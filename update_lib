@@ -1,0 +1,16 @@
+#!/bin/bash
+# looks at all the library files, and copies the relevant ones into the source
+# folder.
+
+# Change this to the correct path of the libraries.
+LIBPATH=~/.lexaloffle/pico-8/carts/alan-pico-lib/
+
+PATHS=$(find $LIBPATH -path '*/src/*' | grep -v demo.p8)
+
+for path in $PATHS; do
+	name=$(echo $path | sed 's/^.*\///g')
+	if [ -e src/$name ]
+	then
+		cp -v $path src/
+	fi
+done
