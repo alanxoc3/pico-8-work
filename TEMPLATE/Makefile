@@ -1,6 +1,6 @@
-t1=pico project
+t1=a christmas rest
 t2=by alan morgan
-files=$(shell find -path '*src/*' | grep -v '/demo.p8')
+files=$(shell find -path '*src/*.p8' -o -path '*lib/*.p8' | grep -v '/demo.p8')
 
 out.p8: code.p8 res.p8
 	cat code.p8 > out.p8
