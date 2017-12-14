@@ -1,6 +1,6 @@
 t1=pico project
 t2=by alan morgan
-files=
+files=$(shell find -path '*src/*' | grep -v '/demo.p8')
 
 out.p8: code.p8 res.p8
 	cat code.p8 > out.p8

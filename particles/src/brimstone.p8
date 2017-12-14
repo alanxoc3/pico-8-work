@@ -37,6 +37,4 @@ g_brimstone = {
 	create = create_brimstone_p,
 	update = update_brimstone_p,
 	draw   = draw_brimstone_p,
-	cont   = {},
-	num    = 2
 }

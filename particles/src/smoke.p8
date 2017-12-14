@@ -45,14 +45,10 @@ g_smoke = {
 	create = create_smoke_p,
 	update = update_smoke_p,
 	draw   = draw_smoke_p,
-	cont   = {},
-	num    = 20
 }
 
 g_steam = {
 	create = create_smoke_p,
 	update = update_smoke_p,
 	draw   = draw_steam_p,
-	cont   = {},
-	num    = 20
 }

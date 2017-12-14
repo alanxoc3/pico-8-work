@@ -1,17 +1,41 @@
-function draw_particles(_state)
-	for p in all(_state.cont) do
-		_state.draw(p)
+-- input is the particle states
+function init_particles(_ps)
+	g_ps = _ps
+	g_pt=0
+
+	-- clear the existing particles.
+	for s in all(_ps) do s.cont = {} end
+end
+
+-- draws all the particles that are alive!
+function draw_particles()
+	for s in all(g_ps) do
+		for p in all(s.cont) do
+			s.draw(p)
+		end
 	end
 end
 
-function create_particles(_state, _x, _y)
-	for i=1, _state.num do add(_state.cont, _state.create(_x, _y)) end
+-- this should only be called once a frame.
+-- updates all the particles
+function update_particles()
+	for s in all(g_ps) do
+		for p in all(s.cont) do
+			if not s.update(p) then
+				del(s.cont, p)
+			end
+		end
+	end
+
+	g_pt += 1
 end
 
-function update_particles(_state)
-	for p in all(_state.cont) do
-		if not _state.update(p) then
-			del(_state.cont, p)
+-- type, x, y, number of particles, rate
+function spawn_particles(_t, _x, _y, _n, _r)
+	if g_pt % _r == 0 then
+		local s = g_ps[_t]
+		for i=1, _n do
+			add(s.cont, s.create(_x, _y))
 		end
 	end
 end

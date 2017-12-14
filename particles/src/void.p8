@@ -32,6 +32,4 @@ g_void = {
 	create = create_void_p,
 	update = update_void_p,
 	draw   = draw_void_p,
-	cont   = {},
-	num    = 60
 }

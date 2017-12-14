@@ -38,6 +38,4 @@ g_firework = {
 	create = create_firework_p,
 	update = update_firework_p,
 	draw   = draw_firework_p,
-	cont   = {},
-	num    = 50
 }

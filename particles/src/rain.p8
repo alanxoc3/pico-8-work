@@ -35,6 +35,4 @@ g_rain = {
 	create = create_rain_p,
 	update = update_rain_p,
 	draw   = draw_rain_p,
-	cont   = {},
-	num    = 20
 }
