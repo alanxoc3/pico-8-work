@@ -13,7 +13,7 @@ if [ $1 = "update" ]; then
 	for path in $PATHS; do
 		name=$(echo $path | sed 's/^.*\///g')
 		if [ -e lib/$name ]; then
-			cp -v $path ./$2/lib/
+			cp -v $path ./lib/
 		fi
 	done
 fi
