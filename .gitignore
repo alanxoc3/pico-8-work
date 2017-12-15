@@ -6,5 +6,6 @@ _tests.p8
 
 *.bin
 *.p8.png
+*.p8l
 
 code.p8

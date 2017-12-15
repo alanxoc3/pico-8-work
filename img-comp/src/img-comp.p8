@@ -1,8 +1,6 @@
 -- this function compresses an image.
 function img_c(ind, w, h, alt)
 	-- step 1, convert the sprite to an uncompressed string.
-	w *= 8
-	h *= 8
 	local str = ""
 
 	local x, y = (ind % 16) * 8, flr(ind / 16) * 8

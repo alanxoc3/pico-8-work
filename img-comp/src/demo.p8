@@ -1,21 +1,27 @@
 function _init()
 	gen_cipher()
 
-	-- edit this line with your
-	-- sprite parameters
+	-- optional, edit this line to import data from another cart.
+	-- reload(0x0000, 0x0000, 0x1000, "_tests.p8")
+
+	-- sprite parameters go here
 	-- index, width, height, alt col
-	g_str, g_w, g_h = img_c(2,12,7, 14)
+	g_str, g_w, g_h = img_c(0,16,16, nil)
 
 	-- this is printed to cli.
-	printh("str = img_x(\""..g_str.."\")")
+	printh("str = img_x(\""..g_str.."\")", "out.p8l", true)
+	printh("str = img_x(\""..g_str.."\")", "@clip")
 	extracted = img_x(g_str, g_w, g_h)
+
+	-- uncompressed version
+	printh("\n-- str val is: \""..extracted.."\"", "out.p8l", false)
 end
 
 function _draw()
 	cls()
 	rectfill(0, 0, 128, 12, 13)
-	print('import a spritesheet,', 1, 1, 7)
-	print('edit line #10, then view cli.', 1, 7, 7)
+	print('edit lines #8 & #12, then see', 1, 1, 7)
+	print('out.p8l or @clip', 1, 7, 7)
 
 	-- you would do something like this line in your game.
 	cspr(extracted, 0, 14, g_w)
