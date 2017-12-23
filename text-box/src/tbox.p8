@@ -125,10 +125,11 @@ function tbox_active()
 end
 
 -- draw the text boxes (if any)
-function tbox_draw()
+-- foreground color, background color, border width
+function tbox_draw(fg_col, bg_col, b_w)
 	if tbox_active() then -- only draw if there are messages
-		rectfill(3, 103, 124, 123, 7) -- draw border rectangle
-		rectfill(5, 106, 122, 121, 1) -- draw fill rectangle
+		rectfill(3, 103, 124, 123, fg_col) -- draw border rectangle
+		rectfill(5, 106, 122, 121, bg_col) -- draw fill rectangle
 		line(5, 105, 122, 105, 6) -- draw top border shadow 
 		line(3, 124, 124, 124, 6) -- draw bottom border shadow 
 
@@ -136,11 +137,10 @@ function tbox_draw()
 		if #tbox_messages[1].speaker>0 then
 			local speaker_width = min(#tbox_messages[1].speaker*4, 115)
 
-			rectfill(3, 96, speaker_width+9, 102, 7) -- draw border rectangle
-			rectfill(5, 99, speaker_width+7, 105, 1) -- draw fill rectangle
-			line(5, 98, speaker_width+7, 98, 6) -- draw top border shadow 
+			rectfill(3, 96, speaker_width+9, 102, fg_col) -- draw border rectangle
+			rectfill(5, 99, speaker_width+7, 105, bg_col) -- draw fill rectangle
 
-			print(sub(tbox_messages[1].speaker, 0, 28), 7, 101, 7)
+			print(sub(tbox_messages[1].speaker, 0, 28), 7, 101, fg_col)
 		end
 
 		-- print the message
@@ -160,7 +160,7 @@ function tbox_draw()
 		-- draw / animate arrow
 		for i=0, 2 do
 			local y = 116+i
-			if global_time%10<5 then
+			if g_tbox_anim%10<5 then
 				y+=1
 			end
 

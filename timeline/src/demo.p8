@@ -9,6 +9,12 @@ end
 
 function _update60()
 	tl_update()
+
+	-- test jumping to states.
+	if btnp(0) then tl_next(1) end
+	if btnp(1) then tl_next(2) end
+	if btnp(2) then tl_next(3) end
+	if btnp(3) then tl_next(4) end
 end
 
 function _draw()
@@ -16,6 +22,7 @@ function _draw()
 	tl_draw()
 
 	print("fps: "..stat(7), 0,0,7)
+	print("state: "..g_tl_cur, 64,0,7)
 end
 
 -- state 1 test

@@ -3,8 +3,8 @@ function init_particles(_ps)
 	g_ps = _ps
 	g_pt=0
 
-	-- clear the existing particles.
-	for s in all(_ps) do s.cont = {} end
+	-- clears, but also creates the cont field.
+	clear_particles()
 end
 
 -- draws all the particles that are alive!
@@ -38,4 +38,10 @@ function spawn_particles(_t, _x, _y, _n, _r)
 			add(s.cont, s.create(_x, _y))
 		end
 	end
+end
+
+-- clear all the particles from the buffer!
+function clear_particles()
+	-- clear the existing particles.
+	for s in all(g_ps) do s.cont = {} end
 end

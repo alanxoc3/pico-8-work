@@ -10,6 +10,8 @@ function tl_init(tl)
 	g_tl = tl
 
 	g_tl_cur = 1
+	g_tl_nxt = (g_tl_cur % #g_tl) + 1
+
 	g_tl_tim = tl[g_tl_cur][3]
 
 	tl_func(4)
@@ -22,14 +24,18 @@ function tl_func(num)
 	end
 end
 
-function tl_next()
+-- optional number of which state should be loaded next.
+function tl_next(num)
 	g_tl_tim = 0
+	if num then g_tl_nxt = num end
 end
 
 function tl_update()
 	-- switch the state
 	if g_tl_tim == 0 then
-		g_tl_cur = (g_tl_cur % #g_tl) + 1
+		g_tl_cur = g_tl_nxt
+		g_tl_nxt = (g_tl_cur % #g_tl) + 1
+
 		g_tl_tim = g_tl[g_tl_cur][3]
 
 		tl_func(4) -- init func
