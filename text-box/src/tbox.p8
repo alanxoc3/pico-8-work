@@ -9,7 +9,7 @@
 
 tbox_messages={} -- the array for keeping track of text box overflows
 g_tbox_anim=0
-g_tbox_max_len=26
+g_tbox_max_len=28
 
 function break_up_long_word(words, w, max_len)
 	for i=1, #w, max_len-1 do
@@ -103,17 +103,23 @@ function tbox(str)
 	end
 end
 
--- check for button presses so we can clear text box messages
+-- if you press the button while text is still being displayed, then the text
+-- finishes its display.
 function tbox_interact()
 	if tbox_active() then
-		g_tbox_anim += 1
+		g_tbox_anim += .5
 		if btnp(4) then
-			sfx(61)
-			if #tbox_messages>1 then
+			local str1, str2 = get_tbox_strs()
+
+			if g_tbox_anim < #str1+#str2 then
+				g_tbox_anim = #str1+#str2
+			else
+				if #tbox_messages>1 then
+					del(tbox_messages, tbox_messages[1])
+				end
 				del(tbox_messages, tbox_messages[1])
+				g_tbox_anim = 0
 			end
-			del(tbox_messages, tbox_messages[1])
-			g_tbox_anim = 0
 		end
 	end
 end
@@ -124,47 +130,81 @@ function tbox_active()
 	return #tbox_messages>0
 end
 
+function draw_rect_with_border(x1, y1, x2, y2, bor_col, bkg_col, b_w)
+	rectfill(x1, y1, x2, y2, bor_col)
+	rectfill(x1+b_w, y1+b_w, x2-b_w, y2-b_w, bkg_col)
+end
+
+function draw_tbox_speaker(x1, y1, bor_col, bkg_col, b_w, txt, top)
+	local txt_w = #txt*4
+	local x2, y2 = b_w*2+2+txt_w+x1, y1+6+b_w
+
+	rectfill(x1, y1, x2, y2, bor_col)
+
+	if top then
+		rectfill(x1+b_w, y1, x2-b_w, y2-b_w, bkg_col)
+		print(txt, x1+b_w+2, y1, bor_col)
+	else
+		rectfill(x1+b_w, y1+b_w, x2-b_w, y2, bkg_col)
+		print(txt, x1+b_w+2, y1+b_w+2, bor_col)
+	end
+end
+
+function get_tbox_strs()
+	local str1, str2 = "", ""
+
+	if tbox_messages[1] then
+		str1 = tbox_messages[1].line
+	end
+
+	if tbox_messages[2] then
+		str2 = tbox_messages[2].line
+	end
+
+	return str1, str2
+end
+
 -- draw the text boxes (if any)
 -- foreground color, background color, border width
-function tbox_draw(fg_col, bg_col, b_w)
+-- function tbox_draw(top?, b_w, fg_col, bg_col)
+function tbox_draw(fg_col, bg_col, b_w, top)
+	local x, y = 0, 0
+
+	if not top then
+		y = 127-b_w*2-2*3-5*2
+	end
+
+	local ybot = y+b_w*2+2*3+5*2-1
+
 	if tbox_active() then -- only draw if there are messages
-		rectfill(3, 103, 124, 123, fg_col) -- draw border rectangle
-		rectfill(5, 106, 122, 121, bg_col) -- draw fill rectangle
-		line(5, 105, 122, 105, 6) -- draw top border shadow 
-		line(3, 124, 124, 124, 6) -- draw bottom border shadow 
+		draw_rect_with_border(x, y, 127, ybot, fg_col, bg_col, b_w)
 
 		-- draw speaker
 		if #tbox_messages[1].speaker>0 then
-			local speaker_width = min(#tbox_messages[1].speaker*4, 115)
 
-			rectfill(3, 96, speaker_width+9, 102, fg_col) -- draw border rectangle
-			rectfill(5, 99, speaker_width+7, 105, bg_col) -- draw fill rectangle
+			local sy = ybot-b_w+1
 
-			print(sub(tbox_messages[1].speaker, 0, 28), 7, 101, fg_col)
+			if not top then
+				sy = y-5-2
+			end
+
+			draw_tbox_speaker(x, sy, fg_col, bg_col, b_w, tbox_messages[1].speaker, top)
 		end
 
 		-- print the message
-		local str1, str2 = "", ""
+		local str1, str2 = get_tbox_strs()
 
-		if tbox_messages[1] then
-			str1 = tbox_messages[1].line
-		end
-
-		if tbox_messages[2] then
-			str2 = tbox_messages[2].line
-		end
-
-		print( sub(str1, 1, g_tbox_anim),                 7, 108, 7) 
-		print( sub(str2, 0, max(g_tbox_anim - #str1, 0)), 7, 115, 7) 
+		print( sub(str1, 1, g_tbox_anim),                 x+b_w+2, y+b_w+2,   fg_col)
+		print( sub(str2, 0, max(g_tbox_anim - #str1, 0)), x+b_w+2, y+b_w+2+7, fg_col)
 
 		-- draw / animate arrow
 		for i=0, 2 do
-			local y = 116+i
-			if g_tbox_anim%10<5 then
-				y+=1
+			local ypos = y+i+b_w+2+7+1
+			if g_tbox_anim%20<10 then
+				ypos+=1
 			end
 
-			line(116+i, y, 120-i, y, 7)
+			line(127-b_w-6+i, ypos, 127-b_w-2-i, ypos, fg_col)
 		end
 	end
 end

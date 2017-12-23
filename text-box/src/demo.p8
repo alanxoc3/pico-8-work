@@ -1,5 +1,5 @@
 function _init()
-	tbox("bob@he:hello, my name is bob and my real name is not sid.:i am a carpenter")
+	tbox("@he:0 1 2 3 4 5 6 7 8 9 0 1 2 3 4:hello, my name is bob and my real name is not sid.:i am a carpenter|hello:meep:no")
 end
 
 function _update60()
@@ -8,7 +8,7 @@ end
 
 function _draw()
 	cls()
-	tbox_draw(7, 1)
-	print('pico_project!', 20, 20, 7)
-	print(g_tbox_anim, 20, 50, 7)
+	print("cpu: "..stat(1), 2, 64, 7)
+	tbox_draw(7, 0, 2, true)
+	tbox_draw(7, 0, 2, false)
 end
