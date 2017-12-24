@@ -3,7 +3,7 @@
 function fade(f, val)
 	val = min(max(flr(val) + 1, 1), 16)
 	for c=0,15 do
-		pal(c,f[c+1][val], 1) -- 1 is to set the screen!
+		pal(c,f[c+1][val])
 	end
 end
 
@@ -22,6 +22,6 @@ end
 -- can't just do pal(), because that gets rid of transparency color. >:0
 function clear_fade()
 	for c=0,15 do
-		pal(c,c,1)
+		pal(c,c)
 	end
 end

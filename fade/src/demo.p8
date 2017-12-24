@@ -13,6 +13,7 @@ function _init()
 	fade_strs = {}
 	add(fade_strs, gen_fade_str(0,  0))
 	add(fade_strs, gen_fade_str(16, 0))
+	add(fade_strs, gen_fade_str(32, 0))
 
 	for k,v in pairs(fade_strs) do
 		printh('-- fade #'..k..'\ngen_fade("'..v..'")\n')

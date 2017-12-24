@@ -171,7 +171,7 @@ function tbox_draw(fg_col, bg_col, b_w, top)
 	local x, y = 0, 0
 
 	if not top then
-		y = 127-b_w*2-2*3-5*2
+		y = 128-b_w*2-2*3-5*2
 	end
 
 	local ybot = y+b_w*2+2*3+5*2-1
