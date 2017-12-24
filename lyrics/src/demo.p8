@@ -16,7 +16,7 @@ g_ind = 1
 function _update60()
 	if lyrics_update() then
 		local tab = {g_verse_1, g_verse_2, g_verse_3, g_verse_4, g_verse_5, g_chorus}
-		lyrics(tab[g_ind], 0, .3, 1, 1)
+		lyrics(tab[g_ind], 0, .265, 1, 1)
 
 		printh("next")
 
