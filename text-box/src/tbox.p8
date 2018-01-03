@@ -11,17 +11,6 @@ tbox_messages={} -- the array for keeping track of text box overflows
 g_tbox_anim=0
 g_tbox_max_len=28
 
-function break_up_long_word(words, w, max_len)
-	for i=1, #w, max_len-1 do
-		if i+max_len <= #w then
-			add(words, sub(w, i, i+max_len-2).."-")
-		else
-			add(words, sub(w, i, #w))
-			return
-		end
-	end
-end
-
 function str_to_words(str, line_len)
 	local words, c = {}, ""
 	str=str.." "
@@ -29,7 +18,7 @@ function str_to_words(str, line_len)
 		local x = sub(str, i, i)
 
 		if #c > 0 and x == " " then
-			break_up_long_word(words, c, line_len)
+			add(words, c)
 			c = ""
 		else
 			c = c..x
