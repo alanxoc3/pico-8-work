@@ -94,12 +94,17 @@ end
 
 -- if you press the button while text is still being displayed, then the text
 -- finishes its display.
-function tbox_interact()
+function tbox_interact(sound)
 	if tbox_active() then
 		g_tbox_anim += .5
-		if btnp(4) then
-			local str1, str2 = get_tbox_strs()
 
+		local str1, str2 = get_tbox_strs()
+
+		if g_tbox_anim < #str1+#str2 and sound then
+			sfx(sound)
+		end
+
+		if btnp(4) then
 			if g_tbox_anim < #str1+#str2 then
 				g_tbox_anim = #str1+#str2
 			else
