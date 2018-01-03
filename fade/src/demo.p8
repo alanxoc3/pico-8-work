@@ -1,19 +1,19 @@
 function _init()
 	gen_cipher()
 	tl_init({
-		{ u_fade, d_fade,    4 },
+		{ u_fade, d_fade,    5 },
 		{ nil,   draw_rects, 1, switchdir },
-		{ u_fade, d_fade,    4 },
+		{ u_fade, d_fade,    5 },
 		{ nil,   draw_rects, 1, switchfade },
 	})
 
 	palt(0, false)
-	g_ft = 0
+	g_ft = -1
 
 	fade_strs = {}
-	add(fade_strs, gen_fade_str(0,  0))
-	add(fade_strs, gen_fade_str(16, 0))
-	add(fade_strs, gen_fade_str(32, 0))
+	add(fade_strs, gen_fade_str(0,  0, 16))
+	add(fade_strs, gen_fade_str(16, 0, 16))
+	add(fade_strs, gen_fade_str(32, 0, 16))
 
 	for k,v in pairs(fade_strs) do
 		printh('-- fade #'..k..'\ngen_fade("'..v..'")\n')
@@ -21,7 +21,7 @@ function _init()
 
 	fade_tabs = {}
 	for x in all(fade_strs) do
-		add(fade_tabs, gen_fade(x))
+		add(fade_tabs, gen_fade(x, 16))
 	end
 end
 
@@ -47,9 +47,9 @@ function draw_rects()
 end
 
 function u_fade() g_ft += g_fade_spd end 
-function d_fade() fade(fade_tabs[g_cur_fade], g_ft) draw_rects() end 
+function d_fade() fade(fade_tabs[g_cur_fade], g_ft, 16) draw_rects() end 
 
-g_fade_spd = 5/60
+g_fade_spd = .3/60
 function switchdir()
 	g_fade_spd = -g_fade_spd
 end

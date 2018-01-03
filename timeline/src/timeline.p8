@@ -2,7 +2,7 @@
 --    update: callback for every frame.
 --    draw:   callback for every frame.
 --    timer:  t > 0: measured in seconds. t == 0: done. t < 0: disabled.
---    reset:  optional reset callback. called right before the first update.
+--    init:   optional reset callback. called right before the first update.
 
 -- pass the array into this function.
 function tl_init(tl)

@@ -53,7 +53,7 @@ function is_tbox_done(id)
 	return true
 end
 
--- add a new text box, id is optional, it is the id of the event. You can check
+-- add a new text box, id is optional, it is the id of the event. you can check
 -- if an event is done with a unique id.
 function tbox(str)
 	local acc, id, speaker, mode = "", "", "", "|"
