@@ -22,9 +22,9 @@ function make_col_actor(x, y)
 	return a
 end
 
-function move_actors(tile_func)
+function move_actors(actors, tile_func)
 	-- speed/collision, speed/walls, then position
-	foreach(actors, set_actor_speed)
+	foreach(actors, function (a) set_actor_speed(a, actors) end)
 	foreach(actors, function(a) tile_col(a, tile_func) end)
 	foreach(actors, set_actor_pos)
 end
@@ -36,7 +36,7 @@ function tile_col(a, func)
 	end
 end
 
-function set_actor_speed(a)
+function set_actor_speed(a, actors)
 	if a.is_outside then
 		return
 	end
@@ -48,8 +48,8 @@ function set_actor_speed(a)
 			a.stun -= 1
 		end
 
-		a.dx = move_actor_check(a, a.dx, 0)
-		a.dy = move_actor_check(a, 0, a.dy)
+		a.dx = move_actor_check(a, actors, a.dx, 0)
+		a.dy = move_actor_check(a, actors, 0, a.dy)
 	end
 end
 
@@ -67,8 +67,8 @@ function set_actor_pos(a)
 end
 
 -- moves, with actor collisions
-function move_actor_check(a, dx, dy)
-	local other_list = actor_collision(a, dx, dy) 
+function move_actor_check(a, actors, dx, dy)
+	local other_list = actor_collision(a, actors, dx, dy) 
 
 	if #other_list != 0 then
 		hit_actors(a,other_list)
@@ -86,7 +86,7 @@ end
 -- or if this is out of bounds.
 -- bounds. won't check for actors that are out of bounds.
 -- also does not work with overlapping actors.
-function actor_collision(a, dx, dy)
+function actor_collision(a, actors, dx, dy)
 	local retlist = {}
 
 	if not a.is_outside then
