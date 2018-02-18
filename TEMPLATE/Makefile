@@ -1,4 +1,4 @@
-t1=a christmas rest
+t1=template pico game
 t2=by alan morgan
 files=$(shell find -path '*src/*.p8' -o -path '*lib/*.p8' | grep -v '/demo.p8')
 

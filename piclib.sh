@@ -5,7 +5,7 @@
 # Change this to the correct path of the libraries.
 LIBPATH=~/.lexaloffle/pico-8/carts/alan-pico-lib/
 
-PATHS=$(find $LIBPATH -path '*/src/*.p8' | grep -v demo.p8)
+PATHS=$(find $LIBPATH -path '*/src/*.p8' | grep -v /demo)
 
 if [ -z $1 ]; then exit; fi
 
