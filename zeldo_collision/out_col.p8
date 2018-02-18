@@ -33,7 +33,6 @@ end
 
 function _init()
 	global_time = 0
-	actors = {}
 
 	pl = make_col_actor(8,8)
 	pl.spd = .05
@@ -64,6 +63,8 @@ function _draw()
 	map(0, 0, 0, 0, 16, 16)
 	foreach(actors, function(a) debug_actor_box(a, 9) end)
 end
+actors = {}
+
 -- make an actors and add to global collection.
 -- x,y means center of the actors, in map tiles (not pixels).
 function make_col_actor(x, y)

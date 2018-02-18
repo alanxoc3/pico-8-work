@@ -26,7 +26,6 @@ end
 
 function _init()
 	global_time = 0
-	actors = {}
 
 	pl = make_col_actor(8,8)
 	pl.spd = .05
