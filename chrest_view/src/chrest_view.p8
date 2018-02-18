@@ -21,7 +21,7 @@ function update_view_helper(pc, gc, rc, rd)
 end
 
 -- example usage: update_view
-function update_view(p_x, p_y, scr1, scr2)
+function update_view(p_x, p_y)
 	g_x, g_y = update_view_helper(p_x, g_x, g_rx, g_rw), update_view_helper(p_y, g_y, g_ry, g_rh)
 end
 

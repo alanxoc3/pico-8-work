@@ -1,54 +1,58 @@
+-- 150 tokens.
+
 -- tl array fields:
 --    update: callback for every frame.
 --    draw:   callback for every frame.
---    timer:  t > 0: measured in seconds. t == 0: done. t < 0: disabled.
+--    timer:  t > 0: measured in seconds. t == 0: done. t == nil: disabled. t < 0: next frame will be finished
 --    init:   optional reset callback. called right before the first update.
 
 -- pass the array into this function.
-function tl_init(tl)
-	assert(#tl > 0)
-	g_tl = tl
+function tl_init(tl_master)
+	assert(#tl_master > 0)
 
-	g_tl_cur = 1
-	g_tl_nxt = (g_tl_cur % #g_tl) + 1
+	local tl = {
+		master=tl_master,
+		current=1,
+		next=(1 % #tl_master)+1,
+		time = tl_master[1][3]
+	}
 
-	g_tl_tim = tl[g_tl_cur][3]
+	-- init function
+	tl_func(tl, 4)
 
-	tl_func(4)
+	return tl
 end
 
 -- call a function if not nil
-function tl_func(num)
-	if g_tl[g_tl_cur][num] then
-		g_tl[g_tl_cur][num]()
+function tl_func(tl, num)
+	if tl.master[tl.current][num] then
+		tl.master[tl.current][num]()
 	end
 end
 
 -- optional number of which state should be loaded next.
-function tl_next(num)
-	g_tl_tim = 0
-	if num then g_tl_nxt = num end
+function tl_next(tl, num)
+	tl.time=0
+	if num then tl.next=num end
 end
 
-function tl_update()
+function tl_update(tl)
 	-- switch the state
-	if g_tl_tim == 0 then
-		g_tl_cur = g_tl_nxt
-		g_tl_nxt = (g_tl_cur % #g_tl) + 1
-
-		g_tl_tim = g_tl[g_tl_cur][3]
-
-		tl_func(4) -- init func
+	if tl.time == 0 then
+		tl.current = tl.next
+		tl.next = (tl.current % #tl.master) + 1
+		tl.time = tl.master[tl.current][3]
+		tl_func(tl, 4) -- init func
 	end
 
-	tl_func(1) -- update func
+	tl_func(tl, 1) -- update func
 
 	-- inc timer if enabled
-	if g_tl_tim > 0 then
-		g_tl_tim = max(0, g_tl_tim - 1/60)
+	if tl.time then
+		tl.time = max(0, tl.time - 1/60)
 	end
 end
 
-function tl_draw()
-	tl_func(2) -- draw func
+function tl_draw(tl)
+	tl_func(tl,2) -- draw func
 end
