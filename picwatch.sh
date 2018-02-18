@@ -1,7 +1,9 @@
-if [ "$1" ] && [ -d $1 ]; then
-	cd $1
-else
-	(>&2 echo "Empty parameter.")
+#!/bin/bash
+# picwatch
+
+# assumes current directory.
+if ! ([ "$1" ]); then
+	(>&2 echo "Need file to build.")
 	exit
 fi
 
@@ -15,5 +17,5 @@ done
 inotifywait -e close_write,moved_to,create -m $DIRS |
 while read -r directory; do
   echo "'$directory' was changed."
-  make > /dev/null
+  make $1 > /dev/null
 done
