@@ -1,5 +1,5 @@
 #!/bin/bash
-# looks at all the library files, and copies the relevant ones into the source
+# Looks at all the library files, and copies the relevant ones into the source
 # folder.
 
 # Change this to the correct path of the libraries.
