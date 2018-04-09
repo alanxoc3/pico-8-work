@@ -1,9 +1,10 @@
+--- tokens: 49
 function _init()
-	tbox("@he:0 1 2 3 4 5 6 7 8 9 0 1 2 3 4:hello, my name is bob and my real name is not sid.:i am a carpenter|hello:meep:no")
+	tbox("|sidney@idnum%23%199%3%10%293%19%0%-1:how old are you.:that's nice to know you are that old.|simon:wait what did you say?")
 end
 
 function _update60()
-	tbox_interact()
+	tbox_interact(function() end)
 end
 
 function _draw()
