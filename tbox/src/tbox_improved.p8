@@ -1,5 +1,8 @@
 --- tokens: 1128
 -- original tbox was 537, modified was 805
+-- options added 323
+
+-- if we preparse the text, then we could limit on code space.
 
 -- api
 -- speaker:line:line%option1%option2@id:line|newspeaker:line...

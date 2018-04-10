@@ -1,0 +1,98 @@
+#!/usr/bin/perl
+# Piclib by Alan Morgan
+# This was my first Perl script! Just learned it :).
+# This replaces and exceeds the old picolib bash script.
+#
+# 'picolib' allows for a directory filled with short pico-8 functions to
+# easily be imported into your project!
+
+use strict;
+use warnings;
+use File::Copy;
+use File::Spec;
+
+# Command Line Parsing
+my $usage=<<'END';
+Usage:
+   picolib list <files>
+   picolib update <files> <dir>
+
+Commands:
+   list     lists functions that <files> are using from $PICOLIBPATH
+   update   pulls files from list to <dir>
+END
+
+sub usage_exit {
+	die "$usage";
+}
+
+my $ARGC=@ARGV;
+if ($ARGC <= 1) { usage_exit(); }
+
+my $mode = 0;
+if ($ARGV[0] eq "list")   { $mode = 1; }
+if ($ARGV[0] eq "update") { $mode = 2 ;}
+if ($mode == 0 or $mode == 2 and $ARGC < 3) { usage_exit(); }
+
+# Parse ARGV
+shift @ARGV;
+my @files = @ARGV;
+my $dir = "";
+if ($mode == 2) {
+	$dir = pop(@files)
+}
+
+# remove duplicates!
+# https://stackoverflow.com/questions/7651/how-do-i-remove-duplicate-items-from-an-array-in-perl
+sub uniq {
+    my %seen;
+    grep !$seen{$_}++, @_;
+}
+
+# opens a file and parses through functions.
+sub parse_funcs {
+	my $filename = shift;
+	open(my $fh, '<:encoding(UTF-8)', $filename)
+		or die "Couldn't open file '$filename'!";
+
+	my @funcs=();
+	while (my $row = <$fh>) {
+		chomp $row;
+		my @line_funcs = $row =~ /(\w+)\s*\(/gi;
+		push @funcs, @line_funcs;
+	}
+	close $fh;
+	return @funcs;
+}
+
+my @funcs = ();
+foreach my $file (@files) { push @funcs, parse_funcs($file); }
+@funcs = uniq(@funcs);
+
+sub dir_or_error {
+	my $path = shift;
+	my $error = shift;
+	unless (-e $path and -d $path) {
+		die $error;
+	}
+}
+
+my $path = $ENV{'PICOLIBPATH'};
+dir_or_error($path, "Set your \$PICOLIBPATH environment variable!\n");
+if ($mode == 2) { dir_or_error($dir, "'$dir' isn't a directory!\n"); }
+
+my @func_files = map {"$_.p8"} @funcs;
+foreach my $file (@func_files) {
+	my $old = File::Spec->catfile($path, $file);
+	if (-e $old and -f $old) {
+		if ($mode == 1) {
+			print "$file\n";	
+		} elsif ($mode == 2) {
+			if (copy($old, $dir)) {
+				print "'$file' -> '$dir'.\n";	
+			} else {
+				print STDERR "'$file' didn't copy.";	
+			}
+		}
+	}
+}
