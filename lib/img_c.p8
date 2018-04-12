@@ -1,5 +1,3 @@
--- alan morgan
-
 -- this function compresses an image.
 function img_c(ind, w, h, alt)
 	-- step 1, convert the sprite to an uncompressed string.

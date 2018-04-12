@@ -1,5 +1,3 @@
--- con_tbox()
-
 function get_tbox_strs()
 	local str1, str2 = "", ""
 

@@ -6,4 +6,3 @@ function init_logo()
 	l_o, l_p, l_t = 7, 0, 0
 	l_x, l_y = 47, 60 -- the o is in the center of the screen.
 end
-

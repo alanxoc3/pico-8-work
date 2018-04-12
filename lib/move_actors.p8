@@ -4,4 +4,3 @@ function move_actors(actors, tile_func)
 	foreach(actors, function(a) tile_col(a, tile_func) end)
 	foreach(actors, set_actor_pos)
 end
-

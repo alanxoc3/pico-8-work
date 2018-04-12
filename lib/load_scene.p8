@@ -1,4 +1,3 @@
-
 -- use when switching to a new scene.
 -- x and y are the player's new coordinates.
 function load_scene(name)
@@ -23,4 +22,3 @@ function load_scene(name)
 		end
 	end 
 end
-

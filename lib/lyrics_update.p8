@@ -1,3 +1,5 @@
+-- con_lyrics()
+
 -- returns true if everything is complete, including the display is done.
 function lyrics_update()
 	if not g_lyrics_enabled then return true end

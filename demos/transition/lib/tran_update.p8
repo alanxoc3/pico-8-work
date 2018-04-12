@@ -1,4 +1,6 @@
-function update_tran()
+-- con_tran()
+
+function tran_update()
 	local prev_tran = g_tran
 	g_tran = min(g_tran+g_tran_inc, 1)
 

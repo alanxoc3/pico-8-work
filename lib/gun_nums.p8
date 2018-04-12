@@ -1,5 +1,3 @@
--- alan morgan
-
 -- numbers are zipped with commas.
 -- like gunzip, but for numbers.
 function gun_nums(num_str)
