@@ -18,22 +18,3 @@ function make_trigger(nam_num_mrk_dat)
 	triggers[nam_num_mrk_dat[1]] = field
 end
 
--- used for debugging purposes.
-function debug_triggers()
-	for k,v in pairs(triggers) do
-		scr_rect(v.box.x1, v.box.y1, v.box.x2, v.box.y2, 10)
-	end
-end
-
--- returns the new position for the player.
-function trigger_update()
-	for k, v in pairs(triggers) do
-		if v.active and is_pl_in_box(v.box) then
-			v.func()
-			if v.posx and v.posy then
-				pl.x, pl.y = v.posx, v.posy
-			end
-		end
-	end
-end
-

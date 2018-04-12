@@ -39,71 +39,6 @@ function lyrics(verse, music_num, beat_len, delay, swipe_speed)
 	end
 end
 
-function lyrics_complete()
-	return #g_lyrics_parts
-end
-
--- returns true if everything is complete, including the display is done.
-function lyrics_update()
-	if not g_lyrics_enabled then return true end
-
-	if g_lyrics_rad < 9 and not g_lyrics_done then
-		g_lyrics_rad += .3
-	end
-
-	if g_lyrics_done then
-		g_lyrics_rad = max(g_lyrics_rad - .3, 0)
-	end
-
-	if g_lyrics_timer >= g_lyric_delay then
-		if #g_lyrics_parts == 0 then
-			g_lyrics_done = true
-		end
-
-		if not g_lyrics_playing then
-			music(g_lyrics_music_num)
-			g_lyrics_playing = true
-		end
-
-		for p in all(g_lyrics_parts) do
-			local prev_t = p.t
-			p.t = min(6, p.t + 1)
-
-			p.y += p.dy
-
-			if prev_t != 6 and p.t == 6 then
-				p.death_func()
-			end
-		end
-
-		-- garbage collection.
-		for p in all(g_lyrics_parts) do
-			if p.y < 30 then
-				del(g_lyrics_parts, p)
-			end
-		end
-	else
-		g_lyrics_timer += 1/60
-	end
-
-	if g_lyrics_rad == 0 then
-		g_lyrics_enabled = false
-	end
-
-	return not g_lyrics_enabled
-end
-
-function lyrics_draw()
-	if not g_lyrics_enabled then return end
-	rectfill(0, 64-g_lyrics_rad, 127, 64+g_lyrics_rad, 0)
-
-	clip(0, 64-g_lyrics_rad, 127, g_lyrics_rad*2)
-	for p in all(g_lyrics_parts) do
-		lyrics_part_print(p)
-	end
-	clip()
-end
-
 function gather_string(str, check_char)
 	local acc, tmp = {}, ""
 	str=str..check_char
@@ -170,32 +105,6 @@ function lyrics_swipe()
 	for x in all(g_lyrics_parts) do
 		if x.t == 6 then
 			x.dy -= g_lyrics_swipe_speed
-		end
-	end
-end
-
-function lyrics_part_print(p)
-	local txt, x, y, fg, bg, t = p.txt, p.x, p.y, p.fg, p.bg, p.t
-
-	local w = ((#txt)*4-2) / 2
-	local h = 2
-	local wt, ht = w*t/6, h*t/6
-
-	local x1, y1, x2, y2 = x+w-wt, y+h-ht, x+w+wt, y+h+ht
-	
-	if t > 0 and #txt > 0 then
-		if p.middle then x1 -= 1 x2 += 1 end
-		rectfill(x1, y1, x2, y2, bg)
-
-		if t == 6 then
-			for o in all({-1, 1}) do
-				print(txt, x+o, y, bg)
-				print(txt, x, y+o, bg)
-			end
-
-			print(txt, x, y, fg)
-		else
-			rectfill(x1+1, y1+1, x2-1, y2-1, fg)
 		end
 	end
 end

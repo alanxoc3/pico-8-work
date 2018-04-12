@@ -1,8 +1,3 @@
--- alan morgan
-
-g_tran = 0
-g_tran_inc = 0
-
 -- nils, i'm saving tokens
 -- g_tran_d1 = nil
 -- g_tran_d2 = nil
@@ -22,19 +17,4 @@ function init_tran(tran_func, max_time, d1, d2, init_func)
 	0xffff, 2 / (max_time * 60), -- 60 is for FPS
 	d1 or function() end, d2 or function() end,
 	init_func, tran_func
-end
-
-function update_tran()
-	local prev_tran = g_tran
-	g_tran = min(g_tran+g_tran_inc, 1)
-
-	if prev_tran < 0 and g_tran >= 0 then
-		if g_tran_init then g_tran_init() end
-	end
-end
-
-function draw_tran()
-	if g_tran_func then
-		g_tran_func(g_tran, g_tran < 0 and g_tran_d1 or g_tran_d2)
-	end
 end

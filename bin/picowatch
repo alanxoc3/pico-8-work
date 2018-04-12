@@ -1,5 +1,5 @@
 #!/bin/bash
-# picwatch
+# picomake
 
 # assumes current directory.
 if ! ([ "$1" ]); then

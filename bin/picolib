@@ -1,6 +1,8 @@
 #!/usr/bin/perl
-# Piclib by Alan Morgan
-# This was my first Perl script! Just learned it :).
+# picolib
+
+# picolib by Alan Morgan
+# This was my first real Perl script! Just learned it :).
 # This replaces and exceeds the old picolib bash script.
 #
 # 'picolib' allows for a directory filled with short pico-8 functions to

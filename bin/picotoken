@@ -1,4 +1,6 @@
 #!/bin/bash
+# picotoken
+
 # Counts the tokens of the file.
 
 # Replace this line with your p8tool path

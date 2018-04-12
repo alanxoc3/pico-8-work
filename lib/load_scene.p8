@@ -1,6 +1,3 @@
--- alan morgan
-
-g_scenes, g_scene, g_actors = {}, {}, {}
 
 -- use when switching to a new scene.
 -- x and y are the player's new coordinates.
@@ -27,23 +24,3 @@ function load_scene(name)
 	end 
 end
 
-function scene_update()
-	if not tbox_active() then
-		map_update()
-		trigger_update()
-	else
-		tbox_interact()
-	end
-end
-
-function scene_draw()
-	-- the marker variable is for the transitions.
-	local mark = ""
-	if trans_after_peak then
-		mark = marker
-	else
-		mark = prev_marker
-	end
-
-	g_scene.draw()
-end
