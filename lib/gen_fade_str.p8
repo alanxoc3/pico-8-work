@@ -1,3 +1,4 @@
+--- tokens: 47
 -- generates a fade string from the coordinates in pixels on the sprite sheet.
 -- a ?x16 pixel image is assumed.
 function gen_fade_str(x, y, wid)

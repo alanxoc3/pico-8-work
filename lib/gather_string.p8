@@ -1,3 +1,4 @@
+--- tokens: 56
 function gather_string(str, check_char)
 	local acc, tmp = {}, ""
 	str=str..check_char

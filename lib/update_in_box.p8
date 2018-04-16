@@ -1,5 +1,4 @@
--- alan morgan
-
+--- tokens: 64
 -- example usage:
 -- a.x, a.hs = update_in_box(a.x, a.hs, a.rad, 0, 16)
 -- a.y, a.vs = update_in_box(a.y, a.vs, a.rad, 0, 16)

@@ -1,3 +1,4 @@
+--- tokens: 40
 -- assumes that when timer is zero, you are at the top of the circle.
 function move_clockwise(a, spd, radx, rady, timer)
 	local ang = -timer / 30 / spd

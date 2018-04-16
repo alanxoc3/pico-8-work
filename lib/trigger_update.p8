@@ -1,3 +1,4 @@
+--- tokens: 42
 -- returns the new position for the player.
 function trigger_update()
 	for k, v in pairs(triggers) do
@@ -9,4 +10,3 @@ function trigger_update()
 		end
 	end
 end
-

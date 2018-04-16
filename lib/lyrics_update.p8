@@ -1,3 +1,4 @@
+--- tokens: 131
 -- con_lyrics()
 
 -- returns true if everything is complete, including the display is done.
@@ -49,4 +50,3 @@ function lyrics_update()
 
 	return not g_lyrics_enabled
 end
-

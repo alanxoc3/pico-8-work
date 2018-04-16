@@ -1,3 +1,4 @@
+--- tokens: 31
 -- used for debugging purposes.
 function debug_triggers()
 	for k,v in pairs(triggers) do

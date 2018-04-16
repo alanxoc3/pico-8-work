@@ -1,3 +1,4 @@
+--- tokens: 127
 -- con_lyrics()
 
 function lyrics(verse, music_num, beat_len, delay, swipe_speed)

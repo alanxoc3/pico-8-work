@@ -1,3 +1,4 @@
+--- tokens: 57
 -- todo, remove this for final game.
 function debug_actor_box(a, col)
 	local x1 = (a.x-.5) * 8

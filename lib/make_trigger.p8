@@ -1,3 +1,4 @@
+--- tokens: 121
 -- name, bounds (x1, y1, x2, y2), mark, dat (pl x, pl y, mus, snd)
 function make_trigger(nam_num_mrk_dat)
 	-- yes, this is very cryptic. it saved at least 15 tokens though.

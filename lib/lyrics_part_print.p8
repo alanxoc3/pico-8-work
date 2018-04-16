@@ -1,3 +1,4 @@
+--- tokens: 192
 function lyrics_part_print(p)
 	local txt, x, y, fg, bg, t = p.txt, p.x, p.y, p.fg, p.bg, p.t
 

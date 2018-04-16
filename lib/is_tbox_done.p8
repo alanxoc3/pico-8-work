@@ -1,3 +1,4 @@
+--- tokens: 21
 -- con_tbox()
 
 function is_tbox_done(id)

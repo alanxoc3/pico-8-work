@@ -1,3 +1,4 @@
+--- tokens: 17
 -- con_tran()
 
 function tran_draw()

@@ -1,3 +1,4 @@
+--- tokens: 74
 -- returns an expanded fade table from a string
 -- you probably want to call this at the start of your program.
 -- assumes the str has a string length of a multiple of 16.

@@ -1,37 +1,27 @@
+--- tokens: 286
 -- con_tbox()
 
 -- add a new text box, id is optional, it is the id of the event. you can check
 -- if an event is done with a unique id.
 function tbox(str)
-	local acc, id, speaker, mode, options = "", "", "", "|", {}
-	str=str.."|"
+	local acc, id, speaker, mode, options, l_str = "", "", "", "|", {}, str.."|"
 
-	for i=1, #str do
-		local x = sub(str, i, i)
+	for i=1, #l_str do
+		local x = sub(l_str, i, i)
 
 		if x == ":" or x == "|" or x == "@" or x == "%" then
 			if mode == ":" then
-				-- adding the message
-				local add_mes = function(l)
-					add(tbox_messages, {options=options, speaker=speaker, id=id, line=l})
-				end
+				local lines = str_to_word_lines(acc, g_tbox_max_len)
 
-				if #tbox_messages%2==1 then
-					add_mes("")
+				for i=1,#lines do
+					local l = lines[i]
+					if i % 2 == 1 then
+						add(g_tbox_messages, {options=options, speaker=speaker, id=id, l1=l, l2=""})
+						options, id = {}, ""
+					else
+						g_tbox_messages[#g_tbox_messages].l2 = l
+					end
 				end
-
-				for l in all(
-					words_to_lines(
-						str_to_words(acc, g_tbox_max_len),
-						g_tbox_max_len
-					)
-				) do
-					add_mes(l)
-					options = {} -- reset after the very first
-					id = "" -- reset that too
-				end
-				-- end
-				-- options={} -- this should be optional
 
 			elseif mode == "|" then speaker, id = acc, ""
 			elseif mode == "@" then id = acc
@@ -41,38 +31,7 @@ function tbox(str)
 			acc=acc..x
 		end
 	end
-end
 
-function str_to_words(str, line_len)
-	local words, c = {}, ""
-	str=str.." "
-	for i=1, #str do
-		local x = sub(str, i, i)
-
-		if #c > 0 and x == " " then
-			add(words, c)
-			c = ""
-		else
-			c = c..x
-		end
-	end
-
-	return words
-end
-
-function words_to_lines(words, line_len)
-	local lines, l = {}, ""
-	add(words, "")
-
-	for x in all(words) do
-		if #(l..x) > line_len or x == "" then
-			add(lines, l)
-			l = ""
-		end
-
-		l = l..x.." "
-	end
-
-	return lines
+	g_tbox_active = g_tbox_messages[1]
 end
 

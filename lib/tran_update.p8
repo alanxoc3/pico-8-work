@@ -1,3 +1,4 @@
+--- tokens: 29
 -- con_tran()
 
 function tran_update()

@@ -1,3 +1,4 @@
+--- tokens: 57
 -- embed this function in your game
 -- draws an uncompressed image.
 function cspr(txt, x, y, w)

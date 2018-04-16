@@ -1,5 +1,4 @@
--- alan morgan
-
+--- tokens: 26
 -- tl array fields:
 --    update: callback for every frame.
 --    draw:   callback for every frame.
@@ -7,13 +6,18 @@
 --    reset:  optional reset callback. called right before the first update.
 
 -- pass the array into this function.
-function tl_init(tl)
-	assert(#tl > 0)
-	g_tl = tl
+function tl_init(tl_master)
+	assert(#tl_master > 0)
 
-	g_tl_cur = 1
-	g_tl_tim = tl[g_tl_cur][3]
+	local tl = {
+		master=tl_master,
+		current=1,
+		next=(1 % #tl_master)+1,
+		time = tl_master[1][3]
+	}
 
-	tl_func(4)
+	-- init function
+	tl_func(tl, 4)
+
+	return tl
 end
-

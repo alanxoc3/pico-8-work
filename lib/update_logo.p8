@@ -1,5 +1,4 @@
--- alan morgan
-
+--- tokens: 24
 function update_logo()
 	if l_o <= 0 then
 		if l_t > 40 then

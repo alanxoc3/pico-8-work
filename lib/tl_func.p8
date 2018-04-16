@@ -1,7 +1,9 @@
+--- tokens: 17
 -- call a function if not nil
-function tl_func(num)
-	if g_tl[g_tl_cur][num] then
-		g_tl[g_tl_cur][num]()
+-- call a function if not nil
+function tl_func(tl, num)
+	if tl.master[tl.current][num] then
+		tl.master[tl.current][num]()
 	end
 end
 

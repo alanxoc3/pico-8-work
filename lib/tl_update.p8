@@ -1,17 +1,18 @@
-function tl_update()
+--- tokens: 46
+function tl_update(tl)
 	-- switch the state
-	if g_tl_tim == 0 then
-		g_tl_cur = (g_tl_cur % #g_tl) + 1
-		g_tl_tim = g_tl[g_tl_cur][3]
-
-		tl_func(4) -- init func
+	if tl.time == 0 then
+		tl.current = tl.next
+		tl.next = (tl.current % #tl.master) + 1
+		tl.time = tl.master[tl.current][3]
+		tl_func(tl, 4) -- init func
 	end
 
-	tl_func(1) -- update func
+	tl_func(tl, 1) -- update func
 
 	-- inc timer if enabled
-	if g_tl_tim > 0 then
-		g_tl_tim = max(0, g_tl_tim - 1/60)
+	if tl.time then
+		tl.time = max(0, tl.time - 1/60)
 	end
 end
 

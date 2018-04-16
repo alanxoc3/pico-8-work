@@ -10,6 +10,5 @@ end
 function _draw()
 	cls()
 	print("cpu: "..stat(1), 2, 64, 7)
-	tbox_draw(7, 0, 2, true)
-	tbox_draw(7, 0, 2, false)
+	ttbox_draw(6, 1)
 end

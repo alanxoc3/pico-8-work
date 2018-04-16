@@ -1,3 +1,4 @@
+--- tokens: 102
 -- returns the offset
 function lyrics_add_line(l, x, y, fg, bg, tim_off, tim_int)
 	local off, beat = 0, tim_off

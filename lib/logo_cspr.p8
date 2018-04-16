@@ -1,3 +1,4 @@
+--- tokens: 71
 -- amorg logo small
 function logo_cspr(txt, x, y, w, y_div)
 	for i=1, #txt do

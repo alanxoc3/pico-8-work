@@ -1,3 +1,4 @@
+--- tokens: 33
 function line_char_len(l)
 	local len = 0
 

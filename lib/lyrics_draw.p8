@@ -1,3 +1,4 @@
+--- tokens: 48
 function lyrics_draw()
 	if not g_lyrics_enabled then return end
 	rectfill(0, 64-g_lyrics_rad, 127, 64+g_lyrics_rad, 0)

@@ -1,3 +1,4 @@
+--- tokens: 68
 -- embed this function in your game
 -- returns an uncompressed version of your image
 function img_x(str)

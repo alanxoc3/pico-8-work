@@ -1,3 +1,4 @@
-function tl_draw()
-	tl_func(2) -- draw func
+--- tokens: 6
+function tl_draw(tl)
+	tl_func(tl,2) -- draw func
 end

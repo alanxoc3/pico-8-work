@@ -1,3 +1,4 @@
+--- tokens: 46
 -- con_tran()
 
 function tran_init(tran_func, max_time, d1, d2, init_func)

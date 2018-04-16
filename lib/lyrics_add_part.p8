@@ -1,3 +1,4 @@
+--- tokens: 68
 function lyrics_add_part(txt, x, y, fg, bg, t, middle, dy, death_func)
 	death_func = death_func or function() end
 

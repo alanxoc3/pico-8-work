@@ -1,3 +1,4 @@
+--- tokens: 33
 function zeldo_trans_update(time)
 	local after_peak = false
 
@@ -9,4 +10,3 @@ function zeldo_trans_update(time)
 
 	return after_peak
 end
-

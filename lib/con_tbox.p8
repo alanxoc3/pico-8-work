@@ -1,14 +1,18 @@
+--- tokens: 15
 -- tbox api
--- speaker:line:line%option1%option2@id:line|newspeaker:line...
--- speaker must go first! line must go last! options and id are in between!
 
--- "|" speaker
--- "@" id
--- "%" option
--- ":" line
+-- "|" speaker, must go first!
+-- "@" id,      must go in between!
+-- "%" option   must go in between!
+-- ":" line,    must go last!
 
-tbox_messages={} -- the array for keeping track of text box overflows
-g_tbox_anim=0
-g_tbox_max_len=28
-g_tbox_options_open=false
-g_tbox_select=0
+-- example usage:
+-- tbox("speaker:line:line%option1%option2@id:line|newspeaker:line...")
+
+-- listen to 'g_tbox_active', to listen if tbox is active.
+-- example usage:
+-- if not g_tbox_active then do_some_func() end
+
+-- vars:
+g_tbox_messages, g_tbox_anim, g_tbox_max_len, g_tbox_select = {}, 0, 28, 0
+-- g_tbox_options_open, g_tbox_active = nil, nil

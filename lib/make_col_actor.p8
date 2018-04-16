@@ -1,3 +1,4 @@
+--- tokens: 79
 -- make an actors and add to global collection.
 -- x,y means center of the actors, in map tiles (not pixels).
 function make_col_actor(x, y)

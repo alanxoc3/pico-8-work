@@ -1,5 +1,4 @@
-
-
+--- tokens: 15
 function scene_update()
 	if not tbox_active() then
 		map_update()

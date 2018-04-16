@@ -1,5 +1,4 @@
--- alan morgan
-
+--- tokens: 47
 -- call to start a transition.
 function zeldo_transition(mark, music_when_done, sound_effect)
 	if not trans_active then
@@ -20,4 +19,3 @@ function zeldo_transition(mark, music_when_done, sound_effect)
 		end
 	end
 end
-

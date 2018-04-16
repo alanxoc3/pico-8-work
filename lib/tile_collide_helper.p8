@@ -1,5 +1,4 @@
--- alan morgan
-
+--- tokens: 122
 -- example usage:
 -- a.x, a.hs = collide_helper(a.x, a.y, a.hs, a.rad, function(pos, per) return is_solid(mget(pos, per)) end)
 -- a.y, a.vs = collide_helper(a.y, a.x, a.vs, a.rad, function(pos, per) return is_solid(mget(per, pos)) end)

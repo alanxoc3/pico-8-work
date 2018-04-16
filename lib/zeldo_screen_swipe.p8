@@ -1,4 +1,4 @@
-
+--- tokens: 54
 -- a transition effect. returns true if it is at least halfway done.
 function zeldo_screen_swipe(length, timer)
 	-- only want to go in a half circle.

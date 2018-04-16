@@ -1,3 +1,5 @@
+--- tokens: 35
+-- set_actor_pos()
 function move_actors(actors, tile_func)
 	-- speed/collision, speed/walls, then position
 	foreach(actors, function (a) set_actor_speed(a, actors) end)

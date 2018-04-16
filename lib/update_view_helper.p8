@@ -1,3 +1,4 @@
+--- tokens: 74
 function update_view_helper(pc, gc, rc, rd)
 	-- order matters here.
 	-- this helper shaved over 30 tokens.
