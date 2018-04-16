@@ -20,7 +20,7 @@ function ttbox_draw(fg_col, bg_col, top)
 		print( sub(g_tbox_active.l2, 0, max(g_tbox_anim - #g_tbox_active.l1, 0)), 4, 119, fg_col)
 
 		-- draw / animate arrow
-		tbox_draw_arrow(119, 120+(g_tbox_anim%20)/10, fg_col, false)
+		tbox_draw_arrow(119, 120+(g_tbox_anim%20)/10, fg_col)
 
 		-- options
 		if g_tbox_options_open then
@@ -38,7 +38,7 @@ function ttbox_draw(fg_col, bg_col, top)
 			draw_rect_with_border(115-opt_width, y1, 127, 108, fg_col, bg_col, 2)
 
 			local text_y = y1+4
-			tbox_draw_arrow(119-opt_width+(g_tbox_anim%20)/10, text_y + g_tbox_select*7, fg_col, true)
+			tbox_draw_arrow(119-opt_width+(g_tbox_anim%20)/10, text_y + (g_tbox_select-1)*7, fg_col, true)
 			for opt in all(options) do
 				print(opt, 125-opt_width, text_y, fg_col)
 				text_y+=7

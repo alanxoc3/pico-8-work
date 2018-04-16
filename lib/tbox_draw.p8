@@ -35,7 +35,7 @@ function tbox_draw(fg_col, bg_col, bw, top)
 
 		-- draw / animate arrow
 		local ypos = y+g_tbox_bw+2+7+1
-		tbox_draw_arrow(127-g_tbox_bw-6, ypos+(g_tbox_anim%20)/10, fg_col, false)
+		tbox_draw_arrow(127-g_tbox_bw-6, ypos+(g_tbox_anim%20)/10, fg_col)
 
 		if g_tbox_options_open then
 			tbox_draw_options(y, fg_col, bg_col, g_tbox_active.options)
@@ -83,5 +83,5 @@ function tbox_draw_options(y0, fg_col, bg_col, options)
 		text_y+=5+g_tbox_bw
 	end
 
-	tbox_draw_arrow(arrow_x+(g_tbox_anim%20)/10, arrow_y + g_tbox_select*(5+g_tbox_bw), fg_col, true)
+	tbox_draw_arrow(arrow_x+(g_tbox_anim%20)/10, arrow_y + (g_tbox_select-1)*(5+g_tbox_bw), fg_col, true)
 end

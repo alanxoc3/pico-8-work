@@ -14,5 +14,5 @@
 -- if not g_tbox_active then do_some_func() end
 
 -- vars:
-g_tbox_messages, g_tbox_anim, g_tbox_max_len, g_tbox_select = {}, 0, 28, 0
+g_tbox_messages, g_tbox_anim, g_tbox_max_len, g_tbox_select = {}, 0, 28, 1
 -- g_tbox_options_open, g_tbox_active = nil, nil
