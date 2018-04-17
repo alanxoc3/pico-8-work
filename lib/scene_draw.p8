@@ -1,4 +1,5 @@
 --- tokens: 19
+-- con_scene()
 function scene_draw()
 	-- the marker variable is for the transitions.
 	local mark = ""

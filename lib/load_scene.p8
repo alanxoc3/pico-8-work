@@ -1,6 +1,7 @@
 --- tokens: 74
 -- use when switching to a new scene.
 -- x and y are the player's new coordinates.
+-- con_scene()
 function load_scene(name)
 	-- unload the actors.
 	for a in all(g_actors) do a.unload() end
