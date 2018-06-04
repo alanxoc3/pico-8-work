@@ -1,4 +1,3 @@
---- tokens: 49
 function _init()
 	tbox("sidney@idnum%23%199%3%10%293%19%0%-1:how old are you.:that's nice to know you are that old.|simon:wait what did you say?")
 	tbox("|bob:hi")
