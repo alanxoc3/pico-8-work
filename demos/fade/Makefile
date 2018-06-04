@@ -1,15 +1,21 @@
-t1=a christmas rest
+t1=pico game
 t2=by alan morgan
-files=$(shell find -path '*src/*.p8' -o -path '*lib/*.p8' | grep -v '/demo.p8')
+res=res.p8
+files=$(shell find -path '*src/*.p8' | grep -v '/dem_')
 
-out.p8: code.p8 res.p8
-	cat code.p8 > out.p8
-	tail --lines=+5 res.p8 >> out.p8
-	rm code.p8
-
-code.p8: src/demo.p8 $(files)
-	echo -e "pico-8 cartridge // http://www.pico-8.com\nversion 8\n__lua__\n-- $(t1)\n-- $(t2)\n\n" > code.p8
-	cat $^ >> code.p8
-
+.PHONY: all clean
+all: out.p8
 clean:
-	rm out.p8
+	find . -maxdepth 1 -name 'out*.p8' -delete;
+
+# target, code files
+# below, thanks to:
+# https://serverfault.com/questions/172284/linux-cat-with-separators-among-files
+compile_code = head --lines=3 $(res) > $(1); \
+					/bin/echo "-- $(t1)" >> $(1); \
+					/bin/echo "-- $(t2)" >> $(1); \
+					awk 'FNR==1 && NR!=1 {print "-->8"}{print}' $(2) >> $(1); \
+					tail --lines=+5 $(res) >> $(1);
+
+out%: src/demo% $(files) $(res)
+	$(call compile_code,$@,$^ $(files))

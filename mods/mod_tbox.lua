@@ -1,4 +1,5 @@
---- tokens: 15
+-- tbox
+
 -- tbox api
 
 -- "|" speaker, must go first!
@@ -52,8 +53,6 @@ function tbox_draw_arrow(x, y, col, hor)
 		line(x+i, y+i, p1, p2, col)
 	end
 end
---- tokens: 163
--- con_tbox()
 
 -- if you press the button while text is still being displayed, then the text
 -- finishes its display.
@@ -98,8 +97,6 @@ function tbox_interact(option_interact, sound)
 		end
 	end
 end
---- tokens: 286
--- con_tbox()
 
 -- add a new text box, id is optional, it is the id of the event. you can check
 -- if an event is done with a unique id.
@@ -134,9 +131,6 @@ function tbox(str)
 
 	g_tbox_active = g_tbox_messages[1]
 end
-
---- tokens: 599
--- con_tbox()
 
 -- draw the text boxes (if any)
 -- foreground color, background color, border width

@@ -1,10 +1,10 @@
-# new and improved pico makefile.
-t1=pico game
+# modified makefile (for modules)
+t1=mod test
 t2=by alan morgan
 res=res.p8
 
 .PHONY: all clean
-all: out.p8
+all: out_tbox.p8
 
 # target, code files
 # below, thanks to:
@@ -15,9 +15,9 @@ compile_code = head --lines=3 $(res) > $(1); \
 					awk 'FNR==1 && NR!=1 {print "-->8"}{print}' $(2) >> $(1); \
 					tail --lines=+5 $(res) >> $(1);
 
-files=$(shell find -path './src/*.lua' | grep -v '/demo')
-out%p8: src/demo%lua $(files) $(res)
-	$(call compile_code,$@,$< $(files))
+out_%.p8: dem_%.lua mod_%.lua
+	$(call compile_code,$@,$^)
 
 clean:
 	find . -maxdepth 1 -name 'out*.p8' -delete;
+
