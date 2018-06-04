@@ -4,13 +4,9 @@ function _init()
 
 	init_pl()
 	init_enemy()
-	acts_vec_attach(enemy, 8, 8)
-	acts_mov_attach(enemy)
-	acts_spr_attach(enemy, 1)
 end
 
 function _update60()
-	acts_loop(g_acts_mov_lst, "move")
 	acts_mov_update()
 	acts_col_update(function(x, y) return fget(mget(x, y), 0) end)
 	acts_vec_update()
@@ -42,6 +38,10 @@ function init_enemy()
 	enemy.hit = function(other, dir)
 		printh("hit enem: "..dir)
 	end
+
+	acts_vec_attach(enemy, 8, 8)
+	acts_mov_attach(enemy)
+	acts_spr_attach(enemy, 1)
 end
 
 function init_pl()

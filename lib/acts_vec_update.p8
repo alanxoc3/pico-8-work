@@ -1,6 +1,7 @@
--- con_acts_vec()
+-- con_actors()
 function acts_vec_update()
-	foreach(g_acts_vec_lst, function(a)
+	local acts = filter_val(g_actors, "vec")
+	foreach(acts, function(a)
 		a.x += a.dx
 		a.y += a.dy
 	end)

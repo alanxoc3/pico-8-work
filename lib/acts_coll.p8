@@ -15,7 +15,7 @@ function acts_coll(a, actors, dx, dy)
 					(abs(y) < (a.h+a2.h))) then 
 					-- check if moving together
 					if (dx != 0 and abs(x) < abs(a.x-a2.x)) then
-						if a.touchable and a2.touchable then
+						if a.touchable and a2.touchable and a.touch_group == a2.touch_group then
 							v=a.dx + a2.dx
 							if not a.static then a.dx = v/2 end
 							if not a2.static then a2.dx = v/2 end
@@ -23,7 +23,7 @@ function acts_coll(a, actors, dx, dy)
 						add(retlist, a2)
 						add(dirlist, dx > 0 and 1 or 0)
 					elseif (dy != 0 and abs(y) < abs(a.y-a2.y)) then
-						if a.touchable and a2.touchable then
+						if a.touchable and a2.touchable and a.touch_group == a2.touch_group then
 							v=a.dy + a2.dy
 							if not a.static then a.dy = v/2 end
 							if not a2.static then a2.dy = v/2 end

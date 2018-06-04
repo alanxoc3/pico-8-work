@@ -12,7 +12,7 @@ function actor_collision(a, actors, dx, dy)
 				local y=(a.y+dy) - a2.y
 				if ((abs(x) < (a.w+a2.w)) and
 					(abs(y) < (a.h+a2.h)))
-				then
+				then 
 					-- check if moving together
 					if (dx != 0 and abs(x) <
 							abs(a.x-a2.x)) then

@@ -1,9 +1,8 @@
-function acts_clean(...)
-	for list in all({...}) do
-		for a in all(list) do
-			if not a.alive then
-				del(list, a)
-			end
+function acts_clean()
+	for a in all(g_actors) do
+		if not a.alive then
+			del(g_actors, a)
+			del(g_all_actors, a)
 		end
 	end
 end

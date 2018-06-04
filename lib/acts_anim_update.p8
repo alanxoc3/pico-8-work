@@ -1,6 +1,8 @@
+-- con_actors()
 -- con_acts_anim()
 function acts_anim_update()
-	foreach(g_acts_anim_lst,
+	local acts = filter_val(g_actors, "anim")
+	foreach(acts,
 		function(a)
 			if a.t % a.anim_spd == 0 then
 				a.anim_off += 1

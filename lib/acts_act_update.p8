@@ -1,5 +1,5 @@
--- con_acts_act()
+-- con_actors()
 function acts_act_update()
-	acts_loop(g_acts_act_lst, "update")
-	foreach(g_acts_act_lst, function(a) a.t += 1 end)
+	acts_loop(g_actors, "update")
+	foreach(g_actors, function(a) a.t += 1 end)
 end

@@ -1,7 +1,8 @@
 -- con_acts_spr.p8
 function acts_spr_draw()
+	local acts = filter_val(g_actors, "spr")
 	-- set speed
-	foreach(g_acts_spr_lst,
+	foreach(acts,
 		function(a)
 			if a.sind >= 0 then
 				spr(a.sind,
