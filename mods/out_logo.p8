@@ -96,7 +96,6 @@ function img_x(str)
 	return ret
 end
 
---- tokens: 47
 -- call this at the start of your game.
 function gen_cipher()
 	c_str = "0123456789abcdefxghijklmnopqrstuvwyz!@#$%^&*()[]{}?+/=-_,<.>"
