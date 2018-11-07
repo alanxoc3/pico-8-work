@@ -1,4 +1,4 @@
-# Alan Pico Libs
+# Pico 8 Library
 This repository is my Pico-8 workflow.
 
 * `/bin` folder contains scripts.
