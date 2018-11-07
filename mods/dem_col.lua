@@ -33,11 +33,11 @@ end
 
 function _draw()
    cls(1)
+   map(0, 0, 0, 0, 16, 16)
    spr(g_pl.sind, g_pl.x*8-4, g_pl.y*8-4)
    for a in all(g_actors) do
       rectfill(a.x*8-a.w*8, a.y*8-a.h*8, a.x*8 + a.w*8, a.y*8 + a.h*8, rnd()*16)
    end
-   map(0, 0, 0, 0, 16, 16)
 end
 
 function create_block(x, y)

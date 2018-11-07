@@ -10,10 +10,10 @@ function _update60()
 	local dx = 0
 	local dy = 0
 
-	if btn(0) then dx = -.05 end
-	if btn(1) then dx = .05 end
-	if btn(2) then dy = -.05 end
-	if btn(3) then dy = .05 end
+	if btn(0) then dx = -.1 end
+	if btn(1) then dx = .1 end
+	if btn(2) then dy = -.1 end
+	if btn(3) then dy = .1 end
 
 	pl_x += dx
 	pl_y += dy

@@ -4,7 +4,7 @@ t2=by alan morgan
 res=res.p8
 
 .PHONY: all clean
-all: out_tbox.p8 out_logo.p8 out_tl.p8 out_col.p8 out_att.p8 out_tcol.p8
+all: out_tbox.p8 out_logo.p8 out_tl.p8 out_col.p8 out_att.p8 out_tcol.p8 out_view.p8
 
 # target, code files
 # below, thanks to:

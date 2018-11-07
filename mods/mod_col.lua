@@ -4,10 +4,10 @@
 -- an attachment!
 function acts_col_attach (a)
    return acts_attach("col",  a,
-      {"static", "solid", "touchable", "xb", "yb", "hit", "tile_hit",
+      {"static", "touchable", "xb", "yb", "hit", "tile_hit",
       "move_check"},
 
-      {false,    true,    true,        .1,   .1,   nf,    nf,
+      {false,    true,        .1,   .1,   nf,    nf,
       function(a, acts)
          local other_list = {}
          local move_check = function(dx, dy)
