@@ -12,7 +12,7 @@ all: out.p8
 compile_code = head --lines=3 $(res) > $(1); \
 					/bin/echo "-- $(t1)" >> $(1); \
 					/bin/echo "-- $(t2)" >> $(1); \
-					awk 'FNR==1 && NR!=1 {print "-->8"}{print}' $(2) >> $(1); \
+					awk 'FNR==1 && NR!=1 {print "------ " FILENAME}{print}' $(2) >> $(1); \
 					tail --lines=+5 $(res) >> $(1);
 
 files=$(shell find -path './src/*.lua' | grep -v '/demo')
