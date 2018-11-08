@@ -1,3 +1,0 @@
-# Pico Demo Project
-description
-
