@@ -1,9 +1,0 @@
-## TODO
-Look into screen color changing transitions.
-
-Create base song
-
-Offset the very left
-
-Organize the code. Better files / refactoring, possible token decrease.
-
