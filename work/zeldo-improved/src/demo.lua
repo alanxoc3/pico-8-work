@@ -33,15 +33,19 @@ function _draw()
 end
 
 function game_update()
-   batch_call(
-      acts_loop,
-      "{act,update}, {mov,move}, {col,move_check,@}, {tcol,coll_tile,@}, {rel,rel_update,@}, {vec,vec_update}, {act, clean}, {anim,anim_update}, {timed,tick}",
-      g_act_arrs["col"],
-      function(x, y) return fget(mget(x, y), 1) end,
-      g_pl
-   )
+   menu_update()
 
-	update_view(g_pl.x, g_pl.y)
+   if not g_menu_open then
+      batch_call(
+         acts_loop,
+         "{act,update}, {mov,move}, {col,move_check,@}, {tcol,coll_tile,@}, {rel,rel_update,@}, {vec,vec_update}, {act, clean}, {anim,anim_update}, {timed,tick}",
+         g_act_arrs["col"],
+         function(x, y) return fget(mget(x, y), 1) end,
+         g_pl
+      )
+
+      update_view(g_pl.x, g_pl.y)
+   end
 
    if stat(1) > .3 then
       printh(stat(1))
