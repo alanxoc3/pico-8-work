@@ -1,6 +1,5 @@
 g_menu_cursor_timer=0
 
-
 g_selected=4
 g_new_selected=4
 g_was_selected=false
