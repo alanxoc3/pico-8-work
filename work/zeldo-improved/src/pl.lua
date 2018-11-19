@@ -5,8 +5,9 @@ function btn_to_dir()
           (btn(3) and 0b1000 or 0)
 end
 
+g_item = nil
 function gen_pl(x, y)
-   return acts_attach("pl,nil,{item_type,x,y,rx,ry,spd,sinds,anim_len,anim_spd,hit,update},{lank_banjo,@,@,.4,.4,.02,@,3,5,@,@},{anim,spr_out,col,mov,tcol}",
+   return acts_attach("pl,nil,{x,y,rx,ry,spd,sinds,anim_len,anim_spd,hit,update},{@,@,.4,.4,.02,@,3,5,@,@},{anim,spr_out,col,mov,tcol}",
    x, y, {104, 105, 106, 107},
       function(self, other, xdir, ydir)
          if other.deku_bullet then

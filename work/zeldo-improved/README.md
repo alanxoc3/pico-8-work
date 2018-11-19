@@ -5,4 +5,4 @@ forces of evil!
 
 ## Todo
 - Experiment with getting hit back.
-- Experiment with pausing on menu screen.
+   - Then I can make the sword work.

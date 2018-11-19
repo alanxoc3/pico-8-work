@@ -23,6 +23,8 @@ function menu_update()
    g_menu_open = btn(5)
 
    if g_menu_open then
+      if g_pl.item then g_pl.item.holding = false end
+
       -- for some reason, negative values don't work here.
       batch_call(menu_btn_helper, "{0,@,0xffff},{1,@,1},{2,@,0xfffd},{3,@,3}", 
          g_new_selected%3 - 1 >= 0,
