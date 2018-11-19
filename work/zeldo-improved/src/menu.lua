@@ -32,3 +32,41 @@ function draw_menu()
    end
    g_menu_cursor_timer += 1
 end
+
+g_selected=4
+g_new_selected=4
+g_was_selected=false
+
+-- 0 = bottle
+-- 1 = sword
+-- 2 = bomb
+-- 3 = boomerang
+-- 4 = nothing
+-- 5 = bow
+-- 6 = banjo
+-- 7 = shield
+-- 8 = triforce
+
+function menu_btn_helper(key_code, expr, add)
+   if btnp(key_code) and expr then g_new_selected += add end
+end
+
+function menu_update()
+   g_menu_open = btn(5)
+
+   if g_menu_open then
+      -- for some reason, negative values don't work here.
+      batch_call(menu_btn_helper, "{0,@,0xffff},{1,@,1},{2,@,0xfffd},{3,@,3}", 
+         g_new_selected%3 - 1 >= 0,
+         g_new_selected%3 + 1 <= 2,
+         g_new_selected   - 3 >= 0,
+         g_new_selected   + 3 <= 8
+      )
+      g_was_selected=true
+   else
+      if g_was_selected then
+         g_selected, g_new_selected, g_was_selected = g_new_selected, 4, false
+      end
+   end
+end
+
