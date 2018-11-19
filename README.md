@@ -1,34 +1,19 @@
-# Pico 8 Library
-This repository is my entire Pico-8 workflow.
+# Alan's PICO-8 Library
+This repo contains my PICO-8 life.
 
-* `/bin` folder contains scripts.
-* `/demos` demos the various libraries.
-* `/lib` contains all the library scripts.
-* `/template` is the sample project I copy.
-* `/work` is miscellanious right now.
+* `/template` Includes my build system.
+* `/work` Games I'm working on.
+* `/show` A nice collection of all the things I've written.
 
-* alan-pico-lib
-	My library of reusable code.
-* demos
-	Pico-8 demos/cool things I didn't write.
-* games
-	Games I am working on.
-* sims
-	Tools and simulations I'm working on.
-	If it ain't a game, it goes here.
-* work
-	Disjointed work that I randomly create. Sometimes songs are here.
+## PICO-8 Useful Resources
+For all the pico-eighters out there. Here are some pages that I have found
+useful.
 
-## pico-8-club
-For all the pico-eighters out there.
-
-This repo is dedicated to the Pico-8 club at BYU-Idaho.
-
-## learning links
+### learning links
 - [List of links to learn](https://blog.nextthing.co/resources-to-help-you-learn-pico-8-game-development/)
 - [Crazy list of links](https://github.com/felipebueno/awesome-PICO-8)
 
-## useful/cool links and why
+### useful/cool links and why
 
 - [Pretty Pico-8 API](https://neko250.github.io/pico8-api/).
   May be a bit outdated sometimes, but really nice.
@@ -40,9 +25,10 @@ This repo is dedicated to the Pico-8 club at BYU-Idaho.
 - [Pico 8 Cheat Sheet](https://www.lexaloffle.com/bbs/?tid=28207).
    Also may be outdated barely, because of recent frequent updates.
 
-## cool carts
+### cool carts
 It's very cool to see what people have made with so little.
 
-- [carts I have made](https://www.lexaloffle.com/bbs/?uid=17205)
+- [tweetcarts](https://twitter.com/search?q=%23tweetcart)
+- [my carts](https://www.lexaloffle.com/bbs/?uid=17205)
 - [featured carts](https://www.lexaloffle.com/bbs/?cat=7#mode=carts&sub=2&orderby=rating)
 - [new carts](https://www.lexaloffle.com/bbs/?cat=7#sub=2&mode=carts)
