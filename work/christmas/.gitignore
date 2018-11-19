@@ -1,0 +1,10 @@
+# ignore those pesky vim files
+*.swp
+*.swo
+
+# and my pico files
+out.p8
+*.p8.png
+_tests.p8
+*.bin
+./code.p8

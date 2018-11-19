@@ -1,0 +1,95 @@
+## christmas-rest-task2
+
+deadline for final posting is 11 o clock pm December 25th CST
+
+3 tasks per level.
+
+- lvl 1
+DONE: create mary, jesus, joseph, and manger.
+DONE: create choir people.
+DONE: add stable scene to res spr.
+
+- lvl 2
+DONE: MJJM in stable scene (look at it)
+DONE: running field scene (do bkgd). in gimp
+DONE: choir in church gimp (look)
+
+- lvl 3
+DONE: choir in church pico8
+DONE: running field scene in pico8.
+DONE: manger in pico8.
+
+- lvl 4
+DONE: create shepherd people.
+DONE: create angel.
+DONE: gbymg melody.
+
+- lvl 5
+DONE: shepherd boy in running scene.
+DONE: rain in running scene.
+DONE: gbymg melody in running scene.
+
+- lvl 6
+DONE: way to set the view initially. (church interior glitches on it).
+DONE: fix character sprite offset thing.
+DONE: angel in sky scene.
+
+- lvl 7
+DONE: good and stylish textbox system. (no sound yet.)
+DONE: fix starting position in city.
+DONE: finalize from logo to entering church.
+
+- lvl 8
+DONE: church trigger of textbox thing :).
+DONE: brainstorm trigger system more.
+DONE: brainstorm movie of song more.
+
+- lvl 9
+DONE: field scene, no turning back!
+DONE: church inside, textbox and auto-walk to chair.
+DONE: angel/sky scene, add shepherds and sheep.
+
+- lvl 10
+DONE: angel scene animations (end collision, view move)
+DONE: church exit working
+
+- lvl 11
+DONE: make field scene longer.
+DONE: draw shepherds at the manger
+DONE: manger collision
+
+- lvl 12
+DONE: rain gets harder if field scene.
+DONE: church scene with family + transition
+DONE: grayscale fade (maybe 3 shades, blue and 2 greys)
+
+- lvl 13
+DONE: better (much better) fade system.
+DONE: implement the fade system
+DONE: lyrics with clipping and moving :) synced on a time interval.
+
+- lvl 14
+DONE: lyrics for each scene.
+DONE: ending texts.
+DONE: text fade from black, text fade to black.
+DONE: set up black rect in middle of screen. (for lyrics, like a generic thing).
+
+- lvl 15
+TODO: create the music for each scene!
+TODO: create the sound effects!
+DONE: "dedicated to my parents and siblings :)"
+
+- lvl 16
+DONE: sync the music.
+DONE: better logo (simplify).
+TODO: clean up (directory and libs).
+
+- lvl 17
+DONE: gameplay and tweak.
+
+-- OPTIMIZATIONS
+TODO: probably a much simpler logo.
+TODO: make sprite space smaller.
+TODO: have a screen map function.
+TODO: optimize player inputs.
+TODO: optimize player draws.
