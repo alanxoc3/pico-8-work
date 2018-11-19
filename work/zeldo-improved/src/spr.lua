@@ -1,5 +1,5 @@
 function scr_spr_out(col, a)
-	for c=0,15 do pal(c,col) end
+	for c=1,15 do pal(c,g_pal[col]) end
 
 	for xx=0xffff, 1 do
       for yy=0xffff, 1 do
@@ -7,7 +7,7 @@ function scr_spr_out(col, a)
 		end
 	end
 
-	for c=0,15 do pal(c,c) end
+   restore_pal()
    scr_spr(a)
 end
 

@@ -9,7 +9,9 @@
 
 function _init()
    poke(0x5f34, 1) -- for pattern colors.
-   g_grayscale = gun_vals("5,13,13,13,5,6,6,6,6,6,6,6,13,6,6")
+   g_pal_gray = gun_vals("5,13,13,13,5,6,6,6,6,6,6,6,13,6,6")
+   g_pal_norm = gun_vals("1,2,3,4,5,6,7,8,9,10,11,12,13,14,15")
+   g_pal = g_pal_norm
 
 	g_tl = tl_init(
 		--{ init_logo,  2.5, update_logo,  draw_logo },
@@ -52,19 +54,22 @@ function game_update()
    end
 end
 
+function restore_pal()
+   for i=1,15 do pal(i,g_pal[i]) end
+end
+
 function game_draw()
    cls(0)
 
-   -- todo: gray for sprites, and pause.
-   if g_menu_open then
-      for i=1,15 do pal(i, g_grayscale[i]) end
-   end
+   if g_menu_open then g_pal = g_pal_gray
+   else g_pal = g_pal_norm end
+
+   restore_pal()
 
    -- draw the background colors! for efficiency :).
    batch_call(scr_rectfill, "{0,0,49.5,64,3}, {49.5,31,95,64,3}, {64,31,95,64,4}, {78.5,0,95,31,4}, {49.5,0,78.5,31,5}, {82,0,93,18,5}, {63,0,65,64,12}")
 	scr_map(0, 0, 0, 0, 96, 64)
 
-   pal()
    acts_loop("spr", "draw")
 
    if g_menu_open then
