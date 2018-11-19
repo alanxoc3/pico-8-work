@@ -1,0 +1,9 @@
+# pico8 git ignore
+*.swp
+*.swo
+out*.p8
+
+*.bin
+*.p8.png
+*.p8l
+sheet.png
