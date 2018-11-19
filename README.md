@@ -1,4 +1,4 @@
-# Alan's PICO-8 Library
+# Alanxoc3's PICO-8 Workspace
 This repo contains my PICO-8 life.
 
 * `/template` Includes my build system.
