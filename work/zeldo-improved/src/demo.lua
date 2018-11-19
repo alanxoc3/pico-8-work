@@ -9,7 +9,7 @@
 
 function _init()
    poke(0x5f34, 1) -- for pattern colors.
-   g_pal_gray = gun_vals("5,13,13,13,5,6,6,6,6,6,6,6,13,6,6")
+   g_pal_gray = gun_vals("5,5,13,13,5,6,6,6,6,6,6,6,13,6,6")
    g_pal_norm = gun_vals("1,2,3,4,5,6,7,8,9,10,11,12,13,14,15")
    g_pal = g_pal_norm
 
