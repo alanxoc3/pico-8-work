@@ -54,10 +54,6 @@ function game_update()
    end
 end
 
-function restore_pal()
-   for i=1,15 do pal(i,g_pal[i]) end
-end
-
 function game_draw()
    cls(0)
 

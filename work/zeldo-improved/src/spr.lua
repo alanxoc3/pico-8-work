@@ -1,3 +1,7 @@
+function restore_pal()
+   for i=1,15 do pal(i,g_pal[i]) end
+end
+
 function scr_spr_out(col, a)
 	for c=1,15 do pal(c,g_pal[col]) end
 
