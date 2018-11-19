@@ -2,7 +2,7 @@
 out.p8
 *.swp
 *.swo
-
 *.bin
-*.p8.png
 *.p8l
+*.html
+*.js
