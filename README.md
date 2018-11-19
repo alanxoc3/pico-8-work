@@ -1,5 +1,5 @@
-# Alanxoc3's PICO-8 Workspace
-This repo contains my PICO-8 life.
+# PICO-8 Workspace
+This repo contains [@alanxoc3](https://twitter.com/alanxoc3)'s PICO-8 life.
 
 * `/template` Includes my build system.
 * `/work` Games I'm working on.
