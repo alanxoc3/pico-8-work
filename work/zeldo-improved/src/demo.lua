@@ -75,9 +75,9 @@ function game_draw()
    batch_call(scr_rectfill, "{0,0,49.5,64,3}, {49.5,31,95,64,3}, {64,31,95,64,4}, {78.5,0,95,31,4}, {49.5,0,78.5,31,5}, {82,0,93,18,5}, {63,0,65,64,12}")
 	scr_map(0, 0, 0, 0, 96, 64)
 
-   acts_loop("spr", "draw")
-   acts_loop("spr_out", "draw")
-   acts_loop("team_pl", "draw")
+   acts_loop("spr_bot", "draw")
+   acts_loop("spr_mid", "draw")
+   acts_loop("spr_top", "draw")
 
    if g_menu_open then
       draw_menu()

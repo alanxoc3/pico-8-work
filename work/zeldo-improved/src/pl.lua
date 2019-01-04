@@ -7,7 +7,7 @@ end
 
 g_item = nil
 function gen_pl(x, y)
-   return acts_attach("pl,nil,{x,y,rx,ry,spd,sinds,anim_len,anim_spd,push_countdown,hit,hearts,update},{@,@,.4,.4,.02,@,3,5,@,@,3,@},{team_pl,anim,spr_out,col,mov,tcol}",
+   return acts_attach("pl,nil,{x,y,rx,ry,spd,sinds,anim_len,anim_spd,push_countdown,hit,hearts,update},{@,@,.4,.4,.02,@,3,5,@,@,3,@},{spr_top,anim,spr_out,col,mov,tcol}",
    x, y, {0, 1, 2, 3}, 0,
       function(self, other, xdir, ydir)
          if other.deku_bullet then
@@ -71,7 +71,7 @@ end
 
 function gen_pl_item(pl, item_type)
    if item_type == 1 then
-      return acts_attach("lank_sword,nil,{movable,holding,rx,ry,sind,xf,touchable,init},{true,true,.3,.3,8,@,false,@},{team_pl,rel,tl,timed,spr,col}",
+      return acts_attach("lank_sword,nil,{movable,holding,rx,ry,sind,xf,touchable,init},{true,true,.3,.3,8,@,false,@},{spr_top,rel,tl,timed,spr,col}",
          pl.xf,
          function(a)
             return tl_init(
@@ -96,7 +96,7 @@ function gen_pl_item(pl, item_type)
          end)
 
    elseif item_type == 6 then
-      return acts_attach("lank_banjo,nil,{holding,rx,ry,sind,xf,touchable,init},{true,.3,.3,13,@,false,@},{team_pl,rel,tl,timed,spr,col}",
+      return acts_attach("lank_banjo,nil,{holding,rx,ry,sind,xf,touchable,init},{true,.3,.3,13,@,false,@},{spr_top,rel,tl,timed,spr,col}",
          pl.xf,
          function(a)
             return tl_init(
@@ -113,7 +113,7 @@ function gen_pl_item(pl, item_type)
          end)
 
    elseif item_type == 7 then
-      return acts_attach("lank_shield,nil,{movable,holding,rx,ry,sind,xf,touchable,init},{true,true,.3,.3,65,@,false,@},{team_pl,rel,tl,timed,spr,col}",
+      return acts_attach("lank_shield,nil,{movable,holding,rx,ry,sind,xf,touchable,init},{true,true,.3,.3,65,@,false,@},{spr_top,rel,tl,timed,spr,col}",
          pl.xf,
          function(a)
             return tl_init(
