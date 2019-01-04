@@ -59,7 +59,7 @@ function draw_menu()
          end
 
          if ind == g_new_selected then
-            local spr_ind = (g_menu_cursor_timer % 60 > 40) and 26 or 27
+            local spr_ind = (g_menu_cursor_timer % 60 > 40) and 68 or 69
             local rel_spr = function(x1, y1, ...) spr(spr_ind, x+x1, y+y1, ...) end
             batch_call(rel_spr, "{-5,-5,1,1,false,false}, {5,-5,1,1,true,false}, {5,5,1,1,true,true}, {-5,5,1,1,false,true}")
          else
