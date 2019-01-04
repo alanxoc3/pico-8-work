@@ -109,6 +109,8 @@ gen_attach("spr_out", function(a)
    end)
 end)
 
+gen_attach("team_pl", function(a) return acts_attach("team_pl,@,{},{},{spr}", a) end)
+
 gen_attach("anim", function(a)
    return acts_attach("anim,@,{sinds,anim_loc,anim_off,anim_len,anim_spd,anim_sind,anim_update},{{},1,0,1,0,nil,@},{spr,timed}", a,
 		function(a)

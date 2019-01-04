@@ -58,7 +58,9 @@ function gen_deku(x, y, can_turn)
 end
 
 function gen_hobgoblin(x, y)
+   -- x, y, init, tile_hit, hit
    return acts_attach("hobgoblin,nil,{x,y,rx,ry,xb,yb,sind,touchable,init,tile_hit,hit},{@,@,.6,.6,.4,.4,69,true,@,@,@},{tl,mov,timed,spr_out,col,tcol}", x, y,
+      -- init
       function(a)
          local rand_xxyy = function() a.xx, a.yy = rnd_one(), rnd_one() end
          return tl_init(
@@ -77,18 +79,28 @@ function gen_hobgoblin(x, y)
             { nil, .5, rand_xxyy}
          )
       end,
+      -- tile_hit
       function(a, dir)
          if not a.hit_pl then
             local ax, ay, d = abs(a.ax), abs(a.ay), dir-2
             a.hit_pl = d < 0 and ax > ay or d >= 0 and ax < ay
          end
       end,
+      -- hit
       function(a, other)
-         if other.touchable and not a.hit_pl then
+         if other.pl and not a.hit_pl then
             local ang = atan2(a.ax, a.ay)
-            if other.pl then
-               other.dx = .3 * cos(ang)
-               other.dy = .3 * sin(ang)
+            local x = other.x - a.x
+            local y = other.y - a.y
+            if abs(x) > abs(y) then
+               other.dx = sgn(x) * .3
+            else
+               other.dy = sgn(y) * .3
+            end
+
+            if other.push_countdown == 0 then
+               other.push_countdown = 30
+               other.hearts -= 1
             end
             a.hit_pl = true
          end
