@@ -48,6 +48,8 @@ function game_update()
 
       update_view(g_pl.x, g_pl.y)
    end
+
+   debug_update()
 end
 
 function debug_update()
@@ -82,6 +84,8 @@ function game_draw()
    end
 
    batch_call(rectfill, "{0,0,127,9,0}, {0,118,127,127,0}")
+
+   debug_draw()
 end
 
 function game_init()
