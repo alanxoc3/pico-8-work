@@ -103,12 +103,12 @@ gen_attach("spr", function(a)
 end)
 
 gen_attach("spr_out", function(a)
-   return acts_attach("spr_out,@,{sind,sw,sh,xf,yf,xx,yy,draw},{0,1,1,false,false,0,0,@},{vec}", a, function(a)
-      scr_sspr(a, 48, 24)
-   end)
+   return acts_attach("spr_out,@,{draw},{@},{spr}", a, scr_spr10)
 end)
 
-gen_attach("team_pl", function(a) return acts_attach("team_pl,@,{},{},{spr}", a) end)
+gen_attach("spr_top", function(a) return acts_attach("spr_top,@,{},{},{spr}", a) end)
+gen_attach("spr_mid", function(a) return acts_attach("spr_mid,@,{},{},{spr}", a) end)
+gen_attach("spr_bot", function(a) return acts_attach("spr_bot,@,{},{},{spr}", a) end)
 
 gen_attach("anim", function(a)
    return acts_attach("anim,@,{sinds,anim_loc,anim_off,anim_len,anim_spd,anim_sind,anim_update},{{},1,0,1,0,nil,@},{spr,timed}", a,

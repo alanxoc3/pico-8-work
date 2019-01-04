@@ -2,14 +2,15 @@ function restore_pal()
    for i=1,15 do pal(i,g_pal[i]) end
 end
 
-function scr_sspr(a, off_x, off_y)
+-- this is zeldo specific
+function scr_spr10(a)
    sspr(
-      off_x+a.sind%8*10,
-      off_y+flr(a.sind/8)*10,
+      48+a.sind%8*10,
+      24+flr(a.sind/8)*10,
       a.sw*10,
       a.sh*10,
-      scr_x(a.x-a.sw*(10/16))+a.xx,
-      scr_y(a.y-a.sh*(10/16))+a.yy,
+      scr_x(a.x-a.sw*.625)+a.xx,
+      scr_y(a.y-a.sh*.625)+a.yy,
       a.sw*10,
       a.sh*10,
       a.xf,
