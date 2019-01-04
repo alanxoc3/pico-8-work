@@ -8,7 +8,7 @@ end
 g_item = nil
 function gen_pl(x, y)
    return acts_attach("pl,nil,{x,y,rx,ry,spd,sinds,anim_len,anim_spd,push_countdown,hit,hearts,update},{@,@,.4,.4,.02,@,3,5,@,@,3,@},{team_pl,anim,spr_out,col,mov,tcol}",
-   x, y, {104, 105, 106, 107}, 0,
+   x, y, {0, 1, 2, 3}, 0,
       function(self, other, xdir, ydir)
          if other.deku_bullet then
             self.xx, self.yy = rnd_one(), rnd_one()
@@ -58,7 +58,7 @@ function gen_pl(x, y)
 
             end
 
-            a.anim_sind = item and item.lank_banjo and (btn(0) or btn(1) or btn(2) or btn(3)) and 107
+            a.anim_sind = item and item.lank_banjo and (btn(0) or btn(1) or btn(2) or btn(3)) and 3
          end
 
          if flr((abs(a.dx) + abs(a.dy))*50) > 0 then
@@ -113,7 +113,7 @@ function gen_pl_item(pl, item_type)
          end)
 
    elseif item_type == 7 then
-      return acts_attach("lank_shield,nil,{movable,holding,rx,ry,sind,xf,touchable,init},{true,true,.3,.3,46,@,false,@},{team_pl,rel,tl,timed,spr,col}",
+      return acts_attach("lank_shield,nil,{movable,holding,rx,ry,sind,xf,touchable,init},{true,true,.3,.3,65,@,false,@},{team_pl,rel,tl,timed,spr,col}",
          pl.xf,
          function(a)
             return tl_init(

@@ -17,12 +17,12 @@ function gen_spawner(x, y, func, buf_len, ...)
 end
 
 function gen_bullet(x, y, dx, dy, lifespan)
-   return acts_attach("deku_bullet,nil,{x,y,dx,dy,rx,ry,sind,touchable,init,hit},{@,@,@,@,.3,.3,71,false,@,@},{tl,timed,spr,col}",
+   return acts_attach("deku_bullet,nil,{x,y,dx,dy,rx,ry,sind,touchable,init,hit},{@,@,@,@,.3,.3,84,false,@,@},{tl,timed,spr,col}",
       x, y, dx, dy,
       function(a)
          return tl_init(
          { nil, lifespan*.0125 },
-         { function() a.sind = 87 end, lifespan*.0042 },
+         { function() a.sind = 83 end, lifespan*.0042 },
          { function() a.alive = false end }
          )
       end,
@@ -38,7 +38,7 @@ function gen_bullet(x, y, dx, dy, lifespan)
 end
 
 function gen_deku(x, y, can_turn)
-   return acts_attach("deku,nil,{x,y,rx,ry,sind,static,touchable,init},{@,@,.6,.6,70,true,true,@},{tl,timed,spr_out,col,tcol}",x,y,
+   return acts_attach("deku,nil,{x,y,rx,ry,sind,static,touchable,init},{@,@,.6,.6,5,true,true,@},{tl,timed,spr_out,col,tcol}",x,y,
       function(a)
          return tl_init(
             { nil, nil,
@@ -51,15 +51,15 @@ function gen_deku(x, y, can_turn)
                   end
                end
             },
-            { function() a.xx, a.sind = a.xf and -1 or 1, 121 end, .833 },
-            { function() a.xx, a.sind = 0, 70 end, .833 }
+            { function() a.xx, a.sind = a.xf and -1 or 1, 6 end, .833 },
+            { function() a.xx, a.sind = 0, 5 end, .833 }
          )
       end)
 end
 
 function gen_hobgoblin(x, y)
    -- x, y, init, tile_hit, hit
-   return acts_attach("hobgoblin,nil,{x,y,rx,ry,xb,yb,sind,touchable,init,tile_hit,hit},{@,@,.6,.6,.4,.4,69,true,@,@,@},{tl,mov,timed,spr_out,col,tcol}", x, y,
+   return acts_attach("hobgoblin,nil,{x,y,rx,ry,xb,yb,sind,touchable,init,tile_hit,hit},{@,@,.6,.6,.4,.4,4,true,@,@,@},{tl,mov,timed,spr_out,col,tcol}", x, y,
       -- init
       function(a)
          local rand_xxyy = function() a.xx, a.yy = rnd_one(), rnd_one() end
