@@ -48,10 +48,17 @@ function game_update()
 
       update_view(g_pl.x, g_pl.y)
    end
+end
 
+function debug_update()
    if stat(1) > .3 then
       printh(stat(1))
    end
+end
+
+function debug_draw()
+   print("cpu: "..stat(1), 2, 2, 7)
+   print("hearts: "..g_pl.hearts, 2, 121, 7)
 end
 
 function game_draw()
@@ -67,14 +74,13 @@ function game_draw()
 	scr_map(0, 0, 0, 0, 96, 64)
 
    acts_loop("spr", "draw")
+   acts_loop("team_pl", "draw")
 
    if g_menu_open then
       draw_menu()
    end
 
    batch_call(rectfill, "{0,0,127,9,0}, {0,118,127,127,0}")
-
-   print("cpu: "..stat(1), 2, 2, 7)
 end
 
 function game_init()
@@ -84,7 +90,7 @@ function game_init()
    g_pl = gen_pl(75, 40)
 
    -- gen_spawner(71, 53, gen_hobgoblin, 12)
-   for i=71,91,2 do
+   for i=71,76,2 do
       gen_spawner(i, 53, gen_hobgoblin, 12)
    end
 
