@@ -12,11 +12,13 @@ function gen_pl(x, y)
       function(self, other, xdir, ydir)
          if other.deku_bullet then
             self.xx, self.yy = rnd_one(), rnd_one()
-            -- if not other.dying then end
+            if self.item then
+               self.item.xx = self.xx
+               self.item.yy = self.yy
+            end
          end
       end, function(a)
-         a.xx, a.yy = 0, 0
-
+         -- movement logic
          if a.push_countdown != 0 then
             a.ay, a.ax = 0, 0
             a.push_countdown -= 1
@@ -36,31 +38,33 @@ function gen_pl(x, y)
             if btn(2) then a.ay = -a.spd end
             if btn(3) then a.ay =  a.spd end
             if not (btn(2) or btn(3)) or btn(2) and btn(3) then a.ay = 0 end
-
-            if btn(4) and not a.item then
-               a.item = gen_pl_item(a, g_selected)
-               if g_selected == 4 then -- speed up!
-                  a.ax *= 1.6 a.ay *= 1.6
-               end
-            end
-
-            local item = a.item
-            if (not btn(4) or btn(5)) then
-               if item then item.holding = false end
-            end
-
-            if item then
-               if item.movable then
-                  a.ax /= 2 a.ay /= 2
-               else
-                  a.ax, a.ay = 0, 0
-               end
-
-            end
-
-            a.anim_sind = item and item.lank_banjo and (btn(0) or btn(1) or btn(2) or btn(3)) and 3
          end
 
+         -- item logic
+         if btn(4) and not a.item then
+            a.item = gen_pl_item(a, g_selected)
+            if g_selected == 4 then -- speed up!
+               a.ax *= 1.6 a.ay *= 1.6
+            end
+         end
+
+         local item = a.item
+         if (not btn(4) or btn(5)) then
+            if item then item.holding = false end
+         end
+
+         if item then
+            if item.movable then
+               a.ax /= 2 a.ay /= 2
+            else
+               a.ax, a.ay = 0, 0
+            end
+
+         end
+
+         a.anim_sind = item and item.lank_banjo and (btn(0) or btn(1) or btn(2) or btn(3)) and 3
+
+         -- walking animation logic
          if flr((abs(a.dx) + abs(a.dy))*50) > 0 then
             a.anim_len = 3
          else
