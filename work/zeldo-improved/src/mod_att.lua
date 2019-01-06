@@ -110,6 +110,24 @@ gen_attach("spr_top", function(a) return acts_attach("spr_top,@,{},{},{spr}", a)
 gen_attach("spr_mid", function(a) return acts_attach("spr_mid,@,{},{},{spr}", a) end)
 gen_attach("spr_bot", function(a) return acts_attach("spr_bot,@,{},{},{spr}", a) end)
 
+gen_attach("stunnable", function(a) return acts_attach("stunnable,@,{stun_countdown,hearts,stun,stun_update},{0,3,@,@},{mov}", a,
+   function(a, other, speed, len)
+      local ang = atan2(other.ax, other.ay)
+      local x,y = a.x - other.x, a.y - other.y
+      if abs(x) > abs(y) then a.dx = sgn(x) * speed
+      else                    a.dy = sgn(y) * speed end
+
+      if a.stun_countdown == 0 then
+         a.stun_countdown = len
+      end
+   end, function(a)
+      if a.stun_countdown != 0 then
+         a.ay, a.ax = 0, 0
+         a.stun_countdown -= 1
+      end
+   end)
+end)
+
 gen_attach("anim", function(a)
    return acts_attach("anim,@,{sinds,anim_loc,anim_off,anim_len,anim_spd,anim_sind,anim_update},{{},1,0,1,0,nil,@},{spr,timed}", a,
 		function(a)
