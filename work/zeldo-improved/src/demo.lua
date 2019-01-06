@@ -1,5 +1,6 @@
--- todo: grayscale and overall palette fixing.
---
+-- todo: knockback
+-- todo: try to make the attributes not take in a name.
+
 -- 3522 3529 3503 3510 3521 3523 3538 3526 3487 3428 3635 3660 3652 3545 3494
 -- 3487 3743 3686 3675 3585 3591 3797 3802 3759 3755 3861 4663 4470 4457 4478
 -- 4477 4488 4387 4353 4369 4404 4338 4330 4316 4308 4288 4280 4259 4257 4272
@@ -40,7 +41,7 @@ function game_update()
    if not g_menu_open then
       batch_call(
          acts_loop,
-         "{spr,reset_off}, {act,update}, {mov,move}, {col,move_check,@}, {tcol,coll_tile,@}, {rel,rel_update,@}, {vec,vec_update}, {act, clean}, {anim,anim_update}, {timed,tick}",
+         "{spr,reset_off}, {stunnable, stun_update}, {act,update}, {mov,move}, {col,move_check,@}, {tcol,coll_tile,@}, {rel,rel_update,@}, {vec,vec_update}, {act, clean}, {anim,anim_update}, {timed,tick}",
          g_act_arrs["col"],
          function(x, y) return fget(mget(x, y), 1) end,
          g_pl

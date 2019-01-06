@@ -87,18 +87,10 @@ function gen_top(x, y)
       end,
       -- hit
       function(a, other)
-         if other.touchable and not other.static and not a.hit_pl then
-            local ang = atan2(a.ax, a.ay)
-            local x = other.x - a.x
-            local y = other.y - a.y
-            if abs(x) > abs(y) then
-               other.dx = sgn(x) * .3
-            else
-               other.dy = sgn(y) * .3
-            end
+         if other.stunnable and not a.hit_pl then
+            other.stun(other, a, .3, 30)
 
             if other.pl and other.push_countdown == 0 then
-               other.push_countdown = 30
                other.hearts -= 1
             end
             a.hit_pl = true

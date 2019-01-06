@@ -7,22 +7,12 @@ end
 
 g_item = nil
 function gen_pl(x, y)
-   return acts_attach("pl,nil,{x,y,rx,ry,spd,sinds,anim_len,anim_spd,push_countdown,hit,hearts,update},{@,@,.4,.4,.02,@,3,5,@,@,3,@},{spr_top,anim,spr_out,col,mov,tcol}",
+   return acts_attach("pl,nil,{x,y,rx,ry,spd,sinds,anim_len,anim_spd,stun_countdown,hit,hearts,update},{@,@,.4,.4,.02,@,3,5,@,@,3,@},{spr_top,anim,spr_out,col,mov,tcol,stunnable}",
    x, y, {0, 1, 2, 3}, 0,
       function(self, other, xdir, ydir)
-         if other.deku_bullet then
-            self.xx, self.yy = rnd_one(), rnd_one()
-            if self.item then
-               self.item.xx = self.xx
-               self.item.yy = self.yy
-            end
-         end
       end, function(a)
          -- movement logic
-         if a.push_countdown != 0 then
-            a.ay, a.ax = 0, 0
-            a.push_countdown -= 1
-         else
+         if a.stun_countdown == 0 then
             if not (btn(0) and btn(1)) then
                if btn(0) then
                   if not a.item then a.xf = true end
@@ -69,6 +59,15 @@ function gen_pl(x, y)
             a.anim_len = 3
          else
             a.anim_len = 1
+         end
+
+         -- shaking logic
+         if a.stun_countdown != 0 then
+            a.xx, a.yy = rnd_one(), rnd_one()
+            if a.item then
+               a.item.xx = a.xx
+               a.item.yy = a.yy
+            end
          end
       end)
 end
