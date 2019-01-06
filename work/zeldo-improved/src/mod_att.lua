@@ -99,7 +99,7 @@ gen_attach("rel", function(a)
 end)
 
 gen_attach("spr", function(a)
-   return acts_attach("spr,@,{sind,sw,sh,xf,yf,xx,yy,draw},{0,1,1,false,false,0,0,@},{vec}", a, scr_spr)
+   return acts_attach("spr,@,{sind,sw,sh,xf,yf,xx,yy,draw,reset_off},{0,1,1,false,false,0,0,@},{vec}", a, scr_spr, function(a) a.xx, a.yy = 0, 0 end)
 end)
 
 gen_attach("spr_out", function(a)

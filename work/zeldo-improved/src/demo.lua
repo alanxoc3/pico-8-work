@@ -5,7 +5,7 @@
 -- 4477 4488 4387 4353 4369 4404 4338 4330 4316 4308 4288 4280 4259 4257 4272
 -- 4295 4275 4259 4223 4206 4205 4212 4200 4198 4187 4232 4232 4230 4227 4212
 -- 4206 4198 4283 4219 4321 4312 4190 4104 4094 4087 4123 4121 4119 4141 4099
--- 4089 4075 4040 4015 4169
+-- 4089 4075 4040 4015 4169 4180
 
 function _init()
    poke(0x5f34, 1) -- for pattern colors.
@@ -40,7 +40,7 @@ function game_update()
    if not g_menu_open then
       batch_call(
          acts_loop,
-         "{act,update}, {mov,move}, {col,move_check,@}, {tcol,coll_tile,@}, {rel,rel_update,@}, {vec,vec_update}, {act, clean}, {anim,anim_update}, {timed,tick}",
+         "{spr,reset_off}, {act,update}, {mov,move}, {col,move_check,@}, {tcol,coll_tile,@}, {rel,rel_update,@}, {vec,vec_update}, {act, clean}, {anim,anim_update}, {timed,tick}",
          g_act_arrs["col"],
          function(x, y) return fget(mget(x, y), 1) end,
          g_pl
@@ -84,8 +84,16 @@ function game_draw()
    end
 
    batch_call(rectfill, "{0,0,127,9,0}, {0,118,127,127,0}")
+   draw_glitch_effect()
 
    debug_draw()
+end
+
+function draw_glitch_effect()
+   o1 = flr(rnd(0x1F00)) + 0x6040
+   o2 = o1 + flr(rnd(0x4)-0x2)
+   len = flr(rnd(0x40))
+   memcpy(o1,o2,len)
 end
 
 function game_init()
@@ -94,9 +102,9 @@ function game_init()
    for i=5,20 do gen_spawner(3.5, i*2.2, gen_deku, 12, true) end
    g_pl = gen_pl(75, 40)
 
-   -- gen_spawner(71, 53, gen_hobgoblin, 12)
-   for i=71,76,2 do
-      gen_spawner(i, 53, gen_hobgoblin, 12)
+   -- gen_spawner(71, 53, gen_top, 12)
+   for i=71,90,2 do
+      gen_spawner(i, 53, gen_top, 12)
    end
 
 	load_view(0, 0-10/8, 96, 68-12/8, 5, 11)

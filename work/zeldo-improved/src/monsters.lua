@@ -51,13 +51,13 @@ function gen_deku(x, y, can_turn)
                   end
                end
             },
-            { function() a.xx, a.sind = a.xf and -1 or 1, 6 end, .833 },
-            { function() a.xx, a.sind = 0, 5 end, .833 }
+            { function() a.xx, a.sind = a.xf and -1 or 1, 4 end, .833 },
+            { function() a.sind = 5 end, .833 }
          )
       end)
 end
 
-function gen_hobgoblin(x, y)
+function gen_top(x, y)
    -- x, y, init, tile_hit, hit
    return acts_attach("hobgoblin,nil,{x,y,rx,ry,xb,yb,sind,touchable,init,tile_hit,hit},{@,@,.6,.6,.4,.4,4,true,@,@,@},{spr_mid,tl,mov,timed,spr_out,col,tcol}", x, y,
       -- init
@@ -66,7 +66,6 @@ function gen_hobgoblin(x, y)
          return tl_init(
          {
             function()
-               a.xx = 0 a.yy = 0
                amov_to_actor(a, g_pl, .05)
                a.hit_pl = false
                local dir = flr((atan2(a.ax, a.ay)-.125) % 1 * 4)
@@ -74,21 +73,21 @@ function gen_hobgoblin(x, y)
             end, 1, function()
                if a.hit_pl then tl_next(a.state) end
             end },
-            { function() a.hit_pl, a.ax, a.ay = true, 0, 0 end, .1, rand_xxyy},
-            { function() a.xx, a.yy = 0, 0 end, 1.4},
+            { function() a.hit_pl, a.ax, a.ay = true, 0, 0 end, .1},
+            { nil, 1.4},
             { nil, .5, rand_xxyy}
          )
       end,
       -- tile_hit
       function(a, dir)
-         if not a.hit_pl then
-            local ax, ay, d = abs(a.ax), abs(a.ay), dir-2
-            a.hit_pl = d < 0 and ax > ay or d >= 0 and ax < ay
-         end
+         -- if not a.hit_pl then
+            -- local ax, ay, d = abs(a.ax), abs(a.ay), dir-2
+            -- a.hit_pl = d < 0 and ax > ay or d >= 0 and ax < ay
+         -- end
       end,
       -- hit
       function(a, other)
-         if other.pl and not a.hit_pl then
+         if other.touchable and not other.static and not a.hit_pl then
             local ang = atan2(a.ax, a.ay)
             local x = other.x - a.x
             local y = other.y - a.y
@@ -98,7 +97,7 @@ function gen_hobgoblin(x, y)
                other.dy = sgn(y) * .3
             end
 
-            if other.push_countdown == 0 then
+            if other.pl and other.push_countdown == 0 then
                other.push_countdown = 30
                other.hearts -= 1
             end
