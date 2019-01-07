@@ -16,21 +16,23 @@ function gen_spawner(x, y, func, buf_len, ...)
       end)
 end
 
-function gen_bullet(x, y, dx, dy, lifespan)
-   return acts_attach("deku_bullet,nil,{x,y,dx,dy,rx,ry,sind,touchable,init,hit},{@,@,@,@,.3,.3,84,false,@,@},{spr_mid,tl,timed,spr,col}",
-      x, y, dx, dy,
+function gen_bullet(x, y, xdir)
+   return acts_attach("deku_bullet,nil,{x,y,dx,dy,rx,ry,sind,touchable,init,hit},{@,@,@,#0,.3,.3,84,false,@,@},{spr_mid,tl,timed,spr,col}",
+      x, y, xdir and .25 or -.25,
       function(a)
          return tl_init(
-         { nil, lifespan*.0125 },
-         { function() a.sind = 83 end, lifespan*.0042 },
-         { function() a.alive = false end }
+            { nil, .5 },
+            { function() a.sind = 83 end, .15 },
+            { function() a.alive = false end }
          )
       end,
       function(a, other, ...)
-         if other.pl and a.state.current == 1 then
+         if other.pl then
             other.hurt(.5)
-            other.stun(.3, 30, ...)
-            tl_next(a.state, 2)
+            other.stun(30)
+            other.knockback(.3, ...)
+
+            tl_next(a.state, 3)
          end
       end)
 end
@@ -43,7 +45,7 @@ function gen_deku(x, y, can_turn)
             { nil, nil,
                function()
                   if axis_collide("y", g_pl, a) and (g_pl.x > a.x and a.xf or g_pl.x < a.x and not a.xf) then
-                     gen_bullet(a.x, a.y+.125, a.xf and .25 or -.25, 0, 40)
+                     gen_bullet(a.x, a.y+.125, a.xf)
                      tl_next(a.state)
                   else
                      a.xf = g_pl.x > a.x
@@ -57,21 +59,20 @@ function gen_deku(x, y, can_turn)
 end
 
 function gen_top(x, y)
-   return acts_attach("hobgoblin,nil,{x,y,rx,ry,xb,yb,sind,touchable,init,hit},{@,@,.6,.6,.4,.4,4,true,@,@},{spr_mid,tl,mov,timed,spr_out,col,tcol,stunnable}",x,y,
+   return acts_attach("hobgoblin,nil,{x,y,rx,ry,xb,yb,sind,touchable,init,hit},{@,@,.6,.6,.4,.4,4,true,@,@},{spr_mid,tl,mov,timed,spr_out,col,tcol,knockable}",x,y,
       -- init
       function(a)
-         local rand_xxyy = function() a.xx, a.yy = rnd_one(), rnd_one() end
          return tl_init(
             {function() amov_to_actor(a, g_pl, .05) end, 1},
             {function() a.ax, a.ay = 0, 0 end, 1.5},
-            {nil, .5, rand_xxyy}
+            {nil, .5, function() a.xx, a.yy = rnd_one(), rnd_one() end}
          )
       end,
       -- hit
       function(a, other, ...)
-         if other.stunnable and a.state.current == 1 then
-            if other.pl then other.hurt(1) end
-            other.stun(.3, 30, ...)
+         if other.knockable and a.state.current == 1 then
+            if other.pl then other.hurt(1) other.stun(30) end
+            other.knockback(.3, ...)
             tl_next(a.state)
          end
       end)
