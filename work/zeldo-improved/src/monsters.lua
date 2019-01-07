@@ -37,6 +37,7 @@ end
 
 function gen_deku(x, y, can_turn)
    return acts_attach("deku,nil,{x,y,rx,ry,sind,static,touchable,init},{@,@,.5,.5,5,true,true,@},{spr_mid,tl,timed,spr_out,col,tcol}",x,y,
+      -- init
       function(a)
          return tl_init(
             { nil, nil,
@@ -56,29 +57,22 @@ function gen_deku(x, y, can_turn)
 end
 
 function gen_top(x, y)
-   -- x, y, init, tile_hit, hit
-   return acts_attach("hobgoblin,nil,{x,y,rx,ry,xb,yb,sind,touchable,init,hit},{@,@,.6,.6,.4,.4,4,true,@,@},{spr_mid,tl,mov,timed,spr_out,col,tcol,stunnable}", x, y,
+   return acts_attach("hobgoblin,nil,{x,y,rx,ry,xb,yb,sind,touchable,init,hit},{@,@,.6,.6,.4,.4,4,true,@,@},{spr_mid,tl,mov,timed,spr_out,col,tcol,stunnable}",x,y,
       -- init
       function(a)
          local rand_xxyy = function() a.xx, a.yy = rnd_one(), rnd_one() end
          return tl_init(
-         {
-            function()
-               amov_to_actor(a, g_pl, .05)
-               a.hit_other = false
-            end, 1, function()
-               if a.hit_other then tl_next(a.state) end
-            end },
-            { function() a.hit_other, a.ax, a.ay = true, 0, 0 end, 1.5},
-            { nil, .5, rand_xxyy}
+            {function() amov_to_actor(a, g_pl, .05) end, 1},
+            {function() a.ax, a.ay = 0, 0 end, 1.5},
+            {nil, .5, rand_xxyy}
          )
       end,
       -- hit
       function(a, other, ...)
-         if other.stunnable and not a.hit_other then
-            a.hit_other = true
+         if other.stunnable and a.state.current == 1 then
             if other.pl then other.hurt(1) end
             other.stun(.3, 30, ...)
+            tl_next(a.state)
          end
       end)
 end
