@@ -54,9 +54,9 @@ function game_update()
 end
 
 function debug_update()
-   if stat(1) > .3 then
-      printh(stat(1))
-   end
+   -- if stat(1) > .3 then
+      -- printh(stat(1))
+   -- end
 end
 
 function debug_draw()

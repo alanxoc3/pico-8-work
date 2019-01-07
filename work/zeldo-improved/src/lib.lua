@@ -15,12 +15,13 @@ end
 
 -- returns the parsed table, the current position, and the parameter locations
 function gun_vals_helper(val_str,i,new_params)
-   local val_list, val, val_ind = {}, "", 1
+   local val_list, val, val_ind, isnum = {}, "", 1
 
    while i <= #val_str do
       local x = sub(val_str, i, i)
 
       if x == "{" then val, i = gun_vals_helper(val_str,i+1,new_params)
+      elseif x == "#" then isnum = true
       elseif x == "," or x == "}" then
          if     val == "@"                then add(new_params, {val_list, val_ind})
          elseif val == "true"             then val = true
@@ -28,8 +29,7 @@ function gun_vals_helper(val_str,i,new_params)
          elseif val == "nil"              then val = nil
          end
 
-         val_list[val_ind], val_ind, val = val, val_ind+1, ""
-
+         val_list[val_ind], val_ind, val, isnum = isnum and 0+val or val, val_ind+1, ""
          if x == "}" then return val_list, i end
       elseif x != " " then
    		val=val..x
