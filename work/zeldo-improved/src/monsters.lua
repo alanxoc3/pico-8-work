@@ -59,7 +59,7 @@ end
 
 function gen_top(x, y)
    -- x, y, init, tile_hit, hit
-   return acts_attach("hobgoblin,nil,{x,y,rx,ry,xb,yb,sind,touchable,init,tile_hit,hit},{@,@,.6,.6,.4,.4,4,true,@,@,@},{spr_mid,tl,mov,timed,spr_out,col,tcol}", x, y,
+   return acts_attach("hobgoblin,nil,{x,y,rx,ry,xb,yb,sind,touchable,init,hit},{@,@,.6,.6,.4,.4,4,true,@,@},{spr_mid,tl,mov,timed,spr_out,col,tcol,stunnable}", x, y,
       -- init
       function(a)
          local rand_xxyy = function() a.xx, a.yy = rnd_one(), rnd_one() end
@@ -67,33 +67,20 @@ function gen_top(x, y)
          {
             function()
                amov_to_actor(a, g_pl, .05)
-               a.hit_pl = false
-               local dir = flr((atan2(a.ax, a.ay)-.125) % 1 * 4)
-               a.xf = (dir != 3)
+               a.hit_other = false
             end, 1, function()
-               if a.hit_pl then tl_next(a.state) end
+               if a.hit_other then tl_next(a.state) end
             end },
-            { function() a.hit_pl, a.ax, a.ay = true, 0, 0 end, .1},
-            { nil, 1.4},
+            { function() a.hit_other, a.ax, a.ay = true, 0, 0 end, 1.5},
             { nil, .5, rand_xxyy}
          )
       end,
-      -- tile_hit
-      function(a, dir)
-         -- if not a.hit_pl then
-            -- local ax, ay, d = abs(a.ax), abs(a.ay), dir-2
-            -- a.hit_pl = d < 0 and ax > ay or d >= 0 and ax < ay
-         -- end
-      end,
       -- hit
-      function(a, other)
-         if other.stunnable and not a.hit_pl then
-            other.stun(other, a, .3, 30)
-
-            if other.pl and other.push_countdown == 0 then
-               other.hearts -= 1
-            end
-            a.hit_pl = true
+      function(a, other, ...)
+         if other.stunnable and not a.hit_other then
+            a.hit_other = true
+            if other.pl then other.hurt(1) end
+            other.stun(.3, 30, ...)
          end
       end)
 end

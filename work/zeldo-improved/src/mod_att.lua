@@ -99,7 +99,7 @@ gen_attach("rel", function(a)
 end)
 
 gen_attach("spr", function(a)
-   return acts_attach("spr,@,{sind,sw,sh,xf,yf,xx,yy,draw,reset_off},{0,1,1,false,false,0,0,@},{vec}", a, scr_spr, function(a) a.xx, a.yy = 0, 0 end)
+   return acts_attach("spr,@,{sind,sw,sh,xf,yf,xx,yy,draw,reset_off},{0,1,1,false,false,0,0,@,@},{vec}", a, scr_spr, function(a) a.xx, a.yy = 0, 0 end)
 end)
 
 gen_attach("spr_out", function(a)
@@ -110,20 +110,25 @@ gen_attach("spr_top", function(a) return acts_attach("spr_top,@,{},{},{spr}", a)
 gen_attach("spr_mid", function(a) return acts_attach("spr_mid,@,{},{},{spr}", a) end)
 gen_attach("spr_bot", function(a) return acts_attach("spr_bot,@,{},{},{spr}", a) end)
 
-gen_attach("stunnable", function(a) return acts_attach("stunnable,@,{stun_countdown,hearts,stun,stun_update},{0,3,@,@},{mov}", a,
-   function(a, other, speed, len)
-      local ang = atan2(other.ax, other.ay)
-      local x,y = a.x - other.x, a.y - other.y
-      if abs(x) > abs(y) then a.dx = sgn(x) * speed
-      else                    a.dy = sgn(y) * speed end
+gen_attach("stunnable", function(a) return acts_attach("stunnable,@,{stun_countdown,stun,stun_update},{#0,@,@},{mov}", a,
+   function(speed, len, xdir, ydir)
+      if xdir != 0 then a.dx = xdir * speed
+      else              a.dy = ydir * speed end
 
       if a.stun_countdown == 0 then
          a.stun_countdown = len
       end
-   end, function(a)
+   end, function()
       if a.stun_countdown != 0 then
          a.ay, a.ax = 0, 0
          a.stun_countdown -= 1
+      end
+   end)
+end)
+
+gen_attach("hurtable", function(a) return acts_attach("hurtable,@,{hearts,hurt},{#3,@},{stunnable}", a, function(damage)
+      if a.stun_countdown == 0 then
+         a.hearts -= damage
       end
    end)
 end)
