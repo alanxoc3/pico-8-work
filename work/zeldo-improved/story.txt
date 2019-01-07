@@ -1,0 +1,12 @@
+Village has:
+   shop
+   banjo school
+   3 houses (each gives you some money for playing)
+      first  is $20
+      second is $30
+      third  is $40
+   lank's house
+
+
+how do we get the boomerang?
+   house in the graveyard.
