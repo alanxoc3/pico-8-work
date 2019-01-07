@@ -74,7 +74,7 @@ function game_draw()
 
    -- draw the background colors! for efficiency :).
    batch_call(scr_rectfill, "{0,0,49.5,64,3}, {49.5,31,95,64,3}, {64,31,95,64,4}, {78.5,0,95,31,4}, {49.5,0,78.5,31,5}, {82,0,93,18,5}, {63,0,65,64,12}")
-	scr_map(0, 0, 0, 0, 96, 64)
+	scr_map(0, 0, 0, 0, 128, 64)
 
    acts_loop("spr_bot", "draw")
    acts_loop("spr_mid", "draw")
@@ -108,6 +108,7 @@ function game_init()
       gen_spawner(i, 53, gen_top, 12)
    end
 
-	load_view(0, 0-10/8, 96, 68-12/8, 5, 11)
+	load_view(0, 0-10/8, 128, 68-12/8, 5, 11)
+	-- load_view(0, 0-10/8, 96, 68-12/8, 5, 11)
 	center_view(g_pl.x, g_pl.y)
 end
