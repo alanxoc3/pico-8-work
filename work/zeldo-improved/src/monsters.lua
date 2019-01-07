@@ -26,19 +26,17 @@ function gen_bullet(x, y, dx, dy, lifespan)
          { function() a.alive = false end }
          )
       end,
-      function(a, other)
+      function(a, other, ...)
          if other.pl and a.state.current == 1 then
-            local ang = atan2(a.ax, a.ay)
-            if other.pl then
-               other.dx = .3 * sgn(a.dx)
-            end
+            other.hurt(.5)
+            other.stun(.3, 30, ...)
             tl_next(a.state, 2)
          end
       end)
 end
 
 function gen_deku(x, y, can_turn)
-   return acts_attach("deku,nil,{x,y,rx,ry,sind,static,touchable,init},{@,@,.6,.6,5,true,true,@},{spr_mid,tl,timed,spr_out,col,tcol}",x,y,
+   return acts_attach("deku,nil,{x,y,rx,ry,sind,static,touchable,init},{@,@,.5,.5,5,true,true,@},{spr_mid,tl,timed,spr_out,col,tcol}",x,y,
       function(a)
          return tl_init(
             { nil, nil,
