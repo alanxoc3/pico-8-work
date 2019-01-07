@@ -110,11 +110,15 @@ gen_attach("spr_top", function(a) return acts_attach("spr_top,@,{},{},{spr}", a)
 gen_attach("spr_mid", function(a) return acts_attach("spr_mid,@,{},{},{spr}", a) end)
 gen_attach("spr_bot", function(a) return acts_attach("spr_bot,@,{},{},{spr}", a) end)
 
-gen_attach("stunnable", function(a) return acts_attach("stunnable,@,{stun_countdown,stun,stun_update},{#0,@,@},{mov}", a,
-   function(speed, len, xdir, ydir)
+gen_attach("knockable", function(a) return acts_attach("knockable,@,{knockback},{@},{mov}", a,
+   function(speed, xdir, ydir)
       if xdir != 0 then a.dx = xdir * speed
       else              a.dy = ydir * speed end
+   end)
+end)
 
+gen_attach("stunnable", function(a) return acts_attach("stunnable,@,{stun_countdown,stun,stun_update},{#0,@,@},{mov}", a,
+   function(len)
       if a.stun_countdown == 0 then
          a.stun_countdown = len
       end

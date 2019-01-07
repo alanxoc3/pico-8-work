@@ -7,8 +7,8 @@ end
 
 g_item = nil
 function gen_pl(x, y)
-   return acts_attach("pl,nil,{x,y,rx,ry,spd,sinds,anim_len,anim_spd,stun_countdown,hit,hearts,update},{@,@,.4,.4,.02,@,3,5,@,@,3,@},{spr_top,anim,spr_out,col,mov,tcol,hurtable}",
-   x, y, {0, 1, 2, 3}, 0,
+   return acts_attach("pl,nil,{x,y,sinds,rx,ry,spd,anim_len,anim_spd,hit,hearts,update},{@,@,@,.4,.4,.02,3,5,@,3,@},{spr_top,anim,spr_out,col,mov,tcol,hurtable,knockable,stunnable}",
+   x, y, {0, 1, 2, 3},
       function(self, other, xdir, ydir)
       end, function(a)
          -- movement logic
