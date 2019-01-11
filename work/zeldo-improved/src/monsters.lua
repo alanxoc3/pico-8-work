@@ -65,15 +65,19 @@ function gen_top(x, y)
          return tl_init(
             {function() amov_to_actor(a, g_pl, .05) end, 1},
             {function() a.ax, a.ay = 0, 0 end, 1.5},
-            {nil, .5, function() a.xx, a.yy = rnd_one(), rnd_one() end}
+            {nil, .5, function() a.xx = rnd_one() end}
          )
       end,
       -- hit
       function(a, other, ...)
-         if other.knockable and a.state.current == 1 then
-            if other.pl then other.hurt(1) other.stun(30) end
-            other.knockback(.3, ...)
-            tl_next(a.state)
+         if a.state.current == 1 then
+            if other.knockable then
+               if other.pl then other.hurt(1) other.stun(30) end
+               other.knockback(.3, ...)
+               tl_next(a.state)
+            elseif other.lank_sword then
+               tl_next(a.state)
+            end
          end
       end)
 end
