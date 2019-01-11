@@ -7,7 +7,7 @@ end
 
 g_item = nil
 function gen_pl(x, y)
-   return acts_attach("pl,nil,{x,y,sinds,rx,ry,spd,anim_len,anim_spd,hit,hearts,update},{@,@,@,.4,.4,.02,3,5,@,3,@},{spr_top,anim,spr_out,col,mov,tcol,hurtable,knockable,stunnable}",
+   return acts_attach("pl,nil,{x,y,sinds,rx,ry,spd,anim_len,anim_spd,hit,hearts,update},{@,@,@,.4,.4,.02,3,5,@,3,@},{spr_top,anim,col,mov,tcol,hurtable,knockable,stunnable,spr_out}",
    x, y, {0, 1, 2, 3},
       function(self, other, xdir, ydir)
       end, function(a)
@@ -63,7 +63,6 @@ function gen_pl(x, y)
 
          -- shaking logic
          if a.stun_countdown != 0 then
-            a.xx, a.yy = rnd_one(), rnd_one()
             if a.item then
                a.item.xx = a.xx
                a.item.yy = a.yy
@@ -74,7 +73,7 @@ end
 
 function gen_pl_item(pl, item_type)
    if item_type == 1 then
-      return acts_attach("lank_sword,nil,{movable,holding,rx,ry,sind,xf,touchable,init},{true,true,.3,.3,8,@,false,@},{spr_top,rel,tl,timed,spr,col}",
+      return acts_attach("lank_sword,nil,{movable,holding,rx,ry,sind,xf,touchable,init,hit},{true,true,.3,.3,8,@,false,@,@},{spr_top,rel,tl,timed,spr,col}",
          pl.xf,
          function(a)
             return tl_init(
@@ -96,6 +95,12 @@ function gen_pl_item(pl, item_type)
                end
             end }
             )
+         end, function(a, other, ...)
+            if not other.pl then
+               if other.knockable then other.knockback(.4, ...) end
+               if other.stunnable then other.stun(30) end
+               if other.hurtable  then other.hurt(.5) end
+            end
          end)
 
    elseif item_type == 6 then

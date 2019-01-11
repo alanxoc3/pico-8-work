@@ -57,7 +57,7 @@ gen_attach("act", function(a)
 end)
 
 gen_attach("tl", function(a)
-   return acts_attach("tl,@,{update},{@}",  a, function(a) tl_update(a.state) end)
+   return acts_attach("tl,@,{update},{@},{stunnable}",  a, function(a) if a.stun_countdown == 0 then tl_update(a.state) end end)
 end)
 
 gen_attach("timed", function(a)
@@ -98,8 +98,12 @@ gen_attach("rel", function(a)
 	end)
 end)
 
+gen_attach("drawable", function(a)
+   return acts_attach("spr,@,{xx,yy,draw,reset_off},{#0,#0,@,@,@}", a, nf, function(a) a.xx, a.yy = 0, 0 end)
+end)
+
 gen_attach("spr", function(a)
-   return acts_attach("spr,@,{sind,sw,sh,xf,yf,xx,yy,draw,reset_off},{0,1,1,false,false,0,0,@,@},{vec}", a, scr_spr, function(a) a.xx, a.yy = 0, 0 end)
+   return acts_attach("spr,@,{sind,sw,sh,xf,yf,draw},{0,1,1,false,false,@},{vec,drawable}", a, scr_spr)
 end)
 
 gen_attach("spr_out", function(a)
@@ -117,7 +121,7 @@ gen_attach("knockable", function(a) return acts_attach("knockable,@,{knockback},
    end)
 end)
 
-gen_attach("stunnable", function(a) return acts_attach("stunnable,@,{stun_countdown,stun,stun_update},{#0,@,@},{mov}", a,
+gen_attach("stunnable", function(a) return acts_attach("stunnable,@,{stun_countdown,stun,stun_update},{#0,@,@},{mov,drawable}", a,
    function(len)
       if a.stun_countdown == 0 then
          a.stun_countdown = len
@@ -125,6 +129,7 @@ gen_attach("stunnable", function(a) return acts_attach("stunnable,@,{stun_countd
    end, function()
       if a.stun_countdown != 0 then
          a.ay, a.ax = 0, 0
+         a.xx, a.yy = rnd_one(), rnd_one()
          a.stun_countdown -= 1
       end
    end)

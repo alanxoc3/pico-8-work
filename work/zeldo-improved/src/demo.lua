@@ -41,7 +41,7 @@ function game_update()
    if not g_menu_open then
       batch_call(
          acts_loop,
-         "{spr,reset_off}, {stunnable, stun_update}, {act,update}, {mov,move}, {col,move_check,@}, {tcol,coll_tile,@}, {rel,rel_update,@}, {vec,vec_update}, {act, clean}, {anim,anim_update}, {timed,tick}",
+         "{drawable,reset_off}, {stunnable, stun_update}, {act,update}, {mov,move}, {col,move_check,@}, {tcol,coll_tile,@}, {rel,rel_update,@}, {vec,vec_update}, {act, clean}, {anim,anim_update}, {timed,tick}",
          g_act_arrs["col"],
          function(x, y) return fget(mget(x, y), 1) end,
          g_pl
