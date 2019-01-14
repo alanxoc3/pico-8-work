@@ -100,12 +100,12 @@ end
 function game_init()
 	-- palt(0, false)
    -- deku_spawner(3.5, 22.5, true)
-   for i=5,20 do gen_spawner(3.5, i*2.2, gen_deku, 12, true) end
-   g_pl = gen_pl(75, 40)
+   for i=0,10,2 do gen_spawner(49, 15+i, gen_deku, 12, true) end
+   g_pl = gen_pl(53, 17)
 
    -- gen_spawner(71, 53, gen_top, 12)
-   for i=71,90,2 do
-      gen_spawner(i, 53, gen_top, 12)
+   for i=53,60,2 do
+      gen_spawner(i, 20, gen_top, 12)
    end
 
 	load_view(0, 0-10/8, 128, 68-12/8, 5, 11)
