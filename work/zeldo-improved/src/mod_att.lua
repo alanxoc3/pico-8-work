@@ -121,6 +121,12 @@ gen_attach("knockable", function(a) return acts_attach("knockable,@,{knockback},
    end)
 end)
 
+gen_attach("starable", function(a) return acts_attach("starable,@,{stare},{@},{spr}", a,
+   function(a)
+      a.xf = g_pl.x < a.x
+   end)
+end)
+
 gen_attach("stunnable", function(a) return acts_attach("stunnable,@,{stun_countdown,stun,stun_update},{#0,@,@},{mov,drawable}", a,
    function(len)
       if a.stun_countdown == 0 then
