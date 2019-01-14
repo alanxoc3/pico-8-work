@@ -38,7 +38,7 @@ function gen_bullet(x, y, xdir)
 end
 
 function gen_deku(x, y, can_turn)
-   return acts_attach("deku,nil,{x,y,rx,ry,sind,static,touchable,init},{@,@,.5,.5,5,true,true,@},{spr_mid,tl,timed,spr_out,col,tcol}",x,y,
+   return acts_attach("deku,nil,{x,y,rx,ry,sind,static,touchable,init},{@,@,.5,.5,5,true,true,@},{starable,spr_mid,tl,timed,spr_out,col,tcol}",x,y,
       -- init
       function(a)
          return tl_init(
@@ -47,8 +47,6 @@ function gen_deku(x, y, can_turn)
                   if axis_collide("y", g_pl, a) and (g_pl.x > a.x and a.xf or g_pl.x < a.x and not a.xf) then
                      gen_bullet(a.x, a.y+.125, a.xf)
                      tl_next(a.state)
-                  else
-                     a.xf = g_pl.x > a.x
                   end
                end
             },
@@ -59,7 +57,7 @@ function gen_deku(x, y, can_turn)
 end
 
 function gen_top(x, y)
-   return acts_attach("hobgoblin,nil,{x,y,rx,ry,xb,yb,sind,touchable,init,hit},{@,@,.6,.6,.4,.4,4,true,@,@},{spr_mid,tl,mov,timed,spr_out,col,tcol,knockable}",x,y,
+   return acts_attach("hobgoblin,nil,{x,y,rx,ry,xb,yb,sind,touchable,init,hit},{@,@,.6,.6,.4,.4,4,true,@,@},{starable,spr_mid,tl,mov,timed,spr_out,col,tcol,knockable}",x,y,
       -- init
       function(a)
          return tl_init(
