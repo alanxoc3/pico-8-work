@@ -73,8 +73,7 @@ function game_draw()
    restore_pal()
 
    -- draw the background colors! for efficiency :).
-   batch_call(scr_rectfill, "{0,0,49.5,64,3}, {49.5,31,95,64,3}, {64,31,95,64,4}, {78.5,0,95,31,4}, {49.5,0,78.5,31,5}, {82,0,93,18,5}, {63,0,65,64,12}")
-	scr_map(0, 0, 0, 0, 128, 64)
+   draw_cur_room()
 
    acts_loop("spr_bot", "draw")
    acts_loop("spr_mid", "draw")
@@ -85,7 +84,7 @@ function game_draw()
    end
 
    batch_call(rectfill, "{0,0,127,9,0}, {0,118,127,127,0}")
-   draw_glitch_effect()
+   -- draw_glitch_effect()
 
    debug_draw()
 end
@@ -100,6 +99,8 @@ end
 function game_init()
 	-- palt(0, false)
    -- deku_spawner(3.5, 22.5, true)
+   map_init()
+
    for i=0,10,2 do gen_spawner(49, 15+i, gen_deku, 12, true) end
    g_pl = gen_pl(53, 17)
 
