@@ -99,7 +99,7 @@ gen_attach("rel", function(a)
 end)
 
 gen_attach("drawable", function(a)
-   return acts_attach("spr,@,{xx,yy,draw,reset_off},{#0,#0,@,@,@}", a, nf, function(a) a.xx, a.yy = 0, 0 end)
+   return acts_attach("drawable,@,{xx,yy,draw,reset_off},{#0,#0,@,@}", a, nf, function(a) a.xx, a.yy = 0, 0 end)
 end)
 
 gen_attach("spr", function(a)
