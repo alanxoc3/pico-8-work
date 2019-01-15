@@ -83,7 +83,7 @@ function game_draw()
       draw_menu()
    end
 
-   batch_call(rectfill, "{0,0,127,9,0}, {0,118,127,127,0}")
+   batch_call(rectfill, "{0,0,127,15,0}, {0,112,127,127,0}")
    -- draw_glitch_effect()
 
    debug_draw()
