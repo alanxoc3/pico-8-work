@@ -25,7 +25,7 @@ function _update60()
    tl_update(g_tl)
 
    if not g_tbox_active then
-      if btnp(0) and not btnp(4) then tbox(":hello lank, we meet again") end
+      if btnp(0) and not btnp(4) then tbox("ivan:hello lank, we meet again") end
    end
    tbox_interact()
 end
@@ -46,7 +46,7 @@ function game_update()
          g_act_arrs["col"],
          function(x, y)
             return x >= g_rx and x < g_rx+g_rw and
-                   y >= g_ry+2 and y < g_ry+g_rh-2 and
+                   y >= g_ry and y < g_ry+g_rh and
                    fget(mget(x, y), 1)
          end,
          g_pl
@@ -90,7 +90,9 @@ function game_draw()
       draw_menu()
    end
 
-   batch_call(rectfill, "{0,0,127,15,0}, {0,112,127,127,0}")
+   rectfill(0,0,127, g_v1*8-1,8)
+   rectfill(0,128-g_v2*8,127,127,8)
+   -- batch_call(rectfill, "{0,0,127,15,0}, {0,112,127,127,0}")
    -- draw_glitch_effect()
 
    debug_draw()
@@ -116,5 +118,6 @@ function game_init()
       gen_spawner(i, 20, gen_top, 12)
    end
 
-   load_room("dun00", 20, 10)
+   load_room("dun00", 4, 4)
+   -- load_room("villa", 15, 10)
 end

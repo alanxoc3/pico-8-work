@@ -1,8 +1,8 @@
 function draw_cur_room()
    cur_room = g_rooms[g_cur_room]
-   w = min(16, cur_room.w)/2*8
-   h = min(16, cur_room.h)/2*8
-   clip(64-w, 64-h, 2*w, 2*h)
+   w = min(16, cur_room.w)*8
+   h = min(12, cur_room.h)*8
+   clip(64-w/2, g_v1*8+(12*8-h)/2, w, h)
    rectfill(0,0,128,128,cur_room.c)
 	scr_map(cur_room.x, cur_room.y, cur_room.x, cur_room.y, cur_room.w, cur_room.h)
 end
@@ -79,7 +79,7 @@ function load_room(new_room, rx, ry)
    g_pl.y = y + ry
    -- end debugging
 
-	load_view(x, y-2, w, h+4, 5, 11)
+	load_view(x, y, w, h, 5, 11, 1.5, 2.5)
 	center_view(g_pl.x, g_pl.y)
 
    -- get rid of current text.
@@ -88,9 +88,9 @@ end
 
 function room_update()
    cur_room = g_rooms[g_cur_room]
-   if g_pl.y > g_ry+g_rh-2 and cur_room.d then
+   if g_pl.y > g_ry+g_rh and cur_room.d then
       load_room(cur_room.d[1], cur_room.d[2], cur_room.d[3])
-   elseif g_pl.y < g_ry+2 and cur_room.u then
+   elseif g_pl.y < g_ry and cur_room.u then
       load_room(cur_room.u[1], cur_room.u[2], cur_room.u[3])
    elseif g_pl.x > g_rx+g_rw and cur_room.r then
       load_room(cur_room.r[1], cur_room.r[2], cur_room.r[3])
