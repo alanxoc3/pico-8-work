@@ -43,7 +43,11 @@ function game_update()
          acts_loop,
          "{drawable,reset_off}, {stunnable, stun_update}, {act,update}, {mov,move}, {col,move_check,@}, {tcol,coll_tile,@}, {rel,rel_update,@}, {vec,vec_update}, {act, clean}, {starable,stare}, {anim,anim_update}, {timed,tick}",
          g_act_arrs["col"],
-         function(x, y) return fget(mget(x, y), 1) end,
+         function(x, y)
+            return x >= g_rx and x < g_rx+g_rw and
+                   y >= g_ry+2 and y < g_ry+g_rh-2 and
+                   fget(mget(x, y), 1)
+         end,
          g_pl
       )
 
@@ -82,6 +86,7 @@ function game_draw()
    acts_loop("spr_bot", "draw")
    acts_loop("spr_mid", "draw")
    acts_loop("spr_top", "draw")
+   clip()
 
    if g_menu_open then
       draw_menu()
