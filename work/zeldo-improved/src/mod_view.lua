@@ -1,5 +1,5 @@
 function load_view(...)
-	g_rx, g_ry, g_rw, g_rh, g_s1, g_s2 = ...
+	g_rx, g_ry, g_rw, g_rh, g_s1, g_s2, g_v1, g_v2 = ...
 end
 
 function center_view(x, y)
@@ -20,7 +20,7 @@ end
 
 -- example usage: update_view
 function update_view(p_x, p_y)
-	g_x, g_y = update_view_helper(p_x, g_x, g_rx, g_rw), update_view_helper(p_y, g_y, g_ry, g_rh)
+	g_x, g_y = update_view_helper(p_x, g_x, g_rx, g_rw), update_view_helper(p_y, g_y, g_ry-g_v1, g_rh+g_v1+g_v2)
 end
 
 -- some utility functions
