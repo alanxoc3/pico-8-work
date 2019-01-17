@@ -6,7 +6,7 @@
 -- 4477 4488 4387 4353 4369 4404 4338 4330 4316 4308 4288 4280 4259 4257 4272
 -- 4295 4275 4259 4223 4206 4205 4212 4200 4198 4187 4232 4232 4230 4227 4212
 -- 4206 4198 4283 4219 4321 4312 4190 4104 4094 4087 4123 4121 4119 4141 4099
--- 4089 4075 4040 4015 4169 4180 4170 4145 4225 4665
+-- 4089 4075 4040 4015 4169 4180 4170 4145 4225 4665 5565
 
 function _init()
    poke(0x5f34, 1) -- for pattern colors.
@@ -52,13 +52,10 @@ function game_update()
       )
 
       update_view(g_pl.x, g_pl.y)
+      room_update()
    end
 
    debug_update()
-   -- debug for map
-   if btnp(4) then
-      load_room(g_cur_room%#g_rooms+1)
-   end
 end
 
 function debug_update()
@@ -118,5 +115,5 @@ function game_init()
       gen_spawner(i, 20, gen_top, 12)
    end
 
-   load_room(1)
+   load_room("field", 20, 10)
 end
