@@ -4,19 +4,14 @@
 
 -- "|" speaker, must go first!
 -- "@" id,      must go in between!
--- "%" option   must go in between!
 -- ":" line,    must go last!
 
 -- example usage:
--- tbox("speaker:line:line%option1%option2@id:line|newspeaker:line...")
-
--- listen to 'g_tbox_active', to listen if tbox is active.
--- example usage:
--- if not g_tbox_active then do_some_func() end
+-- tbox("speaker:line:line@id:line|newspeaker:line...")
 
 -- vars:
-g_tbox_messages, g_tbox_anim, g_tbox_max_len, g_tbox_select = {}, 0, 28, 0
--- g_tbox_options_open, g_tbox_active = nil, nil
+g_tbox_messages, g_tbox_anim, g_tbox_max_len = {}, 0, 28
+-- listen to 'g_tbox_active', to listen if tbox is active.
 
 function draw_rect_with_border(x1, y1, x2, y2, bor_col, bkg_col, b_w)
 	rectfill(x1, y1, x2, y2, bor_col)
@@ -56,7 +51,7 @@ end
 
 -- if you press the button while text is still being displayed, then the text
 -- finishes its display.
-function tbox_interact(option_interact, sound)
+function tbox_interact(sound)
 	if g_tbox_active then
 		g_tbox_anim += .5
 
@@ -64,33 +59,10 @@ function tbox_interact(option_interact, sound)
 			sfx(sound)
 		end
 
-		-- this must go above the button checks.
-		if #g_tbox_active.options > 0 and g_tbox_anim >= #g_tbox_active.l1+#g_tbox_active.l2 then
-			g_tbox_options_open = true
-		end
-
-		if g_tbox_options_open then
-			if btnp(2) then
-				g_tbox_select = max(g_tbox_select-1, 0)
-			elseif btnp(3) then
-				g_tbox_select = min(g_tbox_select+1, #g_tbox_active.options-1)
-			end
-		end
-
 		if btnp(4) then
 			if g_tbox_anim < #g_tbox_active.l1+#g_tbox_active.l2 then
 				g_tbox_anim = #g_tbox_active.l1+#g_tbox_active.l2
 			else
-				-- tbox options
-				if g_tbox_options_open then
-					option_interact(g_tbox_active.id, g_tbox_active.options[g_tbox_select+1], g_tbox_select+1)
-					g_tbox_select = 0
-					g_tbox_options_open = false
-				else
-					option_interact(g_tbox_active.id)
-				end
-
-				-- tbox end
 				del(g_tbox_messages, g_tbox_active)
 				g_tbox_active, g_tbox_anim = g_tbox_messages[1], 0
 			end
@@ -101,7 +73,7 @@ end
 -- add a new text box, id is optional, it is the id of the event. you can check
 -- if an event is done with a unique id.
 function tbox(str)
-	local acc, id, speaker, mode, options, l_str = "", "", "", "|", {}, str.."|"
+	local acc, id, speaker, mode, l_str = "", "", "", "|", str.."|"
 
 	for i=1, #l_str do
 		local x = sub(l_str, i, i)
@@ -113,16 +85,15 @@ function tbox(str)
 				for i=1,#lines do
 					local l = lines[i]
 					if i % 2 == 1 then
-						add(g_tbox_messages, {options=options, speaker=speaker, id=id, l1=l, l2=""})
-						options, id = {}, ""
+						add(g_tbox_messages, {speaker=speaker, id=id, l1=l, l2=""})
+						id = ""
 					else
 						g_tbox_messages[#g_tbox_messages].l2 = l
 					end
 				end
 
 			elseif mode == "|" then speaker, id = acc, ""
-			elseif mode == "@" then id = acc
-			elseif mode == "%" then add(options, acc) end
+			elseif mode == "@" then id = acc end
 			mode, acc = x, ""
 		else
 			acc=acc..x
@@ -152,28 +123,9 @@ function ttbox_draw(fg_col, bg_col)
 
 		-- draw / animate arrow
 		tbox_draw_arrow(119, 120+(g_tbox_anim%20)/10, fg_col, false)
-
-		-- options
-		if g_tbox_options_open then
-			local options = g_tbox_active.options
-			local height = #options*7
-			local y1 = 103-height
-
-			local opt_width = 0
-			for opt in all(options) do
-				if #opt * 4 > opt_width then
-					opt_width = #opt*4
-				end
-			end
-
-			draw_rect_with_border(115-opt_width, y1, 127, 108, fg_col, bg_col, 2)
-
-			local text_y = y1+4
-			tbox_draw_arrow(119-opt_width+(g_tbox_anim%20)/10, text_y + g_tbox_select*7, fg_col, true)
-			for opt in all(options) do
-				print(opt, 125-opt_width, text_y, fg_col)
-				text_y+=7
-			end
-		end
 	end
+end
+
+function tbox_clear()
+   g_tbox_messages, g_tbox_anim, g_tbox_active = {}, 0, false
 end
