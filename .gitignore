@@ -1,9 +1,10 @@
 # pico8 git ignore
-out.p8
 *.swp
 *.swo
+out*.p8
+
 *.bin
+*.p8.png
 *.p8l
-*.html
-*.js
-work/*.p8.png
+sheet.png
+.dropbox
