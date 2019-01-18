@@ -33,6 +33,15 @@ function menu_update()
       )
       g_was_selected=true
       g_menu_cursor_timer += 1
+
+      if g_menu_cursor_timer % 6 == 0 then
+         g_menu_pattern  = rotl(g_menu_pattern, 4)
+      end
+
+      if g_menu_cursor_timer % 9 == 0 then
+         g_menu_pattern2 = rotr(g_menu_pattern2, 4)
+      end
+      printh("thing is: "..g_menu_pattern)
    else
       if g_was_selected then
          g_selected, g_new_selected, g_was_selected = g_new_selected, 4, false
@@ -40,10 +49,22 @@ function menu_update()
    end
 end
 
+g_menu_pattern=0b1001001101101100.1001001101101100
+-- g_menu_pattern=0x1248.1248
+g_menu_pattern2=0x8421
 -- todo: make this work if item doesn't exist.
 function draw_menu()
    pal()
-   batch_call(rectfill, "{44,44,83,83,0x1001}, {47,47,80,80,5}, {48,48,79,79,0x10d6.8421}, {0,0,0,0,0x1000}")
+
+   fillp(flr(g_menu_pattern)+0b0.1)
+   rectfill(0,0,127,127,0x5d)
+
+   rectfill(44,44,83,83,0x1001)
+   rectfill(47,47,80,80,5)
+
+   fillp(0x8421)
+   rectfill(48,48,79,79,0xd6)
+   rectfill(0,0,0,0,0x1000)
 
    for i=0,2 do
       for j=0,2 do
