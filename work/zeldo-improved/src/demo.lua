@@ -71,27 +71,30 @@ function debug_draw()
 end
 
 function game_draw()
-   cls(0)
-
    if g_menu_open then g_pal = g_pal_gray
    else g_pal = g_pal_norm end
 
    restore_pal()
 
-   -- draw the background colors! for efficiency :).
-   draw_cur_room()
+   rectfill(0, 0, 127, 127, 0x1)
 
-   acts_loop("spr_bot", "draw")
-   acts_loop("spr_mid", "draw")
-   acts_loop("spr_top", "draw")
-   clip()
+
+   -- draw the background colors! for efficiency :).
+   --if not g_menu_open then
+      draw_cur_room()
+
+      acts_loop("spr_bot", "draw")
+      acts_loop("spr_mid", "draw")
+      acts_loop("spr_top", "draw")
+      clip()
+   --end
 
    if g_menu_open then
       draw_menu()
    end
 
-   rectfill(0,0,127, g_v1*8-1,8)
-   rectfill(0,128-g_v2*8,127,127,8)
+   rectfill(0,0,127, g_v1*8-1,0)
+   rectfill(0,128-g_v2*8,127,127,0)
    -- batch_call(rectfill, "{0,0,127,15,0}, {0,112,127,127,0}")
    -- draw_glitch_effect()
 

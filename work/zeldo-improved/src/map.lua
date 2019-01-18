@@ -2,8 +2,11 @@ function draw_cur_room()
    cur_room = g_rooms[g_cur_room]
    w = min(16, cur_room.w)*8
    h = min(12, cur_room.h)*8
-   clip(64-w/2, g_v1*8+(12*8-h)/2, w, h)
-   rectfill(0,0,128,128,cur_room.c)
+   x, y = 64-w/2, g_v1*8+(12*8-h)/2
+   clip(x, y, w, h)
+   -- rectfill(x+2, y+2, x+w-3, y+h-3, cur_room.c)
+   
+   scr_rectfill(cur_room.x+2/8, cur_room.y+2/8, cur_room.x+cur_room.w-3/8, cur_room.y+cur_room.h-3/8, cur_room.c)
 	scr_map(cur_room.x, cur_room.y, cur_room.x, cur_room.y, cur_room.w, cur_room.h)
 end
 
