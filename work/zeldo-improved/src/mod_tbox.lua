@@ -59,7 +59,8 @@ function tbox_interact(sound)
 			sfx(sound)
 		end
 
-		if btnp(4) then
+		if btnp(4) and g_tbox_anim > .5 and g_tbox_active.continue then
+         printh("ttbox anim: "..g_tbox_anim)
 			if g_tbox_anim < #g_tbox_active.l1+#g_tbox_active.l2 then
 				g_tbox_anim = #g_tbox_active.l1+#g_tbox_active.l2
 			else
@@ -74,18 +75,21 @@ end
 -- if an event is done with a unique id.
 function tbox(str)
 	local acc, id, speaker, mode, l_str = "", "", "", "|", str.."|"
+   local cont = true
 
 	for i=1, #l_str do
 		local x = sub(l_str, i, i)
 
-		if x == ":" or x == "|" or x == "@" or x == "%" then
+      if x == "^" then
+         cont = false
+      elseif x == ":" or x == "|" or x == "@" or x == "%" then
 			if mode == ":" then
 				local lines = str_to_word_lines(acc, g_tbox_max_len)
 
 				for i=1,#lines do
 					local l = lines[i]
 					if i % 2 == 1 then
-						add(g_tbox_messages, {speaker=speaker, id=id, l1=l, l2=""})
+						add(g_tbox_messages, {speaker=speaker, id=id, continue=cont, l1=l, l2=""})
 						id = ""
 					else
 						g_tbox_messages[#g_tbox_messages].l2 = l
@@ -122,10 +126,22 @@ function ttbox_draw(fg_col, bg_col)
 		print( sub(g_tbox_active.l2, 0, max(g_tbox_anim - #g_tbox_active.l1, 0)), 4, 119, fg_col)
 
 		-- draw / animate arrow
-		tbox_draw_arrow(119, 120+(g_tbox_anim%20)/10, fg_col, false)
+      if g_tbox_active.continue then
+         tbox_draw_arrow(119, 120+(g_tbox_anim%20)/10, fg_col, false)
+      end
 	end
 end
 
 function tbox_clear()
    g_tbox_messages, g_tbox_anim, g_tbox_active = {}, 0, false
+end
+
+function tbox_stash_push()
+   g_tbox_active_backup, g_tbox_messages_backup = g_tbox_active, g_tbox_messages
+   tbox_clear()
+end
+
+function tbox_stash_pop()
+   tbox_clear()
+   g_tbox_messages, g_tbox_active = g_tbox_messages_backup, g_tbox_active_backup
 end

@@ -7,7 +7,7 @@ end
 
 g_item = nil
 function gen_pl(x, y)
-   return acts_attach("pl,nil,{x,y,sinds,rx,ry,spd,anim_len,anim_spd,hit,hearts,update},{@,@,@,.4,.4,.02,3,5,@,3,@},{spr_top,anim,col,mov,tcol,hurtable,knockable,stunnable,spr_out}",
+   return acts_attach("pl,nil,{x,y,sinds,rx,ry,spd,anim_len,anim_spd,hit,max_hearts,hearts,update},{@,@,@,.4,.4,.02,3,5,@,#7,#3,@},{spr_top,anim,col,mov,tcol,hurtable,knockable,stunnable,spr_out}",
    x, y, {0, 1, 2, 3},
       function(self, other, xdir, ydir)
       end, function(a)
