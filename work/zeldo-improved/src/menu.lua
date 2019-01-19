@@ -18,7 +18,28 @@ function menu_btn_helper(key_code, expr, add)
    if btnp(key_code) and expr then g_new_selected += add end
 end
 
+g_item_descs = {
+   "^lantern:lights up dark places.",
+   "^sword:hurts bad guys.",
+   "^spirit bomb:blows things up. requires 5 power squares.",
+   "^boomerang:stuns enemies and kills really weak ones.",
+   "^dash:a quick dodge move.",
+   "^spirit bow:shoots enemies. requires 2 power squares.",
+   "^banjo:play a sick tune!",
+   "^shield:be safe from enemy attacks.",
+   "^squareforce:don't let ivan take it from you!",
+}
+
 function menu_update()
+   if not g_menu_open and btn(5) then
+      tbox_stash_push()
+   end
+
+   if g_menu_open and not btn(5) then
+      tbox_stash_pop()
+   end
+
+   old_selected = g_menu_open and g_new_selected
    g_menu_open = btn(5)
 
    if g_menu_open then
@@ -31,16 +52,19 @@ function menu_update()
          g_new_selected   - 3 >= 0,
          g_new_selected   + 3 <= 8
       )
+
+      if old_selected != g_new_selected then
+         tbox_clear()
+         tbox(g_item_descs[g_new_selected+1])
+      end
+
       g_was_selected=true
       g_menu_cursor_timer += 1
 
-      if g_menu_cursor_timer % 6 == 0 then
+      if g_menu_cursor_timer % 15 == 0 then
          g_menu_pattern  = rotl(g_menu_pattern, 4)
       end
 
-      if g_menu_cursor_timer % 9 == 0 then
-         g_menu_pattern2 = rotr(g_menu_pattern2, 4)
-      end
       printh("thing is: "..g_menu_pattern)
    else
       if g_was_selected then
@@ -51,7 +75,6 @@ end
 
 g_menu_pattern=0b1001001101101100.1001001101101100
 -- g_menu_pattern=0x1248.1248
-g_menu_pattern2=0x8421
 -- todo: make this work if item doesn't exist.
 function draw_menu()
    pal()
@@ -59,16 +82,16 @@ function draw_menu()
    fillp(flr(g_menu_pattern)+0b0.1)
    rectfill(0,0,127,127,0x5d)
 
-   rectfill(44,44,83,83,0x1001)
-   rectfill(47,47,80,80,5)
+   rectfill(44,40,83,79,0x1001)
+   rectfill(47,43,80,76,5)
 
    fillp(0x8421)
-   rectfill(48,48,79,79,0xd6)
+   rectfill(48,44,79,75,0xd6)
    rectfill(0,0,0,0,0x1000)
 
    for i=0,2 do
       for j=0,2 do
-         local ind, x, y = (i*3 + j), (42 + j * 18), (42 + i * 18)
+         local ind, x, y = (i*3 + j), (42 + j * 18), (38 + i * 18)
          local rel_func2 = function(x1, y1, x2, y2, ...)
             rectfill(x+x1,y+y1,x+x2,y+y2,...)
          end
@@ -91,4 +114,21 @@ function draw_menu()
          pal()
       end
    end
+end
+
+function draw_status_bars()
+   rectfill(0,0,127, g_v1*8-1,0)
+
+   yoff = 1
+   for i=0, flr(g_pl.max_hearts)-1 do
+      s = (i < g_pl.hearts) and 240 or 241
+      spr(s, 2 + i*4, yoff)
+      yoff = (yoff==1) and 3 or 1
+   end
+
+   spr(197, 127-19, 2)
+   print("81", 127-12, 4, 7)
+
+   rectfill(0,128-g_v2*8,127,127,0)
+   -- print("village", 50, 110, 7)
 end

@@ -19,14 +19,12 @@ function _init()
 		--{ title_init, 1,   title_update, title_draw },
 		{ game_init,  nil, game_update,  game_draw }
 	)
+
+   tbox("lank:...:where am i?:this must be another pico 8 cartridge demo.:i'm getting sick of these things.")
 end
 
 function _update60()
    tl_update(g_tl)
-
-   if not g_tbox_active then
-      if btnp(0) and not btnp(4) then tbox("ivan:hello lank, we meet again") end
-   end
    tbox_interact()
 end
 
@@ -65,11 +63,6 @@ function debug_update()
    -- end
 end
 
-function debug_draw()
-   print("cpu: "..stat(1), 2, 2, 7)
-   print("hearts: "..g_pl.hearts, 64, 2, 7)
-end
-
 function game_draw()
    if g_menu_open then g_pal = g_pal_gray
    else g_pal = g_pal_norm end
@@ -93,12 +86,9 @@ function game_draw()
       draw_menu()
    end
 
-   rectfill(0,0,127, g_v1*8-1,0)
-   rectfill(0,128-g_v2*8,127,127,0)
+   draw_status_bars()
    -- batch_call(rectfill, "{0,0,127,15,0}, {0,112,127,127,0}")
    -- draw_glitch_effect()
-
-   debug_draw()
 end
 
 function draw_glitch_effect()
@@ -121,6 +111,6 @@ function game_init()
       gen_spawner(i, 20, gen_top, 12)
    end
 
-   load_room("dun00", 4, 4)
-   -- load_room("villa", 15, 10)
+   -- load_room("dun73", 4, 4)
+   load_room("villa", 5, 2.5)
 end
