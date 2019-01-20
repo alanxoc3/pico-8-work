@@ -120,7 +120,7 @@ function draw_status_bars()
    rectfill(0,0,127, g_v1*8-1,0)
 
    yoff = 1
-   for i=0, flr(g_pl.max_hearts)-1 do
+   for i=flr(g_pl.max_hearts)-1,0,-1 do
       s = (i < g_pl.hearts) and 240 or 241
       spr(s, 2 + i*4, yoff)
       yoff = (yoff==1) and 3 or 1

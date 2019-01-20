@@ -95,9 +95,9 @@ function gen_pl_item(pl, item_type)
                end
             end }
             )
-         end, function(a, other, ...)
+         end, function(a, other)
             if not other.pl then
-               if other.knockable then other.knockback(.4, ...) end
+               if other.knockable then other.knockback(.4, a.xf and -1 or 1, 0) end
                if other.stunnable then other.stun(30) end
                if other.hurtable  then other.hurt(.5) end
             end
