@@ -1,5 +1,34 @@
 function rnd_one() return flr(rnd(3))-1 end
 
+-- for debugging
+-- converts anything to string, even nested tables
+function tostring(any)
+    if type(any)=="function" then 
+        return "function" 
+    end
+    if any==nil then 
+        return "nil" 
+    end
+    if type(any)=="string" then
+        return any
+    end
+    if type(any)=="boolean" then
+        if any then return "true" end
+        return "false"
+    end
+    if type(any)=="table" then
+        local str = "{ "
+        for k,v in pairs(any) do
+            str=str..tostring(k).."->"..tostring(v).." "
+        end
+        return str.."}"
+    end
+    if type(any)=="number" then
+        return ""..any
+    end
+    return "unkown" -- should never show
+end
+
 function batch_call(func, str, ...)
    local arr = gun_vals(str,...)
    for i=1,#arr do func(munpack(arr[i])) end
@@ -15,13 +44,15 @@ end
 
 -- returns the parsed table, the current position, and the parameter locations
 function gun_vals_helper(val_str,i,new_params)
-   local val_list, val, val_ind, isnum = {}, "", 1
+   local val_list, val, val_ind, isnum, val_key = {}, "", 1
 
    while i <= #val_str do
       local x = sub(val_str, i, i)
 
       if x == "{" then val, i = gun_vals_helper(val_str,i+1,new_params)
       elseif x == "#" then isnum = true
+      elseif x == "=" then
+         val_key, val = val, ""
       elseif x == "," or x == "}" then
          if     val == "@"                then add(new_params, {val_list, val_ind})
          elseif val == "true"             then val = true
@@ -29,9 +60,17 @@ function gun_vals_helper(val_str,i,new_params)
          elseif val == "nil"              then val = nil
          end
 
-         val_list[val_ind], val_ind, val, isnum = isnum and 0+val or val, val_ind+1, ""
+         if val_key then
+            key = val_key
+         else
+            key = val_ind
+            val_ind = val_ind+1
+         end
+
+         val_list[key] = isnum and 0+val or val
+         val, isnum, val_key = ""
          if x == "}" then return val_list, i end
-      elseif x != " " then
+      elseif x != " " and x != "\n" then
    		val=val..x
    	end
       i += 1
