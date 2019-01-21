@@ -4,7 +4,7 @@ end
 
 function gen_spawner(x, y, func, buf_len, ...)
    local args = {...}
-   return acts_attach2([[
+   return acts_attach([[
          spawner,nil,
          {
             x=@,
@@ -25,7 +25,7 @@ function gen_spawner(x, y, func, buf_len, ...)
 end
 
 function gen_bullet(x, y, xdir)
-   return acts_attach2([[
+   return acts_attach([[
       deku_bullet, nil,
       {
          x=@,
@@ -60,7 +60,7 @@ function gen_bullet(x, y, xdir)
 end
 
 function gen_deku(x, y, can_turn)
-   return acts_attach2([[
+   return acts_attach([[
       deku, nil,
       {
          x=@,
@@ -71,7 +71,8 @@ function gen_deku(x, y, can_turn)
          static=true,
          touchable=true,
          init=@
-      },{starable,spr_mid,tl,timed,spr_out,col,tcol}
+      },
+      {starable,spr_mid,tl,timed,spr_out,col,tcol}
       ]],
       x,y,
       -- init
@@ -92,7 +93,22 @@ function gen_deku(x, y, can_turn)
 end
 
 function gen_top(x, y)
-   return acts_attach("hobgoblin,nil,{x,y,rx,ry,xb,yb,sind,touchable,init,hit},{@,@,.6,.6,.4,.4,4,true,@,@},{starable,spr_mid,tl,mov,timed,spr_out,col,tcol,knockable}",x,y,
+   return acts_attach([[
+      hobgoblin,nil,
+      {
+         x=@,
+         y=@,
+         rx=.6,
+         ry=.6,
+         xb=.4,
+         yb=.4,
+         sind=4,
+         touchable=true,
+         init=@,
+         hit=@
+      },
+      {starable,spr_mid,tl,mov,timed,spr_out,col,tcol,knockable}
+      ]],x,y,
       -- init
       function(a)
          return tl_init(

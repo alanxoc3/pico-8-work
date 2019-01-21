@@ -7,7 +7,7 @@ end
 
 g_item = nil
 function gen_pl(x, y)
-   return acts_attach2(
+   return acts_attach(
       [[pl,nil,
          {
             x=@,
@@ -22,7 +22,7 @@ function gen_pl(x, y)
             max_hearts=#7,
             hearts=#3,
             update=@
-         }, {spr_top,anim,col,mov,tcol,hurtable,knockable,stunnable,spr_out}
+         },{spr_top,anim,col,mov,tcol,hurtable,knockable,stunnable,spr_out}
       ]], x, y, {0,1,2,3},
       function(self, other, xdir, ydir)
       end, function(a)
@@ -89,7 +89,20 @@ end
 
 function gen_pl_item(pl, item_type)
    if item_type == 1 then
-      return acts_attach("lank_sword,nil,{movable,holding,rx,ry,sind,xf,touchable,init,hit},{true,true,.3,.3,8,@,false,@,@},{spr_top,rel,tl,timed,spr,col}",
+      return acts_attach([[
+         lank_sword,nil,
+         {
+            movable=true,
+            holding=true,
+            rx=.3,
+            ry=.3,
+            sind=8,
+            xf=@,
+            touchable=false,
+            init=@,
+            hit=@
+         },{spr_top,rel,tl,timed,spr,col}
+         ]],
          pl.xf,
          function(a)
             return tl_init(
@@ -120,7 +133,18 @@ function gen_pl_item(pl, item_type)
          end)
 
    elseif item_type == 0 then
-      return acts_attach("lank_banjo,nil,{holding,rx,ry,sind,xf,touchable,init},{true,.3,.3,7,@,false,@},{spr_top,rel,tl,timed,spr,col}",
+      return acts_attach([[
+         lank_banjo,nil,
+         {
+            holding=true,
+            rx=.3,
+            ry=.3,
+            sind=7,
+            xf=@,
+            touchable=false,
+            init=@
+         },{spr_top,rel,tl,timed,spr,col}
+         ]],
          pl.xf,
          function(a)
             return tl_init(
@@ -137,7 +161,19 @@ function gen_pl_item(pl, item_type)
          end)
 
    elseif item_type == 7 then
-      return acts_attach("lank_shield,nil,{movable,holding,rx,ry,sind,xf,touchable,init},{true,true,.3,.3,65,@,false,@},{spr_top,rel,tl,timed,spr,col}",
+      return acts_attach([[
+         lank_shield,nil,
+         {
+            movable=true,
+            holding=true,
+            rx=.3,
+            ry=.3,
+            sind=65,
+            xf=@,
+            touchable=false,
+            init=@
+         },{spr_top,rel,tl,timed,spr,col}
+      ]],
          pl.xf,
          function(a)
             return tl_init(

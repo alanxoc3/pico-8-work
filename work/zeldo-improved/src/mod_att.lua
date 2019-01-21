@@ -10,26 +10,6 @@ end
 -- id, a, attrs, vals, parents
 function acts_attach(str, ...)
    local params = gun_vals(str, ...)
-   local id, a, attrs, vals, parents = params[1], params[2] or {}, params[3], params[4], params[5]
-   foreach(parents, function(sf) a = g_attach[sf](a) end)
-
-   for i=1,#attrs do
-      local ind = attrs[i]
-      a[ind] = vals[i] or a[i]
-   end
-
-   if not a[id] then
-      g_act_arrs[id] = g_act_arrs[id] or {}
-      add(g_act_arrs[id], a)
-      a[id] = true
-   end
-
-   a.state = a.init and a.init(a)
-   return a
-end
-
-function acts_attach2(str, ...)
-   local params = gun_vals(str, ...)
    local id, a, attrs, parents = params[1], params[2] or {}, params[3], params[4]
    printh("params: "..tostring(params))
    foreach(parents, function(sf) a = g_attach[sf](a) end)
@@ -69,7 +49,14 @@ end
 -- to generate an actor.
 -- includes update
 gen_attach("act", function(a)
-   return acts_attach("act,@,{alive,active,clean},{true,true,@}", a,
+   return acts_attach([[
+      act,@,
+      {
+         alive=true,
+         active=true,
+         clean=@
+      }
+   ]], a,
    function(a)
       if not a.alive then
          del_act(a)
@@ -78,77 +65,185 @@ gen_attach("act", function(a)
 end)
 
 gen_attach("tl", function(a)
-   return acts_attach("tl,@,{update},{@},{stunnable}",  a, function(a) if a.stun_countdown == 0 then tl_update(a.state) end end)
+   return acts_attach([[
+      tl,@,{
+         update=@
+      },{stunnable}
+   ]],  a,
+   function(a)
+      if a.stun_countdown == 0 then
+         tl_update(a.state)
+      end
+   end)
 end)
 
 gen_attach("timed", function(a)
-   return acts_attach("timed,@,{t,tick},{0,@},{act}", a, function(a) a.t += 1 end)
+   return acts_attach([[
+      timed,@,
+      {
+         t=0,
+         tick=@
+      },{act}
+   ]], a,
+   function(a)
+      a.t += 1
+   end)
 end)
 
 gen_attach("pos", function(a)
-   return acts_attach("pos,@,{x,y},{0,0},{act}", a)
+   return acts_attach([[pos,@,
+      {
+         x=0,
+         y=0
+      },{act}]], a
+   )
 end)
 
 gen_attach("vec", function(a)
-   return acts_attach("vec,@,{dx,dy,vec_update},{0,0,@},{pos}", a,
-      function(a)
-         a.x += a.dx
-         a.y += a.dy
-      end)
+   return acts_attach([[
+      vec,@,
+      {
+         dx=0,
+         dy=0,
+         vec_update=@
+      },{pos}
+   ]], a,
+   function(a)
+      a.x += a.dx
+      a.y += a.dy
+   end)
 end)
 
 gen_attach("mov", function(a)
-   return acts_attach("mov,@,{ix,iy,ax,ay,move},{.85,.85,0,0,@},{vec}", a,
-      function(a)
-         a.dx += a.ax a.dy += a.ay
-         a.dx *= a.ix a.dy *= a.iy
-         if a.ax == 0 and abs(a.dx) < .01 then a.dx = 0 end
-         if a.ay == 0 and abs(a.dy) < .01 then a.dy = 0 end
-      end)
+   return acts_attach([[
+      mov,@,
+      {
+         ix=#.85,
+         iy=#.85,
+         ax=#0,
+         ay=#0,
+         move=@
+      },{vec}
+   ]], a,
+   function(a)
+      a.dx += a.ax a.dy += a.ay
+      a.dx *= a.ix a.dy *= a.iy
+      if a.ax == 0 and abs(a.dx) < .01 then a.dx = 0 end
+      if a.ay == 0 and abs(a.dy) < .01 then a.dy = 0 end
+   end)
 end)
 
 gen_attach("dim", function(a)
-   return acts_attach("dim,@,{rx,ry},{.4,.4},{pos}", a)
+   return acts_attach([[
+      dim,@,
+      {
+         rx=#.4,
+         ry=#.4
+      },{pos}
+   ]], a)
 end)
 
 -- used with player items/weapons.
 gen_attach("rel", function(a)
-   return acts_attach("rel,@,{rel_x,rel_y,rel_dx,rel_dy,rel_update},{0,0,0,0,@},{act}", a,
+   return acts_attach([[
+      rel,@,
+      {
+         rel_x=0,
+         rel_y=0,
+         rel_dx=0,
+         rel_dy=0,
+         rel_update=@
+      },{act}
+   ]], a,
 	function(a, a2)
 		a.x, a.y, a.dx, a.dy = a2.x+a.rel_x, a2.y+a.rel_y, a2.dx+a.rel_dx, a2.dy+a.rel_dy
 	end)
 end)
 
 gen_attach("drawable", function(a)
-   return acts_attach("drawable,@,{xx,yy,draw,reset_off},{#0,#0,@,@}", a, nf, function(a) a.xx, a.yy = 0, 0 end)
+   return acts_attach([[
+      drawable,@,
+      {
+         xx=#0,
+         yy=#0,
+         draw=@,
+         reset_off=@
+      }
+   ]], a, nf, function(a) a.xx, a.yy = 0, 0 end)
 end)
 
 gen_attach("spr", function(a)
-   return acts_attach("spr,@,{sind,sw,sh,xf,yf,draw},{0,1,1,false,false,@},{vec,drawable}", a, scr_spr)
+   return acts_attach([[
+      spr,@,
+      {
+         sind=0,
+         sw=1,
+         sh=1,
+         xf=false,
+         yf=false,
+         draw=@
+      },{vec,drawable}
+   ]], a, scr_spr)
 end)
 
 gen_attach("spr_out", function(a)
-   return acts_attach("spr_out,@,{draw},{@},{spr}", a, scr_spr10)
+   return acts_attach([[
+      spr_out,@,
+      {
+         draw=@
+      },{spr}
+   ]], a, scr_spr10)
 end)
 
-gen_attach("spr_top", function(a) return acts_attach("spr_top,@,{},{},{spr}", a) end)
-gen_attach("spr_mid", function(a) return acts_attach("spr_mid,@,{},{},{spr}", a) end)
-gen_attach("spr_bot", function(a) return acts_attach("spr_bot,@,{},{},{spr}", a) end)
+gen_attach("spr_top", function(a)
+   return acts_attach([[
+      spr_top,@,{},{spr}
+   ]], a)
+end)
 
-gen_attach("knockable", function(a) return acts_attach("knockable,@,{knockback},{@},{mov}", a,
+gen_attach("spr_mid", function(a)
+   return acts_attach([[
+      spr_mid,@,{},{spr}
+   ]], a)
+end)
+
+gen_attach("spr_bot", function(a)
+   return acts_attach([[
+      spr_bot,@,{},{spr}
+   ]], a)
+end)
+
+gen_attach("knockable", function(a)
+   return acts_attach([[
+      knockable,@,{
+         knockback=@
+      },{mov}
+   ]], a,
    function(speed, xdir, ydir)
       if xdir != 0 then a.dx = xdir * speed
       else              a.dy = ydir * speed end
    end)
 end)
 
-gen_attach("starable", function(a) return acts_attach("starable,@,{stare},{@},{spr}", a,
+gen_attach("starable", function(a)
+   return acts_attach([[
+      starable,@,{
+         stare=@
+      },{spr}
+   ]], a,
    function(a)
       a.xf = g_pl.x < a.x
    end)
 end)
 
-gen_attach("stunnable", function(a) return acts_attach("stunnable,@,{stun_countdown,stun,stun_update},{#0,@,@},{mov,drawable}", a,
+gen_attach("stunnable", function(a)
+   return acts_attach([[
+      stunnable,@,{
+         stun_countdown=#0,
+         stun=@,
+         stun_update=@
+      },{mov,drawable}
+   ]], a,
    function(len)
       if a.stun_countdown == 0 then
          a.stun_countdown = len
@@ -162,7 +257,14 @@ gen_attach("stunnable", function(a) return acts_attach("stunnable,@,{stun_countd
    end)
 end)
 
-gen_attach("hurtable", function(a) return acts_attach("hurtable,@,{hearts,hurt},{#3,@},{stunnable}", a, function(damage)
+gen_attach("hurtable", function(a)
+   return acts_attach([[
+      hurtable,@,{
+         hearts=#3,
+         hurt=@
+      },{stunnable}
+   ]], a,
+   function(damage)
       if a.stun_countdown == 0 then
          a.hearts -= damage
       end
@@ -170,7 +272,17 @@ gen_attach("hurtable", function(a) return acts_attach("hurtable,@,{hearts,hurt},
 end)
 
 gen_attach("anim", function(a)
-   return acts_attach("anim,@,{sinds,anim_loc,anim_off,anim_len,anim_spd,anim_sind,anim_update},{{},1,0,1,0,nil,@},{spr,timed}", a,
+   return acts_attach([[
+      anim,@,{
+         sinds={},
+         anim_loc=1,
+         anim_off=0,
+         anim_len=1,
+         anim_spd=0,
+         anim_sind=nil,
+         anim_update=@
+      },{spr,timed}
+   ]], a,
 		function(a)
 			if a.anim_sind then
 				a.sind = a.anim_sind
@@ -186,7 +298,16 @@ gen_attach("anim", function(a)
 end)
 
 gen_attach("col", function(a)
-   return acts_attach("col,@,{static,touchable,xb,yb,hit,move_check},{false,true,0,0,@,@},{vec,dim}", a, nf,
+   return acts_attach([[
+      col,@,{
+         static=false,
+         touchable=true,
+         xb=0,
+         yb=0,
+         hit=@,
+         move_check=@
+      },{vec,dim}
+   ]], a, nf,
       function(a, acts)
          local other_list = {}
          local move_check = function(dx, dy)
@@ -239,7 +360,12 @@ gen_attach("col", function(a)
 end)
 
 gen_attach("tcol", function(a)
-   return acts_attach("tcol,@,{tile_hit,coll_tile},{@,@},{vec,dim}", a, nf,
+   return acts_attach([[
+      tcol,@,{
+         tile_hit=@,
+         coll_tile=@
+      },{vec,dim}
+   ]], a, nf,
    function(a, solid_func)
       a.x, a.dx = coll_tile_help(a.x, a.y, a.dx, a.rx, a.ry, 0, a, a.tile_hit, solid_func)
       a.y, a.dy = coll_tile_help(a.y, a.x, a.dy, a.ry, a.rx, 2, a, a.tile_hit, function(y, x) return solid_func(x, y) end)
