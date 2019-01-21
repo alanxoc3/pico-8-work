@@ -6,8 +6,15 @@ function draw_cur_room()
    clip(x, y, w, h)
    -- rectfill(x+2, y+2, x+w-3, y+h-3, cur_room.c)
    
-   scr_rectfill(cur_room.x+2/8, cur_room.y+2/8, cur_room.x+cur_room.w-3/8, cur_room.y+cur_room.h-3/8, cur_room.c)
+   scr_rectfill(cur_room.x+4/8, cur_room.y+4/8, cur_room.x+cur_room.w-5/8, cur_room.y+cur_room.h-5/8, cur_room.c)
 	scr_map(cur_room.x, cur_room.y, cur_room.x, cur_room.y, cur_room.w, cur_room.h)
+
+   acts_loop("spr_bot", "draw")
+   acts_loop("spr_mid", "draw")
+   acts_loop("spr_top", "draw")
+
+	scr_map(cur_room.x, cur_room.y, cur_room.x, cur_room.y, cur_room.w, cur_room.h, 1)
+   clip()
 end
 
 function map_init()
@@ -22,7 +29,7 @@ function map_init()
       dun12={c=2, x=112, y=8,  w=8, h=8},
       dun13={c=2, x=120, y=8,  w=8, h=8},
       dun20={c=4, x=96,  y=16, w=8, h=8, u={"dun10",4,8}, d={"villa", 18.5,3}},
-      dun21={c=2, x=104, y=16, w=8, h=8},
+      dun21={c=2, x=104, y=16, w=8, h=8, d={"castl",8,2}},
       dun22={c=2, x=112, y=16, w=8, h=8},
       dun23={c=2, x=120, y=16, w=8, h=8},
       dun30={c=6, x=96,  y=24, w=8, h=8},
@@ -46,26 +53,27 @@ function map_init()
       dun71={c=3, x=104, y=56, w=8, h=8, u={"dun70",4,8}, d={"dun70",4,0}, r={"dun70",0,4}, l={"dun70",8,4}},
       dun72={c=3, x=112, y=56, w=8, h=8, u={"dun62",4,8}, d={"dun71",4,0}, r={"dun73",0,4}, l={"dun71",8,4}},
       dun73={c=3, x=120, y=56, w=8, h=8, u={"bossw",8,12}, l={"dun72",8,4}},
-      villa={c=3, x=29,  y=0,  w=22, h=25, r={"field",0,26}, u={"lankp",5,20}, doors={{"dun20",4,8,18.5,2.5,.5,.5}, {"shop",4,8,4,11.5,.5,.5}, {"banjo_academy",4,8,17,19.5,.5,.5}}},
+      villa={c=3, x=29,  y=0,  w=22, h=25, r={"field",0,26}, u={"lankp",5,20}, doors={{"dun20",4,8,18.5,2.5,.5,.5}, {"shop",4,8,4,11.5,.5,.5}, {"banjo_academy",4,8,17,19.5,.5,.5}, {"house_1",3,6,17,7.5,.5,.5},
+      {"house_2",3,6,6,18.5,.5,.5}, {"house_3",3,7,15,13.5,.5,.5}}},
       field={c=3, x=0,   y=0,  w=29, h=32, l={"villa",22,13}, r={"gravp",0,3}, u={"mount",7,25}},
       bossw={c=3, x=64,  y=12, w=16, h=12, d={"dun73",4,0}, u={"dun63",4,8}},
-      lankp={c=3, x=32,  y=32, w=10, h=20, d={"villa",4,0}},
+      lankp={c=3, x=32,  y=32, w=10, h=20, d={"villa",4,0}, doors={{"lanks_house",4,8,5,2.5,.5,.5}}},
       gravp={c=5, x=29,  y=25, w=19, h=7,  l={"field",29,18}, r={"grave",0,3}, u={"templ",8,12}},
-      grave={c=5, x=48,  y=25, w=16, h=21, l={"gravp",19,4}},
+      grave={c=5, x=48,  y=25, w=16, h=21, l={"gravp",19,4}, doors={{"gravekeepers_house",4,8,13,1.5,.5,.5}}},
       mount={c=4, x=51,  y=0,  w=13, h=25, d={"field",12,0}, u={"castl",8,12}}, -- mtn
-      castl={c=5, x=32,  y=52, w=16, h=12, d={"mount",6,0}},
+      castl={c=5, x=32,  y=52, w=16, h=12, d={"mount",6,0}, doors={{"dun21",4,8,8,1.5,.5,.5}}},
       templ={c=5, x=64,  y=0,  w=16, h=12, d={"gravp",11,0}},
 
       novi_grave={c=4, x=54, y=46, w=5,  h=6 }, -- xs room 1
       ivan_grave={c=4, x=59, y=46, w=5,  h=6 }, -- xs room 2
-      house_1={c=4, x=42, y=46, w=6,  h=6 }, -- small room 1
-      house_2={c=4, x=48, y=46, w=6,  h=6 }, -- small room 2
-      house_3={c=4, x=42, y=32, w=6,  h=7 }, -- medium room 1
-      house_4={c=4, x=42, y=39, w=6,  h=7 }, -- medium room 2
-      lanks_house={c=4, x=64, y=24, w=8,  h=8 }, -- big room 1
+      house_1={c=4, x=42, y=46, w=6,  h=6, d={"villa",17,8}}, -- small room 1
+      house_2={c=4, x=48, y=46, w=6,  h=6, d={"villa",6,19} }, -- small room 2
+      house_3={c=4, x=42, y=32, w=6,  h=7, d={"villa",15,14}}, -- medium room 1
+      idk={c=4, x=42, y=39, w=6,  h=7 }, -- medium room 2
+      lanks_house={c=4, x=64, y=24, w=8,  h=8, d={"lankp",5,3} }, -- big room 1
       shop={c=4, x=72, y=24, w=8,  h=8, d={"villa",4,12} }, -- big room 2
       banjo_academy={c=4, x=80, y=24, w=8,  h=8, d={"villa",17,20}}, -- big room 3
-      gravekeepers_house={c=4, x=88, y=24, w=8,  h=8}, -- big room 4
+      gravekeepers_house={c=4, x=88, y=24, w=8,  h=8, d={"grave",13,2}}, -- big room 4
 
       bossi={c=0, x=48, y=52, w=16, h=12}, -- final hard ivan battle
       bossc={c=5, x=80, y=0,  w=16, h=12}, -- cannon boss
