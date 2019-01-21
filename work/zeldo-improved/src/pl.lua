@@ -7,8 +7,23 @@ end
 
 g_item = nil
 function gen_pl(x, y)
-   return acts_attach("pl,nil,{x,y,sinds,rx,ry,spd,anim_len,anim_spd,hit,max_hearts,hearts,update},{@,@,@,.375,.375,.02,3,5,@,#7,#3,@},{spr_top,anim,col,mov,tcol,hurtable,knockable,stunnable,spr_out}",
-   x, y, {0, 1, 2, 3},
+   return acts_attach2(
+      [[pl,nil,
+         {
+            x=@,
+            y=@,
+            sinds=@,
+            rx=#.375,
+            ry=#.375,
+            spd=#.02,
+            anim_len=#3,
+            anim_spd=#5,
+            hit=@,
+            max_hearts=#7,
+            hearts=#3,
+            update=@
+         }, {spr_top,anim,col,mov,tcol,hurtable,knockable,stunnable,spr_out}
+      ]], x, y, {0,1,2,3},
       function(self, other, xdir, ydir)
       end, function(a)
          a.yy=-2
@@ -104,8 +119,8 @@ function gen_pl_item(pl, item_type)
             end
          end)
 
-   elseif item_type == 6 then
-      return acts_attach("lank_banjo,nil,{holding,rx,ry,sind,xf,touchable,init},{true,.3,.3,13,@,false,@},{spr_top,rel,tl,timed,spr,col}",
+   elseif item_type == 0 then
+      return acts_attach("lank_banjo,nil,{holding,rx,ry,sind,xf,touchable,init},{true,.3,.3,7,@,false,@},{spr_top,rel,tl,timed,spr,col}",
          pl.xf,
          function(a)
             return tl_init(

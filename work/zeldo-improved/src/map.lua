@@ -18,8 +18,7 @@ function draw_cur_room()
 end
 
 function map_init()
-   g_rooms = gun_vals(
-   [[
+   g_rooms = gun_vals[[
    villa={c=#3, x=#29,  y=#0,  w=#22, h=#25, r={field,#0,#26}, u={lankp,#5,#20},
       doors={
          {dun20,#4,#8,#18.5,#2.5,#.5,#.5},
@@ -91,23 +90,7 @@ function map_init()
    bossi={c=#0, x=#48, y=#52, w=#16, h=#12},
    bossc={c=#5, x=#80, y=#0,  w=#16, h=#12},
    endls={c=#3, x=#80, y=#12, w=#16, h=#12},
-
    ]]
-   )
-
-   printh("str: "..tostring(g_rooms))
-
---   g_rooms = {
---      -- color, x, y, w, h, l, r, u, d
---      -- lost forest
---
-
-
-
---
---
---   }
-
 end
 
 function load_room(new_room, rx, ry)

@@ -28,6 +28,27 @@ function acts_attach(str, ...)
    return a
 end
 
+function acts_attach2(str, ...)
+   local params = gun_vals(str, ...)
+   local id, a, attrs, parents = params[1], params[2] or {}, params[3], params[4]
+   printh("params: "..tostring(params))
+   foreach(parents, function(sf) a = g_attach[sf](a) end)
+
+   for k,v in pairs(attrs) do
+      a[k] = v
+   end
+
+   if not a[id] then
+      g_act_arrs[id] = g_act_arrs[id] or {}
+      add(g_act_arrs[id], a)
+      a[id] = true
+   end
+
+   a.state = a.init and a.init(a)
+
+   return a
+end
+
 function acts_loop(id, func, ...)
 	for a in all(g_act_arrs[id]) do
       if a[func] then
