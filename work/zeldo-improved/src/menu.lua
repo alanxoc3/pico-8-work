@@ -4,30 +4,30 @@ g_selected=4
 g_new_selected=4
 g_was_selected=false
 
--- 0 = bottle
+-- 0 = banjo
 -- 1 = sword
--- 2 = bomb
--- 3 = boomerang
--- 4 = nothing
--- 5 = bow
--- 6 = banjo
+-- 2 = squareforce
+-- 3 = lantern
+-- 4 = dash
+-- 5 = boomerang
+-- 6 = bomb
 -- 7 = shield
--- 8 = triforce
+-- 8 = bow
 
 function menu_btn_helper(key_code, expr, add)
    if btnp(key_code) and expr then g_new_selected += add end
 end
 
 g_item_descs = {
-   "^lantern:lights up dark places.",
-   "^sword:hurts bad guys.",
-   "^spirit bomb:blows things up. requires 5 power squares.",
-   "^boomerang:stuns enemies and kills really weak ones.",
-   "^dash:a quick dodge move.",
-   "^spirit bow:shoots enemies. requires 2 power squares.",
    "^banjo:play a sick tune!",
-   "^shield:be safe from enemy attacks.",
+   "^sword:hurts bad guys.",
    "^squareforce:don't let ivan take it from you!",
+   "^lantern:lights up dark places.",
+   "^dash:a quick dodge move.",
+   "^boomerang:stuns enemies and kills really weak ones.",
+   "^spirit bomb:blows things up. requires 5 power squares.",
+   "^shield:be safe from enemy attacks.",
+   "^spirit bow:shoots enemies. requires 2 power squares.",
 }
 
 function menu_update()

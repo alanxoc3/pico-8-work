@@ -54,17 +54,17 @@ function gun_vals_helper(val_str,i,new_params)
       elseif x == "=" then
          val_key, val = val, ""
       elseif x == "," or x == "}" then
-         if     val == "@"                then add(new_params, {val_list, val_ind})
-         elseif val == "true"             then val = true
-         elseif val == "false"            then val = false
-         elseif val == "nil"              then val = nil
-         end
-
          if val_key then
             key = val_key
          else
             key = val_ind
             val_ind = val_ind+1
+         end
+
+         if     val == "@"                then add(new_params, {val_list, key})
+         elseif val == "true"             then val = true
+         elseif val == "false"            then val = false
+         elseif val == "nil"              then val = nil
          end
 
          val_list[key] = isnum and 0+val or val
