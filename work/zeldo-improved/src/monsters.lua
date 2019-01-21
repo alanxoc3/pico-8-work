@@ -4,7 +4,15 @@ end
 
 function gen_spawner(x, y, func, buf_len, ...)
    local args = {...}
-   return acts_attach("spawner,nil,{x,y,child,update},{@,@,nil,@},{dim}", x, y,
+   return acts_attach2([[
+         spawner,nil,
+         {
+            x=@,
+            y=@,
+            child=nil,
+            update=@
+         },{dim}
+      ]], x, y,
       function(a)
          local acol = dim_collide(a, get_buf_rect(buf_len))
          if not a.child and acol then
@@ -17,7 +25,21 @@ function gen_spawner(x, y, func, buf_len, ...)
 end
 
 function gen_bullet(x, y, xdir)
-   return acts_attach("deku_bullet,nil,{x,y,dx,dy,rx,ry,sind,touchable,init,hit},{@,@,@,#0,.3,.3,84,false,@,@},{spr_mid,tl,timed,spr,col}",
+   return acts_attach2([[
+      deku_bullet, nil,
+      {
+         x=@,
+         y=@,
+         dx=@,
+         dy#0,
+         rx=#.3,
+         ry=#.3,
+         sind=#84,
+         touchable=false,
+         init=@,
+         hit=@
+      },{spr_mid,tl,timed,spr,col}
+      ]],
       x, y, xdir and .25 or -.25,
       function(a)
          return tl_init(
@@ -38,7 +60,20 @@ function gen_bullet(x, y, xdir)
 end
 
 function gen_deku(x, y, can_turn)
-   return acts_attach("deku,nil,{x,y,rx,ry,sind,static,touchable,init},{@,@,.5,.5,5,true,true,@},{starable,spr_mid,tl,timed,spr_out,col,tcol}",x,y,
+   return acts_attach2([[
+      deku, nil,
+      {
+         x=@,
+         y=@,
+         rx=#.5,
+         ry=#.5,
+         sind=#5,
+         static=true,
+         touchable=true,
+         init=@
+      },{starable,spr_mid,tl,timed,spr_out,col,tcol}
+      ]],
+      x,y,
       -- init
       function(a)
          return tl_init(
