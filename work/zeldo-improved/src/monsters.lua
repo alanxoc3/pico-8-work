@@ -61,7 +61,7 @@ end
 
 function gen_deku(x, y, can_turn)
    return acts_attach([[
-      deku, nil,
+      deku,nil,
       {
          x=@,
          y=@,

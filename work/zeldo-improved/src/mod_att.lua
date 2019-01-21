@@ -11,7 +11,6 @@ end
 function acts_attach(str, ...)
    local params = gun_vals(str, ...)
    local id, a, attrs, parents = params[1], params[2] or {}, params[3], params[4]
-   printh("params: "..tostring(params))
    foreach(parents, function(sf) a = g_attach[sf](a) end)
 
    for k,v in pairs(attrs) do
