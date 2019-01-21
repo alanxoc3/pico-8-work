@@ -5,7 +5,7 @@
 -- 4295 4275 4259 4223 4206 4205 4212 4200 4198 4187 4232 4232 4230 4227 4212
 -- 4206 4198 4283 4219 4321 4312 4190 4104 4094 4087 4123 4121 4119 4141 4099
 -- 4089 4075 4040 4015 4169 4180 4170 4145 4225 4665 5565 5549 5800 6043 4775
--- 4760
+-- 4760 4755
 
 -- 80% 95% 96%
 
@@ -66,14 +66,6 @@ function game_update()
       update_view(g_pl.x, g_pl.y)
       room_update()
    end
-
-   debug_update()
-end
-
-function debug_update()
-   -- if stat(1) > .3 then
-      -- printh(stat(1))
-   -- end
 end
 
 function game_draw()
@@ -116,5 +108,5 @@ function game_init()
    end
 
    -- load_room("dun73", 4, 4)
-   load_room("villa", 5, 2.5)
+   load_room("field", 6, 5.5)
 end
