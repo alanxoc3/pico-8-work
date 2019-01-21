@@ -7,10 +7,11 @@ end
 
 g_item = nil
 function gen_pl(x, y)
-   return acts_attach("pl,nil,{x,y,sinds,rx,ry,spd,anim_len,anim_spd,hit,max_hearts,hearts,update},{@,@,@,.4,.4,.02,3,5,@,#7,#3,@},{spr_top,anim,col,mov,tcol,hurtable,knockable,stunnable,spr_out}",
+   return acts_attach("pl,nil,{x,y,sinds,rx,ry,spd,anim_len,anim_spd,hit,max_hearts,hearts,update},{@,@,@,.375,.375,.02,3,5,@,#7,#3,@},{spr_top,anim,col,mov,tcol,hurtable,knockable,stunnable,spr_out}",
    x, y, {0, 1, 2, 3},
       function(self, other, xdir, ydir)
       end, function(a)
+         a.yy=-2
          -- movement logic
          if a.stun_countdown == 0 then
             if not (btn(0) and btn(1)) then

@@ -69,16 +69,7 @@ function game_draw()
 
    rectfill(0, 0, 127, 127, 0x1)
 
-
-   -- draw the background colors! for efficiency :).
-   --if not g_menu_open then
-      draw_cur_room()
-
-      acts_loop("spr_bot", "draw")
-      acts_loop("spr_mid", "draw")
-      acts_loop("spr_top", "draw")
-      clip()
-   --end
+   draw_cur_room()
 
    if g_menu_open then
       draw_menu()
