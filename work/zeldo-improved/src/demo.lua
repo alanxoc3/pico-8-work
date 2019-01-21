@@ -5,8 +5,9 @@
 -- 4295 4275 4259 4223 4206 4205 4212 4200 4198 4187 4232 4232 4230 4227 4212
 -- 4206 4198 4283 4219 4321 4312 4190 4104 4094 4087 4123 4121 4119 4141 4099
 -- 4089 4075 4040 4015 4169 4180 4170 4145 4225 4665 5565 5549 5800 6043 4775
+-- 4760
 
--- 95% compression.
+-- 80% 95% 96%
 
 function _init()
    poke(0x5f34, 1) -- for pattern colors.
@@ -39,8 +40,20 @@ function game_update()
 
    if not g_menu_open then
       batch_call(
-         acts_loop,
-         "{drawable,reset_off}, {stunnable, stun_update}, {act,update}, {mov,move}, {col,move_check,@}, {tcol,coll_tile,@}, {rel,rel_update,@}, {vec,vec_update}, {act, clean}, {starable,stare}, {anim,anim_update}, {timed,tick}",
+         acts_loop, [[
+            {drawable,reset_off},
+            {stunnable, stun_update},
+            {act,update},
+            {mov,move},
+            {col,move_check,@},
+            {tcol,coll_tile,@},
+            {rel,rel_update,@},
+            {vec,vec_update},
+            {act, clean},
+            {starable,stare},
+            {anim,anim_update},
+            {timed,tick}
+         ]],
          g_act_arrs["col"],
          function(x, y)
             return x >= g_rx and x < g_rx+g_rw and
