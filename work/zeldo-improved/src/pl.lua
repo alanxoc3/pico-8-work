@@ -12,7 +12,7 @@ function gen_pl(x, y)
          {
             x=@,
             y=@,
-            sinds=@,
+            sinds={#54, #55, #56, #57},
             rx=#.375,
             ry=#.375,
             spd=#.02,
@@ -23,7 +23,7 @@ function gen_pl(x, y)
             hearts=#3,
             update=@
          },{spr_top,anim,col,mov,tcol,hurtable,knockable,stunnable,spr_out}
-      ]], x, y, {0,1,2,3},
+      ]], x, y,
       function(self, other, xdir, ydir)
       end, function(a)
          a.yy=-2
