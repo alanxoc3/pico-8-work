@@ -105,5 +105,5 @@ end
 
 
 -- .2604 (bad outline)
--- .2536 (working on outline.
+-- .2537 (working on outline, should get to be smaller).
 -- .2388 (no outline)
