@@ -191,7 +191,7 @@ gen_attach("spr_out", function(a)
       {
          draw=@
       },{spr}
-   ]], a, gen_sprite_outline)
+   ]], a, scr_spr_out)
 end)
 
 gen_attach("spr_top", function(a)

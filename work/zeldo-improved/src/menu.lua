@@ -64,8 +64,6 @@ function menu_update()
       if g_menu_cursor_timer % 15 == 0 then
          g_menu_pattern  = rotl(g_menu_pattern, 4)
       end
-
-      printh("thing is: "..g_menu_pattern)
    else
       if g_was_selected then
          g_selected, g_new_selected, g_was_selected = g_new_selected, 4, false
@@ -92,8 +90,8 @@ function draw_menu()
    for i=0,2 do
       for j=0,2 do
          local ind, x, y = (i*3 + j), (42 + j * 18), (38 + i * 18)
-         local rel_func2 = function(x1, y1, x2, y2, ...)
-            rectfill(x+x1,y+y1,x+x2,y+y2,...)
+         local rel_func2 = function(x1, y1, x2, y2, c)
+            rectfill(x+x1,y+y1,x+x2,y+y2,c)
          end
 
          if ind == g_new_selected then
