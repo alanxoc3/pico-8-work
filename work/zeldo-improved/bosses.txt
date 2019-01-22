@@ -1,0 +1,57 @@
+
+
+Ghost 1:
+   move in a figure 8, stop, shoot circle of bullets. stop. repeat.
+   as you hurt him, moves faster. and shoots bullets in faster increments.
+
+Ghost 2:
+   teleports randomly. shoots plus. pauses. teleports shoots x. pauses. repeat.
+
+Ghost 3:
+   armor slowly depletes one by one. more armor, faster he is. when hurt, he
+   has more armor than before. and always move to character slightly, with wrap
+   screen.
+
+Ghost 4:
+   laser beam that goes in a circle.
+
+Lost dude:
+   appears on the edges of the screen and shoots a spear thing at you. first
+   phase runs to the edge. next just appears at edge. Final maybe shoots
+   vertical bullets at you too that you can't hit at.
+   
+   another idea is throwing like a deku bomb thing that blows up.
+
+Cannon:
+   3 minigames.
+   
+   1st: Cannon: Mwahaha. I lost my klucks. This door will only open with them.
+   Find all the clucks throughout Hiroll.
+
+   2nd: Cannon: A music battle jam. Banjo vs Organ.
+
+   3nd: Cannon: Energy ball tennis.
+
+   Then cannon is tired and your fairy says to finish him off.
+
+Ivan Easy Mode Boss.
+   he has these items in easy mode: banjo, bomb, sword, lamp, dash
+   in hard mode he also has bow, boomerang, and shield
+
+   Here are some brainstorming things.
+
+   Easy:
+   Banjo. Summon enemies. He can only use the banjo if there are no enemies on the screen though.
+   Sword & Bomb. Explosive Charge. He charges at Lank with his sword, leaving bombs behind him.
+   Lamp & Bomb: Fire come in from corner and sides to middle. When it reaches him, he disappears and leaves a bomb there.
+
+   Hard:
+   Bow and Boomerang. Duplicates boomerang on left side bow on right side.
+   Bow. Teleport to the top left and moves down while rapid firing arrows.
+   Shield & Lamp. Makes the border fiery, then charges at you with shield. Tries to make you get burned.
+
+   Maybe 3 different things he can do. He can teleport too then attack you with
+   his sword.
+
+   castle is abandoned. you gotta go to the very top room, open the squareforce
+   door to get to a small save room. then ivan's room.

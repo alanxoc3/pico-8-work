@@ -67,7 +67,7 @@ function gen_deku(x, y, can_turn)
          y=@,
          rx=#.5,
          ry=#.5,
-         sind=#5,
+         sind=#59,
          static=true,
          touchable=true,
          init=@
@@ -98,11 +98,11 @@ function gen_top(x, y)
       {
          x=@,
          y=@,
-         rx=.6,
-         ry=.6,
-         xb=.4,
-         yb=.4,
-         sind=4,
+         rx=#.6,
+         ry=#.6,
+         xb=#.4,
+         yb=#.4,
+         sind=#58,
          touchable=true,
          init=@,
          hit=@
