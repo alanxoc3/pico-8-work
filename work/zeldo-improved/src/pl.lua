@@ -141,10 +141,12 @@ function gen_pl_item(pl, item_type)
             )
          end, function(a, other)
             if not other.pl then
-               if other.knockable then other.knockback(.4, a.xf and -1 or 1, 0) end
+               local knockback_val = (a.state.current == 1) and .3 or .1
+               local hurt_val = (a.state.current == 1) and .1 or .2
+               if other.knockable then other.knockback(knockback_val, a.xf and -1 or 1, 0) end
                if other.stunnable then other.stun(30) end
                if other.hurtable  then other.hurt(.5) end
-               g_pl.knockback(.2, a.xf and 1 or -1, 0)
+               g_pl.knockback(.3, a.xf and 1 or -1, 0)
                a.poke = 10
             end
          end)
@@ -220,11 +222,11 @@ function gen_pl_item(pl, item_type)
             )
          end, function(a, other)
             if not other.pl then
-               if other.knockable then other.knockback(.07, a.xf and -1 or 1, 0) end
+               local knockback_val = (a.state.current == 1) and .4 or .2
+               if other.knockable then other.knockback(knockback_val, a.xf and -1 or 1, 0) end
                g_pl.knockback(.1, a.xf and 1 or -1, 0)
-               other.knockback(.4, a.xf and -1 or 1, 0)
                if other.stunnable and a.state.current == 1 then
-                  other.stun(30)
+                  other.stun(90)
                end
                a.poke=10
             end
