@@ -3,18 +3,28 @@ function draw_cur_room()
    w = min(16, cur_room.w)*8
    h = min(12, cur_room.h)*8
    x, y = 64-w/2, g_v1*8+(12*8-h)/2
+
    clip(x, y, w, h)
    -- rectfill(x+2, y+2, x+w-3, y+h-3, cur_room.c)
    
    scr_rectfill(cur_room.x+4/8, cur_room.y+4/8, cur_room.x+cur_room.w-5/8, cur_room.y+cur_room.h-5/8, cur_room.c)
 	scr_map(cur_room.x, cur_room.y, cur_room.x, cur_room.y, cur_room.w, cur_room.h)
 
-   acts_loop("spr_bot", "draw")
-   acts_loop("spr_mid", "draw")
-   acts_loop("spr_top", "draw")
+   isorty(g_act_arrs["spr"])
+   acts_loop("spr", "draw")
 
 	scr_map(cur_room.x, cur_room.y, cur_room.x, cur_room.y, cur_room.w, cur_room.h, 1)
    clip()
+end
+
+function isorty(t)
+    for n=2,#t do
+        local i=n
+        while i>1 and t[i].y<t[i-1].y do
+            t[i],t[i-1]=t[i-1],t[i]
+            i-=1
+        end
+    end
 end
 
 function map_init()
