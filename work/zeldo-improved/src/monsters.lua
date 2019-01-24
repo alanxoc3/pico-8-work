@@ -38,7 +38,7 @@ function gen_bullet(x, y, xdir)
          touchable=false,
          init=@,
          hit=@
-      },{spr_mid,tl,timed,spr,col}
+      },{tl,timed,spr,col}
       ]],
       x, y, xdir and .25 or -.25,
       function(a)
@@ -72,7 +72,7 @@ function gen_deku(x, y, can_turn)
          touchable=true,
          init=@
       },
-      {starable,spr_mid,tl,timed,spr_out,col,tcol}
+      {tl,timed,spr_out,col,tcol}
       ]],
       x,y,
       -- init
@@ -83,6 +83,7 @@ function gen_deku(x, y, can_turn)
                   if axis_collide("y", g_pl, a) and (g_pl.x > a.x and a.xf or g_pl.x < a.x and not a.xf) then
                      gen_bullet(a.x, a.y+.125, a.xf)
                      tl_next(a.state)
+                     a.xf = g_pl.x < a.x
                   end
                end
             },
@@ -108,26 +109,26 @@ function gen_top(x, y)
          init=@,
          hit=@
       },
-      {starable,spr_mid,tl,mov,timed,spr_out,col,tcol,knockable}
+      {tl,mov,timed,spr_out,col,tcol,knockable}
       ]],x,y,
       -- init
       function(a)
          return tl_init(
-            {function() amov_to_actor(a, g_pl, .05) end, 1},
             {function() a.ax, a.ay = 0, 0 end, 1.5},
-            {nil, .5, function() a.xx = rnd_one() end}
+            {nil, .5, function()
+               a.xx = rnd_one()
+               a.xf = g_pl.x < a.x
+            end},
+            {function() amov_to_actor(a, g_pl, .05) end, 1}
          )
       end,
       -- hit
       function(a, other, ...)
-         if a.state.current == 1 then
-            if other.knockable then
-               if other.pl then other.hurt(1) other.stun(30) end
-               other.knockback(.3, ...)
-               tl_next(a.state)
-            elseif other.lank_sword then
-               tl_next(a.state)
-            end
+         if a.state.current == 3 then
+            if other.pl then other.hurt(1) other.stun(30) end
+            if other.knockable then other.knockback(.2, ...) end
+
+            tl_next(a.state)
          end
       end)
 end

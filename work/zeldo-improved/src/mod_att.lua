@@ -173,7 +173,7 @@ gen_attach("drawable", function(a)
          draw=@,
          reset_off=@
       }
-   ]], a, nf, function(a) a.xx, a.yy = a.ixx, a.iyy end)
+   ]], a, nf, function(a) a.xx, a.yy = 0, 0 end)
 end)
 
 gen_attach("spr", function(a)
@@ -199,24 +199,6 @@ gen_attach("spr_out", function(a)
    ]], a, scr_spr_out)
 end)
 
-gen_attach("spr_top", function(a)
-   return acts_attach([[
-      spr_top,@,{},{spr}
-   ]], a)
-end)
-
-gen_attach("spr_mid", function(a)
-   return acts_attach([[
-      spr_mid,@,{},{spr}
-   ]], a)
-end)
-
-gen_attach("spr_bot", function(a)
-   return acts_attach([[
-      spr_bot,@,{},{spr}
-   ]], a)
-end)
-
 gen_attach("knockable", function(a)
    return acts_attach([[
       knockable,@,{
@@ -226,17 +208,6 @@ gen_attach("knockable", function(a)
    function(speed, xdir, ydir)
       if xdir != 0 then a.dx = xdir * speed
       else              a.dy = ydir * speed end
-   end)
-end)
-
-gen_attach("starable", function(a)
-   return acts_attach([[
-      starable,@,{
-         stare=@
-      },{spr}
-   ]], a,
-   function(a)
-      a.xf = g_pl.x < a.x
    end)
 end)
 
@@ -255,7 +226,7 @@ gen_attach("stunnable", function(a)
    end, function()
       if a.stun_countdown != 0 then
          a.ay, a.ax = 0, 0
-         a.xx = a.ixx+rnd_one()
+         a.xx = rnd_one()
          a.stun_countdown -= 1
       end
    end)

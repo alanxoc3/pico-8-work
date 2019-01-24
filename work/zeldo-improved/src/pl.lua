@@ -5,6 +5,15 @@ function btn_to_dir()
           (btn(3) and 0b1000 or 0)
 end
 
+function act_poke(a, ix1, ix2)
+   if a.poke > 0 then
+      a.poke -= 1
+      a.ixx = a.xf and ix1 or -ix1
+   else
+      a.ixx = a.xf and ix2 or -ix2
+   end
+end
+
 g_item = nil
 function gen_pl(x, y)
    return acts_attach(
@@ -23,7 +32,7 @@ function gen_pl(x, y)
             max_hearts=#7,
             hearts=#3,
             update=@
-         },{spr_top,anim,col,mov,tcol,hurtable,knockable,stunnable,spr_out}
+         },{anim,col,mov,tcol,hurtable,knockable,stunnable,spr_out}
       ]], x, y,
       function(self, other, xdir, ydir)
       end, function(a)
@@ -98,28 +107,33 @@ function gen_pl_item(pl, item_type)
             rel_y=#-.125,
             iyy=#-1,
             sind=8,
+            poke=#0,
             xf=@,
             touchable=false,
             init=@,
             hit=@
-         },{spr_top,rel,tl,timed,spr,col}
+         },{rel,tl,timed,spr,col}
          ]],
          pl.xf,
          function(a)
             return tl_init(
             { function() 
                   a.rel_dx = a.xf and -.125 or .125
+                  a.ixx = a.xf and -1 or 1
+                  a.poke = 20
                end, .4,
                function()
-                  local neg_one = -1
-                  if abs(a.rel_dx + a.rel_x) > 1 then
-                     a.rel_dx, a.rel_x = 0, a.xf and neg_one or 1
-                  else
+                  act_poke(a, -1, 0)
+                  if abs(a.rel_dx + a.rel_x) < 1 then
                      a.rel_x += a.rel_dx
+                  else
+                     local neg_one = -1
+                     a.rel_dx, a.rel_x = 0, a.xf and neg_one or 1
                   end
                end
             },
             { nil, nil, function()
+               act_poke(a, -1, 0)
                if not a.holding then
                   a.alive, pl.item = false
                end
@@ -130,6 +144,8 @@ function gen_pl_item(pl, item_type)
                if other.knockable then other.knockback(.4, a.xf and -1 or 1, 0) end
                if other.stunnable then other.stun(30) end
                if other.hurtable  then other.hurt(.5) end
+               g_pl.knockback(.2, a.xf and 1 or -1, 0)
+               a.poke = 10
             end
          end)
 
@@ -144,7 +160,7 @@ function gen_pl_item(pl, item_type)
             xf=@,
             touchable=false,
             init=@
-         },{spr_top,rel,tl,timed,spr,col}
+         },{rel,tl,timed,spr,col}
          ]],
          pl.xf,
          function(a)
@@ -169,25 +185,49 @@ function gen_pl_item(pl, item_type)
             rx=.25,
             ry=.5,
             iyy=#-2,
+            poke=#20,
             sind=65,
             xf=@,
             touchable=false,
-            init=@
-         },{spr_top,rel,tl,timed,spr,col}
+            init=@,
+            hit=@
+         },{rel,tl,timed,spr,col}
       ]],
          pl.xf,
          function(a)
             return tl_init(
             { function() 
-               a.rel_x = a.xf and -.625 or .625
-               a.ixx = a.xf and -2 or 2
-            end, nil,
-            function()
+                  a.rel_dx = a.xf and -.0625 or .0625
+                  a.ixx = a.xf and -3 or 3
+                  a.poke = 20
+               end, .4,
+               function()
+                  act_poke(a, -3, -2)
+                  if abs(a.rel_dx + a.rel_x) < .625 then
+                     a.rel_x += a.rel_dx
+                  else
+                     local neg_one = -.625
+                     a.rel_dx, a.rel_x = 0, a.xf and neg_one or .625
+                  end
+               end
+            },
+            { nil, nil, function()
+               act_poke(a, -3, -2)
                if not a.holding then
                   a.alive, pl.item = false
                end
-            end  }
+            end }
             )
+         end, function(a, other)
+            if not other.pl then
+               if other.knockable then other.knockback(.07, a.xf and -1 or 1, 0) end
+               g_pl.knockback(.1, a.xf and 1 or -1, 0)
+               other.knockback(.4, a.xf and -1 or 1, 0)
+               if other.stunnable and a.state.current == 1 then
+                  other.stun(30)
+               end
+               a.poke=10
+            end
          end)
    else
       return nil

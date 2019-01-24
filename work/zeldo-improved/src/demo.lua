@@ -55,7 +55,6 @@ function game_update()
             {rel,rel_update,@},
             {vec,vec_update},
             {act, clean},
-            {starable,stare},
             {anim,anim_update},
             {timed,tick}
          ]],
@@ -87,7 +86,7 @@ function game_draw()
       draw_menu()
    end
 
-   acts_loop("dim", "debug_rect")
+   -- acts_loop("dim", "debug_rect")
    draw_status_bars()
    -- batch_call(rectfill, "{0,0,127,15,0}, {0,112,127,127,0}")
    -- draw_glitch_effect()
@@ -109,8 +108,11 @@ function game_init()
    g_pl = gen_pl(0, 0)
 
    -- gen_spawner(71, 53, gen_top, 12)
+   for i=20,26 do
+   -- gen_spawner(4, i, gen_top, 12)
+   end
    gen_spawner(4, 20, gen_top, 12)
 
    -- load_room("dun73", 4, 4)
-   load_room("field", 6, 5.5)
+   load_room("villa", 6, 5.5)
 end
