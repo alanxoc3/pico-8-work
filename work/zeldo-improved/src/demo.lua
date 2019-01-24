@@ -37,7 +37,7 @@ function _draw()
 	cls()
 	tl_draw(g_tl)
    ttbox_draw(7, 0)
-   print(stat(0), 44, 2, 7)
+   print("cpu: "..stat(1), 44, 2, 7)
 end
 
 function game_update()

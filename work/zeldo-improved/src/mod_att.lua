@@ -163,12 +163,14 @@ gen_attach("drawable", function(a)
    return acts_attach([[
       drawable,@,
       {
+         ixx=#0,
+         iyy=#0,
          xx=#0,
          yy=#0,
          draw=@,
          reset_off=@
       }
-   ]], a, nf, function(a) a.xx, a.yy = 0, 0 end)
+   ]], a, nf, function(a) a.xx, a.yy = a.ixx, a.iyy end)
 end)
 
 gen_attach("spr", function(a)
@@ -250,7 +252,7 @@ gen_attach("stunnable", function(a)
    end, function()
       if a.stun_countdown != 0 then
          a.ay, a.ax = 0, 0
-         a.xx, a.yy = rnd_one(), rnd_one()
+         a.xx = a.ixx+rnd_one()
          a.stun_countdown -= 1
       end
    end)
