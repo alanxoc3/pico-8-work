@@ -25,7 +25,7 @@ function _init()
 
    init_out_cache(54,127)
 
-   tbox("lank:...:where am i?:this must be another pico 8 cartridge demo.:i'm getting sick of these things.")
+   -- tbox("lank:...:where am i?:this must be another pico 8 cartridge demo.:i'm getting sick of these things.")
 end
 
 function _update60()
@@ -114,5 +114,5 @@ function game_init()
    gen_spawner(4, 20, gen_top, 12)
 
    -- load_room("dun73", 4, 4)
-   load_room("villa", 6, 5.5)
+   load_room("field", 6, 15)
 end

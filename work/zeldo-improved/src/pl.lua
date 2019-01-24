@@ -148,6 +148,7 @@ function gen_pl_item(pl, item_type)
                if other.hurtable  then other.hurt(.5) end
                g_pl.knockback(.3, a.xf and 1 or -1, 0)
                a.poke = 10
+               g_me = other
             end
          end)
 
