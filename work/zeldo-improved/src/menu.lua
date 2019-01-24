@@ -129,10 +129,10 @@ function draw_menu_enemy()
    local x, y = 0, 128-20
    if g_me then
       fillp(flr(g_me_pattern))
-      rectfill(x+1, y+1, x+18, y+18, 0xd6)
+      rectfill(x+2, y+2, x+17, y+17, 0xd6)
       fillp()
       spr_out(g_me.sind, x+6+g_me.xx, y+6+g_me.yy, 1, 1, g_me.xf, false, 1)
-      rect(x+1, y+1, x+18, y+18, 7)
+      -- rect(x+1, y+1, x+18, y+18, 7)
       rect(x+2, y+2, x+17, y+17, 7)
    end
 end
