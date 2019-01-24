@@ -136,10 +136,13 @@ gen_attach("dim", function(a)
    return acts_attach([[
       dim,@,
       {
-         rx=#.4,
-         ry=#.4
+         rx=#.375,
+         ry=#.375,
+         debug_rect=@
       },{pos}
-   ]], a)
+   ]], a, function(a)
+      scr_rect(a.x-a.rx,a.y-a.ry,a.x+a.rx,a.y+a.ry, 8)
+   end)
 end)
 
 -- used with player items/weapons.

@@ -87,6 +87,7 @@ function game_draw()
       draw_menu()
    end
 
+   acts_loop("dim", "debug_rect")
    draw_status_bars()
    -- batch_call(rectfill, "{0,0,127,15,0}, {0,112,127,127,0}")
    -- draw_glitch_effect()
@@ -104,13 +105,11 @@ function game_init()
    -- deku_spawner(3.5, 22.5, true)
    map_init()
 
-   for i=0,10,2 do gen_spawner(12, 15+i, gen_deku, 12, true) end
+   -- for i=0,10,2 do gen_spawner(12, 15+i, gen_deku, 12, true) end
    g_pl = gen_pl(0, 0)
 
    -- gen_spawner(71, 53, gen_top, 12)
-   for i=4,12,2 do
-      gen_spawner(i, 20, gen_top, 12)
-   end
+   gen_spawner(4, 20, gen_top, 12)
 
    -- load_room("dun73", 4, 4)
    load_room("field", 6, 5.5)

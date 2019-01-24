@@ -93,9 +93,10 @@ function gen_pl_item(pl, item_type)
          {
             movable=true,
             holding=true,
-            rx=.3,
-            ry=.3,
-            rel_y=#-.25,
+            rx=.5,
+            ry=.375,
+            rel_y=#-.125,
+            iyy=#-1,
             sind=8,
             xf=@,
             touchable=false,
@@ -107,7 +108,7 @@ function gen_pl_item(pl, item_type)
          function(a)
             return tl_init(
             { function() 
-                  a.rel_dx = a.xf and -.1 or .1
+                  a.rel_dx = a.xf and -.125 or .125
                end, .4,
                function()
                   local neg_one = -1
@@ -165,9 +166,9 @@ function gen_pl_item(pl, item_type)
          {
             movable=true,
             holding=true,
-            rx=.3,
-            ry=.3,
-            rel_y=#-.25,
+            rx=.25,
+            ry=.5,
+            iyy=#-2,
             sind=65,
             xf=@,
             touchable=false,
@@ -178,7 +179,8 @@ function gen_pl_item(pl, item_type)
          function(a)
             return tl_init(
             { function() 
-               a.rel_x = a.xf and -.875 or .875
+               a.rel_x = a.xf and -.625 or .625
+               a.ixx = a.xf and -2 or 2
             end, nil,
             function()
                if not a.holding then
