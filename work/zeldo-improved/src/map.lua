@@ -112,6 +112,7 @@ function load_room(new_room, rx, ry)
    g_pl.x = x + rx
    g_pl.y = y + ry
    -- end debugging
+   g_me = nil
 
 	load_view(x, y, w, h, 5, 11, 1.5, 2.5)
 	center_view(g_pl.x, g_pl.y)

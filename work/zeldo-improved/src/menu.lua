@@ -1,4 +1,5 @@
 g_menu_cursor_timer=0
+g_me_timer=0
 
 g_selected=4
 g_new_selected=4
@@ -69,6 +70,13 @@ function menu_update()
          g_selected, g_new_selected, g_was_selected = g_new_selected, 4, false
       end
    end
+
+   if g_me then
+      g_me_timer += 1
+      if g_me_timer % 15 == 0 then
+         g_me_pattern = rotl(g_me_pattern, 4)
+      end
+   end
 end
 
 g_menu_pattern=0b1001001101101100.1001001101101100
@@ -114,6 +122,21 @@ function draw_menu()
    end
 end
 
+-- menu enemy
+g_me = nil
+g_me_pattern = 0b0000010011100100.0000010011100100
+function draw_menu_enemy()
+   local x, y = 0, 128-20
+   if g_me then
+      fillp(flr(g_me_pattern))
+      rectfill(x+1, y+1, x+18, y+18, 0xd6)
+      fillp()
+      spr_out(g_me.sind, x+6+g_me.xx, y+6+g_me.yy, 1, 1, g_me.xf, false, 1)
+      rect(x+1, y+1, x+18, y+18, 7)
+      rect(x+2, y+2, x+17, y+17, 7)
+   end
+end
+
 function draw_status_bars()
    rectfill(0,0,127, g_v1*8-1,0)
 
@@ -128,5 +151,7 @@ function draw_status_bars()
    print("81", 127-12, 4, 7)
 
    rectfill(0,128-g_v2*8,127,127,0)
+   draw_menu_enemy()
    -- print("village", 50, 110, 7)
 end
+
