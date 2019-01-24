@@ -15,6 +15,7 @@ function gen_pl(x, y)
             sinds={#54, #55, #56, #57},
             rx=#.375,
             ry=#.375,
+            iyy=#-2,
             spd=#.02,
             anim_len=#3,
             anim_spd=#5,
@@ -26,7 +27,6 @@ function gen_pl(x, y)
       ]], x, y,
       function(self, other, xdir, ydir)
       end, function(a)
-         a.yy=-2
          -- movement logic
          if a.stun_countdown == 0 then
             if not (btn(0) and btn(1)) then
@@ -68,7 +68,7 @@ function gen_pl(x, y)
 
          end
 
-         a.anim_sind = item and item.lank_banjo and (btn(0) or btn(1) or btn(2) or btn(3)) and 3
+         a.anim_sind = item and item.lank_banjo and (btn(0) or btn(1) or btn(2) or btn(3)) and 57
 
          -- walking animation logic
          if flr((abs(a.dx) + abs(a.dy))*50) > 0 then
@@ -81,7 +81,6 @@ function gen_pl(x, y)
          if a.stun_countdown != 0 then
             if a.item then
                a.item.xx = a.xx
-               a.item.yy = a.yy
             end
          end
       end)
@@ -96,6 +95,7 @@ function gen_pl_item(pl, item_type)
             holding=true,
             rx=.3,
             ry=.3,
+            rel_y=#-.25,
             sind=8,
             xf=@,
             touchable=false,
@@ -150,7 +150,6 @@ function gen_pl_item(pl, item_type)
             return tl_init(
             { function() 
                a.rel_x=a.xf and 1/8 or -1/8
-               a.rel_y=2/8
             end, nil,
             function()
                if not a.holding then
@@ -168,6 +167,7 @@ function gen_pl_item(pl, item_type)
             holding=true,
             rx=.3,
             ry=.3,
+            rel_y=#-.25,
             sind=65,
             xf=@,
             touchable=false,
