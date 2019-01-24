@@ -98,8 +98,9 @@ function gen_top(x, y)
       {
          x=@,
          y=@,
-         rx=#.6,
-         ry=#.6,
+         rx=#.375,
+         ry=#.375,
+         iyy=-2,
          xb=#.4,
          yb=#.4,
          sind=#58,

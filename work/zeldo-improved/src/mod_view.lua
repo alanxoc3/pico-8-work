@@ -28,7 +28,7 @@ function scr_x(x) return x*8-flr(g_x*8) end
 function scr_y(y) return y*8-flr(g_y*8) end
 
 function scr_rect(x1, y1, x2, y2, col)
-	rect(scr_x(x1),scr_y(y1),scr_x(x2),scr_y(y2),col)
+	rect(scr_x(x1),scr_y(y1),scr_x(x2)-1,scr_y(y2)-1,col)
 end
 
 function scr_rectfill(x1, y1, x2, y2, col)
