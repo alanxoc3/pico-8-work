@@ -1,5 +1,6 @@
 -- todo: tbox and menu actor integration.
 -- todo: allow actor and sprite index for menu actor.
+-- todo: menu actor, different name and different backgrounds.
 -- todo: nice functions to integrate with menu actor.
 -- todo: reconnect the map.
 -- todo: room fades
