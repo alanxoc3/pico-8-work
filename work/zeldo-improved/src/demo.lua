@@ -25,7 +25,7 @@ function _init()
 
    init_out_cache(54,127)
 
-   -- tbox("lank:...:where am i?:this must be another pico 8 cartridge demo.:i'm getting sick of these things.")
+   tbox(":...:...:...:1234123456 8901234567890 1234123456 8901234567890 ")
 end
 
 function _update60()
@@ -37,6 +37,7 @@ function _draw()
 	cls()
 	tl_draw(g_tl)
    ttbox_draw(7, 0)
+   draw_ma()
    print("cpu: "..stat(1), 44, 2, 7)
 end
 

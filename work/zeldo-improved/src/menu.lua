@@ -1,5 +1,5 @@
 g_menu_cursor_timer=0
-g_me_timer=0
+g_ma_timer=0
 
 g_selected=4
 g_new_selected=4
@@ -57,6 +57,7 @@ function menu_update()
       if old_selected != g_new_selected then
          tbox_clear()
          tbox(g_item_descs[g_new_selected+1])
+         g_ma = 7+g_new_selected
       end
 
       g_was_selected=true
@@ -71,11 +72,9 @@ function menu_update()
       end
    end
 
-   if g_me then
-      g_me_timer += 1
-      if g_me_timer % 15 == 0 then
-         g_me_pattern = rotl(g_me_pattern, 4)
-      end
+   g_ma_timer += 1
+   if g_ma_timer % 15 == 0 then
+      g_ma_pattern = rotl(g_ma_pattern, 4)
    end
 end
 
@@ -123,18 +122,14 @@ function draw_menu()
 end
 
 -- menu enemy
-g_me = nil
-g_me_pattern = 0b0000010011100100.0000010011100100
-function draw_menu_enemy()
-   local x, y = 0, 128-20
-   if g_me then
-      fillp(flr(g_me_pattern))
-      rectfill(x+2, y+2, x+17, y+17, 0xd6)
-      fillp()
-      spr_out(g_me.sind, x+6+g_me.xx, y+6+g_me.yy, 1, 1, g_me.xf, false, 1)
-      -- rect(x+1, y+1, x+18, y+18, 7)
-      rect(x+2, y+2, x+17, y+17, 7)
-   end
+g_ma = 54
+g_ma_pattern = 0b0000010011100100.0000010011100100
+function draw_ma()
+   fillp(flr(g_ma_pattern))
+   rectfill(2, 110, 17, 125, 0xd6)
+   fillp()
+   spr_out(g_ma, 6, 114, 1, 1, false, false, 1)
+   rect(2, 110, 17, 125, 1)
 end
 
 function draw_status_bars()
@@ -151,7 +146,7 @@ function draw_status_bars()
    print("81", 127-12, 4, 7)
 
    rectfill(0,128-g_v2*8,127,127,0)
-   draw_menu_enemy()
+   draw_ma()
    -- print("village", 50, 110, 7)
 end
 
