@@ -22,13 +22,13 @@ end
 g_item_descs = {
    "^banjo:play a sick tune!",
    "^sword:hurts bad guys.",
-   "^squareforce:don't let ivan take it from you!",
+   "^sqr'force:don't let ivan take it from you!",
    "^lantern:lights up dark places.",
    "^dash:a quick dodge move.",
-   "^boomerang:stuns enemies and kills really weak ones.",
-   "^spirit bomb:blows things up. requires 5 power squares.",
+   "^b'rang:stuns enemies and kills really weak ones.",
+   "^bomb:blows things up. requires 5 power squares.",
    "^shield:be safe from enemy attacks.",
-   "^spirit bow:shoots enemies. requires 2 power squares.",
+   "^bow:shoots enemies. requires 2 power squares.",
 }
 
 function menu_update()
@@ -70,11 +70,12 @@ function menu_update()
       if g_was_selected then
          g_selected, g_new_selected, g_was_selected = g_new_selected, 4, false
       end
+      g_ma = 54
    end
 
    g_ma_timer += 1
    if g_ma_timer % 15 == 0 then
-      g_ma_pattern = rotl(g_ma_pattern, 4)
+      g_ma_pat = rotl(g_ma_pat, 4)
    end
 end
 
@@ -123,30 +124,43 @@ end
 
 -- menu enemy
 g_ma = 54
-g_ma_pattern = 0b0000010011100100.0000010011100100
+g_ma_pat = 0b0000010011100100.0000010011100100
+g_ma_col = 0xd6
+-- g_ma_pat = 0b1000010000100001.1000010000100001
+-- g_ma_pat = 0b1100100111000110.1100100111000110
+-- g_ma_col = 0x9a
 function draw_ma()
-   fillp(flr(g_ma_pattern))
-   rectfill(2, 110, 17, 125, 0xd6)
+   -- rectfill(0, 108, 19, 127, 1)
+   rectfill(2, 110, 17, 125, 1)
+   rectfill(3, 111, 16, 124, 7)
+   fillp(flr(g_ma_pat))
+   rectfill(4, 112, 15, 123, g_ma_col)
+   -- rectfill(2, 110, 17, 125, g_ma_col)
    fillp()
    spr_out(g_ma, 6, 114, 1, 1, false, false, 1)
-   rect(2, 110, 17, 125, 1)
+   -- rect(2, 110, 17, 125, 1)
 end
+
+-- change style
+-- change to actor
+-- change to sprite
 
 function draw_status_bars()
    rectfill(0,0,127, g_v1*8-1,0)
+   spr(g_selected+7, 2, 2)
+   rectfill(12,2,12,9,7)
 
    yoff = 1
    for i=flr(g_pl.max_hearts)-1,0,-1 do
       s = (i < g_pl.hearts) and 240 or 241
-      spr(s, 2 + i*4, yoff)
+      spr(s, 15 + i*4, yoff)
       yoff = (yoff==1) and 3 or 1
    end
 
-   spr(197, 127-19, 2)
-   print("81", 127-12, 4, 7)
+   rectfill(104,2,104,9,7)
+   spr(197, 106, 2)
+   zprint("9", 127-12-4+2+2, 4)
 
    rectfill(0,128-g_v2*8,127,127,0)
    draw_ma()
-   -- print("village", 50, 110, 7)
 end
-

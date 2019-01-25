@@ -29,7 +29,7 @@ function gen_pl(x, y)
             anim_len=#3,
             anim_spd=#5,
             hit=@,
-            max_hearts=#7,
+            max_hearts=#3,
             hearts=#3,
             update=@
          },{anim,col,mov,tcol,hurtable,knockable,stunnable,spr_out}

@@ -1,3 +1,11 @@
+-- todo: tbox and menu actor integration.
+-- todo: allow actor and sprite index for menu actor.
+-- todo: nice functions to integrate with menu actor.
+-- todo: reconnect the map.
+-- todo: room fades
+-- todo: make a sign
+-- todo: make enemy health bar / status
+-- todo: make area information (if no enemy)
 -- 2% compression here.
 -- 3522 3529 3503 3510 3521 3523 3538 3526 3487 3428 3635 3660 3652 3545 3494
 -- 3487 3743 3686 3675 3585 3591 3797 3802 3759 3755 3861 4663 4470 4457 4478
@@ -7,9 +15,9 @@
 -- 4089 4075 4040 4015 4169 4180 4170 4145 4225 4665 5565 5549 5800 6043 4775
 -- 4760 4755 4746 5143 5144 5140 5137 5096 5067 5055 4967 4946 4946 4945 4947
 -- 4946 4941 5143 5144 5140 5137 5096 5067 5055 4967 4946 4946 4945 4947 4946
--- 4984 4982 4979 4970 4862
+-- 4984 4982 4979 4970 4862 5250
 
--- 80% 95% 96%
+-- 80% 95% 96% 104%
 
 function _init()
    poke(0x5f34, 1) -- for pattern colors.
@@ -25,7 +33,7 @@ function _init()
 
    init_out_cache(54,127)
 
-   tbox(":...:...:...:1234123456 8901234567890 1234123456 8901234567890 ")
+   tbox("lank:...:...:...:1234123456 901234567890 234123456 8901234567890 ")
 end
 
 function _update60()
@@ -38,7 +46,7 @@ function _draw()
 	tl_draw(g_tl)
    ttbox_draw(7, 0)
    draw_ma()
-   print("cpu: "..stat(1), 44, 2, 7)
+   zprint(stat(1), 75, 4)
 end
 
 function game_update()
@@ -115,5 +123,5 @@ function game_init()
    gen_spawner(4, 20, gen_top, 12)
 
    -- load_room("dun73", 4, 4)
-   load_room("field", 6, 15)
+   load_room("villa", 18, 5)
 end

@@ -10,7 +10,7 @@
 -- tbox("speaker:line:line@id:line|newspeaker:line...")
 
 -- vars:
-g_tbox_messages, g_tbox_anim, g_tbox_max_len = {}, 0, 24
+g_tbox_messages, g_tbox_anim, g_tbox_max_len = {}, 0, 23
 -- listen to 'g_tbox_active', to listen if tbox is active.
 
 function draw_rect_with_border(x1, y1, x2, y2, bor_col, bkg_col, b_w)
@@ -60,7 +60,6 @@ function tbox_interact(sound)
 		end
 
 		if btnp(4) and g_tbox_anim > .5 and g_tbox_active.continue then
-         printh("ttbox anim: "..g_tbox_anim)
 			if g_tbox_anim < #g_tbox_active.l1+#g_tbox_active.l2 then
 				g_tbox_anim = #g_tbox_active.l1+#g_tbox_active.l2
 			else
@@ -111,28 +110,23 @@ end
 -- foreground color, background color, border width
 function ttbox_draw(fg_col, bg_col)
 	if g_tbox_active then -- only draw if there are messages
-		draw_rect_with_border(0, 108, 127, 127, fg_col, bg_col, 2)
-      rectfill(0, 108, 19, 127, 7)
+		draw_rect_with_border(20, 108, 127, 127, fg_col, bg_col, 2)
 
 		-- draw speaker
 		if #g_tbox_active.speaker>0 then
 			local x2 = #g_tbox_active.speaker*4+6
-			rectfill(18, 101, 18+x2, 108, fg_col)
-			rectfill(20, 103, 18+x2-2, 109, bg_col)
-			print(g_tbox_active.speaker, 22, 105, fg_col)
-
-			-- rectfill(127-x2, 101, 127, 108, fg_col)
-			-- rectfill(127-x2+2,   103, 127-2, 109, bg_col)
-			-- print(g_tbox_active.speaker, 127-x2+4, 105, fg_col)
+			rectfill(20, 101, 20+x2, 108, fg_col)
+			rectfill(22, 103, 20+x2-2, 109, bg_col)
+			zprint(g_tbox_active.speaker, 24, 105, fg_col)
 		end
 
 		-- print the message
-		print( sub(g_tbox_active.l1, 1, g_tbox_anim),                 22, 112, fg_col)
-		print( sub(g_tbox_active.l2, 0, max(g_tbox_anim - #g_tbox_active.l1, 0)), 22, 119, fg_col)
+		zprint( sub(g_tbox_active.l1, 1, g_tbox_anim),                 24, 112)
+		zprint( sub(g_tbox_active.l2, 0, max(g_tbox_anim - #g_tbox_active.l1, 0)), 24, 119)
 
 		-- draw / animate arrow
       if g_tbox_active.continue then
-         tbox_draw_arrow(119, 120+(g_tbox_anim%20)/10, fg_col, false)
+         tbox_draw_arrow(118, 116+(g_tbox_anim%20)/10, 7, false)
       end
 	end
 end
