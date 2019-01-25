@@ -69,8 +69,10 @@ function gen_pl(x, y)
          end
 
          if item then
-            if item.movable then
+            if item.lank_sword then
                a.ax /= 2 a.ay /= 2
+            elseif item.lank_shield then
+               a.ax *= .75 a.ay *= .75
             else
                a.ax, a.ay = 0, 0
             end
@@ -148,7 +150,7 @@ function gen_pl_item(pl, item_type)
                if other.hurtable  then other.hurt(.5) end
                g_pl.knockback(.3, a.xf and 1 or -1, 0)
                a.poke = 10
-               g_me = other
+               g_ma = other.sind
             end
          end)
 
@@ -227,9 +229,10 @@ function gen_pl_item(pl, item_type)
                if other.knockable then other.knockback(knockback_val, a.xf and -1 or 1, 0) end
                g_pl.knockback(.1, a.xf and 1 or -1, 0)
                if other.stunnable and a.state.current == 1 then
-                  other.stun(90)
+                  other.stun(60)
                end
                a.poke=10
+               g_ma = other.sind
             end
          end)
    else
