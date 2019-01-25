@@ -69,6 +69,11 @@ function spr_out(sind, x, y, sw, sh, xf, yf, col)
    spr(sind, x, y, sw, sh, xf, yf)
 end
 
+function zprint(str, x, y)
+   print(str, x, y-1, 1)
+   print(str, x, y, 7)
+end
+
 -- .2604 (bad outline)
 -- .2537 (working on outline, should get to be smaller).
 -- .2388 (no outline)
