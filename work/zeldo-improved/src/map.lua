@@ -95,8 +95,8 @@ function map_init()
    grave={c=#5, x=#48,  y=#25, w=#16, h=#21, l={gravp,#19,#4},  doors={{gravekeepers_house,#4,#8,#13,#1.5,#.5,#.5}}},
    castl={c=#5, x=#64,  y=#12, w=#16, h=#12, d={mount,#6,#0},   doors={{castle_1,#8,#12,#8,#1.5,#.5,#.5}}},
 
-   crypt_novi={c=#4, x=#118, y=#24, w=#5,  h=#8 },
-   crypt_ivan={c=#4, x=#123, y=#24, w=#5,  h=#8 },
+   crypt_novi={c=#4, x=#118, y=#24, w=#5,  h=#8, d={templ,#3.5,#2}},
+   crypt_ivan={c=#4, x=#123, y=#24, w=#5,  h=#8, d={templ,#12.5,#2}},
 
    house_1={c=#4, x=#42, y=#46, w=#6,  h=#6, d={villa,#17,#8}},
    house_2={c=#4, x=#48, y=#46, w=#6,  h=#6, d={villa,#6, #19}},
