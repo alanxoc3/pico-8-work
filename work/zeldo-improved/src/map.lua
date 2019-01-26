@@ -52,29 +52,6 @@ function map_init()
    dun72={c=#3, x=#112, y=#56, w=#8, h=#8, u={dun62,#4,#8}, d={dun71,#4,#0}, r={dun73,#0,#4}, l={dun71,#8,#4}},
    dun73={c=#3, x=#120, y=#56, w=#8, h=#8, u={bossw,#8,#12}, l={dun72,#8,#4}},
 
-   dun01={c=#2, x=#104, y=#0,  w=#8, h=#8},
-   dun02={c=#2, x=#112, y=#0,  w=#8, h=#8},
-   dun03={c=#2, x=#120, y=#0,  w=#8, h=#8},
-   dun11={c=#2, x=#104, y=#8,  w=#8, h=#8},
-   dun12={c=#2, x=#112, y=#8,  w=#8, h=#8},
-   dun13={c=#2, x=#120, y=#8,  w=#8, h=#8},
-   dun21={c=#2, x=#104, y=#16, w=#8, h=#8, d={castl,#8,#2}},
-   dun22={c=#2, x=#112, y=#16, w=#8, h=#8},
-   dun23={c=#2, x=#120, y=#16, w=#8, h=#8},
-   dun30={c=#6, x=#96,  y=#24, w=#8, h=#8},
-   dun31={c=#6, x=#104, y=#24, w=#8, h=#8},
-   dun32={c=#6, x=#112, y=#24, w=#8, h=#8},
-   dun33={c=#6, x=#120, y=#24, w=#8, h=#8},
-   dun40={c=#6, x=#96,  y=#32, w=#8, h=#8},
-   dun41={c=#6, x=#104, y=#32, w=#8, h=#8},
-   dun42={c=#6, x=#112, y=#32, w=#8, h=#8},
-   dun43={c=#6, x=#120, y=#32, w=#8, h=#8},
-   dun50={c=#6, x=#96,  y=#40, w=#8, h=#8},
-   dun51={c=#6, x=#104, y=#40, w=#8, h=#8},
-   dun52={c=#6, x=#112, y=#40, w=#8, h=#8},
-   dun53={c=#6, x=#120, y=#40, w=#8, h=#8},
-
-
    castle_1={c=#5, x=#64,  y=#0, w=#16, h=#12, d={castl,#8,#2}, u={castle_2,#8,#12}},
    castle_2={c=#5, x=#80,  y=#0, w=#16, h=#12, d={castle_1,#8,#0}, u={castle_3,#8,#12}},
    castle_3={c=#5, x=#96,  y=#0, w=#16, h=#12, d={castle_2,#8,#0}, u={castle_4,#8,#12}},
@@ -82,35 +59,40 @@ function map_init()
 
    field={c=#3, x=#0,   y=#0,  w=#29, h=#32, l={villa,#22,#13}, r={gravp,#0,#3}, u={mount,#7,#25}},
    bossw={c=#3, x=#96,  y=#12, w=#16, h=#12, d={dun73,#4,#0},   u={dun63,#4,#8}},
-   gravp={c=#5, x=#29,  y=#25, w=#19, h=#7,  l={field,#29,#18}, r={grave,#0,#3}, u={templ,#8,#12}},
+   gravp={c=#5, x=#29,  y=#25, w=#19, h=#7,  l={field,#29,#18}, r={grave,#0,#18}, u={templ,#8,#12}},
    mount={c=#4, x=#51,  y=#0,  w=#13, h=#25, d={field,#12,#0},  u={castl,#8,#12}},
    templ={c=#5, x=#32,  y=#52,  w=#16, h=#12, d={gravp,#11,#0}, u={temple_r1,#2.5,#6}, doors={
       {crypt_novi,#2.5,#8,#3.5,#1.5,#.5,#.5},
       {crypt_ivan,#2.5,#8,#12.5,#1.5,#.5,#.5}
    }},
-   temple_r1={c=#8, x=#54,  y=#46,  w=#5, h=#6, d={templ,#8,#0}, u={temple_r2,#2.5,#6}},
-   temple_r2={c=#8, x=#59,  y=#46,  w=#5, h=#6, d={temple_r1,#2.5,#0}},
+   temple_r1={c=#5, x=#54,  y=#46,  w=#5, h=#6, d={templ,#8,#0}, u={temple_r2,#2.5,#6}},
+   temple_r2={c=#5, x=#59,  y=#46,  w=#5, h=#6, d={temple_r1,#2.5,#0}},
 
    lankp={c=#3, x=#32,  y=#32, w=#10, h=#20, r={villa,#0,#20},   doors={{lanks_house,#4,#8,#5,#2.5,#.5,#.5}}},
-   grave={c=#5, x=#48,  y=#25, w=#16, h=#21, l={gravp,#19,#4},  doors={{gravekeepers_house,#4,#8,#13,#1.5,#.5,#.5}}},
+   grave={c=#5, x=#48,  y=#25, w=#16, h=#21, l={gravp,#19,#4}, u={grave_boss,#8,#12}, doors={{gravekeepers_house,#4,#8,#14,#16.5,#.5,#.5}}},
    castl={c=#5, x=#64,  y=#12, w=#16, h=#12, d={mount,#6,#0},   doors={{castle_1,#8,#12,#8,#1.5,#.5,#.5}}},
 
-   crypt_novi={c=#4, x=#118, y=#24, w=#5,  h=#8, d={templ,#3.5,#2}},
-   crypt_ivan={c=#4, x=#123, y=#24, w=#5,  h=#8, d={templ,#12.5,#2}},
+   crypt_novi={c=#13, x=#118, y=#24, w=#5,  h=#8, d={templ,#3.5,#2}, r={crypt_r1,#0,#5.5}},
+   crypt_ivan={c=#13, x=#123, y=#24, w=#5,  h=#8, d={templ,#12.5,#2}, l={crypt_r1,#16,#2.5}},
+
+   crypt_r1={c=#13, x=#112, y=#32, w=#16,  h=#8, d={crypt_r2,#11.5,#0}, l={crypt_novi,#5,#5.5}, r={crypt_ivan,#0,#2.5}, u={crypt_r3,#1.5,#16}},
+   crypt_r2={c=#13, x=#112, y=#40, w=#16,  h=#8, u={crypt_r1,#11.5,#8}},
+   crypt_r3={c=#13, x=#104, y=#32, w=#8,  h=#16, d={crypt_r1,#1.5,#0}, u={crypt_r4,#4.5,#8}},
+   crypt_r4={c=#13, x=#104, y=#24, w=#14,  h=#8, d={crypt_r3,#4.5,#0}, u={crypt_boss,#8,#12}},
+   crypt_boss={c=#13, x=#112, y=#12, w=#16,  h=#12, d={crypt_r4,#10,#0}},
 
    house_1={c=#4, x=#42, y=#46, w=#6,  h=#6, d={villa,#17,#8}},
    house_2={c=#4, x=#48, y=#46, w=#6,  h=#6, d={villa,#6, #19}},
    house_3={c=#4, x=#42, y=#32, w=#6,  h=#7, d={villa,#15,#14}},
-   fandude_house={c=#4, x=#42, y=#39, w=#6,  h=#7, d={villa,#5,#3}},
-   idk={c=#4, x=#42, y=#39, w=#6,  h=#7},
+
+   fandude_house={c=#4, x=#42, y=#39, w=#6,  h=#7, d={villa,#5,#3}, u={endless,#8,#12}},
+   endless={c=#3, x=#80, y=#12, w=#16, h=#12, d={fandude_house,#3,#0}},
+
    lanks_house={c=#4, x=#64, y=#24, w=#8,  h=#8, d={lankp,#5,#3}},
    shop={c=#4, x=#72, y=#24, w=#8,  h=#8, d={villa,#4,#12} },
    banjo_academy={c=#4, x=#80, y=#24, w=#8,  h=#8, d={villa,#17,#20}},
-   gravekeepers_house={c=#4, x=#88, y=#24, w=#8,  h=#8, d={grave,#13,#2}},
-
-   bossi={c=#0, x=#48, y=#52, w=#16, h=#12},
-   bossc={c=#5, x=#80, y=#0,  w=#16, h=#12},
-   endls={c=#3, x=#80, y=#12, w=#16, h=#12},
+   gravekeepers_house={c=#4, x=#88, y=#24, w=#8,  h=#8, d={grave,#14,#17}},
+   grave_boss={c=#5, x=#112, y=#12, w=#16,  h=#12, d={grave,#8,#0}},
    ]]
 end
 
