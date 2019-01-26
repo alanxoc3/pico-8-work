@@ -124,6 +124,6 @@ function game_init()
    gen_spawner(4, 20, gen_top, 12)
 
    -- load_room("dun73", 4, 4)
-   -- load_room("villa", 18, 5)
-   load_room("templ", 6, 7)
+   load_room("grave", 5, 5)
+   -- load_room("templ", 6, 7)
 end
