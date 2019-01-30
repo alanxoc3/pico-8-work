@@ -2,11 +2,12 @@
 -- todo: allow actor and sprite index for menu actor.
 -- todo: menu actor, different name and different backgrounds.
 -- todo: nice functions to integrate with menu actor.
--- todo: reconnect the map.
 -- todo: room fades
 -- todo: make a sign
 -- todo: make enemy health bar / status
 -- todo: make area information (if no enemy)
+--
+-- done: reconnect the map.
 -- 2% compression here.
 -- 3522 3529 3503 3510 3521 3523 3538 3526 3487 3428 3635 3660 3652 3545 3494
 -- 3487 3743 3686 3675 3585 3591 3797 3802 3759 3755 3861 4663 4470 4457 4478

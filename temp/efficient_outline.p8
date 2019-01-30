@@ -1,6 +1,8 @@
 pico-8 cartridge // http://www.pico-8.com
 version 16
 __lua__
+-- efficient outline
+-- by alan morgan
 
 g_out_cache = {}
 function init_out_cache(s_beg, s_end)
@@ -90,7 +92,7 @@ function _draw()
 end
 
 -- older function taken from:
--- https://gist.github.com/Liquidream/1b419261dc324708f008f24ee6d13d7b
+-- https://gist.github.com/liquidream/1b419261dc324708f008f24ee6d13d7b
 function outline_sprite(n,x,y,w,h,flip_x,flip_y, col_outline)
   -- reset palette to black
   for c=1,15 do
