@@ -4,7 +4,10 @@
 out*.p8
 
 *.bin
-*.p8.png
+./*.p8.png
+lib/*.p8.png
+template/*.p8.png
+temp/*.p8.png
 *.p8l
 sheet.png
 .dropbox
