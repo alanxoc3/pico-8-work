@@ -17,22 +17,22 @@ end
 g_item = nil
 function gen_pl(x, y)
    return acts_attach(
-      [[pl,nil,
+      [[$pl$,nil,
          {
             x=@,
             y=@,
-            sinds={#54, #55, #56, #57},
-            rx=#.375,
-            ry=#.375,
-            iyy=#-2,
-            spd=#.02,
-            anim_len=#3,
-            anim_spd=#5,
+            sinds={54, 55, 56, 57},
+            rx=.375,
+            ry=.375,
+            iyy=-2,
+            spd=.02,
+            anim_len=3,
+            anim_spd=5,
             hit=@,
-            max_hearts=#3,
-            hearts=#3,
+            max_hearts=3,
+            hearts=3,
             update=@
-         },{anim,col,mov,tcol,hurtable,knockable,stunnable,spr_out}
+         },{$anim$,$col$,$mov$,$tcol$,$hurtable$,$knockable$,$stunnable$,$spr_out$}
       ]], x, y,
       function(self, other, xdir, ydir)
       end, function(a)
@@ -100,21 +100,21 @@ end
 function gen_pl_item(pl, item_type)
    if item_type == 1 then
       return acts_attach([[
-         lank_sword,nil,
+         $lank_sword$,nil,
          {
             movable=true,
             holding=true,
             rx=.5,
             ry=.375,
-            rel_y=#-.125,
-            iyy=#-1,
+            rel_y=-.125,
+            iyy=-1,
             sind=8,
-            poke=#0,
+            poke=0,
             xf=@,
             touchable=false,
             init=@,
             hit=@
-         },{rel,tl,timed,spr,col}
+         },{$rel$,$tl$,$timed$,$spr$,$col$}
          ]],
          pl.xf,
          function(a)
@@ -156,7 +156,7 @@ function gen_pl_item(pl, item_type)
 
    elseif item_type == 0 then
       return acts_attach([[
-         lank_banjo,nil,
+         $lank_banjo$,nil,
          {
             holding=true,
             rx=.3,
@@ -165,7 +165,7 @@ function gen_pl_item(pl, item_type)
             xf=@,
             touchable=false,
             init=@
-         },{rel,tl,timed,spr,col}
+         },{$rel$,$tl$,$timed$,$spr$,$col$}
          ]],
          pl.xf,
          function(a)
@@ -183,20 +183,20 @@ function gen_pl_item(pl, item_type)
 
    elseif item_type == 7 then
       return acts_attach([[
-         lank_shield,nil,
+         $lank_shield$,nil,
          {
             movable=true,
             holding=true,
             rx=.25,
             ry=.5,
-            iyy=#-2,
-            poke=#20,
+            iyy=-2,
+            poke=20,
             sind=65,
             xf=@,
             touchable=false,
             init=@,
             hit=@
-         },{rel,tl,timed,spr,col}
+         },{$rel$,$tl$,$timed$,$spr$,$col$}
       ]],
          pl.xf,
          function(a)
