@@ -2,51 +2,29 @@
 g_act_arrs, g_attach = {}, {}
 function nf() end -- the nothing function
 
-function gen_attach(name, str, ...)
-   local params = {...}
-   g_attach[name] = function(a)
-      return acts_attach_2(name, a or {}, str, munpack(params))
+function create_parent(str, ...)
+   local params = gun_vals(str, ...)
+   g_attach[params.id] = function(a)
+      return acts_attach_helper(params, a or {})
    end
 end
 
--- this attaches the basic stuff
--- id, a, attrs, vals, parents
-function acts_attach_2(id, a, str, ...)
-   printh("tttesting "..id.." "..#{...})
-   local params = gun_vals(str, ...)
-   local attrs, parents = params[1], params[2]
-   foreach(parents, function(sf) a = g_attach[sf](a) end)
-
-   for k,v in pairs(attrs) do
-      a[k] = v
-   end
-
-   if not a[id] then
-      g_act_arrs[id] = g_act_arrs[id] or {}
-      add(g_act_arrs[id], a)
-      a[id] = true
-   end
-
-   a.state = a.init and a.init(a)
-
-   return a
+function create_actor(str, ...)
+   return acts_attach_helper(gun_vals(str, ...))
 end
 
--- this attaches the basic stuff
--- id, a, attrs, vals, parents
-function acts_attach(str, ...)
-   local params = gun_vals(str, ...)
-   local id, a, attrs, parents = params[1], params[2] or {}, params[3], params[4]
-   foreach(parents, function(sf) a = g_attach[sf](a) end)
+-- opt: {id, att, par}
+function acts_attach_helper(opt, a)
+   foreach(opt.par, function(sf) a = g_attach[sf](a) end)
 
-   for k,v in pairs(attrs) do
+   for k,v in pairs(opt.att) do
       a[k] = v
    end
 
-   if not a[id] then
-      g_act_arrs[id] = g_act_arrs[id] or {}
-      add(g_act_arrs[id], a)
-      a[id] = true
+   if not a[opt.id] then
+      g_act_arrs[opt.id] = g_act_arrs[opt.id] or {}
+      add(g_act_arrs[opt.id], a)
+      a[opt.id] = true
    end
 
    a.state = a.init and a.init(a)
@@ -73,9 +51,9 @@ end
 
 -- to generate an actor.
 -- includes update
-gen_attach("act",
-[[
-   {
+create_parent(
+[[ id=$act$,
+   att={
       alive=true,
       active=true,
       clean=@
@@ -86,57 +64,62 @@ gen_attach("act",
    end
 end)
 
-gen_attach("tl",
-[[
-   {
+create_parent(
+[[ id=$tl$,
+   att={
       update=@
-   },{$stunnable$}
+   },
+   par={$stunnable$}
 ]], function(a)
    if a.stun_countdown == 0 then
       tl_update(a.state)
    end
 end)
 
-gen_attach("timed",
-[[
-   {
+create_parent(
+[[ id=$timed$,
+   att={
       t=0,
       tick=@
-   },{$act$}
+   },
+   par={$act$}
 ]], function(a)
    a.t += 1
 end)
 
-gen_attach("pos",
-[[
-   {
+create_parent(
+[[ id=$pos$,
+   att={
       x=0,
       y=0
-   },{$act$}
+   },
+   par={$act$}
 ]]
 )
 
-gen_attach("vec",
-[[
-   {
+create_parent(
+[[ id=$vec$,
+   att={
       dx=0,
       dy=0,
       vec_update=@
-   },{$pos$}
+   },
+   par={$pos$}
 ]], function(a)
    a.x += a.dx
    a.y += a.dy
 end)
 
-gen_attach("mov",
-[[
-   {
+create_parent(
+[[ id=$mov$,
+   att={
       ix=.85,
       iy=.85,
       ax=0,
       ay=0,
       move=@
-   },{$vec$}
+   },
+   par={$vec$}
 ]], function(a)
    a.dx += a.ax a.dy += a.ay
    a.dx *= a.ix a.dy *= a.iy
@@ -144,34 +127,36 @@ gen_attach("mov",
    if a.ay == 0 and abs(a.dy) < .01 then a.dy = 0 end
 end)
 
-gen_attach("dim",
-[[
-   {
+create_parent(
+[[ id=$dim$,
+   att={
       rx=.375,
       ry=.375,
       debug_rect=@
-   },{$pos$}
+   },
+   par={$pos$}
 ]], function(a)
    scr_rect(a.x-a.rx,a.y-a.ry,a.x+a.rx,a.y+a.ry, 8)
 end)
 
 -- used with player items/weapons.
-gen_attach("rel",
-[[
-   {
+create_parent(
+[[ id=$rel$,
+   att={
       rel_x=0,
       rel_y=0,
       rel_dx=0,
       rel_dy=0,
       rel_update=@
-   },{$act$}
+   },
+   par={$act$}
 ]], function(a, a2)
    a.x, a.y, a.dx, a.dy = a2.x+a.rel_x, a2.y+a.rel_y, a2.dx+a.rel_dx, a2.dy+a.rel_dy
 end)
 
-gen_attach("drawable",
-[[
-   {
+create_parent(
+[[ id=$drawable$,
+   att={
       ixx=0,
       iyy=0,
       xx=0,
@@ -183,42 +168,46 @@ gen_attach("drawable",
    a.xx, a.yy = 0, 0
 end)
 
-gen_attach("spr",
-[[
-   {
+create_parent(
+[[ id=$spr$,
+   att={
       sind=0,
       sw=1,
       sh=1,
       xf=false,
       yf=false,
       draw=@
-   },{$vec$,$drawable$}
+   },
+   par={$vec$,$drawable$}
 ]], scr_spr)
 
-gen_attach("spr_out",
-[[
-   {
+create_parent(
+[[ id=$spr_out$,
+   att={
       draw=@
-   },{$spr$}
+   },
+   par={$spr$}
 ]], scr_spr_out)
 
-gen_attach("knockable",
-[[
-   {
+create_parent(
+[[ id=$knockable$,
+   att={
       knockback=@
-   },{$mov$}
+   },
+   par={$mov$}
 ]], function(a, speed, xdir, ydir)
    if xdir != 0 then a.dx = xdir * speed
    else              a.dy = ydir * speed end
 end)
 
-gen_attach("stunnable",
-[[
-   {
+create_parent(
+[[ id=$stunnable$,
+   att={
       stun_countdown=0,
       stun=@,
       stun_update=@
-   },{$mov$,$drawable$}
+   },
+   par={$mov$,$drawable$}
 ]], function(a, len)
    if a.stun_countdown == 0 then
       a.stun_countdown = len
@@ -231,21 +220,22 @@ end, function(a)
    end
 end)
 
-gen_attach("hurtable",
-[[
-   {
+create_parent(
+[[ id=$hurtable$,
+   att={
       hearts=3,
       hurt=@
-   },{$stunnable$}
+   },
+   par={$stunnable$}
 ]], function(a, damage)
    if a.stun_countdown == 0 then
       a.hearts -= damage
    end
 end)
 
-gen_attach("anim",
-[[
-   {
+create_parent(
+[[ id=$anim$,
+   att={
       sinds={},
       anim_loc=1,
       anim_off=0,
@@ -253,7 +243,8 @@ gen_attach("anim",
       anim_spd=0,
       anim_sind=,
       anim_update=@
-   },{$spr$,$timed$}
+   },
+   par={$spr$,$timed$}
 ]], function(a)
    if a.anim_sind then
       a.sind = a.anim_sind
@@ -267,16 +258,17 @@ gen_attach("anim",
    end
 end)
 
-gen_attach("col",
-[[
-   {
+create_parent(
+[[ id=$col$,
+   att={
       static=false,
       touchable=true,
       xb=0,
       yb=0,
       hit=@,
       move_check=@
-   },{$vec$,$dim$}
+   },
+   par={$vec$,$dim$}
 ]], nf, function(a, acts)
    local other_list = {}
    local move_check = function(dx, dy)
@@ -327,12 +319,13 @@ gen_attach("col",
    end
 end)
 
-gen_attach("tcol",
-[[
-   {
+create_parent(
+[[ id=$tcol$,
+   att={
       $tile_hit$=@,
       $coll_tile$=@
-   },{$vec$,$dim$}
+   },
+   par={$vec$,$dim$}
 ]], nf, function(a, solid_func)
    a.x, a.dx = coll_tile_help(a.x, a.y, a.dx, a.rx, a.ry, 0, a, a.tile_hit, solid_func)
    a.y, a.dy = coll_tile_help(a.y, a.x, a.dy, a.ry, a.rx, 2, a, a.tile_hit, function(y, x) return solid_func(x, y) end)

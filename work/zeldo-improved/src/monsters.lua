@@ -4,14 +4,15 @@ end
 
 function gen_spawner(x, y, func, buf_len, ...)
    local args = {...}
-   return acts_attach([[
-         $spawner$,,
-         {
+   return create_actor([[
+         id=$spawner$,
+         att={
             x=@,
             y=@,
             child=,
             update=@
-         },{$dim$}
+         },
+         par={$dim$}
       ]], x, y,
       function(a)
          local acol = dim_collide(a, get_buf_rect(buf_len))
@@ -25,9 +26,9 @@ function gen_spawner(x, y, func, buf_len, ...)
 end
 
 function gen_bullet(x, y, xdir)
-   return acts_attach([[
-      $deku_bullet$,,
-      {
+   return create_actor([[
+      id=$deku_bullet$,
+      att={
          x=@,
          y=@,
          dx=@,
@@ -38,7 +39,8 @@ function gen_bullet(x, y, xdir)
          touchable=false,
          init=@,
          hit=@
-      },{$tl$,$timed$,$spr$,$col$}
+      },
+      par={$tl$,$timed$,$spr$,$col$}
       ]],
       x, y, xdir and .25 or -.25,
       function(a)
@@ -60,9 +62,9 @@ function gen_bullet(x, y, xdir)
 end
 
 function gen_deku(x, y, can_turn)
-   return acts_attach([[
-      $deku$,,
-      {
+   return create_actor([[
+      id=$deku$,
+      att={
          x=@,
          y=@,
          rx=.5,
@@ -72,7 +74,7 @@ function gen_deku(x, y, can_turn)
          touchable=true,
          init=@
       },
-      {$tl$,$timed$,$spr_out$,$col$,$tcol$}
+      par={$tl$,$timed$,$spr_out$,$col$,$tcol$}
       ]],
       x,y,
       -- init
@@ -94,9 +96,9 @@ function gen_deku(x, y, can_turn)
 end
 
 function gen_top(x, y)
-   return acts_attach([[
-      $hobgoblin$,,
-      {
+   return create_actor([[
+      id=$hobgoblin$,
+      att={
          x=@,
          y=@,
          rx=.375,
@@ -109,7 +111,7 @@ function gen_top(x, y)
          init=@,
          hit=@
       },
-      {$tl$,$mov$,$timed$,$spr_out$,$col$,$tcol$,$knockable$}
+      par={$tl$,$mov$,$timed$,$spr_out$,$col$,$tcol$,$knockable$}
       ]],x,y,
       -- init
       function(a)

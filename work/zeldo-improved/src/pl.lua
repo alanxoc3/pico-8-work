@@ -16,9 +16,9 @@ end
 
 g_item = nil
 function gen_pl(x, y)
-   return acts_attach(
-      [[$pl$,,
-         {
+   return create_actor(
+      [[ id=$pl$,
+         att={
             x=@,
             y=@,
             sinds={54, 55, 56, 57},
@@ -32,7 +32,8 @@ function gen_pl(x, y)
             max_hearts=3,
             hearts=3,
             update=@
-         },{$anim$,$col$,$mov$,$tcol$,$hurtable$,$knockable$,$stunnable$,$spr_out$}
+         },
+         par={$anim$,$col$,$mov$,$tcol$,$hurtable$,$knockable$,$stunnable$,$spr_out$}
       ]], x, y,
       function(self, other, xdir, ydir)
       end, function(a)
@@ -99,9 +100,9 @@ end
 
 function gen_pl_item(pl, item_type)
    if item_type == 1 then
-      return acts_attach([[
-         $lank_sword$,,
-         {
+      return create_actor([[
+         id=$lank_sword$,
+         att={
             movable=true,
             holding=true,
             rx=.5,
@@ -114,7 +115,8 @@ function gen_pl_item(pl, item_type)
             touchable=false,
             init=@,
             hit=@
-         },{$rel$,$tl$,$timed$,$spr$,$col$}
+         },
+         par={$rel$,$tl$,$timed$,$spr$,$col$}
          ]],
          pl.xf,
          function(a)
@@ -155,9 +157,9 @@ function gen_pl_item(pl, item_type)
          end)
 
    elseif item_type == 0 then
-      return acts_attach([[
-         $lank_banjo$,,
-         {
+      return create_actor([[
+         id=$lank_banjo$,
+         att={
             holding=true,
             rx=.3,
             ry=.3,
@@ -165,7 +167,8 @@ function gen_pl_item(pl, item_type)
             xf=@,
             touchable=false,
             init=@
-         },{$rel$,$tl$,$timed$,$spr$,$col$}
+         },
+         par={$rel$,$tl$,$timed$,$spr$,$col$}
          ]],
          pl.xf,
          function(a)
@@ -182,9 +185,9 @@ function gen_pl_item(pl, item_type)
          end)
 
    elseif item_type == 7 then
-      return acts_attach([[
-         $lank_shield$,,
-         {
+      return create_actor([[
+         id=$lank_shield$,
+         att={
             movable=true,
             holding=true,
             rx=.25,
@@ -196,7 +199,8 @@ function gen_pl_item(pl, item_type)
             touchable=false,
             init=@,
             hit=@
-         },{$rel$,$tl$,$timed$,$spr$,$col$}
+         },
+         par={$rel$,$tl$,$timed$,$spr$,$col$}
       ]],
          pl.xf,
          function(a)
