@@ -43,7 +43,7 @@ function munpack(t, from, to)
 end
 
 -- returns the parsed table, the current position, and the parameter locations
--- 5296 5284 5285 5282 5275 5264 5260
+-- 5296 5284 5285 5282 5275 5264 5258
 function gun_vals_helper(val_str,i,new_params)
    local val_list, val, val_ind, isnum, val_key, str_mode = {}, "", 1, true
 
@@ -51,9 +51,6 @@ function gun_vals_helper(val_str,i,new_params)
       local x = sub(val_str, i, i)
       if     x == "$" then str_mode, isnum = not str_mode
       elseif x == "}" or x == "," then
-         -- update key and index
-         -- local key = val_key or val_ind
-
          if     val == "@" then add(new_params, {val_list, val_key or val_ind})
          elseif val == "true" or val == "false" or val == "" then val=val=="true"
          elseif isnum then val=0+val
