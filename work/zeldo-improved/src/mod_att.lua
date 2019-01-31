@@ -254,7 +254,7 @@ gen_attach("anim", function(a)
          anim_off=0,
          anim_len=1,
          anim_spd=0,
-         anim_sind=nil,
+         anim_sind=,
          anim_update=@
       },{$spr$,$timed$}
    ]], a,

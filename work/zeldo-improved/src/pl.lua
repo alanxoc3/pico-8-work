@@ -17,7 +17,7 @@ end
 g_item = nil
 function gen_pl(x, y)
    return acts_attach(
-      [[$pl$,nil,
+      [[$pl$,,
          {
             x=@,
             y=@,
@@ -100,7 +100,7 @@ end
 function gen_pl_item(pl, item_type)
    if item_type == 1 then
       return acts_attach([[
-         $lank_sword$,nil,
+         $lank_sword$,,
          {
             movable=true,
             holding=true,
@@ -156,7 +156,7 @@ function gen_pl_item(pl, item_type)
 
    elseif item_type == 0 then
       return acts_attach([[
-         $lank_banjo$,nil,
+         $lank_banjo$,,
          {
             holding=true,
             rx=.3,
@@ -183,7 +183,7 @@ function gen_pl_item(pl, item_type)
 
    elseif item_type == 7 then
       return acts_attach([[
-         $lank_shield$,nil,
+         $lank_shield$,,
          {
             movable=true,
             holding=true,

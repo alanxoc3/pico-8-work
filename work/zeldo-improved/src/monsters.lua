@@ -5,11 +5,11 @@ end
 function gen_spawner(x, y, func, buf_len, ...)
    local args = {...}
    return acts_attach([[
-         $spawner$,nil,
+         $spawner$,,
          {
             x=@,
             y=@,
-            child=nil,
+            child=,
             update=@
          },{$dim$}
       ]], x, y,
@@ -26,7 +26,7 @@ end
 
 function gen_bullet(x, y, xdir)
    return acts_attach([[
-      $deku_bullet$, nil,
+      $deku_bullet$,,
       {
          x=@,
          y=@,
@@ -61,7 +61,7 @@ end
 
 function gen_deku(x, y, can_turn)
    return acts_attach([[
-      $deku$,nil,
+      $deku$,,
       {
          x=@,
          y=@,
@@ -95,7 +95,7 @@ end
 
 function gen_top(x, y)
    return acts_attach([[
-      $hobgoblin$,nil,
+      $hobgoblin$,,
       {
          x=@,
          y=@,
