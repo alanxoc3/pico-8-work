@@ -43,50 +43,32 @@ function munpack(t, from, to)
 end
 
 -- returns the parsed table, the current position, and the parameter locations
+-- 5296 5284 5285 5282 5275 5264 5260
 function gun_vals_helper(val_str,i,new_params)
-   local val_list, val, val_ind, val_key = {}, "", 1
-   local isnum = true
-   local str_mode = false
+   local val_list, val, val_ind, isnum, val_key, str_mode = {}, "", 1, true
 
    while i <= #val_str do
       local x = sub(val_str, i, i)
+      if     x == "$" then str_mode, isnum = not str_mode
+      elseif x == "}" or x == "," then
+         -- update key and index
+         local key = val_key or val_ind
+         val_ind = val_key and val_ind or val_ind+1
 
-      if x == "$" then
-         str_mode = not str_mode
-         isnum = false
-      elseif str_mode then
-   		val=val..x
-      elseif x == "{" then isnum=false val, i = gun_vals_helper(val_str,i+1,new_params)
-      elseif x == "=" then
-         val_key, val = val, ""
-         isnum=true
-      elseif x == "," or x == "}" then
-         if val_key then
-            key = val_key
-         else
-            key = val_ind
-            val_ind = val_ind+1
+         if     val == "@" then add(new_params, {val_list, key})
+         elseif val == "true" or val == "false" or val == "" then val=val=="true"
+         elseif isnum then val=0+val
          end
 
-         if     val == "@"                then isnum = false add(new_params, {val_list, key})
-         elseif val == "true"             then isnum = false val = true
-         elseif val == "false"            then isnum = false val = false
-         elseif val == "nil"              then isnum = false val = nil
-         end
+         val_list[key], isnum, val, val_key = val, true, ""
 
-         printh(x)
-         printh(val)
-         if val != "" then
-            val_list[key] = isnum and 0+val or val
+         if x == "}" then
+            return val_list, i
          end
-
-         -- reset
-         val, val_key = ""
-         isnum = true
-         if x == "}" then return val_list, i end
-      elseif x != " " and x != "\n" then
-   		val=val..x
-   	end
+      elseif str_mode then val=val..x
+      elseif x == "{" then val, i, isnum = gun_vals_helper(val_str,i+1,new_params)
+      elseif x == "=" then isnum, val_key, val = true, val, ""
+      elseif x != " " and x != "\n" then val=val..x end
       i += 1
    end
 
