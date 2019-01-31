@@ -43,7 +43,6 @@ function munpack(t, from, to)
 end
 
 -- returns the parsed table, the current position, and the parameter locations
--- 5296 5284 5285 5282 5275 5264 5260
 function gun_vals_helper(val_str,i,new_params)
    local val_list, val, val_ind, isnum, val_key, str_mode = {}, "", 1, true
 
