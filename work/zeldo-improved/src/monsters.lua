@@ -50,9 +50,9 @@ function gen_bullet(x, y, xdir)
       end,
       function(a, other, ...)
          if other.pl then
-            other.hurt(.5)
-            other.stun(30)
-            other.knockback(.3, ...)
+            other.hurt(other, .5)
+            other.stun(other, 30)
+            other.knockback(other, .3, ...)
 
             tl_next(a.state, 3)
          end
@@ -125,8 +125,8 @@ function gen_top(x, y)
       -- hit
       function(a, other, ...)
          if a.state.current == 3 then
-            if other.pl then other.hurt(1) other.stun(30) end
-            if other.knockable then other.knockback(.2, ...) end
+            if other.pl then other.hurt(other, 1) other.stun(other, 30) end
+            if other.knockable then other.knockback(other, .2, ...) end
 
             tl_next(a.state)
          end
