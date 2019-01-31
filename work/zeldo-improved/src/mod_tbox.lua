@@ -13,11 +13,6 @@
 g_tbox_messages, g_tbox_anim, g_tbox_max_len = {}, 0, 23
 -- listen to 'g_tbox_active', to listen if tbox is active.
 
-function draw_rect_with_border(x1, y1, x2, y2, bor_col, bkg_col, b_w)
-	rectfill(x1, y1, x2, y2, bor_col)
-	rectfill(x1+b_w, y1+b_w, x2-b_w, y2-b_w, bkg_col)
-end
-
 function str_to_word_lines(str, line_len)
 	-- word, line, loop_string, lines
 	local l, w, l_str, lines = "", "", str.." ", {}
@@ -40,13 +35,6 @@ function str_to_word_lines(str, line_len)
 	add(lines, l)
 
 	return lines
-end
-function tbox_draw_arrow(x, y, col, hor)
-	for i=0, 2 do
-		local p1, p2 = x+4-i, y+i
-		if hor then p1, p2 = x+i, y+4-i end
-		line(x+i, y+i, p1, p2, col)
-	end
 end
 
 -- if you press the button while text is still being displayed, then the text
@@ -110,23 +98,45 @@ end
 -- foreground color, background color, border width
 function ttbox_draw(fg_col, bg_col)
 	if g_tbox_active then -- only draw if there are messages
-		draw_rect_with_border(20, 108, 127, 127, fg_col, bg_col, 2)
+      batch_call(rectfill, [[
+         {20, 108, 127, 127, 7},
+         {22, 110, 125, 125, 0}
+      ]])
 
 		-- draw speaker
 		if #g_tbox_active.speaker>0 then
 			local x2 = #g_tbox_active.speaker*4+6
-			rectfill(20, 101, 20+x2, 108, fg_col)
-			rectfill(22, 103, 20+x2-2, 109, bg_col)
+         batch_call(rectfill, [[
+            {20, 101, @, 108, 7},
+            {22, 103, @, 109, 0}
+         ]], 20+x2, 18+x2)
+
 			zprint(g_tbox_active.speaker, 24, 105, fg_col)
 		end
 
 		-- print the message
-		zprint( sub(g_tbox_active.l1, 1, g_tbox_anim),                 24, 112)
-		zprint( sub(g_tbox_active.l2, 0, max(g_tbox_anim - #g_tbox_active.l1, 0)), 24, 119)
+      batch_call(zprint, [[
+         {@, 24, 112},
+         {@, 24, 119}
+      ]],
+         sub(g_tbox_active.l1, 1, g_tbox_anim),
+         sub(g_tbox_active.l2, 0, max(g_tbox_anim - #g_tbox_active.l1, 0))
+      )
 
-		-- draw / animate arrow
       if g_tbox_active.continue then
-         tbox_draw_arrow(118, 116+(g_tbox_anim%20)/10, 7, false)
+         -- draw the arrow
+         batch_call(rectfill, g_tbox_anim%20 < 10 and [[
+            {118, 115, 122, 115, 1},
+            {118, 116, 122, 116, 7},
+            {119, 117, 121, 117, 7},
+            {120, 118, 120, 118, 7}
+         ]] or [[
+            {118, 116, 122,  116, 1},
+            {118, 117, 122,  117, 7},
+            {119, 118, 121,  118, 7},
+            {120, 119, 120,  119, 7}
+         ]]
+         )
       end
 	end
 end
