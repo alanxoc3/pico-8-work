@@ -44,15 +44,22 @@ end
 
 -- returns the parsed table, the current position, and the parameter locations
 function gun_vals_helper(val_str,i,new_params)
-   local val_list, val, val_ind, isnum, val_key = {}, "", 1
+   local val_list, val, val_ind, val_key = {}, "", 1
+   local isnum = true
+   local str_mode = false
 
    while i <= #val_str do
       local x = sub(val_str, i, i)
 
-      if x == "{" then val, i = gun_vals_helper(val_str,i+1,new_params)
-      elseif x == "#" then isnum = true
+      if x == "$" then
+         str_mode = not str_mode
+         isnum = false
+      elseif str_mode then
+   		val=val..x
+      elseif x == "{" then isnum=false val, i = gun_vals_helper(val_str,i+1,new_params)
       elseif x == "=" then
          val_key, val = val, ""
+         isnum=true
       elseif x == "," or x == "}" then
          if val_key then
             key = val_key
@@ -61,14 +68,21 @@ function gun_vals_helper(val_str,i,new_params)
             val_ind = val_ind+1
          end
 
-         if     val == "@"                then add(new_params, {val_list, key})
-         elseif val == "true"             then val = true
-         elseif val == "false"            then val = false
-         elseif val == "nil"              then val = nil
+         if     val == "@"                then isnum = false add(new_params, {val_list, key})
+         elseif val == "true"             then isnum = false val = true
+         elseif val == "false"            then isnum = false val = false
+         elseif val == "nil"              then isnum = false val = nil
          end
 
-         val_list[key] = isnum and 0+val or val
-         val, isnum, val_key = ""
+         printh(x)
+         printh(val)
+         if val != "" then
+            val_list[key] = isnum and 0+val or val
+         end
+
+         -- reset
+         val, val_key = ""
+         isnum = true
          if x == "}" then return val_list, i end
       elseif x != " " and x != "\n" then
    		val=val..x

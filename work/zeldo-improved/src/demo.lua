@@ -57,17 +57,17 @@ function game_update()
    if not g_menu_open then
       batch_call(
          acts_loop, [[
-            {drawable,reset_off},
-            {stunnable, stun_update},
-            {act,update},
-            {mov,move},
-            {col,move_check,@},
-            {tcol,coll_tile,@},
-            {rel,rel_update,@},
-            {vec,vec_update},
-            {act, clean},
-            {anim,anim_update},
-            {timed,tick}
+            {$drawable$,$reset_off$},
+            {$stunnable$, $stun_update$},
+            {$act$,$update$},
+            {$mov$,$move$},
+            {$col$,$move_check$,@},
+            {$tcol$,$coll_tile$,@},
+            {$rel$,$rel_update$,@},
+            {$vec$,$vec_update$},
+            {$act$, $clean$},
+            {$anim$,$anim_update$},
+            {$timed$,$tick$}
          ]],
          g_act_arrs["col"],
          function(x, y)
@@ -125,6 +125,6 @@ function game_init()
    gen_spawner(4, 20, gen_top, 12)
 
    -- load_room("dun73", 4, 4)
-   load_room("grave", 5, 5)
-   -- load_room("templ", 6, 7)
+   -- load_room("grave", 5, 5)
+   load_room("templ", 6, 7)
 end
