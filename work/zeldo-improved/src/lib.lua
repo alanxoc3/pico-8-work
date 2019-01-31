@@ -52,15 +52,14 @@ function gun_vals_helper(val_str,i,new_params)
       if     x == "$" then str_mode, isnum = not str_mode
       elseif x == "}" or x == "," then
          -- update key and index
-         local key = val_key or val_ind
-         val_ind = val_key and val_ind or val_ind+1
+         -- local key = val_key or val_ind
 
-         if     val == "@" then add(new_params, {val_list, key})
+         if     val == "@" then add(new_params, {val_list, val_key or val_ind})
          elseif val == "true" or val == "false" or val == "" then val=val=="true"
          elseif isnum then val=0+val
          end
 
-         val_list[key], isnum, val, val_key = val, true, ""
+         val_list[val_key or val_ind], isnum, val, val_ind, val_key = val, true, "", val_key and val_ind or val_ind+1
 
          if x == "}" then
             return val_list, i
