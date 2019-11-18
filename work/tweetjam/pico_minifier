@@ -1,0 +1,32 @@
+#!/usr/bin/perl -Iminifier_lib/
+use strict;
+use warnings;
+use experimental 'smartmatch';
+use Alanxoc3::Pico8FormatUtil;
+use Getopt::Long qw(GetOptions);
+
+my $dev_mode;
+GetOptions('dev' => \$dev_mode) or die "Usage: $0 [--dev]\n";
+
+my @lines = <>;
+chomp(@lines);
+@lines = remove_comments(@lines);
+@lines = remove_texts(@lines);
+@lines = single_quotes_to_double(@lines);
+
+if ($dev_mode) {
+   @lines = remove_spaces(@lines);
+} else {
+   my %vars = populate_vars(@lines);
+   @lines = remove_spaces(@lines);
+   my $file_line = join("\n",@lines);
+   @lines = ($file_line);
+   @lines = remove_spaces(@lines);
+   @lines = tokenize_lines(\@lines, \%vars);
+}
+
+# Uncomment for each thing to go on its own line.
+# Note that this is slightly more compression space.
+# $lines[0] =~ s/([^\"]) ([^\"])/$1\n$2/g;
+@lines = pop_text_logics(@lines);
+print $dev_mode ? "$_\n" : "$_\n" for @lines;
