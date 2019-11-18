@@ -3,7 +3,7 @@
 *.swo
 out*.p8
 
-*.p8.png
+# *.p8.png
 *.p8l
 
 *.bin
