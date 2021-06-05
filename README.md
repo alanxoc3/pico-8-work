@@ -1,9 +1,8 @@
 # PICO-8 Workspace
 This repo contains [@alanxoc3](https://twitter.com/alanxoc3)'s PICO-8 life.
 
-* `/template` Includes my build system.
-* `/work`     Unfinished projects.
-* `/show`     A nice collection of all the things I've written.
+* `/TEMPLATE` My build system.
+* `/.archive` An incomplete collection cartridge files I made.
 
 # PICO-8 Useful Resources
 For all the pico-eighters out there. Here are some pages that I have found

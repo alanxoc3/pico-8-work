@@ -9,6 +9,7 @@ out*.p8
 *.bin
 ./*.p8.png
 sheet.png
+build/
 
 .dropbox
 
