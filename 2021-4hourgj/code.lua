@@ -668,6 +668,10 @@ elseif a.tl_tim<2*wait then a.txt="you are in a game now"
 elseif a.tl_tim<3*wait then a.txt="how do you like it?"
 elseif a.tl_tim<4*wait then a.txt="press 🅾️ or z to jump"
 elseif a.tl_tim<5*wait then a.txt="press ❎ or x to meow"
+elseif a.tl_tim<6*wait then a.txt=""
+elseif a.tl_tim<7*wait then a.txt="oh"
+elseif a.tl_tim<8*wait then a.txt="dont fall into the water"
+elseif a.tl_tim<9*wait then a.txt="kittens cant swim"
 end
 end)
 function update_view_helper(view,xy,wh,ii)
