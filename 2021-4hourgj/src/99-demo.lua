@@ -36,14 +36,44 @@ end
 
 function game_init(a)
     _g.fader_in(.5, nf, nf)
+
+    g_main_view = _g.view(15, 16, 0, bucket)
+    g_pl = _g.pl(3, 3)
+
+    g_cur_room = tabcpy(ztable[[
+        x:0; y:0; w:8; h:16;
+    ]])
 end
 
 function game_update(a)
+   batch_call_new(
+      acts_loop, [[
+         act,update;
+         drawable_obj,reset_off;
+         mov,move;
+         pl,move_check,@1;
+         tcol,coll_tile,@2;
+         rel,rel_update;
+         vec,vec_update;
+         kill_too_high,check_height;
+         bounded,check_bounds;
+         anim,anim_update;
+         timed,tick;
+         view,update_view;
+      ]], g_act_arrs['col'],
+      function(x, y)
+         return x >= g_cur_room.x and x < g_cur_room.x+g_cur_room.w and
+                y >= g_cur_room.y and y < g_cur_room.y+g_cur_room.h and
+                fget(mget(x, y), 6)
+      end
+   )
+
     batch_call_new(acts_loop, [[act, clean]])
 end
 
 function game_draw(a)
     fade(g_card_fade)
+    map_draw(g_main_view, 8, 8)
 end
 
 function logo_draw(a)
@@ -84,7 +114,6 @@ end
 
 
 
-
 -- CAMERA STUFF
 
 function shiftx(view)
@@ -119,7 +148,6 @@ function map_draw(view, x, y)
             pre_drawable_1, d;
             pre_drawable_2, d;
         ]])
-      draw_lvl_blocks(g_blocks)
 
       isorty(g_act_arrs.drawable)
       batch_call_new(acts_loop, [[
@@ -132,11 +160,19 @@ function map_draw(view, x, y)
       ]])
 
       -- DEBUG_BEGIN
-      if g_debug then acts_loop('dim', 'debug_rect') end
+      if g_debug then
+         acts_loop('dim', 'debug_rect')
+      end
       -- DEBUG_END
 
       clip()
       camera()
       -- zrect(x1, y1, x2, y2)
+
+      -- DEBUG_BEGIN
+      if g_debug then
+         -- rect(g_cur_room.x, g_cur_room.y, 20, 20, 8)
+      end
+      -- DEBUG_END
    end
 end
