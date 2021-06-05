@@ -23,7 +23,7 @@ function game_init(a)
     _g.fader_in(.5, nf, nf)
 
     g_cur_room = tabcpy(ztable[[
-        x:-16; y:0; w:64; h:16;
+        x:-16; y:0; w:48; h:16;
     ]])
 
     g_pl = _g.pl(8, 5)
@@ -55,6 +55,10 @@ function game_update(a)
    )
 
     batch_call_new(acts_loop, [[act, clean]])
+end
+
+function cycle(period)
+  return time()%period/period
 end
 
 function game_draw(a)
@@ -146,6 +150,14 @@ function map_draw(view, x, y)
          post_drawable_1, d;
          post_drawable_2, d;
       ]])
+
+    local tr_water = 115
+    for x=-128,128+128,4 do
+        local function wave(a, p) return a+a*sin(x/64+cycle(4)+p) end
+        rectfill(x,tr_water-wave(2+sin(cycle(2)),0),x+3,tr_water,1)
+        rectfill(x,tr_water-wave(2+sin(cycle(4)),0.2+0.1*sin(cycle(6))),x+3,tr_water,12)
+    end
+    rectfill(-128, tr_water, 128*3, 128, 12)
 
       -- DEBUG_BEGIN
       if g_debug then
