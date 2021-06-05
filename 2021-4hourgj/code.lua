@@ -660,7 +660,17 @@ game_init()
 end)
 end)
 create_actor([[98|99]],function(a)
-local sinfo=rnd_item{{192,5,2},{197,5,2},{224,3,2},{227,5,2}}
+local sinfo=rnd_item{
+{192,4,2},
+{197,4,2},
+{197,4,2},
+{197,4,2},
+{224,3,2},
+{224,3,2},
+{224,3,2},
+{224,3,2},
+{227,5,2}
+}
 a.dx=0.015625*(flr_rnd(2)+1)
 a.xf=rnd_item{true,false}
 a.sind=sinfo[1]
@@ -688,6 +698,7 @@ elseif a.tl_tim<13*wait then a.txt="so... you win!"
 elseif a.tl_tim<14*wait then a.txt="congratulations"
 elseif a.tl_tim<15*wait then a.txt="spectacular"
 elseif a.tl_tim<16*wait then a.txt="goodbye for now"
+elseif a.tl_tim<25*wait then a.txt=""
 elseif a.tl_tim<26*wait then a.txt="huh?"
 elseif a.tl_tim<27*wait then a.txt="you're still here?"
 elseif a.tl_tim<28*wait then a.txt="you must be waiting"
