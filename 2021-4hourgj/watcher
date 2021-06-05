@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# pico watch, by Alan Morgan
+
+echo "** Using argument '$1'."
+
+inotifywait -e close_write,moved_to,create -mr ./src |
+while read -r directory; do
+  echo "** '$directory' was changed, so let's compile this thing!"
+  ./compile $1
+  echo
+done
