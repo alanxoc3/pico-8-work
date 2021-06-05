@@ -143,6 +143,8 @@ function map_draw(view, x, y)
       zclip(x1, y1, x2, y2)
       zcls(g_cur_room.c)
 
+      scr_map(g_cur_room.x, g_cur_room.y, g_cur_room.x, g_cur_room.y, g_cur_room.w, g_cur_room.h)
+
       batch_call_new(acts_loop, [[
             pre_drawable, d;
             pre_drawable_1, d;
