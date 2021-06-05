@@ -57,13 +57,14 @@ create_parent([[kill_too_high;0;pos,|
     end
 end)
 
-create_parent[[bounded;0;act,;|
-    check_bounds:nf;
-]]
-
-create_parent([[x_bounded;0;bounded,;|
+create_parent([[bounded;0;act,;|
     check_bounds:@1;
+    x_check_bounds:@2;
+    y_check_bounds:@3;
 ]], function(a)
+    a:x_check_bounds()
+    a:y_check_bounds()
+end, function(a)
    if a.x+a.dx < g_cur_room.x+.5 then
       a.x = g_cur_room.x+.5
       a.dx = 0
@@ -73,11 +74,7 @@ create_parent([[x_bounded;0;bounded,;|
       a.x = g_cur_room.x+g_cur_room.w-.5
       a.dx = 0
    end
-end)
-
-create_parent([[y_bounded;0;bounded,;|
-   check_bounds:@1;
-]], function(a)
+end, function(a)
    if a.y+a.dy < g_cur_room.y+.5 then
       a.y = g_cur_room.y+.5
       a.dy = 0
@@ -88,6 +85,9 @@ create_parent([[y_bounded;0;bounded,;|
       a.dy = 0
    end
 end)
+
+create_parent[[x_bounded;0;bounded,;| check_bounds:$x_check_bounds; ]]
+create_parent[[y_bounded;0;bounded,;| check_bounds:$y_check_bounds; ]]
 
 create_parent([[timed;0;act,;|
    t:0;
