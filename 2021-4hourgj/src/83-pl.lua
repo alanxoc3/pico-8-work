@@ -34,7 +34,7 @@ create_actor([[pl;3;drawable,spr,mov,tcol,col,confined,bounded|
             local s = .25
             local tmods = t() % s
             if tmods < .25*s then
-                a.sind = 96
+                a.sind = 64
             elseif tmods < .5*s then
                 a.sind = 66
             elseif tmods < .75*s then
