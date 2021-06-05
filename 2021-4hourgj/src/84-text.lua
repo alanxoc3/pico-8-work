@@ -21,6 +21,7 @@ end, function(a)
     elseif a.tl_tim < 15*wait then a.txt = "spectacular"
     elseif a.tl_tim < 16*wait then a.txt = "goodbye for now"
 
+    elseif a.tl_tim < 25*wait then a.txt = ""
     elseif a.tl_tim < 26*wait then a.txt = "huh?"
     elseif a.tl_tim < 27*wait then a.txt = "you're still here?"
     elseif a.tl_tim < 28*wait then a.txt = "you must be waiting"
