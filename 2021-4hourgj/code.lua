@@ -661,16 +661,12 @@ end)
 end)
 create_actor([[98|99]],function(a)
 local sinfo=rnd_item{{192,5,2},{197,5,2},{224,3,2},{227,5,2}}
-if a.x<8 then
-a.dx=rnd(.03)+.02
-else
-a.dx=-(rnd(.03)+.02)
-end
+a.dx=0.015625*(flr_rnd(2)+1)
 a.xf=rnd_item{true,false}
 a.sind=sinfo[1]
 a.sw=sinfo[2]
 a.sh=sinfo[3]
-a.y=flr_rnd(3)*2+2
+a.y=flr_rnd(2)*2+2
 end)
 create_actor([[100|101]],function(a)
 zprint(a.txt,a.x*8,a.y*8-2*8,0,7,2)
@@ -764,7 +760,7 @@ g_main_view:center_view()
 end
 function game_update(a)
 if t()%4==0 then
-_g.cloud(rnd_item{-24,40})
+_g.cloud(-24)
 end
 batch_call_new(
 acts_loop,[[108]],g_act_arrs["col"],

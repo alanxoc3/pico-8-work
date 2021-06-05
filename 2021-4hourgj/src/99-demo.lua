@@ -44,7 +44,7 @@ end
 
 function game_update(a)
     if t() % 4 == 0 then
-        _g.cloud(rnd_item{-24,40})
+        _g.cloud(-24)
     end
 
    batch_call_new(
