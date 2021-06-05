@@ -20,6 +20,12 @@ function _init()
 end
 
 function game_init(a)
+    batch_call_new(acts_loop, [[
+        confined,room_end;
+        confined,kill;
+        confined,delete
+    ]])
+
     _g.fader_in(.5, nf, nf)
 
     g_cur_room = tabcpy(ztable[[
