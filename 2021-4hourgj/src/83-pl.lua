@@ -4,7 +4,7 @@ create_actor([[pl_meow;1;post_drawable,rel,confined|
     u:@3;
     i:@4;
 ]], function(a)
-    zprint("meow", (a.x+a.dx)*8, (a.y+a.dy)*8-2*8, 0, 11, 1)
+    zprint("meow", (a.x+a.dx)*8, (a.y+a.dy)*8-2*8, 0, 14, 1)
 end, function(a)
     if not btn(5) then
         a:kill()
