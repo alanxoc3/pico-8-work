@@ -10,8 +10,9 @@ create_actor([[cloud;1;pre_drawable,spr,pos,confined|
         a.dx = -(rnd(.03)+.02)
     end
 
+    a.xf = rnd_item{true, false}
     a.sind = sinfo[1]
     a.sw = sinfo[2]
     a.sh = sinfo[3]
-    a.y = rnd(3)+2
+    a.y = flr_rnd(3)*2+2
 end)
