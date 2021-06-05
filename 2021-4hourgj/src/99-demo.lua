@@ -26,7 +26,7 @@ function game_init(a)
         x:-16; y:0; w:48; h:16;
     ]])
 
-    g_pl = _g.pl(8, 5)
+    g_pl = _g.pl(8, 10)
     g_main_view = _g.view(16, 16, 3, g_pl)
     g_main_view:center_view()
 end

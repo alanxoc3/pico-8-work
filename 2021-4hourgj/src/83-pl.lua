@@ -8,12 +8,20 @@ create_actor([[pl;3;drawable,spr,mov,tcol,col,confined,bounded|
     sind:6;
     ay:.01;
     u:@4;
-    d:@5;
+    tile_hit:@5;
 ]], function(a)
-    a.ax = .02*xbtn()
-    if xbtn() > 0 then a.xf = false end
-    if xbtn() < 0 then a.xf = true end
-    if btnp(4) then
-        a.dy = -a.jump_speed
+    local above_water = a.y < 14
+
+    a.ax = 0
+    if above_water then
+        a.ax = .02*xbtn()
+        if xbtn() > 0 then a.xf = false end
+        if xbtn() < 0 then a.xf = true end
+        if a.touching_ground and btnp(4)  then
+            a.dy = -a.jump_speed
+        end
     end
+    a.touching_ground = false
+end, function(a, dir)
+    if dir == 3 then a.touching_ground = true end
 end)
