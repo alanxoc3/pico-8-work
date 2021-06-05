@@ -1,4 +1,4 @@
-#!/usr/bin/perl -Iminifier/
+#!/usr/bin/perl -I../minifier/
 use strict;
 use warnings;
 use experimental 'smartmatch';

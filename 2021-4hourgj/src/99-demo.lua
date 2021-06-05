@@ -66,14 +66,6 @@ function tolevel(level)
     end
 end
 
-function resetlevel()
-    g_level_coins = 0
-    g_level_max_coins = 0
-
-    local default_level = 0
-    tolevel(g_cur_level or default_level)
-end
-
 create_actor([[water_gauge;0;above_map_post_camera_drawable,pos,confined|
     x:111;
     y:123;
@@ -127,41 +119,30 @@ end, function(a)
 end)
 
 function game_init(a)
-    g_stats.coins = 0
-    g_level_coins = 0
-    g_level_max_coins = 0
-    resetlevel()
 end
 
 function game_update(a)
-   allocate_level(g_blocks, g_block_context, g_bucket_control.y+3)
-
-   g_card_shake_x = 0
-
-   batch_call_new(
-      acts_loop, [[
-         act,update;
-         drawable_obj,reset_off;
-         mov,move;
-         pl,move_check,@1;
-         bucket,move_check,@1;
-         water_shot,move_check,@1;
-         tcol,coll_tile,@2;
-         rel,rel_update;
-         vec,vec_update;
-         kill_too_high,check_height;
-         bounded,check_bounds;
-         anim,anim_update;
-         timed,tick;
-         view,update_view;
-      ]], g_act_arrs['col'],
-      function(x, y)
-         return x >= g_cur_room.x and x < g_cur_room.x+g_cur_room.w and
-                y >= g_cur_room.y and y < g_cur_room.y+g_cur_room.h and
-                g_blocks[flr(y)] and g_blocks[flr(y)][flr(x)] and
-                g_blocks[flr(y)][flr(x)].id == 'solid'
-      end
-   )
+   -- batch_call_new(
+      -- acts_loop, [[
+         -- act,update;
+         -- drawable_obj,reset_off;
+         -- mov,move;
+         -- tcol,coll_tile,@2;
+         -- rel,rel_update;
+         -- vec,vec_update;
+         -- kill_too_high,check_height;
+         -- bounded,check_bounds;
+         -- anim,anim_update;
+         -- timed,tick;
+         -- view,update_view;
+      -- ]], g_act_arrs['col'],
+      -- function(x, y)
+         -- return x >= g_cur_room.x and x < g_cur_room.x+g_cur_room.w and
+                -- y >= g_cur_room.y and y < g_cur_room.y+g_cur_room.h and
+                -- g_blocks[flr(y)] and g_blocks[flr(y)][flr(x)] and
+                -- g_blocks[flr(y)][flr(x)].id == 'solid'
+      -- end
+   -- )
 
    batch_call_new(acts_loop, [[act, clean]])
 end
@@ -180,16 +161,16 @@ end
 
 function game_draw(a)
    fade(g_card_fade)
-   map_draw(g_main_view, 8 + g_card_shake_x * sin(t()*8)/8, 7.5)
-   camera_to_view(g_main_view)
-   if g_menu_open then
-      if g_selected == 5 then g_pl.outline_color = SL_UI end
-      g_pl.d(g_pl)
-   end
-   camera()
-   acts_loop('above_map_post_camera_drawable', 'd')
-   spr(41, 14, 120)
-   zprint(":"..(g_stats.coins + g_level_coins), 21, 121, -1, 10, 5)
+   -- map_draw(g_main_view, 8 + g_card_shake_x * sin(t()*8)/8, 7.5)
+   -- camera_to_view(g_main_view)
+   -- if g_menu_open then
+      -- if g_selected == 5 then g_pl.outline_color = SL_UI end
+      -- g_pl.d(g_pl)
+   -- end
+   -- camera()
+   -- acts_loop('above_map_post_camera_drawable', 'd')
+   -- spr(41, 14, 120)
+   -- zprint(":"..(g_stats.coins + g_level_coins), 21, 121, -1, 10, 5)
 end
 
 function logo_draw(a)
