@@ -120,6 +120,18 @@ function tl_node(a)
    end
 end
 
+function isorty(t)
+    if t then
+        for n=2,#t do
+            local i=n
+            while i>1 and t[i].y<t[i-1].y do
+                t[i],t[i-1]=t[i-1],t[i]
+                i=i-1
+            end
+        end
+    end
+end
+
 -- DEBUG_BEGIN
 -- For debugging
 function tostring(any)
