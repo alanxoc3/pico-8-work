@@ -13,5 +13,6 @@ end, function(a)
     elseif a.tl_tim <  7*wait then a.txt = "oh"
     elseif a.tl_tim <  8*wait then a.txt = "dont fall into the water"
     elseif a.tl_tim <  9*wait then a.txt = "kittens cant swim"
+    elseif a.tl_tim <  10*wait then a.txt = ""
     end
 end)
