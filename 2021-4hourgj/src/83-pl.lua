@@ -1,10 +1,10 @@
-create_actor([[pl_meow;1;post_drawable,rel|
+create_actor([[pl_meow;1;post_drawable,rel,confined|
     rel_actor:@1;
     d:@2;
     u:@3;
     i:@4;
 ]], function(a)
-    zprint("meow", (a.x+a.dx)*8, (a.y+a.dy)*8-2*8, 0, 14, 2)
+    zprint("meow", (a.x+a.dx)*8, (a.y+a.dy)*8-2*8, 0, 11, 1)
 end, function(a)
     if not btn(5) then
         a:kill()
@@ -24,6 +24,8 @@ create_actor([[pl;2;drawable,spr,mov,tcol,col,confined,bounded|
     ay:.01;
     u:@3;
     tile_hit:@4;
+    ,;
+    i=@5,u=nf;
 ]], function(a)
     local above_water = a.y < 14
 
@@ -64,6 +66,8 @@ create_actor([[pl;2;drawable,spr,mov,tcol,col,confined,bounded|
         else
             a.sind = t() % 1 < .25 and 96 or 64
         end
+    else
+        a:next()
     end
     a.touching_ground = false
 end, function(a, dir)
@@ -71,4 +75,9 @@ end, function(a, dir)
     if above_water then
         if dir == 3 then a.touching_ground = true end
     end
+end, function(a)
+    _g.fader_out(.5, nf, function()
+         a:kill()
+         game_init()
+    end)
 end)
