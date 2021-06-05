@@ -9,20 +9,6 @@ g_card_fade = 8
 poke(0x5f5c, 15) -- set the initial delay before repeating.
 poke(0x5f5d, 15) -- set the repeating delay.
 
-menuitem(1, "restart", function()
-   extcmd'reset'
-end)
-
-g_level_coins = 0
-g_level_max_coins = 0
-g_stats = {
-    time_start = 0,
-    coins = 0,
-    max_coins = 0,
-    deaths = 0,
-    shots = 0,
-}
-
 function _init()
     music(0, 3000)
     g_tl = ztable([[
@@ -33,16 +19,16 @@ function _init()
     )
 end
 
-
 function game_init(a)
     _g.fader_in(.5, nf, nf)
 
-    g_main_view = _g.view(16, 16, 0, bucket)
-    g_pl = _g.pl(3, 3)
-
     g_cur_room = tabcpy(ztable[[
-        x:0; y:0; w:16; h:16;
+        x:-16; y:0; w:64; h:16;
     ]])
+
+    g_pl = _g.pl(8, 5)
+    g_main_view = _g.view(16, 16, 3, g_pl)
+    g_main_view:center_view()
 end
 
 function game_update(a)
