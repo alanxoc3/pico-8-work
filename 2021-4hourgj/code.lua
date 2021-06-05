@@ -605,13 +605,30 @@ if above_water then
 a.ax=.02*xbtn()
 if xbtn()>0 then a.xf=false end
 if xbtn()<0 then a.xf=true end
-if a.touching_ground and btnp(4)then
+if a.touching_ground and btn(4)then
 a.dy=-a.jump_speed
+end
+printh(a.dy)
+if not a.touching_ground then
+if a.dy<-.1 then
+a.sind=14
+elseif a.dy<.05 then
+a.sind=6
+else
+a.sind=46
+end
+elseif xbtn()~=0 then
+a.sind=6
+else
+a.sind=t()%2<.5 and 22 or 6
 end
 end
 a.touching_ground=false
 end,function(a,dir)
+local above_water=a.y<14
+if above_water then
 if dir==3 then a.touching_ground=true end
+end
 end)
 function update_view_helper(view,xy,wh,ii)
 local follow_coord=view.follow_act and(view.follow_act[xy]+view.follow_act[ii]/8)or 0
