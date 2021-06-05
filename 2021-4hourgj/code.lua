@@ -1,666 +1,654 @@
-g_gunvals_raw="|!plus/@1/-2,!plus/@2/-2,!plus/@3/2,!plus/@4/2,13;!plus/@1/-1,!plus/@2/-1,!plus/@3/1,!plus/@4/1,1;|@1,@2,!plus/@3/1,@5;@1,@2,@3,@4;|0x8000,0x8000,0x7fff,0x7fff,@1|0,0,0,0,0,0,0;1,1,1,0,0,0,0;2,2,2,1,0,0,0;3,3,3,1,0,0,0;4,2,2,2,1,0,0;5,5,1,1,1,0,0;6,13,13,5,5,1,0;7,6,13,13,5,1,0;8,8,2,2,2,0,0;9,4,4,4,5,0,0;10,9,4,4,5,5,0;11,3,3,3,3,0,0;12,12,3,1,1,1,0;13,5,5,1,1,1,0;14,13,4,2,2,1,0;15,13,13,5,5,1,0;|fader_out;3;act,;update,|fade_time:@1;i:@2;e:@3;u:@4;tl_max_time=@1,|fader_in;3;act,;update,|act;0;,;room_init,pause_init,pause_update,pause_end,kill,clean,delete|alive:yes;stun_countdown:0;i:nf;u:nf;update:@1;clean:@2;kill:@3;delete:@4;room_init:nf;create_init:nf;pause_init:nf;pause_update:nf;pause_end:nf;destroyed:nf;get:@5;|ma_able;0;act,;|name:thing;|confined;0;act,;room_end,|room_end:nf;|loopable;0;act,;|tl_loop:yes;|pos;0;act,;|x:0;y:0;|move_pause;0;act,;update,move,vec_update,tick|;|dim;0;pos,;|rx:.375;ry:.375;|knock;0;col,;|popper;0;col,;|bad;0;knock,;|kill_too_high;0;pos,|check_height:@1;|bounded;0;act,;|check_bounds:@1;x_check_bounds:@2;y_check_bounds:@3;|x_bounded;0;bounded,;|check_bounds:$x_check_bounds;|y_bounded;0;bounded,;|check_bounds:$y_check_bounds;|timed;0;act,;|t:0;tick:@1;|vec;0;pos,;|dx:0;dy:0;vec_update:@1;|mov;0;vec,;|ix:1;iy:1;ax:0;ay:0;move:@1;stop:@2;|dim;0;pos,;debug_rect,|rx:.375;ry:.375;debug_rect:@1;|rel;0;act,;rel_update,|rel_actor:null;rel_x:0;rel_y:0;rel_dx:0;rel_dy:0;flippable:no;rel_update:@1;|drawable_obj;0;pos,;reset_off,|ixx:0;iyy:0;xx:0;yy:0;visible:yes;reset_off:@1;|drawable;0;drawable_obj,;d,|d:nf;|drawable_1;0;drawable_obj,;d,|drawable_2;0;drawable_obj,;d,|pre_drawable;0;drawable_obj,;d,|pre_drawable_1;0;drawable_obj,;d,|pre_drawable_2;0;drawable_obj,;d,|post_drawable;0;drawable_obj,;d,|post_drawable_1;0;drawable_obj,;d,|post_drawable_2;0;drawable_obj,;d,|above_map_post_camera_drawable;0;drawable_obj,;d,|spr_obj;0;vec,drawable_obj,;|sind:0;outline_color:BG_UI;sw:1;sh:1;xf:no;yf:no;draw_spr:@1;draw_out:@2;draw_both:@3;|spr;0;spr_obj,;|d:@1;|knockable;0;mov,;|knockback:@1;|stunnable;0;mov,drawable_obj;|stun_update:@1;|hurtable;0;act,;|health:1;max_health:1;health_visible:yes;hurt:@1;heal:@2;|brang_hurtable;0;hurtable,;|anim;0;spr,timed;|sinds:,;anim_loc:1;anim_off:0;anim_len:1;anim_spd:0;anim_sind:null;anim_update:@1;|trig;0;vec,dim;|contains:nf;intersects:nf;not_contains_or_intersects:nf;contains_or_intersects:@1;trigger_update:@1;|anchored;1;vec,dim;|touchable:@1;hit:nf;|col;0;vec,dim;|touchable:yes;hit:nf;move_check:@1;|dx:0;dy:0|x,dx,@1,@2,@3,@4;y,dy,@1,@2,@5,@6;|tcol;0;vec,dim;|tile_solid:yes;tile_hit:nf;coll_tile:@1;|interactable;0;spr,anchored/yes,confined,ma_able;|interactable_trigger:nf;trig_x:0;trig_y:0;trig_rx:.75;trig_ry:.75;trig:null;i:@1;interactable_init:@1;|nnpc;0;drawable,danceable,interactable,ma_able;|rx:.5;ry:.5;iyy:-2;u:%look_at_pl|bashable;0;rel,knockable,col;|bash_dx:1;rel_bash_dx:1;hit:@1;bash:@1;|item;0;drawable,rel,confined,spr_obj;|being_held:yes;destroyed:@1;|pokeable;0;rel,drawable_obj,item;|i:@1;u:@2;e:@3;poke_init:@1;poke_update:@2;poke_end:@3;poke_update_reverse:@4;poke:20;poke_dist:20;poke_energy:0;|shop_item;0;drawable,interactable,ma_able;update,|costable:yes;interactable_trigger:@1;rx:.5;ry:.5;iyy:-3;trig_x:0;trig_y:.125;trig_rx:.5;trig_ry:.625;mem_loc:BOGUS_SPOT;cost:99|mem_dep;0;act,;|room_init:@1;mem_loc:BOGUS_SPOT;mem_loc_expect:yes;|pl_meow;1;post_drawable,rel,confined|rel_actor:@1;d:@2;u:@3;i:@4;|pl;2;drawable,spr,mov,tcol,col,confined,bounded|x:@1;y:@2;sw:2;sh:2;xf:no;ix:.90;iy:.98;touching_ground:no;jump_speed:.5;sind:6;ay:.01;u:@3;tile_hit:@4;,;i=@5,u=nf;|cloud;1;pre_drawable,spr,pos,confined|x:@1;i:@2;u:@3;,tl_max_time=96;|texter;2;pre_drawable,pos,confined|x:@1;y:@2;d:@3;u:@4;txt:hey there kitty;|view;4;act,confined;center_view,update_view|x:0;y:0;room_crop:2;tl_loop:yes;w:@1;h:@2;follow_dim:@3;follow_act:@4;update_view:@5;center_view:@6;change_ma:@7;,;|@1,x,w,ixx;@1,y,h,iyy|x=64,y=64,i=@2,u=nf,d=@1,tl_max_time=2.5;i=@3,u=@4,d=@5;|confined,room_end;confined,kill;confined,delete|x:-16;y:0;w:48;h:16;|act,update;drawable_obj,reset_off;mov,move;pl,move_check,@1;tcol,coll_tile,@2;rel,rel_update;vec,vec_update;kill_too_high,check_height;bounded,check_bounds;anim,anim_update;timed,tick;view,update_view;|act,clean|pre_drawable,d;pre_drawable_1,d;pre_drawable_2,d;|drawable,d;drawable_1,d;drawable_2,d;post_drawable,d;post_drawable_1,d;post_drawable_2,d;|"
-_g={}
-function zsfx(num,sub_num)
-sfx(num,-1,sub_num*4,4)
+g_gunvals_raw="|!ex/@1/-2,!ex/@2/-2,!ex/@3/2,!ex/@4/2,13;!ex/@1/-1,!ex/@2/-1,!ex/@3/1,!ex/@4/1,1;|@1,@2,!ex/@3/1,@5;@1,@2,@3,@4;|0x8000,0x8000,0x7fff,0x7fff,@1|0,0,0,0,0,0,0;1,1,1,0,0,0,0;2,2,2,1,0,0,0;3,3,3,1,0,0,0;4,2,2,2,1,0,0;5,5,1,1,1,0,0;6,13,13,5,5,1,0;7,6,13,13,5,1,0;8,8,2,2,2,0,0;9,4,4,4,5,0,0;10,9,4,4,5,5,0;11,3,3,3,3,0,0;12,12,3,1,1,1,0;13,5,5,1,1,1,0;14,13,4,2,2,1,0;15,13,13,5,5,1,0;|rj;3;z,;at,|ca:@1;r:@2;it:@3;en:@4;es=@1,|lr;3;z,;at,|z;0;,;rn,hv,cu,hm,tu,nu,ow|eq:eo;tg:0;r:d;en:d;at:@1;nu:@2;tu:@3;ow:@4;rn:d;rg:d;hv:d;cu:d;hm:d;sk:d;sy:@5;|az;0;z,;|rc:thing;|eu;0;z,;na,|na:d;|c_;0;z,;|sx:eo;|et;0;z,;|a:0;o:0;|cj;0;z,;at,nb,nc,sa|;|tl;0;et,;|x:.375;k:.375;|lq;0;b,;|cb;0;b,;|me;0;lq,;|dh;0;et,|hi:@1;|ak;0;z,;|ig:@1;sf:@2;nq:@3;|mt;0;ak,;|ig:$sf;|un;0;ak,;|ig:$nq;|nt;0;z,;|t:0;sa:@1;|tn;0;et,;|g:0;p:0;nc:@1;|ax;0;tn,;|sn:1;si:1;th:0;tf:0;nb:@1;stop:@2;|tv;0;z,;nv,|ek:ii;ob:0;n_:0;as:0;st:0;hw:tk;nv:@1;|_;0;et,;sr,|ox:0;oo:0;ou:0;tx:0;hk:eo;sr:@1;|tp;0;_,;h,|h:d;|li;0;_,;h,|lo;0;_,;h,|ie;0;_,;h,|dm;0;_,;h,|dt;0;_,;h,|ri;0;_,;h,|cf;0;_,;h,|lz;0;_,;h,|mf;0;_,;h,|nk;0;tn,_,;|w:0;iu:BG_UI;ep:1;eg:1;v:tk;oq:tk;ui:@1;us:@2;mu:@3;|spr;0;nk,;|h:@1;|rv;0;ax,;|ix:@1;|mr;0;ax,_;|uz:@1;|d_;0;z,;|tr:1;dn:1;uv:eo;um:@1;cv:@2;|u_;0;d_,;|lh;0;spr,nt;|rf:,;dq:1;ok:0;hj:1;ce:0;ss:ii;rp:@1;|ir;0;tn,tl;|hq:d;hh:d;co:d;uk:@1;uc:@1;|op;1;tn,tl;|is:@1;oy:d;|b;0;tn,tl;|is:eo;oy:d;ay:@1;|g:0;p:0|a,g,@1,@2,@3,@4;o,p,@1,@2,@5,@6;|ng;0;tn,tl;|le:eo;oz:d;hc:@1;|np;0;spr,op/eo,eu,az;|sq:d;nz:0;sp:0;iz:.75;nn:.75;ir:ii;r:@1;ul:@1;|ms;0;tp,mi,np,az;|x:.5;k:.5;oo:-2;en:%md|uq;0;tv,rv,b;|df:1;cl:1;oy:@1;cy:@1;|td;0;tp,tv,eu,nk;|uh:eo;sk:@1;|uj;0;tv,_,td;|r:@1;en:@2;it:@3;uw:@1;ut:@2;ck:@3;ub:@4;poke:20;au:20;ht:0;|uf;0;tp,np,az;at,|ud:eo;sq:@1;x:.5;k:.5;oo:-3;nz:0;sp:.125;iz:.5;nn:.625;iw:BOGUS_SPOT;dk:99|mm;0;z,;|rn:@1;iw:BOGUS_SPOT;lb:eo;|rm;1;ri,tv,eu|ek:@1;h:@2;en:@3;r:@4;|nd;2;tp,spr,ax,ng,b,eu,ak|a:@1;o:@2;ep:2;eg:2;v:tk;sn:.90;si:.98;af:tk;lf:.5;w:6;tf:.01;en:@3;oz:@4;,;r=@5,en=d;|sh;1;ie,spr,et,eu|a:@1;r:@2;en:@3;,es=96;|h_;2;ie,et,eu|a:@1;o:@2;h:@3;en:@4;u:hey there kitty;|m;4;z,eu;rs,ic|a:0;o:0;mb:2;sx:eo;ed:@1;er:@2;tw:@3;el:@4;ic:@5;rs:@6;up:@7;,;|@1,a,ed,ox;@1,o,er,oo|a=64,o=64,r=@2,en=d,h=@1,es=2.5;r=@3,en=@4,h=@5;|eu,na;eu,tu;eu,ow|a:-16;o:0;ed:48;er:16;|z,at;_,sr;ax,nb;nd,ay,@1;ng,hc,@2;tv,nv;tn,nc;dh,hi;ak,ig;lh,rp;nt,sa;m,ic;|z,nu|ie,h;dm,h;dt,h;|tp,h;li,h;lo,h;ri,h;cf,h;lz,h;|"
+j={}
+function hr(tc,dc)
+sfx(tc,-1,dc*4,4)
 end
-function btn_helper(f,a,b)
-return f(a)and f(b)and 0 or f(a)and 0xffff or f(b)and 1 or 0
+function av(te,e,s)
+return te(e)and te(s)and 0 or te(e)and 0xffff or te(s)and 1 or 0
 end
-function _g.plus(a,b)return a+b end
-function _g.minus(a,b)return a-b end
-function bool_to_num(condition)return condition and 0xffff or 1 end
-function get(a,...)
-local arr,cur_act=ztable(...),a or{}
-for i=1,#arr do
-cur_act=cur_act[arr[i]]
-if not cur_act then
+function j.ex(e,s)return e+s end
+function j.mw(e,s)return e-s end
+function aw(hy)return hy and 0xffff or 1 end
+function sy(e,...)
+local rr,oe=eb(...),e or{}
+for r=1,#rr do
+oe=oe[rr[r]]
+if not oe then
 break
 end
 end
-return cur_act
+return oe
 end
-function xbtn()return btn_helper(btn,0,1)end
-function ybtn()return btn_helper(btn,2,3)end
-function xbtnp()return btn_helper(btnp,0,1)end
-function ybtnp()return btn_helper(btnp,2,3)end
-function zsgn(num)return num==0 and 0 or sgn(num)end
-function round(num)return flr(num+.5)end
-function rnd_one(val)return(flr_rnd"3"-1)*(val or 1)end
-function ti(period,length)
-return t()%period<length
+function ot()return av(btn,0,1)end
+function ue()return av(btn,2,3)end
+function uy()return av(btnp,0,1)end
+function cz()return av(btnp,2,3)end
+function rb(tc)return tc==0 and 0 or sgn(tc)end
+function lw(tc)return flr(tc+.5)end
+function no(dz)return(on"3"-1)*(dz or 1)end
+function ur(ol,cc)
+return t()%ol<cc
 end
-function flr_rnd(x)
-return flr(rnd(x))
+function on(a)
+return flr(rnd(a))
 end
-function rnd_item(list)
-return list[flr_rnd(#list)+1]
+function so(aj)
+return aj[on(#aj)+1]
 end
-function tabcpy(src,dest)
-dest=dest or{}
-for k,v in pairs(src or{})do
-if type(v)=="table"and not v.is_tabcpy_disabled then
-dest[k]=tabcpy(v)
+function ao(dv,t_)
+t_=t_ or{}
+for y,ee in pairs(dv or{})do
+if type(ee)=="table"and not ee.dj then
+t_[y]=ao(ee)
 else
-dest[k]=v
+t_[y]=ee
 end
 end
-return dest
+return t_
 end
-function call_not_nil(table,key,...)
-if table and table[key]then
-return table[key](...)
+function ez(table,sw,...)
+if table and table[sw]then
+return table[sw](...)
 end
 end
-function batch_call_table(func,tbl)
-foreach(tbl,function(t)func(unpack(t))end)
+function lm(ov,q)
+foreach(q,function(t)ov(unpack(t))end)
 end
-function batch_call_new(func,...)
-batch_call_table(func,ztable(...))
+function ey(ov,...)
+lm(ov,eb(...))
 end
-function tl_node(a)
-a.tl_cur=a.tl_cur or 1
-if not a.tl_continued then
-a.next=function()
-if a.tl_loop then
-a.tl_next=(a.tl_cur%#a)+1
+function ns(e)
+e.ae=e.ae or 1
+if not e.nj then
+e.ik=function()
+if e.sx then
+e.aq=(e.ae%#e)+1
 else
-a.tl_next=a.tl_cur+1
+e.aq=e.ae+1
 end
 end
-a.tl_tim,a.tl_max_time,a.tl_continued=0,nil,true
-tabcpy(a[a.tl_cur]or{},a)
-call_not_nil(a,"i",a)
+e.l,e.es,e.nj=0,nil,true
+ao(e[e.ae]or{},e)
+ez(e,"r",e)
 end
-if call_not_nil(a,"u",a)then a:next()end
-a.tl_tim+=1/60
-if a.tl_max_time and a.tl_tim>=a.tl_max_time then
-a:next()
+if ez(e,"en",e)then e:ik()end
+e.l+=1/60
+if e.es and e.l>=e.es then
+e:ik()
 end
-if a.tl_next then
-local old_tl_next=a.tl_next
-a.tl_cur,a.tl_continued,a.tl_next=old_tl_next,nil,nil
-call_not_nil(a,"e",a)
-return old_tl_next>#a or old_tl_next<1
+if e.aq then
+local id=e.aq
+e.ae,e.nj,e.aq=id,nil,nil
+ez(e,"it",e)
+return id>#e or id<1
 end
 end
-function isorty(t)
+function r_(t)
 if t then
 for n=2,#t do
-local i=n
-while i>1 and t[i].y<t[i-1].y do
-t[i],t[i-1]=t[i-1],t[i]
-i=i-1
+local r=n
+while r>1 and t[r].o<t[r-1].o do
+t[r],t[r-1]=t[r-1],t[r]
+r=r-1
 end
 end
 end
 end
-function tostring(any)
-if type(any)~="table"then return tostr(any)end
-local str="{"
-for k,v in pairs(any)do
-if str~="{"then str=str.."," end
-str=str..tostring(k).."="..tostring(v)
+lt=split(g_gunvals_raw,"|")
+sl={}
+function d()end
+function eb(dg,...)
+local em=lt[0+dg]
+local q,tt=unpack(sl[em]or{})
+if not q then
+q,tt={},{}
+for td in all(split(em,";"))do
+local y,ee=sz(td,":",q)
+local rd=function(hd,lg,ld)
+return lj(ld or q,lg or y,hd,tt)
 end
-return str.."}"
-end
-g_gunvals=split(g_gunvals_raw,"|")
-g_ztable_cache={}
-function nf()end
-function ztable(original_str,...)
-local str=g_gunvals[0+original_str]
-local tbl,ops=unpack(g_ztable_cache[str]or{})
-if not tbl then
-tbl,ops={},{}
-for item in all(split(str,";"))do
-local k,v=split_kv(item,":",tbl)
-local val_func=function(sub_val,sub_key,sub_tbl)
-return queue_operation(sub_tbl or tbl,sub_key or k,sub_val,ops)
-end
-local ret_val,items={},split(v,",")
-for item in all(items)do
-local k,v=split_kv(item,"=",ret_val)
-if #items==1 then
-ret_val=val_func(v)
+local e_,se={},split(ee,",")
+for td in all(se)do
+local y,ee=sz(td,"=",e_)
+if #se==1 then
+e_=rd(ee)
 else
-ret_val[k]=val_func(v,k,ret_val)
+e_[y]=rd(ee,y,e_)
 end
 end
-tbl[k]=ret_val
+q[y]=e_
 end
-g_ztable_cache[str]={tbl,ops}
+sl[em]={q,tt}
 end
-local params={...}
-foreach(params,disable_tabcpy)
-foreach(ops,function(op)
-local t,k,f=unpack(op)
-t[k]=f(params)
+local tq={...}
+foreach(tq,ln)
+foreach(tt,function(dl)
+local t,y,te=unpack(dl)
+t[y]=te(tq)
 end)
-return tbl
+return q
 end
-function split_kv(list,delim,tbl)
-local kvs=split(list,delim)
-return kvs[#kvs-1]or #tbl+1,kvs[#kvs]
+function sz(aj,ry,q)
+local ac=split(aj,ry)
+return ac[#ac-1]or #q+1,ac[#ac]
 end
-function queue_operation(tbl,k,v,ops)
-local vlist=split(v,"/")
-local will_be_table,func_op,func_name=#vlist>1
-if ord(v)==33 then
-will_be_table,func_name=true,deli(vlist,1)
-func_op={
-tbl,k,function()
-return _g[sub(func_name,2)](unpack(vlist))
+function lj(q,y,ee,tt)
+local ta=split(ee,"/")
+local iv,ru,od=#ta>1
+if ord(ee)==33 then
+iv,od=true,deli(ta,1)
+ru={
+q,y,function()
+return j[sub(od,2)](unpack(ta))
 end
 }
 end
-for i,x in ipairs(vlist)do
-local rest,closure_tbl=sub(x,2),tbl
-if will_be_table then
-closure_tbl,k=vlist,i
+for r,a in ipairs(ta)do
+local oa,il=sub(a,2),q
+if iv then
+il,y=ta,r
 end
-if ord(x)==64 then
-add(ops,{
-closure_tbl,k,function(p)
-return p[rest+0]
-end
-})
-elseif ord(x)==36 then
-x=function(a,...)
-a[rest](a,...)
-end
-elseif ord(x)==37 then
-x=_g[rest]
-elseif ord(x)==126 then
-add(ops,{
-closure_tbl,k,function()
-return tbl[rest]
+if ord(a)==64 then
+add(tt,{
+il,y,function(ib)
+return ib[oa+0]
 end
 })
-elseif x=="yes"or x=="no"then x=x=="yes"
-elseif x=="null"or x==""then x=nil
-elseif x=="nf"then x=function()end
+elseif ord(a)==36 then
+a=function(e,...)
+e[oa](e,...)
 end
-vlist[i]=x
+elseif ord(a)==37 then
+a=j[oa]
+elseif ord(a)==126 then
+add(tt,{
+il,y,function()
+return q[oa]
 end
-add(ops,func_op)
-if will_be_table then
-return vlist
+})
+elseif a=="eo"or a=="tk"then a=a=="eo"
+elseif a=="ii"or a==""then a=nil
+elseif a=="d"then a=function()end
+end
+ta[r]=a
+end
+add(tt,ru)
+if iv then
+return ta
 else
-return vlist[1]
+return ta[1]
 end
 end
-function disable_tabcpy(t)
+function ln(t)
 if type(t)=="table"then
-t.is_tabcpy_disabled=true
+t.dj=true
 end
 return t
 end
-g_act_arrs={}
-function create_parent_actor_shared(is_create_parent,meta_and_att_str,...)
-local meta,template=unpack(split(meta_and_att_str,"|"))
-local template_params,id,provided,parents,pause_funcs={...},unpack(ztable(meta))
-_g[id]=function(...)
-local func_params,params,a={...},tabcpy(template_params),{}
-if is_create_parent then
-a=deli(func_params,1)
+ti={}
+function ij(hz,db,...)
+local cs,lc=unpack(split(db,"|"))
+local ho,eh,ct,l_,ds={...},unpack(eb(cs))
+j[eh]=function(...)
+local sd,tq,e={...},ao(ho),{}
+if hz then
+e=deli(sd,1)
 end
-for i=1,provided do
-add(params,func_params[i]or false,i)
+for r=1,ct do
+add(tq,sd[r]or false,r)
 end
-if not a[id]then
-foreach(parents,function(par)
-if type(par)~="table"then
-par={par}
+if not e[eh]then
+foreach(l_,function(tz)
+if type(tz)~="table"then
+tz={tz}
 end
-a=_g[par[1]](a,unpack(par,2))
+e=j[tz[1]](e,unpack(tz,2))
 end)
-tabcpy(ztable(template,unpack(params)),a)
-if not a[id]then
-g_act_arrs[id]=g_act_arrs[id]or{}
-add(g_act_arrs[id],a)
+ao(eb(lc,unpack(tq)),e)
+if not e[eh]then
+ti[eh]=ti[eh]or{}
+add(ti[eh],e)
 end
-a.id,a[id],a.pause=id,true,a.pause or{}
-foreach(pause_funcs,function(f)
-a.pause[f]=true
+e.eh,e[eh],e.pause=eh,true,e.pause or{}
+foreach(ds,function(te)
+e.pause[te]=true
 end)
 end
-call_not_nil(a,"create_init",a)
-return a
+ez(e,"rg",e)
+return e
 end
 end
-function create_parent(...)create_parent_actor_shared(true,...)end
-function create_actor(...)create_parent_actor_shared(false,...)end
-function acts_loop(id,func_name,...)
-for a in all(g_act_arrs[id])do
-call_not_nil(a,func_name,a,...)
+function i(...)ij(true,...)end
+function ts(...)ij(false,...)end
+function ah(eh,od,...)
+for e in all(ti[eh])do
+ez(e,od,e,...)
 end
 end
-g_out_cache=ztable[[1]]
-function zspr(sind,x,y,sw,sh,...)
-sw,sh=sw or 1,sh or 1
-spr(sind,x-sw*4,y-sh*4,sw,sh,...)
+dr=eb[[1]]
+function rt(w,a,o,ep,eg,...)
+ep,eg=ep or 1,eg or 1
+spr(w,a-ep*4,o-eg*4,ep,eg,...)
 end
-function scr_spr(a,spr_func,...)
-if a and a.visible then
-(spr_func or zspr)(a.sind,a.x*8+a.ixx+a.xx,a.y*8+a.iyy+a.yy,a.sw,a.sh,a.xf,a.yf,...)
+function iy(e,dx,...)
+if e and e.hk then
+(dx or rt)(e.w,e.a*8+e.ox+e.ou,e.o*8+e.oo+e.tx,e.ep,e.eg,e.v,e.oq,...)
 end
 end
-function scr_spr_out(a)scr_spr(a,spr_out,a.outline_color)end
-function scr_spr_and_out(...)
-foreach({...},scr_spr_out)
-foreach({...},scr_spr)
+function hx(e)iy(e,hl,e.iu)end
+function rl(...)
+foreach({...},hx)
+foreach({...},iy)
 end
-function zrect(x1,y1,x2,y2)
-batch_call_new(rect,
-[[2]],x1,y1,x2,y2)
+function cq(ef,ew,ev,ej)
+ey(rect,
+[[2]],ef,ew,ev,ej)
 end
-function outline_helper(flip,coord,dim)
-coord=coord-dim*4
+function s_(flip,oi,tl)
+oi=oi-tl*4
 if flip then
-return dim*8-1+coord,-1
+return tl*8-1+oi,-1
 else
-return coord,1
+return oi,1
 end
 end
-function spr_out(sind,x,y,sw,sh,xf,yf,col)
-local ox,x_mult=outline_helper(xf,x,sw)
-local oy,y_mult=outline_helper(yf,y,sh)
-local out_tbl=g_out_cache[sind]
-if out_tbl then
-for i=1,#out_tbl,4 do
+function hl(w,a,o,ep,eg,v,oq,b)
+local sm,ne=s_(v,a,ep)
+local su,re=s_(oq,o,eg)
+local tm=dr[w]
+if tm then
+for r=1,#tm,4 do
 rectfill(
-ox+x_mult*out_tbl[i],
-oy+y_mult*out_tbl[i+1],
-ox+x_mult*out_tbl[i+2],
-oy+y_mult*out_tbl[i+3],
-col)
+sm+ne*tm[r],
+su+re*tm[r+1],
+sm+ne*tm[r+2],
+su+re*tm[r+3],
+b)
 end
 end
 end
-function tprint(str,x,y,c1,c2)
-for i=-1,1 do
-for j=-1,1 do
-zprint(str,x+i,y+j,0,BG_UI,BG_UI)
+function mg(em,a,o,lk,lv)
+for r=-1,1 do
+for ad=-1,1 do
+oh(em,a+r,o+ad,0,BG_UI,BG_UI)
 end
 end
-zprint(str,x,y,0,c1,c2)
+oh(em,a,o,0,lk,lv)
 end
-function zprint(str,x,y,align,fg,bg)
-if align==0 then x-=#str*2
-elseif align>0 then x-=#str*4+1 end
-batch_call_new(print,[[3]],str,x,y,fg,bg)
+function oh(em,a,o,i_,rw,cn)
+if i_==0 then a-=#em*2
+elseif i_>0 then a-=#em*4+1 end
+ey(print,[[3]],em,a,o,rw,cn)
 end
-function zclip(x1,y1,x2,y2)
-clip(x1,y1,x2+1-flr(x1),y2+1-flr(y1))
+function ly(ef,ew,ev,ej)
+clip(ef,ew,ev+1-flr(ef),ej+1-flr(ew))
 end
-function zcls(col)
-batch_call_new(rectfill,[[4]],col or 0)
+function lp(b)
+ey(rectfill,[[4]],b or 0)
 end
-g_fadetable=ztable[[5]]
-function fade(i)
-for c=0,15 do
-pal(c,g_fadetable[c+1][min(flr(i+1),7)])
+du=eb[[5]]
+function ih(r)
+for to=0,15 do
+pal(to,du[to+1][min(flr(r+1),7)])
 end
 end
-create_actor([[6|7]],function(a)
-g_card_fade=max(a.tl_tim/a.tl_max_time*10,g_card_fade)
+ts([[6|7]],function(e)
+ai=max(e.l/e.es*10,ai)
 end)
-create_actor([[8|7]],function(a)
-g_card_fade=min((a.tl_max_time-a.tl_tim)/a.tl_max_time*10,g_card_fade)
+ts([[8|7]],function(e)
+ai=min((e.es-e.l)/e.es*10,ai)
 end)
-function amov_to_actor(a1,a2,spd,off_x,off_y)
-off_x=off_x or 0
-off_y=off_y or 0
-if a1 and a2 then
-amov_to_point(a1,spd,a2.x+off_x,a2.y+off_y)
+function cg(nl,ea,ei,aa,tj)
+aa=aa or 0
+tj=tj or 0
+if nl and ea then
+hs(nl,ei,ea.a+aa,ea.o+tj)
 end
 end
-function amov_to_point(a,spd,x,y)
-local ang=atan2(x-a.x,y-a.y)
-a.ax,a.ay=spd*cos(ang),spd*sin(ang)
+function hs(e,ei,a,o)
+local nw=atan2(a-e.a,o-e.o)
+e.th,e.tf=ei*cos(nw),ei*sin(nw)
 end
-function do_actors_intersect(a,b)
-return a and b
-and abs(a.x-b.x)<a.rx+b.rx
-and abs(a.y-b.y)<a.ry+b.ry
+function rz(e,s)
+return e and s
+and abs(e.a-s.a)<e.x+s.x
+and abs(e.o-s.o)<e.k+s.k
 end
-function does_a_contain_b(a,b)
-return a and b
-and b.x-b.rx>=a.x-a.rx
-and b.x+b.rx<=a.x+a.rx
-and b.y-b.ry>=a.y-a.ry
-and b.y+b.ry<=a.y+a.ry
+function hp(e,s)
+return e and s
+and s.a-s.x>=e.a-e.x
+and s.a+s.x<=e.a+e.x
+and s.o-s.k>=e.o-e.k
+and s.o+s.k<=e.o+e.k
 end
-function coll_tile_help(pos,per,spd,pos_rad,per_rad,dir,a,hit_func,solid_func)
-local coll_tile_bounds=function(pos,rad)
-return flr(pos-rad),-flr(-(pos+rad))-1
+function nr(et,di,ei,ip,dp,am,e,nm,al)
+local sv=function(et,nf)
+return flr(et-nf),-flr(-(et+nf))-1
 end
-local pos_min,pos_max=coll_tile_bounds(pos+spd,pos_rad)
-local per_min,per_max=coll_tile_bounds(per,per_rad)
-for j=per_min,per_max do
-if spd<0 and solid_func(pos_min,j)then
-hit_func(a,dir)
-return pos_min+pos_rad+1,0
-elseif spd>0 and solid_func(pos_max,j)then
-hit_func(a,dir+1)
-return pos_max-pos_rad,0
+local nx,sb=sv(et+ei,ip)
+local lu,lx=sv(di,dp)
+for ad=lu,lx do
+if ei<0 and al(nx,ad)then
+nm(e,am)
+return nx+ip+1,0
+elseif ei>0 and al(sb,ad)then
+nm(e,am+1)
+return sb-ip,0
 end
 end
-return pos,spd
+return et,ei
 end
-create_parent([[9|10]],function(a)
-if a.alive and a.stun_countdown<=0 then
-if tl_node(a)then
-a.alive=false
+i([[9|10]],function(e)
+if e.eq and e.tg<=0 then
+if ns(e)then
+e.eq=false
 end
-elseif a.stun_countdown>0 then
-a.stun_countdown-=1
+elseif e.tg>0 then
+e.tg-=1
 end
-end,function(a)
-if not a.alive then
-a:destroyed()
-a:delete()
+end,function(e)
+if not e.eq then
+e:sk()
+e:ow()
 end
-end,function(a)
-a.alive=nil
-end,function(a)
-for k,v in pairs(g_act_arrs)do
-if a[k]then del(v,a)end
+end,function(e)
+e.eq=nil
+end,function(e)
+for y,ee in pairs(ti)do
+if e[y]then del(ee,e)end
 end
-end,get)
-create_parent[[11|12]]
-create_parent[[13|14]]
-create_parent[[15|16]]
-create_parent[[17|18]]
-create_parent[[19|20]]
-create_parent[[21|22]]
-create_parent[[23|20]]
-create_parent[[24|20]]
-create_parent[[25|20]]
-create_parent([[26|27]],function(a)
-if a.y<g_main_view.y-g_main_view.h/2-8 then
-a:kill()
-end
-end)
-create_parent([[28|29]],function(a)
-a:x_check_bounds()
-a:y_check_bounds()
-end,function(a)
-if a.x+a.dx<g_cur_room.x+.5 then
-a.x=g_cur_room.x+.5
-a.dx=0
-end
-if a.x+a.dx>g_cur_room.x+g_cur_room.w-.5 then
-a.x=g_cur_room.x+g_cur_room.w-.5
-a.dx=0
-end
-end,function(a)
-if a.y+a.dy<g_cur_room.y+.5 then
-a.y=g_cur_room.y+.5
-a.dy=0
-end
-if a.y+a.dy>g_cur_room.y+g_cur_room.h-.5 then
-a.y=g_cur_room.y+g_cur_room.h-.5
-a.dy=0
+end,sy)
+i[[11|12]]
+i[[13|14]]
+i[[15|16]]
+i[[17|18]]
+i[[19|20]]
+i[[21|22]]
+i[[23|20]]
+i[[24|20]]
+i[[25|20]]
+i([[26|27]],function(e)
+if e.o<of.o-of.er/2-8 then
+e:tu()
 end
 end)
-create_parent[[30|31]]
-create_parent[[32|33]]
-create_parent([[34|35]],function(a)
-a.t+=1
+i([[28|29]],function(e)
+e:sf()
+e:nq()
+end,function(e)
+if e.a+e.g<c.a+.5 then
+e.a=c.a+.5
+e.g=0
+end
+if e.a+e.g>c.a+c.ed-.5 then
+e.a=c.a+c.ed-.5
+e.g=0
+end
+end,function(e)
+if e.o+e.p<c.o+.5 then
+e.o=c.o+.5
+e.p=0
+end
+if e.o+e.p>c.o+c.er-.5 then
+e.o=c.o+c.er-.5
+e.p=0
+end
 end)
-create_parent([[36|37]],function(a)
-a.x+=a.dx
-a.y+=a.dy
+i[[30|31]]
+i[[32|33]]
+i([[34|35]],function(e)
+e.t+=1
 end)
-create_parent([[38|39]],function(a)
-a.dx+=a.ax a.dy+=a.ay
-a.dx*=a.ix a.dy*=a.iy
-if a.ax==0 and abs(a.dx)<.01 then a.dx=0 end
-if a.ay==0 and abs(a.dy)<.01 then a.dy=0 end
-end,function(a)
-a.ax,a.ay,a.dx,a.dy=0,0,0,0
+i([[36|37]],function(e)
+e.a+=e.g
+e.o+=e.p
 end)
-create_parent([[40|41]],function(a)
-scr_rect(a.x-a.rx,a.y-a.ry,a.x+a.rx,a.y+a.ry,8)
+i([[38|39]],function(e)
+e.g+=e.th e.p+=e.tf
+e.g*=e.sn e.p*=e.si
+if e.th==0 and abs(e.g)<.01 then e.g=0 end
+if e.tf==0 and abs(e.p)<.01 then e.p=0 end
+end,function(e)
+e.th,e.tf,e.g,e.p=0,0,0,0
 end)
-create_parent([[42|43]],function(a)
-local a2=a.rel_actor
-if a2 then
-if a2.alive then
-a.x,a.y=a2.x+a.rel_x,a2.y+a.rel_y
-a.dx,a.dy=a2.dx+a.rel_dx,a2.dy+a.rel_dy
-a.rel_x+=a.rel_dx
-a.rel_y+=a.rel_dy
-a.xx,a.yy=a2.xx,a2.yy
-if a.flippable then
-a.xf=a2.xf
+i([[40|41]],function(e)
+local ea=e.ek
+if ea then
+if ea.eq then
+e.a,e.o=ea.a+e.ob,ea.o+e.n_
+e.g,e.p=ea.g+e.as,ea.p+e.st
+e.ob+=e.as
+e.n_+=e.st
+e.ou,e.tx=ea.ou,ea.tx
+if e.hw then
+e.v=ea.v
 end
 else
-a.alive=false
+e.eq=false
 end
 end
 end)
-create_parent([[44|45]],function(a)
-a.xx,a.yy=0,0
+i([[42|43]],function(e)
+e.ou,e.tx=0,0
 end)
-create_parent[[46|47]]
-create_parent[[48|47]]
-create_parent[[49|47]]
-create_parent[[50|47]]
-create_parent[[51|47]]
-create_parent[[52|47]]
-create_parent[[53|47]]
-create_parent[[54|47]]
-create_parent[[55|47]]
-create_parent[[56|47]]
-create_parent([[57|58]],scr_spr,scr_out,scr_spr_and_out
+i[[44|45]]
+i[[46|45]]
+i[[47|45]]
+i[[48|45]]
+i[[49|45]]
+i[[50|45]]
+i[[51|45]]
+i[[52|45]]
+i[[53|45]]
+i[[54|45]]
+i([[55|56]],iy,ua,rl
 )
-create_parent([[59|60]],scr_spr_and_out)
-create_parent([[61|62]],function(a,speed,xdir,ydir)
-a.dx=xdir*speed
-a.dy=ydir*speed
+i([[57|58]],rl)
+i([[59|60]],function(e,ni,la,dd)
+e.g=la*ni
+e.p=dd*ni
 end)
-create_parent([[63|64]],function(a)
-if a.stun_countdown>0 then
-a.ay,a.ax=0,0
-a.yy=rnd_one()
-a.outline_color=2
+i([[61|62]],function(e)
+if e.tg>0 then
+e.tf,e.th=0,0
+e.tx=no()
+e.iu=2
 else
-a.outline_color=1
+e.iu=1
 end
 end)
-create_parent([[65|66]],function(a,damage,stun_val)
-if a.stun_countdown<=0 then
-a.stun_countdown=stun_val
-a.health=max(0,a.health-damage)
-if a.health==0 then
-a.alive=false
+i([[63|64]],function(e,hb,rq)
+if e.tg<=0 then
+e.tg=rq
+e.tr=max(0,e.tr-hb)
+if e.tr==0 then
+e.eq=false
 end
 end
-end,function(a,health)
-a.health=min(a.max_health,a.health+health)
+end,function(e,tr)
+e.tr=min(e.dn,e.tr+tr)
 end)
-create_parent[[67|20]]
-create_parent([[68|69]],function(a)
-if a.anim_sind then
-a.sind=a.anim_sind
+i[[65|20]]
+i([[66|67]],function(e)
+if e.ss then
+e.w=e.ss
 else
-if a.t%a.anim_spd==0 then
-a.anim_off+=1
-a.anim_off%=a.anim_len
+if e.t%e.ce==0 then
+e.ok+=1
+e.ok%=e.hj
 end
-a.sind=a.sinds[a.anim_loc+a.anim_off]or 0xffff
+e.w=e.rf[e.dq+e.ok]or 0xffff
 end
 end)
-create_parent([[70|71]],function(a,b)
-if does_a_contain_b(a,b)then
-a:contains(b)
-elseif do_actors_intersect(a,b)then
-a:intersects(b)
+i([[68|69]],function(e,s)
+if hp(e,s)then
+e:hq(s)
+elseif rz(e,s)then
+e:hh(s)
 else
-a:not_contains_or_intersects(b)
+e:co(s)
 end
 end)
-create_parent[[72|73]]
-create_parent([[74|75]],function(a,acts)
-local hit_list={}
-local move_check=function(dx,dy)
-local ret_val=dx+dy
-local col_help=function(axis,spd_axis,a,b,pos,spd)
-if spd!=0 and pos<abs(a[axis]-b[axis])then
-if a.touchable and b.touchable then
-local s_f=function(c)
-if not c.anchored then
-c[spd_axis]=(a[spd_axis]+b[spd_axis])/2
+i[[70|71]]
+i([[72|73]],function(e,ha)
+local os={}
+local ay=function(g,p)
+local e_=g+p
+local da=function(nh,a_,e,s,et,ei)
+if ei!=0 and et<abs(e[nh]-s[nh])then
+if e.is and s.is then
+local sg=function(to)
+if not to.op then
+to[a_]=(e[a_]+s[a_])/2
 end
 end
-s_f(a)s_f(b)
-ret_val=0
+sg(e)sg(s)
+e_=0
 end
-hit_list[b][spd_axis]=zsgn(spd)
+os[s][a_]=rb(ei)
 end
 end
-foreach(acts,function(b)
-if a!=b and(not a.anchored or not b.anchored)then
-local x,y=abs(a.x+dx-b.x),abs(a.y+dy-b.y)
-if x<a.rx+b.rx and y<a.ry+b.ry then
-hit_list[b]=hit_list[b]or ztable[[76]]
-batch_call_new(col_help,[[77]],a,b,x,dx,y,dy)
+foreach(ha,function(s)
+if e!=s and(not e.op or not s.op)then
+local a,o=abs(e.a+g-s.a),abs(e.o+p-s.o)
+if a<e.x+s.x and o<e.k+s.k then
+os[s]=os[s]or eb[[74]]
+ey(da,[[75]],e,s,a,g,o,p)
 end
 end
 end)
-return ret_val
+return e_
 end
-a.dx,a.dy=move_check(a.dx,0),move_check(0,a.dy)
-for b,d in pairs(hit_list)do
-a:hit(b,d.dx,d.dy)
-end
-end)
-create_parent([[78|79]],function(a,solid_func)
-local x,dx=coll_tile_help(a.x,a.y,a.dx,a.rx,a.ry,0,a,a.tile_hit,solid_func)
-local y,dy=coll_tile_help(a.y,a.x,a.dy,a.ry,a.rx,2,a,a.tile_hit,function(y,x)return solid_func(x,y)end)
-if a.tile_solid then
-a.x,a.y,a.dx,a.dy=x,y,dx,dy
+e.g,e.p=ay(e.g,0),ay(0,e.p)
+for s,h in pairs(os)do
+e:oy(s,h.g,h.p)
 end
 end)
-create_parent([[80|81]],function(a)
-a.trig=_g.gen_trigger_block(a,a.trig_x,a.trig_y,a.trig_rx,a.trig_ry,nf,function(trig,other)
-if npc_able_to_interact(a,other)then
-change_cur_ma(a)
-if able_to_interact(a,other)then
-a:interactable_trigger()
+i([[76|77]],function(e,al)
+local a,g=nr(e.a,e.o,e.g,e.x,e.k,0,e,e.oz,al)
+local o,p=nr(e.o,e.a,e.p,e.k,e.x,2,e,e.oz,function(o,a)return al(a,o)end)
+if e.le then
+e.a,e.o,e.g,e.p=a,o,g,p
+end
+end)
+i([[78|79]],function(e)
+e.ir=j.my(e,e.nz,e.sp,e.iz,e.nn,d,function(ir,ty)
+if cw(e,ty)then
+iq(e)
+if uo(e,ty)then
+e:sq()
 end
 else
-if get_cur_ma()==a then
-change_cur_ma()
+if mh()==e then
+iq()
 end
 end
 end)
 end)
-create_parent[[82|83]]
-create_parent([[84|85]],function(a,o)
-if o!=a.rel_actor then
-call_not_nil(o,"knockback",o,a.bash_dx,bool_to_num(a.xf),0)
-change_cur_ma(o)
-if a.rel_actor then
-call_not_nil(a.rel_actor,"knockback",a.rel_actor,-a.rel_bash_dx,bool_to_num(a.xf),0)
+i[[80|81]]
+i([[82|83]],function(e,ab)
+if ab!=e.ek then
+ez(ab,"ix",ab,e.df,aw(e.v),0)
+iq(ab)
+if e.ek then
+ez(e.ek,"ix",e.ek,-e.cl,aw(e.v),0)
 end
 end
 end
 )
-create_parent([[86|87]],function(a)
-if a==a.rel_actor.item then a.rel_actor.item=nil end
+i([[84|85]],function(e)
+if e==e.ek.td then e.ek.td=nil end
 end)
-create_parent([[88|89]],function(a)
-a.xf=a.rel_actor.xf
-a.ixx=a.xf and a.poke_ixx or-a.poke_ixx
-use_energy(a.poke_energy)
-end,function(a)
-a.rel_dx=bool_to_num(a.xf)*a.poke_dist/a.tl_max_time/FPS
-pause_energy()
-end,function(a)
-a.rel_dx,a.rel_x=0,a.xf and-a.poke_dist or a.poke_dist
-end,function(a)
-a.rel_dx=-bool_to_num(a.xf)*a.poke_dist/a.tl_max_time/FPS/2
+i([[86|87]],function(e)
+e.v=e.ek.v
+e.ox=e.v and e.hn or-e.hn
+ug(e.ht)
+end,function(e)
+e.as=aw(e.v)*e.au/e.es/FPS
+mv()
+end,function(e)
+e.as,e.ob=0,e.v and-e.au or e.au
+end,function(e)
+e.as=-aw(e.v)*e.au/e.es/FPS/2
 end)
-create_parent([[90|91]],function(a)
-if remove_money(a.cost)then
-a:kill()
-_g.item_show(g_pl,a.sind,a.mem_loc)
-pause"chest"
-stop_music"1"
+i([[88|89]],function(e)
+if ma(e.dk)then
+e:tu()
+j.uu(sj,e.w,e.iw)
+pause"mo"
+mn"1"
 else
-zsfx(2,6)
+hr(2,6)
 end
 end)
-create_parent([[92|93]],function(a)
-if zdget(a.mem_loc)==a.mem_loc_expect then
-a:delete()
+i([[90|91]],function(e)
+if mc(e.iw)==e.lb then
+e:ow()
 end
 end)
-create_actor([[94|95]],function(a)
-zprint("meow",(a.x+a.dx)*8,(a.y+a.dy)*8-12,0,7,2)
-end,function(a)
+ts([[92|93]],function(e)
+oh("meow",(e.a+e.g)*8,(e.o+e.p)*8-12,0,7,2)
+end,function(e)
 if not btn(5)then
-a:kill()
+e:tu()
 end
-end,function(a)
+end,function(e)
 sfx"0"
 end)
-create_actor([[96|97]],function(a)
-local above_water=a.y<14
-a.ax=0
-if above_water then
-a.ax=.02*xbtn()
-if xbtn()>0 then a.xf=false end
-if xbtn()<0 then a.xf=true end
-if a.touching_ground and btn(4)then
-a.dy=-a.jump_speed
+ts([[94|95]],function(e)
+local im=e.o<14
+e.th=0
+if im then
+e.th=.02*ot()
+if ot()>0 then e.v=false end
+if ot()<0 then e.v=true end
+if e.af and btn(4)then
+e.p=-e.lf
 sfx"1"
 end
-if btn(5)and(not a.meow or not a.meow.alive)then
-a.meow=_g.pl_meow(a)
+if btn(5)and(not e.sc or not e.sc.eq)then
+e.sc=j.rm(e)
 end
-if not a.touching_ground then
-if a.dy<-.1 then
-a.sind=70
-elseif a.dy<.05 then
-a.sind=72
+if not e.af then
+if e.p<-.1 then
+e.w=70
+elseif e.p<.05 then
+e.w=72
 else
-a.sind=74
+e.w=74
 end
-elseif xbtn()~=0 then
-local s=.25
-local tmods=t()%s
-if tmods<.25*s then
-a.sind=64
-elseif tmods<.5*s then
-a.sind=66
-elseif tmods<.75*s then
-a.sind=96
+elseif ot()~=0 then
+local ag=.25
+local io=t()%ag
+if io<.25*ag then
+e.w=64
+elseif io<.5*ag then
+e.w=66
+elseif io<.75*ag then
+e.w=96
 else
-a.sind=68
-end
-else
-a.sind=t()%1<.25 and 96 or 64
+e.w=68
 end
 else
-a:next()
+e.w=t()%1<.25 and 96 or 64
 end
-a.touching_ground=false
-end,function(a,dir)
-local above_water=a.y<14
-if above_water then
-if dir==3 then a.touching_ground=true end
+else
+e:ik()
 end
-end,function(a)
-_g.fader_out(.5,nf,function()
-a:kill()
-game_init()
+e.af=false
+end,function(e,am)
+local im=e.o<14
+if im then
+if am==3 then e.af=true end
+end
+end,function(e)
+j.rj(.5,d,function()
+e:tu()
+ro()
 end)
 end)
-create_actor([[98|99]],function(a)
-local sinfo=rnd_item{
+ts([[96|97]],function(e)
+local o_=so{
 {192,4,2},
 {197,4,2},
 {197,4,2},
@@ -671,205 +659,189 @@ local sinfo=rnd_item{
 {224,3,2},
 {227,5,2}
 }
-a.dx=0.015625*(flr_rnd(2)+1)
-a.xf=rnd_item{true,false}
-a.sind=sinfo[1]
-a.sw=sinfo[2]
-a.sh=sinfo[3]
-a.y=flr_rnd(2)*2+2
+e.g=0.015625*(on(2)+1)
+e.v=so{true,false}
+e.w=o_[1]
+e.ep=o_[2]
+e.eg=o_[3]
+e.o=on(2)*2+2
 end)
-create_actor([[100|101]],function(a)
-zprint(a.txt,a.x*8,a.y*8-2*8,0,7,2)
-end,function(a)
-local wait=3
-if a.tl_tim<1*wait then a.txt="hey there kitty"
-elseif a.tl_tim<2*wait then a.txt="you are in a game now"
-elseif a.tl_tim<3*wait then a.txt="how do you like it?"
-elseif a.tl_tim<4*wait then a.txt="use ⬅️ and ➡️ to move"
-elseif a.tl_tim<5*wait then a.txt="press 🅾️ or z to jump"
-elseif a.tl_tim<6*wait then a.txt="press ❎ or x to meow"
-elseif a.tl_tim<7*wait then a.txt=""
-elseif a.tl_tim<8*wait then a.txt="oh"
-elseif a.tl_tim<9*wait then a.txt="dont fall into the water"
-elseif a.tl_tim<10*wait then a.txt="kittens cant swim"
-elseif a.tl_tim<11*wait then a.txt=""
-elseif a.tl_tim<12*wait then a.txt="i also forgot to mention"
-elseif a.tl_tim<13*wait then a.txt="this game isn't finished"
-elseif a.tl_tim<14*wait then a.txt="it was made in 4 hours"
-elseif a.tl_tim<15*wait then a.txt="for a game jam"
-elseif a.tl_tim<16*wait then a.txt="so... you win!"
-elseif a.tl_tim<17*wait then a.txt="congratulations"
-elseif a.tl_tim<18*wait then a.txt="spectacular"
-elseif a.tl_tim<19*wait then a.txt="wonderful"
-elseif a.tl_tim<20*wait then a.txt="awesome"
-elseif a.tl_tim<21*wait then a.txt="goodbye for now"
-elseif a.tl_tim<26*wait then a.txt=""
-elseif a.tl_tim<27*wait then a.txt="huh?"
-elseif a.tl_tim<28*wait then a.txt="you're still here?"
-elseif a.tl_tim<29*wait then a.txt="you must be waiting"
-elseif a.tl_tim<30*wait then a.txt="for the credits"
-elseif a.tl_tim<31*wait then a.txt="@alanxoc3 = code & sfx"
-elseif a.tl_tim<32*wait then a.txt="@cadetthegreat = gfx"
-elseif a.tl_tim<33*wait then a.txt="that's it for real"
-elseif a.tl_tim<34*wait then a.txt="bye bye kitty"
-elseif a.tl_tim<35*wait then a.txt=""
-end
-end)
-function update_view_helper(view,xy,wh,ii)
-local follow_coord=view.follow_act and(view.follow_act[xy]+view.follow_act[ii]/8)or 0
-local view_coord=view[xy]
-local view_dim=view[wh]
-local room_dim=g_cur_room[wh]/2-view_dim/2
-local room_coord=g_cur_room[xy]+g_cur_room[wh]/2
-local follow_dim=round(view.follow_dim*8)/8
-if follow_coord<view_coord-follow_dim then view_coord=follow_coord+follow_dim end
-if follow_coord>view_coord+follow_dim then view_coord=follow_coord-follow_dim end
-if view_coord<room_coord-room_dim then view_coord=room_coord-room_dim end
-if view_coord>room_coord+room_dim then view_coord=room_coord+room_dim end
-if g_cur_room[wh]<=view[wh]then view_coord=room_coord end
-view[xy]=view_coord
-end
-function scr_pset(x,y,c)
-pset(x*8,y*8,c)
-end
-function scr_line(x1,y1,x2,y2,col)
-line(x1*8,y1*8,x2*8,y2*8,col)
-end
-function scr_rect(x1,y1,x2,y2,col)
-rect(x1*8,y1*8,x2*8-1,y2*8-1,col)
-end
-function scr_rectfill(x1,y1,x2,y2,col)
-rectfill(x1*8,y1*8,x2*8,y2*8,col)
-end
-function scr_map(cel_x,cel_y,sx,sy,...)
-map(cel_x,cel_y,sx*8,sy*8,...)
-end
-function scr_circfill(x,y,r,col)
-circfill(x*8,y*8,r*8,col)
-end
-function scr_circ(x,y,r,col)
-circ(x*8,y*8,r*8,col)
-end
-create_actor([[102|103]],
-function(a)
-if a.follow_act and not a.follow_act.alive then
-a.follow_act=nil
-end
-batch_call_new(update_view_helper,[[104]],a)
-end,function(a)
-if a.follow_act then
-a.x,a.y=a.follow_act.x,a.follow_act.y
-a.name=a.follow_act.name
-end
-a:update_view()
-end,function(a,other)
-if not other or other.ma_able then
-a.follow_act=other
+ts([[98|99]],function(e)
+oh(e.u,e.a*8,e.o*8-2*8,0,7,2)
+end,function(e)
+local f=3
+if e.l<1*f then e.u="hey there kitty"
+elseif e.l<2*f then e.u="you are in a game now"
+elseif e.l<3*f then e.u="how do you like it?"
+elseif e.l<4*f then e.u="use ⬅️ and ➡️ to move"
+elseif e.l<5*f then e.u="press 🅾️ or z to jump"
+elseif e.l<6*f then e.u="press ❎ or x to meow"
+elseif e.l<7*f then e.u=""
+elseif e.l<8*f then e.u="oh"
+elseif e.l<9*f then e.u="dont fall into the water"
+elseif e.l<10*f then e.u="kittens cant swim"
+elseif e.l<11*f then e.u=""
+elseif e.l<12*f then e.u="i also forgot to mention"
+elseif e.l<13*f then e.u="this game isn't finished"
+elseif e.l<14*f then e.u="it was made in 4 hours"
+elseif e.l<15*f then e.u="for a game jam"
+elseif e.l<16*f then e.u="so... you win!"
+elseif e.l<17*f then e.u="congratulations"
+elseif e.l<18*f then e.u="spectacular"
+elseif e.l<19*f then e.u="wonderful"
+elseif e.l<20*f then e.u="awesome"
+elseif e.l<21*f then e.u="goodbye for now"
+elseif e.l<26*f then e.u=""
+elseif e.l<27*f then e.u="huh?"
+elseif e.l<28*f then e.u="you're still here?"
+elseif e.l<29*f then e.u="you must be waiting"
+elseif e.l<30*f then e.u="for the credits"
+elseif e.l<31*f then e.u="@alanxoc3 = code & sfx"
+elseif e.l<32*f then e.u="@cadetthegreat = gfx"
+elseif e.l<33*f then e.u="that's it for real"
+elseif e.l<34*f then e.u="bye bye kitty"
+elseif e.l<35*f then e.u=""
 end
 end)
-g_debug=false
-g_card_fade=8
+function ci(m,om,ar,rk)
+local ap=m.el and(m.el[om]+m.el[rk]/8)or 0
+local ec=m[om]
+local dw=m[ar]
+local oc=c[ar]/2-dw/2
+local tb=c[om]+c[ar]/2
+local tw=lw(m.tw*8)/8
+if ap<ec-tw then ec=ap+tw end
+if ap>ec+tw then ec=ap-tw end
+if ec<tb-oc then ec=tb-oc end
+if ec>tb+oc then ec=tb+oc end
+if c[ar]<=m[ar]then ec=tb end
+m[om]=ec
+end
+function cx(a,o,to)
+pset(a*8,o*8,to)
+end
+function ml(ef,ew,ev,ej,b)
+line(ef*8,ew*8,ev*8,ej*8,b)
+end
+function mp(ef,ew,ev,ej,b)
+rectfill(ef*8,ew*8,ev*8,ej*8,b)
+end
+function ra(de,dy,ch,cr,...)
+map(de,dy,ch*8,cr*8,...)
+end
+function ux(a,o,ia,b)
+circfill(a*8,o*8,ia*8,b)
+end
+function cp(a,o,ia,b)
+circ(a*8,o*8,ia*8,b)
+end
+ts([[100|101]],
+function(e)
+if e.el and not e.el.eq then
+e.el=nil
+end
+ey(ci,[[102]],e)
+end,function(e)
+if e.el then
+e.a,e.o=e.el.a,e.el.o
+e.rc=e.el.rc
+end
+e:ic()
+end,function(e,ty)
+if not ty or ty.az then
+e.el=ty
+end
+end)
+ai=8
 poke(0x5f5c,15)
 poke(0x5f5d,15)
 function _init()
 music(0,3000)
-g_tl=ztable([[105]],logo_draw,function()sfx"63" end,
-game_init,game_update,game_draw
+oj=eb([[103]],rx,function()sfx"63" end,
+ro,hg,ll
 )
 end
-function game_init(a)
-batch_call_new(acts_loop,[[106]])
-for x=-16,40,8 do
-_g.cloud(x)
+function ro(e)
+ey(ah,[[104]])
+for a=-16,40,8 do
+j.sh(a)
 end
-_g.fader_in(.5,nf,nf)
-g_cur_room=tabcpy(ztable[[107]])
-g_pl=_g.pl(8,10)
-_g.texter(8,11.5)
-g_main_view=_g.view(16,16,3,g_pl)
-g_main_view:center_view()
+j.lr(.5,d,d)
+c=ao(eb[[105]])
+sj=j.nd(8,10)
+j.h_(8,11.5)
+of=j.m(16,16,3,sj)
+of:rs()
 end
-function game_update(a)
+function hg(e)
 if t()%4==0 then
-_g.cloud(-24)
+j.sh(-24)
 end
-batch_call_new(
-acts_loop,[[108]],g_act_arrs["col"],
-function(x,y)
-return x>=g_cur_room.x and x<g_cur_room.x+g_cur_room.w and
-y>=g_cur_room.y and y<g_cur_room.y+g_cur_room.h and
-fget(mget(x,y),6)
+ey(
+ah,[[106]],ti["b"],
+function(a,o)
+return a>=c.a and a<c.a+c.ed and
+o>=c.o and o<c.o+c.er and
+fget(mget(a,o),6)
 end
 )
-batch_call_new(acts_loop,[[109]])
+ey(ah,[[107]])
 end
-function cycle(period)
-return time()%period/period
+function og(ol)
+return time()%ol/ol
 end
-function game_draw(a)
-fade(g_card_fade)
-map_draw(g_main_view,8,8)
+function ll(e)
+ih(ai)
+hu(of,8,8)
 end
-function logo_draw(a)
-local logo_opacity=8+cos(a.tl_tim/a.tl_max_time)*4-4
-fade(logo_opacity)
-camera(logo_opacity>1 and rnd_one())
-zspr(108,a.x,a.y,4,2)
-fade"0"
+function rx(e)
+local ny=8+cos(e.l/e.es)*4-4
+ih(ny)
+camera(ny>1 and no())
+rt(108,e.a,e.o,4,2)
+ih"0"
 camera()
 end
 function _update60()
-if g_debug then poke(0x5f42,15)
-else poke(0x5f42,0)
-end
-if btnp"5"and btn"4"then g_debug=not g_debug end
-tl_node(g_tl)
+ns(oj)
 end
 function _draw()
 cls()
-if g_debug then
-rect(0,0,127,127,8)
+ez(oj,"h",oj)
 end
-call_not_nil(g_tl,"d",g_tl)
+function hf(m)
+return(m.a-m.aa-8)*8
 end
-function shiftx(view)
-return(view.x-view.off_x-8)*8
+function cm(m)
+return(m.o-m.tj-8)*8
 end
-function shifty(view)
-return(view.y-view.off_y-8)*8
+function he(m)
+camera(hf(m),cm(m))
 end
-function camera_to_view(view)
-camera(shiftx(view),shifty(view))
+function hu(m,a,o)
+if m then
+local x=a-m.ed/2
+local k=o-m.er/2
+m.aa=-(16-m.ed)/2+x
+m.tj=-(16-m.er)/2+k
+local ef,ev=x*8+4,(x+m.ed)*8-5
+local ew,ej=k*8+4,(k+m.er)*8-5
+he(m)
+ly(ef,ew,ev,ej)
+lp(c.to)
+ra(48,1,c.a,c.o,c.ed,c.er)
+ra(c.a,c.o,c.a,c.o,c.ed,c.er)
+ey(ah,[[108]])
+r_(ti.tp)
+ey(ah,[[109]])
+local an=115
+for a=-128,128+128,4 do
+local function rh(e,ib)return e+e*sin(a/64+og(4)+ib)end
+rectfill(a,an-rh(2+sin(og(2)),0),a+3,an,1)
+rectfill(a,an-rh(2+sin(og(4)),0.2+0.1*sin(og(6))),a+3,an,12)
 end
-function map_draw(view,x,y)
-if view then
-local rx=x-view.w/2
-local ry=y-view.h/2
-view.off_x=-(16-view.w)/2+rx
-view.off_y=-(16-view.h)/2+ry
-local x1,x2=rx*8+4,(rx+view.w)*8-5
-local y1,y2=ry*8+4,(ry+view.h)*8-5
-camera_to_view(view)
-zclip(x1,y1,x2,y2)
-zcls(g_cur_room.c)
-scr_map(48,1,g_cur_room.x,g_cur_room.y,g_cur_room.w,g_cur_room.h)
-scr_map(g_cur_room.x,g_cur_room.y,g_cur_room.x,g_cur_room.y,g_cur_room.w,g_cur_room.h)
-batch_call_new(acts_loop,[[110]])
-isorty(g_act_arrs.drawable)
-batch_call_new(acts_loop,[[111]])
-local tr_water=115
-for x=-128,128+128,4 do
-local function wave(a,p)return a+a*sin(x/64+cycle(4)+p)end
-rectfill(x,tr_water-wave(2+sin(cycle(2)),0),x+3,tr_water,1)
-rectfill(x,tr_water-wave(2+sin(cycle(4)),0.2+0.1*sin(cycle(6))),x+3,tr_water,12)
-end
-rectfill(-128,tr_water,128*3,128,12)
-if g_debug then
-acts_loop("dim","debug_rect")
-end
+rectfill(-128,an,128*3,128,12)
 clip()
 camera()
-if g_debug then
-end
 end
 end
