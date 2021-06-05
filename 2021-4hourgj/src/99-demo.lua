@@ -33,7 +33,7 @@ function game_init(a)
     ]])
 
     g_pl = _g.pl(8, 10)
-    _g.texter(8, 10)
+    _g.texter(8, 12)
     g_main_view = _g.view(16, 16, 3, g_pl)
     g_main_view:center_view()
 end
@@ -140,7 +140,7 @@ function map_draw(view, x, y)
       zclip(x1, y1, x2, y2)
       zcls(g_cur_room.c)
 
-      scr_map(48, 3, g_cur_room.x, g_cur_room.y, g_cur_room.w, g_cur_room.h)
+      scr_map(48, 2, g_cur_room.x, g_cur_room.y, g_cur_room.w, g_cur_room.h)
       scr_map(g_cur_room.x, g_cur_room.y, g_cur_room.x, g_cur_room.y, g_cur_room.w, g_cur_room.h)
 
       batch_call_new(acts_loop, [[
