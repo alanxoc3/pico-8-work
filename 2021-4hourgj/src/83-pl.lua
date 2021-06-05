@@ -1,6 +1,6 @@
 create_actor([[pl;3;drawable,spr,mov,tcol,col,confined,bounded|
     x:@1; y:@2;
-    sw:2;
+    sw:2; sh:2;
     xf:no;
     ix:.90; iy:.98;
     touching_ground:no;
@@ -24,16 +24,26 @@ create_actor([[pl;3;drawable,spr,mov,tcol,col,confined,bounded|
 
         if not a.touching_ground then
             if a.dy < -.1 then
-                a.sind = 14
+                a.sind = 70
             elseif a.dy < .05 then
-                a.sind = 6
+                a.sind = 72
             else
-                a.sind = 46
+                a.sind = 74
             end
         elseif xbtn() ~= 0 then
-            a.sind = 6
+            local s = .25
+            local tmods = t() % s
+            if tmods < .25*s then
+                a.sind = 96
+            elseif tmods < .5*s then
+                a.sind = 66
+            elseif tmods < .75*s then
+                a.sind = 96
+            else
+                a.sind = 68
+            end
         else
-            a.sind = t() % 2 < .5 and 22 or 6
+            a.sind = t() % 1 < .25 and 96 or 64
         end
     end
     a.touching_ground = false
