@@ -4,15 +4,11 @@ create_actor([[cloud;1;pre_drawable,spr,pos,confined|
 ]], function(a)
     local sinfo = rnd_item{{192,5,2},{197,5,2},{224,3,2},{227,5,2}}
 
-    if a.x < 8 then
-        a.dx = rnd(.03)+.02
-    else
-        a.dx = -(rnd(.03)+.02)
-    end
+    a.dx = 0.015625*(flr_rnd(2)+1)
 
     a.xf = rnd_item{true, false}
     a.sind = sinfo[1]
     a.sw = sinfo[2]
     a.sh = sinfo[3]
-    a.y = flr_rnd(3)*2+2
+    a.y = flr_rnd(2)*2+2
 end)
