@@ -37,11 +37,11 @@ end
 function game_init(a)
     _g.fader_in(.5, nf, nf)
 
-    g_main_view = _g.view(15, 16, 0, bucket)
+    g_main_view = _g.view(16, 16, 0, bucket)
     g_pl = _g.pl(3, 3)
 
     g_cur_room = tabcpy(ztable[[
-        x:0; y:0; w:8; h:16;
+        x:0; y:0; w:16; h:16;
     ]])
 end
 

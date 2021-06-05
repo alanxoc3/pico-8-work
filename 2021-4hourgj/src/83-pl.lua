@@ -1,4 +1,4 @@
-create_actor([[pl;3;drawable,spr,mov,tcol,col,confined,x_bounded,y_bounded|
+create_actor([[pl;3;drawable,spr,mov,tcol,col,confined,bounded|
     x:@1; y:@2;
     xf:no;
     ix:.90; iy:.98;
