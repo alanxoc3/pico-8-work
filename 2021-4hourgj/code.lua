@@ -1,4 +1,4 @@
-g_gunvals_raw="|!plus/@1/-2,!plus/@2/-2,!plus/@3/2,!plus/@4/2,13;!plus/@1/-1,!plus/@2/-1,!plus/@3/1,!plus/@4/1,1;|@1,@2,!plus/@3/1,@5;@1,@2,@3,@4;|0x8000,0x8000,0x7fff,0x7fff,@1|0,0,0,0,0,0,0;1,1,1,0,0,0,0;2,2,2,1,0,0,0;3,3,3,1,0,0,0;4,2,2,2,1,0,0;5,5,1,1,1,0,0;6,13,13,5,5,1,0;7,6,13,13,5,1,0;8,8,2,2,2,0,0;9,4,4,4,5,0,0;10,9,4,4,5,5,0;11,3,3,3,3,0,0;12,12,3,1,1,1,0;13,5,5,1,1,1,0;14,13,4,2,2,1,0;15,13,13,5,5,1,0;|fader_out;3;act,;update,|fade_time:@1;i:@2;e:@3;u:@4;tl_max_time=@1,|fader_in;3;act,;update,|act;0;,;room_init,pause_init,pause_update,pause_end,kill,clean,delete|alive:yes;stun_countdown:0;i:nf;u:nf;update:@1;clean:@2;kill:@3;delete:@4;room_init:nf;create_init:nf;pause_init:nf;pause_update:nf;pause_end:nf;destroyed:nf;get:@5;|ma_able;0;act,;|name:thing;|confined;0;act,;room_end,|room_end:nf;|loopable;0;act,;|tl_loop:yes;|pos;0;act,;|x:0;y:0;|move_pause;0;act,;update,move,vec_update,tick|;|dim;0;pos,;|rx:.375;ry:.375;|knock;0;col,;|popper;0;col,;|bad;0;knock,;|kill_too_high;0;pos,|check_height:@1;|bounded;0;act,;|check_bounds:@1;x_check_bounds:@2;y_check_bounds:@3;|x_bounded;0;bounded,;|check_bounds:$x_check_bounds;|y_bounded;0;bounded,;|check_bounds:$y_check_bounds;|timed;0;act,;|t:0;tick:@1;|vec;0;pos,;|dx:0;dy:0;vec_update:@1;|mov;0;vec,;|ix:1;iy:1;ax:0;ay:0;move:@1;stop:@2;|dim;0;pos,;debug_rect,|rx:.375;ry:.375;debug_rect:@1;|rel;0;act,;rel_update,|rel_actor:null;rel_x:0;rel_y:0;rel_dx:0;rel_dy:0;flippable:no;rel_update:@1;|drawable_obj;0;pos,;reset_off,|ixx:0;iyy:0;xx:0;yy:0;visible:yes;reset_off:@1;|drawable;0;drawable_obj,;d,|d:nf;|drawable_1;0;drawable_obj,;d,|drawable_2;0;drawable_obj,;d,|pre_drawable;0;drawable_obj,;d,|pre_drawable_1;0;drawable_obj,;d,|pre_drawable_2;0;drawable_obj,;d,|post_drawable;0;drawable_obj,;d,|post_drawable_1;0;drawable_obj,;d,|post_drawable_2;0;drawable_obj,;d,|above_map_post_camera_drawable;0;drawable_obj,;d,|spr_obj;0;vec,drawable_obj,;|sind:0;outline_color:BG_UI;sw:1;sh:1;xf:no;yf:no;draw_spr:@1;draw_out:@2;draw_both:@3;|spr;0;spr_obj,;|d:@1;|knockable;0;mov,;|knockback:@1;|stunnable;0;mov,drawable_obj;|stun_update:@1;|hurtable;0;act,;|health:1;max_health:1;health_visible:yes;hurt:@1;heal:@2;|brang_hurtable;0;hurtable,;|anim;0;spr,timed;|sinds:,;anim_loc:1;anim_off:0;anim_len:1;anim_spd:0;anim_sind:null;anim_update:@1;|trig;0;vec,dim;|contains:nf;intersects:nf;not_contains_or_intersects:nf;contains_or_intersects:@1;trigger_update:@1;|anchored;1;vec,dim;|touchable:@1;hit:nf;|col;0;vec,dim;|touchable:yes;hit:nf;move_check:@1;|dx:0;dy:0|x,dx,@1,@2,@3,@4;y,dy,@1,@2,@5,@6;|tcol;0;vec,dim;|tile_solid:yes;tile_hit:nf;coll_tile:@1;|interactable;0;spr,anchored/yes,confined,ma_able;|interactable_trigger:nf;trig_x:0;trig_y:0;trig_rx:.75;trig_ry:.75;trig:null;i:@1;interactable_init:@1;|nnpc;0;drawable,danceable,interactable,ma_able;|rx:.5;ry:.5;iyy:-2;u:%look_at_pl|bashable;0;rel,knockable,col;|bash_dx:1;rel_bash_dx:1;hit:@1;bash:@1;|item;0;drawable,rel,confined,spr_obj;|being_held:yes;destroyed:@1;|pokeable;0;rel,drawable_obj,item;|i:@1;u:@2;e:@3;poke_init:@1;poke_update:@2;poke_end:@3;poke_update_reverse:@4;poke:20;poke_dist:20;poke_energy:0;|shop_item;0;drawable,interactable,ma_able;update,|costable:yes;interactable_trigger:@1;rx:.5;ry:.5;iyy:-3;trig_x:0;trig_y:.125;trig_rx:.5;trig_ry:.625;mem_loc:BOGUS_SPOT;cost:99|mem_dep;0;act,;|room_init:@1;mem_loc:BOGUS_SPOT;mem_loc_expect:yes;|pl_meow;1;post_drawable,rel,confined|rel_actor:@1;d:@2;u:@3;i:@4;|pl;2;drawable,spr,mov,tcol,col,confined,bounded|x:@1;y:@2;sw:2;sh:2;xf:no;ix:.90;iy:.98;touching_ground:no;jump_speed:.5;sind:6;ay:.01;u:@3;tile_hit:@4;,;i=@5,u=nf;|texter;2;pre_drawable,pos,confined|x:@1;y:@2;d:@3;u:@4;txt:hey there kitty;|view;4;act,confined;center_view,update_view|x:0;y:0;room_crop:2;tl_loop:yes;w:@1;h:@2;follow_dim:@3;follow_act:@4;update_view:@5;center_view:@6;change_ma:@7;,;|@1,x,w,ixx;@1,y,h,iyy|i=@3,u=@4,d=@5;|confined,room_end;confined,kill;confined,delete|x:-16;y:0;w:48;h:16;|act,update;drawable_obj,reset_off;mov,move;pl,move_check,@1;tcol,coll_tile,@2;rel,rel_update;vec,vec_update;kill_too_high,check_height;bounded,check_bounds;anim,anim_update;timed,tick;view,update_view;|act,clean|pre_drawable,d;pre_drawable_1,d;pre_drawable_2,d;|drawable,d;drawable_1,d;drawable_2,d;post_drawable,d;post_drawable_1,d;post_drawable_2,d;|"
+g_gunvals_raw="|!plus/@1/-2,!plus/@2/-2,!plus/@3/2,!plus/@4/2,13;!plus/@1/-1,!plus/@2/-1,!plus/@3/1,!plus/@4/1,1;|@1,@2,!plus/@3/1,@5;@1,@2,@3,@4;|0x8000,0x8000,0x7fff,0x7fff,@1|0,0,0,0,0,0,0;1,1,1,0,0,0,0;2,2,2,1,0,0,0;3,3,3,1,0,0,0;4,2,2,2,1,0,0;5,5,1,1,1,0,0;6,13,13,5,5,1,0;7,6,13,13,5,1,0;8,8,2,2,2,0,0;9,4,4,4,5,0,0;10,9,4,4,5,5,0;11,3,3,3,3,0,0;12,12,3,1,1,1,0;13,5,5,1,1,1,0;14,13,4,2,2,1,0;15,13,13,5,5,1,0;|fader_out;3;act,;update,|fade_time:@1;i:@2;e:@3;u:@4;tl_max_time=@1,|fader_in;3;act,;update,|act;0;,;room_init,pause_init,pause_update,pause_end,kill,clean,delete|alive:yes;stun_countdown:0;i:nf;u:nf;update:@1;clean:@2;kill:@3;delete:@4;room_init:nf;create_init:nf;pause_init:nf;pause_update:nf;pause_end:nf;destroyed:nf;get:@5;|ma_able;0;act,;|name:thing;|confined;0;act,;room_end,|room_end:nf;|loopable;0;act,;|tl_loop:yes;|pos;0;act,;|x:0;y:0;|move_pause;0;act,;update,move,vec_update,tick|;|dim;0;pos,;|rx:.375;ry:.375;|knock;0;col,;|popper;0;col,;|bad;0;knock,;|kill_too_high;0;pos,|check_height:@1;|bounded;0;act,;|check_bounds:@1;x_check_bounds:@2;y_check_bounds:@3;|x_bounded;0;bounded,;|check_bounds:$x_check_bounds;|y_bounded;0;bounded,;|check_bounds:$y_check_bounds;|timed;0;act,;|t:0;tick:@1;|vec;0;pos,;|dx:0;dy:0;vec_update:@1;|mov;0;vec,;|ix:1;iy:1;ax:0;ay:0;move:@1;stop:@2;|dim;0;pos,;debug_rect,|rx:.375;ry:.375;debug_rect:@1;|rel;0;act,;rel_update,|rel_actor:null;rel_x:0;rel_y:0;rel_dx:0;rel_dy:0;flippable:no;rel_update:@1;|drawable_obj;0;pos,;reset_off,|ixx:0;iyy:0;xx:0;yy:0;visible:yes;reset_off:@1;|drawable;0;drawable_obj,;d,|d:nf;|drawable_1;0;drawable_obj,;d,|drawable_2;0;drawable_obj,;d,|pre_drawable;0;drawable_obj,;d,|pre_drawable_1;0;drawable_obj,;d,|pre_drawable_2;0;drawable_obj,;d,|post_drawable;0;drawable_obj,;d,|post_drawable_1;0;drawable_obj,;d,|post_drawable_2;0;drawable_obj,;d,|above_map_post_camera_drawable;0;drawable_obj,;d,|spr_obj;0;vec,drawable_obj,;|sind:0;outline_color:BG_UI;sw:1;sh:1;xf:no;yf:no;draw_spr:@1;draw_out:@2;draw_both:@3;|spr;0;spr_obj,;|d:@1;|knockable;0;mov,;|knockback:@1;|stunnable;0;mov,drawable_obj;|stun_update:@1;|hurtable;0;act,;|health:1;max_health:1;health_visible:yes;hurt:@1;heal:@2;|brang_hurtable;0;hurtable,;|anim;0;spr,timed;|sinds:,;anim_loc:1;anim_off:0;anim_len:1;anim_spd:0;anim_sind:null;anim_update:@1;|trig;0;vec,dim;|contains:nf;intersects:nf;not_contains_or_intersects:nf;contains_or_intersects:@1;trigger_update:@1;|anchored;1;vec,dim;|touchable:@1;hit:nf;|col;0;vec,dim;|touchable:yes;hit:nf;move_check:@1;|dx:0;dy:0|x,dx,@1,@2,@3,@4;y,dy,@1,@2,@5,@6;|tcol;0;vec,dim;|tile_solid:yes;tile_hit:nf;coll_tile:@1;|interactable;0;spr,anchored/yes,confined,ma_able;|interactable_trigger:nf;trig_x:0;trig_y:0;trig_rx:.75;trig_ry:.75;trig:null;i:@1;interactable_init:@1;|nnpc;0;drawable,danceable,interactable,ma_able;|rx:.5;ry:.5;iyy:-2;u:%look_at_pl|bashable;0;rel,knockable,col;|bash_dx:1;rel_bash_dx:1;hit:@1;bash:@1;|item;0;drawable,rel,confined,spr_obj;|being_held:yes;destroyed:@1;|pokeable;0;rel,drawable_obj,item;|i:@1;u:@2;e:@3;poke_init:@1;poke_update:@2;poke_end:@3;poke_update_reverse:@4;poke:20;poke_dist:20;poke_energy:0;|shop_item;0;drawable,interactable,ma_able;update,|costable:yes;interactable_trigger:@1;rx:.5;ry:.5;iyy:-3;trig_x:0;trig_y:.125;trig_rx:.5;trig_ry:.625;mem_loc:BOGUS_SPOT;cost:99|mem_dep;0;act,;|room_init:@1;mem_loc:BOGUS_SPOT;mem_loc_expect:yes;|pl_meow;1;post_drawable,rel,confined|rel_actor:@1;d:@2;u:@3;i:@4;|pl;2;drawable,spr,mov,tcol,col,confined,bounded|x:@1;y:@2;sw:2;sh:2;xf:no;ix:.90;iy:.98;touching_ground:no;jump_speed:.5;sind:6;ay:.01;u:@3;tile_hit:@4;,;i=@5,u=nf;|cloud;1;pre_drawable,spr,pos,confined|x:@1;i:@2;u:@3;,tl_max_time=96;|texter;2;pre_drawable,pos,confined|x:@1;y:@2;d:@3;u:@4;txt:hey there kitty;|view;4;act,confined;center_view,update_view|x:0;y:0;room_crop:2;tl_loop:yes;w:@1;h:@2;follow_dim:@3;follow_act:@4;update_view:@5;center_view:@6;change_ma:@7;,;|@1,x,w,ixx;@1,y,h,iyy|i=@3,u=@4,d=@5;|confined,room_end;confined,kill;confined,delete|x:-16;y:0;w:48;h:16;|act,update;drawable_obj,reset_off;mov,move;pl,move_check,@1;tcol,coll_tile,@2;rel,rel_update;vec,vec_update;kill_too_high,check_height;bounded,check_bounds;anim,anim_update;timed,tick;view,update_view;|act,clean|pre_drawable,d;pre_drawable_1,d;pre_drawable_2,d;|drawable,d;drawable_1,d;drawable_2,d;post_drawable,d;post_drawable_1,d;post_drawable_2,d;|"
 _g={}
 function zsfx(num,sub_num)
 sfx(num,-1,sub_num*4,4)
@@ -660,6 +660,18 @@ game_init()
 end)
 end)
 create_actor([[98|99]],function(a)
+local sinfo=rnd_item{{192,5,2},{197,5,2},{224,3,2},{227,5,2}}
+if a.x<8 then
+a.dx=rnd(.03)+.02
+else
+a.dx=-(rnd(.03)+.02)
+end
+a.sind=sinfo[1]
+a.sw=sinfo[2]
+a.sh=sinfo[3]
+a.y=rnd(3)+2
+end)
+create_actor([[100|101]],function(a)
 zprint(a.txt,a.x*8,a.y*8-2*8,0,7,2)
 end,function(a)
 local wait=3
@@ -710,12 +722,12 @@ end
 function scr_circ(x,y,r,col)
 circ(x*8,y*8,r*8,col)
 end
-create_actor([[100|101]],
+create_actor([[102|103]],
 function(a)
 if a.follow_act and not a.follow_act.alive then
 a.follow_act=nil
 end
-batch_call_new(update_view_helper,[[102]],a)
+batch_call_new(update_view_helper,[[104]],a)
 end,function(a)
 if a.follow_act then
 a.x,a.y=a.follow_act.x,a.follow_act.y
@@ -733,29 +745,35 @@ poke(0x5f5c,15)
 poke(0x5f5d,15)
 function _init()
 music(0,3000)
-g_tl=ztable([[103]],logo_draw,function()sfx"63" end,
+g_tl=ztable([[105]],logo_draw,function()sfx"63" end,
 game_init,game_update,game_draw
 )
 end
 function game_init(a)
-batch_call_new(acts_loop,[[104]])
+batch_call_new(acts_loop,[[106]])
+for x=-16,40,8 do
+_g.cloud(x)
+end
 _g.fader_in(.5,nf,nf)
-g_cur_room=tabcpy(ztable[[105]])
+g_cur_room=tabcpy(ztable[[107]])
 g_pl=_g.pl(8,10)
-_g.texter(8,12)
+_g.texter(8,11.5)
 g_main_view=_g.view(16,16,3,g_pl)
 g_main_view:center_view()
 end
 function game_update(a)
+if t()%4==0 then
+_g.cloud(rnd_item{-24,40})
+end
 batch_call_new(
-acts_loop,[[106]],g_act_arrs["col"],
+acts_loop,[[108]],g_act_arrs["col"],
 function(x,y)
 return x>=g_cur_room.x and x<g_cur_room.x+g_cur_room.w and
 y>=g_cur_room.y and y<g_cur_room.y+g_cur_room.h and
 fget(mget(x,y),6)
 end
 )
-batch_call_new(acts_loop,[[107]])
+batch_call_new(acts_loop,[[109]])
 end
 function cycle(period)
 return time()%period/period
@@ -806,11 +824,11 @@ local y1,y2=ry*8+4,(ry+view.h)*8-5
 camera_to_view(view)
 zclip(x1,y1,x2,y2)
 zcls(g_cur_room.c)
-scr_map(48,2,g_cur_room.x,g_cur_room.y,g_cur_room.w,g_cur_room.h)
+scr_map(48,1,g_cur_room.x,g_cur_room.y,g_cur_room.w,g_cur_room.h)
 scr_map(g_cur_room.x,g_cur_room.y,g_cur_room.x,g_cur_room.y,g_cur_room.w,g_cur_room.h)
-batch_call_new(acts_loop,[[108]])
+batch_call_new(acts_loop,[[110]])
 isorty(g_act_arrs.drawable)
-batch_call_new(acts_loop,[[109]])
+batch_call_new(acts_loop,[[111]])
 local tr_water=115
 for x=-128,128+128,4 do
 local function wave(a,p)return a+a*sin(x/64+cycle(4)+p)end
