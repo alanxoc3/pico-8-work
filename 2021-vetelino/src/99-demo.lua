@@ -38,9 +38,10 @@ function game_update(a)
         act, clean;
         act, update;
         mov, move;
+        vehicle,move_check,@1;
         vec, vec_update;
         bounded, check_bounds;
-    ]])
+    ]], g_act_arrs['col'])
 end
 
 function game_draw(a)
@@ -52,6 +53,10 @@ function game_draw(a)
     batch_call_new(acts_loop, [[
         drawable, d;
     ]])
+
+    -- DEBUG_BEGIN
+    if g_debug then acts_loop('dim', 'debug_rect') end
+    -- DEBUG_END
 end
 
 function logo_draw(a)
@@ -81,13 +86,13 @@ end
 function _draw()
     cls()
 
+    call_not_nil(g_tl, 'd', g_tl)
+
     -- DEBUG_BEGIN
     if g_debug then
         rect(0,0,127,127,8)
     end
     -- DEBUG_END
-
-    call_not_nil(g_tl, 'd', g_tl)
 end
 
 -- CAMERA STUFF

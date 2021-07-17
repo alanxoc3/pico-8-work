@@ -133,6 +133,15 @@ end
 end
 end
 end
+function tostring(any)
+if type(any)~="table"then return tostr(any)end
+local str="{"
+for k,v in pairs(any)do
+if str~="{"then str=str.."," end
+str=str..tostring(k).."="..tostring(v)
+end
+return str.."}"
+end
 function amov_to_actor(a1,a2,spd,off_x,off_y)
 off_x=off_x or 0
 off_y=off_y or 0
@@ -183,7 +192,7 @@ end
 end
 return pos,spd
 end
-g_gunvals=split("@1,@2,!plus/@3/1,@5;@1,@2,@3,@4;|0x8000,0x8000,0x7fff,0x7fff,@1|!plus/@1/-2,!plus/@2/-2,!plus/@3/2,!plus/@4/2,13;!plus/@1/-1,!plus/@2/-1,!plus/@3/1,!plus/@4/1,1;|0,0,0,0,0,0,0;1,1,1,0,0,0,0;2,2,2,1,0,0,0;3,3,3,1,0,0,0;4,2,2,2,1,0,0;5,5,1,1,1,0,0;6,13,13,5,5,1,0;7,6,13,13,5,1,0;8,8,2,2,2,0,0;9,4,4,4,5,0,0;10,9,4,4,5,5,0;11,3,3,3,3,0,0;12,12,3,1,1,1,0;13,5,5,1,1,1,0;14,13,4,2,2,1,0;15,13,13,5,5,1,0;|fader_out;3;act,;update,|fade_time:@1;i:@2;e:@3;u:@4;tl_max_time=@1,|fader_in;3;act,;update,||act;0;,;room_init,pause_init,pause_update,pause_end,kill,clean,delete|alive:yes;stun_countdown:0;i:nf;u:nf;update:@1;clean:@2;kill:@3;delete:@4;room_init:nf;create_init:nf;pause_init:nf;pause_update:nf;pause_end:nf;destroyed:nf;get:@5;|ma_able;0;act,;|name:thing;|confined;0;act,;room_end,|room_end:nf;|loopable;0;act,;|tl_loop:yes;|pos;0;act,;|x:0;y:0;|move_pause;0;act,;update,move,vec_update,tick|;|knock;0;col,;|popper;0;col,;|bad;0;knock,;|bounded;0;act,;|check_bounds:nf;|x_bounded;0;bounded,;|check_bounds:@1;|y_bounded;0;bounded,;|timed;0;act,;|t:0;tick:@1;|vec;0;pos,;|dx:0;dy:0;vec_update:@1;|mov;0;vec,;|ix:1;iy:1;ax:0;ay:0;move:@1;stop:@2;calc_next_pos:@3;|dim;0;pos,;|rx:.375;ry:.375;|rel;0;act,;rel_update,|rel_actor:null;rel_x:0;rel_y:0;rel_dx:0;rel_dy:0;flippable:no;rel_update:@1;|drawable_obj;0;pos,;reset_off,|ixx:0;iyy:0;xx:0;yy:0;visible:yes;reset_off:@1;|drawable;0;drawable_obj,;d,|d:nf;|drawable_1;0;drawable_obj,;d,|drawable_2;0;drawable_obj,;d,|pre_drawable;0;drawable_obj,;d,|pre_drawable_1;0;drawable_obj,;d,|pre_drawable_2;0;drawable_obj,;d,|post_drawable;0;drawable_obj,;d,|post_drawable_1;0;drawable_obj,;d,|post_drawable_2;0;drawable_obj,;d,|above_map_post_camera_drawable;0;drawable_obj,;d,|spr_obj;0;vec,drawable_obj,;|sind:0;outline_color:BG_UI;sw:1;sh:1;xf:no;yf:no;draw_spr:@1;draw_out:@2;draw_both:@3;|spr;0;spr_obj,;|d:@1;|knockable;0;mov,;|knockback:@1;|stunnable;0;mov,drawable_obj;|stun_update:@1;|hurtable;0;act,;|health:1;max_health:1;health_visible:yes;hurt:@1;heal:@2;|trig;0;vec,dim;|contains:nf;intersects:nf;not_contains_or_intersects:nf;contains_or_intersects:@1;trigger_update:@1;|anchored;1;vec,dim;|touchable:@1;hit:nf;|col;0;vec,dim;|touchable:yes;hit:nf;move_check:@1;|dx:0;dy:0|x,dx,@1,@2,@3,@4;y,dy,@1,@2,@5,@6;|tcol;0;vec,dim;|tile_solid:yes;tile_hit:nf;coll_tile:@1;|view;4;act,confined;center_view,update_view|x:0;y:0;room_crop:2;tl_loop:yes;w:@1;h:@2;follow_dim:@3;follow_act:@4;update_view:@5;center_view:@6;change_ma:@7;,;|@1,x,w,ixx;@1,y,h,iyy|lane_jumper;0;pos,|x:4;y:4;lane:1;i:@1;switch_lane:@2;|vehicle;0;drawable,spr,mov,x_bounded|x:4;y:4;ix:.96;iy:.92;vehicle_logic:nf;i:@1;u:@2;move_x:@3;move_y:@4;|pl;2;vehicle,|x:@1;y:@2;vehicle_logic:@3;x:4;y:4;sind:39;sh:2;iyy:-4;|truck;2;vehicle,|x:@1;y:@2;vehicle_logic:@3;sind:26;sw:2;sh:3;iyy:-8;horizontal_input:0;|intro_truck;0;truck,|x:-5;y:10;check_bounds:nf;vehicle_logic:@1;destroyed:@2;|intro_pl;0;pl,|x:-18;y:10;check_bounds:nf;vehicle_logic:@1;destroyed:@2;|mission_text;3;drawable,timed|text:@1;y:@2;callback:@3;u:@4;d:@5;destroyed:@6;,;u=nf,tl_max_time=.5,;|road_gen;0;act,vec,drawable;update,|x:0;u:@1;d:@2;|i=@3,u=@4,d=@5;|x:1;y:2;w:14;h:16;c:0;|act,clean;act,update;mov,move;vec,vec_update;bounded,check_bounds;|drawable,d;|pre_drawable,d;pre_drawable_1,d;pre_drawable_2,d;|drawable,d;drawable_1,d;drawable_2,d;post_drawable,d;post_drawable_1,d;post_drawable_2,d;|","|")
+g_gunvals=split("@1,@2,!plus/@3/1,@5;@1,@2,@3,@4;|0x8000,0x8000,0x7fff,0x7fff,@1|!plus/@1/-2,!plus/@2/-2,!plus/@3/2,!plus/@4/2,13;!plus/@1/-1,!plus/@2/-1,!plus/@3/1,!plus/@4/1,1;|0,0,0,0,0,0,0;1,1,1,0,0,0,0;2,2,2,1,0,0,0;3,3,3,1,0,0,0;4,2,2,2,1,0,0;5,5,1,1,1,0,0;6,13,13,5,5,1,0;7,6,13,13,5,1,0;8,8,2,2,2,0,0;9,4,4,4,5,0,0;10,9,4,4,5,5,0;11,3,3,3,3,0,0;12,12,3,1,1,1,0;13,5,5,1,1,1,0;14,13,4,2,2,1,0;15,13,13,5,5,1,0;|fader_out;3;act,;update,|fade_time:@1;i:@2;e:@3;u:@4;tl_max_time=@1,|fader_in;3;act,;update,||act;0;,;room_init,pause_init,pause_update,pause_end,kill,clean,delete|alive:yes;stun_countdown:0;i:nf;u:nf;update:@1;clean:@2;kill:@3;delete:@4;room_init:nf;create_init:nf;pause_init:nf;pause_update:nf;pause_end:nf;destroyed:nf;get:@5;|ma_able;0;act,;|name:thing;|confined;0;act,;room_end,|room_end:nf;|loopable;0;act,;|tl_loop:yes;|pos;0;act,;|x:0;y:0;|move_pause;0;act,;update,move,vec_update,tick|;|knock;0;col,;|popper;0;col,;|bad;0;knock,;|bounded;0;act,;|check_bounds:nf;|x_bounded;0;bounded,;|check_bounds:@1;|y_bounded;0;bounded,;|timed;0;act,;|t:0;tick:@1;|vec;0;pos,;|dx:0;dy:0;vec_update:@1;|mov;0;vec,;|ix:1;iy:1;ax:0;ay:0;move:@1;stop:@2;calc_next_pos:@3;|dim;0;pos,;|rx:.375;ry:.375;|dim;0;pos,;debug_rect,|rx:.375;ry:.375;debug_rect:@1;|rel;0;act,;rel_update,|rel_actor:null;rel_x:0;rel_y:0;rel_dx:0;rel_dy:0;flippable:no;rel_update:@1;|drawable_obj;0;pos,;reset_off,|ixx:0;iyy:0;xx:0;yy:0;visible:yes;reset_off:@1;|drawable;0;drawable_obj,;d,|d:nf;|drawable_1;0;drawable_obj,;d,|drawable_2;0;drawable_obj,;d,|pre_drawable;0;drawable_obj,;d,|pre_drawable_1;0;drawable_obj,;d,|pre_drawable_2;0;drawable_obj,;d,|post_drawable;0;drawable_obj,;d,|post_drawable_1;0;drawable_obj,;d,|post_drawable_2;0;drawable_obj,;d,|above_map_post_camera_drawable;0;drawable_obj,;d,|spr_obj;0;vec,drawable_obj,;|sind:0;outline_color:BG_UI;sw:1;sh:1;xf:no;yf:no;draw_spr:@1;draw_out:@2;draw_both:@3;|spr;0;spr_obj,;|d:@1;|knockable;0;mov,;|knockback:@1;|stunnable;0;mov,drawable_obj;|stun_update:@1;|hurtable;0;act,;|health:1;max_health:1;health_visible:yes;hurt:@1;heal:@2;|trig;0;vec,dim;|contains:nf;intersects:nf;not_contains_or_intersects:nf;contains_or_intersects:@1;trigger_update:@1;|anchored;1;vec,dim;|touchable:@1;hit:nf;|col;0;vec,dim;|touchable:yes;hit:nf;move_check:@1;|dx:0;dy:0|x,dx,@1,@2,@3,@4;y,dy,@1,@2,@5,@6;|tcol;0;vec,dim;|tile_solid:yes;tile_hit:nf;coll_tile:@1;|view;4;act,confined;center_view,update_view|x:0;y:0;room_crop:2;tl_loop:yes;w:@1;h:@2;follow_dim:@3;follow_act:@4;update_view:@5;center_view:@6;change_ma:@7;,;|@1,x,w,ixx;@1,y,h,iyy|lane_jumper;0;pos,|x:4;y:4;lane:1;i:@1;switch_lane:@2;|vehicle;0;drawable,spr,mov,x_bounded,col|x:4;y:4;ix:.96;iy:.92;vehicle_logic:nf;i:@1;u:@2;move_x:@3;move_y:@4;|pl;2;vehicle,|x:@1;y:@2;vehicle_logic:@3;x:4;y:4;sind:39;sh:2;iyy:-4;|truck;2;vehicle,|x:@1;y:@2;rx:1;vehicle_logic:@3;sind:26;sw:2;sh:3;iyy:-8;horizontal_input:0;|intro_truck;0;truck,|x:-5;y:10;check_bounds:nf;vehicle_logic:@1;destroyed:@2;|intro_pl;0;pl,|x:-18;y:10;check_bounds:nf;vehicle_logic:@1;destroyed:@2;|mission_text;3;drawable,timed|text:@1;y:@2;callback:@3;u:@4;d:@5;destroyed:@6;,;u=nf,tl_max_time=.5,;|road_gen;0;act,vec,drawable;update,|x:0;u:@1;d:@2;|i=@3,u=@4,d=@5;|x:1;y:2;w:14;h:16;c:0;|act,clean;act,update;mov,move;vehicle,move_check,@1;vec,vec_update;bounded,check_bounds;|drawable,d;|pre_drawable,d;pre_drawable_1,d;pre_drawable_2,d;|drawable,d;drawable_1,d;drawable_2,d;post_drawable,d;post_drawable_1,d;post_drawable_2,d;|","|")
 g_ztable_cache={}
 function nf()end
 function ztable(original_str,...)
@@ -415,6 +424,9 @@ return a.x+(a.dx+ax)*a.ix,a.y+(a.dy+ay)*a.iy
 end)
 create_parent[[35|36]]
 create_parent([[37|38]],function(a)
+scr_rect(a.x-a.rx,a.y-a.ry,a.x+a.rx,a.y+a.ry,8)
+end)
+create_parent([[39|40]],function(a)
 local a2=a.rel_actor
 if a2 then
 if a2.alive then
@@ -431,27 +443,27 @@ a.alive=false
 end
 end
 end)
-create_parent([[39|40]],function(a)
+create_parent([[41|42]],function(a)
 a.xx,a.yy=0,0
 end)
-create_parent[[41|42]]
-create_parent[[43|42]]
-create_parent[[44|42]]
-create_parent[[45|42]]
-create_parent[[46|42]]
-create_parent[[47|42]]
-create_parent[[48|42]]
-create_parent[[49|42]]
-create_parent[[50|42]]
-create_parent[[51|42]]
-create_parent([[52|53]],scr_spr,scr_out,scr_spr_and_out
+create_parent[[43|44]]
+create_parent[[45|44]]
+create_parent[[46|44]]
+create_parent[[47|44]]
+create_parent[[48|44]]
+create_parent[[49|44]]
+create_parent[[50|44]]
+create_parent[[51|44]]
+create_parent[[52|44]]
+create_parent[[53|44]]
+create_parent([[54|55]],scr_spr,scr_out,scr_spr_and_out
 )
-create_parent([[54|55]],scr_spr_and_out)
-create_parent([[56|57]],function(a,speed,xdir,ydir)
+create_parent([[56|57]],scr_spr_and_out)
+create_parent([[58|59]],function(a,speed,xdir,ydir)
 a.dx=xdir*speed
 a.dy=ydir*speed
 end)
-create_parent([[58|59]],function(a)
+create_parent([[60|61]],function(a)
 if a.stun_countdown>0 then
 a.ay,a.ax=0,0
 a.yy=rnd_one()
@@ -460,7 +472,7 @@ else
 a.outline_color=1
 end
 end)
-create_parent([[60|61]],function(a,damage,stun_val)
+create_parent([[62|63]],function(a,damage,stun_val)
 if a.stun_countdown<=0 then
 a.stun_countdown=stun_val
 a.health=max(0,a.health-damage)
@@ -471,7 +483,7 @@ end
 end,function(a,health)
 a.health=min(a.max_health,a.health+health)
 end)
-create_parent([[62|63]],function(a,b)
+create_parent([[64|65]],function(a,b)
 if does_a_contain_b(a,b)then
 a:contains(b)
 elseif do_actors_intersect(a,b)then
@@ -480,8 +492,8 @@ else
 a:not_contains_or_intersects(b)
 end
 end)
-create_parent[[64|65]]
-create_parent([[66|67]],function(a,acts)
+create_parent[[66|67]]
+create_parent([[68|69]],function(a,acts)
 local hit_list={}
 local move_check=function(dx,dy)
 local ret_val=dx+dy
@@ -503,8 +515,8 @@ foreach(acts,function(b)
 if a!=b and(not a.anchored or not b.anchored)then
 local x,y=abs(a.x+dx-b.x),abs(a.y+dy-b.y)
 if x<a.rx+b.rx and y<a.ry+b.ry then
-hit_list[b]=hit_list[b]or ztable[[68]]
-batch_call_new(col_help,[[69]],a,b,x,dx,y,dy)
+hit_list[b]=hit_list[b]or ztable[[70]]
+batch_call_new(col_help,[[71]],a,b,x,dx,y,dy)
 end
 end
 end)
@@ -515,7 +527,7 @@ for b,d in pairs(hit_list)do
 a:hit(b,d.dx,d.dy)
 end
 end)
-create_parent([[70|71]],function(a,solid_func)
+create_parent([[72|73]],function(a,solid_func)
 local x,dx=coll_tile_help(a.x,a.y,a.dx,a.rx,a.ry,0,a,a.tile_hit,solid_func)
 local y,dy=coll_tile_help(a.y,a.x,a.dy,a.ry,a.rx,2,a,a.tile_hit,function(y,x)return solid_func(x,y)end)
 if a.tile_solid then
@@ -542,6 +554,9 @@ end
 function scr_line(x1,y1,x2,y2,col)
 line(x1*8,y1*8,x2*8,y2*8,col)
 end
+function scr_rect(x1,y1,x2,y2,col)
+rect(x1*8,y1*8,x2*8-1,y2*8-1,col)
+end
 function scr_rectfill(x1,y1,x2,y2,col)
 rectfill(x1*8,y1*8,x2*8,y2*8,col)
 end
@@ -554,12 +569,12 @@ end
 function scr_circ(x,y,r,col)
 circ(round(x*8),round(y*8),r*8,col)
 end
-create_actor([[72|73]],
+create_actor([[74|75]],
 function(a)
 if a.follow_act and not a.follow_act.alive then
 a.follow_act=nil
 end
-batch_call_new(update_view_helper,[[74]],a)
+batch_call_new(update_view_helper,[[76]],a)
 end,function(a)
 if a.follow_act then
 a.x,a.y=a.follow_act.x,a.follow_act.y
@@ -583,7 +598,7 @@ zprint("time: 32.3s",4,119,-1,10,2)
 rectfill(124-64,119,124,124,12)
 rect(124-64,124,124,124,1)
 end
-create_actor([[75|76]],function(a)
+create_actor([[77|78]],function(a)
 a:switch_lane(0)
 end,function(a,lane_dir)
 a.lane=mid(0,a.lane+lane_dir,2)
@@ -591,7 +606,7 @@ a.y=TOP_LANE_Y+a.lane*2
 end,function(a)
 scr_circ(a.x,a.y,.5,8)
 end)
-create_actor([[77|78]],function(a)
+create_actor([[79|80]],function(a)
 a.lane_jumper=_g.lane_jumper()
 end,function(a)
 a:vehicle_logic()
@@ -601,7 +616,7 @@ a.ax=x*.005
 end,function(a,y)
 a.lane_jumper:switch_lane(y)
 end)
-create_actor([[79|80]],function(a)
+create_actor([[81|82]],function(a)
 a:move_x(xbtn())
 a:move_y(ybtnp())
 if a.dx>.05 and a.ax>0 then
@@ -614,7 +629,7 @@ end
 end,function(a)
 scr_circ(a.x,a.y,.5,12)
 end)
-create_actor([[81|82]],function(a)
+create_actor([[83|84]],function(a)
 if flr_rnd(15)==0 then
 a.horizontal_input=flr_rnd(3)-1
 end
@@ -623,17 +638,17 @@ if flr_rnd(30)==0 then
 a:move_y(flr_rnd(3)-1)
 end
 end)
-create_actor([[83|84]],function(a)
+create_actor([[85|86]],function(a)
 a:move_x(a.x<10 and 1 or 0)
 end,function(a)
 _g.truck(a.x,a.y)
 end)
-create_actor([[85|86]],function(a)
+create_actor([[87|88]],function(a)
 a:move_x(a.x<1 and 1 or 0)
 end,function(a)
 _g.pl(a.x,a.y)
 end)
-create_actor([[87|88]],function(a)
+create_actor([[89|90]],function(a)
 a.cur_text=sub(a.text,1,min(#a.text,a.tl_tim*10))
 if #a.cur_text>=#a.text then
 a:next()
@@ -643,7 +658,7 @@ zprint(a.cur_text,4,a.y,-1,11,1)
 end,function(a)
 a.callback()
 end)
-create_actor([[89|90]],function(a)
+create_actor([[91|92]],function(a)
 a.dx=-.14
 end,function(a)
 for y=TOP_LANE_Y,BOT_LANE_Y,2 do
@@ -652,12 +667,13 @@ zspr(96,((a.x+x*2)%18)*8-8,y*8,2,2)
 end
 end
 end)
+g_debug=false
 g_card_fade=8
 poke(0x5f5c,15)
 poke(0x5f5d,15)
 function _init()
 music(0,3000)
-g_tl=ztable([[91]],logo_draw,function()sfx"63" end,
+g_tl=ztable([[93]],logo_draw,function()sfx"63" end,
 game_init,game_update,game_draw
 )
 end
@@ -670,16 +686,17 @@ g_intro_pl:kill()
 g_intro_truck:kill()
 end)
 _g.road_gen()
-g_cur_room=ztable[[92]]
+g_cur_room=ztable[[94]]
 end
 function game_update(a)
-batch_call_new(acts_loop,[[93]])
+batch_call_new(acts_loop,[[95]],g_act_arrs["col"])
 end
 function game_draw(a)
 fade(g_card_fade)
 draw_blueprint()
 isorty(g_act_arrs.drawable)
-batch_call_new(acts_loop,[[94]])
+batch_call_new(acts_loop,[[96]])
+if g_debug then acts_loop("dim","debug_rect")end
 end
 function logo_draw(a)
 local logo_opacity=8+cos(a.tl_tim/a.tl_max_time)*4-4
@@ -690,11 +707,18 @@ fade"0"
 camera()
 end
 function _update60()
+if g_debug then poke(0x5f42,15)
+else poke(0x5f42,0)
+end
+if btnp"5"and btn"4"then g_debug=not g_debug end
 tl_node(g_tl)
 end
 function _draw()
 cls()
 call_not_nil(g_tl,"d",g_tl)
+if g_debug then
+rect(0,0,127,127,8)
+end
 end
 function shiftx(view)
 return(view.x-view.off_x-8)*8
@@ -716,9 +740,10 @@ local y1,y2=ry*8+4,(ry+view.h)*8-5
 camera_to_view(view)
 zclip(x1,y1,x2,y2)
 zcls(g_cur_room.c)
-batch_call_new(acts_loop,[[95]])
+batch_call_new(acts_loop,[[97]])
 isorty(g_act_arrs.drawable)
-batch_call_new(acts_loop,[[96]])
+batch_call_new(acts_loop,[[98]])
+if g_debug then acts_loop("dim","debug_rect")end
 clip()
 camera()
 end
