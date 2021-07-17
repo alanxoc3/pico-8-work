@@ -11,7 +11,7 @@ end, function(a)
     scr_circ(a.x, a.y, .5, 8)
 end)
 
-create_actor([[vehicle;0;drawable,spr,mov,x_bounded|
+create_actor([[vehicle;0;drawable,spr,mov,x_bounded,col|
     x:4; y:4;
     ix:.96; iy:.92;
     vehicle_logic:nf;
@@ -50,6 +50,7 @@ end)
 
 create_actor([[truck;2;vehicle,|
     x:@1; y:@2;
+    rx:1;
     vehicle_logic:@3;
 
     sind:26; sw:2; sh:3; iyy:-8;
