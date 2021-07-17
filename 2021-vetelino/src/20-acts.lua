@@ -1,4 +1,4 @@
-create_actor([[lane_jumper;0;pos,|
+create_actor([[lane_jumper;0;pos,confined|
     x:4; y:4;
     lane: 1; -- [0, 1, or 2]
     i:@1; switch_lane:@2;
@@ -11,7 +11,7 @@ end, function(a)
     scr_circ(a.x, a.y, .5, 8)
 end)
 
-create_actor([[vehicle;0;drawable,spr,mov,x_bounded,col,anim|
+create_actor([[vehicle;0;drawable,spr,mov,x_bounded,col,anim,hurtable,confined|
     x:4; y:4;
     ix:.96; iy:.92;
     vehicle_logic:nf;
@@ -29,13 +29,14 @@ end)
 
 create_actor([[pl;2;vehicle,|
     x:@1; y:@2;
-    vehicle_logic:@3; anim_update:@4;
+    vehicle_logic:@3; anim_update:@4; destroyed:@5;
 
     x:4; y:4;
     sind:34; sh:2; iyy:-4;
 ]], function(a)
     a:move_x(xbtn())
     a:move_y(ybtnp())
+    a:anim_update()
 end, function(a)
     local toggle = a.tl_tim % .5 < .25
 
@@ -46,9 +47,12 @@ end, function(a)
     else
         a.sind = toggle and 34 or 35
     end
+end, function(a)
+    g_pl = nil
+    _g.fader_out(1,nf,reset_level)
 end)
 
-create_actor([[truck;2;vehicle,hurtable|
+create_actor([[truck;2;vehicle,|
     x:@1; y:@2;
     rx:1;
     vehicle_logic:@3;
@@ -86,11 +90,12 @@ create_actor([[intro_pl;0;pl,|
     destroyed:@2;
 ]], function(a)
     a:move_x(a.x < 1 and 1 or 0)
+    a:anim_update()
 end, function(a)
     g_pl = _g.pl(a.x, a.y)
 end)
 
-create_actor([[mission_text;3;drawable,vec,timed|
+create_actor([[mission_text;3;drawable,vec,timed, confined|
     text:@1; y:@2; callback:@3;
     u:@4; d:@5;
     destroyed:@6;

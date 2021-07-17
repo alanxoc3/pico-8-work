@@ -19,7 +19,17 @@ function _init()
     )
 end
 
-function game_init(a)
+function reset_level()
+    batch_call_new(acts_loop, [[
+        confined,room_end;
+        confined,delete
+    ]])
+    printh("RESET")
+
+    game_init()
+end
+
+function game_init()
     _g.fader_in(.5, nf, nf)
     g_intro_pl = _g.intro_pl()
     g_intro_truck = _g.intro_truck()
@@ -33,19 +43,20 @@ function game_init(a)
     g_cur_room = ztable[[x:1;y:2;w:14;h:16;c:0;]]
 end
 
-function game_update(a)
+function game_update()
     batch_call_new(acts_loop, [[
-        act, clean;
         act, update;
         mov, move;
         vehicle,move_check,@1;
+        popsicle,move_check,@2;
         vec, vec_update;
         bounded, check_bounds;
-        anim, anim_update;
-    ]], g_act_arrs['col'])
+        timed, tick;
+        act, clean;
+    ]], g_act_arrs['col'], g_act_arrs['vehicle'])
 end
 
-function game_draw(a)
+function game_draw()
     fade(g_card_fade)
 
     draw_blueprint()
@@ -59,6 +70,7 @@ function game_draw(a)
     isorty(g_act_arrs.drawable)
     batch_call_new(acts_loop, [[
         drawable, d;
+        post_drawable, d;
     ]])
 
     -- DEBUG_BEGIN
