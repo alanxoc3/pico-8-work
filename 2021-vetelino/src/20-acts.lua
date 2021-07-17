@@ -48,10 +48,12 @@ end, function(a)
     end
 end)
 
-create_actor([[truck;2;vehicle,|
+create_actor([[truck;2;vehicle,hurtable|
     x:@1; y:@2;
     rx:1;
     vehicle_logic:@3;
+    health:119;
+    max_health:119;
 
     sind:26; sw:2; sh:3; iyy:-8;
     horizontal_input:0;
@@ -74,7 +76,7 @@ create_actor([[intro_truck;0;truck,|
 ]], function(a)
     a:move_x(a.x < 10 and 1 or 0)
 end, function(a)
-    _g.truck(a.x, a.y)
+    g_truck = _g.truck(a.x, a.y)
 end)
 
 create_actor([[intro_pl;0;pl,|
@@ -85,16 +87,17 @@ create_actor([[intro_pl;0;pl,|
 ]], function(a)
     a:move_x(a.x < 1 and 1 or 0)
 end, function(a)
-    _g.pl(a.x, a.y)
+    g_pl = _g.pl(a.x, a.y)
 end)
 
-create_actor([[mission_text;3;drawable,timed|
+create_actor([[mission_text;3;drawable,vec,timed|
     text:@1; y:@2; callback:@3;
     u:@4; d:@5;
     destroyed:@6;
 
     ,;
-    u=nf, tl_max_time=.5,;
+    u=nf, tl_max_time=.5;
+    dy=-1, u=nf, tl_max_time=.5;
 ]], function(a)
     a.cur_text = sub(a.text, 1, min(#a.text, a.tl_tim*10))
     if #a.cur_text >= #a.text then

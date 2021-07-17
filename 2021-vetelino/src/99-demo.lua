@@ -50,6 +50,12 @@ function game_draw(a)
 
     draw_blueprint()
 
+    if not g_truck then
+        draw_health_bar(1, 1)
+    else
+        draw_health_bar(g_truck.health, g_truck.max_health)
+    end
+
     isorty(g_act_arrs.drawable)
     batch_call_new(acts_loop, [[
         drawable, d;
