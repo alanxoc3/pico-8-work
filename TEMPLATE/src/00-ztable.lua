@@ -1,5 +1,11 @@
--- ztable and dependencies.
-g_gunvals = split(g_gunvals_raw, "|")
+-- DEBUG_BEGIN
+-- printh("ZTABLE_STRINGS")
+-- DEBUG_END
+
+-- DEV_MODE_BEGIN
+-- Perl preprocessor replaces the constant below.
+g_gunvals = split("ZTABLE_STRINGS", "|")
+-- DEV_MODE_END
 
 g_ztable_cache = {}
 function nf() end
