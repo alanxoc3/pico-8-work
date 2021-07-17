@@ -635,7 +635,6 @@ else
 a.sind=toggle and 34 or 35
 end
 end,function(a)
-g_pl=nil
 _g.fader_out(1,nf,reset_level)
 end)
 create_actor([[84|85]],function(a)
@@ -734,6 +733,10 @@ end
 function reset_level()
 batch_call_new(acts_loop,[[99]])
 printh("RESET")
+g_pl=nil
+g_truck=nil
+g_intro_pl=nil
+g_intro_truck=nil
 game_init()
 end
 function game_init()

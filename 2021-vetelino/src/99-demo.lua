@@ -25,6 +25,10 @@ function reset_level()
         confined,delete
     ]])
     printh("RESET")
+    g_pl = nil
+    g_truck = nil
+    g_intro_pl = nil
+    g_intro_truck = nil
 
     game_init()
 end
