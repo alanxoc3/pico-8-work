@@ -4,8 +4,8 @@ BOT_LANE_Y = 12
 
 function draw_blueprint()
     rect(0, 0, 127, 127, 2)
-    zprint("codename: pendae", 4, 4, -1, 11, 1)
-    zprint("objective: steal the ice cream", 4, 12, -1, 11, 1)
+    -- zprint("codename: pendae", 4, 4, -1, 11, 1)
+    --zprint("objective: steal the ice cream", 4, 12, -1, 11, 1)
 
     rect(0, TOP_LANE_Y*8-8, 127, TOP_LANE_Y*8+7, 8)
     rect(0, MID_LANE_Y*8-8, 127, MID_LANE_Y*8+7, 8)
