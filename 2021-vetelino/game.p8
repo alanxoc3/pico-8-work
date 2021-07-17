@@ -1,13 +1,13 @@
 pico-8 cartridge // http://www.pico-8.com
 version 32
 __lua__
--- cat game
+-- pendae
 -- amorg
 
 -- unobfuscated code at:
 -- git.io/amorg-pico8
 
-#include code.lua
+#include .code.lua
 
 __gfx__
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000009400000000000000000000
