@@ -48,7 +48,6 @@ end, function(a)
         a.sind = toggle and 34 or 35
     end
 end, function(a)
-    g_pl = nil
     _g.fader_out(1,nf,reset_level)
 end)
 
