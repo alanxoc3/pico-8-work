@@ -11,7 +11,7 @@ end, function(a)
     scr_circ(a.x, a.y, .5, 8)
 end)
 
-create_actor([[vehicle;0;drawable,spr,mov,x_bounded,col|
+create_actor([[vehicle;0;drawable,spr,mov,x_bounded,col,anim|
     x:4; y:4;
     ix:.96; iy:.92;
     vehicle_logic:nf;
@@ -29,23 +29,23 @@ end)
 
 create_actor([[pl;2;vehicle,|
     x:@1; y:@2;
-    vehicle_logic:@3;
+    vehicle_logic:@3; anim_update:@4;
 
     x:4; y:4;
-    sind:39; sh:2; iyy:-4;
+    sind:34; sh:2; iyy:-4;
 ]], function(a)
     a:move_x(xbtn())
     a:move_y(ybtnp())
+end, function(a)
+    local toggle = a.tl_tim % .5 < .25
 
     if a.dx > .05 and a.ax > 0 then
-        a.sind = 38
+        a.sind = toggle and 36 or 37
     elseif a.dx < -.05 and a.ax < 0 then
-        a.sind = 37
+        a.sind = toggle and 32 or 33
     else
-        a.sind = 39
+        a.sind = toggle and 34 or 35
     end
-end, function(a)
-    scr_circ(a.x, a.y, .5, 12)
 end)
 
 create_actor([[truck;2;vehicle,|

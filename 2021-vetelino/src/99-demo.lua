@@ -41,6 +41,7 @@ function game_update(a)
         vehicle,move_check,@1;
         vec, vec_update;
         bounded, check_bounds;
+        anim, anim_update;
     ]], g_act_arrs['col'])
 end
 

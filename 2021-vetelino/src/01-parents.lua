@@ -45,7 +45,6 @@ create_parent[[loopable;0;act,;|tl_loop:yes;]]
 create_parent[[pos;0;act,;|x:0;y:0;]]
 create_parent[[move_pause;0;act,;update,move,vec_update,tick|;]]
 create_parent[[knock;0;col,;|;]]
-create_parent[[popper;0;col,;|;]]
 create_parent[[bad;0;knock,;|;]]
 
 create_parent[[bounded;0;act,;|
@@ -191,6 +190,8 @@ create_parent([[spr_obj;0;vec,drawable_obj,;|
    draw_both:@3;
 ]], scr_spr, scr_out, scr_spr_and_out
 )
+
+create_parent[[anim;0;spr_obj,|anim_update:nf;]]
 
 create_parent([[spr;0;spr_obj,;|
    d:@1;
