@@ -12,6 +12,12 @@ function draw_blueprint()
     rect(0, BOT_LANE_Y*8-8, 127, BOT_LANE_Y*8+7, 8)
 
     zprint("time: 32.3s", 4, 119, -1, 10, 2)
-    rectfill(124-64, 119, 124, 124, 12)
-    rect(124-64, 124, 124, 124, 1)
+end
+
+function draw_health_bar(health, max_health)
+    local health_drawn = health/max_health * 119
+    if health_drawn > 0 then
+        rectfill(4, 119, 4 + health_drawn, 124, 12)
+        rect(4, 124, 4 + health_drawn, 124, 1)
+    end
 end
