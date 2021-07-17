@@ -1,14 +1,1 @@
-# pico8 git ignore
-*.swp
-*.swo
-out*.p8
-
-*.p8.png
-*.p8l
-
-*.bin
-./*.p8.png
-sheet.png
-
-.dropbox
-
+build/
