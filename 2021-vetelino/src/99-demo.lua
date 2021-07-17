@@ -22,6 +22,9 @@ end
 function game_init(a)
     _g.fader_in(.5, nf, nf)
     _g.pl()
+    _g.truck()
+    _g.road_gen()
+    g_cur_room = ztable[[x:2;y:2;w:12;h:16;c:0;]]
 end
 
 function game_update(a)
@@ -30,6 +33,7 @@ function game_update(a)
         act, update;
         mov, move;
         vec, vec_update;
+        bounded, check_bounds;
     ]])
 end
 
