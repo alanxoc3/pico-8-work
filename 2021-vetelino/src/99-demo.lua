@@ -12,7 +12,7 @@ poke(0x5f5d, 15) -- set the repeating delay.
 function _init()
     music(0, 3000)
     g_tl = ztable([[
-        x=64, y=64, i=@2, u=nf, d=@1, tl_max_time=2.5; -- logo
+        -- x=64, y=64, i=@2, u=nf, d=@1, tl_max_time=2.5; -- logo
         i=@3, u=@4, d=@5;  -- game
     ]], logo_draw, function() sfx'63' end,
     game_init, game_update, game_draw
@@ -24,11 +24,16 @@ function game_init(a)
 end
 
 function game_update(a)
-    batch_call_new(acts_loop, [[act, clean]])
+    batch_call_new(acts_loop, [[
+        act, clean;
+        act, update
+    ]])
 end
 
 function game_draw(a)
     fade(g_card_fade)
+
+    draw_blueprint()
 end
 
 function logo_draw(a)
