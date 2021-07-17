@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-files_in_order=$(ls src/*.lua)
-
-echo "* Creating code.lua ..."
-cat $files_in_order | ./minify "$@" > code.lua

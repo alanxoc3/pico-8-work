@@ -1,5 +1,3 @@
-#!/usr/bin/perl -I../minifier/
-
 use strict;
 use warnings;
 use experimental 'smartmatch';
@@ -17,7 +15,7 @@ GetOptions('minifiable' => \$minifiable,
            'debug' => \$debug_mode,
 ) or die "Usage: $0 [--prod] [--minifiable] [--debug] [--input=file] [--output=file]\n";
 
-# Constants specific to Zeldo.
+# Constants for game.
 my %constants;
 
 # Go through the actual minifying.

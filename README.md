@@ -3,5 +3,7 @@ For all the pico-eighters out there, this repo contains [@alanxoc3](https://twit
 
 The directory structure is as follows:
 * `/TEMPLATE` My build system.
-* `/minifier` My lua preprocessor library.
+* `/bin` My shell scripts for building pico-8 projects.
 * `/.archive` An incomplete collection of cartridge files I made.
+
+To ensure the executable scripts run correctly, set the environment variable `PICO_WORK_DIR` to the root of this repo.
