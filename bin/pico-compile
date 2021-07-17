@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
 files_in_order=$(ls ./src/*.lua)
-cat $files_in_order | $PICO_WORK_DIR/bin/pico-minify "$@" > code.lua
+cat $files_in_order | $PICO_WORK_DIR/bin/pico-minify "$@" > .code.lua
