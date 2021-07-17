@@ -21,8 +21,14 @@ end
 
 function game_init(a)
     _g.fader_in(.5, nf, nf)
-    _g.pl()
-    _g.truck()
+    g_intro_pl = _g.intro_pl()
+    g_intro_truck = _g.intro_truck()
+
+    _g.mission_text("\^y8codename: pendae\nobjective: eat ice cream", 4, function()
+        g_intro_pl:kill()
+        g_intro_truck:kill()
+    end)
+
     _g.road_gen()
     g_cur_room = ztable[[x:1;y:2;w:14;h:16;c:0;]]
 end
