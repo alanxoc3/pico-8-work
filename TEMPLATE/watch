@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-# pico watch, by Alan Morgan
 
 echo "** Using argument '$1'."
 

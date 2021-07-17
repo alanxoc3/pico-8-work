@@ -3,6 +3,32 @@ function zspr(sind, x, y, sw, sh, ...)
    spr(sind, x-sw*4, y-sh*4, sw, sh, ...)
 end
 
+function zprint(str, x, y, align, fg, bg)
+   if align == 0    then x -= #str*2
+   elseif align > 0 then x -= #str*4+1 end
+
+   batch_call_new(print, [[
+      @1,@2,!plus/@3/1,@5;
+      @1,@2,@3,@4;
+   ]], str, x, y, fg, bg)
+end
+
+function zclip(x1, y1, x2, y2)
+   clip(x1, y1, x2+1-flr(x1), y2+1-flr(y1))
+end
+
+function zcls(col)
+   batch_call_new(rectfill, [[0x8000,0x8000,0x7fff,0x7fff,@1]], col or 0)
+end
+
+function zrect(x1, y1, x2, y2)
+   batch_call_new(rect,
+   [[ !plus/@1/-2, !plus/@2/-2, !plus/@3/2, !plus/@4/2, 13;
+      !plus/@1/-1, !plus/@2/-1, !plus/@3/1, !plus/@4/1, 1;
+   ]], x1, y1, x2, y2)
+end
+
+
 function scr_spr(a, spr_func, ...)
    if a and a.visible then
       (spr_func or zspr)(a.sind, a.x*8+a.ixx+a.xx, a.y*8+a.iyy+a.yy, a.sw, a.sh, a.xf, a.yf, ...)
@@ -14,13 +40,6 @@ function scr_spr_out(a) scr_spr(a, spr_out, a.outline_color) end
 function scr_spr_and_out(...)
    foreach({...}, scr_spr_out)
    foreach({...}, scr_spr)
-end
-
-function zrect(x1, y1, x2, y2)
-   batch_call_new(rect,
-   [[ !plus/@1/-2, !plus/@2/-2, !plus/@3/2, !plus/@4/2, 13;
-      !plus/@1/-1, !plus/@2/-1, !plus/@3/1, !plus/@4/1, 1;
-   ]], x1, y1, x2, y2)
 end
 
 function outline_helper(flip, coord, dim)
@@ -56,24 +75,6 @@ function tprint(str, x, y, c1, c2)
       end
    end
    zprint(str, x, y, 0, c1, c2)
-end
-
-function zprint(str, x, y, align, fg, bg)
-   if align == 0    then x -= #str*2
-   elseif align > 0 then x -= #str*4+1 end
-
-   batch_call_new(print, [[
-      @1,@2,!plus/@3/1,@5;
-      @1,@2,@3,@4;
-   ]], str, x, y, fg, bg)
-end
-
-function zclip(x1, y1, x2, y2)
-   clip(x1, y1, x2+1-flr(x1), y2+1-flr(y1))
-end
-
-function zcls(col)
-   batch_call_new(rectfill, [[0x8000,0x8000,0x7fff,0x7fff,@1]], col or 0)
 end
 
 -- fading

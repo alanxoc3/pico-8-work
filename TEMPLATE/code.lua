@@ -1,4 +1,43 @@
-g_gunvals_raw="|!plus/@1/-2,!plus/@2/-2,!plus/@3/2,!plus/@4/2,13;!plus/@1/-1,!plus/@2/-1,!plus/@3/1,!plus/@4/1,1;|@1,@2,!plus/@3/1,@5;@1,@2,@3,@4;|0x8000,0x8000,0x7fff,0x7fff,@1|0,0,0,0,0,0,0;1,1,1,0,0,0,0;2,2,2,1,0,0,0;3,3,3,1,0,0,0;4,2,2,2,1,0,0;5,5,1,1,1,0,0;6,13,13,5,5,1,0;7,6,13,13,5,1,0;8,8,2,2,2,0,0;9,4,4,4,5,0,0;10,9,4,4,5,5,0;11,3,3,3,3,0,0;12,12,3,1,1,1,0;13,5,5,1,1,1,0;14,13,4,2,2,1,0;15,13,13,5,5,1,0;|fader_out;3;act,;update,|fade_time:@1;i:@2;e:@3;u:@4;tl_max_time=@1,|fader_in;3;act,;update,|act;0;,;room_init,pause_init,pause_update,pause_end,kill,clean,delete|alive:yes;stun_countdown:0;i:nf;u:nf;update:@1;clean:@2;kill:@3;delete:@4;room_init:nf;create_init:nf;pause_init:nf;pause_update:nf;pause_end:nf;destroyed:nf;get:@5;|ma_able;0;act,;|name:thing;|confined;0;act,;room_end,|room_end:nf;|loopable;0;act,;|tl_loop:yes;|pos;0;act,;|x:0;y:0;|move_pause;0;act,;update,move,vec_update,tick|;|knock;0;col,;|popper;0;col,;|bad;0;knock,;|bounded;0;act,;|check_bounds:nf;|x_bounded;0;bounded,;|check_bounds:@1;|y_bounded;0;bounded,;|timed;0;act,;|t:0;tick:@1;|vec;0;pos,;|dx:0;dy:0;vec_update:@1;|mov;0;vec,;|ix:1;iy:1;ax:0;ay:0;move:@1;stop:@2;|dim;0;pos,;|rx:.375;ry:.375;|rel;0;act,;rel_update,|rel_actor:null;rel_x:0;rel_y:0;rel_dx:0;rel_dy:0;flippable:no;rel_update:@1;|drawable_obj;0;pos,;reset_off,|ixx:0;iyy:0;xx:0;yy:0;visible:yes;reset_off:@1;|drawable;0;drawable_obj,;d,|d:nf;|drawable_1;0;drawable_obj,;d,|drawable_2;0;drawable_obj,;d,|pre_drawable;0;drawable_obj,;d,|pre_drawable_1;0;drawable_obj,;d,|pre_drawable_2;0;drawable_obj,;d,|post_drawable;0;drawable_obj,;d,|post_drawable_1;0;drawable_obj,;d,|post_drawable_2;0;drawable_obj,;d,|above_map_post_camera_drawable;0;drawable_obj,;d,|spr_obj;0;vec,drawable_obj,;|sind:0;outline_color:BG_UI;sw:1;sh:1;xf:no;yf:no;draw_spr:@1;draw_out:@2;draw_both:@3;|spr;0;spr_obj,;|d:@1;|knockable;0;mov,;|knockback:@1;|stunnable;0;mov,drawable_obj;|stun_update:@1;|hurtable;0;act,;|health:1;max_health:1;health_visible:yes;hurt:@1;heal:@2;|trig;0;vec,dim;|contains:nf;intersects:nf;not_contains_or_intersects:nf;contains_or_intersects:@1;trigger_update:@1;|anchored;1;vec,dim;|touchable:@1;hit:nf;|col;0;vec,dim;|touchable:yes;hit:nf;move_check:@1;|dx:0;dy:0|x,dx,@1,@2,@3,@4;y,dy,@1,@2,@5,@6;|tcol;0;vec,dim;|tile_solid:yes;tile_hit:nf;coll_tile:@1;|view;4;act,confined;center_view,update_view|x:0;y:0;room_crop:2;tl_loop:yes;w:@1;h:@2;follow_dim:@3;follow_act:@4;update_view:@5;center_view:@6;change_ma:@7;,;|@1,x,w,ixx;@1,y,h,iyy|x=64,y=64,i=@2,u=nf,d=@1,tl_max_time=2.5;i=@3,u=@4,d=@5;|act,clean|pre_drawable,d;pre_drawable_1,d;pre_drawable_2,d;|drawable,d;drawable_1,d;drawable_2,d;post_drawable,d;post_drawable_1,d;post_drawable_2,d;|"
+g_act_arrs={}
+function create_parent_actor_shared(is_create_parent,meta_and_att_str,...)
+local meta,template=unpack(split(meta_and_att_str,"|"))
+local template_params,id,provided,parents,pause_funcs={...},unpack(ztable(meta))
+_g[id]=function(...)
+local func_params,params,a={...},tabcpy(template_params),{}
+if is_create_parent then
+a=deli(func_params,1)
+end
+for i=1,provided do
+add(params,func_params[i]or false,i)
+end
+if not a[id]then
+foreach(parents,function(par)
+if type(par)~="table"then
+par={par}
+end
+a=_g[par[1]](a,unpack(par,2))
+end)
+tabcpy(ztable(template,unpack(params)),a)
+if not a[id]then
+g_act_arrs[id]=g_act_arrs[id]or{}
+add(g_act_arrs[id],a)
+end
+a.id,a[id],a.pause=id,true,a.pause or{}
+foreach(pause_funcs,function(f)
+a.pause[f]=true
+end)
+end
+call_not_nil(a,"create_init",a)
+return a
+end
+end
+function create_parent(...)create_parent_actor_shared(true,...)end
+function create_actor(...)create_parent_actor_shared(false,...)end
+function acts_loop(id,func_name,...)
+for a in all(g_act_arrs[id])do
+call_not_nil(a,func_name,a,...)
+end
+end
 _g={}
 function zsfx(num,sub_num)
 sfx(num,-1,sub_num*4,4)
@@ -94,7 +133,47 @@ end
 end
 end
 end
-g_gunvals=split(g_gunvals_raw,"|")
+function amov_to_actor(a1,a2,spd,off_x,off_y)
+off_x=off_x or 0
+off_y=off_y or 0
+if a1 and a2 then
+amov_to_point(a1,spd,a2.x+off_x,a2.y+off_y)
+end
+end
+function amov_to_point(a,spd,x,y)
+local ang=atan2(x-a.x,y-a.y)
+a.ax,a.ay=spd*cos(ang),spd*sin(ang)
+end
+function do_actors_intersect(a,b)
+return a and b
+and abs(a.x-b.x)<a.rx+b.rx
+and abs(a.y-b.y)<a.ry+b.ry
+end
+function does_a_contain_b(a,b)
+return a and b
+and b.x-b.rx>=a.x-a.rx
+and b.x+b.rx<=a.x+a.rx
+and b.y-b.ry>=a.y-a.ry
+and b.y+b.ry<=a.y+a.ry
+end
+function coll_tile_help(pos,per,spd,pos_rad,per_rad,dir,a,hit_func,solid_func)
+local coll_tile_bounds=function(pos,rad)
+return flr(pos-rad),-flr(-(pos+rad))-1
+end
+local pos_min,pos_max=coll_tile_bounds(pos+spd,pos_rad)
+local per_min,per_max=coll_tile_bounds(per,per_rad)
+for j=per_min,per_max do
+if spd<0 and solid_func(pos_min,j)then
+hit_func(a,dir)
+return pos_min+pos_rad+1,0
+elseif spd>0 and solid_func(pos_max,j)then
+hit_func(a,dir+1)
+return pos_max-pos_rad,0
+end
+end
+return pos,spd
+end
+g_gunvals=split("@1,@2,!plus/@3/1,@5;@1,@2,@3,@4;|0x8000,0x8000,0x7fff,0x7fff,@1|!plus/@1/-2,!plus/@2/-2,!plus/@3/2,!plus/@4/2,13;!plus/@1/-1,!plus/@2/-1,!plus/@3/1,!plus/@4/1,1;|0,0,0,0,0,0,0;1,1,1,0,0,0,0;2,2,2,1,0,0,0;3,3,3,1,0,0,0;4,2,2,2,1,0,0;5,5,1,1,1,0,0;6,13,13,5,5,1,0;7,6,13,13,5,1,0;8,8,2,2,2,0,0;9,4,4,4,5,0,0;10,9,4,4,5,5,0;11,3,3,3,3,0,0;12,12,3,1,1,1,0;13,5,5,1,1,1,0;14,13,4,2,2,1,0;15,13,13,5,5,1,0;|fader_out;3;act,;update,|fade_time:@1;i:@2;e:@3;u:@4;tl_max_time=@1,|fader_in;3;act,;update,|act;0;,;room_init,pause_init,pause_update,pause_end,kill,clean,delete|alive:yes;stun_countdown:0;i:nf;u:nf;update:@1;clean:@2;kill:@3;delete:@4;room_init:nf;create_init:nf;pause_init:nf;pause_update:nf;pause_end:nf;destroyed:nf;get:@5;|ma_able;0;act,;|name:thing;|confined;0;act,;room_end,|room_end:nf;|loopable;0;act,;|tl_loop:yes;|pos;0;act,;|x:0;y:0;|move_pause;0;act,;update,move,vec_update,tick|;|knock;0;col,;|popper;0;col,;|bad;0;knock,;|bounded;0;act,;|check_bounds:nf;|x_bounded;0;bounded,;|check_bounds:@1;|y_bounded;0;bounded,;|timed;0;act,;|t:0;tick:@1;|vec;0;pos,;|dx:0;dy:0;vec_update:@1;|mov;0;vec,;|ix:1;iy:1;ax:0;ay:0;move:@1;stop:@2;|dim;0;pos,;|rx:.375;ry:.375;|rel;0;act,;rel_update,|rel_actor:null;rel_x:0;rel_y:0;rel_dx:0;rel_dy:0;flippable:no;rel_update:@1;|drawable_obj;0;pos,;reset_off,|ixx:0;iyy:0;xx:0;yy:0;visible:yes;reset_off:@1;|drawable;0;drawable_obj,;d,|d:nf;|drawable_1;0;drawable_obj,;d,|drawable_2;0;drawable_obj,;d,|pre_drawable;0;drawable_obj,;d,|pre_drawable_1;0;drawable_obj,;d,|pre_drawable_2;0;drawable_obj,;d,|post_drawable;0;drawable_obj,;d,|post_drawable_1;0;drawable_obj,;d,|post_drawable_2;0;drawable_obj,;d,|above_map_post_camera_drawable;0;drawable_obj,;d,|spr_obj;0;vec,drawable_obj,;|sind:0;outline_color:BG_UI;sw:1;sh:1;xf:no;yf:no;draw_spr:@1;draw_out:@2;draw_both:@3;|spr;0;spr_obj,;|d:@1;|knockable;0;mov,;|knockback:@1;|stunnable;0;mov,drawable_obj;|stun_update:@1;|hurtable;0;act,;|health:1;max_health:1;health_visible:yes;hurt:@1;heal:@2;|trig;0;vec,dim;|contains:nf;intersects:nf;not_contains_or_intersects:nf;contains_or_intersects:@1;trigger_update:@1;|anchored;1;vec,dim;|touchable:@1;hit:nf;|col;0;vec,dim;|touchable:yes;hit:nf;move_check:@1;|dx:0;dy:0|x,dx,@1,@2,@3,@4;y,dy,@1,@2,@5,@6;|tcol;0;vec,dim;|tile_solid:yes;tile_hit:nf;coll_tile:@1;|view;4;act,confined;center_view,update_view|x:0;y:0;room_crop:2;tl_loop:yes;w:@1;h:@2;follow_dim:@3;follow_act:@4;update_view:@5;center_view:@6;change_ma:@7;,;|@1,x,w,ixx;@1,y,h,iyy|x=64,y=64,i=@2,u=nf,d=@1,tl_max_time=2.5;i=@3,u=@4,d=@5;|act,clean|pre_drawable,d;pre_drawable_1,d;pre_drawable_2,d;|drawable,d;drawable_1,d;drawable_2,d;post_drawable,d;post_drawable_1,d;post_drawable_2,d;|","|")
 g_ztable_cache={}
 function nf()end
 function ztable(original_str,...)
@@ -185,50 +264,24 @@ t.is_tabcpy_disabled=true
 end
 return t
 end
-g_act_arrs={}
-function create_parent_actor_shared(is_create_parent,meta_and_att_str,...)
-local meta,template=unpack(split(meta_and_att_str,"|"))
-local template_params,id,provided,parents,pause_funcs={...},unpack(ztable(meta))
-_g[id]=function(...)
-local func_params,params,a={...},tabcpy(template_params),{}
-if is_create_parent then
-a=deli(func_params,1)
-end
-for i=1,provided do
-add(params,func_params[i]or false,i)
-end
-if not a[id]then
-foreach(parents,function(par)
-if type(par)~="table"then
-par={par}
-end
-a=_g[par[1]](a,unpack(par,2))
-end)
-tabcpy(ztable(template,unpack(params)),a)
-if not a[id]then
-g_act_arrs[id]=g_act_arrs[id]or{}
-add(g_act_arrs[id],a)
-end
-a.id,a[id],a.pause=id,true,a.pause or{}
-foreach(pause_funcs,function(f)
-a.pause[f]=true
-end)
-end
-call_not_nil(a,"create_init",a)
-return a
-end
-end
-function create_parent(...)create_parent_actor_shared(true,...)end
-function create_actor(...)create_parent_actor_shared(false,...)end
-function acts_loop(id,func_name,...)
-for a in all(g_act_arrs[id])do
-call_not_nil(a,func_name,a,...)
-end
-end
-g_out_cache=ztable[[1]]
 function zspr(sind,x,y,sw,sh,...)
 sw,sh=sw or 1,sh or 1
 spr(sind,x-sw*4,y-sh*4,sw,sh,...)
+end
+function zprint(str,x,y,align,fg,bg)
+if align==0 then x-=#str*2
+elseif align>0 then x-=#str*4+1 end
+batch_call_new(print,[[1]],str,x,y,fg,bg)
+end
+function zclip(x1,y1,x2,y2)
+clip(x1,y1,x2+1-flr(x1),y2+1-flr(y1))
+end
+function zcls(col)
+batch_call_new(rectfill,[[2]],col or 0)
+end
+function zrect(x1,y1,x2,y2)
+batch_call_new(rect,
+[[3]],x1,y1,x2,y2)
 end
 function scr_spr(a,spr_func,...)
 if a and a.visible then
@@ -239,10 +292,6 @@ function scr_spr_out(a)scr_spr(a,spr_out,a.outline_color)end
 function scr_spr_and_out(...)
 foreach({...},scr_spr_out)
 foreach({...},scr_spr)
-end
-function zrect(x1,y1,x2,y2)
-batch_call_new(rect,
-[[2]],x1,y1,x2,y2)
 end
 function outline_helper(flip,coord,dim)
 coord=coord-dim*4
@@ -275,70 +324,19 @@ end
 end
 zprint(str,x,y,0,c1,c2)
 end
-function zprint(str,x,y,align,fg,bg)
-if align==0 then x-=#str*2
-elseif align>0 then x-=#str*4+1 end
-batch_call_new(print,[[3]],str,x,y,fg,bg)
-end
-function zclip(x1,y1,x2,y2)
-clip(x1,y1,x2+1-flr(x1),y2+1-flr(y1))
-end
-function zcls(col)
-batch_call_new(rectfill,[[4]],col or 0)
-end
-g_fadetable=ztable[[5]]
+g_fadetable=ztable[[4]]
 function fade(i)
 for c=0,15 do
 pal(c,g_fadetable[c+1][min(flr(i+1),7)])
 end
 end
-create_actor([[6|7]],function(a)
+create_actor([[5|6]],function(a)
 g_card_fade=max(a.tl_tim/a.tl_max_time*10,g_card_fade)
 end)
-create_actor([[8|7]],function(a)
+create_actor([[7|6]],function(a)
 g_card_fade=min((a.tl_max_time-a.tl_tim)/a.tl_max_time*10,g_card_fade)
 end)
-function amov_to_actor(a1,a2,spd,off_x,off_y)
-off_x=off_x or 0
-off_y=off_y or 0
-if a1 and a2 then
-amov_to_point(a1,spd,a2.x+off_x,a2.y+off_y)
-end
-end
-function amov_to_point(a,spd,x,y)
-local ang=atan2(x-a.x,y-a.y)
-a.ax,a.ay=spd*cos(ang),spd*sin(ang)
-end
-function do_actors_intersect(a,b)
-return a and b
-and abs(a.x-b.x)<a.rx+b.rx
-and abs(a.y-b.y)<a.ry+b.ry
-end
-function does_a_contain_b(a,b)
-return a and b
-and b.x-b.rx>=a.x-a.rx
-and b.x+b.rx<=a.x+a.rx
-and b.y-b.ry>=a.y-a.ry
-and b.y+b.ry<=a.y+a.ry
-end
-function coll_tile_help(pos,per,spd,pos_rad,per_rad,dir,a,hit_func,solid_func)
-local coll_tile_bounds=function(pos,rad)
-return flr(pos-rad),-flr(-(pos+rad))-1
-end
-local pos_min,pos_max=coll_tile_bounds(pos+spd,pos_rad)
-local per_min,per_max=coll_tile_bounds(per,per_rad)
-for j=per_min,per_max do
-if spd<0 and solid_func(pos_min,j)then
-hit_func(a,dir)
-return pos_min+pos_rad+1,0
-elseif spd>0 and solid_func(pos_max,j)then
-hit_func(a,dir+1)
-return pos_max-pos_rad,0
-end
-end
-return pos,spd
-end
-create_parent([[9|10]],function(a)
+create_parent([[8|9]],function(a)
 if a.alive and a.stun_countdown<=0 then
 if tl_node(a)then
 a.alive=false
@@ -358,16 +356,16 @@ for k,v in pairs(g_act_arrs)do
 if a[k]then del(v,a)end
 end
 end,get)
-create_parent[[11|12]]
-create_parent[[13|14]]
-create_parent[[15|16]]
-create_parent[[17|18]]
-create_parent[[19|20]]
-create_parent[[21|20]]
-create_parent[[22|20]]
-create_parent[[23|20]]
-create_parent[[24|25]]
-create_parent([[26|27]],function(a)
+create_parent[[10|11]]
+create_parent[[12|13]]
+create_parent[[14|15]]
+create_parent[[16|17]]
+create_parent[[18|19]]
+create_parent[[20|19]]
+create_parent[[21|19]]
+create_parent[[22|19]]
+create_parent[[23|24]]
+create_parent([[25|26]],function(a)
 if a.x+a.dx<g_cur_room.x+.5 then
 a.x=g_cur_room.x+.5
 a.dx=0
@@ -377,7 +375,7 @@ a.x=g_cur_room.x+g_cur_room.w-.5
 a.dx=0
 end
 end)
-create_parent([[28|27]],function(a)
+create_parent([[27|26]],function(a)
 if a.y+a.dy<g_cur_room.y+.5 then
 a.y=g_cur_room.y+.5
 a.dy=0
@@ -387,14 +385,14 @@ a.y=g_cur_room.y+g_cur_room.h-.5
 a.dy=0
 end
 end)
-create_parent([[29|30]],function(a)
+create_parent([[28|29]],function(a)
 a.t+=1
 end)
-create_parent([[31|32]],function(a)
+create_parent([[30|31]],function(a)
 a.x+=a.dx
 a.y+=a.dy
 end)
-create_parent([[33|34]],function(a)
+create_parent([[32|33]],function(a)
 a.dx+=a.ax a.dy+=a.ay
 a.dx*=a.ix a.dy*=a.iy
 if a.ax==0 and abs(a.dx)<.01 then a.dx=0 end
@@ -402,8 +400,8 @@ if a.ay==0 and abs(a.dy)<.01 then a.dy=0 end
 end,function(a)
 a.ax,a.ay,a.dx,a.dy=0,0,0,0
 end)
-create_parent[[35|36]]
-create_parent([[37|38]],function(a)
+create_parent[[34|35]]
+create_parent([[36|37]],function(a)
 local a2=a.rel_actor
 if a2 then
 if a2.alive then
@@ -420,27 +418,27 @@ a.alive=false
 end
 end
 end)
-create_parent([[39|40]],function(a)
+create_parent([[38|39]],function(a)
 a.xx,a.yy=0,0
 end)
-create_parent[[41|42]]
-create_parent[[43|42]]
-create_parent[[44|42]]
-create_parent[[45|42]]
-create_parent[[46|42]]
-create_parent[[47|42]]
-create_parent[[48|42]]
-create_parent[[49|42]]
-create_parent[[50|42]]
-create_parent[[51|42]]
-create_parent([[52|53]],scr_spr,scr_out,scr_spr_and_out
+create_parent[[40|41]]
+create_parent[[42|41]]
+create_parent[[43|41]]
+create_parent[[44|41]]
+create_parent[[45|41]]
+create_parent[[46|41]]
+create_parent[[47|41]]
+create_parent[[48|41]]
+create_parent[[49|41]]
+create_parent[[50|41]]
+create_parent([[51|52]],scr_spr,scr_out,scr_spr_and_out
 )
-create_parent([[54|55]],scr_spr_and_out)
-create_parent([[56|57]],function(a,speed,xdir,ydir)
+create_parent([[53|54]],scr_spr_and_out)
+create_parent([[55|56]],function(a,speed,xdir,ydir)
 a.dx=xdir*speed
 a.dy=ydir*speed
 end)
-create_parent([[58|59]],function(a)
+create_parent([[57|58]],function(a)
 if a.stun_countdown>0 then
 a.ay,a.ax=0,0
 a.yy=rnd_one()
@@ -449,7 +447,7 @@ else
 a.outline_color=1
 end
 end)
-create_parent([[60|61]],function(a,damage,stun_val)
+create_parent([[59|60]],function(a,damage,stun_val)
 if a.stun_countdown<=0 then
 a.stun_countdown=stun_val
 a.health=max(0,a.health-damage)
@@ -460,7 +458,7 @@ end
 end,function(a,health)
 a.health=min(a.max_health,a.health+health)
 end)
-create_parent([[62|63]],function(a,b)
+create_parent([[61|62]],function(a,b)
 if does_a_contain_b(a,b)then
 a:contains(b)
 elseif do_actors_intersect(a,b)then
@@ -469,8 +467,8 @@ else
 a:not_contains_or_intersects(b)
 end
 end)
-create_parent[[64|65]]
-create_parent([[66|67]],function(a,acts)
+create_parent[[63|64]]
+create_parent([[65|66]],function(a,acts)
 local hit_list={}
 local move_check=function(dx,dy)
 local ret_val=dx+dy
@@ -492,8 +490,8 @@ foreach(acts,function(b)
 if a!=b and(not a.anchored or not b.anchored)then
 local x,y=abs(a.x+dx-b.x),abs(a.y+dy-b.y)
 if x<a.rx+b.rx and y<a.ry+b.ry then
-hit_list[b]=hit_list[b]or ztable[[68]]
-batch_call_new(col_help,[[69]],a,b,x,dx,y,dy)
+hit_list[b]=hit_list[b]or ztable[[67]]
+batch_call_new(col_help,[[68]],a,b,x,dx,y,dy)
 end
 end
 end)
@@ -504,7 +502,7 @@ for b,d in pairs(hit_list)do
 a:hit(b,d.dx,d.dy)
 end
 end)
-create_parent([[70|71]],function(a,solid_func)
+create_parent([[69|70]],function(a,solid_func)
 local x,dx=coll_tile_help(a.x,a.y,a.dx,a.rx,a.ry,0,a,a.tile_hit,solid_func)
 local y,dy=coll_tile_help(a.y,a.x,a.dy,a.ry,a.rx,2,a,a.tile_hit,function(y,x)return solid_func(x,y)end)
 if a.tile_solid then
@@ -543,12 +541,12 @@ end
 function scr_circ(x,y,r,col)
 circ(x*8,y*8,r*8,col)
 end
-create_actor([[72|73]],
+create_actor([[71|72]],
 function(a)
 if a.follow_act and not a.follow_act.alive then
 a.follow_act=nil
 end
-batch_call_new(update_view_helper,[[74]],a)
+batch_call_new(update_view_helper,[[73]],a)
 end,function(a)
 if a.follow_act then
 a.x,a.y=a.follow_act.x,a.follow_act.y
@@ -565,7 +563,7 @@ poke(0x5f5c,15)
 poke(0x5f5d,15)
 function _init()
 music(0,3000)
-g_tl=ztable([[75]],logo_draw,function()sfx"63" end,
+g_tl=ztable([[74]],logo_draw,function()sfx"63" end,
 game_init,game_update,game_draw
 )
 end
@@ -573,7 +571,7 @@ function game_init(a)
 _g.fader_in(.5,nf,nf)
 end
 function game_update(a)
-batch_call_new(acts_loop,[[76]])
+batch_call_new(acts_loop,[[75]])
 end
 function game_draw(a)
 fade(g_card_fade)
@@ -613,9 +611,9 @@ local y1,y2=ry*8+4,(ry+view.h)*8-5
 camera_to_view(view)
 zclip(x1,y1,x2,y2)
 zcls(g_cur_room.c)
-batch_call_new(acts_loop,[[77]])
+batch_call_new(acts_loop,[[76]])
 isorty(g_act_arrs.drawable)
-batch_call_new(acts_loop,[[78]])
+batch_call_new(acts_loop,[[77]])
 clip()
 camera()
 end
