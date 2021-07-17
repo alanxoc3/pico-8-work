@@ -11,15 +11,31 @@ end, function(a)
     scr_circ(a.x, a.y, .5, 8)
 end)
 
-create_actor([[pl;0;drawable,spr,mov,x_bounded|
+create_actor([[vehicle;0;drawable,spr,mov,x_bounded|
     x:4; y:4;
     ix:.96; iy:.92;
     sind:39; sh:2; iyy:-4;
-    i:@1; u:@2; --d:@3;
+    vehicle_logic:nf;
+    i:@1; u:@2; move_x:@3; move_y:@4;
 ]], function(a)
     a.lane_jumper = _g.lane_jumper()
 end, function(a)
-    a.ax = xbtn() * .005
+    a:vehicle_logic()
+    amov_y(a, .02, a.lane_jumper.y)
+end, function(a, x) -- x: -1, 0, 1
+    a.ax = x * .005
+end, function(a, y) -- y: -1, 0, 1
+    a.lane_jumper:switch_lane(y)
+end)
+
+create_actor([[pl;0;vehicle,|
+    x:4; y:4;
+    sind:39; sh:2; iyy:-4;
+    vehicle_logic:@1;
+]], function(a)
+    a:move_x(xbtn())
+    a:move_y(ybtnp())
+
     if a.dx > .05 and a.ax > 0 then
         a.sind = 38
     elseif a.dx < -.05 and a.ax < 0 then
@@ -27,26 +43,22 @@ end, function(a)
     else
         a.sind = 39
     end
-    a.lane_jumper:switch_lane(ybtnp())
-    amov_y(a, .02, a.lane_jumper.y)
 end, function(a)
     scr_circ(a.x, a.y, .5, 12)
 end)
 
-create_actor([[truck;0;drawable,spr,mov|
-    x:14.5; y:4;
+create_actor([[truck;0;vehicle,|
+    x:12; y:4;
     sind:26; sw:2; sh:3; iyy:-8;
-    ix:.96; iy:.92;
-    i:@1; u:@2;-- d:@3;
+    vehicle_logic:@1;
+    horizontal_input:0;
 ]], function(a)
-    a.lane_jumper = _g.lane_jumper()
-end, function(a)
-    a.ax = 0
-    amov_y(a, .02, a.lane_jumper.y)
+    if flr_rnd(15) == 0 then
+        a.horizontal_input = flr_rnd(3)-1
+    end
+    a:move_x(a.horizontal_input)
 
     if flr_rnd(30) == 0 then
-        a.lane_jumper:switch_lane(flr_rnd(3)-1)
+        a:move_y(flr_rnd(3)-1)
     end
-end, function(a)
-    scr_circ(a.x, a.y, .5, 12)
 end)

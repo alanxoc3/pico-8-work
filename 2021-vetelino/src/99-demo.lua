@@ -24,7 +24,7 @@ function game_init(a)
     _g.pl()
     _g.truck()
     _g.road_gen()
-    g_cur_room = ztable[[x:2;y:2;w:12;h:16;c:0;]]
+    g_cur_room = ztable[[x:1;y:2;w:14;h:16;c:0;]]
 end
 
 function game_update(a)
