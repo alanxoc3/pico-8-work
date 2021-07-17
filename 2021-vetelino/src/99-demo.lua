@@ -21,12 +21,15 @@ end
 
 function game_init(a)
     _g.fader_in(.5, nf, nf)
+    _g.pl()
 end
 
 function game_update(a)
     batch_call_new(acts_loop, [[
         act, clean;
-        act, update
+        act, update;
+        mov, move;
+        vec, vec_update;
     ]])
 end
 
@@ -34,6 +37,11 @@ function game_draw(a)
     fade(g_card_fade)
 
     draw_blueprint()
+
+    isorty(g_act_arrs.drawable)
+    batch_call_new(acts_loop, [[
+        drawable, d;
+    ]])
 end
 
 function logo_draw(a)

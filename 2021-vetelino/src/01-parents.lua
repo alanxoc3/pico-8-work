@@ -97,22 +97,26 @@ create_parent([[vec;0;pos,;|
 end)
 
 create_parent([[mov;0;vec,;|
-   ix:1;
-   iy:1;
-   ax:0;
-   ay:0;
-   move:@1;
-   stop:@2;
+    ix:1;
+    iy:1;
+    ax:0;
+    ay:0;
+    move:@1;
+    stop:@2;
+    calc_next_pos:@3;
 ]], function(a)
-   a.dx += a.ax a.dy += a.ay
-   a.dx *= a.ix a.dy *= a.iy
-   if a.ax == 0 and abs(a.dx) < .01 then a.dx = 0 end
-   if a.ay == 0 and abs(a.dy) < .01 then a.dy = 0 end
+    a.dx += a.ax a.dy += a.ay
+    a.dx *= a.ix a.dy *= a.iy
+    if a.ax == 0 and abs(a.dx) < .01 then a.dx = 0 end
+    if a.ay == 0 and abs(a.dy) < .01 then a.dy = 0 end
 end, function(a)
-   a.ax, a.ay, a.dx, a.dy = 0, 0, 0, 0
+    a.ax, a.ay, a.dx, a.dy = 0, 0, 0, 0
+end, function(a, ax, ay)
+    return a.x+(a.dx+ax)*a.ix, a.y+(a.dy+ay)*a.iy
 end)
 
 create_parent[[dim;0;pos,;|rx:.375;ry:.375;]]
+
 -- DEBUG_BEGIN
 create_parent([[dim;0;pos,;debug_rect,|
    rx:.375;

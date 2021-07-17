@@ -48,7 +48,7 @@ function scr_circfill(x, y, r, col)
 end
 
 function scr_circ(x, y, r, col)
-   circ(x*8, y*8, r*8, col)
+   circ(round(x*8), round(y*8), r*8, col)
 end
 
 create_actor([[view;4;act,confined;center_view,update_view|

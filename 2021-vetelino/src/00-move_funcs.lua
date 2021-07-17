@@ -11,6 +11,17 @@ function amov_to_point(a, spd, x, y)
    a.ax, a.ay = spd*cos(ang), spd*sin(ang)
 end
 
+function amov_y(a, spd, y)
+    local diff = y - a.y
+    local dy = zsgn(diff)*spd
+    local _, next_y = a:calc_next_pos(0, dy)
+    if zsgn(y - next_y) != zsgn(diff) then
+        a.ay = -a.dy + diff/a.iy
+    else
+        a.ay = dy
+    end
+end
+
 -- returns true or false
 -- function point_in_rect(a, b)
    -- return a.x < b.x+b.rx and a.x > b.x-b.rx and a.y < b.y+b.ry and a.y > b.y-b.ry
