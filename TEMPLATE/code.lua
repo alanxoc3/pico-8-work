@@ -1,4 +1,4 @@
-g_gunvals_raw="|!plus/@1/-2,!plus/@2/-2,!plus/@3/2,!plus/@4/2,13;!plus/@1/-1,!plus/@2/-1,!plus/@3/1,!plus/@4/1,1;|@1,@2,!plus/@3/1,@5;@1,@2,@3,@4;|0x8000,0x8000,0x7fff,0x7fff,@1|0,0,0,0,0,0,0;1,1,1,0,0,0,0;2,2,2,1,0,0,0;3,3,3,1,0,0,0;4,2,2,2,1,0,0;5,5,1,1,1,0,0;6,13,13,5,5,1,0;7,6,13,13,5,1,0;8,8,2,2,2,0,0;9,4,4,4,5,0,0;10,9,4,4,5,5,0;11,3,3,3,3,0,0;12,12,3,1,1,1,0;13,5,5,1,1,1,0;14,13,4,2,2,1,0;15,13,13,5,5,1,0;|fader_out;3;act,;update,|fade_time:@1;i:@2;e:@3;u:@4;tl_max_time=@1,|fader_in;3;act,;update,|act;0;,;room_init,pause_init,pause_update,pause_end,kill,clean,delete|alive:yes;stun_countdown:0;i:nf;u:nf;update:@1;clean:@2;kill:@3;delete:@4;room_init:nf;create_init:nf;pause_init:nf;pause_update:nf;pause_end:nf;destroyed:nf;get:@5;|ma_able;0;act,;|name:thing;|confined;0;act,;room_end,|room_end:nf;|loopable;0;act,;|tl_loop:yes;|pos;0;act,;|x:0;y:0;|move_pause;0;act,;update,move,vec_update,tick|;|dim;0;pos,;|rx:.375;ry:.375;|knock;0;col,;|popper;0;col,;|bad;0;knock,;|kill_too_high;0;pos,|check_height:@1;|bounded;0;act,;|check_bounds:nf;|x_bounded;0;bounded,;|check_bounds:@1;|y_bounded;0;bounded,;|timed;0;act,;|t:0;tick:@1;|vec;0;pos,;|dx:0;dy:0;vec_update:@1;|mov;0;vec,;|ix:1;iy:1;ax:0;ay:0;move:@1;stop:@2;|rel;0;act,;rel_update,|rel_actor:null;rel_x:0;rel_y:0;rel_dx:0;rel_dy:0;flippable:no;rel_update:@1;|drawable_obj;0;pos,;reset_off,|ixx:0;iyy:0;xx:0;yy:0;visible:yes;reset_off:@1;|drawable;0;drawable_obj,;d,|d:nf;|drawable_1;0;drawable_obj,;d,|drawable_2;0;drawable_obj,;d,|pre_drawable;0;drawable_obj,;d,|pre_drawable_1;0;drawable_obj,;d,|pre_drawable_2;0;drawable_obj,;d,|post_drawable;0;drawable_obj,;d,|post_drawable_1;0;drawable_obj,;d,|post_drawable_2;0;drawable_obj,;d,|above_map_post_camera_drawable;0;drawable_obj,;d,|spr_obj;0;vec,drawable_obj,;|sind:0;outline_color:BG_UI;sw:1;sh:1;xf:no;yf:no;draw_spr:@1;draw_out:@2;draw_both:@3;|spr;0;spr_obj,;|d:@1;|knockable;0;mov,;|knockback:@1;|stunnable;0;mov,drawable_obj;|stun_update:@1;|hurtable;0;act,;|health:1;max_health:1;health_visible:yes;hurt:@1;heal:@2;|brang_hurtable;0;hurtable,;|anim;0;spr,timed;|sinds:,;anim_loc:1;anim_off:0;anim_len:1;anim_spd:0;anim_sind:null;anim_update:@1;|trig;0;vec,dim;|contains:nf;intersects:nf;not_contains_or_intersects:nf;contains_or_intersects:@1;trigger_update:@1;|anchored;1;vec,dim;|touchable:@1;hit:nf;|col;0;vec,dim;|touchable:yes;hit:nf;move_check:@1;|dx:0;dy:0|x,dx,@1,@2,@3,@4;y,dy,@1,@2,@5,@6;|tcol;0;vec,dim;|tile_solid:yes;tile_hit:nf;coll_tile:@1;|interactable;0;spr,anchored/yes,confined,ma_able;|interactable_trigger:nf;trig_x:0;trig_y:0;trig_rx:.75;trig_ry:.75;trig:null;i:@1;interactable_init:@1;|nnpc;0;drawable,danceable,interactable,ma_able;|rx:.5;ry:.5;iyy:-2;u:%look_at_pl|bashable;0;rel,knockable,col;|bash_dx:1;rel_bash_dx:1;hit:@1;bash:@1;|item;0;drawable,rel,confined,spr_obj;|being_held:yes;destroyed:@1;|pokeable;0;rel,drawable_obj,item;|i:@1;u:@2;e:@3;poke_init:@1;poke_update:@2;poke_end:@3;poke_update_reverse:@4;poke:20;poke_dist:20;poke_energy:0;|shop_item;0;drawable,interactable,ma_able;update,|costable:yes;interactable_trigger:@1;rx:.5;ry:.5;iyy:-3;trig_x:0;trig_y:.125;trig_rx:.5;trig_ry:.625;mem_loc:BOGUS_SPOT;cost:99|mem_dep;0;act,;|room_init:@1;mem_loc:BOGUS_SPOT;mem_loc_expect:yes;|view;4;act,confined;center_view,update_view|x:0;y:0;room_crop:2;tl_loop:yes;w:@1;h:@2;follow_dim:@3;follow_act:@4;update_view:@5;center_view:@6;change_ma:@7;,;|@1,x,w,ixx;@1,y,h,iyy|x=64,y=64,i=@2,u=nf,d=@1,tl_max_time=2.5;i=@3,u=@4,d=@5;|act,clean|pre_drawable,d;pre_drawable_1,d;pre_drawable_2,d;|drawable,d;drawable_1,d;drawable_2,d;post_drawable,d;post_drawable_1,d;post_drawable_2,d;|"
+g_gunvals_raw="|!plus/@1/-2,!plus/@2/-2,!plus/@3/2,!plus/@4/2,13;!plus/@1/-1,!plus/@2/-1,!plus/@3/1,!plus/@4/1,1;|@1,@2,!plus/@3/1,@5;@1,@2,@3,@4;|0x8000,0x8000,0x7fff,0x7fff,@1|0,0,0,0,0,0,0;1,1,1,0,0,0,0;2,2,2,1,0,0,0;3,3,3,1,0,0,0;4,2,2,2,1,0,0;5,5,1,1,1,0,0;6,13,13,5,5,1,0;7,6,13,13,5,1,0;8,8,2,2,2,0,0;9,4,4,4,5,0,0;10,9,4,4,5,5,0;11,3,3,3,3,0,0;12,12,3,1,1,1,0;13,5,5,1,1,1,0;14,13,4,2,2,1,0;15,13,13,5,5,1,0;|fader_out;3;act,;update,|fade_time:@1;i:@2;e:@3;u:@4;tl_max_time=@1,|fader_in;3;act,;update,|act;0;,;room_init,pause_init,pause_update,pause_end,kill,clean,delete|alive:yes;stun_countdown:0;i:nf;u:nf;update:@1;clean:@2;kill:@3;delete:@4;room_init:nf;create_init:nf;pause_init:nf;pause_update:nf;pause_end:nf;destroyed:nf;get:@5;|ma_able;0;act,;|name:thing;|confined;0;act,;room_end,|room_end:nf;|loopable;0;act,;|tl_loop:yes;|pos;0;act,;|x:0;y:0;|move_pause;0;act,;update,move,vec_update,tick|;|knock;0;col,;|popper;0;col,;|bad;0;knock,;|bounded;0;act,;|check_bounds:nf;|x_bounded;0;bounded,;|check_bounds:@1;|y_bounded;0;bounded,;|timed;0;act,;|t:0;tick:@1;|vec;0;pos,;|dx:0;dy:0;vec_update:@1;|mov;0;vec,;|ix:1;iy:1;ax:0;ay:0;move:@1;stop:@2;|dim;0;pos,;|rx:.375;ry:.375;|rel;0;act,;rel_update,|rel_actor:null;rel_x:0;rel_y:0;rel_dx:0;rel_dy:0;flippable:no;rel_update:@1;|drawable_obj;0;pos,;reset_off,|ixx:0;iyy:0;xx:0;yy:0;visible:yes;reset_off:@1;|drawable;0;drawable_obj,;d,|d:nf;|drawable_1;0;drawable_obj,;d,|drawable_2;0;drawable_obj,;d,|pre_drawable;0;drawable_obj,;d,|pre_drawable_1;0;drawable_obj,;d,|pre_drawable_2;0;drawable_obj,;d,|post_drawable;0;drawable_obj,;d,|post_drawable_1;0;drawable_obj,;d,|post_drawable_2;0;drawable_obj,;d,|above_map_post_camera_drawable;0;drawable_obj,;d,|spr_obj;0;vec,drawable_obj,;|sind:0;outline_color:BG_UI;sw:1;sh:1;xf:no;yf:no;draw_spr:@1;draw_out:@2;draw_both:@3;|spr;0;spr_obj,;|d:@1;|knockable;0;mov,;|knockback:@1;|stunnable;0;mov,drawable_obj;|stun_update:@1;|hurtable;0;act,;|health:1;max_health:1;health_visible:yes;hurt:@1;heal:@2;|trig;0;vec,dim;|contains:nf;intersects:nf;not_contains_or_intersects:nf;contains_or_intersects:@1;trigger_update:@1;|anchored;1;vec,dim;|touchable:@1;hit:nf;|col;0;vec,dim;|touchable:yes;hit:nf;move_check:@1;|dx:0;dy:0|x,dx,@1,@2,@3,@4;y,dy,@1,@2,@5,@6;|tcol;0;vec,dim;|tile_solid:yes;tile_hit:nf;coll_tile:@1;|view;4;act,confined;center_view,update_view|x:0;y:0;room_crop:2;tl_loop:yes;w:@1;h:@2;follow_dim:@3;follow_act:@4;update_view:@5;center_view:@6;change_ma:@7;,;|@1,x,w,ixx;@1,y,h,iyy|x=64,y=64,i=@2,u=nf,d=@1,tl_max_time=2.5;i=@3,u=@4,d=@5;|act,clean|pre_drawable,d;pre_drawable_1,d;pre_drawable_2,d;|drawable,d;drawable_1,d;drawable_2,d;post_drawable,d;post_drawable_1,d;post_drawable_2,d;|"
 _g={}
 function zsfx(num,sub_num)
 sfx(num,-1,sub_num*4,4)
@@ -363,17 +363,11 @@ create_parent[[13|14]]
 create_parent[[15|16]]
 create_parent[[17|18]]
 create_parent[[19|20]]
-create_parent[[21|22]]
+create_parent[[21|20]]
+create_parent[[22|20]]
 create_parent[[23|20]]
-create_parent[[24|20]]
-create_parent[[25|20]]
+create_parent[[24|25]]
 create_parent([[26|27]],function(a)
-if a.y<g_main_view.y-g_main_view.h/2-8 then
-a:kill()
-end
-end)
-create_parent[[28|29]]
-create_parent([[30|31]],function(a)
 if a.x+a.dx<g_cur_room.x+.5 then
 a.x=g_cur_room.x+.5
 a.dx=0
@@ -383,7 +377,7 @@ a.x=g_cur_room.x+g_cur_room.w-.5
 a.dx=0
 end
 end)
-create_parent([[32|31]],function(a)
+create_parent([[28|27]],function(a)
 if a.y+a.dy<g_cur_room.y+.5 then
 a.y=g_cur_room.y+.5
 a.dy=0
@@ -393,14 +387,14 @@ a.y=g_cur_room.y+g_cur_room.h-.5
 a.dy=0
 end
 end)
-create_parent([[33|34]],function(a)
+create_parent([[29|30]],function(a)
 a.t+=1
 end)
-create_parent([[35|36]],function(a)
+create_parent([[31|32]],function(a)
 a.x+=a.dx
 a.y+=a.dy
 end)
-create_parent([[37|38]],function(a)
+create_parent([[33|34]],function(a)
 a.dx+=a.ax a.dy+=a.ay
 a.dx*=a.ix a.dy*=a.iy
 if a.ax==0 and abs(a.dx)<.01 then a.dx=0 end
@@ -408,7 +402,8 @@ if a.ay==0 and abs(a.dy)<.01 then a.dy=0 end
 end,function(a)
 a.ax,a.ay,a.dx,a.dy=0,0,0,0
 end)
-create_parent([[39|40]],function(a)
+create_parent[[35|36]]
+create_parent([[37|38]],function(a)
 local a2=a.rel_actor
 if a2 then
 if a2.alive then
@@ -425,27 +420,27 @@ a.alive=false
 end
 end
 end)
-create_parent([[41|42]],function(a)
+create_parent([[39|40]],function(a)
 a.xx,a.yy=0,0
 end)
-create_parent[[43|44]]
-create_parent[[45|44]]
-create_parent[[46|44]]
-create_parent[[47|44]]
-create_parent[[48|44]]
-create_parent[[49|44]]
-create_parent[[50|44]]
-create_parent[[51|44]]
-create_parent[[52|44]]
-create_parent[[53|44]]
-create_parent([[54|55]],scr_spr,scr_out,scr_spr_and_out
+create_parent[[41|42]]
+create_parent[[43|42]]
+create_parent[[44|42]]
+create_parent[[45|42]]
+create_parent[[46|42]]
+create_parent[[47|42]]
+create_parent[[48|42]]
+create_parent[[49|42]]
+create_parent[[50|42]]
+create_parent[[51|42]]
+create_parent([[52|53]],scr_spr,scr_out,scr_spr_and_out
 )
-create_parent([[56|57]],scr_spr_and_out)
-create_parent([[58|59]],function(a,speed,xdir,ydir)
+create_parent([[54|55]],scr_spr_and_out)
+create_parent([[56|57]],function(a,speed,xdir,ydir)
 a.dx=xdir*speed
 a.dy=ydir*speed
 end)
-create_parent([[60|61]],function(a)
+create_parent([[58|59]],function(a)
 if a.stun_countdown>0 then
 a.ay,a.ax=0,0
 a.yy=rnd_one()
@@ -454,7 +449,7 @@ else
 a.outline_color=1
 end
 end)
-create_parent([[62|63]],function(a,damage,stun_val)
+create_parent([[60|61]],function(a,damage,stun_val)
 if a.stun_countdown<=0 then
 a.stun_countdown=stun_val
 a.health=max(0,a.health-damage)
@@ -465,19 +460,7 @@ end
 end,function(a,health)
 a.health=min(a.max_health,a.health+health)
 end)
-create_parent[[64|20]]
-create_parent([[65|66]],function(a)
-if a.anim_sind then
-a.sind=a.anim_sind
-else
-if a.t%a.anim_spd==0 then
-a.anim_off+=1
-a.anim_off%=a.anim_len
-end
-a.sind=a.sinds[a.anim_loc+a.anim_off]or 0xffff
-end
-end)
-create_parent([[67|68]],function(a,b)
+create_parent([[62|63]],function(a,b)
 if does_a_contain_b(a,b)then
 a:contains(b)
 elseif do_actors_intersect(a,b)then
@@ -486,8 +469,8 @@ else
 a:not_contains_or_intersects(b)
 end
 end)
-create_parent[[69|70]]
-create_parent([[71|72]],function(a,acts)
+create_parent[[64|65]]
+create_parent([[66|67]],function(a,acts)
 local hit_list={}
 local move_check=function(dx,dy)
 local ret_val=dx+dy
@@ -509,8 +492,8 @@ foreach(acts,function(b)
 if a!=b and(not a.anchored or not b.anchored)then
 local x,y=abs(a.x+dx-b.x),abs(a.y+dy-b.y)
 if x<a.rx+b.rx and y<a.ry+b.ry then
-hit_list[b]=hit_list[b]or ztable[[73]]
-batch_call_new(col_help,[[74]],a,b,x,dx,y,dy)
+hit_list[b]=hit_list[b]or ztable[[68]]
+batch_call_new(col_help,[[69]],a,b,x,dx,y,dy)
 end
 end
 end)
@@ -521,66 +504,11 @@ for b,d in pairs(hit_list)do
 a:hit(b,d.dx,d.dy)
 end
 end)
-create_parent([[75|76]],function(a,solid_func)
+create_parent([[70|71]],function(a,solid_func)
 local x,dx=coll_tile_help(a.x,a.y,a.dx,a.rx,a.ry,0,a,a.tile_hit,solid_func)
 local y,dy=coll_tile_help(a.y,a.x,a.dy,a.ry,a.rx,2,a,a.tile_hit,function(y,x)return solid_func(x,y)end)
 if a.tile_solid then
 a.x,a.y,a.dx,a.dy=x,y,dx,dy
-end
-end)
-create_parent([[77|78]],function(a)
-a.trig=_g.gen_trigger_block(a,a.trig_x,a.trig_y,a.trig_rx,a.trig_ry,nf,function(trig,other)
-if npc_able_to_interact(a,other)then
-change_cur_ma(a)
-if able_to_interact(a,other)then
-a:interactable_trigger()
-end
-else
-if get_cur_ma()==a then
-change_cur_ma()
-end
-end
-end)
-end)
-create_parent[[79|80]]
-create_parent([[81|82]],function(a,o)
-if o!=a.rel_actor then
-call_not_nil(o,"knockback",o,a.bash_dx,bool_to_num(a.xf),0)
-change_cur_ma(o)
-if a.rel_actor then
-call_not_nil(a.rel_actor,"knockback",a.rel_actor,-a.rel_bash_dx,bool_to_num(a.xf),0)
-end
-end
-end
-)
-create_parent([[83|84]],function(a)
-if a==a.rel_actor.item then a.rel_actor.item=nil end
-end)
-create_parent([[85|86]],function(a)
-a.xf=a.rel_actor.xf
-a.ixx=a.xf and a.poke_ixx or-a.poke_ixx
-use_energy(a.poke_energy)
-end,function(a)
-a.rel_dx=bool_to_num(a.xf)*a.poke_dist/a.tl_max_time/FPS
-pause_energy()
-end,function(a)
-a.rel_dx,a.rel_x=0,a.xf and-a.poke_dist or a.poke_dist
-end,function(a)
-a.rel_dx=-bool_to_num(a.xf)*a.poke_dist/a.tl_max_time/FPS/2
-end)
-create_parent([[87|88]],function(a)
-if remove_money(a.cost)then
-a:kill()
-_g.item_show(g_pl,a.sind,a.mem_loc)
-pause"chest"
-stop_music"1"
-else
-zsfx(2,6)
-end
-end)
-create_parent([[89|90]],function(a)
-if zdget(a.mem_loc)==a.mem_loc_expect then
-a:delete()
 end
 end)
 function update_view_helper(view,xy,wh,ii)
@@ -615,12 +543,12 @@ end
 function scr_circ(x,y,r,col)
 circ(x*8,y*8,r*8,col)
 end
-create_actor([[91|92]],
+create_actor([[72|73]],
 function(a)
 if a.follow_act and not a.follow_act.alive then
 a.follow_act=nil
 end
-batch_call_new(update_view_helper,[[93]],a)
+batch_call_new(update_view_helper,[[74]],a)
 end,function(a)
 if a.follow_act then
 a.x,a.y=a.follow_act.x,a.follow_act.y
@@ -635,21 +563,9 @@ end)
 g_card_fade=8
 poke(0x5f5c,15)
 poke(0x5f5d,15)
-menuitem(1,"restart",function()
-extcmd"reset"
-end)
-g_level_coins=0
-g_level_max_coins=0
-g_stats={
-time_start=0,
-coins=0,
-max_coins=0,
-deaths=0,
-shots=0,
-}
 function _init()
 music(0,3000)
-g_tl=ztable([[94]],logo_draw,function()sfx"63" end,
+g_tl=ztable([[75]],logo_draw,function()sfx"63" end,
 game_init,game_update,game_draw
 )
 end
@@ -657,7 +573,7 @@ function game_init(a)
 _g.fader_in(.5,nf,nf)
 end
 function game_update(a)
-batch_call_new(acts_loop,[[95]])
+batch_call_new(acts_loop,[[76]])
 end
 function game_draw(a)
 fade(g_card_fade)
@@ -697,10 +613,9 @@ local y1,y2=ry*8+4,(ry+view.h)*8-5
 camera_to_view(view)
 zclip(x1,y1,x2,y2)
 zcls(g_cur_room.c)
-batch_call_new(acts_loop,[[96]])
-draw_lvl_blocks(g_blocks)
+batch_call_new(acts_loop,[[77]])
 isorty(g_act_arrs.drawable)
-batch_call_new(acts_loop,[[97]])
+batch_call_new(acts_loop,[[78]])
 clip()
 camera()
 end

@@ -44,18 +44,9 @@ create_parent[[confined;0;act,;room_end,|room_end:nf;]]
 create_parent[[loopable;0;act,;|tl_loop:yes;]]
 create_parent[[pos;0;act,;|x:0;y:0;]]
 create_parent[[move_pause;0;act,;update,move,vec_update,tick|;]]
-create_parent[[dim;0;pos,;|rx:.375;ry:.375;]]
 create_parent[[knock;0;col,;|;]]
 create_parent[[popper;0;col,;|;]]
 create_parent[[bad;0;knock,;|;]]
-
-create_parent([[kill_too_high;0;pos,|
-    check_height:@1;
-]], function(a)
-    if a.y < g_main_view.y - g_main_view.h/2 - 8 then -- 10 then
-        a:kill()
-    end
-end)
 
 create_parent[[bounded;0;act,;|
     check_bounds:nf;
@@ -121,6 +112,7 @@ end, function(a)
    a.ax, a.ay, a.dx, a.dy = 0, 0, 0, 0
 end)
 
+create_parent[[dim;0;pos,;|rx:.375;ry:.375;]]
 -- DEBUG_BEGIN
 create_parent([[dim;0;pos,;debug_rect,|
    rx:.375;
@@ -172,9 +164,11 @@ end)
 create_parent[[drawable;0;drawable_obj,;d,|d:nf;]]
 create_parent[[drawable_1;0;drawable_obj,;d,|d:nf;]]
 create_parent[[drawable_2;0;drawable_obj,;d,|d:nf;]]
+
 create_parent[[pre_drawable;0;drawable_obj,;d,|d:nf;]]
 create_parent[[pre_drawable_1;0;drawable_obj,;d,|d:nf;]]
 create_parent[[pre_drawable_2;0;drawable_obj,;d,|d:nf;]]
+
 create_parent[[post_drawable;0;drawable_obj,;d,|d:nf;]]
 create_parent[[post_drawable_1;0;drawable_obj,;d,|d:nf;]]
 create_parent[[post_drawable_2;0;drawable_obj,;d,|d:nf;]]
@@ -217,6 +211,7 @@ create_parent([[stunnable;0;mov,drawable_obj;|
    end
 end)
 
+-- HURTABLE: something that has health and can be hurt or healed.
 create_parent([[hurtable;0;act,;|
    health:1;
    max_health:1;
@@ -237,29 +232,7 @@ end, function(a, health)
    a.health = min(a.max_health, a.health + health)
 end)
 
-create_parent[[brang_hurtable;0;hurtable,;|;]]
-
-create_parent([[anim;0;spr,timed;|
-   sinds:,;
-   anim_loc:1;
-   anim_off:0;
-   anim_len:1;
-   anim_spd:0;
-   anim_sind:null;
-   anim_update:@1;
-]], function(a)
-   if a.anim_sind then
-      a.sind = a.anim_sind
-   else
-      if a.t % a.anim_spd == 0 then
-         a.anim_off += 1
-         a.anim_off %= a.anim_len
-      end
-
-      a.sind = a.sinds[a.anim_loc + a.anim_off] or 0xffff
-   end
-end)
-
+-- TRIG: a trigger that calls a function if called
 create_parent([[trig;0;vec,dim;|
    contains:nf;
    intersects:nf;
@@ -276,6 +249,7 @@ create_parent([[trig;0;vec,dim;|
    end
 end)
 
+-- ANCHORED: the object will not move
 create_parent[[anchored;1;vec,dim;|touchable:@1;hit:nf;]]
 
 create_parent([[col;0;vec,dim;|
@@ -339,112 +313,5 @@ create_parent([[tcol;0;vec,dim;|
    local y, dy = coll_tile_help(a.y, a.x, a.dy, a.ry, a.rx, 2, a, a.tile_hit, function(y, x) return solid_func(x, y) end)
    if a.tile_solid then
       a.x, a.y, a.dx, a.dy = x, y, dx, dy
-   end
-end)
-
--- SECTION: CHARS
-create_parent([[interactable;0;spr,anchored/yes,confined,ma_able;|
-   interactable_trigger:nf;
-   trig_x:0;
-   trig_y:0;
-   trig_rx:.75;
-   trig_ry:.75;
-   trig:null;
-   i:@1;
-   interactable_init:@1;
-]], function(a)
-   a.trig = _g.gen_trigger_block(a, a.trig_x, a.trig_y, a.trig_rx, a.trig_ry, nf, function(trig, other)
-      if npc_able_to_interact(a, other) then
-         change_cur_ma(a)
-         if able_to_interact(a, other) then
-            a:interactable_trigger()
-         end
-      else
-         if get_cur_ma() == a then
-            change_cur_ma()
-         end
-      end
-   end)
-end)
-
-create_parent[[nnpc;0;drawable,danceable,interactable,ma_able;|
-   rx:.5;ry:.5;iyy:-2;
-   u:%look_at_pl
-]]
-
--- SECTION: INVENTORY
-create_parent([[bashable;0;rel,knockable,col;|
-   bash_dx:1;
-   rel_bash_dx:1;
-   hit:@1;bash:@1;
-]], function(a, o)
-   if o != a.rel_actor then
-      call_not_nil(o, 'knockback', o, a.bash_dx, bool_to_num(a.xf), 0)
-      change_cur_ma(o)
-      if a.rel_actor then
-         call_not_nil(a.rel_actor, 'knockback', a.rel_actor, -a.rel_bash_dx, bool_to_num(a.xf), 0)
-      end
-   end
-end
-)
-
-create_parent([[item;0;drawable,rel,confined,spr_obj;|
-   being_held:yes;destroyed:@1;
-]], function(a)
-   if a == a.rel_actor.item then a.rel_actor.item = nil end
-end)
-
-create_parent([[pokeable;0;rel,drawable_obj,item;|
-   i:@1;
-   u:@2;
-   e:@3;
-   poke_init:@1;
-   poke_update:@2;
-   poke_end:@3;
-   poke_update_reverse:@4;
-   poke:20;
-   poke_dist:20;
-   poke_energy:0;
-]], function(a) -- set position
-   a.xf = a.rel_actor.xf
-   a.ixx = a.xf and a.poke_ixx or -a.poke_ixx
-   use_energy(a.poke_energy)
-end, function(a) -- move to position
-   a.rel_dx = bool_to_num(a.xf)*a.poke_dist/a.tl_max_time/FPS
-   pause_energy()
-end, function(a) -- e
-   a.rel_dx, a.rel_x = 0, a.xf and -a.poke_dist or a.poke_dist
-end, function(a)
-   a.rel_dx = -bool_to_num(a.xf)*a.poke_dist/a.tl_max_time/FPS/2
-end)
-
--- SECTION: NPCS
-create_parent([[shop_item;0;drawable,interactable,ma_able;update,|
-   costable:yes;
-   interactable_trigger:@1;
-   rx:.5;ry:.5;
-   iyy:-3;
-   trig_x:0;trig_y:.125;
-   trig_rx:.5;trig_ry:.625;
-   mem_loc:BOGUS_SPOT;cost:99
-]], function(a)
-   if remove_money(a.cost) then
-      a:kill()
-      _g.item_show(g_pl, a.sind, a.mem_loc)
-      pause'chest' -- not a chest, but is the same functionality.
-      stop_music'1'
-   else
-      zsfx(2,6)
-   end
-end)
-
--- exists based on memory
-create_parent([[mem_dep;0;act,;|
-   room_init:@1;
-   mem_loc:BOGUS_SPOT;
-   mem_loc_expect:yes;
-]], function(a)
-   if zdget(a.mem_loc) == a.mem_loc_expect then
-      a:delete()
    end
 end)
