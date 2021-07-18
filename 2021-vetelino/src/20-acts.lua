@@ -27,7 +27,7 @@ end, function(a, y) -- y: -1, 0, 1
     a.lane_jumper:switch_lane(y)
 end)
 
-create_actor([[pl;3;vehicle,|
+create_actor([[pl;3;vehicle,timed|
     x:@1; y:@2;
     vehicle_logic:@4; anim_update:@5; destroyed:@6;
 
@@ -37,7 +37,8 @@ create_actor([[pl;3;vehicle,|
     a:move_x(xbtn())
     a:move_y(ybtnp())
     a:anim_update()
-    if btnp(4) then
+    if a.t > 30 and (btn(4) or btn(5)) then
+        a.t = 0
         _g.throwing_star(a.x, a.y)
     end
 end, function(a)
