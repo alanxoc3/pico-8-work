@@ -94,7 +94,7 @@ end, function(a)
     g_pl = _g.pl(a.x, a.y)
 end)
 
-create_actor([[mission_text;3;drawable,vec,timed, confined|
+create_actor([[mission_text;3;post_drawable,vec,timed, confined|
     text:@1; y:@2; callback:@3;
     u:@4; d:@5;
     destroyed:@6;
