@@ -822,6 +822,9 @@ _g.fader_in(.5,nf,nf)
 end
 function title_draw()
 fade(g_card_fade)
+fillp(0b1000010000100001)
+zcls(0x10)
+fillp()
 local width=7*8*2
 local height=3*8*2
 local bounce=min(2,max(-2,sin(t())*3))
