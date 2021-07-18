@@ -767,10 +767,14 @@ _g.smalltree(18+a.x%1,variant)
 end
 end
 end,function(a)
-for y=TOP_LANE_Y,BOT_LANE_Y,2 do
 for x=0,8 do
-zspr(96,((a.x+x*2)%18)*8-8,y*8,2,2)
+zspr(98,((a.x+x*2)%18)*8-8,TOP_LANE_Y*8,2,2)
 end
+for x=0,8 do
+zspr(96,((a.x+x*2)%18)*8-8,MID_LANE_Y*8,2,2)
+end
+for x=0,8 do
+zspr(100,((a.x+x*2)%18)*8-8,BOT_LANE_Y*8,2,2)
 end
 for x=0,8 do
 zspr(128,((a.x+x*2)%18)*8-8,0*8,2,1)

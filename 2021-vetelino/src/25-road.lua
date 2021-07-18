@@ -82,10 +82,14 @@ end, function(a)
         end
     end
 end, function(a)
-    for y=TOP_LANE_Y,BOT_LANE_Y,2 do
-        for x=0,8 do
-            zspr(96, ((a.x+x*2)%18)*8-8, y*8, 2, 2)
-        end
+    for x=0,8 do
+        zspr(98, ((a.x+x*2)%18)*8-8, TOP_LANE_Y*8, 2, 2)
+    end
+    for x=0,8 do
+        zspr(96, ((a.x+x*2)%18)*8-8, MID_LANE_Y*8, 2, 2)
+    end
+    for x=0,8 do
+        zspr(100, ((a.x+x*2)%18)*8-8, BOT_LANE_Y*8, 2, 2)
     end
 
     for x=0,8 do
