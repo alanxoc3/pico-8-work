@@ -192,7 +192,7 @@ end
 end
 return pos,spd
 end
-g_gunvals=split("@1,@2,!plus/@3/1,@5;@1,@2,@3,@4;|0x8000,0x8000,0x7fff,0x7fff,@1|!plus/@1/-2,!plus/@2/-2,!plus/@3/2,!plus/@4/2,13;!plus/@1/-1,!plus/@2/-1,!plus/@3/1,!plus/@4/1,1;|0,0,0,0,0,0,0;1,1,1,0,0,0,0;2,2,2,1,0,0,0;3,3,3,1,0,0,0;4,2,2,2,1,0,0;5,5,1,1,1,0,0;6,13,13,5,5,1,0;7,6,13,13,5,1,0;8,8,2,2,2,0,0;9,4,4,4,5,0,0;10,9,4,4,5,5,0;11,3,3,3,3,0,0;12,12,3,1,1,1,0;13,5,5,1,1,1,0;14,13,4,2,2,1,0;15,13,13,5,5,1,0;|fader_out;3;act,;update,|fade_time:@1;i:@2;e:@3;u:@4;tl_max_time=@1,|fader_in;3;act,;update,|35:-1,1,7,4,0,1,7,15,1,1,6,16,2,-1,6,16,7,0,7,15,8,2,8,4;|act;0;,;room_init,pause_init,pause_update,pause_end,kill,clean,delete|alive:yes;stun_countdown:0;i:nf;u:nf;update:@1;clean:@2;kill:@3;delete:@4;room_init:nf;create_init:nf;pause_init:nf;pause_update:nf;pause_end:nf;destroyed:nf;get:@5;|ma_able;0;act,;|name:thing;|confined;0;act,;room_end,|room_end:nf;|loopable;0;act,;|tl_loop:yes;|pos;0;act,;|x:0;y:0;|move_pause;0;act,;update,move,vec_update,tick|;|knock;0;col,;|bad;0;knock,;|bounded;0;act,;|check_bounds:nf;|x_bounded;0;bounded,;|check_bounds:@1;|y_bounded;0;bounded,;|timed;0;act,;|t:0;tick:@1;|vec;0;pos,;|dx:0;dy:0;vec_update:@1;|mov;0;vec,;|ix:1;iy:1;ax:0;ay:0;move:@1;stop:@2;calc_next_pos:@3;|dim;0;pos,;|rx:.375;ry:.375;|dim;0;pos,;debug_rect,|rx:.375;ry:.375;debug_rect:@1;|rel;0;act,;rel_update,|rel_actor:null;rel_x:0;rel_y:0;rel_dx:0;rel_dy:0;flippable:no;rel_update:@1;|drawable_obj;0;pos,;reset_off,|ixx:0;iyy:0;xx:0;yy:0;visible:yes;reset_off:@1;|drawable;0;drawable_obj,;d,|d:nf;|drawable_1;0;drawable_obj,;d,|drawable_2;0;drawable_obj,;d,|pre_drawable;0;drawable_obj,;d,|pre_drawable_1;0;drawable_obj,;d,|pre_drawable_2;0;drawable_obj,;d,|post_drawable;0;drawable_obj,;d,|post_drawable_1;0;drawable_obj,;d,|post_drawable_2;0;drawable_obj,;d,|above_map_post_camera_drawable;0;drawable_obj,;d,|spr_obj;0;vec,drawable_obj,;|sind:0;outline_color:1;sw:1;sh:1;xf:no;yf:no;draw_spr:@1;draw_out:@2;draw_both:@3;|anim;0;spr_obj,|anim_update:nf;|spr;0;spr_obj,;|d:@1;|knockable;0;mov,;|knockback:@1;|stunnable;0;mov,drawable_obj;|stun_update:@1;|hurtable;0;act,;|health:1;max_health:1;health_visible:yes;hurt:@1;heal:@2;|trig;0;vec,dim;|contains:nf;intersects:nf;not_contains_or_intersects:nf;contains_or_intersects:@1;trigger_update:@1;|anchored;1;vec,dim;|touchable:@1;hit:nf;|col;0;vec,dim;|touchable:yes;hit:nf;move_check:@1;|dx:0;dy:0|x,dx,@1,@2,@3,@4;y,dy,@1,@2,@5,@6;|tcol;0;vec,dim;|tile_solid:yes;tile_hit:nf;coll_tile:@1;|view;4;act,confined;center_view,update_view|x:0;y:0;room_crop:2;tl_loop:yes;w:@1;h:@2;follow_dim:@3;follow_act:@4;update_view:@5;center_view:@6;change_ma:@7;,;|@1,x,w,ixx;@1,y,h,iyy|lane_jumper;0;pos,confined|x:4;y:4;lane:1;i:@1;switch_lane:@2;|vehicle;0;drawable,spr,mov,x_bounded,col,anim,hurtable,confined|x:4;y:4;ix:.96;iy:.92;vehicle_logic:nf;i:@1;u:@2;move_x:@3;move_y:@4;|pl;2;vehicle,|x:@1;y:@2;vehicle_logic:@3;anim_update:@4;destroyed:@5;x:4;y:4;sind:34;sh:2;iyy:-4;|truck;2;vehicle,|x:@1;y:@2;rx:1;vehicle_logic:@3;health:119;max_health:119;sind:26;sw:2;sh:3;iyy:-8;horizontal_input:0;|intro_truck;0;truck,|x:-5;y:10;check_bounds:nf;vehicle_logic:@1;destroyed:@2;|intro_pl;0;pl,|x:-18;y:10;check_bounds:nf;vehicle_logic:@1;destroyed:@2;|mission_text;3;post_drawable,vec,timed,confined|text:@1;y:@2;callback:@3;u:@4;d:@5;destroyed:@6;,;u=nf,tl_max_time=.5;dy=-1,u=nf,tl_max_time=.5;|popsicle;2;post_drawable,spr,vec,dim,col,confined|touchable:no;x:@1;variant:@2;i:@4;sind:70;sh:2;u=@3,;hit=@6,u=nf,i=@5,tl_max_time=5;|cannon;2;drawable,spr,vec,dim,confined|x:@1;variant:@2;i:@3;sind:118;tl_max_time=12,;|road_gen;0;act,vec,pre_drawable,timed,confined|x:0;i:@1;u:@2;d:@3;|i=@3,u=@4,d=@5;|confined,room_end;confined,delete|x:1;y:2;w:14;h:16;c:0;|act,update;mov,move;vehicle,move_check,@1;popsicle,move_check,@2;vec,vec_update;bounded,check_bounds;timed,tick;act,clean;|pre_drawable,d;drawable,d;post_drawable,d;|pre_drawable,d;pre_drawable_1,d;pre_drawable_2,d;|drawable,d;drawable_1,d;drawable_2,d;post_drawable,d;post_drawable_1,d;post_drawable_2,d;|","|")
+g_gunvals=split("@1,@2,!plus/@3/1,@5;@1,@2,@3,@4;|0x8000,0x8000,0x7fff,0x7fff,@1|!plus/@1/-2,!plus/@2/-2,!plus/@3/2,!plus/@4/2,13;!plus/@1/-1,!plus/@2/-1,!plus/@3/1,!plus/@4/1,1;|0,0,0,0,0,0,0;1,1,1,0,0,0,0;2,2,2,1,0,0,0;3,3,3,1,0,0,0;4,2,2,2,1,0,0;5,5,1,1,1,0,0;6,13,13,5,5,1,0;7,6,13,13,5,1,0;8,8,2,2,2,0,0;9,4,4,4,5,0,0;10,9,4,4,5,5,0;11,3,3,3,3,0,0;12,12,3,1,1,1,0;13,5,5,1,1,1,0;14,13,4,2,2,1,0;15,13,13,5,5,1,0;|fader_out;3;act,;update,|fade_time:@1;i:@2;e:@3;u:@4;tl_max_time=@1,|fader_in;3;act,;update,|35:-1,1,7,4,0,1,7,15,1,1,6,16,2,-1,6,16,7,0,7,15,8,2,8,4;|act;0;,;room_init,pause_init,pause_update,pause_end,kill,clean,delete|alive:yes;stun_countdown:0;i:nf;u:nf;update:@1;clean:@2;kill:@3;delete:@4;room_init:nf;create_init:nf;pause_init:nf;pause_update:nf;pause_end:nf;destroyed:nf;get:@5;|ma_able;0;act,;|name:thing;|confined;0;act,;room_end,|room_end:nf;|loopable;0;act,;|tl_loop:yes;|pos;0;act,;|x:0;y:0;|move_pause;0;act,;update,move,vec_update,tick|;|knock;0;col,;|bad;0;knock,;|bounded;0;act,;|check_bounds:nf;|x_bounded;0;bounded,;|check_bounds:@1;|y_bounded;0;bounded,;|timed;0;act,;|t:0;tick:@1;|vec;0;pos,;|dx:0;dy:0;vec_update:@1;|mov;0;vec,;|ix:1;iy:1;ax:0;ay:0;move:@1;stop:@2;calc_next_pos:@3;|dim;0;pos,;|rx:.375;ry:.375;|dim;0;pos,;debug_rect,|rx:.375;ry:.375;debug_rect:@1;|rel;0;act,;rel_update,|rel_actor:null;rel_x:0;rel_y:0;rel_dx:0;rel_dy:0;flippable:no;rel_update:@1;|drawable_obj;0;pos,;reset_off,|ixx:0;iyy:0;xx:0;yy:0;visible:yes;reset_off:@1;|drawable;0;drawable_obj,;d,|d:nf;|drawable_1;0;drawable_obj,;d,|drawable_2;0;drawable_obj,;d,|pre_drawable;0;drawable_obj,;d,|pre_drawable_1;0;drawable_obj,;d,|pre_drawable_2;0;drawable_obj,;d,|post_drawable;0;drawable_obj,;d,|post_drawable_1;0;drawable_obj,;d,|post_drawable_2;0;drawable_obj,;d,|above_map_post_camera_drawable;0;drawable_obj,;d,|spr_obj;0;vec,drawable_obj,;|sind:0;outline_color:1;sw:1;sh:1;xf:no;yf:no;draw_spr:@1;draw_out:@2;draw_both:@3;|anim;0;spr_obj,|anim_update:nf;|spr;0;spr_obj,;|d:@1;|knockable;0;mov,;|knockback:@1;|stunnable;0;mov,drawable_obj;|stun_update:@1;|hurtable;0;act,;|health:1;max_health:1;health_visible:yes;hurt:@1;heal:@2;|trig;0;vec,dim;|contains:nf;intersects:nf;not_contains_or_intersects:nf;contains_or_intersects:@1;trigger_update:@1;|anchored;1;vec,dim;|touchable:@1;hit:nf;|col;0;vec,dim;|touchable:yes;hit:nf;move_check:@1;|dx:0;dy:0|x,dx,@1,@2,@3,@4;y,dy,@1,@2,@5,@6;|tcol;0;vec,dim;|tile_solid:yes;tile_hit:nf;coll_tile:@1;|view;4;act,confined;center_view,update_view|x:0;y:0;room_crop:2;tl_loop:yes;w:@1;h:@2;follow_dim:@3;follow_act:@4;update_view:@5;center_view:@6;change_ma:@7;,;|@1,x,w,ixx;@1,y,h,iyy|lane_jumper;0;pos,confined|x:4;y:4;lane:1;i:@1;switch_lane:@2;|vehicle;0;drawable,spr,mov,x_bounded,col,anim,hurtable,confined|x:4;y:4;ix:.96;iy:.92;vehicle_logic:nf;i:@1;u:@2;move_x:@3;move_y:@4;|pl;2;vehicle,|x:@1;y:@2;vehicle_logic:@3;anim_update:@4;destroyed:@5;x:4;y:4;sind:34;sh:2;iyy:-4;|truck;2;vehicle,|x:@1;y:@2;rx:1;vehicle_logic:@3;health:119;max_health:119;sind:26;sw:2;sh:3;iyy:-8;horizontal_input:0;|intro_truck;0;truck,|x:-5;y:10;check_bounds:nf;vehicle_logic:@1;destroyed:@2;|intro_pl;0;pl,|x:-18;y:10;check_bounds:nf;vehicle_logic:@1;destroyed:@2;|mission_text;3;post_drawable,vec,timed,confined|text:@1;y:@2;callback:@3;u:@4;d:@5;destroyed:@6;,;u=nf,tl_max_time=.5;dy=-1,u=nf,tl_max_time=.5;|popsicle;2;post_drawable,spr,vec,dim,col,confined|touchable:no;x:@1;variant:@2;i:@4;sind:70;sh:2;u=@3,;hit=@6,u=nf,i=@5,tl_max_time=5;|cannon;2;drawable,spr,vec,dim,confined|x:@1;variant:@2;i:@3;sind:118;tl_max_time=12,;|smalltree;2;drawable,spr,vec,dim,confined|x:@1;variant:@2;i:@3;sind:46;sh:2;tl_max_time=12,;|road_gen;0;act,vec,pre_drawable,timed,confined|x:0;i:@1;u:@2;d:@3;|i=@3,u=@4,d=@5;|confined,room_end;confined,delete|x:1;y:2;w:14;h:16;c:0;|act,update;mov,move;vehicle,move_check,@1;popsicle,move_check,@2;vec,vec_update;bounded,check_bounds;timed,tick;act,clean;|pre_drawable,d;drawable,d;post_drawable,d;|pre_drawable,d;pre_drawable_1,d;pre_drawable_2,d;|drawable,d;drawable_1,d;drawable_2,d;post_drawable,d;post_drawable_1,d;post_drawable_2,d;|","|")
 g_ztable_cache={}
 function nf()end
 function ztable(original_str,...)
@@ -702,10 +702,18 @@ _g.popsicle(a.x,a.variant,1+rnd(1))
 end)
 create_actor([[96|97]],function(a)
 a.dx=ROAD_SPEED
+a.y=a.variant and 13 or 5.5
+end)
+create_actor([[98|99]],function(a)
+a.dx=ROAD_SPEED
 end,function(a)
 if a.t%60==0 then
-if flr_rnd(3)==0 then
-_g.cannon(18+a.x%1,flr_rnd(2)==0)
+local r_num=flr_rnd(3)
+local variant=flr_rnd(2)==0
+if r_num==0 then
+_g.cannon(18+a.x%1,variant)
+elseif r_num==1 then
+_g.smalltree(18+a.x%1,variant)
 end
 end
 end,function(a)
@@ -728,12 +736,12 @@ poke(0x5f5c,15)
 poke(0x5f5d,15)
 function _init()
 music(0,3000)
-g_tl=ztable([[98]],logo_draw,function()sfx"63" end,
+g_tl=ztable([[100]],logo_draw,function()sfx"63" end,
 game_init,game_update,game_draw
 )
 end
 function reset_level()
-batch_call_new(acts_loop,[[99]])
+batch_call_new(acts_loop,[[101]])
 printh("RESET")
 g_pl=nil
 g_truck=nil
@@ -750,10 +758,10 @@ g_intro_pl:kill()
 g_intro_truck:kill()
 end)
 _g.road_gen()
-g_cur_room=ztable[[100]]
+g_cur_room=ztable[[102]]
 end
 function game_update()
-batch_call_new(acts_loop,[[101]],g_act_arrs["col"],g_act_arrs["vehicle"])
+batch_call_new(acts_loop,[[103]],g_act_arrs["col"],g_act_arrs["vehicle"])
 end
 function game_draw()
 fade(g_card_fade)
@@ -764,7 +772,7 @@ else
 draw_health_bar(g_truck.health,g_truck.max_health)
 end
 isorty(g_act_arrs.drawable)
-batch_call_new(acts_loop,[[102]])
+batch_call_new(acts_loop,[[104]])
 rect(0,0,127,127,2)
 if g_debug then acts_loop("dim","debug_rect")end
 end
@@ -810,9 +818,9 @@ local y1,y2=ry*8+4,(ry+view.h)*8-5
 camera_to_view(view)
 zclip(x1,y1,x2,y2)
 zcls(g_cur_room.c)
-batch_call_new(acts_loop,[[103]])
+batch_call_new(acts_loop,[[105]])
 isorty(g_act_arrs.drawable)
-batch_call_new(acts_loop,[[104]])
+batch_call_new(acts_loop,[[106]])
 if g_debug then acts_loop("dim","debug_rect")end
 clip()
 camera()
