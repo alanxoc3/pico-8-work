@@ -87,6 +87,7 @@ create_actor([[truck;2;vehicle,timed|
     end
 end, function(a)
     _g.fader_out(.5,nf,function() g_tl:next() end)
+    _g.dead_truck(a.x, a.y)
 end)
 
 create_actor([[intro_truck;0;truck,|
@@ -125,7 +126,10 @@ create_actor([[mission_text;3;post_drawable,vec,timed, confined|
         a:next()
     end
 end, function(a)
-    rectfill(0, 0, 127, a.y + 17, 0)
+    fillp(0b1000010000100001)
+    rectfill(0, 0, 127, a.y + 17, 0x10)
+    fillp()
+
     rect(0, 0, 127, a.y + 17, 1)
     zprint(a.cur_text, 4, a.y, -1, 11, 1)
 end, function(a)
@@ -165,6 +169,11 @@ create_actor([[dead_unicycle;3;drawable,spr,mov,x_bounded,timed,confined|
         end
     end
 end)
+
+create_actor[[dead_truck;2;drawable,spr,pos,x_bounded,timed,confined|
+    x:@1; y:@2;
+    sind:89; sw:2; sh:3; iyy:-8;
+]]
 
 create_actor([[throwing_star;2;drawable,vec,spr,col,confined|
     x:@1; y:@2;
