@@ -65,7 +65,9 @@ create_actor([[truck;2;vehicle,|
     x:@1; y:@2;
     rx:1;
     vehicle_logic:@3;
-    health:119;
+    destroyed:@4;
+    -- health:119;
+    health:1;
     max_health:119;
 
     sind:26; sw:2; sh:3; iyy:-8;
@@ -79,6 +81,8 @@ create_actor([[truck;2;vehicle,|
     if flr_rnd(30) == 0 then
         a:move_y(flr_rnd(3)-1)
     end
+end, function(a)
+    _g.fader_out(.5,nf,function() g_tl:next() end)
 end)
 
 create_actor([[intro_truck;0;truck,|
@@ -118,8 +122,8 @@ create_actor([[mission_text;3;post_drawable,vec,timed, confined|
     end
 end, function(a)
     rectfill(0, 0, 127, a.y + 17, 0)
-    rect(0, 0, 127, a.y + 17, 2)
-    zprint(a.cur_text, 4, a.y, -1, 8, 2)
+    rect(0, 0, 127, a.y + 17, 1)
+    zprint(a.cur_text, 4, a.y, -1, 11, 1)
 end, function(a)
     a.callback()
 end)
