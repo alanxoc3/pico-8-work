@@ -1,13 +1,13 @@
 ROAD_SPEED = -.125
 
-create_actor([[popsicle;2;post_drawable,spr,vec,dim,col,confined|
+create_actor([[popsicle;2;drawable,spr,vec,dim,col,confined|
     touchable:no;
     x:@1; variant:@2;
     i:@4;
     sind:70; sh:2;
 
     u=@3,;
-    hit=@6,u=nf,i=@5,tl_max_time=5;
+    hit=@6,u=@7,i=@5,tl_max_time=5;
 ]], function(a)
     if g_pl and g_pl.x+4 > a.x then
         a:next()
@@ -31,9 +31,11 @@ end, function(a)
     a.sind = 68
 end, function(a, other)
     if other.vehicle then
-        other:hurt(3, 0)
+        other:hurt(6, 0)
         a:kill()
     end
+end, function(a)
+    a.sind = t()*2 % 1 < .5 and 68 or 69
 end)
 
 create_actor([[cannon;2;drawable,spr,vec,dim,confined|
@@ -73,7 +75,7 @@ end, function(a)
     if a.t % 60 == 0 then
         local r_num = flr_rnd(3)
         local variant = flr_rnd(2) == 0
-        if r_num == 0 then
+        if a.t > 240 and r_num == 0 then
             _g.cannon(18+a.x%1, variant)
         elseif r_num == 1 then
             _g.smalltree(18+a.x%1, variant)

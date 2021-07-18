@@ -12,7 +12,7 @@ poke(0x5f5d, 15) -- set the repeating delay.
 function _init()
     music(0, 3000)
     g_tl = ztable([[
-        -- x=64, y=64, i=@2, u=nf, d=@1, tl_max_time=2.5; -- logo
+        --x=64, y=64, i=@2, u=nf, d=@1, tl_max_time=2.5; -- logo
         i=@3, u=@4, d=@5;  -- title
         i=@6, u=@7, d=@8;  -- game
     ]], logo_draw, function() sfx'63' end,
@@ -38,9 +38,11 @@ end
 function title_init()
     g_title_selection = 0
     g_codename = ""
+    _g.fader_in(.5, nf, nf)
 end
 
 function title_draw()
+    fade(g_card_fade)
     local width = 7*8*2
     local height = 3*8*2
     local bounce = min(2, max(-2, sin(t())*3))
@@ -57,8 +59,15 @@ function title_update(tl)
     g_title_selection = min(1, max(0, g_title_selection+xbtn()))
     if btnp(4) or btnp(5) then
         g_codename = g_title_selection == 0 and "pendae" or "popguin"
-        tl:next()
+        _g.fader_out(.5,nf,function()
+            tl:next()
+        end)
     end
+
+    batch_call_new(acts_loop, [[
+        act, update;
+        act, clean;
+    ]])
 end
 
 function game_init()
@@ -81,11 +90,12 @@ function game_update()
         mov, move;
         vehicle,move_check,@1;
         popsicle,move_check,@2;
+        throwing_star,move_check,@3;
         vec, vec_update;
         bounded, check_bounds;
         timed, tick;
         act, clean;
-    ]], g_act_arrs['col'], g_act_arrs['vehicle'])
+    ]], g_act_arrs['col'], g_act_arrs['vehicle'], g_act_arrs['truck'])
 end
 
 function game_draw()
