@@ -62,8 +62,7 @@ end
 
 function game_draw()
     fade(g_card_fade)
-
-    draw_blueprint()
+    zcls(3)
 
     if not g_truck then
         draw_health_bar(1, 1)
@@ -73,10 +72,12 @@ function game_draw()
 
     isorty(g_act_arrs.drawable)
     batch_call_new(acts_loop, [[
+        pre_drawable, d;
         drawable, d;
         post_drawable, d;
     ]])
 
+    rect(0, 0, 127, 127, 2)
     -- DEBUG_BEGIN
     if g_debug then acts_loop('dim', 'debug_rect') end
     -- DEBUG_END
