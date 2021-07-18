@@ -178,7 +178,7 @@ create_actor([[throwing_star;2;drawable,vec,spr,col,confined|
     end
 end, function(a, o)
     if o.truck then
-        o:hurt(1, 0)
+        o:hurt(5, 0)
         a:kill()
     end
 end)
