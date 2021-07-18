@@ -4,6 +4,7 @@ create_actor([[popsicle;2;drawable,spr,vec,dim,col,confined|
     touchable:no;
     x:@1; variant:@2;
     i:@4;
+    ry:.5;
     sind:70; sh:2;
 
     u=@3,;
@@ -67,6 +68,17 @@ create_actor([[smalltree;2;drawable,spr,vec,dim,confined|
     a.y = a.variant and 13 or 5.5
 end)
 
+create_actor([[grass;2;drawable,spr,vec,dim,confined|
+    x:@1; variant:@2;
+    i:@3;
+
+    sind:61;
+    tl_max_time=12,;
+]], function(a)
+    a.dx = ROAD_SPEED
+    a.y = a.variant and 14 or 6
+end)
+
 create_actor([[road_gen;0;act,vec,pre_drawable,timed,confined|
     x:0; i:@1; u:@2; d:@3;
 ]], function(a)
@@ -78,7 +90,13 @@ end, function(a)
         if a.t > 240 and r_num == 0 then
             _g.cannon(18+a.x%1, variant)
         elseif r_num == 1 then
+            _g.grass(18+a.x%1,variant)
+        else
             _g.smalltree(18+a.x%1, variant)
+        end
+    elseif a.t % 30 == 0 then
+        if flr_rnd(2) == 0 then
+            _g.grass(18+a.x%1,variant)
         end
     end
 end, function(a)
