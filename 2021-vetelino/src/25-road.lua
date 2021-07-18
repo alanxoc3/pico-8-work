@@ -31,7 +31,7 @@ end, function(a)
     a.sind = 68
 end, function(a, other)
     if other.vehicle then
-        other:hurt(6, 0)
+        other:hurt(15, 0)
         a:kill()
     end
 end, function(a)
