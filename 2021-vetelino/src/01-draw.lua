@@ -71,7 +71,7 @@ end
 function tprint(str, x, y, c1, c2)
    for i=-1,1 do
       for j=-1,1 do
-         zprint(str, x+i, y+j, 0, BG_UI, BG_UI)
+         zprint(str, x+i, y+j, 0, 1, 1)
       end
    end
    zprint(str, x, y, 0, c1, c2)

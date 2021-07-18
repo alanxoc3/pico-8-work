@@ -108,7 +108,9 @@ create_actor([[mission_text;3;post_drawable,vec,timed, confined|
         a:next()
     end
 end, function(a)
-    zprint(a.cur_text, 4, a.y, -1, 11, 1)
+    rectfill(0, 0, 127, a.y + 17, 0)
+    rect(0, 0, 127, a.y + 17, 2)
+    zprint(a.cur_text, 4, a.y, -1, 8, 2)
 end, function(a)
     a.callback()
 end)
