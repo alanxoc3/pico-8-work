@@ -12,26 +12,31 @@ poke(0x5f5d, 15) -- set the repeating delay.
 function _init()
     music(0, 3000)
     g_tl = ztable([[
+        tl_loop:yes;
         --x=64, y=64, i=@2, u=nf, d=@1, tl_max_time=2.5; -- logo
         i=@3, u=@4, d=@5;  -- title
         i=@6, u=@7, d=@8;  -- game
+        i=@9, u=@10, d=@11;  -- win
     ]], logo_draw, function() sfx'63' end,
     title_init, title_update, title_draw,
-    game_init, game_update, game_draw
+    game_init, game_update, game_draw,
+    win_init, win_update, win_draw
     )
 end
 
-function reset_level()
+function end_level()
     batch_call_new(acts_loop, [[
         confined,room_end;
         confined,delete
     ]])
-    printh("RESET")
     g_pl = nil
     g_truck = nil
     g_intro_pl = nil
     g_intro_truck = nil
+end
 
+function reset_level()
+    end_level()
     game_init()
 end
 
@@ -77,7 +82,34 @@ function title_update(tl)
     ]])
 end
 
+function win_init()
+    end_level()
+    _g.fader_in(.5, nf, nf)
+    g_ended = false
+end
+
+function win_draw()
+    fade(g_card_fade)
+    zprint("you win!", 64, 64, 0, 11, 1)
+end
+
+function win_update(tl)
+    if not g_ended and (btnp(4) or btnp(5)) then
+        g_ended = true
+        _g.fader_out(.5,nf,function()
+            tl.tl_next = 2
+            tl:next()
+        end)
+    end
+
+    batch_call_new(acts_loop, [[
+        act, update;
+        act, clean;
+    ]])
+end
+
 function game_init()
+    end_level()
     _g.fader_in(.5, nf, nf)
     g_intro_pl = _g.intro_pl()
     g_intro_truck = _g.intro_truck()
@@ -122,7 +154,7 @@ function game_draw()
         post_drawable, d;
     ]])
 
-    rect(0, 0, 127, 127, 2)
+    rect(0, 0, 127, 127, 1)
     -- DEBUG_BEGIN
     if g_debug then acts_loop('dim', 'debug_rect') end
     -- DEBUG_END
