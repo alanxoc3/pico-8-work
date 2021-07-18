@@ -40,6 +40,7 @@ create_actor([[pl;3;vehicle,timed|
     if a.t > 30 and (btn(4) or btn(5)) then
         a.t = 0
         _g.throwing_star(a.x, a.y)
+        g_stars_thrown += 1
     end
 end, function(a)
     local toggle = a.tl_tim % .5 < .25
@@ -59,6 +60,8 @@ end, function(a)
     _g.dead_pl(a.x, a.y, g_codename == "popguin" and 24 or 56)
     _g.dead_unicycle(a.x, a.y, g_codename == "popguin" and 8 or 40)
     _g.fader_out(.5,nf,reset_level)
+
+    g_death_count += 1
 end)
 
 create_actor([[truck;2;vehicle,timed|
@@ -66,8 +69,7 @@ create_actor([[truck;2;vehicle,timed|
     rx:1;
     vehicle_logic:@3;
     destroyed:@4;
-    -- health:119;
-    health:1;
+    health:119;
     max_health:119;
 
     sind:26; sw:2; sh:3; iyy:-8;

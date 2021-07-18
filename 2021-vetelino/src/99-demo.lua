@@ -9,11 +9,15 @@ g_card_fade = 8
 poke(0x5f5c, 15) -- set the initial delay before repeating.
 poke(0x5f5d, 15) -- set the repeating delay.
 
+g_stars_thrown = 0
+g_death_count = 0
+g_time_spent = 0
+
 function _init()
-    music(0, 3000)
+    music(0, 8000)
     g_tl = ztable([[
         tl_loop:yes;
-        --x=64, y=64, i=@2, u=nf, d=@1, tl_max_time=2.5; -- logo
+        x=64, y=64, i=@2, u=nf, d=@1, tl_max_time=2.5; -- logo
         i=@3, u=@4, d=@5;  -- title
         i=@6, u=@7, d=@8;  -- game
         i=@9, u=@10, d=@11;  -- win
@@ -41,6 +45,9 @@ function reset_level()
 end
 
 function title_init()
+    g_stars_thrown = 0
+    g_death_count = 0
+    g_time_spent = 0
     g_started = false
     g_title_selection = 0
     g_codename = ""
@@ -71,6 +78,7 @@ function title_update(tl)
     if not g_started and (btnp(4) or btnp(5)) then
         g_started = true
         g_codename = g_title_selection == 0 and "pendae" or "popguin"
+        g_time_spent = 0
         _g.fader_out(.5,nf,function()
             tl:next()
         end)
@@ -90,7 +98,20 @@ end
 
 function win_draw()
     fade(g_card_fade)
-    zprint("you win!", 64, 64, 0, 11, 1)
+
+    fillp(0b1000010000100001)
+    zcls(0x10)
+    fillp()
+
+    local bounce = min(2, max(-2, sin(t())*3))
+
+    zspr(g_codename == "popguin" and 197 or 229, 64, 2+20+bounce, 5, 2)
+    zprint("objective complete!", 64, 2+38+bounce, 0, 11, 1)
+    zprint("time spent: "..(g_time_spent/60).."s", 64+bounce, 2+59, 0, 12, 1)
+    zprint("stars thrown: "..g_stars_thrown, 64-bounce, 2+59+8, 0, 14, 2)
+    zprint("death count: "..g_death_count, 64+bounce, 2+59+16, 0, 6, 5)
+    zprint("code & music: @alanxoc3", 64, 2+96-bounce, 0, 8, 2)
+    zprint("spr & sfx: @thegreatcadet", 64, 2+96+8-bounce, 0, 10, 4)
 end
 
 function win_update(tl)
@@ -98,7 +119,6 @@ function win_update(tl)
         g_ended = true
         _g.fader_out(.5,nf,function()
             tl.tl_next = 2
-            tl:next()
         end)
     end
 
@@ -110,6 +130,7 @@ end
 
 function game_init()
     end_level()
+    g_stars_thrown = 0
     _g.fader_in(.5, nf, nf)
     g_intro_pl = _g.intro_pl()
     g_intro_truck = _g.intro_truck()
@@ -124,6 +145,7 @@ function game_init()
 end
 
 function game_update()
+    g_time_spent += 1
     batch_call_new(acts_loop, [[
         act, update;
         mov, move;
