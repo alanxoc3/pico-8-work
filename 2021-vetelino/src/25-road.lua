@@ -53,14 +53,30 @@ create_actor([[cannon;2;drawable,spr,vec,dim,confined|
     _g.popsicle(a.x, a.variant, 1+rnd(1))
 end)
 
+create_actor([[smalltree;2;drawable,spr,vec,dim,confined|
+    x:@1; variant:@2;
+    i:@3;
+
+    sind:46;
+    sh:2;
+    tl_max_time=12,;
+]], function(a)
+    a.dx = ROAD_SPEED
+    a.y = a.variant and 13 or 5.5
+end)
+
 create_actor([[road_gen;0;act,vec,pre_drawable,timed,confined|
     x:0; i:@1; u:@2; d:@3;
 ]], function(a)
     a.dx = ROAD_SPEED
 end, function(a)
     if a.t % 60 == 0 then
-        if flr_rnd(3) == 0 then
-            _g.cannon(18+a.x%1, flr_rnd(2) == 0)
+        local r_num = flr_rnd(3)
+        local variant = flr_rnd(2) == 0
+        if r_num == 0 then
+            _g.cannon(18+a.x%1, variant)
+        elseif r_num == 1 then
+            _g.smalltree(18+a.x%1, variant)
         end
     end
 end, function(a)
