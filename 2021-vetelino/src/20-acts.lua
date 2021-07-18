@@ -27,12 +27,12 @@ end, function(a, y) -- y: -1, 0, 1
     a.lane_jumper:switch_lane(y)
 end)
 
-create_actor([[pl;2;vehicle,|
+create_actor([[pl;3;vehicle,|
     x:@1; y:@2;
-    vehicle_logic:@3; anim_update:@4; destroyed:@5;
+    vehicle_logic:@4; anim_update:@5; destroyed:@6;
 
     x:4; y:4;
-    sind:34; sh:2; iyy:-4;
+    sind:@3; sh:2; iyy:-4;
 ]], function(a)
     a:move_x(xbtn())
     a:move_y(ybtnp())
@@ -49,6 +49,10 @@ end, function(a)
         a.sind = toggle and 32 or 33
     else
         a.sind = toggle and 34 or 35
+    end
+
+    if g_codename == "popguin" then
+        a.sind -= 32
     end
 end, function(a)
     _g.fader_out(.5,nf,reset_level)
@@ -94,7 +98,7 @@ create_actor([[intro_pl;0;pl,|
     a:move_x(a.x < 1 and 1 or 0)
     a:anim_update()
 end, function(a)
-    g_pl = _g.pl(a.x, a.y)
+    g_pl = _g.pl(a.x, a.y, g_codename == "popguin" and 2 or 34)
 end)
 
 create_actor([[mission_text;3;post_drawable,vec,timed, confined|
@@ -126,7 +130,7 @@ create_actor([[throwing_star;2;drawable,vec,spr,col,confined|
     dx:.25;
     tl_max_time=10,;
 ]], function(a)
-    local val = t() % 2
+    local val = t() % 1
     if val < .25 then
         a.sind = 28
     elseif val < .5 then

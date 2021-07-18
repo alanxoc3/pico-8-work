@@ -49,7 +49,7 @@ function title_draw()
     sspr(16, 70, 7*8, 3*8, 64-width/2, 8+bounce, width, height)
 
     spr(g_title_selection == 0 and 229 or 224, 64-5*8/2-24+bounce, 64-16+15, 5, 2)
-    spr(g_title_selection == 1 and 229 or 224, 64-5*8/2+24-bounce, 64-16+15, 5, 2)
+    spr(g_title_selection == 1 and 197 or 192, 64-5*8/2+24-bounce, 64-16+15, 5, 2)
 
     zprint("select player then", 64, 96+4-bounce, 0, 11, 1)
     zprint("z or x to play", 64, 96+4+8-bounce, 0, 11, 1)
