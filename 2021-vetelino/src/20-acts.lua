@@ -40,6 +40,7 @@ create_actor([[pl;3;vehicle,timed|
     if a.t > 30 and (btn(4) or btn(5)) then
         a.t = 0
         _g.throwing_star(a.x, a.y)
+        sfx'17'
         g_stars_thrown += 1
     end
 end, function(a)
@@ -85,9 +86,13 @@ create_actor([[truck;2;vehicle,timed|
         a:move_y(flr_rnd(3)-1)
     end
 
+    if a.t % 240 == 10 and flr_rnd(4) == 0 then
+        sfx'13'
+    end
+
     if a.t % 60 == 0 and flr_rnd(4) == 0 then
         if flr_rnd(4) == 0 then
-            sfx'13'
+            sfx'16'
         end
         _g.bomb(a.x-1, a.y)
     end
