@@ -36,6 +36,7 @@ function reset_level()
 end
 
 function title_init()
+    g_started = false
     g_title_selection = 0
     g_codename = ""
     _g.fader_in(.5, nf, nf)
@@ -57,7 +58,8 @@ end
 
 function title_update(tl)
     g_title_selection = min(1, max(0, g_title_selection+xbtn()))
-    if btnp(4) or btnp(5) then
+    if not g_started and (btnp(4) or btnp(5)) then
+        g_started = true
         g_codename = g_title_selection == 0 and "pendae" or "popguin"
         _g.fader_out(.5,nf,function()
             tl:next()
