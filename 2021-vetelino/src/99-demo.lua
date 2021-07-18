@@ -13,8 +13,10 @@ function _init()
     music(0, 3000)
     g_tl = ztable([[
         -- x=64, y=64, i=@2, u=nf, d=@1, tl_max_time=2.5; -- logo
-        i=@3, u=@4, d=@5;  -- game
+        i=@3, u=@4, d=@5;  -- title
+        i=@6, u=@7, d=@8;  -- game
     ]], logo_draw, function() sfx'63' end,
+    title_init, title_update, title_draw,
     game_init, game_update, game_draw
     )
 end
@@ -31,6 +33,30 @@ function reset_level()
     g_intro_truck = nil
 
     game_init()
+end
+
+function title_init()
+    g_title_selection = 0
+end
+
+function title_draw()
+    local width = 7*8*2
+    local height = 3*8*2
+    local bounce = min(2, max(-2, sin(t())*3))
+    sspr(16, 70, 7*8, 3*8, 64-width/2, 8+bounce, width, height)
+
+    spr(g_title_selection == 0 and 229 or 224, 64-5*8/2-24+bounce, 64-16+15, 5, 2)
+    spr(g_title_selection == 1 and 229 or 224, 64-5*8/2+24-bounce, 64-16+15, 5, 2)
+
+    zprint("select player then", 64, 96+4-bounce, 0, 11, 1)
+    zprint("z or x to play", 64, 96+4+8-bounce, 0, 11, 1)
+end
+
+function title_update(tl)
+    g_title_selection = min(1, max(0, g_title_selection+xbtn()))
+    if btnp(4) or btnp(5) then
+        tl:next()
+    end
 end
 
 function game_init()
