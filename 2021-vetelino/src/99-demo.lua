@@ -130,11 +130,12 @@ function game_update()
         vehicle,move_check,@1;
         popsicle,move_check,@2;
         throwing_star,move_check,@3;
+        bomb,move_check,@4;
         vec, vec_update;
         bounded, check_bounds;
         timed, tick;
         act, clean;
-    ]], g_act_arrs['col'], g_act_arrs['vehicle'], g_act_arrs['truck'])
+    ]], g_act_arrs['col'], g_act_arrs['vehicle'], g_act_arrs['truck'], g_act_arrs['pl'])
 end
 
 function game_draw()

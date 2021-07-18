@@ -61,7 +61,7 @@ end, function(a)
     _g.fader_out(.5,nf,reset_level)
 end)
 
-create_actor([[truck;2;vehicle,|
+create_actor([[truck;2;vehicle,timed|
     x:@1; y:@2;
     rx:1;
     vehicle_logic:@3;
@@ -80,6 +80,10 @@ create_actor([[truck;2;vehicle,|
 
     if flr_rnd(30) == 0 then
         a:move_y(flr_rnd(3)-1)
+    end
+
+    if a.t % 60 == 0 and flr_rnd(4) == 0 then
+        _g.bomb(a.x-1, a.y)
     end
 end, function(a)
     _g.fader_out(.5,nf,function() g_tl:next() end)
@@ -184,6 +188,23 @@ create_actor([[throwing_star;2;drawable,vec,spr,col,confined|
 end, function(a, o)
     if o.truck then
         o:hurt(5, 0)
+        a:kill()
+    end
+end)
+
+create_actor([[bomb;2;drawable,vec,spr,col,confined|
+    x:@1; y:@2;
+    u:@3; hit:@4;
+    touchable:no;
+    sind:13;
+    iyy:-4;
+    dx:.25;
+    tl_max_time=10,;
+]], function(a)
+    a.dx = ROAD_SPEED
+end, function(a, o)
+    if o.pl then
+        o:hurt(1, 0)
         a:kill()
     end
 end)
