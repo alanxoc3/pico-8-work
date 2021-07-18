@@ -55,6 +55,8 @@ end, function(a)
         a.sind -= 32
     end
 end, function(a)
+    _g.dead_pl(a.x, a.y, g_codename == "popguin" and 24 or 56)
+    _g.dead_unicycle(a.x, a.y, g_codename == "popguin" and 8 or 40)
     _g.fader_out(.5,nf,reset_level)
 end)
 
@@ -119,6 +121,40 @@ end, function(a)
     zprint(a.cur_text, 4, a.y, -1, 8, 2)
 end, function(a)
     a.callback()
+end)
+
+create_actor([[dead_pl;3;drawable,spr,mov,x_bounded,timed,confined|
+    x:@1; y:@2; sind:@3;
+    ix:.95;
+    dx:-.25;
+    u:@4;
+]], function(a)
+    if a.t > 5 then
+        a.sind = 55
+        if a.t > 10 then
+            a.sind = 54
+        end
+        if g_codename == "popguin" then
+            a.sind -= 32
+        end
+    end
+end)
+
+create_actor([[dead_unicycle;3;drawable,spr,mov,x_bounded,timed,confined|
+    x:@1; y:@2; sind:@3;
+    ix:.95;
+    dx:.125;
+    u:@4;
+]], function(a)
+    if a.t > 5 then
+        a.sind = 39
+        if a.t > 10 then
+            a.sind = 38
+        end
+        if g_codename == "popguin" then
+            a.sind -= 32
+        end
+    end
 end)
 
 create_actor([[throwing_star;2;drawable,vec,spr,col,confined|
