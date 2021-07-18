@@ -91,9 +91,7 @@ create_actor([[truck;2;vehicle,timed|
     end
 
     if a.t % 60 == 0 and flr_rnd(4) == 0 then
-        if flr_rnd(4) == 0 then
-            sfx'16'
-        end
+        sfx'16'
         _g.bomb(a.x-1, a.y)
     end
 end, function(a)

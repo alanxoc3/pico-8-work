@@ -642,9 +642,7 @@ if a.t%240==10 and flr_rnd(4)==0 then
 sfx"13"
 end
 if a.t%60==0 and flr_rnd(4)==0 then
-if flr_rnd(4)==0 then
 sfx"16"
-end
 _g.bomb(a.x-1,a.y)
 end
 end,function(a)
@@ -742,6 +740,7 @@ a.iyy=-4
 a.yf=true
 end
 end,function(a)
+sfx"16"
 if a.variant then
 a.dy=-.1
 else
@@ -909,7 +908,7 @@ g_stars_thrown=0
 _g.fader_in(.5,nf,nf)
 g_intro_pl=_g.intro_pl()
 g_intro_truck=_g.intro_truck()
-_g.mission_text("\^y8codename: "..g_codename.."\nobjective: eat ice cream",4,function()
+_g.mission_text("\^y8codename: "..g_codename.."\nobjective: stop that truck!",4,function()
 g_intro_pl:kill()
 g_intro_truck:kill()
 end)
