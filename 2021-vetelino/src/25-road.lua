@@ -24,6 +24,7 @@ end, function(a)
         a.yf = true
     end
 end, function(a)
+    sfx'16'
     if a.variant then
         a.dy = -.1
     else

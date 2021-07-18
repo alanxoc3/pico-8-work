@@ -139,7 +139,7 @@ function game_init()
     g_intro_pl = _g.intro_pl()
     g_intro_truck = _g.intro_truck()
 
-    _g.mission_text("\^y8codename: "..g_codename.."\nobjective: eat ice cream", 4, function()
+    _g.mission_text("\^y8codename: "..g_codename.."\nobjective: stop that truck!", 4, function()
         g_intro_pl:kill()
         g_intro_truck:kill()
     end)
