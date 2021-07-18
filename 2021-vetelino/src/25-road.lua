@@ -53,7 +53,7 @@ create_actor([[cannon;2;drawable,spr,vec,dim,confined|
     _g.popsicle(a.x, a.variant, 1+rnd(1))
 end)
 
-create_actor([[road_gen;0;act,vec,drawable,timed,confined|
+create_actor([[road_gen;0;act,vec,pre_drawable,timed,confined|
     x:0; i:@1; u:@2; d:@3;
 ]], function(a)
     a.dx = ROAD_SPEED
@@ -68,6 +68,14 @@ end, function(a)
         for x=0,8 do
             zspr(96, ((a.x+x*2)%18)*8-8, y*8, 2, 2)
         end
+    end
+
+    for x=0,8 do
+        zspr(128, ((a.x+x*2)%18)*8-8, 0*8, 2, 1)
+        zspr(128, ((a.x+x*2)%18)*8-8, 1*8, 2, 1)
+        zspr(128, ((a.x+x*2)%18)*8-8, 2*8, 2, 1)
+        zspr(128, ((a.x+x*2)%18)*8-8, 3*8, 2, 1)
+        zspr(128, ((a.x+x*2)%18)*8-8, 4*8, 2, 2)
     end
 end)
 
