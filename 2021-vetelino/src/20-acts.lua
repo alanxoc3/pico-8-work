@@ -37,18 +37,21 @@ create_actor([[pl;2;vehicle,|
     a:move_x(xbtn())
     a:move_y(ybtnp())
     a:anim_update()
+    if btnp(4) then
+        _g.throwing_star(a.x, a.y)
+    end
 end, function(a)
     local toggle = a.tl_tim % .5 < .25
 
-    if a.dx > .05 and a.ax > 0 then
+    if a.dx > .01 and a.ax > 0 then
         a.sind = toggle and 36 or 37
-    elseif a.dx < -.05 and a.ax < 0 then
+    elseif a.dx < -.01 and a.ax < 0 then
         a.sind = toggle and 32 or 33
     else
         a.sind = toggle and 34 or 35
     end
 end, function(a)
-    _g.fader_out(1,nf,reset_level)
+    _g.fader_out(.5,nf,reset_level)
 end)
 
 create_actor([[truck;2;vehicle,|
@@ -97,11 +100,10 @@ end)
 create_actor([[mission_text;3;post_drawable,vec,timed, confined|
     text:@1; y:@2; callback:@3;
     u:@4; d:@5;
-    destroyed:@6;
 
     ,;
     u=nf, tl_max_time=.5;
-    dy=-1, u=nf, tl_max_time=.5;
+    i=@6,u=nf;
 ]], function(a)
     a.cur_text = sub(a.text, 1, min(#a.text, a.tl_tim*10))
     if #a.cur_text >= #a.text then
@@ -113,4 +115,30 @@ end, function(a)
     zprint(a.cur_text, 4, a.y, -1, 8, 2)
 end, function(a)
     a.callback()
+end)
+
+create_actor([[throwing_star;2;drawable,vec,spr,col,confined|
+    x:@1; y:@2;
+    touchable:no;
+    sind:28;
+    u:@3; hit:@4;
+    iyy:-4;
+    dx:.25;
+    tl_max_time=10,;
+]], function(a)
+    local val = t() % 2
+    if val < .25 then
+        a.sind = 28
+    elseif val < .5 then
+        a.sind = 29
+    elseif val < .75 then
+        a.sind = 30
+    else
+        a.sind = 31
+    end
+end, function(a, o)
+    if o.truck then
+        o:hurt(1, 0)
+        a:kill()
+    end
 end)
