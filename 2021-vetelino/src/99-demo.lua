@@ -75,7 +75,11 @@ end
 
 function title_update(tl)
     g_title_selection = min(1, max(0, g_title_selection+xbtn()))
+    if btnp(0) or btnp(1) then
+        sfx'14'
+    end
     if not g_started and (btnp(4) or btnp(5)) then
+        sfx'15'
         g_started = true
         g_codename = g_title_selection == 0 and "pendae" or "popguin"
         g_time_spent = 0

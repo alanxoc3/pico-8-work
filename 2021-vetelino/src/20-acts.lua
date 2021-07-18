@@ -61,6 +61,7 @@ end, function(a)
     _g.dead_unicycle(a.x, a.y, g_codename == "popguin" and 8 or 40)
     _g.fader_out(.5,nf,reset_level)
 
+    sfx'12'
     g_death_count += 1
 end)
 
@@ -85,6 +86,9 @@ create_actor([[truck;2;vehicle,timed|
     end
 
     if a.t % 60 == 0 and flr_rnd(4) == 0 then
+        if flr_rnd(4) == 0 then
+            sfx'13'
+        end
         _g.bomb(a.x-1, a.y)
     end
 end, function(a)
@@ -200,6 +204,7 @@ end, function(a, o)
     if o.truck then
         o:hurt(5, 0)
         a:kill()
+        sfx'11'
     end
 end)
 
@@ -215,6 +220,7 @@ create_actor([[bomb;2;drawable,vec,spr,col,confined|
     a.dx = ROAD_SPEED
 end, function(a, o)
     if o.pl then
+        sfx'10'
         o:hurt(1, 0)
         a:kill()
     end
