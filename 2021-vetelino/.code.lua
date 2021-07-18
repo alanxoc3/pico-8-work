@@ -752,6 +752,7 @@ game_init()
 end
 function title_init()
 g_title_selection=0
+g_codename=""
 end
 function title_draw()
 local width=7*8*2
@@ -766,6 +767,7 @@ end
 function title_update(tl)
 g_title_selection=min(1,max(0,g_title_selection+xbtn()))
 if btnp(4)or btnp(5)then
+g_codename=g_title_selection==0 and "pendae"or "popguin"
 tl:next()
 end
 end
@@ -773,7 +775,7 @@ function game_init()
 _g.fader_in(.5,nf,nf)
 g_intro_pl=_g.intro_pl()
 g_intro_truck=_g.intro_truck()
-_g.mission_text("\^y8codename: pendae\nobjective: eat ice cream",4,function()
+_g.mission_text("\^y8codename: "..g_codename.."\nobjective: eat ice cream",4,function()
 g_intro_pl:kill()
 g_intro_truck:kill()
 end)
