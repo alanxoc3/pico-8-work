@@ -2,15 +2,21 @@ SCR_MIN_X, SCR_MAX_X = 0+4,  127-4
 SCR_MIN_Y, SCR_MAX_Y = 0+4, 127-12
 
 function _init()
+    global_framecount = 0
     pl = create_pl(64, 64)
     walls = { create_wall(50,50) }
-    enemies = { create_enemy(10,10) }
+    enemies = {}
     bullets = {}
 end
 
 function _update60()
     -- ensure things are alive
     bullets = filter_out_dead_things(bullets)
+    enemies = filter_out_dead_things(enemies)
+
+    if global_framecount % 120 == 0 then
+        add(enemies, create_enemy())
+    end
 
     -- step 1: speeds
     pl:update()
@@ -41,6 +47,8 @@ function _update60()
         bullet.x += bullet.dx
         bullet.y += bullet.dy
     end)
+
+    global_framecount += 1
 end
 
 function _draw()

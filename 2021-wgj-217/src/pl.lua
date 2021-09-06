@@ -1,11 +1,13 @@
 MAX_ENERGY=100
 SPLIT_COOLDOWN_FRAMECOUNT=60
 BULLET_COOLDOWN_FRAMECOUNT=15
+SPLIT_COST=33
+BULLET_COST=10
 
 function create_pl(x, y)
     return {
         dx=0, dy=0,
-        rx=4, ry=4,
+        rx=3, ry=3,
         dir=0, -- 0=l, 1=r, 2=u, 3=d
         color=12,
         pressing=nil, -- nil=nothing, 0=l, 1=r, 2=u, 3=d
@@ -32,7 +34,7 @@ function create_pl(x, y)
 
             if a:is_split() then
                 if a.split_cooldown == SPLIT_COOLDOWN_FRAMECOUNT-1 then
-                    a.energy -= 45
+                    a.energy -= SPLIT_COST
                 end
                 a.color = 11
                 return
@@ -40,17 +42,17 @@ function create_pl(x, y)
 
             a.color = 12
             a.energy = min(MAX_ENERGY, a.energy+.25)
-            if btn(4) and a.energy - 10 >= 0 and a.bullet_cooldown >= BULLET_COOLDOWN_FRAMECOUNT then
+            if btn(4) and a.energy - BULLET_COST >= 0 and a.bullet_cooldown >= BULLET_COOLDOWN_FRAMECOUNT then
                 local dx = get_x_from_dir(a.dir, abs(a.dx)+2)
                 local dy = get_y_from_dir(a.dir, abs(a.dy)+2)
                 add(bullets, create_bullet(a.x, a.y, dx, dy))
                 add(bullets, create_bullet(a.x, a.y, dx+dy*.25, dy+dx*.25))
                 add(bullets, create_bullet(a.x, a.y, dx-dy*.25, dy-dx*.25))
-                a.energy -= 10
+                a.energy -= BULLET_COST
                 a.bullet_cooldown = 0
             end
 
-            if btn(5) and a.energy - 45 >= 0 then
+            if btn(5) and a.energy - SPLIT_COST >= 0 then
                 a.split_cooldown = 0
             end
         end
@@ -78,9 +80,9 @@ function create_bullet(x, y, dx, dy)
         alive=true,
         x=x, y=y,
         dx=dx, dy=dy,
-        rx=2, ry=2,
+        rx=1, ry=1,
         draw=function(a)
-            rect(a.x-a.rx, a.y-a.ry, a.x+a.rx, a.y+a.ry, 10)
+            rect(a.x-a.rx, a.y-a.ry, a.x+a.rx, a.y+a.ry, 11)
         end,
         update=function(a)
             a.frames_alive += 1
@@ -112,11 +114,12 @@ function draw_split_pl(time, max_time, x, y, rx, ry, color)
         rect(x-rx, y-ry, x+rx, y+ry, color)
         pset(x-3, y-3, color) pset(x+3, y-3, color) pset(x+3, y+3, color) pset(x-3, y+3, color)
     elseif percent < 1 then
-        rx = rx * (percent-.9)*10
-        ry = ry * (percent-.9)*10
+        local new_percent = (percent-.9)/.10
+        rx = rx * new_percent
+        ry = ry * new_percent
         pset(x-3, y-3, color) pset(x+3, y-3, color) pset(x+3, y+3, color) pset(x-3, y+3, color)
         rect(x-rx, y-ry, x+rx, y+ry, color)
-        rect(x-rx*3, y-ry*3, x+rx*3, y+ry*3, color)
+        rect(x-2*8*new_percent, y-2*8*new_percent, x+2*8*new_percent, y+2*8*new_percent, color)
     else
         rect(x-rx, y-ry, x+rx, y+ry, color)
     end
