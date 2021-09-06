@@ -12,7 +12,21 @@ function _init()
 end
 
 function _update60()
+    -- step 1: speeds
     update_player(pl, walls)
+
+    -- step 2: update pos with other objects
+    foreach(walls, function(wall)
+        -- pl:collide_with_wall(wall)
+    end)
+
+    -- step 3: update pos with speed
+    pl.x += pl.dx
+    pl.y += pl.dy
+
+    -- step 4: update pos with screen collision
+    pl.x = mid(0+pl.rx, pl.x, 127-pl.rx)
+    pl.y = mid(0+pl.ry, pl.y, 127-pl.ry)
 end
 
 function _draw()
@@ -36,12 +50,6 @@ function update_player(p, walls)
 
     p.dx *= p.friction
     p.dy *= p.friction
-
-    p.x += p.dx
-    p.y += p.dy
-
-    p.x = mid(0+p.rx, p.x, 127-p.rx)
-    p.y = mid(0+p.ry, p.y, 127-p.ry)
 end
 
 function create_wall(x, y)
