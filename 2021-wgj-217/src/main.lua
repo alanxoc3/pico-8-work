@@ -21,6 +21,13 @@ function _update60()
     -- step 4: update pos with screen collision
     pl.x = mid(0+pl.rx, pl.x, 127-pl.rx)
     pl.y = mid(0+pl.ry, pl.y, 127-pl.ry)
+
+    foreach(enemies, function(enemy)
+        enemy.x += enemy.dx
+        enemy.y += enemy.dy
+        enemy.x = mid(0+enemy.rx, enemy.x, 127-enemy.rx)
+        enemy.y = mid(0+enemy.ry, enemy.y, 127-enemy.ry)
+    end)
 end
 
 function _draw()
