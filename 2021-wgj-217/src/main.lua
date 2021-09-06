@@ -2,15 +2,34 @@ SCR_MIN_X, SCR_MAX_X = 0+4,  127-4
 SCR_MIN_Y, SCR_MAX_Y = 0+4, 127-12
 
 function _init()
-    game_init()
+    current_update=title_update
+    current_draw=title_draw
 end
 
 function _update60()
-    game_update()
+    current_update()
 end
 
 function _draw()
-    game_draw()
+    current_draw()
+end
+
+function title_update()
+    if btnp(4) or btnp(5) then
+        game_init()
+        current_update = game_update
+    end
+end
+
+function title_draw()
+    cls()
+    if btnp(4) or btnp(5) then
+        current_draw = game_draw
+    end
+
+    print_centered("a cool game", 64, 64-10, 8)
+    print_centered("by @alanxoc3 and @davery", 64, 64, 12)
+    print_centered("press x or z to play", 64, 64+10, 11)
 end
 
 function game_init()

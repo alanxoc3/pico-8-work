@@ -7,3 +7,7 @@ function filter_out_dead_things(array)
     end
     return new_array
 end
+
+function print_centered(str, x, y, color)
+    print(str, x - #str*2, y-2, color)
+end
