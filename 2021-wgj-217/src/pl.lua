@@ -73,10 +73,9 @@ function create_bullet(x, y, dx, dy)
 end
 
 function draw_energy_bar(energy, max_energy)
-    local bar_drawn = energy/max_energy * 119
+    local bar_drawn = energy/max_energy * (SCR_MAX_X - SCR_MIN_X)
     if bar_drawn > 0 then
-
-        rectfill(4, 119, 4 + bar_drawn, 124, 12)
-        rect(4, 124, 4 + bar_drawn, 124, 1)
+        rectfill(4, SCR_MAX_Y+4, 4 + bar_drawn, SCR_MAX_Y+9, 12)
+        rect(4, SCR_MAX_Y+9, 4 + bar_drawn, SCR_MAX_Y+9, 1)
     end
 end
