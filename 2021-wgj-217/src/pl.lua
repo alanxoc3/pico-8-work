@@ -12,7 +12,7 @@ function create_pl(x, y)
         color=11,
         pressing=nil, -- nil=nothing, 0=l, 1=r, 2=u, 3=d
         energy=MAX_ENERGY,
-        bullet_cooldown=BULLET_COOLDOWN_FRAMECOUNT,
+        bullet_cooldown=0,
         split_cooldown=SPLIT_COOLDOWN_FRAMECOUNT,
         is_split=function(a) return a.split_cooldown < SPLIT_COOLDOWN_FRAMECOUNT end,
         x=x, y=y,
@@ -52,7 +52,7 @@ function create_pl(x, y)
                 a.bullet_cooldown = 0
             end
 
-            if btn(5) and a.energy - SPLIT_COST >= 0 then
+            if btn(5) and a.energy - SPLIT_COST >= 0 and a.bullet_cooldown >= BULLET_COOLDOWN_FRAMECOUNT then
                 a.split_cooldown = 0
             end
         end
