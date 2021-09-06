@@ -1,3 +1,6 @@
+SCR_MIN_X, SCR_MAX_X = 0+4,  127-4
+SCR_MIN_Y, SCR_MAX_Y = 0+4, 127-12
+
 function _init()
     pl = create_pl(64, 64)
     walls = { create_wall(50,50) }
@@ -24,14 +27,14 @@ function _update60()
     pl.y += pl.dy
 
     -- step 4: update pos with screen collision
-    pl.x = mid(0+pl.rx, pl.x, 127-pl.rx)
-    pl.y = mid(0+pl.ry, pl.y, 127-pl.ry)
+    pl.x = mid(SCR_MIN_X+pl.rx, pl.x, SCR_MAX_X-pl.rx)
+    pl.y = mid(SCR_MIN_Y+pl.ry, pl.y, SCR_MAX_Y-pl.ry)
 
     foreach(enemies, function(enemy)
         enemy.x += enemy.dx
         enemy.y += enemy.dy
-        enemy.x = mid(0+enemy.rx, enemy.x, 127-enemy.rx)
-        enemy.y = mid(0+enemy.ry, enemy.y, 127-enemy.ry)
+        enemy.x = mid(SCR_MIN_X+enemy.rx, enemy.x, SCR_MAX_X-enemy.rx)
+        enemy.y = mid(SCR_MIN_Y+enemy.ry, enemy.y, SCR_MAX_Y-enemy.ry)
     end)
 
     foreach(bullets, function(bullet)
@@ -42,9 +45,10 @@ end
 
 function _draw()
     cls()
-    rect(0,0,127,127,8)
+    rect(SCR_MIN_X,SCR_MIN_Y,SCR_MAX_X,SCR_MAX_Y,8)
     pl:draw()
     foreach(walls, function(wall) wall:draw() end)
     foreach(enemies, function(enemy) enemy:draw() end)
     foreach(bullets, function(bullet) bullet:draw() end)
+    draw_energy_bar(pl.energy, MAX_ENERGY)
 end
