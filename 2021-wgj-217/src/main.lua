@@ -2,6 +2,18 @@ SCR_MIN_X, SCR_MAX_X = 0+4,  127-4
 SCR_MIN_Y, SCR_MAX_Y = 0+4, 127-12
 
 function _init()
+    game_init()
+end
+
+function _update60()
+    game_update()
+end
+
+function _draw()
+    game_draw()
+end
+
+function game_init()
     global_framecount = 0
     pl = create_pl(64, 64)
     walls = { create_wall(50,50) }
@@ -9,7 +21,7 @@ function _init()
     bullets = {}
 end
 
-function _update60()
+function game_update()
     -- ensure things are alive
     bullets = filter_out_dead_things(bullets)
     enemies = filter_out_dead_things(enemies)
@@ -51,7 +63,7 @@ function _update60()
     global_framecount += 1
 end
 
-function _draw()
+function game_draw()
     cls()
     rect(SCR_MIN_X,SCR_MIN_Y,SCR_MAX_X,SCR_MAX_Y,8)
     pl:draw()

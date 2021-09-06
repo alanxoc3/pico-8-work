@@ -9,7 +9,7 @@ function create_pl(x, y)
         dx=0, dy=0,
         rx=3, ry=3,
         dir=0, -- 0=l, 1=r, 2=u, 3=d
-        color=12,
+        color=11,
         pressing=nil, -- nil=nothing, 0=l, 1=r, 2=u, 3=d
         energy=MAX_ENERGY,
         bullet_cooldown=BULLET_COOLDOWN_FRAMECOUNT,
@@ -36,11 +36,11 @@ function create_pl(x, y)
                 if a.split_cooldown == SPLIT_COOLDOWN_FRAMECOUNT-1 then
                     a.energy -= SPLIT_COST
                 end
-                a.color = 11
+                a.color = 12
                 return
             end
 
-            a.color = 12
+            a.color = 11
             a.energy = min(MAX_ENERGY, a.energy+.25)
             if btn(4) and a.energy - BULLET_COST >= 0 and a.bullet_cooldown >= BULLET_COOLDOWN_FRAMECOUNT then
                 local dx = get_x_from_dir(a.dir, abs(a.dx)+2)
@@ -82,7 +82,7 @@ function create_bullet(x, y, dx, dy)
         dx=dx, dy=dy,
         rx=1, ry=1,
         draw=function(a)
-            rect(a.x-a.rx, a.y-a.ry, a.x+a.rx, a.y+a.ry, 11)
+            rect(a.x-a.rx, a.y-a.ry, a.x+a.rx, a.y+a.ry, 12)
         end,
         update=function(a)
             a.frames_alive += 1
