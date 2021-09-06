@@ -2,12 +2,17 @@ function _init()
     pl = create_pl(64, 64)
     walls = { create_wall(50,50) }
     enemies = { create_enemy(10,10) }
+    bullets = {}
 end
 
 function _update60()
+    -- ensure things are alive
+    bullets = filter_out_dead_things(bullets)
+
     -- step 1: speeds
     pl:update()
     foreach(enemies, function(enemy) enemy:update() end)
+    foreach(bullets, function(bullet) bullet:update() end)
 
     -- step 2: update pos with other objects
     foreach(walls, function(wall)
@@ -28,6 +33,11 @@ function _update60()
         enemy.x = mid(0+enemy.rx, enemy.x, 127-enemy.rx)
         enemy.y = mid(0+enemy.ry, enemy.y, 127-enemy.ry)
     end)
+
+    foreach(bullets, function(bullet)
+        bullet.x += bullet.dx
+        bullet.y += bullet.dy
+    end)
 end
 
 function _draw()
@@ -36,4 +46,5 @@ function _draw()
     pl:draw()
     foreach(walls, function(wall) wall:draw() end)
     foreach(enemies, function(enemy) enemy:draw() end)
+    foreach(bullets, function(bullet) bullet:draw() end)
 end
