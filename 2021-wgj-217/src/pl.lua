@@ -1,27 +1,46 @@
 MAX_ENERGY=100
+SPLIT_COOLDOWN_FRAMECOUNT=60
+BULLET_COOLDOWN_FRAMECOUNT=15
 
 function create_pl(x, y)
     return {
         dx=0, dy=0,
         rx=4, ry=4,
         dir=0, -- 0=l, 1=r, 2=u, 3=d
+        color=12,
         pressing=nil, -- nil=nothing, 0=l, 1=r, 2=u, 3=d
         energy=MAX_ENERGY,
-        bullet_cooldown=0,
+        bullet_cooldown=BULLET_COOLDOWN_FRAMECOUNT,
+        split_cooldown=SPLIT_COOLDOWN_FRAMECOUNT,
+        is_split=function(a) return a.split_cooldown < SPLIT_COOLDOWN_FRAMECOUNT end,
         x=x, y=y,
         friction=.925,
         draw=function(a)
-            circ(a.x, a.y, 4, 8)
+            draw_split_pl(a.split_cooldown, SPLIT_COOLDOWN_FRAMECOUNT, a.x, a.y, a.rx, a.ry, a.color)
         end,
         update=function(a)
-            a.bullet_cooldown += 1
-            a.energy = min(MAX_ENERGY, a.energy+.25)
+            a.bullet_cooldown = min(BULLET_COOLDOWN_FRAMECOUNT, a.bullet_cooldown+1)
+            a.split_cooldown = min(SPLIT_COOLDOWN_FRAMECOUNT, a.split_cooldown+1)
+
             a.dx -= pl_button_logic(a, 0, 1)
             a.dx += pl_button_logic(a, 1, 0)
             a.dy -= pl_button_logic(a, 2, 3)
             a.dy += pl_button_logic(a, 3, 2)
 
-            if btn(4) and a.energy - 10 >= 0 and a.bullet_cooldown >= 15 then
+            a.dx *= a.friction
+            a.dy *= a.friction
+
+            if a:is_split() then
+                if a.split_cooldown == SPLIT_COOLDOWN_FRAMECOUNT-1 then
+                    a.energy -= 45
+                end
+                a.color = 11
+                return
+            end
+
+            a.color = 12
+            a.energy = min(MAX_ENERGY, a.energy+.25)
+            if btn(4) and a.energy - 10 >= 0 and a.bullet_cooldown >= BULLET_COOLDOWN_FRAMECOUNT then
                 local dx = get_x_from_dir(a.dir, abs(a.dx)+2)
                 local dy = get_y_from_dir(a.dir, abs(a.dy)+2)
                 add(bullets, create_bullet(a.x, a.y, dx, dy))
@@ -31,8 +50,9 @@ function create_pl(x, y)
                 a.bullet_cooldown = 0
             end
 
-            a.dx *= a.friction
-            a.dy *= a.friction
+            if btn(5) and a.energy - 45 >= 0 then
+                a.split_cooldown = 0
+            end
         end
     }
 end
@@ -42,13 +62,12 @@ function pl_button_logic(a, btn_1, btn_2)
         if not a.pressing or a.pressing == btn_1 or a.pressing == btn_2 then
             a.pressing=btn_1 a.dir=btn_1
         end
-        return .1
+        return a:is_split() and .2 or .1
     elseif a.pressing == btn_1 then
         a.pressing = nil
     end
     return 0
 end
-
 
 function get_x_from_dir(dir, spd) return dir == 0 and -spd or dir == 1 and spd or 0 end
 function get_y_from_dir(dir, spd) return dir == 2 and -spd or dir == 3 and spd or 0 end
@@ -77,5 +96,28 @@ function draw_energy_bar(energy, max_energy)
     if bar_drawn > 0 then
         rectfill(4, SCR_MAX_Y+4, 4 + bar_drawn, SCR_MAX_Y+9, 12)
         rect(4, SCR_MAX_Y+9, 4 + bar_drawn, SCR_MAX_Y+9, 1)
+    end
+end
+
+function draw_split_pl(time, max_time, x, y, rx, ry, color)
+    local percent = time/max_time
+    if percent < .10 then
+        local crx = rx * (.75 - percent/.10*.75) + .25
+        local cry = ry * (.75 - percent/.10*.75) + .25
+        rect(x-crx, y-cry, x+crx, y+cry, color)
+        pset(x-3, y-3, color) pset(x+3, y-3, color) pset(x+3, y+3, color) pset(x-3, y+3, color)
+    elseif percent < .9 then
+        rx = rx * .25
+        ry = ry * .25
+        rect(x-rx, y-ry, x+rx, y+ry, color)
+        pset(x-3, y-3, color) pset(x+3, y-3, color) pset(x+3, y+3, color) pset(x-3, y+3, color)
+    elseif percent < 1 then
+        rx = rx * (percent-.9)*10
+        ry = ry * (percent-.9)*10
+        pset(x-3, y-3, color) pset(x+3, y-3, color) pset(x+3, y+3, color) pset(x-3, y+3, color)
+        rect(x-rx, y-ry, x+rx, y+ry, color)
+        rect(x-rx*3, y-ry*3, x+rx*3, y+ry*3, color)
+    else
+        rect(x-rx, y-ry, x+rx, y+ry, color)
     end
 end
