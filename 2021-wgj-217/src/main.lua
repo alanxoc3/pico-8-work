@@ -76,6 +76,16 @@ function game_update()
         end)
     end)
 
+    if pl:is_split() and pl.split_cooldown == SPLIT_COOLDOWN_FRAMECOUNT-1 then
+        -- Explosion! Kills le enemies..
+        local em_wave = {x=pl.x, y=pl.y, rx=30, ry=30}
+        foreach(enemies, function(enemy)
+            if collide_obj(enemy, em_wave) then -- Kills even if enemies are spawning
+                enemy.alive = false
+            end
+        end)
+    end
+
     -- step 2: update pos with speed
     pl.x += pl.dx
     pl.y += pl.dy
