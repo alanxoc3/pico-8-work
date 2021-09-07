@@ -1,11 +1,10 @@
 SCR_MIN_X, SCR_MAX_X = 0+4,  127-4
 SCR_MIN_Y, SCR_MAX_Y = 0+4, 127-20
 
-cartdata("last_battle_of_angry_squares")
+cartdata("last_battle_of_angry_square")
 
 function _init()
     music(0)
-    high_score_rounds=1
     current_update=title_update
     current_draw=title_draw
 end
@@ -31,10 +30,10 @@ function title_draw()
         current_draw = game_draw
     end
 
-    print_centered("last battle of angry squares"   , 64, 64-10, 8)
+    print_centered("last battle of angry square"    , 64, 64-10, 8)
     print_centered("by @alanxoc3 and @davery22"     , 64, 64   , 12)
     print_centered("press x or z to play"           , 64, 64+10, 11)
-    print_centered("high score: "..high_score_rounds, 64, 64+20, 10)
+    print_centered("high score: "..max(dget(0),1)   , 64, 64+20, 10)
 end
 
 function game_init()
@@ -56,7 +55,7 @@ function game_update()
 
     if global_framecount % 120 == 0 then
         global_rounds += 1
-        high_score_rounds = max(global_rounds, high_score_rounds)
+        dset(0, max(global_rounds, dget(0)))
         add(enemies, create_enemy())
         add(enemies, create_enemy())
     end
@@ -144,7 +143,7 @@ function game_draw()
 
     draw_energy_bar(pl.energy, MAX_ENERGY)
     print("round: "..global_rounds, SCR_MIN_X, SCR_MAX_Y+12, 8)
-    print("high: "..global_rounds, SCR_MIN_X+60, SCR_MAX_Y+12, 10)
+    print("high: "..max(1, dget(0)), SCR_MIN_X+60, SCR_MAX_Y+12, 10)
     
     if not pl.alive then
         current_draw=title_draw
