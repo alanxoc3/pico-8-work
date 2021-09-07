@@ -56,8 +56,11 @@ function game_update()
     if global_framecount % 120 == 0 then
         global_rounds += 1
         dset(0, max(global_rounds, dget(0)))
+        
         add(enemies, create_enemy())
         add(enemies, create_enemy())
+        if global_rounds > 50 then add(enemies, create_enemy()) end
+        if global_rounds > 100 then add(enemies, create_enemy()) end
     end
 
     -- step 1: speeds
