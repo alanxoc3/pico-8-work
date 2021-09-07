@@ -2,6 +2,7 @@ SCR_MIN_X, SCR_MAX_X = 0+4,  127-4
 SCR_MIN_Y, SCR_MAX_Y = 0+4, 127-12
 
 function _init()
+    music(0)
     current_update=title_update
     current_draw=title_draw
 end
