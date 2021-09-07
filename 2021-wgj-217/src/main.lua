@@ -48,12 +48,23 @@ function game_update()
 
     if global_framecount % 120 == 0 then
         add(enemies, create_enemy())
+        add(enemies, create_enemy())
+        add(enemies, create_enemy())
     end
 
     -- step 1: speeds
     pl:update()
     foreach(enemies, function(enemy) enemy:update() end)
     foreach(bullets, function(bullet) bullet:update() end)
+
+    foreach(bullets, function(bullet)
+        foreach(enemies, function(enemy)
+            if collide_obj(enemy, bullet) and not enemy:is_spawning() then
+                bullet.alive = false
+                enemy.alive = false
+            end
+        end)
+    end)
 
     -- step 2: update pos with speed
     pl.x += pl.dx
