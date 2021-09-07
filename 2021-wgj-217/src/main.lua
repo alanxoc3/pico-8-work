@@ -63,11 +63,7 @@ function game_update()
         enemy:update()
         if not pl:is_split() and collide_obj(enemy, pl) then
             enemy.alive = false
-            if pl.energy > 33 then
-                pl.energy -= 33
-            else
-                pl.alive = false
-            end
+            pl.alive = false
         end
     end)
     foreach(bullets, function(bullet) bullet:update() end)
@@ -117,6 +113,10 @@ function game_update()
 
     -- step 5: update pos with other objects
     detect_collisions(pl)
+
+    if not pl.alive then
+        current_update=title_update
+    end
 end
 
 function game_draw()
@@ -135,4 +135,7 @@ function game_draw()
     draw_energy_bar(pl.energy, MAX_ENERGY)
     print("round: "..global_rounds, SCR_MIN_X, SCR_MAX_Y+12, 8)
     
+    if not pl.alive then
+        current_draw=title_draw
+    end
 end
