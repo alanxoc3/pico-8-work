@@ -1,6 +1,8 @@
 SCR_MIN_X, SCR_MAX_X = 0+4,  127-4
 SCR_MIN_Y, SCR_MAX_Y = 0+4, 127-20
 
+cartdata("last_battle_of_angry_squares")
+
 function _init()
     music(0)
     high_score_rounds=1
@@ -29,9 +31,9 @@ function title_draw()
         current_draw = game_draw
     end
 
-    print_centered("a cool game", 64, 64-10, 8)
-    print_centered("by @alanxoc3 and @davery22", 64, 64, 12)
-    print_centered("press x or z to play", 64, 64+10, 11)
+    print_centered("last battle of angry squares"   , 64, 64-10, 8)
+    print_centered("by @alanxoc3 and @davery22"     , 64, 64   , 12)
+    print_centered("press x or z to play"           , 64, 64+10, 11)
     print_centered("high score: "..high_score_rounds, 64, 64+20, 10)
 end
 
