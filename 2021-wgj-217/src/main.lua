@@ -54,7 +54,17 @@ function game_update()
 
     -- step 1: speeds
     pl:update()
-    foreach(enemies, function(enemy) enemy:update() end)
+    foreach(enemies, function(enemy)
+        enemy:update()
+        if not pl:is_split() and collide_obj(enemy, pl) then
+            enemy.alive = false
+            if pl.energy > 33 then
+                pl.energy -= 33
+            else
+                pl.alive = false
+            end
+        end
+    end)
     foreach(bullets, function(bullet) bullet:update() end)
 
     foreach(bullets, function(bullet)

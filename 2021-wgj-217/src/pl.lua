@@ -8,6 +8,7 @@ function create_pl(x, y)
     return {
         dx=0, dy=0,
         rx=3, ry=3,
+        alive=true,
         dir=0, -- 0=l, 1=r, 2=u, 3=d
         color=11,
         pressing=nil, -- nil=nothing, 0=l, 1=r, 2=u, 3=d
@@ -18,7 +19,9 @@ function create_pl(x, y)
         x=x, y=y,
         friction=.925,
         draw=function(a)
-            draw_split_pl(a.split_cooldown, SPLIT_COOLDOWN_FRAMECOUNT, a.x, a.y, a.rx, a.ry, a.color)
+            if pl.energy > 33 or t() % .5 < .4 then
+                draw_split_pl(a.split_cooldown, SPLIT_COOLDOWN_FRAMECOUNT, a.x, a.y, a.rx, a.ry, a.color)
+            end
         end,
         update=function(a)
             a.bullet_cooldown = min(BULLET_COOLDOWN_FRAMECOUNT, a.bullet_cooldown+1)
