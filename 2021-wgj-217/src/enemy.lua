@@ -1,8 +1,6 @@
 SPAWN_MAX_FRAMECOUNT = 60
 
 function create_enemy()
-    local mid_x = (SCR_MAX_X + SCR_MIN_X) / 2
-    local mid_y = (SCR_MAX_Y + SCR_MIN_Y) / 2
     local x = rnd(SCR_MAX_X-SCR_MIN_X)+SCR_MIN_X
     local y = rnd(SCR_MAX_Y-SCR_MIN_Y)+SCR_MIN_Y
 
@@ -13,7 +11,7 @@ function create_enemy()
         a.dy = sin(rand_sign*a.time/2)
     end
 
-    local rand_num = flr(rnd(5))
+    local rand_num = flr(rnd(6))
     if rand_num == 0 then
         color = 14
         movement_func = function(a)
@@ -41,6 +39,12 @@ function create_enemy()
             a.dy += rnd(.25)-.125
             a.dx *= a.friction
             a.dy *= a.friction
+        end
+    elseif rand_num == 4 then
+        color = 8
+        movement_func = function(a)
+            a.alive = false
+            add(walls, create_wall(a.x, a.y))
         end
     end
 

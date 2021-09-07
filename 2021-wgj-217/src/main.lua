@@ -1,5 +1,6 @@
 SCR_MIN_X, SCR_MAX_X = 0+4,  127-4
-SCR_MIN_Y, SCR_MAX_Y = 0+4, 127-12
+SCR_MIN_Y, SCR_MAX_Y = 0+4, 127-20
+
 
 function _init()
     music(0)
@@ -34,20 +35,24 @@ function title_draw()
 end
 
 function game_init()
+    global_rounds = 0
     global_framecount = 0
     pl = create_pl(64, 64)
-    walls = { create_wall(50,50) }
+    walls = {}
     enemies = {}
     bullets = {}
+    shake_timer=0
 end
 
 function game_update()
+    shake_timer = max(0, shake_timer - 1)
     -- ensure things are alive
     bullets = filter_out_dead_things(bullets)
     enemies = filter_out_dead_things(enemies)
+    walls = filter_out_dead_things(walls)
 
     if global_framecount % 120 == 0 then
-        add(enemies, create_enemy())
+        global_rounds += 1
         add(enemies, create_enemy())
         add(enemies, create_enemy())
     end
@@ -66,6 +71,7 @@ function game_update()
         end
     end)
     foreach(bullets, function(bullet) bullet:update() end)
+    foreach(walls, function(wall) wall:update() end)
 
     foreach(bullets, function(bullet)
         foreach(enemies, function(enemy)
@@ -99,7 +105,7 @@ function game_update()
         enemy.y += enemy.dy
         enemy.x = mid(SCR_MIN_X+enemy.rx, enemy.x, SCR_MAX_X-enemy.rx)
         enemy.y = mid(SCR_MIN_Y+enemy.ry, enemy.y, SCR_MAX_Y-enemy.ry)
-        detect_collisions(enemy)
+        -- detect_collisions(enemy)
     end)
 
     foreach(bullets, function(bullet)
@@ -114,11 +120,19 @@ function game_update()
 end
 
 function game_draw()
+    if shake_timer > 0 then
+        camera(rnd(3)-1, rnd(3)-1)
+    end
+
     cls()
     rect(SCR_MIN_X,SCR_MIN_Y,SCR_MAX_X,SCR_MAX_Y,8)
     pl:draw()
     foreach(walls, function(wall) wall:draw() end)
     foreach(enemies, function(enemy) enemy:draw() end)
     foreach(bullets, function(bullet) bullet:draw() end)
+    camera()
+
     draw_energy_bar(pl.energy, MAX_ENERGY)
+    print("round: "..global_rounds, SCR_MIN_X, SCR_MAX_Y+12, 8)
+    
 end
