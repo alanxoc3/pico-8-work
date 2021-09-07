@@ -54,6 +54,7 @@ function game_update()
 
     if global_framecount % 120 == 0 then
         global_rounds += 1
+        high_score_rounds = max(global_rounds, high_score_rounds)
         add(enemies, create_enemy())
         add(enemies, create_enemy())
     end
@@ -135,6 +136,7 @@ function game_draw()
 
     draw_energy_bar(pl.energy, MAX_ENERGY)
     print("round: "..global_rounds, SCR_MIN_X, SCR_MAX_Y+12, 8)
+    print("high: "..global_rounds, SCR_MIN_X+60, SCR_MAX_Y+12, 10)
     
     if not pl.alive then
         current_draw=title_draw
