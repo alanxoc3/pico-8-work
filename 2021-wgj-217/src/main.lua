@@ -1,9 +1,9 @@
 SCR_MIN_X, SCR_MAX_X = 0+4,  127-4
 SCR_MIN_Y, SCR_MAX_Y = 0+4, 127-20
 
-
 function _init()
     music(0)
+    high_score_rounds=1
     current_update=title_update
     current_draw=title_draw
 end
@@ -32,6 +32,7 @@ function title_draw()
     print_centered("a cool game", 64, 64-10, 8)
     print_centered("by @alanxoc3 and @davery", 64, 64, 12)
     print_centered("press x or z to play", 64, 64+10, 11)
+    print_centered("high score: "..high_score_rounds, 64, 64+20, 10)
 end
 
 function game_init()
@@ -61,7 +62,7 @@ function game_update()
     pl:update()
     foreach(enemies, function(enemy)
         enemy:update()
-        if not pl:is_split() and collide_obj(enemy, pl) then
+        if not enemy:is_spawning() and not pl:is_split() and collide_obj(enemy, pl) then
             enemy.alive = false
             pl.alive = false
         end
@@ -126,10 +127,10 @@ function game_draw()
 
     cls()
     rect(SCR_MIN_X,SCR_MIN_Y,SCR_MAX_X,SCR_MAX_Y,8)
-    pl:draw()
     foreach(walls, function(wall) wall:draw() end)
     foreach(enemies, function(enemy) enemy:draw() end)
     foreach(bullets, function(bullet) bullet:draw() end)
+    pl:draw()
     camera()
 
     draw_energy_bar(pl.energy, MAX_ENERGY)
