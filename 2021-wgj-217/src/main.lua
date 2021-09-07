@@ -54,12 +54,7 @@ function game_update()
     foreach(enemies, function(enemy) enemy:update() end)
     foreach(bullets, function(bullet) bullet:update() end)
 
-    -- step 2: update pos with other objects
-    foreach(walls, function(wall)
-        -- pl:collide_with_wall(wall)
-    end)
-
-    -- step 3: update pos with speed
+    -- step 2: update pos with speed
     pl.x += pl.dx
     pl.y += pl.dy
 
@@ -72,6 +67,7 @@ function game_update()
         enemy.y += enemy.dy
         enemy.x = mid(SCR_MIN_X+enemy.rx, enemy.x, SCR_MAX_X-enemy.rx)
         enemy.y = mid(SCR_MIN_Y+enemy.ry, enemy.y, SCR_MAX_Y-enemy.ry)
+        detect_collisions(enemy)
     end)
 
     foreach(bullets, function(bullet)
@@ -80,6 +76,9 @@ function game_update()
     end)
 
     global_framecount += 1
+
+    -- step 5: update pos with other objects
+    detect_collisions(pl)
 end
 
 function game_draw()

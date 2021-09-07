@@ -7,6 +7,7 @@ __lua__
 #include src/pl.lua
 #include src/enemy.lua
 #include src/wall.lua
+#include src/collision.lua
 #include src/main.lua
 #include src/utilities.lua
 __gfx__
