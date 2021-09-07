@@ -36,6 +36,7 @@ function create_pl(x, y)
             a.dy *= a.friction
 
             if a:is_split() then
+                shake_timer = 8
                 if a.split_cooldown == SPLIT_COOLDOWN_FRAMECOUNT-1 then
                     a.energy -= SPLIT_COST
                 end
@@ -53,6 +54,7 @@ function create_pl(x, y)
                 add(bullets, create_bullet(a.x, a.y, dx-dy*.25, dy-dx*.25))
                 a.energy -= BULLET_COST
                 a.bullet_cooldown = 0
+                shake_timer = 8
             end
 
             if btn(5) and a.energy - SPLIT_COST >= 0 and a.bullet_cooldown >= BULLET_COOLDOWN_FRAMECOUNT then
