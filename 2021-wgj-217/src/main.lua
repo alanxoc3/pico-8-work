@@ -30,7 +30,7 @@ function title_draw()
     end
 
     print_centered("a cool game", 64, 64-10, 8)
-    print_centered("by @alanxoc3 and @davery", 64, 64, 12)
+    print_centered("by @alanxoc3 and @davery22", 64, 64, 12)
     print_centered("press x or z to play", 64, 64+10, 11)
     print_centered("high score: "..high_score_rounds, 64, 64+20, 10)
 end
