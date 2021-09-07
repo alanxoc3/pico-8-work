@@ -46,14 +46,14 @@ function fix_pos(obj, coords)
 end
 
 function collide_obj(a, b)
-    -- On intersect, returns the distance required on either side to remove the overlap. Else returns false.
-    -- {dx=?, dy=?} (from a's perspective)
+    -- On overlap, returns the distance required on either side to remove the overlap. Else returns nil.
     -- { eject a on the left   / b on the right
     -- , eject a on the right  / b on the left
     -- , eject a on the top    / b on the top 
     -- , eject a on the bottom / b on the bottom
     -- }
     -- This can be used to adjust the positions to not overlap.
+
     local lr = collide_coords(a.x, a.rx, b.x, b.rx)
     if lr then
         local tb = collide_coords(a.y, a.ry, b.y, b.ry)
@@ -73,13 +73,12 @@ function collide_coords(a_x, a_rx, b_x, b_rx)
 end
 
 function intersect(a_a, a_b, b_a, b_b)
-    -- On intersect, returns the distance required on either side to remove the overlap. Else returns false.
-    -- { eject a on the left / b on the right
+    -- On overlap, returns the distance required on either side to remove the overlap. Else returns nil.
+    -- { eject a on the left  / b on the right
     -- , eject a on the right / b on the left
     -- }
-    -- a: (), b: []
-    --printh(between(b_a, a_b, b_b) and "true" or "false")
 
+    -- a: (), b: []
     if between(b_a, a_b, b_b) -- (---[---)---] or [---(------)---]
     or between(b_a, a_a, b_b) -- [---(---]---) or [---(------)---]
     or between(a_a, b_b, a_b) -- [---(---]---) or (---[------]---)
@@ -94,10 +93,3 @@ function between(lo, x, hi)
     return lo < x and x < hi
 end
 
-function table_to_str(any)
-    local str = "{ "
-    for k,v in pairs(any) do
-        str=str..tostring(k).."->"..tostring(v).." "
-    end
-    return str.."}"
-end
