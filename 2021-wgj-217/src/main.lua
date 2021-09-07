@@ -88,6 +88,12 @@ function game_update()
                 enemy.alive = false
             end
         end)
+
+        foreach(walls, function(wall)
+            if collide_obj(wall, em_wave) then -- Kills walls too.
+                wall.alive = false
+            end
+        end)
     end
 
     -- step 2: update pos with speed
