@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-
-perl -I$PICO_WORK_DIR/bin/minifier/ $PICO_WORK_DIR/bin/pico-minify.pl "$@"
