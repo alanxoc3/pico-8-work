@@ -3,6 +3,6 @@
 inotifywait -e close_write,moved_to,create -mr ./src |
 while read -r directory; do
   echo "** '$directory' was changed, so let's compile this thing!"
-  $PICO_WORK_DIR/bin/pico-compile $1
+  $PICO_WORK_DIR/bin/pico-compile "$@"
   echo
 done

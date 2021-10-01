@@ -9,11 +9,11 @@ use open qw(:std :utf8);
 binmode(STDIN, "encoding(UTF-8)");
 binmode(STDOUT, "encoding(UTF-8)");
 
-my $minifiable;
+my $minify;
 my $debug_mode;
-GetOptions('minifiable' => \$minifiable,
+GetOptions('minify' => \$minify,
            'debug' => \$debug_mode,
-) or die "Usage: $0 [--prod] [--minifiable] [--debug] [--input=file] [--output=file]\n";
+) or die "Usage: $0 [--minify] [--debug]\n";
 
 # Constants for game.
 my %constants;
@@ -39,7 +39,7 @@ my $content = join("\n", @lines);
 @lines = single_quotes_to_double(@lines);
 @lines = remove_spaces(@lines);
 
-if ($minifiable) {
+if ($minify) {
    my %vars = populate_vars(@lines);
    @lines = tokenize_lines(\@lines, \%vars);
 }
