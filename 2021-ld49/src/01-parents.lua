@@ -43,39 +43,34 @@ create_parent[[ma_able;0;act,;|name:"thing";]]
 create_parent[[confined;0;act,;room_end,|room_end:nf;]]
 create_parent[[loopable;0;act,;|tl_loop:yes;]]
 create_parent[[pos;0;act,;|x:0;y:0;]]
-create_parent[[move_pause;0;act,;update,move,vec_update,tick|;]]
 create_parent[[knock;0;col,;|;]]
 create_parent[[popper;0;col,;|;]]
 create_parent[[bad;0;knock,;|;]]
 
-create_parent[[bounded;0;act,;|
-    check_bounds:nf;
-]]
-
-create_parent([[x_bounded;0;bounded,;|
-    check_bounds:@1;
+create_parent([[x_bounded;0;act,;|
+    check_bounds_x:@1;
 ]], function(a)
-   if a.x+a.dx < g_cur_room.x+.5 then
-      a.x = g_cur_room.x+.5
+   if a.x+a.dx < g_room.x+.5 then
+      a.x = g_room.x+.5
       a.dx = 0
    end
 
-   if a.x+a.dx > g_cur_room.x+g_cur_room.w-.5 then
-      a.x = g_cur_room.x+g_cur_room.w-.5
+   if a.x+a.dx > g_room.x+g_room.w-.5 then
+      a.x = g_room.x+g_room.w-.5
       a.dx = 0
    end
 end)
 
-create_parent([[y_bounded;0;bounded,;|
-   check_bounds:@1;
+create_parent([[y_bounded;0;act,;|
+    check_bounds_y:@1;
 ]], function(a)
-   if a.y+a.dy < g_cur_room.y+.5 then
-      a.y = g_cur_room.y+.5
+   if a.y+a.dy < g_room.y+.5 then
+      a.y = g_room.y+.5
       a.dy = 0
    end
 
-   if a.y+a.dy > g_cur_room.y+g_cur_room.h-.5 then
-      a.y = g_cur_room.y+g_cur_room.h-.5
+   if a.y+a.dy > g_room.y+g_room.h-.5 then
+      a.y = g_room.y+g_room.h-.5
       a.dy = 0
    end
 end)
@@ -97,15 +92,15 @@ create_parent([[vec;0;pos,;|
 end)
 
 create_parent([[mov;0;vec,;|
-   ix:1;
-   iy:1;
+   inertia_x:1;
+   inertia_y:1;
    ax:0;
    ay:0;
-   move:@1;
+   mov_update:@1;
    stop:@2;
 ]], function(a)
    a.dx += a.ax a.dy += a.ay
-   a.dx *= a.ix a.dy *= a.iy
+   a.dx *= a.inertia_x a.dy *= a.inertia_y
    if a.ax == 0 and abs(a.dx) < .01 then a.dx = 0 end
    if a.ay == 0 and abs(a.dy) < .01 then a.dy = 0 end
 end, function(a)
