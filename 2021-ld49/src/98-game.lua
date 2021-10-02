@@ -5,6 +5,8 @@ function game_init(a)
     g_room = ztable[[ x:0; y:0; w:15; h:12; ]]
     g_pl = _g.pl(g_room.w/2, g_room.h/2)
     _g.simple_enemy(3, 2)
+
+    tbox"hello, how are^you?"
 end
 
 function game_update(a)
@@ -21,6 +23,25 @@ function game_update(a)
         y_bounded, check_bounds_y;
         act,       clean;
     ]], g_act_arrs['col'], g_act_arrs['pl'], g_act_arrs['fist'])
+
+   if g_tbox_update then
+      -- zsfx(2,5)
+      if g_tbox_writing then
+         g_tbox_anim = #g_tbox_active.l1+#g_tbox_active.l2
+      else
+         del(g_tbox_messages, g_tbox_active)
+         g_tbox_active, g_tbox_anim = g_tbox_messages[1], 0
+      end
+
+      -- if not g_tbox_active then
+         -- unpause()
+         -- g_tbox_messages.trigger()
+      -- end
+
+      g_tbox_update = false
+   end
+
+    tbox_interact()
 end
 
 function game_draw(a)
@@ -60,14 +81,14 @@ function game_draw(a)
     clip()
     camera()
 
-    if g_debug then
-        scr_rectfill(2,8-2,14,8+2,0)
-        scr_rect(2.125,8-2+.125,14,8+2,7)
 
-        scr_rect(2.125+.25+.125+.25, 8-2+.125+.25+.125+.25, 2.125+.25+3.25-.25-.125, 8-2+.125+.25+3.25-.25, 7)
-        print("hello, how are", 47, 58, 7)
-        print("you? 6789012345", 47, 58+8, 7)
-    end
+        -- rectfill(16,48,112,80,0)
+        -- rect(17,49,111,79,7)
+        -- rect(22,54,41,74,7)
+        -- print("hello, how are", 47, 58, 7)
+        -- print("you? 6789012345", 47, 58+8, 7)
+
+    tbox_draw(16,48)
 
     -- design below
     local y = 14.5
