@@ -28,18 +28,10 @@ function zrect(x1, y1, x2, y2)
    ]], x1, y1, x2, y2)
 end
 
-
 function scr_spr(a, spr_func, ...)
    if a and a.visible then
       (spr_func or zspr)(a.sind, a.x*8+a.ixx+a.xx, a.y*8+a.iyy+a.yy, a.sw, a.sh, a.xf, a.yf, ...)
    end
-end
-
-function scr_spr_out(a) scr_spr(a, spr_out, a.outline_color) end
-
-function scr_spr_and_out(...)
-   foreach({...}, scr_spr_out)
-   foreach({...}, scr_spr)
 end
 
 function outline_helper(flip, coord, dim)
@@ -48,23 +40,6 @@ function outline_helper(flip, coord, dim)
       return dim*8-1+coord, -1
    else
       return coord, 1
-   end
-end
-
-function spr_out(sind, x, y, sw, sh, xf, yf, col)
-   local ox, x_mult = outline_helper(xf, x, sw)
-   local oy, y_mult = outline_helper(yf, y, sh)
-
-   local out_tbl = g_out_cache[sind]
-   if out_tbl then
-      for i=1,#out_tbl,4 do
-         rectfill(
-            ox+x_mult*out_tbl[i],
-            oy+y_mult*out_tbl[i+1],
-            ox+x_mult*out_tbl[i+2],
-            oy+y_mult*out_tbl[i+3],
-         col)
-      end
    end
 end
 

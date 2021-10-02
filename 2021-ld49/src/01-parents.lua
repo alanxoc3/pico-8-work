@@ -175,22 +175,18 @@ create_parent[[post_drawable_2;0;drawable_obj,;d,|d:nf;]]
 
 create_parent[[above_map_post_camera_drawable;0;drawable_obj,;d,|d:nf;]]
 
-create_parent([[spr_obj;0;vec,drawable_obj,;|
+create_parent[[spr_obj;0;vec,drawable_obj,;|
    sind:0;
    outline_color:BG_UI;
    sw:1;
    sh:1;
    xf:no;
    yf:no;
-   draw_spr:@1;
-   draw_out:@2;
-   draw_both:@3;
-]], scr_spr, scr_out, scr_spr_and_out
-)
+]]
 
 create_parent([[spr;0;spr_obj,;|
    d:@1;
-]], scr_spr_and_out)
+]], scr_spr)
 
 create_parent([[knockable;0;mov,;|
    knockback:@1;
