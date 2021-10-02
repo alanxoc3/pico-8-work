@@ -1,15 +1,19 @@
-create_actor([[angry_part;3;pre_drawable,mov|
-    x:@1; y:@2; u:@4; d:@5;
-    inertia_y:.99;
-    dy:-.1;
+create_actor([[angry_particle;5;pre_drawable,mov|
+    x:@1; y:@2; beg_color:@3; end_color:@4;
 
-    tl_max_time=@3,;
+    i:@6; d:@7;
+    inertia_x:.90;
+    inertia_y:.90;
+
+    tl_max_time=@5,;
 ]], function(a)
+    a.dx = rnd(.2) - .1
+    a.dy = -rnd(.2)-.1
 end, function(a)
-    local color = 8
+    local color = a.beg_color
     if a.tl_tim then
         if a.tl_tim / a.tl_max_time > .5 then
-            color = 2
+            color = a.end_color
         end
         scr_circfill(a.x, a.y, .125, color)
     end
@@ -55,8 +59,18 @@ create_actor([[pl;2;drawable,pos,confined,mov,x_bounded,y_bounded,col,spr_obj,kn
 
     scr_spr(a)
 end, function(a)
+    -- DEBUG_BEGIN
+    if g_debug and btnp(4) then a.insane_level += 1 end
+    -- DEBUG_END
+
     if a.insane_level == 4 then
-        _g.angry_part(a.x+rnd(1)-.5, a.y+rnd(2)-1, rnd(.25)+.25)
+        _g.angry_particle(a.x, a.y+.5, 8, 8, rnd(.25)+.25)
+    elseif a.insane_level == 3 then
+        _g.angry_particle(a.x, a.y+.5, 14, 14, rnd(.2))
+    elseif a.insane_level == 2 then
+        _g.angry_particle(a.x, a.y+.5, 2, 2, rnd(.2))
+    elseif a.insane_level == 1 then
+      _g.angry_particle(a.x, a.y+.5, 1, 1, rnd(.2))
     end
 
     if not a:any_timer_active("cooldown", "roll", "punch") then
