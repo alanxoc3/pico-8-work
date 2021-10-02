@@ -1,4 +1,17 @@
-create_actor([[simple_enemy;2;drawable,col,confined,mov,x_bounded,y_bounded,knockbackable,hurtable,spr_obj|
+create_actor([[nurse_weapon;3;col,confined,rel,enemy|
+    rel_actor:@1; x:@2; y:@3; i:@4; hit:@5;
+    touchable:no; rx:.5; ry:1;
+
+    tl_max_time=.16,;
+]], function(a)
+    a.rel_dx = zsgn(cos(a.rel_actor.dir))*.1
+end, function(a, other)
+    if other.pl and not other:any_timer_active("roll") then
+        other:damage(a)
+    end
+end)
+
+create_actor([[simple_enemy;2;drawable,col,confined,mov,x_bounded,y_bounded,knockbackable,hurtable,spr_obj,enemy|
     x:@1; y:@2; u:@3; d:@4; hit:@5;
     health:3; max_health:3;
     sh:2;
@@ -7,9 +20,16 @@ create_actor([[simple_enemy;2;drawable,col,confined,mov,x_bounded,y_bounded,knoc
     inertia_x:.90;
     inertia_y:.90;
 ]], function(a)
-    if not a:any_timer_active("cooldown", "walk") then
+    if not a:any_timer_active("cooldown", "walk", "prepare", "attack") then
         a.dir = atan2(g_pl.x - a.x, g_pl.y - a.y) + rnd(.125) - .125/2
-        a:create_timer("walk",  flr_rnd(10)+10, function() a:create_timer("cooldown", flr_rnd(80)+120) end)
+        a:create_timer("walk", flr_rnd(10)+30, function()
+            a:create_timer("cooldown", flr_rnd(120), function()
+                a:create_timer("prepare", 40, function()
+                    _g.nurse_weapon(a, a.x, a.y)
+                    a:create_timer("attack", 10)
+                end)
+            end)
+        end)
     end
 
     if a:any_timer_active"knockback" then
@@ -26,9 +46,17 @@ create_actor([[simple_enemy;2;drawable,col,confined,mov,x_bounded,y_bounded,knoc
         a.ax = 0
         a.ay = 0
     end
+
+    if a:any_timer_active"attack" then
+    end
 end, function(a)
     a.sind=66
-    if abs(a.dx) > .005 or abs(a.dy) > .005 then
+
+    if a:any_timer_active"prepare" then
+        a.sind=69
+    elseif a:any_timer_active"attack" then
+        a.sind=70
+    elseif abs(a.dx) > .005 or abs(a.dy) > .005 then
         local loop = a.tl_tim % .5 / .5
         if loop < .25 then a.sind=66
         elseif loop < .5 then a.sind=67
@@ -39,8 +67,8 @@ end, function(a)
     scr_spr(a)
 end, function(a, other)
     if other.pl and not other:any_timer_active("roll") then
-        other:damage(a)
-        a:knockback(atan2(a.x-other.x, a.y-other.y))
+        -- other:knockback(atan2(other.x-a.x, other.y-a.y))
+        -- a:knockback(atan2(a.x-other.x, a.y-other.y))
     elseif other.fist then
         a:hurt(g_pl.insane_level == 4 and 2 or 1)
         g_pl:knockback(atan2(g_pl.x-a.x, g_pl.y-a.y))
