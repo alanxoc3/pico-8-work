@@ -47,30 +47,30 @@ create_parent[[knock;0;col,;|;]]
 create_parent[[popper;0;col,;|;]]
 create_parent[[bad;0;knock,;|;]]
 
-create_parent([[x_bounded;0;act,;|
+create_parent([[x_bounded;0;dim,;|
     check_bounds_x:@1;
 ]], function(a)
-   if a.x+a.dx < g_room.x+.5 then
-      a.x = g_room.x+.5
+   if a.x+a.dx < g_room.x+a.rx then
+      a.x = g_room.x+a.rx
       a.dx = 0
    end
 
-   if a.x+a.dx > g_room.x+g_room.w-.5 then
-      a.x = g_room.x+g_room.w-.5
+   if a.x+a.dx > g_room.x+g_room.w-a.rx then
+      a.x = g_room.x+g_room.w-a.rx
       a.dx = 0
    end
 end)
 
-create_parent([[y_bounded;0;act,;|
+create_parent([[y_bounded;0;dim,;|
     check_bounds_y:@1;
 ]], function(a)
-   if a.y+a.dy < g_room.y+.5 then
-      a.y = g_room.y+.5
+   if a.y+a.dy < g_room.y+a.ry then
+      a.y = g_room.y+a.ry
       a.dy = 0
    end
 
-   if a.y+a.dy > g_room.y+g_room.h-.5 then
-      a.y = g_room.y+g_room.h-.5
+   if a.y+a.dy > g_room.y+g_room.h-a.ry then
+      a.y = g_room.y+g_room.h-a.ry
       a.dy = 0
    end
 end)
@@ -79,7 +79,7 @@ create_parent([[timer;0;act,;|
     timers:,;
     tick:@1;
     create_timer:@2;
-    is_timer_active:@3;
+    any_timer_active:@3;
 ]], function(a)
     local keys_to_remove = {}
     for k, v in pairs(a.timers) do
@@ -96,8 +96,13 @@ create_parent([[timer;0;act,;|
     end
 end, function(a, timer_name, limit, callback)
     a.timers[timer_name] = { t=0, limit=limit, callback=(callback or nf) }
-end, function(a, timer_name)
-    return a.timers[timer_name] ~= nil
+end, function(a, ...)
+    for timer_name in all{...} do
+        if a.timers[timer_name] ~= nil then
+            return true
+        end
+    end
+    return false
 end)
 
 create_parent([[vec;0;pos,;|
