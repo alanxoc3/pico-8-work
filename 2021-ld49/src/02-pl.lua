@@ -63,8 +63,16 @@ create_actor([[pl;2;drawable,pos,confined,mov,x_bounded,y_bounded,col,spr_obj,kn
         elseif percent >= .30 then a.sind = 137
         else a.sind = 136
         end
-    elseif abs(a.dx) > .001 or abs(a.dy) > .001 then
-        a.sind = a.tl_tim % .25 > .125 and 134 or 135
+    elseif abs(a.dx) > .005 or abs(a.dy) > .005 then
+        local loop = (a.tl_tim % .4) / .4
+        if loop >= .8 then a.sind = 134
+        elseif loop >= .5 then a.sind = 167
+        elseif loop >= .3 then a.sind = 134
+        else a.sind = 168
+        end
+    else
+        local loop = (a.tl_tim % 1)
+        if loop < .25 then a.sind = 166 end
     end
     a.xf = a.is_facing_left
 
