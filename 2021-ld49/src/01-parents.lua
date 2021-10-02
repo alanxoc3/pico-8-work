@@ -206,11 +206,20 @@ create_parent([[spr;0;spr_obj,;|
    d:@1;
 ]], scr_spr)
 
-create_parent([[knockable;0;mov,;|
-   knockback:@1;
-]], function(a, speed, xdir, ydir)
-   a.dx = xdir * speed
-   a.dy = ydir * speed
+create_parent([[knockbackable;0;mov,timer,;|
+    knockback:@1;
+    apply_knockback:@2;
+    knockback_speed:0;
+    knockback_dir:0;
+]], function(a, direction)
+    if not a:any_timer_active("knockback") then
+        a.knockback_speed = .075
+        a.knockback_dir = direction
+        a:create_timer("knockback", 4)
+    end
+end, function(a)
+    a.ax = cos(a.knockback_dir)*a.knockback_speed
+    a.ay = sin(a.knockback_dir)*a.knockback_speed
 end)
 
 create_parent([[stunnable;0;mov,drawable_obj;|
