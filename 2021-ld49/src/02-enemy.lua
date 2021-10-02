@@ -1,6 +1,7 @@
-create_actor([[simple_enemy;2;drawable,col,confined,mov,x_bounded,y_bounded,knockbackable,hurtable|
+create_actor([[simple_enemy;2;drawable,col,confined,mov,x_bounded,y_bounded,knockbackable,hurtable,spr_obj|
     x:@1; y:@2; u:@3; d:@4; hit:@5;
     health:3; max_health:3;
+    sh:2;
     rx:.375; ry:.375;
     touchable: no;
     inertia_x:.90;
@@ -15,13 +16,24 @@ create_actor([[simple_enemy;2;drawable,col,confined,mov,x_bounded,y_bounded,knoc
         a:apply_knockback()
     elseif a:any_timer_active"walk" then
         a.ax = cos(a.dir)*.01
+        if a.ay > 0 then
+            a.xf = false
+        elseif a.ay < 0 then
+            a.xf = true
+        end
         a.ay = sin(a.dir)*.01
     else
         a.ax = 0
         a.ay = 0
     end
 end, function(a)
-    scr_circ(a.x, a.y, .4, 10)
+    a.sind=66
+    if abs(a.dx) > .005 or abs(a.dy) > .005 then
+        if a.tl_tim % .5 < .25 then
+            a.sind=67
+        end
+    end
+    scr_spr(a)
 end, function(a, other)
     if other.pl and not other:any_timer_active("roll") then
         other:damage(a)
