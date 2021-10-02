@@ -11,6 +11,8 @@ end)
 create_actor([[pl;2;drawable,pos,confined,mov,x_bounded,y_bounded,col,spr_obj,knockbackable,hurtable|
     x:@1; y:@2;
     health:3; max_health:3;
+
+    insane_level:0;
     
     sh:2; sind:137;
     inertia_x:.90;
@@ -18,7 +20,7 @@ create_actor([[pl;2;drawable,pos,confined,mov,x_bounded,y_bounded,col,spr_obj,kn
 
     dir:0; is_facing_left:no;
 
-    d:@3; u:@4;
+    d:@3; u:@4; damage:@5;
 ]], function(a)
     a.sind = 128
     a.yy = 0
@@ -38,7 +40,7 @@ create_actor([[pl;2;drawable,pos,confined,mov,x_bounded,y_bounded,col,spr_obj,kn
 end, function(a)
     if not a:any_timer_active("cooldown", "roll", "punch") then
         if btn(4) then
-            a:create_timer("roll",  12, function() a.dx /= 3 a.dy /= 3 a:create_timer("cooldown", 20) end)
+            a:create_timer("roll",  15, function() a.dx /= 3 a.dy /= 3 a:create_timer("cooldown", 20) end)
             
         elseif btn(5) then
             a:create_timer("punch", 20, function() a:create_timer("cooldown", 10) end)
@@ -50,8 +52,8 @@ end, function(a)
     if a:any_timer_active"knockback" then
         a:apply_knockback()
     elseif a:any_timer_active"roll" then
-        a.ax = cos(a.dir)*.05
-        a.ay = sin(a.dir)*.05
+        a.ax = cos(a.dir)*.03
+        a.ay = sin(a.dir)*.03
     elseif a:any_timer_active"punch" then
         a.ax = cos(a.dir)*.01
         a.ay = sin(a.dir)*.01
@@ -70,4 +72,7 @@ end, function(a)
         a.ax = 0
         a.ay = 0
     end
+end, function(a, other)
+    a:hurt()
+    a:knockback(atan2(a.x-other.x, a.y-other.y))
 end)

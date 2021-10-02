@@ -97,14 +97,15 @@ function game_draw(a)
     scr_rect(.625   ,y+0  ,1.625   ,y+1  ,8) -- normal face
     scr_rect(14.375 ,y+0  ,15.375  ,y+1  ,8) -- angry face
 
-    scr_rect(2.125      ,y+.125,2.125+3.75,y+.875,8) -- left
-    scr_rect(6.125      ,y+.125,6.125+3.75,y+.875,8) -- middle
-    scr_rect(13.875-3.75,y+.125,13.875    ,y+.875,8) -- right
+    scr_rect(2.125      ,y+.125,2.125+3.75,y+.875,1) -- left
 
-    scr_rect(2.125+3.75,y+.375,6.125    ,y+.625,8) -- connect left
-    scr_rect(13.875-3.75-.25,y+.375,13.875-3.75    ,y+.625,8) -- connect right
+    scr_rect(2.125+3.75,y+.375,6.125    ,y+.625,1) -- connect left
+    scr_rect(6.125      ,y+.125,6.125+3.75,y+.875,1) -- middle
+    scr_rect(13.875-3.75-.25,y+.375,13.875-3.75    ,y+.625,1) -- connect right
 
-    scr_rect(5.375+.5+.125 ,.5  ,5.375+1.5+.125  ,1.5 ,8)
-    scr_rect(5.375+2+.125  ,.5  ,5.375+3+.125    ,1.5 ,8)
-    scr_rect(5.375+3.5+.125,.5  ,5.375+4.5+.125  ,1.5 ,8)
+    scr_rect(13.875-3.75,y+.125,13.875    ,y+.875,1) -- right
+
+    if g_pl.health > 2 then scr_rect(5.375+.5+.125 ,.5  ,5.375+1.5+.125  ,1.5 ,8) end
+    if g_pl.health > 0 then scr_rect(5.375+2+.125  ,.5  ,5.375+3+.125    ,1.5 ,8) end
+    if g_pl.health > 1 then scr_rect(5.375+3.5+.125,.5  ,5.375+4.5+.125  ,1.5 ,8) end
 end
