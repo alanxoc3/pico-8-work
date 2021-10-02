@@ -26,7 +26,8 @@ create_actor([[pl;2;drawable,pos,confined,mov,x_bounded,y_bounded,timer,col,knoc
 end, function(a)
     if not a:any_timer_active("cooldown", "roll", "punch") then
         if btn(4) then
-            a:create_timer("roll",  10, function() a.dx /= 2 a.dy /= 2 a:create_timer("cooldown", 20) end)
+            a:create_timer("roll",  12, function() a.dx /= 3 a.dy /= 3 a:create_timer("cooldown", 20) end)
+            
         elseif btn(5) then
             a:create_timer("punch", 10, function() a:create_timer("cooldown", 10) end)
             _g.fist(a, a.x, a.y)

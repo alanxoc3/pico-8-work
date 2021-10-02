@@ -22,7 +22,7 @@ create_actor([[simple_enemy;2;drawable,col,confined,mov,timer,x_bounded,y_bounde
 end, function(a)
     scr_circ(a.x, a.y, .4, 10)
 end, function(a, other)
-    if other.pl then
+    if other.pl and not other:any_timer_active("roll") then
         other:knockback(atan2(other.x-a.x, other.y-a.y))
         a:knockback(atan2(a.x-other.x, a.y-other.y))
     elseif other.fist then

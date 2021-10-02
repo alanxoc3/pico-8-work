@@ -593,7 +593,7 @@ end
 end,function(a)
 scr_circ(a.x,a.y,.4,10)
 end,function(a,other)
-if other.pl then
+if other.pl and not other:any_timer_active("roll")then
 other:knockback(atan2(other.x-a.x,other.y-a.y))
 a:knockback(atan2(a.x-other.x,a.y-other.y))
 elseif other.fist then
@@ -612,7 +612,7 @@ scr_circ(a.x,a.y,.5,4)
 end,function(a)
 if not a:any_timer_active("cooldown","roll","punch")then
 if btn(4)then
-a:create_timer("roll",10,function()a.dx/=2 a.dy/=2 a:create_timer("cooldown",20)end)
+a:create_timer("roll",12,function()a.dx/=3 a.dy/=3 a:create_timer("cooldown",20)end)
 elseif btn(5)then
 a:create_timer("punch",10,function()a:create_timer("cooldown",10)end)
 _g.fist(a,a.x,a.y)
