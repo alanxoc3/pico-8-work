@@ -13,3 +13,6 @@ build/
 
 .dropbox
 TEMPLATE/.code.lua
+
+# temp files
+*~

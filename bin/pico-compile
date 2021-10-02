@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 pico-minifier() {
-    perl -I$PICO_WORK_DIR/bin/minifier/ $PICO_WORK_DIR/bin/pico-minifier.pl "$@"
+    perl "-I$PICO_WORK_DIR/bin/minifier/" "$PICO_WORK_DIR/bin/pico-minifier.pl" "$@"
 }
 
 files_in_order=$(ls ./src/*.lua)
