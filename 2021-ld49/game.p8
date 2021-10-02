@@ -1,7 +1,7 @@
 pico-8 cartridge // http://www.pico-8.com
 version 33
 __lua__
--- cat game
+-- game
 -- amorg
 
 -- unobfuscated code at:
