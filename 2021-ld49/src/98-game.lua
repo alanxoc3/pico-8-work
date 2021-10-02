@@ -105,7 +105,7 @@ function game_draw(a)
 
     scr_rect(13.875-3.75,y+.125,13.875    ,y+.875,1) -- right
 
-    if g_pl.health > 2 then scr_rect(5.375+.5+.125 ,.5  ,5.375+1.5+.125  ,1.5 ,8) end
-    if g_pl.health > 0 then scr_rect(5.375+2+.125  ,.5  ,5.375+3+.125    ,1.5 ,8) end
-    if g_pl.health > 1 then scr_rect(5.375+3.5+.125,.5  ,5.375+4.5+.125  ,1.5 ,8) end
+    if g_pl.health > 2 then zspr(4, 6.5*8, 9) end
+    if g_pl.health > 0 then zspr(4, 8*8  , 9) end
+    if g_pl.health > 1 then zspr(4, 9.5*8, 9) end
 end
