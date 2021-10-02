@@ -55,6 +55,7 @@ function game_draw(a)
 
     camera(-x1*8-off_x*8, -y1*8-off_y*8)
 
+    map(1,1,0,0,15,12)
     -- unneeded rectangle:
     rect(0, 2, 10, 10, 7, 8)
 

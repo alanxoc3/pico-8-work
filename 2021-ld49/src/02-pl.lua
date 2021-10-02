@@ -7,7 +7,7 @@ create_actor([[fist;3;drawable,col,confined,rel|
     a.rel_dx = cos(a.rel_actor.dir)*.2
     a.rel_dy = sin(a.rel_actor.dir)*.2
 end, function(a)
-    scr_circ(a.x, a.y, .3, 8)
+    scr_circ(a.x, a.y, .3, 12)
 end)
 
 create_actor([[pl;2;drawable,pos,confined,mov,x_bounded,y_bounded,col,knockbackable,hurtable|
