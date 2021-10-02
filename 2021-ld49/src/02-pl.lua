@@ -10,18 +10,30 @@ end, function(a)
     scr_circ(a.x, a.y, .3, 8)
 end)
 
-create_actor([[pl;2;drawable,pos,confined,mov,x_bounded,y_bounded,col,knockbackable,hurtable|
+create_actor([[pl;2;drawable,pos,confined,mov,x_bounded,y_bounded,col,spr_obj,knockbackable,hurtable|
     x:@1; y:@2;
     health:3; max_health:3;
     
+    sh:2; sind:137;
     inertia_x:.90;
     inertia_y:.90;
 
-    dir:0;
+    dir:0; is_facing_left:no;
 
     d:@3; u:@4;
 ]], function(a)
-    scr_circ(a.x, a.y, .5, 12)
+    a.sind = 137
+    if a:any_timer_active"punch" then
+        local percent = a:get_timer_percent"punch"
+        a.sind = 138
+        if percent >= .50 then
+            a.sind = 139
+        end
+    end
+    a.xf = a.is_facing_left
+
+    -- scr_circ(a.x, a.y, .5, 12)
+    scr_spr(a)
 end, function(a)
     if not a:any_timer_active("cooldown", "roll", "punch") then
         if btn(4) then
@@ -36,6 +48,10 @@ end, function(a)
     local is_moving = xbtn() ~= 0 or ybtn() ~= 0
     if is_moving then
         a.dir = atan2(xbtn(), ybtn())
+    end
+
+    if xbtn() ~= 0 then
+        a.is_facing_left = xbtn() < 0
     end
 
     if a:any_timer_active"knockback" then
