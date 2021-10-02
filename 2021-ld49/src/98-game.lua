@@ -2,13 +2,13 @@
 
 function game_init(a)
     _g.fader_in(.5, nf, nf)
-    g_view = ztable[[ off_x:0; off_y:0; ]]
     g_room = ztable[[ x:0; y:0; w:15; h:8; ]]
     _g.pl(g_room.w/2, g_room.h/2)
 end
 
 function game_update(a)
     batch_call_new(acts_loop, [[
+        timer,     tick;
         act,       update;
         mov,       mov_update;
         vec,       vec_update;

@@ -75,11 +75,29 @@ create_parent([[y_bounded;0;act,;|
    end
 end)
 
-create_parent([[timed;0;act,;|
-   t:0;
-   tick:@1;
+create_parent([[timer;0;act,;|
+    timers:,;
+    tick:@1;
+    create_timer:@2;
+    is_timer_active:@3;
 ]], function(a)
-   a.t += 1
+    local keys_to_remove = {}
+    for k, v in pairs(a.timers) do
+        v.t += 1
+        if v.t > v.limit then
+            add(keys_to_remove, k)
+        end
+    end
+
+    for k in all(keys_to_remove) do
+        local v = a.timers[k]
+        a.timers[k] = nil
+        v.callback()
+    end
+end, function(a, timer_name, limit, callback)
+    a.timers[timer_name] = { t=0, limit=limit, callback=(callback or nf) }
+end, function(a, timer_name)
+    return a.timers[timer_name] ~= nil
 end)
 
 create_parent([[vec;0;pos,;|
