@@ -11,6 +11,7 @@ function game_update(a)
         timer,     tick;
         act,       update;
         mov,       mov_update;
+        rel,       rel_update;
         vec,       vec_update;
         x_bounded, check_bounds_x;
         y_bounded, check_bounds_y;
@@ -21,7 +22,7 @@ end
 function game_draw(a)
     fade(g_card_fade)
 
-    local x1, x2, y1, y2 = 8-g_room.w/2, 8+g_room.w/2, 8-g_room.h/2, 8+g_room.h/2
+    local x1, x2, y1, y2 = 8-g_room.w/2, 8+g_room.w/2-1/8, 8-g_room.h/2, 8+g_room.h/2-1/8
     local off_x, off_y = 0, 0
 
     zclip(x1*8+off_x*8, y1*8+off_y*8, x2*8+off_x*8, y2*8+off_y*8)
