@@ -1,6 +1,6 @@
 create_actor([[fist;3;drawable,col,confined,rel|
     rel_actor:@1; x:@2; y:@3; i:@4; d:@5;
-    rx:.25; ry:.25;
+    touchable:no; rx:.25; ry:.25;
 
     tl_max_time=.125,;
 ]], function(a)
@@ -10,7 +10,7 @@ end, function(a)
     scr_circ(a.x, a.y, .3, 8)
 end)
 
-create_actor([[pl;2;drawable,pos,confined,mov,x_bounded,y_bounded,timer,col|
+create_actor([[pl;2;drawable,pos,confined,mov,x_bounded,y_bounded,timer,col,knockbackable|
     x:@1; y:@2;
     
     inertia_x:.90;
@@ -26,7 +26,7 @@ create_actor([[pl;2;drawable,pos,confined,mov,x_bounded,y_bounded,timer,col|
 end, function(a)
     if not a:any_timer_active("cooldown", "roll", "punch") then
         if btn(4) then
-            a:create_timer("roll",  10, function() a:create_timer("cooldown", 20) end)
+            a:create_timer("roll",  10, function() a.dx /= 2 a.dy /= 2 a:create_timer("cooldown", 20) end)
         elseif btn(5) then
             a:create_timer("punch", 10, function() a:create_timer("cooldown", 10) end)
             _g.fist(a, a.x, a.y)
@@ -38,7 +38,9 @@ end, function(a)
         a.dir = atan2(xbtn(), ybtn())
     end
 
-    if a:any_timer_active"roll" then
+    if a:any_timer_active"knockback" then
+        a:apply_knockback()
+    elseif a:any_timer_active"roll" then
         a.ax = cos(a.dir)*.05
         a.ay = sin(a.dir)*.05
     elseif is_moving then -- and not a:any_timer_active"punch" then
