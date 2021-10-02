@@ -23,6 +23,7 @@ create_actor([[pl;2;drawable,pos,confined,mov,x_bounded,y_bounded,col,spr_obj,kn
     d:@3; u:@4;
 ]], function(a)
     a.sind = 128
+    a.yy = 0
     if a:any_timer_active"punch" then
         local percent = a:get_timer_percent"punch"
         a.sind = 129
@@ -30,6 +31,7 @@ create_actor([[pl;2;drawable,pos,confined,mov,x_bounded,y_bounded,col,spr_obj,kn
         elseif percent >= .40 then a.sind = 131
         elseif percent >= .20 then a.sind = 130
         end
+        a.yy = sin(percent/2)*5
     end
     a.xf = a.is_facing_left
 

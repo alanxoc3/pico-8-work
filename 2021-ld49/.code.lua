@@ -647,6 +647,7 @@ scr_circ(a.x,a.y,.3,8)
 end)
 create_actor([[77|78]],function(a)
 a.sind=128
+a.yy=0
 if a:any_timer_active"punch"then
 local percent=a:get_timer_percent"punch"
 a.sind=129
@@ -654,6 +655,7 @@ if percent>=.80 then a.sind=132
 elseif percent>=.40 then a.sind=131
 elseif percent>=.20 then a.sind=130
 end
+a.yy=sin(percent/2)*5
 end
 a.xf=a.is_facing_left
 scr_spr(a)
