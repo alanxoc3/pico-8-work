@@ -6,6 +6,7 @@ create_parent([[timer;0;,;|
     tick:@1;
     create_timer:@2;
     any_timer_active:@3;
+    get_timer_percent:@4;
 ]], function(a)
     local keys_to_remove = {}
     for k, v in pairs(a.timers) do
@@ -29,6 +30,9 @@ end, function(a, ...)
         end
     end
     return false
+end, function(a, timer_name)
+    local timer = a.timers[timer_name]
+    return timer and (timer.t/timer.limit) or 1
 end)
 
 -- basic actor. most things ultimately inherit this.
