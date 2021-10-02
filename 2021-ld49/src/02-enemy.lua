@@ -1,5 +1,6 @@
-create_actor([[simple_enemy;2;drawable,col,confined,mov,timer,x_bounded,y_bounded,knockbackable|
+create_actor([[simple_enemy;2;drawable,col,confined,mov,x_bounded,y_bounded,knockbackable,hurtable|
     x:@1; y:@2; u:@3; d:@4; hit:@5;
+    health:3; max_health:3;
     rx:.375; ry:.375;
     touchable: no;
     inertia_x:.90;
@@ -23,9 +24,11 @@ end, function(a)
     scr_circ(a.x, a.y, .4, 10)
 end, function(a, other)
     if other.pl and not other:any_timer_active("roll") then
+        other:hurt()
         other:knockback(atan2(other.x-a.x, other.y-a.y))
         a:knockback(atan2(a.x-other.x, a.y-other.y))
     elseif other.fist then
+        a:hurt()
         g_pl:knockback(atan2(g_pl.x-a.x, g_pl.y-a.y))
         a:knockback(atan2(a.x-other.x, a.y-other.y))
     end

@@ -10,15 +10,14 @@ end, function(a)
     scr_circ(a.x, a.y, .3, 8)
 end)
 
-create_actor([[pl;2;drawable,pos,confined,mov,x_bounded,y_bounded,timer,col,knockbackable|
+create_actor([[pl;2;drawable,pos,confined,mov,x_bounded,y_bounded,col,knockbackable,hurtable|
     x:@1; y:@2;
+    health:3; max_health:3;
     
     inertia_x:.90;
     inertia_y:.90;
 
     dir:0;
-
-    timer:nil;
 
     d:@3; u:@4;
 ]], function(a)
