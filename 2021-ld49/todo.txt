@@ -1,0 +1,5 @@
+next steps for alan:
+- implement lives
+- implement combo system
+- tie sprites to character
+- implement text box system
