@@ -79,7 +79,7 @@ create_actor([[pl;2;drawable,pos,confined,mov,x_bounded,y_bounded,col,spr_obj,kn
     scr_spr(a)
 end, function(a)
     -- DEBUG_BEGIN
-    if g_debug and btnp(5) then a.insane_level = (a.insane_level + 1) % 5 end
+    if g_debug and btnp(4) then a.insane_level = (a.insane_level + 1) % 5 end
     -- DEBUG_END
 
     local speed_multiplier = 1 + a.insane_level / 10
@@ -94,9 +94,9 @@ end, function(a)
     end
 
     if not a:any_timer_active("cooldown", "roll", "punch") then
-        if btn(5) then
+        if btn(4) then
             a:create_timer("roll",  20, function() a.dx /= 3 a.dy /= 3 a:create_timer("cooldown", 20) end)
-        elseif btn(4) then
+        elseif btn(5) then
             a:create_timer("punch", 20, function() a:create_timer("cooldown", 10) end)
             _g.fist(a, a.x, a.y)
         end
