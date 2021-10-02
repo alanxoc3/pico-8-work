@@ -109,8 +109,8 @@ end, function(a)
         a.ax = cos(a.dir)*.03
         a.ay = sin(a.dir)*.03
     elseif a:any_timer_active"punch" then
-        a.ax = cos(a.dir)*.015
-        a.ay = sin(a.dir)*.015
+        a.ax = cos(a.dir)*.005
+        a.ay = sin(a.dir)*.005
     elseif is_moving then -- and not a:any_timer_active"punch" then
         if xbtn() ~= 0 then
             a.is_facing_left = xbtn() < 0
