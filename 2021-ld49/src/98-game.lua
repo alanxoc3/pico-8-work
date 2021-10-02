@@ -15,8 +15,8 @@ function game_update(a)
         act,       update;
         mov,       mov_update;
         pl,        move_check,@1; -- collision
-        simple_enemy,        move_check,@2; -- collision
-        simple_enemy,        move_check,@3; -- collision
+        enemy,        move_check,@2; -- collision
+        enemy,        move_check,@3; -- collision
         rel,       rel_update;
         vec,       vec_update;
         x_bounded, check_bounds_x;
