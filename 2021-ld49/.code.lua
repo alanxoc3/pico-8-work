@@ -636,8 +636,11 @@ end
 end,function(a)
 a.sind=66
 if abs(a.dx)>.005 or abs(a.dy)>.005 then
-if a.tl_tim%.5<.25 then
-a.sind=67
+local loop=a.tl_tim%.5/.5
+if loop<.25 then a.sind=66
+elseif loop<.5 then a.sind=67
+elseif loop<.75 then a.sind=66
+else a.sind=68
 end
 end
 scr_spr(a)
@@ -728,8 +731,8 @@ elseif a:any_timer_active"roll"then
 a.ax=cos(a.dir)*.03
 a.ay=sin(a.dir)*.03
 elseif a:any_timer_active"punch"then
-a.ax=cos(a.dir)*.015
-a.ay=sin(a.dir)*.015
+a.ax=cos(a.dir)*.005
+a.ay=sin(a.dir)*.005
 elseif is_moving then
 if xbtn()~=0 then
 a.is_facing_left=xbtn()<0
