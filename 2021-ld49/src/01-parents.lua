@@ -216,18 +216,22 @@ create_parent([[hurtable;0;act,;|
     health:1;
     max_health:1;
     hurt_cooldown_time:60;
+    hurt_start:nf;
+    hurt_end:nf;
 
     hurt:@1; heal:@2;
 ]], function(a, damage)
     damage = damage or 1
     if not a:any_timer_active("hurt_cooldown") then
-        a:create_timer("hurt_cooldown", a.hurt_cooldown_time)
-
         a.health = max(0, a.health - damage)
 
         if a.health == 0 then
             a.alive = false
+            return
         end
+
+        a:create_timer("hurt_cooldown", a.hurt_cooldown_time, a.hurt_end)
+        a:hurt_start()
     end
 end, function(a, health)
    a.health = min(a.max_health, a.health + health)
