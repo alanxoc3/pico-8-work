@@ -2,7 +2,7 @@
 
 function game_init(a)
     _g.fader_in(.5, nf, nf)
-    g_room = ztable[[ x:0; y:0; w:15; h:8; ]]
+    g_room = ztable[[ x:0; y:0; w:15; h:12; ]]
     g_pl = _g.pl(g_room.w/2, g_room.h/2)
     _g.simple_enemy(3, 2)
 end
@@ -60,8 +60,9 @@ function game_draw(a)
     clip()
     camera()
 
-    local y = 14.375
+    local y = 14.5
     scr_rect(.625   ,y+0  ,1.625   ,y+1  ,8) -- normal face
+    scr_rect(14.375 ,y+0  ,15.375  ,y+1  ,8) -- angry face
 
     scr_rect(2.125      ,y+.125,2.125+3.75,y+.875,8) -- left
     scr_rect(6.125      ,y+.125,6.125+3.75,y+.875,8) -- middle
@@ -70,10 +71,7 @@ function game_draw(a)
     scr_rect(2.125+3.75,y+.375,6.125    ,y+.625,8) -- connect left
     scr_rect(13.875-3.75-.25,y+.375,13.875-3.75    ,y+.625,8) -- connect right
 
-    scr_rect(14.375 ,y+0  ,15.375  ,y+1  ,8) -- angry face
-    -- scr_rect(14.375 ,14.5  ,15.375  ,15.5  ,10) -- crazy
-
-    scr_rect(5.375+.5+.125 ,.625  ,5.375+1.5+.125  ,1.625 ,8)
-    scr_rect(5.375+2+.125  ,.625  ,5.375+3+.125    ,1.625 ,8)
-    scr_rect(5.375+3.5+.125,.625  ,5.375+4.5+.125  ,1.625 ,8)
+    scr_rect(5.375+.5+.125 ,.5  ,5.375+1.5+.125  ,1.5 ,8)
+    scr_rect(5.375+2+.125  ,.5  ,5.375+3+.125    ,1.5 ,8)
+    scr_rect(5.375+3.5+.125,.5  ,5.375+4.5+.125  ,1.5 ,8)
 end
