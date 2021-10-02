@@ -182,7 +182,7 @@ end
 end
 return pos,spd
 end
-g_gunvals=split("@1,@2,!plus/@3/1,@5;@1,@2,@3,@4;|0x8000,0x8000,0x7fff,0x7fff,@1|!plus/@1/-2,!plus/@2/-2,!plus/@3/2,!plus/@4/2,13;!plus/@1/-1,!plus/@2/-1,!plus/@3/1,!plus/@4/1,1;|0,0,0,0,0,0,0;1,1,1,0,0,0,0;2,2,2,1,0,0,0;3,3,3,1,0,0,0;4,2,2,2,1,0,0;5,5,1,1,1,0,0;6,13,13,5,5,1,0;7,6,13,13,5,1,0;8,8,2,2,2,0,0;9,4,4,4,5,0,0;10,9,4,4,5,5,0;11,3,3,3,3,0,0;12,12,3,1,1,1,0;13,5,5,1,1,1,0;14,13,4,2,2,1,0;15,13,13,5,5,1,0;|fader_out;3;act,;update,|fade_time:@1;i:@2;e:@3;u:@4;tl_max_time=@1,|fader_in;3;act,;update,|act;0;,;room_init,pause_init,pause_update,pause_end,kill,clean,delete|alive:yes;stun_countdown:0;i:nf;u:nf;update:@1;clean:@2;kill:@3;delete:@4;room_init:nf;create_init:nf;pause_init:nf;pause_update:nf;pause_end:nf;destroyed:nf;get:@5;|ma_able;0;act,;|name:thing;|confined;0;act,;room_end,|room_end:nf;|loopable;0;act,;|tl_loop:yes;|pos;0;act,;|x:0;y:0;|knock;0;col,;|;|popper;0;col,;|bad;0;knock,;|x_bounded;0;dim,;|check_bounds_x:@1;|y_bounded;0;dim,;|check_bounds_y:@1;|timer;0;act,;|timers:,;tick:@1;create_timer:@2;any_timer_active:@3;|vec;0;pos,;|dx:0;dy:0;vec_update:@1;|mov;0;vec,;|inertia_x:1;inertia_y:1;ax:0;ay:0;mov_update:@1;stop:@2;|dim;0;pos,;|rx:.375;ry:.375;|dim;0;pos,;debug_rect,|rx:.375;ry:.375;debug_rect:@1;|rel;0;act,;rel_update,|rel_actor:null;rel_x:0;rel_y:0;rel_dx:0;rel_dy:0;flippable:no;rel_update:@1;|drawable_obj;0;pos,;reset_off,|ixx:0;iyy:0;xx:0;yy:0;visible:yes;reset_off:@1;|drawable;0;drawable_obj,;d,|d:nf;|drawable_1;0;drawable_obj,;d,|drawable_2;0;drawable_obj,;d,|pre_drawable;0;drawable_obj,;d,|pre_drawable_1;0;drawable_obj,;d,|pre_drawable_2;0;drawable_obj,;d,|post_drawable;0;drawable_obj,;d,|post_drawable_1;0;drawable_obj,;d,|post_drawable_2;0;drawable_obj,;d,|above_map_post_camera_drawable;0;drawable_obj,;d,|spr_obj;0;vec,drawable_obj,;|sind:0;outline_color:BG_UI;sw:1;sh:1;xf:no;yf:no;|spr;0;spr_obj,;|d:@1;|knockbackable;0;mov,timer,;|knockback:@1;apply_knockback:@2;knockback_speed:0;knockback_dir:0;|stunnable;0;mov,drawable_obj;|stun_update:@1;|hurtable;0;act,;|health:1;max_health:1;health_visible:yes;hurt:@1;heal:@2;|trig;0;vec,dim;|contains:nf;intersects:nf;not_contains_or_intersects:nf;contains_or_intersects:@1;trigger_update:@1;|anchored;1;vec,dim;|touchable:@1;hit:nf;|col;0;vec,dim;|touchable:yes;hit:nf;move_check:@1;|dx:0;dy:0|x,dx,@1,@2,@3,@4;y,dy,@1,@2,@5,@6;|tcol;0;vec,dim;|tile_solid:yes;tile_hit:nf;coll_tile:@1;|view;4;act,confined;center_view,update_view|x:0;y:0;room_crop:2;tl_loop:yes;w:@1;h:@2;follow_dim:@3;follow_act:@4;update_view:@5;center_view:@6;change_ma:@7;,;|@1,x,w,ixx;@1,y,h,iyy|simple_enemy;2;drawable,col,confined,mov,timer,x_bounded,y_bounded,knockbackable|x:@1;y:@2;u:@3;d:@4;hit:@5;rx:.375;ry:.375;touchable:no;inertia_x:.90;inertia_y:.90;|fist;3;drawable,col,confined,rel|rel_actor:@1;x:@2;y:@3;i:@4;d:@5;touchable:no;rx:.25;ry:.25;tl_max_time=.125,;|pl;2;drawable,pos,confined,mov,x_bounded,y_bounded,timer,col,knockbackable|x:@1;y:@2;inertia_x:.90;inertia_y:.90;dir:0;timer:nil;d:@3;u:@4;|x:0;y:0;w:15;h:12;|timer,tick;act,update;mov,mov_update;pl,move_check,@1;simple_enemy,move_check,@2;simple_enemy,move_check,@3;rel,rel_update;vec,vec_update;x_bounded,check_bounds_x;y_bounded,check_bounds_y;act,clean;|pre_drawable,d;pre_drawable_1,d;pre_drawable_2,d;|drawable,d;drawable_1,d;drawable_2,d;post_drawable,d;post_drawable_1,d;post_drawable_2,d;|i=@3,u=@4,d=@5;|","|")
+g_gunvals=split("@1,@2,!plus/@3/1,@5;@1,@2,@3,@4;|0x8000,0x8000,0x7fff,0x7fff,@1|!plus/@1/-2,!plus/@2/-2,!plus/@3/2,!plus/@4/2,13;!plus/@1/-1,!plus/@2/-1,!plus/@3/1,!plus/@4/1,1;|0,0,0,0,0,0,0;1,1,1,0,0,0,0;2,2,2,1,0,0,0;3,3,3,1,0,0,0;4,2,2,2,1,0,0;5,5,1,1,1,0,0;6,13,13,5,5,1,0;7,6,13,13,5,1,0;8,8,2,2,2,0,0;9,4,4,4,5,0,0;10,9,4,4,5,5,0;11,3,3,3,3,0,0;12,12,3,1,1,1,0;13,5,5,1,1,1,0;14,13,4,2,2,1,0;15,13,13,5,5,1,0;|fader_out;3;act,;update,|fade_time:@1;i:@2;e:@3;u:@4;tl_max_time=@1,|fader_in;3;act,;update,|timer;0;,;|timers:,;tick:@1;create_timer:@2;any_timer_active:@3;|act;0;timer,;room_init,kill,clean,delete|update:@1;clean:@2;kill:@3;delete:@4;get:@5;alive:yes;i:nf;u:nf;room_init:nf;destroyed:nf;|ma_able;0;act,;|name:thing;|confined;0;act,;room_end,|room_end:nf;|loopable;0;act,;|tl_loop:yes;|pos;0;act,;|x:0;y:0;|knock;0;col,;|;|popper;0;col,;|bad;0;knock,;|x_bounded;0;dim,;|check_bounds_x:@1;|y_bounded;0;dim,;|check_bounds_y:@1;|vec;0;pos,;|dx:0;dy:0;vec_update:@1;|mov;0;vec,;|inertia_x:1;inertia_y:1;ax:0;ay:0;mov_update:@1;stop:@2;|dim;0;pos,;|rx:.375;ry:.375;|dim;0;pos,;debug_rect,|rx:.375;ry:.375;debug_rect:@1;|rel;0;act,;rel_update,|rel_actor:null;rel_x:0;rel_y:0;rel_dx:0;rel_dy:0;flippable:no;rel_update:@1;|drawable_obj;0;pos,;reset_off,|ixx:0;iyy:0;xx:0;yy:0;visible:yes;reset_off:@1;|drawable;0;drawable_obj,;d,|d:nf;|drawable_1;0;drawable_obj,;d,|drawable_2;0;drawable_obj,;d,|pre_drawable;0;drawable_obj,;d,|pre_drawable_1;0;drawable_obj,;d,|pre_drawable_2;0;drawable_obj,;d,|post_drawable;0;drawable_obj,;d,|post_drawable_1;0;drawable_obj,;d,|post_drawable_2;0;drawable_obj,;d,|above_map_post_camera_drawable;0;drawable_obj,;d,|spr_obj;0;vec,drawable_obj,;|sind:0;outline_color:BG_UI;sw:1;sh:1;xf:no;yf:no;|spr;0;spr_obj,;|d:@1;|knockbackable;0;mov,timer,;|knockback:@1;apply_knockback:@2;knockback_speed:0;knockback_dir:0;|hurtable;0;act,;|health:1;max_health:1;hurt_cooldown_time:60;hurt:@1;heal:@2;|trig;0;vec,dim;|contains:nf;intersects:nf;not_contains_or_intersects:nf;contains_or_intersects:@1;trigger_update:@1;|anchored;1;vec,dim;|touchable:@1;hit:nf;|col;0;vec,dim;|touchable:yes;hit:nf;move_check:@1;|dx:0;dy:0|x,dx,@1,@2,@3,@4;y,dy,@1,@2,@5,@6;|tcol;0;vec,dim;|tile_solid:yes;tile_hit:nf;coll_tile:@1;|view;4;act,confined;center_view,update_view|x:0;y:0;room_crop:2;tl_loop:yes;w:@1;h:@2;follow_dim:@3;follow_act:@4;update_view:@5;center_view:@6;change_ma:@7;,;|@1,x,w,ixx;@1,y,h,iyy|simple_enemy;2;drawable,col,confined,mov,x_bounded,y_bounded,knockbackable,hurtable|x:@1;y:@2;u:@3;d:@4;hit:@5;health:3;max_health:3;rx:.375;ry:.375;touchable:no;inertia_x:.90;inertia_y:.90;|fist;3;drawable,col,confined,rel|rel_actor:@1;x:@2;y:@3;i:@4;d:@5;touchable:no;rx:.25;ry:.25;tl_max_time=.125,;|pl;2;drawable,pos,confined,mov,x_bounded,y_bounded,col,knockbackable,hurtable|x:@1;y:@2;health:3;max_health:3;inertia_x:.90;inertia_y:.90;dir:0;d:@3;u:@4;|x:0;y:0;w:15;h:12;|timer,tick;act,update;mov,mov_update;pl,move_check,@1;simple_enemy,move_check,@2;simple_enemy,move_check,@3;rel,rel_update;vec,vec_update;x_bounded,check_bounds_x;y_bounded,check_bounds_y;act,clean;|pre_drawable,d;pre_drawable_1,d;pre_drawable_2,d;|drawable,d;drawable_1,d;drawable_2,d;post_drawable,d;post_drawable_1,d;post_drawable_2,d;|i=@3,u=@4,d=@5;|","|")
 g_ztable_cache={}
 function nf()end
 function ztable(original_str,...)
@@ -326,53 +326,6 @@ create_actor([[7|6]],function(a)
 g_card_fade=min((a.tl_max_time-a.tl_tim)/a.tl_max_time*10,g_card_fade)
 end)
 create_parent([[8|9]],function(a)
-if a.alive and a.stun_countdown<=0 then
-if tl_node(a)then
-a.alive=false
-end
-elseif a.stun_countdown>0 then
-a.stun_countdown-=1
-end
-end,function(a)
-if not a.alive then
-a:destroyed()
-a:delete()
-end
-end,function(a)
-a.alive=nil
-end,function(a)
-for k,v in pairs(g_act_arrs)do
-if a[k]then del(v,a)end
-end
-end,get)
-create_parent[[10|11]]
-create_parent[[12|13]]
-create_parent[[14|15]]
-create_parent[[16|17]]
-create_parent[[18|19]]
-create_parent[[20|19]]
-create_parent[[21|19]]
-create_parent([[22|23]],function(a)
-if a.x+a.dx<g_room.x+a.rx then
-a.x=g_room.x+a.rx
-a.dx=0
-end
-if a.x+a.dx>g_room.x+g_room.w-a.rx then
-a.x=g_room.x+g_room.w-a.rx
-a.dx=0
-end
-end)
-create_parent([[24|25]],function(a)
-if a.y+a.dy<g_room.y+a.ry then
-a.y=g_room.y+a.ry
-a.dy=0
-end
-if a.y+a.dy>g_room.y+g_room.h-a.ry then
-a.y=g_room.y+g_room.h-a.ry
-a.dy=0
-end
-end)
-create_parent([[26|27]],function(a)
 local keys_to_remove={}
 for k,v in pairs(a.timers)do
 v.t+=1
@@ -394,6 +347,49 @@ return true
 end
 end
 return false
+end)
+create_parent([[10|11]],function(a)
+if a.alive and tl_node(a)then
+a.alive=false
+end
+end,function(a)
+if not a.alive then
+a:destroyed()
+a:delete()
+end
+end,function(a)
+a.alive=nil
+end,function(a)
+for k,v in pairs(g_act_arrs)do
+if a[k]then del(v,a)end
+end
+end,get)
+create_parent[[12|13]]
+create_parent[[14|15]]
+create_parent[[16|17]]
+create_parent[[18|19]]
+create_parent[[20|21]]
+create_parent[[22|21]]
+create_parent[[23|21]]
+create_parent([[24|25]],function(a)
+if a.x+a.dx<g_room.x+a.rx then
+a.x=g_room.x+a.rx
+a.dx=0
+end
+if a.x+a.dx>g_room.x+g_room.w-a.rx then
+a.x=g_room.x+g_room.w-a.rx
+a.dx=0
+end
+end)
+create_parent([[26|27]],function(a)
+if a.y+a.dy<g_room.y+a.ry then
+a.y=g_room.y+a.ry
+a.dy=0
+end
+if a.y+a.dy>g_room.y+g_room.h-a.ry then
+a.y=g_room.y+g_room.h-a.ry
+a.dy=0
+end
 end)
 create_parent([[28|29]],function(a)
 a.x+=a.dx
@@ -453,18 +449,10 @@ end,function(a)
 a.ax=cos(a.knockback_dir)*a.knockback_speed
 a.ay=sin(a.knockback_dir)*a.knockback_speed
 end)
-create_parent([[57|58]],function(a)
-if a.stun_countdown>0 then
-a.ay,a.ax=0,0
-a.yy=rnd_one()
-a.outline_color=2
-else
-a.outline_color=1
-end
-end)
-create_parent([[59|60]],function(a,damage,stun_val)
-if a.stun_countdown<=0 then
-a.stun_countdown=stun_val
+create_parent([[57|58]],function(a,damage)
+damage=damage or 1
+if not a:any_timer_active("hurt_cooldown")then
+a:create_timer("hurt_cooldown",a.hurt_cooldown_time)
 a.health=max(0,a.health-damage)
 if a.health==0 then
 a.alive=false
@@ -473,7 +461,7 @@ end
 end,function(a,health)
 a.health=min(a.max_health,a.health+health)
 end)
-create_parent([[61|62]],function(a,b)
+create_parent([[59|60]],function(a,b)
 if does_a_contain_b(a,b)then
 a:contains(b)
 elseif do_actors_intersect(a,b)then
@@ -482,8 +470,8 @@ else
 a:not_contains_or_intersects(b)
 end
 end)
-create_parent[[63|64]]
-create_parent([[65|66]],function(a,acts)
+create_parent[[61|62]]
+create_parent([[63|64]],function(a,acts)
 local hit_list={}
 local move_check=function(dx,dy)
 local ret_val=dx+dy
@@ -505,8 +493,8 @@ foreach(acts,function(b)
 if a!=b and(not a.anchored or not b.anchored)then
 local x,y=abs(a.x+dx-b.x),abs(a.y+dy-b.y)
 if x<a.rx+b.rx and y<a.ry+b.ry then
-hit_list[b]=hit_list[b]or ztable[[67]]
-batch_call_new(col_help,[[68]],a,b,x,dx,y,dy)
+hit_list[b]=hit_list[b]or ztable[[65]]
+batch_call_new(col_help,[[66]],a,b,x,dx,y,dy)
 end
 end
 end)
@@ -517,7 +505,7 @@ for b,d in pairs(hit_list)do
 a:hit(b,d.dx,d.dy)
 end
 end)
-create_parent([[69|70]],function(a,solid_func)
+create_parent([[67|68]],function(a,solid_func)
 local x,dx=coll_tile_help(a.x,a.y,a.dx,a.rx,a.ry,0,a,a.tile_hit,solid_func)
 local y,dy=coll_tile_help(a.y,a.x,a.dy,a.ry,a.rx,2,a,a.tile_hit,function(y,x)return solid_func(x,y)end)
 if a.tile_solid then
@@ -559,12 +547,12 @@ end
 function scr_circ(x,y,r,col)
 circ(x*8,y*8,r*8,col)
 end
-create_actor([[71|72]],
+create_actor([[69|70]],
 function(a)
 if a.follow_act and not a.follow_act.alive then
 a.follow_act=nil
 end
-batch_call_new(update_view_helper,[[73]],a)
+batch_call_new(update_view_helper,[[71]],a)
 end,function(a)
 if a.follow_act then
 a.x,a.y=a.follow_act.x,a.follow_act.y
@@ -576,7 +564,7 @@ if not other or other.ma_able then
 a.follow_act=other
 end
 end)
-create_actor([[74|75]],function(a)
+create_actor([[72|73]],function(a)
 if not a:any_timer_active("cooldown","walk")then
 a.dir=atan2(g_pl.x-a.x,g_pl.y-a.y)+rnd(.125)-.125/2
 a:create_timer("walk",flr_rnd(10)+10,function()a:create_timer("cooldown",flr_rnd(80)+120)end)
@@ -594,20 +582,22 @@ end,function(a)
 scr_circ(a.x,a.y,.4,10)
 end,function(a,other)
 if other.pl and not other:any_timer_active("roll")then
+other:hurt()
 other:knockback(atan2(other.x-a.x,other.y-a.y))
 a:knockback(atan2(a.x-other.x,a.y-other.y))
 elseif other.fist then
+a:hurt()
 g_pl:knockback(atan2(g_pl.x-a.x,g_pl.y-a.y))
 a:knockback(atan2(a.x-other.x,a.y-other.y))
 end
 end)
-create_actor([[76|77]],function(a)
+create_actor([[74|75]],function(a)
 a.rel_dx=cos(a.rel_actor.dir)*.2
 a.rel_dy=sin(a.rel_actor.dir)*.2
 end,function(a)
 scr_circ(a.x,a.y,.3,8)
 end)
-create_actor([[78|79]],function(a)
+create_actor([[76|77]],function(a)
 scr_circ(a.x,a.y,.5,4)
 end,function(a)
 if not a:any_timer_active("cooldown","roll","punch")then
@@ -637,12 +627,12 @@ end
 end)
 function game_init(a)
 _g.fader_in(.5,nf,nf)
-g_room=ztable[[80]]
+g_room=ztable[[78]]
 g_pl=_g.pl(g_room.w/2,g_room.h/2)
 _g.simple_enemy(3,2)
 end
 function game_update(a)
-batch_call_new(acts_loop,[[81]],g_act_arrs["col"],g_act_arrs["pl"],g_act_arrs["fist"])
+batch_call_new(acts_loop,[[79]],g_act_arrs["col"],g_act_arrs["pl"],g_act_arrs["fist"])
 end
 function game_draw(a)
 fade(g_card_fade)
@@ -652,9 +642,9 @@ zclip(x1*8+off_x*8,y1*8+off_y*8,x2*8+off_x*8,y2*8+off_y*8)
 zcls(1)
 camera(-x1*8-off_x*8,-y1*8-off_y*8)
 rect(0,2,10,10,7,8)
-batch_call_new(acts_loop,[[82]])
+batch_call_new(acts_loop,[[80]])
 isorty(g_act_arrs.drawable)
-batch_call_new(acts_loop,[[83]])
+batch_call_new(acts_loop,[[81]])
 if g_debug then acts_loop("dim","debug_rect")end
 clip()
 camera()
@@ -676,7 +666,7 @@ poke(0x5f5c,15)
 poke(0x5f5d,15)
 function _init()
 music(0,3000)
-g_tl=ztable([[84]],logo_draw,function()sfx"63" end,
+g_tl=ztable([[82]],logo_draw,function()sfx"63" end,
 game_init,game_update,game_draw
 )
 end

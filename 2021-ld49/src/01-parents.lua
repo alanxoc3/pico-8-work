@@ -1,42 +1,57 @@
-------------------------------------------
---           actor definitions          --
-------------------------------------------
+-- apply parents to your actor
 
--- to generate an actor.
-create_parent([[act;0;,;room_init,pause_init,pause_update,pause_end,kill,clean,delete|
-   alive:yes;
-   stun_countdown:0;
-   i:nf; u:nf;
-   update:@1;
-   clean:@2;
-   kill:@3;
-   delete:@4;
-   room_init:nf;
-   create_init:nf;
-   pause_init:nf;
-   pause_update:nf;
-   pause_end:nf;
-   destroyed:nf;
-   get:@5;
+-- lets you create timers on your actor
+create_parent([[timer;0;,;|
+    timers:,;
+    tick:@1;
+    create_timer:@2;
+    any_timer_active:@3;
 ]], function(a)
-   if a.alive and a.stun_countdown <= 0 then
-      if tl_node(a) then
-         a.alive = false
-      end
-   elseif a.stun_countdown > 0 then
-      a.stun_countdown -= 1
-   end
+    local keys_to_remove = {}
+    for k, v in pairs(a.timers) do
+        v.t += 1
+        if v.t > v.limit then
+            add(keys_to_remove, k)
+        end
+    end
+
+    for k in all(keys_to_remove) do
+        local v = a.timers[k]
+        a.timers[k] = nil
+        v.callback()
+    end
+end, function(a, timer_name, limit, callback)
+    a.timers[timer_name] = { t=0, limit=limit, callback=(callback or nf) }
+end, function(a, ...)
+    for timer_name in all{...} do
+        if a.timers[timer_name] ~= nil then
+            return true
+        end
+    end
+    return false
+end)
+
+-- basic actor. most things ultimately inherit this.
+-- handles update, init, and deletion stuff.
+create_parent([[act;0;timer,;room_init,kill,clean,delete|
+    update:@1; clean:@2; kill:@3; delete:@4; get:@5;
+    alive:yes; i:nf; u:nf; room_init:nf; destroyed:nf;
+]], function(a)
+    -- tl_node calls the u/i functions.
+    if a.alive and tl_node(a) then
+        a.alive = false
+    end
 end, function(a)
-   if not a.alive then
-      a:destroyed()
-      a:delete()
-   end
+    if not a.alive then
+        a:destroyed()
+        a:delete()
+    end
 end, function(a)
-   a.alive = nil
+    a.alive = nil
 end, function(a)
-   for k, v in pairs(g_act_arrs) do
-      if a[k] then del(v, a) end
-   end
+    for k, v in pairs(g_act_arrs) do
+        if a[k] then del(v, a) end
+    end
 end, get)
 
 create_parent[[ma_able;0;act,;|name:"thing";]]
@@ -73,36 +88,6 @@ create_parent([[y_bounded;0;dim,;|
       a.y = g_room.y+g_room.h-a.ry
       a.dy = 0
    end
-end)
-
-create_parent([[timer;0;act,;|
-    timers:,;
-    tick:@1;
-    create_timer:@2;
-    any_timer_active:@3;
-]], function(a)
-    local keys_to_remove = {}
-    for k, v in pairs(a.timers) do
-        v.t += 1
-        if v.t > v.limit then
-            add(keys_to_remove, k)
-        end
-    end
-
-    for k in all(keys_to_remove) do
-        local v = a.timers[k]
-        a.timers[k] = nil
-        v.callback()
-    end
-end, function(a, timer_name, limit, callback)
-    a.timers[timer_name] = { t=0, limit=limit, callback=(callback or nf) }
-end, function(a, ...)
-    for timer_name in all{...} do
-        if a.timers[timer_name] ~= nil then
-            return true
-        end
-    end
-    return false
 end)
 
 create_parent([[vec;0;pos,;|
@@ -222,35 +207,24 @@ end, function(a)
     a.ay = sin(a.knockback_dir)*a.knockback_speed
 end)
 
-create_parent([[stunnable;0;mov,drawable_obj;|
-   stun_update:@1;
-]], function(a)
-   if a.stun_countdown > 0 then
-      a.ay, a.ax = 0, 0
-      a.yy = rnd_one()
-      a.outline_color = 2
-   else
-      a.outline_color = 1
-   end
-end)
-
 -- HURTABLE: something that has health and can be hurt or healed.
 create_parent([[hurtable;0;act,;|
-   health:1;
-   max_health:1;
-   health_visible:yes;
+    health:1;
+    max_health:1;
+    hurt_cooldown_time:60;
 
-   hurt:@1; heal:@2;
-]], function(a, damage, stun_val)
-   if a.stun_countdown <= 0 then
-      a.stun_countdown = stun_val
+    hurt:@1; heal:@2;
+]], function(a, damage)
+    damage = damage or 1
+    if not a:any_timer_active("hurt_cooldown") then
+        a:create_timer("hurt_cooldown", a.hurt_cooldown_time)
 
-      a.health = max(0, a.health - damage)
+        a.health = max(0, a.health - damage)
 
-      if a.health == 0 then
-         a.alive = false
-      end
-   end
+        if a.health == 0 then
+            a.alive = false
+        end
+    end
 end, function(a, health)
    a.health = min(a.max_health, a.health + health)
 end)
