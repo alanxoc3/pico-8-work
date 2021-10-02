@@ -1,3 +1,20 @@
+create_actor([[angry_part;3;pre_drawable,mov|
+    x:@1; y:@2; u:@4; d:@5;
+    inertia_y:.99;
+    dy:-.1;
+
+    tl_max_time=@3,;
+]], function(a)
+end, function(a)
+    local color = 8
+    if a.tl_tim then
+        if a.tl_tim / a.tl_max_time > .5 then
+            color = 2
+        end
+        scr_circfill(a.x, a.y, .125, color)
+    end
+end)
+
 create_actor([[fist;3;col,confined,rel|
     rel_actor:@1; x:@2; y:@3; i:@4; d:@5;
     touchable:no; rx:.25; ry:.5;
@@ -20,7 +37,7 @@ create_actor([[pl;2;drawable,pos,confined,mov,x_bounded,y_bounded,col,spr_obj,kn
 
     dir:0; is_facing_left:no;
 
-    d:@3; u:@4; damage:@5;
+    d:@3; u:@4; damage:@5; hurt_start:@6; hurt_end:@7;
 ]], function(a)
     a.sind = 128
     a.yy = 0
@@ -36,9 +53,12 @@ create_actor([[pl;2;drawable,pos,confined,mov,x_bounded,y_bounded,col,spr_obj,kn
     end
     a.xf = a.is_facing_left
 
-    -- scr_circ(a.x, a.y, .5, 12)
     scr_spr(a)
 end, function(a)
+    if a.insane_level == 4 then
+        _g.angry_part(a.x+rnd(1)-.5, a.y+rnd(2)-1, rnd(.25)+.25)
+    end
+
     if not a:any_timer_active("cooldown", "roll", "punch") then
         if btn(4) then
             a:create_timer("roll",  15, function() a.dx /= 3 a.dy /= 3 a:create_timer("cooldown", 20) end)
@@ -76,4 +96,8 @@ end, function(a)
 end, function(a, other)
     a:hurt()
     a:knockback(atan2(a.x-other.x, a.y-other.y))
+end, function(a)
+    a.insane_level = 4
+end, function(a)
+    a.insane_level = 0
 end)
