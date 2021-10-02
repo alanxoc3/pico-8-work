@@ -1,6 +1,9 @@
 next steps for alan:
-- design where things go on the UI.
-- implement lives
-- implement combo system
-- tie sprites to character
-- implement text box system
+- implement lives on ui.
+- implement combo system.
+- tie sprites to character.
+- implement text box system.
+
+- DONE! design text box.
+- DONE! design where things go on the UI.
+- DONE! damage is functional.

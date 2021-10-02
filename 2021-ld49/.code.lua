@@ -648,6 +648,13 @@ batch_call_new(acts_loop,[[81]])
 if g_debug then acts_loop("dim","debug_rect")end
 clip()
 camera()
+if g_debug then
+scr_rectfill(2,8-2,14,8+2,0)
+scr_rect(2.125,8-2+.125,14,8+2,7)
+scr_rect(2.125+.25+.125+.25,8-2+.125+.25+.125+.25,2.125+.25+3.25-.25-.125,8-2+.125+.25+3.25-.25,7)
+print("hello, how are",47,58,7)
+print("you? 6789012345",47,58+8,7)
+end
 local y=14.5
 scr_rect(.625,y+0,1.625,y+1,8)
 scr_rect(14.375,y+0,15.375,y+1,8)
