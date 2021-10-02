@@ -623,9 +623,9 @@ if a:any_timer_active"knockback"then
 a:apply_knockback()
 elseif a:any_timer_active"walk"then
 a.ax=cos(a.dir)*.01
-if a.ay>0 then
+if a.ax>0 then
 a.xf=false
-elseif a.ay<0 then
+elseif a.ax<0 then
 a.xf=true
 end
 a.ay=sin(a.dir)*.01
