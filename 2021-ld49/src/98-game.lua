@@ -3,13 +3,18 @@
 function game_init(a)
     _g.fader_in(.5, nf, nf)
     g_view = ztable[[ off_x:0; off_y:0; ]]
-    g_room = ztable[[ w:15; h:8; ]]
+    g_room = ztable[[ x:0; y:0; w:15; h:8; ]]
+    _g.pl(g_room.w/2, g_room.h/2)
 end
 
 function game_update(a)
     batch_call_new(acts_loop, [[
-        act, update;
-        act, clean;
+        act,       update;
+        mov,       mov_update;
+        vec,       vec_update;
+        x_bounded, check_bounds_x;
+        y_bounded, check_bounds_y;
+        act,       clean;
     ]])
 end
 
@@ -19,10 +24,13 @@ function game_draw(a)
     local x1, x2, y1, y2 = 8-g_room.w/2, 8+g_room.w/2, 8-g_room.h/2, 8+g_room.h/2
     local off_x, off_y = 0, 0
 
-    camera(-off_x*8, -off_y*8)
     zclip(x1*8+off_x*8, y1*8+off_y*8, x2*8+off_x*8, y2*8+off_y*8)
     zcls(1)
-    zrect(x1*8+5, y1*8+5, x2*8-5, y2*8-5)
+
+    camera(-x1*8-off_x*8, -y1*8-off_y*8)
+
+    -- unneeded rectangle:
+    rect(0, 2, 10, 10, 7, 8)
 
     batch_call_new(acts_loop, [[
         pre_drawable, d;
