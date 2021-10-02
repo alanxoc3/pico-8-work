@@ -3,6 +3,7 @@ next steps for alan:
 - implement combo system.
 - tie sprites to character.
 - implement text box system.
+- particle for enemy.
 
 - DONE! design text box.
 - DONE! design where things go on the UI.
