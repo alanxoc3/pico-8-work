@@ -640,10 +640,10 @@ create_actor([[75|76]],function(a)
 a.rel_dx=cos(a.rel_actor.dir)*.2
 a.rel_dy=sin(a.rel_actor.dir)*.2
 end,function(a)
-scr_circ(a.x,a.y,.3,12)
+scr_circ(a.x,a.y,.3,8)
 end)
 create_actor([[77|78]],function(a)
-scr_circ(a.x,a.y,.5,4)
+scr_circ(a.x,a.y,.5,12)
 end,function(a)
 if not a:any_timer_active("cooldown","roll","punch")then
 if btn(4)then
@@ -697,7 +697,7 @@ local off_x,off_y=0,0
 zclip(x1*8+off_x*8,y1*8+off_y*8,x2*8+off_x*8,y2*8+off_y*8)
 zcls(1)
 camera(-x1*8-off_x*8,-y1*8-off_y*8)
-map(1,1,0,0,15,12)
+map(0,0,0,0,15,12)
 rect(0,2,10,10,7,8)
 batch_call_new(acts_loop,[[81]])
 isorty(g_act_arrs.drawable)
