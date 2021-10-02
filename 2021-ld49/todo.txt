@@ -1,4 +1,5 @@
 next steps for alan:
+- design where things go on the UI.
 - implement lives
 - implement combo system
 - tie sprites to character
