@@ -19,7 +19,7 @@ create_parent([[timer;0;,;|
     for k in all(keys_to_remove) do
         local v = a.timers[k]
         a.timers[k] = nil
-        v.callback()
+        v.callback(a)
     end
 end, function(a, timer_name, limit, callback)
     a.timers[timer_name] = { t=0, limit=limit, callback=(callback or nf) }
