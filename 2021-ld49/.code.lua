@@ -702,7 +702,7 @@ end
 a.xf=a.is_facing_left
 scr_spr(a)
 end,function(a)
-if g_debug and btnp(4)then a.insane_level=(a.insane_level+1)%5 end
+if g_debug and btnp(5)then a.insane_level=(a.insane_level+1)%5 end
 local speed_multiplier=1+a.insane_level/10
 if a.insane_level==4 then
 _g.angry_particle(a.x,a.y+.5,8,8,rnd(.25)+.25)
@@ -714,9 +714,9 @@ elseif a.insane_level==1 then
 _g.angry_particle(a.x,a.y+.5,1,1,rnd(.2))
 end
 if not a:any_timer_active("cooldown","roll","punch")then
-if btn(4)then
+if btn(5)then
 a:create_timer("roll",20,function()a.dx/=3 a.dy/=3 a:create_timer("cooldown",20)end)
-elseif btn(5)then
+elseif btn(4)then
 a:create_timer("punch",20,function()a:create_timer("cooldown",10)end)
 _g.fist(a,a.x,a.y)
 end
