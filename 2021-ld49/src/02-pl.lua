@@ -62,6 +62,9 @@ end, function(a)
     elseif a:any_timer_active"roll" then
         a.ax = cos(a.dir)*.05
         a.ay = sin(a.dir)*.05
+    elseif a:any_timer_active"punch" then
+        a.ax = cos(a.dir)*.01
+        a.ay = sin(a.dir)*.01
     elseif is_moving then -- and not a:any_timer_active"punch" then
         a.ax = cos(a.dir)*.01
         a.ay = sin(a.dir)*.01
