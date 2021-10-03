@@ -8,7 +8,7 @@ create_actor([[fist;3;col,confined,rel|
     a.rel_dy = sin(a.rel_actor.dir)*.03
 end)
 
-create_actor([[pl;2;drawable,pos,confined,mov,x_bounded,y_bounded,col,spr_obj,knockbackable,hurtable|
+create_actor([[pl;2;drawable,pos,confined,mov,x_bounded,y_bounded,col,spr_obj,knockbackable,hurtable,tcol|
     x:@1; y:@2;
     health:3; max_health:3;
 
