@@ -8,16 +8,28 @@ create_actor([[fist;3;col,confined,rel|
     a.rel_dy = sin(a.rel_actor.dir)*.03
 end)
 
-function control_player(a, x_dir, y_dir, is_z_pressed, is_x_pressed, punch_enabled)
+function control_player(a, x_dir, y_dir, is_z_pressed, is_x_pressed, punch_enabled, insane_level)
     if not a.pl then return end
 
-    local speed_multiplier = 1 + a.insane_level / 10
-    if a.insane_level == 4 then _g.powerup_particle(a.x, a.y+.5, COLOR_ANGRY)
-    elseif a.insane_level == 3 then _g.powerup_particle(a.x, a.y+.5, COLOR_INSANE_3)
-    elseif a.insane_level == 2 then _g.powerup_particle(a.x, a.y+.5, COLOR_INSANE_2)
-    elseif a.insane_level == 1 then _g.powerup_particle(a.x, a.y+.5, COLOR_INSANE_1)
-    -- no color for normal
-    -- elseif a.insane_level == 0 then _g.powerup_particle(a.x, a.y+.5, COLOR_NORMAL)
+    -- no speed or power multiplier for the non insane
+    local speed_multiplier = 1
+
+    -- if insane level is not nil, insanity is enabled.
+    if insane_level then
+        speed_multiplier = 1 + a.insane_level/10
+
+        -- anger emotion particle is used instead of blood
+        if     insane_level == 4 then _g.powerup_particle(a.x, a.y+.5, COLOR_ANGRY)
+        elseif insane_level == 3 then _g.powerup_particle(a.x, a.y+.5, COLOR_INSANE_3)
+        elseif insane_level == 2 then _g.powerup_particle(a.x, a.y+.5, COLOR_INSANE_2)
+        elseif insane_level == 1 then _g.powerup_particle(a.x, a.y+.5, COLOR_INSANE_1)
+        -- no color for normal
+        -- elseif insane_level == 0 then _g.powerup_particle(a.x, a.y+.5, COLOR_NORMAL)
+        end
+
+    -- if not insane, getting hurt can spawn particles
+    elseif a:any_timer_active("hurt_cooldown") then
+        _g.powerup_particle(a.x, a.y+.5, COLOR_BLOOD)
     end
 
     if not a:any_timer_active("cooldown", "roll", "punch") then
