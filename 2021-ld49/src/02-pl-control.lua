@@ -12,16 +12,12 @@ function control_player(a, x_dir, y_dir, is_z_pressed, is_x_pressed, punch_enabl
     if not a.pl then return end
 
     local speed_multiplier = 1 + a.insane_level / 10
-    if a.insane_level == 4 then
-        _g.powerup_particle(a.x, a.y+.5, 8)
-    elseif a.insane_level == 3 then
-        _g.powerup_particle(a.x, a.y+.5, 12)
-    elseif a.insane_level == 2 then
-        _g.powerup_particle(a.x, a.y+.5, 14)
-    elseif a.insane_level == 1 then
-        _g.powerup_particle(a.x, a.y+.5, 3)
-    elseif a.insane_level == 0 then
-        -- _g.powerup_particle(a.x, a.y+.5, 13)
+    if a.insane_level == 4 then _g.powerup_particle(a.x, a.y+.5, COLOR_ANGRY)
+    elseif a.insane_level == 3 then _g.powerup_particle(a.x, a.y+.5, COLOR_INSANE_3)
+    elseif a.insane_level == 2 then _g.powerup_particle(a.x, a.y+.5, COLOR_INSANE_2)
+    elseif a.insane_level == 1 then _g.powerup_particle(a.x, a.y+.5, COLOR_INSANE_1)
+    -- no color for normal
+    -- elseif a.insane_level == 0 then _g.powerup_particle(a.x, a.y+.5, COLOR_NORMAL)
     end
 
     if not a:any_timer_active("cooldown", "roll", "punch") then
