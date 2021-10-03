@@ -18,7 +18,7 @@ end, function(a)
 end)
 
 -- particles
-create_actor[[powerup_particle;3;pre_drawable,particle_parent|
+create_actor[[powerup_particle;3;pre_drawable_2,particle_parent|
     x:@1; y:@2; color:@3; d:$draw_small_circle;
     i:$move_up;
     tl_max_time=.25,;

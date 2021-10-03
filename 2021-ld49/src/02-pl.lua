@@ -1,11 +1,11 @@
 create_actor([[fist;3;col,confined,rel|
     rel_actor:@1; x:@2; y:@3; i:@4; d:@5;
-    touchable:no; rx:.25; ry:.5;
+    touchable:no; rx:.25; ry:.75;
 
     tl_max_time=.33,;
 ]], function(a)
-    a.rel_dx = cos(a.rel_actor.dir)*.05
-    a.rel_dy = sin(a.rel_actor.dir)*.05
+    a.rel_dx = cos(a.rel_actor.dir)*.03
+    a.rel_dy = sin(a.rel_actor.dir)*.03
 end)
 
 create_actor([[pl;2;drawable,pos,confined,mov,x_bounded,y_bounded,col,spr_obj,knockbackable,hurtable|
@@ -15,6 +15,7 @@ create_actor([[pl;2;drawable,pos,confined,mov,x_bounded,y_bounded,col,spr_obj,kn
     insane_level:0;
     
     sh:2; sind:137;
+    iyy:-5;
     inertia_x:.90;
     inertia_y:.90;
 
