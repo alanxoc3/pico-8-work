@@ -855,24 +855,12 @@ batch_call_new(acts_loop,[[101]])
 end
 function title_draw(a)
 fade(g_card_fade)
-cls()
-title_b=-1
-title_t=-1
-title_o=title_o+.04
-rectfill(0,64,127,300,1)
-for title_i=0,32 do
-title_c=5
-title_r=title_i+64
-l=64-title_i
-if(64/(title_i+7)+title_o)%2<1 then
-title_w=title_i/12
-title_c=13 title_t=l title_b=title_r
-end
-line(l-32,title_t,l-32,title_b,title_c)
-line(title_r+32,title_t,title_r+32,title_b,title_c)
-end
-rectfill(64-40,32-20,64+40,32+20,0)
-zspr(200,64+1,64+5,8,3)
+zspr(72,64+cos(t()/5+.0)*45,64+sin(t()/3+.0)*45,2,2,t()%5<2.5,false)
+zspr(74,64+cos(t()/5+.2)*45,64+sin(t()/3+.2)*45,2,2,false,t()%5>2.5)
+zspr(76,64+cos(t()/5+.4)*45,64+sin(t()/3+.4)*45,2,2,t()%5<2.5,false)
+zspr(78,64+cos(t()/5+.6)*45,64+sin(t()/3+.6)*45,2,2,t()%5>2.5,false)
+zspr(104,64+cos(t()/5+.8)*45,64+sin(t()/3+.8)*45,2,2,false,t()%5<2.5)
+zspr(200,64,64,8,3)
 end
 g_debug=false
 g_card_fade=8
