@@ -28,12 +28,17 @@ function game_update(a)
         pl,        move_check,@1; -- collision
         enemy,        move_check,@2; -- collision
         enemy,        move_check,@3; -- collision
+        tcol,coll_tile,@4;
         rel,       rel_update;
         vec,       vec_update;
         x_bounded, check_bounds_x;
         y_bounded, check_bounds_y;
         act,       clean;
-    ]], g_act_arrs['col'], g_act_arrs['pl'], g_act_arrs['fist'])
+    ]], g_act_arrs['col'], g_act_arrs['pl'], g_act_arrs['fist'], function(x, y)
+        return x >= g_room.x and x < g_room.x+g_room.w and
+            y >= g_room.y and y < g_room.y+g_room.h and
+            fget(mget(x, y), 0)
+    end)
 
    if g_tbox_update then
       -- zsfx(2,5)
