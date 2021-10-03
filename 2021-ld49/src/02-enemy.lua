@@ -4,7 +4,7 @@ create_actor([[nurse_weapon;3;col,confined,rel,enemy|
 
     tl_max_time=.16,;
 ]], function(a)
-    a.rel_dx = zsgn(cos(a.rel_actor.dir))*.1
+    a.rel_dx = zsgn(cos(a.rel_actor.dir))*.05
 end, function(a, other)
     if other.pl and not other:any_timer_active("roll") then
         other:damage(a)

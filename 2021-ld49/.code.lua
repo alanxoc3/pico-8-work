@@ -620,7 +620,7 @@ end,function(a)
 zspr(a.sind,a.x*8+a.xx,a.y*8+a.yy,2,1,a.xf,false)
 end)
 create_actor([[76|77]],function(a)
-a.rel_dx=zsgn(cos(a.rel_actor.dir))*.1
+a.rel_dx=zsgn(cos(a.rel_actor.dir))*.05
 end,function(a,other)
 if other.pl and not other:any_timer_active("roll")then
 other:damage(a)
@@ -944,7 +944,7 @@ _g.fader_in(.5,nf,nf)
 g_floormap=create_map()
 g_room=ztable[[98]]
 g_pl=_g.pl(4,4)
-g_view=_g.view(15,12,4,g_pl)
+g_view=_g.view(15.25,11.5,3,g_pl)
 _g.simple_enemy(3,2)
 _g.heart_particle_spawner(6.5,1,3)
 _g.heart_particle_spawner(9.5,1,2)
@@ -984,6 +984,7 @@ g_view.off_x=-(16-g_view.w)/2+rx
 g_view.off_y=-(16-g_view.h)/2+ry
 local x1,x2=rx*8,(rx+g_view.w)*8-1
 local y1,y2=ry*8,(ry+g_view.h)*8-1
+rect(x1-2,y1-2,x2+2,y2+2,7)
 zclip(x1,y1,x2,y2)
 camera_to_view(g_view)
 scr_map(0,0,0,0,128,32)
