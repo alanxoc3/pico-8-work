@@ -884,7 +884,7 @@ g_view.off_y=-(16-g_view.h)/2+ry
 local x1,x2=rx*8+4,(rx+g_view.w)*8-5
 local y1,y2=ry*8+4,(ry+g_view.h)*8-5
 camera_to_view(g_view)
-scr_map(0,0,0,0,15,12)
+scr_map(0,0,0,0,128,32)
 batch_call_new(acts_loop,[[100]])
 isorty(g_act_arrs.drawable)
 batch_call_new(acts_loop,[[101]])
