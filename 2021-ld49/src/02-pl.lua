@@ -21,7 +21,10 @@ create_actor([[pl;2;drawable,pos,confined,mov,x_bounded,y_bounded,col,spr_obj,kn
 
     dir:0; is_facing_left:no;
 
-    d:@3; u:@4; damage:@5; hurt_start:@6; hurt_end:@7; destroyed:@8;
+    d:@3; u:@4;
+
+    damage:@5; hurt_start:@6; destroyed:@7;
+    increment_insanity:@8; decrement_insanity:@9; set_insanity:@10;
 ]], function(a)
     a.sind = 134
     a.yy = 0
@@ -59,7 +62,7 @@ create_actor([[pl;2;drawable,pos,confined,mov,x_bounded,y_bounded,col,spr_obj,kn
     scr_spr(a)
 end, function(a)
     -- DEBUG_BEGIN
-    if g_debug and btnp(4) then a.insane_level = (a.insane_level + 1) % 5 end
+    if g_debug and btnp(4) then a:set_insanity((a.insane_level + 1) % 5) end
     -- DEBUG_END
 
     local speed_multiplier = 1 + a.insane_level / 10
@@ -72,7 +75,7 @@ end, function(a)
     elseif a.insane_level == 1 then
         _g.powerup_particle(a.x, a.y+.5, 3)
     elseif a.insane_level == 0 then
-        _g.powerup_particle(a.x, a.y+.5, 13)
+        -- _g.powerup_particle(a.x, a.y+.5, 13)
     end
 
     if not a:any_timer_active("cooldown", "roll", "punch") then
@@ -114,9 +117,22 @@ end, function(a, other)
     a:hurt()
     a:knockback(atan2(a.x-other.x, a.y-other.y))
 end, function(a)
-    a.insane_level = 4
-end, function(a)
-    a.insane_level = 0
+    a:set_insanity(4)
 end, function(a)
     _g.deadbody(a.x, a.y, a.xf, 178)
+end, function(a)
+    if a.insane_level < 3 then
+        a:set_insanity(a.insane_level + 1)
+    end
+end, function(a)
+    if a.insane_level > 3 then
+        a:set_insanity(0)
+    elseif a.insane_level > 0 then
+        a:set_insanity(a.insane_level - 1)
+    end
+end, function(a, level)
+    a.insane_level = level
+    a:create_timer("insane_timeout", 60*5, function()
+        a:decrement_insanity()
+    end)
 end)
