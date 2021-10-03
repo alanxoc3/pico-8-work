@@ -779,6 +779,14 @@ this.width=ratio*this.width
 this.height=ratio*this.height
 end,
 draw=function(this)
+local x0=127-this.width
+local y0=127-this.height
+for x=1,this.width do
+for y=1,this.height do
+local color=this.map[x][y].type==0 and 8 or 9
+pset(x0+x,y0+y,color)
+end
+end
 end
 }
 floor:prefill()
