@@ -63,12 +63,14 @@ end, function(a)
     zspr(4, a.x*8, a.y*8+1)
 end)
 
-create_actor([[powerup_particle_spawner;4;particle_spawner/2/.125/1/1/%slow_medium_ui_particle,above_map_drawable_1|
-    x:@1; y:@2; powerup_level:@3; color:@4; u:@5; d:@6
+create_actor([[powerup_particle_spawner;5;particle_spawner/2/.125/1/1/%slow_medium_ui_particle,above_map_drawable_1|
+    x:@1; y:@2; powerup_level:@3; color:@4; sind:@5; u:@6; d:@7
 ]], function(a)
     if g_pl.insane_level == a.powerup_level then
         a:update_particles()
     end
 end, function(a)
-    scr_rect(a.x-1.875, a.y-.375, a.x+1.875, a.y+.375, 7)
+    if g_pl.insane_level == a.powerup_level then
+        zspr(a.sind, a.x*8, a.y*8, 2, 2, g_pl.is_facing_left, false)
+    end
 end)
