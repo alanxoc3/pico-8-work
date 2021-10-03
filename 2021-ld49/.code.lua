@@ -182,7 +182,7 @@ end
 end
 return pos,spd
 end
-g_gunvals=split("@1,@2,!plus/@3/1,@5;@1,@2,@3,@4;|0x8000,0x8000,0x7fff,0x7fff,@1|!plus/@1/-2,!plus/@2/-2,!plus/@3/2,!plus/@4/2,13;!plus/@1/-1,!plus/@2/-1,!plus/@3/1,!plus/@4/1,1;|0,0,0,0,0,0,0;1,1,1,0,0,0,0;2,2,2,1,0,0,0;3,3,3,1,0,0,0;4,2,2,2,1,0,0;5,5,1,1,1,0,0;6,13,13,5,5,1,0;7,6,13,13,5,1,0;8,8,2,2,2,0,0;9,4,4,4,5,0,0;10,9,4,4,5,5,0;11,3,3,3,3,0,0;12,12,3,1,1,1,0;13,5,5,1,1,1,0;14,13,4,2,2,1,0;15,13,13,5,5,1,0;|fader_out;3;act,;update,|fade_time:@1;i:@2;e:@3;u:@4;tl_max_time=@1,|fader_in;3;act,;update,|timer;0;,;|timers:,;tick:@1;create_timer:@2;any_timer_active:@3;get_timer_percent:@4;|act;0;timer,;room_init,kill,clean,delete|update:@1;clean:@2;kill:@3;delete:@4;get:@5;alive:yes;i:nf;u:nf;room_init:nf;destroyed:nf;|ma_able;0;act,;|name:thing;|confined;0;act,;room_end,|room_end:nf;|loopable;0;act,;|tl_loop:yes;|pos;0;act,;|x:0;y:0;|enemy;0;act,;|;|knock;0;col,;|popper;0;col,;|bad;0;knock,;|x_bounded;0;dim,;|check_bounds_x:@1;|y_bounded;0;dim,;|check_bounds_y:@1;|vec;0;pos,;|dx:0;dy:0;vec_update:@1;|mov;0;vec,;|inertia_x:1;inertia_y:1;ax:0;ay:0;mov_update:@1;stop:@2;|dim;0;pos,;|rx:.375;ry:.375;|dim;0;pos,;debug_rect,|rx:.375;ry:.375;debug_rect:@1;|rel;0;act,;rel_update,|rel_actor:null;rel_x:0;rel_y:0;rel_dx:0;rel_dy:0;flippable:no;rel_update:@1;|drawable_obj;0;pos,;reset_off,|ixx:0;iyy:0;xx:0;yy:0;visible:yes;reset_off:@1;|drawable;0;drawable_obj,;d,|d:nf;|drawable_1;0;drawable_obj,;d,|drawable_2;0;drawable_obj,;d,|pre_drawable;0;drawable_obj,;d,|pre_drawable_1;0;drawable_obj,;d,|pre_drawable_2;0;drawable_obj,;d,|post_drawable;0;drawable_obj,;d,|post_drawable_1;0;drawable_obj,;d,|post_drawable_2;0;drawable_obj,;d,|above_map_drawable;0;drawable_obj,;d,|above_map_drawable_1;0;drawable_obj,;d,|spr_obj;0;vec,drawable_obj,;|sind:0;outline_color:BG_UI;sw:1;sh:1;xf:no;yf:no;|spr;0;spr_obj,;|d:@1;|knockbackable;0;mov,timer,;|knockback:@1;apply_knockback:@2;knockback_speed:0;knockback_dir:0;|hurtable;0;act,;|health:1;max_health:1;hurt_cooldown_time:60;hurt_start:nf;hurt_end:nf;hurt:@1;heal:@2;|trig;0;vec,dim;|contains:nf;intersects:nf;not_contains_or_intersects:nf;contains_or_intersects:@1;trigger_update:@1;|anchored;1;vec,dim;|touchable:@1;hit:nf;|col;0;vec,dim;|touchable:yes;hit:nf;move_check:@1;|dx:0;dy:0|x,dx,@1,@2,@3,@4;y,dy,@1,@2,@5,@6;|tcol;0;vec,dim;|tile_solid:yes;tile_hit:nf;coll_tile:@1;|@1,31,10,7;@2,31,18,7;|view;4;act,confined;center_view,update_view|x:0;y:0;room_crop:2;tl_loop:yes;w:@1;h:@2;follow_dim:@3;follow_act:@4;update_view:@5;center_view:@6;change_ma:@7;,;|@1,x,w,ixx;@1,y,h,iyy|nurse_weapon;3;col,confined,rel,enemy|rel_actor:@1;x:@2;y:@3;i:@4;hit:@5;touchable:no;rx:.5;ry:1;tl_max_time=.16,;|simple_enemy;2;drawable,col,confined,mov,x_bounded,y_bounded,knockbackable,hurtable,spr_obj,enemy|x:@1;y:@2;u:@3;d:@4;hit:@5;health:3;max_health:3;sh:2;rx:.375;ry:.375;touchable:no;inertia_x:.90;inertia_y:.90;|particle_parent;0;mov,;|i:@1;d:@2;inertia_x:.90;inertia_y:.90;|pre_particle;4;pre_drawable,particle_parent|x:@1;y:@2;color:@3;tl_max_time=@4,;|post_particle;4;above_map_drawable,particle_parent|particle_spawner;4;dim,|rx:@1;ry:@2;rate:@3;chance:@4;update_particles:@5;|heart_particle_spawner;3;particle_spawner/.125/.125/1/3,above_map_drawable_1|x:@1;y:@2;heart_number:@3;u:@4;d:@5|fist;3;col,confined,rel|rel_actor:@1;x:@2;y:@3;i:@4;d:@5;touchable:no;rx:.25;ry:.5;tl_max_time=.33,;|pl;2;drawable,pos,confined,mov,x_bounded,y_bounded,col,spr_obj,knockbackable,hurtable|x:@1;y:@2;health:3;max_health:3;insane_level:0;sh:2;sind:137;inertia_x:.90;inertia_y:.90;dir:0;is_facing_left:no;d:@3;u:@4;damage:@5;hurt_start:@6;hurt_end:@7;|x:0;y:0;w:15;h:12;|timer,tick;act,update;mov,mov_update;pl,move_check,@1;enemy,move_check,@2;enemy,move_check,@3;rel,rel_update;vec,vec_update;x_bounded,check_bounds_x;y_bounded,check_bounds_y;act,clean;|pre_drawable,d;pre_drawable_1,d;pre_drawable_2,d;|drawable,d;drawable_1,d;drawable_2,d;post_drawable,d;post_drawable_1,d;post_drawable_2,d;|above_map_drawable,d;above_map_drawable_1,d;|i=@3,u=@4,d=@5;|","|")
+g_gunvals=split("@1,@2,!plus/@3/1,@5;@1,@2,@3,@4;|0x8000,0x8000,0x7fff,0x7fff,@1|!plus/@1/-2,!plus/@2/-2,!plus/@3/2,!plus/@4/2,13;!plus/@1/-1,!plus/@2/-1,!plus/@3/1,!plus/@4/1,1;|0,0,0,0,0,0,0;1,1,1,0,0,0,0;2,2,2,1,0,0,0;3,3,3,1,0,0,0;4,2,2,2,1,0,0;5,5,1,1,1,0,0;6,13,13,5,5,1,0;7,6,13,13,5,1,0;8,8,2,2,2,0,0;9,4,4,4,5,0,0;10,9,4,4,5,5,0;11,3,3,3,3,0,0;12,12,3,1,1,1,0;13,5,5,1,1,1,0;14,13,4,2,2,1,0;15,13,13,5,5,1,0;|fader_out;3;act,;update,|fade_time:@1;i:@2;e:@3;u:@4;tl_max_time=@1,|fader_in;3;act,;update,|timer;0;,;|timers:,;tick:@1;create_timer:@2;any_timer_active:@3;get_timer_percent:@4;|act;0;timer,;room_init,kill,clean,delete|update:@1;clean:@2;kill:@3;delete:@4;get:@5;alive:yes;i:nf;u:nf;room_init:nf;destroyed:nf;|ma_able;0;act,;|name:thing;|confined;0;act,;room_end,|room_end:nf;|loopable;0;act,;|tl_loop:yes;|pos;0;act,;|x:0;y:0;|enemy;0;act,;|;|knock;0;col,;|popper;0;col,;|bad;0;knock,;|x_bounded;0;dim,;|check_bounds_x:@1;|y_bounded;0;dim,;|check_bounds_y:@1;|vec;0;pos,;|dx:0;dy:0;vec_update:@1;|mov;0;vec,;|inertia_x:1;inertia_y:1;ax:0;ay:0;mov_update:@1;stop:@2;|dim;0;pos,;|rx:.375;ry:.375;|dim;0;pos,;debug_rect,|rx:.375;ry:.375;debug_rect:@1;|rel;0;act,;rel_update,|rel_actor:null;rel_x:0;rel_y:0;rel_dx:0;rel_dy:0;flippable:no;rel_update:@1;|drawable_obj;0;pos,;reset_off,|ixx:0;iyy:0;xx:0;yy:0;visible:yes;reset_off:@1;|drawable;0;drawable_obj,;d,|d:nf;|drawable_1;0;drawable_obj,;d,|drawable_2;0;drawable_obj,;d,|pre_drawable;0;drawable_obj,;d,|pre_drawable_1;0;drawable_obj,;d,|pre_drawable_2;0;drawable_obj,;d,|post_drawable;0;drawable_obj,;d,|post_drawable_1;0;drawable_obj,;d,|post_drawable_2;0;drawable_obj,;d,|above_map_drawable;0;drawable_obj,;d,|above_map_drawable_1;0;drawable_obj,;d,|spr_obj;0;vec,drawable_obj,;|sind:0;outline_color:BG_UI;sw:1;sh:1;xf:no;yf:no;|spr;0;spr_obj,;|d:@1;|knockbackable;0;mov,timer,;|knockback:@1;apply_knockback:@2;knockback_speed:0;knockback_dir:0;|hurtable;0;act,;|health:1;max_health:1;hurt_cooldown_time:60;hurt_start:nf;hurt_end:nf;hurt:@1;heal:@2;|trig;0;vec,dim;|contains:nf;intersects:nf;not_contains_or_intersects:nf;contains_or_intersects:@1;trigger_update:@1;|anchored;1;vec,dim;|touchable:@1;hit:nf;|col;0;vec,dim;|touchable:yes;hit:nf;move_check:@1;|dx:0;dy:0|x,dx,@1,@2,@3,@4;y,dy,@1,@2,@5,@6;|tcol;0;vec,dim;|tile_solid:yes;tile_hit:nf;coll_tile:@1;|@1,31,10,7;@2,31,18,7;|view;4;act,confined;center_view,update_view|x:0;y:0;room_crop:2;tl_loop:yes;w:@1;h:@2;follow_dim:@3;follow_act:@4;update_view:@5;center_view:@6;change_ma:@7;,;|@1,x,w,ixx;@1,y,h,iyy|nurse_weapon;3;col,confined,rel,enemy|rel_actor:@1;x:@2;y:@3;i:@4;hit:@5;touchable:no;rx:.5;ry:1;tl_max_time=.16,;|simple_enemy;2;drawable,col,confined,mov,x_bounded,y_bounded,knockbackable,hurtable,spr_obj,enemy|x:@1;y:@2;u:@3;d:@4;hit:@5;health:3;max_health:3;sh:2;rx:.375;ry:.375;touchable:no;inertia_x:.90;inertia_y:.90;|particle_parent;0;mov,;|draw_small_circle:@1;draw_medium_circle:@2;move_up:@3;move_slow:@4;inertia_x:.90;inertia_y:.90;|powerup_particle;3;pre_drawable,particle_parent|x:@1;y:@2;color:@3;d:$draw_small_circle;i:$move_up;tl_max_time=.25,;|slow_small_ui_particle;3;above_map_drawable,particle_parent|x:@1;y:@2;color:@3;d:$draw_small_circle;i:$move_slow;tl_max_time=.25,;|slow_medium_ui_particle;3;above_map_drawable,particle_parent|x:@1;y:@2;color:@3;d:$draw_medium_circle;i:$move_slow;tl_max_time=.25,;|particle_spawner;5;dim,|color:8;rx:@1;ry:@2;rate:@3;chance:@4;create_func:@5;update_particles:@6;|heart_particle_spawner;3;particle_spawner/.125/.125/1/3/%slow_small_ui_particle,above_map_drawable_1|x:@1;y:@2;heart_number:@3;u:@4;d:@5;color:8;|powerup_particle_spawner;4;particle_spawner/2/.125/1/1/%slow_medium_ui_particle,above_map_drawable_1|x:@1;y:@2;powerup_level:@3;color:@4;u:@5;d:@6|fist;3;col,confined,rel|rel_actor:@1;x:@2;y:@3;i:@4;d:@5;touchable:no;rx:.25;ry:.5;tl_max_time=.33,;|pl;2;drawable,pos,confined,mov,x_bounded,y_bounded,col,spr_obj,knockbackable,hurtable|x:@1;y:@2;health:3;max_health:3;insane_level:0;sh:2;sind:137;inertia_x:.90;inertia_y:.90;dir:0;is_facing_left:no;d:@3;u:@4;damage:@5;hurt_start:@6;hurt_end:@7;|x:0;y:0;w:15;h:12;|timer,tick;act,update;mov,mov_update;pl,move_check,@1;enemy,move_check,@2;enemy,move_check,@3;rel,rel_update;vec,vec_update;x_bounded,check_bounds_x;y_bounded,check_bounds_y;act,clean;|pre_drawable,d;pre_drawable_1,d;pre_drawable_2,d;|drawable,d;drawable_1,d;drawable_2,d;post_drawable,d;post_drawable_1,d;post_drawable_2,d;|above_map_drawable,d;above_map_drawable_1,d;|i=@3,u=@4,d=@5;|","|")
 g_ztable_cache={}
 function nf()end
 function ztable(original_str,...)
@@ -675,25 +675,31 @@ a:knockback(atan2(a.x-other.x,a.y-other.y))
 end
 end)
 create_parent([[79|80]],function(a)
-a.dx=rnd(.2)-.1
-a.dy=rnd(.2)-.1
-end,function(a)
 scr_circfill(a.x,a.y,.125,a.color)
+end,function(a)
+scr_circfill(a.x,a.y,.375,a.color)
+end,function(a)
+a.dx=rnd(.2)-.1
+a.dy=-rnd(.2)-.1
+end,function(a)
+a.dx=rnd(.05)-.025
+a.dy=rnd(.05)-.025
 end)
 create_actor[[81|82]]
-create_actor[[83|82]]
-create_parent([[84|85]],function(a)
+create_actor[[83|84]]
+create_actor[[85|86]]
+create_parent([[87|88]],function(a)
 for i=1,a.rate do
 if flr_rnd(a.chance)==0 then
-_g.post_particle(
+a.create_func(
 a.x+rnd(a.rx*2)-a.rx,
 a.y+rnd(a.ry*2)-a.ry,
-8,.25
+a.color
 )
 end
 end
 end)
-create_actor([[86|87]],function(a)
+create_actor([[89|90]],function(a)
 a:update_particles()
 if g_pl.health<a.heart_number then
 a:kill()
@@ -701,11 +707,18 @@ end
 end,function(a)
 zspr(4,a.x*8,a.y*8+1)
 end)
-create_actor([[88|89]],function(a)
+create_actor([[91|92]],function(a)
+if g_pl.insane_level==a.powerup_level then
+a:update_particles()
+end
+end,function(a)
+scr_rect(a.x-1.875,a.y-.375,a.x+1.875,a.y+.375,7)
+end)
+create_actor([[93|94]],function(a)
 a.rel_dx=cos(a.rel_actor.dir)*.05
 a.rel_dy=sin(a.rel_actor.dir)*.05
 end)
-create_actor([[90|91]],function(a)
+create_actor([[95|96]],function(a)
 a.sind=134
 a.yy=0
 if a:any_timer_active"punch"then
@@ -743,13 +756,13 @@ end,function(a)
 if g_debug and btnp(4)then a.insane_level=(a.insane_level+1)%5 end
 local speed_multiplier=1+a.insane_level/10
 if a.insane_level==4 then
-_g.pre_particle(a.x,a.y+.5,8,rnd(.2))
+_g.powerup_particle(a.x,a.y+.5,8)
 elseif a.insane_level==3 then
-_g.pre_particle(a.x,a.y+.5,14,rnd(.2))
+_g.powerup_particle(a.x,a.y+.5,14)
 elseif a.insane_level==2 then
-_g.pre_particle(a.x,a.y+.5,2,rnd(.2))
+_g.powerup_particle(a.x,a.y+.5,2)
 elseif a.insane_level==1 then
-_g.pre_particle(a.x,a.y+.5,1,rnd(.2))
+_g.powerup_particle(a.x,a.y+.5,1)
 end
 if not a:any_timer_active("cooldown","roll","punch")then
 if btn(4)then
@@ -793,16 +806,19 @@ a.insane_level=0
 end)
 function game_init(a)
 _g.fader_in(.5,nf,nf)
-g_room=ztable[[92]]
+g_room=ztable[[97]]
 g_pl=_g.pl(g_room.w/2,g_room.h/2)
 _g.simple_enemy(3,2)
 _g.heart_particle_spawner(6.5,1,3)
 _g.heart_particle_spawner(9.5,1,2)
 _g.heart_particle_spawner(8,1,1)
+_g.powerup_particle_spawner(4,15,1,1)
+_g.powerup_particle_spawner(8,15,2,2)
+_g.powerup_particle_spawner(12,15,3,14)
 tbox"hello, how are^you?"
 end
 function game_update(a)
-batch_call_new(acts_loop,[[93]],g_act_arrs["col"],g_act_arrs["pl"],g_act_arrs["fist"])
+batch_call_new(acts_loop,[[98]],g_act_arrs["col"],g_act_arrs["pl"],g_act_arrs["fist"])
 if g_tbox_update then
 if g_tbox_writing then
 g_tbox_anim=#g_tbox_active.l1+#g_tbox_active.l2
@@ -818,25 +834,18 @@ function game_draw(a)
 fade(g_card_fade)
 local x1,x2,y1,y2=8-g_room.w/2,8+g_room.w/2-1/8,8-g_room.h/2,8+g_room.h/2-1/8
 local off_x,off_y=0,0
-zclip(x1*8+off_x*8,y1*8+off_y*8,x2*8+off_x*8,y2*8+off_y*8)
-zcls(1)
 camera(-x1*8-off_x*8,-y1*8-off_y*8)
 map(0,0,0,0,15,12)
-rect(0,2,10,10,7,8)
-batch_call_new(acts_loop,[[94]])
+batch_call_new(acts_loop,[[99]])
 isorty(g_act_arrs.drawable)
-batch_call_new(acts_loop,[[95]])
+batch_call_new(acts_loop,[[100]])
 if g_debug then acts_loop("dim","debug_rect")end
-clip()
 camera()
-batch_call_new(acts_loop,[[96]])
+batch_call_new(acts_loop,[[101]])
 tbox_draw(16,48)
 local y=14.5
-scr_rect(.625,y+0,1.625,y+1,8)
-scr_rect(14.375,y+0,15.375,y+1,8)
-scr_rect(2.125,y+.125,2.125+3.75,y+.875,7)
-scr_rect(6.125,y+.125,6.125+3.75,y+.875,7)
-scr_rect(13.875-3.75,y+.125,13.875,y+.875,7)
+scr_rect(.625,y+0,1.625,y+1,7)
+scr_rect(14.375,y+0,15.375,y+1,7)
 end
 g_debug=false
 g_card_fade=8
@@ -844,7 +853,7 @@ poke(0x5f5c,15)
 poke(0x5f5d,15)
 function _init()
 music(0,3000)
-g_tl=ztable([[97]],logo_draw,function()sfx"63" end,
+g_tl=ztable([[102]],logo_draw,function()sfx"63" end,
 game_init,game_update,game_draw
 )
 end
