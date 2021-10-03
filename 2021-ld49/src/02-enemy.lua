@@ -80,5 +80,5 @@ end, function(a, other)
         a:knockback(atan2(a.x-other.x, a.y-other.y))
     end
 end, function(a)
-    _g.deadbody(a.x, a.y, atan2(a.dx, a.dy), 96)
+    _g.deadbody(a.x, a.y, a.xf, 96)
 end)
