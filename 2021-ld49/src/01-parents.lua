@@ -105,8 +105,8 @@ create_parent([[vec;0;pos,;|
 end)
 
 create_parent([[mov;0;vec,;|
-   inertia_x:1;
-   inertia_y:1;
+   inertia_x:.90; -- inertia for every object in the game!
+   inertia_y:.90; -- inertia for every object in the game!
    ax:0;
    ay:0;
    mov_update:@1;

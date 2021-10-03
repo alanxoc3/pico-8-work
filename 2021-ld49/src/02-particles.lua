@@ -3,8 +3,6 @@ create_parent([[particle_parent;0;mov,;|
     draw_medium_circle:@2;
     move_up:@3;
     move_slow:@4;
-    inertia_x:.90;
-    inertia_y:.90;
 ]], function(a)
     scr_circfill(a.x, a.y, .125, a.color)
 end, function(a)
