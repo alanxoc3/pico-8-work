@@ -1,25 +1,5 @@
-create_actor([[fist;3;col,confined,rel|
-    rel_actor:@1; x:@2; y:@3; i:@4; d:@5;
-    touchable:no; rx:.25; ry:.75;
-
-    tl_max_time=.33,;
-]], function(a)
-    a.rel_dx = cos(a.rel_actor.dir)*.03
-    a.rel_dy = sin(a.rel_actor.dir)*.03
-end)
-
-create_parent[[pl;0;act,;|;]]
-create_actor([[pl_monster;2;pl,drawable,pos,confined,mov,x_bounded,y_bounded,col,spr_obj,knockbackable,hurtable,tcol|
-    x:@1; y:@2;
-
-    health:3; max_health:3;
-    sh:2; sind:137; iyy:-5;
-    dir:0; is_facing_left:no;
-    insane_level:0;
-
-    d:@3; u:@4;
-    damage:@5; hurt_start:@6; destroyed:@7;
-    increment_insanity:@8; decrement_insanity:@9; set_insanity:@10;
+create_parent([[pl;1;drawable,pos,confined,mov,x_bounded,y_bounded,col,spr_obj,knockbackable,hurtable,tcol;|
+    passive_mode:@1; d:@2;
 ]], function(a)
     a.sind = 134
     a.yy = 0
@@ -54,13 +34,28 @@ create_actor([[pl_monster;2;pl,drawable,pos,confined,mov,x_bounded,y_bounded,col
     end
     a.xf = a.is_facing_left
 
+    if a.passive_mode then a.sind += 32 end
+
     scr_spr(a)
-end, function(a)
+end)
+
+create_actor([[pl_monster;2;pl/yes,|
+    x:@1; y:@2;
+
+    health:3; max_health:3;
+    sh:2; iyy:-5;
+    dir:0; is_facing_left:no;
+    insane_level:0;
+
+    u:@3;
+    damage:@4; hurt_start:@5; destroyed:@6;
+    increment_insanity:@7; decrement_insanity:@8; set_insanity:@9;
+]], function(a)
     -- DEBUG_BEGIN
     if g_debug and btnp(4) then a:set_insanity((a.insane_level + 1) % 5) end
     -- DEBUG_END
 
-    control_player(a, xbtn(), ybtn(), btn(4), btn(5))
+    control_player(a, xbtn(), ybtn(), btn(4), btn(5), true)
 end, function(a, other)
     if a.insane_level < 4 then a:hurt() end
     a:knockback(atan2(a.x-other.x, a.y-other.y))
