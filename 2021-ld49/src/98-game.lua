@@ -120,14 +120,7 @@ function game_draw(a)
     -- Draw minimap.
     -- DEBUG_BEGIN
     if g_debug then
-        local mx0 = 127-g_floormap.width
-        local my0 = 127-g_floormap.height
-        for mx=1,g_floormap.width do
-            for my=1,g_floormap.height do
-                local color = g_floormap.map[mx][my].type == 0 and 8 or 9
-                pset(mx0+mx, my0+my, color)
-            end
-        end
+        g_floormap:draw()
     end
     -- DEBUG_END
 end
