@@ -663,6 +663,9 @@ if a:any_timer_active"prepare"then
 a.sind=69
 elseif a:any_timer_active"attack"then
 a.sind=70
+if a:get_timer_percent"attack">.50 then
+a.sind=71
+end
 elseif abs(a.dx)>.005 or abs(a.dy)>.005 then
 local loop=a.tl_tim%.5/.5
 if loop<.25 then a.sind=66
