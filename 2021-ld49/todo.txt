@@ -1,10 +1,14 @@
 next steps for alan:
-- implement lives on ui.
-- implement combo system.
-- tie sprites to character.
-- implement text box system.
-- particle for enemy.
+- collision with walls.
+- random prop thing.
+- implement another enemy.
+- make sum muzik.
 
+- DONE! implement lives on ui.
+- DONE! implement combo system.
+- DONE! tie sprites to character.
+- DONE! implement text box system. may need to think more.
+- DONE! particle for enemy.
 - DONE! design text box.
 - DONE! design where things go on the UI.
 - DONE! damage is functional.
