@@ -65,11 +65,13 @@ end, function(a)
     if a.insane_level == 4 then
         _g.powerup_particle(a.x, a.y+.5, 8)
     elseif a.insane_level == 3 then
-        _g.powerup_particle(a.x, a.y+.5, 14)
+        _g.powerup_particle(a.x, a.y+.5, 12)
     elseif a.insane_level == 2 then
-        _g.powerup_particle(a.x, a.y+.5, 2)
+        _g.powerup_particle(a.x, a.y+.5, 14)
     elseif a.insane_level == 1 then
-        _g.powerup_particle(a.x, a.y+.5, 1)
+        _g.powerup_particle(a.x, a.y+.5, 3)
+    elseif a.insane_level == 0 then
+        _g.powerup_particle(a.x, a.y+.5, 13)
     end
 
     if not a:any_timer_active("cooldown", "roll", "punch") then
