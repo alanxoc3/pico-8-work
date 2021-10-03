@@ -81,7 +81,7 @@ function game_draw(a)
     local x1, x2 = rx*8, (rx+g_view.w)*8-1
     local y1, y2 = ry*8, (ry+g_view.h)*8-1
 
-    rect(x1-2, y1-2, x2+2, y2+2, 7)
+    rect(x1-2, y1-2, x2+2, y2+2, 1)
     zclip(x1, y1, x2, y2)
     camera_to_view(g_view)
     scr_map(0,0,0,0,128,32)
