@@ -15,6 +15,7 @@ create_actor([[simple_enemy;2;drawable,col,confined,mov,x_bounded,y_bounded,knoc
     x:@1; y:@2; u:@3; d:@4; hit:@5; destroyed:@6;
     health:3; max_health:3;
     sh:2;
+    iyy:-5;
     rx:.375; ry:.375;
     touchable: no;
     inertia_x:.90;
@@ -30,6 +31,10 @@ create_actor([[simple_enemy;2;drawable,col,confined,mov,x_bounded,y_bounded,knoc
                 end)
             end)
         end)
+    end
+
+    if a:any_timer_active"hurt_cooldown" then
+       _g.powerup_particle(a.x, a.y+.5, 8)
     end
 
     if a:any_timer_active"knockback" then
