@@ -13,11 +13,11 @@ function reset_the_dungeon()
     _g.heart_particle_spawner(9.5, 1, 2)
     _g.heart_particle_spawner(  8, 1, 1)
 
-    _g.powerup_particle_spawner(3 , 1 , 0, COLOR_NORMAL  , 72)
-    _g.powerup_particle_spawner(4 , 15, 1, COLOR_INSANE_1, 74)
-    _g.powerup_particle_spawner(8 , 15, 2, COLOR_INSANE_2, 76)
-    _g.powerup_particle_spawner(12, 15, 3, COLOR_INSANE_3, 78)
-    _g.powerup_particle_spawner(13, 1 , 4, COLOR_ANGRY   , 104)
+    _g.powerup_particle_spawner(3 , 1 , 0, c_color_normal  , 72)
+    _g.powerup_particle_spawner(4 , 15, 1, c_color_insane_1, 74)
+    _g.powerup_particle_spawner(8 , 15, 2, c_color_insane_2, 76)
+    _g.powerup_particle_spawner(12, 15, 3, c_color_insane_3, 78)
+    _g.powerup_particle_spawner(13, 1 , 4, c_color_angry   , 104)
 
     -- tbox"hello, how are^you?"
 end
@@ -53,8 +53,8 @@ function game_init()
         -- confined,delete
     -- ]])
 
-    -- reset_the_dungeon()
-    reset_the_void()
+    reset_the_dungeon()
+    -- reset_the_void()
 end
 
 function game_update()
