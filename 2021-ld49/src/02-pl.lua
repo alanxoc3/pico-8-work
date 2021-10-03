@@ -44,13 +44,13 @@ create_actor([[pl_monster;2;pl,drawable,pos,confined,mov,x_bounded,y_bounded,col
     elseif abs(a.dx) > .005 or abs(a.dy) > .005 then
         local loop = (a.tl_tim % .4) / .4
         if loop >= .8 then a.sind = 134
-        elseif loop >= .5 then a.sind = 167
+        elseif loop >= .5 then a.sind = 142
         elseif loop >= .3 then a.sind = 134
-        else a.sind = 168
+        else a.sind = 143
         end
     else
         local loop = (a.tl_tim % 1)
-        if loop < .25 then a.sind = 166 end
+        if loop < .25 then a.sind = 141 end
     end
     a.xf = a.is_facing_left
 
@@ -67,7 +67,7 @@ end, function(a, other)
 end, function(a)
     a:set_insanity(4)
 end, function(a)
-    _g.deadbody(a.x, a.y, a.xf, 178)
+    _g.deadbody(a.x, a.y, a.xf, 64)
 end, function(a)
     if a.insane_level < 3 then
         a:set_insanity(a.insane_level + 1)
