@@ -7,6 +7,16 @@ __lua__
 -- unobfuscated code at:
 -- git.io/amorg-pico8
 
+-- emotion colors
+color_normal   = 13
+color_insane_1 = 3
+color_insane_2 = 14
+color_insane_3 = 12
+color_angry    = 8
+
+-- other colors
+color_blood    = 8
+
 #include .code.lua
 
 __gfx__
