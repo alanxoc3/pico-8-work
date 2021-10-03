@@ -2,8 +2,9 @@
 
 function game_init(a)
     _g.fader_in(.5, nf, nf)
-    g_room = ztable[[ x:0; y:0; w:15; h:12; ]]
-    g_pl = _g.pl(g_room.w/2, g_room.h/2)
+    g_room = ztable[[ x:0; y:0; w:128; h:32; ]]
+    g_pl = _g.pl(4, 4)
+    g_view = _g.view(15, 15, 4, g_pl)
     _g.simple_enemy(3, 2)
 
     -- draws the hearts at the top of the screen, with particles!
@@ -17,7 +18,7 @@ function game_init(a)
     _g.powerup_particle_spawner(12, 15, 3, 12, 78)
     _g.powerup_particle_spawner(13, 1 , 4, 8 , 104)
 
-    tbox"hello, how are^you?"
+    -- tbox"hello, how are^you?"
 end
 
 function game_update(a)
@@ -33,7 +34,9 @@ function game_update(a)
         vec,       vec_update;
         x_bounded, check_bounds_x;
         y_bounded, check_bounds_y;
+        view,update_view;
         act,       clean;
+
     ]], g_act_arrs['col'], g_act_arrs['pl'], g_act_arrs['fist'], function(x, y)
         return x >= g_room.x and x < g_room.x+g_room.w and
             y >= g_room.y and y < g_room.y+g_room.h and
@@ -60,18 +63,25 @@ function game_update(a)
     tbox_interact()
 end
 
+function shiftx(view) return (view.x-view.off_x-8)*8 end
+function shifty(view) return (view.y-view.off_y-8)*8 end
+function camera_to_view(view) camera(shiftx(view), shifty(view)) end
+
 function game_draw(a)
     fade(g_card_fade)
 
-    local x1, x2, y1, y2 = 8-g_room.w/2, 8+g_room.w/2-1/8, 8-g_room.h/2, 8+g_room.h/2-1/8
-    local off_x, off_y = 0, 0
+    local x, y = 8, 8
+    local rx = x - g_view.w/2
+    local ry = y - g_view.h/2
 
-    -- zclip(x1*8+off_x*8, y1*8+off_y*8, x2*8+off_x*8, y2*8+off_y*8)
-    -- zcls(1)
+    g_view.off_x = -(16-g_view.w)/2+rx
+    g_view.off_y = -(16-g_view.h)/2+ry
 
-    camera(-x1*8-off_x*8, -y1*8-off_y*8)
+    local x1, x2 = rx*8+4, (rx+g_view.w)*8-5
+    local y1, y2 = ry*8+4, (ry+g_view.h)*8-5
+    camera_to_view(g_view)
 
-    map(0,0,0,0,15,12)
+    scr_map(0,0,0,0,15,12)
 
     batch_call_new(acts_loop, [[
         pre_drawable, d;

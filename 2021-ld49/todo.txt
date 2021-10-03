@@ -1,10 +1,10 @@
 next steps for alan:
-- collision with walls.
 - random prop thing.
 - implement another enemy.
 - make sum muzik.
 - implement view
 
+- DONE! collision with walls.
 - DONE! anim for nurse monster.
 - DONE! implement lives on ui.
 - DONE! implement combo system.
