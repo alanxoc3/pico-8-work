@@ -688,6 +688,107 @@ end
 end,function(a)
 _g.deadbody(a.x,a.y,a.xf,96)
 end)
+function randBetween(lo,hi)
+local diff=hi-lo+1
+local norm=flr(rnd()*diff)
+return lo+norm
+end
+function shuffleArr(arr)
+for i=1,#arr do
+local j=1+flr(rnd()*i)
+local x=arr[i]
+arr[i]=arr[j]
+arr[j]=x
+end
+return arr
+end
+function create_map()
+local floor={
+map={},
+width=32,
+height=32,
+dirs={
+{dy=-1},
+{dy=1},
+{dx=1},
+{dx=-1}
+},
+area=function(this)
+return this.width*this.height
+end,
+prefill=function(this)
+for x=1,this.width do
+this.map[x]={}
+for y=1,this.height do
+this.map[x][y]={type=0,seen=x==1 or x==this.width or y==1 or y==this.height}
+end
+end
+end,
+carve=function(this,x0,y0)
+if this.map[x0][y0].seen then return end
+this.map[x0][y0].seen=true
+local dir_ids=shuffleArr({1,2,3,4})
+local count=0
+foreach(dir_ids,function(dir_id)
+local dir=this.dirs[dir_id]
+local x1=x0+(dir.dx or 0)
+local y1=y0+(dir.dy or 0)
+if this.map[x1][y1].type!=0 then count=count+1 end
+end)
+if count>1 then return end
+this.map[x0][y0].type=1
+foreach(dir_ids,function(dir_id)
+local dir=this.dirs[dir_id]
+local x1=x0+(dir.dx or 0)
+local y1=y0+(dir.dy or 0)
+this:carve(x1,y1)
+end)
+end,
+clearArea=function(this,area)
+for x=1,area.w do
+for y=1,area.h do
+this.map[x+area.x][y+area.y]={type=1,seen=true}
+end
+end
+end,
+randArea=function(this,wmin,wmax,hmin,hmax)
+wmin=mid(1,wmin,this.width-2)
+wmax=mid(1,wmax,this.width-2)
+hmin=mid(1,hmin,this.height-2)
+hmax=mid(1,hmax,this.height-2)
+local w=randBetween(wmin,wmax)
+local h=randBetween(hmin,hmax)
+local x=randBetween(1,this.width-2-w)
+local y=randBetween(1,this.height-2-h)
+return{x=x,y=y,w=w,h=h}
+end,
+scale=function(this,ratio)
+local newMap={}
+for x=1,this.width do
+for x2=1,ratio do
+newMap[(x-1)*ratio+x2]={}
+for y=1,this.height do
+for y2=1,ratio do
+newMap[(x-1)*ratio+x2][(y-1)*ratio+y2]={type=this.map[x][y].type,seen=1}
+end
+end
+end
+end
+this.map=newMap
+this.width=ratio*this.width
+this.height=ratio*this.height
+end,
+draw=function(this)
+end
+}
+floor:prefill()
+floor:carve(floor.width/2,floor.height/2)
+local scoops=randBetween(floor:area()/200,floor:area()/50)
+for i=1,scoops do
+floor:clearArea(floor:randArea(3,8,3,8))
+end
+return floor
+end
 create_parent([[80|81]],function(a)
 scr_circfill(a.x,a.y,.125,a.color)
 end,function(a)
@@ -840,6 +941,7 @@ end
 end)
 function game_init(a)
 _g.fader_in(.5,nf,nf)
+g_floormap=create_map()
 g_room=ztable[[98]]
 g_pl=_g.pl(4,4)
 g_view=_g.view(15,12,4,g_pl)
@@ -894,6 +996,12 @@ clip()
 batch_call_new(acts_loop,[[102]])
 tbox_draw(16,48)
 local y=14.5
+for mx=1,g_floormap.width do
+for my=1,g_floormap.height do
+local color=g_floormap.map[mx][my].type==0 and 8 or 9
+pset(94+mx,94+my,color)
+end
+end
 end
 function disable_looping_on_music(music_num)
 local addr=0x3101+music_num*4

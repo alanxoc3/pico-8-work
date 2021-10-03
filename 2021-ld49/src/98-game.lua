@@ -2,6 +2,7 @@
 
 function game_init(a)
     _g.fader_in(.5, nf, nf)
+    g_floormap = create_map()
     g_room = ztable[[ x:0; y:0; w:128; h:32; ]]
     g_pl = _g.pl(4, 4)
     g_view = _g.view(15, 12, 4, g_pl)
@@ -120,4 +121,12 @@ function game_draw(a)
     -- zspr(72, 10, 118, 2, 2)
     -- scr_rect(.625   ,y+0  ,1.625   ,y+1  ,7) -- normal face
     -- scr_rect(14.375 ,y+0  ,15.375  ,y+1  ,7) -- angry face
+
+    -- Draw minimap.
+    for mx=1,g_floormap.width do
+        for my=1,g_floormap.height do
+            local color = g_floormap.map[mx][my].type == 0 and 8 or 9
+            pset(94+mx, 94+my, color)
+        end
+    end
 end
