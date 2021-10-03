@@ -1,10 +1,10 @@
 -- game logic is in this file
+-- 3 rooms: dungeon, void, hospital
 
-function game_init(a)
+function reset_the_dungeon()
     _g.fader_in(.5, nf, nf)
-    g_floormap = create_map()
     g_room = ztable[[ x:0; y:0; w:128; h:32; ]]
-    g_pl = _g.pl(4, 4)
+    g_pl = _g.pl_monster(4, 4)
     g_view = _g.view(15.25, 11.5, 3, g_pl)
     _g.simple_enemy(3, 2)
 
@@ -22,7 +22,42 @@ function game_init(a)
     -- tbox"hello, how are^you?"
 end
 
-function game_update(a)
+function reset_the_void()
+    _g.fader_in(.5, nf, nf)
+    g_room = ztable[[ x:0; y:0; w:128; h:32; ]]
+    g_pl = _g.pl_monster(4, 4)
+    g_view = _g.view(15.25, 11.5, 3, g_pl)
+    _g.simple_enemy(3, 2)
+
+    -- draws the hearts at the top of the screen, with particles!
+    _g.heart_particle_spawner(6.5, 1, 3)
+    _g.heart_particle_spawner(9.5, 1, 2)
+    _g.heart_particle_spawner(  8, 1, 1)
+
+    _g.powerup_particle_spawner(3 , 1 , 0, 13 , 72)
+    _g.powerup_particle_spawner(4 , 15, 1, 3 , 74)
+    _g.powerup_particle_spawner(8 , 15, 2, 14 , 76)
+    _g.powerup_particle_spawner(12, 15, 3, 12, 78)
+    _g.powerup_particle_spawner(13, 1 , 4, 8 , 104)
+
+    -- tbox"hello, how are^you?"
+end
+
+function game_init()
+    g_floormap = create_map()
+
+    -- _g.fader_out(1,nf,resetlevel)
+    -- batch_call_new(acts_loop, [[
+        -- confined,room_end;
+        -- confined,kill;
+        -- confined,delete
+    -- ]])
+
+    -- reset_the_dungeon()
+    reset_the_void()
+end
+
+function game_update()
     batch_call_new(acts_loop, [[
         timer,     tick;
         act,       update;
@@ -68,7 +103,7 @@ function shiftx(view) return (view.x-view.off_x-8)*8 end
 function shifty(view) return (view.y-view.off_y-8)*8 end
 function camera_to_view(view) camera(shiftx(view), shifty(view)) end
 
-function game_draw(a)
+function game_draw()
     fade(g_card_fade)
 
     local x, y = 8, 8
