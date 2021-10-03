@@ -12,7 +12,7 @@ end, function(a, other)
 end)
 
 create_actor([[simple_enemy;2;drawable,col,confined,mov,x_bounded,y_bounded,knockbackable,hurtable,spr_obj,enemy|
-    x:@1; y:@2; u:@3; d:@4; hit:@5;
+    x:@1; y:@2; u:@3; d:@4; hit:@5; destroyed:@6;
     health:3; max_health:3;
     sh:2;
     rx:.375; ry:.375;
@@ -74,4 +74,6 @@ end, function(a, other)
         g_pl:knockback(atan2(g_pl.x-a.x, g_pl.y-a.y))
         a:knockback(atan2(a.x-other.x, a.y-other.y))
     end
+end, function(a)
+    _g.deadbody(a.x, a.y, atan2(a.dx, a.dy), 96)
 end)
