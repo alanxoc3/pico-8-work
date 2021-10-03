@@ -114,7 +114,7 @@ end, function(a)
     a.ax *= speed_multiplier
     a.ay *= speed_multiplier
 end, function(a, other)
-    a:hurt()
+    if a.insane_level < 4 then a:hurt() end
     a:knockback(atan2(a.x-other.x, a.y-other.y))
 end, function(a)
     a:set_insanity(4)
@@ -131,8 +131,10 @@ end, function(a)
         a:set_insanity(a.insane_level - 1)
     end
 end, function(a, level)
-    a.insane_level = level
-    a:create_timer("insane_timeout", 60*5, function()
-        a:decrement_insanity()
-    end)
+    if level ~= a.insane_level then
+        a.insane_level = level
+        a:create_timer("insane_timeout", 60*5, function()
+            a:decrement_insanity()
+        end)
+    end
 end)
