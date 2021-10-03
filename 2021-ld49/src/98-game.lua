@@ -117,17 +117,15 @@ function game_draw(a)
 
     tbox_draw(16,48)
 
-    -- design below
-    local y = 14.5
-    -- zspr(72, 10, 118, 2, 2)
-    -- scr_rect(.625   ,y+0  ,1.625   ,y+1  ,7) -- normal face
-    -- scr_rect(14.375 ,y+0  ,15.375  ,y+1  ,7) -- angry face
-
     -- Draw minimap.
-    for mx=1,g_floormap.width do
-        for my=1,g_floormap.height do
-            local color = g_floormap.map[mx][my].type == 0 and 8 or 9
-            pset(94+mx, 94+my, color)
+    -- DEBUG_BEGIN
+    if g_debug then
+        for mx=1,g_floormap.width do
+            for my=1,g_floormap.height do
+                local color = g_floormap.map[mx][my].type == 0 and 8 or 9
+                pset(94+mx, 94+my, color)
+            end
         end
     end
+    -- DEBUG_END
 end

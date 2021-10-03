@@ -996,11 +996,12 @@ camera()
 clip()
 batch_call_new(acts_loop,[[102]])
 tbox_draw(16,48)
-local y=14.5
+if g_debug then
 for mx=1,g_floormap.width do
 for my=1,g_floormap.height do
 local color=g_floormap.map[mx][my].type==0 and 8 or 9
 pset(94+mx,94+my,color)
+end
 end
 end
 end
