@@ -1,5 +1,10 @@
 create_parent([[pl;1;drawable,pos,confined,mov,x_bounded,y_bounded,col,spr_obj,knockbackable,hurtable,tcol;|
     passive_mode:@1; d:@2;
+
+    dir:0; is_facing_left:no;
+    health:3; max_health:3;
+    sh:2; iyy:-5;
+    strength:1; -- amount of damage you do to enemies
 ]], function(a)
     a.sind = 134
     a.yy = 0
@@ -39,23 +44,19 @@ create_parent([[pl;1;drawable,pos,confined,mov,x_bounded,y_bounded,col,spr_obj,k
     scr_spr(a)
 end)
 
-create_actor([[pl_monster;2;pl/yes,|
+create_actor([[pl_monster;2;pl/no,|
     x:@1; y:@2;
 
-    health:3; max_health:3;
-    sh:2; iyy:-5;
-    dir:0; is_facing_left:no;
     insane_level:0;
 
-    u:@3;
-    damage:@4; hurt_start:@5; destroyed:@6;
+    u:@3; damage:@4; hurt_start:@5; destroyed:@6;
     increment_insanity:@7; decrement_insanity:@8; set_insanity:@9;
 ]], function(a)
     -- DEBUG_BEGIN
     if g_debug and btnp(4) then a:set_insanity((a.insane_level + 1) % 5) end
     -- DEBUG_END
 
-    control_player(a, xbtn(), ybtn(), btn(4), btn(5), true)
+    control_player(a, xbtn(), ybtn(), btn(4), btn(5), true, a.insane_level)
 end, function(a, other)
     if a.insane_level < 4 then a:hurt() end
     a:knockback(atan2(a.x-other.x, a.y-other.y))
