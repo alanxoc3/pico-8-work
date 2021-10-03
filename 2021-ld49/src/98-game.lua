@@ -81,7 +81,7 @@ function game_draw(a)
     local y1, y2 = ry*8+4, (ry+g_view.h)*8-5
     camera_to_view(g_view)
 
-    scr_map(0,0,0,0,15,12)
+    scr_map(0,0,0,0,128,32)
 
     batch_call_new(acts_loop, [[
         pre_drawable, d;
