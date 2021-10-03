@@ -29,7 +29,7 @@ function title_draw(a)
     title_t=-1
     title_o=title_o+.04
 
-    rectfill(0,64,127,127,1)
+    rectfill(0,64,127,300,1)
     for title_i=0,32 do
         title_c=5
         title_r=title_i+64
@@ -44,9 +44,5 @@ function title_draw(a)
     end
 
     rectfill(64-40, 32-20, 64+40, 32+20, 0)
-    zspr(200, 64, 32, 8, 3)
-    
-    if t() % 1 > .25 then
-        zprint("press x or z to begin", 64, 96, 7, 0)
-    end
+    zspr(200, 64+1, 64+5, 8, 3)
 end
