@@ -1,5 +1,10 @@
 -- game logic is in this file
 
+function disable_looping_on_music(music_num)
+    local addr = 0x3101 + music_num*4
+    poke(addr, 0b01111111 & peek(addr))
+end
+
 function title_init(a)
     _g.fader_in(.5, nf, function() g_title_enabled = true end)
     g_title_enabled = false
@@ -9,6 +14,7 @@ end
 function title_update(a)
     if g_title_enabled and (btn(4) or btn(5)) then
         g_title_enabled = false
+        disable_looping_on_music(2) -- i can now use looping effectively!
         _g.fader_out(.5, nf, function()
             g_tl:next()
         end)
