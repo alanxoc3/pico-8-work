@@ -1,49 +1,3 @@
-create_parent([[particle_parent;0;mov,;|
-    i:@1; d:@2;
-    inertia_x:.90;
-    inertia_y:.90;
-]], function(a)
-    a.dx = rnd(.2)-.1
-    a.dy = rnd(.2)-.1
-end, function(a)
-    scr_circfill(a.x, a.y, .125, a.color)
-end)
-
-create_actor[[pre_particle;4;pre_drawable,particle_parent|
-    x:@1; y:@2; color:@3;
-    tl_max_time=@4,;
-]]
-
-create_actor[[post_particle;4;above_map_drawable,particle_parent|
-    x:@1; y:@2; color:@3; 
-    tl_max_time=@4,;
-]]
-
-create_parent([[particle_spawner;4;dim,|
-    rx:@1; ry:@2; rate:@3; chance:@4; update_particles:@5;
-]], function(a)
-    for i=1,a.rate do
-        if flr_rnd(a.chance) == 0 then
-            _g.post_particle(
-                a.x + rnd(a.rx*2)-a.rx,
-                a.y + rnd(a.ry*2)-a.ry,
-                8, .25
-            )
-        end
-    end
-end)
-
-create_actor([[heart_particle_spawner;3;particle_spawner/.125/.125/1/3,above_map_drawable_1|
-    x:@1; y:@2; heart_number:@3; u:@4; d:@5
-]], function(a)
-    a:update_particles()
-    if g_pl.health < a.heart_number then
-        a:kill()
-    end
-end, function(a)
-    zspr(4, a.x*8, a.y*8+1)
-end)
-
 create_actor([[fist;3;col,confined,rel|
     rel_actor:@1; x:@2; y:@3; i:@4; d:@5;
     touchable:no; rx:.25; ry:.5;
@@ -109,13 +63,13 @@ end, function(a)
 
     local speed_multiplier = 1 + a.insane_level / 10
     if a.insane_level == 4 then
-        _g.pre_particle(a.x, a.y+.5, 8 , rnd(.2))
+        _g.powerup_particle(a.x, a.y+.5, 8)
     elseif a.insane_level == 3 then
-        _g.pre_particle(a.x, a.y+.5, 14, rnd(.2))
+        _g.powerup_particle(a.x, a.y+.5, 14)
     elseif a.insane_level == 2 then
-        _g.pre_particle(a.x, a.y+.5, 2 , rnd(.2))
+        _g.powerup_particle(a.x, a.y+.5, 2)
     elseif a.insane_level == 1 then
-        _g.pre_particle(a.x, a.y+.5, 1 , rnd(.2))
+        _g.powerup_particle(a.x, a.y+.5, 1)
     end
 
     if not a:any_timer_active("cooldown", "roll", "punch") then

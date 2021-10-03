@@ -11,6 +11,10 @@ function game_init(a)
     _g.heart_particle_spawner(9.5, 1, 2)
     _g.heart_particle_spawner(  8, 1, 1)
 
+    _g.powerup_particle_spawner(4, 15, 1, 1)
+    _g.powerup_particle_spawner(8, 15, 2, 2)
+    _g.powerup_particle_spawner(12, 15, 3, 14)
+
     tbox"hello, how are^you?"
 end
 
@@ -55,15 +59,12 @@ function game_draw(a)
     local x1, x2, y1, y2 = 8-g_room.w/2, 8+g_room.w/2-1/8, 8-g_room.h/2, 8+g_room.h/2-1/8
     local off_x, off_y = 0, 0
 
-    zclip(x1*8+off_x*8, y1*8+off_y*8, x2*8+off_x*8, y2*8+off_y*8)
-    zcls(1)
+    -- zclip(x1*8+off_x*8, y1*8+off_y*8, x2*8+off_x*8, y2*8+off_y*8)
+    -- zcls(1)
 
     camera(-x1*8-off_x*8, -y1*8-off_y*8)
 
     map(0,0,0,0,15,12)
-
-    -- unneeded rectangle:
-    rect(0, 2, 10, 10, 7, 8)
 
     batch_call_new(acts_loop, [[
         pre_drawable, d;
@@ -85,7 +86,7 @@ function game_draw(a)
     if g_debug then acts_loop('dim', 'debug_rect') end
     -- DEBUG_END
 
-    clip()
+    -- clip()
     camera()
 
     batch_call_new(acts_loop, [[
@@ -97,11 +98,6 @@ function game_draw(a)
 
     -- design below
     local y = 14.5
-    scr_rect(.625   ,y+0  ,1.625   ,y+1  ,8) -- normal face
-    scr_rect(14.375 ,y+0  ,15.375  ,y+1  ,8) -- angry face
-
-
-    scr_rect(2.125      ,y+.125,2.125+3.75,y+.875,7) -- left
-    scr_rect(6.125      ,y+.125,6.125+3.75,y+.875,7) -- middle
-    scr_rect(13.875-3.75,y+.125,13.875    ,y+.875,7) -- right
+    scr_rect(.625   ,y+0  ,1.625   ,y+1  ,7) -- normal face
+    scr_rect(14.375 ,y+0  ,15.375  ,y+1  ,7) -- angry face
 end
