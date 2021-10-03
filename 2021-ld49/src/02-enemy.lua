@@ -18,8 +18,6 @@ create_actor([[simple_enemy;2;drawable,col,confined,mov,x_bounded,y_bounded,knoc
     iyy:-5;
     rx:.375; ry:.375;
     touchable: no;
-    inertia_x:.90;
-    inertia_y:.90;
 ]], function(a)
     if not a:any_timer_active("cooldown", "walk", "prepare", "attack") then
         a.dir = atan2(g_pl.x - a.x, g_pl.y - a.y) + rnd(.125) - .125/2

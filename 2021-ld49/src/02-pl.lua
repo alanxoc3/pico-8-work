@@ -9,22 +9,15 @@ create_actor([[fist;3;col,confined,rel|
 end)
 
 create_parent[[pl;0;act,;|;]]
-
 create_actor([[pl_monster;2;pl,drawable,pos,confined,mov,x_bounded,y_bounded,col,spr_obj,knockbackable,hurtable,tcol|
     x:@1; y:@2;
+
     health:3; max_health:3;
-
-    insane_level:0;
-    
-    sh:2; sind:137;
-    iyy:-5;
-    inertia_x:.90;
-    inertia_y:.90;
-
+    sh:2; sind:137; iyy:-5;
     dir:0; is_facing_left:no;
+    insane_level:0;
 
     d:@3; u:@4;
-
     damage:@5; hurt_start:@6; destroyed:@7;
     increment_insanity:@8; decrement_insanity:@9; set_insanity:@10;
 ]], function(a)
@@ -67,54 +60,7 @@ end, function(a)
     if g_debug and btnp(4) then a:set_insanity((a.insane_level + 1) % 5) end
     -- DEBUG_END
 
-    local speed_multiplier = 1 + a.insane_level / 10
-    if a.insane_level == 4 then
-        _g.powerup_particle(a.x, a.y+.5, 8)
-    elseif a.insane_level == 3 then
-        _g.powerup_particle(a.x, a.y+.5, 12)
-    elseif a.insane_level == 2 then
-        _g.powerup_particle(a.x, a.y+.5, 14)
-    elseif a.insane_level == 1 then
-        _g.powerup_particle(a.x, a.y+.5, 3)
-    elseif a.insane_level == 0 then
-        -- _g.powerup_particle(a.x, a.y+.5, 13)
-    end
-
-    if not a:any_timer_active("cooldown", "roll", "punch") then
-        if btn(4) then
-            a:create_timer("roll",  20, function() a.dx /= 3 a.dy /= 3 a:create_timer("cooldown", 20) end)
-        elseif btn(5) then
-            a:create_timer("punch", 20, function() a:create_timer("cooldown", 10) end)
-            _g.fist(a, a.x, a.y)
-        end
-    end
-
-    local is_moving = xbtn() ~= 0 or ybtn() ~= 0
-    if a:any_timer_active"knockback" then
-        a:apply_knockback()
-    elseif a:any_timer_active"roll" then
-        a.ax = cos(a.dir)*.03
-        a.ay = sin(a.dir)*.03
-    elseif a:any_timer_active"punch" then
-        a.ax = cos(a.dir)*.005
-        a.ay = sin(a.dir)*.005
-    elseif is_moving then -- and not a:any_timer_active"punch" then
-        if xbtn() ~= 0 then
-            a.is_facing_left = xbtn() < 0
-        end
-
-        a.dir = atan2(xbtn() == 0 and (a.is_facing_left and -1 or 1) or xbtn(), ybtn())
-
-        local dir = atan2(xbtn(), ybtn())
-        a.ax = cos(dir)*.015
-        a.ay = sin(dir)*.015
-    else
-        a.dir = atan2(a.is_facing_left and -1 or 1, 0)
-        a.ax = 0
-        a.ay = 0
-    end
-    a.ax *= speed_multiplier
-    a.ay *= speed_multiplier
+    control_player(a, xbtn(), ybtn(), btn(4), btn(5))
 end, function(a, other)
     if a.insane_level < 4 then a:hurt() end
     a:knockback(atan2(a.x-other.x, a.y-other.y))

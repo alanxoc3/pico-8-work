@@ -2,7 +2,13 @@ next steps for alan:
 - random props around the map.
 - implement another enemy.
 - implement level restart.
-- implement portal and separate room.
+- implement portal.
+- implement separate room.
+- implement "5 left" countdown if you killed 95%.
+- implement arrow to exit for end thing.
+- implement ending screen: pacifist, genocide, normal.
+- implement computer controlled pl monster boss.
+- ask if enemy powerup should last as long as player's (5 seconds) and maybe implement.
 
 - implement door. -- STRETCH
 - help with getting the random generator used. -- STRETCH
