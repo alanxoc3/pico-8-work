@@ -1,9 +1,14 @@
 next steps for alan:
-- random prop thing.
+- random props around the map.
 - implement another enemy.
-- make sum muzik.
-- implement view
+- implement portal and separate room.
 
+- implement door. -- STRETCH
+- help with getting the random generator used. -- STRETCH
+- title screen lets you select modes. -- STRETCH
+
+- DONE! implement view
+- DONE! make sum muzik.
 - DONE! collision with walls.
 - DONE! anim for nurse monster.
 - DONE! implement lives on ui.
