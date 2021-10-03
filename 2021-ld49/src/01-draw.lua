@@ -3,14 +3,11 @@ function zspr(sind, x, y, sw, sh, ...)
    spr(sind, x-sw*4, y-sh*4, sw, sh, ...)
 end
 
-function zprint(str, x, y, align, fg, bg)
-   if align == 0    then x -= #str*2
-   elseif align > 0 then x -= #str*4+1 end
+function zprint(str, x, y, color, align)
+    if align == 0    then x -= #str*2
+    elseif align > 0 then x -= #str*4+1 end
 
-   batch_call_new(print, [[
-      @1,@2,!plus/@3/1,@5;
-      @1,@2,@3,@4;
-   ]], str, x, y, fg, bg)
+    print(str, x, y, color)
 end
 
 function zclip(x1, y1, x2, y2)
@@ -41,15 +38,6 @@ function outline_helper(flip, coord, dim)
    else
       return coord, 1
    end
-end
-
-function tprint(str, x, y, c1, c2)
-   for i=-1,1 do
-      for j=-1,1 do
-         zprint(str, x+i, y+j, 0, BG_UI, BG_UI)
-      end
-   end
-   zprint(str, x, y, 0, c1, c2)
 end
 
 -- fading
