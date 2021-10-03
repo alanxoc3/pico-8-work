@@ -9,12 +9,13 @@ poke(0x5f5c, 15) -- set the initial delay before repeating.
 poke(0x5f5d, 15) -- set the repeating delay.
 
 function _init()
-    music(0, 3000)
+    music(0)
+
     g_tl = ztable([[
---         x=64, y=64, i=@2, u=nf, d=@1, tl_max_time=2.5; -- logo
---         i=@3, u=@4, d=@5; -- title
+        x=64, y=64, i=@2, u=nf, d=@1, tl_max_time=2.5; -- logo
+        i=@3, u=@4, d=@5; -- title
         i=@6, u=@7, d=@8;  -- game
-    ]], logo_draw, function() sfx'63' end,
+    ]], logo_draw, function() end, -- sfx'63' end,
     title_init, title_update, title_draw,
     game_init, game_update, game_draw
     )
