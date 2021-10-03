@@ -181,7 +181,8 @@ create_parent[[post_drawable;0;drawable_obj,;d,|d:nf;]]
 create_parent[[post_drawable_1;0;drawable_obj,;d,|d:nf;]]
 create_parent[[post_drawable_2;0;drawable_obj,;d,|d:nf;]]
 
-create_parent[[above_map_post_camera_drawable;0;drawable_obj,;d,|d:nf;]]
+create_parent[[above_map_drawable;0;drawable_obj,;d,|d:nf;]]
+create_parent[[above_map_drawable_1;0;drawable_obj,;d,|d:nf;]]
 
 create_parent[[spr_obj;0;vec,drawable_obj,;|
    sind:0;

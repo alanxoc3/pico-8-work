@@ -6,6 +6,11 @@ function game_init(a)
     g_pl = _g.pl(g_room.w/2, g_room.h/2)
     _g.simple_enemy(3, 2)
 
+    -- draws the hearts at the top of the screen, with particles!
+    _g.heart_particle_spawner(6.5, 1, 3)
+    _g.heart_particle_spawner(9.5, 1, 2)
+    _g.heart_particle_spawner(  8, 1, 1)
+
     tbox"hello, how are^you?"
 end
 
@@ -83,12 +88,10 @@ function game_draw(a)
     clip()
     camera()
 
-
-        -- rectfill(16,48,112,80,0)
-        -- rect(17,49,111,79,7)
-        -- rect(22,54,41,74,7)
-        -- print("hello, how are", 47, 58, 7)
-        -- print("you? 6789012345", 47, 58+8, 7)
+    batch_call_new(acts_loop, [[
+        above_map_drawable, d;
+        above_map_drawable_1, d;
+    ]])
 
     tbox_draw(16,48)
 
@@ -97,15 +100,8 @@ function game_draw(a)
     scr_rect(.625   ,y+0  ,1.625   ,y+1  ,8) -- normal face
     scr_rect(14.375 ,y+0  ,15.375  ,y+1  ,8) -- angry face
 
-    scr_rect(2.125      ,y+.125,2.125+3.75,y+.875,1) -- left
 
-    scr_rect(2.125+3.75,y+.375,6.125    ,y+.625,1) -- connect left
-    scr_rect(6.125      ,y+.125,6.125+3.75,y+.875,1) -- middle
-    scr_rect(13.875-3.75-.25,y+.375,13.875-3.75    ,y+.625,1) -- connect right
-
-    scr_rect(13.875-3.75,y+.125,13.875    ,y+.875,1) -- right
-
-    if g_pl.health > 2 then zspr(4, 6.5*8, 9) end
-    if g_pl.health > 0 then zspr(4, 8*8  , 9) end
-    if g_pl.health > 1 then zspr(4, 9.5*8, 9) end
+    scr_rect(2.125      ,y+.125,2.125+3.75,y+.875,7) -- left
+    scr_rect(6.125      ,y+.125,6.125+3.75,y+.875,7) -- middle
+    scr_rect(13.875-3.75,y+.125,13.875    ,y+.875,7) -- right
 end
