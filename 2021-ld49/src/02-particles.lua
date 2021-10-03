@@ -66,11 +66,11 @@ end)
 create_actor([[powerup_particle_spawner;5;particle_spawner/2/.125/1/1/%slow_medium_ui_particle,above_map_drawable_1|
     x:@1; y:@2; powerup_level:@3; color:@4; sind:@5; u:@6; d:@7
 ]], function(a)
-    if g_pl.insane_level == a.powerup_level then
+    if g_pl.alive and g_pl.insane_level == a.powerup_level then
         a:update_particles()
     end
 end, function(a)
-    if g_pl.insane_level == a.powerup_level then
+    if g_pl.alive and g_pl.insane_level == a.powerup_level then
         zspr(a.sind, a.x*8, a.y*8, 2, 2, g_pl.is_facing_left, false)
     end
 end)

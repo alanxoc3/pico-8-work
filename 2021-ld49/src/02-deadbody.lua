@@ -1,8 +1,7 @@
 create_actor([[deadbody;4;pre_drawable,|
-    x:@1; y:@2; dir:@3; sind:@4; i:@5; u:@6; d:@7;
+    x:@1; y:@2; xf:@3; sind:@4; i:@5; u:@6; d:@7;
     touchable:no; rx:.25; ry:.5;
 ]], function(a)
-    a.xf = cos(dir) > 0
     a:create_timer('bleeding', 30)
 end, function(a)
     if a:any_timer_active'bleeding' then

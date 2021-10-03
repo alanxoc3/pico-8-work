@@ -21,7 +21,7 @@ create_actor([[pl;2;drawable,pos,confined,mov,x_bounded,y_bounded,col,spr_obj,kn
 
     dir:0; is_facing_left:no;
 
-    d:@3; u:@4; damage:@5; hurt_start:@6; hurt_end:@7;
+    d:@3; u:@4; damage:@5; hurt_start:@6; hurt_end:@7; destroyed:@8;
 ]], function(a)
     a.sind = 134
     a.yy = 0
@@ -117,4 +117,6 @@ end, function(a)
     a.insane_level = 4
 end, function(a)
     a.insane_level = 0
+end, function(a)
+    _g.deadbody(a.x, a.y, a.xf, 178)
 end)
