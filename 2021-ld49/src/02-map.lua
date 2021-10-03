@@ -21,8 +21,8 @@ end
 function create_map()
     local floor = {
         map    = {},
-        width  = 32,
-        height = 32,
+        width  = 27,
+        height = 9,
 
         dirs = {
             { dy = -1 }, -- N
@@ -119,10 +119,10 @@ function create_map()
 
     -- First build a perfect maze.
     floor:prefill()
-    floor:carve(floor.width/2, floor.height/2)
+    floor:carve(flr(floor.width/2), flr(floor.height/2))
 
     -- Clear out walls from a lot of relatively small areas, to make interestingly-shaped "rooms".
-    local scoops = randBetween(floor:area()/200, floor:area()/50)
+    local scoops = randBetween(flr(floor:area()/200), flr(floor:area()/50))
     for i = 1,scoops do
         floor:clearArea(floor:randArea(3, 8, 3, 8))
     end
