@@ -1,6 +1,7 @@
 next steps for alan:
 - random props around the map.
 - implement another enemy.
+- implement level restart.
 - implement portal and separate room.
 
 - implement door. -- STRETCH
