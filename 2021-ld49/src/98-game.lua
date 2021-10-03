@@ -4,7 +4,7 @@ function game_init(a)
     _g.fader_in(.5, nf, nf)
     g_room = ztable[[ x:0; y:0; w:128; h:32; ]]
     g_pl = _g.pl(4, 4)
-    g_view = _g.view(15, 15, 4, g_pl)
+    g_view = _g.view(15, 12, 4, g_pl)
     _g.simple_enemy(3, 2)
 
     -- draws the hearts at the top of the screen, with particles!
@@ -77,10 +77,11 @@ function game_draw(a)
     g_view.off_x = -(16-g_view.w)/2+rx
     g_view.off_y = -(16-g_view.h)/2+ry
 
-    local x1, x2 = rx*8+4, (rx+g_view.w)*8-5
-    local y1, y2 = ry*8+4, (ry+g_view.h)*8-5
-    camera_to_view(g_view)
+    local x1, x2 = rx*8, (rx+g_view.w)*8-1
+    local y1, y2 = ry*8, (ry+g_view.h)*8-1
 
+    zclip(x1, y1, x2, y2)
+    camera_to_view(g_view)
     scr_map(0,0,0,0,128,32)
 
     batch_call_new(acts_loop, [[
@@ -105,6 +106,7 @@ function game_draw(a)
 
     -- clip()
     camera()
+    clip()
 
     batch_call_new(acts_loop, [[
         above_map_drawable, d;

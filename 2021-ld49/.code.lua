@@ -557,12 +557,12 @@ function tbox_clear()
 g_tbox_messages,g_tbox_anim,g_tbox_active={},0,false
 end
 function update_view_helper(view,xy,wh,ii)
-local follow_coord=view.follow_act and(view.follow_act[xy]+view.follow_act[ii]/8)or 0
+local follow_coord=view.follow_act and view.follow_act[xy]or 0
 local view_coord=view[xy]
 local view_dim=view[wh]
 local room_dim=g_room[wh]/2-view_dim/2
 local room_coord=g_room[xy]+g_room[wh]/2
-local follow_dim=round(view.follow_dim*8)/8
+local follow_dim=round(view.follow_dim*(view_dim/2))/8
 if follow_coord<view_coord-follow_dim then view_coord=follow_coord+follow_dim end
 if follow_coord>view_coord+follow_dim then view_coord=follow_coord-follow_dim end
 if view_coord<room_coord-room_dim then view_coord=room_coord-room_dim end
@@ -682,7 +682,6 @@ if not a:any_timer_active"hurt_cooldown"then
 g_pl:increment_insanity()
 end
 a:hurt(g_pl.insane_level==4 and 2 or 1)
-printh(g_pl.insane_level)
 g_pl:knockback(atan2(g_pl.x-a.x,g_pl.y-a.y))
 a:knockback(atan2(a.x-other.x,a.y-other.y))
 end
@@ -843,7 +842,7 @@ function game_init(a)
 _g.fader_in(.5,nf,nf)
 g_room=ztable[[98]]
 g_pl=_g.pl(4,4)
-g_view=_g.view(15,15,4,g_pl)
+g_view=_g.view(15,12,4,g_pl)
 _g.simple_enemy(3,2)
 _g.heart_particle_spawner(6.5,1,3)
 _g.heart_particle_spawner(9.5,1,2)
@@ -881,8 +880,9 @@ local rx=x-g_view.w/2
 local ry=y-g_view.h/2
 g_view.off_x=-(16-g_view.w)/2+rx
 g_view.off_y=-(16-g_view.h)/2+ry
-local x1,x2=rx*8+4,(rx+g_view.w)*8-5
-local y1,y2=ry*8+4,(ry+g_view.h)*8-5
+local x1,x2=rx*8,(rx+g_view.w)*8-1
+local y1,y2=ry*8,(ry+g_view.h)*8-1
+zclip(x1,y1,x2,y2)
 camera_to_view(g_view)
 scr_map(0,0,0,0,128,32)
 batch_call_new(acts_loop,[[100]])
@@ -890,6 +890,7 @@ isorty(g_act_arrs.drawable)
 batch_call_new(acts_loop,[[101]])
 if g_debug then acts_loop("dim","debug_rect")end
 camera()
+clip()
 batch_call_new(acts_loop,[[102]])
 tbox_draw(16,48)
 local y=14.5

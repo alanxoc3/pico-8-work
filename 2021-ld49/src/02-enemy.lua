@@ -82,7 +82,6 @@ end, function(a, other)
             g_pl:increment_insanity()
         end
         a:hurt(g_pl.insane_level == 4 and 2 or 1)
-        printh(g_pl.insane_level)
         g_pl:knockback(atan2(g_pl.x-a.x, g_pl.y-a.y))
         a:knockback(atan2(a.x-other.x, a.y-other.y))
     end

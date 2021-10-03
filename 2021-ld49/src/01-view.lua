@@ -1,10 +1,10 @@
 function update_view_helper(view, xy, wh, ii)
-   local follow_coord = view.follow_act and (view.follow_act[xy]+view.follow_act[ii]/8) or 0
+   local follow_coord = view.follow_act and view.follow_act[xy] or 0
    local view_coord = view[xy]
    local view_dim = view[wh]
    local room_dim = g_room[wh]/2-view_dim/2
    local room_coord = g_room[xy]+g_room[wh]/2
-   local follow_dim = round(view.follow_dim*8)/8
+   local follow_dim = round(view.follow_dim*(view_dim/2))/8
 
    -- Checking the actor we follow.
    if follow_coord < view_coord-follow_dim then view_coord = follow_coord+follow_dim end
