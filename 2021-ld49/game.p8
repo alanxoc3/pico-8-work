@@ -8,14 +8,14 @@ __lua__
 -- git.io/amorg-pico8
 
 -- emotion colors
-color_normal   = 13
-color_insane_1 = 3
-color_insane_2 = 14
-color_insane_3 = 12
-color_angry    = 8
+c_color_normal   = 13
+c_color_insane_1 = 3
+c_color_insane_2 = 14
+c_color_insane_3 = 12
+c_color_angry    = 8
 
 -- other colors
-color_blood    = 8
+c_color_blood    = 8
 
 #include .code.lua
 

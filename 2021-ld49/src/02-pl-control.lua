@@ -19,17 +19,17 @@ function control_player(a, x_dir, y_dir, is_z_pressed, is_x_pressed, punch_enabl
         speed_multiplier = 1 + a.insane_level/10
 
         -- anger emotion particle is used instead of blood
-        if     insane_level == 4 then _g.powerup_particle(a.x, a.y+.5, COLOR_ANGRY)
-        elseif insane_level == 3 then _g.powerup_particle(a.x, a.y+.5, COLOR_INSANE_3)
-        elseif insane_level == 2 then _g.powerup_particle(a.x, a.y+.5, COLOR_INSANE_2)
-        elseif insane_level == 1 then _g.powerup_particle(a.x, a.y+.5, COLOR_INSANE_1)
+        if     insane_level == 4 then _g.powerup_particle(a.x, a.y+.5, c_color_angry)
+        elseif insane_level == 3 then _g.powerup_particle(a.x, a.y+.5, c_color_insane_3)
+        elseif insane_level == 2 then _g.powerup_particle(a.x, a.y+.5, c_color_insane_2)
+        elseif insane_level == 1 then _g.powerup_particle(a.x, a.y+.5, c_color_insane_1)
         -- no color for normal
-        -- elseif insane_level == 0 then _g.powerup_particle(a.x, a.y+.5, COLOR_NORMAL)
+        -- elseif insane_level == 0 then _g.powerup_particle(a.x, a.y+.5, c_color_normal)
         end
 
     -- if not insane, getting hurt can spawn particles
     elseif a:any_timer_active("hurt_cooldown") then
-        _g.powerup_particle(a.x, a.y+.5, COLOR_BLOOD)
+        _g.powerup_particle(a.x, a.y+.5, c_color_blood)
     end
 
     if not a:any_timer_active("cooldown", "roll", "punch") then
