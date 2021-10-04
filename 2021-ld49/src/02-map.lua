@@ -9,20 +9,18 @@ end
 function shuffleArr(arr)
     for i = 1,#arr do
         local j = 1 + flr(rnd() * i) -- Random position between 1 and i
-
-        -- Swap value at current i with value at the random position
-        local x = arr[i]
-        arr[i] = arr[j]
-        arr[j] = x
+        arr[i], arr[j] = arr[j], arr[i]
     end
     return arr
 end
 
 function create_map()
     local floor = {
-        map    = {},
-        width  = 27,
-        height = 9,
+        -- The width and height will be scaled so that the full_map is 128x32 tiles
+        map      = {},
+        width    = 32,
+        height   = 8,
+        full_map = {},
 
         dirs = {
             { dy = -1 }, -- N
@@ -94,25 +92,24 @@ function create_map()
             return { x=x, y=y, w=w, h=h }
         end,
 
-        -- Convert every position in the map into ratio*ratio positions (ratio must be a positive int).
-        scale = function(this, ratio)
-            local newMap = {}
+        -- Build the "full" map by converting every position in the (mini-)map into ratio*ratio positions (ratio must be a positive int).
+        scale = function(this)
+            local ratio = 4
+            this.full_map = {}
             for x = 1,this.width do
                 for x2 = 1,ratio do
-                    newMap[(x-1)*ratio+x2] = {}
+                    this.full_map[(x-1)*ratio+x2] = {}
                     for y = 1,this.height do
                         for y2 = 1,ratio do
-                            newMap[(x-1)*ratio+x2][(y-1)*ratio+y2] = { type= this.map[x][y].type, seen= 1 }
+                            this.full_map[(x-1)*ratio+x2][(y-1)*ratio+y2] = { type= this.map[x][y].type }
                         end
                     end
                 end
             end
-            this.map = newMap
-            this.width = ratio*this.width
-            this.height = ratio*this.height
         end,
 
-        draw = function(this)
+        -- Draw the mini-map in the bottom-right of the screen.
+        draw_mini = function(this)
             local x0 = 127-this.width
             local y0 = 127-this.height
             for x=1,this.width do
@@ -120,6 +117,53 @@ function create_map()
                     local color = this.map[x][y].type == 0 and 8 or 9
                     pset(x0+x, y0+y, color)
                 end
+            end
+        end,
+
+        -- mset all squares onto the pico8 map.
+        mset_all = function(this)
+            for x=1,128 do
+                for y=1,32 do
+                    local tile = this:get_tile_for_square(x, y)
+                    mset(x-1, y-1, tile)
+                end
+            end
+        end,
+
+        -- Get the tile to draw for this square, based on its type and the surrounding squares' types.
+        get_tile_for_square = function(this, x, y)
+            local FLOOR = 52
+            local SOLID = 19
+            local U     = 19
+            local D     = 19
+            local L     = 19
+            local R     = 19
+            local UR_E  = 19
+            local UL_E  = 19
+            local DR_E  = 19
+            local DL_E  = 19
+            --local UR_I  = 9
+            --local UL_I  = 10
+            --local DR_I  = 11
+            --local DL_I  = 12
+            
+            local square = this.full_map[x][y]
+            if square.type == 1 then return FLOOR
+            else
+                local floorU = y>1 and this.full_map[x][y-1].type != 0
+                local floorL = x>1 and this.full_map[x-1][y].type != 0
+                local floorR = x<this.width  and this.full_map[x+1][y].type != 0
+                local floorD = y<this.height and this.full_map[x][y+1].type != 0
+
+                if     floorU and floorR then return UR_E
+                elseif floorU and floorL then return UL_E
+                elseif floorD and floorR then return DR_E
+                elseif floorD and floorL then return DL_E
+                elseif floorU then return U
+                elseif floorD then return D
+                elseif floorL then return L
+                elseif floorR then return R
+                else return SOLID end
             end
         end
     }
@@ -131,8 +175,10 @@ function create_map()
     -- Clear out walls from a lot of relatively small areas, to make interestingly-shaped "rooms".
     local scoops = randBetween(flr(floor:area()/200), flr(floor:area()/50))
     for i = 1,scoops do
-        floor:clearArea(floor:randArea(3, 8, 3, 8))
+        floor:clearArea(floor:randArea(2, 5, 2, 5))
     end
 
+    floor:scale()
+    floor:mset_all()
     return floor
 end
