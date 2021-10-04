@@ -12,10 +12,26 @@ function get_all_enemies_for_story_mode()
         x=81 , y=15, dungeon=%bad_nurse, hospital=%nurse, alive=yes;
         x=18 , y=13, dungeon=%bad_nurse, hospital=%nurse, alive=yes;
         x=102, y=4 , dungeon=%bad_nurse, hospital=%nurse, alive=yes;
+        x=91 , y=20, dungeon=%bad_nurse, hospital=%nurse, alive=yes;
 
         x=89 , y=15, dungeon=%bad_patient, hospital=%patient, alive=yes;
+        x=5  , y=28, dungeon=%bad_patient, hospital=%patient, alive=yes;
+        x=5  , y=30, dungeon=%bad_patient, hospital=%patient, alive=yes;
+        x=40 , y=24, dungeon=%bad_patient, hospital=%patient, alive=yes;
+        x=104, y=14, dungeon=%bad_patient, hospital=%patient, alive=yes;
+        x=104, y=20, dungeon=%bad_patient, hospital=%patient, alive=yes;
+        x=82 , y=4 , dungeon=%bad_patient, hospital=%patient, alive=yes;
+        x=82 , y=10, dungeon=%bad_patient, hospital=%patient, alive=yes;
+        x=102, y=26, dungeon=%bad_patient, hospital=%patient, alive=yes;
 
-        x=91 , y=20, dungeon=%bad_police, hospital=%police, alive=yes;
+        x=90 , y=26, dungeon=%bad_police, hospital=%police, alive=yes;
+        x=90 , y=4 , dungeon=%bad_police, hospital=%police, alive=yes;
+        x=105, y=24, dungeon=%bad_police, hospital=%police, alive=yes;
+        x=105, y=26, dungeon=%bad_police, hospital=%police, alive=yes;
+        x=44 , y=4 , dungeon=%bad_police, hospital=%police, alive=yes;
+        x=54 , y=4 , dungeon=%bad_police, hospital=%police, alive=yes;
+        x=38 , y=30, dungeon=%bad_police, hospital=%police, alive=yes;
+        x=48 , y=30, dungeon=%bad_police, hospital=%police, alive=yes;
     ]]
 
     return {
