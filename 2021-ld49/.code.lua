@@ -1261,6 +1261,7 @@ g_room=ztable[[132]]
 create_all_deadbodies()
 create_all_enemies()
 create_ui_hearts()
+_g.objective_arrow(8,13)
 end
 function reset_the_bossroom()
 cleanup_confined()
@@ -1272,6 +1273,7 @@ _g.portal(118,30)
 create_all_deadbodies()
 create_all_enemies()
 create_ui_hearts()
+_g.objective_arrow(8,13)
 end
 function game_init()
 local d_and_h={}_g.all_deadbody_templates={dungeon=d_and_h,bossroom={},hospital=d_and_h}
