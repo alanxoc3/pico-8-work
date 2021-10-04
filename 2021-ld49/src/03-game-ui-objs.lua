@@ -24,20 +24,14 @@ end)
 create_actor([[genocide_tip;2;above_map_drawable,confined|
     x:@1; y:@2; d:@3; when_to_show_tip:%c_when_to_show_tip;
 ]], function(a)
-    local killed_count = #_g.all_deadbody_templates[g_room.name]
-    local total_count = #_g.all_enemy_templates[g_room.name]
-    local enemies_left = total_count - killed_count
-
-    -- if g_pl.insane_level ~= 1 and g_pl.insane_level ~= 2 and g_pl.insane_level ~= 3 then
-        if enemies_left <= a.when_to_show_tip then
-            scr_rectfill(.125, a.y-.5, 15.75, a.y+.5, 1)
-            local number_str = ""..killed_count.."/"..total_count
-            if killed_count == total_count then
-                number_str = "all"
-            end
-            zprint("killed "..number_str.." enemies", a.x*8, a.y*8-2, 8, 0)
+    if g_endgame_stats.enemy_total_count - g_endgame_stats.enemy_kill_count <= a.when_to_show_tip then
+        scr_rectfill(.125, a.y-.5, 15.75, a.y+.5, 1)
+        local number_str = ""..g_endgame_stats.enemy_kill_count.."/"..g_endgame_stats.enemy_total_count
+        if g_endgame_stats.enemy_kill_count == g_endgame_stats.enemy_total_count then
+            number_str = "all"
         end
-    -- end
+        zprint("killed "..number_str.." enemies", a.x*8, a.y*8-2, 8, 0)
+    end
 end)
 
 create_actor([[objective_arrow;2;post_drawable_2,confined|
