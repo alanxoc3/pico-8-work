@@ -59,8 +59,6 @@ function acts_loop(id, func_name, ...)
     for a in all(g_act_arrs[id]) do
         if not a.disabled[func_name] then
             call_not_nil(a, func_name, a, ...)
-        else
-            printh(func_name)
         end
     end
 end
