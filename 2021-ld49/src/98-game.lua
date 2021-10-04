@@ -6,7 +6,15 @@ function reset_the_dungeon()
     g_room = ztable[[ x:0; y:0; w:128; h:32; ]]
     -- g_pl = _g.pl_monster_control(4, 4)
     -- g_pl = _g.pl_patient_control_passive(4, 4)
-    g_pl = _g.pl_patient_control_fight(4, 4)
+
+    -- DEBUG_BEGIN
+    if c_is_patient then
+        g_pl = _g.pl_patient_control_fight(4, 4)
+    else
+        g_pl = _g.pl_monster_control(4, 4)
+    end
+    -- DEBUG_BEGIN
+
     g_view = _g.view(15.25, 11.5, 3, g_pl)
     _g.simple_enemy(3, 2)
 
