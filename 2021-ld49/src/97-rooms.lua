@@ -59,8 +59,6 @@ end
 function create_all_enemies()
     for i, enemy_template in pairs(_g.all_enemy_templates[g_room.name]) do
         if enemy_template.alive then
-            printh(g_room.name)
-            printh(g_room.name)
             enemy_template[g_room.name](enemy_template.x, enemy_template.y, i)
         end
     end
@@ -96,6 +94,7 @@ function reset_the_dungeon()
     create_ui_powerups()
 
     _g.genocide_tip(8, 13)
+    _g.objective_arrow(8, 13)
 end
 
 -- resets the hospital

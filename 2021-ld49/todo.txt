@@ -1,9 +1,9 @@
 next steps for alan:
+- make procgen mode unlockable.
 - look at possible bug in boss fight, where the portal isn't generated. rare?
 - implement some random props/objects.
 - saw flip animation
 - message - "are you sure you want to enter the boss room"
-- consider procgen mode unlock-able.
 - enemy left arrow.
 - implement another enemy.
 - implement stat recordings.
@@ -18,6 +18,7 @@ next steps for alan:
 - implement door. -- STRETCH
 - title screen lets you select modes. -- STRETCH
 
+- DONE! decide on making procgen mode unlock-able.
 - DONE! change plus to square in boss room.
 - DONE! implement portal.
 - DONE! implement separate room.

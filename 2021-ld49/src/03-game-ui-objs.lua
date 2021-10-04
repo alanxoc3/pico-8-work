@@ -40,3 +40,56 @@ create_actor([[genocide_tip;2;above_map_drawable,confined|
     -- end
 end)
 
+create_actor([[objective_arrow;2;post_drawable_2,confined|
+    x:@1; y:@2; u:@3; d:@4;
+    ry:.25;
+    radius:.2;
+    touchable:no;
+    smallest_dist:0;
+]], function(a)
+    local smallest_dist
+    local objective
+
+    for g_ind in all{'bad_character', 'portal'} do
+        for b in all(g_act_arrs[g_ind]) do
+            local dist = approx_dist(g_pl.x-b.x, g_pl.y-b.y)
+            if not smallest_dist or dist < smallest_dist then
+                smallest_dist = dist
+                objective = b
+            end
+        end
+    end
+
+    a.smallest_dist = smallest_dist
+    a.objective = objective
+end, function(a)
+    if a.objective and a.smallest_dist > 3.5 then
+        local dir = atan2(a.objective.x - g_pl.x, a.objective.y - g_pl.y)
+        dir = round(dir*16)/16
+        local dx = cos(dir)
+        local dy = sin(dir)
+        local offy = -.5
+        local color = 1
+
+        local len_multiplier = 1.75
+        if t() % .5 < .25 then
+            len_multiplier *= 1.125
+        end
+
+        local x1=g_pl.x+dx
+        local y1=offy+g_pl.y+dy
+        local x2=g_pl.x+dx*len_multiplier
+        local y2=offy+g_pl.y+dy*len_multiplier
+
+        scr_line(x1, y1, x2, y2, color)
+
+        local turn=.375
+        local length=.375
+        local x3=x2+cos(dir+turn)*length
+        local y3=y2+sin(dir+turn)*length
+        local x4=x2+cos(dir-turn)*length
+        local y4=y2+sin(dir-turn)*length
+        scr_line(x2, y2, x3, y3, color)
+        scr_line(x2, y2, x4, y4, color)
+    end
+end)
