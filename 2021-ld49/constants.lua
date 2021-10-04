@@ -20,8 +20,6 @@ _g.c_when_to_show_tip = 1
 
 function get_normal_map_enemies()
     return {
-        {8 ,6,"nurse"},
-        {10,6,"nurse"},
 	{4,28,"nurse"},
 	{14,26,"nurse"},
 	{45,28,"nurse"},
@@ -32,6 +30,7 @@ function get_normal_map_enemies()
 	{81,4,"nurse"},
 	{81,15,"nurse"},
 	{18,13,"nurse"},
+	{102,4,"nurse"},
 
         {12,6,"pl_monster_cpu"}
     }
