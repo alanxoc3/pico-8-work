@@ -1,4 +1,4 @@
-create_actor([[nurse_weapon;3;col,confined,rel,enemy|
+create_actor([[nurse_weapon;3;col,confined,rel,bad_attack|
     rel_actor:@1; x:@2; y:@3; i:@4; hit:@5;
     touchable:no; rx:.5; ry:1;
 
@@ -6,12 +6,12 @@ create_actor([[nurse_weapon;3;col,confined,rel,enemy|
 ]], function(a)
     a.rel_dx = zsgn(cos(a.rel_actor.dir))*.05
 end, function(a, other)
-    if other.pl and not other:any_timer_active("roll") then
+    if other.good_character and not other:any_timer_active("roll") then
         other:damage(a)
     end
 end)
 
-create_actor([[nurse;3;drawable,col,confined,mov,x_bounded,y_bounded,knockbackable,hurtable,spr_obj,enemy,tcol|
+create_actor([[nurse;3;drawable,col,confined,mov,x_bounded,y_bounded,knockbackable,hurtable,spr_obj,bad_character,tcol|
     x:@1; y:@2; enemy_id:@3; u:@4; d:@5; hit:@6; destroyed:@7;
     health:%c_enemy_health; max_health:%c_enemy_health;
     sh:2; iyy:-5;
@@ -71,15 +71,14 @@ end, function(a)
     end
     scr_spr(a)
 end, function(a, other)
-    if other.pl and not other:any_timer_active("roll") then
-        -- other:knockback(atan2(other.x-a.x, other.y-a.y))
-        -- a:knockback(atan2(a.x-other.x, a.y-other.y))
-    elseif other.fist then
+    if other.good_attack then
         if not a:any_timer_active"hurt_cooldown" then
             g_pl:increment_insanity()
         end
         a:hurt(g_pl.strength)
-        g_pl:knockback(atan2(g_pl.x-a.x, g_pl.y-a.y))
+        if other.rel_actor then
+            other.rel_actor:knockback(atan2(g_pl.x-a.x, g_pl.y-a.y))
+        end
         a:knockback(atan2(a.x-other.x, a.y-other.y))
     end
 end, function(a)

@@ -1,4 +1,4 @@
-create_actor([[pl_patient_control_fight;2;pl_patient,|
+create_actor([[pl_patient_control_fight;2;pl_patient,good_character|
     x:@1; y:@2; u:@3; destroyed:@4;
 ]], function(a)
     control_player(a, xbtn(), ybtn(), btn(4), btn(5), _g.good_fist)
@@ -7,7 +7,7 @@ end, function(a)
     _g.fader_out(1,nf,g_reset_room)
 end)
 
-create_actor([[pl_patient_control_passive;2;pl_patient,|
+create_actor([[pl_patient_control_passive;2;pl_patient,good_character|
     x:@1; y:@2; u:@3; destroyed:@4;
 ]], function(a)
     control_player(a, xbtn(), ybtn(), btn(4), btn(5))
@@ -16,7 +16,7 @@ end, function(a)
     _g.fader_out(1,nf,g_reset_room)
 end)
 
-create_actor([[pl_monster_control;2;pl_monster,|
+create_actor([[pl_monster_control;2;pl_monster,good_character|
     x:@1; y:@2; u:@3; destroyed:@4;
 ]], function(a)
     -- DEBUG_BEGIN

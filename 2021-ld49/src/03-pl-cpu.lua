@@ -1,7 +1,12 @@
-create_actor([[pl_monster_cpu;2;pl_monster,|
+create_actor([[pl_monster_cpu;2;pl_monster,bad_character|
     touchable:no;
-    x:@1; y:@2; u:@3;
-    insane_level:4;
+    x:@1; y:@2; i:@3; u:@4;
 ]], function(a)
-    control_player(a, flr_rnd(3)-1, flr_rnd(3)-1, flr_rnd(3) == 0, flr_rnd(3) == 0, _g.bad_fist, a.insane_level)
+    a:set_insanity(4)
+end, function(a)
+    if a.insane_level == 4 then
+        control_player(a, flr_rnd(3)-1, flr_rnd(3)-1, flr_rnd(10) == 0, flr_rnd(4) == 0, _g.bad_fist, a.insane_level)
+    else
+        control_player(a, flr_rnd(3)-1, flr_rnd(3)-1, flr_rnd(5) == 0, flr_rnd(6) == 0, _g.bad_fist, a.insane_level)
+    end
 end)
