@@ -22,7 +22,7 @@ create_actor([[patient_weapon;3;col,confined,rel,bad_attack|
     rel_actor:@1; x:@2; y:@3; i:@4;
     touchable:no; rx:.75; ry:.75;
 
-    tl_max_time=.33,;
+    tl_max_time=.5,;
 ]])
 
 create_actor([[bad_patient;3;drawable,col,confined,mov,x_bounded,y_bounded,knockbackable,hurtable,spr_obj,bad_character,tcol|
