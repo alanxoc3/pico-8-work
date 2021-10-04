@@ -709,9 +709,10 @@ end
 function create_map()
 local floor={
 map={},
+full_map={},
 width=32,
 height=8,
-full_map={},
+ratio=4,
 dirs={
 {dy=-1},
 {dy=1},
@@ -768,14 +769,34 @@ local y=randBetween(1,this.height-2-h)
 return{x=x,y=y,w=w,h=h}
 end,
 scale=function(this)
-local ratio=4
 this.full_map={}
+local ratio=this.ratio
 for x=1,this.width do
 for x2=1,ratio do
 this.full_map[(x-1)*ratio+x2]={}
 for y=1,this.height do
 for y2=1,ratio do
 this.full_map[(x-1)*ratio+x2][(y-1)*ratio+y2]={type=this.map[x][y].type}
+end
+end
+end
+end
+local loc=function(p)return(p-1)*ratio+1 end
+for x=1,this.width do
+for y=1,this.height do
+if this.map[x][y].type==0 then
+local wallL=x>1 and this.map[x-1][y].type==0
+local wallR=x<this.width and this.map[x+1][y].type==0
+local wallD=y<this.height and this.map[x][y+1].type==0
+local wallDL=x>1 and y<this.height and this.map[x-1][y+1].type==0
+local wallDR=x<this.width and y<this.height and this.map[x+1][y+1].type==0
+if not wallD and not wallR and wallDR then
+this.full_map[loc(x)+ratio][loc(y)+ratio-1]={type=0}
+this.full_map[loc(x)+ratio-1][loc(y)+ratio]={type=0}
+end
+if not wallD and not wallL and wallDL then
+this.full_map[loc(x)][loc(y)+ratio]={type=0}
+this.full_map[loc(x)-1][loc(y)+ratio-1]={type=0}
 end
 end
 end
@@ -791,32 +812,33 @@ pset(x0+x,y0+y,color)
 end
 end
 end,
-mset_all=function(this)
+mset_all=function(this,theme)
 for x=1,128 do
 for y=1,32 do
-local tile=this:get_tile_for_square(x,y)
+local tile=this:get_tile_for_square(x,y,theme)
 mset(x-1,y-1,tile)
 end
 end
 end,
-get_tile_for_square=function(this,x,y)
-local FLOOR=52
-local SOLID=19
-local U=19
-local D=19
-local L=19
-local R=19
-local UR_E=19
-local UL_E=19
-local DR_E=19
-local DL_E=19
+get_tile_for_square=function(this,x,y,theme)
+local FLOOR1=4
+local FLOOR2=52
+local SOLID=theme and 48 or 32
+local U=theme and 23 or 19
+local D=theme and 38 or 34
+local L=theme and 23 or 19
+local R=theme and 23 or 19
+local UR_E=theme and 23 or 19
+local UL_E=theme and 23 or 19
+local DR_E=theme and 38 or 34
+local DL_E=theme and 38 or 34
 local square=this.full_map[x][y]
-if square.type==1 then return FLOOR
+if square.type==1 then return rnd()<.5 and FLOOR1 or FLOOR2
 else
 local floorU=y>1 and this.full_map[x][y-1].type!=0
 local floorL=x>1 and this.full_map[x-1][y].type!=0
-local floorR=x<this.width and this.full_map[x+1][y].type!=0
-local floorD=y<this.height and this.full_map[x][y+1].type!=0
+local floorR=x<this.width*this.ratio and this.full_map[x+1][y].type!=0
+local floorD=y<this.height*this.ratio and this.full_map[x][y+1].type!=0
 if floorU and floorR then return UR_E
 elseif floorU and floorL then return UL_E
 elseif floorD and floorR then return DR_E
@@ -837,7 +859,7 @@ floor:clearArea(floor:randArea(2,5,2,5))
 end
 floor:scale()
 if _g.c_enable_procgen_map then
-floor:mset_all()
+floor:mset_all(true)
 end
 return floor
 end
