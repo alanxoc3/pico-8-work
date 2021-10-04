@@ -23,7 +23,7 @@ create_parent([[pl;1;drawable,pos,confined,mov,x_bounded,y_bounded,col,spr_obj,k
     health:%c_pl_health; max_health:%c_pl_health;
 
     -- some methods that could be implemented on sub-actors:
-    damage:nf; increment_insanity:nf; decrement_insanity:nf; set_insanity:nf;
+    damage:nf; increment_strength:nf; decrement_strength:nf; set_strength:nf;
 
     sh:2; iyy:-5;
 ]], function(a)
@@ -74,33 +74,33 @@ end)
 
 create_parent([[pl_monster;0;pl/no,|
     damage:@1; hurt_start:@2; hurt_end:@3;
-    increment_insanity:@4; decrement_insanity:@5; set_insanity:@6;
+    increment_strength:@4; decrement_strength:@5; set_strength:@6;
 
-    insane_level:0;
+    strength:0;
 ]], function(a, other)
     if not a:any_timer_active"roll" then
         a:hurt()
         a:knockback(atan2(a.x-other.x, a.y-other.y))
     end
 end, function(a)
-    a:set_insanity(4)
+    a:set_strength(4)
 end, function(a)
-    a:set_insanity(0)
+    a:set_strength(0)
 end, function(a)
-    if a.insane_level < 3 then
-        a:set_insanity(a.insane_level + 1)
+    if a.strength < 3 then
+        a:set_strength(a.strength + 1)
     end
 end, function(a)
-    if a.insane_level > 3 then
-        a:set_insanity(0)
-    elseif a.insane_level > 0 then
-        a:set_insanity(a.insane_level - 1)
+    if a.strength > 3 then
+        a:set_strength(0)
+    elseif a.strength > 0 then
+        a:set_strength(a.strength - 1)
     end
 end, function(a, level)
-    if level ~= a.insane_level then
-        a.insane_level = level
-        a:create_timer("insane_timeout", 60*5, function()
-            a:decrement_insanity()
+    if level ~= a.strength then
+        a.strength = level
+        a:create_timer("strength_timeout", 60*5, function()
+            a:decrement_strength()
         end)
     end
 end)
@@ -115,7 +115,7 @@ create_parent([[pl_patient;0;pl/yes,|
 end)
 
 -- use this for the player with button logic, or for the boss with ai logic.
-function control_player(a, x_dir, y_dir, is_z_pressed, is_x_pressed, punch_func, insane_level)
+function control_player(a, x_dir, y_dir, is_z_pressed, is_x_pressed, punch_func, strength)
     if not a.pl then return end
 
     if a.teleporting then
@@ -127,17 +127,17 @@ function control_player(a, x_dir, y_dir, is_z_pressed, is_x_pressed, punch_func,
     -- no speed or power multiplier for the non insane
     local speed_multiplier = 1
 
-    -- if insane level is not nil, insanity is enabled.
-    if insane_level then
-        speed_multiplier = 1 + a.insane_level/10
+    -- if strength level is not nil, strength is enabled.
+    if strength then
+        speed_multiplier = 1 + a.strength/10
 
         -- anger emotion particle is used instead of blood
-        if     insane_level == 4 then _g.powerup_particle(a.x, a.y+.5, _g.c_color_angry)
-        elseif insane_level == 3 then _g.powerup_particle(a.x, a.y+.5, _g.c_color_insane_3)
-        elseif insane_level == 2 then _g.powerup_particle(a.x, a.y+.5, _g.c_color_insane_2)
-        elseif insane_level == 1 then _g.powerup_particle(a.x, a.y+.5, _g.c_color_insane_1)
+        if     strength == 4 then _g.powerup_particle(a.x, a.y+.5, _g.c_color_angry)
+        elseif strength == 3 then _g.powerup_particle(a.x, a.y+.5, _g.c_color_insane_3)
+        elseif strength == 2 then _g.powerup_particle(a.x, a.y+.5, _g.c_color_insane_2)
+        elseif strength == 1 then _g.powerup_particle(a.x, a.y+.5, _g.c_color_insane_1)
         -- no color for normal
-        -- elseif insane_level == 0 then _g.powerup_particle(a.x, a.y+.5, _g.c_color_normal)
+        -- elseif strength == 0 then _g.powerup_particle(a.x, a.y+.5, _g.c_color_normal)
         end
 
     -- if not insane, getting hurt can spawn particles
@@ -146,7 +146,7 @@ function control_player(a, x_dir, y_dir, is_z_pressed, is_x_pressed, punch_func,
     end
 
     -- amount of damage you do to enemies
-    if insane_level == 4 then a.stregth = 2
+    if strength == 4 then a.stregth = 2
     else a.stregth = 1 end
 
     if not a:any_timer_active("cooldown", "roll", "punch") then

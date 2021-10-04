@@ -56,16 +56,17 @@ create_actor([[bad_police;3;drawable,col,confined,mov,x_bounded,y_bounded,knockb
     end
 
 end, function(a, other)
+    local had_timer = a:any_timer_active"hurt_cooldown"
+    a:hurt(g_pl.strength)
+    a:knockback(atan2(a.x-other.x, a.y-other.y))
+
     if other.rel_actor then
         other.rel_actor:knockback(atan2(g_pl.x-a.x, g_pl.y-a.y))
 
-        if not a:any_timer_active"hurt_cooldown" then
-            call_not_nil(other.rel_actor, "increment_insanity", other.rel_actor)
+        if not had_timer then
+            call_not_nil(other.rel_actor, "increment_strength", other.rel_actor)
         end
     end
-
-    a:hurt(g_pl.strength)
-    a:knockback(atan2(a.x-other.x, a.y-other.y))
 end, function(a)
     create_cached_deadbody(a.enemy_id, a.x, a.y, a.xf, 227)
 end, function(a) -- draw
