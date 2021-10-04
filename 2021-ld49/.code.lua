@@ -1225,12 +1225,14 @@ g_endgame_stats.deaths=g_endgame_stats.deaths+1
 _g.fader_out(1,nf,g_reset_room)
 end)
 create_actor([[136|137]],function(a)
-a:set_insanity(4)
+if g_endgame_stats.achievement ~="pacifist"then
+a:set_insanity(3)
+end
 end,function(a)
-if a.insane_level==4 then
-control_player(a,flr_rnd(3)-1,flr_rnd(3)-1,flr_rnd(10)==0,flr_rnd(4)==0,_g.bad_fist,a.insane_level)
+if g_endgame_stats.achievement=="pacifist"then
+control_player(a,flr_rnd(3)-1,flr_rnd(3)-1,flr_rnd(5)==0,false,_g.bad_fist,a.insane_level)
 else
-control_player(a,flr_rnd(3)-1,flr_rnd(3)-1,flr_rnd(5)==0,flr_rnd(6)==0,_g.bad_fist,a.insane_level)
+control_player(a,flr_rnd(3)-1,flr_rnd(3)-1,flr_rnd(a.insane_level+5)==0,flr_rnd(4-a.insane_level)==0,_g.bad_fist,a.insane_level)
 end
 end,function(a)
 a:create_dead_body()
@@ -1289,7 +1291,7 @@ end
 function reset_the_dungeon()
 cleanup_confined()
 _g.fader_in(.5,nf,nf)
-g_pl=_g.pl_monster_control(17,4)
+g_pl=_g.pl_monster_control(94,12)
 g_view=_g.view(15.25,11.5,3,g_pl)
 g_room=ztable[[141]]
 _g.portal(94,13)
