@@ -22,9 +22,10 @@ create_actor([[bad_police;3;drawable,col,confined,mov,x_bounded,y_bounded,knockb
     -- walk, then wait, then shoot then wait
     if not a:any_timer_active("walk", "wait", "aim", "shoot") then
         a:create_timer("walk", 120+rnd(60), function()
-            a:create_timer("wait", flr_rnd(60)+60, function()
+            a:create_timer("wait", flr_rnd(20)+10, function()
                 a:create_timer("aim", 10, function()
                     _g.police_weapon(a.x, a.y, a.xf and -shoot_speed or shoot_speed)
+                    a:create_timer("aim", 10, function() _g.police_weapon(a.x, a.y-1, a.xf and -shoot_speed or shoot_speed) end)
                     a:create_timer("shoot", 40, function()
                     end)
                 end)
