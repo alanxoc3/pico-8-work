@@ -26,6 +26,13 @@ _g.c_pl_health = 1
 _g.c_enemy_health = 1
 _g.c_enable_procgen_map = false
 
+function get_normal_map_enemies()
+ return {
+  {8 ,6,"simple_enemy"},
+  {10,6,"simple_enemy"}
+ }
+end
+
 #include .code.lua
 
 __gfx__
