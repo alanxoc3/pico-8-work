@@ -157,7 +157,7 @@ end
 end
 return pos,spd
 end
-g_gunvals=split("0x8000,0x8000,0x7fff,0x7fff,@1|!plus/@1/-2,!plus/@2/-2,!plus/@3/2,!plus/@4/2,13;!plus/@1/-1,!plus/@2/-1,!plus/@3/1,!plus/@4/1,1;|0,0,0,0,0,0,0;1,1,1,0,0,0,0;2,2,2,1,0,0,0;3,3,3,1,0,0,0;4,2,2,2,1,0,0;5,5,1,1,1,0,0;6,13,13,5,5,1,0;7,6,13,13,5,1,0;8,8,2,2,2,0,0;9,4,4,4,5,0,0;10,9,4,4,5,5,0;11,3,3,3,3,0,0;12,12,3,1,1,1,0;13,5,5,1,1,1,0;14,13,4,2,2,1,0;15,13,13,5,5,1,0;|fader_out;3;act,;update,|fade_time:@1;i:@2;e:@3;u:@4;tl_max_time=@1,|fader_in;3;act,;update,|timer;0;,;|timers:,;tick:@1;create_timer:@2;any_timer_active:@3;get_timer_percent:@4;|act;0;timer,;room_init,kill,clean,delete|update:@1;clean:@2;kill:@3;delete:@4;get:@5;alive:yes;i:nf;u:nf;room_init:nf;destroyed:nf;|ma_able;0;act,;|name:thing;|confined;0;act,;room_end,|room_end:nf;|loopable;0;act,;|tl_loop:yes;|pos;0;act,;|x:0;y:0;|knock;0;col,;|;|popper;0;col,;|good_character;0;col,hurtable;|bad_character;0;col,hurtable;|good_attack;0;col,;|hit:@1;|bad_attack;0;col,;|hit:@1;kill_when_hit:no;|x_bounded;0;dim,;|check_bounds_x:@1;|y_bounded;0;dim,;|check_bounds_y:@1;|vec;0;pos,;|dx:0;dy:0;vec_update:@1;|mov;0;vec,;|inertia_x:.90;inertia_y:.90;ax:0;ay:0;mov_update:@1;stop:@2;|dim;0;pos,;|rx:.375;ry:.375;|dim;0;pos,;debug_rect,|rx:.375;ry:.375;debug_rect:@1;|rel;0;act,;rel_update,|rel_actor:null;rel_x:0;rel_y:0;rel_dx:0;rel_dy:0;flippable:no;rel_update:@1;|drawable_obj;0;pos,;reset_off,|ixx:0;iyy:0;xx:0;yy:0;visible:yes;reset_off:@1;|drawable;0;drawable_obj,;d,|d:nf;|drawable_1;0;drawable_obj,;d,|drawable_2;0;drawable_obj,;d,|pre_drawable;0;drawable_obj,;d,|pre_drawable_1;0;drawable_obj,;d,|pre_drawable_2;0;drawable_obj,;d,|post_drawable;0;drawable_obj,;d,|post_drawable_1;0;drawable_obj,;d,|post_drawable_2;0;drawable_obj,;d,|above_map_drawable;0;drawable_obj,;d,|above_map_drawable_1;0;drawable_obj,;d,|spr_obj;0;vec,drawable_obj,;|sind:0;outline_color:BG_UI;sw:1;sh:1;xf:no;yf:no;|spr;0;spr_obj,;|d:@1;|knockbackable;0;mov,timer,;|knockback:@1;apply_knockback:@2;knockback_speed:0;knockback_dir:0;|hurtable;0;act,;|health:1;max_health:1;hurt_cooldown_time:60;hurt_start:nf;hurt_end:nf;damage:nf;hurt:@1;heal:@2;|anchored;1;vec,dim;|touchable:@1;hit:nf;|col;0;vec,dim;|touchable:yes;hit:nf;move_check:@1;|dx:0;dy:0|x,dx,@1,@2,@3,@4;y,dy,@1,@2,@5,@6;|tcol;0;vec,dim;|tile_solid:yes;tile_hit:nf;coll_tile:@1;|view;4;act,confined;center_view,update_view|x:0;y:0;room_crop:2;tl_loop:yes;w:@1;h:@2;follow_dim:@3;follow_act:@4;update_view:@5;center_view:@6;change_ma:@7;,;|@1,x,w,ixx;@1,y,h,iyy|deadbody_parent;0;confined,pre_drawable|d:@1;i:@2;touchable:no;rx:.25;ry:.5;sind:0;|deadbody_nobleed;4;deadbody_parent,|x:@1;y:@2;xf:@3;sind:@4;touchable:no;rx:.25;ry:.5;|deadbody;4;deadbody_parent,|x:@1;y:@2;xf:@3;sind:@4;i:@5;u:@6;touchable:no;rx:.25;ry:.5;|nurse_weapon;3;col,confined,rel,bad_attack|rel_actor:@1;x:@2;y:@3;i:@4;touchable:no;rx:.5;ry:1;tl_max_time=.16,;|bad_nurse;3;drawable,col,confined,mov,x_bounded,y_bounded,knockbackable,hurtable,spr_obj,bad_character,tcol|x:@1;y:@2;enemy_id:@3;u:@4;damage:@5;destroyed:@6;d:%nurse_draw;health:%c_enemy_health;max_health:%c_enemy_health;sh:2;iyy:-5;rx:.375;ry:.375;touchable:no;|nurse;3;drawable,col,confined,mov,x_bounded,y_bounded,spr_obj,tcol|x:@1;y:@2;enemy_id:@3;u:@4;d:%nurse_draw;sh:2;iyy:-5;rx:.375;ry:.375;touchable:no;|particle_parent;0;confined,mov,;|draw_small_circle:@1;draw_medium_circle:@2;move_up:@3;move_slow:@4;|powerup_particle;3;pre_drawable_2,particle_parent|x:@1;y:@2;color:@3;d:$draw_small_circle;i:$move_up;tl_max_time=.25,;|slow_small_ui_particle;3;above_map_drawable,particle_parent|x:@1;y:@2;color:@3;d:$draw_small_circle;i:$move_slow;tl_max_time=.25,;|slow_medium_ui_particle;3;above_map_drawable,particle_parent|x:@1;y:@2;color:@3;d:$draw_medium_circle;i:$move_slow;tl_max_time=.25,;|particle_spawner;5;dim,confined|color:8;rx:@1;ry:@2;rate:@3;chance:@4;create_func:@5;update_particles:@6;|patient_weapon;3;col,confined,rel,bad_attack|rel_actor:@1;x:@2;y:@3;i:@4;touchable:no;rx:.75;ry:.75;tl_max_time=.5,;|bad_patient;3;drawable,col,confined,mov,x_bounded,y_bounded,knockbackable,hurtable,spr_obj,bad_character,tcol|x:@1;y:@2;enemy_id:@3;u:@4;damage:@5;destroyed:@6;d:%patient_draw;health:%c_enemy_health;max_health:%c_enemy_health;sh:2;iyy:-5;rx:.375;ry:.375;touchable:no;|patient;3;drawable,col,confined,mov,x_bounded,y_bounded,spr_obj,tcol|x:@1;y:@2;enemy_id:@3;u:@4;d:@5;sind:41;sh:2;iyy:-5;rx:.375;ry:.375;touchable:no;|fist_parent;0;col,confined,rel|i:@1;touchable:no;rx:.375;ry:.75;tl_max_time=.33,;|good_fist;3;fist_parent,good_attack|rel_actor:@1;x:@2;y:@3;|bad_fist;3;fist_parent,bad_attack|pl;1;drawable,pos,confined,mov,x_bounded,y_bounded,col,spr_obj,knockbackable,hurtable,tcol;|passive_mode:@1;create_dead_body:@2;destroyed:@2;d:@3;strength:1;dir:0;is_facing_left:yes;xf:yes;health:%c_pl_health;max_health:%c_pl_health;damage:nf;increment_insanity:nf;decrement_insanity:nf;set_insanity:nf;sh:2;iyy:-5;|pl_monster;0;pl/no,|damage:@1;hurt_start:@2;increment_insanity:@3;decrement_insanity:@4;set_insanity:@5;insane_level:0;|pl_patient;0;pl/yes,|damage:@1;|police_weapon;3;col,vec,confined,rel,bad_attack,post_drawable|x:@1;y:@2;dx:@3;d:@4;kill_when_hit:yes;touchable:no;rx:.375;ry:.25;iyy:-6;tl_max_time=1,;|bad_police;3;drawable,col,confined,mov,x_bounded,y_bounded,knockbackable,hurtable,spr_obj,bad_character,tcol|x:@1;y:@2;enemy_id:@3;u:@4;damage:@5;destroyed:@6;d:@7;d:%police_draw;health:%c_enemy_health;max_health:%c_enemy_health;sh:2;iyy:-5;rx:.375;ry:.375;touchable:no;|police;3;drawable,col,confined,mov,x_bounded,y_bounded,spr_obj,tcol|x:@1;y:@2;enemy_id:@3;u:@4;d:@5;sind:224;sh:2;iyy:-5;rx:.375;ry:.375;touchable:no;|heart_particle_spawner;3;particle_spawner/.125/.125/1/3/%slow_small_ui_particle,above_map_drawable_1|x:@1;y:@2;heart_number:@3;u:@4;d:@5;color:8;|powerup_particle_spawner;5;particle_spawner/2/.125/1/1/%slow_medium_ui_particle,above_map_drawable_1|x:@1;y:@2;powerup_level:@3;color:@4;sind:@5;u:@6;d:@7|genocide_tip;2;above_map_drawable,confined|x:@1;y:@2;d:@3;when_to_show_tip:%c_when_to_show_tip;|objective_arrow;2;post_drawable_2,confined|x:@1;y:@2;u:@3;d:@4;ry:.25;radius:.2;touchable:no;smallest_dist:0;|portal;2;col,pre_drawable,confined|x:@1;y:@2;u:@3;d:@4;rx:.125;ry:.125;radius:.2;touchable:no;|pl_control;0;col,|hit:@1;teleporting:no;|pl_patient_control_fight;2;pl_patient,good_character,pl_control|x:@1;y:@2;u:@3;destroyed:@4;|pl_patient_control_passive;2;pl_patient,good_character,pl_control|pl_monster_control;2;pl_monster,good_character,pl_control|pl_monster_cpu;3;pl_monster,bad_character|touchable:no;x:@1;y:@2;enemy_id:@3;i:@4;u:@5;destroyed:@6;;|x=4,y=28,dungeon=%bad_nurse,hospital=%nurse,alive=yes;x=14,y=26,dungeon=%bad_nurse,hospital=%nurse,alive=yes;x=45,y=28,dungeon=%bad_nurse,hospital=%nurse,alive=yes;x=53,y=9,dungeon=%bad_nurse,hospital=%nurse,alive=yes;x=70,y=13,dungeon=%bad_nurse,hospital=%nurse,alive=yes;x=60,y=15,dungeon=%bad_nurse,hospital=%nurse,alive=yes;x=48,y=3,dungeon=%bad_nurse,hospital=%nurse,alive=yes;x=81,y=4,dungeon=%bad_nurse,hospital=%nurse,alive=yes;x=81,y=15,dungeon=%bad_nurse,hospital=%nurse,alive=yes;x=18,y=13,dungeon=%bad_nurse,hospital=%nurse,alive=yes;x=102,y=4,dungeon=%bad_nurse,hospital=%nurse,alive=yes;x=89,y=15,dungeon=%bad_patient,hospital=%patient,alive=yes;x=91,y=20,dungeon=%bad_police,hospital=%police,alive=yes;|x=120,y=12,bossroom=%pl_monster_cpu,alive=yes;|confined,room_end;confined,kill;confined,delete;|name:dungeon;x:0;y:0;w:108;h:32;|name:hospital;x:0;y:0;w:108;h:32;|name:bossroom;x:108;y:0;w:20;h:32;|timer,tick;act,update;mov,mov_update;good_character,move_check,@1;bad_character,move_check,@1;good_attack,move_check,@2;bad_attack,move_check,@3;pl_control,move_check,@4;tcol,coll_tile,@5;rel,rel_update;vec,vec_update;x_bounded,check_bounds_x;y_bounded,check_bounds_y;view,update_view;act,clean;|pre_drawable,d;pre_drawable_1,d;pre_drawable_2,d;|drawable,d;drawable_1,d;drawable_2,d;post_drawable,d;post_drawable_1,d;post_drawable_2,d;|above_map_drawable,d;above_map_drawable_1,d;|timer,tick;act,update;act,clean;|i=@6,u=@7,d=@8;|","|")
+g_gunvals=split("0x8000,0x8000,0x7fff,0x7fff,@1|!plus/@1/-2,!plus/@2/-2,!plus/@3/2,!plus/@4/2,13;!plus/@1/-1,!plus/@2/-1,!plus/@3/1,!plus/@4/1,1;|0,0,0,0,0,0,0;1,1,1,0,0,0,0;2,2,2,1,0,0,0;3,3,3,1,0,0,0;4,2,2,2,1,0,0;5,5,1,1,1,0,0;6,13,13,5,5,1,0;7,6,13,13,5,1,0;8,8,2,2,2,0,0;9,4,4,4,5,0,0;10,9,4,4,5,5,0;11,3,3,3,3,0,0;12,12,3,1,1,1,0;13,5,5,1,1,1,0;14,13,4,2,2,1,0;15,13,13,5,5,1,0;|fader_out;3;act,;update,|fade_time:@1;i:@2;e:@3;u:@4;tl_max_time=@1,|fader_in;3;act,;update,|timer;0;,;|timers:,;tick:@1;create_timer:@2;any_timer_active:@3;get_timer_percent:@4;|act;0;timer,;room_init,kill,clean,delete|update:@1;clean:@2;kill:@3;delete:@4;get:@5;alive:yes;i:nf;u:nf;room_init:nf;destroyed:nf;|ma_able;0;act,;|name:thing;|confined;0;act,;room_end,|room_end:nf;|loopable;0;act,;|tl_loop:yes;|pos;0;act,;|x:0;y:0;|knock;0;col,;|;|popper;0;col,;|good_character;0;col,hurtable;|bad_character;0;col,hurtable;|good_attack;0;col,;|hit:@1;|bad_attack;0;col,;|hit:@1;kill_when_hit:no;|x_bounded;0;dim,;|check_bounds_x:@1;|y_bounded;0;dim,;|check_bounds_y:@1;|vec;0;pos,;|dx:0;dy:0;vec_update:@1;|mov;0;vec,;|inertia_x:.90;inertia_y:.90;ax:0;ay:0;mov_update:@1;stop:@2;|dim;0;pos,;|rx:.375;ry:.375;|dim;0;pos,;debug_rect,|rx:.375;ry:.375;debug_rect:@1;|rel;0;act,;rel_update,|rel_actor:null;rel_x:0;rel_y:0;rel_dx:0;rel_dy:0;flippable:no;rel_update:@1;|drawable_obj;0;pos,;reset_off,|ixx:0;iyy:0;xx:0;yy:0;visible:yes;reset_off:@1;|drawable;0;drawable_obj,;d,|d:nf;|drawable_1;0;drawable_obj,;d,|drawable_2;0;drawable_obj,;d,|pre_drawable;0;drawable_obj,;d,|pre_drawable_1;0;drawable_obj,;d,|pre_drawable_2;0;drawable_obj,;d,|post_drawable;0;drawable_obj,;d,|post_drawable_1;0;drawable_obj,;d,|post_drawable_2;0;drawable_obj,;d,|above_map_drawable;0;drawable_obj,;d,|above_map_drawable_1;0;drawable_obj,;d,|spr_obj;0;vec,drawable_obj,;|sind:0;outline_color:BG_UI;sw:1;sh:1;xf:no;yf:no;|spr;0;spr_obj,;|d:@1;|knockbackable;0;mov,timer,;|knockback:@1;apply_knockback:@2;knockback_speed:0;knockback_dir:0;|hurtable;0;act,;|health:1;max_health:1;hurt_cooldown_time:60;hurt_start:nf;hurt_end:nf;damage:nf;hurt:@1;heal:@2;|anchored;1;vec,dim;|touchable:@1;hit:nf;|col;0;vec,dim;|touchable:yes;hit:nf;move_check:@1;|dx:0;dy:0|x,dx,@1,@2,@3,@4;y,dy,@1,@2,@5,@6;|tcol;0;vec,dim;|tile_solid:yes;tile_hit:nf;coll_tile:@1;|view;4;act,confined;center_view,update_view|x:0;y:0;room_crop:2;tl_loop:yes;w:@1;h:@2;follow_dim:@3;follow_act:@4;update_view:@5;center_view:@6;change_ma:@7;,;|@1,x,w,ixx;@1,y,h,iyy|deadbody_parent;0;confined,pre_drawable|d:@1;i:@2;touchable:no;rx:.25;ry:.5;sind:0;|deadbody_nobleed;4;deadbody_parent,|x:@1;y:@2;xf:@3;sind:@4;touchable:no;rx:.25;ry:.5;|deadbody;4;deadbody_parent,|x:@1;y:@2;xf:@3;sind:@4;i:@5;u:@6;touchable:no;rx:.25;ry:.5;|nurse_weapon;3;col,confined,rel,bad_attack|rel_actor:@1;x:@2;y:@3;i:@4;touchable:no;rx:.5;ry:1;tl_max_time=.16,;|bad_nurse;3;drawable,col,confined,mov,x_bounded,y_bounded,knockbackable,hurtable,spr_obj,bad_character,tcol|x:@1;y:@2;enemy_id:@3;u:@4;damage:@5;destroyed:@6;d:%nurse_draw;health:%c_enemy_health;max_health:%c_enemy_health;sh:2;iyy:-5;rx:.375;ry:.375;touchable:no;|nurse;3;drawable,col,confined,mov,x_bounded,y_bounded,spr_obj,tcol|x:@1;y:@2;enemy_id:@3;u:@4;d:%nurse_draw;sh:2;iyy:-5;rx:.375;ry:.375;touchable:no;|particle_parent;0;confined,mov,;|draw_small_circle:@1;draw_medium_circle:@2;move_up:@3;move_slow:@4;|powerup_particle;3;pre_drawable_2,particle_parent|x:@1;y:@2;color:@3;d:$draw_small_circle;i:$move_up;tl_max_time=.25,;|slow_small_ui_particle;3;above_map_drawable,particle_parent|x:@1;y:@2;color:@3;d:$draw_small_circle;i:$move_slow;tl_max_time=.25,;|slow_medium_ui_particle;3;above_map_drawable,particle_parent|x:@1;y:@2;color:@3;d:$draw_medium_circle;i:$move_slow;tl_max_time=.25,;|particle_spawner;5;dim,confined|color:8;rx:@1;ry:@2;rate:@3;chance:@4;create_func:@5;update_particles:@6;|patient_weapon;3;col,confined,rel,bad_attack|rel_actor:@1;x:@2;y:@3;i:@4;touchable:no;rx:.75;ry:.75;tl_max_time=.5,;|bad_patient;3;drawable,col,confined,mov,x_bounded,y_bounded,knockbackable,hurtable,spr_obj,bad_character,tcol|x:@1;y:@2;enemy_id:@3;u:@4;damage:@5;destroyed:@6;d:%patient_draw;health:%c_enemy_health;max_health:%c_enemy_health;sh:2;iyy:-5;rx:.375;ry:.375;touchable:no;|patient;3;drawable,col,confined,mov,x_bounded,y_bounded,spr_obj,tcol|x:@1;y:@2;enemy_id:@3;u:@4;d:@5;sind:41;sh:2;iyy:-5;rx:.375;ry:.375;touchable:no;|fist_parent;0;col,confined,rel|i:@1;touchable:no;rx:.375;ry:.75;tl_max_time=.33,;|good_fist;3;fist_parent,good_attack|rel_actor:@1;x:@2;y:@3;|bad_fist;3;fist_parent,bad_attack|pl;1;drawable,pos,confined,mov,x_bounded,y_bounded,col,spr_obj,knockbackable,hurtable,tcol;|passive_mode:@1;create_dead_body:@2;destroyed:@2;d:@3;strength:1;dir:0;is_facing_left:yes;xf:yes;health:%c_pl_health;max_health:%c_pl_health;damage:nf;increment_insanity:nf;decrement_insanity:nf;set_insanity:nf;sh:2;iyy:-5;|pl_monster;0;pl/no,|damage:@1;hurt_start:@2;increment_insanity:@3;decrement_insanity:@4;set_insanity:@5;insane_level:0;|pl_patient;0;pl/yes,|damage:@1;|police_weapon;3;col,vec,confined,rel,bad_attack,post_drawable|x:@1;y:@2;dx:@3;d:@4;kill_when_hit:yes;touchable:no;rx:.375;ry:.25;iyy:-6;tl_max_time=1,;|bad_police;3;drawable,col,confined,mov,x_bounded,y_bounded,knockbackable,hurtable,spr_obj,bad_character,tcol|x:@1;y:@2;enemy_id:@3;u:@4;damage:@5;destroyed:@6;d:@7;d:%police_draw;health:%c_enemy_health;max_health:%c_enemy_health;sh:2;iyy:-5;rx:.375;ry:.375;touchable:no;|police;3;drawable,col,confined,mov,x_bounded,y_bounded,spr_obj,tcol|x:@1;y:@2;enemy_id:@3;u:@4;d:@5;sind:224;sh:2;iyy:-5;rx:.375;ry:.375;touchable:no;|heart_particle_spawner;3;particle_spawner/.125/.125/1/3/%slow_small_ui_particle,above_map_drawable_1|x:@1;y:@2;heart_number:@3;u:@4;d:@5;color:8;|powerup_particle_spawner;5;particle_spawner/2/.125/1/1/%slow_medium_ui_particle,above_map_drawable_1|x:@1;y:@2;powerup_level:@3;color:@4;sind:@5;u:@6;d:@7|genocide_tip;2;above_map_drawable,confined|x:@1;y:@2;d:@3;when_to_show_tip:%c_when_to_show_tip;|objective_arrow;2;post_drawable_2,confined|x:@1;y:@2;u:@3;d:@4;ry:.25;radius:.2;touchable:no;smallest_dist:0;|portal;2;col,pre_drawable,confined|x:@1;y:@2;u:@3;d:@4;rx:.125;ry:.125;radius:.2;touchable:no;|pl_control;0;col,|hit:@1;teleporting:no;|pl_patient_control_fight;2;pl_patient,good_character,pl_control|x:@1;y:@2;u:@3;destroyed:@4;|pl_patient_control_passive;2;pl_patient,good_character,pl_control|pl_monster_control;2;pl_monster,good_character,pl_control|pl_monster_cpu;3;pl_monster,bad_character|touchable:no;x:@1;y:@2;enemy_id:@3;i:@4;u:@5;destroyed:@6;;|x=4,y=28,dungeon=%bad_nurse,hospital=%nurse,alive=yes;x=14,y=26,dungeon=%bad_nurse,hospital=%nurse,alive=yes;x=45,y=28,dungeon=%bad_nurse,hospital=%nurse,alive=yes;x=53,y=9,dungeon=%bad_nurse,hospital=%nurse,alive=yes;x=70,y=13,dungeon=%bad_nurse,hospital=%nurse,alive=yes;x=60,y=15,dungeon=%bad_nurse,hospital=%nurse,alive=yes;x=48,y=3,dungeon=%bad_nurse,hospital=%nurse,alive=yes;x=81,y=4,dungeon=%bad_nurse,hospital=%nurse,alive=yes;x=81,y=15,dungeon=%bad_nurse,hospital=%nurse,alive=yes;x=18,y=13,dungeon=%bad_nurse,hospital=%nurse,alive=yes;x=102,y=4,dungeon=%bad_nurse,hospital=%nurse,alive=yes;x=89,y=15,dungeon=%bad_patient,hospital=%patient,alive=yes;x=91,y=20,dungeon=%bad_police,hospital=%police,alive=yes;|x=120,y=12,bossroom=%pl_monster_cpu,alive=yes;|confined,room_end;confined,kill;confined,delete;|name:dungeon;x:0;y:0;w:108;h:32;|name:hospital;x:0;y:0;w:108;h:32;|name:bossroom;x:108;y:0;w:20;h:32;|timer,tick;act,update;act,clean;|timer,tick;act,update;mov,mov_update;good_character,move_check,@1;bad_character,move_check,@1;good_attack,move_check,@2;bad_attack,move_check,@3;pl_control,move_check,@4;tcol,coll_tile,@5;rel,rel_update;vec,vec_update;x_bounded,check_bounds_x;y_bounded,check_bounds_y;view,update_view;act,clean;|pre_drawable,d;pre_drawable_1,d;pre_drawable_2,d;|drawable,d;drawable_1,d;drawable_2,d;post_drawable,d;post_drawable_1,d;post_drawable_2,d;|above_map_drawable,d;above_map_drawable_1,d;|i=@6,u=@7,d=@8;i=@9,u=@10,d=@11;|","|")
 g_ztable_cache={}
 function nf()end
 function ztable(original_str,...)
@@ -568,156 +568,6 @@ function create_cached_deadbody(enemy_id,...)
 add(_g.all_deadbody_templates[g_room.name],{...})
 _g.all_enemy_templates[g_room.name][enemy_id].alive=false
 _g.deadbody(...)
-end
-function randBetween(lo,hi)
-local diff=hi-lo+1
-local norm=flr(rnd()*diff)
-return lo+norm
-end
-function shuffleArr(arr)
-for i=1,#arr do
-local j=1+flr(rnd()*i)
-arr[i],arr[j]=arr[j],arr[i]
-end
-return arr
-end
-function create_map()
-local floor={
-map={},
-full_map={},
-width=27,
-height=8,
-ratio=4,
-dirs={
-{dy=-1},
-{dy=1},
-{dx=1},
-{dx=-1}
-},
-area=function(this)
-return this.width*this.height
-end,
-prefill=function(this)
-for x=1,this.width do
-this.map[x]={}
-for y=1,this.height do
-this.map[x][y]={type=0,seen=x==1 or x==this.width or y==1 or y==this.height}
-end
-end
-end,
-carve=function(this,x0,y0)
-if this.map[x0][y0].seen then return end
-this.map[x0][y0].seen=true
-local dir_ids=shuffleArr({1,2,3,4})
-local visit_surrounding=function(visitor)
-foreach(dir_ids,function(dir_id)
-local dir=this.dirs[dir_id]
-local x1=x0+(dir.dx or 0)
-local y1=y0+(dir.dy or 0)
-visitor(x1,y1)
-end)
-end
-local count=0
-visit_surrounding(function(x1,y1)if this.map[x1][y1].type!=0 then count=count+1 end end)
-if count>1 then return end
-this.map[x0][y0].type=1
-visit_surrounding(function(x1,y1)this:carve(x1,y1)end)
-end,
-clearArea=function(this,area)
-for x=1,area.w do
-for y=1,area.h do
-this.map[x+area.x][y+area.y]={type=1,seen=true}
-end
-end
-end,
-randArea=function(this,wmin,wmax,hmin,hmax)
-wmin=mid(1,wmin,this.width-2)
-wmax=mid(1,wmax,this.width-2)
-hmin=mid(1,hmin,this.height-2)
-hmax=mid(1,hmax,this.height-2)
-local w=randBetween(wmin,wmax)
-local h=randBetween(hmin,hmax)
-local x=randBetween(1,this.width-2-w)
-local y=randBetween(1,this.height-2-h)
-return{x=x,y=y,w=w,h=h}
-end,
-scale=function(this)
-this.full_map={}
-local ratio=this.ratio
-for x=1,this.width do
-for x2=1,ratio do
-this.full_map[(x-1)*ratio+x2]={}
-for y=1,this.height do
-for y2=1,ratio do
-this.full_map[(x-1)*ratio+x2][(y-1)*ratio+y2]={type=this.map[x][y].type}
-end
-end
-end
-end
-local loc=function(p)return(p-1)*ratio+1 end
-for x=1,this.width do
-for y=1,this.height do
-if this.map[x][y].type==0 then
-local wallL=x>1 and this.map[x-1][y].type==0
-local wallR=x<this.width and this.map[x+1][y].type==0
-local wallD=y<this.height and this.map[x][y+1].type==0
-local wallDL=x>1 and y<this.height and this.map[x-1][y+1].type==0
-local wallDR=x<this.width and y<this.height and this.map[x+1][y+1].type==0
-if not wallD and not wallR and wallDR then
-this.full_map[loc(x)+ratio][loc(y)+ratio-1]={type=0}
-this.full_map[loc(x)+ratio-1][loc(y)+ratio]={type=0}
-end
-if not wallD and not wallL and wallDL then
-this.full_map[loc(x)][loc(y)+ratio]={type=0}
-this.full_map[loc(x)-1][loc(y)+ratio-1]={type=0}
-end
-end
-end
-end
-end,
-draw_mini=function(this)
-local x0=127-this.width
-local y0=127-this.height
-for x=1,this.width do
-for y=1,this.height do
-local color=this.map[x][y].type==0 and 8 or 9
-pset(x0+x,y0+y,color)
-end
-end
-end,
-mset_all=function(this,theme)
-for x=1,108 do
-for y=1,32 do
-local tile=this:get_tile_for_square(x,y,theme)
-mset(x-1,y-1,tile)
-end
-end
-end,
-get_tile_for_square=function(this,x,y,theme)
-local square=this.full_map[x][y]
-if square.type==1 then return rnd()<.5 and 4 or 52
-else
-local floorU=y>1 and this.full_map[x][y-1].type!=0
-local floorL=x>1 and this.full_map[x-1][y].type!=0
-local floorR=x<this.width*this.ratio and this.full_map[x+1][y].type!=0
-local floorD=y<this.height*this.ratio and this.full_map[x][y+1].type!=0
-if floorD then return 34
-elseif floorU or floorL or floorR then return 19
-else return 32 end
-end
-end
-}
-floor:prefill()
-floor:carve(2,2)
-local scoops=randBetween(1,4)
-for i=1,scoops do
-floor:clearArea(floor:randArea(2,3,2,3))
-end
-floor:scale()
-if _g.c_enable_procgen_map then
-floor:mset_all()
-end
-return floor
 end
 function _g.nurse_draw(a)
 a.sind=66
@@ -1198,6 +1048,8 @@ g_reset_room()
 elseif g_room.name=="bossroom"then
 g_reset_room=reset_the_hospital
 g_reset_room()
+elseif g_room.name=="hospital"then
+g_tl:next()
 end
 end)
 end
@@ -1327,10 +1179,34 @@ create_all_enemies()
 create_ui_hearts()
 _g.objective_arrow(8,13)
 end
+function credits_init(a)
+_g.fader_in(.5,nf,function()g_credits_enabled=true end)
+g_credits_enabled=false
+credits_o=0
+end
+function credits_update(a)
+if g_credits_enabled and(btn(4)or btn(5))then
+g_credits_enabled=false
+_g.fader_out(.5,nf,function()
+g_tl:next()
+end)
+end
+batch_call_new(acts_loop,[[144]])
+end
+function credits_draw(a)
+fade(g_card_fade)
+zspr(200,64,16,8,3)
+print("credits!",64,64,8)
+local base=48
+zspr(72,16,base,2,2)zprint("hello",16+12,base-1,_g.c_color_normal,-1)
+zspr(74,128-16,base+16,2,2)zprint("hello",128-16-12,base+16-1,_g.c_color_normal,-1)
+zspr(76,16,base+32,2,2)zprint("hello",16+12,base+32-1,_g.c_color_normal,-1)
+zspr(78,128-16,base+48,2,2)zprint("hello",128-16-12,base+48-1,_g.c_color_normal,-1)
+zspr(104,16,base+64,2,2)zprint("hello",16+12,base+64-1,_g.c_color_normal,-1)
+end
 function game_init()
 local d_and_h={}_g.all_deadbody_templates={dungeon=d_and_h,bossroom={},hospital=d_and_h}
 _g.all_enemy_templates=get_all_enemies_for_story_mode()
-g_floormap=create_map()
 g_endgame_stats={
 frames=0,
 deaths=0,
@@ -1338,12 +1214,14 @@ achievement="pacifist",
 enemy_kill_count=0,
 enemy_total_count=0
 }
-g_reset_room=reset_the_dungeon
+g_reset_room=reset_the_hospital
 g_reset_room()
+g_pl.x=15
+g_pl.y=5
 end
 function game_update()
 g_endgame_stats.frames=g_endgame_stats.frames+1
-batch_call_new(acts_loop,[[144]],g_act_arrs["wall"],g_act_arrs["bad_character"],g_act_arrs["good_character"],g_act_arrs["portal"],function(x,y)
+batch_call_new(acts_loop,[[145]],g_act_arrs["wall"],g_act_arrs["bad_character"],g_act_arrs["good_character"],g_act_arrs["portal"],function(x,y)
 return x>=g_room.x and x<g_room.x+g_room.w and
 y>=g_room.y and y<g_room.y+g_room.h and
 fget(mget(x,y),0)
@@ -1374,13 +1252,13 @@ rect(x1-2,y1-2,x2+2,y2+2,1)
 zclip(x1,y1,x2,y2)
 camera_to_view(g_view)
 scr_map(0,0,0,0,128,32)
-batch_call_new(acts_loop,[[145]])
-isorty(g_act_arrs.drawable)
 batch_call_new(acts_loop,[[146]])
+isorty(g_act_arrs.drawable)
+batch_call_new(acts_loop,[[147]])
 if g_debug then acts_loop("dim","debug_rect")end
 camera()
 clip()
-batch_call_new(acts_loop,[[147]])
+batch_call_new(acts_loop,[[148]])
 if g_debug then
 print(g_endgame_stats.achievement,2,2,8)
 print("time="..format_time()..",deaths="..g_endgame_stats.deaths.." kill:"..g_endgame_stats.enemy_kill_count.."/"..g_endgame_stats.enemy_total_count,2,120,8)
@@ -1411,7 +1289,7 @@ _g.fader_out(.5,nf,function()
 g_tl:next()
 end)
 end
-batch_call_new(acts_loop,[[148]])
+batch_call_new(acts_loop,[[144]])
 end
 function title_draw(a)
 fade(g_card_fade)
@@ -1430,7 +1308,8 @@ function _init()
 music(0)
 g_tl=ztable([[149]],logo_draw,function()end,
 title_init,title_update,title_draw,
-game_init,game_update,game_draw
+game_init,game_update,game_draw,
+credits_init,credits_update,credits_draw
 )
 end
 function _update60()

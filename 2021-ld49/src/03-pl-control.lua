@@ -10,6 +10,8 @@ create_parent([[pl_control;0;col,|
             elseif g_room.name == "bossroom" then
                 g_reset_room = reset_the_hospital
                 g_reset_room()
+            elseif g_room.name == "hospital" then
+                g_tl:next() -- go to the credits!
             end
         end)
     end
