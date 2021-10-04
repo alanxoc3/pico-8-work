@@ -13,9 +13,8 @@ end)
 
 create_actor([[simple_enemy;2;drawable,col,confined,mov,x_bounded,y_bounded,knockbackable,hurtable,spr_obj,enemy,tcol|
     x:@1; y:@2; u:@3; d:@4; hit:@5; destroyed:@6;
-    health:3; max_health:3;
-    sh:2;
-    iyy:-5;
+    health:%c_enemy_health; max_health:%c_enemy_health;
+    sh:2; iyy:-5;
     rx:.375; ry:.375;
     touchable: no;
 ]], function(a)
