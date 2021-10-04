@@ -1,6 +1,6 @@
 -- this file has the base parent for both patient and monster players.
 create_parent([[fist_parent;0;col,confined,rel|
-    i:@1; touchable:no; rx:.25; ry:.75;
+    i:@1; touchable:no; rx:.375; ry:.75;
     tl_max_time=.33,;
 ]], function(a)
     a.rel_dx = cos(a.rel_actor.dir)*.03
