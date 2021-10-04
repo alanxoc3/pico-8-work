@@ -20,6 +20,23 @@ function get_all_enemies_for_story_mode()
     }
 end
 
+-- turns every tile in the map to a hospital tile.
+function hospitalify_the_map()
+    for x=0,107 do
+        for y=0,31 do
+            local v = mget(x, y)
+            if v >= 1 and v <= 4 then v += 4
+            elseif v >= 17 and v <= 20 then v += 4
+            elseif v >= 33 and v <= 36 then v += 4
+            elseif v >= 49 and v <= 52 then v += 4
+            elseif v == 32 or v == 46 or v == 47 then v += 16
+            elseif v == 117 then v += 1
+            end
+            mset(x, y, v)
+        end
+    end
+end
+
 -- draws the hearts at the top of the screen, with particles!
 function create_ui_hearts()
     _g.heart_particle_spawner(6.5, 1, 3)
