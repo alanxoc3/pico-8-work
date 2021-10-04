@@ -19,7 +19,7 @@ create_parent([[pl;1;drawable,pos,confined,mov,x_bounded,y_bounded,col,spr_obj,k
     passive_mode:@1; create_dead_body:@2; destroyed:@2; d:@3;
 
     strength:1; -- amount of damage you do to enemies
-    dir:0; is_facing_left:no;
+    dir:0; is_facing_left:yes; xf:yes;
     health:%c_pl_health; max_health:%c_pl_health;
 
     -- some methods that could be implemented on sub-actors:
