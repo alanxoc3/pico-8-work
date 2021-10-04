@@ -32,7 +32,9 @@ function game_update()
         good_attack, move_check,@2; -- bad_character
         bad_attack,  move_check,@3; -- good_character
 
-        tcol,coll_tile,@4;
+        pl_control, move_check,@4; -- portal
+
+        tcol,coll_tile,@5;
         rel,       rel_update;
         vec,       vec_update;
         x_bounded, check_bounds_x;
@@ -40,7 +42,7 @@ function game_update()
         view,update_view;
         act,       clean;
 
-    ]], g_act_arrs['wall'], g_act_arrs['bad_character'], g_act_arrs['good_character'], function(x, y)
+    ]], g_act_arrs['wall'], g_act_arrs['bad_character'], g_act_arrs['good_character'], g_act_arrs['portal'], function(x, y)
         return x >= g_room.x and x < g_room.x+g_room.w and
             y >= g_room.y and y < g_room.y+g_room.h and
             fget(mget(x, y), 0)
