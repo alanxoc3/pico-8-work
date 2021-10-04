@@ -22,6 +22,17 @@ function get_normal_map_enemies()
     return {
         {8 ,6,"nurse"},
         {10,6,"nurse"},
+	{4,28,"nurse"},
+	{14,26,"nurse"},
+	{45,28,"nurse"},
+	{53,9,"nurse"},
+	{70,13,"nurse"},
+	{60,15,"nurse"},
+	{48,3,"nurse"},
+	{81,4,"nurse"},
+	{81,15,"nurse"},
+	{18,13,"nurse"},
+
         {12,6,"pl_monster_cpu"}
     }
 end
