@@ -23,20 +23,21 @@ function credits_draw(a)
     fade(g_card_fade)
 
     zspr(200, 64, 16, 8, 3)
-    print("credits!", 64, 64, 8)
 
     local base = 48
-    zspr(72 ,   16    , base   , 2, 2) zprint("hello", 16+12, base-1, _g.c_color_normal, -1)
-    zspr(74 ,   128-16, base+16, 2, 2) zprint("hello", 128-16-12, base+16-1, _g.c_color_normal, -1)
-    zspr(76 ,   16    , base+32, 2, 2) zprint("hello", 16+12, base+32-1, _g.c_color_normal, -1)
-    zspr(78 ,   128-16, base+48, 2, 2) zprint("hello", 128-16-12, base+48-1, _g.c_color_normal, -1)
-    zspr(104,  16     , base+64, 2, 2) zprint("hello", 16+12, base+64-1, _g.c_color_normal, -1)
+    zspr(72 , 16, base   , 2, 2)
+    zspr(74 , 16, base+16, 2, 2)
+    zspr(76 , 16, base+32, 2, 2)
+    zspr(78 , 16, base+48, 2, 2)
+    zspr(104, 16, base+64, 2, 2)
 
-
---    zspr(72,  64+cos(t()/5+.0)*45, 64+sin(t()/3+.0)*45, 2, 2, t() % 5 < 2.5, false)
---    zspr(74,  64+cos(t()/5+.2)*45, 64+sin(t()/3+.2)*45, 2, 2, false, t() % 5 > 2.5)
---    zspr(76,  64+cos(t()/5+.4)*45, 64+sin(t()/3+.4)*45, 2, 2, t() % 5 < 2.5, false)
---    zspr(78,  64+cos(t()/5+.6)*45, 64+sin(t()/3+.6)*45, 2, 2, t() % 5 > 2.5, false)
---    zspr(104, 64+cos(t()/5+.8)*45, 64+sin(t()/3+.8)*45, 2, 2, false, t() % 5 < 2.5)
-
+    zprint("you beat "..g_endgame_stats.achievement.." mode!"                                  , 16+12, base-1     , 13, -1)
+    zprint('- - - - - - - - - - - - - - - - - - - - - - -'                                     , 16+12, base+8-1   , 1 , -1)
+    zprint("kills : "..g_endgame_stats.enemy_kill_count.."/"..g_endgame_stats.enemy_total_count, 16+12, base+16-1  , 14 , -1)
+    zprint("deaths: "..g_endgame_stats.deaths                                                  , 16+12, base+16+8-1, 2 , -1)
+    zprint("timer : "..format_time()                                                           , 16+12, base+32-1  , 3 , -1)
+    zprint('- - - - - - - - - - - - - - - - - - - - - - -'                                     , 16+12, base+32+8-1, 1 , -1)
+    zprint("@alanxoc3: code/music"                                                             , 16+12, base+48-1  , 9 , -1)
+    zprint("@denial: code/design"                                                              , 16+12, base+48+8-1, 12, -1)
+    zprint("@thegreatcadet: gfx/map"                                                           , 16+12, base+64-1  , 8 , -1)
 end
