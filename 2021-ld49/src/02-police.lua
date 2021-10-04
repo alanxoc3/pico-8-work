@@ -85,15 +85,25 @@ end)
 
 create_actor([[police;3;drawable,col,confined,mov,x_bounded,y_bounded,spr_obj,tcol|
     x:@1; y:@2; enemy_id:@3; u:@4; d:@5;
-    sind:41; sh:2; iyy:-5;
+    sind:224; sh:2; iyy:-5;
     rx:.375; ry:.375;
     touchable: no;
 ]], function(a)
-    a.xf = a.x - g_pl.x > 0
-    if t() % 5 < .5 then
-        a.ixx = flr_rnd(3)-1
-        a.sind = rnd_item{41,42,43}
+    a.xf = t() % 10 > 5
+
+    if t() % 7 < 1 then
+        if a.xf then
+            a.ax=.005
+        else
+            a.ax=-.005
+        end
     else
-        a.ixx = 0
+        a.ax=0
     end
+
+    local tim = t() % 5
+    if     tim < 1 then a.sind = 224
+    elseif tim < 2 then a.sind = 225
+    elseif tim < 3 then a.sind = 226
+    else a.sind = 225 end
 end, scr_spr)
