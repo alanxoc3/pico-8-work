@@ -943,8 +943,10 @@ if a.passive_mode then a.sind+=32 end
 scr_spr(a)
 end)
 create_parent([[104|105]],function(a,other)
+if not a:any_timer_active"roll"then
 if a.insane_level<4 then a:hurt()end
 a:knockback(atan2(a.x-other.x,a.y-other.y))
+end
 end,function(a)
 a:set_insanity(4)
 end,function(a)
@@ -966,8 +968,10 @@ end)
 end
 end)
 create_parent([[106|107]],function(a,other)
+if not a:any_timer_active"roll"then
 a:hurt(other.strength or 1)
 a:knockback(atan2(a.x-other.x,a.y-other.y))
+end
 end)
 function control_player(a,x_dir,y_dir,is_z_pressed,is_x_pressed,punch_func,insane_level)
 if not a.pl then return end
