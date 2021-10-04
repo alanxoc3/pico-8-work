@@ -3,14 +3,11 @@
 
 function game_init()
     -- array of {x, y, xf, sind}
-    _g.all_deadbody_templates = {}
+    _g.all_deadbody_templates = {dungeon={}, bossroom={}}
 
     -- array of {x, y, func, alive}
     -- don't remove things from this array!
-    _g.all_enemy_templates = {}
-    for e in all(get_normal_map_enemies()) do
-        add(_g.all_enemy_templates, {x=e[1], y=e[2], func=_g[e[3]], alive=true})
-    end
+    _g.all_enemy_templates = get_all_enemies_for_story_mode()
 
     g_floormap = create_map()
 
@@ -49,18 +46,12 @@ function game_update()
     end)
 
    if g_tbox_update then
-      -- zsfx(2,5)
       if g_tbox_writing then
          g_tbox_anim = #g_tbox_active.l1+#g_tbox_active.l2
       else
          del(g_tbox_messages, g_tbox_active)
          g_tbox_active, g_tbox_anim = g_tbox_messages[1], 0
       end
-
-      -- if not g_tbox_active then
-         -- unpause()
-         -- g_tbox_messages.trigger()
-      -- end
 
       g_tbox_update = false
    end

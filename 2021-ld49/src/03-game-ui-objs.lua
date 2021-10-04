@@ -24,8 +24,8 @@ end)
 create_actor([[genocide_tip;2;above_map_drawable,confined|
     x:@1; y:@2; d:@3; when_to_show_tip:%c_when_to_show_tip;
 ]], function(a)
-    local killed_count = #_g.all_deadbody_templates
-    local total_count = #_g.all_enemy_templates
+    local killed_count = #_g.all_deadbody_templates[g_room.name]
+    local total_count = #_g.all_enemy_templates[g_room.name]
     local enemies_left = total_count - killed_count
 
     -- if g_pl.insane_level ~= 1 and g_pl.insane_level ~= 2 and g_pl.insane_level ~= 3 then

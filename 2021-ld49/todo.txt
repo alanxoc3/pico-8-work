@@ -1,22 +1,25 @@
 next steps for alan:
+- change plus to square in boss room.
 - implement some random props/objects.
 - saw flip animation
 - message - "are you sure you want to enter the boss room"
 - consider procgen mode unlock-able.
 - enemy left arrow.
 - implement another enemy.
-- implement portal.
 - implement stat recordings.
 - implement separate room.
 - implement arrow to exit for end thing.
 - implement ending screen: pacifist, genocide, normal.
 - credits: denial, cadetthegreat, tigerwolf, alanxoc3, wadlo
 - implement computer controlled pl monster boss.
+- enemies don't move when off the screen.
+- door blocks enemy passage.
 
 - make tiles able to go in front of you (sorted by y) & maybe smaller hitbox.
 - implement door. -- STRETCH
 - title screen lets you select modes. -- STRETCH
 
+- DONE! implement portal.
 - DONE! implement "5 left" countdown if you killed 95%.
 - DONE! experiment with black floor.
 - DONE! implement level restart.
