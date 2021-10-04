@@ -1,4 +1,4 @@
-create_actor([[deadbody;4;pre_drawable,|
+create_actor([[deadbody;4;confined,pre_drawable|
     x:@1; y:@2; xf:@3; sind:@4; i:@5; u:@6; d:@7;
     touchable:no; rx:.25; ry:.5;
 ]], function(a)

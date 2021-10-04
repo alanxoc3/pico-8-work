@@ -4,10 +4,17 @@
 -- array of {x, y, xf, sind}
 _g.all_dead_bodies = {}
 
--- array of something?
--- _g.all_enemies = ztable[[  ]]
+-- array of {x, y, func, obj}
+-- cleanup by looping through and checking if obj is dead.
+-- g.all_enemies = {}
 
 function reset_the_dungeon()
+    batch_call_new(acts_loop, [[
+        confined,room_end;
+        confined,kill;
+        confined,delete;
+    ]])
+
     _g.fader_in(.5, nf, nf)
     g_room = ztable[[ x:0; y:0; w:128; h:32; ]]
     -- g_pl = _g.pl_monster_control(4, 4)
@@ -36,39 +43,10 @@ function reset_the_dungeon()
     _g.powerup_particle_spawner(13, 1 , 4, _g.c_color_angry   , 104)
 end
 
-function reset_the_void()
-    _g.fader_in(.5, nf, nf)
-    g_room = ztable[[ x:0; y:0; w:128; h:32; ]]
-    g_pl = _g.pl_monster(7, 7)
-    g_view = _g.view(15.25, 11.5, 3, g_pl)
-    _g.simple_enemy(8, 6)
-
-    -- draws the hearts at the top of the screen, with particles!
-    _g.heart_particle_spawner(6.5, 1, 3)
-    _g.heart_particle_spawner(9.5, 1, 2)
-    _g.heart_particle_spawner(  8, 1, 1)
-
-    _g.powerup_particle_spawner(3 , 1 , 0, 13 , 72)
-    _g.powerup_particle_spawner(4 , 15, 1, 3 , 74)
-    _g.powerup_particle_spawner(8 , 15, 2, 14 , 76)
-    _g.powerup_particle_spawner(12, 15, 3, 12, 78)
-    _g.powerup_particle_spawner(13, 1 , 4, 8 , 104)
-
-    -- tbox"hello, how are^you?"
-end
-
 function game_init()
     g_floormap = create_map()
-
-    -- _g.fader_out(1,nf,resetlevel)
-    -- batch_call_new(acts_loop, [[
-        -- confined,room_end;
-        -- confined,kill;
-        -- confined,delete
-    -- ]])
-
-    reset_the_dungeon()
-    -- reset_the_void()
+    g_reset_room=reset_the_dungeon
+    g_reset_room()
 end
 
 function game_update()

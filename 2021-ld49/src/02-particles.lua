@@ -1,4 +1,4 @@
-create_parent([[particle_parent;0;mov,;|
+create_parent([[particle_parent;0;confined,mov,;|
     draw_small_circle:@1;
     draw_medium_circle:@2;
     move_up:@3;
@@ -35,7 +35,7 @@ create_actor[[slow_medium_ui_particle;3;above_map_drawable,particle_parent|
 ]]
 
 
-create_parent([[particle_spawner;5;dim,|
+create_parent([[particle_spawner;5;dim,confined|
     color: 8;
     rx:@1; ry:@2; rate:@3; chance:@4; create_func:@5; update_particles:@6;
 ]], function(a)
