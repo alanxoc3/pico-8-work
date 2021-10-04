@@ -1,6 +1,6 @@
-create_actor([[pl_monster_cpu;2;pl_monster,bad_character|
+create_actor([[pl_monster_cpu;3;pl_monster,bad_character|
     touchable:no;
-    x:@1; y:@2; i:@3; u:@4;
+    x:@1; y:@2; enemy_id:@3; i:@4; u:@5;
 ]], function(a)
     a:set_insanity(4)
 end, function(a)

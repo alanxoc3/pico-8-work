@@ -66,10 +66,24 @@ create_parent[[knock;0;col,;|;]]
 create_parent[[popper;0;col,;|;]]
 
 -- these are used to simplify collision handling.
-create_parent[[good_character;0;col,;|;]]
-create_parent[[bad_character;0;col,;|;]]
-create_parent[[good_attack;0;col,;|;]]
-create_parent[[bad_attack;0;col,;|;]]
+create_parent[[good_character;0;col,hurtable;|;]]
+create_parent[[bad_character;0;col,hurtable;|;]]
+
+create_parent([[good_attack;0;col,;|
+    hit:@1;
+]], function(a, other)
+    if other.bad_character then
+        other:damage(a)
+    end
+end)
+
+create_parent([[bad_attack;0;col,;|
+    hit:@1;
+]], function(a, other)
+    if other.good_character then
+        other:damage(a)
+    end
+end)
 
 create_parent([[x_bounded;0;dim,;|
     check_bounds_x:@1;

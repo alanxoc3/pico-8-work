@@ -1,16 +1,10 @@
 -- this file has the base parent for both patient and monster players.
 create_parent([[fist_parent;0;col,confined,rel|
-    i:@1; hit:@2; touchable:no; rx:.25; ry:.75;
+    i:@1; touchable:no; rx:.25; ry:.75;
     tl_max_time=.33,;
 ]], function(a)
     a.rel_dx = cos(a.rel_actor.dir)*.03
     a.rel_dy = sin(a.rel_actor.dir)*.03
-end, function(a, other)
-    printh(other.id)
-    if other.hurtable and other ~= a.rel_actor then
-        printh("inside:"..other.id)
-        other:damage(a)
-    end
 end)
 
 create_actor[[good_fist;3;fist_parent,good_attack|
@@ -33,7 +27,12 @@ create_parent([[pl;1;drawable,pos,confined,mov,x_bounded,y_bounded,col,spr_obj,k
 
     sh:2; iyy:-5;
 ]], function(a)
-    _g.deadbody(a.x, a.y, a.xf, a.passive_mode and 80 or 64)
+    local sind = a.passive_mode and 80 or 64
+    if a.bad_character then
+        create_cached_deadbody(a.enemy_id, a.x, a.y, a.xf, sind)
+    else
+        _g.deadbody(a.x, a.y, a.xf, sind)
+    end
 end, function(a)
     a.sind = 134
     a.yy = 0
