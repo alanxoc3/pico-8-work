@@ -30,7 +30,7 @@ function get_all_enemies_for_story_mode()
         x=105, y=26, dungeon=%bad_police, hospital=%police, alive=yes;
         x=44 , y=4 , dungeon=%bad_police, hospital=%police, alive=yes;
         x=54 , y=4 , dungeon=%bad_police, hospital=%police, alive=yes;
-        x=38 , y=30, dungeon=%bad_police, hospital=%police, alive=yes;
+        x=18 , y=26, dungeon=%bad_police, hospital=%police, alive=yes;
         x=48 , y=30, dungeon=%bad_police, hospital=%police, alive=yes;
     ]]
 
