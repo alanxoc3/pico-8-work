@@ -1,21 +1,24 @@
 -- room resec helper functions and functions
 function get_all_enemies_for_story_mode()
+    local dungeon_and_hospital = ztable[[
+        x=4  , y=28, bad_nurse, hospital=%nurse, alive=yes;
+        x=14 , y=26, bad_nurse, hospital=%nurse, alive=yes;
+        x=45 , y=28, bad_nurse, hospital=%nurse, alive=yes;
+        x=53 , y=9 , bad_nurse, hospital=%nurse, alive=yes;
+        x=70 , y=13, bad_nurse, hospital=%nurse, alive=yes;
+        x=60 , y=15, bad_nurse, hospital=%nurse, alive=yes;
+        x=48 , y=3 , bad_nurse, hospital=%nurse, alive=yes;
+        x=81 , y=4 , bad_nurse, hospital=%nurse, alive=yes;
+        x=81 , y=15, bad_nurse, hospital=%nurse, alive=yes;
+        x=18 , y=13, bad_nurse, hospital=%nurse, alive=yes;
+        x=102, y=4 , dungeon=%bad_nurse, hospital=%nurse, alive=yes;
+    ]]
+
     return {
-        dungeon=ztable[[
-            x=4  , y=28, func=%nurse, alive=yes;
-            x=14 , y=26, func=%nurse, alive=yes;
-            x=45 , y=28, func=%nurse, alive=yes;
-            x=53 , y=9 , func=%nurse, alive=yes;
-            x=70 , y=13, func=%nurse, alive=yes;
-            x=60 , y=15, func=%nurse, alive=yes;
-            x=48 , y=3 , func=%nurse, alive=yes;
-            x=81 , y=4 , func=%nurse, alive=yes;
-            x=81 , y=15, func=%nurse, alive=yes;
-            x=18 , y=13, func=%nurse, alive=yes;
-            x=102, y=4 , func=%nurse, alive=yes;
-        ]], bossroom=ztable[[
+        dungeon=dungeon_and_hospital,
+        hospital=dungeon_and_hospital,
+        bossroom=ztable[[
             x=120, y=12, func=%pl_monster_cpu, alive=yes;
-        ]], hospital=ztable[[
         ]]
     }
 end
@@ -56,7 +59,7 @@ end
 function create_all_enemies()
     for i, enemy_template in pairs(_g.all_enemy_templates[g_room.name]) do
         if enemy_template.alive then
-            enemy_template.func(enemy_template.x, enemy_template.y, i)
+            enemy_template[g_room.name](enemy_template.x, enemy_template.y, i)
         end
     end
 end
@@ -116,6 +119,10 @@ function reset_the_bossroom()
     g_pl   = _g.pl_patient_control_fight(118, 27)
     g_view = _g.view(15.25, 11.5, 3, g_pl)
     g_room = ztable[[ name:bossroom; x:108; y:0; w:20; h:32; ]]
+
+    -- DEBUG_BEGIN
+    _g.portal(118, 30)
+    -- DEBUG_END
 
     create_all_deadbodies()
     create_all_enemies()

@@ -7,7 +7,9 @@ create_actor([[nurse_weapon;3;col,confined,rel,bad_attack|
     a.rel_dx = zsgn(cos(a.rel_actor.dir))*.05
 end)
 
-create_actor([[nurse;3;drawable,col,confined,mov,x_bounded,y_bounded,knockbackable,hurtable,spr_obj,bad_character,tcol|
+
+
+create_actor([[bad_nurse;3;drawable,col,confined,mov,x_bounded,y_bounded,knockbackable,hurtable,spr_obj,bad_character,tcol|
     x:@1; y:@2; enemy_id:@3; u:@4; d:@5; damage:@6; destroyed:@7;
     health:%c_enemy_health; max_health:%c_enemy_health;
     sh:2; iyy:-5;
@@ -76,4 +78,44 @@ end, function(a, other)
     a:knockback(atan2(a.x-other.x, a.y-other.y))
 end, function(a)
     create_cached_deadbody(a.enemy_id, a.x, a.y, a.xf, 96)
+end)
+
+create_actor([[nurse;3;drawable,col,confined,mov,x_bounded,y_bounded,spr_obj,tcol|
+    x:@1; y:@2; enemy_id:@3; u:@4; d:@5;
+    sh:2; iyy:-5;
+    rx:.375; ry:.375;
+    touchable: no;
+]], function(a)
+    if not a:any_timer_active("cooldown", "walk") then
+        a.dir = atan2(g_pl.x - a.x, g_pl.y - a.y) + rnd(.125) - .125/2
+        a:create_timer("walk", flr_rnd(10)+30, function()
+            a:create_timer("cooldown", flr_rnd(120)+50)
+        end)
+    end
+
+    if a:any_timer_active"walk" then
+        a.ax = cos(a.dir)*.01
+        if a.ax > 0 then
+            a.xf = false
+        elseif a.ax < 0 then
+            a.xf = true
+        end
+        a.ay = sin(a.dir)*.01
+    else
+        a.ax = 0
+        a.ay = 0
+    end
+end, function(a)
+    a.sind=98
+
+    if abs(a.dx) > .005 or abs(a.dy) > .005 then
+        local loop = a.tl_tim % .5 / .5
+        if loop < .25 then a.sind=98
+        elseif loop < .5 then a.sind=99
+        elseif loop < .75 then a.sind=98
+        else a.sind=100
+        end
+    end
+
+    scr_spr(a)
 end)
