@@ -14,6 +14,8 @@ c_color_insane_2 = 14
 c_color_insane_3 = 12
 c_color_angry    = 8
 
+c_is_patient = true
+
 -- other colors
 c_color_blood    = 8
 
