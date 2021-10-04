@@ -1174,7 +1174,6 @@ _g.fader_in(.5,nf,nf)
 g_pl=_g.pl_patient_control_fight(118,27)
 g_view=_g.view(15.25,11.5,3,g_pl)
 g_room=ztable[[143]]
-_g.portal(118,30)
 create_all_deadbodies()
 create_all_enemies()
 create_ui_hearts()
@@ -1237,8 +1236,6 @@ enemy_total_count=0
 }
 g_reset_room=reset_the_dungeon
 g_reset_room()
-g_pl.x=15
-g_pl.y=5
 end
 function game_update()
 g_endgame_stats.frames=g_endgame_stats.frames+1
