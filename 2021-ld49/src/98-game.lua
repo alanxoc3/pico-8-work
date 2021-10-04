@@ -1,9 +1,6 @@
 -- game logic is in this file
 -- 3 rooms: dungeon, void, hospital
 
--- array of {x, y, xf, sind}
-_g.all_dead_bodies = {}
-
 -- array of {x, y, func, obj}
 -- cleanup by looping through and checking if obj is dead.
 -- g.all_enemies = {}
@@ -14,6 +11,10 @@ function reset_the_dungeon()
         confined,kill;
         confined,delete;
     ]])
+
+    for body in all(_g.all_dead_bodies) do
+        _g.deadbody_nobleed(unpack(body))
+    end
 
     _g.fader_in(.5, nf, nf)
     g_room = ztable[[ x:0; y:0; w:128; h:32; ]]
@@ -45,6 +46,9 @@ function reset_the_dungeon()
 end
 
 function game_init()
+    -- array of {x, y, xf, sind}
+    _g.all_dead_bodies = {}
+
     g_floormap = create_map()
     g_reset_room=reset_the_dungeon
     g_reset_room()
