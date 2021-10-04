@@ -1,8 +1,10 @@
 create_actor([[police_weapon;3;col,vec,confined,rel,bad_attack,post_drawable|
     x:@1; y:@2; dx:@3; d:@4;
-    touchable:no; rx:.5; ry:.5;
+    kill_when_hit:yes;
+    touchable:no; rx:.375; ry:.25;
+    iyy:-6;
 
-    tl_max_time=.33,;
+    tl_max_time=1,;
 ]], function(a)
     a.sind = 197
     scr_spr(a)
@@ -16,12 +18,13 @@ create_actor([[bad_police;3;drawable,col,confined,mov,x_bounded,y_bounded,knockb
     rx:.375; ry:.375;
     touchable: no;
 ]], function(a)
+    local shoot_speed = .2
     -- walk, then wait, then shoot then wait
     if not a:any_timer_active("walk", "wait", "aim", "shoot") then
         a:create_timer("walk", 120+rnd(60), function()
             a:create_timer("wait", flr_rnd(60)+60, function()
                 a:create_timer("aim", 10, function()
-                    _g.police_weapon(a.x, a.y, .1)
+                    _g.police_weapon(a.x, a.y, a.xf and -shoot_speed or shoot_speed)
                     a:create_timer("shoot", 40, function()
                     end)
                 end)
@@ -31,6 +34,12 @@ create_actor([[bad_police;3;drawable,col,confined,mov,x_bounded,y_bounded,knockb
 
     if a:any_timer_active"hurt_cooldown" then
        _g.powerup_particle(a.x, a.y+.5, _g.c_color_blood)
+    end
+
+    if not a:any_timer_active"shoot" then
+        if abs(a.dx) < .01 then
+            a.xf = a.x - g_pl.x > 0
+        end
     end
 
     if a:any_timer_active"knockback" then
@@ -43,9 +52,6 @@ create_actor([[bad_police;3;drawable,col,confined,mov,x_bounded,y_bounded,knockb
         a.ay = 0
     end
 
-    if abs(a.dx) < .01 then
-        a.xf = a.x - g_pl.x > 0
-    end
 end, function(a, other)
     if other.rel_actor then
         other.rel_actor:knockback(atan2(g_pl.x-a.x, g_pl.y-a.y))

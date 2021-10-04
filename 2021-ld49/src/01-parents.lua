@@ -78,10 +78,13 @@ create_parent([[good_attack;0;col,;|
 end)
 
 create_parent([[bad_attack;0;col,;|
-    hit:@1;
+    hit:@1; kill_when_hit:no;
 ]], function(a, other)
     if other.good_character then
         other:damage(a)
+    end
+    if a.kill_when_hit then
+        a:kill()
     end
 end)
 

@@ -20,7 +20,7 @@ end
 
 create_actor([[patient_weapon;3;col,confined,rel,bad_attack|
     rel_actor:@1; x:@2; y:@3; i:@4;
-    touchable:no; rx:.5; ry:.5;
+    touchable:no; rx:.75; ry:.75;
 
     tl_max_time=.33,;
 ]])
@@ -35,11 +35,10 @@ create_actor([[bad_patient;3;drawable,col,confined,mov,x_bounded,y_bounded,knock
 ]], function(a)
     if not a:any_timer_active("cooldown", "charge", "prepare", "attack") then
         a.dir = atan2(g_pl.x - a.x, g_pl.y - a.y) + rnd(.125) - .125/2
+        _g.patient_weapon(a, a.x, a.y)
         a:create_timer("charge", 20, function()
-            _g.patient_weapon(a, a.x, a.y)
             a:create_timer("cooldown", flr_rnd(60)+60, function()
-                a:create_timer("prepare", 60, function()
-                end)
+                a:create_timer("prepare", 60)
             end)
         end)
     end
