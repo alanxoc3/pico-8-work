@@ -1,10 +1,6 @@
 -- game logic is in this file
 -- 3 rooms: dungeon, void, hospital
 
--- array of {x, y, func, obj}
--- cleanup by looping through and checking if obj is dead.
--- g.all_enemies = {}
-
 function reset_the_dungeon()
     batch_call_new(acts_loop, [[
         confined,room_end;
@@ -12,8 +8,14 @@ function reset_the_dungeon()
         confined,delete;
     ]])
 
-    for body in all(_g.all_dead_bodies) do
+    for body in all(_g.all_deadbody_templates) do
         _g.deadbody_nobleed(unpack(body))
+    end
+
+    for i, enemy_template in pairs(_g.all_enemy_templates) do
+        if enemy_template.alive then
+            enemy_template.func(enemy_template.x, enemy_template.y, i)
+        end
     end
 
     _g.fader_in(.5, nf, nf)
@@ -30,8 +32,6 @@ function reset_the_dungeon()
     -- DEBUG_END
 
     g_view = _g.view(15.25, 11.5, 3, g_pl)
-    _g.simple_enemy(8, 6)
-    _g.simple_enemy(10, 6)
 
     -- draws the hearts at the top of the screen, with particles!
     _g.heart_particle_spawner(6.5, 1, 3)
@@ -47,7 +47,14 @@ end
 
 function game_init()
     -- array of {x, y, xf, sind}
-    _g.all_dead_bodies = {}
+    _g.all_deadbody_templates = {}
+
+    -- array of {x, y, func, alive}
+    -- don't remove things from this array!
+    _g.all_enemy_templates = {
+        {x=8 , y=6, func=_g.simple_enemy, alive=true},
+        {x=10, y=6, func=_g.simple_enemy, alive=true}
+    }
 
     g_floormap = create_map()
     g_reset_room=reset_the_dungeon
