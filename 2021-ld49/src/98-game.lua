@@ -2,8 +2,6 @@
 -- 3 rooms: dungeon, void, hospital
 
 function game_init()
-    hospitalify_the_map()
-
     -- array of {x, y, xf, sind}
     _g.all_deadbody_templates = {dungeon={}, bossroom={}, hospital={}}
 

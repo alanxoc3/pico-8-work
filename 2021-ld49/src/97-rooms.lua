@@ -95,6 +95,7 @@ end
 
 -- resets the hospital
 function reset_the_hospital()
+    hospitalify_the_map()
     cleanup_confined()
 
     _g.fader_in(.5, nf, nf)
