@@ -761,7 +761,7 @@ function create_map()
 local floor={
 map={},
 full_map={},
-width=32,
+width=27,
 height=8,
 ratio=4,
 dirs={
@@ -864,7 +864,7 @@ end
 end
 end,
 mset_all=function(this,theme)
-for x=1,128 do
+for x=1,108 do
 for y=1,32 do
 local tile=this:get_tile_for_square(x,y,theme)
 mset(x-1,y-1,tile)
@@ -874,15 +874,9 @@ end,
 get_tile_for_square=function(this,x,y,theme)
 local FLOOR1=4
 local FLOOR2=52
-local SOLID=theme and 48 or 32
-local U=theme and 23 or 19
-local D=theme and 38 or 34
-local L=theme and 23 or 19
-local R=theme and 23 or 19
-local UR_E=theme and 23 or 19
-local UL_E=theme and 23 or 19
-local DR_E=theme and 38 or 34
-local DL_E=theme and 38 or 34
+local SOLID=32
+local DOWN=34
+local SIDE=19
 local square=this.full_map[x][y]
 if square.type==1 then return rnd()<.5 and FLOOR1 or FLOOR2
 else
@@ -890,14 +884,14 @@ local floorU=y>1 and this.full_map[x][y-1].type!=0
 local floorL=x>1 and this.full_map[x-1][y].type!=0
 local floorR=x<this.width*this.ratio and this.full_map[x+1][y].type!=0
 local floorD=y<this.height*this.ratio and this.full_map[x][y+1].type!=0
-if floorU and floorR then return UR_E
-elseif floorU and floorL then return UL_E
-elseif floorD and floorR then return DR_E
-elseif floorD and floorL then return DL_E
-elseif floorU then return U
-elseif floorD then return D
-elseif floorL then return L
-elseif floorR then return R
+if floorU and floorR then return SIDE
+elseif floorU and floorL then return SIDE
+elseif floorD and floorR then return DOWN
+elseif floorD and floorL then return DOWN
+elseif floorU then return SIDE
+elseif floorD then return DOWN
+elseif floorL then return SIDE
+elseif floorR then return SIDE
 else return SOLID end
 end
 end
@@ -910,7 +904,7 @@ floor:clearArea(floor:randArea(2,5,2,5))
 end
 floor:scale()
 if _g.c_enable_procgen_map then
-floor:mset_all(true)
+floor:mset_all()
 end
 return floor
 end
