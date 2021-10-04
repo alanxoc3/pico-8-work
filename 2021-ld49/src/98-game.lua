@@ -1,6 +1,20 @@
 -- game logic is in this file
 -- 3 rooms: dungeon, void, hospital
 
+function disable_offscreen_bad_characters()
+    for a in all(g_act_arrs.bad_character) do
+        local dist = approx_dist(a.x - g_pl.x, a.y - g_pl.y)
+        if dist > 17 then
+            a.disabled.update = true
+            a.disabled.d = true
+        else
+            a.disabled.update = nil
+            a.disabled.d = nil
+        end
+
+    end
+end
+
 function game_init()
     -- array of {x, y, xf, sind}
     local d_and_h = {} _g.all_deadbody_templates = {dungeon=d_and_h, bossroom={}, hospital=d_and_h}
@@ -22,8 +36,8 @@ function game_init()
     }
 
     -- this controls which room you start in
-    -- g_reset_room=reset_the_dungeon
-    g_reset_room=reset_the_hospital
+    g_reset_room=reset_the_dungeon
+    -- g_reset_room=reset_the_hospital
     -- g_reset_room=reset_the_bossroom
     g_reset_room()
 
@@ -61,6 +75,8 @@ function game_update()
             y >= g_room.y and y < g_room.y+g_room.h and
             fget(mget(x, y), 0)
     end)
+
+    if t() % .5 == 0 then disable_offscreen_bad_characters() end
 
     g_endgame_stats.enemy_kill_count  = #_g.all_deadbody_templates.dungeon
     g_endgame_stats.enemy_total_count = #_g.all_enemy_templates.dungeon
