@@ -1,4 +1,10 @@
-create_parent[[pl_control;0;col,|;]]
+create_parent([[pl_control;0;col,|
+    hit:@1;
+]], function(a, other)
+    if other.portal then
+        -- do something
+    end
+end)
 
 create_actor([[pl_patient_control_fight;2;pl_patient,good_character,pl_control|
     x:@1; y:@2; u:@3; destroyed:@4;
