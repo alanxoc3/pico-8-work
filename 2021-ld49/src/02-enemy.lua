@@ -11,7 +11,7 @@ end, function(a, other)
     end
 end)
 
-create_actor([[simple_enemy;3;drawable,col,confined,mov,x_bounded,y_bounded,knockbackable,hurtable,spr_obj,enemy,tcol|
+create_actor([[nurse;3;drawable,col,confined,mov,x_bounded,y_bounded,knockbackable,hurtable,spr_obj,enemy,tcol|
     x:@1; y:@2; enemy_id:@3; u:@4; d:@5; hit:@6; destroyed:@7;
     health:%c_enemy_health; max_health:%c_enemy_health;
     sh:2; iyy:-5;
