@@ -8,7 +8,7 @@ function credits_update(a)
     if g_credits_enabled and (btn(4) or btn(5)) then
         g_credits_enabled = false
         _g.fader_out(.5, nf, function()
-            g_tl:next()
+            g_tl.tl_next = 2
         end)
     end
 
