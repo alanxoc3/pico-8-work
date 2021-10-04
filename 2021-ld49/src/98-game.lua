@@ -9,14 +9,14 @@ function reset_the_dungeon()
 
     -- DEBUG_BEGIN
     if _g.c_is_patient then
-        g_pl = _g.pl_patient_control_fight(4, 4)
+        g_pl = _g.pl_patient_control_fight(7, 7)
     else
-        g_pl = _g.pl_monster_control(4, 4)
+        g_pl = _g.pl_monster_control(7, 7)
     end
     -- DEBUG_BEGIN
 
     g_view = _g.view(15.25, 11.5, 3, g_pl)
-    _g.simple_enemy(3, 2)
+    _g.simple_enemy(8, 6)
 
     -- draws the hearts at the top of the screen, with particles!
     _g.heart_particle_spawner(6.5, 1, 3)
@@ -35,9 +35,9 @@ end
 function reset_the_void()
     _g.fader_in(.5, nf, nf)
     g_room = ztable[[ x:0; y:0; w:128; h:32; ]]
-    g_pl = _g.pl_monster(4, 4)
+    g_pl = _g.pl_monster(7, 7)
     g_view = _g.view(15.25, 11.5, 3, g_pl)
-    _g.simple_enemy(3, 2)
+    _g.simple_enemy(8, 6)
 
     -- draws the hearts at the top of the screen, with particles!
     _g.heart_particle_spawner(6.5, 1, 3)
@@ -165,7 +165,7 @@ function game_draw()
     -- Draw minimap.
     -- DEBUG_BEGIN
     if g_debug then
-        g_floormap:draw()
+        g_floormap:draw_mini()
     end
     -- DEBUG_END
 end
