@@ -46,6 +46,7 @@ create_actor([[bad_police;3;drawable,col,confined,mov,x_bounded,y_bounded,knockb
         a:apply_knockback()
     elseif a:any_timer_active"walk" then
         a.dir = atan2(g_pl.x - a.x, g_pl.y - a.y) + rnd(.125) - .125/2
+        a.ax = 0
         a.ay = sin(a.dir)*.03
     else
         a.ax = 0
