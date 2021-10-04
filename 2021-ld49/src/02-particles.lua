@@ -58,7 +58,7 @@ create_actor([[heart_particle_spawner;3;particle_spawner/.125/.125/1/3/%slow_sma
         a:kill()
     end
 end, function(a)
-    zspr(4, a.x*8, a.y*8+1)
+    zspr(16, a.x*8, a.y*8+1)
 end)
 
 create_actor([[powerup_particle_spawner;5;particle_spawner/2/.125/1/1/%slow_medium_ui_particle,above_map_drawable_1|

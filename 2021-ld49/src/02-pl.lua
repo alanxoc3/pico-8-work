@@ -14,7 +14,7 @@ create_parent([[pl;1;drawable,pos,confined,mov,x_bounded,y_bounded,col,spr_obj,k
 
     strength:1; -- amount of damage you do to enemies
     dir:0; is_facing_left:no;
-    health:3; max_health:3;
+    health:%c_pl_health; max_health:%c_pl_health;
 
     -- some methods that could be implemented on sub-actors:
     damage:nf; increment_insanity:nf; decrement_insanity:nf; set_insanity:nf;
@@ -22,6 +22,7 @@ create_parent([[pl;1;drawable,pos,confined,mov,x_bounded,y_bounded,col,spr_obj,k
     sh:2; iyy:-5;
 ]], function(a)
     _g.deadbody(a.x, a.y, a.xf, a.passive_mode and 80 or 64)
+    _g.fader_out(1,nf,game_init)
 end, function(a)
     a.sind = 134
     a.yy = 0

@@ -32,7 +32,7 @@ create_actor([[simple_enemy;2;drawable,col,confined,mov,x_bounded,y_bounded,knoc
     end
 
     if a:any_timer_active"hurt_cooldown" then
-       _g.powerup_particle(a.x, a.y+.5, c_color_blood)
+       _g.powerup_particle(a.x, a.y+.5, _g.c_color_blood)
     end
 
     if a:any_timer_active"knockback" then
