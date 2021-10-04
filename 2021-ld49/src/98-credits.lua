@@ -22,7 +22,7 @@ end
 function credits_draw(a)
     fade(g_card_fade)
 
-    zspr(200, 64, 16, 8, 3)
+    zspr(200, 64, 16+8, 8, 3)
 
     local base = 48
     zspr(72 , 16, base   , 2, 2)
@@ -33,11 +33,11 @@ function credits_draw(a)
 
     zprint("you beat "..g_endgame_stats.achievement.." mode!"                                  , 16+12, base-1     , 13, -1)
     zprint('- - - - - - - - - - - - - - - - - - - - - - -'                                     , 16+12, base+8-1   , 1 , -1)
-    zprint("kills : "..g_endgame_stats.enemy_kill_count.."/"..g_endgame_stats.enemy_total_count, 16+12, base+16-1  , 14 , -1)
-    zprint("deaths: "..g_endgame_stats.deaths                                                  , 16+12, base+16+8-1, 2 , -1)
-    zprint("timer : "..format_time()                                                           , 16+12, base+32-1  , 3 , -1)
+    zprint("kills : "..g_endgame_stats.enemy_kill_count.."/"..g_endgame_stats.enemy_total_count, 16+12, base+16-1  , 3 , -1)
+    zprint("deaths: "..g_endgame_stats.deaths                                                  , 16+12, base+16+8-1, 4 , -1)
+    zprint("timer : "..format_time()                                                           , 16+12, base+32-1  , 9 , -1)
     zprint('- - - - - - - - - - - - - - - - - - - - - - -'                                     , 16+12, base+32+8-1, 1 , -1)
-    zprint("@alanxoc3: code/music"                                                             , 16+12, base+48-1  , 9 , -1)
-    zprint("@denial: code/design"                                                              , 16+12, base+48+8-1, 12, -1)
+    zprint("@alanxoc3: code/music"                                                             , 16+12, base+48-1  , 12, -1)
+    zprint("@denial: code/design"                                                              , 16+12, base+48+8-1, 14, -1)
     zprint("@thegreatcadet: gfx/map"                                                           , 16+12, base+64-1  , 8 , -1)
 end
