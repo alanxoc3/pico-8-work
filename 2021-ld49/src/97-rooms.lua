@@ -14,6 +14,8 @@ function get_all_enemies_for_story_mode()
         x=102, y=4 , dungeon=%bad_nurse, hospital=%nurse, alive=yes;
 
         x=89 , y=15, dungeon=%bad_patient, hospital=%patient, alive=yes;
+
+        x=91 , y=15, dungeon=%bad_police, hospital=%police, alive=yes;
     ]]
 
     return {

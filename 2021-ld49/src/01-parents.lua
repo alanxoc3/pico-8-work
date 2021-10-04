@@ -258,23 +258,6 @@ end, function(a, health)
    a.health = min(a.max_health, a.health + health)
 end)
 
--- TRIG: a trigger that calls a function if called
-create_parent([[trig;0;vec,dim;|
-   contains:nf;
-   intersects:nf;
-   not_contains_or_intersects:nf;
-   contains_or_intersects:@1;
-   trigger_update:@1;
-]], function(a, b)
-   if does_a_contain_b(a, b) then
-      a:contains(b)
-   elseif do_actors_intersect(a, b) then
-      a:intersects(b)
-   else
-      a:not_contains_or_intersects(b)
-   end
-end)
-
 -- ANCHORED: the object will not move
 create_parent[[anchored;1;vec,dim;|touchable:@1;hit:nf;]]
 

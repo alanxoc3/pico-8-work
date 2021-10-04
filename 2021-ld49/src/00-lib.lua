@@ -138,16 +138,3 @@ function isorty(t)
         end
     end
 end
-
--- DEBUG_BEGIN
--- For debugging
-function tostring(any)
-  if type(any)~="table" then return tostr(any) end
-  local str = "{"
-  for k,v in pairs(any) do
-    if str~="{" then str=str.."," end
-    str=str..tostring(k).."="..tostring(v)
-  end
-  return str.."}"
-end
--- DEBUG_END
