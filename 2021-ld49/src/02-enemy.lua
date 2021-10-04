@@ -11,8 +11,8 @@ end, function(a, other)
     end
 end)
 
-create_actor([[simple_enemy;2;drawable,col,confined,mov,x_bounded,y_bounded,knockbackable,hurtable,spr_obj,enemy,tcol|
-    x:@1; y:@2; u:@3; d:@4; hit:@5; destroyed:@6;
+create_actor([[simple_enemy;3;drawable,col,confined,mov,x_bounded,y_bounded,knockbackable,hurtable,spr_obj,enemy,tcol|
+    x:@1; y:@2; enemy_id:@3; u:@4; d:@5; hit:@6; destroyed:@7;
     health:%c_enemy_health; max_health:%c_enemy_health;
     sh:2; iyy:-5;
     rx:.375; ry:.375;
@@ -83,5 +83,5 @@ end, function(a, other)
         a:knockback(atan2(a.x-other.x, a.y-other.y))
     end
 end, function(a)
-    create_cached_deadbody(1, a.x, a.y, a.xf, 96)
+    create_cached_deadbody(a.enemy_id, a.x, a.y, a.xf, 96)
 end)
