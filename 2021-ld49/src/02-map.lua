@@ -52,25 +52,23 @@ function create_map()
             if this.map[x0][y0].seen then return end
             this.map[x0][y0].seen = true
             local dir_ids = shuffleArr({1,2,3,4})
+            local visit_surrounding = function(visitor)
+                foreach(dir_ids, function(dir_id)
+                    local dir = this.dirs[dir_id]
+                    local x1 = x0 + (dir.dx or 0)
+                    local y1 = y0 + (dir.dy or 0)
+                    visitor(x1, y1)
+                end)
+            end
 
             -- If at most 1 surrounding square is already carved, then carve this one.
             local count = 0
-            foreach(dir_ids, function(dir_id)
-                local dir = this.dirs[dir_id]
-                local x1 = x0 + (dir.dx or 0)
-                local y1 = y0 + (dir.dy or 0)
-                if this.map[x1][y1].type != 0 then count = count + 1 end
-            end)
+            visit_surrounding(function(x1,y1) if this.map[x1][y1].type != 0 then count = count + 1 end end)
             if count > 1 then return end
             this.map[x0][y0].type = 1 -- Carve!
 
             -- Try to carve surrounding squares (can bias order here for different effects).
-            foreach(dir_ids, function(dir_id)
-                local dir = this.dirs[dir_id]
-                local x1 = x0 + (dir.dx or 0)
-                local y1 = y0 + (dir.dy or 0)
-                this:carve(x1, y1)
-            end)
+            visit_surrounding(function(x1,y1) this:carve(x1,y1) end)
         end,
 
         -- Clear all walls within the given area.
@@ -113,8 +111,6 @@ function create_map()
             local loc = function(p) return (p-1)*ratio+1 end
             for x = 1,this.width do
                 for y = 1,this.height do
-                    -- I am a wall, with floor to my bottom and right, and wall to my bottom-right.
-                    -- I am a wall, with floor to my bottom and left,  and wall to my bottom-left.
                     if this.map[x][y].type == 0 then -- I am a wall...
                         local wallL  = x>1           and this.map[x-1][y].type == 0
                         local wallR  = x<this.width  and this.map[x+1][y].type == 0
@@ -122,11 +118,11 @@ function create_map()
                         local wallDL = x>1           and y<this.height and this.map[x-1][y+1].type == 0
                         local wallDR = x<this.width  and y<this.height and this.map[x+1][y+1].type == 0
 
-                        if not wallD and not wallR and wallDR then
+                        if not wallD and not wallR and wallDR then -- ...with floor to my bottom and right, but not bottom-right.
                             this.full_map[loc(x)+ratio][loc(y)+ratio-1] = { type=0 }
                             this.full_map[loc(x)+ratio-1][loc(y)+ratio] = { type=0 }
                         end
-                        if not wallD and not wallL and wallDL then
+                        if not wallD and not wallL and wallDL then -- ...with floor to my bottom and left, but not bottom-left.
                             this.full_map[loc(x)][loc(y)+ratio]     = { type=0 }
                             this.full_map[loc(x)-1][loc(y)+ratio-1] = { type=0 }
                         end
@@ -160,41 +156,29 @@ function create_map()
         -- Get the tile to draw for this square, based on its type and the surrounding squares' types.
         -- Note this uses the "dungeon" palette. Remapping to the "hospital" palette is done elsewhere.
         get_tile_for_square = function(this, x, y, theme)
-            local FLOOR1 =  4
-            local FLOOR2 = 52
-            local SOLID  = 32
-            local DOWN   = 34
-            local SIDE   = 19
-            
             local square = this.full_map[x][y]
-            if square.type == 1 then return rnd() < .5 and FLOOR1 or FLOOR2
+            if square.type == 1 then return rnd() < .5 and 4 or 52 -- Floor tiles
             else
                 local floorU = y>1 and this.full_map[x][y-1].type != 0
                 local floorL = x>1 and this.full_map[x-1][y].type != 0
                 local floorR = x<this.width*this.ratio  and this.full_map[x+1][y].type != 0
                 local floorD = y<this.height*this.ratio and this.full_map[x][y+1].type != 0
 
-                if     floorU and floorR then return SIDE
-                elseif floorU and floorL then return SIDE
-                elseif floorD and floorR then return DOWN 
-                elseif floorD and floorL then return DOWN
-                elseif floorU then return SIDE
-                elseif floorD then return DOWN
-                elseif floorL then return SIDE
-                elseif floorR then return SIDE
-                else return SOLID end
+                if     floorD then return 34 -- Down-facing wall
+                elseif floorU or floorL or floorR then return 19 -- Other wall adjacent to floor
+                else return 32 end -- Fully-enclosed wall
             end
         end
     }
 
     -- First build a perfect maze.
     floor:prefill()
-    floor:carve(flr(floor.width/2), flr(floor.height/2))
+    floor:carve(2,2)
 
-    -- Clear out walls from a lot of relatively small areas, to make interestingly-shaped "rooms".
-    local scoops = randBetween(flr(floor:area()/200), flr(floor:area()/50))
+    -- Clear out walls from several small areas, to make interestingly-shaped "rooms".
+    local scoops = randBetween(1, 4) 
     for i = 1,scoops do
-        floor:clearArea(floor:randArea(2, 5, 2, 5))
+        floor:clearArea(floor:randArea(2, 3, 2, 3))
     end
 
     floor:scale()
