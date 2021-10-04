@@ -1,4 +1,23 @@
 -- room resec helper functions and functions
+function get_all_enemies_for_story_mode()
+    return {
+        dungeon=ztable[[
+            x=4  , y=28, func=%nurse, alive=yes;
+            x=14 , y=26, func=%nurse, alive=yes;
+            x=45 , y=28, func=%nurse, alive=yes;
+            x=53 , y=9 , func=%nurse, alive=yes;
+            x=70 , y=13, func=%nurse, alive=yes;
+            x=60 , y=15, func=%nurse, alive=yes;
+            x=48 , y=3 , func=%nurse, alive=yes;
+            x=81 , y=4 , func=%nurse, alive=yes;
+            x=81 , y=15, func=%nurse, alive=yes;
+            x=18 , y=13, func=%nurse, alive=yes;
+            x=102, y=4 , func=%nurse, alive=yes;
+        ]], bossroom=ztable[[
+            x=120, y=12, func=%pl_monster_cpu, alive=yes;
+        ]]
+    }
+end
 
 -- draws the hearts at the top of the screen, with particles!
 function create_ui_hearts()
@@ -17,7 +36,7 @@ function create_ui_powerups()
 end
 
 function create_all_enemies()
-    for i, enemy_template in pairs(_g.all_enemy_templates) do
+    for i, enemy_template in pairs(_g.all_enemy_templates[g_room.name]) do
         if enemy_template.alive then
             enemy_template.func(enemy_template.x, enemy_template.y, i)
         end
@@ -25,7 +44,7 @@ function create_all_enemies()
 end
 
 function create_all_deadbodies()
-    for body in all(_g.all_deadbody_templates) do
+    for body in all(_g.all_deadbody_templates[g_room.name]) do
         _g.deadbody_nobleed(unpack(body))
     end
 end
@@ -62,11 +81,11 @@ function reset_the_bossroom()
 
     _g.fader_in(.5, nf, nf)
     g_pl   = _g.pl_patient_control_fight(118, 27)
-    g_boss = _g.pl_monster_cpu(120, 7)
     g_view = _g.view(15.25, 11.5, 3, g_pl)
     g_room = ztable[[ name:bossroom; x:108; y:0; w:20; h:32; ]]
 
-    create_ui_hearts()
+    create_all_deadbodies()
+    create_all_enemies()
 
-    _g.genocide_tip(8, 13)
+    create_ui_hearts()
 end
