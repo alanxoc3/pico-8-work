@@ -1,7 +1,7 @@
 pico-8 cartridge // http://www.pico-8.com
 version 33
 __lua__
--- game
+-- a healthy dose of dungeon
 -- amorg
 
 -- unobfuscated code at:

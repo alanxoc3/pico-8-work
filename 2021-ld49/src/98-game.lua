@@ -16,6 +16,7 @@ function disable_offscreen_bad_characters()
 end
 
 function game_init()
+    reload(0x2000, 0x2000, 0x1000)
     -- array of {x, y, xf, sind}
     local d_and_h = {} _g.all_deadbody_templates = {dungeon=d_and_h, bossroom={}, hospital=d_and_h}
 
