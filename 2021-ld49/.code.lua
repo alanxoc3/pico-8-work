@@ -1144,7 +1144,7 @@ end
 function reset_the_dungeon()
 cleanup_confined()
 _g.fader_in(.5,nf,nf)
-g_pl=_g.pl_monster_control(94,12)
+g_pl=_g.pl_monster_control(18,3)
 g_view=_g.view(15.25,11.5,3,g_pl)
 g_room=ztable[[141]]
 _g.portal(94,13)
@@ -1159,7 +1159,7 @@ function reset_the_hospital()
 hospitalify_the_map()
 cleanup_confined()
 _g.fader_in(.5,nf,nf)
-_g.portal(17,4)
+_g.portal(18,3)
 g_pl=_g.pl_patient_control_passive(94,13)
 g_view=_g.view(15.25,11.5,3,g_pl)
 g_room=ztable[[142]]
