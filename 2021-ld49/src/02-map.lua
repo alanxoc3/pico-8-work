@@ -19,9 +19,9 @@ function create_map()
         map      = {},
         full_map = {},
 
-        -- The width and height will be scaled so that the full_map is 128x32 tiles
+        -- The width and height will be scaled so that the full_map is 108x32 tiles (saving 20x32 for boss room).
         -- These are currently UNCONFIGURABLE.
-        width    = 32,
+        width    = 27,
         height   = 8,
         ratio    = 4,
 
@@ -149,7 +149,7 @@ function create_map()
 
         -- mset all squares onto the pico8 map.
         mset_all = function(this, theme)
-            for x=1,128 do
+            for x=1,108 do
                 for y=1,32 do
                     local tile = this:get_tile_for_square(x, y, theme)
                     mset(x-1, y-1, tile)
