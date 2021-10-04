@@ -36,3 +36,10 @@ create_actor([[pl_monster_control;2;pl_monster,|
 
     control_player(a, xbtn(), ybtn(), btn(4), btn(5), true, a.insane_level)
 end)
+
+create_actor([[pl_monster_cpu;2;pl_monster,|
+    x:@1; y:@2; u:@3;
+    insane_level:4;
+]], function(a)
+    control_player(a, flr_rnd(3)-1, flr_rnd(3)-1, flr_rnd(3) == 0, flr_rnd(3) == 0, true, a.insane_level)
+end)

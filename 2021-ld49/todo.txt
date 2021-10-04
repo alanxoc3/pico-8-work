@@ -1,10 +1,10 @@
 next steps for alan:
 - implement some random props/objects.
+- enemy left arrow.
 - implement another enemy.
 - implement portal.
 - implement stat recordings.
 - implement separate room.
-- implement "5 left" countdown if you killed 95%.
 - implement arrow to exit for end thing.
 - implement ending screen: pacifist, genocide, normal.
 - credits: denial, cadetthegreat, tigerwolf, alanxoc3, wadlo
@@ -14,6 +14,7 @@ next steps for alan:
 - implement door. -- STRETCH
 - title screen lets you select modes. -- STRETCH
 
+- DONE! implement "5 left" countdown if you killed 95%.
 - DONE! experiment with black floor.
 - DONE! implement level restart.
 - DONE! refactor player logic to support multiple types of players.
