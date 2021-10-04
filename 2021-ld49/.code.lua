@@ -647,21 +647,19 @@ carve=function(this,x0,y0)
 if this.map[x0][y0].seen then return end
 this.map[x0][y0].seen=true
 local dir_ids=shuffleArr({1,2,3,4})
-local count=0
+local visit_surrounding=function(visitor)
 foreach(dir_ids,function(dir_id)
 local dir=this.dirs[dir_id]
 local x1=x0+(dir.dx or 0)
 local y1=y0+(dir.dy or 0)
-if this.map[x1][y1].type!=0 then count=count+1 end
+visitor(x1,y1)
 end)
+end
+local count=0
+visit_surrounding(function(x1,y1)if this.map[x1][y1].type!=0 then count=count+1 end end)
 if count>1 then return end
 this.map[x0][y0].type=1
-foreach(dir_ids,function(dir_id)
-local dir=this.dirs[dir_id]
-local x1=x0+(dir.dx or 0)
-local y1=y0+(dir.dy or 0)
-this:carve(x1,y1)
-end)
+visit_surrounding(function(x1,y1)this:carve(x1,y1)end)
 end,
 clearArea=function(this,area)
 for x=1,area.w do
@@ -734,35 +732,24 @@ end
 end
 end,
 get_tile_for_square=function(this,x,y,theme)
-local FLOOR1=4
-local FLOOR2=52
-local SOLID=32
-local DOWN=34
-local SIDE=19
 local square=this.full_map[x][y]
-if square.type==1 then return rnd()<.5 and FLOOR1 or FLOOR2
+if square.type==1 then return rnd()<.5 and 4 or 52
 else
 local floorU=y>1 and this.full_map[x][y-1].type!=0
 local floorL=x>1 and this.full_map[x-1][y].type!=0
 local floorR=x<this.width*this.ratio and this.full_map[x+1][y].type!=0
 local floorD=y<this.height*this.ratio and this.full_map[x][y+1].type!=0
-if floorU and floorR then return SIDE
-elseif floorU and floorL then return SIDE
-elseif floorD and floorR then return DOWN
-elseif floorD and floorL then return DOWN
-elseif floorU then return SIDE
-elseif floorD then return DOWN
-elseif floorL then return SIDE
-elseif floorR then return SIDE
-else return SOLID end
+if floorD then return 34
+elseif floorU or floorL or floorR then return 19
+else return 32 end
 end
 end
 }
 floor:prefill()
-floor:carve(flr(floor.width/2),flr(floor.height/2))
-local scoops=randBetween(flr(floor:area()/200),flr(floor:area()/50))
+floor:carve(2,2)
+local scoops=randBetween(1,4)
 for i=1,scoops do
-floor:clearArea(floor:randArea(2,5,2,5))
+floor:clearArea(floor:randArea(2,3,2,3))
 end
 floor:scale()
 if _g.c_enable_procgen_map then
