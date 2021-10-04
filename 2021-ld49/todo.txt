@@ -1,4 +1,5 @@
 next steps for alan:
+- look at possible bug in boss fight, where the portal isn't generated. rare?
 - change plus to square in boss room.
 - implement some random props/objects.
 - saw flip animation
