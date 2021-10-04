@@ -63,7 +63,8 @@ function reset_the_bossroom()
     g_pl   = _g.pl_patient_control_fight(7, 7)
     g_boss = _g.pl_monster_cpu(9, 7)
     g_view = _g.view(15.25, 11.5, 3, g_pl)
-    g_room = ztable[[ x:0; y:0; w:20; h:16; ]]
+    -- g_room = ztable[[ x:0; y:0; w:20; h:16; ]]
+    g_room = ztable[[ x:0; y:0; w:128; h:32; ]]
 
     create_ui_hearts()
 
