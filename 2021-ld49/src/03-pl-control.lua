@@ -21,6 +21,7 @@ create_actor([[pl_patient_control_fight;2;pl_patient,good_character,pl_control|
     control_player(a, xbtn(), ybtn(), btn(4), btn(5), _g.good_fist)
 end, function(a)
     a:create_dead_body()
+    g_endgame_stats.deaths = g_endgame_stats.deaths + 1
     _g.fader_out(1,nf,g_reset_room)
 end)
 
@@ -30,6 +31,7 @@ create_actor([[pl_patient_control_passive;2;pl_patient,good_character,pl_control
     control_player(a, xbtn(), ybtn(), btn(4), btn(5))
 end, function(a)
     a:create_dead_body()
+    g_endgame_stats.deaths = g_endgame_stats.deaths + 1
     _g.fader_out(1,nf,g_reset_room)
 end)
 
@@ -43,5 +45,6 @@ create_actor([[pl_monster_control;2;pl_monster,good_character,pl_control|
     control_player(a, xbtn(), ybtn(), btn(4), btn(5), _g.good_fist, a.insane_level)
 end, function(a)
     a:create_dead_body()
+    g_endgame_stats.deaths = g_endgame_stats.deaths + 1
     _g.fader_out(1,nf,g_reset_room)
 end)

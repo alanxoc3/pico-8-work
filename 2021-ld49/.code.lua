@@ -1165,12 +1165,14 @@ create_actor([[122|123]],function(a)
 control_player(a,xbtn(),ybtn(),btn(4),btn(5),_g.good_fist)
 end,function(a)
 a:create_dead_body()
+g_endgame_stats.deaths=g_endgame_stats.deaths+1
 _g.fader_out(1,nf,g_reset_room)
 end)
 create_actor([[124|123]],function(a)
 control_player(a,xbtn(),ybtn(),btn(4),btn(5))
 end,function(a)
 a:create_dead_body()
+g_endgame_stats.deaths=g_endgame_stats.deaths+1
 _g.fader_out(1,nf,g_reset_room)
 end)
 create_actor([[125|123]],function(a)
@@ -1178,6 +1180,7 @@ if g_debug and btnp(4)then a:set_insanity((a.insane_level+1)%5)end
 control_player(a,xbtn(),ybtn(),btn(4),btn(5),_g.good_fist,a.insane_level)
 end,function(a)
 a:create_dead_body()
+g_endgame_stats.deaths=g_endgame_stats.deaths+1
 _g.fader_out(1,nf,g_reset_room)
 end)
 create_actor([[126|127]],function(a)
@@ -1284,10 +1287,12 @@ function game_init()
 local d_and_h={}_g.all_deadbody_templates={dungeon=d_and_h,bossroom={},hospital=d_and_h}
 _g.all_enemy_templates=get_all_enemies_for_story_mode()
 g_floormap=create_map()
+g_endgame_stats={frames=0,deaths=0}
 g_reset_room=reset_the_dungeon
 g_reset_room()
 end
 function game_update()
+g_endgame_stats.frames=g_endgame_stats.frames+1
 batch_call_new(acts_loop,[[134]],g_act_arrs["wall"],g_act_arrs["bad_character"],g_act_arrs["good_character"],g_act_arrs["portal"],function(x,y)
 return x>=g_room.x and x<g_room.x+g_room.w and
 y>=g_room.y and y<g_room.y+g_room.h and
@@ -1331,6 +1336,15 @@ tbox_draw(16,48)
 if g_debug then
 g_floormap:draw_mini()
 end
+print("time="..format_time()..",deaths="..g_endgame_stats.deaths,2,120)
+end
+function format_time()
+local seconds=flr(g_endgame_stats.frames/60)
+local mins=flr(seconds/60)
+seconds=seconds%60
+mins=mins<10 and "0"..mins or mins
+seconds=seconds<10 and "0"..seconds or seconds
+return ""..mins..":"..seconds
 end
 function disable_looping_on_music(music_num)
 local addr=0x3101+music_num*4
