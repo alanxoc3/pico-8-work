@@ -87,7 +87,8 @@ function reset_the_dungeon()
     cleanup_confined()
 
     _g.fader_in(.5, nf, nf)
-    g_pl = _g.pl_monster_control(17, 4)
+    -- g_pl = _g.pl_monster_control(17, 4)
+    g_pl = _g.pl_monster_control(94, 12)
     g_view = _g.view(15.25, 11.5, 3, g_pl)
     g_room = ztable[[ name:dungeon; x:0; y:0; w:108; h:32; ]]
 
