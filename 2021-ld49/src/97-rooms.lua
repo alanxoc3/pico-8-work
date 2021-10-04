@@ -47,6 +47,7 @@ function reset_the_dungeon()
     g_view = _g.view(15.25, 11.5, 3, g_pl)
     g_room = ztable[[ x:0; y:0; w:128; h:32; ]]
 
+    _g.portal(4, 4)
     create_all_deadbodies()
     create_all_enemies()
     create_ui_hearts()
