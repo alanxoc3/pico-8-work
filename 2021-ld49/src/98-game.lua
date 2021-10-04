@@ -3,7 +3,7 @@
 
 function game_init()
     -- array of {x, y, xf, sind}
-    _g.all_deadbody_templates = {dungeon={}, bossroom={}, hospital={}}
+    local d_and_h = {} _g.all_deadbody_templates = {dungeon=d_and_h, bossroom={}, hospital=d_and_h}
 
     -- array of {x, y, func, alive}
     -- don't remove things from this array!
@@ -12,8 +12,8 @@ function game_init()
     g_floormap = create_map()
 
     -- this controls which room you start in
-    -- g_reset_room=reset_the_dungeon
-    g_reset_room=reset_the_hospital
+    g_reset_room=reset_the_dungeon
+    -- g_reset_room=reset_the_hospital
     -- g_reset_room=reset_the_bossroom
     g_reset_room()
 end

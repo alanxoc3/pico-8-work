@@ -7,8 +7,6 @@ create_actor([[nurse_weapon;3;col,confined,rel,bad_attack|
     a.rel_dx = zsgn(cos(a.rel_actor.dir))*.05
 end)
 
-
-
 create_actor([[bad_nurse;3;drawable,col,confined,mov,x_bounded,y_bounded,knockbackable,hurtable,spr_obj,bad_character,tcol|
     x:@1; y:@2; enemy_id:@3; u:@4; d:@5; damage:@6; destroyed:@7;
     health:%c_enemy_health; max_health:%c_enemy_health;
