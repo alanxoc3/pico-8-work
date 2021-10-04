@@ -22,8 +22,8 @@ function get_all_enemies_for_story_mode()
         x=63, y=8, dungeon=%bad_patient, hospital=%patient, alive=yes;
         x=70, y=8, dungeon=%bad_patient, hospital=%patient, alive=yes;
         x=15, y=18, dungeon=%bad_patient, hospital=%patient, alive=yes;
-        x=104, y=14, dungeon=%bad_patient, hospital=%patient, alive=yes;
-        x=104, y=20, dungeon=%bad_patient, hospital=%patient, alive=yes;
+        x=102, y=13, dungeon=%bad_patient, hospital=%patient, alive=yes;
+        x=106, y=20, dungeon=%bad_patient, hospital=%patient, alive=yes;
         x=49  , y=19, dungeon=%bad_patient, hospital=%patient, alive=yes;
         x=9  , y=23, dungeon=%bad_patient, hospital=%patient, alive=yes;
         x=9  , y=28, dungeon=%bad_patient, hospital=%patient, alive=yes;
@@ -36,7 +36,7 @@ function get_all_enemies_for_story_mode()
         x=44 , y=4 , dungeon=%bad_police, hospital=%police, alive=yes;
         x=54 , y=4 , dungeon=%bad_police, hospital=%police, alive=yes;
         x=90 , y=4, dungeon=%bad_police, hospital=%police, alive=yes;
-        x=105, y=24, dungeon=%bad_police, hospital=%police, alive=yes;
+        x=105, y=28, dungeon=%bad_police, hospital=%police, alive=yes;
         x=102, y=4, dungeon=%bad_police, hospital=%police, alive=yes;
         x=66, y=29, dungeon=%bad_police, hospital=%police, alive=yes;
         x=41, y=18, dungeon=%bad_police, hospital=%police, alive=yes;
