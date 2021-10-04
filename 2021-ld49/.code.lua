@@ -1236,6 +1236,7 @@ end
 end
 end
 function game_init()
+reload(0x2000,0x2000,0x1000)
 local d_and_h={}_g.all_deadbody_templates={dungeon=d_and_h,bossroom={},hospital=d_and_h}
 _g.all_enemy_templates=get_all_enemies_for_story_mode()
 g_endgame_stats={
