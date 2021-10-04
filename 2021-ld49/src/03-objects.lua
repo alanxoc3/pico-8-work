@@ -11,6 +11,5 @@ create_actor([[portal;2;col,pre_drawable,confined|
         a.radius=(sin(t())*.2+.5)
     end
 end, function(a)
-    printh(a.x)
     scr_ovalfill(a.x-a.radius, a.y-.2, a.x+a.radius, a.y+.2, 1)
 end)
