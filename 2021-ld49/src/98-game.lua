@@ -4,7 +4,9 @@
 function reset_the_dungeon()
     _g.fader_in(.5, nf, nf)
     g_room = ztable[[ x:0; y:0; w:128; h:32; ]]
-    g_pl = _g.pl_monster(4, 4)
+    -- g_pl = _g.pl_monster_control(4, 4)
+    -- g_pl = _g.pl_patient_control_passive(4, 4)
+    g_pl = _g.pl_patient_control_fight(4, 4)
     g_view = _g.view(15.25, 11.5, 3, g_pl)
     _g.simple_enemy(3, 2)
 

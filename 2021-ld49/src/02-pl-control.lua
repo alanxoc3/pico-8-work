@@ -1,13 +1,5 @@
-create_actor([[fist;3;col,confined,rel|
-    rel_actor:@1; x:@2; y:@3; i:@4; d:@5;
-    touchable:no; rx:.25; ry:.75;
-
-    tl_max_time=.33,;
-]], function(a)
-    a.rel_dx = cos(a.rel_actor.dir)*.03
-    a.rel_dy = sin(a.rel_actor.dir)*.03
-end)
-
+-- this file just has the control player function, because the function is a bit big.
+-- use this for the player with button logic, or for the boss with ai logic.
 function control_player(a, x_dir, y_dir, is_z_pressed, is_x_pressed, punch_enabled, insane_level)
     if not a.pl then return end
 
@@ -31,6 +23,10 @@ function control_player(a, x_dir, y_dir, is_z_pressed, is_x_pressed, punch_enabl
     elseif a:any_timer_active("hurt_cooldown") then
         _g.powerup_particle(a.x, a.y+.5, c_color_blood)
     end
+
+    -- amount of damage you do to enemies
+    if insane_level == 4 then a.stregth = 2
+    else a.stregth = 1 end
 
     if not a:any_timer_active("cooldown", "roll", "punch") then
         if is_z_pressed then
