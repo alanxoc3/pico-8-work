@@ -28,8 +28,8 @@ _g.c_enable_procgen_map = false
 
 function get_normal_map_enemies()
  return {
-  {8 ,6,"simple_enemy"},
-  {10,6,"simple_enemy"}
+  {8 ,6,"nurse"},
+  {10,6,"nurse"}
  }
 end
 
