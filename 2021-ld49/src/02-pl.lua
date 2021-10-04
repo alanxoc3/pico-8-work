@@ -116,6 +116,12 @@ end)
 function control_player(a, x_dir, y_dir, is_z_pressed, is_x_pressed, punch_func, insane_level)
     if not a.pl then return end
 
+    if a.teleporting then
+        a.iyy -= .25
+        a.ax=0 a.ay=0
+        return
+    end
+
     -- no speed or power multiplier for the non insane
     local speed_multiplier = 1
 

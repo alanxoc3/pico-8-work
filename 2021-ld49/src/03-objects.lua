@@ -2,7 +2,8 @@
 
 create_actor([[portal;2;col,pre_drawable,confined|
     x:@1; y:@2; u:@3; d:@4;
-    ry:.25;
+    rx:.125;
+    ry:.125;
     radius:.2;
     touchable:no;
 ]], function(a)
