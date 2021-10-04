@@ -1125,6 +1125,21 @@ return{
 dungeon=ztable[[124]],bossroom=ztable[[125]],hospital=ztable[[126]]
 }
 end
+function hospitalify_the_map()
+for x=0,107 do
+for y=0,31 do
+local v=mget(x,y)
+if v>=1 and v<=4 then v+=4
+elseif v>=17 and v<=20 then v+=4
+elseif v>=33 and v<=36 then v+=4
+elseif v>=49 and v<=52 then v+=4
+elseif v==32 or v==46 or v==47 then v+=16
+elseif v==117 then v+=1
+end
+mset(x,y,v)
+end
+end
+end
 function create_ui_hearts()
 _g.heart_particle_spawner(6.5,1,3)
 _g.heart_particle_spawner(9.5,1,2)
@@ -1186,6 +1201,7 @@ create_all_enemies()
 create_ui_hearts()
 end
 function game_init()
+hospitalify_the_map()
 _g.all_deadbody_templates={dungeon={},bossroom={},hospital={}}
 _g.all_enemy_templates=get_all_enemies_for_story_mode()
 g_floormap=create_map()
