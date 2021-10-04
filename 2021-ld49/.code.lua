@@ -1042,10 +1042,10 @@ _g.powerup_particle_spawner(13,1,4,_g.c_color_angry,104)
 end
 function game_init()
 _g.all_deadbody_templates={}
-_g.all_enemy_templates={
-{x=8,y=6,func=_g.simple_enemy,alive=true},
-{x=10,y=6,func=_g.simple_enemy,alive=true}
-}
+_g.all_enemy_templates={}
+for e in all(get_normal_map_enemies())do
+add(_g.all_enemy_templates,{x=e[1],y=e[2],func=_g[e[3]],alive=true})
+end
 g_floormap=create_map()
 g_reset_room=reset_the_dungeon
 g_reset_room()
