@@ -7,6 +7,9 @@ create_parent([[pl_control;0;col,|
             if g_room.name == "dungeon" then
                 g_reset_room = reset_the_bossroom
                 g_reset_room()
+            elseif g_room.name == "bossroom" then
+                g_reset_room = reset_the_hospital
+                g_reset_room()
             end
         end)
     end

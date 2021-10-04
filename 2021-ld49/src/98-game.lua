@@ -3,7 +3,7 @@
 
 function game_init()
     -- array of {x, y, xf, sind}
-    _g.all_deadbody_templates = {dungeon={}, bossroom={}}
+    _g.all_deadbody_templates = {dungeon={}, bossroom={}, hospital={}}
 
     -- array of {x, y, func, alive}
     -- don't remove things from this array!

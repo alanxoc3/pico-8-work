@@ -15,6 +15,7 @@ function get_all_enemies_for_story_mode()
             x=102, y=4 , func=%nurse, alive=yes;
         ]], bossroom=ztable[[
             x=120, y=12, func=%pl_monster_cpu, alive=yes;
+        ]], hospital=ztable[[
         ]]
     }
 end
@@ -73,6 +74,20 @@ function reset_the_dungeon()
     create_ui_powerups()
 
     _g.genocide_tip(8, 13)
+end
+
+-- resets the hospital
+function reset_the_hospital()
+    cleanup_confined()
+
+    _g.fader_in(.5, nf, nf)
+    g_pl = _g.pl_patient_control_passive(94, 13)
+    g_view = _g.view(15.25, 11.5, 3, g_pl)
+    g_room = ztable[[ name:hospital; x:0; y:0; w:108; h:32; ]]
+
+    create_all_deadbodies()
+    create_all_enemies()
+    create_ui_hearts()
 end
 
 -- resets the boss room
