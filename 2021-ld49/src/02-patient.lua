@@ -83,14 +83,16 @@ end, function(a)
 end)
 
 create_actor([[patient;3;drawable,col,confined,mov,x_bounded,y_bounded,spr_obj,tcol|
-    x:@1; y:@2; enemy_id:@3; u:@4; d:%patient_draw;
-    sh:2; iyy:-5;
+    x:@1; y:@2; enemy_id:@3; u:@4; d:@5;
+    sind:41; sh:2; iyy:-5;
     rx:.375; ry:.375;
     touchable: no;
 ]], function(a)
-    a.ax = 0
-    a.ay = 0
-    if abs(a.dx) < .01 then
-        a.xf = a.x - g_pl.x
+    a.xf = a.x - g_pl.x > 0
+    if t() % 5 < .5 then
+        a.ixx = flr_rnd(3)-1
+        a.sind = rnd_item{41,42,43}
+    else
+        a.ixx = 0
     end
-end)
+end, scr_spr)
