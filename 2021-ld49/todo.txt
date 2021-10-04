@@ -1,6 +1,5 @@
 next steps for alan:
 - look at possible bug in boss fight, where the portal isn't generated. rare?
-- change plus to square in boss room.
 - implement some random props/objects.
 - saw flip animation
 - message - "are you sure you want to enter the boss room"
@@ -8,7 +7,6 @@ next steps for alan:
 - enemy left arrow.
 - implement another enemy.
 - implement stat recordings.
-- implement separate room.
 - implement arrow to exit for end thing.
 - implement ending screen: pacifist, genocide, normal.
 - credits: denial, cadetthegreat, tigerwolf, alanxoc3, wadlo
@@ -20,7 +18,9 @@ next steps for alan:
 - implement door. -- STRETCH
 - title screen lets you select modes. -- STRETCH
 
+- DONE! change plus to square in boss room.
 - DONE! implement portal.
+- DONE! implement separate room.
 - DONE! implement "5 left" countdown if you killed 95%.
 - DONE! experiment with black floor.
 - DONE! implement level restart.
