@@ -40,11 +40,6 @@ function game_init()
     -- g_reset_room=reset_the_hospital
     -- g_reset_room=reset_the_bossroom
     g_reset_room()
-
-    -- DEBUG_BEGIN
-    g_pl.x = 15
-    g_pl.y = 5
-    -- DEBUG_END
 end
 
 function game_update()

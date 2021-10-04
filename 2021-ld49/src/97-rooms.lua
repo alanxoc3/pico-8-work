@@ -144,10 +144,6 @@ function reset_the_bossroom()
     g_view = _g.view(15.25, 11.5, 3, g_pl)
     g_room = ztable[[ name:bossroom; x:108; y:0; w:20; h:32; ]]
 
-    -- DEBUG_BEGIN
-    _g.portal(118, 30)
-    -- DEBUG_END
-
     create_all_deadbodies()
     create_all_enemies()
 
