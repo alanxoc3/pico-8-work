@@ -1130,13 +1130,10 @@ zspr(a.sind,a.x*8,a.y*8,2,2,g_pl.is_facing_left,false)
 end
 end)
 create_actor([[124|125]],function(a)
-local killed_count=#_g.all_deadbody_templates[g_room.name]
-local total_count=#_g.all_enemy_templates[g_room.name]
-local enemies_left=total_count-killed_count
-if enemies_left<=a.when_to_show_tip then
+if g_endgame_stats.enemy_total_count-g_endgame_stats.enemy_kill_count<=a.when_to_show_tip then
 scr_rectfill(.125,a.y-.5,15.75,a.y+.5,1)
-local number_str=""..killed_count.."/"..total_count
-if killed_count==total_count then
+local number_str=""..g_endgame_stats.enemy_kill_count.."/"..g_endgame_stats.enemy_total_count
+if g_endgame_stats.enemy_kill_count==g_endgame_stats.enemy_total_count then
 number_str="all"
 end
 zprint("killed "..number_str.." enemies",a.x*8,a.y*8-2,8,0)
@@ -1332,7 +1329,13 @@ function game_init()
 local d_and_h={}_g.all_deadbody_templates={dungeon=d_and_h,bossroom={},hospital=d_and_h}
 _g.all_enemy_templates=get_all_enemies_for_story_mode()
 g_floormap=create_map()
-g_endgame_stats={frames=0,deaths=0}
+g_endgame_stats={
+frames=0,
+deaths=0,
+achievement="pacifist",
+enemy_kill_count=0,
+enemy_total_count=0
+}
 g_reset_room=reset_the_dungeon
 g_reset_room()
 end
@@ -1343,6 +1346,15 @@ return x>=g_room.x and x<g_room.x+g_room.w and
 y>=g_room.y and y<g_room.y+g_room.h and
 fget(mget(x,y),0)
 end)
+g_endgame_stats.enemy_kill_count=#_g.all_deadbody_templates.dungeon
+g_endgame_stats.enemy_total_count=#_g.all_enemy_templates.dungeon
+if g_endgame_stats.enemy_kill_count==0 then
+g_endgame_stats.achievement="pacifist"
+elseif g_endgame_stats.enemy_kill_count==enemy_total_count then
+g_endgame_stats.achievement="genocide"
+else
+g_endgame_stats.achievement="unstable"
+end
 end
 function shiftx(view)return(view.x-view.off_x-8)*8 end
 function shifty(view)return(view.y-view.off_y-8)*8 end
@@ -1368,9 +1380,9 @@ camera()
 clip()
 batch_call_new(acts_loop,[[147]])
 if g_debug then
-g_floormap:draw_mini()
+print(g_endgame_stats.achievement,2,2,8)
+print("time="..format_time()..",deaths="..g_endgame_stats.deaths.." kill:"..g_endgame_stats.enemy_kill_count.."/"..g_endgame_stats.enemy_total_count,2,120,8)
 end
-print("time="..format_time()..",deaths="..g_endgame_stats.deaths,2,120)
 end
 function format_time()
 local seconds=flr(g_endgame_stats.frames/60)

@@ -12,7 +12,14 @@ function game_init()
     g_floormap = create_map()
 
     -- Frames updated in game_update. Deaths updated in 03-pl-control (just before the room is reset).
-    g_endgame_stats = { frames=0, deaths=0 }
+    -- Achievements: carnage, unstable, pacifist
+    g_endgame_stats = {
+        frames=0,
+        deaths=0,
+        achievement="pacifist",
+        enemy_kill_count=0,
+        enemy_total_count=0
+    }
 
     -- this controls which room you start in
     g_reset_room=reset_the_dungeon
@@ -49,6 +56,17 @@ function game_update()
             y >= g_room.y and y < g_room.y+g_room.h and
             fget(mget(x, y), 0)
     end)
+
+    g_endgame_stats.enemy_kill_count  = #_g.all_deadbody_templates.dungeon
+    g_endgame_stats.enemy_total_count = #_g.all_enemy_templates.dungeon
+
+    if g_endgame_stats.enemy_kill_count == 0 then
+        g_endgame_stats.achievement = "pacifist"
+    elseif g_endgame_stats.enemy_kill_count == enemy_total_count then
+        g_endgame_stats.achievement = "genocide"
+    else
+        g_endgame_stats.achievement = "unstable"
+    end
 
     -- ran into token limit. may enable again?
     -- tbox_interact()
@@ -111,11 +129,11 @@ function game_draw()
     -- Draw minimap.
     -- DEBUG_BEGIN
     if g_debug then
-        g_floormap:draw_mini()
+        -- g_floormap:draw_mini()
+        print(g_endgame_stats.achievement, 2, 2, 8)
+        print('time= '..format_time()..', deaths= '..g_endgame_stats.deaths..' kill: '..g_endgame_stats.enemy_kill_count..'/'..g_endgame_stats.enemy_total_count, 2, 120, 8)
     end
     -- DEBUG_END
-    
-    print('time= '..format_time()..', deaths= '..g_endgame_stats.deaths, 2, 120)
 end
 
 function format_time()
