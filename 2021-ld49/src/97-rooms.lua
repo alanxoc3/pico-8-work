@@ -1,16 +1,16 @@
 -- room resec helper functions and functions
 function get_all_enemies_for_story_mode()
     local dungeon_and_hospital = ztable[[
-        x=4  , y=28, bad_nurse, hospital=%nurse, alive=yes;
-        x=14 , y=26, bad_nurse, hospital=%nurse, alive=yes;
-        x=45 , y=28, bad_nurse, hospital=%nurse, alive=yes;
-        x=53 , y=9 , bad_nurse, hospital=%nurse, alive=yes;
-        x=70 , y=13, bad_nurse, hospital=%nurse, alive=yes;
-        x=60 , y=15, bad_nurse, hospital=%nurse, alive=yes;
-        x=48 , y=3 , bad_nurse, hospital=%nurse, alive=yes;
-        x=81 , y=4 , bad_nurse, hospital=%nurse, alive=yes;
-        x=81 , y=15, bad_nurse, hospital=%nurse, alive=yes;
-        x=18 , y=13, bad_nurse, hospital=%nurse, alive=yes;
+        x=4  , y=28, dungeon=%bad_nurse, hospital=%nurse, alive=yes;
+        x=14 , y=26, dungeon=%bad_nurse, hospital=%nurse, alive=yes;
+        x=45 , y=28, dungeon=%bad_nurse, hospital=%nurse, alive=yes;
+        x=53 , y=9 , dungeon=%bad_nurse, hospital=%nurse, alive=yes;
+        x=70 , y=13, dungeon=%bad_nurse, hospital=%nurse, alive=yes;
+        x=60 , y=15, dungeon=%bad_nurse, hospital=%nurse, alive=yes;
+        x=48 , y=3 , dungeon=%bad_nurse, hospital=%nurse, alive=yes;
+        x=81 , y=4 , dungeon=%bad_nurse, hospital=%nurse, alive=yes;
+        x=81 , y=15, dungeon=%bad_nurse, hospital=%nurse, alive=yes;
+        x=18 , y=13, dungeon=%bad_nurse, hospital=%nurse, alive=yes;
         x=102, y=4 , dungeon=%bad_nurse, hospital=%nurse, alive=yes;
     ]]
 
@@ -18,7 +18,7 @@ function get_all_enemies_for_story_mode()
         dungeon=dungeon_and_hospital,
         hospital=dungeon_and_hospital,
         bossroom=ztable[[
-            x=120, y=12, func=%pl_monster_cpu, alive=yes;
+            x=120, y=12, bossroom=%pl_monster_cpu, alive=yes;
         ]]
     }
 end
@@ -59,6 +59,8 @@ end
 function create_all_enemies()
     for i, enemy_template in pairs(_g.all_enemy_templates[g_room.name]) do
         if enemy_template.alive then
+            printh(g_room.name)
+            printh(g_room.name)
             enemy_template[g_room.name](enemy_template.x, enemy_template.y, i)
         end
     end
