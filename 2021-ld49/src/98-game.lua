@@ -50,18 +50,8 @@ function game_update()
             fget(mget(x, y), 0)
     end)
 
-   if g_tbox_update then
-      if g_tbox_writing then
-         g_tbox_anim = #g_tbox_active.l1+#g_tbox_active.l2
-      else
-         del(g_tbox_messages, g_tbox_active)
-         g_tbox_active, g_tbox_anim = g_tbox_messages[1], 0
-      end
-
-      g_tbox_update = false
-   end
-
-    tbox_interact()
+    -- ran into token limit. may enable again?
+    -- tbox_interact()
 end
 
 function shiftx(view) return (view.x-view.off_x-8)*8 end
@@ -115,7 +105,8 @@ function game_draw()
         above_map_drawable_1, d;
     ]])
 
-    tbox_draw(16,48)
+    -- ran into token limit. may enable again?
+    -- tbox_draw(16,48)
 
     -- Draw minimap.
     -- DEBUG_BEGIN

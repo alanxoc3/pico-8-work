@@ -7,6 +7,17 @@ g_tbox_messages, g_tbox_anim, g_tbox_max_len = {}, 0, 25
 -- if you press the button while text is still being displayed, then the text
 -- finishes its display.
 function tbox_interact()
+   if g_tbox_update then
+      if g_tbox_writing then
+         g_tbox_anim = #g_tbox_active.l1+#g_tbox_active.l2
+      else
+         del(g_tbox_messages, g_tbox_active)
+         g_tbox_active, g_tbox_anim = g_tbox_messages[1], 0
+      end
+
+      g_tbox_update = false
+   end
+
    if g_tbox_active then
       g_tbox_anim += .5
       -- pause'tbox'

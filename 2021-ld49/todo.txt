@@ -6,7 +6,6 @@ next steps for alan:
 - message - "are you sure you want to enter the boss room"
 - implement another enemy.
 - implement ending screen: pacifist, genocide, normal.
-- in portal, levitate.
 - credits: denial, cadetthegreat, tigerwolf, alanxoc3, wadlo
 - implement computer controlled pl monster boss.
 - enemies don't move when off the screen.
@@ -16,6 +15,7 @@ next steps for alan:
 - implement door. -- STRETCH
 - title screen lets you select modes. -- STRETCH
 
+- DONE! in portal, levitate.
 - DONE! enemy left arrow.
 - DONE! implement arrow to exit for end thing.
 - DONE! implement stat recordings.
