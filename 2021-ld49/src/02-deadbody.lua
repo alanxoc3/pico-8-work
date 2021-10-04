@@ -24,7 +24,6 @@ end)
 
 -- enemy_id, x, y, xf, sind
 function create_cached_deadbody(enemy_id, ...)
-    printh("eid: "..enemy_id)
     add(_g.all_deadbody_templates, {...})
     _g.all_enemy_templates[enemy_id].alive = false
     _g.deadbody(...)
