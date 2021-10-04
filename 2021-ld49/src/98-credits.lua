@@ -31,7 +31,16 @@ function credits_draw(a)
     zspr(78 , 16, base+48, 2, 2)
     zspr(104, 16, base+64, 2, 2)
 
-    zprint("you beat "..g_endgame_stats.achievement.." mode!"                                  , 16+12, base-1     , 13, -1)
+    local achievement
+    if g_endgame_stats.enemy_kill_count == 0 then
+        achievement = "pacifist"
+    elseif g_endgame_stats.enemy_kill_count == g_endgame_stats.enemy_total_count then
+        achievement = "genocide"
+    else
+        achievement = "unstable"
+    end
+
+    zprint("you beat "..achievement.." mode!"                                  , 16+12, base-1     , 13, -1)
     zprint('- - - - - - - - - - - - - - - - - - - - - - -'                                     , 16+12, base+8-1   , 1 , -1)
     zprint("kills : "..g_endgame_stats.enemy_kill_count.."/"..g_endgame_stats.enemy_total_count, 16+12, base+16-1  , 3 , -1)
     zprint("deaths: "..g_endgame_stats.deaths                                                  , 16+12, base+16+8-1, 4 , -1)
