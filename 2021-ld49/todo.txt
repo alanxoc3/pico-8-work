@@ -1,5 +1,6 @@
 next steps for alan:
 - implement some random props/objects.
+- consider procgen mode unlock-able.
 - enemy left arrow.
 - implement another enemy.
 - implement portal.

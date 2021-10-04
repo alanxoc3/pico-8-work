@@ -220,6 +220,7 @@ create_parent([[hurtable;0;act,;|
     hurt_cooldown_time:60;
     hurt_start:nf;
     hurt_end:nf;
+    damage:nf;
 
     hurt:@1; heal:@2;
 ]], function(a, damage)
