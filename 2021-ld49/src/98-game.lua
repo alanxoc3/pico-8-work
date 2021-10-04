@@ -4,9 +4,9 @@
 function disable_offscreen_bad_characters()
     for a in all(g_act_arrs.bad_character) do
         local dist = approx_dist(a.x - g_pl.x, a.y - g_pl.y)
-        if dist > 17 then
+        if dist > 14 then
             a.disabled.update = true
-            a.disabled.d = true
+            if dist > 17 then a.disabled.d = true end
         else
             a.disabled.update = nil
             a.disabled.d = nil
@@ -65,10 +65,10 @@ function game_update()
         view,update_view;
         act,       clean;
 
-    ]], g_act_arrs['wall'], g_act_arrs['bad_character'], g_act_arrs['good_character'], g_act_arrs['portal'], function(x, y)
+    ]], g_act_arrs['wall'], g_act_arrs['bad_character'], g_act_arrs['good_character'], g_act_arrs['portal'], function(a, x, y)
         return x >= g_room.x and x < g_room.x+g_room.w and
             y >= g_room.y and y < g_room.y+g_room.h and
-            fget(mget(x, y), 0)
+            (fget(mget(x, y), 0) or a.bad_character and fget(mget(x, y), 1))
     end)
 
     if t() % .5 == 0 then disable_offscreen_bad_characters() end

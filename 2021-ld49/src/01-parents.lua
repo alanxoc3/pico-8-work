@@ -322,7 +322,7 @@ create_parent([[tcol;0;vec,dim;|
    coll_tile:@1;
 ]], function(a, solid_func)
    local x, dx = coll_tile_help(a.x, a.y, a.dx, a.rx, a.ry, 0, a, a.tile_hit, solid_func)
-   local y, dy = coll_tile_help(a.y, a.x, a.dy, a.ry, a.rx, 2, a, a.tile_hit, function(y, x) return solid_func(x, y) end)
+   local y, dy = coll_tile_help(a.y, a.x, a.dy, a.ry, a.rx, 2, a, a.tile_hit, function(a, y, x) return solid_func(a, x, y) end)
    if a.tile_solid then
       a.x, a.y, a.dx, a.dy = x, y, dx, dy
    end
