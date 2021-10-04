@@ -1080,7 +1080,16 @@ end)
 create_actor([[134|135]],function(a)
 a:set_strength(3)
 end,function(a)
-control_player(a,flr_rnd(3)-1,flr_rnd(3)-1,flr_rnd(a.strength+5)==0,flr_rnd(4-a.strength)==0,_g.bad_fist,a.strength)
+local x=zsgn(g_pl.x-a.x)
+local y=zsgn(g_pl.y-a.y)
+control_player(a
+,x
+,y
+,flr_rnd(10)==0
+,flr_rnd(2)==0
+,_g.bad_fist
+,a.strength
+)
 end,function(a)
 a:create_dead_body()
 _g.portal(118,28)
