@@ -26,10 +26,11 @@ function reset_the_dungeon()
     else
         g_pl = _g.pl_monster_control(7, 7)
     end
-    -- DEBUG_BEGIN
+    -- DEBUG_END
 
     g_view = _g.view(15.25, 11.5, 3, g_pl)
     _g.simple_enemy(8, 6)
+    _g.simple_enemy(10, 6)
 
     -- draws the hearts at the top of the screen, with particles!
     _g.heart_particle_spawner(6.5, 1, 3)
