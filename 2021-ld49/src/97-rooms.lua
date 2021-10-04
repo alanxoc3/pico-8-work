@@ -61,7 +61,7 @@ function reset_the_bossroom()
     cleanup_confined()
 
     _g.fader_in(.5, nf, nf)
-    g_pl   = _g.pl_patient_control_fight(120, 7)
+    g_pl   = _g.pl_patient_control_fight(118, 27)
     g_boss = _g.pl_monster_cpu(120, 7)
     g_view = _g.view(15.25, 11.5, 3, g_pl)
     g_room = ztable[[ name:bossroom; x:108; y:0; w:20; h:32; ]]
