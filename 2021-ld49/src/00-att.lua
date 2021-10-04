@@ -56,7 +56,11 @@ function create_actor(...)  create_parent_actor_shared(false, ...) end
 
 -- If the game is paused, only run paused functions.
 function acts_loop(id, func_name, ...)
-   for a in all(g_act_arrs[id]) do
-      call_not_nil(a, func_name, a, ...)
-   end
+    for a in all(g_act_arrs[id]) do
+        if not a.disabled[func_name] then
+            call_not_nil(a, func_name, a, ...)
+        else
+            printh(func_name)
+        end
+    end
 end

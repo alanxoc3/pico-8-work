@@ -38,7 +38,7 @@ end)
 -- basic actor. most things ultimately inherit this.
 -- handles update, init, and deletion stuff.
 create_parent([[act;0;timer,;room_init,kill,clean,delete|
-    update:@1; clean:@2; kill:@3; delete:@4; get:@5;
+    update:@1; clean:@2; kill:@3; delete:@4; get:@5; disabled:,;
     alive:yes; i:nf; u:nf; room_init:nf; destroyed:nf;
 ]], function(a)
     -- tl_node calls the u/i functions.
