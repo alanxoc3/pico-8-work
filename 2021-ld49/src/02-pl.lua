@@ -22,7 +22,7 @@ create_parent([[pl;1;drawable,pos,confined,mov,x_bounded,y_bounded,col,spr_obj,k
     sh:2; iyy:-5;
 ]], function(a)
     _g.deadbody(a.x, a.y, a.xf, a.passive_mode and 80 or 64)
-    _g.fader_out(1,nf,game_init)
+    _g.fader_out(1,nf,g_reset_room)
 end, function(a)
     a.sind = 134
     a.yy = 0
@@ -52,7 +52,7 @@ end, function(a)
         else a.sind = 143
         end
     else
-        local loop = (a.tl_tim % 1)
+        local loop = a.tl_tim and (a.tl_tim % 1) or 0
         if loop < .25 then a.sind = 141 end
     end
     a.xf = a.is_facing_left
