@@ -73,17 +73,19 @@ end, function(a)
 end)
 
 create_parent([[pl_monster;0;pl/no,|
-    damage:@1; hurt_start:@2;
-    increment_insanity:@3; decrement_insanity:@4; set_insanity:@5;
+    damage:@1; hurt_start:@2; hurt_end:@3;
+    increment_insanity:@4; decrement_insanity:@5; set_insanity:@6;
 
     insane_level:0;
 ]], function(a, other)
     if not a:any_timer_active"roll" then
-        if a.insane_level < 4 then a:hurt() end
+        a:hurt()
         a:knockback(atan2(a.x-other.x, a.y-other.y))
     end
 end, function(a)
     a:set_insanity(4)
+end, function(a)
+    a:set_insanity(0)
 end, function(a)
     if a.insane_level < 3 then
         a:set_insanity(a.insane_level + 1)
