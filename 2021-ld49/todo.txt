@@ -9,6 +9,7 @@ next steps for alan:
 - implement "5 left" countdown if you killed 95%.
 - implement arrow to exit for end thing.
 - implement ending screen: pacifist, genocide, normal.
+- credits: denial, cadetthegreat, tigerwolf, alanxoc3, wadlo
 - implement computer controlled pl monster boss.
 
 - make tiles able to go in front of you (sorted by y) & maybe smaller hitbox.

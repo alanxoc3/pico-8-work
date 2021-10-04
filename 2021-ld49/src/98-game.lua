@@ -1,6 +1,12 @@
 -- game logic is in this file
 -- 3 rooms: dungeon, void, hospital
 
+-- array of {x, y, xf, sind}
+_g.all_dead_bodies = {}
+
+-- array of something?
+-- _g.all_enemies = ztable[[  ]]
+
 function reset_the_dungeon()
     _g.fader_in(.5, nf, nf)
     g_room = ztable[[ x:0; y:0; w:128; h:32; ]]
@@ -28,8 +34,6 @@ function reset_the_dungeon()
     _g.powerup_particle_spawner(8 , 15, 2, _g.c_color_insane_2, 76)
     _g.powerup_particle_spawner(12, 15, 3, _g.c_color_insane_3, 78)
     _g.powerup_particle_spawner(13, 1 , 4, _g.c_color_angry   , 104)
-
-    -- tbox"hello, how are^you?"
 end
 
 function reset_the_void()

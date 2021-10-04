@@ -968,6 +968,7 @@ end)
 create_actor([[105|101]],function(a)
 control_player(a,xbtn(),ybtn(),btn(4),btn(5),false)
 end)
+_g.all_dead_bodies={}
 function reset_the_dungeon()
 _g.fader_in(.5,nf,nf)
 g_room=ztable[[106]]

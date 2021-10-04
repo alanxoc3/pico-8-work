@@ -12,4 +12,3 @@ end, function(a)
 end, function(a)
     zspr(a.sind, a.x*8+a.xx, a.y*8+a.yy, 2, 1, a.xf, false)
 end)
-
