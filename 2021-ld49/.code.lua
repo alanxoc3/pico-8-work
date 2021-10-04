@@ -825,7 +825,7 @@ end
 end)
 create_parent([[110|111]],function(a,other)
 if not a:any_timer_active"roll"then
-a:hurt(other.strength or 1)
+a:hurt()
 a:knockback(atan2(a.x-other.x,a.y-other.y))
 end
 end)
