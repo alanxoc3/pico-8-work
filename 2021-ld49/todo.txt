@@ -6,7 +6,6 @@ next steps for alan:
 - message - "are you sure you want to enter the boss room"
 - enemy left arrow.
 - implement another enemy.
-- implement stat recordings.
 - implement arrow to exit for end thing.
 - implement ending screen: pacifist, genocide, normal.
 - credits: denial, cadetthegreat, tigerwolf, alanxoc3, wadlo
@@ -18,6 +17,7 @@ next steps for alan:
 - implement door. -- STRETCH
 - title screen lets you select modes. -- STRETCH
 
+- DONE! implement stat recordings.
 - DONE! decide on making procgen mode unlock-able.
 - DONE! change plus to square in boss room.
 - DONE! implement portal.

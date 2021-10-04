@@ -11,6 +11,9 @@ function game_init()
 
     g_floormap = create_map()
 
+    -- Frames updated in game_update. Deaths updated in 03-pl-control (just before the room is reset).
+    g_endgame_stats = { frames=0, deaths=0 }
+
     -- this controls which room you start in
     g_reset_room=reset_the_dungeon
     -- g_reset_room=reset_the_hospital
@@ -19,6 +22,7 @@ function game_init()
 end
 
 function game_update()
+    g_endgame_stats.frames = g_endgame_stats.frames + 1
     batch_call_new(acts_loop, [[
         timer,       tick;
         act,         update;
@@ -119,4 +123,15 @@ function game_draw()
         g_floormap:draw_mini()
     end
     -- DEBUG_END
+    
+    print('time= '..format_time()..', deaths= '..g_endgame_stats.deaths, 2, 120)
+end
+
+function format_time()
+    local seconds = flr(g_endgame_stats.frames/60)
+    local mins = flr(seconds/60)
+    seconds = seconds%60
+    mins    = mins    < 10 and '0'..mins or mins
+    seconds = seconds < 10 and '0'..seconds or seconds
+    return ''..mins..':'..seconds
 end
