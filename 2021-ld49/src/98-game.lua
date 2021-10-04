@@ -38,6 +38,8 @@ function reset_the_dungeon()
     _g.heart_particle_spawner(9.5, 1, 2)
     _g.heart_particle_spawner(  8, 1, 1)
 
+    _g.genocide_tip(8, 13)
+
     _g.powerup_particle_spawner(3 , 1 , 0, _g.c_color_normal  , 72)
     _g.powerup_particle_spawner(4 , 15, 1, _g.c_color_insane_1, 74)
     _g.powerup_particle_spawner(8 , 15, 2, _g.c_color_insane_2, 76)

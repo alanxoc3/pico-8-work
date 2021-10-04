@@ -1,9 +1,7 @@
 next steps for alan:
 - implement some random props/objects.
 - implement another enemy.
-- implement level restart.
 - implement portal.
-- experiment with black floor.
 - implement stat recordings.
 - implement separate room.
 - implement "5 left" countdown if you killed 95%.
@@ -16,6 +14,8 @@ next steps for alan:
 - implement door. -- STRETCH
 - title screen lets you select modes. -- STRETCH
 
+- DONE! experiment with black floor.
+- DONE! implement level restart.
 - DONE! refactor player logic to support multiple types of players.
 - DONE! implement view
 - DONE! make sum muzik.
