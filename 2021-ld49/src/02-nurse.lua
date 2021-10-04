@@ -33,6 +33,7 @@ create_actor([[nurse_weapon;3;col,confined,rel,bad_attack|
 end)
 
 create_actor([[bad_nurse;3;drawable,col,confined,mov,x_bounded,y_bounded,knockbackable,hurtable,spr_obj,bad_character,tcol|
+    sind:66;
     x:@1; y:@2; enemy_id:@3; u:@4; damage:@5; destroyed:@6;
     d:%nurse_draw;
     health:%c_enemy_health; max_health:%c_enemy_health;
@@ -86,6 +87,7 @@ end, function(a)
 end)
 
 create_actor([[nurse;3;drawable,col,confined,mov,x_bounded,y_bounded,spr_obj,tcol|
+    sind:98;
     x:@1; y:@2; enemy_id:@3; u:@4; d:%nurse_draw;
     sh:2; iyy:-5;
     rx:.375; ry:.375;

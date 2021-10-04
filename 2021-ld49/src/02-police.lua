@@ -11,6 +11,7 @@ create_actor([[police_weapon;3;col,vec,confined,rel,bad_attack,post_drawable|
 end)
 
 create_actor([[bad_police;3;drawable,col,confined,mov,x_bounded,y_bounded,knockbackable,hurtable,spr_obj,bad_character,tcol|
+    sind:192;
     x:@1; y:@2; enemy_id:@3; u:@4; damage:@5; destroyed:@6; d:@7;
     d:%police_draw;
     health:%c_enemy_health; max_health:%c_enemy_health;
