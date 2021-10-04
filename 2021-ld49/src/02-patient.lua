@@ -1,3 +1,28 @@
+function _g.nurse_draw(a)
+    a.sind=66
+
+    if a:any_timer_active"prepare" then
+        a.sind=69
+    elseif a:any_timer_active"attack" then
+        a.sind=70
+        if a:get_timer_percent"attack" > .50 then
+            a.sind=71
+        end
+    elseif abs(a.dx) > .005 or abs(a.dy) > .005 then
+        local loop = a.tl_tim % .5 / .5
+        if loop < .25 then a.sind=66
+        elseif loop < .5 then a.sind=67
+        elseif loop < .75 then a.sind=66
+        else a.sind=68
+        end
+    end
+
+    if g_room.name == 'hospital' then
+        a.sind += 32
+    end
+    scr_spr(a)
+end
+
 create_actor([[nurse_weapon;3;col,confined,rel,bad_attack|
     rel_actor:@1; x:@2; y:@3; i:@4;
     touchable:no; rx:.5; ry:1;
@@ -7,8 +32,9 @@ create_actor([[nurse_weapon;3;col,confined,rel,bad_attack|
     a.rel_dx = zsgn(cos(a.rel_actor.dir))*.05
 end)
 
-create_actor([[bad_nurse;3;drawable,col,confined,mov,x_bounded,y_bounded,knockbackable,hurtable,spr_obj,bad_character,tcol|
-    x:@1; y:@2; enemy_id:@3; u:@4; d:@5; damage:@6; destroyed:@7;
+create_actor([[bad_patient;3;drawable,col,confined,mov,x_bounded,y_bounded,knockbackable,hurtable,spr_obj,bad_character,tcol|
+    x:@1; y:@2; enemy_id:@3; u:@4; damage:@5; destroyed:@6;
+    d:%nurse_draw;
     health:%c_enemy_health; max_health:%c_enemy_health;
     sh:2; iyy:-5;
     rx:.375; ry:.375;
@@ -44,25 +70,6 @@ create_actor([[bad_nurse;3;drawable,col,confined,mov,x_bounded,y_bounded,knockba
         a.ax = 0
         a.ay = 0
     end
-end, function(a)
-    a.sind=66
-
-    if a:any_timer_active"prepare" then
-        a.sind=69
-    elseif a:any_timer_active"attack" then
-        a.sind=70
-        if a:get_timer_percent"attack" > .50 then
-            a.sind=71
-        end
-    elseif abs(a.dx) > .005 or abs(a.dy) > .005 then
-        local loop = a.tl_tim % .5 / .5
-        if loop < .25 then a.sind=66
-        elseif loop < .5 then a.sind=67
-        elseif loop < .75 then a.sind=66
-        else a.sind=68
-        end
-    end
-    scr_spr(a)
 end, function(a, other)
     if other.rel_actor then
         other.rel_actor:knockback(atan2(g_pl.x-a.x, g_pl.y-a.y))
@@ -78,8 +85,8 @@ end, function(a)
     create_cached_deadbody(a.enemy_id, a.x, a.y, a.xf, 96)
 end)
 
-create_actor([[nurse;3;drawable,col,confined,mov,x_bounded,y_bounded,spr_obj,tcol|
-    x:@1; y:@2; enemy_id:@3; u:@4; d:@5;
+create_actor([[patient;3;drawable,col,confined,mov,x_bounded,y_bounded,spr_obj,tcol|
+    x:@1; y:@2; enemy_id:@3; u:@4; d:%nurse_draw;
     sh:2; iyy:-5;
     rx:.375; ry:.375;
     touchable: no;
@@ -103,17 +110,4 @@ create_actor([[nurse;3;drawable,col,confined,mov,x_bounded,y_bounded,spr_obj,tco
         a.ax = 0
         a.ay = 0
     end
-end, function(a)
-    a.sind=98
-
-    if abs(a.dx) > .005 or abs(a.dy) > .005 then
-        local loop = a.tl_tim % .5 / .5
-        if loop < .25 then a.sind=98
-        elseif loop < .5 then a.sind=99
-        elseif loop < .75 then a.sind=98
-        else a.sind=100
-        end
-    end
-
-    scr_spr(a)
 end)
