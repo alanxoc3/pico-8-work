@@ -26,6 +26,7 @@ create_actor([[patient_weapon;3;col,confined,rel,bad_attack|
 ]])
 
 create_actor([[bad_patient;3;drawable,col,confined,mov,x_bounded,y_bounded,knockbackable,hurtable,spr_obj,bad_character,tcol|
+    sind:9;
     x:@1; y:@2; enemy_id:@3; u:@4; damage:@5; destroyed:@6;
     d:%patient_draw;
     health:%c_enemy_health; max_health:%c_enemy_health;
@@ -82,6 +83,7 @@ end, function(a)
 end)
 
 create_actor([[patient;3;drawable,col,confined,mov,x_bounded,y_bounded,spr_obj,tcol|
+    sind:41;
     x:@1; y:@2; enemy_id:@3; u:@4; d:@5;
     sind:41; sh:2; iyy:-5;
     rx:.375; ry:.375;
