@@ -7,17 +7,22 @@ __lua__
 -- unobfuscated code at:
 -- git.io/amorg-pico8
 
--- emotion colors
-c_color_normal   = 13
-c_color_insane_1 = 3
-c_color_insane_2 = 9
-c_color_insane_3 = 12
-c_color_angry    = 8
+-- global var table
+_g = {}
 
-c_is_patient = false	 
+-- emotion colors
+_g.c_color_normal   = 13
+_g.c_color_insane_1 = 3
+_g.c_color_insane_2 = 9
+_g.c_color_insane_3 = 12
+_g.c_color_angry    = 8
 
 -- other colors
-c_color_blood    = 8
+_g.c_color_blood = 8
+
+-- config stuff
+_g.c_is_patient = false
+_g.c_pl_health = 1
 
 #include .code.lua
 
