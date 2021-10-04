@@ -43,11 +43,11 @@ function reset_the_dungeon()
     cleanup_confined()
 
     _g.fader_in(.5, nf, nf)
-    g_pl = _g.pl_monster_control(7, 7)
+    g_pl = _g.pl_monster_control(94, 11)
     g_view = _g.view(15.25, 11.5, 3, g_pl)
-    g_room = ztable[[ x:0; y:0; w:128; h:32; ]]
+    g_room = ztable[[ name:dungeon; x:0; y:0; w:128; h:32; ]]
 
-    _g.portal(4, 4)
+    _g.portal(94, 13)
     create_all_deadbodies()
     create_all_enemies()
     create_ui_hearts()
@@ -64,7 +64,7 @@ function reset_the_bossroom()
     g_pl   = _g.pl_patient_control_fight(7, 7)
     g_boss = _g.pl_monster_cpu(9, 7)
     g_view = _g.view(15.25, 11.5, 3, g_pl)
-    g_room = ztable[[ x:0; y:0; w:20; h:16; ]]
+    g_room = ztable[[ name:bossroom; x:0; y:0; w:20; h:16; ]]
 
     create_ui_hearts()
 

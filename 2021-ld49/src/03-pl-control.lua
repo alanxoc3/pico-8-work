@@ -1,8 +1,14 @@
 create_parent([[pl_control;0;col,|
-    hit:@1;
+    hit:@1; teleporting:no;
 ]], function(a, other)
-    if other.portal then
-        -- do something
+    if other.portal and not a.teleporting then
+        a.teleporting = true
+        _g.fader_out(1,nf,function()
+            if g_room.name == "dungeon" then
+                g_reset_room = reset_the_bossroom
+                g_reset_room()
+            end
+        end)
     end
 end)
 
