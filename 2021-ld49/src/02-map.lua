@@ -179,6 +179,8 @@ function create_map()
     end
 
     floor:scale()
-    floor:mset_all()
+    if _g.c_enable_procgen_map then
+        floor:mset_all()
+    end
     return floor
 end
