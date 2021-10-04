@@ -1,5 +1,6 @@
 next steps for alan:
 - implement some random props/objects.
+- enemy left arrow.
 - implement another enemy.
 - implement portal.
 - implement stat recordings.

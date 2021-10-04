@@ -54,3 +54,18 @@ function reset_the_dungeon()
 
     _g.genocide_tip(8, 13)
 end
+
+-- resets the boss room
+function reset_the_bossroom()
+    cleanup_confined()
+
+    _g.fader_in(.5, nf, nf)
+    g_pl   = _g.pl_patient_control_fight(7, 7)
+    g_boss = _g.pl_monster_cpu(9, 7)
+    g_view = _g.view(15.25, 11.5, 3, g_pl)
+    g_room = ztable[[ x:0; y:0; w:20; h:16; ]]
+
+    create_ui_hearts()
+
+    _g.genocide_tip(8, 13)
+end

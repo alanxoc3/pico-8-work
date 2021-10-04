@@ -13,7 +13,10 @@ function game_init()
     end
 
     g_floormap = create_map()
-    g_reset_room=reset_the_dungeon
+
+    -- this controls which room you start in
+    -- g_reset_room=reset_the_dungeon
+    g_reset_room=reset_the_bossroom
     g_reset_room()
 end
 
