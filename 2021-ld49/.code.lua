@@ -829,7 +829,9 @@ for i=1,scoops do
 floor:clearArea(floor:randArea(2,5,2,5))
 end
 floor:scale()
+if _g.c_enable_procgen_map then
 floor:mset_all()
+end
 return floor
 end
 create_parent([[80|81]],function(a)

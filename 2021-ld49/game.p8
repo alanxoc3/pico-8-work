@@ -23,6 +23,7 @@ _g.c_color_blood = 8
 -- config stuff
 _g.c_is_patient = false
 _g.c_pl_health = 1
+_g.c_enable_procgen_map = false
 
 #include .code.lua
 
