@@ -22,12 +22,16 @@ end
 
 function game_update()
     batch_call_new(acts_loop, [[
-        timer,     tick;
-        act,       update;
-        mov,       mov_update;
-        pl,        move_check,@1; -- collision
-        enemy,        move_check,@2; -- collision
-        enemy,        move_check,@3; -- collision
+        timer,       tick;
+        act,         update;
+        mov,         mov_update;
+
+        good_character, move_check,@1; -- wall
+        bad_character,  move_check,@1; -- wall
+
+        good_attack, move_check,@2; -- bad_character
+        bad_attack,  move_check,@3; -- good_character
+
         tcol,coll_tile,@4;
         rel,       rel_update;
         vec,       vec_update;
@@ -36,7 +40,7 @@ function game_update()
         view,update_view;
         act,       clean;
 
-    ]], g_act_arrs['col'], g_act_arrs['pl'], g_act_arrs['fist'], function(x, y)
+    ]], g_act_arrs['wall'], g_act_arrs['bad_character'], g_act_arrs['good_character'], function(x, y)
         return x >= g_room.x and x < g_room.x+g_room.w and
             y >= g_room.y and y < g_room.y+g_room.h and
             fget(mget(x, y), 0)

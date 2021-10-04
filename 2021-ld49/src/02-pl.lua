@@ -6,16 +6,18 @@ create_parent([[fist_parent;0;col,confined,rel|
     a.rel_dx = cos(a.rel_actor.dir)*.03
     a.rel_dy = sin(a.rel_actor.dir)*.03
 end, function(a, other)
+    printh(other.id)
     if other.hurtable and other ~= a.rel_actor then
+        printh("inside:"..other.id)
         other:damage(a)
     end
 end)
 
-create_actor[[good_fist;3;fist_parent,|
+create_actor[[good_fist;3;fist_parent,good_attack|
     rel_actor:@1; x:@2; y:@3;
 ]]
 
-create_actor[[bad_fist;3;fist_parent,enemy|
+create_actor[[bad_fist;3;fist_parent,bad_attack|
     rel_actor:@1; x:@2; y:@3;
 ]]
 
