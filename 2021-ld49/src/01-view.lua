@@ -41,6 +41,14 @@ function scr_rectfill(x1, y1, x2, y2, col)
    rectfill(x1*8, y1*8, x2*8, y2*8, col)
 end
 
+function scr_oval(x1, y1, x2, y2, col)
+   oval(x1*8, y1*8, x2*8, y2*8, col)
+end
+
+function scr_ovalfill(x1, y1, x2, y2, col)
+   ovalfill(x1*8, y1*8, x2*8, y2*8, col)
+end
+
 function scr_map(cel_x, cel_y, sx, sy, ...)
    map(cel_x, cel_y, sx*8, sy*8, ...)
 end
