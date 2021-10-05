@@ -1213,7 +1213,7 @@ diagnosis="healthy"
 elseif g_endgame_stats.enemy_kill_count==g_endgame_stats.enemy_total_count then
 if g_endgame_stats.deaths==0 then
 if g_endgame_stats.frames<10800 then
-diagnosis="inspirational"
+diagnosis="unbelievable"
 else
 diagnosis="impressive"
 end
