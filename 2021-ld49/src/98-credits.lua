@@ -32,10 +32,12 @@ function credits_draw(a)
     zspr(104, 16, base+64, 2, 2)
 
     local achievement
-    if g_endgame_stats.enemy_kill_count == 0 then
+    if g_endgame_stats.frames < 3600 then
+        achievement = "speedrun"
+    elseif g_endgame_stats.enemy_kill_count == 0 then
         achievement = "pacifist"
     elseif g_endgame_stats.enemy_kill_count == g_endgame_stats.enemy_total_count then
-        achievement = "genocide"
+        achievement = g_endgame_stats.frames < 10800 and g_endgame_stats.deaths == 0 and "insane" or "genocide"
     else
         achievement = "unstable"
     end
