@@ -50,7 +50,7 @@ function credits_draw(a)
         diagnosis = "unstable"
     end
 
-    zprint("You have been diagnosed as: "..diagnosis                                           , 16+12, base-1     , 13, -1)
+    zprint("diagnosis: "..diagnosis                                                            , 16+12, base-1     , 13, -1)
     zprint('- - - - - - - - - - - - - - - - - - - - - - -'                                     , 16+12, base+8-1   , 1 , -1)
     zprint("kills : "..g_endgame_stats.enemy_kill_count.."/"..g_endgame_stats.enemy_total_count, 16+12, base+16-1  , 3 , -1)
     zprint("deaths: "..g_endgame_stats.deaths                                                  , 16+12, base+16+8-1, 4 , -1)
