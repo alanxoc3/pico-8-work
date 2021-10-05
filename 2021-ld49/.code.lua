@@ -1205,21 +1205,29 @@ zspr(74,16,base+16,2,2)
 zspr(76,16,base+32,2,2)
 zspr(78,16,base+48,2,2)
 zspr(104,16,base+64,2,2)
-local achievement
+local diagnosis
 if g_endgame_stats.frames<3600 then
-achievement="speedrun"
+diagnosis="skittish"
 elseif g_endgame_stats.enemy_kill_count==0 then
-achievement="pacifist"
+diagnosis="healthy"
 elseif g_endgame_stats.enemy_kill_count==g_endgame_stats.enemy_total_count then
-achievement=g_endgame_stats.frames<10800 and g_endgame_stats.deaths==0 and "insane"or "genocide"
+if g_endgame_stats.deaths==0 then
+if g_endgame_stats.frames<10800 then
+diagnosis="inspirational"
 else
-achievement="unstable"
+diagnosis="impressive"
 end
-zprint("you beat "..achievement.." mode!",16+12,base-1,13,-1)
+else
+diagnosis="insane"
+end
+else
+diagnosis="unstable"
+end
+zprint("You have been diagnosed as: "..diagnosis,16+12,base-1,13,-1)
 zprint("-----------------------",16+12,base+8-1,1,-1)
 zprint("kills : "..g_endgame_stats.enemy_kill_count.."/"..g_endgame_stats.enemy_total_count,16+12,base+16-1,3,-1)
 zprint("deaths: "..g_endgame_stats.deaths,16+12,base+16+8-1,4,-1)
-zprint("timer : "..format_time(),16+12,base+32-1,9,-1)
+zprint("time  : "..format_time(),16+12,base+32-1,9,-1)
 zprint("-----------------------",16+12,base+32+8-1,1,-1)
 zprint("@alanxoc3: code/music",16+12,base+48-1,12,-1)
 zprint("@denial: code/design",16+12,base+48+8-1,14,-1)
