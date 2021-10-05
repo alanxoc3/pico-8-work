@@ -885,7 +885,9 @@ a.ax*=speed_multiplier
 a.ay*=speed_multiplier
 end
 create_actor([[112|113]],function(a)
-a.sind=197
+a.flipped=not a.flipped
+a.sind=a.flipped and 197 or 198
+a.xf=a.dx<0
 scr_spr(a)
 end)
 create_actor([[114|115]],function(a)
@@ -896,8 +898,7 @@ a:create_timer("wait",flr_rnd(20)+10,function()
 a:create_timer("aim",10,function()
 _g.police_weapon(a.x,a.y,a.xf and-shoot_speed or shoot_speed)
 a:create_timer("aim",10,function()_g.police_weapon(a.x,a.y-1,a.xf and-shoot_speed or shoot_speed)end)
-a:create_timer("shoot",40,function()
-end)
+a:create_timer("shoot",40,nf)
 end)
 end)
 end)
