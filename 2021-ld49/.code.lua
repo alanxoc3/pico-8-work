@@ -1207,15 +1207,15 @@ zspr(78,16,base+48,2,2)
 zspr(104,16,base+64,2,2)
 local diagnosis
 if g_endgame_stats.frames<3600 then
-diagnosis="skittish"
+diagnosis="hyperactive"
 elseif g_endgame_stats.enemy_kill_count==0 then
 diagnosis="healthy"
 elseif g_endgame_stats.enemy_kill_count==g_endgame_stats.enemy_total_count then
 if g_endgame_stats.deaths==0 then
 if g_endgame_stats.frames<10800 then
-diagnosis="unbelievable"
+diagnosis="possessed"
 else
-diagnosis="impressive"
+diagnosis="obsessive"
 end
 else
 diagnosis="insane"
