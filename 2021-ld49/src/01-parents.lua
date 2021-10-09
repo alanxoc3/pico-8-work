@@ -194,6 +194,20 @@ create_parent[[drawable;0;drawable_obj,;d,|d:nf;]]
 create_parent[[drawable_1;0;drawable_obj,;d,|d:nf;]]
 create_parent[[drawable_2;0;drawable_obj,;d,|d:nf;]]
 
+create_parent([[captionable;0;drawable,pos;|
+    d:nf;
+    draw_caption:@1;
+    caption_text:null;
+]], function(a)
+    if a.caption_text and approx_dist(g_pl.x-a.x, g_pl.y-a.y) < 1 then
+        zprint(a.caption_text, a.x*8  , (a.y-2.5)*8+1, 1, 0)
+        zprint(a.caption_text, a.x*8  , (a.y-2.5)*8-1, 1, 0)
+        zprint(a.caption_text, a.x*8-1, (a.y-2.5)*8  , 1, 0)
+        zprint(a.caption_text, a.x*8+1, (a.y-2.5)*8  , 1, 0)
+        zprint(a.caption_text, a.x*8  , (a.y-2.5)*8  , 7, 0)
+    end
+end)
+
 create_parent[[pre_drawable;0;drawable_obj,;d,|d:nf;]]
 create_parent[[pre_drawable_1;0;drawable_obj,;d,|d:nf;]]
 create_parent[[pre_drawable_2;0;drawable_obj,;d,|d:nf;]]

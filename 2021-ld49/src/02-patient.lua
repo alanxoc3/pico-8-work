@@ -83,7 +83,7 @@ end, function(a)
     create_cached_deadbody(a.enemy_id, a.x, a.y, a.xf, 14)
 end)
 
-create_actor([[patient;3;drawable,col,confined,mov,x_bounded,y_bounded,spr_obj,tcol|
+create_actor([[patient;3;captionable,drawable,col,confined,mov,x_bounded,y_bounded,spr_obj,tcol|
     sind:41;
     x:@1; y:@2; enemy_id:@3; u:@4; d:@5;
     sind:41; sh:2; iyy:-5;
@@ -96,5 +96,11 @@ create_actor([[patient;3;drawable,col,confined,mov,x_bounded,y_bounded,spr_obj,t
         a.sind = rnd_item{41,42,43}
     else
         a.ixx = 0
+    end
+
+    if g_endgame_stats.enemy_kill_count > 0 then
+        a.caption_text = "don't kill me too!"
+    else
+        a.caption_text = "play with me!"
     end
 end, scr_spr)

@@ -87,7 +87,7 @@ end, function(a) -- draw
     scr_spr(a)
 end)
 
-create_actor([[police;3;drawable,col,confined,mov,x_bounded,y_bounded,spr_obj,tcol|
+create_actor([[police;3;captionable,drawable,col,confined,mov,x_bounded,y_bounded,spr_obj,tcol|
     x:@1; y:@2; enemy_id:@3; u:@4; d:@5;
     sind:224; sh:2; iyy:-5;
     rx:.375; ry:.375;
@@ -103,6 +103,12 @@ create_actor([[police;3;drawable,col,confined,mov,x_bounded,y_bounded,spr_obj,tc
         end
     else
         a.ax=0
+    end
+
+    if g_endgame_stats.enemy_kill_count > 0 then
+        a.caption_text = "killer, thriller!"
+    else
+        a.caption_text = "moonwalking, yeah!"
     end
 
     local tim = t() % 5
