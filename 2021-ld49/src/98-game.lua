@@ -72,7 +72,7 @@ function game_update()
 
     if t() % .5 == 0 then disable_offscreen_bad_characters() end
 
-    g_endgame_stats.enemy_kill_count  = #_g.all_deadbody_templates.dungeon + 1
+    g_endgame_stats.enemy_kill_count  = #_g.all_deadbody_templates.dungeon
     g_endgame_stats.enemy_total_count = #_g.all_enemy_templates.dungeon
 
     -- ran into token limit. may enable again?

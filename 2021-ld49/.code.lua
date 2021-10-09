@@ -981,7 +981,7 @@ end
 if g_endgame_stats.enemy_kill_count>0 then
 a.caption_text="killer, thriller!"
 else
-a.caption_text="moonwalking, yeah!"
+a.caption_text="abc, 123, you & me!"
 end
 local tim=t()%5
 if tim<1 then a.sind=224
@@ -1291,7 +1291,7 @@ y>=g_room.y and y<g_room.y+g_room.h and
 (fget(mget(x,y),0)or(a.bad_character or a.captionable)and fget(mget(x,y),1))
 end)
 if t()%.5==0 then disable_offscreen_bad_characters()end
-g_endgame_stats.enemy_kill_count=#_g.all_deadbody_templates.dungeon+1
+g_endgame_stats.enemy_kill_count=#_g.all_deadbody_templates.dungeon
 g_endgame_stats.enemy_total_count=#_g.all_enemy_templates.dungeon
 end
 function shiftx(view)return(view.x-view.off_x-8)*8 end
