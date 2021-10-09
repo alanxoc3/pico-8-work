@@ -87,7 +87,7 @@ end, function(a)
     create_cached_deadbody(a.enemy_id, a.x, a.y, a.xf, 96)
 end)
 
-create_actor([[nurse;3;drawable,col,confined,mov,x_bounded,y_bounded,spr_obj,tcol|
+create_actor([[nurse;3;captionable,drawable,col,confined,mov,x_bounded,y_bounded,spr_obj,tcol|
     sind:98;
     x:@1; y:@2; enemy_id:@3; u:@4; d:%nurse_draw;
     sh:2; iyy:-5;
@@ -99,6 +99,12 @@ create_actor([[nurse;3;drawable,col,confined,mov,x_bounded,y_bounded,spr_obj,tco
         a:create_timer("walk", flr_rnd(10)+30, function()
             a:create_timer("cooldown", flr_rnd(120)+50)
         end)
+    end
+
+    if g_endgame_stats.enemy_kill_count > 0 then
+        a.caption_text = "you monster!"
+    else
+        a.caption_text = "you're healed!"
     end
 
     if a:any_timer_active"walk" then

@@ -35,8 +35,8 @@ function game_init()
     }
 
     -- this controls which room you start in
-    g_reset_room=reset_the_dungeon
-    -- g_reset_room=reset_the_hospital
+    -- g_reset_room=reset_the_dungeon
+    g_reset_room=reset_the_hospital
     -- g_reset_room=reset_the_bossroom
     g_reset_room()
 end
@@ -67,12 +67,12 @@ function game_update()
     ]], g_act_arrs['wall'], g_act_arrs['bad_character'], g_act_arrs['good_character'], g_act_arrs['portal'], function(a, x, y)
         return x >= g_room.x and x < g_room.x+g_room.w and
             y >= g_room.y and y < g_room.y+g_room.h and
-            (fget(mget(x, y), 0) or a.bad_character and fget(mget(x, y), 1))
+            (fget(mget(x, y), 0) or (a.bad_character or a.captionable) and fget(mget(x, y), 1))
     end)
 
     if t() % .5 == 0 then disable_offscreen_bad_characters() end
 
-    g_endgame_stats.enemy_kill_count  = #_g.all_deadbody_templates.dungeon
+    g_endgame_stats.enemy_kill_count  = #_g.all_deadbody_templates.dungeon + 1
     g_endgame_stats.enemy_total_count = #_g.all_enemy_templates.dungeon
 
     -- ran into token limit. may enable again?
@@ -115,6 +115,7 @@ function game_draw()
         post_drawable,   d;
         post_drawable_1, d;
         post_drawable_2, d;
+        captionable,     draw_caption;
     ]])
 
     -- DEBUG_BEGIN
