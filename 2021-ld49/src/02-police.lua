@@ -108,7 +108,7 @@ create_actor([[police;3;captionable,drawable,col,confined,mov,x_bounded,y_bounde
     if g_endgame_stats.enemy_kill_count > 0 then
         a.caption_text = "killer, thriller!"
     else
-        a.caption_text = "moonwalking, yeah!"
+        a.caption_text = "abc, 123, you & me!"
     end
 
     local tim = t() % 5
