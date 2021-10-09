@@ -28,11 +28,7 @@ create_parent([[pl;1;drawable,pos,confined,mov,x_bounded,y_bounded,col,spr_obj,k
     sh:2; iyy:-5;
 ]], function(a)
     local sind = a.passive_mode and 80 or 64
-    if a.bad_character then
-        create_cached_deadbody(a.enemy_id, a.x, a.y, a.xf, sind)
-    else
-        _g.deadbody(a.x, a.y, a.xf, sind)
-    end
+    _g.deadbody(a.x, a.y, a.xf, sind)
 end, function(a)
     a.sind = 134
     a.yy = 0
@@ -109,6 +105,11 @@ create_parent([[pl_patient;0;pl/yes,|
     damage:@1;
 ]], function(a, other)
     if not a:any_timer_active"roll" then
+        if not a:any_timer_active"hurt_cooldown" then
+            if other.rel_actor then
+                other.rel_actor:increment_strength()
+            end
+        end
         a:hurt()
         a:knockback(atan2(a.x-other.x, a.y-other.y))
     end

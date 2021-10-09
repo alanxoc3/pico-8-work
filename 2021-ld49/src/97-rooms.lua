@@ -46,7 +46,7 @@ function get_all_enemies_for_story_mode()
         dungeon=dungeon_and_hospital,
         hospital=dungeon_and_hospital,
         bossroom=tabcpy(ztable[[
-            x=120, y=12, bossroom=%pl_monster_cpu, alive=yes;
+            x=126, y=8, bossroom=%pl_monster_cpu, alive=yes;
         ]])
     }
 end
@@ -147,9 +147,9 @@ function reset_the_bossroom()
     cleanup_confined()
 
     _g.fader_in(.5, nf, nf)
-    g_pl   = _g.pl_patient_control_fight(118, 27)
+    g_pl   = _g.pl_patient_control_fight(110, 8)
     g_view = _g.view(15.25, 11.5, 3, g_pl)
-    g_room = ztable[[ name:bossroom; x:108; y:0; w:20; h:32; ]]
+    g_room = ztable[[ name:bossroom; x:108; y:0; w:20; h:16; ]]
 
     create_all_deadbodies()
     create_all_enemies()
