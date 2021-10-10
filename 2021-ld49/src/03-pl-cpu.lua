@@ -1,7 +1,7 @@
 create_actor([[pl_monster_cpu;3;pl_monster,bad_character|
     health:4;
     max_health:4;
-    touchable:no; hurt_end:nf;
+    touchable:no;
     x:@1; y:@2; enemy_id:@3; i:@4; u:@5; destroyed:@6;;
 ]], function(a)
     a:set_strength(3)
