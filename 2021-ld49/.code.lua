@@ -1294,7 +1294,7 @@ g_reset_room=reset_the_dungeon
 g_reset_room()
 end
 function game_update()
-g_endgame_stats.frames=min(43200,g_endgame_stats.frames+1/60)
+g_endgame_stats.frames=min(7200,g_endgame_stats.frames+1/60)
 batch_call_new(acts_loop,[[145]],g_act_arrs["wall"],g_act_arrs["bad_character"],g_act_arrs["good_character"],g_act_arrs["portal"],function(a,x,y)
 return x>=g_room.x and x<g_room.x+g_room.w and
 y>=g_room.y and y<g_room.y+g_room.h and
@@ -1328,7 +1328,7 @@ clip()
 batch_call_new(acts_loop,[[148]])
 end
 function format_time()
-local seconds=flr(g_endgame_stats.frames/60)
+local seconds=flr(g_endgame_stats.frames)
 local mins=flr(seconds/60)
 seconds=seconds%60
 mins=mins<10 and "0"..mins or mins
