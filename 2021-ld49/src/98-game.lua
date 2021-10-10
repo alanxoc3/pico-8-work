@@ -150,8 +150,9 @@ end
 function format_time()
     local seconds = flr(g_endgame_stats.frames)
     local mins = flr(seconds/60)
+    local hours = flr(mins/60)
     seconds = seconds%60
-    mins    = mins    < 10 and '0'..mins or mins
-    seconds = seconds < 10 and '0'..seconds or seconds
-    return ''..mins..':'..seconds
+    mins    = mins    < 10 and '0'..mins  or mins
+    hours   = hours   < 10 and '0'..hours or hours
+    return ''..hours..':'..mins..':'..seconds
 end
