@@ -16,6 +16,7 @@ create_actor[[bad_fist;3;fist_parent,bad_attack|
 ]]
 
 create_parent([[pl;1;drawable,pos,confined,mov,x_bounded,y_bounded,col,spr_obj,knockbackable,hurtable,tcol;|
+    hurt_cooldown_time:90;
     passive_mode:@1; create_dead_body:@2; destroyed:@2; d:@3;
 
     strength:1; -- amount of damage you do to enemies

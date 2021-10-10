@@ -12,8 +12,8 @@ end, function(a)
     control_player(a
     , x
     , y
-    , flr_rnd(10) == 0 -- 4
-    , flr_rnd(2) == 0 -- 5
+    , flr_rnd(80) == 0 -- 4
+    , flr_rnd(20) == 0 -- 5
     , _g.bad_fist
     , a.strength
     )
