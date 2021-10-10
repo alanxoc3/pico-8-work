@@ -1,5 +1,5 @@
 create_actor([[police_weapon;3;col,vec,confined,rel,bad_attack,post_drawable,tcol|
-    x:@1; y:@2; dx:@3; d:@4; tile_hit:@5;
+    x:@1; y:@2; dx:@3; d:@4; tile_hit:@5; destroyed:@6;
     kill_when_hit:yes;
     touchable:no; rx:.375; ry:.25;
     iyy:-6;
@@ -12,6 +12,7 @@ create_actor([[police_weapon;3;col,vec,confined,rel,bad_attack,post_drawable,tco
     scr_spr(a)
 end, function(a)
     a.alive = false
+end, function(a)
     _g.powerup_particle(a.x, a.y, 8)
     _g.powerup_particle(a.x, a.y, 8)
     _g.powerup_particle(a.x, a.y, 8)
