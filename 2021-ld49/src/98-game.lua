@@ -39,11 +39,13 @@ function game_init()
     -- g_reset_room=reset_the_hospital
     -- g_reset_room=reset_the_bossroom
     g_reset_room()
+    -- g_pl.x = 4
+    -- g_pl.y = 4
 end
 
 function game_update()
-    -- max is 12 hours
-    g_endgame_stats.frames = min(43200, g_endgame_stats.frames + 1/60)
+    -- max is 2 hours
+    g_endgame_stats.frames = min(7200, g_endgame_stats.frames + 1/60)
 
     batch_call_new(acts_loop, [[
         timer,       tick;
@@ -146,7 +148,7 @@ function game_draw()
 end
 
 function format_time()
-    local seconds = flr(g_endgame_stats.frames/60)
+    local seconds = flr(g_endgame_stats.frames)
     local mins = flr(seconds/60)
     seconds = seconds%60
     mins    = mins    < 10 and '0'..mins or mins
