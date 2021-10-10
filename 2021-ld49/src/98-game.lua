@@ -42,7 +42,9 @@ function game_init()
 end
 
 function game_update()
-    g_endgame_stats.frames = g_endgame_stats.frames + 1
+    -- max is 12 hours
+    g_endgame_stats.frames = min(43200, g_endgame_stats.frames + 1/60)
+
     batch_call_new(acts_loop, [[
         timer,       tick;
         act,         update;

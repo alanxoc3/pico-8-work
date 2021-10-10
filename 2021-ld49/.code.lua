@@ -1241,13 +1241,13 @@ zspr(76,16,base+32,2,2)
 zspr(78,16,base+48,2,2)
 zspr(104,16,base+64,2,2)
 local diagnosis
-if g_endgame_stats.frames<3600 then
+if g_endgame_stats.frames<60 then
 diagnosis="hyperactive"
 elseif g_endgame_stats.enemy_kill_count==0 then
 diagnosis="healthy"
 elseif g_endgame_stats.enemy_kill_count==g_endgame_stats.enemy_total_count then
 if g_endgame_stats.deaths==0 then
-if g_endgame_stats.frames<10800 then
+if g_endgame_stats.frames<180 then
 diagnosis="possessed"
 else
 diagnosis="obsessive"
@@ -1294,7 +1294,7 @@ g_reset_room=reset_the_dungeon
 g_reset_room()
 end
 function game_update()
-g_endgame_stats.frames=g_endgame_stats.frames+1
+g_endgame_stats.frames=min(43200,g_endgame_stats.frames+1/60)
 batch_call_new(acts_loop,[[145]],g_act_arrs["wall"],g_act_arrs["bad_character"],g_act_arrs["good_character"],g_act_arrs["portal"],function(a,x,y)
 return x>=g_room.x and x<g_room.x+g_room.w and
 y>=g_room.y and y<g_room.y+g_room.h and
