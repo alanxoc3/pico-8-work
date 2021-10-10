@@ -14,8 +14,8 @@ function _init()
 
     g_tl = ztable([[
         tl_loop:yes;
-        x=64, y=64, i=@2, u=nf, d=@1, tl_max_time=2.5; -- logo
-        i=@3, u=@4, d=@5; -- title
+        -- x=64, y=64, i=@2, u=nf, d=@1, tl_max_time=2.5; -- logo
+        -- i=@3, u=@4, d=@5; -- title
         i=@6, u=@7, d=@8;  -- game
         i=@9, u=@10, d=@11;  -- credits
     ]], logo_draw, function() end, -- sfx'63' end,
