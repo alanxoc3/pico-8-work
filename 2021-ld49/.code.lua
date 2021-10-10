@@ -1330,10 +1330,11 @@ end
 function format_time()
 local seconds=flr(g_endgame_stats.frames)
 local mins=flr(seconds/60)
+local hours=flr(mins/60)
 seconds=seconds%60
 mins=mins<10 and "0"..mins or mins
-seconds=seconds<10 and "0"..seconds or seconds
-return ""..mins..":"..seconds
+hours=hours<10 and "0"..hours or hours
+return ""..hours..":"..mins..":"..seconds
 end
 function title_init(a)
 _g.fader_in(.5,nf,function()g_title_enabled=true end)
