@@ -1,5 +1,5 @@
-create_actor([[police_weapon;3;col,vec,confined,rel,bad_attack,post_drawable|
-    x:@1; y:@2; dx:@3; d:@4;
+create_actor([[police_weapon;3;col,vec,confined,rel,bad_attack,post_drawable,tcol|
+    x:@1; y:@2; dx:@3; d:@4; tile_hit:@5;
     kill_when_hit:yes;
     touchable:no; rx:.375; ry:.25;
     iyy:-6;
@@ -10,6 +10,14 @@ create_actor([[police_weapon;3;col,vec,confined,rel,bad_attack,post_drawable|
     a.sind = a.flipped and 197 or 198
     a.xf = a.dx < 0
     scr_spr(a)
+end, function(a)
+    a.alive = false
+    _g.powerup_particle(a.x, a.y, 8)
+    _g.powerup_particle(a.x, a.y, 8)
+    _g.powerup_particle(a.x, a.y, 8)
+    _g.powerup_particle(a.x, a.y, 8)
+    _g.powerup_particle(a.x, a.y, 8)
+    _g.powerup_particle(a.x, a.y, 8)
 end)
 
 create_actor([[bad_police;3;drawable,col,confined,mov,x_bounded,y_bounded,knockbackable,hurtable,spr_obj,bad_character,tcol|

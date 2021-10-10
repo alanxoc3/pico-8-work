@@ -35,9 +35,9 @@ function game_init()
     }
 
     -- this controls which room you start in
-    -- g_reset_room=reset_the_dungeon
+    g_reset_room=reset_the_dungeon
     -- g_reset_room=reset_the_hospital
-    g_reset_room=reset_the_bossroom
+    -- g_reset_room=reset_the_bossroom
     g_reset_room()
 end
 
