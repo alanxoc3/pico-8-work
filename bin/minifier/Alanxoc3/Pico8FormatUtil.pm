@@ -14,15 +14,15 @@ break do else elseif end false for function goto if in local nil not or repeat
 return then true until while and table string boolean unknown number
 
 ipairs unpack chr ord split label screen rec video audio_rec audio_end pause
-reset breadcrumb shutdown g_gunvals_raw _init _update _update60 _draw
+reset breadcrumb shutdown _g g_gunvals_raw _init _update _update60 _draw
 setmetatable getmetatable cocreate coresume lshr costatus cd yield load save
 folder ls run resume reboot stat info flip printh clip pget pset sget sset fget
-fset print cursor color ceil cls camera circ circfill line rect rectfill pal
-palt spr sspr add del deli all foreach pairs btn btnp sfx music mget mset map
-peek peek2 poke2 peek4 poke4 poke memcpy reload cstore memset max min mid flr
-cos sin atan2 sqrt abs rnd srand band bor bxor bnot shl shr cartdata dget dset
-sub sgn stop menuitem type tostr tonum extcmd ls fillp time assert t
-_update_buttons count mapdraw self ? __index rotl
+fset print cursor color ceil cls camera oval ovalfill circ circfill line rect
+rectfill pal palt spr sspr add del deli all foreach pairs btn btnp sfx music
+mget mset map peek peek2 poke2 peek4 poke4 poke memcpy reload cstore memset max
+min mid flr cos sin atan2 sqrt abs rnd srand band bor bxor bnot shl shr
+cartdata dget dset sub sgn stop menuitem type tostr tonum extcmd ls fillp time
+assert t _update_buttons count mapdraw self ? __index rotl
 );
 
 sub get_next_var_name {

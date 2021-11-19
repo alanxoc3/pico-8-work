@@ -36,7 +36,7 @@ create_actor([[bad_nurse;3;drawable,col,confined,mov,x_bounded,y_bounded,knockba
     sind:66;
     x:@1; y:@2; enemy_id:@3; u:@4; damage:@5; destroyed:@6;
     d:%nurse_draw;
-    health:%c_enemy_health; max_health:%c_enemy_health;
+    health:C_ENEMY_HEALTH; max_health:C_ENEMY_HEALTH;
     sh:2; iyy:-5;
     rx:.375; ry:.375;
     touchable: no;
@@ -54,7 +54,7 @@ create_actor([[bad_nurse;3;drawable,col,confined,mov,x_bounded,y_bounded,knockba
     end
 
     if a:any_timer_active"hurt_cooldown" then
-       _g.powerup_particle(a.x, a.y+.5, _g.c_color_blood)
+       _g.powerup_particle(a.x, a.y+.5, C_COLOR_BLOOD)
     end
 
     if a:any_timer_active"knockback" then

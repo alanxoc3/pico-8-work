@@ -1,1388 +1,1388 @@
-g_act_arrs={}
-function create_parent_actor_shared(is_create_parent,meta_and_att_str,...)
-local meta,template=unpack(split(meta_and_att_str,"|"))
-local template_params,id,provided,parents,pause_funcs={...},unpack(ztable(meta))
-_g[id]=function(...)
-local func_params,params,a={...},tabcpy(template_params),{}
-if is_create_parent then
-a=deli(func_params,1)
+tc={}
+function hf(fo,mk,...)
+local mv,cj=unpack(split(mk,"|"))
+local ce,tm,dz,cg,dg={...},unpack(td(mv))
+_g[tm]=function(...)
+local rq,ir,e={...},ox(ce),{}
+if fo then
+e=deli(rq,1)
 end
-for i=1,provided do
-add(params,func_params[i]or false,i)
+for w=1,dz do
+add(ir,rq[w]or false,w)
 end
-if not a[id]then
-foreach(parents,function(par)
-if type(par)~="table"then
-par={par}
+if not e[tm]then
+foreach(cg,function(il)
+if type(il)~="table"then
+il={il}
 end
-a=_g[par[1]](a,unpack(par,2))
+e=_g[il[1]](e,unpack(il,2))
 end)
-tabcpy(ztable(template,unpack(params)),a)
-if not a[id]then
-g_act_arrs[id]=g_act_arrs[id]or{}
-add(g_act_arrs[id],a)
+ox(td(cj,unpack(ir)),e)
+if not e[tm]then
+tc[tm]=tc[tm]or{}
+add(tc[tm],e)
 end
-a.id,a[id],a.pause=id,true,a.pause or{}
-foreach(pause_funcs,function(f)
-a.pause[f]=true
+e.tm,e[tm],e.pause=tm,true,e.pause or{}
+foreach(dg,function(ad)
+e.pause[ad]=true
 end)
 end
-call_not_nil(a,"create_init",a)
-return a
+an(e,"pc",e)
+return e
 end
 end
-function create_parent(...)create_parent_actor_shared(true,...)end
-function create_actor(...)create_parent_actor_shared(false,...)end
-function acts_loop(id,func_name,...)
-for a in all(g_act_arrs[id])do
-if not a.disabled[func_name]then
-call_not_nil(a,func_name,a,...)
+function d(...)hf(true,...)end
+function _(...)hf(false,...)end
+function oi(tm,ih,...)
+for e in all(tc[tm])do
+if not e.im[ih]then
+an(e,ih,e,...)
 end
 end
 end
-function zsfx(num,sub_num)
-sfx(num,-1,sub_num*4,4)
+function po(ok,ft)
+sfx(ok,-1,ft*4,4)
 end
-function btn_helper(f,a,b)
-return f(a)and f(b)and 0 or f(a)and 0xffff or f(b)and 1 or 0
+function nn(ad,e,ee)
+return ad(e)and ad(ee)and 0 or ad(e)and 0xffff or ad(ee)and 1 or 0
 end
-function _g.plus(a,b)return a+b end
-function _g.minus(a,b)return a-b end
-function bool_to_num(condition)return condition and 0xffff or 1 end
-function get(a,...)
-local arr,cur_act=ztable(...),a or{}
-for i=1,#arr do
-cur_act=cur_act[arr[i]]
-if not cur_act then
+function _g.ak(e,ee)return e+ee end
+function _g.pa(e,ee)return e-ee end
+function fv(dk)return dk and 0xffff or 1 end
+function lv(e,...)
+local ll,nb=td(...),e or{}
+for w=1,#ll do
+nb=nb[ll[w]]
+if not nb then
 break
 end
 end
-return cur_act
+return nb
 end
-function approx_dist(dx,dy)
-local maskx,masky=dx>>31,dy>>31
-local a0,b0=(dx+maskx)^^maskx,(dy+masky)^^masky
-if a0>b0 then
-return a0*0.9609+b0*0.3984
+function nx(f,y)
+local lk,rw=f>>31,y>>31
+local sy,sa=(f+lk)^^lk,(y+rw)^^rw
+if sy>sa then
+return sy*0.9609+sa*0.3984
 end
-return b0*0.9609+a0*0.3984
+return sa*0.9609+sy*0.3984
 end
-function xbtn()return btn_helper(btn,0,1)end
-function ybtn()return btn_helper(btn,2,3)end
-function xbtnp()return btn_helper(btnp,0,1)end
-function ybtnp()return btn_helper(btnp,2,3)end
-function zsgn(num)return num==0 and 0 or sgn(num)end
-function round(num)return flr(num+.5)end
-function rnd_one(val)return(flr_rnd"3"-1)*(val or 1)end
-function ti(period,length)
-return t()%period<length
+function rm()return nn(btn,0,1)end
+function rs()return nn(btn,2,3)end
+function pi()return nn(btnp,0,1)end
+function ph()return nn(btnp,2,3)end
+function nq(ok)return ok==0 and 0 or sgn(ok)end
+function rv(ok)return flr(ok+.5)end
+function dq(cs)return(te"3"-1)*(cs or 1)end
+function pe(db,od)
+return t()%db<od
 end
-function flr_rnd(x)
-return flr(rnd(x))
+function te(a)
+return flr(rnd(a))
 end
-function rnd_item(list)
-return list[flr_rnd(#list)+1]
+function hc(nk)
+return nk[te(#nk)+1]
 end
-function tabcpy(src,dest)
-dest=dest or{}
-for k,v in pairs(src or{})do
-if type(v)=="table"and not v.is_tabcpy_disabled then
-dest[k]=tabcpy(v)
+function ox(me,is)
+is=is or{}
+for eh,g in pairs(me or{})do
+if type(g)=="table"and not g.mq then
+is[eh]=ox(g)
 else
-dest[k]=v
+is[eh]=g
 end
 end
-return dest
+return is
 end
-function call_not_nil(table,key,...)
-if table and table[key]then
-return table[key](...)
+function an(table,rg,...)
+if table and table[rg]then
+return table[rg](...)
 end
 end
-function batch_call_table(func,tbl)
-foreach(tbl,function(t)func(unpack(t))end)
+function mz(sc,ej)
+foreach(ej,function(t)sc(unpack(t))end)
 end
-function batch_call_new(func,...)
-batch_call_table(func,ztable(...))
+function tp(sc,...)
+mz(sc,td(...))
 end
-function tl_node(a)
-a.tl_cur=a.tl_cur or 1
-if not a.tl_continued then
-a.next=function()
-if a.tl_loop then
-a.tl_next=(a.tl_cur%#a)+1
+function rb(e)
+e.iu=e.iu or 1
+if not e.hn then
+e.nw=function()
+if e.sw then
+e.it=(e.iu%#e)+1
 else
-a.tl_next=a.tl_cur+1
+e.it=e.iu+1
 end
 end
-a.tl_tim,a.tl_max_time,a.tl_continued=0,nil,true
-tabcpy(a[a.tl_cur]or{},a)
-call_not_nil(a,"i",a)
+e.ae,e.eb,e.hn=0,nil,true
+ox(e[e.iu]or{},e)
+an(e,"w",e)
 end
-if call_not_nil(a,"u",a)then a:next()end
-a.tl_tim+=1/60
-if a.tl_max_time and a.tl_tim>=a.tl_max_time then
-a:next()
+if an(e,"en",e)then e:nw()end
+e.ae+=1/60
+if e.eb and e.ae>=e.eb then
+e:nw()
 end
-if a.tl_next then
-local old_tl_next=a.tl_next
-a.tl_cur,a.tl_continued,a.tl_next=old_tl_next,nil,nil
-call_not_nil(a,"e",a)
-return old_tl_next>#a or old_tl_next<1
+if e.it then
+local sm=e.it
+e.iu,e.hn,e.it=sm,nil,nil
+an(e,"dt",e)
+return sm>#e or sm<1
 end
 end
-function isorty(t)
+function fe(t)
 if t then
 for n=2,#t do
-local i=n
-while i>1 and t[i].y<t[i-1].y do
-t[i],t[i-1]=t[i-1],t[i]
-i=i-1
+local w=n
+while w>1 and t[w].o<t[w-1].o do
+t[w],t[w-1]=t[w-1],t[w]
+w=w-1
 end
 end
 end
 end
-function coll_tile_help(pos,per,spd,pos_rad,per_rad,dir,a,hit_func,solid_func)
-local coll_tile_bounds=function(pos,rad)
-return flr(pos-rad),-flr(-(pos+rad))-1
+function lt(ts,dc,oo,sg,um,k,e,hj,iw)
+local rj=function(ts,lh)
+return flr(ts-lh),-flr(-(ts+lh))-1
 end
-local pos_min,pos_max=coll_tile_bounds(pos+spd,pos_rad)
-local per_min,per_max=coll_tile_bounds(per,per_rad)
-for j=per_min,per_max do
-if spd<0 and solid_func(a,pos_min,j)then
-hit_func(a,dir)
-return pos_min+pos_rad+1,0
-elseif spd>0 and solid_func(a,pos_max,j)then
-hit_func(a,dir+1)
-return pos_max-pos_rad,0
+local rk,lb=rj(ts+oo,sg)
+local mr,di=rj(dc,um)
+for lf=mr,di do
+if oo<0 and iw(e,rk,lf)then
+hj(e,k)
+return rk+sg+1,0
+elseif oo>0 and iw(e,lb,lf)then
+hj(e,k+1)
+return lb-sg,0
 end
 end
-return pos,spd
+return ts,oo
 end
-g_gunvals=split("0x8000,0x8000,0x7fff,0x7fff,@1|!plus/@1/-2,!plus/@2/-2,!plus/@3/2,!plus/@4/2,13;!plus/@1/-1,!plus/@2/-1,!plus/@3/1,!plus/@4/1,1;|0,0,0,0,0,0,0;1,1,1,0,0,0,0;2,2,2,1,0,0,0;3,3,3,1,0,0,0;4,2,2,2,1,0,0;5,5,1,1,1,0,0;6,13,13,5,5,1,0;7,6,13,13,5,1,0;8,8,2,2,2,0,0;9,4,4,4,5,0,0;10,9,4,4,5,5,0;11,3,3,3,3,0,0;12,12,3,1,1,1,0;13,5,5,1,1,1,0;14,13,4,2,2,1,0;15,13,13,5,5,1,0;|fader_out;3;act,;update,|fade_time:@1;i:@2;e:@3;u:@4;tl_max_time=@1,|fader_in;3;act,;update,|timer;0;,;|timers:,;tick:@1;create_timer:@2;any_timer_active:@3;get_timer_percent:@4;|act;0;timer,;room_init,kill,clean,delete|update:@1;clean:@2;kill:@3;delete:@4;get:@5;disabled:,;alive:yes;i:nf;u:nf;room_init:nf;destroyed:nf;|ma_able;0;act,;|name:thing;|confined;0;act,;room_end,|room_end:nf;|loopable;0;act,;|tl_loop:yes;|pos;0;act,;|x:0;y:0;|knock;0;col,;|;|popper;0;col,;|good_character;0;col,hurtable;|bad_character;0;col,hurtable;|good_attack;0;col,;|hit:@1;|bad_attack;0;col,;|hit:@1;kill_when_hit:no;|x_bounded;0;dim,;|check_bounds_x:@1;|y_bounded;0;dim,;|check_bounds_y:@1;|vec;0;pos,;|dx:0;dy:0;vec_update:@1;|mov;0;vec,;|inertia_x:.90;inertia_y:.90;ax:0;ay:0;mov_update:@1;stop:@2;|dim;0;pos,;|rx:.375;ry:.375;|rel;0;act,;rel_update,|rel_actor:null;rel_x:0;rel_y:0;rel_dx:0;rel_dy:0;flippable:no;rel_update:@1;|drawable_obj;0;pos,;reset_off,|ixx:0;iyy:0;xx:0;yy:0;visible:yes;reset_off:@1;|drawable;0;drawable_obj,;d,|d:nf;|drawable_1;0;drawable_obj,;d,|drawable_2;0;drawable_obj,;d,|captionable;0;drawable,pos;|d:nf;draw_caption:@1;caption_text:null;|pre_drawable;0;drawable_obj,;d,|pre_drawable_1;0;drawable_obj,;d,|pre_drawable_2;0;drawable_obj,;d,|post_drawable;0;drawable_obj,;d,|post_drawable_1;0;drawable_obj,;d,|post_drawable_2;0;drawable_obj,;d,|above_map_drawable;0;drawable_obj,;d,|above_map_drawable_1;0;drawable_obj,;d,|spr_obj;0;vec,drawable_obj,;|sind:0;outline_color:BG_UI;sw:1;sh:1;xf:no;yf:no;|spr;0;spr_obj,;|d:@1;|knockbackable;0;mov,timer,;|knockback:@1;apply_knockback:@2;knockback_speed:0;knockback_dir:0;|hurtable;0;act,;|health:1;max_health:1;hurt_cooldown_time:60;hurt_start:nf;hurt_end:nf;damage:nf;hurt:@1;heal:@2;|anchored;1;vec,dim;|touchable:@1;hit:nf;|col;0;vec,dim;|touchable:yes;hit:nf;move_check:@1;|dx:0;dy:0|x,dx,@1,@2,@3,@4;y,dy,@1,@2,@5,@6;|tcol;0;vec,dim;|tile_solid:yes;tile_hit:nf;coll_tile:@1;|view;4;act,confined;center_view,update_view|x:0;y:0;room_crop:2;tl_loop:yes;w:@1;h:@2;follow_dim:@3;follow_act:@4;update_view:@5;center_view:@6;change_ma:@7;,;|@1,x,w,ixx;@1,y,h,iyy|deadbody_parent;0;confined,pre_drawable|d:@1;i:@2;touchable:no;rx:.25;ry:.5;sind:0;|deadbody_nobleed;4;deadbody_parent,|x:@1;y:@2;xf:@3;sind:@4;touchable:no;rx:.25;ry:.5;|deadbody;4;deadbody_parent,|x:@1;y:@2;xf:@3;sind:@4;i:@5;u:@6;touchable:no;rx:.25;ry:.5;|nurse_weapon;3;col,confined,rel,bad_attack|rel_actor:@1;x:@2;y:@3;i:@4;touchable:no;rx:.5;ry:1;tl_max_time=.16,;|bad_nurse;3;drawable,col,confined,mov,x_bounded,y_bounded,knockbackable,hurtable,spr_obj,bad_character,tcol|sind:66;x:@1;y:@2;enemy_id:@3;u:@4;damage:@5;destroyed:@6;d:%nurse_draw;health:%c_enemy_health;max_health:%c_enemy_health;sh:2;iyy:-5;rx:.375;ry:.375;touchable:no;|nurse;3;captionable,drawable,col,confined,mov,x_bounded,y_bounded,spr_obj,tcol|sind:98;x:@1;y:@2;enemy_id:@3;u:@4;d:%nurse_draw;sh:2;iyy:-5;rx:.375;ry:.375;touchable:no;|particle_parent;0;confined,mov,;|draw_small_circle:@1;draw_medium_circle:@2;move_up:@3;move_slow:@4;|powerup_particle;3;pre_drawable_2,particle_parent|x:@1;y:@2;color:@3;d:$draw_small_circle;i:$move_up;tl_max_time=.25,;|slow_small_ui_particle;3;above_map_drawable,particle_parent|x:@1;y:@2;color:@3;d:$draw_small_circle;i:$move_slow;tl_max_time=.25,;|slow_medium_ui_particle;3;above_map_drawable,particle_parent|x:@1;y:@2;color:@3;d:$draw_medium_circle;i:$move_slow;tl_max_time=.25,;|particle_spawner;5;dim,confined|color:8;rx:@1;ry:@2;rate:@3;chance:@4;create_func:@5;update_particles:@6;|patient_weapon;3;col,confined,rel,bad_attack|rel_actor:@1;x:@2;y:@3;i:@4;touchable:no;rx:.75;ry:.75;tl_max_time=.5,;|bad_patient;3;drawable,col,confined,mov,x_bounded,y_bounded,knockbackable,hurtable,spr_obj,bad_character,tcol|sind:9;x:@1;y:@2;enemy_id:@3;u:@4;damage:@5;destroyed:@6;d:%patient_draw;health:%c_enemy_health;max_health:%c_enemy_health;sh:2;iyy:-5;rx:.375;ry:.375;touchable:no;|patient;3;captionable,drawable,col,confined,mov,x_bounded,y_bounded,spr_obj,tcol|sind:41;x:@1;y:@2;enemy_id:@3;u:@4;d:@5;sind:41;sh:2;iyy:-5;rx:.375;ry:.375;touchable:no;|fist_parent;0;col,confined,rel|i:@1;touchable:no;rx:.375;ry:.75;tl_max_time=.33,;|good_fist;3;fist_parent,good_attack|rel_actor:@1;x:@2;y:@3;|bad_fist;3;fist_parent,bad_attack|pl;1;drawable,pos,confined,mov,x_bounded,y_bounded,col,spr_obj,knockbackable,hurtable,tcol;|hurt_cooldown_time:90;passive_mode:@1;create_dead_body:@2;destroyed:@2;d:@3;strength:1;dir:0;is_facing_left:yes;xf:yes;health:%c_pl_health;max_health:%c_pl_health;damage:nf;increment_strength:nf;decrement_strength:nf;set_strength:nf;sh:2;iyy:-5;|pl_monster;0;pl/no,|damage:@1;hurt_start:@2;hurt_end:@3;increment_strength:@4;decrement_strength:@5;set_strength:@6;strength:0;|pl_patient;0;pl/yes,|damage:@1;|police_weapon;3;col,vec,confined,rel,bad_attack,post_drawable,tcol|x:@1;y:@2;dx:@3;d:@4;tile_hit:@5;destroyed:@6;kill_when_hit:yes;touchable:no;rx:.375;ry:.25;iyy:-6;tl_max_time=1,;|bad_police;3;drawable,col,confined,mov,x_bounded,y_bounded,knockbackable,hurtable,spr_obj,bad_character,tcol|sind:192;x:@1;y:@2;enemy_id:@3;u:@4;damage:@5;destroyed:@6;d:@7;d:%police_draw;health:%c_enemy_health;max_health:%c_enemy_health;sh:2;iyy:-5;rx:.375;ry:.375;touchable:no;|police;3;captionable,drawable,col,confined,mov,x_bounded,y_bounded,spr_obj,tcol|x:@1;y:@2;enemy_id:@3;u:@4;d:@5;sind:224;sh:2;iyy:-5;rx:.375;ry:.375;touchable:no;|heart_particle_spawner;3;particle_spawner/.125/.125/1/3/%slow_small_ui_particle,above_map_drawable_1|x:@1;y:@2;heart_number:@3;u:@4;d:@5;color:8;|powerup_particle_spawner;5;particle_spawner/2/.125/1/1/%slow_medium_ui_particle,above_map_drawable_1|x:@1;y:@2;powerup_level:@3;color:@4;sind:@5;u:@6;d:@7|genocide_tip;2;above_map_drawable,confined|x:@1;y:@2;d:@3;when_to_show_tip:%c_when_to_show_tip;|objective_arrow;2;post_drawable_2,confined|x:@1;y:@2;u:@3;d:@4;ry:.25;radius:.2;touchable:no;smallest_dist:0;|portal;2;col,pre_drawable,confined|x:@1;y:@2;u:@3;d:@4;rx:.125;ry:.125;radius:.2;touchable:no;|pl_control;0;col,|hit:@1;teleporting:no;|pl_patient_control_fight;2;pl_patient,good_character,pl_control|x:@1;y:@2;u:@3;destroyed:@4;|pl_patient_control_passive;2;pl_patient,good_character,pl_control|pl_monster_control;2;pl_monster,good_character,pl_control|pl_monster_cpu;3;pl_monster,bad_character|health:4;max_health:4;touchable:no;x:@1;y:@2;enemy_id:@3;i:@4;u:@5;destroyed:@6;;|x=102,y=4,dungeon=%bad_nurse,hospital=%nurse,alive=yes;x=14,y=26,dungeon=%bad_nurse,hospital=%nurse,alive=yes;x=18,y=13,dungeon=%bad_nurse,hospital=%nurse,alive=yes;x=45,y=28,dungeon=%bad_nurse,hospital=%nurse,alive=yes;x=48,y=3,dungeon=%bad_nurse,hospital=%nurse,alive=yes;x=4,y=28,dungeon=%bad_nurse,hospital=%nurse,alive=yes;x=53,y=9,dungeon=%bad_nurse,hospital=%nurse,alive=yes;x=70,y=13,dungeon=%bad_nurse,hospital=%nurse,alive=yes;x=76,y=18,dungeon=%bad_nurse,hospital=%nurse,alive=yes;x=76,y=7,dungeon=%bad_nurse,hospital=%nurse,alive=yes;x=81,y=4,dungeon=%bad_nurse,hospital=%nurse,alive=yes;x=65,y=23,dungeon=%bad_nurse,hospital=%nurse,alive=yes;x=9,y=17,dungeon=%bad_nurse,hospital=%nurse,alive=yes;x=20,y=18,dungeon=%bad_nurse,hospital=%nurse,alive=yes;x=30,y=6,dungeon=%bad_nurse,hospital=%nurse,alive=yes;x=4,y=3,dungeon=%bad_nurse,hospital=%nurse,alive=yes;x=3,y=18,dungeon=%bad_patient,hospital=%patient,alive=yes;x=63,y=8,dungeon=%bad_patient,hospital=%patient,alive=yes;x=70,y=8,dungeon=%bad_patient,hospital=%patient,alive=yes;x=15,y=18,dungeon=%bad_patient,hospital=%patient,alive=yes;x=102,y=13,dungeon=%bad_patient,hospital=%patient,alive=yes;x=106,y=20,dungeon=%bad_patient,hospital=%patient,alive=yes;x=49,y=19,dungeon=%bad_patient,hospital=%patient,alive=yes;x=9,y=23,dungeon=%bad_patient,hospital=%patient,alive=yes;x=9,y=28,dungeon=%bad_patient,hospital=%patient,alive=yes;x=76,y=12,dungeon=%bad_patient,hospital=%patient,alive=yes;x=76,y=3,dungeon=%bad_patient,hospital=%patient,alive=yes;x=82,y=4,dungeon=%bad_patient,hospital=%patient,alive=yes;x=89,y=15,dungeon=%bad_patient,hospital=%patient,alive=yes;x=18,y=26,dungeon=%bad_police,hospital=%police,alive=yes;x=44,y=4,dungeon=%bad_police,hospital=%police,alive=yes;x=54,y=4,dungeon=%bad_police,hospital=%police,alive=yes;x=90,y=4,dungeon=%bad_police,hospital=%police,alive=yes;x=105,y=28,dungeon=%bad_police,hospital=%police,alive=yes;x=102,y=4,dungeon=%bad_police,hospital=%police,alive=yes;x=66,y=29,dungeon=%bad_police,hospital=%police,alive=yes;x=41,y=18,dungeon=%bad_police,hospital=%police,alive=yes;|x=126,y=8,bossroom=%pl_monster_cpu,alive=yes;|confined,room_end;confined,kill;confined,delete;|name:dungeon;x:0;y:0;w:108;h:32;|name:hospital;x:0;y:0;w:108;h:32;|name:bossroom;x:108;y:0;w:20;h:16;|timer,tick;act,update;act,clean;|timer,tick;act,update;mov,mov_update;good_character,move_check,@1;bad_character,move_check,@1;good_attack,move_check,@2;bad_attack,move_check,@3;pl_control,move_check,@4;tcol,coll_tile,@5;rel,rel_update;vec,vec_update;x_bounded,check_bounds_x;y_bounded,check_bounds_y;view,update_view;act,clean;|pre_drawable,d;pre_drawable_1,d;pre_drawable_2,d;|drawable,d;drawable_1,d;drawable_2,d;post_drawable,d;post_drawable_1,d;post_drawable_2,d;captionable,draw_caption;|above_map_drawable,d;above_map_drawable_1,d;|tl_loop:yes;x=64,y=64,i=@2,u=nf,d=@1,tl_max_time=2.5;i=@3,u=@4,d=@5;i=@6,u=@7,d=@8;i=@9,u=@10,d=@11;|","|")
-g_ztable_cache={}
-function nf()end
-function ztable(original_str,...)
-local str=g_gunvals[0+original_str]
-local tbl,ops=unpack(g_ztable_cache[str]or{})
-if not tbl then
-tbl,ops={},{}
-for item in all(split(str,";"))do
-local k,v=split_kv(item,":",tbl)
-local val_func=function(sub_val,sub_key,sub_tbl)
-return queue_operation(sub_tbl or tbl,sub_key or k,sub_val,ops)
+cf=split("0x8000,0x8000,0x7fff,0x7fff,@1|!ak/@1/-2,!ak/@2/-2,!ak/@3/2,!ak/@4/2,13;!ak/@1/-1,!ak/@2/-1,!ak/@3/1,!ak/@4/1,1;|0,0,0,0,0,0,0;1,1,1,0,0,0,0;2,2,2,1,0,0,0;3,3,3,1,0,0,0;4,2,2,2,1,0,0;5,5,1,1,1,0,0;6,13,13,5,5,1,0;7,6,13,13,5,1,0;8,8,2,2,2,0,0;9,4,4,4,5,0,0;10,9,4,4,5,5,0;11,3,3,3,3,0,0;12,12,3,1,1,1,0;13,5,5,1,1,1,0;14,13,4,2,2,1,0;15,13,13,5,5,1,0;|ou;3;eq,;aj,|ul:@1;w:@2;dt:@3;en:@4;eb=@1,|ii;3;eq,;aj,|aa;0;,;|on:,;rd:@1;er:@2;b:@3;ni:@4;|eq;0;aa,;dw,nu,nc,sk|aj:@1;nc:@2;nu:@3;sk:@4;lv:@5;im:,;r:h;w:c;en:c;dw:c;tk:c;|mx;0;eq,;|ex:thing;|el;0;eq,;r_,|r_:c;|fj;0;eq,;|sw:h;|ts;0;eq,;|a:0;o:0;|fq;0;x,;|;|pl;0;x,;|ow;0;x,of;|tb;0;x,of;|hr;0;x,;|ig:@1;|io;0;x,;|ig:@1;lq:es;|af;0;ao,;|c_:@1;|au;0;ao,;|dm:@1;|a_;0;ts,;|f:0;y:0;dl:@1;|ty;0;a_,;|us:.90;my:.90;et:0;ef:0;cy:@1;stop:@2;|ao;0;ts,;|q:.375;j:.375;|oz;0;eq,;hq,|ei:hb;hi:0;lx:0;iq:0;ru:0;mo:es;hq:@1;|tl;0;ts,;uk,|nj:0;tg:0;op:0;ap:0;cl:h;uk:@1;|tj;0;tl,;s,|s:c;|uu;0;tl,;s,|d_;0;tl,;s,|oq;0;tj,ts;|s:c;ue:@1;th:hb;|sj;0;tl,;s,|mb;0;tl,;s,|lo;0;tl,;s,|li;0;tl,;s,|dn;0;tl,;s,|lr;0;tl,;s,|nr;0;tl,;s,|ro;0;tl,;s,|al;0;a_,tl,;|i:0;pu:BG_UI;oy:1;tr:1;ea:es;mi:es;|spr;0;al,;|s:@1;|nf;0;ty,aa,;|ab:@1;nz:@2;st:0;rt:0;|of;0;eq,;|tn:1;ob:1;hx:60;de:c;hy:c;tu:c;ie:@1;fy:@2;|se;1;a_,ao;|em:@1;ig:c;|x;0;a_,ao;|em:h;ig:c;ac:@1;|f:0;y:0|a,f,@1,@2,@3,@4;o,y,@1,@2,@5,@6;|ai;0;a_,ao;|cr:h;ri:c;dh:@1;|ed;4;eq,el;cp,sh|a:0;o:0;pt:2;sw:h;t_:@1;tq:@2;ol:@3;tv:@4;sh:@5;cp:@6;pd:@7;,;|@1,a,t_,nj;@1,o,tq,tg|ho;0;el,sj|s:@1;w:@2;em:es;q:.25;j:.5;i:0;|dy;4;ho,|a:@1;o:@2;ea:@3;i:@4;em:es;q:.25;j:.5;|lg;4;ho,|a:@1;o:@2;ea:@3;i:@4;w:@5;en:@6;em:es;q:.25;j:.5;|fi;3;x,el,oz,io|ei:@1;a:@2;o:@3;w:@4;em:es;q:.5;j:1;eb=.16,;|ek;3;tj,x,el,ty,af,au,nf,of,al,tb,ai|i:66;a:@1;o:@2;tw:@3;en:@4;tu:@5;tk:@6;s:%ld;tn:3;ob:3;tr:2;tg:-5;q:.375;j:.375;em:es;|ey;3;oq,tj,x,el,ty,af,au,al,ai|i:98;a:@1;o:@2;tw:@3;en:@4;s:%ld;tr:2;tg:-5;q:.375;j:.375;em:es;|sq;0;el,ty,;|hw:@1;ck:@2;cm:@3;lw:@4;|ev;3;lo,sq|a:@1;o:@2;color:@3;s:$hw;w:$cm;eb=.25,;|ci;3;nr,sq|a:@1;o:@2;color:@3;s:$hw;w:$lw;eb=.25,;|mf;3;nr,sq|a:@1;o:@2;color:@3;s:$ck;w:$lw;eb=.25,;|ry;5;ao,el|color:8;q:@1;j:@2;cc:@3;dj:@4;ud:@5;lz:@6;|fh;3;x,el,oz,io|ei:@1;a:@2;o:@3;w:@4;em:es;q:.75;j:.75;eb=.5,;|ti;3;tj,x,el,ty,af,au,nf,of,al,tb,ai|i:9;a:@1;o:@2;tw:@3;en:@4;tu:@5;tk:@6;s:%mj;tn:3;ob:3;tr:2;tg:-5;q:.375;j:.375;em:es;|to;3;oq,tj,x,el,ty,af,au,al,ai|i:41;a:@1;o:@2;tw:@3;en:@4;s:@5;i:41;tr:2;tg:-5;q:.375;j:.375;em:es;|ly;0;x,el,oz|w:@1;em:es;q:.375;j:.75;eb=.33,;|lu;3;ly,hr|ei:@1;a:@2;o:@3;|up;3;ly,io|rn;1;tj,ts,el,ty,af,au,x,al,nf,of,ai;|hx:90;hv:@1;nt:@2;tk:@2;s:@3;eo:1;k:0;oj:h;ea:h;tn:3;ob:3;tu:c;ha:c;l_:c;aq:c;tr:2;tg:-5;|lj;0;rn/es,|tu:@1;de:@2;hy:@3;ha:@4;l_:@5;aq:@6;eo:0;|la;0;rn/h,|tu:@1;|hm;3;x,a_,el,oz,io,li,ai|a:@1;o:@2;f:@3;s:@4;ri:@5;tk:@6;lq:h;em:es;q:.375;j:.25;tg:-6;eb=1,;|am;3;tj,x,el,ty,af,au,nf,of,al,tb,ai|i:192;a:@1;o:@2;tw:@3;en:@4;tu:@5;tk:@6;s:@7;s:%ps;tn:3;ob:3;tr:2;tg:-5;q:.375;j:.375;em:es;|ay;3;oq,tj,x,el,ty,af,au,al,ai|a:@1;o:@2;tw:@3;en:@4;s:@5;i:224;tr:2;tg:-5;q:.375;j:.375;em:es;|sb;3;ry/.125/.125/1/3/%ci,ro|a:@1;o:@2;ux:@3;en:@4;s:@5;color:8;|ia;5;ry/2/.125/1/1/%mf,ro|a:@1;o:@2;rx:@3;color:@4;i:@5;en:@6;s:@7|fl;2;nr,el|a:@1;o:@2;s:@3;dr:5;|sf;2;lr,el|a:@1;o:@2;en:@3;s:@4;j:.25;ij:.2;em:es;oe:0;|om;2;x,sj,el|a:@1;o:@2;en:@3;s:@4;q:.125;j:.125;ij:.2;em:es;|ne;0;x,|ig:@1;sr:es;|fa;2;la,ow,ne|a:@1;o:@2;en:@3;tk:@4;|m_;2;la,ow,ne|cz;2;lj,ow,ne|mh;3;lj,tb|tn:4;ob:4;em:es;a:@1;o:@2;tw:@3;w:@4;en:@5;tk:@6;;|a=102,o=4,m=%ek,u=%ey,r=h;a=14,o=26,m=%ek,u=%ey,r=h;a=18,o=13,m=%ek,u=%ey,r=h;a=45,o=28,m=%ek,u=%ey,r=h;a=48,o=3,m=%ek,u=%ey,r=h;a=4,o=28,m=%ek,u=%ey,r=h;a=53,o=9,m=%ek,u=%ey,r=h;a=70,o=13,m=%ek,u=%ey,r=h;a=76,o=18,m=%ek,u=%ey,r=h;a=76,o=7,m=%ek,u=%ey,r=h;a=81,o=4,m=%ek,u=%ey,r=h;a=65,o=23,m=%ek,u=%ey,r=h;a=9,o=17,m=%ek,u=%ey,r=h;a=20,o=18,m=%ek,u=%ey,r=h;a=30,o=6,m=%ek,u=%ey,r=h;a=4,o=3,m=%ek,u=%ey,r=h;a=3,o=18,m=%ti,u=%to,r=h;a=63,o=8,m=%ti,u=%to,r=h;a=70,o=8,m=%ti,u=%to,r=h;a=15,o=18,m=%ti,u=%to,r=h;a=102,o=13,m=%ti,u=%to,r=h;a=106,o=20,m=%ti,u=%to,r=h;a=49,o=19,m=%ti,u=%to,r=h;a=9,o=23,m=%ti,u=%to,r=h;a=9,o=28,m=%ti,u=%to,r=h;a=76,o=12,m=%ti,u=%to,r=h;a=76,o=3,m=%ti,u=%to,r=h;a=82,o=4,m=%ti,u=%to,r=h;a=89,o=15,m=%ti,u=%to,r=h;a=18,o=26,m=%am,u=%ay,r=h;a=44,o=4,m=%am,u=%ay,r=h;a=54,o=4,m=%am,u=%ay,r=h;a=90,o=4,m=%am,u=%ay,r=h;a=105,o=28,m=%am,u=%ay,r=h;a=102,o=4,m=%am,u=%ay,r=h;a=66,o=29,m=%am,u=%ay,r=h;a=41,o=18,m=%am,u=%ay,r=h;|a=126,o=8,si=%mh,r=h;|el,r_;el,nu;el,sk;|ex:m;a:0;o:0;t_:108;tq:32;|ex:u;a:0;o:0;t_:108;tq:32;|ex:si;a:108;o:0;t_:20;tq:16;|aa,rd;eq,aj;eq,nc;|aa,rd;eq,aj;ty,cy;ow,ac,@1;tb,ac,@1;hr,ac,@2;io,ac,@3;ne,ac,@4;ai,dh,@5;oz,hq;a_,dl;af,c_;au,dm;ed,sh;eq,nc;|sj,s;mb,s;lo,s;|tj,s;uu,s;d_,s;li,s;dn,s;lr,s;oq,ue;|nr,s;ro,s;|sw:h;a=64,o=64,w=@2,en=c,s=@1,eb=2.5;w=@3,en=@4,s=@5;w=@6,en=@7,s=@8;w=@9,en=@10,s=@11;|","|")
+rp={}
+function c()end
+function td(cu,...)
+local oa=cf[0+cu]
+local ej,ar=unpack(rp[oa]or{})
+if not ej then
+ej,ar={},{}
+for re in all(split(oa,";"))do
+local eh,g=he(re,":",ej)
+local le=function(uf,co,ct)
+return fd(ct or ej,co or eh,uf,ar)
 end
-local ret_val,items={},split(v,",")
-for item in all(items)do
-local k,v=split_kv(item,"=",ret_val)
-if #items==1 then
-ret_val=val_func(v)
+local as,hp={},split(g,",")
+for re in all(hp)do
+local eh,g=he(re,"=",as)
+if #hp==1 then
+as=le(g)
 else
-ret_val[k]=val_func(v,k,ret_val)
+as[eh]=le(g,eh,as)
 end
 end
-tbl[k]=ret_val
+ej[eh]=as
 end
-g_ztable_cache[str]={tbl,ops}
+rp[oa]={ej,ar}
 end
-local params={...}
-foreach(params,disable_tabcpy)
-foreach(ops,function(op)
-local t,k,f=unpack(op)
-t[k]=f(params)
+local ir={...}
+foreach(ir,dp)
+foreach(ar,function(fs)
+local t,eh,ad=unpack(fs)
+t[eh]=ad(ir)
 end)
-return tbl
+return ej
 end
-function split_kv(list,delim,tbl)
-local kvs=split(list,delim)
-return kvs[#kvs-1]or #tbl+1,kvs[#kvs]
+function he(nk,ug,ej)
+local iz=split(nk,ug)
+return iz[#iz-1]or #ej+1,iz[#iz]
 end
-function queue_operation(tbl,k,v,ops)
-local vlist=split(v,"/")
-local will_be_table,func_op,func_name=#vlist>1
-if ord(v)==33 then
-will_be_table,func_name=true,deli(vlist,1)
-func_op={
-tbl,k,function()
-return _g[sub(func_name,2)](unpack(vlist))
+function fd(ej,eh,g,ar)
+local av=split(g,"/")
+local sp,hh,ih=#av>1
+if ord(g)==33 then
+sp,ih=true,deli(av,1)
+hh={
+ej,eh,function()
+return _g[sub(ih,2)](unpack(av))
 end
 }
 end
-for i,x in ipairs(vlist)do
-local rest,closure_tbl=sub(x,2),tbl
-if will_be_table then
-closure_tbl,k=vlist,i
+for w,a in ipairs(av)do
+local nl,sn=sub(a,2),ej
+if sp then
+sn,eh=av,w
 end
-if ord(x)==64 then
-add(ops,{
-closure_tbl,k,function(p)
-return p[rest+0]
-end
-})
-elseif ord(x)==36 then
-x=function(a,...)
-a[rest](a,...)
-end
-elseif ord(x)==37 then
-x=_g[rest]
-elseif ord(x)==126 then
-add(ops,{
-closure_tbl,k,function()
-return tbl[rest]
+if ord(a)==64 then
+add(ar,{
+sn,eh,function(mw)
+return mw[nl+0]
 end
 })
-elseif x=="yes"or x=="no"then x=x=="yes"
-elseif x=="null"or x==""then x=nil
-elseif x=="nf"then x=function()end
+elseif ord(a)==36 then
+a=function(e,...)
+e[nl](e,...)
 end
-vlist[i]=x
+elseif ord(a)==37 then
+a=_g[nl]
+elseif ord(a)==126 then
+add(ar,{
+sn,eh,function()
+return ej[nl]
 end
-add(ops,func_op)
-if will_be_table then
-return vlist
+})
+elseif a=="h"or a=="es"then a=a=="h"
+elseif a=="hb"or a==""then a=nil
+elseif a=="c"then a=function()end
+end
+av[w]=a
+end
+add(ar,hh)
+if sp then
+return av
 else
-return vlist[1]
+return av[1]
 end
 end
-function disable_tabcpy(t)
+function dp(t)
 if type(t)=="table"then
-t.is_tabcpy_disabled=true
+t.mq=true
 end
 return t
 end
-function zspr(sind,x,y,sw,sh,...)
-sw,sh=sw or 1,sh or 1
-spr(sind,x-sw*4,y-sh*4,sw,sh,...)
+function ep(i,a,o,oy,tr,...)
+oy,tr=oy or 1,tr or 1
+spr(i,a-oy*4,o-tr*4,oy,tr,...)
 end
-function zprint(str,x,y,color,align)
-if align==0 then x-=#str*2
-elseif align>0 then x-=#str*4+1 end
-print(str,x,y,color)
+function e_(oa,a,o,color,hg)
+if hg==0 then a-=#oa*2
+elseif hg>0 then a-=#oa*4+1 end
+print(oa,a,o,color)
 end
-function zclip(x1,y1,x2,y2)
-clip(x1,y1,x2+1-flr(x1),y2+1-flr(y1))
+function du(eg,ew,ec,eu)
+clip(eg,ew,ec+1-flr(eg),eu+1-flr(ew))
 end
-function zcls(col)
-batch_call_new(rectfill,[[1]],col or 0)
+function fw(x)
+tp(rectfill,[[1]],x or 0)
 end
-function zrect(x1,y1,x2,y2)
-batch_call_new(rect,
-[[2]],x1,y1,x2,y2)
+function fz(eg,ew,ec,eu)
+tp(rect,
+[[2]],eg,ew,ec,eu)
 end
-function scr_spr(a,spr_func,...)
-if a and a.visible then
-(spr_func or zspr)(a.sind,a.x*8+a.ixx+a.xx,a.y*8+a.iyy+a.yy,a.sw,a.sh,a.xf,a.yf,...)
+function ag(e,cn,...)
+if e and e.cl then
+(cn or ep)(e.i,e.a*8+e.nj+e.op,e.o*8+e.tg+e.ap,e.oy,e.tr,e.ea,e.mi,...)
 end
 end
-function outline_helper(flip,coord,dim)
-coord=coord-dim*4
+function fx(flip,ng,ao)
+ng=ng-ao*4
 if flip then
-return dim*8-1+coord,-1
+return ao*8-1+ng,-1
 else
-return coord,1
+return ng,1
 end
 end
-g_fadetable=ztable[[3]]
-function fade(i)
-for c=0,15 do
-pal(c,g_fadetable[c+1][min(flr(i+1),7)])
+ml=td[[3]]
+function ib(w)
+for ax=0,15 do
+pal(ax,ml[ax+1][min(flr(w+1),7)])
 end
 end
-create_actor([[4|5]],function(a)
-g_card_fade=max(a.tl_tim/a.tl_max_time*10,g_card_fade)
+_([[4|5]],function(e)
+ot=max(e.ae/e.eb*10,ot)
 end)
-create_actor([[6|5]],function(a)
-g_card_fade=min((a.tl_max_time-a.tl_tim)/a.tl_max_time*10,g_card_fade)
+_([[6|5]],function(e)
+ot=min((e.eb-e.ae)/e.eb*10,ot)
 end)
-create_parent([[7|8]],function(a)
-local keys_to_remove={}
-for k,v in pairs(a.timers)do
-v.t+=1
-if v.t>v.limit then
-add(keys_to_remove,k)
+d([[7|8]],function(e)
+local lp={}
+for eh,g in pairs(e.on)do
+g.t+=1
+if g.t>g.np then
+add(lp,eh)
 end
 end
-for k in all(keys_to_remove)do
-local v=a.timers[k]
-a.timers[k]=nil
-v.callback(a)
+for eh in all(lp)do
+local g=e.on[eh]
+e.on[eh]=nil
+g.rf(e)
 end
-end,function(a,timer_name,limit,callback)
-a.timers[timer_name]={t=0,limit=limit,callback=(callback or nf)}
-end,function(a,...)
-for timer_name in all{...}do
-if a.timers[timer_name]~=nil then
+end,function(e,ic,np,rf)
+e.on[ic]={t=0,np=np,rf=(rf or c)}
+end,function(e,...)
+for ic in all{...}do
+if e.on[ic]~=nil then
 return true
 end
 end
 return false
-end,function(a,timer_name)
-local timer=a.timers[timer_name]
-return timer and(timer.t/timer.limit)or 1
+end,function(e,ic)
+local aa=e.on[ic]
+return aa and(aa.t/aa.np)or 1
 end)
-create_parent([[9|10]],function(a)
-if a.alive and tl_node(a)then
-a.alive=false
+d([[9|10]],function(e)
+if e.r and rb(e)then
+e.r=false
 end
-end,function(a)
-if not a.alive then
-a:destroyed()
-a:delete()
+end,function(e)
+if not e.r then
+e:tk()
+e:sk()
 end
-end,function(a)
-a.alive=nil
-end,function(a)
-for k,v in pairs(g_act_arrs)do
-if a[k]then del(v,a)end
+end,function(e)
+e.r=nil
+end,function(e)
+for eh,g in pairs(tc)do
+if e[eh]then del(g,e)end
 end
-end,get)
-create_parent[[11|12]]
-create_parent[[13|14]]
-create_parent[[15|16]]
-create_parent[[17|18]]
-create_parent[[19|20]]
-create_parent[[21|20]]
-create_parent[[22|20]]
-create_parent[[23|20]]
-create_parent([[24|25]],function(a,other)
-if other.bad_character then
-other:damage(a)
-end
-end)
-create_parent([[26|27]],function(a,other)
-if other.good_character then
-other:damage(a)
-end
-if a.kill_when_hit then
-a:kill()
+end,lv)
+d[[11|12]]
+d[[13|14]]
+d[[15|16]]
+d[[17|18]]
+d[[19|20]]
+d[[21|20]]
+d[[22|20]]
+d[[23|20]]
+d([[24|25]],function(e,p)
+if p.tb then
+p:tu(e)
 end
 end)
-create_parent([[28|29]],function(a)
-if a.x+a.dx<g_room.x+a.rx then
-a.x=g_room.x+a.rx
-a.dx=0
+d([[26|27]],function(e,p)
+if p.ow then
+p:tu(e)
 end
-if a.x+a.dx>g_room.x+g_room.w-a.rx then
-a.x=g_room.x+g_room.w-a.rx
-a.dx=0
+if e.lq then
+e:nu()
 end
 end)
-create_parent([[30|31]],function(a)
-if a.y+a.dy<g_room.y+a.ry then
-a.y=g_room.y+a.ry
-a.dy=0
+d([[28|29]],function(e)
+if e.a+e.f<v.a+e.q then
+e.a=v.a+e.q
+e.f=0
 end
-if a.y+a.dy>g_room.y+g_room.h-a.ry then
-a.y=g_room.y+g_room.h-a.ry
-a.dy=0
+if e.a+e.f>v.a+v.t_-e.q then
+e.a=v.a+v.t_-e.q
+e.f=0
 end
 end)
-create_parent([[32|33]],function(a)
-a.x+=a.dx
-a.y+=a.dy
+d([[30|31]],function(e)
+if e.o+e.y<v.o+e.j then
+e.o=v.o+e.j
+e.y=0
+end
+if e.o+e.y>v.o+v.tq-e.j then
+e.o=v.o+v.tq-e.j
+e.y=0
+end
 end)
-create_parent([[34|35]],function(a)
-a.dx+=a.ax a.dy+=a.ay
-a.dx*=a.inertia_x a.dy*=a.inertia_y
-if a.ax==0 and abs(a.dx)<.01 then a.dx=0 end
-if a.ay==0 and abs(a.dy)<.01 then a.dy=0 end
-end,function(a)
-a.ax,a.ay,a.dx,a.dy=0,0,0,0
+d([[32|33]],function(e)
+e.a+=e.f
+e.o+=e.y
 end)
-create_parent[[36|37]]
-create_parent([[38|39]],function(a)
-local a2=a.rel_actor
-if a2 then
-if a2.alive then
-a.x,a.y=a2.x+a.rel_x,a2.y+a.rel_y
-a.dx,a.dy=a2.dx+a.rel_dx,a2.dy+a.rel_dy
-a.rel_x+=a.rel_dx
-a.rel_y+=a.rel_dy
-a.xx,a.yy=a2.xx,a2.yy
-if a.flippable then
-a.xf=a2.xf
+d([[34|35]],function(e)
+e.f+=e.et e.y+=e.ef
+e.f*=e.us e.y*=e.my
+if e.et==0 and abs(e.f)<.01 then e.f=0 end
+if e.ef==0 and abs(e.y)<.01 then e.y=0 end
+end,function(e)
+e.et,e.ef,e.f,e.y=0,0,0,0
+end)
+d[[36|37]]
+d([[38|39]],function(e)
+local at=e.ei
+if at then
+if at.r then
+e.a,e.o=at.a+e.hi,at.o+e.lx
+e.f,e.y=at.f+e.iq,at.y+e.ru
+e.hi+=e.iq
+e.lx+=e.ru
+e.op,e.ap=at.op,at.ap
+if e.mo then
+e.ea=at.ea
 end
 else
-a.alive=false
+e.r=false
 end
 end
 end)
-create_parent([[40|41]],function(a)
-a.xx,a.yy=0,0
+d([[40|41]],function(e)
+e.op,e.ap=0,0
 end)
-create_parent[[42|43]]
-create_parent[[44|43]]
-create_parent[[45|43]]
-create_parent([[46|47]],function(a)
-if a.caption_text and approx_dist(g_pl.x-a.x,g_pl.y-a.y)<1 then
-zprint(a.caption_text,a.x*8,(a.y-2.5)*8+1,1,0)
-zprint(a.caption_text,a.x*8,(a.y-2.5)*8-1,1,0)
-zprint(a.caption_text,a.x*8-1,(a.y-2.5)*8,1,0)
-zprint(a.caption_text,a.x*8+1,(a.y-2.5)*8,1,0)
-zprint(a.caption_text,a.x*8,(a.y-2.5)*8,7,0)
+d[[42|43]]
+d[[44|43]]
+d[[45|43]]
+d([[46|47]],function(e)
+if e.th and nx(l.a-e.a,l.o-e.o)<1 then
+e_(e.th,e.a*8,(e.o-2.5)*8+1,1,0)
+e_(e.th,e.a*8,(e.o-2.5)*8-1,1,0)
+e_(e.th,e.a*8-1,(e.o-2.5)*8,1,0)
+e_(e.th,e.a*8+1,(e.o-2.5)*8,1,0)
+e_(e.th,e.a*8,(e.o-2.5)*8,7,0)
 end
 end)
-create_parent[[48|43]]
-create_parent[[49|43]]
-create_parent[[50|43]]
-create_parent[[51|43]]
-create_parent[[52|43]]
-create_parent[[53|43]]
-create_parent[[54|43]]
-create_parent[[55|43]]
-create_parent[[56|57]]
-create_parent([[58|59]],scr_spr)
-create_parent([[60|61]],function(a,direction)
-if not a:any_timer_active("knockback")then
-a.knockback_speed=.075
-a.knockback_dir=direction
-a:create_timer("knockback",4)
+d[[48|43]]
+d[[49|43]]
+d[[50|43]]
+d[[51|43]]
+d[[52|43]]
+d[[53|43]]
+d[[54|43]]
+d[[55|43]]
+d[[56|57]]
+d([[58|59]],ag)
+d([[60|61]],function(e,ff)
+if not e:b("knockback")then
+e.st=.075
+e.rt=ff
+e:er("knockback",4)
 end
-end,function(a)
-a.ax=cos(a.knockback_dir)*a.knockback_speed
-a.ay=sin(a.knockback_dir)*a.knockback_speed
+end,function(e)
+e.et=cos(e.rt)*e.st
+e.ef=sin(e.rt)*e.st
 end)
-create_parent([[62|63]],function(a,damage)
-damage=damage or 1
-if not a:any_timer_active("hurt_cooldown")then
-a.health=max(0,a.health-damage)
-if a.health==0 then
-a.alive=false
+d([[62|63]],function(e,tu)
+tu=tu or 1
+if not e:b("hurt_cooldown")then
+e.tn=max(0,e.tn-tu)
+if e.tn==0 then
+e.r=false
 return
 end
-a:create_timer("hurt_cooldown",a.hurt_cooldown_time,a.hurt_end)
-a:hurt_start()
+e:er("hurt_cooldown",e.hx,e.hy)
+e:de()
 end
-end,function(a,health)
-a.health=min(a.max_health,a.health+health)
+end,function(e,tn)
+e.tn=min(e.ob,e.tn+tn)
 end)
-create_parent[[64|65]]
-create_parent([[66|67]],function(a,acts)
-local hit_list={}
-local move_check=function(dx,dy)
-local ret_val=dx+dy
-local col_help=function(axis,spd_axis,a,b,pos,spd)
-if spd!=0 and pos<abs(a[axis]-b[axis])then
-if a.touchable and b.touchable then
-local s_f=function(c)
-if not c.anchored then
-c[spd_axis]=(a[spd_axis]+b[spd_axis])/2
+d[[64|65]]
+d([[66|67]],function(e,ca)
+local ix={}
+local ac=function(f,y)
+local as=f+y
+local dv=function(hu,nm,e,ee,ts,oo)
+if oo!=0 and ts<abs(e[hu]-ee[hu])then
+if e.em and ee.em then
+local lm=function(ax)
+if not ax.se then
+ax[nm]=(e[nm]+ee[nm])/2
 end
 end
-s_f(a)s_f(b)
-ret_val=0
+lm(e)lm(ee)
+as=0
 end
-hit_list[b][spd_axis]=zsgn(spd)
-end
-end
-foreach(acts,function(b)
-if a!=b and(not a.anchored or not b.anchored)then
-local x,y=abs(a.x+dx-b.x),abs(a.y+dy-b.y)
-if x<a.rx+b.rx and y<a.ry+b.ry then
-hit_list[b]=hit_list[b]or ztable[[68]]
-batch_call_new(col_help,[[69]],a,b,x,dx,y,dy)
+ix[ee][nm]=nq(oo)
 end
 end
-end)
-return ret_val
+foreach(ca,function(ee)
+if e!=ee and(not e.se or not ee.se)then
+local a,o=abs(e.a+f-ee.a),abs(e.o+y-ee.o)
+if a<e.q+ee.q and o<e.j+ee.j then
+ix[ee]=ix[ee]or td[[68]]
+tp(dv,[[69]],e,ee,a,f,o,y)
 end
-a.dx,a.dy=move_check(a.dx,0),move_check(0,a.dy)
-for b,d in pairs(hit_list)do
-a:hit(b,d.dx,d.dy)
 end
 end)
-create_parent([[70|71]],function(a,solid_func)
-local x,dx=coll_tile_help(a.x,a.y,a.dx,a.rx,a.ry,0,a,a.tile_hit,solid_func)
-local y,dy=coll_tile_help(a.y,a.x,a.dy,a.ry,a.rx,2,a,a.tile_hit,function(a,y,x)return solid_func(a,x,y)end)
-if a.tile_solid then
-a.x,a.y,a.dx,a.dy=x,y,dx,dy
+return as
+end
+e.f,e.y=ac(e.f,0),ac(0,e.y)
+for ee,s in pairs(ix)do
+e:ig(ee,s.f,s.y)
 end
 end)
-function update_view_helper(view,xy,wh,ii)
-if not view.follow_act then return end
-local follow_coord=view.follow_act[xy]
-local view_coord=view[xy]
-local view_dim=view[wh]
-local room_dim=g_room[wh]/2-view_dim/2
-local room_coord=g_room[xy]+g_room[wh]/2
-local follow_dim=round(view.follow_dim*(view_dim/2))/8
-if follow_coord<view_coord-follow_dim then view_coord=follow_coord+follow_dim end
-if follow_coord>view_coord+follow_dim then view_coord=follow_coord-follow_dim end
-if view_coord<room_coord-room_dim then view_coord=room_coord-room_dim end
-if view_coord>room_coord+room_dim then view_coord=room_coord+room_dim end
-if g_room[wh]<=view[wh]then view_coord=room_coord end
-view[xy]=view_coord
-end
-function scr_pset(x,y,c)
-pset(x*8,y*8,c)
-end
-function scr_line(x1,y1,x2,y2,col)
-line(x1*8,y1*8,x2*8,y2*8,col)
-end
-function scr_rectfill(x1,y1,x2,y2,col)
-rectfill(x1*8,y1*8,x2*8,y2*8,col)
-end
-function scr_oval(x1,y1,x2,y2,col)
-oval(x1*8,y1*8,x2*8,y2*8,col)
-end
-function scr_ovalfill(x1,y1,x2,y2,col)
-ovalfill(x1*8,y1*8,x2*8,y2*8,col)
-end
-function scr_map(cel_x,cel_y,sx,sy,...)
-map(cel_x,cel_y,sx*8,sy*8,...)
-end
-function scr_circfill(x,y,r,col)
-circfill(x*8,y*8,r*8,col)
-end
-function scr_circ(x,y,r,col)
-circ(x*8,y*8,r*8,col)
-end
-create_actor([[72|73]],
-function(a)
-if a.follow_act and not a.follow_act.alive then
-a.follow_act=nil
-end
-batch_call_new(update_view_helper,[[74]],a)
-end,function(a)
-if a.follow_act then
-a.x,a.y=a.follow_act.x,a.follow_act.y
-a.name=a.follow_act.name
-end
-a:update_view()
-end,function(a,other)
-if not other or other.ma_able then
-a.follow_act=other
+d([[70|71]],function(e,iw)
+local a,f=lt(e.a,e.o,e.f,e.q,e.j,0,e,e.ri,iw)
+local o,y=lt(e.o,e.a,e.y,e.j,e.q,2,e,e.ri,function(e,o,a)return iw(e,a,o)end)
+if e.cr then
+e.a,e.o,e.f,e.y=a,o,f,y
 end
 end)
-create_actor([[75|76]],function(a)
-local sind=a.sind
-if g_room.name=="hospital"then sind+=16 end
-zspr(sind,a.x*8+a.xx,a.y*8+a.yy,2,1,a.xf,false)
-end)
-create_actor[[77|78]]
-create_actor([[79|80]],function(a)
-a:create_timer("bleeding",30)
-end,function(a)
-if a:any_timer_active"bleeding"then
-_g.powerup_particle(a.x,a.y,_g.c_color_blood)
-a.xx=flr_rnd(3)-2
-a.yy=flr_rnd(3)-2
+function dd(ed,i_,iy,fg)
+if not ed.tv then return end
+local nd=ed.tv[i_]
+local tz=ed[i_]
+local lc=ed[iy]
+local nh=v[iy]/2-lc/2
+local ip=v[i_]+v[iy]/2
+local ol=rv(ed.ol*(lc/2))/8
+if nd<tz-ol then tz=nd+ol end
+if nd>tz+ol then tz=nd-ol end
+if tz<ip-nh then tz=ip-nh end
+if tz>ip+nh then tz=ip+nh end
+if v[iy]<=ed[iy]then tz=ip end
+ed[i_]=tz
+end
+function fb(a,o,ax)
+pset(a*8,o*8,ax)
+end
+function ss(eg,ew,ec,eu,x)
+line(eg*8,ew*8,ec*8,eu*8,x)
+end
+function ch(eg,ew,ec,eu,x)
+rectfill(eg*8,ew*8,ec*8,eu*8,x)
+end
+function fk(eg,ew,ec,eu,x)
+oval(eg*8,ew*8,ec*8,eu*8,x)
+end
+function un(eg,ew,ec,eu,x)
+ovalfill(eg*8,ew*8,ec*8,eu*8,x)
+end
+function uz(mn,cx,da,mm,...)
+map(mn,cx,da*8,mm*8,...)
+end
+function h_(a,o,s_,x)
+circfill(a*8,o*8,s_*8,x)
+end
+function pn(a,o,s_,x)
+circ(a*8,o*8,s_*8,x)
+end
+_([[72|73]],
+function(e)
+if e.tv and not e.tv.r then
+e.tv=nil
+end
+tp(dd,[[74]],e)
+end,function(e)
+if e.tv then
+e.a,e.o=e.tv.a,e.tv.o
+e.ex=e.tv.ex
+end
+e:sh()
+end,function(e,p)
+if not p or p.mx then
+e.tv=p
 end
 end)
-function create_cached_deadbody(enemy_id,...)
-add(_g.all_deadbody_templates[g_room.name],{...})
-_g.all_enemy_templates[g_room.name][enemy_id].alive=false
-_g.deadbody(...)
-end
-function _g.nurse_draw(a)
-a.sind=66
-if a:any_timer_active"prepare"then
-a.sind=69
-elseif a:any_timer_active"attack"then
-a.sind=70
-if a:get_timer_percent"attack">.50 then
-a.sind=71
-end
-elseif abs(a.dx)>.005 or abs(a.dy)>.005 then
-local loop=a.tl_tim%.5/.5
-if loop<.25 then a.sind=66
-elseif loop<.5 then a.sind=67
-elseif loop<.75 then a.sind=66
-else a.sind=68
-end
-end
-if g_room.name=="hospital"then
-a.sind+=32
-end
-scr_spr(a)
-end
-create_actor([[81|82]],function(a)
-a.rel_dx=zsgn(cos(a.rel_actor.dir))*.05
+_([[75|76]],function(e)
+local i=e.i
+if v.ex=="hospital"then i+=16 end
+ep(i,e.a*8+e.op,e.o*8+e.ap,2,1,e.ea,false)
 end)
-create_actor([[83|84]],function(a)
-if not a:any_timer_active("cooldown","walk","prepare","attack")then
-a.dir=atan2(g_pl.x-a.x,g_pl.y-a.y)+rnd(.125)-.125/2
-a:create_timer("walk",flr_rnd(10)+30,function()
-a:create_timer("cooldown",flr_rnd(120),function()
-a:create_timer("prepare",40,function()
-_g.nurse_weapon(a,a.x,a.y)
-a:create_timer("attack",10)
+_[[77|78]]
+_([[79|80]],function(e)
+e:er("ma",30)
+end,function(e)
+if e:b"ma"then
+_g.ev(e.a,e.o,8)
+e.op=te(3)-2
+e.ap=te(3)-2
+end
+end)
+function rl(tw,...)
+add(_g.sd[v.ex],{...})
+_g.sz[v.ex][tw].r=false
+_g.lg(...)
+end
+function _g.ld(e)
+e.i=66
+if e:b"prepare"then
+e.i=69
+elseif e:b"attack"then
+e.i=70
+if e:ni"attack">.50 then
+e.i=71
+end
+elseif abs(e.f)>.005 or abs(e.y)>.005 then
+local ta=e.ae%.5/.5
+if ta<.25 then e.i=66
+elseif ta<.5 then e.i=67
+elseif ta<.75 then e.i=66
+else e.i=68
+end
+end
+if v.ex=="u"then
+e.i+=32
+end
+ag(e)
+end
+_([[81|82]],function(e)
+e.iq=nq(cos(e.ei.k))*.05
+end)
+_([[83|84]],function(e)
+if not e:b("cooldown","walk","prepare","attack")then
+e.k=atan2(l.a-e.a,l.o-e.o)+rnd(.125)-.125/2
+e:er("walk",te(10)+30,function()
+e:er("cooldown",te(120),function()
+e:er("prepare",40,function()
+_g.fi(e,e.a,e.o)
+e:er("attack",10)
 end)
 end)
 end)
 end
-if a:any_timer_active"hurt_cooldown"then
-_g.powerup_particle(a.x,a.y+.5,_g.c_color_blood)
+if e:b"hurt_cooldown"then
+_g.ev(e.a,e.o+.5,8)
 end
-if a:any_timer_active"knockback"then
-a:apply_knockback()
-elseif a:any_timer_active"walk"then
-a.ax=cos(a.dir)*.01
-if a.ax>0 then
-a.xf=false
-elseif a.ax<0 then
-a.xf=true
+if e:b"knockback"then
+e:nz()
+elseif e:b"walk"then
+e.et=cos(e.k)*.01
+if e.et>0 then
+e.ea=false
+elseif e.et<0 then
+e.ea=true
 end
-a.ay=sin(a.dir)*.01
+e.ef=sin(e.k)*.01
 else
-a.ax=0
-a.ay=0
+e.et=0
+e.ef=0
 end
-end,function(a,other)
-local had_timer=a:any_timer_active"hurt_cooldown"
-a:hurt(g_pl.strength)
-a:knockback(atan2(a.x-other.x,a.y-other.y))
-if other.rel_actor then
-other.rel_actor:knockback(atan2(g_pl.x-a.x,g_pl.y-a.y))
-if not had_timer then
-call_not_nil(other.rel_actor,"increment_strength",other.rel_actor)
+end,function(e,p)
+local ik=e:b"hurt_cooldown"
+e:ie(l.eo)
+e:ab(atan2(e.a-p.a,e.o-p.o))
+if p.ei then
+p.ei:ab(atan2(l.a-e.a,l.o-e.o))
+if not ik then
+an(p.ei,"increment_strength",p.ei)
 end
 end
-end,function(a)
-create_cached_deadbody(a.enemy_id,a.x,a.y,a.xf,96)
+end,function(e)
+rl(e.tw,e.a,e.o,e.ea,96)
 end)
-create_actor([[85|86]],function(a)
-if not a:any_timer_active("cooldown","walk")then
-a.dir=atan2(g_pl.x-a.x,g_pl.y-a.y)+rnd(.125)-.125/2
-a:create_timer("walk",flr_rnd(10)+30,function()
-a:create_timer("cooldown",flr_rnd(120)+50)
+_([[85|86]],function(e)
+if not e:b("cooldown","walk")then
+e.k=atan2(l.a-e.a,l.o-e.o)+rnd(.125)-.125/2
+e:er("walk",te(10)+30,function()
+e:er("cooldown",te(120)+50)
 end)
 end
-if g_endgame_stats.enemy_kill_count>0 then
-a.caption_text="you monster!"
+if z.tx>0 then
+e.th="you monster!"
 else
-a.caption_text="you're healed!"
+e.th="you're healed!"
 end
-if a:any_timer_active"walk"then
-a.ax=cos(a.dir)*.01
-if a.ax>0 then
-a.xf=false
-elseif a.ax<0 then
-a.xf=true
+if e:b"walk"then
+e.et=cos(e.k)*.01
+if e.et>0 then
+e.ea=false
+elseif e.et<0 then
+e.ea=true
 end
-a.ay=sin(a.dir)*.01
+e.ef=sin(e.k)*.01
 else
-a.ax=0
-a.ay=0
+e.et=0
+e.ef=0
 end
 end)
-create_parent([[87|88]],function(a)
-scr_circfill(a.x,a.y,.125,a.color)
-end,function(a)
-scr_circfill(a.x,a.y,.375,a.color)
-end,function(a)
-a.dx=rnd(.2)-.1
-a.dy=-rnd(.2)-.1
-end,function(a)
-a.dx=rnd(.05)-.025
-a.dy=rnd(.05)-.025
+d([[87|88]],function(e)
+h_(e.a,e.o,.125,e.color)
+end,function(e)
+h_(e.a,e.o,.375,e.color)
+end,function(e)
+e.f=rnd(.2)-.1
+e.y=-rnd(.2)-.1
+end,function(e)
+e.f=rnd(.05)-.025
+e.y=rnd(.05)-.025
 end)
-create_actor[[89|90]]
-create_actor[[91|92]]
-create_actor[[93|94]]
-create_parent([[95|96]],function(a)
-for i=1,a.rate do
-if flr_rnd(a.chance)==0 then
-a.create_func(
-a.x+rnd(a.rx*2)-a.rx,
-a.y+rnd(a.ry*2)-a.ry,
-a.color
+_[[89|90]]
+_[[91|92]]
+_[[93|94]]
+d([[95|96]],function(e)
+for w=1,e.cc do
+if te(e.dj)==0 then
+e.ud(
+e.a+rnd(e.q*2)-e.q,
+e.o+rnd(e.j*2)-e.j,
+e.color
 )
 end
 end
 end)
-function _g.patient_draw(a)
-a.sind=9
-if a:any_timer_active"prepare"then
-a.sind=10
-elseif a:any_timer_active"charge"then
-local percent=a:get_timer_percent"charge"
-if percent<.2 then a.sind=11
-elseif percent<.4 then a.sind=12
-elseif percent<.75 then a.sind=13
-else a.sind=10
+function _g.mj(e)
+e.i=9
+if e:b"prepare"then
+e.i=10
+elseif e:b"charge"then
+local ez=e:ni"charge"
+if ez<.2 then e.i=11
+elseif ez<.4 then e.i=12
+elseif ez<.75 then e.i=13
+else e.i=10
 end
 end
-if g_room.name=="hospital"then
-a.sind+=32
+if v.ex=="u"then
+e.i+=32
 end
-scr_spr(a)
+ag(e)
 end
-create_actor([[97|98]])
-create_actor([[99|100]],function(a)
-if not a:any_timer_active("cooldown","charge","prepare","attack")then
-a.dir=atan2(g_pl.x-a.x,g_pl.y-a.y)+rnd(.125)-.125/2
-_g.patient_weapon(a,a.x,a.y)
-a:create_timer("charge",20,function()
-a:create_timer("cooldown",flr_rnd(60)+60,function()
-a:create_timer("prepare",60)
+_([[97|98]])
+_([[99|100]],function(e)
+if not e:b("cooldown","charge","prepare","attack")then
+e.k=atan2(l.a-e.a,l.o-e.o)+rnd(.125)-.125/2
+_g.fh(e,e.a,e.o)
+e:er("charge",20,function()
+e:er("cooldown",te(60)+60,function()
+e:er("prepare",60)
 end)
 end)
 end
-if a:any_timer_active"hurt_cooldown"then
-_g.powerup_particle(a.x,a.y+.5,_g.c_color_blood)
+if e:b"hurt_cooldown"then
+_g.ev(e.a,e.o+.5,8)
 end
-if a:any_timer_active"knockback"then
-a:apply_knockback()
-elseif a:any_timer_active"charge"then
-a.ax=cos(a.dir)*.03
-a.ay=sin(a.dir)*.03
-if a.ax>0 then
-a.xf=false
-elseif a.ax<0 then
-a.xf=true
+if e:b"knockback"then
+e:nz()
+elseif e:b"charge"then
+e.et=cos(e.k)*.03
+e.ef=sin(e.k)*.03
+if e.et>0 then
+e.ea=false
+elseif e.et<0 then
+e.ea=true
 end
 else
-if abs(a.dx)<.01 then
-a.xf=a.x-g_pl.x>0
+if abs(e.f)<.01 then
+e.ea=e.a-l.a>0
 end
-a.ax=0
-a.ay=0
+e.et=0
+e.ef=0
 end
-end,function(a,other)
-local had_timer=a:any_timer_active"hurt_cooldown"
-a:hurt(g_pl.strength)
-a:knockback(atan2(a.x-other.x,a.y-other.y))
-if other.rel_actor then
-other.rel_actor:knockback(atan2(g_pl.x-a.x,g_pl.y-a.y))
-if not had_timer then
-call_not_nil(other.rel_actor,"increment_strength",other.rel_actor)
+end,function(e,p)
+local ik=e:b"hurt_cooldown"
+e:ie(l.eo)
+e:ab(atan2(e.a-p.a,e.o-p.o))
+if p.ei then
+p.ei:ab(atan2(l.a-e.a,l.o-e.o))
+if not ik then
+an(p.ei,"increment_strength",p.ei)
 end
 end
-end,function(a)
-create_cached_deadbody(a.enemy_id,a.x,a.y,a.xf,14)
+end,function(e)
+rl(e.tw,e.a,e.o,e.ea,14)
 end)
-create_actor([[101|102]],function(a)
-a.xf=a.x-g_pl.x>0
+_([[101|102]],function(e)
+e.ea=e.a-l.a>0
 if t()%5<.5 then
-a.ixx=flr_rnd(3)-1
-a.sind=rnd_item{41,42,43}
+e.nj=te(3)-1
+e.i=hc{41,42,43}
 else
-a.ixx=0
+e.nj=0
 end
-if g_endgame_stats.enemy_kill_count>0 then
-a.caption_text="don't kill me too!"
+if z.tx>0 then
+e.th="don't kill me too!"
 else
-a.caption_text="play with me!"
+e.th="play with me!"
 end
-end,scr_spr)
-create_parent([[103|104]],function(a)
-a.rel_dx=cos(a.rel_actor.dir)*.03
-a.rel_dy=sin(a.rel_actor.dir)*.03
+end,ag)
+d([[103|104]],function(e)
+e.iq=cos(e.ei.k)*.03
+e.ru=sin(e.ei.k)*.03
 end)
-create_actor[[105|106]]
-create_actor[[107|106]]
-create_parent([[108|109]],function(a)
-local sind=a.passive_mode and 80 or 64
-_g.deadbody(a.x,a.y,a.xf,sind)
-end,function(a)
-a.sind=134
-a.yy=0
-if a:any_timer_active"punch"then
-local percent=a:get_timer_percent"punch"
-if percent>=.90 then a.sind=133
-elseif percent>=.80 then a.sind=132
-elseif percent>=.50 then a.sind=131
-elseif percent>=.30 then a.sind=130
-elseif percent>=.10 then a.sind=129
-else a.sind=128
+_[[105|106]]
+_[[107|106]]
+d([[108|109]],function(e)
+local i=e.hv and 80 or 64
+_g.lg(e.a,e.o,e.ea,i)
+end,function(e)
+e.i=134
+e.ap=0
+if e:b"punch"then
+local ez=e:ni"punch"
+if ez>=.90 then e.i=133
+elseif ez>=.80 then e.i=132
+elseif ez>=.50 then e.i=131
+elseif ez>=.30 then e.i=130
+elseif ez>=.10 then e.i=129
+else e.i=128
 end
-a.yy=sin(percent/2)*5
-elseif a:any_timer_active"roll"then
-local percent=a:get_timer_percent"roll"
-if percent>=.90 then a.sind=140
-elseif percent>=.80 then a.sind=139
-elseif percent>=.50 then a.sind=138
-elseif percent>=.30 then a.sind=137
-else a.sind=136
+e.ap=sin(ez/2)*5
+elseif e:b"roll"then
+local ez=e:ni"roll"
+if ez>=.90 then e.i=140
+elseif ez>=.80 then e.i=139
+elseif ez>=.50 then e.i=138
+elseif ez>=.30 then e.i=137
+else e.i=136
 end
-elseif abs(a.dx)>.005 or abs(a.dy)>.005 then
-local loop=(a.tl_tim%.4)/.4
-if loop>=.8 then a.sind=134
-elseif loop>=.5 then a.sind=142
-elseif loop>=.3 then a.sind=134
-else a.sind=143
+elseif abs(e.f)>.005 or abs(e.y)>.005 then
+local ta=(e.ae%.4)/.4
+if ta>=.8 then e.i=134
+elseif ta>=.5 then e.i=142
+elseif ta>=.3 then e.i=134
+else e.i=143
 end
 else
-local loop=a.tl_tim and(a.tl_tim%1)or 0
-if loop<.25 then a.sind=141 end
+local ta=e.ae and(e.ae%1)or 0
+if ta<.25 then e.i=141 end
 end
-a.xf=a.is_facing_left
-if a.passive_mode then a.sind+=32 end
-scr_spr(a)
+e.ea=e.oj
+if e.hv then e.i+=32 end
+ag(e)
 end)
-create_parent([[110|111]],function(a,other)
-if not a:any_timer_active"roll"then
-a:hurt()
-a:knockback(atan2(a.x-other.x,a.y-other.y))
+d([[110|111]],function(e,p)
+if not e:b"roll"then
+e:ie()
+e:ab(atan2(e.a-p.a,e.o-p.o))
 end
-end,function(a)
-a:set_strength(4)
-end,function(a)
-a:set_strength(0)
-end,function(a)
-if a.strength<3 then
-a:set_strength(a.strength+1)
+end,function(e)
+e:aq(4)
+end,function(e)
+e:aq(0)
+end,function(e)
+if e.eo<3 then
+e:aq(e.eo+1)
 end
-end,function(a)
-if a.strength>3 then
-a:set_strength(0)
-elseif a.strength>0 then
-a:set_strength(a.strength-1)
+end,function(e)
+if e.eo>3 then
+e:aq(0)
+elseif e.eo>0 then
+e:aq(e.eo-1)
 end
-end,function(a,level)
-if level ~=a.strength then
-a.strength=level
-a:create_timer("strength_timeout",60*5,function()
-a:decrement_strength()
+end,function(e,hl)
+if hl ~=e.eo then
+e.eo=hl
+e:er("strength_timeout",60*5,function()
+e:l_()
 end)
-end
-end)
-create_parent([[112|113]],function(a,other)
-if not a:any_timer_active"roll"then
-if not a:any_timer_active"hurt_cooldown"then
-if other.rel_actor then
-other.rel_actor:increment_strength()
-end
-end
-a:hurt()
-a:knockback(atan2(a.x-other.x,a.y-other.y))
 end
 end)
-function control_player(a,x_dir,y_dir,is_z_pressed,is_x_pressed,punch_func,strength)
-if not a.pl then return end
-if a.teleporting then
-a.iyy-=.25
-a.ax=0 a.ay=0
+d([[112|113]],function(e,p)
+if not e:b"roll"then
+if not e:b"hurt_cooldown"then
+if p.ei then
+p.ei:ha()
+end
+end
+e:ie()
+e:ab(atan2(e.a-p.a,e.o-p.o))
+end
+end)
+function ns(e,oh,n_,uj,uh,rz,eo)
+if not e.rn then return end
+if e.sr then
+e.tg-=.25
+e.et=0 e.ef=0
 return
 end
-local speed_multiplier=1
-if strength then
-speed_multiplier=1+a.strength/10
-if strength==4 then _g.powerup_particle(a.x,a.y+.5,_g.c_color_angry)
-elseif strength==3 then _g.powerup_particle(a.x,a.y+.5,_g.c_color_insane_3)
-elseif strength==2 then _g.powerup_particle(a.x,a.y+.5,_g.c_color_insane_2)
-elseif strength==1 then _g.powerup_particle(a.x,a.y+.5,_g.c_color_insane_1)
+local sl=1
+if eo then
+sl=1+e.eo/10
+if eo==4 then _g.ev(e.a,e.o+.5,8)
+elseif eo==3 then _g.ev(e.a,e.o+.5,12)
+elseif eo==2 then _g.ev(e.a,e.o+.5,9)
+elseif eo==1 then _g.ev(e.a,e.o+.5,3)
 end
-elseif a:any_timer_active("hurt_cooldown")then
-_g.powerup_particle(a.x,a.y+.5,_g.c_color_blood)
+elseif e:b("hurt_cooldown")then
+_g.ev(e.a,e.o+.5,8)
 end
-if strength==4 then a.stregth=2
-else a.stregth=1 end
-if not a:any_timer_active("cooldown","roll","punch")then
-if is_z_pressed then
-a:create_timer("roll",20,function()a.dx/=3 a.dy/=3 a:create_timer("cooldown",20)end)
-elseif is_x_pressed then
-if punch_func then
-a:create_timer("punch",20,function()a:create_timer("cooldown",10)end)
-punch_func(a,a.x,a.y)
+if eo==4 then e.uq=2
+else e.uq=1 end
+if not e:b("cooldown","roll","punch")then
+if uj then
+e:er("roll",20,function()e.f/=3 e.y/=3 e:er("cooldown",20)end)
+elseif uh then
+if rz then
+e:er("punch",20,function()e:er("cooldown",10)end)
+rz(e,e.a,e.o)
 end
 end
 end
-local is_moving=x_dir ~=0 or y_dir ~=0
-if a:any_timer_active"knockback"then
-a:apply_knockback()
-elseif a:any_timer_active"roll"then
-a.ax=cos(a.dir)*.03
-a.ay=sin(a.dir)*.03
-elseif a:any_timer_active"punch"then
-a.ax=cos(a.dir)*.005
-a.ay=sin(a.dir)*.005
-elseif is_moving then
-if x_dir ~=0 then
-a.is_facing_left=x_dir<0
+local ut=oh ~=0 or n_ ~=0
+if e:b"knockback"then
+e:nz()
+elseif e:b"roll"then
+e.et=cos(e.k)*.03
+e.ef=sin(e.k)*.03
+elseif e:b"punch"then
+e.et=cos(e.k)*.005
+e.ef=sin(e.k)*.005
+elseif ut then
+if oh ~=0 then
+e.oj=oh<0
 end
-a.dir=atan2(x_dir==0 and(a.is_facing_left and-1 or 1)or x_dir,y_dir)
-local dir=atan2(x_dir,y_dir)
-a.ax=cos(dir)*.015
-a.ay=sin(dir)*.015
+e.k=atan2(oh==0 and(e.oj and-1 or 1)or oh,n_)
+local k=atan2(oh,n_)
+e.et=cos(k)*.015
+e.ef=sin(k)*.015
 else
-a.dir=atan2(a.is_facing_left and-1 or 1,0)
-a.ax=0
-a.ay=0
+e.k=atan2(e.oj and-1 or 1,0)
+e.et=0
+e.ef=0
 end
-a.ax*=speed_multiplier
-a.ay*=speed_multiplier
+e.et*=sl
+e.ef*=sl
 end
-create_actor([[114|115]],function(a)
-a.flipped=not a.flipped
-a.sind=a.flipped and 197 or 198
-a.xf=a.dx<0
-scr_spr(a)
-end,function(a)
-a.alive=false
-end,function(a)
-_g.powerup_particle(a.x,a.y,8)
-_g.powerup_particle(a.x,a.y,8)
-_g.powerup_particle(a.x,a.y,8)
-_g.powerup_particle(a.x,a.y,8)
-_g.powerup_particle(a.x,a.y,8)
-_g.powerup_particle(a.x,a.y,8)
+_([[114|115]],function(e)
+e.hz=not e.hz
+e.i=e.hz and 197 or 198
+e.ea=e.f<0
+ag(e)
+end,function(e)
+e.r=false
+end,function(e)
+_g.ev(e.a,e.o,8)
+_g.ev(e.a,e.o,8)
+_g.ev(e.a,e.o,8)
+_g.ev(e.a,e.o,8)
+_g.ev(e.a,e.o,8)
+_g.ev(e.a,e.o,8)
 end)
-create_actor([[116|117]],function(a)
-local shoot_speed=.2
-if not a:any_timer_active("walk","wait","aim","shoot")then
-a:create_timer("walk",120+rnd(60),function()
-a:create_timer("wait",flr_rnd(20)+10,function()
-a:create_timer("aim",10,function()
-_g.police_weapon(a.x,a.y,a.xf and-shoot_speed or shoot_speed)
-a:create_timer("aim",10,function()_g.police_weapon(a.x,a.y-1,a.xf and-shoot_speed or shoot_speed)end)
-a:create_timer("shoot",40,nf)
+_([[116|117]],function(e)
+local nv=.2
+if not e:b("walk","wait","aim","shoot")then
+e:er("walk",120+rnd(60),function()
+e:er("wait",te(20)+10,function()
+e:er("aim",10,function()
+_g.hm(e.a,e.o,e.ea and-nv or nv)
+e:er("aim",10,function()_g.hm(e.a,e.o-1,e.ea and-nv or nv)end)
+e:er("shoot",40,c)
 end)
 end)
 end)
 end
-if a:any_timer_active"hurt_cooldown"then
-_g.powerup_particle(a.x,a.y+.5,_g.c_color_blood)
+if e:b"hurt_cooldown"then
+_g.ev(e.a,e.o+.5,8)
 end
-if not a:any_timer_active"shoot"then
-if abs(a.dx)<.01 then
-a.xf=a.x-g_pl.x>0
+if not e:b"shoot"then
+if abs(e.f)<.01 then
+e.ea=e.a-l.a>0
 end
 end
-if a:any_timer_active"knockback"then
-a:apply_knockback()
-elseif a:any_timer_active"walk"then
-a.dir=atan2(g_pl.x-a.x,g_pl.y-a.y)+rnd(.125)-.125/2
-a.ax=0
-a.ay=sin(a.dir)*.03
+if e:b"knockback"then
+e:nz()
+elseif e:b"walk"then
+e.k=atan2(l.a-e.a,l.o-e.o)+rnd(.125)-.125/2
+e.et=0
+e.ef=sin(e.k)*.03
 else
-a.ax=0
-a.ay=0
+e.et=0
+e.ef=0
 end
-end,function(a,other)
-local had_timer=a:any_timer_active"hurt_cooldown"
-a:hurt(g_pl.strength)
-a:knockback(atan2(a.x-other.x,a.y-other.y))
-if other.rel_actor then
-other.rel_actor:knockback(atan2(g_pl.x-a.x,g_pl.y-a.y))
-if not had_timer then
-call_not_nil(other.rel_actor,"increment_strength",other.rel_actor)
-end
-end
-end,function(a)
-create_cached_deadbody(a.enemy_id,a.x,a.y,a.xf,227)
-end,function(a)
-if a:any_timer_active"aim"then
-a.sind=195
-elseif a:any_timer_active"shoot"then
-a.sind=196
-elseif abs(a.dx)>.01 or abs(a.dy)>.01 then
-local loop=a.tl_tim%.5/.5
-if loop<.25 then a.sind=193
-elseif loop<.5 then a.sind=192
-elseif loop<.75 then a.sind=193
-else a.sind=194
+end,function(e,p)
+local ik=e:b"hurt_cooldown"
+e:ie(l.eo)
+e:ab(atan2(e.a-p.a,e.o-p.o))
+if p.ei then
+p.ei:ab(atan2(l.a-e.a,l.o-e.o))
+if not ik then
+an(p.ei,"increment_strength",p.ei)
 end
 end
-scr_spr(a)
+end,function(e)
+rl(e.tw,e.a,e.o,e.ea,227)
+end,function(e)
+if e:b"aim"then
+e.i=195
+elseif e:b"shoot"then
+e.i=196
+elseif abs(e.f)>.01 or abs(e.y)>.01 then
+local ta=e.ae%.5/.5
+if ta<.25 then e.i=193
+elseif ta<.5 then e.i=192
+elseif ta<.75 then e.i=193
+else e.i=194
+end
+end
+ag(e)
 end)
-create_actor([[118|119]],function(a)
-a.xf=t()%10>5
+_([[118|119]],function(e)
+e.ea=t()%10>5
 if t()%7<1 then
-if a.xf then
-a.ax=.005
+if e.ea then
+e.et=.005
 else
-a.ax=-.005
+e.et=-.005
 end
 else
-a.ax=0
+e.et=0
 end
-if g_endgame_stats.enemy_kill_count>0 then
-a.caption_text="killer, thriller!"
+if z.tx>0 then
+e.th="killer, thriller!"
 else
-a.caption_text="abc, 123, you & me!"
+e.th="abc, 123, you & me!"
 end
-local tim=t()%5
-if tim<1 then a.sind=224
-elseif tim<2 then a.sind=225
-elseif tim<3 then a.sind=226
-else a.sind=225 end
-end,scr_spr)
-create_actor([[120|121]],function(a)
-a:update_particles()
-if g_pl.health<a.heart_number then
-a:kill()
+local sx=t()%5
+if sx<1 then e.i=224
+elseif sx<2 then e.i=225
+elseif sx<3 then e.i=226
+else e.i=225 end
+end,ag)
+_([[120|121]],function(e)
+e:lz()
+if l.tn<e.ux then
+e:nu()
 end
-end,function(a)
-zspr(16,a.x*8,a.y*8+1)
+end,function(e)
+ep(16,e.a*8,e.o*8+1)
 end)
-create_actor([[122|123]],function(a)
-if g_pl.alive and g_pl.strength==a.powerup_level then
-a:update_particles()
+_([[122|123]],function(e)
+if l.r and l.eo==e.rx then
+e:lz()
 end
-end,function(a)
-if g_pl.alive and g_pl.strength==a.powerup_level then
-zspr(a.sind,a.x*8,a.y*8,2,2,g_pl.is_facing_left,false)
-end
-end)
-create_actor([[124|125]],function(a)
-if g_endgame_stats.enemy_total_count-g_endgame_stats.enemy_kill_count<=a.when_to_show_tip then
-scr_rectfill(.125,a.y-.5,15.75,a.y+.5,1)
-local number_str=""..g_endgame_stats.enemy_kill_count.."/"..g_endgame_stats.enemy_total_count
-if g_endgame_stats.enemy_kill_count==g_endgame_stats.enemy_total_count then
-number_str="all"
-end
-zprint("killed "..number_str.." enemies",a.x*8,a.y*8-2,8,0)
+end,function(e)
+if l.r and l.eo==e.rx then
+ep(e.i,e.a*8,e.o*8,2,2,l.oj,false)
 end
 end)
-create_actor([[126|127]],function(a)
-local smallest_dist
-local objective
-for g_ind in all{"bad_character","portal"}do
-for b in all(g_act_arrs[g_ind])do
-local dist=approx_dist(g_pl.x-b.x,g_pl.y-b.y)
-if not smallest_dist or dist<smallest_dist then
-smallest_dist=dist
-objective=b
+_([[124|125]],function(e)
+if z.oc-z.tx<=e.dr then
+ch(.125,e.o-.5,15.75,e.o+.5,1)
+local hk=""..z.tx.."/"..z.oc
+if z.tx==z.oc then
+hk="all"
+end
+e_("killed "..hk.." enemies",e.a*8,e.o*8-2,8,0)
+end
+end)
+_([[126|127]],function(e)
+local oe
+local ov
+for uw in all{"tb","om"}do
+for ee in all(tc[uw])do
+local o_=nx(l.a-ee.a,l.o-ee.o)
+if not oe or o_<oe then
+oe=o_
+ov=ee
 end
 end
 end
-a.smallest_dist=smallest_dist
-a.objective=objective
-end,function(a)
-if a.objective and a.smallest_dist>3.5 then
-local dir=atan2(a.objective.x-g_pl.x,a.objective.y-g_pl.y)
-dir=round(dir*16)/16
-local dx=cos(dir)
-local dy=sin(dir)
-local offy=-.5
+e.oe=oe
+e.ov=ov
+end,function(e)
+if e.ov and e.oe>3.5 then
+local k=atan2(e.ov.a-l.a,e.ov.o-l.o)
+k=rv(k*16)/16
+local f=cos(k)
+local y=sin(k)
+local ht=-.5
 local color=1
-local len_multiplier=1.75
+local rh=1.75
 if t()%.5<.25 then
-len_multiplier*=1.125
+rh*=1.125
 end
-local x1=g_pl.x+dx
-local y1=offy+g_pl.y+dy
-local x2=g_pl.x+dx*len_multiplier
-local y2=offy+g_pl.y+dy*len_multiplier
-scr_line(x1,y1,x2,y2,color)
-local turn=.375
-local length=.375
-local x3=x2+cos(dir+turn)*length
-local y3=y2+sin(dir+turn)*length
-local x4=x2+cos(dir-turn)*length
-local y4=y2+sin(dir-turn)*length
-scr_line(x2,y2,x3,y3,color)
-scr_line(x2,y2,x4,y4,color)
-end
-end)
-create_actor([[128|129]],function(a)
-if approx_dist(g_pl.x-a.x,g_pl.y-a.y)<16 then
-_g.powerup_particle(a.x+rnd(.5)-.25,a.y+rnd(.5)-.25,rnd_item{1,2})
-a.radius=(sin(t())*.2+.5)
-end
-end,function(a)
-scr_ovalfill(a.x-a.radius,a.y-.2,a.x+a.radius,a.y+.2,1)
-end)
-create_parent([[130|131]],function(a,other)
-if other.portal and not a.teleporting then
-a.teleporting=true
-_g.fader_out(1,nf,function()
-if g_room.name=="dungeon"then
-g_reset_room=reset_the_bossroom
-g_reset_room()
-elseif g_room.name=="bossroom"then
-g_reset_room=reset_the_hospital
-g_reset_room()
-elseif g_room.name=="hospital"then
-g_tl:next()
+local eg=l.a+f
+local ew=ht+l.o+y
+local ec=l.a+f*rh
+local eu=ht+l.o+y*rh
+ss(eg,ew,ec,eu,color)
+local na=.375
+local od=.375
+local fc=ec+cos(k+na)*od
+local mg=eu+sin(k+na)*od
+local fn=ec+cos(k-na)*od
+local mp=eu+sin(k-na)*od
+ss(ec,eu,fc,mg,color)
+ss(ec,eu,fn,mp,color)
 end
 end)
+_([[128|129]],function(e)
+if nx(l.a-e.a,l.o-e.o)<16 then
+_g.ev(e.a+rnd(.5)-.25,e.o+rnd(.5)-.25,hc{1,2})
+e.ij=(sin(t())*.2+.5)
+end
+end,function(e)
+un(e.a-e.ij,e.o-.2,e.a+e.ij,e.o+.2,1)
+end)
+d([[130|131]],function(e,p)
+if p.om and not e.sr then
+e.sr=true
+_g.ou(1,c,function()
+if v.ex=="dungeon"then
+ah=mc
+ah()
+elseif v.ex=="bossroom"then
+ah=ds
+ah()
+elseif v.ex=="hospital"then
+os:nw()
 end
 end)
-create_actor([[132|133]],function(a)
-control_player(a,xbtn(),ybtn(),btn(4),btn(5),_g.good_fist)
-end,function(a)
-a:create_dead_body()
-g_endgame_stats.deaths=g_endgame_stats.deaths+1
-_g.fader_out(1,nf,g_reset_room)
+end
 end)
-create_actor([[134|133]],function(a)
-control_player(a,xbtn(),ybtn(),btn(4),btn(5))
-end,function(a)
-a:create_dead_body()
-g_endgame_stats.deaths=g_endgame_stats.deaths+1
-_g.fader_out(1,nf,g_reset_room)
+_([[132|133]],function(e)
+ns(e,rm(),rs(),btn(4),btn(5),_g.lu)
+end,function(e)
+e:nt()
+z.aw=z.aw+1
+_g.ou(1,c,ah)
 end)
-create_actor([[135|133]],function(a)
-control_player(a,xbtn(),ybtn(),btn(4),btn(5),_g.good_fist,a.strength)
-end,function(a)
-a:create_dead_body()
-g_endgame_stats.deaths=g_endgame_stats.deaths+1
-_g.fader_out(1,nf,g_reset_room)
+_([[134|133]],function(e)
+ns(e,rm(),rs(),btn(4),btn(5))
+end,function(e)
+e:nt()
+z.aw=z.aw+1
+_g.ou(1,c,ah)
 end)
-create_actor([[136|137]],function(a)
-a:set_strength(3)
-end,function(a)
-local x=zsgn(g_pl.x-a.x)
-local y=zsgn(g_pl.y-a.y)
-control_player(a
-,x
-,y
-,flr_rnd(80)==0
-,flr_rnd(20)==0
-,_g.bad_fist
-,a.strength
+_([[135|133]],function(e)
+ns(e,rm(),rs(),btn(4),btn(5),_g.lu,e.eo)
+end,function(e)
+e:nt()
+z.aw=z.aw+1
+_g.ou(1,c,ah)
+end)
+_([[136|137]],function(e)
+e:aq(3)
+end,function(e)
+local a=nq(l.a-e.a)
+local o=nq(l.o-e.o)
+ns(e
+,a
+,o
+,te(80)==0
+,te(20)==0
+,_g.up
+,e.eo
 )
-end,function(a)
-a:create_dead_body()
-_g.portal(118,8)
+end,function(e)
+e:nt()
+_g.om(118,8)
 end)
-function get_all_enemies_for_story_mode()
-local dungeon_and_hospital=tabcpy(ztable[[138]])
+function df()
+local hd=ox(td[[138]])
 return{
-dungeon=dungeon_and_hospital,
-hospital=dungeon_and_hospital,
-bossroom=tabcpy(ztable[[139]])
+m=hd,
+u=hd,
+si=ox(td[[139]])
 }
 end
-function hospitalify_the_map()
-for x=0,107 do
-for y=0,31 do
-local v=mget(x,y)
-if v>=1 and v<=4 then v+=4
-elseif v>=17 and v<=20 then v+=4
-elseif v>=33 and v<=36 then v+=4
-elseif v>=49 and v<=52 then v+=4
-elseif v==32 or v==46 or v==47 then v+=16
-elseif v==117 then v+=1
+function cb()
+for a=0,107 do
+for o=0,31 do
+local g=mget(a,o)
+if g>=1 and g<=4 then g+=4
+elseif g>=17 and g<=20 then g+=4
+elseif g>=33 and g<=36 then g+=4
+elseif g>=49 and g<=52 then g+=4
+elseif g==32 or g==46 or g==47 then g+=16
+elseif g==117 then g+=1
 end
-mset(x,y,v)
-end
-end
-end
-function create_ui_hearts()
-_g.heart_particle_spawner(6.5,1,3)
-_g.heart_particle_spawner(9.5,1,2)
-_g.heart_particle_spawner(8,1,1)
-end
-function create_ui_powerups()
-_g.powerup_particle_spawner(3,1,0,_g.c_color_normal,72)
-_g.powerup_particle_spawner(4,15,1,_g.c_color_insane_1,74)
-_g.powerup_particle_spawner(8,15,2,_g.c_color_insane_2,76)
-_g.powerup_particle_spawner(12,15,3,_g.c_color_insane_3,78)
-_g.powerup_particle_spawner(13,1,4,_g.c_color_angry,104)
-end
-function create_all_enemies()
-for i,enemy_template in pairs(_g.all_enemy_templates[g_room.name])do
-if enemy_template.alive then
-enemy_template[g_room.name](enemy_template.x,enemy_template.y,i)
+mset(a,o,g)
 end
 end
 end
-function create_all_deadbodies()
-for body in all(_g.all_deadbody_templates[g_room.name])do
-_g.deadbody_nobleed(unpack(body))
+function sv()
+_g.sb(6.5,1,3)
+_g.sb(9.5,1,2)
+_g.sb(8,1,1)
+end
+function dx()
+_g.ia(3,1,0,13,72)
+_g.ia(4,15,1,3,74)
+_g.ia(8,15,2,9,76)
+_g.ia(12,15,3,12,78)
+_g.ia(13,1,4,8,104)
+end
+function su()
+for w,ny in pairs(_g.sz[v.ex])do
+if ny.r then
+ny[v.ex](ny.a,ny.o,w)
 end
 end
-function cleanup_confined()
-batch_call_new(acts_loop,[[140]])
 end
-function reset_the_dungeon()
-cleanup_confined()
-_g.fader_in(.5,nf,nf)
-g_pl=_g.pl_monster_control(18,3)
-g_view=_g.view(15.25,11.5,3,g_pl)
-g_room=ztable[[141]]
-_g.portal(94,13)
-create_all_deadbodies()
-create_all_enemies()
-create_ui_hearts()
-create_ui_powerups()
-_g.genocide_tip(8,13)
-_g.objective_arrow(8,13)
+function rr()
+for ms in all(_g.sd[v.ex])do
+_g.dy(unpack(ms))
 end
-function reset_the_hospital()
-hospitalify_the_map()
-cleanup_confined()
-_g.fader_in(.5,nf,nf)
-_g.portal(18,3)
-g_pl=_g.pl_patient_control_passive(94,13)
-g_view=_g.view(15.25,11.5,3,g_pl)
-g_room=ztable[[142]]
-create_all_deadbodies()
-create_all_enemies()
-create_ui_hearts()
-_g.objective_arrow(8,13)
 end
-function reset_the_bossroom()
-cleanup_confined()
-_g.fader_in(.5,nf,nf)
-g_pl=_g.pl_patient_control_fight(110,8)
-g_view=_g.view(15.25,11.5,3,g_pl)
-g_room=ztable[[143]]
-create_all_deadbodies()
-create_all_enemies()
-create_ui_hearts()
-_g.objective_arrow(8,13)
+function so()
+tp(oi,[[140]])
 end
-function credits_init(a)
-_g.fader_in(.5,nf,function()g_credits_enabled=true end)
-g_credits_enabled=false
-credits_o=0
+function uv()
+so()
+_g.ii(.5,c,c)
+l=_g.cz(18,3)
+tf=_g.ed(15.25,11.5,3,l)
+v=td[[141]]
+_g.om(94,13)
+rr()
+su()
+sv()
+dx()
+_g.fl(8,13)
+_g.sf(8,13)
 end
-function credits_update(a)
-if g_credits_enabled and(btn(4)or btn(5))then
-g_credits_enabled=false
-_g.fader_out(.5,nf,function()
-g_tl.tl_next=2
+function ds()
+cb()
+so()
+_g.ii(.5,c,c)
+_g.om(18,3)
+l=_g.m_(94,13)
+tf=_g.ed(15.25,11.5,3,l)
+v=td[[142]]
+rr()
+su()
+sv()
+_g.sf(8,13)
+end
+function mc()
+so()
+_g.ii(.5,c,c)
+l=_g.fa(110,8)
+tf=_g.ed(15.25,11.5,3,l)
+v=td[[143]]
+rr()
+su()
+sv()
+_g.sf(8,13)
+end
+function ur(e)
+_g.ii(.5,c,function()ra=true end)
+ra=false
+f_=0
+end
+function mu(e)
+if ra and(btn(4)or btn(5))then
+ra=false
+_g.ou(.5,c,function()
+os.it=2
 end)
 end
-batch_call_new(acts_loop,[[144]])
+tp(oi,[[144]])
 end
-function credits_draw(a)
-fade(g_card_fade)
-zspr(200,64,16+8,8,3)
-local base=48
-zspr(72,16,base,2,2)
-zspr(74,16,base+16,2,2)
-zspr(76,16,base+32,2,2)
-zspr(78,16,base+48,2,2)
-zspr(104,16,base+64,2,2)
-local diagnosis
-if g_endgame_stats.frames<60 then
-diagnosis="hyperactive"
-elseif g_endgame_stats.enemy_kill_count==0 then
-diagnosis="healthy"
-elseif g_endgame_stats.enemy_kill_count==g_endgame_stats.enemy_total_count then
-if g_endgame_stats.deaths==0 then
-if g_endgame_stats.frames<180 then
-diagnosis="possessed"
+function fm(e)
+ib(ot)
+ep(200,64,16+8,8,3)
+local tt=48
+ep(72,16,tt,2,2)
+ep(74,16,tt+16,2,2)
+ep(76,16,tt+32,2,2)
+ep(78,16,tt+48,2,2)
+ep(104,16,tt+64,2,2)
+local az
+if z.iv<60 then
+az="hyperactive"
+elseif z.tx==0 then
+az="healthy"
+elseif z.tx==z.oc then
+if z.aw==0 then
+if z.iv<180 then
+az="possessed"
 else
-diagnosis="obsessive"
-end
-else
-diagnosis="insane"
+az="obsessive"
 end
 else
-diagnosis="unstable"
+az="insane"
 end
-zprint("diagnosis: "..diagnosis,16+12,base-1,13,-1)
-zprint("-----------------------",16+12,base+8-1,1,-1)
-zprint("kills : "..g_endgame_stats.enemy_kill_count.."/"..g_endgame_stats.enemy_total_count,16+12,base+16-1,3,-1)
-zprint("deaths: "..g_endgame_stats.deaths,16+12,base+16+8-1,4,-1)
-zprint("time  : "..format_time(),16+12,base+32-1,9,-1)
-zprint("-----------------------",16+12,base+32+8-1,1,-1)
-zprint("@alanxoc3: code/music",16+12,base+48-1,12,-1)
-zprint("@denial: code/design",16+12,base+48+8-1,14,-1)
-zprint("@thegreatcadet: gfx/map",16+12,base+64-1,8,-1)
-end
-function disable_offscreen_bad_characters()
-for a in all(g_act_arrs.bad_character)do
-local dist=approx_dist(a.x-g_pl.x,a.y-g_pl.y)
-if dist>14 then
-a.disabled.update=true
-if dist>17 then a.disabled.d=true end
 else
-a.disabled.update=nil
-a.disabled.d=nil
+az="unstable"
+end
+e_("diagnosis: "..az,16+12,tt-1,13,-1)
+e_("-----------------------",16+12,tt+8-1,1,-1)
+e_("kills : "..z.tx.."/"..z.oc,16+12,tt+16-1,3,-1)
+e_("deaths: "..z.aw,16+12,tt+16+8-1,4,-1)
+e_("time  : "..fr(),16+12,tt+32-1,9,-1)
+e_("-----------------------",16+12,tt+32+8-1,1,-1)
+e_("@alanxoc3: code/music",16+12,tt+48-1,12,-1)
+e_("@denial: code/design",16+12,tt+48+8-1,14,-1)
+e_("@thegreatcadet: gfx/map",16+12,tt+64-1,8,-1)
+end
+function ub()
+for e in all(tc.tb)do
+local o_=nx(e.a-l.a,e.o-l.o)
+if o_>14 then
+e.im.aj=true
+if o_>17 then e.im.s=true end
+else
+e.im.aj=nil
+e.im.s=nil
 end
 end
 end
-function game_init()
+function md()
 reload(0x2000,0x2000,0x1000)
-local d_and_h={}_g.all_deadbody_templates={dungeon=d_and_h,bossroom={},hospital=d_and_h}
-_g.all_enemy_templates=get_all_enemies_for_story_mode()
-g_endgame_stats={
-frames=0,
-deaths=0,
-enemy_kill_count=0,
-enemy_total_count=0
+local hs={}_g.sd={m=hs,si={},u=hs}
+_g.sz=df()
+z={
+iv=0,
+aw=0,
+tx=0,
+oc=0
 }
-g_reset_room=reset_the_dungeon
-g_reset_room()
+ah=uv
+ah()
 end
-function game_update()
-g_endgame_stats.frames=min(7200,g_endgame_stats.frames+1/60)
-batch_call_new(acts_loop,[[145]],g_act_arrs["wall"],g_act_arrs["bad_character"],g_act_arrs["good_character"],g_act_arrs["portal"],function(a,x,y)
-return x>=g_room.x and x<g_room.x+g_room.w and
-y>=g_room.y and y<g_room.y+g_room.h and
-(fget(mget(x,y),0)or(a.bad_character or a.captionable)and fget(mget(x,y),1))
+function uc()
+z.iv=min(7200,z.iv+1/60)
+tp(oi,[[145]],tc["fp"],tc["tb"],tc["ow"],tc["om"],function(e,a,o)
+return a>=v.a and a<v.a+v.t_ and
+o>=v.o and o<v.o+v.tq and
+(fget(mget(a,o),0)or(e.tb or e.oq)and fget(mget(a,o),1))
 end)
-if t()%.5==0 then disable_offscreen_bad_characters()end
-g_endgame_stats.enemy_kill_count=#_g.all_deadbody_templates.dungeon
-g_endgame_stats.enemy_total_count=#_g.all_enemy_templates.dungeon
+if t()%.5==0 then ub()end
+z.tx=#_g.sd.m
+z.oc=#_g.sz.m
 end
-function shiftx(view)return(view.x-view.off_x-8)*8 end
-function shifty(view)return(view.y-view.off_y-8)*8 end
-function camera_to_view(view)camera(shiftx(view),shifty(view))end
-function game_draw()
-fade(g_card_fade)
-local x,y=8,8
-local rx=x-g_view.w/2
-local ry=y-g_view.h/2
-g_view.off_x=-(16-g_view.w)/2+rx
-g_view.off_y=-(16-g_view.h)/2+ry
-local x1,x2=rx*8,(rx+g_view.w)*8-1
-local y1,y2=ry*8,(ry+g_view.h)*8-1
-rect(x1-2,y1-2,x2+2,y2+2,1)
-zclip(x1,y1,x2,y2)
-camera_to_view(g_view)
-scr_map(0,0,0,0,128,32)
-batch_call_new(acts_loop,[[146]])
-isorty(g_act_arrs.drawable)
-batch_call_new(acts_loop,[[147]])
+function ui(ed)return(ed.a-ed.u_-8)*8 end
+function mt(ed)return(ed.o-ed.cw-8)*8 end
+function cv(ed)camera(ui(ed),mt(ed))end
+function ua()
+ib(ot)
+local a,o=8,8
+local q=a-tf.t_/2
+local j=o-tf.tq/2
+tf.u_=-(16-tf.t_)/2+q
+tf.cw=-(16-tf.tq)/2+j
+local eg,ec=q*8,(q+tf.t_)*8-1
+local ew,eu=j*8,(j+tf.tq)*8-1
+rect(eg-2,ew-2,ec+2,eu+2,1)
+du(eg,ew,ec,eu)
+cv(tf)
+uz(0,0,0,0,128,32)
+tp(oi,[[146]])
+fe(tc.tj)
+tp(oi,[[147]])
 camera()
 clip()
-batch_call_new(acts_loop,[[148]])
+tp(oi,[[148]])
 end
-function format_time()
-local seconds=flr(g_endgame_stats.frames)
-local mins=flr(seconds/60)
-local hours=flr(mins/60)
-seconds=seconds%60
-mins=mins<10 and "0"..mins or mins
-hours=hours<10 and "0"..hours or hours
-return ""..hours..":"..mins..":"..seconds
+function fr()
+local no=flr(z.iv)
+local og=flr(no/60)
+local id=flr(og/60)
+no=no%60
+og=og<10 and "0"..og or og
+id=id<10 and "0"..id or id
+return ""..id..":"..og..":"..no
 end
-function title_init(a)
-_g.fader_in(.5,nf,function()g_title_enabled=true end)
-g_title_enabled=false
-title_o=0
+function fu(e)
+_g.ii(.5,c,function()rc=true end)
+rc=false
+pr=0
 end
-function title_update(a)
-if g_title_enabled and(btn(4)or btn(5))then
-g_title_enabled=false
-_g.fader_out(.5,nf,function()
-g_tl:next()
+function uy(e)
+if rc and(btn(4)or btn(5))then
+rc=false
+_g.ou(.5,c,function()
+os:nw()
 end)
 end
-batch_call_new(acts_loop,[[144]])
+tp(oi,[[144]])
 end
-function title_draw(a)
-fade(g_card_fade)
-zspr(72,64+cos(t()/5+.0)*45,64+sin(t()/3+.0)*45,2,2,t()%5<2.5,false)
-zspr(74,64+cos(t()/5+.2)*45,64+sin(t()/3+.2)*45,2,2,false,t()%5>2.5)
-zspr(76,64+cos(t()/5+.4)*45,64+sin(t()/3+.4)*45,2,2,t()%5<2.5,false)
-zspr(78,64+cos(t()/5+.6)*45,64+sin(t()/3+.6)*45,2,2,t()%5>2.5,false)
-zspr(104,64+cos(t()/5+.8)*45,64+sin(t()/3+.8)*45,2,2,false,t()%5<2.5)
-zspr(200,64,64,8,3)
+function uo(e)
+ib(ot)
+ep(72,64+cos(t()/5+.0)*45,64+sin(t()/3+.0)*45,2,2,t()%5<2.5,false)
+ep(74,64+cos(t()/5+.2)*45,64+sin(t()/3+.2)*45,2,2,false,t()%5>2.5)
+ep(76,64+cos(t()/5+.4)*45,64+sin(t()/3+.4)*45,2,2,t()%5<2.5,false)
+ep(78,64+cos(t()/5+.6)*45,64+sin(t()/3+.6)*45,2,2,t()%5>2.5,false)
+ep(104,64+cos(t()/5+.8)*45,64+sin(t()/3+.8)*45,2,2,false,t()%5<2.5)
+ep(200,64,64,8,3)
 end
-g_card_fade=8
+ot=8
 poke(0x5f5c,15)
 poke(0x5f5d,15)
 function _init()
 music(0,3000)
 sfx(63)
-g_tl=ztable([[149]],logo_draw,function()end,
-title_init,title_update,title_draw,
-game_init,game_update,game_draw,
-credits_init,credits_update,credits_draw
+os=td([[149]],cq,function()end,
+fu,uy,uo,
+md,uc,ua,
+ur,mu,fm
 )
 end
 function _update60()
-tl_node(g_tl)
+rb(os)
 end
 function _draw()
 cls()
-call_not_nil(g_tl,"d",g_tl)
+an(os,"s",os)
 end
-function logo_draw(a)
-local logo_opacity=8+cos(a.tl_tim/a.tl_max_time)*4-4
-fade(logo_opacity)
-camera(logo_opacity>1 and rnd_one())
-zspr(108,a.x,a.y,4,2)
-fade"0"
+function cq(e)
+local ln=8+cos(e.ae/e.eb)*4-4
+ib(ln)
+camera(ln>1 and dq())
+ep(108,e.a,e.o,4,2)
+ib"0"
 camera()
 end

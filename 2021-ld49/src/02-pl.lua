@@ -21,7 +21,7 @@ create_parent([[pl;1;drawable,pos,confined,mov,x_bounded,y_bounded,col,spr_obj,k
 
     strength:1; -- amount of damage you do to enemies
     dir:0; is_facing_left:yes; xf:yes;
-    health:%c_pl_health; max_health:%c_pl_health;
+    health:C_PL_HEALTH; max_health:C_PL_HEALTH;
 
     -- some methods that could be implemented on sub-actors:
     damage:nf; increment_strength:nf; decrement_strength:nf; set_strength:nf;
@@ -134,17 +134,17 @@ function control_player(a, x_dir, y_dir, is_z_pressed, is_x_pressed, punch_func,
         speed_multiplier = 1 + a.strength/10
 
         -- anger emotion particle is used instead of blood
-        if     strength == 4 then _g.powerup_particle(a.x, a.y+.5, _g.c_color_angry)
-        elseif strength == 3 then _g.powerup_particle(a.x, a.y+.5, _g.c_color_insane_3)
-        elseif strength == 2 then _g.powerup_particle(a.x, a.y+.5, _g.c_color_insane_2)
-        elseif strength == 1 then _g.powerup_particle(a.x, a.y+.5, _g.c_color_insane_1)
+        if     strength == 4 then _g.powerup_particle(a.x, a.y+.5, C_COLOR_ANGRY)
+        elseif strength == 3 then _g.powerup_particle(a.x, a.y+.5, C_COLOR_INSANE_3)
+        elseif strength == 2 then _g.powerup_particle(a.x, a.y+.5, C_COLOR_INSANE_2)
+        elseif strength == 1 then _g.powerup_particle(a.x, a.y+.5, C_COLOR_INSANE_1)
         -- no color for normal
-        -- elseif strength == 0 then _g.powerup_particle(a.x, a.y+.5, _g.c_color_normal)
+        -- elseif strength == 0 then _g.powerup_particle(a.x, a.y+.5, C_COLOR_NORMAL)
         end
 
     -- if not insane, getting hurt can spawn particles
     elseif a:any_timer_active("hurt_cooldown") then
-        _g.powerup_particle(a.x, a.y+.5, _g.c_color_blood)
+        _g.powerup_particle(a.x, a.y+.5, C_COLOR_BLOOD)
     end
 
     -- amount of damage you do to enemies

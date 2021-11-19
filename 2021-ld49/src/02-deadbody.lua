@@ -18,7 +18,7 @@ create_actor([[deadbody;4;deadbody_parent,|
     a:create_timer('bleeding', 30)
 end, function(a)
     if a:any_timer_active'bleeding' then
-        _g.powerup_particle(a.x, a.y, _g.c_color_blood)
+        _g.powerup_particle(a.x, a.y, C_COLOR_BLOOD)
         a.xx = flr_rnd(3)-2
         a.yy = flr_rnd(3)-2
     end
