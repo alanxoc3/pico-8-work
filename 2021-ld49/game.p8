@@ -7,7 +7,6 @@ __lua__
 -- unobfuscated code at:
 -- git.io/amorg-pico8
 
-_g={}
 #include .code.lua
 
 __gfx__

@@ -1,4 +1,4 @@
--- lib. make sure this is included second (after loading string data).
+function nf() end
 
 function zsfx(num, sub_num)
    sfx(num,-1,sub_num*4,4)
