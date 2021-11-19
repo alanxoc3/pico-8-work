@@ -1,11 +1,11 @@
 function _g.nurse_draw(a)
     a.sind=66
 
-    if a:any_timer_active"prepare" then
+    if a:any_timer_active'prepare' then
         a.sind=69
-    elseif a:any_timer_active"attack" then
+    elseif a:any_timer_active'attack' then
         a.sind=70
-        if a:get_timer_percent"attack" > .50 then
+        if a:get_timer_percent'attack' > .50 then
             a.sind=71
         end
     elseif abs(a.dx) > .005 or abs(a.dy) > .005 then
@@ -41,25 +41,25 @@ create_actor([[bad_nurse;3;drawable,col,confined,mov,x_bounded,y_bounded,knockba
     rx:.375; ry:.375;
     touchable: no;
 ]], function(a)
-    if not a:any_timer_active("cooldown", "walk", "prepare", "attack") then
+    if not a:any_timer_active('cooldown', 'walk', 'prepare', 'attack') then
         a.dir = atan2(g_pl.x - a.x, g_pl.y - a.y) + rnd(.125) - .125/2
-        a:create_timer("walk", flr_rnd(10)+30, function()
-            a:create_timer("cooldown", flr_rnd(120), function()
-                a:create_timer("prepare", 40, function()
+        a:create_timer('walk', flr_rnd(10)+30, function()
+            a:create_timer('cooldown', flr_rnd(120), function()
+                a:create_timer('prepare', 40, function()
                     _g.nurse_weapon(a, a.x, a.y)
-                    a:create_timer("attack", 10)
+                    a:create_timer('attack', 10)
                 end)
             end)
         end)
     end
 
-    if a:any_timer_active"hurt_cooldown" then
+    if a:any_timer_active'hurt_cooldown' then
        _g.powerup_particle(a.x, a.y+.5, C_COLOR_BLOOD)
     end
 
-    if a:any_timer_active"knockback" then
+    if a:any_timer_active'knockback' then
         a:apply_knockback()
-    elseif a:any_timer_active"walk" then
+    elseif a:any_timer_active'walk' then
         a.ax = cos(a.dir)*.01
         if a.ax > 0 then
             a.xf = false
@@ -72,7 +72,7 @@ create_actor([[bad_nurse;3;drawable,col,confined,mov,x_bounded,y_bounded,knockba
         a.ay = 0
     end
 end, function(a, other)
-    local had_timer = a:any_timer_active"hurt_cooldown"
+    local had_timer = a:any_timer_active'hurt_cooldown'
     a:hurt(g_pl.strength)
     a:knockback(atan2(a.x-other.x, a.y-other.y))
 
@@ -80,7 +80,7 @@ end, function(a, other)
         other.rel_actor:knockback(atan2(g_pl.x-a.x, g_pl.y-a.y))
 
         if not had_timer then
-            call_not_nil(other.rel_actor, "increment_strength", other.rel_actor)
+            call_not_nil(other.rel_actor, 'increment_strength', other.rel_actor)
         end
     end
 end, function(a)
@@ -94,10 +94,10 @@ create_actor([[nurse;3;captionable,drawable,col,confined,mov,x_bounded,y_bounded
     rx:.375; ry:.375;
     touchable: no;
 ]], function(a)
-    if not a:any_timer_active("cooldown", "walk") then
+    if not a:any_timer_active('cooldown', 'walk') then
         a.dir = atan2(g_pl.x - a.x, g_pl.y - a.y) + rnd(.125) - .125/2
-        a:create_timer("walk", flr_rnd(10)+30, function()
-            a:create_timer("cooldown", flr_rnd(120)+50)
+        a:create_timer('walk', flr_rnd(10)+30, function()
+            a:create_timer('cooldown', flr_rnd(120)+50)
         end)
     end
 
@@ -107,7 +107,7 @@ create_actor([[nurse;3;captionable,drawable,col,confined,mov,x_bounded,y_bounded
         a.caption_text = "you're healed!"
     end
 
-    if a:any_timer_active"walk" then
+    if a:any_timer_active'walk' then
         a.ax = cos(a.dir)*.01
         if a.ax > 0 then
             a.xf = false

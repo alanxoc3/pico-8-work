@@ -33,8 +33,8 @@ create_parent([[pl;1;drawable,pos,confined,mov,x_bounded,y_bounded,col,spr_obj,k
 end, function(a)
     a.sind = 134
     a.yy = 0
-    if a:any_timer_active"punch" then
-        local percent = a:get_timer_percent"punch"
+    if a:any_timer_active'punch' then
+        local percent = a:get_timer_percent'punch'
         if percent >= .90 then a.sind = 133
         elseif percent >= .80 then a.sind = 132
         elseif percent >= .50 then a.sind = 131
@@ -43,8 +43,8 @@ end, function(a)
         else a.sind = 128
         end
         a.yy = sin(percent/2)*5
-    elseif a:any_timer_active"roll" then
-        local percent = a:get_timer_percent"roll"
+    elseif a:any_timer_active'roll' then
+        local percent = a:get_timer_percent'roll'
         if percent >= .90 then a.sind = 140
         elseif percent >= .80 then a.sind = 139
         elseif percent >= .50 then a.sind = 138
@@ -75,7 +75,7 @@ create_parent([[pl_monster;0;pl/no,|
 
     strength:0;
 ]], function(a, other)
-    if not a:any_timer_active"roll" then
+    if not a:any_timer_active'roll' then
         a:hurt()
         a:knockback(atan2(a.x-other.x, a.y-other.y))
     end
@@ -96,7 +96,7 @@ end, function(a)
 end, function(a, level)
     if level ~= a.strength then
         a.strength = level
-        a:create_timer("strength_timeout", 60*5, function()
+        a:create_timer('strength_timeout', 60*5, function()
             a:decrement_strength()
         end)
     end
@@ -105,8 +105,8 @@ end)
 create_parent([[pl_patient;0;pl/yes,|
     damage:@1;
 ]], function(a, other)
-    if not a:any_timer_active"roll" then
-        if not a:any_timer_active"hurt_cooldown" then
+    if not a:any_timer_active'roll' then
+        if not a:any_timer_active'hurt_cooldown' then
             if other.rel_actor then
                 other.rel_actor:increment_strength()
             end
@@ -143,7 +143,7 @@ function control_player(a, x_dir, y_dir, is_z_pressed, is_x_pressed, punch_func,
         end
 
     -- if not insane, getting hurt can spawn particles
-    elseif a:any_timer_active("hurt_cooldown") then
+    elseif a:any_timer_active('hurt_cooldown') then
         _g.powerup_particle(a.x, a.y+.5, C_COLOR_BLOOD)
     end
 
@@ -151,25 +151,25 @@ function control_player(a, x_dir, y_dir, is_z_pressed, is_x_pressed, punch_func,
     if strength == 4 then a.stregth = 2
     else a.stregth = 1 end
 
-    if not a:any_timer_active("cooldown", "roll", "punch") then
+    if not a:any_timer_active('cooldown', 'roll', 'punch') then
         if is_z_pressed then
-            a:create_timer("roll",  20, function() a.dx /= 3 a.dy /= 3 a:create_timer("cooldown", 20) end)
+            a:create_timer('roll',  20, function() a.dx /= 3 a.dy /= 3 a:create_timer('cooldown', 20) end)
         elseif is_x_pressed then
             -- if punch is not enabled, assume that talking is enabled.
             if punch_func then
-                a:create_timer("punch", 20, function() a:create_timer("cooldown", 10) end)
+                a:create_timer('punch', 20, function() a:create_timer('cooldown', 10) end)
                 punch_func(a, a.x, a.y)
             end
         end
     end
 
     local is_moving = x_dir ~= 0 or y_dir ~= 0
-    if a:any_timer_active"knockback" then
+    if a:any_timer_active'knockback' then
         a:apply_knockback()
-    elseif a:any_timer_active"roll" then
+    elseif a:any_timer_active'roll' then
         a.ax = cos(a.dir)*.03
         a.ay = sin(a.dir)*.03
-    elseif a:any_timer_active"punch" then
+    elseif a:any_timer_active'punch' then
         a.ax = cos(a.dir)*.005
         a.ay = sin(a.dir)*.005
     elseif is_moving then

@@ -94,7 +94,7 @@
 --             return { x=x, y=y, w=w, h=h }
 --         end,
 -- 
---         -- Build the "full" map by converting every position in the (mini-)map into ratio*ratio positions.
+--         -- Build the 'full' map by converting every position in the (mini-)map into ratio*ratio positions.
 --         scale = function(this)
 --             this.full_map = {}
 --             local ratio = this.ratio
@@ -155,7 +155,7 @@
 --         end,
 -- 
 --         -- Get the tile to draw for this square, based on its type and the surrounding squares' types.
---         -- Note this uses the "dungeon" palette. Remapping to the "hospital" palette is done elsewhere.
+--         -- Note this uses the 'dungeon' palette. Remapping to the 'hospital' palette is done elsewhere.
 --         get_tile_for_square = function(this, x, y, theme)
 --             local square = this.full_map[x][y]
 --             if square.type == 1 then return rnd() < .5 and 4 or 52 -- Floor tiles
@@ -176,7 +176,7 @@
 --     floor:prefill()
 --     floor:carve(2,2)
 -- 
---     -- Clear out walls from several small areas, to make interestingly-shaped "rooms".
+--     -- Clear out walls from several small areas, to make interestingly-shaped 'rooms'.
 --     local scoops = randBetween(1, 4) 
 --     for i = 1,scoops do
 --         floor:clearArea(floor:randArea(2, 3, 2, 3))

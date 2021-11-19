@@ -32,31 +32,31 @@ create_actor([[bad_police;3;drawable,col,confined,mov,x_bounded,y_bounded,knockb
 ]], function(a)
     local shoot_speed = .2
     -- walk, then wait, then shoot then wait
-    if not a:any_timer_active("walk", "wait", "aim", "shoot") then
-        a:create_timer("walk", 120+rnd(60), function()
-            a:create_timer("wait", flr_rnd(20)+10, function()
-                a:create_timer("aim", 10, function()
+    if not a:any_timer_active('walk', 'wait', 'aim', 'shoot') then
+        a:create_timer('walk', 120+rnd(60), function()
+            a:create_timer('wait', flr_rnd(20)+10, function()
+                a:create_timer('aim', 10, function()
                     _g.police_weapon(a.x, a.y, a.xf and -shoot_speed or shoot_speed)
-                    a:create_timer("aim", 10, function() _g.police_weapon(a.x, a.y-1, a.xf and -shoot_speed or shoot_speed) end)
-                    a:create_timer("shoot", 40, nf)
+                    a:create_timer('aim', 10, function() _g.police_weapon(a.x, a.y-1, a.xf and -shoot_speed or shoot_speed) end)
+                    a:create_timer('shoot', 40, nf)
                 end)
             end)
         end)
     end
 
-    if a:any_timer_active"hurt_cooldown" then
+    if a:any_timer_active'hurt_cooldown' then
        _g.powerup_particle(a.x, a.y+.5, C_COLOR_BLOOD)
     end
 
-    if not a:any_timer_active"shoot" then
+    if not a:any_timer_active'shoot' then
         if abs(a.dx) < .01 then
             a.xf = a.x - g_pl.x > 0
         end
     end
 
-    if a:any_timer_active"knockback" then
+    if a:any_timer_active'knockback' then
         a:apply_knockback()
-    elseif a:any_timer_active"walk" then
+    elseif a:any_timer_active'walk' then
         a.dir = atan2(g_pl.x - a.x, g_pl.y - a.y) + rnd(.125) - .125/2
         a.ax = 0
         a.ay = sin(a.dir)*.03
@@ -66,7 +66,7 @@ create_actor([[bad_police;3;drawable,col,confined,mov,x_bounded,y_bounded,knockb
     end
 
 end, function(a, other)
-    local had_timer = a:any_timer_active"hurt_cooldown"
+    local had_timer = a:any_timer_active'hurt_cooldown'
     a:hurt(g_pl.strength)
     a:knockback(atan2(a.x-other.x, a.y-other.y))
 
@@ -74,16 +74,16 @@ end, function(a, other)
         other.rel_actor:knockback(atan2(g_pl.x-a.x, g_pl.y-a.y))
 
         if not had_timer then
-            call_not_nil(other.rel_actor, "increment_strength", other.rel_actor)
+            call_not_nil(other.rel_actor, 'increment_strength', other.rel_actor)
         end
     end
 end, function(a)
     create_cached_deadbody(a.enemy_id, a.x, a.y, a.xf, 227)
 end, function(a) -- draw
     -- a.sind=192
-    if a:any_timer_active"aim" then
+    if a:any_timer_active'aim' then
         a.sind=195
-    elseif a:any_timer_active"shoot" then
+    elseif a:any_timer_active'shoot' then
         a.sind=196
     elseif abs(a.dx) > .01 or abs(a.dy) > .01 then
         local loop = a.tl_tim % .5 / .5

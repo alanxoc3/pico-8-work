@@ -51,11 +51,11 @@ function credits_draw(a)
     end
 
     zprint("diagnosis: "..diagnosis                                                            , 16+12, base-1     , 13, -1)
-    zprint('- - - - - - - - - - - - - - - - - - - - - - -'                                     , 16+12, base+8-1   , 1 , -1)
+    zprint("- - - - - - - - - - - - - - - - - - - - - - -"                                     , 16+12, base+8-1   , 1 , -1)
     zprint("kills : "..g_endgame_stats.enemy_kill_count.."/"..g_endgame_stats.enemy_total_count, 16+12, base+16-1  , 3 , -1)
     zprint("deaths: "..g_endgame_stats.deaths                                                  , 16+12, base+16+8-1, 4 , -1)
     zprint("time  : "..format_time()                                                           , 16+12, base+32-1  , 9 , -1)
-    zprint('- - - - - - - - - - - - - - - - - - - - - - -'                                     , 16+12, base+32+8-1, 1 , -1)
+    zprint("- - - - - - - - - - - - - - - - - - - - - - -"                                     , 16+12, base+32+8-1, 1 , -1)
     zprint("@alanxoc3: code/music"                                                             , 16+12, base+48-1  , 12, -1)
     zprint("@denial: code/design"                                                              , 16+12, base+48+8-1, 14, -1)
     zprint("@thegreatcadet: gfx/map"                                                           , 16+12, base+64-1  , 8 , -1)
