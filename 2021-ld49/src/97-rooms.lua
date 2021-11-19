@@ -77,11 +77,11 @@ end
 
 -- the emotion faces things
 function create_ui_powerups()
-    _g.powerup_particle_spawner(3 , 1 , 0, _g.c_color_normal  , 72)
-    _g.powerup_particle_spawner(4 , 15, 1, _g.c_color_insane_1, 74)
-    _g.powerup_particle_spawner(8 , 15, 2, _g.c_color_insane_2, 76)
-    _g.powerup_particle_spawner(12, 15, 3, _g.c_color_insane_3, 78)
-    _g.powerup_particle_spawner(13, 1 , 4, _g.c_color_angry   , 104)
+    _g.powerup_particle_spawner(3 , 1 , 0, C_COLOR_NORMAL  , 72)
+    _g.powerup_particle_spawner(4 , 15, 1, C_COLOR_INSANE_1, 74)
+    _g.powerup_particle_spawner(8 , 15, 2, C_COLOR_INSANE_2, 76)
+    _g.powerup_particle_spawner(12, 15, 3, C_COLOR_INSANE_3, 78)
+    _g.powerup_particle_spawner(13, 1 , 4, C_COLOR_ANGRY   , 104)
 end
 
 function create_all_enemies()

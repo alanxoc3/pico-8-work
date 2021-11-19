@@ -4,5 +4,8 @@ pico-minifier() {
     perl "-I$PICO_WORK_DIR/bin/minifier/" "$PICO_WORK_DIR/bin/pico-minifier.pl" "$@"
 }
 
-files_in_order=$(ls ./src/*.lua)
-cat $files_in_order | pico-minifier "$@" > .code.lua
+files_in_order=$(ls ./src/*.lua | sort)
+
+cat $files_in_order \
+    | pico-constants $(cat ./constants.txt 2>/dev/null | awk '/^\w/{gsub(/\s*:\s*/, ":", $0); print($0);}') \
+    | pico-minifier "$@" > .code.lua

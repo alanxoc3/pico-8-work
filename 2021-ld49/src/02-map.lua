@@ -183,7 +183,7 @@
 --     end
 -- 
 --     floor:scale()
---     if _g.c_enable_procgen_map then
+--     if C_ENABLE_PROCGEN_MAP then
 --         floor:mset_all()
 --     end
 --     return floor
