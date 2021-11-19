@@ -1,18 +1,17 @@
-# pico8 git ignore
-*.swp
-*.swo
-out*.p8
-
-# *.p8.png
-*.p8l
-
-*.bin
-./*.p8.png
-sheet.png
-build/
-
-.dropbox
-TEMPLATE/.code.lua
-
-# temp files
 *~
+*.bin
+build
+.dropbox
+.~lock*
+.mapb.bin
+.mapb.p8
+out*.p8
+*.p8l
+*.p8.png
+sheet.png
+*.swo
+*.swp
+tags
+TEMPLATE/.code.lua
+.tmp_map_data.lua
+.zeldo_outline_copy.p8

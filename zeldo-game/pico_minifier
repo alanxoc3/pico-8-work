@@ -1,0 +1,260 @@
+#!/usr/bin/perl -Iminifier_lib/
+use strict;
+use warnings;
+use experimental 'smartmatch';
+use Alanxoc3::Pico8FormatUtil;
+use Getopt::Long qw(GetOptions);
+
+use utf8;
+use open qw(:std :utf8);
+binmode(STDIN, "encoding(UTF-8)");
+binmode(STDOUT, "encoding(UTF-8)");
+
+my $prd_mode;
+my $minifiable;
+my $debug_mode;
+my $ascii;
+my $debug;
+my $input_file = "";
+my $output_file = "";
+GetOptions('prod' => \$prd_mode,
+           'minifiable' => \$minifiable,
+           'debug' => \$debug_mode,
+           'ascii' => \$ascii,
+           'input=s' => \$input_file,
+           'output=s' => \$output_file
+) or die "Usage: $0 [--prod] [--minifiable] [--debug] [--ascii] [--input=file] [--output=file]\n";
+
+# Constants specific to Zeldo.
+my %constants;
+
+# Colors
+
+$constants{'POSSIBLE_CHARACTERS'} = "|0123456789abcdefghijklmnopqrstuvwxyz !%',-./:;=?@^_~❎➡️⬅️⬆️🅾️";
+$constants{'FG_YELLOW'} = '10';
+$constants{'BG_YELLOW'} = '9';
+$constants{'FG_WHITE'} = '7';
+$constants{'BG_WHITE'} = '5';
+$constants{'FG_RED'} = '8';
+$constants{'BG_RED'} = '2';
+$constants{'FG_GREEN'} = '11';
+$constants{'BG_GREEN'} = '3';
+$constants{'FG_UI'} = '13';
+$constants{'BG_UI'} = '1';
+$constants{'SL_UI'} = '2';
+$constants{'BG'} = '0';
+
+# Symbols
+if (!$ascii) {
+   $constants{'B_UP'} = '⬆️';
+   $constants{'B_DOWN'} = '⬇️';
+   $constants{'B_LEFT'} = '⬅️';
+   $constants{'B_RIGHT'} = '➡️';
+   $constants{'B_X'} = '❎';
+   $constants{'B_O'} = '🅾️';
+}
+
+# Other
+$constants{'FADE_TIME'} = '.5';
+$constants{'MAX_ENERGY'} = '100';
+$constants{'INTERACT_SPACE'} = '.5';
+$constants{'FPS'} = '60';
+$constants{'CART_NAME'} = 'zeldo_test3';
+$constants{'TEMP_SAVE_LOCATION'} = '0x5d00';
+$constants{'REAL_SAVE_LOCATION'} = '0x5e00';
+$constants{'SAVE_LENGTH'}        = '64';
+$constants{'FIRST_ITEM_COST'} = '10';
+$constants{'LANK_START_HEALTH'} = '10';
+
+# Save states (up to 256).
+$constants{'VERSION'}        = '0'  ;
+$constants{'GAME_CONTINUE'}  = '1'  ;
+$constants{'HARD_MODE'}      = '2'  ;
+$constants{'SAVE_SPOT'}      = '3'  ;
+$constants{'MONEY'}          = '4'  ; # Used
+$constants{'MAX_HEALTH'}     = '5'  ; # Used
+$constants{'HEALTH'}         = '6'  ;
+$constants{'HAS_FORCE'}      = '7'  ; # Used
+$constants{'HAS_BOOMERANG'}  = '8'  ; # Used
+$constants{'HAS_BOMB'}       = '9'  ; # Used
+$constants{'HAS_SHIELD'}     = '10'  ; # Used
+$constants{'ALWAYS_TRUE'}    = '11'  ; # Used
+$constants{'HAS_BOW'}        = '12' ; # Used
+$constants{'HAS_SHOVEL'}     = '13' ; # Used
+$constants{'HAS_SWORD'}      = '14' ; # Used
+$constants{'HAS_BANJO'}      = '15' ; # Used
+$constants{'CAN_THROW_POTS'} = '16' ; # Used
+$constants{'LARK_DANCE'}     = '17' ; # Used
+$constants{'NAVY_DANCE'}     = '18' ;
+$constants{'KEEP_DANCE'}     = '19' ; # Used
+$constants{'JANE_DANCE'}     = '20' ; # Used
+$constants{'BOB_DANCE'}      = '21' ; # Used
+$constants{'CHICKEN_1'}      = '22' ;
+$constants{'CHICKEN_2'}      = '23' ;
+$constants{'CHICKEN_3'}      = '24' ;
+$constants{'CHICKEN_4'}      = '25' ;
+$constants{'CHICKEN_5'}      = '26' ;
+$constants{'SOUP_DELIVERED'} = '27' ;
+$constants{'GHOST_1'}        = '28' ;
+$constants{'GHOST_2'}        = '29' ;
+$constants{'GHOST_3'}        = '30' ;
+$constants{'GHOST_4'}        = '31' ;
+$constants{'FOREST_BOSS'}    = '32' ;
+$constants{'GRAVE_BOSS'}     = '33' ;
+$constants{'CANNON_BOSS'}    = '34' ;
+$constants{'IVAN_BOSS'}      = '35' ;
+
+$constants{'KEY'}            = '36' ;
+$constants{'LETTER'}         = '37' ; # Used
+$constants{'BOB_OUT'}        = '38' ; # Used
+$constants{'BANJO_TUNED'}    = '39' ; # Used
+$constants{'NAVY_OUT'}       = '40' ; # Used
+
+$constants{'BOGUS_SPOT'}   = '255'; # Used
+
+# Rooms
+$constants{'R_00'} = '00';
+$constants{'R_01'} = '01';
+$constants{'R_02'} = '02';
+$constants{'R_03'} = '03';
+$constants{'R_04'} = '04';
+$constants{'R_05'} = '05';
+$constants{'R_06'} = '06';
+$constants{'R_07'} = '07';
+$constants{'R_08'} = '08';
+$constants{'R_09'} = '09';
+
+$constants{'R_10'} = '10';
+$constants{'R_11'} = '11';
+$constants{'R_12'} = '12';
+$constants{'R_13'} = '13';
+$constants{'R_14'} = '14';
+$constants{'R_15'} = '15';
+$constants{'R_16'} = '16';
+$constants{'R_17'} = '17';
+$constants{'R_18'} = '18';
+$constants{'R_19'} = '19';
+
+$constants{'R_20'} = '20';
+$constants{'R_21'} = '21';
+$constants{'R_22'} = '22';
+$constants{'R_23'} = '23';
+$constants{'R_24'} = '24';
+$constants{'R_25'} = '25';
+$constants{'R_26'} = '26';
+$constants{'R_27'} = '27';
+$constants{'R_28'} = '28';
+$constants{'R_29'} = '29';
+
+$constants{'R_30'} = '30';
+$constants{'R_31'} = '31';
+$constants{'R_32'} = '32';
+$constants{'R_33'} = '33';
+$constants{'R_34'} = '34';
+$constants{'R_35'} = '35';
+$constants{'R_36'} = '36';
+$constants{'R_37'} = '37';
+$constants{'R_38'} = '38';
+$constants{'R_39'} = '39';
+
+$constants{'R_50'} = '50';
+$constants{'R_51'} = '51';
+$constants{'R_52'} = '52';
+$constants{'R_53'} = '53';
+$constants{'R_54'} = '54';
+$constants{'R_55'} = '55';
+$constants{'R_56'} = '56';
+$constants{'R_57'} = '57';
+$constants{'R_58'} = '58';
+$constants{'R_59'} = '59';
+
+$constants{'R_70'} = '70';
+$constants{'R_71'} = '71';
+$constants{'R_72'} = '72';
+$constants{'R_73'} = '73';
+$constants{'R_74'} = '74';
+$constants{'R_75'} = '75';
+$constants{'R_76'} = '76';
+$constants{'R_77'} = '77';
+$constants{'R_78'} = '78';
+$constants{'R_79'} = '79';
+
+# Go through the actual minifying.
+my @lines = <>;
+chomp(@lines);
+
+# Preprocess, remove unneeded code.
+if (not $debug_mode) {
+   my $content = join("\n", @lines);
+   $content =~ s/DEBUG_BEGIN.*?DEBUG_END//gims;
+   @lines = split(/\n/, $content);
+}
+
+my $content = join("\n", @lines);
+if ($prd_mode) {
+   $content =~ s/DEV_MODE_BEGIN.*?DEV_MODE_END//gims;
+} else {
+   $content =~ s/PRD_MODE_BEGIN.*?PRD_MODE_END//gims;
+}
+@lines = split(/\n/, $content);
+
+# Remove comments and spaces, preserve quotes...
+@lines = remove_comments(@lines);
+@lines = tokenize_lines(\@lines, \%constants);
+@lines = remove_texts(@lines);
+@lines = single_quotes_to_double(@lines);
+@lines = remove_spaces(@lines);
+
+if ($minifiable) {
+   my %vars = populate_vars(@lines);
+   @lines = tokenize_lines(\@lines, \%vars);
+}
+
+# Uncomment for each thing to go on its own line.
+# Note that this is slightly more compression space.
+# $lines[0] =~ s/([^\"]) ([^\"])/$1\n$2/g;
+@lines = pop_text_logics(@lines);
+
+my ($strings, $contents) = multiline_string_replace(join("\n", @lines));
+
+# Ztable doesn't use the quotes in the string data, so remove them.
+$strings =~ s/"//g;
+
+sub length_in_graphemes {
+    my $word = shift;
+    my $length = () = $word =~ m/\X/g;
+    return $length;
+}
+
+if (not $prd_mode) {
+   $contents =~ s/ZTABLE_STRINGS/$strings/gme;
+} else {
+   my ($string_second_half) = $strings =~ /(\X{12541})$/x; # Up until the song section at 0x3100.
+   my $string_first_half = substr($strings, 0, length($strings) - length($string_second_half));
+
+   my $strings_len = length_in_graphemes($strings);
+   if ($strings_len lt 12541) {
+      $string_second_half = $strings;
+      $string_first_half = "";
+   }
+
+   my $strings_second_length = length_in_graphemes($string_second_half);
+   $contents =~ s/ZTABLE_STRINGS_SECOND_LEN/$strings_second_length/gme;
+   $contents =~ s/ZTABLE_STRINGS_SECOND/$string_second_half/gme;
+   $contents =~ s/ZTABLE_STRINGS_FIRST/$string_first_half/gme;
+
+   if ($input_file ne "" and $output_file ne "") {
+      open(my $src, "<:utf8", $input_file) or die "Unable to read file \"$input_file\"\n";
+      open(my $dst, ">:utf8", $output_file) or die "Unable to create file \"$output_file\"\n";
+
+      my $src_content = do { local $/; <$src> };
+      $src_content =~ s/ZTABLE_STRINGS_SECOND/$string_second_half/gme;
+
+      close $src;
+
+      print $dst $src_content;
+      close $dst;
+   }
+}
+
+print $contents;

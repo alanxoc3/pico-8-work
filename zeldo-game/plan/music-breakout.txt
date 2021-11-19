@@ -1,0 +1,55 @@
+1 row of sfx:
+0: 
+1: 
+2: 
+3: 
+4: 
+5: 
+6: Broken Banjo
+7: Banjo
+
+- Open inventory
+- Close inventory
+- Open tbox
+- tbox update
+- tbox skip
+- tbox next
+- sword
+- shield
+- brang
+- brang hit
+- Cannon laugh
+- bomb explode
+- chest get item
+
+2 rows of songs and 1 row of sfx:
+- Title
+- Game Over
+- End Credits
+- Graveyard Song
+- Outside Castle Song
+- Outside Tech Song
+- Sword Room Song
+
+6 rows of songs and 6 rows of sfx:
+- Village & House
+- Woods & Woods Boss
+- Overworld
+- Castle & Castle Boss
+- Crypt & Crypt Boss
+- Tech & Tech Boss
+
+---
+
+Song instrument breakout
+- Village     - 5 & 7
+- House       - 7
+- Woods       - 1 & 7
+- Woods Boss  - 1 & 7 & 6
+- Overworld   - 1 & 4 & 2 & 6
+- Castle      - 
+- Castle Boss - 
+- Crypt       - 
+- Crypt Boss  - 4 & 0 & 5 & 7
+- Tech        -
+- Tech Boss   - 
