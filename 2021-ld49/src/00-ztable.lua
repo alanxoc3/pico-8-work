@@ -1,14 +1,5 @@
--- DEBUG_BEGIN
--- printh('ZTABLE_STRINGS')
--- DEBUG_END
-
--- DEV_MODE_BEGIN
 -- Perl preprocessor replaces the constant below.
-g_gunvals = split('ZTABLE_STRINGS', '|')
--- DEV_MODE_END
-
-g_ztable_cache = {}
-function nf() end
+_g, g_ztable_cache, g_gunvals = {}, {}, split('ZTABLE_STRINGS', '|')
 
 function ztable(original_str, ...)
    local str = g_gunvals[0+original_str]
