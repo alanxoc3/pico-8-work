@@ -1,10 +1,10 @@
 -- DEBUG_BEGIN
--- printh("ZTABLE_STRINGS")
+-- printh('ZTABLE_STRINGS')
 -- DEBUG_END
 
 -- DEV_MODE_BEGIN
 -- Perl preprocessor replaces the constant below.
-g_gunvals = split("ZTABLE_STRINGS", "|")
+g_gunvals = split('ZTABLE_STRINGS', '|')
 -- DEV_MODE_END
 
 g_ztable_cache = {}

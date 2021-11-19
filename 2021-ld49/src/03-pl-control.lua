@@ -4,13 +4,13 @@ create_parent([[pl_control;0;col,|
     if other.portal and not a.teleporting then
         a.teleporting = true
         _g.fader_out(1,nf,function()
-            if g_room.name == "dungeon" then
+            if g_room.name == 'dungeon' then
                 g_reset_room = reset_the_bossroom
                 g_reset_room()
-            elseif g_room.name == "bossroom" then
+            elseif g_room.name == 'bossroom' then
                 g_reset_room = reset_the_hospital
                 g_reset_room()
-            elseif g_room.name == "hospital" then
+            elseif g_room.name == 'hospital' then
                 g_tl:next() -- go to the credits!
             end
         end)

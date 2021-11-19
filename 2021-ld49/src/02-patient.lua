@@ -1,10 +1,10 @@
 function _g.patient_draw(a)
     a.sind=9
 
-    if a:any_timer_active"prepare" then
+    if a:any_timer_active'prepare' then
         a.sind=10
-    elseif a:any_timer_active"charge" then
-        local percent = a:get_timer_percent"charge"
+    elseif a:any_timer_active'charge' then
+        local percent = a:get_timer_percent'charge'
         if percent < .2 then a.sind=11
         elseif percent < .4 then a.sind=12
         elseif percent < .75 then a.sind=13
@@ -34,23 +34,23 @@ create_actor([[bad_patient;3;drawable,col,confined,mov,x_bounded,y_bounded,knock
     rx:.375; ry:.375;
     touchable: no;
 ]], function(a)
-    if not a:any_timer_active("cooldown", "charge", "prepare", "attack") then
+    if not a:any_timer_active('cooldown', 'charge', 'prepare', 'attack') then
         a.dir = atan2(g_pl.x - a.x, g_pl.y - a.y) + rnd(.125) - .125/2
         _g.patient_weapon(a, a.x, a.y)
-        a:create_timer("charge", 20, function()
-            a:create_timer("cooldown", flr_rnd(60)+60, function()
-                a:create_timer("prepare", 60)
+        a:create_timer('charge', 20, function()
+            a:create_timer('cooldown', flr_rnd(60)+60, function()
+                a:create_timer('prepare', 60)
             end)
         end)
     end
 
-    if a:any_timer_active"hurt_cooldown" then
+    if a:any_timer_active'hurt_cooldown' then
        _g.powerup_particle(a.x, a.y+.5, C_COLOR_BLOOD)
     end
 
-    if a:any_timer_active"knockback" then
+    if a:any_timer_active'knockback' then
         a:apply_knockback()
-    elseif a:any_timer_active"charge" then
+    elseif a:any_timer_active'charge' then
         a.ax = cos(a.dir)*.03
         a.ay = sin(a.dir)*.03
 
@@ -68,7 +68,7 @@ create_actor([[bad_patient;3;drawable,col,confined,mov,x_bounded,y_bounded,knock
         a.ay = 0
     end
 end, function(a, other)
-    local had_timer = a:any_timer_active"hurt_cooldown"
+    local had_timer = a:any_timer_active'hurt_cooldown'
     a:hurt(g_pl.strength)
     a:knockback(atan2(a.x-other.x, a.y-other.y))
 
@@ -76,7 +76,7 @@ end, function(a, other)
         other.rel_actor:knockback(atan2(g_pl.x-a.x, g_pl.y-a.y))
 
         if not had_timer then
-            call_not_nil(other.rel_actor, "increment_strength", other.rel_actor)
+            call_not_nil(other.rel_actor, 'increment_strength', other.rel_actor)
         end
     end
 end, function(a)

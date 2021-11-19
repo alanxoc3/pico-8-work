@@ -58,7 +58,7 @@ end, function(a)
     end
 end, get)
 
-create_parent[[ma_able;0;act,;|name:"thing";]]
+create_parent[[ma_able;0;act,;|name:'thing';]]
 create_parent[[confined;0;act,;room_end,|room_end:nf;]]
 create_parent[[loopable;0;act,;|tl_loop:yes;]]
 create_parent[[pos;0;act,;|x:0;y:0;]]
@@ -238,10 +238,10 @@ create_parent([[knockbackable;0;mov,timer,;|
     knockback_speed:0;
     knockback_dir:0;
 ]], function(a, direction)
-    if not a:any_timer_active("knockback") then
+    if not a:any_timer_active('knockback') then
         a.knockback_speed = .075
         a.knockback_dir = direction
-        a:create_timer("knockback", 4)
+        a:create_timer('knockback', 4)
     end
 end, function(a)
     a.ax = cos(a.knockback_dir)*a.knockback_speed
@@ -260,7 +260,7 @@ create_parent([[hurtable;0;act,;|
     hurt:@1; heal:@2;
 ]], function(a, damage)
     damage = damage or 1
-    if not a:any_timer_active("hurt_cooldown") then
+    if not a:any_timer_active('hurt_cooldown') then
         a.health = max(0, a.health - damage)
 
         if a.health == 0 then
@@ -268,7 +268,7 @@ create_parent([[hurtable;0;act,;|
             return
         end
 
-        a:create_timer("hurt_cooldown", a.hurt_cooldown_time, a.hurt_end)
+        a:create_timer('hurt_cooldown', a.hurt_cooldown_time, a.hurt_end)
         a:hurt_start()
     end
 end, function(a, health)

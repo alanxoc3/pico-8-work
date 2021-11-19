@@ -26,7 +26,7 @@ create_actor([[genocide_tip;2;above_map_drawable,confined|
 ]], function(a)
     if g_endgame_stats.enemy_total_count - g_endgame_stats.enemy_kill_count <= a.when_to_show_tip then
         scr_rectfill(.125, a.y-.5, 15.75, a.y+.5, 1)
-        local number_str = ""..g_endgame_stats.enemy_kill_count.."/"..g_endgame_stats.enemy_total_count
+        local number_str = ''..g_endgame_stats.enemy_kill_count..'/'..g_endgame_stats.enemy_total_count
         if g_endgame_stats.enemy_kill_count == g_endgame_stats.enemy_total_count then
             number_str = "all"
         end
