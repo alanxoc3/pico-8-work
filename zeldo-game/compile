@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+files_in_order=$(ls src/game/*)
+
+echo "* Cleaning build directory ..."
+rm -r build
+mkdir -p build
+
+echo "* Creating code.lua ..."
+cat $files_in_order | ./pico_minifier "$@" > build/code.lua

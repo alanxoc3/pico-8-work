@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+t1="zeldo mapbuilder"
+t2="amorg"
+
+files_in_order="
+src/game/01-ztable.lua
+src/game/70-story.lua
+src/game/70-map_data.lua
+src/tools/mapbuilder_demo.lua
+"
+echo -e "g_gunvals_raw=\"ZTABLE_STRINGS\"\n" | cat - $files_in_order | ./pico_minifier -a > build/compiled_mb.lua
+
+# Now create the p8 file for the map builder.
+cp zeldo.p8 build/mapb.p8
+perl -0777 -pi -e '
+my $doc = do {
+    local $/ = undef;
+    open my $fh, "<", "build/compiled_mb.lua"
+        or die "could not open file";
+    <$fh>;
+}; my $header = "'"-- $t1\n-- $t2"'";
+s/(__lua__).*(__gfx__)/$1\n$header\n$doc\n$2/igs;
+' build/mapb.p8
+
+# Next convert that pico8 file into a binary, so we can close out of it on save.
+pico8 -run build/mapb.p8 > build/tmp_map_data.lua 2>&1
+
+# Now write to the map data file if you hit save in your program.
+OUTPUT=$(cat build/tmp_map_data.lua | tr -d "[:space:]")
+
+sed -i "s/^INFO: //g" build/tmp_map_data.lua
+
+if [ -z "$OUTPUT" ];
+then
+    echo "Program didn't output anything."
+    echo "So... I'm not writing to src/game/70-map_data.lua"
+else
+    mv build/tmp_map_data.lua src/game/70-map_data.lua
+    echo "Wrote map to 'src/game/70-map_data.lua'."
+fi
