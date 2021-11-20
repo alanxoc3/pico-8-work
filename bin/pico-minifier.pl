@@ -15,11 +15,15 @@ GetOptions('minify' => \$minify,
            'debug' => \$debug_mode,
 ) or die "Usage: $0 [--minify] [--debug]\n";
 
-# Constants for game.
+# Set constants from colon separated keyvalue pairs in arguments.
 my %constants;
+for (@ARGV) {
+    my @pair = split(/:/, $_, 2);
+    $constants{$pair[0]} = $pair[1];
+}
 
 # Go through the actual minifying.
-my @lines = <>;
+my @lines = <STDIN>;
 chomp(@lines);
 
 # Preprocess, remove unneeded code.

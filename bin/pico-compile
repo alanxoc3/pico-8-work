@@ -7,5 +7,4 @@ pico-minifier() {
 files_in_order=$(ls ./src/*.lua | sort)
 
 cat $files_in_order \
-    | pico-constants $(cat ./constants.txt 2>/dev/null | awk '/^\w/{gsub(/\s*:\s*/, ":", $0); print($0);}') \
-    | pico-minifier "$@" > .code.lua
+    | pico-minifier "$@" $(cat ./constants.txt 2>/dev/null | awk '/^\w/{gsub(/\s*:\s*/, ":", $0); print($0);}') > .code.lua

@@ -3,10 +3,10 @@ t1="zeldo mapbuilder"
 t2="amorg"
 
 files_in_order="
-src/game/01-ztable.lua
-src/game/70-story.lua
-src/game/70-map_data.lua
-src/tools/mapbuilder_demo.lua
+src/01-ztable.lua
+src/70-story.lua
+src/70-map_data.lua
+tools/mapbuilder_demo.lua
 "
 echo -e "g_gunvals_raw=\"ZTABLE_STRINGS\"\n" | cat - $files_in_order | ./pico_minifier -a > build/compiled_mb.lua
 

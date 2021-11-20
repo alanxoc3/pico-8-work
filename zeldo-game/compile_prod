@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-./compile -p -m -i src/tools/prd-writer.lua -o build/writer.lua
-
-echo "* Adding store filepath to code.lua ..."
-sed -i "s/STORE_FILEPATH/build\\/store.p8/g" build/code.lua
-
-echo "* Running pico-8 cstore ..."
-pico8 -x build/writer.lua -p store.p8

@@ -3,7 +3,7 @@ cp zeldo.p8 build/outline.p8
 perl -0777 -pi -e '
 my $doc = do {
     local $/ = undef;
-    open my $fh, "<", "src/tools/compile_outline.lua"
+    open my $fh, "<", "tools/compile_outline.lua"
         or die "could not open file";
     <$fh>;
 }; my $header = "'"-- $t1\n-- $t2"'";
