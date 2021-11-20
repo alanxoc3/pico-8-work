@@ -5,10 +5,10 @@ The bulk of the code for this game is in the `src/game` directory. Files in
 this directory start with a number that determines which files should come
 first when running the `./compile` command.
 
-The `src/tools` directory contains lua code that is used by tools that aid with
+The `tools` directory contains lua code that is used by tools that aid with
 developing the game. The most notable of these tools is the mapbuilder. The
 mapbuilder tool is used to edit the map and save it as a multiline lua string
-in the `src/game` directory.
+in the `src` directory.
 
 When you run shell scripts located at the repo's root directory, a `build`
 folder will be created. This folder will usually contain at least a `code.lua`.

@@ -45,9 +45,10 @@ function game_over_init()
       32,  "quack quack";
       68,  "and play with me";
       70,  "to save hi-roll";
-      81,  "for my famous pie";
+      81,  "in time for dinner";
       83,  "and make me rich";
-      96,  "because i'm lonely";
+      96,  "the banjo awaits you";
+      99,  "for your fans";
       118, "splat splat boing";
    ]]))
 end

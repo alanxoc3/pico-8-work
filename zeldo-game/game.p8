@@ -1,13 +1,13 @@
 pico-8 cartridge // http://www.pico-8.com
-version 30
+version 33
 __lua__
 -- that story about zeldo
 -- amorg
 
--- see unobfuscated source at:
--- git.io/zeldo
+-- unobfuscated code at:
+-- git.io/amorg-pico8
 
-#include build/code.lua
+#include .code.lua
 
 __gfx__
 00000000000000000000000000000000000000000000000000000000000000001500111111110051015dcc6cccccd51000000000000000001111111111111111
