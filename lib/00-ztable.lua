@@ -1,8 +1,5 @@
--- ztable and dependencies.
-g_gunvals = split(g_gunvals_raw, "|")
-
-g_ztable_cache = {}
-function nf() end
+-- Perl preprocessor replaces the constant below.
+_g, g_ztable_cache, g_gunvals = {}, {}, split('ZTABLE_STRINGS', '|')
 
 function ztable(original_str, ...)
    local str = g_gunvals[0+original_str]

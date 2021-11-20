@@ -29,6 +29,16 @@ function get(a, ...)
    return cur_act
 end
 
+-- stole this from a forum
+function approx_dist(dx,dy)
+    local maskx,masky=dx>>31,dy>>31
+    local a0,b0=(dx+maskx)^^maskx,(dy+masky)^^masky
+    if a0>b0 then
+        return a0*0.9609+b0*0.3984
+    end
+    return b0*0.9609+a0*0.3984
+end
+
 function xbtn() return btn_helper(btn, 0, 1) end
 function ybtn() return btn_helper(btn, 2, 3) end
 
@@ -133,14 +143,13 @@ function isorty(t)
 end
 
 -- DEBUG_BEGIN
--- For debugging
 function tostring(any)
-  if type(any)~="table" then return tostr(any) end
-  local str = "{"
-  for k,v in pairs(any) do
-    if str~="{" then str=str.."," end
-    str=str..tostring(k).."="..tostring(v)
-  end
-  return str.."}"
+    if type(any)~="table" then return tostr(any) end
+    local str = "{"
+    for k,v in pairs(any) do
+        if str~="{" then str=str.."," end
+        str=str..tostring(k).."="..tostring(v)
+    end
+    return str.."}"
 end
 -- DEBUG_END
