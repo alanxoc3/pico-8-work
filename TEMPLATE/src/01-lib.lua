@@ -1,14 +1,9 @@
 -- lib. make sure this is included second (after loading string data).
 
--- A table with a bunch of global variables.
 _g = {}
 
-function zsfx(num, sub_num)
-   sfx(num,-1,sub_num*4,4)
-end
+function zsfx(num, sub_num) sfx(num,-1,sub_num*4,4) end
 
--- util functions:
--- 7661 -> 7650
 function btn_helper(f, a, b)
    return f(a) and f(b) and 0 or f(a) and 0xffff or f(b) and 1 or 0
 end
@@ -140,6 +135,13 @@ function isorty(t)
             end
         end
     end
+end
+
+-- If the game is paused, only run paused functions.
+function acts_loop(id, func_name, ...)
+   for a in all(g_act_arrs[id]) do
+      call_not_nil(a, func_name, a, ...)
+   end
 end
 
 -- DEBUG_BEGIN
