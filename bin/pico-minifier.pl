@@ -10,10 +10,12 @@ binmode(STDIN, "encoding(UTF-8)");
 binmode(STDOUT, "encoding(UTF-8)");
 
 my $minify;
+my $tokenify;
 my $debug_mode;
-GetOptions('minify' => \$minify,
-           'debug' => \$debug_mode,
-) or die "Usage: $0 [--minify] [--debug]\n";
+GetOptions('minify' => \$minify,     # minifies everything
+           'tokenify' => \$tokenify, # output is a list of tokens
+           'debug' => \$debug_mode,  # includes 
+) or die "Usage: $0 [--minify|--tokenify] [--debug]\n";
 
 # Set constants from colon separated keyvalue pairs in arguments.
 my %constants;
@@ -43,21 +45,27 @@ my $content = join("\n", @lines);
 @lines = single_quotes_to_double(@lines);
 @lines = remove_spaces(@lines);
 
-if ($minify) {
-   my %vars = populate_vars(@lines);
-   @lines = tokenize_lines(\@lines, \%vars);
+my %vars = populate_vars(@lines);
+if (!$tokenify) {
+    if ($minify) {
+       @lines = tokenize_lines(\@lines, \%vars);
+    }
+
+    # Uncomment for each thing to go on its own line.
+    # Note that this is slightly more compression space.
+    # $lines[0] =~ s/([^\"]) ([^\"])/$1\n$2/g;
+    @lines = pop_text_logics(@lines);
+
+    my ($strings, $contents) = multiline_string_replace(join("\n", @lines));
+
+    # Ztable doesn't use the quotes in the string data, so remove them.
+    $strings =~ s/"//g;
+
+    $contents =~ s/ZTABLE_STRINGS/$strings/gme;
+
+    print $contents;
+} else {
+    for (keys %vars) {
+        print $_ . "\n";
+    }
 }
-
-# Uncomment for each thing to go on its own line.
-# Note that this is slightly more compression space.
-# $lines[0] =~ s/([^\"]) ([^\"])/$1\n$2/g;
-@lines = pop_text_logics(@lines);
-
-my ($strings, $contents) = multiline_string_replace(join("\n", @lines));
-
-# Ztable doesn't use the quotes in the string data, so remove them.
-$strings =~ s/"//g;
-
-$contents =~ s/ZTABLE_STRINGS/$strings/gme;
-
-print $contents;

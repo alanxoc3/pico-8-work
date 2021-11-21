@@ -1,5 +1,4 @@
 -- Perl preprocessor replaces the constant below.
-_g, g_ztable_cache, g_gunvals = {}, {}, split('ZTABLE_STRINGS', '|')
 
 function ztable(original_str, ...)
     local str = g_gunvals[0+original_str]
@@ -43,7 +42,7 @@ function ztable(original_str, ...)
     end)
 
     return tbl
-end
+end _g, g_ztable_cache, g_gunvals = {}, {}, split('ZTABLE_STRINGS', '|')
 
 function split_kv(list, delim, tbl)
     local kvs = split(list, delim)

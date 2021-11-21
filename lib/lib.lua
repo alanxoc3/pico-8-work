@@ -1,15 +1,5 @@
 -- lib. make sure this is included second (after loading string data).
 
-_g = {}
-
-function _g.plus(a,b)
-    return a + b
-end
-
-function _g.minus(a,b)
-    return a - b
-end
-
 -- allows playing partial sound effects.
 function zsfx(num, sub_num)
     sfx(num,-1,sub_num*4,4)
