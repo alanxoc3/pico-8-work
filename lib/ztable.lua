@@ -1,5 +1,8 @@
 -- Perl preprocessor replaces the constant below.
 
+function nf()
+end
+
 function ztable(original_str, ...)
     local str = g_gunvals[0+original_str]
     local tbl, ops = unpack(g_ztable_cache[str] or {})
@@ -90,7 +93,7 @@ function queue_operation(tbl, k, v, ops)
             })
         elseif x == 'yes' or x == 'no' then x = x=='yes'
         elseif x == 'null' or x == '' then x = nil
-        elseif x == 'nf' then x = function() end
+        elseif x == 'nf' then x = nf
         end
         vlist[i] = x
     end
