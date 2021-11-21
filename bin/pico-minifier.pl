@@ -10,12 +10,12 @@ binmode(STDIN, "encoding(UTF-8)");
 binmode(STDOUT, "encoding(UTF-8)");
 
 my $minify;
-my $tokenify;
+my $ignorelib;
 my $debug_mode;
 GetOptions('minify' => \$minify,     # minifies everything
-           'tokenify' => \$tokenify, # output is a list of tokens
+           'ignorelib' => \$ignorelib, # output is a list of tokens
            'debug' => \$debug_mode,  # includes 
-) or die "Usage: $0 [--minify|--tokenify] [--debug]\n";
+) or die "Usage: $0 [--minify] [--ignorelib] [--debug]\n";
 
 # Set constants from colon separated keyvalue pairs in arguments.
 my %constants;
@@ -45,27 +45,31 @@ my $content = join("\n", @lines);
 @lines = single_quotes_to_double(@lines);
 @lines = remove_spaces(@lines);
 
-my %vars = populate_vars(@lines);
-if (!$tokenify) {
-    if ($minify) {
-       @lines = tokenize_lines(\@lines, \%vars);
+if ($minify or not $ignorelib) {
+    my %vars = populate_vars(@lines);
+    if (not $ignorelib) {
+        # my %existing_functions = populate_funcs(@lines);
+        # my %library_functions = get_library_functions(@lines); # <lib/*.lua>
+        # my %imported_functions = get_imported_functions(@lines, %library_functions, %vars);
+        # remove any imported functions that already exist
+        # split /\n/ (join "\n", (sort (values %imported_functions))); # prepend @lines with that
     }
 
-    # Uncomment for each thing to go on its own line.
-    # Note that this is slightly more compression space.
-    # $lines[0] =~ s/([^\"]) ([^\"])/$1\n$2/g;
-    @lines = pop_text_logics(@lines);
-
-    my ($strings, $contents) = multiline_string_replace(join("\n", @lines));
-
-    # Ztable doesn't use the quotes in the string data, so remove them.
-    $strings =~ s/"//g;
-
-    $contents =~ s/ZTABLE_STRINGS/$strings/gme;
-
-    print $contents;
-} else {
-    for (keys %vars) {
-        print $_ . "\n";
+    if ($minify) {
+        @lines = tokenize_lines(\@lines, \%vars);
     }
 }
+
+# Uncomment for each thing to go on its own line.
+# Note that this is slightly more compression space.
+# $lines[0] =~ s/([^\"]) ([^\"])/$1\n$2/g;
+@lines = pop_text_logics(@lines);
+
+my ($strings, $contents) = multiline_string_replace(join("\n", @lines));
+
+# Ztable doesn't use the quotes in the string data, so remove them.
+$strings =~ s/"//g;
+
+$contents =~ s/ZTABLE_STRINGS/$strings/gme;
+
+print $contents;
