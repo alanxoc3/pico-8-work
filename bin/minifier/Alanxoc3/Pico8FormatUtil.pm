@@ -5,7 +5,7 @@ use experimental 'smartmatch';
 
 use Exporter;
 our @ISA = 'Exporter';
-our @EXPORT = qw(tokenize_lines populate_vars single_quotes_to_double remove_comments pop_text_logics remove_texts remove_spaces @lua_keywords multiline_string_replace);
+our @EXPORT = qw(tokenize_lines populate_vars populate_funcs populate_funcs_with_content single_quotes_to_double remove_comments pop_text_logics remove_texts remove_spaces @lua_keywords multiline_string_replace get_imported_functions);
 
 our @lua_keywords = qw(
 n b0d0 P_TEXT_LOGIC
@@ -52,18 +52,18 @@ sub get_next_var_name {
    }
 }
 
-my %multiline_strings;
-my $multiline_number = 1;
 sub test_multiline_string {
    my $str = shift;
+   my $multiline_strings = shift;
    my @strings = split(/\|/, $str);
    my @retarr;
 
    foreach my $x (@strings) {
-      if (not exists($multiline_strings{$x})) {
-         $multiline_strings{$x} = $multiline_number++;
+      if (not exists($multiline_strings->{$x})) {
+         my $size = keys %{$multiline_strings};
+         $multiline_strings->{$x} = $size + 1;
       }
-      push(@retarr, $multiline_strings{$x});
+      push(@retarr, $multiline_strings->{$x});
    }
 
    return "[[" . join('|', @retarr) . "]]";
@@ -71,7 +71,9 @@ sub test_multiline_string {
 
 sub multiline_string_replace {
    my $file = shift;
-   $file =~ s/\[\[(.*?)\]\]/test_multiline_string($1)/gimse;
+   my %multiline_strings;
+
+   $file =~ s/\[\[(.*?)\]\]/test_multiline_string($1,\%multiline_strings)/gimse;
 
    my $gunval_strs = "";
    foreach my $name (sort { $multiline_strings{$a} <=> $multiline_strings{$b} } keys %multiline_strings) {
@@ -84,9 +86,10 @@ sub multiline_string_replace {
 }
 
 sub remove_spaces {
+   my $content = shift;
    my @new_lines;
 
-   for (@_) {
+   for (split /\n/, $content) {
       my $line = $_;
       $line =~ s/^\s+|\s+$//g;
       $line =~ s/ +/ /g;
@@ -100,41 +103,21 @@ sub remove_spaces {
       }
    }
 
-   return @new_lines;
+   return join("\n", @new_lines);
 }
 
 sub remove_comments {
-   my @new_lines;
-
-   for (@_) {
-      my $line = $_;
-
-      my @matches = ($line =~ /--.*/g);
-      foreach(@matches) { $line =~ s/\Q$_\E//g; }
-
-      if (length($line) > 0) {
-         push @new_lines, $line;
-      }
-   }
-
-   return @new_lines;
+   my $content = shift;
+   $content =~ s/\-\-.*?$//gm;
+   return $content;
 }
 
 sub populate_vars {
-   # tokenize based on most used tokens.
-   # this saves about 100 compression tokens.
+   my $content = shift;
    my %vars;
-   for (@_) {
-      my $line = $_;
-      my @matches = ($line =~ /[\W]*\b([a-z_]\w*)/g);
-      foreach(@matches) {
-         if (not ($_ ~~ @lua_keywords)) {
-            if (not exists($vars{$_})) {
-               $vars{$_} = 0;
-            } else {
-               $vars{$_}++;
-            }
-         }
+   while ($content =~ /[\W]*\b([a-z_]\w*)/g) {
+      if (not ($1 ~~ @lua_keywords)) {
+        $vars{$1}++;
       }
    }
 
@@ -147,55 +130,59 @@ sub populate_vars {
    return %vars;
 }
 
-my @texts;
+sub populate_funcs {
+   my %funcs;
+   my $line = shift;
+   my @matches = ($line =~ /\bfunction\s+(\w+)\s*\(/g);
+   foreach(@matches) {
+     if (not ($_ ~~ @lua_keywords)) {
+       $funcs{$_} = 1;
+     }
+   }
+
+   return %funcs;
+}
+
+sub populate_funcs_with_content {
+   my %funcs;
+   my $content = shift;
+
+   while($content =~ /(^function (\w+)\s*?\(.*?^end.*?$)/gms) {
+     if (not ($2 ~~ @lua_keywords)) {
+       $funcs{$2} = $1;
+     }
+   }
+
+   return %funcs;
+}
+
 sub text_logic {
+   my $texts = shift;
    my $quote = shift;
-   push @texts, $quote;
+   push @{$texts}, $quote;
    return "\"P_TEXT_LOGIC\"";
 }
 
 # Removes tbox texts, similar to removing comments. ($|, "|)
 sub remove_texts {
-   my @new_lines;
-
-   for (@_) {
-      my $line = $_;
-      $line =~ s/\"(.*?)\"/text_logic($1)/ge;
-      push @new_lines, $line;
-   }
-
-   return @new_lines
-}
-
-sub pop_text {
-   my $thing = shift;
-   my $item = shift @texts;
-   return $item;
+   my $content = shift;
+   my @texts;
+   $content =~ s/\"(.*?)\"/text_logic(\@texts, $1)/ge;
+   return ($content, @texts);
 }
 
 sub pop_text_logics {
-   my @new_lines;
-
-   for (@_) {
-      my $line = $_;
-      $line =~ s/(P_TEXT_LOGIC)/pop_text($1)/ge;
-      push @new_lines, $line;
-   }
-
-   return @new_lines
+   my $content = shift;
+   my $texts = shift;
+   $content =~ s/(P_TEXT_LOGIC)/shift @{$texts}/ge;
+   return $content
 }
 
 # Consistent quotes in project. Gun_vals assumes double quotes too.
 sub single_quotes_to_double {
-   my @new_lines;
-
-   for (@_) {
-      my $line = $_;
-      $line =~ s/\'/\"/g;
-      push @new_lines, $line;
-   }
-
-   return @new_lines
+   my $content = shift;
+   $content =~ s/\'/\"/g;
+   return $content
 }
 
 sub test_eval {
@@ -212,21 +199,36 @@ sub test_eval {
    return "$punc$var";
 }
 
+sub get_imported_functions {
+    my $vars = shift;
+    my $library_functions = shift;
+    my %imported_functions;
+
+    for (keys %{$vars}) {
+        if ($library_functions->{$_}) {
+            $imported_functions{$_} = $library_functions->{$_};
+        }
+    }
+
+    my $prev_size = 0;
+    while (scalar (keys %imported_functions) != $prev_size) {
+        $prev_size = keys %imported_functions;
+        my %vars = populate_vars(join "\n\n", (sort (values %imported_functions)));
+        for (keys %vars) {
+            if ($library_functions->{$_}) {
+                $imported_functions{$_} = $library_functions->{$_};
+            }
+        }
+    }
+
+    return %imported_functions;
+}
+
 sub tokenize_lines {
-   my $lines_ref = shift;
+   my $content = shift;
    my $vars_ref = shift;
-
-   my @lines = @{$lines_ref};
-
-   my @new_lines;
-
-   for (@lines) {
-      my $line = $_;
-      $line =~ s/([\W]*\b)([a-zA-Z_]\w*)/test_eval($1,$2,$vars_ref)/ge;
-      push @new_lines, $line;
-   }
-
-   return @new_lines
+   $content =~ s/([\W]*\b)([a-zA-Z_]\w*)/test_eval($1,$2,$vars_ref)/ge;
+   return $content;
 }
 
 1;

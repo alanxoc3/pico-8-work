@@ -24,52 +24,48 @@ for (@ARGV) {
     $constants{$pair[0]} = $pair[1];
 }
 
-# Go through the actual minifying.
-my @lines = <STDIN>;
-chomp(@lines);
+my $content = join("\n", <STDIN>);
 
-# Preprocess, remove unneeded code.
 if (not $debug_mode) {
-   my $content = join("\n", @lines);
    $content =~ s/DEBUG_BEGIN.*?DEBUG_END//gims;
-   @lines = split(/\n/, $content);
 }
 
-my $content = join("\n", @lines);
-@lines = split(/\n/, $content);
+if (not $ignorelib) {
+    my $tmpcontent = $content;
+    $tmpcontent = remove_comments($tmpcontent);
+    $tmpcontent = tokenize_lines($tmpcontent, \%constants);
+    ($tmpcontent, @_) = remove_texts($tmpcontent);
 
-# Remove comments and spaces, preserve quotes...
-@lines = remove_comments(@lines);
-@lines = tokenize_lines(\@lines, \%constants);
-@lines = remove_texts(@lines);
-@lines = single_quotes_to_double(@lines);
-@lines = remove_spaces(@lines);
-
-if ($minify or not $ignorelib) {
-    my %vars = populate_vars(@lines);
-    if (not $ignorelib) {
-        # my %existing_functions = populate_funcs(@lines);
-        # my %library_functions = get_library_functions(@lines); # <lib/*.lua>
-        # my %imported_functions = get_imported_functions(@lines, %library_functions, %vars);
-        # remove any imported functions that already exist
-        # split /\n/ (join "\n", (sort (values %imported_functions))); # prepend @lines with that
+    my %vars = populate_vars($tmpcontent);
+    my %existing_functions = populate_funcs($tmpcontent);
+    my $library_text = `cat $ENV{PICO_WORK_DIR}/lib/*.lua`;
+    my %library_functions = populate_funcs_with_content($library_text);
+    my %imported_functions = get_imported_functions(\%vars, \%library_functions);
+    foreach (keys %existing_functions) {
+        delete %imported_functions{$_};
     }
 
-    if ($minify) {
-        @lines = tokenize_lines(\@lines, \%vars);
-    }
+    my $imported_content = join "\n\n", (sort (values %imported_functions));
+    $content = $imported_content . "\n\n" . $content;
 }
 
-# Uncomment for each thing to go on its own line.
-# Note that this is slightly more compression space.
-# $lines[0] =~ s/([^\"]) ([^\"])/$1\n$2/g;
-@lines = pop_text_logics(@lines);
+$content = remove_comments($content);
+$content = tokenize_lines($content, \%constants);
+my @texts;
+($content, @texts) = remove_texts($content);
 
-my ($strings, $contents) = multiline_string_replace(join("\n", @lines));
+if ($minify) {
+    my %vars = populate_vars($content);
+    $content = tokenize_lines($content, \%vars);
+}
 
-# Ztable doesn't use the quotes in the string data, so remove them.
+$content = single_quotes_to_double($content);
+$content = remove_spaces($content);
+$content = pop_text_logics($content, \@texts);
+
+my $strings = "";
+($strings, $content) = multiline_string_replace($content);
 $strings =~ s/"//g;
+$content =~ s/ZTABLE_STRINGS/$strings/gme;
 
-$contents =~ s/ZTABLE_STRINGS/$strings/gme;
-
-print $contents;
+print $content;

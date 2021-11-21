@@ -1,10 +1,7 @@
 #!/usr/bin/env bash
 pico-minifier() { perl "-I$PICO_WORK_DIR/bin/minifier/" "$PICO_WORK_DIR/bin/pico-minifier.pl" "$@"; }
-pico-lib() { perl "-I$PICO_WORK_DIR/bin/minifier/" "$PICO_WORK_DIR/bin/pico-lib.pl" "$@"; }
 
 files_in_order=$(ls ./src/*.lua | sort)
-TOKENS=$(cat $files_in_order | pico-minifier -tokenify)
-OUTPUT=$(cat $PICO_WORK_DIR/lib/*.lua | pico-lib $TOKENS)
 
-cat <<< $OUTPUT | cat - $files_in_order \
+cat $files_in_order \
     | pico-minifier "$@" $(cat ./constants.txt 2>/dev/null | awk '/^\w/{gsub(/\s*:\s*/, ":", $0); print($0);}') > .code.lua
