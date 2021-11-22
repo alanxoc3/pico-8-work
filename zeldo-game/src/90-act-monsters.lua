@@ -1,16 +1,16 @@
 -- SECTION: MONSTERS
-create_parent([[slimy_parent;8;ma_able,drawable,bounded,danceable,confined,stunnable,mov,col,tcol,hurtable,knockable,spr_obj,spr|
+create_parent([[slimy_parent;8;brang_hittable,ma_able,drawable,bounded,danceable,confined,stunnable,mov,col,tcol,hurtable,knockable,spr_obj,spr|
    name:@1; rx:@2; ry:@3;
    max_health:@4; health:@4;
    sind:@7;
    evil:yes; tl_loop:yes;
    anim_len:1;
-   touchable:yes;
+   touchable:no;
    jump_speed:.03;
    knockback_speed:@5;
    stun_len:@6;
 
-   sind=@7,iyy=-2,ax=0,ay=0,hit=nf,u=%look_at_pl,tl_max_time=2;  -- wait
+   sind=@7,ax=0,ay=0,hit=nf,u=%look_at_pl,tl_max_time=2;  -- wait
    i=nf,hit=nf,u=@9,tl_max_time=.25; -- shake
    sind=@8,ixx=0,i=nf,hit=@11,u=@10,tl_max_time=.25; -- in air
 ]], function(a)
@@ -20,8 +20,8 @@ end, function(a)
    amov_to_actor(a, g_pl, a.jump_speed)
    a.iyy += sin(a.tl_tim/a.tl_max_time)
 end, function(a, other, ...)
-   call_not_nil(other, 'knockback', other, a.knockback_speed, ...)
    if other.pl then
+      call_not_nil(other, 'knockback', other, a.knockback_speed, ...)
       other.hurt(other, 0, a.stun_len)
    end
 end)
@@ -31,7 +31,9 @@ create_actor[[
    x:@1;y:@2;dy:@3;destroyed:%destroy_effect
 ]]
 
-create_actor([[slimy;2;slimy_parent/"slimy"/.25/.25/3/.2/30/118/119,|x:@1;y:@2;destroyed:@3;]], function(a)
+create_actor([[slimy;2;slimy_parent/"slimy"/.25/.25/3/.2/30/118/119,|
+    x:@1;y:@2;destroyed:@3;
+]], function(a)
    batch_call_new(_g.miny, [[
       @1,@2,.2;
       @1,@2,-.2;
@@ -62,7 +64,7 @@ end, function(a, other)
    end
 end)
 
-create_actor([[quack;2;drawable,ma_able,hurtable,loopable,bounded,confined,stunnable,mov,col,tcol,knockable,spr,danceable|
+create_actor([[quack;2;brang_hittable,drawable,ma_able,hurtable,loopable,bounded,confined,stunnable,mov,col,tcol,knockable,spr,danceable|
    name:"quack";
    evil:yes;
    x:@1;y:@2;

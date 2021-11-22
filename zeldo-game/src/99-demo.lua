@@ -21,7 +21,7 @@ function _init()
    map_init()
 
    g_tl = ztable([[
-      x=64, y=64, i=nf, u=nf, d=@1, tl_max_time=2.5; -- logo
+      -- x=64, y=64, i=nf, u=nf, d=@1, tl_max_time=2.5; -- logo
       i=@2, u=@3, d=@4; -- game
       i=@5, u=@6, d=@7; -- game over
    ]], logo_draw, game_init, game_update, game_draw, game_over_init, game_over_update, game_over_draw)
@@ -278,10 +278,6 @@ function game_init()
       zdset(HEALTH, LANK_START_HEALTH)
       zdset'GAME_CONTINUE'
    end
-
-   -- DEBUG_BEGIN
-   zdset(HEALTH, 1)
-   -- DEBUG_END
 
    inventory_init()
    g_energy, g_energy_tired, g_energy_amount = 0, false, 0
