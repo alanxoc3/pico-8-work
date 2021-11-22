@@ -431,6 +431,8 @@ create_parent([[shop_item;0;drawable,interactable,ma_able;update,|
    end
 end)
 
+create_parent[[brang_hittable;0;,;|;]]
+
 -- exists based on memory
 create_parent([[mem_dep;0;act,;|
    room_init:@1;
