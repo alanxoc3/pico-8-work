@@ -135,8 +135,8 @@ create_actor([[house;6;drawable,confined,spr|
    end)
 end)
 
-create_actor[[pillow;2;pre_drawable,spr,confined|
-   x:@1;y:@2;sind:39;iyy:0;
+new_create_actor[[:pillow:2;#;.#:pre_drawable:spr:confined|
+   x:@;y:@;sind:39;iyy:0;
 ]]
 
 create_actor([[bed;2;drawable,confined,spr|
