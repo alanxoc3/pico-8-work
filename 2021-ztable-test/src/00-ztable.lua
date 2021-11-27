@@ -1,14 +1,6 @@
 -- Perl preprocessor replaces the constant below.
--- 1224 is original
--- 1159 is next
--- 1313 is next i think
--- 1286 is next i think
--- 1375 is next i think
--- 1368 is next i think
-
-function nf()
-end
-
+-- 414 - original
+-- 366 - result
 _g, g_ztable_cache, g_gunvals = {}, {}, split('ZTABLE_STRINGS', '|')
 function ztable(original_str, ...)
     local str, index, params = g_gunvals[0+original_str], 0, {...}
@@ -17,8 +9,7 @@ function ztable(original_str, ...)
     -- Create the table if it isn't in the cache.
     if not tbl then
         tbl, ops = {}, {}
-        local path, relative_path, indextbl = {'#'}, {}, {}
-        local is_relative = true
+        local base_path, relative_path, indextbl = {'#'}, {}, {}
 
         -- Get first level of table in order.
         for item in all(split(str, ';')) do
@@ -26,89 +17,72 @@ function ztable(original_str, ...)
             local key = deli(vals, 1)
             if key == '' then key = '#' end
 
-            if not is_relative then
-                path = relative_path
-            end
-
-            local newpath = split(key, '.')
-            if newpath[1] == '' then
-                deli(newpath, 1)
-                is_relative = true
+            local path = split(key, '.')
+            if path[1] == '' then
+                deli(path, 1)
+                relative_path = path
             else
-                path = {}
-                is_relative = false
+                base_path, relative_path = path
             end
             
-            relative_path = newpath
-
             for val in all(vals) do
-                local finalkey
-                local prevtbl, subtbl = tbl, tbl
+                local subtbl, finalkey = {tbl}, 1
 
-                for i=1,#path do
-                    finalkey = path[i]
-                    if finalkey == '#' then
-                        indextbl[subtbl] = (indextbl[subtbl] or 1)
-                        path[i] = indextbl[subtbl]
-                        finalkey = indextbl[subtbl]
-                    end
-
-                    if type(subtbl[finalkey]) ~= "table" then
-                        subtbl[finalkey] = {}
-                    end
-
-                    prevtbl = subtbl
-                    subtbl = subtbl[finalkey]
-                end
-
-                for i=1,#relative_path do
-                    finalkey = relative_path[i]
-                    if finalkey == '#' then
-                        indextbl[subtbl] = (indextbl[subtbl] or 0) + 1
-                        finalkey = indextbl[subtbl]
-                    end
-
-                    if type(subtbl[finalkey]) ~= "table" then
-                        subtbl[finalkey] = {}
-                    end
-
-                    prevtbl = subtbl
-                    subtbl = subtbl[finalkey]
-                end
-
-                if val == '@' then
-                    local ind = index + 1
-                    add(ops, {
-                        prevtbl, finalkey, function(p)
-                            return p[ind]
+                for tmppath in all{base_path, relative_path} do
+                    for i=1,#tmppath do
+                        if type(subtbl[finalkey]) ~= "table" then
+                            subtbl[finalkey] = {}
                         end
-                    })
-                    index += 1
-                elseif val == 'yes'  then val = true
-                elseif val == 'no'   then val = false
-                elseif val == '' or val == 'null' then val = nil
-                elseif val == 'nf'   then val = nf
+
+                        subtbl, finalkey = subtbl[finalkey], tmppath[i]
+                        if finalkey == '#' then
+                            indextbl[subtbl] = indextbl[subtbl] or 0
+                            finalkey = indextbl[subtbl]+1
+                            if tmppath == base_path and relative_path then
+                                tmppath[i] = finalkey
+                            else
+                                indextbl[subtbl] = finalkey
+                            end
+                        end
+                    end
                 end
 
-                prevtbl[finalkey] = val
+                local valchr, valcdr, func = sub(val, 1, 1), sub(val, 2)
+                if val == '@' then
+                    index += 1 local ind = index
+                    func = function(p) return p[ind] end
+                elseif val == 'yes' then val = true
+                elseif val == 'no' then val = false
+                elseif val == 'null' then val = nil
+                elseif val == 'nf' then val = function() end
+                elseif val == '' then val = subtbl[finalkey]
+                elseif valchr == '~' then
+                    func = function() return tbl[valcdr] end
+                elseif sub(val, 1, 1) == '%' then
+                    func = function() return _g[valcdr] end
+                end
+
+                subtbl[finalkey] = val
+
+                if func then
+                    add(ops, { subtbl, finalkey, func })
+                end
             end
         end
 
         g_ztable_cache[str] = {tbl, ops}
     end
 
-    foreach(params, disable_tabcpy)
+    foreach(params, function(t)
+        if type(t) == 'table' then
+            t.is_tabcpy_disabled = true
+        end
+    end)
+
     foreach(ops, function(op)
         local t, k, f = unpack(op)
         t[k] = f(params)
     end)
 
     return tbl
-end
-
-function disable_tabcpy(t)
-    if type(t) == 'table' then
-        t.is_tabcpy_disabled = true
-    end
-    return t
 end
