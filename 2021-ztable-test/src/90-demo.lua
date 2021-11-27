@@ -1,29 +1,49 @@
-z=ztable
 function _init()
-    ta("{a=a,b=b}",                         z[[a:a;b:b;]])
-    ta("{a=a,b=b}",                         z([[a:@;b:@;]], "a", "b"))
-    ta("{a=a,b=b}",                         z([[a:@;b:@;c:@;]], "a", "b"))
-    ta("{nf=[function],no=false,yes=true}", z[[yes:yes;no:no;null:null;nf:nf;]])
-    ta("{a={b=a.b},b=b}",                   z[[a.b:a.b;b:b;]])
-    ta("{a={b={c=a.b.c}}}",                 z[[a.b.c:a.b.c;]])
-    ta("{a={b={c=a.b.c}}}",                 z[[a.b:a.b;.c:a.b.c;]])
-    ta("{a={b=a.b,c=a.c}}",                 z[[a:;.b:a.b;.c:a.c;]])
-    ta("{a={b=.b,c=.c},d={e=.e,f=.f}}",     z([[a:;.b:.b;.c:@;d:;.e:.e;.f:.f]], ".c"))
-    ta("{{1,2,3}}",                         z[[.#:1;.#:2;.#:3;]])
-    ta("{{1,2,3}}",                         z[[.#:1:2:3;]])
-    ta("{1,2,3}",                           z[[#:1;#:2;#:3;]])
-    ta("{1,2,3}",                           z[[#:1:2:3]])
-    ta("{1,2,3}",                           z[[#;:1:2:3]])
-    ta("{{1},{2},{3}}",                     z[[#.#:1;#.#:2;#.#:3;]])
-    ta("{{1},{2},{3}}",                     z[[#.#:1:2:3;]])
-    ta("{uno,dos}",                         z[[#:uno:dos;]])
-    ta("{g={a,b,c}}",                       z[[g;.#:a:b:c;d]])
-    ta("{a,b,c,d}",                         z[[:a:b:c:d;]])
-    ta("{a,b,c,d}",                         z[[#:a:b:c:d;]])
-    ta("{a,b,c,d}",                         z[[:a;:b;:c;:d;]])
-    ta("{a,b,c,d}",                         z[[#:a;:b;:c;:d;]])
-    ta("{a,b,c,d}",                         z[[#:a;#:b;#:c;#:d;]])
+    -- testing basic nesting "."
+    ta("{a=a,b=b}",         ztable[[a:a;b:b;]])
+    ta("{a={b=a.b},b=b}",   ztable[[a.b:a.b;b:b;]])
+    ta("{a={b={c=a.b.c}}}", ztable[[a.b.c:a.b.c;]])
+    ta("{a={b={c=a.b.c}}}", ztable[[a.b:a.b;.c:a.b.c;]])
+    ta("{a={b=a.b,c=a.c}}", ztable[[a:;.b:a.b;.c:a.c;]])
+
+    -- testing parameters "@"
+    ta("{a=a,b=b}", ztable([[a:@;b:@;]], "a", "b"))
+    ta("{a=a,b=b}", ztable([[a:@;b:@;c:@;]], "a", "b"))
+    ta("{a={b=.b,c=.c},d={e=.e,f=.f}}", ztable([[a:;.b:.b;.c:@;d:;.e:.e;.f:.f]], ".c"))
+
+    -- testing values "nf/no/yes/null"
+    ta("{nf=[function],no=false,yes=true}", ztable[[yes:yes;no:no;null:null;nf:nf;nf:;yes:]])
+
+    -- testing arrays "#"
+    ta("{{1,2,3}}",     ztable[[.#:1;.#:2;.#:3;]])
+    ta("{{1,2,3}}",     ztable[[.#:1:2:3;]])
+    ta("{1,2,3}",       ztable[[#:1;#:2;#:3;]])
+    ta("{1,2,3}",       ztable[[#:1:2:3]])
+    ta("{1,2,3}",       ztable[[#;:1:2:3]])
+    ta("{{1},{2},{3}}", ztable[[#.#:1;#.#:2;#.#:3;]])
+    ta("{{1},{2},{3}}", ztable[[#.#:1:2:3;]])
+    ta("{uno,dos}",     ztable[[#:uno:dos;]])
+    ta("{g={a,b,c}}",   ztable[[g;.#:a:b:c;d]])
+    ta("{a,b,c,d}",     ztable[[:a:b:c:d;]])
+    ta("{a,b,c,d}",     ztable[[#:a:b:c:d;]])
+    ta("{a,b,c,d}",     ztable[[:a;:b;:c;:d;]])
+    ta("{a,b,c,d}",     ztable[[#:a;:b;:c;:d;]])
+    ta("{a,b,c,d}",     ztable[[#:a;#:b;#:c;#:d;]])
+    ta("{a,b,c,d}",     ztable[[#:a;#:b;#:c;#:d;]])
+
+    -- testing _g "%"
+    _g.apple = "hello"
+    ta("{hello}", ztable[[:%apple]])
+    _g.apple = "byeby"
+    ta("{byeby}", ztable[[:%apple]])
+
+    -- testing tbl "~"
+    _g.gval = "hi"
+    ta("{hello=hi,hey=hi}", ztable[[hello:%gval;hey:~hello]])
+    ta("{a=cat,b=cat,c={d={e=cat}}}", ztable[[a:cat;b:~a;c.d.e:~b;]])
+
     print("all tests passed")
+    printh("all tests passed")
 end
 
 function ta(expected, actual)
