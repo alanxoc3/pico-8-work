@@ -10,9 +10,14 @@ create_parent([[slimy_parent;8;brang_hittable,ma_able,drawable,bounded,danceable
    knockback_speed:@5;
    stun_len:@6;
 
-   sind=@7,ax=0,ay=0,hit=nf,u=%look_at_pl,tl_max_time=2;  -- wait
-   i=nf,hit=nf,u=@9,tl_max_time=.25; -- shake
-   sind=@8,ixx=0,i=nf,hit=@11,u=@10,tl_max_time=.25; -- in air
+sind=@7,ax=0,ay=0,hit=nf,u=%look_at_pl,tl_max_time=2;
+i=nf,hit=nf,u=@9,tl_max_time=.25;
+sind=@8,ixx=0,i=nf,hit=@11,u=@10,tl_max_time=.25;
+
+-- #;.tl_max_time:2;.u:%look_at_pl;
+-- #;.tl_max_time:.25;.u:~u_shake;
+-- #;.tl_max_time:.25;.u:~u_air;.hit:~hit_air;.sind:~other_sind;
+ 
 ]], function(a)
    _g.look_at_pl(a)
    a.ixx = rnd_one()
