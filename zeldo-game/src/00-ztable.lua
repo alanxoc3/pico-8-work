@@ -169,10 +169,13 @@ function new_ztable(original_str, ...)
                 elseif val == 'null' then val = nil
                 elseif val == 'nf' then val = function() end
                 elseif val == '' then val = subtbl[finalkey]
-                elseif valchr == '~' then
-                    func = function() return tbl[valcdr] end
-                elseif sub(val, 1, 1) == '%' then
-                    func = function() return _g[valcdr] end
+                elseif valchr == '~' then func = function() return tbl[valcdr] end
+                elseif valchr == '%' then func = function() return _g[valcdr] end
+                elseif valchr == '!' then func = function()
+                        local arr = tbl[valcdr]
+                        local func_name = deli(arr, 1)
+                        return tbl[func](unpack(arr))
+                    end
                 end
 
                 subtbl[finalkey] = val

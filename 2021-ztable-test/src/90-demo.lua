@@ -42,6 +42,9 @@ function _init()
     ta("{hello=hi,hey=hi}", ztable[[hello:%gval;hey:~hello]])
     ta("{a=cat,b=cat,c={d={e=cat}}}", ztable[[a:cat;b:~a;c.d.e:~b;]])
 
+    -- testing func call "!"
+    ta("{a=3,fcall={[function],1,2}}", ztable([[fcall.#:@:1:2; a:!fcall;]], function(a,b) return a+b end))
+
     print("all tests passed")
     printh("all tests passed")
 end
