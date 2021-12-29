@@ -1,6 +1,15 @@
 -- Perl preprocessor replaces the constant below.
 -- 414 - original
 -- 366 - result
+-- 391 - result
+
+-- @: parameter stack - things passed into ztable
+-- !: temporary stack - things defined within the string
+-- $: cache stack     - things defined in the ztable cache
+-- %: value from _g
+-- ~: value from local table
+-- ?: call ! as a function {func,params...}
+
 _g, g_ztable_cache, g_gunvals = {}, {}, split('ZTABLE_STRINGS', '|')
 function ztable(original_str, ...)
     local str, index, params = g_gunvals[0+original_str], 0, {...}
@@ -56,10 +65,13 @@ function ztable(original_str, ...)
                 elseif val == 'null' then val = nil
                 elseif val == 'nf' then val = function() end
                 elseif val == '' then val = subtbl[finalkey]
-                elseif valchr == '~' then
-                    func = function() return tbl[valcdr] end
-                elseif sub(val, 1, 1) == '%' then
-                    func = function() return _g[valcdr] end
+                elseif valchr == '~' then func = function() return tbl[valcdr] end
+                elseif valchr == '%' then func = function() return _g[valcdr] end
+                elseif valchr == '!' then func = function()
+                        local arr = {unpack(tbl[valcdr])}
+                        local func = deli(arr, 1)
+                        return func(unpack(arr))
+                    end
                 end
 
                 subtbl[finalkey] = val
