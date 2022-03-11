@@ -1,116 +1,45 @@
--- Perl preprocessor replaces the constant below.
-
-function nf()
+function ztable_eval(val, table, parameters)
+    -- 37: %, 126: ~
+    if     ord(val) == 37               then return _g[sub(val, 2)]
+    elseif ord(val) == 126              then return table[sub(val, 2)]
+    elseif val == "@"                   then return deli(parameters, 1)
+    elseif val == 'yes'  or val == 'no' then return val=='yes'
+    elseif val == 'null' or val == ''   then return nil
+    elseif val == 'nop'                 then return function() end
+    end                                      return val
 end
 
-function ztable(original_str, ...)
-    local str = g_gunvals[0+original_str]
-    local tbl, ops = unpack(g_ztable_cache[str] or {})
-
-    -- Create the table if it isn't in the cache.
-    if not tbl then
-        tbl, ops = {}, {}
-
-        -- Get first level of table in order.
-        for item in all(split(str, ';')) do
-            local k, v = split_kv(item, ':', tbl)
-
-            local val_func = function(sub_val, sub_key, sub_tbl)
-                return queue_operation(sub_tbl or tbl, sub_key or k, sub_val, ops)
-            end
-
-            local ret_val, items = {}, split(v, ',')
-            for item in all(items) do
-                local k, v = split_kv(item, '=', ret_val)
-
-                if #items == 1 then
-                    ret_val = val_func(v)
-                else
-                    ret_val[k] = val_func(v, k, ret_val)
-                end
-            end
-
-            tbl[k] = ret_val
-        end
-
-        g_ztable_cache[str] = {tbl, ops}
-    end
-
-    -- Add the various parameters to the table.
-    local params = {...}
-    foreach(params, disable_tabcpy)
-    foreach(ops, function(op)
-        local t, k, f = unpack(op)
-        t[k] = f(params)
+function ztable_set(table, str, ...)
+    local params, statements = {...}, split(str, ";")
+    foreach(statements, function(statement)
+        local tokens = split(statement) -- defaults to comma
+        _g[deli(tokens, 1)](tokens, table, params)
     end)
-
-    return tbl
-end _g, g_ztable_cache, g_gunvals = {}, {}, split('ZTABLE_STRINGS', '|')
-
-function split_kv(list, delim, tbl)
-    local kvs = split(list, delim)
-    return kvs[#kvs-1] or #tbl+1, kvs[#kvs]
+    return table
 end
 
-function queue_operation(tbl, k, v, ops)
-    local vlist = split(v, '/')
-    local will_be_table, func_op, func_name = #vlist > 1
-
-    if ord(v) == 33 then -- ! func
-        will_be_table, func_name = true, deli(vlist, 1)
-
-        func_op = {
-            tbl, k, function()
-                return _g[sub(func_name, 2)](unpack(vlist))
-            end
-        }
-    end
-
-    for i, x in ipairs(vlist) do
-        local rest, closure_tbl = sub(x, 2), tbl
-
-        if will_be_table then
-            closure_tbl, k = vlist, i
-        end
-
-        if ord(x) == 64 then -- @ param
-            add(ops, {
-                closure_tbl, k, function(p)
-                    return p[rest+0]
-                end
-            })
-        elseif ord(x) == 36 then -- $ parent func value
-            x = function(a, ...)
-                a[rest](a, ...)
-            end
-        elseif ord(x) == 37 then -- % _g value
-            x = _g[rest]
-        elseif ord(x) == 126 then -- ~ tbl value
-            add(ops, {
-                closure_tbl, k, function()
-                    return tbl[rest]
-                end
-            })
-        elseif x == 'yes' or x == 'no' then x = x=='yes'
-        elseif x == 'null' or x == '' then x = nil
-        elseif x == 'nf' then x = nf
-        end
-        vlist[i] = x
-    end
-
-    -- nil func_op won't actually add.
-    add(ops, func_op)
-
-    if will_be_table then
-        return vlist
-    else
-        return vlist[1]
-    end
+function ztable(...)
+    return ztable({}, ...)
 end
 
-function disable_tabcpy(t)
-    if type(t) == 'table' then
-        t.is_tabcpy_disabled = true
-    end
-    return t
-end
+-- _g = {
+--     "=" = function(tokens, table, params)
+--         local val_str = deli(tokens)
+--         foreach(tokens, function(key)
+--             table[key] = ztable_eval(val_str, table, params)
+--         end)
+--     end,
+-- 
+--     ":" = function(tokens, table, params)
+--         table[deli(tokens, 1)] = tokens
+--         for key,val_str in pairs(tokens) do
+--             tokens[key] = ztable_eval(val_str, table, params)
+--         end
+--     end,
+-- 
+--     "#" = function(tokens, table, params)
+--         foreach(tokens, function(val_str)
+--             add(table, ztable_eval(val_str, table, params))
+--         end)
+--     end
+-- }

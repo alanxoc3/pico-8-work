@@ -1,9 +1,22 @@
-ACTOR_BEGIN(pot_projectile)
-    KEY(init) function(a) a.ax = bool_to_num(a.xf)*.04 end
-ACTOR_END
+function _init()
+    old_tbl = ztable([[:uno;]], "hello")
+    new_tbl = ztable_no_cache("1;2;3;@", "hello")
+end
 
-ACTOR_BEGIN(other_thing)
-    KEY(meow) function() print("hello world") end
-ACTOR_END
+function _update60()
+end
 
-_g.actor_keys=ztable([[ACTOR_TEMPLATE_KEYS]], ACTOR_TEMPLATE_VALS)
+function _draw()
+    cls()
+    print("old", 32, 10, 7)
+    print(old_tbl[1])
+    -- print(old_tbl[2])
+    -- print(old_tbl[3])
+    -- print(old_tbl[4])
+
+    print("new", 64+32, 10, 7)
+    print(new_tbl[1])
+    print(new_tbl[2])
+    print(new_tbl[3])
+    print(new_tbl[4])
+end

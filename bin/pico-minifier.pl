@@ -10,20 +10,22 @@ binmode(STDIN, "encoding(UTF-8)");
 binmode(STDOUT, "encoding(UTF-8)");
 
 # Constants to worry about:
-# DEBUG_BEGIN         - marks the beginning of debug code. this code is left out of the generated .code.lua unless you pass in the --debug option.
-# DEBUG_END           - marks the end of debug code.
-# ZTABLE_STRINGS      - if this is found in the code, it is replaced with all the multiline (ztable) strings put together, separated by a "|"
-# ACTOR_TEMPLATE_KEYS - if this is found in the code, it is replaced with a ztable syntax of all the keys for the (...) -{...}- syntax
-# ACTOR_TEMPLATE_VALS - if this is found in the code, it is replaced with a code snippet calling ztable
-#
+# DEBUG_BEGIN         -- marks the beginning of debug code. this code is left out of the generated .code.lua unless you pass in the --debug option.
+# DEBUG_END           -- marks the end of debug code.
+# ZTABLE_STRINGS      -- if this is found in the code, it is replaced with all the multiline (ztable) strings put together, separated by a "|"
+# ACTOR_TEMPLATE_KEYS -- if this is found in the code, it is replaced with a ztable syntax of all the keys for the (...) -{...}- syntax
+# ACTOR_TEMPLATE_VALS -- if this is found in the code, it is replaced with a code snippet calling ztable
+
+# Syntax to worry about:
+# ""   -- raw string, spaces are not deleted from a string with double quotes, and the minifier does not run on it. the minifier does run on strings with '...' or [[...]] though.
+# [[]] -- ztable string, ztable strings are all put together into one variable, and replaced with an index. this is done so that all the strings could be serialized in pico-8 cart data if you want.
 
 my $minify;
 my $ignorelib;
 my $debug_mode;
 GetOptions('minify'    => \$minify,     # minify the generated code
-           'ignorelib' => \$ignorelib,  # should the generated code include library functions
            'debug'     => \$debug_mode, # should the generated code include debug code
-) or die "Usage: $0 [--minify] [--ignorelib] [--debug]\n";
+) or die "Usage: $0 [--minify] [--debug]\n";
 
 # Set constants from colon separated keyvalue pairs in arguments.
 my %constants;
@@ -55,26 +57,7 @@ $actor_template_vals =~ s/\n+/\n/g;
 $content =~ s/ACTOR_TEMPLATE_KEYS/$actor_template_keys/ge;
 $content =~ s/ACTOR_TEMPLATE_VALS/$actor_template_vals/ge;
 
-# Parsing library.
-if (not $ignorelib) {
-    my $tmpcontent = $content;
-    $tmpcontent = remove_comments($tmpcontent);
-    $tmpcontent = tokenize_lines($tmpcontent, \%constants);
-    ($tmpcontent, @_) = remove_texts($tmpcontent);
-
-    my %vars = populate_vars($tmpcontent);
-    my %existing_functions = populate_funcs($tmpcontent);
-    my $library_text = `cat $ENV{PICO_WORK_DIR}/lib/*.lua`;
-    my %library_functions = populate_funcs_with_content($library_text);
-    my %imported_functions = get_imported_functions(\%vars, \%library_functions);
-    foreach (keys %existing_functions) {
-        delete %imported_functions{$_};
-    }
-
-    my $imported_content = join "\n\n", (sort (values %imported_functions));
-    $content = $imported_content . "\n\n" . $content;
-}
-
+# trimming, minimizing, replacing things
 $content = remove_comments($content);
 $content = tokenize_lines($content, \%constants);
 my @texts;
