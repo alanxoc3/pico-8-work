@@ -11,8 +11,7 @@ x:VAL:VAL; -- set x to [VAL,VAL]
 :VAL;      -- set '' to [VAL]
 
 VAL;       -- set 1 to VAL
-VAL,VAL;   -- set 1 to VAL, set 2 to VAL
-,VAL;      -- set 1 to '', set 2 to VAL
+VAL;VAL    -- set 1 to VAL, set 2 to VAL
 
 -- VAL interpretations
 nop;  -- empty function

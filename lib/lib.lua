@@ -34,21 +34,10 @@ function btn_helper(f, a, b)
    return f(a) and f(b) and 0 or f(a) and 0xffff or f(b) and 1 or 0
 end
 
-function xbtn()
-    return btn_helper(btn, 0, 1)
-end
-
-function ybtn()
-    return btn_helper(btn, 2, 3)
-end
-
-function xbtnp()
-    return btn_helper(btnp, 0, 1)
-end
-
-function ybtnp()
-    return btn_helper(btnp, 2, 3)
-end
+function xbtn()  return btn_helper(btn , 0, 1) end
+function ybtn()  return btn_helper(btn , 2, 3) end
+function xbtnp() return btn_helper(btnp, 0, 1) end
+function ybtnp() return btn_helper(btnp, 2, 3) end
 
 function zsgn(num)
     return num == 0 and 0 or sgn(num)
