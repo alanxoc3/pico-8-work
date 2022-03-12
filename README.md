@@ -2,11 +2,11 @@
 For all the pico-eighters out there, this repo contains [@alanxoc3](https://twitter.com/alanxoc3)'s PICO-8 life.
 
 The directory structure is as follows:
-* `/TEMPLATE` The template to base future projects off of.
-* `/bin` Shell scripts to help link and minify projects.
+* `/TEMPLATE` The template to jumpstart future projects. Includes common functions for a game.
+* `/bin` Shell scripts for preprocessing & minifying projects.
 * `/.archive` An incomplete collection of pico-8 cartridges I made.
 
-To ensure the compilation scripts scripts run correctly, set the environment variable `PICO_WORK_DIR` to the root of this repo. You may also want to add `PICO_WORK_DIR` to your path. So you probably want something like this:
+To ensure the compilation scripts scripts run correctly, set the environment variable `PICO_WORK_DIR` to the root of this repo. You can easily run the compilation scripts if you add `PICO_WORK_DIR/bin` to your path too. So add these to your shell's rc file:
 ```
 export PICO_WORK_DIR=$HOME/.lexaloffle/pico-8/carts/pico-8-work
 export PATH="$PATH:$PICO_WORK_DIR/bin"
