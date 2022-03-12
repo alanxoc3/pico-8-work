@@ -1,17 +1,24 @@
 -- params: initCallback, endCallback
-create_actor([[fader_out;3;act,;update,|
-    fade_time:@1; i:@2; e:@3; u:@4;
+create_actor[[#,fader_out,act|
+    =fade_time,i,e,u,@;
+    :start,tl_max_time,~fade_time;
+]]
 
-   tl_max_time=@1,
-]], function(a)
+--[[]] function(a)
     g_card_fade = max(a.tl_tim/a.tl_max_time*10, g_card_fade)
 end)
 
 -- params: initCallback, endCallback
-create_actor([[fader_in;3;act,;update,|
-   fade_time:@1; i:@2; e:@3; u:@4;
+ztable[[
+    act,fader_in,act;
+    =,fade_time,i,e,@;
+    =,u,%fader_in_u;
+    :,start,tl_max_time,~fade_time;
+]]
 
-   tl_max_time=@1,
-]], function(a)
+--[[fader_in_u]]
+function(a)
     g_card_fade = min((a.tl_max_time-a.tl_tim)/a.tl_max_time*10, g_card_fade)
-end)
+end
+--[[]]
+

@@ -1,8 +1,6 @@
 -- attachment module
 -- goes after libraries and before actors/parents
 
-g_act_arrs = {}
-
 function create_parent_actor_shared(is_create_parent, meta_and_att_str, ...)
    local meta, template = unpack(split(meta_and_att_str, '|'))
    local template_params, id, provided, parents, pause_funcs = {...}, unpack(ztable(meta))
@@ -48,8 +46,13 @@ function create_parent_actor_shared(is_create_parent, meta_and_att_str, ...)
 
       return a
    end
-end
+end g_act_arrs = {}
 
 -- params: str, opts
-function create_parent(...) create_parent_actor_shared(true, ...) end
-function create_actor(...)  create_parent_actor_shared(false, ...) end
+function create_parent(...)
+    create_parent_actor_shared(true, ...)
+end
+
+function create_actor(...)
+    create_parent_actor_shared(false, ...)
+end
