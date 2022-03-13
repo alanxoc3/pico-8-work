@@ -1,20 +1,23 @@
-_g = ztable([[GLOBAL_KEYS]], GLOBAL_VALS)
+_g = ztable([[GLOBAL_KEYS]] GLOBAL_VALS)
 
 zactor[[,movable|
-    :x:64 :y:64
-    :move:%move_with_arrows
+    x,64, y,64,
+    move,%move_with_arrows
 ]]
 
+
 zactor[[,ball,movable|
-    :radius:3 :color:7
-    :draw: %ball_draw
-    :grow: %ball_grow
+    radius,3, color,7,
+    draw, %ball_draw,
+    grow, %ball_grow
 ]]
+
 
 |move_with_arrows| function(a)
     a.x += xbtn()
     a.y += ybtn()
 end $$
+
 
 |ball_grow| function(a)
     if btn(4) then
@@ -31,9 +34,8 @@ function xbtn() return btn_helper(btn, 0, 1) end
 function ybtn() return btn_helper(btn, 2, 3) end
 
 function _init()
-    g_tl = ztable[[:u:%game_update :d:%game_draw]]
+    g_tl = ztable[[u,%game_update, d,%game_draw]]
     ball = _g.ball(50, 50)
-    
 end
 
 |ball_draw| function(a)
