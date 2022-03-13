@@ -1,4 +1,4 @@
--- 199 tokens
+-- 198 tokens
 function ztable_eval(val, table, parameters)
     -- 37: %, 126: ~
     if     ord(val) == 37               then return _g[sub(val, 2)]
@@ -29,7 +29,7 @@ function ztable_set(table, str, ...)
         elseif cmd then -- cmd == nil when statement == ""
             if type(dest[statement]) ~= "table" then
                 dest[statement] = {}
-            else
+            end
             next_dest = dest[statement]
         end
         dest = next_dest
