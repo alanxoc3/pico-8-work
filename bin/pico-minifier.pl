@@ -40,21 +40,22 @@ if (not $debug_mode) {
    $content =~ s/DEBUG_BEGIN.*?DEBUG_END//gims;
 }
 
+$content = remove_comments($content);
+
+# |...| ... $$ syntax
 my $global_keys = "";
 my $global_vals = "";
 while ( $content =~ s/\|\s*(\w+)\s*\|(.*?)\$\$//ms ) {
     my $name = $1; my $value = $2;
-    $global_keys .= ":".$1.":@";
-    $global_vals .= $2.",";
+    $global_keys .= ",".$1.",@";
+    $global_vals .= ",".$2;
 }
 
-# $global_vals =~ s/\n+/\n/g;
-$global_vals = substr $global_vals, 0, -1;
+$global_keys = substr $global_keys, 1;
 $content =~ s/GLOBAL_KEYS/$global_keys/ge;
 $content =~ s/GLOBAL_VALS/$global_vals/ge;
 
 # trimming, minimizing, replacing things
-$content = remove_comments($content);
 $content = tokenize_lines($content, \%constants);
 my @texts;
 ($content, @texts) = remove_texts($content);

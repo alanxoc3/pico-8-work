@@ -10,6 +10,8 @@ function ztable_eval(val, table, parameters)
     end                                      return val
 end
 
+-- one less split call for keys, so maybe more performant in some cases? (not benchmarked at all though)
+-- idea of using different delimiters for better visibility than ztable-small
 function ztable_set(table, str, ...)
     local params, statements, dest = {...}, split(str, ";"), table
     foreach(statements, function(statement)
