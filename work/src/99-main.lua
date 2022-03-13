@@ -33,7 +33,6 @@ function ybtn() return btn_helper(btn, 2, 3) end
 function _init()
     g_tl = ztable[[:u:%game_update :d:%game_draw]]
     ball = _g.ball(50, 50)
-    printh(ball)
     
 end
 

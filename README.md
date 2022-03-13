@@ -4,6 +4,7 @@ For all the pico-eighters out there, this repo contains [@alanxoc3](https://twit
 The directory structure is as follows:
 * `/TEMPLATE` The template to jumpstart future projects. Includes common functions for a game.
 * `/bin` Shell scripts for preprocessing & minifying projects.
+* `/lib` Useful library snippets for other projects to use.
 * `/.archive` An incomplete collection of pico-8 cartridges I made.
 
 To ensure the compilation scripts scripts run correctly, set the environment variable `PICO_WORK_DIR` to the root of this repo. You can easily run the compilation scripts if you add `PICO_WORK_DIR/bin` to your path too. So add these to your shell's rc file:
