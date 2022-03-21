@@ -8,6 +8,7 @@ build
 out*.p8
 *.p8l
 *.p8.png
+!.archive/*.p8.png
 sheet.png
 *.swo
 *.swp
