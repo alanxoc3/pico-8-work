@@ -7,13 +7,13 @@ build
 .mapb.p8
 out*.p8
 *.p8l
-*.p8.png
-!.archive/*.p8.png
 sheet.png
 *.swo
 *.swp
 tags
-TEMPLATE/.code.lua
 .tmp_map_data.lua
 .zeldo_outline_copy.p8
 .code.lua
+
+*.p8.png
+!.archive/*.p8.png

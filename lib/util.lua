@@ -90,7 +90,7 @@ function batch_call_table(func,tbl)
     foreach(tbl, function(t) func(unpack(t)) end)
 end
 
-function batch_call_new(func, ...)
+function batch_call(func, ...)
     batch_call_table(func, ztable(...))
 end
 

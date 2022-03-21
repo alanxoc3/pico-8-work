@@ -65,7 +65,7 @@ function(a)
       a.follow_act = nil
    end
 
-   batch_call_new(update_view_helper, [[@1,x,w,ixx;@1,y,h,iyy]], a)
+   batch_call(update_view_helper, [[@1,x,w,ixx;@1,y,h,iyy]], a)
 end, function(a)
    if a.follow_act then
       a.x, a.y = a.follow_act.x, a.follow_act.y

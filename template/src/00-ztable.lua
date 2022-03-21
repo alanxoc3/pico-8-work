@@ -1,1 +1,1 @@
-../../lib/ztable-small.lua
+../../lib/ztable.lua
