@@ -1,4 +1,4 @@
-_g = ztable([[GLOBAL_KEYS]] GLOBAL_VALS)
+_g = G_TABLE_INITIALIZATION
 
 zactor[[,movable|
     x,64, y,64,

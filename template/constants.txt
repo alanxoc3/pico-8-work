@@ -1,0 +1,7 @@
+# Buttons
+B_UP: ⬆️
+B_DOWN: ⬇️
+B_LEFT: ⬅️
+B_RIGHT: ➡️
+B_X: ❎
+B_O: 🅾️

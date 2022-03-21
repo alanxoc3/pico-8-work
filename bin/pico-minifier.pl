@@ -10,10 +10,9 @@ binmode(STDIN, "encoding(UTF-8)");
 binmode(STDOUT, "encoding(UTF-8)");
 
 # Constants to worry about:
-# DEBUG_BEGIN -- marks the beginning of debug code. this code is left out of the generated .code.lua unless you pass in the --debug option.
-# DEBUG_END   -- marks the end of debug code.
-# GLOBAL_KEYS -- if this is found in the code, it is replaced with a ztable syntax of all the keys for the (...) -{...}- syntax
-# GLOBAL_VALS -- if this is found in the code, it is replaced with a code snippet calling ztable
+# DEBUG_BEGIN            -- marks the beginning of debug code. this code is left out of the generated .code.lua unless you pass in the --debug option.
+# DEBUG_END              -- marks the end of debug code.
+# G_TABLE_INITIALIZATION -- if this is found in the code, it is replaced with a suitable initial value for the _g table
 
 # Syntax to worry about:
 # ""    -- raw string, spaces are not deleted from a string with double quotes, and the minifier does not run on it. the minifier does run on strings with '...' or [[...]] though.
@@ -51,8 +50,13 @@ while ( $content =~ s/\|\s*(\w+)\s*\|(.*?)\$\$//ms ) {
     $global_vals .= ",".$2;
 }
 
-$global_keys = substr $global_keys, 1;
-$content =~ s/GLOBAL_KEYS/$global_keys/ge;
+if (length $global_keys and length $global_vals) {
+    $global_keys = substr $global_keys, 1;
+    $content =~ s/G_TABLE_INITIALIZATION/"ztable([[".$global_keys."]]".$global_vals.")"/ge;
+} else {
+    $content =~ s/G_TABLE_INITIALIZATION/{}/g;
+}
+
 $content =~ s/GLOBAL_VALS/$global_vals/ge;
 
 # trimming, minimizing, replacing things

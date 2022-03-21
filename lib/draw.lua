@@ -7,7 +7,7 @@ function zprint(str, x, y, align, fg, bg)
    if align == 0    then x -= #str*2
    elseif align > 0 then x -= #str*4+1 end
 
-   batch_call_new(print, [[
+   batch_call(print, [[
       @1,@2,!plus/@3/1,@5;
       @1,@2,@3,@4;
    ]], str, x, y, fg, bg)
@@ -18,11 +18,11 @@ function zclip(x1, y1, x2, y2)
 end
 
 function zcls(col)
-   batch_call_new(rectfill, [[0x8000,0x8000,0x7fff,0x7fff,@1]], col or 0)
+   batch_call(rectfill, [[0x8000,0x8000,0x7fff,0x7fff,@1]], col or 0)
 end
 
 function zrect(x1, y1, x2, y2)
-   batch_call_new(rect,
+   batch_call(rect,
    [[ !plus/@1/-2, !plus/@2/-2, !plus/@3/2, !plus/@4/2, 13;
       !plus/@1/-1, !plus/@2/-1, !plus/@3/1, !plus/@4/1, 1;
    ]], x1, y1, x2, y2)
