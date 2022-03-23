@@ -1,6 +1,6 @@
 -- overview of basic game loop:
--- * tick (start at 0)
 -- * create things
+-- * tick (start at 0)
 -- * update
 -- * destroy / delete
 -- * draw
@@ -8,13 +8,13 @@
 _g = G_TABLE_INITIALIZATION
 
 zobj[[,game_state,actor|
-    next,logo;
-    logo; update,%logo_update, draw,%logo_draw, duration,2.5, next,game;
-    game; update,%game_update, draw,%game_draw;
+    curr,logo;
+    logo; init,%logo_init, update,%logo_update, draw,%logo_draw, duration,2.5, next,game;
+    game; init,nop,        update,%game_update, draw,%game_draw;
 ]]
 
 |game_update| function()
-    loop_zobjs('actor', 'state')
+    -- loop_zobjs('actor', 'state')
 end $$
 
 |game_draw| function()
@@ -26,13 +26,13 @@ function _init()
 end
 
 function _update60()
-    loop_zobjs('timer', 'tick')
     register_zobjs()
-    g_tl:state()
+    loop_zobjs('timer', 'tick')
+    loop_zobjs('actor', 'state')
     loop_zobjs('actor', 'clean')
 end
 
 function _draw()
     cls()
-    g_tl:draw()
+    loop_zobjs('game_state', 'draw')
 end

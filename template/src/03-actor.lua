@@ -26,25 +26,18 @@ zobj[[,actor,timer|
 |actor_load| function(a, next)
     if next then
         a.next, a.duration = nil
-        for k, v in pairs(a[next]) do a[k] = v end
+        for k, v in pairs(a[next]) do  a[k] = v end
         a.curr = next
     else
         a:kill()
     end
 
-    a:delete_timer'state'
+    a:set_timer('state', a.duration, a.duration and function() a:load(a.next) end)
 end $$
 
 |actor_state| function(a)
-    if not a:get_timer'state' then
-        a:set_timer(
-            'state',
-            a.duration,
-            a.duration and function() a:load(a.next) end or function() end
-        )
-
-        a:init()
-    end
+    if not a:get_timer'state'  then a:load(a.curr) end
+    if a:get_timer'state' == 0 then a:init() end
 
     a:update()
 end $$

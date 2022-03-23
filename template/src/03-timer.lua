@@ -1,4 +1,4 @@
--- < 144 tokens
+-- < 152 tokens
 
 -- a timer object is able to keep track of multiple timers. a callback can be
 -- optionally called when the timer completes. each "tick" call will increment all
@@ -19,7 +19,7 @@ zobj[[,timer|
 
 |timer_set_timer| function(a, timer_name, limit, callback)
     -- hard limit of 30000 seconds to prevent overflow, a little over 8 hours
-    a.timers[timer_name] = { t=0, max=limit or 30000, callback=callback or function() end }
+    a.timers[timer_name] = { t=0, limit=limit or 30000, callback=callback or function() end }
 end $$
 
 |timer_get_timer| function(a, timer_name)
@@ -37,17 +37,17 @@ end $$
 end $$
 
 |timer_tick| function(a)
-    local done = {}
+    local finished_timers = {}
     for k, v in pairs(a.timers) do
         local before_t = v.t
         v.t = min(v.limit, v.t+0.016666666666667) -- 1/60 aka 1 frame
         if v.t > before_t and v.t == v.limit then
-            add(done, v)
+            add(finished_timers, v)
         end
     end
 
     -- need separate loop for the scenario if callback tries to add another timer
-    foreach(done, function(timer)
+    foreach(finished_timers, function(timer)
         timer.callback(a)
     end)
 end $$
