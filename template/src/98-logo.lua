@@ -1,12 +1,12 @@
 -- x=64, y=64, i=@2, u=nf, d=@1, tl_max_time=2.5; -- logo
 
 function zspr(sind, x, y, sw, sh, ...)
-   sw, sh = sw or 1, sh or 1
-   spr(sind, x-sw*4, y-sh*4, sw, sh, ...)
+    sw, sh = sw or 1, sh or 1
+    spr(sind, x-sw*4, y-sh*4, sw, sh, ...)
 end
 
 function flr_rnd(x)
-   return flr(rnd(x))
+    return flr(rnd(x))
 end
 
 function rnd_one(val)
@@ -41,13 +41,13 @@ end
 |logo_init| function() sfx'63' end $$
 
 |logo_draw| function(a)
-   -- stateful: load(state)
-   -- timed_state: state_duration, state_tick, state_next=nil (end)
-   local logo_opacity = 8+cos(a.state_tick/a.state_duration)*4-4
+    -- stateful: load(state)
+    -- timed_state: state_duration, state_tick, state_next=nil (end)
+    local logo_opacity = 8+cos(a.get_timer_percent'state')*4-4
 
-   fade(logo_opacity)
-   camera(logo_opacity > 1 and rnd_one())
-   zspr(108, a.x, a.y, 4, 2)
-   fade'0'
-   camera()
+    fade(logo_opacity)
+    camera(logo_opacity > 1 and rnd_one())
+    zspr(108, a.x, a.y, 4, 2)
+    fade'0'
+    camera()
 end $$

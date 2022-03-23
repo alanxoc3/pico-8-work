@@ -1,5 +1,5 @@
 -- 76 tokens
-g_parent = {}
+g_parent, g_act_arrs = {}, {}
 function zactor(meta_and_att_str)
     local meta, template = unpack(split(meta_and_att_str, '|'))
     local parents = ztable(meta)
@@ -16,6 +16,17 @@ function zactor(meta_and_att_str)
     end
 
     _g[id] = function(...)
-        return g_parent[id]({}, ...)
+        local a = g_parent[id]({}, ...)
+
+        g_act_arrs[id] = g_act_arrs[id] or {}
+        add(g_act_arrs[id], a)
+
+        a.delete = function()
+            for k, v in pairs(g_act_arrs) do
+                if a[k] then del(v, a) end
+            end
+        end
+
+        return a
     end
 end
