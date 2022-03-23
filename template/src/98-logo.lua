@@ -19,9 +19,12 @@ g_fade_table = ztable[[
 15; ,15 ,15 ,13 ,13 ,5  ,5  ,1  ,0;
 ]]
 
-function fade(i)
+-- takes a percent between 0 and 1
+-- 0 means no fade (regular)
+-- 1 means completely black
+function fade(threshold)
     for c=0,15 do
-        pal(c,g_fade_table[c][min(flr(i+1), 7)])
+        pal(c,g_fade_table[c][1+flr(7*min(1, max(0, threshold)))])
     end
 end
 
@@ -30,10 +33,10 @@ end
 |logo_draw| function(a)
     -- stateful: load(state)
     -- timed_state: state_duration, state_tick, state_next=nil (end)
-    local logo_opacity = 8+cos(a:get_timer_percent'state')*4-4
+    local logo_opacity = cos(a:get_timer_percent'state')+1
 
     fade(logo_opacity)
-    camera(logo_opacity > 1 and rnd_one())
+    camera(logo_opacity > .5 and rnd_one())
     zspr(108, 64, 64, 4, 2)
     fade'0'
     camera()

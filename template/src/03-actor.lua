@@ -9,12 +9,13 @@
 -- * init function when entering a state
 
 zobj[[,actor,timer|
-    alive,    yes,
-    init,     nop,
-    update,   nop,
+    destroyed, nop,
+    alive,     yes,
+    init,      nop,
+    update,    nop,
 
     duration, null,
-    curr,     null,
+    curr,     start,
     next,     null,
 
     kill,     %actor_kill,

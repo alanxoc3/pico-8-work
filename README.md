@@ -2,9 +2,8 @@
 For all the pico-eighters out there, this repo contains [@alanxoc3](https://twitter.com/alanxoc3)'s PICO-8 life.
 
 The directory structure is as follows:
-* `/template` The template to jumpstart future projects. Includes the most basic functions needed for a game.
+* `/template` The directory to copy for bootstrapping future games. Includes the basics for all amorg games.
 * `/bin` Shell scripts for preprocessing & minifying projects.
-* `/lib` A collection of useful functions to either copy or sym link to use.
 * `/.archive` A collection of pico-8 cartridges I made.
 
 To ensure the compilation scripts scripts run correctly, set the environment variable `PICO_WORK_DIR` to the root of this repo. You can easily run the compilation scripts if you add `PICO_WORK_DIR/bin` to your path too. So add these to your shell's rc file:
