@@ -1,18 +1,5 @@
 -- x=64, y=64, i=@2, u=nf, d=@1, tl_max_time=2.5; -- logo
 
-function zspr(sind, x, y, sw, sh, ...)
-    sw, sh = sw or 1, sh or 1
-    spr(sind, x-sw*4, y-sh*4, sw, sh, ...)
-end
-
-function flr_rnd(x)
-    return flr(rnd(x))
-end
-
-function rnd_one(val)
-    return (flr_rnd'3'-1)*(val or 1)
-end
-
 g_fade_table = ztable[[
 0;,0,0,0,0,0,0,0,0;
 1;,1,1,1,1,0,0,0,0;
