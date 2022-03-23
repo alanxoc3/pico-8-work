@@ -51,7 +51,7 @@ function scr_circ(x, y, r, col)
    circ(x*8, y*8, r*8, col)
 end
 
-create_actor([[view;4;act,confined;center_view,update_view|
+zobj([[view;4;act,confined;center_view,update_view|
    x:0;y:0;room_crop:2;
    tl_loop:yes;
    w:@1;h:@2;follow_dim:@3;follow_act:@4;

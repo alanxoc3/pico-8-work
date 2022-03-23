@@ -1,5 +1,5 @@
 -- params: initCallback, endCallback
-create_actor[[#,fader_out,act|
+zobj[[#,fader_out,act|
     =fade_time,i,e,u,@;
     :start,tl_max_time,~fade_time;
 ]]

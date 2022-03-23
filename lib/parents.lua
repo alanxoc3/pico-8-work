@@ -3,7 +3,7 @@
 ------------------------------------------
 
 -- to generate an actor.
-create_parent([[act;0;,;room_init,pause_init,pause_update,pause_end,kill,clean,delete|
+zobj([[act;0;,;room_init,pause_init,pause_update,pause_end,kill,clean,delete|
    alive:yes;
    stun_countdown:0;
    i:nf; u:nf;
@@ -39,20 +39,20 @@ end, function(a)
    end
 end, get)
 
-create_parent[[ma_able;0;act,;|name:"thing";]]
-create_parent[[confined;0;act,;room_end,|room_end:nf;]]
-create_parent[[loopable;0;act,;|tl_loop:yes;]]
-create_parent[[pos;0;act,;|x:0;y:0;]]
-create_parent[[move_pause;0;act,;update,move,vec_update,tick|;]]
-create_parent[[knock;0;col,;|;]]
-create_parent[[popper;0;col,;|;]]
-create_parent[[bad;0;knock,;|;]]
+zobj[[ma_able;0;act,;|name:"thing";]]
+zobj[[confined;0;act,;room_end,|room_end:nf;]]
+zobj[[loopable;0;act,;|tl_loop:yes;]]
+zobj[[pos;0;act,;|x:0;y:0;]]
+zobj[[move_pause;0;act,;update,move,vec_update,tick|;]]
+zobj[[knock;0;col,;|;]]
+zobj[[popper;0;col,;|;]]
+zobj[[bad;0;knock,;|;]]
 
-create_parent[[bounded;0;act,;|
+zobj[[bounded;0;act,;|
     check_bounds:nf;
 ]]
 
-create_parent([[x_bounded;0;bounded,;|
+zobj([[x_bounded;0;bounded,;|
     check_bounds:@1;
 ]], function(a)
    if a.x+a.dx < g_cur_room.x+.5 then
@@ -66,7 +66,7 @@ create_parent([[x_bounded;0;bounded,;|
    end
 end)
 
-create_parent([[y_bounded;0;bounded,;|
+zobj([[y_bounded;0;bounded,;|
    check_bounds:@1;
 ]], function(a)
    if a.y+a.dy < g_cur_room.y+.5 then
@@ -80,14 +80,14 @@ create_parent([[y_bounded;0;bounded,;|
    end
 end)
 
-create_parent([[timed;0;act,;|
+zobj([[timed;0;act,;|
    t:0;
    tick:@1;
 ]], function(a)
    a.t += 1
 end)
 
-create_parent([[vec;0;pos,;|
+zobj([[vec;0;pos,;|
    dx:0;
    dy:0;
    vec_update:@1;
@@ -96,7 +96,7 @@ create_parent([[vec;0;pos,;|
    a.y += a.dy
 end)
 
-create_parent([[mov;0;vec,;|
+zobj([[mov;0;vec,;|
    ix:1;
    iy:1;
    ax:0;
@@ -112,9 +112,9 @@ end, function(a)
    a.ax, a.ay, a.dx, a.dy = 0, 0, 0, 0
 end)
 
-create_parent[[dim;0;pos,;|rx:.375;ry:.375;]]
+zobj[[dim;0;pos,;|rx:.375;ry:.375;]]
 -- DEBUG_BEGIN
-create_parent([[dim;0;pos,;debug_rect,|
+zobj([[dim;0;pos,;debug_rect,|
    rx:.375;
    ry:.375;
    debug_rect:@1;
@@ -124,7 +124,7 @@ end)
 -- DEBUG_END
 
 -- used with player items/weapons.
-create_parent([[rel;0;act,;rel_update,|
+zobj([[rel;0;act,;rel_update,|
    rel_actor:null;
    rel_x:0;
    rel_y:0;
@@ -150,7 +150,7 @@ create_parent([[rel;0;act,;rel_update,|
    end
 end)
 
-create_parent([[drawable_obj;0;pos,;reset_off,|
+zobj([[drawable_obj;0;pos,;reset_off,|
    ixx:0;
    iyy:0;
    xx:0;
@@ -161,21 +161,21 @@ create_parent([[drawable_obj;0;pos,;reset_off,|
    a.xx, a.yy = 0, 0
 end)
 
-create_parent[[drawable;0;drawable_obj,;d,|d:nf;]]
-create_parent[[drawable_1;0;drawable_obj,;d,|d:nf;]]
-create_parent[[drawable_2;0;drawable_obj,;d,|d:nf;]]
+zobj[[drawable;0;drawable_obj,;d,|d:nf;]]
+zobj[[drawable_1;0;drawable_obj,;d,|d:nf;]]
+zobj[[drawable_2;0;drawable_obj,;d,|d:nf;]]
 
-create_parent[[pre_drawable;0;drawable_obj,;d,|d:nf;]]
-create_parent[[pre_drawable_1;0;drawable_obj,;d,|d:nf;]]
-create_parent[[pre_drawable_2;0;drawable_obj,;d,|d:nf;]]
+zobj[[pre_drawable;0;drawable_obj,;d,|d:nf;]]
+zobj[[pre_drawable_1;0;drawable_obj,;d,|d:nf;]]
+zobj[[pre_drawable_2;0;drawable_obj,;d,|d:nf;]]
 
-create_parent[[post_drawable;0;drawable_obj,;d,|d:nf;]]
-create_parent[[post_drawable_1;0;drawable_obj,;d,|d:nf;]]
-create_parent[[post_drawable_2;0;drawable_obj,;d,|d:nf;]]
+zobj[[post_drawable;0;drawable_obj,;d,|d:nf;]]
+zobj[[post_drawable_1;0;drawable_obj,;d,|d:nf;]]
+zobj[[post_drawable_2;0;drawable_obj,;d,|d:nf;]]
 
-create_parent[[above_map_post_camera_drawable;0;drawable_obj,;d,|d:nf;]]
+zobj[[above_map_post_camera_drawable;0;drawable_obj,;d,|d:nf;]]
 
-create_parent([[spr_obj;0;vec,drawable_obj,;|
+zobj([[spr_obj;0;vec,drawable_obj,;|
    sind:0;
    outline_color:BG_UI;
    sw:1;
@@ -188,18 +188,18 @@ create_parent([[spr_obj;0;vec,drawable_obj,;|
 ]], scr_spr, scr_out, scr_spr_and_out
 )
 
-create_parent([[spr;0;spr_obj,;|
+zobj([[spr;0;spr_obj,;|
    d:@1;
 ]], scr_spr_and_out)
 
-create_parent([[knockable;0;mov,;|
+zobj([[knockable;0;mov,;|
    knockback:@1;
 ]], function(a, speed, xdir, ydir)
    a.dx = xdir * speed
    a.dy = ydir * speed
 end)
 
-create_parent([[stunnable;0;mov,drawable_obj;|
+zobj([[stunnable;0;mov,drawable_obj;|
    stun_update:@1;
 ]], function(a)
    if a.stun_countdown > 0 then
@@ -212,7 +212,7 @@ create_parent([[stunnable;0;mov,drawable_obj;|
 end)
 
 -- HURTABLE: something that has health and can be hurt or healed.
-create_parent([[hurtable;0;act,;|
+zobj([[hurtable;0;act,;|
    health:1;
    max_health:1;
    health_visible:yes;
@@ -233,7 +233,7 @@ end, function(a, health)
 end)
 
 -- TRIG: a trigger that calls a function if called
-create_parent([[trig;0;vec,dim;|
+zobj([[trig;0;vec,dim;|
    contains:nf;
    intersects:nf;
    not_contains_or_intersects:nf;
@@ -250,9 +250,9 @@ create_parent([[trig;0;vec,dim;|
 end)
 
 -- ANCHORED: the object will not move
-create_parent[[anchored;1;vec,dim;|touchable:@1;hit:nf;]]
+zobj[[anchored;1;vec,dim;|touchable:@1;hit:nf;]]
 
-create_parent([[col;0;vec,dim;|
+zobj([[col;0;vec,dim;|
    touchable:yes;
    hit:nf;
    move_check:@1;
@@ -304,7 +304,7 @@ create_parent([[col;0;vec,dim;|
    end
 end)
 
-create_parent([[tcol;0;vec,dim;|
+zobj([[tcol;0;vec,dim;|
    tile_solid:yes;
    tile_hit:nf;
    coll_tile:@1;
