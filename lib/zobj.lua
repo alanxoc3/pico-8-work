@@ -22,11 +22,15 @@ function zobj(meta_and_att_str)
                 add(g_zobj_register_queue, {parent, a})
             end
         end)
+
         return ztable_set(a, template, ...)
     end
 
     _g[id] = function(...)
-        return g_zobj_parents[id]({}, ...)
+        local a = g_zobj_parents[id]({}, ...)
+        a[id] = true
+        add(g_zobj_register_queue, {id, a})
+        return a
     end
 end
 

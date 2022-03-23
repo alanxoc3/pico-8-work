@@ -1,4 +1,4 @@
--- 197 tokens
+-- 200 tokens
 function ztable_eval(val, table, parameters)
     -- 37: %, 126: ~
     if     ord(val) == 37               then return _g[sub(val, 2)]
@@ -40,3 +40,7 @@ end
 function ztable(...)
     return ztable_set({}, ...)
 end
+
+-- set the initial state of _g. _g is needed for ztable "%" references to work.
+-- see the perl preprocessor script for more info on G_TABLE_INITIALIZATION.
+_g = G_TABLE_INITIALIZATION
