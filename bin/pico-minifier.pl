@@ -16,7 +16,7 @@ binmode(STDOUT, "encoding(UTF-8)");
 
 # Syntax to worry about:
 # ""    -- raw string, spaces are not deleted from a string with double quotes, and the minifier does not run on it. the minifier does run on strings with '...' or [[...]] though.
-# [[]]  -- ztable string, ztable strings are all put together into one variable, and replaced with an index. this is done so that all the strings could be serialized in pico-8 cart data if you want.
+# [[]]  -- zobj string, zobj strings are all put together into one variable, and replaced with an index. this is done so that all the strings could be serialized in pico-8 cart data if you want.
 # || $$ -- adds something to the _g table. name of item is specified between | and |. value is specified between | and $$.
 
 my $minify;
@@ -52,7 +52,7 @@ while ( $content =~ s/\|\s*(\w+)\s*\|(.*?)\$\$//ms ) {
 
 if (length $global_keys and length $global_vals) {
     $global_keys = substr $global_keys, 1;
-    $content =~ s/G_TABLE_INITIALIZATION/"ztable([[".$global_keys."]]".$global_vals.")"/ge;
+    $content =~ s/G_TABLE_INITIALIZATION/"zobj([[".$global_keys."]]".$global_vals.")"/ge;
 } else {
     $content =~ s/G_TABLE_INITIALIZATION/{}/g;
 }
@@ -76,10 +76,10 @@ $content = pop_text_logics($content, \@texts);
 # remove all newlines from multiline strings
 $content =~ s/\[\[.*?\]\]/$& =~ s|\n||rg/gimse;
 
-# This can be used to join all ztable strings on one line. Legacy functionality.
+# This can be used to join all zobj strings on one line. Legacy functionality.
 # my $strings = "";
 # ($strings, $content) = multiline_string_replace($content);
 # $strings =~ s/"//g;
-# $content =~ s/ZTABLE_STRINGS/$strings/gme;
+# $content =~ s/ZOBJ_STRINGS/$strings/gme;
 
 print $content;

@@ -1,2 +1,2 @@
 -- file for zobjs relating to drawing.
-zobj[[,drawable|draw,nop]]
+zclass[[drawable|draw,nop]]

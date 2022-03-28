@@ -1,75 +1,45 @@
--- 199 tokens
+-- 200 tokens
+function zobj_eval(val, table, parameters)
+    -- 37: %, 126: ~
+    if     ord(val) == 37               then return _g[sub(val, 2)]
+    elseif ord(val) == 126              then return table[sub(val, 2)]
+    elseif val == '@'                   then return deli(parameters, 1)
+    elseif val == 'yes'  or val == 'no' then return val=='yes'
+    elseif val == 'null' or val == ''   then return -- nil is inferred
+    elseif val == 'nop'                 then return function() end
+    end                                      return val
+end
 
--- zobj specifies a template for how objects of a type are constructed. a
--- single string is passed in as a parameter. a pipe separates the two parts of
--- that string. the first part contains a list of strings, the first item in that
--- list is the name of this "class", while the remaining items are classes to
--- inherit from (parents). the second part of the string is a ztable definition
--- specifying values.
-
-g_zobj_parents, g_zobj_arrs, g_zobj_register_queue = {}, {}, {}
-function zobj(meta_and_att_str)
-    local meta, template = unpack(split(meta_and_att_str, '|'))
-    local parents = ztable(meta)
-    local id = deli(parents, 1)
-
-    g_zobj_parents[id] = function(a, ...)
-        foreach(parents, function(parent)
-            if not a[parent] then
-                g_zobj_parents[parent](a)
-
-                a[parent] = true
-                add(g_zobj_register_queue, {parent, a})
+-- has an extra split call no matter key or val, but token & character count goes down from ztable-ord
+function zobj_set(table, str, ...)
+    local params, statements, dest = {...}, split(str, ";"), table
+    foreach(statements, function(statement)
+        local tokens = split(statement)
+        if #tokens > 1 then
+            if tokens[1] == '' then -- array (started with ',')
+                foreach(tokens, function(val)
+                    add(dest, zobj_eval(val, table, params))
+                end)
+            else -- map
+                for i=1,#tokens,2 do
+                    dest[tokens[i]] = zobj_eval(tokens[i+1], table, params)
+                end
             end
-        end)
-
-        return ztable_set(a, template, ...)
-    end
-
-    _g[id] = function(...)
-        local a = g_zobj_parents[id]({}, ...)
-        a[id] = true
-        add(g_zobj_register_queue, {id, a})
-        return a
-    end
+            dest = table
+        else
+            if type(dest[statement]) ~= "table" then
+                dest[statement] = {}
+            end
+            dest = dest[statement]
+        end
+    end)
+    return table
 end
 
--- this function removes objects from the registration queue and adds the
--- objects waiting to be registered into global list of objects as long as that
--- object has a true value for the id of the global list it wants to be added to.
--- this should preferably be called near the beginning of each iteration of the
--- game loop.
-
--- you can make an object inherit the information of parents but not be added
--- to that parent's array group by setting the parrent to nil. ex, this
--- actorwithoutparent zobj will be in the actorwithoutparent list, but not the
--- actor list: zobj[[,actorwithoutparent,actor|actor, null]]
-
-function register_zobjs()
-    while #g_zobj_register_queue > 0 do
-        local id, a = unpack(deli(g_zobj_register_queue))
-        g_zobj_arrs[id] = g_zobj_arrs[id] or {}
-        if a[id] then add(g_zobj_arrs[id], a) end
-    end
+function zobj(...)
+    return zobj_set({}, ...)
 end
 
--- removes a zobj from all the array groups it was in when registered.
-function deregister_zobj(a)
-    for k, v in pairs(g_zobj_arrs) do
-        if a[k] then del(v, a) end
-    end
-end
-
--- call a function if the table and the table value are not nil.
-function call_not_nil(table, key, ...)
-    if table and table[key] then
-        return table[key](...)
-    end
-end
-
--- loop through all the actors of a certain type and call a method on each one if that method exists.
-function loop_zobjs(id, method_name, ...)
-    for a in all(g_zobj_arrs[id]) do
-        call_not_nil(a, method_name, a, ...)
-    end
-end
+-- set the initial state of _g. _g is needed for ztable "%" references to work.
+-- see the perl preprocessor script for more info on G_TABLE_INITIALIZATION.
+_g = G_TABLE_INITIALIZATION
