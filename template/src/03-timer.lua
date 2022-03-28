@@ -8,8 +8,8 @@
 -- increment and remain stagnant at the maximum. the maximum might be a good idea
 -- if, for example, you want to record the entire gameplay time of a long game.
 
-zobj[[,timer|
-    timers,             #,
+zclass[[timer|
+    timers;             ,;
     set_timer,          %timer_set_timer,
     get_timer,          %timer_get_timer,
     get_timer_percent,  %timer_get_timer_percent,
@@ -17,14 +17,14 @@ zobj[[,timer|
     tick,               %timer_tick,
 ]]
 
-|timer_set_timer| function(a, timer_name, limit, callback)
+|timer_set_timer| function(a, timer_name, duration, callback)
     -- hard limit of 30000 seconds to prevent overflow, a little over 8 hours
-    a.timers[timer_name] = { t=0, limit=limit or 30000, callback=callback or function() end }
+    a.timers[timer_name] = { done=false, t0=time(), t1=time()+(duration or 30000), callback=callback or function() end }
 end $$
 
 |timer_get_timer| function(a, timer_name)
     local timer = a.timers[timer_name]
-    return timer and timer.t
+    return timer and (time()-timer.t0)
 end $$
 
 |timer_delete_timer| function(a, timer_name)
@@ -33,15 +33,14 @@ end $$
 
 |timer_get_timer_percent| function(a, timer_name)
     local timer = a.timers[timer_name]
-    return timer and timer.t/timer.limit
+    return timer and (time()-timer.t0)/timer.t1
 end $$
 
 |timer_tick| function(a)
     local finished_timers = {}
     for k, v in pairs(a.timers) do
-        local before_t = v.t
-        v.t = min(v.limit, v.t+0.016666666666667) -- 1/60 aka 1 frame
-        if v.t > before_t and v.t == v.limit then
+        if time() >= v.t1 and not v.done then
+            v.done = true
             add(finished_timers, v)
         end
     end
