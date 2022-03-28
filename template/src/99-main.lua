@@ -1,7 +1,7 @@
 -- TEMPLATE TOKEN COUNT: 910
 
 zclass[[game_state,actor|
-    actor, null; -- remove game_state from the actor list
+    actor,ignore; -- remove game_state from the actor list
     curr,logo;
     logo; init,%logo_init, update,%logo_update, draw,%logo_draw, duration,2.5, next,game;
     game; init,%game_init, update,%game_update, draw,%game_draw;

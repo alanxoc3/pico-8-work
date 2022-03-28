@@ -19,8 +19,7 @@ function zclass(meta_and_att_str)
         end)
 
         done[class] = true -- Mark to avoid initializing this class twice.
-        inst[class] = true -- Mark to add to ECS; may be overridden by template.
-        add(g_zclass_new_entities, {class, inst})
+        add(g_zclass_new_entities, {class, inst}) -- Mark for addition to ECS (may be overridden by templates).
 
         return zobj_set(inst, template, ...)
     end
@@ -31,16 +30,16 @@ end
 -- This function drains newly-created entities into the ECS. It should preferably
 -- be called near the beginning of each iteration of the game loop.
 
--- You can make a class inherit the information of parents but not be added to that
--- parent's class group by setting the parent to nil. Ex, instances of this
+-- You can make a class inherit the information of parents but NOT be added to that
+-- parent's class group by setting the parent key to 'ignore'. Ex, instances of this
 -- actorwithoutparent zclass will be in the actorwithoutparent group, but not the
--- actor group: zclass[[actorwithoutparent,actor|actor,null]]
+-- actor group: zclass[[actorwithoutparent,actor|actor,ignore]]
 
 function register_zobjs()
     while #g_zclass_new_entities > 0 do
         local class, inst = unpack(deli(g_zclass_new_entities))
         g_zclass_entities[class] = g_zclass_entities[class] or {}
-        if inst[class] then add(g_zclass_entities[class], inst) end
+        if inst[class] ~= 'ignore' then add(g_zclass_entities[class], inst) end
     end
 end
 
