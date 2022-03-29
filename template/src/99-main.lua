@@ -1,4 +1,4 @@
--- TEMPLATE TOKEN COUNT: 910
+-- TEMPLATE TOKEN COUNT: 895
 
 zclass[[game_state,actor|
     actor,ignore; -- remove game_state from the actor group

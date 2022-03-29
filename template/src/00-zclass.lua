@@ -1,4 +1,4 @@
--- 199 tokens
+-- 190 tokens
 
 -- zclass specifies a template for how objects of a type are constructed. A
 -- single string is passed in as a parameter. A pipe separates the two parts of

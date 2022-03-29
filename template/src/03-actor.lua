@@ -1,4 +1,4 @@
--- < 118 tokens
+-- 102 tokens
 
 -- an actor is the basic thing in the game. think of an actor in a play. every
 -- actor has a few basic roles:

@@ -1,4 +1,4 @@
--- 200 tokens
+-- 193 tokens
 function zobj_eval(val, table, parameters)
     -- 37: %, 126: ~
     if     ord(val) == 37               then return _g[sub(val, 2)]

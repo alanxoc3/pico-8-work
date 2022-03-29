@@ -1,4 +1,4 @@
--- < 152 tokens
+-- 123 tokens
 
 -- A timer object is able to keep track of multiple timers. A callback can be
 -- optionally called when each timer completes. Due to pico-8 constraints, there
@@ -14,7 +14,7 @@ zclass[[timer|
 ]]
 
 |timer_set_timer| function(a, timer_name, duration, callback)
-    -- Note: Should use 0 < duration < 32767 (measured in sec; about 9.1 hrs).
+    -- Note: Should use 0 < duration <= 32767 (measured in sec; about 9.1 hrs).
     a.timers[timer_name] = { elapsed=0, duration=duration or 32767, callback=callback or function() end }
 end $$
 
