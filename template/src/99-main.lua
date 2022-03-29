@@ -1,7 +1,7 @@
 -- TEMPLATE TOKEN COUNT: 910
 
-zobj[[,game_state,actor|
-    actor, null; -- remove game_state from the actor list
+zclass[[game_state,actor|
+    actor,ignore; -- remove game_state from the actor list
     curr,logo;
     logo; init,%logo_init, update,%logo_update, draw,%logo_draw, duration,2.5, next,game;
     game; init,%game_init, update,%game_update, draw,%game_draw;
@@ -24,7 +24,7 @@ function _draw()
 end
 
 -- BASIC EXAMPLE FOR SIMPLE GAME BELOW:
-zobj[[,test_obj,actor,drawable|x,@,y,@,color,7,init,%test_init,update,%test_update,draw,%test_draw;]]
+zclass[[test_obj,actor,drawable|x,@,y,@,color,7,init,%test_init,update,%test_update,draw,%test_draw;]]
 |test_init|   function(a) a.color += 1                   end $$
 |test_update| function(a) a.x += xbtn() a.y += ybtn()    end $$
 |test_draw|   function(a) circfill(a.x, a.y, 2, a.color) end $$

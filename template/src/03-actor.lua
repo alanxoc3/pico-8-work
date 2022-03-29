@@ -8,7 +8,7 @@
 -- * able to have a time limit on states if desired
 -- * init function when entering a state
 
-zobj[[,actor,timer|
+zclass[[actor,timer|
     destroyed, nop,
     alive,     yes,
     init,      nop,
