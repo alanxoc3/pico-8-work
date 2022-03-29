@@ -9,41 +9,47 @@
 -- * init function when entering a state
 
 zclass[[actor,timer|
-    destroyed, nop,
-    alive,     yes,
-    init,      nop,
-    update,    nop,
+    load,     %actor_load,
+    state,    %actor_state,
+    kill,     %actor_kill,
+    clean,    %actor_clean,
 
+    alive,    yes,
     duration, null,
     curr,     start,
     next,     null,
 
-    kill,     %actor_kill,
-    clean,    %actor_clean,
-    load,     %actor_load,
-    state,    %actor_state;
+    init,      nop,
+    update,    nop,
+    destroyed, nop;
 ]]
 
-|actor_load| function(a, next)
-    if next then
-        a.next, a.duration = nil
-        for k, v in pairs(a[next]) do  a[k] = v end
-        a.curr = next
+-- Load the given state into the actor, by applying the properties of the sub-object
+-- (at key=stateName) to the actor object. (If the given stateName is falsey, kill
+-- the actor.) Then set up the next state change to happen after the actor's duration,
+-- using stateName=actor.next.
+|actor_load| function(a, stateName)
+    if stateName then
+        a.next, a.duration = nil -- default values, unless overridden by next line
+        for k, v in pairs(a[stateName]) do a[k] = v end
+        a.curr = stateName
+        a:set_timer('state', a.duration, a.duration and function() a:load(a.next) end)
     else
         a:kill()
     end
-
-    a:set_timer('state', a.duration, a.duration and function() a:load(a.next) end)
 end $$
 
+-- This is expected to be called on each frame!
 |actor_state| function(a)
-    if not a:get_timer'state'  then a:load(a.curr) end
-    if a:get_timer'state' == 0 then a:init() end
-
-    a:update()
+    if not a:get_elapsed'state'  then a:load(a.curr) end -- actor was created in this frame
+    if a:get_elapsed'state' == 0 then a:init() end -- state changed in this frame
+    a:update() -- per-frame update
 end $$
 
+-- Stage this actor to be removed at the end of the frame (see actor_clean).
 |actor_kill| function(a) a.alive = nil end $$
+
+-- This is expected to be called on each frame! (at the end of the frame)
 |actor_clean| function(a)
     if not a.alive then
         a:destroyed()
