@@ -33,7 +33,7 @@ end
 |logo_draw| function(a)
     -- stateful: load(state)
     -- timed_state: state_duration, state_tick, state_next=nil (end)
-    local logo_opacity = cos(a:get_timer_percent'state')+1
+    local logo_opacity = cos(a:get_elapsed_percent'state')+1
 
     fade(logo_opacity)
     camera(logo_opacity > .5 and rnd_one())

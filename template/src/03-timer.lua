@@ -1,47 +1,45 @@
 -- < 152 tokens
 
--- a timer object is able to keep track of multiple timers. a callback can be
--- optionally called when the timer completes. each "tick" call will increment all
--- timers by 1/60. that means at an FPS of 60, this will be roughly 1 after a
--- second, and 60 after a minute. due to pico-8 constraints, there is a default
--- maximum of a little over 8 hours. at that point, the timer will no longer
--- increment and remain stagnant at the maximum. the maximum might be a good idea
--- if, for example, you want to record the entire gameplay time of a long game.
+-- A timer object is able to keep track of multiple timers. a callback can be
+-- optionally called when each timer completes. Due to pico-8 constraints, there
+-- is a default maximum of a little over 9 hours. At that point, the global time()
+-- will overflow to a negative number, and timers will cease to work as expected.
 
 zclass[[timer|
     timers;             ,;
     set_timer,          %timer_set_timer,
-    get_timer,          %timer_get_timer,
-    get_timer_percent,  %timer_get_timer_percent,
     delete_timer,       %timer_delete_timer,
+    get_elapsed,        %timer_get_elapsed,
+    get_elapsed_percent,%timer_get_elapsed_percent,
     tick,               %timer_tick,
 ]]
 
 |timer_set_timer| function(a, timer_name, duration, callback)
-    -- hard limit of 30000 seconds to prevent overflow, a little over 8 hours
-    a.timers[timer_name] = { done=false, t0=time(), t1=time()+(duration or 30000), callback=callback or function() end }
-end $$
-
-|timer_get_timer| function(a, timer_name)
-    local timer = a.timers[timer_name]
-    return timer and (time()-timer.t0)
+    -- Note: Should use 0 < duration < 32767 (measured in sec; about 9.1 hrs).
+    -- Since we rely on the global time(), expect the game to come to a screeching conclusion after 9.1 hrs.
+    a.timers[timer_name] = { done=false, start=time(), duration=duration or 32767, callback=callback or function() end }
 end $$
 
 |timer_delete_timer| function(a, timer_name)
     a.timers[timer_name] = nil
 end $$
 
-|timer_get_timer_percent| function(a, timer_name)
+|timer_get_elapsed| function(a, timer_name)
     local timer = a.timers[timer_name]
-    return timer and (time()-timer.t0)/timer.t1
+    return timer and (time()-timer.start)
+end $$
+
+|timer_get_elapsed_percent| function(a, timer_name)
+    local timer = a.timers[timer_name]
+    return timer and (time()-timer.start)/timer.duration
 end $$
 
 |timer_tick| function(a)
     local finished_timers = {}
-    for k, v in pairs(a.timers) do
-        if time() >= v.t1 and not v.done then
-            v.done = true
-            add(finished_timers, v)
+    for name, timer in pairs(a.timers) do
+        if not timer.done and time()-timer.duration >= timer.start then
+            timer.done = true
+            add(finished_timers, timer)
         end
     end
 
