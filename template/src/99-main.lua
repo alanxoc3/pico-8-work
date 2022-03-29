@@ -1,7 +1,7 @@
 -- TEMPLATE TOKEN COUNT: 910
 
 zclass[[game_state,actor|
-    actor,ignore; -- remove game_state from the actor list
+    actor,ignore; -- remove game_state from the actor group
     curr,logo;
     logo; init,%logo_init, update,%logo_update, draw,%logo_draw, duration,2.5, next,game;
     game; init,%game_init, update,%game_update, draw,%game_draw;
@@ -15,7 +15,7 @@ function _update60()
     register_zobjs()                  -- register all zobs from previous game loop iteration
     loop_zobjs('timer',      'tick')  -- update the timers
     loop_zobjs('game_state', 'state') -- game state controls the different overall states in the game
-    loop_zobjs('actor',      'clean') -- delete actors and call their "destroy" function at the end of the loop
+    loop_zobjs('actor',      'clean') -- delete any actors that were killed, and call their "destroy" callback
 end
 
 function _draw()
