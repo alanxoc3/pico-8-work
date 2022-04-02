@@ -37,14 +37,17 @@ zclass[[mov,acc|
 end $$
 
 -- basically, copies all the speed/movement properties of something
-zclass[[collision_circ,acc,actor
+zclass[[collision_circ,vec,actor
 -- DEBUG_BEGIN
 ,drawable
 -- DEBUG_END
 |
     anchoring,@, offset_x,@, offset_y,@, radius,@,
     inertia_x,1, inertia_y,1,
-    follow_anchoring,%collision_follow_anchoring
+    follow_anchoring,%collision_follow_anchoring,
+    check_collision,%check_collision,
+    init,%collision_follow_anchoring,
+    hit,nop
 
     -- DEBUG_BEGIN
     ,draw,%collision_draw_debug
@@ -52,28 +55,39 @@ zclass[[collision_circ,acc,actor
 ]]
 |collision_follow_anchoring| function(a)
     local b = a.anchoring
-
-    local ang, spd = b.ang + b.d_ang, b.speed
     local off_magnitude = approx_dist(a.offset_x, a.offset_y)
-    local off_ang_old = atan2(a.offset_x, a.offset_y) + b.ang
-    local off_ang_new = off_ang_old + b.d_ang
-
-    a.ax = spd*cos(ang)
-    a.ay = spd*sin(ang)
+    local off_ang_new = atan2(a.offset_x, a.offset_y) + b.ang + b.d_ang
     a.alive, a.dx, a.dy, a.x, a.y = b.alive, b.dx, b.dy, b.x+off_magnitude*cos(off_ang_new), b.y+off_magnitude*sin(off_ang_new)
+end $$
 
-    -- this accounts for the momentum from turning.
-    -- if check is to save cpu cycles for the common case of no offset.
-    if offset_x ~= 0 or offset_y ~= 0 then
-        a.ax += spd*cos(ang) + (cos(off_ang_new) - cos(off_ang_old))*off_magnitude
-        a.ay += spd*sin(ang) + (sin(off_ang_new) - sin(off_ang_old))*off_magnitude
-    end
+|check_collision| function(a, others)
+    foreach(others, function(other)
+        if a == other then return end
+        local x, y = other.x-a.x, other.y-a.y
+        local minimum_dist = a.radius + other.radius
+        local dist = approx_dist(x, y) - minimum_dist
+        
+        if dist < 0 then
+            local ang = atan2(x, y)
+            local dx, dy = cos(ang)*dist, sin(ang)*dist
+            a.anchoring:hit(other.anchoring, dx, dy)
+            other.anchoring:hit(a.anchoring, -dx, -dy)
+        end
+    end)
 end $$
 
 -- DEBUG_BEGIN
 |collision_draw_debug| function(a)
-    line(zoomx(a.x), zoomy(a.y), zoomx(a.x+a.ax*5), zoomy(a.y+a.ay*5), 3)
-    -- line(zoomx(a.x), zoomy(a.y), zoomx(a.x+a.dx*3), zoomy(a.y+a.dy*3), 2)
-    circ(zoomx(a.x), zoomy(a.y), a.radius*g_view.zoom_factor, 8)
+    if g_debug then
+        circ(zoomx(a.x), zoomy(a.y), a.radius*g_view.zoom_factor, 8)
+    end
 end $$
 -- DEBUG_BEGIN
+
+zclass[[bad_collision_circ,collision_circ|
+    anchoring,@, offset_x,@, offset_y,@, radius,@
+]]
+
+zclass[[good_collision_circ,collision_circ|
+    anchoring,@, offset_x,@, offset_y,@, radius,@
+]]

@@ -12,6 +12,10 @@ function _init()
 end
 
 function _update60()
+    -- DEBUG_BEGIN
+    if btnp(4) and btn(5) then g_debug = not g_debug end
+    -- DEBUG_END
+
     register_zobjs()                  -- register all zobs from previous game loop iteration
     loop_zobjs('timer',      'tick')  -- update the timers
     loop_zobjs('game_state', 'state') -- game state controls the different overall states in the game
@@ -21,11 +25,15 @@ end
 function _draw()
     cls()
     loop_zobjs('game_state', 'draw')
+    -- DEBUG_BEGIN
+    if g_debug then rect(0, 0, 127, 127, 8) end
+    -- DEBUG_END
 end
 
 |game_init| function()
     -- [0,0] is the center of the level
-    local g_pl = _g.pl(0, 0)
+    g_pl = _g.pl(0, 0)
+    _g.cateroid(10, 0)
     g_view = _g.view(g_pl)
 end $$
 
@@ -33,6 +41,7 @@ end $$
     loop_zobjs('actor', 'state')
     loop_zobjs('view', 'match_following')
 
+    loop_zobjs('bad_collision_circ', 'check_collision', g_zclass_entities['good_collision_circ'])
     loop_zobjs('collision_circ', 'follow_anchoring')
     loop_zobjs('mov', 'mov_update')
     loop_zobjs('acc', 'acc_update')
@@ -40,9 +49,6 @@ end $$
 end $$
 
 |game_draw| function()
-    -- DEBUG_BEGIN
-    rect(0, 0, 127, 127, 8)
-    -- DEBUG_END
     loop_zobjs('drawable', 'draw')
 end $$
 
@@ -52,11 +58,12 @@ zclass[[pl,actor,model|
     x,@, y,@,
     init,%pl_init,
     update,%pl_update,
+    hit,%pl_hit,
+    collision_func,%good_collision_circ
 ]]
 
 |pl_init| function(a)
-    a.model = zobj[[lines;1;,9,0.5,0,-0.5,-0.3,-0.3,0,-0.5,0.3,0.5,0;collisions;1;,0,0,0.1;collisions;2;,-0.3,0,0.2;]]
-    create_collision_circs_from_model(a, a.model)
+    a:model_init[[lines;1;,9,0.5,0,-0.5,-0.3,-0.3,0,-0.5,0.3,0.5,0;collisions;1;,0,0,0.1;collisions;2;,-0.3,0,0.2;]]
 end $$
 
 |pl_update| function(a)
@@ -66,10 +73,22 @@ end $$
     -- printh("x: "..a.x.." y: "..a.y)
 end $$
 
-function create_collision_circs_from_model(a, model)
-    foreach(model.collisions or {}, function(collision)
-        _g.collision_circ(a, collision[1], collision[2], collision[3])
-    end)
-end
+|pl_hit| function(a, b, dx, dy)
+    a.dx += dx
+    a.dy += dy
+end $$
 
+zclass[[cateroid,model|
+    x,@, y,@,
+    init,%cateroid_init,
+    update,%cateroid_update
+]]
+
+|cateroid_init| function(a)
+    a:model_init[[lines;1;,7,-1.2,-0.4,-1.3,0,-1.2,0.5,-0.8,0.9,-0.4,1,0,1;lines;2;,7,1.2,-0.4,1.3,0,1.2,0.5,0.8,0.9,0.4,1,0,1;lines;3;,7,0,0.4,0.2,0.3,0.1,0.2,-0.1,0.2,-0.2,0.3,0,0.4;lines;4;,7,0,0.4,0,0.5,-0.1,0.6,-0.2,0.6;lines;5;,7,0,0.4,0,0.5,0.1,0.6,0.2,0.6;lines;6;,7,0.6,0.2,0.5,0.1,0.5,-0.1,0.6,-0.2,0.7,-0.1,0.7,0.1,0.6,0.2;lines;7;,7,-0.6,0.2,-0.5,0.1,-0.5,-0.1,-0.6,-0.2,-0.7,-0.1,-0.7,0.1,-0.6,0.2;lines;8;,7,-1,-0.6,-0.8,-0.8,-0.5,-1,-0.1,-1.1,0,-1.1;lines;9;,7,1,-0.6,0.8,-0.8,0.5,-1,0.1,-1.1,0,-1.1;lines;10;,7,-1.2,-0.5,-1.1,-1.1,-0.9,-1.5,-0.5,-1;lines;11;,7,1.2,-0.5,1.1,-1.1,0.9,-1.5,0.5,-1;lines;12;,7,0.9,-1.5,0.8,-1.2,0.8,-0.8;lines;13;,7,-0.9,-1.5,-0.8,-1.2,-0.8,-0.8;lines;14;,7,0.9,0.3,1.2,0.3;lines;15;,7,-0.9,0.3,-1.2,0.3;lines;16;,7,0.9,0.2,1.1,0;lines;17;,7,-0.9,0.2,-1.1,0;lines;18;,7,0.9,0.4,1.1,0.6;lines;19;,7,-0.9,0.4,-1.1,0.6;collisions;1;,0.3,0,1;collisions;2;,-0.3,0,1;collisions;3;,-0.8,-0.9,0.4;collisions;4;,-0.9,-1.3,0.2;collisions;5;,-0.8,-0.6,0.4;collisions;6;,0.8,-0.9,0.4;collisions;7;,0.9,-1.3,0.2;collisions;8;,0.8,-0.6,0.4;collisions;9;,0,-0.3,0.9;]]
+end $$
+
+|cateroid_update| function(a)
+    a.d_ang = .001
+end $$
 

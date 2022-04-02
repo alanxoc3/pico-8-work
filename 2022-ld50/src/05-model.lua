@@ -1,9 +1,12 @@
 function zoomx(x) return (x - g_view.x) * g_view.zoom_factor + 64 end
 function zoomy(y) return (y - g_view.y) * g_view.zoom_factor + 64 end
 
-zclass[[model,mov,drawable|
+zclass[[model,mov,drawable,actor|
     model;,;
-    draw,%model_draw;
+    hit,nop,
+    collision_func,%bad_collision_circ,
+    draw,%model_draw,
+    model_init,%model_init
 ]]
 |model_draw| function(a)
     local dir = a.ang
@@ -20,6 +23,15 @@ zclass[[model,mov,drawable|
                 zoomx(x+cos(ang2+dir)*mag2), zoomy(y+sin(ang2+dir)*mag2), shape[1]
             )
         end
+    end)
+end $$
+
+|model_init| function(a, zobj_str)
+    a.model = zobj(zobj_str)
+
+    -- create collision rects
+    foreach(a.model.collisions or {}, function(collision)
+        a.collision_func(a, collision[1], collision[2], collision[3])
     end)
 end $$
 

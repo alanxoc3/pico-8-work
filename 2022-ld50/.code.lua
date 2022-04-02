@@ -71,7 +71,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,timer_set_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,collision_follow_anchoring,@,collision_draw_debug,@,model_draw,@,view_match_following,@,logo_init,@,logo_draw,@,game_init,@,game_update,@,game_draw,@,pl_init,@,pl_update,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,timer_set_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,collision_follow_anchoring,@,check_collision,@,collision_draw_debug,@,model_draw,@,model_init,@,view_match_following,@,logo_init,@,logo_draw,@,game_init,@,game_update,@,game_draw,@,pl_init,@,pl_update,@,pl_hit,@,cateroid_init,@,cateroid_update,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -126,20 +126,26 @@ a.ax=a.speed*cos(a.ang)
 a.ay=a.speed*sin(a.ang)
 end,function(a)
 local b=a.anchoring
-local ang,spd=b.ang+b.d_ang,b.speed
 local off_magnitude=approx_dist(a.offset_x,a.offset_y)
-local off_ang_old=atan2(a.offset_x,a.offset_y)+b.ang
-local off_ang_new=off_ang_old+b.d_ang
-a.ax=spd*cos(ang)
-a.ay=spd*sin(ang)
+local off_ang_new=atan2(a.offset_x,a.offset_y)+b.ang+b.d_ang
 a.alive,a.dx,a.dy,a.x,a.y=b.alive,b.dx,b.dy,b.x+off_magnitude*cos(off_ang_new),b.y+off_magnitude*sin(off_ang_new)
-if offset_x ~=0 or offset_y ~=0 then
-a.ax+=spd*cos(ang)+(cos(off_ang_new)-cos(off_ang_old))*off_magnitude
-a.ay+=spd*sin(ang)+(sin(off_ang_new)-sin(off_ang_old))*off_magnitude
+end,function(a,others)
+foreach(others,function(other)
+if a==other then return end
+local x,y=other.x-a.x,other.y-a.y
+local minimum_dist=a.radius+other.radius
+local dist=approx_dist(x,y)-minimum_dist
+if dist<0 then
+local ang=atan2(x,y)
+local dx,dy=cos(ang)*dist,sin(ang)*dist
+a.anchoring:hit(other.anchoring,dx,dy)
+other.anchoring:hit(a.anchoring,-dx,-dy)
 end
+end)
 end,function(a)
-line(zoomx(a.x),zoomy(a.y),zoomx(a.x+a.ax*5),zoomy(a.y+a.ay*5),3)
+if g_debug then
 circ(zoomx(a.x),zoomy(a.y),a.radius*g_view.zoom_factor,8)
+end
 end,function(a)
 local dir=a.ang
 local x,y=a.x,a.y
@@ -154,6 +160,11 @@ zoomx(x+cos(ang1+dir)*mag1),zoomy(y+sin(ang1+dir)*mag1),
 zoomx(x+cos(ang2+dir)*mag2),zoomy(y+sin(ang2+dir)*mag2),shape[1]
 )
 end
+end)
+end,function(a,zobj_str)
+a.model=zobj(zobj_str)
+foreach(a.model.collisions or{},function(collision)
+a.collision_func(a,collision[1],collision[2],collision[3])
 end)
 end,function(a)
 if a.following then
@@ -173,24 +184,31 @@ zspr(108,64,64,4,2)
 fade"0"
 camera()
 end,function()
-local g_pl=_g.pl(0,0)
+g_pl=_g.pl(0,0)
+_g.cateroid(10,0)
 g_view=_g.view(g_pl)
 end,function()
 loop_zobjs("actor","state")
 loop_zobjs("view","match_following")
+loop_zobjs("bad_collision_circ","check_collision",g_zclass_entities["good_collision_circ"])
 loop_zobjs("collision_circ","follow_anchoring")
 loop_zobjs("mov","mov_update")
 loop_zobjs("acc","acc_update")
 loop_zobjs("vec","vec_update")
 end,function()
-rect(0,0,127,127,8)
 loop_zobjs("drawable","draw")
 end,function(a)
-a.model=zobj[[lines;1;,9,0.5,0,-0.5,-0.3,-0.3,0,-0.5,0.3,0.5,0;collisions;1;,0,0,0.1;collisions;2;,-0.3,0,0.2;]]
-create_collision_circs_from_model(a,a.model)
+a:model_init[[lines;1;,9,0.5,0,-0.5,-0.3,-0.3,0,-0.5,0.3,0.5,0;collisions;1;,0,0,0.1;collisions;2;,-0.3,0,0.2;]]
 end,function(a)
 a.speed=-ybtn()*.01
 a.d_ang=-xbtn()*.01
+end,function(a,b,dx,dy)
+a.dx+=dx
+a.dy+=dy
+end,function(a)
+a:model_init[[lines;1;,7,-1.2,-0.4,-1.3,0,-1.2,0.5,-0.8,0.9,-0.4,1,0,1;lines;2;,7,1.2,-0.4,1.3,0,1.2,0.5,0.8,0.9,0.4,1,0,1;lines;3;,7,0,0.4,0.2,0.3,0.1,0.2,-0.1,0.2,-0.2,0.3,0,0.4;lines;4;,7,0,0.4,0,0.5,-0.1,0.6,-0.2,0.6;lines;5;,7,0,0.4,0,0.5,0.1,0.6,0.2,0.6;lines;6;,7,0.6,0.2,0.5,0.1,0.5,-0.1,0.6,-0.2,0.7,-0.1,0.7,0.1,0.6,0.2;lines;7;,7,-0.6,0.2,-0.5,0.1,-0.5,-0.1,-0.6,-0.2,-0.7,-0.1,-0.7,0.1,-0.6,0.2;lines;8;,7,-1,-0.6,-0.8,-0.8,-0.5,-1,-0.1,-1.1,0,-1.1;lines;9;,7,1,-0.6,0.8,-0.8,0.5,-1,0.1,-1.1,0,-1.1;lines;10;,7,-1.2,-0.5,-1.1,-1.1,-0.9,-1.5,-0.5,-1;lines;11;,7,1.2,-0.5,1.1,-1.1,0.9,-1.5,0.5,-1;lines;12;,7,0.9,-1.5,0.8,-1.2,0.8,-0.8;lines;13;,7,-0.9,-1.5,-0.8,-1.2,-0.8,-0.8;lines;14;,7,0.9,0.3,1.2,0.3;lines;15;,7,-0.9,0.3,-1.2,0.3;lines;16;,7,0.9,0.2,1.1,0;lines;17;,7,-0.9,0.2,-1.1,0;lines;18;,7,0.9,0.4,1.1,0.6;lines;19;,7,-0.9,0.4,-1.1,0.6;collisions;1;,0.3,0,1;collisions;2;,-0.3,0,1;collisions;3;,-0.8,-0.9,0.4;collisions;4;,-0.9,-1.3,0.2;collisions;5;,-0.8,-0.6,0.4;collisions;6;,0.8,-0.9,0.4;collisions;7;,0.9,-1.3,0.2;collisions;8;,0.8,-0.6,0.4;collisions;9;,0,-0.3,0.9;]]
+end,function(a)
+a.d_ang=.001
 end)
 function zspr(sind,x,y,sw,sh,...)
 sw,sh=sw or 1,sh or 1
@@ -231,10 +249,12 @@ zclass[[pos|x,0,y,0]]
 zclass[[vec,pos|dx,0,dy,0,vec_update,%vec_update]]
 zclass[[acc,vec|inertia_x,.95,inertia_y,.95,ax,0,ay,0,acc_update,%acc_update]]
 zclass[[mov,acc|ang,0,speed,0,d_ang,0,mov_update,%mov_update]]
-zclass[[collision_circ,acc,actor,drawable|anchoring,@,offset_x,@,offset_y,@,radius,@,inertia_x,1,inertia_y,1,follow_anchoring,%collision_follow_anchoring,draw,%collision_draw_debug]]
+zclass[[collision_circ,vec,actor,drawable|anchoring,@,offset_x,@,offset_y,@,radius,@,inertia_x,1,inertia_y,1,follow_anchoring,%collision_follow_anchoring,check_collision,%check_collision,init,%collision_follow_anchoring,hit,nop,draw,%collision_draw_debug]]
+zclass[[bad_collision_circ,collision_circ|anchoring,@,offset_x,@,offset_y,@,radius,@]]
+zclass[[good_collision_circ,collision_circ|anchoring,@,offset_x,@,offset_y,@,radius,@]]
 function zoomx(x)return(x-g_view.x)*g_view.zoom_factor+64 end
 function zoomy(y)return(y-g_view.y)*g_view.zoom_factor+64 end
-zclass[[model,mov,drawable|model;,;draw,%model_draw;]]
+zclass[[model,mov,drawable,actor|model;,;hit,nop,collision_func,%bad_collision_circ,draw,%model_draw,model_init,%model_init]]
 function wobble_line(x1,y1,x3,y3,color)
 srand(t()*4\1)
 local x2,y2=(x3-x1)/2+x1+flr_rnd(3)-1,(y3-y1)/2+y1+flr_rnd(3)-1
@@ -253,6 +273,7 @@ function _init()
 g_tl=_g.game_state()
 end
 function _update60()
+if btnp(4)and btn(5)then g_debug=not g_debug end
 register_zobjs()
 loop_zobjs("timer","tick")
 loop_zobjs("game_state","state")
@@ -261,10 +282,7 @@ end
 function _draw()
 cls()
 loop_zobjs("game_state","draw")
+if g_debug then rect(0,0,127,127,8)end
 end
-zclass[[pl,actor,model|x,@,y,@,init,%pl_init,update,%pl_update,]]
-function create_collision_circs_from_model(a,model)
-foreach(model.collisions or{},function(collision)
-_g.collision_circ(a,collision[1],collision[2],collision[3])
-end)
-end
+zclass[[pl,actor,model|x,@,y,@,init,%pl_init,update,%pl_update,hit,%pl_hit,collision_func,%good_collision_circ]]
+zclass[[cateroid,model|x,@,y,@,init,%cateroid_init,update,%cateroid_update]]
