@@ -17,3 +17,4 @@ tags
 
 *.p8.png
 !.archive/*.p8.png
+!2022-ld50/.code.lua
