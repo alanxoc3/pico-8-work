@@ -71,7 +71,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,timer_set_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,collision_follow_anchoring,@,check_collision,@,collision_draw_debug,@,model_draw,@,model_init,@,view_match_following,@,logo_init,@,logo_draw,@,game_init,@,game_update,@,game_draw,@,pl_init,@,pl_update,@,pl_hit,@,cateroid_init,@,cateroid_update,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,timer_set_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,collision_follow_anchoring,@,check_collision,@,collision_draw_debug,@,model_draw,@,model_init,@,view_match_following,@,twinkle_draw,@,twinkle_init,@,planet_init,@,planet_update,@,logo_init,@,logo_draw,@,game_init,@,game_update,@,game_draw,@,pl_init,@,pl_update,@,pl_hit,@,cateroid_init,@,cateroid_update,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -176,6 +176,14 @@ a.dy=sin(dir)*dist*.25
 if btn"4"then a.zoom_factor=max(1,a.zoom_factor+1)end
 if btn"5"then a.zoom_factor=max(1,a.zoom_factor-1)end
 end
+end,function(a)
+pset(a.x,a.y,sin(time()/10+a.twinkle_offset)>0.5 and 6 or 5)
+end,function(a)
+a.twinkle_offset=rnd()
+end,function(a)
+a.model=zobj[[lines;1;,3,0.5,0,-0.5,0]]
+end,function(a)
+a.ang-=.001
 end,function()sfx"63" end,function(a)
 local logo_opacity=cos(a:get_elapsed_percent"state")+1
 fade(logo_opacity)
@@ -185,8 +193,12 @@ fade"0"
 camera()
 end,function()
 g_pl=_g.pl(0,0)
-_g.cateroid(10,0)
 g_view=_g.view(g_pl)
+_g.planet(1,3)
+_g.cateroid(10,0)
+for i=1,100 do
+_g.twinkle(rnd(126)+1,rnd(126)+1)
+end
 end,function()
 loop_zobjs("actor","state")
 loop_zobjs("view","match_following")
@@ -262,6 +274,8 @@ line(x1,y1,x2,y2,color)
 line(x2,y2,x3,y3,color)
 end
 zclass[[view,vec|following,@,zoom_factor,16,match_following,%view_match_following]]
+zclass[[twinkle,actor,drawable|x,@,y,@,draw,%twinkle_draw,init,%twinkle_init,]]
+zclass[[planet,actor,model|x,@,y,@,init,%planet_init,update,%planet_update;]]
 g_fade_table=zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,2,1,0,0,0;3;,3,3,3,3,1,0,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,1,1,0,0;6;,6,6,13,13,5,5,1,0;7;,7,7,6,13,13,5,1,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,5,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,1,1,0;13;,13,13,5,5,1,1,1,0;14;,14,14,13,4,2,2,1,0;15;,15,15,13,13,5,5,1,0;]]
 function fade(threshold)
 for c=0,15 do
