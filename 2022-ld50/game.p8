@@ -1,8 +1,8 @@
 pico-8 cartridge // http://www.pico-8.com
 version 35
 __lua__
--- game
--- amorg
+-- ld50 - space regen game
+-- amorg, davery, tigerwolf181
 
 -- unobfuscated code at:
 -- git.io/amorg-pico8

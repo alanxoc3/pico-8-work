@@ -2,7 +2,7 @@
 
 zclass[[game_state,actor|
     actor,ignore; -- remove game_state from the actor group
-    curr,logo;
+    curr,game;
     logo; init,%logo_init, update,%logo_update, draw,%logo_draw, duration,2.5, next,game;
     game; init,%game_init, update,%game_update, draw,%game_draw;
 ]]
@@ -23,13 +23,41 @@ function _draw()
     loop_zobjs('game_state', 'draw')
 end
 
--- BASIC EXAMPLE FOR SIMPLE GAME BELOW:
-zclass[[test_obj,actor,drawable|x,@,y,@,color,7,init,%test_init,update,%test_update,draw,%test_draw;]]
-|test_init|   function(a) a.color += 1                   end $$
-|test_update| function(a) a.x += xbtn() a.y += ybtn()    end $$
-|test_draw|   function(a) circfill(a.x, a.y, 2, a.color) end $$
+|game_init| function()
+    local g_pl = _g.pl(0, 0)
+    g_view = _g.view(g_pl)
+end $$
 
-|game_init|   function() _g.test_obj(64, 64)             end $$
-|game_update| function() loop_zobjs('actor', 'state')    end $$
-|game_draw|   function() rect(0, 0, 127, 127, 8)
-                         loop_zobjs('drawable', 'draw')  end $$
+|game_update| function()
+    loop_zobjs('actor', 'state')
+    loop_zobjs('mov', 'mov_update')
+    loop_zobjs('acc', 'acc_update')
+    loop_zobjs('vec', 'vec_update')
+    loop_zobjs('view', 'match_following')
+end $$
+
+|game_draw| function()
+    rect(0, 0, 127, 127, 8)
+    loop_zobjs('drawable', 'draw')
+end $$
+
+-- BASIC EXAMPLE FOR SIMPLE GAME BELOW:
+zclass[[pl,actor,model|
+    x,@, y,@,
+    init,%pl_init,
+    update,%pl_update,
+]]
+
+|pl_init| function(a)
+    a.model = zobj[[
+        -- type  color x,y...
+        1;,lines,7,    .5,0, -.5,.3, -.3,0, -.5,-.3, .5,0
+    ]]
+end $$
+
+|pl_update| function(a)
+    -- a.x += xbtn()
+    a.speed = -ybtn()*.01
+    a.ang -= xbtn()*.01
+    -- printh("x: "..a.x.." y: "..a.y)
+end $$
