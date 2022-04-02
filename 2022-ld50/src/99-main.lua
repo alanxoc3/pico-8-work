@@ -31,18 +31,23 @@ end $$
 
 |game_update| function()
     loop_zobjs('actor', 'state')
+    loop_zobjs('view', 'match_following')
+
+    loop_zobjs('collision_circ', 'follow_anchoring')
     loop_zobjs('mov', 'mov_update')
     loop_zobjs('acc', 'acc_update')
     loop_zobjs('vec', 'vec_update')
-    loop_zobjs('view', 'match_following')
 end $$
 
 |game_draw| function()
+    -- DEBUG_BEGIN
     rect(0, 0, 127, 127, 8)
+    -- DEBUG_END
     loop_zobjs('drawable', 'draw')
 end $$
 
--- BASIC EXAMPLE FOR SIMPLE GAME BELOW:
+----------------------------------------------
+
 zclass[[pl,actor,model|
     x,@, y,@,
     init,%pl_init,
@@ -50,12 +55,21 @@ zclass[[pl,actor,model|
 ]]
 
 |pl_init| function(a)
-    a.model = zobj[[lines;1;,9,0.5,0,-0.5,-0.3,-0.3,0,-0.5,0.3,0.5,0;]]
+    a.model = zobj[[lines;1;,9,0.5,0,-0.5,-0.3,-0.3,0,-0.5,0.3,0.5,0;collisions;1;,0,0,0.1;collisions;2;,-0.3,0,0.2;]]
+    create_collision_circs_from_model(a, a.model)
 end $$
 
 |pl_update| function(a)
     -- a.x += xbtn()
     a.speed = -ybtn()*.01
-    a.ang -= xbtn()*.01
+    a.d_ang = -xbtn()*.01
     -- printh("x: "..a.x.." y: "..a.y)
 end $$
+
+function create_collision_circs_from_model(a, model)
+    foreach(model.collisions or {}, function(collision)
+        _g.collision_circ(a, collision[1], collision[2], collision[3])
+    end)
+end
+
+

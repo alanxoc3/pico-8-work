@@ -6,9 +6,6 @@ zclass[[view,vec|
 
 |view_match_following| function(a)
     if a.following then
-        
-        -- a.x = a.following.x
-        -- a.y = a.following.y
         local x, y = a.following.x - a.x, a.following.y - a.y
         local dir = atan2(x, y)
 
