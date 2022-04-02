@@ -156,16 +156,18 @@ foreach(a.model.collisions or{},function(collision)
 a.collision_func(a,collision[1],collision[2],collision[3])
 end)
 end,function(a)
+if a.alive then
 a:kill()
 foreach(get_line_coords(a.x,a.y,a.ang,a.model.lines),function(l)
 local midx,midy=(l.x2-l.x1)/2+l.x1,(l.y2-l.y1)/2+l.y1
 local x1,y1=l.x1-midx,l.y1-midy
 local x2,y2=l.x2-midx,l.y2-midy
-_g.line_particle(atan2(midx-a.x,midy-a.y),midx,midy,x1,y1,x2,y2,l.color)
+_g.line_particle(atan2(midx-a.x,midy-a.y),midx,midy,x1,y1,x2,y2,l.color,a.dx,a.dy)
 end)
+end
 end,function(a)
-a.dx=cos(a.ang)*.01
-a.dy=sin(a.ang)*.01
+a.dx+=cos(a.ang)*.005
+a.dy+=sin(a.ang)*.005
 end,function(a)
 local percent=1-a:get_elapsed_percent"state"
 line(zoomx(a.x+a.x1*percent),zoomy(a.y+a.y1*percent),zoomx(a.x+a.x2*percent),zoomy(a.y+a.y2*percent),a.color)
@@ -288,7 +290,7 @@ end
 end)
 return lines
 end
-zclass[[line_particle,vec,actor,drawable|ang,@,x,@,y,@,x1,@,y1,@,x2,@,y2,@,color,@,draw,%line_particle_draw,update,%line_particle_update;start;duration,.5;]]
+zclass[[line_particle,vec,actor,drawable|ang,@,x,@,y,@,x1,@,y1,@,x2,@,y2,@,color,@,dx,@,dy,@,draw,%line_particle_draw,update,%line_particle_update;start;duration,.5;]]
 function wobble_line(x1,y1,x3,y3,color)
 srand(t()*4\1)
 local x2,y2=(x3-x1)/2+x1+flr_rnd(3)-1,(y3-y1)/2+y1+flr_rnd(3)-1

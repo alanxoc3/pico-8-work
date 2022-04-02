@@ -43,18 +43,20 @@ function get_line_coords(x, y, dir, model_lines)
 end
 
 |model_explode| function(a)
-    a:kill()
+    if a.alive then
+        a:kill()
 
-    foreach(get_line_coords(a.x, a.y, a.ang, a.model.lines), function(l)
-        local midx, midy = (l.x2-l.x1)/2+l.x1, (l.y2-l.y1)/2+l.y1
-        local x1, y1 = l.x1-midx, l.y1-midy
-        local x2, y2 = l.x2-midx, l.y2-midy
-        _g.line_particle(atan2(midx-a.x, midy-a.y), midx, midy, x1, y1, x2, y2, l.color)
-    end)
+        foreach(get_line_coords(a.x, a.y, a.ang, a.model.lines), function(l)
+            local midx, midy = (l.x2-l.x1)/2+l.x1, (l.y2-l.y1)/2+l.y1
+            local x1, y1 = l.x1-midx, l.y1-midy
+            local x2, y2 = l.x2-midx, l.y2-midy
+            _g.line_particle(atan2(midx-a.x, midy-a.y), midx, midy, x1, y1, x2, y2, l.color, a.dx, a.dy)
+        end)
+    end
 end $$
 
 zclass[[line_particle,vec,actor,drawable|
-    ang,@, x,@, y,@, x1,@, y1,@, x2,@, y2,@, color,@, 
+    ang,@, x,@, y,@, x1,@, y1,@, x2,@, y2,@, color,@, dx,@, dy,@,
 
     draw,%line_particle_draw,
     update,%line_particle_update;
@@ -62,8 +64,8 @@ zclass[[line_particle,vec,actor,drawable|
 ]]
 
 |line_particle_update| function(a)
-    a.dx = cos(a.ang)*.01    
-    a.dy = sin(a.ang)*.01    
+    a.dx += cos(a.ang)*.005
+    a.dy += sin(a.ang)*.005
 end $$
 
 |line_particle_draw| function(a)
