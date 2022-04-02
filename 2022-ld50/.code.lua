@@ -177,9 +177,14 @@ if btn"4"then a.zoom_factor=max(1,a.zoom_factor+1)end
 if btn"5"then a.zoom_factor=max(1,a.zoom_factor-1)end
 end
 end,function(a)
-pset(a.x,a.y,sin(time()/10+a.twinkle_offset)>0.5 and 6 or 5)
+srand((a.x+t()*4)\1)
+local x=(-g_view.x+flr(a.x*g_view.zoom_factor))%128
+local y=(-g_view.y+flr(a.y*g_view.zoom_factor))%128
+pset(x+rnd_one(),y+rnd_one(),sin(time()/10+a.twinkle_offset)>0.5 and 6 or 5)
 end,function(a)
 a.twinkle_offset=rnd()
+a.x=rnd(256)
+a.y=rnd(256)
 end,function(a)
 a.model=zobj[[lines;1;,3,0.5,0,-0.5,0]]
 end,function(a)
@@ -196,8 +201,8 @@ g_pl=_g.pl(0,0)
 g_view=_g.view(g_pl)
 _g.planet(1,3)
 _g.cateroid(10,0)
-for i=1,100 do
-_g.twinkle(rnd(126)+1,rnd(126)+1)
+for i=1,50 do
+_g.twinkle()
 end
 end,function()
 loop_zobjs("actor","state")
@@ -274,7 +279,7 @@ line(x1,y1,x2,y2,color)
 line(x2,y2,x3,y3,color)
 end
 zclass[[view,vec|following,@,zoom_factor,16,match_following,%view_match_following]]
-zclass[[twinkle,actor,drawable|x,@,y,@,draw,%twinkle_draw,init,%twinkle_init,]]
+zclass[[twinkle,actor,drawable|x,0,y,0,draw,%twinkle_draw,init,%twinkle_init,]]
 zclass[[planet,actor,model|x,@,y,@,init,%planet_init,update,%planet_update;]]
 g_fade_table=zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,2,1,0,0,0;3;,3,3,3,3,1,0,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,1,1,0,0;6;,6,6,13,13,5,5,1,0;7;,7,7,6,13,13,5,1,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,5,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,1,1,0;13;,13,13,5,5,1,1,1,0;14;,14,14,13,4,2,2,1,0;15;,15,15,13,13,5,5,1,0;]]
 function fade(threshold)

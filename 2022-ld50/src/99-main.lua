@@ -42,8 +42,8 @@ end
     _g.cateroid(10, 0)
 
     -- add background stars
-    for i=1,100 do
-        _g.twinkle(rnd(126)+1, rnd(126)+1)
+    for i=1,50 do
+        _g.twinkle()
     end
 end $$
 
