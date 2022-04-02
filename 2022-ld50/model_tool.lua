@@ -1,10 +1,10 @@
-modes = { "lines" }
-colors = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 }
+modes = { "lines", "collisions" }
 zooms = { .5, 1, 1.5, 2, 3, 5 }
-model = {}
-layer = 1
+model = { lines={}, collisions={} }
 virt_mx, virt_my = 0, 0
 show_ui = true
+lines_layer = 1
+collisions_layer = 1
 
 -- fast approximate distance formula (no need for sqrt & ^2)
 -- stolen from a pico-8 forum
@@ -20,15 +20,22 @@ end
 function _init()
     poke(0x5f2d, 1)
     mode_i = 1
-    color_i = 7
     zoom_i = 2
 end
 
 function model_to_string()
     local str = ""
-    for i=1,#model,1 do
-        str = str..i..";"
-        for item in all(model[i]) do
+    for i=1,#model.lines,1 do
+        str = str.."lines;"..i..";"
+        for item in all(model.lines[i]) do
+            str = str..","..item
+        end
+        str = str..";"
+    end
+
+    for i=1,#model.collisions,1 do
+        str = str.."collisions;"..i..";"
+        for item in all(model.collisions[i]) do
             str = str..","..item
         end
         str = str..";"
@@ -50,39 +57,99 @@ function _update60()
     virt_mx, virt_my = (min(120, max(8, stat(32)))-64)/50*zooms[zoom_i], (min(120, max(8, stat(33)))-64)/50*zooms[zoom_i]
     virt_mx, virt_my = round(virt_mx*10)/10, round(virt_my*10)/10
 
-    if stat(30) then
-        local char = stat(31)
-        if false then
-        elseif char == "t" then show_ui = not show_ui
-        elseif char == "m" and not model[layer] then mode_i = mode_i % #modes + 1 if model[layer] then model[layer][1] = modes[mode_i] end
-        elseif char == "c" then color_i = color_i % #colors + 1 if model[layer] then model[layer][2] = colors[color_i] end
-        elseif char == "d" then if model[layer] then deli(model, layer) end
-        elseif char == "s" then printh(model_to_string(), '@clip')
-        elseif char == "r" then if stat(4) ~= "" then model = zobj(stat(4)) end
-        elseif char == "-" then next_zoom = min(#zooms, zoom_i+1)
-        elseif char == "+" then next_zoom = max(1, zoom_i-1)
-        elseif char == "=" then next_zoom = 2
+    -- switch mode logic
+    local keyboard_enabled = stat(30)
+    local char = stat(31)
+    local curr_mode = modes[mode_i]
+    if     keyboard_enabled and char == "f" then mode_i = mode_i % #modes + 1 last_x = nil last_y = nil
+    elseif keyboard_enabled and char == "b" then mode_i=mode_i-1 mode_i = mode_i == 0 and #modes or mode_i last_x = nil last_y = nil
+    elseif keyboard_enabled and char == "t" then show_ui = not show_ui
+    elseif keyboard_enabled and char == "s" then printh(model_to_string(), '@clip')
+    elseif keyboard_enabled and char == "r" then if stat(4) ~= "" then model = zobj(stat(4)) model.lines=model.lines or {} model.collisions=model.collisions or {} end
+    elseif keyboard_enabled and char == "-" then next_zoom = min(#zooms, zoom_i+1)
+    elseif keyboard_enabled and char == "+" then next_zoom = max(1, zoom_i-1)
+    elseif keyboard_enabled and char == "=" then next_zoom = 2
+    elseif curr_mode == "lines" then
+        if char == "d" and model.lines[lines_layer] then
+            deli(model.lines, lines_layer)
+        elseif char == "x" and model.lines[lines_layer] then -- add layer that flips on x axis
+            local cpy = {model.lines[lines_layer][1]}
+            for i=2,#model.lines[lines_layer],1 do
+                local item = model.lines[lines_layer][i]
+                add(cpy, i % 2 == 0 and -item or item)
+            end
+            add(model.lines, cpy)
+            lines_layer = #model.lines
+        elseif char == "y" and model.lines[lines_layer] then -- add layer that flips on y axis
+            local cpy = {model.lines[lines_layer][1]}
+            for i=2,#model.lines[lines_layer],1 do
+                local item = model.lines[lines_layer][i]
+                add(cpy, i % 2 == 1 and -item or item)
+            end
+            add(model.lines, cpy)
+            lines_layer = #model.lines
+        elseif btnp(0) then lines_layer = max(1, lines_layer - 1)
+        elseif btnp(1) then lines_layer = min(#model.lines+1, lines_layer + 1)
+        elseif btnp(2) then 
+            if model.lines[lines_layer] then
+                model.lines[lines_layer][1] = min(15, model.lines[lines_layer][1]+1)
+            end
+        elseif btnp(3) then
+            if model.lines[lines_layer] then
+                model.lines[lines_layer][1] = max(1, model.lines[lines_layer][1]-1)
+            end
         end
-    elseif btnp(0) then layer = max(1, layer - 1)
-    elseif btnp(1) then layer = min(#model+1, layer + 1)
-    elseif btnp(2) then next_zoom = max(1, zoom_i-1)
-    elseif btnp(3) then next_zoom = min(#zooms, zoom_i+1)
-    end
 
-    if btnp(4) then mode_i = mode_i % #modes + 1 end
-    if stat(34) == 1 then -- left click, add point
-        if not (last_x == virt_mx and last_y == virt_my) then
-            model[layer] = model[layer] or {modes[mode_i], colors[color_i]}
-            add(model[layer], virt_mx)
-            add(model[layer], virt_my)
+        -- left click, add point
+        if stat(34) == 1 and not (last_x == virt_mx and last_y == virt_my) then
+            model.lines[lines_layer] = model.lines[lines_layer] or {7}
+            add(model.lines[lines_layer], virt_mx)
+            add(model.lines[lines_layer], virt_my)
             last_x = virt_mx
             last_y = virt_my
+        end
+    elseif curr_mode == "collisions" then
+        if char == "d" and model.collisions[collisions_layer] then
+            deli(model.collisions, collisions_layer)
+        elseif btnp(0) then collisions_layer = max(1, collisions_layer - 1)
+        elseif btnp(1) then collisions_layer = min(#model.collisions+1, collisions_layer + 1)
+        elseif btnp(2) then 
+            if model.collisions[collisions_layer] then
+                model.collisions[collisions_layer][3] = min(5, model.collisions[collisions_layer][3]+.1)
+            end
+        elseif btnp(3) then
+            if model.collisions[collisions_layer] then
+                model.collisions[collisions_layer][3] = max(.1, model.collisions[collisions_layer][3]-.1)
+            end
+        end
+
+        -- left click, add point
+        if stat(34) == 1 and not (last_x == virt_mx and last_y == virt_my) then
+            model.collisions[collisions_layer] = model.collisions[collisions_layer] or { virt_mx, virt_my, .5 }
+            model.collisions[collisions_layer][1] = virt_mx
+            model.collisions[collisions_layer][2] = virt_my
+            last_x, last_y = virt_mx, virt_my
         end
     end
 end
 
 function _draw()
     cls()
+
+    if show_ui then
+        if modes[mode_i] == "lines" then
+            local shape = model.lines[lines_layer]
+            print("points:"..(shape and (#shape-1)/2 or 0), 4, 96, 5)
+            print("layer:"..lines_layer, 4, 102, 5)
+        elseif modes[mode_i] == "collisions" then
+            local shape = model.collisions[collisions_layer]
+            print("rad:"..(shape and shape[3] or 0), 4, 96, 5)
+            print("layer:"..collisions_layer, 4, 102, 5)
+        end
+        print("x: "..virt_mx, 4, 108, 5)
+        print("y: "..virt_my, 4, 114, 5)
+        print(modes[mode_i], 4, 120, 5)
+    end
 
     if show_ui then
         fillp(0b1010010110100101)
@@ -95,41 +162,56 @@ function _draw()
         fillp()
 
         print(zooms[zoom_i], 66, 116, 7)
+
+        for coll_i=1,#model.collisions,1 do
+            local collision = model.collisions[coll_i]
+            for i=1,#collision,3 do
+                local x, y, rad = collision[i], collision[i+1], collision[i+2]
+                local color = modes[mode_i] == "collisions" and collisions_layer == coll_i and 11 or 2
+                circ(x*50/zooms[zoom_i]+64, y*50/zooms[zoom_i]+64, rad*50/zooms[zoom_i], color)
+            end
+        end
     end
 
-    for layer_i=1,#model,1 do
-        local shape = model[layer_i]
-        if #shape >= 4 then
-            for i=3,#shape-2,2 do
+    for layer_i=1,#model.lines,1 do
+        local shape = model.lines[layer_i]
+        if #shape >= 5 then
+            for i=2,#shape-2,2 do
                 local x1, y1 = shape[i], shape[i+1]
                 local x2, y2 = shape[i+2], shape[i+3]
+                local color = (layer_i == lines_layer and modes[mode_i] == "lines" or not show_ui) and shape[1] or 1
                 line(
                     x1*50/zooms[zoom_i]+64, y1*50/zooms[zoom_i]+64,
-                    x2*50/zooms[zoom_i]+64, y2*50/zooms[zoom_i]+64, (layer_i == layer or not show_ui) and shape[2] or 1
+                    x2*50/zooms[zoom_i]+64, y2*50/zooms[zoom_i]+64, color
                 )
             end
         end
     end
 
-    if show_ui then
-        local shape = model[layer]
+    if show_ui and modes[mode_i] == "lines" then
+        local shape = model.lines[lines_layer]
         if shape then
             -- vertices
-            for i=3,#shape,2 do
+            for i=2,#shape,2 do
                 local x1, y1 = shape[i], shape[i+1]
                 circfill(x1*50/zooms[zoom_i]+64, y1*50/zooms[zoom_i]+64, 1, 7)
             end
 
-            -- origin point
-            if #shape >= 4 then
-                circ(shape[3]*50/zooms[zoom_i]+64, shape[4]*50/zooms[zoom_i]+64, 4, 8)
+            -- first point
+            if #shape >= 3 then
+                circ(shape[2]*50/zooms[zoom_i]+64, shape[3]*50/zooms[zoom_i]+64, 4, 8)
             end
         end
+    end
 
-        print("l:"..layer.."|p:"..(shape and #shape/2 or 0), 4, 102, colors[color_i])
-        print("x: "..virt_mx, 4, 108, colors[color_i])
-        print("y: "..virt_my, 4, 114, colors[color_i])
-        print("mode: "..modes[mode_i], 4, 120, colors[color_i])
+    if show_ui and modes[mode_i] == "collisions" then
+        local shape = model.collisions[collisions_layer]
+        if shape then
+            circ(shape[1]*50/zooms[zoom_i]+64, shape[2]*50/zooms[zoom_i]+64, 4, 8)
+            line(shape[1]*50/zooms[zoom_i]+64, shape[2]*50/zooms[zoom_i]+64, (shape[1]+shape[3])*50/zooms[zoom_i]+64, shape[2]*50/zooms[zoom_i]+64, 11)
+            line(shape[1]*50/zooms[zoom_i]+64, shape[2]*50/zooms[zoom_i]+64, shape[1]*50/zooms[zoom_i]+64, (shape[2]+shape[3])*50/zooms[zoom_i]+64, 11)
+            circ(shape[1]*50/zooms[zoom_i]+64, shape[2]*50/zooms[zoom_i]+64, 1, 7)
+        end
     end
 
     -- cursor

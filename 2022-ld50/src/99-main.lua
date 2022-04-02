@@ -50,7 +50,7 @@ zclass[[pl,actor,model|
 ]]
 
 |pl_init| function(a)
-    a.model = zobj[[1;,lines,9,0.5,0,-0.5,-0.3,-0.3,0,-0.5,0.3,0.5,0;]]
+    a.model = zobj[[lines;1;,9,0.5,0,-0.5,-0.3,-0.3,0,-0.5,0.3,0.5,0;]]
 end $$
 
 |pl_update| function(a)
