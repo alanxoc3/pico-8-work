@@ -132,7 +132,7 @@ local x1,y1=shape[i],shape[i+1]
 local x2,y2=shape[i+2],shape[i+3]
 local ang1,ang2=atan2(x1,y1),atan2(x2,y2)
 local mag1,mag2=approx_dist(x1,y1),approx_dist(x2,y2)
-line(
+wobble_line(
 zoomx(x+cos(ang1+dir)*mag1),zoomy(y+sin(ang1+dir)*mag1),
 zoomx(x+cos(ang2+dir)*mag2),zoomy(y+sin(ang2+dir)*mag2),shape[1]
 )
@@ -215,6 +215,12 @@ zclass[[mov,acc|ang,0,speed,0,mov_update,%mov_update]]
 function zoomx(x)return(x-g_view.x)*g_view.zoom_factor+64 end
 function zoomy(y)return(y-g_view.y)*g_view.zoom_factor+64 end
 zclass[[model,mov,drawable|model;,;draw,%model_draw;]]
+function wobble_line(x1,y1,x3,y3,color)
+srand(t()*4\1)
+local x2,y2=(x3-x1)/2+x1+flr_rnd(3)-1,(y3-y1)/2+y1+flr_rnd(3)-1
+line(x1,y1,x2,y2,color)
+line(x2,y2,x3,y3,color)
+end
 zclass[[view,vec|following,@,zoom_factor,16,match_following,%view_match_following]]
 g_fade_table=zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,2,1,0,0,0;3;,3,3,3,3,1,0,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,1,1,0,0;6;,6,6,13,13,5,5,1,0;7;,7,7,6,13,13,5,1,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,5,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,1,1,0;13;,13,13,5,5,1,1,1,0;14;,14,14,13,4,2,2,1,0;15;,15,15,13,13,5,5,1,0;]]
 function fade(threshold)

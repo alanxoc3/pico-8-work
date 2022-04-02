@@ -15,10 +15,18 @@ zclass[[model,mov,drawable|
             local ang1, ang2 = atan2(x1, y1), atan2(x2, y2)
             local mag1, mag2 = approx_dist(x1, y1), approx_dist(x2, y2)
 
-            line(
+            wobble_line(
                 zoomx(x+cos(ang1+dir)*mag1), zoomy(y+sin(ang1+dir)*mag1),
                 zoomx(x+cos(ang2+dir)*mag2), zoomy(y+sin(ang2+dir)*mag2), shape[1]
             )
         end
     end)
 end $$
+
+
+function wobble_line(x1, y1, x3, y3, color)
+    srand(t()*4\1)
+    local x2, y2 = (x3-x1)/2+x1+flr_rnd(3)-1, (y3-y1)/2+y1+flr_rnd(3)-1
+    line(x1, y1, x2, y2, color)
+    line(x2, y2, x3, y3, color)
+end
