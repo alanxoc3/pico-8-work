@@ -24,6 +24,7 @@ function _draw()
 end
 
 |game_init| function()
+    -- [0,0] is the center of the level
     local g_pl = _g.pl(0, 0)
     g_view = _g.view(g_pl)
 end $$
@@ -49,10 +50,7 @@ zclass[[pl,actor,model|
 ]]
 
 |pl_init| function(a)
-    a.model = zobj[[
-        -- type  color x,y...
-        1;,lines,7,    .5,0, -.5,.3, -.3,0, -.5,-.3, .5,0
-    ]]
+    a.model = zobj[[1;,lines,9,0.5,0,-0.5,-0.3,-0.3,0,-0.5,0.3,0.5,0;]]
 end $$
 
 |pl_update| function(a)
