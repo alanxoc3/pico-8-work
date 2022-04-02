@@ -153,12 +153,12 @@ function _draw()
 
     if show_ui then
         fillp(0b1010010110100101)
-        line(64, 0, 64, 127, 8)
-        line(0, 64, 127, 64, 8)
-        line(14, 64-3, 14, 64+3, 7)
-        line(64-3, 14, 64+3, 14, 7)
-        line(114, 64-3, 114, 64+3, 7)
-        line(64-3, 114, 64+3, 114, 7)
+        wobble_line(64, 0, 64, 127, 8)
+        wobble_line(0, 64, 127, 64, 8)
+        wobble_line(14, 64-3, 14, 64+3, 7)
+        wobble_line(64-3, 14, 64+3, 14, 7)
+        wobble_line(114, 64-3, 114, 64+3, 7)
+        wobble_line(64-3, 114, 64+3, 114, 7)
         fillp()
 
         print(zooms[zoom_i], 66, 116, 7)
@@ -180,7 +180,7 @@ function _draw()
                 local x1, y1 = shape[i], shape[i+1]
                 local x2, y2 = shape[i+2], shape[i+3]
                 local color = (layer_i == lines_layer and modes[mode_i] == "lines" or not show_ui) and shape[1] or 1
-                line(
+                wobble_line(
                     x1*50/zooms[zoom_i]+64, y1*50/zooms[zoom_i]+64,
                     x2*50/zooms[zoom_i]+64, y2*50/zooms[zoom_i]+64, color
                 )
@@ -208,8 +208,8 @@ function _draw()
         local shape = model.collisions[collisions_layer]
         if shape then
             circ(shape[1]*50/zooms[zoom_i]+64, shape[2]*50/zooms[zoom_i]+64, 4, 8)
-            line(shape[1]*50/zooms[zoom_i]+64, shape[2]*50/zooms[zoom_i]+64, (shape[1]+shape[3])*50/zooms[zoom_i]+64, shape[2]*50/zooms[zoom_i]+64, 11)
-            line(shape[1]*50/zooms[zoom_i]+64, shape[2]*50/zooms[zoom_i]+64, shape[1]*50/zooms[zoom_i]+64, (shape[2]+shape[3])*50/zooms[zoom_i]+64, 11)
+            wobble_line(shape[1]*50/zooms[zoom_i]+64, shape[2]*50/zooms[zoom_i]+64, (shape[1]+shape[3])*50/zooms[zoom_i]+64, shape[2]*50/zooms[zoom_i]+64, 11)
+            wobble_line(shape[1]*50/zooms[zoom_i]+64, shape[2]*50/zooms[zoom_i]+64, shape[1]*50/zooms[zoom_i]+64, (shape[2]+shape[3])*50/zooms[zoom_i]+64, 11)
             circ(shape[1]*50/zooms[zoom_i]+64, shape[2]*50/zooms[zoom_i]+64, 1, 7)
         end
     end
@@ -267,6 +267,21 @@ function zobj_set(table, oldstr, ...)
         end
     end)
     return table
+end
+
+function flr_rnd(x)
+    return flr(rnd(x))
+end
+
+function wobble_line(x1, y1, x3, y3, color)
+    if not show_ui then
+        srand(t()*4\1)
+        local x2, y2 = (x3-x1)/2+x1+flr_rnd(3)-1, (y3-y1)/2+y1+flr_rnd(3)-1
+        line(x1, y1, x2, y2, color)
+        line(x2, y2, x3, y3, color)
+    else
+        line(x1, y1, x3, y3, color)
+    end
 end
 
 function zobj(...)
