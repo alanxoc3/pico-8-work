@@ -25,8 +25,17 @@ end
 
 |game_init| function()
     -- [0,0] is the center of the level
+    -- add player
     local g_pl = _g.pl(0, 0)
     g_view = _g.view(g_pl)
+
+    -- add planets
+    _g.planet(1,3)
+
+    -- add background stars
+    for i=1,100 do
+        _g.twinkle(rnd(126)+1, rnd(126)+1)
+    end
 end $$
 
 |game_update| function()
