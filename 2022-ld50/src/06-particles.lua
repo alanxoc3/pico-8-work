@@ -5,10 +5,9 @@ zclass[[twinkle,actor,drawable|
 ]]
 
 |twinkle_draw| function(a)
-    srand((a.x+t()*4)\1)
     local x = (-g_view.x+flr(a.x*g_view.zoom_factor))%128
     local y = (-g_view.y+flr(a.y*g_view.zoom_factor))%128
-    pset(x+rnd_one(), y+rnd_one(), sin(time() / 10 + a.twinkle_offset) > 0.5 and 6 or 5)
+    pset(x, y, sin(time() / 10 + a.twinkle_offset) > 0.5 and 6 or 5)
 end $$
 
 |twinkle_init| function(a)

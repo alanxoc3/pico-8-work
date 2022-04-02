@@ -46,7 +46,7 @@ end
 -- Removes a zobj from all the entity groups it was in when registered.
 function deregister_zobj(inst)
     for class, entities in pairs(g_zclass_entities) do
-        if inst[class] then del(entities, inst) end
+        del(entities, inst)
     end
 end
 

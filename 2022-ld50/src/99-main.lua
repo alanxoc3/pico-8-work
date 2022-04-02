@@ -39,7 +39,7 @@ end
 
     -- add planets
     _g.planet(1,3)
-    _g.cateroid(10, 0)
+    g_cateroid = _g.cateroid(10, 0)
 
     -- add background stars
     for i=1,50 do
@@ -48,6 +48,8 @@ end
 end $$
 
 |game_update| function()
+    if btnp(4) then g_pl:explode() g_cateroid:explode() end
+
     loop_zobjs('actor', 'state')
     loop_zobjs('view', 'match_following')
 

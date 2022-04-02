@@ -22,7 +22,7 @@ end
 end
 function deregister_zobj(inst)
 for class,entities in pairs(g_zclass_entities)do
-if inst[class]then del(entities,inst)end
+del(entities,inst)
 end
 end
 function call_not_nil(table,key,...)
@@ -71,7 +71,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,timer_set_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,collision_follow_anchoring,@,check_collision,@,collision_draw_debug,@,model_draw,@,model_init,@,view_match_following,@,twinkle_draw,@,twinkle_init,@,planet_init,@,planet_update,@,logo_init,@,logo_draw,@,game_init,@,game_update,@,game_draw,@,pl_init,@,pl_update,@,pl_hit,@,cateroid_init,@,cateroid_update,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,timer_set_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,collision_follow_anchoring,@,check_collision,@,collision_draw_debug,@,model_draw,@,model_init,@,model_explode,@,line_particle_update,@,line_particle_draw,@,view_match_following,@,twinkle_draw,@,twinkle_init,@,planet_init,@,planet_update,@,logo_init,@,logo_draw,@,game_init,@,game_update,@,game_draw,@,pl_init,@,pl_update,@,pl_hit,@,cateroid_init,@,cateroid_update,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -147,19 +147,8 @@ if g_debug then
 circ(zoomx(a.x),zoomy(a.y),a.radius*g_view.zoom_factor,8)
 end
 end,function(a)
-local dir=a.ang
-local x,y=a.x,a.y
-foreach(a.model.lines or{},function(shape)
-for i=2,#shape-2,2 do
-local x1,y1=shape[i],shape[i+1]
-local x2,y2=shape[i+2],shape[i+3]
-local ang1,ang2=atan2(x1,y1),atan2(x2,y2)
-local mag1,mag2=approx_dist(x1,y1),approx_dist(x2,y2)
-wobble_line(
-zoomx(x+cos(ang1+dir)*mag1),zoomy(y+sin(ang1+dir)*mag1),
-zoomx(x+cos(ang2+dir)*mag2),zoomy(y+sin(ang2+dir)*mag2),shape[1]
-)
-end
+foreach(get_line_coords(a.x,a.y,a.ang,a.model.lines),function(l)
+wobble_line(zoomx(l.x1),zoomy(l.y1),zoomx(l.x2),zoomy(l.y2),l.color)
 end)
 end,function(a,zobj_str)
 a.model=zobj(zobj_str)
@@ -167,20 +156,31 @@ foreach(a.model.collisions or{},function(collision)
 a.collision_func(a,collision[1],collision[2],collision[3])
 end)
 end,function(a)
+a:kill()
+foreach(get_line_coords(a.x,a.y,a.ang,a.model.lines),function(l)
+local midx,midy=(l.x2-l.x1)/2+l.x1,(l.y2-l.y1)/2+l.y1
+local x1,y1=l.x1-midx,l.y1-midy
+local x2,y2=l.x2-midx,l.y2-midy
+_g.line_particle(atan2(midx-a.x,midy-a.y),midx,midy,x1,y1,x2,y2,l.color)
+end)
+end,function(a)
+a.dx=cos(a.ang)*.01
+a.dy=sin(a.ang)*.01
+end,function(a)
+local percent=1-a:get_elapsed_percent"state"
+line(zoomx(a.x+a.x1*percent),zoomy(a.y+a.y1*percent),zoomx(a.x+a.x2*percent),zoomy(a.y+a.y2*percent),a.color)
+end,function(a)
 if a.following then
 local x,y=a.following.x-a.x,a.following.y-a.y
 local dir=atan2(x,y)
 local dist=approx_dist(x,y)
 a.dx=cos(dir)*dist*.25
 a.dy=sin(dir)*dist*.25
-if btn"4"then a.zoom_factor=max(1,a.zoom_factor+1)end
-if btn"5"then a.zoom_factor=max(1,a.zoom_factor-1)end
 end
 end,function(a)
-srand((a.x+t()*4)\1)
 local x=(-g_view.x+flr(a.x*g_view.zoom_factor))%128
 local y=(-g_view.y+flr(a.y*g_view.zoom_factor))%128
-pset(x+rnd_one(),y+rnd_one(),sin(time()/10+a.twinkle_offset)>0.5 and 6 or 5)
+pset(x,y,sin(time()/10+a.twinkle_offset)>0.5 and 6 or 5)
 end,function(a)
 a.twinkle_offset=rnd()
 a.x=rnd(256)
@@ -200,11 +200,12 @@ end,function()
 g_pl=_g.pl(0,0)
 g_view=_g.view(g_pl)
 _g.planet(1,3)
-_g.cateroid(10,0)
+g_cateroid=_g.cateroid(10,0)
 for i=1,50 do
 _g.twinkle()
 end
 end,function()
+if btnp(4)then g_pl:explode()g_cateroid:explode()end
 loop_zobjs("actor","state")
 loop_zobjs("view","match_following")
 loop_zobjs("bad_collision_circ","check_collision",g_zclass_entities["good_collision_circ"])
@@ -271,7 +272,23 @@ zclass[[bad_collision_circ,collision_circ|anchoring,@,offset_x,@,offset_y,@,radi
 zclass[[good_collision_circ,collision_circ|anchoring,@,offset_x,@,offset_y,@,radius,@]]
 function zoomx(x)return(x-g_view.x)*g_view.zoom_factor+64 end
 function zoomy(y)return(y-g_view.y)*g_view.zoom_factor+64 end
-zclass[[model,mov,drawable,actor|model;,;hit,nop,collision_func,%bad_collision_circ,draw,%model_draw,model_init,%model_init]]
+zclass[[model,mov,drawable,actor|model;,;hit,nop,collision_func,%bad_collision_circ,draw,%model_draw,explode,%model_explode,model_init,%model_init]]
+function get_line_coords(x,y,dir,model_lines)
+local lines={}
+foreach(model_lines or{},function(shape)
+for i=2,#shape-2,2 do
+local x1,y1=shape[i],shape[i+1]
+local x2,y2=shape[i+2],shape[i+3]
+local ang1,ang2=atan2(x1,y1),atan2(x2,y2)
+local mag1,mag2=approx_dist(x1,y1),approx_dist(x2,y2)
+add(lines,{x1=x+cos(ang1+dir)*mag1,y1=y+sin(ang1+dir)*mag1,
+x2=x+cos(ang2+dir)*mag2,y2=y+sin(ang2+dir)*mag2,
+color=shape[1]})
+end
+end)
+return lines
+end
+zclass[[line_particle,vec,actor,drawable|ang,@,x,@,y,@,x1,@,y1,@,x2,@,y2,@,color,@,draw,%line_particle_draw,update,%line_particle_update;start;duration,.5;]]
 function wobble_line(x1,y1,x3,y3,color)
 srand(t()*4\1)
 local x2,y2=(x3-x1)/2+x1+flr_rnd(3)-1,(y3-y1)/2+y1+flr_rnd(3)-1
