@@ -152,8 +152,15 @@ circ(zoomx(a.x),zoomy(a.y),a.radius*g_view.zoom_factor,8)
 end
 end,function(a)
 srand(t()*4\1)
-foreach(get_line_coords(a.x,a.y,a.ang,a.model.lines),function(l)
-wobble_line(zoomx(l.x1),zoomy(l.y1),zoomx(l.x2),zoomy(l.y2),l.color)
+foreach(a.model.fills,function(lines)
+local points=get_points_from_shape(a.x,a.y,a.ang,lines)
+foreach(points,function(point)point.x=zoomx(point.x)point.y=zoomy(point.y)end)
+draw_polygon(points,lines[1])
+end)
+foreach(a.model.lines,function(lines)
+line_loop(get_points_from_shape(a.x,a.y,a.ang,lines),lines[1],function(x1,y1,x2,y2,color)
+wobble_line(zoomx(x1),zoomy(y1),zoomx(x2),zoomy(y2),color)
+end)
 end)
 if g_debug and a.field_radius then
 circ(zoomx(a.x),zoomy(a.y),a.field_radius*g_view.zoom_factor,2)
@@ -184,11 +191,13 @@ end)
 end,function(a)
 if a.alive then
 a:kill()
-foreach(get_line_coords(a.x,a.y,a.ang,a.model.lines),function(l)
-local midx,midy=(l.x2-l.x1)/2+l.x1,(l.y2-l.y1)/2+l.y1
-local x1,y1=l.x1-midx,l.y1-midy
-local x2,y2=l.x2-midx,l.y2-midy
-_g.line_particle(atan2(midx-a.x,midy-a.y),midx,midy,x1,y1,x2,y2,l.color,a.dx,a.dy)
+foreach(a.model.lines,function(lines)
+line_loop(get_points_from_shape(a.x,a.y,a.ang,lines),lines[1],function(x1,y1,x2,y2,color)
+local midx,midy=(x2-x1)/2+x1,(y2-y1)/2+y1
+x1,y1=l.x1-midx,l.y1-midy
+x2,y2=l.x2-midx,l.y2-midy
+_g.line_particle(atan2(midx-a.x,midy-a.y),midx,midy,x1,y1,x2,y2,color,a.dx,a.dy)
+end)
 end)
 end
 end,function(a)
@@ -249,7 +258,7 @@ loop_zobjs("vec","vec_update")
 end,function()
 loop_zobjs("drawable","draw")
 end,function(a)
-a:model_init[[field,1;lines;1;,5,-0.5,-0.2,-0.7,-0.3,-0.8,-0.1,-0.8,0.1,-0.7,0.3,-0.5,0.2;lines;2;,13,0,-0.3,-0.2,-0.5,-0.6,-0.6,-0.8,-0.6,-0.9,-0.5,-0.6,-0.4,-0.5,-0.2;lines;3;,13,0,0.3,-0.2,0.5,-0.6,0.6,-0.8,0.6,-0.9,0.5,-0.6,0.4,-0.5,0.2;lines;4;,13,0,0,-0.9,0;lines;5;,7,1,0,0.7,-0.2,0.2,-0.3,0,-0.3,-0.5,-0.2,-0.6,0;lines;6;,7,1,0,0.7,0.2,0.2,0.3,0,0.3,-0.5,0.2,-0.6,0;lines;7;,13,0.7,-0.2,1,0,0.7,0.2,0.6,0.1,0.6,-0.1,0.7,-0.2;lines;8;,13,0.5,0,0.4,-0.1,0.3,-0.1,0.2,0,0.3,0.1,0.4,0.1,0.5,0;collisions;1;,-0.4,0,0.6;collisions;2;,0.2,0,0.3;collisions;3;,0.5,0,0.3;collisions;4;,0.8,0,0.2;collisions;5;,-0.7,-0.4,0.2;collisions;6;,-0.7,0.4,0.2;]]
+a:model_init[[field,1;collisions;1;,-0.4,0,0.6;collisions;2;,0.2,0,0.3;collisions;3;,0.5,0,0.3;collisions;4;,0.8,0,0.2;collisions;5;,-0.7,-0.4,0.2;collisions;6;,-0.7,0.4,0.2;fills;1;,8,1,0,0.7,0.2,0.6,0.1,0.6,-0.1,0.7,-0.2,1,0;fills;2;,12,0.7,-0.2,0.6,-0.2,0.1,-0.3,-0.5,-0.2,-0.6,0,-0.5,0.2,0.1,0.3,0.6,0.2,0.7,0.2,0.6,0.1,0.6,-0.1,0.7,-0.2;fills;3;,7,0.5,0,0.4,-0.1,0.3,-0.1,0.2,0,0.3,0.1,0.4,0.1,0.5,0;fills;4;,1,0,-0.3,-0.2,-0.5,-0.6,-0.6,-0.8,-0.6,-0.9,-0.5,-0.6,-0.4,-0.5,-0.2,0,-0.3;fills;5;,1,0,0.3,-0.2,0.5,-0.6,0.6,-0.8,0.6,-0.9,0.5,-0.6,0.4,-0.5,0.2,0,0.3;fills;6;,2,-0.7,-0.3,-0.8,-0.1,-0.8,0.1,-0.7,0.3,-0.5,0.2,-0.6,0,-0.5,-0.2,-0.7,-0.3;lines;1;,5,-0.5,-0.2,-0.7,-0.3,-0.8,-0.1,-0.8,0.1,-0.7,0.3,-0.5,0.2;lines;2;,13,0,-0.3,-0.2,-0.5,-0.6,-0.6,-0.8,-0.6,-0.9,-0.5,-0.6,-0.4,-0.5,-0.2;lines;3;,13,0,0.3,-0.2,0.5,-0.6,0.6,-0.8,0.6,-0.9,0.5,-0.6,0.4,-0.5,0.2;lines;4;,13,0,0,-0.9,0;lines;5;,7,1,0,0.7,-0.2,0.2,-0.3,0,-0.3,-0.5,-0.2,-0.6,0;lines;6;,7,1,0,0.7,0.2,0.2,0.3,0,0.3,-0.5,0.2,-0.6,0;lines;7;,13,0.7,-0.2,1,0,0.7,0.2,0.6,0.1,0.6,-0.1,0.7,-0.2;lines;8;,13,0.5,0,0.4,-0.1,0.3,-0.1,0.2,0,0.3,0.1,0.4,0.1,0.5,0;]]
 end,function(a)
 if btn"4"and a.missile_ready then
 _g.missile(a.x+1,a.y+1,a.ang)
@@ -288,6 +297,25 @@ return a0*0.9609+b0*0.3984
 end
 return b0*0.9609+a0*0.3984
 end
+function draw_polygon(points,c)
+local xl,xr,ymin,ymax={},{},129,0xffff
+for k,v in pairs(points)do
+local p2=points[k%#points+1]
+local x1,y1,x2,y2=v.x,flr(v.y),p2.x,flr(p2.y)
+if y1>y2 then
+y1,y2,x1,x2=y2,y1,x2,x1
+end
+local d=y2-y1
+for y=y1,y2 do
+local xval=flr(x1+(x2-x1)*(d==0 and 1 or(y-y1)/d))
+xl[y],xr[y]=min(xl[y]or 32767,xval),max(xr[y]or 0x8001,xval)
+end
+ymin,ymax=min(y1,ymin),max(y2,ymax)
+end
+for y=ymin,ymax do
+rectfill(xl[y],y,xr[y],y,c)
+end
+end
 function tostring(any)
 if type(any)~="table"then return tostr(any)end
 local str="{"
@@ -310,20 +338,21 @@ zclass[[good_collision_circ,collision_circ|anchoring,@,offset_x,@,offset_y,@,rad
 function zoomx(x)return(x-g_view.x)*g_view.zoom_factor+64 end
 function zoomy(y)return(y-g_view.y)*g_view.zoom_factor+64 end
 zclass[[model,mov,drawable,actor|model;,;hit,nop,collision_func,%bad_collision_circ,draw,%model_draw,explode,%model_explode,collide,%model_collide,model_init,%model_init]]
-function get_line_coords(x,y,dir,model_lines)
-local lines={}
-foreach(model_lines or{},function(shape)
-for i=2,#shape-2,2 do
-local x1,y1=shape[i],shape[i+1]
-local x2,y2=shape[i+2],shape[i+3]
-local ang1,ang2=atan2(x1,y1),atan2(x2,y2)
-local mag1,mag2=approx_dist(x1,y1),approx_dist(x2,y2)
-add(lines,{x1=x+cos(ang1+dir)*mag1,y1=y+sin(ang1+dir)*mag1,
-x2=x+cos(ang2+dir)*mag2,y2=y+sin(ang2+dir)*mag2,
-color=shape[1]})
+function line_loop(points,color,linefunc)
+for i=1,#points-1,1 do
+local p1,p2=points[i],points[i+1]
+linefunc(p1.x,p1.y,p2.x,p2.y,color)
 end
-end)
-return lines
+end
+function get_points_from_shape(x,y,dir,shape)
+local points={}
+for i=2,#shape,2 do
+local x1,y1=shape[i],shape[i+1]
+local ang1=atan2(x1,y1)
+local mag1=approx_dist(x1,y1)
+add(points,{x=x+cos(ang1+dir)*mag1,y=y+sin(ang1+dir)*mag1})
+end
+return points
 end
 zclass[[line_particle,vec,actor,drawable|ang,@,x,@,y,@,x1,@,y1,@,x2,@,y2,@,color,@,dx,@,dy,@,draw,%line_particle_draw,update,%line_particle_update;start;duration,.5;]]
 function wobble_line(x1,y1,x3,y3,color)

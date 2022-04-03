@@ -1,10 +1,13 @@
-modes = { "lines", "collisions", "field" }
+modes = { "lines", "collisions", "fills", "field" }
 zooms = { .5, 1, 1.5, 2, 3, 5 }
-model = { lines={}, collisions={} }
+model = { lines={}, collisions={}, fills={} }
+
+default_line_color = 7
+default_fill_color = 1
+
 virt_mx, virt_my = 0, 0
 show_ui = true
-lines_layer = 1
-collisions_layer = 1
+lines_layer, collisions_layer, fills_layer = 1, 1, 1
 
 -- fast approximate distance formula (no need for sqrt & ^2)
 -- stolen from a pico-8 forum
@@ -30,17 +33,25 @@ function model_to_string()
         str = str.."field,"..model.field..";"
     end
 
-    for i=1,#model.lines,1 do
-        str = str.."lines;"..i..";"
-        for item in all(model.lines[i]) do
+    for i=1,#model.collisions,1 do
+        str = str.."collisions;"..i..";"
+        for item in all(model.collisions[i]) do
             str = str..","..item
         end
         str = str..";"
     end
 
-    for i=1,#model.collisions,1 do
-        str = str.."collisions;"..i..";"
-        for item in all(model.collisions[i]) do
+    for i=1,#model.fills,1 do
+        str = str.."fills;"..i..";"
+        for item in all(model.fills[i]) do
+            str = str..","..item
+        end
+        str = str..";"
+    end
+
+    for i=1,#model.lines,1 do
+        str = str.."lines;"..i..";"
+        for item in all(model.lines[i]) do
             str = str..","..item
         end
         str = str..";"
@@ -70,7 +81,7 @@ function _update60()
     if     keyboard_enabled and char == "m" then mode_i = mode_i % #modes + 1 last_x = nil last_y = nil
     elseif keyboard_enabled and char == "t" then show_ui = not show_ui
     elseif keyboard_enabled and char == "s" then printh(model_to_string(), '@clip')
-    elseif keyboard_enabled and char == "r" then if stat(4) ~= "" then model = zobj(stat(4)) model.lines=model.lines or {} model.collisions=model.collisions or {} end
+    elseif keyboard_enabled and char == "r" then if stat(4) ~= "" then model = zobj(stat(4)) model.lines=model.lines or {} model.collisions=model.collisions or {} model.fills=model.fills or {} end
     elseif keyboard_enabled and char == "-" then next_zoom = min(#zooms, zoom_i+1)
     elseif keyboard_enabled and char == "+" then next_zoom = max(1, zoom_i-1)
     elseif keyboard_enabled and char == "=" then next_zoom = 2
@@ -78,6 +89,12 @@ function _update60()
         for lines in all(model.lines) do
             for i=2,#lines,2 do
                 lines[i], lines[i+1] = -lines[i+1], lines[i]
+            end
+        end
+
+        for fills in all(model.fills) do
+            for i=2,#fills,2 do
+                fills[i], fills[i+1] = -fills[i+1], fills[i]
             end
         end
 
@@ -103,21 +120,29 @@ function _update60()
             end
             add(model.lines, cpy)
             lines_layer = #model.lines
+        elseif char == "0" then default_line_color = 0  if model.lines[lines_layer] then model.lines[lines_layer][1] = default_line_color end
+        elseif char == "1" then default_line_color = 1  if model.lines[lines_layer] then model.lines[lines_layer][1] = default_line_color end
+        elseif char == "2" then default_line_color = 2  if model.lines[lines_layer] then model.lines[lines_layer][1] = default_line_color end
+        elseif char == "3" then default_line_color = 3  if model.lines[lines_layer] then model.lines[lines_layer][1] = default_line_color end
+        elseif char == "4" then default_line_color = 4  if model.lines[lines_layer] then model.lines[lines_layer][1] = default_line_color end
+        elseif char == "5" then default_line_color = 5  if model.lines[lines_layer] then model.lines[lines_layer][1] = default_line_color end
+        elseif char == "6" then default_line_color = 6  if model.lines[lines_layer] then model.lines[lines_layer][1] = default_line_color end
+        elseif char == "7" then default_line_color = 7  if model.lines[lines_layer] then model.lines[lines_layer][1] = default_line_color end
+        elseif char == "8" then default_line_color = 8  if model.lines[lines_layer] then model.lines[lines_layer][1] = default_line_color end
+        elseif char == "9" then default_line_color = 9  if model.lines[lines_layer] then model.lines[lines_layer][1] = default_line_color end
+        elseif char == ")" then default_line_color = 10 if model.lines[lines_layer] then model.lines[lines_layer][1] = default_line_color end
+        elseif char == "!" then default_line_color = 11 if model.lines[lines_layer] then model.lines[lines_layer][1] = default_line_color end
+        elseif char == "@" then default_line_color = 12 if model.lines[lines_layer] then model.lines[lines_layer][1] = default_line_color end
+        elseif char == "#" then default_line_color = 13 if model.lines[lines_layer] then model.lines[lines_layer][1] = default_line_color end
+        elseif char == "$" then default_line_color = 14 if model.lines[lines_layer] then model.lines[lines_layer][1] = default_line_color end
+        elseif char == "%" then default_line_color = 15 if model.lines[lines_layer] then model.lines[lines_layer][1] = default_line_color end
         elseif btnp(0) then lines_layer = max(1, lines_layer - 1)
         elseif btnp(1) then lines_layer = min(#model.lines+1, lines_layer + 1)
-        elseif btnp(2) then 
-            if model.lines[lines_layer] then
-                model.lines[lines_layer][1] = min(15, model.lines[lines_layer][1]+1)
-            end
-        elseif btnp(3) then
-            if model.lines[lines_layer] then
-                model.lines[lines_layer][1] = max(1, model.lines[lines_layer][1]-1)
-            end
         end
 
         -- left click, add point
         if stat(34) == 1 and not (last_x == virt_mx and last_y == virt_my) then
-            model.lines[lines_layer] = model.lines[lines_layer] or {7}
+            model.lines[lines_layer] = model.lines[lines_layer] or {default_line_color}
             add(model.lines[lines_layer], virt_mx)
             add(model.lines[lines_layer], virt_my)
             last_x = virt_mx
@@ -145,11 +170,56 @@ function _update60()
             model.collisions[collisions_layer][2] = virt_my
             last_x, last_y = virt_mx, virt_my
         end
+    elseif curr_mode == "fills" then
+        if char == "d" and model.fills[fills_layer] then
+            deli(model.fills, fills_layer)
+        elseif char == "x" and model.fills[fills_layer] then -- add layer that flips on x axis
+            local cpy = {model.fills[fills_layer][1]}
+            for i=2,#model.fills[fills_layer],1 do
+                local item = model.fills[fills_layer][i]
+                add(cpy, i % 2 == 0 and -item or item)
+            end
+            add(model.fills, cpy)
+            fills_layer = #model.fills
+        elseif char == "y" and model.fills[fills_layer] then -- add layer that flips on y axis
+            local cpy = {model.fills[fills_layer][1]}
+            for i=2,#model.fills[fills_layer],1 do
+                local item = model.fills[fills_layer][i]
+                add(cpy, i % 2 == 1 and -item or item)
+            end
+            add(model.fills, cpy)
+            fills_layer = #model.fills
+        elseif char == "0" then default_fill_color = 0  if model.fills[fills_layer] then model.fills[fills_layer][1] = default_fill_color end
+        elseif char == "1" then default_fill_color = 1  if model.fills[fills_layer] then model.fills[fills_layer][1] = default_fill_color end
+        elseif char == "2" then default_fill_color = 2  if model.fills[fills_layer] then model.fills[fills_layer][1] = default_fill_color end
+        elseif char == "3" then default_fill_color = 3  if model.fills[fills_layer] then model.fills[fills_layer][1] = default_fill_color end
+        elseif char == "4" then default_fill_color = 4  if model.fills[fills_layer] then model.fills[fills_layer][1] = default_fill_color end
+        elseif char == "5" then default_fill_color = 5  if model.fills[fills_layer] then model.fills[fills_layer][1] = default_fill_color end
+        elseif char == "6" then default_fill_color = 6  if model.fills[fills_layer] then model.fills[fills_layer][1] = default_fill_color end
+        elseif char == "7" then default_fill_color = 7  if model.fills[fills_layer] then model.fills[fills_layer][1] = default_fill_color end
+        elseif char == "8" then default_fill_color = 8  if model.fills[fills_layer] then model.fills[fills_layer][1] = default_fill_color end
+        elseif char == "9" then default_fill_color = 9  if model.fills[fills_layer] then model.fills[fills_layer][1] = default_fill_color end
+        elseif char == ")" then default_fill_color = 10 if model.fills[fills_layer] then model.fills[fills_layer][1] = default_fill_color end
+        elseif char == "!" then default_fill_color = 11 if model.fills[fills_layer] then model.fills[fills_layer][1] = default_fill_color end
+        elseif char == "@" then default_fill_color = 12 if model.fills[fills_layer] then model.fills[fills_layer][1] = default_fill_color end
+        elseif char == "#" then default_fill_color = 13 if model.fills[fills_layer] then model.fills[fills_layer][1] = default_fill_color end
+        elseif char == "$" then default_fill_color = 14 if model.fills[fills_layer] then model.fills[fills_layer][1] = default_fill_color end
+        elseif char == "%" then default_fill_color = 15 if model.fills[fills_layer] then model.fills[fills_layer][1] = default_fill_color end
+        elseif btnp(0) then fills_layer = max(1, fills_layer - 1)
+        elseif btnp(1) then fills_layer = min(#model.fills+1, fills_layer + 1)
+        end
+
+        -- left click, add point
+        if stat(34) == 1 and not (last_x == virt_mx and last_y == virt_my) then
+            model.fills[fills_layer] = model.fills[fills_layer] or {default_fill_color}
+            add(model.fills[fills_layer], virt_mx)
+            add(model.fills[fills_layer], virt_my)
+            last_x = virt_mx
+            last_y = virt_my
+        end
     elseif curr_mode == "field" then
-        if char == "d" and model.collisions[collisions_layer] then
+        if char == "d" then
             model.field = nil
-        elseif btnp(0) then collisions_layer = max(1, collisions_layer - 1)
-        elseif btnp(1) then collisions_layer = min(#model.collisions+1, collisions_layer + 1)
         elseif btnp(2) then 
             model.field = min(6, (model.field or 1)+.5)
         elseif btnp(3) then
@@ -170,20 +240,23 @@ function _draw()
             local shape = model.collisions[collisions_layer]
             print("rad:"..(shape and shape[3] or 0), 4, 96, 5)
             print("layer:"..collisions_layer, 4, 102, 5)
+        elseif modes[mode_i] == "fills" then
+            local shape = model.fills[fills_layer]
+            print("points:"..(shape and (#shape-1)/2 or 0), 4, 96, 5)
+            print("layer:"..fills_layer, 4, 102, 5)
         end
         print("x: "..virt_mx, 4, 108, 5)
         print("y: "..virt_my, 4, 114, 5)
         print(modes[mode_i], 4, 120, 5)
-    end
 
-    if show_ui then
+        -- grid
         fillp(0b1010010110100101)
-        wobble_line(64, 0, 64, 127, 8)
-        wobble_line(0, 64, 127, 64, 8)
-        wobble_line(14, 64-3, 14, 64+3, 7)
-        wobble_line(64-3, 14, 64+3, 14, 7)
-        wobble_line(114, 64-3, 114, 64+3, 7)
-        wobble_line(64-3, 114, 64+3, 114, 7)
+        line(64, 0, 64, 127, 8)
+        line(0, 64, 127, 64, 8)
+        line(14, 64-3, 14, 64+3, 7)
+        line(64-3, 14, 64+3, 14, 7)
+        line(114, 64-3, 114, 64+3, 7)
+        line(64-3, 114, 64+3, 114, 7)
         fillp()
 
         print(zooms[zoom_i], 66, 116, 7)
@@ -196,11 +269,38 @@ function _draw()
                 circ(x*50/zooms[zoom_i]+64, y*50/zooms[zoom_i]+64, rad*50/zooms[zoom_i], color)
             end
         end
-    end
 
-    if show_ui then
         if model.field then
             circ(64, 64, model.field*50/zooms[zoom_i], 8)
+        end
+
+        for layer_i=1,#model.fills,1 do
+            local shape = model.fills[layer_i]
+            if #shape >= 5 then
+                for i=2,#shape-2,2 do
+                    local x1, y1 = shape[i], shape[i+1]
+                    local x2, y2 = shape[i+2], shape[i+3]
+                    local color = (layer_i == fills_layer and modes[mode_i] == "fills" or not show_ui) and shape[1] or 1
+                    line(
+                        x1*50/zooms[zoom_i]+64, y1*50/zooms[zoom_i]+64,
+                        x2*50/zooms[zoom_i]+64, y2*50/zooms[zoom_i]+64, color
+                    )
+                end
+            end
+        end
+    end
+
+    if not show_ui then
+        for layer_i=1,#model.fills,1 do
+            local shape = model.fills[layer_i]
+            if #shape >= 1 then
+                local points = {}
+                for i=2,#shape-2,2 do
+                    add(points, {x=shape[i]*50/zooms[zoom_i]+64, y=shape[i+1]*50/zooms[zoom_i]+64})
+                end
+
+                draw_polygon(points, shape[1])
+            end
         end
     end
 
@@ -219,29 +319,55 @@ function _draw()
         end
     end
 
-    if show_ui and modes[mode_i] == "lines" then
-        local shape = model.lines[lines_layer]
-        if shape then
-            -- vertices
-            for i=2,#shape,2 do
-                local x1, y1 = shape[i], shape[i+1]
-                circfill(x1*50/zooms[zoom_i]+64, y1*50/zooms[zoom_i]+64, 1, 7)
-            end
+    if show_ui then
+        if modes[mode_i] == "lines" then
+            local shape = model.lines[lines_layer]
+            if shape then
+                -- vertices
+                for i=2,#shape,2 do
+                    local x1, y1 = shape[i], shape[i+1]
+                    circfill(x1*50/zooms[zoom_i]+64, y1*50/zooms[zoom_i]+64, 1, 7)
+                end
 
-            -- first point
-            if #shape >= 3 then
-                circ(shape[2]*50/zooms[zoom_i]+64, shape[3]*50/zooms[zoom_i]+64, 4, 8)
+                -- first point
+                if #shape >= 3 then
+                    circ(shape[2]*50/zooms[zoom_i]+64, shape[3]*50/zooms[zoom_i]+64, 4, 8)
+                end
             end
-        end
-    end
+        elseif modes[mode_i] == "collisions" then
+            local shape = model.collisions[collisions_layer]
+            if shape then
+                circ(shape[1]*50/zooms[zoom_i]+64, shape[2]*50/zooms[zoom_i]+64, 4, 8)
+                wobble_line(shape[1]*50/zooms[zoom_i]+64, shape[2]*50/zooms[zoom_i]+64, (shape[1]+shape[3])*50/zooms[zoom_i]+64, shape[2]*50/zooms[zoom_i]+64, 11)
+                wobble_line(shape[1]*50/zooms[zoom_i]+64, shape[2]*50/zooms[zoom_i]+64, shape[1]*50/zooms[zoom_i]+64, (shape[2]+shape[3])*50/zooms[zoom_i]+64, 11)
+                circ(shape[1]*50/zooms[zoom_i]+64, shape[2]*50/zooms[zoom_i]+64, 1, 7)
+            end
+        elseif modes[mode_i] == "fills" then
+            local shape = model.fills[fills_layer]
+            if shape then
+                if #shape >= 5 then
+                    for i=2,#shape-2,2 do
+                        local x1, y1 = shape[i], shape[i+1]
+                        local x2, y2 = shape[i+2], shape[i+3]
+                        local color = shape[1]
+                        line(
+                            x1*50/zooms[zoom_i]+64, y1*50/zooms[zoom_i]+64,
+                            x2*50/zooms[zoom_i]+64, y2*50/zooms[zoom_i]+64, color
+                        )
+                    end
+                end
 
-    if show_ui and modes[mode_i] == "collisions" then
-        local shape = model.collisions[collisions_layer]
-        if shape then
-            circ(shape[1]*50/zooms[zoom_i]+64, shape[2]*50/zooms[zoom_i]+64, 4, 8)
-            wobble_line(shape[1]*50/zooms[zoom_i]+64, shape[2]*50/zooms[zoom_i]+64, (shape[1]+shape[3])*50/zooms[zoom_i]+64, shape[2]*50/zooms[zoom_i]+64, 11)
-            wobble_line(shape[1]*50/zooms[zoom_i]+64, shape[2]*50/zooms[zoom_i]+64, shape[1]*50/zooms[zoom_i]+64, (shape[2]+shape[3])*50/zooms[zoom_i]+64, 11)
-            circ(shape[1]*50/zooms[zoom_i]+64, shape[2]*50/zooms[zoom_i]+64, 1, 7)
+                -- vertices
+                for i=2,#shape,2 do
+                    local x1, y1 = shape[i], shape[i+1]
+                    circfill(x1*50/zooms[zoom_i]+64, y1*50/zooms[zoom_i]+64, 1, 7)
+                end
+
+                -- first point
+                if #shape >= 3 then
+                    circ(shape[2]*50/zooms[zoom_i]+64, shape[3]*50/zooms[zoom_i]+64, 4, 8)
+                end
+            end
         end
     end
 
@@ -255,6 +381,27 @@ function _draw()
     pset(virt_mx*50/zooms[zoom_i]+64+2, virt_my*50/zooms[zoom_i]+64,   pget(virt_mx*50/zooms[zoom_i]+64+2, virt_my*50/zooms[zoom_i]+64)+7)
     pset(virt_mx*50/zooms[zoom_i]+64,   virt_my*50/zooms[zoom_i]+64-2, pget(virt_mx*50/zooms[zoom_i]+64,   virt_my*50/zooms[zoom_i]+64-2)+7)
     pset(virt_mx*50/zooms[zoom_i]+64,   virt_my*50/zooms[zoom_i]+64+2, pget(virt_mx*50/zooms[zoom_i]+64,   virt_my*50/zooms[zoom_i]+64+2)+7)
+end
+
+-- thanks to https://www.lexaloffle.com/bbs/?tid=34282
+function draw_polygon(points, c)
+    local xl,xr,ymin,ymax={},{},129,0xffff
+    for k,v in pairs(points) do
+        local p2=points[k%#points+1]
+        local x1,y1,x2,y2=v.x,flr(v.y),p2.x,flr(p2.y)
+        if y1>y2 then
+            y1,y2,x1,x2=y2,y1,x2,x1
+        end
+        local d=y2-y1
+        for y=y1,y2 do
+            local xval=flr(x1+(x2-x1)*(d==0 and 1 or (y-y1)/d))
+            xl[y],xr[y]=min(xl[y] or 32767,xval),max(xr[y] or 0x8001,xval)
+        end
+        ymin,ymax=min(y1,ymin),max(y2,ymax)
+    end
+    for y=ymin,ymax do
+        rectfill(xl[y],y,xr[y],y,c)
+    end
 end
 
 -- MODIFIED ZOBJ

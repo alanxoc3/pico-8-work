@@ -32,6 +32,27 @@ function approx_dist(dx,dy)
     return b0*0.9609+a0*0.3984
 end
 
+-- thanks to https://www.lexaloffle.com/bbs/?tid=34282
+function draw_polygon(points, c)
+    local xl,xr,ymin,ymax={},{},129,0xffff
+    for k,v in pairs(points) do
+        local p2=points[k%#points+1]
+        local x1,y1,x2,y2=v.x,flr(v.y),p2.x,flr(p2.y)
+        if y1>y2 then
+            y1,y2,x1,x2=y2,y1,x2,x1
+        end
+        local d=y2-y1
+        for y=y1,y2 do
+            local xval=flr(x1+(x2-x1)*(d==0 and 1 or (y-y1)/d))
+            xl[y],xr[y]=min(xl[y] or 32767,xval),max(xr[y] or 0x8001,xval)
+        end
+        ymin,ymax=min(y1,ymin),max(y2,ymax)
+    end
+    for y=ymin,ymax do
+        rectfill(xl[y],y,xr[y],y,c)
+    end
+end
+
 -- DEBUG_BEGIN
 -- Converts anything to a string.
 function tostring(any)

@@ -11,10 +11,26 @@ zclass[[model,mov,drawable,actor|
     model_init,%model_init
 ]]
 
+function line_loop(points, color, linefunc)
+    for i=1,#points-1,1 do
+        local p1, p2 = points[i], points[i+1]
+        linefunc(p1.x, p1.y, p2.x, p2.y, color)
+    end
+end
+
 |model_draw| function(a)
     srand(t()*4\1)
-    foreach(get_line_coords(a.x, a.y, a.ang, a.model.lines), function(l)
-        wobble_line(zoomx(l.x1), zoomy(l.y1), zoomx(l.x2), zoomy(l.y2), l.color)
+ 
+    foreach(a.model.fills, function(lines)
+        local points = get_points_from_shape(a.x, a.y, a.ang, lines)
+        foreach(points, function(point) point.x = zoomx(point.x) point.y = zoomy(point.y) end)
+        draw_polygon(points, lines[1])
+    end)
+
+    foreach(a.model.lines, function(lines)
+        line_loop(get_points_from_shape(a.x, a.y, a.ang, lines), lines[1], function(x1, y1, x2, y2, color)
+            wobble_line(zoomx(x1), zoomy(y1), zoomx(x2), zoomy(y2), color)
+        end)
     end)
 
     -- DEBUG_BEGIN
@@ -55,32 +71,29 @@ end $$
     end)
 end $$
 
-function get_line_coords(x, y, dir, model_lines)
-    local lines = {}
-    foreach(model_lines or {}, function(shape)
-        for i=2,#shape-2,2 do
-            local x1, y1 = shape[i], shape[i+1]
-            local x2, y2 = shape[i+2], shape[i+3]
-            local ang1, ang2 = atan2(x1, y1), atan2(x2, y2)
-            local mag1, mag2 = approx_dist(x1, y1), approx_dist(x2, y2)
+function get_points_from_shape(x, y, dir, shape)
+    local points = {}
+    for i=2,#shape,2 do
+        local x1, y1 = shape[i], shape[i+1]
+        local ang1 = atan2(x1, y1)
+        local mag1 = approx_dist(x1, y1)
 
-            add(lines, { x1=x+cos(ang1+dir)*mag1, y1=y+sin(ang1+dir)*mag1,
-                         x2=x+cos(ang2+dir)*mag2, y2=y+sin(ang2+dir)*mag2,
-                         color=shape[1] })
-        end
-    end)
-    return lines
+        add(points, {x=x+cos(ang1+dir)*mag1, y=y+sin(ang1+dir)*mag1})
+    end
+    return points
 end
 
 |model_explode| function(a)
     if a.alive then
         a:kill()
-
-        foreach(get_line_coords(a.x, a.y, a.ang, a.model.lines), function(l)
-            local midx, midy = (l.x2-l.x1)/2+l.x1, (l.y2-l.y1)/2+l.y1
-            local x1, y1 = l.x1-midx, l.y1-midy
-            local x2, y2 = l.x2-midx, l.y2-midy
-            _g.line_particle(atan2(midx-a.x, midy-a.y), midx, midy, x1, y1, x2, y2, l.color, a.dx, a.dy)
+ 
+        foreach(a.model.lines, function(lines)
+            line_loop(get_points_from_shape(a.x, a.y, a.ang, lines), lines[1], function(x1, y1, x2, y2, color)
+                local midx, midy = (x2-x1)/2+x1, (y2-y1)/2+y1
+                x1, y1 = l.x1-midx, l.y1-midy
+                x2, y2 = l.x2-midx, l.y2-midy
+                _g.line_particle(atan2(midx-a.x, midy-a.y), midx, midy, x1, y1, x2, y2, color, a.dx, a.dy)
+            end)
         end)
     end
 end $$
