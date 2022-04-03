@@ -1,15 +1,11 @@
 zclass[[pl,actor,model,drawable|
     x,@, y,@,
     missile_ready,yes,
-    init,%pl_init,
+    model_obj,%PLAYER_SPACESHIP,
     update,%pl_update,
     hit,%pl_hit,
     collision_func,%good_collision_circ
 ]]
-
-|pl_init| function(a)
-    a:model_init[[PLAYER_SPACESHIP]]
-end $$
 
 |pl_update| function(a)
     if btn'4' and a.missile_ready then

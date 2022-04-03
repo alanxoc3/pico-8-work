@@ -37,7 +37,8 @@ end
 function draw_polygon(points, color)
     if color >= 0 then
         local xl,xr,ymin,ymax={},{},129,0xffff
-        for k,v in pairs(points) do
+        for i=1,#points,1 do
+            local k, v = i, points[i]
             local p2=points[k%#points+1]
             local x1,y1,x2,y2=v.x,flr(v.y),p2.x,flr(p2.y)
             if y1>y2 then
@@ -50,6 +51,7 @@ function draw_polygon(points, color)
             end
             ymin,ymax=min(y1,ymin),max(y2,ymax)
         end
+
         for y=ymin,ymax do
             rectfill(xl[y],y,xr[y],y,color)
         end

@@ -2,12 +2,14 @@ function zoomx(x) return (x - g_view.x) * g_view.zoom_factor + 64 end
 function zoomy(y) return (y - g_view.y) * g_view.zoom_factor + 64 end
 
 zclass[[model,mov,actor|
-    model;,;
+    model_str,placeholder,
     hit,nop,
+    scale,1,
     collision_func,%bad_collision_circ,
     draw,%model_draw,
     explode,%model_explode,
     collide,%model_collide,
+    init,%model_init,
     model_init,%model_init
 ]]
 
@@ -19,16 +21,15 @@ function line_loop(points, color, linefunc)
 end
 
 |model_draw| function(a)
-    srand(t()*4\1) -- for nice wobbling
- 
     local modelpoints = {}
-    foreach(a.model.lines, function(lines)
-        local points = get_points_from_shape(a.x, a.y, a.ang, lines)
+    foreach(a.shapes, function(shape)
+        local points = translate_points(a.x, a.y, a.ang, shape)
         foreach(points, function(point) point.x = zoomx(point.x) point.y = zoomy(point.y) end)
-        draw_polygon(points, lines[2])
-        add(modelpoints, {c=lines[1], points=points})
+        draw_polygon(points, shape.bg_color)
+        add(modelpoints, {c=shape.fg_color, points=points})
     end)
 
+    srand(t()*4\1) -- for nice wobbling
     foreach(modelpoints, function(points)
         line_loop(points.points, points.c, wobble_line)
     end)
@@ -40,14 +41,28 @@ end
     -- DEBUG_END
 end $$
 
-|model_init| function(a, zobj_str)
-    a.model = zobj(zobj_str)
+-- meant to be called only once during the model's initialization
+|model_init| function(a)
+    local model = a.model_obj
 
-    a.field_radius = a.model.field
+    if model.field then
+        a.field_radius = model.field*a.scale
+    end
+
     a.collisions = {}
+
+    a.shapes = {}
+    foreach(model.lines, function(line_components)
+        local shape = {fg_color = line_components[1], bg_color = line_components[2]}
+        for i=3,#line_components/2\1*2,2 do
+            add(shape, {x=line_components[i]*a.scale, y=line_components[i+1]*a.scale})
+        end
+        add(a.shapes, shape)
+    end)
+    
     -- create collision rects
-    foreach(a.model.collisions or {}, function(collision)
-        a.collision_func(a, collision[1], collision[2], collision[3])
+    foreach(model.collisions or {}, function(collision)
+        a.collision_func(a, collision[1]*a.scale, collision[2]*a.scale, collision[3]*a.scale)
     end)
 end $$
 
@@ -71,15 +86,13 @@ end $$
     end)
 end $$
 
-function get_points_from_shape(x, y, dir, shape)
+function translate_points(x, y, dir, shape)
     local points = {}
-    for i=3,#shape/2\1*2,2 do
-        local x1, y1 = shape[i], shape[i+1]
-        local ang1 = atan2(x1, y1)
-        local mag1 = approx_dist(x1, y1)
-
-        add(points, {x=x+cos(ang1+dir)*mag1, y=y+sin(ang1+dir)*mag1})
-    end
+    foreach(shape, function(p)
+        local ang = atan2(p.x, p.y)
+        local mag = approx_dist(p.x, p.y)
+        add(points, {x=x+cos(ang+dir)*mag, y=y+sin(ang+dir)*mag})
+    end)
     return points
 end
 
@@ -87,16 +100,16 @@ end
     if a.alive then
         a:kill()
  
-        foreach(a.model.lines, function(lines)
-            local points = get_points_from_shape(a.x, a.y, a.ang, lines)
-            line_loop(points, lines[1], function(x1, y1, x2, y2, color)
+        foreach(a.shapes, function(shape)
+            local points = translate_points(a.x, a.y, a.ang, shape)
+            line_loop(points, shape.fg_color, function(x1, y1, x2, y2, color)
                 local midx, midy = (x2-x1)/2+x1, (y2-y1)/2+y1
                 x1, y1 = x1-midx, y1-midy
                 x2, y2 = x2-midx, y2-midy
                 _g.line_particle(atan2(midx-a.x, midy-a.y), midx, midy, x1, y1, x2, y2, color, a.dx, a.dy)
             end)
 
-            _g.vanishing_shape(a.x, a.y, a.dx, a.dy, points, lines[2])
+            _g.vanishing_shape(a.x, a.y, a.dx, a.dy, points, shape.bg_color)
         end)
     end
 end $$

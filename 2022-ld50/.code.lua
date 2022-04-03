@@ -72,7 +72,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_set_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,collision_draw_debug,@,model_draw,@,model_init,@,model_collide,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_match_following,@,missile_init,@,twinkle_draw,@,twinkle_init,@,star_view_match_following,@,planet_init,@,cateroid_init,@,pl_init,@,pl_update,@,pl_hit,@,level_select_draw,@,letter_init,@,level_select_init,@,level_select_update,@,logo_init,@,logo_draw,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_set_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,collision_draw_debug,@,model_draw,@,model_init,@,model_collide,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_match_following,@,twinkle_draw,@,twinkle_init,@,star_view_match_following,@,pl_update,@,pl_hit,@,level_select_draw,@,level_select_init,@,level_select_update,@,logo_init,@,logo_draw,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -155,26 +155,36 @@ if g_debug then
 circ(zoomx(a.x),zoomy(a.y),a.radius*g_view.zoom_factor,8)
 end
 end,function(a)
-srand(t()*4\1)
 local modelpoints={}
-foreach(a.model.lines,function(lines)
-local points=get_points_from_shape(a.x,a.y,a.ang,lines)
+foreach(a.shapes,function(shape)
+local points=translate_points(a.x,a.y,a.ang,shape)
 foreach(points,function(point)point.x=zoomx(point.x)point.y=zoomy(point.y)end)
-draw_polygon(points,lines[2])
-add(modelpoints,{c=lines[1],points=points})
+draw_polygon(points,shape.bg_color)
+add(modelpoints,{c=shape.fg_color,points=points})
 end)
+srand(t()*4\1)
 foreach(modelpoints,function(points)
 line_loop(points.points,points.c,wobble_line)
 end)
 if g_debug and a.field_radius then
 circ(zoomx(a.x),zoomy(a.y),a.field_radius*g_view.zoom_factor,2)
 end
-end,function(a,zobj_str)
-a.model=zobj(zobj_str)
-a.field_radius=a.model.field
+end,function(a)
+local model=a.model_obj
+if model.field then
+a.field_radius=model.field*a.scale
+end
 a.collisions={}
-foreach(a.model.collisions or{},function(collision)
-a.collision_func(a,collision[1],collision[2],collision[3])
+a.shapes={}
+foreach(model.lines,function(line_components)
+local shape={fg_color=line_components[1],bg_color=line_components[2]}
+for i=3,#line_components/2\1*2,2 do
+add(shape,{x=line_components[i]*a.scale,y=line_components[i+1]*a.scale})
+end
+add(a.shapes,shape)
+end)
+foreach(model.collisions or{},function(collision)
+a.collision_func(a,collision[1]*a.scale,collision[2]*a.scale,collision[3]*a.scale)
 end)
 end,function(a,other_list)
 foreach(other_list,function(other)
@@ -195,15 +205,15 @@ end)
 end,function(a)
 if a.alive then
 a:kill()
-foreach(a.model.lines,function(lines)
-local points=get_points_from_shape(a.x,a.y,a.ang,lines)
-line_loop(points,lines[1],function(x1,y1,x2,y2,color)
+foreach(a.shapes,function(shape)
+local points=translate_points(a.x,a.y,a.ang,shape)
+line_loop(points,shape.fg_color,function(x1,y1,x2,y2,color)
 local midx,midy=(x2-x1)/2+x1,(y2-y1)/2+y1
 x1,y1=x1-midx,y1-midy
 x2,y2=x2-midx,y2-midy
 _g.line_particle(atan2(midx-a.x,midy-a.y),midx,midy,x1,y1,x2,y2,color,a.dx,a.dy)
 end)
-_g.vanishing_shape(a.x,a.y,a.dx,a.dy,points,lines[2])
+_g.vanishing_shape(a.x,a.y,a.dx,a.dy,points,shape.bg_color)
 end)
 end
 end,function(a)
@@ -236,8 +246,6 @@ if btn"5"then a.zoom_factor=max(8,a.zoom_factor-1)end
 end
 end
 end,function(a)
-a:model_init[[lines;1;,7,-1,-0.1,0,0.1,0;collisions;1;,0,0,0.1;]]
-end,function(a)
 local x=(-g_star_view.x+flr(a.x*g_view.zoom_factor))%128
 local y=(-g_star_view.y+flr(a.y*g_view.zoom_factor))%128
 pset(x,y,sin(time()/10+a.twinkle_offset)>0.5 and 6 or 5)
@@ -250,14 +258,6 @@ if a.following then
 a.dx=a.following.dx
 a.dy=a.following.dy
 end
-end,function(a)
-a:model_init[[lines;1;,3,-1,0,-2,0.6,-1.9,1.2,-1.6,1.6,-1.2,1.9,-0.6,2,0;lines;2;,3,-1,0,2,0.6,1.9,1.2,1.6,1.6,1.2,1.9,0.6,2,0;lines;3;,3,-1,0,-2,-0.6,-1.9,-1.2,-1.6,-1.6,-1.2,-1.9,-0.6,-2,0;lines;4;,3,-1,0,2,-0.6,1.9,-1.2,1.6,-1.6,1.2,-1.9,0.6,-2,0;collisions;1;,0,0,1.9999;]]
-a.d_ang=.001
-end,function(a)
-a:model_init[[field,2;lines;1;,7,-1,-1.2,-0.4,-1.3,0,-1.2,0.5,-0.8,0.9,-0.4,1,0,1;lines;2;,7,-1,1.2,-0.4,1.3,0,1.2,0.5,0.8,0.9,0.4,1,0,1;lines;3;,7,-1,0,0.4,0.2,0.3,0.1,0.2,-0.1,0.2,-0.2,0.3,0,0.4;lines;4;,7,-1,0,0.4,0,0.5,-0.1,0.6,-0.2,0.6;lines;5;,7,-1,0,0.4,0,0.5,0.1,0.6,0.2,0.6;lines;6;,7,-1,0.6,0.2,0.5,0.1,0.5,-0.1,0.6,-0.2,0.7,-0.1,0.7,0.1,0.6,0.2;lines;7;,7,-1,-0.6,0.2,-0.5,0.1,-0.5,-0.1,-0.6,-0.2,-0.7,-0.1,-0.7,0.1,-0.6,0.2;lines;8;,7,-1,-1,-0.6,-0.8,-0.8,-0.5,-1,-0.1,-1.1,0,-1.1;lines;9;,7,-1,1,-0.6,0.8,-0.8,0.5,-1,0.1,-1.1,0,-1.1;lines;10;,7,-1,-1.2,-0.5,-1.1,-1.1,-0.9,-1.5,-0.5,-1;lines;11;,7,-1,1.2,-0.5,1.1,-1.1,0.9,-1.5,0.5,-1;lines;12;,7,-1,0.9,-1.5,0.8,-1.2,0.8,-0.8;lines;13;,7,-1,-0.9,-1.5,-0.8,-1.2,-0.8,-0.8;lines;14;,7,-1,0.9,0.3,1.2,0.3;lines;15;,7,-1,-0.9,0.3,-1.2,0.3;lines;16;,7,-1,0.9,0.2,1.1,0;lines;17;,7,-1,-0.9,0.2,-1.1,0;lines;18;,7,-1,0.9,0.4,1.1,0.6;lines;19;,7,-1,-0.9,0.4,-1.1,0.6;collisions;1;,0.3,0,1;collisions;2;,-0.3,0,1;collisions;3;,-0.8,-0.9,0.4;collisions;4;,-0.9,-1.3,0.2;collisions;5;,-0.8,-0.6,0.4;collisions;6;,0.8,-0.9,0.4;collisions;7;,0.9,-1.3,0.2;collisions;8;,0.8,-0.6,0.4;collisions;9;,0,-0.3,0.9;]]
-a.d_ang=.001
-end,function(a)
-a:model_init[[field,1;collisions;1;,-0.1,0,0.3;lines;1;,7,12,0.5,0,0,-0.3,-0.5,-0.3,-0.3,0,-0.5,0.3,0,0.3,0.5,0;]]
 end,function(a)
 if btn"4"and a.missile_ready then
 _g.missile(a.x+cos(a.ang)*.8,a.y+sin(a.ang)*.8,a.ang)
@@ -275,8 +275,6 @@ end,function()
 loop_zobjs("drawable_pre","draw")
 loop_zobjs("drawable","draw")
 loop_zobjs("drawable_post","draw")
-end,function(a)
-a:model_init(a.model_template)
 end,function()
 g_pl=_g.pl(0,0)
 g_view=_g.view(g_pl)
@@ -284,11 +282,11 @@ g_star_view=_g.star_view(g_pl)
 _g.fader_in(1)
 g_title_screen_coord=20
 g_title_screen_dim=g_title_screen_coord*2
-_g.letter(-3,-3,[[lines;1;,7,-1,-0.5,0.9,-0.5,-0.6,0.2,-0.7,0.7,-0.3,0.2,0.1,-0.5,0.1,0.5,0.8;]])
-_g.letter(-1.5,-3,[[lines;1;,7,-1,0.5,-0.7,-0.6,-0.7,-0.6,0.1,0.1,0.1;lines;2;,7,-1,-0.6,0.1,-0.5,0.9,0.4,0.7;]])
-_g.letter(0,-3,[[lines;1;,7,-1,-0.7,-0.5,-0.3,0.6,-0.1,0.2,0.1,0.6,0.7,-0.4;]])
-_g.letter(1.5,-3,[[lines;1;,7,-1,-0.1,-0.7,-0.5,-0.3,-0.5,0.3,0,0.7,0.5,0,0.2,-0.5,-0.1,-0.7;]])
-_g.letter(3,-3,[[lines;1;,7,-1,-0.5,-0.6,-0.4,0.9,0.3,0.4,0.2,0.2,-0.4,0.1,0.1,-0.2,0.1,-0.5,-0.5,-0.6;]])
+_g.letter(-3,-3,_g.TEST_LET_R)
+_g.letter(-1.5,-3,_g.TEST_LET_E)
+_g.letter(0,-3,_g.TEST_LET_W)
+_g.letter(1.5,-3,_g.TEST_LET_O)
+_g.letter(3,-3,_g.TEST_LET_B)
 _g.planet(1,3)
 g_cateroid=_g.cateroid(10,0)
 for i=1,50 do
@@ -341,7 +339,8 @@ end
 function draw_polygon(points,color)
 if color>=0 then
 local xl,xr,ymin,ymax={},{},129,0xffff
-for k,v in pairs(points)do
+for i=1,#points,1 do
+local k,v=i,points[i]
 local p2=points[k%#points+1]
 local x1,y1,x2,y2=v.x,flr(v.y),p2.x,flr(p2.y)
 if y1>y2 then
@@ -401,34 +400,33 @@ zclass[[bad_collision_circ,collision_circ|anchoring,@,offset_x,@,offset_y,@,radi
 zclass[[good_collision_circ,collision_circ|anchoring,@,offset_x,@,offset_y,@,radius,@]]
 function zoomx(x)return(x-g_view.x)*g_view.zoom_factor+64 end
 function zoomy(y)return(y-g_view.y)*g_view.zoom_factor+64 end
-zclass[[model,mov,actor|model;,;hit,nop,collision_func,%bad_collision_circ,draw,%model_draw,explode,%model_explode,collide,%model_collide,model_init,%model_init]]
+zclass[[model,mov,actor|model_str,placeholder,hit,nop,scale,1,collision_func,%bad_collision_circ,draw,%model_draw,explode,%model_explode,collide,%model_collide,init,%model_init,model_init,%model_init]]
 function line_loop(points,color,linefunc)
 for i=1,#points-1,1 do
 local p1,p2=points[i],points[i+1]
 linefunc(p1.x,p1.y,p2.x,p2.y,color)
 end
 end
-function get_points_from_shape(x,y,dir,shape)
+function translate_points(x,y,dir,shape)
 local points={}
-for i=3,#shape/2\1*2,2 do
-local x1,y1=shape[i],shape[i+1]
-local ang1=atan2(x1,y1)
-local mag1=approx_dist(x1,y1)
-add(points,{x=x+cos(ang1+dir)*mag1,y=y+sin(ang1+dir)*mag1})
-end
+foreach(shape,function(p)
+local ang=atan2(p.x,p.y)
+local mag=approx_dist(p.x,p.y)
+add(points,{x=x+cos(ang+dir)*mag,y=y+sin(ang+dir)*mag})
+end)
 return points
 end
 zclass[[vanishing_shape,vec,actor,drawable_pre|x,@,y,@,dx,@,dy,@,points,@,color,@,draw,%vanishing_shape_draw;start;duration,.25;]]
 zclass[[line_particle,vec,actor,drawable_post|ang,@,x,@,y,@,x1,@,y1,@,x2,@,y2,@,color,@,dx,@,dy,@,draw,%line_particle_draw,update,%line_particle_update;start;duration,.5;]]
 zclass[[view,vec|following,@,zoom_factor,16,match_following,%view_match_following]]
-zclass[[missile,model,drawable|x,@,y,@,ang,@,speed,0.05,init,%missile_init;start;duration,2;]]
+zclass[[missile,model,drawable|x,@,y,@,ang,@,model_obj,%MISSILE,speed,0.05;start;duration,2;]]
 zclass[[twinkle,actor,drawable|x,0,y,0,draw,%twinkle_draw,init,%twinkle_init,]]
 zclass[[star_view,vec|following,@,match_following,%star_view_match_following]]
-zclass[[planet,actor,model,drawable|x,@,y,@,init,%planet_init]]
 zclass[[wall|]]
-zclass[[cateroid,model,wall,drawable|x,@,y,@,init,%cateroid_init]]
-zclass[[pl,actor,model,drawable|x,@,y,@,missile_ready,yes,init,%pl_init,update,%pl_update,hit,%pl_hit,collision_func,%good_collision_circ]]
-zclass[[letter,model,drawable_post|x,@,y,@,model_template,@,init,%letter_init;]]
+zclass[[planet,actor,model,drawable|x,@,y,@,d_ang,.001,model_obj,%PLANET_SMALL]]
+zclass[[cateroid,model,wall,drawable|x,@,y,@,d_ang,.001,scale,2,model_obj,%CATEROID]]
+zclass[[pl,actor,model,drawable|x,@,y,@,missile_ready,yes,model_obj,%PLAYER_SPACESHIP,update,%pl_update,hit,%pl_hit,collision_func,%good_collision_circ]]
+zclass[[letter,model,drawable_post|x,@,y,@,model_obj,@]]
 g_fade_table=zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,2,1,0,0,0;3;,3,3,3,3,1,0,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,1,1,0,0;6;,6,6,13,13,5,5,1,0;7;,7,7,6,13,13,5,1,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,5,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,1,1,0;13;,13,13,5,5,1,1,1,0;14;,14,14,13,4,2,2,1,0;15;,15,15,13,13,5,5,1,0;]]
 function fade(threshold)
 for c=0,15 do

@@ -1,16 +1,11 @@
 zclass[[letter,model,drawable_post|
-    x,@, y,@, model_template,@,
-    init,%letter_init;
+    x,@, y,@, model_obj,@
 ]]
 
 |level_select_draw| function()
     loop_zobjs('drawable_pre',  'draw')
     loop_zobjs('drawable',      'draw')
     loop_zobjs('drawable_post', 'draw')
-end $$
-
-|letter_init| function(a)
-    a:model_init(a.model_template)
 end $$
 
 |level_select_init| function()
@@ -28,11 +23,11 @@ end $$
     g_title_screen_dim = g_title_screen_coord*2
 
     -- title
-    _g.letter(-3,   -3, [[TEST_LET_R]])
-    _g.letter(-1.5, -3, [[TEST_LET_E]])
-    _g.letter(0,    -3, [[TEST_LET_W]])
-    _g.letter(1.5,  -3, [[TEST_LET_O]])
-    _g.letter(3,    -3, [[TEST_LET_B]])
+    _g.letter(-3,   -3, _g.TEST_LET_R)
+    _g.letter(-1.5, -3, _g.TEST_LET_E)
+    _g.letter(0,    -3, _g.TEST_LET_W)
+    _g.letter(1.5,  -3, _g.TEST_LET_O)
+    _g.letter(3,    -3, _g.TEST_LET_B)
 
     -- add planets
     _g.planet(1,3)

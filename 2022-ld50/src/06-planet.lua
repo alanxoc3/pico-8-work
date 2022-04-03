@@ -1,21 +1,14 @@
+zclass[[wall|]]
+
 zclass[[planet,actor,model,drawable|
-    x,@,y,@,
-    init,%planet_init
+    x,@, y,@,
+    d_ang,.001,
+    model_obj,%PLANET_SMALL
 ]]
 
-|planet_init| function(a)
-    a:model_init[[PLANET_SMALL]]
-    a.d_ang = .001
-end $$
-
-zclass[[wall|]]
- 
 zclass[[cateroid,model,wall,drawable|
     x,@, y,@,
-    init,%cateroid_init
+    d_ang,.001,
+    scale,2,
+    model_obj,%CATEROID
 ]]
- 
-|cateroid_init| function(a)
-    a:model_init[[CATEROID]]
-    a.d_ang = .001
-end $$
