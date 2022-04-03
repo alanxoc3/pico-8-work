@@ -20,6 +20,23 @@ Cheat sheet:
     "d" - delete the current layer
     "x" - add new layer that flips current layer on x axis
     "y" - add new layer that flips current layer on y axis
+    "f" - toggle between "fill" and "line"
+    "0" - change color to 0
+    "1" - change color to 1
+    "2" - change color to 2
+    "3" - change color to 3
+    "4" - change color to 4
+    "5" - change color to 5
+    "6" - change color to 6
+    "7" - change color to 7
+    "8" - change color to 8
+    "9" - change color to 9
+    ")" - change color to 10
+    "!" - change color to 11
+    "@" - change color to 12
+    "#" - change color to 13
+    "$" - change color to 14
+    "%" - change color to 15
     left/right - move between layers
     up/down - change the color of the current layer
     left click - add point
