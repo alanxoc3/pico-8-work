@@ -171,6 +171,7 @@ circ(zoomx(a.x),zoomy(a.y),a.field_radius*g_view.zoom_factor,2)
 end
 end,function(a)
 local model=a.model_obj
+printh(a.id)
 if model.field then
 a.field_radius=model.field*a.scale
 end
@@ -400,7 +401,7 @@ zclass[[bad_collision_circ,collision_circ|anchoring,@,offset_x,@,offset_y,@,radi
 zclass[[good_collision_circ,collision_circ|anchoring,@,offset_x,@,offset_y,@,radius,@]]
 function zoomx(x)return(x-g_view.x)*g_view.zoom_factor+64 end
 function zoomy(y)return(y-g_view.y)*g_view.zoom_factor+64 end
-zclass[[model,mov,actor|model_str,placeholder,hit,nop,scale,1,collision_func,%bad_collision_circ,draw,%model_draw,explode,%model_explode,collide,%model_collide,init,%model_init,model_init,%model_init]]
+zclass[[model,mov,actor|model_obj;,;hit,nop,scale,1,collision_func,%bad_collision_circ,draw,%model_draw,explode,%model_explode,collide,%model_collide,init,%model_init,model_init,%model_init]]
 function line_loop(points,color,linefunc)
 for i=1,#points-1,1 do
 local p1,p2=points[i],points[i+1]

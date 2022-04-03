@@ -57,3 +57,12 @@ end $$
     if g_pl.y < -g_title_screen_coord then g_pl.y += g_title_screen_dim-1 g_view.y += g_title_screen_dim-1 end
 end $$
 
+-- zclass[[level_entrance|
+--     x,@, y,@, show_model,@, scale,@,
+-- 
+--     draw, %level_entrance_draw
+-- ]]
+-- 
+-- |level_entrance_draw| function(a)
+--     
+-- end
