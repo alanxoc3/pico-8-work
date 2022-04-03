@@ -44,7 +44,6 @@ end $$
 -- meant to be called only once during the model's initialization
 |model_init| function(a)
     local model = a.model_obj
-    printh(a.id)
 
     if model.field then
         a.field_radius = model.field*a.scale

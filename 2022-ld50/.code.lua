@@ -3,22 +3,22 @@ function zclass(meta_and_att_str)
 local meta,template=unpack(split(meta_and_att_str,"|"))
 local parents=split(meta)
 local class=deli(parents,1)
-g_zclass_constructors[class]=function(inst,...)
+g_zclass_constructors[class]=function(inst,done,...)
 foreach(parents,function(parent)
-if not inst[parent]then g_zclass_constructors[parent](inst)end
+if not done[parent]then g_zclass_constructors[parent](inst,done)end
 end)
-inst.id=class
-inst[class]=true
+done[class]=true
+inst.parents[class]=true
 add(g_zclass_new_entities,{class,inst})
 return zobj_set(inst,template,...)
 end
-_g[class]=function(...)return g_zclass_constructors[class]({},...)end
+_g[class]=function(...)return g_zclass_constructors[class]({id=class,parents={},ecs_exclusions={}},{},...)end
 end
 function register_zobjs()
 while #g_zclass_new_entities>0 do
 local class,inst=unpack(deli(g_zclass_new_entities))
 g_zclass_entities[class]=g_zclass_entities[class]or{}
-if inst[class]~="ignore"then add(g_zclass_entities[class],inst)end
+if not inst.ecs_exclusions[class]then add(g_zclass_entities[class],inst)end
 end
 end
 function deregister_zobj(inst)
@@ -171,7 +171,6 @@ circ(zoomx(a.x),zoomy(a.y),a.field_radius*g_view.zoom_factor,2)
 end
 end,function(a)
 local model=a.model_obj
-printh(a.id)
 if model.field then
 a.field_radius=model.field*a.scale
 end
@@ -434,7 +433,7 @@ for c=0,15 do
 pal(c,g_fade_table[c][1+flr(7*min(1,max(0,threshold)))])
 end
 end
-zclass[[game_state,actor|actor,ignore;curr,level_select;logo;init,%logo_init,update,%logo_update,draw,%logo_draw,duration,2.5,next,level_select;level_select;init,%level_select_init,update,%level_select_update,draw,%level_select_draw;]]
+zclass[[game_state,actor|ecs_exclusions;actor,true;curr,level_select;logo;init,%logo_init,update,%logo_update,draw,%logo_draw,duration,2.5,next,level_select;level_select;init,%level_select_init,update,%level_select_update,draw,%level_select_draw;]]
 function _init()
 g_tl=_g.game_state()
 g_fade=0
