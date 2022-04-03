@@ -219,7 +219,7 @@ if btn"5"then a.zoom_factor=max(8,a.zoom_factor-1)end
 end
 end
 end,function(a)
-a:model_init[[lines;1;,7,-0.1,0,0.1,0;collisions;1;,0,0,0.1;]]
+a:model_init[[lines;1;,7,7,-0.1,0,0.1,0;collisions;1;,0,0,0.1;]]
 end,function(a)
 local x=(-g_view.x+flr(a.x*g_view.zoom_factor))%128
 local y=(-g_view.y+flr(a.y*g_view.zoom_factor))%128
