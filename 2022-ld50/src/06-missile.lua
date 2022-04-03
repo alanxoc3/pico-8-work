@@ -1,4 +1,4 @@
-zclass[[missile,model|
+zclass[[missile,model,drawable|
     x,@,y,@,ang,@,     -- initial position & direction
     speed,0.1,
     init,%missile_init;

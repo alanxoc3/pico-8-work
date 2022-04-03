@@ -1,7 +1,7 @@
 function zoomx(x) return (x - g_view.x) * g_view.zoom_factor + 64 end
 function zoomy(y) return (y - g_view.y) * g_view.zoom_factor + 64 end
 
-zclass[[model,mov,drawable,actor|
+zclass[[model,mov,actor|
     model;,;
     hit,nop,
     collision_func,%bad_collision_circ,
@@ -101,7 +101,7 @@ end
     end
 end $$
 
-zclass[[vanishing_shape,vec,actor,drawable|
+zclass[[vanishing_shape,vec,actor,drawable_pre|
     x,@, y,@, dx,@, dy,@, points,@, color,@,
     
     draw,%vanishing_shape_draw;
@@ -121,7 +121,7 @@ zclass[[vanishing_shape,vec,actor,drawable|
     draw_polygon(points, a.color)
 end $$
 
-zclass[[line_particle,vec,actor,drawable|
+zclass[[line_particle,vec,actor,drawable_post|
     ang,@, x,@, y,@, x1,@, y1,@, x2,@, y2,@, color,@, dx,@, dy,@,
 
     draw,%line_particle_draw,

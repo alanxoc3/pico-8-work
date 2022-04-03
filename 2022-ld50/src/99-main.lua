@@ -1,12 +1,13 @@
 zclass[[game_state,actor|
     actor,ignore; -- remove game_state from the actor group
-    curr,game;
-    logo; init,%logo_init, update,%logo_update, draw,%logo_draw, duration,2.5, next,game;
-    game; init,%game_init, update,%game_update, draw,%game_draw;
+    curr,level_select;
+    logo; init,%logo_init, update,%logo_update, draw,%logo_draw, duration,2.5, next,level_select;
+    level_select; init,%level_select_init, update,%level_select_update, draw,%level_select_draw;
 ]]
 
 function _init()
     g_tl = _g.game_state()
+    g_fade = 0
 end
 
 function _update60()
@@ -22,17 +23,35 @@ end
 
 function _draw()
     cls()
+    fade(g_fade)
     loop_zobjs('game_state', 'draw')
     -- DEBUG_BEGIN
     if g_debug then rect(0, 0, 127, 127, 8) end
     -- DEBUG_END
 end
 
-|game_init| function()
+zclass[[letter,model,drawable_post|
+    x,@, y,@, model_template,@,
+    init,%letter_init;
+]]
+
+|letter_init| function(a)
+    a:model_init(a.model_template)
+end $$
+
+|level_select_init| function()
     -- [0,0] is the center of the level
     -- add player
     g_pl = _g.pl(0, 0)
     g_view = _g.view(g_pl)
+    _g.fader_in(1)
+
+    -- title
+    _g.letter(-3,   -3, [[TEST_LET_R]])
+    _g.letter(-1.5, -3, [[TEST_LET_E]])
+    _g.letter(0,    -3, [[TEST_LET_W]])
+    _g.letter(1.5,  -3, [[TEST_LET_O]])
+    _g.letter(3,    -3, [[TEST_LET_B]])
 
     -- add planets
     _g.planet(1,3)
@@ -44,7 +63,7 @@ end
     end
 end $$
 
-|game_update| function()
+|level_select_update| function()
     loop_zobjs('actor', 'state')
     loop_zobjs('view', 'match_following')
 
@@ -55,13 +74,15 @@ end $$
     loop_zobjs('vec', 'vec_update')
 end $$
 
-|game_draw| function()
+|level_select_draw| function()
+    loop_zobjs('drawable_pre', 'draw')
     loop_zobjs('drawable', 'draw')
+    loop_zobjs('drawable_post', 'draw')
 end $$
 
 ----------------------------------------------
 
-zclass[[pl,actor,model|
+zclass[[pl,actor,model,drawable|
     x,@, y,@,
     missile_ready,yes,
     init,%pl_init,
@@ -94,7 +115,7 @@ end $$
 
 zclass[[wall|]]
 
-zclass[[cateroid,model,wall|
+zclass[[cateroid,model,wall,drawable|
     x,@, y,@,
     init,%cateroid_init
 ]]
