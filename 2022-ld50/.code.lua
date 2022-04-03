@@ -71,7 +71,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,timer_set_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,collision_follow_anchoring,@,check_collision,@,collision_draw_debug,@,model_draw,@,model_init,@,model_explode,@,line_particle_update,@,line_particle_draw,@,view_match_following,@,twinkle_draw,@,twinkle_init,@,planet_init,@,planet_update,@,logo_init,@,logo_draw,@,game_init,@,game_update,@,game_draw,@,pl_init,@,pl_update,@,pl_hit,@,cateroid_init,@,cateroid_update,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,timer_set_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,collision_follow_anchoring,@,check_collision,@,collision_draw_debug,@,model_draw,@,model_init,@,model_explode,@,line_particle_update,@,line_particle_draw,@,view_match_following,@,missile_init,@,twinkle_draw,@,twinkle_init,@,planet_init,@,planet_update,@,logo_init,@,logo_draw,@,game_init,@,game_update,@,game_draw,@,pl_init,@,pl_update,@,pl_hit,@,cateroid_init,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -180,6 +180,8 @@ a.dx=cos(dir)*dist*.25
 a.dy=sin(dir)*dist*.25
 end
 end,function(a)
+a:model_init[[lines;1;,7,0.2,0,0.1,0.1,-0.1,0.1,0,0,-0.1,-0.1,0.1,-0.1,0.2,0;collisions;1;,0.1,0,0.1;collisions;2;,0,0,0.1;]]
+end,function(a)
 local x=(-g_view.x+flr(a.x*g_view.zoom_factor))%128
 local y=(-g_view.y+flr(a.y*g_view.zoom_factor))%128
 pset(x,y,sin(time()/10+a.twinkle_offset)>0.5 and 6 or 5)
@@ -219,6 +221,11 @@ loop_zobjs("drawable","draw")
 end,function(a)
 a:model_init[[field,1;lines;1;,9,0.5,0,-0.5,-0.3,-0.3,0,-0.5,0.3,0.5,0;collisions;1;,0,0,0.1;collisions;2;,-0.3,0,0.2;]]
 end,function(a)
+if btn"4"and a.missile_ready then
+_g.missile(a.x+1,a.y+1,a.ang)
+a.missile_ready=false
+a:set_timer("missile_cooldown",0.1,function()a.missile_ready=true end)
+end
 a.speed=-ybtn()*.01
 a.d_ang=-xbtn()*.01
 end,function(a,b,dx,dy)
@@ -226,7 +233,6 @@ a.dx+=dx
 a.dy+=dy
 end,function(a)
 a:model_init[[field,2;lines;1;,7,-1.2,-0.4,-1.3,0,-1.2,0.5,-0.8,0.9,-0.4,1,0,1;lines;2;,7,1.2,-0.4,1.3,0,1.2,0.5,0.8,0.9,0.4,1,0,1;lines;3;,7,0,0.4,0.2,0.3,0.1,0.2,-0.1,0.2,-0.2,0.3,0,0.4;lines;4;,7,0,0.4,0,0.5,-0.1,0.6,-0.2,0.6;lines;5;,7,0,0.4,0,0.5,0.1,0.6,0.2,0.6;lines;6;,7,0.6,0.2,0.5,0.1,0.5,-0.1,0.6,-0.2,0.7,-0.1,0.7,0.1,0.6,0.2;lines;7;,7,-0.6,0.2,-0.5,0.1,-0.5,-0.1,-0.6,-0.2,-0.7,-0.1,-0.7,0.1,-0.6,0.2;lines;8;,7,-1,-0.6,-0.8,-0.8,-0.5,-1,-0.1,-1.1,0,-1.1;lines;9;,7,1,-0.6,0.8,-0.8,0.5,-1,0.1,-1.1,0,-1.1;lines;10;,7,-1.2,-0.5,-1.1,-1.1,-0.9,-1.5,-0.5,-1;lines;11;,7,1.2,-0.5,1.1,-1.1,0.9,-1.5,0.5,-1;lines;12;,7,0.9,-1.5,0.8,-1.2,0.8,-0.8;lines;13;,7,-0.9,-1.5,-0.8,-1.2,-0.8,-0.8;lines;14;,7,0.9,0.3,1.2,0.3;lines;15;,7,-0.9,0.3,-1.2,0.3;lines;16;,7,0.9,0.2,1.1,0;lines;17;,7,-0.9,0.2,-1.1,0;lines;18;,7,0.9,0.4,1.1,0.6;lines;19;,7,-0.9,0.4,-1.1,0.6;collisions;1;,0.3,0,1;collisions;2;,-0.3,0,1;collisions;3;,-0.8,-0.9,0.4;collisions;4;,-0.9,-1.3,0.2;collisions;5;,-0.8,-0.6,0.4;collisions;6;,0.8,-0.9,0.4;collisions;7;,0.9,-1.3,0.2;collisions;8;,0.8,-0.6,0.4;collisions;9;,0,-0.3,0.9;]]
-end,function(a)
 a.d_ang=.001
 end)
 function zspr(sind,x,y,sw,sh,...)
@@ -297,6 +303,7 @@ line(x1,y1,x2,y2,color)
 line(x2,y2,x3,y3,color)
 end
 zclass[[view,vec|following,@,zoom_factor,16,match_following,%view_match_following]]
+zclass[[missile,model|x,@,y,@,ang,@,speed,0.1,init,%missile_init;start;duration,2;]]
 zclass[[twinkle,actor,drawable|x,0,y,0,draw,%twinkle_draw,init,%twinkle_init,]]
 zclass[[planet,actor,model|x,@,y,@,init,%planet_init,update,%planet_update;]]
 g_fade_table=zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,2,1,0,0,0;3;,3,3,3,3,1,0,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,1,1,0,0;6;,6,6,13,13,5,5,1,0;7;,7,7,6,13,13,5,1,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,5,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,1,1,0;13;,13,13,5,5,1,1,1,0;14;,14,14,13,4,2,2,1,0;15;,15,15,13,13,5,5,1,0;]]
@@ -321,5 +328,5 @@ cls()
 loop_zobjs("game_state","draw")
 if g_debug then rect(0,0,127,127,8)end
 end
-zclass[[pl,actor,model|x,@,y,@,init,%pl_init,update,%pl_update,hit,%pl_hit,collision_func,%good_collision_circ]]
-zclass[[cateroid,model|x,@,y,@,init,%cateroid_init,update,%cateroid_update]]
+zclass[[pl,actor,model|x,@,y,@,missile_ready,yes,init,%pl_init,update,%pl_update,hit,%pl_hit,collision_func,%good_collision_circ]]
+zclass[[cateroid,model|x,@,y,@,init,%cateroid_init]]
