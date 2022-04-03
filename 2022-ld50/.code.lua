@@ -72,7 +72,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_set_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,collision_draw_debug,@,model_draw,@,model_init,@,model_collide,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_match_following,@,missile_hit,@,missile_pop_init,@,twinkle_draw,@,twinkle_init,@,star_view_match_following,@,cateroid_hit,@,pl_update,@,pl_hit,@,level_select_draw,@,level_select_init,@,level_select_update,@,logo_init,@,logo_draw,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_set_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,collision_draw_debug,@,model_draw,@,model_init,@,model_collide,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_match_following,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,twinkle_draw,@,twinkle_init,@,star_view_match_following,@,cateroid_hit,@,pl_update,@,pl_hit,@,level_select_draw,@,level_select_init,@,level_select_update,@,logo_init,@,logo_draw,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -246,9 +246,10 @@ if btn"4"then a.zoom_factor=min(20,a.zoom_factor+1)end
 if btn"5"then a.zoom_factor=max(8,a.zoom_factor-1)end
 end
 end
+end,function(a)
+_g.missile_pop(a.x,a.y)
 end,function(a,b,dx,dy)
 a:kill()
-_g.missile_pop(a.x,a.y)
 end,function(a)
 a:model_init()
 a:explode(.2)
@@ -276,7 +277,6 @@ a.speed=-ybtn()*.01
 a.d_ang=-xbtn()*.01
 end,function(a,b,dx,dy)
 a:explode()
-a:kill()
 end,function()
 loop_zobjs("drawable_pre","draw")
 loop_zobjs("drawable","draw")
@@ -426,7 +426,7 @@ end
 zclass[[vanishing_shape,vec,actor,drawable_pre|x,@,y,@,dx,@,dy,@,points,@,color,@,draw,%vanishing_shape_draw;start;duration,.25;]]
 zclass[[line_particle,vec,actor,drawable_post|ang,@,x,@,y,@,x1,@,y1,@,x2,@,y2,@,color,@,dx,@,dy,@,draw,%line_particle_draw,update,%line_particle_update;start;duration,.5;]]
 zclass[[view,vec|following,@,zoom_factor,16,match_following,%view_match_following]]
-zclass[[missile,model,drawable|x,@,y,@,ang,@,model_obj,%MISSILE,speed,0.05,hit,%missile_hit;start;duration,2;]]
+zclass[[missile,model,drawable|x,@,y,@,ang,@,model_obj,%MISSILE,speed,0.05,destroyed,%missile_destroyed,hit,%missile_hit;start;duration,2;]]
 zclass[[missile_pop,model,drawable|x,@,y,@,model_obj,%MISSILE_POP,init,%missile_pop_init]]
 zclass[[twinkle,actor,drawable|x,0,y,0,draw,%twinkle_draw,init,%twinkle_init,]]
 zclass[[star_view,vec|following,@,match_following,%star_view_match_following]]
