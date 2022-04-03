@@ -152,15 +152,15 @@ circ(zoomx(a.x),zoomy(a.y),a.radius*g_view.zoom_factor,8)
 end
 end,function(a)
 srand(t()*4\1)
-foreach(a.model.fills,function(lines)
+local modelpoints={}
+foreach(a.model.lines,function(lines)
 local points=get_points_from_shape(a.x,a.y,a.ang,lines)
 foreach(points,function(point)point.x=zoomx(point.x)point.y=zoomy(point.y)end)
-draw_polygon(points,lines[1])
+draw_polygon(points,lines[2],points.fill_color)
+add(modelpoints,{c=lines[1],points=points})
 end)
-foreach(a.model.lines,function(lines)
-line_loop(get_points_from_shape(a.x,a.y,a.ang,lines),lines[1],function(x1,y1,x2,y2,color)
-wobble_line(zoomx(x1),zoomy(y1),zoomx(x2),zoomy(y2),color)
-end)
+foreach(modelpoints,function(points)
+line_loop(points.points,points.c,wobble_line)
 end)
 if g_debug and a.field_radius then
 circ(zoomx(a.x),zoomy(a.y),a.field_radius*g_view.zoom_factor,2)
@@ -258,7 +258,7 @@ loop_zobjs("vec","vec_update")
 end,function()
 loop_zobjs("drawable","draw")
 end,function(a)
-a:model_init[[field,1;collisions;1;,-0.4,0,0.6;collisions;2;,0.2,0,0.3;collisions;3;,0.5,0,0.3;collisions;4;,0.8,0,0.2;collisions;5;,-0.7,-0.4,0.2;collisions;6;,-0.7,0.4,0.2;fills;1;,8,1,0,0.7,0.2,0.6,0.1,0.6,-0.1,0.7,-0.2,1,0;fills;2;,12,0.7,-0.2,0.6,-0.2,0.1,-0.3,-0.5,-0.2,-0.6,0,-0.5,0.2,0.1,0.3,0.6,0.2,0.7,0.2,0.6,0.1,0.6,-0.1,0.7,-0.2;fills;3;,7,0.5,0,0.4,-0.1,0.3,-0.1,0.2,0,0.3,0.1,0.4,0.1,0.5,0;fills;4;,1,0,-0.3,-0.2,-0.5,-0.6,-0.6,-0.8,-0.6,-0.9,-0.5,-0.6,-0.4,-0.5,-0.2,0,-0.3;fills;5;,1,0,0.3,-0.2,0.5,-0.6,0.6,-0.8,0.6,-0.9,0.5,-0.6,0.4,-0.5,0.2,0,0.3;fills;6;,2,-0.7,-0.3,-0.8,-0.1,-0.8,0.1,-0.7,0.3,-0.5,0.2,-0.6,0,-0.5,-0.2,-0.7,-0.3;lines;1;,5,-0.5,-0.2,-0.7,-0.3,-0.8,-0.1,-0.8,0.1,-0.7,0.3,-0.5,0.2;lines;2;,13,0,-0.3,-0.2,-0.5,-0.6,-0.6,-0.8,-0.6,-0.9,-0.5,-0.6,-0.4,-0.5,-0.2;lines;3;,13,0,0.3,-0.2,0.5,-0.6,0.6,-0.8,0.6,-0.9,0.5,-0.6,0.4,-0.5,0.2;lines;4;,13,0,0,-0.9,0;lines;5;,7,1,0,0.7,-0.2,0.2,-0.3,0,-0.3,-0.5,-0.2,-0.6,0;lines;6;,7,1,0,0.7,0.2,0.2,0.3,0,0.3,-0.5,0.2,-0.6,0;lines;7;,13,0.7,-0.2,1,0,0.7,0.2,0.6,0.1,0.6,-0.1,0.7,-0.2;lines;8;,13,0.5,0,0.4,-0.1,0.3,-0.1,0.2,0,0.3,0.1,0.4,0.1,0.5,0;]]
+a:model_init[[field,1;collisions;1;,-0.4,0,0.6;collisions;2;,0.2,0,0.3;collisions;3;,0.5,0,0.3;collisions;4;,0.8,0,0.2;collisions;5;,-0.7,-0.4,0.2;collisions;6;,-0.7,0.4,0.2;lines;1;,7,-1,-0.5,-0.2,-0.7,-0.3,-0.8,-0.1,-0.8,0.1,-0.7,0.3,-0.5,0.2;lines;2;,13,-1,0,-0.3,-0.2,-0.5,-0.6,-0.6,-0.8,-0.6,-0.9,-0.5,-0.6,-0.4,-0.5,-0.2;lines;3;,13,-1,0,0.3,-0.2,0.5,-0.6,0.6,-0.8,0.6,-0.9,0.5,-0.6,0.4,-0.5,0.2;lines;4;,13,-1,0,0,-0.9,0;lines;5;,7,-1,1,0,0.7,-0.2,0.2,-0.3,0,-0.3,-0.5,-0.2,-0.6,0;lines;6;,7,-1,1,0,0.7,0.2,0.2,0.3,0,0.3,-0.5,0.2,-0.6,0;lines;7;,13,2,0.7,-0.2,1,0,0.7,0.2,0.6,0.1,0.6,-0.1,0.7,-0.2;lines;8;,13,1,0.5,0,0.4,-0.1,0.3,-0.1,0.2,0,0.3,0.1,0.4,0.1,0.5,0;]]
 end,function(a)
 if btn"4"and a.missile_ready then
 _g.missile(a.x+cos(a.ang)*.8,a.y+sin(a.ang)*.8,a.ang)
@@ -271,7 +271,7 @@ end,function(a,b,dx,dy)
 a.dx+=dx
 a.dy+=dy
 end,function(a)
-a:model_init[[field,2;lines;1;,7,-1.2,-0.4,-1.3,0,-1.2,0.5,-0.8,0.9,-0.4,1,0,1;lines;2;,7,1.2,-0.4,1.3,0,1.2,0.5,0.8,0.9,0.4,1,0,1;lines;3;,7,0,0.4,0.2,0.3,0.1,0.2,-0.1,0.2,-0.2,0.3,0,0.4;lines;4;,7,0,0.4,0,0.5,-0.1,0.6,-0.2,0.6;lines;5;,7,0,0.4,0,0.5,0.1,0.6,0.2,0.6;lines;6;,7,0.6,0.2,0.5,0.1,0.5,-0.1,0.6,-0.2,0.7,-0.1,0.7,0.1,0.6,0.2;lines;7;,7,-0.6,0.2,-0.5,0.1,-0.5,-0.1,-0.6,-0.2,-0.7,-0.1,-0.7,0.1,-0.6,0.2;lines;8;,7,-1,-0.6,-0.8,-0.8,-0.5,-1,-0.1,-1.1,0,-1.1;lines;9;,7,1,-0.6,0.8,-0.8,0.5,-1,0.1,-1.1,0,-1.1;lines;10;,7,-1.2,-0.5,-1.1,-1.1,-0.9,-1.5,-0.5,-1;lines;11;,7,1.2,-0.5,1.1,-1.1,0.9,-1.5,0.5,-1;lines;12;,7,0.9,-1.5,0.8,-1.2,0.8,-0.8;lines;13;,7,-0.9,-1.5,-0.8,-1.2,-0.8,-0.8;lines;14;,7,0.9,0.3,1.2,0.3;lines;15;,7,-0.9,0.3,-1.2,0.3;lines;16;,7,0.9,0.2,1.1,0;lines;17;,7,-0.9,0.2,-1.1,0;lines;18;,7,0.9,0.4,1.1,0.6;lines;19;,7,-0.9,0.4,-1.1,0.6;collisions;1;,0.3,0,1;collisions;2;,-0.3,0,1;collisions;3;,-0.8,-0.9,0.4;collisions;4;,-0.9,-1.3,0.2;collisions;5;,-0.8,-0.6,0.4;collisions;6;,0.8,-0.9,0.4;collisions;7;,0.9,-1.3,0.2;collisions;8;,0.8,-0.6,0.4;collisions;9;,0,-0.3,0.9;]]
+a:model_init[[field,2;lines;1;,7,-1,-1.2,-0.4,-1.3,0,-1.2,0.5,-0.8,0.9,-0.4,1,0,1;lines;2;,7,-1,1.2,-0.4,1.3,0,1.2,0.5,0.8,0.9,0.4,1,0,1;lines;3;,7,-1,0,0.4,0.2,0.3,0.1,0.2,-0.1,0.2,-0.2,0.3,0,0.4;lines;4;,7,-1,0,0.4,0,0.5,-0.1,0.6,-0.2,0.6;lines;5;,7,-1,0,0.4,0,0.5,0.1,0.6,0.2,0.6;lines;6;,7,-1,0.6,0.2,0.5,0.1,0.5,-0.1,0.6,-0.2,0.7,-0.1,0.7,0.1,0.6,0.2;lines;7;,7,-1,-0.6,0.2,-0.5,0.1,-0.5,-0.1,-0.6,-0.2,-0.7,-0.1,-0.7,0.1,-0.6,0.2;lines;8;,7,-1,-1,-0.6,-0.8,-0.8,-0.5,-1,-0.1,-1.1,0,-1.1;lines;9;,7,-1,1,-0.6,0.8,-0.8,0.5,-1,0.1,-1.1,0,-1.1;lines;10;,7,-1,-1.2,-0.5,-1.1,-1.1,-0.9,-1.5,-0.5,-1;lines;11;,7,-1,1.2,-0.5,1.1,-1.1,0.9,-1.5,0.5,-1;lines;12;,7,-1,0.9,-1.5,0.8,-1.2,0.8,-0.8;lines;13;,7,-1,-0.9,-1.5,-0.8,-1.2,-0.8,-0.8;lines;14;,7,-1,0.9,0.3,1.2,0.3;lines;15;,7,-1,-0.9,0.3,-1.2,0.3;lines;16;,7,-1,0.9,0.2,1.1,0;lines;17;,7,-1,-0.9,0.2,-1.1,0;lines;18;,7,-1,0.9,0.4,1.1,0.6;lines;19;,7,-1,-0.9,0.4,-1.1,0.6;collisions;1;,0.3,0,1;collisions;2;,-0.3,0,1;collisions;3;,-0.8,-0.9,0.4;collisions;4;,-0.9,-1.3,0.2;collisions;5;,-0.8,-0.6,0.4;collisions;6;,0.8,-0.9,0.4;collisions;7;,0.9,-1.3,0.2;collisions;8;,0.8,-0.6,0.4;collisions;9;,0,-0.3,0.9;]]
 a.d_ang=.001
 end)
 function zspr(sind,x,y,sw,sh,...)
@@ -297,7 +297,8 @@ return a0*0.9609+b0*0.3984
 end
 return b0*0.9609+a0*0.3984
 end
-function draw_polygon(points,c)
+function draw_polygon(points,color)
+if color>=0 then
 local xl,xr,ymin,ymax={},{},129,0xffff
 for k,v in pairs(points)do
 local p2=points[k%#points+1]
@@ -313,7 +314,15 @@ end
 ymin,ymax=min(y1,ymin),max(y2,ymax)
 end
 for y=ymin,ymax do
-rectfill(xl[y],y,xr[y],y,c)
+rectfill(xl[y],y,xr[y],y,color)
+end
+end
+end
+function wobble_line(x1,y1,x3,y3,color)
+if color>=0 then
+local x2,y2=(x3-x1)/2+x1+flr_rnd(3)-1,(y3-y1)/2+y1+flr_rnd(3)-1
+line(x1,y1,x2,y2,color)
+line(x2,y2,x3,y3,color)
 end
 end
 function tostring(any)
@@ -346,7 +355,7 @@ end
 end
 function get_points_from_shape(x,y,dir,shape)
 local points={}
-for i=2,#shape,2 do
+for i=3,#shape/2\1*2,2 do
 local x1,y1=shape[i],shape[i+1]
 local ang1=atan2(x1,y1)
 local mag1=approx_dist(x1,y1)
@@ -355,11 +364,6 @@ end
 return points
 end
 zclass[[line_particle,vec,actor,drawable|ang,@,x,@,y,@,x1,@,y1,@,x2,@,y2,@,color,@,dx,@,dy,@,draw,%line_particle_draw,update,%line_particle_update;start;duration,.5;]]
-function wobble_line(x1,y1,x3,y3,color)
-local x2,y2=(x3-x1)/2+x1+flr_rnd(3)-1,(y3-y1)/2+y1+flr_rnd(3)-1
-line(x1,y1,x2,y2,color)
-line(x2,y2,x3,y3,color)
-end
 zclass[[view,vec|following,@,zoom_factor,16,match_following,%view_match_following]]
 zclass[[missile,model|x,@,y,@,ang,@,speed,0.1,init,%missile_init;start;duration,2;]]
 zclass[[twinkle,actor,drawable|x,0,y,0,draw,%twinkle_draw,init,%twinkle_init,]]

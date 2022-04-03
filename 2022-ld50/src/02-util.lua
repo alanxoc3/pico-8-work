@@ -33,23 +33,36 @@ function approx_dist(dx,dy)
 end
 
 -- thanks to https://www.lexaloffle.com/bbs/?tid=34282
-function draw_polygon(points, c)
-    local xl,xr,ymin,ymax={},{},129,0xffff
-    for k,v in pairs(points) do
-        local p2=points[k%#points+1]
-        local x1,y1,x2,y2=v.x,flr(v.y),p2.x,flr(p2.y)
-        if y1>y2 then
-            y1,y2,x1,x2=y2,y1,x2,x1
+-- negative colors are transparent
+function draw_polygon(points, color)
+    if color >= 0 then
+        local xl,xr,ymin,ymax={},{},129,0xffff
+        for k,v in pairs(points) do
+            local p2=points[k%#points+1]
+            local x1,y1,x2,y2=v.x,flr(v.y),p2.x,flr(p2.y)
+            if y1>y2 then
+                y1,y2,x1,x2=y2,y1,x2,x1
+            end
+            local d=y2-y1
+            for y=y1,y2 do
+                local xval=flr(x1+(x2-x1)*(d==0 and 1 or (y-y1)/d))
+                xl[y],xr[y]=min(xl[y] or 32767,xval),max(xr[y] or 0x8001,xval)
+            end
+            ymin,ymax=min(y1,ymin),max(y2,ymax)
         end
-        local d=y2-y1
-        for y=y1,y2 do
-            local xval=flr(x1+(x2-x1)*(d==0 and 1 or (y-y1)/d))
-            xl[y],xr[y]=min(xl[y] or 32767,xval),max(xr[y] or 0x8001,xval)
+        for y=ymin,ymax do
+            rectfill(xl[y],y,xr[y],y,color)
         end
-        ymin,ymax=min(y1,ymin),max(y2,ymax)
     end
-    for y=ymin,ymax do
-        rectfill(xl[y],y,xr[y],y,c)
+end
+
+-- call srand before this function to make the wobbliness more consistent
+-- negative colors are transparent
+function wobble_line(x1, y1, x3, y3, color)
+    if color >= 0 then
+        local x2, y2 = (x3-x1)/2+x1+flr_rnd(3)-1, (y3-y1)/2+y1+flr_rnd(3)-1
+        line(x1, y1, x2, y2, color)
+        line(x2, y2, x3, y3, color)
     end
 end
 

@@ -19,18 +19,18 @@ function line_loop(points, color, linefunc)
 end
 
 |model_draw| function(a)
-    srand(t()*4\1)
+    srand(t()*4\1) -- for nice wobbling
  
-    foreach(a.model.fills, function(lines)
+    local modelpoints = {}
+    foreach(a.model.lines, function(lines)
         local points = get_points_from_shape(a.x, a.y, a.ang, lines)
         foreach(points, function(point) point.x = zoomx(point.x) point.y = zoomy(point.y) end)
-        draw_polygon(points, lines[1])
+        draw_polygon(points, lines[2], points.fill_color)
+        add(modelpoints, {c=lines[1], points=points})
     end)
 
-    foreach(a.model.lines, function(lines)
-        line_loop(get_points_from_shape(a.x, a.y, a.ang, lines), lines[1], function(x1, y1, x2, y2, color)
-            wobble_line(zoomx(x1), zoomy(y1), zoomx(x2), zoomy(y2), color)
-        end)
+    foreach(modelpoints, function(points)
+        line_loop(points.points, points.c, wobble_line)
     end)
 
     -- DEBUG_BEGIN
@@ -73,7 +73,7 @@ end $$
 
 function get_points_from_shape(x, y, dir, shape)
     local points = {}
-    for i=2,#shape,2 do
+    for i=3,#shape/2\1*2,2 do
         local x1, y1 = shape[i], shape[i+1]
         local ang1 = atan2(x1, y1)
         local mag1 = approx_dist(x1, y1)
@@ -115,9 +115,3 @@ end $$
     local percent = 1 - a:get_elapsed_percent'state'
     line(zoomx(a.x+a.x1*percent), zoomy(a.y+a.y1*percent), zoomx(a.x+a.x2*percent), zoomy(a.y+a.y2*percent), a.color)
 end $$
-
-function wobble_line(x1, y1, x3, y3, color)
-    local x2, y2 = (x3-x1)/2+x1+flr_rnd(3)-1, (y3-y1)/2+y1+flr_rnd(3)-1
-    line(x1, y1, x2, y2, color)
-    line(x2, y2, x3, y3, color)
-end
