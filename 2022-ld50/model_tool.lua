@@ -1,4 +1,4 @@
-modes = { "lines", "collisions" }
+modes = { "lines", "collisions", "field" }
 zooms = { .5, 1, 1.5, 2, 3, 5 }
 model = { lines={}, collisions={} }
 virt_mx, virt_my = 0, 0
@@ -25,6 +25,11 @@ end
 
 function model_to_string()
     local str = ""
+
+    if model.field then
+        str = str.."field,"..model.field..";"
+    end
+
     for i=1,#model.lines,1 do
         str = str.."lines;"..i..";"
         for item in all(model.lines[i]) do
@@ -40,6 +45,7 @@ function model_to_string()
         end
         str = str..";"
     end
+
     return str
 end
 
@@ -61,8 +67,7 @@ function _update60()
     local keyboard_enabled = stat(30)
     local char = stat(31)
     local curr_mode = modes[mode_i]
-    if     keyboard_enabled and char == "f" then mode_i = mode_i % #modes + 1 last_x = nil last_y = nil
-    elseif keyboard_enabled and char == "b" then mode_i=mode_i-1 mode_i = mode_i == 0 and #modes or mode_i last_x = nil last_y = nil
+    if     keyboard_enabled and char == "m" then mode_i = mode_i % #modes + 1 last_x = nil last_y = nil
     elseif keyboard_enabled and char == "t" then show_ui = not show_ui
     elseif keyboard_enabled and char == "s" then printh(model_to_string(), '@clip')
     elseif keyboard_enabled and char == "r" then if stat(4) ~= "" then model = zobj(stat(4)) model.lines=model.lines or {} model.collisions=model.collisions or {} end
@@ -130,6 +135,16 @@ function _update60()
             model.collisions[collisions_layer][2] = virt_my
             last_x, last_y = virt_mx, virt_my
         end
+    elseif curr_mode == "field" then
+        if char == "d" and model.collisions[collisions_layer] then
+            model.field = nil
+        elseif btnp(0) then collisions_layer = max(1, collisions_layer - 1)
+        elseif btnp(1) then collisions_layer = min(#model.collisions+1, collisions_layer + 1)
+        elseif btnp(2) then 
+            model.field = min(6, (model.field or 1)+.5)
+        elseif btnp(3) then
+            model.field = max(1, (model.field or 1)-.5)
+        end
     end
 end
 
@@ -170,6 +185,12 @@ function _draw()
                 local color = modes[mode_i] == "collisions" and collisions_layer == coll_i and 11 or 2
                 circ(x*50/zooms[zoom_i]+64, y*50/zooms[zoom_i]+64, rad*50/zooms[zoom_i], color)
             end
+        end
+    end
+
+    if show_ui then
+        if model.field then
+            circ(64, 64, model.field*50/zooms[zoom_i], 8)
         end
     end
 
