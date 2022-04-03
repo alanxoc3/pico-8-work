@@ -80,7 +80,7 @@ function _update60()
     elseif keyboard_enabled and char == "=" then next_zoom = 2
     elseif keyboard_enabled and char == "o" then -- rotate everything
         for lines in all(model.lines) do
-            for i=2,#lines,2 do
+            for i=3,#lines,2 do
                 lines[i], lines[i+1] = -lines[i+1], lines[i]
             end
         end
