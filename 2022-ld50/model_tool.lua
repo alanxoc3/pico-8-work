@@ -335,7 +335,6 @@ function zobj_set(table, oldstr, ...)
             str = str..sub(oldstr,i,i)
         end
     end
-    printh(str)
 
     local params, statements, dest = {...}, split(str, ";"), table
     foreach(statements, function(statement)
