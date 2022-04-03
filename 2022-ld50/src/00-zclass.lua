@@ -13,33 +13,32 @@ function zclass(meta_and_att_str)
     local parents = split(meta)
     local class = deli(parents, 1)
 
-    g_zclass_constructors[class] = function(inst, ...)
+    g_zclass_constructors[class] = function(inst, done, ...)
         foreach(parents, function(parent)
-            if not inst[parent] then g_zclass_constructors[parent](inst) end
+            if not done[parent] then g_zclass_constructors[parent](inst, done) end
         end)
-
-        inst.id = class -- useful for debugging
-        inst[class] = true -- avoid initializing class twice and useful for debugging
-        add(g_zclass_new_entities, {class, inst}) -- Mark for addition to ECS (may be overridden by templates).
+        done[class] = true -- avoid initializing class twice
+        inst.parents[class] = true -- useful for checking if instance inherits from this class (should not be overridden!)
+        add(g_zclass_new_entities, {class, inst}) -- mark for addition to ECS (may be overridden by templates).
         return zobj_set(inst, template, ...)
     end
 
-    _g[class] = function(...) return g_zclass_constructors[class]({}, ...) end
+    _g[class] = function(...) return g_zclass_constructors[class]({ id=class, parents={}, ecs_exclusions={} }, {}, ...) end
 end
 
 -- This function drains newly-created entities into the ECS. It should preferably
 -- be called near the beginning of each iteration of the game loop.
 
 -- You can make a class inherit the information of parents but NOT be added to that
--- parent's class group by setting the parent key to 'ignore'. Ex, instances of this
+-- parent's ECS group by setting an exclusion in the template. Ex, instances of this
 -- actorwithoutparent zclass will be in the actorwithoutparent group, but not the
--- actor group: zclass[[actorwithoutparent,actor|actor,ignore]]
+-- actor group: zclass[[actorwithoutparent,actor|ecs_exclusions;actor,true]]
 
 function register_zobjs()
     while #g_zclass_new_entities > 0 do
         local class, inst = unpack(deli(g_zclass_new_entities))
         g_zclass_entities[class] = g_zclass_entities[class] or {}
-        if inst[class] ~= 'ignore' then add(g_zclass_entities[class], inst) end
+        if not inst.ecs_exclusions[class] then add(g_zclass_entities[class], inst) end
     end
 end
 

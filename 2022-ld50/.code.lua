@@ -3,22 +3,22 @@ function zclass(meta_and_att_str)
 local meta,template=unpack(split(meta_and_att_str,"|"))
 local parents=split(meta)
 local class=deli(parents,1)
-g_zclass_constructors[class]=function(inst,...)
+g_zclass_constructors[class]=function(inst,done,...)
 foreach(parents,function(parent)
-if not inst[parent]then g_zclass_constructors[parent](inst)end
+if not done[parent]then g_zclass_constructors[parent](inst,done)end
 end)
-inst.id=class
-inst[class]=true
+done[class]=true
+inst.parents[class]=true
 add(g_zclass_new_entities,{class,inst})
 return zobj_set(inst,template,...)
 end
-_g[class]=function(...)return g_zclass_constructors[class]({},...)end
+_g[class]=function(...)return g_zclass_constructors[class]({id=class,parents={},ecs_exclusions={}},{},...)end
 end
 function register_zobjs()
 while #g_zclass_new_entities>0 do
 local class,inst=unpack(deli(g_zclass_new_entities))
 g_zclass_entities[class]=g_zclass_entities[class]or{}
-if inst[class]~="ignore"then add(g_zclass_entities[class],inst)end
+if not inst.ecs_exclusions[class]then add(g_zclass_entities[class],inst)end
 end
 end
 function deregister_zobj(inst)
@@ -72,7 +72,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_set_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,collision_draw_debug,@,model_init,@,model_draw,@,model_collide,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_match_following,@,twinkle_draw,@,twinkle_init,@,star_view_match_following,@,pl_update,@,pl_hit,@,level_select_draw,@,level_select_init,@,level_select_update,@,level_entrance_draw,@,logo_init,@,logo_draw,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_set_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,collision_draw_debug,@,model_init,@,model_draw,@,model_collide,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_match_following,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,twinkle_draw,@,twinkle_init,@,star_view_match_following,@,cateroid_hit,@,pl_update,@,pl_hit,@,level_select_draw,@,level_select_init,@,level_select_update,@,level_entrance_draw,@,logo_init,@,logo_draw,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -193,7 +193,7 @@ b:check_collision(other.collisions)
 end)
 end
 end)
-end,function(a)
+end,function(a,duration)
 if a.alive then
 a:kill()
 foreach(a.shapes,function(shape)
@@ -202,7 +202,8 @@ line_loop(points,shape.fg_color,function(x1,y1,x2,y2,color)
 local midx,midy=(x2-x1)/2+x1,(y2-y1)/2+y1
 x1,y1=x1-midx,y1-midy
 x2,y2=x2-midx,y2-midy
-_g.line_particle(atan2(midx-a.x,midy-a.y),midx,midy,x1,y1,x2,y2,color,a.dx,a.dy)
+local particle=_g.line_particle(atan2(midx-a.x,midy-a.y),midx,midy,x1,y1,x2,y2,color,a.dx,a.dy)
+if duration then particle.start.duration=duration end
 end)
 _g.vanishing_shape(a.x,a.y,a.dx,a.dy,points,shape.bg_color)
 end)
@@ -237,6 +238,13 @@ if btn"5"then a.zoom_factor=max(8,a.zoom_factor-1)end
 end
 end
 end,function(a)
+_g.missile_pop(a.x,a.y)
+end,function(a,b,dx,dy)
+a:kill()
+end,function(a)
+a:model_init()
+a:explode(.2)
+end,function(a)
 local x=(-g_star_view.x+flr(a.x*g_view.zoom_factor))%128
 local y=(-g_star_view.y+flr(a.y*g_view.zoom_factor))%128
 pset(x,y,sin(time()/10+a.twinkle_offset)>0.5 and 6 or 5)
@@ -249,6 +257,7 @@ if a.following then
 a.dx=a.following.dx
 a.dy=a.following.dy
 end
+end,function(a,b,dx,dy)
 end,function(a)
 if btn"4"and a.missile_ready then
 _g.missile(a.x+cos(a.ang)*.8,a.y+sin(a.ang)*.8,a.ang)
@@ -258,10 +267,7 @@ end
 a.speed=-ybtn()*.01
 a.d_ang=-xbtn()*.01
 end,function(a,b,dx,dy)
-a.dx+=dx
-a.dy+=dy
 a:explode()
-b:explode()
 end,function()
 loop_zobjs("drawable_pre","draw")
 loop_zobjs("drawable","draw")
@@ -290,6 +296,7 @@ loop_zobjs("actor","state")
 loop_zobjs("view","match_following")
 loop_zobjs("star_view","match_following")
 loop_zobjs("wall","collide",g_zclass_entities["pl"])
+loop_zobjs("wall","collide",g_zclass_entities["missile"])
 loop_zobjs("collision_circ","follow_anchoring")
 loop_zobjs("mov","mov_update")
 loop_zobjs("acc","acc_update")
@@ -441,12 +448,13 @@ end
 zclass[[vanishing_shape,vec,actor,drawable_pre|x,@,y,@,dx,@,dy,@,points,@,color,@,draw,%vanishing_shape_draw;start;duration,.25;]]
 zclass[[line_particle,vec,actor,drawable_post|ang,@,x,@,y,@,x1,@,y1,@,x2,@,y2,@,color,@,dx,@,dy,@,draw,%line_particle_draw,update,%line_particle_update;start;duration,.5;]]
 zclass[[view,vec|following,@,zoom_factor,16,match_following,%view_match_following]]
-zclass[[missile,model,drawable|x,@,y,@,ang,@,model_obj,%MISSILE,speed,0.05;start;duration,2;]]
+zclass[[missile,model,drawable|x,@,y,@,ang,@,model_obj,%MISSILE,speed,0.05,destroyed,%missile_destroyed,hit,%missile_hit;start;duration,2;]]
+zclass[[missile_pop,model,drawable|x,@,y,@,model_obj,%MISSILE_POP,init,%missile_pop_init]]
 zclass[[twinkle,actor,drawable_pre|x,0,y,0,draw,%twinkle_draw,init,%twinkle_init,]]
 zclass[[star_view,vec|following,@,match_following,%star_view_match_following]]
 zclass[[wall|]]
 zclass[[planet,actor,model,drawable|x,@,y,@,d_ang,.001,model_obj,%PLANET_SMALL]]
-zclass[[cateroid,model,wall,drawable|x,@,y,@,d_ang,.001,scale,2,model_obj,%CATEROID]]
+zclass[[cateroid,model,wall,drawable|x,@,y,@,d_ang,.001,scale,2,model_obj,%CATEROID,hit,%cateroid_hit]]
 zclass[[pl,actor,model,drawable|x,@,y,@,missile_ready,yes,model_obj,%PLAYER_SPACESHIP,update,%pl_update,hit,%pl_hit,collision_func,%good_collision_circ]]
 zclass[[letter,model,drawable_post|x,@,y,@,model_obj,@]]
 zclass[[level_entrance,drawable_post|x,@,y,@,shapes,@,scale,@,d_ang,@,circ_radius,1.5,draw,%level_entrance_draw]]
@@ -456,7 +464,7 @@ for c=0,15 do
 pal(c,g_fade_table[c][1+flr(7*min(1,max(0,threshold)))])
 end
 end
-zclass[[game_state,actor|actor,ignore;curr,level_select;logo;init,%logo_init,update,%logo_update,draw,%logo_draw,duration,2.5,next,level_select;level_select;init,%level_select_init,update,%level_select_update,draw,%level_select_draw;]]
+zclass[[game_state,actor|ecs_exclusions;actor,true;curr,level_select;logo;init,%logo_init,update,%logo_update,draw,%logo_draw,duration,2.5,next,level_select;level_select;init,%level_select_init,update,%level_select_update,draw,%level_select_draw;]]
 function _init()
 g_tl=_g.game_state()
 g_fade=0
