@@ -72,7 +72,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_set_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,collision_draw_debug,@,model_draw,@,model_init,@,model_collide,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_match_following,@,twinkle_draw,@,twinkle_init,@,star_view_match_following,@,pl_update,@,pl_hit,@,level_select_draw,@,level_select_init,@,level_select_update,@,logo_init,@,logo_draw,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_set_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,collision_draw_debug,@,model_draw,@,model_init,@,model_collide,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_match_following,@,twinkle_draw,@,twinkle_init,@,star_view_match_following,@,cateroid_hit,@,pl_update,@,pl_hit,@,level_select_draw,@,level_select_init,@,level_select_update,@,logo_init,@,logo_draw,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -258,6 +258,8 @@ if a.following then
 a.dx=a.following.dx
 a.dy=a.following.dy
 end
+end,function(a,b,dx,dy)
+a:explode()
 end,function(a)
 if btn"4"and a.missile_ready then
 _g.missile(a.x+cos(a.ang)*.8,a.y+sin(a.ang)*.8,a.ang)
@@ -267,10 +269,7 @@ end
 a.speed=-ybtn()*.01
 a.d_ang=-xbtn()*.01
 end,function(a,b,dx,dy)
-a.dx+=dx
-a.dy+=dy
 a:explode()
-b:explode()
 end,function()
 loop_zobjs("drawable_pre","draw")
 loop_zobjs("drawable","draw")
@@ -297,6 +296,7 @@ loop_zobjs("actor","state")
 loop_zobjs("view","match_following")
 loop_zobjs("star_view","match_following")
 loop_zobjs("wall","collide",g_zclass_entities["pl"])
+loop_zobjs("wall","collide",g_zclass_entities["missile"])
 loop_zobjs("collision_circ","follow_anchoring")
 loop_zobjs("mov","mov_update")
 loop_zobjs("acc","acc_update")
@@ -424,7 +424,7 @@ zclass[[twinkle,actor,drawable|x,0,y,0,draw,%twinkle_draw,init,%twinkle_init,]]
 zclass[[star_view,vec|following,@,match_following,%star_view_match_following]]
 zclass[[wall|]]
 zclass[[planet,actor,model,drawable|x,@,y,@,d_ang,.001,model_obj,%PLANET_SMALL]]
-zclass[[cateroid,model,wall,drawable|x,@,y,@,d_ang,.001,scale,2,model_obj,%CATEROID]]
+zclass[[cateroid,model,wall,drawable|x,@,y,@,d_ang,.001,scale,2,model_obj,%CATEROID,hit,%cateroid_hit]]
 zclass[[pl,actor,model,drawable|x,@,y,@,missile_ready,yes,model_obj,%PLAYER_SPACESHIP,update,%pl_update,hit,%pl_hit,collision_func,%good_collision_circ]]
 zclass[[letter,model,drawable_post|x,@,y,@,model_obj,@]]
 g_fade_table=zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,2,1,0,0,0;3;,3,3,3,3,1,0,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,1,1,0,0;6;,6,6,13,13,5,5,1,0;7;,7,7,6,13,13,5,1,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,5,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,1,1,0;13;,13,13,5,5,1,1,1,0;14;,14,14,13,4,2,2,1,0;15;,15,15,13,13,5,5,1,0;]]

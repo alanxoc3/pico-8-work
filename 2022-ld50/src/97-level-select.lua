@@ -45,6 +45,7 @@ end $$
     loop_zobjs('star_view', 'match_following')
 
     loop_zobjs('wall', 'collide', g_zclass_entities['pl'])
+    loop_zobjs('wall', 'collide', g_zclass_entities['missile'])
     loop_zobjs('collision_circ', 'follow_anchoring')
     loop_zobjs('mov', 'mov_update')
     loop_zobjs('acc', 'acc_update')

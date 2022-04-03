@@ -25,5 +25,5 @@ zclass[[star_view,vec|
     if a.following then
         a.dx = a.following.dx
         a.dy = a.following.dy
-   end
+    end
 end $$
