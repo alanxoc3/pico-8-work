@@ -255,7 +255,7 @@ end
 end,function(a,b,dx,dy)
 end,function(a)
 if btn"4"and a.missile_ready then
-_g.missile(a.x+cos(a.ang)*.8,a.y+sin(a.ang)*.8,a.ang)
+_g.missile(a.x+cos(a.ang)*.8,a.y+sin(a.ang)*.8,a.dx,a.dy,a.ang)
 a.missile_ready=false
 a:set_timer("missile_cooldown",0.1,function()a.missile_ready=true end)
 end
@@ -444,7 +444,7 @@ end
 zclass[[vanishing_shape,vec,actor,drawable_pre|x,@,y,@,dx,@,dy,@,points,@,color,@,draw,%vanishing_shape_draw;start;duration,.25;]]
 zclass[[line_particle,vec,actor,drawable_post|ang,@,x,@,y,@,x1,@,y1,@,x2,@,y2,@,color,@,dx,@,dy,@,draw,%line_particle_draw,update,%line_particle_update;start;duration,.5;]]
 zclass[[view,vec|following,@,zoom_factor,16,match_following,%view_match_following]]
-zclass[[missile,model,drawable|x,@,y,@,ang,@,model_obj,%MISSILE,speed,0.05,destroyed,%missile_destroyed,hit,%missile_hit;start;duration,2;]]
+zclass[[missile,model,drawable|x,@,y,@,dx,@,dy,@,ang,@,model_obj,%MISSILE,speed,0.05,inertia_x,1,inertia_y,1,destroyed,%missile_destroyed,hit,%missile_hit;start;duration,2;]]
 zclass[[missile_pop,model,drawable|x,@,y,@,model_obj,%MISSILE_POP,init,%missile_pop_init]]
 zclass[[twinkle,actor,drawable_pre|x,0,y,0,draw,%twinkle_draw,init,%twinkle_init,]]
 zclass[[star_view,vec|following,@,match_following,%star_view_match_following]]

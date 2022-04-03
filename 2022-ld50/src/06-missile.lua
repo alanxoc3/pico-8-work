@@ -1,7 +1,8 @@
 zclass[[missile,model,drawable|
-    x,@,y,@,ang,@,     -- initial position & direction
+    x,@,y,@,dx,@,dy,@,ang,@,     -- initial position & direction
     model_obj,%MISSILE,
     speed,0.05,
+    inertia_x,1,inertia_y,1,
     destroyed,%missile_destroyed,
     hit,%missile_hit;
     start;duration,2;  -- disappear after 2 sec
