@@ -46,8 +46,7 @@ zclass[[collision_circ,vec,actor
     inertia_x,1, inertia_y,1,
     follow_anchoring,%collision_follow_anchoring,
     check_collision,%check_collision,
-    init,%collision_init,
-    hit,nop
+    init,%collision_init
 
     -- DEBUG_BEGIN
     ,draw,%collision_draw_debug

@@ -1,6 +1,6 @@
 zclass[[model,mov,actor|
     model_obj;,;
-    hit,nop,
+    hit,%model_hit,
     scale,1,
     collision_func,%bad_collision_circ,
     draw,%model_draw,
@@ -90,6 +90,13 @@ end
                 end
             end
         end)
+    end
+end $$
+
+|model_hit| function(a, b, dx, dy)
+    if a.health and a.health > 0 then
+        a.health -= b.damage or 0
+        if a.health <= 0 then a:explode() end
     end
 end $$
 
