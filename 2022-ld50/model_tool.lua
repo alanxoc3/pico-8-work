@@ -1,4 +1,4 @@
-modes = { "lines", "collisions", "field" }
+modes = { "lines", "collisions" }
 zooms = { .5, 1, 1.5, 2, 3, 5 }
 model = { lines={}, collisions={} }
 
@@ -29,10 +29,6 @@ end
 
 function model_to_string()
     local str = ""
-
-    if model.field then
-        str = str.."field,"..model.field..";"
-    end
 
     for i=1,#model.collisions,1 do
         str = str.."collisions;"..i..";"
@@ -159,14 +155,6 @@ function _update60()
             model.collisions[collisions_layer][2] = virt_my
             last_x, last_y = virt_mx, virt_my
         end
-    elseif curr_mode == "field" then
-        if char == "d" then
-            model.field = nil
-        elseif btnp(2) then 
-            model.field = min(6, (model.field or 1)+.5)
-        elseif btnp(3) then
-            model.field = max(1, (model.field or 1)-.5)
-        end
     end
 end
 
@@ -213,10 +201,6 @@ function _draw()
                 local color = modes[mode_i] == "collisions" and collisions_layer == coll_i and 11 or 2
                 circ(x*50/zooms[zoom_i]+64, y*50/zooms[zoom_i]+64, rad*50/zooms[zoom_i], color)
             end
-        end
-
-        if model.field then
-            circ(64, 64, model.field*50/zooms[zoom_i], 8)
         end
     end
 
