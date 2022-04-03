@@ -6,5 +6,5 @@ zclass[[missile,model|
 ]]
 
 |missile_init| function(a)
-    a:model_init[[lines;1;,7,0.2,0,0.1,0.1,-0.1,0.1,0,0,-0.1,-0.1,0.1,-0.1,0.2,0;collisions;1;,0.1,0,0.1;collisions;2;,0,0,0.1;]]
+    a:model_init[[lines;1;,7,-0.1,0,0.1,0;collisions;1;,0,0,0.1;]]
 end $$

@@ -76,7 +76,7 @@ end $$
 
 |pl_update| function(a)
     if btn'4' and a.missile_ready then
-        _g.missile(a.x+1,a.y+1,a.ang)
+        _g.missile(a.x+cos(a.ang)*.8,a.y+sin(a.ang)*.8,a.ang)
         a.missile_ready = false
         a:set_timer('missile_cooldown', 0.1, function() a.missile_ready=true end)
     end

@@ -205,7 +205,7 @@ a.dx=cos(dir)*dist*.25
 a.dy=sin(dir)*dist*.25
 end
 end,function(a)
-a:model_init[[lines;1;,7,0.2,0,0.1,0.1,-0.1,0.1,0,0,-0.1,-0.1,0.1,-0.1,0.2,0;collisions;1;,0.1,0,0.1;collisions;2;,0,0,0.1;]]
+a:model_init[[lines;1;,7,-0.1,0,0.1,0;collisions;1;,0,0,0.1;]]
 end,function(a)
 local x=(-g_view.x+flr(a.x*g_view.zoom_factor))%128
 local y=(-g_view.y+flr(a.y*g_view.zoom_factor))%128
@@ -247,7 +247,7 @@ end,function(a)
 a:model_init[[field,1;lines;1;,9,0.5,0,-0.5,-0.3,-0.3,0,-0.5,0.3,0.5,0;collisions;1;,0,0,0.1;collisions;2;,-0.3,0,0.2;]]
 end,function(a)
 if btn"4"and a.missile_ready then
-_g.missile(a.x+1,a.y+1,a.ang)
+_g.missile(a.x+cos(a.ang)*.8,a.y+sin(a.ang)*.8,a.ang)
 a.missile_ready=false
 a:set_timer("missile_cooldown",0.1,function()a.missile_ready=true end)
 end
