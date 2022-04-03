@@ -2,6 +2,7 @@ zclass[[missile,model,drawable|
     x,@,y,@,dx,@,dy,@,ang,@,     -- initial position & direction
     model_obj,%MISSILE,
     speed,0.05,
+    damage,1,
     inertia_x,1,inertia_y,1,
     destroyed,%missile_destroyed,
     hit,%missile_hit;

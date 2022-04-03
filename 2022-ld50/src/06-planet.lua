@@ -9,11 +9,7 @@ zclass[[planet,actor,model,drawable|
 zclass[[cateroid,model,wall,drawable|
     x,@, y,@,
     d_ang,.001,
+    health,50,
     scale,2,
-    model_obj,%CATEROID,
-    hit,%cateroid_hit
+    model_obj,%CATEROID
 ]]
-
-|cateroid_hit| function(a, b, dx, dy)
-    --a:explode()
-end $$
