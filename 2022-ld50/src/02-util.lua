@@ -66,6 +66,19 @@ function wobble_line(x1, y1, x3, y3, color)
     end
 end
 
+function scr_wobble_line(x1, y1, x3, y3, color)
+    wobble_line(zoomx(x1), zoomy(y1), zoomx(x2), zoomy(y2), color)
+end
+
+function scr_draw_polygon(old_points, color)
+    local points = {}
+    foreach(old_points, function(p)
+        add(points, {x=zoomx(p.x), y=zoomy(p.y)})
+    end)
+    
+    draw_polygon(points, color)
+end
+
 -- DEBUG_BEGIN
 -- Converts anything to a string.
 function tostring(any)

@@ -88,14 +88,37 @@ end
         a:kill()
  
         foreach(a.model.lines, function(lines)
-            line_loop(get_points_from_shape(a.x, a.y, a.ang, lines), lines[1], function(x1, y1, x2, y2, color)
+            local points = get_points_from_shape(a.x, a.y, a.ang, lines)
+            line_loop(points, lines[1], function(x1, y1, x2, y2, color)
                 local midx, midy = (x2-x1)/2+x1, (y2-y1)/2+y1
                 x1, y1 = x1-midx, y1-midy
                 x2, y2 = x2-midx, y2-midy
                 _g.line_particle(atan2(midx-a.x, midy-a.y), midx, midy, x1, y1, x2, y2, color, a.dx, a.dy)
             end)
+
+            _g.vanishing_shape(a.x, a.y, a.dx, a.dy, points, lines[2])
         end)
     end
+end $$
+
+zclass[[vanishing_shape,vec,actor,drawable|
+    x,@, y,@, dx,@, dy,@, points,@, color,@,
+    
+    draw,%vanishing_shape_draw;
+    start;duration,.25;
+]]
+
+|vanishing_shape_draw| function(a)
+    local percent = a:get_elapsed_percent'state'
+    local points = {}
+    foreach(a.points, function(p)
+        local dx, dy = a.x - p.x, a.y - p.y
+        local dist = approx_dist(dx, dy)
+        local ang = atan2(dx, dy)
+        local x, y = dist*cos(ang)*percent, dist*sin(ang)*percent
+        add(points, {x=zoomx(p.x+x), y=zoomy(p.y+y)})
+    end)
+    draw_polygon(points, a.color)
 end $$
 
 zclass[[line_particle,vec,actor,drawable|

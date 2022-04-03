@@ -72,7 +72,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,timer_set_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,collision_draw_debug,@,model_draw,@,model_init,@,model_collide,@,model_explode,@,line_particle_update,@,line_particle_draw,@,view_match_following,@,missile_init,@,twinkle_draw,@,twinkle_init,@,planet_init,@,planet_update,@,logo_init,@,logo_draw,@,game_init,@,game_update,@,game_draw,@,pl_init,@,pl_update,@,pl_hit,@,cateroid_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,timer_set_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,collision_draw_debug,@,model_draw,@,model_init,@,model_collide,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_match_following,@,missile_init,@,twinkle_draw,@,twinkle_init,@,planet_init,@,planet_update,@,logo_init,@,logo_draw,@,game_init,@,game_update,@,game_draw,@,pl_init,@,pl_update,@,pl_hit,@,cateroid_init,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -192,14 +192,27 @@ end,function(a)
 if a.alive then
 a:kill()
 foreach(a.model.lines,function(lines)
-line_loop(get_points_from_shape(a.x,a.y,a.ang,lines),lines[1],function(x1,y1,x2,y2,color)
+local points=get_points_from_shape(a.x,a.y,a.ang,lines)
+line_loop(points,lines[1],function(x1,y1,x2,y2,color)
 local midx,midy=(x2-x1)/2+x1,(y2-y1)/2+y1
 x1,y1=x1-midx,y1-midy
 x2,y2=x2-midx,y2-midy
 _g.line_particle(atan2(midx-a.x,midy-a.y),midx,midy,x1,y1,x2,y2,color,a.dx,a.dy)
 end)
+_g.vanishing_shape(a.x,a.y,a.dx,a.dy,points,lines[2])
 end)
 end
+end,function(a)
+local percent=a:get_elapsed_percent"state"
+local points={}
+foreach(a.points,function(p)
+local dx,dy=a.x-p.x,a.y-p.y
+local dist=approx_dist(dx,dy)
+local ang=atan2(dx,dy)
+local x,y=dist*cos(ang)*percent,dist*sin(ang)*percent
+add(points,{x=zoomx(p.x+x),y=zoomy(p.y+y)})
+end)
+draw_polygon(points,a.color)
 end,function(a)
 a.dx+=cos(a.ang)*.005
 a.dy+=sin(a.ang)*.005
@@ -258,7 +271,7 @@ loop_zobjs("vec","vec_update")
 end,function()
 loop_zobjs("drawable","draw")
 end,function(a)
-a:model_init[[field,1;collisions;1;,-0.4,0,0.6;collisions;2;,0.2,0,0.3;collisions;3;,0.5,0,0.3;collisions;4;,0.8,0,0.2;collisions;5;,-0.7,-0.4,0.2;collisions;6;,-0.7,0.4,0.2;lines;1;,7,-1,-0.5,-0.2,-0.7,-0.3,-0.8,-0.1,-0.8,0.1,-0.7,0.3,-0.5,0.2;lines;2;,13,-1,0,-0.3,-0.2,-0.5,-0.6,-0.6,-0.8,-0.6,-0.9,-0.5,-0.6,-0.4,-0.5,-0.2;lines;3;,13,-1,0,0.3,-0.2,0.5,-0.6,0.6,-0.8,0.6,-0.9,0.5,-0.6,0.4,-0.5,0.2;lines;4;,13,-1,0,0,-0.9,0;lines;5;,7,-1,1,0,0.7,-0.2,0.2,-0.3,0,-0.3,-0.5,-0.2,-0.6,0;lines;6;,7,-1,1,0,0.7,0.2,0.2,0.3,0,0.3,-0.5,0.2,-0.6,0;lines;7;,13,2,0.7,-0.2,1,0,0.7,0.2,0.6,0.1,0.6,-0.1,0.7,-0.2;lines;8;,13,1,0.5,0,0.4,-0.1,0.3,-0.1,0.2,0,0.3,0.1,0.4,0.1,0.5,0;]]
+a:model_init[[field,1;collisions;1;,-0.1,0,0.3;lines;1;,7,12,0.5,0,0,-0.3,-0.5,-0.3,-0.3,0,-0.5,0.3,0,0.3,0.5,0;]]
 end,function(a)
 if btn"4"and a.missile_ready then
 _g.missile(a.x+cos(a.ang)*.8,a.y+sin(a.ang)*.8,a.ang)
@@ -327,6 +340,16 @@ line(x1,y1,x2,y2,color)
 line(x2,y2,x3,y3,color)
 end
 end
+function scr_wobble_line(x1,y1,x3,y3,color)
+wobble_line(zoomx(x1),zoomy(y1),zoomx(x2),zoomy(y2),color)
+end
+function scr_draw_polygon(old_points,color)
+local points={}
+foreach(old_points,function(p)
+add(points,{x=zoomx(p.x),y=zoomy(p.y)})
+end)
+draw_polygon(points,color)
+end
 function tostring(any)
 if type(any)~="table"then return tostr(any)end
 local str="{"
@@ -365,6 +388,7 @@ add(points,{x=x+cos(ang1+dir)*mag1,y=y+sin(ang1+dir)*mag1})
 end
 return points
 end
+zclass[[vanishing_shape,vec,actor,drawable|x,@,y,@,dx,@,dy,@,points,@,color,@,draw,%vanishing_shape_draw;start;duration,.25;]]
 zclass[[line_particle,vec,actor,drawable|ang,@,x,@,y,@,x1,@,y1,@,x2,@,y2,@,color,@,dx,@,dy,@,draw,%line_particle_draw,update,%line_particle_update;start;duration,.5;]]
 zclass[[view,vec|following,@,zoom_factor,16,match_following,%view_match_following]]
 zclass[[missile,model|x,@,y,@,ang,@,speed,0.1,init,%missile_init;start;duration,2;]]
