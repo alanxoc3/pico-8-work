@@ -13,18 +13,18 @@ function zclass(meta_and_att_str)
     local parents = split(meta)
     local class = deli(parents, 1)
 
-    g_zclass_constructors[class] = function(inst, done, ...)
+    g_zclass_constructors[class] = function(inst, ...)
         foreach(parents, function(parent)
-            if not done[parent] then g_zclass_constructors[parent](inst, done) end
+            if not inst[parent] then g_zclass_constructors[parent](inst) end
         end)
 
-        done[class] = true -- Mark to avoid initializing this class twice.
+        inst.id = class -- useful for debugging
+        inst[class] = true -- avoid initializing class twice and useful for debugging
         add(g_zclass_new_entities, {class, inst}) -- Mark for addition to ECS (may be overridden by templates).
-
         return zobj_set(inst, template, ...)
     end
 
-    _g[class] = function(...) return g_zclass_constructors[class]({}, {}, ...) end
+    _g[class] = function(...) return g_zclass_constructors[class]({}, ...) end
 end
 
 -- This function drains newly-created entities into the ECS. It should preferably

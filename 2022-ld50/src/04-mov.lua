@@ -46,13 +46,19 @@ zclass[[collision_circ,vec,actor
     inertia_x,1, inertia_y,1,
     follow_anchoring,%collision_follow_anchoring,
     check_collision,%check_collision,
-    init,%collision_follow_anchoring,
+    init,%collision_init,
     hit,nop
 
     -- DEBUG_BEGIN
     ,draw,%collision_draw_debug
     -- DEBUG_END
 ]]
+
+|collision_init| function(a)
+    add(a.anchoring.collisions, a)
+    a:follow_anchoring()
+end $$
+
 |collision_follow_anchoring| function(a)
     local b = a.anchoring
     local off_magnitude = approx_dist(a.offset_x, a.offset_y)

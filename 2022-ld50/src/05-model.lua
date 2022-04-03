@@ -7,6 +7,7 @@ zclass[[model,mov,drawable,actor|
     collision_func,%bad_collision_circ,
     draw,%model_draw,
     explode,%model_explode,
+    collide,%model_collide,
     model_init,%model_init
 ]]
 
@@ -14,14 +15,42 @@ zclass[[model,mov,drawable,actor|
     foreach(get_line_coords(a.x, a.y, a.ang, a.model.lines), function(l)
         wobble_line(zoomx(l.x1), zoomy(l.y1), zoomx(l.x2), zoomy(l.y2), l.color)
     end)
+
+    -- DEBUG_BEGIN
+    if g_debug and a.field_radius then
+        circ(zoomx(a.x), zoomy(a.y), a.field_radius*g_view.zoom_factor, 2)
+    end
+    -- DEBUG_END
 end $$
 
 |model_init| function(a, zobj_str)
     a.model = zobj(zobj_str)
 
+    a.field_radius = a.model.field
+    a.collisions = {}
     -- create collision rects
     foreach(a.model.collisions or {}, function(collision)
         a.collision_func(a, collision[1], collision[2], collision[3])
+    end)
+end $$
+
+|model_collide| function(a, other_list)
+    foreach(other_list, function(other)
+        local should_check_fine_grained_collisions = false
+
+        if a.field_radius and other.field_radius then
+            local x, y = other.x-a.x, other.y-a.y
+            local minimum_dist = a.field_radius + other.field_radius
+            should_check_fine_grained_collisions = approx_dist(x, y) < minimum_dist
+        else
+            should_check_fine_grained_collisions = true
+        end
+
+        if should_check_fine_grained_collisions then
+            foreach(a.collisions, function(b)
+                b:check_collision(other.collisions)
+            end)
+        end
     end)
 end $$
 

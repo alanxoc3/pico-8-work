@@ -48,7 +48,7 @@ end $$
     loop_zobjs('actor', 'state')
     loop_zobjs('view', 'match_following')
 
-    loop_zobjs('bad_collision_circ', 'check_collision', g_zclass_entities['good_collision_circ'])
+    loop_zobjs('wall', 'collide', g_zclass_entities['pl'])
     loop_zobjs('collision_circ', 'follow_anchoring')
     loop_zobjs('mov', 'mov_update')
     loop_zobjs('acc', 'acc_update')
@@ -90,7 +90,9 @@ end $$
 end $$
 
 
-zclass[[cateroid,model|
+zclass[[wall|]]
+
+zclass[[cateroid,model,wall|
     x,@, y,@,
     init,%cateroid_init
 ]]

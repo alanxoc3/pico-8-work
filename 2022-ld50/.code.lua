@@ -3,15 +3,16 @@ function zclass(meta_and_att_str)
 local meta,template=unpack(split(meta_and_att_str,"|"))
 local parents=split(meta)
 local class=deli(parents,1)
-g_zclass_constructors[class]=function(inst,done,...)
+g_zclass_constructors[class]=function(inst,...)
 foreach(parents,function(parent)
-if not done[parent]then g_zclass_constructors[parent](inst,done)end
+if not inst[parent]then g_zclass_constructors[parent](inst)end
 end)
-done[class]=true
+inst.id=class
+inst[class]=true
 add(g_zclass_new_entities,{class,inst})
 return zobj_set(inst,template,...)
 end
-_g[class]=function(...)return g_zclass_constructors[class]({},{},...)end
+_g[class]=function(...)return g_zclass_constructors[class]({},...)end
 end
 function register_zobjs()
 while #g_zclass_new_entities>0 do
@@ -71,7 +72,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,timer_set_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,collision_follow_anchoring,@,check_collision,@,collision_draw_debug,@,model_draw,@,model_init,@,model_explode,@,line_particle_update,@,line_particle_draw,@,view_match_following,@,missile_init,@,twinkle_draw,@,twinkle_init,@,planet_init,@,planet_update,@,logo_init,@,logo_draw,@,game_init,@,game_update,@,game_draw,@,pl_init,@,pl_update,@,pl_hit,@,cateroid_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,timer_set_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,collision_draw_debug,@,model_draw,@,model_init,@,model_collide,@,model_explode,@,line_particle_update,@,line_particle_draw,@,view_match_following,@,missile_init,@,twinkle_draw,@,twinkle_init,@,planet_init,@,planet_update,@,logo_init,@,logo_draw,@,game_init,@,game_update,@,game_draw,@,pl_init,@,pl_update,@,pl_hit,@,cateroid_init,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -125,6 +126,9 @@ a.ang+=a.d_ang
 a.ax=a.speed*cos(a.ang)
 a.ay=a.speed*sin(a.ang)
 end,function(a)
+add(a.anchoring.collisions,a)
+a:follow_anchoring()
+end,function(a)
 local b=a.anchoring
 local off_magnitude=approx_dist(a.offset_x,a.offset_y)
 local off_ang_new=atan2(a.offset_x,a.offset_y)+b.ang+b.d_ang
@@ -150,10 +154,31 @@ end,function(a)
 foreach(get_line_coords(a.x,a.y,a.ang,a.model.lines),function(l)
 wobble_line(zoomx(l.x1),zoomy(l.y1),zoomx(l.x2),zoomy(l.y2),l.color)
 end)
+if g_debug and a.field_radius then
+circ(zoomx(a.x),zoomy(a.y),a.field_radius*g_view.zoom_factor,2)
+end
 end,function(a,zobj_str)
 a.model=zobj(zobj_str)
+a.field_radius=a.model.field
+a.collisions={}
 foreach(a.model.collisions or{},function(collision)
 a.collision_func(a,collision[1],collision[2],collision[3])
+end)
+end,function(a,other_list)
+foreach(other_list,function(other)
+local should_check_fine_grained_collisions=false
+if a.field_radius and other.field_radius then
+local x,y=other.x-a.x,other.y-a.y
+local minimum_dist=a.field_radius+other.field_radius
+should_check_fine_grained_collisions=approx_dist(x,y)<minimum_dist
+else
+should_check_fine_grained_collisions=true
+end
+if should_check_fine_grained_collisions then
+foreach(a.collisions,function(b)
+b:check_collision(other.collisions)
+end)
+end
 end)
 end,function(a)
 if a.alive then
@@ -211,7 +236,7 @@ end
 end,function()
 loop_zobjs("actor","state")
 loop_zobjs("view","match_following")
-loop_zobjs("bad_collision_circ","check_collision",g_zclass_entities["good_collision_circ"])
+loop_zobjs("wall","collide",g_zclass_entities["pl"])
 loop_zobjs("collision_circ","follow_anchoring")
 loop_zobjs("mov","mov_update")
 loop_zobjs("acc","acc_update")
@@ -274,12 +299,12 @@ zclass[[pos|x,0,y,0]]
 zclass[[vec,pos|dx,0,dy,0,vec_update,%vec_update]]
 zclass[[acc,vec|inertia_x,.95,inertia_y,.95,ax,0,ay,0,acc_update,%acc_update]]
 zclass[[mov,acc|ang,0,speed,0,d_ang,0,mov_update,%mov_update]]
-zclass[[collision_circ,vec,actor,drawable|anchoring,@,offset_x,@,offset_y,@,radius,@,inertia_x,1,inertia_y,1,follow_anchoring,%collision_follow_anchoring,check_collision,%check_collision,init,%collision_follow_anchoring,hit,nop,draw,%collision_draw_debug]]
+zclass[[collision_circ,vec,actor,drawable|anchoring,@,offset_x,@,offset_y,@,radius,@,inertia_x,1,inertia_y,1,follow_anchoring,%collision_follow_anchoring,check_collision,%check_collision,init,%collision_init,hit,nop,draw,%collision_draw_debug]]
 zclass[[bad_collision_circ,collision_circ|anchoring,@,offset_x,@,offset_y,@,radius,@]]
 zclass[[good_collision_circ,collision_circ|anchoring,@,offset_x,@,offset_y,@,radius,@]]
 function zoomx(x)return(x-g_view.x)*g_view.zoom_factor+64 end
 function zoomy(y)return(y-g_view.y)*g_view.zoom_factor+64 end
-zclass[[model,mov,drawable,actor|model;,;hit,nop,collision_func,%bad_collision_circ,draw,%model_draw,explode,%model_explode,model_init,%model_init]]
+zclass[[model,mov,drawable,actor|model;,;hit,nop,collision_func,%bad_collision_circ,draw,%model_draw,explode,%model_explode,collide,%model_collide,model_init,%model_init]]
 function get_line_coords(x,y,dir,model_lines)
 local lines={}
 foreach(model_lines or{},function(shape)
@@ -329,4 +354,5 @@ loop_zobjs("game_state","draw")
 if g_debug then rect(0,0,127,127,8)end
 end
 zclass[[pl,actor,model|x,@,y,@,missile_ready,yes,init,%pl_init,update,%pl_update,hit,%pl_hit,collision_func,%good_collision_circ]]
-zclass[[cateroid,model|x,@,y,@,init,%cateroid_init]]
+zclass[[wall|]]
+zclass[[cateroid,model,wall|x,@,y,@,init,%cateroid_init]]
