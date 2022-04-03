@@ -96,7 +96,7 @@ function translate_points(x, y, dir, shape)
     return points
 end
 
-|model_explode| function(a)
+|model_explode| function(a, duration)
     if a.alive then
         a:kill()
  
@@ -106,7 +106,8 @@ end
                 local midx, midy = (x2-x1)/2+x1, (y2-y1)/2+y1
                 x1, y1 = x1-midx, y1-midy
                 x2, y2 = x2-midx, y2-midy
-                _g.line_particle(atan2(midx-a.x, midy-a.y), midx, midy, x1, y1, x2, y2, color, a.dx, a.dy)
+                local particle = _g.line_particle(atan2(midx-a.x, midy-a.y), midx, midy, x1, y1, x2, y2, color, a.dx, a.dy)
+                if duration then particle.start.duration = duration end
             end)
 
             _g.vanishing_shape(a.x, a.y, a.dx, a.dy, points, shape.bg_color)

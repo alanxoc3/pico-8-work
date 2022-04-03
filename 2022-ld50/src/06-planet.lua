@@ -15,5 +15,5 @@ zclass[[cateroid,model,wall,drawable|
 ]]
 
 |cateroid_hit| function(a, b, dx, dy)
-    a:explode()
+    --a:explode()
 end $$
