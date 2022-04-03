@@ -1,1 +1,1 @@
-lines;1;,9,0.5,0,-0.5,-0.3,-0.3,0,-0.5,0.3,0.5,0;collisions;1;,-0.3,0,0.3;collisions;2;,0,0,0.2;collisions;3;,0.2,0,0.1;collisions;4;,0.3,0,0.1;collisions;5;,0.4,0,0.1;
+lines;1;,9,-1,0.5,0,-0.5,-0.3,-0.3,0,-0.5,0.3,0.5,0;collisions;1;,-0.3,0,0.3;collisions;2;,0,0,0.2;collisions;3;,0.2,0,0.1;collisions;4;,0.3,0,0.1;collisions;5;,0.4,0,0.1;
