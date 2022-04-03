@@ -18,21 +18,16 @@ function line_loop(points, color, linefunc)
 end
 
 |model_init| function(a)
-    local model = parse_model(a.model_obj, a.scale)
-
-    a.shapes = model.shapes
-    a.field_radius = model.field_radius
-
     -- create collision rects
     a.collisions = {}
-    foreach(model.collisions or {}, function(collision)
+    foreach(a.model_obj.collisions or {}, function(collision)
         a.collision_func(a, collision.x, collision.y, collision.radius)
     end)
 end $$
 
 |model_draw| function(a)
     local modelpoints = {}
-    foreach(a.shapes, function(shape)
+    foreach(a.model_obj.shapes, function(shape)
         local points = translate_points(a.x, a.y, a.ang, shape)
         foreach(points, function(point) point.x = zoomx(point.x) point.y = zoomy(point.y) end)
         draw_polygon(points, shape.bg_color)
@@ -45,17 +40,18 @@ end $$
     end)
 
     -- DEBUG_BEGIN
-    if g_debug and a.field_radius then
-        circ(zoomx(a.x), zoomy(a.y), a.field_radius*g_view.zoom_factor, 2)
+    if g_debug and a.model_obj.field_radius then
+        circ(zoomx(a.x), zoomy(a.y), a.model_obj.field_radius*g_view.zoom_factor, 2)
     end
     -- DEBUG_END
 end $$
 
-function parse_model(template, scale, xoffset, yoffset)
+function parse_model(template_str, scale, xoffset, yoffset)
     scale = scale or 1
     xoffset = xoffset or 0
     yoffset = yoffset or 0
 
+    local template = zobj(template_str)
     local model = {}
 
     model.shapes = {}
@@ -82,23 +78,19 @@ function parse_model(template, scale, xoffset, yoffset)
 end
 
 |model_collide| function(a, other_list)
-    foreach(other_list, function(other)
-        local should_check_fine_grained_collisions = false
-
-        if a.field_radius and other.field_radius then
-            local x, y = other.x-a.x, other.y-a.y
-            local minimum_dist = a.field_radius + other.field_radius
-            should_check_fine_grained_collisions = approx_dist(x, y) < minimum_dist
-        else
-            should_check_fine_grained_collisions = true
-        end
-
-        if should_check_fine_grained_collisions then
-            foreach(a.collisions, function(b)
-                b:check_collision(other.collisions)
-            end)
-        end
-    end)
+    if #a.collisions > 0 then
+        foreach(other_list, function(other)
+            if a.model_obj.field_radius + other.model_obj.field_radius > 0 then
+                local x, y = other.x-a.x, other.y-a.y
+                local minimum_dist = a.model_obj.field_radius + other.model_obj.field_radius
+                if approx_dist(x, y) < minimum_dist then
+                    foreach(a.collisions, function(b)
+                        b:check_collision(other.collisions)
+                    end)
+                end
+            end
+        end)
+    end
 end $$
 
 function translate_points(x, y, dir, shape)
@@ -115,7 +107,7 @@ end
     if a.alive then
         a:kill()
  
-        foreach(a.shapes, function(shape)
+        foreach(a.model_obj.shapes, function(shape)
             local points = translate_points(a.x, a.y, a.ang, shape)
             line_loop(points, shape.fg_color, function(x1, y1, x2, y2, color)
                 local midx, midy = (x2-x1)/2+x1, (y2-y1)/2+y1

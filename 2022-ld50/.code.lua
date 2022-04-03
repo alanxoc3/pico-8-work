@@ -155,16 +155,13 @@ if g_debug then
 circ(zoomx(a.x),zoomy(a.y),a.radius*g_view.zoom_factor,8)
 end
 end,function(a)
-local model=parse_model(a.model_obj,a.scale)
-a.shapes=model.shapes
-a.field_radius=model.field_radius
 a.collisions={}
-foreach(model.collisions or{},function(collision)
+foreach(a.model_obj.collisions or{},function(collision)
 a.collision_func(a,collision.x,collision.y,collision.radius)
 end)
 end,function(a)
 local modelpoints={}
-foreach(a.shapes,function(shape)
+foreach(a.model_obj.shapes,function(shape)
 local points=translate_points(a.x,a.y,a.ang,shape)
 foreach(points,function(point)point.x=zoomx(point.x)point.y=zoomy(point.y)end)
 draw_polygon(points,shape.bg_color)
@@ -174,29 +171,27 @@ srand(t()*4\1)
 foreach(modelpoints,function(points)
 line_loop(points.points,points.c,wobble_line)
 end)
-if g_debug and a.field_radius then
-circ(zoomx(a.x),zoomy(a.y),a.field_radius*g_view.zoom_factor,2)
+if g_debug and a.model_obj.field_radius then
+circ(zoomx(a.x),zoomy(a.y),a.model_obj.field_radius*g_view.zoom_factor,2)
 end
 end,function(a,other_list)
+if #a.collisions>0 then
 foreach(other_list,function(other)
-local should_check_fine_grained_collisions=false
-if a.field_radius and other.field_radius then
+if a.model_obj.field_radius+other.model_obj.field_radius>0 then
 local x,y=other.x-a.x,other.y-a.y
-local minimum_dist=a.field_radius+other.field_radius
-should_check_fine_grained_collisions=approx_dist(x,y)<minimum_dist
-else
-should_check_fine_grained_collisions=true
-end
-if should_check_fine_grained_collisions then
+local minimum_dist=a.model_obj.field_radius+other.model_obj.field_radius
+if approx_dist(x,y)<minimum_dist then
 foreach(a.collisions,function(b)
 b:check_collision(other.collisions)
 end)
 end
+end
 end)
+end
 end,function(a,duration)
 if a.alive then
 a:kill()
-foreach(a.shapes,function(shape)
+foreach(a.model_obj.shapes,function(shape)
 local points=translate_points(a.x,a.y,a.ang,shape)
 line_loop(points,shape.fg_color,function(x1,y1,x2,y2,color)
 local midx,midy=(x2-x1)/2+x1,(y2-y1)/2+y1
@@ -411,10 +406,11 @@ local p1,p2=points[i],points[i+1]
 linefunc(p1.x,p1.y,p2.x,p2.y,color)
 end
 end
-function parse_model(template,scale,xoffset,yoffset)
+function parse_model(template_str,scale,xoffset,yoffset)
 scale=scale or 1
 xoffset=xoffset or 0
 yoffset=yoffset or 0
+local template=zobj(template_str)
 local model={}
 model.shapes={}
 foreach(template.lines or{},function(line_components)
@@ -457,7 +453,7 @@ zclass[[planet,actor,model,drawable|x,@,y,@,d_ang,.001,model_obj,%PLANET_SMALL]]
 zclass[[cateroid,model,wall,drawable|x,@,y,@,d_ang,.001,scale,2,model_obj,%CATEROID,hit,%cateroid_hit]]
 zclass[[pl,actor,model,drawable|x,@,y,@,missile_ready,yes,model_obj,%PLAYER_SPACESHIP,update,%pl_update,hit,%pl_hit,collision_func,%good_collision_circ]]
 zclass[[letter,model,drawable_post|x,@,y,@,model_obj,@]]
-zclass[[level_entrance,drawable_post|x,@,y,@,shapes,@,scale,@,d_ang,@,circ_radius,1.5,draw,%level_entrance_draw]]
+zclass[[level_entrance,model,drawable_post|x,@,y,@,shapes,@,scale,@,d_ang,@,circ_radius,1.5,draw,%level_entrance_draw]]
 g_fade_table=zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,2,1,0,0,0;3;,3,3,3,3,1,0,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,1,1,0,0;6;,6,6,13,13,5,5,1,0;7;,7,7,6,13,13,5,1,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,5,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,1,1,0;13;,13,13,5,5,1,1,1,0;14;,14,14,13,4,2,2,1,0;15;,15,15,13,13,5,5,1,0;]]
 function fade(threshold)
 for c=0,15 do

@@ -63,7 +63,7 @@ end $$
     if g_pl.y < -g_title_screen_coord then g_pl.y += g_title_screen_dim-1 g_view.y += g_title_screen_dim-1 end
 end $$
 
-zclass[[level_entrance,drawable_post|
+zclass[[level_entrance,model,drawable_post|
     x,@, y,@, shapes,@, scale,@, d_ang,@,
     circ_radius,1.5,
     draw, %level_entrance_draw
