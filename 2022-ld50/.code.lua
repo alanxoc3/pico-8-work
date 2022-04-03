@@ -312,10 +312,10 @@ g_tl=_g.game_state()
 end
 function _update60()
 if btnp(4)and btn(5)then g_debug=not g_debug end
+loop_zobjs("actor","clean")
 register_zobjs()
 loop_zobjs("timer","tick")
 loop_zobjs("game_state","state")
-loop_zobjs("actor","clean")
 end
 function _draw()
 cls()

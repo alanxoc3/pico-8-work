@@ -1,5 +1,3 @@
--- TEMPLATE TOKEN COUNT: 895
-
 zclass[[game_state,actor|
     actor,ignore; -- remove game_state from the actor group
     curr,game;
@@ -16,10 +14,10 @@ function _update60()
     if btnp(4) and btn(5) then g_debug = not g_debug end
     -- DEBUG_END
 
+    loop_zobjs('actor',      'clean') -- delete any actors that were killed, and call their "destroy" callback
     register_zobjs()                  -- register all zobs from previous game loop iteration
     loop_zobjs('timer',      'tick')  -- update the timers
     loop_zobjs('game_state', 'state') -- game state controls the different overall states in the game
-    loop_zobjs('actor',      'clean') -- delete any actors that were killed, and call their "destroy" callback
 end
 
 function _draw()
@@ -34,7 +32,6 @@ end
     -- [0,0] is the center of the level
     -- add player
     g_pl = _g.pl(0, 0)
-
     g_view = _g.view(g_pl)
 
     -- add planets
@@ -103,4 +100,3 @@ end $$
 |cateroid_update| function(a)
     a.d_ang = .001
 end $$
-

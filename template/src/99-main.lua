@@ -12,10 +12,10 @@ function _init()
 end
 
 function _update60()
+    loop_zobjs('actor',      'clean') -- delete any actors that were killed, and call their "destroy" callback
     register_zobjs()                  -- register all zobs from previous game loop iteration
     loop_zobjs('timer',      'tick')  -- update the timers
     loop_zobjs('game_state', 'state') -- game state controls the different overall states in the game
-    loop_zobjs('actor',      'clean') -- delete any actors that were killed, and call their "destroy" callback
 end
 
 function _draw()

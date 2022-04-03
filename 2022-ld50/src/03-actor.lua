@@ -46,10 +46,11 @@ end $$
     a:update() -- per-frame update
 end $$
 
--- Stage this actor to be removed at the end of the frame (see actor_clean).
+-- Stage this actor to be removed at the beginning of the next frame.
 |actor_kill| function(a) a.alive = nil end $$
 
--- This is expected to be called on each frame! (at the end of the frame)
+-- This is expected to be called at the beginning of each frame!
+-- If this is not called at the beginning, you could have a frame delay for things like explosions.
 |actor_clean| function(a)
     if not a.alive then
         a:destroyed()
