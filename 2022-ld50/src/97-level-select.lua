@@ -36,11 +36,11 @@ end $$
 
     -- add planets
     -- _g.planet(1,3)
-    _g.cateroid(0, -15)
+    _g.cateroid(0, -11)
 
     -- add background stars
     for i=1,50 do
-        _g.twinkle()
+        _g.twinkle(rnd(256), rnd(256), rnd())
     end
 end $$
 
@@ -51,6 +51,7 @@ end $$
 
     loop_zobjs('wall', 'collide', g_zclass_entities['pl'])
     loop_zobjs('wall', 'collide', g_zclass_entities['missile'])
+    loop_zobjs('wall', 'collide', g_zclass_entities['view'])
     loop_zobjs('collision_circ', 'follow_anchoring')
     loop_zobjs('mov', 'mov_update')
     loop_zobjs('acc', 'acc_update')
@@ -71,5 +72,5 @@ zclass[[level_entrance,model,drawable_post|
 
 |level_entrance_draw| function(a)
     _g.model_draw(a)
-    circ(zoomx(a.x), zoomy(a.y), zoom(a.circ_radius+sin(t())+1.5), 7)
+    circ(zoomx(a.x), zoomy(a.y), zoom(a.circ_radius), 7)
 end $$

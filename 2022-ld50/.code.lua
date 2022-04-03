@@ -72,7 +72,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_set_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,collision_draw_debug,@,model_init,@,model_draw,@,model_collide,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_match_following,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,twinkle_draw,@,twinkle_init,@,star_view_match_following,@,cateroid_hit,@,pl_update,@,pl_hit,@,level_select_draw,@,level_select_init,@,level_select_update,@,level_entrance_draw,@,logo_init,@,logo_draw,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_set_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,collision_draw_debug,@,model_init,@,model_draw,@,model_collide,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_update,@,view_hit,@,view_match_following,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,twinkle_draw,@,star_view_match_following,@,cateroid_hit,@,pl_update,@,pl_hit,@,level_select_draw,@,level_select_init,@,level_select_update,@,level_entrance_draw,@,logo_init,@,logo_draw,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -221,6 +221,14 @@ end,function(a)
 local percent=1-a:get_elapsed_percent"state"
 line(zoomx(a.x+a.x1*percent),zoomy(a.y+a.y1*percent),zoomx(a.x+a.x2*percent),zoomy(a.y+a.y2*percent),a.color)
 end,function(a)
+if not a.zooming then
+a.zoom_factor=min(16,a.zoom_factor+.1)
+end
+a.zooming=false
+end,function(a)
+a.zoom_factor=max(12,a.zoom_factor-.1)
+a.zooming=true
+end,function(a)
 if a.following then
 local x,y=a.following.x-a.x,a.following.y-a.y
 local dir=atan2(x,y)
@@ -240,13 +248,10 @@ end,function(a)
 a:model_init()
 a:explode(.2)
 end,function(a)
-local x=(-g_star_view.x+flr(a.x*g_view.zoom_factor))%128
-local y=(-g_star_view.y+flr(a.y*g_view.zoom_factor))%128
+local factor=g_view.zoom_factor/16
+local x=((-g_star_view.x+a.x)%256)*factor-128*factor+64
+local y=((-g_star_view.y+a.y)%256)*factor-128*factor+64
 pset(x,y,sin(time()/10+a.twinkle_offset)>0.5 and 6 or 5)
-end,function(a)
-a.twinkle_offset=rnd()
-a.x=rnd(256)
-a.y=rnd(256)
 end,function(a)
 if a.following then
 a.dx=a.following.dx
@@ -282,9 +287,9 @@ _g.letter(3,-3,_g.TEST_LET_B)
 _g.level_entrance(-10,0,_g.CATEROID,.75,.001)
 _g.level_entrance(10,0,_g.CATEROID,.75,.001)
 _g.level_entrance(0,7.5,_g.CATEROID,.75,.001)
-_g.cateroid(0,-15)
+_g.cateroid(0,-11)
 for i=1,50 do
-_g.twinkle()
+_g.twinkle(rnd(256),rnd(256),rnd())
 end
 end,function()
 loop_zobjs("actor","state")
@@ -292,6 +297,7 @@ loop_zobjs("view","match_following")
 loop_zobjs("star_view","match_following")
 loop_zobjs("wall","collide",g_zclass_entities["pl"])
 loop_zobjs("wall","collide",g_zclass_entities["missile"])
+loop_zobjs("wall","collide",g_zclass_entities["view"])
 loop_zobjs("collision_circ","follow_anchoring")
 loop_zobjs("mov","mov_update")
 loop_zobjs("acc","acc_update")
@@ -302,7 +308,7 @@ if g_pl.x<-g_title_screen_coord then g_pl.x+=g_title_screen_dim-1 g_view.x+=g_ti
 if g_pl.y<-g_title_screen_coord then g_pl.y+=g_title_screen_dim-1 g_view.y+=g_title_screen_dim-1 end
 end,function(a)
 _g.model_draw(a)
-circ(zoomx(a.x),zoomy(a.y),zoom(a.circ_radius+sin(t())+1.5),7)
+circ(zoomx(a.x),zoomy(a.y),zoom(a.circ_radius),7)
 end,function()sfx"63" end,function(a)
 local logo_opacity=cos(a:get_elapsed_percent"state")+1
 fade(logo_opacity)
@@ -443,10 +449,10 @@ return points
 end
 zclass[[vanishing_shape,vec,actor,drawable_pre|x,@,y,@,dx,@,dy,@,points,@,color,@,draw,%vanishing_shape_draw;start;duration,.25;]]
 zclass[[line_particle,vec,actor,drawable_post|ang,@,x,@,y,@,x1,@,y1,@,x2,@,y2,@,color,@,dx,@,dy,@,draw,%line_particle_draw,update,%line_particle_update;start;duration,.5;]]
-zclass[[view,vec|following,@,zoom_factor,16,match_following,%view_match_following]]
+zclass[[view,model|following,@,model_obj,%VIEW_COLLISION_CIRC,scale,5,zoom_factor,16,zooming,false,update,%view_update,hit,%view_hit,match_following,%view_match_following]]
 zclass[[missile,model,drawable|x,@,y,@,dx,@,dy,@,ang,@,model_obj,%MISSILE,speed,0.05,inertia_x,1,inertia_y,1,destroyed,%missile_destroyed,hit,%missile_hit;start;duration,2;]]
 zclass[[missile_pop,model,drawable|x,@,y,@,model_obj,%MISSILE_POP,init,%missile_pop_init]]
-zclass[[twinkle,actor,drawable_pre|x,0,y,0,draw,%twinkle_draw,init,%twinkle_init,]]
+zclass[[twinkle,drawable_pre|x,@,y,@,twinkle_offset,@,draw,%twinkle_draw]]
 zclass[[star_view,vec|following,@,match_following,%star_view_match_following]]
 zclass[[wall|]]
 zclass[[planet,actor,model,drawable|x,@,y,@,d_ang,.001,model_obj,%PLANET_SMALL]]

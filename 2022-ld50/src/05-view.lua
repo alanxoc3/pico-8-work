@@ -1,8 +1,27 @@
-zclass[[view,vec|
-    following, @,
-    zoom_factor, 16,
+zclass[[view,model|
+    following,@,
+    model_obj,%VIEW_COLLISION_CIRC,
+    scale,5,
+    zoom_factor,16,
+    zooming,false,
+    
+    update,%view_update,
+    hit,%view_hit,
+    
     match_following, %view_match_following
 ]]
+
+|view_update| function(a)
+    if not a.zooming then
+        a.zoom_factor = min(16, a.zoom_factor + .1)
+    end
+    a.zooming = false
+end $$
+
+|view_hit| function(a)
+    a.zoom_factor = max(12, a.zoom_factor - .1)
+    a.zooming = true
+end $$
 
 |view_match_following| function(a)
     if a.following then
