@@ -11,6 +11,7 @@ Cheat sheet:
     "t" - toggle on/off gui
     "s" - save - copies the model to the clipboard
     "r" - reload - deletes the current model and replaces it with the clipboard copy you need to "ctrl+v" into pico-8 first, then press "r" to reload
+    "o" - rotate 90 degrees
     "-" - zoom out
     "+" - zoom in
     "=" - zoom to "1"

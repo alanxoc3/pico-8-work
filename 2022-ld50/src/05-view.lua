@@ -13,7 +13,11 @@ zclass[[view,vec|
         a.dx = cos(dir)*dist*.25
         a.dy = sin(dir)*dist*.25
 
-        -- if btn'4' then a.zoom_factor = min(20, a.zoom_factor + 1) end
-        -- if btn'5' then a.zoom_factor = max(8,  a.zoom_factor - 1) end
+        -- DEBUG_BEGIN
+        if g_debug then
+            if btn'4' then a.zoom_factor = min(20, a.zoom_factor + 1) end
+            if btn'5' then a.zoom_factor = max(8,  a.zoom_factor - 1) end
+        end
+        -- DEBUG_END
    end
 end $$

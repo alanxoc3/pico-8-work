@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-inotifywait -e close_write,moved_to,create -mr ./src |
+inotifywait -e close_write,moved_to,create -mr ./src ./constants.txt |
 while read -r directory; do
   echo "** '$directory' was changed, so let's compile this thing!"
   "$PICO_WORK_DIR/bin/pico-compile" "$@"

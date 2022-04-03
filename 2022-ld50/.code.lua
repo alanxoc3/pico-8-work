@@ -151,6 +151,7 @@ if g_debug then
 circ(zoomx(a.x),zoomy(a.y),a.radius*g_view.zoom_factor,8)
 end
 end,function(a)
+srand(t()*4\1)
 foreach(get_line_coords(a.x,a.y,a.ang,a.model.lines),function(l)
 wobble_line(zoomx(l.x1),zoomy(l.y1),zoomx(l.x2),zoomy(l.y2),l.color)
 end)
@@ -203,6 +204,10 @@ local dir=atan2(x,y)
 local dist=approx_dist(x,y)
 a.dx=cos(dir)*dist*.25
 a.dy=sin(dir)*dist*.25
+if g_debug then
+if btn"4"then a.zoom_factor=min(20,a.zoom_factor+1)end
+if btn"5"then a.zoom_factor=max(8,a.zoom_factor-1)end
+end
 end
 end,function(a)
 a:model_init[[lines;1;,7,0.2,0,0.1,0.1,-0.1,0.1,0,0,-0.1,-0.1,0.1,-0.1,0.2,0;collisions;1;,0.1,0,0.1;collisions;2;,0,0,0.1;]]
@@ -244,7 +249,7 @@ loop_zobjs("vec","vec_update")
 end,function()
 loop_zobjs("drawable","draw")
 end,function(a)
-a:model_init[[field,1;lines;1;,9,0.5,0,-0.5,-0.3,-0.3,0,-0.5,0.3,0.5,0;collisions;1;,0,0,0.1;collisions;2;,-0.3,0,0.2;]]
+a:model_init[[field,1;lines;1;,5,-0.5,-0.2,-0.7,-0.3,-0.8,-0.1,-0.8,0.1,-0.7,0.3,-0.5,0.2;lines;2;,13,0,-0.3,-0.2,-0.5,-0.6,-0.6,-0.8,-0.6,-0.9,-0.5,-0.6,-0.4,-0.5,-0.2;lines;3;,13,0,0.3,-0.2,0.5,-0.6,0.6,-0.8,0.6,-0.9,0.5,-0.6,0.4,-0.5,0.2;lines;4;,13,0,0,-0.9,0;lines;5;,7,1,0,0.7,-0.2,0.2,-0.3,0,-0.3,-0.5,-0.2,-0.6,0;lines;6;,7,1,0,0.7,0.2,0.2,0.3,0,0.3,-0.5,0.2,-0.6,0;lines;7;,13,0.7,-0.2,1,0,0.7,0.2,0.6,0.1,0.6,-0.1,0.7,-0.2;lines;8;,13,0.5,0,0.4,-0.1,0.3,-0.1,0.2,0,0.3,0.1,0.4,0.1,0.5,0;collisions;1;,-0.4,0,0.6;collisions;2;,0.2,0,0.3;collisions;3;,0.5,0,0.3;collisions;4;,0.8,0,0.2;collisions;5;,-0.7,-0.4,0.2;collisions;6;,-0.7,0.4,0.2;]]
 end,function(a)
 if btn"4"and a.missile_ready then
 _g.missile(a.x+1,a.y+1,a.ang)
@@ -322,7 +327,6 @@ return lines
 end
 zclass[[line_particle,vec,actor,drawable|ang,@,x,@,y,@,x1,@,y1,@,x2,@,y2,@,color,@,dx,@,dy,@,draw,%line_particle_draw,update,%line_particle_update;start;duration,.5;]]
 function wobble_line(x1,y1,x3,y3,color)
-srand(t()*4\1)
 local x2,y2=(x3-x1)/2+x1+flr_rnd(3)-1,(y3-y1)/2+y1+flr_rnd(3)-1
 line(x1,y1,x2,y2,color)
 line(x2,y2,x3,y3,color)
@@ -342,7 +346,7 @@ function _init()
 g_tl=_g.game_state()
 end
 function _update60()
-if btnp(4)and btn(5)then g_debug=not g_debug end
+if btnp(4)and btnp(5)then g_debug=not g_debug end
 loop_zobjs("actor","clean")
 register_zobjs()
 loop_zobjs("timer","tick")

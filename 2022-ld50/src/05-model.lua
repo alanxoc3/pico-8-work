@@ -12,6 +12,7 @@ zclass[[model,mov,drawable,actor|
 ]]
 
 |model_draw| function(a)
+    srand(t()*4\1)
     foreach(get_line_coords(a.x, a.y, a.ang, a.model.lines), function(l)
         wobble_line(zoomx(l.x1), zoomy(l.y1), zoomx(l.x2), zoomy(l.y2), l.color)
     end)
@@ -103,7 +104,6 @@ end $$
 end $$
 
 function wobble_line(x1, y1, x3, y3, color)
-    srand(t()*4\1)
     local x2, y2 = (x3-x1)/2+x1+flr_rnd(3)-1, (y3-y1)/2+y1+flr_rnd(3)-1
     line(x1, y1, x2, y2, color)
     line(x2, y2, x3, y3, color)

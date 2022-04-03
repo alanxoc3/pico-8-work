@@ -74,6 +74,16 @@ function _update60()
     elseif keyboard_enabled and char == "-" then next_zoom = min(#zooms, zoom_i+1)
     elseif keyboard_enabled and char == "+" then next_zoom = max(1, zoom_i-1)
     elseif keyboard_enabled and char == "=" then next_zoom = 2
+    elseif keyboard_enabled and char == "o" then -- rotate everything
+        for lines in all(model.lines) do
+            for i=2,#lines,2 do
+                lines[i], lines[i+1] = -lines[i+1], lines[i]
+            end
+        end
+
+        for collision in all(model.collisions) do
+            collision[1], collision[2] = -collision[2], collision[1]
+        end
     elseif curr_mode == "lines" then
         if char == "d" and model.lines[lines_layer] then
             deli(model.lines, lines_layer)

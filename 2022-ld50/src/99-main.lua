@@ -11,7 +11,7 @@ end
 
 function _update60()
     -- DEBUG_BEGIN
-    if btnp(4) and btn(5) then g_debug = not g_debug end
+    if btnp(4) and btnp(5) then g_debug = not g_debug end
     -- DEBUG_END
 
     loop_zobjs('actor',      'clean') -- delete any actors that were killed, and call their "destroy" callback
@@ -71,7 +71,7 @@ zclass[[pl,actor,model|
 ]]
 
 |pl_init| function(a)
-    a:model_init[[field,1;lines;1;,9,0.5,0,-0.5,-0.3,-0.3,0,-0.5,0.3,0.5,0;collisions;1;,0,0,0.1;collisions;2;,-0.3,0,0.2;]]
+    a:model_init[[PLAYER_SPACESHIP]]
 end $$
 
 |pl_update| function(a)
