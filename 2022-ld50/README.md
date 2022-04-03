@@ -29,6 +29,10 @@ Cheat sheet:
     up/down - change the size of the current collision circle
     left click - move or create a collision circle
 
+    FIELD MODE:
+    "d" - delete the field
+    up/down - increase/decrease the size of the field
+
 Here is a sample model. To load this model, copy the text below, load the model
 tool, paste the text into the model tool (ctrl+v), then press "r" to reload:
 
