@@ -72,7 +72,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_set_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,collision_draw_debug,@,model_draw,@,model_init,@,model_collide,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_match_following,@,missile_init,@,twinkle_draw,@,twinkle_init,@,star_view_match_following,@,planet_init,@,planet_update,@,cateroid_init,@,pl_init,@,pl_update,@,pl_hit,@,level_select_draw,@,letter_init,@,level_select_init,@,level_select_update,@,logo_init,@,logo_draw,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_set_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,collision_draw_debug,@,model_draw,@,model_init,@,model_collide,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_match_following,@,missile_init,@,twinkle_draw,@,twinkle_init,@,star_view_match_following,@,planet_init,@,cateroid_init,@,pl_init,@,pl_update,@,pl_hit,@,level_select_draw,@,letter_init,@,level_select_init,@,level_select_update,@,logo_init,@,logo_draw,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -236,7 +236,7 @@ if btn"5"then a.zoom_factor=max(8,a.zoom_factor-1)end
 end
 end
 end,function(a)
-a:model_init[[lines;1;,7,7,-0.1,0,0.1,0;collisions;1;,0,0,0.1;]]
+a:model_init[[lines;1;,7,-1,-0.1,0,0.1,0;collisions;1;,0,0,0.1;]]
 end,function(a)
 local x=(-g_star_view.x+flr(a.x*g_view.zoom_factor))%128
 local y=(-g_star_view.y+flr(a.y*g_view.zoom_factor))%128
@@ -251,9 +251,8 @@ a.dx=a.following.dx
 a.dy=a.following.dy
 end
 end,function(a)
-a.model=zobj[[lines;1;,3,0.5,0,-0.5,0]]
-end,function(a)
-a.ang-=.001
+a:model_init[[lines;1;,3,-1,0,-2,0.6,-1.9,1.2,-1.6,1.6,-1.2,1.9,-0.6,2,0;lines;2;,3,-1,0,2,0.6,1.9,1.2,1.6,1.6,1.2,1.9,0.6,2,0;lines;3;,3,-1,0,-2,-0.6,-1.9,-1.2,-1.6,-1.6,-1.2,-1.9,-0.6,-2,0;lines;4;,3,-1,0,2,-0.6,1.9,-1.2,1.6,-1.6,1.2,-1.9,0.6,-2,0;collisions;1;,0,0,1.9999;]]
+a.d_ang=.001
 end,function(a)
 a:model_init[[field,2;lines;1;,7,-1,-1.2,-0.4,-1.3,0,-1.2,0.5,-0.8,0.9,-0.4,1,0,1;lines;2;,7,-1,1.2,-0.4,1.3,0,1.2,0.5,0.8,0.9,0.4,1,0,1;lines;3;,7,-1,0,0.4,0.2,0.3,0.1,0.2,-0.1,0.2,-0.2,0.3,0,0.4;lines;4;,7,-1,0,0.4,0,0.5,-0.1,0.6,-0.2,0.6;lines;5;,7,-1,0,0.4,0,0.5,0.1,0.6,0.2,0.6;lines;6;,7,-1,0.6,0.2,0.5,0.1,0.5,-0.1,0.6,-0.2,0.7,-0.1,0.7,0.1,0.6,0.2;lines;7;,7,-1,-0.6,0.2,-0.5,0.1,-0.5,-0.1,-0.6,-0.2,-0.7,-0.1,-0.7,0.1,-0.6,0.2;lines;8;,7,-1,-1,-0.6,-0.8,-0.8,-0.5,-1,-0.1,-1.1,0,-1.1;lines;9;,7,-1,1,-0.6,0.8,-0.8,0.5,-1,0.1,-1.1,0,-1.1;lines;10;,7,-1,-1.2,-0.5,-1.1,-1.1,-0.9,-1.5,-0.5,-1;lines;11;,7,-1,1.2,-0.5,1.1,-1.1,0.9,-1.5,0.5,-1;lines;12;,7,-1,0.9,-1.5,0.8,-1.2,0.8,-0.8;lines;13;,7,-1,-0.9,-1.5,-0.8,-1.2,-0.8,-0.8;lines;14;,7,-1,0.9,0.3,1.2,0.3;lines;15;,7,-1,-0.9,0.3,-1.2,0.3;lines;16;,7,-1,0.9,0.2,1.1,0;lines;17;,7,-1,-0.9,0.2,-1.1,0;lines;18;,7,-1,0.9,0.4,1.1,0.6;lines;19;,7,-1,-0.9,0.4,-1.1,0.6;collisions;1;,0.3,0,1;collisions;2;,-0.3,0,1;collisions;3;,-0.8,-0.9,0.4;collisions;4;,-0.9,-1.3,0.2;collisions;5;,-0.8,-0.6,0.4;collisions;6;,0.8,-0.9,0.4;collisions;7;,0.9,-1.3,0.2;collisions;8;,0.8,-0.6,0.4;collisions;9;,0,-0.3,0.9;]]
 a.d_ang=.001
@@ -422,10 +421,10 @@ end
 zclass[[vanishing_shape,vec,actor,drawable_pre|x,@,y,@,dx,@,dy,@,points,@,color,@,draw,%vanishing_shape_draw;start;duration,.25;]]
 zclass[[line_particle,vec,actor,drawable_post|ang,@,x,@,y,@,x1,@,y1,@,x2,@,y2,@,color,@,dx,@,dy,@,draw,%line_particle_draw,update,%line_particle_update;start;duration,.5;]]
 zclass[[view,vec|following,@,zoom_factor,16,match_following,%view_match_following]]
-zclass[[missile,model,drawable|x,@,y,@,ang,@,speed,0.1,init,%missile_init;start;duration,2;]]
+zclass[[missile,model,drawable|x,@,y,@,ang,@,speed,0.05,init,%missile_init;start;duration,2;]]
 zclass[[twinkle,actor,drawable|x,0,y,0,draw,%twinkle_draw,init,%twinkle_init,]]
 zclass[[star_view,vec|following,@,match_following,%star_view_match_following]]
-zclass[[planet,actor,model|x,@,y,@,init,%planet_init,update,%planet_update;]]
+zclass[[planet,actor,model,drawable|x,@,y,@,init,%planet_init]]
 zclass[[wall|]]
 zclass[[cateroid,model,wall,drawable|x,@,y,@,init,%cateroid_init]]
 zclass[[pl,actor,model,drawable|x,@,y,@,missile_ready,yes,init,%pl_init,update,%pl_update,hit,%pl_hit,collision_func,%good_collision_circ]]

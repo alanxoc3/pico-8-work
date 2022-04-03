@@ -1,15 +1,11 @@
-zclass[[planet,actor,model|
+zclass[[planet,actor,model,drawable|
     x,@,y,@,
-    init,%planet_init,
-    update,%planet_update;
+    init,%planet_init
 ]]
 
 |planet_init| function(a)
-    a.model = zobj[[lines;1;,3,0.5,0,-0.5,0]]
-end $$
-
-|planet_update| function(a)
-    a.ang -= .001
+    a:model_init[[PLANET_SMALL]]
+    a.d_ang = .001
 end $$
 
 zclass[[wall|]]
