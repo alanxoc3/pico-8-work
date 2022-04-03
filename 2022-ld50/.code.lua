@@ -72,7 +72,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_set_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,collision_draw_debug,@,model_draw,@,model_init,@,model_collide,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_match_following,@,missile_init,@,twinkle_draw,@,twinkle_init,@,star_view_match_following,@,planet_init,@,planet_update,@,logo_init,@,logo_draw,@,letter_init,@,level_select_init,@,level_select_update,@,level_select_draw,@,pl_init,@,pl_update,@,pl_hit,@,cateroid_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_set_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,collision_draw_debug,@,model_draw,@,model_init,@,model_collide,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_match_following,@,missile_init,@,twinkle_draw,@,twinkle_init,@,star_view_match_following,@,planet_init,@,planet_update,@,cateroid_init,@,pl_init,@,pl_update,@,pl_hit,@,level_select_draw,@,letter_init,@,level_select_init,@,level_select_update,@,logo_init,@,logo_draw,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -160,7 +160,7 @@ local modelpoints={}
 foreach(a.model.lines,function(lines)
 local points=get_points_from_shape(a.x,a.y,a.ang,lines)
 foreach(points,function(point)point.x=zoomx(point.x)point.y=zoomy(point.y)end)
-draw_polygon(points,lines[2],points.fill_color)
+draw_polygon(points,lines[2])
 add(modelpoints,{c=lines[1],points=points})
 end)
 foreach(modelpoints,function(points)
@@ -254,13 +254,28 @@ end,function(a)
 a.model=zobj[[lines;1;,3,0.5,0,-0.5,0]]
 end,function(a)
 a.ang-=.001
-end,function()sfx"63" end,function(a)
-local logo_opacity=cos(a:get_elapsed_percent"state")+1
-fade(logo_opacity)
-camera(logo_opacity>.5 and rnd_one())
-zspr(108,64,64,4,2)
-fade"0"
-camera()
+end,function(a)
+a:model_init[[field,2;lines;1;,7,-1,-1.2,-0.4,-1.3,0,-1.2,0.5,-0.8,0.9,-0.4,1,0,1;lines;2;,7,-1,1.2,-0.4,1.3,0,1.2,0.5,0.8,0.9,0.4,1,0,1;lines;3;,7,-1,0,0.4,0.2,0.3,0.1,0.2,-0.1,0.2,-0.2,0.3,0,0.4;lines;4;,7,-1,0,0.4,0,0.5,-0.1,0.6,-0.2,0.6;lines;5;,7,-1,0,0.4,0,0.5,0.1,0.6,0.2,0.6;lines;6;,7,-1,0.6,0.2,0.5,0.1,0.5,-0.1,0.6,-0.2,0.7,-0.1,0.7,0.1,0.6,0.2;lines;7;,7,-1,-0.6,0.2,-0.5,0.1,-0.5,-0.1,-0.6,-0.2,-0.7,-0.1,-0.7,0.1,-0.6,0.2;lines;8;,7,-1,-1,-0.6,-0.8,-0.8,-0.5,-1,-0.1,-1.1,0,-1.1;lines;9;,7,-1,1,-0.6,0.8,-0.8,0.5,-1,0.1,-1.1,0,-1.1;lines;10;,7,-1,-1.2,-0.5,-1.1,-1.1,-0.9,-1.5,-0.5,-1;lines;11;,7,-1,1.2,-0.5,1.1,-1.1,0.9,-1.5,0.5,-1;lines;12;,7,-1,0.9,-1.5,0.8,-1.2,0.8,-0.8;lines;13;,7,-1,-0.9,-1.5,-0.8,-1.2,-0.8,-0.8;lines;14;,7,-1,0.9,0.3,1.2,0.3;lines;15;,7,-1,-0.9,0.3,-1.2,0.3;lines;16;,7,-1,0.9,0.2,1.1,0;lines;17;,7,-1,-0.9,0.2,-1.1,0;lines;18;,7,-1,0.9,0.4,1.1,0.6;lines;19;,7,-1,-0.9,0.4,-1.1,0.6;collisions;1;,0.3,0,1;collisions;2;,-0.3,0,1;collisions;3;,-0.8,-0.9,0.4;collisions;4;,-0.9,-1.3,0.2;collisions;5;,-0.8,-0.6,0.4;collisions;6;,0.8,-0.9,0.4;collisions;7;,0.9,-1.3,0.2;collisions;8;,0.8,-0.6,0.4;collisions;9;,0,-0.3,0.9;]]
+a.d_ang=.001
+end,function(a)
+a:model_init[[field,1;collisions;1;,-0.1,0,0.3;lines;1;,7,12,0.5,0,0,-0.3,-0.5,-0.3,-0.3,0,-0.5,0.3,0,0.3,0.5,0;]]
+end,function(a)
+if btn"4"and a.missile_ready then
+_g.missile(a.x+cos(a.ang)*.8,a.y+sin(a.ang)*.8,a.ang)
+a.missile_ready=false
+a:set_timer("missile_cooldown",0.1,function()a.missile_ready=true end)
+end
+a.speed=-ybtn()*.01
+a.d_ang=-xbtn()*.01
+end,function(a,b,dx,dy)
+a.dx+=dx
+a.dy+=dy
+a:explode()
+b:explode()
+end,function()
+loop_zobjs("drawable_pre","draw")
+loop_zobjs("drawable","draw")
+loop_zobjs("drawable_post","draw")
 end,function(a)
 a:model_init(a.model_template)
 end,function()
@@ -293,28 +308,13 @@ if g_pl.x>g_title_screen_coord then g_pl.x-=g_title_screen_dim-1 g_view.x-=g_tit
 if g_pl.y>g_title_screen_coord then g_pl.y-=g_title_screen_dim-1 g_view.y-=g_title_screen_dim-1 end
 if g_pl.x<-g_title_screen_coord then g_pl.x+=g_title_screen_dim-1 g_view.x+=g_title_screen_dim-1 end
 if g_pl.y<-g_title_screen_coord then g_pl.y+=g_title_screen_dim-1 g_view.y+=g_title_screen_dim-1 end
-end,function()
-loop_zobjs("drawable_pre","draw")
-loop_zobjs("drawable","draw")
-loop_zobjs("drawable_post","draw")
-end,function(a)
-a:model_init[[field,1;collisions;1;,-0.1,0,0.3;lines;1;,7,12,0.5,0,0,-0.3,-0.5,-0.3,-0.3,0,-0.5,0.3,0,0.3,0.5,0;]]
-end,function(a)
-if btn"4"and a.missile_ready then
-_g.missile(a.x+cos(a.ang)*.8,a.y+sin(a.ang)*.8,a.ang)
-a.missile_ready=false
-a:set_timer("missile_cooldown",0.1,function()a.missile_ready=true end)
-end
-a.speed=-ybtn()*.01
-a.d_ang=-xbtn()*.01
-end,function(a,b,dx,dy)
-a.dx+=dx
-a.dy+=dy
-a:explode()
-b:explode()
-end,function(a)
-a:model_init[[field,2;lines;1;,7,-1,-1.2,-0.4,-1.3,0,-1.2,0.5,-0.8,0.9,-0.4,1,0,1;lines;2;,7,-1,1.2,-0.4,1.3,0,1.2,0.5,0.8,0.9,0.4,1,0,1;lines;3;,7,-1,0,0.4,0.2,0.3,0.1,0.2,-0.1,0.2,-0.2,0.3,0,0.4;lines;4;,7,-1,0,0.4,0,0.5,-0.1,0.6,-0.2,0.6;lines;5;,7,-1,0,0.4,0,0.5,0.1,0.6,0.2,0.6;lines;6;,7,-1,0.6,0.2,0.5,0.1,0.5,-0.1,0.6,-0.2,0.7,-0.1,0.7,0.1,0.6,0.2;lines;7;,7,-1,-0.6,0.2,-0.5,0.1,-0.5,-0.1,-0.6,-0.2,-0.7,-0.1,-0.7,0.1,-0.6,0.2;lines;8;,7,-1,-1,-0.6,-0.8,-0.8,-0.5,-1,-0.1,-1.1,0,-1.1;lines;9;,7,-1,1,-0.6,0.8,-0.8,0.5,-1,0.1,-1.1,0,-1.1;lines;10;,7,-1,-1.2,-0.5,-1.1,-1.1,-0.9,-1.5,-0.5,-1;lines;11;,7,-1,1.2,-0.5,1.1,-1.1,0.9,-1.5,0.5,-1;lines;12;,7,-1,0.9,-1.5,0.8,-1.2,0.8,-0.8;lines;13;,7,-1,-0.9,-1.5,-0.8,-1.2,-0.8,-0.8;lines;14;,7,-1,0.9,0.3,1.2,0.3;lines;15;,7,-1,-0.9,0.3,-1.2,0.3;lines;16;,7,-1,0.9,0.2,1.1,0;lines;17;,7,-1,-0.9,0.2,-1.1,0;lines;18;,7,-1,0.9,0.4,1.1,0.6;lines;19;,7,-1,-0.9,0.4,-1.1,0.6;collisions;1;,0.3,0,1;collisions;2;,-0.3,0,1;collisions;3;,-0.8,-0.9,0.4;collisions;4;,-0.9,-1.3,0.2;collisions;5;,-0.8,-0.6,0.4;collisions;6;,0.8,-0.9,0.4;collisions;7;,0.9,-1.3,0.2;collisions;8;,0.8,-0.6,0.4;collisions;9;,0,-0.3,0.9;]]
-a.d_ang=.001
+end,function()sfx"63" end,function(a)
+local logo_opacity=cos(a:get_elapsed_percent"state")+1
+fade(logo_opacity)
+camera(logo_opacity>.5 and rnd_one())
+zspr(108,64,64,4,2)
+fade"0"
+camera()
 end)
 function zspr(sind,x,y,sw,sh,...)
 sw,sh=sw or 1,sh or 1
@@ -426,6 +426,10 @@ zclass[[missile,model,drawable|x,@,y,@,ang,@,speed,0.1,init,%missile_init;start;
 zclass[[twinkle,actor,drawable|x,0,y,0,draw,%twinkle_draw,init,%twinkle_init,]]
 zclass[[star_view,vec|following,@,match_following,%star_view_match_following]]
 zclass[[planet,actor,model|x,@,y,@,init,%planet_init,update,%planet_update;]]
+zclass[[wall|]]
+zclass[[cateroid,model,wall,drawable|x,@,y,@,init,%cateroid_init]]
+zclass[[pl,actor,model,drawable|x,@,y,@,missile_ready,yes,init,%pl_init,update,%pl_update,hit,%pl_hit,collision_func,%good_collision_circ]]
+zclass[[letter,model,drawable_post|x,@,y,@,model_template,@,init,%letter_init;]]
 g_fade_table=zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,2,1,0,0,0;3;,3,3,3,3,1,0,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,1,1,0,0;6;,6,6,13,13,5,5,1,0;7;,7,7,6,13,13,5,1,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,5,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,1,1,0;13;,13,13,5,5,1,1,1,0;14;,14,14,13,4,2,2,1,0;15;,15,15,13,13,5,5,1,0;]]
 function fade(threshold)
 for c=0,15 do
@@ -450,7 +454,3 @@ fade(g_fade)
 loop_zobjs("game_state","draw")
 if g_debug then rect(0,0,127,127,8)end
 end
-zclass[[letter,model,drawable_post|x,@,y,@,model_template,@,init,%letter_init;]]
-zclass[[pl,actor,model,drawable|x,@,y,@,missile_ready,yes,init,%pl_init,update,%pl_update,hit,%pl_hit,collision_func,%good_collision_circ]]
-zclass[[wall|]]
-zclass[[cateroid,model,wall,drawable|x,@,y,@,init,%cateroid_init]]

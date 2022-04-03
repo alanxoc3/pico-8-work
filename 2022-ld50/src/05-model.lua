@@ -25,7 +25,7 @@ end
     foreach(a.model.lines, function(lines)
         local points = get_points_from_shape(a.x, a.y, a.ang, lines)
         foreach(points, function(point) point.x = zoomx(point.x) point.y = zoomy(point.y) end)
-        draw_polygon(points, lines[2], points.fill_color)
+        draw_polygon(points, lines[2])
         add(modelpoints, {c=lines[1], points=points})
     end)
 
