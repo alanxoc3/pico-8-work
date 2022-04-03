@@ -1,4 +1,4 @@
-zclass[[twinkle,actor,drawable|
+zclass[[twinkle,actor,drawable_pre|
     x,0,y,0,
     draw,%twinkle_draw,
     init,%twinkle_init,

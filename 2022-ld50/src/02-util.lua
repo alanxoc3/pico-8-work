@@ -81,6 +81,10 @@ function scr_draw_polygon(old_points, color)
     draw_polygon(points, color)
 end
 
+function zoom(num) return num * g_view.zoom_factor end
+function zoomx(x) return zoom(x - g_view.x) + 64 end
+function zoomy(y) return zoom(y - g_view.y) + 64 end
+
 -- DEBUG_BEGIN
 -- Converts anything to a string.
 function tostring(any)

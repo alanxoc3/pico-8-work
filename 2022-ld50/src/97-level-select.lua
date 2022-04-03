@@ -29,9 +29,14 @@ end $$
     _g.letter(1.5,  -3, _g.TEST_LET_O)
     _g.letter(3,    -3, _g.TEST_LET_B)
 
+    -- level entrances
+    _g.level_entrance(-10, 0, _g.CATEROID, .75, .001)
+    _g.level_entrance(10,  0, _g.CATEROID, .75, .001)
+    _g.level_entrance(0, 7.5, _g.CATEROID, .75, .001)
+
     -- add planets
-    _g.planet(1,3)
-    g_cateroid = _g.cateroid(10, 0)
+    -- _g.planet(1,3)
+    _g.cateroid(0, -15)
 
     -- add background stars
     for i=1,50 do
@@ -57,12 +62,13 @@ end $$
     if g_pl.y < -g_title_screen_coord then g_pl.y += g_title_screen_dim-1 g_view.y += g_title_screen_dim-1 end
 end $$
 
--- zclass[[level_entrance|
---     x,@, y,@, show_model,@, scale,@,
--- 
---     draw, %level_entrance_draw
--- ]]
--- 
--- |level_entrance_draw| function(a)
---     
--- end
+zclass[[level_entrance,drawable_post|
+    x,@, y,@, shapes,@, scale,@, d_ang,@,
+    circ_radius,1.5,
+    draw, %level_entrance_draw
+]]
+
+|level_entrance_draw| function(a)
+    _g.model_draw(a)
+    circ(zoomx(a.x), zoomy(a.y), zoom(a.circ_radius+sin(t())+1.5), 7)
+end $$

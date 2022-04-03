@@ -1,6 +1,3 @@
-function zoomx(x) return (x - g_view.x) * g_view.zoom_factor + 64 end
-function zoomy(y) return (y - g_view.y) * g_view.zoom_factor + 64 end
-
 zclass[[model,mov,actor|
     model_obj;,;
     hit,nop,
@@ -19,6 +16,19 @@ function line_loop(points, color, linefunc)
         linefunc(p1.x, p1.y, p2.x, p2.y, color)
     end
 end
+
+|model_init| function(a)
+    local model = parse_model(a.model_obj, a.scale)
+
+    a.shapes = model.shapes
+    a.field_radius = model.field_radius
+
+    -- create collision rects
+    a.collisions = {}
+    foreach(model.collisions or {}, function(collision)
+        a.collision_func(a, collision.x, collision.y, collision.radius)
+    end)
+end $$
 
 |model_draw| function(a)
     local modelpoints = {}
@@ -41,31 +51,35 @@ end
     -- DEBUG_END
 end $$
 
--- meant to be called only once during the model's initialization
-|model_init| function(a)
-    local model = a.model_obj
-    printh(a.id)
+function parse_model(template, scale, xoffset, yoffset)
+    scale = scale or 1
+    xoffset = xoffset or 0
+    yoffset = yoffset or 0
 
-    if model.field then
-        a.field_radius = model.field*a.scale
-    end
+    local model = {}
 
-    a.collisions = {}
-
-    a.shapes = {}
-    foreach(model.lines, function(line_components)
+    model.shapes = {}
+    foreach(template.lines or {}, function(line_components)
         local shape = {fg_color = line_components[1], bg_color = line_components[2]}
         for i=3,#line_components/2\1*2,2 do
-            add(shape, {x=line_components[i]*a.scale, y=line_components[i+1]*a.scale})
+            local x, y = line_components[i], line_components[i+1]
+            add(shape, {x=(x+xoffset)*scale, y=(y+yoffset)*scale})
         end
-        add(a.shapes, shape)
+        add(model.shapes, shape)
     end)
-    
-    -- create collision rects
-    foreach(model.collisions or {}, function(collision)
-        a.collision_func(a, collision[1]*a.scale, collision[2]*a.scale, collision[3]*a.scale)
+
+    model.field_radius = 0
+    model.collisions = {}
+    foreach(template.collisions or {}, function(collision)
+        local x = (collision[1]+xoffset)*scale
+        local y = (collision[2]+yoffset)*scale
+        local radius = abs(collision[3]*scale)
+        model.field_radius = max(model.field_radius, approx_dist(x, y)+radius)
+        add(model.collisions, {x=x, y=y, radius=radius})
     end)
-end $$
+
+    return model
+end
 
 |model_collide| function(a, other_list)
     foreach(other_list, function(other)
