@@ -90,8 +90,8 @@ end
         foreach(a.model.lines, function(lines)
             line_loop(get_points_from_shape(a.x, a.y, a.ang, lines), lines[1], function(x1, y1, x2, y2, color)
                 local midx, midy = (x2-x1)/2+x1, (y2-y1)/2+y1
-                x1, y1 = l.x1-midx, l.y1-midy
-                x2, y2 = l.x2-midx, l.y2-midy
+                x1, y1 = x1-midx, y1-midy
+                x2, y2 = x2-midx, y2-midy
                 _g.line_particle(atan2(midx-a.x, midy-a.y), midx, midy, x1, y1, x2, y2, color, a.dx, a.dy)
             end)
         end)

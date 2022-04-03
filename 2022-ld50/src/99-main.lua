@@ -87,6 +87,8 @@ end $$
 |pl_hit| function(a, b, dx, dy)
     a.dx += dx
     a.dy += dy
+    a:explode()
+    b:explode()
 end $$
 
 
