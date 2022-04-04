@@ -21,6 +21,8 @@ Cheat sheet:
     "x" - add new layer that flips current layer on x axis
     "y" - add new layer that flips current layer on y axis
     "f" - toggle between "fill" and "line"
+    "[" - move layer left
+    "]" - move layer right
     "`" - change color to -1 (transparent)
     "0" - change color to 0
     "1" - change color to 1

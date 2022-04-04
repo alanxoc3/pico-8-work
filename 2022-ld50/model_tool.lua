@@ -95,6 +95,16 @@ function _update60()
             end
             add(model.lines, cpy)
             lines_layer = #model.lines
+        elseif char == "[" then -- move layer left
+            if lines_layer > 1 and model.lines[lines_layer] then
+                model.lines[lines_layer], model.lines[lines_layer-1] = model.lines[lines_layer-1], model.lines[lines_layer]
+                lines_layer -= 1
+            end
+        elseif char == "]" then -- move layer left
+            if lines_layer < #model.lines and model.lines[lines_layer] then
+                model.lines[lines_layer], model.lines[lines_layer+1] = model.lines[lines_layer+1], model.lines[lines_layer]
+                lines_layer += 1
+            end
         elseif char == "y" and model.lines[lines_layer] then -- add layer that flips on y axis
             local cpy = {model.lines[lines_layer][1]}
             for i=2,#model.lines[lines_layer],1 do
