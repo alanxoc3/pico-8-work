@@ -1,3 +1,5 @@
+
+
 |level_mouse_init| function()
     music(32,1000,7)
     clean_all_actors()
@@ -9,6 +11,7 @@
         _g.twinkle(rnd(256), rnd(256), rnd(), g_view, star_view)
     end
 
+    create_level_focus_points()
     create_text("lvl", 0, -3, _g.drawable_model_post_temp)
     _g.drawable_model_post_temp(0, 0, _g.STARTING_CIRCLE, 1)
     create_text("mouse", 0, 3, _g.drawable_model_post_temp)
@@ -38,6 +41,7 @@ end $$
 
     loop_zobjs('alert_radar', 'register', g_zclass_entities['planet'])
     loop_zobjs('alert_radar', 'register', g_zclass_entities['view'])
+    loop_zobjs('focus_point', 'collide', g_zclass_entities['view'])
     --loop_zobjs('alert_radar', 'register', g_zclass_entities['chaser'])
     --loop_zobjs('alert_radar', 'register', g_zclass_entities['black_hole'])
 
@@ -47,4 +51,6 @@ end $$
     loop_zobjs('vec', 'vec_update')
     loop_zobjs('anchor_pos', 'update_anchor')
     loop_zobjs('model', 'model_update')
+
+    check_level_bounds()
 end $$

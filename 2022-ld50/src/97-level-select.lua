@@ -42,12 +42,6 @@ function loop_zobjs_in_view(view, class, method_name, ...)
     end
 end
 
-|level_select_draw| function()
-    loop_zobjs_in_view(g_view, 'drawable_pre',  'draw')
-    loop_zobjs_in_view(g_view, 'drawable',      'draw')
-    loop_zobjs_in_view(g_view, 'drawable_post', 'draw')
-end $$
-
 |level_select_init| function()
     music(0,1000,7)
     clean_all_actors()
