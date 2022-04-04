@@ -42,6 +42,8 @@ function model_to_string()
     for i=1,#model.lines,1 do
         str = str.."lines;"..i..";"
         for item in all(model.lines[i]) do
+            if item == true then item = "yes" end
+            if item == false then item = "no" end
             str = str..","..item
         end
         str = str..";"

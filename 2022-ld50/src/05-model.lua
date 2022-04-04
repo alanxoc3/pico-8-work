@@ -40,12 +40,12 @@ end $$
         local points = translate_points(a.x, a.y, a.ang, shape)
         foreach(points, function(point) point.x = zoomx(point.x) point.y = zoomy(point.y) end)
         draw_polygon(points, shape.bg_color)
-        add(modelpoints, {c=shape.fg_color, points=points})
+        add(modelpoints, {c=shape.fg_color, points=points, wobble_enabled=shape.wobble_enabled})
     end)
 
     srand(t()*4\1) -- for nice wobbling
     foreach(modelpoints, function(points)
-        line_loop(points.points, points.c, wobble_line)
+        line_loop(points.points, points.c, points.wobble_enabled and wobble_line or line)
     end)
 
     -- DEBUG_BEGIN
@@ -63,8 +63,8 @@ function parse_model(template_str, scale, xoffset, yoffset)
     local template = zobj(template_str)
     local shapes = {}
     foreach(template.lines or {}, function(line_components)
-        local shape = {fg_color = line_components[1], bg_color = line_components[2]}
-        for i=3,#line_components/2\1*2,2 do
+        local shape = {fg_color = line_components[1], bg_color = line_components[2], wobble_enabled = line_components[3]}
+        for i=4,#line_components/2\1*2,2 do
             local x, y = line_components[i], line_components[i+1]
             add(shape, {x=(x+xoffset)*scale, y=(y+yoffset)*scale})
         end
