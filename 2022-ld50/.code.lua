@@ -492,7 +492,6 @@ else
 txt="wob,"..G_DEATH_COUNT
 end
 end
-printh(txt)
 create_text(txt,0,0)
 g_game_state:start_timer("retry",1,function()
 _g.fader_out(1,function()
