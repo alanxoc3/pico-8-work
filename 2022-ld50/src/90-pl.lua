@@ -13,7 +13,16 @@ zclass[[pl,actor,model,drawable|
         a.missile_ready = false
         a:set_timer('missile_cooldown', 0.1, function() a.missile_ready=true end)
     end
-    a.speed = -ybtn()*.01
+
+    if ybtn() > 0 then
+        a.speed = -.005
+    elseif ybtn() < 0 then
+        a.speed = .01
+    else
+        a.speed = 0
+    end
+
+    
     a.d_ang = -xbtn()*.01
 end $$
 
@@ -60,7 +69,7 @@ end $$
         local minimize = 12
         local x1, y1 = a.x+cos(a.ang)*1.5, a.y+sin(a.ang)*1.5
         local x2, y2 = x1+cos(a.ang)*dist/minimize*scale, y1+sin(a.ang)*dist/minimize*scale
-        line(zoomx(x1), zoomy(y1), zoomx(x2), zoomy(y2), 8)
+        line(zoomx(x1), zoomy(y1), zoomx(x2), zoomy(y2), a.pointing_to.alert_color or 7)
     end
 end $$
 
@@ -74,12 +83,6 @@ zclass[[alert_radar,anchor_pos|
 ]]
 
 |alert_radar_register| function(a, others)
-    local l = 0
-    for k, v in pairs(a.alerts) do
-        l+=1
-    end
-    printh(l)
-
     foreach(others, function(other)
         if not a.alerts[other] then
             a.alerts[other] = _g.pl_alert(a, a.anchoring, other)

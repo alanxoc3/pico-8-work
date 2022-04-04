@@ -20,9 +20,11 @@ zclass[[missile_pop,model,drawable|
 end $$
 
 |missile_hit| function(a, b, dx, dy)
+    a.dx = -dx
+    a.dy = -dy
     a:kill()
 end $$
 
 |missile_pop_init| function(a)
-    a:explode(.2)
+    a:explode(10)
 end $$

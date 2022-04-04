@@ -11,6 +11,7 @@ zclass[[planet,model,drawable|
 zclass[[chaser,model,drawable|
     x,@, y,@,
     team,red,
+    alert_color,8,
     health,50,
     damage,30,
     scale,2,
@@ -35,6 +36,7 @@ end $$
 zclass[[black_hole,model,drawable|
     x,@, y,@,
     team,red,
+    alert_color,8,
     d_ang,.1, -- spinz fast
     damage,32767, -- basically infinite damage
     model,%BLACK_HOLE,

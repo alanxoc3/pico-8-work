@@ -2,22 +2,28 @@ zclass[[drawable_model_post,model,drawable_post|
     x,@, y,@, model,@
 ]]
 
-function create_text(text, x, y, spacing)
-    local new_text = ""
-    for i=1,#text,1 do
-        local letter = sub(text, i, i)
-        if g_font[letter] then
-            new_text = new_text..letter
+function create_text(original_text, original_x, y)
+    local l = split(original_text)
+
+    y = y-#l/2 + .5
+    foreach(l, function(text)
+        local x = original_x
+        local new_text = ""
+        for i=1,#text,1 do
+            local letter = sub(text, i, i)
+            if g_font[letter] then
+                new_text = new_text..letter
+            end
         end
-    end
 
-    x = x-#new_text/2*spacing + spacing/2
-    for i=1,#new_text,1 do
-        local letter = sub(text, i, i)
-        _g.drawable_model_post(x, y, g_font[letter])
-        x+=spacing
-    end
-
+        x = x-#new_text/2 + .5
+        for i=1,#new_text,1 do
+            local letter = sub(text, i, i)
+            _g.drawable_model_post(x, y, g_font[letter])
+            x+=1
+        end
+        y+=1
+    end)
 end
 
 function loop_zobjs_in_view(class, method_name, ...)
@@ -52,18 +58,24 @@ end $$
     _g.alert_radar(g_pl)
 
     -- title
-    create_text("rewob", 0, -2, 1)
+    create_text("rewob", 0, -3, 1)
+    create_text("ldjam50", 0, 3, 1)
 
     -- level entrances
-    _g.level_entrance(-12, 0, _g.LEVEL_LEFT,  .75, .001)
-    _g.level_entrance(12,  0, _g.LEVEL_RIGHT, .75, .001)
-    _g.level_entrance(0,  12, _g.LEVEL_DOWN,  .75, .001)
-    _g.level_entrance(0, -12, _g.LEVEL_UP,    .75, .001)
+    create_text("lvl",    -12,  -2.5)  create_text("cat",  -12,  2.5) _g.level_entrance(-12, 0, _g.LEVEL_LEFT,  .75, .001)
+    create_text("lvl",    12,   -2.5)  create_text("pig",  12,   2.5) _g.level_entrance(12,  0, _g.LEVEL_RIGHT, .75, .001)
+    create_text("lvl",  0,    9.5)   create_text("mouse",  0,    14.5) _g.level_entrance(0,  12, _g.LEVEL_DOWN,  .75, .001)
+    create_text("lvl",   0,   -14.5)  create_text("bear",  0,   -9.5) _g.level_entrance(0, -12, _g.LEVEL_UP,    .75, .001)
+
+    create_text("code,amorg,denial", -12, -12)
+    create_text("gfx,tigerwolf,greatcadet", 12, -12) _g.focus_point(12,-12)
+    create_text("sfx,amorg", -12, 12)
+    create_text("made,with,pico8", 12, 12)
 
     -- add planets
     -- _g.planet(1,3)
-    _g.chaser(0, -11).target = g_pl
-    _g.black_hole(-11, -5)
+    -- _g.chaser(0, -11).target = g_pl
+    -- _g.black_hole(-11, -5)
 
     -- add background stars
     for i=1,50 do
@@ -76,15 +88,17 @@ end $$
     loop_zobjs('view',      'match_following')
     loop_zobjs('star_view', 'match_following')
 
-    loop_zobjs('chaser', 'collide', g_zclass_entities['pl'])
-    loop_zobjs('chaser', 'collide', g_zclass_entities['missile'])
-    loop_zobjs('chaser', 'collide', g_zclass_entities['view'])
-    loop_zobjs('black_hole', 'collide', g_zclass_entities['pl'])
-    loop_zobjs('black_hole', 'collide', g_zclass_entities['view'])
-    loop_zobjs('level_entrance', 'collide', g_zclass_entities['view'])
+    -- loop_zobjs('chaser', 'collide', g_zclass_entities['pl'])
+    -- loop_zobjs('chaser', 'collide', g_zclass_entities['missile'])
+    -- loop_zobjs('chaser', 'collide', g_zclass_entities['view'])
+    -- loop_zobjs('black_hole', 'collide', g_zclass_entities['pl'])
+    -- loop_zobjs('black_hole', 'collide', g_zclass_entities['view'])
+    -- loop_zobjs('alert_radar', 'register', g_zclass_entities['chaser'])
+    -- loop_zobjs('alert_radar', 'register', g_zclass_entities['black_hole'])
 
-    loop_zobjs('alert_radar', 'register', g_zclass_entities['chaser'])
-    loop_zobjs('alert_radar', 'register', g_zclass_entities['black_hole'])
+    loop_zobjs('level_entrance', 'collide', g_zclass_entities['view'])
+    loop_zobjs('focus_point', 'collide', g_zclass_entities['view'])
+
     loop_zobjs('alert_radar', 'register', g_zclass_entities['level_entrance'])
 
     loop_zobjs('collision_circ', 'follow_anchoring')
@@ -105,9 +119,14 @@ end $$
 zclass[[level_entrance,model,drawable_pre|
     x,@, y,@, model,@, scale,@, d_ang,@,
     circ_radius,1.5,
+    alert_color,9,
     draw, %level_entrance_draw
 ]]
 
 |level_entrance_draw| function(a)
     _g.model_draw(a)
 end $$
+
+zclass[[focus_point,model|
+    model,%FOCUS_POINT, x,@, y,@, radius,1
+]]

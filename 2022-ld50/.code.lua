@@ -256,9 +256,11 @@ end
 end,function(a)
 _g.missile_pop(a.x,a.y)
 end,function(a,b,dx,dy)
+a.dx=-dx
+a.dy=-dy
 a:kill()
 end,function(a)
-a:explode(.2)
+a:explode(10)
 end,function(a)
 if a.target then
 local ang=atan2(a.target.x-a.x,a.target.y-a.y)
@@ -286,7 +288,13 @@ _g.missile(a.x+cos(a.ang)*.8,a.y+sin(a.ang)*.8,a.dx,a.dy,a.ang)
 a.missile_ready=false
 a:set_timer("missile_cooldown",0.1,function()a.missile_ready=true end)
 end
-a.speed=-ybtn()*.01
+if ybtn()>0 then
+a.speed=-.005
+elseif ybtn()<0 then
+a.speed=.01
+else
+a.speed=0
+end
 a.d_ang=-xbtn()*.01
 end,function(a,b,dx,dy)
 a:explode()
@@ -310,14 +318,9 @@ if dist>2 then
 local minimize=12
 local x1,y1=a.x+cos(a.ang)*1.5,a.y+sin(a.ang)*1.5
 local x2,y2=x1+cos(a.ang)*dist/minimize*scale,y1+sin(a.ang)*dist/minimize*scale
-line(zoomx(x1),zoomy(y1),zoomx(x2),zoomy(y2),8)
+line(zoomx(x1),zoomy(y1),zoomx(x2),zoomy(y2),a.pointing_to.alert_color or 7)
 end
 end,function(a,others)
-local l=0
-for k,v in pairs(a.alerts)do
-l+=1
-end
-printh(l)
 foreach(others,function(other)
 if not a.alerts[other]then
 a.alerts[other]=_g.pl_alert(a,a.anchoring,other)
@@ -336,13 +339,16 @@ _g.fader_in(1)
 g_title_screen_coord=30
 g_title_screen_dim=g_title_screen_coord*2
 _g.alert_radar(g_pl)
-create_text("rewob",0,-2,1)
-_g.level_entrance(-12,0,_g.LEVEL_LEFT,.75,.001)
-_g.level_entrance(12,0,_g.LEVEL_RIGHT,.75,.001)
-_g.level_entrance(0,12,_g.LEVEL_DOWN,.75,.001)
-_g.level_entrance(0,-12,_g.LEVEL_UP,.75,.001)
-_g.chaser(0,-11).target=g_pl
-_g.black_hole(-11,-5)
+create_text("rewob",0,-3,1)
+create_text("ldjam50",0,3,1)
+create_text("lvl",-12,-2.5)create_text("cat",-12,2.5)_g.level_entrance(-12,0,_g.LEVEL_LEFT,.75,.001)
+create_text("lvl",12,-2.5)create_text("pig",12,2.5)_g.level_entrance(12,0,_g.LEVEL_RIGHT,.75,.001)
+create_text("lvl",0,9.5)create_text("mouse",0,14.5)_g.level_entrance(0,12,_g.LEVEL_DOWN,.75,.001)
+create_text("lvl",0,-14.5)create_text("bear",0,-9.5)_g.level_entrance(0,-12,_g.LEVEL_UP,.75,.001)
+create_text("code,amorg,denial",-12,-12)
+create_text("gfx,tigerwolf,greatcadet",12,-12)_g.focus_point(12,-12)
+create_text("sfx,amorg",-12,12)
+create_text("made,with,pico8",12,12)
 for i=1,50 do
 _g.twinkle(rnd(256),rnd(256),rnd())
 end
@@ -350,14 +356,8 @@ end,function()
 loop_zobjs("actor","state")
 loop_zobjs("view","match_following")
 loop_zobjs("star_view","match_following")
-loop_zobjs("chaser","collide",g_zclass_entities["pl"])
-loop_zobjs("chaser","collide",g_zclass_entities["missile"])
-loop_zobjs("chaser","collide",g_zclass_entities["view"])
-loop_zobjs("black_hole","collide",g_zclass_entities["pl"])
-loop_zobjs("black_hole","collide",g_zclass_entities["view"])
 loop_zobjs("level_entrance","collide",g_zclass_entities["view"])
-loop_zobjs("alert_radar","register",g_zclass_entities["chaser"])
-loop_zobjs("alert_radar","register",g_zclass_entities["black_hole"])
+loop_zobjs("focus_point","collide",g_zclass_entities["view"])
 loop_zobjs("alert_radar","register",g_zclass_entities["level_entrance"])
 loop_zobjs("collision_circ","follow_anchoring")
 loop_zobjs("mov","mov_update")
@@ -520,15 +520,19 @@ zclass[[view,model|following,@,model,%VIEW_COLLISION_CIRC,scale,5,zoom_factor,16
 zclass[[missile,model,drawable|x,@,y,@,dx,@,dy,@,ang,@,model,%MISSILE,speed,0.05,damage,1,inertia_x,1,inertia_y,1,destroyed,%missile_destroyed,hit,%missile_hit;start;duration,2;]]
 zclass[[missile_pop,model,drawable|x,@,y,@,model,%MISSILE_POP,init,%missile_pop_init]]
 zclass[[planet,model,drawable|x,@,y,@,team,blue,health,100,d_ang,.001,model,%PLANET_SMALL]]
-zclass[[chaser,model,drawable|x,@,y,@,team,red,health,50,damage,30,scale,2,model,%CHASER,update,%chaser_update]]
-zclass[[black_hole,model,drawable|x,@,y,@,team,red,d_ang,.1,damage,32767,model,%BLACK_HOLE,init,%black_hole_init,update,%black_hole_update;]]
+zclass[[chaser,model,drawable|x,@,y,@,team,red,alert_color,8,health,50,damage,30,scale,2,model,%CHASER,update,%chaser_update]]
+zclass[[black_hole,model,drawable|x,@,y,@,team,red,alert_color,8,d_ang,.1,damage,32767,model,%BLACK_HOLE,init,%black_hole_init,update,%black_hole_update;]]
 zclass[[twinkle,drawable_pre|x,@,y,@,twinkle_offset,@,draw,%twinkle_draw]]
 zclass[[star_view,vec|following,@,match_following,%star_view_match_following]]
 zclass[[pl,actor,model,drawable|x,@,y,@,missile_ready,yes,model,%PLAYER_SPACESHIP,update,%pl_update,hit,%pl_hit,collision_func,%good_collision_circ,]]
 zclass[[pl_alert,anchor_pos,actor,drawable|alert_radar,@,anchoring,@,pointing_to,@,model,%PLAYER_ALERT,update,%pl_alert_update,dist,0,scale,1,destroyed,%pl_alert_destroy,draw,%pl_alert_draw;start;duration,1,next,normal;normal;,;dying;duration,.25,update,nop,next,wait;wait;duration,1,draw,nop]]
 zclass[[alert_radar,anchor_pos|alerts;,;anchoring,@,model,%ALERT_RADAR_CIRC,register,%alert_radar_register,update,%alert_radar_update,draw,%pl_alert_draw,]]
 zclass[[drawable_model_post,model,drawable_post|x,@,y,@,model,@]]
-function create_text(text,x,y,spacing)
+function create_text(original_text,original_x,y)
+local l=split(original_text)
+y=y-#l/2+.5
+foreach(l,function(text)
+local x=original_x
 local new_text=""
 for i=1,#text,1 do
 local letter=sub(text,i,i)
@@ -536,12 +540,14 @@ if g_font[letter]then
 new_text=new_text..letter
 end
 end
-x=x-#new_text/2*spacing+spacing/2
+x=x-#new_text/2+.5
 for i=1,#new_text,1 do
 local letter=sub(text,i,i)
 _g.drawable_model_post(x,y,g_font[letter])
-x+=spacing
+x+=1
 end
+y+=1
+end)
 end
 function loop_zobjs_in_view(class,method_name,...)
 for inst in all(g_zclass_entities[class])do
@@ -550,7 +556,8 @@ call_not_nil(inst,method_name,inst,...)
 end
 end
 end
-zclass[[level_entrance,model,drawable_pre|x,@,y,@,model,@,scale,@,d_ang,@,circ_radius,1.5,draw,%level_entrance_draw]]
+zclass[[level_entrance,model,drawable_pre|x,@,y,@,model,@,scale,@,d_ang,@,circ_radius,1.5,alert_color,9,draw,%level_entrance_draw]]
+zclass[[focus_point,model|model,%FOCUS_POINT,x,@,y,@,radius,1]]
 g_fade_table=zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,2,1,0,0,0;3;,3,3,3,3,1,0,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,1,1,0,0;6;,6,6,13,13,5,5,1,0;7;,7,7,6,13,13,5,1,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,5,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,1,1,0;13;,13,13,5,5,1,1,1,0;14;,14,14,13,4,2,2,1,0;15;,15,15,13,13,5,5,1,0;]]
 function fade(threshold)
 for c=0,15 do
