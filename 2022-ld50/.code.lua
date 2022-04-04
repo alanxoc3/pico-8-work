@@ -371,6 +371,7 @@ create_text("mouse",0,3,_g.drawable_model_post_temp)
 _g.fader_in(1)
 _g.alert_radar(g_pl)
 _g.planet(1,3)
+_g.black_hole(1,3)
 end,function()
 loop_zobjs("actor","state")
 loop_zobjs("view","match_following")
@@ -662,7 +663,7 @@ for c=0,15 do
 pal(c,g_fade_table[c][1+flr(7*min(1,max(0,threshold)))])
 end
 end
-zclass[[game_state,actor|ecs_exclusions;actor,true;curr,logo;logo;init,%logo_init,update,%logo_update,draw,%logo_draw,duration,2.5,next,level_select;level_select;init,%level_select_init,update,%level_select_update,draw,%level_select_draw;level_bear;init,%level_bear_init,update,%level_bear_update,draw,%level_draw;level_mouse;init,%level_mouse_init,update,%level_mouse_update,draw,%level_draw;level_cat;init,%level_cat_init,update,%level_cat_update,draw,%level_draw;level_pig;init,%level_pig_init,update,%level_pig_update,draw,%level_draw;]]
+zclass[[game_state,actor|ecs_exclusions;actor,true;curr,level_mouse;logo;init,%logo_init,update,%logo_update,draw,%logo_draw,duration,2.5,next,level_select;level_select;init,%level_select_init,update,%level_select_update,draw,%level_select_draw;level_bear;init,%level_bear_init,update,%level_bear_update,draw,%level_draw;level_mouse;init,%level_mouse_init,update,%level_mouse_update,draw,%level_draw;level_cat;init,%level_cat_init,update,%level_cat_update,draw,%level_draw;level_pig;init,%level_pig_init,update,%level_pig_update,draw,%level_draw;]]
 function _init()
 g_game_state=_g.game_state()
 g_fade=0
