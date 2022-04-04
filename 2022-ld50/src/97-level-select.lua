@@ -72,8 +72,9 @@ end $$
 
     -- add planets
     -- _g.planet(1,3)
-    -- _g.chaser(0, -11).target = g_pl
-    -- _g.black_hole(-11, -5)
+    _g.zipper(-3, -2, 0)
+    _g.chaser(0, -11).target = g_pl
+    _g.black_hole(-11, -5)
 
     -- add background stars
     for i=1,50 do

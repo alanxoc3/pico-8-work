@@ -265,6 +265,7 @@ end,function(a)
 a:explode(10)
 end,function(a)
 if a.target then
+if not a.target.alive then a.target=nil return end
 local ang=atan2(a.target.x-a.x,a.target.y-a.y)
 a.d_ang=sgn(ang-a.ang%1)*.01
 a.speed=.004
@@ -372,6 +373,9 @@ create_text("code,amorg,denial",-12,-12)
 create_text("gfx,tigerwolf,greatcadet",12,-12)_g.focus_point(12,-12)
 create_text("sfx,amorg",-12,12)
 create_text("made,with,pico8",12,12)
+_g.zipper(-3,-2,0)
+_g.chaser(0,-11).target=g_pl
+_g.black_hole(-11,-5)
 for i=1,50 do
 _g.twinkle(rnd(256),rnd(256),rnd(),g_view,star_view)
 end
@@ -551,6 +555,7 @@ zclass[[view,model|following,@,model,%VIEW_COLLISION_CIRC,scale,5,zoom_factor,16
 zclass[[missile,model,drawable|x,@,y,@,dx,@,dy,@,ang,@,model,%MISSILE,speed,0.05,damage,1,inertia_x,1,inertia_y,1,destroyed,%missile_destroyed,init,%missile_init,hit,%missile_hit;start;duration,2;]]
 zclass[[missile_pop,model,drawable|x,@,y,@,model,%MISSILE_POP,init,%missile_pop_init]]
 zclass[[planet,model,drawable|x,@,y,@,team,blue,health,100,d_ang,.001,model,%PLANET_SMALL]]
+zclass[[zipper,model,drawable|x,@,y,@,ang,@,team,blue,model,%CHASER;start;duration,1,next,zip;zip;speed,.05,duration,2;]]
 zclass[[chaser,model,drawable|x,@,y,@,team,red,alert_color,8,health,50,damage,30,scale,2,model,%CHASER,update,%chaser_update]]
 zclass[[black_hole,model,drawable|x,@,y,@,team,red,alert_color,8,d_ang,.1,damage,32767,model,%BLACK_HOLE,init,%black_hole_init,update,%black_hole_update;]]
 zclass[[twinkle,drawable_pre|x,@,y,@,twinkle_offset,@,view,@,star_view,@,draw,%twinkle_draw]]

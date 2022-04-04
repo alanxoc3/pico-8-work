@@ -8,6 +8,16 @@ zclass[[planet,model,drawable|
     model,%PLANET_SMALL
 ]]
 
+-- the idea is these would just spawn from a planet and quickly zip away
+-- ie a ship that you saved
+zclass[[zipper,model,drawable|
+    x,@,y,@,ang,@,
+    team,blue,
+    model,%CHASER;
+    start;duration,1,next,zip;
+    zip;speed,.05,duration,2;
+]]
+
 zclass[[chaser,model,drawable|
     x,@, y,@,
     team,red,
@@ -22,6 +32,7 @@ zclass[[chaser,model,drawable|
 |chaser_update| function(a)
     -- if there is a target, apply an impulse towards that target
     if a.target then
+        if not a.target.alive then a.target = nil return end
         local ang = atan2(a.target.x-a.x, a.target.y-a.y)
             -- This would be the shortest path, but making it change rotational direction adds character
             --local diff = ang - a.ang%1
@@ -51,3 +62,5 @@ end $$
 |black_hole_init| function(a)
     a:set_timer('fade', 10, function() a:explode(.2) end)
 end $$
+
+
