@@ -19,6 +19,7 @@ Cheat sheet:
     LINES MODE:
     "d" - delete the current layer
     "x" - add new layer that flips current layer on x axis
+    "w" - toggle wobble for a line
     "y" - add new layer that flips current layer on y axis
     "f" - toggle between "fill" and "line"
     "[" - move layer left

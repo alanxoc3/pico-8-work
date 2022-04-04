@@ -4,6 +4,7 @@ model = { lines={}, collisions={} }
 
 line_view = true
 default_line_color = 7
+default_wobble = false
 default_fill_color = -1
 
 virt_mx, virt_my = 0, 0
@@ -76,7 +77,7 @@ function _update60()
     elseif keyboard_enabled and char == "=" then next_zoom = 2
     elseif keyboard_enabled and char == "o" then -- rotate everything
         for lines in all(model.lines) do
-            for i=3,#lines,2 do
+            for i=4,#lines,2 do
                 lines[i], lines[i+1] = -lines[i+1], lines[i]
             end
         end
@@ -87,14 +88,27 @@ function _update60()
     elseif curr_mode == "lines" then
         if char == "d" and model.lines[lines_layer] then
             deli(model.lines, lines_layer)
+        elseif char == "y" and model.lines[lines_layer] then -- add layer that flips on y axis
+            local cpy = {model.lines[lines_layer][1]}
+            for i=4,#model.lines[lines_layer],1 do
+                local item = model.lines[lines_layer][i]
+                add(cpy, i % 2 == 1 and -item or item)
+            end
+            add(model.lines, cpy)
+            lines_layer = #model.lines
         elseif char == "x" and model.lines[lines_layer] then -- add layer that flips on x axis
             local cpy = {model.lines[lines_layer][1]}
-            for i=2,#model.lines[lines_layer],1 do
+            for i=4,#model.lines[lines_layer],1 do
                 local item = model.lines[lines_layer][i]
                 add(cpy, i % 2 == 0 and -item or item)
             end
             add(model.lines, cpy)
             lines_layer = #model.lines
+        elseif char == "w" then
+            if model.lines[lines_layer] then
+                model.lines[lines_layer][3] = not model.lines[lines_layer][3]
+                default_wobble = model.lines[lines_layer][3]
+            end
         elseif char == "[" then -- move layer left
             if lines_layer > 1 and model.lines[lines_layer] then
                 model.lines[lines_layer], model.lines[lines_layer-1] = model.lines[lines_layer-1], model.lines[lines_layer]
@@ -105,14 +119,6 @@ function _update60()
                 model.lines[lines_layer], model.lines[lines_layer+1] = model.lines[lines_layer+1], model.lines[lines_layer]
                 lines_layer += 1
             end
-        elseif char == "y" and model.lines[lines_layer] then -- add layer that flips on y axis
-            local cpy = {model.lines[lines_layer][1]}
-            for i=2,#model.lines[lines_layer],1 do
-                local item = model.lines[lines_layer][i]
-                add(cpy, i % 2 == 1 and -item or item)
-            end
-            add(model.lines, cpy)
-            lines_layer = #model.lines
         elseif char == "0" then if line_view then default_line_color = 0  if model.lines[lines_layer] then model.lines[lines_layer][1] = default_line_color end else default_fill_color = 0  if model.lines[lines_layer] then model.lines[lines_layer][2] = default_fill_color end end
         elseif char == "1" then if line_view then default_line_color = 1  if model.lines[lines_layer] then model.lines[lines_layer][1] = default_line_color end else default_fill_color = 1  if model.lines[lines_layer] then model.lines[lines_layer][2] = default_fill_color end end
         elseif char == "2" then if line_view then default_line_color = 2  if model.lines[lines_layer] then model.lines[lines_layer][1] = default_line_color end else default_fill_color = 2  if model.lines[lines_layer] then model.lines[lines_layer][2] = default_fill_color end end
@@ -137,7 +143,7 @@ function _update60()
 
         -- left click, add point
         if stat(34) == 1 and not (last_x == virt_mx and last_y == virt_my) then
-            model.lines[lines_layer] = model.lines[lines_layer] or {default_line_color, default_fill_color}
+            model.lines[lines_layer] = model.lines[lines_layer] or {default_line_color, default_fill_color, default_wobble}
             add(model.lines[lines_layer], virt_mx)
             add(model.lines[lines_layer], virt_my)
             last_x = virt_mx
@@ -180,7 +186,8 @@ function _draw()
     if show_ui then
         if modes[mode_i] == "lines" then
             local shape = model.lines[lines_layer]
-            print(line_view and "line edit" or "fill edit", 4, 90, 5)
+            print(line_view and "line edit" or "fill edit", 4, 84, 5)
+            print("wobble "..(shape and shape[3] and "on" or "off"), 4, 90, 5)
             print("points:"..(shape and (#shape-1)/2 or 0), 4, 96, 5)
             print("layer:"..lines_layer, 4, 102, 5)
         elseif modes[mode_i] == "collisions" then
@@ -217,9 +224,9 @@ function _draw()
     if not show_ui then
         for layer_i=1,#model.lines,1 do
             local shape = model.lines[layer_i]
-            if #shape >= 2 then
+            if #shape >= 3 then
                 local points = {}
-                for i=3,#shape-2,2 do
+                for i=4,#shape-2,2 do
                     add(points, {x=shape[i]*50/zooms[zoom_i]+64, y=shape[i+1]*50/zooms[zoom_i]+64})
                 end
 
@@ -232,8 +239,8 @@ function _draw()
 
     for layer_i=1,#model.lines,1 do
         local shape = model.lines[layer_i]
-        if #shape >= 6 then
-            for i=3,#shape-2,2 do
+        if #shape >= 7 then
+            for i=4,#shape-2,2 do
                 local x1, y1 = shape[i], shape[i+1]
                 local x2, y2 = shape[i+2], shape[i+3]
                 local color = 1
@@ -244,10 +251,17 @@ function _draw()
                 end
 
                 if color >= 0 then
-                    wobble_line(
-                        x1*50/zooms[zoom_i]+64, y1*50/zooms[zoom_i]+64,
-                        x2*50/zooms[zoom_i]+64, y2*50/zooms[zoom_i]+64, color
-                    )
+                    if not shape[3] then
+                        line(
+                            x1*50/zooms[zoom_i]+64, y1*50/zooms[zoom_i]+64,
+                            x2*50/zooms[zoom_i]+64, y2*50/zooms[zoom_i]+64, color
+                        )
+                    else
+                        wobble_line(
+                            x1*50/zooms[zoom_i]+64, y1*50/zooms[zoom_i]+64,
+                            x2*50/zooms[zoom_i]+64, y2*50/zooms[zoom_i]+64, color
+                        )
+                    end
                 end
             end
         end
@@ -258,14 +272,14 @@ function _draw()
             local shape = model.lines[lines_layer]
             if shape then
                 -- vertices
-                for i=3,#shape,2 do
+                for i=4,#shape,2 do
                     local x1, y1 = shape[i], shape[i+1]
                     circfill(x1*50/zooms[zoom_i]+64, y1*50/zooms[zoom_i]+64, 1, 7)
                 end
 
                 -- first point
-                if #shape >= 4 then
-                    circ(shape[3]*50/zooms[zoom_i]+64, shape[4]*50/zooms[zoom_i]+64, 4, 8)
+                if #shape >= 5 then
+                    circ(shape[4]*50/zooms[zoom_i]+64, shape[5]*50/zooms[zoom_i]+64, 4, 8)
                 end
             end
         elseif modes[mode_i] == "collisions" then
