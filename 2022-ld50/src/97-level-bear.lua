@@ -5,7 +5,3 @@ end $$
 
 |level_bear_update| function()
 end $$
-
-|level_bear_draw| function()
-end $$
-

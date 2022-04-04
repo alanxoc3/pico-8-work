@@ -2,8 +2,16 @@ zclass[[drawable_model_post,model,drawable_post|
     x,@, y,@, model,@
 ]]
 
-function create_text(original_text, original_x, y)
+zclass[[drawable_model_post_temp,model,drawable_post|
+    x,@, y,@, model,@;
+    start;duration,1.5, next,dying;
+    dying;init,%model_explode;
+]]
+
+function create_text(original_text, original_x, y, func, ...)
+    func = func or _g.drawable_model_post
     local l = split(original_text)
+    local params = {...}
 
     y = y-#l/2 + .5
     foreach(l, function(text)
@@ -19,7 +27,7 @@ function create_text(original_text, original_x, y)
         x = x-#new_text/2 + .5
         for i=1,#new_text,1 do
             local letter = sub(text, i, i)
-            _g.drawable_model_post(x, y, g_font[letter])
+            func(x, y, g_font[letter], unpack(params))
             x+=1
         end
         y+=1
@@ -56,8 +64,8 @@ end $$
     g_title_screen_dim = g_title_screen_coord*2
 
     -- title
-    create_text("rewob", 0, -3, 1)
-    create_text("ldjam50", 0, 3, 1)
+    create_text("rewob", 0, -3)
+    create_text("ldjam50", 0, 3)
 
     -- level entrances
     create_text("lvl",    -12,  -2.5)  create_text("cat",   -12, 2.5)  _g.level_entrance(-12, 0, _g.LEVEL_LEFT, "level_cat")

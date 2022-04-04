@@ -5,7 +5,3 @@ end $$
 
 |level_cat_update| function()
 end $$
-
-|level_cat_draw| function()
-end $$
-

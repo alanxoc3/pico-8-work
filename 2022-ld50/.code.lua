@@ -72,7 +72,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,anchor_pos_update_anchor,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,collision_draw_debug,@,model_update,@,model_draw,@,model_collide,@,model_hit,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_update,@,view_hit,@,view_match_following,@,missile_init,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,chaser_update,@,black_hole_update,@,black_hole_init,@,twinkle_draw,@,star_view_match_following,@,pl_update,@,pl_hit,@,pl_alert_destroy,@,pl_alert_update,@,pl_alert_draw,@,alert_radar_register,@,level_bear_init,@,level_bear_update,@,level_bear_draw,@,level_cat_init,@,level_cat_update,@,level_cat_draw,@,level_mouse_init,@,level_mouse_update,@,level_mouse_draw,@,level_pig_init,@,level_pig_update,@,level_pig_draw,@,level_select_draw,@,level_select_init,@,level_select_update,@,level_entrance_draw,@,level_entrance_hit,@,logo_init,@,logo_draw,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,anchor_pos_update_anchor,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,collision_draw_debug,@,model_update,@,model_draw,@,model_collide,@,model_hit,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_update,@,view_hit,@,view_match_following,@,missile_init,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,chaser_update,@,black_hole_update,@,black_hole_init,@,twinkle_draw,@,star_view_match_following,@,pl_update,@,pl_hit,@,pl_alert_destroy,@,pl_alert_update,@,pl_alert_draw,@,alert_radar_register,@,level_bear_init,@,level_bear_update,@,level_cat_init,@,level_cat_update,@,level_mouse_init,@,level_mouse_update,@,level_pig_init,@,level_pig_update,@,level_pig_draw,@,level_select_draw,@,level_select_init,@,level_select_update,@,level_entrance_draw,@,level_entrance_hit,@,logo_init,@,logo_draw,@,standard_level_draw,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -341,16 +341,36 @@ music(8,1000,7)
 clean_all_actors()
 end,function()
 end,function()
-end,function()
 music(24,1000,7)
 clean_all_actors()
 end,function()
 end,function()
-end,function()
 music(32,1000,7)
 clean_all_actors()
+g_pl=_g.pl(0,0)
+g_view=_g.view(g_pl)
+local star_view=_g.star_view(pl)
+for i=1,50 do
+_g.twinkle(rnd(256),rnd(256),rnd(),g_view,star_view)
+end
+create_text("lvl",0,-3,_g.drawable_model_post_temp)
+_g.drawable_model_post_temp(0,0,_g.STARTING_CIRCLE,1)
+create_text("mouse",0,3,_g.drawable_model_post_temp)
+_g.fader_in(1)
+_g.alert_radar(g_pl)
+_g.planet(1,3)
 end,function()
-end,function()
+loop_zobjs("actor","state")
+loop_zobjs("view","match_following")
+loop_zobjs("star_view","match_following")
+loop_zobjs("alert_radar","register",g_zclass_entities["planet"])
+loop_zobjs("alert_radar","register",g_zclass_entities["view"])
+loop_zobjs("collision_circ","follow_anchoring")
+loop_zobjs("mov","mov_update")
+loop_zobjs("acc","acc_update")
+loop_zobjs("vec","vec_update")
+loop_zobjs("anchor_pos","update_anchor")
+loop_zobjs("model","model_update")
 end,function()
 music(16,1000,7)
 clean_all_actors()
@@ -371,8 +391,8 @@ _g.drawable_model_post(0,0,_g.STARTING_CIRCLE)
 _g.alert_radar(g_pl)
 g_title_screen_coord=30
 g_title_screen_dim=g_title_screen_coord*2
-create_text("rewob",0,-3,1)
-create_text("ldjam50",0,3,1)
+create_text("rewob",0,-3)
+create_text("ldjam50",0,3)
 create_text("lvl",-12,-2.5)create_text("cat",-12,2.5)_g.level_entrance(-12,0,_g.LEVEL_LEFT,"level_cat")
 create_text("lvl",12,-2.5)create_text("pig",12,2.5)_g.level_entrance(12,0,_g.LEVEL_RIGHT,"level_pig")
 create_text("lvl",0,9.5)create_text("mouse",0,14.5)_g.level_entrance(0,12,_g.LEVEL_DOWN,"level_mouse")
@@ -423,6 +443,10 @@ camera(logo_opacity>.5 and rnd_one())
 zspr(108,64,64,4,2)
 fade"0"
 camera()
+end,function()
+loop_zobjs_in_view(g_view,"drawable_pre","draw")
+loop_zobjs_in_view(g_view,"drawable","draw")
+loop_zobjs_in_view(g_view,"drawable_post","draw")
 end)
 function zspr(sind,x,y,sw,sh,...)
 sw,sh=sw or 1,sh or 1
@@ -580,8 +604,11 @@ zclass[[pl,actor,model,drawable|x,@,y,@,missile_ready,yes,model,%PLAYER_SPACESHI
 zclass[[pl_alert,anchor_pos,actor,drawable|alert_radar,@,anchoring,@,pointing_to,@,model,%PLAYER_ALERT,update,%pl_alert_update,dist,0,scale,1,destroyed,%pl_alert_destroy,draw,%pl_alert_draw;start;duration,1,next,normal;normal;,;dying;duration,.25,update,nop,next,wait;wait;duration,1,draw,nop]]
 zclass[[alert_radar,anchor_pos|alerts;,;anchoring,@,model,%ALERT_RADAR_CIRC,register,%alert_radar_register,update,%alert_radar_update,draw,%pl_alert_draw,]]
 zclass[[drawable_model_post,model,drawable_post|x,@,y,@,model,@]]
-function create_text(original_text,original_x,y)
+zclass[[drawable_model_post_temp,model,drawable_post|x,@,y,@,model,@;start;duration,1.5,next,dying;dying;init,%model_explode;]]
+function create_text(original_text,original_x,y,func,...)
+func=func or _g.drawable_model_post
 local l=split(original_text)
+local params={...}
 y=y-#l/2+.5
 foreach(l,function(text)
 local x=original_x
@@ -595,7 +622,7 @@ end
 x=x-#new_text/2+.5
 for i=1,#new_text,1 do
 local letter=sub(text,i,i)
-_g.drawable_model_post(x,y,g_font[letter])
+func(x,y,g_font[letter],unpack(params))
 x+=1
 end
 y+=1
@@ -616,7 +643,7 @@ for c=0,15 do
 pal(c,g_fade_table[c][1+flr(7*min(1,max(0,threshold)))])
 end
 end
-zclass[[game_state,actor|ecs_exclusions;actor,true;curr,logo;logo;init,%logo_init,update,%logo_update,draw,%logo_draw,duration,2.5,next,level_select;level_select;init,%level_select_init,update,%level_select_update,draw,%level_select_draw;level_bear;init,%level_bear_init,update,%level_bear_update,draw,%level_bear_draw;level_mouse;init,%level_mouse_init,update,%level_mouse_update,draw,%level_mouse_draw;level_cat;init,%level_cat_init,update,%level_cat_update,draw,%level_cat_draw;level_pig;init,%level_pig_init,update,%level_pig_update,draw,%level_pig_draw;]]
+zclass[[game_state,actor|ecs_exclusions;actor,true;curr,logo;logo;init,%logo_init,update,%logo_update,draw,%logo_draw,duration,2.5,next,level_select;level_select;init,%level_select_init,update,%level_select_update,draw,%level_select_draw;level_bear;init,%level_bear_init,update,%level_bear_update,draw,%standard_level_draw;level_mouse;init,%level_mouse_init,update,%level_mouse_update,draw,%standard_level_draw;level_cat;init,%level_cat_init,update,%level_cat_update,draw,%standard_level_draw;level_pig;init,%level_pig_init,update,%level_pig_update,draw,%standard_level_draw;]]
 function _init()
 g_game_state=_g.game_state()
 g_fade=0
