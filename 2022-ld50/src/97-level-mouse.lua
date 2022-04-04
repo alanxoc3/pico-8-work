@@ -41,8 +41,8 @@ end $$
     -- loop_zobjs('chaser', 'collide', g_zclass_entities['pl'])
     -- loop_zobjs('chaser', 'collide', g_zclass_entities['missile'])
     -- loop_zobjs('chaser', 'collide', g_zclass_entities['view'])
-    -- loop_zobjs('black_hole', 'collide', g_zclass_entities['pl'])
-    -- loop_zobjs('black_hole', 'collide', g_zclass_entities['view'])
+    loop_zobjs('black_hole', 'collide', g_zclass_entities['pl'])
+    loop_zobjs('black_hole', 'collide', g_zclass_entities['view'])
 
     loop_zobjs('alert_radar', 'register', g_zclass_entities['planet'])
     loop_zobjs('alert_radar', 'register', g_zclass_entities['view'])
