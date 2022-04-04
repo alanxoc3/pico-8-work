@@ -278,20 +278,21 @@ loop_zobjs("drawable","draw")
 loop_zobjs("drawable_post","draw")
 end,function()
 g_pl=_g.pl(0,0)
+_g.drawable_model_post(0,0,_g.STARTING_CIRCLE)
 g_view=_g.view(g_pl)
 g_star_view=_g.star_view(g_pl)
 _g.fader_in(1)
-g_title_screen_coord=20
+g_title_screen_coord=30
 g_title_screen_dim=g_title_screen_coord*2
-_g.letter(-3,-3,_g.TEST_LET_R)
-_g.letter(-1.5,-3,_g.TEST_LET_E)
-_g.letter(0,-3,_g.TEST_LET_W)
-_g.letter(1.5,-3,_g.TEST_LET_O)
-_g.letter(3,-3,_g.TEST_LET_B)
-_g.level_entrance(-10,0,_g.CATEROID,.75,.001)
-_g.level_entrance(10,0,_g.CATEROID,.75,.001)
-_g.level_entrance(0,7.5,_g.CATEROID,.75,.001)
-_g.cateroid(0,-11)
+_g.drawable_model_post(-3,-3,_g.TEST_LET_R)
+_g.drawable_model_post(-1.5,-3,_g.TEST_LET_E)
+_g.drawable_model_post(0,-3,_g.TEST_LET_W)
+_g.drawable_model_post(1.5,-3,_g.TEST_LET_O)
+_g.drawable_model_post(3,-3,_g.TEST_LET_B)
+_g.level_entrance(-12,0,_g.LEVEL_CATEROID,.75,.001)
+_g.level_entrance(12,0,_g.LEVEL_CATEROID,.75,.001)
+_g.level_entrance(0,12,_g.LEVEL_CATEROID,.75,.001)
+_g.level_entrance(0,-12,_g.LEVEL_CATEROID,.75,.001)
 for i=1,50 do
 _g.twinkle(rnd(256),rnd(256),rnd())
 end
@@ -302,6 +303,7 @@ loop_zobjs("star_view","match_following")
 loop_zobjs("wall","collide",g_zclass_entities["pl"])
 loop_zobjs("wall","collide",g_zclass_entities["missile"])
 loop_zobjs("wall","collide",g_zclass_entities["view"])
+loop_zobjs("level_entrance","collide",g_zclass_entities["view"])
 loop_zobjs("collision_circ","follow_anchoring")
 loop_zobjs("mov","mov_update")
 loop_zobjs("acc","acc_update")
@@ -312,7 +314,6 @@ if g_pl.x<-g_title_screen_coord then g_pl.x+=g_title_screen_dim-1 g_view.x+=g_ti
 if g_pl.y<-g_title_screen_coord then g_pl.y+=g_title_screen_dim-1 g_view.y+=g_title_screen_dim-1 end
 end,function(a)
 _g.model_draw(a)
-circ(zoomx(a.x),zoomy(a.y),zoom(a.circ_radius),7)
 end,function()sfx"63" end,function(a)
 local logo_opacity=cos(a:get_elapsed_percent"state")+1
 fade(logo_opacity)
@@ -462,8 +463,8 @@ zclass[[wall|]]
 zclass[[planet,actor,model,drawable|x,@,y,@,d_ang,.001,model_obj,%PLANET_SMALL]]
 zclass[[cateroid,model,wall,drawable|x,@,y,@,d_ang,.001,health,50,scale,2,model_obj,%CATEROID]]
 zclass[[pl,actor,model,drawable|x,@,y,@,missile_ready,yes,model_obj,%PLAYER_SPACESHIP,update,%pl_update,hit,%pl_hit,collision_func,%good_collision_circ]]
-zclass[[letter,model,drawable_post|x,@,y,@,model_obj,@]]
-zclass[[level_entrance,model,drawable_post|x,@,y,@,shapes,@,scale,@,d_ang,@,circ_radius,1.5,draw,%level_entrance_draw]]
+zclass[[drawable_model_post,model,drawable_post|x,@,y,@,model_obj,@]]
+zclass[[level_entrance,model,drawable_post|x,@,y,@,model_obj,@,scale,@,d_ang,@,circ_radius,1.5,draw,%level_entrance_draw]]
 g_fade_table=zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,2,1,0,0,0;3;,3,3,3,3,1,0,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,1,1,0,0;6;,6,6,13,13,5,5,1,0;7;,7,7,6,13,13,5,1,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,5,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,1,1,0;13;,13,13,5,5,1,1,1,0;14;,14,14,13,4,2,2,1,0;15;,15,15,13,13,5,5,1,0;]]
 function fade(threshold)
 for c=0,15 do
