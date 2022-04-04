@@ -41,7 +41,7 @@ end
 end $$
 
 |level_select_init| function()
-    music(0)
+    music(0, 7)
     reset_zclass_entities()
     -- [0,0] is the center of the level
     g_pl = _g.pl(0, 0) -- add player
@@ -131,7 +131,9 @@ end $$
 |level_entrance_hit| function(a, other)
     if other.id == 'pl' then
         a:explode()
-        _g.fader_out(1, function() g_game_state.load(a.next_game_state) end)
+        music(-1)
+        sfx(22, 3)
+        _g.fader_out(1.5, function() g_game_state.load(a.next_game_state) end)
     end
 end $$
 

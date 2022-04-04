@@ -5,6 +5,7 @@ function reset_zclass_entities()
 end
 
 |level_bear_init| function()
+    music(8,7)
     reset_zclass_entities()
     printh('worked')
 end $$
