@@ -24,11 +24,11 @@
     -- title
 
     -- add planets
-    _g.planet(1,3)
+    _g.planet(0,-22)
     -- _g.planet(1,3)
     -- _g.zipper(-3, 2, 0.05)
     -- _g.chaser(0, -11).target = g_pl
-    _g.black_hole(1, 3)
+    _g.black_hole(0, 22)
 
     -- _g.zipper(-3, -2, 0)
     -- _g.chaser(0, -11).target = g_pl
@@ -40,11 +40,13 @@ end $$
     loop_zobjs('view',      'match_following')
     loop_zobjs('star_view', 'match_following')
 
+    loop_zobjs('missile', 'collide', g_zclass_entities['teammate'])
+    loop_zobjs('teammate', 'collide', g_zclass_entities['teammate'])
     -- loop_zobjs('chaser', 'collide', g_zclass_entities['pl'])
     -- loop_zobjs('chaser', 'collide', g_zclass_entities['missile'])
     -- loop_zobjs('chaser', 'collide', g_zclass_entities['view'])
-    loop_zobjs('black_hole', 'collide', g_zclass_entities['pl'])
-    loop_zobjs('black_hole', 'collide', g_zclass_entities['view'])
+    -- loop_zobjs('black_hole', 'collide', g_zclass_entities['pl'])
+    -- loop_zobjs('black_hole', 'collide', g_zclass_entities['view'])
 
     loop_zobjs('alert_radar', 'register', g_zclass_entities['planet'])
     loop_zobjs('alert_radar', 'register', g_zclass_entities['view'])

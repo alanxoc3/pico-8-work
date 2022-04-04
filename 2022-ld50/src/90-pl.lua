@@ -27,7 +27,12 @@ zclass[[pl,actor,model,drawable,team_blue|
 end $$
 
 |pl_hit| function(a, b, dx, dy)
-    a:explode()
+    if b.parents['team_blue'] then -- if same team as player, just bump
+        a.dx += dx
+        a.dy += dy
+    else
+        a:explode()
+    end
 end $$
 
 zclass[[pl_alert,anchor_pos,actor,drawable|
