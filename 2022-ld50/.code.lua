@@ -95,8 +95,8 @@ g_fade=a:get_elapsed_percent"state"
 end,function(a)
 g_fade=1-a:get_elapsed_percent"state"
 end,function(...)
-timer_stop_timer(...)
-timer_play_timer(...)
+_g.timer_stop_timer(...)
+_g.timer_play_timer(...)
 end,function(a,timer_name,duration,callback)
 a.timers[timer_name]={elapsed=false,duration=duration or 32767,callback=callback or function()end}
 end,function(a,timer_name)

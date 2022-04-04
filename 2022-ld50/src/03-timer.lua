@@ -17,8 +17,8 @@ zclass[[timer|
 ]]
 
 |timer_start_timer| function(...)
-    timer_stop_timer(...)
-    timer_play_timer(...)
+    _g.timer_stop_timer(...)
+    _g.timer_play_timer(...)
 end $$
 
 |timer_stop_timer| function(a, timer_name, duration, callback)
