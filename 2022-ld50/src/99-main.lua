@@ -1,3 +1,5 @@
+G_DEATH_COUNT = 0
+
 zclass[[game_state,actor|
     ecs_exclusions;actor,true; -- remove game_state from the actor group
     -- curr,level_select;
@@ -91,12 +93,24 @@ end $$
 |retry_init| function(a)
     music(4,nil,1)
     clean_all_entities()
+    G_DEATH_COUNT = min(100, G_DEATH_COUNT+1)
 
     _g.fader_in(1)
     g_view = _g.view()
     
-    create_text("wob", 0, 0)
-    -- create_text("wob,again?", 0, 0)
+    local txt = "???"
+    if G_DEATH_COUNT == 1     then txt = "wob"
+    elseif G_DEATH_COUNT == 2 then txt = "wob,again"
+    elseif G_DEATH_COUNT == 3 then txt = "wob,again?"
+    elseif G_DEATH_COUNT < 100 and G_DEATH_COUNT >= 3 then
+        if G_DEATH_COUNT % 10 == 0 then
+            txt = "rewob,"..(G_DEATH_COUNT\10)
+        else
+            txt = "wob,"..G_DEATH_COUNT
+        end
+    end
+    printh(txt)
+    create_text(txt, 0, 0)
 
     g_game_state:start_timer("retry", 1, function()
         _g.fader_out(1, function()

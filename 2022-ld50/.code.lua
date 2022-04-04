@@ -175,7 +175,6 @@ end)
 a.previous_model=a.model
 end
 end,function(a)
-printh("testing "..t())
 local modelpoints={}
 foreach(a.shapes,function(shape)
 local points=translate_points(a.x,a.y,a.ang,shape)
@@ -358,7 +357,7 @@ end,function()
 end,function()
 music(32,1000,7)
 clean_all_entities()
-g_pl=_g.pl(0,0)
+g_pl=_g.pl(0,20)
 g_view=_g.view(g_pl)
 local star_view=_g.star_view(g_pl)
 for i=1,50 do
@@ -475,9 +474,22 @@ end
 end,function(a)
 music(4,nil,1)
 clean_all_entities()
+G_DEATH_COUNT=min(100,G_DEATH_COUNT+1)
 _g.fader_in(1)
 g_view=_g.view()
-create_text("wob",0,0)
+local txt="???"
+if G_DEATH_COUNT==1 then txt="wob"
+elseif G_DEATH_COUNT==2 then txt="wob,again"
+elseif G_DEATH_COUNT==3 then txt="wob,again?"
+elseif G_DEATH_COUNT<100 and G_DEATH_COUNT>=3 then
+if G_DEATH_COUNT%10==0 then
+txt="rewob,"..(G_DEATH_COUNT\10)
+else
+txt="wob,"..G_DEATH_COUNT
+end
+end
+printh(txt)
+create_text(txt,0,0)
 g_game_state:start_timer("retry",1,function()
 _g.fader_out(1,function()
 if g_game_state.curr=="level_mouse_retry"then
@@ -669,7 +681,7 @@ zclass[[drawable_model_post,model,drawable_post|x,@,y,@,model,@]]
 zclass[[drawable_model_post_temp,model,drawable_post|x,@,y,@,model,@;start;duration,1.5,next,dying;dying;init,%model_explode;]]
 function create_text(original_text,original_x,y,func,...)
 func=func or _g.drawable_model_post
-local l=split(original_text)
+local l=split(original_text,",",false)
 local params={...}
 y=y-#l/2+.5
 foreach(l,function(text)
@@ -705,6 +717,7 @@ for c=0,15 do
 pal(c,g_fade_table[c][1+flr(7*min(1,max(0,threshold)))])
 end
 end
+G_DEATH_COUNT=0
 zclass[[game_state,actor|ecs_exclusions;actor,true;curr,level_mouse;logo;init,%logo_init,update,%logo_update,draw,%logo_draw,duration,2.5,next,level_select;level_select;init,%level_select_init,update,%level_select_update,draw,%level_select_draw;level_bear;init,%level_bear_init,update,%level_bear_update,draw,%level_draw;level_mouse;init,%level_mouse_init,update,%level_mouse_update,draw,%level_draw;level_cat;init,%level_cat_init,update,%level_cat_update,draw,%level_draw;level_pig;init,%level_pig_init,update,%level_pig_update,draw,%level_draw;level_bear_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;level_mouse_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;level_cat_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;level_pig_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;]]
 function _init()
 g_game_state=_g.game_state()

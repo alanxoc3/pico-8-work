@@ -10,7 +10,7 @@ zclass[[drawable_model_post_temp,model,drawable_post|
 
 function create_text(original_text, original_x, y, func, ...)
     func = func or _g.drawable_model_post
-    local l = split(original_text)
+    local l = split(original_text, ",", false)
     local params = {...}
 
     y = y-#l/2 + .5

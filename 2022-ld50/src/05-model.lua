@@ -35,7 +35,6 @@ end
 end $$
 
 |model_draw| function(a)
-    printh("testing "..t())
     local modelpoints = {}
     foreach(a.shapes, function(shape)
         local points = translate_points(a.x, a.y, a.ang, shape)
