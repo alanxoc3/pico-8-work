@@ -1,5 +1,6 @@
-zclass[[pl,actor,model,drawable|
+zclass[[pl,actor,model,drawable,teammate|
     x,@, y,@,
+    team,blue,
     missile_ready,yes,
     model,%PLAYER_SPACESHIP,
     update,%pl_update,

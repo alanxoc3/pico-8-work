@@ -20,8 +20,8 @@ zclass[[acc,vec|
 |acc_update| function(a)
     a.dx += a.ax a.dy += a.ay
     a.dx *= a.inertia_x a.dy *= a.inertia_y
-    if a.ax == 0 and abs(a.dx) < .01 then a.dx = 0 end
-    if a.ay == 0 and abs(a.dy) < .01 then a.dy = 0 end
+    if a.ax == 0 and abs(a.dx) < .00001 then a.dx = 0 end
+    if a.ay == 0 and abs(a.dy) < .00001 then a.dy = 0 end
 end $$
 
 -- able to contribute to acceleration with direction and speed

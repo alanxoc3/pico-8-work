@@ -73,8 +73,8 @@ end
     create_text("made,with,pico8", 12, 12)
 
     -- add planets
-    -- _g.planet(1,3)
-    _g.zipper(-3, -2, 0)
+    _g.planet(1,3)
+    _g.zipper(-3, 2, 0.05)
     _g.chaser(0, -11).target = g_pl
     _g.black_hole(-11, -5)
 
@@ -103,6 +103,7 @@ end $$
 
     loop_zobjs('alert_radar', 'register', g_zclass_entities['level_entrance'])
 
+    loop_zobjs('black_hole', 'tug', g_zclass_entities['teammate']) -- affects dx & dy of all 'teammate' objects
     loop_zobjs('collision_circ', 'follow_anchoring')
     loop_zobjs('mov', 'mov_update')
     loop_zobjs('acc', 'acc_update')
