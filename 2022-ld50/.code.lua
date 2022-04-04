@@ -293,10 +293,10 @@ _g.drawable_model_post(-1.5,-3,_g.TEST_LET_E)
 _g.drawable_model_post(0,-3,_g.TEST_LET_W)
 _g.drawable_model_post(1.5,-3,_g.TEST_LET_O)
 _g.drawable_model_post(3,-3,_g.TEST_LET_B)
-_g.level_entrance(-12,0,_g.LEVEL_CATEROID,.75,.001)
-_g.level_entrance(12,0,_g.LEVEL_CATEROID,.75,.001)
-_g.level_entrance(0,12,_g.LEVEL_CATEROID,.75,.001)
-_g.level_entrance(0,-12,_g.LEVEL_CATEROID,.75,.001)
+_g.level_entrance(-12,0,_g.LEVEL_LEFT,.75,.001)
+_g.level_entrance(12,0,_g.LEVEL_RIGHT,.75,.001)
+_g.level_entrance(0,12,_g.LEVEL_DOWN,.75,.001)
+_g.level_entrance(0,-12,_g.LEVEL_UP,.75,.001)
 for i=1,50 do
 _g.twinkle(rnd(256),rnd(256),rnd())
 end
@@ -480,7 +480,7 @@ call_not_nil(inst,method_name,inst,...)
 end
 end
 end
-zclass[[level_entrance,model,drawable_post|x,@,y,@,model,@,scale,@,d_ang,@,circ_radius,1.5,draw,%level_entrance_draw]]
+zclass[[level_entrance,model,drawable_pre|x,@,y,@,model,@,scale,@,d_ang,@,circ_radius,1.5,draw,%level_entrance_draw]]
 g_fade_table=zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,2,1,0,0,0;3;,3,3,3,3,1,0,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,1,1,0,0;6;,6,6,13,13,5,5,1,0;7;,7,7,6,13,13,5,1,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,5,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,1,1,0;13;,13,13,5,5,1,1,1,0;14;,14,14,13,4,2,2,1,0;15;,15,15,13,13,5,5,1,0;]]
 function fade(threshold)
 for c=0,15 do

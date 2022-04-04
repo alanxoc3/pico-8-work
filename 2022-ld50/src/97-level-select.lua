@@ -39,10 +39,10 @@ end $$
     _g.drawable_model_post(3,    -3, _g.TEST_LET_B)
 
     -- level entrances
-    _g.level_entrance(-12, 0, _g.LEVEL_CATEROID, .75, .001)
-    _g.level_entrance(12,  0, _g.LEVEL_CATEROID, .75, .001)
-    _g.level_entrance(0,  12, _g.LEVEL_CATEROID, .75, .001)
-    _g.level_entrance(0, -12, _g.LEVEL_CATEROID, .75, .001)
+    _g.level_entrance(-12, 0, _g.LEVEL_LEFT,  .75, .001)
+    _g.level_entrance(12,  0, _g.LEVEL_RIGHT, .75, .001)
+    _g.level_entrance(0,  12, _g.LEVEL_DOWN,  .75, .001)
+    _g.level_entrance(0, -12, _g.LEVEL_UP,    .75, .001)
 
     -- add planets
     -- _g.planet(1,3)
@@ -71,13 +71,13 @@ end $$
     loop_zobjs('model', 'model_update')
 
     -- wrap the level select screen
-    if g_pl.x >  g_title_screen_coord then g_pl.x -= g_title_screen_dim-1 g_view.x -= g_title_screen_dim-1 end
+    if g_pl                                   .x >  g_title_screen_coord then g_pl.x -= g_title_screen_dim-1 g_view.x -= g_title_screen_dim-1 end
     if g_pl.y >  g_title_screen_coord then g_pl.y -= g_title_screen_dim-1 g_view.y -= g_title_screen_dim-1 end
     if g_pl.x < -g_title_screen_coord then g_pl.x += g_title_screen_dim-1 g_view.x += g_title_screen_dim-1 end
     if g_pl.y < -g_title_screen_coord then g_pl.y += g_title_screen_dim-1 g_view.y += g_title_screen_dim-1 end
 end $$
 
-zclass[[level_entrance,model,drawable_post|
+zclass[[level_entrance,model,drawable_pre|
     x,@, y,@, model,@, scale,@, d_ang,@,
     circ_radius,1.5,
     draw, %level_entrance_draw
