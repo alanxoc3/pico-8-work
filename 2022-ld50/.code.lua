@@ -288,11 +288,7 @@ g_star_view=_g.star_view(g_pl)
 _g.fader_in(1)
 g_title_screen_coord=30
 g_title_screen_dim=g_title_screen_coord*2
-_g.drawable_model_post(-3,-3,_g.TEST_LET_R)
-_g.drawable_model_post(-1.5,-3,_g.TEST_LET_E)
-_g.drawable_model_post(0,-3,_g.TEST_LET_W)
-_g.drawable_model_post(1.5,-3,_g.TEST_LET_O)
-_g.drawable_model_post(3,-3,_g.TEST_LET_B)
+create_text("abc",0,-3,1)
 _g.level_entrance(-12,0,_g.LEVEL_LEFT,.75,.001)
 _g.level_entrance(12,0,_g.LEVEL_RIGHT,.75,.001)
 _g.level_entrance(0,12,_g.LEVEL_DOWN,.75,.001)
@@ -473,6 +469,21 @@ zclass[[planet,actor,model,drawable|x,@,y,@,d_ang,.001,model,%PLANET_SMALL]]
 zclass[[cateroid,model,wall,drawable|x,@,y,@,d_ang,.001,health,50,scale,2,model,%CATEROID]]
 zclass[[pl,actor,model,drawable|x,@,y,@,missile_ready,yes,model,%PLAYER_SPACESHIP,update,%pl_update,hit,%pl_hit,collision_func,%good_collision_circ]]
 zclass[[drawable_model_post,model,drawable_post|x,@,y,@,model,@]]
+function create_text(text,x,y,spacing)
+local new_text=""
+for i=1,#text,1 do
+local letter=sub(text,i,i)
+if g_font[letter]then
+new_text=new_text..letter
+end
+end
+x=x-#new_text/2*spacing+spacing/2
+for i=1,#new_text,1 do
+local letter=sub(text,i,i)
+_g.drawable_model_post(x,y,g_font[letter])
+x+=spacing
+end
+end
 function loop_zobjs_in_view(class,method_name,...)
 for inst in all(g_zclass_entities[class])do
 if inst.parents.model and dist_between_circles(g_view,inst)<0 or not inst.parents.model then
