@@ -14,7 +14,7 @@ zclass[[chaser,model,drawable|
     health,50,
     damage,30,
     scale,2,
-    model,%CATEROID,
+    model,%CHASER,
     update,%chaser_update
 ]]
 
@@ -37,7 +37,7 @@ zclass[[black_hole,model,drawable|
     team,red,
     d_ang,.1, -- spinz fast
     damage,32767, -- basically infinite damage
-    model,%CATEROID,
+    model,%BLACK_HOLE,
     init,%black_hole_init,
     update,%black_hole_update;
 ]]
