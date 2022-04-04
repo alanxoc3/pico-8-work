@@ -23,16 +23,9 @@
 
     -- title
 
-    -- add planets
-    _g.planet(0,-22)
-    -- _g.planet(1,3)
-    -- _g.zipper(-3, 2, 0.05)
-    -- _g.chaser(0, -11).target = g_pl
+    local planet = _g.planet(0,-22,_g.MOUSE)
+    _g.chaser(0, 2, planet)
     _g.black_hole(0, 22)
-
-    -- _g.zipper(-3, -2, 0)
-    -- _g.chaser(0, -11).target = g_pl
-    -- _g.black_hole(-11, -5)
 end $$
 
 |level_mouse_update| function()

@@ -6,10 +6,11 @@ zclass[[team_none,teammate|]] -- unaffiliated team (black holes)
 
 -- a friendly planet that you protect
 zclass[[planet,model,drawable,team_blue|
-    x,@, y,@,
+    x,@, y,@,model,@,
+    max_health,100,
     health,100,
-    d_ang,.001,
-    model,%PLANET_SMALL
+    damage,10000, -- so that things that crash into the planet immediately die
+    d_ang,.001;
 ]]
 
 -- a friendly ship leaving a planet that you're protecting
@@ -23,19 +24,21 @@ zclass[[zipper,model,drawable,team_blue|
 
 -- an enemy that chases a target around, trying to crash into it
 zclass[[chaser,model,drawable,team_red|
-    x,@, y,@,
+    x,@, y,@, target,@,
     alert_color,8,
-    health,30,
-    damage,30,
+    max_health,20,
+    health,20,
+    damage,20,
     scale,2,
     model,%CHASER,
-    update,%chaser_update
+    update,%chaser_update,
+    hit,%chaser_hit;
 ]]
 
 |chaser_update| function(a)
     -- if there is a target, apply an impulse towards that target
     if not a.target or not a.target.alive then
-        a.target = select_next_target(a)
+        a.target = g_zclass_entities['team_blue'][1]
     end
     if a.target then
         local ang = atan2(a.target.x-a.x, a.target.y-a.y)
@@ -49,9 +52,10 @@ zclass[[chaser,model,drawable,team_red|
     end
 end $$
 
-function select_next_target(a)
-
-end
+|chaser_hit| function(a, b, dx, dy)
+    _g.model_hit(a, b, dx, dy)
+    if b.id == 'missile' then a.target = g_pl end
+end $$
 
 -- an enemy that sucks other things into itself and destroys them
 zclass[[black_hole,model,drawable,team_none|
