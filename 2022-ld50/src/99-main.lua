@@ -10,6 +10,11 @@ zclass[[game_state,actor|
     level_mouse; init,%level_mouse_init, update,%level_mouse_update, draw,%level_draw;
     level_cat;   init,%level_cat_init,   update,%level_cat_update,   draw,%level_draw;
     level_pig;   init,%level_pig_init,   update,%level_pig_update,   draw,%level_draw;
+
+    level_bear_retry;  init,%retry_init, update,%retry_update, draw,%retry_draw;
+    level_mouse_retry; init,%retry_init, update,%retry_update, draw,%retry_draw;
+    level_cat_retry;   init,%retry_init, update,%retry_update, draw,%retry_draw;
+    level_pig_retry;   init,%retry_init, update,%retry_update, draw,%retry_draw;
 ]]
 
 function _init()
@@ -69,3 +74,44 @@ function create_level_focus_points()
         _g.focus_point(cos(i/num)*LEVEL_RADIUS, sin(i/num)*LEVEL_RADIUS)
     end
 end
+
+zclass[[pl_checker,actor|
+    pl,@, retry_level,@,
+    update,%pl_checker_update
+]]
+
+|pl_checker_update| function(a)
+    if not g_pl.alive then
+        a:kill()
+        music(-1) sfx(24, 3)
+        _g.fader_out(1, function() g_game_state:load(a.retry_level) end)
+    end
+end $$
+
+|retry_init| function(a)
+    music(4,nil,1)
+    clean_all_actors()
+
+    _g.fader_in(1)
+    g_view = _g.view()
+    
+    create_text("wob", 0, 0)
+    -- create_text("wob,again?", 0, 0)
+
+    g_game_state:start_timer("retry", 1, function()
+        _g.fader_out(1, function()
+            if g_game_state.curr == "level_mouse_retry" then
+                g_game_state:load("level_mouse")
+            end
+        end)
+    end)
+end $$
+
+|retry_update| function(a)
+    loop_zobjs('actor',     'state')
+    loop_zobjs('model', 'model_update')
+end $$
+
+|retry_draw| function(a)
+    loop_zobjs('drawable_post', 'draw')
+end $$

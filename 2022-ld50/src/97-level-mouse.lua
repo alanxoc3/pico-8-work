@@ -11,6 +11,8 @@
         _g.twinkle(rnd(256), rnd(256), rnd(), g_view, star_view)
     end
 
+    _g.pl_checker(g_pl, "level_mouse_retry")
+
     create_level_focus_points()
     create_text("lvl", 0, -3, _g.drawable_model_post_temp)
     _g.drawable_model_post_temp(0, 0, _g.STARTING_CIRCLE, 1)

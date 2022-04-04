@@ -7,7 +7,7 @@ zclass[[view,model|
     
     update,%view_update,
     hit,%view_hit,
-    
+
     match_following, %view_match_following
 ]]
 
