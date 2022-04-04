@@ -17,7 +17,7 @@ zclass[[planet,model,drawable,team_blue|
 -- the idea is these would just spawn from the planet and quickly zip away
 zclass[[zipper,model,drawable,team_blue|
     x,@,y,@,ang,@,
-    model,%CHASER;
+    model,%ZIPPER;
     start;duration,1,next,zip;
     zip;speed,.05,duration,2;
 ]]
