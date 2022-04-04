@@ -18,7 +18,7 @@ zclass[[view,model|
     a.zooming = false
 end $$
 
-|view_hit| function(a)
+|view_hit| function(a, other)
     a.zoom_factor = max(12, a.zoom_factor - .1)
     a.zooming = true
 end $$

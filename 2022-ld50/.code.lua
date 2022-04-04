@@ -72,7 +72,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_set_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,collision_draw_debug,@,model_update,@,model_draw,@,model_collide,@,model_hit,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_update,@,view_hit,@,view_match_following,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,chaser_update,@,black_hole_update,@,black_hole_init,@,twinkle_draw,@,star_view_match_following,@,pl_update,@,pl_hit,@,level_select_draw,@,level_select_init,@,level_select_update,@,level_entrance_draw,@,logo_init,@,logo_draw,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_set_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,anchor_pos_update_anchor,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,collision_draw_debug,@,model_update,@,model_draw,@,model_collide,@,model_hit,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_update,@,view_hit,@,view_match_following,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,chaser_update,@,black_hole_update,@,black_hole_init,@,twinkle_draw,@,star_view_match_following,@,pl_update,@,pl_hit,@,pl_alert_destroy,@,pl_alert_update,@,pl_alert_draw,@,alert_radar_register,@,level_select_draw,@,level_select_init,@,level_select_update,@,level_entrance_draw,@,logo_init,@,logo_draw,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -129,6 +129,9 @@ end,function(a)
 a.ang+=a.d_ang
 a.ax=a.speed*cos(a.ang)
 a.ay=a.speed*sin(a.ang)
+end,function(a)
+a.x=a.anchoring.x
+a.y=a.anchoring.y
 end,function(a)
 add(a.anchoring.collision_circs,a)
 a:follow_anchoring()
@@ -235,7 +238,7 @@ if not a.zooming then
 a.zoom_factor=min(16,a.zoom_factor+.1)
 end
 a.zooming=false
-end,function(a)
+end,function(a,other)
 a.zoom_factor=max(12,a.zoom_factor-.1)
 a.zooming=true
 end,function(a)
@@ -287,6 +290,39 @@ a.speed=-ybtn()*.01
 a.d_ang=-xbtn()*.01
 end,function(a,b,dx,dy)
 a:explode()
+end,function(a)
+a.alert_radar.alerts[a.pointing_to]=nil
+end,function(a)
+if a.anchoring.alive and a.pointing_to.alive then
+local x,y=a.pointing_to.x-a.anchoring.x,a.pointing_to.y-a.anchoring.y
+a.ang=atan2(x,y)
+a.dist=dist_between_circles(a.pointing_to,a.anchoring)
+else
+if a.curr=="normal"then a:load"dying" end
+end
+end,function(a)
+local dist=max(1,a.dist/2)
+local scale=1
+if a.curr=="dying"then
+scale=1-a:get_elapsed_percent[[state]]
+end
+if dist>2 then
+local minimize=12
+local x1,y1=a.x+cos(a.ang)*1.5,a.y+sin(a.ang)*1.5
+local x2,y2=x1+cos(a.ang)*dist/minimize*scale,y1+sin(a.ang)*dist/minimize*scale
+line(zoomx(x1),zoomy(y1),zoomx(x2),zoomy(y2),8)
+end
+end,function(a,others)
+local l=0
+for k,v in pairs(a.alerts)do
+l+=1
+end
+printh(l)
+foreach(others,function(other)
+if not a.alerts[other]then
+a.alerts[other]=_g.pl_alert(a,a.anchoring,other)
+end
+end)
 end,function()
 loop_zobjs_in_view("drawable_pre","draw")
 loop_zobjs_in_view("drawable","draw")
@@ -299,6 +335,7 @@ g_star_view=_g.star_view(g_pl)
 _g.fader_in(1)
 g_title_screen_coord=30
 g_title_screen_dim=g_title_screen_coord*2
+_g.alert_radar(g_pl)
 create_text("rewob",0,-2,1)
 _g.level_entrance(-12,0,_g.LEVEL_LEFT,.75,.001)
 _g.level_entrance(12,0,_g.LEVEL_RIGHT,.75,.001)
@@ -319,10 +356,14 @@ loop_zobjs("chaser","collide",g_zclass_entities["view"])
 loop_zobjs("black_hole","collide",g_zclass_entities["pl"])
 loop_zobjs("black_hole","collide",g_zclass_entities["view"])
 loop_zobjs("level_entrance","collide",g_zclass_entities["view"])
+loop_zobjs("alert_radar","register",g_zclass_entities["chaser"])
+loop_zobjs("alert_radar","register",g_zclass_entities["black_hole"])
+loop_zobjs("alert_radar","register",g_zclass_entities["level_entrance"])
 loop_zobjs("collision_circ","follow_anchoring")
 loop_zobjs("mov","mov_update")
 loop_zobjs("acc","acc_update")
 loop_zobjs("vec","vec_update")
+loop_zobjs("anchor_pos","update_anchor")
 loop_zobjs("model","model_update")
 if g_pl.x>g_title_screen_coord then g_pl.x-=g_title_screen_dim-1 g_view.x-=g_title_screen_dim-1 end
 if g_pl.y>g_title_screen_coord then g_pl.y-=g_title_screen_dim-1 g_view.y-=g_title_screen_dim-1 end
@@ -423,6 +464,7 @@ zclass[[pos|x,0,y,0]]
 zclass[[vec,pos|dx,0,dy,0,vec_update,%vec_update]]
 zclass[[acc,vec|inertia_x,.95,inertia_y,.95,ax,0,ay,0,acc_update,%acc_update]]
 zclass[[mov,acc|ang,0,speed,0,d_ang,0,mov_update,%mov_update]]
+zclass[[anchor_pos,pos|anchoring;x,0,y,0;update_anchor,%anchor_pos_update_anchor]]
 zclass[[collision_circ,vec,actor,drawable|anchoring,@,offset_x,@,offset_y,@,radius,@,inertia_x,1,inertia_y,1,follow_anchoring,%collision_follow_anchoring,check_collision,%check_collision,init,%collision_init,draw,%collision_draw_debug]]
 function dist_between_circles(a,b)
 local x,y=b.x-a.x,b.y-a.y
@@ -482,7 +524,9 @@ zclass[[chaser,model,drawable|x,@,y,@,team,red,health,50,damage,30,scale,2,model
 zclass[[black_hole,model,drawable|x,@,y,@,team,red,d_ang,.1,damage,32767,model,%BLACK_HOLE,init,%black_hole_init,update,%black_hole_update;]]
 zclass[[twinkle,drawable_pre|x,@,y,@,twinkle_offset,@,draw,%twinkle_draw]]
 zclass[[star_view,vec|following,@,match_following,%star_view_match_following]]
-zclass[[pl,actor,model,drawable|x,@,y,@,missile_ready,yes,model,%PLAYER_SPACESHIP,update,%pl_update,hit,%pl_hit,collision_func,%good_collision_circ]]
+zclass[[pl,actor,model,drawable|x,@,y,@,missile_ready,yes,model,%PLAYER_SPACESHIP,update,%pl_update,hit,%pl_hit,collision_func,%good_collision_circ,]]
+zclass[[pl_alert,anchor_pos,actor,drawable|alert_radar,@,anchoring,@,pointing_to,@,model,%PLAYER_ALERT,update,%pl_alert_update,dist,0,scale,1,destroyed,%pl_alert_destroy,draw,%pl_alert_draw;start;duration,1,next,normal;normal;,;dying;duration,.25,update,nop,next,wait;wait;duration,1,draw,nop]]
+zclass[[alert_radar,anchor_pos|alerts;,;anchoring,@,model,%ALERT_RADAR_CIRC,register,%alert_radar_register,update,%alert_radar_update,draw,%pl_alert_draw,]]
 zclass[[drawable_model_post,model,drawable_post|x,@,y,@,model,@]]
 function create_text(text,x,y,spacing)
 local new_text=""

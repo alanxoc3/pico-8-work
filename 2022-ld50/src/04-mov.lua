@@ -36,6 +36,12 @@ zclass[[mov,acc|
     a.ay = a.speed*sin(a.ang)
 end $$
 
+zclass[[anchor_pos,pos|anchoring;x,0,y,0;update_anchor,%anchor_pos_update_anchor]]
+|anchor_pos_update_anchor| function(a)
+    a.x = a.anchoring.x
+    a.y = a.anchoring.y
+end $$
+
 -- basically, copies all the speed/movement properties of something
 zclass[[collision_circ,vec,actor
 -- DEBUG_BEGIN

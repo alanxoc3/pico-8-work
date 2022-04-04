@@ -49,6 +49,8 @@ end $$
     g_title_screen_coord = 30
     g_title_screen_dim = g_title_screen_coord*2
 
+    _g.alert_radar(g_pl)
+
     -- title
     create_text("rewob", 0, -2, 1)
 
@@ -80,15 +82,21 @@ end $$
     loop_zobjs('black_hole', 'collide', g_zclass_entities['pl'])
     loop_zobjs('black_hole', 'collide', g_zclass_entities['view'])
     loop_zobjs('level_entrance', 'collide', g_zclass_entities['view'])
+
+    loop_zobjs('alert_radar', 'register', g_zclass_entities['chaser'])
+    loop_zobjs('alert_radar', 'register', g_zclass_entities['black_hole'])
+    loop_zobjs('alert_radar', 'register', g_zclass_entities['level_entrance'])
+
     loop_zobjs('collision_circ', 'follow_anchoring')
     loop_zobjs('mov', 'mov_update')
     loop_zobjs('acc', 'acc_update')
     loop_zobjs('vec', 'vec_update')
+    loop_zobjs('anchor_pos', 'update_anchor')
 
     loop_zobjs('model', 'model_update')
 
     -- wrap the level select screen
-    if g_pl                                   .x >  g_title_screen_coord then g_pl.x -= g_title_screen_dim-1 g_view.x -= g_title_screen_dim-1 end
+    if g_pl.x >  g_title_screen_coord then g_pl.x -= g_title_screen_dim-1 g_view.x -= g_title_screen_dim-1 end
     if g_pl.y >  g_title_screen_coord then g_pl.y -= g_title_screen_dim-1 g_view.y -= g_title_screen_dim-1 end
     if g_pl.x < -g_title_screen_coord then g_pl.x += g_title_screen_dim-1 g_view.x += g_title_screen_dim-1 end
     if g_pl.y < -g_title_screen_coord then g_pl.y += g_title_screen_dim-1 g_view.y += g_title_screen_dim-1 end
