@@ -58,7 +58,7 @@ zclass[[black_hole,model,drawable,team_none|
     x,@, y,@,
     alert_color,8,
     d_ang,.1, -- spinz fast
-    damage,32767, -- basically infinite damage
+    damage,10000, -- basically infinite damage
     model,%BLACK_HOLE,
     tug,%black_hole_tug;
 ]]
