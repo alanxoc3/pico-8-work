@@ -1,25 +1,12 @@
 -- 'team' to avoid friendly fire?
-g_teams = {}
-
-zclass[[teammate|
-    team,none, -- default, should usually be overridden
-    init,%teammate_init,
-    destroyed,%teammate_destroyed;
-]]
-
-|teammate_init| function(a)
-    g_teams[a.team] = g_teams[a.team] or {}
-    add(g_teams[a.team], a)
-end $$
-
-|teammate_destroyed| function(a)
-    del(g_teams[a.team] or {}, a)
-end $$
+zclass[[teammate|]]
+zclass[[team_red,teammate|]]  -- enemy team
+zclass[[team_blue,teammate|]] -- player team
+zclass[[team_none,teammate|]] -- unaffiliated team (black holes)
 
 -- a friendly planet that you protect
-zclass[[planet,model,drawable,teammate|
+zclass[[planet,model,drawable,team_blue|
     x,@, y,@,
-    team,blue,
     health,100,
     d_ang,.001,
     model,%PLANET_SMALL
@@ -27,18 +14,16 @@ zclass[[planet,model,drawable,teammate|
 
 -- a friendly ship leaving a planet that you're protecting
 -- the idea is these would just spawn from the planet and quickly zip away
-zclass[[zipper,model,drawable,teammate|
+zclass[[zipper,model,drawable,team_blue|
     x,@,y,@,ang,@,
-    team,blue,
     model,%CHASER;
     start;duration,1,next,zip;
     zip;speed,.05,duration,2;
 ]]
 
 -- an enemy that chases a target around, trying to crash into it
-zclass[[chaser,model,drawable,teammate|
+zclass[[chaser,model,drawable,team_red|
     x,@, y,@,
-    team,red,
     alert_color,8,
     health,30,
     damage,30,
@@ -69,7 +54,7 @@ function select_next_target(a)
 end
 
 -- an enemy that sucks other things into itself and destroys them
-zclass[[black_hole,model,drawable,teammate|
+zclass[[black_hole,model,drawable,team_none|
     x,@, y,@,
     alert_color,8,
     d_ang,.1, -- spinz fast
