@@ -299,7 +299,7 @@ g_star_view=_g.star_view(g_pl)
 _g.fader_in(1)
 g_title_screen_coord=30
 g_title_screen_dim=g_title_screen_coord*2
-create_text("abc",0,-3,1)
+create_text("rewob",0,-2,1)
 _g.level_entrance(-12,0,_g.LEVEL_LEFT,.75,.001)
 _g.level_entrance(12,0,_g.LEVEL_RIGHT,.75,.001)
 _g.level_entrance(0,12,_g.LEVEL_DOWN,.75,.001)

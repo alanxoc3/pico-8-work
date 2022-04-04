@@ -50,7 +50,7 @@ end $$
     g_title_screen_dim = g_title_screen_coord*2
 
     -- title
-    create_text("abc", 0, -3, 1)
+    create_text("rewob", 0, -2, 1)
 
     -- level entrances
     _g.level_entrance(-12, 0, _g.LEVEL_LEFT,  .75, .001)
