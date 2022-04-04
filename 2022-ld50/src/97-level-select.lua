@@ -48,7 +48,7 @@ end
     -- [0,0] is the center of the level
     g_pl = _g.pl(0, 0) -- add player
     g_view = _g.view(g_pl)
-    local star_view = _g.star_view(pl) -- this view is just for stars, so they don't lose their position when the screen wraps
+    local star_view = _g.star_view(g_pl) -- this view is just for stars, so they don't lose their position when the screen wraps
     for i=1,50 do
         _g.twinkle(rnd(256), rnd(256), rnd(), g_view, star_view)
     end

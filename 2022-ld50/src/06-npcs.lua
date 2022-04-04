@@ -59,8 +59,10 @@ zclass[[black_hole,model,drawable,team_none|
     alert_color,8,
     d_ang,.1, -- spinz fast
     damage,10000, -- basically infinite damage
-    model,%BLACK_HOLE,
-    tug,%black_hole_tug;
+    model,%BLACK_HOLE;
+
+    start;duration,2, tug,nop, next,run;
+    run;tug,%black_hole_tug;
 ]]
 
 |black_hole_tug| function(a, obj_list)

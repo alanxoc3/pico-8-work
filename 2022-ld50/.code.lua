@@ -360,7 +360,7 @@ music(32,1000,7)
 clean_all_entities()
 g_pl=_g.pl(0,0)
 g_view=_g.view(g_pl)
-local star_view=_g.star_view(pl)
+local star_view=_g.star_view(g_pl)
 for i=1,50 do
 _g.twinkle(rnd(256),rnd(256),rnd(),g_view,star_view)
 end
@@ -400,7 +400,7 @@ music(0,1000,7)
 clean_all_entities()
 g_pl=_g.pl(0,0)
 g_view=_g.view(g_pl)
-local star_view=_g.star_view(pl)
+local star_view=_g.star_view(g_pl)
 for i=1,50 do
 _g.twinkle(rnd(256),rnd(256),rnd(),g_view,star_view)
 end
@@ -659,7 +659,7 @@ zclass[[zipper,model,drawable,team_blue|x,@,y,@,ang,@,model,%CHASER;start;durati
 zclass[[chaser,model,drawable,team_red|x,@,y,@,alert_color,8,health,30,damage,30,scale,2,model,%CHASER,update,%chaser_update]]
 function select_next_target(a)
 end
-zclass[[black_hole,model,drawable,team_none|x,@,y,@,alert_color,8,d_ang,.1,damage,10000,model,%BLACK_HOLE,tug,%black_hole_tug;]]
+zclass[[black_hole,model,drawable,team_none|x,@,y,@,alert_color,8,d_ang,.1,damage,10000,model,%BLACK_HOLE;start;duration,2,tug,nop,next,run;run;tug,%black_hole_tug;]]
 zclass[[twinkle,drawable_pre|x,@,y,@,twinkle_offset,@,view,@,star_view,@,draw,%twinkle_draw]]
 zclass[[star_view,vec|following,@,match_following,%star_view_match_following]]
 zclass[[pl,actor,model,drawable,team_blue|x,@,y,@,missile_ready,yes,model,%PLAYER_SPACESHIP,update,%pl_update,hit,%pl_hit,collision_func,%good_collision_circ,]]
