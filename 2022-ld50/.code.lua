@@ -152,7 +152,7 @@ foreach(others,function(other)
 if a==other then return end
 local dist=dist_between_circles(a,other)
 if dist<0 then
-local ang=atan2(x,y)
+local ang=atan2(other.x-a.x,other.y-a.y)
 local dx,dy=cos(ang)*dist,sin(ang)*dist
 a.anchoring:hit(other.anchoring,dx,dy)
 other.anchoring:hit(a.anchoring,-dx,-dy)
@@ -266,11 +266,10 @@ sfx(23,3)
 end,function(a)
 _g.missile_pop(a.x,a.y)
 end,function(a,b,dx,dy)
-a.dx=-dx
-a.dy=-dy
 a:kill()
 end,function(a)
-a:explode(10)
+a:model_update()
+a:explode(.2)
 end,function(a)
 if not a.target or not a.target.alive then
 a.target=select_next_target(a)
@@ -286,8 +285,8 @@ end,function(a,obj_list)
 foreach(obj_list,function(obj)
 if a==obj then return end
 local ang=atan2(a.x-obj.x,a.y-obj.y)
-obj.dx+=cos(ang)*.001
-obj.dy+=sin(ang)*.001
+obj.dx+=cos(ang)*.0004
+obj.dy+=sin(ang)*.0004
 end)
 end,function(a)
 local factor=a.view.zoom_factor/16
@@ -314,7 +313,12 @@ a.speed=0
 end
 a.d_ang=-xbtn()*.01
 end,function(a,b,dx,dy)
+if b.parents["team_blue"]then
+a.dx+=dx
+a.dy+=dy
+else
 a:explode()
+end
 end,function(a)
 a.alert_radar.alerts[a.pointing_to]=nil
 end,function(a)
@@ -367,14 +371,14 @@ _g.drawable_model_post_temp(0,0,_g.STARTING_CIRCLE,1)
 create_text("mouse",0,3,_g.drawable_model_post_temp)
 _g.fader_in(1)
 _g.alert_radar(g_pl)
-_g.planet(1,3)
-_g.black_hole(1,3)
+_g.planet(0,-22)
+_g.black_hole(0,22)
 end,function()
 loop_zobjs("actor","state")
 loop_zobjs("view","match_following")
 loop_zobjs("star_view","match_following")
-loop_zobjs("black_hole","collide",g_zclass_entities["pl"])
-loop_zobjs("black_hole","collide",g_zclass_entities["view"])
+loop_zobjs("missile","collide",g_zclass_entities["teammate"])
+loop_zobjs("teammate","collide",g_zclass_entities["teammate"])
 loop_zobjs("alert_radar","register",g_zclass_entities["planet"])
 loop_zobjs("alert_radar","register",g_zclass_entities["view"])
 loop_zobjs("focus_point","collide",g_zclass_entities["view"])

@@ -67,7 +67,7 @@ zclass[[black_hole,model,drawable,team_none|
     foreach(obj_list, function(obj) 
         if a == obj then return end
         local ang = atan2(a.x-obj.x, a.y-obj.y)
-        obj.dx += cos(ang) * .001
-        obj.dy += sin(ang) * .001
+        obj.dx += cos(ang) * .0004
+        obj.dy += sin(ang) * .0004
     end)
 end $$

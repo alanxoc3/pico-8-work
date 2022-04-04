@@ -25,11 +25,10 @@ end $$
 end $$
 
 |missile_hit| function(a, b, dx, dy)
-    a.dx = -dx
-    a.dy = -dy
     a:kill()
 end $$
 
 |missile_pop_init| function(a)
-    a:explode(10)
+    a:model_update()
+    a:explode(.2)
 end $$
