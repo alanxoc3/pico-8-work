@@ -49,17 +49,20 @@ end
     g_pl = _g.pl(0, 0) -- add player
     g_view = _g.view(g_pl)
     local star_view = _g.star_view(pl) -- this view is just for stars, so they don't lose their position when the screen wraps
+    for i=1,50 do
+        _g.twinkle(rnd(256), rnd(256), rnd(), g_view, star_view)
+    end
 
     _g.fader_in(1) -- to show the level
-    _g.drawable_model_post(0, 0, _g.STARTING_CIRCLE)
     _g.alert_radar(g_pl)
 
     g_title_screen_coord = 30
     g_title_screen_dim = g_title_screen_coord*2
 
     -- title
-    create_text("rewob", 0, -3)
-    create_text("ldjam50", 0, 3)
+    create_text("rewob", 0, -3, _g.drawable_model_post_temp)
+    _g.drawable_model_post_temp(0, 0, _g.STARTING_CIRCLE)
+    create_text("ldjam50", 0, 3, _g.drawable_model_post_temp)
 
     -- level entrances
     create_text("lvl",    -12,  -2.5)  create_text("cat",   -12, 2.5)  _g.level_entrance(-12, 0, _g.LEVEL_LEFT, "level_cat")
@@ -72,16 +75,6 @@ end
     create_text("sfx,amorg", -12, 12)
     create_text("made,with,pico8", 12, 12)
 
-    -- add planets
-    _g.planet(1,3)
-    _g.zipper(-3, 2, 0.05)
-    _g.chaser(0, -11).target = g_pl
-    _g.black_hole(-11, -5)
-
-    -- add background stars
-    for i=1,50 do
-        _g.twinkle(rnd(256), rnd(256), rnd(), g_view, star_view)
-    end
 end $$
 
 |level_select_update| function()
@@ -89,21 +82,12 @@ end $$
     loop_zobjs('view',      'match_following')
     loop_zobjs('star_view', 'match_following')
 
-    -- loop_zobjs('chaser', 'collide', g_zclass_entities['pl'])
-    -- loop_zobjs('chaser', 'collide', g_zclass_entities['missile'])
-    -- loop_zobjs('chaser', 'collide', g_zclass_entities['view'])
-    -- loop_zobjs('black_hole', 'collide', g_zclass_entities['pl'])
-    -- loop_zobjs('black_hole', 'collide', g_zclass_entities['view'])
-    -- loop_zobjs('alert_radar', 'register', g_zclass_entities['chaser'])
-    -- loop_zobjs('alert_radar', 'register', g_zclass_entities['black_hole'])
-
     loop_zobjs('level_entrance', 'collide', g_zclass_entities['view'])
     loop_zobjs('level_entrance', 'collide', g_zclass_entities['pl'])
     loop_zobjs('focus_point', 'collide', g_zclass_entities['view'])
 
     loop_zobjs('alert_radar', 'register', g_zclass_entities['level_entrance'])
 
-    loop_zobjs('black_hole', 'tug', g_zclass_entities['teammate']) -- affects dx & dy of all 'teammate' objects
     loop_zobjs('collision_circ', 'follow_anchoring')
     loop_zobjs('mov', 'mov_update')
     loop_zobjs('acc', 'acc_update')
