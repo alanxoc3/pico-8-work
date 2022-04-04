@@ -72,7 +72,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_set_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,collision_draw_debug,@,model_update,@,model_draw,@,model_collide,@,model_hit,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_update,@,view_hit,@,view_match_following,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,twinkle_draw,@,star_view_match_following,@,pl_update,@,pl_hit,@,level_select_draw,@,level_select_init,@,level_select_update,@,level_entrance_draw,@,logo_init,@,logo_draw,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_set_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,collision_draw_debug,@,model_update,@,model_draw,@,model_collide,@,model_hit,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_update,@,view_hit,@,view_match_following,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,chaser_update,@,black_hole_update,@,black_hole_init,@,twinkle_draw,@,star_view_match_following,@,pl_update,@,pl_hit,@,level_select_draw,@,level_select_init,@,level_select_update,@,level_entrance_draw,@,logo_init,@,logo_draw,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -257,6 +257,17 @@ a:kill()
 end,function(a)
 a:explode(.2)
 end,function(a)
+if a.target then
+local ang=atan2(a.target.x-a.x,a.target.y-a.y)
+a.d_ang=sgn(ang-a.ang%1)*.01
+a.speed=.004
+else
+a.speed=0
+end
+end,function(a)
+end,function(a)
+a:set_timer("fade",10,function()a:explode(.2)end)
+end,function(a)
 local factor=g_view.zoom_factor/16
 local x=((-g_star_view.x+a.x)%192)*factor-192/2*factor+64
 local y=((-g_star_view.y+a.y)%192)*factor-192/2*factor+64
@@ -293,6 +304,8 @@ _g.level_entrance(-12,0,_g.LEVEL_LEFT,.75,.001)
 _g.level_entrance(12,0,_g.LEVEL_RIGHT,.75,.001)
 _g.level_entrance(0,12,_g.LEVEL_DOWN,.75,.001)
 _g.level_entrance(0,-12,_g.LEVEL_UP,.75,.001)
+_g.chaser(0,-11).target=g_pl
+_g.black_hole(-11,-5)
 for i=1,50 do
 _g.twinkle(rnd(256),rnd(256),rnd())
 end
@@ -300,9 +313,11 @@ end,function()
 loop_zobjs("actor","state")
 loop_zobjs("view","match_following")
 loop_zobjs("star_view","match_following")
-loop_zobjs("wall","collide",g_zclass_entities["pl"])
-loop_zobjs("wall","collide",g_zclass_entities["missile"])
-loop_zobjs("wall","collide",g_zclass_entities["view"])
+loop_zobjs("chaser","collide",g_zclass_entities["pl"])
+loop_zobjs("chaser","collide",g_zclass_entities["missile"])
+loop_zobjs("chaser","collide",g_zclass_entities["view"])
+loop_zobjs("black_hole","collide",g_zclass_entities["pl"])
+loop_zobjs("black_hole","collide",g_zclass_entities["view"])
 loop_zobjs("level_entrance","collide",g_zclass_entities["view"])
 loop_zobjs("collision_circ","follow_anchoring")
 loop_zobjs("mov","mov_update")
@@ -462,11 +477,11 @@ zclass[[line_particle,vec,actor,drawable_post|ang,@,x,@,y,@,x1,@,y1,@,x2,@,y2,@,
 zclass[[view,model|following,@,model,%VIEW_COLLISION_CIRC,scale,5,zoom_factor,16,zooming,false,update,%view_update,hit,%view_hit,match_following,%view_match_following]]
 zclass[[missile,model,drawable|x,@,y,@,dx,@,dy,@,ang,@,model,%MISSILE,speed,0.05,damage,1,inertia_x,1,inertia_y,1,destroyed,%missile_destroyed,hit,%missile_hit;start;duration,2;]]
 zclass[[missile_pop,model,drawable|x,@,y,@,model,%MISSILE_POP,init,%missile_pop_init]]
+zclass[[planet,model,drawable|x,@,y,@,team,blue,health,100,d_ang,.001,model,%PLANET_SMALL]]
+zclass[[chaser,model,drawable|x,@,y,@,team,red,health,50,damage,30,scale,2,model,%CATEROID,update,%chaser_update]]
+zclass[[black_hole,model,drawable|x,@,y,@,team,red,d_ang,.1,damage,32767,model,%CATEROID,init,%black_hole_init,update,%black_hole_update;]]
 zclass[[twinkle,drawable_pre|x,@,y,@,twinkle_offset,@,draw,%twinkle_draw]]
 zclass[[star_view,vec|following,@,match_following,%star_view_match_following]]
-zclass[[wall|]]
-zclass[[planet,actor,model,drawable|x,@,y,@,d_ang,.001,model,%PLANET_SMALL]]
-zclass[[cateroid,model,wall,drawable|x,@,y,@,d_ang,.001,health,50,scale,2,model,%CATEROID]]
 zclass[[pl,actor,model,drawable|x,@,y,@,missile_ready,yes,model,%PLAYER_SPACESHIP,update,%pl_update,hit,%pl_hit,collision_func,%good_collision_circ]]
 zclass[[drawable_model_post,model,drawable_post|x,@,y,@,model,@]]
 function create_text(text,x,y,spacing)

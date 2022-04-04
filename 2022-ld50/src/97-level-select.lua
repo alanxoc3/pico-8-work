@@ -60,7 +60,8 @@ end $$
 
     -- add planets
     -- _g.planet(1,3)
-    -- _g.cateroid(0, -11)
+    _g.chaser(0, -11).target = g_pl
+    _g.black_hole(-11, -5)
 
     -- add background stars
     for i=1,50 do
@@ -73,9 +74,11 @@ end $$
     loop_zobjs('view',      'match_following')
     loop_zobjs('star_view', 'match_following')
 
-    loop_zobjs('wall', 'collide', g_zclass_entities['pl'])
-    loop_zobjs('wall', 'collide', g_zclass_entities['missile'])
-    loop_zobjs('wall', 'collide', g_zclass_entities['view'])
+    loop_zobjs('chaser', 'collide', g_zclass_entities['pl'])
+    loop_zobjs('chaser', 'collide', g_zclass_entities['missile'])
+    loop_zobjs('chaser', 'collide', g_zclass_entities['view'])
+    loop_zobjs('black_hole', 'collide', g_zclass_entities['pl'])
+    loop_zobjs('black_hole', 'collide', g_zclass_entities['view'])
     loop_zobjs('level_entrance', 'collide', g_zclass_entities['view'])
     loop_zobjs('collision_circ', 'follow_anchoring')
     loop_zobjs('mov', 'mov_update')
