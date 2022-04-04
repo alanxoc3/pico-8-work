@@ -345,15 +345,15 @@ end
 end)
 end,function()
 music(8,1000,7)
-clean_all_actors()
+clean_all_entities()
 end,function()
 end,function()
 music(24,1000,7)
-clean_all_actors()
+clean_all_entities()
 end,function()
 end,function()
 music(32,1000,7)
-clean_all_actors()
+clean_all_entities()
 g_pl=_g.pl(0,0)
 g_view=_g.view(g_pl)
 local star_view=_g.star_view(pl)
@@ -388,12 +388,12 @@ loop_zobjs("model","model_update")
 check_level_bounds()
 end,function()
 music(16,1000,7)
-clean_all_actors()
+clean_all_entities()
 end,function()
 end,function()
 end,function()
 music(0,1000,7)
-clean_all_actors()
+clean_all_entities()
 g_pl=_g.pl(0,0)
 g_view=_g.view(g_pl)
 local star_view=_g.star_view(pl)
@@ -470,7 +470,7 @@ _g.fader_out(1,function()g_game_state:load(a.retry_level)end)
 end
 end,function(a)
 music(4,nil,1)
-clean_all_actors()
+clean_all_entities()
 _g.fader_in(1)
 g_view=_g.view()
 create_text("wob",0,0)
@@ -562,11 +562,24 @@ end
 return str.."}"
 end
 zclass[[actor,timer|load,%actor_load,state,%actor_state,kill,%actor_kill,clean,%actor_clean,alive,yes,duration,null,curr,start,next,null,init,nop,update,nop,destroyed,nop;]]
-function clean_all_actors()
-foreach(g_zclass_entities["actor"],function(actor)
-actor:kill()
-actor:clean()
-end)
+function clean_all_entities(...)
+local objs={}
+local exclusions={game_state=true}
+foreach({...},function(exclusion)exclusions[exclusion]=true end)
+for class,entities in pairs(g_zclass_entities)do
+for entity in all(entities)do
+objs[entity]=entity.id
+end
+end
+for obj,id in pairs(objs)do
+if not exclusions[id]then
+if obj.parents.actor then
+obj:kill()
+obj:clean()
+end
+deregister_zobj(obj)
+end
+end
 end
 zclass[[drawable|]]
 zclass[[drawable_pre|]]

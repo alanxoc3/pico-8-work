@@ -44,7 +44,7 @@ end
 
 |level_select_init| function()
     music(0,1000,7)
-    clean_all_actors()
+    clean_all_entities()
     -- [0,0] is the center of the level
     g_pl = _g.pl(0, 0) -- add player
     g_view = _g.view(g_pl)

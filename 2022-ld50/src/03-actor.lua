@@ -59,9 +59,25 @@ end $$
 end $$
 
 -- parameter is exclusion
-function clean_all_actors()
-    foreach(g_zclass_entities["actor"], function(actor)
-        actor:kill()
-        actor:clean()
-    end)
+function clean_all_entities(...)
+    local objs = {}
+    local exclusions = { game_state=true }
+
+    foreach({...}, function(exclusion) exclusions[exclusion] = true end)
+    
+    for class,entities in pairs(g_zclass_entities) do
+        for entity in all(entities) do
+            objs[entity] = entity.id
+        end
+    end
+
+    for obj,id in pairs(objs) do
+        if not exclusions[id] then
+            if obj.parents.actor then
+                obj:kill()
+                obj:clean()
+            end
+            deregister_zobj(obj)
+        end
+    end
 end

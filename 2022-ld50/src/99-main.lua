@@ -90,7 +90,7 @@ end $$
 
 |retry_init| function(a)
     music(4,nil,1)
-    clean_all_actors()
+    clean_all_entities()
 
     _g.fader_in(1)
     g_view = _g.view()
