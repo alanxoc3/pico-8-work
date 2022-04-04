@@ -337,20 +337,23 @@ a.alerts[other]=_g.pl_alert(a,a.anchoring,other)
 end
 end)
 end,function()
-music(8,7)
-reset_zclass_entities()
+music(8,1000,7)
+clean_all_actors()
 end,function()
 end,function()
 end,function()
-music(24,7)
+music(24,1000,7)
+clean_all_actors()
 end,function()
 end,function()
 end,function()
-music(32,7)
+music(32,1000,7)
+clean_all_actors()
 end,function()
 end,function()
 end,function()
-music(16,7)
+music(16,1000,7)
+clean_all_actors()
 end,function()
 end,function()
 end,function()
@@ -358,8 +361,8 @@ loop_zobjs_in_view(g_view,"drawable_pre","draw")
 loop_zobjs_in_view(g_view,"drawable","draw")
 loop_zobjs_in_view(g_view,"drawable_post","draw")
 end,function()
-music(0,7)
-reset_zclass_entities()
+music(0,1000,7)
+clean_all_actors()
 g_pl=_g.pl(0,0)
 g_view=_g.view(g_pl)
 local star_view=_g.star_view(pl)
@@ -409,7 +412,7 @@ if other.id=="pl"then
 a:explode()
 music(-1)
 sfx(22,3)
-_g.fader_out(1.5,function()
+_g.fader_out(1,function()
 g_game_state:load(a.next_game_state)
 end)
 end
@@ -496,6 +499,12 @@ end
 return str.."}"
 end
 zclass[[actor,timer|load,%actor_load,state,%actor_state,kill,%actor_kill,clean,%actor_clean,alive,yes,duration,null,curr,start,next,null,init,nop,update,nop,destroyed,nop;]]
+function clean_all_actors()
+foreach(g_zclass_entities["actor"],function(actor)
+actor:kill()
+actor:clean()
+end)
+end
 zclass[[drawable|]]
 zclass[[drawable_pre|]]
 zclass[[drawable_post|]]
@@ -570,10 +579,6 @@ zclass[[star_view,vec|following,@,match_following,%star_view_match_following]]
 zclass[[pl,actor,model,drawable|x,@,y,@,missile_ready,yes,model,%PLAYER_SPACESHIP,update,%pl_update,hit,%pl_hit,collision_func,%good_collision_circ,]]
 zclass[[pl_alert,anchor_pos,actor,drawable|alert_radar,@,anchoring,@,pointing_to,@,model,%PLAYER_ALERT,update,%pl_alert_update,dist,0,scale,1,destroyed,%pl_alert_destroy,draw,%pl_alert_draw;start;duration,1,next,normal;normal;,;dying;duration,.25,update,nop,next,wait;wait;duration,1,draw,nop]]
 zclass[[alert_radar,anchor_pos|alerts;,;anchoring,@,model,%ALERT_RADAR_CIRC,register,%alert_radar_register,update,%alert_radar_update,draw,%pl_alert_draw,]]
-function reset_zclass_entities()
-local g_zclass_entities={game_state=g_zclass_entities[game_state]}
-local g_zclass_new_entities={}
-end
 zclass[[drawable_model_post,model,drawable_post|x,@,y,@,model,@]]
 function create_text(original_text,original_x,y)
 local l=split(original_text)

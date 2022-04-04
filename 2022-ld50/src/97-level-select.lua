@@ -41,8 +41,8 @@ end
 end $$
 
 |level_select_init| function()
-    music(0, 7)
-    reset_zclass_entities()
+    music(0,1000,7)
+    clean_all_actors()
     -- [0,0] is the center of the level
     g_pl = _g.pl(0, 0) -- add player
     g_view = _g.view(g_pl)
@@ -134,7 +134,7 @@ end $$
         a:explode()
         music(-1)
         sfx(22, 3)
-        _g.fader_out(1.5, function()
+        _g.fader_out(1, function()
             g_game_state:load(a.next_game_state)
         end)
     end

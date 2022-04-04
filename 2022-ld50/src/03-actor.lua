@@ -57,3 +57,11 @@ end $$
         deregister_zobj(a)
     end
 end $$
+
+-- parameter is exclusion
+function clean_all_actors()
+    foreach(g_zclass_entities["actor"], function(actor)
+        actor:kill()
+        actor:clean()
+    end)
+end
