@@ -54,7 +54,7 @@ zclass[[collision_circ,vec,actor
 ]]
 
 |collision_init| function(a)
-    add(a.anchoring.collisions, a)
+    add(a.anchoring.collision_circs, a)
     a:follow_anchoring()
 end $$
 
@@ -65,12 +65,17 @@ end $$
     a.alive, a.dx, a.dy, a.x, a.y = b.alive, b.dx, b.dy, b.x+off_magnitude*cos(off_ang_new), b.y+off_magnitude*sin(off_ang_new)
 end $$
 
+-- requires x, y, and radius
+function dist_between_circles(a, b)
+    local x, y = b.x-a.x, b.y-a.y
+    local minimum_dist = a.radius + b.radius
+    return approx_dist(x, y) - minimum_dist
+end
+
 |check_collision| function(a, others)
     foreach(others, function(other)
         if a == other then return end
-        local x, y = other.x-a.x, other.y-a.y
-        local minimum_dist = a.radius + other.radius
-        local dist = approx_dist(x, y) - minimum_dist
+        local dist = dist_between_circles(a, other)
         
         if dist < 0 then
             local ang = atan2(x, y)

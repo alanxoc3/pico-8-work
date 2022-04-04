@@ -1,7 +1,7 @@
 zclass[[pl,actor,model,drawable|
     x,@, y,@,
     missile_ready,yes,
-    model_obj,%PLAYER_SPACESHIP,
+    model,%PLAYER_SPACESHIP,
     update,%pl_update,
     hit,%pl_hit,
     collision_func,%good_collision_circ

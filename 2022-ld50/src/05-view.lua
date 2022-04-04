@@ -1,6 +1,6 @@
 zclass[[view,model|
     following,@,
-    model_obj,%VIEW_COLLISION_CIRC,
+    model,%VIEW_COLLISION_CIRC,
     scale,5,
     zoom_factor,16,
     zooming,false,

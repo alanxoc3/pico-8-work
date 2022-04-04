@@ -72,7 +72,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_set_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,collision_draw_debug,@,model_init,@,model_draw,@,model_collide,@,model_hit,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_update,@,view_hit,@,view_match_following,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,twinkle_draw,@,star_view_match_following,@,pl_update,@,pl_hit,@,level_select_draw,@,level_select_init,@,level_select_update,@,level_entrance_draw,@,logo_init,@,logo_draw,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_set_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,collision_draw_debug,@,model_update,@,model_draw,@,model_collide,@,model_hit,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_update,@,view_hit,@,view_match_following,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,twinkle_draw,@,star_view_match_following,@,pl_update,@,pl_hit,@,level_select_draw,@,level_select_init,@,level_select_update,@,level_entrance_draw,@,logo_init,@,logo_draw,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -130,7 +130,7 @@ a.ang+=a.d_ang
 a.ax=a.speed*cos(a.ang)
 a.ay=a.speed*sin(a.ang)
 end,function(a)
-add(a.anchoring.collisions,a)
+add(a.anchoring.collision_circs,a)
 a:follow_anchoring()
 end,function(a)
 local b=a.anchoring
@@ -140,9 +140,7 @@ a.alive,a.dx,a.dy,a.x,a.y=b.alive,b.dx,b.dy,b.x+off_magnitude*cos(off_ang_new),b
 end,function(a,others)
 foreach(others,function(other)
 if a==other then return end
-local x,y=other.x-a.x,other.y-a.y
-local minimum_dist=a.radius+other.radius
-local dist=approx_dist(x,y)-minimum_dist
+local dist=dist_between_circles(a,other)
 if dist<0 then
 local ang=atan2(x,y)
 local dx,dy=cos(ang)*dist,sin(ang)*dist
@@ -155,13 +153,20 @@ if g_debug then
 circ(zoomx(a.x),zoomy(a.y),a.radius*g_view.zoom_factor,8)
 end
 end,function(a)
-a.collisions={}
-foreach(a.model_obj.collisions or{},function(collision)
+if a.model ~=a.previous_model then
+a.radius=a.model.radius
+a.collisions=a.model.collisions
+a.shapes=a.model.shapes
+foreach(a.collision_circs,_g.actor_kill)
+a.collision_circs={}
+foreach(a.collisions or{},function(collision)
 a.collision_func(a,collision.x,collision.y,collision.radius)
 end)
+a.previous_model=a.model
+end
 end,function(a)
 local modelpoints={}
-foreach(a.model_obj.shapes,function(shape)
+foreach(a.shapes,function(shape)
 local points=translate_points(a.x,a.y,a.ang,shape)
 foreach(points,function(point)point.x=zoomx(point.x)point.y=zoomy(point.y)end)
 draw_polygon(points,shape.bg_color)
@@ -171,18 +176,18 @@ srand(t()*4\1)
 foreach(modelpoints,function(points)
 line_loop(points.points,points.c,wobble_line)
 end)
-if g_debug and a.model_obj.field_radius then
-circ(zoomx(a.x),zoomy(a.y),a.model_obj.field_radius*g_view.zoom_factor,2)
+if g_debug and a.radius then
+circ(zoomx(a.x),zoomy(a.y),a.radius*g_view.zoom_factor,2)
 end
 end,function(a,other_list)
-if #a.collisions>0 then
+if #a.collision_circs>0 then
 foreach(other_list,function(other)
-if a.model_obj.field_radius+other.model_obj.field_radius>0 then
+if a.radius+other.radius>0 then
 local x,y=other.x-a.x,other.y-a.y
-local minimum_dist=a.model_obj.field_radius+other.model_obj.field_radius
+local minimum_dist=a.radius+other.radius
 if approx_dist(x,y)<minimum_dist then
-foreach(a.collisions,function(b)
-b:check_collision(other.collisions)
+foreach(a.collision_circs,function(b)
+b:check_collision(other.collision_circs)
 end)
 end
 end
@@ -196,7 +201,7 @@ end
 end,function(a,duration)
 if a.alive then
 a:kill()
-foreach(a.model_obj.shapes,function(shape)
+foreach(a.shapes,function(shape)
 local points=translate_points(a.x,a.y,a.ang,shape)
 line_loop(points,shape.fg_color,function(x1,y1,x2,y2,color)
 local midx,midy=(x2-x1)/2+x1,(y2-y1)/2+y1
@@ -250,7 +255,6 @@ _g.missile_pop(a.x,a.y)
 end,function(a,b,dx,dy)
 a:kill()
 end,function(a)
-a:model_init()
 a:explode(.2)
 end,function(a)
 local factor=g_view.zoom_factor/16
@@ -273,9 +277,9 @@ a.d_ang=-xbtn()*.01
 end,function(a,b,dx,dy)
 a:explode()
 end,function()
-loop_zobjs("drawable_pre","draw")
-loop_zobjs("drawable","draw")
-loop_zobjs("drawable_post","draw")
+loop_zobjs_in_view("drawable_pre","draw")
+loop_zobjs_in_view("drawable","draw")
+loop_zobjs_in_view("drawable_post","draw")
 end,function()
 g_pl=_g.pl(0,0)
 _g.drawable_model_post(0,0,_g.STARTING_CIRCLE)
@@ -308,6 +312,7 @@ loop_zobjs("collision_circ","follow_anchoring")
 loop_zobjs("mov","mov_update")
 loop_zobjs("acc","acc_update")
 loop_zobjs("vec","vec_update")
+loop_zobjs("model","model_update")
 if g_pl.x>g_title_screen_coord then g_pl.x-=g_title_screen_dim-1 g_view.x-=g_title_screen_dim-1 end
 if g_pl.y>g_title_screen_coord then g_pl.y-=g_title_screen_dim-1 g_view.y-=g_title_screen_dim-1 end
 if g_pl.x<-g_title_screen_coord then g_pl.x+=g_title_screen_dim-1 g_view.x+=g_title_screen_dim-1 end
@@ -408,9 +413,14 @@ zclass[[vec,pos|dx,0,dy,0,vec_update,%vec_update]]
 zclass[[acc,vec|inertia_x,.95,inertia_y,.95,ax,0,ay,0,acc_update,%acc_update]]
 zclass[[mov,acc|ang,0,speed,0,d_ang,0,mov_update,%mov_update]]
 zclass[[collision_circ,vec,actor,drawable|anchoring,@,offset_x,@,offset_y,@,radius,@,inertia_x,1,inertia_y,1,follow_anchoring,%collision_follow_anchoring,check_collision,%check_collision,init,%collision_init,draw,%collision_draw_debug]]
+function dist_between_circles(a,b)
+local x,y=b.x-a.x,b.y-a.y
+local minimum_dist=a.radius+b.radius
+return approx_dist(x,y)-minimum_dist
+end
 zclass[[bad_collision_circ,collision_circ|anchoring,@,offset_x,@,offset_y,@,radius,@]]
 zclass[[good_collision_circ,collision_circ|anchoring,@,offset_x,@,offset_y,@,radius,@]]
-zclass[[model,mov,actor|model_obj;,;hit,%model_hit,scale,1,collision_func,%bad_collision_circ,draw,%model_draw,explode,%model_explode,collide,%model_collide,init,%model_init,model_init,%model_init]]
+zclass[[model,mov,actor|shapes;,;collisions;,;collision_circs;,;radius,0,hit,%model_hit,scale,1,collision_func,%bad_collision_circ,draw,%model_draw,explode,%model_explode,collide,%model_collide,model_update,%model_update]]
 function line_loop(points,color,linefunc)
 for i=1,#points-1,1 do
 local p1,p2=points[i],points[i+1]
@@ -422,26 +432,25 @@ scale=scale or 1
 xoffset=xoffset or 0
 yoffset=yoffset or 0
 local template=zobj(template_str)
-local model={}
-model.shapes={}
+local shapes={}
 foreach(template.lines or{},function(line_components)
 local shape={fg_color=line_components[1],bg_color=line_components[2]}
 for i=3,#line_components/2\1*2,2 do
 local x,y=line_components[i],line_components[i+1]
 add(shape,{x=(x+xoffset)*scale,y=(y+yoffset)*scale})
 end
-add(model.shapes,shape)
+add(shapes,shape)
 end)
-model.field_radius=0
-model.collisions={}
+local radius=0
+local collisions={}
 foreach(template.collisions or{},function(collision)
 local x=(collision[1]+xoffset)*scale
 local y=(collision[2]+yoffset)*scale
-local radius=abs(collision[3]*scale)
-model.field_radius=max(model.field_radius,approx_dist(x,y)+radius)
-add(model.collisions,{x=x,y=y,radius=radius})
+local local_radius=abs(collision[3]*scale)
+radius=max(radius,approx_dist(x,y)+local_radius)
+add(collisions,{x=x,y=y,radius=local_radius})
 end)
-return model
+return{radius=radius,shapes=shapes,collisions=collisions}
 end
 function translate_points(x,y,dir,shape)
 local points={}
@@ -454,17 +463,24 @@ return points
 end
 zclass[[vanishing_shape,vec,actor,drawable_pre|x,@,y,@,dx,@,dy,@,points,@,color,@,draw,%vanishing_shape_draw;start;duration,.25;]]
 zclass[[line_particle,vec,actor,drawable_post|ang,@,x,@,y,@,x1,@,y1,@,x2,@,y2,@,color,@,dx,@,dy,@,draw,%line_particle_draw,update,%line_particle_update;start;duration,.5;]]
-zclass[[view,model|following,@,model_obj,%VIEW_COLLISION_CIRC,scale,5,zoom_factor,16,zooming,false,update,%view_update,hit,%view_hit,match_following,%view_match_following]]
-zclass[[missile,model,drawable|x,@,y,@,dx,@,dy,@,ang,@,model_obj,%MISSILE,speed,0.05,damage,1,inertia_x,1,inertia_y,1,destroyed,%missile_destroyed,hit,%missile_hit;start;duration,2;]]
-zclass[[missile_pop,model,drawable|x,@,y,@,model_obj,%MISSILE_POP,init,%missile_pop_init]]
+zclass[[view,model|following,@,model,%VIEW_COLLISION_CIRC,scale,5,zoom_factor,16,zooming,false,update,%view_update,hit,%view_hit,match_following,%view_match_following]]
+zclass[[missile,model,drawable|x,@,y,@,dx,@,dy,@,ang,@,model,%MISSILE,speed,0.05,damage,1,inertia_x,1,inertia_y,1,destroyed,%missile_destroyed,hit,%missile_hit;start;duration,2;]]
+zclass[[missile_pop,model,drawable|x,@,y,@,model,%MISSILE_POP,init,%missile_pop_init]]
 zclass[[twinkle,drawable_pre|x,@,y,@,twinkle_offset,@,draw,%twinkle_draw]]
 zclass[[star_view,vec|following,@,match_following,%star_view_match_following]]
 zclass[[wall|]]
-zclass[[planet,actor,model,drawable|x,@,y,@,d_ang,.001,model_obj,%PLANET_SMALL]]
-zclass[[cateroid,model,wall,drawable|x,@,y,@,d_ang,.001,health,50,scale,2,model_obj,%CATEROID]]
-zclass[[pl,actor,model,drawable|x,@,y,@,missile_ready,yes,model_obj,%PLAYER_SPACESHIP,update,%pl_update,hit,%pl_hit,collision_func,%good_collision_circ]]
-zclass[[drawable_model_post,model,drawable_post|x,@,y,@,model_obj,@]]
-zclass[[level_entrance,model,drawable_post|x,@,y,@,model_obj,@,scale,@,d_ang,@,circ_radius,1.5,draw,%level_entrance_draw]]
+zclass[[planet,actor,model,drawable|x,@,y,@,d_ang,.001,model,%PLANET_SMALL]]
+zclass[[cateroid,model,wall,drawable|x,@,y,@,d_ang,.001,health,50,scale,2,model,%CATEROID]]
+zclass[[pl,actor,model,drawable|x,@,y,@,missile_ready,yes,model,%PLAYER_SPACESHIP,update,%pl_update,hit,%pl_hit,collision_func,%good_collision_circ]]
+zclass[[drawable_model_post,model,drawable_post|x,@,y,@,model,@]]
+function loop_zobjs_in_view(class,method_name,...)
+for inst in all(g_zclass_entities[class])do
+if inst.parents.model and dist_between_circles(g_view,inst)<0 or not inst.parents.model then
+call_not_nil(inst,method_name,inst,...)
+end
+end
+end
+zclass[[level_entrance,model,drawable_post|x,@,y,@,model,@,scale,@,d_ang,@,circ_radius,1.5,draw,%level_entrance_draw]]
 g_fade_table=zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,2,1,0,0,0;3;,3,3,3,3,1,0,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,1,1,0,0;6;,6,6,13,13,5,5,1,0;7;,7,7,6,13,13,5,1,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,5,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,1,1,0;13;,13,13,5,5,1,1,1,0;14;,14,14,13,4,2,2,1,0;15;,15,15,13,13,5,5,1,0;]]
 function fade(threshold)
 for c=0,15 do

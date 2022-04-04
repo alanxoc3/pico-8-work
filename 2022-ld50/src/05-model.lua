@@ -1,13 +1,13 @@
 zclass[[model,mov,actor|
-    model_obj;,;
+    shapes;,; collisions;,; collision_circs;,;
+    radius,0,
     hit,%model_hit,
     scale,1,
     collision_func,%bad_collision_circ,
     draw,%model_draw,
     explode,%model_explode,
     collide,%model_collide,
-    init,%model_init,
-    model_init,%model_init
+    model_update,%model_update
 ]]
 
 function line_loop(points, color, linefunc)
@@ -17,17 +17,26 @@ function line_loop(points, color, linefunc)
     end
 end
 
-|model_init| function(a)
-    -- create collision rects
-    a.collisions = {}
-    foreach(a.model_obj.collisions or {}, function(collision)
-        a.collision_func(a, collision.x, collision.y, collision.radius)
-    end)
+-- listens for a change in the "model" variable
+|model_update| function(a)
+    if a.model ~= a.previous_model then
+        a.radius = a.model.radius
+        a.collisions = a.model.collisions
+        a.shapes = a.model.shapes
+
+        foreach(a.collision_circs, _g.actor_kill)
+
+        a.collision_circs = {}
+        foreach(a.collisions or {}, function(collision)
+            a.collision_func(a, collision.x, collision.y, collision.radius)
+        end)
+        a.previous_model = a.model
+    end
 end $$
 
 |model_draw| function(a)
     local modelpoints = {}
-    foreach(a.model_obj.shapes, function(shape)
+    foreach(a.shapes, function(shape)
         local points = translate_points(a.x, a.y, a.ang, shape)
         foreach(points, function(point) point.x = zoomx(point.x) point.y = zoomy(point.y) end)
         draw_polygon(points, shape.bg_color)
@@ -40,8 +49,8 @@ end $$
     end)
 
     -- DEBUG_BEGIN
-    if g_debug and a.model_obj.field_radius then
-        circ(zoomx(a.x), zoomy(a.y), a.model_obj.field_radius*g_view.zoom_factor, 2)
+    if g_debug and a.radius then
+        circ(zoomx(a.x), zoomy(a.y), a.radius*g_view.zoom_factor, 2)
     end
     -- DEBUG_END
 end $$
@@ -52,40 +61,38 @@ function parse_model(template_str, scale, xoffset, yoffset)
     yoffset = yoffset or 0
 
     local template = zobj(template_str)
-    local model = {}
-
-    model.shapes = {}
+    local shapes = {}
     foreach(template.lines or {}, function(line_components)
         local shape = {fg_color = line_components[1], bg_color = line_components[2]}
         for i=3,#line_components/2\1*2,2 do
             local x, y = line_components[i], line_components[i+1]
             add(shape, {x=(x+xoffset)*scale, y=(y+yoffset)*scale})
         end
-        add(model.shapes, shape)
+        add(shapes, shape)
     end)
 
-    model.field_radius = 0
-    model.collisions = {}
+    local radius = 0
+    local collisions = {}
     foreach(template.collisions or {}, function(collision)
         local x = (collision[1]+xoffset)*scale
         local y = (collision[2]+yoffset)*scale
-        local radius = abs(collision[3]*scale)
-        model.field_radius = max(model.field_radius, approx_dist(x, y)+radius)
-        add(model.collisions, {x=x, y=y, radius=radius})
+        local local_radius = abs(collision[3]*scale)
+        radius = max(radius, approx_dist(x, y)+local_radius)
+        add(collisions, {x=x, y=y, radius=local_radius})
     end)
 
-    return model
+    return {radius=radius, shapes=shapes, collisions=collisions}
 end
 
 |model_collide| function(a, other_list)
-    if #a.collisions > 0 then
+    if #a.collision_circs > 0 then
         foreach(other_list, function(other)
-            if a.model_obj.field_radius + other.model_obj.field_radius > 0 then
+            if a.radius + other.radius > 0 then
                 local x, y = other.x-a.x, other.y-a.y
-                local minimum_dist = a.model_obj.field_radius + other.model_obj.field_radius
+                local minimum_dist = a.radius + other.radius
                 if approx_dist(x, y) < minimum_dist then
-                    foreach(a.collisions, function(b)
-                        b:check_collision(other.collisions)
+                    foreach(a.collision_circs, function(b)
+                        b:check_collision(other.collision_circs)
                     end)
                 end
             end
@@ -114,7 +121,7 @@ end
     if a.alive then
         a:kill()
  
-        foreach(a.model_obj.shapes, function(shape)
+        foreach(a.shapes, function(shape)
             local points = translate_points(a.x, a.y, a.ang, shape)
             line_loop(points, shape.fg_color, function(x1, y1, x2, y2, color)
                 local midx, midy = (x2-x1)/2+x1, (y2-y1)/2+y1

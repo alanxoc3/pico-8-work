@@ -1,6 +1,6 @@
 zclass[[missile,model,drawable|
     x,@,y,@,dx,@,dy,@,ang,@,     -- initial position & direction
-    model_obj,%MISSILE,
+    model,%MISSILE,
     speed,0.05,
     damage,1,
     inertia_x,1,inertia_y,1,
@@ -11,7 +11,7 @@ zclass[[missile,model,drawable|
 
 zclass[[missile_pop,model,drawable|
     x,@,y,@,
-    model_obj,%MISSILE_POP,
+    model,%MISSILE_POP,
     init,%missile_pop_init
 ]]
 
@@ -24,6 +24,5 @@ end $$
 end $$
 
 |missile_pop_init| function(a)
-    a:model_init()
     a:explode(.2)
 end $$

@@ -1,11 +1,19 @@
 zclass[[drawable_model_post,model,drawable_post|
-    x,@, y,@, model_obj,@
+    x,@, y,@, model,@
 ]]
 
+function loop_zobjs_in_view(class, method_name, ...)
+    for inst in all(g_zclass_entities[class]) do
+        if inst.parents.model and dist_between_circles(g_view, inst) < 0 or not inst.parents.model then
+            call_not_nil(inst, method_name, inst, ...)
+        end
+    end
+end
+
 |level_select_draw| function()
-    loop_zobjs('drawable_pre',  'draw')
-    loop_zobjs('drawable',      'draw')
-    loop_zobjs('drawable_post', 'draw')
+    loop_zobjs_in_view('drawable_pre',  'draw')
+    loop_zobjs_in_view('drawable',      'draw')
+    loop_zobjs_in_view('drawable_post', 'draw')
 end $$
 
 |level_select_init| function()
@@ -60,6 +68,8 @@ end $$
     loop_zobjs('acc', 'acc_update')
     loop_zobjs('vec', 'vec_update')
 
+    loop_zobjs('model', 'model_update')
+
     -- wrap the level select screen
     if g_pl.x >  g_title_screen_coord then g_pl.x -= g_title_screen_dim-1 g_view.x -= g_title_screen_dim-1 end
     if g_pl.y >  g_title_screen_coord then g_pl.y -= g_title_screen_dim-1 g_view.y -= g_title_screen_dim-1 end
@@ -68,7 +78,7 @@ end $$
 end $$
 
 zclass[[level_entrance,model,drawable_post|
-    x,@, y,@, model_obj,@, scale,@, d_ang,@,
+    x,@, y,@, model,@, scale,@, d_ang,@,
     circ_radius,1.5,
     draw, %level_entrance_draw
 ]]
