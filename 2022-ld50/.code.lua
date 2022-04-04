@@ -72,18 +72,18 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_set_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,anchor_pos_update_anchor,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,collision_draw_debug,@,model_update,@,model_draw,@,model_collide,@,model_hit,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_update,@,view_hit,@,view_match_following,@,missile_init,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,chaser_update,@,black_hole_update,@,black_hole_init,@,twinkle_draw,@,star_view_match_following,@,pl_update,@,pl_hit,@,pl_alert_destroy,@,pl_alert_update,@,pl_alert_draw,@,alert_radar_register,@,level_bear_init,@,level_bear_update,@,level_bear_draw,@,level_cat_init,@,level_cat_update,@,level_cat_draw,@,level_mouse_init,@,level_mouse_update,@,level_mouse_draw,@,level_pig_init,@,level_pig_update,@,level_pig_draw,@,level_select_draw,@,level_select_init,@,level_select_update,@,level_entrance_draw,@,level_entrance_hit,@,logo_init,@,logo_draw,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,anchor_pos_update_anchor,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,collision_draw_debug,@,model_update,@,model_draw,@,model_collide,@,model_hit,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_update,@,view_hit,@,view_match_following,@,missile_init,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,chaser_update,@,black_hole_update,@,black_hole_init,@,twinkle_draw,@,star_view_match_following,@,pl_update,@,pl_hit,@,pl_alert_destroy,@,pl_alert_update,@,pl_alert_draw,@,alert_radar_register,@,level_bear_init,@,level_bear_update,@,level_bear_draw,@,level_cat_init,@,level_cat_update,@,level_cat_draw,@,level_mouse_init,@,level_mouse_update,@,level_mouse_draw,@,level_pig_init,@,level_pig_update,@,level_pig_draw,@,level_select_draw,@,level_select_init,@,level_select_update,@,level_entrance_draw,@,level_entrance_hit,@,logo_init,@,logo_draw,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
 a.curr=stateName
-a:set_timer("state",a.duration,a.duration and function()a:load(a.next)end)
+a:stop_timer("state",a.duration,a.duration and function()a:load(a.next)end)
 else
 a:kill()
 end
 end,function(a)
-if not a:get_elapsed"state"then a:load(a.curr)end
-if a:get_elapsed"state"==0 then a:init()end
+if a:get_elapsed"state"==nil then a:load(a.curr)end
+if a:get_elapsed"state"==false then a:play_timer"state" a:init()end
 a:update()
 end,function(a)a.alive=nil end,function(a)
 if not a.alive then
@@ -94,20 +94,27 @@ end,function(a)
 g_fade=a:get_elapsed_percent"state"
 end,function(a)
 g_fade=1-a:get_elapsed_percent"state"
+end,function(...)
+timer_stop_timer(...)
+timer_play_timer(...)
 end,function(a,timer_name,duration,callback)
-a.timers[timer_name]={elapsed=0,duration=duration or 32767,callback=callback or function()end}
+a.timers[timer_name]={elapsed=false,duration=duration or 32767,callback=callback or function()end}
+end,function(a,timer_name)
+if a.timers[timer_name]and not a.timers[timer_name].elapsed then
+a.timers[timer_name].elapsed=0
+end
 end,function(a,timer_name)
 a.timers[timer_name]=nil
 end,function(a,timer_name)
 local timer=a.timers[timer_name]
-return timer and timer.elapsed
+return timer and(timer.elapsed or false)
 end,function(a,timer_name)
 local timer=a.timers[timer_name]
-return timer and timer.elapsed/timer.duration
+return timer and(timer.elapsed or 0)/timer.duration
 end,function(a)
 local finished_timers={}
 for name,timer in pairs(a.timers)do
-if timer.elapsed<timer.duration then
+if timer.elapsed and timer.elapsed<timer.duration then
 timer.elapsed=timer.elapsed+1/60
 if timer.elapsed>=timer.duration then
 add(finished_timers,timer)
@@ -273,7 +280,7 @@ a.speed=0
 end
 end,function(a)
 end,function(a)
-a:set_timer("fade",10,function()a:explode(.2)end)
+a:start_timer("fade",10,function()a:explode(.2)end)
 end,function(a)
 local factor=a.view.zoom_factor/16
 local x=((-a.star_view.x+a.x)%192)*factor-192/2*factor+64
@@ -288,7 +295,7 @@ end,function(a)
 if btn"4"and a.missile_ready then
 _g.missile(a.x+cos(a.ang)*.8,a.y+sin(a.ang)*.8,a.dx,a.dy,a.ang)
 a.missile_ready=false
-a:set_timer("missile_cooldown",0.1,function()a.missile_ready=true end)
+a:start_timer("missile_cooldown",0.1,function()a.missile_ready=true end)
 end
 if ybtn()>0 then
 a.speed=-.005
@@ -331,9 +338,7 @@ end)
 end,function()
 music(8,7)
 reset_zclass_entities()
-printh("worked")
 end,function()
-printh("worked")
 end,function()
 end,function()
 music(24,7)
@@ -400,7 +405,9 @@ if other.id=="pl"then
 a:explode()
 music(-1)
 sfx(22,3)
-_g.fader_out(1.5,function()g_game_state.load(a.next_game_state)end)
+_g.fader_out(1.5,function()
+g_game_state:load(a.next_game_state)
+end)
 end
 end,function()sfx"63" end,function(a)
 local logo_opacity=cos(a:get_elapsed_percent"state")+1
@@ -488,9 +495,9 @@ zclass[[actor,timer|load,%actor_load,state,%actor_state,kill,%actor_kill,clean,%
 zclass[[drawable|]]
 zclass[[drawable_pre|]]
 zclass[[drawable_post|]]
-zclass[[fader_out,actor|start;duration,@,destroy,@,update,%fader_out_update]]
+zclass[[fader_out,actor|start;duration,@,destroyed,@,update,%fader_out_update]]
 zclass[[fader_in,actor|start;duration,@,update,%fader_in_update]]
-zclass[[timer|timers;,;set_timer,%timer_set_timer,delete_timer,%timer_delete_timer,get_elapsed,%timer_get_elapsed,get_elapsed_percent,%timer_get_elapsed_percent,tick,%timer_tick,]]
+zclass[[timer|timers;,;start_timer,%timer_start_timer,stop_timer,%timer_stop_timer,play_timer,%timer_play_timer,delete_timer,%timer_delete_timer,get_elapsed,%timer_get_elapsed,get_elapsed_percent,%timer_get_elapsed_percent,tick,%timer_tick,]]
 zclass[[pos|x,0,y,0]]
 zclass[[vec,pos|dx,0,dy,0,vec_update,%vec_update]]
 zclass[[acc,vec|inertia_x,.95,inertia_y,.95,ax,0,ay,0,acc_update,%acc_update]]

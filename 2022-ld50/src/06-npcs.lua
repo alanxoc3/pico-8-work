@@ -49,5 +49,5 @@ zclass[[black_hole,model,drawable|
 end $$
 
 |black_hole_init| function(a)
-    a:set_timer('fade', 10, function() a:explode(.2) end)
+    a:start_timer('fade', 10, function() a:explode(.2) end)
 end $$

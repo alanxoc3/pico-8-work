@@ -133,7 +133,9 @@ end $$
         a:explode()
         music(-1)
         sfx(22, 3)
-        _g.fader_out(1.5, function() g_game_state.load(a.next_game_state) end)
+        _g.fader_out(1.5, function()
+            g_game_state:load(a.next_game_state)
+        end)
     end
 end $$
 

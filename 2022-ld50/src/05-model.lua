@@ -90,7 +90,10 @@ end
             if a.radius + other.radius > 0 then
                 local x, y = other.x-a.x, other.y-a.y
                 local minimum_dist = a.radius + other.radius
+
+
                 if approx_dist(x, y) < minimum_dist then
+
                     foreach(a.collision_circs, function(b)
                         b:check_collision(other.collision_circs)
                     end)
