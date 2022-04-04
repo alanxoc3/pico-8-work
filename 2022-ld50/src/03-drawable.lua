@@ -4,7 +4,7 @@ zclass[[drawable_pre|]]
 zclass[[drawable_post|]]
 
 zclass[[fader_out,actor|
-    start; duration,@, destroy,@, u,%fader_out_update;
+    start; duration,@, destroy,@, update,%fader_out_update
 ]]
 
 |fader_out_update| function(a)
@@ -12,7 +12,7 @@ zclass[[fader_out,actor|
 end $$
 
 zclass[[fader_in,actor|
-    start; duration,@, update,%fader_in_update;
+    start; duration,@, update,%fader_in_update
 ]]
 
 |fader_in_update| function(a)
