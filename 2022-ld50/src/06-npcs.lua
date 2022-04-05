@@ -73,7 +73,7 @@ zclass[[black_hole,model,drawlayer_20,team_none|
     alert_color,1,
     d_ang,.1, -- spinz fast
     damage,10000, -- basically infinite damage
-    tug_constant,.001,
+    tug_constant,.0004,
     model,%BLACK_HOLE;
 
     start;duration,1.5, tug,nop, next,run;
