@@ -73,6 +73,7 @@ zclass[[black_hole,model,drawable,team_none|
     alert_color,1,
     d_ang,.1, -- spinz fast
     damage,10000, -- basically infinite damage
+    tug_constant,.001,
     model,%BLACK_HOLE;
 
     start;duration,2, tug,nop, next,run;
@@ -83,7 +84,7 @@ zclass[[black_hole,model,drawable,team_none|
     foreach(obj_list, function(obj) 
         if a == obj then return end
         local ang = atan2(a.x-obj.x, a.y-obj.y)
-        obj.dx += cos(ang) * .0004
-        obj.dy += sin(ang) * .0004
+        obj.dx += cos(ang) * a.tug_constant
+        obj.dy += sin(ang) * a.tug_constant
     end)
 end $$

@@ -72,7 +72,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,anchor_pos_update_anchor,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,model_update,@,model_draw,@,model_collide,@,model_hit,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_update,@,view_hit,@,view_match_following,@,missile_init,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,planet_evac,@,chaser_update,@,chaser_hit,@,black_hole_tug,@,twinkle_draw,@,star_view_match_following,@,pl_update,@,pl_hit,@,pl_alert_destroy,@,pl_alert_update,@,pl_alert_draw,@,alert_radar_register,@,level_bear_init,@,level_cat_init,@,level_mouse_init,@,level_pig_init,@,level_select_init,@,level_select_update,@,level_entrance_draw,@,level_entrance_hit,@,logo_init,@,logo_draw,@,level_select_draw,@,level_draw,@,title_screen_draw,@,score_counter_draw,@,game_checker_update,@,retry_init,@,retry_update,@,retry_draw,@,win_init,@,win_update,@,win_draw,@,level_update,@,spawn_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,anchor_pos_update_anchor,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,model_update,@,model_draw,@,model_collide,@,model_hit,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_update,@,view_hit,@,view_match_following,@,missile_init,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,missile_init,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,planet_evac,@,chaser_update,@,chaser_hit,@,black_hole_tug,@,twinkle_draw,@,star_view_match_following,@,pl_update,@,pl_hit,@,pl_alert_destroy,@,pl_alert_update,@,pl_alert_draw,@,alert_radar_register,@,bar_update,@,bar_draw,@,level_bear_init,@,level_cat_init,@,level_mouse_init,@,level_pig_init,@,level_select_init,@,level_select_update,@,level_entrance_draw,@,level_entrance_hit,@,logo_init,@,logo_draw,@,level_select_draw,@,level_draw,@,title_screen_draw,@,stats_displayer_draw,@,game_checker_update,@,retry_init,@,retry_update,@,retry_draw,@,win_init,@,win_update,@,win_draw,@,level_update,@,spawn_init,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -259,6 +259,15 @@ end,function(a)
 a:model_update()
 a:explode(.2)
 end,function(a)
+sfx(23,3)
+end,function(a)
+_g.missile_pop(a.x,a.y)
+end,function(a,b,dx,dy)
+a:kill()
+end,function(a)
+a:model_update()
+a:explode(.2)
+end,function(a)
 _g.zipper(a.x,a.y,a.ang)
 a.done_ships+=1
 if a.done_ships==a.total_ships then a.next="done" end
@@ -280,8 +289,8 @@ end,function(a,obj_list)
 foreach(obj_list,function(obj)
 if a==obj then return end
 local ang=atan2(a.x-obj.x,a.y-obj.y)
-obj.dx+=cos(ang)*.0004
-obj.dy+=sin(ang)*.0004
+obj.dx+=cos(ang)*a.tug_constant
+obj.dy+=sin(ang)*a.tug_constant
 end)
 end,function(a)
 local factor=a.view.zoom_factor/16
@@ -294,10 +303,27 @@ a.dx=a.following.dx
 a.dy=a.following.dy
 end
 end,function(a)
+a.shoot_percent=min(1,a.shoot_percent+.01)
+if a.shoot_percent==1 then
+a.shoot_enabled=true
+end
 if btn"4"and a.missile_ready then
+if a.shoot_percent>0 and a.shoot_enabled then
+if not a.shoot_bar or not a.shoot_bar.alive then
+a.shoot_bar=_g.bar(
+a,
+function()return a.shoot_percent end,
+function()return 1 end,
+function()return a.shoot_enabled and 7 or 1 end,
+.25,1.2,3
+)
+end
+a.shoot_percent=max(0,a.shoot_percent-.1)
 _g.missile(a.x+cos(a.ang)*.8,a.y+sin(a.ang)*.8,a.dx,a.dy,a.ang)
 a.missile_ready=false
 a:start_timer("missile_cooldown",0.1,function()a.missile_ready=true end)
+if a.shoot_percent==0 then a.shoot_enabled=false end
+end
 end
 if ybtn()>0 then
 a.speed=-.0075
@@ -334,7 +360,7 @@ end
 if dist>2 then
 local minimize=12
 local x1,y1=a.x+cos(a.ang)*1.5,a.y+sin(a.ang)*1.5
-local x2,y2=x1+cos(a.ang)*dist/minimize*scale,y1+sin(a.ang)*dist/minimize*scale
+local x2,y2=x1+cos(a.ang)*min(1,dist/minimize*scale),y1+sin(a.ang)*min(1,dist/minimize*scale)
 line(zoomx(x1),zoomy(y1),zoomx(x2),zoomy(y2),a.pointing_to.alert_color or 7)
 end
 end,function(a,others)
@@ -343,6 +369,13 @@ if not a.alerts[other]then
 a.alerts[other]=_g.pl_alert(a,a.anchoring,other)
 end
 end)
+end,function(a)
+local prev_percent=a.percent
+a.percent=a.percent_func()
+a.fg=a.fg_func()a.bg=a.bg_func()
+if prev_percent ~=a.percent then a:load"start" end
+end,function(a)
+draw_circle_bar(a.percent,zoomx(a.x),zoomy(a.y),zoom(a.rmin),zoom(a.rmax),a.bg,a.fg)
 end,function()
 music(8,1000,7)
 clean_all_entities()
@@ -360,7 +393,7 @@ _g.fader_in(1)
 _g.alert_radar(g_pl)
 local planet=_g.planet(0,-22,10,_g.BEAR)
 _g.level_state(planet)
-_g.score_counter(planet)
+_g.stats_displayer(planet)
 _g.black_hole(0,22)
 _g.game_checker(g_pl,planet,"level_bear_retry","win_bear")
 end,function()
@@ -380,8 +413,8 @@ _g.fader_in(1)
 _g.alert_radar(g_pl)
 local planet=_g.planet(0,-22,10,_g.CAT)
 _g.level_state(planet)
+_g.stats_displayer(planet)
 _g.black_hole(0,22)
-_g.score_counter(planet)
 _g.game_checker(g_pl,planet,"level_cat_retry","win_cat")
 end,function()
 music(32,1000,7)
@@ -400,8 +433,9 @@ _g.fader_in(1)
 _g.alert_radar(g_pl)
 local planet=_g.planet(0,-22,10,_g.MOUSE)
 _g.level_state(planet)
-_g.score_counter(planet)
+_g.stats_displayer(planet)
 _g.black_hole(0,22)
+_g.black_hole(-22,0)
 _g.game_checker(g_pl,planet,"level_mouse_retry","win_mouse")
 end,function()
 music(16,1000,7)
@@ -420,7 +454,7 @@ _g.fader_in(1)
 _g.alert_radar(g_pl)
 local planet=_g.planet(0,-22,10,_g.PIG)
 _g.level_state(planet)
-_g.score_counter(planet)
+_g.stats_displayer(planet)
 _g.black_hole(0,22)
 _g.game_checker(g_pl,planet,"level_pig_retry","win_pig")
 end,function()
@@ -509,6 +543,8 @@ loop_zobjs_in_view(g_view,"drawable","draw")
 loop_zobjs_in_view(g_view,"drawable_post","draw")
 end,function(a)
 print(""..a.planet.done_ships.."/"..a.planet.total_ships,4,4,11)
+local width=122-5
+print(""..a.planet.done_ships.."/"..a.planet.total_ships,4,4,11)
 end,function(a)
 if not a.pl.alive then a:kill()music(-1)sfx(24,3)_g.fader_out(1,function()g_game_state:load(a.retry_level)end)
 elseif not a.planet.alive then
@@ -577,6 +613,9 @@ loop_zobjs("alert_radar","register",g_zclass_entities["planet"])
 loop_zobjs("alert_radar","register",g_zclass_entities["view"])
 loop_zobjs("alert_radar","register",g_zclass_entities["black_hole"])
 loop_zobjs("focus_point","collide",g_zclass_entities["view"])
+loop_zobjs("planet","collide",g_zclass_entities["view"])
+loop_zobjs("chaser","collide",g_zclass_entities["view"])
+loop_zobjs("zipper","collide",g_zclass_entities["view"])
 loop_zobjs("alert_radar","register",g_zclass_entities["chaser"])
 loop_zobjs("alert_radar","register",g_zclass_entities["black_hole"])
 loop_zobjs("black_hole","tug",g_zclass_entities["teammate"])
@@ -588,7 +627,6 @@ loop_zobjs("anchor_pos","update_anchor")
 loop_zobjs("model","model_update")
 check_level_bounds()
 end,function(a)
-printh("here")
 local ang=rnd()
 local x,y=cos(ang)*20,sin(ang)*20
 _g.chaser(x,y,a.planet)
@@ -745,6 +783,8 @@ zclass[[line_particle,vec,actor,drawable_post|ang,@,x,@,y,@,x1,@,y1,@,x2,@,y2,@,
 zclass[[view,model|following,@,model,%VIEW_COLLISION_CIRC,scale,5,zoom_factor,16,zooming,false,update,%view_update,hit,%view_hit,match_following,%view_match_following]]
 zclass[[missile,model,drawable|x,@,y,@,dx,@,dy,@,ang,@,model,%MISSILE,speed,0.05,damage,1,inertia_x,1,inertia_y,1,destroyed,%missile_destroyed,init,%missile_init,hit,%missile_hit;start;duration,2;]]
 zclass[[missile_pop,model,drawable|x,@,y,@,model,%MISSILE_POP,init,%missile_pop_init]]
+zclass[[missile,model,drawable|x,@,y,@,dx,@,dy,@,ang,@,model,%MISSILE,speed,0.05,damage,1,inertia_x,1,inertia_y,1,destroyed,%missile_destroyed,init,%missile_init,hit,%missile_hit;start;duration,2;]]
+zclass[[bomb,model,drawable|x,@,y,@,model,%MISSILE_POP,init,%missile_pop_init]]
 zclass[[teammate|]]
 zclass[[team_red,teammate|]]
 zclass[[team_blue,teammate|]]
@@ -752,12 +792,13 @@ zclass[[team_none,teammate|]]
 zclass[[planet,model,drawable,team_blue|x,@,y,@,total_ships,@,model,@,done_ships,0,max_health,100,health,100,damage,10000,d_ang,.001;start;duration,10,next,evac;evac;init,%planet_evac,duration,9.5,next,evac;done;,;]]
 zclass[[zipper,model,drawable,team_blue|x,@,y,@,ang,@,model,%ZIPPER;start;duration,1,next,zip;zip;speed,.05,duration,1;]]
 zclass[[chaser,model,drawable,team_red|x,@,y,@,target,@,alert_color,8,max_health,20,health,20,damage,30,scale,2,model,%CHASER,update,%chaser_update,hit,%chaser_hit;]]
-zclass[[black_hole,model,drawable,team_none|x,@,y,@,alert_color,1,d_ang,.1,damage,10000,model,%BLACK_HOLE;start;duration,2,tug,nop,next,run;run;tug,%black_hole_tug;]]
+zclass[[black_hole,model,drawable,team_none|x,@,y,@,alert_color,1,d_ang,.1,damage,10000,tug_constant,.001,model,%BLACK_HOLE;start;duration,2,tug,nop,next,run;run;tug,%black_hole_tug;]]
 zclass[[twinkle,drawable_pre|x,@,y,@,twinkle_offset,@,view,@,star_view,@,draw,%twinkle_draw]]
 zclass[[star_view,vec|following,@,match_following,%star_view_match_following]]
-zclass[[pl,actor,model,drawable,team_blue|x,@,y,@,missile_ready,yes,model,%PLAYER_SPACESHIP,update,%pl_update,hit,%pl_hit,collision_func,%good_collision_circ,]]
+zclass[[pl,actor,model,drawable,team_blue|x,@,y,@,missile_ready,yes,model,%PLAYER_SPACESHIP,update,%pl_update,shoot_percent,0,shoot_enabled,yes,hit,%pl_hit,collision_func,%good_collision_circ,]]
 zclass[[pl_alert,anchor_pos,actor,drawable|alert_radar,@,anchoring,@,pointing_to,@,model,%PLAYER_ALERT,update,%pl_alert_update,dist,0,scale,1,destroyed,%pl_alert_destroy,draw,%pl_alert_draw;start;duration,1,next,normal;normal;,;dying;duration,.25,update,nop,next,wait;wait;duration,1,draw,nop]]
 zclass[[alert_radar,anchor_pos|alerts;,;anchoring,@,model,%ALERT_RADAR_CIRC,register,%alert_radar_register,update,%alert_radar_update,draw,%pl_alert_draw,]]
+zclass[[bar,actor,anchor_pos,drawable_pre|anchoring,@,percent_func,@,bg_func,@,fg_func,@,inactive_timeout,@,rmin,@,rmax,@,draw,%bar_draw;update,%bar_update;start;duration,~inactive_timeout;]]
 zclass[[drawable_model_post,model,drawable_post|x,@,y,@,model,@]]
 zclass[[drawable_model_post_temp,model,drawable_post|x,@,y,@,model,@;start;duration,1.5,next,dying;dying;init,%model_explode;]]
 function create_text(original_text,original_x,y,func,...)
@@ -803,7 +844,7 @@ G_LEVEL_BEAR_WIN=false
 G_LEVEL_MOUSE_WIN=false
 G_LEVEL_CAT_WIN=false
 G_LEVEL_PIG_WIN=false
-zclass[[game_state,actor|ecs_exclusions;actor,true;curr,logo;logo;init,%logo_init,update,%logo_update,draw,%logo_draw,duration,2.5,next,level_select;level_select;init,%level_select_init,update,%level_select_update,draw,%level_select_draw;level_bear;init,%level_bear_init,update,%level_update,draw,%level_draw;level_mouse;init,%level_mouse_init,update,%level_update,draw,%level_draw;level_cat;init,%level_cat_init,update,%level_update,draw,%level_draw;level_pig;init,%level_pig_init,update,%level_update,draw,%level_draw;level_bear_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;level_mouse_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;level_cat_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;level_pig_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;win_bear;init,%win_init,update,%win_update,draw,%win_draw;win_mouse;init,%win_init,update,%win_update,draw,%win_draw;win_cat;init,%win_init,update,%win_update,draw,%win_draw;win_pig;init,%win_init,update,%win_update,draw,%win_draw;]]
+zclass[[game_state,actor|ecs_exclusions;actor,true;curr,level_select;logo;init,%logo_init,update,%logo_update,draw,%logo_draw,duration,2.5,next,level_select;level_select;init,%level_select_init,update,%level_select_update,draw,%level_select_draw;level_bear;init,%level_bear_init,update,%level_update,draw,%level_draw;level_mouse;init,%level_mouse_init,update,%level_update,draw,%level_draw;level_cat;init,%level_cat_init,update,%level_update,draw,%level_draw;level_pig;init,%level_pig_init,update,%level_update,draw,%level_draw;level_bear_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;level_mouse_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;level_cat_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;level_pig_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;win_bear;init,%win_init,update,%win_update,draw,%win_draw;win_mouse;init,%win_init,update,%win_update,draw,%win_draw;win_cat;init,%win_init,update,%win_update,draw,%win_draw;win_pig;init,%win_init,update,%win_update,draw,%win_draw;]]
 function _init()
 g_game_state=_g.game_state()
 g_fade=0
@@ -833,6 +874,12 @@ for i=0,num-1 do
 _g.focus_point(cos(i/num)*LEVEL_RADIUS,sin(i/num)*LEVEL_RADIUS)
 end
 end
-zclass[[score_counter,drawable_post|planet,@,draw,%score_counter_draw]]
+zclass[[stats_displayer,drawable_post|planet,@,draw,%stats_displayer_draw]]
+function draw_circle_bar(percent,x,y,rmin,rmax,b,f)
+printh(percent)
+circ(x,y,rmin,b)
+circ(x,y,rmax,b)
+circ(x,y,(rmax-rmin)*percent\1+rmin,f)
+end
 zclass[[game_checker,actor|pl,@,planet,@,retry_level,@,win_level,@,update,%game_checker_update]]
 zclass[[level_state,actor|planet,@,chasers_spawned,0;start;duration,10,next,spawn;spawn;init,%spawn_init,duration,8,next,spawn;done_spawning;,;]]

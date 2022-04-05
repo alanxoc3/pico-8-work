@@ -6,7 +6,8 @@ G_LEVEL_PIG_WIN   = false
 
 zclass[[game_state,actor|
     ecs_exclusions;actor,true; -- remove game_state from the actor group
-    curr,logo;
+    -- curr,logo;
+    curr,level_select;
     logo; init,%logo_init, update,%logo_update, draw,%logo_draw, duration,2.5, next,level_select;
     level_select; init,%level_select_init, update,%level_select_update, draw,%level_select_draw;
 
@@ -84,11 +85,36 @@ function create_level_focus_points()
     end
 end
 
-zclass[[score_counter,drawable_post|
-    planet,@, draw,%score_counter_draw
+zclass[[stats_displayer,drawable_post|
+    planet,@, draw,%stats_displayer_draw
 ]]
 
-|score_counter_draw| function(a)
+-- function draw_centered_bar(percent, x, y, hw, hh, b, f)
+--     local width = 122 - 5
+--     local hwp, hhp = hw*percent\1, hh*percent\1
+-- 
+--     -- rectfill(x-hw, y-hh, x+hw, y+hh, b)
+--     -- rectfill(x-hwp, y-hhp, x+hwp, y+hhp, f)
+--     rect(x-hw, y-hh, x+hw, y+hh, b)
+--     rect(x-hwp, y-hhp, x+hwp, y+hhp, f)
+-- end
+
+function draw_circle_bar(percent, x, y, rmin, rmax, b, f)
+    printh(percent)
+    circ(x, y, rmin, b)
+    circ(x, y, rmax, b)
+    circ(x, y, (rmax-rmin)*percent\1+rmin, f)
+end
+
+|stats_displayer_draw| function(a)
+    print(""..a.planet.done_ships.."/"..a.planet.total_ships, 4, 4, 11)
+
+    local width = 122 - 5
+
+    -- draw_centered_bar(64, 116, 100, 8, 
+    -- draw_circle_bar(g_pl.shoot_percent, 64, 64, 16, 60, 1, g_pl.shoot_enabled and 7 or 1)
+    -- rectfill(5, 112, 5+width, 122, 1)
+    -- rectfill(5, 112, 5+width*g_pl.shoot_percent, 122, 7)
     print(""..a.planet.done_ships.."/"..a.planet.total_ships, 4, 4, 11)
 end $$
 
@@ -190,6 +216,10 @@ end $$
     loop_zobjs('alert_radar', 'register', g_zclass_entities['black_hole'])
 
     loop_zobjs('focus_point', 'collide', g_zclass_entities['view'])
+    loop_zobjs('planet', 'collide', g_zclass_entities['view'])
+    loop_zobjs('chaser', 'collide', g_zclass_entities['view'])
+    loop_zobjs('zipper', 'collide', g_zclass_entities['view'])
+
     loop_zobjs('alert_radar', 'register', g_zclass_entities['chaser'])
     loop_zobjs('alert_radar', 'register', g_zclass_entities['black_hole'])
     loop_zobjs('black_hole', 'tug', g_zclass_entities['teammate']) -- affects dx & dy of all 'teammate' objects
@@ -213,7 +243,6 @@ zclass[[level_state,actor|
 ]]
 
 |spawn_init| function(a)
-    printh('here')
     local ang = rnd()
     local x,y = cos(ang)*20,sin(ang)*20
     _g.chaser(x, y, a.planet)
