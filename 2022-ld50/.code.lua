@@ -72,7 +72,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,anchor_pos_update_anchor,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,collision_draw_debug,@,model_update,@,model_draw,@,model_collide,@,model_hit,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_update,@,view_hit,@,view_match_following,@,missile_init,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,planet_evac,@,chaser_update,@,chaser_hit,@,black_hole_tug,@,twinkle_draw,@,star_view_match_following,@,pl_update,@,pl_hit,@,pl_alert_destroy,@,pl_alert_update,@,pl_alert_draw,@,alert_radar_register,@,level_bear_init,@,level_bear_update,@,level_cat_init,@,level_cat_update,@,spawn_init,@,level_mouse_init,@,level_mouse_update,@,level_pig_init,@,level_pig_update,@,level_pig_draw,@,level_select_init,@,level_select_update,@,level_entrance_draw,@,level_entrance_hit,@,logo_init,@,logo_draw,@,level_select_draw,@,level_draw,@,title_screen_draw,@,game_checker_update,@,retry_init,@,retry_update,@,retry_draw,@,win_init,@,win_update,@,win_draw,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,anchor_pos_update_anchor,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,collision_draw_debug,@,model_update,@,model_draw,@,model_collide,@,model_hit,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_update,@,view_hit,@,view_match_following,@,missile_init,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,planet_evac,@,chaser_update,@,chaser_hit,@,black_hole_tug,@,twinkle_draw,@,star_view_match_following,@,pl_update,@,pl_hit,@,pl_alert_destroy,@,pl_alert_update,@,pl_alert_draw,@,alert_radar_register,@,level_bear_init,@,level_cat_init,@,level_mouse_init,@,level_pig_init,@,level_select_init,@,level_select_update,@,level_entrance_draw,@,level_entrance_hit,@,logo_init,@,logo_draw,@,level_select_draw,@,level_draw,@,title_screen_draw,@,game_checker_update,@,retry_init,@,retry_update,@,retry_draw,@,win_init,@,win_update,@,win_draw,@,level_update,@,spawn_init,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -357,18 +357,43 @@ end)
 end,function()
 music(8,1000,7)
 clean_all_entities()
-end,function()
+g_pl=_g.pl(0,0)
+g_view=_g.view(g_pl)
+local star_view=_g.star_view(g_pl)
+for i=1,50 do
+_g.twinkle(rnd(256),rnd(256),rnd(),g_view,star_view)
+end
+create_level_focus_points()
+create_text("lvl",0,-3,_g.drawable_model_post_temp)
+_g.drawable_model_post_temp(0,0,_g.STARTING_CIRCLE,1)
+create_text("bear",0,3,_g.drawable_model_post_temp)
+_g.fader_in(1)
+_g.alert_radar(g_pl)
+local planet=_g.planet(0,-22,10,_g.BEAR)
+_g.level_state(planet)
+_g.chaser(0,2,planet)
+_g.black_hole(0,22)
+_g.game_checker(g_pl,planet,"level_bear_retry","win_bear")
 end,function()
 music(24,1000,7)
 clean_all_entities()
-end,function()
-end,function(a)
-printh("here")
-local ang=rnd()
-local x,y=cos(ang)*20,sin(ang)*20
-_g.chaser(x,y,a.planet)
-a.chasers_spawned+=1
-if a.chasers_spawned==9 then a.next="done_spawning" end
+g_pl=_g.pl(0,0)
+g_view=_g.view(g_pl)
+local star_view=_g.star_view(g_pl)
+for i=1,50 do
+_g.twinkle(rnd(256),rnd(256),rnd(),g_view,star_view)
+end
+create_level_focus_points()
+create_text("lvl",0,-3,_g.drawable_model_post_temp)
+_g.drawable_model_post_temp(0,0,_g.STARTING_CIRCLE,1)
+create_text("cat",0,3,_g.drawable_model_post_temp)
+_g.fader_in(1)
+_g.alert_radar(g_pl)
+local planet=_g.planet(0,-22,10,_g.MOUSE)
+_g.level_state(planet)
+_g.chaser(0,2,planet)
+_g.black_hole(0,22)
+_g.game_checker(g_pl,planet,"level_cat_retry","win_cat")
 end,function()
 music(32,1000,7)
 clean_all_entities()
@@ -385,35 +410,30 @@ create_text("mouse",0,3,_g.drawable_model_post_temp)
 _g.fader_in(1)
 _g.alert_radar(g_pl)
 local planet=_g.planet(0,-22,10,_g.MOUSE)
-_g.mouse_level_state(planet)
+_g.level_state(planet)
 _g.chaser(0,2,planet)
 _g.black_hole(0,22)
 _g.game_checker(g_pl,planet,"level_mouse_retry","win_mouse")
 end,function()
-loop_zobjs("actor","state")
-loop_zobjs("view","match_following")
-loop_zobjs("star_view","match_following")
-loop_zobjs("missile","collide",g_zclass_entities["teammate"])
-loop_zobjs("teammate","collide",g_zclass_entities["teammate"])
-loop_zobjs("alert_radar","register",g_zclass_entities["planet"])
-loop_zobjs("alert_radar","register",g_zclass_entities["view"])
-loop_zobjs("alert_radar","register",g_zclass_entities["black_hole"])
-loop_zobjs("focus_point","collide",g_zclass_entities["view"])
-loop_zobjs("alert_radar","register",g_zclass_entities["chaser"])
-loop_zobjs("alert_radar","register",g_zclass_entities["black_hole"])
-loop_zobjs("black_hole","tug",g_zclass_entities["teammate"])
-loop_zobjs("collision_circ","follow_anchoring")
-loop_zobjs("mov","mov_update")
-loop_zobjs("acc","acc_update")
-loop_zobjs("vec","vec_update")
-loop_zobjs("anchor_pos","update_anchor")
-loop_zobjs("model","model_update")
-check_level_bounds()
-end,function()
 music(16,1000,7)
 clean_all_entities()
-end,function()
-end,function()
+g_pl=_g.pl(0,0)
+g_view=_g.view(g_pl)
+local star_view=_g.star_view(g_pl)
+for i=1,50 do
+_g.twinkle(rnd(256),rnd(256),rnd(),g_view,star_view)
+end
+create_level_focus_points()
+create_text("lvl",0,-3,_g.drawable_model_post_temp)
+_g.drawable_model_post_temp(0,0,_g.STARTING_CIRCLE,1)
+create_text("pig",0,3,_g.drawable_model_post_temp)
+_g.fader_in(1)
+_g.alert_radar(g_pl)
+local planet=_g.planet(0,-22,10,_g.PIG)
+_g.level_state(planet)
+_g.chaser(0,2,planet)
+_g.black_hole(0,22)
+_g.game_checker(g_pl,planet,"level_pig_retry","win_pig")
 end,function()
 local win=G_LEVEL_BEAR_WIN and G_LEVEL_MOUSE_WIN and G_LEVEL_CAT_WIN and G_LEVEL_PIG_WIN
 music(0,1000,7)
@@ -499,14 +519,10 @@ loop_zobjs_in_view(g_view,"drawable_pre","draw")
 loop_zobjs_in_view(g_view,"drawable","draw")
 loop_zobjs_in_view(g_view,"drawable_post","draw")
 end,function(a)
-if a.planet.done_ships>=a.planet.total_ships and g_zclass_entities["zipper"]and #g_zclass_entities["zipper"]==0 then
-a:kill()
-music(-1)sfx(24,3)
-_g.fader_out(1,function()g_game_state:load(a.win_level)end)
-elseif not a.pl.alive or not a.planet.alive then
-a:kill()
-music(-1)sfx(24,3)
-_g.fader_out(1,function()g_game_state:load(a.retry_level)end)
+if not a.pl.alive then a:kill()music(-1)sfx(24,3)_g.fader_out(1,function()g_game_state:load(a.retry_level)end)
+elseif not a.planet.alive then
+if a.planet.done_ships>=a.planet.total_ships then a:kill()music(-1)sfx(24,3)_g.fader_out(1,function()g_game_state:load(a.win_level)end)
+else a:kill()music(-1)sfx(24,3)_g.fader_out(1,function()g_game_state:load(a.retry_level)end)end
 end
 end,function(a)
 music(4,nil,1)
@@ -560,6 +576,33 @@ loop_zobjs("actor","state")
 loop_zobjs("model","model_update")
 end,function(a)
 loop_zobjs("drawable_post","draw")
+end,function()
+loop_zobjs("actor","state")
+loop_zobjs("view","match_following")
+loop_zobjs("star_view","match_following")
+loop_zobjs("missile","collide",g_zclass_entities["teammate"])
+loop_zobjs("teammate","collide",g_zclass_entities["teammate"])
+loop_zobjs("alert_radar","register",g_zclass_entities["planet"])
+loop_zobjs("alert_radar","register",g_zclass_entities["view"])
+loop_zobjs("alert_radar","register",g_zclass_entities["black_hole"])
+loop_zobjs("focus_point","collide",g_zclass_entities["view"])
+loop_zobjs("alert_radar","register",g_zclass_entities["chaser"])
+loop_zobjs("alert_radar","register",g_zclass_entities["black_hole"])
+loop_zobjs("black_hole","tug",g_zclass_entities["teammate"])
+loop_zobjs("collision_circ","follow_anchoring")
+loop_zobjs("mov","mov_update")
+loop_zobjs("acc","acc_update")
+loop_zobjs("vec","vec_update")
+loop_zobjs("anchor_pos","update_anchor")
+loop_zobjs("model","model_update")
+check_level_bounds()
+end,function(a)
+printh("here")
+local ang=rnd()
+local x,y=cos(ang)*20,sin(ang)*20
+_g.chaser(x,y,a.planet)
+a.chasers_spawned+=1
+if a.chasers_spawned==9 then a.next="done_spawning" end
 end)
 function zspr(sind,x,y,sw,sh,...)
 sw,sh=sw or 1,sh or 1
@@ -733,7 +776,6 @@ zclass[[star_view,vec|following,@,match_following,%star_view_match_following]]
 zclass[[pl,actor,model,drawable,team_blue|x,@,y,@,missile_ready,yes,model,%PLAYER_SPACESHIP,update,%pl_update,hit,%pl_hit,collision_func,%good_collision_circ,]]
 zclass[[pl_alert,anchor_pos,actor,drawable|alert_radar,@,anchoring,@,pointing_to,@,model,%PLAYER_ALERT,update,%pl_alert_update,dist,0,scale,1,destroyed,%pl_alert_destroy,draw,%pl_alert_draw;start;duration,1,next,normal;normal;,;dying;duration,.25,update,nop,next,wait;wait;duration,1,draw,nop]]
 zclass[[alert_radar,anchor_pos|alerts;,;anchoring,@,model,%ALERT_RADAR_CIRC,register,%alert_radar_register,update,%alert_radar_update,draw,%pl_alert_draw,]]
-zclass[[mouse_level_state,actor|planet,@,chasers_spawned,0;start;duration,10,next,spawn;spawn;init,%spawn_init,duration,8,next,spawn;done_spawning;,;]]
 zclass[[drawable_model_post,model,drawable_post|x,@,y,@,model,@]]
 zclass[[drawable_model_post_temp,model,drawable_post|x,@,y,@,model,@;start;duration,1.5,next,dying;dying;init,%model_explode;]]
 function create_text(original_text,original_x,y,func,...)
@@ -779,7 +821,7 @@ G_LEVEL_BEAR_WIN=false
 G_LEVEL_MOUSE_WIN=false
 G_LEVEL_CAT_WIN=false
 G_LEVEL_PIG_WIN=false
-zclass[[game_state,actor|ecs_exclusions;actor,true;curr,level_mouse;logo;init,%logo_init,update,%logo_update,draw,%logo_draw,duration,2.5,next,level_select;level_select;init,%level_select_init,update,%level_select_update,draw,%level_select_draw;level_bear;init,%level_bear_init,update,%level_bear_update,draw,%level_draw;level_mouse;init,%level_mouse_init,update,%level_mouse_update,draw,%level_draw;level_cat;init,%level_cat_init,update,%level_cat_update,draw,%level_draw;level_pig;init,%level_pig_init,update,%level_pig_update,draw,%level_draw;level_bear_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;level_mouse_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;level_cat_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;level_pig_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;win_bear;init,%win_init,update,%win_update,draw,%win_draw;win_mouse;init,%win_init,update,%win_update,draw,%win_draw;win_cat;init,%win_init,update,%win_update,draw,%win_draw;win_pig;init,%win_init,update,%win_update,draw,%win_draw;]]
+zclass[[game_state,actor|ecs_exclusions;actor,true;curr,logo;logo;init,%logo_init,update,%logo_update,draw,%logo_draw,duration,2.5,next,level_select;level_select;init,%level_select_init,update,%level_select_update,draw,%level_select_draw;level_bear;init,%level_bear_init,update,%level_update,draw,%level_draw;level_mouse;init,%level_mouse_init,update,%level_update,draw,%level_draw;level_cat;init,%level_cat_init,update,%level_update,draw,%level_draw;level_pig;init,%level_pig_init,update,%level_update,draw,%level_draw;level_bear_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;level_mouse_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;level_cat_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;level_pig_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;win_bear;init,%win_init,update,%win_update,draw,%win_draw;win_mouse;init,%win_init,update,%win_update,draw,%win_draw;win_cat;init,%win_init,update,%win_update,draw,%win_draw;win_pig;init,%win_init,update,%win_update,draw,%win_draw;]]
 function _init()
 g_game_state=_g.game_state()
 g_fade=0
@@ -812,3 +854,4 @@ _g.focus_point(cos(i/num)*LEVEL_RADIUS,sin(i/num)*LEVEL_RADIUS)
 end
 end
 zclass[[game_checker,actor|pl,@,planet,@,retry_level,@,win_level,@,update,%game_checker_update]]
+zclass[[level_state,actor|planet,@,chasers_spawned,0;start;duration,10,next,spawn;spawn;init,%spawn_init,duration,8,next,spawn;done_spawning;,;]]
