@@ -6,12 +6,22 @@ zclass[[team_none,teammate|]] -- unaffiliated team (black holes)
 
 -- a friendly planet that you protect
 zclass[[planet,model,drawable,team_blue|
-    x,@, y,@,model,@,
+    x,@, y,@,total_ships,@,model,@,
+    done_ships,0,
     max_health,100,
     health,100,
     damage,10000, -- so that things that crash into the planet immediately die
     d_ang,.001;
+    start;duration,10,next,evac;
+    evac;init,%planet_evac,duration,9.5,next,evac;
+    done;,;
 ]]
+
+|planet_evac| function(a)
+    _g.zipper(a.x, a.y, a.ang)
+    a.done_ships += 1
+    if a.done_ships == a.total_ships then a.next = 'done' end
+end $$
 
 -- a friendly ship leaving a planet that you're protecting
 -- the idea is these would just spawn from the planet and quickly zip away

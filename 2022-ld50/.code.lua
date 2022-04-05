@@ -72,7 +72,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,anchor_pos_update_anchor,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,collision_draw_debug,@,model_update,@,model_draw,@,model_collide,@,model_hit,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_update,@,view_hit,@,view_match_following,@,missile_init,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,chaser_update,@,chaser_hit,@,black_hole_tug,@,twinkle_draw,@,star_view_match_following,@,pl_update,@,pl_hit,@,pl_alert_destroy,@,pl_alert_update,@,pl_alert_draw,@,alert_radar_register,@,level_bear_init,@,level_bear_update,@,level_cat_init,@,level_cat_update,@,level_mouse_init,@,level_mouse_update,@,level_pig_init,@,level_pig_update,@,level_pig_draw,@,level_select_init,@,level_select_update,@,level_entrance_draw,@,level_entrance_hit,@,logo_init,@,logo_draw,@,level_select_draw,@,level_draw,@,title_screen_draw,@,pl_checker_update,@,retry_init,@,retry_update,@,retry_draw,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,anchor_pos_update_anchor,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,collision_draw_debug,@,model_update,@,model_draw,@,model_collide,@,model_hit,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_update,@,view_hit,@,view_match_following,@,missile_init,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,planet_evac,@,chaser_update,@,chaser_hit,@,black_hole_tug,@,twinkle_draw,@,star_view_match_following,@,pl_update,@,pl_hit,@,pl_alert_destroy,@,pl_alert_update,@,pl_alert_draw,@,alert_radar_register,@,level_bear_init,@,level_bear_update,@,level_cat_init,@,level_cat_update,@,level_mouse_init,@,level_mouse_update,@,level_pig_init,@,level_pig_update,@,level_pig_draw,@,level_select_init,@,level_select_update,@,level_entrance_draw,@,level_entrance_hit,@,logo_init,@,logo_draw,@,level_select_draw,@,level_draw,@,title_screen_draw,@,pl_checker_update,@,retry_init,@,retry_update,@,retry_draw,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -270,6 +270,10 @@ end,function(a)
 a:model_update()
 a:explode(.2)
 end,function(a)
+_g.zipper(a.x,a.y,a.ang)
+a.done_ships+=1
+if a.done_ships==a.total_ships then a.next="done" end
+end,function(a)
 if not a.target or not a.target.alive then
 a.target=g_zclass_entities["team_blue"][1]
 end
@@ -316,6 +320,7 @@ end
 a.d_ang=-xbtn()*.01
 end,function(a,b,dx,dy)
 if b.parents["team_blue"]then
+if b.id=="zipper"then return end
 a.dx+=dx
 a.dy+=dy
 else
@@ -373,7 +378,7 @@ _g.drawable_model_post_temp(0,0,_g.STARTING_CIRCLE,1)
 create_text("mouse",0,3,_g.drawable_model_post_temp)
 _g.fader_in(1)
 _g.alert_radar(g_pl)
-local planet=_g.planet(0,-22,_g.MOUSE)
+_g.planet(0,-22,10,_g.MOUSE)
 _g.chaser(0,2,planet)
 _g.black_hole(0,22)
 end,function()
@@ -669,7 +674,7 @@ zclass[[teammate|]]
 zclass[[team_red,teammate|]]
 zclass[[team_blue,teammate|]]
 zclass[[team_none,teammate|]]
-zclass[[planet,model,drawable,team_blue|x,@,y,@,model,@,max_health,100,health,100,damage,10000,d_ang,.001;]]
+zclass[[planet,model,drawable,team_blue|x,@,y,@,total_ships,@,model,@,done_ships,0,max_health,100,health,100,damage,10000,d_ang,.001;start;duration,10,next,evac;evac;init,%planet_evac,duration,9.5,next,evac;done;,;]]
 zclass[[zipper,model,drawable,team_blue|x,@,y,@,ang,@,model,%ZIPPER;start;duration,1,next,zip;zip;speed,.05,duration,2;]]
 zclass[[chaser,model,drawable,team_red|x,@,y,@,target,@,alert_color,8,max_health,20,health,20,damage,20,scale,2,model,%CHASER,update,%chaser_update,hit,%chaser_hit;]]
 zclass[[black_hole,model,drawable,team_none|x,@,y,@,alert_color,8,d_ang,.1,damage,10000,model,%BLACK_HOLE;start;duration,2,tug,nop,next,run;run;tug,%black_hole_tug;]]
