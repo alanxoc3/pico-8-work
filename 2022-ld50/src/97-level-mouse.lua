@@ -23,7 +23,7 @@
 
     -- title
 
-    local planet = _g.planet(0,-22,_g.MOUSE)
+    _g.planet(0,-22,10,_g.MOUSE)
     _g.chaser(0, 2, planet)
     _g.black_hole(0, 22)
 end $$

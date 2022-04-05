@@ -28,6 +28,7 @@ end $$
 
 |pl_hit| function(a, b, dx, dy)
     if b.parents['team_blue'] then -- if same team as player, just bump
+        if b.id == 'zipper' then return end
         a.dx += dx
         a.dy += dy
     else
