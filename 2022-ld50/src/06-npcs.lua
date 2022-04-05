@@ -38,7 +38,7 @@ zclass[[chaser,model,drawable,team_red|
     alert_color,8,
     max_health,20,
     health,20,
-    damage,20,
+    damage,30,
     scale,2,
     model,%CHASER,
     update,%chaser_update,

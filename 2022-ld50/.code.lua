@@ -72,7 +72,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,anchor_pos_update_anchor,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,collision_draw_debug,@,model_update,@,model_draw,@,model_collide,@,model_hit,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_update,@,view_hit,@,view_match_following,@,missile_init,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,planet_evac,@,chaser_update,@,chaser_hit,@,black_hole_tug,@,twinkle_draw,@,star_view_match_following,@,pl_update,@,pl_hit,@,pl_alert_destroy,@,pl_alert_update,@,pl_alert_draw,@,alert_radar_register,@,level_bear_init,@,level_bear_update,@,level_cat_init,@,level_cat_update,@,level_mouse_init,@,level_mouse_update,@,level_pig_init,@,level_pig_update,@,level_pig_draw,@,level_select_init,@,level_select_update,@,level_entrance_draw,@,level_entrance_hit,@,logo_init,@,logo_draw,@,level_select_draw,@,level_draw,@,title_screen_draw,@,pl_checker_update,@,retry_init,@,retry_update,@,retry_draw,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,anchor_pos_update_anchor,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,collision_draw_debug,@,model_update,@,model_draw,@,model_collide,@,model_hit,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_update,@,view_hit,@,view_match_following,@,missile_init,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,planet_evac,@,chaser_update,@,chaser_hit,@,black_hole_tug,@,twinkle_draw,@,star_view_match_following,@,pl_update,@,pl_hit,@,pl_alert_destroy,@,pl_alert_update,@,pl_alert_draw,@,alert_radar_register,@,level_bear_init,@,level_bear_update,@,level_cat_init,@,level_cat_update,@,spawn_init,@,level_mouse_init,@,level_mouse_update,@,level_pig_init,@,level_pig_update,@,level_pig_draw,@,level_select_init,@,level_select_update,@,level_entrance_draw,@,level_entrance_hit,@,logo_init,@,logo_draw,@,level_select_draw,@,level_draw,@,title_screen_draw,@,pl_checker_update,@,retry_init,@,retry_update,@,retry_draw,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -362,10 +362,17 @@ end,function()
 music(24,1000,7)
 clean_all_entities()
 end,function()
+end,function(a)
+printh("here")
+local ang=rnd()
+local x,y=cos(ang)*20,sin(ang)*20
+_g.chaser(x,y,a.planet)
+a.chasers_spawned+=1
+if a.chasers_spawned==9 then a.next="done_spawning" end
 end,function()
 music(32,1000,7)
 clean_all_entities()
-g_pl=_g.pl(0,20)
+g_pl=_g.pl(0,0)
 g_view=_g.view(g_pl)
 local star_view=_g.star_view(g_pl)
 for i=1,50 do
@@ -378,7 +385,8 @@ _g.drawable_model_post_temp(0,0,_g.STARTING_CIRCLE,1)
 create_text("mouse",0,3,_g.drawable_model_post_temp)
 _g.fader_in(1)
 _g.alert_radar(g_pl)
-_g.planet(0,-22,10,_g.MOUSE)
+local planet=_g.planet(0,-22,10,_g.MOUSE)
+_g.mouse_level_state(planet)
 _g.chaser(0,2,planet)
 _g.black_hole(0,22)
 end,function()
@@ -390,6 +398,8 @@ loop_zobjs("teammate","collide",g_zclass_entities["teammate"])
 loop_zobjs("alert_radar","register",g_zclass_entities["planet"])
 loop_zobjs("alert_radar","register",g_zclass_entities["view"])
 loop_zobjs("focus_point","collide",g_zclass_entities["view"])
+loop_zobjs("alert_radar","register",g_zclass_entities["chaser"])
+loop_zobjs("alert_radar","register",g_zclass_entities["black_hole"])
 loop_zobjs("black_hole","tug",g_zclass_entities["teammate"])
 loop_zobjs("collision_circ","follow_anchoring")
 loop_zobjs("mov","mov_update")
@@ -676,13 +686,14 @@ zclass[[team_blue,teammate|]]
 zclass[[team_none,teammate|]]
 zclass[[planet,model,drawable,team_blue|x,@,y,@,total_ships,@,model,@,done_ships,0,max_health,100,health,100,damage,10000,d_ang,.001;start;duration,10,next,evac;evac;init,%planet_evac,duration,9.5,next,evac;done;,;]]
 zclass[[zipper,model,drawable,team_blue|x,@,y,@,ang,@,model,%ZIPPER;start;duration,1,next,zip;zip;speed,.05,duration,2;]]
-zclass[[chaser,model,drawable,team_red|x,@,y,@,target,@,alert_color,8,max_health,20,health,20,damage,20,scale,2,model,%CHASER,update,%chaser_update,hit,%chaser_hit;]]
+zclass[[chaser,model,drawable,team_red|x,@,y,@,target,@,alert_color,8,max_health,20,health,20,damage,30,scale,2,model,%CHASER,update,%chaser_update,hit,%chaser_hit;]]
 zclass[[black_hole,model,drawable,team_none|x,@,y,@,alert_color,8,d_ang,.1,damage,10000,model,%BLACK_HOLE;start;duration,2,tug,nop,next,run;run;tug,%black_hole_tug;]]
 zclass[[twinkle,drawable_pre|x,@,y,@,twinkle_offset,@,view,@,star_view,@,draw,%twinkle_draw]]
 zclass[[star_view,vec|following,@,match_following,%star_view_match_following]]
 zclass[[pl,actor,model,drawable,team_blue|x,@,y,@,missile_ready,yes,model,%PLAYER_SPACESHIP,update,%pl_update,hit,%pl_hit,collision_func,%good_collision_circ,]]
 zclass[[pl_alert,anchor_pos,actor,drawable|alert_radar,@,anchoring,@,pointing_to,@,model,%PLAYER_ALERT,update,%pl_alert_update,dist,0,scale,1,destroyed,%pl_alert_destroy,draw,%pl_alert_draw;start;duration,1,next,normal;normal;,;dying;duration,.25,update,nop,next,wait;wait;duration,1,draw,nop]]
 zclass[[alert_radar,anchor_pos|alerts;,;anchoring,@,model,%ALERT_RADAR_CIRC,register,%alert_radar_register,update,%alert_radar_update,draw,%pl_alert_draw,]]
+zclass[[mouse_level_state,actor|planet,@,chasers_spawned,0;start;duration,10,next,spawn;spawn;init,%spawn_init,duration,8,next,spawn;done_spawning;,;]]
 zclass[[drawable_model_post,model,drawable_post|x,@,y,@,model,@]]
 zclass[[drawable_model_post_temp,model,drawable_post|x,@,y,@,model,@;start;duration,1.5,next,dying;dying;init,%model_explode;]]
 function create_text(original_text,original_x,y,func,...)
