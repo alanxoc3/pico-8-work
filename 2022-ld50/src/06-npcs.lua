@@ -29,7 +29,7 @@ zclass[[zipper,model,drawable,team_blue|
     x,@,y,@,ang,@,
     model,%ZIPPER;
     start;duration,1,next,zip;
-    zip;speed,.05,duration,2;
+    zip;speed,.05,duration,1;
 ]]
 
 -- an enemy that chases a target around, trying to crash into it
@@ -70,7 +70,7 @@ end $$
 -- an enemy that sucks other things into itself and destroys them
 zclass[[black_hole,model,drawable,team_none|
     x,@, y,@,
-    alert_color,8,
+    alert_color,1,
     d_ang,.1, -- spinz fast
     damage,10000, -- basically infinite damage
     model,%BLACK_HOLE;

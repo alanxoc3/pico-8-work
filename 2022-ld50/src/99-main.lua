@@ -4,8 +4,6 @@ G_LEVEL_MOUSE_WIN = false
 G_LEVEL_CAT_WIN   = false
 G_LEVEL_PIG_WIN   = false
 
-
-
 zclass[[game_state,actor|
     ecs_exclusions;actor,true; -- remove game_state from the actor group
     -- curr,level_select;
@@ -36,10 +34,6 @@ function _init()
 end
 
 function _update60()
-            if btnp(4) then
-            G_LEVEL_BEAR_WIN  = true G_LEVEL_MOUSE_WIN = true G_LEVEL_CAT_WIN   = true G_LEVEL_PIG_WIN   = true
-             _g.fader_out(1, function() g_game_state:load("win_mouse") end)
-            end
     -- DEBUG_BEGIN
     if btnp(4) and btnp(5) then g_debug = not g_debug end
     -- DEBUG_END
@@ -92,13 +86,17 @@ function create_level_focus_points()
     end
 end
 
-zclass[[pl_checker,actor|
-    pl,@, retry_level,@,
-    update,%pl_checker_update
+zclass[[game_checker,actor|
+    pl,@, planet,@, retry_level,@, win_level,@,
+    update,%game_checker_update
 ]]
 
-|pl_checker_update| function(a)
-    if not g_pl.alive then
+|game_checker_update| function(a)
+    if a.planet.done_ships >= a.planet.total_ships and g_zclass_entities['zipper'] and #g_zclass_entities['zipper'] == 0 then
+        a:kill()
+        music(-1) sfx(24, 3)
+        _g.fader_out(1, function() g_game_state:load(a.win_level) end)
+    elseif not a.pl.alive or not a.planet.alive then
         a:kill()
         music(-1) sfx(24, 3)
         _g.fader_out(1, function() g_game_state:load(a.retry_level) end)

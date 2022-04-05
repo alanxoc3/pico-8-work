@@ -1,5 +1,3 @@
-
-
 |level_mouse_init| function()
     music(32,1000,7)
     clean_all_entities()
@@ -11,8 +9,6 @@
         _g.twinkle(rnd(256), rnd(256), rnd(), g_view, star_view)
     end
 
-    _g.pl_checker(g_pl, "level_mouse_retry")
-
     create_level_focus_points()
     create_text("lvl", 0, -3, _g.drawable_model_post_temp)
     _g.drawable_model_post_temp(0, 0, _g.STARTING_CIRCLE, 1)
@@ -22,10 +18,10 @@
     _g.alert_radar(g_pl)
 
     -- title
-
-    _g.planet(0,-22,10,_g.MOUSE)
+    local planet = _g.planet(0,-22,1,_g.MOUSE)
     _g.chaser(0, 2, planet)
     _g.black_hole(0, 22)
+    _g.game_checker(g_pl, planet, "level_mouse_retry", "win_mouse")
 end $$
 
 |level_mouse_update| function()
@@ -43,6 +39,8 @@ end $$
 
     loop_zobjs('alert_radar', 'register', g_zclass_entities['planet'])
     loop_zobjs('alert_radar', 'register', g_zclass_entities['view'])
+    loop_zobjs('alert_radar', 'register', g_zclass_entities['black_hole'])
+
     loop_zobjs('focus_point', 'collide', g_zclass_entities['view'])
     --loop_zobjs('alert_radar', 'register', g_zclass_entities['chaser'])
     --loop_zobjs('alert_radar', 'register', g_zclass_entities['black_hole'])

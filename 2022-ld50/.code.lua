@@ -72,7 +72,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,anchor_pos_update_anchor,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,collision_draw_debug,@,model_update,@,model_draw,@,model_collide,@,model_hit,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_update,@,view_hit,@,view_match_following,@,missile_init,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,planet_evac,@,chaser_update,@,chaser_hit,@,black_hole_tug,@,twinkle_draw,@,star_view_match_following,@,pl_update,@,pl_hit,@,pl_alert_destroy,@,pl_alert_update,@,pl_alert_draw,@,alert_radar_register,@,level_bear_init,@,level_bear_update,@,level_cat_init,@,level_cat_update,@,level_mouse_init,@,level_mouse_update,@,level_pig_init,@,level_pig_update,@,level_pig_draw,@,level_select_init,@,level_select_update,@,level_entrance_draw,@,level_entrance_hit,@,logo_init,@,logo_draw,@,level_select_draw,@,level_draw,@,title_screen_draw,@,pl_checker_update,@,retry_init,@,retry_update,@,retry_draw,@,win_init,@,win_update,@,win_draw,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,anchor_pos_update_anchor,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,collision_draw_debug,@,model_update,@,model_draw,@,model_collide,@,model_hit,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_update,@,view_hit,@,view_match_following,@,missile_init,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,planet_evac,@,chaser_update,@,chaser_hit,@,black_hole_tug,@,twinkle_draw,@,star_view_match_following,@,pl_update,@,pl_hit,@,pl_alert_destroy,@,pl_alert_update,@,pl_alert_draw,@,alert_radar_register,@,level_bear_init,@,level_bear_update,@,level_cat_init,@,level_cat_update,@,level_mouse_init,@,level_mouse_update,@,level_pig_init,@,level_pig_update,@,level_pig_draw,@,level_select_init,@,level_select_update,@,level_entrance_draw,@,level_entrance_hit,@,logo_init,@,logo_draw,@,level_select_draw,@,level_draw,@,title_screen_draw,@,game_checker_update,@,retry_init,@,retry_update,@,retry_draw,@,win_init,@,win_update,@,win_draw,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -371,16 +371,16 @@ local star_view=_g.star_view(g_pl)
 for i=1,50 do
 _g.twinkle(rnd(256),rnd(256),rnd(),g_view,star_view)
 end
-_g.pl_checker(g_pl,"level_mouse_retry")
 create_level_focus_points()
 create_text("lvl",0,-3,_g.drawable_model_post_temp)
 _g.drawable_model_post_temp(0,0,_g.STARTING_CIRCLE,1)
 create_text("mouse",0,3,_g.drawable_model_post_temp)
 _g.fader_in(1)
 _g.alert_radar(g_pl)
-_g.planet(0,-22,10,_g.MOUSE)
+local planet=_g.planet(0,-22,1,_g.MOUSE)
 _g.chaser(0,2,planet)
 _g.black_hole(0,22)
+_g.game_checker(g_pl,planet,"level_mouse_retry","win_mouse")
 end,function()
 loop_zobjs("actor","state")
 loop_zobjs("view","match_following")
@@ -389,6 +389,7 @@ loop_zobjs("missile","collide",g_zclass_entities["teammate"])
 loop_zobjs("teammate","collide",g_zclass_entities["teammate"])
 loop_zobjs("alert_radar","register",g_zclass_entities["planet"])
 loop_zobjs("alert_radar","register",g_zclass_entities["view"])
+loop_zobjs("alert_radar","register",g_zclass_entities["black_hole"])
 loop_zobjs("focus_point","collide",g_zclass_entities["view"])
 loop_zobjs("black_hole","tug",g_zclass_entities["teammate"])
 loop_zobjs("collision_circ","follow_anchoring")
@@ -437,7 +438,7 @@ else _g.focus_point(0,-12)create_text("bear,dead",0,-12)end
 if win then
 create_text("code,amorg,denial",-12,-12)
 create_text("gfx,tigerwolf,greatcadet",12,-12)_g.focus_point(12,-12)
-create_text("sfx,amorg",-12,12)
+create_text("sfx,amorg,greatcadet",-12,12)
 create_text("made,with,pico8",12,12)
 end
 end,function()
@@ -488,7 +489,11 @@ loop_zobjs_in_view(g_view,"drawable_pre","draw")
 loop_zobjs_in_view(g_view,"drawable","draw")
 loop_zobjs_in_view(g_view,"drawable_post","draw")
 end,function(a)
-if not g_pl.alive then
+if a.planet.done_ships>=a.planet.total_ships and g_zclass_entities["zipper"]and #g_zclass_entities["zipper"]==0 then
+a:kill()
+music(-1)sfx(24,3)
+_g.fader_out(1,function()g_game_state:load(a.win_level)end)
+elseif not a.pl.alive or not a.planet.alive then
 a:kill()
 music(-1)sfx(24,3)
 _g.fader_out(1,function()g_game_state:load(a.retry_level)end)
@@ -710,9 +715,9 @@ zclass[[team_red,teammate|]]
 zclass[[team_blue,teammate|]]
 zclass[[team_none,teammate|]]
 zclass[[planet,model,drawable,team_blue|x,@,y,@,total_ships,@,model,@,done_ships,0,max_health,100,health,100,damage,10000,d_ang,.001;start;duration,10,next,evac;evac;init,%planet_evac,duration,9.5,next,evac;done;,;]]
-zclass[[zipper,model,drawable,team_blue|x,@,y,@,ang,@,model,%ZIPPER;start;duration,1,next,zip;zip;speed,.05,duration,2;]]
+zclass[[zipper,model,drawable,team_blue|x,@,y,@,ang,@,model,%ZIPPER;start;duration,1,next,zip;zip;speed,.05,duration,1;]]
 zclass[[chaser,model,drawable,team_red|x,@,y,@,target,@,alert_color,8,max_health,20,health,20,damage,20,scale,2,model,%CHASER,update,%chaser_update,hit,%chaser_hit;]]
-zclass[[black_hole,model,drawable,team_none|x,@,y,@,alert_color,8,d_ang,.1,damage,10000,model,%BLACK_HOLE;start;duration,2,tug,nop,next,run;run;tug,%black_hole_tug;]]
+zclass[[black_hole,model,drawable,team_none|x,@,y,@,alert_color,1,d_ang,.1,damage,10000,model,%BLACK_HOLE;start;duration,2,tug,nop,next,run;run;tug,%black_hole_tug;]]
 zclass[[twinkle,drawable_pre|x,@,y,@,twinkle_offset,@,view,@,star_view,@,draw,%twinkle_draw]]
 zclass[[star_view,vec|following,@,match_following,%star_view_match_following]]
 zclass[[pl,actor,model,drawable,team_blue|x,@,y,@,missile_ready,yes,model,%PLAYER_SPACESHIP,update,%pl_update,hit,%pl_hit,collision_func,%good_collision_circ,]]
@@ -769,10 +774,6 @@ g_game_state=_g.game_state()
 g_fade=0
 end
 function _update60()
-if btnp(4)then
-G_LEVEL_BEAR_WIN=true G_LEVEL_MOUSE_WIN=true G_LEVEL_CAT_WIN=true G_LEVEL_PIG_WIN=true
-_g.fader_out(1,function()g_game_state:load("win_mouse")end)
-end
 if btnp(4)and btnp(5)then g_debug=not g_debug end
 loop_zobjs("actor","clean")
 register_zobjs()
@@ -799,4 +800,4 @@ for i=0,num-1 do
 _g.focus_point(cos(i/num)*LEVEL_RADIUS,sin(i/num)*LEVEL_RADIUS)
 end
 end
-zclass[[pl_checker,actor|pl,@,retry_level,@,update,%pl_checker_update]]
+zclass[[game_checker,actor|pl,@,planet,@,retry_level,@,win_level,@,update,%game_checker_update]]
