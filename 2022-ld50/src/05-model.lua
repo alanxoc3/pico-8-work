@@ -105,7 +105,7 @@ end $$
 
 |model_hit| function(a, b, dx, dy)
     if a.health and a.health > 0 then
-        a.health -= b.damage or 0
+        a.health = max(0, a.health - (b.damage or 0))
         if a.health <= 0 then a:explode() end
     end
 end $$
@@ -122,6 +122,7 @@ end
 
 |model_explode| function(a, duration)
     if a.alive then
+        if a.explode_sfx then sfx(a.explode_sfx, 3) end
         a:kill()
  
         foreach(a.shapes, function(shape)

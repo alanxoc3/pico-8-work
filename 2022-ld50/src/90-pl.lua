@@ -15,7 +15,7 @@ zclass[[pl,actor,model,drawlayer_20,team_blue|
         a.shoot_enabled = true
     end
 
-    if btn'4' and a.missile_ready then
+    if (btn'5' or btn'4') and a.missile_ready then
         if not a.shoot_bar or not a.shoot_bar.alive then
             a.shoot_bar = _g.bar(a, function() return a.shoot_percent end, 1, 1.2, 2.2, .125)
         end
@@ -137,7 +137,7 @@ end $$
 |bar_update| function(a)
     local prev_percent = a.percent
     a.percent = a.percent_func()
-    if not a.alive then a:load'dying'
+    if not a.anchoring.alive then a:load'dying'
     elseif prev_percent ~= a.percent then a:load"run" end
 end $$
 

@@ -1,4 +1,4 @@
-modes = { "lines", "collisions" }
+modes = { "lines", "collisions", "translate" }
 zooms = { .5, 1, 1.5, 2, 3, 5 }
 model = { lines={}, collisions={} }
 
@@ -20,6 +20,18 @@ function approx_dist(dx,dy)
         return a0*0.9609+b0*0.3984
     end
     return b0*0.9609+a0*0.3984
+end
+
+function translate(x, y)
+    foreach(model.lines, function(shape)
+        for i=4,#shape,2 do shape[i] += x end
+        for i=5,#shape,2 do shape[i] += y end
+    end)
+
+    foreach(model.collisions, function(circ)
+        circ[1] += x
+        circ[2] += y
+    end)
 end
 
 function _init()
@@ -86,6 +98,12 @@ function _update60()
 
         for collision in all(model.collisions) do
             collision[1], collision[2] = -collision[2], collision[1]
+        end
+    elseif curr_mode == "translate" then
+        if     btnp(0) then translate(-.1,0)
+        elseif btnp(1) then translate( .1,0)
+        elseif btnp(2) then translate(0,-.1)
+        elseif btnp(3) then translate(0, .1)
         end
     elseif curr_mode == "lines" then
         if char == "d" and model.lines[lines_layer] then

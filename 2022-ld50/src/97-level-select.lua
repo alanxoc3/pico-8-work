@@ -97,9 +97,11 @@ end $$
     loop_zobjs('view',      'match_following')
     loop_zobjs('star_view', 'match_following')
 
-    loop_zobjs('level_entrance', 'collide', g_zclass_entities['view'])
+    loop_zobjs('view', 'collide', g_zclass_entities['level_entrance'])
+    loop_zobjs('view', 'collide', g_zclass_entities['focus_point'])
+
     loop_zobjs('level_entrance', 'collide', g_zclass_entities['pl'])
-    loop_zobjs('focus_point', 'collide', g_zclass_entities['view'])
+    loop_zobjs('pl', 'collide', g_zclass_entities['level_entrance'])
 
     loop_zobjs('alert_radar', 'register', g_zclass_entities['level_entrance'])
 
