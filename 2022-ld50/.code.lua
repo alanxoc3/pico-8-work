@@ -72,7 +72,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,anchor_pos_update_anchor,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,collision_draw_debug,@,model_update,@,model_draw,@,model_collide,@,model_hit,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_update,@,view_hit,@,view_match_following,@,missile_init,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,chaser_update,@,chaser_hit,@,black_hole_tug,@,twinkle_draw,@,star_view_match_following,@,pl_update,@,pl_hit,@,pl_alert_destroy,@,pl_alert_update,@,pl_alert_draw,@,alert_radar_register,@,level_bear_init,@,level_bear_update,@,level_cat_init,@,level_cat_update,@,level_mouse_init,@,level_mouse_update,@,level_pig_init,@,level_pig_update,@,level_pig_draw,@,level_select_init,@,level_select_update,@,level_entrance_draw,@,level_entrance_hit,@,logo_init,@,logo_draw,@,level_select_draw,@,level_draw,@,title_screen_draw,@,pl_checker_update,@,retry_init,@,retry_update,@,retry_draw,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,anchor_pos_update_anchor,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,collision_draw_debug,@,model_update,@,model_draw,@,model_collide,@,model_hit,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_update,@,view_hit,@,view_match_following,@,missile_init,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,chaser_update,@,chaser_hit,@,black_hole_tug,@,twinkle_draw,@,star_view_match_following,@,pl_update,@,pl_hit,@,pl_alert_destroy,@,pl_alert_update,@,pl_alert_draw,@,alert_radar_register,@,level_bear_init,@,level_bear_update,@,level_cat_init,@,level_cat_update,@,level_mouse_init,@,level_mouse_update,@,level_pig_init,@,level_pig_update,@,level_pig_draw,@,level_select_init,@,level_select_update,@,level_entrance_draw,@,level_entrance_hit,@,logo_init,@,logo_draw,@,level_select_draw,@,level_draw,@,title_screen_draw,@,pl_checker_update,@,retry_init,@,retry_update,@,retry_draw,@,win_init,@,win_update,@,win_draw,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -399,6 +399,7 @@ clean_all_entities()
 end,function()
 end,function()
 end,function()
+local win=G_LEVEL_BEAR_WIN and G_LEVEL_MOUSE_WIN and G_LEVEL_CAT_WIN and G_LEVEL_PIG_WIN
 music(0,1000,7)
 clean_all_entities()
 g_pl=_g.pl(0,0)
@@ -411,17 +412,29 @@ _g.fader_in(1)
 _g.alert_radar(g_pl)
 g_title_screen_coord=30
 g_title_screen_dim=g_title_screen_coord*2
+if win then
+create_text("rewob",0,-3,_g.drawable_model_post)
+_g.drawable_model_post(0,0,_g.STARTING_CIRCLE)
+create_text("credits",0,3,_g.drawable_model_post)
+else
 create_text("rewob",0,-3,_g.drawable_model_post_temp)
 _g.drawable_model_post_temp(0,0,_g.STARTING_CIRCLE)
 create_text("ldjam50",0,3,_g.drawable_model_post_temp)
-create_text("lvl",-12,-2.5)create_text("cat",-12,2.5)_g.level_entrance(-12,0,_g.LEVEL_LEFT,"level_cat")
-create_text("lvl",12,-2.5)create_text("pig",12,2.5)_g.level_entrance(12,0,_g.LEVEL_RIGHT,"level_pig")
-create_text("lvl",0,9.5)create_text("mouse",0,14.5)_g.level_entrance(0,12,_g.LEVEL_DOWN,"level_mouse")
-create_text("lvl",0,-14.5)create_text("bear",0,-9.5)_g.level_entrance(0,-12,_g.LEVEL_UP,"level_bear")
+end
+if not G_LEVEL_CAT_WIN then create_text("lvl",-12,-2.5)create_text("cat",-12,2.5)_g.level_entrance(-12,0,_g.LEVEL_LEFT,"level_cat")
+else _g.focus_point(-12,0)create_text("cat,dead",-12,0)end
+if not G_LEVEL_PIG_WIN then create_text("lvl",12,-2.5)create_text("pig",12,2.5)_g.level_entrance(12,0,_g.LEVEL_RIGHT,"level_pig")
+else _g.focus_point(12,0)create_text("pig,dead",12,0)end
+if not G_LEVEL_MOUSE_WIN then create_text("lvl",0,9.5)create_text("mouse",0,14.5)_g.level_entrance(0,12,_g.LEVEL_DOWN,"level_mouse")
+else _g.focus_point(0,12)create_text("mouse,dead",0,12)end
+if not G_LEVEL_BEAR_WIN then create_text("lvl",0,-14.5)create_text("bear",0,-9.5)_g.level_entrance(0,-12,_g.LEVEL_UP,"level_bear")
+else _g.focus_point(0,-12)create_text("bear,dead",0,-12)end
+if win then
 create_text("code,amorg,denial",-12,-12)
 create_text("gfx,tigerwolf,greatcadet",12,-12)_g.focus_point(12,-12)
 create_text("sfx,amorg",-12,12)
 create_text("made,with,pico8",12,12)
+end
 end,function()
 loop_zobjs("actor","state")
 loop_zobjs("view","match_following")
@@ -495,9 +508,31 @@ end
 create_text(txt,0,0)
 g_game_state:start_timer("retry",1,function()
 _g.fader_out(1,function()
-if g_game_state.curr=="level_mouse_retry"then
-g_game_state:load("level_mouse")
+if g_game_state.curr=="level_mouse_retry"then g_game_state:load("level_mouse")
+elseif g_game_state.curr=="level_cat_retry"then g_game_state:load("level_cat")
+elseif g_game_state.curr=="level_bear_retry"then g_game_state:load("level_bear")
+elseif g_game_state.curr=="level_pig_retry"then g_game_state:load("level_pig")
 end
+end)
+end)
+end,function(a)
+loop_zobjs("actor","state")
+loop_zobjs("model","model_update")
+end,function(a)
+loop_zobjs("drawable_post","draw")
+end,function(a)
+music(4,nil,1)
+clean_all_entities()
+_g.fader_in(1)g_view=_g.view()
+if a.curr=="win_bear"then G_LEVEL_BEAR_WIN=true
+elseif a.curr=="win_mouse"then G_LEVEL_MOUSE_WIN=true
+elseif a.curr=="win_cat"then G_LEVEL_CAT_WIN=true
+elseif a.curr=="win_pig"then G_LEVEL_PIG_WIN=true
+end
+create_text("win",0,0)
+g_game_state:start_timer("win",1,function()
+_g.fader_out(1,function()
+g_game_state:load("level_select")
 end)
 end)
 end,function(a)
@@ -719,12 +754,20 @@ pal(c,g_fade_table[c][1+flr(7*min(1,max(0,threshold)))])
 end
 end
 G_DEATH_COUNT=0
-zclass[[game_state,actor|ecs_exclusions;actor,true;curr,level_mouse;logo;init,%logo_init,update,%logo_update,draw,%logo_draw,duration,2.5,next,level_select;level_select;init,%level_select_init,update,%level_select_update,draw,%level_select_draw;level_bear;init,%level_bear_init,update,%level_bear_update,draw,%level_draw;level_mouse;init,%level_mouse_init,update,%level_mouse_update,draw,%level_draw;level_cat;init,%level_cat_init,update,%level_cat_update,draw,%level_draw;level_pig;init,%level_pig_init,update,%level_pig_update,draw,%level_draw;level_bear_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;level_mouse_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;level_cat_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;level_pig_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;]]
+G_LEVEL_BEAR_WIN=false
+G_LEVEL_MOUSE_WIN=false
+G_LEVEL_CAT_WIN=false
+G_LEVEL_PIG_WIN=false
+zclass[[game_state,actor|ecs_exclusions;actor,true;curr,level_mouse;logo;init,%logo_init,update,%logo_update,draw,%logo_draw,duration,2.5,next,level_select;level_select;init,%level_select_init,update,%level_select_update,draw,%level_select_draw;level_bear;init,%level_bear_init,update,%level_bear_update,draw,%level_draw;level_mouse;init,%level_mouse_init,update,%level_mouse_update,draw,%level_draw;level_cat;init,%level_cat_init,update,%level_cat_update,draw,%level_draw;level_pig;init,%level_pig_init,update,%level_pig_update,draw,%level_draw;level_bear_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;level_mouse_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;level_cat_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;level_pig_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;win_bear;init,%win_init,update,%win_update,draw,%win_draw;win_mouse;init,%win_init,update,%win_update,draw,%win_draw;win_cat;init,%win_init,update,%win_update,draw,%win_draw;win_pig;init,%win_init,update,%win_update,draw,%win_draw;]]
 function _init()
 g_game_state=_g.game_state()
 g_fade=0
 end
 function _update60()
+if btnp(4)then
+G_LEVEL_BEAR_WIN=true G_LEVEL_MOUSE_WIN=true G_LEVEL_CAT_WIN=true G_LEVEL_PIG_WIN=true
+_g.fader_out(1,function()g_game_state:load("win_mouse")end)
+end
 if btnp(4)and btnp(5)then g_debug=not g_debug end
 loop_zobjs("actor","clean")
 register_zobjs()

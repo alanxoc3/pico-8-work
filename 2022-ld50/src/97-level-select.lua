@@ -43,6 +43,7 @@ function loop_zobjs_in_view(view, class, method_name, ...)
 end
 
 |level_select_init| function()
+    local win = G_LEVEL_BEAR_WIN and G_LEVEL_MOUSE_WIN and G_LEVEL_CAT_WIN and G_LEVEL_PIG_WIN
     music(0,1000,7)
     clean_all_entities()
     -- [0,0] is the center of the level
@@ -60,20 +61,34 @@ end
     g_title_screen_dim = g_title_screen_coord*2
 
     -- title
-    create_text("rewob", 0, -3, _g.drawable_model_post_temp)
-    _g.drawable_model_post_temp(0, 0, _g.STARTING_CIRCLE)
-    create_text("ldjam50", 0, 3, _g.drawable_model_post_temp)
+    if win then
+        create_text("rewob", 0, -3, _g.drawable_model_post)
+        _g.drawable_model_post(0, 0, _g.STARTING_CIRCLE)
+        create_text("credits", 0, 3, _g.drawable_model_post)
+    else
+        create_text("rewob", 0, -3, _g.drawable_model_post_temp)
+        _g.drawable_model_post_temp(0, 0, _g.STARTING_CIRCLE)
+        create_text("ldjam50", 0, 3, _g.drawable_model_post_temp)
+    end
 
-    -- level entrances
-    create_text("lvl",    -12,  -2.5)  create_text("cat",   -12, 2.5)  _g.level_entrance(-12, 0, _g.LEVEL_LEFT, "level_cat")
-    create_text("lvl",    12,   -2.5)  create_text("pig",   12,  2.5)  _g.level_entrance(12,  0, _g.LEVEL_RIGHT, "level_pig")
-    create_text("lvl",    0,    9.5)   create_text("mouse", 0,   14.5) _g.level_entrance(0,  12, _g.LEVEL_DOWN, "level_mouse")
-    create_text("lvl",    0,   -14.5)  create_text("bear",  0,   -9.5) _g.level_entrance(0, -12, _g.LEVEL_UP, "level_bear")
+    if not G_LEVEL_CAT_WIN then create_text("lvl",    -12,  -2.5)  create_text("cat",   -12, 2.5)  _g.level_entrance(-12, 0, _g.LEVEL_LEFT, "level_cat")
+    else _g.focus_point(-12, 0) create_text("cat,dead", -12, 0) end
 
-    create_text("code,amorg,denial", -12, -12)
-    create_text("gfx,tigerwolf,greatcadet", 12, -12) _g.focus_point(12,-12)
-    create_text("sfx,amorg", -12, 12)
-    create_text("made,with,pico8", 12, 12)
+    if not G_LEVEL_PIG_WIN then create_text("lvl",    12,   -2.5)  create_text("pig",   12,  2.5)  _g.level_entrance(12,  0, _g.LEVEL_RIGHT, "level_pig")
+    else _g.focus_point(12, 0) create_text("pig,dead", 12, 0) end
+
+    if not G_LEVEL_MOUSE_WIN then create_text("lvl",    0,    9.5)   create_text("mouse", 0,   14.5) _g.level_entrance(0,  12, _g.LEVEL_DOWN, "level_mouse")
+    else _g.focus_point(0, 12) create_text("mouse,dead", 0, 12) end
+
+    if not G_LEVEL_BEAR_WIN then create_text("lvl",    0,   -14.5)  create_text("bear",  0,   -9.5) _g.level_entrance(0, -12, _g.LEVEL_UP, "level_bear")
+    else _g.focus_point(0, -12) create_text("bear,dead", 0, -12) end
+
+    if win then
+        create_text("code,amorg,denial", -12, -12)
+        create_text("gfx,tigerwolf,greatcadet", 12, -12) _g.focus_point(12,-12)
+        create_text("sfx,amorg", -12, 12)
+        create_text("made,with,pico8", 12, 12)
+    end
 
 end $$
 

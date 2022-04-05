@@ -1,4 +1,10 @@
 G_DEATH_COUNT = 0
+G_LEVEL_BEAR_WIN  = false
+G_LEVEL_MOUSE_WIN = false
+G_LEVEL_CAT_WIN   = false
+G_LEVEL_PIG_WIN   = false
+
+
 
 zclass[[game_state,actor|
     ecs_exclusions;actor,true; -- remove game_state from the actor group
@@ -17,6 +23,11 @@ zclass[[game_state,actor|
     level_mouse_retry; init,%retry_init, update,%retry_update, draw,%retry_draw;
     level_cat_retry;   init,%retry_init, update,%retry_update, draw,%retry_draw;
     level_pig_retry;   init,%retry_init, update,%retry_update, draw,%retry_draw;
+
+    win_bear; init,%win_init, update,%win_update, draw,%win_draw;
+    win_mouse; init,%win_init, update,%win_update, draw,%win_draw;
+    win_cat; init,%win_init, update,%win_update, draw,%win_draw;
+    win_pig; init,%win_init, update,%win_update, draw,%win_draw;
 ]]
 
 function _init()
@@ -25,6 +36,10 @@ function _init()
 end
 
 function _update60()
+            if btnp(4) then
+            G_LEVEL_BEAR_WIN  = true G_LEVEL_MOUSE_WIN = true G_LEVEL_CAT_WIN   = true G_LEVEL_PIG_WIN   = true
+             _g.fader_out(1, function() g_game_state:load("win_mouse") end)
+            end
     -- DEBUG_BEGIN
     if btnp(4) and btnp(5) then g_debug = not g_debug end
     -- DEBUG_END
@@ -113,8 +128,10 @@ end $$
 
     g_game_state:start_timer("retry", 1, function()
         _g.fader_out(1, function()
-            if g_game_state.curr == "level_mouse_retry" then
-                g_game_state:load("level_mouse")
+            if g_game_state.curr == "level_mouse_retry" then g_game_state:load("level_mouse")
+            elseif g_game_state.curr == "level_cat_retry" then g_game_state:load("level_cat")
+            elseif g_game_state.curr == "level_bear_retry" then g_game_state:load("level_bear")
+            elseif g_game_state.curr == "level_pig_retry" then g_game_state:load("level_pig")
             end
         end)
     end)
@@ -126,5 +143,36 @@ end $$
 end $$
 
 |retry_draw| function(a)
+    loop_zobjs('drawable_post', 'draw')
+end $$
+
+
+|win_init| function(a)
+    music(4,nil,1)
+    clean_all_entities()
+
+    _g.fader_in(1) g_view = _g.view()
+    
+    if a.curr == "win_bear" then G_LEVEL_BEAR_WIN = true
+    elseif a.curr == "win_mouse" then G_LEVEL_MOUSE_WIN = true
+    elseif a.curr == "win_cat" then G_LEVEL_CAT_WIN = true
+    elseif a.curr == "win_pig" then G_LEVEL_PIG_WIN = true
+    end
+
+    create_text("win", 0, 0)
+
+    g_game_state:start_timer("win", 1, function()
+        _g.fader_out(1, function()
+            g_game_state:load("level_select")
+        end)
+    end)
+end $$
+
+|win_update| function(a)
+    loop_zobjs('actor',     'state')
+    loop_zobjs('model', 'model_update')
+end $$
+
+|win_draw| function(a)
     loop_zobjs('drawable_post', 'draw')
 end $$
