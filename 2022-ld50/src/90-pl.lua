@@ -3,15 +3,35 @@ zclass[[pl,actor,model,drawable,team_blue|
     missile_ready,yes,
     model,%PLAYER_SPACESHIP,
     update,%pl_update,
+    shoot_percent,0, shoot_enabled,yes,
     hit,%pl_hit,
     collision_func,%good_collision_circ,
 ]]
 
 |pl_update| function(a)
+    a.shoot_percent = min(1,a.shoot_percent+.01)
+    if a.shoot_percent == 1 then
+        a.shoot_enabled = true
+    end
+
     if btn'4' and a.missile_ready then
-        _g.missile(a.x+cos(a.ang)*.8,a.y+sin(a.ang)*.8,a.dx,a.dy,a.ang)
-        a.missile_ready = false
-        a:start_timer('missile_cooldown', 0.1, function() a.missile_ready=true end)
+        if a.shoot_percent > 0 and a.shoot_enabled then
+            if not a.shoot_bar or not a.shoot_bar.alive then
+                a.shoot_bar = _g.bar(
+                    a,
+                    function() return a.shoot_percent end,
+                    function() return 1 end,
+                    function() return a.shoot_enabled and 7 or 1 end,
+                    .25, 1.2, 3
+                )
+            end
+
+            a.shoot_percent = max(0,a.shoot_percent-.1)
+            _g.missile(a.x+cos(a.ang)*.8,a.y+sin(a.ang)*.8,a.dx,a.dy,a.ang)
+            a.missile_ready = false
+            a:start_timer('missile_cooldown', 0.1, function() a.missile_ready=true end)
+            if a.shoot_percent == 0 then a.shoot_enabled = false end
+        end
     end
 
     if ybtn() > 0 then
@@ -73,7 +93,7 @@ end $$
     if dist > 2 then
         local minimize = 12
         local x1, y1 = a.x+cos(a.ang)*1.5, a.y+sin(a.ang)*1.5
-        local x2, y2 = x1+cos(a.ang)*dist/minimize*scale, y1+sin(a.ang)*dist/minimize*scale
+        local x2, y2 = x1+cos(a.ang)*min(1,dist/minimize*scale), y1+sin(a.ang)*min(1,dist/minimize*scale)
         line(zoomx(x1), zoomy(y1), zoomx(x2), zoomy(y2), a.pointing_to.alert_color or 7)
     end
 end $$
@@ -93,4 +113,22 @@ zclass[[alert_radar,anchor_pos|
             a.alerts[other] = _g.pl_alert(a, a.anchoring, other)
         end
     end)
+end $$
+
+zclass[[bar,actor,anchor_pos,drawable_pre|
+    anchoring,@, percent_func,@, bg_func,@, fg_func,@, inactive_timeout,@, rmin,@, rmax,@,
+    draw,%bar_draw;
+    update,%bar_update;
+    start; duration,~inactive_timeout;
+]]
+
+|bar_update| function(a)
+    local prev_percent = a.percent
+    a.percent = a.percent_func()
+    a.fg = a.fg_func() a.bg = a.bg_func()
+    if prev_percent ~= a.percent then a:load"start" end
+end $$
+
+|bar_draw| function(a)
+    draw_circle_bar(a.percent, zoomx(a.x), zoomy(a.y), zoom(a.rmin), zoom(a.rmax), a.bg, a.fg)
 end $$

@@ -20,7 +20,7 @@
     -- title
     local planet = _g.planet(0,-22,10,_g.BEAR)
     _g.level_state(planet)
-    _g.score_counter(planet)
+    _g.stats_displayer(planet)
     _g.black_hole(0, 22)
     _g.game_checker(g_pl, planet, "level_bear_retry", "win_bear")
 end $$
