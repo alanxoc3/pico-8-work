@@ -15,13 +15,12 @@ zclass[[pl,actor,model,drawable,team_blue|
     end
 
     if ybtn() > 0 then
-        a.speed = -.005
+        a.speed = -.0075
     elseif ybtn() < 0 then
         a.speed = .01
     else
         a.speed = 0
     end
-
     
     a.d_ang = -xbtn()*.01
 end $$

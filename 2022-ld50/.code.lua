@@ -311,7 +311,7 @@ a.missile_ready=false
 a:start_timer("missile_cooldown",0.1,function()a.missile_ready=true end)
 end
 if ybtn()>0 then
-a.speed=-.005
+a.speed=-.0075
 elseif ybtn()<0 then
 a.speed=.01
 else
