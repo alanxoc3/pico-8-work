@@ -315,7 +315,7 @@ a,
 function()return a.shoot_percent end,
 function()return 1 end,
 function()return a.shoot_enabled and 7 or 1 end,
-.25,1.2,3
+.25,1.2,2.9
 )
 end
 a.shoot_percent=max(0,a.shoot_percent-.1)
@@ -793,7 +793,7 @@ zclass[[chaser,model,drawable,team_red|x,@,y,@,target,@,alert_color,8,max_health
 zclass[[black_hole,model,drawable,team_none|x,@,y,@,alert_color,1,d_ang,.1,damage,10000,tug_constant,.001,model,%BLACK_HOLE;start;duration,2,tug,nop,next,run;run;tug,%black_hole_tug;]]
 zclass[[twinkle,drawable_pre|x,@,y,@,twinkle_offset,@,view,@,star_view,@,draw,%twinkle_draw]]
 zclass[[star_view,vec|following,@,match_following,%star_view_match_following]]
-zclass[[pl,actor,model,drawable,team_blue|x,@,y,@,missile_ready,yes,model,%PLAYER_SPACESHIP,update,%pl_update,shoot_percent,0,shoot_enabled,yes,hit,%pl_hit,collision_func,%good_collision_circ,]]
+zclass[[pl,actor,model,drawable,team_blue|x,@,y,@,missile_ready,yes,model,%PLAYER_SPACESHIP,update,%pl_update,shoot_percent,1,shoot_enabled,yes,hit,%pl_hit,collision_func,%good_collision_circ,]]
 zclass[[pl_alert,anchor_pos,actor,drawable|alert_radar,@,anchoring,@,pointing_to,@,model,%PLAYER_ALERT,update,%pl_alert_update,dist,0,scale,1,destroyed,%pl_alert_destroy,draw,%pl_alert_draw;start;duration,1,next,normal;normal;,;dying;duration,.25,update,nop,next,wait;wait;duration,1,draw,nop]]
 zclass[[alert_radar,anchor_pos|alerts;,;anchoring,@,model,%ALERT_RADAR_CIRC,register,%alert_radar_register,update,%alert_radar_update,draw,%pl_alert_draw,]]
 zclass[[bar,actor,anchor_pos,drawable_pre|anchoring,@,percent_func,@,bg_func,@,fg_func,@,inactive_timeout,@,rmin,@,rmax,@,draw,%bar_draw;update,%bar_update;start;duration,~inactive_timeout;]]

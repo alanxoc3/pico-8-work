@@ -3,7 +3,7 @@ zclass[[pl,actor,model,drawable,team_blue|
     missile_ready,yes,
     model,%PLAYER_SPACESHIP,
     update,%pl_update,
-    shoot_percent,0, shoot_enabled,yes,
+    shoot_percent,1, shoot_enabled,yes,
     hit,%pl_hit,
     collision_func,%good_collision_circ,
 ]]
@@ -22,7 +22,7 @@ zclass[[pl,actor,model,drawable,team_blue|
                     function() return a.shoot_percent end,
                     function() return 1 end,
                     function() return a.shoot_enabled and 7 or 1 end,
-                    .25, 1.2, 3
+                    .25, 1.2, 2.9
                 )
             end
 
