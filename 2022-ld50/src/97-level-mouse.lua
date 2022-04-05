@@ -18,7 +18,7 @@
     _g.alert_radar(g_pl)
 
     -- title
-    local planet = _g.planet(0,-22,1,_g.MOUSE)
+    local planet = _g.planet(0,-22,10,_g.MOUSE)
     _g.chaser(0, 2, planet)
     _g.black_hole(0, 22)
     _g.game_checker(g_pl, planet, "level_mouse_retry", "win_mouse")
