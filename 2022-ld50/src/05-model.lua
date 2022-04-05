@@ -139,7 +139,7 @@ end
     end
 end $$
 
-zclass[[vanishing_shape,vec,actor,drawable_pre|
+zclass[[vanishing_shape,vec,actor,drawlayer_10|
     x,@, y,@, dx,@, dy,@, points,@, color,@,
     
     draw,%vanishing_shape_draw;
@@ -159,7 +159,7 @@ zclass[[vanishing_shape,vec,actor,drawable_pre|
     draw_polygon(points, a.color)
 end $$
 
-zclass[[line_particle,vec,actor,drawable_post|
+zclass[[line_particle,vec,actor,drawlayer_40|
     ang,@, x,@, y,@, x1,@, y1,@, x2,@, y2,@, color,@, dx,@, dy,@,
 
     draw,%line_particle_draw,

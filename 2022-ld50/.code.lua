@@ -72,7 +72,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,anchor_pos_update_anchor,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,model_update,@,model_draw,@,model_collide,@,model_hit,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_update,@,view_hit,@,view_match_following,@,missile_init,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,missile_init,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,planet_evac,@,chaser_update,@,chaser_hit,@,black_hole_tug,@,twinkle_draw,@,star_view_match_following,@,pl_update,@,pl_hit,@,pl_alert_destroy,@,pl_alert_update,@,pl_alert_draw,@,alert_radar_register,@,bar_update,@,bar_draw,@,level_bear_init,@,level_cat_init,@,level_mouse_init,@,level_pig_init,@,level_select_init,@,level_select_update,@,level_entrance_draw,@,level_entrance_hit,@,logo_init,@,logo_draw,@,level_select_draw,@,level_draw,@,title_screen_draw,@,stats_displayer_draw,@,game_checker_update,@,retry_init,@,retry_update,@,retry_draw,@,win_init,@,win_update,@,win_draw,@,level_update,@,spawn_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,anchor_pos_update_anchor,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,model_update,@,model_draw,@,model_collide,@,model_hit,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_update,@,view_hit,@,view_match_following,@,missile_init,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,missile_init,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,planet_evac,@,chaser_update,@,chaser_hit,@,black_hole_tug,@,twinkle_draw,@,star_view_match_following,@,pl_update,@,pl_hit,@,pl_alert_destroy,@,pl_alert_update,@,pl_alert_draw,@,alert_radar_register,@,bar_update_starting,@,bar_update_dying,@,bar_update,@,bar_draw,@,level_bear_init,@,level_cat_init,@,level_mouse_init,@,level_pig_init,@,level_select_init,@,level_select_update,@,level_entrance_draw,@,level_entrance_hit,@,logo_init,@,logo_draw,@,level_select_draw,@,level_draw,@,stats_displayer_draw,@,game_checker_update,@,retry_init,@,retry_update,@,retry_draw,@,win_init,@,win_update,@,win_draw,@,level_update,@,spawn_init,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -303,26 +303,22 @@ a.dx=a.following.dx
 a.dy=a.following.dy
 end
 end,function(a)
-a.shoot_percent=min(1,a.shoot_percent+.01)
+a.shoot_percent=min(1,a.shoot_percent+.005)
 if a.shoot_percent==1 then
 a.shoot_enabled=true
 end
 if btn"4"and a.missile_ready then
-if a.shoot_percent>0 and a.shoot_enabled then
 if not a.shoot_bar or not a.shoot_bar.alive then
-a.shoot_bar=_g.bar(
-a,
-function()return a.shoot_percent end,
-function()return 1 end,
-function()return a.shoot_enabled and 7 or 1 end,
-.25,1.2,2.9
-)
+a.shoot_bar=_g.bar(a,function()return a.shoot_percent end,1,1.2,2.2,.125)
 end
-a.shoot_percent=max(0,a.shoot_percent-.1)
+if a.shoot_percent>0 and a.shoot_enabled then
+a.shoot_percent=max(0,a.shoot_percent-.075)
 _g.missile(a.x+cos(a.ang)*.8,a.y+sin(a.ang)*.8,a.dx,a.dy,a.ang)
 a.missile_ready=false
 a:start_timer("missile_cooldown",0.1,function()a.missile_ready=true end)
 if a.shoot_percent==0 then a.shoot_enabled=false end
+else
+sfx(26,3)
 end
 end
 if ybtn()>0 then
@@ -370,12 +366,23 @@ a.alerts[other]=_g.pl_alert(a,a.anchoring,other)
 end
 end)
 end,function(a)
+a.rmin=a:get_elapsed_percent"state"*a.initial_rmin
+a.rmax=a:get_elapsed_percent"state"*a.initial_rmax
+end,function(a)
+a.rmin=a.initial_rmin-a:get_elapsed_percent"state"*a.initial_rmin
+a.rmax=a.initial_rmax-a:get_elapsed_percent"state"*a.initial_rmax
+end,function(a)
 local prev_percent=a.percent
 a.percent=a.percent_func()
-a.fg=a.fg_func()a.bg=a.bg_func()
-if prev_percent ~=a.percent then a:load"start" end
+if not a.alive then a:load"dying"
+elseif prev_percent ~=a.percent then a:load"run" end
 end,function(a)
-draw_circle_bar(a.percent,zoomx(a.x),zoomy(a.y),zoom(a.rmin),zoom(a.rmax),a.bg,a.fg)
+fillp(0b0111101111011110)
+zcircfill(a.x,a.y,a.rmin,a.fg)
+fillp()
+local rad=(a.rmax-a.rmin)*a.percent+a.rmin
+circ(zoomx(a.x),zoomy(a.y),zoom(rad),a.fg)
+circ(zoomx(a.x),zoomy(a.y),zoom(rad)-1,0)
 end,function()
 music(8,1000,7)
 clean_all_entities()
@@ -531,16 +538,14 @@ zspr(108,64,64,4,2)
 fade"0"
 camera()
 end,function()
-loop_zobjs_in_view(g_view,"drawable_pre","draw")
-loop_zobjs_in_view(g_view,"drawable","draw")
-loop_zobjs_in_view(g_view,"drawable_post","draw")
+loop_zobjs_in_view(g_view,"drawlayer_03","draw")
+loop_zobjs_in_view(g_view,"drawlayer_05","draw")
+loop_zobjs_in_view(g_view,"drawlayer_10","draw")
+loop_zobjs_in_view(g_view,"drawlayer_20","draw")
+loop_zobjs_in_view(g_view,"drawlayer_40","draw")
 end,function()
 circ(zoomx(0),zoomy(0),zoom(LEVEL_RADIUS-1),1)
 _g.level_select_draw()
-end,function()
-loop_zobjs_in_view(g_view,"drawable_pre","draw")
-loop_zobjs_in_view(g_view,"drawable","draw")
-loop_zobjs_in_view(g_view,"drawable_post","draw")
 end,function(a)
 print(""..a.planet.done_ships.."/"..a.planet.total_ships,4,4,11)
 end,function(a)
@@ -580,7 +585,7 @@ end,function(a)
 loop_zobjs("actor","state")
 loop_zobjs("model","model_update")
 end,function(a)
-loop_zobjs("drawable_post","draw")
+loop_zobjs("drawlayer_40","draw")
 end,function(a)
 music(4,nil,1)
 clean_all_entities()
@@ -600,7 +605,7 @@ end,function(a)
 loop_zobjs("actor","state")
 loop_zobjs("model","model_update")
 end,function(a)
-loop_zobjs("drawable_post","draw")
+loop_zobjs("drawlayer_40","draw")
 end,function()
 loop_zobjs("actor","state")
 loop_zobjs("view","match_following")
@@ -716,9 +721,11 @@ deregister_zobj(obj)
 end
 end
 end
-zclass[[drawable|]]
-zclass[[drawable_pre|]]
-zclass[[drawable_post|]]
+zclass[[drawlayer_03|]]
+zclass[[drawlayer_05|]]
+zclass[[drawlayer_10|]]
+zclass[[drawlayer_20|]]
+zclass[[drawlayer_40|]]
 zclass[[fader_out,actor|start;duration,@,destroyed,@,update,%fader_out_update]]
 zclass[[fader_in,actor|start;duration,@,update,%fader_in_update]]
 zclass[[timer|timers;,;start_timer,%timer_start_timer,stop_timer,%timer_stop_timer,play_timer,%timer_play_timer,delete_timer,%timer_delete_timer,get_elapsed,%timer_get_elapsed,get_elapsed_percent,%timer_get_elapsed_percent,tick,%timer_tick,]]
@@ -776,29 +783,30 @@ add(points,{x=x+cos(ang+dir)*mag,y=y+sin(ang+dir)*mag})
 end)
 return points
 end
-zclass[[vanishing_shape,vec,actor,drawable_pre|x,@,y,@,dx,@,dy,@,points,@,color,@,draw,%vanishing_shape_draw;start;duration,.25;]]
-zclass[[line_particle,vec,actor,drawable_post|ang,@,x,@,y,@,x1,@,y1,@,x2,@,y2,@,color,@,dx,@,dy,@,draw,%line_particle_draw,update,%line_particle_update;start;duration,.5;]]
+zclass[[vanishing_shape,vec,actor,drawlayer_10|x,@,y,@,dx,@,dy,@,points,@,color,@,draw,%vanishing_shape_draw;start;duration,.25;]]
+zclass[[line_particle,vec,actor,drawlayer_40|ang,@,x,@,y,@,x1,@,y1,@,x2,@,y2,@,color,@,dx,@,dy,@,draw,%line_particle_draw,update,%line_particle_update;start;duration,.5;]]
 zclass[[view,model|following,@,model,%VIEW_COLLISION_CIRC,scale,5,zoom_factor,16,zooming,false,update,%view_update,hit,%view_hit,match_following,%view_match_following]]
-zclass[[missile,model,drawable|x,@,y,@,dx,@,dy,@,ang,@,model,%MISSILE,speed,0.05,damage,1,inertia_x,1,inertia_y,1,destroyed,%missile_destroyed,init,%missile_init,hit,%missile_hit;start;duration,2;]]
-zclass[[missile_pop,model,drawable|x,@,y,@,model,%MISSILE_POP,init,%missile_pop_init]]
-zclass[[missile,model,drawable|x,@,y,@,dx,@,dy,@,ang,@,model,%MISSILE,speed,0.05,damage,1,inertia_x,1,inertia_y,1,destroyed,%missile_destroyed,init,%missile_init,hit,%missile_hit;start;duration,2;]]
-zclass[[bomb,model,drawable|x,@,y,@,model,%MISSILE_POP,init,%missile_pop_init]]
+zclass[[missile,model,drawlayer_20|x,@,y,@,dx,@,dy,@,ang,@,model,%MISSILE,speed,0.05,damage,1,inertia_x,1,inertia_y,1,destroyed,%missile_destroyed,init,%missile_init,hit,%missile_hit;start;duration,2;]]
+zclass[[missile_pop,model,drawlayer_20|x,@,y,@,model,%MISSILE_POP,init,%missile_pop_init]]
+zclass[[missile,model,drawlayer_20|x,@,y,@,dx,@,dy,@,ang,@,model,%MISSILE,speed,0.05,damage,1,inertia_x,1,inertia_y,1,destroyed,%missile_destroyed,init,%missile_init,hit,%missile_hit;start;duration,2;]]
+zclass[[bomb,model,drawlayer_20|x,@,y,@,model,%MISSILE_POP,init,%missile_pop_init]]
 zclass[[teammate|]]
 zclass[[team_red,teammate|]]
 zclass[[team_blue,teammate|]]
 zclass[[team_none,teammate|]]
-zclass[[planet,model,drawable,team_blue|x,@,y,@,total_ships,@,model,@,done_ships,0,max_health,100,health,100,damage,10000,d_ang,.001;start;duration,10,next,evac;evac;init,%planet_evac,duration,9.5,next,evac;done;,;]]
-zclass[[zipper,model,drawable,team_blue|x,@,y,@,ang,@,model,%ZIPPER;start;duration,1,next,zip;zip;speed,.05,duration,1;]]
-zclass[[chaser,model,drawable,team_red|x,@,y,@,target,@,alert_color,8,max_health,20,health,20,damage,30,scale,2,model,%CHASER,update,%chaser_update,hit,%chaser_hit;]]
-zclass[[black_hole,model,drawable,team_none|x,@,y,@,alert_color,1,d_ang,.1,damage,10000,tug_constant,.001,model,%BLACK_HOLE;start;duration,2,tug,nop,next,run;run;tug,%black_hole_tug;]]
-zclass[[twinkle,drawable_pre|x,@,y,@,twinkle_offset,@,view,@,star_view,@,draw,%twinkle_draw]]
+zclass[[planet,model,drawlayer_20,team_blue|x,@,y,@,total_ships,@,model,@,done_ships,0,max_health,100,health,100,damage,10000,d_ang,.001;start;duration,10,next,evac;evac;init,%planet_evac,duration,9.5,next,evac;done;,;]]
+zclass[[zipper,model,drawlayer_20,team_blue|x,@,y,@,ang,@,model,%ZIPPER;start;duration,1,next,zip;zip;speed,.05,duration,1;]]
+zclass[[chaser,model,drawlayer_20,team_red|x,@,y,@,target,@,alert_color,8,max_health,20,health,20,damage,30,scale,2,model,%CHASER,update,%chaser_update,hit,%chaser_hit;]]
+zclass[[black_hole,model,drawlayer_20,team_none|x,@,y,@,alert_color,1,d_ang,.1,damage,10000,tug_constant,.001,model,%BLACK_HOLE;start;duration,1.5,tug,nop,next,run;run;tug,%black_hole_tug;]]
+zclass[[twinkle,drawlayer_10|x,@,y,@,twinkle_offset,@,view,@,star_view,@,draw,%twinkle_draw]]
 zclass[[star_view,vec|following,@,match_following,%star_view_match_following]]
-zclass[[pl,actor,model,drawable,team_blue|x,@,y,@,missile_ready,yes,model,%PLAYER_SPACESHIP,update,%pl_update,shoot_percent,1,shoot_enabled,yes,hit,%pl_hit,collision_func,%good_collision_circ,]]
-zclass[[pl_alert,anchor_pos,actor,drawable|alert_radar,@,anchoring,@,pointing_to,@,model,%PLAYER_ALERT,update,%pl_alert_update,dist,0,scale,1,destroyed,%pl_alert_destroy,draw,%pl_alert_draw;start;duration,1,next,normal;normal;,;dying;duration,.25,update,nop,next,wait;wait;duration,1,draw,nop]]
+zclass[[pl,actor,model,drawlayer_20,team_blue|x,@,y,@,missile_ready,yes,model,%PLAYER_SPACESHIP,shoot_percent,1,shoot_enabled,yes,hit,%pl_hit,collision_func,%good_collision_circ;start;duration,1.5,next,run;run;update,%pl_update,]]
+zclass[[pl_alert,anchor_pos,actor,drawlayer_05|alert_radar,@,anchoring,@,pointing_to,@,model,%PLAYER_ALERT,update,%pl_alert_update,dist,0,scale,1,destroyed,%pl_alert_destroy,draw,%pl_alert_draw;start;duration,1,next,normal;normal;,;dying;duration,.25,update,nop,next,wait;wait;duration,1,draw,nop]]
 zclass[[alert_radar,anchor_pos|alerts;,;anchoring,@,model,%ALERT_RADAR_CIRC,register,%alert_radar_register,update,%alert_radar_update,draw,%pl_alert_draw,]]
-zclass[[bar,actor,anchor_pos,drawable_pre|anchoring,@,percent_func,@,bg_func,@,fg_func,@,inactive_timeout,@,rmin,@,rmax,@,draw,%bar_draw;update,%bar_update;start;duration,~inactive_timeout;]]
-zclass[[drawable_model_post,model,drawable_post|x,@,y,@,model,@]]
-zclass[[drawable_model_post_temp,model,drawable_post|x,@,y,@,model,@;start;duration,1.5,next,dying;dying;init,%model_explode;]]
+zclass[[bar,actor,anchor_pos,drawlayer_03|anchoring,@,percent_func,@,fg,@,initial_rmin,@,initial_rmax,@,timeout,@,rmin,0,rmax,0,draw,%bar_draw,percent,1;start;duration,.1,update,%bar_update_starting,next,run;run;duration,~timeout,next,dying,update,%bar_update;dying;duration,.1,update,%bar_update_dying;]]
+function zcircfill(x,y,rad,col)circfill(zoomx(x),zoomy(y),zoom(rad),col)end
+zclass[[drawable_model_post,model,drawlayer_40|x,@,y,@,model,@]]
+zclass[[drawable_model_post_temp,model,drawlayer_40|x,@,y,@,model,@;start;duration,1.5,next,dying;dying;init,%model_explode;]]
 function create_text(original_text,original_x,y,func,...)
 func=func or _g.drawable_model_post
 local l=split(original_text,",",false)
@@ -829,9 +837,9 @@ call_not_nil(inst,method_name,inst,...)
 end
 end
 end
-zclass[[level_entrance,model,drawable_pre|x,@,y,@,model,@,next_game_state,@,circ_radius,1.5,alert_color,9,draw,%level_entrance_draw,d_ang,.001,hit,%level_entrance_hit]]
+zclass[[level_entrance,model,drawlayer_10|x,@,y,@,model,@,next_game_state,@,circ_radius,1.5,alert_color,9,draw,%level_entrance_draw,d_ang,.001,hit,%level_entrance_hit]]
 zclass[[focus_point,model|model,%FOCUS_POINT,x,@,y,@,radius,1]]
-g_fade_table=zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,2,1,0,0,0;3;,3,3,3,3,1,0,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,1,1,0,0;6;,6,6,13,13,5,5,1,0;7;,7,7,6,13,13,5,1,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,5,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,1,1,0;13;,13,13,5,5,1,1,1,0;14;,14,14,13,4,2,2,1,0;15;,15,15,13,13,5,5,1,0;]]
+g_fade_table=zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,1,1,0,0;2;,2,2,2,2,1,1,0,0;3;,3,3,3,3,1,1,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,1,1,0,0;6;,6,6,13,13,5,5,0,0;7;,7,7,6,13,13,5,0,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,0,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,1,0,0;13;,13,13,5,5,1,1,0,0;14;,14,14,13,4,2,2,0,0;15;,15,15,13,13,5,5,0,0;]]
 function fade(threshold)
 for c=0,15 do
 pal(c,g_fade_table[c][1+flr(7*min(1,max(0,threshold)))])
@@ -872,12 +880,6 @@ for i=0,num-1 do
 _g.focus_point(cos(i/num)*LEVEL_RADIUS,sin(i/num)*LEVEL_RADIUS)
 end
 end
-zclass[[stats_displayer,drawable_post|planet,@,draw,%stats_displayer_draw]]
-function draw_circle_bar(percent,x,y,rmin,rmax,b,f)
-printh(percent)
-circ(x,y,rmin,b)
-circ(x,y,rmax,b)
-circ(x,y,(rmax-rmin)*percent\1+rmin,f)
-end
+zclass[[stats_displayer,drawlayer_40|planet,@,draw,%stats_displayer_draw]]
 zclass[[game_checker,actor|pl,@,planet,@,retry_level,@,win_level,@,update,%game_checker_update]]
 zclass[[level_state,actor|planet,@,chasers_spawned,0;start;duration,10,next,spawn;spawn;init,%spawn_init,duration,8,next,spawn;done_spawning;,;]]

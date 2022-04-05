@@ -1,8 +1,8 @@
-zclass[[drawable_model_post,model,drawable_post|
+zclass[[drawable_model_post,model,drawlayer_40|
     x,@, y,@, model,@
 ]]
 
-zclass[[drawable_model_post_temp,model,drawable_post|
+zclass[[drawable_model_post_temp,model,drawlayer_40|
     x,@, y,@, model,@;
     start;duration,1.5, next,dying;
     dying;init,%model_explode;
@@ -118,7 +118,7 @@ end $$
     if g_pl.y < -g_title_screen_coord then g_pl.y += g_title_screen_dim-1 g_view.y += g_title_screen_dim-1 end
 end $$
 
-zclass[[level_entrance,model,drawable_pre|
+zclass[[level_entrance,model,drawlayer_10|
     x,@, y,@, model,@, next_game_state,@,
     circ_radius,1.5,
     alert_color,9,

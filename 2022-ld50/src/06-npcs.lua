@@ -5,7 +5,7 @@ zclass[[team_blue,teammate|]] -- player team
 zclass[[team_none,teammate|]] -- unaffiliated team (black holes)
 
 -- a friendly planet that you protect
-zclass[[planet,model,drawable,team_blue|
+zclass[[planet,model,drawlayer_20,team_blue|
     x,@, y,@,total_ships,@,model,@,
     done_ships,0,
     max_health,100,
@@ -25,7 +25,7 @@ end $$
 
 -- a friendly ship leaving a planet that you're protecting
 -- the idea is these would just spawn from the planet and quickly zip away
-zclass[[zipper,model,drawable,team_blue|
+zclass[[zipper,model,drawlayer_20,team_blue|
     x,@,y,@,ang,@,
     model,%ZIPPER;
     start;duration,1,next,zip;
@@ -33,7 +33,7 @@ zclass[[zipper,model,drawable,team_blue|
 ]]
 
 -- an enemy that chases a target around, trying to crash into it
-zclass[[chaser,model,drawable,team_red|
+zclass[[chaser,model,drawlayer_20,team_red|
     x,@, y,@, target,@,
     alert_color,8,
     max_health,20,
@@ -68,7 +68,7 @@ end $$
 end $$
 
 -- an enemy that sucks other things into itself and destroys them
-zclass[[black_hole,model,drawable,team_none|
+zclass[[black_hole,model,drawlayer_20,team_none|
     x,@, y,@,
     alert_color,1,
     d_ang,.1, -- spinz fast
@@ -76,7 +76,7 @@ zclass[[black_hole,model,drawable,team_none|
     tug_constant,.001,
     model,%BLACK_HOLE;
 
-    start;duration,2, tug,nop, next,run;
+    start;duration,1.5, tug,nop, next,run;
     run;tug,%black_hole_tug;
 ]]
 

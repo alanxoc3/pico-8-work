@@ -1,4 +1,4 @@
-zclass[[twinkle,drawable_pre|
+zclass[[twinkle,drawlayer_10|
     x,@, y,@, twinkle_offset,@, view,@, star_view,@,
     draw,%twinkle_draw
 ]]

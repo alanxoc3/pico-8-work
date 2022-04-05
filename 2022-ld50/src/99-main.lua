@@ -53,21 +53,17 @@ function _draw()
 end
 
 |level_select_draw| function()
-    loop_zobjs_in_view(g_view, 'drawable_pre',  'draw')
-    loop_zobjs_in_view(g_view, 'drawable',      'draw')
-    loop_zobjs_in_view(g_view, 'drawable_post', 'draw')
+    loop_zobjs_in_view(g_view, 'drawlayer_03', 'draw')
+    loop_zobjs_in_view(g_view, 'drawlayer_05', 'draw')
+    loop_zobjs_in_view(g_view, 'drawlayer_10', 'draw')
+    loop_zobjs_in_view(g_view, 'drawlayer_20', 'draw')
+    loop_zobjs_in_view(g_view, 'drawlayer_40', 'draw')
 end $$
 
 LEVEL_RADIUS = 25
 |level_draw| function()
     circ(zoomx(0), zoomy(0), zoom(LEVEL_RADIUS-1), 1)
     _g.level_select_draw()
-end $$
-
-|title_screen_draw| function()
-    loop_zobjs_in_view(g_view, 'drawable_pre',  'draw')
-    loop_zobjs_in_view(g_view, 'drawable',      'draw')
-    loop_zobjs_in_view(g_view, 'drawable_post', 'draw')
 end $$
 
 function check_level_bounds()
@@ -85,16 +81,9 @@ function create_level_focus_points()
     end
 end
 
-zclass[[stats_displayer,drawable_post|
+zclass[[stats_displayer,drawlayer_40|
     planet,@, draw,%stats_displayer_draw
 ]]
-
-function draw_circle_bar(percent, x, y, rmin, rmax, b, f)
-    printh(percent)
-    circ(x, y, rmin, b)
-    circ(x, y, rmax, b)
-    circ(x, y, (rmax-rmin)*percent\1+rmin, f)
-end
 
 |stats_displayer_draw| function(a)
     print(""..a.planet.done_ships.."/"..a.planet.total_ships, 4, 4, 11)
@@ -151,7 +140,7 @@ end $$
 end $$
 
 |retry_draw| function(a)
-    loop_zobjs('drawable_post', 'draw')
+    loop_zobjs('drawlayer_40', 'draw')
 end $$
 
 
@@ -182,7 +171,7 @@ end $$
 end $$
 
 |win_draw| function(a)
-    loop_zobjs('drawable_post', 'draw')
+    loop_zobjs('drawlayer_40', 'draw')
 end $$
 
 |level_update| function()

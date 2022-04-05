@@ -1,4 +1,4 @@
-zclass[[missile,model,drawable|
+zclass[[missile,model,drawlayer_20|
     x,@,y,@,dx,@,dy,@,ang,@,     -- initial position & direction
     model,%MISSILE,
     speed,0.05,
@@ -10,7 +10,7 @@ zclass[[missile,model,drawable|
     start;duration,2;  -- disappear after 2 sec
 ]]
 
-zclass[[missile_pop,model,drawable|
+zclass[[missile_pop,model,drawlayer_20|
     x,@,y,@,
     model,%MISSILE_POP,
     init,%missile_pop_init
@@ -33,7 +33,7 @@ end $$
     a:explode(.2)
 end $$
 
-zclass[[missile,model,drawable|
+zclass[[missile,model,drawlayer_20|
     x,@,y,@,dx,@,dy,@,ang,@,     -- initial position & direction
     model,%MISSILE,
     speed,0.05,
@@ -45,7 +45,7 @@ zclass[[missile,model,drawable|
     start;duration,2;  -- disappear after 2 sec
 ]]
 
-zclass[[bomb,model,drawable|
+zclass[[bomb,model,drawlayer_20|
     x,@,y,@,
     model,%MISSILE_POP,
     init,%missile_pop_init
