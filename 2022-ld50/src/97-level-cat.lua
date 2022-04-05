@@ -20,7 +20,6 @@
     -- title
     local planet = _g.planet(0,-22,10,_g.MOUSE)
     _g.level_state(planet)
-    _g.chaser(0, 2, planet)
     _g.black_hole(0, 22)
     _g.game_checker(g_pl, planet, "level_cat_retry", "win_cat")
 end $$
