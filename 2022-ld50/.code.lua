@@ -72,7 +72,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,anchor_pos_update_anchor,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,collision_draw_debug,@,model_update,@,model_draw,@,model_collide,@,model_hit,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_update,@,view_hit,@,view_match_following,@,missile_init,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,planet_evac,@,chaser_update,@,chaser_hit,@,black_hole_tug,@,twinkle_draw,@,star_view_match_following,@,pl_update,@,pl_hit,@,pl_alert_destroy,@,pl_alert_update,@,pl_alert_draw,@,alert_radar_register,@,level_bear_init,@,level_cat_init,@,level_mouse_init,@,level_pig_init,@,level_select_init,@,level_select_update,@,level_entrance_draw,@,level_entrance_hit,@,logo_init,@,logo_draw,@,level_select_draw,@,level_draw,@,title_screen_draw,@,game_checker_update,@,retry_init,@,retry_update,@,retry_draw,@,win_init,@,win_update,@,win_draw,@,level_update,@,spawn_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,anchor_pos_update_anchor,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,collision_draw_debug,@,model_update,@,model_draw,@,model_collide,@,model_hit,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_update,@,view_hit,@,view_match_following,@,missile_init,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,planet_evac,@,chaser_update,@,chaser_hit,@,black_hole_tug,@,twinkle_draw,@,star_view_match_following,@,pl_update,@,pl_hit,@,pl_alert_destroy,@,pl_alert_update,@,pl_alert_draw,@,alert_radar_register,@,level_bear_init,@,level_cat_init,@,level_mouse_init,@,level_pig_init,@,level_select_init,@,level_select_update,@,level_entrance_draw,@,level_entrance_hit,@,logo_init,@,logo_draw,@,level_select_draw,@,level_draw,@,title_screen_draw,@,score_counter_draw,@,game_checker_update,@,retry_init,@,retry_update,@,retry_draw,@,win_init,@,win_update,@,win_draw,@,level_update,@,spawn_init,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -371,6 +371,7 @@ _g.fader_in(1)
 _g.alert_radar(g_pl)
 local planet=_g.planet(0,-22,10,_g.BEAR)
 _g.level_state(planet)
+_g.score_counter(planet)
 _g.black_hole(0,22)
 _g.game_checker(g_pl,planet,"level_bear_retry","win_bear")
 end,function()
@@ -391,6 +392,7 @@ _g.alert_radar(g_pl)
 local planet=_g.planet(0,-22,10,_g.CAT)
 _g.level_state(planet)
 _g.black_hole(0,22)
+_g.score_counter(planet)
 _g.game_checker(g_pl,planet,"level_cat_retry","win_cat")
 end,function()
 music(32,1000,7)
@@ -409,6 +411,7 @@ _g.fader_in(1)
 _g.alert_radar(g_pl)
 local planet=_g.planet(0,-22,10,_g.MOUSE)
 _g.level_state(planet)
+_g.score_counter(planet)
 _g.black_hole(0,22)
 _g.game_checker(g_pl,planet,"level_mouse_retry","win_mouse")
 end,function()
@@ -428,6 +431,7 @@ _g.fader_in(1)
 _g.alert_radar(g_pl)
 local planet=_g.planet(0,-22,10,_g.PIG)
 _g.level_state(planet)
+_g.score_counter(planet)
 _g.black_hole(0,22)
 _g.game_checker(g_pl,planet,"level_pig_retry","win_pig")
 end,function()
@@ -514,6 +518,8 @@ end,function()
 loop_zobjs_in_view(g_view,"drawable_pre","draw")
 loop_zobjs_in_view(g_view,"drawable","draw")
 loop_zobjs_in_view(g_view,"drawable_post","draw")
+end,function(a)
+print(""..a.planet.done_ships.."/"..a.planet.total_ships,4,4,11)
 end,function(a)
 if not a.pl.alive then a:kill()music(-1)sfx(24,3)_g.fader_out(1,function()g_game_state:load(a.retry_level)end)
 elseif not a.planet.alive then
@@ -849,5 +855,6 @@ for i=0,num-1 do
 _g.focus_point(cos(i/num)*LEVEL_RADIUS,sin(i/num)*LEVEL_RADIUS)
 end
 end
+zclass[[score_counter,drawable_post|planet,@,draw,%score_counter_draw]]
 zclass[[game_checker,actor|pl,@,planet,@,retry_level,@,win_level,@,update,%game_checker_update]]
 zclass[[level_state,actor|planet,@,chasers_spawned,0;start;duration,10,next,spawn;spawn;init,%spawn_init,duration,8,next,spawn;done_spawning;,;]]

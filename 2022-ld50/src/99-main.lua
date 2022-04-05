@@ -84,6 +84,14 @@ function create_level_focus_points()
     end
 end
 
+zclass[[score_counter,drawable_post|
+    planet,@, draw,%score_counter_draw
+]]
+
+|score_counter_draw| function(a)
+    print(""..a.planet.done_ships.."/"..a.planet.total_ships, 4, 4, 11)
+end $$
+
 zclass[[game_checker,actor|
     pl,@, planet,@, retry_level,@, win_level,@,
     update,%game_checker_update

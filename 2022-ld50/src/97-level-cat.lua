@@ -21,5 +21,6 @@
     local planet = _g.planet(0,-22,10,_g.CAT)
     _g.level_state(planet)
     _g.black_hole(0, 22)
+    _g.score_counter(planet)
     _g.game_checker(g_pl, planet, "level_cat_retry", "win_cat")
 end $$
