@@ -72,7 +72,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,anchor_pos_update_anchor,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,collision_draw_debug,@,model_update,@,model_draw,@,model_collide,@,model_hit,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_update,@,view_hit,@,view_match_following,@,missile_init,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,planet_evac,@,chaser_update,@,chaser_hit,@,black_hole_tug,@,twinkle_draw,@,star_view_match_following,@,pl_update,@,pl_hit,@,pl_alert_destroy,@,pl_alert_update,@,pl_alert_draw,@,alert_radar_register,@,level_bear_init,@,level_cat_init,@,level_mouse_init,@,level_pig_init,@,level_select_init,@,level_select_update,@,level_entrance_draw,@,level_entrance_hit,@,logo_init,@,logo_draw,@,level_select_draw,@,level_draw,@,title_screen_draw,@,score_counter_draw,@,game_checker_update,@,retry_init,@,retry_update,@,retry_draw,@,win_init,@,win_update,@,win_draw,@,level_update,@,spawn_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,anchor_pos_update_anchor,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,model_update,@,model_draw,@,model_collide,@,model_hit,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_update,@,view_hit,@,view_match_following,@,missile_init,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,planet_evac,@,chaser_update,@,chaser_hit,@,black_hole_tug,@,twinkle_draw,@,star_view_match_following,@,pl_update,@,pl_hit,@,pl_alert_destroy,@,pl_alert_update,@,pl_alert_draw,@,alert_radar_register,@,level_bear_init,@,level_cat_init,@,level_mouse_init,@,level_pig_init,@,level_select_init,@,level_select_update,@,level_entrance_draw,@,level_entrance_hit,@,logo_init,@,logo_draw,@,level_select_draw,@,level_draw,@,title_screen_draw,@,score_counter_draw,@,game_checker_update,@,retry_init,@,retry_update,@,retry_draw,@,win_init,@,win_update,@,win_draw,@,level_update,@,spawn_init,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -159,10 +159,6 @@ other.anchoring:hit(a.anchoring,-dx,-dy)
 end
 end)
 end,function(a)
-if g_debug then
-circ(zoomx(a.x),zoomy(a.y),a.radius*g_view.zoom_factor,8)
-end
-end,function(a)
 if a.model ~=a.previous_model then
 a.radius=a.model.radius
 a.collisions=a.model.collisions
@@ -186,9 +182,6 @@ srand(t()*4\1)
 foreach(modelpoints,function(points)
 line_loop(points.points,points.c,points.wobble_enabled and wobble_line or line)
 end)
-if g_debug and a.radius then
-circ(zoomx(a.x),zoomy(a.y),a.radius*g_view.zoom_factor,2)
-end
 end,function(a,other_list)
 if #a.collision_circs>0 then
 foreach(other_list,function(other)
@@ -255,10 +248,6 @@ local dir=atan2(x,y)
 local dist=approx_dist(x,y)
 a.dx=cos(dir)*dist*.25
 a.dy=sin(dir)*dist*.25
-if g_debug then
-if btn"4"then a.zoom_factor=min(20,a.zoom_factor+1)end
-if btn"5"then a.zoom_factor=max(8,a.zoom_factor-1)end
-end
 end
 end,function(a)
 sfx(23,3)
@@ -671,15 +660,6 @@ end
 function zoom(num)return num*g_view.zoom_factor end
 function zoomx(x)return zoom(x-g_view.x)+64 end
 function zoomy(y)return zoom(y-g_view.y)+64 end
-function tostring(any)
-if type(any)~="table"then return tostr(any)end
-local str="{"
-for k,v in pairs(any)do
-if str~="{"then str=str.."," end
-str=str..tostring(k).."="..tostring(v)
-end
-return str.."}"
-end
 zclass[[actor,timer|load,%actor_load,state,%actor_state,kill,%actor_kill,clean,%actor_clean,alive,yes,duration,null,curr,start,next,null,init,nop,update,nop,destroyed,nop;]]
 function clean_all_entities(...)
 local objs={}
@@ -711,7 +691,7 @@ zclass[[vec,pos|dx,0,dy,0,vec_update,%vec_update]]
 zclass[[acc,vec|inertia_x,.95,inertia_y,.95,ax,0,ay,0,acc_update,%acc_update]]
 zclass[[mov,acc|ang,0,speed,0,d_ang,0,mov_update,%mov_update]]
 zclass[[anchor_pos,pos|anchoring;x,0,y,0;update_anchor,%anchor_pos_update_anchor]]
-zclass[[collision_circ,vec,actor,drawable|anchoring,@,offset_x,@,offset_y,@,radius,@,inertia_x,1,inertia_y,1,follow_anchoring,%collision_follow_anchoring,check_collision,%check_collision,init,%collision_init,draw,%collision_draw_debug]]
+zclass[[collision_circ,vec,actor|anchoring,@,offset_x,@,offset_y,@,radius,@,inertia_x,1,inertia_y,1,follow_anchoring,%collision_follow_anchoring,check_collision,%check_collision,init,%collision_init,]]
 function dist_between_circles(a,b)
 local x,y=b.x-a.x,b.y-a.y
 local minimum_dist=a.radius+b.radius
@@ -829,7 +809,6 @@ g_game_state=_g.game_state()
 g_fade=0
 end
 function _update60()
-if btnp(4)and btnp(5)then g_debug=not g_debug end
 loop_zobjs("actor","clean")
 register_zobjs()
 loop_zobjs("timer","tick")
@@ -839,7 +818,6 @@ function _draw()
 cls()
 fade(g_fade)
 loop_zobjs("game_state","draw")
-if g_debug then rect(0,0,127,127,8)end
 end
 LEVEL_RADIUS=25
 function check_level_bounds()

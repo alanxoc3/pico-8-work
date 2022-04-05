@@ -43,20 +43,13 @@ zclass[[anchor_pos,pos|anchoring;x,0,y,0;update_anchor,%anchor_pos_update_anchor
 end $$
 
 -- basically, copies all the speed/movement properties of something
-zclass[[collision_circ,vec,actor
--- DEBUG_BEGIN
-,drawable
--- DEBUG_END
-|
+zclass[[collision_circ,vec,actor|
     anchoring,@, offset_x,@, offset_y,@, radius,@,
     inertia_x,1, inertia_y,1,
     follow_anchoring,%collision_follow_anchoring,
     check_collision,%check_collision,
     init,%collision_init,
 
-    -- DEBUG_BEGIN
-    draw,%collision_draw_debug
-    -- DEBUG_END
 ]]
 
 |collision_init| function(a)
@@ -91,14 +84,6 @@ end
         end
     end)
 end $$
-
--- DEBUG_BEGIN
-|collision_draw_debug| function(a)
-    if g_debug then
-        circ(zoomx(a.x), zoomy(a.y), a.radius*g_view.zoom_factor, 8)
-    end
-end $$
--- DEBUG_BEGIN
 
 zclass[[bad_collision_circ,collision_circ|
     anchoring,@, offset_x,@, offset_y,@, radius,@
