@@ -7,7 +7,6 @@ G_LEVEL_PIG_WIN   = false
 zclass[[game_state,actor|
     ecs_exclusions;actor,true; -- remove game_state from the actor group
     curr,logo;
-    -- curr,level_select;
     logo; init,%logo_init, update,%logo_update, draw,%logo_draw, duration,2.5, next,level_select;
     level_select; init,%level_select_init, update,%level_select_update, draw,%level_select_draw;
 
@@ -239,9 +238,9 @@ function level_init_shared(level_name, retry_state, win_state, music_index, zipp
     end
 
     create_level_focus_points()
-    create_text("lvl", 0, -3, _g.drawable_model_post_temp)
-    _g.drawable_model_post_temp(0, 0, _g.STARTING_CIRCLE, 1)
-    create_text(level_name, 0, 3, _g.drawable_model_post_temp)
+    create_text("lvl", pl_x, pl_y-3, _g.drawable_model_post_temp)
+    _g.drawable_model_post_temp(pl_x, pl_y, _g.STARTING_CIRCLE, 1)
+    create_text(level_name, pl_x, pl_y+3, _g.drawable_model_post_temp)
 
     _g.fader_in(1) -- to show the level
     _g.alert_radar(g_pl)

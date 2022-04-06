@@ -1,8 +1,17 @@
 |level_cat_init| function()
-    level_init_shared("cat", "level_cat_retry", "win_cat", 24, 10, 0, 0)
+    level_init_shared("cat", "level_cat_retry", "win_cat", 24, 11, 0, -8)
 
     local planet = _g.planet(0,-22,_g.CAT)
-    _g.black_hole(0, 22)
+    _g.asteroid(25,0,_g.ASTEROID)
+    _g.asteroid(-25,0,_g.ASTEROID)
+    _g.asteroid(15,15,_g.ASTEROID)
+    _g.asteroid(-13,13,_g.ASTEROID)
+    _g.asteroid(22,8,_g.ASTEROID)
+    _g.asteroid(-22,8,_g.ASTEROID)
+
+    -- asteroids kinda protect you from enemies
+    _g.spawner(_g.chaser, planet, 4, 2, .5, 1)
+    _g.black_hole(0, 0)
 end $$
 
 |level_pig_init| function()
@@ -22,10 +31,9 @@ end $$
 end $$
 
 |level_bear_init| function()
-    level_init_shared("bear", "level_bear_retry", "win_bear", 8, 10, 0, 0)
+    level_init_shared("bear", "level_bear_retry", "win_bear", 8, 11, 0, -8)
 
     local planet = _g.planet(0,-22,_g.BEAR)
-    _g.black_hole(0, 22)
 end $$
 
 |level_mouse_init| function()
