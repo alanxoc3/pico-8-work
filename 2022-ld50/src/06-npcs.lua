@@ -125,9 +125,11 @@ zclass[[black_hole,model,drawlayer_20,team_none|
 
 |black_hole_tug| function(a, obj_list)
     foreach(obj_list, function(obj) 
-        if a == obj then return end
-        local ang = atan2(a.x-obj.x, a.y-obj.y)
-        obj.dx += cos(ang) * a.tug_constant
-        obj.dy += sin(ang) * a.tug_constant
+        if a.id == obj then return end
+        local x, y = a.x-obj.x, a.y-obj.y
+        local ang = atan2(x, y)
+        local dist = min(approx_dist(x,y), a.tug_constant)
+        obj.dx += cos(ang) * dist
+        obj.dy += sin(ang) * dist
     end)
 end $$
