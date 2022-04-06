@@ -86,7 +86,7 @@ end
     if win then
         create_text("code,amorg,denial", -12, -12)
         create_text("gfx,tigerwolf,greatcadet", 12, -12) _g.focus_point(12,-12)
-        create_text("sfx,amorg,greatcadet", -12, 12)
+        create_text("sfx,amorg,greatcadet", -12, 12) _g.focus_point(-12,12)
         create_text("made,with,pico8", 12, 12)
     end
 
