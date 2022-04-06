@@ -31,20 +31,13 @@ end $$
 end $$
 
 |level_bear_init| function()
-    level_init_shared("bear", "level_bear_retry", "win_bear", 8, 19, 8, 8)
+    level_init_shared("bear", "level_bear_retry", "win_bear", 8, 12, 0, 0)
 
-    local p1 = _g.planet(0,-22,_g.BEAR)
-    local p2 = _g.planet(0,22,_g.BEAR)
-    -- 18
-    _g.asteroid(0, 0,_g.ASTEROID)
-    _g.black_hole(-70, 0)
-    _g.black_hole(-65, 0)
-    _g.black_hole(-60, 0)
-    _g.black_hole(70, 0)
-    _g.black_hole(65, 0)
-    _g.black_hole(60, 0)
-    --_g.spawner(_g.chaser, planet, 8, 8, .825-.125/2, .825+.125/2)
-    --_g.spawner(_g.chaser, planet, 4, 8, .625+.125/2, .625+.125/2)
+    local planet = _g.planet(0,-22,_g.BEAR)
+    _g.black_hole(0,22)
+    _g.black_hole(0,22)
+    _g.spawner(_g.chaser, planet, 8, 8, .825-.125/2, .825+.125/2)
+    _g.spawner(_g.chaser, planet, 4, 8, .625+.125/2, .625+.125/2)
 end $$
 
 |level_mouse_init| function()
