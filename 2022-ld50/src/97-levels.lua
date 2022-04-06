@@ -1,5 +1,5 @@
 |level_cat_init| function()
-    level_init_shared("cat", "level_cat_retry", "win_cat", 24, 11, 0, -8)
+    level_init_shared("cat", "level_cat_retry", "win_cat", 24, 11, 0, -9)
 
     local planet = _g.planet(0,-22,_g.CAT)
     _g.asteroid(25,0,_g.ASTEROID)
@@ -39,14 +39,14 @@ end $$
 end $$
 
 |level_mouse_init| function()
-    level_init_shared("mouse", "level_mouse_retry", "win_mouse", 32, 12, -7, 3)
+    level_init_shared("mouse", "level_mouse_retry", "win_mouse", 32, 12, -7, 0)
 
     local planet = _g.planet(0,0,_g.MOUSE)
     _g.asteroid(cos(.25    )*10,sin(.25    )*10,_g.ASTEROID)
     _g.asteroid(cos(.25+1/3)*20,sin(.25+1/3)*20,_g.ASTEROID)
     _g.asteroid(cos(.25+2/3)*30,sin(.25+2/3)*30,_g.ASTEROID)
 
-    _g.spawner(_g.chaser, planet, 4, 3, 0, 1)
+    _g.spawner(_g.chaser, planet, 4, 4, 0, 1)
 
     _g.black_hole(cos(.75    )*40,sin(.75    )*40)
     _g.black_hole(cos(.75+1/3)*40,sin(.75+1/3)*40)

@@ -183,9 +183,6 @@ foreach(modelpoints,function(points)
 line_loop(points.points,points.c,points.wobble_enabled and wobble_line or line)
 end)
 memcpy(0x5f44,0x5600,8)
-if g_debug and a.radius then
-circ(zoomx(a.x),zoomy(a.y),a.radius*g_view.zoom_factor,2)
-end
 end,function(a,other_list)
 if #a.collision_circs>0 then
 foreach(other_list,function(other)
@@ -253,10 +250,6 @@ local dir=atan2(x,y)
 local dist=approx_dist(x,y)
 a.dx=cos(dir)*dist*.25
 a.dy=sin(dir)*dist*.25
-if g_debug then
-if btn"4"then a.zoom_factor=min(20,a.zoom_factor+1)end
-if btn"5"then a.zoom_factor=max(8,a.zoom_factor-1)end
-end
 end
 end,function(a)
 sfx(23,3)
@@ -341,7 +334,7 @@ sfx(26,3)
 end
 end
 if ybtn()>0 then
-a.speed=-.01*.75
+a.speed=-.00875*.75
 elseif ybtn()<0 then
 a.speed=.01*.75
 else
@@ -470,7 +463,7 @@ g_game_state:load(a.next_game_state)
 end)
 end
 end,function()
-level_init_shared("cat","level_cat_retry","win_cat",24,11,0,-8)
+level_init_shared("cat","level_cat_retry","win_cat",24,11,0,-9)
 local planet=_g.planet(0,-22,_g.CAT)
 _g.asteroid(25,0,_g.ASTEROID)
 _g.asteroid(-25,0,_g.ASTEROID)
@@ -496,12 +489,12 @@ _g.black_hole(0,22)
 _g.spawner(_g.chaser,planet,8,8,.825-.125/2,.825+.125/2)
 _g.spawner(_g.chaser,planet,4,8,.625+.125/2,.625+.125/2)
 end,function()
-level_init_shared("mouse","level_mouse_retry","win_mouse",32,12,-7,3)
+level_init_shared("mouse","level_mouse_retry","win_mouse",32,12,-7,0)
 local planet=_g.planet(0,0,_g.MOUSE)
 _g.asteroid(cos(.25)*10,sin(.25)*10,_g.ASTEROID)
 _g.asteroid(cos(.25+1/3)*20,sin(.25+1/3)*20,_g.ASTEROID)
 _g.asteroid(cos(.25+2/3)*30,sin(.25+2/3)*30,_g.ASTEROID)
-_g.spawner(_g.chaser,planet,4,3,0,1)
+_g.spawner(_g.chaser,planet,4,4,0,1)
 _g.black_hole(cos(.75)*40,sin(.75)*40)
 _g.black_hole(cos(.75+1/3)*40,sin(.75+1/3)*40)
 _g.black_hole(cos(.75+2/3)*40,sin(.75+2/3)*40)
@@ -680,15 +673,6 @@ end
 function zoom(num)return num*g_view.zoom_factor end
 function zoomx(x)return zoom(x-g_view.x)+64 end
 function zoomy(y)return zoom(y-g_view.y)+64 end
-function tostring(any)
-if type(any)~="table"then return tostr(any)end
-local str="{"
-for k,v in pairs(any)do
-if str~="{"then str=str.."," end
-str=str..tostring(k).."="..tostring(v)
-end
-return str.."}"
-end
 zclass[[actor,timer|load,%actor_load,state,%actor_state,kill,%actor_kill,clean,%actor_clean,alive,yes,duration,null,curr,start,next,null,init,nop,update,nop,destroyed,nop;]]
 function clean_all_entities(...)
 local objs={}
@@ -841,13 +825,12 @@ G_LEVEL_MOUSE_WIN=false
 G_LEVEL_CAT_WIN=false
 G_LEVEL_PIG_WIN=false
 SCREEN_SHAKE=false
-zclass[[game_state,actor|ecs_exclusions;actor,true;curr,level_pig;logo;init,%logo_init,update,%logo_update,draw,%logo_draw,duration,2.5,next,level_select;level_select;init,%level_select_init,update,%level_select_update,draw,%level_select_draw;level_bear;init,%level_bear_init,update,%level_update,draw,%level_draw;level_mouse;init,%level_mouse_init,update,%level_update,draw,%level_draw;level_cat;init,%level_cat_init,update,%level_update,draw,%level_draw;level_pig;init,%level_pig_init,update,%level_update,draw,%level_draw;level_bear_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;level_mouse_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;level_cat_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;level_pig_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;win_bear;init,%win_init,update,%win_update,draw,%win_draw;win_mouse;init,%win_init,update,%win_update,draw,%win_draw;win_cat;init,%win_init,update,%win_update,draw,%win_draw;win_pig;init,%win_init,update,%win_update,draw,%win_draw;]]
+zclass[[game_state,actor|ecs_exclusions;actor,true;curr,logo;logo;init,%logo_init,update,%logo_update,draw,%logo_draw,duration,2.5,next,level_select;level_select;init,%level_select_init,update,%level_select_update,draw,%level_select_draw;level_bear;init,%level_bear_init,update,%level_update,draw,%level_draw;level_mouse;init,%level_mouse_init,update,%level_update,draw,%level_draw;level_cat;init,%level_cat_init,update,%level_update,draw,%level_draw;level_pig;init,%level_pig_init,update,%level_update,draw,%level_draw;level_bear_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;level_mouse_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;level_cat_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;level_pig_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;win_bear;init,%win_init,update,%win_update,draw,%win_draw;win_mouse;init,%win_init,update,%win_update,draw,%win_draw;win_cat;init,%win_init,update,%win_update,draw,%win_draw;win_pig;init,%win_init,update,%win_update,draw,%win_draw;]]
 function _init()
 g_game_state=_g.game_state()
 g_fade=0
 end
 function _update60()
-if btnp(4)and btnp(5)then g_debug=not g_debug end
 loop_zobjs("actor","clean")
 register_zobjs()
 loop_zobjs("timer","tick")
@@ -858,7 +841,6 @@ camera(SCREEN_SHAKE and rnd_one()or 0,SCREEN_SHAKE and rnd_one()or 0)
 cls()
 fade(g_fade)
 loop_zobjs("game_state","draw")
-if g_debug then rect(0,0,127,127,8)end
 SCREEN_SHAKE=false
 end
 LEVEL_RADIUS=26
