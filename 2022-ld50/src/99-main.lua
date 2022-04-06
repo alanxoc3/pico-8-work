@@ -222,7 +222,7 @@ zclass[[spawner,actor|
     local ang = rnd(a.max_ang-a.min_ang) + a.min_ang
 
     -- each level is 25 wide, so let's make sure they spawn outside the screen.
-    local x,y = cos(ang)*30,sin(ang)*30
+    local x,y = cos(ang)*(LEVEL_RADIUS+7),sin(ang)*(LEVEL_RADIUS+7)
     a.spawn_func(x, y, a.target)
 end $$
 

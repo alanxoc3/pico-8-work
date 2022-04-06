@@ -615,7 +615,7 @@ loop_zobjs("model","model_update")
 check_level_bounds()
 end,function(a)
 local ang=rnd(a.max_ang-a.min_ang)+a.min_ang
-local x,y=cos(ang)*30,sin(ang)*30
+local x,y=cos(ang)*(LEVEL_RADIUS+7),sin(ang)*(LEVEL_RADIUS+7)
 a.spawn_func(x,y,a.target)
 end)
 function zspr(sind,x,y,sw,sh,...)
