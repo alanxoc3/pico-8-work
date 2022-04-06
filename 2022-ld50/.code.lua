@@ -515,7 +515,7 @@ loop_zobjs_in_view(g_view,"drawlayer_10","draw")
 loop_zobjs_in_view(g_view,"drawlayer_20","draw")
 loop_zobjs_in_view(g_view,"drawlayer_40","draw")
 end,function()
-circ(zoomx(0),zoomy(0),zoom(LEVEL_RADIUS-1),1)
+circ(zoomx(0),zoomy(0),zoom(LEVEL_RADIUS-4),1)
 _g.level_select_draw()
 end,function(a)
 print(""..g_zipper_count.."/"..g_zipper_goal,4,4,11)
@@ -843,7 +843,7 @@ cls()
 fade(g_fade)
 loop_zobjs("game_state","draw")
 end
-LEVEL_RADIUS=25
+LEVEL_RADIUS=28
 function check_level_bounds()
 if approx_dist(g_pl.x,g_pl.y)>LEVEL_RADIUS and(not CHECK_LEVEL_BOUND_FADER or not CHECK_LEVEL_BOUND_FADER.alive)then
 CHECK_LEVEL_BOUND_FADER=_g.fader_out(1,function()

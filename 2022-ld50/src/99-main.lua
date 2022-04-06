@@ -59,9 +59,9 @@ end
     loop_zobjs_in_view(g_view, 'drawlayer_40', 'draw')
 end $$
 
-LEVEL_RADIUS = 25
+LEVEL_RADIUS = 28
 |level_draw| function()
-    circ(zoomx(0), zoomy(0), zoom(LEVEL_RADIUS-1), 1)
+    circ(zoomx(0), zoomy(0), zoom(LEVEL_RADIUS-4), 1)
     _g.level_select_draw()
 end $$
 
