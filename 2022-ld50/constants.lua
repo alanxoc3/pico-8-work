@@ -1,5 +1,5 @@
 -- PLAYER...
-_g.PLAYER_SPACESHIP = parse_model[[collisions;1;,0,0,0.1;lines;1;,7,1,yes,0.4,0,-0.3,0.3,-0.2,0,-0.3,-0.3,0.4,0;]]
+_g.PLAYER_SPACESHIP = parse_model[[collisions;1;,0,0,0.1;collisions;2;,0.1,0,0.1;lines;1;,7,1,yes,0.4,0,-0.3,0.3,-0.2,0,-0.3,-0.3,0.4,0;]]
 _g.MISSILE          = parse_model[[collisions;1;,0,0,0.3;lines;1;,7,-1,no,-0.1,0,0.1,0;]]
 _g.MISSILE_POP      = parse_model[[lines;1;,7,-1,no,-0.2,0,0,0.2,0.2,0,0,-0.2,-0.2,0;]]
 
