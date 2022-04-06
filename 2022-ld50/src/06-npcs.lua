@@ -98,7 +98,7 @@ zclass[[chaser,model_health_bar,drawlayer_20,team_red|
             --local diff = ang - a.ang%1
             --a.d_ang = sgn(abs(diff) > 0.5 and -diff or diff) * .01
         a.d_ang = sgn(ang - a.ang%1) * .01
-        a.speed = .004
+        a.speed = .004*.75
     else
         a.d_ang = .01
         a.speed = 0

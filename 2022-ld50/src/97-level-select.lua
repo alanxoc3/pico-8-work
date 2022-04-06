@@ -74,14 +74,14 @@ end
     if not G_LEVEL_CAT_WIN then create_text("lvl",    -12,  -2.5)  create_text("cat",   -12, 2.5)  _g.level_entrance(-12, 0, _g.LEVEL_LEFT, "level_cat")
     else _g.focus_point(-12, 0) create_text("cat,dead", -12, 0) end
 
-    if not G_LEVEL_PIG_WIN then create_text("lvl",    12,   -2.5)  create_text("pig",   12,  2.5)  _g.level_entrance(12,  0, _g.LEVEL_RIGHT, "level_pig")
-    else _g.focus_point(12, 0) create_text("pig,dead", 12, 0) end
+    if not G_LEVEL_PIG_WIN then create_text("lvl",    0,   -14.5)  create_text("pig",  0,   -9.5) _g.level_entrance(0, -12, _g.LEVEL_RIGHT, "level_pig")
+    else _g.focus_point(0, -12) create_text("pig,dead", 0, -12) end
 
     if not G_LEVEL_MOUSE_WIN then create_text("lvl",    0,    9.5)   create_text("mouse", 0,   14.5) _g.level_entrance(0,  12, _g.LEVEL_DOWN, "level_mouse")
     else _g.focus_point(0, 12) create_text("mouse,dead", 0, 12) end
 
-    if not G_LEVEL_BEAR_WIN then create_text("lvl",    0,   -14.5)  create_text("bear",  0,   -9.5) _g.level_entrance(0, -12, _g.LEVEL_UP, "level_bear")
-    else _g.focus_point(0, -12) create_text("bear,dead", 0, -12) end
+    if not G_LEVEL_BEAR_WIN then create_text("lvl",    12,   -2.5)  create_text("bear",   12,  2.5)  _g.level_entrance(12,  0, _g.LEVEL_UP, "level_bear")
+    else _g.focus_point(12, 0) create_text("bear,dead", 12, 0) end
 
     if win then
         create_text("code,amorg,denial", -12, -12)

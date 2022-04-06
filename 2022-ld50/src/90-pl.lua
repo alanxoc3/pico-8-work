@@ -31,9 +31,9 @@ zclass[[pl,actor,model,drawlayer_20,team_blue|
     end
 
     if ybtn() > 0 then
-        a.speed = -.0075
+        a.speed = -.01*.75
     elseif ybtn() < 0 then
-        a.speed = .01
+        a.speed = .01*.75
     else
         a.speed = 0
     end

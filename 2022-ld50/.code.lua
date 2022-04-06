@@ -294,7 +294,7 @@ end,function()g_zipper_count+=1 end,function(a)a:explode()end,function(a)
 if a.target then
 local ang=atan2(a.target.x-a.x,a.target.y-a.y)
 a.d_ang=sgn(ang-a.ang%1)*.01
-a.speed=.004
+a.speed=.004*.75
 else
 a.d_ang=.01
 a.speed=0
@@ -341,9 +341,9 @@ sfx(26,3)
 end
 end
 if ybtn()>0 then
-a.speed=-.0075
+a.speed=-.01*.75
 elseif ybtn()<0 then
-a.speed=.01
+a.speed=.01*.75
 else
 a.speed=0
 end
@@ -427,12 +427,12 @@ create_text("ldjam50",0,3,_g.drawable_model_post_temp)
 end
 if not G_LEVEL_CAT_WIN then create_text("lvl",-12,-2.5)create_text("cat",-12,2.5)_g.level_entrance(-12,0,_g.LEVEL_LEFT,"level_cat")
 else _g.focus_point(-12,0)create_text("cat,dead",-12,0)end
-if not G_LEVEL_PIG_WIN then create_text("lvl",12,-2.5)create_text("pig",12,2.5)_g.level_entrance(12,0,_g.LEVEL_RIGHT,"level_pig")
-else _g.focus_point(12,0)create_text("pig,dead",12,0)end
+if not G_LEVEL_PIG_WIN then create_text("lvl",0,-14.5)create_text("pig",0,-9.5)_g.level_entrance(0,-12,_g.LEVEL_RIGHT,"level_pig")
+else _g.focus_point(0,-12)create_text("pig,dead",0,-12)end
 if not G_LEVEL_MOUSE_WIN then create_text("lvl",0,9.5)create_text("mouse",0,14.5)_g.level_entrance(0,12,_g.LEVEL_DOWN,"level_mouse")
 else _g.focus_point(0,12)create_text("mouse,dead",0,12)end
-if not G_LEVEL_BEAR_WIN then create_text("lvl",0,-14.5)create_text("bear",0,-9.5)_g.level_entrance(0,-12,_g.LEVEL_UP,"level_bear")
-else _g.focus_point(0,-12)create_text("bear,dead",0,-12)end
+if not G_LEVEL_BEAR_WIN then create_text("lvl",12,-2.5)create_text("bear",12,2.5)_g.level_entrance(12,0,_g.LEVEL_UP,"level_bear")
+else _g.focus_point(12,0)create_text("bear,dead",12,0)end
 if win then
 create_text("code,amorg,denial",-12,-12)
 create_text("gfx,tigerwolf,greatcadet",12,-12)_g.focus_point(12,-12)
@@ -844,7 +844,7 @@ G_LEVEL_MOUSE_WIN=false
 G_LEVEL_CAT_WIN=false
 G_LEVEL_PIG_WIN=false
 SCREEN_SHAKE=false
-zclass[[game_state,actor|ecs_exclusions;actor,true;curr,level_bear;logo;init,%logo_init,update,%logo_update,draw,%logo_draw,duration,2.5,next,level_select;level_select;init,%level_select_init,update,%level_select_update,draw,%level_select_draw;level_bear;init,%level_bear_init,update,%level_update,draw,%level_draw;level_mouse;init,%level_mouse_init,update,%level_update,draw,%level_draw;level_cat;init,%level_cat_init,update,%level_update,draw,%level_draw;level_pig;init,%level_pig_init,update,%level_update,draw,%level_draw;level_bear_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;level_mouse_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;level_cat_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;level_pig_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;win_bear;init,%win_init,update,%win_update,draw,%win_draw;win_mouse;init,%win_init,update,%win_update,draw,%win_draw;win_cat;init,%win_init,update,%win_update,draw,%win_draw;win_pig;init,%win_init,update,%win_update,draw,%win_draw;]]
+zclass[[game_state,actor|ecs_exclusions;actor,true;curr,logo;logo;init,%logo_init,update,%logo_update,draw,%logo_draw,duration,2.5,next,level_select;level_select;init,%level_select_init,update,%level_select_update,draw,%level_select_draw;level_bear;init,%level_bear_init,update,%level_update,draw,%level_draw;level_mouse;init,%level_mouse_init,update,%level_update,draw,%level_draw;level_cat;init,%level_cat_init,update,%level_update,draw,%level_draw;level_pig;init,%level_pig_init,update,%level_update,draw,%level_draw;level_bear_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;level_mouse_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;level_cat_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;level_pig_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;win_bear;init,%win_init,update,%win_update,draw,%win_draw;win_mouse;init,%win_init,update,%win_update,draw,%win_draw;win_cat;init,%win_init,update,%win_update,draw,%win_draw;win_pig;init,%win_init,update,%win_update,draw,%win_draw;]]
 function _init()
 g_game_state=_g.game_state()
 g_fade=0

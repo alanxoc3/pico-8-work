@@ -7,8 +7,7 @@ SCREEN_SHAKE = false
 
 zclass[[game_state,actor|
     ecs_exclusions;actor,true; -- remove game_state from the actor group
-    -- curr,logo;
-    curr,level_bear;
+    curr,logo;
     logo; init,%logo_init, update,%logo_update, draw,%logo_draw, duration,2.5, next,level_select;
     level_select; init,%level_select_init, update,%level_select_update, draw,%level_select_draw;
 
