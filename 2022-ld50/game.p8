@@ -2,7 +2,7 @@ pico-8 cartridge // http://www.pico-8.com
 version 35
 __lua__
 -- rewob
--- amorg, davery, thegreatcadet, tigerwolf181
+-- amorg games
 
 -- unobfuscated code at:
 -- git.io/amorg-pico8
