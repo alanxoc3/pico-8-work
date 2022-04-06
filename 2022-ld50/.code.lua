@@ -497,17 +497,15 @@ _g.black_hole(0,22)
 _g.spawner(_g.chaser,planet,8,8,.825-.125/2,.825+.125/2)
 _g.spawner(_g.chaser,planet,4,8,.625+.125/2,.625+.125/2)
 end,function()
-level_init_shared("mouse","level_mouse_retry","win_mouse",32,16,-7,3)
+level_init_shared("mouse","level_mouse_retry","win_mouse",32,12,-7,3)
 local planet=_g.planet(0,0,_g.MOUSE)
-_g.asteroid(-15,0,_g.ASTEROID)
-_g.asteroid(0,-25,_g.ASTEROID)
-_g.asteroid(35,0,_g.ASTEROID)
-_g.asteroid(0,45,_g.ASTEROID)
+_g.asteroid(cos(.25)*10,sin(.25)*10,_g.ASTEROID)
+_g.asteroid(cos(.25+1/3)*20,sin(.25+1/3)*20,_g.ASTEROID)
+_g.asteroid(cos(.25+2/3)*30,sin(.25+2/3)*30,_g.ASTEROID)
 _g.spawner(_g.chaser,planet,4,3,0,1)
-_g.black_hole(50,-50)
-_g.black_hole(50,50)
-_g.black_hole(-50,50)
-_g.black_hole(-50,-50)
+_g.black_hole(cos(.75)*40,sin(.75)*40)
+_g.black_hole(cos(.75+1/3)*40,sin(.75+1/3)*40)
+_g.black_hole(cos(.75+2/3)*40,sin(.75+2/3)*40)
 end,function()music(-1)sfx"63" end,function(a)
 local logo_opacity=cos(a:get_elapsed_percent"state")+1
 fade(logo_opacity)
@@ -844,7 +842,7 @@ G_LEVEL_MOUSE_WIN=false
 G_LEVEL_CAT_WIN=false
 G_LEVEL_PIG_WIN=false
 SCREEN_SHAKE=false
-zclass[[game_state,actor|ecs_exclusions;actor,true;curr,logo;logo;init,%logo_init,update,%logo_update,draw,%logo_draw,duration,2.5,next,level_select;level_select;init,%level_select_init,update,%level_select_update,draw,%level_select_draw;level_bear;init,%level_bear_init,update,%level_update,draw,%level_draw;level_mouse;init,%level_mouse_init,update,%level_update,draw,%level_draw;level_cat;init,%level_cat_init,update,%level_update,draw,%level_draw;level_pig;init,%level_pig_init,update,%level_update,draw,%level_draw;level_bear_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;level_mouse_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;level_cat_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;level_pig_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;win_bear;init,%win_init,update,%win_update,draw,%win_draw;win_mouse;init,%win_init,update,%win_update,draw,%win_draw;win_cat;init,%win_init,update,%win_update,draw,%win_draw;win_pig;init,%win_init,update,%win_update,draw,%win_draw;]]
+zclass[[game_state,actor|ecs_exclusions;actor,true;curr,level_mouse;logo;init,%logo_init,update,%logo_update,draw,%logo_draw,duration,2.5,next,level_select;level_select;init,%level_select_init,update,%level_select_update,draw,%level_select_draw;level_bear;init,%level_bear_init,update,%level_update,draw,%level_draw;level_mouse;init,%level_mouse_init,update,%level_update,draw,%level_draw;level_cat;init,%level_cat_init,update,%level_update,draw,%level_draw;level_pig;init,%level_pig_init,update,%level_update,draw,%level_draw;level_bear_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;level_mouse_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;level_cat_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;level_pig_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;win_bear;init,%win_init,update,%win_update,draw,%win_draw;win_mouse;init,%win_init,update,%win_update,draw,%win_draw;win_cat;init,%win_init,update,%win_update,draw,%win_draw;win_pig;init,%win_init,update,%win_update,draw,%win_draw;]]
 function _init()
 g_game_state=_g.game_state()
 g_fade=0
