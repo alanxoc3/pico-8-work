@@ -5,7 +5,6 @@ menuitem(1, "reset save data", function()
     extcmd'reset'
 end)
 
-
 zclass[[game_state,actor|
     ecs_exclusions;actor,true; -- remove game_state from the actor group
     curr,logo;
