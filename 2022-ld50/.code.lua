@@ -519,7 +519,7 @@ loop_zobjs_in_view(g_view,"drawlayer_10","draw")
 loop_zobjs_in_view(g_view,"drawlayer_20","draw")
 loop_zobjs_in_view(g_view,"drawlayer_40","draw")
 end,function()
-circ(zoomx(0),zoomy(0),zoom(LEVEL_RADIUS-4),1)
+circ(zoomx(0),zoomy(0),zoom(LEVEL_VIEW_RADIUS),1)
 _g.level_select_draw()
 end,function(a)
 print(""..g_zipper_count.."/"..g_zipper_goal,4,4,11)
@@ -861,7 +861,8 @@ loop_zobjs("game_state","draw")
 if g_debug then rect(0,0,127,127,8)end
 SCREEN_SHAKE=false
 end
-LEVEL_RADIUS=28
+LEVEL_RADIUS=26
+LEVEL_VIEW_RADIUS=LEVEL_RADIUS-2
 function check_level_bounds()
 if approx_dist(g_pl.x,g_pl.y)>LEVEL_RADIUS and(not CHECK_LEVEL_BOUND_FADER or not CHECK_LEVEL_BOUND_FADER.alive)then
 CHECK_LEVEL_BOUND_FADER=_g.fader_out(1,function()
@@ -870,9 +871,9 @@ end)
 end
 end
 function create_level_focus_points()
-local num=LEVEL_RADIUS \ 2
+local num=LEVEL_VIEW_RADIUS \ 2
 for i=0,num-1 do
-_g.focus_point(cos(i/num)*LEVEL_RADIUS,sin(i/num)*LEVEL_RADIUS)
+_g.focus_point(cos(i/num)*LEVEL_VIEW_RADIUS,sin(i/num)*LEVEL_VIEW_RADIUS)
 end
 end
 zclass[[stats_displayer,drawlayer_40|draw,%stats_displayer_draw]]

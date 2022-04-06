@@ -64,9 +64,10 @@ end
     loop_zobjs_in_view(g_view, 'drawlayer_40', 'draw')
 end $$
 
-LEVEL_RADIUS = 28
+LEVEL_RADIUS = 26
+LEVEL_VIEW_RADIUS = LEVEL_RADIUS-2
 |level_draw| function()
-    circ(zoomx(0), zoomy(0), zoom(LEVEL_RADIUS-4), 1)
+    circ(zoomx(0), zoomy(0), zoom(LEVEL_VIEW_RADIUS), 1)
     _g.level_select_draw()
 end $$
 
@@ -79,9 +80,9 @@ function check_level_bounds()
 end
 
 function create_level_focus_points()
-    local num = LEVEL_RADIUS \ 2
+    local num = LEVEL_VIEW_RADIUS \ 2
     for i=0,num-1 do
-        _g.focus_point(cos(i/num)*LEVEL_RADIUS, sin(i/num)*LEVEL_RADIUS)
+        _g.focus_point(cos(i/num)*LEVEL_VIEW_RADIUS, sin(i/num)*LEVEL_VIEW_RADIUS)
     end
 end
 
