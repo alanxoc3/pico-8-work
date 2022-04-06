@@ -21,7 +21,7 @@ zclass[[planet,model_health_bar,drawlayer_20,team_blue|
     spawn_delay,4, spawn_rate,4,
     health_bar_min,1.7,
     health_bar_color,3,
-    max_health,50,
+    max_health,75,
     health,~max_health,
     explode_sfx,24,
     hit,%planet_hit,
