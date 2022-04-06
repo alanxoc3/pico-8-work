@@ -15,7 +15,7 @@
 end $$
 
 |level_pig_init| function()
-    level_init_shared("pig", "level_pig_retry", "win_pig", 16, 7, 0, 0)
+    level_init_shared("pig", "level_pig_retry", "win_pig", 16, 11, 0, 0)
 
     -- title
     local planet = _g.planet(20,0,_g.PIG)
@@ -25,9 +25,7 @@ end $$
     _g.spawner(_g.chaser, planet, 4, 4, -.125, .125)
 
     _g.black_hole(-22, 0)
-    _g.black_hole(-15, -15)
-    _g.black_hole(-15, 15)
-
+    _g.black_hole(-22, 0)
 end $$
 
 |level_bear_init| function()
