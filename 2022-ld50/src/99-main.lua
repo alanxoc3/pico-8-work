@@ -1,9 +1,10 @@
-G_DEATH_COUNT = 0
-G_LEVEL_BEAR_WIN  = false
-G_LEVEL_MOUSE_WIN = false
-G_LEVEL_CAT_WIN   = false
-G_LEVEL_PIG_WIN   = false
 SCREEN_SHAKE = false
+
+menuitem(1, "reset save data", function()
+    memset(0x5e00, 0, 64)
+    extcmd'reset'
+end)
+
 
 zclass[[game_state,actor|
     ecs_exclusions;actor,true; -- remove game_state from the actor group
@@ -28,6 +29,14 @@ zclass[[game_state,actor|
 ]]
 
 function _init()
+    memset(0x5e00, 0, 64) -- clear the memory just in case
+    cartdata"rewob"
+    G_LEVEL_BEAR_WIN = dget(0) ~= 0
+    G_LEVEL_MOUSE_WIN = dget(1) ~= 0
+    G_LEVEL_CAT_WIN = dget(2) ~= 0
+    G_LEVEL_PIG_WIN = dget(3) ~= 0
+    G_DEATH_COUNT = dget(4)
+
     g_game_state = _g.game_state()
     g_fade = 0
 end
@@ -41,6 +50,12 @@ function _update60()
     register_zobjs()                  -- register all zobs from previous game loop iteration
     loop_zobjs('timer',      'tick')  -- update the timers
     loop_zobjs('game_state', 'state') -- game state controls the different overall states in the game
+
+    dset(0, G_LEVEL_BEAR_WIN and 1 or 0)
+    dset(1, G_LEVEL_MOUSE_WIN and 1 or 0)
+    dset(2, G_LEVEL_CAT_WIN and 1 or 0)
+    dset(3, G_LEVEL_PIG_WIN and 1 or 0)
+    dset(4, G_DEATH_COUNT)
 end
 
 function _draw()

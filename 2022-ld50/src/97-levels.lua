@@ -39,7 +39,7 @@ end $$
 end $$
 
 |level_mouse_init| function()
-    level_init_shared("mouse", "level_mouse_retry", "win_mouse", 32, 13, -7, 0)
+    level_init_shared("mouse", "level_mouse_retry", "win_mouse", 32, 13, -9, 0)
 
     local planet = _g.planet(0,0,_g.MOUSE)
     _g.asteroid(cos(.25    )*10,sin(.25    )*10,_g.ASTEROID)

@@ -489,7 +489,7 @@ _g.black_hole(0,22)
 _g.spawner(_g.chaser,planet,8,8,.825-.125/2,.825+.125/2)
 _g.spawner(_g.chaser,planet,4,8,.625+.125/2,.625+.125/2)
 end,function()
-level_init_shared("mouse","level_mouse_retry","win_mouse",32,13,-7,0)
+level_init_shared("mouse","level_mouse_retry","win_mouse",32,13,-9,0)
 local planet=_g.planet(0,0,_g.MOUSE)
 _g.asteroid(cos(.25)*10,sin(.25)*10,_g.ASTEROID)
 _g.asteroid(cos(.25+1/3)*20,sin(.25+1/3)*20,_g.ASTEROID)
@@ -819,14 +819,20 @@ for c=0,15 do
 pal(c,g_fade_table[c][1+flr(7*min(1,max(0,threshold)))])
 end
 end
-G_DEATH_COUNT=0
-G_LEVEL_BEAR_WIN=false
-G_LEVEL_MOUSE_WIN=false
-G_LEVEL_CAT_WIN=false
-G_LEVEL_PIG_WIN=false
 SCREEN_SHAKE=false
+menuitem(1,"reset save data",function()
+memset(0x5e00,0,64)
+extcmd"reset"
+end)
 zclass[[game_state,actor|ecs_exclusions;actor,true;curr,logo;logo;init,%logo_init,update,%logo_update,draw,%logo_draw,duration,2.5,next,level_select;level_select;init,%level_select_init,update,%level_select_update,draw,%level_select_draw;level_bear;init,%level_bear_init,update,%level_update,draw,%level_draw;level_mouse;init,%level_mouse_init,update,%level_update,draw,%level_draw;level_cat;init,%level_cat_init,update,%level_update,draw,%level_draw;level_pig;init,%level_pig_init,update,%level_update,draw,%level_draw;level_bear_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;level_mouse_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;level_cat_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;level_pig_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;win_bear;init,%win_init,update,%win_update,draw,%win_draw;win_mouse;init,%win_init,update,%win_update,draw,%win_draw;win_cat;init,%win_init,update,%win_update,draw,%win_draw;win_pig;init,%win_init,update,%win_update,draw,%win_draw;]]
 function _init()
+memset(0x5e00,0,64)
+cartdata"rewob"
+G_LEVEL_BEAR_WIN=dget(0)~=0
+G_LEVEL_MOUSE_WIN=dget(1)~=0
+G_LEVEL_CAT_WIN=dget(2)~=0
+G_LEVEL_PIG_WIN=dget(3)~=0
+G_DEATH_COUNT=dget(4)
 g_game_state=_g.game_state()
 g_fade=0
 end
@@ -835,6 +841,11 @@ loop_zobjs("actor","clean")
 register_zobjs()
 loop_zobjs("timer","tick")
 loop_zobjs("game_state","state")
+dset(0,G_LEVEL_BEAR_WIN and 1 or 0)
+dset(1,G_LEVEL_MOUSE_WIN and 1 or 0)
+dset(2,G_LEVEL_CAT_WIN and 1 or 0)
+dset(3,G_LEVEL_PIG_WIN and 1 or 0)
+dset(4,G_DEATH_COUNT)
 end
 function _draw()
 camera(SCREEN_SHAKE and rnd_one()or 0,SCREEN_SHAKE and rnd_one()or 0)
