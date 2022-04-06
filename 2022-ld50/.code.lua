@@ -177,10 +177,15 @@ foreach(points,function(point)point.x=zoomx(point.x)point.y=zoomy(point.y)end)
 draw_polygon(points,shape.bg_color)
 add(modelpoints,{c=shape.fg_color,points=points,wobble_enabled=shape.wobble_enabled})
 end)
+memcpy(0x5600,0x5f44,8)
 srand(t()*4\1)
 foreach(modelpoints,function(points)
 line_loop(points.points,points.c,points.wobble_enabled and wobble_line or line)
 end)
+memcpy(0x5f44,0x5600,8)
+if g_debug and a.radius then
+circ(zoomx(a.x),zoomy(a.y),a.radius*g_view.zoom_factor,2)
+end
 end,function(a,other_list)
 if #a.collision_circs>0 then
 foreach(other_list,function(other)
@@ -248,6 +253,10 @@ local dir=atan2(x,y)
 local dist=approx_dist(x,y)
 a.dx=cos(dir)*dist*.25
 a.dy=sin(dir)*dist*.25
+if g_debug then
+if btn"4"then a.zoom_factor=min(20,a.zoom_factor+1)end
+if btn"5"then a.zoom_factor=max(8,a.zoom_factor-1)end
+end
 end
 end,function(a)
 sfx(23,3)
@@ -277,7 +286,7 @@ end,function(a,other,...)
 local prev_health=a.health
 _g.model_hit(a,other,...)
 if prev_health ~=a.health and(not a.health_bar or not a.health_bar.alive)then
-a.health_bar=_g.bar(a,function()return a.health/a.max_health end,3,1.7,2.7,.5)
+a.health_bar=_g.bar(a,function()SCREEN_SHAKE=true return a.health/a.max_health end,3,1.7,2.7,.5)
 end
 end,function(a)
 _g.zipper(a.x,a.y,rnd())
@@ -674,6 +683,15 @@ end
 function zoom(num)return num*g_view.zoom_factor end
 function zoomx(x)return zoom(x-g_view.x)+64 end
 function zoomy(y)return zoom(y-g_view.y)+64 end
+function tostring(any)
+if type(any)~="table"then return tostr(any)end
+local str="{"
+for k,v in pairs(any)do
+if str~="{"then str=str.."," end
+str=str..tostring(k).."="..tostring(v)
+end
+return str.."}"
+end
 zclass[[actor,timer|load,%actor_load,state,%actor_state,kill,%actor_kill,clean,%actor_clean,alive,yes,duration,null,curr,start,next,null,init,nop,update,nop,destroyed,nop;]]
 function clean_all_entities(...)
 local objs={}
@@ -825,21 +843,26 @@ G_LEVEL_BEAR_WIN=false
 G_LEVEL_MOUSE_WIN=false
 G_LEVEL_CAT_WIN=false
 G_LEVEL_PIG_WIN=false
+SCREEN_SHAKE=false
 zclass[[game_state,actor|ecs_exclusions;actor,true;curr,level_bear;logo;init,%logo_init,update,%logo_update,draw,%logo_draw,duration,2.5,next,level_select;level_select;init,%level_select_init,update,%level_select_update,draw,%level_select_draw;level_bear;init,%level_bear_init,update,%level_update,draw,%level_draw;level_mouse;init,%level_mouse_init,update,%level_update,draw,%level_draw;level_cat;init,%level_cat_init,update,%level_update,draw,%level_draw;level_pig;init,%level_pig_init,update,%level_update,draw,%level_draw;level_bear_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;level_mouse_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;level_cat_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;level_pig_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;win_bear;init,%win_init,update,%win_update,draw,%win_draw;win_mouse;init,%win_init,update,%win_update,draw,%win_draw;win_cat;init,%win_init,update,%win_update,draw,%win_draw;win_pig;init,%win_init,update,%win_update,draw,%win_draw;]]
 function _init()
 g_game_state=_g.game_state()
 g_fade=0
 end
 function _update60()
+if btnp(4)and btnp(5)then g_debug=not g_debug end
 loop_zobjs("actor","clean")
 register_zobjs()
 loop_zobjs("timer","tick")
 loop_zobjs("game_state","state")
 end
 function _draw()
+camera(SCREEN_SHAKE and rnd_one()or 0,SCREEN_SHAKE and rnd_one()or 0)
 cls()
 fade(g_fade)
 loop_zobjs("game_state","draw")
+if g_debug then rect(0,0,127,127,8)end
+SCREEN_SHAKE=false
 end
 LEVEL_RADIUS=28
 function check_level_bounds()

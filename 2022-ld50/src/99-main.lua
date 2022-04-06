@@ -3,6 +3,7 @@ G_LEVEL_BEAR_WIN  = false
 G_LEVEL_MOUSE_WIN = false
 G_LEVEL_CAT_WIN   = false
 G_LEVEL_PIG_WIN   = false
+SCREEN_SHAKE = false
 
 zclass[[game_state,actor|
     ecs_exclusions;actor,true; -- remove game_state from the actor group
@@ -44,12 +45,15 @@ function _update60()
 end
 
 function _draw()
+    camera(SCREEN_SHAKE and rnd_one() or 0, SCREEN_SHAKE and rnd_one() or 0)
     cls()
+    
     fade(g_fade)
     loop_zobjs('game_state', 'draw')
     -- DEBUG_BEGIN
     if g_debug then rect(0, 0, 127, 127, 8) end
     -- DEBUG_END
+    SCREEN_SHAKE = false
 end
 
 |level_select_draw| function()

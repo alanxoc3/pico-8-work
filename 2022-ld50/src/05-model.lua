@@ -43,10 +43,14 @@ end $$
         add(modelpoints, {c=shape.fg_color, points=points, wobble_enabled=shape.wobble_enabled})
     end)
 
+    -- save and restore random state
+    -- https://pico-8.fandom.com/wiki/Memory
+    memcpy(0x5600, 0x5f44, 8)
     srand(t()*4\1) -- for nice wobbling
     foreach(modelpoints, function(points)
         line_loop(points.points, points.c, points.wobble_enabled and wobble_line or line)
     end)
+    memcpy(0x5f44, 0x5600, 8)
 
     -- DEBUG_BEGIN
     if g_debug and a.radius then

@@ -36,7 +36,7 @@ zclass[[planet,model_health_bar,drawlayer_20,team_blue|
     _g.model_hit(a, other, ...)
 
     if prev_health ~= a.health and (not a.health_bar or not a.health_bar.alive) then
-        a.health_bar = _g.bar(a, function() return a.health / a.max_health end, 3, 1.7, 2.7, .5)
+        a.health_bar = _g.bar(a, function() SCREEN_SHAKE = true return a.health / a.max_health end, 3, 1.7, 2.7, .5)
     end
 end $$
 
