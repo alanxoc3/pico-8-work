@@ -409,12 +409,13 @@ _g.fader_in(1)
 _g.alert_radar(g_pl)
 g_title_screen_coord=30
 g_title_screen_dim=g_title_screen_coord*2
+local wob=get_wob_text(G_DEATH_COUNT)
 if win then
-create_text("rewob",0,-3,_g.drawable_model_post)
+create_text(wob,0,-3,_g.drawable_model_post)
 _g.drawable_model_post(0,0,_g.STARTING_CIRCLE)
 create_text("credits",0,3,_g.drawable_model_post)
 else
-create_text("rewob",0,-3,_g.drawable_model_post_temp)
+create_text(wob,0,-3,_g.drawable_model_post_temp)
 _g.drawable_model_post_temp(0,0,_g.STARTING_CIRCLE)
 create_text("ldjam50",0,3,_g.drawable_model_post_temp)
 end
@@ -526,21 +527,10 @@ end
 end,function(a)
 music(4,nil,1)
 clean_all_entities()
-G_DEATH_COUNT=min(100,G_DEATH_COUNT+1)
+G_DEATH_COUNT=max(0,min(100,G_DEATH_COUNT+1))
 _g.fader_in(1)
 g_view=_g.view()
-local txt="???"
-if G_DEATH_COUNT==1 then txt="wob"
-elseif G_DEATH_COUNT==2 then txt="wob,again"
-elseif G_DEATH_COUNT==3 then txt="wob,again?"
-elseif G_DEATH_COUNT<100 and G_DEATH_COUNT>=3 then
-if G_DEATH_COUNT%10==0 then
-txt="rewob,"..(G_DEATH_COUNT\10)
-else
-txt="wob,"..G_DEATH_COUNT
-end
-end
-create_text(txt,0,0)
+create_text(get_wob_text(G_DEATH_COUNT),0,0)
 g_game_state:start_timer("retry",1,function()
 _g.fader_out(1,function()
 if g_game_state.curr=="level_mouse_retry"then g_game_state:load("level_mouse")
@@ -871,6 +861,16 @@ end
 end
 zclass[[stats_displayer,drawlayer_40|draw,%stats_displayer_draw]]
 zclass[[game_checker,actor|pl,@,retry_level,@,win_level,@,update,%game_checker_update]]
+function get_wob_text(death_count)
+local wob,num="wob",death_count
+if num==0 then
+return "rewob"
+elseif num%10==0 then
+return "rewob "..num\10
+else
+return "wob "..num\1
+end
+end
 zclass[[spawner,actor|spawn_func,@,target,@,spawn_delay,@,spawn_rate,@,min_ang,@,max_ang,@;start;duration,~spawn_delay,next,spawn;spawn;init,%spawn_init,duration,~spawn_rate,next,spawn;]]
 function level_init_shared(level_name,retry_state,win_state,music_index,zipper_goal,pl_x,pl_y)
 music(music_index,1000,7)

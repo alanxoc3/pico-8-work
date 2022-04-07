@@ -119,26 +119,26 @@ zclass[[game_checker,actor|
     end
 end $$
 
+function get_wob_text(death_count)
+    local wob, num = "wob", death_count
+    if num == 0 then
+        return "rewob"
+    elseif num % 10 == 0 then
+        return "rewob "..num\10
+    else
+        return "wob "..num\1
+    end
+end
+
 |retry_init| function(a)
     music(4,nil,1)
     clean_all_entities()
-    G_DEATH_COUNT = min(100, G_DEATH_COUNT+1)
+    G_DEATH_COUNT = max(0, min(100, G_DEATH_COUNT+1))
 
     _g.fader_in(1)
     g_view = _g.view()
     
-    local txt = "???"
-    if G_DEATH_COUNT == 1     then txt = "wob"
-    elseif G_DEATH_COUNT == 2 then txt = "wob,again"
-    elseif G_DEATH_COUNT == 3 then txt = "wob,again?"
-    elseif G_DEATH_COUNT < 100 and G_DEATH_COUNT >= 3 then
-        if G_DEATH_COUNT % 10 == 0 then
-            txt = "rewob,"..(G_DEATH_COUNT\10)
-        else
-            txt = "wob,"..G_DEATH_COUNT
-        end
-    end
-    create_text(txt, 0, 0)
+    create_text(get_wob_text(G_DEATH_COUNT), 0, 0)
 
     g_game_state:start_timer("retry", 1, function()
         _g.fader_out(1, function()

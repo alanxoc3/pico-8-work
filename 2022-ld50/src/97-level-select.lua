@@ -61,12 +61,13 @@ end
     g_title_screen_dim = g_title_screen_coord*2
 
     -- title
+    local wob = get_wob_text(G_DEATH_COUNT)
     if win then
-        create_text("rewob", 0, -3, _g.drawable_model_post)
+        create_text(wob, 0, -3, _g.drawable_model_post)
         _g.drawable_model_post(0, 0, _g.STARTING_CIRCLE)
         create_text("credits", 0, 3, _g.drawable_model_post)
     else
-        create_text("rewob", 0, -3, _g.drawable_model_post_temp)
+        create_text(wob, 0, -3, _g.drawable_model_post_temp)
         _g.drawable_model_post_temp(0, 0, _g.STARTING_CIRCLE)
         create_text("ldjam50", 0, 3, _g.drawable_model_post_temp)
     end
