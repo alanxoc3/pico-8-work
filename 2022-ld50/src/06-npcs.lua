@@ -46,7 +46,7 @@ end $$
 
 -- a friendly asteroid that you might not want to protect
 zclass[[asteroid,model_health_bar,drawlayer_20,team_blue|
-    x,@, y,@, model,@,
+    x,@, y,@, model,%ASTEROID,
     max_health,50,
     health,~max_health,
 
@@ -63,7 +63,6 @@ zclass[[asteroid,model_health_bar,drawlayer_20,team_blue|
 -- the idea is these would just spawn from the planet and quickly zip away
 zclass[[zipper,model,drawlayer_20,team_blue|
     x,@,y,@,ang,@,
-    alert_color,11,
     destroyed,~explode,model,%ZIPPER;
     start;init,%zipper_init,duration,1,next,zip;
     zip;init,nop,speed,.05,duration,1;
@@ -113,7 +112,7 @@ end $$
 -- an enemy that sucks other things into itself and destroys them
 zclass[[black_hole,model,drawlayer_20,team_none|
     x,@, y,@,
-    alert_color,1,
+    alert_color,2,
     d_ang,.1, -- spinz fast
     damage,10000, -- basically infinite damage
     tug_constant,.0004,

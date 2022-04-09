@@ -7,22 +7,19 @@ end)
 
 zclass[[game_state,actor|
     ecs_exclusions;actor,true; -- remove game_state from the actor group
-    curr,logo;
+    -- curr,logo;
+    curr,1;
     logo; init,%logo_init, update,%logo_update, draw,%logo_draw, duration,2.5, next,level_select;
     level_select; init,%level_select_init, update,%level_select_update, draw,%level_select_draw;
 
-    1; init,%level_bear_init,    update,%level_update, draw,%level_draw;
-    2; init,%level_bear_init,    update,%level_update, draw,%level_draw;
-
-    3; init,%level_bear_init,    update,%level_update, draw,%level_draw;
-
-    4; init,%level_bear_init,    update,%level_update, draw,%level_draw;
-
-    5; init,%level_cat_init,     update,%level_update, draw,%level_draw;
-    6; init,%level_pig_init,     update,%level_update, draw,%level_draw;
-
-    7; init,%level_mouse_init,   update,%level_update, draw,%level_draw;
-    8; init,%level_credits_init, update,%level_update, draw,%level_draw;
+    1; init,%level_1_init, update,%level_update, draw,%level_draw;
+    2; init,%level_2_init, update,%level_update, draw,%level_draw;
+    3; init,%level_3_init, update,%level_update, draw,%level_draw;
+    4; init,%level_4_init, update,%level_update, draw,%level_draw;
+    5; init,%level_5_init, update,%level_update, draw,%level_draw;
+    6; init,%level_6_init, update,%level_update, draw,%level_draw;
+    7; init,%level_7_init, update,%level_update, draw,%level_draw;
+    8; init,%level_8_init, update,%level_update, draw,%level_draw;
 
     retry; init,%retry_init, update,%retry_update, draw,%retry_draw;
     win; init,%win_init, update,%win_update, draw,%win_draw;
@@ -111,14 +108,11 @@ zclass[[game_checker,actor|
     end
 end $$
 
-function get_wob_text(death_count)
-    local wob, num = "wob", death_count
-    if num == 0 then
+function get_wob_text()
+    if G_DEATH_COUNT == 0 then
         return "rewob"
-    elseif num % 10 == 0 then
-        return "rewob "..num\10
     else
-        return "wob "..num\1
+        return "wob "..G_DEATH_COUNT\1
     end
 end
 
@@ -130,7 +124,7 @@ end
     _g.fader_in(1)
     g_view = _g.view()
     
-    create_text(get_wob_text(G_DEATH_COUNT), 0, 0)
+    create_text(get_wob_text(), 0, 0)
 
     g_game_state:start_timer("retry", 1, function()
         _g.fader_out(1, function()
@@ -190,7 +184,6 @@ end $$
     loop_zobjs('alert_radar', 'register', g_zclass_entities['asteroid'])
     loop_zobjs('alert_radar', 'register', g_zclass_entities['view'])
     loop_zobjs('alert_radar', 'register', g_zclass_entities['black_hole'])
-    loop_zobjs('alert_radar', 'register', g_zclass_entities['zipper'])
 
     loop_zobjs('view', 'collide', g_zclass_entities['black_hole'])
     loop_zobjs('view', 'collide', g_zclass_entities['planet'])
@@ -226,7 +219,7 @@ zclass[[spawner,actor|
     a.spawn_func(x, y, a.target)
 end $$
 
-function level_init_shared(level_num, level_name, music_index, pl_x, pl_y, zipper_goal)
+function level_init_shared(level_num, txt1, txt2, music_index, pl_x, pl_y, zipper_goal)
     G_CUR_LEVEL = level_num
     music(music_index,1000,7)
     clean_all_entities()
@@ -238,9 +231,9 @@ function level_init_shared(level_num, level_name, music_index, pl_x, pl_y, zippe
         _g.twinkle(rnd(256), rnd(256), rnd(), g_view, star_view)
     end
 
-    create_text("lvl", pl_x, pl_y-3, _g.drawable_model_post_temp)
+    create_text(txt1, pl_x, pl_y-3, _g.drawable_model_post_temp)
     _g.drawable_model_post_temp(pl_x, pl_y, _g.STARTING_CIRCLE, 1)
-    create_text(level_name, pl_x, pl_y+3, _g.drawable_model_post_temp)
+    create_text(txt2, pl_x, pl_y+3, _g.drawable_model_post_temp)
 
     _g.fader_in(1) -- to show the level
     _g.alert_radar(g_pl)

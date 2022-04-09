@@ -73,20 +73,16 @@ end
     g_title_screen_coord = 40
     g_title_screen_dim = g_title_screen_coord*2
 
-    -- for i=0,6 do
-    --     printh(""..(cos(i/6*.5)*24).." "..(sin(i/6*.5)*24))
-    -- end
-
-    create_level_selector(18,  yoff+0,   1, "bear",    "lvl "..1, _g.LEVEL_BEAR_MODEL,  _g.LEVEL_BEAR_CLEAR)
-    create_level_selector(21,  yoff+-12, 2, "bear",    "lvl "..2, _g.LEVEL_BEAR_MODEL,  _g.LEVEL_BEAR_CLEAR)
-    create_level_selector(12,  yoff+-21, 3, "bear",    "lvl "..3, _g.LEVEL_BEAR_MODEL,  _g.LEVEL_BEAR_CLEAR)
-    create_level_selector(0,   yoff+-18, 4, "bear",    "lvl "..4, _g.LEVEL_BEAR_MODEL,  _g.LEVEL_BEAR_CLEAR)
-    create_level_selector(-12, yoff+-21, 5, "cat",     "lvl "..5, _g.LEVEL_CAT_MODEL,   _g.LEVEL_CAT_CLEAR)
-    create_level_selector(-21, yoff+-12, 6, "pig",     "lvl "..6, _g.LEVEL_PIG_MODEL,   _g.LEVEL_PIG_CLEAR)
-    create_level_selector(-18, yoff+0,   7, "mouse",   "lvl "..7, _g.LEVEL_MOUSE_MODEL, _g.LEVEL_MOUSE_CLEAR)
+    create_level_selector(18,  yoff+0,   1, "lvl "..1, "bear",    _g.LEVEL_BEAR_MODEL,  _g.LEVEL_BEAR_CLEAR)
+    create_level_selector(21,  yoff+-12, 2, "lvl "..2, "bear",    _g.LEVEL_BEAR_MODEL,  _g.LEVEL_BEAR_CLEAR)
+    create_level_selector(12,  yoff+-21, 3, "lvl "..3, "bear",    _g.LEVEL_BEAR_MODEL,  _g.LEVEL_BEAR_CLEAR)
+    create_level_selector(0,   yoff+-18, 4, "lvl "..4, "bear",    _g.LEVEL_BEAR_MODEL,  _g.LEVEL_BEAR_CLEAR)
+    create_level_selector(-12, yoff+-21, 5, "lvl "..5, "cat",     _g.LEVEL_CAT_MODEL,   _g.LEVEL_CAT_CLEAR)
+    create_level_selector(-21, yoff+-12, 6, "lvl "..6, "pig",     _g.LEVEL_PIG_MODEL,   _g.LEVEL_PIG_CLEAR)
+    create_level_selector(-18, yoff+0,   7, "lvl "..7, "mouse",   _g.LEVEL_MOUSE_MODEL, _g.LEVEL_MOUSE_CLEAR)
     create_level_selector(0,   yoff+12,  8, "the",     "credits", _g.LEVEL_CAT_MODEL,   _g.LEVEL_CAT_MODEL)
 
-    create_text(get_wob_text(G_DEATH_COUNT), 0, yoff-3, _g.drawable_model_post_temp)
+    create_text(get_wob_text(), 0, yoff-3, _g.drawable_model_post_temp)
     _g.drawable_model_post_temp(0, yoff, _g.STARTING_CIRCLE)
     create_text("ldjam50", 0, yoff+3, _g.drawable_model_post_temp)
 end $$

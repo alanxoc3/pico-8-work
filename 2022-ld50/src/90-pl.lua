@@ -19,7 +19,7 @@ zclass[[pl,actor,model,drawlayer_20,team_blue|
         a.shoot_percent = max(0,a.shoot_percent-.125)
         _g.missile(a.x+cos(a.ang)*.8,a.y+sin(a.ang)*.8,a.dx,a.dy,a.ang)
         a.missile_ready = false
-        a:start_timer('missile_cooldown', 0.2, function() a.missile_ready=true end)
+        a:start_timer('missile_cooldown', 0.15, function() a.missile_ready=true end)
         if a.shoot_percent == 0 then a.shoot_enabled = false end
     end
 

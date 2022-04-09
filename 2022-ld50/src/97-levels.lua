@@ -1,35 +1,16 @@
-|level_cat_init| function()
-    level_init_shared(5, "cat", 24, 0, -9, 11)
+|level_1_init| function()
+    level_init_shared(1, "lvl 1", "bear", 8, 0, 0, 11)
 
-    local planet = _g.planet(0,-22,_g.CAT)
-    _g.asteroid(25,0,_g.ASTEROID)
-    _g.asteroid(-25,0,_g.ASTEROID)
-    _g.asteroid(15,15,_g.ASTEROID)
-    _g.asteroid(-13,13,_g.ASTEROID)
-    _g.asteroid(22,8,_g.ASTEROID)
-    _g.asteroid(-22,8,_g.ASTEROID)
-
-    -- asteroids kinda protect you from enemies
-    _g.spawner(_g.chaser, planet, 4, 2, .5, 1)
-    _g.black_hole(0, 0)
+    local planet = _g.planet(0,-18,_g.BEAR)
+    _g.asteroid(0,-22)
+    _g.black_hole(0,22)
+    _g.black_hole(0,22)
+    _g.spawner(_g.chaser, planet, 8, 8, .325-.125/2, .325+.125/2)
+    _g.spawner(_g.chaser, planet, 4, 8, .125+.125/2, .125+.125/2)
 end $$
 
-|level_pig_init| function()
-    level_init_shared(6, "pig", 16, 0, 0, 11)
-
-    -- title
-    local planet = _g.planet(20,0,_g.PIG)
-    _g.asteroid(17,-15,_g.ASTEROID)
-    _g.asteroid(17,15,_g.ASTEROID)
-
-    _g.spawner(_g.chaser, planet, 4, 4, -.125, .125)
-
-    _g.black_hole(-22, 0)
-    _g.black_hole(-22, 0)
-end $$
-
-|level_bear_init| function()
-    level_init_shared(3, "bear", 8, 0, 0, 12)
+|level_2_init| function()
+    level_init_shared(2, "lvl 2", "bear", 8, 0, 0, 12)
 
     local planet = _g.planet(0,-22,_g.BEAR)
     _g.black_hole(0,22)
@@ -38,13 +19,43 @@ end $$
     _g.spawner(_g.chaser, planet, 4, 8, .625+.125/2, .625+.125/2)
 end $$
 
-|level_mouse_init| function()
-    level_init_shared(7, "mouse", 32, -9, 0, 13)
+|level_4_init| function()
+    level_init_shared(5, "lvl 5", "cat", 24, 0, -9, 11)
+
+    local planet = _g.planet(0,-22,_g.CAT)
+    _g.asteroid(25,0)
+    _g.asteroid(-25,0)
+    _g.asteroid(15,15)
+    _g.asteroid(-13,13)
+    _g.asteroid(22,8)
+    _g.asteroid(-22,8)
+
+    -- asteroids kinda protect you from enemies
+    _g.spawner(_g.chaser, planet, 4, 2, .5, 1)
+    _g.black_hole(0, 0)
+end $$
+
+|level_6_init| function()
+    level_init_shared(6, "lvl 6", "pig", 16, 0, 0, 11)
+
+    -- title
+    local planet = _g.planet(20,0,_g.PIG)
+    _g.asteroid(17,-15)
+    _g.asteroid(17,15)
+
+    _g.spawner(_g.chaser, planet, 4, 4, -.125, .125)
+
+    _g.black_hole(-22, 0)
+    _g.black_hole(-22, 0)
+end $$
+
+|level_7_init| function()
+    level_init_shared(7, "lvl 7", "mouse", 32, -9, 0, 13)
 
     local planet = _g.planet(0,0,_g.MOUSE)
-    _g.asteroid(cos(.25    )*10,sin(.25    )*10,_g.ASTEROID)
-    _g.asteroid(cos(.25+1/3)*20,sin(.25+1/3)*20,_g.ASTEROID)
-    _g.asteroid(cos(.25+2/3)*30,sin(.25+2/3)*30,_g.ASTEROID)
+    _g.asteroid(cos(.25    )*10,sin(.25    )*10)
+    _g.asteroid(cos(.25+1/3)*20,sin(.25+1/3)*20)
+    _g.asteroid(cos(.25+2/3)*30,sin(.25+2/3)*30)
 
     _g.spawner(_g.chaser, planet, 5, 5, 0, 1)
 
@@ -54,7 +65,7 @@ end $$
 end $$
 
 |level_credits_init| function()
-    level_init_shared(8, "credits", 32, 0, 0)
+    level_init_shared(8, "the", "credits", 32, 0, 0)
 
     create_text("code,amorg,denial",        0,   -12)
     create_text("gfx,tigerwolf,greatcadet", -12, 0)
