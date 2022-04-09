@@ -1,8 +1,8 @@
 -- file for zobjs relating to drawing.
-zclass[[drawlayer_03|]] -- background player shoot ui
-zclass[[drawlayer_05|]] -- background player anchor lines
+zclass[[drawlayer_03|]] -- obj health
 zclass[[drawlayer_10|]] -- stars
 zclass[[drawlayer_20|]] -- ships, planet, etc
+zclass[[drawlayer_30|]] -- player anchor lines
 zclass[[drawlayer_40|]] -- overlay text
 
 zclass[[fader_out,actor|

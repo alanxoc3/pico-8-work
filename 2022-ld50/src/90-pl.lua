@@ -45,7 +45,7 @@ end $$
     end
 end $$
 
-zclass[[pl_alert,anchor_pos,actor,drawlayer_05|
+zclass[[pl_alert,anchor_pos,actor,drawlayer_30|
     alert_radar,@, anchoring,@, pointing_to,@,
     model, %PLAYER_ALERT,
     update, %pl_alert_update,

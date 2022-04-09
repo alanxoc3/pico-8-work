@@ -72,7 +72,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,anchor_pos_update_anchor,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,model_update,@,model_draw,@,model_collide,@,model_hit,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_init,@,view_update,@,view_match_following,@,missile_init,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,missile_init,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,model_health_bar_hit,@,planet_hit,@,planet_evac,@,zipper_init,@,zipper_destroyed,@,chaser_update,@,chaser_hit,@,black_hole_tug,@,twinkle_draw,@,star_view_match_following,@,pl_update,@,pl_hit,@,pl_alert_destroy,@,pl_alert_update,@,pl_alert_draw,@,alert_radar_register,@,bar_update_starting,@,bar_update_dying,@,bar_update,@,bar_draw,@,level_select_init,@,level_select_update,@,level_entrance_draw,@,level_entrance_hit,@,level_1_init,@,level_2_init,@,level_4_init,@,level_6_init,@,level_7_init,@,level_credits_init,@,logo_init,@,logo_draw,@,level_select_draw,@,level_draw,@,stats_displayer_draw,@,game_checker_update,@,retry_init,@,retry_update,@,retry_draw,@,win_init,@,win_update,@,win_draw,@,level_update,@,spawn_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,anchor_pos_update_anchor,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,model_update,@,model_draw,@,model_collide,@,model_hit,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_init,@,view_update,@,view_match_following,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,model_health_bar_hit,@,planet_destroyed,@,planet_evac,@,zipper_init,@,zipper_destroyed,@,chaser_update,@,chaser_hit,@,black_hole_tug,@,twinkle_draw,@,star_view_match_following,@,pl_update,@,pl_hit,@,pl_alert_destroy,@,pl_alert_update,@,pl_alert_draw,@,alert_radar_register,@,bar_update_starting,@,bar_update_dying,@,bar_update,@,bar_draw,@,level_select_init,@,level_select_update,@,level_entrance_draw,@,level_entrance_hit,@,level_1_init,@,level_2_init,@,level_5_init,@,level_6_init,@,level_7_init,@,level_credits_init,@,logo_init,@,logo_draw,@,level_select_draw,@,level_draw,@,stats_displayer_draw,@,game_checker_update,@,retry_init,@,retry_update,@,retry_draw,@,win_init,@,win_update,@,win_draw,@,level_update,@,spawn_init,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -267,17 +267,6 @@ if btn"5"then a.zoom_factor=max(5,a.zoom_factor-5)end
 end
 end
 end,function(a)
-sfx(23,3)
-end,function(a)
-_g.missile_pop(a.x,a.y)
-end,function(a,b,dx,dy)
-a:kill()
-end,function(a)
-a:model_update()
-a:explode(.2)
-end,function(a)
-sfx(23,3)
-end,function(a)
 _g.missile_pop(a.x,a.y)
 end,function(a,b,dx,dy)
 a:kill()
@@ -288,14 +277,10 @@ end,function(a,other,...)
 local prev_health=a.health
 _g.model_hit(a,other,...)
 if prev_health ~=a.health and(not a.health_bar or not a.health_bar.alive)then
-a.health_bar=_g.bar(a,function()return a.health/a.max_health end,a.health_bar_color,a.health_bar_min,a.health_bar_min+1,.5)
+a.health_bar=_g.bar(a,function()SCREEN_SHAKE=true return a.health/a.max_health end,5,a.health_bar_min,a.health_bar_min+1,.5)
 end
-end,function(a,other,...)
-local prev_health=a.health
-_g.model_hit(a,other,...)
-if prev_health ~=a.health and(not a.health_bar or not a.health_bar.alive)then
-a.health_bar=_g.bar(a,function()SCREEN_SHAKE=true return a.health/a.max_health end,3,1.7,2.7,.5)
-end
+end,function(a)
+g_view.following=a
 end,function(a)
 _g.zipper(a.x,a.y,rnd())
 end,function()g_zipper_count+=1 end,function(a)a:explode()end,function(a)
@@ -460,13 +445,12 @@ g_game_state:load(a.next_game_state)
 end)
 end
 end,function()
-level_init_shared(1,"lvl 1","bear",8,0,0,11)
-local planet=_g.planet(0,-18,_g.BEAR)
-_g.asteroid(0,-22)
-_g.black_hole(0,22)
-_g.black_hole(0,22)
-_g.spawner(_g.chaser,planet,8,8,.325-.125/2,.325+.125/2)
-_g.spawner(_g.chaser,planet,4,8,.125+.125/2,.125+.125/2)
+level_init_shared(1,"lvl 1","bear",8,0,0,10)
+local planet=_g.planet(18,0,_g.BEAR)
+_g.asteroid(25,0)
+_g.black_hole(-22,0)
+_g.black_hole(-22,0)
+_g.spawner(_g.chaser,planet,6,6,0,0)
 end,function()
 level_init_shared(2,"lvl 2","bear",8,0,0,12)
 local planet=_g.planet(0,-22,_g.BEAR)
@@ -522,9 +506,9 @@ fade"0"
 camera()
 end,function()
 loop_zobjs_in_view(g_view,"drawlayer_03","draw")
-loop_zobjs_in_view(g_view,"drawlayer_05","draw")
 loop_zobjs_in_view(g_view,"drawlayer_10","draw")
 loop_zobjs_in_view(g_view,"drawlayer_20","draw")
+loop_zobjs_in_view(g_view,"drawlayer_30","draw")
 loop_zobjs_in_view(g_view,"drawlayer_40","draw")
 end,function()
 circ(zoomx(0),zoomy(0),zoom(LEVEL_VIEW_RADIUS),1)
@@ -534,11 +518,24 @@ if g_zipper_goal then
 print(""..g_zipper_count.."/"..g_zipper_goal,4,4,11)
 end
 end,function(a)
-if not a.pl.alive then sfx(24,3)a:kill()music(-1)_g.fader_out(1,function()g_game_state:load"retry" end)
+if g_zipper_goal and g_zipper_count>=g_zipper_goal then
+if #g_zclass_entities["planet"]==0 then
+music(-1)a:kill()
+_g.fader_out(1,function()
+g_game_state:load"win"
+end)
+end
 elseif g_zipper_goal and #g_zclass_entities["planet"]==0 then
 music(-1)a:kill()
-if g_zipper_count>=g_zipper_goal then _g.fader_out(1,function()g_game_state:load"win" end)
-else _g.fader_out(1,function()g_game_state:load"retry" end)end
+_g.fader_out(1,function()
+g_game_state:load"retry"
+end)
+elseif not a.pl.alive then
+a:kill()music(-1)
+sfx(24,3)
+_g.fader_out(1,function()
+g_game_state:load"retry"
+end)
 end
 end,function(a)
 music(4,nil,1)
@@ -574,6 +571,11 @@ loop_zobjs("model","model_update")
 end,function(a)
 loop_zobjs("drawlayer_40","draw")
 end,function()
+if g_zipper_goal and g_zipper_count>=g_zipper_goal then
+if g_zclass_entities["planet"]and #g_zclass_entities["planet"]==1 then
+g_view.following=g_zclass_entities["planet"][1]
+end
+end
 loop_zobjs("actor","state")
 loop_zobjs("view","match_following")
 loop_zobjs("star_view","match_following")
@@ -702,9 +704,9 @@ end
 end
 end
 zclass[[drawlayer_03|]]
-zclass[[drawlayer_05|]]
 zclass[[drawlayer_10|]]
 zclass[[drawlayer_20|]]
+zclass[[drawlayer_30|]]
 zclass[[drawlayer_40|]]
 zclass[[fader_out,actor|start;duration,@,destroyed,@,update,%fader_out_update]]
 zclass[[fader_in,actor|start;duration,@,update,%fader_in_update]]
@@ -766,24 +768,22 @@ end
 zclass[[vanishing_shape,vec,actor,drawlayer_10|x,@,y,@,dx,@,dy,@,points,@,color,@,draw,%vanishing_shape_draw;start;duration,.25;]]
 zclass[[line_particle,vec,actor,drawlayer_40|ang,@,x,@,y,@,x1,@,y1,@,x2,@,y2,@,color,@,dx,@,dy,@,draw,%line_particle_draw,update,%line_particle_update;start;duration,.5;]]
 zclass[[view,model|following,@,model,%VIEW_COLLISION_CIRC,scale,5,zoom_factor,16,init,%view_init,match_following,%view_match_following;start;duration,2,next,run;run;init,nop,update,%view_update;]]
-zclass[[missile,model,drawlayer_20|x,@,y,@,dx,@,dy,@,ang,@,model,%MISSILE,speed,0.05,damage,1,inertia_x,1,inertia_y,1,destroyed,%missile_destroyed,init,%missile_init,hit,%missile_hit;start;duration,2;]]
+zclass[[missile,model,drawlayer_20|x,@,y,@,dx,@,dy,@,ang,@,model,%MISSILE,speed,0.05,damage,1,inertia_x,1,inertia_y,1,destroyed,%missile_destroyed,hit,%missile_hit;start;duration,2;]]
 zclass[[missile_pop,model,drawlayer_20|x,@,y,@,model,%MISSILE_POP,init,%missile_pop_init]]
-zclass[[missile,model,drawlayer_20|x,@,y,@,dx,@,dy,@,ang,@,model,%MISSILE,speed,0.05,damage,1,inertia_x,1,inertia_y,1,destroyed,%missile_destroyed,init,%missile_init,hit,%missile_hit;start;duration,2;]]
-zclass[[bomb,model,drawlayer_20|x,@,y,@,model,%MISSILE_POP,init,%missile_pop_init]]
 zclass[[teammate|]]
 zclass[[team_red,teammate|]]
 zclass[[team_blue,teammate|]]
 zclass[[team_none,teammate|]]
 zclass[[model_health_bar,model|hit,%model_health_bar_hit,health_bar_min,1,health_color,1]]
-zclass[[planet,model_health_bar,drawlayer_20,team_blue|x,@,y,@,model,@,spawn_delay,4,spawn_rate,4,health_bar_min,1.7,health_bar_color,3,max_health,75,health,~max_health,explode_sfx,24,hit,%planet_hit,damage,10000,d_ang,.001;start;duration,~spawn_delay,next,evac;evac;init,%planet_evac,duration,~spawn_rate,next,evac;]]
+zclass[[planet,model_health_bar,drawlayer_20,team_blue|x,@,y,@,model,@,spawn_delay,4,spawn_rate,4,health_bar_min,1.7,health_bar_color,5,max_health,75,health,~max_health,explode_sfx,24,destroyed,%planet_destroyed,damage,10000,d_ang,.001;start;duration,~spawn_delay,next,evac;evac;init,%planet_evac,duration,~spawn_rate,next,evac;]]
 zclass[[asteroid,model_health_bar,drawlayer_20,team_blue|x,@,y,@,model,%ASTEROID,max_health,50,health,~max_health,health_bar_min,1.7,health_bar_color,5,alert_color,13,explode_sfx,27,damage,10000,d_ang,.001;]]
 zclass[[zipper,model,drawlayer_20,team_blue|x,@,y,@,ang,@,destroyed,~explode,model,%ZIPPER;start;init,%zipper_init,duration,1,next,zip;zip;init,nop,speed,.05,duration,1;]]
-zclass[[chaser,model_health_bar,drawlayer_20,team_red|x,@,y,@,target,@,alert_color,8,health_bar_min,1.2,health_bar_color,2,max_health,5,health,~max_health,explode_sfx,27,damage,25,model,%CHASER,update,%chaser_update,hit,%chaser_hit;]]
+zclass[[chaser,model_health_bar,drawlayer_20,team_red|x,@,y,@,target,@,alert_color,8,health_bar_min,1.2,health_bar_color,5,max_health,5,health,~max_health,explode_sfx,27,damage,25,model,%CHASER,update,%chaser_update,hit,%chaser_hit;]]
 zclass[[black_hole,model,drawlayer_20,team_none|x,@,y,@,alert_color,2,d_ang,.1,damage,10000,tug_constant,.0004,model,%BLACK_HOLE;start;duration,1.5,tug,nop,next,run;run;tug,%black_hole_tug;]]
 zclass[[twinkle,drawlayer_10|x,@,y,@,twinkle_offset,@,view,@,star_view,@,draw,%twinkle_draw]]
 zclass[[star_view,vec|following,@,match_following,%star_view_match_following]]
 zclass[[pl,actor,model,drawlayer_20,team_blue|x,@,y,@,missile_ready,yes,model,%PLAYER_SPACESHIP,shoot_percent,1,shoot_enabled,yes,hit,%pl_hit,collision_func,%good_collision_circ;start;duration,1.5,next,run;run;update,%pl_update,]]
-zclass[[pl_alert,anchor_pos,actor,drawlayer_05|alert_radar,@,anchoring,@,pointing_to,@,model,%PLAYER_ALERT,update,%pl_alert_update,dist,0,scale,1,destroyed,%pl_alert_destroy,draw,%pl_alert_draw;start;duration,1,next,normal;normal;,;dying;duration,.25,update,nop,next,wait;wait;duration,1,draw,nop]]
+zclass[[pl_alert,anchor_pos,actor,drawlayer_30|alert_radar,@,anchoring,@,pointing_to,@,model,%PLAYER_ALERT,update,%pl_alert_update,dist,0,scale,1,destroyed,%pl_alert_destroy,draw,%pl_alert_draw;start;duration,1,next,normal;normal;,;dying;duration,.25,update,nop,next,wait;wait;duration,1,draw,nop]]
 zclass[[alert_radar,anchor_pos|alerts;,;anchoring,@,model,%ALERT_RADAR_CIRC,register,%alert_radar_register,update,%alert_radar_update,draw,%pl_alert_draw,]]
 zclass[[bar,actor,anchor_pos,drawlayer_03|anchoring,@,percent_func,@,fg,@,initial_rmin,@,initial_rmax,@,timeout,@,rmin,0,rmax,0,draw,%bar_draw,percent,1;start;duration,.1,update,%bar_update_starting,next,run;run;duration,~timeout,next,dying,update,%bar_update;dying;duration,.1,update,%bar_update_dying;]]
 function zcircfill(x,y,rad,col)circfill(zoomx(x),zoomy(y),zoom(rad),col)end
@@ -842,7 +842,7 @@ menuitem(1,"reset save data",function()
 memset(0x5e00,0,64)
 extcmd"reset"
 end)
-zclass[[game_state,actor|ecs_exclusions;actor,true;curr,1;logo;init,%logo_init,update,%logo_update,draw,%logo_draw,duration,2.5,next,level_select;level_select;init,%level_select_init,update,%level_select_update,draw,%level_select_draw;1;init,%level_1_init,update,%level_update,draw,%level_draw;2;init,%level_2_init,update,%level_update,draw,%level_draw;3;init,%level_3_init,update,%level_update,draw,%level_draw;4;init,%level_4_init,update,%level_update,draw,%level_draw;5;init,%level_5_init,update,%level_update,draw,%level_draw;6;init,%level_6_init,update,%level_update,draw,%level_draw;7;init,%level_7_init,update,%level_update,draw,%level_draw;8;init,%level_8_init,update,%level_update,draw,%level_draw;retry;init,%retry_init,update,%retry_update,draw,%retry_draw;win;init,%win_init,update,%win_update,draw,%win_draw;]]
+zclass[[game_state,actor|ecs_exclusions;actor,true;curr,logo;logo;init,%logo_init,update,%logo_update,draw,%logo_draw,duration,2.5,next,level_select;level_select;init,%level_select_init,update,%level_select_update,draw,%level_select_draw;1;init,%level_1_init,update,%level_update,draw,%level_draw;2;init,%level_2_init,update,%level_update,draw,%level_draw;3;init,%level_3_init,update,%level_update,draw,%level_draw;4;init,%level_4_init,update,%level_update,draw,%level_draw;5;init,%level_5_init,update,%level_update,draw,%level_draw;6;init,%level_6_init,update,%level_update,draw,%level_draw;7;init,%level_7_init,update,%level_update,draw,%level_draw;8;init,%level_8_init,update,%level_update,draw,%level_draw;retry;init,%retry_init,update,%retry_update,draw,%retry_draw;win;init,%win_init,update,%win_update,draw,%win_draw;]]
 function _init()
 memset(0x5e00,0,64)
 cartdata"rewob"

@@ -1,12 +1,15 @@
 |level_1_init| function()
-    level_init_shared(1, "lvl 1", "bear", 8, 0, 0, 11)
+    level_init_shared(1, "lvl 1", "bear", 8, 0, 0, 10)
 
-    local planet = _g.planet(0,-18,_g.BEAR)
-    _g.asteroid(0,-22)
-    _g.black_hole(0,22)
-    _g.black_hole(0,22)
-    _g.spawner(_g.chaser, planet, 8, 8, .325-.125/2, .325+.125/2)
-    _g.spawner(_g.chaser, planet, 4, 8, .125+.125/2, .125+.125/2)
+    local planet = _g.planet(18,0,_g.BEAR)
+    _g.asteroid(25,0)
+    -- _g.asteroid(18,18)
+    -- _g.asteroid(18,-18)
+    _g.black_hole(-22, 0)
+    _g.black_hole(-22, 0)
+    -- _g.spawner(_g.chaser, planet, 4, 8, -.125-.125/2, -.125+.125/2)
+    -- _g.spawner(_g.chaser, planet, 8, 8,  .125-.125/2,  .125+.125/2)
+    _g.spawner(_g.chaser, planet, 6, 6,  0, 0)
 end $$
 
 |level_2_init| function()
@@ -19,7 +22,7 @@ end $$
     _g.spawner(_g.chaser, planet, 4, 8, .625+.125/2, .625+.125/2)
 end $$
 
-|level_4_init| function()
+|level_5_init| function()
     level_init_shared(5, "lvl 5", "cat", 24, 0, -9, 11)
 
     local planet = _g.planet(0,-22,_g.CAT)

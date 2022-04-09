@@ -11,7 +11,7 @@ zclass[[model_health_bar,model|hit,%model_health_bar_hit, health_bar_min,1, heal
     _g.model_hit(a, other, ...)
 
     if prev_health ~= a.health and (not a.health_bar or not a.health_bar.alive) then
-        a.health_bar = _g.bar(a, function() return a.health / a.max_health end, a.health_bar_color, a.health_bar_min, a.health_bar_min+1, .5)
+        a.health_bar = _g.bar(a, function() SCREEN_SHAKE = true return a.health / a.max_health end, 5, a.health_bar_min, a.health_bar_min+1, .5)
     end
 end $$
 
@@ -20,24 +20,19 @@ zclass[[planet,model_health_bar,drawlayer_20,team_blue|
     x,@, y,@, model,@,
     spawn_delay,4, spawn_rate,4,
     health_bar_min,1.7,
-    health_bar_color,3,
+    health_bar_color,5,
     max_health,75,
     health,~max_health,
     explode_sfx,24,
-    hit,%planet_hit,
+    destroyed,%planet_destroyed,
     damage,10000, -- so that things that crash into the planet immediately die
     d_ang,.001;
     start;duration,~spawn_delay,next,evac;
     evac;init,%planet_evac,duration,~spawn_rate,next,evac;
 ]]
 
-|planet_hit| function(a, other, ...)
-    local prev_health = a.health
-    _g.model_hit(a, other, ...)
-
-    if prev_health ~= a.health and (not a.health_bar or not a.health_bar.alive) then
-        a.health_bar = _g.bar(a, function() SCREEN_SHAKE = true return a.health / a.max_health end, 3, 1.7, 2.7, .5)
-    end
+|planet_destroyed| function(a)
+    g_view.following = a
 end $$
 
 |planet_evac| function(a)
@@ -76,7 +71,7 @@ zclass[[chaser,model_health_bar,drawlayer_20,team_red|
     x,@, y,@, target,@,
     alert_color,8,
     health_bar_min,1.2,
-    health_bar_color,2,
+    health_bar_color,5,
     max_health,5,
     health,~max_health,
     explode_sfx,27,

@@ -7,8 +7,8 @@ end)
 
 zclass[[game_state,actor|
     ecs_exclusions;actor,true; -- remove game_state from the actor group
-    -- curr,logo;
-    curr,1;
+    curr,logo;
+    -- curr,1;
     logo; init,%logo_init, update,%logo_update, draw,%logo_draw, duration,2.5, next,level_select;
     level_select; init,%level_select_init, update,%level_select_update, draw,%level_select_draw;
 
@@ -66,9 +66,9 @@ end
 
 |level_select_draw| function()
     loop_zobjs_in_view(g_view, 'drawlayer_03', 'draw')
-    loop_zobjs_in_view(g_view, 'drawlayer_05', 'draw')
     loop_zobjs_in_view(g_view, 'drawlayer_10', 'draw')
     loop_zobjs_in_view(g_view, 'drawlayer_20', 'draw')
+    loop_zobjs_in_view(g_view, 'drawlayer_30', 'draw')
     loop_zobjs_in_view(g_view, 'drawlayer_40', 'draw')
 end $$
 
@@ -100,11 +100,24 @@ zclass[[game_checker,actor|
 ]]
 
 |game_checker_update| function(a)
-    if not a.pl.alive then sfx(24, 3) a:kill() music(-1) _g.fader_out(1, function() g_game_state:load"retry" end)
+    if g_zipper_goal and g_zipper_count >= g_zipper_goal then
+        if #g_zclass_entities['planet'] == 0 then
+            music(-1) a:kill() 
+            _g.fader_out(1, function()
+                g_game_state:load"win"
+            end)
+        end
     elseif g_zipper_goal and #g_zclass_entities['planet'] == 0 then
         music(-1) a:kill() 
-        if g_zipper_count >= g_zipper_goal then _g.fader_out(1, function() g_game_state:load"win" end)
-        else _g.fader_out(1, function() g_game_state:load"retry" end) end
+        _g.fader_out(1, function()
+            g_game_state:load"retry"
+        end)
+    elseif not a.pl.alive then
+        a:kill() music(-1)
+        sfx(24, 3)
+        _g.fader_out(1, function()
+            g_game_state:load"retry"
+        end)
     end
 end $$
 
@@ -172,6 +185,12 @@ end $$
 end $$
 
 |level_update| function()
+    if g_zipper_goal and g_zipper_count >= g_zipper_goal then
+        if g_zclass_entities['planet'] and #g_zclass_entities['planet'] == 1 then
+            g_view.following = g_zclass_entities['planet'][1]
+        end
+    end
+
     loop_zobjs('actor',     'state')
     loop_zobjs('view',      'match_following')
     loop_zobjs('star_view', 'match_following')
