@@ -50,6 +50,12 @@ function _update60()
     dset(4, G_DEATH_COUNT)
 
     inc_level(0) dset(5, G_LEVEL)
+
+    if (btn(4) or btn(5)) and g_zclass_entities["missile"] and #g_zclass_entities["missile"] > 0 then
+        sfx(-1, 2)
+    else
+        sfx(62, 2)
+    end
 end
 
 function _draw()

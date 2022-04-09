@@ -775,7 +775,7 @@ zclass[[team_red,teammate|]]
 zclass[[team_blue,teammate|]]
 zclass[[team_none,teammate|]]
 zclass[[model_health_bar,model|hit,%model_health_bar_hit,health_bar_min,1,health_color,1]]
-zclass[[planet,model_health_bar,drawlayer_20,team_blue|x,@,y,@,model,@,spawn_delay,4,spawn_rate,4,health_bar_min,1.7,health_bar_color,5,max_health,75,health,~max_health,explode_sfx,24,destroyed,%planet_destroyed,damage,10000,d_ang,.001;start;duration,~spawn_delay,next,evac;evac;init,%planet_evac,duration,~spawn_rate,next,evac;]]
+zclass[[planet,model_health_bar,drawlayer_20,team_blue|x,@,y,@,model,@,spawn_delay,4,spawn_rate,4,health_bar_min,1.7,alert_color,11,health_bar_color,5,max_health,75,health,~max_health,explode_sfx,24,destroyed,%planet_destroyed,damage,10000,d_ang,.001;start;duration,~spawn_delay,next,evac;evac;init,%planet_evac,duration,~spawn_rate,next,evac;]]
 zclass[[asteroid,model_health_bar,drawlayer_20,team_blue|x,@,y,@,model,%ASTEROID,max_health,50,health,~max_health,health_bar_min,1.7,health_bar_color,5,alert_color,13,explode_sfx,27,damage,10000,d_ang,.001;]]
 zclass[[zipper,model,drawlayer_20,team_blue|x,@,y,@,ang,@,destroyed,~explode,model,%ZIPPER;start;init,%zipper_init,duration,1,next,zip;zip;init,nop,speed,.05,duration,1;]]
 zclass[[chaser,model_health_bar,drawlayer_20,team_red|x,@,y,@,target,@,alert_color,8,health_bar_min,1.2,health_bar_color,5,max_health,5,health,~max_health,explode_sfx,27,damage,25,model,%CHASER,update,%chaser_update,hit,%chaser_hit;]]
@@ -861,6 +861,11 @@ loop_zobjs("timer","tick")
 loop_zobjs("game_state","state")
 dset(4,G_DEATH_COUNT)
 inc_level(0)dset(5,G_LEVEL)
+if(btn(4)or btn(5))and g_zclass_entities["missile"]and #g_zclass_entities["missile"]>0 then
+sfx(-1,2)
+else
+sfx(62,2)
+end
 end
 function _draw()
 camera(SCREEN_SHAKE and rnd_one()or 0,SCREEN_SHAKE and rnd_one()or 0)

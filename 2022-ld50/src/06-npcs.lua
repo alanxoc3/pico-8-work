@@ -20,6 +20,7 @@ zclass[[planet,model_health_bar,drawlayer_20,team_blue|
     x,@, y,@, model,@,
     spawn_delay,4, spawn_rate,4,
     health_bar_min,1.7,
+    alert_color,11,
     health_bar_color,5,
     max_health,75,
     health,~max_health,
