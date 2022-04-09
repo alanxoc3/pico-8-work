@@ -11,30 +11,30 @@ zclass[[game_state,actor|
     logo; init,%logo_init, update,%logo_update, draw,%logo_draw, duration,2.5, next,level_select;
     level_select; init,%level_select_init, update,%level_select_update, draw,%level_select_draw;
 
-    level_bear;  init,%level_bear_init,  update,%level_update, draw,%level_draw;
-    level_mouse; init,%level_mouse_init, update,%level_update, draw,%level_draw;
-    level_cat;   init,%level_cat_init,   update,%level_update, draw,%level_draw;
-    level_pig;   init,%level_pig_init,   update,%level_update, draw,%level_draw;
+    1; init,%level_bear_init,    update,%level_update, draw,%level_draw;
+    2; init,%level_bear_init,    update,%level_update, draw,%level_draw;
 
-    level_bear_retry;  init,%retry_init, update,%retry_update, draw,%retry_draw;
-    level_mouse_retry; init,%retry_init, update,%retry_update, draw,%retry_draw;
-    level_cat_retry;   init,%retry_init, update,%retry_update, draw,%retry_draw;
-    level_pig_retry;   init,%retry_init, update,%retry_update, draw,%retry_draw;
+    3; init,%level_bear_init,    update,%level_update, draw,%level_draw;
 
-    win_bear; init,%win_init, update,%win_update, draw,%win_draw;
-    win_mouse; init,%win_init, update,%win_update, draw,%win_draw;
-    win_cat; init,%win_init, update,%win_update, draw,%win_draw;
-    win_pig; init,%win_init, update,%win_update, draw,%win_draw;
+    4; init,%level_bear_init,    update,%level_update, draw,%level_draw;
+
+    5; init,%level_cat_init,     update,%level_update, draw,%level_draw;
+    6; init,%level_pig_init,     update,%level_update, draw,%level_draw;
+
+    7; init,%level_mouse_init,   update,%level_update, draw,%level_draw;
+    8; init,%level_credits_init, update,%level_update, draw,%level_draw;
+
+    retry; init,%retry_init, update,%retry_update, draw,%retry_draw;
+    win; init,%win_init, update,%win_update, draw,%win_draw;
 ]]
 
 function _init()
     memset(0x5e00, 0, 64) -- clear the memory just in case
     cartdata"rewob"
-    G_LEVEL_BEAR_WIN = dget(0) ~= 0
-    G_LEVEL_MOUSE_WIN = dget(1) ~= 0
-    G_LEVEL_CAT_WIN = dget(2) ~= 0
-    G_LEVEL_PIG_WIN = dget(3) ~= 0
     G_DEATH_COUNT = dget(4)
+    G_LEVEL = dget(5)
+    G_LEVEL = 8
+    G_CUR_LEVEL = nil
 
     g_game_state = _g.game_state()
     g_fade = 0
@@ -50,11 +50,9 @@ function _update60()
     loop_zobjs('timer',      'tick')  -- update the timers
     loop_zobjs('game_state', 'state') -- game state controls the different overall states in the game
 
-    dset(0, G_LEVEL_BEAR_WIN and 1 or 0)
-    dset(1, G_LEVEL_MOUSE_WIN and 1 or 0)
-    dset(2, G_LEVEL_CAT_WIN and 1 or 0)
-    dset(3, G_LEVEL_PIG_WIN and 1 or 0)
     dset(4, G_DEATH_COUNT)
+
+    inc_level(0) dset(5, G_LEVEL)
 end
 
 function _draw()
@@ -92,30 +90,24 @@ function check_level_bounds()
     end
 end
 
-function create_level_focus_points()
-    local num = LEVEL_VIEW_RADIUS \ 2
-    for i=0,num-1 do
-        _g.focus_point(cos(i/num)*LEVEL_VIEW_RADIUS, sin(i/num)*LEVEL_VIEW_RADIUS)
-    end
-end
-
 zclass[[stats_displayer,drawlayer_40|draw,%stats_displayer_draw]]
 
 |stats_displayer_draw| function(a)
-    print(""..g_zipper_count.."/"..g_zipper_goal, 4, 4, 11)
+    if g_zipper_goal then
+        print(""..g_zipper_count.."/"..g_zipper_goal, 4, 4, 11)
+    end
 end $$
 
 zclass[[game_checker,actor|
-    pl,@, retry_level,@, win_level,@,
-    update,%game_checker_update
+    pl,@, update,%game_checker_update
 ]]
 
 |game_checker_update| function(a)
-    if not a.pl.alive then sfx(24, 3) a:kill() music(-1) _g.fader_out(1, function() g_game_state:load(a.retry_level) end)
-    elseif #g_zclass_entities['planet'] == 0 then
+    if not a.pl.alive then sfx(24, 3) a:kill() music(-1) _g.fader_out(1, function() g_game_state:load"retry" end)
+    elseif g_zipper_goal and #g_zclass_entities['planet'] == 0 then
         music(-1) a:kill() 
-        if g_zipper_count >= g_zipper_goal then _g.fader_out(1, function() g_game_state:load(a.win_level) end)
-        else _g.fader_out(1, function() g_game_state:load(a.retry_level) end) end
+        if g_zipper_count >= g_zipper_goal then _g.fader_out(1, function() g_game_state:load"win" end)
+        else _g.fader_out(1, function() g_game_state:load"retry" end) end
     end
 end $$
 
@@ -142,11 +134,7 @@ end
 
     g_game_state:start_timer("retry", 1, function()
         _g.fader_out(1, function()
-            if g_game_state.curr == "level_mouse_retry" then g_game_state:load("level_mouse")
-            elseif g_game_state.curr == "level_cat_retry" then g_game_state:load("level_cat")
-            elseif g_game_state.curr == "level_bear_retry" then g_game_state:load("level_bear")
-            elseif g_game_state.curr == "level_pig_retry" then g_game_state:load("level_pig")
-            end
+            g_game_state:load(G_CUR_LEVEL)
         end)
     end)
 end $$
@@ -160,6 +148,9 @@ end $$
     loop_zobjs('drawlayer_40', 'draw')
 end $$
 
+function inc_level(inc)
+    G_LEVEL = max(1, min((G_LEVEL+inc)\1, 8))
+end
 
 |win_init| function(a)
     music(5,nil,1)
@@ -167,17 +158,12 @@ end $$
 
     _g.fader_in(1) g_view = _g.view()
     
-    if a.curr == "win_bear" then G_LEVEL_BEAR_WIN = true
-    elseif a.curr == "win_mouse" then G_LEVEL_MOUSE_WIN = true
-    elseif a.curr == "win_cat" then G_LEVEL_CAT_WIN = true
-    elseif a.curr == "win_pig" then G_LEVEL_PIG_WIN = true
-    end
-
+    inc_level(1)
     create_text("win", 0, 0)
 
     g_game_state:start_timer("win", 1, function()
         _g.fader_out(1, function()
-            g_game_state:load("level_select")
+            g_game_state:load"level_select"
         end)
     end)
 end $$
@@ -206,7 +192,6 @@ end $$
     loop_zobjs('alert_radar', 'register', g_zclass_entities['black_hole'])
     loop_zobjs('alert_radar', 'register', g_zclass_entities['zipper'])
 
-    loop_zobjs('view', 'collide', g_zclass_entities['focus_point'])
     loop_zobjs('view', 'collide', g_zclass_entities['black_hole'])
     loop_zobjs('view', 'collide', g_zclass_entities['planet'])
     loop_zobjs('view', 'collide', g_zclass_entities['asteroid'])
@@ -241,13 +226,10 @@ zclass[[spawner,actor|
     a.spawn_func(x, y, a.target)
 end $$
 
-function level_init_shared(level_name, retry_state, win_state, music_index, zipper_goal, pl_x, pl_y)
+function level_init_shared(level_num, level_name, music_index, pl_x, pl_y, zipper_goal)
+    G_CUR_LEVEL = level_num
     music(music_index,1000,7)
     clean_all_entities()
-
-    -- used to determine if you beat the level or not
-    g_zipper_count = 0
-    g_zipper_goal = zipper_goal
 
     g_pl = _g.pl(pl_x, pl_y) -- add player
     g_view = _g.view(g_pl)
@@ -256,14 +238,18 @@ function level_init_shared(level_name, retry_state, win_state, music_index, zipp
         _g.twinkle(rnd(256), rnd(256), rnd(), g_view, star_view)
     end
 
-    create_level_focus_points()
     create_text("lvl", pl_x, pl_y-3, _g.drawable_model_post_temp)
     _g.drawable_model_post_temp(pl_x, pl_y, _g.STARTING_CIRCLE, 1)
     create_text(level_name, pl_x, pl_y+3, _g.drawable_model_post_temp)
 
     _g.fader_in(1) -- to show the level
     _g.alert_radar(g_pl)
-    _g.game_checker(g_pl, retry_state, win_state)
+
+    g_zipper_count = 0
+    g_zipper_goal = zipper_goal
+
+    _g.game_checker(g_pl)
+
+    -- used to determine if you beat the level or not
     _g.stats_displayer()
 end
-

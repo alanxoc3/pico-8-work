@@ -35,20 +35,30 @@ end
 end $$
 
 |model_draw| function(a)
-    local modelpoints = {}
-    foreach(a.shapes, function(shape)
-        local points = translate_points(a.x, a.y, a.ang, shape)
-        foreach(points, function(point) point.x = zoomx(point.x) point.y = zoomy(point.y) end)
-        draw_polygon(points, shape.bg_color)
-        add(modelpoints, {c=shape.fg_color, points=points, wobble_enabled=shape.wobble_enabled})
+    local base_model = {}
+    if a.prev_draw_ang == a.ang and a.prev_draw_x == a.x and a.prev_draw_y == a.y then
+        base_model = a.prev_base_model
+    else
+        foreach(a.shapes, function(shape)
+            local points = translate_points(a.x, a.y, a.ang, shape)
+            add(base_model, {shape=shape, points=points})
+        end)
+        a.prev_base_model = base_model
+        a.prev_draw_ang, a.prev_draw_x, a.prev_draw_y = a.ang, a.x, a.y
+    end
+
+    foreach(base_model, function(m)
+        if m.shape.bg_color >= 0 then
+            scr_draw_polygon(m.points, m.shape.bg_color)
+        end
     end)
 
     -- save and restore random state
     -- https://pico-8.fandom.com/wiki/Memory
     memcpy(0x5600, 0x5f44, 8)
     srand(t()*4\1) -- for nice wobbling
-    foreach(modelpoints, function(points)
-        line_loop(points.points, points.c, points.wobble_enabled and wobble_line or line)
+    foreach(base_model, function(m)
+        line_loop(m.points, m.shape.fg_color, m.shape.wobble_enabled and scr_wobble_line or scr_line)
     end)
     memcpy(0x5f44, 0x5600, 8)
 

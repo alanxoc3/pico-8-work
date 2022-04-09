@@ -68,8 +68,12 @@ function wobble_line(x1, y1, x3, y3, color)
     end
 end
 
-function scr_wobble_line(x1, y1, x3, y3, color)
+function scr_wobble_line(x1, y1, x2, y2, color)
     wobble_line(zoomx(x1), zoomy(y1), zoomx(x2), zoomy(y2), color)
+end
+
+function scr_line(x1, y1, x2, y2, color)
+    line(zoomx(x1), zoomy(y1), zoomx(x2), zoomy(y2), color)
 end
 
 function scr_draw_polygon(old_points, color)

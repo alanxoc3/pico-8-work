@@ -48,6 +48,7 @@ end $$
         a.dy += dy
     else
         a:explode()
+        if b.id == "chaser" then b:explode() end
     end
 end $$
 

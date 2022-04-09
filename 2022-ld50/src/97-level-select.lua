@@ -42,11 +42,23 @@ function loop_zobjs_in_view(view, class, method_name, ...)
     end
 end
 
+function create_level_selector(x, y, level, txt1, txt2, model, model_win, state)
+    if G_LEVEL == level then
+        create_text(txt1, x,  y-2.5)
+        create_text(txt2, x, y+2.5)
+        _g.level_entrance(x, y, model, state, 9)
+    elseif G_LEVEL > level then
+        create_text(txt1, x,  y-2.5)
+        create_text(txt2, x, y+2.5)
+        _g.level_entrance(x, y, model_win, state, 11)
+    end
+end
+
 |level_select_init| function()
-    local win = G_LEVEL_BEAR_WIN and G_LEVEL_MOUSE_WIN and G_LEVEL_CAT_WIN and G_LEVEL_PIG_WIN
+    G_CUR_LEVEL = 0
     music(0,1000,7)
     clean_all_entities()
-    -- [0,0] is the center of the level
+
     g_pl = _g.pl(0, 0) -- add player
     g_view = _g.view(g_pl)
     local star_view = _g.star_view(g_pl) -- this view is just for stars, so they don't lose their position when the screen wraps
@@ -57,40 +69,34 @@ end
     _g.fader_in(1) -- to show the level
     _g.alert_radar(g_pl)
 
-    g_title_screen_coord = 30
+    g_title_screen_coord = 40
     g_title_screen_dim = g_title_screen_coord*2
 
-    -- title
-    local wob = get_wob_text(G_DEATH_COUNT)
-    if win then
-        create_text(wob, 0, -3, _g.drawable_model_post)
-        _g.drawable_model_post(0, 0, _g.STARTING_CIRCLE)
-        create_text("credits", 0, 3, _g.drawable_model_post)
+    for i=0,6 do
+        printh(""..(cos(i/6*.5)*18).." "..(sin(i/6*.5)*18))
+    end
+
+    -- printh(""..(cos(.25-.125)*12).." "..(sin(.25-.125)*12))
+    -- printh(""..(cos(.25+.125)*12).." "..(sin(.25+.125)*12))
+
+    create_level_selector(12,  0,   1, "bear",    "lvl "..1, _g.LEVEL_BEAR_MODEL,  _g.LEVEL_BEAR_CLEAR,  "level_bear")
+    create_level_selector(20,  -12, 2, "bear",    "lvl "..2, _g.LEVEL_BEAR_MODEL,  _g.LEVEL_BEAR_CLEAR,  "level_bear")
+    create_level_selector(9,   -16, 3, "bear",    "lvl "..3, _g.LEVEL_BEAR_MODEL,  _g.LEVEL_BEAR_CLEAR,  "level_bear")
+    create_level_selector(0,   -24, 4, "bear",    "lvl "..4, _g.LEVEL_BEAR_MODEL,  _g.LEVEL_BEAR_CLEAR,  "level_bear")
+    create_level_selector(-9,  -16, 5, "cat",     "lvl "..5, _g.LEVEL_CAT_MODEL,   _g.LEVEL_CAT_CLEAR,   "level_cat")
+    create_level_selector(-20, -12, 6, "pig",     "lvl "..6, _g.LEVEL_PIG_MODEL,   _g.LEVEL_PIG_CLEAR,   "level_pig")
+    create_level_selector(-12, 0,   7, "mouse",   "lvl "..7, _g.LEVEL_MOUSE_MODEL, _g.LEVEL_MOUSE_CLEAR, "level_mouse")
+    create_level_selector(0,   12,  8, "the",     "credits", _g.LEVEL_CAT_MODEL,   _g.LEVEL_CAT_MODEL,   "level_credits")
+
+    if G_DEATH_COUNT > 0 then
+        create_text("rewob", 0, -3, _g.drawable_model_post_temp)
+        _g.drawable_model_post_temp(0, 0, _g.STARTING_CIRCLE)
+        create_text("deaths,"..G_DEATH_COUNT, 0, 3, _g.drawable_model_post_temp)
     else
-        create_text(wob, 0, -3, _g.drawable_model_post_temp)
+        create_text("rewob", 0, -3, _g.drawable_model_post_temp)
         _g.drawable_model_post_temp(0, 0, _g.STARTING_CIRCLE)
         create_text("ldjam50", 0, 3, _g.drawable_model_post_temp)
     end
-
-    if not G_LEVEL_CAT_WIN then create_text("lvl",    -12,  -2.5)  create_text("cat",   -12, 2.5)  _g.level_entrance(-12, 0, _g.LEVEL_LEFT, "level_cat")
-    else _g.focus_point(-12, 0) create_text("cat,dead", -12, 0) end
-
-    if not G_LEVEL_PIG_WIN then create_text("lvl",    0,   -14.5)  create_text("pig",  0,   -9.5) _g.level_entrance(0, -12, _g.LEVEL_RIGHT, "level_pig")
-    else _g.focus_point(0, -12) create_text("pig,dead", 0, -12) end
-
-    if not G_LEVEL_MOUSE_WIN then create_text("lvl",    0,    9.5)   create_text("mouse", 0,   14.5) _g.level_entrance(0,  12, _g.LEVEL_DOWN, "level_mouse")
-    else _g.focus_point(0, 12) create_text("mouse,dead", 0, 12) end
-
-    if not G_LEVEL_BEAR_WIN then create_text("lvl",    12,   -2.5)  create_text("bear",   12,  2.5)  _g.level_entrance(12,  0, _g.LEVEL_UP, "level_bear")
-    else _g.focus_point(12, 0) create_text("bear,dead", 12, 0) end
-
-    if win then
-        create_text("code,amorg,denial", -12, -12)
-        create_text("gfx,tigerwolf,greatcadet", 12, -12) _g.focus_point(12,-12)
-        create_text("sfx,amorg,greatcadet", -12, 12) _g.focus_point(-12,12)
-        create_text("made,with,pico8", 12, 12)
-    end
-
 end $$
 
 |level_select_update| function()
@@ -99,7 +105,6 @@ end $$
     loop_zobjs('star_view', 'match_following')
 
     loop_zobjs('view', 'collide', g_zclass_entities['level_entrance'])
-    loop_zobjs('view', 'collide', g_zclass_entities['focus_point'])
 
     loop_zobjs('level_entrance', 'collide', g_zclass_entities['pl'])
     loop_zobjs('pl', 'collide', g_zclass_entities['level_entrance'])
@@ -122,9 +127,8 @@ end $$
 end $$
 
 zclass[[level_entrance,model,drawlayer_10|
-    x,@, y,@, model,@, next_game_state,@,
+    x,@, y,@, model,@, next_game_state,@, alert_color,@,
     circ_radius,1.5,
-    alert_color,9,
     draw, %level_entrance_draw,
     d_ang, .001,
     hit, %level_entrance_hit
@@ -144,7 +148,3 @@ end $$
         end)
     end
 end $$
-
-zclass[[focus_point,model|
-    model,%FOCUS_POINT, x,@, y,@, radius,1
-]]

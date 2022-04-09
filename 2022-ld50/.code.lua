@@ -72,7 +72,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,anchor_pos_update_anchor,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,model_update,@,model_draw,@,model_collide,@,model_hit,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_update,@,view_match_following,@,missile_init,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,missile_init,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,model_health_bar_hit,@,planet_hit,@,planet_evac,@,zipper_init,@,zipper_destroyed,@,chaser_update,@,chaser_hit,@,black_hole_tug,@,twinkle_draw,@,star_view_match_following,@,pl_update,@,pl_hit,@,pl_alert_destroy,@,pl_alert_update,@,pl_alert_draw,@,alert_radar_register,@,bar_update_starting,@,bar_update_dying,@,bar_update,@,bar_draw,@,level_select_init,@,level_select_update,@,level_entrance_draw,@,level_entrance_hit,@,level_cat_init,@,level_pig_init,@,level_bear_init,@,level_mouse_init,@,logo_init,@,logo_draw,@,level_select_draw,@,level_draw,@,stats_displayer_draw,@,game_checker_update,@,retry_init,@,retry_update,@,retry_draw,@,win_init,@,win_update,@,win_draw,@,level_update,@,spawn_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,anchor_pos_update_anchor,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,model_update,@,model_draw,@,model_collide,@,model_hit,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_update,@,view_match_following,@,missile_init,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,missile_init,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,model_health_bar_hit,@,planet_hit,@,planet_evac,@,zipper_init,@,zipper_destroyed,@,chaser_update,@,chaser_hit,@,black_hole_tug,@,twinkle_draw,@,star_view_match_following,@,pl_update,@,pl_hit,@,pl_alert_destroy,@,pl_alert_update,@,pl_alert_draw,@,alert_radar_register,@,bar_update_starting,@,bar_update_dying,@,bar_update,@,bar_draw,@,level_select_init,@,level_select_update,@,level_entrance_draw,@,level_entrance_hit,@,level_cat_init,@,level_pig_init,@,level_bear_init,@,level_mouse_init,@,level_credits_init,@,logo_init,@,logo_draw,@,level_select_draw,@,level_draw,@,stats_displayer_draw,@,game_checker_update,@,retry_init,@,retry_update,@,retry_draw,@,win_init,@,win_update,@,win_draw,@,level_update,@,spawn_init,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -170,19 +170,31 @@ end)
 a.previous_model=a.model
 end
 end,function(a)
-local modelpoints={}
+local base_model={}
+if a.prev_draw_ang==a.ang and a.prev_draw_x==a.x and a.prev_draw_y==a.y then
+base_model=a.prev_base_model
+else
 foreach(a.shapes,function(shape)
 local points=translate_points(a.x,a.y,a.ang,shape)
-foreach(points,function(point)point.x=zoomx(point.x)point.y=zoomy(point.y)end)
-draw_polygon(points,shape.bg_color)
-add(modelpoints,{c=shape.fg_color,points=points,wobble_enabled=shape.wobble_enabled})
+add(base_model,{shape=shape,points=points})
+end)
+a.prev_base_model=base_model
+a.prev_draw_ang,a.prev_draw_x,a.prev_draw_y=a.ang,a.x,a.y
+end
+foreach(base_model,function(m)
+if m.shape.bg_color>=0 then
+scr_draw_polygon(m.points,m.shape.bg_color)
+end
 end)
 memcpy(0x5600,0x5f44,8)
 srand(t()*4\1)
-foreach(modelpoints,function(points)
-line_loop(points.points,points.c,points.wobble_enabled and wobble_line or line)
+foreach(base_model,function(m)
+line_loop(m.points,m.shape.fg_color,m.shape.wobble_enabled and scr_wobble_line or scr_line)
 end)
 memcpy(0x5f44,0x5600,8)
+if g_debug and a.radius then
+circ(zoomx(a.x),zoomy(a.y),a.radius*g_view.zoom_factor,2)
+end
 end,function(a,other_list)
 if #a.collision_circs>0 then
 foreach(other_list,function(other)
@@ -244,6 +256,10 @@ local dir=atan2(x,y)
 local dist=approx_dist(x,y)
 a.dx=cos(dir)*dist*.25
 a.dy=sin(dir)*dist*.25
+if g_debug then
+if btn"4"then a.zoom_factor=min(30,a.zoom_factor+1)end
+if btn"5"then a.zoom_factor=max(5,a.zoom_factor-5)end
+end
 end
 end,function(a)
 sfx(23,3)
@@ -342,6 +358,7 @@ a.dx+=dx
 a.dy+=dy
 else
 a:explode()
+if b.id=="chaser"then b:explode()end
 end
 end,function(a)
 a.alert_radar.alerts[a.pointing_to]=nil
@@ -390,7 +407,7 @@ local rad=(a.rmax-a.rmin)*a.percent+a.rmin
 circ(zoomx(a.x),zoomy(a.y),zoom(rad),a.fg)
 circ(zoomx(a.x),zoomy(a.y),zoom(rad)-1,0)
 end,function()
-local win=G_LEVEL_BEAR_WIN and G_LEVEL_MOUSE_WIN and G_LEVEL_CAT_WIN and G_LEVEL_PIG_WIN
+G_CUR_LEVEL=0
 music(0,1000,7)
 clean_all_entities()
 g_pl=_g.pl(0,0)
@@ -401,38 +418,33 @@ _g.twinkle(rnd(256),rnd(256),rnd(),g_view,star_view)
 end
 _g.fader_in(1)
 _g.alert_radar(g_pl)
-g_title_screen_coord=30
+g_title_screen_coord=40
 g_title_screen_dim=g_title_screen_coord*2
-local wob=get_wob_text(G_DEATH_COUNT)
-if win then
-create_text(wob,0,-3,_g.drawable_model_post)
-_g.drawable_model_post(0,0,_g.STARTING_CIRCLE)
-create_text("credits",0,3,_g.drawable_model_post)
+for i=0,6 do
+printh(""..(cos(i/6*.5)*18).." "..(sin(i/6*.5)*18))
+end
+create_level_selector(12,0,1,"bear","lvl "..1,_g.LEVEL_BEAR_MODEL,_g.LEVEL_BEAR_CLEAR,"level_bear")
+create_level_selector(20,-12,2,"bear","lvl "..2,_g.LEVEL_BEAR_MODEL,_g.LEVEL_BEAR_CLEAR,"level_bear")
+create_level_selector(9,-16,3,"bear","lvl "..3,_g.LEVEL_BEAR_MODEL,_g.LEVEL_BEAR_CLEAR,"level_bear")
+create_level_selector(0,-24,4,"bear","lvl "..4,_g.LEVEL_BEAR_MODEL,_g.LEVEL_BEAR_CLEAR,"level_bear")
+create_level_selector(-9,-16,5,"cat","lvl "..5,_g.LEVEL_CAT_MODEL,_g.LEVEL_CAT_CLEAR,"level_cat")
+create_level_selector(-20,-12,6,"pig","lvl "..6,_g.LEVEL_PIG_MODEL,_g.LEVEL_PIG_CLEAR,"level_pig")
+create_level_selector(-12,0,7,"mouse","lvl "..7,_g.LEVEL_MOUSE_MODEL,_g.LEVEL_MOUSE_CLEAR,"level_mouse")
+create_level_selector(0,12,8,"the","credits",_g.LEVEL_CAT_MODEL,_g.LEVEL_CAT_MODEL,"level_credits")
+if G_DEATH_COUNT>0 then
+create_text("rewob",0,-3,_g.drawable_model_post_temp)
+_g.drawable_model_post_temp(0,0,_g.STARTING_CIRCLE)
+create_text("deaths,"..G_DEATH_COUNT,0,3,_g.drawable_model_post_temp)
 else
-create_text(wob,0,-3,_g.drawable_model_post_temp)
+create_text("rewob",0,-3,_g.drawable_model_post_temp)
 _g.drawable_model_post_temp(0,0,_g.STARTING_CIRCLE)
 create_text("ldjam50",0,3,_g.drawable_model_post_temp)
-end
-if not G_LEVEL_CAT_WIN then create_text("lvl",-12,-2.5)create_text("cat",-12,2.5)_g.level_entrance(-12,0,_g.LEVEL_LEFT,"level_cat")
-else _g.focus_point(-12,0)create_text("cat,dead",-12,0)end
-if not G_LEVEL_PIG_WIN then create_text("lvl",0,-14.5)create_text("pig",0,-9.5)_g.level_entrance(0,-12,_g.LEVEL_RIGHT,"level_pig")
-else _g.focus_point(0,-12)create_text("pig,dead",0,-12)end
-if not G_LEVEL_MOUSE_WIN then create_text("lvl",0,9.5)create_text("mouse",0,14.5)_g.level_entrance(0,12,_g.LEVEL_DOWN,"level_mouse")
-else _g.focus_point(0,12)create_text("mouse,dead",0,12)end
-if not G_LEVEL_BEAR_WIN then create_text("lvl",12,-2.5)create_text("bear",12,2.5)_g.level_entrance(12,0,_g.LEVEL_UP,"level_bear")
-else _g.focus_point(12,0)create_text("bear,dead",12,0)end
-if win then
-create_text("code,amorg,denial",-12,-12)
-create_text("gfx,tigerwolf,greatcadet",12,-12)_g.focus_point(12,-12)
-create_text("sfx,amorg,greatcadet",-12,12)_g.focus_point(-12,12)
-create_text("made,with,pico8",12,12)
 end
 end,function()
 loop_zobjs("actor","state")
 loop_zobjs("view","match_following")
 loop_zobjs("star_view","match_following")
 loop_zobjs("view","collide",g_zclass_entities["level_entrance"])
-loop_zobjs("view","collide",g_zclass_entities["focus_point"])
 loop_zobjs("level_entrance","collide",g_zclass_entities["pl"])
 loop_zobjs("pl","collide",g_zclass_entities["level_entrance"])
 loop_zobjs("alert_radar","register",g_zclass_entities["level_entrance"])
@@ -458,7 +470,7 @@ g_game_state:load(a.next_game_state)
 end)
 end
 end,function()
-level_init_shared("cat","level_cat_retry","win_cat",24,11,0,-9)
+level_init_shared(5,"cat",24,0,-9,11)
 local planet=_g.planet(0,-22,_g.CAT)
 _g.asteroid(25,0,_g.ASTEROID)
 _g.asteroid(-25,0,_g.ASTEROID)
@@ -469,7 +481,7 @@ _g.asteroid(-22,8,_g.ASTEROID)
 _g.spawner(_g.chaser,planet,4,2,.5,1)
 _g.black_hole(0,0)
 end,function()
-level_init_shared("pig","level_pig_retry","win_pig",16,11,0,0)
+level_init_shared(6,"pig",16,0,0,11)
 local planet=_g.planet(20,0,_g.PIG)
 _g.asteroid(17,-15,_g.ASTEROID)
 _g.asteroid(17,15,_g.ASTEROID)
@@ -477,14 +489,14 @@ _g.spawner(_g.chaser,planet,4,4,-.125,.125)
 _g.black_hole(-22,0)
 _g.black_hole(-22,0)
 end,function()
-level_init_shared("bear","level_bear_retry","win_bear",8,12,0,0)
+level_init_shared(3,"bear",8,0,0,12)
 local planet=_g.planet(0,-22,_g.BEAR)
 _g.black_hole(0,22)
 _g.black_hole(0,22)
 _g.spawner(_g.chaser,planet,8,8,.825-.125/2,.825+.125/2)
 _g.spawner(_g.chaser,planet,4,8,.625+.125/2,.625+.125/2)
 end,function()
-level_init_shared("mouse","level_mouse_retry","win_mouse",32,13,-9,0)
+level_init_shared(7,"mouse",32,-9,0,13)
 local planet=_g.planet(0,0,_g.MOUSE)
 _g.asteroid(cos(.25)*10,sin(.25)*10,_g.ASTEROID)
 _g.asteroid(cos(.25+1/3)*20,sin(.25+1/3)*20,_g.ASTEROID)
@@ -493,6 +505,16 @@ _g.spawner(_g.chaser,planet,5,5,0,1)
 _g.black_hole(cos(.75)*50,sin(.75)*40)
 _g.black_hole(cos(.75+1/3)*50,sin(.75+1/3)*40)
 _g.black_hole(cos(.75+2/3)*50,sin(.75+2/3)*40)
+end,function()
+level_init_shared("credits","level_credits","level_credits",32,0,0)
+create_text("code,amorg,denial",0,-12)
+create_text("gfx,tigerwolf,greatcadet",-12,0)
+create_text("sfx,amorg,greatcadet",12,0)
+create_text("made,with,pico8",0,12)
+_g.spawner(_g.chaser,{x=0,y=0},2,20,.0625,.1875)
+_g.spawner(_g.chaser,{x=0,y=0},7,20,.3125,.4375)
+_g.spawner(_g.chaser,{x=0,y=0},12,20,.5625,.6875)
+_g.spawner(_g.chaser,{x=0,y=0},17,20,.8125,.9375)
 end,function()music(-1)sfx"63" end,function(a)
 local logo_opacity=cos(a:get_elapsed_percent"state")+1
 fade(logo_opacity)
@@ -510,13 +532,15 @@ end,function()
 circ(zoomx(0),zoomy(0),zoom(LEVEL_VIEW_RADIUS),1)
 _g.level_select_draw()
 end,function(a)
+if g_zipper_goal then
 print(""..g_zipper_count.."/"..g_zipper_goal,4,4,11)
+end
 end,function(a)
-if not a.pl.alive then sfx(24,3)a:kill()music(-1)_g.fader_out(1,function()g_game_state:load(a.retry_level)end)
-elseif #g_zclass_entities["planet"]==0 then
+if not a.pl.alive then sfx(24,3)a:kill()music(-1)_g.fader_out(1,function()g_game_state:load"retry" end)
+elseif g_zipper_goal and #g_zclass_entities["planet"]==0 then
 music(-1)a:kill()
-if g_zipper_count>=g_zipper_goal then _g.fader_out(1,function()g_game_state:load(a.win_level)end)
-else _g.fader_out(1,function()g_game_state:load(a.retry_level)end)end
+if g_zipper_count>=g_zipper_goal then _g.fader_out(1,function()g_game_state:load"win" end)
+else _g.fader_out(1,function()g_game_state:load"retry" end)end
 end
 end,function(a)
 music(4,nil,1)
@@ -527,11 +551,7 @@ g_view=_g.view()
 create_text(get_wob_text(G_DEATH_COUNT),0,0)
 g_game_state:start_timer("retry",1,function()
 _g.fader_out(1,function()
-if g_game_state.curr=="level_mouse_retry"then g_game_state:load("level_mouse")
-elseif g_game_state.curr=="level_cat_retry"then g_game_state:load("level_cat")
-elseif g_game_state.curr=="level_bear_retry"then g_game_state:load("level_bear")
-elseif g_game_state.curr=="level_pig_retry"then g_game_state:load("level_pig")
-end
+g_game_state:load(G_CUR_LEVEL)
 end)
 end)
 end,function(a)
@@ -543,15 +563,11 @@ end,function(a)
 music(5,nil,1)
 clean_all_entities()
 _g.fader_in(1)g_view=_g.view()
-if a.curr=="win_bear"then G_LEVEL_BEAR_WIN=true
-elseif a.curr=="win_mouse"then G_LEVEL_MOUSE_WIN=true
-elseif a.curr=="win_cat"then G_LEVEL_CAT_WIN=true
-elseif a.curr=="win_pig"then G_LEVEL_PIG_WIN=true
-end
+inc_level(1)
 create_text("win",0,0)
 g_game_state:start_timer("win",1,function()
 _g.fader_out(1,function()
-g_game_state:load("level_select")
+g_game_state:load"level_select"
 end)
 end)
 end,function(a)
@@ -571,7 +587,6 @@ loop_zobjs("alert_radar","register",g_zclass_entities["asteroid"])
 loop_zobjs("alert_radar","register",g_zclass_entities["view"])
 loop_zobjs("alert_radar","register",g_zclass_entities["black_hole"])
 loop_zobjs("alert_radar","register",g_zclass_entities["zipper"])
-loop_zobjs("view","collide",g_zclass_entities["focus_point"])
 loop_zobjs("view","collide",g_zclass_entities["black_hole"])
 loop_zobjs("view","collide",g_zclass_entities["planet"])
 loop_zobjs("view","collide",g_zclass_entities["asteroid"])
@@ -644,8 +659,11 @@ line(x1,y1,x2,y2,color)
 line(x2,y2,x3,y3,color)
 end
 end
-function scr_wobble_line(x1,y1,x3,y3,color)
+function scr_wobble_line(x1,y1,x2,y2,color)
 wobble_line(zoomx(x1),zoomy(y1),zoomx(x2),zoomy(y2),color)
+end
+function scr_line(x1,y1,x2,y2,color)
+line(zoomx(x1),zoomy(y1),zoomx(x2),zoomy(y2),color)
 end
 function scr_draw_polygon(old_points,color)
 local points={}
@@ -657,6 +675,15 @@ end
 function zoom(num)return num*g_view.zoom_factor end
 function zoomx(x)return zoom(x-g_view.x)+64 end
 function zoomy(y)return zoom(y-g_view.y)+64 end
+function tostring(any)
+if type(any)~="table"then return tostr(any)end
+local str="{"
+for k,v in pairs(any)do
+if str~="{"then str=str.."," end
+str=str..tostring(k).."="..tostring(v)
+end
+return str.."}"
+end
 zclass[[actor,timer|load,%actor_load,state,%actor_state,kill,%actor_kill,clean,%actor_clean,alive,yes,duration,null,curr,start,next,null,init,nop,update,nop,destroyed,nop;]]
 function clean_all_entities(...)
 local objs={}
@@ -795,8 +822,18 @@ call_not_nil(inst,method_name,inst,...)
 end
 end
 end
-zclass[[level_entrance,model,drawlayer_10|x,@,y,@,model,@,next_game_state,@,circ_radius,1.5,alert_color,9,draw,%level_entrance_draw,d_ang,.001,hit,%level_entrance_hit]]
-zclass[[focus_point,model|model,%FOCUS_POINT,x,@,y,@,radius,1]]
+function create_level_selector(x,y,level,txt1,txt2,model,model_win,state)
+if G_LEVEL==level then
+create_text(txt1,x,y-2.5)
+create_text(txt2,x,y+2.5)
+_g.level_entrance(x,y,model,state,9)
+elseif G_LEVEL>level then
+create_text(txt1,x,y-2.5)
+create_text(txt2,x,y+2.5)
+_g.level_entrance(x,y,model_win,state,11)
+end
+end
+zclass[[level_entrance,model,drawlayer_10|x,@,y,@,model,@,next_game_state,@,alert_color,@,circ_radius,1.5,draw,%level_entrance_draw,d_ang,.001,hit,%level_entrance_hit]]
 g_fade_table=zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,1,1,0,0;2;,2,2,2,2,1,1,0,0;3;,3,3,3,3,1,1,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,1,1,0,0;6;,6,6,13,13,5,5,0,0;7;,7,7,6,13,13,5,0,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,0,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,1,0,0;13;,13,13,5,5,1,1,0,0;14;,14,14,13,4,2,2,0,0;15;,15,15,13,13,5,5,0,0;]]
 function fade(threshold)
 for c=0,15 do
@@ -808,34 +845,32 @@ menuitem(1,"reset save data",function()
 memset(0x5e00,0,64)
 extcmd"reset"
 end)
-zclass[[game_state,actor|ecs_exclusions;actor,true;curr,logo;logo;init,%logo_init,update,%logo_update,draw,%logo_draw,duration,2.5,next,level_select;level_select;init,%level_select_init,update,%level_select_update,draw,%level_select_draw;level_bear;init,%level_bear_init,update,%level_update,draw,%level_draw;level_mouse;init,%level_mouse_init,update,%level_update,draw,%level_draw;level_cat;init,%level_cat_init,update,%level_update,draw,%level_draw;level_pig;init,%level_pig_init,update,%level_update,draw,%level_draw;level_bear_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;level_mouse_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;level_cat_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;level_pig_retry;init,%retry_init,update,%retry_update,draw,%retry_draw;win_bear;init,%win_init,update,%win_update,draw,%win_draw;win_mouse;init,%win_init,update,%win_update,draw,%win_draw;win_cat;init,%win_init,update,%win_update,draw,%win_draw;win_pig;init,%win_init,update,%win_update,draw,%win_draw;]]
+zclass[[game_state,actor|ecs_exclusions;actor,true;curr,logo;logo;init,%logo_init,update,%logo_update,draw,%logo_draw,duration,2.5,next,level_select;level_select;init,%level_select_init,update,%level_select_update,draw,%level_select_draw;1;init,%level_bear_init,update,%level_update,draw,%level_draw;2;init,%level_bear_init,update,%level_update,draw,%level_draw;3;init,%level_bear_init,update,%level_update,draw,%level_draw;4;init,%level_bear_init,update,%level_update,draw,%level_draw;5;init,%level_cat_init,update,%level_update,draw,%level_draw;6;init,%level_pig_init,update,%level_update,draw,%level_draw;7;init,%level_mouse_init,update,%level_update,draw,%level_draw;8;init,%level_credits_init,update,%level_update,draw,%level_draw;retry;init,%retry_init,update,%retry_update,draw,%retry_draw;win;init,%win_init,update,%win_update,draw,%win_draw;]]
 function _init()
 memset(0x5e00,0,64)
 cartdata"rewob"
-G_LEVEL_BEAR_WIN=dget(0)~=0
-G_LEVEL_MOUSE_WIN=dget(1)~=0
-G_LEVEL_CAT_WIN=dget(2)~=0
-G_LEVEL_PIG_WIN=dget(3)~=0
 G_DEATH_COUNT=dget(4)
+G_LEVEL=dget(5)
+G_LEVEL=8
+G_CUR_LEVEL=nil
 g_game_state=_g.game_state()
 g_fade=0
 end
 function _update60()
+if btnp(4)and btnp(5)then g_debug=not g_debug end
 loop_zobjs("actor","clean")
 register_zobjs()
 loop_zobjs("timer","tick")
 loop_zobjs("game_state","state")
-dset(0,G_LEVEL_BEAR_WIN and 1 or 0)
-dset(1,G_LEVEL_MOUSE_WIN and 1 or 0)
-dset(2,G_LEVEL_CAT_WIN and 1 or 0)
-dset(3,G_LEVEL_PIG_WIN and 1 or 0)
 dset(4,G_DEATH_COUNT)
+inc_level(0)dset(5,G_LEVEL)
 end
 function _draw()
 camera(SCREEN_SHAKE and rnd_one()or 0,SCREEN_SHAKE and rnd_one()or 0)
 cls()
 fade(g_fade)
 loop_zobjs("game_state","draw")
+if g_debug then rect(0,0,127,127,8)end
 SCREEN_SHAKE=false
 end
 LEVEL_RADIUS=26
@@ -847,14 +882,8 @@ g_game_state:load"level_select"
 end)
 end
 end
-function create_level_focus_points()
-local num=LEVEL_VIEW_RADIUS \ 2
-for i=0,num-1 do
-_g.focus_point(cos(i/num)*LEVEL_VIEW_RADIUS,sin(i/num)*LEVEL_VIEW_RADIUS)
-end
-end
 zclass[[stats_displayer,drawlayer_40|draw,%stats_displayer_draw]]
-zclass[[game_checker,actor|pl,@,retry_level,@,win_level,@,update,%game_checker_update]]
+zclass[[game_checker,actor|pl,@,update,%game_checker_update]]
 function get_wob_text(death_count)
 local wob,num="wob",death_count
 if num==0 then
@@ -865,24 +894,27 @@ else
 return "wob "..num\1
 end
 end
+function inc_level(inc)
+G_LEVEL=max(1,min((G_LEVEL+inc)\1,8))
+end
 zclass[[spawner,actor|spawn_func,@,target,@,spawn_delay,@,spawn_rate,@,min_ang,@,max_ang,@;start;duration,~spawn_delay,next,spawn;spawn;init,%spawn_init,duration,~spawn_rate,next,spawn;]]
-function level_init_shared(level_name,retry_state,win_state,music_index,zipper_goal,pl_x,pl_y)
+function level_init_shared(level_num,level_name,music_index,pl_x,pl_y,zipper_goal)
+G_CUR_LEVEL=level_num
 music(music_index,1000,7)
 clean_all_entities()
-g_zipper_count=0
-g_zipper_goal=zipper_goal
 g_pl=_g.pl(pl_x,pl_y)
 g_view=_g.view(g_pl)
 local star_view=_g.star_view(g_pl)
 for i=1,50 do
 _g.twinkle(rnd(256),rnd(256),rnd(),g_view,star_view)
 end
-create_level_focus_points()
 create_text("lvl",pl_x,pl_y-3,_g.drawable_model_post_temp)
 _g.drawable_model_post_temp(pl_x,pl_y,_g.STARTING_CIRCLE,1)
 create_text(level_name,pl_x,pl_y+3,_g.drawable_model_post_temp)
 _g.fader_in(1)
 _g.alert_radar(g_pl)
-_g.game_checker(g_pl,retry_state,win_state)
+g_zipper_count=0
+g_zipper_goal=zipper_goal
+_g.game_checker(g_pl)
 _g.stats_displayer()
 end
