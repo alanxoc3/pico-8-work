@@ -72,7 +72,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,anchor_pos_update_anchor,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,model_update,@,model_draw,@,model_collide,@,model_hit,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_update,@,view_match_following,@,missile_init,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,missile_init,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,model_health_bar_hit,@,planet_hit,@,planet_evac,@,zipper_init,@,zipper_destroyed,@,chaser_update,@,chaser_hit,@,black_hole_tug,@,twinkle_draw,@,star_view_match_following,@,pl_update,@,pl_hit,@,pl_alert_destroy,@,pl_alert_update,@,pl_alert_draw,@,alert_radar_register,@,bar_update_starting,@,bar_update_dying,@,bar_update,@,bar_draw,@,level_select_init,@,level_select_update,@,level_entrance_draw,@,level_entrance_hit,@,level_cat_init,@,level_pig_init,@,level_bear_init,@,level_mouse_init,@,level_credits_init,@,logo_init,@,logo_draw,@,level_select_draw,@,level_draw,@,stats_displayer_draw,@,game_checker_update,@,retry_init,@,retry_update,@,retry_draw,@,win_init,@,win_update,@,win_draw,@,level_update,@,spawn_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,anchor_pos_update_anchor,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,model_update,@,model_draw,@,model_collide,@,model_hit,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_init,@,view_update,@,view_match_following,@,missile_init,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,missile_init,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,model_health_bar_hit,@,planet_hit,@,planet_evac,@,zipper_init,@,zipper_destroyed,@,chaser_update,@,chaser_hit,@,black_hole_tug,@,twinkle_draw,@,star_view_match_following,@,pl_update,@,pl_hit,@,pl_alert_destroy,@,pl_alert_update,@,pl_alert_draw,@,alert_radar_register,@,bar_update_starting,@,bar_update_dying,@,bar_update,@,bar_draw,@,level_select_init,@,level_select_update,@,level_entrance_draw,@,level_entrance_hit,@,level_cat_init,@,level_pig_init,@,level_bear_init,@,level_mouse_init,@,level_credits_init,@,logo_init,@,logo_draw,@,level_select_draw,@,level_draw,@,stats_displayer_draw,@,game_checker_update,@,retry_init,@,retry_update,@,retry_draw,@,win_init,@,win_update,@,win_draw,@,level_update,@,spawn_init,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -248,6 +248,11 @@ end,function(a)
 local percent=1-a:get_elapsed_percent"state"
 line(zoomx(a.x+a.x1*percent),zoomy(a.y+a.y1*percent),zoomx(a.x+a.x2*percent),zoomy(a.y+a.y2*percent),a.color)
 end,function(a)
+if a.following then
+a.x=a.following.x
+a.y=a.following.y
+end
+end,function(a)
 a.zoom_factor=max(12,a.zoom_factor-.1)
 end,function(a)
 if a.following then
@@ -330,18 +335,11 @@ if a.shoot_percent==1 then
 a.shoot_enabled=true
 end
 if(btn"5"or btn"4")and a.missile_ready then
-if not a.shoot_bar or not a.shoot_bar.alive then
-a.shoot_bar=_g.bar(a,function()return a.shoot_percent end,1,1.2,2.2,.125)
-end
-if a.shoot_percent>0 and a.shoot_enabled then
 a.shoot_percent=max(0,a.shoot_percent-.125)
 _g.missile(a.x+cos(a.ang)*.8,a.y+sin(a.ang)*.8,a.dx,a.dy,a.ang)
 a.missile_ready=false
-a:start_timer("missile_cooldown",0.1,function()a.missile_ready=true end)
+a:start_timer("missile_cooldown",0.2,function()a.missile_ready=true end)
 if a.shoot_percent==0 then a.shoot_enabled=false end
-else
-sfx(26,3)
-end
 end
 if ybtn()>0 then
 a.speed=-.00875*.75
@@ -407,10 +405,11 @@ local rad=(a.rmax-a.rmin)*a.percent+a.rmin
 circ(zoomx(a.x),zoomy(a.y),zoom(rad),a.fg)
 circ(zoomx(a.x),zoomy(a.y),zoom(rad)-1,0)
 end,function()
+local yoff=8
 G_CUR_LEVEL=0
 music(0,1000,7)
 clean_all_entities()
-g_pl=_g.pl(0,0)
+g_pl=_g.pl(0,yoff)
 g_view=_g.view(g_pl)
 local star_view=_g.star_view(g_pl)
 for i=1,50 do
@@ -420,26 +419,17 @@ _g.fader_in(1)
 _g.alert_radar(g_pl)
 g_title_screen_coord=40
 g_title_screen_dim=g_title_screen_coord*2
-for i=0,6 do
-printh(""..(cos(i/6*.5)*18).." "..(sin(i/6*.5)*18))
-end
-create_level_selector(12,0,1,"bear","lvl "..1,_g.LEVEL_BEAR_MODEL,_g.LEVEL_BEAR_CLEAR,"level_bear")
-create_level_selector(20,-12,2,"bear","lvl "..2,_g.LEVEL_BEAR_MODEL,_g.LEVEL_BEAR_CLEAR,"level_bear")
-create_level_selector(9,-16,3,"bear","lvl "..3,_g.LEVEL_BEAR_MODEL,_g.LEVEL_BEAR_CLEAR,"level_bear")
-create_level_selector(0,-24,4,"bear","lvl "..4,_g.LEVEL_BEAR_MODEL,_g.LEVEL_BEAR_CLEAR,"level_bear")
-create_level_selector(-9,-16,5,"cat","lvl "..5,_g.LEVEL_CAT_MODEL,_g.LEVEL_CAT_CLEAR,"level_cat")
-create_level_selector(-20,-12,6,"pig","lvl "..6,_g.LEVEL_PIG_MODEL,_g.LEVEL_PIG_CLEAR,"level_pig")
-create_level_selector(-12,0,7,"mouse","lvl "..7,_g.LEVEL_MOUSE_MODEL,_g.LEVEL_MOUSE_CLEAR,"level_mouse")
-create_level_selector(0,12,8,"the","credits",_g.LEVEL_CAT_MODEL,_g.LEVEL_CAT_MODEL,"level_credits")
-if G_DEATH_COUNT>0 then
-create_text("rewob",0,-3,_g.drawable_model_post_temp)
-_g.drawable_model_post_temp(0,0,_g.STARTING_CIRCLE)
-create_text("deaths,"..G_DEATH_COUNT,0,3,_g.drawable_model_post_temp)
-else
-create_text("rewob",0,-3,_g.drawable_model_post_temp)
-_g.drawable_model_post_temp(0,0,_g.STARTING_CIRCLE)
-create_text("ldjam50",0,3,_g.drawable_model_post_temp)
-end
+create_level_selector(18,yoff+0,1,"bear","lvl "..1,_g.LEVEL_BEAR_MODEL,_g.LEVEL_BEAR_CLEAR)
+create_level_selector(21,yoff+-12,2,"bear","lvl "..2,_g.LEVEL_BEAR_MODEL,_g.LEVEL_BEAR_CLEAR)
+create_level_selector(12,yoff+-21,3,"bear","lvl "..3,_g.LEVEL_BEAR_MODEL,_g.LEVEL_BEAR_CLEAR)
+create_level_selector(0,yoff+-18,4,"bear","lvl "..4,_g.LEVEL_BEAR_MODEL,_g.LEVEL_BEAR_CLEAR)
+create_level_selector(-12,yoff+-21,5,"cat","lvl "..5,_g.LEVEL_CAT_MODEL,_g.LEVEL_CAT_CLEAR)
+create_level_selector(-21,yoff+-12,6,"pig","lvl "..6,_g.LEVEL_PIG_MODEL,_g.LEVEL_PIG_CLEAR)
+create_level_selector(-18,yoff+0,7,"mouse","lvl "..7,_g.LEVEL_MOUSE_MODEL,_g.LEVEL_MOUSE_CLEAR)
+create_level_selector(0,yoff+12,8,"the","credits",_g.LEVEL_CAT_MODEL,_g.LEVEL_CAT_MODEL)
+create_text(get_wob_text(G_DEATH_COUNT),0,yoff-3,_g.drawable_model_post_temp)
+_g.drawable_model_post_temp(0,yoff,_g.STARTING_CIRCLE)
+create_text("ldjam50",0,yoff+3,_g.drawable_model_post_temp)
 end,function()
 loop_zobjs("actor","state")
 loop_zobjs("view","match_following")
@@ -506,7 +496,7 @@ _g.black_hole(cos(.75)*50,sin(.75)*40)
 _g.black_hole(cos(.75+1/3)*50,sin(.75+1/3)*40)
 _g.black_hole(cos(.75+2/3)*50,sin(.75+2/3)*40)
 end,function()
-level_init_shared("credits","level_credits","level_credits",32,0,0)
+level_init_shared(8,"credits",32,0,0)
 create_text("code,amorg,denial",0,-12)
 create_text("gfx,tigerwolf,greatcadet",-12,0)
 create_text("sfx,amorg,greatcadet",12,0)
@@ -768,7 +758,7 @@ return points
 end
 zclass[[vanishing_shape,vec,actor,drawlayer_10|x,@,y,@,dx,@,dy,@,points,@,color,@,draw,%vanishing_shape_draw;start;duration,.25;]]
 zclass[[line_particle,vec,actor,drawlayer_40|ang,@,x,@,y,@,x1,@,y1,@,x2,@,y2,@,color,@,dx,@,dy,@,draw,%line_particle_draw,update,%line_particle_update;start;duration,.5;]]
-zclass[[view,model|following,@,model,%VIEW_COLLISION_CIRC,scale,5,zoom_factor,16,match_following,%view_match_following;start;duration,2,next,run;run;update,%view_update;]]
+zclass[[view,model|following,@,model,%VIEW_COLLISION_CIRC,scale,5,zoom_factor,16,init,%view_init,match_following,%view_match_following;start;duration,2,next,run;run;init,nop,update,%view_update;]]
 zclass[[missile,model,drawlayer_20|x,@,y,@,dx,@,dy,@,ang,@,model,%MISSILE,speed,0.05,damage,1,inertia_x,1,inertia_y,1,destroyed,%missile_destroyed,init,%missile_init,hit,%missile_hit;start;duration,2;]]
 zclass[[missile_pop,model,drawlayer_20|x,@,y,@,model,%MISSILE_POP,init,%missile_pop_init]]
 zclass[[missile,model,drawlayer_20|x,@,y,@,dx,@,dy,@,ang,@,model,%MISSILE,speed,0.05,damage,1,inertia_x,1,inertia_y,1,destroyed,%missile_destroyed,init,%missile_init,hit,%missile_hit;start;duration,2;]]
@@ -781,7 +771,7 @@ zclass[[model_health_bar,model|hit,%model_health_bar_hit,health_bar_min,1,health
 zclass[[planet,model_health_bar,drawlayer_20,team_blue|x,@,y,@,model,@,spawn_delay,4,spawn_rate,4,health_bar_min,1.7,health_bar_color,3,max_health,75,health,~max_health,explode_sfx,24,hit,%planet_hit,damage,10000,d_ang,.001;start;duration,~spawn_delay,next,evac;evac;init,%planet_evac,duration,~spawn_rate,next,evac;]]
 zclass[[asteroid,model_health_bar,drawlayer_20,team_blue|x,@,y,@,model,@,max_health,50,health,~max_health,health_bar_min,1.7,health_bar_color,5,alert_color,13,explode_sfx,27,damage,10000,d_ang,.001;]]
 zclass[[zipper,model,drawlayer_20,team_blue|x,@,y,@,ang,@,alert_color,11,destroyed,~explode,model,%ZIPPER;start;init,%zipper_init,duration,1,next,zip;zip;init,nop,speed,.05,duration,1;]]
-zclass[[chaser,model_health_bar,drawlayer_20,team_red|x,@,y,@,target,@,alert_color,8,health_bar_min,1.2,health_bar_color,2,max_health,10,health,~max_health,explode_sfx,27,damage,25,model,%CHASER,update,%chaser_update,hit,%chaser_hit;]]
+zclass[[chaser,model_health_bar,drawlayer_20,team_red|x,@,y,@,target,@,alert_color,8,health_bar_min,1.2,health_bar_color,2,max_health,5,health,~max_health,explode_sfx,27,damage,25,model,%CHASER,update,%chaser_update,hit,%chaser_hit;]]
 zclass[[black_hole,model,drawlayer_20,team_none|x,@,y,@,alert_color,1,d_ang,.1,damage,10000,tug_constant,.0004,model,%BLACK_HOLE;start;duration,1.5,tug,nop,next,run;run;tug,%black_hole_tug;]]
 zclass[[twinkle,drawlayer_10|x,@,y,@,twinkle_offset,@,view,@,star_view,@,draw,%twinkle_draw]]
 zclass[[star_view,vec|following,@,match_following,%star_view_match_following]]
@@ -822,15 +812,15 @@ call_not_nil(inst,method_name,inst,...)
 end
 end
 end
-function create_level_selector(x,y,level,txt1,txt2,model,model_win,state)
+function create_level_selector(x,y,level,txt1,txt2,model,model_win)
 if G_LEVEL==level then
 create_text(txt1,x,y-2.5)
 create_text(txt2,x,y+2.5)
-_g.level_entrance(x,y,model,state,9)
+_g.level_entrance(x,y,model,level,9)
 elseif G_LEVEL>level then
 create_text(txt1,x,y-2.5)
 create_text(txt2,x,y+2.5)
-_g.level_entrance(x,y,model_win,state,11)
+_g.level_entrance(x,y,model_win,level,11)
 end
 end
 zclass[[level_entrance,model,drawlayer_10|x,@,y,@,model,@,next_game_state,@,alert_color,@,circ_radius,1.5,draw,%level_entrance_draw,d_ang,.001,hit,%level_entrance_hit]]

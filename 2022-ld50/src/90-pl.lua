@@ -16,18 +16,11 @@ zclass[[pl,actor,model,drawlayer_20,team_blue|
     end
 
     if (btn'5' or btn'4') and a.missile_ready then
-        if not a.shoot_bar or not a.shoot_bar.alive then
-            a.shoot_bar = _g.bar(a, function() return a.shoot_percent end, 1, 1.2, 2.2, .125)
-        end
-        if a.shoot_percent > 0 and a.shoot_enabled then
-            a.shoot_percent = max(0,a.shoot_percent-.125)
-            _g.missile(a.x+cos(a.ang)*.8,a.y+sin(a.ang)*.8,a.dx,a.dy,a.ang)
-            a.missile_ready = false
-            a:start_timer('missile_cooldown', 0.1, function() a.missile_ready=true end)
-            if a.shoot_percent == 0 then a.shoot_enabled = false end
-        else
-            sfx(26,3)
-        end
+        a.shoot_percent = max(0,a.shoot_percent-.125)
+        _g.missile(a.x+cos(a.ang)*.8,a.y+sin(a.ang)*.8,a.dx,a.dy,a.ang)
+        a.missile_ready = false
+        a:start_timer('missile_cooldown', 0.2, function() a.missile_ready=true end)
+        if a.shoot_percent == 0 then a.shoot_enabled = false end
     end
 
     if ybtn() > 0 then

@@ -54,7 +54,7 @@ end $$
 end $$
 
 |level_credits_init| function()
-    level_init_shared("credits", "level_credits", "level_credits", 32, 0, 0)
+    level_init_shared(8, "credits", 32, 0, 0)
 
     create_text("code,amorg,denial",        0,   -12)
     create_text("gfx,tigerwolf,greatcadet", -12, 0)

@@ -3,12 +3,20 @@ zclass[[view,model|
     model,%VIEW_COLLISION_CIRC,
     scale,5,
     zoom_factor,16,
+    init,%view_init,
     
     match_following, %view_match_following;
 
     start;duration,2, next,run;
-    run;update,%view_update;
+    run;init,nop, update,%view_update;
 ]]
+
+|view_init| function(a)
+    if a.following then
+        a.x = a.following.x
+        a.y = a.following.y
+    end
+end $$
 
 |view_update| function(a)
     a.zoom_factor = max(12, a.zoom_factor - .1)

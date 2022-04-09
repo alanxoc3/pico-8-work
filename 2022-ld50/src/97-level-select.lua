@@ -42,24 +42,25 @@ function loop_zobjs_in_view(view, class, method_name, ...)
     end
 end
 
-function create_level_selector(x, y, level, txt1, txt2, model, model_win, state)
+function create_level_selector(x, y, level, txt1, txt2, model, model_win)
     if G_LEVEL == level then
         create_text(txt1, x,  y-2.5)
         create_text(txt2, x, y+2.5)
-        _g.level_entrance(x, y, model, state, 9)
+        _g.level_entrance(x, y, model, level, 9)
     elseif G_LEVEL > level then
         create_text(txt1, x,  y-2.5)
         create_text(txt2, x, y+2.5)
-        _g.level_entrance(x, y, model_win, state, 11)
+        _g.level_entrance(x, y, model_win, level, 11)
     end
 end
 
 |level_select_init| function()
+    local yoff = 8
     G_CUR_LEVEL = 0
     music(0,1000,7)
     clean_all_entities()
 
-    g_pl = _g.pl(0, 0) -- add player
+    g_pl = _g.pl(0, yoff) -- add player
     g_view = _g.view(g_pl)
     local star_view = _g.star_view(g_pl) -- this view is just for stars, so they don't lose their position when the screen wraps
     for i=1,50 do
@@ -72,31 +73,22 @@ end
     g_title_screen_coord = 40
     g_title_screen_dim = g_title_screen_coord*2
 
-    for i=0,6 do
-        printh(""..(cos(i/6*.5)*18).." "..(sin(i/6*.5)*18))
-    end
+    -- for i=0,6 do
+    --     printh(""..(cos(i/6*.5)*24).." "..(sin(i/6*.5)*24))
+    -- end
 
-    -- printh(""..(cos(.25-.125)*12).." "..(sin(.25-.125)*12))
-    -- printh(""..(cos(.25+.125)*12).." "..(sin(.25+.125)*12))
+    create_level_selector(18,  yoff+0,   1, "bear",    "lvl "..1, _g.LEVEL_BEAR_MODEL,  _g.LEVEL_BEAR_CLEAR)
+    create_level_selector(21,  yoff+-12, 2, "bear",    "lvl "..2, _g.LEVEL_BEAR_MODEL,  _g.LEVEL_BEAR_CLEAR)
+    create_level_selector(12,  yoff+-21, 3, "bear",    "lvl "..3, _g.LEVEL_BEAR_MODEL,  _g.LEVEL_BEAR_CLEAR)
+    create_level_selector(0,   yoff+-18, 4, "bear",    "lvl "..4, _g.LEVEL_BEAR_MODEL,  _g.LEVEL_BEAR_CLEAR)
+    create_level_selector(-12, yoff+-21, 5, "cat",     "lvl "..5, _g.LEVEL_CAT_MODEL,   _g.LEVEL_CAT_CLEAR)
+    create_level_selector(-21, yoff+-12, 6, "pig",     "lvl "..6, _g.LEVEL_PIG_MODEL,   _g.LEVEL_PIG_CLEAR)
+    create_level_selector(-18, yoff+0,   7, "mouse",   "lvl "..7, _g.LEVEL_MOUSE_MODEL, _g.LEVEL_MOUSE_CLEAR)
+    create_level_selector(0,   yoff+12,  8, "the",     "credits", _g.LEVEL_CAT_MODEL,   _g.LEVEL_CAT_MODEL)
 
-    create_level_selector(12,  0,   1, "bear",    "lvl "..1, _g.LEVEL_BEAR_MODEL,  _g.LEVEL_BEAR_CLEAR,  "level_bear")
-    create_level_selector(20,  -12, 2, "bear",    "lvl "..2, _g.LEVEL_BEAR_MODEL,  _g.LEVEL_BEAR_CLEAR,  "level_bear")
-    create_level_selector(9,   -16, 3, "bear",    "lvl "..3, _g.LEVEL_BEAR_MODEL,  _g.LEVEL_BEAR_CLEAR,  "level_bear")
-    create_level_selector(0,   -24, 4, "bear",    "lvl "..4, _g.LEVEL_BEAR_MODEL,  _g.LEVEL_BEAR_CLEAR,  "level_bear")
-    create_level_selector(-9,  -16, 5, "cat",     "lvl "..5, _g.LEVEL_CAT_MODEL,   _g.LEVEL_CAT_CLEAR,   "level_cat")
-    create_level_selector(-20, -12, 6, "pig",     "lvl "..6, _g.LEVEL_PIG_MODEL,   _g.LEVEL_PIG_CLEAR,   "level_pig")
-    create_level_selector(-12, 0,   7, "mouse",   "lvl "..7, _g.LEVEL_MOUSE_MODEL, _g.LEVEL_MOUSE_CLEAR, "level_mouse")
-    create_level_selector(0,   12,  8, "the",     "credits", _g.LEVEL_CAT_MODEL,   _g.LEVEL_CAT_MODEL,   "level_credits")
-
-    if G_DEATH_COUNT > 0 then
-        create_text("rewob", 0, -3, _g.drawable_model_post_temp)
-        _g.drawable_model_post_temp(0, 0, _g.STARTING_CIRCLE)
-        create_text("deaths,"..G_DEATH_COUNT, 0, 3, _g.drawable_model_post_temp)
-    else
-        create_text("rewob", 0, -3, _g.drawable_model_post_temp)
-        _g.drawable_model_post_temp(0, 0, _g.STARTING_CIRCLE)
-        create_text("ldjam50", 0, 3, _g.drawable_model_post_temp)
-    end
+    create_text(get_wob_text(G_DEATH_COUNT), 0, yoff-3, _g.drawable_model_post_temp)
+    _g.drawable_model_post_temp(0, yoff, _g.STARTING_CIRCLE)
+    create_text("ldjam50", 0, yoff+3, _g.drawable_model_post_temp)
 end $$
 
 |level_select_update| function()

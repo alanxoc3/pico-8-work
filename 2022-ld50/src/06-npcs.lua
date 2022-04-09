@@ -78,7 +78,7 @@ zclass[[chaser,model_health_bar,drawlayer_20,team_red|
     alert_color,8,
     health_bar_min,1.2,
     health_bar_color,2,
-    max_health,10,
+    max_health,5,
     health,~max_health,
     explode_sfx,27,
     damage,25,
