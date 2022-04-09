@@ -30,7 +30,6 @@ zclass[[pl,actor,model,drawlayer_20,team_blue|
     else
         a.speed = 0
     end
-    
     a.d_ang = -xbtn()*.01
 end $$
 

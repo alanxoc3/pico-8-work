@@ -28,7 +28,7 @@ function fade(threshold)
     end
 end
 
-|logo_init| function() music(-1) sfx'63' end $$
+|logo_init| function() music(-1) sfx(63, 0) end $$
 
 |logo_draw| function(a)
     -- stateful: load(state)

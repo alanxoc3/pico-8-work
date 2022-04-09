@@ -93,6 +93,7 @@ end $$
     loop_zobjs('star_view', 'match_following')
 
     loop_zobjs('view', 'collide', g_zclass_entities['level_entrance'])
+    loop_zobjs('missile', 'collide', g_zclass_entities['level_entrance'])
 
     loop_zobjs('level_entrance', 'collide', g_zclass_entities['pl'])
     loop_zobjs('pl', 'collide', g_zclass_entities['level_entrance'])

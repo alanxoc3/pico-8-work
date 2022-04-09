@@ -78,9 +78,14 @@ zclass[[chaser,model_health_bar,drawlayer_20,team_red|
     explode_sfx,27,
     damage,25,
     model,%CHASER,
+    init,%chaser_init,
     update,%chaser_update,
     hit,%chaser_hit;
 ]]
+
+|chaser_init| function(a)
+    a.ang = atan2(a.target.x - a.x, a.target.y - a.y)
+end $$
 
 |chaser_update| function(a)
     -- if there is a target, apply an impulse towards that target
@@ -106,7 +111,7 @@ end $$
 end $$
 
 -- an enemy that sucks other things into itself and destroys them
-zclass[[black_hole,model,drawlayer_20,team_none|
+zclass[[black_hole,model,drawlayer_20|
     x,@, y,@,
     alert_color,2,
     d_ang,.1, -- spinz fast

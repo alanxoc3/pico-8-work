@@ -30,7 +30,6 @@ function _init()
     cartdata"rewob"
     G_DEATH_COUNT = dget(4)
     G_LEVEL = dget(5)
-    G_LEVEL = 8
     G_CUR_LEVEL = nil
 
     g_game_state = _g.game_state()
@@ -38,6 +37,12 @@ function _init()
 end
 
 function _update60()
+    if xbtn() ~= 0 or ybtn() ~= 0 or btn(4) or btn(5) then
+        sfx(-1, 2)
+    else
+        sfx(62, 2)
+    end
+
     -- DEBUG_BEGIN
     if btnp(4) and btnp(5) then g_debug = not g_debug end
     -- DEBUG_END
@@ -50,12 +55,6 @@ function _update60()
     dset(4, G_DEATH_COUNT)
 
     inc_level(0) dset(5, G_LEVEL)
-
-    if (btn(4) or btn(5)) and g_zclass_entities["missile"] and #g_zclass_entities["missile"] > 0 then
-        sfx(-1, 2)
-    else
-        sfx(62, 2)
-    end
 end
 
 function _draw()
@@ -171,7 +170,9 @@ end
 
     _g.fader_in(1) g_view = _g.view()
     
-    inc_level(1)
+    if G_LEVEL == G_CUR_LEVEL then
+        inc_level(1)
+    end
     create_text("win", 0, 0)
 
     g_game_state:start_timer("win", 1, function()
@@ -202,8 +203,11 @@ end $$
     loop_zobjs('star_view', 'match_following')
 
     loop_zobjs('missile', 'collide', g_zclass_entities['teammate'])
+    loop_zobjs('missile', 'collide', g_zclass_entities['black_hole'])
+
     loop_zobjs('teammate', 'collide', g_zclass_entities['missile'])
     loop_zobjs('teammate', 'collide', g_zclass_entities['teammate'])
+    loop_zobjs('teammate', 'collide', g_zclass_entities['black_hole'])
 
     loop_zobjs('alert_radar', 'register', g_zclass_entities['planet'])
     loop_zobjs('alert_radar', 'register', g_zclass_entities['asteroid'])
@@ -218,14 +222,18 @@ end $$
 
     loop_zobjs('alert_radar', 'register', g_zclass_entities['chaser'])
     loop_zobjs('alert_radar', 'register', g_zclass_entities['black_hole'])
-    loop_zobjs('black_hole', 'tug', g_zclass_entities['teammate']) -- affects dx & dy of all 'teammate' objects
 
     loop_zobjs('collision_circ', 'follow_anchoring')
     loop_zobjs('mov', 'mov_update')
+
     loop_zobjs('acc', 'acc_update')
+
     loop_zobjs('vec', 'vec_update')
     loop_zobjs('anchor_pos', 'update_anchor')
     loop_zobjs('model', 'model_update')
+
+    loop_zobjs('black_hole', 'tug', g_zclass_entities['black_hole']) -- affects dx & dy of all 'teammate' objects
+    loop_zobjs('black_hole', 'tug', g_zclass_entities['teammate']) -- affects dx & dy of all 'teammate' objects
 
     check_level_bounds()
 end $$

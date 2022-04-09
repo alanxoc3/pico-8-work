@@ -80,7 +80,6 @@ end
             local ang = atan2(other.x-a.x, other.y-a.y)
             local dx, dy = cos(ang)*dist, sin(ang)*dist
             a.anchoring:hit(other.anchoring, dx, dy)
-            -- other.anchoring:hit(a.anchoring, -dx, -dy)
         end
     end)
 end $$
