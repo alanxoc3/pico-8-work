@@ -46,11 +46,11 @@ function create_level_selector(x, y, level, txt1, txt2, model)
     if G_LEVEL == level then
         create_text(txt1, x,  y-2.5)
         create_text(txt2, x, y+2.5)
-        _g.level_entrance(x, y, model, level, _g.LEVEL_NEXT)
+        _g.level_entrance(x, y, model, level, _g.LEVEL_NEXT, 9)
     elseif G_LEVEL > level then
         create_text(txt1, x,  y-2.5)
         create_text(txt2, x, y+2.5)
-        _g.level_entrance(x, y, model, level, _g.LEVEL_DONE)
+        _g.level_entrance(x, y, model, level, _g.LEVEL_DONE, 11)
     end
 end
 
@@ -72,13 +72,13 @@ end
     g_title_screen_coord = 40
     g_title_screen_dim = g_title_screen_coord*2
 
-    create_level_selector(18,  yoff+0,   1, "lvl "..1, "mouse",   _g.BEAR)
-    create_level_selector(21,  yoff+-12, 2, "lvl "..2, "cat",     _g.BEAR)
-    create_level_selector(12,  yoff+-21, 3, "lvl "..3, "pig",     _g.BEAR)
+    create_level_selector(18,  yoff+0,   1, "lvl "..1, "mouse",   _g.MOUSE)
+    create_level_selector(21,  yoff+-12, 2, "lvl "..2, "cat",     _g.CAT)
+    create_level_selector(12,  yoff+-21, 3, "lvl "..3, "pig",     _g.PIG)
     create_level_selector(0,   yoff+-18, 4, "lvl "..4, "bear",    _g.BEAR)
-    create_level_selector(-12, yoff+-21, 5, "lvl "..5, "rhino",   _g.CAT)
-    create_level_selector(-21, yoff+-12, 6, "lvl "..6, "croc",    _g.PIG)
-    create_level_selector(-18, yoff+0,   7, "lvl "..7, "dragon",  _g.MOUSE)
+    create_level_selector(-12, yoff+-21, 5, "lvl "..5, "rhino",   _g.RHINO)
+    create_level_selector(-21, yoff+-12, 6, "lvl "..6, "croc",    _g.CROC)
+    create_level_selector(-18, yoff+0,   7, "lvl "..7, "dragon",  _g.DRAGON)
     create_level_selector(0,   yoff+12,  8, "the",     "credits", _g.ASTEROID)
 
     create_text("rewob", 0, yoff-3, _g.drawable_model_post_temp)
@@ -127,7 +127,7 @@ zclass[[level_entrance_outline,model,drawlayer_10|
 end $$
 
 zclass[[level_entrance,model,drawlayer_10|
-    x,@, y,@, model,@, next_game_state,@, outline_model,@,
+    x,@, y,@, model,@, next_game_state,@, outline_model,@, alert_color,@,
     circ_radius,1.5,
     init, %level_entrance_init,
     draw, %level_entrance_draw,

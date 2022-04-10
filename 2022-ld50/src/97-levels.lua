@@ -51,7 +51,7 @@ end $$
     level_init_shared(5, "lvl 5", "rhino", 40, 10, 0, 11)
 
     -- title
-    local planet = _g.planet(20,0,_g.PIG)
+    local planet = _g.planet(20,0,_g.RHINO)
     _g.asteroid(17,-18)
     _g.asteroid(17,20)
 
@@ -63,7 +63,7 @@ end $$
 |level_6_init| function()
     level_init_shared(6, "lvl 6", "croc", 44, -9, 0, 11)
 
-    local planet = _g.planet(0,0,_g.MOUSE)
+    local planet = _g.planet(0,0,_g.CROC)
     _g.asteroid(cos(.25    )*35,sin(.25    )*35)
     _g.asteroid(cos(.25+1/3)*35,sin(.25+1/3)*35)
     _g.asteroid(cos(.25+2/3)*35,sin(.25+2/3)*35)
@@ -80,7 +80,7 @@ end $$
 |level_7_init| function()
     level_init_shared(7, "lvl 7", "dragon", 36, 8, 8, 13)
 
-    local planet = _g.planet(0, 0, _g.MOUSE)
+    local planet = _g.planet(0, 0, _g.DRAGON)
     _g.asteroid(23, -12)
     _g.asteroid(-12, 23)
 
