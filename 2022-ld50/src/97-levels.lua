@@ -97,18 +97,18 @@ end $$
 |level_8_init| function()
     level_init_shared(8, "the", "credits", 32, 0, 0)
 
-    create_text("congrats",       0,   -5)
-    create_text("you win",        0,    5)
+    create_text("you win",       0,   -5)
+    create_text(get_wob_text(),        0,   5)
 
     create_text("code,amorg,denial",        0,   -12)
     create_text("gfx,tigerwolf,greatcadet", -12, 0)
     create_text("sfx,amorg,greatcadet",     12,  0)
-    create_text("made,with,pico8",          0,   12)
+    create_text("made for,ludum dare,50",            0,   12)
 
-    _g.spawner(_g.chaser, {x=0, y=0}, 2,  10, 0,   0)
-    _g.spawner(_g.chaser, {x=0, y=0}, 4,  10, .25, .25)
-    _g.spawner(_g.chaser, {x=0, y=0}, 6,  10, .5,  .5)
-    _g.spawner(_g.chaser, {x=0, y=0}, 10, 10, .75, .75)
+    _g.spawner(_g.chaser, {x=0, y=0}, 5,  20,  .125, .125)
+    _g.spawner(_g.chaser, {x=0, y=0}, 10,  20, .375, .375)
+    _g.spawner(_g.chaser, {x=0, y=0}, 15,  20, .625, .625)
+    _g.spawner(_g.chaser, {x=0, y=0}, 20, 20,  .875, .875)
 
     _g.asteroid(-10, -10)
     _g.asteroid(-10,  10)

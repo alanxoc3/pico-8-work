@@ -56,7 +56,6 @@ end
 
 |level_select_init| function()
     local yoff = 8
-    G_CUR_LEVEL = 0
     music(0,1000,7)
     clean_all_entities()
 
@@ -82,9 +81,13 @@ end
     create_level_selector(-18, yoff+0,   7, "lvl "..7, "mouse",   _g.LEVEL_MOUSE_MODEL, _g.LEVEL_MOUSE_CLEAR)
     create_level_selector(0,   yoff+12,  8, "the",     "credits", _g.LEVEL_CAT_MODEL,   _g.LEVEL_CAT_MODEL)
 
-    create_text(get_wob_text(), 0, yoff-3, _g.drawable_model_post_temp)
+    create_text("rewob", 0, yoff-3, _g.drawable_model_post_temp)
     _g.drawable_model_post_temp(0, yoff, _g.STARTING_CIRCLE)
-    create_text("ldjam50", 0, yoff+3, _g.drawable_model_post_temp)
+    if G_DEATH_COUNT > 0 then
+        create_text(get_wob_text(), 0, yoff+3, _g.drawable_model_post_temp)
+    else
+        create_text("by amorg", 0, yoff+3, _g.drawable_model_post_temp)
+    end
 end $$
 
 |level_select_update| function()

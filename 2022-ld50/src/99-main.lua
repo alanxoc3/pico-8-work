@@ -8,7 +8,6 @@ end)
 zclass[[game_state,actor|
     ecs_exclusions;actor,true; -- remove game_state from the actor group
     curr,logo;
-    -- curr,1;
     logo; init,%logo_init, update,%logo_update, draw,%logo_draw, duration,2.5, next,level_select;
     level_select; init,%level_select_init, update,%level_select_update, draw,%level_select_draw;
 
@@ -125,11 +124,7 @@ zclass[[game_checker,actor|
 end $$
 
 function get_wob_text()
-    if G_DEATH_COUNT == 0 then
-        return "rewob"
-    else
-        return "wob "..G_DEATH_COUNT\1
-    end
+    return "wob "..G_DEATH_COUNT\1
 end
 
 |retry_init| function(a)

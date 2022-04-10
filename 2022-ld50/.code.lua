@@ -396,7 +396,6 @@ circ(zoomx(a.x),zoomy(a.y),zoom(rad),a.fg)
 circ(zoomx(a.x),zoomy(a.y),zoom(rad)-1,0)
 end,function()
 local yoff=8
-G_CUR_LEVEL=0
 music(0,1000,7)
 clean_all_entities()
 g_pl=_g.pl(0,yoff)
@@ -417,9 +416,13 @@ create_level_selector(-12,yoff+-21,5,"lvl "..5,"cat",_g.LEVEL_CAT_MODEL,_g.LEVEL
 create_level_selector(-21,yoff+-12,6,"lvl "..6,"pig",_g.LEVEL_PIG_MODEL,_g.LEVEL_PIG_CLEAR)
 create_level_selector(-18,yoff+0,7,"lvl "..7,"mouse",_g.LEVEL_MOUSE_MODEL,_g.LEVEL_MOUSE_CLEAR)
 create_level_selector(0,yoff+12,8,"the","credits",_g.LEVEL_CAT_MODEL,_g.LEVEL_CAT_MODEL)
-create_text(get_wob_text(),0,yoff-3,_g.drawable_model_post_temp)
+create_text("rewob",0,yoff-3,_g.drawable_model_post_temp)
 _g.drawable_model_post_temp(0,yoff,_g.STARTING_CIRCLE)
-create_text("ldjam50",0,yoff+3,_g.drawable_model_post_temp)
+if G_DEATH_COUNT>0 then
+create_text(get_wob_text(),0,yoff+3,_g.drawable_model_post_temp)
+else
+create_text("by amorg",0,yoff+3,_g.drawable_model_post_temp)
+end
 end,function()
 loop_zobjs("actor","state")
 loop_zobjs("view","match_following")
@@ -515,16 +518,16 @@ _g.black_hole(0,50)
 _g.black_hole(0,-50)
 end,function()
 level_init_shared(8,"the","credits",32,0,0)
-create_text("congrats",0,-5)
-create_text("you win",0,5)
+create_text("you win",0,-5)
+create_text(get_wob_text(),0,5)
 create_text("code,amorg,denial",0,-12)
 create_text("gfx,tigerwolf,greatcadet",-12,0)
 create_text("sfx,amorg,greatcadet",12,0)
-create_text("made,with,pico8",0,12)
-_g.spawner(_g.chaser,{x=0,y=0},2,10,0,0)
-_g.spawner(_g.chaser,{x=0,y=0},4,10,.25,.25)
-_g.spawner(_g.chaser,{x=0,y=0},6,10,.5,.5)
-_g.spawner(_g.chaser,{x=0,y=0},10,10,.75,.75)
+create_text("made for,ludum dare,50",0,12)
+_g.spawner(_g.chaser,{x=0,y=0},5,20,.125,.125)
+_g.spawner(_g.chaser,{x=0,y=0},10,20,.375,.375)
+_g.spawner(_g.chaser,{x=0,y=0},15,20,.625,.625)
+_g.spawner(_g.chaser,{x=0,y=0},20,20,.875,.875)
 _g.asteroid(-10,-10)
 _g.asteroid(-10,10)
 _g.asteroid(10,10)
@@ -920,11 +923,7 @@ end
 zclass[[stats_displayer,drawlayer_40|draw,%stats_displayer_draw]]
 zclass[[game_checker,actor|pl,@,update,%game_checker_update]]
 function get_wob_text()
-if G_DEATH_COUNT==0 then
-return "rewob"
-else
 return "wob "..G_DEATH_COUNT\1
-end
 end
 function inc_level(inc)
 G_LEVEL=max(1,min((G_LEVEL+inc)\1,8))
