@@ -72,13 +72,13 @@ end
     g_title_screen_coord = 40
     g_title_screen_dim = g_title_screen_coord*2
 
-    create_level_selector(18,  yoff+0,   1, "lvl "..1, "bear",    _g.LEVEL_BEAR_MODEL,  _g.LEVEL_BEAR_CLEAR)
-    create_level_selector(21,  yoff+-12, 2, "lvl "..2, "bear",    _g.LEVEL_BEAR_MODEL,  _g.LEVEL_BEAR_CLEAR)
-    create_level_selector(12,  yoff+-21, 3, "lvl "..3, "bear",    _g.LEVEL_BEAR_MODEL,  _g.LEVEL_BEAR_CLEAR)
+    create_level_selector(18,  yoff+0,   1, "lvl "..1, "mouse",   _g.LEVEL_BEAR_MODEL,  _g.LEVEL_BEAR_CLEAR)
+    create_level_selector(21,  yoff+-12, 2, "lvl "..2, "cat",     _g.LEVEL_BEAR_MODEL,  _g.LEVEL_BEAR_CLEAR)
+    create_level_selector(12,  yoff+-21, 3, "lvl "..3, "pig",     _g.LEVEL_BEAR_MODEL,  _g.LEVEL_BEAR_CLEAR)
     create_level_selector(0,   yoff+-18, 4, "lvl "..4, "bear",    _g.LEVEL_BEAR_MODEL,  _g.LEVEL_BEAR_CLEAR)
-    create_level_selector(-12, yoff+-21, 5, "lvl "..5, "cat",     _g.LEVEL_CAT_MODEL,   _g.LEVEL_CAT_CLEAR)
-    create_level_selector(-21, yoff+-12, 6, "lvl "..6, "pig",     _g.LEVEL_PIG_MODEL,   _g.LEVEL_PIG_CLEAR)
-    create_level_selector(-18, yoff+0,   7, "lvl "..7, "mouse",   _g.LEVEL_MOUSE_MODEL, _g.LEVEL_MOUSE_CLEAR)
+    create_level_selector(-12, yoff+-21, 5, "lvl "..5, "rhino",   _g.LEVEL_CAT_MODEL,   _g.LEVEL_CAT_CLEAR)
+    create_level_selector(-21, yoff+-12, 6, "lvl "..6, "croc",    _g.LEVEL_PIG_MODEL,   _g.LEVEL_PIG_CLEAR)
+    create_level_selector(-18, yoff+0,   7, "lvl "..7, "dragon",  _g.LEVEL_MOUSE_MODEL, _g.LEVEL_MOUSE_CLEAR)
     create_level_selector(0,   yoff+12,  8, "the",     "credits", _g.LEVEL_CAT_MODEL,   _g.LEVEL_CAT_MODEL)
 
     create_text("rewob", 0, yoff-3, _g.drawable_model_post_temp)

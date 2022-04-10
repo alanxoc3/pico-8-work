@@ -130,7 +130,7 @@ end
 |retry_init| function(a)
     music(4,nil,1)
     clean_all_entities()
-    G_DEATH_COUNT = max(0, min(100, G_DEATH_COUNT+1))
+    G_DEATH_COUNT = max(0, min(999, G_DEATH_COUNT+1))
 
     _g.fader_in(1)
     g_view = _g.view()
@@ -221,12 +221,15 @@ end $$
 
     loop_zobjs('acc', 'acc_update')
 
+    loop_zobjs('gravity', 'tug', g_zclass_entities['gravity']) -- affects dx & dy of all 'teammate' objects
+    loop_zobjs('gravity', 'tug', g_zclass_entities['chaser']) -- affects dx & dy of all 'teammate' objects
+    loop_zobjs('gravity', 'tug', g_zclass_entities['pl']) -- affects dx & dy of all 'teammate' objects
+    loop_zobjs('gravity', 'tug', g_zclass_entities['missile']) -- affects dx & dy of all 'teammate' objects
+    loop_zobjs('gravity', 'tug', g_zclass_entities['asteroid']) -- affects dx & dy of all 'teammate' objects
+
     loop_zobjs('vec', 'vec_update')
     loop_zobjs('anchor_pos', 'update_anchor')
     loop_zobjs('model', 'model_update')
-
-    loop_zobjs('black_hole', 'tug', g_zclass_entities['black_hole']) -- affects dx & dy of all 'teammate' objects
-    loop_zobjs('black_hole', 'tug', g_zclass_entities['teammate']) -- affects dx & dy of all 'teammate' objects
 
     check_level_bounds()
 end $$

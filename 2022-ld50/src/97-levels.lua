@@ -1,9 +1,8 @@
 |level_1_init| function()
-    level_init_shared(1, "lvl 1", "mouse", 32, 0, 0, 10)
+    level_init_shared(1, "lvl 1", "mouse", 32, 0, 0, 9)
 
-    local planet = _g.planet(18,0,_g.BEAR)
-    _g.asteroid(25,0)
-    _g.black_hole(-20, 0)
+    local planet = _g.planet(15,0,_g.MOUSE)
+    _g.asteroid(26,0)
     _g.black_hole(-20, 0)
     _g.spawner(_g.chaser, planet, 4, 4,  0, 0)
 end $$
@@ -11,23 +10,22 @@ end $$
 |level_2_init| function()
     level_init_shared(2, "lvl 2", "cat", 24, 0, 0, 12)
 
-    local planet = _g.planet(0,-22,_g.BEAR)
-    _g.black_hole(0,22)
+    local planet = _g.planet(0,-25,_g.CAT)
     _g.black_hole(0,22)
 
-    _g.spawner(_g.chaser, planet, 4, 8, .82, .82)
-    _g.spawner(_g.chaser, planet, 4, 8, .68, .68)
+    _g.spawner(_g.chaser, planet, 4, 16, .83, .83)
+    _g.spawner(_g.chaser, planet, 12, 16, .67, .67)
 end $$
 
 |level_3_init| function()
     level_init_shared(3, "lvl 3", "pig", 16, 0, 7, 13)
 
-    local planet = _g.planet(0,0,_g.BEAR)
-    _g.black_hole(-25,0)
-    _g.black_hole(25,0)
+    local planet = _g.planet(0,0,_g.PIG)
+    _g.black_hole(-50,0)
+    _g.black_hole(50,0)
 
-    _g.asteroid(0,-15)
-    _g.asteroid(0,15)
+    _g.asteroid(0,-25)
+    _g.asteroid(0,25)
 
     _g.spawner(_g.chaser, planet, 4, 8, .75, .75)
     _g.spawner(_g.chaser, planet, 8, 8, .25, .25)
@@ -36,62 +34,63 @@ end $$
 |level_4_init| function()
     level_init_shared(4, "lvl 4", "bear", 8, 0, -9, 11)
 
-    local planet = _g.planet(0,-22,_g.CAT)
+    local planet = _g.planet(0,-25,_g.BEAR)
     _g.asteroid(25,0)
     _g.asteroid(-25,0)
     _g.asteroid(15,15)
-    _g.asteroid(-13,13)
+    _g.asteroid(-15,15)
     _g.asteroid(22,8)
     _g.asteroid(-22,8)
 
     -- asteroids kinda protect you from enemies
     _g.spawner(_g.chaser, planet, 4, 2, .5, 1)
-    _g.black_hole(0, 0)
+    _g.black_hole(0, 18)
 end $$
 
 |level_5_init| function()
-    level_init_shared(5, "lvl 5", "rhino", 40, 0, 0, 11)
+    level_init_shared(5, "lvl 5", "rhino", 40, 10, 0, 11)
 
     -- title
     local planet = _g.planet(20,0,_g.PIG)
-    _g.asteroid(17,-15)
-    _g.asteroid(17,15)
+    _g.asteroid(17,-18)
+    _g.asteroid(17,20)
 
     _g.spawner(_g.chaser, planet, 4, 4, -.125, .125)
 
     _g.black_hole(-22, 0)
-    _g.black_hole(-22, 0)
 end $$
 
 |level_6_init| function()
-    level_init_shared(6, "lvl 6", "croc", 44, -9, 0, 13)
+    level_init_shared(6, "lvl 6", "croc", 44, -9, 0, 11)
 
     local planet = _g.planet(0,0,_g.MOUSE)
-    _g.asteroid(cos(.25    )*10,sin(.25    )*10)
-    _g.asteroid(cos(.25+1/3)*20,sin(.25+1/3)*20)
-    _g.asteroid(cos(.25+2/3)*30,sin(.25+2/3)*30)
+    _g.asteroid(cos(.25    )*35,sin(.25    )*35)
+    _g.asteroid(cos(.25+1/3)*35,sin(.25+1/3)*35)
+    _g.asteroid(cos(.25+2/3)*35,sin(.25+2/3)*35)
 
-    _g.spawner(_g.chaser, planet, 5, 5, 0, 1)
+    _g.spawner(_g.chaser, planet, 6,  18, .25+0/3-.1, .25+0/3+.1)
+    _g.spawner(_g.chaser, planet, 12, 18, .25+1/3-.1, .25+1/3+.1)
+    _g.spawner(_g.chaser, planet, 18, 18, .25+2/3-.1, .25+2/3+.1)
 
-    _g.black_hole(cos(.75    )*50,sin(.75    )*40)
-    _g.black_hole(cos(.75+1/3)*50,sin(.75+1/3)*40)
-    _g.black_hole(cos(.75+2/3)*50,sin(.75+2/3)*40)
+    _g.black_hole(cos(.75    )*58,sin(.75    )*58)
+    _g.black_hole(cos(.75+1/3)*58,sin(.75+1/3)*58)
+    _g.black_hole(cos(.75+2/3)*58,sin(.75+2/3)*58)
 end $$
 
 |level_7_init| function()
-    level_init_shared(7, "lvl 7", "dragon", 36, 8, 8, 11)
+    level_init_shared(7, "lvl 7", "dragon", 36, 8, 8, 13)
 
     local planet = _g.planet(0, 0, _g.MOUSE)
-    _g.asteroid(-4, 4)
-    _g.asteroid(-12, -12)
-    _g.asteroid(18, -18)
+    _g.asteroid(23, -12)
+    _g.asteroid(-12, 23)
 
-    _g.spawner(_g.chaser, planet, 5, 5, .75+.125-.125/2, .75+.125+.125/2)
+    _g.spawner(_g.chaser, planet, 5, 10,   .75, 1)
+    _g.spawner(_g.chaser, planet, 10, 10, .1762, .5738)
 
-    _g.black_hole(-50, 0)
-    _g.black_hole(50, 0)
-    _g.black_hole(0, 50)
-    _g.black_hole(0, -50)
+    _g.black_hole(-80, 40)
+    _g.black_hole(80, 0)
+    _g.black_hole(0, 80)
+    _g.black_hole(40, -80)
 end $$
 
 |level_8_init| function()

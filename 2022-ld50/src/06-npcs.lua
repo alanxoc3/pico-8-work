@@ -16,7 +16,7 @@ zclass[[model_health_bar,model|hit,%model_health_bar_hit, health_bar_min,1, heal
 end $$
 
 -- a friendly planet that you protect
-zclass[[planet,model_health_bar,drawlayer_20,team_blue|
+zclass[[planet,gravity,model_health_bar,drawlayer_20,team_blue|
     x,@, y,@, model,@,
     spawn_delay,4, spawn_rate,4,
     health_bar_min,1.7,
@@ -29,7 +29,7 @@ zclass[[planet,model_health_bar,drawlayer_20,team_blue|
     damage,10000, -- so that things that crash into the planet immediately die
     d_ang,.001;
     start;duration,~spawn_delay,next,evac;
-    evac;init,%planet_evac,duration,~spawn_rate,next,evac;
+    evac;init,%planet_evac,duration,~spawn_rate,next,evac, tug,~gravity_tug;
 ]]
 
 |planet_destroyed| function(a)
@@ -110,20 +110,11 @@ end $$
     if b.id == 'missile' then a.target = g_pl end
 end $$
 
--- an enemy that sucks other things into itself and destroys them
-zclass[[black_hole,model,drawlayer_20|
-    x,@, y,@,
-    alert_color,2,
-    d_ang,.1, -- spinz fast
-    damage,10000, -- basically infinite damage
-    tug_constant,.0004,
-    model,%BLACK_HOLE;
-
-    start;duration,1.5, tug,nop, next,run;
-    run;tug,%black_hole_tug;
+zclass[[gravity,model|
+    tug_constant,.0004, gravity_tug,%gravity_tug;
 ]]
 
-|black_hole_tug| function(a, obj_list)
+|gravity_tug| function(a, obj_list)
     foreach(obj_list, function(obj) 
         if a.id == obj then return end
         local x, y = a.x-obj.x, a.y-obj.y
@@ -133,3 +124,17 @@ zclass[[black_hole,model,drawlayer_20|
         obj.dy += sin(ang) * dist
     end)
 end $$
+
+-- an enemy that sucks other things into itself and destroys them
+zclass[[black_hole,gravity,drawlayer_20|
+    x,@, y,@,
+    alert_color,2,
+    d_ang,.1, -- spinz fast
+    damage,10000, -- basically infinite damage
+    tug_constant,.0004,
+    model,%BLACK_HOLE;
+    
+    start;duration,1.5, tug,nop, next,run;
+    run;tug,~gravity_tug;
+]]
+
