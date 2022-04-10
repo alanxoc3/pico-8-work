@@ -54,22 +54,20 @@ end $$
     _g.asteroid(17,-18)
     _g.asteroid(17,20)
 
-    _g.spawner(_g.chaser, planet, 4, 4, -.125, .125)
+    _g.spawner(_g.chaser, planet, 5, 5, -.125, .125)
 
     _g.black_hole(-22, 0)
 end $$
 
 |level_6_init| function()
-    level_init_shared(6, "lvl 6", "croc", 44, -9, 0, 11)
+    level_init_shared(6, "lvl 6", "croc", 44, 0, -9, 11)
 
     local planet = _g.planet(0,0,_g.CROC)
     _g.asteroid(cos(.25    )*35,sin(.25    )*35)
     _g.asteroid(cos(.25+1/3)*35,sin(.25+1/3)*35)
     _g.asteroid(cos(.25+2/3)*35,sin(.25+2/3)*35)
 
-    _g.spawner(_g.chaser, planet, 6,  18, .25+0/3-.1, .25+0/3+.1)
-    _g.spawner(_g.chaser, planet, 12, 18, .25+1/3-.1, .25+1/3+.1)
-    _g.spawner(_g.chaser, planet, 18, 18, .25+2/3-.1, .25+2/3+.1)
+    _g.spawner(_g.chaser, planet, 5,  5, .25+0/3-.1, .25+0/3+.1)
 
     _g.black_hole(cos(.75    )*58,sin(.75    )*58)
     _g.black_hole(cos(.75+1/3)*58,sin(.75+1/3)*58)
@@ -77,19 +75,21 @@ end $$
 end $$
 
 |level_7_init| function()
-    level_init_shared(7, "lvl 7", "dragon", 36, 8, 8, 13)
+    level_init_shared(7, "lvl 7", "dragon", 36, -10, -10, 14)
 
-    local planet = _g.planet(0, 0, _g.DRAGON)
-    _g.asteroid(23, -12)
-    _g.asteroid(-12, 23)
+    local planet = _g.planet(-18, -18, _g.DRAGON)
+    _g.asteroid(0, 0)
+    _g.asteroid(5, 5)
+    _g.asteroid(10, 10)
 
-    _g.spawner(_g.chaser, planet, 5, 10,   .75, 1)
-    _g.spawner(_g.chaser, planet, 10, 10, .1762, .5738)
+    _g.spawner(_g.chaser, planet, 6, 6, 0-.1, 0+.1)
+    _g.spawner(_g.chaser, planet, 9, 6, .75-.1, .75+.1)
 
     _g.black_hole(-80, 40)
-    _g.black_hole(80, 0)
-    _g.black_hole(0, 80)
     _g.black_hole(40, -80)
+
+    _g.black_hole(89, 44)
+    _g.black_hole(44, 89)
 end $$
 
 |level_8_init| function()
