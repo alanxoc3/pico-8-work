@@ -1,5 +1,5 @@
 |level_1_init| function()
-    level_init_shared(1, "lvl 1", "bear", 8, 0, 0, 10)
+    level_init_shared(1, "lvl 1", "mouse", 32, 0, 0, 10)
 
     local planet = _g.planet(18,0,_g.BEAR)
     _g.asteroid(25,0)
@@ -9,7 +9,7 @@
 end $$
 
 |level_2_init| function()
-    level_init_shared(2, "lvl 2", "bear", 8, 0, 0, 12)
+    level_init_shared(2, "lvl 2", "cat", 24, 0, 0, 12)
 
     local planet = _g.planet(0,-22,_g.BEAR)
     _g.black_hole(0,22)
@@ -20,7 +20,7 @@ end $$
 end $$
 
 |level_3_init| function()
-    level_init_shared(3, "lvl 3", "bear", 8, 0, 7, 13)
+    level_init_shared(3, "lvl 3", "pig", 16, 0, 7, 13)
 
     local planet = _g.planet(0,0,_g.BEAR)
     _g.black_hole(-25,0)
@@ -34,7 +34,7 @@ end $$
 end $$
 
 |level_4_init| function()
-    level_init_shared(4, "lvl 4", "cat", 24, 0, -9, 11)
+    level_init_shared(4, "lvl 4", "bear", 8, 0, -9, 11)
 
     local planet = _g.planet(0,-22,_g.CAT)
     _g.asteroid(25,0)
@@ -50,7 +50,7 @@ end $$
 end $$
 
 |level_5_init| function()
-    level_init_shared(5, "lvl 5", "pig", 16, 0, 0, 11)
+    level_init_shared(5, "lvl 5", "rhino", 40, 0, 0, 11)
 
     -- title
     local planet = _g.planet(20,0,_g.PIG)
@@ -64,7 +64,7 @@ end $$
 end $$
 
 |level_6_init| function()
-    level_init_shared(6, "lvl 6", "mouse", 32, -9, 0, 13)
+    level_init_shared(6, "lvl 6", "croc", 44, -9, 0, 13)
 
     local planet = _g.planet(0,0,_g.MOUSE)
     _g.asteroid(cos(.25    )*10,sin(.25    )*10)
@@ -79,7 +79,7 @@ end $$
 end $$
 
 |level_7_init| function()
-    level_init_shared(7, "lvl 7", "bear", 8, 8, 8, 11)
+    level_init_shared(7, "lvl 7", "dragon", 36, 8, 8, 11)
 
     local planet = _g.planet(0, 0, _g.MOUSE)
     _g.asteroid(-4, 4)
@@ -95,7 +95,7 @@ end $$
 end $$
 
 |level_8_init| function()
-    level_init_shared(8, "the", "credits", 32, 0, 0)
+    level_init_shared(8, "the", "credits", 48, 0, 0)
 
     create_text("you win",       0,   -5)
     create_text(get_wob_text(),        0,   5)

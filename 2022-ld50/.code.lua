@@ -192,9 +192,6 @@ foreach(base_model,function(m)
 line_loop(m.points,m.shape.fg_color,m.shape.wobble_enabled and scr_wobble_line or scr_line)
 end)
 memcpy(0x5f44,0x5600,8)
-if g_debug and a.radius then
-circ(zoomx(a.x),zoomy(a.y),a.radius*g_view.zoom_factor,2)
-end
 end,function(a,other_list)
 if #a.collision_circs>0 then
 foreach(other_list,function(other)
@@ -261,10 +258,6 @@ local dir=atan2(x,y)
 local dist=approx_dist(x,y)
 a.dx=cos(dir)*dist*.25
 a.dy=sin(dir)*dist*.25
-if g_debug then
-if btn"4"then a.zoom_factor=min(30,a.zoom_factor+1)end
-if btn"5"then a.zoom_factor=max(5,a.zoom_factor-5)end
-end
 end
 end,function(a)
 _g.missile_pop(a.x,a.y)
@@ -454,21 +447,21 @@ g_game_state:load(a.next_game_state)
 end)
 end
 end,function()
-level_init_shared(1,"lvl 1","bear",8,0,0,10)
+level_init_shared(1,"lvl 1","mouse",32,0,0,10)
 local planet=_g.planet(18,0,_g.BEAR)
 _g.asteroid(25,0)
 _g.black_hole(-20,0)
 _g.black_hole(-20,0)
 _g.spawner(_g.chaser,planet,4,4,0,0)
 end,function()
-level_init_shared(2,"lvl 2","bear",8,0,0,12)
+level_init_shared(2,"lvl 2","cat",24,0,0,12)
 local planet=_g.planet(0,-22,_g.BEAR)
 _g.black_hole(0,22)
 _g.black_hole(0,22)
 _g.spawner(_g.chaser,planet,4,8,.82,.82)
 _g.spawner(_g.chaser,planet,4,8,.68,.68)
 end,function()
-level_init_shared(3,"lvl 3","bear",8,0,7,13)
+level_init_shared(3,"lvl 3","pig",16,0,7,13)
 local planet=_g.planet(0,0,_g.BEAR)
 _g.black_hole(-25,0)
 _g.black_hole(25,0)
@@ -477,7 +470,7 @@ _g.asteroid(0,15)
 _g.spawner(_g.chaser,planet,4,8,.75,.75)
 _g.spawner(_g.chaser,planet,8,8,.25,.25)
 end,function()
-level_init_shared(4,"lvl 4","cat",24,0,-9,11)
+level_init_shared(4,"lvl 4","bear",8,0,-9,11)
 local planet=_g.planet(0,-22,_g.CAT)
 _g.asteroid(25,0)
 _g.asteroid(-25,0)
@@ -488,7 +481,7 @@ _g.asteroid(-22,8)
 _g.spawner(_g.chaser,planet,4,2,.5,1)
 _g.black_hole(0,0)
 end,function()
-level_init_shared(5,"lvl 5","pig",16,0,0,11)
+level_init_shared(5,"lvl 5","rhino",40,0,0,11)
 local planet=_g.planet(20,0,_g.PIG)
 _g.asteroid(17,-15)
 _g.asteroid(17,15)
@@ -496,7 +489,7 @@ _g.spawner(_g.chaser,planet,4,4,-.125,.125)
 _g.black_hole(-22,0)
 _g.black_hole(-22,0)
 end,function()
-level_init_shared(6,"lvl 6","mouse",32,-9,0,13)
+level_init_shared(6,"lvl 6","croc",44,-9,0,13)
 local planet=_g.planet(0,0,_g.MOUSE)
 _g.asteroid(cos(.25)*10,sin(.25)*10)
 _g.asteroid(cos(.25+1/3)*20,sin(.25+1/3)*20)
@@ -506,7 +499,7 @@ _g.black_hole(cos(.75)*50,sin(.75)*40)
 _g.black_hole(cos(.75+1/3)*50,sin(.75+1/3)*40)
 _g.black_hole(cos(.75+2/3)*50,sin(.75+2/3)*40)
 end,function()
-level_init_shared(7,"lvl 7","bear",8,8,8,11)
+level_init_shared(7,"lvl 7","dragon",36,8,8,11)
 local planet=_g.planet(0,0,_g.MOUSE)
 _g.asteroid(-4,4)
 _g.asteroid(-12,-12)
@@ -517,7 +510,7 @@ _g.black_hole(50,0)
 _g.black_hole(0,50)
 _g.black_hole(0,-50)
 end,function()
-level_init_shared(8,"the","credits",32,0,0)
+level_init_shared(8,"the","credits",48,0,0)
 create_text("you win",0,-5)
 create_text(get_wob_text(),0,5)
 create_text("code,amorg,denial",0,-12)
@@ -714,15 +707,6 @@ end
 function zoom(num)return num*g_view.zoom_factor end
 function zoomx(x)return zoom(x-g_view.x)+64 end
 function zoomy(y)return zoom(y-g_view.y)+64 end
-function tostring(any)
-if type(any)~="table"then return tostr(any)end
-local str="{"
-for k,v in pairs(any)do
-if str~="{"then str=str.."," end
-str=str..tostring(k).."="..tostring(v)
-end
-return str.."}"
-end
 zclass[[actor,timer|load,%actor_load,state,%actor_state,kill,%actor_kill,clean,%actor_clean,alive,yes,duration,null,curr,start,next,null,init,nop,update,nop,destroyed,nop;]]
 function clean_all_entities(...)
 local objs={}
@@ -894,7 +878,6 @@ g_fade=0
 end
 function _update60()
 G_SHOULD_PAUSE_BEAT=true
-if btnp(4)and btnp(5)then g_debug=not g_debug end
 loop_zobjs("actor","clean")
 register_zobjs()
 loop_zobjs("timer","tick")
@@ -908,7 +891,6 @@ camera(SCREEN_SHAKE and rnd_one()or 0,SCREEN_SHAKE and rnd_one()or 0)
 cls()
 fade(g_fade)
 loop_zobjs("game_state","draw")
-if g_debug then rect(0,0,127,127,8)end
 SCREEN_SHAKE=false
 end
 LEVEL_RADIUS=26
