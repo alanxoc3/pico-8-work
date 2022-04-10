@@ -335,6 +335,11 @@ a.speed=.01*.75
 else
 a.speed=0
 end
+if btn"5"or btn"4"or ybtn()~=0 then
+sfx(-1,2)
+else
+sfx(62,2)
+end
 a.d_ang=-xbtn()*.01
 end,function(a,b,dx,dy)
 if b.parents["team_blue"]then
@@ -881,11 +886,6 @@ g_game_state=_g.game_state()
 g_fade=0
 end
 function _update60()
-if xbtn()~=0 or ybtn()~=0 or btn(4)or btn(5)then
-sfx(-1,2)
-else
-sfx(62,2)
-end
 if btnp(4)and btnp(5)then g_debug=not g_debug end
 loop_zobjs("actor","clean")
 register_zobjs()

@@ -37,12 +37,6 @@ function _init()
 end
 
 function _update60()
-    if xbtn() ~= 0 or ybtn() ~= 0 or btn(4) or btn(5) then
-        sfx(-1, 2)
-    else
-        sfx(62, 2)
-    end
-
     -- DEBUG_BEGIN
     if btnp(4) and btnp(5) then g_debug = not g_debug end
     -- DEBUG_END

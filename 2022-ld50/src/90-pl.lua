@@ -30,6 +30,13 @@ zclass[[pl,actor,model,drawlayer_20,team_blue|
     else
         a.speed = 0
     end
+
+    if btn'5' or btn'4' or ybtn() ~= 0 then
+        sfx(-1, 2)
+    else
+        sfx(62, 2)
+    end
+
     a.d_ang = -xbtn()*.01
 end $$
 
