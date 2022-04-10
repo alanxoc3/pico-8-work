@@ -509,6 +509,7 @@ _g.black_hole(80,0)
 _g.black_hole(0,80)
 _g.black_hole(40,-80)
 end,function()
+inc_level(1)
 level_init_shared(8,"the","credits",48,0,0)
 create_text("you win",0,-5)
 create_text(get_wob_text(),0,5)
@@ -911,7 +912,7 @@ function get_wob_text()
 return "wob "..G_DEATH_COUNT\1
 end
 function inc_level(inc)
-G_LEVEL=max(1,min((G_LEVEL+inc)\1,8))
+G_LEVEL=max(1,min((G_LEVEL+inc)\1,9))
 end
 zclass[[spawner,actor|spawn_func,@,target,@,spawn_delay,@,spawn_rate,@,min_ang,@,max_ang,@;start;duration,~spawn_delay,next,spawn;spawn;init,%spawn_init,duration,~spawn_rate,next,spawn;]]
 function level_init_shared(level_num,txt1,txt2,music_index,pl_x,pl_y,zipper_goal)

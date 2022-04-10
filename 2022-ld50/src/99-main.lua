@@ -154,7 +154,7 @@ end $$
 end $$
 
 function inc_level(inc)
-    G_LEVEL = max(1, min((G_LEVEL+inc)\1, 8))
+    G_LEVEL = max(1, min((G_LEVEL+inc)\1, 9))
 end
 
 |win_init| function(a)

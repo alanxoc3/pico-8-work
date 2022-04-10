@@ -94,6 +94,7 @@ end $$
 end $$
 
 |level_8_init| function()
+    inc_level(1)
     level_init_shared(8, "the", "credits", 48, 0, 0)
 
     create_text("you win",       0,   -5)
