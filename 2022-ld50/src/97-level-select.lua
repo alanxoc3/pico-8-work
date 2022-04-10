@@ -79,7 +79,7 @@ end
     create_level_selector(-12, yoff+-21, 5, "lvl "..5, "rhino",   _g.RHINO)
     create_level_selector(-21, yoff+-12, 6, "lvl "..6, "croc",    _g.CROC)
     create_level_selector(-18, yoff+0,   7, "lvl "..7, "dragon",  _g.DRAGON)
-    create_level_selector(0,   yoff+12,  8, "the",     "credits", _g.ASTEROID)
+    create_level_selector(0,   yoff+12,  8, "the",     "credits", _g.CREDITS)
 
     create_text("rewob", 0, yoff-3, _g.drawable_model_post_temp)
     _g.drawable_model_post_temp(0, yoff, _g.STARTING_CIRCLE)
