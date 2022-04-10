@@ -72,7 +72,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,anchor_pos_update_anchor,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,model_update,@,model_draw,@,model_collide,@,model_hit,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_init,@,view_update,@,view_match_following,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,model_health_bar_hit,@,planet_destroyed,@,planet_evac,@,zipper_init,@,zipper_destroyed,@,chaser_init,@,chaser_update,@,chaser_hit,@,gravity_tug,@,twinkle_draw,@,star_view_match_following,@,pl_update,@,pl_hit,@,pl_alert_destroy,@,pl_alert_update,@,pl_alert_draw,@,alert_radar_register,@,bar_update_starting,@,bar_update_dying,@,bar_update,@,bar_draw,@,level_select_init,@,level_select_update,@,level_entrance_draw,@,level_entrance_hit,@,level_1_init,@,level_2_init,@,level_3_init,@,level_4_init,@,level_5_init,@,level_6_init,@,level_7_init,@,level_8_init,@,logo_init,@,logo_draw,@,level_select_draw,@,level_draw,@,stats_displayer_draw,@,game_checker_update,@,retry_init,@,retry_update,@,retry_draw,@,win_init,@,win_update,@,win_draw,@,level_update,@,spawn_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,anchor_pos_update_anchor,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,model_update,@,model_draw,@,model_collide,@,model_hit,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_init,@,view_update,@,view_match_following,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,model_health_bar_hit,@,planet_destroyed,@,planet_evac,@,zipper_init,@,zipper_destroyed,@,chaser_init,@,chaser_update,@,chaser_hit,@,gravity_tug,@,twinkle_draw,@,star_view_match_following,@,pl_update,@,pl_hit,@,pl_alert_destroy,@,pl_alert_update,@,pl_alert_draw,@,alert_radar_register,@,bar_update_starting,@,bar_update_dying,@,bar_update,@,bar_draw,@,level_select_init,@,level_select_update,@,level_entrance_outline_update,@,level_entrance_init,@,level_entrance_draw,@,level_entrance_hit,@,level_1_init,@,level_2_init,@,level_3_init,@,level_4_init,@,level_5_init,@,level_6_init,@,level_7_init,@,level_8_init,@,logo_init,@,logo_draw,@,level_select_draw,@,level_draw,@,stats_displayer_draw,@,game_checker_update,@,retry_init,@,retry_update,@,retry_draw,@,win_init,@,win_update,@,win_draw,@,level_update,@,spawn_init,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -401,14 +401,14 @@ _g.fader_in(1)
 _g.alert_radar(g_pl)
 g_title_screen_coord=40
 g_title_screen_dim=g_title_screen_coord*2
-create_level_selector(18,yoff+0,1,"lvl "..1,"mouse",_g.LEVEL_BEAR_MODEL,_g.LEVEL_BEAR_CLEAR)
-create_level_selector(21,yoff+-12,2,"lvl "..2,"cat",_g.LEVEL_BEAR_MODEL,_g.LEVEL_BEAR_CLEAR)
-create_level_selector(12,yoff+-21,3,"lvl "..3,"pig",_g.LEVEL_BEAR_MODEL,_g.LEVEL_BEAR_CLEAR)
-create_level_selector(0,yoff+-18,4,"lvl "..4,"bear",_g.LEVEL_BEAR_MODEL,_g.LEVEL_BEAR_CLEAR)
-create_level_selector(-12,yoff+-21,5,"lvl "..5,"rhino",_g.LEVEL_CAT_MODEL,_g.LEVEL_CAT_CLEAR)
-create_level_selector(-21,yoff+-12,6,"lvl "..6,"croc",_g.LEVEL_PIG_MODEL,_g.LEVEL_PIG_CLEAR)
-create_level_selector(-18,yoff+0,7,"lvl "..7,"dragon",_g.LEVEL_MOUSE_MODEL,_g.LEVEL_MOUSE_CLEAR)
-create_level_selector(0,yoff+12,8,"the","credits",_g.LEVEL_CAT_MODEL,_g.LEVEL_CAT_MODEL)
+create_level_selector(18,yoff+0,1,"lvl "..1,"mouse",_g.BEAR)
+create_level_selector(21,yoff+-12,2,"lvl "..2,"cat",_g.BEAR)
+create_level_selector(12,yoff+-21,3,"lvl "..3,"pig",_g.BEAR)
+create_level_selector(0,yoff+-18,4,"lvl "..4,"bear",_g.BEAR)
+create_level_selector(-12,yoff+-21,5,"lvl "..5,"rhino",_g.CAT)
+create_level_selector(-21,yoff+-12,6,"lvl "..6,"croc",_g.PIG)
+create_level_selector(-18,yoff+0,7,"lvl "..7,"dragon",_g.MOUSE)
+create_level_selector(0,yoff+12,8,"the","credits",_g.ASTEROID)
 create_text("rewob",0,yoff-3,_g.drawable_model_post_temp)
 _g.drawable_model_post_temp(0,yoff,_g.STARTING_CIRCLE)
 if G_DEATH_COUNT>0 then
@@ -435,6 +435,10 @@ if g_pl.x>g_title_screen_coord then g_pl.x-=g_title_screen_dim-1 g_view.x-=g_tit
 if g_pl.y>g_title_screen_coord then g_pl.y-=g_title_screen_dim-1 g_view.y-=g_title_screen_dim-1 end
 if g_pl.x<-g_title_screen_coord then g_pl.x+=g_title_screen_dim-1 g_view.x+=g_title_screen_dim-1 end
 if g_pl.y<-g_title_screen_coord then g_pl.y+=g_title_screen_dim-1 g_view.y+=g_title_screen_dim-1 end
+end,function(a)
+if not a.following.alive then a:explode()end
+end,function(a)
+_g.level_entrance_outline(a,a.x,a.y,a.outline_model)
 end,function(a)
 _g.model_draw(a)
 end,function(a,other)
@@ -847,18 +851,19 @@ call_not_nil(inst,method_name,inst,...)
 end
 end
 end
-function create_level_selector(x,y,level,txt1,txt2,model,model_win)
+function create_level_selector(x,y,level,txt1,txt2,model)
 if G_LEVEL==level then
 create_text(txt1,x,y-2.5)
 create_text(txt2,x,y+2.5)
-_g.level_entrance(x,y,model,level,9)
+_g.level_entrance(x,y,model,level,_g.LEVEL_NEXT)
 elseif G_LEVEL>level then
 create_text(txt1,x,y-2.5)
 create_text(txt2,x,y+2.5)
-_g.level_entrance(x,y,model_win,level,11)
+_g.level_entrance(x,y,model,level,_g.LEVEL_DONE)
 end
 end
-zclass[[level_entrance,model,drawlayer_10|x,@,y,@,model,@,next_game_state,@,alert_color,@,circ_radius,1.5,draw,%level_entrance_draw,d_ang,.001,hit,%level_entrance_hit]]
+zclass[[level_entrance_outline,model,drawlayer_10|following,@,x,@,y,@,model,@,update,%level_entrance_outline_update]]
+zclass[[level_entrance,model,drawlayer_10|x,@,y,@,model,@,next_game_state,@,outline_model,@,circ_radius,1.5,init,%level_entrance_init,draw,%level_entrance_draw,d_ang,.001,hit,%level_entrance_hit]]
 g_fade_table=zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,1,1,0,0;2;,2,2,2,2,1,1,0,0;3;,3,3,3,3,1,1,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,1,1,0,0;6;,6,6,13,13,5,5,0,0;7;,7,7,6,13,13,5,0,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,0,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,1,0,0;13;,13,13,5,5,1,1,0,0;14;,14,14,13,4,2,2,0,0;15;,15,15,13,13,5,5,0,0;]]
 function fade(threshold)
 for c=0,15 do
