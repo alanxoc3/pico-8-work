@@ -86,7 +86,7 @@ end $$
     _g.asteroid(-12, -12)
     _g.asteroid(18, -18)
 
-    _g.spawner(_g.chaser, planet, 4, 4, .75+.125-.125/2, .75+.125+.125/2)
+    _g.spawner(_g.chaser, planet, 5, 5, .75+.125-.125/2, .75+.125+.125/2)
 
     _g.black_hole(-50, 0)
     _g.black_hole(50, 0)
@@ -94,16 +94,24 @@ end $$
     _g.black_hole(0, -50)
 end $$
 
-|level_credits_init| function()
+|level_8_init| function()
     level_init_shared(8, "the", "credits", 32, 0, 0)
+
+    create_text("congrats",       0,   -5)
+    create_text("you win",        0,    5)
 
     create_text("code,amorg,denial",        0,   -12)
     create_text("gfx,tigerwolf,greatcadet", -12, 0)
     create_text("sfx,amorg,greatcadet",     12,  0)
     create_text("made,with,pico8",          0,   12)
 
-    _g.spawner(_g.chaser, {x=0, y=0}, 2,  20, .0625, .1875)
-    _g.spawner(_g.chaser, {x=0, y=0}, 7,  20, .3125, .4375)
-    _g.spawner(_g.chaser, {x=0, y=0}, 12, 20, .5625, .6875)
-    _g.spawner(_g.chaser, {x=0, y=0}, 17, 20, .8125, .9375)
+    _g.spawner(_g.chaser, {x=0, y=0}, 2,  10, 0,   0)
+    _g.spawner(_g.chaser, {x=0, y=0}, 4,  10, .25, .25)
+    _g.spawner(_g.chaser, {x=0, y=0}, 6,  10, .5,  .5)
+    _g.spawner(_g.chaser, {x=0, y=0}, 10, 10, .75, .75)
+
+    _g.asteroid(-10, -10)
+    _g.asteroid(-10,  10)
+    _g.asteroid( 10,  10)
+    _g.asteroid( 10, -10)
 end $$

@@ -32,9 +32,7 @@ zclass[[pl,actor,model,drawlayer_20,team_blue|
     end
 
     if btn'5' or btn'4' or ybtn() ~= 0 then
-        sfx(-1, 2)
-    else
-        sfx(62, 2)
+        G_SHOULD_PAUSE_BEAT = false
     end
 
     a.d_ang = -xbtn()*.01

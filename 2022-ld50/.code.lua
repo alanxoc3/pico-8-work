@@ -72,7 +72,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,anchor_pos_update_anchor,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,model_update,@,model_draw,@,model_collide,@,model_hit,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_init,@,view_update,@,view_match_following,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,model_health_bar_hit,@,planet_destroyed,@,planet_evac,@,zipper_init,@,zipper_destroyed,@,chaser_init,@,chaser_update,@,chaser_hit,@,black_hole_tug,@,twinkle_draw,@,star_view_match_following,@,pl_update,@,pl_hit,@,pl_alert_destroy,@,pl_alert_update,@,pl_alert_draw,@,alert_radar_register,@,bar_update_starting,@,bar_update_dying,@,bar_update,@,bar_draw,@,level_select_init,@,level_select_update,@,level_entrance_draw,@,level_entrance_hit,@,level_1_init,@,level_2_init,@,level_3_init,@,level_4_init,@,level_5_init,@,level_6_init,@,level_7_init,@,level_credits_init,@,logo_init,@,logo_draw,@,level_select_draw,@,level_draw,@,stats_displayer_draw,@,game_checker_update,@,retry_init,@,retry_update,@,retry_draw,@,win_init,@,win_update,@,win_draw,@,level_update,@,spawn_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,anchor_pos_update_anchor,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,model_update,@,model_draw,@,model_collide,@,model_hit,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_init,@,view_update,@,view_match_following,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,model_health_bar_hit,@,planet_destroyed,@,planet_evac,@,zipper_init,@,zipper_destroyed,@,chaser_init,@,chaser_update,@,chaser_hit,@,black_hole_tug,@,twinkle_draw,@,star_view_match_following,@,pl_update,@,pl_hit,@,pl_alert_destroy,@,pl_alert_update,@,pl_alert_draw,@,alert_radar_register,@,bar_update_starting,@,bar_update_dying,@,bar_update,@,bar_draw,@,level_select_init,@,level_select_update,@,level_entrance_draw,@,level_entrance_hit,@,level_1_init,@,level_2_init,@,level_3_init,@,level_4_init,@,level_5_init,@,level_6_init,@,level_7_init,@,level_8_init,@,logo_init,@,logo_draw,@,level_select_draw,@,level_draw,@,stats_displayer_draw,@,game_checker_update,@,retry_init,@,retry_update,@,retry_draw,@,win_init,@,win_update,@,win_draw,@,level_update,@,spawn_init,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -336,9 +336,7 @@ else
 a.speed=0
 end
 if btn"5"or btn"4"or ybtn()~=0 then
-sfx(-1,2)
-else
-sfx(62,2)
+G_SHOULD_PAUSE_BEAT=false
 end
 a.d_ang=-xbtn()*.01
 end,function(a,b,dx,dy)
@@ -510,21 +508,27 @@ local planet=_g.planet(0,0,_g.MOUSE)
 _g.asteroid(-4,4)
 _g.asteroid(-12,-12)
 _g.asteroid(18,-18)
-_g.spawner(_g.chaser,planet,4,4,.75+.125-.125/2,.75+.125+.125/2)
+_g.spawner(_g.chaser,planet,5,5,.75+.125-.125/2,.75+.125+.125/2)
 _g.black_hole(-50,0)
 _g.black_hole(50,0)
 _g.black_hole(0,50)
 _g.black_hole(0,-50)
 end,function()
 level_init_shared(8,"the","credits",32,0,0)
+create_text("congrats",0,-5)
+create_text("you win",0,5)
 create_text("code,amorg,denial",0,-12)
 create_text("gfx,tigerwolf,greatcadet",-12,0)
 create_text("sfx,amorg,greatcadet",12,0)
 create_text("made,with,pico8",0,12)
-_g.spawner(_g.chaser,{x=0,y=0},2,20,.0625,.1875)
-_g.spawner(_g.chaser,{x=0,y=0},7,20,.3125,.4375)
-_g.spawner(_g.chaser,{x=0,y=0},12,20,.5625,.6875)
-_g.spawner(_g.chaser,{x=0,y=0},17,20,.8125,.9375)
+_g.spawner(_g.chaser,{x=0,y=0},2,10,0,0)
+_g.spawner(_g.chaser,{x=0,y=0},4,10,.25,.25)
+_g.spawner(_g.chaser,{x=0,y=0},6,10,.5,.5)
+_g.spawner(_g.chaser,{x=0,y=0},10,10,.75,.75)
+_g.asteroid(-10,-10)
+_g.asteroid(-10,10)
+_g.asteroid(10,10)
+_g.asteroid(10,-10)
 end,function()music(-1)sfx(63,0)end,function(a)
 local logo_opacity=cos(a:get_elapsed_percent"state")+1
 fade(logo_opacity)
@@ -886,6 +890,7 @@ g_game_state=_g.game_state()
 g_fade=0
 end
 function _update60()
+G_SHOULD_PAUSE_BEAT=true
 if btnp(4)and btnp(5)then g_debug=not g_debug end
 loop_zobjs("actor","clean")
 register_zobjs()
@@ -893,6 +898,7 @@ loop_zobjs("timer","tick")
 loop_zobjs("game_state","state")
 dset(4,G_DEATH_COUNT)
 inc_level(0)dset(5,G_LEVEL)
+sfx(G_SHOULD_PAUSE_BEAT and 62 or-1,2)
 end
 function _draw()
 camera(SCREEN_SHAKE and rnd_one()or 0,SCREEN_SHAKE and rnd_one()or 0)

@@ -37,6 +37,8 @@ function _init()
 end
 
 function _update60()
+    G_SHOULD_PAUSE_BEAT = true
+
     -- DEBUG_BEGIN
     if btnp(4) and btnp(5) then g_debug = not g_debug end
     -- DEBUG_END
@@ -49,6 +51,8 @@ function _update60()
     dset(4, G_DEATH_COUNT)
 
     inc_level(0) dset(5, G_LEVEL)
+
+    sfx(G_SHOULD_PAUSE_BEAT and 62 or -1, 2)
 end
 
 function _draw()
