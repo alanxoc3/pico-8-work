@@ -32,7 +32,7 @@ end $$
 end $$
 
 |level_4_init| function()
-    level_init_shared(4, "lvl 4", "bear", 8, 0, -9, 11)
+    level_init_shared(4, "lvl 4", "bear", 8, 0, -9, 12)
 
     local planet = _g.planet(0,-25,_g.BEAR)
     _g.asteroid(25,0)
@@ -42,9 +42,8 @@ end $$
     _g.asteroid(22,8)
     _g.asteroid(-22,8)
 
-    -- asteroids kinda protect you from enemies
     _g.spawner(_g.chaser, planet, 4, 2, .5, 1)
-    _g.black_hole(0, 18)
+    _g.black_hole(0, 20)
 end $$
 
 |level_5_init| function()
