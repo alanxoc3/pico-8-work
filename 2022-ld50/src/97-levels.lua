@@ -82,8 +82,8 @@ end $$
     _g.asteroid(5, 5)
     _g.asteroid(10, 10)
 
-    _g.spawner(_g.chaser, planet, 6, 6, 0-.1, 0+.1)
-    _g.spawner(_g.chaser, planet, 9, 6, .75-.1, .75+.1)
+    _g.spawner(_g.chaser, planet, 7, 7, 0-.1, 0+.1)
+    _g.spawner(_g.chaser, planet, 11.5, 7, .75-.1, .75+.1)
 
     _g.black_hole(-80, 40)
     _g.black_hole(40, -80)
