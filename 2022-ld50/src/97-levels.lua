@@ -96,8 +96,8 @@ end $$
     inc_level(1)
     level_init_shared(8, "the", "credits", 48, 0, 0)
 
-    create_text("you win",       0,   -5)
-    create_text(get_wob_text(),        0,   5)
+    create_text("you win",       0,   -4.5)
+    create_text(get_wob_text(),        0,   4.5)
 
     create_text("code,amorg,denial",        0,   -12)
     create_text("gfx,tigerwolf,greatcadet", -12, 0)
