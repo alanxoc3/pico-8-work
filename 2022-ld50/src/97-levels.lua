@@ -31,25 +31,10 @@ end $$
 end $$
 
 |level_4_init| function()
-    level_init_shared(4, "lvl 4", "bear", 8, 0, -9, 12)
-
-    local planet = _g.planet(0,-25,_g.BEAR)
-    _g.asteroid(25,0)
-    _g.asteroid(-25,0)
-    _g.asteroid(15,15)
-    _g.asteroid(-15,15)
-    _g.asteroid(22,8)
-    _g.asteroid(-22,8)
-
-    _g.spawner(_g.chaser, planet, 4, 2, .5, 1)
-    _g.black_hole(0, 20)
-end $$
-
-|level_5_init| function()
-    level_init_shared(5, "lvl 5", "rhino", 40, 10, 0, 11)
+    level_init_shared(4, "lvl 4", "bear", 8, 10, 0, 11)
 
     -- title
-    local planet = _g.planet(20,0,_g.RHINO)
+    local planet = _g.planet(20,0,_g.BEAR)
     _g.asteroid(17,-18)
     _g.asteroid(17,20)
 
@@ -58,10 +43,10 @@ end $$
     _g.black_hole(-22, 0)
 end $$
 
-|level_6_init| function()
-    level_init_shared(6, "lvl 6", "croc", 44, 0, -9, 11)
+|level_5_init| function()
+    level_init_shared(5, "lvl 5", "rhino", 40, 0, -9, 11)
 
-    local planet = _g.planet(0,0,_g.CROC)
+    local planet = _g.planet(0,0,_g.RHINO)
     _g.asteroid(cos(.25    )*35,sin(.25    )*35)
     _g.asteroid(cos(.25+1/3)*35,sin(.25+1/3)*35)
     _g.asteroid(cos(.25+2/3)*35,sin(.25+2/3)*35)
@@ -71,6 +56,21 @@ end $$
     _g.black_hole(cos(.75    )*58,sin(.75    )*58)
     _g.black_hole(cos(.75+1/3)*58,sin(.75+1/3)*58)
     _g.black_hole(cos(.75+2/3)*58,sin(.75+2/3)*58)
+end $$
+
+|level_6_init| function()
+    level_init_shared(6, "lvl 6", "croc", 44, 0, -9, 12)
+
+    local planet = _g.planet(0,-25,_g.CROC)
+    _g.asteroid(25,0)
+    _g.asteroid(-25,0)
+    _g.asteroid(15,15)
+    _g.asteroid(-15,15)
+    _g.asteroid(22,8)
+    _g.asteroid(-22,8)
+
+    _g.spawner(_g.chaser, planet, 4, 2, .5, 1)
+    _g.black_hole(0, 20)
 end $$
 
 |level_7_init| function()
