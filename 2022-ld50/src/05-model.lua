@@ -134,7 +134,7 @@ end
 
 |model_explode| function(a, duration)
     if a.alive then
-        if a.explode_sfx then sfx(a.explode_sfx, 3) end
+        if a.explode_sfx then NOISE = a.explode_sfx end
         a:kill()
  
         foreach(a.shapes, function(shape)

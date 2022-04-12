@@ -213,7 +213,7 @@ if a.health<=0 then a:explode()end
 end
 end,function(a,duration)
 if a.alive then
-if a.explode_sfx then sfx(a.explode_sfx,3)end
+if a.explode_sfx then NOISE=a.explode_sfx end
 a:kill()
 foreach(a.shapes,function(shape)
 local points=translate_points(a.x,a.y,a.ang,shape)
@@ -317,19 +317,21 @@ end
 if(btn"5"or btn"4")and a.missile_ready then
 a.shoot_percent=max(0,a.shoot_percent-.125)
 _g.missile(a.x+cos(a.ang)*.8,a.y+sin(a.ang)*.8,a.dx,a.dy,a.ang)
+if stat(49)<0 and stat(53)<0 and not NOISE then NOISE=51 end
 a.missile_ready=false
-a:start_timer("missile_cooldown",0.15,function()a.missile_ready=true end)
+a:start_timer("missile_cooldown",0.25,function()a.missile_ready=true end)
 if a.shoot_percent==0 then a.shoot_enabled=false end
 end
+local slowdown=1
+if btn"5"or btn"4"then
+slowdown=.5
+end
 if ybtn()>0 then
-a.speed=-.00875*.75
+a.speed=-.00875*.75*slowdown
 elseif ybtn()<0 then
-a.speed=.01*.75
+a.speed=.01*.75*slowdown
 else
 a.speed=0
-end
-if btn"5"or btn"4"or ybtn()~=0 then
-G_SHOULD_PAUSE_BEAT=false
 end
 a.d_ang=-xbtn()*.01
 end,function(a,b,dx,dy)
@@ -445,7 +447,7 @@ end,function(a,other)
 if other.id=="pl"then
 a:explode()
 music(-1)
-sfx(22,3)
+NOISE=22
 _g.fader_out(1,function()
 g_game_state:load(a.next_game_state)
 end)
@@ -501,7 +503,7 @@ _g.asteroid(-22,8)
 _g.spawner(_g.chaser,planet,4,2,.5,1)
 _g.black_hole(0,20)
 end,function()
-level_init_shared(7,"lvl 7","dragon",36,0,-9,11)
+level_init_shared(7,"lvl 7","dragon",56,0,-9,11)
 local planet=_g.planet(0,0,_g.DRAGON)
 _g.asteroid(cos(.25)*35,sin(.25)*35)
 _g.asteroid(cos(.25+1/3)*35,sin(.25+1/3)*35)
@@ -562,7 +564,7 @@ g_game_state:load"retry"
 end)
 elseif not a.pl.alive then
 a:kill()music(-1)
-sfx(24,3)
+NOISE=24
 _g.fader_out(1,function()
 g_game_state:load"retry"
 end)
@@ -884,14 +886,16 @@ g_game_state=_g.game_state()
 g_fade=0
 end
 function _update60()
-G_SHOULD_PAUSE_BEAT=true
+if NOISE then
+sfx(NOISE,3)
+NOISE=false
+end
 loop_zobjs("actor","clean")
 register_zobjs()
 loop_zobjs("timer","tick")
 loop_zobjs("game_state","state")
 dset(4,G_DEATH_COUNT)
 inc_level(0)dset(5,G_LEVEL)
-sfx(G_SHOULD_PAUSE_BEAT and 62 or-1,2)
 end
 function _draw()
 camera(SCREEN_SHAKE and rnd_one()or 0,SCREEN_SHAKE and rnd_one()or 0)

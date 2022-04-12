@@ -78,7 +78,7 @@ end $$
 end $$
 
 |level_7_init| function()
-    level_init_shared(7, "lvl 7", "dragon", 36, 0, -9, 11)
+    level_init_shared(7, "lvl 7", "dragon", 56, 0, -9, 11)
 
     local planet = _g.planet(0,0,_g.DRAGON)
     _g.asteroid(cos(.25    )*35,sin(.25    )*35)
