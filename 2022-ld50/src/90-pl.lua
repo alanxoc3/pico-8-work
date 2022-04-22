@@ -21,7 +21,7 @@ zclass[[pl,actor,model,drawlayer_20,team_blue|
         -- only play bullet noise if there is no sfx playing
         if stat(49) < 0 and stat(53) < 0 and not NOISE then NOISE = 51 end
         a.missile_ready = false
-        a:start_timer('missile_cooldown', 0.20, function() a.missile_ready=true end)
+        a:start_timer('missile_cooldown', 0.15, function() a.missile_ready=true end)
         if a.shoot_percent == 0 then a.shoot_enabled = false end
     end
 
@@ -31,7 +31,7 @@ zclass[[pl,actor,model,drawlayer_20,team_blue|
     end
 
     if ybtn() > 0 then
-        a.speed = -.00875*.75*slowdown
+        a.speed = -.01*.75*slowdown
     elseif ybtn() < 0 then
         a.speed = .01*.75*slowdown
     else

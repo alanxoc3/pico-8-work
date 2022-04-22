@@ -319,7 +319,7 @@ a.shoot_percent=max(0,a.shoot_percent-.125)
 _g.missile(a.x+cos(a.ang)*.8,a.y+sin(a.ang)*.8,a.dx,a.dy,a.ang)
 if stat(49)<0 and stat(53)<0 and not NOISE then NOISE=51 end
 a.missile_ready=false
-a:start_timer("missile_cooldown",0.20,function()a.missile_ready=true end)
+a:start_timer("missile_cooldown",0.15,function()a.missile_ready=true end)
 if a.shoot_percent==0 then a.shoot_enabled=false end
 end
 local slowdown=1
@@ -327,7 +327,7 @@ if btn"5"or btn"4"then
 slowdown=.5
 end
 if ybtn()>0 then
-a.speed=-.00875*.75*slowdown
+a.speed=-.01*.75*slowdown
 elseif ybtn()<0 then
 a.speed=.01*.75*slowdown
 else
