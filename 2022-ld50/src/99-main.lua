@@ -45,10 +45,10 @@ function _update60()
     if btnp(4) and btnp(5) then g_debug = not g_debug end
     -- DEBUG_END
 
-    loop_zobjs('actor',      'clean') -- delete any actors that were killed, and call their "destroy" callback
-    register_zobjs()                  -- register all zobs from previous game loop iteration
-    loop_zobjs('timer',      'tick')  -- update the timers
-    loop_zobjs('game_state', 'state') -- game state controls the different overall states in the game
+    loop_entities('actor',      'clean') -- delete any actors that were killed, and call their "destroy" callback
+    register_entities()                  -- register all zobs from previous game loop iteration
+    loop_entities('timer',      'tick')  -- update the timers
+    loop_entities('game_state', 'state') -- game state controls the different overall states in the game
 
     dset(4, G_DEATH_COUNT)
 
@@ -60,7 +60,7 @@ function _draw()
     cls()
     
     fade(g_fade)
-    loop_zobjs('game_state', 'draw')
+    loop_entities('game_state', 'draw')
     -- DEBUG_BEGIN
     if g_debug then rect(0, 0, 127, 127, 8) end
     -- DEBUG_END
@@ -68,11 +68,11 @@ function _draw()
 end
 
 |level_select_draw| function()
-    loop_zobjs_in_view(g_view, 'drawlayer_03', 'draw')
-    loop_zobjs_in_view(g_view, 'drawlayer_10', 'draw')
-    loop_zobjs_in_view(g_view, 'drawlayer_20', 'draw')
-    loop_zobjs_in_view(g_view, 'drawlayer_30', 'draw')
-    loop_zobjs_in_view(g_view, 'drawlayer_40', 'draw')
+    loop_entities_in_view(g_view, 'drawlayer_03', 'draw')
+    loop_entities_in_view(g_view, 'drawlayer_10', 'draw')
+    loop_entities_in_view(g_view, 'drawlayer_20', 'draw')
+    loop_entities_in_view(g_view, 'drawlayer_30', 'draw')
+    loop_entities_in_view(g_view, 'drawlayer_40', 'draw')
 end $$
 
 LEVEL_RADIUS = 26
@@ -146,12 +146,12 @@ end
 end $$
 
 |retry_update| function(a)
-    loop_zobjs('actor',     'state')
-    loop_zobjs('model', 'model_update')
+    loop_entities('actor',     'state')
+    loop_entities('model', 'model_update')
 end $$
 
 |retry_draw| function(a)
-    loop_zobjs('drawlayer_40', 'draw')
+    loop_entities('drawlayer_40', 'draw')
 end $$
 
 function inc_level(inc)
@@ -177,12 +177,12 @@ end
 end $$
 
 |win_update| function(a)
-    loop_zobjs('actor',     'state')
-    loop_zobjs('model', 'model_update')
+    loop_entities('actor',     'state')
+    loop_entities('model', 'model_update')
 end $$
 
 |win_draw| function(a)
-    loop_zobjs('drawlayer_40', 'draw')
+    loop_entities('drawlayer_40', 'draw')
 end $$
 
 |level_update| function()
@@ -192,45 +192,45 @@ end $$
         end
     end
 
-    loop_zobjs('actor',     'state')
-    loop_zobjs('view',      'match_following')
-    loop_zobjs('star_view', 'match_following')
+    loop_entities('actor',     'state')
+    loop_entities('view',      'match_following')
+    loop_entities('star_view', 'match_following')
 
-    loop_zobjs('missile', 'collide', g_zclass_entities['teammate'])
-    loop_zobjs('missile', 'collide', g_zclass_entities['black_hole'])
+    loop_entities('missile', 'collide', g_zclass_entities['teammate'])
+    loop_entities('missile', 'collide', g_zclass_entities['black_hole'])
 
-    loop_zobjs('teammate', 'collide', g_zclass_entities['missile'])
-    loop_zobjs('teammate', 'collide', g_zclass_entities['teammate'])
-    loop_zobjs('teammate', 'collide', g_zclass_entities['black_hole'])
+    loop_entities('teammate', 'collide', g_zclass_entities['missile'])
+    loop_entities('teammate', 'collide', g_zclass_entities['teammate'])
+    loop_entities('teammate', 'collide', g_zclass_entities['black_hole'])
 
-    loop_zobjs('alert_radar', 'register', g_zclass_entities['planet'])
-    loop_zobjs('alert_radar', 'register', g_zclass_entities['asteroid'])
-    loop_zobjs('alert_radar', 'register', g_zclass_entities['view'])
-    loop_zobjs('alert_radar', 'register', g_zclass_entities['black_hole'])
+    loop_entities('alert_radar', 'register', g_zclass_entities['planet'])
+    loop_entities('alert_radar', 'register', g_zclass_entities['asteroid'])
+    loop_entities('alert_radar', 'register', g_zclass_entities['view'])
+    loop_entities('alert_radar', 'register', g_zclass_entities['black_hole'])
 
-    loop_zobjs('view', 'collide', g_zclass_entities['black_hole'])
-    loop_zobjs('view', 'collide', g_zclass_entities['planet'])
-    loop_zobjs('view', 'collide', g_zclass_entities['asteroid'])
-    loop_zobjs('view', 'collide', g_zclass_entities['chaser'])
-    loop_zobjs('view', 'collide', g_zclass_entities['zipper'])
+    loop_entities('view', 'collide', g_zclass_entities['black_hole'])
+    loop_entities('view', 'collide', g_zclass_entities['planet'])
+    loop_entities('view', 'collide', g_zclass_entities['asteroid'])
+    loop_entities('view', 'collide', g_zclass_entities['chaser'])
+    loop_entities('view', 'collide', g_zclass_entities['zipper'])
 
-    loop_zobjs('alert_radar', 'register', g_zclass_entities['chaser'])
-    loop_zobjs('alert_radar', 'register', g_zclass_entities['black_hole'])
+    loop_entities('alert_radar', 'register', g_zclass_entities['chaser'])
+    loop_entities('alert_radar', 'register', g_zclass_entities['black_hole'])
 
-    loop_zobjs('collision_circ', 'follow_anchoring')
-    loop_zobjs('mov', 'mov_update')
+    loop_entities('collision_circ', 'follow_anchoring')
+    loop_entities('mov', 'mov_update')
 
-    loop_zobjs('acc', 'acc_update')
+    loop_entities('acc', 'acc_update')
 
-    loop_zobjs('gravity', 'tug', g_zclass_entities['gravity']) -- affects dx & dy of all 'teammate' objects
-    loop_zobjs('gravity', 'tug', g_zclass_entities['chaser']) -- affects dx & dy of all 'teammate' objects
-    loop_zobjs('gravity', 'tug', g_zclass_entities['pl']) -- affects dx & dy of all 'teammate' objects
-    loop_zobjs('gravity', 'tug', g_zclass_entities['missile']) -- affects dx & dy of all 'teammate' objects
-    loop_zobjs('gravity', 'tug', g_zclass_entities['asteroid']) -- affects dx & dy of all 'teammate' objects
+    loop_entities('gravity', 'tug', g_zclass_entities['gravity']) -- affects dx & dy of all 'teammate' objects
+    loop_entities('gravity', 'tug', g_zclass_entities['chaser']) -- affects dx & dy of all 'teammate' objects
+    loop_entities('gravity', 'tug', g_zclass_entities['pl']) -- affects dx & dy of all 'teammate' objects
+    loop_entities('gravity', 'tug', g_zclass_entities['missile']) -- affects dx & dy of all 'teammate' objects
+    loop_entities('gravity', 'tug', g_zclass_entities['asteroid']) -- affects dx & dy of all 'teammate' objects
 
-    loop_zobjs('vec', 'vec_update')
-    loop_zobjs('anchor_pos', 'update_anchor')
-    loop_zobjs('model', 'model_update')
+    loop_entities('vec', 'vec_update')
+    loop_entities('anchor_pos', 'update_anchor')
+    loop_entities('model', 'model_update')
 
     check_level_bounds()
 end $$

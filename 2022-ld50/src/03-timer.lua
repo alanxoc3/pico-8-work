@@ -1,4 +1,4 @@
--- 123 tokens
+-- 167 tokens
 
 -- A timer object is able to keep track of multiple timers. A callback can be
 -- optionally called when each timer completes. Due to pico-8 constraints, there

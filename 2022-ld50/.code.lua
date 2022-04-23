@@ -14,14 +14,15 @@ return zobj_set(inst,template,...)
 end
 _g[class]=function(...)return g_zclass_constructors[class]({id=class,parents={},ecs_exclusions={}},{},...)end
 end
-function register_zobjs()
+function register_entities()
 while #g_zclass_new_entities>0 do
 local class,inst=unpack(deli(g_zclass_new_entities))
 g_zclass_entities[class]=g_zclass_entities[class]or{}
 if not inst.ecs_exclusions[class]then add(g_zclass_entities[class],inst)end
 end
 end
-function deregister_zobj(inst)
+function deregister_entity(inst,...)
+call_not_nil(inst,"deregistered",inst,...)
 for class,entities in pairs(g_zclass_entities)do
 del(entities,inst)
 end
@@ -31,9 +32,23 @@ if table and table[key]then
 return table[key](...)
 end
 end
-function loop_zobjs(class,method_name,...)
+function loop_entities(class,method_name,...)
 for inst in all(g_zclass_entities[class])do
 call_not_nil(inst,method_name,inst,...)
+end
+end
+function clean_all_entities(...)
+local objs_to_clean,exclusions={},{}
+foreach({...},function(exclusion)exclusions[exclusion]=true end)
+for class,entities in pairs(g_zclass_entities)do
+for entity in all(entities)do
+objs_to_clean[entity]=entity.id
+end
+end
+for obj,id in pairs(objs_to_clean)do
+if not exclusions[id]then
+(obj)
+end
 end
 end
 function zobj_eval(val,table,parameters)
@@ -72,7 +87,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,fader_out_update,@,fader_in_update,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,anchor_pos_update_anchor,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,model_update,@,model_draw,@,model_collide,@,model_hit,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_init,@,view_update,@,view_match_following,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,model_health_bar_hit,@,planet_destroyed,@,planet_evac,@,zipper_init,@,zipper_destroyed,@,chaser_init,@,chaser_update,@,chaser_hit,@,gravity_tug,@,twinkle_draw,@,star_view_match_following,@,pl_update,@,pl_hit,@,pl_alert_destroy,@,pl_alert_update,@,pl_alert_draw,@,alert_radar_register,@,bar_update_starting,@,bar_update_dying,@,bar_update,@,bar_draw,@,level_select_init,@,level_select_update,@,level_entrance_outline_update,@,level_entrance_init,@,level_entrance_draw,@,level_entrance_hit,@,level_1_init,@,level_2_init,@,level_3_init,@,level_4_init,@,level_5_init,@,level_6_init,@,level_7_init,@,level_8_init,@,logo_init,@,logo_draw,@,level_select_draw,@,level_draw,@,stats_displayer_draw,@,game_checker_update,@,retry_init,@,retry_update,@,retry_draw,@,win_init,@,win_update,@,win_draw,@,level_update,@,spawn_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,actor_deregistered,@,fader_out_update,@,fader_in_update,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,vec_update,@,acc_update,@,mov_update,@,anchor_pos_update_anchor,@,collision_init,@,collision_follow_anchoring,@,check_collision,@,model_update,@,model_draw,@,model_collide,@,model_hit,@,model_explode,@,vanishing_shape_draw,@,line_particle_update,@,line_particle_draw,@,view_init,@,view_update,@,view_match_following,@,missile_destroyed,@,missile_hit,@,missile_pop_init,@,model_health_bar_hit,@,planet_destroyed,@,planet_evac,@,zipper_init,@,zipper_destroyed,@,chaser_init,@,chaser_update,@,chaser_hit,@,gravity_tug,@,twinkle_draw,@,star_view_match_following,@,pl_update,@,pl_hit,@,pl_alert_destroy,@,pl_alert_update,@,pl_alert_draw,@,alert_radar_register,@,bar_update_starting,@,bar_update_dying,@,bar_update,@,bar_draw,@,level_select_init,@,level_select_update,@,level_entrance_outline_update,@,level_entrance_init,@,level_entrance_draw,@,level_entrance_hit,@,level_1_init,@,level_2_init,@,level_3_init,@,level_4_init,@,level_5_init,@,level_6_init,@,level_7_init,@,level_8_init,@,logo_init,@,logo_draw,@,level_select_draw,@,level_draw,@,stats_displayer_draw,@,game_checker_update,@,retry_init,@,retry_update,@,retry_draw,@,win_init,@,win_update,@,win_draw,@,level_update,@,spawn_init,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -85,12 +100,7 @@ end,function(a)
 if a:get_elapsed"state"==nil then a:load(a.curr)end
 if a:get_elapsed"state"==false then a:play_timer"state" a:init()end
 a:update()
-end,function(a)a.alive=nil end,function(a)
-if not a.alive then
-a:destroyed()
-deregister_zobj(a)
-end
-end,function(a)
+end,function(a)a.alive=nil end,function(a)if not a.alive then deregister_entity(a)end end,function(a)a:kill()a:destroyed()end,function(a)
 g_fade=a:get_elapsed_percent"state"
 end,function(a)
 g_fade=1-a:get_elapsed_percent"state"
@@ -419,20 +429,20 @@ else
 create_text("by amorg",0,yoff+3,_g.drawable_model_post_temp)
 end
 end,function()
-loop_zobjs("actor","state")
-loop_zobjs("view","match_following")
-loop_zobjs("star_view","match_following")
-loop_zobjs("view","collide",g_zclass_entities["level_entrance"])
-loop_zobjs("missile","collide",g_zclass_entities["level_entrance"])
-loop_zobjs("level_entrance","collide",g_zclass_entities["pl"])
-loop_zobjs("pl","collide",g_zclass_entities["level_entrance"])
-loop_zobjs("alert_radar","register",g_zclass_entities["level_entrance"])
-loop_zobjs("collision_circ","follow_anchoring")
-loop_zobjs("mov","mov_update")
-loop_zobjs("acc","acc_update")
-loop_zobjs("vec","vec_update")
-loop_zobjs("anchor_pos","update_anchor")
-loop_zobjs("model","model_update")
+loop_entities("actor","state")
+loop_entities("view","match_following")
+loop_entities("star_view","match_following")
+loop_entities("view","collide",g_zclass_entities["level_entrance"])
+loop_entities("missile","collide",g_zclass_entities["level_entrance"])
+loop_entities("level_entrance","collide",g_zclass_entities["pl"])
+loop_entities("pl","collide",g_zclass_entities["level_entrance"])
+loop_entities("alert_radar","register",g_zclass_entities["level_entrance"])
+loop_entities("collision_circ","follow_anchoring")
+loop_entities("mov","mov_update")
+loop_entities("acc","acc_update")
+loop_entities("vec","vec_update")
+loop_entities("anchor_pos","update_anchor")
+loop_entities("model","model_update")
 if g_pl.x>g_title_screen_coord then g_pl.x-=g_title_screen_dim-1 g_view.x-=g_title_screen_dim-1 end
 if g_pl.y>g_title_screen_coord then g_pl.y-=g_title_screen_dim-1 g_view.y-=g_title_screen_dim-1 end
 if g_pl.x<-g_title_screen_coord then g_pl.x+=g_title_screen_dim-1 g_view.x+=g_title_screen_dim-1 end
@@ -537,11 +547,11 @@ zspr(108,64,64,4,2)
 fade"0"
 camera()
 end,function()
-loop_zobjs_in_view(g_view,"drawlayer_03","draw")
-loop_zobjs_in_view(g_view,"drawlayer_10","draw")
-loop_zobjs_in_view(g_view,"drawlayer_20","draw")
-loop_zobjs_in_view(g_view,"drawlayer_30","draw")
-loop_zobjs_in_view(g_view,"drawlayer_40","draw")
+loop_entities_in_view(g_view,"drawlayer_03","draw")
+loop_entities_in_view(g_view,"drawlayer_10","draw")
+loop_entities_in_view(g_view,"drawlayer_20","draw")
+loop_entities_in_view(g_view,"drawlayer_30","draw")
+loop_entities_in_view(g_view,"drawlayer_40","draw")
 end,function()
 circ(zoomx(0),zoomy(0),zoom(LEVEL_VIEW_RADIUS),1)
 _g.level_select_draw()
@@ -582,10 +592,10 @@ g_game_state:load(G_CUR_LEVEL)
 end)
 end)
 end,function(a)
-loop_zobjs("actor","state")
-loop_zobjs("model","model_update")
+loop_entities("actor","state")
+loop_entities("model","model_update")
 end,function(a)
-loop_zobjs("drawlayer_40","draw")
+loop_entities("drawlayer_40","draw")
 end,function(a)
 music(5,nil,1)
 clean_all_entities()
@@ -600,46 +610,46 @@ g_game_state:load"level_select"
 end)
 end)
 end,function(a)
-loop_zobjs("actor","state")
-loop_zobjs("model","model_update")
+loop_entities("actor","state")
+loop_entities("model","model_update")
 end,function(a)
-loop_zobjs("drawlayer_40","draw")
+loop_entities("drawlayer_40","draw")
 end,function()
 if g_zipper_goal and g_zipper_count>=g_zipper_goal then
 if g_zclass_entities["planet"]and #g_zclass_entities["planet"]==1 then
 g_view.following=g_zclass_entities["planet"][1]
 end
 end
-loop_zobjs("actor","state")
-loop_zobjs("view","match_following")
-loop_zobjs("star_view","match_following")
-loop_zobjs("missile","collide",g_zclass_entities["teammate"])
-loop_zobjs("missile","collide",g_zclass_entities["black_hole"])
-loop_zobjs("teammate","collide",g_zclass_entities["missile"])
-loop_zobjs("teammate","collide",g_zclass_entities["teammate"])
-loop_zobjs("teammate","collide",g_zclass_entities["black_hole"])
-loop_zobjs("alert_radar","register",g_zclass_entities["planet"])
-loop_zobjs("alert_radar","register",g_zclass_entities["asteroid"])
-loop_zobjs("alert_radar","register",g_zclass_entities["view"])
-loop_zobjs("alert_radar","register",g_zclass_entities["black_hole"])
-loop_zobjs("view","collide",g_zclass_entities["black_hole"])
-loop_zobjs("view","collide",g_zclass_entities["planet"])
-loop_zobjs("view","collide",g_zclass_entities["asteroid"])
-loop_zobjs("view","collide",g_zclass_entities["chaser"])
-loop_zobjs("view","collide",g_zclass_entities["zipper"])
-loop_zobjs("alert_radar","register",g_zclass_entities["chaser"])
-loop_zobjs("alert_radar","register",g_zclass_entities["black_hole"])
-loop_zobjs("collision_circ","follow_anchoring")
-loop_zobjs("mov","mov_update")
-loop_zobjs("acc","acc_update")
-loop_zobjs("gravity","tug",g_zclass_entities["gravity"])
-loop_zobjs("gravity","tug",g_zclass_entities["chaser"])
-loop_zobjs("gravity","tug",g_zclass_entities["pl"])
-loop_zobjs("gravity","tug",g_zclass_entities["missile"])
-loop_zobjs("gravity","tug",g_zclass_entities["asteroid"])
-loop_zobjs("vec","vec_update")
-loop_zobjs("anchor_pos","update_anchor")
-loop_zobjs("model","model_update")
+loop_entities("actor","state")
+loop_entities("view","match_following")
+loop_entities("star_view","match_following")
+loop_entities("missile","collide",g_zclass_entities["teammate"])
+loop_entities("missile","collide",g_zclass_entities["black_hole"])
+loop_entities("teammate","collide",g_zclass_entities["missile"])
+loop_entities("teammate","collide",g_zclass_entities["teammate"])
+loop_entities("teammate","collide",g_zclass_entities["black_hole"])
+loop_entities("alert_radar","register",g_zclass_entities["planet"])
+loop_entities("alert_radar","register",g_zclass_entities["asteroid"])
+loop_entities("alert_radar","register",g_zclass_entities["view"])
+loop_entities("alert_radar","register",g_zclass_entities["black_hole"])
+loop_entities("view","collide",g_zclass_entities["black_hole"])
+loop_entities("view","collide",g_zclass_entities["planet"])
+loop_entities("view","collide",g_zclass_entities["asteroid"])
+loop_entities("view","collide",g_zclass_entities["chaser"])
+loop_entities("view","collide",g_zclass_entities["zipper"])
+loop_entities("alert_radar","register",g_zclass_entities["chaser"])
+loop_entities("alert_radar","register",g_zclass_entities["black_hole"])
+loop_entities("collision_circ","follow_anchoring")
+loop_entities("mov","mov_update")
+loop_entities("acc","acc_update")
+loop_entities("gravity","tug",g_zclass_entities["gravity"])
+loop_entities("gravity","tug",g_zclass_entities["chaser"])
+loop_entities("gravity","tug",g_zclass_entities["pl"])
+loop_entities("gravity","tug",g_zclass_entities["missile"])
+loop_entities("gravity","tug",g_zclass_entities["asteroid"])
+loop_entities("vec","vec_update")
+loop_entities("anchor_pos","update_anchor")
+loop_entities("model","model_update")
 check_level_bounds()
 end,function(a)
 local ang=rnd(a.max_ang-a.min_ang)+a.min_ang
@@ -714,26 +724,7 @@ end
 function zoom(num)return num*g_view.zoom_factor end
 function zoomx(x)return zoom(x-g_view.x)+64 end
 function zoomy(y)return zoom(y-g_view.y)+64 end
-zclass[[actor,timer|load,%actor_load,state,%actor_state,kill,%actor_kill,clean,%actor_clean,alive,yes,duration,null,curr,start,next,null,init,nop,update,nop,destroyed,nop;]]
-function clean_all_entities(...)
-local objs={}
-local exclusions={game_state=true}
-foreach({...},function(exclusion)exclusions[exclusion]=true end)
-for class,entities in pairs(g_zclass_entities)do
-for entity in all(entities)do
-objs[entity]=entity.id
-end
-end
-for obj,id in pairs(objs)do
-if not exclusions[id]then
-if obj.parents.actor then
-obj:kill()
-obj:clean()
-end
-deregister_zobj(obj)
-end
-end
-end
+zclass[[actor,timer|load,%actor_load,state,%actor_state,kill,%actor_kill,clean,%actor_clean,alive,yes,duration,null,curr,start,next,null,init,nop,update,nop,destroyed,nop,deregistered,%actor_deregistered;]]
 zclass[[drawlayer_03|]]
 zclass[[drawlayer_10|]]
 zclass[[drawlayer_20|]]
@@ -844,7 +835,7 @@ end
 y+=1
 end)
 end
-function loop_zobjs_in_view(view,class,method_name,...)
+function loop_entities_in_view(view,class,method_name,...)
 for inst in all(g_zclass_entities[class])do
 if inst.parents.model and dist_between_circles(view,inst)<0 or not inst.parents.model then
 call_not_nil(inst,method_name,inst,...)
@@ -890,10 +881,10 @@ if NOISE then
 sfx(NOISE,3)
 NOISE=false
 end
-loop_zobjs("actor","clean")
-register_zobjs()
-loop_zobjs("timer","tick")
-loop_zobjs("game_state","state")
+loop_entities("actor","clean")
+register_entities()
+loop_entities("timer","tick")
+loop_entities("game_state","state")
 dset(4,G_DEATH_COUNT)
 inc_level(0)dset(5,G_LEVEL)
 end
@@ -901,7 +892,7 @@ function _draw()
 camera(SCREEN_SHAKE and rnd_one()or 0,SCREEN_SHAKE and rnd_one()or 0)
 cls()
 fade(g_fade)
-loop_zobjs("game_state","draw")
+loop_entities("game_state","draw")
 SCREEN_SHAKE=false
 end
 LEVEL_RADIUS=26

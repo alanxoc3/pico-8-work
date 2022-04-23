@@ -1,10 +1,9 @@
--- 102 tokens
+-- 112 tokens
 
 -- an actor is the basic thing in the game. think of an actor in a play. every
 -- actor has a few basic roles:
 -- * inherited timer functionality
--- * able to die and be 
--- * able to be in different states
+-- * able to die and be in different states
 -- * able to have a time limit on states if desired
 -- * init function when entering a state
 
@@ -21,7 +20,8 @@ zclass[[actor,timer|
 
     init,      nop,
     update,    nop,
-    destroyed, nop;
+    destroyed, nop,
+    deregistered, %actor_deregistered;
 ]]
 
 -- Load the given state into the actor, by applying the properties of the sub-object
@@ -41,7 +41,7 @@ end $$
 
 -- This is expected to be called on each frame!
 |actor_state| function(a)
-    if a:get_elapsed'state' == nil   then a:load(a.curr) end -- a:init() -- actor created this frame
+    if a:get_elapsed'state' == nil   then a:load(a.curr) end -- actor created this frame
     if a:get_elapsed'state' == false then a:play_timer'state' a:init() end -- state changed in this frame
     a:update() -- per-frame update
 end $$
@@ -51,33 +51,7 @@ end $$
 
 -- This is expected to be called at the beginning of each frame!
 -- If this is not called at the beginning, you could have a frame delay for things like explosions.
-|actor_clean| function(a)
-    if not a.alive then
-        a:destroyed()
-        deregister_zobj(a)
-    end
-end $$
+|actor_clean| function(a) if not a.alive then deregister_entity(a) end end $$
 
--- parameter is exclusion
-function clean_all_entities(...)
-    local objs = {}
-    local exclusions = { game_state=true }
-
-    foreach({...}, function(exclusion) exclusions[exclusion] = true end)
-    
-    for class,entities in pairs(g_zclass_entities) do
-        for entity in all(entities) do
-            objs[entity] = entity.id
-        end
-    end
-
-    for obj,id in pairs(objs) do
-        if not exclusions[id] then
-            if obj.parents.actor then
-                obj:kill()
-                obj:clean()
-            end
-            deregister_zobj(obj)
-        end
-    end
-end
+-- Called when deregistered. See zclass for more information.
+|actor_deregistered| function(a) a:kill() a:destroyed() end $$

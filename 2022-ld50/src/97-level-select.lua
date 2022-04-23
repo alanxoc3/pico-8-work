@@ -34,7 +34,7 @@ function create_text(original_text, original_x, y, func, ...)
     end)
 end
 
-function loop_zobjs_in_view(view, class, method_name, ...)
+function loop_entities_in_view(view, class, method_name, ...)
     for inst in all(g_zclass_entities[class]) do
         if inst.parents.model and dist_between_circles(view, inst) < 0 or not inst.parents.model then
             call_not_nil(inst, method_name, inst, ...)
@@ -91,25 +91,25 @@ end
 end $$
 
 |level_select_update| function()
-    loop_zobjs('actor',     'state')
-    loop_zobjs('view',      'match_following')
-    loop_zobjs('star_view', 'match_following')
+    loop_entities('actor',     'state')
+    loop_entities('view',      'match_following')
+    loop_entities('star_view', 'match_following')
 
-    loop_zobjs('view', 'collide', g_zclass_entities['level_entrance'])
-    loop_zobjs('missile', 'collide', g_zclass_entities['level_entrance'])
+    loop_entities('view', 'collide', g_zclass_entities['level_entrance'])
+    loop_entities('missile', 'collide', g_zclass_entities['level_entrance'])
 
-    loop_zobjs('level_entrance', 'collide', g_zclass_entities['pl'])
-    loop_zobjs('pl', 'collide', g_zclass_entities['level_entrance'])
+    loop_entities('level_entrance', 'collide', g_zclass_entities['pl'])
+    loop_entities('pl', 'collide', g_zclass_entities['level_entrance'])
 
-    loop_zobjs('alert_radar', 'register', g_zclass_entities['level_entrance'])
+    loop_entities('alert_radar', 'register', g_zclass_entities['level_entrance'])
 
-    loop_zobjs('collision_circ', 'follow_anchoring')
-    loop_zobjs('mov', 'mov_update')
-    loop_zobjs('acc', 'acc_update')
-    loop_zobjs('vec', 'vec_update')
-    loop_zobjs('anchor_pos', 'update_anchor')
+    loop_entities('collision_circ', 'follow_anchoring')
+    loop_entities('mov', 'mov_update')
+    loop_entities('acc', 'acc_update')
+    loop_entities('vec', 'vec_update')
+    loop_entities('anchor_pos', 'update_anchor')
 
-    loop_zobjs('model', 'model_update')
+    loop_entities('model', 'model_update')
 
     -- wrap the level select screen
     if g_pl.x >  g_title_screen_coord then g_pl.x -= g_title_screen_dim-1 g_view.x -= g_title_screen_dim-1 end

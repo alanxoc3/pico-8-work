@@ -1,10 +1,9 @@
--- 102 tokens
+-- 112 tokens
 
 -- an actor is the basic thing in the game. think of an actor in a play. every
 -- actor has a few basic roles:
 -- * inherited timer functionality
--- * able to die and be 
--- * able to be in different states
+-- * able to die and be in different states
 -- * able to have a time limit on states if desired
 -- * init function when entering a state
 
@@ -21,7 +20,8 @@ zclass[[actor,timer|
 
     init,      nop,
     update,    nop,
-    destroyed, nop;
+    destroyed, nop,
+    deregistered, %actor_deregistered;
 ]]
 
 -- Load the given state into the actor, by applying the properties of the sub-object
@@ -33,7 +33,7 @@ zclass[[actor,timer|
         a.next, a.duration = nil -- default values, unless overridden by next line
         for k, v in pairs(a[stateName]) do a[k] = v end
         a.curr = stateName
-        a:set_timer('state', a.duration, a.duration and function() a:load(a.next) end)
+        a:stop_timer('state', a.duration, a.duration and function() a:load(a.next) end)
     else
         a:kill()
     end
@@ -41,19 +41,17 @@ end $$
 
 -- This is expected to be called on each frame!
 |actor_state| function(a)
-    if not a:get_elapsed'state'  then a:load(a.curr) end -- actor was created in this frame
-    if a:get_elapsed'state' == 0 then a:init() end -- state changed in this frame
+    if a:get_elapsed'state' == nil   then a:load(a.curr) end -- actor created this frame
+    if a:get_elapsed'state' == false then a:play_timer'state' a:init() end -- state changed in this frame
     a:update() -- per-frame update
 end $$
 
--- Stage this actor to be removed at the end of the frame (see actor_clean).
+-- Stage this actor to be removed at the beginning of the next frame.
 |actor_kill| function(a) a.alive = nil end $$
 
 -- This is expected to be called at the beginning of each frame!
 -- If this is not called at the beginning, you could have a frame delay for things like explosions.
-|actor_clean| function(a)
-    if not a.alive then
-        a:destroyed()
-        deregister_zobj(a)
-    end
-end $$
+|actor_clean| function(a) if not a.alive then deregister_entity(a) end end $$
+
+-- Called when deregistered. See zclass for more information.
+|actor_deregistered| function(a) a:kill() a:destroyed() end $$
