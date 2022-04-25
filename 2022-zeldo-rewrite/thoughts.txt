@@ -1,0 +1,32 @@
+sind = sprite ind
+rid = room id
+
+room_count (dim fill_color music unused fill wl0  wl1  wl2  wl3  wl0y wl1x wl2y wl3x (links)... )...
+room_count (w   color      music unused sind sind sind sind sind pos  pos  pos  pos  (rid)...   )...
+8           4   4          6     2      8    8    8    8    8    4    4    4    4     8
+
+Pre-supported dim types:
+
+00:  8 x 8   | 04:  12 x 8
+01:  8 x 12  | 05:  12 x 12
+02:  8 x 16  | 06:  12 x 16
+03:  8 x 24  | 07:  12 x 24
+---------------------------
+08:  16 x 8  | 12:  24 x 8
+09:  16 x 12 | 13:  24 x 12
+10:  16 x 16 | 14:  24 x 16
+11:  16 x 24 | 15:  24 x 24
+
+create room mode.
+delete room
+wall & fill mode (v)
+
+linking mode (v)
+
+tile mode (every new thing is a layer)
+actor mode (zobj)
+house mode (zobj)
+
+final item could be pico-8 controller.
+
+2 4 8 16 (up to 30)
