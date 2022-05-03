@@ -1,5 +1,7 @@
+function load_assets() reload(0, 0, 0x4300, 'game.p8') end
 function _init()
     poke(0x5f2d, 1) -- enable keyboard
+    load_assets()
 
     g_sub_modes = { "config", "tile" }
     g_sub_mode_index = 1
@@ -15,10 +17,11 @@ function _init()
                 "r: redo"
             }
         },
-        edit = {
-            name = "edit", update = edit_update, draw = edit_draw,
+        tile = {
+            name = "tile", update = tile_update, draw = tile_draw,
             help = {
-                "w: edit"
+                "esc: link mode",
+                "r: reload cart data"
             }
         },
         help = {
@@ -67,7 +70,7 @@ function link_update(key)
             new_room{ w=flr(rnd(8))*2+8, h=flr(rnd(8))*2+8, c=rnd(16) }
         end
 
-        g_mode = g_modes.edit
+        g_mode = g_modes.tile
     elseif key == '⁸' then -- backspace
         del_room(g_link_x, g_link_y)
     elseif key == '+' then -- backspace
@@ -109,12 +112,17 @@ function link_draw()
     fillp()
 end
 
-function edit_update(key)
+function tile_update(key)
     if key == ' ' then
+        g_mode = g_modes.link
+    elseif key == 'm' then
         g_mode = g_modes.link
     end
 end
-function edit_draw() return g_mode.name end
+
+function tile_draw()
+
+end
 
 function help_update() end
 function help_draw()
@@ -165,4 +173,3 @@ function zprint(str, x, y, align, color)
     elseif align > 0 then x -= #str*4+1 end
     print(str, x, y, color)
 end
-
