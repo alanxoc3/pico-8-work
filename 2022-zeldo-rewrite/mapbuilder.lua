@@ -1,3 +1,5 @@
+ROOM_H=10 ROOM_W=12
+Y_OFFSET=-14
 function load_assets() reload(0, 0, 0x4300, 'game.p8') end
 function _init()
     poke(0x5f2d, 1) -- enable keyboard
@@ -11,16 +13,16 @@ function _init()
             name = "link", update = link_update, draw = link_draw,
             help = {
                 "arrow: switch room",
-                "space: edit room",
-                "backspace: delete room",
-                "u: undo",
-                "r: redo"
+                "space: edit or create",
+                "d: delete room",
+                "r: reload cart data"
             }
         },
         tile = {
             name = "tile", update = tile_update, draw = tile_draw,
             help = {
-                "esc: link mode",
+                "arrow: switch tile",
+                "backspace: link mode",
                 "r: reload cart data"
             }
         },
@@ -50,16 +52,18 @@ function _draw()
     cls()
     get_mode().draw()
 
-    rectfill(0, 0, 127, 10, 1)
-    zprint("mode: "..g_mode.name, 5, 3, -1, 7)
-    zprint("["..g_link_x..","..g_link_y.."]", 127-5, 3, 1, 7)
+    rectfill(0, 0, 127, 8, 1)
+    zprint("mode: "..g_mode.name, 5, 2, -1, 7)
+    zprint("["..g_link_x..","..g_link_y.."]", 127-5, 2, 1, 7)
+    rectfill(0,92,127,127,0)
+    rect(0,92,127,127,1)
 end
 
 g_rooms = {} -- array
 g_link_map = {} -- double array
 g_link_x, g_link_y = 0, 0
-g_zoom_default = 1.5
-g_link_zoom = g_zoom_default
+g_link_zoom_default = 2
+g_link_zoom = g_link_zoom_default
 function get_room(x, y) return g_link_map[y] and g_link_map[y][x] and g_rooms[g_link_map[y][x]] end
 function del_room(x, y) local room = get_room(x, y) if room then del(g_rooms, room) g_link_map[y][x] = nil end end
 function new_room(room) add(g_rooms, room) g_link_map[g_link_y] = g_link_map[g_link_y] or {} g_link_map[g_link_y][g_link_x] = #g_rooms end
@@ -67,18 +71,19 @@ function new_room(room) add(g_rooms, room) g_link_map[g_link_y] = g_link_map[g_l
 function link_update(key)
     if key == ' ' then
         if not get_room(g_link_x, g_link_y) then
-            new_room{ w=flr(rnd(8))*2+8, h=flr(rnd(8))*2+8, c=rnd(16) }
+            new_room{ c=rnd(16) }
         end
 
         g_mode = g_modes.tile
     elseif key == '⁸' then -- backspace
         del_room(g_link_x, g_link_y)
     elseif key == '+' then -- backspace
-        g_link_zoom = min(g_link_zoom+.25, 3)
+        g_link_zoom = min(g_link_zoom+1, 4)
     elseif key == '-' then -- backspace
-        g_link_zoom = max(g_link_zoom-.25, 1)
+        g_link_zoom = max(g_link_zoom-1, 1)
     elseif key == '=' then -- backspace
-        g_link_zoom = g_zoom_default
+        g_link_zoom = g_link_zoom_default
+
     else
         if xbtnp() ~= 0 then
             g_link_x += xbtnp()
@@ -88,18 +93,21 @@ function link_update(key)
     end
 end
 
+g_link_zoom = 1
 function link_draw()
     local rooms_visited = {}
-    local spacing = 30
-    local cx, cy = 64, (127-10)/2+10
+    local rw, rh = g_link_zoom*6, g_link_zoom*5
+    local x_spacing = g_link_zoom*14
+    local y_spacing = g_link_zoom*12
+    local cx, cy = 64, 64+Y_OFFSET
 
-    for y=g_link_y-2,g_link_y+2 do
-        for x=g_link_x-2,g_link_x+2 do
+    for y=g_link_y-3,g_link_y+3 do
+        for x=g_link_x-4,g_link_x+4 do
             local room = get_room(x, y)
             if room then
-                zrectfill_outline(cx+(x-g_link_x)*g_link_zoom*spacing, cy+(y-g_link_y)*g_link_zoom*spacing, (room.w/2)*g_link_zoom, (room.h/2)*g_link_zoom, 1, room.c)
+                zrectfill_outline(cx+(x-g_link_x)*x_spacing, cy+(y-g_link_y)*y_spacing, rw, rh, room.c)
             else
-                pset(cx+(x-g_link_x)*g_link_zoom*spacing, cy+(y-g_link_y)*g_link_zoom*spacing, 1)
+                pset(cx+(x-g_link_x)*x_spacing, cy+(y-g_link_y)*y_spacing, 1)
             end
         end
     end
@@ -108,7 +116,7 @@ function link_draw()
           t() % 1 < .5  and 0b0110001110011100 or
           t() % 1 < .75 and 0b0011100111000110 or 0b1001110001100011)
     
-    zrect(cx, cy, g_link_zoom*spacing/2-1, g_link_zoom*spacing/2-1, 7)
+    rect(cx-x_spacing/2, cy-y_spacing/2, cx+x_spacing/2, cy+y_spacing/2, 7)
     fillp()
 end
 
@@ -121,7 +129,7 @@ function tile_update(key)
 end
 
 function tile_draw()
-
+    zrect(64, 64+Y_OFFSET, ROOM_W/2*8, ROOM_H/2*8, 8)
 end
 
 function help_update() end
