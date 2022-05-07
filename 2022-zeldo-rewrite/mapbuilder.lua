@@ -1,10 +1,15 @@
 ROOM_H=10 ROOM_W=12
 Y_OFFSET=-14
+function update_mouse() 
+    g_mouse_x, g_mouse_y = stat(32), stat(33)
+end
+
 function load_assets() reload(0, 0, 0x4300, 'game.p8') end
 function _init()
     poke(0x5f2d, 1) -- enable keyboard
     load_assets()
-
+    update_mouse()
+    g_mouse_enabled = false
     g_sub_modes = { "config", "tile" }
     g_sub_mode_index = 1
 
@@ -13,8 +18,10 @@ function _init()
             name = "link", update = link_update, draw = link_draw,
             help = {
                 "arrow: switch room",
-                "space: edit or create",
+                "space: tile mode",
+                "m: toggle mouse",
                 "d: delete room",
+                "tab: switch active",
                 "r: reload cart data"
             }
         },
@@ -22,7 +29,9 @@ function _init()
             name = "tile", update = tile_update, draw = tile_draw,
             help = {
                 "arrow: switch tile",
-                "backspace: link mode",
+                "space: link mode",
+                "m: toggle mouse",
+                "tab: switch active",
                 "r: reload cart data"
             }
         },
@@ -39,10 +48,13 @@ function get_mode()
 end
 
 function _update60()
+    update_mouse()
+
     local is_keydown, char = stat(30)
     if is_keydown then char = stat(31) end
 
     if char == "h"     then char = nil g_help_on = not g_help_on
+    elseif char == "m" then char = nil g_mouse_enabled = not g_mouse_enabled
     end
 
     get_mode().update(char)
@@ -57,6 +69,11 @@ function _draw()
     zprint("["..g_link_x..","..g_link_y.."]", 129, 1, 1, 7)
     rectfill(0,94,127,127,0)
     rect(0,94,127,127,1)
+
+    if g_mouse_enabled then
+        line(g_mouse_x-2, g_mouse_y-2, g_mouse_x+2, g_mouse_y+2, 7)
+        line(g_mouse_x-2, g_mouse_y+2, g_mouse_x+2, g_mouse_y-2, 7)
+    end
 end
 
 g_rooms = {} -- array
@@ -66,11 +83,15 @@ g_link_x, g_link_y = 4, 3
 g_link_cx, g_link_cy = 4, 3
 g_link_zoom_default = 1
 g_link_zoom = g_link_zoom_default
+g_mouse_frame_limit = 0
+g_mouse_frame_limit_max = 6
 function get_room(x, y) return g_link_map[y] and g_link_map[y][x] and g_rooms[g_link_map[y][x]] end
 function del_room(x, y) local room = get_room(x, y) if room then del(g_rooms, room) g_link_map[y][x] = nil end end
 function new_room(room) add(g_rooms, room) g_link_map[g_link_y] = g_link_map[g_link_y] or {} g_link_map[g_link_y][g_link_x] = #g_rooms end
 
 function link_update(key)
+    g_mouse_frame_limit = (g_mouse_frame_limit+1) % g_mouse_frame_limit_max
+    local new_link_x, new_link_y = g_link_x, g_link_y
     if key == ' ' then
         if not get_room(g_link_x, g_link_y) then
             new_room{ c=rnd(16) }
@@ -79,26 +100,29 @@ function link_update(key)
         g_mode = g_modes.tile
     elseif key == '⁸' then -- backspace
         del_room(g_link_x, g_link_y)
-    -- elseif key == '+' then -- backspace
-    --     g_link_zoom = min(g_link_zoom+1, 4)
-    -- elseif key == '-' then -- backspace
-    --     g_link_zoom = max(g_link_zoom-1, 1)
-    -- elseif key == '=' then -- backspace
-    --     g_link_zoom = g_link_zoom_default
-
     else
-        if xbtnp() ~= 0 then
-            g_link_x = min(g_link_max_x, max(g_link_min_x, g_link_x+xbtnp()))
-            local dist, sign = abs(g_link_cx - g_link_x), sgn(g_link_cx - g_link_x)
-            if dist > 4 then g_link_cx = g_link_x + sign*4 end
-            g_link_cx = max(min(g_link_cx, g_link_max_x-4), g_link_min_x+4)
-        elseif ybtnp() ~= 0 then
-            g_link_y = min(g_link_max_y, max(g_link_min_y, g_link_y+ybtnp()))
-            local dist, sign = abs(g_link_cy - g_link_y), sgn(g_link_cy - g_link_y)
-            if dist > 3 then g_link_cy = g_link_y + sign*3 end
-            g_link_cy = max(min(g_link_cy, g_link_max_y-3), g_link_min_y+3)
+        if g_mouse_enabled then
+            if g_mouse_frame_limit == 0 then
+                new_link_x = g_link_cx+flr((g_mouse_x-63)/14+.5)
+                new_link_y = g_link_cy+flr((-Y_OFFSET+g_mouse_y-63)/14+.5)
+            end
+        else
+            new_link_x += xbtnp()
+            new_link_y += ybtnp()
         end
     end
+
+    -- update link x
+    g_link_x = min(g_link_max_x, max(g_link_min_x, new_link_x))
+    local dist, sign = abs(g_link_cx - g_link_x), sgn(g_link_cx - g_link_x)
+    if dist > 3 then g_link_cx = g_link_x + sign*3 end
+    g_link_cx = max(min(g_link_cx, g_link_max_x-3), g_link_min_x+3)
+
+    -- update link y
+    g_link_y = min(g_link_max_y, max(g_link_min_y, new_link_y))
+    local dist, sign = abs(g_link_cy - g_link_y), sgn(g_link_cy - g_link_y)
+    if dist > 2 then g_link_cy = g_link_y + sign*2 end
+    g_link_cy = max(min(g_link_cy, g_link_max_y-2), g_link_min_y+2)
 end
 
 g_link_zoom = 1
@@ -108,28 +132,49 @@ function link_draw()
     local x_spacing = g_link_zoom*14
     local y_spacing = g_link_zoom*12
     local cx, cy = 64, 64+Y_OFFSET
+    local hx_spacing, hy_spacing = x_spacing/2, y_spacing/2
 
+    fillp(0b0111101111011110)
+    rectfill(cx-g_link_cx*x_spacing-hx_spacing,   cy-g_link_cy*y_spacing-hy_spacing,   cx-g_link_cx*x_spacing+g_link_max_x*x_spacing+hx_spacing,   cy-g_link_cy*y_spacing+g_link_max_y*y_spacing+hy_spacing,   1)
+    fillp()
+        rect(cx-g_link_cx*x_spacing-hx_spacing-2, cy-g_link_cy*y_spacing-hy_spacing-2, cx-g_link_cx*x_spacing+g_link_max_x*x_spacing+hx_spacing+2, cy-g_link_cy*y_spacing+g_link_max_y*y_spacing+hy_spacing+2, 1)
     for y=g_link_cy-3,g_link_cy+3 do
         for x=g_link_cx-4,g_link_cx+4 do
             local room = get_room(x, y)
             if room then
                 zrectfill_outline(cx+(x-g_link_cx)*x_spacing, cy+(y-g_link_cy)*y_spacing, rw, rh, room.c)
-            else
-                pset(cx+(x-g_link_cx)*x_spacing, cy+(y-g_link_cy)*y_spacing, 1)
             end
         end
     end
 
+    moving_grid_fill(function()
+        local xoff, yoff = g_link_x-g_link_cx, g_link_y-g_link_cy
+        rect(cx-x_spacing/2+xoff*x_spacing, cy-y_spacing/2+yoff*y_spacing, cx+x_spacing/2+xoff*x_spacing, cy+y_spacing/2+yoff*y_spacing, 7)
+    end)
+end
+
+function moving_grid_fill(callback)
     fillp(t() % 1 < .25 and 0b1100011000111001 or
           t() % 1 < .5  and 0b0110001110011100 or
           t() % 1 < .75 and 0b0011100111000110 or 0b1001110001100011)
-    
-    local xoff, yoff = g_link_x-g_link_cx, g_link_y-g_link_cy
-    rect(cx-x_spacing/2+xoff*x_spacing, cy-y_spacing/2+yoff*y_spacing, cx+x_spacing/2+xoff*x_spacing, cy+y_spacing/2+yoff*y_spacing, 7)
+    callback()
     fillp()
 end
 
+g_tile_x, g_tile_y = 0, 0
 function tile_update(key)
+    local new_tile_x, new_tile_y
+    if g_mouse_enabled then
+        new_tile_x = flr((g_mouse_x-64+ROOM_W/2*8)/8-.125)
+        new_tile_y = flr((-Y_OFFSET+g_mouse_y-64+ROOM_H/2*8)/8-.125)
+    else
+        new_tile_x = g_tile_x + xbtnp()
+        new_tile_y = g_tile_y + ybtnp()
+    end
+
+    g_tile_x = min(ROOM_W-1, max(0, new_tile_x))
+    g_tile_y = min(ROOM_H-1, max(0, new_tile_y))
+
     if key == ' ' then
         g_mode = g_modes.link
     elseif key == 'm' then
@@ -138,7 +183,13 @@ function tile_update(key)
 end
 
 function tile_draw()
-    zrect(64, 64+Y_OFFSET, ROOM_W/2*8, ROOM_H/2*8, 8)
+    moving_grid_fill(function()
+        for i=1,ROOM_W-1 do rect(64-ROOM_W/2*8+i*8, Y_OFFSET+64-ROOM_H/2*8,     64-ROOM_W/2*8+i*8, Y_OFFSET+64+ROOM_H/2*8,     1) end
+        for i=1,ROOM_H-1 do rect(64-ROOM_W/2*8    , Y_OFFSET+64-ROOM_H/2*8+i*8, 64+ROOM_W/2*8,     Y_OFFSET+64-ROOM_H/2*8+i*8, 1) end
+    end)
+    zrect(64, 64+Y_OFFSET, ROOM_W/2*8+2, ROOM_H/2*8+2, 8)
+
+    zrect(64-ROOM_W/2*8+g_tile_x*8+4, Y_OFFSET+64-ROOM_H/2*8+g_tile_y*8+4, 4, 4, 8)
 end
 
 function help_update() end
