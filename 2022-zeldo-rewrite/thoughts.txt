@@ -1,20 +1,19 @@
-Map format...
-
-# room len
-11111111
+# global config
+11111111 -- room len
 
 # room config
-x    y    fill music t/o len
-1111 1111 1111 1111  11111111
+1 1111111 11111111 1111 1111 -- is hut | item len | (x|y or hut ind) | fill | music
 
 # repeats for t/o len
-1111111 1 -- sind (128-255) | tile/object
-# for tile placement
-1111 1111 -- x (0-15), w (1-15) -- FILL
-1111 1111 -- y (0-15), h (1-15) -- FILL
-# for object placement
-1 1111111 -- align 0 or .5 -- pos (0-119)
+1 1111111 -- type (tile|obj) | ind (0-127)
 
-CONSTRAINTS:
-rooms are all: 12 x 10
-huts  are all:  8 x  6
+# for tile placement
+1 1111111 -- bg/fg/mid | pos start (0-119)
+1 1111111 -- bg/fg/mid | pos end   (0-119)
+
+# for object placement
+1 1111111 -- align 0 or .5 | pos (0-119)
+
+# CONSTRAINTS:
+# rooms are all: 12 x 10
+# huts  are all:  8 x  6
