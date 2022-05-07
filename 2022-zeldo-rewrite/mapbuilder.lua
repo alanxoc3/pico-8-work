@@ -67,7 +67,7 @@ function _draw()
 
     rectfill(0, 0, 127, 6, 1)
     zprint("mode: "..g_mode.name, 1, 1, -1, 7)
-    zprint("["..g_link_x..","..g_link_y.."]", 129, 1, 1, 7)
+    zprint("["..g_link_grid.xsel..","..g_link_grid.ysel.."]", 129, 1, 1, 7)
 
     if g_mouse_enabled then
         line(g_mouse_x-2, g_mouse_y-2, g_mouse_x+2, g_mouse_y+2, 7)
@@ -77,33 +77,28 @@ end
 
 g_rooms = {} -- array
 g_link_map = {} -- double array
-g_link_min_x, g_link_min_y, g_link_max_x, g_link_max_y = 0, 0, 15, 15
-g_link_x, g_link_y = 4, 3
-g_link_cx, g_link_cy = 4, 3
-g_link_zoom_default = 1
-g_link_zoom = g_link_zoom_default
 g_mouse_frame_limit = 0
 g_mouse_frame_limit_max = 6
 function get_room(x, y) return g_link_map[y] and g_link_map[y][x] and g_rooms[g_link_map[y][x]] end
 function del_room(x, y) local room = get_room(x, y) if room then del(g_rooms, room) g_link_map[y][x] = nil end end
-function new_room(room) add(g_rooms, room) g_link_map[g_link_y] = g_link_map[g_link_y] or {} g_link_map[g_link_y][g_link_x] = #g_rooms end
+function new_room(room) add(g_rooms, room) g_link_map[g_link_grid.ysel] = g_link_map[g_link_grid.ysel] or {} g_link_map[g_link_grid.ysel][g_link_grid.xsel] = #g_rooms end
 
 function link_update(key)
     g_mouse_frame_limit = (g_mouse_frame_limit+1) % g_mouse_frame_limit_max
-    local new_link_x, new_link_y = g_link_x, g_link_y
+    local new_link_x, new_link_y = g_link_grid.xsel, g_link_grid.ysel
     if key == ' ' then
-        if not get_room(g_link_x, g_link_y) then
+        if not get_room(g_link_grid.xsel, g_link_grid.ysel) then
             new_room{ c=rnd(16) }
         end
 
         g_mode = g_modes.tile
     elseif key == '⁸' then -- backspace
-        del_room(g_link_x, g_link_y)
+        del_room(g_link_grid.xsel, g_link_grid.ysel)
     else
         if g_mouse_enabled then
             if g_mouse_frame_limit == 0 then
-                new_link_x = g_link_cx+flr((g_mouse_x-63)/14+.5)
-                new_link_y = g_link_cy+flr((-Y_OFFSET+g_mouse_y-63)/14+.5)
+                new_link_x = g_link_grid.xcen+flr((g_mouse_x-63)/14+.5)
+                new_link_y = g_link_grid.ycen+flr((-Y_OFFSET+g_mouse_y-63)/14+.5)
             end
         else
             new_link_x += xbtnp()
@@ -112,44 +107,68 @@ function link_update(key)
     end
 
     -- update link x
-    g_link_x = min(g_link_max_x, max(g_link_min_x, new_link_x))
-    local dist, sign = abs(g_link_cx - g_link_x), sgn(g_link_cx - g_link_x)
-    if dist > 3 then g_link_cx = g_link_x + sign*3 end
-    g_link_cx = max(min(g_link_cx, g_link_max_x-3), g_link_min_x+3)
+    g_link_grid.xsel  = min(g_link_grid.xmax, max(g_link_grid.xmin, new_link_x))
+    local dist, sign = abs(g_link_grid.xcen - g_link_grid.xsel), sgn(g_link_grid.xcen - g_link_grid.xsel)
+    if dist > 3 then g_link_grid.xcen = g_link_grid.xsel + sign*3 end
+    g_link_grid.xcen = max(min(g_link_grid.xcen, g_link_grid.xmax-3), g_link_grid.xmin+3)
 
     -- update link y
-    g_link_y = min(g_link_max_y, max(g_link_min_y, new_link_y))
-    local dist, sign = abs(g_link_cy - g_link_y), sgn(g_link_cy - g_link_y)
-    if dist > 2 then g_link_cy = g_link_y + sign*2 end
-    g_link_cy = max(min(g_link_cy, g_link_max_y-2), g_link_min_y+2)
+    g_link_grid.ysel = min(g_link_grid.ymax, max(g_link_grid.ymin, new_link_y))
+    local dist, sign = abs(g_link_grid.ycen - g_link_grid.ysel), sgn(g_link_grid.ycen - g_link_grid.ysel)
+    if dist > 2 then g_link_grid.ycen = g_link_grid.ysel + sign*2 end
+    g_link_grid.ycen = max(min(g_link_grid.ycen, g_link_grid.ymax-2), g_link_grid.ymin+2)
 end
 
-g_link_zoom = 1
-function link_draw()
-    local rooms_visited = {}
-    local rw, rh = g_link_zoom*6, g_link_zoom*5
-    local x_spacing = g_link_zoom*14
-    local y_spacing = g_link_zoom*12
-    local cx, cy = 64, 64+Y_OFFSET
-    local hx_spacing, hy_spacing = x_spacing/2, y_spacing/2
+-- function mouse_to_grid() end
+-- function update_grid() end
 
-    fillp(0b0111101111011110)
-    rectfill(cx-g_link_cx*x_spacing-hx_spacing,   cy-g_link_cy*y_spacing-hy_spacing,   cx-g_link_cx*x_spacing+g_link_max_x*x_spacing+hx_spacing,   cy-g_link_cy*y_spacing+g_link_max_y*y_spacing+hy_spacing,   1)
-    fillp()
-        rect(cx-g_link_cx*x_spacing-hx_spacing-2, cy-g_link_cy*y_spacing-hy_spacing-2, cx-g_link_cx*x_spacing+g_link_max_x*x_spacing+hx_spacing+2, cy-g_link_cy*y_spacing+g_link_max_y*y_spacing+hy_spacing+2, 1)
-    for y=g_link_cy-3,g_link_cy+3 do
-        for x=g_link_cx-4,g_link_cx+4 do
-            local room = get_room(x, y)
-            if room then
-                zrectfill_outline(cx+(x-g_link_cx)*x_spacing, cy+(y-g_link_cy)*y_spacing, rw, rh, room.c)
-            end
+function draw_grid(g)
+    local cww = g.xcel + g.xpad
+    local chh = g.ycel + g.ypad
+
+    local offx = g.xoff - g.xcen*cww - g.xpad
+    local offy = g.yoff - g.ycen*chh - g.ypad
+
+    local offcbx = offx+g.xpad/2
+    local offcby = offy+g.ypad/2
+    local offcex = offx+g.xpad/2+g.xcel-1
+    local offcey = offy+g.ypad/2+g.ycel-1
+
+    local offbex = offcex+(g.xmax)*cww
+    local offbey = offcey+(g.ymax)*chh
+
+    for i=g.xmin,g.xmax do g.rect_grid(offcbx+i*cww, offcby,       offcbx+i*cww,  offbey      ) end
+    for i=g.xmin,g.xmax do g.rect_grid(offcex+i*cww, offcby,       offcex+i*cww,  offbey      ) end
+    for i=g.ymin,g.ymax do g.rect_grid(offcbx,       offcby+i*chh, offbex,        offcby+i*chh) end
+    for i=g.ymin,g.ymax do g.rect_grid(offcbx,       offcey+i*chh, offbex,        offcey+i*chh) end
+    g.rect_boundary(offcbx, offcby, offbex, offbey)
+
+    for i=0,g.xmax do
+        for j=0,g.ymax do
+            --g.rect_cell(offx-gw/2*cww+i*cww, offy-g.ymax*chh+j*chh, offx-gw/2*cww+i*cww+g.xcel, offy-g.ymax*chh+j*chh+g.ycel)
         end
     end
 
-    moving_grid_fill(function()
-        local xoff, yoff = g_link_x-g_link_cx, g_link_y-g_link_cy
-        rect(cx-x_spacing/2+xoff*x_spacing, cy-y_spacing/2+yoff*y_spacing, cx+x_spacing/2+xoff*x_spacing, cy+y_spacing/2+yoff*y_spacing, 7)
-    end)
+    g.rect_select(offcbx+g.xsel*cww, offcby+g.ysel*chh, offcbx+g.xsel*cww+g.xcel-1, offcby+g.ysel*chh+g.ycel-1)
+end
+
+g_link_grid = {
+    xsel=8,  ysel=8,
+    xcen=8,  ycen=8,
+    xmin=0,  ymin=0,
+    xmax=15, ymax=15,
+    xcel=12, ycel=10,
+    xpad=2,  ypad=2,
+    xoff=57, yoff=45,
+
+    rect_grid     = function(x1,y1,x2,y2) moving_grid_fill(function() rect(x1,y1,x2,y2,1) end) end,
+    rect_boundary = function(x1, y1, x2, y2) rect(x1-2,y1-2,x2+2,y2+2,1) end,
+    rect_select   = function(x1, y1, x2, y2) rect(x1-1,y1-1,x2+1,y2+1,7) end,
+    rect_cell     = function(x1, y1, x2, y2) rect(x1,y1,x2,y2,4) end
+}
+
+function link_draw()
+    draw_grid(g_link_grid)
 
     draw_bottom_screen(function() end)
 end
@@ -162,19 +181,33 @@ function moving_grid_fill(callback)
     fillp()
 end
 
-g_tile_x, g_tile_y = 0, 0
+g_tile_grid = {
+    xsel=6,  ysel=5,
+    xcen=6,  ycen=5,
+    xmin=0,  ymin=0,
+    xmax=11, ymax=9,
+    xcel=8,  ycel=8,
+    xpad=0,  ypad=0,
+    xoff=64, yoff=50,
+
+    rect_grid     = function(x1,y1,x2,y2) moving_grid_fill(function() rect(x1,y1,x2,y2,1) end) end,
+    rect_boundary = function(x1, y1, x2, y2) rect(x1,y1,x2,y2,8) end,
+    rect_select   = function(x1, y1, x2, y2) rect(x1,y1,x2,y2,8) end,
+    rect_cell     = function(x, y) spr(15,x,y) end
+}
+
 function tile_update(key)
     local new_tile_x, new_tile_y
     if g_mouse_enabled then
         new_tile_x = flr((g_mouse_x-64+ROOM_W/2*8)/8-.125)
         new_tile_y = flr((-Y_OFFSET+g_mouse_y-64+ROOM_H/2*8)/8-.125)
     else
-        new_tile_x = g_tile_x + xbtnp()
-        new_tile_y = g_tile_y + ybtnp()
+        new_tile_x = g_tile_grid.xsel + xbtnp()
+        new_tile_y = g_tile_grid.ysel + ybtnp()
     end
 
-    g_tile_x = min(ROOM_W-1, max(0, new_tile_x))
-    g_tile_y = min(ROOM_H-1, max(0, new_tile_y))
+    g_tile_grid.xsel = min(ROOM_W-1, max(0, new_tile_x))
+    g_tile_grid.ysel = min(ROOM_H-1, max(0, new_tile_y))
 
     if key == ' ' then
         g_mode = g_modes.link
@@ -184,27 +217,18 @@ function tile_update(key)
 end
 
 function draw_bottom_screen(callback)
-    rectfill(0,94,127,127,0)
-    rect(0,93,127,95,0)
-    rect(0,94,127,94,7)
-    camera(0, -96)
+    local y = 93
+    rectfill(0,y,127,127,0)
+    rect(0,y-1,127,y+1,0)
+    rect(0,y,127,y,7)
+    rect(0,y+1,127,y+1,7)
+    camera(0, -y-3)
     callback()
     camera()
 end
 
-function draw_grid(gx, gy, gw, gh, gcx, gcy, goffx, goffy, gridrect, boundrect, selectrect)
-    boundrect(goffx-gw/2*8-2, goffy-gh/2*8-2, goffx+gw/2*8+2, goffy+gh/2*8+2)
-    for i=1,gw-1 do gridrect(goffx-gw/2*8+i*8, goffy-gh/2*8,     goffx-gw/2*8+i*8, goffy+gh/2*8,     1) end
-    for i=1,gh-1 do gridrect(goffx-gw/2*8    , goffy-gh/2*8+i*8, goffx+gw/2*8,     goffy-gh/2*8+i*8, 1) end
-    selectrect(goffx-gw/2*8+gx*8, goffy-gh/2*8+gy*8, goffx-gw/2*8+gx*8+8, goffy-gh/2*8+gy*8+8)
-end
-
 function tile_draw()
-    draw_grid(g_tile_x, g_tile_y, ROOM_W, ROOM_H, 0, 0, 64, 64+Y_OFFSET, function(x1,y1,x2,y2)
-        moving_grid_fill(function() rect(x1,y1,x2,y2,1) end)
-    end,
-    function(x1, y1, x2, y2) rect(x1,y1,x2,y2,8) end,
-    function(x1, y1, x2, y2) rect(x1,y1,x2,y2,8) end)
+    draw_grid(g_tile_grid)
 
     draw_bottom_screen(function()
         sspr(0, 0, 8*16, 8*4, 0, 0)
