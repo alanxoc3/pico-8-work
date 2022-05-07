@@ -52,17 +52,19 @@ function _draw()
     cls()
     get_mode().draw()
 
-    rectfill(0, 0, 127, 8, 1)
-    zprint("mode: "..g_mode.name, 5, 2, -1, 7)
-    zprint("["..g_link_x..","..g_link_y.."]", 127-5, 2, 1, 7)
-    rectfill(0,92,127,127,0)
-    rect(0,92,127,127,1)
+    rectfill(0, 0, 127, 6, 1)
+    zprint("mode: "..g_mode.name, 1, 1, -1, 7)
+    zprint("["..g_link_x..","..g_link_y.."]", 129, 1, 1, 7)
+    rectfill(0,94,127,127,0)
+    rect(0,94,127,127,1)
 end
 
 g_rooms = {} -- array
 g_link_map = {} -- double array
-g_link_x, g_link_y = 0, 0
-g_link_zoom_default = 2
+g_link_min_x, g_link_min_y, g_link_max_x, g_link_max_y = 0, 0, 15, 15
+g_link_x, g_link_y = 4, 3
+g_link_cx, g_link_cy = 4, 3
+g_link_zoom_default = 1
 g_link_zoom = g_link_zoom_default
 function get_room(x, y) return g_link_map[y] and g_link_map[y][x] and g_rooms[g_link_map[y][x]] end
 function del_room(x, y) local room = get_room(x, y) if room then del(g_rooms, room) g_link_map[y][x] = nil end end
@@ -77,18 +79,24 @@ function link_update(key)
         g_mode = g_modes.tile
     elseif key == '⁸' then -- backspace
         del_room(g_link_x, g_link_y)
-    elseif key == '+' then -- backspace
-        g_link_zoom = min(g_link_zoom+1, 4)
-    elseif key == '-' then -- backspace
-        g_link_zoom = max(g_link_zoom-1, 1)
-    elseif key == '=' then -- backspace
-        g_link_zoom = g_link_zoom_default
+    -- elseif key == '+' then -- backspace
+    --     g_link_zoom = min(g_link_zoom+1, 4)
+    -- elseif key == '-' then -- backspace
+    --     g_link_zoom = max(g_link_zoom-1, 1)
+    -- elseif key == '=' then -- backspace
+    --     g_link_zoom = g_link_zoom_default
 
     else
         if xbtnp() ~= 0 then
-            g_link_x += xbtnp()
+            g_link_x = min(g_link_max_x, max(g_link_min_x, g_link_x+xbtnp()))
+            local dist, sign = abs(g_link_cx - g_link_x), sgn(g_link_cx - g_link_x)
+            if dist > 4 then g_link_cx = g_link_x + sign*4 end
+            g_link_cx = max(min(g_link_cx, g_link_max_x-4), g_link_min_x+4)
         elseif ybtnp() ~= 0 then
-            g_link_y += ybtnp()
+            g_link_y = min(g_link_max_y, max(g_link_min_y, g_link_y+ybtnp()))
+            local dist, sign = abs(g_link_cy - g_link_y), sgn(g_link_cy - g_link_y)
+            if dist > 3 then g_link_cy = g_link_y + sign*3 end
+            g_link_cy = max(min(g_link_cy, g_link_max_y-3), g_link_min_y+3)
         end
     end
 end
@@ -101,13 +109,13 @@ function link_draw()
     local y_spacing = g_link_zoom*12
     local cx, cy = 64, 64+Y_OFFSET
 
-    for y=g_link_y-3,g_link_y+3 do
-        for x=g_link_x-4,g_link_x+4 do
+    for y=g_link_cy-3,g_link_cy+3 do
+        for x=g_link_cx-4,g_link_cx+4 do
             local room = get_room(x, y)
             if room then
-                zrectfill_outline(cx+(x-g_link_x)*x_spacing, cy+(y-g_link_y)*y_spacing, rw, rh, room.c)
+                zrectfill_outline(cx+(x-g_link_cx)*x_spacing, cy+(y-g_link_cy)*y_spacing, rw, rh, room.c)
             else
-                pset(cx+(x-g_link_x)*x_spacing, cy+(y-g_link_y)*y_spacing, 1)
+                pset(cx+(x-g_link_cx)*x_spacing, cy+(y-g_link_cy)*y_spacing, 1)
             end
         end
     end
@@ -116,7 +124,8 @@ function link_draw()
           t() % 1 < .5  and 0b0110001110011100 or
           t() % 1 < .75 and 0b0011100111000110 or 0b1001110001100011)
     
-    rect(cx-x_spacing/2, cy-y_spacing/2, cx+x_spacing/2, cy+y_spacing/2, 7)
+    local xoff, yoff = g_link_x-g_link_cx, g_link_y-g_link_cy
+    rect(cx-x_spacing/2+xoff*x_spacing, cy-y_spacing/2+yoff*y_spacing, cx+x_spacing/2+xoff*x_spacing, cy+y_spacing/2+yoff*y_spacing, 7)
     fillp()
 end
 
