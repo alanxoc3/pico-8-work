@@ -29,7 +29,7 @@ function _init()
             name = "tile", update = tile_update, draw = tile_draw,
             help = {
                 "arrow: switch tile",
-                "space: link mode",
+                "backspace: link mode",
                 "m: toggle mouse",
                 "tab: switch active",
                 "r: reload cart data"
@@ -55,6 +55,7 @@ function _update60()
 
     if char == "h"     then char = nil g_help_on = not g_help_on
     elseif char == "m" then char = nil g_mouse_enabled = not g_mouse_enabled
+    elseif char == "r" then char = nil load_assets()
     end
 
     get_mode().update(char)
@@ -67,8 +68,6 @@ function _draw()
     rectfill(0, 0, 127, 6, 1)
     zprint("mode: "..g_mode.name, 1, 1, -1, 7)
     zprint("["..g_link_x..","..g_link_y.."]", 129, 1, 1, 7)
-    rectfill(0,94,127,127,0)
-    rect(0,94,127,127,1)
 
     if g_mouse_enabled then
         line(g_mouse_x-2, g_mouse_y-2, g_mouse_x+2, g_mouse_y+2, 7)
@@ -151,6 +150,8 @@ function link_draw()
         local xoff, yoff = g_link_x-g_link_cx, g_link_y-g_link_cy
         rect(cx-x_spacing/2+xoff*x_spacing, cy-y_spacing/2+yoff*y_spacing, cx+x_spacing/2+xoff*x_spacing, cy+y_spacing/2+yoff*y_spacing, 7)
     end)
+
+    draw_bottom_screen(function() end)
 end
 
 function moving_grid_fill(callback)
@@ -182,14 +183,32 @@ function tile_update(key)
     end
 end
 
-function tile_draw()
-    moving_grid_fill(function()
-        for i=1,ROOM_W-1 do rect(64-ROOM_W/2*8+i*8, Y_OFFSET+64-ROOM_H/2*8,     64-ROOM_W/2*8+i*8, Y_OFFSET+64+ROOM_H/2*8,     1) end
-        for i=1,ROOM_H-1 do rect(64-ROOM_W/2*8    , Y_OFFSET+64-ROOM_H/2*8+i*8, 64+ROOM_W/2*8,     Y_OFFSET+64-ROOM_H/2*8+i*8, 1) end
-    end)
-    zrect(64, 64+Y_OFFSET, ROOM_W/2*8+2, ROOM_H/2*8+2, 8)
+function draw_bottom_screen(callback)
+    rectfill(0,94,127,127,0)
+    rect(0,93,127,95,0)
+    rect(0,94,127,94,7)
+    camera(0, -96)
+    callback()
+    camera()
+end
 
-    zrect(64-ROOM_W/2*8+g_tile_x*8+4, Y_OFFSET+64-ROOM_H/2*8+g_tile_y*8+4, 4, 4, 8)
+function draw_grid(gx, gy, gw, gh, gcx, gcy, goffx, goffy, gridrect, boundrect, selectrect)
+    boundrect(goffx-gw/2*8-2, goffy-gh/2*8-2, goffx+gw/2*8+2, goffy+gh/2*8+2)
+    for i=1,gw-1 do gridrect(goffx-gw/2*8+i*8, goffy-gh/2*8,     goffx-gw/2*8+i*8, goffy+gh/2*8,     1) end
+    for i=1,gh-1 do gridrect(goffx-gw/2*8    , goffy-gh/2*8+i*8, goffx+gw/2*8,     goffy-gh/2*8+i*8, 1) end
+    selectrect(goffx-gw/2*8+gx*8, goffy-gh/2*8+gy*8, goffx-gw/2*8+gx*8+8, goffy-gh/2*8+gy*8+8)
+end
+
+function tile_draw()
+    draw_grid(g_tile_x, g_tile_y, ROOM_W, ROOM_H, 0, 0, 64, 64+Y_OFFSET, function(x1,y1,x2,y2)
+        moving_grid_fill(function() rect(x1,y1,x2,y2,1) end)
+    end,
+    function(x1, y1, x2, y2) rect(x1,y1,x2,y2,8) end,
+    function(x1, y1, x2, y2) rect(x1,y1,x2,y2,8) end)
+
+    draw_bottom_screen(function()
+        sspr(0, 0, 8*16, 8*4, 0, 0)
+    end)
 end
 
 function help_update() end
