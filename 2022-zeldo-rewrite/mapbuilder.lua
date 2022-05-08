@@ -1,6 +1,12 @@
 ROOM_H=10 ROOM_W=12
 Y_OFFSET=-14
+
+g_mouse_enabled = false
+g_mouse_frame_limit = 0
+g_mouse_frame_limit_max = 6
+g_mouse_x, g_mouse_y = 0, 0
 function update_mouse() 
+    g_mouse_frame_limit = (g_mouse_frame_limit+1) % g_mouse_frame_limit_max
     g_mouse_x, g_mouse_y = stat(32), stat(33)
 end
 
@@ -9,61 +15,46 @@ function _init()
     poke(0x5f2d, 1) -- enable keyboard
     load_assets()
     update_mouse()
-    g_mouse_enabled = false
-    g_sub_modes = { "config", "tile" }
-    g_sub_mode_index = 1
 
     g_modes = {
-        link = {
-            name = "link", update = link_update, draw = link_draw,
-            help = {
-                "arrow: switch room",
-                "space: tile mode",
-                "m: toggle mouse",
-                "d: delete room",
-                "tab: switch active",
-                "r: reload cart data"
-            }
-        },
-        tile = {
-            name = "tile", update = tile_update, draw = tile_draw,
-            help = {
-                "arrow: switch tile",
-                "backspace: link mode",
-                "m: toggle mouse",
-                "tab: switch active",
-                "r: reload cart data"
-            }
-        },
-        help = {
-            name = "help", update = help_update, draw = help_draw
-        }
+        ['l'] = { name = "link", update = link_update, draw = link_draw },
+        ['t'] = { name = "tile", update = tile_update, draw = tile_draw },
+        ['h'] = { name = "help", update = help_update, draw = help_draw },
     }
-
-    g_mode = g_modes.link
-end
-
-function get_mode()
-    return g_help_on and g_modes.help or g_mode
+    g_mode = g_modes.l
+    g_prev_mode = g_mode
 end
 
 function _update60()
+    poke(0x5f30,1) -- disable the pause menu
     update_mouse()
 
     local is_keydown, char = stat(30)
     if is_keydown then char = stat(31) end
 
-    if char == "h"     then char = nil g_help_on = not g_help_on
+    if g_modes[char] then
+        if g_mode ~= g_modes[char] then
+            g_prev_mode, g_mode = g_mode, g_modes[char]
+        end
+        char = nil
+    elseif char == "\13" then -- return/enter/newline
+        char = nil
+        g_mode, g_prev_mode = g_prev_mode, g_mode
     elseif char == "m" then char = nil g_mouse_enabled = not g_mouse_enabled
     elseif char == "r" then char = nil load_assets()
+    elseif char == "s" then char = nil -- save logic
+    elseif char == "u" then char = nil -- undo logic
+    elseif char == "r" then char = nil -- redo logic
+    elseif char == "	" then char = "tab"
+    elseif char == '⁸' then char = "back"
     end
 
-    get_mode().update(char)
+    g_mode.update(char)
 end
 
 function _draw()
     cls()
-    get_mode().draw()
+    g_mode.draw()
 
     rectfill(0, 0, 127, 6, 1)
     zprint("mode: "..g_mode.name, 1, 1, -1, 7)
@@ -75,52 +66,66 @@ function _draw()
     end
 end
 
-g_rooms = {} -- array
-g_link_map = {} -- double array
-g_mouse_frame_limit = 0
-g_mouse_frame_limit_max = 6
-function get_room(x, y) return g_link_map[y] and g_link_map[y][x] and g_rooms[g_link_map[y][x]] end
-function del_room(x, y) local room = get_room(x, y) if room then del(g_rooms, room) g_link_map[y][x] = nil end end
-function new_room(room) add(g_rooms, room) g_link_map[g_link_grid.ysel] = g_link_map[g_link_grid.ysel] or {} g_link_map[g_link_grid.ysel][g_link_grid.xsel] = #g_rooms end
-
-function link_update(key)
-    g_mouse_frame_limit = (g_mouse_frame_limit+1) % g_mouse_frame_limit_max
-    local new_link_x, new_link_y = g_link_grid.xsel, g_link_grid.ysel
-    if key == ' ' then
-        if not get_room(g_link_grid.xsel, g_link_grid.ysel) then
-            new_room{ c=rnd(16) }
-        end
-
-        g_mode = g_modes.tile
-    elseif key == '⁸' then -- backspace
-        del_room(g_link_grid.xsel, g_link_grid.ysel)
-    else
-        if g_mouse_enabled then
-            if g_mouse_frame_limit == 0 then
-                new_link_x = g_link_grid.xcen+flr((g_mouse_x-63)/14+.5)
-                new_link_y = g_link_grid.ycen+flr((-Y_OFFSET+g_mouse_y-63)/14+.5)
-            end
-        else
-            new_link_x += xbtnp()
-            new_link_y += ybtnp()
-        end
+g_rooms = {} -- double array
+function upsert_cur_room()
+    local room = get_room(g_link_grid.xsel, g_link_grid.ysel)
+    if not room then
+        room = {c=3}
+        new_room(g_link_grid.xsel, g_link_grid.ysel, room)
     end
-
-    -- update link x
-    g_link_grid.xsel  = min(g_link_grid.xmax, max(g_link_grid.xmin, new_link_x))
-    local dist, sign = abs(g_link_grid.xcen - g_link_grid.xsel), sgn(g_link_grid.xcen - g_link_grid.xsel)
-    if dist > 3 then g_link_grid.xcen = g_link_grid.xsel + sign*3 end
-    g_link_grid.xcen = max(min(g_link_grid.xcen, g_link_grid.xmax-3), g_link_grid.xmin+3)
-
-    -- update link y
-    g_link_grid.ysel = min(g_link_grid.ymax, max(g_link_grid.ymin, new_link_y))
-    local dist, sign = abs(g_link_grid.ycen - g_link_grid.ysel), sgn(g_link_grid.ycen - g_link_grid.ysel)
-    if dist > 2 then g_link_grid.ycen = g_link_grid.ysel + sign*2 end
-    g_link_grid.ycen = max(min(g_link_grid.ycen, g_link_grid.ymax-2), g_link_grid.ymin+2)
+    return room
 end
 
--- function mouse_to_grid() end
--- function update_grid() end
+function get_room(x, y) return g_rooms[y] and g_rooms[y][x] end
+function del_room(x, y) if g_rooms[y] then g_rooms[y][x] = nil end end
+function new_room(x, y, room)
+    if not get_room(x, y) then
+        g_rooms[y] = g_rooms[y] or {}
+        g_rooms[y][x] = room
+    end
+end
+
+g_link_pane = true
+function link_update(key)
+    update_grid(g_link_pane and g_link_grid or g_hut_grid)
+
+    if key == "back"    then del_room(g_link_grid.xsel, g_link_grid.ysel)
+    elseif key == "tab" then g_link_pane = not g_link_pane
+    end
+end
+
+g_tile_pane = true
+function tile_update(key)
+    upsert_cur_room()
+    update_grid(g_tile_pane and g_tile_grid or g_spr_grid)
+
+    if key == "tab" then -- tab
+        g_tile_pane = not g_tile_pane
+    end
+end
+
+function update_grid(g)
+    local xsel, ysel = g.xsel, g.ysel
+    if g_mouse_enabled then
+        if g_mouse_frame_limit == 0 then
+            xsel = flr(g.xcen+(g_mouse_x-g.xoff)/(g.xcel+g.xpad))
+            ysel = flr(g.ycen+(g_mouse_y-g.yoff)/(g.ycel+g.ypad))
+        end
+    else
+        xsel = flr(xsel+xbtnp())
+        ysel = flr(ysel+ybtnp())
+    end
+
+    g.xsel  = min(g.xmax, max(g.xmin, xsel))
+    local dist, sign = abs(g.xcen - g.xsel), sgn(g.xcen - g.xsel)
+    if dist > g.xscr then g.xcen = g.xsel + sign*g.xscr end
+    g.xcen = max(min(g.xcen, g.xmax-g.xscr), g.xmin+g.xscr)
+
+    g.ysel = min(g.ymax, max(g.ymin, ysel))
+    local dist, sign = abs(g.ycen - g.ysel), sgn(g.ycen - g.ysel)
+    if dist > g.yscr then g.ycen = g.ysel + sign*g.yscr end
+    g.ycen = max(min(g.ycen, g.ymax-g.yscr), g.ymin+g.yscr)
+end
 
 function draw_grid(g)
     local cww = g.xcel + g.xpad
@@ -137,15 +142,15 @@ function draw_grid(g)
     local offbex = offcex+(g.xmax)*cww
     local offbey = offcey+(g.ymax)*chh
 
+    g.rect_boundary(offcbx, offcby, offbex, offbey)
     for i=g.xmin,g.xmax do g.rect_grid(offcbx+i*cww, offcby,       offcbx+i*cww,  offbey      ) end
     for i=g.xmin,g.xmax do g.rect_grid(offcex+i*cww, offcby,       offcex+i*cww,  offbey      ) end
     for i=g.ymin,g.ymax do g.rect_grid(offcbx,       offcby+i*chh, offbex,        offcby+i*chh) end
     for i=g.ymin,g.ymax do g.rect_grid(offcbx,       offcey+i*chh, offbex,        offcey+i*chh) end
-    g.rect_boundary(offcbx, offcby, offbex, offbey)
 
-    for i=0,g.xmax do
-        for j=0,g.ymax do
-            --g.rect_cell(offx-gw/2*cww+i*cww, offy-g.ymax*chh+j*chh, offx-gw/2*cww+i*cww+g.xcel, offy-g.ymax*chh+j*chh+g.ycel)
+    for j=0,g.ymax do
+        for i=0,g.xmax do
+            g.rect_cell(i, j, offcbx+i*cww, offcby+j*chh, offcex+i*cww, offcey+j*chh)
         end
     end
 
@@ -160,18 +165,19 @@ g_link_grid = {
     xcel=12, ycel=10,
     xpad=2,  ypad=2,
     xoff=57, yoff=45,
+    xscr=3,  yscr=2,
 
-    rect_grid     = function(x1,y1,x2,y2) moving_grid_fill(function() rect(x1,y1,x2,y2,1) end) end,
-    rect_boundary = function(x1, y1, x2, y2) rect(x1-2,y1-2,x2+2,y2+2,1) end,
-    rect_select   = function(x1, y1, x2, y2) rect(x1-1,y1-1,x2+1,y2+1,7) end,
-    rect_cell     = function(x1, y1, x2, y2) rect(x1,y1,x2,y2,4) end
+    rect_grid     = function(x1,y1,x2,y2) end,
+    rect_boundary = function(x1,y1,x2,y2) rect(x1-2,y1-2,x2+2,y2+2,1) end,
+    rect_select   = function(x1,y1,x2,y2) rect(x1-2,y1-2,x2+2,y2+2,0) rect(x1-1,y1-1,x2+1,y2+1,7) end,
+    rect_cell     = function(x,y,x1,y1,x2,y2)
+                        local room = get_room(x,y)
+                        if room then
+                            moving_grid_fill(function() rect(x1-1,y1-1,x2+1,y2+1,1) end)
+                            rectfill(x1+1,y1+1,x2-1,y2-1,room.c)
+                        end
+                    end
 }
-
-function link_draw()
-    draw_grid(g_link_grid)
-
-    draw_bottom_screen(function() end)
-end
 
 function moving_grid_fill(callback)
     fillp(t() % 1 < .25 and 0b1100011000111001 or
@@ -189,69 +195,74 @@ g_tile_grid = {
     xcel=8,  ycel=8,
     xpad=0,  ypad=0,
     xoff=64, yoff=50,
+    xscr=6, yscr=5,
 
-    rect_grid     = function(x1,y1,x2,y2) moving_grid_fill(function() rect(x1,y1,x2,y2,1) end) end,
-    rect_boundary = function(x1, y1, x2, y2) rect(x1,y1,x2,y2,8) end,
-    rect_select   = function(x1, y1, x2, y2) rect(x1,y1,x2,y2,8) end,
-    rect_cell     = function(x, y) spr(15,x,y) end
+    rect_grid     = function(x1,y1,x2,y2) rect(x1,y1,x2,y2,0) end,
+    rect_boundary = function(x1, y1, x2, y2) rectfill(x1,y1,x2,y2,upsert_cur_room().c) end,
+    rect_select   = function(x1, y1, x2, y2) rect(x1-2,y1-2,x2+2,y2+2,0) rect(x1-1,y1-1,x2+1,y2+1,7) end,
+    rect_cell     = function(x, y) end
 }
 
-function tile_update(key)
-    local new_tile_x, new_tile_y
-    if g_mouse_enabled then
-        new_tile_x = flr((g_mouse_x-64+ROOM_W/2*8)/8-.125)
-        new_tile_y = flr((-Y_OFFSET+g_mouse_y-64+ROOM_H/2*8)/8-.125)
-    else
-        new_tile_x = g_tile_grid.xsel + xbtnp()
-        new_tile_y = g_tile_grid.ysel + ybtnp()
-    end
+g_spr_grid = {
+    xsel=0,  ysel=0,
+    xcen=8,  ycen=1.5,
+    xmin=0,  ymin=0,
+    xmax=15, ymax=7,
+    xcel=8,  ycel=8,
+    xpad=0,  ypad=0,
+    xoff=64, yoff=107,
+    xscr=8,  yscr=1.5,
 
-    g_tile_grid.xsel = min(ROOM_W-1, max(0, new_tile_x))
-    g_tile_grid.ysel = min(ROOM_H-1, max(0, new_tile_y))
+    rect_grid     = function() end,
+    rect_boundary = function() end,
+    rect_select   = function(x1, y1, x2, y2) rect(x1-2,y1-2,x2+2,y2+2,0) rect(x1-1,y1-1,x2+1,y2+1,7) end,
+    rect_cell     = function(x, y, x1, y1) spr(128+y*16+x,x1,y1) end
+}
 
-    if key == ' ' then
-        g_mode = g_modes.link
-    elseif key == 'm' then
-        g_mode = g_modes.link
-    end
-end
-
-function draw_bottom_screen(callback)
-    local y = 93
-    rectfill(0,y,127,127,0)
-    rect(0,y-1,127,y+1,0)
-    rect(0,y,127,y,7)
-    rect(0,y+1,127,y+1,7)
-    camera(0, -y-3)
-    callback()
-    camera()
+function link_draw()
+    draw_grid(g_link_grid)
+    draw_bottom_screen(g_link_pane, function() end)
 end
 
 function tile_draw()
     draw_grid(g_tile_grid)
-
-    draw_bottom_screen(function()
-        sspr(0, 0, 8*16, 8*4, 0, 0)
+    draw_bottom_screen(g_tile_pane, function()
+        draw_grid(g_spr_grid)
     end)
+end
+
+function draw_bottom_screen(istop, callback)
+    local y = 93
+    rectfill(0,y,127,127,0)
+    clip(0, y, 128, 128-y)
+    callback()
+    clip()
+    rect(0,y,127,y,istop and 7 or 1)
+    rect(0,y+1,127,y+1,istop and 1 or 7)
 end
 
 function help_update() end
 function help_draw()
-    local top_align, left_align = 16, 5
+    local top_align, left_align = 11, 5
     local texts = {
-        "h: toggle help",
-        "------------------------------"
+        "ZELDO MAPBUILDER",
+        "",
+        "H:   HELP MODE | P: PREV MODE",
+        "L:   LINK MODE | C: CONF MODE",
+        "T:   TILE MODE | O: OBJ  MODE",
+        "RET: SWAP MODE | M: TOGL MOUSE",
+        "",
+        "TAB: ALT PANE  | AROW: MOVE",
+        "SPACE: CREATE  | BACK: DELETE",
+        "LCLK:  CREATE  | RCLK: DELETE",
+        "",
+        "U: UNDO        | R: REDO",
+        "S: SAVE        | A: LOAD SPRS",
     }
-
-    for _, helptext in pairs(g_mode.help) do
-        add(texts, helptext)
-    end
 
     for i, t in pairs(texts) do
         zprint(t, left_align, (i-1)*8+top_align, -1, 7)
     end
-
-    return "help "..g_mode.name
 end
 
 -- UTIL
