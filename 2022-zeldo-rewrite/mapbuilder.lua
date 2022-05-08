@@ -13,8 +13,8 @@ end
 
 function load_assets() reload(0, 0, 0x4300, 'game.p8') end
 
-
 g_cur_song = 0
+g_info = {}
 function _init()
     poke(0x5f2d, 1) -- enable keyboard
     load_assets()
@@ -64,12 +64,15 @@ function _update60()
 end
 
 function _draw()
-    cls()
+    fillp(0b0111101111011110)
+    rectfill(0,0,127,127,1)
+    fillp()
     g_mode.draw()
 
     rectfill(0, 0, 127, 6, 1)
-    zprint("mode: "..g_mode.name, 1, 1, -1, 7)
-    zprint("["..g_link_grid.xsel..","..g_link_grid.ysel.."]", 129, 1, 1, 7)
+    local str = g_mode.name
+    for s in all(g_info) do str = str.." | "..s end
+    zprint(str, 1, 1, -1, 7)
 
     if g_mouse_enabled then
         line(g_mouse_x-2, g_mouse_y-2, g_mouse_x+2, g_mouse_y+2, 7)
@@ -89,11 +92,12 @@ g_tile_grid = {
     xoff=64, yoff=50,
     xscr=6, yscr=5,
 
-    rect_grid        = function(x1,y1,x2,y2) rect(x1,y1,x2,y2,0) end,
-    rect_boundary_bg = function(x1, y1, x2, y2) rectfill(x1,y1,x2,y2,get_cur_room().color) end,
+    rect_grid        = function() end,
+    rect_boundary_bg = function() end,
     rect_boundary_fg = function() end,
     rect_select      = function(x1, y1, x2, y2) rect(x1-2,y1-2,x2+2,y2+2,0) rect(x1-1,y1-1,x2+1,y2+1,7) end,
-    rect_cell        = function(x, y, x1, y1)
+    rect_cell        = function(x, y, x1, y1, x2, y2)
+                           rectfill(x1+1,y1+1,x2-1,y2-1,get_cur_room().color)
                            local t = get_cur_room().tiles[g_tile_layer][y*12+x]
                            if t then spr(128+t, x1, y1) end
                        end
@@ -122,15 +126,24 @@ function tile_update(key)
     update_grid(g_tile_pane and g_tile_grid or g_spr_grid, g_mouse_enabled and g_mouse_frame_limit)
 
     if key == "tab" then g_tile_pane = not g_tile_pane
-    elseif key == "1" and g_tile_pane then g_tile_layer = 1
-    elseif key == "2" and g_tile_pane then g_tile_layer = 2
-    elseif key == "3" and g_tile_pane then g_tile_layer = 3
-    elseif key == "4" and g_tile_pane then g_tile_layer = 4
-    elseif key == "space" and g_tile_pane then
+    elseif key == "1" then g_tile_layer = 1
+    elseif key == "2" then g_tile_layer = 2
+    elseif key == "3" then g_tile_layer = 3
+    elseif key == "4" then g_tile_layer = 4
+    elseif key == "space" then
+        g_tile_pane = true
         set_tile(get_cur_room(), g_tile_layer, g_tile_grid.ysel*12+g_tile_grid.xsel, g_spr_grid.ysel*16+g_spr_grid.xsel)
     elseif key == "back" and g_tile_pane then
         set_tile(get_cur_room(), g_tile_layer, g_tile_grid.ysel*12+g_tile_grid.xsel)
     end
+
+
+    local cur_tile_spr = get_cur_room().tiles[g_tile_layer][g_tile_grid.ysel*12+g_tile_grid.xsel]
+    g_info={
+        g_link_grid.xsel..","..g_link_grid.ysel,
+        g_tile_layer,
+        g_tile_grid.xsel..","..g_tile_grid.ysel..(cur_tile_spr and ":"..cur_tile_spr+128 or "")
+    }
 end
 
 function tile_draw()
@@ -152,7 +165,7 @@ g_link_grid = {
     xscr=3,  yscr=2,
 
     rect_grid        = function(x1,y1,x2,y2) end,
-    rect_boundary_bg = function(x1,y1,x2,y2) rect(x1-2,y1-2,x2+2,y2+2,1) end,
+    rect_boundary_bg = function(x1,y1,x2,y2) rectfill(x1-2,y1-2,x2+2,y2+2,0) rect(x1-2,y1-2,x2+2,y2+2,1) end,
     rect_boundary_fg = function() end,
     rect_select      = function(x1,y1,x2,y2) rect(x1-2,y1-2,x2+2,y2+2,0) rect(x1-1,y1-1,x2+1,y2+1,7) end,
     rect_cell        = function(x,y,x1,y1,x2,y2)
@@ -171,6 +184,8 @@ function link_update(key)
     if key == "back"    then del_room(g_link_grid.xsel, g_link_grid.ysel)
     elseif key == "tab" then g_link_pane = not g_link_pane
     end
+
+    g_info={g_link_grid.xsel..","..g_link_grid.ysel}
 end
 
 function link_draw()
@@ -218,6 +233,8 @@ function prev_update(key)
     end
 
     update_grid(g_link_grid)
+
+    g_info={g_link_grid.xsel..","..g_link_grid.ysel}
 end
 
 function prev_draw()
@@ -274,7 +291,10 @@ function conf_draw()
 end
 
 -- HELP MODE --
-function help_update() end
+function help_update()
+    g_info={}
+end
+
 function help_draw()
     local top_align, left_align = 11, 5
     local texts = {
@@ -287,10 +307,10 @@ function help_draw()
         "",
         "TAB: ALT PANE  | ARROW: MOVE",
         "SPACE: CREATE  | BACK: DELETE",
-        "X: SET CREATE  | NUM: LAYER",
+        "X: SET CREATE  | 1-4: LAYER",
         "",
         "U: UNDO        | R: REDO",
-        "S: SAVE        | A: LOAD SPRS",
+        "S: SAVE        | A: RELOAD",
     }
 
     for i, t in pairs(texts) do
