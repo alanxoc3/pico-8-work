@@ -11,6 +11,9 @@ function update_mouse()
 end
 
 function load_assets() reload(0, 0, 0x4300, 'game.p8') end
+
+
+g_cur_song = 0
 function _init()
     poke(0x5f2d, 1) -- enable keyboard
     load_assets()
@@ -20,6 +23,7 @@ function _init()
         ['l'] = { name = "link", update = link_update, draw = link_draw },
         ['t'] = { name = "tile", update = tile_update, draw = tile_draw },
         ['p'] = { name = "prev", update = prev_update, draw = prev_draw },
+        ['c'] = { name = "conf", update = conf_update, draw = conf_draw },
         ['h'] = { name = "help", update = help_update, draw = help_draw },
     }
     g_mode = g_modes.h
@@ -52,6 +56,10 @@ function _update60()
     end
 
     g_mode.update(char)
+    if get_cur_room() and to_track(get_cur_room().music) ~= g_cur_song then
+        g_cur_song = to_track(get_cur_room().music)
+        music(g_cur_song)
+    end
 end
 
 function _draw()
@@ -80,7 +88,7 @@ g_tile_grid = {
     xscr=6, yscr=5,
 
     rect_grid        = function(x1,y1,x2,y2) rect(x1,y1,x2,y2,0) end,
-    rect_boundary_bg = function(x1, y1, x2, y2) rectfill(x1,y1,x2,y2,get_cur_room().c) end,
+    rect_boundary_bg = function(x1, y1, x2, y2) rectfill(x1,y1,x2,y2,get_cur_room().color) end,
     rect_boundary_fg = function() end,
     rect_select      = function(x1, y1, x2, y2) rect(x1-2,y1-2,x2+2,y2+2,0) rect(x1-1,y1-1,x2+1,y2+1,7) end,
     rect_cell        = function(x, y, x1, y1)
@@ -145,7 +153,7 @@ g_link_grid = {
                            local room = get_room(x,y)
                            if room then
                                moving_grid_fill(function() rect(x1-1,y1-1,x2+1,y2+1,1) end)
-                               rectfill(x1+1,y1+1,x2-1,y2-1,room.c)
+                               rectfill(x1+1,y1+1,x2-1,y2-1,room.color)
                            end
                        end
 }
@@ -176,7 +184,7 @@ g_prev_grid = {
     xscr=6, yscr=5,
 
     rect_grid        = function() end,
-    rect_boundary_bg = function(x1, y1, x2, y2) rectfill(x1,y1,x2,y2,get_cur_room().c) end,
+    rect_boundary_bg = function(x1, y1, x2, y2) rectfill(x1,y1,x2,y2,get_cur_room().color) end,
     rect_boundary_fg = function(x1, y1, x2, y2)
                            rect(x1+0,y1+0,x2-0,y2-0,0)
                            rect(x1+1,y1+1,x2-1,y2-1,0)
@@ -209,15 +217,59 @@ function prev_draw()
     draw_bottom_screen(true, function() end)
 end
 
+-- CONF MODE --
+g_config_items = {
+    {
+        txt="COLOR",
+        set=function(change) get_cur_room().color = max(min(get_cur_room().color+change, 15, 0)) end,
+        get=function() return get_cur_room().color end
+    },
+    {
+        txt="MUSIC",
+        set=function(change) get_cur_room().music = max(min(get_cur_room().music+change, 15, 0)) end,
+        get=function() return to_track(get_cur_room().music) end
+    },
+}
+g_config_item = 1
+function conf_update(key)
+    upsert_cur_room()
+
+    g_config_item = max(min(g_config_item+ybtnp(), #g_config_items), 1)
+    g_config_items[g_config_item].set(xbtnp())
+end
+
+function conf_draw()
+    local top_align, left_align = 11, 5
+    local texts = {
+        "ROOM: ["..g_link_grid.xsel..","..g_link_grid.ysel.."]",
+        "",
+    }
+
+    local room = get_cur_room()
+    for x in all(g_config_items) do
+        add(texts, x.txt..": "..x.get())
+    end
+    zprint(">", left_align, (1+g_config_item)*8+top_align, -1, 7)
+
+    local tile_count = 0
+    for k,v in pairs(room.tiles) do tile_count += 1 end
+    add(texts, "")
+    add(texts, "TILE COUNT: "..tile_count)
+
+    for i, t in pairs(texts) do
+        zprint(t, 5+left_align, (i-1)*8+top_align, -1, 7)
+    end
+end
+
 -- HELP MODE --
 function help_update() end
 function help_draw()
     local top_align, left_align = 11, 5
     local texts = {
-        "ZELDO MAPBUILDER",
+        "MAPBUILDER",
         "",
-        "H:   HELP MODE | P: PREV MODE",
-        "L:   LINK MODE | C: CONF MODE",
+        "H:   HELP MODE | C: CONF MODE",
+        "L:   LINK MODE | P: PREV MODE",
         "T:   TILE MODE | O: OBJ  MODE",
         "RET: SWAP MODE | M: TOGL MOUSE",
         "",
@@ -243,7 +295,7 @@ end
 function upsert_cur_room()
     local room = get_cur_room()
     if not room then
-        room = {tiles={}, objs={}, c=3}
+        room = {tiles={}, objs={}, color=3, music=0}
         new_room(g_link_grid.xsel, g_link_grid.ysel, room)
     end
     return room
@@ -328,6 +380,10 @@ function draw_bottom_screen(istop, callback)
     clip()
     rect(0,y,127,y,istop and 7 or 1)
     rect(0,y+1,127,y+1,istop and 1 or 7)
+end
+
+function to_track(s)
+    return flr(s/2)*8+(s%2)*5
 end
 
 function btn_helper(f, a, b) return f(a) and f(b) and 0 or f(a) and 0xffff or f(b) and 1 or 0 end
