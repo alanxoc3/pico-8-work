@@ -1,18 +1,16 @@
-# global config
-11111111 -- room len
-
-# room config
-1 1111111 11111111 1111 1111 -- is hut | item len | (x|y or hut ind) | fill | music
-
-# repeats for t/o len
-1 1111111 -- type (tile|obj) | ind (0-127)
-
-# for tile placement
-1 1111111 -- bg/fg/mid | pos start (0-119)
-1 1111111 -- bg/fg/mid | pos end   (0-119)
-
-# for object placement
-1 1111111 -- align 0 or .5 | pos (0-119)
+[
+    11111111   -- index (0-254)
+    1 111 1111 -- ishut | fill | music
+    [
+        1 1111111 -- one | ind (0-126)
+        1 1 11 11 11 -- obj/tile | (align | fill/place) | (ignore | sw 1-4) | (ignore | sh 1-4) | (ignore | layer 1-4)
+        [
+            0 1111111 -- zero | pos (0-119)
+        ]
+    ]
+    11111111 -- all ones (end)
+]
+11111111 -- all ones (end)
 
 # CONSTRAINTS:
 # rooms are all: 12 x 10

@@ -1,4 +1,5 @@
 ROOM_H=10 ROOM_W=12
+MAX_ITEM_LEN=126
 Y_OFFSET=-14
 
 g_mouse_enabled = false
@@ -77,6 +78,7 @@ function _draw()
 end
 
 -- TILE MODE --
+g_tile_layer = 1
 g_tile_grid = {
     xsel=6,  ysel=5,
     xcen=6,  ycen=5,
@@ -92,7 +94,7 @@ g_tile_grid = {
     rect_boundary_fg = function() end,
     rect_select      = function(x1, y1, x2, y2) rect(x1-2,y1-2,x2+2,y2+2,0) rect(x1-1,y1-1,x2+1,y2+1,7) end,
     rect_cell        = function(x, y, x1, y1)
-                           local t = get_cur_room().tiles[y*12+x]
+                           local t = get_cur_room().tiles[g_tile_layer][y*12+x]
                            if t then spr(128+t, x1, y1) end
                        end
 }
@@ -120,10 +122,14 @@ function tile_update(key)
     update_grid(g_tile_pane and g_tile_grid or g_spr_grid, g_mouse_enabled and g_mouse_frame_limit)
 
     if key == "tab" then g_tile_pane = not g_tile_pane
+    elseif key == "1" and g_tile_pane then g_tile_layer = 1
+    elseif key == "2" and g_tile_pane then g_tile_layer = 2
+    elseif key == "3" and g_tile_pane then g_tile_layer = 3
+    elseif key == "4" and g_tile_pane then g_tile_layer = 4
     elseif key == "space" and g_tile_pane then
-        get_cur_room().tiles[g_tile_grid.ysel*12+g_tile_grid.xsel] = g_spr_grid.ysel*16+g_spr_grid.xsel
+        set_tile(get_cur_room(), g_tile_layer, g_tile_grid.ysel*12+g_tile_grid.xsel, g_spr_grid.ysel*16+g_spr_grid.xsel)
     elseif key == "back" and g_tile_pane then
-        get_cur_room().tiles[g_tile_grid.ysel*12+g_tile_grid.xsel] = nil
+        set_tile(get_cur_room(), g_tile_layer, g_tile_grid.ysel*12+g_tile_grid.xsel)
     end
 end
 
@@ -197,8 +203,12 @@ g_prev_grid = {
                        end,
     rect_select      = function() end,
     rect_cell        = function(x, y, x1, y1)
-                           local t = get_cur_room().tiles[y*12+x]
-                           if t then spr(128+t, x1, y1) end
+                           local room = get_cur_room()
+                           -- loop through layers, later layers draw last
+                           for l in all(room.tiles) do
+                               local t = l[y*12+x]
+                               if t then spr(128+t, x1, y1) end
+                           end
                        end
 }
 
@@ -251,10 +261,12 @@ function conf_draw()
     end
     zprint(">", left_align, (1+g_config_item)*8+top_align, -1, 7)
 
-    local tile_count = 0
-    for k,v in pairs(room.tiles) do tile_count += 1 end
     add(texts, "")
-    add(texts, "TILE COUNT: "..tile_count)
+    add(texts, "L.1 LEN: "..room.tiles_lens[1])
+    add(texts, "L.2 LEN: "..room.tiles_lens[2])
+    add(texts, "L.3 LEN: "..room.tiles_lens[3])
+    add(texts, "L.4 LEN: "..room.tiles_lens[4])
+    add(texts, "OBJ LEN: "..room.objs_len)
 
     for i, t in pairs(texts) do
         zprint(t, 5+left_align, (i-1)*8+top_align, -1, 7)
@@ -273,9 +285,9 @@ function help_draw()
         "T:   TILE MODE | O: OBJ  MODE",
         "RET: SWAP MODE | M: TOGL MOUSE",
         "",
-        "TAB: ALT PANE  | AROW: MOVE",
+        "TAB: ALT PANE  | ARROW: MOVE",
         "SPACE: CREATE  | BACK: DELETE",
-        "LCLK:  CREATE  | RCLK: DELETE",
+        "X: SET CREATE  | NUM: LAYER",
         "",
         "U: UNDO        | R: REDO",
         "S: SAVE        | A: LOAD SPRS",
@@ -286,8 +298,44 @@ function help_draw()
     end
 end
 
+-- 0000 0 | 0100 4 | 1000 8 | 1100 c
+-- 0001 1 | 0101 5 | 1001 9 | 1101 d
+-- 0010 2 | 0110 6 | 1010 a | 1110 e
+-- 0011 3 | 0111 7 | 1011 b | 1111 f
+
 -- UTILITIES --
+-- ....in progres....
+function encode_rooms()
+    local rooms = {}
+
+    for k, v in pairs(g_rooms) do
+        local room = {}
+        add(room, 0x8000)
+        add(rooms, room)
+    end
+
+    return rooms
+end
+
 g_rooms = {} -- double array
+function set_tile(room, layer, ind, val)
+    local l = room.tiles[layer]
+
+    if     l[ind] and not val then room.tiles_lens[layer] -= 1 end
+    if not l[ind] and     val then room.tiles_lens[layer] += 1 end
+
+    l[ind] = val
+end
+
+function set_obj(room, ind, val)
+    local l = room.objs
+
+    if     l[ind] and not val then room.objs_len -= 1 end
+    if not l[ind] and     val then room.objs_len += 1 end
+
+    l[ind] = val
+end
+
 function get_cur_room()
     return get_room(g_link_grid.xsel, g_link_grid.ysel)
 end
@@ -295,7 +343,14 @@ end
 function upsert_cur_room()
     local room = get_cur_room()
     if not room then
-        room = {tiles={}, objs={}, color=3, music=0}
+        room = {
+            tiles={{}, {}, {}, {}},
+            objs={},
+            tiles_lens={0, 0, 0, 0},
+            objs_len=0,
+            color=3,
+            music=0
+        }
         new_room(g_link_grid.xsel, g_link_grid.ysel, room)
     end
     return room
