@@ -3,7 +3,7 @@ Y_OFFSET=-14
 
 g_mouse_enabled = false
 g_mouse_frame_limit = 0
-g_mouse_frame_limit_max = 6
+g_mouse_frame_limit_max = 3
 g_mouse_x, g_mouse_y = 0, 0
 function update_mouse() 
     g_mouse_frame_limit = (g_mouse_frame_limit+1) % g_mouse_frame_limit_max
@@ -46,6 +46,7 @@ function _update60()
     elseif char == "u" then char = nil -- undo logic
     elseif char == "r" then char = nil -- redo logic
     elseif char == "	" then char = "tab"
+    elseif char == " " then char = "space"
     elseif char == '⁸' then char = "back"
     end
 
@@ -70,7 +71,7 @@ g_rooms = {} -- double array
 function upsert_cur_room()
     local room = get_room(g_link_grid.xsel, g_link_grid.ysel)
     if not room then
-        room = {c=3}
+        room = {tiles={}, objs={}, c=3}
         new_room(g_link_grid.xsel, g_link_grid.ysel, room)
     end
     return room
@@ -99,8 +100,11 @@ function tile_update(key)
     upsert_cur_room()
     update_grid(g_tile_pane and g_tile_grid or g_spr_grid)
 
-    if key == "tab" then -- tab
-        g_tile_pane = not g_tile_pane
+    if key == "tab" then g_tile_pane = not g_tile_pane
+    elseif key == "space" and g_tile_pane then
+        upsert_cur_room().tiles[g_tile_grid.ysel*12+g_tile_grid.xsel] = g_spr_grid.ysel*16+g_spr_grid.xsel
+    elseif key == "back" and g_tile_pane then
+        upsert_cur_room().tiles[g_tile_grid.ysel*12+g_tile_grid.xsel] = nil
     end
 end
 
@@ -200,7 +204,10 @@ g_tile_grid = {
     rect_grid     = function(x1,y1,x2,y2) rect(x1,y1,x2,y2,0) end,
     rect_boundary = function(x1, y1, x2, y2) rectfill(x1,y1,x2,y2,upsert_cur_room().c) end,
     rect_select   = function(x1, y1, x2, y2) rect(x1-2,y1-2,x2+2,y2+2,0) rect(x1-1,y1-1,x2+1,y2+1,7) end,
-    rect_cell     = function(x, y) end
+    rect_cell     = function(x, y, x1, y1)
+                        local t = upsert_cur_room().tiles[y*12+x]
+                        if t then spr(128+t, x1, y1) end
+                    end
 }
 
 g_spr_grid = {
