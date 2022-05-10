@@ -16,6 +16,7 @@ function update_mouse()
 end
 
 function load_assets() reload(0, 0, 0x4300, 'game.p8') end
+function save_map() cstore(0x2000, 0x2000, 0x1000, 'game.p8') end
 
 g_cur_song = 0
 g_info = {}
@@ -51,9 +52,13 @@ function _update60()
         char = nil
         g_mode, g_prev_mode = g_prev_mode, g_mode
     elseif char == "m" then char = nil g_mouse_enabled = not g_mouse_enabled
-    elseif char == "r" then char = nil load_assets()
+    elseif char == "a" then char = nil
+        load_assets()
+        g_rooms = decode()
     elseif char == "d" then char = nil g_debug = not g_debug
     elseif char == "s" then char = nil -- save logic
+        encode_room(g_rooms)
+        save_map()
     elseif char == "u" then char = nil -- undo logic
     elseif char == "r" then char = nil -- redo logic
     elseif char == "	" then char = "tab"
@@ -429,45 +434,50 @@ function itemmap_to_fills(width, height, itemmap)
     return fills
 end
 
--- function encode_room(rooms)
---     local mem_loc = 0x2000
--- 
---     for room_index,room in pairs(rooms) do
---         poke(mem_loc, room_ind)
---         mem_loc+=1
---         poke(mem_loc, bor(room.color, shl(room.music, 4)))
---         mem_loc+=1
--- 
---         for layer, tiles in pairs(room.tiles) do
---             local by_tile = {}
---             local by_ind = {}
--- 
---             for tile_index, tile in pairs(tiles) do
---                 if not by_tile[tile] then by_tile[tile] = {} end
---                 by_ind[tile_index] = tile
---                 add(by_tile[tile], {x=tile_index%12, y=flr(tile_index/12)})
---             end
--- 
---             for x in pairs(by_tile) do
---             end
---         end
--- 
--- 
---     end
--- 
---     for
---     local ind = flr(y*16+x)
---     if ind >= 255 or ind < 0 then return {} end
--- 
---     local eroom = {}
---     local fil = band(0xff00, shl(room.color, 8))
---     local mus = band(0x00ff, room.music)
---     
---     add(eroom, ind)
---     add(eroom, band(fil, mus))
--- 
---     return eroom
--- end
+function encode_room(rooms)
+    local mem_loc = 0x2000
+
+    for room_index,room in pairs(rooms) do
+        poke(mem_loc, room_index)
+        mem_loc+=1
+        poke(mem_loc, bor(room.color, shl(room.music, 4)))
+        mem_loc+=1
+
+        for layer, tiles in pairs(room.tiles) do
+            local by_tile = {}
+            local by_ind = {}
+
+            local fills = itemmap_to_fills(12, 10, tiles)
+
+            for f in all(fills) do
+                if not by_ind[f.ind] then by_ind[f.ind] = {} end
+                add(by_ind[f.ind], f)
+            end
+
+            for i=0,127 do
+                if by_ind[i] then
+                    poke(mem_loc, bor(0x80, i))
+                    mem_loc+=1
+
+                    -- only support tile fill rn
+                    local byte = 0xb0 + (layer-1)
+                    poke(mem_loc, byte)
+                    mem_loc+=1
+
+                    for f in all(by_ind[i]) do
+                        poke(mem_loc, f.ybeg*12+f.xbeg)
+                        mem_loc+=1
+                        poke(mem_loc, f.yend*12+f.xend)
+                        mem_loc+=1
+                    end
+                end
+            end
+        end
+        poke(mem_loc, 0xff)
+        mem_loc+=1
+    end
+    poke(mem_loc, 0xff)
+end
 
 -- 0000 0 | 0100 4 | 1000 8 | 1100 c
 -- 0001 1 | 0101 5 | 1001 9 | 1101 d
@@ -503,21 +513,39 @@ function decode()
             cur_loc += 1
 
             local byte      = peek(cur_loc)
-            local isobj     = band(byte, 0x80) > 0
-            local alignfill = band(byte, 0x40) > 0
+            local isobj     = band(byte, 0x80) ~= 0
+            local alignfill = band(byte, 0x40) ~= 0
             local sw        = lshr(band(byte, 0x30), 4)
             local sh        = lshr(band(byte, 0x0c), 2)
-            local layer     = band(byte, 0x03)
+            local layer     = band(byte, 0x03)+1
             cur_loc += 1
 
             while peek(cur_loc) < 128 do
-                if not alignfill then
+                if alignfill then
                     room.tiles[layer][peek(cur_loc)] = lind
+                    cur_loc += 1
+                else
+                    local p1 = peek(cur_loc)
+                    cur_loc += 1
+                    local p2 = peek(cur_loc)
+                    cur_loc += 1
+
+                    local xb,yb,xe,ye = p1%12,flr(p1/12), p2%12,flr(p2/12)
+                    printh("xb: "..xb.." | yb: "..yb)
+                    printh("xe: "..xe.." | ye: "..ye)
+
+                    for yy=yb,ye do
+                        for xx=xb,xe do
+                            room.tiles[layer][yy*12+xx] = lind
+                        end
+                    end
                 end
-                cur_loc += 1
             end
         end
 
+        printh(room.color)
+        printh(room.music)
+        printh(room_ind)
         rooms[room_ind] = room
         cur_loc += 1
     end
