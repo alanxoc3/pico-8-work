@@ -2,6 +2,10 @@ ROOM_H=10 ROOM_W=12
 MAX_ITEM_LEN=126
 Y_OFFSET=-14
 
+function ui_col()
+    return g_debug and 2 or 1
+end
+
 g_mouse_enabled = false
 g_mouse_frame_limit = 0
 g_mouse_frame_limit_max = 3
@@ -48,6 +52,7 @@ function _update60()
         g_mode, g_prev_mode = g_prev_mode, g_mode
     elseif char == "m" then char = nil g_mouse_enabled = not g_mouse_enabled
     elseif char == "r" then char = nil load_assets()
+    elseif char == "d" then char = nil g_debug = not g_debug
     elseif char == "s" then char = nil -- save logic
     elseif char == "u" then char = nil -- undo logic
     elseif char == "r" then char = nil -- redo logic
@@ -65,11 +70,11 @@ end
 
 function _draw()
     fillp(0b0111101111011110)
-    rectfill(0,0,127,127,1)
+    rectfill(0,0,127,127,ui_col())
     fillp()
     g_mode.draw()
 
-    rectfill(0, 0, 127, 6, 1)
+    rectfill(0, 0, 127, 6, ui_col())
     local str = g_mode.name
     for s in all(g_info) do str = str.." | "..s end
     zprint(str, 1, 1, -1, 7)
@@ -121,6 +126,7 @@ g_spr_grid = {
 }
 
 g_tile_pane = true
+g_tile_draw_fills = false
 function tile_update(key)
     upsert_cur_room()
     update_grid(g_tile_pane and g_tile_grid or g_spr_grid, g_mouse_enabled and g_mouse_frame_limit)
@@ -130,13 +136,6 @@ function tile_update(key)
     elseif key == "2" then g_tile_layer = 2
     elseif key == "3" then g_tile_layer = 3
     elseif key == "4" then g_tile_layer = 4
-    elseif key == "f" then -- secret fill debug key
-        local fills = itemmap_to_fills(12, 10, get_cur_room().tiles[g_tile_layer])
-        printh(".... FILL BEG ....")
-        for f in all(fills) do
-            printh(""..f.ind..": ["..f.xbeg..","..f.ybeg.."] - ["..f.xend..","..f.yend.."]")
-        end
-        printh("^^^^ FILL END ^^^^")
     elseif key == "space" then
         g_tile_pane = true
         set_tile(get_cur_room(), g_tile_layer, g_tile_grid.ysel*12+g_tile_grid.xsel, g_spr_grid.ysel*16+g_spr_grid.xsel)
@@ -158,6 +157,18 @@ function tile_draw()
     draw_bottom_screen(g_tile_pane, function()
         draw_grid(g_spr_grid)
     end)
+
+    if g_debug then
+        local fills = itemmap_to_fills(12, 10, get_cur_room().tiles[g_tile_layer])
+        for f in all(fills) do
+            rect(
+                g_tile_grid.xoff-6*8+f.xbeg*8,
+                g_tile_grid.yoff-5*8+f.ybeg*8,
+                g_tile_grid.xoff-6*8+f.xend*8+8,
+                g_tile_grid.yoff-5*8+f.yend*8+8,
+            8)
+        end
+    end
 end
 
 -- LINK MODE --
@@ -172,13 +183,13 @@ g_link_grid = {
     xscr=3,  yscr=2,
 
     rect_grid        = function(x1,y1,x2,y2) end,
-    rect_boundary_bg = function(x1,y1,x2,y2) rectfill(x1-2,y1-2,x2+2,y2+2,0) rect(x1-2,y1-2,x2+2,y2+2,1) end,
+    rect_boundary_bg = function(x1,y1,x2,y2) rectfill(x1-2,y1-2,x2+2,y2+2,0) rect(x1-2,y1-2,x2+2,y2+2,ui_col()) end,
     rect_boundary_fg = function() end,
     rect_select      = function(x1,y1,x2,y2) rect(x1-2,y1-2,x2+2,y2+2,0) rect(x1-1,y1-1,x2+1,y2+1,7) end,
     rect_cell        = function(x,y,x1,y1,x2,y2)
                            local room = get_room(x,y)
                            if room then
-                               moving_grid_fill(function() rect(x1-1,y1-1,x2+1,y2+1,1) end)
+                               moving_grid_fill(function() rect(x1-1,y1-1,x2+1,y2+1,ui_col()) end)
                                rectfill(x1+1,y1+1,x2-1,y2-1,room.color)
                            end
                        end
@@ -216,12 +227,12 @@ g_prev_grid = {
     rect_boundary_fg = function(x1, y1, x2, y2)
                            rect(x1+0,y1+0,x2-0,y2-0,0)
                            rect(x1+1,y1+1,x2-1,y2-1,0)
-                           rect(x1+2,y1+2,x2-2,y2-2,1)
-                           rect(x1+3,y1+3,x2-3,y2-3,1)
+                           rect(x1+2,y1+2,x2-2,y2-2,ui_col())
+                           rect(x1+3,y1+3,x2-3,y2-3,ui_col())
                            pset(x1+2,y1+2,0) pset(x1+2,y2-2,0)
                            pset(x2-2,y1+2,0) pset(x2-2,y2-2,0)
-                           pset(x1+4,y1+4,1) pset(x1+4,y2-4,1)
-                           pset(x2-4,y1+4,1) pset(x2-4,y2-4,1)
+                           pset(x1+4,y1+4,ui_col()) pset(x1+4,y2-4,ui_col())
+                           pset(x2-4,y1+4,ui_col()) pset(x2-4,y2-4,ui_col())
                        end,
     rect_select      = function() end,
     rect_cell        = function(x, y, x1, y1)
@@ -318,6 +329,7 @@ function help_draw()
         "",
         "U: UNDO        | R: REDO",
         "S: SAVE        | A: RELOAD",
+        "D: DEBUG",
     }
 
     for i, t in pairs(texts) do
@@ -378,8 +390,7 @@ function itemmap_to_fills(width, height, itemmap)
         for x=0,width-1 do
             local index = y*width+x
 
-            -- if this spot has already been accounted for, we don't want to draw to it twice.
-            -- just makes representing fills cleaner (no overlaps).
+            -- if this spot has not been accounted for
             if not visited[index] then
                 visited[index] = true
                 -- if in the middle of calculating a fill and we can add to the fill now
@@ -401,6 +412,11 @@ function itemmap_to_fills(width, height, itemmap)
                 elseif itemmap[index] then
                     start_fill(x, y)
                 end
+
+            -- if this spot has already been accounted for and a fill is in progress
+            elseif cur_tile then
+                down_fill(y)
+                end_fill()
             end
         end
 
@@ -622,8 +638,8 @@ function draw_bottom_screen(istop, callback)
     clip(0, y, 128, 128-y)
     callback()
     clip()
-    rect(0,y,127,y,istop and 7 or 1)
-    rect(0,y+1,127,y+1,istop and 1 or 7)
+    rect(0,y,127,y,istop and 7 or ui_col())
+    rect(0,y+1,127,y+1,istop and ui_col() or 7)
 end
 
 function to_track(s)
