@@ -130,6 +130,13 @@ function tile_update(key)
     elseif key == "2" then g_tile_layer = 2
     elseif key == "3" then g_tile_layer = 3
     elseif key == "4" then g_tile_layer = 4
+    elseif key == "f" then -- secret fill debug key
+        local fills = itemmap_to_fills(12, 10, get_cur_room().tiles[g_tile_layer])
+        printh(".... FILL BEG ....")
+        for f in all(fills) do
+            printh(""..f.ind..": ["..f.xbeg..","..f.ybeg.."] - ["..f.xend..","..f.yend.."]")
+        end
+        printh("^^^^ FILL END ^^^^")
     elseif key == "space" then
         g_tile_pane = true
         set_tile(get_cur_room(), g_tile_layer, g_tile_grid.ysel*12+g_tile_grid.xsel, g_spr_grid.ysel*16+g_spr_grid.xsel)
@@ -158,7 +165,7 @@ g_link_grid = {
     xsel=8,  ysel=8,
     xcen=8,  ycen=8,
     xmin=0,  ymin=0,
-    xmax=15, ymax=15,
+    xmax=15, ymax=13,
     xcel=12, ycel=10,
     xpad=2,  ypad=2,
     xoff=57, yoff=45,
@@ -318,26 +325,191 @@ function help_draw()
     end
 end
 
+-- UTILITIES --
+
+-- input: w, h, {xy: ind}
+-- output: [{ind, xbeg, xend, ybeg, yend}...]
+function itemmap_to_fills(width, height, itemmap)
+    local visited = {}
+    local cur_tile, xbeg, xend, ybeg, yend = nil, nil, nil, nil, nil
+    local fills = {}
+
+    local start_fill = function(x, y)
+        local index = y*width+x
+        visited[index] = true
+        cur_tile = itemmap[index]
+        xbeg, xend = x, x
+        ybeg, yend = y, y
+    end
+
+    local end_fill = function()
+        add(fills, {ind=cur_tile, xbeg=xbeg, xend=xend, ybeg=ybeg, yend=yend})
+        cur_tile, xbeg, xend, ybeg, yend = nil, nil, nil, nil, nil
+    end
+
+    local right_fill = function(x)
+        xend = x
+    end
+
+    local down_fill = function(y)
+        for yy=y+1,height-1 do
+            local add_y = true
+            for xx=xbeg,xend do
+                local ind = yy*width+xx
+                if visited[ind] or itemmap[ind] != cur_tile then
+                    add_y = false
+                    break
+                end
+            end
+
+            if add_y then
+                yend = yy
+                for xx=xbeg,xend do
+                    visited[yy*width+xx] = true
+                end
+            else break end
+        end
+    end
+
+    for y=0,height-1 do
+        -- each row should reset current tile
+        -- because y traversal is embedded further down
+        cur_tile = nil
+        for x=0,width-1 do
+            local index = y*width+x
+
+            -- if this spot has already been accounted for, we don't want to draw to it twice.
+            -- just makes representing fills cleaner (no overlaps).
+            if not visited[index] then
+                visited[index] = true
+                -- if in the middle of calculating a fill and we can add to the fill now
+                if cur_tile and cur_tile == itemmap[index] then
+                    right_fill(x)
+
+                -- if in the middle of calculating a fill, current spot does not match and non nil
+                elseif cur_tile and itemmap[index] then
+                    down_fill(y)
+                    end_fill()
+                    start_fill(x, y)
+                    
+                -- if in the middle of calculating a fill, current spot is nil
+                elseif cur_tile then
+                    down_fill(y)
+                    end_fill()
+
+                -- if we aren't currently calculating a fill and the current spot is not empty
+                elseif itemmap[index] then
+                    start_fill(x, y)
+                end
+            end
+        end
+
+        if cur_tile then
+            down_fill(y)
+            end_fill()
+        end
+    end
+
+    return fills
+end
+
+-- function encode_room(rooms)
+--     local mem_loc = 0x2000
+-- 
+--     for room_index,room in pairs(rooms) do
+--         poke(mem_loc, room_ind)
+--         mem_loc+=1
+--         poke(mem_loc, bor(room.color, shl(room.music, 4)))
+--         mem_loc+=1
+-- 
+--         for layer, tiles in pairs(room.tiles) do
+--             local by_tile = {}
+--             local by_ind = {}
+-- 
+--             for tile_index, tile in pairs(tiles) do
+--                 if not by_tile[tile] then by_tile[tile] = {} end
+--                 by_ind[tile_index] = tile
+--                 add(by_tile[tile], {x=tile_index%12, y=flr(tile_index/12)})
+--             end
+-- 
+--             for x in pairs(by_tile) do
+--             end
+--         end
+-- 
+-- 
+--     end
+-- 
+--     for
+--     local ind = flr(y*16+x)
+--     if ind >= 255 or ind < 0 then return {} end
+-- 
+--     local eroom = {}
+--     local fil = band(0xff00, shl(room.color, 8))
+--     local mus = band(0x00ff, room.music)
+--     
+--     add(eroom, ind)
+--     add(eroom, band(fil, mus))
+-- 
+--     return eroom
+-- end
+
 -- 0000 0 | 0100 4 | 1000 8 | 1100 c
 -- 0001 1 | 0101 5 | 1001 9 | 1101 d
 -- 0010 2 | 0110 6 | 1010 a | 1110 e
 -- 0011 3 | 0111 7 | 1011 b | 1111 f
 
--- UTILITIES --
--- ....in progres....
-function encode_rooms()
+function decode()
+    local mem_loc     = 0x2000
+    -- local mem_loc_max = 0x3000
+    local cur_loc = mem_loc
     local rooms = {}
 
-    for k, v in pairs(g_rooms) do
-        local room = {}
-        add(room, 0x8000)
-        add(rooms, room)
+    while peek(cur_loc) ~= 0xff do
+        local room = {
+            tiles={{}, {}, {}, {}},
+            objs={},
+            tiles_lens={0, 0, 0, 0},
+            objs_len=0,
+            color=0,
+            music=0
+        }
+
+        local room_ind = peek(cur_loc)
+        cur_loc += 1
+
+        local musfill = peek(cur_loc)
+        room.color = band(0x0f, musfill)
+        room.music = lshr(band(0xf0, musfill), 4)
+        cur_loc += 1
+
+        while peek(cur_loc) ~= 0xff do
+            local lind = band(0x7f, peek(cur_loc))
+            cur_loc += 1
+
+            local byte      = peek(cur_loc)
+            local isobj     = band(byte, 0x80) > 0
+            local alignfill = band(byte, 0x40) > 0
+            local sw        = lshr(band(byte, 0x30), 4)
+            local sh        = lshr(band(byte, 0x0c), 2)
+            local layer     = band(byte, 0x03)
+            cur_loc += 1
+
+            while peek(cur_loc) < 128 do
+                if not alignfill then
+                    room.tiles[layer][peek(cur_loc)] = lind
+                end
+                cur_loc += 1
+            end
+        end
+
+        rooms[room_ind] = room
+        cur_loc += 1
     end
 
     return rooms
 end
 
-g_rooms = {} -- double array
+g_rooms = {}
 function set_tile(room, layer, ind, val)
     local l = room.tiles[layer]
 
@@ -376,13 +548,10 @@ function upsert_cur_room()
     return room
 end
 
-function get_room(x, y) return g_rooms[y] and g_rooms[y][x] end
-function del_room(x, y) if g_rooms[y] then g_rooms[y][x] = nil end end
+function get_room(x, y) return g_rooms[y*16+x] end
+function del_room(x, y) g_rooms[y*16+x] = nil end
 function new_room(x, y, room)
-    if not get_room(x, y) then
-        g_rooms[y] = g_rooms[y] or {}
-        g_rooms[y][x] = room
-    end
+    g_rooms[y*16+x] = room
 end
 
 function update_grid(g, mouse_rate)

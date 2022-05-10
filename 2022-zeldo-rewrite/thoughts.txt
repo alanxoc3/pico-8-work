@@ -1,6 +1,6 @@
 [
-    11111111   -- index (0-254)
-    1 111 1111 -- ishut | fill | music
+    11111111 -- index (room: 0-223, hut: 224-254)
+    1111 1111 -- fill | music
     [
         1 1111111 -- one | ind (0-126)
         1 1 11 11 11 -- obj/tile | (align | fill/place) | (ignore | sw 1-4) | (ignore | sh 1-4) | (ignore | layer 1-4)
