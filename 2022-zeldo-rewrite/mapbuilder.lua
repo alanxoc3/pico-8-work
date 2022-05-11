@@ -456,18 +456,18 @@ function encode_room(rooms)
 
             for i=0,127 do
                 if by_ind[i] then
-                    poke(mem_loc, bor(0x80, i))
+                    poke(mem_loc, band(0x7f, i))
                     mem_loc+=1
 
-                    -- only support tile fill rn
-                    local byte = 0xb0 + (layer-1)
+                    --           tile   fill   layers
+                    local byte = 0x08 | 0x04 | (layer-1)
                     poke(mem_loc, byte)
                     mem_loc+=1
 
                     for f in all(by_ind[i]) do
-                        poke(mem_loc, f.ybeg*12+f.xbeg)
+                        poke(mem_loc, bor(0x80, min(f.ybeg*12+f.xbeg, 119)))
                         mem_loc+=1
-                        poke(mem_loc, f.yend*12+f.xend)
+                        poke(mem_loc, bor(0x80, min(f.yend*12+f.xend, 119)))
                         mem_loc+=1
                     end
                 end
@@ -509,25 +509,23 @@ function decode()
         cur_loc += 1
 
         while peek(cur_loc) ~= 0xff do
-            local lind = band(0x7f, peek(cur_loc))
+            local lind = peek(cur_loc)
             cur_loc += 1
 
             local byte      = peek(cur_loc)
-            local isobj     = band(byte, 0x80) ~= 0
-            local alignfill = band(byte, 0x40) ~= 0
-            local sw        = lshr(band(byte, 0x30), 4)
-            local sh        = lshr(band(byte, 0x0c), 2)
-            local layer     = band(byte, 0x03)+1
+            local isobj     = band(byte, 0x08) ~= 0
+            local fill      = band(byte, 0x04) ~= 0
+            local layer     = lshr(band(byte, 0x03), 0)
             cur_loc += 1
 
-            while peek(cur_loc) < 128 do
+            while peek(cur_loc) >= 128 and peek(cur_loc) ~= 255 do
                 if alignfill then
                     room.tiles[layer][peek(cur_loc)] = lind
                     cur_loc += 1
                 else
-                    local p1 = peek(cur_loc)
+                    local p1 = band(0x7f, peek(cur_loc))
                     cur_loc += 1
-                    local p2 = peek(cur_loc)
+                    local p2 = band(0x7f, peek(cur_loc))
                     cur_loc += 1
 
                     local xb,yb,xe,ye = p1%12,flr(p1/12), p2%12,flr(p2/12)
@@ -543,9 +541,6 @@ function decode()
             end
         end
 
-        printh(room.color)
-        printh(room.music)
-        printh(room_ind)
         rooms[room_ind] = room
         cur_loc += 1
     end
