@@ -1,14 +1,17 @@
 [
     11111111 -- index (room: 0-223, hut: 224-254)
     1111 1111 -- music | fill
+
+    1 11 1 1111 -- obj/tile | layer 1-4 | fill/place | len 0-15
+                              align x/y
     [
-        1 1111111 -- one | ind (0-126)
-        1 1 11 11 11 -- obj/tile | (align | fill/place) | (ignore | sw 1-4) | (ignore | sh 1-4) | (ignore | layer 1-4)
-        [
-            0 1111111 -- zero | pos (0-119)
-        ]
+        1 1111111 -- one  | ind (0-127)
+        1 1111111
+        0 1111111 new ind
+        0 1111111 -- zero | pos (0-119)
+        0 1111111 -- zero | pos (0-119)
     ]
-    11111111 -- all ones (end)
+    00000000 -- obj no align fill len 0
 ]
 11111111 -- all ones (end)
 
