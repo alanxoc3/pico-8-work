@@ -2,10 +2,8 @@
     11111111 -- index (room: 0-223, hut: 224-254)
     1111 1111 -- music | fill
     [
-        0 1111111    -- zero | ind (0-127)
-        0000 1 1 11  -- unused | obj/tile | fill/place | layer 1-4 or align x/y
-        1 1111111    -- one  | pos (0-119)
-        1 1111111    -- one  | pos (0-119)
+        0 1111111  -- zero | ind (0-127)
+        1 1111111  -- one  | pos (0-119) or ctrl (120-126)
     ]
     11111111 -- obj no align fill len 0
 ]
@@ -14,3 +12,14 @@
 # CONSTRAINTS:
 # rooms are all: 12 x 10
 # huts  are all:  8 x  6
+
+# CONTROL CODES:
+defaults: fill x:0 y:0 tile
+120 fill
+121 place
+122 x 0
+123 y 0
+124 x .5
+125 y .5
+126 obj
+127 END
