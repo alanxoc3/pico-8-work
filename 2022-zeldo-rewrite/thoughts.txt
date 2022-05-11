@@ -14,12 +14,22 @@
 # huts  are all:  8 x  6
 
 # CONTROL CODES:
-defaults: fill x:0 y:0 tile
-120 fill
-121 place
-122 x 0
-123 y 0
-124 x .5
-125 y .5
+defaults: tile l1 fill
+
+# format
+tile l1 l2 l3 l4
+        fill
+        place
+obj  l1 l2 l3 l4
+        fill
+        place
+end
+
+120  0  0 or l1
+121 .5  0 or l2
+122  0 .5 or l3
+123 .5 .5 or l4
+124 fill
+125 place
 126 obj
-127 END
+127 end

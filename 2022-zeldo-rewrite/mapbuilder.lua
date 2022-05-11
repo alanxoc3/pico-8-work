@@ -434,6 +434,15 @@ function itemmap_to_fills(width, height, itemmap)
     return fills
 end
 
+CON_L1    = 248
+CON_L2    = 249
+CON_L3    = 250
+CON_L4    = 251
+CON_FILL  = 252
+CON_PLACE = 253
+CON_OBJ   = 254
+CON_END   = 255
+
 function encode_room(rooms)
     local mem_loc = 0x2000
 
@@ -454,14 +463,16 @@ function encode_room(rooms)
                 add(by_ind[f.ind], f)
             end
 
+            if #fills > 0 then
+                poke(mem_loc, CON_L1+layer-1)
+                mem_loc+=1
+                poke(mem_loc, CON_FILL)
+                mem_loc+=1
+            end
+
             for i=0,127 do
                 if by_ind[i] then
                     poke(mem_loc, band(0x7f, i))
-                    mem_loc+=1
-
-                    --           tile   fill   layers
-                    local byte = 0x08 | 0x04 | (layer-1)
-                    poke(mem_loc, byte)
                     mem_loc+=1
 
                     for f in all(by_ind[i]) do
@@ -490,7 +501,7 @@ function decode()
     local cur_loc = mem_loc
     local rooms = {}
 
-    while peek(cur_loc) ~= 0xff do
+    while peek(cur_loc) ~= CON_END do
         local room = {
             tiles={{}, {}, {}, {}},
             objs={},
@@ -508,23 +519,26 @@ function decode()
         room.music = lshr(band(0xf0, musfill), 4)
         cur_loc += 1
 
-        while peek(cur_loc) ~= 0xff do
-            local lind = peek(cur_loc)
+        local is_fill = true
+        local is_tile = true
+        local layer = 1
+        local ind = 0
+        while peek(cur_loc) ~= CON_END do
+            local byte = peek(cur_loc)
             cur_loc += 1
 
-            local byte      = peek(cur_loc)
-            local isobj     = band(byte, 0x08) ~= 0
-            local fill      = band(byte, 0x04) ~= 0
-            local layer     = lshr(band(byte, 0x03), 0)
-            cur_loc += 1
-
-            while peek(cur_loc) >= 128 and peek(cur_loc) ~= 255 do
-                if alignfill then
-                    room.tiles[layer][peek(cur_loc)] = lind
-                    cur_loc += 1
-                else
-                    local p1 = band(0x7f, peek(cur_loc))
-                    cur_loc += 1
+            if     byte == CON_L1    then layer = 1
+            elseif byte == CON_L2    then layer = 2
+            elseif byte == CON_L3    then layer = 3
+            elseif byte == CON_L4    then layer = 4
+            elseif byte == CON_FILL  then is_fill = true
+            elseif byte == CON_PLACE then is_fill = false
+            elseif byte == CON_OBJ   then is_tile = false
+            elseif byte == CON_OBJ   then is_tile = false
+            elseif byte < 128        then ind = byte
+            elseif byte < CON_END
+                if is_fill then
+                    local p1 = band(0x7f, byte)
                     local p2 = band(0x7f, peek(cur_loc))
                     cur_loc += 1
 
@@ -537,6 +551,9 @@ function decode()
                             room.tiles[layer][yy*12+xx] = lind
                         end
                     end
+                else
+                    room.tiles[layer][byte] = lind
+                    cur_loc += 1
                 end
             end
         end
