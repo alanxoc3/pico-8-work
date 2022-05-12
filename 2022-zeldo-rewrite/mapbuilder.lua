@@ -164,7 +164,7 @@ function tile_draw()
     end)
 
     if g_debug then
-        local fills = itemmap_to_fills(12, 10, get_cur_room().tiles[g_tile_layer])
+        local fills, places = itemmap_to_fills(12, 10, get_cur_room().tiles[g_tile_layer])
         for f in all(fills) do
             rect(
                 g_tile_grid.xoff-6*8+f.xbeg*8,
@@ -172,6 +172,15 @@ function tile_draw()
                 g_tile_grid.xoff-6*8+f.xend*8+8,
                 g_tile_grid.yoff-5*8+f.yend*8+8,
             8)
+        end
+
+        for f in all(places) do
+            rect(
+                g_tile_grid.xoff-6*8+f.x*8+1,
+                g_tile_grid.yoff-5*8+f.y*8+1,
+                g_tile_grid.xoff-6*8+f.x*8+8-1,
+                g_tile_grid.yoff-5*8+f.y*8+8-1,
+            9)
         end
     end
 end
@@ -350,6 +359,7 @@ function itemmap_to_fills(width, height, itemmap)
     local visited = {}
     local cur_tile, xbeg, xend, ybeg, yend = nil, nil, nil, nil, nil
     local fills = {}
+    local places = {}
 
     local start_fill = function(x, y)
         local index = y*width+x
@@ -360,7 +370,11 @@ function itemmap_to_fills(width, height, itemmap)
     end
 
     local end_fill = function()
-        add(fills, {ind=cur_tile, xbeg=xbeg, xend=xend, ybeg=ybeg, yend=yend})
+        if xbeg == xend and ybeg == yend then
+            add(places, {ind=cur_tile, x=xbeg, y=ybeg})
+        else
+            add(fills, {ind=cur_tile, xbeg=xbeg, xend=xend, ybeg=ybeg, yend=yend})
+        end
         cur_tile, xbeg, xend, ybeg, yend = nil, nil, nil, nil, nil
     end
 
@@ -431,7 +445,7 @@ function itemmap_to_fills(width, height, itemmap)
         end
     end
 
-    return fills
+    return fills, places
 end
 
 CON_L1    = 248
@@ -453,36 +467,60 @@ function encode_room(rooms)
         mem_loc+=1
 
         for layer, tiles in pairs(room.tiles) do
-            local by_tile = {}
-            local by_ind = {}
+            local fill_by_ind = {}
+            local place_by_ind = {}
 
-            local fills = itemmap_to_fills(12, 10, tiles)
+            local fills, places = itemmap_to_fills(12, 10, tiles)
 
-            for f in all(fills) do
-                if not by_ind[f.ind] then by_ind[f.ind] = {} end
-                add(by_ind[f.ind], f)
+            for x in all(fills) do
+                if not fill_by_ind[x.ind] then fill_by_ind[x.ind] = {} end
+                add(fill_by_ind[x.ind], x)
+            end
+
+            for x in all(places) do
+                if not place_by_ind[x.ind] then place_by_ind[x.ind] = {} end
+                add(place_by_ind[x.ind], x)
+            end
+
+            if #fills > 0 or #places > 0 then
+                poke(mem_loc, CON_L1+layer-1)
+                mem_loc+=1
             end
 
             if #fills > 0 then
-                poke(mem_loc, CON_L1+layer-1)
-                mem_loc+=1
                 poke(mem_loc, CON_FILL)
                 mem_loc+=1
-            end
-
-            for i=0,127 do
-                if by_ind[i] then
-                    poke(mem_loc, band(0x7f, i))
-                    mem_loc+=1
-
-                    for f in all(by_ind[i]) do
-                        poke(mem_loc, bor(0x80, min(f.ybeg*12+f.xbeg, 119)))
+                for i=0,127 do
+                    if fill_by_ind[i] then
+                        poke(mem_loc, band(0x7f, i))
                         mem_loc+=1
-                        poke(mem_loc, bor(0x80, min(f.yend*12+f.xend, 119)))
-                        mem_loc+=1
+
+                        for f in all(fill_by_ind[i]) do
+                            poke(mem_loc, bor(0x80, min(f.ybeg*12+f.xbeg, 119)))
+                            mem_loc+=1
+                            poke(mem_loc, bor(0x80, min(f.yend*12+f.xend, 119)))
+                            mem_loc+=1
+                        end
                     end
                 end
             end
+
+            if #places > 0 then
+                poke(mem_loc, CON_PLACE)
+                mem_loc+=1
+                for i=0,127 do
+                    if place_by_ind[i] then
+                        poke(mem_loc, band(0x7f, i))
+                        mem_loc+=1
+
+                        for f in all(place_by_ind[i]) do
+                            poke(mem_loc, bor(0x80, min(f.y*12+f.x, 119)))
+                            mem_loc+=1
+                        end
+                    end
+                end
+            end
+
         end
         poke(mem_loc, 0xff)
         mem_loc+=1
@@ -497,7 +535,6 @@ end
 
 function decode()
     local mem_loc     = 0x2000
-    -- local mem_loc_max = 0x3000
     local cur_loc = mem_loc
     local rooms = {}
 
@@ -523,8 +560,9 @@ function decode()
         local is_tile = true
         local layer = 1
         local ind = 0
-        while peek(cur_loc) ~= CON_END do
-            local byte = peek(cur_loc)
+        local byte = 0
+        while byte ~= CON_END do
+            byte = peek(cur_loc)
             cur_loc += 1
 
             if     byte == CON_L1    then layer = 1
@@ -534,32 +572,26 @@ function decode()
             elseif byte == CON_FILL  then is_fill = true
             elseif byte == CON_PLACE then is_fill = false
             elseif byte == CON_OBJ   then is_tile = false
-            elseif byte == CON_OBJ   then is_tile = false
             elseif byte < 128        then ind = byte
-            elseif byte < CON_END
+            elseif byte < CON_END    then
+                local p1 = band(0x7f, byte)
                 if is_fill then
-                    local p1 = band(0x7f, byte)
                     local p2 = band(0x7f, peek(cur_loc))
                     cur_loc += 1
 
                     local xb,yb,xe,ye = p1%12,flr(p1/12), p2%12,flr(p2/12)
-                    printh("xb: "..xb.." | yb: "..yb)
-                    printh("xe: "..xe.." | ye: "..ye)
-
                     for yy=yb,ye do
                         for xx=xb,xe do
-                            room.tiles[layer][yy*12+xx] = lind
+                            room.tiles[layer][yy*12+xx] = ind
                         end
                     end
                 else
-                    room.tiles[layer][byte] = lind
-                    cur_loc += 1
+                    room.tiles[layer][p1] = ind
                 end
             end
         end
 
         rooms[room_ind] = room
-        cur_loc += 1
     end
 
     return rooms
