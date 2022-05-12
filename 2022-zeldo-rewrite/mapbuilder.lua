@@ -36,6 +36,7 @@ function _init()
     g_prev_mode = g_mode
 end
 
+g_compression_percent = 0
 function _update60()
     poke(0x5f30,1) -- disable the pause menu
     update_mouse()
@@ -55,10 +56,13 @@ function _update60()
     elseif char == "a" then char = nil
         load_assets()
         g_rooms = decode()
+        g_compression_percent = encode_room(g_rooms, 0x2000, 0x3000)
     elseif char == "d" then char = nil g_debug = not g_debug
     elseif char == "s" then char = nil -- save logic
-        encode_room(g_rooms)
-        save_map()
+        g_compression_percent = encode_room(g_rooms, 0x2000, 0x3000)
+        if g_compression_percent <= 1 then
+            save_map()
+        end
     elseif char == "u" then char = nil -- undo logic
     elseif char == "r" then char = nil -- redo logic
     elseif char == "	" then char = "tab"
@@ -83,6 +87,12 @@ function _draw()
     local str = g_mode.name
     for s in all(g_info) do str = str.." | "..s end
     zprint(str, 1, 1, -1, 7)
+
+    local percent_color = 11
+    if g_compression_percent > 1 then percent_color = t() % .5 > .25 and 8 or 0 
+    elseif g_compression_percent > .95 then percent_color = 8
+    elseif g_compression_percent > .75 then percent_color = 10 end
+    zprint(""..flr(g_compression_percent*100).."%", 127, 1, 1, percent_color)
 
     if g_mouse_enabled then
         line(g_mouse_x-2, g_mouse_y-2, g_mouse_x+2, g_mouse_y+2, 7)
@@ -141,6 +151,11 @@ function tile_update(key)
     elseif key == "2" then g_tile_layer = 2
     elseif key == "3" then g_tile_layer = 3
     elseif key == "4" then g_tile_layer = 4
+    elseif key == "x" then
+        local spr_ind = get_cur_room().tiles[g_tile_layer][g_tile_grid.ysel*12+g_tile_grid.xsel]
+        g_spr_grid.xsel = spr_ind % 16
+        g_spr_grid.ysel = flr(spr_ind / 16)
+        update_grid(g_spr_grid)
     elseif key == "space" then
         g_tile_pane = true
         set_tile(get_cur_room(), g_tile_layer, g_tile_grid.ysel*12+g_tile_grid.xsel, g_spr_grid.ysel*16+g_spr_grid.xsel)
@@ -210,11 +225,21 @@ g_link_grid = {
 }
 
 g_link_pane = true
+g_link_default_original =  {
+    tiles={{}, {}, {}, {}},
+    objs={},
+    tiles_lens={0, 0, 0, 0},
+    objs_len=0,
+    color=3,
+    music=0
+}
 function link_update(key)
     update_grid(g_link_pane and g_link_grid or g_hut_grid, g_mouse_enabled and g_mouse_frame_limit)
 
     if key == "back"    then del_room(g_link_grid.xsel, g_link_grid.ysel)
     elseif key == "tab" then g_link_pane = not g_link_pane
+    elseif key == "x"   then g_link_default = get_cur_room()
+    elseif key == "space" then upsert_cur_room()
     end
 
     g_info={g_link_grid.xsel..","..g_link_grid.ysel}
@@ -234,7 +259,7 @@ g_prev_grid = {
     xcel=8,  ycel=8,
     xpad=0,  ypad=0,
     xoff=64, yoff=50,
-    xscr=6, yscr=5,
+    xscr=6,  yscr=5,
 
     rect_grid        = function() end,
     rect_boundary_bg = function(x1, y1, x2, y2) rectfill(x1,y1,x2,y2,get_cur_room().color) end,
@@ -262,9 +287,16 @@ g_prev_grid = {
 function prev_update(key)
     if get_cur_room() then
         update_grid(g_prev_grid, g_mouse_enabled and g_mouse_frame_limit)
+
     end
 
     update_grid(g_link_grid)
+
+    if key == "back"    then del_room(g_link_grid.xsel, g_link_grid.ysel)
+    elseif key == "tab" then g_link_pane = not g_link_pane
+    elseif key == "x"   then g_link_default = get_cur_room()
+    elseif key == "space" then upsert_cur_room()
+    end
 
     g_info={g_link_grid.xsel..","..g_link_grid.ysel}
 end
@@ -339,7 +371,7 @@ function help_draw()
         "",
         "TAB: ALT PANE  | ARROW: MOVE",
         "SPACE: CREATE  | BACK: DELETE",
-        "X: SET CREATE  | 1-4: LAYER",
+        "E: SET CREATE  | 1-4: LAYER",
         "",
         "U: UNDO        | R: REDO",
         "S: SAVE        | A: RELOAD",
@@ -457,8 +489,8 @@ CON_PLACE = 253
 CON_OBJ   = 254
 CON_END   = 255
 
-function encode_room(rooms)
-    local mem_loc = 0x2000
+function encode_room(rooms, min_loc, max_loc)
+    local mem_loc = min_loc
 
     for room_index,room in pairs(rooms) do
         poke(mem_loc, room_index)
@@ -526,12 +558,11 @@ function encode_room(rooms)
         mem_loc+=1
     end
     poke(mem_loc, 0xff)
+    mem_loc += 1
+    local percent = (mem_loc - min_loc) / (max_loc - min_loc)
+    for x=mem_loc,max_loc-1 do poke(x, 0) end
+    return percent
 end
-
--- 0000 0 | 0100 4 | 1000 8 | 1100 c
--- 0001 1 | 0101 5 | 1001 9 | 1101 d
--- 0010 2 | 0110 6 | 1010 a | 1110 e
--- 0011 3 | 0111 7 | 1011 b | 1111 f
 
 function decode()
     local mem_loc     = 0x2000
@@ -623,14 +654,7 @@ end
 function upsert_cur_room()
     local room = get_cur_room()
     if not room then
-        room = {
-            tiles={{}, {}, {}, {}},
-            objs={},
-            tiles_lens={0, 0, 0, 0},
-            objs_len=0,
-            color=3,
-            music=0
-        }
+        room = tabcpy(g_link_default or g_link_default_original)
         new_room(g_link_grid.xsel, g_link_grid.ysel, room)
     end
     return room
@@ -746,4 +770,17 @@ function zprint(str, x, y, align, color)
     if align == 0    then x -= #str*2
     elseif align > 0 then x -= #str*4+1 end
     print(str, x, y, color)
+end
+
+function tabcpy(src, dest)
+    dest = dest or {}
+
+    for k,v in pairs(src or {}) do
+        if type(v) == 'table' then
+            dest[k] = tabcpy(v)
+        else
+            dest[k] = v
+        end
+    end
+    return dest
 end
