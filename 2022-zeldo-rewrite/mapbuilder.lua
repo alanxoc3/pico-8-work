@@ -63,8 +63,6 @@ function _update60()
         if g_compression_percent <= 1 then
             save_map()
         end
-    elseif char == "u" then char = nil -- undo logic
-    elseif char == "r" then char = nil -- redo logic
     elseif char == "	" then char = "tab"
     elseif char == " " then char = "space"
     elseif char == '⁸' then char = "back"
@@ -143,7 +141,8 @@ g_spr_grid = {
 g_tile_pane = true
 g_tile_draw_fills = false
 function tile_update(key)
-    upsert_cur_room()
+    if not get_cur_room() then return end
+
     update_grid(g_tile_pane and g_tile_grid or g_spr_grid, g_mouse_enabled and g_mouse_frame_limit)
 
     if key == "tab" then g_tile_pane = not g_tile_pane
@@ -173,6 +172,11 @@ function tile_update(key)
 end
 
 function tile_draw()
+    if not get_cur_room() then
+        zprint("no room here", 5, 11, -1, 7)
+        return
+    end
+
     draw_grid(g_tile_grid)
     draw_bottom_screen(g_tile_pane, function()
         draw_grid(g_spr_grid)
@@ -236,10 +240,10 @@ g_link_default_original =  {
 function link_update(key)
     update_grid(g_link_pane and g_link_grid or g_hut_grid, g_mouse_enabled and g_mouse_frame_limit)
 
-    if key == "back"    then del_room(g_link_grid.xsel, g_link_grid.ysel)
+    if key == "back"    then del_cur_room()
     elseif key == "tab" then g_link_pane = not g_link_pane
     elseif key == "x"   then g_link_default = get_cur_room()
-    elseif key == "space" then upsert_cur_room()
+    elseif key == "space" then set_cur_room()
     end
 
     g_info={g_link_grid.xsel..","..g_link_grid.ysel}
@@ -287,15 +291,14 @@ g_prev_grid = {
 function prev_update(key)
     if get_cur_room() then
         update_grid(g_prev_grid, g_mouse_enabled and g_mouse_frame_limit)
-
     end
 
     update_grid(g_link_grid)
 
-    if key == "back"    then del_room(g_link_grid.xsel, g_link_grid.ysel)
+    if key == "back"    then del_cur_room()
     elseif key == "tab" then g_link_pane = not g_link_pane
     elseif key == "x"   then g_link_default = get_cur_room()
-    elseif key == "space" then upsert_cur_room()
+    elseif key == "space" then set_cur_room()
     end
 
     g_info={g_link_grid.xsel..","..g_link_grid.ysel}
@@ -323,13 +326,18 @@ g_config_items = {
 }
 g_config_item = 1
 function conf_update(key)
-    upsert_cur_room()
+    if not get_cur_room() then return end
 
     g_config_item = max(min(g_config_item+ybtnp(), #g_config_items), 1)
     g_config_items[g_config_item].set(xbtnp())
 end
 
 function conf_draw()
+    if not get_cur_room() then
+        zprint("no room here", 5, 11, -1, 7)
+        return
+    end
+
     local top_align, left_align = 11, 5
     local texts = {
         "ROOM: ["..g_link_grid.xsel..","..g_link_grid.ysel.."]",
@@ -341,13 +349,6 @@ function conf_draw()
         add(texts, x.txt..": "..x.get())
     end
     zprint(">", left_align, (1+g_config_item)*8+top_align, -1, 7)
-
-    add(texts, "")
-    add(texts, "L.1 LEN: "..room.tiles_lens[1])
-    add(texts, "L.2 LEN: "..room.tiles_lens[2])
-    add(texts, "L.3 LEN: "..room.tiles_lens[3])
-    add(texts, "L.4 LEN: "..room.tiles_lens[4])
-    add(texts, "OBJ LEN: "..room.objs_len)
 
     for i, t in pairs(texts) do
         zprint(t, 5+left_align, (i-1)*8+top_align, -1, 7)
@@ -373,7 +374,6 @@ function help_draw()
         "SPACE: CREATE  | BACK: DELETE",
         "E: SET CREATE  | 1-4: LAYER",
         "",
-        "U: UNDO        | R: REDO",
         "S: SAVE        | A: RELOAD",
         "D: DEBUG",
     }
@@ -651,17 +651,17 @@ function get_cur_room()
     return get_room(g_link_grid.xsel, g_link_grid.ysel)
 end
 
-function upsert_cur_room()
-    local room = get_cur_room()
-    if not room then
-        room = tabcpy(g_link_default or g_link_default_original)
-        new_room(g_link_grid.xsel, g_link_grid.ysel, room)
-    end
-    return room
+function set_cur_room()
+    new_room(g_link_grid.xsel, g_link_grid.ysel, tabcpy(g_link_default or g_link_default_original))
 end
 
 function get_room(x, y) return g_rooms[y*16+x] end
-function del_room(x, y) g_rooms[y*16+x] = nil end
+function del_cur_room()
+    local x, y = g_link_grid.xsel, g_link_grid.ysel
+    g_link_default = get_cur_room()
+    g_rooms[y*16+x] = nil
+end
+
 function new_room(x, y, room)
     g_rooms[y*16+x] = room
 end
