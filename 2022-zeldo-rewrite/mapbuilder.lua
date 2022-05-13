@@ -68,7 +68,7 @@ function _update60()
 end
 
 function _draw()
-    fillp(0b0111101111011110)
+    fillp(0b1111101111111110)
     rectfill(0,0,127,127,ui_col())
     fillp()
     g_mode.draw()
@@ -161,7 +161,7 @@ end
 
 function tile_draw()
     if not get_cur_room() then
-        zprint("no room here", 5, 11, -1, 7)
+        draw_no_room()
         return
     end
 
@@ -315,7 +315,7 @@ end
 
 function prvw_draw()
     if not get_cur_room() then
-        zprint("no room here", 5, 11, -1, 7)
+        draw_no_room()
         return
     end
 
@@ -345,7 +345,7 @@ end
 
 function objs_draw()
     if not get_cur_room() then
-        zprint("no room here", 5, 11, -1, 7)
+        draw_no_room()
         return
     end
 end
@@ -801,3 +801,4 @@ function tabcpy(src, dest)
 end
 
 function ui_col() return g_debug and 2 or 1 end
+function draw_no_room() zprint("no room here", 63, 66, 0, 7) end
