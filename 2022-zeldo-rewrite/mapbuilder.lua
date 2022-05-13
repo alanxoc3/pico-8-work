@@ -39,6 +39,8 @@ function _update60()
     if g_modes[char] then
         if g_mode ~= g_modes[char] then
             g_prev_mode, g_mode = g_mode, g_modes[char]
+        else
+            g_mode, g_prev_mode = g_prev_mode, g_mode
         end
         char = nil
     elseif char == "\13" then -- return/enter/newline
