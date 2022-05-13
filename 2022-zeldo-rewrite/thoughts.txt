@@ -25,13 +25,14 @@ obj  l1 l2 l3 l4
         place
 end
 
-248 til l1    place (default)
-249 til l2    place
-250 obj  0  0 place
-251 obj .5  0 place
+(default to til l1 fill)
+248 til l1    place
+249 til l2    fill
+250 til l2    place
+251 obj  0  0 place
 252 obj  0 .5 place
-253 obj .5 .5 place
-254 fill
+253 obj .5  0 place
+254 obj .5 .5 place
 255 end
 
 How to represent objects?

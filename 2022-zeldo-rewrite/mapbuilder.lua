@@ -285,9 +285,11 @@ function tile_update(key)
     elseif key == "2" then g_tile_layer = 2
     elseif key == "x" then
         local spr_ind = get_cur_room().tiles[g_tile_layer][g_tile_grid.ysel*12+g_tile_grid.xsel]
-        g_spr_grid.xsel = spr_ind % 16
-        g_spr_grid.ysel = flr(spr_ind / 16)
-        update_grid(g_spr_grid)
+        if spr_ind then
+            g_spr_grid.xsel = spr_ind % 16
+            g_spr_grid.ysel = flr(spr_ind / 16)
+            update_grid(g_spr_grid)
+        end
     elseif key == "space" then
         g_tile_pane = true
         set_cur_tile(g_spr_grid.ysel*16+g_spr_grid.xsel)
@@ -720,8 +722,8 @@ end
 CON_L1     = 248
 CON_L2     = 249
 CON_OBJ_00 = 250
-CON_OBJ_05 = 251
-CON_OBJ_50 = 252
+CON_OBJ_50 = 251
+CON_OBJ_05 = 252
 CON_OBJ_55 = 253
 CON_FILL   = 254
 CON_END    = 255
@@ -735,6 +737,7 @@ function encode_room(rooms, min_loc, max_loc)
         poke(mem_loc, bor(room.color, shl(room.music, 4)))
         mem_loc+=1
 
+        -- tiles
         for layer, tiles in pairs(room.tiles) do
             local fill_by_ind = {}
             local place_by_ind = {}
@@ -788,6 +791,47 @@ function encode_room(rooms, min_loc, max_loc)
                 end
             end
         end
+
+        -- objs
+        local buckets = {{}, {}, {}, {}}
+        local bucket_lens = {0, 0, 0, 0}
+        for i=0,23*20 do
+            local x = i % 24
+            local y = flr(i/24)
+
+            if room.objs[i] then
+                local ind = 1
+                    if x % 2 == 1 and y % 2 == 0 then ind = 2
+                elseif x % 2 == 0 and y % 2 == 1 then ind = 3
+                elseif x % 2 == 1 and y % 2 == 1 then ind = 4
+                end
+
+                buckets[ind][room.objs[i]] = buckets[ind][room.objs[i]] or {}
+                add(buckets[ind][room.objs[i]], flr(y/2)*12+flr(x/2))
+                bucket_lens[ind] += 1
+            end
+        end
+
+        for i=1,4 do
+            local bucket = buckets[i]
+            if bucket_lens[i] > 0 then
+                poke(mem_loc, CON_OBJ_00+i-1)
+                mem_loc+=1
+
+                for i=0,127 do
+                    if bucket[i] then
+                        poke(mem_loc, band(0x7f, i))
+                        mem_loc+=1
+
+                        for x in all(bucket[i]) do
+                            poke(mem_loc, bor(0x80, min(x, 119)))
+                            mem_loc+=1
+                        end
+                    end
+                end
+            end
+        end
+
         poke(mem_loc, 0xff)
         mem_loc+=1
     end
@@ -823,6 +867,7 @@ function decode()
         local is_tile = true
         local layer = 1
         local ind = 0
+        local offx, offy = 0, 0
         local byte = 0
         while byte ~= CON_END do
             byte = peek(cur_loc)
@@ -830,26 +875,32 @@ function decode()
 
             if     byte == CON_L1     then is_fill = false is_tile = true  layer = 1
             elseif byte == CON_L2     then is_fill = false is_tile = true  layer = 2
-            elseif byte == CON_OBJ_00 then is_fill = false is_tile = false
-            elseif byte == CON_OBJ_05 then is_fill = false is_tile = false
-            elseif byte == CON_OBJ_50 then is_fill = false is_tile = false
-            elseif byte == CON_OBJ_55 then is_fill = false is_tile = false
+            elseif byte == CON_OBJ_00 then is_fill = false is_tile = false offx = 0 offy = 0
+            elseif byte == CON_OBJ_50 then is_fill = false is_tile = false offx = 1 offy = 0
+            elseif byte == CON_OBJ_05 then is_fill = false is_tile = false offx = 0 offy = 1
+            elseif byte == CON_OBJ_55 then is_fill = false is_tile = false offx = 1 offy = 1
             elseif byte == CON_FILL   then is_fill = true
             elseif byte < 128         then ind = byte
             elseif byte < CON_END     then
                 local p1 = band(0x7f, byte)
-                if is_fill then
-                    local p2 = band(0x7f, peek(cur_loc))
-                    cur_loc += 1
+                if is_tile then
+                    if is_fill then
+                        local p2 = band(0x7f, peek(cur_loc))
+                        cur_loc += 1
 
-                    local xb,yb,xe,ye = p1%12,flr(p1/12), p2%12,flr(p2/12)
-                    for yy=yb,ye do
-                        for xx=xb,xe do
-                            room.tiles[layer][yy*12+xx] = ind
+                        local xb,yb,xe,ye = p1%12,flr(p1/12), p2%12,flr(p2/12)
+                        for yy=yb,ye do
+                            for xx=xb,xe do
+                                room.tiles[layer][yy*12+xx] = ind
+                            end
                         end
+                    else
+                        room.tiles[layer][p1] = ind
                     end
                 else
-                    room.tiles[layer][p1] = ind
+                    local x, y = p1 % 12, flr(p1/12)
+                    printh("OBJ: "..ind.." | x: "..x..", y: "..y..", XOFF: "..offx..", YOFF: "..offy)
+                    room.objs[y*2*24+offy*24+(x*2+offx)] = ind
                 end
             end
         end
@@ -861,7 +912,7 @@ function decode()
 end
 
 g_rooms = {}
-function set_cur_tile(room, layer, ind, val)
+function set_cur_tile(val)
     local width = is_hut() and 8 or 12
     local x, y = g_tile_grid.xsel, g_tile_grid.ysel
     get_cur_room().tiles[g_tile_layer][y*width+x] = val
