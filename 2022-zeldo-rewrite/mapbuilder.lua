@@ -249,7 +249,7 @@ g_tile_grid = {
     rect_boundary_fg = function() end,
     rect_select      = function(x1, y1, x2, y2) rect(x1-2,y1-2,x2+2,y2+2,0) rect(x1-1,y1-1,x2+1,y2+1,7) end,
     rect_cell        = function(x, y, x1, y1, x2, y2)
-                           local t = get_cur_room().tiles[g_tile_layer][y*12+x]
+                           local t = get_tile(x,y)
                            if t then spr(128+t, x1, y1) end
                        end
 }
@@ -273,7 +273,11 @@ g_spr_grid = {
 g_tile_pane = true
 g_tile_draw_fills = false
 function tile_update(key)
-    if not get_cur_room() then return end
+    if not get_cur_room() then
+        g_info={}
+        return
+    end
+
     update_grid(g_tile_pane and g_tile_grid or g_spr_grid, g_mouse_enabled and g_mouse_frame_limit)
 
     if key == "tab" then g_tile_pane = not g_tile_pane
@@ -286,15 +290,13 @@ function tile_update(key)
         update_grid(g_spr_grid)
     elseif key == "space" then
         g_tile_pane = true
-        set_tile(get_cur_room(), g_tile_layer, g_tile_grid.ysel*12+g_tile_grid.xsel, g_spr_grid.ysel*16+g_spr_grid.xsel)
+        set_cur_tile(g_spr_grid.ysel*16+g_spr_grid.xsel)
     elseif key == "back" and g_tile_pane then
-        set_tile(get_cur_room(), g_tile_layer, g_tile_grid.ysel*12+g_tile_grid.xsel)
+        set_cur_tile(nil)
     end
 
     local cur_tile_spr = get_cur_room().tiles[g_tile_layer][g_tile_grid.ysel*12+g_tile_grid.xsel]
     g_info={
-        g_link_grid.xsel..","..g_link_grid.ysel,
-        g_tile_layer,
         g_tile_grid.xsel..","..g_tile_grid.ysel..(cur_tile_spr and ":"..cur_tile_spr+128 or "")
     }
 end
@@ -358,10 +360,8 @@ g_link_grid = {
 
 g_link_pane = true
 g_link_default_original =  {
-    tiles={{}, {}, {}, {}},
+    tiles={{}, {}},
     objs={},
-    tiles_lens={0, 0, 0, 0},
-    objs_len=0,
     color=3,
     music=0
 }
@@ -395,6 +395,7 @@ g_prev_grid = {
     rect_grid        = function() end,
     rect_boundary_bg = function(x1, y1, x2, y2) rectfill(x1,y1,x2,y2,get_cur_room().color) end,
     rect_boundary_fg = function(x1, y1, x2, y2)
+                           draw_the_objs()
                            rect(x1+0,y1+0,x2-0,y2-0,0)
                            rect(x1+1,y1+1,x2-1,y2-1,0)
                            rect(x1+2,y1+2,x2-2,y2-2,ui_col())
@@ -436,7 +437,6 @@ function prvw_update(key)
     if get_cur_room() then
         update_grid(g_prev_grid, g_mouse_enabled and g_mouse_frame_limit)
     end
-
 
     if g_prvw_pane then
         update_grid(g_link_grid)
@@ -534,8 +534,12 @@ g_obji_grid = {
 g_objs_pane = true
 function objs_update(key)
     if not get_cur_room() then return end
+    g_objs_grid.xmax -= 1
+    g_objs_grid.ymax -= 1
     update_grid(g_objs_pane and g_objs_grid or g_obji_grid, g_mouse_enabled and g_mouse_frame_limit)
- 
+    g_objs_grid.xmax += 1
+    g_objs_grid.ymax += 1
+
     if key == "tab" then g_objs_pane = not g_objs_pane
     elseif key == "x" then
         -- local spr_ind = get_cur_room().tiles[g_tile_layer][g_tile_grid.ysel*12+g_tile_grid.xsel]
@@ -543,13 +547,35 @@ function objs_update(key)
         -- g_spr_grid.ysel = flr(spr_ind / 16)
         -- update_grid(g_spr_grid)
     elseif key == "space" then
-        -- g_tile_pane = true
-        -- set_tile(get_cur_room(), g_tile_layer, g_tile_grid.ysel*12+g_tile_grid.xsel, g_spr_grid.ysel*16+g_spr_grid.xsel)
-    elseif key == "back" and g_tile_pane then
-        -- set_tile(get_cur_room(), g_tile_layer, g_tile_grid.ysel*12+g_tile_grid.xsel)
+        g_objs_pane = true
+        set_cur_obj(g_obji_grid.ysel*16+g_obji_grid.xsel)
+    elseif key == "back" and g_objs_pane then
+        set_cur_obj(nil)
     end
 
-    g_info={g_link_grid.xsel..","..g_link_grid.ysel}
+    if g_objs_pane then
+        g_info={
+            ""..g_objects[g_obji_grid.ysel*16+g_obji_grid.xsel][1],
+            ""..(g_objs_grid.xsel/2)..","..(g_objs_grid.ysel/2)
+        }
+    else
+        g_info={
+            ""..g_objects[g_obji_grid.ysel*16+g_obji_grid.xsel][1]..":"..(g_obji_grid.ysel*16+g_obji_grid.xsel)
+        }
+    end
+end
+
+function draw_the_objs(include_rect)
+    for obj_loc, obj_ind in pairs(get_cur_room().objs) do
+        local x1 = g_objs_grid.xoff+obj_loc%24*4-g_objs_grid.xcen*4
+        local y1 = g_objs_grid.yoff+flr(obj_loc/24)*4-g_objs_grid.ycen*4
+
+        local obj = g_objects[obj_ind]
+        spr(obj[2], x1-obj[3]*4+4, y1-obj[4]*4+4, obj[3], obj[4])
+        if include_rect then
+            rect(x1-obj[3]*4+4-1, y1-obj[4]*4+4-1, x1+4+obj[3]*4, y1+4+obj[4]*4, 10)
+        end
+    end
 end
 
 function objs_draw()
@@ -559,6 +585,7 @@ function objs_draw()
     end
 
     draw_grid(g_objs_grid)
+    draw_the_objs(true)
     draw_bottom_screen(g_objs_pane, function()
         draw_grid(g_obji_grid)
     end)
@@ -778,10 +805,8 @@ function decode()
 
     while peek(cur_loc) ~= CON_END do
         local room = {
-            tiles={{}, {}, {}, {}},
+            tiles={{}, {}},
             objs={},
-            tiles_lens={0, 0, 0, 0},
-            objs_len=0,
             color=0,
             music=0
         }
@@ -836,22 +861,31 @@ function decode()
 end
 
 g_rooms = {}
-function set_tile(room, layer, ind, val)
-    local l = room.tiles[layer]
-
-    if     l[ind] and not val then room.tiles_lens[layer] -= 1 end
-    if not l[ind] and     val then room.tiles_lens[layer] += 1 end
-
-    l[ind] = val
+function set_cur_tile(room, layer, ind, val)
+    local width = is_hut() and 8 or 12
+    local x, y = g_tile_grid.xsel, g_tile_grid.ysel
+    get_cur_room().tiles[g_tile_layer][y*width+x] = val
 end
 
-function set_obj(room, ind, val)
-    local l = room.objs
+function set_cur_obj(val)
+    local width = is_hut() and 2*8 or 2*12
+    local x, y = g_objs_grid.xsel, g_objs_grid.ysel
+    get_cur_room().objs[y*width+x] = val
+end
 
-    if     l[ind] and not val then room.objs_len -= 1 end
-    if not l[ind] and     val then room.objs_len += 1 end
+function get_tile(x, y)
+    local width = is_hut() and 8 or 12
+    return get_cur_room().tiles[g_tile_layer][y*width+x]
+end
 
-    l[ind] = val
+function get_obj(x, y)
+    local width = is_hut() and 2*8 or 2*12
+    local obj_ind = get_cur_room().objs[y*width+x]
+    if obj_ind then
+        return g_objects[obj_ind]
+    else
+        return nil
+    end
 end
 
 function is_hut(y)
