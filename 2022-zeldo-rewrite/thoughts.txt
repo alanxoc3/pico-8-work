@@ -1,6 +1,6 @@
 [
     11111111 -- index (room: 0-223, hut: 224-254)
-    1111 111 1 -- music | fill | ishut
+    1111 1111 -- music | fill
     [
         0 1111111  -- zero | ind (0-127)
         1 1111111  -- one  | pos (0-119) or ctrl (120-126)

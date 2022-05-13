@@ -103,8 +103,7 @@ g_tile_layer = 1
 g_tile_grid = {
     xsel=6,  ysel=5,
     xcen=6,  ycen=5,
-    xmin=0,  ymin=0,
-    xmax=11, ymax=9,
+    xmax=12, ymax=10,
     xcel=8,  ycel=8,
     xpad=0,  ypad=0,
     xoff=64, yoff=50,
@@ -124,8 +123,7 @@ g_tile_grid = {
 g_spr_grid = {
     xsel=0,  ysel=0,
     xcen=8,  ycen=1.5,
-    xmin=0,  ymin=0,
-    xmax=15, ymax=7,
+    xmax=16, ymax=8,
     xcel=8,  ycel=8,
     xpad=0,  ypad=0,
     xoff=64, yoff=107,
@@ -206,8 +204,7 @@ end
 g_link_grid = {
     xsel=8,  ysel=8,
     xcen=8,  ycen=8,
-    xmin=0,  ymin=0,
-    xmax=15, ymax=13,
+    xmax=16, ymax=16,
     xcel=12, ycel=10,
     xpad=2,  ypad=2,
     xoff=57, yoff=45,
@@ -244,7 +241,7 @@ function link_update(key)
     elseif key == "space" then set_cur_room()
     end
 
-    g_info={g_link_grid.xsel..","..g_link_grid.ysel}
+    g_info={g_link_grid.xsel..","..g_link_grid.ysel..":"..(is_hut() and "hut" or "room")}
 end
 
 function link_draw()
@@ -256,8 +253,7 @@ end
 g_prev_grid = {
     xsel=6,  ysel=5,
     xcen=6,  ycen=5,
-    xmin=0,  ymin=0,
-    xmax=11, ymax=9,
+    xmax=12, ymax=10,
     xcel=8,  ycel=8,
     xpad=0,  ypad=0,
     xoff=64, yoff=50,
@@ -319,7 +315,7 @@ function prvw_update(key)
     elseif key == "space" then set_cur_room() g_prvw_pane = true
     end
 
-    g_info={g_link_grid.xsel..","..g_link_grid.ysel}
+    g_info={g_link_grid.xsel..","..g_link_grid.ysel..":"..(is_hut() and "hut" or "room")}
 end
 
 function prvw_draw()
@@ -649,6 +645,15 @@ function set_obj(room, ind, val)
     l[ind] = val
 end
 
+function is_hut()
+    return g_link_grid.ysel >= 14
+end
+
+function set_grid_to_cur_room(g)
+    g.xmax = is_hut() and 8 or 12
+    g.ymax = is_hut() and 6 or 10
+end
+
 function get_cur_room()
     return get_room(g_link_grid.xsel, g_link_grid.ysel)
 end
@@ -679,22 +684,22 @@ function update_grid(g, mouse_rate)
         xsel = flr(xsel+xbtnp())
         ysel = flr(ysel+ybtnp())
 
-        if xsel < g.xmin then xsel = g.xmax end
-        if ysel < g.ymin then ysel = g.ymax end
+        if xsel < 0 then xsel = g.xmax-1 end
+        if ysel < 0 then ysel = g.ymax-1 end
 
-        if xsel > g.xmax then xsel = g.xmin end
-        if ysel > g.ymax then ysel = g.ymin end
+        if xsel > g.xmax-1 then xsel = 0 end
+        if ysel > g.ymax-1 then ysel = 0 end
     end
 
-    g.xsel  = min(g.xmax, max(g.xmin, xsel))
+    g.xsel  = min(g.xmax-1, max(0, xsel))
     local dist, sign = abs(g.xcen - g.xsel), sgn(g.xcen - g.xsel)
     if dist > g.xscr then g.xcen = g.xsel + sign*g.xscr end
-    g.xcen = max(min(g.xcen, g.xmax-g.xscr), g.xmin+g.xscr)
+    g.xcen = max(min(g.xcen, g.xmax-1-g.xscr), 0+g.xscr)
 
-    g.ysel = min(g.ymax, max(g.ymin, ysel))
+    g.ysel = min(g.ymax-1, max(0, ysel))
     local dist, sign = abs(g.ycen - g.ysel), sgn(g.ycen - g.ysel)
     if dist > g.yscr then g.ycen = g.ysel + sign*g.yscr end
-    g.ycen = max(min(g.ycen, g.ymax-g.yscr), g.ymin+g.yscr)
+    g.ycen = max(min(g.ycen, g.ymax-1-g.yscr), 0+g.yscr)
 end
 
 function draw_grid(g)
@@ -709,17 +714,17 @@ function draw_grid(g)
     local offcex = offx+g.xpad/2+g.xcel-1
     local offcey = offy+g.ypad/2+g.ycel-1
 
-    local offbex = offcex+(g.xmax)*cww
-    local offbey = offcey+(g.ymax)*chh
+    local offbex = offcex+(g.xmax-1)*cww
+    local offbey = offcey+(g.ymax-1)*chh
 
     g.rect_boundary_bg(offcbx, offcby, offbex, offbey)
-    for i=g.xmin,g.xmax do g.rect_grid(offcbx+i*cww, offcby,       offcbx+i*cww,  offbey      ) end
-    for i=g.xmin,g.xmax do g.rect_grid(offcex+i*cww, offcby,       offcex+i*cww,  offbey      ) end
-    for i=g.ymin,g.ymax do g.rect_grid(offcbx,       offcby+i*chh, offbex,        offcby+i*chh) end
-    for i=g.ymin,g.ymax do g.rect_grid(offcbx,       offcey+i*chh, offbex,        offcey+i*chh) end
+    for i=0,g.xmax-1 do g.rect_grid(offcbx+i*cww, offcby,       offcbx+i*cww,  offbey      ) end
+    for i=0,g.xmax-1 do g.rect_grid(offcex+i*cww, offcby,       offcex+i*cww,  offbey      ) end
+    for i=0,g.ymax-1 do g.rect_grid(offcbx,       offcby+i*chh, offbex,        offcby+i*chh) end
+    for i=0,g.ymax-1 do g.rect_grid(offcbx,       offcey+i*chh, offbex,        offcey+i*chh) end
 
-    for j=0,g.ymax do
-        for i=0,g.xmax do
+    for j=0,g.ymax-1 do
+        for i=0,g.xmax-1 do
             g.rect_cell(i, j, offcbx+i*cww, offcby+j*chh, offcex+i*cww, offcey+j*chh)
         end
     end
