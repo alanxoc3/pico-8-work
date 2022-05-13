@@ -180,19 +180,19 @@ function tile_draw()
         local fills, places = itemmap_to_fills(12, 10, get_cur_room().tiles[g_tile_layer])
         for f in all(fills) do
             rect(
-                g_tile_grid.xoff-6*8+f.xbeg*8,
-                g_tile_grid.yoff-5*8+f.ybeg*8,
-                g_tile_grid.xoff-6*8+f.xend*8+8,
-                g_tile_grid.yoff-5*8+f.yend*8+8,
+                g_tile_grid.xoff-(g_tile_grid.xmax/2)*8+f.xbeg*8,
+                g_tile_grid.yoff-(g_tile_grid.ymax/2)*8+f.ybeg*8,
+                g_tile_grid.xoff-(g_tile_grid.xmax/2)*8+f.xend*8+8,
+                g_tile_grid.yoff-(g_tile_grid.ymax/2)*8+f.yend*8+8,
             8)
         end
 
         for f in all(places) do
             rect(
-                g_tile_grid.xoff-6*8+f.x*8+1,
-                g_tile_grid.yoff-5*8+f.y*8+1,
-                g_tile_grid.xoff-6*8+f.x*8+8-1,
-                g_tile_grid.yoff-5*8+f.y*8+8-1,
+                g_tile_grid.xoff-(g_tile_grid.xmax/2)*8+f.x*8+1,
+                g_tile_grid.yoff-(g_tile_grid.ymax/2)*8+f.y*8+1,
+                g_tile_grid.xoff-(g_tile_grid.xmax/2)*8+f.x*8+8-1,
+                g_tile_grid.yoff-(g_tile_grid.ymax/2)*8+f.y*8+8-1,
             9)
         end
     end
@@ -236,7 +236,7 @@ function link_update(key)
 
     if key == "back"    then del_cur_room()
     elseif key == "tab" then g_link_pane = not g_link_pane
-    elseif key == "x"   then g_link_default = get_cur_room()
+    elseif key == "x" then set_room_default()
     elseif key == "space" then set_cur_room()
     end
 
@@ -311,7 +311,7 @@ function prvw_update(key)
 
     if key == "back"    then del_cur_room() g_prvw_pane = true
     elseif key == "tab" then g_prvw_pane = not g_prvw_pane
-    elseif key == "x"   then g_link_default = get_cur_room() g_prvw_pane = true
+    elseif key == "x"   then set_room_default() g_prvw_pane = true
     elseif key == "space" then set_cur_room() g_prvw_pane = true
     end
 
@@ -666,13 +666,24 @@ function get_cur_room()
 end
 
 function set_cur_room()
-    new_room(g_link_grid.xsel, g_link_grid.ysel, tabcpy(g_link_default or g_link_default_original))
+    local tempr
+    if is_hut() then tempr = g_link_hut_default
+    else tempr = g_link_room_default end
+
+    local newr = tabcpy(tempr or g_link_default_original)
+    new_room(g_link_grid.xsel, g_link_grid.ysel, newr)
+end
+
+function set_room_default()
+    local rcpy = tabcpy(get_cur_room())
+    if is_hut() then g_link_hut_default  = rcpy
+    else             g_link_room_default = rcpy end
 end
 
 function get_room(x, y) return g_rooms[y*16+x] end
 function del_cur_room()
     local x, y = g_link_grid.xsel, g_link_grid.ysel
-    g_link_default = get_cur_room()
+    set_room_default()
     g_rooms[y*16+x] = nil
 end
 
