@@ -33,3 +33,5 @@ end
 253 obj .5 .5 place
 254 fill
 255 end
+
+How to represent objects?

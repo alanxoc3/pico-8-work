@@ -28,8 +28,8 @@ function _init()
     g_modes = {
         ['l'] = { name = "link", update = link_update, draw = link_draw },
         ['t'] = { name = "tile", update = tile_update, draw = tile_draw },
-        ['p'] = { name = "prev", update = prev_update, draw = prev_draw },
-        ['c'] = { name = "conf", update = conf_update, draw = conf_draw },
+        ['p'] = { name = "prvw", update = prvw_update, draw = prvw_draw },
+        ['o'] = { name = "objs", update = objs_update, draw = objs_draw },
         ['h'] = { name = "help", update = help_update, draw = help_draw },
     }
     g_mode = g_modes.h
@@ -286,30 +286,6 @@ g_prev_grid = {
                        end
 }
 
-function prev_update(key)
-    if get_cur_room() then
-        update_grid(g_prev_grid, g_mouse_enabled and g_mouse_frame_limit)
-    end
-
-    update_grid(g_link_grid)
-
-    if key == "back"    then del_cur_room()
-    elseif key == "tab" then g_link_pane = not g_link_pane
-    elseif key == "x"   then g_link_default = get_cur_room()
-    elseif key == "space" then set_cur_room()
-    end
-
-    g_info={g_link_grid.xsel..","..g_link_grid.ysel}
-end
-
-function prev_draw()
-    if get_cur_room() then
-        draw_grid(g_prev_grid)
-    end
-    draw_bottom_screen(true, function() end)
-end
-
--- CONF MODE --
 g_config_items = {
     {
         txt="COLOR",
@@ -323,33 +299,63 @@ g_config_items = {
     },
 }
 g_config_item = 1
-function conf_update(key)
-    if not get_cur_room() then return end
 
-    g_config_item = max(min(g_config_item+ybtnp(), #g_config_items), 1)
-    g_config_items[g_config_item].set(xbtnp())
+g_prvw_pane = true
+function prvw_update(key)
+    if get_cur_room() then
+        update_grid(g_prev_grid, g_mouse_enabled and g_mouse_frame_limit)
+    end
+
+    if g_prvw_pane then
+        update_grid(g_link_grid)
+    else
+        g_config_item = max(min(g_config_item+ybtnp(), #g_config_items), 1)
+        g_config_items[g_config_item].set(xbtnp())
+    end
+
+    if key == "back"    then del_cur_room() g_prvw_pane = true
+    elseif key == "tab" then g_prvw_pane = not g_prvw_pane
+    elseif key == "x"   then g_link_default = get_cur_room() g_prvw_pane = true
+    elseif key == "space" then set_cur_room() g_prvw_pane = true
+    end
+
+    g_info={g_link_grid.xsel..","..g_link_grid.ysel}
 end
 
-function conf_draw()
+function prvw_draw()
     if not get_cur_room() then
         zprint("no room here", 5, 11, -1, 7)
         return
     end
 
-    local top_align, left_align = 11, 5
-    local texts = {
-        "ROOM: ["..g_link_grid.xsel..","..g_link_grid.ysel.."]",
-        "",
-    }
+    draw_grid(g_prev_grid)
 
-    local room = get_cur_room()
-    for x in all(g_config_items) do
-        add(texts, x.txt..": "..x.get())
-    end
-    zprint(">", left_align, (1+g_config_item)*8+top_align, -1, 7)
+    draw_bottom_screen(g_prvw_pane, function()
+        local top_align, left_align = 104, 4-- 46
+        local color = g_prvw_pane and 5 or 7
+        local texts = {}
 
-    for i, t in pairs(texts) do
-        zprint(t, 5+left_align, (i-1)*8+top_align, -1, 7)
+        local room = get_cur_room()
+        for x in all(g_config_items) do
+            add(texts, x.txt..": "..x.get())
+        end
+        zprint(">", left_align, (g_config_item-1)*8+top_align, -1, color)
+
+        for i, t in pairs(texts) do
+            zprint(t, 5+left_align, (i-1)*8+top_align, -1, color)
+        end
+    end)
+end
+
+-- OBJECT MODE --
+function objs_update()
+    g_info={g_link_grid.xsel..","..g_link_grid.ysel}
+end
+
+function objs_draw()
+    if not get_cur_room() then
+        zprint("no room here", 5, 11, -1, 7)
+        return
     end
 end
 
@@ -363,17 +369,18 @@ function help_draw()
     local texts = {
         "MAPBUILDER",
         "",
-        "H:   HELP MODE | C: CONF MODE",
-        "L:   LINK MODE | P: PREV MODE",
-        "T:   TILE MODE | O: OBJ  MODE",
-        "RET: SWAP MODE | M: TOGL MOUSE",
+        "L: LINK MODE  | P: PRVW MODE",
+        "T: TILE MODE  | O: OBJS MODE",
+        "H: HELP MODE",
         "",
-        "TAB: ALT PANE  | ARROW: MOVE",
-        "SPACE: CREATE  | BACK: DELETE",
-        "E: SET CREATE  | 1-4: LAYER",
+        "TAB: MODE ALT | RET: MODE SWAP",
+        "M: TOGL MOUSE | D: TOGL DEBUG",
         "",
-        "S: SAVE        | A: RELOAD",
-        "D: DEBUG",
+        "ARROW: MOVE   | SPACE: CREATE",
+        "X: SET CREATE | BACK: DELETE",
+        "1: FOREGROUND | 2: BACKGROUND",
+        "",
+        "S: SAVE       | A: RELOAD",
     }
 
     for i, t in pairs(texts) do
