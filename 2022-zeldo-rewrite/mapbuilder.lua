@@ -1,3 +1,135 @@
+g_objects = {
+--  index  name   spr w  h
+    [  0]={"pot", 49, 1, 1},
+    [  1]={"nil", 0,  1, 1},
+    [  2]={"nil", 0,  1, 1},
+    [  3]={"nil", 0,  1, 1},
+    [  4]={"nil", 0,  1, 1},
+    [  5]={"nil", 0,  1, 1},
+    [  6]={"nil", 0,  1, 1},
+    [  7]={"nil", 0,  1, 1},
+    [  8]={"nil", 0,  1, 1},
+    [  9]={"nil", 0,  1, 1},
+    [ 10]={"nil", 0,  1, 1},
+    [ 11]={"nil", 0,  1, 1},
+    [ 12]={"nil", 0,  1, 1},
+    [ 13]={"nil", 0,  1, 1},
+    [ 14]={"nil", 0,  1, 1},
+    [ 15]={"nil", 0,  1, 1},
+    [ 16]={"nil", 0,  1, 1},
+    [ 17]={"nil", 0,  1, 1},
+    [ 18]={"nil", 0,  1, 1},
+    [ 19]={"nil", 0,  1, 1},
+    [ 20]={"nil", 0,  1, 1},
+    [ 21]={"nil", 0,  1, 1},
+    [ 22]={"nil", 0,  1, 1},
+    [ 23]={"nil", 0,  1, 1},
+    [ 24]={"nil", 0,  1, 1},
+    [ 25]={"nil", 0,  1, 1},
+    [ 26]={"nil", 0,  1, 1},
+    [ 27]={"nil", 0,  1, 1},
+    [ 28]={"nil", 0,  1, 1},
+    [ 29]={"nil", 0,  1, 1},
+    [ 30]={"nil", 0,  1, 1},
+    [ 31]={"nil", 0,  1, 1},
+    [ 32]={"nil", 0,  1, 1},
+    [ 33]={"nil", 0,  1, 1},
+    [ 34]={"nil", 0,  1, 1},
+    [ 35]={"nil", 0,  1, 1},
+    [ 36]={"nil", 0,  1, 1},
+    [ 37]={"nil", 0,  1, 1},
+    [ 38]={"nil", 0,  1, 1},
+    [ 39]={"nil", 0,  1, 1},
+    [ 40]={"nil", 0,  1, 1},
+    [ 41]={"nil", 0,  1, 1},
+    [ 42]={"nil", 0,  1, 1},
+    [ 43]={"nil", 0,  1, 1},
+    [ 44]={"nil", 0,  1, 1},
+    [ 45]={"nil", 0,  1, 1},
+    [ 46]={"nil", 0,  1, 1},
+    [ 47]={"nil", 0,  1, 1},
+    [ 48]={"nil", 0,  1, 1},
+    [ 49]={"nil", 0,  1, 1},
+    [ 50]={"nil", 0,  1, 1},
+    [ 51]={"nil", 0,  1, 1},
+    [ 52]={"nil", 0,  1, 1},
+    [ 53]={"nil", 0,  1, 1},
+    [ 54]={"nil", 0,  1, 1},
+    [ 55]={"nil", 0,  1, 1},
+    [ 56]={"nil", 0,  1, 1},
+    [ 57]={"nil", 0,  1, 1},
+    [ 58]={"nil", 0,  1, 1},
+    [ 59]={"nil", 0,  1, 1},
+    [ 60]={"nil", 0,  1, 1},
+    [ 61]={"nil", 0,  1, 1},
+    [ 62]={"nil", 0,  1, 1},
+    [ 63]={"nil", 0,  1, 1},
+    [ 64]={"nil", 0,  1, 1},
+    [ 65]={"nil", 0,  1, 1},
+    [ 66]={"nil", 0,  1, 1},
+    [ 67]={"nil", 0,  1, 1},
+    [ 68]={"nil", 0,  1, 1},
+    [ 69]={"nil", 0,  1, 1},
+    [ 70]={"nil", 0,  1, 1},
+    [ 71]={"nil", 0,  1, 1},
+    [ 72]={"nil", 0,  1, 1},
+    [ 73]={"nil", 0,  1, 1},
+    [ 74]={"nil", 0,  1, 1},
+    [ 75]={"nil", 0,  1, 1},
+    [ 76]={"nil", 0,  1, 1},
+    [ 77]={"nil", 0,  1, 1},
+    [ 78]={"nil", 0,  1, 1},
+    [ 79]={"nil", 0,  1, 1},
+    [ 80]={"nil", 0,  1, 1},
+    [ 81]={"nil", 0,  1, 1},
+    [ 82]={"nil", 0,  1, 1},
+    [ 83]={"nil", 0,  1, 1},
+    [ 84]={"nil", 0,  1, 1},
+    [ 85]={"nil", 0,  1, 1},
+    [ 86]={"nil", 0,  1, 1},
+    [ 87]={"nil", 0,  1, 1},
+    [ 88]={"nil", 0,  1, 1},
+    [ 89]={"nil", 0,  1, 1},
+    [ 90]={"nil", 0,  1, 1},
+    [ 91]={"nil", 0,  1, 1},
+    [ 92]={"nil", 0,  1, 1},
+    [ 93]={"nil", 0,  1, 1},
+    [ 94]={"nil", 0,  1, 1},
+    [ 95]={"nil", 0,  1, 1},
+    [ 96]={"nil", 0,  1, 1},
+    [ 97]={"nil", 0,  1, 1},
+    [ 98]={"nil", 0,  1, 1},
+    [ 99]={"nil", 0,  1, 1},
+    [100]={"nil", 0,  1, 1},
+    [101]={"nil", 0,  1, 1},
+    [102]={"nil", 0,  1, 1},
+    [103]={"nil", 0,  1, 1},
+    [104]={"nil", 0,  1, 1},
+    [105]={"nil", 0,  1, 1},
+    [106]={"nil", 0,  1, 1},
+    [107]={"nil", 0,  1, 1},
+    [108]={"nil", 0,  1, 1},
+    [109]={"nil", 0,  1, 1},
+    [110]={"nil", 0,  1, 1},
+    [111]={"nil", 0,  1, 1},
+    [112]={"nil", 0,  1, 1},
+    [113]={"nil", 0,  1, 1},
+    [114]={"nil", 0,  1, 1},
+    [115]={"nil", 0,  1, 1},
+    [116]={"nil", 0,  1, 1},
+    [117]={"nil", 0,  1, 1},
+    [118]={"nil", 0,  1, 1},
+    [119]={"nil", 0,  1, 1},
+    [120]={"nil", 0,  1, 1},
+    [121]={"nil", 0,  1, 1},
+    [122]={"nil", 0,  1, 1},
+    [123]={"nil", 0,  1, 1},
+    [124]={"nil", 0,  1, 1},
+    [125]={"nil", 0,  1, 1},
+    [126]={"nil", 0,  1, 1},
+    [127]={"nil", 0,  1, 1},
+}
+
 g_mouse_enabled = false
 g_mouse_frame_limit = 0
 g_mouse_frame_limit_max = 3
@@ -64,11 +196,13 @@ function _update60()
 
     set_grid_to_cur_room(g_prev_grid)
     set_grid_to_cur_room(g_tile_grid)
+    set_grid_to_cur_room(g_objs_grid, 2)
 
     g_mode.update(char)
 
     set_grid_to_cur_room(g_prev_grid)
     set_grid_to_cur_room(g_tile_grid)
+    set_grid_to_cur_room(g_objs_grid, 2)
 
     if get_cur_room() and to_track(get_cur_room().music) ~= g_cur_song then
         g_cur_song = to_track(get_cur_room().music)
@@ -111,11 +245,10 @@ g_tile_grid = {
     xscr=6, yscr=5,
 
     rect_grid        = function() end,
-    rect_boundary_bg = function() end,
+    rect_boundary_bg = function(x1, y1, x2, y2) rectfill(x1,y1,x2,y2,get_cur_room().color) end,
     rect_boundary_fg = function() end,
     rect_select      = function(x1, y1, x2, y2) rect(x1-2,y1-2,x2+2,y2+2,0) rect(x1-1,y1-1,x2+1,y2+1,7) end,
     rect_cell        = function(x, y, x1, y1, x2, y2)
-                           rectfill(x1+0,y1+0,x2-0,y2-0,get_cur_room().color)
                            local t = get_cur_room().tiles[g_tile_layer][y*12+x]
                            if t then spr(128+t, x1, y1) end
                        end
@@ -157,7 +290,6 @@ function tile_update(key)
     elseif key == "back" and g_tile_pane then
         set_tile(get_cur_room(), g_tile_layer, g_tile_grid.ysel*12+g_tile_grid.xsel)
     end
-
 
     local cur_tile_spr = get_cur_room().tiles[g_tile_layer][g_tile_grid.ysel*12+g_tile_grid.xsel]
     g_info={
@@ -353,7 +485,70 @@ function prvw_draw()
 end
 
 -- OBJECT MODE --
-function objs_update()
+g_objs_grid = {
+    xsel=6,  ysel=5,
+    xcen=6,  ycen=5,
+    xmax=12, ymax=10,
+    xcel=4,  ycel=4,
+    xpad=0,  ypad=0,
+    xoff=64, yoff=50,
+    xscr=6,  yscr=5,
+
+    rect_grid        = function() end,
+    rect_boundary_bg = function(x1, y1, x2, y2) rectfill(x1,y1,x2,y2,get_cur_room().color) end,
+    rect_boundary_fg = function(x1, y1, x2, y2) end,
+    rect_select      = function(x1, y1, x2, y2)
+                           local m = 4
+                           rect(x1-2,y1-2,x2+2+m,y2+2+m,0)
+                           rect(x1-1,y1-1,x2+1+m,y2+1+m,7)
+                       end,
+    rect_cell        = function(x, y, x1, y1)
+                           if x % 2 == 0 and y % 2 == 0 then
+                               local nx, ny = x / 2, y / 2
+                               local room = get_cur_room()
+                               -- loop through layers, later layers draw last
+                               for l in all(room.tiles) do
+                                   local t = l[ny*12+nx]
+                                   if t then spr(128+t, x1, y1) end
+                               end
+                           end
+                       end
+}
+
+g_obji_grid = {
+    xsel=0,  ysel=0,
+    xcen=8,  ycen=1.5,
+    xmax=16, ymax=8,
+    xcel=8,  ycel=8,
+    xpad=0,  ypad=0,
+    xoff=64, yoff=107,
+    xscr=8,  yscr=1.5,
+
+    rect_grid        = function() end,
+    rect_boundary_bg = function() end,
+    rect_boundary_fg = function() end,
+    rect_select      = function(x1, y1, x2, y2) rect(x1-2,y1-2,x2+2,y2+2,0) rect(x1-1,y1-1,x2+1,y2+1,7) end,
+    rect_cell        = function(x, y, x1, y1) spr(g_objects[y*16+x][2],x1,y1) end
+}
+
+g_objs_pane = true
+function objs_update(key)
+    if not get_cur_room() then return end
+    update_grid(g_objs_pane and g_objs_grid or g_obji_grid, g_mouse_enabled and g_mouse_frame_limit)
+ 
+    if key == "tab" then g_objs_pane = not g_objs_pane
+    elseif key == "x" then
+        -- local spr_ind = get_cur_room().tiles[g_tile_layer][g_tile_grid.ysel*12+g_tile_grid.xsel]
+        -- g_spr_grid.xsel = spr_ind % 16
+        -- g_spr_grid.ysel = flr(spr_ind / 16)
+        -- update_grid(g_spr_grid)
+    elseif key == "space" then
+        -- g_tile_pane = true
+        -- set_tile(get_cur_room(), g_tile_layer, g_tile_grid.ysel*12+g_tile_grid.xsel, g_spr_grid.ysel*16+g_spr_grid.xsel)
+    elseif key == "back" and g_tile_pane then
+        -- set_tile(get_cur_room(), g_tile_layer, g_tile_grid.ysel*12+g_tile_grid.xsel)
+    end
+
     g_info={g_link_grid.xsel..","..g_link_grid.ysel}
 end
 
@@ -362,6 +557,11 @@ function objs_draw()
         draw_no_room()
         return
     end
+
+    draw_grid(g_objs_grid)
+    draw_bottom_screen(g_objs_pane, function()
+        draw_grid(g_obji_grid)
+    end)
 end
 
 -- HELP MODE --
@@ -658,9 +858,10 @@ function is_hut(y)
     return (y or g_link_grid.ysel) >= 14
 end
 
-function set_grid_to_cur_room(g)
-    g.xmax = is_hut() and 8 or 12
-    g.ymax = is_hut() and 6 or 10
+function set_grid_to_cur_room(g, multiplier)
+    multiplier = multiplier or 1
+    g.xmax = is_hut() and 8*multiplier or 12*multiplier
+    g.ymax = is_hut() and 6*multiplier or 10*multiplier
 
     g.xcen = g.xmax / 2
     g.ycen = g.ymax / 2
