@@ -286,11 +286,13 @@ g_prev_grid = {
 g_config_items = {
     {
         txt="COLOR",
+        prop="color",
         set=function(change) get_cur_room().color = max(min(get_cur_room().color+change, 15, 0)) end,
         get=function() return get_cur_room().color end
     },
     {
         txt="MUSIC",
+        prop="music",
         set=function(change) get_cur_room().music = max(min(get_cur_room().music+change, 15, 0)) end,
         get=function() return to_track(get_cur_room().music) end
     },
@@ -329,18 +331,23 @@ function prvw_draw()
     draw_grid(g_prev_grid)
 
     draw_bottom_screen(g_prvw_pane, function()
-        local top_align, left_align = 104, 4-- 46
+        local top_align, left_align = 104, 64
         local color = g_prvw_pane and 5 or 7
         local texts = {}
 
         local room = get_cur_room()
-        for x in all(g_config_items) do
-            add(texts, x.txt..": "..x.get())
+        for i, x in pairs(g_config_items) do
+            if i == g_config_item then
+                local left  = get_cur_room()[x.prop] <= 0 and "   " or "<- "
+                local right = get_cur_room()[x.prop] >= 15 and "   " or " ->"
+                add(texts, left..x.txt..": "..x.get()..right)
+            else
+                add(texts, x.txt..": "..x.get())
+            end
         end
-        zprint(">", left_align, (g_config_item-1)*8+top_align, -1, color)
 
         for i, t in pairs(texts) do
-            zprint(t, 5+left_align, (i-1)*8+top_align, -1, color)
+            zprint(t, left_align, (i-1)*8+top_align, 0, color)
         end
     end)
 end
