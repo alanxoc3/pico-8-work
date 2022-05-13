@@ -1,11 +1,3 @@
-ROOM_H=10 ROOM_W=12
-MAX_ITEM_LEN=126
-Y_OFFSET=-14
-
-function ui_col()
-    return g_debug and 2 or 1
-end
-
 g_mouse_enabled = false
 g_mouse_frame_limit = 0
 g_mouse_frame_limit_max = 3
@@ -140,7 +132,7 @@ g_tile_pane = true
 g_tile_draw_fills = false
 function tile_update(key)
     if not get_cur_room() then return end
-
+    set_grid_to_cur_room(g_tile_grid)
     update_grid(g_tile_pane and g_tile_grid or g_spr_grid, g_mouse_enabled and g_mouse_frame_limit)
 
     if key == "tab" then g_tile_pane = not g_tile_pane
@@ -217,8 +209,9 @@ g_link_grid = {
     rect_cell        = function(x,y,x1,y1,x2,y2)
                            local room = get_room(x,y)
                            if room then
+                               local pad = is_hut(y) and 2 or 1
                                moving_grid_fill(function() rect(x1-1,y1-1,x2+1,y2+1,ui_col()) end)
-                               rectfill(x1+1,y1+1,x2-1,y2-1,room.color)
+                               rectfill(x1+pad,y1+pad,x2-pad,y2-pad,room.color)
                            end
                        end
 }
@@ -299,8 +292,10 @@ g_config_item = 1
 g_prvw_pane = true
 function prvw_update(key)
     if get_cur_room() then
+        set_grid_to_cur_room(g_prev_grid)
         update_grid(g_prev_grid, g_mouse_enabled and g_mouse_frame_limit)
     end
+
 
     if g_prvw_pane then
         update_grid(g_link_grid)
@@ -645,13 +640,20 @@ function set_obj(room, ind, val)
     l[ind] = val
 end
 
-function is_hut()
-    return g_link_grid.ysel >= 14
+function is_hut(y)
+    return (y or g_link_grid.ysel) >= 14
 end
 
 function set_grid_to_cur_room(g)
     g.xmax = is_hut() and 8 or 12
     g.ymax = is_hut() and 6 or 10
+
+    g.xcen = g.xmax / 2
+    g.ycen = g.ymax / 2
+    g.xscr = g.xmax / 2
+    g.yscr = g.ymax / 2
+    g.xsel = min(g.xsel, g.xmax-1)
+    g.ysel = min(g.ysel, g.ymax-1)
 end
 
 function get_cur_room()
@@ -797,3 +799,5 @@ function tabcpy(src, dest)
     end
     return dest
 end
+
+function ui_col() return g_debug and 2 or 1 end
