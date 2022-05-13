@@ -60,7 +60,14 @@ function _update60()
     elseif char == '⁸' then char = "back"
     end
 
+    set_grid_to_cur_room(g_prev_grid)
+    set_grid_to_cur_room(g_tile_grid)
+
     g_mode.update(char)
+
+    set_grid_to_cur_room(g_prev_grid)
+    set_grid_to_cur_room(g_tile_grid)
+
     if get_cur_room() and to_track(get_cur_room().music) ~= g_cur_song then
         g_cur_song = to_track(get_cur_room().music)
         music(g_cur_song)
@@ -106,7 +113,7 @@ g_tile_grid = {
     rect_boundary_fg = function() end,
     rect_select      = function(x1, y1, x2, y2) rect(x1-2,y1-2,x2+2,y2+2,0) rect(x1-1,y1-1,x2+1,y2+1,7) end,
     rect_cell        = function(x, y, x1, y1, x2, y2)
-                           rectfill(x1+1,y1+1,x2-1,y2-1,get_cur_room().color)
+                           rectfill(x1+0,y1+0,x2-0,y2-0,get_cur_room().color)
                            local t = get_cur_room().tiles[g_tile_layer][y*12+x]
                            if t then spr(128+t, x1, y1) end
                        end
@@ -132,7 +139,6 @@ g_tile_pane = true
 g_tile_draw_fills = false
 function tile_update(key)
     if not get_cur_room() then return end
-    set_grid_to_cur_room(g_tile_grid)
     update_grid(g_tile_pane and g_tile_grid or g_spr_grid, g_mouse_enabled and g_mouse_frame_limit)
 
     if key == "tab" then g_tile_pane = not g_tile_pane
@@ -292,7 +298,6 @@ g_config_item = 1
 g_prvw_pane = true
 function prvw_update(key)
     if get_cur_room() then
-        set_grid_to_cur_room(g_prev_grid)
         update_grid(g_prev_grid, g_mouse_enabled and g_mouse_frame_limit)
     end
 
