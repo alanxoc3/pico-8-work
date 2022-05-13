@@ -1,6 +1,6 @@
 [
     11111111 -- index (room: 0-223, hut: 224-254)
-    1111 1111 -- music | fill
+    1111 111 1 -- music | fill | ishut
     [
         0 1111111  -- zero | ind (0-127)
         1 1111111  -- one  | pos (0-119) or ctrl (120-126)
@@ -25,11 +25,11 @@ obj  l1 l2 l3 l4
         place
 end
 
-120  0  0 or l1
-121 .5  0 or l2
-122  0 .5 or l3
-123 .5 .5 or l4
-124 fill
-125 place
-126 obj
-127 end
+248 til l1    place (default)
+249 til l2    place
+250 obj  0  0 place
+251 obj .5  0 place
+252 obj  0 .5 place
+253 obj .5 .5 place
+254 fill
+255 end

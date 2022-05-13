@@ -148,8 +148,6 @@ function tile_update(key)
     if key == "tab" then g_tile_pane = not g_tile_pane
     elseif key == "1" then g_tile_layer = 1
     elseif key == "2" then g_tile_layer = 2
-    elseif key == "3" then g_tile_layer = 3
-    elseif key == "4" then g_tile_layer = 4
     elseif key == "x" then
         local spr_ind = get_cur_room().tiles[g_tile_layer][g_tile_grid.ysel*12+g_tile_grid.xsel]
         g_spr_grid.xsel = spr_ind % 16
@@ -480,14 +478,14 @@ function itemmap_to_fills(width, height, itemmap)
     return fills, places
 end
 
-CON_L1    = 248
-CON_L2    = 249
-CON_L3    = 250
-CON_L4    = 251
-CON_FILL  = 252
-CON_PLACE = 253
-CON_OBJ   = 254
-CON_END   = 255
+CON_L1     = 248
+CON_L2     = 249
+CON_OBJ_00 = 250
+CON_OBJ_05 = 251
+CON_OBJ_50 = 252
+CON_OBJ_55 = 253
+CON_FILL   = 254
+CON_END    = 255
 
 function encode_room(rooms, min_loc, max_loc)
     local mem_loc = min_loc
@@ -519,6 +517,20 @@ function encode_room(rooms, min_loc, max_loc)
                 mem_loc+=1
             end
 
+            if #places > 0 then
+                for i=0,127 do
+                    if place_by_ind[i] then
+                        poke(mem_loc, band(0x7f, i))
+                        mem_loc+=1
+
+                        for f in all(place_by_ind[i]) do
+                            poke(mem_loc, bor(0x80, min(f.y*12+f.x, 119)))
+                            mem_loc+=1
+                        end
+                    end
+                end
+            end
+
             if #fills > 0 then
                 poke(mem_loc, CON_FILL)
                 mem_loc+=1
@@ -536,23 +548,6 @@ function encode_room(rooms, min_loc, max_loc)
                     end
                 end
             end
-
-            if #places > 0 then
-                poke(mem_loc, CON_PLACE)
-                mem_loc+=1
-                for i=0,127 do
-                    if place_by_ind[i] then
-                        poke(mem_loc, band(0x7f, i))
-                        mem_loc+=1
-
-                        for f in all(place_by_ind[i]) do
-                            poke(mem_loc, bor(0x80, min(f.y*12+f.x, 119)))
-                            mem_loc+=1
-                        end
-                    end
-                end
-            end
-
         end
         poke(mem_loc, 0xff)
         mem_loc+=1
@@ -587,7 +582,7 @@ function decode()
         room.music = lshr(band(0xf0, musfill), 4)
         cur_loc += 1
 
-        local is_fill = true
+        local is_fill = false
         local is_tile = true
         local layer = 1
         local ind = 0
@@ -596,15 +591,15 @@ function decode()
             byte = peek(cur_loc)
             cur_loc += 1
 
-            if     byte == CON_L1    then layer = 1
-            elseif byte == CON_L2    then layer = 2
-            elseif byte == CON_L3    then layer = 3
-            elseif byte == CON_L4    then layer = 4
-            elseif byte == CON_FILL  then is_fill = true
-            elseif byte == CON_PLACE then is_fill = false
-            elseif byte == CON_OBJ   then is_tile = false
-            elseif byte < 128        then ind = byte
-            elseif byte < CON_END    then
+            if     byte == CON_L1     then is_fill = false is_tile = true  layer = 1
+            elseif byte == CON_L2     then is_fill = false is_tile = true  layer = 2
+            elseif byte == CON_OBJ_00 then is_fill = false is_tile = false
+            elseif byte == CON_OBJ_05 then is_fill = false is_tile = false
+            elseif byte == CON_OBJ_50 then is_fill = false is_tile = false
+            elseif byte == CON_OBJ_55 then is_fill = false is_tile = false
+            elseif byte == CON_FILL   then is_fill = true
+            elseif byte < 128         then ind = byte
+            elseif byte < CON_END     then
                 local p1 = band(0x7f, byte)
                 if is_fill then
                     local p2 = band(0x7f, peek(cur_loc))
@@ -676,6 +671,12 @@ function update_grid(g, mouse_rate)
     else
         xsel = flr(xsel+xbtnp())
         ysel = flr(ysel+ybtnp())
+
+        if xsel < g.xmin then xsel = g.xmax end
+        if ysel < g.ymin then ysel = g.ymax end
+
+        if xsel > g.xmax then xsel = g.xmin end
+        if ysel > g.ymax then ysel = g.ymin end
     end
 
     g.xsel  = min(g.xmax, max(g.xmin, xsel))
