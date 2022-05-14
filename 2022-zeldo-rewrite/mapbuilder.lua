@@ -1,7 +1,7 @@
 g_objects = {
 --  index  name   spr w  h
     [  0]={"pot", 49, 1, 1},
-    [  1]={"nil", 0,  1, 1},
+    [  1]={"bed", 39, 1, 2},
     [  2]={"nil", 0,  1, 1},
     [  3]={"nil", 0,  1, 1},
     [  4]={"nil", 0,  1, 1},
@@ -503,8 +503,12 @@ g_objs_grid = {
     rect_boundary_fg = function(x1, y1, x2, y2) end,
     rect_select      = function(x1, y1, x2, y2)
                            local m = 4
+                           local w = g_objects[g_obji_grid.ysel*16+g_obji_grid.xsel][3] - 1
+                           local h = g_objects[g_obji_grid.ysel*16+g_obji_grid.xsel][4] - 1
                            rect(x1-2,y1-2,x2+2+m,y2+2+m,0)
                            rect(x1-1,y1-1,x2+1+m,y2+1+m,7)
+                           rect(x1-2-w*4,y1-2-h*4,x2+2+m+w*4,y2+2+m+h*4,0)
+                           rect(x1-1-w*4,y1-1-h*4,x2+1+m+w*4,y2+1+m+h*4,7)
                        end,
     rect_cell        = function(x, y, x1, y1)
                            if x % 2 == 0 and y % 2 == 0 then
