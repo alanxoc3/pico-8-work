@@ -143,6 +143,8 @@ function load_assets()
     reload(0x0000, 0x0000, 0x2000, 'res.p8')
     reload(0x3000, 0x3000, 0x1300, 'res.p8')
     reload(0x2000, 0x2000, 0x1000, 'game.p8')
+    g_rooms = decode()
+    g_compression_percent = encode_room(g_rooms, 0x2000, 0x3000)
 end
 
 function save_map() cstore(0x2000, 0x2000, 0x1000, 'game.p8') end
@@ -184,10 +186,7 @@ function _update60()
         char = nil
         g_mode, g_prev_mode = g_prev_mode, g_mode
     elseif char == "m" then char = nil g_mouse_enabled = not g_mouse_enabled
-    elseif char == "a" then char = nil
-        load_assets()
-        g_rooms = decode()
-        g_compression_percent = encode_room(g_rooms, 0x2000, 0x3000)
+    elseif char == "a" then char = nil load_assets()
     elseif char == "d" then char = nil g_debug = not g_debug
     elseif char == "s" then char = nil -- save logic
         g_compression_percent = encode_room(g_rooms, 0x2000, 0x3000)
@@ -545,7 +544,7 @@ function objs_update(key)
     g_objs_grid.ymax += 1
 
     if key == "tab" then g_objs_pane = not g_objs_pane
-    elseif key == "x" then
+    elseif key == "x" then -- TODO
         -- local spr_ind = get_cur_room().tiles[g_tile_layer][g_tile_grid.ysel*12+g_tile_grid.xsel]
         -- g_spr_grid.xsel = spr_ind % 16
         -- g_spr_grid.ysel = flr(spr_ind / 16)
@@ -845,9 +844,7 @@ function encode_room(rooms, min_loc, max_loc)
 end
 
 function decode()
-    local mem_loc     = 0x2000
-    local cur_loc = mem_loc
-    local rooms = {}
+    local rooms, cur_loc = {}, 0x2000
 
     while peek(cur_loc) ~= CON_END do
         local room = {
@@ -914,24 +911,24 @@ end
 
 g_rooms = {}
 function set_cur_tile(val)
-    local width = is_hut() and 8 or 12
+    local width = 12
     local x, y = g_tile_grid.xsel, g_tile_grid.ysel
     get_cur_room().tiles[g_tile_layer][y*width+x] = val
 end
 
 function set_cur_obj(val)
-    local width = is_hut() and 2*8 or 2*12
+    local width = 2*12
     local x, y = g_objs_grid.xsel, g_objs_grid.ysel
     get_cur_room().objs[y*width+x] = val
 end
 
 function get_tile(x, y)
-    local width = is_hut() and 8 or 12
+    local width = 12
     return get_cur_room().tiles[g_tile_layer][y*width+x]
 end
 
 function get_obj(x, y)
-    local width = is_hut() and 2*8 or 2*12
+    local width = 2*12
     local obj_ind = get_cur_room().objs[y*width+x]
     if obj_ind then
         return g_objects[obj_ind]
