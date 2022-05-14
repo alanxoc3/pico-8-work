@@ -187,7 +187,7 @@ function _update60()
         g_mode, g_prev_mode = g_prev_mode, g_mode
     elseif char == "m" then char = nil g_mouse_enabled = not g_mouse_enabled
     elseif char == "a" then char = nil load_assets()
-    elseif char == "d" then char = nil g_debug = not g_debug
+    elseif char == "g" then char = nil g_debug = not g_debug
     elseif char == "s" then char = nil -- save logic
         g_compression_percent = encode_room(g_rooms, 0x2000, 0x3000)
         if g_compression_percent <= 1 then
@@ -195,7 +195,6 @@ function _update60()
         end
     elseif char == "	" then char = "tab"
     elseif char == " " then char = "space"
-    elseif char == '⁸' then char = "back"
     end
 
     set_grid_to_cur_room(g_prev_grid)
@@ -297,7 +296,7 @@ function tile_update(key)
     elseif key == "space" then
         g_tile_pane = true
         set_cur_tile(g_spr_grid.ysel*16+g_spr_grid.xsel)
-    elseif key == "back" and g_tile_pane then
+    elseif key == "d" and g_tile_pane then
         set_cur_tile(nil)
     end
 
@@ -373,7 +372,7 @@ g_link_default_original =  {
 function link_update(key)
     update_grid(g_link_grid, g_mouse_enabled and g_mouse_frame_limit)
 
-    if key == "back"    then del_cur_room()
+    if key == "d"    then del_cur_room()
     elseif key == "x" then set_room_default()
     elseif key == "space" then set_cur_room()
     end
@@ -448,7 +447,7 @@ function prvw_update(key)
         g_config_items[g_config_item].set(xbtnp())
     end
 
-    if key == "back"    then del_cur_room() g_prvw_pane = true
+    if key == "d"    then del_cur_room() g_prvw_pane = true
     elseif key == "tab" then g_prvw_pane = not g_prvw_pane
     elseif key == "x"   then set_room_default() g_prvw_pane = true
     elseif key == "space" then set_cur_room() g_prvw_pane = true
@@ -552,7 +551,7 @@ function objs_update(key)
     elseif key == "space" then
         g_objs_pane = true
         set_cur_obj(g_obji_grid.ysel*16+g_obji_grid.xsel)
-    elseif key == "back" and g_objs_pane then
+    elseif key == "d" and g_objs_pane then
         set_cur_obj(nil)
     end
 
@@ -609,10 +608,10 @@ function help_draw()
         "H: HELP MODE",
         "",
         "TAB: MODE ALT | RET: MODE SWAP",
-        "M: TOGL MOUSE | D: TOGL DEBUG",
+        "M: TOGL MOUSE | G: TOGL DEBUG",
         "",
         "ARROW: MOVE   | SPACE: CREATE",
-        "X: SET CREATE | BACK: DELETE",
+        "X: SET CREATE | D: DELETE",
         "1: FOREGROUND | 2: BACKGROUND",
         "",
         "S: SAVE       | A: RELOAD",
