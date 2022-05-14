@@ -302,6 +302,7 @@ function tile_update(key)
 
     local cur_tile_spr = get_cur_room().tiles[g_tile_layer][g_tile_grid.ysel*12+g_tile_grid.xsel]
     g_info={
+        g_tile_layer,
         g_spr_grid.ysel*16+g_spr_grid.xsel+128,
         g_tile_grid.xsel..","..g_tile_grid.ysel,
         cur_tile_spr and cur_tile_spr+128 or nil
@@ -376,7 +377,7 @@ function link_update(key)
 
     if key == "d"    then del_cur_room()
     elseif key == "x" then set_room_default()
-    elseif key == "space" then set_cur_room()
+    elseif key == "space" and get_cur_room() then set_cur_room()
     end
 
     g_info={is_hut() and "hut" or "room", g_link_grid.xsel..","..g_link_grid.ysel}
@@ -452,7 +453,7 @@ function prvw_update(key)
     if key == "d"    then del_cur_room() g_prvw_pane = true
     elseif key == "tab" then g_prvw_pane = not g_prvw_pane
     elseif key == "x"   then set_room_default() g_prvw_pane = true
-    elseif key == "space" then set_cur_room() g_prvw_pane = true
+    elseif key == "space" and get_cur_room() then set_cur_room() g_prvw_pane = true
     end
 
     g_info={is_hut() and "hut" or "room", g_link_grid.xsel..","..g_link_grid.ysel}
