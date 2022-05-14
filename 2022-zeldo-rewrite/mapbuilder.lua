@@ -139,7 +139,6 @@ function update_gfill()
             for x=0,11 do
                 if layer[x] then
                     g_fills[layer[x]+128] = {ind=1, fills={layer[x]+128}}
-            printh("HERE: "..layer[x]+128)
                     for y=1,9 do
                         if layer[y*12+x] then
                             add(g_fills[layer[x]+128].fills, layer[y*12+x]+128)
