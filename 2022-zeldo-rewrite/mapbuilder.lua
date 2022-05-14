@@ -302,7 +302,9 @@ function tile_update(key)
 
     local cur_tile_spr = get_cur_room().tiles[g_tile_layer][g_tile_grid.ysel*12+g_tile_grid.xsel]
     g_info={
-        g_tile_grid.xsel..","..g_tile_grid.ysel..(cur_tile_spr and ":"..cur_tile_spr+128 or "")
+        g_spr_grid.ysel*16+g_spr_grid.xsel+128,
+        g_tile_grid.xsel..","..g_tile_grid.ysel,
+        cur_tile_spr and cur_tile_spr+128 or nil
     }
 end
 
@@ -377,7 +379,7 @@ function link_update(key)
     elseif key == "space" then set_cur_room()
     end
 
-    g_info={g_link_grid.xsel..","..g_link_grid.ysel..":"..(is_hut() and "hut" or "room")}
+    g_info={is_hut() and "hut" or "room", g_link_grid.xsel..","..g_link_grid.ysel}
 end
 
 function link_draw()
@@ -453,7 +455,7 @@ function prvw_update(key)
     elseif key == "space" then set_cur_room() g_prvw_pane = true
     end
 
-    g_info={g_link_grid.xsel..","..g_link_grid.ysel..":"..(is_hut() and "hut" or "room")}
+    g_info={is_hut() and "hut" or "room", g_link_grid.xsel..","..g_link_grid.ysel}
 end
 
 function prvw_draw()
@@ -535,7 +537,7 @@ g_obji_grid = {
 
 g_objs_pane = true
 function objs_update(key)
-    if not get_cur_room() then return end
+    if not get_cur_room() then g_info={} return end
     g_objs_grid.xmax -= 1
     g_objs_grid.ymax -= 1
     update_grid(g_objs_pane and g_objs_grid or g_obji_grid, g_mouse_enabled and g_mouse_frame_limit)
@@ -543,11 +545,13 @@ function objs_update(key)
     g_objs_grid.ymax += 1
 
     if key == "tab" then g_objs_pane = not g_objs_pane
-    elseif key == "x" then -- TODO
-        -- local spr_ind = get_cur_room().tiles[g_tile_layer][g_tile_grid.ysel*12+g_tile_grid.xsel]
-        -- g_spr_grid.xsel = spr_ind % 16
-        -- g_spr_grid.ysel = flr(spr_ind / 16)
-        -- update_grid(g_spr_grid)
+    elseif key == "x" then
+        local obj_ind = get_cur_room().objs[g_objs_grid.ysel*24+g_objs_grid.xsel]
+        if obj_ind then
+            g_obji_grid.xsel = obj_ind % 16
+            g_obji_grid.ysel = flr(obj_ind / 16)
+            update_grid(g_obji_grid)
+        end
     elseif key == "space" then
         g_objs_pane = true
         set_cur_obj(g_obji_grid.ysel*16+g_obji_grid.xsel)
@@ -555,15 +559,13 @@ function objs_update(key)
         set_cur_obj(nil)
     end
 
-    if g_objs_pane then
-        g_info={
-            ""..g_objects[g_obji_grid.ysel*16+g_obji_grid.xsel][1],
-            ""..(g_objs_grid.xsel/2)..","..(g_objs_grid.ysel/2)
-        }
-    else
-        g_info={
-            ""..g_objects[g_obji_grid.ysel*16+g_obji_grid.xsel][1]..":"..(g_obji_grid.ysel*16+g_obji_grid.xsel)
-        }
+    g_info={
+        ""..g_objects[g_obji_grid.ysel*16+g_obji_grid.xsel][1]..":"..(g_obji_grid.ysel*16+g_obji_grid.xsel),
+        ""..(g_objs_grid.xsel/2)..","..(g_objs_grid.ysel/2)
+    }
+
+    if get_cur_room().objs[g_objs_grid.ysel*24+g_objs_grid.xsel] then
+        add(g_info, get_cur_room().objs[g_objs_grid.ysel*24+g_objs_grid.xsel])
     end
 end
 
