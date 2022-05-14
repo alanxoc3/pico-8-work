@@ -139,7 +139,12 @@ function update_mouse()
     g_mouse_x, g_mouse_y = stat(32), stat(33)
 end
 
-function load_assets() reload(0, 0, 0x4300, 'game.p8') end
+function load_assets()
+    reload(0x0000, 0x0000, 0x2000, 'res.p8')
+    reload(0x3000, 0x3000, 0x1300, 'res.p8')
+    reload(0x2000, 0x2000, 0x1000, 'game.p8')
+end
+
 function save_map() cstore(0x2000, 0x2000, 0x1000, 'game.p8') end
 
 g_cur_song = 0
@@ -343,8 +348,8 @@ g_link_grid = {
     xmax=16, ymax=16,
     xcel=12, ycel=10,
     xpad=2,  ypad=2,
-    xoff=57, yoff=45,
-    xscr=3,  yscr=2,
+    xoff=57, yoff=60,
+    xscr=3,  yscr=3,
 
     rect_grid        = function(x1,y1,x2,y2) end,
     rect_boundary_bg = function(x1,y1,x2,y2) rectfill(x1-2,y1-2,x2+2,y2+2,0) rect(x1-2,y1-2,x2+2,y2+2,ui_col()) end,
@@ -360,7 +365,6 @@ g_link_grid = {
                        end
 }
 
-g_link_pane = true
 g_link_default_original =  {
     tiles={{}, {}},
     objs={},
@@ -368,10 +372,9 @@ g_link_default_original =  {
     music=0
 }
 function link_update(key)
-    update_grid(g_link_pane and g_link_grid or g_hut_grid, g_mouse_enabled and g_mouse_frame_limit)
+    update_grid(g_link_grid, g_mouse_enabled and g_mouse_frame_limit)
 
     if key == "back"    then del_cur_room()
-    elseif key == "tab" then g_link_pane = not g_link_pane
     elseif key == "x" then set_room_default()
     elseif key == "space" then set_cur_room()
     end
@@ -381,7 +384,6 @@ end
 
 function link_draw()
     draw_grid(g_link_grid)
-    draw_bottom_screen(g_link_pane, function() end)
 end
 
 -- PREV MODE --
@@ -899,7 +901,6 @@ function decode()
                     end
                 else
                     local x, y = p1 % 12, flr(p1/12)
-                    printh("OBJ: "..ind.." | x: "..x..", y: "..y..", XOFF: "..offx..", YOFF: "..offy)
                     room.objs[y*2*24+offy*24+(x*2+offx)] = ind
                 end
             end
