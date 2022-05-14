@@ -130,6 +130,27 @@ g_objects = {
     [127]={"nil", 0,  1, 1},
 }
 
+g_fills = {}
+function update_gfill()
+    local room = g_rooms[0]
+    g_fills = {}
+    if room then
+        for layer in all(room.tiles) do
+            for x=0,11 do
+                if layer[x] then
+                    g_fills[layer[x]+128] = {ind=1, fills={layer[x]+128}}
+            printh("HERE: "..layer[x]+128)
+                    for y=1,9 do
+                        if layer[y*12+x] then
+                            add(g_fills[layer[x]+128].fills, layer[y*12+x]+128)
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
 g_mouse_enabled = false
 g_mouse_frame_limit = 0
 g_mouse_frame_limit_max = 3
@@ -145,6 +166,7 @@ function load_assets()
     reload(0x2000, 0x2000, 0x1000, 'game.p8')
     g_rooms = decode()
     g_compression_percent = encode_room(g_rooms, 0x2000, 0x3000)
+    update_gfill()
 end
 
 function save_map() cstore(0x2000, 0x2000, 0x1000, 'game.p8') end
@@ -171,6 +193,12 @@ g_compression_percent = 0
 function _update60()
     poke(0x5f30,1) -- disable the pause menu
     update_mouse()
+
+    if t() % .5 == 0 then
+        for i, fill in pairs(g_fills) do
+            fill.ind = fill.ind%#fill.fills+1
+        end
+    end
 
     local is_keydown, char = stat(30)
     if is_keydown then char = stat(31) end
@@ -377,7 +405,7 @@ function link_update(key)
 
     if key == "d"    then del_cur_room()
     elseif key == "x" then set_room_default()
-    elseif key == "space" and get_cur_room() then set_cur_room()
+    elseif key == "space" and not get_cur_room() then set_cur_room()
     end
 
     g_info={is_hut() and "hut" or "room", g_link_grid.xsel..","..g_link_grid.ysel}
@@ -416,7 +444,14 @@ g_prev_grid = {
                            -- loop through layers, later layers draw last
                            for l in all(room.tiles) do
                                local t = l[y*12+x]
-                               if t then spr(128+t, x1, y1) end
+                               if t then
+                                   local sind = 128+t
+                                   if g_fills[sind] then
+                                       spr(g_fills[sind].fills[g_fills[sind].ind], x1, y1)
+                                   else
+                                       spr(sind, x1, y1)
+                                   end
+                               end
                            end
                        end
 }
@@ -453,7 +488,7 @@ function prvw_update(key)
     if key == "d"    then del_cur_room() g_prvw_pane = true
     elseif key == "tab" then g_prvw_pane = not g_prvw_pane
     elseif key == "x"   then set_room_default() g_prvw_pane = true
-    elseif key == "space" and get_cur_room() then set_cur_room() g_prvw_pane = true
+    elseif key == "space" and not get_cur_room() then set_cur_room() g_prvw_pane = true
     end
 
     g_info={is_hut() and "hut" or "room", g_link_grid.xsel..","..g_link_grid.ysel}
