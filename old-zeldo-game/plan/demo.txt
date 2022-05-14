@@ -1,0 +1,10 @@
+Demo version:
+   Go through woods. Get sword. Fight boss. Sister says sorry she left her
+   brother. Go back to brother. He teaches you secret technique... Holding
+   things. Grab chicken. Take to Jane. Get past Bob. Cue demo end!
+
+   That would be a lot of work, but also very satisfying. Let's go for that
+   much in a demo!
+
+   This means that I can get rid of a few enemies, items, and rooms. But I will
+   have to add in a title screen, demo screen, game over, and a boss fight.

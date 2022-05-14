@@ -1,0 +1,48 @@
+Interact/Dash
+   - This is the default action. Just allows the character to interact with
+     something. Without this, you can't interact.
+   - Dash. Get after defeating Cannon. Blow things up. Costs all your
+     energy.
+
+Banjo
+   - Find in Lank's house at the beginning of the game.
+
+Shield
+   - You can buy this from the shop keeper. Deflects shrub balls and protects
+     against attacks.
+
+Boomerang
+   - You can buy this from the shop keeper. Stuns some enemies. Kills others.
+     Doesn't affect some.
+
+Sword
+   - Find in the Maze Woods. After defeating Forest/Navy. After getting the
+     sword. Karla is finished making dinner for Bobb.
+
+Shovel
+   - Shovel up anything that is on the ground. You might get a reward for
+     shoveling things. Shoveled up slots restart when leaving the room. May
+     find entrances, power orbs, hearts, lives. Get the shovel after opening
+     the chest. Grover gives it to you.
+
+Bow and Arrow
+   - Hidden with the shopkeeper. Available after defeating Novi. Novi uses it,
+     then the shopkeeper obtains it.
+
+Bomb
+   - Get from cannon bomb.
+
+Cup
+   - Navy gives you Lime's cup.
+   - It can hold a cup of soup or a fairy.
+   - Shopkeeper sells you fairies for $49 or heart containers for $99.
+   - Bosses give you heart containers too.
+   - Jane gives you soup.
+
+Ghosts & Chickens
+   - These have an internal counter, not visible.
+
+Keys, Squareforce
+   - These are unusable items. They will appear as status-type things along
+     with the ma box at the bottom.
+

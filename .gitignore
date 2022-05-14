@@ -18,3 +18,4 @@ tags
 *.p8.png
 !.archive/*.p8.png
 !template/.code.lua
+!old-zeldo-game/.code.lua
