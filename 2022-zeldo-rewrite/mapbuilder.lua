@@ -165,9 +165,25 @@ function load_assets()
     reload(0x0000, 0x0000, 0x2000, 'game.p8')
     reload(0x2000, 0x2000, 0x1000, 'game.p8')
     reload(0x3000, 0x3000, 0x1300, 'game.p8')
-    g_rooms = decode_map()
+    g_rooms = mapbuilder_decode()
     g_compression_percent = encode_room(g_rooms, 0x2000, 0x3000)
     update_gfill()
+end
+
+function mapbuilder_decode()
+    local old_rooms = decode_map()
+    local rooms = {}
+
+    for ind, r in pairs(old_rooms) do
+        rooms[ind] = {
+            color = r.color,
+            music = r.music,
+            tiles = {r.tiles_1, r.tiles_2},
+            objs  = r.objects
+        }
+    end
+
+    return rooms
 end
 
 function save_map() cstore(0x2000, 0x2000, 0x1000, 'game.p8') end
@@ -175,17 +191,21 @@ function save_map() cstore(0x2000, 0x2000, 0x1000, 'game.p8') end
 g_cur_song = 0
 g_info = {}
 function _init()
+    poke(0x5f5c, 5) -- set custom delay
+    poke(0x5f5d, 5) -- set custom delay
     poke(0x5f2d, 1) -- enable keyboard
     load_assets()
     update_mouse()
 
     g_modes = {
-        ['l'] = { name = "link", update = link_update, draw = link_draw },
-        ['t'] = { name = "tile", update = tile_update, draw = tile_draw },
-        ['p'] = { name = "prvw", update = prvw_update, draw = prvw_draw },
-        ['o'] = { name = "objs", update = objs_update, draw = objs_draw },
-        ['h'] = { name = "help", update = help_update, draw = help_draw },
+        ['h'] = { ind = 0, name = "help", update = help_update, draw = help_draw },
+        ['l'] = { ind = 1, name = "link", update = link_update, draw = link_draw },
+        ['p'] = { ind = 2, name = "prev", update = prvw_update, draw = prvw_draw },
+        ['t'] = { ind = 3, name = "tile", update = tile_update, draw = tile_draw },
+        ['o'] = { ind = 4, name = "objs", update = objs_update, draw = objs_draw },
     }
+
+    g_modes_list = { g_modes.l, g_modes.p, g_modes.t, g_modes.o }
     g_mode = g_modes.h
     g_prev_mode = g_mode
 end
@@ -211,34 +231,38 @@ function _update60()
             g_mode, g_prev_mode = g_prev_mode, g_mode
         end
         char = nil
-    elseif char == "\13" then -- return/enter/newline
-        char = nil
-        g_mode, g_prev_mode = g_prev_mode, g_mode
+    elseif char == "	" then -- tab
+        g_prev_mode, g_mode = g_mode, g_modes_list[g_mode.ind%#g_modes_list+1]
     elseif char == "m" then char = nil g_mouse_enabled = not g_mouse_enabled
-    elseif char == "a" then char = nil load_assets()
+    elseif char == "r" then char = nil load_assets()
     elseif char == "g" then char = nil g_debug = not g_debug
-    elseif char == "s" then char = nil -- save logic
+    elseif char == "s" then char = nil
         g_compression_percent = encode_room(g_rooms, 0x2000, 0x3000)
         if g_compression_percent <= 1 then
             save_map()
         end
-    elseif char == "	" then char = "tab"
-    elseif char == " " then char = "space"
+    elseif char == " " then -- space
+        char = nil
+        g_mode, g_prev_mode = g_prev_mode, g_mode
     end
 
     set_grid_to_cur_room(g_prev_grid)
     set_grid_to_cur_room(g_tile_grid)
     set_grid_to_cur_room(g_objs_grid, 2)
 
+    g_pane_prev = g_pane
+    g_pane = not btn(5)
     g_mode.update(char)
 
     set_grid_to_cur_room(g_prev_grid)
     set_grid_to_cur_room(g_tile_grid)
     set_grid_to_cur_room(g_objs_grid, 2)
 
-    if get_cur_room() and to_track(get_cur_room().music) ~= g_cur_song then
-        g_cur_song = to_track(get_cur_room().music)
-        music(g_cur_song)
+    if get_cur_room() then
+        if to_track(get_cur_room().music) ~= g_cur_song then
+            g_cur_song = to_track(get_cur_room().music)
+            music(g_cur_song)
+        end
     end
 end
 
@@ -302,7 +326,6 @@ g_spr_grid = {
     rect_cell        = function(x, y, x1, y1) spr(128+y*16+x,x1,y1) end
 }
 
-g_tile_pane = true
 g_tile_draw_fills = false
 function tile_update(key)
     if not get_cur_room() then
@@ -310,23 +333,22 @@ function tile_update(key)
         return
     end
 
-    update_grid(g_tile_pane and g_tile_grid or g_spr_grid, g_mouse_enabled and g_mouse_frame_limit)
+    update_grid(g_pane and g_tile_grid or g_spr_grid, g_mouse_enabled and g_mouse_frame_limit)
 
-    if key == "tab" then g_tile_pane = not g_tile_pane
-    elseif key == "1" then g_tile_layer = 1
-    elseif key == "2" then g_tile_layer = 2
-    elseif key == "x" then
+    if g_pane then
+        if key == "1" then g_tile_layer = 1
+        elseif key == "2" then g_tile_layer = 2
+        elseif key == "d" then set_cur_tile(nil)
+        elseif btn(4) then
+            set_cur_tile(g_spr_grid.ysel*16+g_spr_grid.xsel)
+        end
+    elseif g_pane_prev then
         local spr_ind = get_cur_room().tiles[g_tile_layer][g_tile_grid.ysel*12+g_tile_grid.xsel]
         if spr_ind then
             g_spr_grid.xsel = spr_ind % 16
             g_spr_grid.ysel = flr(spr_ind / 16)
             update_grid(g_spr_grid)
         end
-    elseif key == "space" then
-        g_tile_pane = true
-        set_cur_tile(g_spr_grid.ysel*16+g_spr_grid.xsel)
-    elseif key == "d" and g_tile_pane then
-        set_cur_tile(nil)
     end
 
     local cur_tile_spr = get_cur_room().tiles[g_tile_layer][g_tile_grid.ysel*12+g_tile_grid.xsel]
@@ -345,7 +367,7 @@ function tile_draw()
     end
 
     draw_grid(g_tile_grid)
-    draw_bottom_screen(g_tile_pane, function()
+    draw_bottom_screen(g_pane, function()
         draw_grid(g_spr_grid)
     end)
 
@@ -405,8 +427,8 @@ function link_update(key)
     update_grid(g_link_grid, g_mouse_enabled and g_mouse_frame_limit)
 
     if key == "d"    then del_cur_room()
-    elseif key == "x" then set_room_default()
-    elseif key == "space" and not get_cur_room() then set_cur_room()
+    elseif btn(5) then set_room_default()
+    elseif btn(4) then set_cur_room()
     end
 
     g_info={is_hut() and "hut" or "room", g_link_grid.xsel..","..g_link_grid.ysel}
@@ -473,23 +495,16 @@ g_config_items = {
 }
 g_config_item = 1
 
-g_prvw_pane = true
 function prvw_update(key)
     if get_cur_room() then
         update_grid(g_prev_grid, g_mouse_enabled and g_mouse_frame_limit)
     end
 
-    if g_prvw_pane then
+    if g_pane then
         update_grid(g_link_grid)
     else
         g_config_item = max(min(g_config_item+ybtnp(), #g_config_items), 1)
         g_config_items[g_config_item].set(xbtnp())
-    end
-
-    if key == "d"    then del_cur_room() g_prvw_pane = true
-    elseif key == "tab" then g_prvw_pane = not g_prvw_pane
-    elseif key == "x"   then set_room_default() g_prvw_pane = true
-    elseif key == "space" and not get_cur_room() then set_cur_room() g_prvw_pane = true
     end
 
     g_info={is_hut() and "hut" or "room", g_link_grid.xsel..","..g_link_grid.ysel}
@@ -503,9 +518,9 @@ function prvw_draw()
 
     draw_grid(g_prev_grid)
 
-    draw_bottom_screen(g_prvw_pane, function()
+    draw_bottom_screen(g_pane, function()
         local top_align, left_align = 104, 64
-        local color = g_prvw_pane and 5 or 7
+        local color = g_pane and 5 or 7
         local texts = {}
 
         local room = get_cur_room()
@@ -576,28 +591,27 @@ g_obji_grid = {
     rect_cell        = function(x, y, x1, y1) spr(g_objects[y*16+x][2],x1,y1) end
 }
 
-g_objs_pane = true
 function objs_update(key)
     if not get_cur_room() then g_info={} return end
     g_objs_grid.xmax -= 1
     g_objs_grid.ymax -= 1
-    update_grid(g_objs_pane and g_objs_grid or g_obji_grid, g_mouse_enabled and g_mouse_frame_limit)
+    update_grid(g_pane and g_objs_grid or g_obji_grid, g_mouse_enabled and g_mouse_frame_limit)
     g_objs_grid.xmax += 1
     g_objs_grid.ymax += 1
 
-    if key == "tab" then g_objs_pane = not g_objs_pane
-    elseif key == "x" then
+    if g_pane then
+        if key == "d" and g_objs_pane then set_cur_obj(nil)
+        elseif btn(4) then
+            g_objs_pane = true
+            set_cur_obj(g_obji_grid.ysel*16+g_obji_grid.xsel)
+        end
+    elseif g_pane_prev then
         local obj_ind = get_cur_room().objs[g_objs_grid.ysel*24+g_objs_grid.xsel]
         if obj_ind then
             g_obji_grid.xsel = obj_ind % 16
             g_obji_grid.ysel = flr(obj_ind / 16)
             update_grid(g_obji_grid)
         end
-    elseif key == "space" then
-        g_objs_pane = true
-        set_cur_obj(g_obji_grid.ysel*16+g_obji_grid.xsel)
-    elseif key == "d" and g_objs_pane then
-        set_cur_obj(nil)
     end
 
     g_info={
@@ -631,7 +645,7 @@ function objs_draw()
 
     draw_grid(g_objs_grid)
     draw_the_objs(true)
-    draw_bottom_screen(g_objs_pane, function()
+    draw_bottom_screen(g_pane, function()
         draw_grid(g_obji_grid)
     end)
 end
@@ -642,26 +656,32 @@ function help_update()
 end
 
 function help_draw()
-    local top_align, left_align = 11, 5
+    local tit_top_align = 13
+    local top_align, left_align = 13, 6
     local texts = {
-        "MAPBUILDER",
+        "ARR: MOVE         D: DELETE",
+        " 🅾️: CREATE      ❎: PANE",
+        "  1: BG LAYER     2: FG LAYER",
         "",
-        "L: LINK MODE  | P: PRVW MODE",
-        "T: TILE MODE  | O: OBJS MODE",
-        "H: HELP MODE",
+        "  S: SAVE         R: RELOAD",
+        "  M: MOUSE        G: DEBUG",
         "",
-        "TAB: MODE ALT | RET: MODE SWAP",
-        "M: TOGL MOUSE | G: TOGL DEBUG",
-        "",
-        "ARROW: MOVE   | SPACE: CREATE",
-        "X: SET CREATE | D: DELETE",
-        "1: FOREGROUND | 2: BACKGROUND",
-        "",
-        "S: SAVE       | A: RELOAD",
+        "TAB: NEXT       SPA: SWAP",
+        "  L: LINKS        P: PREVIEW",
+        "  T: TILES        O: OBJECTS",
+        "  H: HELP",
     }
 
+    rectfill(63-1, top_align+13, 63+1, 127-10, ui_col())
+    rectfill(63, top_align+13, 63, 127-10, 7)
+    rect(2   , top_align+13   , 127-2  , 127-10  , ui_col())
+    rect(-1+2,-1+ top_align+13,1+ 127-2,1+ 127-10, 7)
+    rect(-2+2,-2+ top_align+13,2+ 127-2,2+ 127-10, ui_col())
+    -- rect(-3+2,-3+ top_align+13,3+ 127-2,3+ 127-7, ui_col())
+    -- rect(-4+2,-4+ top_align+13,4+ 127-2,4+ 127-7, ui_col())
+    zprint("         mapbuilder", left_align, tit_top_align, -1, 7)
     for i, t in pairs(texts) do
-        zprint(t, left_align, (i-1)*8+top_align, -1, 7)
+        zprint(t, left_align, (i-1)*8+top_align+16, -1, 7)
     end
 end
 
@@ -935,18 +955,21 @@ function get_cur_room()
 end
 
 function set_cur_room()
-    local tempr
-    if is_hut() then tempr = g_link_hut_default
-    else tempr = g_link_room_default end
+    if not get_cur_room() then
+        local tempr
+        if is_hut() then tempr = g_link_hut_default
+        else tempr = g_link_room_default end
 
-    local newr = tabcpy(tempr or g_link_default_original)
-    new_room(g_link_grid.xsel, g_link_grid.ysel, newr)
+        g_rooms[g_link_grid.ysel*16+g_link_grid.xsel] = tabcpy(tempr or g_link_default_original)
+    end
 end
 
 function set_room_default()
-    local rcpy = tabcpy(get_cur_room())
-    if is_hut() then g_link_hut_default  = rcpy
-    else             g_link_room_default = rcpy end
+    if get_cur_room() then
+        local rcpy = tabcpy(get_cur_room())
+        if is_hut() then g_link_hut_default  = rcpy
+        else             g_link_room_default = rcpy end
+    end
 end
 
 function get_room(x, y) return g_rooms[y*16+x] end
@@ -954,10 +977,6 @@ function del_cur_room()
     local x, y = g_link_grid.xsel, g_link_grid.ysel
     set_room_default()
     g_rooms[y*16+x] = nil
-end
-
-function new_room(x, y, room)
-    g_rooms[y*16+x] = room
 end
 
 function update_grid(g, mouse_rate)
