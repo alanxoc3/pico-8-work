@@ -1,3 +1,4 @@
+#include src/00-zobj.lua
 #include src/00-decode-map.lua
 g_objects = {
 --  index  name   spr w  h
