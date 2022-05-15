@@ -32,10 +32,10 @@ function decode_map()
 
             if     byte == CON_L1     then is_tile = true  layer = room.tiles_1
             elseif byte == CON_L2     then is_tile = true  layer = room.tiles_2
-            elseif byte == CON_OBJ_00 then offx = 0 offy = 0
-            elseif byte == CON_OBJ_50 then offx = 1 offy = 0
-            elseif byte == CON_OBJ_05 then offx = 0 offy = 1
-            elseif byte == CON_OBJ_55 then offx = 1 offy = 1
+            elseif byte == CON_OBJ_00 then offx = 0  offy = 0
+            elseif byte == CON_OBJ_50 then offx = .5 offy = 0
+            elseif byte == CON_OBJ_05 then offx = 0  offy = .5
+            elseif byte == CON_OBJ_55 then offx = .5 offy = .5
             elseif byte == CON_FILL   then is_fill = true
             elseif byte < 128         then ind = byte
             elseif byte < CON_END     then
@@ -52,7 +52,7 @@ function decode_map()
                         layer[p1] = ind
                     end
                 else
-                    room.objects[p1\12*48+offy*24+p1%12*2+offx] = ind
+                    add(room.objects, {index=ind, x=p1%12+offx, y=p1\12+offy})
                 end
             end
         end

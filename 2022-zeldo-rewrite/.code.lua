@@ -19,9 +19,9 @@ end
 if byte==248 then is_tile=true layer=room.tiles_1
 elseif byte==249 then is_tile=true layer=room.tiles_2
 elseif byte==250 then offx=0 offy=0
-elseif byte==251 then offx=1 offy=0
-elseif byte==252 then offx=0 offy=1
-elseif byte==253 then offx=1 offy=1
+elseif byte==251 then offx=.5 offy=0
+elseif byte==252 then offx=0 offy=.5
+elseif byte==253 then offx=.5 offy=.5
 elseif byte==254 then is_fill=true
 elseif byte<128 then ind=byte
 elseif byte<255 then
@@ -38,7 +38,7 @@ else
 layer[p1]=ind
 end
 else
-room.objects[p1\12*48+offy*24+p1%12*2+offx]=ind
+add(room.objects,{index=ind,x=p1%12+offx,y=p1\12+offy})
 end
 end
 end

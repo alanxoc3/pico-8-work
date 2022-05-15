@@ -175,11 +175,17 @@ function mapbuilder_decode()
     local rooms = {}
 
     for ind, r in pairs(old_rooms) do
+        local objs = {}
+
+        for obj in all(r.objects) do
+            objs[obj.y*2*24+obj.x*2] = obj.index
+        end
+
         rooms[ind] = {
             color = r.color,
             music = r.music,
             tiles = {r.tiles_1, r.tiles_2},
-            objs  = r.objects
+            objs  = objs
         }
     end
 
