@@ -34,7 +34,7 @@ end
     local logo_opacity = cos(a:get_elapsed_percent'state')+1
     fade(logo_opacity)
     camera(logo_opacity > .5 and rnd_one())
-    zspr(108, 64, 64, 4, 2)
+    zspr(SPR_LOGO, 64, 64, SPR_LOGO_W, SPR_LOGO_H)
     fade'0'
     camera()
 end $$

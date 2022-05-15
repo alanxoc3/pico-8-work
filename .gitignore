@@ -19,3 +19,4 @@ tags
 !.archive/*.p8.png
 !template/.code.lua
 !old-zeldo-game/.code.lua
+!2022-zeldo-rewrite/.code.lua

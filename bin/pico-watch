@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
+echo "** watch starting, so let's compile this thing!"
+"$PICO_WORK_DIR/bin/pico-compile" "$@"
 
-inotifywait -e close_write,moved_to,create -mr ./src |
+inotifywait -e close_write,moved_to,create -mr ./src ./constants.txt 2>/dev/null |
 while read -r directory; do
   echo "** '$directory' was changed, so let's compile this thing!"
   "$PICO_WORK_DIR/bin/pico-compile" "$@"
-  echo
 done

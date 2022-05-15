@@ -1,4 +1,10 @@
--- TEMPLATE TOKEN COUNT: 1041
+cartdata"CART_NAME"
+
+menuitem(2, "reset save data", function()
+   memset(REAL_SAVE_LOCATION, 0, SAVE_LENGTH)
+   extcmd'reset'
+end)
+
 zclass[[game_state,actor|
     ecs_exclusions;actor,true; -- remove game_state from the actor group
     curr,logo;
@@ -7,6 +13,8 @@ zclass[[game_state,actor|
 ]]
 
 function _init()
+    memset(TEMP_SAVE_LOCATION, 0, SAVE_LENGTH)
+
     g_tl = _g.game_state()
 end
 

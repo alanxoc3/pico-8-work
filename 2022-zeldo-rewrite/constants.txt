@@ -1,7 +1,17 @@
 # Buttons
-B_UP: ⬆️
+B_UP: ⬆
 B_DOWN: ⬇️
 B_LEFT: ⬅️
 B_RIGHT: ➡️
 B_X: ❎
-B_O: 🅾️
+B_O: 🅾
+
+CART_NAME: zeldo_rewrite
+TEMP_SAVE_LOCATION: 0x5d00
+REAL_SAVE_LOCATION: 0x5e00
+SAVE_LENGTH: 64
+
+# Sprites
+SPR_LOGO: 12
+SPR_LOGO_W: 4
+SPR_LOGO_H: 2

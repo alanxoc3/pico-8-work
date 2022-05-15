@@ -160,9 +160,9 @@ function update_mouse()
 end
 
 function load_assets()
-    reload(0x0000, 0x0000, 0x2000, 'res.p8')
-    reload(0x3000, 0x3000, 0x1300, 'res.p8')
+    reload(0x0000, 0x0000, 0x2000, 'game.p8')
     reload(0x2000, 0x2000, 0x1000, 'game.p8')
+    reload(0x3000, 0x3000, 0x1300, 'game.p8')
     g_rooms = decode()
     g_compression_percent = encode_room(g_rooms, 0x2000, 0x3000)
     update_gfill()
