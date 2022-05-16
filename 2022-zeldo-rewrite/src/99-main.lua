@@ -15,7 +15,7 @@ zclass[[game_state,actor|
 function _init()
     memset(TEMP_SAVE_LOCATION, 0, SAVE_LENGTH)
     g_tl, g_rooms = _g.game_state(), decode_map()
-    initialize_tile_animation_lookup(g_rooms[0])
+    initialize_tile_animation_lookup(g_rooms[ANIMATION_ROOM_INDEX])
 end
 
 function _update60()

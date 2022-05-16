@@ -20,6 +20,7 @@ LAST_ROOM_INDEX: 223
 
 # Higher Number Means Lower Speed
 TILE_ANIMATION_SPEED: .5
+ANIMATION_ROOM_INDEX: 0
 
 # Decode Memory Locations
 CON_L1:     248

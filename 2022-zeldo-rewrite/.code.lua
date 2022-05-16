@@ -222,7 +222,7 @@ local x,y=location%12,location\12
 spr(lookup_tile_animation(index),x1+x*8,y1+y*8)
 end
 end
-post_tile_func()
+post_tile_func(x1,y1)
 clip()
 for i,color in pairs{1,13,1,0}do
 i=4-i
@@ -231,24 +231,16 @@ i+=1
 pset(x1+i,y1+i,color)pset(x1+i,y2-i,color)
 pset(x2-i,y1+i,color)pset(x2-i,y2-i,color)
 end
-post_card_func()
+post_card_func(x1,y1)
 end
 g_tile_animation_lookup={}
 g_tile_animation_index=0
 function initialize_tile_animation_lookup(room)
-if room then
 for layer in all{room.tiles_1,room.tiles_2}do
 for x=0,11 do
-local spr_base=layer[x]
-if spr_base then
-g_tile_animation_lookup[spr_base]={}
-for y=0,9 do
-if layer[y*12+x]then
-add(g_tile_animation_lookup[spr_base],layer[y*12+x])
-end
-end
-end
-end
+local tbl={}
+for y=0,9 do add(tbl,layer[y*12+x])end
+g_tile_animation_lookup[layer[x]or 0]=tbl
 end
 end
 end
