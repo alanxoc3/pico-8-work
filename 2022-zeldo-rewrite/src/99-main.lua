@@ -15,6 +15,7 @@ zclass[[game_state,actor|
 function _init()
     memset(TEMP_SAVE_LOCATION, 0, SAVE_LENGTH)
     g_tl, g_rooms = _g.game_state(), decode_map()
+    initialize_tile_animation_lookup(g_rooms[0])
 end
 
 function _update60()
@@ -22,6 +23,7 @@ function _update60()
     if btnp(4) and btnp(5) then g_debug = not g_debug end
     -- DEBUG_END
 
+    update_tile_animation_lookup()
     loop_entities('actor',      'clean') -- delete any actors that were killed, and call their "destroy" callback
     register_entities()                  -- register all zobs from previous game loop iteration
     loop_entities('timer',      'tick')  -- update the timers

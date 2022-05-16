@@ -211,18 +211,55 @@ zclass[[fader_out,actor|start;duration,@,destroyed,@,update,%fader_out_update]]
 zclass[[fader_in,actor|start;duration,@,update,%fader_in_update]]
 zclass[[timer|timers;,;start_timer,%timer_start_timer,stop_timer,%timer_stop_timer,play_timer,%timer_play_timer,delete_timer,%timer_delete_timer,get_elapsed,%timer_get_elapsed,get_elapsed_percent,%timer_get_elapsed_percent,tick,%timer_tick,]]
 function draw_room(room,center_x,center_y,post_tile_func,post_card_func)
-local offx,offy=center_x-room.w*8\2,center_y-room.h*8\2
-rectfill(offx,offy,offx+room.w*8-1,offy+room.h*8-1,room.color)
-for location,index in pairs(room.tiles_1)do
+local x1,y1=center_x-room.w*8\2,center_y-room.h*8\2
+local pw,ph=room.w*8-1,room.h*8-1
+local x2,y2=x1+pw,y1+ph
+clip(x1+4,y1+4,pw-7,ph-7)
+rectfill(x1,y1,x2,y2,room.color)
+for tiles in all{room.tiles_1,room.tiles_2}do
+for location,index in pairs(tiles)do
 local x,y=location%12,location\12
-spr(index,offx+x*8,offy+y*8)
+spr(lookup_tile_animation(index),x1+x*8,y1+y*8)
 end
-for location,index in pairs(room.tiles_2)do
-local x,y=location%12,location\12
-spr(index,offx+x*8,offy+y*8)
 end
 post_tile_func()
+clip()
+for i,color in pairs{1,13,1,0}do
+i=4-i
+rect(x1+i,y1+i,x2-i,y2-i,color)
+i+=1
+pset(x1+i,y1+i,color)pset(x1+i,y2-i,color)
+pset(x2-i,y1+i,color)pset(x2-i,y2-i,color)
+end
 post_card_func()
+end
+g_tile_animation_lookup={}
+g_tile_animation_index=0
+function initialize_tile_animation_lookup(room)
+if room then
+for layer in all{room.tiles_1,room.tiles_2}do
+for x=0,11 do
+local spr_base=layer[x]
+if spr_base then
+g_tile_animation_lookup[spr_base]={}
+for y=0,9 do
+if layer[y*12+x]then
+add(g_tile_animation_lookup[spr_base],layer[y*12+x])
+end
+end
+end
+end
+end
+end
+end
+function update_tile_animation_lookup()
+if t()%.5==0 then
+g_tile_animation_index=(g_tile_animation_index+1)%60
+end
+end
+function lookup_tile_animation(sind)
+local anim=g_tile_animation_lookup[sind]
+return anim and anim[g_tile_animation_index%#anim+1]or sind
 end
 g_fade_table=zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,1,0,0,0,0;3;,3,3,3,3,1,1,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,0,0,0,0;6;,6,6,13,13,5,5,0,0;7;,7,7,6,13,13,5,0,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,0,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,0,0,0;13;,13,13,5,5,1,0,0,0;14;,14,14,13,4,2,2,0,0;15;,15,15,13,13,5,5,0,0;]]
 function fade(threshold)
@@ -239,8 +276,10 @@ zclass[[game_state,actor|ecs_exclusions;actor,true;curr,logo;logo;init,%logo_ini
 function _init()
 memset(0x5d00,0,64)
 g_tl,g_rooms=_g.game_state(),decode_map()
+initialize_tile_animation_lookup(g_rooms[0])
 end
 function _update60()
+update_tile_animation_lookup()
 loop_entities("actor","clean")
 register_entities()
 loop_entities("timer","tick")

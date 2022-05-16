@@ -6,6 +6,7 @@
 --     objects: {{x:0, y:0, index:0}...},
 --     color:0,
 --     music:0,
+--     get_spr
 --   }
 -- }
 
