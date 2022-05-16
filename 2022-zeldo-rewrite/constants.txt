@@ -15,6 +15,8 @@ HUT_W: 8
 HUT_H: 6
 ROOM_W: 12
 ROOM_H: 10
+WRAP_W: 12
+LAST_ROOM_INDEX: 223
 
 # Decode Memory Locations
 CON_L1:     248

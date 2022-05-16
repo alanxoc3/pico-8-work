@@ -1,3 +1,13 @@
+CON_L1     = 248
+CON_L2     = 249
+CON_OBJ_00 = 250
+CON_OBJ_50 = 251
+CON_OBJ_05 = 252
+CON_OBJ_55 = 253
+CON_FILL   = 254
+CON_END    = 255
+LAST_ROOM_INDEX = 223
+
 #include src/00-zobj.lua
 #include src/00-decode-map.lua
 g_objects = {
@@ -175,7 +185,9 @@ function mapbuilder_decode()
     local rooms = {}
 
     for ind, r in pairs(old_rooms) do
-        local objs = {}
+        local objs, tiles_1, tiles_2 = {}, {}, {}
+        for ind, tile in pairs(r.tiles_1) do tiles_1[ind] = tile-128 end
+        for ind, tile in pairs(r.tiles_2) do tiles_2[ind] = tile-128 end
 
         for obj in all(r.objects) do
             objs[obj.y*2*24+obj.x*2] = obj.index
@@ -184,7 +196,7 @@ function mapbuilder_decode()
         rooms[ind] = {
             color = r.color,
             music = r.music,
-            tiles = {r.tiles_1, r.tiles_2},
+            tiles = {tiles_1, tiles_2},
             objs  = objs
         }
     end
@@ -787,15 +799,6 @@ function itemmap_to_fills(width, height, itemmap)
 
     return fills, places
 end
-
-CON_L1     = 248
-CON_L2     = 249
-CON_OBJ_00 = 250
-CON_OBJ_50 = 251
-CON_OBJ_05 = 252
-CON_OBJ_55 = 253
-CON_FILL   = 254
-CON_END    = 255
 
 function encode_room(rooms, min_loc, max_loc)
     local mem_loc = min_loc

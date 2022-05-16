@@ -14,8 +14,7 @@ zclass[[game_state,actor|
 
 function _init()
     memset(TEMP_SAVE_LOCATION, 0, SAVE_LENGTH)
-
-    g_tl = _g.game_state()
+    g_tl, g_rooms = _g.game_state(), decode_map()
 end
 
 function _update60()
@@ -43,4 +42,5 @@ zclass[[test_obj,actor,drawlayer_50|x,@,y,@,color,7,init,%test_init,update,%test
 |game_init|   function() _g.test_obj(64, 64)             end $$
 |game_update| function() loop_entities('actor', 'state')    end $$
 |game_draw|   function() rect(0, 0, 127, 127, 8)
+                         draw_room(g_rooms[8*16+8], 64, 64, nop, nop)
                          loop_entities('drawlayer_50', 'draw')  end $$

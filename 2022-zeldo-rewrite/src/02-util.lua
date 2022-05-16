@@ -4,6 +4,9 @@ function zspr(sind, x, y, sw, sh, ...)
     spr(sind, x-sw*4, y-sh*4, sw, sh, ...)
 end
 
+-- noop
+function nop() end
+
 -- gives a discrete random number: [0, x)
 function flr_rnd(x)
     return flr(rnd(x))
