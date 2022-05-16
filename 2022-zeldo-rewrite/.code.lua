@@ -134,7 +134,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,actor_deregistered,@,fader_out_update,@,fader_in_update,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,logo_init,@,logo_draw,@,test_init,@,test_update,@,test_draw,@,game_init,@,game_update,@,game_draw,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,actor_deregistered,@,fader_out_update,@,fader_in_update,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,tile_animation_init,@,tile_animation_lookup,@,logo_init,@,logo_draw,@,test_init,@,test_update,@,test_draw,@,game_init,@,game_update,@,game_draw,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -181,6 +181,12 @@ end
 foreach(finished_timers,function(timer)
 timer.callback(a)
 end)
+end,function(a)
+a.index+=1
+a.index%=60
+end,function(a,sind)
+local anim=a.lookup_table[sind]
+return anim and anim[a.index%#anim+1]or sind
 end,function()sfx(63,0)end,function(a)
 local logo_opacity=cos(a:get_elapsed_percent"state")+1
 fade(logo_opacity)
@@ -219,7 +225,7 @@ rectfill(x1,y1,x2,y2,room.color)
 for tiles in all{room.tiles_1,room.tiles_2}do
 for location,index in pairs(tiles)do
 local x,y=location%12,location\12
-spr(lookup_tile_animation(index),x1+x*8,y1+y*8)
+spr(g_tile_animation:lookup(index),x1+x*8,y1+y*8)
 end
 end
 post_tile_func(x1,y1)
@@ -233,26 +239,18 @@ pset(x2-i,y1+i,color)pset(x2-i,y2-i,color)
 end
 post_card_func(x1,y1)
 end
-g_tile_animation_lookup={}
-g_tile_animation_index=0
-function initialize_tile_animation_lookup(room)
+function create_tile_animation(room)
+local lookup={}
 for layer in all{room.tiles_1,room.tiles_2}do
 for x=0,11 do
 local tbl={}
 for y=0,9 do add(tbl,layer[y*12+x])end
-g_tile_animation_lookup[layer[x]or 0]=tbl
+lookup[layer[x]or 0]=tbl
 end
 end
+return _g.tile_animation(lookup)
 end
-function update_tile_animation_lookup()
-if t()%.5==0 then
-g_tile_animation_index=(g_tile_animation_index+1)%60
-end
-end
-function lookup_tile_animation(sind)
-local anim=g_tile_animation_lookup[sind]
-return anim and anim[g_tile_animation_index%#anim+1]or sind
-end
+zclass[[tile_animation,actor|lookup_table,@,index,0,init,%tile_animation_init,lookup,%tile_animation_lookup;start;duration,.5,next,start]]
 g_fade_table=zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,1,0,0,0,0;3;,3,3,3,3,1,1,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,0,0,0,0;6;,6,6,13,13,5,5,0,0;7;,7,7,6,13,13,5,0,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,0,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,0,0,0;13;,13,13,5,5,1,0,0,0;14;,14,14,13,4,2,2,0,0;15;,15,15,13,13,5,5,0,0;]]
 function fade(threshold)
 for c=0,15 do
@@ -268,10 +266,9 @@ zclass[[game_state,actor|ecs_exclusions;actor,true;curr,logo;logo;init,%logo_ini
 function _init()
 memset(0x5d00,0,64)
 g_tl,g_rooms=_g.game_state(),decode_map()
-initialize_tile_animation_lookup(g_rooms[0])
+g_tile_animation=create_tile_animation(g_rooms[0])
 end
 function _update60()
-update_tile_animation_lookup()
 loop_entities("actor","clean")
 register_entities()
 loop_entities("timer","tick")

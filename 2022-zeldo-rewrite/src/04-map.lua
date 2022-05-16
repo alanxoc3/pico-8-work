@@ -15,7 +15,7 @@ function draw_room(room, center_x, center_y, post_tile_func, post_card_func)
     for tiles in all{room.tiles_1, room.tiles_2} do
         for location, index in pairs(tiles) do
             local x, y = location%ROOM_W, location\ROOM_W
-            spr(lookup_tile_animation(index), x1+x*8, y1+y*8)
+            spr(g_tile_animation:lookup(index), x1+x*8, y1+y*8)
         end
     end
     post_tile_func(x1, y1)
@@ -32,25 +32,33 @@ function draw_room(room, center_x, center_y, post_tile_func, post_card_func)
     post_card_func(x1, y1)
 end
 
-g_tile_animation_lookup = {}
-g_tile_animation_index = 0
-function initialize_tile_animation_lookup(room)
+function create_tile_animation(room)
+    local lookup = {}
     for layer in all{room.tiles_1, room.tiles_2} do
         for x=0,11 do
             local tbl = {}
             for y=0,9 do add(tbl, layer[y*12+x]) end
-            g_tile_animation_lookup[layer[x] or 0] = tbl
+            lookup[layer[x] or 0] = tbl
         end
     end
+    return _g.tile_animation(lookup)
 end
 
-function update_tile_animation_lookup()
-    if t() % TILE_ANIMATION_SPEED == 0 then
-        g_tile_animation_index = (g_tile_animation_index+1)%60
-    end
-end
+zclass[[tile_animation,actor|
+    lookup_table,@,
+    index,0,
+    init,%tile_animation_init,
+    lookup,%tile_animation_lookup;
 
-function lookup_tile_animation(sind)
-    local anim = g_tile_animation_lookup[sind]
-    return anim and anim[g_tile_animation_index%#anim+1] or sind
-end
+    start;duration,TILE_ANIMATION_SPEED,next,start
+]]
+
+|tile_animation_init| function(a)
+    a.index += 1
+    a.index %= 60 -- smooth because divisible by 2,3,4,5,6
+end $$
+
+|tile_animation_lookup| function(a, sind)
+    local anim = a.lookup_table[sind]
+    return anim and anim[a.index%#anim+1] or sind
+end $$

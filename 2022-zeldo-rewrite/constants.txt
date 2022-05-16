@@ -18,8 +18,10 @@ ROOM_H: 10
 WRAP_W: 12
 LAST_ROOM_INDEX: 223
 
-# Higher Number Means Lower Speed
+# Animation change in seconds
 TILE_ANIMATION_SPEED: .5
+
+# The room that contains animations
 ANIMATION_ROOM_INDEX: 0
 
 # Decode Memory Locations
