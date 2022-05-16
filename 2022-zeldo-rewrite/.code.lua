@@ -155,7 +155,7 @@ end,function(...)
 _g.timer_stop_timer(...)
 _g.timer_play_timer(...)
 end,function(a,timer_name,duration,callback)
-a.timers[timer_name]={elapsed=false,duration=duration or 32767,callback=callback or function()end}
+a.timers[timer_name]={elapsed=false,duration=0+(duration or 32767),callback=callback or function()end}
 end,function(a,timer_name)
 if a.timers[timer_name]and not a.timers[timer_name].elapsed then
 a.timers[timer_name].elapsed=0
@@ -188,13 +188,11 @@ end,function(a,sind)
 local anim=a.lookup_table[sind]
 return anim and anim[a.index%#anim+1]or sind
 end,function()sfx(63,0)end,function(a)
-local logo_opacity=cos(a:get_elapsed_percent"state")+1
-fade(logo_opacity)
-camera(logo_opacity>.5 and rnd_one())
-zspr(12,64,64,4,2)
-fade"0"
+g_fade=cos(a:get_elapsed_percent"state")+1
+camera(g_fade>.5 and rnd_one())
+zspr(108,64,64,4,2)
 camera()
-end,function(a)a.color+=1 end,function(a)a.x+=xbtn()a.y+=ybtn()end,function(a)circfill(a.x,a.y,2,a.color)end,function()_g.test_obj(64,64)end,function()loop_entities("actor","state")end,function()rect(0,0,127,127,8)
+end,function(a)a.color+=1 end,function(a)a.x+=xbtn()a.y+=ybtn()end,function(a)circfill(a.x,a.y,2,a.color)end,function()_g.fader_in".5" _g.test_obj(64,64)end,function()loop_entities("actor","state")end,function()rect(0,0,127,127,8)
 draw_room(g_rooms[8*16+8],64,64,nop,nop)
 loop_entities("drawlayer_50","draw")end)
 function zspr(sind,x,y,sw,sh,...)
@@ -276,6 +274,7 @@ loop_entities("game_state","state")
 end
 function _draw()
 cls()
+fade(g_fade)
 loop_entities("game_state","draw")
 end
 zclass[[test_obj,actor,drawlayer_50|x,@,y,@,color,7,init,%test_init,update,%test_update,draw,%test_draw;]]

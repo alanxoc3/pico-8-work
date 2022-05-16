@@ -31,10 +31,8 @@ end
 |logo_init| function() sfx(63, 0) end $$
 
 |logo_draw| function(a)
-    local logo_opacity = cos(a:get_elapsed_percent'state')+1
-    fade(logo_opacity)
-    camera(logo_opacity > .5 and rnd_one())
-    zspr(108, 64, 64, 4, 2)
-    fade'0'
+    g_fade = cos(a:get_elapsed_percent'state')+1
+    camera(g_fade > .5 and rnd_one())
+    zspr(SPR_LOGO, 64, 64, SPR_LOGO_W, SPR_LOGO_H)
     camera()
 end $$

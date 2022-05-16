@@ -108,7 +108,7 @@ end,function(...)
 _g.timer_stop_timer(...)
 _g.timer_play_timer(...)
 end,function(a,timer_name,duration,callback)
-a.timers[timer_name]={elapsed=false,duration=duration or 32767,callback=callback or function()end}
+a.timers[timer_name]={elapsed=false,duration=0+(duration or 32767),callback=callback or function()end}
 end,function(a,timer_name)
 if a.timers[timer_name]and not a.timers[timer_name].elapsed then
 a.timers[timer_name].elapsed=0
@@ -135,13 +135,11 @@ foreach(finished_timers,function(timer)
 timer.callback(a)
 end)
 end,function()sfx(63,0)end,function(a)
-local logo_opacity=cos(a:get_elapsed_percent"state")+1
-fade(logo_opacity)
-camera(logo_opacity>.5 and rnd_one())
+g_fade=cos(a:get_elapsed_percent"state")+1
+camera(g_fade>.5 and rnd_one())
 zspr(108,64,64,4,2)
-fade"0"
 camera()
-end,function(a)a.color+=1 end,function(a)a.x+=xbtn()a.y+=ybtn()end,function(a)circfill(a.x,a.y,2,a.color)end,function()_g.test_obj(64,64)end,function()loop_entities("actor","state")end,function()rect(0,0,127,127,8)
+end,function(a)a.color+=1 end,function(a)a.x+=xbtn()a.y+=ybtn()end,function(a)circfill(a.x,a.y,2,a.color)end,function()_g.fader_in".5" _g.test_obj(64,64)end,function()loop_entities("actor","state")end,function()rect(0,0,127,127,8)
 loop_entities("drawlayer_50","draw")end)
 function zspr(sind,x,y,sw,sh,...)
 sw,sh=sw or 1,sh or 1
@@ -163,7 +161,7 @@ zclass[[drawlayer_50|]]
 zclass[[fader_out,actor|start;duration,@,destroyed,@,update,%fader_out_update]]
 zclass[[fader_in,actor|start;duration,@,update,%fader_in_update]]
 zclass[[timer|timers;,;start_timer,%timer_start_timer,stop_timer,%timer_stop_timer,play_timer,%timer_play_timer,delete_timer,%timer_delete_timer,get_elapsed,%timer_get_elapsed,get_elapsed_percent,%timer_get_elapsed_percent,tick,%timer_tick,]]
-g_fade_table=zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,1,1,0,0;2;,2,2,2,2,1,1,0,0;3;,3,3,3,3,1,1,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,1,1,0,0;6;,6,6,13,13,5,5,0,0;7;,7,7,6,13,13,5,0,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,0,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,1,0,0;13;,13,13,5,5,1,1,0,0;14;,14,14,13,4,2,2,0,0;15;,15,15,13,13,5,5,0,0;]]
+g_fade_table=zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,1,0,0,0,0;3;,3,3,3,3,1,1,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,0,0,0,0;6;,6,6,13,13,5,5,0,0;7;,7,7,6,13,13,5,0,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,0,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,0,0,0;13;,13,13,5,5,1,0,0,0;14;,14,14,13,4,2,2,0,0;15;,15,15,13,13,5,5,0,0;]]
 function fade(threshold)
 for c=0,15 do
 pal(c,g_fade_table[c][1+flr(7*min(1,max(0,threshold)))])
@@ -181,6 +179,7 @@ loop_entities("game_state","state")
 end
 function _draw()
 cls()
+fade(g_fade)
 loop_entities("game_state","draw")
 end
 zclass[[test_obj,actor,drawlayer_50|x,@,y,@,color,7,init,%test_init,update,%test_update,draw,%test_draw;]]

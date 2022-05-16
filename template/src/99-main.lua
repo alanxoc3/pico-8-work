@@ -1,4 +1,4 @@
--- TEMPLATE TOKEN COUNT: 1041
+-- TEMPLATE TOKEN COUNT: 1045
 zclass[[game_state,actor|
     ecs_exclusions;actor,true; -- remove game_state from the actor group
     curr,logo;
@@ -23,6 +23,7 @@ end
 
 function _draw()
     cls()
+    fade(g_fade)
     loop_entities('game_state', 'draw')
 end
 
@@ -32,7 +33,7 @@ zclass[[test_obj,actor,drawlayer_50|x,@,y,@,color,7,init,%test_init,update,%test
 |test_update| function(a) a.x += xbtn() a.y += ybtn()    end $$
 |test_draw|   function(a) circfill(a.x, a.y, 2, a.color) end $$
 
-|game_init|   function() _g.test_obj(64, 64)             end $$
+|game_init|   function() _g.fader_in'.5' _g.test_obj(64, 64)             end $$
 |game_update| function() loop_entities('actor', 'state')    end $$
 |game_draw|   function() rect(0, 0, 127, 127, 8)
                          loop_entities('drawlayer_50', 'draw')  end $$

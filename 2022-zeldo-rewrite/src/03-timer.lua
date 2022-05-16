@@ -22,7 +22,7 @@ zclass[[timer|
 end $$
 
 |timer_stop_timer| function(a, timer_name, duration, callback)
-    a.timers[timer_name] = { elapsed=false, duration=duration or 32767, callback=callback or function() end }
+    a.timers[timer_name] = { elapsed=false, duration=0+(duration or 32767), callback=callback or function() end }
 end $$
 
 |timer_play_timer| function(a, timer_name)

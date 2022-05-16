@@ -5,3 +5,8 @@ B_LEFT: ⬅️
 B_RIGHT: ➡️
 B_X: ❎
 B_O: 🅾️
+
+# Sprites
+SPR_LOGO: 108
+SPR_LOGO_W: 4
+SPR_LOGO_H: 2
