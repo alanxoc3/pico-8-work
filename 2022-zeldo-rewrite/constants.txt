@@ -19,6 +19,7 @@ WRAP_W: 12
 LAST_ROOM_INDEX: 223
 
 # Animation change in seconds
+FADE_SPEED: .5
 TILE_ANIMATION_SPEED: .5
 
 # The room that contains animations
@@ -38,3 +39,4 @@ CON_END:    255
 SPR_LOGO: 108
 SPR_LOGO_W: 4
 SPR_LOGO_H: 2
+SPR_TITLE_L: 45

@@ -648,6 +648,14 @@ function draw_the_objs(include_rect)
         local y1 = g_objs_grid.yoff+flr(obj_loc/24)*4-g_objs_grid.ycen*4
 
         local obj = g_objects[obj_ind]
+        sprout(obj[2], x1-obj[3]*4+4, y1-obj[4]*4+4, obj[3], obj[4])
+    end
+
+    for obj_loc, obj_ind in pairs(get_cur_room().objs) do
+        local x1 = g_objs_grid.xoff+obj_loc%24*4-g_objs_grid.xcen*4
+        local y1 = g_objs_grid.yoff+flr(obj_loc/24)*4-g_objs_grid.ycen*4
+
+        local obj = g_objects[obj_ind]
         spr(obj[2], x1-obj[3]*4+4, y1-obj[4]*4+4, obj[3], obj[4])
         if include_rect then
             rect(x1-obj[3]*4+4-1, y1-obj[4]*4+4-1, x1+4+obj[3]*4, y1+4+obj[4]*4, 10)
@@ -1115,3 +1123,9 @@ end
 
 function ui_col() return g_debug and 2 or 1 end
 function draw_no_room() zprint("no room here", 63, 66, 0, 7) end
+
+function sprout(sind, x, y, sw, sh, flip_x, flip_y)
+    for c=1,15 do pal(c,1) end
+    for i=0,8 do spr(sind, x+i%3-1, y+i\3-1, sw, sh, flip_x, flip_y) end
+    pal()
+end

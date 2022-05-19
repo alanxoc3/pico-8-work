@@ -134,7 +134,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,actor_deregistered,@,fader_out_update,@,fader_in_update,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,tile_animation_init,@,tile_animation_lookup,@,logo_init,@,logo_draw,@,test_init,@,test_update,@,test_draw,@,game_init,@,game_update,@,game_draw,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,actor_deregistered,@,fader_out_update,@,fader_in_update,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,tile_animation_init,@,tile_animation_lookup,@,title_logo_update,@,title_logo_draw,@,logo_init,@,logo_draw,@,test_init,@,test_update,@,test_draw,@,game_init,@,game_update,@,game_draw,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -187,18 +187,44 @@ a.index%=60
 end,function(a,sind)
 local anim=a.lookup_table[sind]
 return anim and anim[a.index%#anim+1]or sind
+end,function(a)
+if btnp(4)or btnp(5)then
+_g.fader_out(.5,function()end)
+a:load"ending"
+end
+end,function(a)
+camera(-8*8,-8*8)
+for i=-2,2 do
+zsprb(45+i,i*10,cos(t()/2+i/4)/2+1+a.title_y,1,2)
+end
+title_print("not the story of",0,a.title_y-17,10,4,1)
+if t()%1<.5 then
+title_print("🅾️ or ❎ to play  ",0,a.title_y+12,7,5,1)
+end
+camera()
 end,function()sfx(63,0)end,function(a)
 g_fade=cos(a:get_elapsed_percent"state")+1
 camera(g_fade>.5 and rnd_one())
 zspr(108,64,64,4,2)
 camera()
-end,function(a)a.color+=1 end,function(a)a.x+=xbtn()a.y+=ybtn()end,function(a)circfill(a.x,a.y,2,a.color)end,function()_g.fader_in".5" _g.test_obj(64,64)end,function()loop_entities("actor","state")end,function()rect(0,0,127,127,8)
-draw_room(g_rooms[8*16+8],64,64,nop,nop)
-loop_entities("drawlayer_50","draw")end)
-function zspr(sind,x,y,sw,sh,...)
+end,function(a)a.color+=1 end,function(a)a.x+=xbtn()a.y+=ybtn()end,function(a)circfill(a.x,a.y,2,a.color)end,function()_g.fader_in".5" _g.title_logo()_g.test_obj(64,64)end,function()loop_entities("actor","state")end,function()draw_room(g_rooms[8*16+8],64,64,nop,nop)
+loop_entities("outlayer_99","drawout")
+loop_entities("drawlayer_99","draw")
+end)
+function zspr_helper(func,sind,x,y,sw,sh,...)
 sw,sh=sw or 1,sh or 1
-spr(sind,x-sw*4,y-sh*4,sw,sh,...)
+x,y=x-sw*4,y-sh*4
+func(sind,x,y,sw,sh,...)
 end
+function spro(sind,x,y,...)
+for c=1,15 do pal(c,1)end
+for i=0,8 do spr(sind,x+i%3-1,y+i\3-1,...)end
+pal()
+end
+function sprb(...)spro(...)spr(...)end
+function zspr(...)zspr_helper(spr,...)end
+function zspro(...)zspr_helper(spro,...)end
+function zsprb(...)zspr_helper(sprb,...)end
 function nop()end
 function flr_rnd(x)
 return flr(rnd(x))
@@ -209,8 +235,15 @@ end
 function btn_helper(f,a,b)return f(a)and f(b)and 0 or f(a)and 0xffff or f(b)and 1 or 0 end
 function xbtn()return btn_helper(btn,0,1)end
 function ybtn()return btn_helper(btn,2,3)end
+function zprint(str,x,y,align,color)
+if align==0 then x-=#str*2
+elseif align>0 then x-=#str*4+1 end
+print(str,x,y,color)
+end
 zclass[[actor,timer|load,%actor_load,state,%actor_state,kill,%actor_kill,clean,%actor_clean,alive,yes,duration,null,curr,start,next,null,init,nop,update,nop,destroyed,nop,deregistered,%actor_deregistered;]]
 zclass[[drawlayer_50|]]
+zclass[[drawlayer_99|]]
+zclass[[outlayer_50|drawout,nop]]
 zclass[[fader_out,actor|start;duration,@,destroyed,@,update,%fader_out_update]]
 zclass[[fader_in,actor|start;duration,@,update,%fader_in_update]]
 zclass[[timer|timers;,;start_timer,%timer_start_timer,stop_timer,%timer_stop_timer,play_timer,%timer_play_timer,delete_timer,%timer_delete_timer,get_elapsed,%timer_get_elapsed,get_elapsed_percent,%timer_get_elapsed_percent,tick,%timer_tick,]]
@@ -249,10 +282,20 @@ end
 return _g.tile_animation(lookup)
 end
 zclass[[tile_animation,actor|lookup_table,@,index,0,init,%tile_animation_init,lookup,%tile_animation_lookup;start;duration,.5,next,start]]
+function title_print(str,x,y,fg,bg,out)
+for yy=-1,2 do
+for xx=-1,1 do
+zprint(str,x+xx,y+yy,0,out)
+end
+end
+zprint(str,x,y+1,0,bg)
+zprint(str,x,y,0,fg)
+end
+zclass[[title_logo,actor,drawlayer_99|update,%title_logo_update_normal,draw,%title_logo_draw,title_y,0;start;update,nop,duration,.5,next,normal;normal;update,%title_logo_update;ending;update,nop;]]
 g_fade_table=zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,1,0,0,0,0;3;,3,3,3,3,1,1,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,0,0,0,0;6;,6,6,13,13,5,5,0,0;7;,7,7,6,13,13,5,0,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,0,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,0,0,0;13;,13,13,5,5,1,0,0,0;14;,14,14,13,4,2,2,0,0;15;,15,15,13,13,5,5,0,0;]]
 function fade(threshold)
 for c=0,15 do
-pal(c,g_fade_table[c][1+flr(7*min(1,max(0,threshold)))])
+pal(c,g_fade_table[c][1+flr(7*min(1,max(0,threshold)))],1)
 end
 end
 cartdata"zeldo_rewrite"
@@ -274,7 +317,7 @@ loop_entities("game_state","state")
 end
 function _draw()
 cls()
-fade(g_fade)
 loop_entities("game_state","draw")
+fade(g_fade)
 end
 zclass[[test_obj,actor,drawlayer_50|x,@,y,@,color,7,init,%test_init,update,%test_update,draw,%test_draw;]]

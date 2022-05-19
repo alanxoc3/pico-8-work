@@ -24,7 +24,7 @@ g_fade_table = zobj[[
 -- 1 means completely black
 function fade(threshold)
     for c=0,15 do
-        pal(c,g_fade_table[c][1+flr(7*min(1, max(0, threshold)))])
+        pal(c,g_fade_table[c][1+flr(7*min(1, max(0, threshold)))],1)
     end
 end
 

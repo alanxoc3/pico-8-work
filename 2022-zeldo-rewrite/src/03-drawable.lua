@@ -2,6 +2,12 @@
 -- max = 99, min = 00
 zclass[[drawlayer_50|]]
 
+-- these layers are above the card
+zclass[[drawlayer_99|]]
+
+-- for now, only one outline layer, this is like cell shading
+zclass[[outlayer_50|drawout,nop]]
+
 zclass[[fader_out,actor|
     start; duration,@, destroyed,@, update,%fader_out_update
 ]]

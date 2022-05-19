@@ -31,8 +31,8 @@ end
 
 function _draw()
     cls()
-    fade(g_fade)
     loop_entities('game_state', 'draw')
+    fade(g_fade)
 end
 
 -- BASIC EXAMPLE FOR SIMPLE GAME BELOW:
@@ -41,8 +41,9 @@ zclass[[test_obj,actor,drawlayer_50|x,@,y,@,color,7,init,%test_init,update,%test
 |test_update| function(a) a.x += xbtn() a.y += ybtn()    end $$
 |test_draw|   function(a) circfill(a.x, a.y, 2, a.color) end $$
 
-|game_init|   function() _g.fader_in'.5' _g.test_obj(64, 64)             end $$
+|game_init|   function() _g.fader_in'FADE_SPEED' _g.title_logo() _g.test_obj(64, 64)             end $$
 |game_update| function() loop_entities('actor', 'state')    end $$
-|game_draw|   function() rect(0, 0, 127, 127, 8)
-                         draw_room(g_rooms[8*16+8], 64, 64, nop, nop)
-                         loop_entities('drawlayer_50', 'draw')  end $$
+|game_draw|   function() draw_room(g_rooms[8*16+8], 64, 64, nop, nop)
+                         loop_entities('outlayer_99', 'drawout')
+                         loop_entities('drawlayer_99', 'draw')
+              end $$
