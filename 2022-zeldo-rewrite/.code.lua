@@ -197,16 +197,13 @@ a:load"ending"
 end
 end,function(state)
 _g.gameover_control()
-state.game_over_sind,state.game_over_text=unpack(split(rnd_item(split[[32|"quack quack",68|"and play with me",70|"to save hi-roll",81|"in time for dinner",83|"and make me rich",96|"the banjo awaits you",99|"for your fans",118|"splat splat boing"]]),"|"))
-printh(state.game_over_sind)
+state.game_over_sind,state.game_over_text=unpack(rnd_item(zobj[[1;,32,"quack quack";2;,68,"and play with me";3;,70,"to save hi-roll";4;,81,"in time for dinner";5;,83,"and make me rich";6;,96,"the banjo awaits you";7;,99,"for your fans";8;,118,"splat splat boing";]]))
 end,function()
 loop_entities("actor","state")
 end,function(state)
 camera(-8*8,-8*8)
 zsprb(state.game_over_sind,0,g_i%2,1,1,true,false,1)
-zprintgui("game over",0,-17,8,2,1)
-zprintgui("come back lank",0,12,10,4,1)
-zprintgui(state.game_over_text,0,22,7,5,1)
+zcall(zprintgui,[[1;,"game over",0,-17,8,2,1;2;,"come back lank",0,12,10,4,1;3;,@,0,22,7,5,1]],state.game_over_text)
 camera()
 end,function()sfx(63,0)end,function(a)
 g_fade=cos(a:get_elapsed_percent"state")+1
@@ -285,6 +282,11 @@ zprint(str,x+xx,y+yy,0,out)
 end
 end
 zprinttbox(str,x,y,0,fg,bg)
+end
+function zcall(func,text,...)
+foreach(zobjc(text,...),function(params)
+func(unpack(params))
+end)
 end
 zclass[[actor,timer|load,%actor_load,state,%actor_state,kill,%actor_kill,clean,%actor_clean,alive,yes,duration,null,curr,start,next,null,init,nop,update,nop,destroyed,nop,deregistered,%actor_deregistered;]]
 zclass[[drawlayer_50|]]

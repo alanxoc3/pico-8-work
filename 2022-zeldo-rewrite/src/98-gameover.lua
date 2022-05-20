@@ -13,18 +13,16 @@ end $$
 
 |gameover_init| function(state)
     _g.gameover_control()
-    state.game_over_sind, state.game_over_text = unpack(split(rnd_item(split[[
-        32|  "quack quack",
-        68|  "and play with me",
-        70|  "to save hi-roll",
-        81|  "in time for dinner",
-        83|  "and make me rich",
-        96|  "the banjo awaits you",
-        99|  "for your fans",
-        118| "splat splat boing"
-    ]]), '|'))
-
-    printh(state.game_over_sind)
+    state.game_over_sind, state.game_over_text = unpack(rnd_item(zobj[[
+        1;,32,  "quack quack";
+        2;,68,  "and play with me";
+        3;,70,  "to save hi-roll";
+        4;,81,  "in time for dinner";
+        5;,83,  "and make me rich";
+        6;,96,  "the banjo awaits you";
+        7;,99,  "for your fans";
+        8;,118, "splat splat boing";
+    ]]))
 end $$
 
 |gameover_update| function()
@@ -35,8 +33,12 @@ end $$
     camera(-8*8, -8*8)
     zsprb(state.game_over_sind, 0, g_i%2, 1, 1, true, false, 1)
 
-    zprintgui("game over",      0, -17, 8, 2, 1)
-    zprintgui("come back lank", 0, 12, 10, 4, 1)
-    zprintgui(state.game_over_text, 0, 22, 7, 5, 1)
+-- cpu: .20/.19
+    zcall(zprintgui, [[
+        1;,"game over",      0, -17, 8, 2, 1;
+        2;,"come back lank", 0, 12, 10, 4, 1;
+        3;,@,                0, 22, 7,  5, 1
+    ]], state.game_over_text)
+
     camera()
 end $$

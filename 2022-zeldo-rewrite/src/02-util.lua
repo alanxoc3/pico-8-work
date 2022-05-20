@@ -58,3 +58,9 @@ function zprintgui(str, x, y, fg, bg, out)
     end
     zprinttbox(str, x, y, 0, fg, bg)
 end
+
+function zcall(func, text, ...)
+    foreach(zobjc(text, ...), function(params)
+        func(unpack(params))
+    end)
+end
