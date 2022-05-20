@@ -4,7 +4,8 @@ zclass[[box,pos|
     touching,%box_touching,
     inside,%box_inside,
     outside,%box_outside,
-    side,%box_side
+    side,%box_side,
+    abside,%box_abside
 ]]
 
 |box_touching| function(a, b)
@@ -25,14 +26,24 @@ end $$
     return (a.x-b.x)/b.rx, (a.y-b.y)/b.ry, a.rx/b.rx, a.ry/b.ry
 end $$
 
+|box_abside| function(a, b)
+    local xp, yp = a:side(b)
+    if abs(yp) > abs(xp)
+    then return 0, sgn(yp)
+    else return sgn(xp), 0 end
+end $$
+
 -- DEBUG_BEGIN
 function debug_boxes(a, b)
     local xs, ys = a:side(b)
+    local axs, ays = a:abside(b)
     printh("in: "   ..(g_pl:inside(g_room_bounds) and "true, " or "false, ")
          .."out: "  ..(g_pl:outside(g_room_bounds) and "true, " or "false, ")
          .."touch: "..(g_pl:touching(g_room_bounds) and "true, " or "false, ")
          .."xs: "   ..xs..", "
          .."ys: "   ..ys..", "
+         .."axs: "  ..axs..", "
+         .."ays: "  ..ays..", "
     )
 end
 -- DEBUG_END

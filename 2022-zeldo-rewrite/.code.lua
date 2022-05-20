@@ -134,7 +134,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,actor_deregistered,@,fader_out_update,@,fader_in_update,@,animation_init,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,pl_init,@,pl_update,@,pl_drawout,@,pl_draw,@,fairy_init,@,fairy_update,@,fairy_draw,@,game_init,@,game_update,@,game_draw,@,gameover_control_update,@,gameover_init,@,gameover_update,@,gameover_draw,@,logo_init,@,logo_draw,@,title_init,@,title_update,@,title_draw,@,title_logo_update,@,title_logo_draw,@,game_state_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,actor_deregistered,@,fader_out_update,@,fader_in_update,@,animation_init,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,pl_init,@,pl_update,@,pl_drawout,@,pl_draw,@,fairy_init,@,fairy_update,@,fairy_draw,@,game_init,@,game_update,@,game_draw,@,gameover_control_update,@,gameover_init,@,gameover_update,@,gameover_draw,@,logo_init,@,logo_draw,@,title_init,@,title_update,@,title_draw,@,title_logo_update,@,title_logo_draw,@,game_state_init,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -194,6 +194,11 @@ local xp,yp,xr,yr=a:side(b)
 return xp>-1+xr and xp<1-xr and yp>-1+yr and yp<1-yr
 end,function(a,b)
 return(a.x-b.x)/b.rx,(a.y-b.y)/b.ry,a.rx/b.rx,a.ry/b.ry
+end,function(a,b)
+local xp,yp=a:side(b)
+if abs(yp)>abs(xp)
+then return 0,sgn(yp)
+else return sgn(xp),0 end
 end,function(a,x,y)
 local dx,dy=x-a.x,y-a.y
 local maskx,masky=dx>>31,dy>>31
@@ -402,7 +407,7 @@ function lookup_tile_animation(sind)
 local anim=g_tile_animation_lookup[sind]
 return anim and anim[g_i%#anim+1]or sind
 end
-zclass[[box,pos|rx,0,ry,0,touching,%box_touching,inside,%box_inside,outside,%box_outside,side,%box_side]]
+zclass[[box,pos|rx,0,ry,0,touching,%box_touching,inside,%box_inside,outside,%box_outside,side,%box_side,abside,%box_abside]]
 zclass[[pos|x,0,y,0,dist_point,%pos_dist_point]]
 zclass[[vec,pos|dx,0,dy,0,vec_update,%vec_update]]
 zclass[[mov,vec|ang,0,speed,0,mov_update,%mov_update,towards_point,%mov_towards_point]]
