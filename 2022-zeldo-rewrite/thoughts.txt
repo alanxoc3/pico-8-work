@@ -1,6 +1,8 @@
 TODO: re-implement game logic with new ztable setup
 TODO: re-implement title
 TODO: obj fill is a must (eventually)
+TODO: player moving around
+TODO: re-implement screen logic
 
 [
     11111111 -- index (room: 0-223, hut: 224-254)
@@ -41,7 +43,3 @@ end
 254 obj .5 .5 place
 
 255 end
-
-How to represent objects?
-
-TODO

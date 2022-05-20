@@ -23,3 +23,16 @@ zclass[[fader_in,actor|
 |fader_in_update| function(a)
     g_fade = 1 - a:get_elapsed_percent'state'
 end $$
+
+-- just a common timer so animation syncs between everything
+zclass[[animation,actor|
+    index,0,
+    init,%animation_init;
+
+    start; duration,@, next,start
+]]
+
+|animation_init| function(a)
+    a.index += 1
+    a.index %= 60 -- smooth because divisible by 2,3,4,5,6
+end $$

@@ -20,7 +20,7 @@ LAST_ROOM_INDEX: 223
 
 # Animation change in seconds
 FADE_SPEED: .5
-TILE_ANIMATION_SPEED: .5
+ANIMATION_SPEED: .5
 
 # The room that contains animations
 ANIMATION_ROOM_INDEX: 0

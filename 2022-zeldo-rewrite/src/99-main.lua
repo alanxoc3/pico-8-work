@@ -7,15 +7,25 @@ end)
 
 zclass[[game_state,actor|
     ecs_exclusions;actor,true; -- remove game_state from the actor group
-    curr,logo;
-    logo; init,%logo_init, update,nop,          draw,%logo_draw, duration,2.5, next,game;
-    game; init,%game_init, update,%game_update, draw,%game_draw;
+    curr,title, init,%game_state_init;
+
+    logo;     state_init, %logo_init,     update, nop,              draw,%logo_draw, duration,2.5, next,title;
+    title;    state_init, %title_init,    update, %title_update,    draw,%title_draw;
+    game;     state_init, %game_init,     update, %game_update,     draw,%game_draw;
+    gameover; state_init, %gameover_init, update, %gameover_update, draw,%gameover_draw;
 ]]
+
+|game_state_init| function(state)
+    clean_all_entities'game_state'
+    _g.fader_in'FADE_SPEED'
+    g_animation = _g.animation'ANIMATION_SPEED'
+    state:state_init()
+end $$
 
 function _init()
     memset(TEMP_SAVE_LOCATION, 0, SAVE_LENGTH)
-    g_tl, g_rooms = _g.game_state(), decode_map()
-    g_tile_animation = create_tile_animation(g_rooms[ANIMATION_ROOM_INDEX])
+    g_state, g_rooms = _g.game_state(), decode_map()
+    g_tile_animation_lookup = create_tile_animation_lookup(g_rooms[ANIMATION_ROOM_INDEX])
 end
 
 function _update60()
@@ -30,20 +40,14 @@ function _update60()
 end
 
 function _draw()
+    g_i = g_animation.index
     cls()
     loop_entities('game_state', 'draw')
     fade(g_fade)
 end
 
 -- BASIC EXAMPLE FOR SIMPLE GAME BELOW:
-zclass[[test_obj,actor,drawlayer_50|x,@,y,@,color,7,init,%test_init,update,%test_update,draw,%test_draw;]]
-|test_init|   function(a) a.color += 1                   end $$
-|test_update| function(a) a.x += xbtn() a.y += ybtn()    end $$
-|test_draw|   function(a) circfill(a.x, a.y, 2, a.color) end $$
-
-|game_init|   function() _g.fader_in'FADE_SPEED' _g.title_logo() _g.test_obj(64, 64)             end $$
-|game_update| function() loop_entities('actor', 'state')    end $$
-|game_draw|   function() draw_room(g_rooms[8*16+8], 64, 64, nop, nop)
-                         loop_entities('outlayer_99', 'drawout')
-                         loop_entities('drawlayer_99', 'draw')
-              end $$
+-- zclass[[test_obj,actor,drawlayer_50|x,@,y,@,color,7,init,%test_init,update,%test_update,draw,%test_draw;]]
+-- |test_init|   function(a) a.color += 1                   end $$
+-- |test_update| function(a) a.x += xbtn() a.y += ybtn()    end $$
+-- |test_draw|   function(a) circfill(a.x, a.y, 2, a.color) end $$

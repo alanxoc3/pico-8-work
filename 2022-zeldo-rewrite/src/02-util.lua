@@ -25,9 +25,14 @@ function flr_rnd(x)
     return flr(rnd(x))
 end
 
+-- a random item from the list.
+function rnd_item(list)
+   return list[flr_rnd(#list)+1]
+end
+
 -- gives a random value that is one of: -1, 0, 1
 function rnd_one(val)
-    return (flr_rnd'3'-1)*(val or 1)
+    return rnd_item{-1,0,1}
 end
 
 function btn_helper(f, a, b) return f(a) and f(b) and 0 or f(a) and 0xffff or f(b) and 1 or 0 end
@@ -38,4 +43,18 @@ function zprint(str, x, y, align, color)
     if align == 0    then x -= #str*2
     elseif align > 0 then x -= #str*4+1 end
     print(str, x, y, color)
+end
+
+function zprinttbox(str, x, y, align, fg, bg)
+    zprint(str, x, y+1, 0, bg)
+    zprint(str, x, y, 0, fg)
+end
+
+function zprintgui(str, x, y, fg, bg, out)
+    for yy=-1,2 do
+        for xx=-1,1 do
+            zprint(str, x+xx, y+yy, 0, out)
+        end
+    end
+    zprinttbox(str, x, y, 0, fg, bg)
 end
