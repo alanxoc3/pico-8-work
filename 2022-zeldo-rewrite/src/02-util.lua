@@ -60,7 +60,7 @@ function zprintgui(str, x, y, fg, bg, out)
 end
 
 function zcall(func, text, ...)
-    foreach(zobjc(text, ...), function(params)
+    foreach(zobj(text, ...), function(params)
         func(unpack(params))
     end)
 end

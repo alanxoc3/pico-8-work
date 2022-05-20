@@ -35,8 +35,10 @@ function _update60()
 
     loop_entities('actor',      'clean') -- delete any actors that were killed, and call their "destroy" callback
     register_entities()                  -- register all zobs from previous game loop iteration
-    loop_entities('timer',      'tick')  -- update the timers
-    loop_entities('game_state', 'state') -- game state controls the different overall states in the game
+    zcall(loop_entities, [[
+        1;,timer,tick;
+        2;,game_state,state;
+    ]])
 end
 
 function _draw()

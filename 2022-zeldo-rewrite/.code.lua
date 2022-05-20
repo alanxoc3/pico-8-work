@@ -284,7 +284,7 @@ end
 zprinttbox(str,x,y,0,fg,bg)
 end
 function zcall(func,text,...)
-foreach(zobjc(text,...),function(params)
+foreach(zobj(text,...),function(params)
 func(unpack(params))
 end)
 end
@@ -356,8 +356,7 @@ end
 function _update60()
 loop_entities("actor","clean")
 register_entities()
-loop_entities("timer","tick")
-loop_entities("game_state","state")
+zcall(loop_entities,[[1;,timer,tick;2;,game_state,state;]])
 end
 function _draw()
 g_i=g_animation.index
