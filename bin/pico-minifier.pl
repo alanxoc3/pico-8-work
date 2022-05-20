@@ -73,8 +73,10 @@ $content = single_quotes_to_double($content);
 $content = remove_spaces($content);
 $content = pop_text_logics($content, \@texts);
 
-# remove all newlines from multiline strings
+# remove all newlines and quotes from multiline strings
 $content =~ s/\[\[.*?\]\]/$& =~ s|\n||rg/gimse;
+$content =~ s/\[\[.*?\]\]/$& =~ s|"||rg/gimse;
+$content =~ s/\[\[.*?\]\]/$& =~ s|'||rg/gimse;
 
 # This can be used to join all zobj strings on one line. Legacy functionality.
 # my $strings = "";

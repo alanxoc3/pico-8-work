@@ -64,3 +64,6 @@ function zcall(func, text, ...)
         func(unpack(params))
     end)
 end
+
+function scr_line(x1, y1, x2, y2, color) line(8*x1, 8*y1, 8*x2, 8*y2, color) end
+function scr_pset(x, y, color) pset(8*x, 8*y, color) end

@@ -23,7 +23,7 @@ zclass[[title_logo,actor,drawlayer_99|
 
 |title_logo_update| function(a)
     if btnp(4) or btnp(5) then
-        _g.fader_out(FADE_SPEED, function() g_state:load'gameover' end)
+        _g.fader_out(FADE_SPEED, function() g_state:load'game' end)
         a:load'ending'
     end
 end $$

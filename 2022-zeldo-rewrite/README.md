@@ -4,4 +4,5 @@ help him save the Land of Hi-roll from the forces of evil.
 
 ## Tokens
 - 2022-05-15: 1665, 1654, 1653, 1655, 1657
-- 2022-05-19: 2048, 2046, 2042
+- 2022-05-19: 2048, 2046, 2042, 2040
+- 2022-05-20: 2457 -- mov, pl, fairy

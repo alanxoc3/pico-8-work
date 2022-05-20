@@ -21,6 +21,8 @@ LAST_ROOM_INDEX: 223
 # Animation change in seconds
 FADE_SPEED: .5
 ANIMATION_SPEED: .5
+DEFAULT_INERTIA: .80
+PL_SPEED: .025
 
 # The room that contains animations
 ANIMATION_ROOM_INDEX: 0

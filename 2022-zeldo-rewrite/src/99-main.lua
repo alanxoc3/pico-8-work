@@ -1,6 +1,6 @@
 cartdata"CART_NAME"
 
-menuitem(2, "reset save data", function()
+menuitem(1, "reset save data", function()
    memset(REAL_SAVE_LOCATION, 0, SAVE_LENGTH)
    extcmd'reset'
 end)
