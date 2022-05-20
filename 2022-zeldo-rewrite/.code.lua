@@ -134,7 +134,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,actor_deregistered,@,fader_out_update,@,fader_in_update,@,animation_init,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,box_touching_point,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,pl_init,@,pl_update,@,pl_drawout,@,pl_draw,@,fairy_init,@,fairy_update,@,fairy_draw,@,game_init,@,game_update,@,game_draw,@,gameover_control_update,@,gameover_init,@,gameover_update,@,gameover_draw,@,logo_init,@,logo_draw,@,title_init,@,title_update,@,title_draw,@,title_logo_update,@,title_logo_draw,@,game_state_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,actor_deregistered,@,fader_out_update,@,fader_in_update,@,animation_init,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,pl_init,@,pl_update,@,pl_drawout,@,pl_draw,@,fairy_init,@,fairy_update,@,fairy_draw,@,game_init,@,game_update,@,game_draw,@,gameover_control_update,@,gameover_init,@,gameover_update,@,gameover_draw,@,logo_init,@,logo_draw,@,title_init,@,title_update,@,title_draw,@,title_logo_update,@,title_logo_draw,@,game_state_init,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -184,8 +184,16 @@ end
 foreach(finished_timers,function(timer)
 timer.callback(a)
 end)
-end,function(a,x,y)
-return x>a.x-a.rx and x<a.x+rx and y>a.y-ry and y<a.y+ry
+end,function(a,b)
+return not a:outside(b)and not a:inside(b)
+end,function(a,b)
+local xp,yp,xr,yr=a:side(b)
+return xp<-1-xr or xp>1+xr or yp<-1-yr or yp>1+yr
+end,function(a,b)
+local xp,yp,xr,yr=a:side(b)
+return xp>-1+xr and xp<1-xr and yp>-1+yr and yp<1-yr
+end,function(a,b)
+return(a.x-b.x)/b.rx,(a.y-b.y)/b.ry,a.rx/b.rx,a.ry/b.ry
 end,function(a,x,y)
 local dx,dy=x-a.x,y-a.y
 local maskx,masky=dx>>31,dy>>31
@@ -201,8 +209,8 @@ end,function(a)
 local ax,ay=a.speed*cos(a.ang),a.speed*sin(a.ang)
 a.dx+=ax a.dy+=ay
 a.dx*=.80 a.dy*=.80
-if ax==0 and abs(a.dx)<.00001 then a.dx=0 end
-if ay==0 and abs(a.dy)<.00001 then a.dy=0 end
+if ax==0 and abs(a.dx)<.0001 then a.dx=0 end
+if ay==0 and abs(a.dy)<.0001 then a.dy=0 end
 end,function(a,x,y)
 a.ang=atan2(x-a.x,y-a.y)
 end,function(a)
@@ -235,11 +243,13 @@ end
 scr_pset(a.x,a.y,12)
 end,function(state)
 state.room_index=8*16+8
-g_pl=_g.pl(7,7)
+local r=g_rooms[state.room_index]
+g_room_bounds=_g.room_bounds(r.w/2,r.h/2,r.w/2,r.h/2)
+g_pl=_g.pl(5.5,5)
 end,function()
 zcall(loop_entities,[[1;,actor,state;2;,mov,mov_update;3;,vec,vec_update;]])
 end,function(state)
-draw_room(g_rooms[state.room_index],64,64,function(x,y)
+draw_room(g_rooms[state.room_index],64,64,function()
 loop_entities("outlayer_50","drawout")
 loop_entities("drawlayer_50","draw")
 end)
@@ -268,7 +278,7 @@ _g.title_logo()
 end,function()
 loop_entities("actor","state")
 end,function()
-draw_room(g_rooms[8*16+8],64,64,nop,nop)
+draw_room(g_rooms[8*16+8],64,64,nop)
 loop_entities("outlayer_99","drawout")
 loop_entities("drawlayer_99","draw")
 end,function(a)
@@ -365,7 +375,9 @@ local x,y=location%12,location\12
 spr(lookup_tile_animation(index),x1+x*8,y1+y*8)
 end
 end
+camera(-x1,-y1)
 post_tile_func(x1,y1)
+camera()
 clip()
 for i,color in pairs(split"1,13,0,0")do
 i=4-i
@@ -390,12 +402,13 @@ function lookup_tile_animation(sind)
 local anim=g_tile_animation_lookup[sind]
 return anim and anim[g_i%#anim+1]or sind
 end
-zclass[[box,pos|rx,0,ry,0,touching_point,%box_touching_point]]
+zclass[[box,pos|rx,0,ry,0,touching,%box_touching,inside,%box_inside,outside,%box_outside,side,%box_side]]
 zclass[[pos|x,0,y,0,dist_point,%pos_dist_point]]
 zclass[[vec,pos|dx,0,dy,0,vec_update,%vec_update]]
 zclass[[mov,vec|ang,0,speed,0,mov_update,%mov_update,towards_point,%mov_towards_point]]
 zclass[[pl,actor,mov,box,drawlayer_50,outlayer_50|x,@,y,@,rx,.5,ry,.5,init,%pl_init,update,%pl_update,draw,%pl_draw,drawout,%pl_drawout]]
 zclass[[fairy,actor,mov,drawlayer_50|rel_actor,@,init,%fairy_init,update,%fairy_update,draw,%fairy_draw]]
+zclass[[room_bounds,box|x,@,y,@,rx,@,ry,@]]
 zclass[[gameover_control,actor|start;update,nop,duration,.5,next,normal;normal;update,%gameover_control_update;ending;update,nop;]]
 g_fade_table=zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,1,0,0,0,0;3;,3,3,3,3,1,1,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,0,0,0,0;6;,6,6,13,13,5,5,0,0;7;,7,7,6,13,13,5,0,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,0,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,0,0,0;13;,13,13,5,5,1,0,0,0;14;,14,14,13,4,2,2,0,0;15;,15,15,13,13,5,5,0,0;]]
 function fade(threshold)

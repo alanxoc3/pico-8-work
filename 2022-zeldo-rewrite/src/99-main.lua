@@ -46,15 +46,8 @@ function _draw()
     cls()
     loop_entities('game_state', 'draw')
     fade(g_fade)
-
     -- DEBUG_BEGIN
-    if g_debug then
-        for inst in all(g_zclass_entities['box']) do
-            scr_rect(inst.x-inst.rx, inst.y-inst.ry, inst.x+inst.rx-.125, inst.y+inst.ry-.125, 8)
-        end
-
-        rect(0,0,127,127,8)
-    end
+    if g_debug then rect(0,0,127,127,8) end
     -- DEBUG_END
 end
 

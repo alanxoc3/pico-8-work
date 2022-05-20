@@ -7,7 +7,7 @@ end $$
 end $$
 
 |title_draw| function()
-    draw_room(g_rooms[8*16+8], 64, 64, nop, nop)
+    draw_room(g_rooms[8*16+8], 64, 64, nop)
     loop_entities('outlayer_99', 'drawout')
     loop_entities('drawlayer_99', 'draw')
 end $$

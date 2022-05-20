@@ -37,8 +37,8 @@ zclass[[mov,vec|
     local ax, ay = a.speed*cos(a.ang), a.speed*sin(a.ang)
     a.dx += ax a.dy += ay
     a.dx *= DEFAULT_INERTIA a.dy *= DEFAULT_INERTIA
-    if ax == 0 and abs(a.dx) < .00001 then a.dx = 0 end
-    if ay == 0 and abs(a.dy) < .00001 then a.dy = 0 end
+    if ax == 0 and abs(a.dx) < .0001 then a.dx = 0 end
+    if ay == 0 and abs(a.dy) < .0001 then a.dy = 0 end
 end $$
 
 |mov_towards_point| function(a, x, y)

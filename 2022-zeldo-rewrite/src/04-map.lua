@@ -18,7 +18,9 @@ function draw_room(room, center_x, center_y, post_tile_func)
             spr(lookup_tile_animation(index), x1+x*8, y1+y*8)
         end
     end
+    camera(-x1,-y1)
     post_tile_func(x1, y1)
+    camera()
     clip()
     
     for i, color in pairs(split'1,13,0,0') do
