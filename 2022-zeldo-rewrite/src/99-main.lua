@@ -30,7 +30,7 @@ end
 
 function _update60()
     -- DEBUG_BEGIN
-    if btnp(4) and btnp(5) then g_debug = not g_debug end
+    if btn(4) and btnp(5) then g_debug = not g_debug end
     -- DEBUG_END
 
     loop_entities('actor',      'clean') -- delete any actors that were killed, and call their "destroy" callback
@@ -46,6 +46,16 @@ function _draw()
     cls()
     loop_entities('game_state', 'draw')
     fade(g_fade)
+
+    -- DEBUG_BEGIN
+    if g_debug then
+        for inst in all(g_zclass_entities['box']) do
+            scr_rect(inst.x-inst.rx, inst.y-inst.ry, inst.x+inst.rx-.125, inst.y+inst.ry-.125, 8)
+        end
+
+        rect(0,0,127,127,8)
+    end
+    -- DEBUG_END
 end
 
 -- BASIC EXAMPLE FOR SIMPLE GAME BELOW:

@@ -37,6 +37,8 @@ my $content = join("\n", <STDIN>);
 
 if (not $debug_mode) {
    $content =~ s/DEBUG_BEGIN.*?DEBUG_END//gims;
+} else {
+   $content =~ s/NORMAL_BEGIN.*?NORMAL_END//gims;
 }
 
 $content = remove_comments($content);

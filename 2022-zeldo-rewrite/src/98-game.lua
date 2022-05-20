@@ -10,8 +10,6 @@ end $$
         2;,mov,   mov_update;
         3;,vec,   vec_update;
     ]])
-
-
 end $$
 
 |game_draw| function(state)

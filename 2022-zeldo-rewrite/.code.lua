@@ -134,7 +134,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,actor_deregistered,@,fader_out_update,@,fader_in_update,@,animation_init,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,pl_init,@,pl_update,@,pl_draw,@,fairy_init,@,fairy_update,@,fairy_draw,@,game_init,@,game_update,@,game_draw,@,gameover_control_update,@,gameover_init,@,gameover_update,@,gameover_draw,@,logo_init,@,logo_draw,@,title_init,@,title_update,@,title_draw,@,title_logo_update,@,title_logo_draw,@,game_state_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,actor_deregistered,@,fader_out_update,@,fader_in_update,@,animation_init,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,box_touching_point,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,pl_init,@,pl_update,@,pl_drawout,@,pl_draw,@,fairy_init,@,fairy_update,@,fairy_draw,@,game_init,@,game_update,@,game_draw,@,gameover_control_update,@,gameover_init,@,gameover_update,@,gameover_draw,@,logo_init,@,logo_draw,@,title_init,@,title_update,@,title_draw,@,title_logo_update,@,title_logo_draw,@,game_state_init,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -185,6 +185,8 @@ foreach(finished_timers,function(timer)
 timer.callback(a)
 end)
 end,function(a,x,y)
+return x>a.x-a.rx and x<a.x+rx and y>a.y-ry and y<a.y+ry
+end,function(a,x,y)
 local dx,dy=x-a.x,y-a.y
 local maskx,masky=dx>>31,dy>>31
 local a0,b0=(dx+maskx)^^maskx,(dy+masky)^^masky
@@ -212,7 +214,11 @@ else
 a.speed=0
 end
 end,function(a)
+zspro(88,a.x*8,a.y*8)
+zspro(91,a.x*8,a.y*8)
+end,function(a)
 zspr(88,a.x*8,a.y*8)
+zspr(91,a.x*8,a.y*8)
 end,function(a)
 a.x,a.y=a.rel_actor.x,a.rel_actor.y-.25
 end,function(a)
@@ -335,7 +341,9 @@ foreach(zobj(text,...),function(params)
 func(unpack(params))
 end)
 end
-function scr_line(x1,y1,x2,y2,color)line(8*x1,8*y1,8*x2,8*y2,color)end
+function scr_help_four(func,x1,y1,x2,y2,color)func(8*x1,8*y1,8*x2,8*y2,color)end
+function scr_line(...)scr_help_four(line,...)end
+function scr_rect(...)scr_help_four(rect,...)end
 function scr_pset(x,y,color)pset(8*x,8*y,color)end
 zclass[[actor,timer|load,%actor_load,state,%actor_state,kill,%actor_kill,clean,%actor_clean,alive,yes,duration,null,curr,start,next,null,init,nop,update,nop,destroyed,nop,deregistered,%actor_deregistered;]]
 zclass[[drawlayer_50|]]
@@ -382,10 +390,11 @@ function lookup_tile_animation(sind)
 local anim=g_tile_animation_lookup[sind]
 return anim and anim[g_i%#anim+1]or sind
 end
+zclass[[box,pos|rx,0,ry,0,touching_point,%box_touching_point]]
 zclass[[pos|x,0,y,0,dist_point,%pos_dist_point]]
 zclass[[vec,pos|dx,0,dy,0,vec_update,%vec_update]]
 zclass[[mov,vec|ang,0,speed,0,mov_update,%mov_update,towards_point,%mov_towards_point]]
-zclass[[pl,actor,mov,drawlayer_50|x,@,y,@,init,%pl_init,update,%pl_update,draw,%pl_draw]]
+zclass[[pl,actor,mov,box,drawlayer_50,outlayer_50|x,@,y,@,rx,.5,ry,.5,init,%pl_init,update,%pl_update,draw,%pl_draw,drawout,%pl_drawout]]
 zclass[[fairy,actor,mov,drawlayer_50|rel_actor,@,init,%fairy_init,update,%fairy_update,draw,%fairy_draw]]
 zclass[[gameover_control,actor|start;update,nop,duration,.5,next,normal;normal;update,%gameover_control_update;ending;update,nop;]]
 g_fade_table=zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,1,0,0,0,0;3;,3,3,3,3,1,1,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,0,0,0,0;6;,6,6,13,13,5,5,0,0;7;,7,7,6,13,13,5,0,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,0,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,0,0,0;13;,13,13,5,5,1,0,0,0;14;,14,14,13,4,2,2,0,0;15;,15,15,13,13,5,5,0,0;]]
