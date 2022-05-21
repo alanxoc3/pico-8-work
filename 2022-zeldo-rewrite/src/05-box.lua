@@ -5,7 +5,8 @@ zclass[[box,pos|
     inside,%box_inside,
     outside,%box_outside,
     side,%box_side,
-    abside,%box_abside
+    abside,%box_abside,
+    getdelta,%box_getdelta
 ]]
 
 |box_touching| function(a, b)
@@ -31,6 +32,25 @@ end $$
     if abs(yp) > abs(xp)
     then return 0, sgn(yp)
     else return sgn(xp), 0 end
+end $$
+
+function get_delta_axis(dx, x, rx, tdx, tdrx)
+    local xp = (x-tdx)/tdrx
+    return abs(xp)-rx/tdrx < 1 and tdx+sgn(xp)*(rx+tdrx)-(x-dx) or dx
+end
+
+|box_getdelta| function(a, b, dx, dy)
+    local abx, aby = a:abside(b)
+
+    if not a:outside(b) then
+        if abx ~= 0 then
+            dx = get_delta_axis(dx, a.x, a.rx, b.x, b.rx)
+        elseif aby ~= 0 then
+            dy = get_delta_axis(dy, a.y, a.ry, b.y, b.ry)
+        end
+    end
+
+    return dx, dy
 end $$
 
 -- DEBUG_BEGIN

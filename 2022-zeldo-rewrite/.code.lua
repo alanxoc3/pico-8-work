@@ -134,7 +134,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,actor_deregistered,@,fader_out_update,@,fader_in_update,@,animation_init,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,adjust_deltas_for_tiles,@,pl_update,@,pl_drawout,@,pl_draw,@,fairy_update,@,fairy_draw,@,gameover_control_update,@,gameover_init,@,gameover_update,@,gameover_draw,@,logo_init,@,logo_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,title_update,@,title_draw,@,title_logo_update,@,title_logo_draw,@,game_state_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,actor_deregistered,@,fader_out_update,@,fader_in_update,@,animation_init,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,col_adjust_for_collision,@,adjust_deltas_for_tiles,@,pl_update,@,pl_drawout,@,pl_draw,@,fairy_update,@,fairy_draw,@,gameover_control_update,@,gameover_init,@,gameover_update,@,gameover_draw,@,logo_init,@,logo_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,title_update,@,title_draw,@,title_logo_update,@,title_logo_draw,@,game_state_init,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -199,6 +199,16 @@ local xp,yp=a:side(b)
 if abs(yp)>abs(xp)
 then return 0,sgn(yp)
 else return sgn(xp),0 end
+end,function(a,b,dx,dy)
+local abx,aby=a:abside(b)
+if not a:outside(b)then
+if abx ~=0 then
+dx=get_delta_axis(dx,a.x,a.rx,b.x,b.rx)
+elseif aby ~=0 then
+dy=get_delta_axis(dy,a.y,a.ry,b.y,b.ry)
+end
+end
+return dx,dy
 end,function(a,x,y)
 local dx,dy=x-a.x,y-a.y
 local maskx,masky=dx>>31,dy>>31
@@ -218,14 +228,16 @@ if ax==0 and abs(a.dx)<.0001 then a.dx=0 end
 if ay==0 and abs(a.dy)<.0001 then a.dy=0 end
 end,function(a,x,y)
 a.ang=atan2(x-a.x,y-a.y)
+end,function(a,b)
+local box={x=b.x-a.dx,y=b.y,rx=b.rx,ry=b.ry}
+local dx,dy=a:getdelta(box,a.dx,a.dy)
+box.x,box.y=b.x-dx,b.y-dy
+return a:getdelta(box,dx,dy)
 end,function(a,room)
-local tx1,ty1,tx2,ty2=flr(a.x-a.rx)-1,flr(a.y-a.ry)-1,ceil(a.x+a.rx),ceil(a.y+a.ry)
-local nextx,nexty=a.x+a.dx,a.y+a.dy
-for tx=tx1,tx2 do
-for ty=ty1,ty2 do
-local trect={x=tx+.5,y=ty+.5,rx=.5,ry=.5}
+for tx=flr(a.x-a.rx)-1,ceil(a.x+a.rx)do
+for ty=flr(a.y-a.ry)-1,ceil(a.y+a.ry)do
 if is_solid_tile(room,tx,ty)then
-a.dx,a.dy=adjust_for_collision(a,{x=tx+.5,y=ty+.5,rx=.5,ry=.5})
+a.dx,a.dy=a:adjust_for_collision{x=tx+.5,y=ty+.5,rx=.5,ry=.5}
 end
 end
 end
@@ -280,7 +292,6 @@ end,function(state)
 if state:get_elapsed"state">.5 and not state.leaving then
 zcall(loop_entities,[[1;,mov,mov_update;2;,tilecol,adjust_deltas_for_tiles,@;3;,vec,vec_update;]],g_rooms[state.room_index])
 end
-if g_debug then debug_boxes(g_pl,g_room_bounds)end
 if not state.leaving and not g_pl:inside(g_room_bounds)then
 state.leaving=true
 _g.fader_out(.5,function()
@@ -298,11 +309,6 @@ end,function(state)
 draw_room(g_rooms[state.room_index],64,64,function()
 loop_entities("outlayer_50","drawout")
 loop_entities("drawlayer_50","draw")
-if g_debug then
-for inst in all(g_zclass_entities["box"])do
-scr_rect(inst.x-inst.rx,inst.y-inst.ry,inst.x+inst.rx-.125,inst.y+inst.ry-.125,8)
-end
-end
 end)
 end,function()
 _g.title_logo()
@@ -431,54 +437,22 @@ function lookup_tile_animation(sind)
 local anim=g_tile_animation_lookup[sind]
 return anim and anim[g_i%#anim+1]or sind
 end
-zclass[[box,pos|rx,0,ry,0,touching,%box_touching,inside,%box_inside,outside,%box_outside,side,%box_side,abside,%box_abside]]
-function debug_boxes(a,b)
-local xs,ys=a:side(b)
-local axs,ays=a:abside(b)
-printh("in: "..(g_pl:inside(g_room_bounds)and "true, "or "false, ")
-.."out: "..(g_pl:outside(g_room_bounds)and "true, "or "false, ")
-.."touch: "..(g_pl:touching(g_room_bounds)and "true, "or "false, ")
-.."xs: "..xs..", "
-.."ys: "..ys..", "
-.."axs: "..axs..", "
-.."ays: "..ays..", "
-)
+zclass[[box,pos|rx,0,ry,0,touching,%box_touching,inside,%box_inside,outside,%box_outside,side,%box_side,abside,%box_abside,getdelta,%box_getdelta]]
+function get_delta_axis(dx,x,rx,tdx,tdrx)
+local xp=(x-tdx)/tdrx
+return abs(xp)-rx/tdrx<1 and tdx+sgn(xp)*(rx+tdrx)-(x-dx)or dx
 end
 zclass[[pos|x,0,y,0,dist_point,%pos_dist_point]]
 zclass[[vec,pos|dx,0,dy,0,vec_update,%vec_update]]
 zclass[[mov,vec|ang,0,speed,0,mov_update,%mov_update,towards_point,%mov_towards_point]]
-zclass[[tilecol,vec,box|adjust_deltas_for_tiles,%adjust_deltas_for_tiles]]
+zclass[[col,vec,box|adjust_for_collision,%col_adjust_for_collision]]
+zclass[[tilecol,col|adjust_deltas_for_tiles,%adjust_deltas_for_tiles]]
 function is_solid_tile(room,x,y)
 if x<12 then
 local t2=room.tiles_2[y*12+x]
 if t2 then return fget(t2,0)end
 return fget(room.tiles_1[y*12+x],0)
 end
-end
-function adjust_for_collision(a,b)
-local dx,dy=a.dx,a.dy
-local tdxrect={x=b.x-dx,y=b.y,rx=b.rx,ry=b.ry}
-local abx,aby=a:abside(tdxrect)
-if abx ~=0 and not a:outside(tdxrect)then
-local xp,yp,xr,yr=a:side(tdxrect)
-local xthing=abs(xp)-xr
-local xgoal=tdxrect.x+sgn(xp)*(a.rx+tdxrect.rx)
-if xthing<1 then dx=xgoal-(a.x-dx)end
-elseif aby ~=0 and not a:outside(tdxrect)then
-local xp,yp,xr,yr=a:side(tdxrect)
-local ything=abs(yp)-yr
-local ygoal=tdxrect.y+sgn(yp)*(a.ry+tdxrect.ry)
-if ything<1 then dy=ygoal-(a.y-dy)end
-end
-local tdyrect={x=b.x-dx,y=b.y-dy,rx=b.rx,ry=b.ry}
-abx,aby=a:abside(tdyrect)
-if aby ~=0 and not a:outside(tdyrect)then
-local xp,yp,xr,yr=a:side(tdyrect)
-local ything=abs(yp)-yr
-local ygoal=tdyrect.y+sgn(yp)*(a.ry+tdyrect.ry)
-if ything<1 then dy=ygoal-(a.y-dy)end
-end
-return dx,dy
 end
 zclass[[pl,actor,mov,tilecol,drawlayer_50,outlayer_50|x,@,y,@,rx,.375,ry,.375,update,%pl_update,draw,%pl_draw,drawout,%pl_drawout]]
 zclass[[fairy,actor,mov,drawlayer_50|rel_actor,@,x,@,y,@,update,%fairy_update,draw,%fairy_draw]]
@@ -503,7 +477,6 @@ g_state,g_rooms=_g.game_state(),decode_map()
 g_tile_animation_lookup=create_tile_animation_lookup(g_rooms[0])
 end
 function _update60()
-if btn(4)and btnp(5)then g_debug=not g_debug end
 loop_entities("actor","clean")
 register_entities()
 zcall(loop_entities,[[1;,timer,tick;2;,actor,state;3;,game_state,state;]])
@@ -513,5 +486,4 @@ g_i=g_animation.index
 cls()
 loop_entities("game_state","draw")
 fade(g_fade)
-if g_debug then rect(0,0,127,127,8)end
 end
