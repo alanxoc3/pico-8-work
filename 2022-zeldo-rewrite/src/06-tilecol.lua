@@ -11,12 +11,10 @@ zclass[[tilecol,vec,box|
 -- }
 
 function is_solid_tile(room, x, y)
-    if x < 12 then
+    if x < ROOM_W then
         local t2 = room.tiles_2[y*ROOM_W+x]
         if t2 then return fget(t2, 0) end
         return fget(room.tiles_1[y*ROOM_W+x], 0)
-    else
-        return false
     end
 end
 
@@ -35,6 +33,11 @@ end
                     local xthing = abs(xp)-xr
                     local xgoal = tdxrect.x+sgn(xp)*(a.rx+tdxrect.rx)
                     if xthing < 1 then a.dx = xgoal-(a.x-a.dx) end
+                elseif aby ~= 0 and not a:outside(tdxrect) then
+                    local xp, yp, xr, yr = a:side(tdxrect)
+                    local ything = abs(yp)-yr
+                    local ygoal = tdxrect.y+sgn(yp)*(a.ry+tdxrect.ry)
+                    if ything < 1 then a.dy = ygoal-(a.y-a.dy) end
                 end
 
                 local tdyrect = {x=tx+.5-a.dx, y=ty+.5-a.dy, rx=.5, ry=.5}
