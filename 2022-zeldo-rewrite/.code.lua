@@ -134,7 +134,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,actor_deregistered,@,fader_out_update,@,fader_in_update,@,animation_init,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,col_adjust_for_collision,@,adjust_deltas_for_tiles,@,pl_nopause_update,@,pl_drawout,@,pl_draw,@,fairy_update,@,fairy_draw,@,gameover_control_update,@,gameover_init,@,gameover_update,@,gameover_draw,@,logo_init,@,logo_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,title_update,@,title_draw,@,title_logo_update,@,title_logo_draw,@,game_state_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,actor_deregistered,@,fader_out_update,@,fader_in_update,@,animation_init,@,auto_outline_drawout,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,col_adjust_for_collision,@,adjust_deltas_for_tiles,@,pl_nopause_update,@,pl_draw,@,fairy_update,@,fairy_draw,@,gameover_control_update,@,gameover_init,@,gameover_update,@,gameover_draw,@,logo_init,@,logo_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,title_update,@,title_draw,@,title_logo_update,@,title_logo_draw,@,game_state_init,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -154,6 +154,14 @@ g_fade=1-a:get_elapsed_percent"state"
 end,function(a)
 a.index+=1
 a.index%=60
+end,function(a)
+for c=1,15 do pal(c,1)end
+local ox,oy=peek2(0x5f28),peek2(0x5f2a)
+for i=0,8 do
+camera(ox+i%3-1,oy+i\3-1)a:draw()
+end
+camera(ox,oy)
+pal()
 end,function(...)
 _g.timer_stop_timer(...)
 _g.timer_play_timer(...)
@@ -252,9 +260,6 @@ a.speed=0
 end
 a.sind=a.sinds[a.dx|a.dy ~=0 and t()*12%3\1+1 or 1]
 end,function(a)
-zspro(a.sind,a.x*8,a.y*8-2,1,1,a.xf)
-zspro(91,a.x*8,a.y*8-2,1,1,a.xf)
-end,function(a)
 zspr(a.sind,a.x*8,a.y*8-2,1,1,a.xf)
 zspr(91,a.x*8,a.y*8-2,1,1,a.xf)
 end,function(a)
@@ -289,7 +294,7 @@ zspr(108,64,64,4,2)
 camera()
 end,function(state)
 local r=g_rooms[state.room_index]
-g_room_bounds=_g.room_bounds(r.w/2,r.h/2,r.w/2+.25,r.h/2+.25)
+g_room_bounds=_g.room_bounds(r.w/2,r.h/2+.25,r.w/2+.125,r.h/2+.125)
 g_pl=_g.pl(state.pl_x,state.pl_y,state.pl_xf)
 g_fairy=_g.fairy(g_pl,state.fairy_x,state.fairy_y)
 end,function(state)
@@ -305,7 +310,7 @@ local nr=g_rooms[state.room_index]
 local helper=function(x,w)return w/2-x*w/2+.75*x end
 if x ~=0
 then state.pl_x,state.pl_y,state.pl_xf=helper(x,nr.w),g_pl.y,x<0
-else state.pl_y,state.pl_x,state.pl_xf=helper(y,nr.h),g_pl.x,g_pl.xf end
+else state.pl_y,state.pl_x,state.pl_xf=helper(y,nr.h)+.25,g_pl.x,g_pl.xf end
 state.fairy_x,state.fairy_y=state.pl_x-x*2,state.pl_y-y*2
 state:load"room"
 end)
@@ -398,10 +403,11 @@ function scr_pset(x,y,color)pset(8*x,8*y,color)end
 zclass[[actor,timer|load,%actor_load,state,%actor_state,kill,%actor_kill,clean,%actor_clean,alive,yes,duration,null,curr,start,next,null,init,nop,update,nop,destroyed,nop,deregistered,%actor_deregistered;]]
 zclass[[drawlayer_50|]]
 zclass[[drawlayer_99|]]
-zclass[[outlayer_50|drawout,nop]]
+zclass[[outlayer_50|]]
 zclass[[fader_out,actor|start;duration,@,destroyed,@,update,%fader_out_update]]
 zclass[[fader_in,actor|start;duration,@,update,%fader_in_update]]
 zclass[[animation,actor|index,0,init,%animation_init;start;duration,@,next,start]]
+zclass[[auto_outline|drawout,%auto_outline_drawout]]
 zclass[[timer|timers;,;start_timer,%timer_start_timer,stop_timer,%timer_stop_timer,play_timer,%timer_play_timer,delete_timer,%timer_delete_timer,get_elapsed,%timer_get_elapsed,get_elapsed_percent,%timer_get_elapsed_percent,tick,%timer_tick,]]
 function draw_room(room,center_x,center_y,post_tile_func)
 local x1,y1=center_x-room.w*8\2,center_y-room.h*8\2
@@ -460,7 +466,7 @@ return fget(room.tiles_1[y*12+x],0)
 end
 end
 zclass[[nopause|nopause_update,nop]]
-zclass[[pl,actor,mov,nopause,tilecol,drawlayer_50,outlayer_50|x,@,y,@,xf,@,sind,88,rx,.375,ry,.375,nopause_update,%pl_nopause_update,draw,%pl_draw,drawout,%pl_drawout;sinds;,88,89,90]]
+zclass[[pl,actor,mov,nopause,tilecol,auto_outline,drawlayer_50,outlayer_50|x,@,y,@,xf,@,sind,88,rx,.375,ry,.375,nopause_update,%pl_nopause_update,draw,%pl_draw;sinds;,88,89,90]]
 zclass[[fairy,actor,mov,drawlayer_50|rel_actor,@,x,@,y,@,update,%fairy_update,draw,%fairy_draw]]
 zclass[[gameover_control,actor|start;update,nop,duration,.5,next,normal;normal;update,%gameover_control_update;ending;update,nop;]]
 g_fade_table=zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,1,0,0,0,0;3;,3,3,3,3,1,1,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,0,0,0,0;6;,6,6,13,13,5,5,0,0;7;,7,7,6,13,13,5,0,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,0,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,0,0,0;13;,13,13,5,5,1,0,0,0;14;,14,14,13,4,2,2,0,0;15;,15,15,13,13,5,5,0,0;]]

@@ -4,8 +4,8 @@ help him save the Land of Hi-roll from the forces of evil.
 
 ## Tokens & Features
 ```
-2022-05-21 -- tilecol, planim
-    3128 3183 3214 3144 3093 3167
+2022-05-21 -- tilecol, planim, autooutline
+    3128 3183 3214 3144 3093 3167 3188
 
 2022-05-20 -- mov, box, pl, fairy, roomtran
     2457 2546 2591 2682 2669 2700 2801
@@ -33,14 +33,14 @@ Canon  - Proposed to zeldo with squareforce. Weirdo dressed as santa. Gave Lime 
 Zeldo  - Canon proposed to her with squareforce.
 
 ## Items
-- Shield
-- Brang
+- Shield 99
+- Brang  99
 - Mega Sword (only effective against evil)
-- Banjo
-- Bowl
-- Bomb
-- Bow
-- Pico-8 Controller?
+- Bowl - drink it
+- Banjo - play it (use for saving & earn money)
+- Bomb - place and hold release to blow up (longer hold, stamina goes up) (or timer)
+- Bow  - 999
+- Mask - 999 Hold down item button. Stamina goes down quickly. Pauses everything in the room.
 
 ## Enemies
 Batty      - Everywhere.
@@ -55,20 +55,21 @@ Zomby      - Hard mode (village).
 Shadow Lank
 Ghost
 
-## Boss
-Cannon
-Lime
-Ivan
-Quack
+## Ways To Get Money
+- Kill enemies
+- Under pots
+- Find secret chest
+- Play banjo
 
 ## Game Outline
 - Start game.
-- Flash back, Zeldo and Lank injured. Zeldo and lank talk. Zeldo leaves. Lank gets attacked. Fade to black.
-- In house.
+- Flash back, Zeldo and lank talk. Zeldo leaves. Lank gets attacked. Fade to black.
+- In house. Fairy talk to you whatever.
 - Grab banjo.
 - Learn to play.
+- Get money from playing to people.
 - Get boomerang or shield.
-- Go through woods.
+- Go through woods. Navy lets you in.
 - Get sword from chest.
 - Fight and kill Lime & Mask.
 - Navy is sad. Give you bowl.
@@ -80,7 +81,7 @@ Quack
 - Tennis
 - Reveal. Get bomb.
 - Where's Zeldo?
-- Graveyard/Crypt
+- Graveyard/Crypt.
 - Tiny puzzle.
 - Zeldo is hiding behind locked door. Blow up the door.
 - It's a trick Grover sets some traps for you & puzzles.
@@ -90,38 +91,8 @@ Quack
 - Ivan intercepts it.
 - World corrupted. Enemies everywhere.
 - There is some room that has a computer. Go there.
-
-- At some point is the snow place.
-
-- Go to graveyard.
-- Open chest (says not to open).
-- Graveyard dude enters house.
-- If you find all ghosts, he gives you a shovel.
-- Ghost in Cannon's castle. Ghost by ramming tree. Ghost by blowing up rock.
-  Ghost by throwing plant, Last back in graveyard house.
-- 6 chickens. Chickens throughout the game. Last chicken noodle soup.
-- Go into castle, maybe small puzzle.
-- Chicken in cage with Zeldo.
-- Fight Cannon boss.
-- Beat him, realize fairy is bad. Fairy tries to find square force.
-- Cannon doesn't have the square force.
-- They say lank has it. But Lank lost it.
-- Fairy leaves, looking for square force.
-- Cannon gives you cannon bombs.
-- Need to get shovel now. Go to crypt.
-- In crypt is previous fairy as boss.
-- Beat fairy. Get key.
-- You can open secret chest in your house now.
-- Use square force to go to computer place.
-- Find fairy there.
-- Use square force to turn on computer, in generator room.
-- Computer turns on. Fairy appears, fight fairy before he hacks the game.
-- One of fairy's moves is dark lank.
-- Easy mode is over.
-- Hard mode is similar, after you beat easy mode, somehow you can activate hard mode.
-- Also, you can buy the boomerang/shield later. And you buy the sword later too.
-- If you didn't take the sword at the beginning, maybe you can get a better sword.
-- Or maybe it can enable something for hard mode.
+- Ivan battle.
+- After you win. Endless mode (lark/high score). Replay game with hard mode (health, enemy...).
 
 ## Quotes
 - Here's my heart.
@@ -129,3 +100,20 @@ Quack
 - Silly lank, only works against evil forces. That tickles (canon says on deathbead)
 - Canon can't give gifts. He gave some kid a creepy mask and now he gives me a hunk of metal.
 - I gave it to zeldo you know the gravedigger's daughter?
+
+## Boss Fights
+Lime:
+    - teleports every few seconds (mask power)
+
+Canon:
+    - dodgeball/tennis
+
+Grover:
+    - zeldo's dad
+
+Ivan:
+    - repeat of previous bosses + something else?
+    - duck with mask???
+
+## Areas
+Ice Castle, Graveyard, Zeldo Home, Field, Mountain Area, Spike Forest, Village

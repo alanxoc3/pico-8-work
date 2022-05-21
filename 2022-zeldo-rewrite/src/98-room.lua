@@ -2,7 +2,7 @@ zclass[[room_bounds,box|x,@,y,@,rx,@,ry,@]]
 
 |room_init| function(state)
     local r = g_rooms[state.room_index]
-    g_room_bounds = _g.room_bounds(r.w/2, r.h/2, r.w/2+.25, r.h/2+.25)
+    g_room_bounds = _g.room_bounds(r.w/2, r.h/2+.25, r.w/2+.125, r.h/2+.125)
     g_pl = _g.pl(state.pl_x, state.pl_y, state.pl_xf)
     g_fairy = _g.fairy(g_pl, state.fairy_x, state.fairy_y)
 end $$
@@ -30,7 +30,7 @@ end $$
             local helper = function(x, w) return w/2-x*w/2+.75*x end
             if x ~= 0
             then state.pl_x, state.pl_y, state.pl_xf = helper(x, nr.w), g_pl.y, x < 0
-            else state.pl_y, state.pl_x, state.pl_xf = helper(y, nr.h), g_pl.x, g_pl.xf end
+            else state.pl_y, state.pl_x, state.pl_xf = helper(y, nr.h)+.25, g_pl.x, g_pl.xf end
             state.fairy_x, state.fairy_y = state.pl_x-x*2, state.pl_y-y*2
             state:load'room'
         end)
