@@ -1,6 +1,6 @@
 zclass[[pl,actor,mov,tilecol,drawlayer_50,outlayer_50|
     x,@,y,@,
-    rx,.375,ry,.375,
+    rx,PL_RADIUS,ry,PL_RADIUS,
     update,%pl_update,
     draw,%pl_draw,
     drawout,%pl_drawout

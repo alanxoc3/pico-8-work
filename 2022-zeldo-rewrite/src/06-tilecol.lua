@@ -18,6 +18,36 @@ function is_solid_tile(room, x, y)
     end
 end
 
+-- a: mov,box
+-- b: box
+function adjust_for_collision(a, b)
+    local dx, dy = a.dx, a.dy
+    local tdxrect = {x=b.x-dx, y=b.y, rx=b.rx, ry=b.ry}
+    local abx, aby = a:abside(tdxrect)
+    if abx ~= 0 and not a:outside(tdxrect) then
+        local xp, yp, xr, yr = a:side(tdxrect)
+        local xthing = abs(xp)-xr
+        local xgoal = tdxrect.x+sgn(xp)*(a.rx+tdxrect.rx)
+        if xthing < 1 then dx = xgoal-(a.x-dx) end
+    elseif aby ~= 0 and not a:outside(tdxrect) then
+        local xp, yp, xr, yr = a:side(tdxrect)
+        local ything = abs(yp)-yr
+        local ygoal = tdxrect.y+sgn(yp)*(a.ry+tdxrect.ry)
+        if ything < 1 then dy = ygoal-(a.y-dy) end
+    end
+
+    local tdyrect = {x=b.x-dx, y=b.y-dy, rx=b.rx, ry=b.ry}
+    abx, aby = a:abside(tdyrect)
+    if aby ~= 0 and not a:outside(tdyrect) then
+        local xp, yp, xr, yr = a:side(tdyrect)
+        local ything = abs(yp)-yr
+        local ygoal = tdyrect.y+sgn(yp)*(a.ry+tdyrect.ry)
+        if ything < 1 then dy = ygoal-(a.y-dy) end
+    end
+
+    return dx, dy
+end
+
 |adjust_deltas_for_tiles| function(a, room)
     local tx1, ty1, tx2, ty2 = flr(a.x-a.rx)-1, flr(a.y-a.ry)-1, ceil(a.x+a.rx), ceil(a.y+a.ry)
     local nextx, nexty = a.x+a.dx, a.y+a.dy
@@ -26,28 +56,7 @@ end
         for ty=ty1,ty2 do
             local trect = {x=tx+.5, y=ty+.5, rx=.5, ry=.5}
             if is_solid_tile(room, tx, ty) then
-                local tdxrect = {x=tx+.5-a.dx, y=ty+.5, rx=.5, ry=.5}
-                local abx, aby = a:abside(tdxrect)
-                if abx ~= 0 and not a:outside(tdxrect) then
-                    local xp, yp, xr, yr = a:side(tdxrect)
-                    local xthing = abs(xp)-xr
-                    local xgoal = tdxrect.x+sgn(xp)*(a.rx+tdxrect.rx)
-                    if xthing < 1 then a.dx = xgoal-(a.x-a.dx) end
-                elseif aby ~= 0 and not a:outside(tdxrect) then
-                    local xp, yp, xr, yr = a:side(tdxrect)
-                    local ything = abs(yp)-yr
-                    local ygoal = tdxrect.y+sgn(yp)*(a.ry+tdxrect.ry)
-                    if ything < 1 then a.dy = ygoal-(a.y-a.dy) end
-                end
-
-                local tdyrect = {x=tx+.5-a.dx, y=ty+.5-a.dy, rx=.5, ry=.5}
-                abx, aby = a:abside(tdyrect)
-                if aby ~= 0 and not a:outside(tdyrect) then
-                    local xp, yp, xr, yr = a:side(tdyrect)
-                    local ything = abs(yp)-yr
-                    local ygoal = tdyrect.y+sgn(yp)*(a.ry+tdyrect.ry)
-                    if ything < 1 then a.dy = ygoal-(a.y-a.dy) end
-                end
+                a.dx, a.dy = adjust_for_collision(a, {x=tx+.5, y=ty+.5, rx=.5, ry=.5})
             end
         end
     end
