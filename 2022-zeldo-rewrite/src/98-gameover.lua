@@ -25,9 +25,7 @@ end $$
     ]]))
 end $$
 
-|gameover_update| function()
-    loop_entities('actor', 'state')
-end $$
+|gameover_update| function() end $$
 
 |gameover_draw| function(state)
     camera(-8*8, -8*8)

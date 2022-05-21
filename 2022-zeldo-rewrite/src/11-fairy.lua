@@ -1,13 +1,8 @@
 zclass[[fairy,actor,mov,drawlayer_50|
-    rel_actor,@,
-    init,%fairy_init,
+    rel_actor,@, x,@, y,@,
     update,%fairy_update,
     draw,%fairy_draw
 ]]
-
-|fairy_init| function(a)
-    a.x, a.y = a.rel_actor.x, a.rel_actor.y-.25
-end $$
 
 |fairy_update| function(a)
     local b = a.rel_actor

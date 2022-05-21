@@ -2,9 +2,7 @@
     _g.title_logo()
 end $$
 
-|title_update| function()
-    loop_entities('actor', 'state')
-end $$
+|title_update| function() end $$
 
 |title_draw| function()
     draw_room(g_rooms[8*16+8], 64, 64, nop)
@@ -23,7 +21,7 @@ zclass[[title_logo,actor,drawlayer_99|
 
 |title_logo_update| function(a)
     if btnp(4) or btnp(5) then
-        _g.fader_out(FADE_SPEED, function() g_state:load'game' end)
+        _g.fader_out(FADE_SPEED, function() g_state:load'room' end)
         a:load'ending'
     end
 end $$

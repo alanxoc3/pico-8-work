@@ -1,15 +1,10 @@
 zclass[[pl,actor,mov,box,drawlayer_50,outlayer_50|
     x,@,y,@,
     rx,.5,ry,.5,
-    init,%pl_init,
     update,%pl_update,
     draw,%pl_draw,
     drawout,%pl_drawout
 ]]
-
-|pl_init| function(a)
-    _g.fairy(a)
-end $$
 
 |pl_update| function(a)
     if xbtn() | ybtn() ~= 0 then
