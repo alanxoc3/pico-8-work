@@ -7,9 +7,9 @@ end)
 
 zclass[[game_state,actor|
     ecs_exclusions;actor,true; -- remove game_state from the actor group
-    curr,logo, init,%game_state_init,
+    curr,room, init,%game_state_init,
     room_index,136,
-    pl_x,7, pl_y,7,
+    pl_x,3, pl_y,3,
     fairy_x,7, fairy_y,8;
 
     logo;     state_init, %logo_init,     update, nop,              draw,%logo_draw, duration,2.5, next,title;

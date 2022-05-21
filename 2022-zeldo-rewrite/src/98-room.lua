@@ -10,9 +10,10 @@ end $$
 |room_update| function(state)
     if state:get_elapsed'state' > FADE_SPEED and not state.leaving then
         zcall(loop_entities, [[
-            1;,mov,   mov_update;
-            2;,vec,   vec_update;
-        ]])
+            1;,mov,     mov_update;
+            2;,tilecol, adjust_deltas_for_tiles, @;
+            3;,vec,     vec_update;
+        ]], g_rooms[state.room_index])
     end
 
     -- DEBUG_BEGIN

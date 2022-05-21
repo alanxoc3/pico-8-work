@@ -1,6 +1,6 @@
-zclass[[pl,actor,mov,box,drawlayer_50,outlayer_50|
+zclass[[pl,actor,mov,tilecol,drawlayer_50,outlayer_50|
     x,@,y,@,
-    rx,.5,ry,.5,
+    rx,.375,ry,.375,
     update,%pl_update,
     draw,%pl_draw,
     drawout,%pl_drawout
@@ -15,11 +15,11 @@ zclass[[pl,actor,mov,box,drawlayer_50,outlayer_50|
 end $$
 
 |pl_drawout| function(a)
-    zspro(88, a.x*8, a.y*8)
-    zspro(91, a.x*8, a.y*8)
+    zspro(88, a.x*8, a.y*8-2)
+    zspro(91, a.x*8, a.y*8-2)
 end $$
 
 |pl_draw| function(a)
-    zspr(88, a.x*8, a.y*8)
-    zspr(91, a.x*8, a.y*8)
+    zspr(88, a.x*8, a.y*8-2)
+    zspr(91, a.x*8, a.y*8-2)
 end $$
