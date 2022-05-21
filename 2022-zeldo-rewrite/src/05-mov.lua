@@ -27,8 +27,7 @@ end $$
 
 -- able to contribute to acceleration with direction and speed
 zclass[[mov,vec|
-    ang,0,
-    speed,0,
+    ang,0, speed,0,
     mov_update,%mov_update,
     towards_point,%mov_towards_point
 ]]
@@ -37,8 +36,8 @@ zclass[[mov,vec|
     local ax, ay = a.speed*cos(a.ang), a.speed*sin(a.ang)
     a.dx += ax a.dy += ay
     a.dx *= DEFAULT_INERTIA a.dy *= DEFAULT_INERTIA
-    if ax == 0 and abs(a.dx) < .0001 then a.dx = 0 end
-    if ay == 0 and abs(a.dy) < .0001 then a.dy = 0 end
+    if ax == 0 and abs(a.dx) < MIN_SPEED then a.dx = 0 end
+    if ay == 0 and abs(a.dy) < MIN_SPEED then a.dy = 0 end
 end $$
 
 |mov_towards_point| function(a, x, y)
