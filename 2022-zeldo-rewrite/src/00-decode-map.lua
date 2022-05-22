@@ -14,14 +14,14 @@ function decode_map()
     local rooms, cur_loc = {}, 0x2000
     local peek_inc = function()
         cur_loc += 1
-        return peek(cur_loc-1)
+        return @(cur_loc-1)
     end
 
-    while peek(cur_loc) ~= CON_END do
+    while @cur_loc ~= CON_END do
         local room, room_ind = zobj"tiles_1;,;tiles_2;,;objects;,;w,ROOM_W,h,ROOM_H,color,0,music,0", peek_inc()
         if room_ind > LAST_ROOM_INDEX then room.w, room.h = HUT_W, HUT_H end
 
-        room.color = 0x0f & peek(cur_loc)
+        room.color = 0x0f & @cur_loc
         room.music = 0xf0 & peek_inc() >>> 4
 
         local byte, is_fill, is_tile, layer, ind, offx, offy = 0, false, true, room.tiles_1, 0, 0, 0

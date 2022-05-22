@@ -4,7 +4,7 @@ help him save the Land of Hi-roll from the forces of evil.
 
 ## Tokens & Features
 ```
-2022-05-21 -- tilecol, planim, autooutline, inventory, explode
+2022-05-21 -- tilecol, planim, autooutline, inventory, explode, btndelay
     3128 3183 3214 3144 3093 3167 3188 3298 3277 3351 3347
 
 2022-05-20 -- mov, box, pl, fairy, roomtran

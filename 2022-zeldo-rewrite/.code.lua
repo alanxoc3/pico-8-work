@@ -2,12 +2,12 @@ function decode_map()
 local rooms,cur_loc={},0x2000
 local peek_inc=function()
 cur_loc+=1
-return peek(cur_loc-1)
+return@(cur_loc-1)
 end
-while peek(cur_loc)~=255 do
+while@cur_loc ~=255 do
 local room,room_ind=zobj"tiles_1;,;tiles_2;,;objects;,;w,12,h,10,color,0,music,0",peek_inc()
 if room_ind>223 then room.w,room.h=8,6 end
-room.color=0x0f & peek(cur_loc)
+room.color=0x0f &@cur_loc
 room.music=0xf0 & peek_inc()>>>4
 local byte,is_fill,is_tile,layer,ind,offx,offy=0,false,true,room.tiles_1,0,0,0
 while byte ~=255 do
@@ -419,7 +419,7 @@ zclass[[animation,actor|index,0,init,%animation_init;start;duration,@,next,start
 zclass[[auto_outline|drawout,%auto_outline_drawout]]
 function draw_outline(color,drawfunc)
 for c=1,15 do pal(c,color)end
-local ox,oy=peek2(0x5f28),peek2(0x5f2a)
+local ox,oy=%0x5f28,%0x5f2a
 for i=0,8 do
 camera(ox+i%3-1,oy+i\3-1)drawfunc()
 end
@@ -508,6 +508,7 @@ end)
 zclass[[game_state,actor|ecs_exclusions;actor,true;curr,room,init,%game_state_init,room_index,136,pl_x,3,pl_y,3,pl_xf,yes,fairy_x,7,fairy_y,8;logo;state_init,%logo_init,update,nop,draw,%logo_draw,duration,2.5,next,title;title;state_init,%title_init,update,%title_update,draw,%title_draw;room;state_init,%room_init,update,%room_update,draw,%room_draw,leaving,no;gameover;state_init,%gameover_init,update,%gameover_update,draw,%gameover_draw;]]
 function _init()
 memset(0x5d00,0,64)
+poke2(0x5f5c,0x0808)
 g_state,g_rooms=_g.game_state(),decode_map()
 g_tile_animation_lookup=create_tile_animation_lookup(g_rooms[0])
 end
