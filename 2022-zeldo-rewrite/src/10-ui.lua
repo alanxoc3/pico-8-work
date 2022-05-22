@@ -1,10 +1,10 @@
-function draw_bar(x1,y1,x2,y2,num,dem,align,fg,bg)
+function draw_bar(x1,y1,x2,y2,percent,align,fg,bg)
     if x1 > x2 then x1 -= 3 x2 -= 3 end
 
-    local bar_off = x2-x1-min(num/dem, 1)*(x2-x1)
+    local bar_off = x2-x1-min(percent, 1)*(x2-x1)
     if align == 0 then bar_off /= 2 end
 
-    if num > 0 then
+    if percent > 0 then
         local xx = ceil(x1+(align >= 0 and bar_off or 0))
         local yy = flr(x2-(align <= 0 and bar_off or 0))
         rectfill(x1, y1, x1, y2, 13)
@@ -35,16 +35,21 @@ function draw_card(x, y, rx, ry, coffx, coffy, card_func, post_card_func)
     zcamera(cam_x, cam_y, post_card_func)
 end
 
-zclass[[stat,drawlayer_95|
-    x,@, y,@, align,@, draw,%stat_draw,
-    name,"test", drawfunc,nop, max_health,10, health,5
+zclass[[stat,vec,actor,drawlayer_95|
+    align,@, x,@, y,138, draw,%stat_draw,
+    name,"test", drawfunc,nop, max_health,10, health,5;
+
+    start;  dy,-2, duration,.2, next,normal;
+    normal; dy,0;
+    ending; dy,2, duration,.2;
+
 ]]
 
 |stat_draw| function(a)
     zcamera(a.x+2, a.y, function()
         local xyo = -8*a.align-1
         zprinttbox(a.name, xyo, -10, a.align, 7, 5)
-        draw_bar(xyo, -2, xyo-35*a.align, 1, a.health, a.max_health, -1, 11, 3)
+        draw_bar(xyo, -2, xyo-35*a.align, 1, a.health/a.max_health, -1, 11, 3)
         zprinttbox(flr(a.health)..'/'..a.max_health, xyo, 4, a.align, 7, 5)
     end)
 

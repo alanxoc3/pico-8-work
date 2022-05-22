@@ -3,6 +3,7 @@ zclass[[pl,actor,mov,tilecol,auto_outline,drawlayer_50,outlayer_50|
     sind,88,
     rx,PL_RADIUS,ry,PL_RADIUS,
     update,%pl_update,
+    energy,0,
     draw,%pl_draw;
     sinds;,SPR_PL_FEET_1,SPR_PL_FEET_2,SPR_PL_FEET_3
 ]]
@@ -23,6 +24,5 @@ end $$
 
 |pl_draw| function(a)
     zspr(a.sind, a.x*8, a.y*8-2, 1, 1, a.xf)
-
     zspr(91,     a.x*8, a.y*8-2, 1, 1, a.xf)
 end $$

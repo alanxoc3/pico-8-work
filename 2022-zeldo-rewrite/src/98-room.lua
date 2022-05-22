@@ -9,8 +9,8 @@ zclass[[room_bounds,box|x,@,y,@,rx,@,ry,@]]
 
 -- , "lank", function() zspr(88,0,0) zspr(91,0,0) end, 10, 5
 -- , "bady", function() zspr(118,0,0,1,1,true) end, 4, 3
-    _g.stat(9,   112, -1)
-    _g.stat(119, 112,  1)
+    _g.stat(-1, 9)
+    _g.stat(1, 119)
 end $$
 
 |room_update| function(state)
@@ -72,6 +72,6 @@ end $$
     end)
 
     zcall(draw_bar, [[
-        1;,18,6,109,11,@,20,0,8,2
-    ]], 10)
+        1;,18,6,109,11,@,0,8,2
+    ]], g_pl.energy)
 end $$

@@ -2,6 +2,12 @@
     _g.title_logo()
 end $$
 
+|simple_update| function()
+    zcall(loop_entities, [[
+        1;,actor, state;
+    ]])
+end $$
+
 |title_draw| function()
     draw_room(g_rooms[8*16+8], CARD_CX, CARD_CY, nop, nop)
     zcall(loop_entities, [[
