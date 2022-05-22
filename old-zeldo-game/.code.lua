@@ -1537,7 +1537,7 @@ local x1,x2=rx*8+4,(rx+view.w)*8-5
 local y1,y2=ry*8+4,(ry+view.h)*8-5
 camera_to_view(view)
 zclip(x1,y1,x2,y2)
-zcls(g_cur_room.c)
+rectfill(0, 0, 1127, 1127, g_cur_room.c)
 scr_map(g_cur_room.x,g_cur_room.y,g_cur_room.x,g_cur_room.y,g_cur_room.w,g_cur_room.h)
 isorty(g_act_arrs.drawable)
 batch_call_new(acts_loop,[[216]])
