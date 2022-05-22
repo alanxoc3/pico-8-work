@@ -32,8 +32,8 @@ function zprint(str, x, y, align, color)
 end
 
 function zprinttbox(str, x, y, align, fg, bg)
-    zprint(str, x, y+1, 0, bg)
-    zprint(str, x, y, 0, fg)
+    zprint(str, x, y+1, align, bg)
+    zprint(str, x, y, align, fg)
 end
 
 function zprintgui(str, x, y, fg, bg, out)

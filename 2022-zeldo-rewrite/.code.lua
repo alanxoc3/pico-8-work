@@ -134,7 +134,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,actor_deregistered,@,fader_out_update,@,fader_in_update,@,animation_init,@,auto_outline_drawout,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,explode_draw,@,col_adjust_for_collision,@,adjust_deltas_for_tiles,@,inventory_start_update,@,inventory_press_update,@,inventory_draw,@,pl_nopause_update,@,pl_draw,@,fairy_update,@,fairy_draw,@,gameover_control_update,@,gameover_init,@,gameover_update,@,gameover_draw,@,logo_init,@,logo_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,title_update,@,title_draw,@,title_logo_update,@,title_logo_draw,@,game_state_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,actor_deregistered,@,fader_out_update,@,fader_in_update,@,animation_init,@,auto_outline_drawout,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,explode_draw,@,col_adjust_for_collision,@,adjust_deltas_for_tiles,@,inventory_start_update,@,inventory_press_update,@,inventory_draw,@,pl_nopause_update,@,pl_draw,@,fairy_update,@,fairy_draw,@,gameover_control_update,@,gameover_init,@,gameover_draw,@,logo_init,@,logo_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,title_draw,@,title_logo_update,@,title_logo_draw,@,game_state_init,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -294,7 +294,7 @@ end
 end,function(state)
 _g.gameover_control()
 state.game_over_sind,state.game_over_text=unpack(rnd_item(zobj[[1;,32,quack quack;2;,68,and play with me;3;,70,to save hi-roll;4;,81,in time for dinner;5;,83,and make me rich;6;,96,the banjo awaits you;7;,99,for your fans;8;,118,splat splat boing;]]))
-end,function()end,function(state)
+end,function(state)
 camera(-8*8,-8*8)
 zsprb(state.game_over_sind,0,g_i%2,1,1,true,false,1)
 zcall(zprintgui,[[1;,game over,0,-17,8,2,1;2;,come back lank,0,12,10,4,1;3;,@,0,22,7,5,1]],state.game_over_text)
@@ -329,34 +329,35 @@ state:load"room"
 end)
 end
 end,function(state)
-draw_room(g_rooms[state.room_index],64,64,function()
+draw_room(g_rooms[state.room_index],64,57,function()
 loop_entities("outlayer_50","drawout")
 loop_entities("drawlayer_50","draw")
 zcall(loop_entities,[[1;,outlayer_50,drawout;2;,drawlayer_50,draw;3;,drawlayer_70,draw;4;,drawlayer_75,draw;]])
 end,function()
 zcall(loop_entities,[[1;,outlayer_99,drawout;2;,drawlayer_99,draw;]])
 end)
+zcall(draw_bar,[[1;,18,6,109,11,@,20,0,8,2]],10)
+draw_stat(9,112,-1,"lank",function()zspr(88,0,0)zspr(91,0,0)end,10,5)
+draw_stat(127-8,112,1,"bady",function()zspr(118,0,0,1,1,true)end,4,3)
 end,function()
 _g.title_logo()
-end,function()end,function()
-draw_room(g_rooms[8*16+8],64,64,nop)
-loop_entities("outlayer_99","drawout")
-loop_entities("drawlayer_99","draw")
+end,function()
+draw_room(g_rooms[8*16+8],64,57,nop,nop)
+zcall(loop_entities,[[1;,outlayer_99,drawout;2;,drawlayer_99,draw;]])
+zcall(zprinttbox,[[1;,code/sfx:  @alanxoc3  ,64,104,0,7,5;2;,tile/spr:  @greatcadet,64,114,0,7,5;3;,amorg games presents,64,6,0,7,5;]])
 end,function(a)
-if btnp(4)or btnp(5)then
+if btnp"4"or btnp"5"then
 _g.fader_out(.5,function()g_state:load"room" end)
 a:load"ending"
 end
 end,function(a)
-camera(-8*8,-8*8)
 for i=-2,2 do
-zsprb(45+i,i*10,cos((g_i+i)/4)/2+1+a.title_y,1,2)
+zspr(45+i,i*10+64,57+cos((g_i+i)/4)/2,1,2)
 end
-zprintgui("not the story of",0,a.title_y-17,10,4,1)
+zcall(zprinttbox,[[1;,not the story of,64,39,0,10,4;]])
 if g_i%2==0 then
-zprintgui("🅾️ or ❎ to play  ",0,a.title_y+12,7,5,1)
+zcall(zprinttbox,[[1;,🅾️ or ❎ to play  ,64,68,0,7,5;]])
 end
-camera()
 end,function(state)
 clean_all_entities"game_state"
 _g.fader_in".5"
@@ -385,8 +386,8 @@ elseif align>0 then x-=#str*4+1 end
 print(str,x,y,color)
 end
 function zprinttbox(str,x,y,align,fg,bg)
-zprint(str,x,y+1,0,bg)
-zprint(str,x,y,0,fg)
+zprint(str,x,y+1,align,bg)
+zprint(str,x,y,align,fg)
 end
 function zprintgui(str,x,y,fg,bg,out)
 for yy=-1,2 do
@@ -489,6 +490,30 @@ end
 end
 zclass[[inventory,actor,drawlayer_99,nopause|pl,@;start;nopause_update,%inventory_start_update,draw,nop;press;nopause_update,%inventory_press_update,cur_item,4,draw,%inventory_draw;1;mem_loc,2,index,0,name,brang,xoff,-7,yoff,-9,sind,4;2;mem_loc,7,index,1,name,mask,xoff,0,yoff,-11,sind,3;3;mem_loc,3,index,2,name,bomb,xoff,7,yoff,-9,sind,5;4;mem_loc,4,index,3,name,shield,xoff,-8,yoff,-3,sind,6;5;index,4;6;mem_loc,6,index,5,name,bow,xoff,9,yoff,-2,sind,7;7;mem_loc,9,index,6,name,banjo,xoff,-7,yoff,4,sind,1;8;mem_loc,8,index,7,name,sword,xoff,0,yoff,6,sind,2;9;mem_loc,1,index,8,name,bow,xoff,7,yoff,5,sind,0;]]
 zclass[[pl,actor,mov,nopause,tilecol,auto_outline,drawlayer_50,outlayer_50|x,@,y,@,xf,@,sind,88,rx,.375,ry,.375,nopause_update,%pl_nopause_update,draw,%pl_draw;sinds;,88,89,90]]
+function draw_bar(x1,y1,x2,y2,num,dem,align,fg,bg)
+if x1>x2 then x1-=3 x2-=3 end
+local bar_off=x2-x1-min(num/dem,1)*(x2-x1)
+if align==0 then bar_off/=2 end
+if num>0 then
+local xx=ceil(x1+(align>=0 and bar_off or 0))
+local yy=flr(x2-(align<=0 and bar_off or 0))
+rectfill(x1,y1,x1,y2,13)
+rectfill(x2,y1,x2,y2,13)
+rectfill(xx,y1,yy,y2,fg)
+rectfill(xx,y2,yy,y2,bg)
+end
+end
+function draw_stat(x,y,align,name,draw,max_health,health)
+camera(-x-2,-y)
+local xyo=-8*align-1
+zprinttbox(name,xyo,-10,align,7,5)
+draw_bar(xyo,-2,xyo-35*align,1,health,max_health,-1,11,3)
+zprinttbox(flr(health).."/"..max_health,xyo,4,align,7,5)
+camera(-x,-y-g_i%2*align)
+draw_outline(1,draw)
+draw()
+camera()
+end
 zclass[[fairy,actor,mov,drawlayer_70|rel_actor,@,x,@,y,@,update,%fairy_update,draw,%fairy_draw]]
 zclass[[gameover_control,actor|start;update,nop,duration,.5,next,normal;normal;update,%gameover_control_update;ending;update,nop;]]
 g_fade_table=zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,1,0,0,0,0;3;,3,3,3,3,1,1,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,0,0,0,0;6;,6,6,13,13,5,5,0,0;7;,7,7,6,13,13,5,0,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,0,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,0,0,0;13;,13,13,5,5,1,0,0,0;14;,14,14,13,4,2,2,0,0;15;,15,15,13,13,5,5,0,0;]]
@@ -499,13 +524,13 @@ end
 end
 zclass[[nopause|nopause_update,nop]]
 zclass[[room_bounds,box|x,@,y,@,rx,@,ry,@]]
-zclass[[title_logo,actor,drawlayer_99|update,%title_logo_update_normal,draw,%title_logo_draw,title_y,0;start;update,nop,duration,.5,next,normal;normal;update,%title_logo_update;ending;update,nop;]]
+zclass[[title_logo,actor,auto_outline,drawlayer_99,outlayer_99|update,%title_logo_update_normal,draw,%title_logo_draw;start;update,nop,duration,.5,next,normal;normal;update,%title_logo_update;ending;update,nop;]]
 cartdata"zeldo_rewrite"
 menuitem(1,"reset save data",function()
 memset(0x5e00,0,64)
 extcmd"reset"
 end)
-zclass[[game_state,actor|ecs_exclusions;actor,true;curr,room,init,%game_state_init,room_index,136,pl_x,3,pl_y,3,pl_xf,yes,fairy_x,7,fairy_y,8;logo;state_init,%logo_init,update,nop,draw,%logo_draw,duration,2.5,next,title;title;state_init,%title_init,update,%title_update,draw,%title_draw;room;state_init,%room_init,update,%room_update,draw,%room_draw,leaving,no;gameover;state_init,%gameover_init,update,%gameover_update,draw,%gameover_draw;]]
+zclass[[game_state,actor|ecs_exclusions;actor,true;curr,logo,init,%game_state_init,room_index,136,pl_x,3,pl_y,3,pl_xf,yes,fairy_x,7,fairy_y,8;logo;state_init,%logo_init,update,nop,draw,%logo_draw,duration,2.5,next,title;title;state_init,%title_init,update,nop,draw,%title_draw;room;state_init,%room_init,update,%room_update,draw,%room_draw,leaving,no;gameover;state_init,%gameover_init,update,nop,draw,%gameover_draw;]]
 function _init()
 memset(0x5d00,0,64)
 poke2(0x5f5c,0x0808)

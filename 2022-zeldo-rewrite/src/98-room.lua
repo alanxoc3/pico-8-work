@@ -19,10 +19,6 @@ end $$
         ]], g_rooms[state.room_index])
     end
 
-    -- DEBUG_BEGIN
-    if g_debug then debug_boxes(g_pl, g_room_bounds) end
-    -- DEBUG_END
-
     if not state.leaving and not g_pl:inside(g_room_bounds) then
         state.leaving = true
         _g.fader_out(FADE_SPEED, function()
@@ -40,7 +36,7 @@ end $$
 end $$
 
 |room_draw| function(state)
-    draw_room(g_rooms[state.room_index], 64, 64, function()
+    draw_room(g_rooms[state.room_index], CARD_CX, CARD_CY, function()
         loop_entities('outlayer_50', 'drawout')
         loop_entities('drawlayer_50', 'draw')
         zcall(loop_entities, [[
@@ -63,4 +59,11 @@ end $$
             2;,drawlayer_99, draw;
         ]])
     end)
+
+    zcall(draw_bar, [[
+        1;,18,6,109,11,@,20,0,8,2
+    ]], 10)
+
+    draw_stat(9, 112, -1, "lank", function() zspr(88,0,0) zspr(91,0,0) end, 10, 5)
+    draw_stat(127-8, 112,  1, "bady", function() zspr(118,0,0,1,1,true) end, 4, 3)
 end $$

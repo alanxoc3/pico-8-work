@@ -17,6 +17,8 @@ ROOM_W: 12
 ROOM_H: 10
 WRAP_W: 12
 LAST_ROOM_INDEX: 223
+CARD_CX: 64
+CARD_CY: 57
 
 # Animation change in seconds
 BTN_ITEM_SELECT: 5

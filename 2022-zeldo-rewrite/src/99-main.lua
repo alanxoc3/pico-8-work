@@ -7,15 +7,15 @@ end)
 
 zclass[[game_state,actor|
     ecs_exclusions;actor,true; -- remove game_state from the actor group
-    curr,room, init,%game_state_init,
+    curr,logo, init,%game_state_init,
     room_index,136,
     pl_x,3, pl_y,3, pl_xf,yes,
     fairy_x,7, fairy_y,8;
 
-    logo;     state_init, %logo_init,     update, nop,              draw,%logo_draw, duration,2.5, next,title;
-    title;    state_init, %title_init,    update, %title_update,    draw,%title_draw;
-    room;     state_init, %room_init,     update, %room_update,     draw,%room_draw, leaving,no;
-    gameover; state_init, %gameover_init, update, %gameover_update, draw,%gameover_draw;
+    logo;     state_init, %logo_init,     update, nop,          draw,%logo_draw, duration,2.5, next,title;
+    title;    state_init, %title_init,    update, nop,          draw,%title_draw;
+    room;     state_init, %room_init,     update, %room_update, draw,%room_draw, leaving,no;
+    gameover; state_init, %gameover_init, update, nop,          draw,%gameover_draw;
 ]]
 
 |game_state_init| function(state)
@@ -52,6 +52,18 @@ function _draw()
     loop_entities('game_state', 'draw')
     fade(g_fade)
     -- DEBUG_BEGIN
-    if g_debug then rect(0,0,127,127,8) end
+    if g_debug then
+        zcall(rect, [[
+            1;,0,12,127,18,1;
+            2;,0,95,127,101,1;
+
+            3;,0,0,127,5,1;
+            4;,0,122,127,127,1;
+
+            5;,0,0,17,127,1;
+            6;,110,0,127,127,1;
+        ]])
+    end
+    
     -- DEBUG_END
 end

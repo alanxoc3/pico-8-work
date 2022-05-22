@@ -25,8 +25,6 @@ end $$
     ]]))
 end $$
 
-|gameover_update| function() end $$
-
 |gameover_draw| function(state)
     camera(-8*8, -8*8)
     zsprb(state.game_over_sind, 0, g_i%2, 1, 1, true, false, 1)
