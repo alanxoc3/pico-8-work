@@ -1,4 +1,4 @@
-zclass[[inventory,actor,drawlayer_99,nopause|
+zclass[[inventory,actor,drawlayer_90,nopause|
     pl,@;
     start; nopause_update,%inventory_start_update, draw,nop;
     press; nopause_update,%inventory_press_update, cur_item,4, draw,%inventory_draw;

@@ -7,9 +7,19 @@ zclass[[room_bounds,box|x,@,y,@,rx,@,ry,@]]
     g_pl = _g.pl(state.pl_x, state.pl_y, state.pl_xf)
     g_fairy = _g.fairy(g_pl, state.fairy_x, state.fairy_y)
     _g.inventory(g_pl)
+
+-- , "lank", function() zspr(88,0,0) zspr(91,0,0) end, 10, 5
+-- , "bady", function() zspr(118,0,0,1,1,true) end, 4, 3
+    _g.stat(9,   112, -1)
+    _g.stat(119, 112,  1)
 end $$
 
 |room_update| function(state)
+
+    if btnp'4' then
+        _g.tbox{"hello world", "how are you", "this is just", "a textbox system!", "yeah"}
+    end
+
     if state:get_elapsed'state' > FADE_SPEED and not state.leaving then
         zcall(loop_entities, [[
             1;,nopause, nopause_update;
@@ -56,15 +66,13 @@ end $$
     end, function()
         zcall(loop_entities, [[
             1;,outlayer_99, drawout;
-            2;,drawlayer_99, draw;
+            2;,drawlayer_95, draw;
+            3;,drawlayer_97, draw;
+            4;,drawlayer_99, draw;
         ]])
     end)
 
     zcall(draw_bar, [[
         1;,18,6,109,11,@,20,0,8,2
     ]], 10)
-
-    draw_stat(9, 112, -1, "lank", function() zspr(88,0,0) zspr(91,0,0) end, 10, 5)
-    draw_stat(127-8, 112,  1, "bady", function() zspr(118,0,0,1,1,true) end, 4, 3)
-    draw_tbox(64, 112)
 end $$

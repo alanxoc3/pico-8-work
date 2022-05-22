@@ -134,7 +134,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,actor_deregistered,@,fader_out_update,@,fader_in_update,@,animation_init,@,auto_outline_drawout,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,explode_draw,@,col_adjust_for_collision,@,adjust_deltas_for_tiles,@,inventory_start_update,@,inventory_press_update,@,inventory_draw,@,pl_nopause_update,@,pl_draw,@,fairy_update,@,fairy_draw,@,gameover_control_update,@,gameover_init,@,gameover_draw,@,logo_init,@,logo_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,title_draw,@,title_logo_update,@,title_logo_draw,@,game_state_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,actor_deregistered,@,fader_out_update,@,fader_in_update,@,animation_init,@,auto_outline_drawout,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,explode_draw,@,col_adjust_for_collision,@,adjust_deltas_for_tiles,@,inventory_start_update,@,inventory_press_update,@,inventory_draw,@,pl_nopause_update,@,pl_draw,@,stat_draw,@,tbox_update,@,tbox_draw,@,fairy_update,@,fairy_draw,@,gameover_control_update,@,gameover_init,@,gameover_draw,@,logo_init,@,logo_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,title_draw,@,title_logo_update,@,title_logo_draw,@,game_state_init,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -275,6 +275,45 @@ end,function(a)
 zspr(a.sind,a.x*8,a.y*8-2,1,1,a.xf)
 zspr(91,a.x*8,a.y*8-2,1,1,a.xf)
 end,function(a)
+zcamera(a.x+2,a.y,function()
+local xyo=-8*a.align-1
+zprinttbox(a.name,xyo,-10,a.align,7,5)
+draw_bar(xyo,-2,xyo-35*a.align,1,a.health,a.max_health,-1,11,3)
+zprinttbox(flr(a.health).."/"..a.max_health,xyo,4,a.align,7,5)
+end)
+draw_card(a.x,a.y-cos(g_i/4)*a.align,6,8,6,8,a.drawfunc,nop)
+end,function(a)
+local text1=a.texts[a.cur_text_index]
+local text2=a.texts[a.cur_text_index+1]or ""
+local textslen=#text1+#text2+4
+a.line_1=sub(text1,1,a.anim)
+a.line_2=sub(text2,1,max(0,a.anim-#text1))
+if a.anim==textslen then
+a.done=true
+end
+if btnp(4)or btnp(5)then
+if a.anim==textslen then
+if a.cur_text_index+2>#a.texts then
+a:load"ending"
+else
+a.cur_text_index+=2
+a:load"normal"
+end
+else
+a.anim=textslen
+end
+end
+a.anim=min(textslen,a.anim+.5)
+end,function(a)
+draw_card(64+g_i%2,a.y,46.5,10,2.5,5,
+function()
+zcall(zprinttbox,[[1;,@,0,-2,-1,7,5;2;,@,0,6,-1,7,5;]],a.line_1 or "",a.line_2 or "")
+end,function()
+if a.done then
+zspr(38,44,16+g_i%2)
+end
+end)
+end,function(a)
 local b=a.rel_actor
 local dir=t()\10%2==0 and 1 or-1
 local offx,offy=b.x+dir*cos(t()*.75),b.y+sin(t()*.75)-.25
@@ -310,7 +349,12 @@ g_room_bounds=_g.room_bounds(r.w/2,r.h/2+.25,r.w/2+.125,r.h/2+.125)
 g_pl=_g.pl(state.pl_x,state.pl_y,state.pl_xf)
 g_fairy=_g.fairy(g_pl,state.fairy_x,state.fairy_y)
 _g.inventory(g_pl)
+_g.stat(9,112,-1)
+_g.stat(119,112,1)
 end,function(state)
+if btnp"4"then
+_g.tbox{"hello world","how are you","this is just","a textbox system!","yeah"}
+end
 if state:get_elapsed"state">.5 and not state.leaving then
 zcall(loop_entities,[[1;,nopause,nopause_update;2;,mov,mov_update;3;,tilecol,adjust_deltas_for_tiles,@;4;,vec,vec_update;]],g_rooms[state.room_index])
 end
@@ -334,12 +378,9 @@ loop_entities("outlayer_50","drawout")
 loop_entities("drawlayer_50","draw")
 zcall(loop_entities,[[1;,outlayer_50,drawout;2;,drawlayer_50,draw;3;,drawlayer_70,draw;4;,drawlayer_75,draw;]])
 end,function()
-zcall(loop_entities,[[1;,outlayer_99,drawout;2;,drawlayer_99,draw;]])
+zcall(loop_entities,[[1;,outlayer_99,drawout;2;,drawlayer_95,draw;3;,drawlayer_97,draw;4;,drawlayer_99,draw;]])
 end)
 zcall(draw_bar,[[1;,18,6,109,11,@,20,0,8,2]],10)
-draw_stat(9,112,-1,"lank",function()zspr(88,0,0)zspr(91,0,0)end,10,5)
-draw_stat(127-8,112,1,"bady",function()zspr(118,0,0,1,1,true)end,4,3)
-draw_tbox(64,112)
 end,function()
 _g.title_logo()
 end,function()
@@ -414,7 +455,8 @@ function scr_pset(x,y,color)pset(8*x,8*y,color)end
 zclass[[actor,timer|load,%actor_load,state,%actor_state,kill,%actor_kill,clean,%actor_clean,alive,yes,duration,null,curr,start,next,null,init,nop,update,nop,destroyed,nop,deregistered,%actor_deregistered;]]
 zclass[[drawlayer_50|]]
 zclass[[drawlayer_70|]]
-zclass[[drawlayer_75|]]
+zclass[[drawlayer_90|]]
+zclass[[drawlayer_95|]]
 zclass[[drawlayer_99|]]
 zclass[[outlayer_50|]]
 zclass[[outlayer_99|]]
@@ -434,7 +476,7 @@ end
 zclass[[timer|timers;,;start_timer,%timer_start_timer,stop_timer,%timer_stop_timer,play_timer,%timer_play_timer,delete_timer,%timer_delete_timer,get_elapsed,%timer_get_elapsed,get_elapsed_percent,%timer_get_elapsed_percent,tick,%timer_tick,]]
 function draw_room(room,center_x,center_y,post_tile_func,post_card_func)
 local x1,y1=center_x-room.w*8\2,center_y-room.h*8\2
-draw_card(center_x,center_y,room.w*4-2,room.h*4-2,0,0,function()
+draw_card(center_x,center_y,room.w*4-2,room.h*4-2,-2,-2,function()
 rectfill(0,0,127,127,room.color)
 for tiles in all{room.tiles_1,room.tiles_2}do
 for location,index in pairs(tiles)do
@@ -478,7 +520,7 @@ if t2 then return fget(t2,0)end
 return fget(room.tiles_1[y*12+x],0)
 end
 end
-zclass[[inventory,actor,drawlayer_99,nopause|pl,@;start;nopause_update,%inventory_start_update,draw,nop;press;nopause_update,%inventory_press_update,cur_item,4,draw,%inventory_draw;1;mem_loc,2,index,0,name,brang,xoff,-7,yoff,-9,sind,4;2;mem_loc,7,index,1,name,mask,xoff,0,yoff,-11,sind,3;3;mem_loc,3,index,2,name,bomb,xoff,7,yoff,-9,sind,5;4;mem_loc,4,index,3,name,shield,xoff,-8,yoff,-3,sind,6;5;index,4;6;mem_loc,6,index,5,name,bow,xoff,9,yoff,-2,sind,7;7;mem_loc,9,index,6,name,banjo,xoff,-7,yoff,4,sind,1;8;mem_loc,8,index,7,name,sword,xoff,0,yoff,6,sind,2;9;mem_loc,1,index,8,name,bow,xoff,7,yoff,5,sind,0;]]
+zclass[[inventory,actor,drawlayer_90,nopause|pl,@;start;nopause_update,%inventory_start_update,draw,nop;press;nopause_update,%inventory_press_update,cur_item,4,draw,%inventory_draw;1;mem_loc,2,index,0,name,brang,xoff,-7,yoff,-9,sind,4;2;mem_loc,7,index,1,name,mask,xoff,0,yoff,-11,sind,3;3;mem_loc,3,index,2,name,bomb,xoff,7,yoff,-9,sind,5;4;mem_loc,4,index,3,name,shield,xoff,-8,yoff,-3,sind,6;5;index,4;6;mem_loc,6,index,5,name,bow,xoff,9,yoff,-2,sind,7;7;mem_loc,9,index,6,name,banjo,xoff,-7,yoff,4,sind,1;8;mem_loc,8,index,7,name,sword,xoff,0,yoff,6,sind,2;9;mem_loc,1,index,8,name,bow,xoff,7,yoff,5,sind,0;]]
 zclass[[pl,actor,mov,nopause,tilecol,auto_outline,drawlayer_50,outlayer_50|x,@,y,@,xf,@,sind,88,rx,.375,ry,.375,nopause_update,%pl_nopause_update,draw,%pl_draw;sinds;,88,89,90]]
 function draw_bar(x1,y1,x2,y2,num,dem,align,fg,bg)
 if x1>x2 then x1-=3 x2-=3 end
@@ -493,20 +535,11 @@ rectfill(xx,y1,yy,y2,fg)
 rectfill(xx,y2,yy,y2,bg)
 end
 end
-function draw_stat(x,y,align,name,draw,max_health,health)
-zcamera(x+2,y,function()
-local xyo=-8*align-1
-zprinttbox(name,xyo,-10,align,7,5)
-draw_bar(xyo,-2,xyo-35*align,1,health,max_health,-1,11,3)
-zprinttbox(flr(health).."/"..max_health,xyo,4,align,7,5)
-end)
-draw_card(x,y-cos(g_i/4)*align,6,8,6,8,draw,nop)
-end
 function draw_card(x,y,rx,ry,coffx,coffy,card_func,post_card_func)
 local x1,x2,y1,y2=x-rx,x+rx-1,y-ry,y+ry-1
-rectfill(x1,y1,x2,y2,1)
 local cam_x,cam_y=x1+coffx,y1+coffy
 clip(x1,y1,x2-x1,y2-y1)
+rectfill(-100,-100,9000,9000,1)
 zcamera(cam_x,cam_y,card_func)
 clip()
 for i,c in pairs{1,13,0}do
@@ -519,15 +552,8 @@ pset(x2-i,y1+i)pset(x2-i,y2-i)
 end
 zcamera(cam_x,cam_y,post_card_func)
 end
-function draw_tbox(x,y)
-draw_card(x+g_i%2,y,46.5,10,2.5,5,
-function()
-zprinttbox("1234567890123456789012345",0,-2,-1,7,5)
-zprinttbox("1234567890123456789012345",0,6,-1,7,5)
-end,function()
-zspr(38,44,16+g_i%2)
-end)
-end
+zclass[[stat,drawlayer_95|x,@,y,@,align,@,draw,%stat_draw,name,test,drawfunc,nop,max_health,10,health,5]]
+zclass[[tbox,vec,actor,drawlayer_99|y,138,texts,@,cur_text_index,1,anim,0,line_1,,line_2,,update,%tbox_update,draw,%tbox_draw;start;dy,-2,duration,.2,next,normal,update,nop;normal;dy,0,anim,0,done,no,update,%tbox_update;ending;dy,2,duration,.2;]]
 zclass[[fairy,actor,mov,drawlayer_70|rel_actor,@,x,@,y,@,update,%fairy_update,draw,%fairy_draw]]
 zclass[[gameover_control,actor|start;update,nop,duration,.5,next,normal;normal;update,%gameover_control_update;ending;update,nop;]]
 g_fade_table=zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,1,0,0,0,0;3;,3,3,3,3,1,1,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,0,0,0,0;6;,6,6,13,13,5,5,0,0;7;,7,7,6,13,13,5,0,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,0,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,0,0,0;13;,13,13,5,5,1,0,0,0;14;,14,14,13,4,2,2,0,0;15;,15,15,13,13,5,5,0,0;]]

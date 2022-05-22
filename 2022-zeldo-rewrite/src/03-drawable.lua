@@ -2,9 +2,10 @@
 -- max = 99, min = 00
 zclass[[drawlayer_50|]] -- pl
 zclass[[drawlayer_70|]] -- fairy
-zclass[[drawlayer_75|]] -- inventory
 
-zclass[[drawlayer_99|]] -- above the card, title
+zclass[[drawlayer_90|]] -- above the card, inventory
+zclass[[drawlayer_95|]] -- above the card, stat
+zclass[[drawlayer_99|]] -- above the card, title, textbox
 
 zclass[[outlayer_50|]] -- cell shading
 zclass[[outlayer_99|]] -- inventory

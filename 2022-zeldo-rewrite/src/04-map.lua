@@ -7,7 +7,7 @@
 -- }
 function draw_room(room, center_x, center_y, post_tile_func, post_card_func)
     local x1, y1 = center_x-room.w*8\2, center_y-room.h*8\2
-    draw_card(center_x, center_y, room.w*4-2, room.h*4-2, 0, 0, function()
+    draw_card(center_x, center_y, room.w*4-2, room.h*4-2, -2, -2, function()
         rectfill(0, 0, 127, 127, room.color)
         for tiles in all{room.tiles_1, room.tiles_2} do
             for location, index in pairs(tiles) do
