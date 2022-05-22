@@ -1,4 +1,3 @@
-zclass[[nopause|nopause_update,nop]]
 zclass[[pl,actor,mov,nopause,tilecol,auto_outline,drawlayer_50,outlayer_50|
     x,@,y,@,xf,@,
     sind,88,
@@ -9,8 +8,8 @@ zclass[[pl,actor,mov,nopause,tilecol,auto_outline,drawlayer_50,outlayer_50|
 ]]
 
 |pl_nopause_update| function(a)
-    if xbtn() | ybtn() ~= 0 then
-        a.ang, a.speed = atan2(xbtn(), ybtn()), PL_SPEED
+    if not btn(BTN_ITEM_SELECT) and zbtn(btn, 0) | zbtn(btn, 2) ~= 0 then
+        a.ang, a.speed = atan2(zbtn(btn, 0), zbtn(btn, 2)), PL_SPEED
 
         if cos(a.ang) ~= 0 then
             a.xf = cos(a.ang) < 0

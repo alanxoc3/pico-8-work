@@ -15,7 +15,7 @@ zclass[[tilecol,col|
 ]]
 
 function is_solid_tile(room, x, y)
-    if x < ROOM_W then
+    if x >= 0 and x < ROOM_W then
         local t2 = room.tiles_2[y*ROOM_W+x]
         if t2 then return fget(t2, 0) end
         return fget(room.tiles_1[y*ROOM_W+x], 0)

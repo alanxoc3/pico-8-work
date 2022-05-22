@@ -1,12 +1,13 @@
 -- start with drawlayer_50 and divide by 2 if something needs to go forward or backward
 -- max = 99, min = 00
-zclass[[drawlayer_50|]]
+zclass[[drawlayer_50|]] -- pl
+zclass[[drawlayer_70|]] -- fairy
+zclass[[drawlayer_75|]] -- inventory
 
--- these layers are above the card
-zclass[[drawlayer_99|]]
+zclass[[drawlayer_99|]] -- above the card, title
 
--- for now, only one outline layer, this is like cell shading
-zclass[[outlayer_50|]]
+zclass[[outlayer_50|]] -- cell shading
+zclass[[outlayer_99|]] -- inventory
 
 zclass[[fader_out,actor|
     start; duration,@, destroyed,@, update,%fader_out_update
@@ -39,12 +40,16 @@ end $$
 
 zclass[[auto_outline|drawout,%auto_outline_drawout]]
 |auto_outline_drawout| function(a)
-    for c=1,15 do pal(c,1) end
+    draw_outline(1, function() a:draw() end)
+end $$
+
+function draw_outline(color, drawfunc)
+    for c=1,15 do pal(c,color) end
     -- cache the old camera coords and restore them
     local ox, oy = peek2(0x5f28), peek2(0x5f2a)
     for i=0,8 do
-        camera(ox+i%3-1, oy+i\3-1) a:draw()
+        camera(ox+i%3-1, oy+i\3-1) drawfunc()
     end
     camera(ox, oy)
     pal()
-end $$
+end

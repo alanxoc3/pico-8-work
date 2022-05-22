@@ -5,7 +5,7 @@
 --   objects: {{x:0, y:0, index:0}...},
 --   color:0, music:0,
 -- }
-function draw_room(room, center_x, center_y, post_tile_func)
+function draw_room(room, center_x, center_y, post_tile_func, post_card_func)
     local x1, y1 = center_x-room.w*8\2, center_y-room.h*8\2
     local pw, ph = room.w*8-1, room.h*8-1
     local x2, y2 = x1+pw, y1+ph
@@ -30,6 +30,10 @@ function draw_room(room, center_x, center_y, post_tile_func)
         pset(x1+i, y1+i, color) pset(x1+i, y2-i, color)
         pset(x2-i, y1+i, color) pset(x2-i, y2-i, color)
     end
+
+    camera(-x1,-y1)
+    post_card_func(x1, y1)
+    camera()
 end
 
 function create_tile_animation_lookup(room)

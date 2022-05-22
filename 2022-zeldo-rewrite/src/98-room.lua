@@ -1,3 +1,4 @@
+zclass[[nopause|nopause_update,nop]] -- update for things that shouldn't run when room is paused.
 zclass[[room_bounds,box|x,@,y,@,rx,@,ry,@]]
 
 |room_init| function(state)
@@ -5,6 +6,7 @@ zclass[[room_bounds,box|x,@,y,@,rx,@,ry,@]]
     g_room_bounds = _g.room_bounds(r.w/2, r.h/2+.25, r.w/2+.125, r.h/2+.125)
     g_pl = _g.pl(state.pl_x, state.pl_y, state.pl_xf)
     g_fairy = _g.fairy(g_pl, state.fairy_x, state.fairy_y)
+    _g.inventory(g_pl)
 end $$
 
 |room_update| function(state)
@@ -41,6 +43,12 @@ end $$
     draw_room(g_rooms[state.room_index], 64, 64, function()
         loop_entities('outlayer_50', 'drawout')
         loop_entities('drawlayer_50', 'draw')
+        zcall(loop_entities, [[
+            1;,outlayer_50, drawout;
+            2;,drawlayer_50, draw;
+            3;,drawlayer_70, draw;
+            4;,drawlayer_75, draw;
+        ]])
 
         -- DEBUG_BEGIN
         if g_debug then
@@ -49,8 +57,10 @@ end $$
             end
         end
         -- DEBUG_END
+    end, function()
+        zcall(loop_entities, [[
+            1;,outlayer_99, drawout;
+            2;,drawlayer_99, draw;
+        ]])
     end)
-
-    -- loop_entities('outlayer_99', 'drawout')
-    -- loop_entities('drawlayer_99', 'draw')
 end $$

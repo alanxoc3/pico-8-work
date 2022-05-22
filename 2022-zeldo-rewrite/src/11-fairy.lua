@@ -1,4 +1,4 @@
-zclass[[fairy,actor,mov,drawlayer_50|
+zclass[[fairy,actor,mov,drawlayer_70|
     rel_actor,@, x,@, y,@,
     update,%fairy_update,
     draw,%fairy_draw
