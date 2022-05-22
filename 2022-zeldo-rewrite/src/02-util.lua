@@ -25,6 +25,10 @@ function zspr(sind, x, y, sw, sh, ...)
     spr(sind, x, y, sw, sh, ...)
 end
 
+function zcamera(x, y, func)
+    camera(-x, -y) func() camera()
+end
+
 function zprint(str, x, y, align, color)
     if align == 0    then x -= #str*2
     elseif align > 0 then x -= #str*4+1 end

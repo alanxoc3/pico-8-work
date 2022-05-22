@@ -295,10 +295,10 @@ end,function(state)
 _g.gameover_control()
 state.game_over_sind,state.game_over_text=unpack(rnd_item(zobj[[1;,32,quack quack;2;,68,and play with me;3;,70,to save hi-roll;4;,81,in time for dinner;5;,83,and make me rich;6;,96,the banjo awaits you;7;,99,for your fans;8;,118,splat splat boing;]]))
 end,function(state)
-camera(-8*8,-8*8)
+zcamera(64,64,function()
 zsprb(state.game_over_sind,0,g_i%2,1,1,true,false,1)
 zcall(zprintgui,[[1;,game over,0,-17,8,2,1;2;,come back lank,0,12,10,4,1;3;,@,0,22,7,5,1]],state.game_over_text)
-camera()
+end)
 end,function()sfx(63,0)end,function(a)
 g_fade=cos(a:get_elapsed_percent"state")+1
 camera(g_fade>.5 and rnd_one())
@@ -333,6 +333,11 @@ draw_room(g_rooms[state.room_index],64,57,function()
 loop_entities("outlayer_50","drawout")
 loop_entities("drawlayer_50","draw")
 zcall(loop_entities,[[1;,outlayer_50,drawout;2;,drawlayer_50,draw;3;,drawlayer_70,draw;4;,drawlayer_75,draw;]])
+if g_debug then
+for inst in all(g_zclass_entities["box"])do
+scr_zrect(inst.x,inst.y,inst.rx,inst.ry,8)
+end
+end
 end,function()
 zcall(loop_entities,[[1;,outlayer_99,drawout;2;,drawlayer_99,draw;]])
 end)
@@ -379,6 +384,9 @@ function zspr(sind,x,y,sw,sh,...)
 sw,sh=sw or 1,sh or 1
 x,y=x-sw*4,y-sh*4
 spr(sind,x,y,sw,sh,...)
+end
+function zcamera(x,y,func)
+camera(-x,-y)func()camera()
 end
 function zprint(str,x,y,align,color)
 if align==0 then x-=#str*2
@@ -430,30 +438,16 @@ end
 zclass[[timer|timers;,;start_timer,%timer_start_timer,stop_timer,%timer_stop_timer,play_timer,%timer_play_timer,delete_timer,%timer_delete_timer,get_elapsed,%timer_get_elapsed,get_elapsed_percent,%timer_get_elapsed_percent,tick,%timer_tick,]]
 function draw_room(room,center_x,center_y,post_tile_func,post_card_func)
 local x1,y1=center_x-room.w*8\2,center_y-room.h*8\2
-local pw,ph=room.w*8-1,room.h*8-1
-local x2,y2=x1+pw,y1+ph
-clip(x1+4,y1+4,pw-7,ph-7)
-rectfill(x1,y1,x2,y2,room.color)
+draw_card(center_x,center_y,room.w*4-2,room.h*4-2,0,0,function()
+rectfill(0,0,127,127,room.color)
 for tiles in all{room.tiles_1,room.tiles_2}do
 for location,index in pairs(tiles)do
 local x,y=location%12,location\12
-spr(lookup_tile_animation(index),x1+x*8,y1+y*8)
+spr(lookup_tile_animation(index),x*8,y*8)
 end
 end
-camera(-x1,-y1)
 post_tile_func(x1,y1)
-camera()
-clip()
-for i,color in pairs(split"1,13,0,0")do
-i=4-i
-rect(x1+i,y1+i,x2-i,y2-i,color)
-i+=1
-pset(x1+i,y1+i)pset(x1+i,y2-i)
-pset(x2-i,y1+i)pset(x2-i,y2-i)
-end
-camera(-x1,-y1)
-post_card_func(x1,y1)
-camera()
+end,post_card_func)
 end
 function create_tile_animation_lookup(room)
 local lookup={}
@@ -504,15 +498,30 @@ rectfill(xx,y2,yy,y2,bg)
 end
 end
 function draw_stat(x,y,align,name,draw,max_health,health)
-camera(-x-2,-y)
+zcamera(x+2,y,function()
 local xyo=-8*align-1
 zprinttbox(name,xyo,-10,align,7,5)
 draw_bar(xyo,-2,xyo-35*align,1,health,max_health,-1,11,3)
 zprinttbox(flr(health).."/"..max_health,xyo,4,align,7,5)
-camera(-x,-y-g_i%2*align)
-draw_outline(1,draw)
-draw()
-camera()
+end)
+draw_card(x,y-cos(g_i/4)*align,6,8,6,8,draw,nop)
+end
+function draw_card(x,y,rx,ry,coffx,coffy,card_func,post_card_func)
+local x1,x2,y1,y2=x-rx,x+rx-1,y-ry,y+ry-1
+rectfill(x1,y1,x2,y2,1)
+local cam_x,cam_y=x1+coffx,y1+coffy
+clip(x1,y1,x2-x1,y2-y1)
+zcamera(cam_x,cam_y,card_func)
+clip()
+for i,c in pairs{1,13,0}do
+i=2-i
+color(c)
+if c ~=0 then rect(x1+i,y1+i,x2-i,y2-i)end
+i+=1
+pset(x1+i,y1+i)pset(x1+i,y2-i)
+pset(x2-i,y1+i)pset(x2-i,y2-i)
+end
+zcamera(cam_x,cam_y,post_card_func)
 end
 zclass[[fairy,actor,mov,drawlayer_70|rel_actor,@,x,@,y,@,update,%fairy_update,draw,%fairy_draw]]
 zclass[[gameover_control,actor|start;update,nop,duration,.5,next,normal;normal;update,%gameover_control_update;ending;update,nop;]]
@@ -538,6 +547,7 @@ g_state,g_rooms=_g.game_state(),decode_map()
 g_tile_animation_lookup=create_tile_animation_lookup(g_rooms[0])
 end
 function _update60()
+if btn(4)and btnp(5)then g_debug=not g_debug end
 loop_entities("actor","clean")
 register_entities()
 zcall(loop_entities,[[1;,timer,tick;2;,actor,state;3;,game_state,state;]])
@@ -547,4 +557,7 @@ g_i=g_animation.index
 cls()
 loop_entities("game_state","draw")
 fade(g_fade)
+if g_debug then
+zcall(rect,[[1;,0,12,127,18,1;2;,0,95,127,101,1;3;,0,0,127,5,1;4;,0,122,127,127,1;5;,0,0,17,127,1;6;,110,0,127,127,1;]])
+end
 end

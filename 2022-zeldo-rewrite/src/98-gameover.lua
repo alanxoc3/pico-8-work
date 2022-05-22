@@ -26,15 +26,13 @@ end $$
 end $$
 
 |gameover_draw| function(state)
-    camera(-8*8, -8*8)
-    zsprb(state.game_over_sind, 0, g_i%2, 1, 1, true, false, 1)
+    zcamera(64, 64, function()
+        zsprb(state.game_over_sind, 0, g_i%2, 1, 1, true, false, 1)
 
--- cpu: .20/.19
-    zcall(zprintgui, [[
-        1;,"game over",      0, -17, 8, 2, 1;
-        2;,"come back lank", 0, 12, 10, 4, 1;
-        3;,@,                0, 22, 7,  5, 1
-    ]], state.game_over_text)
-
-    camera()
+        zcall(zprintgui, [[
+            1;,"game over",      0, -17, 8, 2, 1;
+            2;,"come back lank", 0, 12, 10, 4, 1;
+            3;,@,                0, 22, 7,  5, 1
+        ]], state.game_over_text)
+    end)
 end $$

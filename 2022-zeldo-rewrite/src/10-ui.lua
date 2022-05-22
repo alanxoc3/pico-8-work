@@ -15,14 +15,33 @@ function draw_bar(x1,y1,x2,y2,num,dem,align,fg,bg)
 end
 
 function draw_stat(x, y, align, name, draw, max_health, health)
-    camera(-x-2, -y)
+    zcamera(x+2, y, function()
         local xyo = -8*align-1
         zprinttbox(name, xyo, -10, align, 7, 5)
         draw_bar(xyo, -2, xyo-35*align, 1, health, max_health, -1, 11, 3)
         zprinttbox(flr(health)..'/'..max_health, xyo, 4, align, 7, 5)
+    end)
 
-        camera(-x,-y-g_i%2*align)
-        draw_outline(1, draw)
-        draw()
-    camera()
+    draw_card(x, y-cos(g_i/4)*align, 6, 8, 6, 8, draw, nop)
+end
+
+function draw_card(x, y, rx, ry, coffx, coffy, card_func, post_card_func)
+    local x1, x2, y1, y2 = x-rx, x+rx-1, y-ry, y+ry-1
+    rectfill(x1, y1, x2, y2, 1)
+    local cam_x, cam_y = x1+coffx, y1+coffy
+
+    clip(x1,y1,x2-x1,y2-y1)
+    zcamera(cam_x, cam_y, card_func)
+    clip()
+
+    for i, c in pairs{1,13,0} do
+        i=2-i
+        color(c)
+        if c ~= 0 then rect(x1+i, y1+i, x2-i, y2-i) end
+        i+=1
+        pset(x1+i, y1+i) pset(x1+i, y2-i)
+        pset(x2-i, y1+i) pset(x2-i, y2-i)
+    end
+
+    zcamera(cam_x, cam_y, post_card_func)
 end
