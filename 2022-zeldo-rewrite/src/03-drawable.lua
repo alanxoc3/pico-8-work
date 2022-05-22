@@ -3,14 +3,18 @@
 zclass[[drawlayer_50|]] -- pl
 zclass[[drawlayer_70|]] -- fairy
 
-zclass[[drawlayer_90|]] -- above the card, inventory
-zclass[[drawlayer_95|]] -- above the card, stat
+zclass[[drawlayer_90|]] -- above the card, stat
+zclass[[drawlayer_95|]] -- above the card, inventory
 zclass[[drawlayer_99|]] -- above the card, title, textbox
 
 zclass[[outlayer_50|]] -- cell shading
 zclass[[outlayer_99|]] -- inventory
 
-zclass[[fader_out,actor|
+zclass[[fader,actor|
+    ecs_exclusions;actor,true; -- remove game_state from the actor group
+]]
+
+zclass[[fader_out,fader|
     start; duration,@, destroyed,@, update,%fader_out_update
 ]]
 
@@ -18,7 +22,7 @@ zclass[[fader_out,actor|
     g_fade = a:get_elapsed_percent'state'
 end $$
 
-zclass[[fader_in,actor|
+zclass[[fader_in,fader|
     start; duration,@, update,%fader_in_update
 ]]
 

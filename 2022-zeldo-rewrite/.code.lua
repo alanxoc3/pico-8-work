@@ -79,6 +79,9 @@ if table and table[key]then
 return table[key](...)
 end
 end
+function does_entity_exist(entity_name)
+return g_zclass_entities[entity_name]and #g_zclass_entities[entity_name]>0
+end
 function loop_entities(class,method_name,...)
 for inst in all(g_zclass_entities[class])do
 call_not_nil(inst,method_name,inst,...)
@@ -134,7 +137,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,actor_deregistered,@,fader_out_update,@,fader_in_update,@,animation_init,@,auto_outline_drawout,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,explode_draw,@,col_adjust_for_collision,@,adjust_deltas_for_tiles,@,inventory_start_update,@,inventory_press_update,@,inventory_draw,@,pl_nopause_update,@,pl_draw,@,stat_draw,@,tbox_update,@,tbox_draw,@,fairy_update,@,fairy_draw,@,gameover_control_update,@,gameover_init,@,gameover_draw,@,logo_init,@,logo_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,title_draw,@,title_logo_update,@,title_logo_draw,@,game_state_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,actor_deregistered,@,fader_out_update,@,fader_in_update,@,animation_init,@,auto_outline_drawout,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,explode_draw,@,col_adjust_for_collision,@,adjust_deltas_for_tiles,@,inventory_start_update,@,inventory_press_update,@,inventory_draw,@,pl_update,@,pl_draw,@,stat_draw,@,tbox_update,@,tbox_draw,@,fairy_update,@,fairy_draw,@,gameover_control_update,@,gameover_init,@,gameover_draw,@,logo_init,@,logo_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,title_draw,@,title_logo_update,@,title_logo_draw,@,game_state_init,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -249,9 +252,9 @@ end
 end
 end
 end,function(a)
-if btn"5"then a:load"press" end
+if not does_entity_exist"tbox"and btn"5"then a:load"press" end
 end,function(a)
-if not btn"5"then a:load"start" end
+if does_entity_exist"tbox"or not btn"5"then a:load"start" end
 a.cur_item=mid(0,2,a.cur_item%3+zbtn(btnp,0))+mid(0,2,a.cur_item\3+zbtn(btnp,2))*3
 end,function(a)
 for item in all(a)do
@@ -262,7 +265,7 @@ draw_outline(item.index==a.cur_item and 2 or 1,drawfunc)
 drawfunc()
 end
 end,function(a)
-if not btn(5)and zbtn(btn,0)|zbtn(btn,2)~=0 then
+if not does_entity_exist"tbox"and not btn(5)and zbtn(btn,0)|zbtn(btn,2)~=0 then
 a.ang,a.speed=atan2(zbtn(btn,0),zbtn(btn,2)),.025
 if cos(a.ang)~=0 then
 a.xf=cos(a.ang)<0
@@ -356,7 +359,7 @@ if btnp"4"then
 _g.tbox{"hello world","how are you","this is just","a textbox system!","yeah"}
 end
 if state:get_elapsed"state">.5 and not state.leaving then
-zcall(loop_entities,[[1;,nopause,nopause_update;2;,mov,mov_update;3;,tilecol,adjust_deltas_for_tiles,@;4;,vec,vec_update;]],g_rooms[state.room_index])
+zcall(loop_entities,[[1;,actor,state;2;,mov,mov_update;3;,tilecol,adjust_deltas_for_tiles,@;4;,vec,vec_update;]],g_rooms[state.room_index])
 end
 if not state.leaving and not g_pl:inside(g_room_bounds)then
 state.leaving=true
@@ -378,7 +381,7 @@ loop_entities("outlayer_50","drawout")
 loop_entities("drawlayer_50","draw")
 zcall(loop_entities,[[1;,outlayer_50,drawout;2;,drawlayer_50,draw;3;,drawlayer_70,draw;4;,drawlayer_75,draw;]])
 end,function()
-zcall(loop_entities,[[1;,outlayer_99,drawout;2;,drawlayer_95,draw;3;,drawlayer_97,draw;4;,drawlayer_99,draw;]])
+zcall(loop_entities,[[1;,outlayer_99,drawout;2;,drawlayer_90,draw;3;,drawlayer_95,draw;4;,drawlayer_99,draw;]])
 end)
 zcall(draw_bar,[[1;,18,6,109,11,@,20,0,8,2]],10)
 end,function()
@@ -460,8 +463,9 @@ zclass[[drawlayer_95|]]
 zclass[[drawlayer_99|]]
 zclass[[outlayer_50|]]
 zclass[[outlayer_99|]]
-zclass[[fader_out,actor|start;duration,@,destroyed,@,update,%fader_out_update]]
-zclass[[fader_in,actor|start;duration,@,update,%fader_in_update]]
+zclass[[fader,actor|ecs_exclusions;actor,true;]]
+zclass[[fader_out,fader|start;duration,@,destroyed,@,update,%fader_out_update]]
+zclass[[fader_in,fader|start;duration,@,update,%fader_in_update]]
 zclass[[animation,actor|index,0,init,%animation_init;start;duration,@,next,start]]
 zclass[[auto_outline|drawout,%auto_outline_drawout]]
 function draw_outline(color,drawfunc)
@@ -520,8 +524,8 @@ if t2 then return fget(t2,0)end
 return fget(room.tiles_1[y*12+x],0)
 end
 end
-zclass[[inventory,actor,drawlayer_90,nopause|pl,@;start;nopause_update,%inventory_start_update,draw,nop;press;nopause_update,%inventory_press_update,cur_item,4,draw,%inventory_draw;1;mem_loc,2,index,0,name,brang,xoff,-7,yoff,-9,sind,4;2;mem_loc,7,index,1,name,mask,xoff,0,yoff,-11,sind,3;3;mem_loc,3,index,2,name,bomb,xoff,7,yoff,-9,sind,5;4;mem_loc,4,index,3,name,shield,xoff,-8,yoff,-3,sind,6;5;index,4;6;mem_loc,6,index,5,name,bow,xoff,9,yoff,-2,sind,7;7;mem_loc,9,index,6,name,banjo,xoff,-7,yoff,4,sind,1;8;mem_loc,8,index,7,name,sword,xoff,0,yoff,6,sind,2;9;mem_loc,1,index,8,name,bow,xoff,7,yoff,5,sind,0;]]
-zclass[[pl,actor,mov,nopause,tilecol,auto_outline,drawlayer_50,outlayer_50|x,@,y,@,xf,@,sind,88,rx,.375,ry,.375,nopause_update,%pl_nopause_update,draw,%pl_draw;sinds;,88,89,90]]
+zclass[[inventory,actor,drawlayer_90|pl,@;start;update,%inventory_start_update,draw,nop;press;update,%inventory_press_update,cur_item,4,draw,%inventory_draw;1;mem_loc,2,index,0,name,brang,xoff,-7,yoff,-9,sind,4;2;mem_loc,7,index,1,name,mask,xoff,0,yoff,-11,sind,3;3;mem_loc,3,index,2,name,bomb,xoff,7,yoff,-9,sind,5;4;mem_loc,4,index,3,name,shield,xoff,-8,yoff,-3,sind,6;5;index,4;6;mem_loc,6,index,5,name,bow,xoff,9,yoff,-2,sind,7;7;mem_loc,9,index,6,name,banjo,xoff,-7,yoff,4,sind,1;8;mem_loc,8,index,7,name,sword,xoff,0,yoff,6,sind,2;9;mem_loc,1,index,8,name,bow,xoff,7,yoff,5,sind,0;]]
+zclass[[pl,actor,mov,tilecol,auto_outline,drawlayer_50,outlayer_50|x,@,y,@,xf,@,sind,88,rx,.375,ry,.375,update,%pl_update,draw,%pl_draw;sinds;,88,89,90]]
 function draw_bar(x1,y1,x2,y2,num,dem,align,fg,bg)
 if x1>x2 then x1-=3 x2-=3 end
 local bar_off=x2-x1-min(num/dem,1)*(x2-x1)
@@ -562,7 +566,6 @@ for c=0,15 do
 pal(c,g_fade_table[c][1+flr(7*min(1,max(0,threshold)))],1)
 end
 end
-zclass[[nopause|nopause_update,nop]]
 zclass[[room_bounds,box|x,@,y,@,rx,@,ry,@]]
 zclass[[title_logo,actor,auto_outline,drawlayer_99,outlayer_99|update,%title_logo_update_normal,draw,%title_logo_draw;start;update,nop,duration,.5,next,normal;normal;update,%title_logo_update;ending;update,nop;]]
 cartdata"zeldo_rewrite"
@@ -578,9 +581,9 @@ g_state,g_rooms=_g.game_state(),decode_map()
 g_tile_animation_lookup=create_tile_animation_lookup(g_rooms[0])
 end
 function _update60()
-loop_entities("actor","clean")
+zcall(loop_entities,[[1;,actor,clean;2;,fader,clean;]])
 register_entities()
-zcall(loop_entities,[[1;,timer,tick;2;,actor,state;3;,game_state,state;]])
+zcall(loop_entities,[[1;,timer,tick;2;,fader,state;3;,game_state,state;]])
 end
 function _draw()
 g_i=g_animation.index

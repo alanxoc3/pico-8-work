@@ -1,14 +1,14 @@
-zclass[[pl,actor,mov,nopause,tilecol,auto_outline,drawlayer_50,outlayer_50|
+zclass[[pl,actor,mov,tilecol,auto_outline,drawlayer_50,outlayer_50|
     x,@,y,@,xf,@,
     sind,88,
     rx,PL_RADIUS,ry,PL_RADIUS,
-    nopause_update,%pl_nopause_update,
+    update,%pl_update,
     draw,%pl_draw;
     sinds;,SPR_PL_FEET_1,SPR_PL_FEET_2,SPR_PL_FEET_3
 ]]
 
-|pl_nopause_update| function(a)
-    if not btn(BTN_ITEM_SELECT) and zbtn(btn, 0) | zbtn(btn, 2) ~= 0 then
+|pl_update| function(a)
+    if not does_entity_exist'tbox' and not btn(BTN_ITEM_SELECT) and zbtn(btn, 0) | zbtn(btn, 2) ~= 0 then
         a.ang, a.speed = atan2(zbtn(btn, 0), zbtn(btn, 2)), PL_SPEED
 
         if cos(a.ang) ~= 0 then

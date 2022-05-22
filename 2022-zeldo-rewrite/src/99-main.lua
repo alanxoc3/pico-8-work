@@ -37,11 +37,14 @@ function _update60()
     if btn(4) and btnp(5) then g_debug = not g_debug end
     -- DEBUG_END
 
-    loop_entities('actor',      'clean') -- delete any actors that were killed, and call their "destroy" callback
+    zcall(loop_entities, [[
+        1;,actor,clean;
+        2;,fader,clean;
+    ]])
     register_entities()                  -- register all zobs from previous game loop iteration
     zcall(loop_entities, [[
         1;,timer,tick;
-        2;,actor,state;
+        2;,fader,state;
         3;,game_state,state;
     ]])
 end

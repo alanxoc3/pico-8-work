@@ -4,8 +4,8 @@ help him save the Land of Hi-roll from the forces of evil.
 
 ## Tokens & Features
 ```
-2022-05-22 -- ui tbox
-    3347 3553 3597 3648 3756
+2022-05-22 -- ui tbox uifixes
+    3347 3553 3597 3648 3756 3782
 
 2022-05-21 -- tilecol planim autooutline inventory explode btndelay
     2801 3128 3183 3214 3144 3093 3167 3188 3298 3277 3351 3347

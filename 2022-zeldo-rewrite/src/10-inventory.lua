@@ -1,7 +1,7 @@
-zclass[[inventory,actor,drawlayer_90,nopause|
+zclass[[inventory,actor,drawlayer_90|
     pl,@;
-    start; nopause_update,%inventory_start_update, draw,nop;
-    press; nopause_update,%inventory_press_update, cur_item,4, draw,%inventory_draw;
+    start; update,%inventory_start_update, draw,nop;
+    press; update,%inventory_press_update, cur_item,4, draw,%inventory_draw;
     1; mem_loc,HAS_BRANG  , index,0, name,brang , xoff,-7, yoff,-9 , sind,SPR_BRANG;
     2; mem_loc,HAS_MASK   , index,1, name,mask  , xoff,0 , yoff,-11, sind,SPR_MASK;
     3; mem_loc,HAS_BOMB   , index,2, name,bomb  , xoff,7 , yoff,-9 , sind,SPR_BOMB;
@@ -14,11 +14,11 @@ zclass[[inventory,actor,drawlayer_90,nopause|
 ]]
 
 |inventory_start_update| function(a)
-    if btn'BTN_ITEM_SELECT' then a:load'press' end
+    if not does_entity_exist'tbox' and btn'BTN_ITEM_SELECT' then a:load'press' end
 end $$
 
 |inventory_press_update| function(a)
-    if not btn'BTN_ITEM_SELECT' then a:load'start' end
+    if does_entity_exist'tbox' or not btn'BTN_ITEM_SELECT' then a:load'start' end
     a.cur_item = mid(0,2,a.cur_item%3+zbtn(btnp,0)) + mid(0,2,a.cur_item\3+zbtn(btnp,2))*3
 end $$
 

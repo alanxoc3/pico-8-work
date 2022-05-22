@@ -1,4 +1,3 @@
-zclass[[nopause|nopause_update,nop]] -- update for things that shouldn't run when room is paused.
 zclass[[room_bounds,box|x,@,y,@,rx,@,ry,@]]
 
 |room_init| function(state)
@@ -22,7 +21,7 @@ end $$
 
     if state:get_elapsed'state' > FADE_SPEED and not state.leaving then
         zcall(loop_entities, [[
-            1;,nopause, nopause_update;
+            1;,actor,   state;
             2;,mov,     mov_update;
             3;,tilecol, adjust_deltas_for_tiles, @;
             4;,vec,     vec_update;
@@ -66,8 +65,8 @@ end $$
     end, function()
         zcall(loop_entities, [[
             1;,outlayer_99, drawout;
-            2;,drawlayer_95, draw;
-            3;,drawlayer_97, draw;
+            2;,drawlayer_90, draw;
+            3;,drawlayer_95, draw;
             4;,drawlayer_99, draw;
         ]])
     end)

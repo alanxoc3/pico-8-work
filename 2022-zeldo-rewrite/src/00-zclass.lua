@@ -63,6 +63,11 @@ function call_not_nil(table, key, ...)
     end
 end
 
+-- Check if an entity exists.
+function does_entity_exist(entity_name)
+    return g_zclass_entities[entity_name] and #g_zclass_entities[entity_name] > 0
+end
+
 -- Loop through all the entities of a certain type and call a method on each one if that method exists.
 function loop_entities(class, method_name, ...)
     for inst in all(g_zclass_entities[class]) do
