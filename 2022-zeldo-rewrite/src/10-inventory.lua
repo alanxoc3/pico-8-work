@@ -2,15 +2,15 @@ zclass[[inventory,actor,drawlayer_99,nopause|
     pl,@;
     start; nopause_update,%inventory_start_update, draw,nop;
     press; nopause_update,%inventory_press_update, cur_item,4, draw,%inventory_draw;
-    1; mem_loc,HAS_BRANG  , index,0, name,brang , xoff,-7, yoff,-9 , sind,4;
-    2; mem_loc,HAS_MASK   , index,1, name,mask  , xoff,0 , yoff,-11, sind,3;
-    3; mem_loc,HAS_BOMB   , index,2, name,bomb  , xoff,7 , yoff,-9 , sind,5;
-    4; mem_loc,HAS_SHIELD , index,3, name,shield, xoff,-8, yoff,-3 , sind,6;
+    1; mem_loc,HAS_BRANG  , index,0, name,brang , xoff,-7, yoff,-9 , sind,SPR_BRANG;
+    2; mem_loc,HAS_MASK   , index,1, name,mask  , xoff,0 , yoff,-11, sind,SPR_MASK;
+    3; mem_loc,HAS_BOMB   , index,2, name,bomb  , xoff,7 , yoff,-9 , sind,SPR_BOMB;
+    4; mem_loc,HAS_SHIELD , index,3, name,shield, xoff,-8, yoff,-3 , sind,SPR_SHIELD;
     5; index,4;
-    6; mem_loc,HAS_BOW    , index,5, name,bow   , xoff,9 , yoff,-2 , sind,7;
-    7; mem_loc,HAS_BANJO  , index,6, name,banjo , xoff,-7, yoff,4  , sind,1;
-    8; mem_loc,HAS_SWORD  , index,7, name,sword , xoff,0 , yoff,6  , sind,2;
-    9; mem_loc,HAS_BOWL   , index,8, name,bow   , xoff,7 , yoff,5  , sind,0;
+    6; mem_loc,HAS_BOW    , index,5, name,bow   , xoff,9 , yoff,-2 , sind,SPR_BOW;
+    7; mem_loc,HAS_BANJO  , index,6, name,banjo , xoff,-7, yoff,4  , sind,SPR_BANJO;
+    8; mem_loc,HAS_SWORD  , index,7, name,sword , xoff,0 , yoff,6  , sind,SPR_SWORD;
+    9; mem_loc,HAS_BOWL   , index,8, name,bow   , xoff,7 , yoff,5  , sind,SPR_BOWL;
 ]]
 
 |inventory_start_update| function(a)

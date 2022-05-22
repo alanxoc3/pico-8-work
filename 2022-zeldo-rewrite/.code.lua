@@ -134,7 +134,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,actor_deregistered,@,fader_out_update,@,fader_in_update,@,animation_init,@,auto_outline_drawout,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,col_adjust_for_collision,@,adjust_deltas_for_tiles,@,inventory_start_update,@,inventory_press_update,@,inventory_draw,@,pl_nopause_update,@,pl_draw,@,fairy_update,@,fairy_draw,@,gameover_control_update,@,gameover_init,@,gameover_update,@,gameover_draw,@,logo_init,@,logo_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,title_update,@,title_draw,@,title_logo_update,@,title_logo_draw,@,game_state_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,actor_deregistered,@,fader_out_update,@,fader_in_update,@,animation_init,@,auto_outline_drawout,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,explode_draw,@,col_adjust_for_collision,@,adjust_deltas_for_tiles,@,inventory_start_update,@,inventory_press_update,@,inventory_draw,@,pl_nopause_update,@,pl_draw,@,fairy_update,@,fairy_draw,@,gameover_control_update,@,gameover_init,@,gameover_update,@,gameover_draw,@,logo_init,@,logo_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,title_update,@,title_draw,@,title_logo_update,@,title_logo_draw,@,game_state_init,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -230,6 +230,11 @@ if ax==0 and abs(a.dx)<.01 then a.dx=0 end
 if ay==0 and abs(a.dy)<.01 then a.dy=0 end
 end,function(a,x,y)
 a.ang=atan2(x-a.x,y-a.y)
+end,function(a)
+local percent=a:get_elapsed"state"*4
+for i=0,3 do
+scr_zrect(a.x+percent*cos(i/4+.125),a.y+percent*sin(i/4+.125),.125,.125,1)
+end
 end,function(a,b)
 local box={x=b.x-a.dx,y=b.y,rx=b.rx,ry=b.ry}
 local dx,dy=a:getdelta(box,a.dx,a.dy)
@@ -309,7 +314,6 @@ end,function(state)
 if state:get_elapsed"state">.5 and not state.leaving then
 zcall(loop_entities,[[1;,nopause,nopause_update;2;,mov,mov_update;3;,tilecol,adjust_deltas_for_tiles,@;4;,vec,vec_update;]],g_rooms[state.room_index])
 end
-if g_debug then debug_boxes(g_pl,g_room_bounds)end
 if not state.leaving and not g_pl:inside(g_room_bounds)then
 state.leaving=true
 _g.fader_out(.5,function()
@@ -329,11 +333,6 @@ draw_room(g_rooms[state.room_index],64,64,function()
 loop_entities("outlayer_50","drawout")
 loop_entities("drawlayer_50","draw")
 zcall(loop_entities,[[1;,outlayer_50,drawout;2;,drawlayer_50,draw;3;,drawlayer_70,draw;4;,drawlayer_75,draw;]])
-if g_debug then
-for inst in all(g_zclass_entities["box"])do
-scr_rect(inst.x-inst.rx,inst.y-inst.ry,inst.x+inst.rx-.125,inst.y+inst.ry-.125,8)
-end
-end
 end,function()
 zcall(loop_entities,[[1;,outlayer_99,drawout;2;,drawlayer_99,draw;]])
 end)
@@ -402,9 +401,10 @@ foreach(zobj(text,...),function(params)
 func(unpack(params))
 end)
 end
+function zrect(x,y,rx,ry,color)rect(x-rx,y-ry,x+rx-1,y+ry-1,color)end
 function scr_help_four(func,x1,y1,x2,y2,color)func(8*x1,8*y1,8*x2,8*y2,color)end
 function scr_line(...)scr_help_four(line,...)end
-function scr_rect(...)scr_help_four(rect,...)end
+function scr_zrect(...)scr_help_four(zrect,...)end
 function scr_pset(x,y,color)pset(8*x,8*y,color)end
 zclass[[actor,timer|load,%actor_load,state,%actor_state,kill,%actor_kill,clean,%actor_clean,alive,yes,duration,null,curr,start,next,null,init,nop,update,nop,destroyed,nop,deregistered,%actor_deregistered;]]
 zclass[[drawlayer_50|]]
@@ -447,8 +447,8 @@ for i,color in pairs(split"1,13,0,0")do
 i=4-i
 rect(x1+i,y1+i,x2-i,y2-i,color)
 i+=1
-pset(x1+i,y1+i,color)pset(x1+i,y2-i,color)
-pset(x2-i,y1+i,color)pset(x2-i,y2-i,color)
+pset(x1+i,y1+i)pset(x1+i,y2-i)
+pset(x2-i,y1+i)pset(x2-i,y2-i)
 end
 camera(-x1,-y1)
 post_card_func(x1,y1)
@@ -474,21 +474,10 @@ function get_delta_axis(dx,x,rx,tdx,tdrx)
 local xp=(x-tdx)/tdrx
 return abs(xp)-rx/tdrx<1 and tdx+sgn(xp)*(rx+tdrx)-(x-dx)or dx
 end
-function debug_boxes(a,b)
-local xs,ys=a:side(b)
-local axs,ays=a:abside(b)
-printh("in: "..(g_pl:inside(g_room_bounds)and "true, "or "false, ")
-.."out: "..(g_pl:outside(g_room_bounds)and "true, "or "false, ")
-.."touch: "..(g_pl:touching(g_room_bounds)and "true, "or "false, ")
-.."xs: "..xs..", "
-.."ys: "..ys..", "
-.."axs: "..axs..", "
-.."ays: "..ays..", "
-)
-end
 zclass[[pos|x,0,y,0,dist_point,%pos_dist_point]]
 zclass[[vec,pos|dx,0,dy,0,vec_update,%vec_update]]
 zclass[[mov,vec|ang,0,speed,0,mov_update,%mov_update,towards_point,%mov_towards_point]]
+zclass[[explode,actor,drawlayer_50|x,@,y,@,draw,%explode_draw;start;duration,.25;]]
 zclass[[col,vec,box|adjust_for_collision,%col_adjust_for_collision]]
 zclass[[tilecol,col|adjust_deltas_for_tiles,%adjust_deltas_for_tiles]]
 function is_solid_tile(room,x,y)
@@ -523,7 +512,6 @@ g_state,g_rooms=_g.game_state(),decode_map()
 g_tile_animation_lookup=create_tile_animation_lookup(g_rooms[0])
 end
 function _update60()
-if btn(4)and btnp(5)then g_debug=not g_debug end
 loop_entities("actor","clean")
 register_entities()
 zcall(loop_entities,[[1;,timer,tick;2;,actor,state;3;,game_state,state;]])
@@ -533,5 +521,4 @@ g_i=g_animation.index
 cls()
 loop_entities("game_state","draw")
 fade(g_fade)
-if g_debug then rect(0,0,127,127,8)end
 end

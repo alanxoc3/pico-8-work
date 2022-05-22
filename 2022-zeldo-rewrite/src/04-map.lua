@@ -27,8 +27,8 @@ function draw_room(room, center_x, center_y, post_tile_func, post_card_func)
         i=4-i
         rect(x1+i, y1+i, x2-i, y2-i, color)
         i+=1
-        pset(x1+i, y1+i, color) pset(x1+i, y2-i, color)
-        pset(x2-i, y1+i, color) pset(x2-i, y2-i, color)
+        pset(x1+i, y1+i) pset(x1+i, y2-i)
+        pset(x2-i, y1+i) pset(x2-i, y2-i)
     end
 
     camera(-x1,-y1)

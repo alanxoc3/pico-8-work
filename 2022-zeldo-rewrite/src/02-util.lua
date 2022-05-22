@@ -51,7 +51,8 @@ function zcall(func, text, ...)
     end)
 end
 
+function zrect(x, y, rx, ry, color) rect(x-rx, y-ry, x+rx-1, y+ry-1, color) end
 function scr_help_four(func, x1, y1, x2, y2, color) func(8*x1, 8*y1, 8*x2, 8*y2, color) end
 function scr_line(...) scr_help_four(line, ...) end
-function scr_rect(...) scr_help_four(rect, ...) end
+function scr_zrect(...) scr_help_four(zrect, ...) end
 function scr_pset(x, y, color) pset(8*x, 8*y, color) end

@@ -53,7 +53,7 @@ end $$
         -- DEBUG_BEGIN
         if g_debug then
             for inst in all(g_zclass_entities['box']) do
-                scr_rect(inst.x-inst.rx, inst.y-inst.ry, inst.x+inst.rx-.125, inst.y+inst.ry-.125, 8)
+                scr_zrect(inst.x, inst.y, inst.rx, inst.ry, 8)
             end
         end
         -- DEBUG_END
