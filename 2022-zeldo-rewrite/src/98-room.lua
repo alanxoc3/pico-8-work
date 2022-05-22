@@ -66,4 +66,5 @@ end $$
 
     draw_stat(9, 112, -1, "lank", function() zspr(88,0,0) zspr(91,0,0) end, 10, 5)
     draw_stat(127-8, 112,  1, "bady", function() zspr(118,0,0,1,1,true) end, 4, 3)
+    draw_tbox(64, 112)
 end $$

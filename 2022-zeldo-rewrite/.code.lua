@@ -333,17 +333,13 @@ draw_room(g_rooms[state.room_index],64,57,function()
 loop_entities("outlayer_50","drawout")
 loop_entities("drawlayer_50","draw")
 zcall(loop_entities,[[1;,outlayer_50,drawout;2;,drawlayer_50,draw;3;,drawlayer_70,draw;4;,drawlayer_75,draw;]])
-if g_debug then
-for inst in all(g_zclass_entities["box"])do
-scr_zrect(inst.x,inst.y,inst.rx,inst.ry,8)
-end
-end
 end,function()
 zcall(loop_entities,[[1;,outlayer_99,drawout;2;,drawlayer_99,draw;]])
 end)
 zcall(draw_bar,[[1;,18,6,109,11,@,20,0,8,2]],10)
 draw_stat(9,112,-1,"lank",function()zspr(88,0,0)zspr(91,0,0)end,10,5)
 draw_stat(127-8,112,1,"bady",function()zspr(118,0,0,1,1,true)end,4,3)
+draw_tbox(64,112)
 end,function()
 _g.title_logo()
 end,function()
@@ -523,6 +519,15 @@ pset(x2-i,y1+i)pset(x2-i,y2-i)
 end
 zcamera(cam_x,cam_y,post_card_func)
 end
+function draw_tbox(x,y)
+draw_card(x+g_i%2,y,46.5,10,2.5,5,
+function()
+zprinttbox("1234567890123456789012345",0,-2,-1,7,5)
+zprinttbox("1234567890123456789012345",0,6,-1,7,5)
+end,function()
+zspr(38,44,16+g_i%2)
+end)
+end
 zclass[[fairy,actor,mov,drawlayer_70|rel_actor,@,x,@,y,@,update,%fairy_update,draw,%fairy_draw]]
 zclass[[gameover_control,actor|start;update,nop,duration,.5,next,normal;normal;update,%gameover_control_update;ending;update,nop;]]
 g_fade_table=zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,1,0,0,0,0;3;,3,3,3,3,1,1,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,0,0,0,0;6;,6,6,13,13,5,5,0,0;7;,7,7,6,13,13,5,0,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,0,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,0,0,0;13;,13,13,5,5,1,0,0,0;14;,14,14,13,4,2,2,0,0;15;,15,15,13,13,5,5,0,0;]]
@@ -539,7 +544,7 @@ menuitem(1,"reset save data",function()
 memset(0x5e00,0,64)
 extcmd"reset"
 end)
-zclass[[game_state,actor|ecs_exclusions;actor,true;curr,logo,init,%game_state_init,room_index,136,pl_x,3,pl_y,3,pl_xf,yes,fairy_x,7,fairy_y,8;logo;state_init,%logo_init,update,nop,draw,%logo_draw,duration,2.5,next,title;title;state_init,%title_init,update,nop,draw,%title_draw;room;state_init,%room_init,update,%room_update,draw,%room_draw,leaving,no;gameover;state_init,%gameover_init,update,nop,draw,%gameover_draw;]]
+zclass[[game_state,actor|ecs_exclusions;actor,true;curr,room,init,%game_state_init,room_index,136,pl_x,3,pl_y,3,pl_xf,yes,fairy_x,7,fairy_y,8;logo;state_init,%logo_init,update,nop,draw,%logo_draw,duration,2.5,next,title;title;state_init,%title_init,update,nop,draw,%title_draw;room;state_init,%room_init,update,%room_update,draw,%room_draw,leaving,no;gameover;state_init,%gameover_init,update,nop,draw,%gameover_draw;]]
 function _init()
 memset(0x5d00,0,64)
 poke2(0x5f5c,0x0808)
@@ -547,7 +552,6 @@ g_state,g_rooms=_g.game_state(),decode_map()
 g_tile_animation_lookup=create_tile_animation_lookup(g_rooms[0])
 end
 function _update60()
-if btn(4)and btnp(5)then g_debug=not g_debug end
 loop_entities("actor","clean")
 register_entities()
 zcall(loop_entities,[[1;,timer,tick;2;,actor,state;3;,game_state,state;]])
@@ -557,7 +561,4 @@ g_i=g_animation.index
 cls()
 loop_entities("game_state","draw")
 fade(g_fade)
-if g_debug then
-zcall(rect,[[1;,0,12,127,18,1;2;,0,95,127,101,1;3;,0,0,127,5,1;4;,0,122,127,127,1;5;,0,0,17,127,1;6;,110,0,127,127,1;]])
-end
 end

@@ -45,3 +45,13 @@ function draw_card(x, y, rx, ry, coffx, coffy, card_func, post_card_func)
 
     zcamera(cam_x, cam_y, post_card_func)
 end
+
+function draw_tbox(x, y)
+    draw_card(x+g_i%2, y, 46.5, 10, 2.5, 5,
+    function()
+        zprinttbox("1234567890123456789012345", 0, -2, -1, 7, 5)
+        zprinttbox("1234567890123456789012345", 0, 6, -1, 7, 5)
+    end, function()
+        zspr(38, 44, 16+g_i%2)
+    end)
+end
