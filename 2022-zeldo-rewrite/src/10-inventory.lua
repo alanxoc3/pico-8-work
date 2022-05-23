@@ -14,11 +14,21 @@ zclass[[inventory,actor,drawlayer_90|
 ]]
 
 |inventory_start_update| function(a)
-    if not does_entity_exist'tbox' and btn'BTN_ITEM_SELECT' then a:load'press' end
+    if not does_entity_exist'tbox' and btn'BTN_ITEM_SELECT' then
+        call_not_nil(a.stat, 'load', a.stat, 'ending')
+        a:load'press'
+    end
 end $$
 
 |inventory_press_update| function(a)
-    if does_entity_exist'tbox' or not btn'BTN_ITEM_SELECT' then a:load'start' end
+    if does_entity_exist'tbox' or not btn'BTN_ITEM_SELECT' then
+        a:load'start'
+        if a.cur_item ~= 4 then
+            a.stat = _g.stat(0, 64, {cspr=a[a.cur_item+1].sind})
+        else
+            a.stat = nil
+        end
+    end
     a.cur_item = mid(0,2,a.cur_item%3+zbtn(btnp,0)) + mid(0,2,a.cur_item\3+zbtn(btnp,2))*3
 end $$
 

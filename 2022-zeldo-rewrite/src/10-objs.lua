@@ -1,6 +1,7 @@
 zclass[[sign,actor,auto_outline,drawlayer_50,outlayer_50|
     x,@,y,@,
     cname,"sign",cspr,SPR_SIGN,
+    health,10,max_health,10,
     init,%sign_init,
     draw,%sign_draw
 ]]

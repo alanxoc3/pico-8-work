@@ -253,9 +253,19 @@ end
 end
 end
 end,function(a)
-if not does_entity_exist"tbox"and btn"5"then a:load"press" end
+if not does_entity_exist"tbox"and btn"5"then
+call_not_nil(a.stat,"load",a.stat,"ending")
+a:load"press"
+end
 end,function(a)
-if does_entity_exist"tbox"or not btn"5"then a:load"start" end
+if does_entity_exist"tbox"or not btn"5"then
+a:load"start"
+if a.cur_item ~=4 then
+a.stat=_g.stat(0,64,{cspr=a[a.cur_item+1].sind})
+else
+a.stat=nil
+end
+end
 a.cur_item=mid(0,2,a.cur_item%3+zbtn(btnp,0))+mid(0,2,a.cur_item\3+zbtn(btnp,2))*3
 end,function(a)
 for item in all(a)do
@@ -285,6 +295,7 @@ zspr(a.sind,a.x*8,a.y*8-2,1,1,a.xf)
 zspr(91,a.x*8,a.y*8-2,1,1,a.xf)
 end,function(a)
 local obj=a.obj
+if align ~=0 then
 zcamera(a.x+2,a.y,function()
 local xyo=-8*a.align-1
 if obj.cname then zprinttbox(obj.cname,xyo,-10,a.align,7,5)end
@@ -293,6 +304,7 @@ draw_bar(xyo,-2,xyo-35*a.align,1,obj.health/obj.max_health,-1,11,3)
 zprinttbox(flr(obj.health).."/"..obj.max_health,xyo,4,a.align,7,5)
 end
 end)
+end
 local offx=a.align>0 and does_entity_exist"tbox"and-1 or 0
 local offy=does_entity_exist"tbox"and 0 or-cos(g_i/4)*a.align
 draw_card(a.x+offx,a.y+offy,6,8,2,4,function()
@@ -538,7 +550,7 @@ return fget(room.tiles_1[y*12+x],0)
 end
 end
 zclass[[inventory,actor,drawlayer_90|pl,@;start;update,%inventory_start_update,draw,nop;press;update,%inventory_press_update,cur_item,4,draw,%inventory_draw;1;mem_loc,2,index,0,name,brang,xoff,-7,yoff,-9,sind,4;2;mem_loc,7,index,1,name,mask,xoff,0,yoff,-11,sind,3;3;mem_loc,3,index,2,name,bomb,xoff,7,yoff,-9,sind,5;4;mem_loc,4,index,3,name,shield,xoff,-8,yoff,-3,sind,6;5;index,4;6;mem_loc,6,index,5,name,bow,xoff,9,yoff,-2,sind,7;7;mem_loc,9,index,6,name,banjo,xoff,-7,yoff,4,sind,1;8;mem_loc,8,index,7,name,sword,xoff,0,yoff,6,sind,2;9;mem_loc,1,index,8,name,bow,xoff,7,yoff,5,sind,0;]]
-zclass[[sign,actor,auto_outline,drawlayer_50,outlayer_50|x,@,y,@,cname,sign,cspr,171,init,%sign_init,draw,%sign_draw]]
+zclass[[sign,actor,auto_outline,drawlayer_50,outlayer_50|x,@,y,@,cname,sign,cspr,171,health,10,max_health,10,init,%sign_init,draw,%sign_draw]]
 zclass[[pl,actor,mov,tilecol,auto_outline,drawlayer_50,outlayer_50|cname,lank,cspr,103,health,10,max_health,10,x,@,y,@,xf,@,sind,88,rx,.375,ry,.375,init,%pl_init,update,%pl_update,energy,0,draw,%pl_draw;sinds;,88,89,90]]
 function draw_bar(x1,y1,x2,y2,percent,align,fg,bg)
 if x1>x2 then x1-=3 x2-=3 end

@@ -49,15 +49,17 @@ zclass[[stat,vec,actor,drawlayer_95|
 
 |stat_draw| function(a)
     local obj = a.obj
-    zcamera(a.x+2, a.y, function()
-        local xyo = -8*a.align-1
-        if obj.cname then zprinttbox(obj.cname, xyo, -10, a.align, 7, 5) end
-        
-        if obj.health and obj.max_health then
-            draw_bar(xyo, -2, xyo-35*a.align, 1, obj.health/obj.max_health, -1, 11, 3)
-            zprinttbox(flr(obj.health)..'/'..obj.max_health, xyo, 4, a.align, 7, 5)
-        end
-    end)
+    if align ~= 0 then
+        zcamera(a.x+2, a.y, function()
+            local xyo = -8*a.align-1
+            if obj.cname then zprinttbox(obj.cname, xyo, -10, a.align, 7, 5) end
+            
+            if obj.health and obj.max_health then
+                draw_bar(xyo, -2, xyo-35*a.align, 1, obj.health/obj.max_health, -1, 11, 3)
+                zprinttbox(flr(obj.health)..'/'..obj.max_health, xyo, 4, a.align, 7, 5)
+            end
+        end)
+    end
 
     local offx = a.align > 0 and does_entity_exist'tbox' and -1 or 0
     local offy = does_entity_exist'tbox' and 0 or -cos(g_i/4)*a.align
