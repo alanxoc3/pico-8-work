@@ -1,4 +1,4 @@
-zclass[[pl,actor,mov,tilecol,auto_outline,drawlayer_50,outlayer_50|
+zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50,outlayer_50|
     cname,"lank", cspr,SPR_PL_WHOLE,
     health,10,max_health,10,
     x,@,y,@,xf,@,

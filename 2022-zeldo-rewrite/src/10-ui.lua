@@ -35,9 +35,6 @@ function draw_card(x, y, rx, ry, coffx, coffy, card_func, post_card_func)
     zcamera(cam_x, cam_y, post_card_func)
 end
 
--- zclass[[statcard,vec,actor,drawlayer_95|
-    
-
 zclass[[stat,vec,actor,drawlayer_95|
     align,@, x,@, obj,@, y,138, draw,%stat_draw,
     max_health,10, health,5;
@@ -69,8 +66,8 @@ zclass[[stat,vec,actor,drawlayer_95|
 end $$
 
 zclass[[tbox,vec,actor,drawlayer_99|
+    rawtext,@,
     y,138,
-    texts,@,
     cur_text_index,1,
     anim,0,
     line_1,,
@@ -78,10 +75,18 @@ zclass[[tbox,vec,actor,drawlayer_99|
     update,%tbox_update,
     draw,%tbox_draw;
 
-    start;  dy,-2, duration,.2, next,normal, update,nop;
-    normal; dy,0,  anim,0, done,no, update,%tbox_update;
-    ending; dy,2,  duration,.2;
+    texts;,;
+    start;  dy,-2, duration,.2, next,normal, update,nop, init,%tbox_init;
+    normal; dy,0,  anim,0, done,no, update,%tbox_update, init,nop;
+    ending; dy,2,  update,nop, duration,.2, init,nop;
 ]]
+
+|tbox_init| function(a)
+    printh("REACHED")
+    a.texts = split(a.rawtext, "^")
+    printh(a.rawtext)
+    printh(#a.texts)
+end $$
 
 |tbox_update| function(a)
     local text1 = a.texts[a.cur_text_index]

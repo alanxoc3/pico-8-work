@@ -13,7 +13,7 @@ LAST_ROOM_INDEX = 223
 g_objects = {
 --  name   spr w  h
     {"bed", 39, 1, 2},       -- 1 INDEX
-    {"sign", 171,  1, 1},    -- 2 INDEX
+    {"signtest", 171,  1, 1},    -- 2 INDEX
     {"pot", 49, 1, 1},       -- 3 INDEX
     {"nil", 0,  1, 1},       -- 4 INDEX
     {"nil", 0,  1, 1},       -- 5 INDEX

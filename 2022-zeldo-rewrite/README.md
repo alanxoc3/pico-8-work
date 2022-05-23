@@ -11,6 +11,9 @@ cat mapbuilder.lua | rg INDEX | rg -o '"\w+"' | rg -o '\w+' | tr '\n' ','
 
 ## Tokens & Features
 ```
+2022-05-23 -- solids signworks
+    3920 4057
+
 2022-05-22 -- ui tbox uipolish placeobjs itemswitchui
     3347 3553 3597 3648 3756 3782 3785 3878 3920
 
