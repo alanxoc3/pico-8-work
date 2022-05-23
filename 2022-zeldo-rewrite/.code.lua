@@ -1,3 +1,4 @@
+g_obj_map=split[[bed,sign,pot,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil]]
 function decode_map()
 local rooms,cur_loc={},0x2000
 local peek_inc=function()
@@ -5,7 +6,7 @@ cur_loc+=1
 return@(cur_loc-1)
 end
 while@cur_loc ~=255 do
-local room,room_ind=zobj"tiles_1;,;tiles_2;,;objects;,;w,12,h,10,color,0,music,0",peek_inc()
+local room,room_ind=zobj[[tiles_1;,;tiles_2;,;objects;,;w,12,h,10,color,0,music,0]],peek_inc()
 if room_ind>223 then room.w,room.h=8,6 end
 room.color=0x0f &@cur_loc
 room.music=0xf0 & peek_inc()>>>4
@@ -37,7 +38,7 @@ else
 layer[p1]=ind+128
 end
 else
-add(room.objects,{index=ind,x=p1%12+offx,y=p1\12+offy})
+add(room.objects,{index=ind+1,x=p1%12+offx,y=p1\12+offy})
 end
 end
 end
@@ -137,7 +138,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,actor_deregistered,@,fader_out_update,@,fader_in_update,@,animation_init,@,auto_outline_drawout,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,explode_draw,@,col_adjust_for_collision,@,adjust_deltas_for_tiles,@,inventory_start_update,@,inventory_press_update,@,inventory_draw,@,pl_update,@,pl_draw,@,stat_draw,@,tbox_update,@,tbox_draw,@,fairy_update,@,fairy_draw,@,gameover_control_update,@,gameover_init,@,gameover_draw,@,logo_init,@,logo_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,simple_update,@,title_draw,@,title_logo_update,@,title_logo_draw,@,game_state_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,actor_deregistered,@,fader_out_update,@,fader_in_update,@,animation_init,@,auto_outline_drawout,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,explode_draw,@,col_adjust_for_collision,@,adjust_deltas_for_tiles,@,inventory_start_update,@,inventory_press_update,@,inventory_draw,@,sign_init,@,sign_draw,@,pl_init,@,pl_update,@,pl_draw,@,stat_draw,@,tbox_update,@,tbox_draw,@,fairy_update,@,fairy_draw,@,gameover_control_update,@,gameover_init,@,gameover_draw,@,logo_init,@,logo_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,simple_update,@,title_draw,@,title_logo_update,@,title_logo_draw,@,game_state_init,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -265,6 +266,11 @@ draw_outline(item.index==a.cur_item and 2 or 1,drawfunc)
 drawfunc()
 end
 end,function(a)
+_g.stat(1,119,a)
+_g.tbox(split"testing a sign,this must be a sign,how are you,this is just,a textbox system!,yeah")
+end,function(a)
+zspr(a.cspr,a.x*8,a.y*8)
+end,function(a)_g.stat(-1,9,a)end,function(a)
 if not does_entity_exist"tbox"and not btn(5)and zbtn(btn,0)|zbtn(btn,2)~=0 then
 a.ang,a.speed=atan2(zbtn(btn,0),zbtn(btn,2)),.025
 if cos(a.ang)~=0 then
@@ -278,13 +284,20 @@ end,function(a)
 zspr(a.sind,a.x*8,a.y*8-2,1,1,a.xf)
 zspr(91,a.x*8,a.y*8-2,1,1,a.xf)
 end,function(a)
+local obj=a.obj
 zcamera(a.x+2,a.y,function()
 local xyo=-8*a.align-1
-zprinttbox(a.name,xyo,-10,a.align,7,5)
-draw_bar(xyo,-2,xyo-35*a.align,1,a.health/a.max_health,-1,11,3)
-zprinttbox(flr(a.health).."/"..a.max_health,xyo,4,a.align,7,5)
+if obj.cname then zprinttbox(obj.cname,xyo,-10,a.align,7,5)end
+if obj.health and obj.max_health then
+draw_bar(xyo,-2,xyo-35*a.align,1,obj.health/obj.max_health,-1,11,3)
+zprinttbox(flr(obj.health).."/"..obj.max_health,xyo,4,a.align,7,5)
+end
 end)
-draw_card(a.x,a.y-cos(g_i/4)*a.align,6,8,6,8,a.drawfunc,nop)
+local offx=a.align>0 and does_entity_exist"tbox"and-1 or 0
+local offy=does_entity_exist"tbox"and 0 or-cos(g_i/4)*a.align
+draw_card(a.x+offx,a.y+offy,6,8,2,4,function()
+spr(obj.cspr,0,0,1,1,a.align>0)
+end,nop)
 end,function(a)
 local text1=a.texts[a.cur_text_index]
 local text2=a.texts[a.cur_text_index+1]or ""
@@ -308,7 +321,7 @@ end
 end
 a.anim=min(textslen,a.anim+.5)
 end,function(a)
-draw_card(64+g_i%2,a.y,46.5,10,2.5,5,
+draw_card(65,a.y,46.5,10,2.5,5,
 function()
 zcall(zprinttbox,[[1;,@,0,-2,-1,7,5;2;,@,0,6,-1,7,5;]],a.line_1 or "",a.line_2 or "")
 end,function()
@@ -352,12 +365,10 @@ g_room_bounds=_g.room_bounds(r.w/2,r.h/2+.25,r.w/2+.125,r.h/2+.125)
 g_pl=_g.pl(state.pl_x,state.pl_y,state.pl_xf)
 g_fairy=_g.fairy(g_pl,state.fairy_x,state.fairy_y)
 _g.inventory(g_pl)
-_g.stat(-1,9)
-_g.stat(1,119)
+foreach(r.objects,function(obj_template)
+_g[g_obj_map[obj_template.index]](obj_template.x+.5,obj_template.y+.5)
+end)
 end,function(state)
-if btnp"4"then
-_g.tbox{"hello world","how are you","this is just","a textbox system!","yeah"}
-end
 if state:get_elapsed"state">.5 and not state.leaving then
 zcall(loop_entities,[[1;,actor,state;2;,mov,mov_update;3;,tilecol,adjust_deltas_for_tiles,@;4;,vec,vec_update;]],g_rooms[state.room_index])
 end
@@ -527,7 +538,8 @@ return fget(room.tiles_1[y*12+x],0)
 end
 end
 zclass[[inventory,actor,drawlayer_90|pl,@;start;update,%inventory_start_update,draw,nop;press;update,%inventory_press_update,cur_item,4,draw,%inventory_draw;1;mem_loc,2,index,0,name,brang,xoff,-7,yoff,-9,sind,4;2;mem_loc,7,index,1,name,mask,xoff,0,yoff,-11,sind,3;3;mem_loc,3,index,2,name,bomb,xoff,7,yoff,-9,sind,5;4;mem_loc,4,index,3,name,shield,xoff,-8,yoff,-3,sind,6;5;index,4;6;mem_loc,6,index,5,name,bow,xoff,9,yoff,-2,sind,7;7;mem_loc,9,index,6,name,banjo,xoff,-7,yoff,4,sind,1;8;mem_loc,8,index,7,name,sword,xoff,0,yoff,6,sind,2;9;mem_loc,1,index,8,name,bow,xoff,7,yoff,5,sind,0;]]
-zclass[[pl,actor,mov,tilecol,auto_outline,drawlayer_50,outlayer_50|x,@,y,@,xf,@,sind,88,rx,.375,ry,.375,update,%pl_update,energy,0,draw,%pl_draw;sinds;,88,89,90]]
+zclass[[sign,actor,auto_outline,drawlayer_50,outlayer_50|x,@,y,@,cname,sign,cspr,171,init,%sign_init,draw,%sign_draw]]
+zclass[[pl,actor,mov,tilecol,auto_outline,drawlayer_50,outlayer_50|cname,lank,cspr,103,health,10,max_health,10,x,@,y,@,xf,@,sind,88,rx,.375,ry,.375,init,%pl_init,update,%pl_update,energy,0,draw,%pl_draw;sinds;,88,89,90]]
 function draw_bar(x1,y1,x2,y2,percent,align,fg,bg)
 if x1>x2 then x1-=3 x2-=3 end
 local bar_off=x2-x1-min(percent,1)*(x2-x1)
@@ -558,7 +570,7 @@ pset(x2-i,y1+i)pset(x2-i,y2-i)
 end
 zcamera(cam_x,cam_y,post_card_func)
 end
-zclass[[stat,vec,actor,drawlayer_95|align,@,x,@,y,138,draw,%stat_draw,name,test,drawfunc,nop,max_health,10,health,5;start;dy,-2,duration,.2,next,normal;normal;dy,0;ending;dy,2,duration,.2;]]
+zclass[[stat,vec,actor,drawlayer_95|align,@,x,@,obj,@,y,138,draw,%stat_draw,max_health,10,health,5;start;dy,-2,duration,.2,next,normal;normal;dy,0;ending;dy,2,duration,.2;]]
 zclass[[tbox,vec,actor,drawlayer_99|y,138,texts,@,cur_text_index,1,anim,0,line_1,,line_2,,update,%tbox_update,draw,%tbox_draw;start;dy,-2,duration,.2,next,normal,update,nop;normal;dy,0,anim,0,done,no,update,%tbox_update;ending;dy,2,duration,.2;]]
 zclass[[fairy,actor,mov,drawlayer_70|rel_actor,@,x,@,y,@,update,%fairy_update,draw,%fairy_draw]]
 zclass[[gameover_control,actor|start;update,nop,duration,.5,next,normal;normal;update,%gameover_control_update;ending;update,nop;]]
@@ -575,7 +587,7 @@ menuitem(1,"reset save data",function()
 memset(0x5e00,0,64)
 extcmd"reset"
 end)
-zclass[[game_state,actor|ecs_exclusions;actor,true;curr,logo,init,%game_state_init,room_index,136,pl_x,3,pl_y,3,pl_xf,yes,fairy_x,7,fairy_y,8;logo;state_init,%logo_init,update,nop,draw,%logo_draw,duration,2.5,next,title;title;state_init,%title_init,update,%simple_update,draw,%title_draw;room;state_init,%room_init,update,%room_update,draw,%room_draw,leaving,no;gameover;state_init,%gameover_init,update,%simple_update,draw,%gameover_draw;]]
+zclass[[game_state,actor|ecs_exclusions;actor,true;curr,room,init,%game_state_init,room_index,136,pl_x,3,pl_y,3,pl_xf,yes,fairy_x,7,fairy_y,8;logo;state_init,%logo_init,update,nop,draw,%logo_draw,duration,2.5,next,title;title;state_init,%title_init,update,%simple_update,draw,%title_draw;room;state_init,%room_init,update,%room_update,draw,%room_draw,leaving,no;gameover;state_init,%gameover_init,update,%simple_update,draw,%gameover_draw;]]
 function _init()
 memset(0x5d00,0,64)
 poke2(0x5f5c,0x0808)

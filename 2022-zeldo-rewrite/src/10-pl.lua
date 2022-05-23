@@ -1,12 +1,17 @@
 zclass[[pl,actor,mov,tilecol,auto_outline,drawlayer_50,outlayer_50|
+    cname,"lank", cspr,SPR_PL_WHOLE,
+    health,10,max_health,10,
     x,@,y,@,xf,@,
     sind,88,
     rx,PL_RADIUS,ry,PL_RADIUS,
+    init,%pl_init,
     update,%pl_update,
     energy,0,
     draw,%pl_draw;
     sinds;,SPR_PL_FEET_1,SPR_PL_FEET_2,SPR_PL_FEET_3
 ]]
+
+|pl_init| function(a) _g.stat(-1, 9, a) end $$
 
 |pl_update| function(a)
     if not does_entity_exist'tbox' and not btn(BTN_ITEM_SELECT) and zbtn(btn, 0) | zbtn(btn, 2) ~= 0 then

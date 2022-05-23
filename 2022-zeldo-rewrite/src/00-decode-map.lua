@@ -1,3 +1,5 @@
+g_obj_map = split[[bed,sign,pot,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil]]
+
 -- {
 --   [y*16+x]: {
 --     w:12, h:10,
@@ -18,7 +20,7 @@ function decode_map()
     end
 
     while @cur_loc ~= CON_END do
-        local room, room_ind = zobj"tiles_1;,;tiles_2;,;objects;,;w,ROOM_W,h,ROOM_H,color,0,music,0", peek_inc()
+        local room, room_ind = zobj[[tiles_1;,;tiles_2;,;objects;,;w,ROOM_W,h,ROOM_H,color,0,music,0]], peek_inc()
         if room_ind > LAST_ROOM_INDEX then room.w, room.h = HUT_W, HUT_H end
 
         room.color = 0x0f & @cur_loc
@@ -54,7 +56,7 @@ function decode_map()
                         layer[p1] = ind+128
                     end
                 else
-                    add(room.objects, {index=ind, x=p1%12+offx, y=p1\12+offy})
+                    add(room.objects, {index=ind+1, x=p1%12+offx, y=p1\12+offy})
                 end
             end
         end

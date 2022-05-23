@@ -35,25 +35,35 @@ function draw_card(x, y, rx, ry, coffx, coffy, card_func, post_card_func)
     zcamera(cam_x, cam_y, post_card_func)
 end
 
+-- zclass[[statcard,vec,actor,drawlayer_95|
+    
+
 zclass[[stat,vec,actor,drawlayer_95|
-    align,@, x,@, y,138, draw,%stat_draw,
-    name,"test", drawfunc,nop, max_health,10, health,5;
+    align,@, x,@, obj,@, y,138, draw,%stat_draw,
+    max_health,10, health,5;
 
     start;  dy,-2, duration,.2, next,normal;
     normal; dy,0;
     ending; dy,2, duration,.2;
-
 ]]
 
 |stat_draw| function(a)
+    local obj = a.obj
     zcamera(a.x+2, a.y, function()
         local xyo = -8*a.align-1
-        zprinttbox(a.name, xyo, -10, a.align, 7, 5)
-        draw_bar(xyo, -2, xyo-35*a.align, 1, a.health/a.max_health, -1, 11, 3)
-        zprinttbox(flr(a.health)..'/'..a.max_health, xyo, 4, a.align, 7, 5)
+        if obj.cname then zprinttbox(obj.cname, xyo, -10, a.align, 7, 5) end
+        
+        if obj.health and obj.max_health then
+            draw_bar(xyo, -2, xyo-35*a.align, 1, obj.health/obj.max_health, -1, 11, 3)
+            zprinttbox(flr(obj.health)..'/'..obj.max_health, xyo, 4, a.align, 7, 5)
+        end
     end)
 
-    draw_card(a.x, a.y-cos(g_i/4)*a.align, 6, 8, 6, 8, a.drawfunc, nop)
+    local offx = a.align > 0 and does_entity_exist'tbox' and -1 or 0
+    local offy = does_entity_exist'tbox' and 0 or -cos(g_i/4)*a.align
+    draw_card(a.x+offx, a.y+offy, 6, 8, 2, 4, function()
+        spr(obj.cspr, 0, 0, 1, 1, a.align > 0)
+    end, nop)
 end $$
 
 zclass[[tbox,vec,actor,drawlayer_99|
@@ -98,7 +108,7 @@ zclass[[tbox,vec,actor,drawlayer_99|
 end $$
 
 |tbox_draw| function(a)
-    draw_card(64+g_i%2, a.y, 46.5, 10, 2.5, 5,
+    draw_card(65, a.y, 46.5, 10, 2.5, 5,
     function()
         zcall(zprinttbox, [[
             1;,@,0,-2,-1,7,5;
