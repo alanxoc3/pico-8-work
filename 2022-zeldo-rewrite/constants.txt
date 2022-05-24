@@ -74,3 +74,6 @@ HAS_BOW:     6
 HAS_MASK:    7
 HAS_SWORD:   8
 HAS_BANJO:   9
+
+# Texts
+TEXT_SIGNTEST: mary had a^little lamb^little lamb^little lamb^mary had a^little lamb^whose fleece was^white as yo face

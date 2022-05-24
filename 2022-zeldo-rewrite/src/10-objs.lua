@@ -47,4 +47,4 @@ end $$
     zspr(a.cspr, a.x*8, a.y*8)
 end $$
 
-zclass[[signtest,sign|x,@,y,@,text,"mary had a^little lamb^little lamb^little lamb^mary had a^little lamb^whose fleece was^white as yo face"]]
+zclass[[signtest,sign|x,@,y,@,text,"TEXT_SIGNTEST"]]
