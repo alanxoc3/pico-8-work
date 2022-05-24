@@ -82,10 +82,7 @@ zclass[[tbox,vec,actor,drawlayer_99|
 ]]
 
 |tbox_init| function(a)
-    printh("REACHED")
     a.texts = split(a.rawtext, "^")
-    printh(a.rawtext)
-    printh(#a.texts)
 end $$
 
 |tbox_update| function(a)

@@ -331,10 +331,7 @@ draw_card(a.x+offx,a.y+offy,6,8,2,4,function()
 spr(obj.cspr,0,0,1,1,a.align>0)
 end,nop)
 end,function(a)
-printh("REACHED")
 a.texts=split(a.rawtext,"^")
-printh(a.rawtext)
-printh(#a.texts)
 end,function(a)
 local text1=a.texts[a.cur_text_index]
 local text2=a.texts[a.cur_text_index+1]or ""
