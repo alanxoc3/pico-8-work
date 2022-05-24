@@ -11,7 +11,7 @@ zclass[[outlayer_50|]] -- cell shading
 zclass[[outlayer_99|]] -- inventory
 
 zclass[[fader,actor|
-    ecs_exclusions;actor,true; -- remove game_state from the actor group
+    ecs_exclusions;actor,yes,timer,yes; -- remove game_state from the actor group
 ]]
 
 zclass[[fader_out,fader|

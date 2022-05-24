@@ -4,7 +4,8 @@ end $$
 
 |simple_update| function()
     zcall(loop_entities, [[
-        1;,actor, state;
+        1;,timer, tick;
+        2;,actor, state;
     ]])
 end $$
 

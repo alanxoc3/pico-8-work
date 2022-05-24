@@ -404,7 +404,7 @@ _g[g_obj_map[obj_template.index]](obj_template.x+.5,obj_template.y+.5)
 end)
 end,function(state)
 if state:get_elapsed"state">.5 and not state.leaving then
-zcall(loop_entities,[[1;,actor,state;2;,mov,mov_update;3;,collidable,adjust_deltas_for_tiles,@;4;,collidable,adjust_deltas_for_solids,@;5;,vec,vec_update;6;,anchor,update_anchor;7;,target,update_target,@;]],g_rooms[state.room_index],g_zclass_entities.solid,g_zclass_entities.pl)
+zcall(loop_entities,[[1;,timer,tick;2;,actor,state;3;,mov,mov_update;4;,collidable,adjust_deltas_for_tiles,@;5;,collidable,adjust_deltas_for_solids,@;6;,vec,vec_update;7;,anchor,update_anchor;8;,target,update_target,@;]],g_rooms[state.room_index],g_zclass_entities.solid,g_zclass_entities.pl)
 end
 if not state.leaving and not g_pl:inside(g_room_bounds)then
 state.leaving=true
@@ -425,11 +425,6 @@ draw_room(g_rooms[state.room_index],64,57,function()
 loop_entities("outlayer_50","drawout")
 loop_entities("drawlayer_50","draw")
 zcall(loop_entities,[[1;,outlayer_50,drawout;2;,drawlayer_50,draw;3;,drawlayer_70,draw;4;,drawlayer_75,draw;]])
-if g_debug then
-for inst in all(g_zclass_entities["box"])do
-scr_zrect(inst.x,inst.y,inst.rx,inst.ry,8)
-end
-end
 end,function()
 zcall(loop_entities,[[1;,outlayer_99,drawout;2;,drawlayer_90,draw;3;,drawlayer_95,draw;4;,drawlayer_99,draw;]])
 end)
@@ -437,7 +432,7 @@ zcall(draw_bar,[[1;,18,6,109,11,@,0,8,2]],g_pl.energy)
 end,function()
 _g.title_logo()
 end,function()
-zcall(loop_entities,[[1;,actor,state;]])
+zcall(loop_entities,[[1;,timer,tick;2;,actor,state;]])
 end,function()
 draw_room(g_rooms[8*16+8],64,57,nop,nop)
 zcall(loop_entities,[[1;,outlayer_99,drawout;2;,drawlayer_99,draw;]])
@@ -515,7 +510,7 @@ zclass[[drawlayer_95|]]
 zclass[[drawlayer_99|]]
 zclass[[outlayer_50|]]
 zclass[[outlayer_99|]]
-zclass[[fader,actor|ecs_exclusions;actor,true;]]
+zclass[[fader,actor|ecs_exclusions;actor,yes,timer,yes;]]
 zclass[[fader_out,fader|start;duration,@,destroyed,@,update,%fader_out_update]]
 zclass[[fader_in,fader|start;duration,@,update,%fader_in_update]]
 zclass[[animation,actor|index,0,init,%animation_init;start;duration,@,next,start]]
@@ -629,7 +624,7 @@ menuitem(1,"reset save data",function()
 memset(0x5e00,0,64)
 extcmd"reset"
 end)
-zclass[[game_state,actor|ecs_exclusions;actor,true;curr,room,init,%game_state_init,room_index,136,pl_x,3,pl_y,3,pl_xf,yes,fairy_x,7,fairy_y,8;logo;state_init,%logo_init,update,nop,draw,%logo_draw,duration,2.5,next,title;title;state_init,%title_init,update,%simple_update,draw,%title_draw;room;state_init,%room_init,update,%room_update,draw,%room_draw,leaving,no;gameover;state_init,%gameover_init,update,%simple_update,draw,%gameover_draw;]]
+zclass[[game_state,actor|ecs_exclusions;actor,yes,timer,yes;curr,logo,init,%game_state_init,room_index,136,pl_x,3,pl_y,3,pl_xf,yes,fairy_x,7,fairy_y,8;logo;state_init,%logo_init,update,%simple_update,draw,%logo_draw,duration,2.5,next,title;title;state_init,%title_init,update,%simple_update,draw,%title_draw;room;state_init,%room_init,update,%room_update,draw,%room_draw,leaving,no;gameover;state_init,%gameover_init,update,%simple_update,draw,%gameover_draw;]]
 function _init()
 memset(0x5d00,0,64)
 poke2(0x5f5c,0x0808)
@@ -637,17 +632,13 @@ g_state,g_rooms=_g.game_state(),decode_map()
 g_tile_animation_lookup=create_tile_animation_lookup(g_rooms[0])
 end
 function _update60()
-if btn(4)and btnp(5)then g_debug=not g_debug end
 zcall(loop_entities,[[1;,actor,clean;2;,fader,clean;]])
 register_entities()
-zcall(loop_entities,[[1;,timer,tick;2;,fader,state;3;,game_state,state;]])
+zcall(loop_entities,[[1;,fader,tick;2;,game_state,tick;3;,fader,state;4;,game_state,state;]])
 end
 function _draw()
 g_i=g_animation.index
 cls()
 loop_entities("game_state","draw")
 fade(g_fade)
-if g_debug then
-zcall(rect,[[1;,0,12,127,18,1;2;,0,95,127,101,1;3;,0,0,127,5,1;4;,0,122,127,127,1;5;,0,0,17,127,1;6;,110,0,127,127,1;]])
-end
 end

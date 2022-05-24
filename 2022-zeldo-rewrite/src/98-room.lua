@@ -16,13 +16,14 @@ end $$
 |room_update| function(state)
     if state:get_elapsed'state' > FADE_SPEED and not state.leaving then
         zcall(loop_entities, [[
-            1;,actor,       state;
-            2;,mov,         mov_update;
-            3;,collidable,  adjust_deltas_for_tiles, @;
-            4;,collidable,  adjust_deltas_for_solids, @;
-            5;,vec,         vec_update;
-            6;,anchor,      update_anchor;
-            7;,target,      update_target, @;
+            1;,timer,       tick;
+            2;,actor,       state;
+            3;,mov,         mov_update;
+            4;,collidable,  adjust_deltas_for_tiles, @;
+            5;,collidable,  adjust_deltas_for_solids, @;
+            6;,vec,         vec_update;
+            7;,anchor,      update_anchor;
+            8;,target,      update_target, @;
         ]], g_rooms[state.room_index], g_zclass_entities.solid, g_zclass_entities.pl)
     end
 

@@ -6,13 +6,13 @@ menuitem(1, "reset save data", function()
 end)
 
 zclass[[game_state,actor|
-    ecs_exclusions;actor,true; -- remove game_state from the actor group
-    curr,room, init,%game_state_init,
+    ecs_exclusions;actor,yes,timer,yes; -- remove game_state from the actor group
+    curr,logo, init,%game_state_init,
     room_index,136,
     pl_x,3, pl_y,3, pl_xf,yes,
     fairy_x,7, fairy_y,8;
 
-    logo;     state_init, %logo_init,     update, nop,            draw,%logo_draw, duration,2.5, next,title;
+    logo;     state_init, %logo_init,     update, %simple_update, draw,%logo_draw, duration,2.5, next,title;
     title;    state_init, %title_init,    update, %simple_update, draw,%title_draw;
     room;     state_init, %room_init,     update, %room_update,   draw,%room_draw, leaving,no;
     gameover; state_init, %gameover_init, update, %simple_update, draw,%gameover_draw;
@@ -43,9 +43,10 @@ function _update60()
     ]])
     register_entities()                  -- register all zobs from previous game loop iteration
     zcall(loop_entities, [[
-        1;,timer,tick;
-        2;,fader,state;
-        3;,game_state,state;
+        1;,fader,tick;
+        2;,game_state,tick;
+        3;,fader,state;
+        4;,game_state,state;
     ]])
 end
 
