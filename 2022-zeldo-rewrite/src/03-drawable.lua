@@ -1,6 +1,7 @@
 -- start with drawlayer_50 and divide by 2 if something needs to go forward or backward
 -- max = 99, min = 00
 zclass[[drawlayer_50|]] -- pl
+zclass[[drawlayer_60|]] -- house
 zclass[[drawlayer_70|]] -- fairy
 
 zclass[[drawlayer_90|]] -- above the card, stat

@@ -14,15 +14,19 @@ zclass[[collidable,box,vec|
 ]]
 
 |calc_deltas| function(a, b)
-    local box = {x=b.x-a.dx, y=b.y, rx=b.rx, ry=b.ry}
-    local dx, dy = a:getdelta(box, a.dx, a.dy)
-    box.x, box.y = b.x-dx, b.y-dy
-    return         a:getdelta(box, dx,   dy)
+    local box = {x=b.x-a.dx, y=b.y-a.dy, rx=b.rx, ry=b.ry}
+    return a:getdelta(box, a.dx, a.dy)
+
+    -- box.x, box.y = b.x-a.dx, b.y-a.dy
+    -- return a:getdelta(box, dx, dy)
 end $$
 
 |adjust_deltas_for_solids| function(a, list)
-    foreach(list, function(obj)
-        a.dx, a.dy = a:calc_deltas(obj)
+    local junk
+    foreach(list, function(b)
+        -- a.dx, junk = a:calc_deltas(obj)
+        local box = {x=b.x-a.dx, y=b.y-a.dy, rx=b.rx, ry=b.ry}
+        a.dx, a.dy = a:getdelta(box, a.dx, a.dy)
     end)
 end $$
 

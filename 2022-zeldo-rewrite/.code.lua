@@ -1,4 +1,4 @@
-g_obj_map=split[[bed,signtest,pot,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil]]
+g_obj_map=split[[bed,signtest,pot,housetest,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil]]
 function decode_map()
 local rooms,cur_loc={},0x2000
 local peek_inc=function()
@@ -138,7 +138,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,actor_deregistered,@,fader_out_update,@,fader_in_update,@,animation_init,@,auto_outline_drawout,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,explode_draw,@,calc_deltas,@,adjust_deltas_for_solids,@,adjust_deltas_for_tiles,@,inventory_start_update,@,inventory_press_update,@,inventory_draw,@,anchor_update_anchor,@,targettouch_update_target,@,sign_init,@,sign_draw,@,pl_init,@,pl_update,@,pl_draw,@,stat_draw,@,tbox_init,@,tbox_update,@,tbox_draw,@,fairy_update,@,fairy_draw,@,gameover_control_update,@,gameover_init,@,gameover_draw,@,logo_init,@,logo_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,simple_update,@,title_draw,@,title_logo_update,@,title_logo_draw,@,game_state_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,actor_deregistered,@,fader_out_update,@,fader_in_update,@,animation_init,@,auto_outline_drawout,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,explode_draw,@,calc_deltas,@,adjust_deltas_for_solids,@,adjust_deltas_for_tiles,@,inventory_start_update,@,inventory_press_update,@,inventory_draw,@,anchor_update_anchor,@,targettouch_update_target,@,pl_init,@,pl_update,@,pl_draw,@,stat_draw,@,tbox_init,@,tbox_update,@,tbox_draw,@,fairy_update,@,fairy_draw,@,house_init,@,house_draw,@,sign_init,@,sign_draw,@,gameover_control_update,@,gameover_init,@,gameover_draw,@,logo_init,@,logo_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,simple_update,@,title_draw,@,title_logo_update,@,title_logo_draw,@,game_state_init,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -194,7 +194,7 @@ end,function(a,b)
 return not a:outside(b)and not a:inside(b)
 end,function(a,b)
 local xp,yp,xr,yr=a:side(b)
-return xp<-1-xr or xp>1+xr or yp<-1-yr or yp>1+yr
+return xp<=-1-xr or xp>=1+xr or yp<=-1-yr or yp>=1+yr
 end,function(a,b)
 local xp,yp,xr,yr=a:side(b)
 return xp>-1+xr and xp<1-xr and yp>-1+yr and yp<1-yr
@@ -207,10 +207,15 @@ then return 0,sgn(yp)
 else return sgn(xp),0 end
 end,function(a,b,dx,dy)
 local abx,aby=a:abside(b)
+local xp,yp=a:side(b)
 if not a:outside(b)then
-if abx ~=0 then
+if abx ~=0 and zsgn(dx)==-abx then
 dx=get_delta_axis(dx,a.x,a.rx,b.x,b.rx)
+elseif aby ~=0 and zsgn(dy)==-aby then
+dy=get_delta_axis(dy,a.y,a.ry,b.y,b.ry)
 elseif aby ~=0 then
+dx=get_delta_axis(dx,a.x,a.rx,b.x,b.rx)
+elseif abx ~=0 then
 dy=get_delta_axis(dy,a.y,a.ry,b.y,b.ry)
 end
 end
@@ -240,13 +245,13 @@ for i=0,3 do
 scr_zrect(a.x+percent*cos(i/4+.125),a.y+percent*sin(i/4+.125),.125,.125,1)
 end
 end,function(a,b)
-local box={x=b.x-a.dx,y=b.y,rx=b.rx,ry=b.ry}
-local dx,dy=a:getdelta(box,a.dx,a.dy)
-box.x,box.y=b.x-dx,b.y-dy
-return a:getdelta(box,dx,dy)
+local box={x=b.x-a.dx,y=b.y-a.dy,rx=b.rx,ry=b.ry}
+return a:getdelta(box,a.dx,a.dy)
 end,function(a,list)
-foreach(list,function(obj)
-a.dx,a.dy=a:calc_deltas(obj)
+local junk
+foreach(list,function(b)
+local box={x=b.x-a.dx,y=b.y-a.dy,rx=b.rx,ry=b.ry}
+a.dx,a.dy=a:getdelta(box,a.dx,a.dy)
 end)
 end,function(a,room)
 for tx=flr(a.x-a.rx)-1,ceil(a.x+a.rx)do
@@ -289,17 +294,6 @@ else
 target:callback_touch(a)
 end
 end)
-end,function(a)
-_g.target(.125,.5,0,.25,a,function()
-if not a.stat then a.stat=_g.stat(1,119,a)end
-if btnp"4"and not does_entity_exist"tbox"then
-_g.tbox(a.text)
-end
-end,function()
-if a.stat then a.stat:load"ending" a.stat=nil end
-end)
-end,function(a)
-zspr(a.cspr,a.x*8,a.y*8)
 end,function(a)_g.stat(-1,9,a)end,function(a)
 if not does_entity_exist"tbox"and not btn(5)and zbtn(btn,0)|zbtn(btn,2)~=0 then
 a.ang,a.speed=atan2(zbtn(btn,0),zbtn(btn,2)),.025
@@ -376,6 +370,24 @@ scr_line(a.x+abs(i)\2*m,a.y+i%2*m,a.x-a.dx*6,a.y-a.dy*6,1)
 end
 scr_pset(a.x,a.y,12)
 end,function(a)
+zcall(_g.wall,[[a,@;1;,~a,.75,.5,.25,.75;2;,~a,-.75,.5,.25,.75;3;,~a,0,0,.75,.25;]],a)
+zcall(_g.target,[[1;,.125,.375,0,.5,@,@,nop;]],a,function()
+printh("entering "..t())
+end)
+end,function(a)
+zspr(a.cspr,a.x*8,a.y*8,2,2)
+end,function(a)
+_g.target(.125,.5,0,.25,a,function()
+if not a.stat then a.stat=_g.stat(1,119,a)end
+if btnp"4"and not does_entity_exist"tbox"then
+_g.tbox(a.text)
+end
+end,function()
+if a.stat then a.stat:load"ending" a.stat=nil end
+end)
+end,function(a)
+zspr(a.cspr,a.x*8,a.y*8)
+end,function(a)
 if btnp(4)or btnp(5)then
 _g.fader_out(.5,function()g_state:load"title" end)
 a:load"ending"
@@ -404,7 +416,7 @@ _g[g_obj_map[obj_template.index]](obj_template.x+.5,obj_template.y+.5)
 end)
 end,function(state)
 if state:get_elapsed"state">.5 and not state.leaving then
-zcall(loop_entities,[[1;,timer,tick;2;,actor,state;3;,mov,mov_update;4;,collidable,adjust_deltas_for_tiles,@;5;,collidable,adjust_deltas_for_solids,@;6;,vec,vec_update;7;,anchor,update_anchor;8;,target,update_target,@;]],g_rooms[state.room_index],g_zclass_entities.solid,g_zclass_entities.pl)
+zcall(loop_entities,[[1;,timer,tick;2;,actor,state;3;,mov,mov_update;4;,collidable,adjust_deltas_for_solids,@;5;,collidable,adjust_deltas_for_tiles,@;6;,vec,vec_update;7;,anchor,update_anchor;8;,target,update_target,@;]],g_zclass_entities.solid,g_rooms[state.room_index],g_zclass_entities.pl)
 end
 if not state.leaving and not g_pl:inside(g_room_bounds)then
 state.leaving=true
@@ -429,12 +441,7 @@ end,function(state)
 draw_room(g_rooms[state.room_index],64,57,function()
 loop_entities("outlayer_50","drawout")
 loop_entities("drawlayer_50","draw")
-zcall(loop_entities,[[1;,outlayer_50,drawout;2;,drawlayer_50,draw;3;,drawlayer_70,draw;4;,drawlayer_75,draw;]])
-if g_debug then
-for inst in all(g_zclass_entities["box"])do
-scr_zrect(inst.x,inst.y,inst.rx,inst.ry,8)
-end
-end
+zcall(loop_entities,[[1;,outlayer_50,drawout;2;,drawlayer_50,draw;3;,drawlayer_60,draw;4;,drawlayer_70,draw;5;,drawlayer_75,draw;]])
 end,function()
 zcall(loop_entities,[[1;,outlayer_99,drawout;2;,drawlayer_90,draw;3;,drawlayer_95,draw;4;,drawlayer_99,draw;]])
 end)
@@ -514,6 +521,7 @@ function scr_zrect(...)scr_help_four(zrect,...)end
 function scr_pset(x,y,color)pset(8*x,8*y,color)end
 zclass[[actor,timer|load,%actor_load,state,%actor_state,kill,%actor_kill,clean,%actor_clean,alive,yes,duration,null,curr,start,next,null,init,nop,update,nop,destroyed,nop,deregistered,%actor_deregistered;]]
 zclass[[drawlayer_50|]]
+zclass[[drawlayer_60|]]
 zclass[[drawlayer_70|]]
 zclass[[drawlayer_90|]]
 zclass[[drawlayer_95|]]
@@ -564,6 +572,9 @@ local anim=g_tile_animation_lookup[sind]
 return anim and anim[g_i%#anim+1]or sind
 end
 zclass[[box,pos|rx,0,ry,0,touching,%box_touching,inside,%box_inside,outside,%box_outside,side,%box_side,abside,%box_abside,getdelta,%box_getdelta]]
+function zsgn(num)
+return num==0 and 0 or sgn(num)
+end
 function get_delta_axis(dx,x,rx,tdx,tdrx)
 local xp=(x-tdx)/tdrx
 return abs(xp)-rx/tdrx<1 and tdx+sgn(xp)*(rx+tdrx)-(x-dx)or dx
@@ -582,10 +593,9 @@ end
 zclass[[collidable,box,vec|calc_deltas,%calc_deltas,adjust_deltas_for_solids,%adjust_deltas_for_solids,adjust_deltas_for_tiles,%adjust_deltas_for_tiles]]
 zclass[[inventory,actor,drawlayer_90|pl,@;start;update,%inventory_start_update,draw,nop;press;update,%inventory_press_update,cur_item,4,draw,%inventory_draw;1;mem_loc,2,index,0,name,brang,xoff,-7,yoff,-9,sind,4;2;mem_loc,7,index,1,name,mask,xoff,0,yoff,-11,sind,3;3;mem_loc,3,index,2,name,bomb,xoff,7,yoff,-9,sind,5;4;mem_loc,4,index,3,name,shield,xoff,-8,yoff,-3,sind,6;5;index,4;6;mem_loc,6,index,5,name,bow,xoff,9,yoff,-2,sind,7;7;mem_loc,9,index,6,name,banjo,xoff,-7,yoff,4,sind,1;8;mem_loc,8,index,7,name,sword,xoff,0,yoff,6,sind,2;9;mem_loc,1,index,8,name,bow,xoff,7,yoff,5,sind,0;]]
 zclass[[solid,box|]]
+zclass[[wall,solid,anchor|anchoring,@,offx,@,offy,@,rx,@,ry,@]]
 zclass[[anchor,pos|update_anchor,%anchor_update_anchor;offx,0,offy,0,anchoring;,]]
 zclass[[target,anchor,box|rx,@,ry,@,offx,@,offy,@,anchoring,@,callback_touch,@,callback_outside,@,update_target,%targettouch_update_target]]
-zclass[[sign,actor,solid,auto_outline,drawlayer_50,outlayer_50|text,,rx,.375,ry,.375,cname,sign,cspr,171,init,%sign_init,draw,%sign_draw]]
-zclass[[signtest,sign|x,@,y,@,text,mary had a^little lamb^little lamb^little lamb^mary had a^little lamb^whose fleece was^white as yo face]]
 zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50,outlayer_50|cname,lank,cspr,103,health,10,max_health,10,x,@,y,@,xf,@,sind,88,rx,.375,ry,.375,init,%pl_init,update,%pl_update,energy,0,draw,%pl_draw;sinds;,88,89,90]]
 function draw_bar(x1,y1,x2,y2,percent,align,fg,bg)
 if x1>x2 then x1-=3 x2-=3 end
@@ -620,6 +630,10 @@ end
 zclass[[stat,vec,actor,drawlayer_95|align,@,x,@,obj,@,y,138,draw,%stat_draw,max_health,10,health,5;start;dy,-2,duration,.2,next,normal;normal;dy,0;ending;dy,2,duration,.2;]]
 zclass[[tbox,vec,actor,drawlayer_99|rawtext,@,y,138,cur_text_index,1,anim,0,line_1,,line_2,,update,%tbox_update,draw,%tbox_draw;texts;,;start;dy,-2,duration,.2,next,normal,update,nop,init,%tbox_init;normal;dy,0,anim,0,done,no,update,%tbox_update,init,nop;ending;dy,2,update,nop,duration,.2,init,nop;]]
 zclass[[fairy,actor,mov,drawlayer_70|rel_actor,@,x,@,y,@,update,%fairy_update,draw,%fairy_draw]]
+zclass[[house,actor,auto_outline,drawlayer_60,outlayer_50|cspr,174,init,%house_init,draw,%house_draw]]
+zclass[[housetest,house|x,@,y,@]]
+zclass[[sign,actor,solid,auto_outline,drawlayer_50,outlayer_50|text,,rx,.375,ry,.375,cname,sign,cspr,171,init,%sign_init,draw,%sign_draw]]
+zclass[[signtest,sign|x,@,y,@,text,mary had a^little lamb^little lamb^little lamb^mary had a^little lamb^whose fleece was^white as yo face]]
 zclass[[gameover_control,actor|start;update,nop,duration,.5,next,normal;normal;update,%gameover_control_update;ending;update,nop;]]
 g_fade_table=zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,1,0,0,0,0;3;,3,3,3,3,1,1,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,0,0,0,0;6;,6,6,13,13,5,5,0,0;7;,7,7,6,13,13,5,0,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,0,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,0,0,0;13;,13,13,5,5,1,0,0,0;14;,14,14,13,4,2,2,0,0;15;,15,15,13,13,5,5,0,0;]]
 function fade(threshold)
@@ -642,7 +656,6 @@ g_state,g_rooms=_g.game_state(),decode_map()
 g_tile_animation_lookup=create_tile_animation_lookup(g_rooms[0])
 end
 function _update60()
-if btn(4)and btnp(5)then g_debug=not g_debug end
 zcall(loop_entities,[[1;,actor,clean;2;,fader,clean;]])
 register_entities()
 zcall(loop_entities,[[1;,fader,tick;2;,game_state,tick;3;,fader,state;4;,game_state,state;]])
@@ -652,7 +665,4 @@ g_i=g_animation.index
 cls()
 loop_entities("game_state","draw")
 fade(g_fade)
-if g_debug then
-zcall(rect,[[1;,17,12,110,18,1;2;,17,95,110,101,1;3;,17,0,110,5,1;4;,17,122,110,127,1;5;,0,0,17,127,1;6;,110,0,127,127,1;]])
-end
 end

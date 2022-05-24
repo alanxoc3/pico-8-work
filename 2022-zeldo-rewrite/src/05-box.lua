@@ -15,7 +15,7 @@ end $$
 
 |box_outside| function(a, b)
     local xp, yp, xr, yr = a:side(b)
-    return xp < -1-xr or xp > 1+xr or yp < -1-yr or yp > 1+yr
+    return xp <= -1-xr or xp >= 1+xr or yp <= -1-yr or yp >= 1+yr
 end $$
 
 |box_inside| function(a, b)
@@ -26,6 +26,10 @@ end $$
 |box_side| function(a, b)
     return (a.x-b.x)/b.rx, (a.y-b.y)/b.ry, a.rx/b.rx, a.ry/b.ry
 end $$
+
+function zsgn(num)
+    return num == 0 and 0 or sgn(num)
+end
 
 |box_abside| function(a, b)
     local xp, yp = a:side(b)
@@ -41,11 +45,17 @@ end
 
 |box_getdelta| function(a, b, dx, dy)
     local abx, aby = a:abside(b)
+    local xp, yp = a:side(b)
 
     if not a:outside(b) then
-        if abx ~= 0 then
+        if abx ~= 0 and zsgn(dx) == -abx then
             dx = get_delta_axis(dx, a.x, a.rx, b.x, b.rx)
-        elseif aby ~= 0 then
+        elseif aby ~= 0 and zsgn(dy) == -aby then
+            dy = get_delta_axis(dy, a.y, a.ry, b.y, b.ry)
+
+        elseif aby ~= 0 then --and zsgn(xp) ~= zsgn(dx) then
+            dx = get_delta_axis(dx, a.x, a.rx, b.x, b.rx)
+        elseif abx ~= 0 then -- and zsgn(yp) ~= zsgn(dy) then
             dy = get_delta_axis(dy, a.y, a.ry, b.y, b.ry)
         end
     end

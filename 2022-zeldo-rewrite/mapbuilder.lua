@@ -15,7 +15,7 @@ g_objects = {
     {"bed", 39, 1, 2},       -- 1 INDEX
     {"signtest", 171,  1, 1},    -- 2 INDEX
     {"pot", 49, 1, 1},       -- 3 INDEX
-    {"nil", 0,  1, 1},       -- 4 INDEX
+    {"housetest", 174,  2, 2},       -- 4 INDEX
     {"nil", 0,  1, 1},       -- 5 INDEX
     {"nil", 0,  1, 1},       -- 6 INDEX
     {"nil", 0,  1, 1},       -- 7 INDEX
