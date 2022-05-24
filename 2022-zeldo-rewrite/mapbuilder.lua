@@ -216,11 +216,11 @@ function _init()
     update_mouse()
 
     g_modes = {
-        ['h'] = { ind = 0, name = "help", update = help_update, draw = help_draw },
-        ['l'] = { ind = 1, name = "link", update = link_update, draw = link_draw },
-        ['p'] = { ind = 2, name = "prev", update = prvw_update, draw = prvw_draw },
-        ['t'] = { ind = 3, name = "tile", update = tile_update, draw = tile_draw },
-        ['o'] = { ind = 4, name = "objs", update = objs_update, draw = objs_draw },
+        ['h'] = { ind = 0, name = "h", update = help_update, draw = help_draw },
+        ['l'] = { ind = 1, name = "l", update = link_update, draw = link_draw },
+        ['p'] = { ind = 2, name = "p", update = prvw_update, draw = prvw_draw },
+        ['t'] = { ind = 3, name = "t", update = tile_update, draw = tile_draw },
+        ['o'] = { ind = 4, name = "o", update = objs_update, draw = objs_draw },
     }
 
     g_modes_list = { g_modes.l, g_modes.p, g_modes.t, g_modes.o }
@@ -292,7 +292,7 @@ function _draw()
 
     rectfill(0, 0, 127, 6, ui_col())
     local str = g_mode.name
-    for s in all(g_info) do str = str.." | "..s end
+    for s in all(g_info) do str = str.." "..s end
     zprint(str, 1, 1, -1, 7)
 
     local percent_color = 11
@@ -573,8 +573,8 @@ g_objs_grid = {
     rect_boundary_fg = function(x1, y1, x2, y2) end,
     rect_select      = function(x1, y1, x2, y2)
                            local m = 4
-                           local w = g_objects[g_obji_grid.ysel*16+g_obji_grid.xsel][3] - 1
-                           local h = g_objects[g_obji_grid.ysel*16+g_obji_grid.xsel][4] - 1
+                           local w = g_objects[g_obji_grid.ysel*16+g_obji_grid.xsel+1][3] - 1
+                           local h = g_objects[g_obji_grid.ysel*16+g_obji_grid.xsel+1][4] - 1
                            rect(x1-2,y1-2,x2+2+m,y2+2+m,0)
                            rect(x1-1,y1-1,x2+1+m,y2+1+m,7)
                            rect(x1-2-w*4,y1-2-h*4,x2+2+m+w*4,y2+2+m+h*4,0)
@@ -606,7 +606,7 @@ g_obji_grid = {
     rect_boundary_bg = function() end,
     rect_boundary_fg = function() end,
     rect_select      = function(x1, y1, x2, y2) rect(x1-2,y1-2,x2+2,y2+2,0) rect(x1-1,y1-1,x2+1,y2+1,7) end,
-    rect_cell        = function(x, y, x1, y1) spr(g_objects[y*16+x][2],x1,y1) end
+    rect_cell        = function(x, y, x1, y1) spr(g_objects[y*16+x+1][2],x1,y1) end
 }
 
 function objs_update(key)
@@ -621,11 +621,12 @@ function objs_update(key)
         if key == "d" and g_objs_pane then set_cur_obj(nil)
         elseif btn(4) then
             g_objs_pane = true
-            set_cur_obj(g_obji_grid.ysel*16+g_obji_grid.xsel)
+            set_cur_obj(g_obji_grid.ysel*16+g_obji_grid.xsel+1)
         end
     elseif g_pane_prev then
         local obj_ind = get_cur_room().objs[g_objs_grid.ysel*24+g_objs_grid.xsel]
         if obj_ind then
+            obj_ind -= 1
             g_obji_grid.xsel = obj_ind % 16
             g_obji_grid.ysel = flr(obj_ind / 16)
             update_grid(g_obji_grid)
@@ -633,7 +634,7 @@ function objs_update(key)
     end
 
     g_info={
-        ""..g_objects[g_obji_grid.ysel*16+g_obji_grid.xsel][1]..":"..(g_obji_grid.ysel*16+g_obji_grid.xsel),
+        ""..g_objects[g_obji_grid.ysel*16+g_obji_grid.xsel+1][1]..":"..(g_obji_grid.ysel*16+g_obji_grid.xsel),
         ""..(g_objs_grid.xsel/2)..","..(g_objs_grid.ysel/2)
     }
 
@@ -938,16 +939,6 @@ end
 function get_tile(x, y)
     local width = 12
     return get_cur_room().tiles[g_tile_layer][y*width+x]
-end
-
-function get_obj(x, y)
-    local width = 2*12
-    local obj_ind = get_cur_room().objs[y*width+x]
-    if obj_ind then
-        return g_objects[obj_ind]
-    else
-        return nil
-    end
 end
 
 function is_hut(y)

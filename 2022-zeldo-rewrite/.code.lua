@@ -428,6 +428,11 @@ draw_room(g_rooms[state.room_index],64,57,function()
 loop_entities("outlayer_50","drawout")
 loop_entities("drawlayer_50","draw")
 zcall(loop_entities,[[1;,outlayer_50,drawout;2;,drawlayer_50,draw;3;,drawlayer_70,draw;4;,drawlayer_75,draw;]])
+if g_debug then
+for inst in all(g_zclass_entities["box"])do
+scr_zrect(inst.x,inst.y,inst.rx,inst.ry,8)
+end
+end
 end,function()
 zcall(loop_entities,[[1;,outlayer_99,drawout;2;,drawlayer_90,draw;3;,drawlayer_95,draw;4;,drawlayer_99,draw;]])
 end)
@@ -635,6 +640,7 @@ g_state,g_rooms=_g.game_state(),decode_map()
 g_tile_animation_lookup=create_tile_animation_lookup(g_rooms[0])
 end
 function _update60()
+if btn(4)and btnp(5)then g_debug=not g_debug end
 zcall(loop_entities,[[1;,actor,clean;2;,fader,clean;]])
 register_entities()
 zcall(loop_entities,[[1;,timer,tick;2;,fader,state;3;,game_state,state;]])
@@ -644,4 +650,7 @@ g_i=g_animation.index
 cls()
 loop_entities("game_state","draw")
 fade(g_fade)
+if g_debug then
+zcall(rect,[[1;,0,12,127,18,1;2;,0,95,127,101,1;3;,0,0,127,5,1;4;,0,122,127,127,1;5;,0,0,17,127,1;6;,110,0,127,127,1;]])
+end
 end
