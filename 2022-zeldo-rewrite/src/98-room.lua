@@ -30,14 +30,20 @@ end $$
     if not state.leaving and not g_pl:inside(g_room_bounds) then
         state.leaving = true
         _g.fader_out(FADE_SPEED, function()
-            local x, y = g_pl:abside(g_room_bounds)
-            state.room_index += y*16+x
-            local nr = g_rooms[state.room_index]
-            local helper = function(x, w) return w/2-x*w/2+1.25*x end
-            if x ~= 0
-            then state.pl_x, state.pl_y, state.pl_xf = helper(x, nr.w), g_pl.y, x < 0
-            else state.pl_y, state.pl_x, state.pl_xf = helper(y, nr.h)+.25, g_pl.x, g_pl.xf end
-            state.fairy_x, state.fairy_y = state.pl_x-x*2, state.pl_y-y*2
+            local abx, aby = g_pl:abside(g_room_bounds)
+            local nri = state.room_index + aby*16+abx
+            local nr = g_rooms[nri]
+            if nr then
+                local helper = function(x, w) return w/2-x*w/2+1.25*x end
+                if abx ~= 0 then state.pl_x, state.pl_y, state.pl_xf = helper(abx, nr.w), g_pl.y, abx < 0
+                          else state.pl_y, state.pl_x, state.pl_xf = helper(aby, nr.h)+.25, g_pl.x, g_pl.xf end
+            else
+                state.pl_x, state.pl_y, state.pl_xf = LOST_ROOM_START_X, LOST_ROOM_START_Y, g_pl.xf
+                nri = LOST_ROOM_INDEX
+            end
+            state.room_index = nri
+
+            state.fairy_x, state.fairy_y = state.pl_x-abx*2, state.pl_y-aby*2
             state:load'room'
         end)
     end

@@ -7,7 +7,7 @@ end)
 
 zclass[[game_state,actor|
     ecs_exclusions;actor,yes,timer,yes; -- remove game_state from the actor group
-    curr,logo, init,%game_state_init,
+    curr,room, init,%game_state_init,
     room_index,136,
     pl_x,3, pl_y,3, pl_xf,yes,
     fairy_x,7, fairy_y,8;
@@ -58,11 +58,11 @@ function _draw()
     -- DEBUG_BEGIN
     if g_debug then
         zcall(rect, [[
-            1;,0,12,127,18,1;
-            2;,0,95,127,101,1;
+            1;,17,12,110,18,1;
+            2;,17,95,110,101,1;
 
-            3;,0,0,127,5,1;
-            4;,0,122,127,127,1;
+            3;,17,0,110,5,1;
+            4;,17,122,110,127,1;
 
             5;,0,0,17,127,1;
             6;,110,0,127,127,1;

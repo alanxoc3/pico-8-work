@@ -449,7 +449,7 @@ function link_update(key)
     elseif btn(4) then set_cur_room()
     end
 
-    g_info={is_hut() and "hut" or "room", g_link_grid.xsel..","..g_link_grid.ysel}
+    g_info={is_hut() and "hut" or "room", g_link_grid.xsel..","..g_link_grid.ysel, g_link_grid.ysel*16+g_link_grid.xsel}
 end
 
 function link_draw()
