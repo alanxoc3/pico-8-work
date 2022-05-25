@@ -23,7 +23,7 @@ zclass[[game_state,actor|
 end $$
 
 function _init()
-    memcpy(TEMP_SAVE_LOCATION, REAL_SAVE_LOCATION, SAVE_LENGTH)
+    memcpy(MEM_SAVE_LOCATION, REAL_SAVE_LOCATION, SAVE_LENGTH)
 
     if not zdget'MEM_SAVE_DATA' then
         zcall(zdset, [[

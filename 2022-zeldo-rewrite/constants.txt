@@ -8,8 +8,6 @@ B_O: 🅾️
 
 # Some Global Things
 CART_NAME: zeldo_rewrite
-TEMP_SAVE_LOCATION: 0x5d00
-REAL_SAVE_LOCATION: 0x5e00
 SAVE_LENGTH: 64
 HUT_W: 8
 HUT_H: 6
@@ -78,19 +76,20 @@ SPR_BOWL:   0
 # This is like the precision to store the position.
 POS_MULTIPLIER_FOR_MEMORY: 16
 
+REAL_SAVE_LOCATION: 0x5e00
+
 # Save Memory Locations
-MEM_SAVE_DATA:   0
+MEM_SAVE_LOCATION: 0x5d00
+MEM_ROOM_IND:      0x5d01
+MEM_PL_X:          0x5d02
+MEM_PL_Y:          0x5d03
+MEM_PL_XF:         0x5d04
 
-MEM_ROOM_IND:      1
-MEM_PL_X:          2
-MEM_PL_Y:          3
-MEM_PL_XF:         4
+MEM_RET_ROOM_IND:  0x5d05
+MEM_RET_PL_X:      0x5d06
+MEM_RET_PL_Y:      0x5d07
 
-MEM_RET_ROOM_IND:  5
-MEM_RET_PL_X:      6
-MEM_RET_PL_Y:      7
-
-MEM_ITEM_INDEX:    8
+MEM_ITEM_INDEX:    0x5d08
 
 MEM_HAS_BOWL:    5
 MEM_HAS_BRANG:   6
