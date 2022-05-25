@@ -458,6 +458,11 @@ draw_room(g_rooms[peek"0x5d01"],64,57,function()
 loop_entities("outlayer_50","drawout")
 loop_entities("drawlayer_50","draw")
 zcall(loop_entities,[[1;,outlayer_50,drawout;2;,drawlayer_50,draw;3;,drawlayer_60,draw;4;,drawlayer_70,draw;5;,drawlayer_75,draw;]])
+if g_debug then
+for inst in all(g_zclass_entities["box"])do
+scr_zrect(inst.x,inst.y,inst.rx,inst.ry,8)
+end
+end
 end,function()
 zcall(loop_entities,[[1;,outlayer_99,drawout;2;,drawlayer_90,draw;3;,drawlayer_95,draw;4;,drawlayer_99,draw;]])
 end)
@@ -607,7 +612,7 @@ return fget(room.tiles_1[y*12+x],0)
 end
 end
 zclass[[collidable,box,vec|calc_deltas,%calc_deltas,adjust_deltas_for_solids,%adjust_deltas_for_solids,adjust_deltas_for_tiles,%adjust_deltas_for_tiles]]
-zclass[[inventory,actor,drawlayer_90|pl,@;start;init,%inventory_start_init,update,%inventory_start_update,draw,nop;press;init,nop,update,%inventory_press_update,draw,%inventory_draw;1;mem_loc,6,index,0,name,brang,xoff,-7,yoff,-9,sind,4;2;mem_loc,10,index,1,name,mask,xoff,0,yoff,-11,sind,3;3;mem_loc,7,index,2,name,bomb,xoff,7,yoff,-9,sind,5;4;mem_loc,8,index,3,name,shield,xoff,-8,yoff,-3,sind,6;5;index,4;6;mem_loc,9,index,5,name,bow,xoff,9,yoff,-2,sind,7;7;mem_loc,12,index,6,name,banjo,xoff,-7,yoff,4,sind,1;8;mem_loc,11,index,7,name,sword,xoff,0,yoff,6,sind,2;9;mem_loc,5,index,8,name,bow,xoff,7,yoff,5,sind,0;]]
+zclass[[inventory,actor,drawlayer_90|pl,@;start;init,%inventory_start_init,update,%inventory_start_update,draw,nop;press;init,nop,update,%inventory_press_update,draw,%inventory_draw;1;mem_loc,6,index,0,name,brang,xoff,-7,yoff,-9,sind,4;2;mem_loc,10,index,1,name,mask,xoff,0,yoff,-11,sind,3;3;mem_loc,7,index,2,name,bomb,xoff,7,yoff,-9,sind,5;4;mem_loc,8,index,3,name,shield,xoff,-8,yoff,-3,sind,6;5;index,4;6;mem_loc,9,index,5,name,bow,xoff,9,yoff,-2,sind,7;7;mem_loc,12,index,6,name,banjo,xoff,-7,yoff,4,sind,1;8;mem_loc,11,index,7,name,sword,xoff,0,yoff,6,sind,2;9;mem_loc,5,index,8,name,bow,xoff,7,yoff,5,sind,8;]]
 zclass[[solid,box|]]
 zclass[[wall,solid,anchor|anchoring,@,offx,@,offy,@,rx,@,ry,@]]
 zclass[[anchor,pos|update_anchor,%anchor_update_anchor;offx,0,offy,0,anchoring;,]]
@@ -677,6 +682,7 @@ g_state,g_rooms=_g.game_state(),decode_map()
 g_tile_animation_lookup=create_tile_animation_lookup(g_rooms[0])
 end
 function _update60()
+if btn(4)and btnp(5)then g_debug=not g_debug end
 zcall(loop_entities,[[1;,actor,clean;2;,fader,clean;]])
 register_entities()
 zcall(loop_entities,[[1;,fader,tick;2;,game_state,tick;3;,fader,state;4;,game_state,state;]])
@@ -686,4 +692,7 @@ g_i=g_animation.index
 cls()
 loop_entities("game_state","draw")
 fade(g_fade)
+if g_debug then
+zcall(rect,[[1;,17,12,110,18,1;2;,17,95,110,101,1;3;,17,0,110,5,1;4;,17,122,110,127,1;5;,0,0,17,127,1;6;,110,0,127,127,1;]])
+end
 end
