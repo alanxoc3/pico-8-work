@@ -17,14 +17,21 @@ zclass[[house,actor,auto_outline,drawlayer_60,outlayer_50|
         1;,.125,.375,0,.5,@,@,nop;
     ]], a, function()
         _g.fader_out(function()
-            zdset(MEM_RET_ROOM_IND, g_state.room_index)
-            zdset(MEM_RET_PL_X, a.x*POS_MULTIPLIER_FOR_MEMORY)
-            zdset(MEM_RET_PL_Y, (a.y+1.5)*POS_MULTIPLIER_FOR_MEMORY)
+            zcall(zdset, [[
+                1;,MEM_RET_ROOM_IND,@;
+                2;,MEM_RET_PL_X,@;
+                3;,MEM_RET_PL_Y,@;
+                4;,MEM_ROOM_IND,@;
+                5;,MEM_PL_X,SMALL_ROOM_START_X;
+                6;,MEM_PL_Y,SMALL_ROOM_START_Y;
+                7;,MEM_PL_XF,@;
 
-            zdset(MEM_ROOM_IND,a.room)
-            zdset(MEM_PL_X, SMALL_ROOM_START_X)
-            zdset(MEM_PL_Y, SMALL_ROOM_START_Y)
-            zdset(MEM_PL_XF,g_pl.xf and 1 or 0)
+            ]], zdget_value'MEM_ROOM_IND',
+                a.x*POS_MULTIPLIER_FOR_MEMORY,
+                (a.y+1.5)*POS_MULTIPLIER_FOR_MEMORY,
+                a.room,
+                g_pl.xf and 1 or 0
+            )
 
             g_state:load'room'
         end)

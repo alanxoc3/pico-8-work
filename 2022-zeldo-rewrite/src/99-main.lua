@@ -26,13 +26,14 @@ function _init()
     memcpy(TEMP_SAVE_LOCATION, REAL_SAVE_LOCATION, SAVE_LENGTH)
 
     if not zdget'MEM_SAVE_DATA' then
-        printh("initializing...")
-        zdset(MEM_SAVE_DATA,1)
-        zdset(MEM_ROOM_IND,136)
-        zdset(MEM_PL_X, 48)
-        zdset(MEM_PL_Y, 48)
-        zdset(MEM_PL_XF,1)
-        zdset(MEM_ITEM_INDEX,4)
+        zcall(zdset, [[
+            1;,MEM_SAVE_DATA ,1;
+            2;,MEM_ROOM_IND  ,136;
+            3;,MEM_PL_X      ,48;
+            4;,MEM_PL_Y      ,48;
+            5;,MEM_PL_XF     ,1;
+            6;,MEM_ITEM_INDEX,4;
+        ]])
     end
 
     poke2(0x5f5c, BTN_DELAY) -- set custom delay
@@ -49,7 +50,9 @@ function _update60()
         1;,actor,clean;
         2;,fader,clean;
     ]])
+
     register_entities()                  -- register all zobs from previous game loop iteration
+
     zcall(loop_entities, [[
         1;,fader,tick;
         2;,game_state,tick;

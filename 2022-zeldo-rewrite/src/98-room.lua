@@ -1,9 +1,7 @@
 zclass[[room_bounds,box|x,@,y,@,rx,@,ry,@]]
 
 |room_init| function(state) 
-    state.room_index = zdget_value'MEM_ROOM_IND'
-
-    local r = g_rooms[state.room_index]
+    local r = g_rooms[zdget_value'MEM_ROOM_IND']
     g_room_bounds = _g.room_bounds(r.w/2, r.h/2+.25, r.w/2+.125, r.h/2+.125)
     g_pl = _g.pl(zdget_value'MEM_PL_X'/POS_MULTIPLIER_FOR_MEMORY, zdget_value'MEM_PL_Y'/POS_MULTIPLIER_FOR_MEMORY, zdget'MEM_PL_XF')
 
@@ -30,16 +28,16 @@ end $$
         6;,vec,         vec_update;
         7;,anchor,      update_anchor;
         8;,target,      update_target, @;
-    ]], g_zclass_entities.solid, g_rooms[state.room_index], g_zclass_entities.pl)
+    ]], g_zclass_entities.solid, g_rooms[zdget_value'MEM_ROOM_IND'], g_zclass_entities.pl)
 
     if not g_pl:inside(g_room_bounds) then
         _g.fader_out(function()
             local abx, aby = g_pl:abside(g_room_bounds)
-            local nri = state.room_index + aby*16+abx
+            local nri = zdget_value'MEM_ROOM_IND' + aby*16+abx
             local nr = g_rooms[nri]
             local pl_x, pl_y, pl_xf
 
-            if state.room_index > LAST_ROOM_INDEX then
+            if zdget_value'MEM_ROOM_IND' > LAST_ROOM_INDEX then
                 pl_x, pl_y, pl_xf = zdget_value'MEM_RET_PL_X'/POS_MULTIPLIER_FOR_MEMORY, zdget_value'MEM_RET_PL_Y'/POS_MULTIPLIER_FOR_MEMORY, g_pl.xf
                 nri = zdget_value'MEM_RET_ROOM_IND' 
             elseif nr then
@@ -51,12 +49,16 @@ end $$
                 nri = LOST_ROOM_INDEX
             end
 
-            state.room_index = nri
-
-            zdset(MEM_ROOM_IND,nri)
-            zdset(MEM_PL_X, pl_x*POS_MULTIPLIER_FOR_MEMORY)
-            zdset(MEM_PL_Y, pl_y*POS_MULTIPLIER_FOR_MEMORY)
-            zdset(MEM_PL_XF,pl_xf and 1 or 0)
+            zcall(zdset, [[
+                1;,MEM_ROOM_IND,@;
+                2;,MEM_PL_X,@;
+                3;,MEM_PL_Y,@;
+                4;,MEM_PL_XF,@;
+            ]], nri,
+                pl_x*POS_MULTIPLIER_FOR_MEMORY,
+                pl_y*POS_MULTIPLIER_FOR_MEMORY,
+                pl_xf and 1 or 0
+            )
 
             state:load'room'
         end)
@@ -64,7 +66,7 @@ end $$
 end $$
 
 |room_draw| function(state)
-    draw_room(g_rooms[state.room_index], CARD_CX, CARD_CY, function()
+    draw_room(g_rooms[zdget_value'MEM_ROOM_IND'], CARD_CX, CARD_CY, function()
         loop_entities('outlayer_50', 'drawout')
         loop_entities('drawlayer_50', 'draw')
         zcall(loop_entities, [[

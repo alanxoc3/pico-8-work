@@ -375,13 +375,12 @@ end,function(a)
 zcall(_g.wall,[[a,@;1;,~a,.75,.5,.25,.75;2;,~a,-.75,.5,.25,.75;3;,~a,0,0,.75,.25;]],a)
 zcall(_g.target,[[1;,.125,.375,0,.5,@,@,nop;]],a,function()
 _g.fader_out(function()
-zdset(5,g_state.room_index)
-zdset(6,a.x*16)
-zdset(7,(a.y+1.5)*16)
-zdset(1,a.room)
-zdset(2,64)
-zdset(3,80)
-zdset(4,g_pl.xf and 1 or 0)
+zcall(zdset,[[1;,5,@;2;,6,@;3;,7,@;4;,1,@;5;,2,64;6;,3,80;7;,4,@;]],zdget_value"1",
+a.x*16,
+(a.y+1.5)*16,
+a.room,
+g_pl.xf and 1 or 0
+)
 g_state:load"room"
 end)
 end)
@@ -417,8 +416,7 @@ camera(g_fade>.5 and rnd_one())
 zspr(108,64,64,4,2)
 camera()
 end,function(state)
-state.room_index=zdget_value"1"
-local r=g_rooms[state.room_index]
+local r=g_rooms[zdget_value"1"]
 g_room_bounds=_g.room_bounds(r.w/2,r.h/2+.25,r.w/2+.125,r.h/2+.125)
 g_pl=_g.pl(zdget_value"2"/16,zdget_value"3"/16,zdget"4")
 local abx,aby=g_pl:abside(g_room_bounds)
@@ -429,14 +427,14 @@ _g[g_obj_map[obj_template.index]](obj_template.x+.5,obj_template.y+.5)
 end)
 end,function(state)
 if does_entity_exist"fader"then return end
-zcall(loop_entities,[[1;,timer,tick;2;,actor,state;3;,mov,mov_update;4;,collidable,adjust_deltas_for_solids,@;5;,collidable,adjust_deltas_for_tiles,@;6;,vec,vec_update;7;,anchor,update_anchor;8;,target,update_target,@;]],g_zclass_entities.solid,g_rooms[state.room_index],g_zclass_entities.pl)
+zcall(loop_entities,[[1;,timer,tick;2;,actor,state;3;,mov,mov_update;4;,collidable,adjust_deltas_for_solids,@;5;,collidable,adjust_deltas_for_tiles,@;6;,vec,vec_update;7;,anchor,update_anchor;8;,target,update_target,@;]],g_zclass_entities.solid,g_rooms[zdget_value"1"],g_zclass_entities.pl)
 if not g_pl:inside(g_room_bounds)then
 _g.fader_out(function()
 local abx,aby=g_pl:abside(g_room_bounds)
-local nri=state.room_index+aby*16+abx
+local nri=zdget_value"1"+aby*16+abx
 local nr=g_rooms[nri]
 local pl_x,pl_y,pl_xf
-if state.room_index>223 then
+if zdget_value"1">223 then
 pl_x,pl_y,pl_xf=zdget_value"6"/16,zdget_value"7"/16,g_pl.xf
 nri=zdget_value"5"
 elseif nr then
@@ -447,16 +445,16 @@ else
 pl_x,pl_y,pl_xf=6,5,g_pl.xf
 nri=151
 end
-state.room_index=nri
-zdset(1,nri)
-zdset(2,pl_x*16)
-zdset(3,pl_y*16)
-zdset(4,pl_xf and 1 or 0)
+zcall(zdset,[[1;,1,@;2;,2,@;3;,3,@;4;,4,@;]],nri,
+pl_x*16,
+pl_y*16,
+pl_xf and 1 or 0
+)
 state:load"room"
 end)
 end
 end,function(state)
-draw_room(g_rooms[state.room_index],64,57,function()
+draw_room(g_rooms[zdget_value"1"],64,57,function()
 loop_entities("outlayer_50","drawout")
 loop_entities("drawlayer_50","draw")
 zcall(loop_entities,[[1;,outlayer_50,drawout;2;,drawlayer_50,draw;3;,drawlayer_60,draw;4;,drawlayer_70,draw;5;,drawlayer_75,draw;]])
@@ -675,13 +673,7 @@ zclass[[game_state,actor|ecs_exclusions;actor,yes,timer,yes;curr,room,init,%game
 function _init()
 memcpy(0x5d00,0x5e00,64)
 if not zdget"0"then
-printh("initializing...")
-zdset(0,1)
-zdset(1,136)
-zdset(2,48)
-zdset(3,48)
-zdset(4,1)
-zdset(8,4)
+zcall(zdset,[[1;,0,1;2;,1,136;3;,2,48;4;,3,48;5;,4,1;6;,8,4;]])
 end
 poke2(0x5f5c,0x0808)
 g_state,g_rooms=_g.game_state(),decode_map()
