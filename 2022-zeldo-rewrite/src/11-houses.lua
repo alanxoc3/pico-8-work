@@ -17,7 +17,7 @@ zclass[[house,actor,auto_outline,drawlayer_60,outlayer_50|
         1;,.125,.375,0,.5,@,@,nop;
     ]], a, function()
         _g.fader_out(function()
-            zcall(zdset, [[
+            zcall(poke, [[
                 1;,MEM_RET_ROOM_IND,@;
                 2;,MEM_RET_PL_X,@;
                 3;,MEM_RET_PL_Y,@;
@@ -26,7 +26,7 @@ zclass[[house,actor,auto_outline,drawlayer_60,outlayer_50|
                 6;,MEM_PL_Y,SMALL_ROOM_START_Y;
                 7;,MEM_PL_XF,@;
 
-            ]], zdget_value'MEM_ROOM_IND',
+            ]], peek'MEM_ROOM_IND',
                 a.x*POS_MULTIPLIER_FOR_MEMORY,
                 (a.y+1.5)*POS_MULTIPLIER_FOR_MEMORY,
                 a.room,

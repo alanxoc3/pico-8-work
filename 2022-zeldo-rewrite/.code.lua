@@ -262,19 +262,19 @@ end
 end
 end
 end,function(a)
-if zdget_value"0x5d08" ~=4 then
-a.stat=_g.stat(0,64,{cspr=a[zdget_value"0x5d08"+1].sind})
+if peek"0x5d08" ~=4 then
+a.stat=_g.stat(0,64,{cspr=a[peek"0x5d08"+1].sind})
 else
 a.stat=nil
 end
 end,function(a)
 if not does_entity_exist"tbox"and btn"5"then
 call_not_nil(a.stat,"load",a.stat,"ending")
-zdset(0x5d08,4)
+poke(0x5d08,4)
 a:load"press"
 end
 end,function(a)
-zdset(0x5d08,mid(0,2,zdget_value"0x5d08"%3+zbtn(btnp,0))+mid(0,2,zdget_value"0x5d08"\3+zbtn(btnp,2))*3)
+poke(0x5d08,mid(0,2,peek"0x5d08"%3+zbtn(btnp,0))+mid(0,2,peek"0x5d08"\3+zbtn(btnp,2))*3)
 if does_entity_exist"tbox"or not btn"5"then
 a:load"start"
 end
@@ -283,7 +283,7 @@ for item in all(a)do
 local drawfunc=item.index==4 and function()a.pl:draw()end or function()
 zspr(item.sind,a.pl.x*8+item.xoff,a.pl.y*8+item.yoff,1,1,a.pl.xf)
 end
-draw_outline(item.index==zdget_value"0x5d08"and 2 or 1,drawfunc)
+draw_outline(item.index==peek"0x5d08"and 2 or 1,drawfunc)
 drawfunc()
 end
 end,function(a)
@@ -375,7 +375,7 @@ end,function(a)
 zcall(_g.wall,[[a,@;1;,~a,.75,.5,.25,.75;2;,~a,-.75,.5,.25,.75;3;,~a,0,0,.75,.25;]],a)
 zcall(_g.target,[[1;,.125,.375,0,.5,@,@,nop;]],a,function()
 _g.fader_out(function()
-zcall(zdset,[[1;,0x5d05,@;2;,0x5d06,@;3;,0x5d07,@;4;,0x5d01,@;5;,0x5d02,64;6;,0x5d03,80;7;,0x5d04,@;]],zdget_value"0x5d01",
+zcall(poke,[[1;,0x5d05,@;2;,0x5d06,@;3;,0x5d07,@;4;,0x5d01,@;5;,0x5d02,64;6;,0x5d03,80;7;,0x5d04,@;]],peek"0x5d01",
 a.x*16,
 (a.y+1.5)*16,
 a.room,
@@ -416,9 +416,9 @@ camera(g_fade>.5 and rnd_one())
 zspr(108,64,64,4,2)
 camera()
 end,function(state)
-local r=g_rooms[zdget_value"0x5d01"]
+local r=g_rooms[peek"0x5d01"]
 g_room_bounds=_g.room_bounds(r.w/2,r.h/2+.25,r.w/2+.125,r.h/2+.125)
-g_pl=_g.pl(zdget_value"0x5d02"/16,zdget_value"0x5d03"/16,zdget"0x5d04")
+g_pl=_g.pl(peek"0x5d02"/16,peek"0x5d03"/16,peek"0x5d04">0)
 local abx,aby=g_pl:abside(g_room_bounds)
 g_fairy=_g.fairy(g_pl,g_pl.x+abx*1.25,g_pl.y+aby*1.25)
 _g.inventory(g_pl)
@@ -427,16 +427,16 @@ _g[g_obj_map[obj_template.index]](obj_template.x+.5,obj_template.y+.5)
 end)
 end,function(state)
 if does_entity_exist"fader"then return end
-zcall(loop_entities,[[1;,timer,tick;2;,actor,state;3;,mov,mov_update;4;,collidable,adjust_deltas_for_solids,@;5;,collidable,adjust_deltas_for_tiles,@;6;,vec,vec_update;7;,anchor,update_anchor;8;,target,update_target,@;]],g_zclass_entities.solid,g_rooms[zdget_value"0x5d01"],g_zclass_entities.pl)
+zcall(loop_entities,[[1;,timer,tick;2;,actor,state;3;,mov,mov_update;4;,collidable,adjust_deltas_for_solids,@;5;,collidable,adjust_deltas_for_tiles,@;6;,vec,vec_update;7;,anchor,update_anchor;8;,target,update_target,@;]],g_zclass_entities.solid,g_rooms[peek"0x5d01"],g_zclass_entities.pl)
 if not g_pl:inside(g_room_bounds)then
 _g.fader_out(function()
 local abx,aby=g_pl:abside(g_room_bounds)
-local nri=zdget_value"0x5d01"+aby*16+abx
+local nri=peek"0x5d01"+aby*16+abx
 local nr=g_rooms[nri]
 local pl_x,pl_y,pl_xf
-if zdget_value"0x5d01">223 then
-pl_x,pl_y,pl_xf=zdget_value"0x5d06"/16,zdget_value"0x5d07"/16,g_pl.xf
-nri=zdget_value"0x5d05"
+if peek"0x5d01">223 then
+pl_x,pl_y,pl_xf=peek"0x5d06"/16,peek"0x5d07"/16,g_pl.xf
+nri=peek"0x5d05"
 elseif nr then
 local helper=function(x,w)return w/2-x*w/2+1.25*x end
 if abx ~=0 then pl_x,pl_y,pl_xf=helper(abx,nr.w),g_pl.y,abx<0
@@ -445,7 +445,7 @@ else
 pl_x,pl_y,pl_xf=6,5,g_pl.xf
 nri=151
 end
-zcall(zdset,[[1;,0x5d01,@;2;,0x5d02,@;3;,0x5d03,@;4;,0x5d04,@;]],nri,
+zcall(poke,[[1;,0x5d01,@;2;,0x5d02,@;3;,0x5d03,@;4;,0x5d04,@;]],nri,
 pl_x*16,
 pl_y*16,
 pl_xf and 1 or 0
@@ -454,15 +454,10 @@ state:load"room"
 end)
 end
 end,function(state)
-draw_room(g_rooms[zdget_value"0x5d01"],64,57,function()
+draw_room(g_rooms[peek"0x5d01"],64,57,function()
 loop_entities("outlayer_50","drawout")
 loop_entities("drawlayer_50","draw")
 zcall(loop_entities,[[1;,outlayer_50,drawout;2;,drawlayer_50,draw;3;,drawlayer_60,draw;4;,drawlayer_70,draw;5;,drawlayer_75,draw;]])
-if g_debug then
-for inst in all(g_zclass_entities["box"])do
-scr_zrect(inst.x,inst.y,inst.rx,inst.ry,8)
-end
-end
 end,function()
 zcall(loop_entities,[[1;,outlayer_99,drawout;2;,drawlayer_90,draw;3;,drawlayer_95,draw;4;,drawlayer_99,draw;]])
 end)
@@ -540,9 +535,6 @@ function scr_help_four(func,x1,y1,x2,y2,color)func(8*x1,8*y1,8*x2,8*y2,color)end
 function scr_line(...)scr_help_four(line,...)end
 function scr_zrect(...)scr_help_four(zrect,...)end
 function scr_pset(x,y,color)pset(8*x,8*y,color)end
-function zdget_value(ind)return peek(ind)end
-function zdget(ind)return zdget_value(ind)>0 end
-function zdset(ind,val)return poke(ind,val or 1)end
 zclass[[actor,timer|load,%actor_load,state,%actor_state,kill,%actor_kill,clean,%actor_clean,alive,yes,duration,null,curr,start,next,null,init,nop,update,nop,destroyed,nop,deregistered,%actor_deregistered;]]
 zclass[[drawlayer_50|]]
 zclass[[drawlayer_60|]]
@@ -677,15 +669,14 @@ end)
 zclass[[game_state,actor|ecs_exclusions;actor,yes,timer,yes;curr,room,init,%game_state_init,logo;state_init,%logo_init,update,%simple_update,draw,%logo_draw,duration,2.5,next,title;title;state_init,%title_init,update,%simple_update,draw,%title_draw;room;state_init,%room_init,update,%room_update,draw,%room_draw;gameover;state_init,%gameover_init,update,%simple_update,draw,%gameover_draw;]]
 function _init()
 memcpy(0x5d00,0x5e00,64)
-if not zdget"MEM_SAVE_DATA"then
-zcall(zdset,[[1;,MEM_SAVE_DATA,1;2;,0x5d01,136;3;,0x5d02,48;4;,0x5d03,48;5;,0x5d04,1;6;,0x5d08,4;]])
+if peek"MEM_SAVE_DATA"==0 then
+zcall(poke,[[1;,MEM_SAVE_DATA,1;2;,0x5d01,136;3;,0x5d02,48;4;,0x5d03,48;5;,0x5d04,1;6;,0x5d08,4;]])
 end
 poke2(0x5f5c,0x0808)
 g_state,g_rooms=_g.game_state(),decode_map()
 g_tile_animation_lookup=create_tile_animation_lookup(g_rooms[0])
 end
 function _update60()
-if btn(4)and btnp(5)then g_debug=not g_debug end
 zcall(loop_entities,[[1;,actor,clean;2;,fader,clean;]])
 register_entities()
 zcall(loop_entities,[[1;,fader,tick;2;,game_state,tick;3;,fader,state;4;,game_state,state;]])
@@ -695,7 +686,4 @@ g_i=g_animation.index
 cls()
 loop_entities("game_state","draw")
 fade(g_fade)
-if g_debug then
-zcall(rect,[[1;,17,12,110,18,1;2;,17,95,110,101,1;3;,17,0,110,5,1;4;,17,122,110,127,1;5;,0,0,17,127,1;6;,110,0,127,127,1;]])
-end
 end

@@ -14,8 +14,8 @@ zclass[[inventory,actor,drawlayer_90|
 ]]
 
 |inventory_start_init| function(a)
-    if zdget_value'MEM_ITEM_INDEX' ~= 4 then
-        a.stat = _g.stat(0, 64, {cspr=a[zdget_value'MEM_ITEM_INDEX'+1].sind})
+    if peek'MEM_ITEM_INDEX' ~= 4 then
+        a.stat = _g.stat(0, 64, {cspr=a[peek'MEM_ITEM_INDEX'+1].sind})
     else
         a.stat = nil
     end
@@ -24,13 +24,13 @@ end $$
 |inventory_start_update| function(a)
     if not does_entity_exist'tbox' and btn'BTN_ITEM_SELECT' then
         call_not_nil(a.stat, 'load', a.stat, 'ending')
-        zdset(MEM_ITEM_INDEX, 4)
+        poke(MEM_ITEM_INDEX, 4)
         a:load'press'
     end
 end $$
 
 |inventory_press_update| function(a)
-    zdset(MEM_ITEM_INDEX, mid(0,2,zdget_value'MEM_ITEM_INDEX'%3+zbtn(btnp,0)) + mid(0,2,zdget_value'MEM_ITEM_INDEX'\3+zbtn(btnp,2))*3)
+    poke(MEM_ITEM_INDEX, mid(0,2,peek'MEM_ITEM_INDEX'%3+zbtn(btnp,0)) + mid(0,2,peek'MEM_ITEM_INDEX'\3+zbtn(btnp,2))*3)
     if does_entity_exist'tbox' or not btn'BTN_ITEM_SELECT' then
         a:load'start'
     end
@@ -42,7 +42,7 @@ end $$
             zspr(item.sind, a.pl.x*8+item.xoff, a.pl.y*8+item.yoff, 1, 1, a.pl.xf)
         end
 
-        draw_outline(item.index == zdget_value'MEM_ITEM_INDEX' and 2 or 1, drawfunc)
+        draw_outline(item.index == peek'MEM_ITEM_INDEX' and 2 or 1, drawfunc)
         drawfunc()
     end
 end $$

@@ -25,8 +25,8 @@ end $$
 function _init()
     memcpy(MEM_SAVE_LOCATION, REAL_SAVE_LOCATION, SAVE_LENGTH)
 
-    if not zdget'MEM_SAVE_DATA' then
-        zcall(zdset, [[
+    if peek'MEM_SAVE_DATA' == 0 then
+        zcall(poke, [[
             1;,MEM_SAVE_DATA ,1;
             2;,MEM_ROOM_IND  ,136;
             3;,MEM_PL_X      ,48;
