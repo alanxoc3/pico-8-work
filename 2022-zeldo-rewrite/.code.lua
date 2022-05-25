@@ -138,7 +138,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,actor_deregistered,@,fader_out_update,@,fader_in_update,@,animation_init,@,auto_outline_drawout,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,explode_draw,@,calc_deltas,@,adjust_deltas_for_solids,@,adjust_deltas_for_tiles,@,inventory_start_update,@,inventory_press_update,@,inventory_draw,@,anchor_update_anchor,@,targettouch_update_target,@,pl_init,@,pl_update,@,pl_draw,@,stat_draw,@,tbox_init,@,tbox_update,@,tbox_draw,@,fairy_update,@,fairy_draw,@,house_init,@,house_draw,@,sign_init,@,sign_draw,@,gameover_control_update,@,gameover_init,@,gameover_draw,@,logo_init,@,logo_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,simple_update,@,title_draw,@,title_logo_update,@,title_logo_draw,@,game_state_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,actor_deregistered,@,fader_out_update,@,fader_in_update,@,animation_init,@,auto_outline_drawout,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,explode_draw,@,calc_deltas,@,adjust_deltas_for_solids,@,adjust_deltas_for_tiles,@,inventory_start_init,@,inventory_start_update,@,inventory_press_update,@,inventory_draw,@,anchor_update_anchor,@,targettouch_update_target,@,pl_init,@,pl_update,@,pl_draw,@,stat_draw,@,tbox_init,@,tbox_update,@,tbox_draw,@,fairy_update,@,fairy_draw,@,house_init,@,house_draw,@,sign_init,@,sign_draw,@,gameover_control_update,@,gameover_init,@,gameover_draw,@,logo_init,@,logo_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,simple_update,@,title_draw,@,title_logo_update,@,title_logo_draw,@,game_state_init,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -262,26 +262,28 @@ end
 end
 end
 end,function(a)
-if not does_entity_exist"tbox"and btn"5"then
-call_not_nil(a.stat,"load",a.stat,"ending")
-a:load"press"
-end
-end,function(a)
-if does_entity_exist"tbox"or not btn"5"then
-a:load"start"
-if a.cur_item ~=4 then
-a.stat=_g.stat(0,64,{cspr=a[a.cur_item+1].sind})
+if zdget_value"8" ~=4 then
+a.stat=_g.stat(0,64,{cspr=a[zdget_value"8"+1].sind})
 else
 a.stat=nil
 end
+end,function(a)
+if not does_entity_exist"tbox"and btn"5"then
+call_not_nil(a.stat,"load",a.stat,"ending")
+zdset(8,4)
+a:load"press"
 end
-a.cur_item=mid(0,2,a.cur_item%3+zbtn(btnp,0))+mid(0,2,a.cur_item\3+zbtn(btnp,2))*3
+end,function(a)
+zdset(8,mid(0,2,zdget_value"8"%3+zbtn(btnp,0))+mid(0,2,zdget_value"8"\3+zbtn(btnp,2))*3)
+if does_entity_exist"tbox"or not btn"5"then
+a:load"start"
+end
 end,function(a)
 for item in all(a)do
 local drawfunc=item.index==4 and function()a.pl:draw()end or function()
 zspr(item.sind,a.pl.x*8+item.xoff,a.pl.y*8+item.yoff,1,1,a.pl.xf)
 end
-draw_outline(item.index==a.cur_item and 2 or 1,drawfunc)
+draw_outline(item.index==zdget_value"8"and 2 or 1,drawfunc)
 drawfunc()
 end
 end,function(a)
@@ -610,7 +612,7 @@ return fget(room.tiles_1[y*12+x],0)
 end
 end
 zclass[[collidable,box,vec|calc_deltas,%calc_deltas,adjust_deltas_for_solids,%adjust_deltas_for_solids,adjust_deltas_for_tiles,%adjust_deltas_for_tiles]]
-zclass[[inventory,actor,drawlayer_90|pl,@;start;update,%inventory_start_update,draw,nop;press;update,%inventory_press_update,cur_item,4,draw,%inventory_draw;1;mem_loc,6,index,0,name,brang,xoff,-7,yoff,-9,sind,4;2;mem_loc,10,index,1,name,mask,xoff,0,yoff,-11,sind,3;3;mem_loc,7,index,2,name,bomb,xoff,7,yoff,-9,sind,5;4;mem_loc,8,index,3,name,shield,xoff,-8,yoff,-3,sind,6;5;index,4;6;mem_loc,9,index,5,name,bow,xoff,9,yoff,-2,sind,7;7;mem_loc,12,index,6,name,banjo,xoff,-7,yoff,4,sind,1;8;mem_loc,11,index,7,name,sword,xoff,0,yoff,6,sind,2;9;mem_loc,5,index,8,name,bow,xoff,7,yoff,5,sind,0;]]
+zclass[[inventory,actor,drawlayer_90|pl,@;start;init,%inventory_start_init,update,%inventory_start_update,draw,nop;press;init,nop,update,%inventory_press_update,draw,%inventory_draw;1;mem_loc,6,index,0,name,brang,xoff,-7,yoff,-9,sind,4;2;mem_loc,10,index,1,name,mask,xoff,0,yoff,-11,sind,3;3;mem_loc,7,index,2,name,bomb,xoff,7,yoff,-9,sind,5;4;mem_loc,8,index,3,name,shield,xoff,-8,yoff,-3,sind,6;5;index,4;6;mem_loc,9,index,5,name,bow,xoff,9,yoff,-2,sind,7;7;mem_loc,12,index,6,name,banjo,xoff,-7,yoff,4,sind,1;8;mem_loc,11,index,7,name,sword,xoff,0,yoff,6,sind,2;9;mem_loc,5,index,8,name,bow,xoff,7,yoff,5,sind,0;]]
 zclass[[solid,box|]]
 zclass[[wall,solid,anchor|anchoring,@,offx,@,offy,@,rx,@,ry,@]]
 zclass[[anchor,pos|update_anchor,%anchor_update_anchor;offx,0,offy,0,anchoring;,]]
@@ -679,6 +681,7 @@ zdset(1,136)
 zdset(2,48)
 zdset(3,48)
 zdset(4,1)
+zdset(8,4)
 end
 poke2(0x5f5c,0x0808)
 g_state,g_rooms=_g.game_state(),decode_map()

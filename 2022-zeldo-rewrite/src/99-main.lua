@@ -32,6 +32,7 @@ function _init()
         zdset(MEM_PL_X, 48)
         zdset(MEM_PL_Y, 48)
         zdset(MEM_PL_XF,1)
+        zdset(MEM_ITEM_INDEX,4)
     end
 
     poke2(0x5f5c, BTN_DELAY) -- set custom delay

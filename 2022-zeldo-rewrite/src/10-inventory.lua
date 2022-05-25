@@ -1,7 +1,7 @@
 zclass[[inventory,actor,drawlayer_90|
     pl,@;
-    start; update,%inventory_start_update, draw,nop;
-    press; update,%inventory_press_update, cur_item,4, draw,%inventory_draw;
+    start; init,%inventory_start_init, update,%inventory_start_update, draw,nop;
+    press; init,nop,                   update,%inventory_press_update, draw,%inventory_draw;
     1; mem_loc,MEM_HAS_BRANG  , index,0, name,brang , xoff,-7, yoff,-9 , sind,SPR_BRANG;
     2; mem_loc,MEM_HAS_MASK   , index,1, name,mask  , xoff,0 , yoff,-11, sind,SPR_MASK;
     3; mem_loc,MEM_HAS_BOMB   , index,2, name,bomb  , xoff,7 , yoff,-9 , sind,SPR_BOMB;
@@ -13,23 +13,27 @@ zclass[[inventory,actor,drawlayer_90|
     9; mem_loc,MEM_HAS_BOWL   , index,8, name,bow   , xoff,7 , yoff,5  , sind,SPR_BOWL;
 ]]
 
+|inventory_start_init| function(a)
+    if zdget_value'MEM_ITEM_INDEX' ~= 4 then
+        a.stat = _g.stat(0, 64, {cspr=a[zdget_value'MEM_ITEM_INDEX'+1].sind})
+    else
+        a.stat = nil
+    end
+end $$
+
 |inventory_start_update| function(a)
     if not does_entity_exist'tbox' and btn'BTN_ITEM_SELECT' then
         call_not_nil(a.stat, 'load', a.stat, 'ending')
+        zdset(MEM_ITEM_INDEX, 4)
         a:load'press'
     end
 end $$
 
 |inventory_press_update| function(a)
+    zdset(MEM_ITEM_INDEX, mid(0,2,zdget_value'MEM_ITEM_INDEX'%3+zbtn(btnp,0)) + mid(0,2,zdget_value'MEM_ITEM_INDEX'\3+zbtn(btnp,2))*3)
     if does_entity_exist'tbox' or not btn'BTN_ITEM_SELECT' then
         a:load'start'
-        if a.cur_item ~= 4 then
-            a.stat = _g.stat(0, 64, {cspr=a[a.cur_item+1].sind})
-        else
-            a.stat = nil
-        end
     end
-    a.cur_item = mid(0,2,a.cur_item%3+zbtn(btnp,0)) + mid(0,2,a.cur_item\3+zbtn(btnp,2))*3
 end $$
 
 |inventory_draw| function(a)
@@ -38,7 +42,7 @@ end $$
             zspr(item.sind, a.pl.x*8+item.xoff, a.pl.y*8+item.yoff, 1, 1, a.pl.xf)
         end
 
-        draw_outline(item.index == a.cur_item and 2 or 1, drawfunc)
+        draw_outline(item.index == zdget_value'MEM_ITEM_INDEX' and 2 or 1, drawfunc)
         drawfunc()
     end
 end $$
