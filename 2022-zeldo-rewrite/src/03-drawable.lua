@@ -16,7 +16,7 @@ zclass[[fader,actor|
 ]]
 
 zclass[[fader_out,fader|
-    start; duration,@, destroyed,@, update,%fader_out_update
+    start; duration,FADE_SPEED, destroyed,@, update,%fader_out_update
 ]]
 
 |fader_out_update| function(a)
@@ -24,7 +24,7 @@ zclass[[fader_out,fader|
 end $$
 
 zclass[[fader_in,fader|
-    start; duration,@, update,%fader_in_update
+    start; duration,FADE_SPEED, update,%fader_in_update
 ]]
 
 |fader_in_update| function(a)

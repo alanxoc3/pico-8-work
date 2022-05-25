@@ -3,6 +3,7 @@
 end $$
 
 |simple_update| function()
+    if does_entity_exist'fader' then return end
     zcall(loop_entities, [[
         1;,timer, tick;
         2;,actor, state;
@@ -24,17 +25,13 @@ end $$
 end $$
 
 zclass[[title_logo,actor,auto_outline,drawlayer_99,outlayer_99|
-    update,%title_logo_update_normal,
+    update,%title_logo_update,
     draw,%title_logo_draw;
-    start;update,nop,duration,FADE_SPEED,next,normal;
-    normal;update,%title_logo_update;
-    ending;update,nop;
 ]]
 
 |title_logo_update| function(a)
     if btnp'4' or btnp'5' then
-        _g.fader_out(FADE_SPEED, function() g_state:load'room' end)
-        a:load'ending'
+        _g.fader_out(function() g_state:load'room' end)
     end
 end $$
 

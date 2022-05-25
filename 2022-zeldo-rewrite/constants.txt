@@ -16,9 +16,15 @@ HUT_H: 6
 ROOM_W: 12
 ROOM_H: 10
 WRAP_W: 12
-LAST_ROOM_INDEX: 223
 CARD_CX: 64
 CARD_CY: 57
+
+# Rooms
+LAST_ROOM_INDEX: 223
+TEST_ROOM_INDEX: 231
+SMALL_ROOM_START_X: 64
+SMALL_ROOM_START_Y: 80
+SMALL_ROOM_START_Y_FAIRY: 7
 LOST_ROOM_INDEX: 151
 LOST_ROOM_START_X: 6
 LOST_ROOM_START_Y: 5
@@ -68,16 +74,30 @@ SPR_BANJO:  1
 SPR_SWORD:  2
 SPR_BOWL:   0
 
+# A zdset/get takes 0-255. So to have decimal places, use the multiplier.
+# This is like the precision to store the position.
+POS_MULTIPLIER_FOR_MEMORY: 16
+
 # Save Memory Locations
-HAS_BOWL:    1
-HAS_BRANG:   2
-HAS_BOMB:    3
-HAS_SHIELD:  4
-ALWAYS_TRUE: 5
-HAS_BOW:     6
-HAS_MASK:    7
-HAS_SWORD:   8
-HAS_BANJO:   9
+MEM_SAVE_DATA:   0
+
+MEM_ROOM_IND:      1
+MEM_PL_X:          2
+MEM_PL_Y:          3
+MEM_PL_XF:         4
+
+MEM_RET_ROOM_IND:  5
+MEM_RET_PL_X:      6
+MEM_RET_PL_Y:      7
+
+MEM_HAS_BOWL:    5
+MEM_HAS_BRANG:   6
+MEM_HAS_BOMB:    7
+MEM_HAS_SHIELD:  8
+MEM_HAS_BOW:     9
+MEM_HAS_MASK:    10
+MEM_HAS_SWORD:   11
+MEM_HAS_BANJO:   12
 
 # Texts
 TEXT_SIGNTEST: mary had a^little lamb^little lamb^little lamb^mary had a^little lamb^whose fleece was^white as yo face

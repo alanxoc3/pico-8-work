@@ -60,3 +60,8 @@ function scr_help_four(func, x1, y1, x2, y2, color) func(8*x1, 8*y1, 8*x2, 8*y2,
 function scr_line(...) scr_help_four(line, ...) end
 function scr_zrect(...) scr_help_four(zrect, ...) end
 function scr_pset(x, y, color) pset(8*x, 8*y, color) end
+
+-- up to 256 save locations
+function zdget_value(ind) return peek(TEMP_SAVE_LOCATION+ind) end
+function zdget(ind)       return zdget_value(ind) > 0 end
+function zdset(ind, val)  return poke(TEMP_SAVE_LOCATION+ind, val or 1) end

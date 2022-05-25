@@ -8,25 +8,32 @@ end)
 zclass[[game_state,actor|
     ecs_exclusions;actor,yes,timer,yes; -- remove game_state from the actor group
     curr,room, init,%game_state_init,
-    room_index,136,
-    pl_x,3, pl_y,3, pl_xf,yes,
-    fairy_x,7, fairy_y,8;
 
     logo;     state_init, %logo_init,     update, %simple_update, draw,%logo_draw, duration,2.5, next,title;
     title;    state_init, %title_init,    update, %simple_update, draw,%title_draw;
-    room;     state_init, %room_init,     update, %room_update,   draw,%room_draw, leaving,no;
+    room;     state_init, %room_init,     update, %room_update,   draw,%room_draw;
     gameover; state_init, %gameover_init, update, %simple_update, draw,%gameover_draw;
 ]]
 
 |game_state_init| function(state)
     clean_all_entities'game_state'
-    _g.fader_in'FADE_SPEED'
+    _g.fader_in()
     g_animation = _g.animation'ANIMATION_SPEED'
     state:state_init()
 end $$
 
 function _init()
-    memset(TEMP_SAVE_LOCATION, 0, SAVE_LENGTH)
+    memcpy(TEMP_SAVE_LOCATION, REAL_SAVE_LOCATION, SAVE_LENGTH)
+
+    if not zdget'MEM_SAVE_DATA' then
+        printh("initializing...")
+        zdset(MEM_SAVE_DATA,1)
+        zdset(MEM_ROOM_IND,136)
+        zdset(MEM_PL_X, 48)
+        zdset(MEM_PL_Y, 48)
+        zdset(MEM_PL_XF,1)
+    end
+
     poke2(0x5f5c, BTN_DELAY) -- set custom delay
     g_state, g_rooms = _g.game_state(), decode_map()
     g_tile_animation_lookup = create_tile_animation_lookup(g_rooms[ANIMATION_ROOM_INDEX])

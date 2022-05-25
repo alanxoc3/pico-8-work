@@ -372,7 +372,16 @@ scr_pset(a.x,a.y,12)
 end,function(a)
 zcall(_g.wall,[[a,@;1;,~a,.75,.5,.25,.75;2;,~a,-.75,.5,.25,.75;3;,~a,0,0,.75,.25;]],a)
 zcall(_g.target,[[1;,.125,.375,0,.5,@,@,nop;]],a,function()
-printh("entering "..t())
+_g.fader_out(function()
+zdset(5,g_state.room_index)
+zdset(6,a.x*16)
+zdset(7,(a.y+1.5)*16)
+zdset(1,a.room)
+zdset(2,64)
+zdset(3,80)
+zdset(4,g_pl.xf and 1 or 0)
+g_state:load"room"
+end)
 end)
 end,function(a)
 zspr(a.cspr,a.x*8,a.y*8,2,2)
@@ -389,7 +398,7 @@ end,function(a)
 zspr(a.cspr,a.x*8,a.y*8)
 end,function(a)
 if btnp(4)or btnp(5)then
-_g.fader_out(.5,function()g_state:load"title" end)
+_g.fader_out(function()g_state:load"title" end)
 a:load"ending"
 end
 end,function(state)
@@ -406,34 +415,41 @@ camera(g_fade>.5 and rnd_one())
 zspr(108,64,64,4,2)
 camera()
 end,function(state)
+state.room_index=zdget_value"1"
 local r=g_rooms[state.room_index]
 g_room_bounds=_g.room_bounds(r.w/2,r.h/2+.25,r.w/2+.125,r.h/2+.125)
-g_pl=_g.pl(state.pl_x,state.pl_y,state.pl_xf)
-g_fairy=_g.fairy(g_pl,state.fairy_x,state.fairy_y)
+g_pl=_g.pl(zdget_value"2"/16,zdget_value"3"/16,zdget"4")
+local abx,aby=g_pl:abside(g_room_bounds)
+g_fairy=_g.fairy(g_pl,g_pl.x+abx*1.25,g_pl.y+aby*1.25)
 _g.inventory(g_pl)
 foreach(r.objects,function(obj_template)
 _g[g_obj_map[obj_template.index]](obj_template.x+.5,obj_template.y+.5)
 end)
 end,function(state)
-if state:get_elapsed"state">.5 and not state.leaving then
+if does_entity_exist"fader"then return end
 zcall(loop_entities,[[1;,timer,tick;2;,actor,state;3;,mov,mov_update;4;,collidable,adjust_deltas_for_solids,@;5;,collidable,adjust_deltas_for_tiles,@;6;,vec,vec_update;7;,anchor,update_anchor;8;,target,update_target,@;]],g_zclass_entities.solid,g_rooms[state.room_index],g_zclass_entities.pl)
-end
-if not state.leaving and not g_pl:inside(g_room_bounds)then
-state.leaving=true
-_g.fader_out(.5,function()
+if not g_pl:inside(g_room_bounds)then
+_g.fader_out(function()
 local abx,aby=g_pl:abside(g_room_bounds)
 local nri=state.room_index+aby*16+abx
 local nr=g_rooms[nri]
-if nr then
+local pl_x,pl_y,pl_xf
+if state.room_index>223 then
+pl_x,pl_y,pl_xf=zdget_value"6"/16,zdget_value"7"/16,g_pl.xf
+nri=zdget_value"5"
+elseif nr then
 local helper=function(x,w)return w/2-x*w/2+1.25*x end
-if abx ~=0 then state.pl_x,state.pl_y,state.pl_xf=helper(abx,nr.w),g_pl.y,abx<0
-else state.pl_y,state.pl_x,state.pl_xf=helper(aby,nr.h)+.25,g_pl.x,g_pl.xf end
+if abx ~=0 then pl_x,pl_y,pl_xf=helper(abx,nr.w),g_pl.y,abx<0
+else pl_y,pl_x,pl_xf=helper(aby,nr.h)+.25,g_pl.x,g_pl.xf end
 else
-state.pl_x,state.pl_y,state.pl_xf=6,5,g_pl.xf
+pl_x,pl_y,pl_xf=6,5,g_pl.xf
 nri=151
 end
 state.room_index=nri
-state.fairy_x,state.fairy_y=state.pl_x-abx*2,state.pl_y-aby*2
+zdset(1,nri)
+zdset(2,pl_x*16)
+zdset(3,pl_y*16)
+zdset(4,pl_xf and 1 or 0)
 state:load"room"
 end)
 end
@@ -449,6 +465,7 @@ zcall(draw_bar,[[1;,18,6,109,11,@,0,8,2]],g_pl.energy)
 end,function()
 _g.title_logo()
 end,function()
+if does_entity_exist"fader"then return end
 zcall(loop_entities,[[1;,timer,tick;2;,actor,state;]])
 end,function()
 draw_room(g_rooms[8*16+8],64,57,nop,nop)
@@ -456,8 +473,7 @@ zcall(loop_entities,[[1;,outlayer_99,drawout;2;,drawlayer_99,draw;]])
 zcall(zprinttbox,[[1;,code/sfx:  @alanxoc3  ,64,104,0,7,5;2;,tile/spr:  @greatcadet,64,114,0,7,5;3;,amorg games presents,64,6,0,7,5;]])
 end,function(a)
 if btnp"4"or btnp"5"then
-_g.fader_out(.5,function()g_state:load"room" end)
-a:load"ending"
+_g.fader_out(function()g_state:load"room" end)
 end
 end,function(a)
 for i=-2,2 do
@@ -469,7 +485,7 @@ zcall(zprinttbox,[[1;,🅾️ or ❎ to play  ,64,68,0,7,5;]])
 end
 end,function(state)
 clean_all_entities"game_state"
-_g.fader_in".5"
+_g.fader_in()
 g_animation=_g.animation".5"
 state:state_init()
 end)
@@ -519,6 +535,9 @@ function scr_help_four(func,x1,y1,x2,y2,color)func(8*x1,8*y1,8*x2,8*y2,color)end
 function scr_line(...)scr_help_four(line,...)end
 function scr_zrect(...)scr_help_four(zrect,...)end
 function scr_pset(x,y,color)pset(8*x,8*y,color)end
+function zdget_value(ind)return peek(0x5d00+ind)end
+function zdget(ind)return zdget_value(ind)>0 end
+function zdset(ind,val)return poke(0x5d00+ind,val or 1)end
 zclass[[actor,timer|load,%actor_load,state,%actor_state,kill,%actor_kill,clean,%actor_clean,alive,yes,duration,null,curr,start,next,null,init,nop,update,nop,destroyed,nop,deregistered,%actor_deregistered;]]
 zclass[[drawlayer_50|]]
 zclass[[drawlayer_60|]]
@@ -529,8 +548,8 @@ zclass[[drawlayer_99|]]
 zclass[[outlayer_50|]]
 zclass[[outlayer_99|]]
 zclass[[fader,actor|ecs_exclusions;actor,yes,timer,yes;]]
-zclass[[fader_out,fader|start;duration,@,destroyed,@,update,%fader_out_update]]
-zclass[[fader_in,fader|start;duration,@,update,%fader_in_update]]
+zclass[[fader_out,fader|start;duration,.5,destroyed,@,update,%fader_out_update]]
+zclass[[fader_in,fader|start;duration,.5,update,%fader_in_update]]
 zclass[[animation,actor|index,0,init,%animation_init;start;duration,@,next,start]]
 zclass[[auto_outline|drawout,%auto_outline_drawout]]
 function draw_outline(color,drawfunc)
@@ -591,11 +610,13 @@ return fget(room.tiles_1[y*12+x],0)
 end
 end
 zclass[[collidable,box,vec|calc_deltas,%calc_deltas,adjust_deltas_for_solids,%adjust_deltas_for_solids,adjust_deltas_for_tiles,%adjust_deltas_for_tiles]]
-zclass[[inventory,actor,drawlayer_90|pl,@;start;update,%inventory_start_update,draw,nop;press;update,%inventory_press_update,cur_item,4,draw,%inventory_draw;1;mem_loc,2,index,0,name,brang,xoff,-7,yoff,-9,sind,4;2;mem_loc,7,index,1,name,mask,xoff,0,yoff,-11,sind,3;3;mem_loc,3,index,2,name,bomb,xoff,7,yoff,-9,sind,5;4;mem_loc,4,index,3,name,shield,xoff,-8,yoff,-3,sind,6;5;index,4;6;mem_loc,6,index,5,name,bow,xoff,9,yoff,-2,sind,7;7;mem_loc,9,index,6,name,banjo,xoff,-7,yoff,4,sind,1;8;mem_loc,8,index,7,name,sword,xoff,0,yoff,6,sind,2;9;mem_loc,1,index,8,name,bow,xoff,7,yoff,5,sind,0;]]
+zclass[[inventory,actor,drawlayer_90|pl,@;start;update,%inventory_start_update,draw,nop;press;update,%inventory_press_update,cur_item,4,draw,%inventory_draw;1;mem_loc,6,index,0,name,brang,xoff,-7,yoff,-9,sind,4;2;mem_loc,10,index,1,name,mask,xoff,0,yoff,-11,sind,3;3;mem_loc,7,index,2,name,bomb,xoff,7,yoff,-9,sind,5;4;mem_loc,8,index,3,name,shield,xoff,-8,yoff,-3,sind,6;5;index,4;6;mem_loc,9,index,5,name,bow,xoff,9,yoff,-2,sind,7;7;mem_loc,12,index,6,name,banjo,xoff,-7,yoff,4,sind,1;8;mem_loc,11,index,7,name,sword,xoff,0,yoff,6,sind,2;9;mem_loc,5,index,8,name,bow,xoff,7,yoff,5,sind,0;]]
 zclass[[solid,box|]]
 zclass[[wall,solid,anchor|anchoring,@,offx,@,offy,@,rx,@,ry,@]]
 zclass[[anchor,pos|update_anchor,%anchor_update_anchor;offx,0,offy,0,anchoring;,]]
 zclass[[target,anchor,box|rx,@,ry,@,offx,@,offy,@,anchoring,@,callback_touch,@,callback_outside,@,update_target,%targettouch_update_target]]
+zclass[[pot]]
+zclass[[bed]]
 zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50,outlayer_50|cname,lank,cspr,103,health,10,max_health,10,x,@,y,@,xf,@,sind,88,rx,.375,ry,.375,init,%pl_init,update,%pl_update,energy,0,draw,%pl_draw;sinds;,88,89,90]]
 function draw_bar(x1,y1,x2,y2,percent,align,fg,bg)
 if x1>x2 then x1-=3 x2-=3 end
@@ -630,7 +651,7 @@ end
 zclass[[stat,vec,actor,drawlayer_95|align,@,x,@,obj,@,y,138,draw,%stat_draw,max_health,10,health,5;start;dy,-2,duration,.2,next,normal;normal;dy,0;ending;dy,2,duration,.2;]]
 zclass[[tbox,vec,actor,drawlayer_99|rawtext,@,y,138,cur_text_index,1,anim,0,line_1,,line_2,,update,%tbox_update,draw,%tbox_draw;texts;,;start;dy,-2,duration,.2,next,normal,update,nop,init,%tbox_init;normal;dy,0,anim,0,done,no,update,%tbox_update,init,nop;ending;dy,2,update,nop,duration,.2,init,nop;]]
 zclass[[fairy,actor,mov,drawlayer_70|rel_actor,@,x,@,y,@,update,%fairy_update,draw,%fairy_draw]]
-zclass[[house,actor,auto_outline,drawlayer_60,outlayer_50|cspr,174,init,%house_init,draw,%house_draw]]
+zclass[[house,actor,auto_outline,drawlayer_60,outlayer_50|cspr,174,room,231,init,%house_init,draw,%house_draw]]
 zclass[[housetest,house|x,@,y,@]]
 zclass[[sign,actor,solid,auto_outline,drawlayer_50,outlayer_50|text,,rx,.375,ry,.375,cname,sign,cspr,171,init,%sign_init,draw,%sign_draw]]
 zclass[[signtest,sign|x,@,y,@,text,mary had a^little lamb^little lamb^little lamb^mary had a^little lamb^whose fleece was^white as yo face]]
@@ -642,15 +663,23 @@ pal(c,g_fade_table[c][1+flr(7*min(1,max(0,threshold)))],1)
 end
 end
 zclass[[room_bounds,box|x,@,y,@,rx,@,ry,@]]
-zclass[[title_logo,actor,auto_outline,drawlayer_99,outlayer_99|update,%title_logo_update_normal,draw,%title_logo_draw;start;update,nop,duration,.5,next,normal;normal;update,%title_logo_update;ending;update,nop;]]
+zclass[[title_logo,actor,auto_outline,drawlayer_99,outlayer_99|update,%title_logo_update,draw,%title_logo_draw;]]
 cartdata"zeldo_rewrite"
 menuitem(1,"reset save data",function()
 memset(0x5e00,0,64)
 extcmd"reset"
 end)
-zclass[[game_state,actor|ecs_exclusions;actor,yes,timer,yes;curr,room,init,%game_state_init,room_index,136,pl_x,3,pl_y,3,pl_xf,yes,fairy_x,7,fairy_y,8;logo;state_init,%logo_init,update,%simple_update,draw,%logo_draw,duration,2.5,next,title;title;state_init,%title_init,update,%simple_update,draw,%title_draw;room;state_init,%room_init,update,%room_update,draw,%room_draw,leaving,no;gameover;state_init,%gameover_init,update,%simple_update,draw,%gameover_draw;]]
+zclass[[game_state,actor|ecs_exclusions;actor,yes,timer,yes;curr,room,init,%game_state_init,logo;state_init,%logo_init,update,%simple_update,draw,%logo_draw,duration,2.5,next,title;title;state_init,%title_init,update,%simple_update,draw,%title_draw;room;state_init,%room_init,update,%room_update,draw,%room_draw;gameover;state_init,%gameover_init,update,%simple_update,draw,%gameover_draw;]]
 function _init()
-memset(0x5d00,0,64)
+memcpy(0x5d00,0x5e00,64)
+if not zdget"0"then
+printh("initializing...")
+zdset(0,1)
+zdset(1,136)
+zdset(2,48)
+zdset(3,48)
+zdset(4,1)
+end
 poke2(0x5f5c,0x0808)
 g_state,g_rooms=_g.game_state(),decode_map()
 g_tile_animation_lookup=create_tile_animation_lookup(g_rooms[0])

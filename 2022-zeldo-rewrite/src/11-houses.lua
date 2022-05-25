@@ -1,5 +1,6 @@
 zclass[[house,actor,auto_outline,drawlayer_60,outlayer_50|
     cspr,SPR_HOUSE,
+    room,TEST_ROOM_INDEX,
     init,%house_init,
     draw,%house_draw
 ]]
@@ -15,7 +16,18 @@ zclass[[house,actor,auto_outline,drawlayer_60,outlayer_50|
     zcall(_g.target, [[
         1;,.125,.375,0,.5,@,@,nop;
     ]], a, function()
-        printh("entering "..t())
+        _g.fader_out(function()
+            zdset(MEM_RET_ROOM_IND, g_state.room_index)
+            zdset(MEM_RET_PL_X, a.x*POS_MULTIPLIER_FOR_MEMORY)
+            zdset(MEM_RET_PL_Y, (a.y+1.5)*POS_MULTIPLIER_FOR_MEMORY)
+
+            zdset(MEM_ROOM_IND,a.room)
+            zdset(MEM_PL_X, SMALL_ROOM_START_X)
+            zdset(MEM_PL_Y, SMALL_ROOM_START_Y)
+            zdset(MEM_PL_XF,g_pl.xf and 1 or 0)
+
+            g_state:load'room'
+        end)
     end)
 end $$
 

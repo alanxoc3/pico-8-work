@@ -6,7 +6,7 @@ zclass[[gameover_control,actor|
 
 |gameover_control_update| function(a)
     if btnp(4) or btnp(5) then
-        _g.fader_out(FADE_SPEED, function() g_state:load'title' end)
+        _g.fader_out(function() g_state:load'title' end)
         a:load'ending'
     end
 end $$
