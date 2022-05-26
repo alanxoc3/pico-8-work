@@ -48,7 +48,7 @@ return rooms
 end
 g_zclass_constructors,g_zclass_entities,g_zclass_new_entities={},{},{}
 function zclass(meta_and_att_str)
-local meta,template=unpack(split(meta_and_att_str,"|"))
+local meta,template,memloc=unpack(split(meta_and_att_str,"|"))
 local parents=split(meta)
 local class=deli(parents,1)
 g_zclass_entities[class]=g_zclass_entities[class]or{}
@@ -61,7 +61,7 @@ inst.parents[class]=true
 add(g_zclass_new_entities,{class,inst})
 return zobj_set(inst,template,...)
 end
-_g[class]=function(...)return g_zclass_constructors[class]({id=class,parents={},ecs_exclusions={}},{},...)end
+_g[class]=function(...)if peek(memloc or ALWAYS_TRUE)>0 then return g_zclass_constructors[class]({id=class,parents={},ecs_exclusions={}},{},...)end end
 end
 function register_entities()
 while #g_zclass_new_entities>0 do

@@ -80,6 +80,7 @@ REAL_SAVE_LOCATION: 0x5e00
 
 # Save Memory Locations
 MEM_SAVE_LOCATION: 0x5d00
+MEM_ALWAYS_TRUE:   0x5d00
 MEM_ROOM_IND:      0x5d01
 MEM_PL_X:          0x5d02
 MEM_PL_Y:          0x5d03
