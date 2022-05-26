@@ -454,15 +454,15 @@ local abx,aby=g_pl:abside(g_room_bounds)
 local nri=peek"0x5d01"+aby*16+abx
 local pl_x,pl_y,pl_xf=g_pl.x,g_pl.y,g_pl.xf
 if peek"0x5d01">223 then
-nri,pl_x,pl_y=peek"0x5d05",peek"0x5d06"/16,peek"0x5d07"/16
+load_room(peek"0x5d05",peek"0x5d06"/16,peek"0x5d07"/16,pl_xf)
 elseif g_rooms[nri]then
 local helper=function(x,w)return w/2-x*w/2+1.25*x end
-if abx ~=0 then pl_x,pl_y,pl_xf=helper(abx,12),pl_y,abx<0
-else pl_y,pl_x,pl_xf=helper(aby,10)+.25,pl_x,pl_xf end
-else
-nri,pl_x,pl_y=151,6,5
+if abx ~=0 then load_room(nri,helper(abx,12),pl_y,abx<0)
+else load_room(nri,pl_x,helper(aby,10)+.25,pl_xf)
 end
-load_room(nri,pl_x,pl_y,pl_xf)
+else
+load_room(151,6,5,pl_xf)
+end
 end
 end,function(state)
 isorty(g_zclass_entities["drawlayer_50"])
