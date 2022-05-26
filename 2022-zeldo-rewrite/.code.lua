@@ -383,15 +383,11 @@ scr_pset(a.x,a.y,12)
 end,function(a)
 zcall(_g.wall,[[a,@;1;,~a,.75,.5,.25,.75;2;,~a,-.75,.5,.25,.75;3;,~a,0,0,.75,.25;]],a)
 zcall(_g.target,[[1;,.125,.375,0,.5,@,@,nop;]],a,function()
-_g.fader_out(function()
-zcall(poke,[[1;,0x5d05,@;2;,0x5d06,@;3;,0x5d07,@;4;,0x5d01,@;5;,0x5d02,64;6;,0x5d03,80;7;,0x5d04,@;]],peek"0x5d01",
+zcall(poke,[[1;,0x5d05,@;2;,0x5d06,@;3;,0x5d07,@;]],peek"0x5d01",
 a.x*16,
-(a.y+1.5)*16,
-a.room,
-g_pl.xf and 1 or 0
+(a.y+1.5)*16
 )
-g_state:load"room"
-end)
+load_room(a.room,4,5,g_pl.xf)
 end)
 end,function(a)
 _g.target(.5,.25,0,0,a,function()
@@ -400,8 +396,8 @@ if a.xf ~=g_pl.xf then
 if not a.stat then a.stat=_g.stat(1,119,a)end
 if btnp"4"and not does_entity_exist"tbox"then
 _g.tbox(a.text,function()
-zcall(poke,[[1;,0x5d02,@;2;,0x5d03,@;3;,0x5d04,@;4;,0x5d09,1;]],g_pl.x*16,g_pl.y*16,g_pl.xf and 1 or 0)
-_g.fader_out(function()g_state:load"room" end)
+poke(0x5d09,1)
+load_room(%0x5d01,g_pl.x,g_pl.y,g_pl.xf)
 end)
 end
 end
@@ -454,7 +450,6 @@ end,function(state)
 if does_entity_exist"fader"then return end
 zcall(loop_entities,[[1;,timer,tick;2;,actor,state;3;,mov,mov_update;4;,collidable,adjust_deltas_for_solids,@;5;,collidable,adjust_deltas_for_tiles,@;6;,vec,vec_update;7;,anchor,update_anchor;8;,target,update_target,@;]],g_zclass_entities.solid,g_rooms[peek"0x5d01"],g_zclass_entities.pl)
 if not g_pl:inside(g_room_bounds)then
-_g.fader_out(function()
 local abx,aby=g_pl:abside(g_room_bounds)
 local nri=peek"0x5d01"+aby*16+abx
 local nr=g_rooms[nri]
@@ -470,18 +465,12 @@ else
 pl_x,pl_y,pl_xf=6,5,g_pl.xf
 nri=151
 end
-zcall(poke,[[1;,0x5d01,@;2;,0x5d02,@;3;,0x5d03,@;4;,0x5d04,@;]],nri,
-pl_x*16,
-pl_y*16,
-pl_xf and 1 or 0
-)
-state:load"room"
-end)
+load_room(nri,pl_x,pl_y,pl_xf)
 end
 end,function(state)
 isorty(g_zclass_entities["drawlayer_50"])
 draw_room(g_rooms[peek"0x5d01"],64,57,function()
-zcall(loop_entities,[[1;,drawlayer_50,draw;2;,drawlayer_60,draw;3;,drawlayer_70,draw;4;,drawlayer_75,draw;]])
+zcall(loop_entities,[[1;,drawlayer_50,draw;]])
 end,function()
 zcall(loop_entities,[[1;,drawlayer_90,draw;2;,drawlayer_95,draw;3;,drawlayer_99,draw;]])
 end)
@@ -561,8 +550,6 @@ function scr_zrect(...)scr_help_four(zrect,...)end
 function scr_pset(x,y,color)pset(8*x,8*y,color)end
 zclass[[actor,timer|load,%actor_load,state,%actor_state,kill,%actor_kill,clean,%actor_clean,alive,yes,duration,null,curr,start,next,null,init,nop,update,nop,destroyed,nop,deregistered,%actor_deregistered;]]
 zclass[[drawlayer_50|]]
-zclass[[drawlayer_60|]]
-zclass[[drawlayer_70|]]
 zclass[[drawlayer_90|]]
 zclass[[drawlayer_95|]]
 zclass[[drawlayer_99|]]
@@ -691,6 +678,16 @@ zclass[[tbox,vec,actor,drawlayer_99|rawtext,@,destroyed,@,y,138,cur_text_index,1
 zclass[[fairy,actor,mov,drawlayer_50|rel_actor,@,x,@,y,@,cname,ivan,cspr,9,update,%fairy_update,draw,%fairy_draw]]
 zclass[[house,actor,simple_spr,drawlayer_50|cspr,174,sind,174,sw,2,sh,2,room,231,init,%house_init]]
 zclass[[housetest,house|x,@,y,@]]
+function load_room(rind,x,y,xf)
+_g.fader_out(function()
+zcall(poke,[[1;,0x5d01,@;2;,0x5d02,@;3;,0x5d03,@;4;,0x5d04,@;]],rind,
+x*16,
+y*16,
+xf and 1 or 0
+)
+g_state:load"room"
+end)
+end
 zclass[[person,actor,solid,simple_spr,drawlayer_50|text,,rx,.375,ry,.375,init,%person_init]]
 zclass[[navyblock,person|x,@,y,@,sy,-2,cname,navy,cspr,97,sind,97,text,my sister has been in^the forest all day.^find something to^protect yourself with^and bring her home.|0x5d09|0]]
 zclass[[sign,actor,solid,simple_spr,drawlayer_50|text,,rx,.375,ry,.375,sy,-2,cname,sign,cspr,24,sind,24,init,%sign_init]]

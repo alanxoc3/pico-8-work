@@ -36,37 +36,24 @@ end $$
     ]], g_zclass_entities.solid, g_rooms[peek'MEM_ROOM_IND'], g_zclass_entities.pl)
 
     if not g_pl:inside(g_room_bounds) then
-        _g.fader_out(function()
-            local abx, aby = g_pl:abside(g_room_bounds)
-            local nri = peek'MEM_ROOM_IND' + aby*16+abx
-            local nr = g_rooms[nri]
-            local pl_x, pl_y, pl_xf
+        local abx, aby = g_pl:abside(g_room_bounds)
+        local nri = peek'MEM_ROOM_IND' + aby*16+abx
+        local nr = g_rooms[nri]
+        local pl_x, pl_y, pl_xf
 
-            if peek'MEM_ROOM_IND' > LAST_ROOM_INDEX then
-                pl_x, pl_y, pl_xf = peek'MEM_RET_PL_X'/POS_MULTIPLIER_FOR_MEMORY, peek'MEM_RET_PL_Y'/POS_MULTIPLIER_FOR_MEMORY, g_pl.xf
-                nri = peek'MEM_RET_ROOM_IND' 
-            elseif nr then
-                local helper = function(x, w) return w/2-x*w/2+1.25*x end
-                if abx ~= 0 then pl_x, pl_y, pl_xf = helper(abx, nr.w), g_pl.y, abx < 0
-                            else pl_y, pl_x, pl_xf = helper(aby, nr.h)+.25, g_pl.x, g_pl.xf end
-            else
-                pl_x, pl_y, pl_xf = LOST_ROOM_START_X, LOST_ROOM_START_Y, g_pl.xf
-                nri = LOST_ROOM_INDEX
-            end
+        if peek'MEM_ROOM_IND' > LAST_ROOM_INDEX then
+            pl_x, pl_y, pl_xf = peek'MEM_RET_PL_X'/POS_MULTIPLIER_FOR_MEMORY, peek'MEM_RET_PL_Y'/POS_MULTIPLIER_FOR_MEMORY, g_pl.xf
+            nri = peek'MEM_RET_ROOM_IND' 
+        elseif nr then
+            local helper = function(x, w) return w/2-x*w/2+1.25*x end
+            if abx ~= 0 then pl_x, pl_y, pl_xf = helper(abx, nr.w), g_pl.y, abx < 0
+                        else pl_y, pl_x, pl_xf = helper(aby, nr.h)+.25, g_pl.x, g_pl.xf end
+        else
+            pl_x, pl_y, pl_xf = LOST_ROOM_START_X, LOST_ROOM_START_Y, g_pl.xf
+            nri = LOST_ROOM_INDEX
+        end
 
-            zcall(poke, [[
-                1;,MEM_ROOM_IND,@;
-                2;,MEM_PL_X,@;
-                3;,MEM_PL_Y,@;
-                4;,MEM_PL_XF,@;
-            ]], nri,
-                pl_x*POS_MULTIPLIER_FOR_MEMORY,
-                pl_y*POS_MULTIPLIER_FOR_MEMORY,
-                pl_xf and 1 or 0
-            )
-
-            state:load'room'
-        end)
+        load_room(nri, pl_x, pl_y, pl_xf)
     end
 end $$
 
@@ -76,9 +63,6 @@ end $$
     draw_room(g_rooms[peek'MEM_ROOM_IND'], CARD_CX, CARD_CY, function()
         zcall(loop_entities, [[
             1;,drawlayer_50, draw;
-            2;,drawlayer_60, draw;
-            3;,drawlayer_70, draw;
-            4;,drawlayer_75, draw;
         ]])
 
         -- DEBUG_BEGIN

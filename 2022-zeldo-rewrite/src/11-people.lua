@@ -1,3 +1,20 @@
+function load_room(rind, x, y, xf)
+    _g.fader_out(function()
+        zcall(poke, [[
+            1;,MEM_ROOM_IND, @;
+            2;,MEM_PL_X,     @;
+            3;,MEM_PL_Y,     @;
+            4;,MEM_PL_XF,    @;
+        ]], rind,
+            x*POS_MULTIPLIER_FOR_MEMORY,
+            y*POS_MULTIPLIER_FOR_MEMORY,
+            xf and 1 or 0
+        )
+
+        g_state:load'room'
+    end)
+end
+
 zclass[[person,actor,solid,simple_spr,drawlayer_50|
     text,,rx,.375,ry,.375,
     init,%person_init
@@ -11,14 +28,8 @@ zclass[[person,actor,solid,simple_spr,drawlayer_50|
             if not a.stat then a.stat = _g.stat(1, 119, a) end
             if btnp'4' and not does_entity_exist'tbox' then
                 _g.tbox(a.text, function()
-                    zcall(poke, [[
-                        1;,MEM_PL_X,@;
-                        2;,MEM_PL_Y,@;
-                        3;,MEM_PL_XF,@;
-                        4;,MEM_IS_NAVY_HOME,1;
-                    ]],  g_pl.x*POS_MULTIPLIER_FOR_MEMORY, g_pl.y*POS_MULTIPLIER_FOR_MEMORY, g_pl.xf and 1 or 0)
-
-                    _g.fader_out(function() g_state:load'room' end)
+                    poke(MEM_IS_NAVY_HOME, 1)
+                    load_room(%MEM_ROOM_IND, g_pl.x, g_pl.y, g_pl.xf)
                 end)
             end
         end
