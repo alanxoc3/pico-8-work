@@ -38,19 +38,21 @@ end $$
     if not g_pl:inside(g_room_bounds) then
         local abx, aby = g_pl:abside(g_room_bounds)
         local nri = peek'MEM_ROOM_IND' + aby*16+abx
-        local nr = g_rooms[nri]
-        local pl_x, pl_y, pl_xf
+        local pl_x, pl_y, pl_xf = g_pl.x, g_pl.y, g_pl.xf
 
+        -- if currently in a small room
         if peek'MEM_ROOM_IND' > LAST_ROOM_INDEX then
-            pl_x, pl_y, pl_xf = peek'MEM_RET_PL_X'/POS_MULTIPLIER_FOR_MEMORY, peek'MEM_RET_PL_Y'/POS_MULTIPLIER_FOR_MEMORY, g_pl.xf
-            nri = peek'MEM_RET_ROOM_IND' 
-        elseif nr then
+            nri, pl_x, pl_y = peek'MEM_RET_ROOM_IND', peek'MEM_RET_PL_X'/POS_MULTIPLIER_FOR_MEMORY, peek'MEM_RET_PL_Y'/POS_MULTIPLIER_FOR_MEMORY
+
+        -- if the adjacent room does exist
+        elseif g_rooms[nri] then
             local helper = function(x, w) return w/2-x*w/2+1.25*x end
-            if abx ~= 0 then pl_x, pl_y, pl_xf = helper(abx, nr.w), g_pl.y, abx < 0
-                        else pl_y, pl_x, pl_xf = helper(aby, nr.h)+.25, g_pl.x, g_pl.xf end
+            if abx ~= 0 then pl_x, pl_y, pl_xf = helper(abx, ROOM_W),     pl_y, abx < 0
+                        else pl_y, pl_x, pl_xf = helper(aby, ROOM_H)+.25, pl_x, pl_xf end
+
+        -- if the adjacent room doesn't exist
         else
-            pl_x, pl_y, pl_xf = LOST_ROOM_START_X, LOST_ROOM_START_Y, g_pl.xf
-            nri = LOST_ROOM_INDEX
+            nri, pl_x, pl_y = LOST_ROOM_INDEX, LOST_ROOM_START_X, LOST_ROOM_START_Y
         end
 
         load_room(nri, pl_x, pl_y, pl_xf)
@@ -84,3 +86,20 @@ end $$
         1;,18,6,109,11,@,0,8,2
     ]], g_pl.energy)
 end $$
+
+function load_room(rind, x, y, xf)
+    _g.fader_out(function()
+        zcall(poke, [[
+            1;,MEM_ROOM_IND, @;
+            2;,MEM_PL_X,     @;
+            3;,MEM_PL_Y,     @;
+            4;,MEM_PL_XF,    @;
+        ]], rind,
+            x*POS_MULTIPLIER_FOR_MEMORY,
+            y*POS_MULTIPLIER_FOR_MEMORY,
+            xf and 1 or 0
+        )
+
+        g_state:load'room'
+    end)
+end

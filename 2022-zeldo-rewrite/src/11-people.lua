@@ -1,20 +1,3 @@
-function load_room(rind, x, y, xf)
-    _g.fader_out(function()
-        zcall(poke, [[
-            1;,MEM_ROOM_IND, @;
-            2;,MEM_PL_X,     @;
-            3;,MEM_PL_Y,     @;
-            4;,MEM_PL_XF,    @;
-        ]], rind,
-            x*POS_MULTIPLIER_FOR_MEMORY,
-            y*POS_MULTIPLIER_FOR_MEMORY,
-            xf and 1 or 0
-        )
-
-        g_state:load'room'
-    end)
-end
-
 zclass[[person,actor,solid,simple_spr,drawlayer_50|
     text,,rx,.375,ry,.375,
     init,%person_init

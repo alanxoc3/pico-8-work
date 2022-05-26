@@ -452,18 +452,15 @@ zcall(loop_entities,[[1;,timer,tick;2;,actor,state;3;,mov,mov_update;4;,collidab
 if not g_pl:inside(g_room_bounds)then
 local abx,aby=g_pl:abside(g_room_bounds)
 local nri=peek"0x5d01"+aby*16+abx
-local nr=g_rooms[nri]
-local pl_x,pl_y,pl_xf
+local pl_x,pl_y,pl_xf=g_pl.x,g_pl.y,g_pl.xf
 if peek"0x5d01">223 then
-pl_x,pl_y,pl_xf=peek"0x5d06"/16,peek"0x5d07"/16,g_pl.xf
-nri=peek"0x5d05"
-elseif nr then
+nri,pl_x,pl_y=peek"0x5d05",peek"0x5d06"/16,peek"0x5d07"/16
+elseif g_rooms[nri]then
 local helper=function(x,w)return w/2-x*w/2+1.25*x end
-if abx ~=0 then pl_x,pl_y,pl_xf=helper(abx,nr.w),g_pl.y,abx<0
-else pl_y,pl_x,pl_xf=helper(aby,nr.h)+.25,g_pl.x,g_pl.xf end
+if abx ~=0 then pl_x,pl_y,pl_xf=helper(abx,12),pl_y,abx<0
+else pl_y,pl_x,pl_xf=helper(aby,10)+.25,pl_x,pl_xf end
 else
-pl_x,pl_y,pl_xf=6,5,g_pl.xf
-nri=151
+nri,pl_x,pl_y=151,6,5
 end
 load_room(nri,pl_x,pl_y,pl_xf)
 end
@@ -678,16 +675,6 @@ zclass[[tbox,vec,actor,drawlayer_99|rawtext,@,destroyed,@,y,138,cur_text_index,1
 zclass[[fairy,actor,mov,drawlayer_50|rel_actor,@,x,@,y,@,cname,ivan,cspr,9,update,%fairy_update,draw,%fairy_draw]]
 zclass[[house,actor,simple_spr,drawlayer_50|cspr,174,sind,174,sw,2,sh,2,room,231,init,%house_init]]
 zclass[[housetest,house|x,@,y,@]]
-function load_room(rind,x,y,xf)
-_g.fader_out(function()
-zcall(poke,[[1;,0x5d01,@;2;,0x5d02,@;3;,0x5d03,@;4;,0x5d04,@;]],rind,
-x*16,
-y*16,
-xf and 1 or 0
-)
-g_state:load"room"
-end)
-end
 zclass[[person,actor,solid,simple_spr,drawlayer_50|text,,rx,.375,ry,.375,init,%person_init]]
 zclass[[navyblock,person|x,@,y,@,sy,-2,cname,navy,cspr,97,sind,97,text,my sister has been in^the forest all day.^find something to^protect yourself with^and bring her home.|0x5d09|0]]
 zclass[[sign,actor,solid,simple_spr,drawlayer_50|text,,rx,.375,ry,.375,sy,-2,cname,sign,cspr,24,sind,24,init,%sign_init]]
@@ -700,6 +687,16 @@ pal(c,g_fade_table[c][1+flr(7*min(1,max(0,threshold)))],1)
 end
 end
 zclass[[room_bounds,box|x,@,y,@,rx,@,ry,@]]
+function load_room(rind,x,y,xf)
+_g.fader_out(function()
+zcall(poke,[[1;,0x5d01,@;2;,0x5d02,@;3;,0x5d03,@;4;,0x5d04,@;]],rind,
+x*16,
+y*16,
+xf and 1 or 0
+)
+g_state:load"room"
+end)
+end
 zclass[[title_logo,actor,auto_outline,drawlayer_99|update,%title_logo_update,drawout,%title_logo_drawout;]]
 cartdata"zeldo_rewrite"
 menuitem(1,"reset save data",function()

@@ -20,8 +20,8 @@ cat mapbuilder.lua | rg INDEX | rg -o '"\w+"' | rg -o '\w+' | tr '\n' ','
 Next: combine sign and person logic
 
 ```
-2022-05-26 -- tile sprite flags
-    4421 4515 4511 4512 4504
+2022-05-26 -- tileflags tokencrunch
+    4421 4515 4511 4512 4504 4495
 
 2022-05-25 -- isorty memcondcreate navy fairypolish
     4265 4263 4323 4311 4307 4317 4375 4466 4423 4421
