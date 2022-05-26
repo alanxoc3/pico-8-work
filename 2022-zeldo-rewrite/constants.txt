@@ -71,6 +71,7 @@ SPR_BOW:    7
 SPR_BANJO:  1
 SPR_SWORD:  2
 SPR_BOWL:   8
+SPR_NAVY:   97
 
 # A zdset/get takes 0-255. So to have decimal places, use the multiplier.
 # This is like the precision to store the position.
@@ -89,17 +90,19 @@ MEM_PL_XF:         0x5d04
 MEM_RET_ROOM_IND:  0x5d05
 MEM_RET_PL_X:      0x5d06
 MEM_RET_PL_Y:      0x5d07
-
 MEM_ITEM_INDEX:    0x5d08
 
-MEM_HAS_BOWL:    5
-MEM_HAS_BRANG:   6
-MEM_HAS_BOMB:    7
-MEM_HAS_SHIELD:  8
-MEM_HAS_BOW:     9
-MEM_HAS_MASK:    10
-MEM_HAS_SWORD:   11
-MEM_HAS_BANJO:   12
+MEM_IS_NAVY_HOME:  0x5d09
 
-# Texts
-TEXT_SIGNTEST: mary had a^little lamb^little lamb^little lamb^mary had a^little lamb^whose fleece was^white as yo face
+MEM_HAS_BOWL:    0x5d10
+MEM_HAS_BRANG:   0x5d11
+MEM_HAS_BOMB:    0x5d12
+MEM_HAS_SHIELD:  0x5d13
+MEM_HAS_BOW:     0x5d14
+MEM_HAS_MASK:    0x5d15
+MEM_HAS_SWORD:   0x5d16
+MEM_HAS_BANJO:   0x5d17
+
+# Texts, max 22 chars
+TEXT_SIGNTEST:   mary had a^little lamb^little lamb^little lamb^mary had a^little lamb^whose fleece was^white as yo face
+TEXT_NAVY_BLOCK: my sister has been in^the forest all day.^find something to^protect yourself with^and bring her home.

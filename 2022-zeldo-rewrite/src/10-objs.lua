@@ -5,10 +5,10 @@ zclass[[wall,solid,anchor|anchoring,@,offx,@,offy,@,rx,@,ry,@]]
 
 zclass[[simple_spr,auto_outline,pos|
     drawout,%simple_spr_draw,
-    sind,0, sw,1, sh,1, xf,no, yf,no
+    sind,0, sw,1, sh,1, xf,no, yf,no, sx,0, sy,0
 ]]
 |simple_spr_draw| function(a)
-    zspr(a.cspr, a.x*8, a.y*8, a.sw, a.sh, a.xf, a.yf)
+    zspr(a.cspr, a.x*8+a.sx, a.y*8+a.sy, a.sw, a.sh, a.xf, a.yf)
 end $$
 
 zclass[[anchor,pos|
