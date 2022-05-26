@@ -38,22 +38,20 @@ end $$
     if not g_pl:inside(g_room_bounds) then
         local abx, aby = g_pl:abside(g_room_bounds)
         local nri = peek'MEM_ROOM_IND' + aby*16+abx
-        local pl_x, pl_y, pl_xf = g_pl.x, g_pl.y, g_pl.xf
 
         -- if currently in a small room
         if peek'MEM_ROOM_IND' > LAST_ROOM_INDEX then
-            load_room(peek'MEM_RET_ROOM_IND', peek'MEM_RET_PL_X'/POS_MULTIPLIER_FOR_MEMORY, peek'MEM_RET_PL_Y'/POS_MULTIPLIER_FOR_MEMORY, pl_xf)
+            load_room(peek'MEM_RET_ROOM_IND', peek'MEM_RET_PL_X'/POS_MULTIPLIER_FOR_MEMORY, peek'MEM_RET_PL_Y'/POS_MULTIPLIER_FOR_MEMORY, g_pl.xf)
 
         -- if the adjacent room does exist
         elseif g_rooms[nri] then
-            local helper = function(x, w) return w/2-x*w/2+1.25*x end
-            if abx ~= 0 then load_room(nri, helper(abx, ROOM_W),     pl_y, abx < 0)
-                        else load_room(nri, pl_x, helper(aby, ROOM_H)+.25, pl_xf)
+            if abx ~= 0 then load_room(nri, ROOM_RX-abx*ROOM_RX+1.25*abx, g_pl.y, abx < 0)
+                        else load_room(nri, g_pl.x, ROOM_RY-aby*ROOM_RY+1.25*aby, g_pl.xf)
             end
 
         -- if the adjacent room doesn't exist
         else
-            load_room(LOST_ROOM_INDEX, LOST_ROOM_START_X, LOST_ROOM_START_Y, pl_xf)
+            load_room(LOST_ROOM_INDEX, LOST_ROOM_START_X, LOST_ROOM_START_Y, g_pl.xf)
         end
     end
 end $$

@@ -452,16 +452,14 @@ zcall(loop_entities,[[1;,timer,tick;2;,actor,state;3;,mov,mov_update;4;,collidab
 if not g_pl:inside(g_room_bounds)then
 local abx,aby=g_pl:abside(g_room_bounds)
 local nri=peek"0x5d01"+aby*16+abx
-local pl_x,pl_y,pl_xf=g_pl.x,g_pl.y,g_pl.xf
 if peek"0x5d01">223 then
-load_room(peek"0x5d05",peek"0x5d06"/16,peek"0x5d07"/16,pl_xf)
+load_room(peek"0x5d05",peek"0x5d06"/16,peek"0x5d07"/16,g_pl.xf)
 elseif g_rooms[nri]then
-local helper=function(x,w)return w/2-x*w/2+1.25*x end
-if abx ~=0 then load_room(nri,helper(abx,12),pl_y,abx<0)
-else load_room(nri,pl_x,helper(aby,10)+.25,pl_xf)
+if abx ~=0 then load_room(nri,6-abx*6+1.25*abx,g_pl.y,abx<0)
+else load_room(nri,g_pl.x,5-aby*5+1.25*aby,g_pl.xf)
 end
 else
-load_room(151,6,5,pl_xf)
+load_room(151,6,5,g_pl.xf)
 end
 end
 end,function(state)
