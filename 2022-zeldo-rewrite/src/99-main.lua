@@ -23,6 +23,7 @@ zclass[[game_state,actor|
 end $$
 
 function _init()
+    g_i=0
     memcpy(MEM_SAVE_LOCATION, REAL_SAVE_LOCATION, SAVE_LENGTH)
 
     if peek'MEM_SAVE_DATA' == 0 then

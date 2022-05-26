@@ -5,16 +5,32 @@
 --   objects: {{x:0, y:0, index:0}...},
 --   color:0, music:0,
 -- }
+
+function loop_through_tiles(room, func)
+    for tiles in all{room.tiles_1, room.tiles_2} do
+        for location, index in pairs(tiles) do
+            local x, y = location%ROOM_W, location\ROOM_W
+            func(lookup_tile_animation(index), x*8, y*8)
+        end
+    end
+end
+
 function draw_room(room, center_x, center_y, post_tile_func, post_card_func)
     local x1, y1 = center_x-room.w*8\2, center_y-room.h*8\2
     draw_card(center_x, center_y, room.w*4-2, room.h*4-2, -2, -2, function()
         rectfill(0, 0, 127, 127, room.color)
-        for tiles in all{room.tiles_1, room.tiles_2} do
-            for location, index in pairs(tiles) do
-                local x, y = location%ROOM_W, location\ROOM_W
-                spr(lookup_tile_animation(index), x*8, y*8)
+
+        loop_through_tiles(room, function(sind, x, y)
+            if not fget(sind, 1) then
+                spr(sind, x, y)
             end
-        end
+            -- DEBUG_BEGIN
+            if g_debug then
+                rect(x+1, y+1, x+6, y+6, 0)
+            end
+            -- DEBUG_END
+        end)
+
         post_tile_func(x1, y1)
     end, post_card_func)
 end
@@ -35,3 +51,12 @@ function lookup_tile_animation(sind)
     local anim = g_tile_animation_lookup[sind]
     return anim and anim[g_i%#anim+1] or sind
 end
+
+zclass[[tiledraw,pos,drawlayer_50|
+    sind,@, x,@, y,@,
+    draw,%tiledraw_draw
+]]
+
+|[tiledraw_draw]| function(a)
+    zspr(a.sind, a.x*8, a.y*8)
+end $$

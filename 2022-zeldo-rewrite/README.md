@@ -9,12 +9,22 @@ cat mapbuilder.lua | rg INDEX | rg -o '"\w+"' | rg -o '\w+' | tr '\n' ','
 | ccl
 ```
 
+## Sprite Flag Reference
+```
+0: solid
+1: y with actors
+2: rx=.375 ry=.375 (default is .5)
+```
+
 ## Tokens & Features
 Next: combine sign and person logic
 
 ```
+2022-05-26 -- tile sprite flags
+    4421 4515
+
 2022-05-25 -- isorty memcondcreate navy fairypolish
-    4265 4263 4323 4311 4307 4317 4375 4466
+    4265 4263 4323 4311 4307 4317 4375 4466 4423 4421
 
 2022-05-24 -- house savelogic
     4198 4183 4250 4344 4355 4296 4265

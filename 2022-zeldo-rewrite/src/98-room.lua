@@ -7,9 +7,13 @@ zclass[[room_bounds,box|x,@,y,@,rx,@,ry,@]]
     g_pl = _g.pl(peek'MEM_PL_X'/POS_MULTIPLIER_FOR_MEMORY, peek'MEM_PL_Y'/POS_MULTIPLIER_FOR_MEMORY, peek'MEM_PL_XF'>0)
     g_fairy = _g.fairy(g_pl, g_pl.x, g_pl.y-.125)
     _g.stat(1, 119, g_fairy)
-
-
     _g.inventory(g_pl)
+
+    loop_through_tiles(r, function(sind, x, y)
+        if fget(sind, 1) then
+            _g.tiledraw(sind, x/8+.5, y/8+.5-.25)
+        end
+    end)
 
     -- create the objects in the room
     foreach(r.objects, function(obj_template)

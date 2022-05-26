@@ -54,9 +54,9 @@ function draw_outline(color, drawfunc)
     for c=1,15 do pal(c,color) end
     -- cache the old camera coords and restore them
     local ox, oy = %0x5f28, %0x5f2a
-    for i=0,8 do
-        camera(ox+i%3-1, oy+i\3-1) drawfunc()
-    end
+    for y=-1,1 do for x=-1,1 do
+        camera(ox+x, oy+y) drawfunc()
+    end end
     camera(ox, oy)
     pal()
 end

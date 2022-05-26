@@ -139,7 +139,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,actor_deregistered,@,fader_out_update,@,fader_in_update,@,animation_init,@,auto_outline_draw,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,explode_draw,@,calc_deltas,@,adjust_deltas_for_solids,@,adjust_deltas_for_tiles,@,inventory_start_init,@,inventory_start_update,@,inventory_press_update,@,inventory_draw,@,simple_spr_draw,@,anchor_update_anchor,@,targettouch_update_target,@,pl_init,@,pl_update,@,pl_drawout,@,stat_draw,@,tbox_init,@,tbox_update,@,tbox_draw,@,fairy_update,@,fairy_draw,@,house_init,@,person_init,@,sign_init,@,gameover_control_update,@,gameover_init,@,gameover_draw,@,logo_init,@,logo_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,simple_update,@,title_draw,@,title_logo_update,@,title_logo_drawout,@,game_state_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,actor_deregistered,@,fader_out_update,@,fader_in_update,@,animation_init,@,auto_outline_draw,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,tiledraw_draw,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,explode_draw,@,calc_deltas,@,adjust_deltas_for_solids,@,adjust_deltas_for_tiles,@,inventory_start_init,@,inventory_start_update,@,inventory_press_update,@,inventory_draw,@,simple_spr_draw,@,anchor_update_anchor,@,targettouch_update_target,@,pl_init,@,pl_update,@,pl_drawout,@,stat_draw,@,tbox_init,@,tbox_update,@,tbox_draw,@,fairy_update,@,fairy_draw,@,house_init,@,person_init,@,sign_init,@,gameover_control_update,@,gameover_init,@,gameover_draw,@,logo_init,@,logo_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,simple_update,@,title_draw,@,title_logo_update,@,title_logo_drawout,@,game_state_init,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -192,6 +192,8 @@ end
 foreach(finished_timers,function(timer)
 timer.callback(a)
 end)
+end,function(a)
+zspr(a.sind,a.x*8,a.y*8)
 end,function(a,b)
 return not a:outside(b)and not a:inside(b)
 end,function(a,b)
@@ -256,10 +258,13 @@ local box={x=b.x-a.dx,y=b.y-a.dy,rx=b.rx,ry=b.ry}
 a.dx,a.dy=a:getdelta(box,a.dx,a.dy)
 end)
 end,function(a,room)
-for tx=flr(a.x-a.rx)-1,ceil(a.x+a.rx)do
+for tx=max(flr(a.x-a.rx)-1,0),min(ceil(a.x+a.rx),12-1)do
 for ty=flr(a.y-a.ry)-1,ceil(a.y+a.ry)do
-if is_solid_tile(room,tx,ty)then
-a.dx,a.dy=a:calc_deltas{x=tx+.5,y=ty+.5,rx=.5,ry=.5}
+local sind=get_solid_tile(room,ty*12+tx)
+if sind then
+local rx,ry=.5,.5
+if fget(sind,2)then rx,ry=.375,.375 end
+a.dx,a.dy=a:calc_deltas{x=tx+.5,y=ty+.5,rx=rx,ry=ry}
 end
 end
 end
@@ -437,6 +442,11 @@ g_pl=_g.pl(peek"0x5d02"/16,peek"0x5d03"/16,peek"0x5d04">0)
 g_fairy=_g.fairy(g_pl,g_pl.x,g_pl.y-.125)
 _g.stat(1,119,g_fairy)
 _g.inventory(g_pl)
+loop_through_tiles(r,function(sind,x,y)
+if fget(sind,1)then
+_g.tiledraw(sind,x/8+.5,y/8+.5-.25)
+end
+end)
 foreach(r.objects,function(obj_template)
 _g[g_obj_map[obj_template.index]](obj_template.x+.5,obj_template.y+.5)
 end)
@@ -472,11 +482,6 @@ end,function(state)
 isorty(g_zclass_entities["drawlayer_50"])
 draw_room(g_rooms[peek"0x5d01"],64,57,function()
 zcall(loop_entities,[[1;,drawlayer_50,draw;2;,drawlayer_60,draw;3;,drawlayer_70,draw;4;,drawlayer_75,draw;]])
-if g_debug then
-for inst in all(g_zclass_entities["box"])do
-scr_zrect(inst.x,inst.y,inst.rx,inst.ry,8)
-end
-end
 end,function()
 zcall(loop_entities,[[1;,drawlayer_90,draw;2;,drawlayer_95,draw;3;,drawlayer_99,draw;]])
 end)
@@ -569,9 +574,9 @@ zclass[[auto_outline|draw,%auto_outline_draw,outline_color,1]]
 function draw_outline(color,drawfunc)
 for c=1,15 do pal(c,color)end
 local ox,oy=%0x5f28,%0x5f2a
-for i=0,8 do
-camera(ox+i%3-1,oy+i\3-1)drawfunc()
-end
+for y=-1,1 do for x=-1,1 do
+camera(ox+x,oy+y)drawfunc()
+end end
 camera(ox,oy)
 pal()
 end
@@ -587,16 +592,23 @@ end
 end
 end
 zclass[[timer|timers;,;start_timer,%timer_start_timer,stop_timer,%timer_stop_timer,play_timer,%timer_play_timer,delete_timer,%timer_delete_timer,get_elapsed,%timer_get_elapsed,get_elapsed_percent,%timer_get_elapsed_percent,tick,%timer_tick,]]
+function loop_through_tiles(room,func)
+for tiles in all{room.tiles_1,room.tiles_2}do
+for location,index in pairs(tiles)do
+local x,y=location%12,location\12
+func(lookup_tile_animation(index),x*8,y*8)
+end
+end
+end
 function draw_room(room,center_x,center_y,post_tile_func,post_card_func)
 local x1,y1=center_x-room.w*8\2,center_y-room.h*8\2
 draw_card(center_x,center_y,room.w*4-2,room.h*4-2,-2,-2,function()
 rectfill(0,0,127,127,room.color)
-for tiles in all{room.tiles_1,room.tiles_2}do
-for location,index in pairs(tiles)do
-local x,y=location%12,location\12
-spr(lookup_tile_animation(index),x*8,y*8)
+loop_through_tiles(room,function(sind,x,y)
+if not fget(sind,1)then
+spr(sind,x,y)
 end
-end
+end)
 post_tile_func(x1,y1)
 end,post_card_func)
 end
@@ -615,6 +627,7 @@ function lookup_tile_animation(sind)
 local anim=g_tile_animation_lookup[sind]
 return anim and anim[g_i%#anim+1]or sind
 end
+zclass[[tiledraw,pos,drawlayer_50|sind,@,x,@,y,@,draw,%tiledraw_draw]]
 zclass[[box,pos|rx,0,ry,0,touching,%box_touching,inside,%box_inside,outside,%box_outside,side,%box_side,abside,%box_abside,getdelta,%box_getdelta]]
 function zsgn(num)
 return num==0 and 0 or sgn(num)
@@ -627,12 +640,11 @@ zclass[[pos|x,0,y,0,dist_point,%pos_dist_point]]
 zclass[[vec,pos|dx,0,dy,0,vec_update,%vec_update]]
 zclass[[mov,vec|ang,0,speed,0,mov_update,%mov_update,towards_point,%mov_towards_point]]
 zclass[[explode,actor,drawlayer_50|x,@,y,@,draw,%explode_draw;start;duration,.25;]]
-function is_solid_tile(room,x,y)
-if x>=0 and x<12 then
-local t2=room.tiles_2[y*12+x]
-if t2 then return fget(t2,0)end
-return fget(room.tiles_1[y*12+x],0)
-end
+function get_solid_tile(room,index)
+local t2=room.tiles_2[index]
+if t2 then return fget(t2,0)and t2 end
+t2=room.tiles_1[index]
+return fget(t2,0)and t2
 end
 zclass[[collidable,box,vec|calc_deltas,%calc_deltas,adjust_deltas_for_solids,%adjust_deltas_for_solids,adjust_deltas_for_tiles,%adjust_deltas_for_tiles]]
 zclass[[inventory,actor,drawlayer_90|pl,@;start;init,%inventory_start_init,update,%inventory_start_update,draw,nop;press;init,nop,update,%inventory_press_update,draw,%inventory_draw;1;mem_loc,0x5d11,index,0,name,brang,xoff,-7,yoff,-9,sind,4;2;mem_loc,0x5d15,index,1,name,mask,xoff,0,yoff,-11,sind,3;3;mem_loc,0x5d12,index,2,name,bomb,xoff,7,yoff,-9,sind,5;4;mem_loc,0x5d13,index,3,name,shield,xoff,-8,yoff,-3,sind,6;5;index,4;6;mem_loc,0x5d14,index,5,name,bow,xoff,9,yoff,-2,sind,7;7;mem_loc,0x5d17,index,6,name,banjo,xoff,-7,yoff,4,sind,1;8;mem_loc,0x5d16,index,7,name,sword,xoff,0,yoff,6,sind,2;9;mem_loc,0x5d10,index,8,name,bow,xoff,7,yoff,5,sind,8;]]
@@ -681,7 +693,7 @@ zclass[[house,actor,simple_spr,drawlayer_50|cspr,174,sind,174,sw,2,sh,2,room,231
 zclass[[housetest,house|x,@,y,@]]
 zclass[[person,actor,solid,simple_spr,drawlayer_50|text,,rx,.375,ry,.375,init,%person_init]]
 zclass[[navyblock,person|x,@,y,@,sy,-2,cname,navy,cspr,97,sind,97,text,my sister has been in^the forest all day.^find something to^protect yourself with^and bring her home.|0x5d09|0]]
-zclass[[sign,actor,solid,simple_spr,drawlayer_50|text,,rx,.375,ry,.375,sy,-2,cname,sign,cspr,171,sind,171,init,%sign_init]]
+zclass[[sign,actor,solid,simple_spr,drawlayer_50|text,,rx,.375,ry,.375,sy,-2,cname,sign,cspr,24,sind,24,init,%sign_init]]
 zclass[[signtest,sign|x,@,y,@,text,mary had a^little lamb^little lamb^little lamb^mary had a^little lamb^whose fleece was^white as yo face]]
 zclass[[gameover_control,actor|start;update,nop,duration,.5,next,normal;normal;update,%gameover_control_update;ending;update,nop;]]
 g_fade_table=zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,1,0,0,0,0;3;,3,3,3,3,1,1,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,0,0,0,0;6;,6,6,13,13,5,5,0,0;7;,7,7,6,13,13,5,0,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,0,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,0,0,0;13;,13,13,5,5,1,0,0,0;14;,14,14,13,4,2,2,0,0;15;,15,15,13,13,5,5,0,0;]]
@@ -699,6 +711,7 @@ extcmd"reset"
 end)
 zclass[[game_state,actor|ecs_exclusions;actor,yes,timer,yes;curr,room,init,%game_state_init;logo;state_init,%logo_init,update,%simple_update,draw,%logo_draw,duration,2.5,next,title;title;state_init,%title_init,update,%simple_update,draw,%title_draw;room;state_init,%room_init,update,%room_update,draw,%room_draw;gameover;state_init,%gameover_init,update,%simple_update,draw,%gameover_draw;]]
 function _init()
+g_i=0
 memcpy(0x5d00,0x5e00,64)
 if peek"MEM_SAVE_DATA"==0 then
 zcall(poke,[[1;,MEM_SAVE_DATA,1;2;,0x5d01,136;3;,0x5d02,48;4;,0x5d03,48;5;,0x5d04,1;6;,0x5d08,4;]])
@@ -708,7 +721,6 @@ g_state,g_rooms=_g.game_state(),decode_map()
 g_tile_animation_lookup=create_tile_animation_lookup(g_rooms[0])
 end
 function _update60()
-if btn(4)and btnp(5)then g_debug=not g_debug end
 zcall(loop_entities,[[1;,actor,clean;2;,fader,clean;]])
 register_entities()
 zcall(loop_entities,[[1;,fader,tick;2;,game_state,tick;3;,fader,state;4;,game_state,state;]])
@@ -718,7 +730,4 @@ g_i=g_animation.index
 cls()
 loop_entities("game_state","draw")
 fade(g_fade)
-if g_debug then
-zcall(rect,[[1;,17,12,110,18,1;2;,17,95,110,101,1;3;,17,0,110,5,1;4;,17,122,110,127,1;5;,0,0,17,127,1;6;,110,0,127,127,1;]])
-end
 end
