@@ -51,7 +51,7 @@ end $$
 
         -- if the adjacent room doesn't exist
         else
-            load_room(LOST_ROOM_INDEX, LOST_ROOM_START_X, LOST_ROOM_START_Y, g_pl.xf)
+            zcall(load_room, [[1;,LOST_ROOM_INDEX,LOST_ROOM_START_X,LOST_ROOM_START_Y,@;]], g_pl.xf) 
         end
     end
 end $$
