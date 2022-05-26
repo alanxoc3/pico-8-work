@@ -3,10 +3,11 @@ zclass[[room_bounds,box|x,@,y,@,rx,@,ry,@]]
 |[room_init]| function(state) 
     local r = g_rooms[peek'MEM_ROOM_IND']
     g_room_bounds = _g.room_bounds(r.w/2, r.h/2+.25, r.w/2+.125, r.h/2+.125)
-    g_pl = _g.pl(peek'MEM_PL_X'/POS_MULTIPLIER_FOR_MEMORY, peek'MEM_PL_Y'/POS_MULTIPLIER_FOR_MEMORY, peek'MEM_PL_XF'>0)
 
-    local abx, aby = g_pl:abside(g_room_bounds)
-    g_fairy = _g.fairy(g_pl, g_pl.x+abx*1.25, g_pl.y+aby*1.25)
+    g_pl = _g.pl(peek'MEM_PL_X'/POS_MULTIPLIER_FOR_MEMORY, peek'MEM_PL_Y'/POS_MULTIPLIER_FOR_MEMORY, peek'MEM_PL_XF'>0)
+    g_fairy = _g.fairy(g_pl, g_pl.x, g_pl.y-.125)
+    _g.stat(1, 119, g_fairy)
+
 
     _g.inventory(g_pl)
 

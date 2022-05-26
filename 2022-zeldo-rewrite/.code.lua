@@ -434,8 +434,8 @@ end,function(state)
 local r=g_rooms[peek"0x5d01"]
 g_room_bounds=_g.room_bounds(r.w/2,r.h/2+.25,r.w/2+.125,r.h/2+.125)
 g_pl=_g.pl(peek"0x5d02"/16,peek"0x5d03"/16,peek"0x5d04">0)
-local abx,aby=g_pl:abside(g_room_bounds)
-g_fairy=_g.fairy(g_pl,g_pl.x+abx*1.25,g_pl.y+aby*1.25)
+g_fairy=_g.fairy(g_pl,g_pl.x,g_pl.y-.125)
+_g.stat(1,119,g_fairy)
 _g.inventory(g_pl)
 foreach(r.objects,function(obj_template)
 _g[g_obj_map[obj_template.index]](obj_template.x+.5,obj_template.y+.5)
@@ -676,11 +676,11 @@ zcamera(cam_x,cam_y,post_card_func)
 end
 zclass[[stat,vec,actor,drawlayer_95|align,@,x,@,obj,@,y,138,draw,%stat_draw,max_health,10,health,5;start;dy,-2,duration,.2,next,normal;normal;dy,0;ending;dy,2,duration,.2;]]
 zclass[[tbox,vec,actor,drawlayer_99|rawtext,@,destroyed,@,y,138,cur_text_index,1,anim,0,line_1,,line_2,,update,%tbox_update,draw,%tbox_draw;texts;,;start;dy,-2,duration,.2,next,normal,update,nop,init,%tbox_init;normal;dy,0,anim,0,done,no,update,%tbox_update,init,nop;ending;dy,2,update,nop,duration,.2,init,nop;]]
-zclass[[fairy,actor,mov,drawlayer_70|rel_actor,@,x,@,y,@,update,%fairy_update,draw,%fairy_draw]]
+zclass[[fairy,actor,mov,drawlayer_50|rel_actor,@,x,@,y,@,cname,ivan,cspr,9,update,%fairy_update,draw,%fairy_draw]]
 zclass[[house,actor,simple_spr,drawlayer_50|cspr,174,sind,174,sw,2,sh,2,room,231,init,%house_init]]
 zclass[[housetest,house|x,@,y,@]]
-zclass[[person,actor,solid,simple_spr,drawlayer_50|text,,rx,.375,ry,.375,cspr,97,init,%person_init]]
-zclass[[navyblock,person|x,@,y,@,sy,-2,cname,navy,sind,97,text,my sister has been in^the forest all day.^find something to^protect yourself with^and bring her home.|0x5d09|0]]
+zclass[[person,actor,solid,simple_spr,drawlayer_50|text,,rx,.375,ry,.375,init,%person_init]]
+zclass[[navyblock,person|x,@,y,@,sy,-2,cname,navy,cspr,97,sind,97,text,my sister has been in^the forest all day.^find something to^protect yourself with^and bring her home.|0x5d09|0]]
 zclass[[sign,actor,solid,simple_spr,drawlayer_50|text,,rx,.375,ry,.375,cname,sign,cspr,171,sind,171,init,%sign_init]]
 zclass[[signtest,sign|x,@,y,@,text,mary had a^little lamb^little lamb^little lamb^mary had a^little lamb^whose fleece was^white as yo face]]
 zclass[[gameover_control,actor|start;update,nop,duration,.5,next,normal;normal;update,%gameover_control_update;ending;update,nop;]]

@@ -1,5 +1,7 @@
-zclass[[fairy,actor,mov,drawlayer_70|
+zclass[[fairy,actor,mov,drawlayer_50|
     rel_actor,@, x,@, y,@,
+    cname, ivan,
+    cspr, SPR_FAIRY_CARD,
     update,%fairy_update,
     draw,%fairy_draw
 ]]

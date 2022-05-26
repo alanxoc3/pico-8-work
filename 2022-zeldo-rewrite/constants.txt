@@ -72,6 +72,7 @@ SPR_BANJO:  1
 SPR_SWORD:  2
 SPR_BOWL:   8
 SPR_NAVY:   97
+SPR_FAIRY_CARD: 9
 
 # A zdset/get takes 0-255. So to have decimal places, use the multiplier.
 # This is like the precision to store the position.

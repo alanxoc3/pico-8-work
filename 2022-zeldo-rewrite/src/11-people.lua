@@ -1,6 +1,5 @@
 zclass[[person,actor,solid,simple_spr,drawlayer_50|
     text,,rx,.375,ry,.375,
-    cspr,SPR_NAVY,
     init,%person_init
 ]]
 
@@ -31,6 +30,7 @@ zclass[[navyblock,person|
     x,@, y,@,
     sy,-2,
     cname,"navy",
+    cspr,SPR_NAVY,
     sind,SPR_NAVY,
     text,"TEXT_NAVY_BLOCK"
 |MEM_IS_NAVY_HOME|0
