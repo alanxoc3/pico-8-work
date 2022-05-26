@@ -1,3 +1,6 @@
+-- used everywhere
+function nop() end
+
 -- 193 tokens
 function zobj_eval(val, table, parameters)
     -- 37: %, 126: ~
@@ -6,7 +9,7 @@ function zobj_eval(val, table, parameters)
     elseif val == '@'                   then return deli(parameters, 1)
     elseif val == 'yes'  or val == 'no' then return val=='yes'
     elseif val == 'null' or val == ''   then return -- nil is inferred
-    elseif val == 'nop'                 then return function() end
+    elseif val == 'nop'                 then return nop
     end                                      return val
 end
 

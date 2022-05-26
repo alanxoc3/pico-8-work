@@ -1,14 +1,10 @@
 zclass[[gameover_control,actor|
-    start;update,nop,duration,FADE_SPEED,next,normal;
-    normal;update,%gameover_control_update;
-    ending;update,nop;
+    start;duration,.75, next,ending;
+    ending;init,%gameover_control_ending;
 ]]
 
-|[gameover_control_update]| function(a)
-    if btnp(4) or btnp(5) then
-        _g.fader_out(function() g_state:load'title' end)
-        a:load'ending'
-    end
+|[gameover_control_ending]| function(a)
+    _g.fader_out(function() g_state:load'title' end)
 end $$
 
 |[gameover_init]| function(state)
@@ -16,7 +12,7 @@ end $$
     state.game_over_sind, state.game_over_text = unpack(rnd_item(zobj[[
         1;,32,  "quack quack";
         2;,68,  "and play with me";
-        3;,70,  "to save hi-roll";
+        3;,9,  "to save hi-roll";
         4;,81,  "in time for dinner";
         5;,83,  "and make me rich";
         6;,96,  "the banjo awaits you";
@@ -26,13 +22,16 @@ end $$
 end $$
 
 |[gameover_draw]| function(state)
-    zcamera(64, 64, function()
-        zsprb(state.game_over_sind, 0, g_i%2, 1, 1, true, false, 1)
+    local drawfunc = function()
+        zspr(state.game_over_sind, 0, g_i%2, 1, 1, true, false, 1)
+    end
 
-        zcall(zprintgui, [[
-            1;,"game over",      0, -17, 8, 2, 1;
-            2;,"come back lank", 0, 12, 10, 4, 1;
-            3;,@,                0, 22, 7,  5, 1
-        ]], state.game_over_text)
-    end)
+    zcall(zprinttbox, [[
+        1;,"come back lank", 64, 38,0,  10, 4, 1;
+        2;,@,                64, 69, 0, 7, 5, 1;
+    ]], state.game_over_text)
+
+    draw_card(64, 56+g_i%2, 6, 8, 2, 4, function()
+        spr(state.game_over_sind, 0, 0)
+    end, nop)
 end $$

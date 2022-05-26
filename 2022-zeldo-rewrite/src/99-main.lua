@@ -7,7 +7,7 @@ end)
 
 zclass[[game_state,actor|
     ecs_exclusions;actor,yes,timer,yes; -- remove game_state from the actor group
-    curr,room, init,%game_state_init;
+    curr,gameover, init,%game_state_init;
 
     logo;     state_init,%logo_init,     update,%simple_update, draw,%logo_draw, duration,2.5, next,title;
     title;    state_init,%title_init,    update,%simple_update, draw,%title_draw;
@@ -23,7 +23,6 @@ zclass[[game_state,actor|
 end $$
 
 function _init()
-    g_i=0
     memcpy(MEM_SAVE_LOCATION, REAL_SAVE_LOCATION, SAVE_LENGTH)
 
     if peek'MEM_SAVE_DATA' == 0 then
@@ -38,7 +37,7 @@ function _init()
     end
 
     poke2(0x5f5c, BTN_DELAY) -- set custom delay
-    g_state, g_rooms = _g.game_state(), decode_map()
+    g_i, g_state, g_rooms = 0, _g.game_state(), decode_map()
     g_tile_animation_lookup = create_tile_animation_lookup(g_rooms[ANIMATION_ROOM_INDEX])
 end
 

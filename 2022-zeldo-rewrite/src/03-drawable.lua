@@ -6,26 +6,6 @@ zclass[[drawlayer_90|]] -- above the card, stat
 zclass[[drawlayer_95|]] -- above the card, inventory
 zclass[[drawlayer_99|]] -- above the card, title, textbox
 
-zclass[[fader,actor|
-    ecs_exclusions;actor,yes,timer,yes; -- remove game_state from the actor group
-]]
-
-zclass[[fader_out,fader|
-    start; duration,FADE_SPEED, destroyed,@, update,%fader_out_update
-]]
-
-|[fader_out_update]| function(a)
-    g_fade = a:get_elapsed_percent'state'
-end $$
-
-zclass[[fader_in,fader|
-    start; duration,FADE_SPEED, update,%fader_in_update
-]]
-
-|[fader_in_update]| function(a)
-    g_fade = 1 - a:get_elapsed_percent'state'
-end $$
-
 -- just a common timer so animation syncs between everything
 zclass[[animation,actor|
     index,0,
@@ -61,13 +41,11 @@ end
 
 -- sort based on y position for some draw layers
 function isorty(t)
-    if t then
-        for n=2,#t do
-            local i=n
-            while i>1 and t[i].y<t[i-1].y do
-                t[i],t[i-1]=t[i-1],t[i]
-                i=i-1
-            end
+    for n=2,#t do
+        local i=n
+        while i>1 and t[i].y<t[i-1].y do
+            t[i],t[i-1]=t[i-1],t[i]
+            i=i-1
         end
     end
 end

@@ -28,6 +28,26 @@ function fade(threshold)
     end
 end
 
+zclass[[fader,actor|
+    ecs_exclusions;actor,yes,timer,yes; -- remove game_state from the actor group
+]]
+
+zclass[[fader_out,fader|
+    start; duration,FADE_SPEED, destroyed,@, update,%fader_out_update
+]]
+
+|[fader_out_update]| function(a)
+    g_fade = a:get_elapsed_percent'state'
+end $$
+
+zclass[[fader_in,fader|
+    start; duration,FADE_SPEED, update,%fader_in_update
+]]
+
+|[fader_in_update]| function(a)
+    g_fade = 1 - a:get_elapsed_percent'state'
+end $$
+
 |[logo_init]| function() sfx(63, 0) end $$
 
 |[logo_draw]| function(a)

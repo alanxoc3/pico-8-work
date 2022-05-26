@@ -26,7 +26,7 @@ function decode_map()
         room.color = 0x0f & @cur_loc
         room.music = 0xf0 & peek_inc() >>> 4
 
-        local byte, is_fill, is_tile, layer, ind, offx, offy = 0, false, true, room.tiles_1, 0, 0, 0
+        local byte, is_tile, layer, ind, offx, offy, is_fill = 0, true, room.tiles_1, 0, 0, 0
         while byte ~= CON_END do
             byte = peek_inc()
 

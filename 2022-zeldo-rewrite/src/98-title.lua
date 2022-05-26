@@ -11,7 +11,7 @@ end $$
 end $$
 
 |[title_draw]| function()
-    draw_room(g_rooms[8*16+8], CARD_CX, CARD_CY, nop, nop)
+    draw_room(g_rooms[TITLE_ROOM_INDEX], CARD_CX, CARD_CY, nop, nop)
     zcall(loop_entities, [[
         1;,drawlayer_99, draw;
     ]])
