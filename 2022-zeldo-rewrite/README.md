@@ -5,8 +5,7 @@ help him save the Land of Hi-roll from the forces of evil.
 ## Useful Snippet
 Use this to update the list of things from mapbuilder:
 ```
-cat mapbuilder.lua | rg INDEX | rg -o '"\w+"' | rg -o '\w+' | tr '\n' ','
-| ccl
+cat mapbuilder.lua | rg INDEX | rg -o '"\w+"' | rg -o '\w+' | tr '\n' ',' | ccl
 ```
 
 ## Sprite Flag Reference
@@ -17,7 +16,7 @@ cat mapbuilder.lua | rg INDEX | rg -o '"\w+"' | rg -o '\w+' | tr '\n' ','
 ```
 
 ## Tokens & Features
-TODO: hmm
+TODO: Merge the mapbuilder list with the decoder one.
 
 ```
 2022-05-26 -- tileflags tokencrunch

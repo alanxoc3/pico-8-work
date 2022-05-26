@@ -10,137 +10,6 @@ LAST_ROOM_INDEX = 223
 
 #include src/00-zobj.lua
 #include src/00-decode-map.lua
-g_objects = {
---  name   spr w  h
-    {"bed", 39, 1, 2},       -- 1 INDEX
-    {"signtest", 171,  1, 1},    -- 2 INDEX
-    {"pot", 49, 1, 1},       -- 3 INDEX
-    {"housetest", 174,  2, 2},       -- 4 INDEX
-    {"navyblock", 97,  1, 1},       -- 5 INDEX
-    {"nil", 0,  1, 1},       -- 6 INDEX
-    {"nil", 0,  1, 1},       -- 7 INDEX
-    {"nil", 0,  1, 1},       -- 8 INDEX
-    {"nil", 0,  1, 1},       -- 9 INDEX
-    {"nil", 0,  1, 1},       -- 10 INDEX
-    {"nil", 0,  1, 1},       -- 11 INDEX
-    {"nil", 0,  1, 1},       -- 12 INDEX
-    {"nil", 0,  1, 1},       -- 13 INDEX
-    {"nil", 0,  1, 1},       -- 14 INDEX
-    {"nil", 0,  1, 1},       -- 15 INDEX
-    {"nil", 0,  1, 1},       -- 16 INDEX
-    {"nil", 0,  1, 1},       -- 17 INDEX
-    {"nil", 0,  1, 1},       -- 18 INDEX
-    {"nil", 0,  1, 1},       -- 19 INDEX
-    {"nil", 0,  1, 1},       -- 20 INDEX
-    {"nil", 0,  1, 1},       -- 21 INDEX
-    {"nil", 0,  1, 1},       -- 22 INDEX
-    {"nil", 0,  1, 1},       -- 23 INDEX
-    {"nil", 0,  1, 1},       -- 24 INDEX
-    {"nil", 0,  1, 1},       -- 25 INDEX
-    {"nil", 0,  1, 1},       -- 26 INDEX
-    {"nil", 0,  1, 1},       -- 27 INDEX
-    {"nil", 0,  1, 1},       -- 28 INDEX
-    {"nil", 0,  1, 1},       -- 29 INDEX
-    {"nil", 0,  1, 1},       -- 30 INDEX
-    {"nil", 0,  1, 1},       -- 31 INDEX
-    {"nil", 0,  1, 1},       -- 32 INDEX
-    {"nil", 0,  1, 1},       -- 33 INDEX
-    {"nil", 0,  1, 1},       -- 34 INDEX
-    {"nil", 0,  1, 1},       -- 35 INDEX
-    {"nil", 0,  1, 1},       -- 36 INDEX
-    {"nil", 0,  1, 1},       -- 37 INDEX
-    {"nil", 0,  1, 1},       -- 38 INDEX
-    {"nil", 0,  1, 1},       -- 39 INDEX
-    {"nil", 0,  1, 1},       -- 40 INDEX
-    {"nil", 0,  1, 1},       -- 41 INDEX
-    {"nil", 0,  1, 1},       -- 42 INDEX
-    {"nil", 0,  1, 1},       -- 43 INDEX
-    {"nil", 0,  1, 1},       -- 44 INDEX
-    {"nil", 0,  1, 1},       -- 45 INDEX
-    {"nil", 0,  1, 1},       -- 46 INDEX
-    {"nil", 0,  1, 1},       -- 47 INDEX
-    {"nil", 0,  1, 1},       -- 48 INDEX
-    {"nil", 0,  1, 1},       -- 49 INDEX
-    {"nil", 0,  1, 1},       -- 50 INDEX
-    {"nil", 0,  1, 1},       -- 51 INDEX
-    {"nil", 0,  1, 1},       -- 52 INDEX
-    {"nil", 0,  1, 1},       -- 53 INDEX
-    {"nil", 0,  1, 1},       -- 54 INDEX
-    {"nil", 0,  1, 1},       -- 55 INDEX
-    {"nil", 0,  1, 1},       -- 56 INDEX
-    {"nil", 0,  1, 1},       -- 57 INDEX
-    {"nil", 0,  1, 1},       -- 58 INDEX
-    {"nil", 0,  1, 1},       -- 59 INDEX
-    {"nil", 0,  1, 1},       -- 60 INDEX
-    {"nil", 0,  1, 1},       -- 61 INDEX
-    {"nil", 0,  1, 1},       -- 62 INDEX
-    {"nil", 0,  1, 1},       -- 63 INDEX
-    {"nil", 0,  1, 1},       -- 64 INDEX
-    {"nil", 0,  1, 1},       -- 65 INDEX
-    {"nil", 0,  1, 1},       -- 66 INDEX
-    {"nil", 0,  1, 1},       -- 67 INDEX
-    {"nil", 0,  1, 1},       -- 68 INDEX
-    {"nil", 0,  1, 1},       -- 69 INDEX
-    {"nil", 0,  1, 1},       -- 70 INDEX
-    {"nil", 0,  1, 1},       -- 71 INDEX
-    {"nil", 0,  1, 1},       -- 72 INDEX
-    {"nil", 0,  1, 1},       -- 73 INDEX
-    {"nil", 0,  1, 1},       -- 74 INDEX
-    {"nil", 0,  1, 1},       -- 75 INDEX
-    {"nil", 0,  1, 1},       -- 76 INDEX
-    {"nil", 0,  1, 1},       -- 77 INDEX
-    {"nil", 0,  1, 1},       -- 78 INDEX
-    {"nil", 0,  1, 1},       -- 79 INDEX
-    {"nil", 0,  1, 1},       -- 80 INDEX
-    {"nil", 0,  1, 1},       -- 81 INDEX
-    {"nil", 0,  1, 1},       -- 82 INDEX
-    {"nil", 0,  1, 1},       -- 83 INDEX
-    {"nil", 0,  1, 1},       -- 84 INDEX
-    {"nil", 0,  1, 1},       -- 85 INDEX
-    {"nil", 0,  1, 1},       -- 86 INDEX
-    {"nil", 0,  1, 1},       -- 87 INDEX
-    {"nil", 0,  1, 1},       -- 88 INDEX
-    {"nil", 0,  1, 1},       -- 89 INDEX
-    {"nil", 0,  1, 1},       -- 90 INDEX
-    {"nil", 0,  1, 1},       -- 91 INDEX
-    {"nil", 0,  1, 1},       -- 92 INDEX
-    {"nil", 0,  1, 1},       -- 93 INDEX
-    {"nil", 0,  1, 1},       -- 94 INDEX
-    {"nil", 0,  1, 1},       -- 95 INDEX
-    {"nil", 0,  1, 1},       -- 96 INDEX
-    {"nil", 0,  1, 1},       -- 97 INDEX
-    {"nil", 0,  1, 1},       -- 98 INDEX
-    {"nil", 0,  1, 1},       -- 99 INDEX
-    {"nil", 0,  1, 1},       -- 100 INDEX
-    {"nil", 0,  1, 1},       -- 101 INDEX
-    {"nil", 0,  1, 1},       -- 102 INDEX
-    {"nil", 0,  1, 1},       -- 103 INDEX
-    {"nil", 0,  1, 1},       -- 104 INDEX
-    {"nil", 0,  1, 1},       -- 105 INDEX
-    {"nil", 0,  1, 1},       -- 106 INDEX
-    {"nil", 0,  1, 1},       -- 107 INDEX
-    {"nil", 0,  1, 1},       -- 108 INDEX
-    {"nil", 0,  1, 1},       -- 109 INDEX
-    {"nil", 0,  1, 1},       -- 110 INDEX
-    {"nil", 0,  1, 1},       -- 111 INDEX
-    {"nil", 0,  1, 1},       -- 112 INDEX
-    {"nil", 0,  1, 1},       -- 113 INDEX
-    {"nil", 0,  1, 1},       -- 114 INDEX
-    {"nil", 0,  1, 1},       -- 115 INDEX
-    {"nil", 0,  1, 1},       -- 116 INDEX
-    {"nil", 0,  1, 1},       -- 117 INDEX
-    {"nil", 0,  1, 1},       -- 118 INDEX
-    {"nil", 0,  1, 1},       -- 119 INDEX
-    {"nil", 0,  1, 1},       -- 120 INDEX
-    {"nil", 0,  1, 1},       -- 121 INDEX
-    {"nil", 0,  1, 1},       -- 122 INDEX
-    {"nil", 0,  1, 1},       -- 123 INDEX
-    {"nil", 0,  1, 1},       -- 124 INDEX
-    {"nil", 0,  1, 1},       -- 125 INDEX
-    {"nil", 0,  1, 1},       -- 126 INDEX
-    {"nil", 0,  1, 1},       -- 127 INDEX
-    {"nil", 0,  1, 1},       -- 128 INDEX
-}
 
 g_fills = {}
 function update_gfill()
@@ -206,9 +75,29 @@ end
 
 function save_map() cstore(0x2000, 0x2000, 0x1000, 'game.p8') end
 
+function trim_str(str)
+    local nstr = ""
+    for i=1,#str do
+        if sub(str,i,i) ~= " " and sub(str,i,i) ~= "\n" then
+            nstr = nstr..sub(str,i,i)
+        end
+    end
+    return nstr
+end
+
 g_cur_song = 0
 g_info = {}
+g_objects = {}
 function _init()
+    -- convert decoder map to mapbuilder map
+    for item in all(g_obj_map) do
+        -- {"bed",       39, 1, 2  },       -- 1 INDEX
+        item = trim_str(item)
+        local name, ignore, rest = unpack(split(item, "-"))
+        local index, sind, rx, ry = unpack(split(rest, "|"))
+        add(g_objects, {name, sind, rx, ry})
+    end
+
     poke(0x5f5c, 5) -- set custom delay
     poke(0x5f5d, 5) -- set custom delay
     poke(0x5f2d, 1) -- enable keyboard
