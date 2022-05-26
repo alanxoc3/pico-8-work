@@ -19,6 +19,9 @@ function zclass(meta_and_att_str)
     local parents = split(meta)
     local class = deli(parents, 1)
 
+    -- ensure that entity lists are not nil, useful to always be able to assume this
+    g_zclass_entities[class] = g_zclass_entities[class] or {}
+
     g_zclass_constructors[class] = function(inst, done, ...)
         foreach(parents, function(parent)
             if not done[parent] then g_zclass_constructors[parent](inst, done) end
@@ -43,7 +46,6 @@ end
 function register_entities()
     while #g_zclass_new_entities > 0 do
         local class, inst = unpack(deli(g_zclass_new_entities))
-        g_zclass_entities[class] = g_zclass_entities[class] or {}
         if not inst.ecs_exclusions[class] then add(g_zclass_entities[class], inst) end
     end
 end
@@ -65,7 +67,7 @@ end
 
 -- Check if an entity exists.
 function does_entity_exist(entity_name)
-    return g_zclass_entities[entity_name] and #g_zclass_entities[entity_name] > 0
+    return #g_zclass_entities[entity_name] > 0
 end
 
 -- Loop through all the entities of a certain type and call a method on each one if that method exists.
