@@ -10,11 +10,11 @@ cat mapbuilder.lua | rg INDEX | rg -o '"\w+"' | rg -o '\w+' | tr '\n' ','
 ```
 
 ## Tokens & Features
-Next: make a person and combine sign logic
+Next: combine sign and person logic
 
 ```
-2022-05-25 -- isorty memcondcreate navy
-    4265 4263 4323 4311 4307 4317 4375
+2022-05-25 -- isorty memcondcreate navy fairypolish
+    4265 4263 4323 4311 4307 4317 4375 4466
 
 2022-05-24 -- house savelogic
     4198 4183 4250 4344 4355 4296 4265

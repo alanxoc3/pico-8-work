@@ -395,7 +395,7 @@ if a.xf ~=g_pl.xf then
 if not a.stat then a.stat=_g.stat(1,119,a)end
 if btnp"4"and not does_entity_exist"tbox"then
 _g.tbox(a.text,function()
-zcall(poke,[[1;,0x5d02,@;2;,0x5d03,@;3;,0x5d09,1;]],g_pl.x*16,g_pl.y*16)
+zcall(poke,[[1;,0x5d02,@;2;,0x5d03,@;3;,0x5d04,@;4;,0x5d09,1;]],g_pl.x*16,g_pl.y*16,g_pl.xf and 1 or 0)
 _g.fader_out(function()g_state:load"room" end)
 end)
 end
@@ -681,7 +681,7 @@ zclass[[house,actor,simple_spr,drawlayer_50|cspr,174,sind,174,sw,2,sh,2,room,231
 zclass[[housetest,house|x,@,y,@]]
 zclass[[person,actor,solid,simple_spr,drawlayer_50|text,,rx,.375,ry,.375,init,%person_init]]
 zclass[[navyblock,person|x,@,y,@,sy,-2,cname,navy,cspr,97,sind,97,text,my sister has been in^the forest all day.^find something to^protect yourself with^and bring her home.|0x5d09|0]]
-zclass[[sign,actor,solid,simple_spr,drawlayer_50|text,,rx,.375,ry,.375,cname,sign,cspr,171,sind,171,init,%sign_init]]
+zclass[[sign,actor,solid,simple_spr,drawlayer_50|text,,rx,.375,ry,.375,sy,-2,cname,sign,cspr,171,sind,171,init,%sign_init]]
 zclass[[signtest,sign|x,@,y,@,text,mary had a^little lamb^little lamb^little lamb^mary had a^little lamb^whose fleece was^white as yo face]]
 zclass[[gameover_control,actor|start;update,nop,duration,.5,next,normal;normal;update,%gameover_control_update;ending;update,nop;]]
 g_fade_table=zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,1,0,0,0,0;3;,3,3,3,3,1,1,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,0,0,0,0;6;,6,6,13,13,5,5,0,0;7;,7,7,6,13,13,5,0,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,0,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,0,0,0;13;,13,13,5,5,1,0,0,0;14;,14,14,13,4,2,2,0,0;15;,15,15,13,13,5,5,0,0;]]

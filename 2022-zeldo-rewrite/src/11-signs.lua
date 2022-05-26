@@ -1,5 +1,6 @@
 zclass[[sign,actor,solid,simple_spr,drawlayer_50|
     text,,rx,.375,ry,.375,
+    sy,-2,
     cname,"sign",cspr,SPR_SIGN,
     sind,SPR_SIGN,
     init,%sign_init

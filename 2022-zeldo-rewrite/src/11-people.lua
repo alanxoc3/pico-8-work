@@ -14,8 +14,9 @@ zclass[[person,actor,solid,simple_spr,drawlayer_50|
                     zcall(poke, [[
                         1;,MEM_PL_X,@;
                         2;,MEM_PL_Y,@;
-                        3;,MEM_IS_NAVY_HOME,1;
-                    ]],  g_pl.x*POS_MULTIPLIER_FOR_MEMORY, g_pl.y*POS_MULTIPLIER_FOR_MEMORY)
+                        3;,MEM_PL_XF,@;
+                        4;,MEM_IS_NAVY_HOME,1;
+                    ]],  g_pl.x*POS_MULTIPLIER_FOR_MEMORY, g_pl.y*POS_MULTIPLIER_FOR_MEMORY, g_pl.xf and 1 or 0)
 
                     _g.fader_out(function() g_state:load'room' end)
                 end)
