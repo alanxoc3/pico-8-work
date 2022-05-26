@@ -1,8 +1,8 @@
-zclass[[house,actor,auto_outline,drawlayer_60,outlayer_50|
+zclass[[house,actor,simple_spr,drawlayer_50|
     cspr,SPR_HOUSE,
+    sind,SPR_HOUSE, sw,2, sh,2,
     room,TEST_ROOM_INDEX,
-    init,%house_init,
-    draw,%house_draw
+    init,%house_init
 ]]
 
 |house_init| function(a)
@@ -36,10 +36,6 @@ zclass[[house,actor,auto_outline,drawlayer_60,outlayer_50|
             g_state:load'room'
         end)
     end)
-end $$
-
-|house_draw| function(a)
-    zspr(a.cspr, a.x*8, a.y*8, 2, 2)
 end $$
 
 zclass[[housetest,house|x,@,y,@]]

@@ -1,15 +1,15 @@
 g_card_fade = 0
 
 function isorty(t)
-   if t then
-    for n=2,#t do
-        local i=n
-        while i>1 and t[i].y<t[i-1].y do
-            t[i],t[i-1]=t[i-1],t[i]
-            i=i-1
+    if t then
+        for n=2,#t do
+            local i=n
+            while i>1 and t[i].y<t[i-1].y do
+                t[i],t[i-1]=t[i-1],t[i]
+                i=i-1
+            end
         end
     end
- end
 end
 
 function load_room(new_room_index, rx, ry, follow_actor)

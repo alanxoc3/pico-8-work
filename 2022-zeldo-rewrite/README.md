@@ -10,12 +10,13 @@ cat mapbuilder.lua | rg INDEX | rg -o '"\w+"' | rg -o '\w+' | tr '\n' ','
 ```
 
 ## Tokens & Features
-Next: common simple spr func (cut tokens)
-Next: no cell shading for separate objects
 Next: conditional create func or room init
 Next: make a person and combine sign logic
 
 ```
+2022-05-25 -- isorty
+    4265 4263 4323 4311
+
 2022-05-24 -- house savelogic
     4198 4183 4250 4344 4355 4296 4265
 

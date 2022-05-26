@@ -1,15 +1,12 @@
 -- start with drawlayer_50 and divide by 2 if something needs to go forward or backward
 -- max = 99, min = 00
-zclass[[drawlayer_50|]] -- pl
+zclass[[drawlayer_50|]] -- main game layer
 zclass[[drawlayer_60|]] -- house
 zclass[[drawlayer_70|]] -- fairy
 
 zclass[[drawlayer_90|]] -- above the card, stat
 zclass[[drawlayer_95|]] -- above the card, inventory
 zclass[[drawlayer_99|]] -- above the card, title, textbox
-
-zclass[[outlayer_50|]] -- cell shading
-zclass[[outlayer_99|]] -- inventory
 
 zclass[[fader,actor|
     ecs_exclusions;actor,yes,timer,yes; -- remove game_state from the actor group
@@ -44,9 +41,13 @@ zclass[[animation,actor|
     a.index %= 60 -- smooth because divisible by 2,3,4,5,6
 end $$
 
-zclass[[auto_outline|drawout,%auto_outline_drawout]]
-|auto_outline_drawout| function(a)
-    draw_outline(1, function() a:draw() end)
+zclass[[auto_outline|
+    draw,%auto_outline_draw,
+    outline_color,1
+]]
+|auto_outline_draw| function(a)
+    draw_outline(a.outline_color, function() a:drawout() end)
+    a:drawout()
 end $$
 
 function draw_outline(color, drawfunc)
@@ -58,4 +59,17 @@ function draw_outline(color, drawfunc)
     end
     camera(ox, oy)
     pal()
+end
+
+-- sort based on y position for some draw layers
+function isorty(t)
+    if t then
+        for n=2,#t do
+            local i=n
+            while i>1 and t[i].y<t[i-1].y do
+                t[i],t[i-1]=t[i-1],t[i]
+                i=i-1
+            end
+        end
+    end
 end

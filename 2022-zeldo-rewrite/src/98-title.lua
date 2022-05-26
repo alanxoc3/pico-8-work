@@ -13,8 +13,7 @@ end $$
 |title_draw| function()
     draw_room(g_rooms[8*16+8], CARD_CX, CARD_CY, nop, nop)
     zcall(loop_entities, [[
-        1;,outlayer_99, drawout;
-        2;,drawlayer_99, draw;
+        1;,drawlayer_99, draw;
     ]])
 
     zcall(zprinttbox, [[
@@ -24,9 +23,9 @@ end $$
     ]])
 end $$
 
-zclass[[title_logo,actor,auto_outline,drawlayer_99,outlayer_99|
+zclass[[title_logo,actor,auto_outline,drawlayer_99|
     update,%title_logo_update,
-    draw,%title_logo_draw;
+    drawout,%title_logo_drawout;
 ]]
 
 |title_logo_update| function(a)
@@ -35,7 +34,7 @@ zclass[[title_logo,actor,auto_outline,drawlayer_99,outlayer_99|
     end
 end $$
 
-|title_logo_draw| function(a)
+|title_logo_drawout| function(a)
     for i=-2,2 do
         zspr(SPR_TITLE_L+i, i*10+64, 57+cos((g_i+i)/4)/2, 1, 2)
     end

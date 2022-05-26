@@ -1,8 +1,8 @@
-zclass[[sign,actor,solid,auto_outline,drawlayer_50,outlayer_50|
+zclass[[sign,actor,solid,simple_spr,drawlayer_50|
     text,,rx,.375,ry,.375,
     cname,"sign",cspr,SPR_SIGN,
-    init,%sign_init,
-    draw,%sign_draw
+    sind,SPR_SIGN,
+    init,%sign_init
 ]]
 
 |sign_init| function(a)
@@ -14,10 +14,6 @@ zclass[[sign,actor,solid,auto_outline,drawlayer_50,outlayer_50|
     end, function()
         if a.stat then a.stat:load'ending' a.stat = nil end
     end)
-end $$
-
-|sign_draw| function(a)
-    zspr(a.cspr, a.x*8, a.y*8)
 end $$
 
 zclass[[signtest,sign|x,@,y,@,text,"TEXT_SIGNTEST"]]

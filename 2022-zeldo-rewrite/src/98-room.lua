@@ -66,15 +66,14 @@ end $$
 end $$
 
 |room_draw| function(state)
+    isorty(g_zclass_entities['drawlayer_50'])
+
     draw_room(g_rooms[peek'MEM_ROOM_IND'], CARD_CX, CARD_CY, function()
-        loop_entities('outlayer_50', 'drawout')
-        loop_entities('drawlayer_50', 'draw')
         zcall(loop_entities, [[
-            1;,outlayer_50, drawout;
-            2;,drawlayer_50, draw;
-            3;,drawlayer_60, draw;
-            4;,drawlayer_70, draw;
-            5;,drawlayer_75, draw;
+            1;,drawlayer_50, draw;
+            2;,drawlayer_60, draw;
+            3;,drawlayer_70, draw;
+            4;,drawlayer_75, draw;
         ]])
 
         -- DEBUG_BEGIN
@@ -86,10 +85,9 @@ end $$
         -- DEBUG_END
     end, function()
         zcall(loop_entities, [[
-            1;,outlayer_99, drawout;
-            2;,drawlayer_90, draw;
-            3;,drawlayer_95, draw;
-            4;,drawlayer_99, draw;
+            1;,drawlayer_90, draw;
+            2;,drawlayer_95, draw;
+            3;,drawlayer_99, draw;
         ]])
     end)
 

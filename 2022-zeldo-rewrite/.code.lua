@@ -138,7 +138,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,actor_deregistered,@,fader_out_update,@,fader_in_update,@,animation_init,@,auto_outline_drawout,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,explode_draw,@,calc_deltas,@,adjust_deltas_for_solids,@,adjust_deltas_for_tiles,@,inventory_start_init,@,inventory_start_update,@,inventory_press_update,@,inventory_draw,@,anchor_update_anchor,@,targettouch_update_target,@,pl_init,@,pl_update,@,pl_draw,@,stat_draw,@,tbox_init,@,tbox_update,@,tbox_draw,@,fairy_update,@,fairy_draw,@,house_init,@,house_draw,@,sign_init,@,sign_draw,@,gameover_control_update,@,gameover_init,@,gameover_draw,@,logo_init,@,logo_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,simple_update,@,title_draw,@,title_logo_update,@,title_logo_draw,@,game_state_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,actor_deregistered,@,fader_out_update,@,fader_in_update,@,animation_init,@,auto_outline_draw,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,explode_draw,@,calc_deltas,@,adjust_deltas_for_solids,@,adjust_deltas_for_tiles,@,inventory_start_init,@,inventory_start_update,@,inventory_press_update,@,inventory_draw,@,simple_spr_draw,@,anchor_update_anchor,@,targettouch_update_target,@,pl_init,@,pl_update,@,pl_drawout,@,stat_draw,@,tbox_init,@,tbox_update,@,tbox_draw,@,fairy_update,@,fairy_draw,@,house_init,@,sign_init,@,gameover_control_update,@,gameover_init,@,gameover_draw,@,logo_init,@,logo_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,simple_update,@,title_draw,@,title_logo_update,@,title_logo_drawout,@,game_state_init,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -159,7 +159,8 @@ end,function(a)
 a.index+=1
 a.index%=60
 end,function(a)
-draw_outline(1,function()a:draw()end)
+draw_outline(a.outline_color,function()a:drawout()end)
+a:drawout()
 end,function(...)
 _g.timer_stop_timer(...)
 _g.timer_play_timer(...)
@@ -280,12 +281,14 @@ a:load"start"
 end
 end,function(a)
 for item in all(a)do
-local drawfunc=item.index==4 and function()a.pl:draw()end or function()
+local drawfunc=item.index==4 and function()a.pl:drawout()end or function()
 zspr(item.sind,a.pl.x*8+item.xoff,a.pl.y*8+item.yoff,1,1,a.pl.xf)
 end
 draw_outline(item.index==peek"0x5d08"and 2 or 1,drawfunc)
 drawfunc()
 end
+end,function(a)
+zspr(a.cspr,a.x*8,a.y*8,a.sw,a.sh,a.xf,a.yf)
 end,function(a)
 a.x,a.y=a.anchoring.x+a.offx,a.anchoring.y+a.offy
 end,function(target,objs)
@@ -385,8 +388,6 @@ g_state:load"room"
 end)
 end)
 end,function(a)
-zspr(a.cspr,a.x*8,a.y*8,2,2)
-end,function(a)
 _g.target(.125,.5,0,.25,a,function()
 if not a.stat then a.stat=_g.stat(1,119,a)end
 if btnp"4"and not does_entity_exist"tbox"then
@@ -395,8 +396,6 @@ end
 end,function()
 if a.stat then a.stat:load"ending" a.stat=nil end
 end)
-end,function(a)
-zspr(a.cspr,a.x*8,a.y*8)
 end,function(a)
 if btnp(4)or btnp(5)then
 _g.fader_out(function()g_state:load"title" end)
@@ -454,17 +453,11 @@ state:load"room"
 end)
 end
 end,function(state)
+isorty(g_zclass_entities["drawlayer_50"])
 draw_room(g_rooms[peek"0x5d01"],64,57,function()
-loop_entities("outlayer_50","drawout")
-loop_entities("drawlayer_50","draw")
-zcall(loop_entities,[[1;,outlayer_50,drawout;2;,drawlayer_50,draw;3;,drawlayer_60,draw;4;,drawlayer_70,draw;5;,drawlayer_75,draw;]])
-if g_debug then
-for inst in all(g_zclass_entities["box"])do
-scr_zrect(inst.x,inst.y,inst.rx,inst.ry,8)
-end
-end
+zcall(loop_entities,[[1;,drawlayer_50,draw;2;,drawlayer_60,draw;3;,drawlayer_70,draw;4;,drawlayer_75,draw;]])
 end,function()
-zcall(loop_entities,[[1;,outlayer_99,drawout;2;,drawlayer_90,draw;3;,drawlayer_95,draw;4;,drawlayer_99,draw;]])
+zcall(loop_entities,[[1;,drawlayer_90,draw;2;,drawlayer_95,draw;3;,drawlayer_99,draw;]])
 end)
 zcall(draw_bar,[[1;,18,6,109,11,@,0,8,2]],g_pl.energy)
 end,function()
@@ -474,7 +467,7 @@ if does_entity_exist"fader"then return end
 zcall(loop_entities,[[1;,timer,tick;2;,actor,state;]])
 end,function()
 draw_room(g_rooms[8*16+8],64,57,nop,nop)
-zcall(loop_entities,[[1;,outlayer_99,drawout;2;,drawlayer_99,draw;]])
+zcall(loop_entities,[[1;,drawlayer_99,draw;]])
 zcall(zprinttbox,[[1;,code/sfx:  @alanxoc3  ,64,104,0,7,5;2;,tile/spr:  @greatcadet,64,114,0,7,5;3;,amorg games presents,64,6,0,7,5;]])
 end,function(a)
 if btnp"4"or btnp"5"then
@@ -547,13 +540,11 @@ zclass[[drawlayer_70|]]
 zclass[[drawlayer_90|]]
 zclass[[drawlayer_95|]]
 zclass[[drawlayer_99|]]
-zclass[[outlayer_50|]]
-zclass[[outlayer_99|]]
 zclass[[fader,actor|ecs_exclusions;actor,yes,timer,yes;]]
 zclass[[fader_out,fader|start;duration,.5,destroyed,@,update,%fader_out_update]]
 zclass[[fader_in,fader|start;duration,.5,update,%fader_in_update]]
 zclass[[animation,actor|index,0,init,%animation_init;start;duration,@,next,start]]
-zclass[[auto_outline|drawout,%auto_outline_drawout]]
+zclass[[auto_outline|draw,%auto_outline_draw,outline_color,1]]
 function draw_outline(color,drawfunc)
 for c=1,15 do pal(c,color)end
 local ox,oy=%0x5f28,%0x5f2a
@@ -562,6 +553,17 @@ camera(ox+i%3-1,oy+i\3-1)drawfunc()
 end
 camera(ox,oy)
 pal()
+end
+function isorty(t)
+if t then
+for n=2,#t do
+local i=n
+while i>1 and t[i].y<t[i-1].y do
+t[i],t[i-1]=t[i-1],t[i]
+i=i-1
+end
+end
+end
 end
 zclass[[timer|timers;,;start_timer,%timer_start_timer,stop_timer,%timer_stop_timer,play_timer,%timer_play_timer,delete_timer,%timer_delete_timer,get_elapsed,%timer_get_elapsed,get_elapsed_percent,%timer_get_elapsed_percent,tick,%timer_tick,]]
 function draw_room(room,center_x,center_y,post_tile_func,post_card_func)
@@ -615,11 +617,12 @@ zclass[[collidable,box,vec|calc_deltas,%calc_deltas,adjust_deltas_for_solids,%ad
 zclass[[inventory,actor,drawlayer_90|pl,@;start;init,%inventory_start_init,update,%inventory_start_update,draw,nop;press;init,nop,update,%inventory_press_update,draw,%inventory_draw;1;mem_loc,6,index,0,name,brang,xoff,-7,yoff,-9,sind,4;2;mem_loc,10,index,1,name,mask,xoff,0,yoff,-11,sind,3;3;mem_loc,7,index,2,name,bomb,xoff,7,yoff,-9,sind,5;4;mem_loc,8,index,3,name,shield,xoff,-8,yoff,-3,sind,6;5;index,4;6;mem_loc,9,index,5,name,bow,xoff,9,yoff,-2,sind,7;7;mem_loc,12,index,6,name,banjo,xoff,-7,yoff,4,sind,1;8;mem_loc,11,index,7,name,sword,xoff,0,yoff,6,sind,2;9;mem_loc,5,index,8,name,bow,xoff,7,yoff,5,sind,8;]]
 zclass[[solid,box|]]
 zclass[[wall,solid,anchor|anchoring,@,offx,@,offy,@,rx,@,ry,@]]
+zclass[[simple_spr,auto_outline,pos|drawout,%simple_spr_draw,sind,0,sw,1,sh,1,xf,no,yf,no]]
 zclass[[anchor,pos|update_anchor,%anchor_update_anchor;offx,0,offy,0,anchoring;,]]
 zclass[[target,anchor,box|rx,@,ry,@,offx,@,offy,@,anchoring,@,callback_touch,@,callback_outside,@,update_target,%targettouch_update_target]]
 zclass[[pot]]
 zclass[[bed]]
-zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50,outlayer_50|cname,lank,cspr,103,health,10,max_health,10,x,@,y,@,xf,@,sind,88,rx,.375,ry,.375,init,%pl_init,update,%pl_update,energy,0,draw,%pl_draw;sinds;,88,89,90]]
+zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50|cname,lank,cspr,103,health,10,max_health,10,x,@,y,@,xf,@,sind,88,rx,.375,ry,.375,init,%pl_init,update,%pl_update,energy,0,drawout,%pl_drawout;sinds;,88,89,90]]
 function draw_bar(x1,y1,x2,y2,percent,align,fg,bg)
 if x1>x2 then x1-=3 x2-=3 end
 local bar_off=x2-x1-min(percent,1)*(x2-x1)
@@ -653,9 +656,9 @@ end
 zclass[[stat,vec,actor,drawlayer_95|align,@,x,@,obj,@,y,138,draw,%stat_draw,max_health,10,health,5;start;dy,-2,duration,.2,next,normal;normal;dy,0;ending;dy,2,duration,.2;]]
 zclass[[tbox,vec,actor,drawlayer_99|rawtext,@,y,138,cur_text_index,1,anim,0,line_1,,line_2,,update,%tbox_update,draw,%tbox_draw;texts;,;start;dy,-2,duration,.2,next,normal,update,nop,init,%tbox_init;normal;dy,0,anim,0,done,no,update,%tbox_update,init,nop;ending;dy,2,update,nop,duration,.2,init,nop;]]
 zclass[[fairy,actor,mov,drawlayer_70|rel_actor,@,x,@,y,@,update,%fairy_update,draw,%fairy_draw]]
-zclass[[house,actor,auto_outline,drawlayer_60,outlayer_50|cspr,174,room,231,init,%house_init,draw,%house_draw]]
+zclass[[house,actor,simple_spr,drawlayer_50|cspr,174,sind,174,sw,2,sh,2,room,231,init,%house_init]]
 zclass[[housetest,house|x,@,y,@]]
-zclass[[sign,actor,solid,auto_outline,drawlayer_50,outlayer_50|text,,rx,.375,ry,.375,cname,sign,cspr,171,init,%sign_init,draw,%sign_draw]]
+zclass[[sign,actor,solid,simple_spr,drawlayer_50|text,,rx,.375,ry,.375,cname,sign,cspr,171,sind,171,init,%sign_init]]
 zclass[[signtest,sign|x,@,y,@,text,mary had a^little lamb^little lamb^little lamb^mary had a^little lamb^whose fleece was^white as yo face]]
 zclass[[gameover_control,actor|start;update,nop,duration,.5,next,normal;normal;update,%gameover_control_update;ending;update,nop;]]
 g_fade_table=zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,1,0,0,0,0;3;,3,3,3,3,1,1,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,0,0,0,0;6;,6,6,13,13,5,5,0,0;7;,7,7,6,13,13,5,0,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,0,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,0,0,0;13;,13,13,5,5,1,0,0,0;14;,14,14,13,4,2,2,0,0;15;,15,15,13,13,5,5,0,0;]]
@@ -665,13 +668,13 @@ pal(c,g_fade_table[c][1+flr(7*min(1,max(0,threshold)))],1)
 end
 end
 zclass[[room_bounds,box|x,@,y,@,rx,@,ry,@]]
-zclass[[title_logo,actor,auto_outline,drawlayer_99,outlayer_99|update,%title_logo_update,draw,%title_logo_draw;]]
+zclass[[title_logo,actor,auto_outline,drawlayer_99|update,%title_logo_update,drawout,%title_logo_drawout;]]
 cartdata"zeldo_rewrite"
 menuitem(1,"reset save data",function()
 memset(0x5e00,0,64)
 extcmd"reset"
 end)
-zclass[[game_state,actor|ecs_exclusions;actor,yes,timer,yes;curr,room,init,%game_state_init,logo;state_init,%logo_init,update,%simple_update,draw,%logo_draw,duration,2.5,next,title;title;state_init,%title_init,update,%simple_update,draw,%title_draw;room;state_init,%room_init,update,%room_update,draw,%room_draw;gameover;state_init,%gameover_init,update,%simple_update,draw,%gameover_draw;]]
+zclass[[game_state,actor|ecs_exclusions;actor,yes,timer,yes;curr,logo,init,%game_state_init;logo;state_init,%logo_init,update,%simple_update,draw,%logo_draw,duration,2.5,next,title;title;state_init,%title_init,update,%simple_update,draw,%title_draw;room;state_init,%room_init,update,%room_update,draw,%room_draw;gameover;state_init,%gameover_init,update,%simple_update,draw,%gameover_draw;]]
 function _init()
 memcpy(0x5d00,0x5e00,64)
 if peek"MEM_SAVE_DATA"==0 then
@@ -682,7 +685,6 @@ g_state,g_rooms=_g.game_state(),decode_map()
 g_tile_animation_lookup=create_tile_animation_lookup(g_rooms[0])
 end
 function _update60()
-if btn(4)and btnp(5)then g_debug=not g_debug end
 zcall(loop_entities,[[1;,actor,clean;2;,fader,clean;]])
 register_entities()
 zcall(loop_entities,[[1;,fader,tick;2;,game_state,tick;3;,fader,state;4;,game_state,state;]])
@@ -692,7 +694,4 @@ g_i=g_animation.index
 cls()
 loop_entities("game_state","draw")
 fade(g_fade)
-if g_debug then
-zcall(rect,[[1;,17,12,110,18,1;2;,17,95,110,101,1;3;,17,0,110,5,1;4;,17,122,110,127,1;5;,0,0,17,127,1;6;,110,0,127,127,1;]])
-end
 end

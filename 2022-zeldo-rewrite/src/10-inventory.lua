@@ -38,7 +38,7 @@ end $$
 
 |inventory_draw| function(a)
     for item in all(a) do
-        local drawfunc = item.index == 4 and function() a.pl:draw() end or function()
+        local drawfunc = item.index == 4 and function() a.pl:drawout() end or function()
             zspr(item.sind, a.pl.x*8+item.xoff, a.pl.y*8+item.yoff, 1, 1, a.pl.xf)
         end
 
