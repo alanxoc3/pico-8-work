@@ -6,7 +6,7 @@ zclass[[pos|x,0,y,0]]
 
 -- position with a speed
 zclass[[vec,pos|dx,0,dy,0,vec_update,%vec_update]]
-|vec_update| function(a)
+|[vec_update]| function(a)
     a.x += a.dx
     a.y += a.dy
 end $$
@@ -17,7 +17,7 @@ zclass[[acc,vec|
    ax,0, ay,0,
    acc_update,%acc_update
 ]]
-|acc_update| function(a)
+|[acc_update]| function(a)
     a.dx += a.ax a.dy += a.ay
     a.dx *= a.inertia_x a.dy *= a.inertia_y
     if a.ax == 0 and abs(a.dx) < .00001 then a.dx = 0 end
@@ -29,7 +29,7 @@ zclass[[mov,acc|
     ang,0, speed,0, d_ang,0,
     mov_update,%mov_update
 ]]
-|mov_update| function(a)
+|[mov_update]| function(a)
     a.ang += a.d_ang
 
     a.ax = a.speed*cos(a.ang)
@@ -37,7 +37,7 @@ zclass[[mov,acc|
 end $$
 
 zclass[[anchor_pos,pos|anchoring;x,0,y,0;update_anchor,%anchor_pos_update_anchor]]
-|anchor_pos_update_anchor| function(a)
+|[anchor_pos_update_anchor]| function(a)
     a.x = a.anchoring.x
     a.y = a.anchoring.y
 end $$
@@ -52,12 +52,12 @@ zclass[[collision_circ,vec,actor|
 
 ]]
 
-|collision_init| function(a)
+|[collision_init]| function(a)
     add(a.anchoring.collision_circs, a)
     a:follow_anchoring()
 end $$
 
-|collision_follow_anchoring| function(a)
+|[collision_follow_anchoring]| function(a)
     local b = a.anchoring
     local off_magnitude = approx_dist(a.offset_x, a.offset_y)
     local off_ang_new = atan2(a.offset_x, a.offset_y) + b.ang + b.d_ang
@@ -71,7 +71,7 @@ function dist_between_circles(a, b)
     return approx_dist(x, y) - minimum_dist
 end
 
-|check_collision| function(a, others)
+|[check_collision]| function(a, others)
     foreach(others, function(other)
         if a == other then return end
         local dist = dist_between_circles(a, other)

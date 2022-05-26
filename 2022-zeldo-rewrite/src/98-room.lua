@@ -1,6 +1,6 @@
 zclass[[room_bounds,box|x,@,y,@,rx,@,ry,@]]
 
-|room_init| function(state) 
+|[room_init]| function(state) 
     local r = g_rooms[peek'MEM_ROOM_IND']
     g_room_bounds = _g.room_bounds(r.w/2, r.h/2+.25, r.w/2+.125, r.h/2+.125)
     g_pl = _g.pl(peek'MEM_PL_X'/POS_MULTIPLIER_FOR_MEMORY, peek'MEM_PL_Y'/POS_MULTIPLIER_FOR_MEMORY, peek'MEM_PL_XF'>0)
@@ -16,7 +16,7 @@ zclass[[room_bounds,box|x,@,y,@,rx,@,ry,@]]
     end)
 end $$
 
-|room_update| function(state)
+|[room_update]| function(state)
     if does_entity_exist'fader' then return end
 
     zcall(loop_entities, [[
@@ -65,7 +65,7 @@ end $$
     end
 end $$
 
-|room_draw| function(state)
+|[room_draw]| function(state)
     isorty(g_zclass_entities['drawlayer_50'])
 
     draw_room(g_rooms[peek'MEM_ROOM_IND'], CARD_CX, CARD_CY, function()

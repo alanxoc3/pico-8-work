@@ -3,7 +3,7 @@ zclass[[twinkle,drawlayer_10|
     draw,%twinkle_draw
 ]]
 
-|twinkle_draw| function(a)
+|[twinkle_draw]| function(a)
     local factor = a.view.zoom_factor/16
     local x = ((-a.star_view.x+a.x)%192)*factor-192/2*factor+64
     local y = ((-a.star_view.y+a.y)%192)*factor-192/2*factor+64
@@ -15,7 +15,7 @@ zclass[[star_view,vec|
     match_following, %star_view_match_following
 ]]
 
-|star_view_match_following| function(a)
+|[star_view_match_following]| function(a)
     if a.following then
         a.dx = a.following.dx
         a.dy = a.following.dy

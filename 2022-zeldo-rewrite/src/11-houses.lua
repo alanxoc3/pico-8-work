@@ -5,7 +5,7 @@ zclass[[house,actor,simple_spr,drawlayer_50|
     init,%house_init
 ]]
 
-|house_init| function(a)
+|[house_init]| function(a)
     zcall(_g.wall, [[
         a,@;
         1;,~a, .75,.5,.25,.75;

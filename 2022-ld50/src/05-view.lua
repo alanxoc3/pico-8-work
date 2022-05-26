@@ -11,18 +11,18 @@ zclass[[view,model|
     run;init,nop, update,%view_update;
 ]]
 
-|view_init| function(a)
+|[view_init]| function(a)
     if a.following then
         a.x = a.following.x
         a.y = a.following.y
     end
 end $$
 
-|view_update| function(a)
+|[view_update]| function(a)
     a.zoom_factor = max(12, a.zoom_factor - .1)
 end $$
 
-|view_match_following| function(a)
+|[view_match_following]| function(a)
     if a.following then
         local x, y = a.following.x - a.x, a.following.y - a.y
         local dir = atan2(x, y)

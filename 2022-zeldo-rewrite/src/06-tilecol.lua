@@ -13,7 +13,7 @@ zclass[[collidable,box,vec|
     adjust_deltas_for_tiles,%adjust_deltas_for_tiles
 ]]
 
-|calc_deltas| function(a, b)
+|[calc_deltas]| function(a, b)
     local box = {x=b.x-a.dx, y=b.y-a.dy, rx=b.rx, ry=b.ry}
     return a:getdelta(box, a.dx, a.dy)
 
@@ -21,7 +21,7 @@ zclass[[collidable,box,vec|
     -- return a:getdelta(box, dx, dy)
 end $$
 
-|adjust_deltas_for_solids| function(a, list)
+|[adjust_deltas_for_solids]| function(a, list)
     local junk
     foreach(list, function(b)
         -- a.dx, junk = a:calc_deltas(obj)
@@ -30,7 +30,7 @@ end $$
     end)
 end $$
 
-|adjust_deltas_for_tiles| function(a, room)
+|[adjust_deltas_for_tiles]| function(a, room)
     for tx=flr(a.x-a.rx)-1,ceil(a.x+a.rx) do
         for ty=flr(a.y-a.ry)-1,ceil(a.y+a.ry) do
             if is_solid_tile(room, tx, ty) then

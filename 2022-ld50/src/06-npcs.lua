@@ -6,7 +6,7 @@ zclass[[team_none,teammate|]] -- unaffiliated team (black holes)
 
 zclass[[model_health_bar,model|hit,%model_health_bar_hit, health_bar_min,1, health_color,1]]
 
-|model_health_bar_hit| function(a, other, ...)
+|[model_health_bar_hit]| function(a, other, ...)
     local prev_health = a.health
     _g.model_hit(a, other, ...)
 
@@ -32,11 +32,11 @@ zclass[[planet,gravity,model_health_bar,drawlayer_20,team_blue|
     evac;init,%planet_evac,duration,~spawn_rate,next,evac, tug,~gravity_tug;
 ]]
 
-|planet_destroyed| function(a)
+|[planet_destroyed]| function(a)
     g_view.following = a
 end $$
 
-|planet_evac| function(a)
+|[planet_evac]| function(a)
     _g.zipper(a.x, a.y, rnd())
 end $$
 
@@ -64,8 +64,8 @@ zclass[[zipper,model,drawlayer_20,team_blue|
     zip;init,nop,speed,.05,duration,1;
 ]]
 
-|zipper_init| function() g_zipper_count += 1 end $$
-|zipper_destroyed| function(a) a:explode() end $$
+|[zipper_init]| function() g_zipper_count += 1 end $$
+|[zipper_destroyed]| function(a) a:explode() end $$
 
 -- an enemy that chases a target around, trying to crash into it
 zclass[[chaser,model_health_bar,drawlayer_20,team_red|
@@ -83,11 +83,11 @@ zclass[[chaser,model_health_bar,drawlayer_20,team_red|
     hit,%chaser_hit;
 ]]
 
-|chaser_init| function(a)
+|[chaser_init]| function(a)
     a.ang = atan2(a.target.x - a.x, a.target.y - a.y)
 end $$
 
-|chaser_update| function(a)
+|[chaser_update]| function(a)
     -- if there is a target, apply an impulse towards that target
     -- if not a.target or not a.target.alive then
         -- a.target = g_zclass_entities['team_blue'][1]
@@ -105,7 +105,7 @@ end $$
     end
 end $$
 
-|chaser_hit| function(a, b, dx, dy)
+|[chaser_hit]| function(a, b, dx, dy)
     _g.model_health_bar_hit(a, b, dx, dy)
     if b.id == 'missile' then a.target = g_pl end
 end $$
@@ -114,7 +114,7 @@ zclass[[gravity,model|
     tug_constant,.0004, gravity_tug,%gravity_tug;
 ]]
 
-|gravity_tug| function(a, obj_list)
+|[gravity_tug]| function(a, obj_list)
     foreach(obj_list, function(obj) 
         if a.id == obj then return end
         local x, y = a.x-obj.x, a.y-obj.y

@@ -7,7 +7,7 @@ zclass[[pos|
 
 -- fast approximate distance formula (no need for sqrt & ^2)
 -- stolen from a pico-8 forum
-|pos_dist_point| function(a, x, y)
+|[pos_dist_point]| function(a, x, y)
     local dx, dy = x-a.x, y-a.y
     local maskx,masky=dx>>31,dy>>31
     local a0,b0=(dx+maskx)^^maskx,(dy+masky)^^masky
@@ -20,7 +20,7 @@ end $$
 -- position with a speed
 zclass[[vec,pos|dx,0,dy,0,vec_update,%vec_update]]
 
-|vec_update| function(a)
+|[vec_update]| function(a)
     a.x += a.dx
     a.y += a.dy
 end $$
@@ -32,7 +32,7 @@ zclass[[mov,vec|
     towards_point,%mov_towards_point
 ]]
 
-|mov_update| function(a)
+|[mov_update]| function(a)
     local ax, ay = a.speed*cos(a.ang), a.speed*sin(a.ang)
     a.dx += ax a.dy += ay
     a.dx *= DEFAULT_INERTIA a.dy *= DEFAULT_INERTIA
@@ -40,6 +40,6 @@ zclass[[mov,vec|
     if ay == 0 and abs(a.dy) < MIN_SPEED then a.dy = 0 end
 end $$
 
-|mov_towards_point| function(a, x, y)
+|[mov_towards_point]| function(a, x, y)
     a.ang = atan2(x-a.x, y-a.y)
 end $$

@@ -47,7 +47,7 @@ end
 end
 for obj,id in pairs(objs_to_clean)do
 if not exclusions[id]then
-(obj)
+deregister_entity(obj)
 end
 end
 end

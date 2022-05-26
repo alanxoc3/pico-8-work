@@ -16,7 +16,7 @@ zclass[[fader_out,fader|
     start; duration,FADE_SPEED, destroyed,@, update,%fader_out_update
 ]]
 
-|fader_out_update| function(a)
+|[fader_out_update]| function(a)
     g_fade = a:get_elapsed_percent'state'
 end $$
 
@@ -24,7 +24,7 @@ zclass[[fader_in,fader|
     start; duration,FADE_SPEED, update,%fader_in_update
 ]]
 
-|fader_in_update| function(a)
+|[fader_in_update]| function(a)
     g_fade = 1 - a:get_elapsed_percent'state'
 end $$
 
@@ -36,7 +36,7 @@ zclass[[animation,actor|
     start; duration,@, next,start
 ]]
 
-|animation_init| function(a)
+|[animation_init]| function(a)
     a.index += 1
     a.index %= 60 -- smooth because divisible by 2,3,4,5,6
 end $$
@@ -45,7 +45,7 @@ zclass[[auto_outline|
     draw,%auto_outline_draw,
     outline_color,1
 ]]
-|auto_outline_draw| function(a)
+|[auto_outline_draw]| function(a)
     draw_outline(a.outline_color, function() a:drawout() end)
     a:drawout()
 end $$

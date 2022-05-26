@@ -54,7 +54,7 @@ function create_level_selector(x, y, level, txt1, txt2, model)
     end
 end
 
-|level_select_init| function()
+|[level_select_init]| function()
     local yoff = 8
     music(0,1000,7)
     clean_all_entities()
@@ -90,7 +90,7 @@ end
     end
 end $$
 
-|level_select_update| function()
+|[level_select_update]| function()
     loop_entities('actor',     'state')
     loop_entities('view',      'match_following')
     loop_entities('star_view', 'match_following')
@@ -122,7 +122,7 @@ zclass[[level_entrance_outline,model,drawlayer_10|
     following,@, x,@, y,@, model,@, update,%level_entrance_outline_update
 ]]
 
-|level_entrance_outline_update| function(a)
+|[level_entrance_outline_update]| function(a)
     if not a.following.alive then a:explode() end
 end $$
 
@@ -135,15 +135,15 @@ zclass[[level_entrance,model,drawlayer_10|
     hit, %level_entrance_hit
 ]]
 
-|level_entrance_init| function(a)
+|[level_entrance_init]| function(a)
     _g.level_entrance_outline(a, a.x, a.y, a.outline_model)
 end $$
 
-|level_entrance_draw| function(a)
+|[level_entrance_draw]| function(a)
     _g.model_draw(a)
 end $$
 
-|level_entrance_hit| function(a, other)
+|[level_entrance_hit]| function(a, other)
     if other.id == 'pl' then
         a:explode()
         music(-1)

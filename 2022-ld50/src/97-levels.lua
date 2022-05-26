@@ -1,4 +1,4 @@
-|level_1_init| function()
+|[level_1_init]| function()
     level_init_shared(1, "lvl 1", "mouse", 32, 0, 0, 9)
 
     local planet = _g.planet(15,0,_g.MOUSE)
@@ -7,7 +7,7 @@
     _g.spawner(_g.chaser, planet, 4, 4,  0, 0)
 end $$
 
-|level_2_init| function()
+|[level_2_init]| function()
     level_init_shared(2, "lvl 2", "cat", 24, 0, 0, 12)
 
     local planet = _g.planet(0,-25,_g.CAT)
@@ -17,7 +17,7 @@ end $$
     _g.spawner(_g.chaser, planet, 12, 16, .67, .67)
 end $$
 
-|level_3_init| function()
+|[level_3_init]| function()
     level_init_shared(3, "lvl 3", "pig", 16, 0, 7, 13)
 
     local planet = _g.planet(0,0,_g.PIG)
@@ -30,7 +30,7 @@ end $$
     _g.spawner(_g.chaser, planet, 8, 8, .25, .25)
 end $$
 
-|level_4_init| function()
+|[level_4_init]| function()
     level_init_shared(4, "lvl 4", "bear", 8, 10, 0, 11)
 
     -- title
@@ -43,7 +43,7 @@ end $$
     _g.black_hole(-22, 0)
 end $$
 
-|level_5_init| function()
+|[level_5_init]| function()
     level_init_shared(5, "lvl 5", "rhino", 40, -10, -10, 14)
 
     local planet = _g.planet(-18, -18, _g.RHINO)
@@ -62,7 +62,7 @@ end $$
 end $$
 
 
-|level_6_init| function()
+|[level_6_init]| function()
     level_init_shared(6, "lvl 6", "croc", 44, 0, -9, 12)
 
     local planet = _g.planet(0,-25,_g.CROC)
@@ -77,7 +77,7 @@ end $$
     _g.black_hole(0, 20)
 end $$
 
-|level_7_init| function()
+|[level_7_init]| function()
     level_init_shared(7, "lvl 7", "dragon", 56, 0, -9, 11)
 
     local planet = _g.planet(0,0,_g.DRAGON)
@@ -92,7 +92,7 @@ end $$
     _g.black_hole(cos(.75+2/3)*58,sin(.75+2/3)*58)
 end $$
 
-|level_8_init| function()
+|[level_8_init]| function()
     inc_level(1)
     level_init_shared(8, "the", "credits", 48, 0, 0)
 

@@ -13,7 +13,7 @@ zclass[[inventory,actor,drawlayer_90|
     9; mem_loc,MEM_HAS_BOWL   , index,8, name,bow   , xoff,7 , yoff,5  , sind,SPR_BOWL;
 ]]
 
-|inventory_start_init| function(a)
+|[inventory_start_init]| function(a)
     if peek'MEM_ITEM_INDEX' ~= 4 then
         a.stat = _g.stat(0, 64, {cspr=a[peek'MEM_ITEM_INDEX'+1].sind})
     else
@@ -21,7 +21,7 @@ zclass[[inventory,actor,drawlayer_90|
     end
 end $$
 
-|inventory_start_update| function(a)
+|[inventory_start_update]| function(a)
     if not does_entity_exist'tbox' and btn'BTN_ITEM_SELECT' then
         call_not_nil(a.stat, 'load', a.stat, 'ending')
         poke(MEM_ITEM_INDEX, 4)
@@ -29,14 +29,14 @@ end $$
     end
 end $$
 
-|inventory_press_update| function(a)
+|[inventory_press_update]| function(a)
     poke(MEM_ITEM_INDEX, mid(0,2,peek'MEM_ITEM_INDEX'%3+zbtn(btnp,0)) + mid(0,2,peek'MEM_ITEM_INDEX'\3+zbtn(btnp,2))*3)
     if does_entity_exist'tbox' or not btn'BTN_ITEM_SELECT' then
         a:load'start'
     end
 end $$
 
-|inventory_draw| function(a)
+|[inventory_draw]| function(a)
     for item in all(a) do
         local drawfunc = item.index == 4 and function() a.pl:drawout() end or function()
             zspr(item.sind, a.pl.x*8+item.xoff, a.pl.y*8+item.yoff, 1, 1, a.pl.xf)

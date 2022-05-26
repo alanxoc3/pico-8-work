@@ -4,14 +4,14 @@ zclass[[gameover_control,actor|
     ending;update,nop;
 ]]
 
-|gameover_control_update| function(a)
+|[gameover_control_update]| function(a)
     if btnp(4) or btnp(5) then
         _g.fader_out(function() g_state:load'title' end)
         a:load'ending'
     end
 end $$
 
-|gameover_init| function(state)
+|[gameover_init]| function(state)
     _g.gameover_control()
     state.game_over_sind, state.game_over_text = unpack(rnd_item(zobj[[
         1;,32,  "quack quack";
@@ -25,7 +25,7 @@ end $$
     ]]))
 end $$
 
-|gameover_draw| function(state)
+|[gameover_draw]| function(state)
     zcamera(64, 64, function()
         zsprb(state.game_over_sind, 0, g_i%2, 1, 1, true, false, 1)
 

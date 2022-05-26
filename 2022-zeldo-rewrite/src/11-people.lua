@@ -4,7 +4,7 @@ zclass[[person,actor,solid,simple_spr,drawlayer_50|
     init,%person_init
 ]]
 
-|person_init| function(a)
+|[person_init]| function(a)
     _g.target(.5, .25, 0, 0, a,function()
         a.xf = a.x > g_pl.x
 

@@ -44,7 +44,7 @@ zclass[[stat,vec,actor,drawlayer_95|
     ending; dy,2, duration,.2;
 ]]
 
-|stat_draw| function(a)
+|[stat_draw]| function(a)
     local obj = a.obj
     if align ~= 0 then
         zcamera(a.x+2, a.y, function()
@@ -81,11 +81,11 @@ zclass[[tbox,vec,actor,drawlayer_99|
     ending; dy,2,  update,nop, duration,.2, init,nop;
 ]]
 
-|tbox_init| function(a)
+|[tbox_init]| function(a)
     a.texts = split(a.rawtext, "^")
 end $$
 
-|tbox_update| function(a)
+|[tbox_update]| function(a)
     local text1 = a.texts[a.cur_text_index]
     local text2 = a.texts[a.cur_text_index+1] or ""
     local textslen = #text1 + #text2 + 4
@@ -111,7 +111,7 @@ end $$
     a.anim = min(textslen, a.anim+.5)
 end $$
 
-|tbox_draw| function(a)
+|[tbox_draw]| function(a)
     draw_card(65, a.y, 46.5, 10, 2.5, 5,
     function()
         zcall(zprinttbox, [[

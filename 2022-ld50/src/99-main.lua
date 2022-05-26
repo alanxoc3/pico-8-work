@@ -67,7 +67,7 @@ function _draw()
     SCREEN_SHAKE = false
 end
 
-|level_select_draw| function()
+|[level_select_draw]| function()
     loop_entities_in_view(g_view, 'drawlayer_03', 'draw')
     loop_entities_in_view(g_view, 'drawlayer_10', 'draw')
     loop_entities_in_view(g_view, 'drawlayer_20', 'draw')
@@ -77,7 +77,7 @@ end $$
 
 LEVEL_RADIUS = 26
 LEVEL_VIEW_RADIUS = LEVEL_RADIUS-2
-|level_draw| function()
+|[level_draw]| function()
     circ(zoomx(0), zoomy(0), zoom(LEVEL_VIEW_RADIUS), 1)
     _g.level_select_draw()
 end $$
@@ -92,7 +92,7 @@ end
 
 zclass[[stats_displayer,drawlayer_40|draw,%stats_displayer_draw]]
 
-|stats_displayer_draw| function(a)
+|[stats_displayer_draw]| function(a)
     if g_zipper_goal then
         print(""..g_zipper_count.."/"..g_zipper_goal, 4, 4, 11)
     end
@@ -102,7 +102,7 @@ zclass[[game_checker,actor|
     pl,@, update,%game_checker_update
 ]]
 
-|game_checker_update| function(a)
+|[game_checker_update]| function(a)
     if g_zipper_goal and g_zipper_count >= g_zipper_goal then
         if #g_zclass_entities['planet'] == 0 then
             music(-1) a:kill() 
@@ -128,7 +128,7 @@ function get_wob_text()
     return "wob "..G_DEATH_COUNT\1
 end
 
-|retry_init| function(a)
+|[retry_init]| function(a)
     music(4,nil,1)
     clean_all_entities()
     G_DEATH_COUNT = max(0, min(999, G_DEATH_COUNT+1))
@@ -145,12 +145,12 @@ end
     end)
 end $$
 
-|retry_update| function(a)
+|[retry_update]| function(a)
     loop_entities('actor',     'state')
     loop_entities('model', 'model_update')
 end $$
 
-|retry_draw| function(a)
+|[retry_draw]| function(a)
     loop_entities('drawlayer_40', 'draw')
 end $$
 
@@ -158,7 +158,7 @@ function inc_level(inc)
     G_LEVEL = max(1, min((G_LEVEL+inc)\1, 9))
 end
 
-|win_init| function(a)
+|[win_init]| function(a)
     music(5,nil,1)
     clean_all_entities()
 
@@ -176,16 +176,16 @@ end
     end)
 end $$
 
-|win_update| function(a)
+|[win_update]| function(a)
     loop_entities('actor',     'state')
     loop_entities('model', 'model_update')
 end $$
 
-|win_draw| function(a)
+|[win_draw]| function(a)
     loop_entities('drawlayer_40', 'draw')
 end $$
 
-|level_update| function()
+|[level_update]| function()
     if g_zipper_goal and g_zipper_count >= g_zipper_goal then
         if g_zclass_entities['planet'] and #g_zclass_entities['planet'] == 1 then
             g_view.following = g_zclass_entities['planet'][1]
@@ -241,7 +241,7 @@ zclass[[spawner,actor|
     spawn;init,%spawn_init, duration,~spawn_rate, next,spawn;
 ]]
 
-|spawn_init| function(a)
+|[spawn_init]| function(a)
     local ang = rnd(a.max_ang-a.min_ang) + a.min_ang
 
     -- each level is 25 wide, so let's make sure they spawn outside the screen.

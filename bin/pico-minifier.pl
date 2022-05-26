@@ -17,7 +17,7 @@ binmode(STDOUT, "encoding(UTF-8)");
 # Syntax to worry about:
 # ""    -- raw string, spaces are not deleted from a string with double quotes, and the minifier does not run on it. the minifier does run on strings with '...' or [[...]] though.
 # [[]]  -- zobj string, zobj strings are all put together into one variable, and replaced with an index. this is done so that all the strings could be serialized in pico-8 cart data if you want.
-# || $$ -- adds something to the _g table. name of item is specified between | and |. value is specified between | and $$.
+# |[...]| $$ -- adds something to the _g table. name of item is specified between | and |. value is specified between | and $$.
 
 my $minify;
 my $ignorelib;
@@ -46,7 +46,7 @@ $content = remove_comments($content);
 # |...| ... $$ syntax
 my $global_keys = "";
 my $global_vals = "";
-while ( $content =~ s/\|\s*(\w+)\s*\|(.*?)\$\$//ms ) {
+while ( $content =~ s/\|\[\s*(\w+)\s*\]\|(.*?)\$\$//ms ) {
     my $name = $1; my $value = $2;
     $global_keys .= ",".$1.",@";
     $global_vals .= ",".$2;

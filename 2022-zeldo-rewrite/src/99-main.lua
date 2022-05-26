@@ -15,7 +15,7 @@ zclass[[game_state,actor|
     gameover; state_init,%gameover_init, update,%simple_update, draw,%gameover_draw;
 ]]
 
-|game_state_init| function(state)
+|[game_state_init]| function(state)
     clean_all_entities'game_state'
     _g.fader_in()
     g_animation = _g.animation'ANIMATION_SPEED'

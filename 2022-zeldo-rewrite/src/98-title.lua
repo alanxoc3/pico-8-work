@@ -1,8 +1,8 @@
-|title_init| function()
+|[title_init]| function()
     _g.title_logo()
 end $$
 
-|simple_update| function()
+|[simple_update]| function()
     if does_entity_exist'fader' then return end
     zcall(loop_entities, [[
         1;,timer, tick;
@@ -10,7 +10,7 @@ end $$
     ]])
 end $$
 
-|title_draw| function()
+|[title_draw]| function()
     draw_room(g_rooms[8*16+8], CARD_CX, CARD_CY, nop, nop)
     zcall(loop_entities, [[
         1;,drawlayer_99, draw;
@@ -28,13 +28,13 @@ zclass[[title_logo,actor,auto_outline,drawlayer_99|
     drawout,%title_logo_drawout;
 ]]
 
-|title_logo_update| function(a)
+|[title_logo_update]| function(a)
     if btnp'4' or btnp'5' then
         _g.fader_out(function() g_state:load'room' end)
     end
 end $$
 
-|title_logo_drawout| function(a)
+|[title_logo_drawout]| function(a)
     for i=-2,2 do
         zspr(SPR_TITLE_L+i, i*10+64, 57+cos((g_i+i)/4)/2, 1, 2)
     end

@@ -4,7 +4,7 @@ zclass[[fairy,actor,mov,drawlayer_70|
     draw,%fairy_draw
 ]]
 
-|fairy_update| function(a)
+|[fairy_update]| function(a)
     local b = a.rel_actor
     local dir = t()\10 % 2 == 0 and 1 or -1
     local offx, offy = b.x+dir*cos(t()*.75), b.y+sin(t()*.75)-.25
@@ -13,7 +13,7 @@ zclass[[fairy,actor,mov,drawlayer_70|
     a.speed = a:dist_point(offx, offy)*.013
 end $$
 
-|fairy_draw| function(a)
+|[fairy_draw]| function(a)
     for i=-2,2 do
         local m = .125*sgn(i)
         scr_line(a.x+abs(i)\2*m, a.y+i%2*m, a.x-a.dx*6, a.y-a.dy*6, 1)

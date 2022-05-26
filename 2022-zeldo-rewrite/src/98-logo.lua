@@ -28,9 +28,9 @@ function fade(threshold)
     end
 end
 
-|logo_init| function() sfx(63, 0) end $$
+|[logo_init]| function() sfx(63, 0) end $$
 
-|logo_draw| function(a)
+|[logo_draw]| function(a)
     g_fade = cos(a:get_elapsed_percent'state')+1
     camera(g_fade > .5 and rnd_one())
     zspr(SPR_LOGO, 64, 64, SPR_LOGO_W, SPR_LOGO_H)

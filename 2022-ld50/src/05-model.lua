@@ -18,7 +18,7 @@ function line_loop(points, color, linefunc)
 end
 
 -- listens for a change in the "model" variable
-|model_update| function(a)
+|[model_update]| function(a)
     if a.model ~= a.previous_model then
         a.radius = a.model.radius
         a.collisions = a.model.collisions
@@ -34,7 +34,7 @@ end
     end
 end $$
 
-|model_draw| function(a)
+|[model_draw]| function(a)
     local base_model = {}
     if a.prev_draw_ang == a.ang and a.prev_draw_x == a.x and a.prev_draw_y == a.y then
         base_model = a.prev_base_model
@@ -98,7 +98,7 @@ function parse_model(template_str, scale, xoffset, yoffset)
     return {radius=radius, shapes=shapes, collisions=collisions}
 end
 
-|model_collide| function(a, other_list)
+|[model_collide]| function(a, other_list)
     if #a.collision_circs > 0 then
         foreach(other_list, function(other)
             if a.radius + other.radius > 0 then
@@ -115,7 +115,7 @@ end
     end
 end $$
 
-|model_hit| function(a, b, dx, dy)
+|[model_hit]| function(a, b, dx, dy)
     if a.health and a.health > 0 then
         a.health = max(0, a.health - (b.damage or 0))
         if a.health <= 0 then a:explode() end
@@ -132,7 +132,7 @@ function translate_points(x, y, dir, shape)
     return points
 end
 
-|model_explode| function(a, duration)
+|[model_explode]| function(a, duration)
     if a.alive then
         if a.explode_sfx then NOISE = a.explode_sfx end
         a:kill()
@@ -159,7 +159,7 @@ zclass[[vanishing_shape,vec,actor,drawlayer_10|
     start;duration,.25;
 ]]
 
-|vanishing_shape_draw| function(a)
+|[vanishing_shape_draw]| function(a)
     local percent = a:get_elapsed_percent'state'
     local points = {}
     foreach(a.points, function(p)
@@ -180,12 +180,12 @@ zclass[[line_particle,vec,actor,drawlayer_40|
     start;duration,.5;
 ]]
 
-|line_particle_update| function(a)
+|[line_particle_update]| function(a)
     a.dx += cos(a.ang)*.005
     a.dy += sin(a.ang)*.005
 end $$
 
-|line_particle_draw| function(a)
+|[line_particle_draw]| function(a)
     local percent = 1 - a:get_elapsed_percent'state'
     line(zoomx(a.x+a.x1*percent), zoomy(a.y+a.y1*percent), zoomx(a.x+a.x2*percent), zoomy(a.y+a.y2*percent), a.color)
 end $$

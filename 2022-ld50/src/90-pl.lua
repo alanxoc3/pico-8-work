@@ -9,7 +9,7 @@ zclass[[pl,actor,model,drawlayer_20,team_blue|
     run;update,%pl_update,
 ]]
 
-|pl_update| function(a)
+|[pl_update]| function(a)
     a.shoot_percent = min(1,a.shoot_percent+.01)
     if a.shoot_percent == 1 then
         a.shoot_enabled = true
@@ -41,7 +41,7 @@ zclass[[pl,actor,model,drawlayer_20,team_blue|
     a.d_ang = -xbtn()*.01
 end $$
 
-|pl_hit| function(a, b, dx, dy)
+|[pl_hit]| function(a, b, dx, dy)
     if b.parents['team_blue'] then -- if same team as player, just bump
         if b.id == 'zipper' then return end
         a.dx += dx
@@ -66,11 +66,11 @@ zclass[[pl_alert,anchor_pos,actor,drawlayer_30|
     wait;duration,1, draw,nop
 ]]
 
-|pl_alert_destroy| function(a)
+|[pl_alert_destroy]| function(a)
     a.alert_radar.alerts[a.pointing_to] = nil
 end $$
 
-|pl_alert_update| function(a)
+|[pl_alert_update]| function(a)
     if a.anchoring.alive and a.pointing_to.alive then
         local x, y = a.pointing_to.x-a.anchoring.x, a.pointing_to.y-a.anchoring.y
         a.ang = atan2(x, y)
@@ -80,7 +80,7 @@ end $$
     end
 end $$
 
-|pl_alert_draw| function(a)
+|[pl_alert_draw]| function(a)
     local dist = max(1, a.dist/2)
     local scale = 1
     if a.curr == 'dying' then
@@ -107,7 +107,7 @@ zclass[[alert_radar,anchor_pos|
     draw, %pl_alert_draw,
 ]]
 
-|alert_radar_register| function(a, others)
+|[alert_radar_register]| function(a, others)
     foreach(others, function(other)
         if not a.alerts[other] then
             a.alerts[other] = _g.pl_alert(a, a.anchoring, other)
@@ -125,24 +125,24 @@ zclass[[bar,actor,anchor_pos,drawlayer_03|
     dying;duration,.1,update,%bar_update_dying;
 ]]
 
-|bar_update_starting| function(a)
+|[bar_update_starting]| function(a)
     a.rmin = a:get_elapsed_percent'state'*a.initial_rmin
     a.rmax = a:get_elapsed_percent'state'*a.initial_rmax
 end $$
 
-|bar_update_dying| function(a)
+|[bar_update_dying]| function(a)
     a.rmin = a.initial_rmin - a:get_elapsed_percent'state'*a.initial_rmin
     a.rmax = a.initial_rmax - a:get_elapsed_percent'state'*a.initial_rmax
 end $$
 
-|bar_update| function(a)
+|[bar_update]| function(a)
     local prev_percent = a.percent
     a.percent = a.percent_func()
     if not a.anchoring.alive then a:load'dying'
     elseif prev_percent ~= a.percent then a:load"run" end
 end $$
 
-|bar_draw| function(a)
+|[bar_draw]| function(a)
     fillp(0b0111101111011110)
     zcircfill(a.x, a.y, a.rmin, a.fg)
     fillp()

@@ -28,9 +28,9 @@ function fade(threshold)
     end
 end
 
-|logo_init| function() music(-1) sfx(63, 0) end $$
+|[logo_init]| function() music(-1) sfx(63, 0) end $$
 
-|logo_draw| function(a)
+|[logo_draw]| function(a)
     -- stateful: load(state)
     -- timed_state: state_duration, state_tick, state_next=nil (end)
     local logo_opacity = cos(a:get_elapsed_percent'state')+1
