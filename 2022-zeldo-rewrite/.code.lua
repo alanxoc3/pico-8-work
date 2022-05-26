@@ -395,7 +395,8 @@ if a.xf ~=g_pl.xf then
 if not a.stat then a.stat=_g.stat(1,119,a)end
 if btnp"4"and not does_entity_exist"tbox"then
 _g.tbox(a.text,function()
-g_state:load"room"
+zcall(poke,[[1;,0x5d02,@;2;,0x5d03,@;3;,0x5d09,1;]],g_pl.x*16,g_pl.y*16)
+_g.fader_out(function()g_state:load"room" end)
 end)
 end
 end
@@ -406,7 +407,7 @@ end,function(a)
 _g.target(.125,.5,0,.25,a,function()
 if not a.stat then a.stat=_g.stat(1,119,a)end
 if btnp"4"and not does_entity_exist"tbox"then
-_g.tbox(a.text)
+_g.tbox(a.text,nop)
 end
 end,function()
 if a.stat then a.stat:load"ending" a.stat=nil end
@@ -674,12 +675,12 @@ end
 zcamera(cam_x,cam_y,post_card_func)
 end
 zclass[[stat,vec,actor,drawlayer_95|align,@,x,@,obj,@,y,138,draw,%stat_draw,max_health,10,health,5;start;dy,-2,duration,.2,next,normal;normal;dy,0;ending;dy,2,duration,.2;]]
-zclass[[tbox,vec,actor,drawlayer_99|rawtext,@,y,138,cur_text_index,1,anim,0,line_1,,line_2,,update,%tbox_update,draw,%tbox_draw;texts;,;start;dy,-2,duration,.2,next,normal,update,nop,init,%tbox_init;normal;dy,0,anim,0,done,no,update,%tbox_update,init,nop;ending;dy,2,update,nop,duration,.2,init,nop;]]
+zclass[[tbox,vec,actor,drawlayer_99|rawtext,@,destroyed,@,y,138,cur_text_index,1,anim,0,line_1,,line_2,,update,%tbox_update,draw,%tbox_draw;texts;,;start;dy,-2,duration,.2,next,normal,update,nop,init,%tbox_init;normal;dy,0,anim,0,done,no,update,%tbox_update,init,nop;ending;dy,2,update,nop,duration,.2,init,nop;]]
 zclass[[fairy,actor,mov,drawlayer_70|rel_actor,@,x,@,y,@,update,%fairy_update,draw,%fairy_draw]]
 zclass[[house,actor,simple_spr,drawlayer_50|cspr,174,sind,174,sw,2,sh,2,room,231,init,%house_init]]
 zclass[[housetest,house|x,@,y,@]]
 zclass[[person,actor,solid,simple_spr,drawlayer_50|text,,rx,.375,ry,.375,cspr,97,init,%person_init]]
-zclass[[navyblock,person|x,@,y,@,sy,-2,cname,navy,sind,97,text,my sister has been in^the forest all day.^find something to^protect yourself with^and bring her home.|0x5d09]]
+zclass[[navyblock,person|x,@,y,@,sy,-2,cname,navy,sind,97,text,my sister has been in^the forest all day.^find something to^protect yourself with^and bring her home.|0x5d09|0]]
 zclass[[sign,actor,solid,simple_spr,drawlayer_50|text,,rx,.375,ry,.375,cname,sign,cspr,171,sind,171,init,%sign_init]]
 zclass[[signtest,sign|x,@,y,@,text,mary had a^little lamb^little lamb^little lamb^mary had a^little lamb^whose fleece was^white as yo face]]
 zclass[[gameover_control,actor|start;update,nop,duration,.5,next,normal;normal;update,%gameover_control_update;ending;update,nop;]]

@@ -66,7 +66,7 @@ zclass[[stat,vec,actor,drawlayer_95|
 end $$
 
 zclass[[tbox,vec,actor,drawlayer_99|
-    rawtext,@,
+    rawtext,@, destroyed,@,
     y,138,
     cur_text_index,1,
     anim,0,

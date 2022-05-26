@@ -12,7 +12,13 @@ zclass[[person,actor,solid,simple_spr,drawlayer_50|
             if not a.stat then a.stat = _g.stat(1, 119, a) end
             if btnp'4' and not does_entity_exist'tbox' then
                 _g.tbox(a.text, function()
-                    g_state:load'room'
+                    zcall(poke, [[
+                        1;,MEM_PL_X,@;
+                        2;,MEM_PL_Y,@;
+                        3;,MEM_IS_NAVY_HOME,1;
+                    ]],  g_pl.x*POS_MULTIPLIER_FOR_MEMORY, g_pl.y*POS_MULTIPLIER_FOR_MEMORY)
+
+                    _g.fader_out(function() g_state:load'room' end)
                 end)
             end
         end
@@ -27,5 +33,5 @@ zclass[[navyblock,person|
     cname,"navy",
     sind,SPR_NAVY,
     text,"TEXT_NAVY_BLOCK"
-|MEM_IS_NAVY_HOME
+|MEM_IS_NAVY_HOME|0
 ]]

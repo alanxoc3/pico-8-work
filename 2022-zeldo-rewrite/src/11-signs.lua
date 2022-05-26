@@ -9,7 +9,7 @@ zclass[[sign,actor,solid,simple_spr,drawlayer_50|
     _g.target(.125,.5,0,.25,a,function()
         if not a.stat then a.stat = _g.stat(1, 119, a) end
         if btnp'4' and not does_entity_exist'tbox' then
-            _g.tbox(a.text)
+            _g.tbox(a.text, nop)
         end
     end, function()
         if a.stat then a.stat:load'ending' a.stat = nil end
