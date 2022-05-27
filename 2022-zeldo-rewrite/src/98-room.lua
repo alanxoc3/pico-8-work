@@ -6,8 +6,8 @@ zclass[[room_bounds,box|x,@,y,@,rx,@,ry,@]]
 
     g_pl = _g.pl(peek'MEM_PL_X'/POS_MULTIPLIER_FOR_MEMORY, peek'MEM_PL_Y'/POS_MULTIPLIER_FOR_MEMORY, peek'MEM_PL_XF'>0)
     g_fairy = _g.fairy(g_pl, g_pl.x, g_pl.y-.125)
-    g_rstat = _g.rstat()
-    -- _g.stat(1, 119, g_fairy)
+    g_rstat_left, g_rstat_inventory, g_rstat_right = _g.rstat(-1, 9), _g.rstat(0, 64), _g.rstat(1, 119)
+
     _g.inventory(g_pl)
 
     loop_through_tiles(r, function(sind, x, y)

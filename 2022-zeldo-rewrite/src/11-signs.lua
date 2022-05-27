@@ -22,7 +22,7 @@ zclass[[target_with_tbox,actor|
 |[target_with_tbox_init]| function(a)
     _g.target(a.trx, a.try, a.tx, a.ty, a, function()
         if not a:target_with_tbox_disable_callback() then
-            g_rstat:set(a)
+            g_rstat_right:set(a)
             if btnp'4' and not does_entity_exist'tbox' then
                 _g.tbox(a.text, function()
                     a:target_with_tbox_finish_callback()

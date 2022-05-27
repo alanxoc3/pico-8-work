@@ -4,16 +4,15 @@ zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50|
     x,@,y,@,xf,@,
     sind,88,
     rx,PL_RADIUS,ry,PL_RADIUS,
-    init,%pl_init,
+
     update,%pl_update,
     energy,0,
     drawout,%pl_drawout;
     sinds;,SPR_PL_FEET_1,SPR_PL_FEET_2,SPR_PL_FEET_3
 ]]
 
-|[pl_init]| function(a) _g.stat(-1, 9, a) end $$
-
 |[pl_update]| function(a)
+    g_rstat_left:set(a)
     if not does_entity_exist'tbox' and not btn(BTN_ITEM_SELECT) and zbtn(btn, 0) | zbtn(btn, 2) ~= 0 then
         a.ang, a.speed = atan2(zbtn(btn, 0), zbtn(btn, 2)), PL_SPEED
 

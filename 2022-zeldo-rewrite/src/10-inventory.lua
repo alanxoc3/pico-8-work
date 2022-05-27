@@ -14,16 +14,13 @@ zclass[[inventory,actor,drawlayer_90|
 ]]
 
 |[inventory_start_init]| function(a)
-    if peek'MEM_ITEM_INDEX' ~= 4 then
-        a.stat = _g.stat(0, 64, {cspr=a[peek'MEM_ITEM_INDEX'+1].sind})
-    else
-        a.stat = nil
-    end
+    a.stat = peek'MEM_ITEM_INDEX' ~= 4 and {cspr=a[peek'MEM_ITEM_INDEX'+1].sind}
 end $$
 
 |[inventory_start_update]| function(a)
+    g_rstat_inventory:set(a.stat)
+
     if not does_entity_exist'tbox' and btn'BTN_ITEM_SELECT' then
-        call_not_nil(a.stat, 'load', a.stat, 'ending')
         poke(MEM_ITEM_INDEX, 4)
         a:load'press'
     end

@@ -37,9 +37,11 @@ end
 
 -- controls the right stat so there is only ever 1 instance
 zclass[[rstat|
-    buffer;,;
+    align,@, x,@,
     update,%rstat_update,
-    set,%rstat_set
+    set,%rstat_set;
+
+    buffer;,;
 ]]
 
 |[rstat_update]| function(a)
@@ -52,7 +54,7 @@ zclass[[rstat|
     end
     
     if a.stat then a.stat:load'ending' end
-    a.stat = first_obj and _g.stat(1, 119, first_obj)
+    a.stat = first_obj and _g.stat(a.align, a.x, first_obj)
 end $$
 
 |[rstat_set]| function(a, s)
