@@ -6,7 +6,8 @@ zclass[[room_bounds,box|x,@,y,@,rx,@,ry,@]]
 
     g_pl = _g.pl(peek'MEM_PL_X'/POS_MULTIPLIER_FOR_MEMORY, peek'MEM_PL_Y'/POS_MULTIPLIER_FOR_MEMORY, peek'MEM_PL_XF'>0)
     g_fairy = _g.fairy(g_pl, g_pl.x, g_pl.y-.125)
-    _g.stat(1, 119, g_fairy)
+    g_rstat = _g.rstat()
+    -- _g.stat(1, 119, g_fairy)
     _g.inventory(g_pl)
 
     loop_through_tiles(r, function(sind, x, y)
@@ -33,6 +34,7 @@ end $$
         6;,vec,         vec_update;
         7;,anchor,      update_anchor;
         8;,target,      update_target, @;
+        9;,rstat,       update;
     ]], g_zclass_entities.solid, g_rooms[peek'MEM_ROOM_IND'], g_zclass_entities.pl)
 
     if not g_pl:inside(g_room_bounds) then

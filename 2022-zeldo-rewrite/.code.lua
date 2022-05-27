@@ -140,7 +140,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,actor_deregistered,@,animation_init,@,auto_outline_draw,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,tiledraw_draw,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,explode_draw,@,calc_deltas,@,adjust_deltas_for_solids,@,adjust_deltas_for_tiles,@,inventory_start_init,@,inventory_start_update,@,inventory_press_update,@,inventory_draw,@,simple_spr_draw,@,anchor_update_anchor,@,targettouch_update_target,@,pl_init,@,pl_update,@,pl_drawout,@,stat_draw,@,tbox_init,@,tbox_update,@,tbox_draw,@,fairy_update,@,fairy_draw,@,house_init,@,person_target_with_tbox_disable_callback,@,person_target_with_tbox_finish_callback,@,target_with_tbox_init,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,gameover_control_ending,@,gameover_init,@,gameover_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,simple_update,@,title_draw,@,title_logo_update,@,title_logo_drawout,@,game_state_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,actor_deregistered,@,animation_init,@,auto_outline_draw,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,tiledraw_draw,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,explode_draw,@,calc_deltas,@,adjust_deltas_for_solids,@,adjust_deltas_for_tiles,@,inventory_start_init,@,inventory_start_update,@,inventory_press_update,@,inventory_draw,@,simple_spr_draw,@,anchor_update_anchor,@,targettouch_update_target,@,pl_init,@,pl_update,@,pl_drawout,@,rstat_update,@,rstat_set,@,stat_draw,@,tbox_init,@,tbox_update,@,tbox_draw,@,fairy_update,@,fairy_draw,@,house_init,@,person_target_with_tbox_disable_callback,@,person_target_with_tbox_finish_callback,@,target_with_tbox_init,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,gameover_control_ending,@,gameover_init,@,gameover_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,simple_update,@,title_draw,@,title_logo_update,@,title_logo_drawout,@,game_state_init,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -316,6 +316,17 @@ end,function(a)
 zspr(a.sind,a.x*8,a.y*8-2,1,1,a.xf)
 zspr(91,a.x*8,a.y*8-2,1,1,a.xf)
 end,function(a)
+local buffer=a.buffer
+a.buffer={}
+local cur_obj,first_obj=a.stat and a.stat.obj,buffer[1]
+for obj in all(buffer)do
+if cur_obj==obj then return end
+end
+if a.stat then a.stat:load"ending" end
+a.stat=first_obj and _g.stat(1,119,first_obj)
+end,function(a,s)
+add(a.buffer,s)
+end,function(a)
 local obj=a.obj
 if align ~=0 then
 zcamera(a.x+2,a.y,function()
@@ -393,21 +404,16 @@ end,function(a)
 poke(0x5d09,1)
 load_room(%0x5d01,g_pl.x,g_pl.y,g_pl.xf)
 end,function(a)
-local end_stat=function()
-if a.stat then a.stat:load"ending" a.stat=nil end
-end
 _g.target(a.trx,a.try,a.tx,a.ty,a,function()
-if a:target_with_tbox_disable_callback()then
-end_stat()
-else
-if not a.stat then a.stat=_g.stat(1,119,a)end
+if not a:target_with_tbox_disable_callback()then
+g_rstat:set(a)
 if btnp"4"and not does_entity_exist"tbox"then
 _g.tbox(a.text,function()
 a:target_with_tbox_finish_callback()
 end)
 end
 end
-end,end_stat)
+end,nop)
 end,function(a)
 g_fade=a:get_elapsed_percent"state"
 end,function(a)
@@ -435,7 +441,7 @@ local r=g_rooms[peek"0x5d01"]
 g_room_bounds=_g.room_bounds(r.w/2,r.h/2+.25,r.w/2+.125,r.h/2+.125)
 g_pl=_g.pl(peek"0x5d02"/16,peek"0x5d03"/16,peek"0x5d04">0)
 g_fairy=_g.fairy(g_pl,g_pl.x,g_pl.y-.125)
-_g.stat(1,119,g_fairy)
+g_rstat=_g.rstat()
 _g.inventory(g_pl)
 loop_through_tiles(r,function(sind,x,y)
 if fget(sind,1)then
@@ -447,7 +453,7 @@ _g[g_obj_map[obj_template.index]](obj_template.x+.5,obj_template.y+.5)
 end)
 end,function(state)
 if does_entity_exist"fader"then return end
-zcall(loop_entities,[[1;,timer,tick;2;,actor,state;3;,mov,mov_update;4;,collidable,adjust_deltas_for_solids,@;5;,collidable,adjust_deltas_for_tiles,@;6;,vec,vec_update;7;,anchor,update_anchor;8;,target,update_target,@;]],g_zclass_entities.solid,g_rooms[peek"0x5d01"],g_zclass_entities.pl)
+zcall(loop_entities,[[1;,timer,tick;2;,actor,state;3;,mov,mov_update;4;,collidable,adjust_deltas_for_solids,@;5;,collidable,adjust_deltas_for_tiles,@;6;,vec,vec_update;7;,anchor,update_anchor;8;,target,update_target,@;9;,rstat,update;]],g_zclass_entities.solid,g_rooms[peek"0x5d01"],g_zclass_entities.pl)
 if not g_pl:inside(g_room_bounds)then
 local abx,aby=g_pl:abside(g_room_bounds)
 local nri=peek"0x5d01"+aby*16+abx
@@ -647,6 +653,7 @@ pset(x2-i,y1+i)pset(x2-i,y2-i)
 end
 zcamera(cam_x,cam_y,post_card_func)
 end
+zclass[[rstat|buffer;,;update,%rstat_update,set,%rstat_set]]
 zclass[[stat,vec,actor,drawlayer_95|align,@,x,@,obj,@,y,138,draw,%stat_draw,max_health,10,health,5;start;dy,-2,duration,.2,next,normal;normal;dy,0;ending;dy,2,duration,.2;]]
 zclass[[tbox,vec,actor,drawlayer_99|rawtext,@,destroyed,@,y,138,cur_text_index,1,anim,0,line_1,,line_2,,update,%tbox_update,draw,%tbox_draw;texts;,;start;dy,-2,duration,.2,next,normal,update,nop,init,%tbox_init;normal;dy,0,anim,0,done,no,update,%tbox_update,init,nop;ending;dy,2,update,nop,duration,.2,init,nop;]]
 zclass[[fairy,actor,mov,drawlayer_50|rel_actor,@,x,@,y,@,cname,ivan,cspr,9,update,%fairy_update,draw,%fairy_draw]]
@@ -655,7 +662,7 @@ zclass[[housetest,house|x,@,y,@]]
 zclass[[person,target_with_tbox,solid,simple_spr,drawlayer_50|text,,rx,.375,ry,.375,trx,.5,try,.25,target_with_tbox_disable_callback,%person_target_with_tbox_disable_callback,target_with_tbox_finish_callback,%person_target_with_tbox_finish_callback;]]
 zclass[[navyblock,person|x,@,y,@,sy,-2,cname,navy,cspr,97,sind,97,text,my sister has been in^the forest all day.^find something to^protect yourself with^and bring her home.|0x5d09|0]]
 zclass[[target_with_tbox,actor|init,%target_with_tbox_init,trx,0,try,0,tx,0,ty,0,target_with_tbox_disable_callback,nop,target_with_tbox_finish_callback,nop]]
-zclass[[sign,target_with_tbox,solid,simple_spr,drawlayer_50|text,,rx,.375,ry,.375,sy,-2,cname,sign,cspr,24,sind,24,trx,.125,try,.5,tx,0,ty,.25]]
+zclass[[sign,target_with_tbox,solid,simple_spr,drawlayer_50|text,,rx,.375,ry,.375,sy,-2,cname,sign,cspr,24,sind,24,trx,.125,try,.375,tx,0,ty,.25]]
 zclass[[signtest,sign|x,@,y,@,text,mary had a^little lamb^little lamb^little lamb^mary had a^little lamb^whose fleece was^white as yo face]]
 g_fade_table=zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,1,0,0,0,0;3;,3,3,3,3,1,1,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,0,0,0,0;6;,6,6,13,13,5,5,0,0;7;,7,7,6,13,13,5,0,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,0,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,0,0,0;13;,13,13,5,5,1,0,0,0;14;,14,14,13,4,2,2,0,0;15;,15,15,13,13,5,5,0,0;]]
 function fade(threshold)
@@ -684,7 +691,7 @@ menuitem(1,"reset save data",function()
 memset(0x5e00,0,64)
 extcmd"reset"
 end)
-zclass[[game_state,actor|ecs_exclusions;actor,yes,timer,yes;curr,gameover,init,%game_state_init;logo;state_init,%logo_init,update,%simple_update,draw,%logo_draw,duration,2.5,next,title;title;state_init,%title_init,update,%simple_update,draw,%title_draw;room;state_init,%room_init,update,%room_update,draw,%room_draw;gameover;state_init,%gameover_init,update,%simple_update,draw,%gameover_draw;]]
+zclass[[game_state,actor|ecs_exclusions;actor,yes,timer,yes;curr,room,init,%game_state_init;logo;state_init,%logo_init,update,%simple_update,draw,%logo_draw,duration,2.5,next,title;title;state_init,%title_init,update,%simple_update,draw,%title_draw;room;state_init,%room_init,update,%room_update,draw,%room_draw;gameover;state_init,%gameover_init,update,%simple_update,draw,%gameover_draw;]]
 function _init()
 memcpy(0x5d00,0x5e00,64)
 if peek"MEM_SAVE_DATA"==0 then

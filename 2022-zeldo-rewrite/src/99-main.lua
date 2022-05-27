@@ -7,7 +7,7 @@ end)
 
 zclass[[game_state,actor|
     ecs_exclusions;actor,yes,timer,yes; -- remove game_state from the actor group
-    curr,gameover, init,%game_state_init;
+    curr,room, init,%game_state_init;
 
     logo;     state_init,%logo_init,     update,%simple_update, draw,%logo_draw, duration,2.5, next,title;
     title;    state_init,%title_init,    update,%simple_update, draw,%title_draw;

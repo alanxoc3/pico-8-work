@@ -35,6 +35,30 @@ function draw_card(x, y, rx, ry, coffx, coffy, card_func, post_card_func)
     zcamera(cam_x, cam_y, post_card_func)
 end
 
+-- controls the right stat so there is only ever 1 instance
+zclass[[rstat|
+    buffer;,;
+    update,%rstat_update,
+    set,%rstat_set
+]]
+
+|[rstat_update]| function(a)
+    local buffer = a.buffer
+    a.buffer = {}
+    local cur_obj, first_obj = a.stat and a.stat.obj, buffer[1]
+
+    for obj in all(buffer) do
+        if cur_obj == obj then return end
+    end
+    
+    if a.stat then a.stat:load'ending' end
+    a.stat = first_obj and _g.stat(1, 119, first_obj)
+end $$
+
+|[rstat_set]| function(a, s)
+    add(a.buffer, s)
+end $$
+
 zclass[[stat,vec,actor,drawlayer_95|
     align,@, x,@, obj,@, y,138, draw,%stat_draw,
     max_health,10, health,5;
