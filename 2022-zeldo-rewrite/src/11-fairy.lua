@@ -1,11 +1,12 @@
 zclass[[fairy,actor,mov,drawlayer_50|
-    rel_actor,@, x,@, y,@,
+    x,@, y,@,
     update,%fairy_update,
     draw,%fairy_draw
 ]]
 
 |[fairy_update]| function(a)
-    local offx, offy = a.rel_actor.x+(t()\10 % 2 == 0 and 1 or -1)*cos(t()*.75), a.rel_actor.y+sin(t()*.75)-.25
+    local relact = g_rstat_right:get() or g_pl
+    local offx, offy = relact.x+(t()\10 % 2 == 0 and 1 or -1)*cos(t()*.75), relact.y+sin(t()*.75)-.25
     a:towards_point(offx, offy)
     a.speed = a:dist_point(offx, offy)*.013
 end $$

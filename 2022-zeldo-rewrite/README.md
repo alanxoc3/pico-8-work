@@ -2,12 +2,6 @@
 Lank wakes up from a good night's rest only to find Hi-roll in danger! You gotta
 help him save the Land of Hi-roll from the forces of evil.
 
-## Useful Snippet
-Use this to update the list of things from mapbuilder:
-```
-cat mapbuilder.lua | rg INDEX | rg -o '"\w+"' | rg -o '\w+' | tr '\n' ',' | ccl
-```
-
 ## Sprite Flag Reference
 ```
 0: solid
@@ -19,8 +13,8 @@ cat mapbuilder.lua | rg INDEX | rg -o '"\w+"' | rg -o '\w+' | tr '\n' ',' | ccl
 TODO: Merge the mapbuilder list with the decoder one.
 
 ```
-2022-05-26 -- tileflags tokencrunch singlema
-    4421 4515 4511 4512 4504 4495 4485 4480 4468 4437 4394 4431 4427 4424
+2022-05-26 -- tileflags tokencrunch singlema fairyfollow
+    4421 4515 4511 4512 4504 4495 4485 4480 4468 4437 4394 4431 4427 4424 4438
 
 2022-05-25 -- isorty memcondcreate navy fairypolish
     4265 4263 4323 4311 4307 4317 4375 4466 4423 4421

@@ -39,7 +39,8 @@ end
 zclass[[rstat|
     align,@, x,@,
     update,%rstat_update,
-    set,%rstat_set;
+    set,%rstat_set,
+    get,%rstat_get;
 
     buffer;,;
 ]]
@@ -59,6 +60,10 @@ end $$
 
 |[rstat_set]| function(a, s)
     add(a.buffer, s)
+end $$
+
+|[rstat_get]| function(a)
+    return a.stat and a.stat.obj
 end $$
 
 zclass[[stat,vec,actor,drawlayer_95|
