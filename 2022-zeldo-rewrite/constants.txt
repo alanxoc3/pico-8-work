@@ -98,14 +98,15 @@ MEM_ITEM_INDEX:    0x5d08
 
 MEM_IS_NAVY_HOME:  0x5d09
 
-MEM_HAS_BOWL:    0x5d10
-MEM_HAS_BRANG:   0x5d11
-MEM_HAS_BOMB:    0x5d12
-MEM_HAS_SHIELD:  0x5d13
-MEM_HAS_BOW:     0x5d14
-MEM_HAS_MASK:    0x5d15
-MEM_HAS_SWORD:   0x5d16
-MEM_HAS_BANJO:   0x5d17
+MEM_HAS_BOWL:      0x5d10
+MEM_HAS_BRANG:     0x5d11
+MEM_HAS_BOMB:      0x5d12
+MEM_HAS_SHIELD:    0x5d13
+MEM_HAS_BOW:       0x5d14
+MEM_HAS_MASK:      0x5d15
+MEM_HAS_SWORD:     0x5d16
+MEM_HAS_BANJO:     0x5d17
+MEM_ALWAYS_FALSE:  0x5dff
 
 # Texts, max 22 chars
 TEXT_SIGNTEST:   mary had a^little lamb^little lamb^little lamb^mary had a^little lamb^whose fleece was^white as yo face

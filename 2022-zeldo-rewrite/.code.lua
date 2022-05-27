@@ -49,7 +49,6 @@ end
 g_zclass_constructors,g_zclass_entities,g_zclass_new_entities={},{},{}
 function zclass(meta_and_att_str)
 local meta,template,memloc,expected_memloc_value=unpack(split(meta_and_att_str,"|"))
-printh(memloc)
 local parents=split(meta)
 local class=deli(parents,1)
 g_zclass_entities[class]=g_zclass_entities[class]or{}
@@ -140,18 +139,18 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,actor_deregistered,@,animation_init,@,auto_outline_draw,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,tiledraw_draw,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,explode_draw,@,calc_deltas,@,adjust_deltas_for_solids,@,adjust_deltas_for_tiles,@,inventory_start_init,@,inventory_start_update,@,inventory_press_update,@,inventory_draw,@,simple_spr_draw,@,anchor_update_anchor,@,targettouch_update_target,@,pl_update,@,pl_drawout,@,rstat_update,@,rstat_set,@,rstat_get,@,stat_draw,@,tbox_init,@,tbox_update,@,tbox_draw,@,fairy_update,@,fairy_draw,@,house_init,@,person_target_with_tbox_disable_callback,@,person_target_with_tbox_finish_callback,@,target_with_tbox_init,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,gameover_control_ending,@,gameover_init,@,gameover_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,simple_update,@,title_draw,@,title_logo_update,@,title_logo_drawout,@,game_state_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,actor_deregistered,@,animation_init,@,auto_outline_draw,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,tiledraw_draw,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,explode_draw,@,calc_deltas,@,adjust_deltas_for_solids,@,adjust_deltas_for_tiles,@,inventory_start_init,@,inventory_start_update,@,inventory_press_update,@,inventory_draw,@,simple_spr_draw,@,anchor_update_anchor,@,targettouch_update_target,@,pl_update,@,pl_drawout,@,rstat_update,@,rstat_set,@,rstat_get,@,stat_draw,@,tbox_init,@,tbox_update,@,tbox_draw,@,fairy_update,@,fairy_draw,@,house_init,@,person_target_with_tbox_disable_callback,@,person_target_with_tbox_finish_callback,@,target_with_tbox_init,@,sign_target_with_tbox_disable_callback,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,gameover_control_ending,@,gameover_init,@,gameover_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,simple_update,@,title_draw,@,title_logo_update,@,title_logo_drawout,@,game_state_init,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
 a.curr=stateName
-a:stop_timer("state",a.duration,a.duration and function()a:load(a.next)end)
+a:stop_timer(a.curr,a.duration,a.duration and function()a:load(a.next)end)
 else
 a:kill()
 end
 end,function(a)
-if a:get_elapsed"state"==nil then a:load(a.curr)end
-if a:get_elapsed"state"==false then a:play_timer"state" a:init()end
+if a:get_elapsed(a.curr)==nil then a:load(a.curr)end
+if a:get_elapsed(a.curr)==false then a:play_timer(a.curr)a:init()end
 a:update()
 end,function(a)a.alive=nil end,function(a)if not a.alive then deregister_entity(a)end end,function(a)a:kill()a:destroyed()end,function(a)
 a.index+=1
@@ -175,7 +174,7 @@ local timer=a.timers[timer_name]
 return timer and(timer.elapsed or false)
 end,function(a,timer_name)
 local timer=a.timers[timer_name]
-return timer and(timer.elapsed or 0)/timer.duration
+return timer and min(1,(timer.elapsed or 0)/timer.duration)
 end,function(a)
 local finished_timers={}
 for name,timer in pairs(a.timers)do
@@ -241,7 +240,7 @@ if ay==0 and abs(a.dy)<.01 then a.dy=0 end
 end,function(a,x,y)
 a.ang=atan2(x-a.x,y-a.y)
 end,function(a)
-local percent=a:get_elapsed"state"*4
+local percent=a:get_elapsed"start"*4
 for i=0,3 do
 scr_zrect(a.x+percent*cos(i/4+.125),a.y+percent*sin(i/4+.125),.125,.125,1)
 end
@@ -266,24 +265,32 @@ end
 end
 end
 end,function(a)
+poke(0x5d08,peek(a[a.ind+1].mem_loc)~=0 and a.ind or 4)
 a.stat=peek"0x5d08" ~=4 and{cspr=a[peek"0x5d08"+1].sind}
 end,function(a)
 g_rstat_inventory:set(a.stat)
 if not does_entity_exist"tbox"and btn"5"then
-poke(0x5d08,4)
-a:load"press"
+poke(0x5d08,9)
+a.flip=a.pl.xf and-1 or 1
+a.ind=4
+a:load"expand"
 end
 end,function(a)
-poke(0x5d08,mid(0,2,peek"0x5d08"%3+zbtn(btnp,0))+mid(0,2,peek"0x5d08"\3+zbtn(btnp,2))*3)
+a.ind=mid(0,2,a.ind%3+a.flip*zbtn(btnp,0))+mid(0,2,a.ind\3+zbtn(btnp,2))*3
 if does_entity_exist"tbox"or not btn"5"then
-a:load"start"
+a:load"contract"
 end
 end,function(a)
+local percent=a.curr=="contract"and(1-a:get_elapsed_percent"contract")or a:get_elapsed_percent"expand"
+zrect(a.pl.x*8,a.pl.y*8-2,percent*8,percent*8,1)
 for item in all(a)do
-local drawfunc=item.index==4 and function()a.pl:drawout()end or function()
-zspr(item.sind,a.pl.x*8+item.xoff,a.pl.y*8+item.yoff,1,1,a.pl.xf)
+local exist=peek(item.mem_loc)~=0
+local sind=exist and item.sind or 0
+local sxo,syo=exist and item.sxo or 0,exist and item.syo or 0
+local drawfunc=function()
+zspr(sind,sxo*a.flip+a.pl.x*8+a.flip*item.xoff*percent,syo+a.pl.y*8+item.yoff*percent,1,1,a.flip<0)
 end
-draw_outline(item.index==peek"0x5d08"and 2 or 1,drawfunc)
+draw_outline(item.index==a.ind and 2 or 1,drawfunc)
 drawfunc()
 end
 end,function(a)
@@ -319,6 +326,7 @@ local cur_obj,first_obj=a.stat and a.stat.obj,buffer[1]
 for obj in all(buffer)do
 if cur_obj==obj then return end
 end
+if does_entity_exist"tbox"then return end
 if a.stat then a.stat:load"ending" end
 a.stat=first_obj and _g.stat(a.align,a.x,first_obj)
 end,function(a,s)
@@ -337,9 +345,7 @@ zprinttbox(flr(obj.health).."/"..obj.max_health,xyo,4,a.align,7,5)
 end
 end)
 end
-local offx=a.align>0 and does_entity_exist"tbox"and-1 or 0
-local offy=does_entity_exist"tbox"and 0 or-cos(g_i/4)*a.align
-draw_card(a.x+offx,a.y+offy,6,8,2,4,function()
+draw_card(a.x,a.y+(does_entity_exist"tbox"and 0 or-cos(g_i/4)*a.align),6,8,2,4,function()
 spr(obj.cspr,0,0,1,1,a.align>0)
 end,nop)
 end,function(a)
@@ -397,7 +403,7 @@ load_room(a.room,4,5,g_pl.xf)
 end)
 end,function(a)
 a.xf=a.x>g_pl.x
-return a.xf==g_pl.xf
+return peek"0x5d08" ~=4 or a.xf==g_pl.xf
 end,function(a)
 poke(0x5d09,1)
 load_room(%0x5d01,g_pl.x,g_pl.y,g_pl.xf)
@@ -413,16 +419,18 @@ end
 end
 end,nop)
 end,function(a)
-g_fade=a:get_elapsed_percent"state"
+return peek"0x5d08" ~=4
 end,function(a)
-g_fade=1-a:get_elapsed_percent"state"
+g_fade=a:get_elapsed_percent"start"
+end,function(a)
+g_fade=1-a:get_elapsed_percent"start"
 end,function()sfx(63,0)end,function(a)
-g_fade=cos(a:get_elapsed_percent"state")+1
+g_fade=cos(a:get_elapsed_percent"logo")+1
 camera(g_fade>.5 and rnd_one())
 zspr(108,64,64,4,2)
 camera()
 end,function(a)
-_g.fader_out(function()g_state:load"title" end)
+_g.fader_out(function()g_state:load"room" end)
 end,function(state)
 _g.gameover_control()
 state.game_over_sind,state.game_over_text=unpack(rnd_item(zobj[[1;,32,quack quack;2;,68,and play with me;3;,9,to save hi-roll;4;,81,in time for dinner;5;,83,and make me rich;6;,96,the banjo awaits you;7;,99,for your fans;8;,118,splat splat boing;]]))
@@ -439,7 +447,7 @@ local r=g_rooms[peek"0x5d01"]
 g_room_bounds=_g.room_bounds(r.w/2,r.h/2+.25,r.w/2+.125,r.h/2+.125)
 g_pl=_g.pl(peek"0x5d02"/16,peek"0x5d03"/16,peek"0x5d04">0)
 g_fairy=_g.fairy(g_pl.x,g_pl.y-.125)
-g_rstat_left,g_rstat_inventory,g_rstat_right=_g.rstat(-1,9),_g.rstat(0,64),_g.rstat(1,119)
+g_rstat_left,g_rstat_inventory,g_rstat_right=_g.rstat(-1,10),_g.rstat(0,64),_g.rstat(1,118)
 _g.inventory(g_pl)
 loop_through_tiles(r,function(sind,x,y)
 if fget(sind,1)then
@@ -612,7 +620,7 @@ t2=room.tiles_1[index]
 return fget(t2,0)and t2
 end
 zclass[[collidable,box,vec|calc_deltas,%calc_deltas,adjust_deltas_for_solids,%adjust_deltas_for_solids,adjust_deltas_for_tiles,%adjust_deltas_for_tiles]]
-zclass[[inventory,actor,drawlayer_90|pl,@;start;init,%inventory_start_init,update,%inventory_start_update,draw,nop;press;init,nop,update,%inventory_press_update,draw,%inventory_draw;1;mem_loc,0x5d11,index,0,name,brang,xoff,-7,yoff,-9,sind,4;2;mem_loc,0x5d15,index,1,name,mask,xoff,0,yoff,-11,sind,3;3;mem_loc,0x5d12,index,2,name,bomb,xoff,7,yoff,-9,sind,5;4;mem_loc,0x5d13,index,3,name,shield,xoff,-8,yoff,-3,sind,6;5;index,4;6;mem_loc,0x5d14,index,5,name,bow,xoff,9,yoff,-2,sind,7;7;mem_loc,0x5d17,index,6,name,banjo,xoff,-7,yoff,4,sind,1;8;mem_loc,0x5d16,index,7,name,sword,xoff,0,yoff,6,sind,2;9;mem_loc,0x5d10,index,8,name,bow,xoff,7,yoff,5,sind,8;]]
+zclass[[inventory,actor,drawlayer_90|pl,@,ind,4,flip,1;start;init,%inventory_start_init,update,%inventory_start_update,draw,nop;press;init,nop,update,%inventory_press_update,draw,%inventory_draw;expand;init,nop,update,nop,draw,%inventory_draw,duration,.0625,next,press;contract;init,nop,update,nop,draw,%inventory_draw,duration,.0625,next,start;1;mem_loc,0x5d12,index,0,name,bomb,sxo,-1,syo,1,xoff,-7,yoff,-9,sind,5;2;mem_loc,0x5d10,index,1,name,bowl,sxo,0,syo,-1,xoff,0,yoff,-10,sind,8;3;mem_loc,0x5d15,index,2,name,mask,sxo,1,syo,1,xoff,7,yoff,-9,sind,3;4;mem_loc,0x5d13,index,3,name,shield,sxo,0,syo,0,xoff,-8,yoff,-2,sind,6;5;mem_loc,0x5dff,sxo,0,syo,0,xoff,0,yoff,0,sind,0;6;mem_loc,0x5d16,index,5,name,sword,sxo,1,syo,0,xoff,8,yoff,-2,sind,2;7;mem_loc,0x5d17,index,6,name,banjo,sxo,1,syo,0,xoff,-7,yoff,5,sind,1;8;mem_loc,0x5d11,index,7,name,brang,sxo,1,syo,1,xoff,0,yoff,6,sind,4;9;mem_loc,0x5d14,index,8,name,bow,sxo,0,syo,0,xoff,7,yoff,5,sind,7;10;mem_loc,0x5d00,index,4,sxo,0,syo,-2,xoff,0,yoff,0,sind,103;]]
 zclass[[solid,box|]]
 zclass[[wall,solid,anchor|anchoring,@,offx,@,offy,@,rx,@,ry,@]]
 zclass[[simple_spr,auto_outline,pos|drawout,%simple_spr_draw,sind,0,sw,1,sh,1,xf,no,yf,no,sx,0,sy,0]]
@@ -660,7 +668,7 @@ zclass[[housetest,house|x,@,y,@]]
 zclass[[person,target_with_tbox,solid,simple_spr,drawlayer_50|text,,rx,.375,ry,.375,trx,.5,try,.25,target_with_tbox_disable_callback,%person_target_with_tbox_disable_callback,target_with_tbox_finish_callback,%person_target_with_tbox_finish_callback;]]
 zclass[[navyblock,person|x,@,y,@,sy,-2,cname,navy,cspr,97,sind,97,text,my sister has been in^the forest all day.^find something to^protect yourself with^and bring her home.|0x5d09|0]]
 zclass[[target_with_tbox,actor|init,%target_with_tbox_init,trx,0,try,0,tx,0,ty,0,target_with_tbox_disable_callback,nop,target_with_tbox_finish_callback,nop]]
-zclass[[sign,target_with_tbox,solid,simple_spr,drawlayer_50|text,,rx,.375,ry,.375,sy,-2,cname,sign,cspr,24,sind,24,trx,.125,try,.375,tx,0,ty,.25]]
+zclass[[sign,target_with_tbox,solid,simple_spr,drawlayer_50|text,,rx,.375,ry,.375,sy,-2,target_with_tbox_disable_callback,%sign_target_with_tbox_disable_callback,cname,sign,cspr,24,sind,24,trx,.125,try,.375,tx,0,ty,.25]]
 zclass[[signtest,sign|x,@,y,@,text,mary had a^little lamb^little lamb^little lamb^mary had a^little lamb^whose fleece was^white as yo face]]
 g_fade_table=zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,1,0,0,0,0;3;,3,3,3,3,1,1,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,0,0,0,0;6;,6,6,13,13,5,5,0,0;7;,7,7,6,13,13,5,0,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,0,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,0,0,0;13;,13,13,5,5,1,0,0,0;14;,14,14,13,4,2,2,0,0;15;,15,15,13,13,5,5,0,0;]]
 function fade(threshold)
@@ -692,10 +700,9 @@ end)
 zclass[[game_state,actor|ecs_exclusions;actor,yes,timer,yes;curr,room,init,%game_state_init;logo;state_init,%logo_init,update,%simple_update,draw,%logo_draw,duration,2.5,next,title;title;state_init,%title_init,update,%simple_update,draw,%title_draw;room;state_init,%room_init,update,%room_update,draw,%room_draw;gameover;state_init,%gameover_init,update,%simple_update,draw,%gameover_draw;]]
 function _init()
 memcpy(0x5d00,0x5e00,64)
-if peek"MEM_SAVE_DATA"==0 then
-zcall(poke,[[1;,MEM_SAVE_DATA,1;2;,0x5d01,136;3;,0x5d02,48;4;,0x5d03,48;5;,0x5d04,1;6;,0x5d08,4;]])
+if peek"0x5d00"==0 then
+zcall(poke,[[1;,0x5d00,1;2;,0x5d01,136;3;,0x5d02,48;4;,0x5d03,48;5;,0x5d04,1;6;,0x5d08,4;14;,0x5d11,1;12;,0x5d15,1;11;,0x5d12,1;15;,0x5d13,1;8;,0x5d14,1;13;,0x5d17,1;7;,0x5d16,1;10;,0x5d10,1;]])
 end
-poke2(0x5f5c,0x0808)
 g_i,g_state,g_rooms=0,_g.game_state(),decode_map()
 g_tile_animation_lookup=create_tile_animation_lookup(g_rooms[0])
 end

@@ -33,7 +33,7 @@ zclass[[actor,timer|
         a.next, a.duration = nil -- default values, unless overridden by next line
         for k, v in pairs(a[stateName]) do a[k] = v end
         a.curr = stateName
-        a:stop_timer('state', a.duration, a.duration and function() a:load(a.next) end)
+        a:stop_timer(a.curr,  a.duration, a.duration and function() a:load(a.next) end)
     else
         a:kill()
     end
@@ -41,8 +41,8 @@ end $$
 
 -- This is expected to be called on each frame!
 |[actor_state]| function(a)
-    if a:get_elapsed'state' == nil   then a:load(a.curr) end -- actor created this frame
-    if a:get_elapsed'state' == false then a:play_timer'state' a:init() end -- state changed in this frame
+    if a:get_elapsed(a.curr) == nil   then a:load(a.curr) end -- actor created this frame
+    if a:get_elapsed(a.curr) == false then a:play_timer(a.curr) a:init() end -- state changed in this frame
     a:update() -- per-frame update
 end $$
 

@@ -35,9 +35,14 @@ end $$
 zclass[[sign,target_with_tbox,solid,simple_spr,drawlayer_50|
     text,,rx,.375,ry,.375,
     sy,-2,
+    target_with_tbox_disable_callback,%sign_target_with_tbox_disable_callback,
     cname,"sign",cspr,SPR_SIGN,
     sind,SPR_SIGN,
     trx,.125, try,.375, tx,0, ty,.25
 ]]
+
+|[sign_target_with_tbox_disable_callback]| function(a)
+    return peek'MEM_ITEM_INDEX' ~= 4
+end $$
 
 zclass[[signtest,sign|x,@,y,@,text,"TEXT_SIGNTEST"]]

@@ -10,10 +10,16 @@ help him save the Land of Hi-roll from the forces of evil.
 ```
 
 ## Tokens & Features
-TODO: Only allow interactions when no item is selected.
-TODO: Inventory matches memory locations.
+How to fix bug where ma is gone but tbox isn't?
+- tbox could be handled by ma. if tbox is active, don't get rid of current ma.
+- tbox can be triggered by button press or startup of ma.
+- probably nothing else would trigger a tbox creation.
+- how does starting tbox work?
 
 ```
+2022-05-27 -- simplifyma expandinventory
+    4438 4426 4488 4483 4528
+
 2022-05-26 -- tileflags tokencrunch singlema fairyfollow
     4421 4515 4511 4512 4504 4495 4485 4480 4468 4437 4394 4431 4427 4424 4438
 

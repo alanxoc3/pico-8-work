@@ -4,7 +4,7 @@ zclass[[gameover_control,actor|
 ]]
 
 |[gameover_control_ending]| function(a)
-    _g.fader_out(function() g_state:load'title' end)
+    _g.fader_out(function() g_state:load'room' end)
 end $$
 
 |[gameover_init]| function(state)

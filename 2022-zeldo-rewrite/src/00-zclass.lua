@@ -16,7 +16,6 @@
 g_zclass_constructors, g_zclass_entities, g_zclass_new_entities = {}, {}, {}
 function zclass(meta_and_att_str)
     local meta, template, memloc, expected_memloc_value = unpack(split(meta_and_att_str, '|'))
-    printh(memloc)
     local parents = split(meta)
     local class = deli(parents, 1)
 

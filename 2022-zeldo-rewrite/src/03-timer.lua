@@ -42,7 +42,7 @@ end $$
 
 |[timer_get_elapsed_percent]| function(a, timer_name)
     local timer = a.timers[timer_name]
-    return timer and (timer.elapsed or 0)/timer.duration
+    return timer and min(1, (timer.elapsed or 0)/timer.duration)
 end $$
 
 -- This is expected to be called once per frame (at 60 FPS)!

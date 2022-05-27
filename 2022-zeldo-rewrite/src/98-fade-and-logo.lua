@@ -29,7 +29,7 @@ function fade(threshold)
 end
 
 zclass[[fader,actor|
-    ecs_exclusions;actor,yes,timer,yes; -- remove game_state from the actor group
+    ecs_exclusions;actor,yes,timer,yes;
 ]]
 
 zclass[[fader_out,fader|
@@ -37,7 +37,7 @@ zclass[[fader_out,fader|
 ]]
 
 |[fader_out_update]| function(a)
-    g_fade = a:get_elapsed_percent'state'
+    g_fade = a:get_elapsed_percent'start'
 end $$
 
 zclass[[fader_in,fader|
@@ -45,13 +45,13 @@ zclass[[fader_in,fader|
 ]]
 
 |[fader_in_update]| function(a)
-    g_fade = 1 - a:get_elapsed_percent'state'
+    g_fade = 1 - a:get_elapsed_percent'start'
 end $$
 
 |[logo_init]| function() sfx(63, 0) end $$
 
 |[logo_draw]| function(a)
-    g_fade = cos(a:get_elapsed_percent'state')+1
+    g_fade = cos(a:get_elapsed_percent'logo')+1
     camera(g_fade > .5 and rnd_one())
     zspr(SPR_LOGO, 64, 64, SPR_LOGO_W, SPR_LOGO_H)
     camera()

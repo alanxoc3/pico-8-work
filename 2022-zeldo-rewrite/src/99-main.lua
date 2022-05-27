@@ -25,18 +25,27 @@ end $$
 function _init()
     memcpy(MEM_SAVE_LOCATION, REAL_SAVE_LOCATION, SAVE_LENGTH)
 
-    if peek'MEM_SAVE_DATA' == 0 then
+    if peek'MEM_SAVE_LOCATION' == 0 then
         zcall(poke, [[
-            1;,MEM_SAVE_DATA ,1;
+            1;,MEM_SAVE_LOCATION ,1;
             2;,MEM_ROOM_IND  ,136;
             3;,MEM_PL_X      ,48;
             4;,MEM_PL_Y      ,48;
             5;,MEM_PL_XF     ,1;
             6;,MEM_ITEM_INDEX,4;
+
+            14; ,MEM_HAS_BRANG  , 1;
+            12; ,MEM_HAS_MASK   , 1;
+            11; ,MEM_HAS_BOMB   , 1;
+            15; ,MEM_HAS_SHIELD , 1;
+            8; ,MEM_HAS_BOW    , 1;
+            13; ,MEM_HAS_BANJO  , 1;
+            7; ,MEM_HAS_SWORD  , 1;
+            10; ,MEM_HAS_BOWL   , 1;
         ]])
     end
 
-    poke2(0x5f5c, BTN_DELAY) -- set custom delay
+    -- poke2(0x5f5c, BTN_DELAY) -- set custom delay
     g_i, g_state, g_rooms = 0, _g.game_state(), decode_map()
     g_tile_animation_lookup = create_tile_animation_lookup(g_rooms[ANIMATION_ROOM_INDEX])
 end

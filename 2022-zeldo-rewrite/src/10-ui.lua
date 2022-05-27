@@ -48,11 +48,13 @@ zclass[[rstat|
 |[rstat_update]| function(a)
     local buffer = a.buffer
     a.buffer = {}
+
     local cur_obj, first_obj = a.stat and a.stat.obj, buffer[1]
 
     for obj in all(buffer) do
         if cur_obj == obj then return end
     end
+    if does_entity_exist'tbox' then return end
     
     if a.stat then a.stat:load'ending' end
     a.stat = first_obj and _g.stat(a.align, a.x, first_obj)
@@ -89,9 +91,7 @@ zclass[[stat,vec,actor,drawlayer_95|
         end)
     end
 
-    local offx = a.align > 0 and does_entity_exist'tbox' and -1 or 0
-    local offy = does_entity_exist'tbox' and 0 or -cos(g_i/4)*a.align
-    draw_card(a.x+offx, a.y+offy, 6, 8, 2, 4, function()
+    draw_card(a.x, a.y+(does_entity_exist'tbox' and 0 or -cos(g_i/4)*a.align), 6, 8, 2, 4, function()
         spr(obj.cspr, 0, 0, 1, 1, a.align > 0)
     end, nop)
 end $$
