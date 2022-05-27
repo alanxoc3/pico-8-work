@@ -10,7 +10,8 @@ help him save the Land of Hi-roll from the forces of evil.
 ```
 
 ## Tokens & Features
-TODO: Merge the mapbuilder list with the decoder one.
+TODO: Only allow interactions when no item is selected.
+TODO: Inventory matches memory locations.
 
 ```
 2022-05-26 -- tileflags tokencrunch singlema fairyfollow
