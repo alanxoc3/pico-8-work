@@ -1,20 +1,25 @@
 -- do all items have the same beg & end states?
--- bow - right, then 
+-- bow - right, then charge, then shoot
 -- bowl - up
 -- mask - up
 -- bomb - place
 -- sword - right
 -- shield - right
--- brang
--- banjo - appear
+-- brang - just through, yes for ending
+-- banjo - appear, ending is instant
 -- bow
 
 -- all items need these:
    -- block_direction:  item doesn't allow a direction change
    -- speed_multiplier: speed is multiplied
+   -- initial_energy:   how much energy it takes to initialize the item
+   -- is_default: is this the "no item" item?
+   -- alive: is the item alive?
+
 zclass[[sword,anchor,vec,actor|
     block_direction, yes,
     speed_multiplier, .5,
+    initial_energy, .25,
 
     anchoring,@,
     offdx,.625,
@@ -24,7 +29,6 @@ zclass[[sword,anchor,vec,actor|
     start;  offdx,@, duration,.08, next,normal;
     normal; offdx,0;
     ending; offdx,@, duration,.08;
-
 ]]
 
 zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50|
@@ -36,12 +40,17 @@ zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50|
 
     update,%pl_update,
     energy,0,
+    target_energy,0,
     drawout,%pl_drawout;
     sinds;,SPR_PL_FEET_1,SPR_PL_FEET_2,SPR_PL_FEET_3;
 
-    default_item; is_default,yes, block_direction,no, speed_multiplier,1, alive,yes;
+    default_item; is_default,yes, block_direction,no, speed_multiplier,1, alive,yes, initial_energy,0;
     item,~default_item;
 ]]
+
+|[pl_add_energy]| function(a, energy)
+    a.energy = 1
+end $$
 
 |[pl_update]| function(a)
     g_rstat_left:set(a)
@@ -62,6 +71,7 @@ zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50|
                 local speed = a.xf and -.125 or .125
 
                 a.item = _g.sword(a, speed, -speed)
+                a.target_energy += a.item.initial_energy
             end
         elseif not a.item.is_default and a.item.curr ~= 'ending' and not btn'BTN_ITEM_USE' then
             a.item:load'ending'
@@ -69,6 +79,13 @@ zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50|
     end
 
     a.sind = a.sinds[a.dx|a.dy ~= 0 and t()*12%3\1+1 or 1]
+
+    -- energy
+    if a.item.is_default then
+        a.target_energy = max(0, a.target_energy-PL_ENERGY_COOLDOWN)
+    end
+
+    a.energy += zsgn(a.target_energy - a.energy)*min(abs(a.target_energy - a.energy), PL_ENERGY_FOLLOW)
 end $$
 
 |[pl_drawout]| function(a)
