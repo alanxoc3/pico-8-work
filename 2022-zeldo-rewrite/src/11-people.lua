@@ -47,3 +47,27 @@ zclass[[bobhouse,person|
     text,"im bob in a house"
 |MEM_IS_BOB_HOME|1
 ]]
+
+zclass[[jane,person|
+    x,@, y,@,
+    cname,"jane", cspr,SPR_JANE, sind,SPR_JANE,
+    text,"im jane in a house"
+]]
+
+zclass[[teach,person|
+    x,@, y,@,
+    cname,"teach", cspr,SPR_TEACH, sind,SPR_TEACH,
+    text,"im teach in a house"
+]]
+
+zclass[[keep,person|
+    x,@, y,@,
+    cname,"keep", cspr,SPR_KEEP, sind,SPR_KEEP,
+    text,"im keep in a house"
+]]
+
+zclass[[lark,person|
+    x,@, y,@,
+    cname,"lark", cspr,SPR_LARK, sind,SPR_LARK,
+    text,"im lark in a house"
+]]

@@ -78,7 +78,11 @@ SPR_SHIELD: 6
 SPR_BOW:    7
 SPR_BOWL:   8
 SPR_BOB:    80
+SPR_JANE:   81
+SPR_KEEP:   83
+SPR_TEACH:  96
 SPR_NAVY:   97
+SPR_LARK:   99
 SPR_FAIRY_CARD: 9
 
 # A zdset/get takes 0-255. So to have decimal places, use the multiplier.

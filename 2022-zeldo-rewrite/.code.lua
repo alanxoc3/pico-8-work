@@ -1,4 +1,4 @@
-g_obj_map=split[[bed,signtest,pot,house231,navyblock,signlank,signkeep,signnavy,signteach,signlark,signjane,house224,house225,house226,house227,house228,house229,navyhouse,bobblock,bobhouse,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil]]
+g_obj_map=split[[bed,signtest,pot,house231,navyblock,signlank,signkeep,signnavy,signteach,signlark,signjane,house224,house225,house226,house227,house228,house229,navyhouse,bobblock,bobhouse,keep,teach,jane,lark,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil]]
 function decode_map()
 local rooms,cur_loc={},0x2000
 local peek_inc=function()
@@ -747,6 +747,10 @@ zclass[[navyblock,person|x,@,y,@,cname,navy,cspr,97,sind,97,text,my sister has b
 zclass[[navyhouse,person|x,@,y,@,cname,navy,cspr,97,sind,97,text,im navy in a house|0x5d09|1]]
 zclass[[bobblock,person|x,@,y,@,cname,bob,cspr,80,sind,80,text,im bob outside,memloc_trigger,0x5d18,memloc_trigger_value,1,target_with_tbox_finish_callback,%person_target_with_tbox_finish_callback|0x5d18|0]]
 zclass[[bobhouse,person|x,@,y,@,cname,bob,cspr,80,sind,80,text,im bob in a house|0x5d18|1]]
+zclass[[jane,person|x,@,y,@,cname,jane,cspr,81,sind,81,text,im jane in a house]]
+zclass[[teach,person|x,@,y,@,cname,teach,cspr,96,sind,96,text,im teach in a house]]
+zclass[[keep,person|x,@,y,@,cname,keep,cspr,83,sind,83,text,im keep in a house]]
+zclass[[lark,person|x,@,y,@,cname,lark,cspr,99,sind,99,text,im lark in a house]]
 zclass[[target_with_tbox,actor|init,%target_with_tbox_init,trx,0,try,0,tx,0,ty,0,target_with_tbox_disable_callback,nop,target_with_tbox_finish_callback,nop]]
 zclass[[sign,target_with_tbox,solid,simple_spr,drawlayer_50|text,,rx,.375,ry,.375,sy,-2,target_with_tbox_disable_callback,%sign_target_with_tbox_disable_callback,cname,sign,cspr,24,sind,24,trx,.125,try,.375,tx,0,ty,.25]]
 zclass[[signtest,sign|x,@,y,@,text,mary had a^little lamb^little lamb^little lamb^mary had a^little lamb^whose fleece was^white as yo face]]
