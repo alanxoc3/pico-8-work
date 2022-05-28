@@ -39,6 +39,7 @@ function _init()
             10; ,MEM_HAS_BOW   , 1;
             11; ,MEM_HAS_SHIELD   , 1;
             12; ,MEM_HAS_BOMB   , 1;
+            13; ,MEM_HAS_BANJO   , 1;
             -- 11; ,MEM_HAS_BOMB   , 1;
             --12; ,MEM_HAS_MASK   , 1;
             --13; ,MEM_HAS_BANJO  , 1;

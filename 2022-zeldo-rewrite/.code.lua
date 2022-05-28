@@ -338,10 +338,12 @@ a.target_energy=a.target_energy+a.item.gradual_energy
 end
 a.energy+=zsgn(a.target_energy-a.energy)*min(abs(a.target_energy-a.energy),.03125)
 end,function(a)
-zspr(a.sind,a.x*8,a.y*8-2,1,1,a.xf)
-zspr(91,a.x*8,a.y*8-2,1,1,a.xf)
+local xf=a.xf
+if does_entity_exist"banjo"then xf=g_i%2==0 end
+zspr(a.sind,a.x*8,a.y*8-2,1,1,xf)
+zspr(91,a.x*8,a.y*8-2,1,1,xf)
 if a.item.visible then
-zspr(a.item.sind,a.item.x*8,a.item.y*8-2,1,1,a.xf)
+zspr(a.item.sind,a.item.x*8,a.item.y*8-2,1,1,xf)
 end
 end,function(a)
 local buffer=a.buffer
@@ -656,10 +658,11 @@ zclass[[item_horizontal,anchor|offspeed,0;start;init,%item_horizontal_start_init
 zclass[[mask,anchor,actor|visible,yes,block_direction,no,speed_multiplier,2,initial_energy,.125,gradual_energy,.0078125,offy,.2,anchoring,@,xf,@,sind,3;start;offdy,-.0625,duration,.08,next,normal;normal;offy,-.125,offdy,0;ending;offdy,.0625,duration,.08;]]
 zclass[[bow,item_horizontal,actor|visible,yes,block_direction,yes,speed_multiplier,.5,initial_energy,.25,gradual_energy,0,offspeed,.105,anchoring,@,xf,@,sind,7;]]
 zclass[[shield,item_horizontal,actor|visible,yes,block_direction,yes,speed_multiplier,.5,initial_energy,.125,gradual_energy,0,offy,.125,offspeed,.105,anchoring,@,xf,@,sind,6;]]
-zclass[[sword,item_horizontal,actor|visible,yes,block_direction,yes,speed_multiplier,.5,initial_energy,.25,gradual_energy,0,offspeed,.125,anchoring,@,xf,@,sind,2;]]
+zclass[[sword,item_horizontal,actor|anchoring,@,xf,@,visible,yes,block_direction,yes,speed_multiplier,.5,initial_energy,.25,gradual_energy,0,offspeed,.125,sind,2;]]
+zclass[[banjo,anchor,actor|anchoring,@,xf,@,visible,yes,block_direction,yes,speed_multiplier,0,initial_energy,0,gradual_energy,0,offy,-.05,sind,1;start;offdy,.0625,duration,.08,next,normal;normal;offy,.25,offdy,0,duration,2,next,ending;ending;offdy,-.0625,duration,.08;]]
 zclass[[bomb,anchor,actor|visible,yes,block_direction,yes,speed_multiplier,.75,initial_energy,.25,gradual_energy,0,offspeed,.185,anchoring,@,xf,@,sind,5;start;gradual_energy,0,init,%bomb_start_init,offy,.175,offdy,.0625,duration,.08,visible,yes,next,normal;normal;init,%bomb_normal_init,offdy,0,duration,0,next,ending;ending;init,nop,visible,no,duration,.75,next,final;final;init,nop,alive,no;]]
 zclass[[bomb_placed,actor,simple_spr,drawlayer_50|x,@,y,@,xf,@,sind,5,destroyed,%bomb_placed_destroyed;start;duration,.5,next,ending;ending;alive,no;]]
-zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50|cname,lank,cspr,103,health,10,max_health,10,x,@,y,@,xf,@,sind,88,rx,.375,ry,.375,update,%pl_update,energy,0,target_energy,0,drawout,%pl_drawout;sinds;,88,89,90;item_funcs;5,%sword,2,%mask,8,%bow,3,%shield,0,%bomb;default_item;visible,no,is_default,yes,block_direction,no,speed_multiplier,1,alive,yes,gradual_energy,0,initial_energy,0;item,~default_item;]]
+zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50|cname,lank,cspr,103,health,10,max_health,10,x,@,y,@,xf,@,sind,88,rx,.375,ry,.375,update,%pl_update,energy,0,target_energy,0,drawout,%pl_drawout;sinds;,88,89,90;item_funcs;5,%sword,2,%mask,8,%bow,3,%shield,0,%bomb,6,%banjo;default_item;visible,no,is_default,yes,block_direction,no,speed_multiplier,1,alive,yes,gradual_energy,0,initial_energy,0;item,~default_item;]]
 function draw_bar(x1,y1,x2,y2,percent,align,fg,bg)
 if x1>x2 then x1-=3 x2-=3 end
 local bar_off=x2-x1-min(percent,1)*(x2-x1)
@@ -744,7 +747,7 @@ zclass[[game_state,actor|ecs_exclusions;actor,yes,timer,yes;curr,room,init,%game
 function _init()
 memcpy(0x5d00,0x5e00,64)
 if peek"0x5d00"==0 then
-zcall(poke,[[1;,0x5d00,1;2;,0x5d01,136;3;,0x5d02,48;4;,0x5d03,48;5;,0x5d04,1;6;,0x5d08,4;7;,0x5d16,1;8;,0x5d15,1;10;,0x5d14,1;11;,0x5d13,1;12;,0x5d12,1;]])
+zcall(poke,[[1;,0x5d00,1;2;,0x5d01,136;3;,0x5d02,48;4;,0x5d03,48;5;,0x5d04,1;6;,0x5d08,4;7;,0x5d16,1;8;,0x5d15,1;10;,0x5d14,1;11;,0x5d13,1;12;,0x5d12,1;13;,0x5d17,1;]])
 end
 g_i,g_state,g_rooms=0,_g.game_state(),decode_map()
 g_tile_animation_lookup=create_tile_animation_lookup(g_rooms[0])

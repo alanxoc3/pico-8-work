@@ -70,6 +70,8 @@ zclass[[shield,item_horizontal,actor|
 ]]
 
 zclass[[sword,item_horizontal,actor|
+    anchoring,@, xf,@,
+
     visible,yes,
     block_direction, yes,
     speed_multiplier, .5,
@@ -77,8 +79,24 @@ zclass[[sword,item_horizontal,actor|
     gradual_energy, 0,
 
     offspeed,.125,
-    anchoring,@, xf,@,
     sind,SPR_SWORD;
+]]
+
+zclass[[banjo,anchor,actor|
+    anchoring,@, xf,@,
+
+    visible,yes,
+    block_direction, yes,
+    speed_multiplier, 0,
+    initial_energy, 0,
+    gradual_energy, 0,
+    offy,-.05,
+
+    sind,SPR_BANJO;
+
+    start;  offdy,.0625, duration,.08, next,normal;
+    normal; offy,.25, offdy,0, duration,2, next,ending;
+    ending; offdy,-.0625, duration,.08;
 ]]
 
 zclass[[bomb,anchor,actor|
@@ -126,7 +144,7 @@ zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50|
     drawout,%pl_drawout;
     sinds;,SPR_PL_FEET_1,SPR_PL_FEET_2,SPR_PL_FEET_3;
 
-    item_funcs; ITEM_IND_SWORD,%sword, ITEM_IND_MASK,%mask, ITEM_IND_BOW,%bow, ITEM_IND_SHIELD,%shield, ITEM_IND_BOMB,%bomb;
+    item_funcs; ITEM_IND_SWORD,%sword, ITEM_IND_MASK,%mask, ITEM_IND_BOW,%bow, ITEM_IND_SHIELD,%shield, ITEM_IND_BOMB,%bomb, ITEM_IND_BANJO,%banjo;
 
     default_item;
         visible,no,
@@ -182,9 +200,12 @@ end $$
 end $$
 
 |[pl_drawout]| function(a)
-    zspr(a.sind, a.x*8, a.y*8-2, 1, 1, a.xf)
-    zspr(91,     a.x*8, a.y*8-2, 1, 1, a.xf)
+    local xf = a.xf
+    if does_entity_exist'banjo' then xf = g_i % 2 == 0 end
+
+    zspr(a.sind, a.x*8, a.y*8-2, 1, 1, xf)
+    zspr(91,     a.x*8, a.y*8-2, 1, 1, xf)
     if a.item.visible then
-        zspr(a.item.sind, a.item.x*8, a.item.y*8-2, 1, 1, a.xf)
+        zspr(a.item.sind, a.item.x*8, a.item.y*8-2, 1, 1, xf)
     end
 end $$
