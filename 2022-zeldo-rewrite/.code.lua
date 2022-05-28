@@ -321,6 +321,9 @@ end,function(a)
 a.x,a.y=a.anchoring.x,a.anchoring.y
 a.ang=atan2(a.xf,0)
 end,function(a)
+if not a:inside(g_room_bounds)then
+a:kill()
+end
 a.speed=0
 if zbtn(btn,0)|zbtn(btn,2)~=0 then
 a.ang,a.speed=atan2(zbtn(btn,0),zbtn(btn,2)),.05
@@ -692,7 +695,7 @@ zclass[[bow,item_horizontal,actor|anchoring,@,xf,@,kill_when_release,yes,visible
 zclass[[shield,item_horizontal,actor|anchoring,@,xf,@,kill_when_release,yes,visible,yes,block_direction,yes,speed_multiplier,.5,initial_energy,.125,gradual_energy,0,offy,.125,offspeed,.105,sind,6;]]
 zclass[[sword,item_horizontal,actor|anchoring,@,xf,@,kill_when_release,yes,visible,yes,block_direction,yes,speed_multiplier,.5,initial_energy,.25,gradual_energy,0,offspeed,.125,sind,2;]]
 zclass[[banjo,anchor,actor|anchoring,@,xf,@,kill_when_release,no,visible,yes,block_direction,yes,speed_multiplier,0,initial_energy,0,gradual_energy,0,offy,-.05,sind,1;start;offdy,.0625,duration,.08,next,normal;normal;offy,.25,offdy,0,duration,3,next,ending;ending;offdy,-.0625,duration,.08;]]
-zclass[[brang,simple_spr,drawlayer_75,mov,actor|anchoring,@,xf,@,kill_when_release,yes,visible,no,block_direction,yes,speed_multiplier,.25,initial_energy,.25,gradual_energy,0,offspeed,.125,drawout,%brang_drawout,sind,4;start;init,%brang_start_init,speed,.075,duration,.125,next,normal;normal;init,nop,speed,0,duration,1.5,update,%brang_normal_update,next,ending;ending;init,%brang_ending_init,speed,0,speed,0,update,%brang_ending_update,duration,.075;final;init,nop,update,nop,alive,no;]]
+zclass[[brang,simple_spr,drawlayer_75,mov,actor,box|anchoring,@,xf,@,kill_when_release,yes,visible,no,block_direction,yes,speed_multiplier,.25,initial_energy,.25,gradual_energy,0,offspeed,.125,drawout,%brang_drawout,sind,4;start;init,%brang_start_init,speed,.075,duration,.125,next,normal;normal;init,nop,speed,0,duration,1.5,update,%brang_normal_update,next,ending;ending;init,%brang_ending_init,speed,0,speed,0,update,%brang_ending_update,duration,.075;final;init,nop,update,nop,alive,no;]]
 zclass[[bomb,anchor,actor|anchoring,@,xf,@,kill_when_release,no,visible,yes,block_direction,yes,speed_multiplier,.75,initial_energy,.25,gradual_energy,0,offspeed,.185,sind,5;start;gradual_energy,0,init,%bomb_start_init,offy,.175,offdy,.0625,duration,.08,visible,yes,next,normal;normal;init,%bomb_normal_init,offdy,0,duration,0,next,ending;ending;init,nop,visible,no,duration,.75,next,final;final;init,nop,alive,no;]]
 zclass[[bomb_placed,actor,simple_spr,drawlayer_50|x,@,y,@,xf,@,sind,5,destroyed,%bomb_placed_destroyed;start;duration,.5,next,ending;ending;alive,no;]]
 zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50|cname,lank,cspr,103,health,10,max_health,10,x,@,y,@,xf,@,sind,88,rx,.375,ry,.375,update,%pl_update,energy,0,target_energy,0,drawout,%pl_drawout;sinds;,88,89,90;item_funcs;5,%sword,2,%mask,8,%bow,3,%shield,0,%bomb,6,%banjo,7,%brang;default_item;visible,no,is_default,yes,block_direction,no,speed_multiplier,1,alive,yes,gradual_energy,0,kill_when_release,no,initial_energy,0;item,~default_item;]]

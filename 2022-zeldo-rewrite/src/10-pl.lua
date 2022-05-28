@@ -111,7 +111,7 @@ zclass[[banjo,anchor,actor|
     ending; offdy,-.0625, duration,.08;
 ]]
 
-zclass[[brang,simple_spr,drawlayer_75,mov,actor|
+zclass[[brang,simple_spr,drawlayer_75,mov,actor,box|
     anchoring,@, xf,@,
 
     kill_when_release,yes,
@@ -141,6 +141,9 @@ end $$
 end $$
 
 |[brang_normal_update]| function(a)
+    if not a:inside(g_room_bounds) then
+        a:kill()
+    end
     a.speed = 0
     if zbtn(btn, 0) | zbtn(btn, 2) ~= 0 then
         a.ang, a.speed = atan2(zbtn(btn, 0), zbtn(btn, 2)), BRANG_SPEED
