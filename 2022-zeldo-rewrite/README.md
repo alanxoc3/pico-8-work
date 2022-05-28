@@ -14,7 +14,7 @@ TODO: xf is a number, not bool
 
 ```
 2022-05-28 -- banjo brang bombfix bob keep teach jane lark
-    4821 4835 4946 4972 4978 5035 5022 5028 5038
+    4821 4835 4946 4972 4978 5035 5022 5028 5038 5050
 
 2022-05-27 -- simplifyma expandinventory sword energy mask bow shield bomb
     4438 4426 4488 4483 4528 4549 4680 4692 4689 3739 4722 4742 4785 4835 4821

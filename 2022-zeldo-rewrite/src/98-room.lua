@@ -63,8 +63,9 @@ end $$
 
     draw_room(g_rooms[peek'MEM_ROOM_IND'], CARD_CX, CARD_CY, function()
         zcall(loop_entities, [[
-            1;,drawlayer_50, draw;
-            2;,drawlayer_75, draw;
+            1;,drawlayer_25, draw;
+            2;,drawlayer_50, draw;
+            3;,drawlayer_75, draw;
         ]])
 
         -- DEBUG_BEGIN
