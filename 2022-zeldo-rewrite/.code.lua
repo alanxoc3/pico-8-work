@@ -332,6 +332,8 @@ end
 a.sind=a.sinds[a.dx|a.dy ~=0 and t()*12%3\1+1 or 1]
 if a.item.is_default then
 a.target_energy=max(0,a.target_energy-.0078125)
+else
+a.target_energy=a.target_energy+a.item.gradual_energy
 end
 a.energy+=zsgn(a.target_energy-a.energy)*min(abs(a.target_energy-a.energy),.03125)
 end,function(a)
@@ -649,9 +651,9 @@ zclass[[anchor,pos|update_anchor,%anchor_update_anchor;offx,0,offy,0,offdx,0,off
 zclass[[target,anchor,box|rx,@,ry,@,offx,@,offy,@,anchoring,@,callback_touch,@,callback_outside,@,update_target,%targettouch_update_target]]
 zclass[[pot]]
 zclass[[bed]]
-zclass[[mask,anchor,actor|block_direction,no,speed_multiplier,1.5,initial_energy,.25,offy,.2,anchoring,@,xf,@,sind,3;start;offdy,-.0625,duration,.08,next,normal;normal;offy,-.125,offdy,0;ending;offdy,.0625,duration,.08;]]
-zclass[[sword,anchor,actor|block_direction,yes,speed_multiplier,.5,initial_energy,.25,anchoring,@,xf,@,offdx,.625,sind,2,speed,.125;start;init,%sword_start_init,duration,.08,next,normal;normal;init,nop,offdx,0;ending;init,%sword_ending_init,duration,.08;]]
-zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50|cname,lank,cspr,103,health,10,max_health,10,x,@,y,@,xf,@,sind,88,rx,.375,ry,.375,update,%pl_update,energy,0,target_energy,0,drawout,%pl_drawout;sinds;,88,89,90;item_funcs;5,%sword,2,%mask;default_item;is_default,yes,block_direction,no,speed_multiplier,1,alive,yes,initial_energy,0;item,~default_item;]]
+zclass[[mask,anchor,actor|block_direction,no,speed_multiplier,2,initial_energy,.125,gradual_energy,.0078125,offy,.2,anchoring,@,xf,@,sind,3;start;offdy,-.0625,duration,.08,next,normal;normal;offy,-.125,offdy,0;ending;offdy,.0625,duration,.08;]]
+zclass[[sword,anchor,actor|block_direction,yes,speed_multiplier,.5,initial_energy,.25,gradual_energy,0,anchoring,@,xf,@,offdx,.625,sind,2,speed,.125;start;init,%sword_start_init,duration,.08,next,normal;normal;init,nop,offdx,0;ending;init,%sword_ending_init,duration,.08;]]
+zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50|cname,lank,cspr,103,health,10,max_health,10,x,@,y,@,xf,@,sind,88,rx,.375,ry,.375,update,%pl_update,energy,0,target_energy,0,drawout,%pl_drawout;sinds;,88,89,90;item_funcs;5,%sword,2,%mask;default_item;is_default,yes,block_direction,no,speed_multiplier,1,alive,yes,gradual_energy,0,initial_energy,0;item,~default_item;]]
 function draw_bar(x1,y1,x2,y2,percent,align,fg,bg)
 if x1>x2 then x1-=3 x2-=3 end
 local bar_off=x2-x1-min(percent,1)*(x2-x1)

@@ -12,13 +12,15 @@
    -- block_direction:  item doesn't allow a direction change
    -- speed_multiplier: speed is multiplied
    -- initial_energy:   how much energy it takes to initialize the item
+   -- gradual_energy:   how much energy is added every step
    -- is_default: is this the "no item" item?
    -- alive: is the item alive?
 
 zclass[[mask,anchor,actor|
     block_direction, no,
-    speed_multiplier, 1.5,
-    initial_energy, .25,
+    speed_multiplier, 2,
+    initial_energy, .125,
+    gradual_energy, PL_ENERGY_COOLDOWN,
     offy, .2,
 
     anchoring,@, xf,@,
@@ -33,6 +35,7 @@ zclass[[sword,anchor,actor|
     block_direction, yes,
     speed_multiplier, .5,
     initial_energy, .25,
+    gradual_energy, 0,
 
     anchoring,@, xf,@,
     offdx,.625,
@@ -62,7 +65,14 @@ zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50|
 
     item_funcs; ITEM_IND_SWORD,%sword, ITEM_IND_MASK,%mask;
 
-    default_item; is_default,yes, block_direction,no, speed_multiplier,1, alive,yes, initial_energy,0;
+    default_item;
+        is_default,yes,
+        block_direction,no,
+        speed_multiplier,1,
+        alive,yes,
+        gradual_energy,0,
+        initial_energy,0;
+
     item,~default_item;
 ]]
 
@@ -100,6 +110,8 @@ end $$
     -- energy
     if a.item.is_default then
         a.target_energy = max(0, a.target_energy-PL_ENERGY_COOLDOWN)
+    else
+        a.target_energy = a.target_energy+a.item.gradual_energy
     end
 
     a.energy += zsgn(a.target_energy - a.energy)*min(abs(a.target_energy - a.energy), PL_ENERGY_FOLLOW)
