@@ -18,8 +18,8 @@ zclass[[inventory,actor,drawlayer_90|
 ]]
 
 |[inventory_start_init]| function(a)
-    poke(MEM_ITEM_INDEX, peek(a[a.ind+1].mem_loc) ~= 0 and a.ind or 4)
     a.stat = peek'MEM_ITEM_INDEX' ~= 4 and {cspr=a[peek'MEM_ITEM_INDEX'+1].sind}
+    -- a.ind = peek'MEM_ITEM_INDEX'
 end $$
 
 |[inventory_start_update]| function(a)
@@ -36,6 +36,7 @@ end $$
 |[inventory_press_update]| function(a)
     a.ind = mid(0,2,a.ind%3+a.flip*zbtn(btnp,0)) + mid(0,2,a.ind\3+zbtn(btnp,2))*3
     if does_entity_exist'tbox' or not btn'BTN_ITEM_SELECT' then
+        poke(MEM_ITEM_INDEX, peek(a[a.ind+1].mem_loc) ~= 0 and a.ind or 4)
         a:load'contract'
     end
 end $$

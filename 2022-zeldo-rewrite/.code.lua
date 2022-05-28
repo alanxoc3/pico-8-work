@@ -266,7 +266,6 @@ end
 end
 end
 end,function(a)
-poke(0x5d08,peek(a[a.ind+1].mem_loc)~=0 and a.ind or 4)
 a.stat=peek"0x5d08" ~=4 and{cspr=a[peek"0x5d08"+1].sind}
 end,function(a)
 g_rstat_inventory:set(a.stat)
@@ -279,6 +278,7 @@ end
 end,function(a)
 a.ind=mid(0,2,a.ind%3+a.flip*zbtn(btnp,0))+mid(0,2,a.ind\3+zbtn(btnp,2))*3
 if does_entity_exist"tbox"or not btn"5"then
+poke(0x5d08,peek(a[a.ind+1].mem_loc)~=0 and a.ind or 4)
 a:load"contract"
 end
 end,function(a)
@@ -309,27 +309,27 @@ end
 end)
 end,function(a)
 g_rstat_left:set(a)
+if not a.item.alive then a.item=a.default_item end
 a.speed=0
 if not does_entity_exist"tbox"and not btn(5)then
 if zbtn(btn,0)|zbtn(btn,2)~=0 then
-a.ang,a.speed=atan2(zbtn(btn,0),zbtn(btn,2)),.025
-if not a.item and cos(a.ang)~=0 then
+a.ang,a.speed=atan2(zbtn(btn,0),zbtn(btn,2)),.025*a.item.speed_multiplier
+if not a.item.block_direction and cos(a.ang)~=0 then
 a.xf=cos(a.ang)<0
 end
 end
-if a.item and not a.item.alive then a.item=nil end
-if not a.item and btn"4"then
+if a.item.is_default and btn"4"then
 if peek"0x5d08"==5 then
 local speed=a.xf and-.125 or.125
 a.item=_g.sword(a,speed,-speed)
 end
-elseif a.item and a.item.curr ~="ending"and not btn"4"then
+elseif not a.item.is_default and a.item.curr ~="ending"and not btn"4"then
 a.item:load"ending"
 end
 end
 a.sind=a.sinds[a.dx|a.dy ~=0 and t()*12%3\1+1 or 1]
 end,function(a)
-if a.item then
+if not a.item.is_default then
 zspr(a.item.sind,a.item.x*8,a.item.y*8-2,1,1,a.xf)
 end
 zspr(a.sind,a.x*8,a.y*8-2,1,1,a.xf)
@@ -482,7 +482,7 @@ if peek"0x5d01">223 then
 load_room(peek"0x5d05",peek"0x5d06"/16,peek"0x5d07"/16,g_pl.xf)
 elseif g_rooms[nri]then
 if abx ~=0 then load_room(nri,6-abx*6+1.25*abx,g_pl.y,abx<0)
-else load_room(nri,g_pl.x,5-aby*5+1.25*aby,g_pl.xf)
+else load_room(nri,g_pl.x,5-aby*5+1.25*aby+.25,g_pl.xf)
 end
 else
 zcall(load_room,[[1;,151,6,5,@;]],g_pl.xf)
@@ -643,8 +643,8 @@ zclass[[anchor,pos|update_anchor,%anchor_update_anchor;offx,0,offy,0,offdx,0,off
 zclass[[target,anchor,box|rx,@,ry,@,offx,@,offy,@,anchoring,@,callback_touch,@,callback_outside,@,update_target,%targettouch_update_target]]
 zclass[[pot]]
 zclass[[bed]]
-zclass[[sword,anchor,vec,actor|anchoring,@,offdx,.625,sind,2,speed,.125;start;offdx,@,duration,.08,next,normal;normal;offdx,0;ending;offdx,@,duration,.08;]]
-zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50|cname,lank,cspr,103,health,10,max_health,10,x,@,y,@,xf,@,sind,88,rx,.375,ry,.375,update,%pl_update,energy,0,drawout,%pl_drawout;sinds;,88,89,90]]
+zclass[[sword,anchor,vec,actor|block_direction,yes,speed_multiplier,.5,anchoring,@,offdx,.625,sind,2,speed,.125;start;offdx,@,duration,.08,next,normal;normal;offdx,0;ending;offdx,@,duration,.08;]]
+zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50|cname,lank,cspr,103,health,10,max_health,10,x,@,y,@,xf,@,sind,88,rx,.375,ry,.375,update,%pl_update,energy,0,drawout,%pl_drawout;sinds;,88,89,90;default_item;is_default,yes,block_direction,no,speed_multiplier,1,alive,yes;item,~default_item;]]
 function draw_bar(x1,y1,x2,y2,percent,align,fg,bg)
 if x1>x2 then x1-=3 x2-=3 end
 local bar_off=x2-x1-min(percent,1)*(x2-x1)
