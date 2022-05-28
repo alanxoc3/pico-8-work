@@ -268,8 +268,10 @@ for ty=flr(a.y-a.ry)-1,ceil(a.y+a.ry)do
 local sind=get_solid_tile(room,ty*12+tx)
 if sind then
 local rx,ry=.5,.5
+if not fget(sind,1)or fget(sind,1)and a.should_collide_below then
 if fget(sind,2)then rx,ry=.375,.375 end
 a.dx,a.dy=a:calc_deltas{x=tx+.5,y=ty+.5,rx=rx,ry=ry}
+end
 end
 end
 end
@@ -647,14 +649,7 @@ function draw_room(room,center_x,center_y,post_tile_func,post_card_func)
 local x1,y1=center_x-room.w*8\2,center_y-room.h*8\2
 draw_card(center_x,center_y,room.w*4-2,room.h*4-2,-2,-2,function()
 rectfill(0,0,127,127,room.color)
-loop_through_tiles(room,function(sind,x,y)
-if not fget(sind,1)then
-spr(sind,x,y)
-end
-if g_debug then
-rect(x+1,y+1,x+6,y+6,0)
-end
-end)
+loop_through_tiles(room,spr)
 post_tile_func(x1,y1)
 end,post_card_func)
 end
@@ -691,7 +686,7 @@ if t2 then return fget(t2,0)and t2 end
 t2=room.tiles_1[index]
 return fget(t2,0)and t2
 end
-zclass[[collidable,box,vec|calc_deltas,%calc_deltas,adjust_deltas_for_solids,%adjust_deltas_for_solids,adjust_deltas_for_tiles,%adjust_deltas_for_tiles]]
+zclass[[collidable,box,vec|calc_deltas,%calc_deltas,should_collide_below,yes,adjust_deltas_for_solids,%adjust_deltas_for_solids,adjust_deltas_for_tiles,%adjust_deltas_for_tiles]]
 zclass[[inventory,actor,drawlayer_90|pl,@,ind,4;start;init,%inventory_start_init,update,%inventory_start_update,draw,nop;press;init,nop,update,%inventory_press_update,draw,%inventory_draw;expand;init,nop,update,nop,draw,%inventory_draw,duration,.0625,next,press;contract;init,nop,update,nop,draw,%inventory_draw,duration,.0625,next,start;1;mem_loc,0x5d12,index,0,name,bomb,sxo,-1,syo,1,xoff,-7,yoff,-9,sind,5;2;mem_loc,0x5d10,index,1,name,bowl,sxo,0,syo,-1,xoff,0,yoff,-10,sind,8;3;mem_loc,0x5d15,index,2,name,mask,sxo,1,syo,1,xoff,7,yoff,-9,sind,3;4;mem_loc,0x5d13,index,3,name,shield,sxo,0,syo,0,xoff,-8,yoff,-2,sind,6;5;mem_loc,0x5dff,sxo,0,syo,0,xoff,0,yoff,0,sind,0;6;mem_loc,0x5d16,index,5,name,sword,sxo,1,syo,0,xoff,8,yoff,-2,sind,2;7;mem_loc,0x5d17,index,6,name,banjo,sxo,1,syo,0,xoff,-7,yoff,5,sind,1;8;mem_loc,0x5d11,index,7,name,brang,sxo,1,syo,1,xoff,0,yoff,6,sind,4;9;mem_loc,0x5d14,index,8,name,bow,sxo,0,syo,0,xoff,7,yoff,5,sind,7;10;mem_loc,0x5d00,index,4,sxo,0,syo,-2,xoff,0,yoff,0,sind,103,flip_enabled,on;]]
 zclass[[solid,box|]]
 zclass[[wall,solid,anchor|anchoring,@,offx,@,offy,@,rx,@,ry,@]]
@@ -704,7 +699,7 @@ zclass[[bow,item_horizontal,actor|anchoring,@,xf,@,kill_when_release,yes,visible
 zclass[[shield,item_horizontal,actor|anchoring,@,xf,@,kill_when_release,yes,visible,yes,block_direction,yes,speed_multiplier,.5,initial_energy,.125,gradual_energy,0,offy,.125,offspeed,.105,sind,6;]]
 zclass[[sword,item_horizontal,actor|anchoring,@,xf,@,kill_when_release,yes,visible,yes,block_direction,yes,speed_multiplier,.5,initial_energy,.25,gradual_energy,0,offspeed,.125,sind,2;]]
 zclass[[banjo,anchor,actor|anchoring,@,xf,@,kill_when_release,no,visible,yes,block_direction,yes,speed_multiplier,0,initial_energy,0,gradual_energy,0,offy,-.05,sind,1;start;offdy,.0625,duration,.08,next,normal;normal;offy,.25,offdy,0,duration,3,next,ending;ending;offdy,-.0625,duration,.08;]]
-zclass[[brang,collidable,simple_spr,drawlayer_75,mov,actor,box|anchoring,@,xf,@,rx,.375,ry,.375,kill_when_release,yes,visible,no,block_direction,yes,speed_multiplier,.25,initial_energy,.25,gradual_energy,0,offspeed,.125,drawout,%brang_drawout,sind,4;start;init,%brang_start_init,speed,.075,duration,.125,next,normal;normal;init,nop,speed,0,duration,1.5,update,%brang_normal_update,next,ending;ending;init,%brang_ending_init,speed,0,speed,0,update,%brang_ending_update,duration,.075;final;init,nop,update,nop,alive,no;]]
+zclass[[brang,collidable,simple_spr,drawlayer_75,mov,actor,box|anchoring,@,xf,@,rx,.375,ry,.375,kill_when_release,yes,visible,no,block_direction,yes,speed_multiplier,.25,initial_energy,.25,gradual_energy,0,should_collide_below,no,offspeed,.125,drawout,%brang_drawout,sind,4;start;init,%brang_start_init,speed,.075,duration,.125,next,normal;normal;init,nop,speed,0,duration,1.5,update,%brang_normal_update,next,ending;ending;init,%brang_ending_init,speed,0,speed,0,update,%brang_ending_update,duration,.075;final;init,nop,update,nop,alive,no;]]
 zclass[[bomb,actor,vec,simple_spr,drawlayer_50|anchoring,@,xf,@,sind,5,sy,-2,kill_when_release,no,visible,no,block_direction,no,speed_multiplier,1,initial_energy,.25,gradual_energy,0,offspeed,.185,destroyed,%bomb_destroyed;start;init,%bomb_start_init,dy,.08,duration,.08,next,normal;normal;init,nop,duration,.5,dy,0,,next,ending;ending;init,nop,alive,no;]]
 zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50|cname,lank,cspr,103,health,10,max_health,10,x,@,y,@,xf,@,sind,88,rx,.375,ry,.375,update,%pl_update,energy,0,target_energy,0,drawout,%pl_drawout;sinds;,88,89,90;item_funcs;5,%sword,2,%mask,8,%bow,3,%shield,0,%bomb,6,%banjo,7,%brang;default_item;visible,no,is_default,yes,block_direction,no,speed_multiplier,1,alive,yes,gradual_energy,0,kill_when_release,no,initial_energy,0;item,~default_item;]]
 function draw_bar(x1,y1,x2,y2,percent,align,fg,bg)

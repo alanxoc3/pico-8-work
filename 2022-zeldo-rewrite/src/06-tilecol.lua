@@ -8,6 +8,7 @@ end
 
 zclass[[collidable,box,vec|
     calc_deltas,%calc_deltas,
+    should_collide_below,yes,
     adjust_deltas_for_solids,%adjust_deltas_for_solids,
     adjust_deltas_for_tiles,%adjust_deltas_for_tiles
 ]]
@@ -32,9 +33,11 @@ end $$
             local sind = get_solid_tile(room, ty*ROOM_W+tx)
             if sind then
                 local rx, ry = .5, .5
-                if fget(sind,2) then rx, ry = .375, .375 end
 
-                a.dx, a.dy = a:calc_deltas{x=tx+.5, y=ty+.5, rx=rx, ry=ry}
+                if not fget(sind,1) or fget(sind,1) and a.should_collide_below then
+                    if fget(sind,2) then rx, ry = .375, .375 end
+                    a.dx, a.dy = a:calc_deltas{x=tx+.5, y=ty+.5, rx=rx, ry=ry}
+                end
             end
         end
     end

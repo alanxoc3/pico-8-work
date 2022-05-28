@@ -19,18 +19,7 @@ function draw_room(room, center_x, center_y, post_tile_func, post_card_func)
     local x1, y1 = center_x-room.w*8\2, center_y-room.h*8\2
     draw_card(center_x, center_y, room.w*4-2, room.h*4-2, -2, -2, function()
         rectfill(0, 0, 127, 127, room.color)
-
-        loop_through_tiles(room, function(sind, x, y)
-            if not fget(sind, 1) then
-                spr(sind, x, y)
-            end
-            -- DEBUG_BEGIN
-            if g_debug then
-                rect(x+1, y+1, x+6, y+6, 0)
-            end
-            -- DEBUG_END
-        end)
-
+        loop_through_tiles(room, spr)
         post_tile_func(x1, y1)
     end, post_card_func)
 end

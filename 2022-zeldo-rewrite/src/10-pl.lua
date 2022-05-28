@@ -122,6 +122,7 @@ zclass[[brang,collidable,simple_spr,drawlayer_75,mov,actor,box|
     initial_energy, .25,
     gradual_energy, 0,
 
+    should_collide_below,no,
     offspeed,.125,
     drawout,%brang_drawout,
     sind,SPR_BRANG;
