@@ -13,8 +13,8 @@ help him save the Land of Hi-roll from the forces of evil.
 TODO: basic bowl, banjo, and brang.
 
 ```
-2022-05-28 -- banjo
-    4821 4835
+2022-05-28 -- banjo brang
+    4821 4835 4946
 
 2022-05-27 -- simplifyma expandinventory sword energy mask bow shield bomb
     4438 4426 4488 4483 4528 4549 4680 4692 4689 3739 4722 4742 4785 4835 4821

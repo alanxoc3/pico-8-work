@@ -99,6 +99,45 @@ zclass[[banjo,anchor,actor|
     ending; offdy,-.0625, duration,.08;
 ]]
 
+zclass[[brang,mov,actor|
+    anchoring,@, xf,@,
+
+    visible,yes,
+    block_direction, yes,
+    speed_multiplier, .25,
+    initial_energy, .25,
+    gradual_energy, 0,
+
+    offspeed,.125,
+    sind,SPR_BRANG;
+    start; init,%brang_start_init, duration,.08, next,normal;
+    normal;init,nop, dx,0, duration,1.5, update,%brang_normal_update, next,ending;
+    ending;init,%brang_ending_init, dx,0, speed,0, update,%brang_ending_update, duration,.08;
+    final;init,nop, update,nop, alive,no;
+]]
+
+|[brang_start_init]| function(a)
+    a.x, a.y = a.anchoring.x, a.anchoring.y
+    a.dx = a.xf and -.375 or .375
+end $$
+
+|[brang_normal_update]| function(a)
+    a.speed = 0
+    if zbtn(btn, 0) | zbtn(btn, 2) ~= 0 then
+        a.ang, a.speed = atan2(zbtn(btn, 0), zbtn(btn, 2)), BRANG_SPEED
+    end
+end $$
+
+|[brang_ending_init]| function(a)
+    a.end_x, a.end_y = a.x, a.y
+end $$
+
+|[brang_ending_update]| function(a)
+    local percent = a:get_elapsed_percent'ending'
+    a.x = a.end_x + (a.anchoring.x - a.end_x)*percent
+    a.y = a.end_y + (a.anchoring.y - a.end_y)*percent
+end $$
+
 zclass[[bomb,anchor,actor|
     visible,yes,
     block_direction, yes,
@@ -144,7 +183,7 @@ zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50|
     drawout,%pl_drawout;
     sinds;,SPR_PL_FEET_1,SPR_PL_FEET_2,SPR_PL_FEET_3;
 
-    item_funcs; ITEM_IND_SWORD,%sword, ITEM_IND_MASK,%mask, ITEM_IND_BOW,%bow, ITEM_IND_SHIELD,%shield, ITEM_IND_BOMB,%bomb, ITEM_IND_BANJO,%banjo;
+    item_funcs; ITEM_IND_SWORD,%sword, ITEM_IND_MASK,%mask, ITEM_IND_BOW,%bow, ITEM_IND_SHIELD,%shield, ITEM_IND_BOMB,%bomb, ITEM_IND_BANJO,%banjo, ITEM_IND_BRANG,%brang;
 
     default_item;
         visible,no,

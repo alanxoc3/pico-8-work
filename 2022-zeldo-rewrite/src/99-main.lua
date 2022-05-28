@@ -40,9 +40,9 @@ function _init()
             11; ,MEM_HAS_SHIELD   , 1;
             12; ,MEM_HAS_BOMB   , 1;
             13; ,MEM_HAS_BANJO   , 1;
+            14; ,MEM_HAS_BRANG  , 1;
             -- 11; ,MEM_HAS_BOMB   , 1;
             --12; ,MEM_HAS_MASK   , 1;
-            --13; ,MEM_HAS_BANJO  , 1;
             --14; ,MEM_HAS_BRANG  , 1;
             --15; ,MEM_HAS_SHIELD , 1;
         ]])
