@@ -85,27 +85,28 @@ zclass[[bomb,anchor,actor|
     visible,yes,
     block_direction, yes,
     speed_multiplier, .75,
-    initial_energy, .125,
-    gradual_energy, PL_ENERGY_COOLDOWN,
-    offy,.175,
+    initial_energy, .25,
+    gradual_energy, 0,
 
     offspeed,.185,
     anchoring,@, xf,@,
     sind,SPR_BOMB;
 
-    start;   init,%bomb_start_init, offdy,.0625, duration,.08, next,normal;
-    normal;  init,%bomb_normal_init, offdy,0, duration,0, next,waiting;
-    waiting; init,nop, visible,no;
-    ending;  init,%bomb_ending_init, alive,no;
+    start;    gradual_energy,0, init,%bomb_start_init, offy,.175, offdy,.0625, duration,.08, visible,yes, next,normal;
+    normal;   init,%bomb_normal_init, offdy,0, duration,0, next,ending;
+
+    ending;   init,nop, visible,no, duration,.75, next,final;
+    final;    init,nop, alive,no;
 ]]
 
 |[bomb_start_init]| function(a) a.offx = a.xf and -.625 or .625 end $$
-|[bomb_normal_init]| function(a) a.child = _g.bomb_placed(a.x, a.y-.25, a.xf) end $$
-|[bomb_ending_init]| function(a) if a.child then a.child:kill() end end $$
+|[bomb_normal_init]| function(a) _g.bomb_placed(a.x, a.y-.25, a.xf) end $$
 
 zclass[[bomb_placed,actor,simple_spr,drawlayer_50|
     x,@, y,@, xf,@, sind,SPR_BOMB,
     destroyed,%bomb_placed_destroyed;
+    start; duration,.5, next,ending;
+    ending; alive,no;
 ]]
 
 |[bomb_placed_destroyed]| function(a)
@@ -145,7 +146,6 @@ end $$
 
 |[pl_update]| function(a)
     g_rstat_left:set(a)
-    if not a.item.alive then a.item = a.default_item end
 
     a.speed = 0
     if not does_entity_exist'tbox' and not btn(BTN_ITEM_SELECT) then
@@ -157,6 +157,7 @@ end $$
             end
         end
 
+        if not a.item.alive then a.item = a.default_item end
         if a.item.is_default and btn'BTN_ITEM_USE' then
             local item_func = a.item_funcs[peek'MEM_ITEM_INDEX']
             if item_func then
