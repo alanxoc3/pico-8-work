@@ -1,13 +1,12 @@
 -- do all items have the same beg & end states?
 -- bow - right, then charge, then shoot
 -- bowl - up
--- mask - up
--- bomb - place
+-- mask - start, normal, ending
+-- bomb - start, place
 -- sword - right
 -- shield - right
 -- brang - just through, yes for ending
 -- banjo - appear, ending is instant
--- bow
 
 -- all items need these:
    -- block_direction:  item doesn't allow a direction change
@@ -16,20 +15,37 @@
    -- is_default: is this the "no item" item?
    -- alive: is the item alive?
 
-zclass[[sword,anchor,vec,actor|
+zclass[[mask,anchor,actor|
+    block_direction, no,
+    speed_multiplier, 1.5,
+    initial_energy, .25,
+    offy, .2,
+
+    anchoring,@, xf,@,
+    sind,SPR_MASK;
+
+    start;  offdy,-.0625, duration,.08, next,normal;
+    normal; offy,-.125, offdy,0;
+    ending; offdy,.0625, duration,.08;
+]]
+
+zclass[[sword,anchor,actor|
     block_direction, yes,
     speed_multiplier, .5,
     initial_energy, .25,
 
-    anchoring,@,
+    anchoring,@, xf,@,
     offdx,.625,
     sind,SPR_SWORD,
     speed,.125;
 
-    start;  offdx,@, duration,.08, next,normal;
-    normal; offdx,0;
-    ending; offdx,@, duration,.08;
+    start;  init,%sword_start_init,  duration,.08, next,normal;
+    normal; init,nop, offdx,0;
+    ending; init,%sword_ending_init, duration,.08;
 ]]
+
+|[sword_start_init]|  function(a) a.offdx = a.xf and -.125 or .125 end $$
+|[sword_ending_init]| function(a) a.offdx = a.xf and .125 or -.125 end $$
 
 zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50|
     cname,"lank", cspr,SPR_PL_WHOLE,
@@ -43,6 +59,8 @@ zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50|
     target_energy,0,
     drawout,%pl_drawout;
     sinds;,SPR_PL_FEET_1,SPR_PL_FEET_2,SPR_PL_FEET_3;
+
+    item_funcs; ITEM_IND_SWORD,%sword, ITEM_IND_MASK,%mask;
 
     default_item; is_default,yes, block_direction,no, speed_multiplier,1, alive,yes, initial_energy,0;
     item,~default_item;
@@ -67,10 +85,9 @@ end $$
         end
 
         if a.item.is_default and btn'BTN_ITEM_USE' then
-            if peek'MEM_ITEM_INDEX' == ITEM_IND_SWORD then
-                local speed = a.xf and -.125 or .125
-
-                a.item = _g.sword(a, speed, -speed)
+            local item_func = a.item_funcs[peek'MEM_ITEM_INDEX']
+            if item_func then
+                a.item = item_func(a, a.xf)
                 a.target_energy += a.item.initial_energy
             end
         elseif not a.item.is_default and a.item.curr ~= 'ending' and not btn'BTN_ITEM_USE' then
@@ -89,9 +106,9 @@ end $$
 end $$
 
 |[pl_drawout]| function(a)
+    zspr(a.sind, a.x*8, a.y*8-2, 1, 1, a.xf)
+    zspr(91,     a.x*8, a.y*8-2, 1, 1, a.xf)
     if not a.item.is_default then
         zspr(a.item.sind, a.item.x*8, a.item.y*8-2, 1, 1, a.xf)
     end
-    zspr(a.sind, a.x*8, a.y*8-2, 1, 1, a.xf)
-    zspr(91,     a.x*8, a.y*8-2, 1, 1, a.xf)
 end $$
