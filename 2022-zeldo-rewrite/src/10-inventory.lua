@@ -5,16 +5,16 @@ zclass[[inventory,actor,drawlayer_90|
     expand;   init,nop, update,nop, draw,%inventory_draw, duration,.0625, next,press;
     contract; init,nop, update,nop, draw,%inventory_draw, duration,.0625, next,start;
 
-    1; mem_loc,MEM_HAS_BOMB   , index,0, name,bomb  , sxo,-1, syo,1, xoff,-7 , yoff,-9 , sind,SPR_BOMB;
-    2; mem_loc,MEM_HAS_BOWL   , index,1, name,bowl  , sxo,0, syo,-1, xoff,0 , yoff,-10  , sind,SPR_BOWL;
-    3; mem_loc,MEM_HAS_MASK   , index,2, name,mask  , sxo,1, syo,1, xoff,7 , yoff,-9, sind,SPR_MASK;
-    4; mem_loc,MEM_HAS_SHIELD , index,3, name,shield, sxo,0, syo,0, xoff,-8, yoff,-2 , sind,SPR_SHIELD;
-    5; mem_loc,MEM_ALWAYS_FALSE,                      sxo,0, syo,0, xoff,0,  yoff,0, sind,0;
-    6; mem_loc,MEM_HAS_SWORD  , index,5, name,sword , sxo,1, syo,0, xoff,8 , yoff,-2  , sind,SPR_SWORD;
-    7; mem_loc,MEM_HAS_BANJO  , index,6, name,banjo , sxo,1, syo,0, xoff,-7, yoff,5  , sind,SPR_BANJO;
-    8; mem_loc,MEM_HAS_BRANG  , index,7, name,brang , sxo,1, syo,1, xoff,0, yoff,6 , sind,SPR_BRANG;
-    9; mem_loc,MEM_HAS_BOW    , index,8, name,bow   , sxo,0, syo,0, xoff,7 , yoff,5  , sind,SPR_BOW;
-    10; mem_loc,MEM_ALWAYS_TRUE, index,4,             sxo,0, syo,-2, xoff,0 , yoff,0, sind,103;
+    ITEM_IND_NEXT_BOMB;     mem_loc,MEM_HAS_BOMB   , index,ITEM_IND_BOMB, name,bomb  ,   sxo,-1, syo,1 , xoff,-7 , yoff ,-9   , sind,SPR_BOMB;
+    ITEM_IND_NEXT_BOWL;     mem_loc,MEM_HAS_BOWL   , index,ITEM_IND_BOWL, name,bowl  ,   sxo,0 , syo,-1, xoff,0  , yoff ,-10  , sind,SPR_BOWL;
+    ITEM_IND_NEXT_MASK;     mem_loc,MEM_HAS_MASK   , index,ITEM_IND_MASK, name,mask  ,   sxo,1 , syo,1 , xoff,7  , yoff ,-9   , sind,SPR_MASK;
+    ITEM_IND_NEXT_SHIELD;   mem_loc,MEM_HAS_SHIELD , index,ITEM_IND_SHIELD, name,shield, sxo,0 , syo,0 , xoff,-8 , yoff ,-2   , sind,SPR_SHIELD;
+    ITEM_IND_NEXT_INTERACT; mem_loc,MEM_ALWAYS_FALSE,                                    sxo,0 , syo,0 , xoff,0  ,  yoff,0    , sind,0;
+    ITEM_IND_NEXT_SWORD;    mem_loc,MEM_HAS_SWORD  , index,ITEM_IND_SWORD, name,sword ,  sxo,1 , syo,0 , xoff,8  , yoff ,-2   , sind,SPR_SWORD;
+    ITEM_IND_NEXT_BANJO;    mem_loc,MEM_HAS_BANJO  , index,ITEM_IND_BANJO, name,banjo ,  sxo,1 , syo,0 , xoff,-7 , yoff ,5    , sind,SPR_BANJO;
+    ITEM_IND_NEXT_BRANG;    mem_loc,MEM_HAS_BRANG  , index,ITEM_IND_BRANG, name,brang ,  sxo,1 , syo,1 , xoff,0  , yoff ,6    , sind,SPR_BRANG;
+    ITEM_IND_NEXT_BOW;      mem_loc,MEM_HAS_BOW    , index,ITEM_IND_BOW, name,bow   ,    sxo,0 , syo,0 , xoff,7  , yoff ,5    , sind,SPR_BOW;
+    10;                     mem_loc,MEM_ALWAYS_TRUE, index,ITEM_IND_INTERACT,            sxo,0 , syo,-2, xoff,0  , yoff ,0    , sind,103;
 ]]
 
 |[inventory_start_init]| function(a)

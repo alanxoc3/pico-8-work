@@ -1,4 +1,4 @@
-g_obj_map=split[[bed,signtest,pot,housetest,navyblock,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil]]
+g_obj_map=split[[bed,signtest,pot,house231,navyblock,signlank,signkeep,signnavy,signteach,signlark,signjane,house224,house225,house226,house227,house228,house229,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil]]
 function decode_map()
 local rooms,cur_loc={},0x2000
 local peek_inc=function()
@@ -296,6 +296,7 @@ end
 end,function(a)
 zspr(a.cspr,a.x*8+a.sx,a.y*8+a.sy,a.sw,a.sh,a.xf,a.yf)
 end,function(a)
+a.offx+=a.offdx a.offy+=a.offdy
 a.x,a.y=a.anchoring.x+a.offx,a.anchoring.y+a.offy
 end,function(target,objs)
 foreach(objs,function(a)
@@ -307,18 +308,27 @@ end
 end)
 end,function(a)
 g_rstat_left:set(a)
-if not does_entity_exist"tbox"and not btn(5)and zbtn(btn,0)|zbtn(btn,2)~=0 then
+a.speed=0
+if not does_entity_exist"tbox"and not btn(5)then
+if zbtn(btn,0)|zbtn(btn,2)~=0 then
 a.ang,a.speed=atan2(zbtn(btn,0),zbtn(btn,2)),.025
-if cos(a.ang)~=0 then
+if not a.item and cos(a.ang)~=0 then
 a.xf=cos(a.ang)<0
 end
-else
-a.speed=0
+end
+if not a.item and btn"4"then
+if peek"0x5d08"==5 then
+a.item=_g.sword(a,a.xf and-.125 or.125,a.xf)
+end
+end
 end
 a.sind=a.sinds[a.dx|a.dy ~=0 and t()*12%3\1+1 or 1]
 end,function(a)
 zspr(a.sind,a.x*8,a.y*8-2,1,1,a.xf)
 zspr(91,a.x*8,a.y*8-2,1,1,a.xf)
+if a.item then
+zspr(a.item.sind,a.item.x*8,a.item.y*8-2,1,1,a.xf)
+end
 end,function(a)
 local buffer=a.buffer
 a.buffer={}
@@ -624,10 +634,11 @@ zclass[[inventory,actor,drawlayer_90|pl,@,ind,4,flip,1;start;init,%inventory_sta
 zclass[[solid,box|]]
 zclass[[wall,solid,anchor|anchoring,@,offx,@,offy,@,rx,@,ry,@]]
 zclass[[simple_spr,auto_outline,pos|drawout,%simple_spr_draw,sind,0,sw,1,sh,1,xf,no,yf,no,sx,0,sy,0]]
-zclass[[anchor,pos|update_anchor,%anchor_update_anchor;offx,0,offy,0,anchoring;,]]
+zclass[[anchor,pos|update_anchor,%anchor_update_anchor;offx,0,offy,0,offdx,0,offdy,0,anchoring;,]]
 zclass[[target,anchor,box|rx,@,ry,@,offx,@,offy,@,anchoring,@,callback_touch,@,callback_outside,@,update_target,%targettouch_update_target]]
 zclass[[pot]]
 zclass[[bed]]
+zclass[[sword,anchor,vec,actor|anchoring,@,offdx,.625,sind,2;start;offdx,@,duration,.08,next,normal;normal;offdx,0;]]
 zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50|cname,lank,cspr,103,health,10,max_health,10,x,@,y,@,xf,@,sind,88,rx,.375,ry,.375,update,%pl_update,energy,0,drawout,%pl_drawout;sinds;,88,89,90]]
 function draw_bar(x1,y1,x2,y2,percent,align,fg,bg)
 if x1>x2 then x1-=3 x2-=3 end
@@ -663,13 +674,25 @@ zclass[[rstat|align,@,x,@,update,%rstat_update,set,%rstat_set,get,%rstat_get;buf
 zclass[[stat,vec,actor,drawlayer_95|align,@,x,@,obj,@,y,138,draw,%stat_draw,max_health,10,health,5;start;dy,-2,duration,.2,next,normal;normal;dy,0;ending;dy,2,duration,.2;]]
 zclass[[tbox,vec,actor,drawlayer_99|rawtext,@,destroyed,@,y,138,cur_text_index,1,anim,0,line_1,,line_2,,update,%tbox_update,draw,%tbox_draw;texts;,;start;dy,-2,duration,.2,next,normal,update,nop,init,%tbox_init;normal;dy,0,anim,0,done,no,update,%tbox_update,init,nop;ending;dy,2,update,nop,duration,.2,init,nop;]]
 zclass[[fairy,actor,mov,drawlayer_50|x,@,y,@,update,%fairy_update,draw,%fairy_draw]]
-zclass[[house,actor,simple_spr,drawlayer_50|cspr,174,sind,174,sw,2,sh,2,room,231,init,%house_init]]
-zclass[[housetest,house|x,@,y,@]]
+zclass[[house,actor,simple_spr,drawlayer_50|cspr,174,sind,174,sw,2,sh,2,init,%house_init]]
+zclass[[house231,house|x,@,y,@,room,231]]
+zclass[[house224,house|x,@,y,@,room,224]]
+zclass[[house225,house|x,@,y,@,room,225]]
+zclass[[house226,house|x,@,y,@,room,226]]
+zclass[[house227,house|x,@,y,@,room,227]]
+zclass[[house228,house|x,@,y,@,room,228]]
+zclass[[house229,house|x,@,y,@,room,229]]
 zclass[[person,target_with_tbox,solid,simple_spr,drawlayer_50|text,,rx,.375,ry,.375,trx,.5,try,.25,target_with_tbox_disable_callback,%person_target_with_tbox_disable_callback,target_with_tbox_finish_callback,%person_target_with_tbox_finish_callback;]]
 zclass[[navyblock,person|x,@,y,@,sy,-2,cname,navy,cspr,97,sind,97,text,my sister has been in^the forest all day.^find something to^protect yourself with^and bring her home.|0x5d09|0]]
 zclass[[target_with_tbox,actor|init,%target_with_tbox_init,trx,0,try,0,tx,0,ty,0,target_with_tbox_disable_callback,nop,target_with_tbox_finish_callback,nop]]
 zclass[[sign,target_with_tbox,solid,simple_spr,drawlayer_50|text,,rx,.375,ry,.375,sy,-2,target_with_tbox_disable_callback,%sign_target_with_tbox_disable_callback,cname,sign,cspr,24,sind,24,trx,.125,try,.375,tx,0,ty,.25]]
 zclass[[signtest,sign|x,@,y,@,text,mary had a^little lamb^little lamb^little lamb^mary had a^little lamb^whose fleece was^white as yo face]]
+zclass[[signlank,sign|x,@,y,@,text,lanks house]]
+zclass[[signkeep,sign|x,@,y,@,text,keeps house]]
+zclass[[signnavy,sign|x,@,y,@,text,navys house]]
+zclass[[signteach,sign|x,@,y,@,text,teachs house]]
+zclass[[signlark,sign|x,@,y,@,text,larks house]]
+zclass[[signjane,sign|x,@,y,@,text,janes house]]
 g_fade_table=zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,1,0,0,0,0;3;,3,3,3,3,1,1,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,0,0,0,0;6;,6,6,13,13,5,5,0,0;7;,7,7,6,13,13,5,0,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,0,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,0,0,0;13;,13,13,5,5,1,0,0,0;14;,14,14,13,4,2,2,0,0;15;,15,15,13,13,5,5,0,0;]]
 function fade(threshold)
 for c=0,15 do

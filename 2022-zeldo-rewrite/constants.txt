@@ -83,6 +83,27 @@ POS_MULTIPLIER_FOR_MEMORY: 16
 
 REAL_SAVE_LOCATION: 0x5e00
 
+# ITEM INDEXES
+ITEM_IND_BOMB:     0
+ITEM_IND_BOWL:     1
+ITEM_IND_MASK:     2
+ITEM_IND_SHIELD:   3
+ITEM_IND_INTERACT: 4
+ITEM_IND_SWORD:    5
+ITEM_IND_BANJO:    6
+ITEM_IND_BRANG:    7
+ITEM_IND_BOW:      8
+
+ITEM_IND_NEXT_BOMB:     1
+ITEM_IND_NEXT_BOWL:     2
+ITEM_IND_NEXT_MASK:     3
+ITEM_IND_NEXT_SHIELD:   4
+ITEM_IND_NEXT_INTERACT: 5
+ITEM_IND_NEXT_SWORD:    6
+ITEM_IND_NEXT_BANJO:    7
+ITEM_IND_NEXT_BRANG:    8
+ITEM_IND_NEXT_BOW:      9
+
 # Save Memory Locations
 MEM_SAVE_LOCATION: 0x5d00
 MEM_ALWAYS_TRUE:   0x5d00
@@ -109,5 +130,4 @@ MEM_HAS_BANJO:     0x5d17
 MEM_ALWAYS_FALSE:  0x5dff
 
 # Texts, max 22 chars
-TEXT_SIGNTEST:   mary had a^little lamb^little lamb^little lamb^mary had a^little lamb^whose fleece was^white as yo face
 TEXT_NAVY_BLOCK: my sister has been in^the forest all day.^find something to^protect yourself with^and bring her home.

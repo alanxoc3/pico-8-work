@@ -1,7 +1,6 @@
 zclass[[house,actor,simple_spr,drawlayer_50|
     cspr,SPR_HOUSE,
     sind,SPR_HOUSE, sw,2, sh,2,
-    room,TEST_ROOM_INDEX,
     init,%house_init
 ]]
 
@@ -29,4 +28,10 @@ zclass[[house,actor,simple_spr,drawlayer_50|
     end)
 end $$
 
-zclass[[housetest,house|x,@,y,@]]
+zclass[[house231,  house|x,@,y,@,room,231]]
+zclass[[house224,  house|x,@,y,@,room,224]]
+zclass[[house225,  house|x,@,y,@,room,225]]
+zclass[[house226,  house|x,@,y,@,room,226]]
+zclass[[house227,  house|x,@,y,@,room,227]]
+zclass[[house228,  house|x,@,y,@,room,228]]
+zclass[[house229,  house|x,@,y,@,room,229]]

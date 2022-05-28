@@ -10,11 +10,7 @@ help him save the Land of Hi-roll from the forces of evil.
 ```
 
 ## Tokens & Features
-How to fix bug where ma is gone but tbox isn't?
-- tbox could be handled by ma. if tbox is active, don't get rid of current ma.
-- tbox can be triggered by button press or startup of ma.
-- probably nothing else would trigger a tbox creation.
-- how does starting tbox work?
+TODO: Sword
 
 ```
 2022-05-27 -- simplifyma expandinventory

@@ -14,9 +14,11 @@ end $$
 zclass[[anchor,pos|
     update_anchor,%anchor_update_anchor;
     offx,0, offy,0,
+    offdx,0, offdy,0,
     anchoring;,
 ]]
 |[anchor_update_anchor]| function(a)
+    a.offx+=a.offdx a.offy+=a.offdy
     a.x, a.y = a.anchoring.x+a.offx, a.anchoring.y+a.offy
 end $$
 
