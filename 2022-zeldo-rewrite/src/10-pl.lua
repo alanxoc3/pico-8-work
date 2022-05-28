@@ -16,6 +16,7 @@
    -- initial_energy:   how much energy it takes to initialize the item
    -- gradual_energy:   how much energy is added every step
    -- is_default: is this the "no item" item?
+   -- visible: should it be drawn with the player?
    -- alive: is the item alive?
 
 zclass[[item_horizontal,anchor|
@@ -27,9 +28,9 @@ zclass[[item_horizontal,anchor|
     ending; init,%item_horizontal_ending_init, duration,.08;
 ]]
 
-|[item_horizontal_start_init]|  function(a) a.offdx = a.xf and -a.offspeed or a.offspeed end $$
+|[item_horizontal_start_init]|  function(a) a.offdx = a.xf*a.offspeed end $$
 |[item_horizontal_normal_init]| function(a) a.offx = abs(a.offx*8)\1/8*sgn(a.offx) end $$
-|[item_horizontal_ending_init]| function(a) a:normal_init() a.offdx = a.xf and a.offspeed or -a.offspeed end $$
+|[item_horizontal_ending_init]| function(a) a:normal_init() a.offdx = -a.xf*a.offspeed end $$
 
 zclass[[mask,anchor,actor|
     anchoring,@, xf,@,
@@ -110,11 +111,11 @@ zclass[[banjo,anchor,actor|
     ending; offdy,-.0625, duration,.08;
 ]]
 
-zclass[[brang,mov,actor|
+zclass[[brang,simple_spr,drawlayer_75,mov,actor|
     anchoring,@, xf,@,
 
     kill_when_release,yes,
-    visible,yes,
+    visible,no,
     block_direction, yes,
     speed_multiplier, .25,
     initial_energy, .25,
@@ -132,7 +133,7 @@ zclass[[brang,mov,actor|
 
 |[brang_start_init]| function(a)
     a.x, a.y = a.anchoring.x, a.anchoring.y
-    a.ang = a.xf and .5 or 0
+    a.ang = (a.xf+1)/2
 end $$
 
 |[brang_normal_update]| function(a)
@@ -172,7 +173,7 @@ zclass[[bomb,anchor,actor|
     final;    init,nop, alive,no;
 ]]
 
-|[bomb_start_init]| function(a) a.offx = a.xf and -.625 or .625 end $$
+|[bomb_start_init]| function(a) a.offx = a.xf*.625 end $$
 |[bomb_normal_init]| function(a) _g.bomb_placed(a.x, a.y-.25, a.xf) end $$
 
 zclass[[bomb_placed,actor,simple_spr,drawlayer_50|
@@ -227,7 +228,7 @@ end $$
             a.ang, a.speed = atan2(zbtn(btn, 0), zbtn(btn, 2)), PL_SPEED*a.item.speed_multiplier
 
             if not a.item.block_direction and cos(a.ang) ~= 0 then
-                a.xf = cos(a.ang) < 0
+                a.xf = sgn(cos(a.ang))
             end
         end
 
@@ -259,7 +260,7 @@ end $$
     local xf = a.xf
     local top = 91
     if does_entity_exist'banjo' then
-        xf = g_i % 2 == 0
+        xf = g_i%2*2-1
         top = 92
     end
 

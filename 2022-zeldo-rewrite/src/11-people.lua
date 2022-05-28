@@ -6,7 +6,7 @@ zclass[[person,target_with_tbox,solid,simple_spr,drawlayer_50|
 ]]
 
 |[person_target_with_tbox_disable_callback]| function(a)
-    a.xf = a.x > g_pl.x
+    a.xf = a.x-g_pl.x
     return peek'MEM_ITEM_INDEX' ~= 4 or a.xf == g_pl.xf
 end $$
 

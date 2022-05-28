@@ -7,10 +7,11 @@ function flr_rnd(x) return flr(rnd(x)) end
 function zbtn(f, a) return f(a) and f(a+1) and 0 or f(a) and -1 or f(a+1) and 1 or 0 end
 
 -- used everwhere
-function zspr(sind, x, y, sw, sh, ...)
+function zspr(sind, x, y, sw, sh, xf, yf)
     sw, sh = sw or 1, sh or 1
+    xf, yf = xf and xf < 0, yf and yf < 0
     x, y = x-sw*4, y-sh*4
-    spr(sind, x, y, sw, sh, ...)
+    spr(sind, x, y, sw, sh, xf, yf)
 end
 
 -- used with ui

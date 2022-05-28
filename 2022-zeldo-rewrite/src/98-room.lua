@@ -4,7 +4,7 @@ zclass[[room_bounds,box|x,@,y,@,rx,@,ry,@]]
     local r = g_rooms[peek'MEM_ROOM_IND']
     g_room_bounds = _g.room_bounds(r.w/2, r.h/2+.25, r.w/2+.125, r.h/2+.125)
 
-    g_pl = _g.pl(peek'MEM_PL_X'/POS_MULTIPLIER_FOR_MEMORY, peek'MEM_PL_Y'/POS_MULTIPLIER_FOR_MEMORY, peek'MEM_PL_XF'>0)
+    g_pl = _g.pl(peek'MEM_PL_X'/POS_MULTIPLIER_FOR_MEMORY, peek'MEM_PL_Y'/POS_MULTIPLIER_FOR_MEMORY, peek'MEM_PL_XF'*2-1)
     g_fairy = _g.fairy(g_pl.x, g_pl.y-.125)
     g_rstat_left, g_rstat_inventory, g_rstat_right = _g.rstat(-1, 10), _g.rstat(0, 64), _g.rstat(1, 118)
 
@@ -64,6 +64,7 @@ end $$
     draw_room(g_rooms[peek'MEM_ROOM_IND'], CARD_CX, CARD_CY, function()
         zcall(loop_entities, [[
             1;,drawlayer_50, draw;
+            2;,drawlayer_75, draw;
         ]])
 
         -- DEBUG_BEGIN
@@ -96,7 +97,7 @@ function load_room(rind, x, y, xf)
         ]], rind,
             x*POS_MULTIPLIER_FOR_MEMORY,
             y*POS_MULTIPLIER_FOR_MEMORY,
-            xf and 1 or 0
+            (xf+1)\2
         )
 
         g_state:load'room'

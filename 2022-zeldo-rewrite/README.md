@@ -10,7 +10,7 @@ help him save the Land of Hi-roll from the forces of evil.
 ```
 
 ## Tokens & Features
-TODO: ending logic kills
+TODO: xf is a number, not bool
 
 ```
 2022-05-28 -- banjo brang
