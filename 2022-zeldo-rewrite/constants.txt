@@ -69,14 +69,15 @@ SPR_PL_WHOLE: 103
 SPR_SIGN: 24
 SPR_HOUSE: 174
 
-SPR_BRANG:  4
+SPR_BANJO:  1
+SPR_SWORD:  2
 SPR_MASK:   3
+SPR_BRANG:  4
 SPR_BOMB:   5
 SPR_SHIELD: 6
 SPR_BOW:    7
-SPR_BANJO:  1
-SPR_SWORD:  2
 SPR_BOWL:   8
+SPR_BOB:    80
 SPR_NAVY:   97
 SPR_FAIRY_CARD: 9
 
@@ -130,7 +131,7 @@ MEM_HAS_BOW:       0x5d14
 MEM_HAS_MASK:      0x5d15
 MEM_HAS_SWORD:     0x5d16
 MEM_HAS_BANJO:     0x5d17
-MEM_ALWAYS_FALSE:  0x5dff
 
-# Texts, max 22 chars
-TEXT_NAVY_BLOCK: my sister has been in^the forest all day.^find something to^protect yourself with^and bring her home.
+MEM_IS_BOB_HOME:   0x5d18
+
+MEM_ALWAYS_FALSE:  0x5dff
