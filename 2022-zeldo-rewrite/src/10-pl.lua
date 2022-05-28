@@ -171,8 +171,8 @@ zclass[[bomb,actor,vec,simple_spr,drawlayer_50|
 
     kill_when_release,no,
     visible,no,
-    block_direction, yes,
-    speed_multiplier, .75,
+    block_direction, no,
+    speed_multiplier, 1,
     initial_energy, .25,
     gradual_energy, 0,
 
