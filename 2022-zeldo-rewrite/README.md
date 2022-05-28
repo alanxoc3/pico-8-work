@@ -10,8 +10,6 @@ help him save the Land of Hi-roll from the forces of evil.
 ```
 
 ## Tokens & Features
-TODO: xf is a number, not bool
-
 ```
 2022-05-28 -- banjo brang bombfix bob keep teach jane lark
     4821 4835 4946 4972 4978 5035 5022 5028 5038 5050 5005

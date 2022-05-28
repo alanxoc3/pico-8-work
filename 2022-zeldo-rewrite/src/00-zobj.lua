@@ -5,6 +5,7 @@ function nop() end
 function zobj_eval(val, table, parameters)
     -- 37: %, 126: ~
     if     ord(val) == 37               then return _g[sub(val, 2)]
+    elseif val == '~'                   then return table
     elseif ord(val) == 126              then return table[sub(val, 2)]
     elseif val == '@'                   then return deli(parameters, 1)
     elseif val == 'yes'  or val == 'no' then return val=='yes'

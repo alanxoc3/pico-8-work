@@ -38,4 +38,3 @@ end $$
 
 -- placeholders
 zclass[[pot]]
-zclass[[bed]]

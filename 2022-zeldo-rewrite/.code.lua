@@ -105,6 +105,7 @@ end
 function nop()end
 function zobj_eval(val,table,parameters)
 if ord(val)==37 then return _g[sub(val,2)]
+elseif val=="~"then return table
 elseif ord(val)==126 then return table[sub(val,2)]
 elseif val=="@"then return deli(parameters,1)
 elseif val=="yes"or val=="no"then return val=="yes"
@@ -139,7 +140,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,animation_init,@,auto_outline_draw,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,explode_draw,@,calc_deltas,@,adjust_deltas_for_solids,@,adjust_deltas_for_tiles,@,inventory_start_init,@,inventory_start_update,@,inventory_press_update,@,inventory_draw,@,simple_spr_draw,@,anchor_update_anchor,@,targettouch_update_target,@,item_horizontal_start_init,@,item_horizontal_normal_init,@,item_horizontal_ending_init,@,brang_drawout,@,brang_start_init,@,brang_normal_update,@,brang_ending_init,@,brang_ending_update,@,bomb_start_init,@,bomb_destroyed,@,pl_add_energy,@,pl_update,@,pl_drawout,@,rstat_update,@,rstat_set,@,rstat_get,@,stat_draw,@,tbox_init,@,tbox_update,@,tbox_draw,@,fairy_update,@,fairy_draw,@,house_init,@,person_target_with_tbox_disable_callback,@,person_target_with_tbox_finish_callback,@,target_with_tbox_init,@,sign_target_with_tbox_disable_callback,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,gameover_control_ending,@,gameover_init,@,gameover_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,simple_update,@,title_draw,@,title_logo_update,@,title_logo_drawout,@,game_state_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,animation_init,@,auto_outline_draw,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,explode_draw,@,calc_deltas,@,adjust_deltas_for_solids,@,adjust_deltas_for_tiles,@,inventory_start_init,@,inventory_start_update,@,inventory_press_update,@,inventory_draw,@,simple_spr_draw,@,anchor_update_anchor,@,targettouch_update_target,@,item_horizontal_start_init,@,item_horizontal_normal_init,@,item_horizontal_ending_init,@,brang_drawout,@,brang_start_init,@,brang_normal_update,@,brang_ending_init,@,brang_ending_update,@,bomb_start_init,@,bomb_destroyed,@,pl_add_energy,@,pl_update,@,pl_drawout,@,rstat_update,@,rstat_set,@,rstat_get,@,stat_draw,@,tbox_init,@,tbox_update,@,tbox_draw,@,fairy_update,@,fairy_draw,@,spawn_walls,@,house_init,@,person_target_with_tbox_disable_callback,@,person_target_with_tbox_finish_callback,@,target_with_tbox_init,@,sign_target_with_tbox_disable_callback,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,gameover_control_ending,@,gameover_init,@,gameover_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,simple_update,@,title_draw,@,title_logo_update,@,title_logo_drawout,@,game_state_init,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -452,7 +453,10 @@ scr_line(a.x+abs(i)\2*m,a.y+i%2*m,a.x-a.dx*6,a.y-a.dy*6,1)
 end
 scr_pset(a.x,a.y,12)
 end,function(a)
-zcall(_g.wall,[[a,@;1;,~a,.75,.5,.25,.75;2;,~a,-.75,.5,.25,.75;3;,~a,0,0,.75,.25;]],a)
+zcall_tbl(_g.wall,a.walls)
+if a.walls[1][1]==a then printh("HEOEU")end
+end,function(a)
+_g.spawn_walls(a)
 zcall(_g.target,[[1;,.125,.375,0,.5,@,@,nop;]],a,function()
 zcall(poke,[[1;,0x5d05,@;2;,0x5d06,@;3;,0x5d07,@;]],peek"0x5d01",
 a.x*16,
@@ -589,10 +593,13 @@ function zprinttbox(str,x,y,align,fg,bg)
 zprint(str,x,y+1,align,bg)
 zprint(str,x,y,align,fg)
 end
-function zcall(func,text,...)
-foreach(zobj(text,...),function(params)
+function zcall_tbl(func,tbl)
+foreach(tbl,function(params)
 func(unpack(params))
 end)
+end
+function zcall(func,text,...)
+zcall_tbl(func,zobj(text,...))
 end
 function zrect(x,y,rx,ry,color)rect(x-rx,y-ry,x+rx-1,y+ry-1,color)end
 function scr_help_four(func,x1,y1,x2,y2,color)func(8*x1,8*y1,8*x2,8*y2,color)end
@@ -691,7 +698,6 @@ zclass[[simple_spr,auto_outline,pos|drawout,%simple_spr_draw,sind,0,sw,1,sh,1,xf
 zclass[[anchor,pos|update_anchor,%anchor_update_anchor;offx,0,offy,0,offdx,0,offdy,0,anchoring;,]]
 zclass[[target,anchor,box|rx,@,ry,@,offx,@,offy,@,anchoring,@,callback_touch,@,callback_outside,@,update_target,%targettouch_update_target]]
 zclass[[pot]]
-zclass[[bed]]
 zclass[[item_horizontal,anchor|offspeed,0,normal_init,%item_horizontal_normal_init;start;init,%item_horizontal_start_init,duration,.08,next,normal;normal;init,%item_horizontal_normal_init,offdx,0;ending;init,%item_horizontal_ending_init,duration,.08;]]
 zclass[[mask,anchor,actor|anchoring,@,xf,@,kill_when_release,yes,visible,yes,block_direction,no,speed_multiplier,2,initial_energy,.125,gradual_energy,.0078125,offy,.2,sind,3;start;offdy,-.0625,duration,.08,next,normal;normal;offy,-.125,offdy,0;ending;offdy,.0625,duration,.08;]]
 zclass[[bow,item_horizontal,actor|anchoring,@,xf,@,kill_when_release,yes,visible,yes,block_direction,yes,speed_multiplier,.5,initial_energy,.25,gradual_energy,0,offspeed,.105,sind,7;]]
@@ -735,7 +741,8 @@ zclass[[rstat|align,@,x,@,update,%rstat_update,set,%rstat_set,get,%rstat_get;buf
 zclass[[stat,vec,actor,drawlayer_95|align,@,x,@,obj,@,y,138,draw,%stat_draw,max_health,10,health,5;start;dy,-2,duration,.2,next,normal;normal;dy,0;ending;dy,2,duration,.2;]]
 zclass[[tbox,vec,actor,drawlayer_99|rawtext,@,destroyed,@,y,138,cur_text_index,1,anim,0,line_1,,line_2,,update,%tbox_update,draw,%tbox_draw;texts;,;start;dy,-2,duration,.2,next,normal,update,nop,init,%tbox_init;normal;dy,0,anim,0,done,no,update,%tbox_update,init,nop;ending;dy,2,update,nop,duration,.2,init,nop;]]
 zclass[[fairy,actor,mov,drawlayer_50|x,@,y,@,update,%fairy_update,draw,%fairy_draw]]
-zclass[[house,actor,simple_spr,drawlayer_50|cspr,174,sind,174,sw,2,sh,2,init,%house_init]]
+zclass[[bed,actor,simple_spr,drawlayer_50|sh,2,sy,-8,init,%spawn_walls;walls;1;,~,.75,.5,.25,.75;walls;2;,~,-.75,.5,.25,.75;walls;3;,~,0,0,.75,.25;]]
+zclass[[house,actor,simple_spr,drawlayer_50|cspr,174,sind,174,sw,2,sh,2,init,%house_init;walls;1;,~,.75,.5,.25,.75;walls;2;,~,-.75,.5,.25,.75;walls;3;,~,0,0,.75,.25;]]
 zclass[[house231,house|x,@,y,@,room,231]]
 zclass[[house224,house|x,@,y,@,room,224]]
 zclass[[house225,house|x,@,y,@,room,225]]
@@ -743,6 +750,7 @@ zclass[[house226,house|x,@,y,@,room,226]]
 zclass[[house227,house|x,@,y,@,room,227]]
 zclass[[house228,house|x,@,y,@,room,228]]
 zclass[[house229,house|x,@,y,@,room,229]]
+zclass[[bed]]
 zclass[[person,target_with_tbox,solid,simple_spr,drawlayer_50|text,,rx,.375,ry,.375,sy,-2,trx,.5,try,.25,target_with_tbox_disable_callback,%person_target_with_tbox_disable_callback]]
 zclass[[navyblock,person|x,@,y,@,cname,navy,cspr,97,sind,97,text,my sister has been in^the forest all day.^find something to^protect yourself with^and bring her home.,ry,1,memloc_trigger,0x5d09,memloc_trigger_value,1,target_with_tbox_finish_callback,%person_target_with_tbox_finish_callback|0x5d09|0]]
 zclass[[navyhouse,person|x,@,y,@,cname,navy,cspr,97,sind,97,text,im navy in a house|0x5d09|1]]
@@ -761,6 +769,8 @@ zclass[[signnavy,sign|x,@,y,@,text,navys house]]
 zclass[[signteach,sign|x,@,y,@,text,teachs house]]
 zclass[[signlark,sign|x,@,y,@,text,larks house]]
 zclass[[signjane,sign|x,@,y,@,text,janes house]]
+zclass[[slimy,simple_spr,actor|x,@,y,@,cspr,118,cname,slimy,sind,118]]
+zclass[[miny,simple_spr,actor|x,@,y,@,cspr,116,cname,miny,sind,118]]
 zclass[[spike,simple_spr,actor,drawlayer_25|sind,52,draw,~drawout;start;next,down;down;sind,52,duration,.5,next,middle1;middle1;sind,53,duration,.125,next,up;up;sind,54,duration,.25,next,middle2;middle2;sind,53,duration,.125,next,down;]]
 zclass[[r1spike,spike|x,@,y,@,xf,1;start;duration,0;]]
 zclass[[r2spike,spike|x,@,y,@,xf,1;start;duration,.5;]]

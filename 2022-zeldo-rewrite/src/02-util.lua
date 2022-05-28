@@ -30,11 +30,15 @@ function zprinttbox(str, x, y, align, fg, bg)
     zprint(str, x, y, align, fg)
 end
 
--- used everwhere
-function zcall(func, text, ...)
-    foreach(zobj(text, ...), function(params)
+function zcall_tbl(func, tbl)
+    foreach(tbl, function(params)
         func(unpack(params))
     end)
+end
+
+-- used everwhere
+function zcall(func, text, ...)
+    zcall_tbl(func, zobj(text, ...))
 end
 
 -- explode logic
