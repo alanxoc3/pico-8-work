@@ -140,6 +140,7 @@ function zobj(...)
 return zobj_set({},...)
 end
 _g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,actor_deregistered,@,animation_init,@,auto_outline_draw,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,tiledraw_draw,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,explode_draw,@,calc_deltas,@,adjust_deltas_for_solids,@,adjust_deltas_for_tiles,@,inventory_start_init,@,inventory_start_update,@,inventory_press_update,@,inventory_draw,@,simple_spr_draw,@,anchor_update_anchor,@,targettouch_update_target,@,pl_update,@,pl_drawout,@,rstat_update,@,rstat_set,@,rstat_get,@,stat_draw,@,tbox_init,@,tbox_update,@,tbox_draw,@,fairy_update,@,fairy_draw,@,house_init,@,person_target_with_tbox_disable_callback,@,person_target_with_tbox_finish_callback,@,target_with_tbox_init,@,sign_target_with_tbox_disable_callback,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,gameover_control_ending,@,gameover_init,@,gameover_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,simple_update,@,title_draw,@,title_logo_update,@,title_logo_drawout,@,game_state_init,@]],function(a,stateName)
+printh(stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -316,19 +317,23 @@ if not a.item and cos(a.ang)~=0 then
 a.xf=cos(a.ang)<0
 end
 end
+if a.item and not a.item.alive then a.item=nil end
 if not a.item and btn"4"then
 if peek"0x5d08"==5 then
-a.item=_g.sword(a,a.xf and-.125 or.125,a.xf)
+local speed=a.xf and-.125 or.125
+a.item=_g.sword(a,speed,-speed)
 end
+elseif a.item and a.item.curr ~="ending"and not btn"4"then
+a.item:load"ending"
 end
 end
 a.sind=a.sinds[a.dx|a.dy ~=0 and t()*12%3\1+1 or 1]
 end,function(a)
-zspr(a.sind,a.x*8,a.y*8-2,1,1,a.xf)
-zspr(91,a.x*8,a.y*8-2,1,1,a.xf)
 if a.item then
 zspr(a.item.sind,a.item.x*8,a.item.y*8-2,1,1,a.xf)
 end
+zspr(a.sind,a.x*8,a.y*8-2,1,1,a.xf)
+zspr(91,a.x*8,a.y*8-2,1,1,a.xf)
 end,function(a)
 local buffer=a.buffer
 a.buffer={}
@@ -638,7 +643,7 @@ zclass[[anchor,pos|update_anchor,%anchor_update_anchor;offx,0,offy,0,offdx,0,off
 zclass[[target,anchor,box|rx,@,ry,@,offx,@,offy,@,anchoring,@,callback_touch,@,callback_outside,@,update_target,%targettouch_update_target]]
 zclass[[pot]]
 zclass[[bed]]
-zclass[[sword,anchor,vec,actor|anchoring,@,offdx,.625,sind,2;start;offdx,@,duration,.08,next,normal;normal;offdx,0;]]
+zclass[[sword,anchor,vec,actor|anchoring,@,offdx,.625,sind,2,speed,.125;start;offdx,@,duration,.08,next,normal;normal;offdx,0;ending;offdx,@,duration,.08;]]
 zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50|cname,lank,cspr,103,health,10,max_health,10,x,@,y,@,xf,@,sind,88,rx,.375,ry,.375,update,%pl_update,energy,0,drawout,%pl_drawout;sinds;,88,89,90]]
 function draw_bar(x1,y1,x2,y2,percent,align,fg,bg)
 if x1>x2 then x1-=3 x2-=3 end
