@@ -11,9 +11,8 @@ zclass[[bedblanket,actor,simple_spr,drawlayer_50|
     sind,55,
     init,%spawn_walls;
 
-    -- walls;1;,~, .625,.125,.125,.375;
-    -- walls;2;,~,-.625,.125,.125,.375;
-    walls;1;,~,   0, .25,.75,.25;
+    walls;1;,~,    .375, .25,.375,.25;
+    walls;2;,~,   -.375, .25,.375,.25;
 ]]
 
 zclass[[bedpillow,simple_spr,drawlayer_25|x,@,y,@,sind,39]]
