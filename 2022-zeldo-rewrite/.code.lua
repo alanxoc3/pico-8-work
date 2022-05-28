@@ -271,12 +271,11 @@ end,function(a)
 g_rstat_inventory:set(a.stat)
 if not does_entity_exist"tbox"and btn"5"then
 poke(0x5d08,9)
-a.flip=a.pl.xf and-1 or 1
 a.ind=4
 a:load"expand"
 end
 end,function(a)
-a.ind=mid(0,2,a.ind%3+a.flip*zbtn(btnp,0))+mid(0,2,a.ind\3+zbtn(btnp,2))*3
+a.ind=mid(0,2,a.ind%3+zbtn(btnp,0))+mid(0,2,a.ind\3+zbtn(btnp,2))*3
 if does_entity_exist"tbox"or not btn"5"then
 poke(0x5d08,peek(a[a.ind+1].mem_loc)~=0 and a.ind or 4)
 a:load"contract"
@@ -289,7 +288,7 @@ local exist=peek(item.mem_loc)~=0
 local sind=exist and item.sind or 0
 local sxo,syo=exist and item.sxo or 0,exist and item.syo or 0
 local drawfunc=function()
-zspr(sind,sxo*a.flip+a.pl.x*8+a.flip*item.xoff*percent,syo+a.pl.y*8+item.yoff*percent,1,1,a.flip<0)
+zspr(sind,sxo+a.pl.x*8+item.xoff*percent,syo+a.pl.y*8+item.yoff*percent,1,1,item.flip_enabled and a.pl.xf)
 end
 draw_outline(item.index==a.ind and 2 or 1,drawfunc)
 drawfunc()
@@ -642,7 +641,7 @@ t2=room.tiles_1[index]
 return fget(t2,0)and t2
 end
 zclass[[collidable,box,vec|calc_deltas,%calc_deltas,adjust_deltas_for_solids,%adjust_deltas_for_solids,adjust_deltas_for_tiles,%adjust_deltas_for_tiles]]
-zclass[[inventory,actor,drawlayer_90|pl,@,ind,4,flip,1;start;init,%inventory_start_init,update,%inventory_start_update,draw,nop;press;init,nop,update,%inventory_press_update,draw,%inventory_draw;expand;init,nop,update,nop,draw,%inventory_draw,duration,.0625,next,press;contract;init,nop,update,nop,draw,%inventory_draw,duration,.0625,next,start;1;mem_loc,0x5d12,index,0,name,bomb,sxo,-1,syo,1,xoff,-7,yoff,-9,sind,5;2;mem_loc,0x5d10,index,1,name,bowl,sxo,0,syo,-1,xoff,0,yoff,-10,sind,8;3;mem_loc,0x5d15,index,2,name,mask,sxo,1,syo,1,xoff,7,yoff,-9,sind,3;4;mem_loc,0x5d13,index,3,name,shield,sxo,0,syo,0,xoff,-8,yoff,-2,sind,6;5;mem_loc,0x5dff,sxo,0,syo,0,xoff,0,yoff,0,sind,0;6;mem_loc,0x5d16,index,5,name,sword,sxo,1,syo,0,xoff,8,yoff,-2,sind,2;7;mem_loc,0x5d17,index,6,name,banjo,sxo,1,syo,0,xoff,-7,yoff,5,sind,1;8;mem_loc,0x5d11,index,7,name,brang,sxo,1,syo,1,xoff,0,yoff,6,sind,4;9;mem_loc,0x5d14,index,8,name,bow,sxo,0,syo,0,xoff,7,yoff,5,sind,7;10;mem_loc,0x5d00,index,4,sxo,0,syo,-2,xoff,0,yoff,0,sind,103;]]
+zclass[[inventory,actor,drawlayer_90|pl,@,ind,4;start;init,%inventory_start_init,update,%inventory_start_update,draw,nop;press;init,nop,update,%inventory_press_update,draw,%inventory_draw;expand;init,nop,update,nop,draw,%inventory_draw,duration,.0625,next,press;contract;init,nop,update,nop,draw,%inventory_draw,duration,.0625,next,start;1;mem_loc,0x5d12,index,0,name,bomb,sxo,-1,syo,1,xoff,-7,yoff,-9,sind,5;2;mem_loc,0x5d10,index,1,name,bowl,sxo,0,syo,-1,xoff,0,yoff,-10,sind,8;3;mem_loc,0x5d15,index,2,name,mask,sxo,1,syo,1,xoff,7,yoff,-9,sind,3;4;mem_loc,0x5d13,index,3,name,shield,sxo,0,syo,0,xoff,-8,yoff,-2,sind,6;5;mem_loc,0x5dff,sxo,0,syo,0,xoff,0,yoff,0,sind,0;6;mem_loc,0x5d16,index,5,name,sword,sxo,1,syo,0,xoff,8,yoff,-2,sind,2;7;mem_loc,0x5d17,index,6,name,banjo,sxo,1,syo,0,xoff,-7,yoff,5,sind,1;8;mem_loc,0x5d11,index,7,name,brang,sxo,1,syo,1,xoff,0,yoff,6,sind,4;9;mem_loc,0x5d14,index,8,name,bow,sxo,0,syo,0,xoff,7,yoff,5,sind,7;10;mem_loc,0x5d00,index,4,sxo,0,syo,-2,xoff,0,yoff,0,sind,103,flip_enabled,on;]]
 zclass[[solid,box|]]
 zclass[[wall,solid,anchor|anchoring,@,offx,@,offy,@,rx,@,ry,@]]
 zclass[[simple_spr,auto_outline,pos|drawout,%simple_spr_draw,sind,0,sw,1,sh,1,xf,no,yf,no,sx,0,sy,0]]
@@ -736,7 +735,7 @@ zclass[[game_state,actor|ecs_exclusions;actor,yes,timer,yes;curr,room,init,%game
 function _init()
 memcpy(0x5d00,0x5e00,64)
 if peek"0x5d00"==0 then
-zcall(poke,[[1;,0x5d00,1;2;,0x5d01,136;3;,0x5d02,48;4;,0x5d03,48;5;,0x5d04,1;6;,0x5d08,4;14;,0x5d11,1;12;,0x5d15,1;11;,0x5d12,1;15;,0x5d13,1;8;,0x5d14,1;13;,0x5d17,1;7;,0x5d16,1;10;,0x5d10,1;]])
+zcall(poke,[[1;,0x5d00,1;2;,0x5d01,136;3;,0x5d02,48;4;,0x5d03,48;5;,0x5d04,1;6;,0x5d08,4;7;,0x5d16,1;]])
 end
 g_i,g_state,g_rooms=0,_g.game_state(),decode_map()
 g_tile_animation_lookup=create_tile_animation_lookup(g_rooms[0])

@@ -1,5 +1,5 @@
 zclass[[inventory,actor,drawlayer_90|
-    pl,@, ind,4, flip,1;
+    pl,@, ind,4;
     start;    init,%inventory_start_init, update,%inventory_start_update, draw,nop;
     press;    init,nop,                   update,%inventory_press_update, draw,%inventory_draw;
     expand;   init,nop, update,nop, draw,%inventory_draw, duration,.0625, next,press;
@@ -14,7 +14,7 @@ zclass[[inventory,actor,drawlayer_90|
     ITEM_IND_NEXT_BANJO;    mem_loc,MEM_HAS_BANJO  , index,ITEM_IND_BANJO, name,banjo ,  sxo,1 , syo,0 , xoff,-7 , yoff ,5    , sind,SPR_BANJO;
     ITEM_IND_NEXT_BRANG;    mem_loc,MEM_HAS_BRANG  , index,ITEM_IND_BRANG, name,brang ,  sxo,1 , syo,1 , xoff,0  , yoff ,6    , sind,SPR_BRANG;
     ITEM_IND_NEXT_BOW;      mem_loc,MEM_HAS_BOW    , index,ITEM_IND_BOW, name,bow   ,    sxo,0 , syo,0 , xoff,7  , yoff ,5    , sind,SPR_BOW;
-    10;                     mem_loc,MEM_ALWAYS_TRUE, index,ITEM_IND_INTERACT,            sxo,0 , syo,-2, xoff,0  , yoff ,0    , sind,103;
+    10;                     mem_loc,MEM_ALWAYS_TRUE, index,ITEM_IND_INTERACT,            sxo,0 , syo,-2, xoff,0  , yoff ,0    , sind,103, flip_enabled,on;
 ]]
 
 |[inventory_start_init]| function(a)
@@ -27,14 +27,13 @@ end $$
 
     if not does_entity_exist'tbox' and btn'BTN_ITEM_SELECT' then
         poke(MEM_ITEM_INDEX, 9) -- 9 is one more than the highest index
-        a.flip = a.pl.xf and -1 or 1
         a.ind = 4
         a:load'expand'
     end
 end $$
 
 |[inventory_press_update]| function(a)
-    a.ind = mid(0,2,a.ind%3+a.flip*zbtn(btnp,0)) + mid(0,2,a.ind\3+zbtn(btnp,2))*3
+    a.ind = mid(0,2,a.ind%3+zbtn(btnp,0)) + mid(0,2,a.ind\3+zbtn(btnp,2))*3
     if does_entity_exist'tbox' or not btn'BTN_ITEM_SELECT' then
         poke(MEM_ITEM_INDEX, peek(a[a.ind+1].mem_loc) ~= 0 and a.ind or 4)
         a:load'contract'
@@ -51,7 +50,7 @@ end $$
         local sxo, syo = exist and item.sxo or 0, exist and item.syo or 0
         
         local drawfunc = function()
-            zspr(sind, sxo*a.flip+ a.pl.x*8+a.flip*item.xoff*percent, syo+a.pl.y*8+item.yoff*percent, 1, 1, a.flip < 0)
+            zspr(sind, sxo+a.pl.x*8+item.xoff*percent, syo+a.pl.y*8+item.yoff*percent, 1, 1, item.flip_enabled and a.pl.xf)
         end
 
         draw_outline(item.index == a.ind and 2 or 1, drawfunc)

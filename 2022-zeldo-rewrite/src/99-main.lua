@@ -34,14 +34,14 @@ function _init()
             5;,MEM_PL_XF     ,1;
             6;,MEM_ITEM_INDEX,4;
 
-            14; ,MEM_HAS_BRANG  , 1;
-            12; ,MEM_HAS_MASK   , 1;
-            11; ,MEM_HAS_BOMB   , 1;
-            15; ,MEM_HAS_SHIELD , 1;
-            8; ,MEM_HAS_BOW    , 1;
-            13; ,MEM_HAS_BANJO  , 1;
             7; ,MEM_HAS_SWORD  , 1;
-            10; ,MEM_HAS_BOWL   , 1;
+            -- 8; ,MEM_HAS_BOW    , 1;
+            -- 10; ,MEM_HAS_BOWL   , 1;
+            -- 11; ,MEM_HAS_BOMB   , 1;
+            --12; ,MEM_HAS_MASK   , 1;
+            --13; ,MEM_HAS_BANJO  , 1;
+            --14; ,MEM_HAS_BRANG  , 1;
+            --15; ,MEM_HAS_SHIELD , 1;
         ]])
     end
 
