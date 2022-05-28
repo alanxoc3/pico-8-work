@@ -20,8 +20,7 @@ zclass[[actor,timer|
 
     init,      nop,
     update,    nop,
-    destroyed, nop,
-    deregistered, %actor_deregistered;
+    destroyed, nop;
 ]]
 
 -- Load the given state into the actor, by applying the properties of the sub-object
@@ -61,7 +60,4 @@ end $$
 
 -- This is expected to be called at the beginning of each frame!
 -- If this is not called at the beginning, you could have a frame delay for things like explosions.
-|[actor_clean]| function(a) if not a.alive then deregister_entity(a) end end $$
-
--- Called when deregistered. See zclass for more information.
-|[actor_deregistered]| function(a) a.alive = false a:destroyed() end $$
+|[actor_clean]| function(a) if not a.alive then a:destroyed() deregister_entity(a) end end $$

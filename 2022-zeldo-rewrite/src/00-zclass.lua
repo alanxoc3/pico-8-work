@@ -52,7 +52,6 @@ end
 
 -- Removes an entity from all the entity groups it was in when registered.
 function deregister_entity(inst, ...)
-    call_not_nil(inst, 'deregistered', inst, ...)
     for class, entities in pairs(g_zclass_entities) do
         del(entities, inst)
     end
@@ -93,4 +92,7 @@ function clean_all_entities(...)
             deregister_entity(obj)
         end
     end
+
+    -- optionally remove all new entities as well
+    g_zclass_new_entities = {}
 end

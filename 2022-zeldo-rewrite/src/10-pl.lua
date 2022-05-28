@@ -146,7 +146,9 @@ end $$
     if not a:inside(g_room_bounds) then
         a:kill()
     end
+
     a.speed = 0
+
     if zbtn(btn, 0) | zbtn(btn, 2) ~= 0 then
         a.ang, a.speed = atan2(zbtn(btn, 0), zbtn(btn, 2)), BRANG_SPEED
     end
@@ -162,37 +164,31 @@ end $$
     a.y = a.end_y + (a.anchoring.y - a.end_y)*percent
 end $$
 
-zclass[[bomb,anchor,actor|
+zclass[[bomb,actor,vec,simple_spr,drawlayer_50|
     anchoring,@, xf,@,
 
+    sind,SPR_BOMB, sy,-2,
+
     kill_when_release,no,
-    visible,yes,
+    visible,no,
     block_direction, yes,
     speed_multiplier, .75,
     initial_energy, .25,
     gradual_energy, 0,
 
     offspeed,.185,
-    sind,SPR_BOMB;
+    destroyed,%bomb_destroyed;
 
-    start;    gradual_energy,0, init,%bomb_start_init, offy,.175, offdy,.0625, duration,.08, visible,yes, next,normal;
-    normal;   init,%bomb_normal_init, offdy,0, duration,0, next,ending;
-
-    ending;   init,nop, visible,no, duration,.75, next,final;
-    final;    init,nop, alive,no;
+    start;    init,%bomb_start_init, dy,.08, duration,.08, next,normal;
+    normal;   init,nop, duration,.5, dy,0, ,next,ending;
+    ending;   init,nop, alive,no;
 ]]
 
-|[bomb_start_init]| function(a) a.offx = a.xf*.625 end $$
-|[bomb_normal_init]| function(a) _g.bomb_placed(a.x, a.y-.25, a.xf) end $$
+|[bomb_start_init]| function(a)
+    a.x, a.y = a.anchoring.x+a.xf*.625, a.anchoring.y*8\1/8
+end $$
 
-zclass[[bomb_placed,actor,simple_spr,drawlayer_50|
-    x,@, y,@, xf,@, sind,SPR_BOMB,
-    destroyed,%bomb_placed_destroyed;
-    start; duration,.5, next,ending;
-    ending; alive,no;
-]]
-
-|[bomb_placed_destroyed]| function(a)
+|[bomb_destroyed]| function(a)
     _g.explode(a.x, a.y)
 end $$
 
