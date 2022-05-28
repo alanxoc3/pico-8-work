@@ -13,7 +13,7 @@
    -- block_direction:  item doesn't allow a direction change
    -- speed_multiplier: speed is multiplied
 zclass[[sword,anchor,vec,actor|
-    block_direction, no,
+    block_direction, yes,
     speed_multiplier, .5,
 
     anchoring,@,
