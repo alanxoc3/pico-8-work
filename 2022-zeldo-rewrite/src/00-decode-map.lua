@@ -1,6 +1,6 @@
 g_obj_map = split[[
- bed        -- 1   | 39  | 1  | 2
-,signtest   -- 2   | 24  | 1  | 1
+ bedpillow  -- 1   | 39  | 1  | 1
+,bedblanket -- 2   | 55  | 1  | 1
 ,pot        -- 3   | 49  | 1  | 1
 ,house231   -- 4   | 174 | 2  | 2
 ,navyblock  -- 5   | 97  | 1  | 1

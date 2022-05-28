@@ -2,18 +2,17 @@
     zcall_tbl(_g.wall, a.walls)
 end $$
 
-zclass[[bed,actor,simple_spr,drawlayer_50|
+zclass[[bedblanket,actor,simple_spr,drawlayer_50|
     x,@, y,@,
     sind,55,
     init,%spawn_walls;
 
-    -- walls;1;,~, .625,-.25,.25,.75;
-    walls;1;,~,   0, .25,.75,.25;
+    walls;1;,~, .625,0,.25,.5;
+    walls;2;,~,-.625,0,.25,.5;
+    walls;3;,~,   0, .25,.75,.25;
 ]]
 
-zclass[[bed_pillow,simple_spr,drawlayer_25|
-    x,@, y,@, sind,39,
-]]
+zclass[[bedpillow,simple_spr,drawlayer_25|x,@,y,@,sind,39]]
 
 zclass[[house,actor,simple_spr,drawlayer_50|
     cspr,SPR_HOUSE,
