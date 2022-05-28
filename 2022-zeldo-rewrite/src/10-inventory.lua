@@ -18,7 +18,7 @@ zclass[[inventory,actor,drawlayer_90|
 ]]
 
 |[inventory_start_init]| function(a)
-    poke(MEM_ITEM_INDEX, peek(a[a.ind+1].mem_loc) ~= 0 and a.ind or 4)
+    poke(MEM_ITEM_INDEX, peek(a[a.ind+1].mem_loc) ~= 0 and (a.ind or peek(MEM_ITEM_INDEX)) or 4)
     a.stat = peek'MEM_ITEM_INDEX' ~= 4 and {cspr=a[peek'MEM_ITEM_INDEX'+1].sind}
 end $$
 

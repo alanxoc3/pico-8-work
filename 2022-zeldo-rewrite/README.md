@@ -14,7 +14,7 @@ TODO: Sword
 
 ```
 2022-05-27 -- simplifyma expandinventory basicsword
-    4438 4426 4488 4483 4528 4549 4680
+    4438 4426 4488 4483 4528 4549 4680 4692
 
 2022-05-26 -- tileflags tokencrunch singlema fairyfollow
     4421 4515 4511 4512 4504 4495 4485 4480 4468 4437 4394 4431 4427 4424 4438
