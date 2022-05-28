@@ -122,18 +122,22 @@ zclass[[brang,simple_spr,drawlayer_75,mov,actor|
     gradual_energy, 0,
 
     offspeed,.125,
+    drawout,%brang_drawout,
     sind,SPR_BRANG;
-    start; init,%brang_start_init, speed,.075, duration,.08, next,normal;
-
+    
+    start; init,%brang_start_init, speed,.075, duration,.125, next,normal;
     normal;init,nop, speed,0, duration,1.5, update,%brang_normal_update, next,ending;
-
-    ending;init,%brang_ending_init, speed,0, speed,0, update,%brang_ending_update, duration,.08;
+    ending;init,%brang_ending_init, speed,0, speed,0, update,%brang_ending_update, duration,.075;
     final;init,nop, update,nop, alive,no;
 ]]
 
+|[brang_drawout]| function(a)
+    zspr(a.sind, a.x*8+a.sx, a.y*8+a.sy, 1, 1, cos(t()*3), sin(t()*3))
+end $$
+
 |[brang_start_init]| function(a)
     a.x, a.y = a.anchoring.x, a.anchoring.y
-    a.ang = (a.xf+1)/2
+    a.ang = atan2(a.xf, 0)
 end $$
 
 |[brang_normal_update]| function(a)

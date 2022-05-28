@@ -47,7 +47,7 @@ end $$
 
         -- if the adjacent room does exist
         elseif g_rooms[nri] then
-            if abx ~= 0 then load_room(nri, ROOM_RX-abx*ROOM_RX+1.25*abx, g_pl.y, abx < 0)
+            if abx ~= 0 then load_room(nri, ROOM_RX-abx*ROOM_RX+1.25*abx, g_pl.y, abx)
                         else load_room(nri, g_pl.x, ROOM_RY-aby*ROOM_RY+1.25*aby+.25, g_pl.xf)
             end
 
