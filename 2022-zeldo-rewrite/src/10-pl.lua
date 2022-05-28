@@ -1,10 +1,11 @@
 -- do all items have the same beg & end states?
 -- bow - right, then charge, then shoot
--- bowl - up
--- mask - start, normal, ending
--- bomb - start, place
 -- sword - right
 -- shield - right
+-- bomb - right, start, place
+
+-- bowl - up
+-- mask - start, normal, ending
 -- brang - just through, yes for ending
 -- banjo - appear, ending is instant
 
@@ -15,6 +16,17 @@
    -- gradual_energy:   how much energy is added every step
    -- is_default: is this the "no item" item?
    -- alive: is the item alive?
+
+zclass[[item_horizontal,anchor|
+    offspeed,0;
+    start;  init,%item_horizontal_start_init,  duration,.08, next,normal;
+    normal; init,%item_horizontal_normal_init, offdx,0;
+    ending; init,%item_horizontal_ending_init, duration,.08;
+]]
+
+|[item_horizontal_start_init]|  function(a) a.offdx = a.xf and -a.offspeed or a.offspeed end $$
+|[item_horizontal_normal_init]| function(a) a.offx = abs(a.offx*8)\1/8*sgn(a.offx) end $$
+|[item_horizontal_ending_init]| function(a) a.offdx = a.xf and a.offspeed or -a.offspeed end $$
 
 zclass[[mask,anchor,actor|
     block_direction, no,
@@ -31,24 +43,39 @@ zclass[[mask,anchor,actor|
     ending; offdy,.0625, duration,.08;
 ]]
 
-zclass[[sword,anchor,actor|
+zclass[[bow,item_horizontal,actor|
     block_direction, yes,
     speed_multiplier, .5,
     initial_energy, .25,
     gradual_energy, 0,
 
+    offspeed,.105,
     anchoring,@, xf,@,
-    offdx,.625,
-    sind,SPR_SWORD,
-    speed,.125;
-
-    start;  init,%sword_start_init,  duration,.08, next,normal;
-    normal; init,nop, offdx,0;
-    ending; init,%sword_ending_init, duration,.08;
+    sind,SPR_BOW;
 ]]
 
-|[sword_start_init]|  function(a) a.offdx = a.xf and -.125 or .125 end $$
-|[sword_ending_init]| function(a) a.offdx = a.xf and .125 or -.125 end $$
+zclass[[shield,item_horizontal,actor|
+    block_direction, yes,
+    speed_multiplier, .5,
+    initial_energy, .125,
+    gradual_energy, 0,
+    offy,.125,
+
+    offspeed,.105,
+    anchoring,@, xf,@,
+    sind,SPR_SHIELD;
+]]
+
+zclass[[sword,item_horizontal,actor|
+    block_direction, yes,
+    speed_multiplier, .5,
+    initial_energy, .25,
+    gradual_energy, 0,
+
+    offspeed,.125,
+    anchoring,@, xf,@,
+    sind,SPR_SWORD;
+]]
 
 zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50|
     cname,"lank", cspr,SPR_PL_WHOLE,
@@ -63,7 +90,7 @@ zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50|
     drawout,%pl_drawout;
     sinds;,SPR_PL_FEET_1,SPR_PL_FEET_2,SPR_PL_FEET_3;
 
-    item_funcs; ITEM_IND_SWORD,%sword, ITEM_IND_MASK,%mask;
+    item_funcs; ITEM_IND_SWORD,%sword, ITEM_IND_MASK,%mask, ITEM_IND_BOW,%bow, ITEM_IND_SHIELD,%shield;
 
     default_item;
         is_default,yes,

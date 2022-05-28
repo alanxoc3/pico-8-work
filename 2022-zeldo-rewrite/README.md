@@ -13,8 +13,8 @@ help him save the Land of Hi-roll from the forces of evil.
 TODO: Sword
 
 ```
-2022-05-27 -- simplifyma expandinventory basicsword basicenergy basicmask
-    4438 4426 4488 4483 4528 4549 4680 4692 4689 3739 4722 4742
+2022-05-27 -- simplifyma expandinventory sword energy mask bow shield
+    4438 4426 4488 4483 4528 4549 4680 4692 4689 3739 4722 4742 4785
 
 2022-05-26 -- tileflags tokencrunch singlema fairyfollow
     4421 4515 4511 4512 4504 4495 4485 4480 4468 4437 4394 4431 4427 4424 4438

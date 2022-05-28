@@ -139,7 +139,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,actor_deregistered,@,animation_init,@,auto_outline_draw,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,tiledraw_draw,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,explode_draw,@,calc_deltas,@,adjust_deltas_for_solids,@,adjust_deltas_for_tiles,@,inventory_start_init,@,inventory_start_update,@,inventory_press_update,@,inventory_draw,@,simple_spr_draw,@,anchor_update_anchor,@,targettouch_update_target,@,sword_start_init,@,sword_ending_init,@,pl_add_energy,@,pl_update,@,pl_drawout,@,rstat_update,@,rstat_set,@,rstat_get,@,stat_draw,@,tbox_init,@,tbox_update,@,tbox_draw,@,fairy_update,@,fairy_draw,@,house_init,@,person_target_with_tbox_disable_callback,@,person_target_with_tbox_finish_callback,@,target_with_tbox_init,@,sign_target_with_tbox_disable_callback,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,gameover_control_ending,@,gameover_init,@,gameover_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,simple_update,@,title_draw,@,title_logo_update,@,title_logo_drawout,@,game_state_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,actor_deregistered,@,animation_init,@,auto_outline_draw,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,tiledraw_draw,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,explode_draw,@,calc_deltas,@,adjust_deltas_for_solids,@,adjust_deltas_for_tiles,@,inventory_start_init,@,inventory_start_update,@,inventory_press_update,@,inventory_draw,@,simple_spr_draw,@,anchor_update_anchor,@,targettouch_update_target,@,item_horizontal_start_init,@,item_horizontal_normal_init,@,item_horizontal_ending_init,@,pl_add_energy,@,pl_update,@,pl_drawout,@,rstat_update,@,rstat_set,@,rstat_get,@,stat_draw,@,tbox_init,@,tbox_update,@,tbox_draw,@,fairy_update,@,fairy_draw,@,house_init,@,person_target_with_tbox_disable_callback,@,person_target_with_tbox_finish_callback,@,target_with_tbox_init,@,sign_target_with_tbox_disable_callback,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,gameover_control_ending,@,gameover_init,@,gameover_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,simple_update,@,title_draw,@,title_logo_update,@,title_logo_drawout,@,game_state_init,@]],function(a,stateName)
 printh(stateName)
 if stateName then
 a.next,a.duration=nil
@@ -306,7 +306,7 @@ else
 target:callback_touch(a)
 end
 end)
-end,function(a)a.offdx=a.xf and-.125 or.125 end,function(a)a.offdx=a.xf and.125 or-.125 end,function(a,energy)
+end,function(a)a.offdx=a.xf and-a.offspeed or a.offspeed end,function(a)a.offx=abs(a.offx*8)\1/8*sgn(a.offx)end,function(a)a.offdx=a.xf and a.offspeed or-a.offspeed end,function(a,energy)
 a.energy=1
 end,function(a)
 g_rstat_left:set(a)
@@ -651,9 +651,12 @@ zclass[[anchor,pos|update_anchor,%anchor_update_anchor;offx,0,offy,0,offdx,0,off
 zclass[[target,anchor,box|rx,@,ry,@,offx,@,offy,@,anchoring,@,callback_touch,@,callback_outside,@,update_target,%targettouch_update_target]]
 zclass[[pot]]
 zclass[[bed]]
+zclass[[item_horizontal,anchor|offspeed,0;start;init,%item_horizontal_start_init,duration,.08,next,normal;normal;init,%item_horizontal_normal_init,offdx,0;ending;init,%item_horizontal_ending_init,duration,.08;]]
 zclass[[mask,anchor,actor|block_direction,no,speed_multiplier,2,initial_energy,.125,gradual_energy,.0078125,offy,.2,anchoring,@,xf,@,sind,3;start;offdy,-.0625,duration,.08,next,normal;normal;offy,-.125,offdy,0;ending;offdy,.0625,duration,.08;]]
-zclass[[sword,anchor,actor|block_direction,yes,speed_multiplier,.5,initial_energy,.25,gradual_energy,0,anchoring,@,xf,@,offdx,.625,sind,2,speed,.125;start;init,%sword_start_init,duration,.08,next,normal;normal;init,nop,offdx,0;ending;init,%sword_ending_init,duration,.08;]]
-zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50|cname,lank,cspr,103,health,10,max_health,10,x,@,y,@,xf,@,sind,88,rx,.375,ry,.375,update,%pl_update,energy,0,target_energy,0,drawout,%pl_drawout;sinds;,88,89,90;item_funcs;5,%sword,2,%mask;default_item;is_default,yes,block_direction,no,speed_multiplier,1,alive,yes,gradual_energy,0,initial_energy,0;item,~default_item;]]
+zclass[[bow,item_horizontal,actor|block_direction,yes,speed_multiplier,.5,initial_energy,.25,gradual_energy,0,offspeed,.105,anchoring,@,xf,@,sind,7;]]
+zclass[[shield,item_horizontal,actor|block_direction,yes,speed_multiplier,.5,initial_energy,.125,gradual_energy,0,offy,.125,offspeed,.105,anchoring,@,xf,@,sind,6;]]
+zclass[[sword,item_horizontal,actor|block_direction,yes,speed_multiplier,.5,initial_energy,.25,gradual_energy,0,offspeed,.125,anchoring,@,xf,@,sind,2;]]
+zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50|cname,lank,cspr,103,health,10,max_health,10,x,@,y,@,xf,@,sind,88,rx,.375,ry,.375,update,%pl_update,energy,0,target_energy,0,drawout,%pl_drawout;sinds;,88,89,90;item_funcs;5,%sword,2,%mask,8,%bow,3,%shield;default_item;is_default,yes,block_direction,no,speed_multiplier,1,alive,yes,gradual_energy,0,initial_energy,0;item,~default_item;]]
 function draw_bar(x1,y1,x2,y2,percent,align,fg,bg)
 if x1>x2 then x1-=3 x2-=3 end
 local bar_off=x2-x1-min(percent,1)*(x2-x1)
@@ -738,7 +741,7 @@ zclass[[game_state,actor|ecs_exclusions;actor,yes,timer,yes;curr,room,init,%game
 function _init()
 memcpy(0x5d00,0x5e00,64)
 if peek"0x5d00"==0 then
-zcall(poke,[[1;,0x5d00,1;2;,0x5d01,136;3;,0x5d02,48;4;,0x5d03,48;5;,0x5d04,1;6;,0x5d08,4;7;,0x5d16,1;8;,0x5d15,1;]])
+zcall(poke,[[1;,0x5d00,1;2;,0x5d01,136;3;,0x5d02,48;4;,0x5d03,48;5;,0x5d04,1;6;,0x5d08,4;7;,0x5d16,1;8;,0x5d15,1;10;,0x5d14,1;11;,0x5d13,1;]])
 end
 g_i,g_state,g_rooms=0,_g.game_state(),decode_map()
 g_tile_animation_lookup=create_tile_animation_lookup(g_rooms[0])
