@@ -51,12 +51,3 @@ function lookup_tile_animation(sind)
     local anim = g_tile_animation_lookup[sind]
     return anim and anim[g_i%#anim+1] or sind
 end
-
-zclass[[tiledraw,pos,drawlayer_50|
-    sind,@, x,@, y,@,
-    draw,%tiledraw_draw
-]]
-
-|[tiledraw_draw]| function(a)
-    zspr(a.sind, a.x*8, a.y*8)
-end $$

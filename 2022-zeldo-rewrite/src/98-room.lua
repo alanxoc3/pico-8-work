@@ -10,12 +10,6 @@ zclass[[room_bounds,box|x,@,y,@,rx,@,ry,@]]
 
     _g.inventory(g_pl)
 
-    loop_through_tiles(r, function(sind, x, y)
-        if fget(sind, 1) then
-            _g.tiledraw(sind, x/8+.5, y/8+.5-.25)
-        end
-    end)
-
     -- create the objects in the room
     foreach(r.objects, function(obj_template)
         _g[g_obj_map[obj_template.index]](obj_template.x+.5, obj_template.y+.5)
