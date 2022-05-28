@@ -1,11 +1,12 @@
 zclass[[sword,anchor,vec,actor|
     anchoring,@,
     offdx,.625,
-    sind,SPR_SWORD;
+    sind,SPR_SWORD,
+    speed,.125;
 
     start;  offdx,@, duration,.08, next,normal;
     normal; offdx,0;
-    
+    ending; offdx,@, duration,.08;
 ]]
 
 zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50|
@@ -35,10 +36,16 @@ zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50|
             end
         end
 
+        if a.item and not a.item.alive then a.item = nil end
+
         if not a.item and btn'BTN_ITEM_USE' then
             if peek'MEM_ITEM_INDEX' == ITEM_IND_SWORD then
-                a.item = _g.sword(a, a.xf and -.125 or .125, a.xf)
+                local speed = a.xf and -.125 or .125
+
+                a.item = _g.sword(a, speed, -speed)
             end
+        elseif a.item and a.item.curr ~= 'ending' and not btn'BTN_ITEM_USE' then
+            a.item:load'ending'
         end
     end
 
@@ -46,9 +53,9 @@ zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50|
 end $$
 
 |[pl_drawout]| function(a)
-    zspr(a.sind, a.x*8, a.y*8-2, 1, 1, a.xf)
-    zspr(91,     a.x*8, a.y*8-2, 1, 1, a.xf)
     if a.item then
         zspr(a.item.sind, a.item.x*8, a.item.y*8-2, 1, 1, a.xf)
     end
+    zspr(a.sind, a.x*8, a.y*8-2, 1, 1, a.xf)
+    zspr(91,     a.x*8, a.y*8-2, 1, 1, a.xf)
 end $$
