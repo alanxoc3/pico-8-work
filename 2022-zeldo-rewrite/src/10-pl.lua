@@ -106,7 +106,7 @@ zclass[[banjo,anchor,actor|
     sind,SPR_BANJO;
 
     start;  offdy,.0625, duration,.08, next,normal;
-    normal; offy,.25, offdy,0, duration,2, next,ending;
+    normal; offy,.25, offdy,0, duration,3, next,ending;
     ending; offdy,-.0625, duration,.08;
 ]]
 
@@ -122,15 +122,17 @@ zclass[[brang,mov,actor|
 
     offspeed,.125,
     sind,SPR_BRANG;
-    start; init,%brang_start_init, duration,.08, next,normal;
-    normal;init,nop, dx,0, duration,1.5, update,%brang_normal_update, next,ending;
-    ending;init,%brang_ending_init, dx,0, speed,0, update,%brang_ending_update, duration,.08;
+    start; init,%brang_start_init, speed,.075, duration,.08, next,normal;
+
+    normal;init,nop, speed,0, duration,1.5, update,%brang_normal_update, next,ending;
+
+    ending;init,%brang_ending_init, speed,0, speed,0, update,%brang_ending_update, duration,.08;
     final;init,nop, update,nop, alive,no;
 ]]
 
 |[brang_start_init]| function(a)
     a.x, a.y = a.anchoring.x, a.anchoring.y
-    a.dx = a.xf and -.375 or .375
+    a.ang = a.xf and .5 or 0
 end $$
 
 |[brang_normal_update]| function(a)
@@ -255,10 +257,14 @@ end $$
 
 |[pl_drawout]| function(a)
     local xf = a.xf
-    if does_entity_exist'banjo' then xf = g_i % 2 == 0 end
+    local top = 91
+    if does_entity_exist'banjo' then
+        xf = g_i % 2 == 0
+        top = 92
+    end
 
     zspr(a.sind, a.x*8, a.y*8-2, 1, 1, xf)
-    zspr(91,     a.x*8, a.y*8-2, 1, 1, xf)
+    zspr(top,    a.x*8, a.y*8-2, 1, 1, xf)
     if a.item.visible then
         zspr(a.item.sind, a.item.x*8, a.item.y*8-2, 1, 1, xf)
     end
