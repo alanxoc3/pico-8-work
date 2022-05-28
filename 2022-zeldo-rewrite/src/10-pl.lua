@@ -10,6 +10,7 @@
 -- banjo - appear, ending is instant
 
 -- all items need these:
+   -- kill_when_release: should the item die when releasing the button?
    -- block_direction:  item doesn't allow a direction change
    -- speed_multiplier: speed is multiplied
    -- initial_energy:   how much energy it takes to initialize the item
@@ -18,7 +19,9 @@
    -- alive: is the item alive?
 
 zclass[[item_horizontal,anchor|
-    offspeed,0;
+    offspeed,0,
+    normal_init,%item_horizontal_normal_init;
+
     start;  init,%item_horizontal_start_init,  duration,.08, next,normal;
     normal; init,%item_horizontal_normal_init, offdx,0;
     ending; init,%item_horizontal_ending_init, duration,.08;
@@ -26,17 +29,19 @@ zclass[[item_horizontal,anchor|
 
 |[item_horizontal_start_init]|  function(a) a.offdx = a.xf and -a.offspeed or a.offspeed end $$
 |[item_horizontal_normal_init]| function(a) a.offx = abs(a.offx*8)\1/8*sgn(a.offx) end $$
-|[item_horizontal_ending_init]| function(a) a.offdx = a.xf and a.offspeed or -a.offspeed end $$
+|[item_horizontal_ending_init]| function(a) a:normal_init() a.offdx = a.xf and a.offspeed or -a.offspeed end $$
 
 zclass[[mask,anchor,actor|
+    anchoring,@, xf,@,
+
+    kill_when_release,yes,
     visible,yes,
     block_direction, no,
     speed_multiplier, 2,
     initial_energy, .125,
     gradual_energy, PL_ENERGY_COOLDOWN,
-    offy, .2,
 
-    anchoring,@, xf,@,
+    offy, .2,
     sind,SPR_MASK;
 
     start;  offdy,-.0625, duration,.08, next,normal;
@@ -45,6 +50,9 @@ zclass[[mask,anchor,actor|
 ]]
 
 zclass[[bow,item_horizontal,actor|
+    anchoring,@, xf,@,
+
+    kill_when_release,yes,
     visible,yes,
     block_direction, yes,
     speed_multiplier, .5,
@@ -52,11 +60,13 @@ zclass[[bow,item_horizontal,actor|
     gradual_energy, 0,
 
     offspeed,.105,
-    anchoring,@, xf,@,
     sind,SPR_BOW;
 ]]
 
 zclass[[shield,item_horizontal,actor|
+    anchoring,@, xf,@,
+
+    kill_when_release,yes,
     visible,yes,
     block_direction, yes,
     speed_multiplier, .5,
@@ -65,13 +75,13 @@ zclass[[shield,item_horizontal,actor|
     offy,.125,
 
     offspeed,.105,
-    anchoring,@, xf,@,
     sind,SPR_SHIELD;
 ]]
 
 zclass[[sword,item_horizontal,actor|
     anchoring,@, xf,@,
 
+    kill_when_release,yes,
     visible,yes,
     block_direction, yes,
     speed_multiplier, .5,
@@ -85,6 +95,7 @@ zclass[[sword,item_horizontal,actor|
 zclass[[banjo,anchor,actor|
     anchoring,@, xf,@,
 
+    kill_when_release,no,
     visible,yes,
     block_direction, yes,
     speed_multiplier, 0,
@@ -102,6 +113,7 @@ zclass[[banjo,anchor,actor|
 zclass[[brang,mov,actor|
     anchoring,@, xf,@,
 
+    kill_when_release,yes,
     visible,yes,
     block_direction, yes,
     speed_multiplier, .25,
@@ -139,6 +151,9 @@ end $$
 end $$
 
 zclass[[bomb,anchor,actor|
+    anchoring,@, xf,@,
+
+    kill_when_release,no,
     visible,yes,
     block_direction, yes,
     speed_multiplier, .75,
@@ -146,7 +161,6 @@ zclass[[bomb,anchor,actor|
     gradual_energy, 0,
 
     offspeed,.185,
-    anchoring,@, xf,@,
     sind,SPR_BOMB;
 
     start;    gradual_energy,0, init,%bomb_start_init, offy,.175, offdy,.0625, duration,.08, visible,yes, next,normal;
@@ -192,6 +206,7 @@ zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50|
         speed_multiplier,1,
         alive,yes,
         gradual_energy,0,
+        kill_when_release,no,
         initial_energy,0;
 
     item,~default_item;
@@ -221,8 +236,8 @@ end $$
                 a.item = item_func(a, a.xf)
                 a.target_energy += a.item.initial_energy
             end
-        elseif not a.item.is_default and a.item.curr ~= 'ending' and not btn'BTN_ITEM_USE' then
-            a.item:load'ending'
+        elseif a.item.kill_when_release and not btn'BTN_ITEM_USE' then
+            a.item:kill()
         end
     end
 

@@ -35,7 +35,7 @@ zclass[[actor,timer|
         a.curr = stateName
         a:stop_timer(a.curr,  a.duration, a.duration and function() a:load(a.next) end)
     else
-        a:kill()
+        a.alive = false
     end
 end $$
 
@@ -46,12 +46,22 @@ end $$
     a:update() -- per-frame update
 end $$
 
--- Stage this actor to be removed at the beginning of the next frame.
-|[actor_kill]| function(a) a.alive = nil end $$
+-- If there is an ending state, call that. Otherwise, just set alive to false.
+|[actor_kill]| function(a)
+    if a.ending then
+        if a.curr == 'start' then
+            a.next = 'ending'
+        elseif not a:get_elapsed'ending' then
+            a:load'ending'
+        end
+    else
+        a.alive = nil
+    end
+end $$
 
 -- This is expected to be called at the beginning of each frame!
 -- If this is not called at the beginning, you could have a frame delay for things like explosions.
 |[actor_clean]| function(a) if not a.alive then deregister_entity(a) end end $$
 
 -- Called when deregistered. See zclass for more information.
-|[actor_deregistered]| function(a) a:kill() a:destroyed() end $$
+|[actor_deregistered]| function(a) a.alive = false a:destroyed() end $$

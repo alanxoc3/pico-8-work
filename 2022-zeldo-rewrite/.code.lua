@@ -146,13 +146,23 @@ for k,v in pairs(a[stateName])do a[k]=v end
 a.curr=stateName
 a:stop_timer(a.curr,a.duration,a.duration and function()a:load(a.next)end)
 else
-a:kill()
+a.alive=false
 end
 end,function(a)
 if a:get_elapsed(a.curr)==nil then a:load(a.curr)end
 if a:get_elapsed(a.curr)==false then a:play_timer(a.curr)a:init()end
 a:update()
-end,function(a)a.alive=nil end,function(a)if not a.alive then deregister_entity(a)end end,function(a)a:kill()a:destroyed()end,function(a)
+end,function(a)
+if a.ending then
+if a.curr=="start"then
+a.next="ending"
+elseif not a:get_elapsed"ending"then
+a:load"ending"
+end
+else
+a.alive=nil
+end
+end,function(a)if not a.alive then deregister_entity(a)end end,function(a)a.alive=false a:destroyed()end,function(a)
 a.index+=1
 a.index%=60
 end,function(a)
@@ -268,7 +278,7 @@ end,function(a)
 a.stat=peek"0x5d08" ~=4 and{cspr=a[peek"0x5d08"+1].sind}
 end,function(a)
 g_rstat_inventory:set(a.stat)
-if not does_entity_exist"tbox"and btn"5"then
+if not does_entity_exist"tbox"and not does_entity_exist"banjo"and btn"5"then
 poke(0x5d08,9)
 a.ind=4
 a:load"expand"
@@ -305,7 +315,7 @@ else
 target:callback_touch(a)
 end
 end)
-end,function(a)a.offdx=a.xf and-a.offspeed or a.offspeed end,function(a)a.offx=abs(a.offx*8)\1/8*sgn(a.offx)end,function(a)a.offdx=a.xf and a.offspeed or-a.offspeed end,function(a)
+end,function(a)a.offdx=a.xf and-a.offspeed or a.offspeed end,function(a)a.offx=abs(a.offx*8)\1/8*sgn(a.offx)end,function(a)a:normal_init()a.offdx=a.xf and a.offspeed or-a.offspeed end,function(a)
 a.x,a.y=a.anchoring.x,a.anchoring.y
 a.dx=a.xf and-.375 or.375
 end,function(a)
@@ -340,8 +350,8 @@ if item_func then
 a.item=item_func(a,a.xf)
 a.target_energy+=a.item.initial_energy
 end
-elseif not a.item.is_default and a.item.curr ~="ending"and not btn"4"then
-a.item:load"ending"
+elseif a.item.kill_when_release and not btn"4"then
+a.item:kill()
 end
 end
 a.sind=a.sinds[a.dx|a.dy ~=0 and t()*12%3\1+1 or 1]
@@ -668,16 +678,16 @@ zclass[[anchor,pos|update_anchor,%anchor_update_anchor;offx,0,offy,0,offdx,0,off
 zclass[[target,anchor,box|rx,@,ry,@,offx,@,offy,@,anchoring,@,callback_touch,@,callback_outside,@,update_target,%targettouch_update_target]]
 zclass[[pot]]
 zclass[[bed]]
-zclass[[item_horizontal,anchor|offspeed,0;start;init,%item_horizontal_start_init,duration,.08,next,normal;normal;init,%item_horizontal_normal_init,offdx,0;ending;init,%item_horizontal_ending_init,duration,.08;]]
-zclass[[mask,anchor,actor|visible,yes,block_direction,no,speed_multiplier,2,initial_energy,.125,gradual_energy,.0078125,offy,.2,anchoring,@,xf,@,sind,3;start;offdy,-.0625,duration,.08,next,normal;normal;offy,-.125,offdy,0;ending;offdy,.0625,duration,.08;]]
-zclass[[bow,item_horizontal,actor|visible,yes,block_direction,yes,speed_multiplier,.5,initial_energy,.25,gradual_energy,0,offspeed,.105,anchoring,@,xf,@,sind,7;]]
-zclass[[shield,item_horizontal,actor|visible,yes,block_direction,yes,speed_multiplier,.5,initial_energy,.125,gradual_energy,0,offy,.125,offspeed,.105,anchoring,@,xf,@,sind,6;]]
-zclass[[sword,item_horizontal,actor|anchoring,@,xf,@,visible,yes,block_direction,yes,speed_multiplier,.5,initial_energy,.25,gradual_energy,0,offspeed,.125,sind,2;]]
-zclass[[banjo,anchor,actor|anchoring,@,xf,@,visible,yes,block_direction,yes,speed_multiplier,0,initial_energy,0,gradual_energy,0,offy,-.05,sind,1;start;offdy,.0625,duration,.08,next,normal;normal;offy,.25,offdy,0,duration,2,next,ending;ending;offdy,-.0625,duration,.08;]]
-zclass[[brang,mov,actor|anchoring,@,xf,@,visible,yes,block_direction,yes,speed_multiplier,.25,initial_energy,.25,gradual_energy,0,offspeed,.125,sind,4;start;init,%brang_start_init,duration,.08,next,normal;normal;init,nop,dx,0,duration,1.5,update,%brang_normal_update,next,ending;ending;init,%brang_ending_init,dx,0,speed,0,update,%brang_ending_update,duration,.08;final;init,nop,update,nop,alive,no;]]
-zclass[[bomb,anchor,actor|visible,yes,block_direction,yes,speed_multiplier,.75,initial_energy,.25,gradual_energy,0,offspeed,.185,anchoring,@,xf,@,sind,5;start;gradual_energy,0,init,%bomb_start_init,offy,.175,offdy,.0625,duration,.08,visible,yes,next,normal;normal;init,%bomb_normal_init,offdy,0,duration,0,next,ending;ending;init,nop,visible,no,duration,.75,next,final;final;init,nop,alive,no;]]
+zclass[[item_horizontal,anchor|offspeed,0,normal_init,%item_horizontal_normal_init;start;init,%item_horizontal_start_init,duration,.08,next,normal;normal;init,%item_horizontal_normal_init,offdx,0;ending;init,%item_horizontal_ending_init,duration,.08;]]
+zclass[[mask,anchor,actor|anchoring,@,xf,@,kill_when_release,yes,visible,yes,block_direction,no,speed_multiplier,2,initial_energy,.125,gradual_energy,.0078125,offy,.2,sind,3;start;offdy,-.0625,duration,.08,next,normal;normal;offy,-.125,offdy,0;ending;offdy,.0625,duration,.08;]]
+zclass[[bow,item_horizontal,actor|anchoring,@,xf,@,kill_when_release,yes,visible,yes,block_direction,yes,speed_multiplier,.5,initial_energy,.25,gradual_energy,0,offspeed,.105,sind,7;]]
+zclass[[shield,item_horizontal,actor|anchoring,@,xf,@,kill_when_release,yes,visible,yes,block_direction,yes,speed_multiplier,.5,initial_energy,.125,gradual_energy,0,offy,.125,offspeed,.105,sind,6;]]
+zclass[[sword,item_horizontal,actor|anchoring,@,xf,@,kill_when_release,yes,visible,yes,block_direction,yes,speed_multiplier,.5,initial_energy,.25,gradual_energy,0,offspeed,.125,sind,2;]]
+zclass[[banjo,anchor,actor|anchoring,@,xf,@,kill_when_release,no,visible,yes,block_direction,yes,speed_multiplier,0,initial_energy,0,gradual_energy,0,offy,-.05,sind,1;start;offdy,.0625,duration,.08,next,normal;normal;offy,.25,offdy,0,duration,2,next,ending;ending;offdy,-.0625,duration,.08;]]
+zclass[[brang,mov,actor|anchoring,@,xf,@,kill_when_release,yes,visible,yes,block_direction,yes,speed_multiplier,.25,initial_energy,.25,gradual_energy,0,offspeed,.125,sind,4;start;init,%brang_start_init,duration,.08,next,normal;normal;init,nop,dx,0,duration,1.5,update,%brang_normal_update,next,ending;ending;init,%brang_ending_init,dx,0,speed,0,update,%brang_ending_update,duration,.08;final;init,nop,update,nop,alive,no;]]
+zclass[[bomb,anchor,actor|anchoring,@,xf,@,kill_when_release,no,visible,yes,block_direction,yes,speed_multiplier,.75,initial_energy,.25,gradual_energy,0,offspeed,.185,sind,5;start;gradual_energy,0,init,%bomb_start_init,offy,.175,offdy,.0625,duration,.08,visible,yes,next,normal;normal;init,%bomb_normal_init,offdy,0,duration,0,next,ending;ending;init,nop,visible,no,duration,.75,next,final;final;init,nop,alive,no;]]
 zclass[[bomb_placed,actor,simple_spr,drawlayer_50|x,@,y,@,xf,@,sind,5,destroyed,%bomb_placed_destroyed;start;duration,.5,next,ending;ending;alive,no;]]
-zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50|cname,lank,cspr,103,health,10,max_health,10,x,@,y,@,xf,@,sind,88,rx,.375,ry,.375,update,%pl_update,energy,0,target_energy,0,drawout,%pl_drawout;sinds;,88,89,90;item_funcs;5,%sword,2,%mask,8,%bow,3,%shield,0,%bomb,6,%banjo,7,%brang;default_item;visible,no,is_default,yes,block_direction,no,speed_multiplier,1,alive,yes,gradual_energy,0,initial_energy,0;item,~default_item;]]
+zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50|cname,lank,cspr,103,health,10,max_health,10,x,@,y,@,xf,@,sind,88,rx,.375,ry,.375,update,%pl_update,energy,0,target_energy,0,drawout,%pl_drawout;sinds;,88,89,90;item_funcs;5,%sword,2,%mask,8,%bow,3,%shield,0,%bomb,6,%banjo,7,%brang;default_item;visible,no,is_default,yes,block_direction,no,speed_multiplier,1,alive,yes,gradual_energy,0,kill_when_release,no,initial_energy,0;item,~default_item;]]
 function draw_bar(x1,y1,x2,y2,percent,align,fg,bg)
 if x1>x2 then x1-=3 x2-=3 end
 local bar_off=x2-x1-min(percent,1)*(x2-x1)

@@ -25,7 +25,7 @@ end $$
 |[inventory_start_update]| function(a)
     g_rstat_inventory:set(a.stat)
 
-    if not does_entity_exist'tbox' and btn'BTN_ITEM_SELECT' then
+    if not does_entity_exist'tbox' and not does_entity_exist'banjo' and btn'BTN_ITEM_SELECT' then
         poke(MEM_ITEM_INDEX, 9) -- 9 is one more than the highest index
         a.ind = 4
         a:load'expand'
