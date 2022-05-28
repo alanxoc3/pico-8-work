@@ -29,7 +29,6 @@ zclass[[actor,timer|
 -- the actor.) Then set up the next state change to happen after the actor's duration,
 -- using stateName=actor.next.
 |[actor_load]| function(a, stateName)
-    printh(stateName)
     if stateName then
         a.next, a.duration = nil -- default values, unless overridden by next line
         for k, v in pairs(a[stateName]) do a[k] = v end

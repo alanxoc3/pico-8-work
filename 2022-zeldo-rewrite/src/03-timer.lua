@@ -49,7 +49,7 @@ end $$
 |[timer_tick]| function(a)
     local finished_timers = {}
     for name, timer in pairs(a.timers) do
-        if timer.elapsed and timer.elapsed < timer.duration then
+        if timer.elapsed and timer.elapsed <= timer.duration then
             timer.elapsed = timer.elapsed + 1/60
             if timer.elapsed >= timer.duration then
                 add(finished_timers, timer)

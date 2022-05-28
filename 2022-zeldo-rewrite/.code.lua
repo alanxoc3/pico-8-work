@@ -139,8 +139,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,actor_deregistered,@,animation_init,@,auto_outline_draw,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,tiledraw_draw,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,explode_draw,@,calc_deltas,@,adjust_deltas_for_solids,@,adjust_deltas_for_tiles,@,inventory_start_init,@,inventory_start_update,@,inventory_press_update,@,inventory_draw,@,simple_spr_draw,@,anchor_update_anchor,@,targettouch_update_target,@,item_horizontal_start_init,@,item_horizontal_normal_init,@,item_horizontal_ending_init,@,pl_add_energy,@,pl_update,@,pl_drawout,@,rstat_update,@,rstat_set,@,rstat_get,@,stat_draw,@,tbox_init,@,tbox_update,@,tbox_draw,@,fairy_update,@,fairy_draw,@,house_init,@,person_target_with_tbox_disable_callback,@,person_target_with_tbox_finish_callback,@,target_with_tbox_init,@,sign_target_with_tbox_disable_callback,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,gameover_control_ending,@,gameover_init,@,gameover_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,simple_update,@,title_draw,@,title_logo_update,@,title_logo_drawout,@,game_state_init,@]],function(a,stateName)
-printh(stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,actor_deregistered,@,animation_init,@,auto_outline_draw,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,tiledraw_draw,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,explode_draw,@,calc_deltas,@,adjust_deltas_for_solids,@,adjust_deltas_for_tiles,@,inventory_start_init,@,inventory_start_update,@,inventory_press_update,@,inventory_draw,@,simple_spr_draw,@,anchor_update_anchor,@,targettouch_update_target,@,item_horizontal_start_init,@,item_horizontal_normal_init,@,item_horizontal_ending_init,@,bomb_start_init,@,bomb_normal_init,@,bomb_ending_init,@,bomb_placed_destroyed,@,pl_add_energy,@,pl_update,@,pl_drawout,@,rstat_update,@,rstat_set,@,rstat_get,@,stat_draw,@,tbox_init,@,tbox_update,@,tbox_draw,@,fairy_update,@,fairy_draw,@,house_init,@,person_target_with_tbox_disable_callback,@,person_target_with_tbox_finish_callback,@,target_with_tbox_init,@,sign_target_with_tbox_disable_callback,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,gameover_control_ending,@,gameover_init,@,gameover_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,simple_update,@,title_draw,@,title_logo_update,@,title_logo_drawout,@,game_state_init,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -179,7 +178,7 @@ return timer and min(1,(timer.elapsed or 0)/timer.duration)
 end,function(a)
 local finished_timers={}
 for name,timer in pairs(a.timers)do
-if timer.elapsed and timer.elapsed<timer.duration then
+if timer.elapsed and timer.elapsed<=timer.duration then
 timer.elapsed=timer.elapsed+1/60
 if timer.elapsed>=timer.duration then
 add(finished_timers,timer)
@@ -294,7 +293,7 @@ draw_outline(item.index==a.ind and 2 or 1,drawfunc)
 drawfunc()
 end
 end,function(a)
-zspr(a.cspr,a.x*8+a.sx,a.y*8+a.sy,a.sw,a.sh,a.xf,a.yf)
+zspr(a.sind,a.x*8+a.sx,a.y*8+a.sy,a.sw,a.sh,a.xf,a.yf)
 end,function(a)
 a.offx+=a.offdx a.offy+=a.offdy
 a.x,a.y=a.anchoring.x+a.offx,a.anchoring.y+a.offy
@@ -306,7 +305,9 @@ else
 target:callback_touch(a)
 end
 end)
-end,function(a)a.offdx=a.xf and-a.offspeed or a.offspeed end,function(a)a.offx=abs(a.offx*8)\1/8*sgn(a.offx)end,function(a)a.offdx=a.xf and a.offspeed or-a.offspeed end,function(a,energy)
+end,function(a)a.offdx=a.xf and-a.offspeed or a.offspeed end,function(a)a.offx=abs(a.offx*8)\1/8*sgn(a.offx)end,function(a)a.offdx=a.xf and a.offspeed or-a.offspeed end,function(a)a.offx=a.xf and-.625 or.625 end,function(a)a.child=_g.bomb_placed(a.x,a.y-.25,a.xf)end,function(a)if a.child then a.child:kill()end end,function(a)
+_g.explode(a.x,a.y)
+end,function(a,energy)
 a.energy=1
 end,function(a)
 g_rstat_left:set(a)
@@ -339,7 +340,7 @@ a.energy+=zsgn(a.target_energy-a.energy)*min(abs(a.target_energy-a.energy),.0312
 end,function(a)
 zspr(a.sind,a.x*8,a.y*8-2,1,1,a.xf)
 zspr(91,a.x*8,a.y*8-2,1,1,a.xf)
-if not a.item.is_default then
+if a.item.visible then
 zspr(a.item.sind,a.item.x*8,a.item.y*8-2,1,1,a.xf)
 end
 end,function(a)
@@ -652,11 +653,13 @@ zclass[[target,anchor,box|rx,@,ry,@,offx,@,offy,@,anchoring,@,callback_touch,@,c
 zclass[[pot]]
 zclass[[bed]]
 zclass[[item_horizontal,anchor|offspeed,0;start;init,%item_horizontal_start_init,duration,.08,next,normal;normal;init,%item_horizontal_normal_init,offdx,0;ending;init,%item_horizontal_ending_init,duration,.08;]]
-zclass[[mask,anchor,actor|block_direction,no,speed_multiplier,2,initial_energy,.125,gradual_energy,.0078125,offy,.2,anchoring,@,xf,@,sind,3;start;offdy,-.0625,duration,.08,next,normal;normal;offy,-.125,offdy,0;ending;offdy,.0625,duration,.08;]]
-zclass[[bow,item_horizontal,actor|block_direction,yes,speed_multiplier,.5,initial_energy,.25,gradual_energy,0,offspeed,.105,anchoring,@,xf,@,sind,7;]]
-zclass[[shield,item_horizontal,actor|block_direction,yes,speed_multiplier,.5,initial_energy,.125,gradual_energy,0,offy,.125,offspeed,.105,anchoring,@,xf,@,sind,6;]]
-zclass[[sword,item_horizontal,actor|block_direction,yes,speed_multiplier,.5,initial_energy,.25,gradual_energy,0,offspeed,.125,anchoring,@,xf,@,sind,2;]]
-zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50|cname,lank,cspr,103,health,10,max_health,10,x,@,y,@,xf,@,sind,88,rx,.375,ry,.375,update,%pl_update,energy,0,target_energy,0,drawout,%pl_drawout;sinds;,88,89,90;item_funcs;5,%sword,2,%mask,8,%bow,3,%shield;default_item;is_default,yes,block_direction,no,speed_multiplier,1,alive,yes,gradual_energy,0,initial_energy,0;item,~default_item;]]
+zclass[[mask,anchor,actor|visible,yes,block_direction,no,speed_multiplier,2,initial_energy,.125,gradual_energy,.0078125,offy,.2,anchoring,@,xf,@,sind,3;start;offdy,-.0625,duration,.08,next,normal;normal;offy,-.125,offdy,0;ending;offdy,.0625,duration,.08;]]
+zclass[[bow,item_horizontal,actor|visible,yes,block_direction,yes,speed_multiplier,.5,initial_energy,.25,gradual_energy,0,offspeed,.105,anchoring,@,xf,@,sind,7;]]
+zclass[[shield,item_horizontal,actor|visible,yes,block_direction,yes,speed_multiplier,.5,initial_energy,.125,gradual_energy,0,offy,.125,offspeed,.105,anchoring,@,xf,@,sind,6;]]
+zclass[[sword,item_horizontal,actor|visible,yes,block_direction,yes,speed_multiplier,.5,initial_energy,.25,gradual_energy,0,offspeed,.125,anchoring,@,xf,@,sind,2;]]
+zclass[[bomb,anchor,actor|visible,yes,block_direction,yes,speed_multiplier,.75,initial_energy,.125,gradual_energy,.0078125,offy,.175,offspeed,.185,anchoring,@,xf,@,sind,5;start;init,%bomb_start_init,offdy,.0625,duration,.08,next,normal;normal;init,%bomb_normal_init,offdy,0,duration,0,next,waiting;waiting;init,nop,visible,no;ending;init,%bomb_ending_init,alive,no;]]
+zclass[[bomb_placed,actor,simple_spr,drawlayer_50|x,@,y,@,xf,@,sind,5,destroyed,%bomb_placed_destroyed;]]
+zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50|cname,lank,cspr,103,health,10,max_health,10,x,@,y,@,xf,@,sind,88,rx,.375,ry,.375,update,%pl_update,energy,0,target_energy,0,drawout,%pl_drawout;sinds;,88,89,90;item_funcs;5,%sword,2,%mask,8,%bow,3,%shield,0,%bomb;default_item;visible,no,is_default,yes,block_direction,no,speed_multiplier,1,alive,yes,gradual_energy,0,initial_energy,0;item,~default_item;]]
 function draw_bar(x1,y1,x2,y2,percent,align,fg,bg)
 if x1>x2 then x1-=3 x2-=3 end
 local bar_off=x2-x1-min(percent,1)*(x2-x1)
@@ -741,7 +744,7 @@ zclass[[game_state,actor|ecs_exclusions;actor,yes,timer,yes;curr,room,init,%game
 function _init()
 memcpy(0x5d00,0x5e00,64)
 if peek"0x5d00"==0 then
-zcall(poke,[[1;,0x5d00,1;2;,0x5d01,136;3;,0x5d02,48;4;,0x5d03,48;5;,0x5d04,1;6;,0x5d08,4;7;,0x5d16,1;8;,0x5d15,1;10;,0x5d14,1;11;,0x5d13,1;]])
+zcall(poke,[[1;,0x5d00,1;2;,0x5d01,136;3;,0x5d02,48;4;,0x5d03,48;5;,0x5d04,1;6;,0x5d08,4;7;,0x5d16,1;8;,0x5d15,1;10;,0x5d14,1;11;,0x5d13,1;12;,0x5d12,1;]])
 end
 g_i,g_state,g_rooms=0,_g.game_state(),decode_map()
 g_tile_animation_lookup=create_tile_animation_lookup(g_rooms[0])

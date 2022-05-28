@@ -29,6 +29,7 @@ zclass[[item_horizontal,anchor|
 |[item_horizontal_ending_init]| function(a) a.offdx = a.xf and a.offspeed or -a.offspeed end $$
 
 zclass[[mask,anchor,actor|
+    visible,yes,
     block_direction, no,
     speed_multiplier, 2,
     initial_energy, .125,
@@ -44,6 +45,7 @@ zclass[[mask,anchor,actor|
 ]]
 
 zclass[[bow,item_horizontal,actor|
+    visible,yes,
     block_direction, yes,
     speed_multiplier, .5,
     initial_energy, .25,
@@ -55,6 +57,7 @@ zclass[[bow,item_horizontal,actor|
 ]]
 
 zclass[[shield,item_horizontal,actor|
+    visible,yes,
     block_direction, yes,
     speed_multiplier, .5,
     initial_energy, .125,
@@ -67,6 +70,7 @@ zclass[[shield,item_horizontal,actor|
 ]]
 
 zclass[[sword,item_horizontal,actor|
+    visible,yes,
     block_direction, yes,
     speed_multiplier, .5,
     initial_energy, .25,
@@ -76,6 +80,37 @@ zclass[[sword,item_horizontal,actor|
     anchoring,@, xf,@,
     sind,SPR_SWORD;
 ]]
+
+zclass[[bomb,anchor,actor|
+    visible,yes,
+    block_direction, yes,
+    speed_multiplier, .75,
+    initial_energy, .125,
+    gradual_energy, PL_ENERGY_COOLDOWN,
+    offy,.175,
+
+    offspeed,.185,
+    anchoring,@, xf,@,
+    sind,SPR_BOMB;
+
+    start;   init,%bomb_start_init, offdy,.0625, duration,.08, next,normal;
+    normal;  init,%bomb_normal_init, offdy,0, duration,0, next,waiting;
+    waiting; init,nop, visible,no;
+    ending;  init,%bomb_ending_init, alive,no;
+]]
+
+|[bomb_start_init]| function(a) a.offx = a.xf and -.625 or .625 end $$
+|[bomb_normal_init]| function(a) a.child = _g.bomb_placed(a.x, a.y-.25, a.xf) end $$
+|[bomb_ending_init]| function(a) if a.child then a.child:kill() end end $$
+
+zclass[[bomb_placed,actor,simple_spr,drawlayer_50|
+    x,@, y,@, xf,@, sind,SPR_BOMB,
+    destroyed,%bomb_placed_destroyed;
+]]
+
+|[bomb_placed_destroyed]| function(a)
+    _g.explode(a.x, a.y)
+end $$
 
 zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50|
     cname,"lank", cspr,SPR_PL_WHOLE,
@@ -90,9 +125,10 @@ zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50|
     drawout,%pl_drawout;
     sinds;,SPR_PL_FEET_1,SPR_PL_FEET_2,SPR_PL_FEET_3;
 
-    item_funcs; ITEM_IND_SWORD,%sword, ITEM_IND_MASK,%mask, ITEM_IND_BOW,%bow, ITEM_IND_SHIELD,%shield;
+    item_funcs; ITEM_IND_SWORD,%sword, ITEM_IND_MASK,%mask, ITEM_IND_BOW,%bow, ITEM_IND_SHIELD,%shield, ITEM_IND_BOMB,%bomb;
 
     default_item;
+        visible,no,
         is_default,yes,
         block_direction,no,
         speed_multiplier,1,
@@ -147,7 +183,7 @@ end $$
 |[pl_drawout]| function(a)
     zspr(a.sind, a.x*8, a.y*8-2, 1, 1, a.xf)
     zspr(91,     a.x*8, a.y*8-2, 1, 1, a.xf)
-    if not a.item.is_default then
+    if a.item.visible then
         zspr(a.item.sind, a.item.x*8, a.item.y*8-2, 1, 1, a.xf)
     end
 end $$
