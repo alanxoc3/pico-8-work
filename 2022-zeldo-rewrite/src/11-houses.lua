@@ -1,16 +1,18 @@
 |[spawn_walls]| function(a)
     zcall_tbl(_g.wall, a.walls)
-    if a.walls[1][1] == a then printh("HEOEU") end
 end $$
 
 zclass[[bed,actor,simple_spr,drawlayer_50|
-    sh,2, sy,-8,
+    x,@, y,@,
+    sind,55,
     init,%spawn_walls;
 
-    
-    walls;1;,~, .75,.5,.25,.75;
-    walls;2;,~,-.75,.5,.25,.75;
-    walls;3;,~,    0, 0,.75,.25;
+    -- walls;1;,~, .625,-.25,.25,.75;
+    walls;1;,~,   0, .25,.75,.25;
+]]
+
+zclass[[bed_pillow,simple_spr,drawlayer_25|
+    x,@, y,@, sind,39,
 ]]
 
 zclass[[house,actor,simple_spr,drawlayer_50|
@@ -49,7 +51,3 @@ zclass[[house226,  house|x,@,y,@,room,226]]
 zclass[[house227,  house|x,@,y,@,room,227]]
 zclass[[house228,  house|x,@,y,@,room,228]]
 zclass[[house229,  house|x,@,y,@,room,229]]
-
-
-
-zclass[[bed]]

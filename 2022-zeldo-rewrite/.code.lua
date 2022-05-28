@@ -454,7 +454,6 @@ end
 scr_pset(a.x,a.y,12)
 end,function(a)
 zcall_tbl(_g.wall,a.walls)
-if a.walls[1][1]==a then printh("HEOEU")end
 end,function(a)
 _g.spawn_walls(a)
 zcall(_g.target,[[1;,.125,.375,0,.5,@,@,nop;]],a,function()
@@ -741,7 +740,8 @@ zclass[[rstat|align,@,x,@,update,%rstat_update,set,%rstat_set,get,%rstat_get;buf
 zclass[[stat,vec,actor,drawlayer_95|align,@,x,@,obj,@,y,138,draw,%stat_draw,max_health,10,health,5;start;dy,-2,duration,.2,next,normal;normal;dy,0;ending;dy,2,duration,.2;]]
 zclass[[tbox,vec,actor,drawlayer_99|rawtext,@,destroyed,@,y,138,cur_text_index,1,anim,0,line_1,,line_2,,update,%tbox_update,draw,%tbox_draw;texts;,;start;dy,-2,duration,.2,next,normal,update,nop,init,%tbox_init;normal;dy,0,anim,0,done,no,update,%tbox_update,init,nop;ending;dy,2,update,nop,duration,.2,init,nop;]]
 zclass[[fairy,actor,mov,drawlayer_50|x,@,y,@,update,%fairy_update,draw,%fairy_draw]]
-zclass[[bed,actor,simple_spr,drawlayer_50|sh,2,sy,-8,init,%spawn_walls;walls;1;,~,.75,.5,.25,.75;walls;2;,~,-.75,.5,.25,.75;walls;3;,~,0,0,.75,.25;]]
+zclass[[bed,actor,simple_spr,drawlayer_50|x,@,y,@,sind,55,init,%spawn_walls;walls;1;,~,0,.25,.75,.25;]]
+zclass[[bed_pillow,simple_spr,drawlayer_25|x,@,y,@,sind,39,]]
 zclass[[house,actor,simple_spr,drawlayer_50|cspr,174,sind,174,sw,2,sh,2,init,%house_init;walls;1;,~,.75,.5,.25,.75;walls;2;,~,-.75,.5,.25,.75;walls;3;,~,0,0,.75,.25;]]
 zclass[[house231,house|x,@,y,@,room,231]]
 zclass[[house224,house|x,@,y,@,room,224]]
@@ -750,7 +750,6 @@ zclass[[house226,house|x,@,y,@,room,226]]
 zclass[[house227,house|x,@,y,@,room,227]]
 zclass[[house228,house|x,@,y,@,room,228]]
 zclass[[house229,house|x,@,y,@,room,229]]
-zclass[[bed]]
 zclass[[person,target_with_tbox,solid,simple_spr,drawlayer_50|text,,rx,.375,ry,.375,sy,-2,trx,.5,try,.25,target_with_tbox_disable_callback,%person_target_with_tbox_disable_callback]]
 zclass[[navyblock,person|x,@,y,@,cname,navy,cspr,97,sind,97,text,my sister has been in^the forest all day.^find something to^protect yourself with^and bring her home.,ry,1,memloc_trigger,0x5d09,memloc_trigger_value,1,target_with_tbox_finish_callback,%person_target_with_tbox_finish_callback|0x5d09|0]]
 zclass[[navyhouse,person|x,@,y,@,cname,navy,cspr,97,sind,97,text,im navy in a house|0x5d09|1]]
