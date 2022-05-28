@@ -743,7 +743,7 @@ zclass[[fairy,actor,mov,drawlayer_50|x,@,y,@,update,%fairy_update,draw,%fairy_dr
 zclass[[woodtbl,solid|x,@,y,@,rx,.375,ry,.375,sind,16]]
 zclass[[greytbl,solid|x,@,y,@,rx,.375,ry,.375,sind,17]]
 zclass[[pot,solid|x,@,y,@,rx,.375,ry,.375,sind,18]]
-zclass[[bedblanket,actor,simple_spr,drawlayer_50|x,@,y,@,sind,55,init,%spawn_walls;walls;1;,~,.625,0,.25,.5;walls;2;,~,-.625,0,.25,.5;walls;3;,~,0,.25,.75,.25;]]
+zclass[[bedblanket,actor,simple_spr,drawlayer_50|x,@,y,@,sind,55,init,%spawn_walls;walls;1;,~,0,.25,.75,.25;]]
 zclass[[bedpillow,simple_spr,drawlayer_25|x,@,y,@,sind,39]]
 zclass[[house,actor,simple_spr,drawlayer_50|cspr,174,sind,174,sw,2,sh,2,init,%house_init;walls;1;,~,.75,.5,.25,.75;walls;2;,~,-.75,.5,.25,.75;walls;3;,~,0,0,.75,.25;]]
 zclass[[house231,house|x,@,y,@,room,231]]
