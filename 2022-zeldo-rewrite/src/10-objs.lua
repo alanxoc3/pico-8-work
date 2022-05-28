@@ -35,6 +35,3 @@ zclass[[target,anchor,box|
         end
     end)
 end $$
-
--- placeholders
-zclass[[pot]]

@@ -2,9 +2,10 @@
     zcall_tbl(_g.wall, a.walls)
 end $$
 
-zclass[[woodtbl,solid|x,@,y,@,rx,.375,ry,.375,sind,16]]
-zclass[[greytbl,solid|x,@,y,@,rx,.375,ry,.375,sind,17]]
-zclass[[soupbucket,solid|x,@,y,@,rx,.375,ry,.375,sind,18]]
+zclass[[woodtbl   ,solid,drawlayer_50,simple_spr|x,@,y,@,rx,.375,ry,.375,draw,~drawout,sind,16]]
+zclass[[greytbl   ,solid,drawlayer_50,simple_spr|x,@,y,@,rx,.375,ry,.375,draw,~drawout,sind,17]]
+zclass[[soupbucket,solid,drawlayer_50,simple_spr|x,@,y,@,rx,.375,ry,.375,draw,~drawout,sind,18]]
+zclass[[pot       ,solid,drawlayer_50,simple_spr|x,@,y,@,rx,.375,ry,.375,draw,~drawout,sind,49]]
 
 zclass[[bedblanket,actor,simple_spr,drawlayer_50|
     x,@, y,@,

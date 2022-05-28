@@ -1,12 +1,14 @@
 zclass[[person,target_with_tbox,solid,simple_spr,drawlayer_50|
     text,, rx,.375, ry,.375, sy,-2,
-    trx,.5, try,.25,
+    trx,.5, try,.25, ty,.25,
     target_with_tbox_disable_callback,%person_target_with_tbox_disable_callback
 ]]
 
 |[person_target_with_tbox_disable_callback]| function(a)
+    local abx = a:abside(g_pl)
     a.xf = sgn(g_pl.x-a.x)
-    return peek'MEM_ITEM_INDEX' ~= 4 or a.xf == g_pl.xf
+    printh(""..abx..","..g_pl.xf)
+    return peek'MEM_ITEM_INDEX' ~= 4 or abx == -g_pl.xf
 end $$
 
 |[person_target_with_tbox_finish_callback]| function(a)
