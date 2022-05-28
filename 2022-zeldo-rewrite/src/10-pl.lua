@@ -111,10 +111,9 @@ zclass[[banjo,anchor,actor|
     ending; offdy,-.0625, duration,.08;
 ]]
 
-zclass[[brang,simple_spr,drawlayer_75,mov,actor,box|
+zclass[[brang,collidable,simple_spr,drawlayer_75,mov,actor,box|
     anchoring,@, xf,@,
     rx,.375, ry,.375,
-    sy,-2,
 
     kill_when_release,yes,
     visible,no,
