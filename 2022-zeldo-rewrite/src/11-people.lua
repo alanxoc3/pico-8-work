@@ -19,6 +19,7 @@ zclass[[navyblock,person|
     cname,"navy", cspr,SPR_NAVY, sind,SPR_NAVY,
     text,"my sister has been in^the forest all day.^find something to^protect yourself with^and bring her home.",
 
+    ry,1,
     memloc_trigger,MEM_IS_NAVY_HOME, memloc_trigger_value,1,
     target_with_tbox_finish_callback,%person_target_with_tbox_finish_callback
 |MEM_IS_NAVY_HOME|0
@@ -36,6 +37,7 @@ zclass[[bobblock,person|
     cname,"bob", cspr,SPR_BOB, sind,SPR_BOB,
     text,"im bob outside",
 
+    ry,1,
     memloc_trigger,MEM_IS_BOB_HOME, memloc_trigger_value,1,
     target_with_tbox_finish_callback,%person_target_with_tbox_finish_callback
 |MEM_IS_BOB_HOME|0
