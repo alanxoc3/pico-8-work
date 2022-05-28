@@ -35,7 +35,7 @@ g_obj_map = split[[
 ,saveplat   -- 29  | 40  | 2  | 2
 ,woodtbl    -- 30  | 16  | 1  | 1
 ,greytbl    -- 31  | 17  | 1  | 1
-,pot        -- 32  | 18  | 1  | 1
+,soupbucket -- 32  | 18  | 1  | 1
 ,nil        -- 33  | 0   | 1  | 1
 ,nil        -- 34  | 0   | 1  | 1
 ,nil        -- 35  | 0   | 1  | 1

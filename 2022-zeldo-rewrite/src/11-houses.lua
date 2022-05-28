@@ -4,7 +4,7 @@ end $$
 
 zclass[[woodtbl,solid|x,@,y,@,rx,.375,ry,.375,sind,16]]
 zclass[[greytbl,solid|x,@,y,@,rx,.375,ry,.375,sind,17]]
-zclass[[pot,solid|x,@,y,@,rx,.375,ry,.375,sind,18]]
+zclass[[soupbucket,solid|x,@,y,@,rx,.375,ry,.375,sind,18]]
 
 zclass[[bedblanket,actor,simple_spr,drawlayer_50|
     x,@, y,@,
