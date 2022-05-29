@@ -12,9 +12,13 @@ zclass[[fairy,actor,mov,drawlayer_50|
 end $$
 
 |[fairy_draw]| function(a)
-    for i=-2,2 do
-        local m = .125*sgn(i)
-        scr_line(a.x+abs(i)\2*m, a.y+i%2*m, a.x-a.dx*6, a.y-a.dy*6, 1)
-    end
+    draw_tail(a.x, a.y, a.dx, a.dy, 6)
     scr_pset(a.x,a.y,12)
 end $$
+
+function draw_tail(x, y, dx, dy, mult)
+    for i=-2,2 do
+        local m = .125*sgn(i)
+        scr_line(x+abs(i)\2*m, y+i%2*m, x-dx*mult, y-dy*mult, 1)
+    end
+end

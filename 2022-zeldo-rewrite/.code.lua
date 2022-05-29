@@ -140,7 +140,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,animation_init,@,auto_outline_draw,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,explode_draw,@,calc_deltas,@,adjust_deltas_for_solids,@,adjust_deltas_for_tiles,@,adjust_deltas_for_screen,@,inventory_start_init,@,inventory_start_update,@,inventory_press_update,@,inventory_draw,@,simple_spr_draw,@,anchor_update_anchor,@,targettouch_update_target,@,banjo_ending_init,@,item_horizontal_start_init,@,item_horizontal_normal_init,@,item_horizontal_ending_init,@,brang_drawout,@,brang_start_init,@,brang_normal_update,@,brang_ending_init,@,brang_ending_update,@,bomb_start_init,@,bomb_destroyed,@,pl_update,@,pl_drawout,@,rstat_update,@,rstat_set,@,rstat_get,@,rstat_get,@,stat_draw,@,tbox_init,@,tbox_update,@,tbox_draw,@,fairy_update,@,fairy_draw,@,spawn_walls,@,house_init,@,person_target_with_tbox_disable_callback,@,person_target_with_tbox_finish_callback,@,target_with_tbox_init,@,sign_target_with_tbox_disable_callback,@,saveplat_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,gameover_control_ending,@,gameover_init,@,gameover_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,simple_update,@,title_draw,@,title_logo_update,@,title_logo_drawout,@,game_state_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,animation_init,@,auto_outline_draw,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,explode_draw,@,calc_deltas,@,adjust_deltas_for_solids,@,adjust_deltas_for_tiles,@,adjust_deltas_for_screen,@,inventory_start_init,@,inventory_start_update,@,inventory_press_update,@,inventory_draw,@,simple_spr_draw,@,anchor_update_anchor,@,targettouch_update_target,@,arrow_destroyed,@,arrow_draw,@,bow_ending_init,@,banjo_ending_init,@,item_horizontal_start_init,@,item_horizontal_normal_init,@,item_horizontal_ending_init,@,brang_drawout,@,brang_start_init,@,brang_normal_update,@,brang_ending_init,@,brang_ending_update,@,bomb_start_init,@,bomb_destroyed,@,pl_update,@,pl_drawout,@,rstat_update,@,rstat_set,@,rstat_get,@,rstat_get,@,stat_draw,@,tbox_init,@,tbox_update,@,tbox_draw,@,fairy_update,@,fairy_draw,@,spawn_walls,@,house_init,@,person_target_with_tbox_disable_callback,@,person_target_with_tbox_finish_callback,@,target_with_tbox_init,@,sign_target_with_tbox_disable_callback,@,saveplat_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,gameover_control_ending,@,gameover_init,@,gameover_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,simple_update,@,title_draw,@,title_logo_update,@,title_logo_drawout,@,game_state_init,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -249,8 +249,8 @@ if ay==0 and abs(a.dy)<.01 then a.dy=0 end
 end,function(a,x,y)
 a.ang=atan2(x-a.x,y-a.y)
 end,function(a)
-for i=0,7 do
-scr_zrect(a.x+sin(a:get_elapsed_percent"start"/2)*cos(i/8+.125),a.y+sin(a:get_elapsed_percent"start"/2)*sin(i/8+.125),i%2*.125+.125,i%2*.125+.125,1)
+for i=0,a.len-1 do
+scr_zrect(a.x+sin(a:get_elapsed_percent"start"/2)*cos(i/a.len+.125),a.y+sin(a:get_elapsed_percent"start"/2)*sin(i/a.len+.125),i%a.mod*.125+.125,i%a.mod*.125+.125,1)
 end
 end,function(a,b)
 local box={x=b.x-a.dx,y=b.y-a.dy,rx=b.rx,ry=b.ry}
@@ -321,6 +321,14 @@ target:callback_touch(a)
 end
 end)
 end,function(a)
+_g.explode(a.x,a.y,4,1)
+end,function(a)
+draw_tail(a.x,a.y,a.dx,0,3)
+pset(a.x*8,a.y*8,12)
+end,function(a)
+_g.item_horizontal_ending_init(a)
+_g.arrow(a.x,a.y-.125,a.xf*.25)
+end,function(a)
 if(g_rstat_right:get()or{}).id=="saveplat"then
 zcall(poke,[[1;,0x5d02,@;2;,0x5d03,@;3;,0x5d04,@;]],a.anchoring.x*16,
 a.anchoring.y*16,
@@ -349,7 +357,7 @@ end,function(a)
 a.x,a.y=a.anchoring.x+a.xf,a.anchoring.y
 a.dx=a.dx+a.xf*.125
 end,function(a)
-_g.explode(a.x,a.y)
+_g.explode(a.x,a.y,8,2)
 end,function(a)
 g_rstat_left:set(a)
 local item=a.item
@@ -463,10 +471,7 @@ local offx,offy=relact.x+(t()\10%2==0 and 1 or-1)*cos(t()*.75),relact.y+sin(t()*
 a:towards_point(offx,offy)
 a.speed=a:dist_point(offx,offy)*.013
 end,function(a)
-for i=-2,2 do
-local m=.125*sgn(i)
-scr_line(a.x+abs(i)\2*m,a.y+i%2*m,a.x-a.dx*6,a.y-a.dy*6,1)
-end
+draw_tail(a.x,a.y,a.dx,a.dy,6)
 scr_pset(a.x,a.y,12)
 end,function(a)
 zcall_tbl(_g.wall,a.walls)
@@ -693,7 +698,7 @@ end
 zclass[[pos|x,0,y,0,dist_point,%pos_dist_point]]
 zclass[[vec,pos|dx,0,dy,0,vec_update,%vec_update]]
 zclass[[mov,vec|ang,0,speed,0,mov_update,%mov_update,towards_point,%mov_towards_point]]
-zclass[[explode,actor,drawlayer_50|x,@,y,@,draw,%explode_draw;start;duration,.25;]]
+zclass[[explode,actor,drawlayer_50|x,@,y,@,len,@,mod,@,draw,%explode_draw;start;duration,.25;]]
 function get_solid_tile(room,index)
 local t2=room.tiles_2[index]
 if t2 then return fget(t2,0)and t2 end
@@ -717,7 +722,8 @@ zclass[[anchor,pos|update_anchor,%anchor_update_anchor;offx,0,offy,0,offdx,0,off
 zclass[[target,anchor,box|rx,@,ry,@,offx,@,offy,@,anchoring,@,callback_touch,@,callback_outside,@,update_target,%targettouch_update_target]]
 zclass[[item_horizontal,anchor|offspeed,0,normal_init,%item_horizontal_normal_init;start;init,%item_horizontal_start_init,duration,.08,next,normal;normal;init,%item_horizontal_normal_init,offdx,0;ending;init,%item_horizontal_ending_init,duration,.08;]]
 zclass[[mask,anchor,actor|anchoring,@,xf,@,kill_when_release,yes,visible,yes,block_direction,no,speed_multiplier,2,initial_energy,.125,gradual_energy,.0078125,offy,.2,sind,3;start;offdy,-.0625,duration,.08,next,normal;normal;offy,-.125,offdy,0;ending;offdy,.0625,duration,.08;]]
-zclass[[bow,item_horizontal,actor|anchoring,@,xf,@,kill_when_release,yes,visible,yes,block_direction,yes,speed_multiplier,.5,initial_energy,.25,gradual_energy,0,offspeed,.105,sind,7;]]
+zclass[[bow,item_horizontal,actor|anchoring,@,xf,@,kill_when_release,yes,visible,yes,block_direction,yes,speed_multiplier,.5,initial_energy,.25,gradual_energy,0,offspeed,.105,sind,7;ending;init,%item_horizontal_ending_init,duration,.08;ending;init,%bow_ending_init,duration,.08;]]
+zclass[[arrow,vec,actor,drawlayer_50|x,@,y,@,dx,@,destroyed,%arrow_destroyed,draw,%arrow_draw;start;duration,.5;]]
 zclass[[shield,item_horizontal,actor|anchoring,@,xf,@,kill_when_release,yes,visible,yes,block_direction,yes,speed_multiplier,.5,initial_energy,.125,gradual_energy,0,offy,.125,offspeed,.105,sind,6;]]
 zclass[[sword,item_horizontal,actor|anchoring,@,xf,@,kill_when_release,yes,visible,yes,block_direction,yes,speed_multiplier,.5,initial_energy,.25,gradual_energy,0,offspeed,.125,sind,2;]]
 zclass[[banjo,anchor,actor|anchoring,@,xf,@,kill_when_release,no,visible,yes,block_direction,yes,speed_multiplier,0,initial_energy,.125,gradual_energy,0,offy,-.05,sind,1;start;offdy,.0625,duration,.08,next,normal;normal;offy,.25,offdy,0,duration,3,next,ending;ending;init,%banjo_ending_init,offdy,-.0625,duration,.08;]]
@@ -758,6 +764,12 @@ zclass[[rstat|align,@,x,@,update,%rstat_update,set,%rstat_set,get,%rstat_get;buf
 zclass[[stat,vec,actor,drawlayer_95|align,@,x,@,obj,@,y,138,draw,%stat_draw,max_health,10,health,5;start;dy,-2,duration,.2,next,normal;normal;dy,0;ending;dy,2,duration,.2;]]
 zclass[[tbox,vec,actor,drawlayer_99|rawtext,@,destroyed,@,y,138,cur_text_index,1,anim,0,line_1,,line_2,,update,%tbox_update,draw,%tbox_draw;texts;,;start;dy,-2,duration,.2,next,normal,update,nop,init,%tbox_init;normal;dy,0,anim,0,done,no,update,%tbox_update,init,nop;ending;dy,2,update,nop,duration,.2,init,nop;]]
 zclass[[fairy,actor,mov,drawlayer_50|x,@,y,@,update,%fairy_update,draw,%fairy_draw]]
+function draw_tail(x,y,dx,dy,mult)
+for i=-2,2 do
+local m=.125*sgn(i)
+scr_line(x+abs(i)\2*m,y+i%2*m,x-dx*mult,y-dy*mult,1)
+end
+end
 zclass[[woodtbl,solid,drawlayer_50,simple_spr|x,@,y,@,rx,.375,ry,.375,draw,~drawout,sind,16]]
 zclass[[greytbl,solid,drawlayer_50,simple_spr|x,@,y,@,rx,.375,ry,.375,draw,~drawout,sind,17]]
 zclass[[soupbucket,solid,drawlayer_50,simple_spr|x,@,y,@,rx,.375,ry,.375,draw,~drawout,sind,18]]

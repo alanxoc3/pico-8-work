@@ -38,8 +38,8 @@ TODO: first boss (lime)
 TODO: think about chicken collection for cannon logic
 
 ```
-2022-05-29 -- insidecollision save
-    5098 5093 5092 5071 5058 5055 5166 5272 5246 5316
+2022-05-29 -- insidecollision save arrow
+    5098 5093 5092 5071 5058 5055 5166 5272 5246 5316 5396
 
 2022-05-28 -- banjo brang bombfix bob keep teach jane lark energylimit objs
     4821 4835 4946 4972 4978 5035 5022 5028 5038 5050 5005 5098

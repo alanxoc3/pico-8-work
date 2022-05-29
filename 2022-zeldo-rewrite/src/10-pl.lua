@@ -59,7 +59,32 @@ zclass[[bow,item_horizontal,actor|
 
     offspeed,.105,
     sind,SPR_BOW;
+
+    ending; init,%item_horizontal_ending_init, duration,.08;
+    ending; init,%bow_ending_init, duration,.08;
 ]]
+
+zclass[[arrow,vec,actor,drawlayer_50|
+    x,@, y,@, dx, @,
+    destroyed,%arrow_destroyed,
+    draw,%arrow_draw;
+
+    start; duration,.5;
+]]
+
+|[arrow_destroyed]| function(a)
+    _g.explode(a.x, a.y, 4, 1)
+end $$
+
+|[arrow_draw]| function(a)
+    draw_tail(a.x, a.y, a.dx, 0, 3)
+    pset(a.x*8, a.y*8, 12)
+end $$
+
+|[bow_ending_init]| function(a)
+    _g.item_horizontal_ending_init(a)
+    _g.arrow(a.x, a.y-.125, a.xf*.25)
+end $$
 
 zclass[[shield,item_horizontal,actor|
     anchoring,@, xf,@,
@@ -205,7 +230,7 @@ end $$
 end $$
 
 |[bomb_destroyed]| function(a)
-    _g.explode(a.x, a.y)
+    _g.explode(a.x, a.y, 8, 2)
 end $$
 
 --| PL LOGIC |--
