@@ -158,7 +158,7 @@ function decode_map()
         if room_ind > LAST_ROOM_INDEX then room.w, room.h = HUT_W, HUT_H end
 
         room.color = 0x0f & @cur_loc
-        room.music = 0xf0 & peek_inc() >>> 4
+        room.music = (0xf0 & peek_inc()) >>> 4
 
         local byte, is_tile, layer, ind, offx, offy, is_fill = 0, true, room.tiles_1, 0, 0, 0
         while byte ~= CON_END do

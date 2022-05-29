@@ -9,7 +9,7 @@ while@cur_loc ~=255 do
 local room,room_ind=zobj[[tiles_1;,;tiles_2;,;objects;,;w,12,h,10,color,0,music,0]],peek_inc()
 if room_ind>223 then room.w,room.h=8,6 end
 room.color=0x0f &@cur_loc
-room.music=0xf0 & peek_inc()>>>4
+room.music=(0xf0 & peek_inc())>>>4
 local byte,is_tile,layer,ind,offx,offy,is_fill=0,true,room.tiles_1,0,0,0
 while byte ~=255 do
 byte=peek_inc()
@@ -327,7 +327,7 @@ a:kill()
 end
 a.speed=0
 if zbtn(btn,0)|zbtn(btn,2)~=0 then
-a.ang,a.speed=atan2(zbtn(btn,0),zbtn(btn,2)),.05
+a.ang,a.speed=atan2(zbtn(btn,0),zbtn(btn,2)),.0375
 end
 end,function(a)
 a.end_x,a.end_y=a.x,a.y

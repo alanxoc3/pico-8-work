@@ -150,7 +150,7 @@ end $$
     a.speed = 0
 
     if zbtn(btn, 0) | zbtn(btn, 2) ~= 0 then
-        a.ang, a.speed = atan2(zbtn(btn, 0), zbtn(btn, 2)), BRANG_SPEED
+        a.ang, a.speed = atan2(zbtn(btn, 0), zbtn(btn, 2)), .0375
     end
 end $$
 
