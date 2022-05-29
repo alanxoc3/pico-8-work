@@ -10,12 +10,35 @@ help him save the Land of Hi-roll from the forces of evil.
 ```
 
 ## Tokens & Features
-TODO: 30 mins thoughts on token crunch
+TODO: 30 mins token crunch
 TODO: battle logic
+TODO: brang collide with screen edge
+TODO: bomb explosion change style
+TODO: save platform actually saves
+TODO: bow actually shoots
+TODO: enemy spawn in with implode effect
+TODO: slimy moves and splits on defeat
+TODO: slimy stuns player
+TODO: player weapons hurt and stun slimy
+TODO: chicken logic
+TODO: spike hurt player
+TODO: try pc minifier
+TODO: music works for rooms in game
+TODO: pot throwing logic
+TODO: chest logic
+TODO: banjo over people text logic
+TODO: token crunch for 30 minutes
+TODO: think of more enemies
+TODO: polish until beating first boss
+TODO: first boss (lime)
+TODO: think about chicken collection for cannon logic
 
 ```
+2022-05-29 --
+    5098
+
 2022-05-28 -- banjo brang bombfix bob keep teach jane lark energylimit objs
-    4821 4835 4946 4972 4978 5035 5022 5028 5038 5050 5005
+    4821 4835 4946 4972 4978 5035 5022 5028 5038 5050 5005 5098
 
 2022-05-27 -- simplifyma expandinventory sword energy mask bow shield bomb
     4438 4426 4488 4483 4528 4549 4680 4692 4689 3739 4722 4742 4785 4835 4821
