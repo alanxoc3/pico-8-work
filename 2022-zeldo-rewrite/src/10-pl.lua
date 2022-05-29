@@ -156,7 +156,7 @@ zclass[[bomb,actor,vec,simple_spr,drawlayer_50|
 |[item_horizontal_ending_init]| function(a) a:normal_init() a.offdx = -a.xf*a.offspeed end $$
 
 |[brang_drawout]| function(a)
-    zspr(a.sind, a.x*8+a.sx, a.y*8+a.sy, 1, 1, cos(t()*3), sin(t()*3))
+    zspr(a.sind, a.x*8+a.sx, a.y*8+a.sy, 1, 1, cos(g_fi/5), sin(g_fi/5))
 end $$
 
 |[brang_start_init]| function(a)
@@ -165,10 +165,6 @@ end $$
 end $$
 
 |[brang_normal_update]| function(a)
-    if not a:inside(g_room_bounds) then
-        a:kill()
-    end
-
     a.speed = 0
 
     if g_zbtn_0 | g_zbtn_2 ~= 0 then
@@ -202,13 +198,13 @@ zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50|
     x,@,y,@,xf,@,
     sind,88,
     rx,PL_RADIUS,ry,PL_RADIUS,
+    should_collide_with_screen_edge,no,
 
     update,%pl_update,
     energy,0,
     is_energy_cooling_down,no,
     target_energy,0,
     drawout,%pl_drawout;
-    sinds;,SPR_PL_FEET_1,SPR_PL_FEET_2,SPR_PL_FEET_3;
 
     item_funcs; ITEM_IND_SWORD,%sword, ITEM_IND_MASK,%mask, ITEM_IND_BOW,%bow, ITEM_IND_SHIELD,%shield, ITEM_IND_BOMB,%bomb, ITEM_IND_BANJO,%banjo, ITEM_IND_BRANG,%brang;
 
@@ -267,7 +263,7 @@ end $$
     local xf = a.xf
     local top = 91
     if does_entity_exist'banjo' then
-        xf = g_i%2*2-1
+        xf = g_si%2*2-1
         top = 92
     end
 

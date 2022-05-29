@@ -91,7 +91,7 @@ zclass[[stat,vec,actor,drawlayer_95|
         end)
     end
 
-    draw_card(a.x, a.y+(does_entity_exist'tbox' and 0 or -cos(g_i/4)*a.align), 6, 8, 2, 4, function()
+    draw_card(a.x, a.y+(does_entity_exist'tbox' and 0 or -cos(g_si/4)*a.align), 6, 8, 2, 4, function()
         spr(obj.cspr, 0, 0, 1, 1, a.align > 0)
     end, nop)
 end $$
@@ -151,7 +151,7 @@ end $$
         ]], a.line_1 or "", a.line_2 or "")
     end, function()
         if a.done then
-            zspr(38, 44, 16+g_i%2)
+            zspr(38, 44, 16+g_si%2)
         end
     end)
 end $$

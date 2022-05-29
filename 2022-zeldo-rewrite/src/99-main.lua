@@ -18,7 +18,8 @@ zclass[[game_state,actor|
 |[game_state_init]| function(state)
     clean_all_entities'game_state'
     _g.fader_in()
-    g_animation = _g.animation'ANIMATION_SPEED'
+    g_slow_animation = _g.animation'.5'
+    g_fast_animation = _g.animation'.05'
     state:state_init()
 end $$
 
@@ -49,7 +50,7 @@ function _init()
     end
 
     -- poke2(0x5f5c, BTN_DELAY) -- set custom delay
-    g_i, g_state, g_rooms = 0, _g.game_state(), decode_map()
+    g_si, g_fi, g_state, g_rooms = 0, 0, _g.game_state(), decode_map()
     g_tile_animation_lookup = create_tile_animation_lookup(g_rooms[ANIMATION_ROOM_INDEX])
 end
 
@@ -77,7 +78,7 @@ function _update60()
 end
 
 function _draw()
-    g_i = g_animation.index
+    g_si, g_fi = g_slow_animation.index, g_fast_animation.index
     cls()
     loop_entities('game_state', 'draw')
     fade(g_fade)

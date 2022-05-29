@@ -38,5 +38,5 @@ end
 
 function lookup_tile_animation(sind)
     local anim = g_tile_animation_lookup[sind]
-    return anim and anim[g_i%#anim+1] or sind
+    return anim and anim[g_si%#anim+1] or sind
 end

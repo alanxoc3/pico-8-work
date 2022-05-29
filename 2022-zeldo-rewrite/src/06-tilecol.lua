@@ -9,8 +9,10 @@ end
 zclass[[collidable,box,vec|
     calc_deltas,%calc_deltas,
     should_collide_below,yes,
+    should_collide_with_screen_edge,yes,
     adjust_deltas_for_solids,%adjust_deltas_for_solids,
-    adjust_deltas_for_tiles,%adjust_deltas_for_tiles
+    adjust_deltas_for_tiles, %adjust_deltas_for_tiles,
+    adjust_deltas_for_screen,%adjust_deltas_for_screen
 ]]
 
 |[calc_deltas]| function(a, b)
@@ -19,9 +21,7 @@ zclass[[collidable,box,vec|
 end $$
 
 |[adjust_deltas_for_solids]| function(a, list)
-    local junk
     foreach(list, function(b)
-        -- a.dx, junk = a:calc_deltas(obj)
         local box = {x=b.x-a.dx, y=b.y-a.dy, rx=b.rx, ry=b.ry}
         a.dx, a.dy = a:getdelta(box, a.dx, a.dy)
     end)
@@ -40,5 +40,22 @@ end $$
                 end
             end
         end
+    end
+end $$
+
+function get_delta_axis2(dx, x, rx, tdx, tdrx)
+    local xp = (x-tdx)/tdrx
+    if abs(xp)+rx/tdrx > 1 then
+        return tdx+sgn(xp)*(tdrx-rx)-(x-dx)
+    else
+        return dx
+    end
+end
+
+|[adjust_deltas_for_screen]| function(a)
+    if a.should_collide_with_screen_edge then
+        local box = {x=g_room_bounds.x-a.dx, y=g_room_bounds.y-a.dy, rx=g_room_bounds.rx, ry=g_room_bounds.ry}
+        a.dx = get_delta_axis2(a.dx, a.x, a.rx, box.x, box.rx)
+        a.dy = get_delta_axis2(a.dy, a.y, a.ry, box.y, box.ry)
     end
 end $$

@@ -36,14 +36,14 @@ end $$
 
 |[title_logo_drawout]| function(a)
     for i=-2,2 do
-        zspr(SPR_TITLE_L+i, i*10+64, 57+cos((g_i+i)/4)/2, 1, 2)
+        zspr(SPR_TITLE_L+i, i*10+64, 57+cos((g_si+i)/4)/2, 1, 2)
     end
 
     zcall(zprinttbox, [[
         1;,"not the story of", 64, 39, 0, 10, 4;
     ]])
 
-    if g_i%2 == 0 then
+    if g_si%2 == 0 then
         zcall(zprinttbox, [[
             1;,"🅾️ or ❎ to play  ", 64, 68, 0, 7, 5;
         ]])

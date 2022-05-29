@@ -23,7 +23,7 @@ end $$
 
 |[gameover_draw]| function(state)
     local drawfunc = function()
-        zspr(state.game_over_sind, 0, g_i%2, 1, 1, true, false, 1)
+        zspr(state.game_over_sind, 0, g_si%2, 1, 1, true, false, 1)
     end
 
     zcall(zprinttbox, [[
@@ -31,7 +31,7 @@ end $$
         2;,@,                64, 69, 0, 7, 5, 1;
     ]], state.game_over_text)
 
-    draw_card(64, 56+g_i%2, 6, 8, 2, 4, function()
+    draw_card(64, 56+g_si%2, 6, 8, 2, 4, function()
         spr(state.game_over_sind, 0, 0)
     end, nop)
 end $$

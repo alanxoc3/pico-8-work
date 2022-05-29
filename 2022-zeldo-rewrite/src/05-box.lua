@@ -62,18 +62,3 @@ end
 
     return dx, dy
 end $$
-
--- DEBUG_BEGIN
--- function debug_boxes(a, b)
---    local xs, ys = a:side(b)
---    local axs, ays = a:abside(b)
---     printh("in: "   ..(g_pl:inside(g_room_bounds) and "true, " or "false, ")
---          .."out: "  ..(g_pl:outside(g_room_bounds) and "true, " or "false, ")
---          .."touch: "..(g_pl:touching(g_room_bounds) and "true, " or "false, ")
---          .."xs: "   ..xs..", "
---          .."ys: "   ..ys..", "
---          .."axs: "  ..axs..", "
---          .."ays: "  ..ays..", "
---     )
--- end
--- DEBUG_END

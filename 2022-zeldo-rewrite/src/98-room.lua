@@ -2,7 +2,7 @@ zclass[[room_bounds,box|x,@,y,@,rx,@,ry,@]]
 
 |[room_init]| function(state) 
     local r = g_rooms[peek'MEM_ROOM_IND']
-    g_room_bounds = _g.room_bounds(r.w/2, r.h/2+.25, r.w/2+.125, r.h/2+.125)
+    g_room_bounds = _g.room_bounds(r.w/2, r.h/2, r.w/2-.375, r.h/2-.375)
 
     g_pl = _g.pl(peek'MEM_PL_X'/POS_MULTIPLIER_FOR_MEMORY, peek'MEM_PL_Y'/POS_MULTIPLIER_FOR_MEMORY, peek'MEM_PL_XF'*2-1)
     g_fairy = _g.fairy(g_pl.x, g_pl.y-.125)
@@ -20,15 +20,16 @@ end $$
     if does_entity_exist'fader' then return end
 
     zcall(loop_entities, [[
-        1;,timer,       tick;
-        2;,actor,       state;
-        3;,mov,         mov_update;
-        4;,collidable,  adjust_deltas_for_solids, @;
-        5;,collidable,  adjust_deltas_for_tiles, @;
-        6;,vec,         vec_update;
-        7;,anchor,      update_anchor;
-        8;,target,      update_target, @;
-        9;,rstat,       update;
+        1 ;,timer,       tick;
+        2 ;,actor,       state;
+        3 ;,mov,         mov_update;
+        4 ;,collidable,  adjust_deltas_for_solids, @;
+        5 ;,collidable,  adjust_deltas_for_tiles, @;
+        6 ;,collidable,  adjust_deltas_for_screen;
+        7 ;,vec,         vec_update;
+        8 ;,anchor,      update_anchor;
+        9 ;,target,      update_target, @;
+        10;,rstat,       update;
     ]], g_zclass_entities.solid, g_rooms[peek'MEM_ROOM_IND'], g_zclass_entities.pl)
 
     if not g_pl:inside(g_room_bounds) then

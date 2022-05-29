@@ -11,7 +11,7 @@ function zspr(sind, x, y, sw, sh, xf, yf)
     sw, sh = sw or 1, sh or 1
     xf, yf = xf and xf < 0, yf and yf < 0
     x, y = x-sw*4, y-sh*4
-    spr(sind, x, y, sw, sh, xf, yf)
+    spr(sind, flr(x+.5), flr(y+.5), sw, sh, xf, yf)
 end
 
 -- used with ui
