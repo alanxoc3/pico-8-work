@@ -10,7 +10,6 @@ help him save the Land of Hi-roll from the forces of evil.
 ```
 
 ## Tokens & Features
-TODO: brang slower pullback
 TODO: 30 mins thoughts on token crunch
 TODO: battle logic
 

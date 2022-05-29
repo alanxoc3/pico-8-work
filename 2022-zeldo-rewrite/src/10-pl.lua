@@ -111,7 +111,7 @@ zclass[[banjo,anchor,actor|
     ending; offdy,-.0625, duration,.08;
 ]]
 
-zclass[[brang,collidable,simple_spr,drawlayer_75,mov,actor,box|
+zclass[[brang,collidable,simple_spr,drawlayer_50,mov,actor,box|
     anchoring,@, xf,@,
     rx,.375, ry,.375,
 
@@ -129,7 +129,7 @@ zclass[[brang,collidable,simple_spr,drawlayer_75,mov,actor,box|
     
     start; init,%brang_start_init, speed,.075, duration,.125, next,normal;
     normal;init,nop, speed,0, duration,1.5, update,%brang_normal_update, next,ending;
-    ending;init,%brang_ending_init, speed,0, speed,0, update,%brang_ending_update, duration,.075;
+    ending;init,%brang_ending_init, speed,0, speed,0, update,%brang_ending_update, duration,.125, adjust_deltas_for_solids,nop, adjust_deltas_for_tiles,nop;
     final;init,nop, update,nop, alive,no;
 ]]
 
