@@ -7,7 +7,6 @@ zclass[[person,target_with_tbox,solid,simple_spr,drawlayer_50|
 |[person_target_with_tbox_disable_callback]| function(a)
     local abx = a:abside(g_pl)
     a.xf = sgn(g_pl.x-a.x)
-    printh(""..abx..","..g_pl.xf)
     return peek'MEM_ITEM_INDEX' ~= 4 or abx == -g_pl.xf
 end $$
 

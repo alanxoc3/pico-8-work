@@ -249,10 +249,8 @@ if ay==0 and abs(a.dy)<.01 then a.dy=0 end
 end,function(a,x,y)
 a.ang=atan2(x-a.x,y-a.y)
 end,function(a)
-if not a:get_elapsed_percent"start"then printh(g_state:get_elapsed_percent"room")printh"NOOO" end
-local percent=a:get_elapsed_percent"start"or 1
 for i=0,7 do
-scr_zrect(a.x+sin(percent/2)*cos(i/8+.125),a.y+sin(percent/2)*sin(i/8+.125),i%2*.125+.125,i%2*.125+.125,1)
+scr_zrect(a.x+sin(a:get_elapsed_percent"start"/2)*cos(i/8+.125),a.y+sin(a:get_elapsed_percent"start"/2)*sin(i/8+.125),i%2*.125+.125,i%2*.125+.125,1)
 end
 end,function(a,b)
 local box={x=b.x-a.dx,y=b.y-a.dy,rx=b.rx,ry=b.ry}
@@ -473,7 +471,6 @@ end)
 end,function(a)
 local abx=a:abside(g_pl)
 a.xf=sgn(g_pl.x-a.x)
-printh(""..abx..","..g_pl.xf)
 return peek"0x5d08" ~=4 or abx==-g_pl.xf
 end,function(a)
 poke(a.memloc_trigger,a.memloc_trigger_value)
