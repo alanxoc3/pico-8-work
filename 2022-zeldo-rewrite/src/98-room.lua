@@ -17,8 +17,6 @@ zclass[[room_bounds,box|x,@,y,@,rx,@,ry,@]]
 end $$
 
 |[room_update]| function(state)
-    if does_entity_exist'fader' then return end
-
     zcall(loop_entities, [[
         1 ;,timer,       tick;
         2 ;,actor,       state;
@@ -32,7 +30,7 @@ end $$
         10;,rstat,       update;
     ]], g_zclass_entities.solid, g_rooms[peek'MEM_ROOM_IND'], g_zclass_entities.pl)
 
-    if not g_pl:inside(g_room_bounds) then
+    if not does_entity_exist'fader' and not g_pl:inside(g_room_bounds) then
         local abx, aby = g_pl:abside(g_room_bounds)
         local nri = peek'MEM_ROOM_IND' + aby*16+abx
 
@@ -84,18 +82,21 @@ end $$
 end $$
 
 function load_room(rind, x, y, xf)
-    _g.fader_out(function()
-        zcall(poke, [[
-            1;,MEM_ROOM_IND, @;
-            2;,MEM_PL_X,     @;
-            3;,MEM_PL_Y,     @;
-            4;,MEM_PL_XF,    @;
-        ]], rind,
-            x*POS_MULTIPLIER_FOR_MEMORY,
-            y*POS_MULTIPLIER_FOR_MEMORY,
-            (xf+1)\2
-        )
+    if not does_entity_exist'fader' then
+        -- explode created with fader.... init won't be called.
+        _g.fader_out(function()
+            zcall(poke, [[
+                1;,MEM_ROOM_IND, @;
+                2;,MEM_PL_X,     @;
+                3;,MEM_PL_Y,     @;
+                4;,MEM_PL_XF,    @;
+            ]], rind,
+                x*POS_MULTIPLIER_FOR_MEMORY,
+                y*POS_MULTIPLIER_FOR_MEMORY,
+                (xf+1)\2
+            )
 
-        g_state:load'room'
-    end)
+            g_state:load'room'
+        end)
+    end
 end

@@ -249,9 +249,10 @@ if ay==0 and abs(a.dy)<.01 then a.dy=0 end
 end,function(a,x,y)
 a.ang=atan2(x-a.x,y-a.y)
 end,function(a)
-local percent=a:get_elapsed_percent"start"
-for i=0,3 do
-scr_zrect(a.x+percent*cos(i/4+.125),a.y+percent*sin(i/4+.125),.125,.125,1)
+if not a:get_elapsed_percent"start"then printh(g_state:get_elapsed_percent"room")printh"NOOO" end
+local percent=a:get_elapsed_percent"start"or 1
+for i=0,7 do
+scr_zrect(a.x+sin(percent/2)*cos(i/8+.125),a.y+sin(percent/2)*sin(i/8+.125),i%2*.125+.125,i%2*.125+.125,1)
 end
 end,function(a,b)
 local box={x=b.x-a.dx,y=b.y-a.dy,rx=b.rx,ry=b.ry}
@@ -284,14 +285,14 @@ end,function(a)
 a.stat=peek"0x5d08" ~=4 and{cspr=a[peek"0x5d08"+1].sind}
 end,function(a)
 g_rstat_inventory:set(a.stat)
-if not does_entity_exist"tbox"and not does_entity_exist"banjo"and btn"5"then
+if not does_entity_exist"fader"and not does_entity_exist"tbox"and not does_entity_exist"banjo"and btn"5"then
 poke(0x5d08,9)
 a.ind=4
 a:load"expand"
 end
 end,function(a)
 a.ind=mid(0,2,a.ind%3+zbtn(btnp,0))+mid(0,2,a.ind\3+zbtn(btnp,2))*3
-if does_entity_exist"tbox"or not btn"5"then
+if does_entity_exist"fader"or does_entity_exist"tbox"or not btn"5"then
 poke(0x5d08,peek(a[a.ind+1].mem_loc)~=0 and a.ind or 4)
 a:load"contract"
 end
@@ -338,14 +339,17 @@ local percent=a:get_elapsed_percent"ending"
 a.x=a.end_x+(a.anchoring.x-a.end_x)*percent
 a.y=a.end_y+(a.anchoring.y-a.end_y)*percent
 end,function(a)
-a.x,a.y=a.anchoring.x+a.xf*.625,a.anchoring.y*8\1/8
+a.x,a.y=a.anchoring.x+a.xf,a.anchoring.y
+a.dx=a.dx+a.xf*.125
 end,function(a)
 _g.explode(a.x,a.y)
 end,function(a)
 g_rstat_left:set(a)
 local item=a.item
 a.speed=0
-if not does_entity_exist"tbox"and not btn(5)then
+if not a:inside(g_room_bounds)then
+a.ang,a.speed=atan2(a:abside(g_room_bounds)),.025
+elseif not does_entity_exist"fader"and not does_entity_exist"tbox"and not btn(5)then
 if g_zbtn_0|g_zbtn_2 ~=0 then
 a.ang,a.speed=atan2(g_zbtn_0,g_zbtn_2),.025*item.speed_multiplier
 if not item.block_direction and cos(a.ang)~=0 then
@@ -520,9 +524,8 @@ foreach(r.objects,function(obj_template)
 _g[g_obj_map[obj_template.index]](obj_template.x+.5,obj_template.y+.5)
 end)
 end,function(state)
-if does_entity_exist"fader"then return end
 zcall(loop_entities,[[1;,timer,tick;2;,actor,state;3;,mov,mov_update;4;,collidable,adjust_deltas_for_solids,@;5;,collidable,adjust_deltas_for_tiles,@;6;,collidable,adjust_deltas_for_screen;7;,vec,vec_update;8;,anchor,update_anchor;9;,target,update_target,@;10;,rstat,update;]],g_zclass_entities.solid,g_rooms[peek"0x5d01"],g_zclass_entities.pl)
-if not g_pl:inside(g_room_bounds)then
+if not does_entity_exist"fader"and not g_pl:inside(g_room_bounds)then
 local abx,aby=g_pl:abside(g_room_bounds)
 local nri=peek"0x5d01"+aby*16+abx
 if peek"0x5d01">223 then
@@ -602,8 +605,10 @@ function zcall(func,text,...)
 zcall_tbl(func,zobj(text,...))
 end
 function zrect(x,y,rx,ry,color)rect(x-rx,y-ry,x+rx-1,y+ry-1,color)end
+function zrectfill(x,y,rx,ry,color)rectfill(x-rx,y-ry,x+rx-1,y+ry-1,color)end
 function scr_help_four(func,x1,y1,x2,y2,color)func(8*x1,8*y1,8*x2,8*y2,color)end
 function scr_zrect(...)scr_help_four(zrect,...)end
+function scr_zrectfill(...)scr_help_four(zrectfill,...)end
 function scr_line(...)scr_help_four(line,...)end
 function scr_pset(x,y,color)pset(8*x,8*y,color)end
 zclass[[actor,timer|load,%actor_load,state,%actor_state,kill,%actor_kill,clean,%actor_clean,alive,yes,duration,null,curr,start,next,null,init,nop,update,nop,destroyed,nop;]]
@@ -705,7 +710,7 @@ zclass[[shield,item_horizontal,actor|anchoring,@,xf,@,kill_when_release,yes,visi
 zclass[[sword,item_horizontal,actor|anchoring,@,xf,@,kill_when_release,yes,visible,yes,block_direction,yes,speed_multiplier,.5,initial_energy,.25,gradual_energy,0,offspeed,.125,sind,2;]]
 zclass[[banjo,anchor,actor|anchoring,@,xf,@,kill_when_release,no,visible,yes,block_direction,yes,speed_multiplier,0,initial_energy,.125,gradual_energy,0,offy,-.05,sind,1;start;offdy,.0625,duration,.08,next,normal;normal;offy,.25,offdy,0,duration,3,next,ending;ending;offdy,-.0625,duration,.08;]]
 zclass[[brang,collidable,simple_spr,drawlayer_50,mov,actor,box|anchoring,@,xf,@,rx,.375,ry,.375,kill_when_release,yes,visible,no,block_direction,yes,speed_multiplier,.25,initial_energy,.25,gradual_energy,0,should_collide_below,no,offspeed,.125,drawout,%brang_drawout,sind,4;start;init,%brang_start_init,speed,.075,duration,.125,next,normal;normal;init,nop,speed,0,duration,1.5,update,%brang_normal_update,next,ending;ending;init,%brang_ending_init,speed,0,speed,0,update,%brang_ending_update,duration,.125,adjust_deltas_for_solids,nop,adjust_deltas_for_tiles,nop;final;init,nop,update,nop,alive,no;]]
-zclass[[bomb,actor,vec,simple_spr,drawlayer_50|anchoring,@,xf,@,sind,5,sy,-2,kill_when_release,no,visible,no,block_direction,no,speed_multiplier,1,initial_energy,.25,gradual_energy,0,offspeed,.185,destroyed,%bomb_destroyed;start;init,%bomb_start_init,dy,.08,duration,.08,next,normal;normal;init,nop,duration,.5,dy,0,,next,ending;ending;init,nop,alive,no;]]
+zclass[[bomb,actor,solid,vec,simple_spr,drawlayer_50|anchoring,@,xf,@,rx,.25,ry,.25,sind,5,sy,-2,kill_when_release,no,visible,no,block_direction,no,speed_multiplier,1,initial_energy,.25,gradual_energy,0,offspeed,.185;start;init,%bomb_start_init,dy,.08,duration,.08,next,normal;normal;init,nop,duration,.5,dx,0,dy,0,next,ending;ending;init,%bomb_destroyed,duration,.25,next,final,draw,nop;final;init,nop,alive,no;]]
 zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50|cname,lank,cspr,103,health,10,max_health,10,x,@,y,@,xf,@,sind,88,rx,.375,ry,.375,should_collide_with_screen_edge,no,update,%pl_update,energy,0,is_energy_cooling_down,no,target_energy,0,drawout,%pl_drawout;item_funcs;5,%sword,2,%mask,8,%bow,3,%shield,0,%bomb,6,%banjo,7,%brang;default_item;visible,no,is_default,yes,block_direction,no,speed_multiplier,1,alive,yes,gradual_energy,-.0078125,kill_when_release,no,initial_energy,0;item,~default_item;]]
 function draw_bar(x1,y1,x2,y2,percent,align,fg,bg)
 if x1>x2 then x1-=3 x2-=3 end
@@ -794,6 +799,7 @@ zclass[[fader_in,fader|start;duration,.5,update,%fader_in_update]]
 zclass[[gameover_control,actor|start;duration,.75,next,ending;ending;init,%gameover_control_ending;]]
 zclass[[room_bounds,box|x,@,y,@,rx,@,ry,@]]
 function load_room(rind,x,y,xf)
+if not does_entity_exist"fader"then
 _g.fader_out(function()
 zcall(poke,[[1;,0x5d01,@;2;,0x5d02,@;3;,0x5d03,@;4;,0x5d04,@;]],rind,
 x*16,
@@ -802,6 +808,7 @@ y*16,
 )
 g_state:load"room"
 end)
+end
 end
 zclass[[title_logo,actor,auto_outline,drawlayer_99|update,%title_logo_update,drawout,%title_logo_drawout;]]
 cartdata"zeldo_rewrite"

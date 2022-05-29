@@ -130,9 +130,10 @@ zclass[[brang,collidable,simple_spr,drawlayer_50,mov,actor,box|
     final;init,nop, update,nop, alive,no;
 ]]
 
-zclass[[bomb,actor,vec,simple_spr,drawlayer_50|
+zclass[[bomb,actor,solid,vec,simple_spr,drawlayer_50|
     anchoring,@, xf,@,
 
+    rx,.25, ry,.25,
     sind,SPR_BOMB, sy,-2,
 
     kill_when_release,no,
@@ -142,12 +143,12 @@ zclass[[bomb,actor,vec,simple_spr,drawlayer_50|
     initial_energy, .25,
     gradual_energy, 0,
 
-    offspeed,.185,
-    destroyed,%bomb_destroyed;
+    offspeed,.185;
 
     start;    init,%bomb_start_init, dy,.08, duration,.08, next,normal;
-    normal;   init,nop, duration,.5, dy,0, ,next,ending;
-    ending;   init,nop, alive,no;
+    normal;   init,nop, duration,.5, dx,0, dy,0, next,ending;
+    ending;   init,%bomb_destroyed, duration,.25, next,final, draw,nop;
+    final;    init,nop, alive,no;
 ]]
 
 --| ITEM CODE LOGIC |--
@@ -183,7 +184,8 @@ end $$
 end $$
 
 |[bomb_start_init]| function(a)
-    a.x, a.y = a.anchoring.x+a.xf*.625, a.anchoring.y*8\1/8
+    a.x, a.y = a.anchoring.x+a.xf, a.anchoring.y
+    a.dx = a.dx + a.xf*.125
 end $$
 
 |[bomb_destroyed]| function(a)
@@ -226,7 +228,9 @@ zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50|
     local item = a.item
 
     a.speed = 0
-    if not does_entity_exist'tbox' and not btn(BTN_ITEM_SELECT) then
+    if not a:inside(g_room_bounds) then
+        a.ang, a.speed = atan2(a:abside(g_room_bounds)), PL_SPEED
+    elseif not does_entity_exist'fader' and not does_entity_exist'tbox' and not btn(BTN_ITEM_SELECT) then
         if g_zbtn_0 | g_zbtn_2 ~= 0 then
             a.ang, a.speed = atan2(g_zbtn_0, g_zbtn_2), PL_SPEED*item.speed_multiplier
 

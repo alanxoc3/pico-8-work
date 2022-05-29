@@ -5,13 +5,11 @@ help him save the Land of Hi-roll from the forces of evil.
 ## Sprite Flag Reference
 ```
 0: solid
-1: y with actors
+1: not solid for flying things
 2: rx=.375 ry=.375 (default is .5)
 ```
 
 ## Tokens & Features
-TODO: brang collide with screen edge
-TODO: bomb explosion change style
 TODO: save platform actually saves
 TODO: bow actually shoots
 TODO: enemy spawn in with implode effect
@@ -20,7 +18,9 @@ TODO: slimy stuns player
 TODO: player weapons hurt and stun slimy
 TODO: chicken logic
 TODO: spike hurt player
+TODO: leave room puts item away
 TODO: try pc minifier
+TODO: inventory selection puts item away
 TODO: music works for rooms in game
 TODO: battle logic
 TODO: pot throwing logic
@@ -34,7 +34,7 @@ TODO: think about chicken collection for cannon logic
 
 ```
 2022-05-29 -- insidecollision
-    5098 5093 5092 5071 5058 5055 5166
+    5098 5093 5092 5071 5058 5055 5166 5272
 
 2022-05-28 -- banjo brang bombfix bob keep teach jane lark energylimit objs
     4821 4835 4946 4972 4978 5035 5022 5028 5038 5050 5005 5098

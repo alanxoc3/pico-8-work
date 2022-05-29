@@ -42,10 +42,6 @@ function _init()
             12; ,MEM_HAS_BOMB   , 1;
             13; ,MEM_HAS_BANJO   , 1;
             14; ,MEM_HAS_BRANG  , 1;
-            -- 11; ,MEM_HAS_BOMB   , 1;
-            --12; ,MEM_HAS_MASK   , 1;
-            --14; ,MEM_HAS_BRANG  , 1;
-            --15; ,MEM_HAS_SHIELD , 1;
         ]])
     end
 
@@ -67,7 +63,7 @@ function _update60()
         2;,fader,clean;
     ]])
 
-    register_entities()                  -- register all zobs from previous game loop iteration
+    register_entities()
 
     zcall(loop_entities, [[
         1;,fader,tick;
@@ -82,6 +78,7 @@ function _draw()
     cls()
     loop_entities('game_state', 'draw')
     fade(g_fade)
+
     -- DEBUG_BEGIN
     if g_debug then
         zcall(rect, [[
@@ -95,6 +92,5 @@ function _draw()
             6;,110,0,127,127,1;
         ]])
     end
-    
     -- DEBUG_END
 end
