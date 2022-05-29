@@ -10,7 +10,6 @@ help him save the Land of Hi-roll from the forces of evil.
 ```
 
 ## Tokens & Features
-TODO: 30 mins token crunch
 TODO: battle logic
 TODO: brang collide with screen edge
 TODO: bomb explosion change style
@@ -35,7 +34,7 @@ TODO: think about chicken collection for cannon logic
 
 ```
 2022-05-29 --
-    5098
+    5098 5093 5092 5071 5058 5055
 
 2022-05-28 -- banjo brang bombfix bob keep teach jane lark energylimit objs
     4821 4835 4946 4972 4978 5035 5022 5028 5038 5050 5005 5098

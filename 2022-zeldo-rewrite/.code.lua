@@ -140,7 +140,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,animation_init,@,auto_outline_draw,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,explode_draw,@,calc_deltas,@,adjust_deltas_for_solids,@,adjust_deltas_for_tiles,@,inventory_start_init,@,inventory_start_update,@,inventory_press_update,@,inventory_draw,@,simple_spr_draw,@,anchor_update_anchor,@,targettouch_update_target,@,item_horizontal_start_init,@,item_horizontal_normal_init,@,item_horizontal_ending_init,@,brang_drawout,@,brang_start_init,@,brang_normal_update,@,brang_ending_init,@,brang_ending_update,@,bomb_start_init,@,bomb_destroyed,@,pl_add_energy,@,pl_update,@,pl_drawout,@,rstat_update,@,rstat_set,@,rstat_get,@,stat_draw,@,tbox_init,@,tbox_update,@,tbox_draw,@,fairy_update,@,fairy_draw,@,spawn_walls,@,house_init,@,person_target_with_tbox_disable_callback,@,person_target_with_tbox_finish_callback,@,target_with_tbox_init,@,sign_target_with_tbox_disable_callback,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,gameover_control_ending,@,gameover_init,@,gameover_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,simple_update,@,title_draw,@,title_logo_update,@,title_logo_drawout,@,game_state_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,animation_init,@,auto_outline_draw,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,explode_draw,@,calc_deltas,@,adjust_deltas_for_solids,@,adjust_deltas_for_tiles,@,inventory_start_init,@,inventory_start_update,@,inventory_press_update,@,inventory_draw,@,simple_spr_draw,@,anchor_update_anchor,@,targettouch_update_target,@,item_horizontal_start_init,@,item_horizontal_normal_init,@,item_horizontal_ending_init,@,brang_drawout,@,brang_start_init,@,brang_normal_update,@,brang_ending_init,@,brang_ending_update,@,bomb_start_init,@,bomb_destroyed,@,pl_update,@,pl_drawout,@,rstat_update,@,rstat_set,@,rstat_get,@,stat_draw,@,tbox_init,@,tbox_update,@,tbox_draw,@,fairy_update,@,fairy_draw,@,spawn_walls,@,house_init,@,person_target_with_tbox_disable_callback,@,person_target_with_tbox_finish_callback,@,target_with_tbox_init,@,sign_target_with_tbox_disable_callback,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,gameover_control_ending,@,gameover_init,@,gameover_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,simple_update,@,title_draw,@,title_logo_update,@,title_logo_drawout,@,game_state_init,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -326,8 +326,8 @@ if not a:inside(g_room_bounds)then
 a:kill()
 end
 a.speed=0
-if zbtn(btn,0)|zbtn(btn,2)~=0 then
-a.ang,a.speed=atan2(zbtn(btn,0),zbtn(btn,2)),.0375
+if g_zbtn_0|g_zbtn_2 ~=0 then
+a.ang,a.speed=atan2(g_zbtn_0,g_zbtn_2),.0375
 end
 end,function(a)
 a.end_x,a.end_y=a.x,a.y
@@ -339,39 +339,35 @@ end,function(a)
 a.x,a.y=a.anchoring.x+a.xf*.625,a.anchoring.y*8\1/8
 end,function(a)
 _g.explode(a.x,a.y)
-end,function(a,energy)
-a.energy=1
 end,function(a)
 g_rstat_left:set(a)
+local item=a.item
 a.speed=0
 if not does_entity_exist"tbox"and not btn(5)then
-if zbtn(btn,0)|zbtn(btn,2)~=0 then
-a.ang,a.speed=atan2(zbtn(btn,0),zbtn(btn,2)),.025*a.item.speed_multiplier
-if not a.item.block_direction and cos(a.ang)~=0 then
+if g_zbtn_0|g_zbtn_2 ~=0 then
+a.ang,a.speed=atan2(g_zbtn_0,g_zbtn_2),.025*item.speed_multiplier
+if not item.block_direction and cos(a.ang)~=0 then
 a.xf=sgn(cos(a.ang))
 end
 end
-if not a.item.alive then a.item=a.default_item end
-if not a.is_energy_cooling_down and a.item.is_default and btn"4"then
+if not item.alive then item=a.default_item end
+if not a.is_energy_cooling_down and item.is_default and btn"4"then
 local item_func=a.item_funcs[peek"0x5d08"]
 if item_func then
-a.item=item_func(a,a.xf)
-a.target_energy+=a.item.initial_energy
+item=item_func(a,a.xf)
+a.target_energy+=item.initial_energy
 end
-elseif a.item.kill_when_release and(a.is_energy_cooling_down or not btn"4")then
-a.item:kill()
+elseif item.kill_when_release and(a.is_energy_cooling_down or not btn"4")then
+item:kill()
 end
 end
-a.sind=a.sinds[a.dx|a.dy ~=0 and t()*12%3\1+1 or 1]
-if a.item.is_default then
-a.target_energy=max(0,a.target_energy-.0078125)
-else
-a.target_energy=a.target_energy+a.item.gradual_energy
-end
+a.target_energy=max(0,a.target_energy+item.gradual_energy)
 if a.target_energy==0 then a.is_energy_cooling_down=false
 elseif a.target_energy>=1 then a.is_energy_cooling_down=true
 end
-a.energy+=zsgn(a.target_energy-a.energy)*min(abs(a.target_energy-a.energy),.03125)
+local diff=a.target_energy-a.energy
+a.energy+=zsgn(diff)*min(abs(diff),.03125)
+a.item,a.sind=item,a.dx|a.dy ~=0 and 88+t()*12%3 or 88
 end,function(a)
 local xf=a.xf
 local top=91
@@ -699,7 +695,7 @@ zclass[[sword,item_horizontal,actor|anchoring,@,xf,@,kill_when_release,yes,visib
 zclass[[banjo,anchor,actor|anchoring,@,xf,@,kill_when_release,no,visible,yes,block_direction,yes,speed_multiplier,0,initial_energy,.125,gradual_energy,0,offy,-.05,sind,1;start;offdy,.0625,duration,.08,next,normal;normal;offy,.25,offdy,0,duration,3,next,ending;ending;offdy,-.0625,duration,.08;]]
 zclass[[brang,collidable,simple_spr,drawlayer_50,mov,actor,box|anchoring,@,xf,@,rx,.375,ry,.375,kill_when_release,yes,visible,no,block_direction,yes,speed_multiplier,.25,initial_energy,.25,gradual_energy,0,should_collide_below,no,offspeed,.125,drawout,%brang_drawout,sind,4;start;init,%brang_start_init,speed,.075,duration,.125,next,normal;normal;init,nop,speed,0,duration,1.5,update,%brang_normal_update,next,ending;ending;init,%brang_ending_init,speed,0,speed,0,update,%brang_ending_update,duration,.125,adjust_deltas_for_solids,nop,adjust_deltas_for_tiles,nop;final;init,nop,update,nop,alive,no;]]
 zclass[[bomb,actor,vec,simple_spr,drawlayer_50|anchoring,@,xf,@,sind,5,sy,-2,kill_when_release,no,visible,no,block_direction,no,speed_multiplier,1,initial_energy,.25,gradual_energy,0,offspeed,.185,destroyed,%bomb_destroyed;start;init,%bomb_start_init,dy,.08,duration,.08,next,normal;normal;init,nop,duration,.5,dy,0,,next,ending;ending;init,nop,alive,no;]]
-zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50|cname,lank,cspr,103,health,10,max_health,10,x,@,y,@,xf,@,sind,88,rx,.375,ry,.375,update,%pl_update,energy,0,is_energy_cooling_down,no,target_energy,0,drawout,%pl_drawout;sinds;,88,89,90;item_funcs;5,%sword,2,%mask,8,%bow,3,%shield,0,%bomb,6,%banjo,7,%brang;default_item;visible,no,is_default,yes,block_direction,no,speed_multiplier,1,alive,yes,gradual_energy,0,kill_when_release,no,initial_energy,0;item,~default_item;]]
+zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50|cname,lank,cspr,103,health,10,max_health,10,x,@,y,@,xf,@,sind,88,rx,.375,ry,.375,update,%pl_update,energy,0,is_energy_cooling_down,no,target_energy,0,drawout,%pl_drawout;sinds;,88,89,90;item_funcs;5,%sword,2,%mask,8,%bow,3,%shield,0,%bomb,6,%banjo,7,%brang;default_item;visible,no,is_default,yes,block_direction,no,speed_multiplier,1,alive,yes,gradual_energy,-.0078125,kill_when_release,no,initial_energy,0;item,~default_item;]]
 function draw_bar(x1,y1,x2,y2,percent,align,fg,bg)
 if x1>x2 then x1-=3 x2-=3 end
 local bar_off=x2-x1-min(percent,1)*(x2-x1)
@@ -812,6 +808,7 @@ g_i,g_state,g_rooms=0,_g.game_state(),decode_map()
 g_tile_animation_lookup=create_tile_animation_lookup(g_rooms[0])
 end
 function _update60()
+g_zbtn_0,g_zbtn_2=zbtn(btn,0),zbtn(btn,2)
 zcall(loop_entities,[[1;,actor,clean;2;,fader,clean;]])
 register_entities()
 zcall(loop_entities,[[1;,fader,tick;2;,game_state,tick;3;,fader,state;4;,game_state,state;]])

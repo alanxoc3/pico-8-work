@@ -19,6 +19,7 @@
    -- visible: should it be drawn with the player?
    -- alive: is the item alive?
 
+--| ITEM ZCLASS LOGIC |--
 zclass[[item_horizontal,anchor|
     offspeed,0,
     normal_init,%item_horizontal_normal_init;
@@ -27,10 +28,6 @@ zclass[[item_horizontal,anchor|
     normal; init,%item_horizontal_normal_init, offdx,0;
     ending; init,%item_horizontal_ending_init, duration,.08;
 ]]
-
-|[item_horizontal_start_init]|  function(a) a.offdx = a.xf*a.offspeed end $$
-|[item_horizontal_normal_init]| function(a) a.offx = abs(a.offx*8)\1/8*sgn(a.offx) end $$
-|[item_horizontal_ending_init]| function(a) a:normal_init() a.offdx = -a.xf*a.offspeed end $$
 
 zclass[[mask,anchor,actor|
     anchoring,@, xf,@,
@@ -133,37 +130,6 @@ zclass[[brang,collidable,simple_spr,drawlayer_50,mov,actor,box|
     final;init,nop, update,nop, alive,no;
 ]]
 
-|[brang_drawout]| function(a)
-    zspr(a.sind, a.x*8+a.sx, a.y*8+a.sy, 1, 1, cos(t()*3), sin(t()*3))
-end $$
-
-|[brang_start_init]| function(a)
-    a.x, a.y = a.anchoring.x, a.anchoring.y
-    a.ang = atan2(a.xf, 0)
-end $$
-
-|[brang_normal_update]| function(a)
-    if not a:inside(g_room_bounds) then
-        a:kill()
-    end
-
-    a.speed = 0
-
-    if zbtn(btn, 0) | zbtn(btn, 2) ~= 0 then
-        a.ang, a.speed = atan2(zbtn(btn, 0), zbtn(btn, 2)), .0375
-    end
-end $$
-
-|[brang_ending_init]| function(a)
-    a.end_x, a.end_y = a.x, a.y
-end $$
-
-|[brang_ending_update]| function(a)
-    local percent = a:get_elapsed_percent'ending'
-    a.x = a.end_x + (a.anchoring.x - a.end_x)*percent
-    a.y = a.end_y + (a.anchoring.y - a.end_y)*percent
-end $$
-
 zclass[[bomb,actor,vec,simple_spr,drawlayer_50|
     anchoring,@, xf,@,
 
@@ -184,6 +150,42 @@ zclass[[bomb,actor,vec,simple_spr,drawlayer_50|
     ending;   init,nop, alive,no;
 ]]
 
+--| ITEM CODE LOGIC |--
+|[item_horizontal_start_init]|  function(a) a.offdx = a.xf*a.offspeed end $$
+|[item_horizontal_normal_init]| function(a) a.offx = abs(a.offx*8)\1/8*sgn(a.offx) end $$
+|[item_horizontal_ending_init]| function(a) a:normal_init() a.offdx = -a.xf*a.offspeed end $$
+
+|[brang_drawout]| function(a)
+    zspr(a.sind, a.x*8+a.sx, a.y*8+a.sy, 1, 1, cos(t()*3), sin(t()*3))
+end $$
+
+|[brang_start_init]| function(a)
+    a.x, a.y = a.anchoring.x, a.anchoring.y
+    a.ang = atan2(a.xf, 0)
+end $$
+
+|[brang_normal_update]| function(a)
+    if not a:inside(g_room_bounds) then
+        a:kill()
+    end
+
+    a.speed = 0
+
+    if g_zbtn_0 | g_zbtn_2 ~= 0 then
+        a.ang, a.speed = atan2(g_zbtn_0, g_zbtn_2), .0375
+    end
+end $$
+
+|[brang_ending_init]| function(a)
+    a.end_x, a.end_y = a.x, a.y
+end $$
+
+|[brang_ending_update]| function(a)
+    local percent = a:get_elapsed_percent'ending'
+    a.x = a.end_x + (a.anchoring.x - a.end_x)*percent
+    a.y = a.end_y + (a.anchoring.y - a.end_y)*percent
+end $$
+
 |[bomb_start_init]| function(a)
     a.x, a.y = a.anchoring.x+a.xf*.625, a.anchoring.y*8\1/8
 end $$
@@ -191,6 +193,8 @@ end $$
 |[bomb_destroyed]| function(a)
     _g.explode(a.x, a.y)
 end $$
+
+--| PL LOGIC |--
 
 zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50|
     cname,"lank", cspr,SPR_PL_WHOLE,
@@ -214,56 +218,49 @@ zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50|
         block_direction,no,
         speed_multiplier,1,
         alive,yes,
-        gradual_energy,0,
+        gradual_energy,-PL_ENERGY_COOLDOWN,
         kill_when_release,no,
         initial_energy,0;
 
     item,~default_item;
 ]]
 
-|[pl_add_energy]| function(a, energy)
-    a.energy = 1
-end $$
-
 |[pl_update]| function(a)
     g_rstat_left:set(a)
+    local item = a.item
 
     a.speed = 0
     if not does_entity_exist'tbox' and not btn(BTN_ITEM_SELECT) then
-        if zbtn(btn, 0) | zbtn(btn, 2) ~= 0 then
-            a.ang, a.speed = atan2(zbtn(btn, 0), zbtn(btn, 2)), PL_SPEED*a.item.speed_multiplier
+        if g_zbtn_0 | g_zbtn_2 ~= 0 then
+            a.ang, a.speed = atan2(g_zbtn_0, g_zbtn_2), PL_SPEED*item.speed_multiplier
 
-            if not a.item.block_direction and cos(a.ang) ~= 0 then
+            if not item.block_direction and cos(a.ang) ~= 0 then
                 a.xf = sgn(cos(a.ang))
             end
         end
 
-        if not a.item.alive then a.item = a.default_item end
-        if not a.is_energy_cooling_down and a.item.is_default and btn'BTN_ITEM_USE' then
+        if not item.alive then item = a.default_item end
+        if not a.is_energy_cooling_down and item.is_default and btn'BTN_ITEM_USE' then
             local item_func = a.item_funcs[peek'MEM_ITEM_INDEX']
             if item_func then
-                a.item = item_func(a, a.xf)
-                a.target_energy += a.item.initial_energy
+                item = item_func(a, a.xf)
+                a.target_energy += item.initial_energy
             end
-        elseif a.item.kill_when_release and (a.is_energy_cooling_down or not btn'BTN_ITEM_USE') then
-            a.item:kill()
+        elseif item.kill_when_release and (a.is_energy_cooling_down or not btn'BTN_ITEM_USE') then
+            item:kill()
         end
     end
 
-    a.sind = a.sinds[a.dx|a.dy ~= 0 and t()*12%3\1+1 or 1]
-
-    -- energy
-    if a.item.is_default then
-        a.target_energy = max(0, a.target_energy-PL_ENERGY_COOLDOWN)
-    else
-        a.target_energy = a.target_energy+a.item.gradual_energy
-    end
-
+    a.target_energy = max(0, a.target_energy + item.gradual_energy)
     if a.target_energy == 0 then a.is_energy_cooling_down = false
     elseif a.target_energy >= 1 then a.is_energy_cooling_down = true
     end
 
-    a.energy += zsgn(a.target_energy - a.energy)*min(abs(a.target_energy - a.energy), PL_ENERGY_FOLLOW)
+    local diff = a.target_energy - a.energy
+    a.energy += zsgn(diff)*min(abs(diff), PL_ENERGY_FOLLOW)
+
+    -- sind logic
+    a.item, a.sind = item, a.dx|a.dy ~= 0 and 88+t()*12%3 or 88
 end $$
 
 |[pl_drawout]| function(a)
