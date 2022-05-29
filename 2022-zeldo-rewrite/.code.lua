@@ -140,7 +140,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,animation_init,@,auto_outline_draw,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,explode_draw,@,calc_deltas,@,adjust_deltas_for_solids,@,adjust_deltas_for_tiles,@,adjust_deltas_for_screen,@,inventory_start_init,@,inventory_start_update,@,inventory_press_update,@,inventory_draw,@,simple_spr_draw,@,anchor_update_anchor,@,targettouch_update_target,@,item_horizontal_start_init,@,item_horizontal_normal_init,@,item_horizontal_ending_init,@,brang_drawout,@,brang_start_init,@,brang_normal_update,@,brang_ending_init,@,brang_ending_update,@,bomb_start_init,@,bomb_destroyed,@,pl_update,@,pl_drawout,@,rstat_update,@,rstat_set,@,rstat_get,@,stat_draw,@,tbox_init,@,tbox_update,@,tbox_draw,@,fairy_update,@,fairy_draw,@,spawn_walls,@,house_init,@,person_target_with_tbox_disable_callback,@,person_target_with_tbox_finish_callback,@,target_with_tbox_init,@,sign_target_with_tbox_disable_callback,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,gameover_control_ending,@,gameover_init,@,gameover_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,simple_update,@,title_draw,@,title_logo_update,@,title_logo_drawout,@,game_state_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,animation_init,@,auto_outline_draw,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,explode_draw,@,calc_deltas,@,adjust_deltas_for_solids,@,adjust_deltas_for_tiles,@,adjust_deltas_for_screen,@,inventory_start_init,@,inventory_start_update,@,inventory_press_update,@,inventory_draw,@,simple_spr_draw,@,anchor_update_anchor,@,targettouch_update_target,@,banjo_ending_init,@,item_horizontal_start_init,@,item_horizontal_normal_init,@,item_horizontal_ending_init,@,brang_drawout,@,brang_start_init,@,brang_normal_update,@,brang_ending_init,@,brang_ending_update,@,bomb_start_init,@,bomb_destroyed,@,pl_update,@,pl_drawout,@,rstat_update,@,rstat_set,@,rstat_get,@,rstat_get,@,stat_draw,@,tbox_init,@,tbox_update,@,tbox_draw,@,fairy_update,@,fairy_draw,@,spawn_walls,@,house_init,@,person_target_with_tbox_disable_callback,@,person_target_with_tbox_finish_callback,@,target_with_tbox_init,@,sign_target_with_tbox_disable_callback,@,saveplat_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,gameover_control_ending,@,gameover_init,@,gameover_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,simple_update,@,title_draw,@,title_logo_update,@,title_logo_drawout,@,game_state_init,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -320,6 +320,15 @@ else
 target:callback_touch(a)
 end
 end)
+end,function(a)
+if(g_rstat_right:get()or{}).id=="saveplat"then
+zcall(poke,[[1;,0x5d02,@;2;,0x5d03,@;3;,0x5d04,@;]],a.anchoring.x*16,
+a.anchoring.y*16,
+(a.anchoring.xf+1)\2
+)
+memcpy(0x5e00,0x5d00,64)
+_g.tbox("great banjo playing.^saving complete!",nop)
+end
 end,function(a)a.offdx=a.xf*a.offspeed end,function(a)a.offx=abs(a.offx*8)\1/8*sgn(a.offx)end,function(a)a:normal_init()a.offdx=-a.xf*a.offspeed end,function(a)
 zspr(a.sind,a.x*8+a.sx,a.y*8+a.sy,1,1,cos(g_fi/5),sin(g_fi/5))
 end,function(a)
@@ -396,6 +405,8 @@ if a.stat then a.stat:load"ending" end
 a.stat=first_obj and _g.stat(a.align,a.x,first_obj)
 end,function(a,s)
 add(a.buffer,s)
+end,function(a)
+return a.stat and a.stat.obj
 end,function(a)
 return a.stat and a.stat.obj
 end,function(a)
@@ -488,6 +499,10 @@ end
 end,nop)
 end,function(a)
 return peek"0x5d08" ~=4
+end,function(a)
+if not a:outside(g_pl)then
+g_rstat_right:set(a)
+end
 end,function(a)
 g_fade=a:get_elapsed_percent"start"
 end,function(a)
@@ -705,7 +720,7 @@ zclass[[mask,anchor,actor|anchoring,@,xf,@,kill_when_release,yes,visible,yes,blo
 zclass[[bow,item_horizontal,actor|anchoring,@,xf,@,kill_when_release,yes,visible,yes,block_direction,yes,speed_multiplier,.5,initial_energy,.25,gradual_energy,0,offspeed,.105,sind,7;]]
 zclass[[shield,item_horizontal,actor|anchoring,@,xf,@,kill_when_release,yes,visible,yes,block_direction,yes,speed_multiplier,.5,initial_energy,.125,gradual_energy,0,offy,.125,offspeed,.105,sind,6;]]
 zclass[[sword,item_horizontal,actor|anchoring,@,xf,@,kill_when_release,yes,visible,yes,block_direction,yes,speed_multiplier,.5,initial_energy,.25,gradual_energy,0,offspeed,.125,sind,2;]]
-zclass[[banjo,anchor,actor|anchoring,@,xf,@,kill_when_release,no,visible,yes,block_direction,yes,speed_multiplier,0,initial_energy,.125,gradual_energy,0,offy,-.05,sind,1;start;offdy,.0625,duration,.08,next,normal;normal;offy,.25,offdy,0,duration,3,next,ending;ending;offdy,-.0625,duration,.08;]]
+zclass[[banjo,anchor,actor|anchoring,@,xf,@,kill_when_release,no,visible,yes,block_direction,yes,speed_multiplier,0,initial_energy,.125,gradual_energy,0,offy,-.05,sind,1;start;offdy,.0625,duration,.08,next,normal;normal;offy,.25,offdy,0,duration,3,next,ending;ending;init,%banjo_ending_init,offdy,-.0625,duration,.08;]]
 zclass[[brang,collidable,simple_spr,drawlayer_50,mov,actor,box|anchoring,@,xf,@,rx,.375,ry,.375,kill_when_release,yes,visible,no,block_direction,yes,speed_multiplier,.25,initial_energy,.25,gradual_energy,0,should_collide_below,no,offspeed,.125,drawout,%brang_drawout,sind,4;start;init,%brang_start_init,speed,.075,duration,.125,next,normal;normal;init,nop,speed,0,duration,1.5,update,%brang_normal_update,next,ending;ending;init,%brang_ending_init,speed,0,speed,0,update,%brang_ending_update,duration,.125,adjust_deltas_for_solids,nop,adjust_deltas_for_tiles,nop;final;init,nop,update,nop,alive,no;]]
 zclass[[bomb,actor,solid,vec,simple_spr,drawlayer_50|anchoring,@,xf,@,rx,.25,ry,.25,sind,5,sy,-2,kill_when_release,no,visible,no,block_direction,no,speed_multiplier,1,initial_energy,.25,gradual_energy,0,offspeed,.185;start;init,%bomb_start_init,dy,.08,duration,.08,next,normal;normal;init,nop,duration,.5,dx,0,dy,0,next,ending;ending;init,%bomb_destroyed,duration,.25,next,final,draw,nop;final;init,nop,alive,no;]]
 zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50|cname,lank,cspr,103,health,10,max_health,10,x,@,y,@,xf,@,sind,88,rx,.375,ry,.375,should_collide_with_screen_edge,no,update,%pl_update,energy,0,is_energy_cooling_down,no,target_energy,0,drawout,%pl_drawout;item_funcs;5,%sword,2,%mask,8,%bow,3,%shield,0,%bomb,6,%banjo,7,%brang;default_item;visible,no,is_default,yes,block_direction,no,speed_multiplier,1,alive,yes,gradual_energy,-.0078125,kill_when_release,no,initial_energy,0;item,~default_item;]]
@@ -783,7 +798,7 @@ zclass[[r1spike,spike|x,@,y,@,xf,1;start;duration,0;]]
 zclass[[r2spike,spike|x,@,y,@,xf,1;start;duration,.5;]]
 zclass[[l1spike,spike|x,@,y,@,xf,-1;start;duration,0;]]
 zclass[[l2spike,spike|x,@,y,@,xf,-1;start;duration,.5;]]
-zclass[[saveplat,simple_spr,actor,drawlayer_25|x,@,y,@,sind,40,sw,2,sh,2,draw,~drawout;]]
+zclass[[saveplat,box,simple_spr,actor,drawlayer_25|x,@,y,@,rx,.375,ry,.375,cname,save,cspr,10,sind,40,sw,2,sh,2,draw,~drawout,update,%saveplat_update;]]
 g_fade_table=zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,1,0,0,0,0;3;,3,3,3,3,1,1,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,0,0,0,0;6;,6,6,13,13,5,5,0,0;7;,7,7,6,13,13,5,0,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,0,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,0,0,0;13;,13,13,5,5,1,0,0,0;14;,14,14,13,4,2,2,0,0;15;,15,15,13,13,5,5,0,0;]]
 function fade(threshold)
 for c=0,15 do

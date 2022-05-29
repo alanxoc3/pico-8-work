@@ -68,6 +68,10 @@ end $$
     return a.stat and a.stat.obj
 end $$
 
+|[rstat_get]| function(a)
+    return a.stat and a.stat.obj
+end $$
+
 zclass[[stat,vec,actor,drawlayer_95|
     align,@, x,@, obj,@, y,138, draw,%stat_draw,
     max_health,10, health,5;

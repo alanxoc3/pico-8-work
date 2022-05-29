@@ -105,7 +105,7 @@ zclass[[banjo,anchor,actor|
 
     start;  offdy,.0625, duration,.08, next,normal;
     normal; offy,.25, offdy,0, duration,3, next,ending;
-    ending; offdy,-.0625, duration,.08;
+    ending; init,%banjo_ending_init, offdy,-.0625, duration,.08;
 ]]
 
 zclass[[brang,collidable,simple_spr,drawlayer_50,mov,actor,box|
@@ -152,6 +152,22 @@ zclass[[bomb,actor,solid,vec,simple_spr,drawlayer_50|
 ]]
 
 --| ITEM CODE LOGIC |--
+|[banjo_ending_init]| function(a)
+    if (g_rstat_right:get() or {}).id == 'saveplat' then
+        zcall(poke, [[
+            1;,MEM_PL_X,     @;
+            2;,MEM_PL_Y,     @;
+            3;,MEM_PL_XF,    @;
+        ]], a.anchoring.x*POS_MULTIPLIER_FOR_MEMORY,
+            a.anchoring.y*POS_MULTIPLIER_FOR_MEMORY,
+            (a.anchoring.xf+1)\2
+        )
+
+        memcpy(REAL_SAVE_LOCATION, MEM_SAVE_LOCATION, SAVE_LENGTH)
+        _g.tbox("great banjo playing.^saving complete!", nop)
+    end
+end $$
+
 |[item_horizontal_start_init]|  function(a) a.offdx = a.xf*a.offspeed end $$
 |[item_horizontal_normal_init]| function(a) a.offx = abs(a.offx*8)\1/8*sgn(a.offx) end $$
 |[item_horizontal_ending_init]| function(a) a:normal_init() a.offdx = -a.xf*a.offspeed end $$

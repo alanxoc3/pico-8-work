@@ -10,7 +10,10 @@ help him save the Land of Hi-roll from the forces of evil.
 ```
 
 ## Tokens & Features
-TODO: save platform actually saves
+how should i make the save platform collide with something...
+
+What if the banjo released an object when you finish playing? Sure, that should be easy.
+
 TODO: bow actually shoots
 TODO: enemy spawn in with implode effect
 TODO: slimy moves and splits on defeat
@@ -18,6 +21,8 @@ TODO: slimy stuns player
 TODO: player weapons hurt and stun slimy
 TODO: chicken logic
 TODO: spike hurt player
+TODO: leaving room, put away banjo
+TODO: item put away when text box exists
 TODO: leave room puts item away
 TODO: try pc minifier
 TODO: inventory selection puts item away
@@ -33,8 +38,8 @@ TODO: first boss (lime)
 TODO: think about chicken collection for cannon logic
 
 ```
-2022-05-29 -- insidecollision
-    5098 5093 5092 5071 5058 5055 5166 5272 5246
+2022-05-29 -- insidecollision save
+    5098 5093 5092 5071 5058 5055 5166 5272 5246 5316
 
 2022-05-28 -- banjo brang bombfix bob keep teach jane lark energylimit objs
     4821 4835 4946 4972 4978 5035 5022 5028 5038 5050 5005 5098
