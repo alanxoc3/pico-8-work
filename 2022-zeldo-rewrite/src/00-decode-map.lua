@@ -38,7 +38,7 @@ g_obj_map = split[[
 ,soupbucket -- 32  | 18  | 1  | 1
 ,slimy      -- 33  | 118 | 1  | 1
 ,miny       -- 34  | 116 | 1  | 1
-,nil        -- 35  | 0   | 1  | 1
+,woodcrate  -- 35  | 35  | 1  | 1
 ,nil        -- 36  | 0   | 1  | 1
 ,nil        -- 37  | 0   | 1  | 1
 ,nil        -- 38  | 0   | 1  | 1

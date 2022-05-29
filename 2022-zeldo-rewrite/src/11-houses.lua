@@ -6,6 +6,7 @@ zclass[[woodtbl   ,solid,drawlayer_50,simple_spr|x,@,y,@,rx,.375,ry,.375,draw,~d
 zclass[[greytbl   ,solid,drawlayer_50,simple_spr|x,@,y,@,rx,.375,ry,.375,draw,~drawout,sind,17]]
 zclass[[soupbucket,solid,drawlayer_50,simple_spr|x,@,y,@,rx,.375,ry,.375,draw,~drawout,sind,18]]
 zclass[[pot       ,solid,drawlayer_50,simple_spr|x,@,y,@,rx,.375,ry,.375,draw,~drawout,sind,49]]
+zclass[[woodcrate ,solid,drawlayer_50,simple_spr|x,@,y,@,rx,.375,ry,.375,draw,~drawout,sind,35]]
 
 zclass[[bedblanket,actor,simple_spr,drawlayer_50|
     x,@, y,@,

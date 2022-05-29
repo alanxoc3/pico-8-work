@@ -11,7 +11,7 @@ help him save the Land of Hi-roll from the forces of evil.
 
 ## Tokens & Features
 ```
-2022-05-28 -- banjo brang bombfix bob keep teach jane lark
+2022-05-28 -- banjo brang bombfix bob keep teach jane lark energylimit objs
     4821 4835 4946 4972 4978 5035 5022 5028 5038 5050 5005
 
 2022-05-27 -- simplifyma expandinventory sword energy mask bow shield bomb
