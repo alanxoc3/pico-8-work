@@ -352,13 +352,13 @@ a.xf=sgn(cos(a.ang))
 end
 end
 if not a.item.alive then a.item=a.default_item end
-if a.item.is_default and btn"4"then
+if not a.is_energy_cooling_down and a.item.is_default and btn"4"then
 local item_func=a.item_funcs[peek"0x5d08"]
 if item_func then
 a.item=item_func(a,a.xf)
 a.target_energy+=a.item.initial_energy
 end
-elseif a.item.kill_when_release and not btn"4"then
+elseif a.item.kill_when_release and(a.is_energy_cooling_down or not btn"4")then
 a.item:kill()
 end
 end
@@ -367,6 +367,9 @@ if a.item.is_default then
 a.target_energy=max(0,a.target_energy-.0078125)
 else
 a.target_energy=a.target_energy+a.item.gradual_energy
+end
+if a.target_energy==0 then a.is_energy_cooling_down=false
+elseif a.target_energy>=1 then a.is_energy_cooling_down=true
 end
 a.energy+=zsgn(a.target_energy-a.energy)*min(abs(a.target_energy-a.energy),.03125)
 end,function(a)
@@ -546,7 +549,7 @@ end
 end,function()
 zcall(loop_entities,[[1;,drawlayer_90,draw;2;,drawlayer_95,draw;3;,drawlayer_99,draw;]])
 end)
-zcall(draw_bar,[[1;,18,6,109,11,@,0,8,2]],g_pl.energy)
+zcall(draw_bar,[[1;,18,6,109,11,@,0,@,@]],g_pl.energy,g_pl.is_energy_cooling_down and 13 or 8,g_pl.is_energy_cooling_down and 1 or 2)
 end,function()
 _g.title_logo()
 end,function()
@@ -698,10 +701,10 @@ zclass[[mask,anchor,actor|anchoring,@,xf,@,kill_when_release,yes,visible,yes,blo
 zclass[[bow,item_horizontal,actor|anchoring,@,xf,@,kill_when_release,yes,visible,yes,block_direction,yes,speed_multiplier,.5,initial_energy,.25,gradual_energy,0,offspeed,.105,sind,7;]]
 zclass[[shield,item_horizontal,actor|anchoring,@,xf,@,kill_when_release,yes,visible,yes,block_direction,yes,speed_multiplier,.5,initial_energy,.125,gradual_energy,0,offy,.125,offspeed,.105,sind,6;]]
 zclass[[sword,item_horizontal,actor|anchoring,@,xf,@,kill_when_release,yes,visible,yes,block_direction,yes,speed_multiplier,.5,initial_energy,.25,gradual_energy,0,offspeed,.125,sind,2;]]
-zclass[[banjo,anchor,actor|anchoring,@,xf,@,kill_when_release,no,visible,yes,block_direction,yes,speed_multiplier,0,initial_energy,0,gradual_energy,0,offy,-.05,sind,1;start;offdy,.0625,duration,.08,next,normal;normal;offy,.25,offdy,0,duration,3,next,ending;ending;offdy,-.0625,duration,.08;]]
+zclass[[banjo,anchor,actor|anchoring,@,xf,@,kill_when_release,no,visible,yes,block_direction,yes,speed_multiplier,0,initial_energy,.125,gradual_energy,0,offy,-.05,sind,1;start;offdy,.0625,duration,.08,next,normal;normal;offy,.25,offdy,0,duration,3,next,ending;ending;offdy,-.0625,duration,.08;]]
 zclass[[brang,collidable,simple_spr,drawlayer_75,mov,actor,box|anchoring,@,xf,@,rx,.375,ry,.375,kill_when_release,yes,visible,no,block_direction,yes,speed_multiplier,.25,initial_energy,.25,gradual_energy,0,should_collide_below,no,offspeed,.125,drawout,%brang_drawout,sind,4;start;init,%brang_start_init,speed,.075,duration,.125,next,normal;normal;init,nop,speed,0,duration,1.5,update,%brang_normal_update,next,ending;ending;init,%brang_ending_init,speed,0,speed,0,update,%brang_ending_update,duration,.075;final;init,nop,update,nop,alive,no;]]
 zclass[[bomb,actor,vec,simple_spr,drawlayer_50|anchoring,@,xf,@,sind,5,sy,-2,kill_when_release,no,visible,no,block_direction,no,speed_multiplier,1,initial_energy,.25,gradual_energy,0,offspeed,.185,destroyed,%bomb_destroyed;start;init,%bomb_start_init,dy,.08,duration,.08,next,normal;normal;init,nop,duration,.5,dy,0,,next,ending;ending;init,nop,alive,no;]]
-zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50|cname,lank,cspr,103,health,10,max_health,10,x,@,y,@,xf,@,sind,88,rx,.375,ry,.375,update,%pl_update,energy,0,target_energy,0,drawout,%pl_drawout;sinds;,88,89,90;item_funcs;5,%sword,2,%mask,8,%bow,3,%shield,0,%bomb,6,%banjo,7,%brang;default_item;visible,no,is_default,yes,block_direction,no,speed_multiplier,1,alive,yes,gradual_energy,0,kill_when_release,no,initial_energy,0;item,~default_item;]]
+zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50|cname,lank,cspr,103,health,10,max_health,10,x,@,y,@,xf,@,sind,88,rx,.375,ry,.375,update,%pl_update,energy,0,is_energy_cooling_down,no,target_energy,0,drawout,%pl_drawout;sinds;,88,89,90;item_funcs;5,%sword,2,%mask,8,%bow,3,%shield,0,%bomb,6,%banjo,7,%brang;default_item;visible,no,is_default,yes,block_direction,no,speed_multiplier,1,alive,yes,gradual_energy,0,kill_when_release,no,initial_energy,0;item,~default_item;]]
 function draw_bar(x1,y1,x2,y2,percent,align,fg,bg)
 if x1>x2 then x1-=3 x2-=3 end
 local bar_off=x2-x1-min(percent,1)*(x2-x1)

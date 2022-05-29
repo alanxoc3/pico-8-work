@@ -100,7 +100,7 @@ zclass[[banjo,anchor,actor|
     visible,yes,
     block_direction, yes,
     speed_multiplier, 0,
-    initial_energy, 0,
+    initial_energy, .125,
     gradual_energy, 0,
     offy,-.05,
 
@@ -201,6 +201,7 @@ zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50|
 
     update,%pl_update,
     energy,0,
+    is_energy_cooling_down,no,
     target_energy,0,
     drawout,%pl_drawout;
     sinds;,SPR_PL_FEET_1,SPR_PL_FEET_2,SPR_PL_FEET_3;
@@ -238,13 +239,13 @@ end $$
         end
 
         if not a.item.alive then a.item = a.default_item end
-        if a.item.is_default and btn'BTN_ITEM_USE' then
+        if not a.is_energy_cooling_down and a.item.is_default and btn'BTN_ITEM_USE' then
             local item_func = a.item_funcs[peek'MEM_ITEM_INDEX']
             if item_func then
                 a.item = item_func(a, a.xf)
                 a.target_energy += a.item.initial_energy
             end
-        elseif a.item.kill_when_release and not btn'BTN_ITEM_USE' then
+        elseif a.item.kill_when_release and (a.is_energy_cooling_down or not btn'BTN_ITEM_USE') then
             a.item:kill()
         end
     end
@@ -256,6 +257,10 @@ end $$
         a.target_energy = max(0, a.target_energy-PL_ENERGY_COOLDOWN)
     else
         a.target_energy = a.target_energy+a.item.gradual_energy
+    end
+
+    if a.target_energy == 0 then a.is_energy_cooling_down = false
+    elseif a.target_energy >= 1 then a.is_energy_cooling_down = true
     end
 
     a.energy += zsgn(a.target_energy - a.energy)*min(abs(a.target_energy - a.energy), PL_ENERGY_FOLLOW)

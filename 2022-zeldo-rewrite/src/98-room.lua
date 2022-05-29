@@ -78,8 +78,8 @@ end $$
     end)
 
     zcall(draw_bar, [[
-        1;,18,6,109,11,@,0,8,2
-    ]], g_pl.energy)
+        1;,18,6,109,11,@,0,@,@
+    ]], g_pl.energy, g_pl.is_energy_cooling_down and 13 or 8, g_pl.is_energy_cooling_down and 1 or 2)
 end $$
 
 function load_room(rind, x, y, xf)
