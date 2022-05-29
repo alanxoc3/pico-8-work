@@ -14,7 +14,6 @@ how should i make the save platform collide with something...
 
 What if the banjo released an object when you finish playing? Sure, that should be easy.
 
-TODO: bow actually shoots
 TODO: enemy spawn in with implode effect
 TODO: slimy moves and splits on defeat
 TODO: slimy stuns player
@@ -26,6 +25,7 @@ TODO: item put away when text box exists
 TODO: leave room puts item away
 TODO: try pc minifier
 TODO: inventory selection puts item away
+TODO: arrow with collision tile/wall collision
 TODO: music works for rooms in game
 TODO: battle logic
 TODO: pot throwing logic
