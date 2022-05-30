@@ -1,6 +1,6 @@
 -- x=64, y=64, i=@2, u=nf, d=@1, tl_max_time=2.5; -- logo
 
-g_fade_table = zobj[[
+g_fade, g_fade_table = 1, zobj[[
 0;  ,0  ,0  ,0  ,0  ,0  ,0  ,0  ,0;
 1;  ,1  ,1  ,1  ,1  ,0  ,0  ,0  ,0;
 2;  ,2  ,2  ,2  ,1  ,0  ,0  ,0  ,0;
@@ -37,6 +37,7 @@ zclass[[fader_out,fader|
 ]]
 
 |[fader_out_update]| function(a)
+    poke(0x5f43, 0xff)
     g_fade = a:get_elapsed_percent'start'
 end $$
 

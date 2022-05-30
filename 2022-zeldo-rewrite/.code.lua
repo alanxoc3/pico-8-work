@@ -534,6 +534,7 @@ if not a:outside(g_pl)then
 g_rstat_right:set(a)
 end
 end,function(a)
+poke(0x5f43,0xff)
 g_fade=a:get_elapsed_percent"start"
 end,function(a)
 g_fade=1-a:get_elapsed_percent"start"
@@ -558,9 +559,10 @@ end,nop)
 end,function(state)
 local r=g_rooms[peek"0x5d01"]
 local mus=flr(r.music/2)*8+(r.music%2)*5
+poke(0x5f43,0)
 if g_music_ind ~=mus then
 g_music_ind=mus
-music(mus)
+music(mus,0,7)
 end
 g_room_bounds=_g.room_bounds(r.w/2,r.h/2,r.w/2-.375,r.h/2-.375)
 g_pl=_g.pl(peek"0x5d02"/16,peek"0x5d03"/16,peek"0x5d04"*2-1)
@@ -847,7 +849,7 @@ zclass[[r2spike,spike|x,@,y,@,xf,1;start;duration,.5;]]
 zclass[[l1spike,spike|x,@,y,@,xf,-1;start;duration,0;]]
 zclass[[l2spike,spike|x,@,y,@,xf,-1;start;duration,.5;]]
 zclass[[saveplat,box,simple_spr,actor,drawlayer_25|x,@,y,@,rx,.375,ry,.375,cname,save,cspr,10,sind,40,sw,2,sh,2,draw,~drawout,update,%saveplat_update;]]
-g_fade_table=zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,1,0,0,0,0;3;,3,3,3,3,1,1,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,0,0,0,0;6;,6,6,13,13,5,5,0,0;7;,7,7,6,13,13,5,0,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,0,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,0,0,0;13;,13,13,5,5,1,0,0,0;14;,14,14,13,4,2,2,0,0;15;,15,15,13,13,5,5,0,0;]]
+g_fade,g_fade_table=1,zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,1,0,0,0,0;3;,3,3,3,3,1,1,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,0,0,0,0;6;,6,6,13,13,5,5,0,0;7;,7,7,6,13,13,5,0,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,0,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,0,0,0;13;,13,13,5,5,1,0,0,0;14;,14,14,13,4,2,2,0,0;15;,15,15,13,13,5,5,0,0;]]
 function fade(threshold)
 for c=0,15 do
 pal(c,g_fade_table[c][1+flr(7*min(1,max(0,threshold)))],1)

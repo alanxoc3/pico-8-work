@@ -4,9 +4,10 @@ zclass[[room_bounds,box|x,@,y,@,rx,@,ry,@]]
     local r = g_rooms[peek'MEM_ROOM_IND']
     
     local mus = flr(r.music/2)*8+(r.music%2)*5
+    poke(0x5f43, 0) -- ensure music is not faded anymore
     if g_music_ind ~= mus then
         g_music_ind = mus
-        music(mus)
+        music(mus, 0, 7)
     end
 
     g_room_bounds = _g.room_bounds(r.w/2, r.h/2, r.w/2-.375, r.h/2-.375)
