@@ -13,7 +13,7 @@ end $$
 
 |[fairy_draw]| function(a)
     draw_tail(a.x, a.y, a.dx, a.dy, 6)
-    scr_pset(a.x,a.y,12)
+    scr_pset(a.x,a.y,13)
 end $$
 
 function draw_tail(x, y, dx, dy, mult)
