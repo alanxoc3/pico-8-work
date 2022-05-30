@@ -100,7 +100,8 @@ zclass[[shield,item_horizontal,actor,statitem|
     speed_multiplier, .5,
     initial_energy, .125,
     gradual_energy, 0,
-    offy,.125,
+    -- offy,.125,
+    
 
     offspeed,.105,
     sind,SPR_SHIELD;
@@ -141,7 +142,7 @@ zclass[[banjo,anchor,actor|
 
 zclass[[brang,collidable,simple_spr,drawlayer_50,mov,actor,statitem|
     anchoring,@, xf,@,
-    rx,.375, ry,.375,
+    rx,.25, ry,.25,
 
     kill_when_release,yes,
     visible,no,

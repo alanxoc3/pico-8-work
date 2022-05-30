@@ -73,8 +73,7 @@ end $$
 end $$
 
 zclass[[stat,vec,actor,drawlayer_95|
-    align,@, x,@, obj,@, y,138, draw,%stat_draw,
-    max_health,10, health,5;
+    align,@, x,@, obj,@, y,138, draw,%stat_draw;
 
     start;  dy,-2, duration,.2, next,normal;
     normal; dy,0;
