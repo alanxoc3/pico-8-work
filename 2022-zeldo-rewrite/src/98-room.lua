@@ -6,6 +6,7 @@ zclass[[room_bounds,box|x,@,y,@,rx,@,ry,@]]
     local mus = flr(r.music/2)*8+(r.music%2)*5
     if g_music_ind ~= mus then
         g_music_ind = mus
+        music(mus)
     end
 
     g_room_bounds = _g.room_bounds(r.w/2, r.h/2, r.w/2-.375, r.h/2-.375)
