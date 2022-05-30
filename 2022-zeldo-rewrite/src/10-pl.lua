@@ -73,7 +73,7 @@ zclass[[arrow,vec,actor,drawlayer_50|
 ]]
 
 |[arrow_destroyed]| function(a)
-    _g.explode(a.x, a.y, 4, 1)
+    _g.explode(a.x, a.y, 4, 1, nop)
 end $$
 
 |[arrow_draw]| function(a)
@@ -230,7 +230,7 @@ end $$
 end $$
 
 |[bomb_destroyed]| function(a)
-    _g.explode(a.x, a.y, 8, 2)
+    _g.explode(a.x, a.y, 8, 2, nop)
 end $$
 
 --| PL LOGIC |--

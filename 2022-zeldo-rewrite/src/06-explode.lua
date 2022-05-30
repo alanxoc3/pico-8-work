@@ -1,5 +1,5 @@
 zclass[[explode,actor,drawlayer_50|
-    x,@, y,@, len,@, mod,@, draw,%explode_draw;
+    x,@, y,@, len,@, mod,@, destroyed,@, draw,%explode_draw;
     start; duration, .25;
 ]]
 

@@ -10,26 +10,25 @@ help him save the Land of Hi-roll from the forces of evil.
 ```
 
 ## Songs
-
 16 songs in total:
 
 7 long
-DONE village
-DONE forest
-DONE field/mountain
-DONE castle/cannon
-DONE crypt
-DONE ivan boss fight (based on computer room)
-TODO endless mode
+- DONE village
+- DONE forest
+- TODO field/mountain
+- DONE castle/cannon
+- DONE crypt
+- DONE ivan boss fight (based on computer room)
+- TODO endless mode
 
 7 short
-TODO title screen
-TODO intro (cut scene)
-TODO game over
-TODO graveyard (village + crypt)
-DONE forest boss
-TODO computer room
-TODO house
+- TODO title screen
+- TODO intro (cut scene)
+- TODO game over
+- TODO graveyard (village + crypt)
+- DONE forest boss
+- DONE computer room
+- TODO house
 
 ## Tokens & Features
 how should i make the save platform collide with something...

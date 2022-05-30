@@ -140,7 +140,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,animation_init,@,auto_outline_draw,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,explode_draw,@,calc_deltas,@,adjust_deltas_for_solids,@,adjust_deltas_for_tiles,@,adjust_deltas_for_screen,@,inventory_start_init,@,inventory_start_update,@,inventory_press_update,@,inventory_draw,@,simple_spr_draw,@,anchor_update_anchor,@,targettouch_update_target,@,arrow_destroyed,@,arrow_draw,@,bow_ending_init,@,banjo_ending_init,@,item_horizontal_start_init,@,item_horizontal_normal_init,@,item_horizontal_ending_init,@,brang_drawout,@,brang_start_init,@,brang_normal_update,@,brang_ending_init,@,brang_ending_update,@,bomb_start_init,@,bomb_destroyed,@,pl_update,@,pl_drawout,@,rstat_update,@,rstat_set,@,rstat_get,@,rstat_get,@,stat_draw,@,tbox_init,@,tbox_update,@,tbox_draw,@,fairy_update,@,fairy_draw,@,spawn_walls,@,house_init,@,person_target_with_tbox_disable_callback,@,person_target_with_tbox_finish_callback,@,target_with_tbox_init,@,sign_target_with_tbox_disable_callback,@,saveplat_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,gameover_control_ending,@,gameover_init,@,gameover_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,simple_update,@,title_draw,@,title_logo_update,@,title_logo_drawout,@,game_state_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,animation_init,@,auto_outline_draw,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,explode_draw,@,calc_deltas,@,adjust_deltas_for_solids,@,adjust_deltas_for_tiles,@,adjust_deltas_for_screen,@,inventory_start_init,@,inventory_start_update,@,inventory_press_update,@,inventory_draw,@,simple_spr_draw,@,anchor_update_anchor,@,targettouch_update_target,@,arrow_destroyed,@,arrow_draw,@,bow_ending_init,@,banjo_ending_init,@,item_horizontal_start_init,@,item_horizontal_normal_init,@,item_horizontal_ending_init,@,brang_drawout,@,brang_start_init,@,brang_normal_update,@,brang_ending_init,@,brang_ending_update,@,bomb_start_init,@,bomb_destroyed,@,pl_update,@,pl_drawout,@,rstat_update,@,rstat_set,@,rstat_get,@,rstat_get,@,stat_draw,@,tbox_init,@,tbox_update,@,tbox_draw,@,fairy_update,@,fairy_draw,@,spawn_walls,@,house_init,@,person_target_with_tbox_disable_callback,@,person_target_with_tbox_finish_callback,@,target_with_tbox_init,@,sign_target_with_tbox_disable_callback,@,slimy,@,miny,@,saveplat_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,gameover_control_ending,@,gameover_init,@,gameover_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,simple_update,@,title_draw,@,title_logo_update,@,title_logo_drawout,@,game_state_init,@]],function(a,stateName)
 if stateName then
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
@@ -321,7 +321,7 @@ target:callback_touch(a)
 end
 end)
 end,function(a)
-_g.explode(a.x,a.y,4,1)
+_g.explode(a.x,a.y,4,1,nop)
 end,function(a)
 draw_tail(a.x,a.y,a.dx,0,3)
 pset(a.x*8,a.y*8,12)
@@ -357,7 +357,7 @@ end,function(a)
 a.x,a.y=a.anchoring.x+a.xf,a.anchoring.y
 a.dx=a.dx+a.xf*.125
 end,function(a)
-_g.explode(a.x,a.y,8,2)
+_g.explode(a.x,a.y,8,2,nop)
 end,function(a)
 g_rstat_left:set(a)
 local item=a.item
@@ -504,6 +504,10 @@ end
 end,nop)
 end,function(a)
 return peek"0x5d08" ~=4
+end,function(x,y)
+_g.explode(x,y,4,1,function()_g.slimy_actual(x,y)end)
+end,function(x,y)
+_g.explode(x,y,4,1,function()_g.miny_actual(x,y)end)
 end,function(a)
 if not a:outside(g_pl)then
 g_rstat_right:set(a)
@@ -698,7 +702,7 @@ end
 zclass[[pos|x,0,y,0,dist_point,%pos_dist_point]]
 zclass[[vec,pos|dx,0,dy,0,vec_update,%vec_update]]
 zclass[[mov,vec|ang,0,speed,0,mov_update,%mov_update,towards_point,%mov_towards_point]]
-zclass[[explode,actor,drawlayer_50|x,@,y,@,len,@,mod,@,draw,%explode_draw;start;duration,.25;]]
+zclass[[explode,actor,drawlayer_50|x,@,y,@,len,@,mod,@,destroyed,@,draw,%explode_draw;start;duration,.25;]]
 function get_solid_tile(room,index)
 local t2=room.tiles_2[index]
 if t2 then return fget(t2,0)and t2 end
@@ -803,8 +807,8 @@ zclass[[signnavy,sign|x,@,y,@,text,navys house]]
 zclass[[signteach,sign|x,@,y,@,text,teachs house]]
 zclass[[signlark,sign|x,@,y,@,text,larks house]]
 zclass[[signjane,sign|x,@,y,@,text,janes house]]
-zclass[[slimy,simple_spr,drawlayer_50,actor|x,@,y,@,cspr,118,cname,slimy,sind,118]]
-zclass[[miny,simple_spr,drawlayer_50,actor|x,@,y,@,cspr,116,cname,miny,sind,116]]
+zclass[[slimy_actual,simple_spr,drawlayer_50,actor|x,@,y,@,cspr,118,cname,slimy,sind,118]]
+zclass[[miny_actual,simple_spr,drawlayer_50,actor|x,@,y,@,cspr,116,cname,miny,sind,116]]
 zclass[[spike,simple_spr,actor,drawlayer_25|sind,52,draw,~drawout;start;next,down;down;sind,52,duration,.5,next,middle1;middle1;sind,53,duration,.125,next,up;up;sind,54,duration,.25,next,middle2;middle2;sind,53,duration,.125,next,down;]]
 zclass[[r1spike,spike|x,@,y,@,xf,1;start;duration,0;]]
 zclass[[r2spike,spike|x,@,y,@,xf,1;start;duration,.5;]]
