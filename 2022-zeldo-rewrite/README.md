@@ -35,7 +35,6 @@ how should i make the save platform collide with something...
 
 What if the banjo released an object when you finish playing? Sure, that should be easy.
 
-TODO: enemy spawn in with implode effect
 TODO: slimy moves and splits on defeat
 TODO: slimy stuns player
 TODO: player weapons hurt and stun slimy
@@ -61,6 +60,9 @@ TODO: first boss (lime)
 TODO: think about chicken collection for cannon logic
 
 ```
+2022-05-30 -- spawnin
+    5396 5434
+
 2022-05-29 -- insidecollision save arrow
     5098 5093 5092 5071 5058 5055 5166 5272 5246 5316 5396
 
