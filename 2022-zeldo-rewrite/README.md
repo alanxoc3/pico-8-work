@@ -26,7 +26,7 @@ TODO endless mode
 TODO title screen
 TODO intro (cut scene)
 TODO game over
-TODO graveyard
+TODO graveyard (village + crypt)
 DONE forest boss
 TODO computer room
 TODO house
