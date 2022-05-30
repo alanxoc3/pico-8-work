@@ -13,12 +13,12 @@ end $$
 
 |[fairy_draw]| function(a)
     draw_tail(a.x, a.y, a.dx, a.dy, 6)
-    scr_pset(a.x,a.y,10)
+    scr_pset(a.x,a.y,13)
 end $$
 
 function draw_tail(x, y, dx, dy, mult)
     for i=-2,2 do
         local m = .125*sgn(i)
-        scr_line(x+abs(i)\2*m, y+i%2*m, x-dx*mult, y-dy*mult, 2)
+        scr_line(x+abs(i)\2*m, y+i%2*m, x-dx*mult, y-dy*mult, 1)
     end
 end

@@ -477,7 +477,7 @@ a:towards_point(offx,offy)
 a.speed=a:dist_point(offx,offy)*.013
 end,function(a)
 draw_tail(a.x,a.y,a.dx,a.dy,6)
-scr_pset(a.x,a.y,10)
+scr_pset(a.x,a.y,13)
 end,function(a)
 zcall_tbl(_g.wall,a.walls)
 end,function(a)
@@ -557,6 +557,7 @@ spr(state.game_over_sind,0,0)
 end,nop)
 end,function(state)
 local r=g_rooms[peek"0x5d01"]
+music(r.music)
 g_room_bounds=_g.room_bounds(r.w/2,r.h/2,r.w/2-.375,r.h/2-.375)
 g_pl=_g.pl(peek"0x5d02"/16,peek"0x5d03"/16,peek"0x5d04"*2-1)
 g_fairy=_g.fairy(g_pl.x,g_pl.y-.125)
@@ -798,7 +799,7 @@ zclass[[fairy,actor,mov,drawlayer_50|x,@,y,@,update,%fairy_update,draw,%fairy_dr
 function draw_tail(x,y,dx,dy,mult)
 for i=-2,2 do
 local m=.125*sgn(i)
-scr_line(x+abs(i)\2*m,y+i%2*m,x-dx*mult,y-dy*mult,2)
+scr_line(x+abs(i)\2*m,y+i%2*m,x-dx*mult,y-dy*mult,1)
 end
 end
 zclass[[woodtbl,solid,drawlayer_50,simple_spr|x,@,y,@,rx,.375,ry,.375,draw,~drawout,sind,16]]
