@@ -5,5 +5,5 @@ zclass[[slimy,simple_spr,drawlayer_50,actor|
 
 zclass[[miny,simple_spr,drawlayer_50,actor|
     x,@, y,@,
-    cspr,116, cname,"miny", sind,118
+    cspr,116, cname,"miny", sind,116
 ]]

@@ -9,6 +9,28 @@ help him save the Land of Hi-roll from the forces of evil.
 2: rx=.375 ry=.375 (default is .5)
 ```
 
+## Songs
+
+16 songs in total:
+
+7 long
+TODO village
+DONE forest
+TODO field/mountain
+TODO castle/cannon
+TODO crypt
+TODO ivan boss fight (based on computer room)
+TODO endless mode
+
+7 short
+TODO title screen
+TODO intro (cut scene)
+TODO game over
+TODO graveyard
+DONE forest boss
+TODO computer room
+TODO house
+
 ## Tokens & Features
 how should i make the save platform collide with something...
 
@@ -26,9 +48,11 @@ TODO: leave room puts item away
 TODO: try pc minifier
 TODO: inventory selection puts item away
 TODO: arrow with collision tile/wall collision
+TODO: mask particle effect
 TODO: music works for rooms in game
 TODO: battle logic
 TODO: pot throwing logic
+TODO: give bomb an arc when thrown
 TODO: chest logic
 TODO: banjo over people text logic
 TODO: token crunch for 30 minutes
