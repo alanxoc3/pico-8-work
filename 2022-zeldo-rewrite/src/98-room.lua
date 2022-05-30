@@ -2,7 +2,12 @@ zclass[[room_bounds,box|x,@,y,@,rx,@,ry,@]]
 
 |[room_init]| function(state) 
     local r = g_rooms[peek'MEM_ROOM_IND']
-    music(r.music)
+    
+    if g_music_ind ~= r.music then
+        music(r.music)
+        g_music_ind = r.music
+    end
+
     g_room_bounds = _g.room_bounds(r.w/2, r.h/2, r.w/2-.375, r.h/2-.375)
 
     g_pl = _g.pl(peek'MEM_PL_X'/POS_MULTIPLIER_FOR_MEMORY, peek'MEM_PL_Y'/POS_MULTIPLIER_FOR_MEMORY, peek'MEM_PL_XF'*2-1)

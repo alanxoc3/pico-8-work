@@ -557,7 +557,10 @@ spr(state.game_over_sind,0,0)
 end,nop)
 end,function(state)
 local r=g_rooms[peek"0x5d01"]
+if g_music_ind ~=r.music then
 music(r.music)
+g_music_ind=r.music
+end
 g_room_bounds=_g.room_bounds(r.w/2,r.h/2,r.w/2-.375,r.h/2-.375)
 g_pl=_g.pl(peek"0x5d02"/16,peek"0x5d03"/16,peek"0x5d04"*2-1)
 g_fairy=_g.fairy(g_pl.x,g_pl.y-.125)
