@@ -3,9 +3,9 @@ zclass[[room_bounds,box|x,@,y,@,rx,@,ry,@]]
 |[room_init]| function(state) 
     local r = g_rooms[peek'MEM_ROOM_IND']
     
-    if g_music_ind ~= r.music then
-        music(r.music)
-        g_music_ind = r.music
+    local mus = flr(r.music/2)*8+(r.music%2)*5
+    if g_music_ind ~= mus then
+        g_music_ind = mus
     end
 
     g_room_bounds = _g.room_bounds(r.w/2, r.h/2, r.w/2-.375, r.h/2-.375)
