@@ -14,12 +14,12 @@ help him save the Land of Hi-roll from the forces of evil.
 16 songs in total:
 
 7 long
-TODO village
+DONE village
 DONE forest
-TODO field/mountain
-TODO castle/cannon
-TODO crypt
-TODO ivan boss fight (based on computer room)
+DONE field/mountain
+DONE castle/cannon
+DONE crypt
+DONE ivan boss fight (based on computer room)
 TODO endless mode
 
 7 short
