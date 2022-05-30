@@ -60,8 +60,8 @@ TODO: first boss (lime)
 TODO: think about chicken collection for cannon logic
 
 ```
-2022-05-30 -- spawnin
-    5396 5434
+2022-05-30 -- spawnin enemycollision
+    5396 5434 5558
 
 2022-05-29 -- insidecollision save arrow
     5098 5093 5092 5071 5058 5055 5166 5272 5246 5316 5396

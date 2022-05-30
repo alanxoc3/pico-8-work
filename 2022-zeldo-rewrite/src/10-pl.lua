@@ -20,6 +20,8 @@
    -- alive: is the item alive?
 
 --| ITEM ZCLASS LOGIC |--
+zclass[[statitem,box|]] -- if the item hits an enemy, the enemy becomes the new stat
+
 zclass[[item_horizontal,anchor|
     offspeed,0,
     normal_init,%item_horizontal_normal_init;
@@ -64,8 +66,9 @@ zclass[[bow,item_horizontal,actor|
     ending; init,%bow_ending_init, duration,.08;
 ]]
 
-zclass[[arrow,vec,actor,drawlayer_50|
-    x,@, y,@, dx, @,
+zclass[[arrow,vec,actor,drawlayer_50,statitem|
+    x,@, y,@, dx, @, xf, @,
+    rx,.375, ry,.125,
     destroyed,%arrow_destroyed,
     draw,%arrow_draw;
 
@@ -83,11 +86,13 @@ end $$
 
 |[bow_ending_init]| function(a)
     _g.item_horizontal_ending_init(a)
-    _g.arrow(a.x, a.y-.125, a.xf*.25)
+    _g.arrow(a.x, a.y-.125, a.xf*.25, a.xf)
 end $$
 
-zclass[[shield,item_horizontal,actor|
+zclass[[shield,item_horizontal,actor,statitem|
     anchoring,@, xf,@,
+
+    rx,.25, ry,.5,
 
     kill_when_release,yes,
     visible,yes,
@@ -101,8 +106,9 @@ zclass[[shield,item_horizontal,actor|
     sind,SPR_SHIELD;
 ]]
 
-zclass[[sword,item_horizontal,actor|
+zclass[[sword,item_horizontal,actor,statitem|
     anchoring,@, xf,@,
+    rx, .375, ry, .25,
 
     kill_when_release,yes,
     visible,yes,
@@ -133,7 +139,7 @@ zclass[[banjo,anchor,actor|
     ending; init,%banjo_ending_init, offdy,-.0625, duration,.08;
 ]]
 
-zclass[[brang,collidable,simple_spr,drawlayer_50,mov,actor,box|
+zclass[[brang,collidable,simple_spr,drawlayer_50,mov,actor,statitem|
     anchoring,@, xf,@,
     rx,.375, ry,.375,
 
@@ -155,10 +161,9 @@ zclass[[brang,collidable,simple_spr,drawlayer_50,mov,actor,box|
     final;init,nop, update,nop, alive,no;
 ]]
 
-zclass[[bomb,actor,solid,vec,simple_spr,drawlayer_50|
+zclass[[bomb,actor,vec,simple_spr,drawlayer_50,statitem|
     anchoring,@, xf,@,
 
-    rx,.25, ry,.25,
     sind,SPR_BOMB, sy,-2,
 
     kill_when_release,no,
@@ -172,7 +177,7 @@ zclass[[bomb,actor,solid,vec,simple_spr,drawlayer_50|
 
     start;    init,%bomb_start_init, dy,.08, duration,.08, next,normal;
     normal;   init,nop, duration,.5, dx,0, dy,0, next,ending;
-    ending;   init,%bomb_destroyed, duration,.25, next,final, draw,nop;
+    ending;   init,%bomb_destroyed, update,%bomb_ending_update, duration,.25, next,final, draw,nop;
     final;    init,nop, alive,no;
 ]]
 
@@ -231,6 +236,11 @@ end $$
 
 |[bomb_destroyed]| function(a)
     _g.explode(a.x, a.y, 8, 2, nop)
+end $$
+
+|[bomb_ending_update]| function(a)
+    a.rx += .05
+    a.ry += .05
 end $$
 
 --| PL LOGIC |--

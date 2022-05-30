@@ -12,6 +12,7 @@ zclass[[actor,timer|
     state,    %actor_state,
     kill,     %actor_kill,
     clean,    %actor_clean,
+    is_alive, %actor_is_alive,
 
     alive,    yes,
     duration, null,
@@ -43,6 +44,10 @@ end $$
     if a:get_elapsed(a.curr) == nil   then a:load(a.curr) end -- actor created this frame
     if a:get_elapsed(a.curr) == false then a:play_timer(a.curr) a:init() end -- state changed in this frame
     a:update() -- per-frame update
+end $$
+
+|[actor_is_alive]| function(a)
+    return not a:get_elapsed'ending' and a.alive
 end $$
 
 -- If there is an ending state, call that. Otherwise, just set alive to false.

@@ -25,10 +25,11 @@ end $$
         5 ;,collidable,  adjust_deltas_for_tiles, @;
         6 ;,collidable,  adjust_deltas_for_screen;
         7 ;,vec,         vec_update;
-        8 ;,anchor,      update_anchor;
-        9 ;,target,      update_target, @;
-        10;,rstat,       update;
-    ]], g_zclass_entities.solid, g_rooms[peek'MEM_ROOM_IND'], g_zclass_entities.pl)
+        8 ;,slimy_actual,statcollide, @;
+        9 ;,anchor,      update_anchor;
+        10;,target,      update_target, @;
+        11;,rstat,       update;
+    ]], g_zclass_entities.solid, g_rooms[peek'MEM_ROOM_IND'], g_zclass_entities.statitem, g_zclass_entities.pl)
 
     if not does_entity_exist'fader' and not g_pl:inside(g_room_bounds) then
         local abx, aby = g_pl:abside(g_room_bounds)
