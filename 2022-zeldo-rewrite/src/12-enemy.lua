@@ -7,8 +7,9 @@ end $$
 end $$
 
 zclass[[slimy_actual,box,mov,simple_spr,drawlayer_50,collidable,actor|
-    x,@, y,@, rx, .5, ry, .5,
-    cspr,118, cname,"slimy", sind,118;
+    x,@, y,@, rx, .375, ry, .375,
+    cspr,118, cname,"slimy", sind,118,
+    health,5, max_health,5;
 
     start; update, %slimy_update, statcollide,%slimy_statcollide;
 ]]
@@ -19,7 +20,7 @@ end $$
 
 |[slimy_statcollide]| function(a, items)
     foreach(items, function(item)
-        if not a:outside(item) then
+        if not a:outside(item) and item:is_alive() then
             a:start_timer('isma', 1.5, function() a.isma = false end)
             a.isma = true
 
