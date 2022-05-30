@@ -477,7 +477,7 @@ a:towards_point(offx,offy)
 a.speed=a:dist_point(offx,offy)*.013
 end,function(a)
 draw_tail(a.x,a.y,a.dx,a.dy,6)
-scr_pset(a.x,a.y,12)
+scr_pset(a.x,a.y,10)
 end,function(a)
 zcall_tbl(_g.wall,a.walls)
 end,function(a)
@@ -798,7 +798,7 @@ zclass[[fairy,actor,mov,drawlayer_50|x,@,y,@,update,%fairy_update,draw,%fairy_dr
 function draw_tail(x,y,dx,dy,mult)
 for i=-2,2 do
 local m=.125*sgn(i)
-scr_line(x+abs(i)\2*m,y+i%2*m,x-dx*mult,y-dy*mult,1)
+scr_line(x+abs(i)\2*m,y+i%2*m,x-dx*mult,y-dy*mult,2)
 end
 end
 zclass[[woodtbl,solid,drawlayer_50,simple_spr|x,@,y,@,rx,.375,ry,.375,draw,~drawout,sind,16]]
