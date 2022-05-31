@@ -150,7 +150,7 @@ zclass[[banjo,anchor,actor|
     anchoring,@, xf,@,
 
     visible,yes,
-    block_direction, yes,
+    block_direction, no,
     speed_multiplier, .5,
     initial_energy, .125,
     gradual_energy, 0,
