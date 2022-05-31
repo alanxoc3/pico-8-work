@@ -32,22 +32,21 @@ help him save the Land of Hi-roll from the forces of evil.
 
 ## Tokens & Features
 how should i make the save platform collide with something...
-
 What if the banjo released an object when you finish playing? Sure, that should be easy.
 
-TODO: slimy moves and splits on defeat
-TODO: slimy stuns player
-TODO: player weapons hurt and stun slimy
-TODO: chicken logic
-TODO: spike hurt player
 TODO: leaving room, put away banjo
 TODO: item put away when text box exists
 TODO: leave room puts item away
+TODO: timer with update callback (calls function every frame as long as timer is active)
 TODO: try pc minifier
 TODO: inventory selection puts item away
 TODO: bomb throw direction
 TODO: arrow with collision tile/wall collision
 TODO: mask particle effect
+TODO: slimy stuns player
+TODO: player weapons hurt and stun slimy
+TODO: chicken logic
+TODO: spike hurt player
 TODO: music works for rooms in game
 TODO: battle logic
 TODO: pot throwing logic
@@ -62,7 +61,7 @@ TODO: think about chicken collection for cannon logic
 
 ```
 2022-05-30 -- spawnin enemycollision
-    5396 5434 5558
+    5396 5434 5558 5804
 
 2022-05-29 -- insidecollision save arrow
     5098 5093 5092 5071 5058 5055 5166 5272 5246 5316 5396

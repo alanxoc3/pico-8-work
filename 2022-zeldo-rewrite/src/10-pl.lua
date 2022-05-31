@@ -22,7 +22,6 @@ zclass[[statitem,box|]] -- if the item hits an enemy, the enemy becomes the new 
 
 --| ITEM ZCLASS LOGIC |--
 -- all items need these:
-   -- kill_when_release: should the item die when releasing the button?
    -- block_direction:  item doesn't allow a direction change
    -- speed_multiplier: speed is multiplied
    -- initial_energy:   how much energy it takes to initialize the item
@@ -43,7 +42,6 @@ zclass[[item_horizontal,anchor|
 zclass[[mask,anchor,actor|
     anchoring,@, xf,@,
 
-    kill_when_release,yes,
     visible,yes,
     block_direction, no,
     speed_multiplier, 2,
@@ -61,7 +59,6 @@ zclass[[mask,anchor,actor|
 zclass[[bow,item_horizontal,actor|
     anchoring,@, xf,@,
 
-    kill_when_release,yes,
     visible,yes,
     block_direction, yes,
     speed_multiplier, .5,
@@ -112,7 +109,6 @@ zclass[[shield,item_horizontal,actor,statitem|
     item_hit_func, %shield_item_hit_func,
 
     plpushspeed,     .125,
-    kill_when_release,yes,
     visible,yes,
     block_direction, yes,
     speed_multiplier, .5,
@@ -136,7 +132,6 @@ zclass[[sword,item_horizontal,actor,statitem|
     item_hit_func, %shield_item_hit_func,
 
     plpushspeed,     .25,
-    kill_when_release,yes,
     visible,yes,
     block_direction, yes,
     speed_multiplier, .5,
@@ -154,20 +149,46 @@ end $$
 zclass[[banjo,anchor,actor|
     anchoring,@, xf,@,
 
-    kill_when_release,no,
     visible,yes,
     block_direction, yes,
-    speed_multiplier, 0,
+    speed_multiplier, .5,
     initial_energy, .125,
     gradual_energy, 0,
     offy,-.05,
 
     sind,SPR_BANJO;
 
-    start;  offdy,.0625, duration,.08, next,normal;
-    normal; offy,.25, offdy,0, duration,3, next,ending;
-    ending; init,%banjo_ending_init, offdy,-.0625, duration,.08;
+    start;    init,%banjo_start_init, offdy,.0625, duration,.08, next,min_play;
+    min_play; init,nop, offdy,0, duration,2, next,normal;
+    normal;   init,nop, offy,.25, next,ending;
+    ending;   init,%banjo_ending_init, offdy,-.0625, duration,.08;
 ]]
+
+|[banjo_start_init]| function(a)
+    sfx(5,0)
+    sfx(6,1)
+    sfx(7,2)
+end $$
+
+|[banjo_ending_init]| function(a)
+    sfx(5,-2)
+    sfx(6,-2)
+    sfx(7,-2)
+
+    if (g_rstat_right:get() or {}).id == 'saveplat' and a:get_elapsed_percent'min_play' and a:get_elapsed_percent'min_play' >= 1 then
+        zcall(poke, [[
+            1;,MEM_PL_X,     @;
+            2;,MEM_PL_Y,     @;
+            3;,MEM_PL_XF,    @;
+        ]], a.anchoring.x*POS_MULTIPLIER_FOR_MEMORY,
+            a.anchoring.y*POS_MULTIPLIER_FOR_MEMORY,
+            (a.anchoring.xf+1)\2
+        )
+
+        memcpy(REAL_SAVE_LOCATION, MEM_SAVE_LOCATION, SAVE_LENGTH)
+        _g.tbox("great banjo playing.^saving complete!", nop)
+    end
+end $$
 
 zclass[[brang,collidable,simple_spr,drawlayer_50,mov,actor,statitem|
     anchoring,@, xf,@,
@@ -179,7 +200,6 @@ zclass[[brang,collidable,simple_spr,drawlayer_50,mov,actor,statitem|
     should_use_xf, no,
     item_hit_func, ~kill,
 
-    kill_when_release,yes,
     visible,no,
     block_direction, yes,
     speed_multiplier, .25,
@@ -208,7 +228,6 @@ zclass[[bomb,actor,vec,simple_spr,drawlayer_50,statitem|
     should_use_xf, yes,
     item_hit_func, nop,
 
-    kill_when_release,no,
     visible,no,
     block_direction, no,
     speed_multiplier, 1,
@@ -224,22 +243,6 @@ zclass[[bomb,actor,vec,simple_spr,drawlayer_50,statitem|
 ]]
 
 --| ITEM CODE LOGIC |--
-|[banjo_ending_init]| function(a)
-    if (g_rstat_right:get() or {}).id == 'saveplat' then
-        zcall(poke, [[
-            1;,MEM_PL_X,     @;
-            2;,MEM_PL_Y,     @;
-            3;,MEM_PL_XF,    @;
-        ]], a.anchoring.x*POS_MULTIPLIER_FOR_MEMORY,
-            a.anchoring.y*POS_MULTIPLIER_FOR_MEMORY,
-            (a.anchoring.xf+1)\2
-        )
-
-        memcpy(REAL_SAVE_LOCATION, MEM_SAVE_LOCATION, SAVE_LENGTH)
-        _g.tbox("great banjo playing.^saving complete!", nop)
-    end
-end $$
-
 |[item_horizontal_start_init]|  function(a) a.offdx = a.xf*a.offspeed end $$
 |[item_horizontal_normal_init]| function(a) a.offx = abs(a.offx*8)\1/8*sgn(a.offx) end $$
 |[item_horizontal_ending_init]| function(a) a:normal_init() a.offdx = -a.xf*a.offspeed end $$
@@ -310,8 +313,8 @@ zclass[[pl,actor,mov,collidable,auto_outline,healthobj,drawlayer_50|
         speed_multiplier,1,
         alive,yes,
         gradual_energy,-PL_ENERGY_COOLDOWN,
-        kill_when_release,no,
-        initial_energy,0;
+        initial_energy,0,
+        kill,nop;
 
     item,~default_item;
 ]]
@@ -320,6 +323,20 @@ zclass[[pl,actor,mov,collidable,auto_outline,healthobj,drawlayer_50|
     g_rstat_left:set(a)
     local item = a.item
 
+    -- item logic
+    if not item.alive then item = a.default_item end
+
+    if btn(BTN_ITEM_SELECT) or does_entity_exist'tbox' or does_entity_exist'fader' or a.is_energy_cooling_down or not btn'BTN_ITEM_USE' then
+        item:kill()
+    elseif not a.is_energy_cooling_down and item.is_default and btn'BTN_ITEM_USE' then
+        local item_func = a.item_funcs[peek'MEM_ITEM_INDEX']
+        if item_func then
+            item = item_func(a, a.xf)
+            a.target_energy += item.initial_energy
+        end
+    end
+
+    -- speed & xf logic
     a.speed = 0
     if not a:inside(g_room_bounds) then
         a.ang, a.speed = atan2(a:abside(g_room_bounds)), PL_SPEED
@@ -330,17 +347,6 @@ zclass[[pl,actor,mov,collidable,auto_outline,healthobj,drawlayer_50|
             if not item.block_direction and cos(a.ang) ~= 0 then
                 a.xf = sgn(cos(a.ang))
             end
-        end
-
-        if not item.alive then item = a.default_item end
-        if not a.is_energy_cooling_down and item.is_default and btn'BTN_ITEM_USE' then
-            local item_func = a.item_funcs[peek'MEM_ITEM_INDEX']
-            if item_func then
-                item = item_func(a, a.xf)
-                a.target_energy += item.initial_energy
-            end
-        elseif item.kill_when_release and (a.is_energy_cooling_down or not btn'BTN_ITEM_USE') then
-            item:kill()
         end
     end
 
@@ -360,7 +366,7 @@ end $$
     local xf = a.xf
     local top = 91
     if does_entity_exist'banjo' then
-        xf = g_si%2*2-1
+        -- xf = g_si%2*2-1
         top = 92
     end
 
