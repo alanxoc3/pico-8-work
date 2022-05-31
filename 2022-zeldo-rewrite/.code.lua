@@ -10,11 +10,11 @@ local room,room_ind=zobj[[tiles_1;,;tiles_2;,;objects;,;w,12,h,10,color,0,music,
 if room_ind>223 then room.w,room.h=8,6 end
 room.color=0x0f &@cur_loc
 room.music=(0xf0 & peek_inc())>>>4
-local byte,is_tile,layer,ind,offx,offy,is_fill=0,true,room.tiles_1,0,0,0
+local byte,is_tile,layer,ind,offx,offy,is_fill=0,true,room.tiles_1,0,0,0,true
 while byte ~=255 do
 byte=peek_inc()
 if byte>=248 and byte<=253 then
-is_fill,is_tile=nil
+is_fill,is_tile=true,nil
 end
 if byte==248 then is_tile=true layer=room.tiles_1
 elseif byte==249 then is_tile=true layer=room.tiles_2
@@ -22,7 +22,7 @@ elseif byte==250 then offx=0 offy=0
 elseif byte==251 then offx=.5 offy=0
 elseif byte==252 then offx=0 offy=.5
 elseif byte==253 then offx=.5 offy=.5
-elseif byte==254 then is_fill=true
+elseif byte==254 then is_fill=false
 elseif byte<128 then ind=byte
 elseif byte<255 then
 local p1=0x7f & byte

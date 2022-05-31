@@ -5,6 +5,7 @@ CON_OBJ_50 = 251
 CON_OBJ_05 = 252
 CON_OBJ_55 = 253
 CON_FILL   = 254
+CON_TILE   = 254
 CON_END    = 255
 LAST_ROOM_INDEX = 223
 
@@ -35,8 +36,10 @@ g_mouse_enabled = false
 g_mouse_frame_limit = 0
 g_mouse_frame_limit_max = 3
 g_mouse_x, g_mouse_y = 0, 0
+g_prev_mouse_x, g_prev_mouse_y = 0, 0
 function update_mouse() 
     g_mouse_frame_limit = (g_mouse_frame_limit+1) % g_mouse_frame_limit_max
+    g_prev_mouse_x, g_prev_mouse_y = g_mouse_x, g_mouse_y
     g_mouse_x, g_mouse_y = stat(32), stat(33)
 end
 
@@ -118,6 +121,7 @@ function _init()
 end
 
 g_compression_percent = 0
+g_wait_time = 0
 function _update60()
     poke(0x5f30,1) -- disable the pause menu
     update_mouse()
@@ -129,7 +133,25 @@ function _update60()
     end
 
     local is_keydown, char = stat(30)
-    if is_keydown then char = stat(31) end
+    if is_keydown then
+        char = stat(31)
+    end
+
+    -- if anything changed, reset the wait time
+    if is_keydown or btn(0) or btn(1) or btn(2) or btn(3) or btn(4) or btn(5) or g_mouse_x ~= g_prev_mouse_x or g_mouse_y ~= g_prev_mouse_y then
+        g_compression_updated_inactive = false
+        g_wait_time = 0
+    else
+        g_wait_time += 1
+    end
+
+    -- if inactive for 2s, update compression percent
+    if not g_compression_updated_inactive and g_wait_time >= 60*2 then
+        g_wait_time = 0
+        g_compression_updated_inactive = true
+        g_compression_percent = encode_room(g_rooms, 0x2000, 0x3000)
+        printh("update")
+    end
 
     if g_modes[char] then
         if g_mode ~= g_modes[char] then
@@ -652,6 +674,38 @@ function itemmap_to_fills(width, height, itemmap)
         end
     end
 
+    local fillall = true
+    local countmap = {}
+    local maxtile
+    for i=0,height*width-1 do
+        if not itemmap[i] then
+            fillall = false
+            break
+        else
+            countmap[itemmap[i]] = (countmap[itemmap[i]] or 0) + 1
+        end
+    end
+
+    if fillall then
+        local maxcount = 0
+        for k, v in pairs(countmap) do
+            if v > maxcount then
+                maxcount = v
+                maxtile = k
+            end
+        end
+
+        -- visit the max tile
+        for i=0,height*width-1 do
+            if itemmap[i] == maxtile then
+                visited[i] = true
+            end
+        end
+
+        -- add a screen fill as the first fill
+        add(fills, {ind=maxtile, xbeg=0, xend=width-1, ybeg=0, yend=height-1})
+    end
+
     for y=0,height-1 do
         -- each row should reset current tile
         -- because y traversal is embedded further down
@@ -707,6 +761,14 @@ function encode_room(rooms, min_loc, max_loc)
         poke(mem_loc, bor(room.color, shl(room.music, 4)))
         mem_loc+=1
 
+        -- first, if there is an empty space on the bottom layer, fill the bottom layer first.
+        for k, v in pairs(room.tiles[2]) do
+            if not room.tiles[1][k] then
+                room.tiles[1][k] = v
+                room.tiles[2][k] = nil
+            end
+        end
+
         -- tiles
         for layer, tiles in pairs(room.tiles) do
             local fill_by_ind = {}
@@ -729,7 +791,26 @@ function encode_room(rooms, min_loc, max_loc)
                 mem_loc+=1
             end
 
+            if #fills > 0 then
+                local cur_ind = nil
+                for f in all(fills) do
+                    if f.ind ~= cur_ind then
+                        cur_ind = f.ind
+                        poke(mem_loc, band(0x7f, cur_ind))
+                        mem_loc+=1
+                    end
+
+                    poke(mem_loc, bor(0x80, min(f.ybeg*12+f.xbeg, 119)))
+                    mem_loc+=1
+                    poke(mem_loc, bor(0x80, min(f.yend*12+f.xend, 119)))
+                    mem_loc+=1
+                end
+            end
+
             if #places > 0 then
+                poke(mem_loc, CON_TILE)
+                mem_loc+=1
+
                 for i=0,127 do
                     if place_by_ind[i] then
                         poke(mem_loc, band(0x7f, i))
@@ -737,24 +818,6 @@ function encode_room(rooms, min_loc, max_loc)
 
                         for f in all(place_by_ind[i]) do
                             poke(mem_loc, bor(0x80, min(f.y*12+f.x, 119)))
-                            mem_loc+=1
-                        end
-                    end
-                end
-            end
-
-            if #fills > 0 then
-                poke(mem_loc, CON_FILL)
-                mem_loc+=1
-                for i=0,127 do
-                    if fill_by_ind[i] then
-                        poke(mem_loc, band(0x7f, i))
-                        mem_loc+=1
-
-                        for f in all(fill_by_ind[i]) do
-                            poke(mem_loc, bor(0x80, min(f.ybeg*12+f.xbeg, 119)))
-                            mem_loc+=1
-                            poke(mem_loc, bor(0x80, min(f.yend*12+f.xend, 119)))
                             mem_loc+=1
                         end
                     end
@@ -999,6 +1062,16 @@ function tabcpy(src, dest)
         end
     end
     return dest
+end
+
+function isorty(t)
+    for n=2,#t do
+        local i=n
+        while i>1 and t[i].y<t[i-1].y do
+            t[i],t[i-1]=t[i-1],t[i]
+            i=i-1
+        end
+    end
 end
 
 function ui_col() return g_debug and 2 or 1 end

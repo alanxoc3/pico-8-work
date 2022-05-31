@@ -160,12 +160,12 @@ function decode_map()
         room.color = 0x0f & @cur_loc
         room.music = (0xf0 & peek_inc()) >>> 4
 
-        local byte, is_tile, layer, ind, offx, offy, is_fill = 0, true, room.tiles_1, 0, 0, 0
+        local byte, is_tile, layer, ind, offx, offy, is_fill = 0, true, room.tiles_1, 0, 0, 0, true
         while byte ~= CON_END do
             byte = peek_inc()
 
             if byte >= CON_L1 and byte <= CON_OBJ_55 then
-                is_fill, is_tile = nil
+                is_fill, is_tile = true, nil
             end
 
             if     byte == CON_L1     then is_tile = true  layer = room.tiles_1
@@ -174,7 +174,7 @@ function decode_map()
             elseif byte == CON_OBJ_50 then offx = .5 offy = 0
             elseif byte == CON_OBJ_05 then offx = 0  offy = .5
             elseif byte == CON_OBJ_55 then offx = .5 offy = .5
-            elseif byte == CON_FILL   then is_fill = true
+            elseif byte == CON_TILE   then is_fill = false
             elseif byte < 128         then ind = byte
             elseif byte < CON_END     then
                 local p1 = 0x7f & byte
