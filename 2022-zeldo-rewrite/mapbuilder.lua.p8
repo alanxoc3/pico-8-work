@@ -1,3 +1,6 @@
+pico-8 cartridge // http://www.pico-8.com
+version 35
+__lua__
 CON_L1     = 248
 CON_L2     = 249
 CON_OBJ_00 = 250
@@ -749,9 +752,10 @@ function itemmap_to_fills(width, height, itemmap)
         end
     end
 
+
     -- when finished, sort by index
     sort(fills, function(a, b)
-        return (b.ind ~= maxtile) and a.ind < b.ind
+        return (fillall and a.ind == maxtile) or a.ind < b.ind
     end)
 
     sort(places, function(a, b)
@@ -1083,3 +1087,6 @@ function sprout(sind, x, y, sw, sh, flip_x, flip_y)
     for i=0,8 do spr(sind, x+i%3-1, y+i\3-1, sw, sh, flip_x, flip_y) end
     pal()
 end
+
+
+
