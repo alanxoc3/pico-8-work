@@ -34,7 +34,6 @@ help him save the Land of Hi-roll from the forces of evil.
 how should i make the save platform collide with something...
 What if the banjo released an object when you finish playing? Sure, that should be easy.
 
-TODO: try pc minifier
 TODO: bomb throw direction
 TODO: arrow with collision tile/wall collision
 TODO: mask particle effect

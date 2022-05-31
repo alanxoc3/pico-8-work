@@ -1,933 +1,933 @@
-g_obj_map=split[[bedpillow,bedblanket,pot,house231,navyblock,signlank,signkeep,signnavy,signteach,signlark,signjane,house224,house225,house226,house227,house228,house229,navyhouse,bobblock,bobhouse,keep,teach,jane,lark,r1spike,r2spike,l1spike,l2spike,saveplat,woodtbl,greytbl,soupbucket,slimy,miny,woodcrate,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil]]
-function decode_map()
-local rooms,cur_loc={},0x2000
-local peek_inc=function()
-cur_loc+=1
-return@(cur_loc-1)
+pb=split[[fm,gs,gu,ud,wg,yt,cr,yi,mj,uk,ww,ue,wu,ft,gn,cn,ut,wn,f_,ux,fy,mf,cf,gt,mi,gy,ma,gg,db,wm,cj,ca,fc,rr,me,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil]]
+function mm()
+local li,nt={},0x2000
+local nl=function()
+nt+=1
+return@(nt-1)
 end
-while@cur_loc ~=255 do
-local room,room_ind=zobj[[tiles_1;,;tiles_2;,;objects;,;w,12,h,10,color,0,music,0]],peek_inc()
-if room_ind>223 then room.w,room.h=8,6 end
-room.color=0x0f &@cur_loc
-room.music=(0xf0 & peek_inc())>>>4
-local byte,is_tile,layer,ind,offx,offy,is_place=0,true,room.tiles_1,0,0,0
-while byte ~=255 do
-byte=peek_inc()
-if byte>=248 and byte<=253 then
-is_place,is_tile=nil
+while@nt ~=255 do
+local m,rk=im[[ir;,;nb;,;hd;,;il,12,ic,10,color,0,music,0]],nl()
+if rk>223 then m.il,m.ic=8,6 end
+m.color=0x0f &@nt
+m.music=(0xf0 & nl())>>>4
+local ew,nq,ay,ti,eu,eh,sx=0,true,m.ir,0,0,0
+while ew ~=255 do
+ew=nl()
+if ew>=248 and ew<=253 then
+sx,nq=nil
 end
-if byte==248 then is_tile=true layer=room.tiles_1
-elseif byte==249 then is_tile=true layer=room.tiles_2
-elseif byte==250 then offx=0 offy=0
-elseif byte==251 then offx=.5 offy=0
-elseif byte==252 then offx=0 offy=.5
-elseif byte==253 then offx=.5 offy=.5
-elseif byte==254 then is_place=true
-elseif byte<128 then ind=byte
-elseif byte<255 then
-local p1=0x7f & byte
-if is_tile then
-if is_place then
-layer[p1]=ind+128
+if ew==248 then nq=true ay=m.ir
+elseif ew==249 then nq=true ay=m.nb
+elseif ew==250 then eu=0 eh=0
+elseif ew==251 then eu=.5 eh=0
+elseif ew==252 then eu=0 eh=.5
+elseif ew==253 then eu=.5 eh=.5
+elseif ew==254 then sx=true
+elseif ew<128 then ti=ew
+elseif ew<255 then
+local oq=0x7f & ew
+if nq then
+if sx then
+ay[oq]=ti+128
 else
-local p2=0x7f & peek_inc()
-for yy=p1\12,p2\12 do
-for xx=p1%12,p2%12 do
-layer[yy*12+xx]=ind+128
+local dt=0x7f & nl()
+for st=oq\12,dt\12 do
+for sa=oq%12,dt%12 do
+ay[st*12+sa]=ti+128
 end
 end
 end
 else
-add(room.objects,{index=ind+1,x=p1%12+offx,y=p1\12+offy})
+add(m.hd,{ee=ti+1,a=oq%12+eu,o=oq\12+eh})
 end
 end
 end
-rooms[room_ind]=room
+li[rk]=m
 end
-return rooms
+return li
 end
-g_zclass_constructors,g_zclass_entities,g_zclass_new_entities={},{},{}
-function zclass(meta_and_att_str)
-local meta,template,memloc,expected_memloc_value=unpack(split(meta_and_att_str,"|"))
-local parents=split(meta)
-local class=deli(parents,1)
-g_zclass_entities[class]=g_zclass_entities[class]or{}
-g_zclass_constructors[class]=function(inst,done,...)
-foreach(parents,function(parent)
-if not done[parent]then g_zclass_constructors[parent](inst,done)end
+sl,tl,nu={},{},{}
+function i(ui)
+local wy,fb,hj,gz=unpack(split(ui,"|"))
+local on=split(wy)
+local ep=deli(on,1)
+tl[ep]=tl[ep]or{}
+sl[ep]=function(to,od,...)
+foreach(on,function(la)
+if not od[la]then sl[la](to,od)end
 end)
-done[class]=true
-inst.parents[class]=true
-add(g_zclass_new_entities,{class,inst})
-return zobj_set(inst,template,...)
+od[ep]=true
+to.on[ep]=true
+add(nu,{ep,to})
+return hh(to,fb,...)
 end
-_g[class]=function(...)if not memloc or peek(memloc)==expected_memloc_value then return g_zclass_constructors[class]({id=class,parents={},ecs_exclusions={}},{},...)end end
+_g[ep]=function(...)if not hj or peek(hj)==gz then return sl[ep]({nm=ep,on={},rf={}},{},...)end end
 end
-function register_entities()
-while #g_zclass_new_entities>0 do
-local class,inst=unpack(deli(g_zclass_new_entities))
-if not inst.ecs_exclusions[class]then add(g_zclass_entities[class],inst)end
-end
-end
-function deregister_entity(inst,...)
-for class,entities in pairs(g_zclass_entities)do
-del(entities,inst)
+function ms()
+while #nu>0 do
+local ep,to=unpack(deli(nu))
+if not to.rf[ep]then add(tl[ep],to)end
 end
 end
-function call_not_nil(table,key,...)
-if table and table[key]then
-return table[key](...)
+function dh(to,...)
+for ep,sm in pairs(tl)do
+del(sm,to)
 end
 end
-function does_entity_exist(entity_name)
-return #g_zclass_entities[entity_name]>0
-end
-function loop_entities(class,method_name,...)
-for inst in all(g_zclass_entities[class])do
-call_not_nil(inst,method_name,inst,...)
+function un(table,dy,...)
+if table and table[dy]then
+return table[dy](...)
 end
 end
-function clean_all_entities(...)
-local objs_to_clean,exclusions={},{}
-foreach({...},function(exclusion)exclusions[exclusion]=true end)
-for class,entities in pairs(g_zclass_entities)do
-for entity in all(entities)do
-objs_to_clean[entity]=entity.id
+function ed(ws)
+return #tl[ws]>0
+end
+function am(ep,cl,...)
+for to in all(tl[ep])do
+un(to,cl,to,...)
 end
 end
-for obj,id in pairs(objs_to_clean)do
-if not exclusions[id]then
-deregister_entity(obj)
+function md(...)
+local hw,dg={},{}
+foreach({...},function(mb)dg[mb]=true end)
+for ep,sm in pairs(tl)do
+for hf in all(sm)do
+hw[hf]=hf.nm
 end
 end
-g_zclass_new_entities={}
+for el,nm in pairs(hw)do
+if not dg[nm]then
+dh(el)
 end
-function nop()end
-function zobj_eval(val,table,parameters)
-if ord(val)==37 then return _g[sub(val,2)]
-elseif val=="~"then return table
-elseif ord(val)==126 then return table[sub(val,2)]
-elseif val=="@"then return deli(parameters,1)
-elseif val=="yes"or val=="no"then return val=="yes"
-elseif val=="null"or val==""then return
-elseif val=="nop"then return nop
-end return val
 end
-function zobj_set(table,str,...)
-local params,statements,dest={...},split(str,";"),table
-foreach(statements,function(statement)
-local tokens=split(statement)
-if #tokens>1 then
-if tokens[1]==""then
-foreach(tokens,function(val)
-add(dest,zobj_eval(val,table,params))
+nu={}
+end
+function f()end
+function lt(em,table,uj)
+if ord(em)==37 then return _g[sub(em,2)]
+elseif em=="~"then return table
+elseif ord(em)==126 then return table[sub(em,2)]
+elseif em=="@"then return deli(uj,1)
+elseif em=="_"or em=="ez"then return em=="_"
+elseif em=="dc"or em==""then return
+elseif em=="f"then return f
+end return em
+end
+function hh(table,af,...)
+local nw,cs,oa={...},split(af,";"),table
+foreach(cs,function(nv)
+local op=split(nv)
+if #op>1 then
+if op[1]==""then
+foreach(op,function(em)
+add(oa,lt(em,table,nw))
 end)
 else
-for i=1,#tokens,2 do
-dest[tokens[i]]=zobj_eval(tokens[i+1],table,params)
+for u=1,#op,2 do
+oa[op[u]]=lt(op[u+1],table,nw)
 end
 end
-dest=table
+oa=table
 else
-if type(dest[statement])~="table"then
-dest[statement]={}
+if type(oa[nv])~="table"then
+oa[nv]={}
 end
-dest=dest[statement]
+oa=oa[nv]
 end
 end)
 return table
 end
-function zobj(...)
-return zobj_set({},...)
+function im(...)
+return hh({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,animation_init,@,auto_outline_draw,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,explode_draw,@,standard_explosion,@,calc_deltas,@,adjust_deltas_for_solids,@,adjust_deltas_for_tiles,@,adjust_deltas_for_screen,@,healthobj_hurt,@,healthobj_health_update,@,inventory_start_init,@,inventory_start_update,@,inventory_press_update,@,inventory_draw,@,simple_spr_draw,@,anchor_update_anchor,@,targettouch_update_target,@,arrow_draw,@,bow_ending_init,@,shield_item_hit_func,@,banjo_start_init,@,banjo_ending_init,@,item_horizontal_start_init,@,item_horizontal_normal_init,@,item_horizontal_ending_init,@,brang_drawout,@,brang_start_init,@,brang_normal_update,@,brang_ending_init,@,brang_ending_update,@,bomb_start_init,@,bomb_destroyed,@,bomb_ending_update,@,pl_update,@,pl_drawout,@,rstat_update,@,rstat_set,@,rstat_get,@,rstat_get,@,stat_draw,@,tbox_init,@,tbox_update,@,tbox_draw,@,fairy_update,@,fairy_draw,@,spawn_walls,@,house_init,@,person_target_with_tbox_disable_callback,@,person_target_with_tbox_finish_callback,@,target_with_tbox_init,@,sign_target_with_tbox_disable_callback,@,slimy,@,miny,@,slimy_destroyed,@,slimy_start,@,slimy_shake,@,slimy_jump,@,slimy_statcollide,@,saveplat_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,gameover_control_ending,@,gameover_init,@,gameover_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,simple_update,@,title_draw,@,title_logo_update,@,title_logo_drawout,@,game_state_init,@]],function(a,stateName)
-if stateName then
-a.next,a.duration=nil
-for k,v in pairs(a[stateName])do a[k]=v end
-a.curr=stateName
-a:stop_timer(a.curr,a.duration,a.duration and function()a:load(a.next)end)
+_g=im([[co,@,wa,@,wt,@,uw,@,cy,@,us,@,pz,@,pw,@,ry,@,di,@,we,@,wc,@,mn,@,px,@,ck,@,mc,@,ps,@,fk,@,mu,@,ff,@,uu,@,ga,@,rm,@,sh,@,fz,@,gp,@,gw,@,sk,@,nd,@,nz,@,sv,@,u_,@,fx,@,ug,@,pu,@,ye,@,s_,@,pg,@,gj,@,cu,@,c_,@,gi,@,rv,@,cq,@,cw,@,uz,@,lw,@,sn,@,ce,@,gc,@,pp,@,ya,@,w_,@,fh,@,pl,@,m_,@,dq,@,pt,@,fo,@,pk,@,du,@,du,@,fd,@,wf,@,dp,@,py,@,gf,@,pr,@,hm,@,gx,@,uh,@,lz,@,pj,@,pe,@,fc,@,rr,@,wk,@,cm,@,fa,@,pa,@,fv,@,ci,@,fj,@,mz,@,go,@,wz,@,mp,@,cc,@,wo,@,mq,@,mk,@,uo,@,fn,@,sq,@,ml,@,cg,@,wr,@,fp,@]],function(e,rs)
+if rs then
+e.x,e.l=nil
+for ua,mr in pairs(e[rs])do e[ua]=mr end
+e.tx=rs
+e:gv(e.tx,e.l,e.l and function()e:load(e.x)end)
 else
-a.alive=false
+e.al=false
 end
-end,function(a)
-if a:get_elapsed(a.curr)==nil then a:load(a.curr)end
-if a:get_elapsed(a.curr)==false then a:play_timer(a.curr)a:init()end
-a:update()
-end,function(a)
-return not a:get_elapsed"ending"and a.alive
-end,function(a)
-if a.ending then
-if a.curr=="start"then
-a.next="ending"
-elseif not a:get_elapsed"ending"then
-a:load"ending"
+end,function(e)
+if e:na(e.tx)==nil then e:load(e.tx)end
+if e:na(e.tx)==false then e:fq(e.tx)e:b()end
+e:j()
+end,function(e)
+return not e:na"ea"and e.al
+end,function(e)
+if e.ea then
+if e.tx=="k"then
+e.x="ea"
+elseif not e:na"ea"then
+e:load"ea"
 end
 else
-a.alive=nil
+e.al=nil
 end
-end,function(a)if not a.alive then a:destroyed()deregister_entity(a)end end,function(a)
-a.index+=1
-a.index%=60
-end,function(a)
-draw_outline(a.outline_color,function()a:drawout()end)
-a:drawout()
+end,function(e)if not e.al then e:oc()dh(e)end end,function(e)
+e.ee+=1
+e.ee%=60
+end,function(e)
+rb(e.wx,function()e:th()end)
+e:th()
 end,function(...)
-_g.timer_stop_timer(...)
-_g.timer_play_timer(...)
-end,function(a,timer_name,duration,callback)
-a.timers[timer_name]={elapsed=false,duration=0+(duration or 32767),callback=callback or function()end}
-end,function(a,timer_name)
-if a.timers[timer_name]and not a.timers[timer_name].elapsed then
-a.timers[timer_name].elapsed=0
+_g.ry(...)
+_g.di(...)
+end,function(e,e_,l,sj)
+e.tq[e_]={tc=false,l=0+(l or 32767),sj=sj or function()end}
+end,function(e,e_)
+if e.tq[e_]and not e.tq[e_].tc then
+e.tq[e_].tc=0
 end
-end,function(a,timer_name)
-a.timers[timer_name]=nil
-end,function(a,timer_name)
-local timer=a.timers[timer_name]
-return timer and(timer.elapsed or false)
-end,function(a,timer_name)
-local timer=a.timers[timer_name]
-return timer and min(1,(timer.elapsed or 0)/timer.duration)
-end,function(a,timer_name)
-local timer=a.timers[timer_name]
-return timer and timer.elapsed and timer.elapsed<timer.duration
-end,function(a)
-local finished_timers={}
-for name,timer in pairs(a.timers)do
-if timer.elapsed and timer.elapsed<=timer.duration then
-timer.elapsed=timer.elapsed+1/60
-if timer.elapsed>=timer.duration then
-add(finished_timers,timer)
+end,function(e,e_)
+e.tq[e_]=nil
+end,function(e,e_)
+local q=e.tq[e_]
+return q and(q.tc or false)
+end,function(e,e_)
+local q=e.tq[e_]
+return q and min(1,(q.tc or 0)/q.l)
+end,function(e,e_)
+local q=e.tq[e_]
+return q and q.tc and q.tc<q.l
+end,function(e)
+local rx={}
+for ae,q in pairs(e.tq)do
+if q.tc and q.tc<=q.l then
+q.tc=q.tc+1/60
+if q.tc>=q.l then
+add(rx,q)
 end
 end
 end
-foreach(finished_timers,function(timer)
-timer.callback(a)
+foreach(rx,function(q)
+q.sj(e)
 end)
-end,function(a,b)
-return not a:outside(b)and not a:inside(b)
-end,function(a,b)
-local xp,yp,xr,yr=a:side(b)
-return xp<=-1-xr or xp>=1+xr or yp<=-1-yr or yp>=1+yr
-end,function(a,b)
-local xp,yp,xr,yr=a:side(b)
-return xp>-1+xr and xp<1-xr and yp>-1+yr and yp<1-yr
-end,function(a,b)
-return(a.x-b.x)/b.rx,(a.y-b.y)/b.ry,a.rx/b.rx,a.ry/b.ry
-end,function(a,b)
-local xp,yp=a:side(b)
-if abs(yp)>abs(xp)
-then return 0,sgn(yp)
-else return sgn(xp),0 end
-end,function(a,b,dx,dy)
-local abx,aby=a:abside(b)
-local xp,yp=a:side(b)
-if not a:outside(b)then
-if abx ~=0 and zsgn(dx)==-abx then
-dx=get_delta_axis(dx,a.x,a.rx,b.x,b.rx)
-elseif aby ~=0 and zsgn(dy)==-aby then
-dy=get_delta_axis(dy,a.y,a.ry,b.y,b.ry)
-elseif aby ~=0 then
-dx=get_delta_axis(dx,a.x,a.rx,b.x,b.rx)
-elseif abx ~=0 then
-dy=get_delta_axis(dy,a.y,a.ry,b.y,b.ry)
+end,function(e,w)
+return not e:ox(w)and not e:sf(w)
+end,function(e,w)
+local eb,tj,ie,id=e:ij(w)
+return eb<=-1-ie or eb>=1+ie or tj<=-1-id or tj>=1+id
+end,function(e,w)
+local eb,tj,ie,id=e:ij(w)
+return eb>-1+ie and eb<1-ie and tj>-1+id and tj<1-id
+end,function(e,w)
+return(e.a-w.a)/w.r,(e.o-w.o)/w.h,e.r/w.r,e.h/w.h
+end,function(e,w)
+local eb,tj=e:ij(w)
+if abs(tj)>abs(eb)
+then return 0,sgn(tj)
+else return sgn(eb),0 end
+end,function(e,w,c,g)
+local te,tk=e:ig(w)
+local eb,tj=e:ij(w)
+if not e:ox(w)then
+if te ~=0 and ny(c)==-te then
+c=nh(c,e.a,e.r,w.a,w.r)
+elseif tk ~=0 and ny(g)==-tk then
+g=nh(g,e.o,e.h,w.o,w.h)
+elseif tk ~=0 then
+c=nh(c,e.a,e.r,w.a,w.r)
+elseif te ~=0 then
+g=nh(g,e.o,e.h,w.o,w.h)
 end
 end
-return dx,dy
-end,function(a,x,y)
-local dx,dy=x-a.x,y-a.y
-local maskx,masky=dx>>31,dy>>31
-local a0,b0=(dx+maskx)^^maskx,(dy+masky)^^masky
-if a0>b0 then
-return a0*0.9609+b0*0.3984
+return c,g
+end,function(e,a,o)
+local c,g=a-e.a,o-e.o
+local lb,rj=c>>31,g>>31
+local si,ro=(c+lb)^^lb,(g+rj)^^rj
+if si>ro then
+return si*0.9609+ro*0.3984
 end
-return b0*0.9609+a0*0.3984
-end,function(a)
-a.x+=a.dx
-a.y+=a.dy
-end,function(a)
-local ax,ay=a.speed*cos(a.ang),a.speed*sin(a.ang)
-a.dx+=ax a.dy+=ay
-a.dx*=.80 a.dy*=.80
-if ax==0 and abs(a.dx)<.01 then a.dx=0 end
-if ay==0 and abs(a.dy)<.01 then a.dy=0 end
-end,function(a,x,y)
-a.ang=atan2(x-a.x,y-a.y)
-end,function(a)
-for i=0,a.len-1 do
-scr_zrect(a.x+sin(a:get_elapsed_percent"start"/2)*cos(i/a.len+.125),a.y+sin(a:get_elapsed_percent"start"/2)*sin(i/a.len+.125),i%a.mod*.125+.125,i%a.mod*.125+.125,1)
+return ro*0.9609+si*0.3984
+end,function(e)
+e.a+=e.c
+e.o+=e.g
+end,function(e)
+local dv,hr=e.ev*cos(e.tm),e.ev*sin(e.tm)
+e.c+=dv e.g+=hr
+e.c*=.80 e.g*=.80
+if dv==0 and abs(e.c)<.01 then e.c=0 end
+if hr==0 and abs(e.g)<.01 then e.g=0 end
+end,function(e,a,o)
+e.tm=atan2(a-e.a,o-e.o)
+end,function(e)
+for u=0,e.su-1 do
+up(e.a+sin(e:td"k"/2)*cos(u/e.su+.125),e.o+sin(e:td"k"/2)*sin(u/e.su+.125),u%e.hc*.125+.125,u%e.hc*.125+.125,1)
 end
-end,function(a)
-_g.explode(a.x,a.y,4,1,nop)
-end,function(a,b)
-local box={x=b.x-a.dx,y=b.y-a.dy,rx=b.rx,ry=b.ry}
-return a:getdelta(box,a.dx,a.dy)
-end,function(a,list)
-foreach(list,function(b)
-local box={x=b.x-a.dx,y=b.y-a.dy,rx=b.rx,ry=b.ry}
-a.dx,a.dy=a:getdelta(box,a.dx,a.dy)
+end,function(e)
+_g.ni(e.a,e.o,4,1,f)
+end,function(e,w)
+local ef={a=w.a-e.c,o=w.o-e.g,r=w.r,h=w.h}
+return e:ds(ef,e.c,e.g)
+end,function(e,nc)
+foreach(nc,function(w)
+local ef={a=w.a-e.c,o=w.o-e.g,r=w.r,h=w.h}
+e.c,e.g=e:ds(ef,e.c,e.g)
 end)
-end,function(a,room)
-for tx=max(flr(a.x-a.rx)-1,0),min(ceil(a.x+a.rx),12-1)do
-for ty=flr(a.y-a.ry)-1,ceil(a.y+a.ry)do
-local sind=get_solid_tile(room,ty*12+tx)
-if sind then
-local rx,ry=.5,.5
-if not fget(sind,1)or fget(sind,1)and a.should_collide_below then
-if fget(sind,2)then rx,ry=.375,.375 end
-a.dx,a.dy=a:calc_deltas{x=tx+.5,y=ty+.5,rx=rx,ry=ry}
+end,function(e,m)
+for ok=max(flr(e.a-e.r)-1,0),min(ceil(e.a+e.r),12-1)do
+for ow=flr(e.o-e.h)-1,ceil(e.o+e.h)do
+local s=ct(m,ow*12+ok)
+if s then
+local r,h=.5,.5
+if not fget(s,1)or fget(s,1)and e.dx then
+if fget(s,2)then r,h=.375,.375 end
+e.c,e.g=e:sk{a=ok+.5,o=ow+.5,r=r,h=h}
 end
 end
 end
 end
-end,function(a)
-if a.should_collide_with_screen_edge then
-local box={x=g_room_bounds.x-a.dx,y=g_room_bounds.y-a.dy,rx=g_room_bounds.rx,ry=g_room_bounds.ry}
-a.dx=get_delta_axis2(a.dx,a.x,a.rx,box.x,box.rx)
-a.dy=get_delta_axis2(a.dy,a.y,a.ry,box.y,box.ry)
+end,function(e)
+if e.lx then
+local ef={a=ai.a-e.c,o=ai.o-e.g,r=ai.r,h=ai.h}
+e.c=lu(e.c,e.a,e.r,ef.a,ef.r)
+e.g=lu(e.g,e.o,e.h,ef.o,ef.h)
 end
-end,function(a,amount)
-a.health=max(0,min((a.health or a.max_health)-amount,a.max_health))
-end,function(a)
-a.health=a.health or a.max_health
-a.display_health=a.display_health or a.health/a.max_health
-local diff=a.health/a.max_health-a.display_health
-a.display_health+=zsgn(diff)*min(abs(diff),.05)
-if a.health<=0 then a:kill()end
-end,function(a)
-a.stat=peek"0x5d08" ~=4 and{cspr=a[peek"0x5d08"+1].sind}
-end,function(a)
-g_rstat_inventory:set(a.stat)
-if not does_entity_exist"fader"and not does_entity_exist"tbox"and not does_entity_exist"banjo"and btn"5"then
+end,function(e,wi)
+e.aj=max(0,min((e.aj or e.aa)-wi,e.aa))
+end,function(e)
+e.aj=e.aj or e.aa
+e.ne=e.ne or e.aj/e.aa
+local o_=e.aj/e.aa-e.ne
+e.ne+=ny(o_)*min(abs(o_),.05)
+if e.aj<=0 then e:iu()end
+end,function(e)
+e.stat=peek"0x5d08" ~=4 and{ey=e[peek"0x5d08"+1].s}
+end,function(e)
+d_:ot(e.stat)
+if not ed"ts"and not ed"tb"and not ed"nr"and btn"5"then
 poke(0x5d08,9)
-a.ind=4
-a:load"expand"
+e.ti=4
+e:load"le"
 end
-end,function(a)
-a.ind=mid(0,2,a.ind%3+zbtn(btnp,0))+mid(0,2,a.ind\3+zbtn(btnp,2))*3
-if does_entity_exist"fader"or does_entity_exist"tbox"or not btn"5"then
-poke(0x5d08,peek(a[a.ind+1].mem_loc)~=0 and a.ind or 4)
-a:load"contract"
+end,function(e)
+e.ti=mid(0,2,e.ti%3+iz(btnp,0))+mid(0,2,e.ti\3+iz(btnp,2))*3
+if ed"ts"or ed"tb"or not btn"5"then
+poke(0x5d08,peek(e[e.ti+1].tu)~=0 and e.ti or 4)
+e:load"sw"
 end
-end,function(a)
-local percent=a.curr=="contract"and(1-a:get_elapsed_percent"contract")or a:get_elapsed_percent"expand"
-zrect(a.pl.x*8,a.pl.y*8-2,percent*8,percent*8,1)
-for item in all(a)do
-local exist=peek(item.mem_loc)~=0
-local sind=exist and item.sind or 0
-local sxo,syo=exist and item.sxo or 0,exist and item.syo or 0
-local drawfunc=function()
-zspr(sind,sxo+a.pl.x*8+item.xoff*percent,syo+a.pl.y*8+item.yoff*percent,1,1,item.flip_enabled and a.pl.xf)
+end,function(e)
+local tp=e.tx=="sw"and(1-e:td"sw")or e:td"le"
+ln(e.at.a*8,e.at.o*8-2,tp*8,tp*8,1)
+for p in all(e)do
+local rc=peek(p.tu)~=0
+local s=rc and p.s or 0
+local tt,tr=rc and p.tt or 0,rc and p.tr or 0
+local oj=function()
+tf(s,tt+e.at.a*8+p.tw*tp,tr+e.at.o*8+p.tg*tp,1,1,p.wq and e.at.d)
 end
-draw_outline(item.index==a.ind and 2 or 1,drawfunc)
-drawfunc()
+rb(p.ee==e.ti and 2 or 1,oj)
+oj()
 end
-end,function(a)
-zspr(a.sind,a.x*8+a.sx,a.y*8+a.sy,a.sw,a.sh,a.xf,a.yf)
-end,function(a)
-a.offx+=a.offdx a.offy+=a.offdy
-a.x,a.y=a.anchoring.x+a.offx,a.anchoring.y+a.offy
-end,function(target,objs)
-foreach(objs,function(a)
-if target:outside(a)then
-target:callback_outside(a)
+end,function(e)
+tf(e.s,e.a*8+e.oz,e.o*8+e.oo,e.as,e.t_,e.d,e.oh)
+end,function(e)
+e.eu+=e.iv e.eh+=e.oe
+e.a,e.o=e.et.a+e.eu,e.et.o+e.eh
+end,function(ab,uv)
+foreach(uv,function(e)
+if ab:ox(e)then
+ab:gb(e)
 else
-target:callback_touch(a)
+ab:pv(e)
 end
 end)
-end,function(a)
-draw_tail(a.x,a.y,a.dx,0,3)
-pset(a.x*8,a.y*8,12)
-end,function(a)
-_g.item_horizontal_ending_init(a)
-_g.arrow(a.x,a.y-.125,a.xf*.25,a.xf)
-end,function(a)
-a.anchoring.dx-=a.plpushspeed*a.xf
-end,function(a)
+end,function(e)
+ld(e.a,e.o,e.c,0,3)
+pset(e.a*8,e.o*8,12)
+end,function(e)
+_g.sn(e)
+_g.fw(e.a,e.o-.125,e.d*.25,e.d)
+end,function(e)
+e.et.c-=e.da*e.d
+end,function(e)
 sfx(5,0)
 sfx(6,1)
 sfx(7,2)
-end,function(a)
+end,function(e)
 sfx(5,-2)
 sfx(6,-2)
 sfx(7,-2)
-if(g_rstat_right:get()or{}).id=="saveplat"and a:get_elapsed_percent"min_play"and a:get_elapsed_percent"min_play">=1 then
-zcall(poke,[[1;,0x5d02,@;2;,0x5d03,@;3;,0x5d04,@;]],a.anchoring.x*16,
-a.anchoring.y*16,
-(a.anchoring.xf+1)\2
+if(aq:hb()or{}).nm=="db"and e:td"rl"and e:td"rl">=1 then
+eo(poke,[[1;,0x5d02,@;2;,0x5d03,@;3;,0x5d04,@;]],e.et.a*16,
+e.et.o*16,
+(e.et.d+1)\2
 )
 memcpy(0x5e00,0x5d00,64)
-_g.tbox("great banjo playing.^saving complete!",nop)
+_g.tb("great banjo playing.^saving complete!",f)
 end
-end,function(a)a.offdx=a.xf*a.offspeed end,function(a)a.offx=abs(a.offx*8)\1/8*sgn(a.offx)end,function(a)a:normal_init()a.offdx=-a.xf*a.offspeed end,function(a)
-zspr(a.sind,a.x*8+a.sx,a.y*8+a.sy,1,1,cos(g_fi/5),sin(g_fi/5))
-end,function(a)
-a.x,a.y=a.anchoring.x,a.anchoring.y
-a.ang=atan2(a.xf,0)
-end,function(a)
-a.speed=0
-if g_zbtn_0|g_zbtn_2 ~=0 then
-a.ang,a.speed=atan2(g_zbtn_0,g_zbtn_2),.0375
+end,function(e)e.iv=e.d*e.az end,function(e)e.eu=abs(e.eu*8)\1/8*sgn(e.eu)end,function(e)e:ge()e.iv=-e.d*e.az end,function(e)
+tf(e.s,e.a*8+e.oz,e.o*8+e.oo,1,1,cos(sd/5),sin(sd/5))
+end,function(e)
+e.a,e.o=e.et.a,e.et.o
+e.tm=atan2(e.d,0)
+end,function(e)
+e.ev=0
+if ik|ix ~=0 then
+e.tm,e.ev=atan2(ik,ix),.0375
 end
-end,function(a)
-a.end_x,a.end_y=a.x,a.y
-end,function(a)
-local percent=a:get_elapsed_percent"ending"
-a.x=a.end_x+(a.anchoring.x-a.end_x)*percent
-a.y=a.end_y+(a.anchoring.y-a.end_y)*percent
-end,function(a)
-a.x,a.y=a.anchoring.x+a.xf,a.anchoring.y
-a.dx=a.dx+a.xf*.125
-end,function(a)
-_g.explode(a.x,a.y,8,2,nop)
-end,function(a)
-a.rx+=.05
-a.ry+=.05
-end,function(a)
-g_rstat_left:set(a)
-local item=a.item
-if not item.alive then item=a.default_item end
-if btn(5)or does_entity_exist"tbox"or does_entity_exist"fader"or a.is_energy_cooling_down or not btn"4"then
-item:kill()
-elseif not a.is_energy_cooling_down and item.is_default and btn"4"then
-local item_func=a.item_funcs[peek"0x5d08"]
-if item_func then
-item=item_func(a,a.xf)
-a.target_energy+=item.initial_energy
-end
-end
-a.speed=0
-if not a:inside(g_room_bounds)then
-a.ang,a.speed=atan2(a:abside(g_room_bounds)),.025
-elseif not does_entity_exist"fader"and not does_entity_exist"tbox"and not btn(5)then
-if g_zbtn_0|g_zbtn_2 ~=0 then
-a.ang,a.speed=atan2(g_zbtn_0,g_zbtn_2),.025*item.speed_multiplier
-if not item.block_direction and cos(a.ang)~=0 then
-a.xf=sgn(cos(a.ang))
+end,function(e)
+e.lq,e.hi=e.a,e.o
+end,function(e)
+local tp=e:td"ea"
+e.a=e.lq+(e.et.a-e.lq)*tp
+e.o=e.hi+(e.et.o-e.hi)*tp
+end,function(e)
+e.a,e.o=e.et.a+e.d,e.et.o
+e.c=e.c+e.d*.125
+end,function(e)
+_g.ni(e.a,e.o,8,2,f)
+end,function(e)
+e.r+=.05
+e.h+=.05
+end,function(e)
+uf:ot(e)
+local p=e.p
+if not p.al then p=e.lf end
+if btn(5)or ed"tb"or ed"ts"or e.ob or not btn"4"then
+p:iu()
+elseif not e.ob and p.uq and btn"4"then
+local lk=e.um[peek"0x5d08"]
+if lk then
+p=lk(e,e.d)
+e.oi+=p.tz
 end
 end
+e.ev=0
+if not e:sf(ai)then
+e.tm,e.ev=atan2(e:ig(ai)),.025
+elseif not ed"ts"and not ed"tb"and not btn(5)then
+if ik|ix ~=0 then
+e.tm,e.ev=atan2(ik,ix),.025*p.ao
+if not p.ad and cos(e.tm)~=0 then
+e.d=sgn(cos(e.tm))
 end
-a.target_energy=max(0,a.target_energy+item.gradual_energy)
-if a.target_energy==0 then a.is_energy_cooling_down=false
-elseif a.target_energy>=1 then a.is_energy_cooling_down=true
 end
-local diff=a.target_energy-a.energy
-a.energy+=zsgn(diff)*min(abs(diff),.03125)
-a.item,a.sind=item,a.dx|a.dy ~=0 and 88+t()*12%3 or 88
-end,function(a)
-local xf=a.xf
-local top=91
-if does_entity_exist"banjo"then
-top=92
 end
-zspr(a.sind,a.x*8,a.y*8-2,1,1,xf)
-zspr(top,a.x*8,a.y*8-2,1,1,xf)
-if a.item.visible then
-zspr(a.item.sind,a.item.x*8,a.item.y*8-2,1,1,xf)
+e.oi=max(0,e.oi+p.ac)
+if e.oi==0 then e.ob=false
+elseif e.oi>=1 then e.ob=true
 end
-end,function(a)
-local buffer=a.buffer
-a.buffer={}
-local cur_obj,first_obj=a.stat and a.stat.obj,buffer[1]
-for obj in all(buffer)do
-if cur_obj==obj then return end
+local o_=e.oi-e.sg
+e.sg+=ny(o_)*min(abs(o_),.03125)
+e.p,e.s=p,e.c|e.g ~=0 and 88+t()*12%3 or 88
+end,function(e)
+local d=e.d
+local lj=91
+if ed"nr"then
+lj=92
 end
-if does_entity_exist"tbox"then return end
-if a.stat then a.stat:load"ending" end
-a.stat=first_obj and _g.stat(a.align,a.x,first_obj)
-end,function(a,s)
-add(a.buffer,s)
-end,function(a)
-return a.stat and a.stat.obj
-end,function(a)
-return a.stat and a.stat.obj
-end,function(a)
-local obj=a.obj
-if align ~=0 then
-zcamera(a.x+2,a.y,function()
-local xyo=-8*a.align-1
-if obj.cname then zprinttbox(obj.cname,xyo,-10,a.align,7,5)end
-if obj.parents and obj.parents.healthobj then
-draw_bar(xyo,-2,xyo-35*a.align,1,obj.display_health,-1,11,3)
-zprinttbox(flr(obj.health).."/"..obj.max_health,xyo,4,a.align,7,5)
+tf(e.s,e.a*8,e.o*8-2,1,1,d)
+tf(lj,e.a*8,e.o*8-2,1,1,d)
+if e.p.an then
+tf(e.p.s,e.p.a*8,e.p.o*8-2,1,1,d)
+end
+end,function(e)
+local os=e.os
+e.os={}
+local fl,lp=e.stat and e.stat.el,os[1]
+for el in all(os)do
+if fl==el then return end
+end
+if ed"tb"then return end
+if e.stat then e.stat:load"ea" end
+e.stat=lp and _g.stat(e.es,e.a,lp)
+end,function(e,ch)
+add(e.os,ch)
+end,function(e)
+return e.stat and e.stat.el
+end,function(e)
+return e.stat and e.stat.el
+end,function(e)
+local el=e.el
+if es ~=0 then
+sy(e.a+2,e.o,function()
+local i_=-8*e.es-1
+if el.ex then ax(el.ex,i_,-10,e.es,7,5)end
+if el.on and el.on.nn then
+hp(i_,-2,i_-35*e.es,1,el.ne,-1,11,3)
+ax(flr(el.aj).."/"..el.aa,i_,4,e.es,7,5)
 end
 end)
 end
-draw_card(a.x,a.y+(does_entity_exist"tbox"and 0 or-cos(g_si/4)*a.align),6,8,2,4,function()
-spr(obj.cspr,0,0,1,1,a.align>0)
-end,nop)
-end,function(a)
-a.texts=split(a.rawtext,"^")
-end,function(a)
-local text1=a.texts[a.cur_text_index]
-local text2=a.texts[a.cur_text_index+1]or ""
-local textslen=#text1+#text2+4
-a.line_1=sub(text1,1,a.anim)
-a.line_2=sub(text2,1,max(0,a.anim-#text1))
-if a.anim==textslen then
-a.done=true
+ng(e.a,e.o+(ed"tb"and 0 or-cos(au/4)*e.es),6,8,2,4,function()
+spr(el.ey,0,0,1,1,e.es>0)
+end,f)
+end,function(e)
+e.so=split(e.fs,"^")
+end,function(e)
+local rg=e.so[e.no]
+local rz=e.so[e.no+1]or ""
+local nk=#rg+#rz+4
+e.rq=sub(rg,1,e.ta)
+e.ht=sub(rz,1,max(0,e.ta-#rg))
+if e.ta==nk then
+e.od=true
 end
 if btnp(4)or btnp(5)then
-if a.anim==textslen then
-if a.cur_text_index+2>#a.texts then
-a:load"ending"
+if e.ta==nk then
+if e.no+2>#e.so then
+e:load"ea"
 else
-a.cur_text_index+=2
-a:load"normal"
+e.no+=2
+e:load"eq"
 end
 else
-a.anim=textslen
+e.ta=nk
 end
 end
-a.anim=min(textslen,a.anim+.5)
-end,function(a)
-draw_card(65,a.y,46.5,10,2.5,5,
+e.ta=min(nk,e.ta+.5)
+end,function(e)
+ng(65,e.o,46.5,10,2.5,5,
 function()
-zcall(zprinttbox,[[1;,@,0,-2,-1,7,5;2;,@,0,6,-1,7,5;]],a.line_1 or "",a.line_2 or "")
+eo(ax,[[1;,@,0,-2,-1,7,5;2;,@,0,6,-1,7,5;]],e.rq or "",e.ht or "")
 end,function()
-if a.done then
-zspr(38,44,16+g_si%2)
+if e.od then
+tf(38,44,16+au%2)
 end
 end)
-end,function(a)
-local relact=g_rstat_right:get()or g_pl
-local offx,offy=relact.x+(t()\10%2==0 and 1 or-1)*cos(t()*.75),relact.y+sin(t()*.75)-.25
-a:towards_point(offx,offy)
-a.speed=a:dist_point(offx,offy)*.013
-end,function(a)
-draw_tail(a.x,a.y,a.dx,a.dy,6)
-scr_pset(a.x,a.y,13)
-end,function(a)
-zcall_tbl(_g.wall,a.walls)
-end,function(a)
-_g.spawn_walls(a)
-zcall(_g.target,[[1;,.125,.375,0,.5,@,@,nop;]],a,function()
-zcall(poke,[[1;,0x5d05,@;2;,0x5d06,@;3;,0x5d07,@;]],peek"0x5d01",
-a.x*16,
-(a.y+1.5)*16
+end,function(e)
+local ho=aq:hb()or z
+local eu,eh=ho.a+(t()\10%2==0 and 1 or-1)*cos(t()*.75),ho.o+sin(t()*.75)-.25
+e:uc(eu,eh)
+e.ev=e:dj(eu,eh)*.013
+end,function(e)
+ld(e.a,e.o,e.c,e.g,6)
+cv(e.a,e.o,13)
+end,function(e)
+de(_g.pc,e.ov)
+end,function(e)
+_g.hm(e)
+eo(_g.ab,[[1;,.125,.375,0,.5,@,@,f;]],e,function()
+eo(poke,[[1;,0x5d05,@;2;,0x5d06,@;3;,0x5d07,@;]],peek"0x5d01",
+e.a*16,
+(e.o+1.5)*16
 )
-load_room(a.room,4,5,g_pl.xf)
+ol(e.m,4,5,z.d)
 end)
-end,function(a)
-local abx=a:abside(g_pl)
-a.xf=sgn(g_pl.x-a.x)
-return peek"0x5d08" ~=4 or abx==-g_pl.xf
-end,function(a)
-poke(a.memloc_trigger,a.memloc_trigger_value)
-load_room(%0x5d01,g_pl.x,g_pl.y,g_pl.xf)
-end,function(a)
-_g.target(a.trx,a.try,a.tx,a.ty,a,function()
-if not a:target_with_tbox_disable_callback()then
-g_rstat_right:set(a)
-if btnp"4"and not does_entity_exist"tbox"then
-_g.tbox(a.text,function()
-a:target_with_tbox_finish_callback()
+end,function(e)
+local te=e:ig(z)
+e.d=sgn(z.a-e.a)
+return peek"0x5d08" ~=4 or te==-z.d
+end,function(e)
+poke(e.lc,e.hv)
+ol(%0x5d01,z.a,z.o,z.d)
+end,function(e)
+_g.ab(e.ru,e.rw,e.ok,e.ow,e,function()
+if not e:sc()then
+aq:ot(e)
+if btnp"4"and not ed"tb"then
+_g.tb(e.ei,function()
+e:ra()
 end)
 end
 end
-end,nop)
-end,function(a)
+end,f)
+end,function(e)
 return peek"0x5d08" ~=4
-end,function(x,y)
-_g.explode(x,y,4,1,function()_g.slimy_actual(x,y)end)
-end,function(x,y)
-_g.explode(x,y,4,1,function()_g.miny_actual(x,y)end)
-end,function(a)
-_g.miny(a.x,a.y-.5)
-_g.miny(a.x,a.y+.5)
-end,function(a)
-if a.isma then g_rstat_right:set(a)end
-a.xf=sgn(g_pl.x-a.x)
-a.target_ang=atan2(g_pl.x-a.x,g_pl.y-a.y)
-end,function(a)
-if a.isma then g_rstat_right:set(a)end
-a.sx=rnd_one()
-end,function(a)
-if a.isma then g_rstat_right:set(a)end
-a.ang=a.target_ang
-a.sy=sin(a:get_elapsed_percent"jump"/2)*8
-end,function(a,items)
-foreach(items,function(item)
-if not a:outside(item)and item:is_alive()then
-a:start_timer("isma",1.5,function()a.isma=false end)
-a.isma=true
-if not a:is_active"stunned"then
-a:start_timer("stunned",item.stunlen,nop)
-a:hurt(item.damage)
+end,function(a,o)
+_g.ni(a,o,4,1,function()_g.hg(a,o)end)
+end,function(a,o)
+_g.ni(a,o,4,1,function()_g.ur(a,o)end)
+end,function(e)
+_g.rr(e.a,e.o-.5)
+_g.rr(e.a,e.o+.5)
+end,function(e)
+if e.ia then aq:ot(e)end
+e.d=sgn(z.a-e.a)
+e.pm=atan2(z.a-e.a,z.o-e.o)
+end,function(e)
+if e.ia then aq:ot(e)end
+e.oz=dk()
+end,function(e)
+if e.ia then aq:ot(e)end
+e.tm=e.pm
+e.oo=sin(e:td"l_"/2)*8
+end,function(e,p_)
+foreach(p_,function(p)
+if not e:ox(p)and p:wh()then
+e:r_("ia",1.5,function()e.ia=false end)
+e.ia=true
+if not e:cb"mo"then
+e:r_("mo",p.ii,f)
+e:gh(p.ih)
 end
-item:item_hit_func()
-if item.should_use_xf then
-a.dx+=item.pushspeed*item.xf
+p:ip()
+if p.iy then
+e.c+=p.av*p.d
 else
-local abx,aby=a:abside(item)
-a.dx+=item.pushspeed*abx
-a.dy+=item.pushspeed*aby
+local te,tk=e:ig(p)
+e.c+=p.av*te
+e.g+=p.av*tk
 end
 end
 end)
-end,function(a)
-if not a:outside(g_pl)then
-g_rstat_right:set(a)
+end,function(e)
+if not e:ox(z)then
+aq:ot(e)
 end
-end,function(a)
+end,function(e)
 poke(0x5f43,0xff)
-g_fade=a:get_elapsed_percent"start"
-end,function(a)
-g_fade=1-a:get_elapsed_percent"start"
-end,function()sfx(63,0)end,function(a)
-g_fade=cos(a:get_elapsed_percent"logo")+1
-camera(g_fade>.5 and rnd_one())
-zspr(108,64,64,4,2)
+it=e:td"k"
+end,function(e)
+it=1-e:td"k"
+end,function()sfx(63,0)end,function(e)
+it=cos(e:td"cz")+1
+camera(it>.5 and dk())
+tf(108,64,64,4,2)
 camera()
-end,function(a)
-_g.fader_out(function()g_state:load"room" end)
-end,function(state)
-_g.gameover_control()
-state.game_over_sind,state.game_over_text=unpack(rnd_item(zobj[[1;,32,quack quack;2;,68,and play with me;3;,9,to save hi-roll;4;,81,in time for dinner;5;,83,and make me rich;6;,96,the banjo awaits you;7;,99,for your fans;8;,118,splat splat boing;]]))
-end,function(state)
-local drawfunc=function()
-zspr(state.game_over_sind,0,g_si%2,1,1,true,false,1)
+end,function(e)
+_g.rp(function()rh:load"m" end)
+end,function(ec)
+_g.wp()
+ec.hl,ec.wd=unpack(dr(im[[1;,32,quack quack;2;,68,and play with me;3;,9,to save hi-roll;4;,81,in time for dinner;5;,83,and make me rich;6;,96,the banjo awaits you;7;,99,for your fans;8;,118,splat splat boing;]]))
+end,function(ec)
+local oj=function()
+tf(ec.hl,0,au%2,1,1,true,false,1)
 end
-zcall(zprinttbox,[[1;,come back lank,64,38,0,10,4,1;2;,@,64,69,0,7,5,1;]],state.game_over_text)
-draw_card(64,56+g_si%2,6,8,2,4,function()
-spr(state.game_over_sind,0,0)
-end,nop)
-end,function(state)
-local r=g_rooms[peek"0x5d01"]
-local mus=flr(r.music/2)*8+(r.music%2)*5
+eo(ax,[[1;,come back lank,64,38,0,10,4,1;2;,@,64,69,0,7,5,1;]],ec.wd)
+ng(64,56+au%2,6,8,2,4,function()
+spr(ec.hl,0,0)
+end,f)
+end,function(ec)
+local aw=of[peek"0x5d01"]
+local sp=flr(aw.music/2)*8+(aw.music%2)*5
 poke(0x5f43,0)
-if g_music_ind ~=mus then
-g_music_ind=mus
-music(mus,0,7)
+if gk ~=sp then
+gk=sp
+music(sp,0,7)
 end
-g_room_bounds=_g.room_bounds(r.w/2,r.h/2,r.w/2-.375,r.h/2-.375)
-g_pl=_g.pl(peek"0x5d02"/16,peek"0x5d03"/16,peek"0x5d04"*2-1)
-g_fairy=_g.fairy(g_pl.x,g_pl.y-.125)
-g_rstat_left,g_rstat_inventory,g_rstat_right=_g.rstat(-1,10),_g.rstat(0,64),_g.rstat(1,118)
-_g.inventory(g_pl)
-foreach(r.objects,function(obj_template)
-_g[g_obj_map[obj_template.index]](obj_template.x+.5,obj_template.y+.5)
+ai=_g.ul(aw.il/2,aw.ic/2,aw.il/2-.375,aw.ic/2-.375)
+z=_g.at(peek"0x5d02"/16,peek"0x5d03"/16,peek"0x5d04"*2-1)
+yd=_g.ub(z.a,z.o-.125)
+uf,d_,aq=_g.nf(-1,10),_g.nf(0,64),_g.nf(1,118)
+_g.mt(z)
+foreach(aw.hd,function(re)
+_g[pb[re.ee]](re.a+.5,re.o+.5)
 end)
-end,function(state)
-zcall(loop_entities,[[1;,timer,tick;2;,actor,state;3;,mov,mov_update;4;,collidable,adjust_deltas_for_solids,@;5;,collidable,adjust_deltas_for_tiles,@;6;,collidable,adjust_deltas_for_screen;7;,vec,vec_update;8;,slimy_actual,statcollide,@;9;,anchor,update_anchor;10;,target,update_target,@;11;,rstat,update;12;,healthobj,health_update;]],g_zclass_entities.solid,g_rooms[peek"0x5d01"],g_zclass_entities.statitem,g_zclass_entities.pl)
-if not does_entity_exist"fader"and not g_pl:inside(g_room_bounds)then
-local abx,aby=g_pl:abside(g_room_bounds)
-local nri=peek"0x5d01"+aby*16+abx
+end,function(ec)
+eo(am,[[1;,q,se;2;,y,ec;3;,io,sh;4;,oy,nd,@;5;,oy,nz,@;6;,oy,sv;7;,ar,rm;8;,hg,wv,@;9;,ou,fr;10;,ab,uy,@;11;,nf,j;12;,nn,gm;]],tl.ty,of[peek"0x5d01"],tl.og,tl.at)
+if not ed"ts"and not z:sf(ai)then
+local te,tk=z:ig(ai)
+local rd=peek"0x5d01"+tk*16+te
 if peek"0x5d01">223 then
-load_room(peek"0x5d05",peek"0x5d06"/16,peek"0x5d07"/16,g_pl.xf)
-elseif g_rooms[nri]then
-if abx ~=0 then load_room(nri,6-abx*6+1.25*abx,g_pl.y,abx)
-else load_room(nri,g_pl.x,5-aby*5+1.25*aby+.25,g_pl.xf)
+ol(peek"0x5d05",peek"0x5d06"/16,peek"0x5d07"/16,z.d)
+elseif of[rd]then
+if te ~=0 then ol(rd,6-te*6+1.25*te,z.o,te)
+else ol(rd,z.a,5-tk*5+1.25*tk+.25,z.d)
 end
 else
-zcall(load_room,[[1;,151,6,5,@;]],g_pl.xf)
+eo(ol,[[1;,151,6,5,@;]],z.d)
 end
 end
-end,function(state)
-isorty(g_zclass_entities["drawlayer_50"])
-draw_room(g_rooms[peek"0x5d01"],64,57,function()
-zcall(loop_entities,[[1;,drawlayer_25,draw;2;,drawlayer_50,draw;3;,drawlayer_75,draw;]])
+end,function(ec)
+wb(tl["en"])
+ly(of[peek"0x5d01"],64,57,function()
+eo(am,[[1;,iq,v;2;,en,v;3;,pi,v;]])
 end,function()
-zcall(loop_entities,[[1;,drawlayer_90,draw;2;,drawlayer_95,draw;3;,drawlayer_99,draw;]])
+eo(am,[[1;,hk,v;2;,hy,v;3;,ib,v;]])
 end)
-zcall(draw_bar,[[1;,18,6,109,11,@,0,@,@]],g_pl.energy,g_pl.is_energy_cooling_down and 13 or 8,g_pl.is_energy_cooling_down and 1 or 2)
+eo(hp,[[1;,18,6,109,11,@,0,@,@]],z.sg,z.ob and 13 or 8,z.ob and 1 or 2)
 end,function()
-_g.title_logo()
+_g.g_()
 end,function()
-if does_entity_exist"fader"then return end
-zcall(loop_entities,[[1;,timer,tick;2;,actor,state;]])
+if ed"ts"then return end
+eo(am,[[1;,q,se;2;,y,ec;]])
 end,function()
-draw_room(g_rooms[136],64,57,nop,nop)
-zcall(loop_entities,[[1;,drawlayer_99,draw;]])
-zcall(zprinttbox,[[1;,code/sfx:  @alanxoc3  ,64,104,0,7,5;2;,tile/spr:  @greatcadet,64,114,0,7,5;3;,amorg games presents,64,6,0,7,5;]])
-end,function(a)
+ly(of[136],64,57,f,f)
+eo(am,[[1;,ib,v;]])
+eo(ax,[[1;,code/sfx:  @alanxoc3  ,64,104,0,7,5;2;,tile/spr:  @greatcadet,64,114,0,7,5;3;,amorg games presents,64,6,0,7,5;]])
+end,function(e)
 if btnp"4"or btnp"5"then
-_g.fader_out(function()g_state:load"room" end)
+_g.rp(function()rh:load"m" end)
 end
-end,function(a)
-for i=-2,2 do
-zspr(45+i,i*10+64,57+cos((g_si+i)/4)/2,1,2)
+end,function(e)
+for u=-2,2 do
+tf(45+u,u*10+64,57+cos((au+u)/4)/2,1,2)
 end
-zcall(zprinttbox,[[1;,not the story of,64,39,0,10,4;]])
-if g_si%2==0 then
-zcall(zprinttbox,[[1;,🅾️ or ❎ to play  ,64,68,0,7,5;]])
+eo(ax,[[1;,not the story of,64,39,0,10,4;]])
+if au%2==0 then
+eo(ax,[[1;,🅾️ or ❎ to play  ,64,68,0,7,5;]])
 end
-end,function(state)
-clean_all_entities"game_state"
-_g.fader_in()
-g_slow_animation=_g.animation".5"
-g_fast_animation=_g.animation".05"
-state:state_init()
+end,function(ec)
+md"is"
+_g.po()
+gl=_g.lv".5"
+fi=_g.lv".05"
+ec:np()
 end)
-function rnd_item(list)return list[flr_rnd(#list)+1]end
-function rnd_one(val)return rnd_item{-1,0,1}end
-function flr_rnd(x)return flr(rnd(x))end
-function zbtn(f,a)return f(a)and f(a+1)and 0 or f(a)and-1 or f(a+1)and 1 or 0 end
-function zspr(sind,x,y,sw,sh,xf,yf)
-sw,sh=sw or 1,sh or 1
-xf,yf=xf and xf<0,yf and yf<0
-x,y=x-sw*4,y-sh*4
-spr(sind,flr(x+.5),flr(y+.5),sw,sh,xf,yf)
+function dr(nc)return nc[mv(#nc)+1]end
+function dk(em)return dr{-1,0,1}end
+function mv(a)return flr(rnd(a))end
+function iz(ns,e)return ns(e)and ns(e+1)and 0 or ns(e)and-1 or ns(e+1)and 1 or 0 end
+function tf(s,a,o,as,t_,d,oh)
+as,t_=as or 1,t_ or 1
+d,oh=d and d<0,oh and oh<0
+a,o=a-as*4,o-t_*4
+spr(s,flr(a+.5),flr(o+.5),as,t_,d,oh)
 end
-function zcamera(x,y,func)
-camera(-x,-y)func()camera()
+function sy(a,o,tv)
+camera(-a,-o)tv()camera()
 end
-function zprint(str,x,y,align,color)
-if align==0 then x-=#str*2
-elseif align>0 then x-=#str*4+1 end
-print(str,x,y,color)
+function dl(af,a,o,es,color)
+if es==0 then a-=#af*2
+elseif es>0 then a-=#af*4+1 end
+print(af,a,o,color)
 end
-function zprinttbox(str,x,y,align,fg,bg)
-zprint(str,x,y+1,align,bg)
-zprint(str,x,y,align,fg)
+function ax(af,a,o,es,sz,rn)
+dl(af,a,o+1,es,rn)
+dl(af,a,o,es,sz)
 end
-function zcall_tbl(func,tbl)
-foreach(tbl,function(params)
-func(unpack(params))
+function de(tv,n_)
+foreach(n_,function(nw)
+tv(unpack(nw))
 end)
 end
-function zcall(func,text,...)
-zcall_tbl(func,zobj(text,...))
+function eo(tv,ei,...)
+de(tv,im(ei,...))
 end
-function zrect(x,y,rx,ry,color)rect(x-rx,y-ry,x+rx-1,y+ry-1,color)end
-function zrectfill(x,y,rx,ry,color)rectfill(x-rx,y-ry,x+rx-1,y+ry-1,color)end
-function scr_help_four(func,x1,y1,x2,y2,color)func(8*x1,8*y1,8*x2,8*y2,color)end
-function scr_zrect(...)scr_help_four(zrect,...)end
-function scr_zrectfill(...)scr_help_four(zrectfill,...)end
-function scr_line(...)scr_help_four(line,...)end
-function scr_pset(x,y,color)pset(8*x,8*y,color)end
-zclass[[actor,timer|load,%actor_load,state,%actor_state,kill,%actor_kill,clean,%actor_clean,is_alive,%actor_is_alive,alive,yes,duration,null,curr,start,next,null,init,nop,update,nop,destroyed,nop;]]
-zclass[[drawlayer_25|]]
-zclass[[drawlayer_50|]]
-zclass[[drawlayer_75|]]
-zclass[[drawlayer_90|]]
-zclass[[drawlayer_95|]]
-zclass[[drawlayer_99|]]
-zclass[[animation,actor|index,0,init,%animation_init;start;duration,@,next,start]]
-zclass[[auto_outline|draw,%auto_outline_draw,outline_color,1]]
-function draw_outline(color,drawfunc)
-for c=1,15 do pal(c,color)end
-local ox,oy=%0x5f28,%0x5f2a
-for y=-1,1 do for x=-1,1 do
-camera(ox+x,oy+y)drawfunc()
+function ln(a,o,r,h,color)rect(a-r,o-h,a+r-1,o+h-1,color)end
+function pd(a,o,r,h,color)rectfill(a-r,o-h,a+r-1,o+h-1,color)end
+function rt(tv,er,ek,ej,tn,color)tv(8*er,8*ek,8*ej,8*tn,color)end
+function up(...)rt(ln,...)end
+function ys(...)rt(pd,...)end
+function pq(...)rt(line,...)end
+function cv(a,o,color)pset(8*a,8*o,color)end
+i[[y,q|load,%co,ec,%wa,iu,%uw,hs,%cy,wh,%wt,al,_,l,dc,tx,k,x,dc,b,f,j,f,oc,f;]]
+i[[iq|]]
+i[[en|]]
+i[[pi|]]
+i[[hk|]]
+i[[hy|]]
+i[[ib|]]
+i[[lv,y|ee,0,b,%us;k;l,@,x,k]]
+i[[sb|v,%pz,wx,1]]
+function rb(color,oj)
+for a_=1,15 do pal(a_,color)end
+local lm,hz=%0x5f28,%0x5f2a
+for o=-1,1 do for a=-1,1 do
+camera(lm+a,hz+o)oj()
 end end
-camera(ox,oy)
+camera(lm,hz)
 pal()
 end
-function isorty(t)
+function wb(t)
 for n=2,#t do
-local i=n
-while i>1 and t[i].y<t[i-1].y do
-t[i],t[i-1]=t[i-1],t[i]
-i=i-1
+local u=n
+while u>1 and t[u].o<t[u-1].o do
+t[u],t[u-1]=t[u-1],t[u]
+u=u-1
 end
 end
 end
-zclass[[timer|timers;,;start_timer,%timer_start_timer,stop_timer,%timer_stop_timer,play_timer,%timer_play_timer,is_active,%timer_is_active,delete_timer,%timer_delete_timer,get_elapsed,%timer_get_elapsed,get_elapsed_percent,%timer_get_elapsed_percent,tick,%timer_tick,]]
-function loop_through_tiles(room,func)
-for tiles in all{room.tiles_1,room.tiles_2}do
-for location,index in pairs(tiles)do
-local x,y=location%12,location\12
-func(lookup_tile_animation(index),x*8,y*8)
+i[[q|tq;,;r_,%pw,gv,%ry,fq,%di,cb,%px,yu,%we,na,%wc,td,%mn,se,%ck,]]
+function gr(m,tv)
+for pn in all{m.ir,m.nb}do
+for he,ee in pairs(pn)do
+local a,o=he%12,he\12
+tv(mg(ee),a*8,o*8)
 end
 end
 end
-function draw_room(room,center_x,center_y,post_tile_func,post_card_func)
-local x1,y1=center_x-room.w*8\2,center_y-room.h*8\2
-draw_card(center_x,center_y,room.w*4-2,room.h*4-2,-2,-2,function()
-rectfill(0,0,127,127,room.color)
-loop_through_tiles(room,spr)
-post_tile_func(x1,y1)
-end,post_card_func)
+function ly(m,lr,lg,dz,ri)
+local er,ek=lr-m.il*8\2,lg-m.ic*8\2
+ng(lr,lg,m.il*4-2,m.ic*4-2,-2,-2,function()
+rectfill(0,0,127,127,m.color)
+gr(m,spr)
+dz(er,ek)
+end,ri)
 end
-function create_tile_animation_lookup(room)
-local lookup={}
-for layer in all{room.tiles_1,room.tiles_2}do
-for x=0,11 do
-local tbl={}
-for y=0,9 do add(tbl,layer[y*12+x])end
-lookup[layer[x]or 0]=tbl
+function gq(m)
+local dn={}
+for ay in all{m.ir,m.nb}do
+for a=0,11 do
+local n_={}
+for o=0,9 do add(n_,ay[o*12+a])end
+dn[ay[a]or 0]=n_
 end
 end
-return lookup
+return dn
 end
-function lookup_tile_animation(sind)
-local anim=g_tile_animation_lookup[sind]
-return anim and anim[g_si%#anim+1]or sind
+function mg(s)
+local ta=mx[s]
+return ta and ta[au%#ta+1]or s
 end
-zclass[[box,pos|rx,0,ry,0,touching,%box_touching,inside,%box_inside,outside,%box_outside,side,%box_side,abside,%box_abside,getdelta,%box_getdelta]]
-function zsgn(num)
-return num==0 and 0 or sgn(num)
+i[[ef,nj|r,0,h,0,yr,%mc,sf,%fk,ox,%ps,ij,%mu,ig,%ff,ds,%uu]]
+function ny(hn)
+return hn==0 and 0 or sgn(hn)
 end
-function get_delta_axis(dx,x,rx,tdx,tdrx)
-local xp=(x-tdx)/tdrx
-return abs(xp)-rx/tdrx<1 and tdx+sgn(xp)*(rx+tdrx)-(x-dx)or dx
+function nh(c,a,r,iw,ag)
+local eb=(a-iw)/ag
+return abs(eb)-r/ag<1 and iw+sgn(eb)*(r+ag)-(a-c)or c
 end
-zclass[[pos|x,0,y,0,dist_point,%pos_dist_point]]
-zclass[[vec,pos|dx,0,dy,0,vec_update,%vec_update]]
-zclass[[mov,vec|ang,0,speed,0,mov_update,%mov_update,towards_point,%mov_towards_point]]
-zclass[[explode,actor,drawlayer_50|x,@,y,@,len,@,mod,@,destroyed,@,draw,%explode_draw;start;duration,.25;]]
-function get_solid_tile(room,index)
-local t2=room.tiles_2[index]
-if t2 then return fget(t2,0)and t2 end
-t2=room.tiles_1[index]
-return fget(t2,0)and t2
+i[[nj|a,0,o,0,dj,%ga]]
+i[[ar,nj|c,0,g,0,rm,%rm]]
+i[[io,ar|tm,0,ev,0,sh,%sh,uc,%fz]]
+i[[ni,y,en|a,@,o,@,su,@,hc,@,oc,@,v,%gp;k;l,.25;]]
+function ct(m,ee)
+local om=m.nb[ee]
+if om then return fget(om,0)and om end
+om=m.ir[ee]
+return fget(om,0)and om
 end
-zclass[[collidable,box,vec|calc_deltas,%calc_deltas,should_collide_below,yes,should_collide_with_screen_edge,yes,adjust_deltas_for_solids,%adjust_deltas_for_solids,adjust_deltas_for_tiles,%adjust_deltas_for_tiles,adjust_deltas_for_screen,%adjust_deltas_for_screen]]
-function get_delta_axis2(dx,x,rx,tdx,tdrx)
-local xp=(x-tdx)/tdrx
-if abs(xp)+rx/tdrx>1 then
-return tdx+sgn(xp)*(tdrx-rx)-(x-dx)
+i[[oy,ef,ar|sk,%sk,dx,_,lx,_,nd,%nd,nz,%nz,sv,%sv]]
+function lu(c,a,r,iw,ag)
+local eb=(a-iw)/ag
+if abs(eb)+r/ag>1 then
+return iw+sgn(eb)*(ag-r)-(a-c)
 else
-return dx
+return c
 end
 end
-zclass[[healthobj|max_health,1,hurt,%healthobj_hurt,health_update,%healthobj_health_update]]
-zclass[[inventory,actor,drawlayer_90|pl,@,ind,4;start;init,%inventory_start_init,update,%inventory_start_update,draw,nop;press;init,nop,update,%inventory_press_update,draw,%inventory_draw;expand;init,nop,update,nop,draw,%inventory_draw,duration,.0625,next,press;contract;init,nop,update,nop,draw,%inventory_draw,duration,.0625,next,start;1;mem_loc,0x5d12,index,0,name,bomb,sxo,-1,syo,1,xoff,-7,yoff,-9,sind,5;2;mem_loc,0x5d10,index,1,name,bowl,sxo,0,syo,-1,xoff,0,yoff,-10,sind,8;3;mem_loc,0x5d15,index,2,name,mask,sxo,1,syo,1,xoff,7,yoff,-9,sind,3;4;mem_loc,0x5d13,index,3,name,shield,sxo,0,syo,0,xoff,-8,yoff,-2,sind,6;5;mem_loc,0x5dff,sxo,0,syo,0,xoff,0,yoff,0,sind,0;6;mem_loc,0x5d16,index,5,name,sword,sxo,1,syo,0,xoff,8,yoff,-2,sind,2;7;mem_loc,0x5d17,index,6,name,banjo,sxo,1,syo,0,xoff,-7,yoff,5,sind,1;8;mem_loc,0x5d11,index,7,name,brang,sxo,1,syo,1,xoff,0,yoff,6,sind,4;9;mem_loc,0x5d14,index,8,name,bow,sxo,0,syo,0,xoff,7,yoff,5,sind,7;10;mem_loc,0x5d00,index,4,sxo,0,syo,-2,xoff,0,yoff,0,sind,103,flip_enabled,on;]]
-zclass[[solid,box|]]
-zclass[[wall,solid,anchor|anchoring,@,offx,@,offy,@,rx,@,ry,@]]
-zclass[[simple_spr,auto_outline,pos|drawout,%simple_spr_draw,sind,0,sw,1,sh,1,xf,1,yf,1,sx,0,sy,0]]
-zclass[[anchor,pos|update_anchor,%anchor_update_anchor;offx,0,offy,0,offdx,0,offdy,0,anchoring;,]]
-zclass[[target,anchor,box|rx,@,ry,@,offx,@,offy,@,anchoring,@,callback_touch,@,callback_outside,@,update_target,%targettouch_update_target]]
-zclass[[statitem,box|]]
-zclass[[item_horizontal,anchor|offspeed,0,normal_init,%item_horizontal_normal_init;start;init,%item_horizontal_start_init,duration,.08,next,normal;normal;init,%item_horizontal_normal_init,offdx,0;ending;init,%item_horizontal_ending_init,duration,.08;]]
-zclass[[mask,anchor,actor|anchoring,@,xf,@,visible,yes,block_direction,no,speed_multiplier,2,initial_energy,.125,gradual_energy,.0078125,offy,.2,sind,3;start;offdy,-.0625,duration,.08,next,normal;normal;offy,-.125,offdy,0;ending;offdy,.0625,duration,.08;]]
-zclass[[bow,item_horizontal,actor|anchoring,@,xf,@,visible,yes,block_direction,yes,speed_multiplier,.5,initial_energy,.25,gradual_energy,0,offspeed,.105,sind,7;ending;init,%item_horizontal_ending_init,duration,.08;ending;init,%bow_ending_init,duration,.08;]]
-zclass[[arrow,vec,actor,drawlayer_50,statitem|x,@,y,@,dx,@,xf,@,damage,1,stunlen,.125,pushspeed,.375,should_use_xf,yes,item_hit_func,~kill,rx,.375,ry,.125,destroyed,%standard_explosion,draw,%arrow_draw;start;duration,.5;]]
-zclass[[shield,item_horizontal,actor,statitem|anchoring,@,xf,@,rx,.25,ry,.5,damage,0,stunlen,2,pushspeed,.25,should_use_xf,yes,item_hit_func,%shield_item_hit_func,plpushspeed,.125,visible,yes,block_direction,yes,speed_multiplier,.5,initial_energy,.125,gradual_energy,0,offspeed,.105,sind,6;]]
-zclass[[sword,item_horizontal,actor,statitem|anchoring,@,xf,@,rx,.375,ry,.25,damage,2,stunlen,.25,pushspeed,.125,should_use_xf,yes,item_hit_func,%shield_item_hit_func,plpushspeed,.25,visible,yes,block_direction,yes,speed_multiplier,.5,initial_energy,.25,gradual_energy,0,offspeed,.125,sind,2;]]
-zclass[[banjo,anchor,actor|anchoring,@,xf,@,visible,yes,block_direction,no,speed_multiplier,.5,initial_energy,.125,gradual_energy,0,offy,-.05,sind,1;start;init,%banjo_start_init,offdy,.0625,duration,.08,next,min_play;min_play;init,nop,offdy,0,duration,2,next,normal;normal;init,nop,offy,.25,next,ending;ending;init,%banjo_ending_init,offdy,-.0625,duration,.08;]]
-zclass[[brang,collidable,simple_spr,drawlayer_50,mov,actor,statitem|anchoring,@,xf,@,rx,.25,ry,.25,damage,0,stunlen,.25,pushspeed,.25,should_use_xf,no,item_hit_func,~kill,visible,no,block_direction,yes,speed_multiplier,.25,initial_energy,.25,gradual_energy,0,should_collide_below,no,offspeed,.125,drawout,%brang_drawout,sind,4;start;init,%brang_start_init,speed,.075,duration,.125,next,normal;normal;init,nop,speed,0,duration,1.5,update,%brang_normal_update,next,ending;ending;init,%brang_ending_init,speed,0,speed,0,update,%brang_ending_update,duration,.125,adjust_deltas_for_solids,nop,adjust_deltas_for_tiles,nop;final;init,nop,update,nop,alive,no;]]
-zclass[[bomb,actor,vec,simple_spr,drawlayer_50,statitem|anchoring,@,xf,@,sind,5,sy,-2,damage,1,stunlen,5,pushspeed,.25,should_use_xf,yes,item_hit_func,nop,visible,no,block_direction,no,speed_multiplier,1,initial_energy,.25,gradual_energy,0,offspeed,.185;start;init,%bomb_start_init,dy,.08,duration,.08,next,normal;normal;init,nop,duration,.5,dx,0,dy,0,next,exploding;exploding;init,%bomb_destroyed,update,%bomb_ending_update,duration,.25,next,ending,draw,nop;ending;init,nop,alive,no;]]
-zclass[[pl,actor,mov,collidable,auto_outline,healthobj,drawlayer_50|cname,lank,cspr,103,max_health,10,x,@,y,@,xf,@,sind,88,rx,.375,ry,.375,should_collide_with_screen_edge,no,update,%pl_update,energy,0,is_energy_cooling_down,no,target_energy,0,drawout,%pl_drawout;item_funcs;5,%sword,2,%mask,8,%bow,3,%shield,0,%bomb,6,%banjo,7,%brang;default_item;visible,no,is_default,yes,block_direction,no,speed_multiplier,1,alive,yes,gradual_energy,-.0078125,initial_energy,0,kill,nop;item,~default_item;]]
-function draw_bar(x1,y1,x2,y2,percent,align,fg,bg)
-if x1>x2 then x1-=3 x2-=3 end
-local bar_off=x2-x1-min(percent,1)*(x2-x1)
-if align==0 then bar_off/=2 end
-if percent>0 then
-local xx=ceil(x1+(align>=0 and bar_off or 0))
-local yy=flr(x2-(align<=0 and bar_off or 0))
-rectfill(x1,y1,x1,y2,13)
-rectfill(x2,y1,x2,y2,13)
-rectfill(xx,y1,yy,y2,fg)
-rectfill(xx,y2,yy,y2,bg)
+i[[nn|aa,1,gh,%u_,gm,%fx]]
+i[[mt,y,hk|at,@,ti,4;k;b,%ug,j,%pu,v,f;gd;b,f,j,%ye,v,%s_;le;b,f,j,f,v,%s_,l,.0625,x,gd;sw;b,f,j,f,v,%s_,l,.0625,x,k;1;tu,0x5d12,ee,0,ae,dw,tt,-1,tr,1,tw,-7,tg,-9,s,5;2;tu,0x5d10,ee,1,ae,yn,tt,0,tr,-1,tw,0,tg,-10,s,8;3;tu,0x5d15,ee,2,ae,hu,tt,1,tr,1,tw,7,tg,-9,s,3;4;tu,0x5d13,ee,3,ae,dd,tt,0,tr,0,tw,-8,tg,-2,s,6;5;tu,0x5dff,tt,0,tr,0,tw,0,tg,0,s,0;6;tu,0x5d16,ee,5,ae,lh,tt,1,tr,0,tw,8,tg,-2,s,2;7;tu,0x5d17,ee,6,ae,nr,tt,1,tr,0,tw,-7,tg,5,s,1;8;tu,0x5d11,ee,7,ae,ll,tt,1,tr,1,tw,0,tg,6,s,4;9;tu,0x5d14,ee,8,ae,lo,tt,0,tr,0,tw,7,tg,5,s,7;10;tu,0x5d00,ee,4,tt,0,tr,-2,tw,0,tg,0,s,103,wq,ym;]]
+i[[ty,ef|]]
+i[[pc,ty,ou|et,@,eu,@,eh,@,r,@,h,@]]
+i[[eg,sb,nj|th,%pg,s,0,as,1,t_,1,d,1,oh,1,oz,0,oo,0]]
+i[[ou,nj|fr,%gj;eu,0,eh,0,iv,0,oe,0,et;,]]
+i[[ab,ou,ef|r,@,h,@,eu,@,eh,@,et,@,pv,@,gb,@,uy,%cu]]
+i[[og,ef|]]
+i[[sr,ou|az,0,ge,%lw;k;b,%uz,l,.08,x,eq;eq;b,%lw,iv,0;ea;b,%sn,l,.08;]]
+i[[hu,ou,y|et,@,d,@,an,_,ad,ez,ao,2,tz,.125,ac,.0078125,eh,.2,s,3;k;oe,-.0625,l,.08,x,eq;eq;eh,-.125,oe,0;ea;oe,.0625,l,.08;]]
+i[[lo,sr,y|et,@,d,@,an,_,ad,_,ao,.5,tz,.25,ac,0,az,.105,s,7;ea;b,%sn,l,.08;ea;b,%gi,l,.08;]]
+i[[fw,ar,y,en,og|a,@,o,@,c,@,d,@,ih,1,ii,.125,av,.375,iy,_,ip,~iu,r,.375,h,.125,oc,%gw,v,%c_;k;l,.5;]]
+i[[dd,sr,y,og|et,@,d,@,r,.25,h,.5,ih,0,ii,2,av,.25,iy,_,ip,%rv,da,.125,an,_,ad,_,ao,.5,tz,.125,ac,0,az,.105,s,6;]]
+i[[lh,sr,y,og|et,@,d,@,r,.375,h,.25,ih,2,ii,.25,av,.125,iy,_,ip,%rv,da,.25,an,_,ad,_,ao,.5,tz,.25,ac,0,az,.125,s,2;]]
+i[[nr,ou,y|et,@,d,@,an,_,ad,ez,ao,.5,tz,.125,ac,0,eh,-.05,s,1;k;b,%cq,oe,.0625,l,.08,x,rl;rl;b,f,oe,0,l,2,x,eq;eq;b,f,eh,.25,x,ea;ea;b,%cw,oe,-.0625,l,.08;]]
+i[[ll,oy,eg,en,io,y,og|et,@,d,@,r,.25,h,.25,ih,0,ii,.25,av,.25,iy,ez,ip,~iu,an,ez,ad,_,ao,.25,tz,.25,ac,0,dx,ez,az,.125,th,%ce,s,4;k;b,%gc,ev,.075,l,.125,x,eq;eq;b,f,ev,0,l,1.5,j,%pp,x,ea;ea;b,%ya,ev,0,ev,0,j,%w_,l,.125,nd,f,nz,f;yc;b,f,j,f,al,ez;]]
+i[[dw,y,ar,eg,en,og|et,@,d,@,s,5,oo,-2,ih,1,ii,5,av,.25,iy,_,ip,f,an,ez,ad,ez,ao,1,tz,.25,ac,0,az,.185;k;b,%fh,g,.08,l,.08,x,eq;eq;b,f,l,.5,c,0,g,0,x,cx;cx;b,%pl,j,%m_,l,.25,x,ea,v,f;ea;b,f,al,ez;]]
+i[[at,y,io,oy,sb,nn,en|ex,lank,ey,103,aa,10,a,@,o,@,d,@,s,88,r,.375,h,.375,lx,ez,j,%dq,sg,0,ob,ez,oi,0,th,%pt;um;5,%lh,2,%hu,8,%lo,3,%dd,0,%dw,6,%nr,7,%ll;lf;an,ez,uq,_,ad,ez,ao,1,al,_,ac,-.0078125,tz,0,iu,f;p,~lf;]]
+function hp(er,ek,ej,tn,tp,es,sz,rn)
+if er>ej then er-=3 ej-=3 end
+local ss=ej-er-min(tp,1)*(ej-er)
+if es==0 then ss/=2 end
+if tp>0 then
+local sa=ceil(er+(es>=0 and ss or 0))
+local st=flr(ej-(es<=0 and ss or 0))
+rectfill(er,ek,er,tn,13)
+rectfill(ej,ek,ej,tn,13)
+rectfill(sa,ek,st,tn,sz)
+rectfill(sa,tn,st,tn,rn)
 end
 end
-function draw_card(x,y,rx,ry,coffx,coffy,card_func,post_card_func)
-local x1,x2,y1,y2=x-rx,x+rx-1,y-ry,y+ry-1
-local cam_x,cam_y=x1+coffx,y1+coffy
-clip(x1,y1,x2-x1,y2-y1)
+function ng(a,o,r,h,mw,wl,ph,ri)
+local er,ej,ek,tn=a-r,a+r-1,o-h,o+h-1
+local dm,h_=er+mw,ek+wl
+clip(er,ek,ej-er,tn-ek)
 rectfill(-100,-100,9000,9000,1)
-zcamera(cam_x,cam_y,card_func)
+sy(dm,h_,ph)
 clip()
-for i,c in pairs{1,13,0}do
-i=2-i
-color(c)
-if c ~=0 then rect(x1+i,y1+i,x2-i,y2-i)end
-i+=1
-pset(x1+i,y1+i)pset(x1+i,y2-i)
-pset(x2-i,y1+i)pset(x2-i,y2-i)
+for u,a_ in pairs{1,13,0}do
+u=2-u
+color(a_)
+if a_ ~=0 then rect(er+u,ek+u,ej-u,tn-u)end
+u+=1
+pset(er+u,ek+u)pset(er+u,tn-u)
+pset(ej-u,ek+u)pset(ej-u,tn-u)
 end
-zcamera(cam_x,cam_y,post_card_func)
+sy(dm,h_,ri)
 end
-zclass[[rstat|align,@,x,@,update,%rstat_update,set,%rstat_set,get,%rstat_get;buffer;,;]]
-zclass[[stat,vec,actor,drawlayer_95|align,@,x,@,obj,@,y,138,draw,%stat_draw;start;dy,-2,duration,.2,next,normal;normal;dy,0;ending;dy,2,duration,.2;]]
-zclass[[tbox,vec,actor,drawlayer_99|rawtext,@,destroyed,@,y,138,cur_text_index,1,anim,0,line_1,,line_2,,update,%tbox_update,draw,%tbox_draw;texts;,;start;dy,-2,duration,.2,next,normal,update,nop,init,%tbox_init;normal;dy,0,anim,0,done,no,update,%tbox_update,init,nop;ending;dy,2,update,nop,duration,.2,init,nop;]]
-zclass[[fairy,actor,mov,drawlayer_50|x,@,y,@,update,%fairy_update,draw,%fairy_draw]]
-function draw_tail(x,y,dx,dy,mult)
-for i=-2,2 do
-local m=.125*sgn(i)
-scr_line(x+abs(i)\2*m,y+i%2*m,x-dx*mult,y-dy*mult,1)
-end
-end
-zclass[[woodtbl,solid,drawlayer_50,simple_spr|x,@,y,@,rx,.375,ry,.375,draw,~drawout,sind,16]]
-zclass[[greytbl,solid,drawlayer_50,simple_spr|x,@,y,@,rx,.375,ry,.375,draw,~drawout,sind,17]]
-zclass[[soupbucket,solid,drawlayer_50,simple_spr|x,@,y,@,rx,.375,ry,.375,draw,~drawout,sind,18]]
-zclass[[pot,solid,drawlayer_50,simple_spr|x,@,y,@,rx,.375,ry,.375,draw,~drawout,sind,49]]
-zclass[[woodcrate,solid,drawlayer_50,simple_spr|x,@,y,@,rx,.375,ry,.375,draw,~drawout,sind,35]]
-zclass[[bedblanket,actor,simple_spr,drawlayer_50|x,@,y,@,sind,55,init,%spawn_walls;walls;1;,~,-.25,.25,.25,.25;walls;2;,~,.25,.25,.25,.25;]]
-zclass[[bedpillow,simple_spr,drawlayer_25|x,@,y,@,sind,39]]
-zclass[[house,actor,simple_spr,drawlayer_50|cspr,174,sind,174,sw,2,sh,2,init,%house_init;walls;1;,~,.75,.5,.25,.75;walls;2;,~,-.75,.5,.25,.75;walls;3;,~,0,0,.75,.25;]]
-zclass[[house231,house|x,@,y,@,room,231]]
-zclass[[house224,house|x,@,y,@,room,224]]
-zclass[[house225,house|x,@,y,@,room,225]]
-zclass[[house226,house|x,@,y,@,room,226]]
-zclass[[house227,house|x,@,y,@,room,227]]
-zclass[[house228,house|x,@,y,@,room,228]]
-zclass[[house229,house|x,@,y,@,room,229]]
-zclass[[person,target_with_tbox,solid,simple_spr,drawlayer_50|text,,rx,.375,ry,.375,sy,-2,trx,.5,try,.25,ty,.25,target_with_tbox_disable_callback,%person_target_with_tbox_disable_callback]]
-zclass[[navyblock,person|x,@,y,@,cname,navy,cspr,97,sind,97,text,my sister has been in^the forest all day.^find something to^protect yourself with^and bring her home.,ry,1,memloc_trigger,0x5d09,memloc_trigger_value,1,target_with_tbox_finish_callback,%person_target_with_tbox_finish_callback|0x5d09|0]]
-zclass[[navyhouse,person|x,@,y,@,cname,navy,cspr,97,sind,97,text,im navy in a house|0x5d09|1]]
-zclass[[bobblock,person|x,@,y,@,cname,bob,cspr,80,sind,80,text,im bob outside,ry,1,memloc_trigger,0x5d18,memloc_trigger_value,1,target_with_tbox_finish_callback,%person_target_with_tbox_finish_callback|0x5d18|0]]
-zclass[[bobhouse,person|x,@,y,@,cname,bob,cspr,80,sind,80,text,im bob in a house|0x5d18|1]]
-zclass[[jane,person|x,@,y,@,cname,jane,cspr,81,sind,81,text,im jane in a house]]
-zclass[[teach,person|x,@,y,@,cname,teach,cspr,96,sind,96,text,im teach in a house]]
-zclass[[keep,person|x,@,y,@,cname,keep,cspr,83,sind,83,text,im keep in a house]]
-zclass[[lark,person|x,@,y,@,cname,lark,cspr,99,sind,99,text,im lark in a house]]
-zclass[[target_with_tbox,actor|init,%target_with_tbox_init,trx,0,try,0,tx,0,ty,0,target_with_tbox_disable_callback,nop,target_with_tbox_finish_callback,nop]]
-zclass[[sign,target_with_tbox,solid,simple_spr,drawlayer_50|text,,rx,.375,ry,.375,sy,-2,target_with_tbox_disable_callback,%sign_target_with_tbox_disable_callback,cname,sign,cspr,24,sind,24,trx,.125,try,.375,tx,0,ty,.25]]
-zclass[[signtest,sign|x,@,y,@,text,mary had a^little lamb^little lamb^little lamb^mary had a^little lamb^whose fleece was^white as yo face]]
-zclass[[signlank,sign|x,@,y,@,text,lanks house]]
-zclass[[signkeep,sign|x,@,y,@,text,keeps house]]
-zclass[[signnavy,sign|x,@,y,@,text,navys house]]
-zclass[[signteach,sign|x,@,y,@,text,teachs house]]
-zclass[[signlark,sign|x,@,y,@,text,larks house]]
-zclass[[signjane,sign|x,@,y,@,text,janes house]]
-zclass[[slimy_actual,box,mov,simple_spr,drawlayer_50,collidable,healthobj,actor|x,@,y,@,rx,.375,ry,.375,cspr,118,cname,slimy,sind,118,destroyed,%slimy_destroyed,statcollide,%slimy_statcollide,max_health,5;start;sind,118,speed,0,sx,0,sy,0,update,%slimy_start,duration,1,next,shake;shake;speed,0,update,%slimy_shake,duration,.25,next,jump;jump;sind,119,speed,.05,sx,0,update,%slimy_jump,duration,.25,next,start;]]
-zclass[[miny_actual,simple_spr,vec,drawlayer_50,actor|x,@,y,@,cspr,116,cname,miny,sind,116]]
-zclass[[spike,simple_spr,actor,drawlayer_25|sind,52,draw,~drawout;start;next,down;down;sind,52,duration,.5,next,middle1;middle1;sind,53,duration,.125,next,up;up;sind,54,duration,.25,next,middle2;middle2;sind,53,duration,.125,next,down;]]
-zclass[[r1spike,spike|x,@,y,@,xf,1;start;duration,0;]]
-zclass[[r2spike,spike|x,@,y,@,xf,1;start;duration,.5;]]
-zclass[[l1spike,spike|x,@,y,@,xf,-1;start;duration,0;]]
-zclass[[l2spike,spike|x,@,y,@,xf,-1;start;duration,.5;]]
-zclass[[saveplat,box,simple_spr,actor,drawlayer_25|x,@,y,@,rx,.375,ry,.375,cname,save,cspr,10,sind,40,sw,2,sh,2,draw,~drawout,update,%saveplat_update;]]
-g_fade,g_fade_table=1,zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,1,0,0,0,0;3;,3,3,3,3,1,1,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,0,0,0,0;6;,6,6,13,13,5,5,0,0;7;,7,7,6,13,13,5,0,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,0,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,0,0,0;13;,13,13,5,5,1,0,0,0;14;,14,14,13,4,2,2,0,0;15;,15,15,13,13,5,5,0,0;]]
-function fade(threshold)
-for c=0,15 do
-pal(c,g_fade_table[c][1+flr(7*min(1,max(0,threshold)))],1)
+i[[nf|es,@,a,@,j,%fo,ot,%pk,hb,%du;os;,;]]
+i[[stat,ar,y,hy|es,@,a,@,el,@,o,138,v,%fd;k;g,-2,l,.2,x,eq;eq;g,0;ea;g,2,l,.2;]]
+i[[tb,ar,y,ib|fs,@,oc,@,o,138,no,1,ta,0,rq,,ht,,j,%dp,v,%py;so;,;k;g,-2,l,.2,x,eq,j,f,b,%wf;eq;g,0,ta,0,od,ez,j,%dp,b,f;ea;g,2,j,f,l,.2,b,f;]]
+i[[ub,y,io,en|a,@,o,@,j,%gf,v,%pr]]
+function ld(a,o,c,g,hx)
+for u=-2,2 do
+local hq=.125*sgn(u)
+pq(a+abs(u)\2*hq,o+u%2*hq,a-c*hx,o-g*hx,1)
 end
 end
-zclass[[fader,actor|ecs_exclusions;actor,yes,timer,yes;]]
-zclass[[fader_out,fader|start;duration,.5,destroyed,@,update,%fader_out_update]]
-zclass[[fader_in,fader|start;duration,.5,update,%fader_in_update]]
-zclass[[gameover_control,actor|start;duration,.75,next,ending;ending;init,%gameover_control_ending;]]
-zclass[[room_bounds,box|x,@,y,@,rx,@,ry,@]]
-function load_room(rind,x,y,xf)
-if not does_entity_exist"fader"then
-_g.fader_out(function()
-zcall(poke,[[1;,0x5d01,@;2;,0x5d02,@;3;,0x5d03,@;4;,0x5d04,@;]],rind,
-x*16,
-y*16,
-(xf+1)\2
+i[[wm,ty,en,eg|a,@,o,@,r,.375,h,.375,v,~th,s,16]]
+i[[cj,ty,en,eg|a,@,o,@,r,.375,h,.375,v,~th,s,17]]
+i[[ca,ty,en,eg|a,@,o,@,r,.375,h,.375,v,~th,s,18]]
+i[[gu,ty,en,eg|a,@,o,@,r,.375,h,.375,v,~th,s,49]]
+i[[me,ty,en,eg|a,@,o,@,r,.375,h,.375,v,~th,s,35]]
+i[[gs,y,eg,en|a,@,o,@,s,55,b,%hm;ov;1;,~,-.25,.25,.25,.25;ov;2;,~,.25,.25,.25,.25;]]
+i[[fm,eg,iq|a,@,o,@,s,39]]
+i[[ak,y,eg,en|ey,174,s,174,as,2,t_,2,b,%gx;ov;1;,~,.75,.5,.25,.75;ov;2;,~,-.75,.5,.25,.75;ov;3;,~,0,0,.75,.25;]]
+i[[ud,ak|a,@,o,@,m,231]]
+i[[ue,ak|a,@,o,@,m,224]]
+i[[wu,ak|a,@,o,@,m,225]]
+i[[ft,ak|a,@,o,@,m,226]]
+i[[gn,ak|a,@,o,@,m,227]]
+i[[cn,ak|a,@,o,@,m,228]]
+i[[ut,ak|a,@,o,@,m,229]]
+i[[ah,df,ty,eg,en|ei,,r,.375,h,.375,oo,-2,ru,.5,rw,.25,ow,.25,sc,%uh]]
+i[[wg,ah|a,@,o,@,ex,navy,ey,97,s,97,ei,my sister has been in^the forest all day.^find something to^protect yourself with^and bring her home.,h,1,lc,0x5d09,hv,1,ra,%lz|0x5d09|0]]
+i[[wn,ah|a,@,o,@,ex,navy,ey,97,s,97,ei,im navy in a house|0x5d09|1]]
+i[[f_,ah|a,@,o,@,ex,bob,ey,80,s,80,ei,im bob outside,h,1,lc,0x5d18,hv,1,ra,%lz|0x5d18|0]]
+i[[ux,ah|a,@,o,@,ex,bob,ey,80,s,80,ei,im bob in a house|0x5d18|1]]
+i[[cf,ah|a,@,o,@,ex,jane,ey,81,s,81,ei,im jane in a house]]
+i[[mf,ah|a,@,o,@,ex,teach,ey,96,s,96,ei,im teach in a house]]
+i[[fy,ah|a,@,o,@,ex,keep,ey,83,s,83,ei,im keep in a house]]
+i[[gt,ah|a,@,o,@,ex,lark,ey,99,s,99,ei,im lark in a house]]
+i[[df,y|b,%pj,ru,0,rw,0,ok,0,ow,0,sc,f,ra,f]]
+i[[ap,df,ty,eg,en|ei,,r,.375,h,.375,oo,-2,sc,%pe,ex,sign,ey,24,s,24,ru,.125,rw,.375,ok,0,ow,.25]]
+i[[yl,ap|a,@,o,@,ei,mary had a^little lamb^little lamb^little lamb^mary had a^little lamb^whose fleece was^white as yo face]]
+i[[yt,ap|a,@,o,@,ei,lanks house]]
+i[[cr,ap|a,@,o,@,ei,keeps house]]
+i[[yi,ap|a,@,o,@,ei,navys house]]
+i[[mj,ap|a,@,o,@,ei,teachs house]]
+i[[uk,ap|a,@,o,@,ei,larks house]]
+i[[ww,ap|a,@,o,@,ei,janes house]]
+i[[hg,ef,io,eg,en,oy,nn,y|a,@,o,@,r,.375,h,.375,ey,118,ex,slimy,s,118,oc,%wk,wv,%fv,aa,5;k;s,118,ev,0,oz,0,oo,0,j,%cm,l,1,x,fg;fg;ev,0,j,%fa,l,.25,x,l_;l_;s,119,ev,.05,oz,0,j,%pa,l,.25,x,k;]]
+i[[ur,eg,ar,en,y|a,@,o,@,ey,116,ex,miny,s,116]]
+i[[nx,eg,y,iq|s,52,v,~th;k;x,ha;ha;s,52,l,.5,x,pf;pf;s,53,l,.125,x,fu;fu;s,54,l,.25,x,fe;fe;s,53,l,.125,x,ha;]]
+i[[mi,nx|a,@,o,@,d,1;k;l,0;]]
+i[[gy,nx|a,@,o,@,d,1;k;l,.5;]]
+i[[ma,nx|a,@,o,@,d,-1;k;l,0;]]
+i[[gg,nx|a,@,o,@,d,-1;k;l,.5;]]
+i[[db,ef,eg,y,iq|a,@,o,@,r,.375,h,.375,ex,save,ey,10,s,40,as,2,t_,2,v,~th,j,%ci;]]
+it,cp=1,im[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,1,0,0,0,0;3;,3,3,3,3,1,1,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,0,0,0,0;6;,6,6,13,13,5,5,0,0;7;,7,7,6,13,13,5,0,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,0,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,0,0,0;13;,13,13,5,5,1,0,0,0;14;,14,14,13,4,2,2,0,0;15;,15,15,13,13,5,5,0,0;]]
+function yo(my)
+for a_=0,15 do
+pal(a_,cp[a_][1+flr(7*min(1,max(0,my)))],1)
+end
+end
+i[[ts,y|rf;y,_,q,_;]]
+i[[rp,ts|k;l,.5,oc,@,j,%fj]]
+i[[po,ts|k;l,.5,j,%mz]]
+i[[wp,y|k;l,.75,x,ea;ea;b,%mp;]]
+i[[ul,ef|a,@,o,@,r,@,h,@]]
+function ol(mh,a,o,d)
+if not ed"ts"then
+_g.rp(function()
+eo(poke,[[1;,0x5d01,@;2;,0x5d02,@;3;,0x5d03,@;4;,0x5d04,@;]],mh,
+a*16,
+o*16,
+(d+1)\2
 )
-g_state:load"room"
+rh:load"m"
 end)
 end
 end
-zclass[[title_logo,actor,auto_outline,drawlayer_99|update,%title_logo_update,drawout,%title_logo_drawout;]]
+i[[g_,y,sb,ib|j,%cg,th,%wr;]]
 cartdata"zeldo_rewrite"
 menuitem(1,"reset save data",function()
 memset(0x5e00,0,64)
 extcmd"reset"
 end)
-zclass[[game_state,actor|ecs_exclusions;actor,yes,timer,yes;curr,room,init,%game_state_init;logo;state_init,%logo_init,update,%simple_update,draw,%logo_draw,duration,2.5,next,title;title;state_init,%title_init,update,%simple_update,draw,%title_draw;room;state_init,%room_init,update,%room_update,draw,%room_draw;gameover;state_init,%gameover_init,update,%simple_update,draw,%gameover_draw;]]
+i[[is,y|rf;y,_,q,_;tx,m,b,%fp;cz;np,%go,j,%sq,v,%wz,l,2.5,x,wj;wj;np,%fn,j,%sq,v,%ml;m;np,%mq,j,%mk,v,%uo;yh;np,%cc,j,%sq,v,%wo;]]
 function _init()
 memcpy(0x5d00,0x5e00,64)
 if peek"0x5d00"==0 then
-zcall(poke,[[1;,0x5d00,1;2;,0x5d01,136;3;,0x5d02,48;4;,0x5d03,48;5;,0x5d04,1;6;,0x5d08,4;7;,0x5d16,1;8;,0x5d15,1;10;,0x5d14,1;11;,0x5d13,1;12;,0x5d12,1;13;,0x5d17,1;14;,0x5d11,1;]])
+eo(poke,[[1;,0x5d00,1;2;,0x5d01,136;3;,0x5d02,48;4;,0x5d03,48;5;,0x5d04,1;6;,0x5d08,4;7;,0x5d16,1;8;,0x5d15,1;10;,0x5d14,1;11;,0x5d13,1;12;,0x5d12,1;13;,0x5d17,1;14;,0x5d11,1;]])
 end
-g_si,g_fi,g_state,g_rooms=0,0,_g.game_state(),decode_map()
-g_tile_animation_lookup=create_tile_animation_lookup(g_rooms[0])
+au,sd,rh,of=0,0,_g.is(),mm()
+mx=gq(of[0])
 end
 function _update60()
-g_zbtn_0,g_zbtn_2=zbtn(btn,0),zbtn(btn,2)
-zcall(loop_entities,[[1;,actor,clean;2;,fader,clean;]])
-register_entities()
-zcall(loop_entities,[[1;,fader,tick;2;,game_state,tick;3;,fader,state;4;,game_state,state;]])
+ik,ix=iz(btn,0),iz(btn,2)
+eo(am,[[1;,y,hs;2;,ts,hs;]])
+ms()
+eo(am,[[1;,ts,se;2;,is,se;3;,ts,ec;4;,is,ec;]])
 end
 function _draw()
-g_si,g_fi=g_slow_animation.index,g_fast_animation.index
+au,sd=gl.ee,fi.ee
 cls()
-loop_entities("game_state","draw")
-fade(g_fade)
+am("is","v")
+yo(it)
 end
