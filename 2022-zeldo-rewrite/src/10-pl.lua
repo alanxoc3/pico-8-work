@@ -9,6 +9,18 @@
 -- brang - just through, yes for ending
 -- banjo - appear, ending is instant
 
+
+--| ITEM STAT |
+-- item stats need these: (sword, arrow, bomb, brang, shield)
+    -- damage: how much damage to do to enemies
+    -- stunlen: how much time enemy should be stunned after hit
+    -- pushspeed: how fast the enemy should be pushed
+    -- should_use_xf: should push speed be reflected by the xf or position
+    -- item_hit_func: a function that gets when it hits the enemy
+
+zclass[[statitem,box|]] -- if the item hits an enemy, the enemy becomes the new stat
+
+--| ITEM ZCLASS LOGIC |--
 -- all items need these:
    -- kill_when_release: should the item die when releasing the button?
    -- block_direction:  item doesn't allow a direction change
@@ -18,9 +30,6 @@
    -- is_default: is this the "no item" item?
    -- visible: should it be drawn with the player?
    -- alive: is the item alive?
-
---| ITEM ZCLASS LOGIC |--
-zclass[[statitem,box|]] -- if the item hits an enemy, the enemy becomes the new stat
 
 zclass[[item_horizontal,anchor|
     offspeed,0,
@@ -68,6 +77,13 @@ zclass[[bow,item_horizontal,actor|
 
 zclass[[arrow,vec,actor,drawlayer_50,statitem|
     x,@, y,@, dx, @, xf, @,
+
+    damage,        1,
+    stunlen,       .125,
+    pushspeed,     .375,
+    should_use_xf, yes,
+    item_hit_func, ~kill,
+
     rx,.375, ry,.125,
     destroyed,%arrow_destroyed,
     draw,%arrow_draw;
@@ -91,9 +107,15 @@ end $$
 
 zclass[[shield,item_horizontal,actor,statitem|
     anchoring,@, xf,@,
-
     rx,.25, ry,.5,
 
+    damage,        0,
+    stunlen,       2,
+    pushspeed,     .25,
+    should_use_xf, yes,
+    item_hit_func, %shield_item_hit_func,
+
+    plpushspeed,     .125,
     kill_when_release,yes,
     visible,yes,
     block_direction, yes,
@@ -111,6 +133,13 @@ zclass[[sword,item_horizontal,actor,statitem|
     anchoring,@, xf,@,
     rx, .375, ry, .25,
 
+    damage,        2,
+    stunlen,       .25,
+    pushspeed,     .125,
+    should_use_xf, yes,
+    item_hit_func, %shield_item_hit_func,
+
+    plpushspeed,     .25,
     kill_when_release,yes,
     visible,yes,
     block_direction, yes,
@@ -121,6 +150,10 @@ zclass[[sword,item_horizontal,actor,statitem|
     offspeed,.125,
     sind,SPR_SWORD;
 ]]
+
+|[shield_item_hit_func]| function(a)
+    a.anchoring.dx -= a.plpushspeed*a.xf
+end $$
 
 zclass[[banjo,anchor,actor|
     anchoring,@, xf,@,
@@ -143,6 +176,12 @@ zclass[[banjo,anchor,actor|
 zclass[[brang,collidable,simple_spr,drawlayer_50,mov,actor,statitem|
     anchoring,@, xf,@,
     rx,.25, ry,.25,
+
+    damage,        0,
+    stunlen,       .25,
+    pushspeed,     .25,
+    should_use_xf, no,
+    item_hit_func, ~kill,
 
     kill_when_release,yes,
     visible,no,
@@ -167,6 +206,12 @@ zclass[[bomb,actor,vec,simple_spr,drawlayer_50,statitem|
 
     sind,SPR_BOMB, sy,-2,
 
+    damage,        1,
+    stunlen,       5,
+    pushspeed,     .25,
+    should_use_xf, yes,
+    item_hit_func, nop,
+
     kill_when_release,no,
     visible,no,
     block_direction, no,
@@ -177,9 +222,9 @@ zclass[[bomb,actor,vec,simple_spr,drawlayer_50,statitem|
     offspeed,.185;
 
     start;    init,%bomb_start_init, dy,.08, duration,.08, next,normal;
-    normal;   init,nop, duration,.5, dx,0, dy,0, next,ending;
-    ending;   init,%bomb_destroyed, update,%bomb_ending_update, duration,.25, next,final, draw,nop;
-    final;    init,nop, alive,no;
+    normal;   init,nop, duration,.5, dx,0, dy,0, next,exploding;
+    exploding; init,%bomb_destroyed, update,%bomb_ending_update, duration,.25, next,ending, draw,nop;
+    ending; init,nop, alive,no;
 ]]
 
 --| ITEM CODE LOGIC |--

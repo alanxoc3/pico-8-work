@@ -45,6 +45,7 @@ TODO: item put away when text box exists
 TODO: leave room puts item away
 TODO: try pc minifier
 TODO: inventory selection puts item away
+TODO: bomb throw direction
 TODO: arrow with collision tile/wall collision
 TODO: mask particle effect
 TODO: music works for rooms in game

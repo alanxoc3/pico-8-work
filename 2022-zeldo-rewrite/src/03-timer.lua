@@ -10,6 +10,7 @@ zclass[[timer|
     stop_timer,         %timer_stop_timer,
     play_timer,         %timer_play_timer,
 
+    is_active,          %timer_is_active,
     delete_timer,       %timer_delete_timer,
     get_elapsed,        %timer_get_elapsed,
     get_elapsed_percent,%timer_get_elapsed_percent,
@@ -43,6 +44,11 @@ end $$
 |[timer_get_elapsed_percent]| function(a, timer_name)
     local timer = a.timers[timer_name]
     return timer and min(1, (timer.elapsed or 0)/timer.duration)
+end $$
+
+|[timer_is_active]| function(a, timer_name)
+    local timer = a.timers[timer_name]
+    return timer and timer.elapsed and timer.elapsed < timer.duration
 end $$
 
 -- This is expected to be called once per frame (at 60 FPS)!

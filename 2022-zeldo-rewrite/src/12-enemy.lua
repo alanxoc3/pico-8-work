@@ -18,18 +18,30 @@ zclass[[slimy_actual,box,mov,simple_spr,drawlayer_50,collidable,actor|
     if a.isma then g_rstat_right:set(a) end
 end $$
 
+    -- damage: how much damage to do to enemies
+    -- stunlen: how much time enemy should be stunned after hit
+    -- pushspeed: how fast the enemy should be pushed
+    -- should_use_xf: should push speed be reflected by the xf or position
+    -- item_hit_func: a function that gets when it hits the enemy
+
 |[slimy_statcollide]| function(a, items)
     foreach(items, function(item)
         if not a:outside(item) and item:is_alive() then
             a:start_timer('isma', 1.5, function() a.isma = false end)
             a.isma = true
 
-            if item.id == 'brang' or item.id == 'bomb' then
+            if not a:is_active'stunned' then
+                a:start_timer('stunned', item.stunlen, nop)
+            end
+
+            item:item_hit_func()
+
+            if item.should_use_xf then
+                a.dx += item.pushspeed*item.xf
+            else
                 local abx, aby = a:abside(item)
-                a.dx += .125*abx
-                a.dy += .125*aby
-            elseif item.id == 'arrow' or item.id == 'shield' or item.id == 'sword' then
-                a.dx += .125*item.xf
+                a.dx += item.pushspeed*abx
+                a.dy += item.pushspeed*aby
             end
         end
     end)
