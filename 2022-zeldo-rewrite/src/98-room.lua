@@ -37,6 +37,7 @@ end $$
         9 ;,anchor,      update_anchor;
         10;,target,      update_target, @;
         11;,rstat,       update;
+        12;,healthobj,   health_update;
     ]], g_zclass_entities.solid, g_rooms[peek'MEM_ROOM_IND'], g_zclass_entities.statitem, g_zclass_entities.pl)
 
     if not does_entity_exist'fader' and not g_pl:inside(g_room_bounds) then

@@ -85,15 +85,11 @@ zclass[[arrow,vec,actor,drawlayer_50,statitem|
     item_hit_func, ~kill,
 
     rx,.375, ry,.125,
-    destroyed,%arrow_destroyed,
+    destroyed,%standard_explosion,
     draw,%arrow_draw;
 
     start; duration,.5;
 ]]
-
-|[arrow_destroyed]| function(a)
-    _g.explode(a.x, a.y, 4, 1, nop)
-end $$
 
 |[arrow_draw]| function(a)
     draw_tail(a.x, a.y, a.dx, 0, 3)
@@ -291,9 +287,9 @@ end $$
 
 --| PL LOGIC |--
 
-zclass[[pl,actor,mov,collidable,auto_outline,drawlayer_50|
+zclass[[pl,actor,mov,collidable,auto_outline,healthobj,drawlayer_50|
     cname,"lank", cspr,SPR_PL_WHOLE,
-    health,10,max_health,10,
+    max_health,10,
     x,@,y,@,xf,@,
     sind,88,
     rx,PL_RADIUS,ry,PL_RADIUS,

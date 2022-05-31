@@ -6,10 +6,11 @@ end $$
     _g.explode(x, y, 4, 1, function() _g.miny_actual(x, y) end)
 end $$
 
-zclass[[slimy_actual,box,mov,simple_spr,drawlayer_50,collidable,actor|
+zclass[[slimy_actual,box,mov,simple_spr,drawlayer_50,collidable,healthobj,actor|
     x,@, y,@, rx, .375, ry, .375,
     cspr,118, cname,"slimy", sind,118,
-    health,5, max_health,5;
+    destroyed, %standard_explosion,
+    max_health,5;
 
     start; update, %slimy_update, statcollide,%slimy_statcollide;
 ]]
@@ -32,6 +33,7 @@ end $$
 
             if not a:is_active'stunned' then
                 a:start_timer('stunned', item.stunlen, nop)
+                a:hurt(item.damage)
             end
 
             item:item_hit_func()

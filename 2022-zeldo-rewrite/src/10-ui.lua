@@ -87,8 +87,8 @@ zclass[[stat,vec,actor,drawlayer_95|
             local xyo = -8*a.align-1
             if obj.cname then zprinttbox(obj.cname, xyo, -10, a.align, 7, 5) end
             
-            if obj.health and obj.max_health then
-                draw_bar(xyo, -2, xyo-35*a.align, 1, obj.health/obj.max_health, -1, 11, 3)
+            if obj.parents and obj.parents.healthobj then
+                draw_bar(xyo, -2, xyo-35*a.align, 1, obj.display_health, -1, 11, 3)
                 zprinttbox(flr(obj.health)..'/'..obj.max_health, xyo, 4, a.align, 7, 5)
             end
         end)
