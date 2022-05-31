@@ -10,11 +10,11 @@ local room,room_ind=zobj[[tiles_1;,;tiles_2;,;objects;,;w,12,h,10,color,0,music,
 if room_ind>223 then room.w,room.h=8,6 end
 room.color=0x0f &@cur_loc
 room.music=(0xf0 & peek_inc())>>>4
-local byte,is_tile,layer,ind,offx,offy,is_fill=0,true,room.tiles_1,0,0,0,true
+local byte,is_tile,layer,ind,offx,offy,is_place=0,true,room.tiles_1,0,0,0
 while byte ~=255 do
 byte=peek_inc()
 if byte>=248 and byte<=253 then
-is_fill,is_tile=true,nil
+is_place,is_tile=nil
 end
 if byte==248 then is_tile=true layer=room.tiles_1
 elseif byte==249 then is_tile=true layer=room.tiles_2
@@ -22,20 +22,20 @@ elseif byte==250 then offx=0 offy=0
 elseif byte==251 then offx=.5 offy=0
 elseif byte==252 then offx=0 offy=.5
 elseif byte==253 then offx=.5 offy=.5
-elseif byte==254 then is_fill=false
+elseif byte==254 then is_place=true
 elseif byte<128 then ind=byte
 elseif byte<255 then
 local p1=0x7f & byte
 if is_tile then
-if is_fill then
+if is_place then
+layer[p1]=ind+128
+else
 local p2=0x7f & peek_inc()
 for yy=p1\12,p2\12 do
 for xx=p1%12,p2%12 do
 layer[yy*12+xx]=ind+128
 end
 end
-else
-layer[p1]=ind+128
 end
 else
 add(room.objects,{index=ind+1,x=p1%12+offx,y=p1\12+offy})

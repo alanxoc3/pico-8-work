@@ -780,14 +780,7 @@ function encode_room(rooms, min_loc, max_loc)
 
         -- tiles
         for layer, tiles in pairs(room.tiles) do
-            local place_by_ind = {}
-
             local fills, places = itemmap_to_fills(12, 10, tiles)
-
-            for x in all(places) do
-                if not place_by_ind[x.ind] then place_by_ind[x.ind] = {} end
-                add(place_by_ind[x.ind], x)
-            end
 
             if #fills > 0 or #places > 0 then
                 poke(mem_loc, CON_L1+layer-1)
@@ -812,16 +805,16 @@ function encode_room(rooms, min_loc, max_loc)
                 poke(mem_loc, CON_TILE)
                 mem_loc+=1
 
-                for i=0,127 do
-                    if place_by_ind[i] then
-                        poke(mem_loc, band(0x7f, i))
+                local cur_ind = nil
+                for f in all(places) do
+                    if f.ind ~= cur_ind then
+                        cur_ind = f.ind
+                        poke(mem_loc, band(0x7f, cur_ind))
                         mem_loc+=1
-
-                        for f in all(place_by_ind[i]) do
-                            poke(mem_loc, bor(0x80, min(f.y*12+f.x, 119)))
-                            mem_loc+=1
-                        end
                     end
+
+                    poke(mem_loc, bor(0x80, min(f.y*12+f.x, 119)))
+                    mem_loc+=1
                 end
             end
         end
