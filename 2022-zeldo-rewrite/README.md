@@ -34,16 +34,17 @@ help him save the Land of Hi-roll from the forces of evil.
 how should i make the save platform collide with something...
 What if the banjo released an object when you finish playing? Sure, that should be easy.
 
-TODO: bomb throw direction
 TODO: arrow with collision tile/wall collision
 TODO: mask particle effect
 TODO: timer with update callback (calls function every frame as long as timer is active)
 TODO: slimy stuns player
 TODO: player weapons hurt and stun slimy
+TODO: bomb and slimy share throw logic
 TODO: chicken logic
 TODO: work on banjo song and get timing right
 TODO: spike hurt player
 TODO: battle logic
+TODO: bomb explode collision
 TODO: pot throwing logic
 TODO: give bomb an arc when thrown
 TODO: chest logic

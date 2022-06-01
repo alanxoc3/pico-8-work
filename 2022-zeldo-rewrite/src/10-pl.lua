@@ -2,7 +2,7 @@
 -- bow - right, then charge, then shoot
 -- sword - right
 -- shield - right
--- bomb - right, start, place
+-- bomb_held - right, start, place
 
 -- bowl - up
 -- mask - start, normal, ending
@@ -11,7 +11,7 @@
 
 
 --| ITEM STAT |
--- item stats need these: (sword, arrow, bomb, brang, shield)
+-- item stats need these: (sword, arrow, bomb_held, brang, shield)
     -- damage: how much damage to do to enemies
     -- stunlen: how much time enemy should be stunned after hit
     -- pushspeed: how fast the enemy should be pushed
@@ -217,36 +217,6 @@ zclass[[brang,collidable,simple_spr,drawlayer_50,mov,actor,statitem|
     final;init,nop, update,nop, alive,no;
 ]]
 
-zclass[[bomb,actor,vec,simple_spr,drawlayer_50,statitem|
-    anchoring,@, xf,@,
-
-    sind,SPR_BOMB, sy,-2,
-
-    damage,        1,
-    stunlen,       5,
-    pushspeed,     .25,
-    should_use_xf, yes,
-    item_hit_func, nop,
-
-    visible,no,
-    block_direction, no,
-    speed_multiplier, 1,
-    initial_energy, .25,
-    gradual_energy, 0,
-
-    offspeed,.185;
-
-    start;    init,%bomb_start_init, dy,.08, duration,.08, next,normal;
-    normal;   init,nop, duration,.5, dx,0, dy,0, next,exploding;
-    exploding; init,%bomb_destroyed, update,%bomb_ending_update, duration,.25, next,ending, draw,nop;
-    ending; init,nop, alive,no;
-]]
-
---| ITEM CODE LOGIC |--
-|[item_horizontal_start_init]|  function(a) a.offdx = a.xf*a.offspeed end $$
-|[item_horizontal_normal_init]| function(a) a.offx = abs(a.offx*8)\1/8*sgn(a.offx) end $$
-|[item_horizontal_ending_init]| function(a) a:normal_init() a.offdx = -a.xf*a.offspeed end $$
-
 |[brang_drawout]| function(a)
     zspr(a.sind, a.x*8+a.sx, a.y*8+a.sy, 1, 1, cos(g_fi/5), sin(g_fi/5))
 end $$
@@ -274,19 +244,57 @@ end $$
     a.y = a.end_y + (a.anchoring.y - a.end_y)*percent
 end $$
 
-|[bomb_start_init]| function(a)
-    a.x, a.y = a.anchoring.x+a.xf, a.anchoring.y
-    a.dx = a.dx + a.xf*.125
+zclass[[bomb_held,anchor,actor|
+    anchoring,@, xf,@,
+
+    sind,SPR_BOMB, sy,-2,
+    visible,yes,
+    block_direction, no,
+    speed_multiplier, 0,
+    initial_energy, .25,
+    gradual_energy, 0,
+    offy,-.25,
+
+    offspeed,.185;
+
+    start;    init,nop, offdy,-.0625, duration,.08, next,normal;
+    normal;   init,nop, offdy,0, offy,-.5;
+    ending;   visible,no, init,%bomb_held_destroyed, duration,.08;
+]]
+
+|[bomb_held_destroyed]| function(a)
+    _g.bomb(a.x, a.y, a.xf, .06, atan2(g_zbtn_0 ~= 0 and g_zbtn_0 or a.anchoring.xf, g_zbtn_2))
+end $$
+
+zclass[[bomb,mov,box,simple_spr,drawlayer_75,actor|
+    x,@, y,@, xf,@, speed,@, ang,@,
+    sind,SPR_BOMB,
+
+    damage,        1,
+    stunlen,       5,
+    pushspeed,     .25,
+    should_use_xf, yes,
+    item_hit_func, nop,
+
+    destroyed,%bomb_destroyed;
+
+    start; duration, .15, update,%bomb_update, next,wait;
+    wait;  speed,0, duration, .25, update,nop, next,ending;
+    ending; alive,no;
+]]
+
+|[bomb_update]| function(a)
+    a.sy = sin(a:get_elapsed_percent'start'/2)*4
 end $$
 
 |[bomb_destroyed]| function(a)
     _g.explode(a.x, a.y, 8, 2, nop)
 end $$
 
-|[bomb_ending_update]| function(a)
-    a.rx += .05
-    a.ry += .05
-end $$
+--| ITEM CODE LOGIC |--
+|[item_horizontal_start_init]|  function(a) a.offdx = a.xf*a.offspeed end $$
+|[item_horizontal_normal_init]| function(a) a.offx = abs(a.offx*8)\1/8*sgn(a.offx) end $$
+|[item_horizontal_ending_init]| function(a) a:normal_init() a.offdx = -a.xf*a.offspeed end $$
 
 --| PL LOGIC |--
 
@@ -304,7 +312,7 @@ zclass[[pl,actor,mov,collidable,auto_outline,healthobj,drawlayer_50|
     target_energy,0,
     drawout,%pl_drawout;
 
-    item_funcs; ITEM_IND_SWORD,%sword, ITEM_IND_MASK,%mask, ITEM_IND_BOW,%bow, ITEM_IND_SHIELD,%shield, ITEM_IND_BOMB,%bomb, ITEM_IND_BANJO,%banjo, ITEM_IND_BRANG,%brang;
+    item_funcs; ITEM_IND_SWORD,%sword, ITEM_IND_MASK,%mask, ITEM_IND_BOW,%bow, ITEM_IND_SHIELD,%shield, ITEM_IND_BOMB,%bomb_held, ITEM_IND_BANJO,%banjo, ITEM_IND_BRANG,%brang;
 
     default_item;
         visible,no,
@@ -368,6 +376,8 @@ end $$
     if does_entity_exist'banjo' then
         -- xf = g_si%2*2-1
         top = 92
+    elseif a.item.id == 'bomb_held' then
+        top = a.item:is_alive() and 93 or 94
     end
 
     zspr(a.sind, a.x*8, a.y*8-2, 1, 1, xf)
