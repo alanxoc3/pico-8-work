@@ -271,7 +271,7 @@ zclass[[bomb_held,anchor,actor|
     _g.bomb(a.x, a.y, a.xf, g_zbtn_2 > 0 and .075 or .06, atan2(g_zbtn_0 ~= 0 and g_zbtn_0 or a.anchoring.xf, g_zbtn_2+.3))
 end $$
 
-zclass[[bomb,mov,box,simple_spr,drawlayer_75,actor|
+zclass[[bomb,mov,box,simple_spr,drawlayer_50,actor|
     x,@, y,@, xf,@, speed,@, ang,@,
     sind,SPR_BOMB,
 
@@ -387,6 +387,7 @@ end $$
 
     zspr(a.sind, a.x*8, a.y*8-2, 1, 1, xf)
     zspr(top,    a.x*8, a.y*8-2, 1, 1, xf)
+
     if a.item.visible then
         zspr(a.item.sind, a.item.x*8, a.item.y*8-2, 1, 1, xf)
     end
