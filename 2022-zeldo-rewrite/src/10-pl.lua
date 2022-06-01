@@ -11,7 +11,7 @@
 
 
 --| ITEM STAT |
--- item stats need these: (sword, arrow, bomb_held, brang, shield)
+-- item stats need these: (sword, pellet, bomb_held, brang, shield)
     -- damage: how much damage to do to enemies
     -- stunlen: how much time enemy should be stunned after hit
     -- pushspeed: how fast the enemy should be pushed
@@ -72,7 +72,7 @@ zclass[[bow,item_horizontal,actor|
     ending; init,%bow_ending_init, duration,.08;
 ]]
 
-zclass[[arrow,vec,actor,drawlayer_50,statitem|
+zclass[[pellet,vec,collidable,actor,drawlayer_50,statitem|
     x,@, y,@, dx, @, xf, @,
 
     damage,        1,
@@ -81,21 +81,26 @@ zclass[[arrow,vec,actor,drawlayer_50,statitem|
     should_use_xf, yes,
     item_hit_func, ~kill,
 
-    rx,.375, ry,.125,
+    should_collide_below,no,
+    rx,.125, ry,.125,
     destroyed,%standard_explosion,
-    draw,%arrow_draw;
+    draw,%pellet_draw;
 
-    start; duration,.5;
+    start; update,%pellet_update, duration,.5;
 ]]
 
-|[arrow_draw]| function(a)
+|[pellet_update]| function(a)
+    if a.dx == 0 then a:kill() end
+end $$
+
+|[pellet_draw]| function(a)
     draw_tail(a.x, a.y, a.dx, 0, 3)
-    pset(a.x*8, a.y*8, 12)
+    pset(a.x*8, a.y*8, 4)
 end $$
 
 |[bow_ending_init]| function(a)
     _g.item_horizontal_ending_init(a)
-    _g.arrow(a.x, a.y-.125, a.xf*.25, a.xf)
+    _g.pellet(a.x, a.y-.125, a.xf*.25, a.xf)
 end $$
 
 zclass[[shield,item_horizontal,actor,statitem|
@@ -279,7 +284,7 @@ zclass[[bomb,mov,box,simple_spr,drawlayer_75,actor|
     destroyed,%bomb_destroyed;
 
     start; duration, .15, update,%bomb_update, next,wait;
-    wait;  speed,0, duration, .25, update,nop, next,ending;
+    wait;  speed,0, duration, .7, update,nop, next,ending;
     ending; alive,no;
 ]]
 

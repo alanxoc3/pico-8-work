@@ -10,6 +10,7 @@ zclass[[collidable,box,vec|
     calc_deltas,%calc_deltas,
     should_collide_below,yes,
     should_collide_with_screen_edge,yes,
+
     adjust_deltas_for_solids,%adjust_deltas_for_solids,
     adjust_deltas_for_tiles, %adjust_deltas_for_tiles,
     adjust_deltas_for_screen,%adjust_deltas_for_screen

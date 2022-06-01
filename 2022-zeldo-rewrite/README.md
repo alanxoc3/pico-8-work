@@ -34,7 +34,6 @@ help him save the Land of Hi-roll from the forces of evil.
 how should i make the save platform collide with something...
 What if the banjo released an object when you finish playing? Sure, that should be easy.
 
-TODO: arrow with collision tile/wall collision
 TODO: mask particle effect
 TODO: timer with update callback (calls function every frame as long as timer is active)
 TODO: slimy stuns player
@@ -51,11 +50,15 @@ TODO: chest logic
 TODO: banjo over people text logic
 TODO: token crunch for 30 minutes
 TODO: think of more enemies
+TODO: invent current cooldown bar
 TODO: polish until beating first boss
 TODO: first boss (lime)
 TODO: think about chicken collection for cannon logic
 
 ```
+2022-05-31 -- better bomb
+    5804 5867
+
 2022-05-30 -- spawnin enemycollision
     5396 5434 5558 5804
 
