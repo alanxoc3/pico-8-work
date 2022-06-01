@@ -251,7 +251,7 @@ zclass[[bomb_held,anchor,actor|
     visible,yes,
     block_direction, no,
     speed_multiplier, 0,
-    initial_energy, .25,
+    initial_energy, .3,
     gradual_energy, 0,
     offy,-.25,
 
@@ -259,11 +259,11 @@ zclass[[bomb_held,anchor,actor|
 
     start;    init,nop, offdy,-.0625, duration,.08, next,normal;
     normal;   init,nop, offdy,0, offy,-.5;
-    ending;   visible,no, init,%bomb_held_destroyed, duration,.08;
+    ending;   visible,no, init,%bomb_held_destroyed, duration,.16;
 ]]
 
 |[bomb_held_destroyed]| function(a)
-    _g.bomb(a.x, a.y, a.xf, .06, atan2(g_zbtn_0 ~= 0 and g_zbtn_0 or a.anchoring.xf, g_zbtn_2))
+    _g.bomb(a.x, a.y, a.xf, g_zbtn_2 > 0 and .075 or .06, atan2(g_zbtn_0 ~= 0 and g_zbtn_0 or a.anchoring.xf, g_zbtn_2+.3))
 end $$
 
 zclass[[bomb,mov,box,simple_spr,drawlayer_75,actor|
