@@ -450,7 +450,7 @@ zcamera(a.x+2,a.y,function()
 local xyo=-8*a.align-1
 if obj.cname then zprinttbox(obj.cname,xyo,-10,a.align,7,5)end
 if obj.parents and obj.parents.healthobj then
-draw_bar(xyo,-2,xyo-35*a.align,1,obj.display_health,-1,11,3)
+draw_bar(xyo,-2,xyo-35*a.align,1,obj.display_health,-1,11,3,1)
 zprinttbox(flr(obj.health).."/"..obj.max_health,xyo,4,a.align,7,5)
 end
 end)
@@ -629,15 +629,17 @@ end,function(state)
 isorty(g_zclass_entities["drawlayer_50"])
 draw_room(g_rooms[peek"0x5d01"],64,57,function()
 zcall(loop_entities,[[1;,drawlayer_25,draw;2;,drawlayer_50,draw;3;,drawlayer_75,draw;]])
-if g_debug then
-for inst in all(g_zclass_entities["box"])do
-scr_zrect(inst.x,inst.y,inst.rx,inst.ry,8)
-end
-end
 end,function()
 zcall(loop_entities,[[1;,drawlayer_90,draw;2;,drawlayer_95,draw;3;,drawlayer_99,draw;]])
 end)
-zcall(draw_bar,[[1;,18,6,109,11,@,0,@,@]],g_pl.energy,g_pl.is_energy_cooling_down and 13 or 8,g_pl.is_energy_cooling_down and 1 or 2)
+local is_cooldown=g_pl.is_energy_cooling_down and g_pl.energy>=g_pl.target_energy
+if is_cooldown then
+camera(0,-cos(g_fi/4))
+end
+zcall(draw_bar,[[1;,18,6,109,11,@,0,@,@,1]],1-g_pl.energy,
+is_cooldown and 1 or 13,
+is_cooldown and 1 or 1)
+camera()
 end,function()
 _g.title_logo()
 end,function()
@@ -808,15 +810,15 @@ zclass[[brang,collidable,simple_spr,drawlayer_50,mov,actor,statitem|anchoring,@,
 zclass[[bomb_held,anchor,actor|anchoring,@,xf,@,sind,5,sy,-2,visible,yes,block_direction,no,speed_multiplier,0,initial_energy,.3,gradual_energy,0,offy,-.25,offspeed,.185;start;init,nop,offdy,-.0625,duration,.08,next,normal;normal;init,nop,offdy,0,offy,-.5;ending;visible,no,init,%bomb_held_destroyed,duration,.16;]]
 zclass[[bomb,mov,box,simple_spr,drawlayer_50,actor|x,@,y,@,xf,@,speed,@,ang,@,sind,5,damage,1,stunlen,5,pushspeed,.25,should_use_xf,yes,item_hit_func,nop,destroyed,%bomb_destroyed;start;duration,.15,update,%bomb_update,next,wait;wait;speed,0,duration,.7,update,nop,next,ending;ending;alive,no;]]
 zclass[[pl,actor,mov,collidable,auto_outline,healthobj,drawlayer_50|cname,lank,cspr,103,max_health,10,x,@,y,@,xf,@,sind,88,rx,.375,ry,.375,should_collide_with_screen_edge,no,update,%pl_update,energy,0,is_energy_cooling_down,no,target_energy,0,drawout,%pl_drawout;item_funcs;5,%sword,2,%mask,8,%bow,3,%shield,0,%bomb_held,6,%banjo,7,%brang;default_item;visible,no,is_default,yes,block_direction,no,speed_multiplier,1,alive,yes,gradual_energy,-.0078125,initial_energy,0,kill,nop;item,~default_item;]]
-function draw_bar(x1,y1,x2,y2,percent,align,fg,bg)
+function draw_bar(x1,y1,x2,y2,percent,align,fg,bg,og)
 if x1>x2 then x1-=3 x2-=3 end
 local bar_off=x2-x1-min(percent,1)*(x2-x1)
 if align==0 then bar_off/=2 end
 if percent>0 then
 local xx=ceil(x1+(align>=0 and bar_off or 0))
 local yy=flr(x2-(align<=0 and bar_off or 0))
-rectfill(x1,y1,x1,y2,13)
-rectfill(x2,y1,x2,y2,13)
+rectfill(x1,y1,x1,y2,og)
+rectfill(x2,y1,x2,y2,og)
 rectfill(xx,y1,yy,y2,fg)
 rectfill(xx,y2,yy,y2,bg)
 end
@@ -929,7 +931,6 @@ g_tile_animation_lookup=create_tile_animation_lookup(g_rooms[0])
 end
 function _update60()
 g_zbtn_0,g_zbtn_2=zbtn(btn,0),zbtn(btn,2)
-if btn(4)and btnp(5)then g_debug=not g_debug end
 zcall(loop_entities,[[1;,actor,clean;2;,fader,clean;]])
 register_entities()
 zcall(loop_entities,[[1;,fader,tick;2;,game_state,tick;3;,fader,state;4;,game_state,state;]])
@@ -939,7 +940,4 @@ g_si,g_fi=g_slow_animation.index,g_fast_animation.index
 cls()
 loop_entities("game_state","draw")
 fade(g_fade)
-if g_debug then
-zcall(rect,[[1;,17,12,110,18,1;2;,17,95,110,101,1;3;,17,0,110,5,1;4;,17,122,110,127,1;5;,0,0,17,127,1;6;,110,0,127,127,1;]])
-end
 end

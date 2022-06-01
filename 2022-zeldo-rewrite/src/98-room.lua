@@ -86,9 +86,18 @@ end $$
         ]])
     end)
 
+    local is_cooldown = g_pl.is_energy_cooling_down and g_pl.energy >= g_pl.target_energy
+
+    if is_cooldown then
+        camera(0, -cos(g_fi/4))
+    end
+
     zcall(draw_bar, [[
-        1;,18,6,109,11,@,0,@,@
-    ]], g_pl.energy, g_pl.is_energy_cooling_down and 13 or 8, g_pl.is_energy_cooling_down and 1 or 2)
+        1;,18,6,109,11,@,0,@,@,1
+    ]], 1-g_pl.energy,
+    is_cooldown and 1 or 13,
+    is_cooldown and 1 or 1)
+    camera()
 end $$
 
 function load_room(rind, x, y, xf)

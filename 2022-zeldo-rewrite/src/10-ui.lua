@@ -1,4 +1,4 @@
-function draw_bar(x1,y1,x2,y2,percent,align,fg,bg)
+function draw_bar(x1,y1,x2,y2,percent,align,fg,bg,og)
     if x1 > x2 then x1 -= 3 x2 -= 3 end
 
     local bar_off = x2-x1-min(percent, 1)*(x2-x1)
@@ -7,8 +7,8 @@ function draw_bar(x1,y1,x2,y2,percent,align,fg,bg)
     if percent > 0 then
         local xx = ceil(x1+(align >= 0 and bar_off or 0))
         local yy = flr(x2-(align <= 0 and bar_off or 0))
-        rectfill(x1, y1, x1, y2, 13)
-        rectfill(x2, y1, x2, y2, 13)
+        rectfill(x1, y1, x1, y2, og)
+        rectfill(x2, y1, x2, y2, og)
         rectfill(xx, y1, yy, y2, fg)
         rectfill(xx, y2, yy, y2, bg)
    end
@@ -88,7 +88,7 @@ zclass[[stat,vec,actor,drawlayer_95|
             if obj.cname then zprinttbox(obj.cname, xyo, -10, a.align, 7, 5) end
             
             if obj.parents and obj.parents.healthobj then
-                draw_bar(xyo, -2, xyo-35*a.align, 1, obj.display_health, -1, 11, 3)
+                draw_bar(xyo, -2, xyo-35*a.align, 1, obj.display_health, -1, 11, 3, 1)
                 zprinttbox(flr(obj.health)..'/'..obj.max_health, xyo, 4, a.align, 7, 5)
             end
         end)
