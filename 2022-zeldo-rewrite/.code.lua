@@ -627,7 +627,8 @@ end
 end
 end,function(state)
 isorty(g_zclass_entities["drawlayer_50"])
-draw_room(g_rooms[peek"0x5d01"],64,57,function()
+local coffx=does_entity_exist"mask"and cos(g_fi/4)or 0
+draw_room(g_rooms[peek"0x5d01"],64+coffx,57,function()
 zcall(loop_entities,[[1;,drawlayer_25,draw;2;,drawlayer_50,draw;3;,drawlayer_75,draw;]])
 end,function()
 zcall(loop_entities,[[1;,drawlayer_90,draw;2;,drawlayer_95,draw;3;,drawlayer_99,draw;]])

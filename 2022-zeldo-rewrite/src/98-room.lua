@@ -64,7 +64,8 @@ end $$
 |[room_draw]| function(state)
     isorty(g_zclass_entities['drawlayer_50'])
 
-    draw_room(g_rooms[peek'MEM_ROOM_IND'], CARD_CX, CARD_CY, function()
+    local coffx = does_entity_exist'mask' and cos(g_fi/4) or 0
+    draw_room(g_rooms[peek'MEM_ROOM_IND'], CARD_CX+coffx, CARD_CY, function()
         zcall(loop_entities, [[
             1;,drawlayer_25, draw;
             2;,drawlayer_50, draw;
