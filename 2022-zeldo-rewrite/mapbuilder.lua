@@ -529,9 +529,8 @@ function objs_update(key)
     g_objs_grid.ymax += 1
 
     if g_pane then
-        if key == "d" and g_objs_pane then set_cur_obj(nil)
+        if key == "d" then set_cur_obj(nil)
         elseif btn(4) then
-            g_objs_pane = true
             set_cur_obj(g_obji_grid.ysel*16+g_obji_grid.xsel+1)
         end
     elseif g_pane_prev then
