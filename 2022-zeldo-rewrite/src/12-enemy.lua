@@ -7,7 +7,7 @@ end $$
 end $$
 
 -- enemy can collide with the player
-zclass[[enemy,box,mov,collidable,healthobj,actor|
+zclass[[enemy,box|
     pl_collide_func_batch,%enemy_pl_collide_func_batch,
     pl_collide_func,nop
 ]]
@@ -20,7 +20,7 @@ zclass[[enemy,box,mov,collidable,healthobj,actor|
     end)
 end $$
 
-zclass[[slimy_actual,enemy,simple_spr,drawlayer_50|
+zclass[[slimy_actual,actor,collidable,healthobj,mov,enemy,simple_spr,drawlayer_50|
     x,@, y,@, rx, .25, ry, .25,
     cspr,118, cname,"slimy", sind,118,
     destroyed,%slimy_destroyed,
@@ -42,6 +42,7 @@ zclass[[slimy_actual,enemy,simple_spr,drawlayer_50|
         a:load'start'
         a:start_timer('isma', 2, function() a.isma = false end)
         pl:start_timer('stunned', .375, nop)
+        pl:start_timer('pushed', .375, nop)
         pl.ang = atan2(a.xf, pl.y-a.y)
     end
 end $$

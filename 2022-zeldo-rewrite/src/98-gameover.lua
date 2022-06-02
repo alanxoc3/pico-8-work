@@ -8,6 +8,7 @@ zclass[[gameover_control,actor|
 end $$
 
 |[gameover_init]| function(state)
+    load_save_state()
     _g.gameover_control()
     state.game_over_sind, state.game_over_text = unpack(rnd_item(zobj[[
         1;,32,  "quack quack";

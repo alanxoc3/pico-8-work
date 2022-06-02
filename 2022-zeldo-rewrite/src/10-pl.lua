@@ -308,6 +308,9 @@ end $$
 
 --| PL LOGIC |--
 
+-- a few timers that affect the player:
+    -- pushed: is the player being pushed in a direction. this has only one speed.
+    -- stunned: is the player being hurt? this shakes the screen and prevents items, but not movement.
 zclass[[pl,actor,mov,collidable,auto_outline,healthobj,drawlayer_50|
     cname,"lank", cspr,SPR_PL_WHOLE,
     max_health,10,
@@ -320,7 +323,7 @@ zclass[[pl,actor,mov,collidable,auto_outline,healthobj,drawlayer_50|
     energy,0,
     is_energy_cooling_down,no,
     target_energy,0,
-    destroyed,%standard_explosion,
+    destroyed,%pl_destroyed,
     drawout,%pl_drawout;
 
     item_funcs; ITEM_IND_SWORD,%sword, ITEM_IND_MASK,%mask, ITEM_IND_BOW,%bow, ITEM_IND_SHIELD,%shield, ITEM_IND_BOMB,%bomb_held, ITEM_IND_BANJO,%banjo, ITEM_IND_BRANG,%brang;
@@ -337,6 +340,11 @@ zclass[[pl,actor,mov,collidable,auto_outline,healthobj,drawlayer_50|
 
     item,~default_item;
 ]]
+
+|[pl_destroyed]| function(a)
+    _g.standard_explosion(a)
+    _g.fader_out(function() g_state:load'gameover' end)
+end $$
 
 |[pl_update]| function(a)
     g_rstat_left:set(a)
@@ -356,15 +364,15 @@ zclass[[pl,actor,mov,collidable,auto_outline,healthobj,drawlayer_50|
     end
 
     -- speed & xf logic
-    if not a:is_active'stunned' then
-        a.speed = 0
-    else
+    if a:is_active'pushed' then
         a.speed = (1-a:get_elapsed_percent'stunned')*PL_STUN_SPEED
+    else
+        a.speed = 0
     end
 
     if not a:inside(g_room_bounds) then
         a.ang, a.speed = atan2(a:abside(g_room_bounds)), PL_SPEED
-    elseif not a:is_active'stunned' and not does_entity_exist'fader' and not does_entity_exist'tbox' and not btn(BTN_ITEM_SELECT) then
+    elseif not a:is_active'pushed' and not does_entity_exist'fader' and not does_entity_exist'tbox' and not btn(BTN_ITEM_SELECT) then
         if g_zbtn_0 | g_zbtn_2 ~= 0 then
             a.ang, a.speed = atan2(g_zbtn_0, g_zbtn_2), PL_SPEED*item.speed_multiplier
 

@@ -23,7 +23,7 @@ zclass[[game_state,actor|
     state:state_init()
 end $$
 
-function _init()
+function load_save_state()
     memcpy(MEM_SAVE_LOCATION, REAL_SAVE_LOCATION, SAVE_LENGTH)
 
     if peek'MEM_SAVE_LOCATION' == 0 then
@@ -44,6 +44,10 @@ function _init()
             14; ,MEM_HAS_BRANG  , 1;
         ]])
     end
+end
+
+function _init()
+    load_save_state()
 
     -- poke2(0x5f5c, BTN_DELAY) -- set custom delay
     g_si, g_fi, g_state, g_rooms = 0, 0, _g.game_state(), decode_map()
