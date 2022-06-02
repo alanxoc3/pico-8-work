@@ -12,7 +12,7 @@ zclass[[room_bounds,box|x,@,y,@,rx,@,ry,@]]
 
     g_room_bounds = _g.room_bounds(r.w/2, r.h/2, r.w/2-.375, r.h/2-.375)
 
-    g_pl = _g.pl(peek'MEM_PL_X'/POS_MULTIPLIER_FOR_MEMORY, peek'MEM_PL_Y'/POS_MULTIPLIER_FOR_MEMORY, peek'MEM_PL_XF'*2-1)
+    g_pl = _g.pl(peek'MEM_PL_X'/POS_MULTIPLIER_FOR_MEMORY, peek'MEM_PL_Y'/POS_MULTIPLIER_FOR_MEMORY, peek'MEM_PL_XF'*2-1, peek'MEM_PL_HEALTH', peek'MEM_PL_MAX_HEALTH')
     g_fairy = _g.fairy(g_pl.x, g_pl.y-.125)
     g_rstat_left, g_rstat_inventory, g_rstat_right = _g.rstat(-1, 10), _g.rstat(0, 64), _g.rstat(1, 118)
 
@@ -42,6 +42,9 @@ end $$
         12;,rstat,       update;
         13;,healthobj,   health_update;
     ]], g_zclass_entities.pl, g_zclass_entities.solid, g_rooms[peek'MEM_ROOM_IND'], g_zclass_entities.statitem)
+
+    poke(MEM_PL_HEALTH, g_pl.health)
+    poke(MEM_PL_MAX_HEALTH, g_pl.max_health)
 
     if not does_entity_exist'fader' and not g_pl:inside(g_room_bounds) then
         local abx, aby = g_pl:abside(g_room_bounds)

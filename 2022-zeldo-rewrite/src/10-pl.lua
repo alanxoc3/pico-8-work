@@ -313,8 +313,7 @@ end $$
     -- stunned: is the player being hurt? this shakes the screen and prevents items, but not movement.
 zclass[[pl,actor,mov,collidable,auto_outline,healthobj,drawlayer_50|
     cname,"lank", cspr,SPR_PL_WHOLE,
-    max_health,10,
-    x,@,y,@,xf,@,
+    x,@, y,@, xf,@, health,@, max_health,@,
     sind,88,
     rx,PL_RADIUS,ry,PL_RADIUS,
     should_collide_with_screen_edge,no,
