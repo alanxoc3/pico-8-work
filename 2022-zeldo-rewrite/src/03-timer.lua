@@ -9,6 +9,7 @@ zclass[[timer|
     start_timer,        %timer_start_timer,
     stop_timer,         %timer_stop_timer,
     play_timer,         %timer_play_timer,
+    end_timer,          %timer_end_timer,
 
     is_active,          %timer_is_active,
     delete_timer,       %timer_delete_timer,
@@ -32,6 +33,12 @@ end $$
     end
 end $$
 
+|[timer_end_timer]| function(a, timer_name)
+    if a.timers[timer_name] and a.timers[timer_name].elapsed then
+        a.timers[timer_name].elapsed = a.timers[timer_name].duration
+    end
+end $$
+
 |[timer_delete_timer]| function(a, timer_name)
     a.timers[timer_name] = nil
 end $$
@@ -43,7 +50,7 @@ end $$
 
 |[timer_get_elapsed_percent]| function(a, timer_name)
     local timer = a.timers[timer_name]
-    return timer and min(1, (timer.elapsed or 0)/timer.duration)
+    return timer and min(1, (timer.elapsed or 0)/timer.duration) or 0
 end $$
 
 |[timer_is_active]| function(a, timer_name)
@@ -55,7 +62,7 @@ end $$
 |[timer_tick]| function(a)
     local finished_timers = {}
     for name, timer in pairs(a.timers) do
-        if timer.elapsed and timer.elapsed <= timer.duration then
+        if timer.elapsed and timer.elapsed < timer.duration then
             timer.elapsed = timer.elapsed + 1/60
             if timer.elapsed >= timer.duration then
                 add(finished_timers, timer)

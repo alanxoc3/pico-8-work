@@ -132,15 +132,15 @@ zclass[[sword,item_horizontal,actor,statitem|
 
     damage,        2,
     stunlen,       .25,
-    pushspeed,     .125,
+    pushspeed,     .25,
     should_use_xf, yes,
-    item_hit_func, %shield_item_hit_func,
+    item_hit_func, %sword_item_hit_func,
 
-    plpushspeed,     .25,
+    plpushspeed,     .125,
     visible,yes,
     block_direction, yes,
     speed_multiplier, .5,
-    initial_energy, .25,
+    initial_energy, .125,
     gradual_energy, 0,
 
     offspeed,.125,
@@ -149,6 +149,11 @@ zclass[[sword,item_horizontal,actor,statitem|
 
 |[shield_item_hit_func]| function(a)
     a.anchoring.dx -= a.plpushspeed*a.xf
+end $$
+
+|[sword_item_hit_func]| function(a)
+    a.anchoring.dx -= a.plpushspeed*a.xf
+    a:kill()
 end $$
 
 zclass[[banjo,anchor,actor|
@@ -315,6 +320,7 @@ zclass[[pl,actor,mov,collidable,auto_outline,healthobj,drawlayer_50|
     energy,0,
     is_energy_cooling_down,no,
     target_energy,0,
+    destroyed,%standard_explosion,
     drawout,%pl_drawout;
 
     item_funcs; ITEM_IND_SWORD,%sword, ITEM_IND_MASK,%mask, ITEM_IND_BOW,%bow, ITEM_IND_SHIELD,%shield, ITEM_IND_BOMB,%bomb_held, ITEM_IND_BANJO,%banjo, ITEM_IND_BRANG,%brang;
@@ -339,9 +345,9 @@ zclass[[pl,actor,mov,collidable,auto_outline,healthobj,drawlayer_50|
     -- item logic
     if not item.alive then item = a.default_item end
 
-    if btn(BTN_ITEM_SELECT) or does_entity_exist'tbox' or does_entity_exist'fader' or a.is_energy_cooling_down or not btn'BTN_ITEM_USE' then
+    if a:is_active'stunned' or btn(BTN_ITEM_SELECT) or does_entity_exist'tbox' or does_entity_exist'fader' or a.is_energy_cooling_down or not btn'BTN_ITEM_USE' then
         item:kill()
-    elseif not a.is_energy_cooling_down and item.is_default and btn'BTN_ITEM_USE' then
+    elseif not a:is_active'stunned' and not a.is_energy_cooling_down and item.is_default and btn'BTN_ITEM_USE' then
         local item_func = a.item_funcs[peek'MEM_ITEM_INDEX']
         if item_func then
             item = item_func(a, a.xf)
@@ -350,10 +356,15 @@ zclass[[pl,actor,mov,collidable,auto_outline,healthobj,drawlayer_50|
     end
 
     -- speed & xf logic
-    a.speed = 0
+    if not a:is_active'stunned' then
+        a.speed = 0
+    else
+        a.speed = (1-a:get_elapsed_percent'stunned')*PL_STUN_SPEED
+    end
+
     if not a:inside(g_room_bounds) then
         a.ang, a.speed = atan2(a:abside(g_room_bounds)), PL_SPEED
-    elseif not does_entity_exist'fader' and not does_entity_exist'tbox' and not btn(BTN_ITEM_SELECT) then
+    elseif not a:is_active'stunned' and not does_entity_exist'fader' and not does_entity_exist'tbox' and not btn(BTN_ITEM_SELECT) then
         if g_zbtn_0 | g_zbtn_2 ~= 0 then
             a.ang, a.speed = atan2(g_zbtn_0, g_zbtn_2), PL_SPEED*item.speed_multiplier
 
@@ -363,7 +374,9 @@ zclass[[pl,actor,mov,collidable,auto_outline,healthobj,drawlayer_50|
         end
     end
 
-    a.target_energy = max(0, a.target_energy + item.gradual_energy)
+    if not a:is_active'stunned' then
+        a.target_energy = max(0, a.target_energy + item.gradual_energy)
+    end
     if a.target_energy == 0 then a.is_energy_cooling_down = false
     elseif a.target_energy >= 1 then a.is_energy_cooling_down = true
     end
@@ -376,6 +389,7 @@ zclass[[pl,actor,mov,collidable,auto_outline,healthobj,drawlayer_50|
 end $$
 
 |[pl_drawout]| function(a)
+    local yoff = 0
     local xf = a.xf
     local top = 91
     if does_entity_exist'banjo' then
@@ -385,10 +399,10 @@ end $$
         top = a.item:is_alive() and 93 or 94
     end
 
-    zspr(a.sind, a.x*8, a.y*8-2, 1, 1, xf)
-    zspr(top,    a.x*8, a.y*8-2, 1, 1, xf)
+    zspr(a.sind, a.x*8, a.y*8-2+yoff, 1, 1, xf)
+    zspr(top,    a.x*8, a.y*8-2+yoff, 1, 1, xf)
 
     if a.item.visible then
-        zspr(a.item.sind, a.item.x*8, a.item.y*8-2, 1, 1, xf)
+        zspr(a.item.sind, a.item.x*8, a.item.y*8-2+yoff, 1, 1, xf)
     end
 end $$

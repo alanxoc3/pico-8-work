@@ -26,19 +26,22 @@ end $$
 
 |[room_update]| function(state)
     zcall(loop_entities, [[
+        pls,@, solids,@, room,@, statitems,@;
+
         1 ;,timer,       tick;
         2 ;,actor,       state;
         3 ;,mov,         mov_update;
-        4 ;,collidable,  adjust_deltas_for_solids, @;
-        5 ;,collidable,  adjust_deltas_for_tiles, @;
-        6 ;,collidable,  adjust_deltas_for_screen;
-        7 ;,vec,         vec_update;
-        8 ;,slimy_actual,statcollide, @;
-        9 ;,anchor,      update_anchor;
-        10;,target,      update_target, @;
-        11;,rstat,       update;
-        12;,healthobj,   health_update;
-    ]], g_zclass_entities.solid, g_rooms[peek'MEM_ROOM_IND'], g_zclass_entities.statitem, g_zclass_entities.pl)
+        4 ;,enemy,       pl_collide_func_batch, ~pls;
+        5 ;,collidable,  adjust_deltas_for_solids, ~solids;
+        6 ;,collidable,  adjust_deltas_for_tiles, ~room;
+        7 ;,collidable,  adjust_deltas_for_screen;
+        8 ;,vec,         vec_update;
+        9 ;,slimy_actual,statcollide, ~statitems;
+        10;,anchor,      update_anchor;
+        11;,target,      update_target, ~pls;
+        12;,rstat,       update;
+        13;,healthobj,   health_update;
+    ]], g_zclass_entities.pl, g_zclass_entities.solid, g_rooms[peek'MEM_ROOM_IND'], g_zclass_entities.statitem)
 
     if not does_entity_exist'fader' and not g_pl:inside(g_room_bounds) then
         local abx, aby = g_pl:abside(g_room_bounds)
@@ -64,7 +67,7 @@ end $$
 |[room_draw]| function(state)
     isorty(g_zclass_entities['drawlayer_50'])
 
-    local coffx = does_entity_exist'mask' and cos(g_fi/4) or 0
+    local coffx = g_pl:is_active'stunned' and cos(g_fi/4) or 0
     draw_room(g_rooms[peek'MEM_ROOM_IND'], CARD_CX+coffx, CARD_CY, function()
         zcall(loop_entities, [[
             1;,drawlayer_25, draw;

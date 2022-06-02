@@ -6,8 +6,22 @@ end $$
     _g.explode(x, y, 4, 1, function() _g.miny_actual(x, y) end)
 end $$
 
-zclass[[slimy_actual,box,mov,simple_spr,drawlayer_50,collidable,healthobj,actor|
-    x,@, y,@, rx, .375, ry, .375,
+-- enemy can collide with the player
+zclass[[enemy,box,mov,collidable,healthobj,actor|
+    pl_collide_func_batch,%enemy_pl_collide_func_batch,
+    pl_collide_func,nop
+]]
+
+|[enemy_pl_collide_func_batch]| function(a, others)
+    foreach(others, function(other)
+        if not a:outside(other) then
+            a:pl_collide_func(other)
+        end
+    end)
+end $$
+
+zclass[[slimy_actual,enemy,simple_spr,drawlayer_50|
+    x,@, y,@, rx, .25, ry, .25,
     cspr,118, cname,"slimy", sind,118,
     destroyed,%slimy_destroyed,
     statcollide,%slimy_statcollide,
@@ -16,10 +30,21 @@ zclass[[slimy_actual,box,mov,simple_spr,drawlayer_50,collidable,healthobj,actor|
     -- start
     -- shake
     -- jump!
-    start; sind,118, speed,0, sx,0, sy,0, update,%slimy_start, duration, 1,   next,shake;
+    start; pl_collide_func,nop, sind,118, speed,0, sx,0, sy,0, update,%slimy_start, duration, 1,   next,shake;
     shake; speed,0,             update,%slimy_shake, duration, .25, next,jump;
-    jump;  sind,119, speed,.05, sx,0,       update,%slimy_jump,  duration, .25, next,start;
+    jump;  pl_collide_func,%slimy_pl_collide_func, sind,119, speed,.05, sx,0,       update,%slimy_jump,  duration, .375, next,start;
 ]]
+
+|[slimy_pl_collide_func]| function(a, pl)
+    if not pl:is_active'stunned' then
+        a.isma = true
+        a.speed = 0
+        a:load'start'
+        a:start_timer('isma', 2, function() a.isma = false end)
+        pl:start_timer('stunned', .375, nop)
+        pl.ang = atan2(a.xf, pl.y-a.y)
+    end
+end $$
 
 |[slimy_destroyed]| function(a)
     _g.miny(a.x, a.y-.5)
@@ -52,7 +77,7 @@ end $$
 |[slimy_statcollide]| function(a, items)
     foreach(items, function(item)
         if not a:outside(item) and item:is_alive() then
-            a:start_timer('isma', 1.5, function() a.isma = false end)
+            a:start_timer('isma', 2, function() a.isma = false end)
             a.isma = true
 
             if not a:is_active'stunned' then

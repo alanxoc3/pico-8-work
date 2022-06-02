@@ -30,6 +30,7 @@ zclass[[actor,timer|
 -- using stateName=actor.next.
 |[actor_load]| function(a, stateName)
     if stateName then
+        a:end_timer(a.curr)
         a.next, a.duration = nil -- default values, unless overridden by next line
         for k, v in pairs(a[stateName]) do a[k] = v end
         a.curr = stateName
