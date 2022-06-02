@@ -8,6 +8,13 @@ zclass[[gameover_control,actor|
 end $$
 
 |[gameover_init]| function(state)
+    poke(0x5f43, 0) -- ensure music is not faded anymore
+    music'-1'
+    sfx'3'
+    sfx(5,-2) -- banjo
+    sfx(6,-2) -- banjo
+    sfx(7,-2) -- banjo
+    g_music_ind = -1
     load_save_state()
     _g.gameover_control()
     state.game_over_sind, state.game_over_text = unpack(rnd_item(zobj[[

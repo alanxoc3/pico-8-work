@@ -32,17 +32,16 @@ zclass[[slimy_actual,actor,collidable,healthobj,mov,enemy,simple_spr,drawlayer_5
     -- jump!
     start; pl_collide_func,nop, sind,118, speed,0, sx,0, sy,0, update,%slimy_start, duration, 1,   next,shake;
     shake; speed,0,             update,%slimy_shake, duration, .25, next,jump;
-    jump;  pl_collide_func,%slimy_pl_collide_func, sind,119, speed,.05, sx,0,       update,%slimy_jump,  duration, .375, next,start;
+    jump;  pl_collide_func,%slimy_pl_collide_func, sind,119, speed,.025, sx,0,       update,%slimy_jump,  duration, .25, next,start;
 ]]
 
 |[slimy_pl_collide_func]| function(a, pl)
     if not pl:is_active'stunned' then
         a.isma = true
         a.speed = 0
-        a:load'start'
         a:start_timer('isma', 2, function() a.isma = false end)
         pl:start_timer('stunned', .375, nop)
-        pl:start_timer('pushed', .375, nop)
+        pl:start_timer('pushed', .125, nop)
         pl.ang = atan2(a.xf, pl.y-a.y)
     end
 end $$

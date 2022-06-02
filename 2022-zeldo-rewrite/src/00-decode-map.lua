@@ -30,8 +30,8 @@ g_obj_map = split[[
 
 ,r1spike    -- 25  | 52  | 1  | 1
 ,r2spike    -- 26  | 54  | 1  | 1
-,l1spike    -- 27  | 52  | 1  | 1
-,l2spike    -- 28  | 54  | 1  | 1
+,l1spike    -- 27  | 52  | 1  | 1 | 1
+,l2spike    -- 28  | 54  | 1  | 1 | 1
 ,saveplat   -- 29  | 40  | 2  | 2
 ,woodtbl    -- 30  | 16  | 1  | 1
 ,greytbl    -- 31  | 17  | 1  | 1

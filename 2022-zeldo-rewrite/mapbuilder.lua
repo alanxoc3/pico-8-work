@@ -97,8 +97,8 @@ function _init()
         -- {"bed",       39, 1, 2  },       -- 1 INDEX
         item = trim_str(item)
         local name, ignore, rest = unpack(split(item, "-"))
-        local index, sind, rx, ry = unpack(split(rest, "|"))
-        add(g_objects, {name, sind, rx, ry})
+        local index, sind, rx, ry, xf = unpack(split(rest, "|"))
+        add(g_objects, {name, sind, rx, ry, xf})
     end
 
     poke(0x5f5c, 5) -- set custom delay
@@ -517,7 +517,7 @@ g_obji_grid = {
     rect_boundary_bg = function() end,
     rect_boundary_fg = function() end,
     rect_select      = function(x1, y1, x2, y2) rect(x1-2,y1-2,x2+2,y2+2,0) rect(x1-1,y1-1,x2+1,y2+1,7) end,
-    rect_cell        = function(x, y, x1, y1) spr(g_objects[y*16+x+1][2],x1,y1) end
+    rect_cell        = function(x, y, x1, y1) spr(g_objects[y*16+x+1][2],x1,y1, 1, 1, g_objects[y*16+x+1][5]) end
 }
 
 function objs_update(key)
@@ -559,7 +559,7 @@ function draw_the_objs(include_rect)
         local y1 = g_objs_grid.yoff+flr(obj_loc/24)*4-g_objs_grid.ycen*4
 
         local obj = g_objects[obj_ind]
-        sprout(obj[2], x1-obj[3]*4+4, y1-obj[4]*4+4, obj[3], obj[4])
+        sprout(obj[2], x1-obj[3]*4+4, y1-obj[4]*4+4, obj[3], obj[4], obj[5])
     end
 
     for obj_loc, obj_ind in pairs(get_cur_room().objs) do
@@ -567,7 +567,7 @@ function draw_the_objs(include_rect)
         local y1 = g_objs_grid.yoff+flr(obj_loc/24)*4-g_objs_grid.ycen*4
 
         local obj = g_objects[obj_ind]
-        spr(obj[2], x1-obj[3]*4+4, y1-obj[4]*4+4, obj[3], obj[4])
+        spr(obj[2], x1-obj[3]*4+4, y1-obj[4]*4+4, obj[3], obj[4], obj[5])
         if include_rect then
             rect(x1-obj[3]*4+4-1, y1-obj[4]*4+4-1, x1+4+obj[3]*4, y1+4+obj[4]*4, 10)
         end
