@@ -69,7 +69,7 @@ end $$
 end $$
 
 zclass[[stat,vec,actor,drawlayer_95|
-    align,@, x,@, obj,@, y,138, draw,%stat_draw;
+    align,@, x,@, obj,@, y,140, draw,%stat_draw;
 
     start;  dy,-2, duration,.2, next,normal;
     normal; dy,0;
@@ -97,7 +97,7 @@ end $$
 
 zclass[[tbox,vec,actor,drawlayer_99|
     rawtext,@, destroyed,@,
-    y,138,
+    y,140,
     cur_text_index,1,
     anim,0,
     line_1,,

@@ -35,7 +35,6 @@ how should i make the save platform collide with something...
 What if the banjo released an object when you finish playing? Sure, that should be easy.
 
 today...
-TODO: bomb throw - collision box in pl and go out, rather than start up. Straight line trajectory.
 TODO: bomb explode collision
 TODO: pot throwing logic
 TODO: chicket grab/throw logic

@@ -45,8 +45,8 @@ zclass[[mask,anchor,actor|
     visible,yes,
     block_direction, no,
     speed_multiplier, 2,
-    initial_energy, .125,
-    gradual_energy, PL_ENERGY_COOLDOWN,
+    initial_energy, .4,
+    gradual_energy, 0,
 
     offy, .2,
     sind,SPR_MASK;
@@ -260,7 +260,7 @@ zclass[[bomb_held,anchor,actor|
     sind,SPR_BOMB, sy,-2,
     visible,yes,
     block_direction, no,
-    speed_multiplier, 0,
+    speed_multiplier, .5,
     initial_energy, .3,
     gradual_energy, 0,
     offy,-.25,
@@ -273,13 +273,14 @@ zclass[[bomb_held,anchor,actor|
 ]]
 
 |[bomb_held_destroyed]| function(a)
-    _g.bomb(a.x, a.y, a.xf, g_zbtn_2 > 0 and .075 or .06, atan2(g_zbtn_0 ~= 0 and g_zbtn_0 or a.anchoring.xf, g_zbtn_2+.3))
+    _g.bomb(a.anchoring.x, a.anchoring.y, a.xf, .06+a.anchoring.speed, atan2(a.anchoring.xf, g_zbtn_2))
 end $$
 
-zclass[[bomb,mov,box,simple_spr,drawlayer_50,actor|
+zclass[[bomb,collidable,mov,box,simple_spr,drawlayer_50,actor|
     x,@, y,@, xf,@, speed,@, ang,@,
     sind,SPR_BOMB,
 
+    rx,.25, ry,.25,
     damage,        1,
     stunlen,       5,
     pushspeed,     .25,
@@ -294,7 +295,7 @@ zclass[[bomb,mov,box,simple_spr,drawlayer_50,actor|
 ]]
 
 |[bomb_update]| function(a)
-    a.sy = sin(a:get_elapsed_percent'start'/2)*4
+    a.sy = sin(a:get_elapsed_percent'start'/4+.25)*7
 end $$
 
 |[bomb_destroyed]| function(a)

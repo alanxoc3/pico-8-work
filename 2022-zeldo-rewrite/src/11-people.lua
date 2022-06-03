@@ -1,13 +1,12 @@
-zclass[[person,box,target_with_tbox,simple_spr,drawlayer_50|
-    text,, rx,.375, ry,.375, sy,-2,
-    trx,.5, try,.25, ty,.25,
+zclass[[person,target_with_tbox,simple_spr,drawlayer_50|
+    text,, sy,-2,
+    trx,.5, try,.5,
     target_with_tbox_disable_callback,%person_target_with_tbox_disable_callback
 ]]
 
 |[person_target_with_tbox_disable_callback]| function(a)
-    local abx = a:abside(g_pl)
     a.xf = sgn(g_pl.x-a.x)
-    return peek'MEM_ITEM_INDEX' ~= 4 or abx == -g_pl.xf
+    return peek'MEM_ITEM_INDEX' ~= 4
 end $$
 
 |[person_target_with_tbox_finish_callback]| function(a)
@@ -20,7 +19,7 @@ zclass[[navyblock,solid,person|
     cname,"navy", cspr,SPR_NAVY, sind,SPR_NAVY,
     text,"my sister has been in^the forest all day.^find something to^protect yourself with^and bring her home.",
 
-    ry,1,
+    rx,.375, ry,1,
     memloc_trigger,MEM_IS_NAVY_HOME, memloc_trigger_value,1,
     target_with_tbox_finish_callback,%person_target_with_tbox_finish_callback
 |MEM_IS_NAVY_HOME|0

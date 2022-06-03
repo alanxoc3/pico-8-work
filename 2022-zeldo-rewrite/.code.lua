@@ -393,9 +393,9 @@ local percent=a:get_elapsed_percent"ending"
 a.x=a.end_x+(a.anchoring.x-a.end_x)*percent
 a.y=a.end_y+(a.anchoring.y-a.end_y)*percent
 end,function(a)
-_g.bomb(a.x,a.y,a.xf,g_zbtn_2>0 and.075 or.06,atan2(g_zbtn_0 ~=0 and g_zbtn_0 or a.anchoring.xf,g_zbtn_2+.3))
+_g.bomb(a.anchoring.x,a.anchoring.y,a.xf,.06+a.anchoring.speed,atan2(a.anchoring.xf,g_zbtn_2))
 end,function(a)
-a.sy=sin(a:get_elapsed_percent"start"/2)*4
+a.sy=sin(a:get_elapsed_percent"start"/4+.25)*7
 end,function(a)
 _g.explode(a.x,a.y,8,2,nop)
 end,function(a)a.offdx=a.xf*a.offspeed end,function(a)a.offx=abs(a.offx*8)\1/8*sgn(a.offx)end,function(a)a:normal_init()a.offdx=-a.xf*a.offspeed end,function(a)
@@ -535,9 +535,8 @@ a.x*16,
 load_room(a.room,4,5,g_pl.xf)
 end)
 end,function(a)
-local abx=a:abside(g_pl)
 a.xf=sgn(g_pl.x-a.x)
-return peek"0x5d08" ~=4 or abx==-g_pl.xf
+return peek"0x5d08" ~=4
 end,function(a)
 poke(a.memloc_trigger,a.memloc_trigger_value)
 load_room(%0x5d01,g_pl.x,g_pl.y,g_pl.xf)
@@ -860,15 +859,15 @@ zclass[[anchor,pos|update_anchor,%anchor_update_anchor;offx,0,offy,0,offdx,0,off
 zclass[[target,anchor,box|rx,@,ry,@,offx,@,offy,@,anchoring,@,callback_touch,@,callback_outside,@,update_target,%targettouch_update_target]]
 zclass[[statitem,box|]]
 zclass[[item_horizontal,anchor|offspeed,0,normal_init,%item_horizontal_normal_init;start;init,%item_horizontal_start_init,duration,.08,next,normal;normal;init,%item_horizontal_normal_init,offdx,0;ending;init,%item_horizontal_ending_init,duration,.08;]]
-zclass[[mask,anchor,actor|anchoring,@,xf,@,visible,yes,block_direction,no,speed_multiplier,2,initial_energy,.125,gradual_energy,.0078125,offy,.2,sind,3;start;offdy,-.0625,duration,.08,next,normal;normal;offy,-.125,offdy,0;ending;offdy,.0625,duration,.08;]]
+zclass[[mask,anchor,actor|anchoring,@,xf,@,visible,yes,block_direction,no,speed_multiplier,2,initial_energy,.4,gradual_energy,0,offy,.2,sind,3;start;offdy,-.0625,duration,.08,next,normal;normal;offy,-.125,offdy,0;ending;offdy,.0625,duration,.08;]]
 zclass[[bow,item_horizontal,actor|anchoring,@,xf,@,visible,yes,block_direction,yes,speed_multiplier,.5,initial_energy,.25,gradual_energy,0,offspeed,.105,sind,7;ending;init,%item_horizontal_ending_init,duration,.08;ending;init,%bow_ending_init,duration,.08;]]
 zclass[[pellet,vec,collidable,actor,drawlayer_50,statitem|x,@,y,@,dx,@,xf,@,damage,1,stunlen,.125,pushspeed,.375,should_use_xf,yes,item_hit_func,~kill,should_collide_below,no,rx,.25,ry,.25,destroyed,%standard_explosion,draw,%pellet_draw;start;update,%pellet_update,duration,.5;]]
 zclass[[shield,item_horizontal,actor,statitem|anchoring,@,xf,@,rx,.25,ry,.5,damage,0,stunlen,2,pushspeed,.25,should_use_xf,yes,item_hit_func,%shield_item_hit_func,plpushspeed,.125,visible,yes,block_direction,yes,speed_multiplier,.5,initial_energy,.125,gradual_energy,0,offspeed,.105,sind,6;]]
 zclass[[sword,item_horizontal,actor,statitem|anchoring,@,xf,@,rx,.375,ry,.25,damage,2,stunlen,.25,pushspeed,.25,should_use_xf,yes,item_hit_func,%sword_item_hit_func,plpushspeed,.125,visible,yes,block_direction,yes,speed_multiplier,.5,initial_energy,.125,gradual_energy,0,offspeed,.125,sind,2;]]
 zclass[[banjo,anchor,actor|anchoring,@,xf,@,visible,yes,block_direction,no,speed_multiplier,.5,initial_energy,.125,gradual_energy,0,offy,-.05,sind,1;start;init,%banjo_start_init,offdy,.0625,duration,.08,next,min_play;min_play;init,nop,offdy,0,duration,2,next,normal;normal;init,nop,offy,.25,next,ending;ending;init,%banjo_ending_init,offdy,-.0625,duration,.08;]]
 zclass[[brang,collidable,simple_spr,drawlayer_50,mov,actor,statitem|anchoring,@,xf,@,rx,.25,ry,.25,damage,0,stunlen,.25,pushspeed,.25,should_use_xf,no,item_hit_func,~kill,visible,no,block_direction,yes,speed_multiplier,0,initial_energy,.25,gradual_energy,0,should_collide_below,no,offspeed,.125,drawout,%brang_drawout,sind,4;start;init,%brang_start_init,speed,.075,duration,.125,next,normal;normal;init,nop,speed,0,duration,1.5,update,%brang_normal_update,next,ending;ending;init,%brang_ending_init,speed,0,speed,0,update,%brang_ending_update,duration,.125,adjust_deltas_for_solids,nop,adjust_deltas_for_tiles,nop;final;init,nop,update,nop,alive,no;]]
-zclass[[bomb_held,anchor,actor|anchoring,@,xf,@,sind,5,sy,-2,visible,yes,block_direction,no,speed_multiplier,0,initial_energy,.3,gradual_energy,0,offy,-.25,offspeed,.185;start;init,nop,offdy,-.0625,duration,.08,next,normal;normal;init,nop,offdy,0,offy,-.5;ending;visible,no,init,%bomb_held_destroyed,duration,.16;]]
-zclass[[bomb,mov,box,simple_spr,drawlayer_50,actor|x,@,y,@,xf,@,speed,@,ang,@,sind,5,damage,1,stunlen,5,pushspeed,.25,should_use_xf,yes,item_hit_func,nop,destroyed,%bomb_destroyed;start;duration,.15,update,%bomb_update,next,wait;wait;speed,0,duration,.7,update,nop,next,ending;ending;alive,no;]]
+zclass[[bomb_held,anchor,actor|anchoring,@,xf,@,sind,5,sy,-2,visible,yes,block_direction,no,speed_multiplier,.5,initial_energy,.3,gradual_energy,0,offy,-.25,offspeed,.185;start;init,nop,offdy,-.0625,duration,.08,next,normal;normal;init,nop,offdy,0,offy,-.5;ending;visible,no,init,%bomb_held_destroyed,duration,.16;]]
+zclass[[bomb,collidable,mov,box,simple_spr,drawlayer_50,actor|x,@,y,@,xf,@,speed,@,ang,@,sind,5,rx,.25,ry,.25,damage,1,stunlen,5,pushspeed,.25,should_use_xf,yes,item_hit_func,nop,destroyed,%bomb_destroyed;start;duration,.15,update,%bomb_update,next,wait;wait;speed,0,duration,.7,update,nop,next,ending;ending;alive,no;]]
 zclass[[pl,ma_left,actor,mov,collidable,auto_outline,healthobj,drawlayer_50|cname,lank,cspr,103,x,@,y,@,xf,@,health,@,max_health,@,sind,88,rx,.375,ry,.375,should_collide_with_screen_edge,no,update,%pl_update,energy,0,is_energy_cooling_down,no,target_energy,0,destroyed,%pl_destroyed,drawout,%pl_drawout;item_funcs;5,%sword,2,%mask,8,%bow,3,%shield,0,%bomb_held,6,%banjo,7,%brang;default_item;visible,no,is_default,yes,block_direction,no,speed_multiplier,1,alive,yes,gradual_energy,-.0078125,initial_energy,0,kill,nop;item,~default_item;]]
 function draw_bar(x1,y1,x2,y2,percent,align,fg,bg,og)
 if x1>x2 then x1-=3 x2-=3 end
@@ -904,8 +903,8 @@ zclass[[ma_left|]]
 zclass[[ma_middle|]]
 zclass[[ma_right|]]
 zclass[[rstat|align,@,x,@,entity_type,@,update,%rstat_update,get,%rstat_get;]]
-zclass[[stat,vec,actor,drawlayer_95|align,@,x,@,obj,@,y,138,draw,%stat_draw;start;dy,-2,duration,.2,next,normal;normal;dy,0;ending;dy,2,duration,.2;]]
-zclass[[tbox,vec,actor,drawlayer_99|rawtext,@,destroyed,@,y,138,cur_text_index,1,anim,0,line_1,,line_2,,update,%tbox_update,draw,%tbox_draw;texts;,;start;dy,-2,duration,.2,next,normal,update,nop,init,%tbox_init;normal;dy,0,anim,0,done,no,update,%tbox_update,init,nop;ending;dy,2,update,nop,duration,.2,init,nop;]]
+zclass[[stat,vec,actor,drawlayer_95|align,@,x,@,obj,@,y,140,draw,%stat_draw;start;dy,-2,duration,.2,next,normal;normal;dy,0;ending;dy,2,duration,.2;]]
+zclass[[tbox,vec,actor,drawlayer_99|rawtext,@,destroyed,@,y,140,cur_text_index,1,anim,0,line_1,,line_2,,update,%tbox_update,draw,%tbox_draw;texts;,;start;dy,-2,duration,.2,next,normal,update,nop,init,%tbox_init;normal;dy,0,anim,0,done,no,update,%tbox_update,init,nop;ending;dy,2,update,nop,duration,.2,init,nop;]]
 zclass[[fairy,actor,mov,drawlayer_50|x,@,y,@,update,%fairy_update,draw,%fairy_draw]]
 function draw_tail(x,y,dx,dy,mult)
 for i=-2,2 do
@@ -928,8 +927,8 @@ zclass[[house226,house|x,@,y,@,room,226]]
 zclass[[house227,house|x,@,y,@,room,227]]
 zclass[[house228,house|x,@,y,@,room,228]]
 zclass[[house229,house|x,@,y,@,xf,-1,room,229]]
-zclass[[person,box,target_with_tbox,simple_spr,drawlayer_50|text,,rx,.375,ry,.375,sy,-2,trx,.5,try,.25,ty,.25,target_with_tbox_disable_callback,%person_target_with_tbox_disable_callback]]
-zclass[[navyblock,solid,person|x,@,y,@,cname,navy,cspr,97,sind,97,text,my sister has been in^the forest all day.^find something to^protect yourself with^and bring her home.,ry,1,memloc_trigger,0x5d09,memloc_trigger_value,1,target_with_tbox_finish_callback,%person_target_with_tbox_finish_callback|0x5d09|0]]
+zclass[[person,target_with_tbox,simple_spr,drawlayer_50|text,,sy,-2,trx,.5,try,.5,target_with_tbox_disable_callback,%person_target_with_tbox_disable_callback]]
+zclass[[navyblock,solid,person|x,@,y,@,cname,navy,cspr,97,sind,97,text,my sister has been in^the forest all day.^find something to^protect yourself with^and bring her home.,rx,.375,ry,1,memloc_trigger,0x5d09,memloc_trigger_value,1,target_with_tbox_finish_callback,%person_target_with_tbox_finish_callback|0x5d09|0]]
 zclass[[navyhouse,person|x,@,y,@,cname,navy,cspr,97,sind,97,text,im navy in a house|0x5d09|1]]
 zclass[[bobblock,solid,person|x,@,y,@,cname,bob,cspr,80,sind,80,text,im bob outside,ry,1,memloc_trigger,0x5d18,memloc_trigger_value,1,target_with_tbox_finish_callback,%person_target_with_tbox_finish_callback|0x5d18|0]]
 zclass[[bobhouse,person|x,@,y,@,cname,bob,cspr,80,sind,80,text,im bob in a house|0x5d18|1]]
