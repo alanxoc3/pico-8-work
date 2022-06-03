@@ -96,17 +96,16 @@ end $$
             if not a:is_active'stunned' then
                 a:start_timer('stunned', item.stunlen, nop)
                 a:hurt(item.damage)
+                if item.should_use_xf then
+                    a.dx += item.pushspeed*item.xf
+                else
+                    local abx, aby = a:abside(item)
+                    a.dx += item.pushspeed*abx
+                    a.dy += item.pushspeed*aby
+                end
             end
 
             item:item_hit_func()
-
-            if item.should_use_xf then
-                a.dx += item.pushspeed*item.xf
-            else
-                local abx, aby = a:abside(item)
-                a.dx += item.pushspeed*abx
-                a.dy += item.pushspeed*aby
-            end
         end
     end)
 end $$

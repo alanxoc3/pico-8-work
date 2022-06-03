@@ -30,6 +30,55 @@ zclass[[statitem,box|]] -- if the item hits an enemy, the enemy becomes the new 
    -- visible: should it be drawn with the player?
    -- alive: is the item alive?
 
+|[interact]| function(...)
+    local obj = g_rstat_right:get()
+    if obj then
+        if obj.id == 'pot' then
+            obj:kill()
+            return _g.pot_held(...)
+        end
+    end
+end $$
+
+zclass[[pot_held,anchor,actor|
+    anchoring,@, xf,@,
+
+    sind,49, sy,-2,
+    visible,yes,
+    block_direction, no,
+    speed_multiplier, .5,
+    initial_energy, .3,
+    gradual_energy, 0,
+    offy,-.25,
+
+    offspeed,.185;
+
+    start;    init,nop, offdy,-.0625, duration,.08, next,normal;
+    normal;   init,nop, offdy,0, offy,-.5;
+    ending;   visible,no, init,%pot_held_destroyed, duration,.16;
+]]
+
+|[pot_held_destroyed]| function(a)
+    _g.pot_thrown(a.anchoring.x, a.anchoring.y, a.xf, .06+a.anchoring.speed, atan2(a.anchoring.xf, g_zbtn_2))
+end $$
+
+zclass[[pot_thrown,collidable,mov,box,simple_spr,drawlayer_50,actor|
+    x,@, y,@, xf,@, speed,@, ang,@,
+    sind,49,
+
+    rx,.25, ry,.25,
+    damage,        1,
+    stunlen,       5,
+    pushspeed,     .25,
+    should_use_xf, yes,
+    item_hit_func, nop,
+
+    destroyed,%standard_explosion;
+
+    start; duration, .15, update,%bomb_update, next,wait;
+    wait;  speed,0, duration, .05, update,nop;
+]]
+
 zclass[[item_horizontal,anchor|
     offspeed,0,
     normal_init,%item_horizontal_normal_init;
@@ -290,8 +339,7 @@ zclass[[bomb,collidable,mov,box,simple_spr,drawlayer_50,actor|
     destroyed,%bomb_destroyed;
 
     start; duration, .15, update,%bomb_update, next,wait;
-    wait;  speed,0, duration, .7, update,nop, next,ending;
-    ending; alive,no;
+    wait;  speed,0, duration, .7, update,nop, next,dead;
 ]]
 
 |[bomb_update]| function(a)
@@ -300,6 +348,26 @@ end $$
 
 |[bomb_destroyed]| function(a)
     _g.explode(a.x, a.y, 8, 2, nop)
+    _g.bomb_explode(a.x, a.y)
+end $$
+
+zclass[[bomb_explode,enemy,box,actor,statitem|
+    x,@, y,@, rx,1, ry,1,
+    damage,4,
+    stunlen,1,
+    pushspeed,.25,
+    should_use_xf,no,
+    item_hit_func,nop,
+    pl_collide_func,%bomb_pl_hit;
+
+    start; duration,.25;
+]]
+
+|[bomb_pl_hit]| function(a, pl)
+    if not pl:is_active'stunned' then
+        pl:start_timer('stunned', .3, nop)
+        pl:hurt(3)
+    end
 end $$
 
 --| ITEM CODE LOGIC |--
@@ -326,7 +394,15 @@ zclass[[pl,ma_left,actor,mov,collidable,auto_outline,healthobj,drawlayer_50|
     destroyed,%pl_destroyed,
     drawout,%pl_drawout;
 
-    item_funcs; ITEM_IND_SWORD,%sword, ITEM_IND_MASK,%mask, ITEM_IND_BOW,%bow, ITEM_IND_SHIELD,%shield, ITEM_IND_BOMB,%bomb_held, ITEM_IND_BANJO,%banjo, ITEM_IND_BRANG,%brang;
+    item_funcs;
+        ITEM_IND_SWORD,%sword,
+        ITEM_IND_MASK,%mask,
+        ITEM_IND_BOW,%bow,
+        ITEM_IND_SHIELD,%shield,
+        ITEM_IND_BOMB,%bomb_held,
+        ITEM_IND_BANJO,%banjo,
+        ITEM_IND_INTERACT,%interact,
+        ITEM_IND_BRANG,%brang;
 
     default_item;
         visible,no,
@@ -358,7 +434,7 @@ end $$
     elseif not a:is_active'stunned' and not a.is_energy_cooling_down and item.is_default and btn'BTN_ITEM_USE' then
         local item_func = a.item_funcs[peek'MEM_ITEM_INDEX']
         if item_func then
-            item = item_func(a, a.xf)
+            item = item_func(a, a.xf) or item
             a.target_energy += item.initial_energy
         end
     end
@@ -403,7 +479,7 @@ end $$
     if does_entity_exist'banjo' then
         -- xf = g_si%2*2-1
         top = 92
-    elseif a.item.id == 'bomb_held' then
+    elseif does_entity_exist'bomb_held' or does_entity_exist'pot_held' then
         top = a.item:is_alive() and 93 or 94
     end
 

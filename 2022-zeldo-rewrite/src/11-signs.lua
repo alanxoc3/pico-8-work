@@ -12,24 +12,35 @@
 -- what should be done if multiple actors are competing for the card thing?
 --   how about first come first serve. check for a ".stat"
 
-zclass[[target_with_tbox,ma_right,actor|
-    init,%target_with_tbox_init,
+zclass[[class_with_target,actor|
     trx,0, try,0, tx,0, ty,0,
+    init,%class_with_target_init,
+    callback_touch,nop,
+    callback_outside,nop
+]]
+
+|[class_with_target_init]| function(a)
+    _g.target(a.trx, a.try, a.tx, a.ty, a,
+        function() a:callback_touch() end,
+        function() a:callback_outside() end
+    )
+end $$
+
+zclass[[target_with_tbox,class_with_target,ma_right|
+    callback_touch,%target_with_tbox_target_func,
     target_with_tbox_disable_callback,nop,
     target_with_tbox_finish_callback,nop
 ]]
 
-|[target_with_tbox_init]| function(a)
-    _g.target(a.trx, a.try, a.tx, a.ty, a, function()
-        if not a:target_with_tbox_disable_callback() then
-            a:start_timer('isma',.1)
-            if btnp'4' and not does_entity_exist'tbox' then
-                _g.tbox(a.text, function()
-                    a:target_with_tbox_finish_callback()
-                end)
-            end
+|[target_with_tbox_target_func]| function(a)
+    if not a:target_with_tbox_disable_callback() then
+        a:start_timer('isma',.1)
+        if btnp'4' and not does_entity_exist'tbox' then
+            _g.tbox(a.text, function()
+                a:target_with_tbox_finish_callback()
+            end)
         end
-    end, nop)
+    end
 end $$
 
 zclass[[sign,target_with_tbox,solid,simple_spr,drawlayer_50|

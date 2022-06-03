@@ -5,8 +5,21 @@ end $$
 zclass[[woodtbl   ,solid,drawlayer_50,simple_spr|x,@,y,@,rx,.375,ry,.375,draw,~drawout,sind,16]]
 zclass[[greytbl   ,solid,drawlayer_50,simple_spr|x,@,y,@,rx,.375,ry,.375,draw,~drawout,sind,17]]
 zclass[[soupbucket,solid,drawlayer_50,simple_spr|x,@,y,@,rx,.375,ry,.375,draw,~drawout,sind,18]]
-zclass[[pot       ,solid,drawlayer_50,simple_spr|x,@,y,@,rx,.375,ry,.375,draw,~drawout,sind,49]]
 zclass[[woodcrate ,solid,drawlayer_50,simple_spr|x,@,y,@,rx,.375,ry,.375,draw,~drawout,sind,35]]
+
+zclass[[pot,solid,class_with_target,drawlayer_50,ma_right,simple_spr|
+    x,@,y,@,
+    cspr,49, cname,"pot", sind,49,
+    rx,.375,ry,.375,
+    trx,.5,try,.5,
+    callback_touch,%pot_callback_touch
+]]
+
+|[pot_callback_touch]| function(a)
+    if peek'MEM_ITEM_INDEX' == 4 then
+        a:start_timer('isma', 0)
+    end
+end $$
 
 zclass[[bedblanket,actor,simple_spr,drawlayer_50|
     x,@, y,@,

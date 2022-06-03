@@ -35,11 +35,10 @@ how should i make the save platform collide with something...
 What if the banjo released an object when you finish playing? Sure, that should be easy.
 
 today...
-TODO: bomb explode collision
-TODO: pot throwing logic
-TODO: chicket grab/throw logic
-TODO: bomb and slimy share throw logic
 TODO: pot throw, chicken throw, and bomb throw all share same logic
+TODO: pot throwing logic
+TODO: chicken grab/throw logic
+TODO: bomb and slimy share throw logic
 
 tomorrow...
 TODO: chest logic
@@ -50,6 +49,7 @@ TODO: improve stun effect (gray effect?)
 TODO: polish until beating first boss
 TODO: banjo over people text logic
 TODO: work on banjo song and get timing right
+TODO: bomb explode collision player
 
 TODO: token crunch for 30 minutes
 TODO: first boss (lime)
@@ -59,7 +59,7 @@ TODO: think about chicken collection for cannon logic (throw chicken onto a plat
 
 ```
 2022-06-02 -- 
-    6117
+    6117 6229 6287
 
 2022-06-01 -- slimestun gameoverwork mapwork
     5905 6117
