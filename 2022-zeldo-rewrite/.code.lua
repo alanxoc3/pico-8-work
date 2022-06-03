@@ -610,8 +610,7 @@ a.target_ang=atan2(g_pl.x-a.x,g_pl.y-a.y)
 end,function(a)
 a.sx=rnd_one()
 end,function(a)
-a.ang=a.target_ang
-a.sy=sin(a:get_elapsed_percent"jump"/2)*8
+a.ang,a.sy=a.target_ang,sin(a:get_elapsed_percent"jump"/2)*8
 end,function(a,items)
 foreach(items,function(item)
 if not a:outside(item)and item:is_alive()then
@@ -708,11 +707,6 @@ isorty(g_zclass_entities["drawlayer_50"])
 local coffx=g_pl:is_active"stunned"and cos(g_fi/4)or 0
 draw_room(g_rooms[peek"0x5d01"],64+coffx,57,function()
 zcall(loop_entities,[[1;,drawlayer_25,draw;2;,drawlayer_50,draw;3;,drawlayer_75,draw;]])
-if g_debug then
-for inst in all(g_zclass_entities["box"])do
-scr_zrect(inst.x,inst.y,inst.rx,inst.ry,8)
-end
-end
 end,function()
 zcall(loop_entities,[[1;,drawlayer_90,draw;2;,drawlayer_95,draw;3;,drawlayer_99,draw;]])
 end)
@@ -1031,7 +1025,6 @@ g_tile_animation_lookup=create_tile_animation_lookup(g_rooms[0])
 end
 function _update60()
 g_zbtn_0,g_zbtn_2=zbtn(btn,0),zbtn(btn,2)
-if btn(4)and btnp(5)then g_debug=not g_debug end
 zcall(loop_entities,[[1;,actor,clean;2;,fader,clean;]])
 register_entities()
 zcall(loop_entities,[[1;,fader,tick;2;,game_state,tick;3;,fader,state;4;,game_state,state;]])
@@ -1041,7 +1034,4 @@ g_si,g_fi=g_slow_animation.index,g_fast_animation.index
 cls()
 loop_entities("game_state","draw")
 fade(g_fade)
-if g_debug then
-zcall(rect,[[1;,17,12,110,18,1;2;,17,95,110,101,1;3;,17,0,110,5,1;4;,17,122,110,127,1;5;,0,0,17,127,1;6;,110,0,127,127,1;]])
-end
 end

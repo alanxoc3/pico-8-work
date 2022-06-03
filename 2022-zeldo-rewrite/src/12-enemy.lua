@@ -78,8 +78,7 @@ end $$
 end $$
 
 |[slimy_jump]| function(a)
-    a.ang = a.target_ang
-    a.sy = sin(a:get_elapsed_percent'jump'/2)*8
+    a.ang, a.sy = a.target_ang, sin(a:get_elapsed_percent'jump'/2)*8
 end $$
 
     -- damage: how much damage to do to enemies
