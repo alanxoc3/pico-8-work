@@ -686,7 +686,7 @@ foreach(r.objects,function(obj_template)
 _g[g_obj_map[obj_template.index]](obj_template.x+.5,obj_template.y+.5)
 end)
 end,function(state)
-zcall(loop_entities,[[pls,@,solids,@,room,@,statitems,@;1;,timer,tick;2;,actor,state;3;,mov,mov_update;4;,enemy,pl_collide_func_batch,~pls;5;,collidable,adjust_deltas_for_solids,~solids;6;,collidable,adjust_deltas_for_tiles,~room;7;,collidable,adjust_deltas_for_screen;8;,vec,vec_update;9;,slimy_actual,statcollide,~statitems;10;,anchor,update_anchor;11;,target,update_target,~pls;12;,rstat,update;13;,healthobj,health_update;]],g_zclass_entities.pl,g_zclass_entities.solid,g_rooms[peek"0x5d01"],g_zclass_entities.statitem)
+zcall(loop_entities,[[pls,@,solids,@,room,@,statitems,@;1;,timer,tick;2;,actor,state;3;,mov,mov_update;4;,enemy,pl_collide_func_batch,~pls;5;,collidable,adjust_deltas_for_solids,~solids;6;,collidable,adjust_deltas_for_tiles,~room;7;,collidable,adjust_deltas_for_screen;8;,vec,vec_update;9;,slimy_shared,statcollide,~statitems;10;,anchor,update_anchor;11;,target,update_target,~pls;12;,rstat,update;13;,healthobj,health_update;]],g_zclass_entities.pl,g_zclass_entities.solid,g_rooms[peek"0x5d01"],g_zclass_entities.statitem)
 poke(0x5d19,g_pl.health)
 poke(0x5d20,g_pl.max_health)
 if not does_entity_exist"fader"and not g_pl:inside(g_room_bounds)then
@@ -707,6 +707,11 @@ isorty(g_zclass_entities["drawlayer_50"])
 local coffx=g_pl:is_active"stunned"and cos(g_fi/4)or 0
 draw_room(g_rooms[peek"0x5d01"],64+coffx,57,function()
 zcall(loop_entities,[[1;,drawlayer_25,draw;2;,drawlayer_50,draw;3;,drawlayer_75,draw;]])
+if g_debug then
+for inst in all(g_zclass_entities["box"])do
+scr_zrect(inst.x,inst.y,inst.rx,inst.ry,8)
+end
+end
 end,function()
 zcall(loop_entities,[[1;,drawlayer_90,draw;2;,drawlayer_95,draw;3;,drawlayer_99,draw;]])
 end)
@@ -974,8 +979,9 @@ zclass[[signlark,sign|x,@,y,@,text,larks house]]
 zclass[[signjane,sign|x,@,y,@,text,janes house]]
 zclass[[enemy,box|pl_collide_func_batch,%enemy_pl_collide_func_batch,pl_collide_func,nop]]
 zclass[[quack,ma_right,actor,collidable,mov,enemy,simple_spr,drawlayer_50|x,@,y,@,rx,.25,ry,.25,sy,-2,speed,.0125,pl_collide_func,%quack_pl_collide_func,sind,32,cspr,32,cname,quack;start;init,%quack_change_dir,duration,1,next,start;]]
-zclass[[slimy_actual,ma_right,actor,collidable,healthobj,mov,enemy,simple_spr,drawlayer_50|x,@,y,@,rx,.25,ry,.25,cspr,118,cname,slimy,sind,118,destroyed,%slimy_destroyed,statcollide,%slimy_statcollide,max_health,5;start;pl_collide_func,nop,sind,118,speed,0,sx,0,sy,0,update,%slimy_start,duration,1,next,shake;shake;speed,0,update,%slimy_shake,duration,.25,next,jump;jump;pl_collide_func,%slimy_pl_collide_func,sind,119,speed,.025,sx,0,update,%slimy_jump,duration,.25,next,start;]]
-zclass[[miny_actual,simple_spr,vec,drawlayer_50,actor|x,@,y,@,cspr,116,cname,miny,sind,116]]
+zclass[[slimy_shared,ma_right,actor,collidable,healthobj,mov,enemy,simple_spr,drawlayer_50|rx,.25,ry,.25,statcollide,%slimy_statcollide,max_health,5;start;pl_collide_func,nop,speed,0,sx,0,sy,0,update,%slimy_start,duration,1,next,shake;shake;speed,0,update,%slimy_shake,duration,.25,next,jump;jump;pl_collide_func,%slimy_pl_collide_func,speed,.025,sx,0,update,%slimy_jump,duration,.25,next,start;]]
+zclass[[slimy_actual,slimy_shared|x,@,y,@,cspr,118,cname,slimy,sind,118,max_health,5,destroyed,%slimy_destroyed;start;sind,118;jump;sind,119;]]
+zclass[[miny_actual,slimy_shared|x,@,y,@,cspr,116,cname,miny,sind,116,max_health,1;destroyed,%standard_explosion;start;sind,116;jump;sind,117;]]
 zclass[[spike,enemy,simple_spr,actor,drawlayer_25|sind,52,rx,.25,ry,.25,sy,0,draw,~drawout;start;next,down;down;sind,52,duration,.65,next,middle1;middle1;sind,53,duration,.05,next,up;up;pl_collide_func,%spike_pl_collide_func,sind,54,duration,.25,next,middle2;middle2;pl_collide_func,nop,sind,53,duration,.05,next,down;]]
 zclass[[r1spike,spike|x,@,y,@,xf,1;start;duration,0;]]
 zclass[[r2spike,spike|x,@,y,@,xf,1;start;duration,.5;]]
@@ -1025,6 +1031,7 @@ g_tile_animation_lookup=create_tile_animation_lookup(g_rooms[0])
 end
 function _update60()
 g_zbtn_0,g_zbtn_2=zbtn(btn,0),zbtn(btn,2)
+if btn(4)and btnp(5)then g_debug=not g_debug end
 zcall(loop_entities,[[1;,actor,clean;2;,fader,clean;]])
 register_entities()
 zcall(loop_entities,[[1;,fader,tick;2;,game_state,tick;3;,fader,state;4;,game_state,state;]])
@@ -1034,4 +1041,7 @@ g_si,g_fi=g_slow_animation.index,g_fast_animation.index
 cls()
 loop_entities("game_state","draw")
 fade(g_fade)
+if g_debug then
+zcall(rect,[[1;,17,12,110,18,1;2;,17,95,110,101,1;3;,17,0,110,5,1;4;,17,122,110,127,1;5;,0,0,17,127,1;6;,110,0,127,127,1;]])
+end
 end

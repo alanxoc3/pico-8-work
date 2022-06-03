@@ -36,7 +36,7 @@ end $$
         6 ;,collidable,  adjust_deltas_for_tiles, ~room;
         7 ;,collidable,  adjust_deltas_for_screen;
         8 ;,vec,         vec_update;
-        9 ;,slimy_actual,statcollide, ~statitems;
+        9 ;,slimy_shared,statcollide, ~statitems;
         10;,anchor,      update_anchor;
         11;,target,      update_target, ~pls;
         12;,rstat,       update;

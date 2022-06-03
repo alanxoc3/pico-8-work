@@ -31,57 +31,13 @@ help him save the Land of Hi-roll from the forces of evil.
 - TODO house
 
 ## Tokens & Features
-for chicken logic... how do you bring chickens to cannon...
-- rope? like a leash?
-- carry on your head (like pots and bombs)
-- put in a bottle/bucket
-- play banjo to make it fly away
-- chickens are already in the room
-- soup doesn't have to be related to cannon
-
-how about chicken starts with jane. she says she will make soup. soup is done when you beat lime.
-
-each chicken has a name. later in the game, cannon asks where quin is. that's the one jane cooked.
-
-maybe cannon says you smell like quack soup. he hates quack soup. ducks are
-friends. so he gets angry and sends his pet duck to fight you. Then you settle
-the duel with a game of tennis.
-
-"i'm hungry, i mean i'm cannon"
-"hey, thanks for the soup"
-"what kind of soup was that anyways"
-".. 
-
-remember me lank? i've been waiting all day. lets play tennis now.
-
-a different part of the game has a duck boss. Maybe ivan fight? no, graveyard
-
-mask: salesman sells it.
-bow:  secret duck boss in graveyard?
-
-you want to see my daughter? she's in her house on the other side of the graveyard. careful, there are ghosts.
-secret duck miniboss in graveyard. get slingshot
-
-secret area in forest, lime gives you the mask.
-
-save lime. lime says she bought a mask from someone in the forest and went crazy.
-you can buy that mask too after you get bombs.
-
-ivan says cannon is the creepy guy who gave her the mask.
-
-banjo belongs to lark's father.
-
-you dare to drink duck soup next to a duck's grave? How dare you.
-i think you need to learn a lesson.
-
-soup is temporary
-
 friday...
-TODO: chest logic
 TODO: implement miny
 TODO: player weapons stun slimy
 TODO: improve stun effect (gray effect?)
+TODO: chest logic
 TODO: banjo over people text logic
+TODO: talk to people, not duck bug
 TODO: work on banjo song and get timing right
 TODO: money system & money object appear under pot
 
@@ -248,3 +204,42 @@ Ivan:
 
 ## Areas
 Ice Castle, Graveyard, Zeldo Home, Field, Mountain Area, Spike Forest, Village
+
+## Randomness
+how about chicken starts with jane. she says she will make soup. soup is done when you beat lime.
+
+each chicken has a name. later in the game, cannon asks where quin is. that's the one jane cooked.
+
+maybe cannon says you smell like quack soup. he hates quack soup. ducks are
+friends. so he gets angry and sends his pet duck to fight you. Then you settle
+the duel with a game of tennis.
+
+"i'm hungry, i mean i'm cannon"
+"hey, thanks for the soup"
+"what kind of soup was that anyways"
+".. 
+
+remember me lank? i've been waiting all day. lets play tennis now.
+
+a different part of the game has a duck boss. Maybe ivan fight? no, graveyard
+
+mask: salesman sells it.
+bow:  secret duck boss in graveyard?
+
+you want to see my daughter? she's in her house on the other side of the graveyard. careful, there are ghosts.
+secret duck miniboss in graveyard. get slingshot
+
+secret area in forest, lime gives you the mask.
+
+save lime. lime says she bought a mask from someone in the forest and went crazy.
+you can buy that mask too after you get bombs.
+
+ivan says cannon is the creepy guy who gave her the mask.
+
+banjo belongs to lark's father.
+
+you dare to drink duck soup next to a duck's grave? How dare you.
+i think you need to learn a lesson.
+
+soup is temporary
+

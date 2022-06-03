@@ -38,20 +38,18 @@ end $$
     end)
 end $$
 
-zclass[[slimy_actual,ma_right,actor,collidable,healthobj,mov,enemy,simple_spr,drawlayer_50|
-    x,@, y,@, rx, .25, ry, .25,
-    cspr,118, cname,"slimy", sind,118,
-    destroyed,%slimy_destroyed,
+zclass[[slimy_shared,ma_right,actor,collidable,healthobj,mov,enemy,simple_spr,drawlayer_50|
+    rx, .25, ry, .25,
     statcollide,%slimy_statcollide,
     max_health,5;
 
-    -- start
-    -- shake
-    -- jump!
-    start; pl_collide_func,nop, sind,118, speed,0, sx,0, sy,0, update,%slimy_start, duration, 1,   next,shake;
+    start; pl_collide_func,nop, speed,0, sx,0, sy,0, update,%slimy_start, duration, 1,   next,shake;
     shake; speed,0,             update,%slimy_shake, duration, .25, next,jump;
-    jump;  pl_collide_func,%slimy_pl_collide_func, sind,119, speed,.025, sx,0,       update,%slimy_jump,  duration, .25, next,start;
+    jump;  pl_collide_func,%slimy_pl_collide_func, speed,.025, sx,0,       update,%slimy_jump,  duration, .25, next,start;
 ]]
+
+zclass[[slimy_actual,slimy_shared| x,@, y,@, cspr,118, cname,"slimy", sind,118, max_health,5, destroyed,%slimy_destroyed;    start;sind,118; jump;sind,119; ]]
+zclass[[miny_actual,slimy_shared|  x,@, y,@, cspr,116, cname,"miny",  sind,116, max_health,1; destroyed,%standard_explosion; start;sind,116; jump;sind,117; ]]
 
 |[slimy_pl_collide_func]| function(a, pl)
     if not pl:is_active'stunned' then
@@ -81,12 +79,6 @@ end $$
     a.ang, a.sy = a.target_ang, sin(a:get_elapsed_percent'jump'/2)*8
 end $$
 
-    -- damage: how much damage to do to enemies
-    -- stunlen: how much time enemy should be stunned after hit
-    -- pushspeed: how fast the enemy should be pushed
-    -- should_use_xf: should push speed be reflected by the xf or position
-    -- item_hit_func: a function that gets when it hits the enemy
-
 |[slimy_statcollide]| function(a, items)
     foreach(items, function(item)
         if not a:outside(item) and item:is_alive() then
@@ -108,13 +100,3 @@ end $$
         end
     end)
 end $$
-
--- shield collide
--- brang collide
--- arrow collide
--- sword collide
-
-zclass[[miny_actual,simple_spr,vec,drawlayer_50,actor|
-    x,@, y,@,
-    cspr,116, cname,"miny", sind,116
-]]
