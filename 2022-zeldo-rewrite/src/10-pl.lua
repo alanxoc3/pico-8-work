@@ -36,48 +36,74 @@ zclass[[statitem,box|]] -- if the item hits an enemy, the enemy becomes the new 
         if obj.id == 'pot' then
             obj:kill()
             return _g.pot_held(...)
+        elseif obj.id == 'quack' then
+            obj:kill()
+            return _g.quack_held(...)
         end
     end
 end $$
 
-zclass[[pot_held,anchor,actor|
-    anchoring,@, xf,@,
-
-    sind,49, sy,-2,
+zclass[[held_to_throw,anchor,actor|
     visible,yes,
     block_direction, no,
     speed_multiplier, .5,
     initial_energy, .3,
     gradual_energy, 0,
     offy,-.25,
+    sy,-2,
 
-    offspeed,.185;
+    item_thrown,nop, sy,-2, offspeed,.185;
 
     start;    init,nop, offdy,-.0625, duration,.08, next,normal;
     normal;   init,nop, offdy,0, offy,-.5;
-    ending;   visible,no, init,%pot_held_destroyed, duration,.16;
+    ending;   visible,no, init,%held_to_throw_ending_init, duration,.16;
 ]]
 
-|[pot_held_destroyed]| function(a)
-    _g.pot_thrown(a.anchoring.x, a.anchoring.y, a.xf, .06+a.anchoring.speed, atan2(a.anchoring.xf, g_zbtn_2))
+|[held_to_throw_ending_init]| function(a)
+    a.item_thrown(a.anchoring.x, a.anchoring.y, a.anchoring.xf, .06+a.anchoring.speed, atan2(a.anchoring.xf, g_zbtn_2))
 end $$
 
-zclass[[pot_thrown,collidable,mov,box,simple_spr,drawlayer_50,actor|
-    x,@, y,@, xf,@, speed,@, ang,@,
-    sind,49,
+zclass[[pot_held,held_to_throw   |anchoring,@, xf,@, sind,49,       item_thrown,%pot_thrown, sy,-3]]
+zclass[[quack_held,held_to_throw |anchoring,@, xf,@, sind,32,       item_thrown,%quack_thrown, sy,-4]]
+zclass[[bomb_held,held_to_throw  |anchoring,@, xf,@, sind,SPR_BOMB, item_thrown,%bomb]]
 
-    rx,.25, ry,.25,
-    damage,        1,
-    stunlen,       5,
-    pushspeed,     .25,
-    should_use_xf, yes,
-    item_hit_func, nop,
+zclass[[item_throwing,collidable,mov,box,simple_spr,drawlayer_50,actor|
+    rx,.25, ry,.25;
 
-    destroyed,%standard_explosion;
-
-    start; duration, .15, update,%bomb_update, next,wait;
-    wait;  speed,0, duration, .05, update,nop;
+    start; duration, .15, update,%item_throwing_update, next,wait;
+    wait; speed,0, update,nop;
 ]]
+
+|[item_throwing_update]| function(a)
+    a.sy = sin(a:get_elapsed_percent'start'/4+.25)*7
+end $$
+
+zclass[[bomb,item_throwing|
+    x,@, y,@, xf,@, speed,@, ang,@,
+    sind,SPR_BOMB, destroyed,%bomb_destroyed;
+    wait; duration, .7;
+]]
+
+zclass[[pot_thrown,item_throwing|
+    x,@, y,@, xf,@, speed,@, ang,@,
+    sind,49, destroyed,%standard_explosion;
+    wait; duration, .05;
+]]
+
+zclass[[quack_thrown,item_throwing|
+    x,@, y,@, xf,@, speed,@, ang,@,
+    sind,32, destroyed,%quack_thrown_destroyed;
+    wait; duration, .05;
+]]
+
+|[quack_thrown_destroyed]| function(a)
+    _g.quack(a.x, a.y)
+end $$
+
+|[bomb_destroyed]| function(a)
+    _g.explode(a.x, a.y, 8, 2, nop)
+    _g.bomb_explode(a.x, a.y)
+end $$
 
 zclass[[item_horizontal,anchor|
     offspeed,0,
@@ -98,6 +124,7 @@ zclass[[mask,anchor,actor|
     gradual_energy, 0,
 
     offy, .2,
+    sy,-2,
     sind,SPR_MASK;
 
     start;  offdy,-.0625, duration,.08, next,normal;
@@ -114,6 +141,7 @@ zclass[[bow,item_horizontal,actor|
     initial_energy, .25,
     gradual_energy, 0,
 
+    sy,-2,
     offspeed,.105,
     sind,SPR_BOW;
 
@@ -168,9 +196,8 @@ zclass[[shield,item_horizontal,actor,statitem|
     speed_multiplier, .5,
     initial_energy, .125,
     gradual_energy, 0,
-    -- offy,.125,
-    
 
+    sy,-2,
     offspeed,.105,
     sind,SPR_SHIELD;
 ]]
@@ -192,6 +219,7 @@ zclass[[sword,item_horizontal,actor,statitem|
     initial_energy, .125,
     gradual_energy, 0,
 
+    sy,-2,
     offspeed,.125,
     sind,SPR_SWORD;
 ]]
@@ -215,6 +243,7 @@ zclass[[banjo,anchor,actor|
     gradual_energy, 0,
     offy,-.05,
 
+    sy,-2,
     sind,SPR_BANJO;
 
     start;    init,%banjo_start_init, offdy,.0625, duration,.08, next,min_play;
@@ -303,57 +332,9 @@ end $$
     a.y = a.end_y + (a.anchoring.y - a.end_y)*percent
 end $$
 
-zclass[[bomb_held,anchor,actor|
-    anchoring,@, xf,@,
-
-    sind,SPR_BOMB, sy,-2,
-    visible,yes,
-    block_direction, no,
-    speed_multiplier, .5,
-    initial_energy, .3,
-    gradual_energy, 0,
-    offy,-.25,
-
-    offspeed,.185;
-
-    start;    init,nop, offdy,-.0625, duration,.08, next,normal;
-    normal;   init,nop, offdy,0, offy,-.5;
-    ending;   visible,no, init,%bomb_held_destroyed, duration,.16;
-]]
-
-|[bomb_held_destroyed]| function(a)
-    _g.bomb(a.anchoring.x, a.anchoring.y, a.xf, .06+a.anchoring.speed, atan2(a.anchoring.xf, g_zbtn_2))
-end $$
-
-zclass[[bomb,collidable,mov,box,simple_spr,drawlayer_50,actor|
-    x,@, y,@, xf,@, speed,@, ang,@,
-    sind,SPR_BOMB,
-
-    rx,.25, ry,.25,
-    damage,        1,
-    stunlen,       5,
-    pushspeed,     .25,
-    should_use_xf, yes,
-    item_hit_func, nop,
-
-    destroyed,%bomb_destroyed;
-
-    start; duration, .15, update,%bomb_update, next,wait;
-    wait;  speed,0, duration, .7, update,nop, next,dead;
-]]
-
-|[bomb_update]| function(a)
-    a.sy = sin(a:get_elapsed_percent'start'/4+.25)*7
-end $$
-
-|[bomb_destroyed]| function(a)
-    _g.explode(a.x, a.y, 8, 2, nop)
-    _g.bomb_explode(a.x, a.y)
-end $$
-
 zclass[[bomb_explode,enemy,box,actor,statitem|
     x,@, y,@, rx,1, ry,1,
-    damage,4,
+    damage,5,
     stunlen,1,
     pushspeed,.25,
     should_use_xf,no,
@@ -366,7 +347,7 @@ zclass[[bomb_explode,enemy,box,actor,statitem|
 |[bomb_pl_hit]| function(a, pl)
     if not pl:is_active'stunned' then
         pl:start_timer('stunned', .3, nop)
-        pl:hurt(3)
+        pl:hurt'5'
     end
 end $$
 
@@ -473,20 +454,19 @@ end $$
 end $$
 
 |[pl_drawout]| function(a)
-    local yoff = 0
     local xf = a.xf
     local top = 91
     if does_entity_exist'banjo' then
         -- xf = g_si%2*2-1
         top = 92
-    elseif does_entity_exist'bomb_held' or does_entity_exist'pot_held' then
+    elseif does_entity_exist'held_to_throw' then
         top = a.item:is_alive() and 93 or 94
     end
 
-    zspr(a.sind, a.x*8, a.y*8-2+yoff, 1, 1, xf)
-    zspr(top,    a.x*8, a.y*8-2+yoff, 1, 1, xf)
+    zspr(a.sind, a.x*8, a.y*8-2, 1, 1, xf)
+    zspr(top,    a.x*8, a.y*8-2, 1, 1, xf)
 
     if a.item.visible then
-        zspr(a.item.sind, a.item.x*8, a.item.y*8-2+yoff, 1, 1, xf)
+        zspr(a.item.sind, a.item.x*8, a.item.y*8+a.item.sy, 1, 1, xf)
     end
 end $$

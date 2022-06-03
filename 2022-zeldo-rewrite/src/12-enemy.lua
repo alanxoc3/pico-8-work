@@ -12,7 +12,7 @@ zclass[[enemy,box|
     pl_collide_func,nop
 ]]
 
-zclass[[quack,ma_right,actor,collidable,healthobj,mov,enemy,simple_spr,drawlayer_50|
+zclass[[quack,ma_right,actor,collidable,mov,enemy,simple_spr,drawlayer_50|
     x,@, y,@, rx, .25, ry, .25,
     sy,-2,
     speed,.0125,
