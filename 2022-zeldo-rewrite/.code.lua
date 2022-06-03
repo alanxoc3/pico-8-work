@@ -140,7 +140,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,animation_init,@,auto_outline_draw,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,explode_draw,@,standard_explosion,@,calc_deltas,@,adjust_deltas_for_solids,@,adjust_deltas_for_tiles,@,adjust_deltas_for_screen,@,healthobj_hurt,@,healthobj_health_update,@,inventory_start_init,@,inventory_start_update,@,inventory_press_update,@,inventory_draw,@,simple_spr_draw,@,anchor_update_anchor,@,targettouch_update_target,@,interact,@,held_to_throw_ending_init,@,item_throwing_update,@,quack_thrown_destroyed,@,bomb_destroyed,@,pellet_update,@,pellet_draw,@,bow_ending_init,@,shield_item_hit_func,@,sword_item_hit_func,@,banjo_start_init,@,banjo_ending_init,@,brang_drawout,@,brang_start_init,@,brang_normal_update,@,brang_ending_init,@,brang_ending_update,@,bomb_pl_hit,@,item_horizontal_start_init,@,item_horizontal_normal_init,@,item_horizontal_ending_init,@,pl_destroyed,@,pl_update,@,pl_drawout,@,rstat_update,@,rstat_get,@,stat_draw,@,tbox_init,@,tbox_update,@,tbox_draw,@,fairy_update,@,fairy_draw,@,spawn_walls,@,pot_callback_touch,@,house_init,@,person_target_with_tbox_disable_callback,@,person_target_with_tbox_finish_callback,@,class_with_target_init,@,target_with_tbox_target_func,@,sign_target_with_tbox_disable_callback,@,slimy,@,miny,@,quack_change_dir,@,quack_pl_collide_func,@,enemy_pl_collide_func_batch,@,slimy_pl_collide_func,@,slimy_destroyed,@,slimy_start,@,slimy_shake,@,slimy_jump,@,slimy_statcollide,@,spike_pl_collide_func,@,saveplat_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,gameover_control_ending,@,gameover_init,@,gameover_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,simple_update,@,title_draw,@,title_logo_update,@,title_logo_drawout,@,game_state_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,animation_init,@,auto_outline_draw,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,explode_draw,@,standard_explosion,@,calc_deltas,@,adjust_deltas_for_solids,@,adjust_deltas_for_tiles,@,adjust_deltas_for_screen,@,healthobj_hurt,@,healthobj_health_update,@,inventory_start_init,@,inventory_start_update,@,inventory_press_update,@,inventory_draw,@,simple_spr_draw,@,anchor_update_anchor,@,targettouch_update_target,@,interact,@,held_to_throw_ending_init,@,item_throwing_update,@,quack_thrown_destroyed,@,bomb_destroyed,@,pellet_update,@,pellet_draw,@,bow_ending_init,@,shield_item_hit_func,@,sword_item_hit_func,@,banjo_start_init,@,banjo_ending_init,@,brang_drawout,@,brang_start_init,@,brang_normal_update,@,brang_ending_init,@,brang_ending_update,@,bomb_pl_hit,@,item_horizontal_start_init,@,item_horizontal_normal_init,@,item_horizontal_ending_init,@,pl_destroyed,@,pl_update,@,pl_drawout,@,energybar_update,@,energybar_draw,@,rstat_update,@,rstat_get,@,stat_draw,@,tbox_init,@,tbox_update,@,tbox_draw,@,fairy_update,@,fairy_draw,@,spawn_walls,@,pot_callback_touch,@,house_init,@,person_target_with_tbox_disable_callback,@,person_target_with_tbox_finish_callback,@,class_with_target_init,@,target_with_tbox_target_func,@,sign_target_with_tbox_disable_callback,@,slimy,@,miny,@,quack_change_dir,@,quack_pl_collide_func,@,enemy_pl_collide_func_batch,@,slimy_pl_collide_func,@,slimy_destroyed,@,slimy_start,@,slimy_shake,@,slimy_jump,@,slimy_statcollide,@,spike_pl_collide_func,@,saveplat_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,gameover_control_ending,@,gameover_init,@,gameover_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,simple_update,@,title_draw,@,title_logo_update,@,title_logo_drawout,@,game_state_init,@]],function(a,stateName)
 a.next_state=a.next_state or stateName
 end,function(a,stateName)
 a.next_state,a.isnew=nil
@@ -471,6 +471,17 @@ if a.item.visible then
 zspr(a.item.sind,a.item.x*8,a.item.y*8+a.item.sy,1,1,xf)
 end
 end,function(a)
+if a.obj.energy==0 then a:kill()end
+end,function(a)
+local is_cooldown=g_pl.is_energy_cooling_down and g_pl.energy>=g_pl.target_energy
+local fg=is_cooldown and 1 or(g_pl.energy>.5 and 8 or 12)
+local bg=is_cooldown and 1 or(g_pl.energy>.5 and 2 or 1)
+local yoff=a.y+(g_pl.is_energy_cooling_down and-cos(g_fi/4)or 0)
+camera(0,-yoff)
+zcall(draw_bar,[[1;,18,6,109,11,@,0,@,@,1]],1-g_pl.energy,
+fg,bg)
+camera()
+end,function(a)
 local buffer=g_zclass_entities[a.entity_type]
 local cur_obj=a.stat and a.stat.obj
 local new_obj=nil
@@ -687,6 +698,9 @@ _g[g_obj_map[obj_template.index]](obj_template.x+.5,obj_template.y+.5)
 end)
 end,function(state)
 zcall(loop_entities,[[pls,@,solids,@,room,@,statitems,@;1;,timer,tick;2;,actor,state;3;,mov,mov_update;4;,enemy,pl_collide_func_batch,~pls;5;,collidable,adjust_deltas_for_solids,~solids;6;,collidable,adjust_deltas_for_tiles,~room;7;,collidable,adjust_deltas_for_screen;8;,vec,vec_update;9;,slimy_shared,statcollide,~statitems;10;,anchor,update_anchor;11;,target,update_target,~pls;12;,rstat,update;13;,healthobj,health_update;]],g_zclass_entities.pl,g_zclass_entities.solid,g_rooms[peek"0x5d01"],g_zclass_entities.statitem)
+if not does_entity_exist"energybar"and g_pl.energy ~=0 then
+_g.energybar(g_pl)
+end
 poke(0x5d19,g_pl.health)
 poke(0x5d20,g_pl.max_health)
 if not does_entity_exist"fader"and not g_pl:inside(g_room_bounds)then
@@ -715,14 +729,6 @@ end
 end,function()
 zcall(loop_entities,[[1;,drawlayer_90,draw;2;,drawlayer_95,draw;3;,drawlayer_99,draw;]])
 end)
-local is_cooldown=g_pl.is_energy_cooling_down and g_pl.energy>=g_pl.target_energy
-if is_cooldown then
-camera(0,-cos(g_fi/4))
-end
-zcall(draw_bar,[[1;,18,6,109,11,@,0,@,@,1]],1-g_pl.energy,
-is_cooldown and 1 or 13,
-is_cooldown and 1 or 1)
-camera()
 end,function()
 _g.title_logo()
 end,function()
@@ -930,6 +936,7 @@ pset(x2-i,y1+i)pset(x2-i,y2-i)
 end
 zcamera(cam_x,cam_y,post_card_func)
 end
+zclass[[energybar,vec,actor,drawlayer_95|obj,@,y,-14,draw,%energybar_draw;start;dy,1,duration,.2,next,normal;normal;dy,0,update,%energybar_update;ending;dy,-1,duration,.2;]]
 zclass[[ma_left|]]
 zclass[[ma_middle|]]
 zclass[[ma_right|]]

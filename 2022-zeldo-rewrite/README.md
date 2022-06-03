@@ -32,9 +32,8 @@ help him save the Land of Hi-roll from the forces of evil.
 
 ## Tokens & Features
 friday...
-TODO: implement miny
-TODO: player weapons stun slimy
 TODO: improve stun effect (gray effect?)
+TODO: player weapons stun slimy
 TODO: chest logic
 TODO: banjo over people text logic
 TODO: talk to people, not duck bug

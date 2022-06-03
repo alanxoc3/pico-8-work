@@ -43,6 +43,10 @@ end $$
         13;,healthobj,   health_update;
     ]], g_zclass_entities.pl, g_zclass_entities.solid, g_rooms[peek'MEM_ROOM_IND'], g_zclass_entities.statitem)
 
+    if not does_entity_exist'energybar' and g_pl.energy ~= 0 then
+        _g.energybar(g_pl)
+    end
+
     poke(MEM_PL_HEALTH, g_pl.health)
     poke(MEM_PL_MAX_HEALTH, g_pl.max_health)
 
@@ -92,19 +96,6 @@ end $$
             3;,drawlayer_99, draw;
         ]])
     end)
-
-    local is_cooldown = g_pl.is_energy_cooling_down and g_pl.energy >= g_pl.target_energy
-
-    if is_cooldown then
-        camera(0, -cos(g_fi/4))
-    end
-
-    zcall(draw_bar, [[
-        1;,18,6,109,11,@,0,@,@,1
-    ]], 1-g_pl.energy,
-    is_cooldown and 1 or 13,
-    is_cooldown and 1 or 1)
-    camera()
 end $$
 
 function load_room(rind, x, y, xf)

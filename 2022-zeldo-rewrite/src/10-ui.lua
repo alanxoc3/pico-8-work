@@ -36,6 +36,34 @@ function draw_card(x, y, rx, ry, coffx, coffy, card_func, post_card_func)
 end
 
 -- controls the right stat so there is only ever 1 instance
+zclass[[energybar,vec,actor,drawlayer_95|
+    obj,@, y,-14, draw,%energybar_draw;
+
+    start;  dy,1,  duration,.2, next,normal;
+    normal; dy,0,  update,%energybar_update;
+    ending; dy,-1, duration,.2;
+]]
+
+|[energybar_update]| function(a)
+    if a.obj.energy == 0 then a:kill() end
+end $$
+
+|[energybar_draw]| function(a)
+    local is_cooldown = g_pl.is_energy_cooling_down and g_pl.energy >= g_pl.target_energy
+    local fg = is_cooldown and 1 or (g_pl.energy > .5 and 8 or 12)
+    local bg = is_cooldown and 1 or (g_pl.energy > .5 and 2 or 1)
+
+    local yoff = a.y + (g_pl.is_energy_cooling_down and -cos(g_fi/4) or 0)
+    camera(0, -yoff)
+
+    zcall(draw_bar, [[
+        1;,18,6,109,11,@,0,@,@,1
+    ]], 1-g_pl.energy,
+    fg, bg)
+
+    camera()
+end $$
+
 zclass[[ma_left|]]
 zclass[[ma_middle|]]
 zclass[[ma_right|]]
