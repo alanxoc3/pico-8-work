@@ -36,36 +36,32 @@ function draw_card(x, y, rx, ry, coffx, coffy, card_func, post_card_func)
 end
 
 -- controls the right stat so there is only ever 1 instance
-zclass[[rstat|
-    align,@, x,@,
-    update,%rstat_update,
-    set,%rstat_set,
-    get,%rstat_get;
+zclass[[ma_left|]]
+zclass[[ma_middle|]]
+zclass[[ma_right|]]
 
-    buffer;,;
+zclass[[rstat|
+    align,@, x,@, entity_type,@,
+    update,%rstat_update,
+    get,%rstat_get;
 ]]
 
 |[rstat_update]| function(a)
-    local buffer = a.buffer
-    a.buffer = {}
+    local buffer = g_zclass_entities[a.entity_type]
 
-    local cur_obj, first_obj = a.stat and a.stat.obj, buffer[1]
+    local cur_obj = a.stat and a.stat.obj
+    local new_obj = nil
 
     for obj in all(buffer) do
-        if cur_obj == obj then return end
+        if obj:is_active'isma' then
+            new_obj = obj
+            if obj == cur_obj then return end
+        end
     end
     if does_entity_exist'tbox' then return end
     
     if a.stat then a.stat:load'ending' end
-    a.stat = first_obj and _g.stat(a.align, a.x, first_obj)
-end $$
-
-|[rstat_set]| function(a, s)
-    add(a.buffer, s)
-end $$
-
-|[rstat_get]| function(a)
-    return a.stat and a.stat.obj
+    a.stat = new_obj and _g.stat(a.align, a.x, new_obj)
 end $$
 
 |[rstat_get]| function(a)

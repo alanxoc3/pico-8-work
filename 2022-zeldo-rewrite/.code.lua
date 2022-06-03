@@ -1,4 +1,4 @@
-g_obj_map=split[[bedpillow,bedblanket,pot,house231,navyblock,signlank,signkeep,signnavy,signteach,signlark,signjane,house224,house225,house226,house227,house228,house229,navyhouse,bobblock,bobhouse,keep,teach,jane,lark,r1spike,r2spike,l1spike,l2spike,saveplat,woodtbl,greytbl,soupbucket,slimy,miny,woodcrate,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil]]
+g_obj_map=split[[bedpillow,bedblanket,pot,house231,navyblock,signlank,signkeep,signnavy,signteach,signlark,signjane,house224,house225,house226,house227,house228,house229,navyhouse,bobblock,bobhouse,keep,teach,jane,lark,r1spike,r2spike,l1spike,l2spike,saveplat,woodtbl,greytbl,soupbucket,slimy,miny,woodcrate,quack,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil]]
 function decode_map()
 local rooms,cur_loc={},0x2000
 local peek_inc=function()
@@ -140,27 +140,34 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,animation_init,@,auto_outline_draw,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_end_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,explode_draw,@,standard_explosion,@,calc_deltas,@,adjust_deltas_for_solids,@,adjust_deltas_for_tiles,@,adjust_deltas_for_screen,@,healthobj_hurt,@,healthobj_health_update,@,inventory_start_init,@,inventory_start_update,@,inventory_press_update,@,inventory_draw,@,simple_spr_draw,@,anchor_update_anchor,@,targettouch_update_target,@,pellet_update,@,pellet_draw,@,bow_ending_init,@,shield_item_hit_func,@,sword_item_hit_func,@,banjo_start_init,@,banjo_ending_init,@,brang_drawout,@,brang_start_init,@,brang_normal_update,@,brang_ending_init,@,brang_ending_update,@,bomb_held_destroyed,@,bomb_update,@,bomb_destroyed,@,item_horizontal_start_init,@,item_horizontal_normal_init,@,item_horizontal_ending_init,@,pl_destroyed,@,pl_update,@,pl_drawout,@,rstat_update,@,rstat_set,@,rstat_get,@,rstat_get,@,stat_draw,@,tbox_init,@,tbox_update,@,tbox_draw,@,fairy_update,@,fairy_draw,@,spawn_walls,@,house_init,@,person_target_with_tbox_disable_callback,@,person_target_with_tbox_finish_callback,@,target_with_tbox_init,@,sign_target_with_tbox_disable_callback,@,slimy,@,miny,@,enemy_pl_collide_func_batch,@,slimy_pl_collide_func,@,slimy_destroyed,@,slimy_start,@,slimy_shake,@,slimy_jump,@,slimy_statcollide,@,spike_pl_collide_func,@,saveplat_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,gameover_control_ending,@,gameover_init,@,gameover_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,simple_update,@,title_draw,@,title_logo_update,@,title_logo_drawout,@,game_state_init,@]],function(a,stateName)
-if stateName then
+_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,animation_init,@,auto_outline_draw,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,explode_draw,@,standard_explosion,@,calc_deltas,@,adjust_deltas_for_solids,@,adjust_deltas_for_tiles,@,adjust_deltas_for_screen,@,healthobj_hurt,@,healthobj_health_update,@,inventory_start_init,@,inventory_start_update,@,inventory_press_update,@,inventory_draw,@,simple_spr_draw,@,anchor_update_anchor,@,targettouch_update_target,@,pellet_update,@,pellet_draw,@,bow_ending_init,@,shield_item_hit_func,@,sword_item_hit_func,@,banjo_start_init,@,banjo_ending_init,@,brang_drawout,@,brang_start_init,@,brang_normal_update,@,brang_ending_init,@,brang_ending_update,@,bomb_held_destroyed,@,bomb_update,@,bomb_destroyed,@,item_horizontal_start_init,@,item_horizontal_normal_init,@,item_horizontal_ending_init,@,pl_destroyed,@,pl_update,@,pl_drawout,@,rstat_update,@,rstat_get,@,stat_draw,@,tbox_init,@,tbox_update,@,tbox_draw,@,fairy_update,@,fairy_draw,@,spawn_walls,@,house_init,@,person_target_with_tbox_disable_callback,@,person_target_with_tbox_finish_callback,@,target_with_tbox_init,@,sign_target_with_tbox_disable_callback,@,slimy,@,miny,@,quack_change_dir,@,quack_pl_collide_func,@,enemy_pl_collide_func_batch,@,slimy_pl_collide_func,@,slimy_destroyed,@,slimy_start,@,slimy_shake,@,slimy_jump,@,slimy_statcollide,@,spike_pl_collide_func,@,saveplat_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,gameover_control_ending,@,gameover_init,@,gameover_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,simple_update,@,title_draw,@,title_logo_update,@,title_logo_drawout,@,game_state_init,@]],function(a,stateName)
+a.next_state=a.next_state or stateName
+end,function(a,stateName)
+a.next_state,a.isnew=nil
+if stateName=="dead"then
+a.alive=false
+else
 a:end_timer(a.curr)
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
 a.curr=stateName
-a:stop_timer(a.curr,a.duration,a.duration and function()a:load(a.next)end)
-else
-a.alive=false
+a:start_timer(a.curr,a.duration,a.duration and function()a:load(a.next or "dead")end)
+a:init()
 end
 end,function(a)
-if a:get_elapsed(a.curr)==nil then a:load(a.curr)end
-if a:get_elapsed(a.curr)==false then a:play_timer(a.curr)a:init()end
+if a.isnew then
+a:loadlogic(a.curr)
+elseif a.next_state then
+a:loadlogic(a.next_state)
+end
 a:update()
 end,function(a)
-return not a:get_elapsed"ending"and a.alive
+return a:is_active"ending"==nil and a.alive
 end,function(a)
 if a.ending then
 if a.curr=="start"then
 a.next="ending"
-elseif not a:get_elapsed"ending"then
+elseif a:is_active"ending"==nil then
 a:load"ending"
 end
 else
@@ -172,41 +179,39 @@ a.index%=60
 end,function(a)
 draw_outline(a.outline_color,function()a:drawout()end)
 a:drawout()
-end,function(...)
-_g.timer_stop_timer(...)
-_g.timer_play_timer(...)
 end,function(a,timer_name,duration,callback)
-a.timers[timer_name]={elapsed=false,duration=0+(duration or 32767),callback=callback or function()end}
+a.timers[timer_name]={active=true,elapsed=false,duration=duration and 0+duration,callback=callback or function()end}
 end,function(a,timer_name)
-if a.timers[timer_name]and not a.timers[timer_name].elapsed then
-a.timers[timer_name].elapsed=0
+if a.timers[timer_name]then
+a.timers[timer_name].elapsed=a.timers[timer_name].duration or a.timers[timer_name].elapsed
+a.timers[timer_name].active=false
 end
 end,function(a,timer_name)
-if a.timers[timer_name]and a.timers[timer_name].elapsed then
-a.timers[timer_name].elapsed=a.timers[timer_name].duration
+local timer=a.timers[timer_name]
+if not timer then return 0
+elseif not timer.duration then return 0
+elseif timer.duration<=0 then return 1
 end
-end,function(a,timer_name)
-a.timers[timer_name]=nil
-end,function(a,timer_name)
-local timer=a.timers[timer_name]
-return timer and(timer.elapsed or false)
+return min(1,(timer.elapsed or 0)/timer.duration)
 end,function(a,timer_name)
 local timer=a.timers[timer_name]
-return timer and min(1,(timer.elapsed or 0)/timer.duration)or 0
-end,function(a,timer_name)
-local timer=a.timers[timer_name]
-return timer and timer.elapsed and timer.elapsed<timer.duration
+return timer and timer.active
 end,function(a)
 local finished_timers={}
 for name,timer in pairs(a.timers)do
-if timer.elapsed and timer.elapsed<timer.duration then
+if timer.active then
+if timer.elapsed then
 timer.elapsed=timer.elapsed+1/60
-if timer.elapsed>=timer.duration then
+if timer.duration and timer.elapsed>=timer.duration then
 add(finished_timers,timer)
+end
+elseif not timer.elapsed then
+timer.elapsed=0
 end
 end
 end
 foreach(finished_timers,function(timer)
+timer.active=false
 timer.callback(a)
 end)
 end,function(a,b)
@@ -300,9 +305,11 @@ local diff=a.health/a.max_health-a.display_health
 a.display_health+=zsgn(diff)*min(abs(diff),.05)
 if a.health<=0 then a:kill()end
 end,function(a)
-a.stat=peek"0x5d08" ~=4 and{cspr=a[peek"0x5d08"+1].sind}
+a.cspr=peek"0x5d08" ~=4 and a[peek"0x5d08"+1].sind
 end,function(a)
-g_rstat_inventory:set(a.stat)
+if peek"0x5d08" ~=4 then
+a:start_timer("isma",0)
+end
 if not does_entity_exist"fader"and not does_entity_exist"tbox"and not does_entity_exist"banjo"and btn"5"then
 poke(0x5d08,9)
 a.ind=4
@@ -343,11 +350,11 @@ end)
 end,function(a)
 if a.dx==0 then a:kill()end
 end,function(a)
-draw_tail(a.x,a.y,a.dx,0,3)
-pset(a.x*8,a.y*8,4)
+draw_tail(a.x,a.y-.25,a.dx,0,3)
+pset(a.x*8,a.y*8-2,4)
 end,function(a)
 _g.item_horizontal_ending_init(a)
-_g.pellet(a.x,a.y-.125,a.xf*.25,a.xf)
+_g.pellet(a.anchoring.x,a.anchoring.y,a.xf*.25,a.xf)
 end,function(a)
 a.anchoring.dx-=a.plpushspeed*a.xf
 end,function(a)
@@ -395,7 +402,7 @@ end,function(a)a.offdx=a.xf*a.offspeed end,function(a)a.offx=abs(a.offx*8)\1/8*s
 _g.standard_explosion(a)
 _g.fader_out(function()g_state:load"gameover" end)
 end,function(a)
-g_rstat_left:set(a)
+a:start_timer("isma",0)
 local item=a.item
 if not item.alive then item=a.default_item end
 if a:is_active"stunned"or btn(5)or does_entity_exist"tbox"or does_entity_exist"fader"or a.is_energy_cooling_down or not btn"4"then
@@ -446,19 +453,18 @@ if a.item.visible then
 zspr(a.item.sind,a.item.x*8,a.item.y*8-2+yoff,1,1,xf)
 end
 end,function(a)
-local buffer=a.buffer
-a.buffer={}
-local cur_obj,first_obj=a.stat and a.stat.obj,buffer[1]
+local buffer=g_zclass_entities[a.entity_type]
+local cur_obj=a.stat and a.stat.obj
+local new_obj=nil
 for obj in all(buffer)do
-if cur_obj==obj then return end
+if obj:is_active"isma"then
+new_obj=obj
+if obj==cur_obj then return end
+end
 end
 if does_entity_exist"tbox"then return end
 if a.stat then a.stat:load"ending" end
-a.stat=first_obj and _g.stat(a.align,a.x,first_obj)
-end,function(a,s)
-add(a.buffer,s)
-end,function(a)
-return a.stat and a.stat.obj
+a.stat=new_obj and _g.stat(a.align,a.x,new_obj)
 end,function(a)
 return a.stat and a.stat.obj
 end,function(a)
@@ -538,7 +544,7 @@ load_room(%0x5d01,g_pl.x,g_pl.y,g_pl.xf)
 end,function(a)
 _g.target(a.trx,a.try,a.tx,a.ty,a,function()
 if not a:target_with_tbox_disable_callback()then
-g_rstat_right:set(a)
+a:start_timer("isma",.1)
 if btnp"4"and not does_entity_exist"tbox"then
 _g.tbox(a.text,function()
 a:target_with_tbox_finish_callback()
@@ -552,6 +558,11 @@ end,function(x,y)
 _g.explode(x,y,4,1,function()_g.slimy_actual(x,y)end)
 end,function(x,y)
 _g.explode(x,y,4,1,function()_g.miny_actual(x,y)end)
+end,function(a)
+a.ang=rnd(2)-1
+a.xf=sgn(cos(a.ang))
+end,function(a,pl)
+a:start_timer("isma",0)
 end,function(a,others)
 foreach(others,function(other)
 if not a:outside(other)then
@@ -560,9 +571,8 @@ end
 end)
 end,function(a,pl)
 if not pl:is_active"stunned"then
-a.isma=true
 a.speed=0
-a:start_timer("isma",2,function()a.isma=false end)
+a:start_timer("isma",2)
 pl:start_timer("stunned",.375,nop)
 pl:start_timer("pushed",.125,nop)
 pl.ang=atan2(a.xf,pl.y-a.y)
@@ -571,21 +581,17 @@ end,function(a)
 _g.miny(a.x,a.y-.5)
 _g.miny(a.x,a.y+.5)
 end,function(a)
-if a.isma then g_rstat_right:set(a)end
 a.xf=sgn(g_pl.x-a.x)
 a.target_ang=atan2(g_pl.x-a.x,g_pl.y-a.y)
 end,function(a)
-if a.isma then g_rstat_right:set(a)end
 a.sx=rnd_one()
 end,function(a)
-if a.isma then g_rstat_right:set(a)end
 a.ang=a.target_ang
 a.sy=sin(a:get_elapsed_percent"jump"/2)*8
 end,function(a,items)
 foreach(items,function(item)
 if not a:outside(item)and item:is_alive()then
-a:start_timer("isma",2,function()a.isma=false end)
-a.isma=true
+a:start_timer("isma",2)
 if not a:is_active"stunned"then
 a:start_timer("stunned",item.stunlen,nop)
 a:hurt(item.damage)
@@ -606,8 +612,8 @@ pl:start_timer("stunned",.125,nop)
 pl:hurt(1)
 end
 end,function(a)
-if not a:outside(g_pl)then
-g_rstat_right:set(a)
+if not a:outside(g_pl)and peek"0x5d08"==6 then
+a:start_timer("isma",.01)
 end
 end,function(a)
 poke(0x5f43,0xff)
@@ -651,7 +657,7 @@ end
 g_room_bounds=_g.room_bounds(r.w/2,r.h/2,r.w/2-.375,r.h/2-.375)
 g_pl=_g.pl(peek"0x5d02"/16,peek"0x5d03"/16,peek"0x5d04"*2-1,peek"0x5d19",peek"0x5d20")
 g_fairy=_g.fairy(g_pl.x,g_pl.y-.125)
-g_rstat_left,g_rstat_inventory,g_rstat_right=_g.rstat(-1,10),_g.rstat(0,64),_g.rstat(1,118)
+g_rstat_left,g_rstat_inventory,g_rstat_right=_g.rstat(-1,10,"ma_left"),_g.rstat(0,64,"ma_middle"),_g.rstat(1,118,"ma_right")
 _g.inventory(g_pl)
 foreach(r.objects,function(obj_template)
 _g[g_obj_map[obj_template.index]](obj_template.x+.5,obj_template.y+.5)
@@ -759,7 +765,7 @@ function scr_zrect(...)scr_help_four(zrect,...)end
 function scr_zrectfill(...)scr_help_four(zrectfill,...)end
 function scr_line(...)scr_help_four(line,...)end
 function scr_pset(x,y,color)pset(8*x,8*y,color)end
-zclass[[actor,timer|load,%actor_load,state,%actor_state,kill,%actor_kill,clean,%actor_clean,is_alive,%actor_is_alive,alive,yes,duration,null,curr,start,next,null,init,nop,update,nop,destroyed,nop;]]
+zclass[[actor,timer|load,%actor_load,loadlogic,%actor_loadlogic,state,%actor_state,kill,%actor_kill,clean,%actor_clean,is_alive,%actor_is_alive,alive,yes,duration,null,curr,start,next,null,isnew,yes,init,nop,update,nop,destroyed,nop;]]
 zclass[[drawlayer_25|]]
 zclass[[drawlayer_50|]]
 zclass[[drawlayer_75|]]
@@ -786,7 +792,7 @@ i=i-1
 end
 end
 end
-zclass[[timer|timers;,;start_timer,%timer_start_timer,stop_timer,%timer_stop_timer,play_timer,%timer_play_timer,end_timer,%timer_end_timer,is_active,%timer_is_active,delete_timer,%timer_delete_timer,get_elapsed,%timer_get_elapsed,get_elapsed_percent,%timer_get_elapsed_percent,tick,%timer_tick,]]
+zclass[[timer|timers;,;start_timer,%timer_reset_timer,end_timer,%timer_end_timer,is_active,%timer_is_active,get_elapsed_percent,%timer_get_elapsed_percent,tick,%timer_tick,]]
 function loop_through_tiles(room,func)
 for tiles in all{room.tiles_1,room.tiles_2}do
 for location,index in pairs(tiles)do
@@ -846,7 +852,7 @@ return dx
 end
 end
 zclass[[healthobj|max_health,1,hurt,%healthobj_hurt,health_update,%healthobj_health_update]]
-zclass[[inventory,actor,drawlayer_90|pl,@,ind,4;start;init,%inventory_start_init,update,%inventory_start_update,draw,nop;press;init,nop,update,%inventory_press_update,draw,%inventory_draw;expand;init,nop,update,nop,draw,%inventory_draw,duration,.0625,next,press;contract;init,nop,update,nop,draw,%inventory_draw,duration,.0625,next,start;1;mem_loc,0x5d12,index,0,name,bomb,sxo,-1,syo,1,xoff,-7,yoff,-9,sind,5;2;mem_loc,0x5d10,index,1,name,bowl,sxo,0,syo,-1,xoff,0,yoff,-10,sind,8;3;mem_loc,0x5d15,index,2,name,mask,sxo,1,syo,1,xoff,7,yoff,-9,sind,3;4;mem_loc,0x5d13,index,3,name,shield,sxo,0,syo,0,xoff,-8,yoff,-2,sind,6;5;mem_loc,0x5dff,sxo,0,syo,0,xoff,0,yoff,0,sind,0;6;mem_loc,0x5d16,index,5,name,sword,sxo,1,syo,0,xoff,8,yoff,-2,sind,2;7;mem_loc,0x5d17,index,6,name,banjo,sxo,1,syo,0,xoff,-7,yoff,5,sind,1;8;mem_loc,0x5d11,index,7,name,brang,sxo,1,syo,1,xoff,0,yoff,6,sind,4;9;mem_loc,0x5d14,index,8,name,bow,sxo,0,syo,0,xoff,7,yoff,5,sind,7;10;mem_loc,0x5d00,index,4,sxo,0,syo,-2,xoff,0,yoff,0,sind,103,flip_enabled,on;]]
+zclass[[inventory,actor,drawlayer_90,ma_middle|pl,@,ind,4;start;init,%inventory_start_init,update,%inventory_start_update,draw,nop;press;init,nop,update,%inventory_press_update,draw,%inventory_draw;expand;init,nop,update,nop,draw,%inventory_draw,duration,.0625,next,press;contract;init,nop,update,nop,draw,%inventory_draw,duration,.0625,next,start;1;mem_loc,0x5d12,index,0,name,bomb,sxo,-1,syo,1,xoff,-7,yoff,-9,sind,5;2;mem_loc,0x5d10,index,1,name,bowl,sxo,0,syo,-1,xoff,0,yoff,-10,sind,8;3;mem_loc,0x5d15,index,2,name,mask,sxo,1,syo,1,xoff,7,yoff,-9,sind,3;4;mem_loc,0x5d13,index,3,name,shield,sxo,0,syo,0,xoff,-8,yoff,-2,sind,6;5;mem_loc,0x5dff,sxo,0,syo,0,xoff,0,yoff,0,sind,0;6;mem_loc,0x5d16,index,5,name,sword,sxo,1,syo,0,xoff,8,yoff,-2,sind,2;7;mem_loc,0x5d17,index,6,name,banjo,sxo,1,syo,0,xoff,-7,yoff,5,sind,1;8;mem_loc,0x5d11,index,7,name,brang,sxo,1,syo,1,xoff,0,yoff,6,sind,4;9;mem_loc,0x5d14,index,8,name,bow,sxo,0,syo,0,xoff,7,yoff,5,sind,7;10;mem_loc,0x5d00,index,4,sxo,0,syo,-2,xoff,0,yoff,0,sind,103,flip_enabled,on;]]
 zclass[[solid,box|]]
 zclass[[wall,solid,anchor|anchoring,@,offx,@,offy,@,rx,@,ry,@]]
 zclass[[simple_spr,auto_outline,pos|drawout,%simple_spr_draw,sind,0,sw,1,sh,1,xf,1,yf,1,sx,0,sy,0]]
@@ -856,14 +862,14 @@ zclass[[statitem,box|]]
 zclass[[item_horizontal,anchor|offspeed,0,normal_init,%item_horizontal_normal_init;start;init,%item_horizontal_start_init,duration,.08,next,normal;normal;init,%item_horizontal_normal_init,offdx,0;ending;init,%item_horizontal_ending_init,duration,.08;]]
 zclass[[mask,anchor,actor|anchoring,@,xf,@,visible,yes,block_direction,no,speed_multiplier,2,initial_energy,.125,gradual_energy,.0078125,offy,.2,sind,3;start;offdy,-.0625,duration,.08,next,normal;normal;offy,-.125,offdy,0;ending;offdy,.0625,duration,.08;]]
 zclass[[bow,item_horizontal,actor|anchoring,@,xf,@,visible,yes,block_direction,yes,speed_multiplier,.5,initial_energy,.25,gradual_energy,0,offspeed,.105,sind,7;ending;init,%item_horizontal_ending_init,duration,.08;ending;init,%bow_ending_init,duration,.08;]]
-zclass[[pellet,vec,collidable,actor,drawlayer_50,statitem|x,@,y,@,dx,@,xf,@,damage,1,stunlen,.125,pushspeed,.375,should_use_xf,yes,item_hit_func,~kill,should_collide_below,no,rx,.125,ry,.125,destroyed,%standard_explosion,draw,%pellet_draw;start;update,%pellet_update,duration,.5;]]
+zclass[[pellet,vec,collidable,actor,drawlayer_50,statitem|x,@,y,@,dx,@,xf,@,damage,1,stunlen,.125,pushspeed,.375,should_use_xf,yes,item_hit_func,~kill,should_collide_below,no,rx,.25,ry,.25,destroyed,%standard_explosion,draw,%pellet_draw;start;update,%pellet_update,duration,.5;]]
 zclass[[shield,item_horizontal,actor,statitem|anchoring,@,xf,@,rx,.25,ry,.5,damage,0,stunlen,2,pushspeed,.25,should_use_xf,yes,item_hit_func,%shield_item_hit_func,plpushspeed,.125,visible,yes,block_direction,yes,speed_multiplier,.5,initial_energy,.125,gradual_energy,0,offspeed,.105,sind,6;]]
 zclass[[sword,item_horizontal,actor,statitem|anchoring,@,xf,@,rx,.375,ry,.25,damage,2,stunlen,.25,pushspeed,.25,should_use_xf,yes,item_hit_func,%sword_item_hit_func,plpushspeed,.125,visible,yes,block_direction,yes,speed_multiplier,.5,initial_energy,.125,gradual_energy,0,offspeed,.125,sind,2;]]
 zclass[[banjo,anchor,actor|anchoring,@,xf,@,visible,yes,block_direction,no,speed_multiplier,.5,initial_energy,.125,gradual_energy,0,offy,-.05,sind,1;start;init,%banjo_start_init,offdy,.0625,duration,.08,next,min_play;min_play;init,nop,offdy,0,duration,2,next,normal;normal;init,nop,offy,.25,next,ending;ending;init,%banjo_ending_init,offdy,-.0625,duration,.08;]]
-zclass[[brang,collidable,simple_spr,drawlayer_50,mov,actor,statitem|anchoring,@,xf,@,rx,.25,ry,.25,damage,0,stunlen,.25,pushspeed,.25,should_use_xf,no,item_hit_func,~kill,visible,no,block_direction,yes,speed_multiplier,.25,initial_energy,.25,gradual_energy,0,should_collide_below,no,offspeed,.125,drawout,%brang_drawout,sind,4;start;init,%brang_start_init,speed,.075,duration,.125,next,normal;normal;init,nop,speed,0,duration,1.5,update,%brang_normal_update,next,ending;ending;init,%brang_ending_init,speed,0,speed,0,update,%brang_ending_update,duration,.125,adjust_deltas_for_solids,nop,adjust_deltas_for_tiles,nop;final;init,nop,update,nop,alive,no;]]
+zclass[[brang,collidable,simple_spr,drawlayer_50,mov,actor,statitem|anchoring,@,xf,@,rx,.25,ry,.25,damage,0,stunlen,.25,pushspeed,.25,should_use_xf,no,item_hit_func,~kill,visible,no,block_direction,yes,speed_multiplier,0,initial_energy,.25,gradual_energy,0,should_collide_below,no,offspeed,.125,drawout,%brang_drawout,sind,4;start;init,%brang_start_init,speed,.075,duration,.125,next,normal;normal;init,nop,speed,0,duration,1.5,update,%brang_normal_update,next,ending;ending;init,%brang_ending_init,speed,0,speed,0,update,%brang_ending_update,duration,.125,adjust_deltas_for_solids,nop,adjust_deltas_for_tiles,nop;final;init,nop,update,nop,alive,no;]]
 zclass[[bomb_held,anchor,actor|anchoring,@,xf,@,sind,5,sy,-2,visible,yes,block_direction,no,speed_multiplier,0,initial_energy,.3,gradual_energy,0,offy,-.25,offspeed,.185;start;init,nop,offdy,-.0625,duration,.08,next,normal;normal;init,nop,offdy,0,offy,-.5;ending;visible,no,init,%bomb_held_destroyed,duration,.16;]]
 zclass[[bomb,mov,box,simple_spr,drawlayer_50,actor|x,@,y,@,xf,@,speed,@,ang,@,sind,5,damage,1,stunlen,5,pushspeed,.25,should_use_xf,yes,item_hit_func,nop,destroyed,%bomb_destroyed;start;duration,.15,update,%bomb_update,next,wait;wait;speed,0,duration,.7,update,nop,next,ending;ending;alive,no;]]
-zclass[[pl,actor,mov,collidable,auto_outline,healthobj,drawlayer_50|cname,lank,cspr,103,x,@,y,@,xf,@,health,@,max_health,@,sind,88,rx,.375,ry,.375,should_collide_with_screen_edge,no,update,%pl_update,energy,0,is_energy_cooling_down,no,target_energy,0,destroyed,%pl_destroyed,drawout,%pl_drawout;item_funcs;5,%sword,2,%mask,8,%bow,3,%shield,0,%bomb_held,6,%banjo,7,%brang;default_item;visible,no,is_default,yes,block_direction,no,speed_multiplier,1,alive,yes,gradual_energy,-.0078125,initial_energy,0,kill,nop;item,~default_item;]]
+zclass[[pl,ma_left,actor,mov,collidable,auto_outline,healthobj,drawlayer_50|cname,lank,cspr,103,x,@,y,@,xf,@,health,@,max_health,@,sind,88,rx,.375,ry,.375,should_collide_with_screen_edge,no,update,%pl_update,energy,0,is_energy_cooling_down,no,target_energy,0,destroyed,%pl_destroyed,drawout,%pl_drawout;item_funcs;5,%sword,2,%mask,8,%bow,3,%shield,0,%bomb_held,6,%banjo,7,%brang;default_item;visible,no,is_default,yes,block_direction,no,speed_multiplier,1,alive,yes,gradual_energy,-.0078125,initial_energy,0,kill,nop;item,~default_item;]]
 function draw_bar(x1,y1,x2,y2,percent,align,fg,bg,og)
 if x1>x2 then x1-=3 x2-=3 end
 local bar_off=x2-x1-min(percent,1)*(x2-x1)
@@ -894,7 +900,10 @@ pset(x2-i,y1+i)pset(x2-i,y2-i)
 end
 zcamera(cam_x,cam_y,post_card_func)
 end
-zclass[[rstat|align,@,x,@,update,%rstat_update,set,%rstat_set,get,%rstat_get;buffer;,;]]
+zclass[[ma_left|]]
+zclass[[ma_middle|]]
+zclass[[ma_right|]]
+zclass[[rstat|align,@,x,@,entity_type,@,update,%rstat_update,get,%rstat_get;]]
 zclass[[stat,vec,actor,drawlayer_95|align,@,x,@,obj,@,y,138,draw,%stat_draw;start;dy,-2,duration,.2,next,normal;normal;dy,0;ending;dy,2,duration,.2;]]
 zclass[[tbox,vec,actor,drawlayer_99|rawtext,@,destroyed,@,y,138,cur_text_index,1,anim,0,line_1,,line_2,,update,%tbox_update,draw,%tbox_draw;texts;,;start;dy,-2,duration,.2,next,normal,update,nop,init,%tbox_init;normal;dy,0,anim,0,done,no,update,%tbox_update,init,nop;ending;dy,2,update,nop,duration,.2,init,nop;]]
 zclass[[fairy,actor,mov,drawlayer_50|x,@,y,@,update,%fairy_update,draw,%fairy_draw]]
@@ -919,16 +928,16 @@ zclass[[house226,house|x,@,y,@,room,226]]
 zclass[[house227,house|x,@,y,@,room,227]]
 zclass[[house228,house|x,@,y,@,room,228]]
 zclass[[house229,house|x,@,y,@,xf,-1,room,229]]
-zclass[[person,target_with_tbox,solid,simple_spr,drawlayer_50|text,,rx,.375,ry,.375,sy,-2,trx,.5,try,.25,ty,.25,target_with_tbox_disable_callback,%person_target_with_tbox_disable_callback]]
-zclass[[navyblock,person|x,@,y,@,cname,navy,cspr,97,sind,97,text,my sister has been in^the forest all day.^find something to^protect yourself with^and bring her home.,ry,1,memloc_trigger,0x5d09,memloc_trigger_value,1,target_with_tbox_finish_callback,%person_target_with_tbox_finish_callback|0x5d09|0]]
+zclass[[person,box,target_with_tbox,simple_spr,drawlayer_50|text,,rx,.375,ry,.375,sy,-2,trx,.5,try,.25,ty,.25,target_with_tbox_disable_callback,%person_target_with_tbox_disable_callback]]
+zclass[[navyblock,solid,person|x,@,y,@,cname,navy,cspr,97,sind,97,text,my sister has been in^the forest all day.^find something to^protect yourself with^and bring her home.,ry,1,memloc_trigger,0x5d09,memloc_trigger_value,1,target_with_tbox_finish_callback,%person_target_with_tbox_finish_callback|0x5d09|0]]
 zclass[[navyhouse,person|x,@,y,@,cname,navy,cspr,97,sind,97,text,im navy in a house|0x5d09|1]]
-zclass[[bobblock,person|x,@,y,@,cname,bob,cspr,80,sind,80,text,im bob outside,ry,1,memloc_trigger,0x5d18,memloc_trigger_value,1,target_with_tbox_finish_callback,%person_target_with_tbox_finish_callback|0x5d18|0]]
+zclass[[bobblock,solid,person|x,@,y,@,cname,bob,cspr,80,sind,80,text,im bob outside,ry,1,memloc_trigger,0x5d18,memloc_trigger_value,1,target_with_tbox_finish_callback,%person_target_with_tbox_finish_callback|0x5d18|0]]
 zclass[[bobhouse,person|x,@,y,@,cname,bob,cspr,80,sind,80,text,im bob in a house|0x5d18|1]]
 zclass[[jane,person|x,@,y,@,cname,jane,cspr,81,sind,81,text,im jane in a house]]
 zclass[[teach,person|x,@,y,@,cname,teach,cspr,96,sind,96,text,im teach in a house]]
 zclass[[keep,person|x,@,y,@,cname,keep,cspr,83,sind,83,text,im keep in a house]]
 zclass[[lark,person|x,@,y,@,cname,lark,cspr,99,sind,99,text,im lark in a house]]
-zclass[[target_with_tbox,actor|init,%target_with_tbox_init,trx,0,try,0,tx,0,ty,0,target_with_tbox_disable_callback,nop,target_with_tbox_finish_callback,nop]]
+zclass[[target_with_tbox,ma_right,actor|init,%target_with_tbox_init,trx,0,try,0,tx,0,ty,0,target_with_tbox_disable_callback,nop,target_with_tbox_finish_callback,nop]]
 zclass[[sign,target_with_tbox,solid,simple_spr,drawlayer_50|text,,rx,.375,ry,.375,sy,-2,target_with_tbox_disable_callback,%sign_target_with_tbox_disable_callback,cname,sign,cspr,24,sind,24,trx,.125,try,.375,tx,0,ty,.25]]
 zclass[[signtest,sign|x,@,y,@,text,mary had a^little lamb^little lamb^little lamb^mary had a^little lamb^whose fleece was^white as yo face]]
 zclass[[signlank,sign|x,@,y,@,text,lanks house]]
@@ -938,14 +947,15 @@ zclass[[signteach,sign|x,@,y,@,text,teachs house]]
 zclass[[signlark,sign|x,@,y,@,text,larks house]]
 zclass[[signjane,sign|x,@,y,@,text,janes house]]
 zclass[[enemy,box|pl_collide_func_batch,%enemy_pl_collide_func_batch,pl_collide_func,nop]]
-zclass[[slimy_actual,actor,collidable,healthobj,mov,enemy,simple_spr,drawlayer_50|x,@,y,@,rx,.25,ry,.25,cspr,118,cname,slimy,sind,118,destroyed,%slimy_destroyed,statcollide,%slimy_statcollide,max_health,5;start;pl_collide_func,nop,sind,118,speed,0,sx,0,sy,0,update,%slimy_start,duration,1,next,shake;shake;speed,0,update,%slimy_shake,duration,.25,next,jump;jump;pl_collide_func,%slimy_pl_collide_func,sind,119,speed,.025,sx,0,update,%slimy_jump,duration,.25,next,start;]]
+zclass[[quack,ma_right,actor,collidable,healthobj,mov,enemy,simple_spr,drawlayer_50|x,@,y,@,rx,.25,ry,.25,sy,-2,speed,.0125,pl_collide_func,%quack_pl_collide_func,sind,32,cspr,32,cname,quack;start;init,%quack_change_dir,duration,1,next,start;]]
+zclass[[slimy_actual,ma_right,actor,collidable,healthobj,mov,enemy,simple_spr,drawlayer_50|x,@,y,@,rx,.25,ry,.25,cspr,118,cname,slimy,sind,118,destroyed,%slimy_destroyed,statcollide,%slimy_statcollide,max_health,5;start;pl_collide_func,nop,sind,118,speed,0,sx,0,sy,0,update,%slimy_start,duration,1,next,shake;shake;speed,0,update,%slimy_shake,duration,.25,next,jump;jump;pl_collide_func,%slimy_pl_collide_func,sind,119,speed,.025,sx,0,update,%slimy_jump,duration,.25,next,start;]]
 zclass[[miny_actual,simple_spr,vec,drawlayer_50,actor|x,@,y,@,cspr,116,cname,miny,sind,116]]
 zclass[[spike,enemy,simple_spr,actor,drawlayer_25|sind,52,rx,.25,ry,.25,sy,0,draw,~drawout;start;next,down;down;sind,52,duration,.65,next,middle1;middle1;sind,53,duration,.05,next,up;up;pl_collide_func,%spike_pl_collide_func,sind,54,duration,.25,next,middle2;middle2;pl_collide_func,nop,sind,53,duration,.05,next,down;]]
-zclass[[r1spike,spike|x,@,y,@,xf,1;start;duration,.5;]]
-zclass[[r2spike,spike|x,@,y,@,xf,1;start;duration,1;]]
-zclass[[l1spike,spike|x,@,y,@,xf,-1;start;duration,.5;]]
-zclass[[l2spike,spike|x,@,y,@,xf,-1;start;duration,1;]]
-zclass[[saveplat,box,simple_spr,actor,drawlayer_25|x,@,y,@,rx,.375,ry,.375,cname,save,cspr,10,sind,40,sw,2,sh,2,draw,~drawout,update,%saveplat_update;]]
+zclass[[r1spike,spike|x,@,y,@,xf,1;start;duration,0;]]
+zclass[[r2spike,spike|x,@,y,@,xf,1;start;duration,.5;]]
+zclass[[l1spike,spike|x,@,y,@,xf,-1;start;duration,0;]]
+zclass[[l2spike,spike|x,@,y,@,xf,-1;start;duration,.5;]]
+zclass[[saveplat,ma_right,box,simple_spr,actor,drawlayer_25|x,@,y,@,rx,.375,ry,.375,cname,save,cspr,10,sind,40,sw,2,sh,2,draw,~drawout,update,%saveplat_update;]]
 g_fade,g_fade_table=1,zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,1,0,0,0,0;3;,3,3,3,3,1,1,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,0,0,0,0;6;,6,6,13,13,5,5,0,0;7;,7,7,6,13,13,5,0,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,0,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,0,0,0;13;,13,13,5,5,1,0,0,0;14;,14,14,13,4,2,2,0,0;15;,15,15,13,13,5,5,0,0;]]
 function fade(threshold)
 for c=0,15 do

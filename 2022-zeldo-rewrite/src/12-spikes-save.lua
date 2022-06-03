@@ -18,13 +18,13 @@ zclass[[spike,enemy,simple_spr,actor,drawlayer_25|
     end
 end $$
 
-zclass[[r1spike,spike|x,@,y,@,xf, 1;start;duration,.5;]]
-zclass[[r2spike,spike|x,@,y,@,xf, 1;start;duration, 1;]]
+zclass[[r1spike,spike|x,@,y,@,xf, 1;start;duration,0;]]
+zclass[[r2spike,spike|x,@,y,@,xf, 1;start;duration,.5;]]
 
-zclass[[l1spike,spike|x,@,y,@,xf,-1;start;duration,.5;]]
-zclass[[l2spike,spike|x,@,y,@,xf,-1;start;duration, 1;]]
+zclass[[l1spike,spike|x,@,y,@,xf,-1;start;duration,0;]]
+zclass[[l2spike,spike|x,@,y,@,xf,-1;start;duration,.5;]]
 
-zclass[[saveplat,box,simple_spr,actor,drawlayer_25|
+zclass[[saveplat,ma_right,box,simple_spr,actor,drawlayer_25|
     x,@, y,@, rx,.375, ry,.375,
     cname,"save", cspr,10,
     sind,40, sw,2, sh,2, draw,~drawout,
@@ -33,7 +33,7 @@ zclass[[saveplat,box,simple_spr,actor,drawlayer_25|
 ]]
 
 |[saveplat_update]| function(a)
-    if not a:outside(g_pl) then
-        g_rstat_right:set(a)
+    if not a:outside(g_pl) and peek'MEM_ITEM_INDEX' == ITEM_IND_BANJO then
+        a:start_timer('isma', .01)
     end
 end $$

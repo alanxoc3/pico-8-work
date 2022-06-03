@@ -14,7 +14,7 @@ zclass[[room_bounds,box|x,@,y,@,rx,@,ry,@]]
 
     g_pl = _g.pl(peek'MEM_PL_X'/POS_MULTIPLIER_FOR_MEMORY, peek'MEM_PL_Y'/POS_MULTIPLIER_FOR_MEMORY, peek'MEM_PL_XF'*2-1, peek'MEM_PL_HEALTH', peek'MEM_PL_MAX_HEALTH')
     g_fairy = _g.fairy(g_pl.x, g_pl.y-.125)
-    g_rstat_left, g_rstat_inventory, g_rstat_right = _g.rstat(-1, 10), _g.rstat(0, 64), _g.rstat(1, 118)
+    g_rstat_left, g_rstat_inventory, g_rstat_right = _g.rstat(-1, 10, 'ma_left'), _g.rstat(0, 64, 'ma_middle'), _g.rstat(1, 118, 'ma_right')
 
     _g.inventory(g_pl)
 

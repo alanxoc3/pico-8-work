@@ -82,7 +82,7 @@ zclass[[pellet,vec,collidable,actor,drawlayer_50,statitem|
     item_hit_func, ~kill,
 
     should_collide_below,no,
-    rx,.125, ry,.125,
+    rx,.25, ry,.25,
     destroyed,%standard_explosion,
     draw,%pellet_draw;
 
@@ -94,13 +94,13 @@ zclass[[pellet,vec,collidable,actor,drawlayer_50,statitem|
 end $$
 
 |[pellet_draw]| function(a)
-    draw_tail(a.x, a.y, a.dx, 0, 3)
-    pset(a.x*8, a.y*8, 4)
+    draw_tail(a.x, a.y-.25, a.dx, 0, 3)
+    pset(a.x*8, a.y*8-2, 4)
 end $$
 
 |[bow_ending_init]| function(a)
     _g.item_horizontal_ending_init(a)
-    _g.pellet(a.x, a.y-.125, a.xf*.25, a.xf)
+    _g.pellet(a.anchoring.x, a.anchoring.y, a.xf*.25, a.xf)
 end $$
 
 zclass[[shield,item_horizontal,actor,statitem|
@@ -212,7 +212,7 @@ zclass[[brang,collidable,simple_spr,drawlayer_50,mov,actor,statitem|
 
     visible,no,
     block_direction, yes,
-    speed_multiplier, .25,
+    speed_multiplier, 0,
     initial_energy, .25,
     gradual_energy, 0,
 
@@ -311,7 +311,7 @@ end $$
 -- a few timers that affect the player:
     -- pushed: is the player being pushed in a direction. this has only one speed.
     -- stunned: is the player being hurt? this shakes the screen and prevents items, but not movement.
-zclass[[pl,actor,mov,collidable,auto_outline,healthobj,drawlayer_50|
+zclass[[pl,ma_left,actor,mov,collidable,auto_outline,healthobj,drawlayer_50|
     cname,"lank", cspr,SPR_PL_WHOLE,
     x,@, y,@, xf,@, health,@, max_health,@,
     sind,88,
@@ -346,7 +346,7 @@ zclass[[pl,actor,mov,collidable,auto_outline,healthobj,drawlayer_50|
 end $$
 
 |[pl_update]| function(a)
-    g_rstat_left:set(a)
+    a:start_timer('isma', 0)
     local item = a.item
 
     -- item logic

@@ -1,4 +1,4 @@
-zclass[[inventory,actor,drawlayer_90|
+zclass[[inventory,actor,drawlayer_90,ma_middle|
     pl,@, ind,4;
     start;    init,%inventory_start_init, update,%inventory_start_update, draw,nop;
     press;    init,nop,                   update,%inventory_press_update, draw,%inventory_draw;
@@ -18,12 +18,13 @@ zclass[[inventory,actor,drawlayer_90|
 ]]
 
 |[inventory_start_init]| function(a)
-    a.stat = peek'MEM_ITEM_INDEX' ~= 4 and {cspr=a[peek'MEM_ITEM_INDEX'+1].sind}
-    -- a.ind = peek'MEM_ITEM_INDEX'
+    a.cspr = peek'MEM_ITEM_INDEX' ~= 4 and a[peek'MEM_ITEM_INDEX'+1].sind
 end $$
 
 |[inventory_start_update]| function(a)
-    g_rstat_inventory:set(a.stat)
+    if peek'MEM_ITEM_INDEX' ~= 4 then
+        a:start_timer('isma', 0)
+    end
 
     if not does_entity_exist'fader' and not does_entity_exist'tbox' and not does_entity_exist'banjo' and btn'BTN_ITEM_SELECT' then
         poke(MEM_ITEM_INDEX, 9) -- 9 is one more than the highest index

@@ -9,6 +9,7 @@
 
 zclass[[actor,timer|
     load,     %actor_load,
+    loadlogic,%actor_loadlogic,
     state,    %actor_state,
     kill,     %actor_kill,
     clean,    %actor_clean,
@@ -18,37 +19,55 @@ zclass[[actor,timer|
     duration, null,
     curr,     start,
     next,     null,
+    isnew,    yes,
 
     init,      nop,
     update,    nop,
     destroyed, nop;
 ]]
 
+-- if load is called multiple times, the first load is used.
+|[actor_load]| function(a, stateName)
+    a.next_state = a.next_state or stateName
+end $$
+
 -- Load the given state into the actor, by applying the properties of the sub-object
 -- (at key=stateName) to the actor object. (If the given stateName is falsey, kill
 -- the actor.) Then set up the next state change to happen after the actor's duration,
 -- using stateName=actor.next.
-|[actor_load]| function(a, stateName)
-    if stateName then
+|[actor_loadlogic]| function(a, stateName)
+    a.next_state, a.isnew = nil
+
+    if stateName == 'dead' then
+        a.alive = false
+    else
         a:end_timer(a.curr)
         a.next, a.duration = nil -- default values, unless overridden by next line
         for k, v in pairs(a[stateName]) do a[k] = v end
         a.curr = stateName
-        a:stop_timer(a.curr,  a.duration, a.duration and function() a:load(a.next) end)
-    else
-        a.alive = false
+        a:start_timer(a.curr, a.duration, a.duration and function() a:load(a.next or 'dead') end)
+
+        a:init()
     end
 end $$
 
 -- This is expected to be called on each frame!
 |[actor_state]| function(a)
-    if a:get_elapsed(a.curr) == nil   then a:load(a.curr) end -- actor created this frame
-    if a:get_elapsed(a.curr) == false then a:play_timer(a.curr) a:init() end -- state changed in this frame
-    a:update() -- per-frame update
+    -- actor created this frame
+    if a.isnew then
+        a:loadlogic(a.curr)
+
+    -- manually changed the state or timer is over
+    elseif a.next_state then
+        a:loadlogic(a.next_state)
+    end
+
+    -- per-frame update
+    a:update()
 end $$
 
 |[actor_is_alive]| function(a)
-    return not a:get_elapsed'ending' and a.alive
+    return a:is_active'ending' == nil and a.alive
 end $$
 
 -- If there is an ending state, call that. Otherwise, just set alive to false.
@@ -56,7 +75,7 @@ end $$
     if a.ending then
         if a.curr == 'start' then
             a.next = 'ending'
-        elseif not a:get_elapsed'ending' then
+        elseif a:is_active'ending' == nil then
             a:load'ending'
         end
     else

@@ -34,27 +34,35 @@ help him save the Land of Hi-roll from the forces of evil.
 how should i make the save platform collide with something...
 What if the banjo released an object when you finish playing? Sure, that should be easy.
 
-TODO: spike hurt player
-TODO: bomb and slimy share throw logic
-TODO: chicken logic
-TODO: work on banjo song and get timing right
-TODO: battle logic
+today...
+TODO: bomb throw - collision box in pl and go out, rather than start up. Straight line trajectory.
 TODO: bomb explode collision
 TODO: pot throwing logic
+TODO: chicket grab/throw logic
+TODO: bomb and slimy share throw logic
+TODO: pot throw, chicken throw, and bomb throw all share same logic
+
+tomorrow...
 TODO: chest logic
-TODO: (why??? i forget) timer with update callback (calls function every frame as long as timer is active)
-TODO: player weapons hurt and stun slimy
 TODO: implement miny
-TODO: mask particle effect
-TODO: banjo over people text logic
-TODO: token crunch for 30 minutes
-TODO: think of more enemies
+TODO: arrow start in player center (fix next to wall bug)
+TODO: player weapons stun slimy
+TODO: improve stun effect (gray effect?)
 TODO: polish until beating first boss
+TODO: banjo over people text logic
+TODO: work on banjo song and get timing right
+
+TODO: token crunch for 30 minutes
 TODO: first boss (lime)
-TODO: think about chicken collection for cannon logic
+TODO: mask particle effect
+TODO: think of more enemies
+TODO: think about chicken collection for cannon logic (throw chicken onto a platform)
 
 ```
-2022-06-01 -- slimestun
+2022-06-02 -- 
+    6117
+
+2022-06-01 -- slimestun gameoverwork mapwork
     5905 6117
 
 2022-05-31 -- betterbomb

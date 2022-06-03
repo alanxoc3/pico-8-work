@@ -12,6 +12,24 @@ zclass[[enemy,box|
     pl_collide_func,nop
 ]]
 
+zclass[[quack,ma_right,actor,collidable,healthobj,mov,enemy,simple_spr,drawlayer_50|
+    x,@, y,@, rx, .25, ry, .25,
+    sy,-2,
+    speed,.0125,
+    pl_collide_func,%quack_pl_collide_func,
+    sind,32, cspr,32, cname,"quack";
+    start; init,%quack_change_dir, duration,1, next,start;
+]]
+
+|[quack_change_dir]| function(a)
+    a.ang = rnd(2)-1
+    a.xf = sgn(cos(a.ang))
+end $$
+
+|[quack_pl_collide_func]| function(a, pl)
+    a:start_timer('isma', 0)
+end $$
+
 |[enemy_pl_collide_func_batch]| function(a, others)
     foreach(others, function(other)
         if not a:outside(other) then
@@ -20,7 +38,7 @@ zclass[[enemy,box|
     end)
 end $$
 
-zclass[[slimy_actual,actor,collidable,healthobj,mov,enemy,simple_spr,drawlayer_50|
+zclass[[slimy_actual,ma_right,actor,collidable,healthobj,mov,enemy,simple_spr,drawlayer_50|
     x,@, y,@, rx, .25, ry, .25,
     cspr,118, cname,"slimy", sind,118,
     destroyed,%slimy_destroyed,
@@ -37,9 +55,8 @@ zclass[[slimy_actual,actor,collidable,healthobj,mov,enemy,simple_spr,drawlayer_5
 
 |[slimy_pl_collide_func]| function(a, pl)
     if not pl:is_active'stunned' then
-        a.isma = true
         a.speed = 0
-        a:start_timer('isma', 2, function() a.isma = false end)
+        a:start_timer('isma', 2)
         pl:start_timer('stunned', .375, nop)
         pl:start_timer('pushed', .125, nop)
         pl.ang = atan2(a.xf, pl.y-a.y)
@@ -52,18 +69,15 @@ end $$
 end $$
 
 |[slimy_start]| function(a)
-    if a.isma then g_rstat_right:set(a) end
     a.xf = sgn(g_pl.x-a.x)
     a.target_ang = atan2(g_pl.x-a.x, g_pl.y-a.y)
 end $$
 
 |[slimy_shake]| function(a)
-    if a.isma then g_rstat_right:set(a) end
     a.sx = rnd_one()
 end $$
 
 |[slimy_jump]| function(a)
-    if a.isma then g_rstat_right:set(a) end
     a.ang = a.target_ang
     a.sy = sin(a:get_elapsed_percent'jump'/2)*8
 end $$
@@ -77,8 +91,7 @@ end $$
 |[slimy_statcollide]| function(a, items)
     foreach(items, function(item)
         if not a:outside(item) and item:is_alive() then
-            a:start_timer('isma', 2, function() a.isma = false end)
-            a.isma = true
+            a:start_timer('isma', 2)
 
             if not a:is_active'stunned' then
                 a:start_timer('stunned', item.stunlen, nop)
