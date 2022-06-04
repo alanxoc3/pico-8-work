@@ -454,6 +454,8 @@ end $$
 end $$
 
 |[pl_drawout]| function(a)
+    local xoff = 0 -- a:is_active'stunned' and rnd_one() or 0
+    local yoff = 0 -- a:is_active'stunned' and cos(g_fi/4) or 0
     local xf = a.xf
     local top = 91
     if does_entity_exist'banjo' then
@@ -463,10 +465,10 @@ end $$
         top = a.item:is_alive() and 93 or 94
     end
 
-    zspr(a.sind, a.x*8, a.y*8-2, 1, 1, xf)
-    zspr(top,    a.x*8, a.y*8-2, 1, 1, xf)
+    zspr(a.sind, a.x*8+xoff, a.y*8-2+yoff, 1, 1, xf)
+    zspr(top,    a.x*8+xoff, a.y*8-2+yoff, 1, 1, xf)
 
     if a.item.visible then
-        zspr(a.item.sind, a.item.x*8, a.item.y*8+a.item.sy, 1, 1, xf)
+        zspr(a.item.sind, a.item.x*8+xoff, yoff+a.item.y*8+a.item.sy, 1, 1, xf)
     end
 end $$

@@ -32,7 +32,7 @@ help him save the Land of Hi-roll from the forces of evil.
 
 ## Tokens & Features
 friday...
-TODO: improve stun effect (gray effect?)
+TODO: fix miny spawn in wall bug
 TODO: player weapons stun slimy
 TODO: chest logic
 TODO: banjo over people text logic

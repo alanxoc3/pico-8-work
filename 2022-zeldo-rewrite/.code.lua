@@ -177,8 +177,13 @@ end,function(a)if not a.alive then a:destroyed()deregister_entity(a)end end,func
 a.index+=1
 a.index%=60
 end,function(a)
-draw_outline(a.outline_color,function()a:drawout()end)
+local ox,oy=%0x5f28,%0x5f2a
+local stunned=a:is_active"stunned"
+camera(ox+(stunned and rnd_one()or 0),oy)
+draw_outline(stunned and 2 or 1,function()a:drawout()end)
 a:drawout()
+pal()
+camera(ox,oy)
 end,function(a,timer_name,duration,callback)
 a.timers[timer_name]={active=true,elapsed=false,duration=duration and 0+duration,callback=callback or function()end}
 end,function(a,timer_name)
@@ -310,14 +315,14 @@ end,function(a)
 if peek"0x5d08" ~=4 then
 a:start_timer("isma",0)
 end
-if not does_entity_exist"fader"and not does_entity_exist"tbox"and not does_entity_exist"banjo"and btn"5"then
+if not g_pl:is_active"stunned"and not does_entity_exist"fader"and not does_entity_exist"tbox"and not does_entity_exist"banjo"and btn"5"then
 poke(0x5d08,9)
 a.ind=4
 a:load"expand"
 end
 end,function(a)
 a.ind=mid(0,2,a.ind%3+zbtn(btnp,0))+mid(0,2,a.ind\3+zbtn(btnp,2))*3
-if does_entity_exist"fader"or does_entity_exist"tbox"or not btn"5"then
+if g_pl:is_active"stunned"or does_entity_exist"fader"or does_entity_exist"tbox"or not btn"5"then
 poke(0x5d08,peek(a[a.ind+1].mem_loc)~=0 and a.ind or 4)
 a:load"contract"
 end
@@ -458,6 +463,8 @@ local diff=a.target_energy-a.energy
 a.energy+=zsgn(diff)*min(abs(diff),.03125)
 a.item,a.sind=item,a.dx|a.dy ~=0 and 88+t()*12%3 or 88
 end,function(a)
+local xoff=0
+local yoff=0
 local xf=a.xf
 local top=91
 if does_entity_exist"banjo"then
@@ -465,10 +472,10 @@ top=92
 elseif does_entity_exist"held_to_throw"then
 top=a.item:is_alive()and 93 or 94
 end
-zspr(a.sind,a.x*8,a.y*8-2,1,1,xf)
-zspr(top,a.x*8,a.y*8-2,1,1,xf)
+zspr(a.sind,a.x*8+xoff,a.y*8-2+yoff,1,1,xf)
+zspr(top,a.x*8+xoff,a.y*8-2+yoff,1,1,xf)
 if a.item.visible then
-zspr(a.item.sind,a.item.x*8,a.item.y*8+a.item.sy,1,1,xf)
+zspr(a.item.sind,a.item.x*8+xoff,yoff+a.item.y*8+a.item.sy,1,1,xf)
 end
 end,function(a)
 if a.obj.energy==0 then a:kill()end
@@ -718,7 +725,7 @@ end
 end
 end,function(state)
 isorty(g_zclass_entities["drawlayer_50"])
-local coffx=g_pl:is_active"stunned"and cos(g_fi/4)or 0
+local coffx=0
 draw_room(g_rooms[peek"0x5d01"],64+coffx,57,function()
 zcall(loop_entities,[[1;,drawlayer_25,draw;2;,drawlayer_50,draw;3;,drawlayer_75,draw;]])
 if g_debug then
@@ -802,7 +809,7 @@ zclass[[drawlayer_90|]]
 zclass[[drawlayer_95|]]
 zclass[[drawlayer_99|]]
 zclass[[animation,actor|index,0,init,%animation_init;start;duration,@,next,start]]
-zclass[[auto_outline|draw,%auto_outline_draw,outline_color,1]]
+zclass[[auto_outline,timer|draw,%auto_outline_draw,outline_color,1]]
 function draw_outline(color,drawfunc)
 for c=1,15 do pal(c,color)end
 local ox,oy=%0x5f28,%0x5f2a

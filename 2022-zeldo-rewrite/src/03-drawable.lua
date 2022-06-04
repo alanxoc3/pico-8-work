@@ -21,13 +21,19 @@ zclass[[animation,actor|
     a.index %= 60 -- smooth because divisible by 2,3,4,5,6
 end $$
 
-zclass[[auto_outline|
+zclass[[auto_outline,timer|
     draw,%auto_outline_draw,
     outline_color,1
 ]]
 |[auto_outline_draw]| function(a)
-    draw_outline(a.outline_color, function() a:drawout() end)
+    local ox, oy = %0x5f28, %0x5f2a
+    local stunned = a:is_active'stunned'
+    
+    camera(ox+(stunned and rnd_one() or 0), oy)
+    draw_outline(stunned and 2 or 1, function() a:drawout() end)
     a:drawout()
+    pal()
+    camera(ox, oy)
 end $$
 
 function draw_outline(color, drawfunc)
@@ -51,3 +57,6 @@ function isorty(t)
         end
     end
 end
+
+-- for enemies, player, and people...
+-- stunned: purple outline & shaking.
