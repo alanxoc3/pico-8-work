@@ -16,4 +16,10 @@ end $$
 |[game_draw]| function()
     rect(0, 0, 127, 127, 8)
     loop_entities('drawlayer_50', 'draw')
+
+    for x=0,6 do
+        for y=0,6 do
+            spr(TILE_SPR_1, x*16, y*16, 2, 2)
+        end
+    end
 end $$
