@@ -188,24 +188,32 @@ end
 end,function(a)
 circ(scr_x(a.x),scr_y(a.y),12,1)
 end,function(a)a.color+=1 end,function(a)a.x+=xbtn()a.y+=ybtn()end,function(a)circfill(a.x,a.y,2,a.color)end,function()
+g_level=0
 _g.level_state()
-g_grid=set_grid(0)
+g_grid=set_grid(g_level)
 _g.fader_in()
 _g.test_obj(64,64)
 end,function()
 loop_entities("actor","state")
 end,function()
-g_offx,g_offy=64,64
+rectfill(0,0,127,127,12)
+g_offx,g_offy=64,53
 draw_tiles()
-rect(0,0,127,127,8)
 loop_entities("drawlayer_50","draw")
+local x=35
+local y=107
+spr(64,x,y,2,2)
+spr(64,x+21,y,2,2)
+spr(64,x+21+21,y,2,2)
+if g_debug then
+rect(0,0,127,127,8)
+end
 end,function(a)
 a.moves=get_move_coordinates("move")
 for m in all(a.moves)do
 _g.possible_move_obj(a,m.x,m.y)
 end
 end,function(a)
-printh(a.curr)
 if btnp(4)or btnp(5)then
 a:load(a.next)
 end
@@ -263,16 +271,44 @@ zclass[[hermit,tile_sprite,drawlayer_50|x,@,y,@,sind,1]]
 zclass[[snake,tile_sprite,drawlayer_50|x,@,y,@,sind,45]]
 zclass[[possible_move_obj,actor,drawlayer_50|gamestate,@,x,@,y,@,update,%possible_move_obj_update,draw,%possible_move_obj_draw;]]
 zclass[[test_obj,actor,drawlayer_50|x,@,y,@,color,7,init,%test_init,update,%test_update,draw,%test_draw;]]
+function round(num)return flr(num+.5)end
+function print_vert_wobble(text,x,y,col,off,wob)
+for i=1,#text do
+print("\^w"..sub(text,i,i).."\^-w",x+wob*((i+off+t())\1%2),y+i*7,col)
+end
+end
 function draw_tiles()
+local tlx,tly=g_offx-46,g_offy-46
+rectfill(tlx,tly,tlx+90,tly+90,15)
+print_vert_wobble("stabby crabby",tlx-14,tly-6,7,1,1)
+print_vert_wobble("level "..g_level,tlx+99,tly-6+7*3,7,1,1)
+local amp=cos(.9)*.4+.8
+local width=91
+local mult=sgn(sin(t()/7))*2+round(cos(t()/3))
+local inc=.05
+color(15)
+line()for i=0,1,inc do line(tlx+i*width,cos(i*mult)*amp+tly+1)end
+line()for i=0,1,inc do line(tlx+i*width,-cos(i*mult)*amp+tly+90)end
+line()for i=0,1,inc do line(cos(i*mult)*amp+tlx+1,tly+i*width)end
+line()for i=0,1,inc do line(-cos(i*mult)*amp+tlx+90,tly+i*width)end
 local midr=7/2*13
 for ind,tile in pairs(g_grid)do
 local x,y=unpack_grid_index(ind)
 if tile.active then
 local sind=37
 if(y*7+x)%2==0 then sind=39 end
-spr(sind,scr_x(x)-7,scr_y(y)-7,2,2)
+spr(sind,scr_x(x)-6,scr_y(y)-6,2,2)
 end
 end
+color(7)
+line()for i=0,1,inc do line(tlx+i*width,cos(i*mult)*amp+tly-1)end
+line()for i=0,1,inc do line(tlx+i*width,cos(i*mult)*amp+tly)end
+line()for i=0,1,inc do line(tlx+i*width,-cos(i*mult)*amp+tly+91)end
+line()for i=0,1,inc do line(tlx+i*width,-cos(i*mult)*amp+tly+92)end
+line()for i=0,1,inc do line(cos(i*mult)*amp+tlx-1,tly+i*width)end
+line()for i=0,1,inc do line(cos(i*mult)*amp+tlx,tly+i*width)end
+line()for i=0,1,inc do line(-cos(i*mult)*amp+tlx+91,tly+i*width)end
+line()for i=0,1,inc do line(-cos(i*mult)*amp+tlx+92,tly+i*width)end
 end
 function set_grid(level)
 local mapx,mapy=level%16,level\16
@@ -315,6 +351,7 @@ function _init()
 g_tl=_g.game_state()
 end
 function _update60()
+if btn(4)and btnp(5)then g_debug=not g_debug end
 zcall(loop_entities,[[1;,actor,clean;2;,fader,clean;]])
 register_entities()
 zcall(loop_entities,[[1;,fader,tick;2;,game_state,tick;3;,fader,state;4;,game_state,state;]])
