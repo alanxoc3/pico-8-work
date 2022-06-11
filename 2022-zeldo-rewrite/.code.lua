@@ -599,7 +599,7 @@ return peek"0x5d08" ~=4
 end,function(x,y)
 _g.explode(x,y,4,1,function()_g.slimy_actual(x,y)end)
 end,function(x,y)
-_g.explode(x,y,4,1,function()_g.miny_actual(x,y)end)
+_g.explode(x,y,4,1,function()_g.miny_actual(x,y,0)end)
 end,function(a)
 a.ang=rnd(2)-1
 a.xf=sgn(cos(a.ang))
@@ -620,8 +620,8 @@ pl:start_timer("pushed",.125,nop)
 pl.ang=atan2(a.xf,pl.y-a.y)
 end
 end,function(a)
-_g.miny(a.x,a.y-.5)
-_g.miny(a.x,a.y+.5)
+_g.miny_actual(a.x,a.y,-.2)
+_g.miny_actual(a.x,a.y,.2)
 end,function(a)
 a.xf=sgn(g_pl.x-a.x)
 a.target_ang=atan2(g_pl.x-a.x,g_pl.y-a.y)
@@ -634,7 +634,7 @@ foreach(items,function(item)
 if not a:outside(item)and item:is_alive()then
 a:start_timer("isma",2)
 if not a:is_active"stunned"then
-a:start_timer("stunned",item.stunlen,nop)
+a:load"stunned"
 a:hurt(item.damage)
 if item.should_use_xf then
 a.dx+=item.pushspeed*item.xf
@@ -993,9 +993,9 @@ zclass[[signlark,sign|x,@,y,@,text,larks house]]
 zclass[[signjane,sign|x,@,y,@,text,janes house]]
 zclass[[enemy,box|pl_collide_func_batch,%enemy_pl_collide_func_batch,pl_collide_func,nop]]
 zclass[[quack,ma_right,actor,collidable,mov,enemy,simple_spr,drawlayer_50|x,@,y,@,rx,.25,ry,.25,sy,-2,speed,.0125,pl_collide_func,%quack_pl_collide_func,sind,32,cspr,32,cname,quack;start;init,%quack_change_dir,duration,1,next,start;]]
-zclass[[slimy_shared,ma_right,actor,collidable,healthobj,mov,enemy,simple_spr,drawlayer_50|rx,.25,ry,.25,statcollide,%slimy_statcollide,max_health,5;start;pl_collide_func,nop,speed,0,sx,0,sy,0,update,%slimy_start,duration,1,next,shake;shake;speed,0,update,%slimy_shake,duration,.25,next,jump;jump;pl_collide_func,%slimy_pl_collide_func,speed,.025,sx,0,update,%slimy_jump,duration,.25,next,start;]]
-zclass[[slimy_actual,slimy_shared|x,@,y,@,cspr,118,cname,slimy,sind,118,max_health,5,destroyed,%slimy_destroyed;start;sind,118;jump;sind,119;]]
-zclass[[miny_actual,slimy_shared|x,@,y,@,cspr,116,cname,miny,sind,116,max_health,1;destroyed,%standard_explosion;start;sind,116;jump;sind,117;]]
+zclass[[slimy_shared,ma_right,actor,collidable,healthobj,mov,enemy,simple_spr,drawlayer_50|rx,.25,ry,.25,statcollide,%slimy_statcollide,max_health,5;stunned;pl_collide_func,nop,speed,0,sx,0,sy,0,duration,0,next,start;start;pl_collide_func,nop,speed,0,sx,0,sy,0,update,%slimy_start,duration,1,next,shake;shake;speed,0,update,%slimy_shake,duration,.25,next,jump;jump;pl_collide_func,%slimy_pl_collide_func,speed,.025,sx,0,update,%slimy_jump,duration,.25,next,start;]]
+zclass[[slimy_actual,slimy_shared|x,@,y,@,cspr,118,cname,slimy,sind,118,max_health,5,destroyed,%slimy_destroyed;stunned;sind,118;start;sind,118;jump;sind,119;]]
+zclass[[miny_actual,slimy_shared|x,@,y,@,dy,@,cspr,116,cname,miny,sind,116,max_health,1;destroyed,%standard_explosion;stunned;sind,116;start;sind,116;jump;sind,117;]]
 zclass[[spike,enemy,simple_spr,actor,drawlayer_25|sind,52,rx,.25,ry,.25,sy,0,draw,~drawout;start;next,down;down;sind,52,duration,.65,next,middle1;middle1;sind,53,duration,.05,next,up;up;pl_collide_func,%spike_pl_collide_func,sind,54,duration,.25,next,middle2;middle2;pl_collide_func,nop,sind,53,duration,.05,next,down;]]
 zclass[[r1spike,spike|x,@,y,@,xf,1;start;duration,0;]]
 zclass[[r2spike,spike|x,@,y,@,xf,1;start;duration,.5;]]

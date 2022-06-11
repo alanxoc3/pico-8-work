@@ -3,7 +3,7 @@
 end $$
 
 |[miny]| function(x, y)
-    _g.explode(x, y, 4, 1, function() _g.miny_actual(x, y) end)
+    _g.explode(x, y, 4, 1, function() _g.miny_actual(x, y, 0) end)
 end $$
 
 -- enemy can collide with the player
@@ -43,13 +43,14 @@ zclass[[slimy_shared,ma_right,actor,collidable,healthobj,mov,enemy,simple_spr,dr
     statcollide,%slimy_statcollide,
     max_health,5;
 
-    start; pl_collide_func,nop, speed,0, sx,0, sy,0, update,%slimy_start, duration, 1,   next,shake;
-    shake; speed,0,             update,%slimy_shake, duration, .25, next,jump;
-    jump;  pl_collide_func,%slimy_pl_collide_func, speed,.025, sx,0,       update,%slimy_jump,  duration, .25, next,start;
+    stunned; pl_collide_func,nop, speed,0, sx,0, sy,0, duration,0, next,start;
+    start;   pl_collide_func,nop, speed,0, sx,0, sy,0, update,%slimy_start, duration, 1,   next,shake;
+    shake;   speed,0,             update,%slimy_shake, duration, .25, next,jump;
+    jump;    pl_collide_func,%slimy_pl_collide_func, speed,.025, sx,0,       update,%slimy_jump,  duration, .25, next,start;
 ]]
 
-zclass[[slimy_actual,slimy_shared| x,@, y,@, cspr,118, cname,"slimy", sind,118, max_health,5, destroyed,%slimy_destroyed;    start;sind,118; jump;sind,119; ]]
-zclass[[miny_actual,slimy_shared|  x,@, y,@, cspr,116, cname,"miny",  sind,116, max_health,1; destroyed,%standard_explosion; start;sind,116; jump;sind,117; ]]
+zclass[[slimy_actual,slimy_shared| x,@, y,@, cspr,118, cname,"slimy", sind,118, max_health,5, destroyed,%slimy_destroyed;          stunned;sind,118; start;sind,118; jump;sind,119; ]]
+zclass[[miny_actual,slimy_shared|  x,@, y,@, dy,@, cspr,116, cname,"miny",  sind,116, max_health,1; destroyed,%standard_explosion; stunned;sind,116; start;sind,116; jump;sind,117; ]]
 
 |[slimy_pl_collide_func]| function(a, pl)
     if not pl:is_active'stunned' then
@@ -62,8 +63,8 @@ zclass[[miny_actual,slimy_shared|  x,@, y,@, cspr,116, cname,"miny",  sind,116, 
 end $$
 
 |[slimy_destroyed]| function(a)
-    _g.miny(a.x, a.y-.5)
-    _g.miny(a.x, a.y+.5)
+    _g.miny_actual(a.x, a.y, -.2)
+    _g.miny_actual(a.x, a.y, .2)
 end $$
 
 |[slimy_start]| function(a)
@@ -85,7 +86,7 @@ end $$
             a:start_timer('isma', 2)
 
             if not a:is_active'stunned' then
-                a:start_timer('stunned', item.stunlen, nop)
+                a:load'stunned'
                 a:hurt(item.damage)
                 if item.should_use_xf then
                     a.dx += item.pushspeed*item.xf
