@@ -5,6 +5,7 @@ zclass[[test_obj,actor,drawlayer_50|x,@,y,@,color,7,init,%test_init,update,%test
 |[test_draw]|   function(a) circfill(a.x, a.y, 2, a.color) end $$
 
 |[game_init]| function()
+    g_grid = set_grid(0)
     _g.fader_in()
     _g.test_obj(64, 64)
 end $$
@@ -21,11 +22,27 @@ end $$
 
 function draw_tiles(cx, cy)
     local midr = 7/2*16
-    for x=0,6 do
-        for y=0,6 do
+    for ind, tile in pairs(g_grid) do
+        local x,y = ind%7, ind\7
+        if tile.active then
             local sind = TILE_SPR_1
             if (y*7+x)%2 == 0 then sind = TILE_SPR_2 end
             spr(sind, x*16+cx-midr, y*16+cy-midr, 2, 2)
         end
     end
+end
+
+-- [ind]: {active}
+function set_grid(level)
+    local mapx, mapy = level%16, level\16
+    local grid = {}
+
+    for y=0,6 do
+        for x=0,6 do
+            local objind = mget(mapx*8+x, mapy*8+y)
+            grid[y*7+x] = {active = (objind ~= 0)}
+            printh(grid[y*7+x].active and "true" or "false")
+        end
+    end
+    return grid
 end
