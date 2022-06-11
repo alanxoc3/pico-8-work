@@ -181,7 +181,7 @@ end,function(a,x,y)
 a.ang=atan2(x-a.x,y-a.y)
 end,function(a)
 local midr=7/2*14
-spr(a.sind,a.x*14+cx-midr-1+8,a.y*14+cy-midr-1+8,a.sw,a.sh)
+spr(a.sind,a.x*14+64-midr-1-a.sx,a.y*14+64-midr-1-a.sy,a.sw,a.sh)
 end,function(a)a.color+=1 end,function(a)a.x+=xbtn()a.y+=ybtn()end,function(a)circfill(a.x,a.y,2,a.color)end,function(a)a.color+=1 end,function(a)a.x+=xbtn()a.y+=ybtn()end,function(a)circfill(a.x,a.y,2,a.color)end,function()
 g_grid=set_grid(0)
 _g.fader_in()
@@ -233,8 +233,9 @@ zclass[[timer|timers;,;start_timer,%timer_reset_timer,end_timer,%timer_end_timer
 zclass[[pos|x,0,y,0,dist_point,%pos_dist_point]]
 zclass[[vec,pos|dx,0,dy,0,vec_update,%vec_update]]
 zclass[[mov,vec|ang,0,speed,0,mov_update,%mov_update,towards_point,%mov_towards_point]]
-zclass[[tile_sprite,pos|sw,2,sh,2,draw,%tile_sprite_draw]]
+zclass[[tile_sprite,pos|sx,0,sy,4,sw,2,sh,2,draw,%tile_sprite_draw]]
 zclass[[hermit,tile_sprite,drawlayer_50|x,@,y,@,sind,1]]
+zclass[[snake,tile_sprite,drawlayer_50|x,@,y,@,sind,45]]
 zclass[[possible_move_obj,actor,drawlayer_50|x,@,y,@,draw,%test_draw;]]
 zclass[[test_obj,actor,drawlayer_50|x,@,y,@,color,7,init,%test_init,update,%test_update,draw,%test_draw;]]
 function draw_tiles(cx,cy)
@@ -254,10 +255,13 @@ local grid={}
 for y=0,6 do
 for x=0,6 do
 local objind=mget(mapx*8+x,mapy*8+y)
-grid[y*7+x]={active=(objind ~=0)}
+local spot={active=true}
 if objind==240 then
-_g.hermit(x,y)
+spot.entity=_g.hermit(x,y)
+elseif objind==242 then
+spot.entity=_g.snake(x,y)
 end
+grid[y*7+x]=spot
 end
 end
 return grid

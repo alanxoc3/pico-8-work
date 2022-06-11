@@ -40,10 +40,15 @@ function set_grid(level)
     for y=0,6 do
         for x=0,6 do
             local objind = mget(mapx*8+x, mapy*8+y)
-            grid[y*7+x] = {active = (objind ~= 0)}
+            local spot = {active = true}
+
             if objind == MAP_PL then
-                _g.hermit(x, y)
+                spot.entity = _g.hermit(x, y)
+            elseif objind == MAP_SNAKE then
+                spot.entity = _g.snake(x, y)
             end
+
+            grid[y*7+x] = spot
         end
     end
 
