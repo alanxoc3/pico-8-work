@@ -23,7 +23,7 @@ end $$
 function draw_tiles(cx, cy)
     local midr = 7/2*TILE_RADIUS
     for ind, tile in pairs(g_grid) do
-        local x,y = ind%7, ind\7
+        local x,y = unpack_grid_index(ind)
         if tile.active then
             local sind = TILE_SPR_1
             if (y*7+x)%2 == 0 then sind = TILE_SPR_2 end
@@ -41,7 +41,24 @@ function set_grid(level)
         for x=0,6 do
             local objind = mget(mapx*8+x, mapy*8+y)
             grid[y*7+x] = {active = (objind ~= 0)}
+            if objind == MAP_PL then
+                _g.hermit(x, y)
+            end
         end
     end
+
     return grid
 end
+
+-- gets the coordinates for the center of each tile
+function unpack_grid_index(index)
+    return index%7, index\7
+end
+
+-- next step:
+    -- list of next moves (indexes)
+    -- move through next moves
+    -- for each next move, make a new object
+
+-- Object has it's own reference of where it is. Object is also in the grid. So you can loop through the grid and loop through function on all the objects.
+-- 
