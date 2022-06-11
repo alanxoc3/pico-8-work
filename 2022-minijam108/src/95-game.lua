@@ -14,12 +14,18 @@ end $$
 end $$
 
 |[game_draw]| function()
+    draw_tiles(64, 64)
     rect(0, 0, 127, 127, 8)
     loop_entities('drawlayer_50', 'draw')
+end $$
 
+function draw_tiles(cx, cy)
+    local midr = 7/2*16
     for x=0,6 do
         for y=0,6 do
-            spr(TILE_SPR_1, x*16, y*16, 2, 2)
+            local sind = TILE_SPR_1
+            if (y*7+x)%2 == 0 then sind = TILE_SPR_2 end
+            spr(sind, x*16+cx-midr, y*16+cy-midr, 2, 2)
         end
     end
-end $$
+end
