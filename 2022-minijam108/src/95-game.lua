@@ -21,13 +21,13 @@ end $$
 end $$
 
 function draw_tiles(cx, cy)
-    local midr = 7/2*16
+    local midr = 7/2*TILE_RADIUS
     for ind, tile in pairs(g_grid) do
         local x,y = ind%7, ind\7
         if tile.active then
             local sind = TILE_SPR_1
             if (y*7+x)%2 == 0 then sind = TILE_SPR_2 end
-            spr(sind, x*16+cx-midr, y*16+cy-midr, 2, 2)
+            spr(sind, x*TILE_RADIUS+cx-midr, y*TILE_RADIUS+cy-midr, 2, 2)
         end
     end
 end
@@ -41,7 +41,6 @@ function set_grid(level)
         for x=0,6 do
             local objind = mget(mapx*8+x, mapy*8+y)
             grid[y*7+x] = {active = (objind ~= 0)}
-            printh(grid[y*7+x].active and "true" or "false")
         end
     end
     return grid
