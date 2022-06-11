@@ -92,7 +92,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,tile_sprite_draw,@,possible_move_obj_update,@,possible_move_obj_draw,@,test_init,@,test_update,@,test_draw,@,game_init,@,game_update,@,game_draw,@,move_select_init,@,level_state_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,tile_sprite_draw,@,possible_move_obj_update,@,possible_move_obj_draw,@,test_init,@,test_update,@,test_draw,@,game_init,@,game_update,@,game_draw,@,card_draw,@,card_normal_update,@,card_selector_init,@,card_select_init,@,move_select_init,@,level_state_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@]],function(a,stateName)
 a.next_state=a.next_state or stateName
 end,function(a,stateName)
 a.next_state,a.isnew=nil
@@ -189,24 +189,42 @@ end,function(a)
 circ(scr_x(a.x),scr_y(a.y),12,1)
 end,function(a)a.color+=1 end,function(a)a.x+=xbtn()a.y+=ybtn()end,function(a)circfill(a.x,a.y,2,a.color)end,function()
 g_level=0
-_g.level_state()
+g_level_state=_g.level_state()
 g_grid=set_grid(g_level)
 _g.fader_in()
 _g.test_obj(64,64)
 end,function()
-loop_entities("actor","state")
+zcall(loop_entities,[[1;,timer,tick;2;,actor,state;3;,mov,mov_update;4;,vec,vec_update;]])
 end,function()
 rectfill(0,0,127,127,12)
 g_offx,g_offy=64,53
 draw_tiles()
 loop_entities("drawlayer_50","draw")
-local x=35
-local y=107
-spr(64,x,y,2,2)
-spr(64,x+21,y,2,2)
-spr(64,x+21+21,y,2,2)
 if g_debug then
 rect(0,0,127,127,8)
+end
+end,function(a)
+local offy=0
+if a.selected then
+offy=-2
+spr(104,a.x,a.y+offy-1,2,2)
+spr(104,a.x,a.y+offy,2,2)
+spr(16,a.x+4,a.y+16)
+end
+spr(a.sind,a.x,a.y+offy,2,2)
+end,function(a)
+if g_level_state.curr!="card_select"and g_level_state.curr!="move_select"then
+a:kill()
+end
+end,function(a)
+_g.card(35,a.c1sind,false)
+_g.card(35+21,a.c2sind,true)
+_g.card(35+21+21,a.c3sind,false)
+end,function(a)
+_g.card_selector(64,66,70)
+a.moves=get_move_coordinates("move")
+for m in all(a.moves)do
+_g.possible_move_obj(a,m.x,m.y)
 end
 end,function(a)
 a.moves=get_move_coordinates("move")
@@ -333,7 +351,9 @@ end
 function unpack_grid_index(index)
 return index%7,index\7
 end
-zclass[[level_state,actor|update,%level_state_update,curr,level_intro;level_intro;init,nop,next,card_select;card_select;init,nop,next,move_select;move_select;init,%move_select_init,next,player_update;player_update;init,nop,next,enemy_update;enemy_update;init,nop,next,card_select;]]
+zclass[[card,actor,vec,drawlayer_50|x,@,sind,@,selected,@,y,141,draw,%card_draw;start;duration,.25,next,normal,dy,-2;normal;dy,0,update,%card_normal_update;ending;update,nop,duration,.25,dy,2;]]
+zclass[[card_selector,actor,vec,drawlayer_50|c1sind,@,c2sind,@,c3sind,@,init,%card_selector_init]]
+zclass[[level_state,actor|update,%level_state_update,curr,level_intro;level_intro;init,nop,next,card_select;card_select;init,%card_select_init,next,move_select;move_select;init,%move_select_init,next,player_update;player_update;init,nop,next,enemy_update;enemy_update;init,nop,next,card_select;]]
 function get_move_coordinates(move_type)
 if move_type=="move"then
 return{{x=1,y=5}}

@@ -6,34 +6,29 @@ zclass[[test_obj,actor,drawlayer_50|x,@,y,@,color,7,init,%test_init,update,%test
 
 |[game_init]| function()
     g_level = 0
-    _g.level_state()
+    g_level_state = _g.level_state()
     g_grid = set_grid(g_level)
     _g.fader_in()
     _g.test_obj(64, 64)
 end $$
 
 |[game_update]| function()
-    loop_entities('actor', 'state')
+    zcall(loop_entities, [[
+        1 ;,timer,       tick;
+        2 ;,actor,       state;
+        3 ;,mov,         mov_update;
+        4 ;,vec,         vec_update;
+    ]])
 end $$
 
 function round(num) return flr(num + .5) end
 |[game_draw]| function()
-    --fillp(0b0101101001011010)
     rectfill(0,0,127,127,12)
-    --fillp()
 
     g_offx, g_offy = 64, 53
     draw_tiles()
 
     loop_entities('drawlayer_50', 'draw')
-
-    --:rectfill(0,105,127,127,13)
-    local x=35
-    local y=107
-    spr(64, x,       y, 2, 2)
-    spr(64, x+21,    y, 2, 2)
-    spr(64, x+21+21, y, 2, 2)
-    --rect(0,127,127,127,1)
 
     if g_debug then
         rect(0, 0, 127, 127, 8)
@@ -116,16 +111,62 @@ function unpack_grid_index(index)
     return index%7, index\7
 end
 
+zclass[[card,actor,vec,drawlayer_50|
+    x,@, sind,@, selected,@,
+    y,141,
+    draw,%card_draw;
+    start;duration,.25, next,normal, dy,-2;
+    normal;dy,0, update,%card_normal_update;
+    ending;update,nop, duration,.25, dy,2;
+]]
+
+|[card_draw]| function(a)
+    local offy = 0
+    if a.selected then
+        offy = -2
+        spr(104, a.x, a.y+offy-1, 2, 2)
+        spr(104, a.x, a.y+offy, 2, 2)
+        spr(16,a.x+4, a.y+16)
+    end
+    spr(a.sind, a.x, a.y+offy, 2, 2)
+end $$
+
+|[card_normal_update]| function(a)
+    if g_level_state.curr != 'card_select' and g_level_state.curr != 'move_select' then
+        a:kill()
+    end
+end $$
+
+zclass[[card_selector,actor,vec,drawlayer_50|
+    c1sind,@, c2sind,@, c3sind,@,
+    init,%card_selector_init
+]]
+
+|[card_selector_init]| function(a)
+    _g.card(35,       a.c1sind, false)
+    _g.card(35+21,    a.c2sind, true)
+    _g.card(35+21+21, a.c3sind, false)
+end $$
+
 zclass[[level_state,actor|
     update,%level_state_update,
     curr,level_intro;
 
-    level_intro;   init,nop, next,card_select;
-    card_select;   init,nop, next,move_select;
+    level_intro;   init,nop,               next,card_select;
+    card_select;   init,%card_select_init, next,move_select;
     move_select;   init,%move_select_init, next,player_update;
-    player_update; init,nop, next,enemy_update;
-    enemy_update;  init,nop, next,card_select;
+    player_update; init,nop,               next,enemy_update;
+    enemy_update;  init,nop,               next,card_select;
 ]]
+
+|[card_select_init]| function(a)
+    _g.card_selector(64, 66, 70)
+    a.moves = get_move_coordinates('move')
+
+    for m in all(a.moves) do
+        _g.possible_move_obj(a, m.x, m.y)
+    end
+end $$
 
 |[move_select_init]| function(a)
     a.moves = get_move_coordinates('move')
