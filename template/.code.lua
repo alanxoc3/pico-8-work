@@ -1,8 +1,9 @@
 g_zclass_constructors,g_zclass_entities,g_zclass_new_entities={},{},{}
 function zclass(meta_and_att_str)
-local meta,template=unpack(split(meta_and_att_str,"|"))
+local meta,template,memloc,expected_memloc_value=unpack(split(meta_and_att_str,"|"))
 local parents=split(meta)
 local class=deli(parents,1)
+g_zclass_entities[class]=g_zclass_entities[class]or{}
 g_zclass_constructors[class]=function(inst,done,...)
 foreach(parents,function(parent)
 if not done[parent]then g_zclass_constructors[parent](inst,done)end
@@ -12,17 +13,15 @@ inst.parents[class]=true
 add(g_zclass_new_entities,{class,inst})
 return zobj_set(inst,template,...)
 end
-_g[class]=function(...)return g_zclass_constructors[class]({id=class,parents={},ecs_exclusions={}},{},...)end
+_g[class]=function(...)if not memloc or peek(memloc)==expected_memloc_value then return g_zclass_constructors[class]({id=class,parents={},ecs_exclusions={}},{},...)end end
 end
 function register_entities()
 while #g_zclass_new_entities>0 do
 local class,inst=unpack(deli(g_zclass_new_entities))
-g_zclass_entities[class]=g_zclass_entities[class]or{}
 if not inst.ecs_exclusions[class]then add(g_zclass_entities[class],inst)end
 end
 end
 function deregister_entity(inst,...)
-call_not_nil(inst,"deregistered",inst,...)
 for class,entities in pairs(g_zclass_entities)do
 del(entities,inst)
 end
@@ -31,6 +30,9 @@ function call_not_nil(table,key,...)
 if table and table[key]then
 return table[key](...)
 end
+end
+function does_entity_exist(entity_name)
+return #g_zclass_entities[entity_name]>0
 end
 function loop_entities(class,method_name,...)
 for inst in all(g_zclass_entities[class])do
@@ -50,14 +52,17 @@ if not exclusions[id]then
 deregister_entity(obj)
 end
 end
+g_zclass_new_entities={}
 end
+function nop()end
 function zobj_eval(val,table,parameters)
 if ord(val)==37 then return _g[sub(val,2)]
+elseif val=="~"then return table
 elseif ord(val)==126 then return table[sub(val,2)]
 elseif val=="@"then return deli(parameters,1)
 elseif val=="yes"or val=="no"then return val=="yes"
 elseif val=="null"or val==""then return
-elseif val=="nop"then return function()end
+elseif val=="nop"then return nop
 end return val
 end
 function zobj_set(table,str,...)
@@ -87,55 +92,82 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_state,@,actor_kill,@,actor_clean,@,actor_deregistered,@,fader_out_update,@,fader_in_update,@,timer_start_timer,@,timer_stop_timer,@,timer_play_timer,@,timer_delete_timer,@,timer_get_elapsed,@,timer_get_elapsed_percent,@,timer_tick,@,logo_init,@,logo_draw,@,test_init,@,test_update,@,test_draw,@,game_init,@,game_update,@,game_draw,@]],function(a,stateName)
-if stateName then
+_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,test_init,@,test_update,@,test_draw,@,game_init,@,game_update,@,game_draw,@]],function(a,stateName)
+a.next_state=a.next_state or stateName
+end,function(a,stateName)
+a.next_state,a.isnew=nil
+if stateName=="dead"then
+a.alive=false
+else
+a:end_timer(a.curr)
 a.next,a.duration=nil
 for k,v in pairs(a[stateName])do a[k]=v end
 a.curr=stateName
-a:stop_timer("state",a.duration,a.duration and function()a:load(a.next)end)
-else
-a:kill()
+a:start_timer(a.curr,a.duration,a.duration and function()a:load(a.next or "dead")end)
+a:init()
 end
 end,function(a)
-if a:get_elapsed"state"==nil then a:load(a.curr)end
-if a:get_elapsed"state"==false then a:play_timer"state" a:init()end
+if a.isnew then
+a:loadlogic(a.curr)
+elseif a.next_state then
+a:loadlogic(a.next_state)
+end
 a:update()
-end,function(a)a.alive=nil end,function(a)if not a.alive then deregister_entity(a)end end,function(a)a:kill()a:destroyed()end,function(a)
-g_fade=a:get_elapsed_percent"state"
 end,function(a)
-g_fade=1-a:get_elapsed_percent"state"
-end,function(...)
-_g.timer_stop_timer(...)
-_g.timer_play_timer(...)
-end,function(a,timer_name,duration,callback)
-a.timers[timer_name]={elapsed=false,duration=0+(duration or 32767),callback=callback or function()end}
+return a:is_active"ending"==nil and a.alive
+end,function(a)
+if a.ending then
+if a.curr=="start"then
+a.next="ending"
+elseif a:is_active"ending"==nil then
+a:load"ending"
+end
+else
+a.alive=nil
+end
+end,function(a)if not a.alive then a:destroyed()deregister_entity(a)end end,function(a,timer_name,duration,callback)
+printh(duration)
+a.timers[timer_name]={active=true,elapsed=false,duration=duration and 0+duration,callback=callback or function()end}
 end,function(a,timer_name)
-if a.timers[timer_name]and not a.timers[timer_name].elapsed then
-a.timers[timer_name].elapsed=0
+if a.timers[timer_name]then
+a.timers[timer_name].elapsed=a.timers[timer_name].duration or a.timers[timer_name].elapsed
+a.timers[timer_name].active=false
 end
 end,function(a,timer_name)
-a.timers[timer_name]=nil
+local timer=a.timers[timer_name]
+if not timer then return 0
+elseif not timer.duration then return 0
+elseif timer.duration<=0 then return 1
+end
+return min(1,(timer.elapsed or 0)/timer.duration)
 end,function(a,timer_name)
 local timer=a.timers[timer_name]
-return timer and(timer.elapsed or false)
-end,function(a,timer_name)
-local timer=a.timers[timer_name]
-return timer and(timer.elapsed or 0)/timer.duration
+return timer and timer.active
 end,function(a)
 local finished_timers={}
 for name,timer in pairs(a.timers)do
-if timer.elapsed and timer.elapsed<timer.duration then
+if timer.active then
+if timer.elapsed then
 timer.elapsed=timer.elapsed+1/60
-if timer.elapsed>=timer.duration then
+if timer.duration and timer.elapsed>=timer.duration then
 add(finished_timers,timer)
+end
+elseif not timer.elapsed then
+timer.elapsed=0
 end
 end
 end
 foreach(finished_timers,function(timer)
+timer.active=false
 timer.callback(a)
 end)
+end,function(a)
+poke(0x5f43,0xff)
+g_fade=a:get_elapsed_percent"start"
+end,function(a)
+g_fade=1-a:get_elapsed_percent"start"
 end,function()sfx(63,0)end,function(a)
-g_fade=cos(a:get_elapsed_percent"state")+1
+g_fade=cos(a:get_elapsed_percent"logo")+1
 camera(g_fade>.5 and rnd_one())
 zspr(108,64,64,4,2)
 camera()
@@ -154,32 +186,41 @@ end
 function btn_helper(f,a,b)
 return f(a)and f(b)and 0 or f(a)and 0xffff or f(b)and 1 or 0
 end
-function xbtn()return btn_helper(btn,0,1)end
-function ybtn()return btn_helper(btn,2,3)end
-zclass[[actor,timer|load,%actor_load,state,%actor_state,kill,%actor_kill,clean,%actor_clean,alive,yes,duration,null,curr,start,next,null,init,nop,update,nop,destroyed,nop,deregistered,%actor_deregistered;]]
+function zcall_tbl(func,tbl)
+foreach(tbl,function(params)
+func(unpack(params))
+end)
+end
+function zcall(func,text,...)
+zcall_tbl(func,zobj(text,...))
+end
+function zbtn(f,a)return f(a)and f(a+1)and 0 or f(a)and-1 or f(a+1)and 1 or 0 end
+function xbtn()return zbtn(btn,0)end
+function ybtn()return zbtn(btn,2)end
+zclass[[actor,timer|load,%actor_load,loadlogic,%actor_loadlogic,state,%actor_state,kill,%actor_kill,clean,%actor_clean,is_alive,%actor_is_alive,alive,yes,duration,null,curr,start,next,null,isnew,yes,init,nop,update,nop,destroyed,nop;]]
 zclass[[drawlayer_50|]]
-zclass[[fader_out,actor|start;duration,@,destroyed,@,update,%fader_out_update]]
-zclass[[fader_in,actor|start;duration,@,update,%fader_in_update]]
-zclass[[timer|timers;,;start_timer,%timer_start_timer,stop_timer,%timer_stop_timer,play_timer,%timer_play_timer,delete_timer,%timer_delete_timer,get_elapsed,%timer_get_elapsed,get_elapsed_percent,%timer_get_elapsed_percent,tick,%timer_tick,]]
-g_fade_table=zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,1,0,0,0,0;3;,3,3,3,3,1,1,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,0,0,0,0;6;,6,6,13,13,5,5,0,0;7;,7,7,6,13,13,5,0,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,0,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,0,0,0;13;,13,13,5,5,1,0,0,0;14;,14,14,13,4,2,2,0,0;15;,15,15,13,13,5,5,0,0;]]
+zclass[[timer|timers;,;start_timer,%timer_reset_timer,end_timer,%timer_end_timer,is_active,%timer_is_active,get_elapsed_percent,%timer_get_elapsed_percent,tick,%timer_tick,]]
+g_fade,g_fade_table=1,zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,1,0,0,0,0;3;,3,3,3,3,1,1,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,0,0,0,0;6;,6,6,13,13,5,5,0,0;7;,7,7,6,13,13,5,0,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,0,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,0,0,0;13;,13,13,5,5,1,0,0,0;14;,14,14,13,4,2,2,0,0;15;,15,15,13,13,5,5,0,0;]]
 function fade(threshold)
 for c=0,15 do
-pal(c,g_fade_table[c][1+flr(7*min(1,max(0,threshold)))])
+pal(c,g_fade_table[c][1+flr(7*min(1,max(0,threshold)))],1)
 end
 end
+zclass[[fader,actor|ecs_exclusions;actor,yes,timer,yes;]]
+zclass[[fader_out,fader|start;duration,.5,destroyed,@,update,%fader_out_update]]
+zclass[[fader_in,fader|start;duration,.5,update,%fader_in_update]]
 zclass[[game_state,actor|ecs_exclusions;actor,true;curr,logo;logo;init,%logo_init,update,nop,draw,%logo_draw,duration,2.5,next,game;game;init,%game_init,update,%game_update,draw,%game_draw;]]
 function _init()
 g_tl=_g.game_state()
 end
 function _update60()
-loop_entities("actor","clean")
+zcall(loop_entities,[[1;,actor,clean;2;,fader,clean;]])
 register_entities()
-loop_entities("timer","tick")
-loop_entities("game_state","state")
+zcall(loop_entities,[[1;,fader,tick;2;,game_state,tick;3;,fader,state;4;,game_state,state;]])
 end
 function _draw()
 cls()
-fade(g_fade)
 loop_entities("game_state","draw")
+fade(g_fade)
 end
 zclass[[test_obj,actor,drawlayer_50|x,@,y,@,color,7,init,%test_init,update,%test_update,draw,%test_draw;]]
