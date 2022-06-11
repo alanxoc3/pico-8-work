@@ -27,7 +27,7 @@ function draw_tiles(cx, cy)
         if tile.active then
             local sind = TILE_SPR_1
             if (y*7+x)%2 == 0 then sind = TILE_SPR_2 end
-            spr(sind, x*TILE_RADIUS+cx-midr, y*TILE_RADIUS+cy-midr, 2, 2)
+            spr(sind, x*TILE_RADIUS+cx-midr-1, y*TILE_RADIUS+cy-midr-1, 2, 2)
         end
     end
 end
