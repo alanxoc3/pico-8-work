@@ -126,7 +126,6 @@ else
 a.alive=nil
 end
 end,function(a)if not a.alive then a:destroyed()deregister_entity(a)end end,function(a,timer_name,duration,callback)
-printh(duration)
 a.timers[timer_name]={active=true,elapsed=false,duration=duration and 0+duration,callback=callback or function()end}
 end,function(a,timer_name)
 if a.timers[timer_name]then

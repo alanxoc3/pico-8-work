@@ -42,7 +42,6 @@ zclass[[timer|
 ]]
 
 |[timer_reset_timer]| function(a, timer_name, duration, callback)
-    printh(duration)
     a.timers[timer_name] = { active=true, elapsed=false, duration=duration and 0+duration, callback=callback or function() end }
 end $$
 

@@ -15,9 +15,12 @@
 
 g_zclass_constructors, g_zclass_entities, g_zclass_new_entities = {}, {}, {}
 function zclass(meta_and_att_str)
-    local meta, template = unpack(split(meta_and_att_str, '|'))
+    local meta, template, memloc, expected_memloc_value = unpack(split(meta_and_att_str, '|'))
     local parents = split(meta)
     local class = deli(parents, 1)
+
+    -- ensure that entity lists are not nil, useful to always be able to assume this
+    g_zclass_entities[class] = g_zclass_entities[class] or {}
 
     g_zclass_constructors[class] = function(inst, done, ...)
         foreach(parents, function(parent)
@@ -29,7 +32,7 @@ function zclass(meta_and_att_str)
         return zobj_set(inst, template, ...)
     end
 
-    _g[class] = function(...) return g_zclass_constructors[class]({ id=class, parents={}, ecs_exclusions={} }, {}, ...) end
+    _g[class] = function(...) if not memloc or peek(memloc) == expected_memloc_value then return g_zclass_constructors[class]({ id=class, parents={}, ecs_exclusions={} }, {}, ...) end end
 end
 
 -- This function drains newly-created entities into the ECS. It should preferably
@@ -43,14 +46,12 @@ end
 function register_entities()
     while #g_zclass_new_entities > 0 do
         local class, inst = unpack(deli(g_zclass_new_entities))
-        g_zclass_entities[class] = g_zclass_entities[class] or {}
         if not inst.ecs_exclusions[class] then add(g_zclass_entities[class], inst) end
     end
 end
 
 -- Removes an entity from all the entity groups it was in when registered.
 function deregister_entity(inst, ...)
-    call_not_nil(inst, 'deregistered', inst, ...)
     for class, entities in pairs(g_zclass_entities) do
         del(entities, inst)
     end
@@ -61,6 +62,11 @@ function call_not_nil(table, key, ...)
     if table and table[key] then
         return table[key](...)
     end
+end
+
+-- Check if an entity exists.
+function does_entity_exist(entity_name)
+    return #g_zclass_entities[entity_name] > 0
 end
 
 -- Loop through all the entities of a certain type and call a method on each one if that method exists.
@@ -86,4 +92,7 @@ function clean_all_entities(...)
             deregister_entity(obj)
         end
     end
+
+    -- optionally remove all new entities as well
+    g_zclass_new_entities = {}
 end

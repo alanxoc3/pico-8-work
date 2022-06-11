@@ -18,5 +18,19 @@ function btn_helper(f, a, b)
    return f(a) and f(b) and 0 or f(a) and 0xffff or f(b) and 1 or 0
 end
 
-function xbtn() return btn_helper(btn, 0, 1) end
-function ybtn() return btn_helper(btn, 2, 3) end
+function zcall_tbl(func, tbl)
+    foreach(tbl, function(params)
+        func(unpack(params))
+    end)
+end
+
+-- used everwhere
+function zcall(func, text, ...)
+    zcall_tbl(func, zobj(text, ...))
+end
+
+function zbtn(f, a) return f(a) and f(a+1) and 0 or f(a) and -1 or f(a+1) and 1 or 0 end
+
+function xbtn() return zbtn(btn, 0) end
+function ybtn() return zbtn(btn, 2) end
+
