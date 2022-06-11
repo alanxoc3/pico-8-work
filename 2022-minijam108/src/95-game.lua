@@ -54,15 +54,18 @@ function draw_tiles()
     print_vert_wobble("level "..g_level, tlx+99, tly-6+7*3, 7, 1, 1)
     
     local amp=cos(.9)*.4+.8
+    local amp1=cos(.25+.9)*.4+.8
+    local amp2=cos(.5+.9)*.4+.8
+    local amp3=cos(.75+.9)*.4+.8
     local width=91
     local mult=sgn(sin(t()/7))*2+round(cos(t()/3))
     local inc=.05
 
     color(15)
-    line() for i=0,1,inc do line(tlx+i*width, cos(i*mult)*amp+tly+1) end
-    line() for i=0,1,inc do line(tlx+i*width, -cos(i*mult)*amp+tly+90) end
-    line() for i=0,1,inc do line(cos(i*mult)*amp+tlx+1, tly+i*width) end
-    line() for i=0,1,inc do line(-cos(i*mult)*amp+tlx+90, tly+i*width) end
+    line() for i=-.01,1,inc do line(tlx+i*width, cos(i*mult)*amp+tly+1) end
+    line() for i=-.01,1,inc do line(tlx+i*width, -cos(i*mult)*amp1+tly+90) end
+    line() for i=-.01,1,inc do line(cos(i*mult)*amp2+tlx+1, tly+i*width) end
+    line() for i=-.01,1,inc do line(-cos(i*mult)*amp3+tlx+90, tly+i*width) end
 
     local midr = 7/2*TILE_RADIUS
     for ind, tile in pairs(g_grid) do
@@ -75,14 +78,14 @@ function draw_tiles()
     end
 
     color(7)
-    line() for i=0,1,inc do line(tlx+i*width, cos(i*mult)*amp+tly-1) end
-    line() for i=0,1,inc do line(tlx+i*width, cos(i*mult)*amp+tly) end
-    line() for i=0,1,inc do line(tlx+i*width, -cos(i*mult)*amp+tly+91) end
-    line() for i=0,1,inc do line(tlx+i*width, -cos(i*mult)*amp+tly+92) end
-    line() for i=0,1,inc do line(cos(i*mult)*amp+tlx-1, tly+i*width) end
-    line() for i=0,1,inc do line(cos(i*mult)*amp+tlx, tly+i*width) end
-    line() for i=0,1,inc do line(-cos(i*mult)*amp+tlx+91, tly+i*width) end
-    line() for i=0,1,inc do line(-cos(i*mult)*amp+tlx+92, tly+i*width) end
+    line() for i=-.01,1,inc do line(tlx+i*width, cos(i*mult)*amp+tly-1) end
+    line() for i=-.01,1,inc do line(tlx+i*width, cos(i*mult)*amp+tly) end
+    line() for i=-.01,1,inc do line(tlx+i*width, -cos(i*mult)*amp1+tly+91) end
+    line() for i=-.01,1,inc do line(tlx+i*width, -cos(i*mult)*amp1+tly+92) end
+    line() for i=-.01,1,inc do line(cos(i*mult)*amp2+tlx-1, tly+i*width) end
+    line() for i=-.01,1,inc do line(cos(i*mult)*amp2+tlx, tly+i*width) end
+    line() for i=-.01,1,inc do line(-cos(i*mult)*amp3+tlx+91, tly+i*width) end
+    line() for i=-.01,1,inc do line(-cos(i*mult)*amp3+tlx+92, tly+i*width) end
 end
 
 -- [ind]: {active}
