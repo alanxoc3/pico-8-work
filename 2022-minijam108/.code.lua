@@ -92,7 +92,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,tile_sprite_draw,@,test_init,@,test_update,@,test_draw,@,test_init,@,test_update,@,test_draw,@,game_init,@,game_update,@,game_draw,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,tile_sprite_draw,@,possible_move_obj_update,@,possible_move_obj_draw,@,test_init,@,test_update,@,test_draw,@,game_init,@,game_update,@,game_draw,@,move_select_init,@,level_state_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@]],function(a,stateName)
 a.next_state=a.next_state or stateName
 end,function(a,stateName)
 a.next_state,a.isnew=nil
@@ -180,18 +180,35 @@ if ay==0 and abs(a.dy)<MIN_SPEED then a.dy=0 end
 end,function(a,x,y)
 a.ang=atan2(x-a.x,y-a.y)
 end,function(a)
-local midr=7/2*14
-spr(a.sind,a.x*14+64-midr-1-a.sx,a.y*14+64-midr-1-a.sy,a.sw,a.sh)
-end,function(a)a.color+=1 end,function(a)a.x+=xbtn()a.y+=ybtn()end,function(a)circfill(a.x,a.y,2,a.color)end,function(a)a.color+=1 end,function(a)a.x+=xbtn()a.y+=ybtn()end,function(a)circfill(a.x,a.y,2,a.color)end,function()
+spr(a.sind,scr_x(a.x)-a.sx,scr_y(a.y)-a.sy,a.sw,a.sh)
+end,function(a)
+if a.gamestate.curr ~="move_select"then
+a:kill()
+end
+end,function(a)
+circ(scr_x(a.x),scr_y(a.y),12,1)
+end,function(a)a.color+=1 end,function(a)a.x+=xbtn()a.y+=ybtn()end,function(a)circfill(a.x,a.y,2,a.color)end,function()
+_g.level_state()
 g_grid=set_grid(0)
 _g.fader_in()
 _g.test_obj(64,64)
 end,function()
 loop_entities("actor","state")
 end,function()
-draw_tiles(64,64)
+g_offx,g_offy=64,64
+draw_tiles()
 rect(0,0,127,127,8)
 loop_entities("drawlayer_50","draw")
+end,function(a)
+a.moves=get_move_coordinates("move")
+for m in all(a.moves)do
+_g.possible_move_obj(a,m.x,m.y)
+end
+end,function(a)
+printh(a.curr)
+if btnp(4)or btnp(5)then
+a:load(a.next)
+end
 end,function(a)
 poke(0x5f43,0xff)
 g_fade=a:get_elapsed_percent"start"
@@ -233,19 +250,27 @@ zclass[[timer|timers;,;start_timer,%timer_reset_timer,end_timer,%timer_end_timer
 zclass[[pos|x,0,y,0,dist_point,%pos_dist_point]]
 zclass[[vec,pos|dx,0,dy,0,vec_update,%vec_update]]
 zclass[[mov,vec|ang,0,speed,0,mov_update,%mov_update,towards_point,%mov_towards_point]]
-zclass[[tile_sprite,pos|sx,0,sy,4,sw,2,sh,2,draw,%tile_sprite_draw]]
+function scr_x(x)
+local midr=7/2*13
+return x*13+g_offx-midr+13/2-1
+end
+function scr_y(y)
+local midr=7/2*13
+return y*13+g_offy-midr+13/2-1
+end
+zclass[[tile_sprite,pos|sx,8,sy,8,sw,2,sh,2,draw,%tile_sprite_draw]]
 zclass[[hermit,tile_sprite,drawlayer_50|x,@,y,@,sind,1]]
 zclass[[snake,tile_sprite,drawlayer_50|x,@,y,@,sind,45]]
-zclass[[possible_move_obj,actor,drawlayer_50|x,@,y,@,draw,%test_draw;]]
+zclass[[possible_move_obj,actor,drawlayer_50|gamestate,@,x,@,y,@,update,%possible_move_obj_update,draw,%possible_move_obj_draw;]]
 zclass[[test_obj,actor,drawlayer_50|x,@,y,@,color,7,init,%test_init,update,%test_update,draw,%test_draw;]]
-function draw_tiles(cx,cy)
-local midr=7/2*14
+function draw_tiles()
+local midr=7/2*13
 for ind,tile in pairs(g_grid)do
 local x,y=unpack_grid_index(ind)
 if tile.active then
 local sind=37
 if(y*7+x)%2==0 then sind=39 end
-spr(sind,x*14+cx-midr-1,y*14+cy-midr-1,2,2)
+spr(sind,scr_x(x)-7,scr_y(y)-7,2,2)
 end
 end
 end
@@ -268,6 +293,13 @@ return grid
 end
 function unpack_grid_index(index)
 return index%7,index\7
+end
+zclass[[level_state,actor|update,%level_state_update,curr,level_intro;level_intro;init,nop,next,card_select;card_select;init,nop,next,move_select;move_select;init,%move_select_init,next,player_update;player_update;init,nop,next,enemy_update;enemy_update;init,nop,next,card_select;]]
+function get_move_coordinates(move_type)
+if move_type=="move"then
+return{{x=1,y=5}}
+end
+return{}
 end
 g_fade,g_fade_table=1,zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,1,0,0,0,0;3;,3,3,3,3,1,1,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,0,0,0,0;6;,6,6,13,13,5,5,0,0;7;,7,7,6,13,13,5,0,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,0,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,0,0,0;13;,13,13,5,5,1,0,0,0;14;,14,14,13,4,2,2,0,0;15;,15,15,13,13,5,5,0,0;]]
 function fade(threshold)
