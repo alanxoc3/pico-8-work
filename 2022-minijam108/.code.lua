@@ -92,7 +92,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,tile_sprite_draw,@,possible_move_obj_update,@,possible_move_obj_draw,@,test_init,@,test_update,@,test_draw,@,game_init,@,game_update,@,game_draw,@,card_draw,@,card_normal_update,@,card_selector_init,@,card_selector_update,@,card_select_init,@,move_select_init,@,level_state_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,tile_sprite_draw,@,possible_move_obj_update,@,possible_move_small_obj_update,@,test_init,@,test_update,@,test_draw,@,game_init,@,game_update,@,game_draw,@,card_draw,@,card_normal_update,@,pre_card_select_init,@,card_select_init,@,card_select_update,@,move_select_init,@,move_select_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@]],function(a,stateName)
 a.next_state=a.next_state or stateName
 end,function(a,stateName)
 a.next_state,a.isnew=nil
@@ -186,7 +186,9 @@ if a.gamestate.curr ~="move_select"then
 a:kill()
 end
 end,function(a)
-circ(scr_x(a.x),scr_y(a.y),12,1)
+if a.gamestate.itemind ~=a.itemind or a.gamestate.curr ~="card_select"then
+a:kill()
+end
 end,function(a)a.color+=1 end,function(a)a.x+=xbtn()a.y+=ybtn()end,function(a)circfill(a.x,a.y,2,a.color)end,function()
 g_level=0
 g_level_state=_g.level_state()
@@ -210,44 +212,51 @@ offy=-2
 spr(104,a.x,a.y+offy-1,2,2)
 spr(104,a.x,a.y+offy,2,2)
 spr(16,a.x+4,a.y+16)
-elseif g_level_state.curr!="card_select"and g_level_state.curr!="card_select_start"then
+elseif g_level_state.curr!="card_select"then
 offy=13
 end
 spr(a.sind,a.x,a.y+offy,2,2)
 end,function(a)
-if g_level_state.curr!="card_select_start"and g_level_state.curr!="card_select"and g_level_state.curr!="move_select"then
+if g_level_state.curr!="card_select"and g_level_state.curr!="move_select"then
 a:kill()
 end
 end,function(a)
-add(a.items,_g.card(35,a.itemsinds[1],false))
-add(a.items,_g.card(35+21,a.itemsinds[2],true))
-add(a.items,_g.card(35+21+21,a.itemsinds[3],false))
+a.items={
+_g.card(35,64,false),
+_g.card(35+21,66,true),
+_g.card(35+21+21,70,false)
+}
 end,function(a)
-if g_level_state.curr=="card_select"then
+local moves=get_move_coordinates(a.items[a.itemind].sind)
+for m in all(moves)do
+_g[m.type_small](a,a.itemind,m.x,m.y)
+end
+end,function(a)
+local prev_ind=a.itemind
 if xbtnp()~=0 then
 a.itemind=mid(1,a.itemind+xbtnp(),3)
+end
+if a.itemind ~=prev_ind then
+local moves=get_move_coordinates(a.items[a.itemind].sind)
+for m in all(moves)do
+_g[m.type_small](a,a.itemind,m.x,m.y)
+end
 end
 for i=1,#a.items do
 a.items[i].selected=i==a.itemind
 end
 if btnp"4"then
-g_level_state:load"move_select"
+a:load"move_select"
 end
-elseif g_level_state.curr=="move_select"then
-if btnp(5)then
-g_level_state:load"card_select"
-end
-end
-_g.card_normal_update(a)
 end,function(a)
-_g.card_selector(64,66,70)
-end,function(a)
-a.moves=get_move_coordinates("move")
+a.moves=get_move_coordinates(a.items[a.itemind].sind)
 for m in all(a.moves)do
-_g.possible_move_obj(a,m.x,m.y)
+_g[m.type](a,a.itemind,m.x,m.y)
 end
 end,function(a)
-printh(a.curr)
+if btnp(5)then
+a:load"card_select"
+end
 end,function(a)
 poke(0x5f43,0xff)
 g_fade=a:get_elapsed_percent"start"
@@ -302,8 +311,12 @@ end
 zclass[[tile_sprite,pos|sx,8,sy,8,sw,2,sh,2,draw,%tile_sprite_draw]]
 zclass[[hermit,tile_sprite,drawlayer_50|x,@,y,@,sind,1]]
 zclass[[enemy|]]
-zclass[[snake,tile_sprite,enemy,drawlayer_50|x,@,y,@,sind,45]]
-zclass[[possible_move_obj,actor,drawlayer_50|gamestate,@,x,@,y,@,update,%possible_move_obj_update,draw,%possible_move_obj_draw;]]
+zclass[[snake,tile_sprite,enemy,drawlayer_50|x,@,y,@,sx,3,sy,8,sw,1,sh,2,sind,196]]
+zclass[[pos_move,tile_sprite,actor,drawlayer_50|sind,140,sx,4,sy,4,sw,1,sh,1,gamestate,@,itemind,@,x,@,y,@,update,%possible_move_obj_update;]]
+zclass[[pos_sword,tile_sprite,actor,drawlayer_50|sind,141,sx,4,sy,4,sw,1,sh,1,gamestate,@,itemind,@,x,@,y,@,update,%possible_move_obj_update;]]
+zclass[[pos_attack,tile_sprite,actor,drawlayer_50|sind,141,sx,4,sy,4,sw,1,sh,1,gamestate,@,itemind,@,x,@,y,@,update,%possible_move_obj_update;]]
+zclass[[pos_move_small,tile_sprite,actor,drawlayer_50|sind,171,sx,4,sy,4,sw,1,sh,1,gamestate,@,itemind,@,x,@,y,@,update,%possible_move_small_obj_update;]]
+zclass[[pos_sword_small,tile_sprite,actor,drawlayer_50|sind,155,sx,4,sy,4,sw,1,sh,1,gamestate,@,itemind,@,x,@,y,@,update,%possible_move_small_obj_update;]]
 zclass[[test_obj,actor,drawlayer_50|x,@,y,@,color,7,init,%test_init,update,%test_update,draw,%test_draw;]]
 function round(num)return flr(num+.5)end
 function print_vert_wobble(text,x,y,col,off,wob)
@@ -369,8 +382,7 @@ function unpack_grid_index(index)
 return index%7,index\7
 end
 zclass[[card,actor,vec,drawlayer_50|x,@,sind,@,selected,@,y,141,draw,%card_draw;start;duration,.25,next,normal,dy,-2;normal;dy,0,update,%card_normal_update;ending;update,nop,duration,.25,dy,2;]]
-zclass[[card_selector,actor,vec,drawlayer_50|itemind,2,init,%card_selector_init,update,%card_selector_update;itemsinds;,@,@,@;items;,;]]
-zclass[[level_state,actor|update,%level_state_update,curr,card_select_start;card_select_start;init,%card_select_init,duration,.5,next,card_select;card_select;init,nop,next,move_select;move_select;init,%move_select_init,next,player_update;player_update;init,nop,next,enemy_update;enemy_update;init,nop,next,card_select_start;]]
+zclass[[level_state,actor|itemind,2,curr,pre_card_select;items;,;pre_card_select;init,%pre_card_select_init,duration,0,next,card_select;card_select;init,%card_select_init,update,%card_select_update,next,move_select;move_select;init,%move_select_init,update,%move_select_update;player_update;init,nop,nop,next,enemy_update;enemy_update;init,nop,nop,next,card_select;]]
 function find_on_grid(predicate)
 local l={}
 for y=0,6 do
@@ -382,30 +394,61 @@ end
 end
 return l
 end
+function find_sword_on_grid()
+end
 function find_pl_on_grid()
 return find_on_grid(function(spot)
 return spot.entity==g_pl
 end)[1]
 end
+function is_spot_valid(x,y)
+local spot=g_grid[y*7+x]
+return x>=0 and x<=6 and y>=0 and y<=6 and spot.active
+end
 function is_spot_empty(x,y)
 local spot=g_grid[y*7+x]
-return x>=0 and x<=6 and y>=0 and y<=6 and spot.entity==nil and spot.active
+return is_spot_valid(x,y)and spot.entity==nil
 end
-function add_spot_if_valid(list,x,y)
+function is_spot_attackable(x,y)
+local spot=g_grid[y*7+x]
+return is_spot_valid(x,y)and spot.entity and spot.entity.parents.enemy
+end
+function add_spot(list,x,y,type,type_small)
+add(list,{x=x,y=y,type=type,type_small=type_small})
+end
+function add_spot_if_empty(list,x,y,...)
 if is_spot_empty(x,y)then
-add(list,{x=x,y=y})
+add_spot(list,x,y,...)
 end
 end
-function find_sword_on_grid()
+function add_spot_if_attackable(list,x,y,...)
+if is_spot_empty(x,y)or is_spot_attackable(x,y)then
+add_spot(list,x,y,...)
+end
 end
 function get_move_coordinates(move_type)
 local pc=find_pl_on_grid()
 local spots={}
-if move_type=="move"then
-add_spot_if_valid(spots,pc.x+1,pc.y)
-add_spot_if_valid(spots,pc.x-1,pc.y)
-add_spot_if_valid(spots,pc.x,pc.y+1)
-add_spot_if_valid(spots,pc.x,pc.y-1)
+if move_type==64 then
+add_spot(spots,pc.x+1,pc.y,"pos_sword","pos_sword_small")
+elseif move_type==66 then
+add_spot_if_attackable(spots,pc.x+1,pc.y,"pos_sword","pos_sword_small")
+add_spot_if_attackable(spots,pc.x-1,pc.y,"pos_sword","pos_sword_small")
+add_spot_if_attackable(spots,pc.x,pc.y+1,"pos_sword","pos_sword_small")
+add_spot_if_attackable(spots,pc.x,pc.y-1,"pos_sword","pos_sword_small")
+add_spot_if_attackable(spots,pc.x-1,pc.y-1,"pos_sword","pos_sword_small")
+add_spot_if_attackable(spots,pc.x-1,pc.y+1,"pos_sword","pos_sword_small")
+add_spot_if_attackable(spots,pc.x+1,pc.y+1,"pos_sword","pos_sword_small")
+add_spot_if_attackable(spots,pc.x+1,pc.y-1,"pos_sword","pos_sword_small")
+elseif move_type==70 then
+add_spot_if_empty(spots,pc.x+1,pc.y,"pos_move","pos_move_small")
+add_spot_if_empty(spots,pc.x-1,pc.y,"pos_move","pos_move_small")
+add_spot_if_empty(spots,pc.x,pc.y+1,"pos_move","pos_move_small")
+add_spot_if_empty(spots,pc.x,pc.y-1,"pos_move","pos_move_small")
+add_spot_if_empty(spots,pc.x-1,pc.y-1,"pos_move","pos_move_small")
+add_spot_if_empty(spots,pc.x-1,pc.y+1,"pos_move","pos_move_small")
+add_spot_if_empty(spots,pc.x+1,pc.y+1,"pos_move","pos_move_small")
+add_spot_if_empty(spots,pc.x+1,pc.y-1,"pos_move","pos_move_small")
 end
 return spots
 end

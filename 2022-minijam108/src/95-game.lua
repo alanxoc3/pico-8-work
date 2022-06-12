@@ -129,82 +129,81 @@ zclass[[card,actor,vec,drawlayer_50|
         spr(104, a.x, a.y+offy-1, 2, 2)
         spr(104, a.x, a.y+offy, 2, 2)
         spr(16,a.x+4, a.y+16)
-    elseif g_level_state.curr != 'card_select' and g_level_state.curr != 'card_select_start' then
+    elseif g_level_state.curr != 'card_select' then
         offy = 13
     end
     spr(a.sind, a.x, a.y+offy, 2, 2)
 end $$
 
 |[card_normal_update]| function(a)
-    if g_level_state.curr != 'card_select_start' and g_level_state.curr != 'card_select' and g_level_state.curr != 'move_select' then
+    if g_level_state.curr != 'card_select' and g_level_state.curr != 'move_select' then
         a:kill()
     end
 end $$
 
-zclass[[card_selector,actor,vec,drawlayer_50|
+zclass[[level_state,actor|
     itemind,2,
-    init,%card_selector_init,
-    update,%card_selector_update;
-    
-    itemsinds;,@,@,@;
+    curr,pre_card_select;
+
     items;,;
+
+    pre_card_select;     init,%pre_card_select_init, duration,0, next,card_select;
+    card_select;         init,%card_select_init, update,%card_select_update, next,move_select;
+    move_select;         init,%move_select_init, update,%move_select_update;
+    player_update;       init,nop,               nop, next,enemy_update;
+    enemy_update;        init,nop,               nop, next,card_select;
 ]]
 
-|[card_selector_init]| function(a)
-    add(a.items, _g.card(35,       a.itemsinds[1], false))
-    add(a.items, _g.card(35+21,    a.itemsinds[2], true))
-    add(a.items, _g.card(35+21+21, a.itemsinds[3], false))
+|[pre_card_select_init]| function(a)
+    a.items = {
+        _g.card(35,       64, false),
+        _g.card(35+21,    66, true),
+        _g.card(35+21+21, 70, false)
+    }
 end $$
 
-|[card_selector_update]| function(a)
-    if g_level_state.curr == 'card_select' then
-        if xbtnp() ~= 0 then
-            a.itemind = mid(1, a.itemind+xbtnp(), 3)
-        end
+|[card_select_init]| function(a)
+    local moves = get_move_coordinates(a.items[a.itemind].sind)
+    for m in all(moves) do
+        _g[m.type_small](a, a.itemind, m.x, m.y)
+    end
+end $$
 
-        for i=1,#a.items do
-            a.items[i].selected = i == a.itemind
-        end
+|[card_select_update]| function(a)
+    local prev_ind = a.itemind
+    if xbtnp() ~= 0 then
+        a.itemind = mid(1, a.itemind +xbtnp(), 3)
+    end
 
-        if btnp'4' then
-            g_level_state:load'move_select'
-        end
-    elseif g_level_state.curr == 'move_select' then
-        if btnp(5) then
-            g_level_state:load'card_select'
+    if a.itemind ~= prev_ind then
+        local moves = get_move_coordinates(a.items[a.itemind].sind)
+        for m in all(moves) do
+            _g[m.type_small](a, a.itemind, m.x, m.y)
         end
     end
 
-    _g.card_normal_update(a)
-end $$
+    for i=1,#a.items do
+        a.items[i].selected = i == a.itemind
+    end
 
-zclass[[level_state,actor|
-    update,%level_state_update,
-    curr,card_select_start;
-
-    card_select_start;   init,%card_select_init, duration, .5, next,card_select;
-    card_select;         init,nop,               next,move_select;
-    move_select;         init,%move_select_init, next,player_update;
-    player_update;       init,nop,               next,enemy_update;
-    enemy_update;        init,nop,               next,card_select_start;
-]]
-
-|[card_select_init]| function(a)
-    _g.card_selector(64, 66, 70)
+    if btnp'4' then
+        a:load'move_select'
+    end
 end $$
 
 |[move_select_init]| function(a)
-    a.moves = get_move_coordinates('move')
+    a.moves = get_move_coordinates(a.items[a.itemind].sind)
 
     for m in all(a.moves) do
-        _g.possible_move_obj(a, m.x, m.y)
+        _g[m.type](a, a.itemind, m.x, m.y)
     end
 end $$
 
-|[level_state_update]| function(a)
-    printh(a.curr)
+|[move_select_update]| function(a)
+    if btnp(5) then
+        a:load'card_select'
+    end
 end $$
-
 
 -- returns list of {{x=1,y=1}}
 function find_on_grid(predicate)
@@ -219,34 +218,71 @@ function find_on_grid(predicate)
     return l
 end
 
+function find_sword_on_grid()
+end
+
 function find_pl_on_grid()
     return find_on_grid(function(spot)
         return spot.entity == g_pl
     end)[1]
 end
 
-function is_spot_empty(x, y)
+function is_spot_valid(x, y)
     local spot = g_grid[y*7+x]
-    return x >= 0 and x <= 6 and y >= 0 and y <= 6 and spot.entity == nil and spot.active
+    return x >= 0 and x <= 6 and y >= 0 and y <= 6 and spot.active
 end
 
-function add_spot_if_valid(list, x, y)
+function is_spot_empty(x, y)
+    local spot = g_grid[y*7+x]
+    return is_spot_valid(x, y) and spot.entity == nil
+end
+
+function is_spot_attackable(x, y)
+    local spot = g_grid[y*7+x]
+    return is_spot_valid(x, y) and spot.entity and spot.entity.parents.enemy
+end
+
+function add_spot(list, x, y, type, type_small)
+    add(list, {x=x, y=y, type=type, type_small=type_small})
+end
+
+function add_spot_if_empty(list, x, y, ...)
     if is_spot_empty(x, y) then
-        add(list, {x=x, y=y})
+        add_spot(list, x, y, ...)
     end
 end
 
-function find_sword_on_grid()
+function add_spot_if_attackable(list, x, y, ...)
+    if is_spot_empty(x, y) or is_spot_attackable(x, y) then
+        add_spot(list, x, y, ...)
+    end
 end
 
 function get_move_coordinates(move_type)
     local pc = find_pl_on_grid()
     local spots = {}
-    if move_type == 'move' then
-        add_spot_if_valid(spots, pc.x+1, pc.y)
-        add_spot_if_valid(spots, pc.x-1, pc.y)
-        add_spot_if_valid(spots, pc.x, pc.y+1)
-        add_spot_if_valid(spots, pc.x, pc.y-1)
+    if move_type == 64 then
+        add_spot(spots, pc.x+1, pc.y, 'pos_sword', 'pos_sword_small')
+    elseif move_type == 66 then
+        add_spot_if_attackable(spots, pc.x+1, pc.y, 'pos_sword', 'pos_sword_small')
+        add_spot_if_attackable(spots, pc.x-1, pc.y, 'pos_sword', 'pos_sword_small')
+        add_spot_if_attackable(spots, pc.x, pc.y+1, 'pos_sword', 'pos_sword_small')
+        add_spot_if_attackable(spots, pc.x, pc.y-1, 'pos_sword', 'pos_sword_small')
+
+        add_spot_if_attackable(spots, pc.x-1, pc.y-1, 'pos_sword', 'pos_sword_small')
+        add_spot_if_attackable(spots, pc.x-1, pc.y+1, 'pos_sword', 'pos_sword_small')
+        add_spot_if_attackable(spots, pc.x+1, pc.y+1, 'pos_sword', 'pos_sword_small')
+        add_spot_if_attackable(spots, pc.x+1, pc.y-1, 'pos_sword', 'pos_sword_small')
+    elseif move_type == 70 then
+        add_spot_if_empty(spots, pc.x+1, pc.y, 'pos_move', 'pos_move_small')
+        add_spot_if_empty(spots, pc.x-1, pc.y, 'pos_move', 'pos_move_small')
+        add_spot_if_empty(spots, pc.x, pc.y+1, 'pos_move', 'pos_move_small')
+        add_spot_if_empty(spots, pc.x, pc.y-1, 'pos_move', 'pos_move_small')
+
+        add_spot_if_empty(spots, pc.x-1, pc.y-1, 'pos_move', 'pos_move_small')
+        add_spot_if_empty(spots, pc.x-1, pc.y+1, 'pos_move', 'pos_move_small')
+        add_spot_if_empty(spots, pc.x+1, pc.y+1, 'pos_move', 'pos_move_small')
+        add_spot_if_empty(spots, pc.x+1, pc.y-1, 'pos_move', 'pos_move_small')
     end
 
     return spots
