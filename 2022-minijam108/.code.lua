@@ -219,9 +219,9 @@ end,function(a)
 local offy=0
 if a.selected then
 offy=-2
-spr(104,a.x,a.y+offy-1,2,2)
-spr(104,a.x,a.y+offy,2,2)
-spr(16,a.x+4,a.y+16)
+spr(168,a.x,a.y+offy-1,2,2)
+spr(168,a.x,a.y+offy,2,2)
+spr(141,a.x+4,a.y+16)
 elseif g_level_state.curr!="card_select"then
 offy=13
 end
@@ -232,9 +232,9 @@ a:kill()
 end
 end,function(a)
 a.items={
-_g.card(35,64,false),
-_g.card(35+21,66,true),
-_g.card(35+21+21,70,false)
+_g.card(35,128,false),
+_g.card(35+21,130,true),
+_g.card(35+21+21,134,false)
 }
 end,function(a)
 local moves=get_move_coordinates(a.items[a.itemind].sind)
@@ -329,8 +329,8 @@ local midr=7/2*13
 return y*13+g_offy-midr+13/2-1
 end
 zclass[[tile_sprite,pos|sx,8,sy,8,sw,2,sh,2,draw,%tile_sprite_draw]]
-zclass[[hermit,tile_sprite,drawlayer_50|x,@,y,@,sy,11,sx,9,sind,1]]
-zclass[[sword,tile_sprite,drawlayer_50|x,@,y,@,sy,8,sx,6,sw,2,sh,2,sind,200]]
+zclass[[hermit,tile_sprite,drawlayer_50|x,@,y,@,sy,21,sx,8,sw,2,sh,4,sind,0]]
+zclass[[sword|x,@,y,@]]
 zclass[[enemy|]]
 zclass[[snake,tile_sprite,enemy,drawlayer_50|x,@,y,@,sx,3,sy,8,sw,1,sh,2,sind,196]]
 zclass[[pos_real,tile_sprite,actor|gamestate,@,itemind,@,x,@,y,@,sind,@,sel_sind,@,sw,1,sh,1,sx,3,sy,3,update,%possible_move_obj_update;]]
@@ -364,8 +364,8 @@ local midr=7/2*13
 for ind,tile in pairs(g_grid)do
 local x,y=unpack_grid_index(ind)
 if tile.active then
-local sind=37
-if(y*7+x)%2==0 then sind=39 end
+local sind=138
+if(y*7+x)%2==0 then sind=170 end
 spr(sind,scr_x(x)-6,scr_y(y)-6,2,2)
 end
 end
@@ -476,9 +476,9 @@ function get_move_coordinates(move_type)
 local pc=find_pl_on_grid()
 local sc=find_sword_on_grid()
 local spots={}
-if move_type==64 then
+if move_type==128 then
 add_spot(spots,sc.x,sc.y,142,156)
-elseif move_type==66 then
+elseif move_type==130 then
 add_spot_if_attackable(spots,pc.x+1,pc.y,142,156)
 add_spot_if_attackable(spots,pc.x-1,pc.y,142,156)
 add_spot_if_attackable(spots,pc.x,pc.y+1,142,156)
@@ -487,7 +487,7 @@ add_spot_if_attackable(spots,pc.x-1,pc.y-1,142,156)
 add_spot_if_attackable(spots,pc.x-1,pc.y+1,142,156)
 add_spot_if_attackable(spots,pc.x+1,pc.y+1,142,156)
 add_spot_if_attackable(spots,pc.x+1,pc.y-1,142,156)
-elseif move_type==70 then
+elseif move_type==134 then
 add_spot_if_movable(spots,pc.x+1,pc.y,143,158)
 add_spot_if_movable(spots,pc.x-1,pc.y,143,158)
 add_spot_if_movable(spots,pc.x,pc.y+1,143,158)

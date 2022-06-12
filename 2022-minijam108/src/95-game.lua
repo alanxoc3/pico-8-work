@@ -130,9 +130,9 @@ zclass[[card,actor,vec,drawlayer_50|
     local offy = 0
     if a.selected then
         offy = -2
-        spr(104, a.x, a.y+offy-1, 2, 2)
-        spr(104, a.x, a.y+offy, 2, 2)
-        spr(16,a.x+4, a.y+16)
+        spr(168, a.x, a.y+offy-1, 2, 2)
+        spr(168, a.x, a.y+offy, 2, 2)
+        spr(141,a.x+4, a.y+16)
     elseif g_level_state.curr != 'card_select' then
         offy = 13
     end
@@ -160,9 +160,9 @@ zclass[[level_state,actor|
 
 |[pre_card_select_init]| function(a)
     a.items = {
-        _g.card(35,       64, false),
-        _g.card(35+21,    66, true),
-        _g.card(35+21+21, 70, false)
+        _g.card(35,       128, false),
+        _g.card(35+21,    130, true),
+        _g.card(35+21+21, 134, false)
     }
 end $$
 
@@ -306,9 +306,9 @@ function get_move_coordinates(move_type)
     local pc = find_pl_on_grid()
     local sc = find_sword_on_grid()
     local spots = {}
-    if move_type == 64 then
+    if move_type == 128 then
         add_spot(spots, sc.x, sc.y, 142, 156)
-    elseif move_type == 66 then
+    elseif move_type == 130 then
         add_spot_if_attackable(spots, pc.x+1, pc.y,   142, 156)
         add_spot_if_attackable(spots, pc.x-1, pc.y,   142, 156)
         add_spot_if_attackable(spots, pc.x, pc.y+1,   142, 156)
@@ -318,7 +318,7 @@ function get_move_coordinates(move_type)
         add_spot_if_attackable(spots, pc.x-1, pc.y+1, 142, 156)
         add_spot_if_attackable(spots, pc.x+1, pc.y+1, 142, 156)
         add_spot_if_attackable(spots, pc.x+1, pc.y-1, 142, 156)
-    elseif move_type == 70 then
+    elseif move_type == 134 then
         add_spot_if_movable(spots, pc.x+1, pc.y,   143, 158)
         add_spot_if_movable(spots, pc.x-1, pc.y,   143, 158)
         add_spot_if_movable(spots, pc.x, pc.y+1,   143, 158)

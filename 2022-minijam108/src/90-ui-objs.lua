@@ -20,17 +20,14 @@ end $$
 
 zclass[[hermit,tile_sprite,drawlayer_50|
     x,@, y,@,
-    sy,11,
-    sx,9,
-    sind,SPR_PL
+    sy,21,
+    sx,8,
+    sw,2, sh,4,
+    sind,0
 ]]
 
-zclass[[sword,tile_sprite,drawlayer_50|
-    x,@, y,@,
-    sy,8,
-    sx,6,
-    sw,2, sh,2,
-    sind,200
+zclass[[sword|
+    x,@, y,@
 ]]
 
 zclass[[enemy|]]
