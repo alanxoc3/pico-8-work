@@ -95,6 +95,8 @@ function set_grid(level)
 
             if objind == MAP_PL then
                 spot.entity = _g.hermit(x, y)
+                g_pl = spot.entity
+                
             elseif objind == MAP_SNAKE then
                 spot.entity = _g.snake(x, y)
             end
@@ -127,12 +129,14 @@ zclass[[card,actor,vec,drawlayer_50|
         spr(104, a.x, a.y+offy-1, 2, 2)
         spr(104, a.x, a.y+offy, 2, 2)
         spr(16,a.x+4, a.y+16)
+    elseif g_level_state.curr != 'card_select' and g_level_state.curr != 'card_select_start' then
+        offy = 13
     end
     spr(a.sind, a.x, a.y+offy, 2, 2)
 end $$
 
 |[card_normal_update]| function(a)
-    if g_level_state.curr != 'card_select' and g_level_state.curr != 'move_select' then
+    if g_level_state.curr != 'card_select_start' and g_level_state.curr != 'card_select' and g_level_state.curr != 'move_select' then
         a:kill()
     end
 end $$
@@ -153,37 +157,40 @@ zclass[[card_selector,actor,vec,drawlayer_50|
 end $$
 
 |[card_selector_update]| function(a)
-    if xbtnp() ~= 0 then
-        a.itemind = mid(1, a.itemind+xbtnp(), 3)
+    if g_level_state.curr == 'card_select' then
+        if xbtnp() ~= 0 then
+            a.itemind = mid(1, a.itemind+xbtnp(), 3)
+        end
+
+        for i=1,#a.items do
+            a.items[i].selected = i == a.itemind
+        end
+
+        if btnp'4' then
+            g_level_state:load'move_select'
+        end
+    elseif g_level_state.curr == 'move_select' then
+        if btnp(5) then
+            g_level_state:load'card_select'
+        end
     end
 
-    for i=1,#a.items do
-        a.items[i].selected = i == a.itemind
-    end
-
-    if g_level_state.curr != 'card_select' and g_level_state.curr != 'move_select' then
-        a:kill()
-    end
+    _g.card_normal_update(a)
 end $$
 
 zclass[[level_state,actor|
     update,%level_state_update,
-    curr,level_intro;
+    curr,card_select_start;
 
-    level_intro;   init,nop,               next,card_select;
-    card_select;   init,%card_select_init, next,move_select;
-    move_select;   init,%move_select_init, next,player_update;
-    player_update; init,nop,               next,enemy_update;
-    enemy_update;  init,nop,               next,card_select;
+    card_select_start;   init,%card_select_init, duration, .5, next,card_select;
+    card_select;         init,nop,               next,move_select;
+    move_select;         init,%move_select_init, next,player_update;
+    player_update;       init,nop,               next,enemy_update;
+    enemy_update;        init,nop,               next,card_select_start;
 ]]
 
 |[card_select_init]| function(a)
     _g.card_selector(64, 66, 70)
-    a.moves = get_move_coordinates('move')
-
-    for m in all(a.moves) do
-        _g.possible_move_obj(a, m.x, m.y)
-    end
 end $$
 
 |[move_select_init]| function(a)
@@ -195,17 +202,54 @@ end $$
 end $$
 
 |[level_state_update]| function(a)
-    if btnp(4) or btnp(5) then
-        a:load(a.next)
-    end
+    printh(a.curr)
 end $$
 
+
+-- returns list of {{x=1,y=1}}
+function find_on_grid(predicate)
+    local l = {}
+    for y=0,6 do
+        for x=0,6 do
+            if predicate(g_grid[y*7+x]) then
+                add(l, {x=x, y=y})
+            end
+        end
+    end
+    return l
+end
+
+function find_pl_on_grid()
+    return find_on_grid(function(spot)
+        return spot.entity == g_pl
+    end)[1]
+end
+
+function is_spot_empty(x, y)
+    local spot = g_grid[y*7+x]
+    return x >= 0 and x <= 6 and y >= 0 and y <= 6 and spot.entity == nil and spot.active
+end
+
+function add_spot_if_valid(list, x, y)
+    if is_spot_empty(x, y) then
+        add(list, {x=x, y=y})
+    end
+end
+
+function find_sword_on_grid()
+end
+
 function get_move_coordinates(move_type)
+    local pc = find_pl_on_grid()
+    local spots = {}
     if move_type == 'move' then
-        return {{x=1, y=5}}
+        add_spot_if_valid(spots, pc.x+1, pc.y)
+        add_spot_if_valid(spots, pc.x-1, pc.y)
+        add_spot_if_valid(spots, pc.x, pc.y+1)
+        add_spot_if_valid(spots, pc.x, pc.y-1)
     end
 
-    return {}
+    return spots
 end
 
 -- next step:

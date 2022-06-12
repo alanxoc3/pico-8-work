@@ -210,10 +210,12 @@ offy=-2
 spr(104,a.x,a.y+offy-1,2,2)
 spr(104,a.x,a.y+offy,2,2)
 spr(16,a.x+4,a.y+16)
+elseif g_level_state.curr!="card_select"and g_level_state.curr!="card_select_start"then
+offy=13
 end
 spr(a.sind,a.x,a.y+offy,2,2)
 end,function(a)
-if g_level_state.curr!="card_select"and g_level_state.curr!="move_select"then
+if g_level_state.curr!="card_select_start"and g_level_state.curr!="card_select"and g_level_state.curr!="move_select"then
 a:kill()
 end
 end,function(a)
@@ -221,30 +223,31 @@ add(a.items,_g.card(35,a.itemsinds[1],false))
 add(a.items,_g.card(35+21,a.itemsinds[2],true))
 add(a.items,_g.card(35+21+21,a.itemsinds[3],false))
 end,function(a)
+if g_level_state.curr=="card_select"then
 if xbtnp()~=0 then
 a.itemind=mid(1,a.itemind+xbtnp(),3)
 end
 for i=1,#a.items do
 a.items[i].selected=i==a.itemind
 end
-if g_level_state.curr!="card_select"and g_level_state.curr!="move_select"then
-a:kill()
+if btnp"4"then
+g_level_state:load"move_select"
 end
+elseif g_level_state.curr=="move_select"then
+if btnp(5)then
+g_level_state:load"card_select"
+end
+end
+_g.card_normal_update(a)
 end,function(a)
 _g.card_selector(64,66,70)
-a.moves=get_move_coordinates("move")
-for m in all(a.moves)do
-_g.possible_move_obj(a,m.x,m.y)
-end
 end,function(a)
 a.moves=get_move_coordinates("move")
 for m in all(a.moves)do
 _g.possible_move_obj(a,m.x,m.y)
 end
 end,function(a)
-if btnp(4)or btnp(5)then
-a:load(a.next)
-end
+printh(a.curr)
 end,function(a)
 poke(0x5f43,0xff)
 g_fade=a:get_elapsed_percent"start"
@@ -298,7 +301,8 @@ return y*13+g_offy-midr+13/2-1
 end
 zclass[[tile_sprite,pos|sx,8,sy,8,sw,2,sh,2,draw,%tile_sprite_draw]]
 zclass[[hermit,tile_sprite,drawlayer_50|x,@,y,@,sind,1]]
-zclass[[snake,tile_sprite,drawlayer_50|x,@,y,@,sind,45]]
+zclass[[enemy|]]
+zclass[[snake,tile_sprite,enemy,drawlayer_50|x,@,y,@,sind,45]]
 zclass[[possible_move_obj,actor,drawlayer_50|gamestate,@,x,@,y,@,update,%possible_move_obj_update,draw,%possible_move_obj_draw;]]
 zclass[[test_obj,actor,drawlayer_50|x,@,y,@,color,7,init,%test_init,update,%test_update,draw,%test_draw;]]
 function round(num)return flr(num+.5)end
@@ -352,6 +356,7 @@ local objind=mget(mapx*8+x,mapy*8+y)
 local spot={active=true}
 if objind==240 then
 spot.entity=_g.hermit(x,y)
+g_pl=spot.entity
 elseif objind==242 then
 spot.entity=_g.snake(x,y)
 end
@@ -365,12 +370,44 @@ return index%7,index\7
 end
 zclass[[card,actor,vec,drawlayer_50|x,@,sind,@,selected,@,y,141,draw,%card_draw;start;duration,.25,next,normal,dy,-2;normal;dy,0,update,%card_normal_update;ending;update,nop,duration,.25,dy,2;]]
 zclass[[card_selector,actor,vec,drawlayer_50|itemind,2,init,%card_selector_init,update,%card_selector_update;itemsinds;,@,@,@;items;,;]]
-zclass[[level_state,actor|update,%level_state_update,curr,level_intro;level_intro;init,nop,next,card_select;card_select;init,%card_select_init,next,move_select;move_select;init,%move_select_init,next,player_update;player_update;init,nop,next,enemy_update;enemy_update;init,nop,next,card_select;]]
-function get_move_coordinates(move_type)
-if move_type=="move"then
-return{{x=1,y=5}}
+zclass[[level_state,actor|update,%level_state_update,curr,card_select_start;card_select_start;init,%card_select_init,duration,.5,next,card_select;card_select;init,nop,next,move_select;move_select;init,%move_select_init,next,player_update;player_update;init,nop,next,enemy_update;enemy_update;init,nop,next,card_select_start;]]
+function find_on_grid(predicate)
+local l={}
+for y=0,6 do
+for x=0,6 do
+if predicate(g_grid[y*7+x])then
+add(l,{x=x,y=y})
 end
-return{}
+end
+end
+return l
+end
+function find_pl_on_grid()
+return find_on_grid(function(spot)
+return spot.entity==g_pl
+end)[1]
+end
+function is_spot_empty(x,y)
+local spot=g_grid[y*7+x]
+return x>=0 and x<=6 and y>=0 and y<=6 and spot.entity==nil and spot.active
+end
+function add_spot_if_valid(list,x,y)
+if is_spot_empty(x,y)then
+add(list,{x=x,y=y})
+end
+end
+function find_sword_on_grid()
+end
+function get_move_coordinates(move_type)
+local pc=find_pl_on_grid()
+local spots={}
+if move_type=="move"then
+add_spot_if_valid(spots,pc.x+1,pc.y)
+add_spot_if_valid(spots,pc.x-1,pc.y)
+add_spot_if_valid(spots,pc.x,pc.y+1)
+add_spot_if_valid(spots,pc.x,pc.y-1)
+end
+return spots
 end
 g_fade,g_fade_table=1,zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,1,0,0,0,0;3;,3,3,3,3,1,1,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,0,0,0,0;6;,6,6,13,13,5,5,0,0;7;,7,7,6,13,13,5,0,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,0,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,0,0,0;13;,13,13,5,5,1,0,0,0;14;,14,14,13,4,2,2,0,0;15;,15,15,13,13,5,5,0,0;]]
 function fade(threshold)
