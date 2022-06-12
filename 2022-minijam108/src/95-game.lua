@@ -57,10 +57,10 @@ function draw_tiles()
     local inc=.05
 
     color(15)
-    line() for i=-.01,1,inc do line(tlx+i*width, cos(i*mult)*amp+tly+1) end
-    line() for i=-.01,1,inc do line(tlx+i*width, -cos(i*mult)*amp1+tly+90) end
-    line() for i=-.01,1,inc do line(cos(i*mult)*amp2+tlx+1, tly+i*width) end
-    line() for i=-.01,1,inc do line(-cos(i*mult)*amp3+tlx+90, tly+i*width) end
+    line() for i=0,1,inc do line(tlx+i*width, cos(i*mult)*amp+tly+1) end
+    line() for i=0,1,inc do line(tlx+i*width, -cos(i*mult)*amp1+tly+90) end
+    line() for i=0,1,inc do line(cos(i*mult)*amp2+tlx+1, tly+i*width) end
+    line() for i=0,1,inc do line(-cos(i*mult)*amp3+tlx+90, tly+i*width) end
 
     local midr = 7/2*TILE_RADIUS
     for ind, tile in pairs(g_grid) do
@@ -73,14 +73,14 @@ function draw_tiles()
     end
 
     color(7)
-    line() for i=-.01,1,inc do line(tlx+i*width, cos(i*mult)*amp+tly-1) end
-    line() for i=-.01,1,inc do line(tlx+i*width, cos(i*mult)*amp+tly) end
-    line() for i=-.01,1,inc do line(tlx+i*width, -cos(i*mult)*amp1+tly+91) end
-    line() for i=-.01,1,inc do line(tlx+i*width, -cos(i*mult)*amp1+tly+92) end
-    line() for i=-.01,1,inc do line(cos(i*mult)*amp2+tlx-1, tly+i*width) end
-    line() for i=-.01,1,inc do line(cos(i*mult)*amp2+tlx, tly+i*width) end
-    line() for i=-.01,1,inc do line(-cos(i*mult)*amp3+tlx+91, tly+i*width) end
-    line() for i=-.01,1,inc do line(-cos(i*mult)*amp3+tlx+92, tly+i*width) end
+    line() for i=0,1,inc do line(tlx+i*width, cos(i*mult)*amp+tly-1) end
+    line() for i=0,1,inc do line(tlx+i*width, cos(i*mult)*amp+tly) end
+    line() for i=0,1,inc do line(tlx+i*width, -cos(i*mult)*amp1+tly+91) end
+    line() for i=0,1,inc do line(tlx+i*width, -cos(i*mult)*amp1+tly+92) end
+    line() for i=0,1,inc do line(cos(i*mult)*amp2+tlx-1, tly+i*width) end
+    line() for i=0,1,inc do line(cos(i*mult)*amp2+tlx, tly+i*width) end
+    line() for i=0,1,inc do line(-cos(i*mult)*amp3+tlx+91, tly+i*width) end
+    line() for i=0,1,inc do line(-cos(i*mult)*amp3+tlx+92, tly+i*width) end
 end
 
 -- [ind]: {active}
@@ -138,14 +138,32 @@ end $$
 end $$
 
 zclass[[card_selector,actor,vec,drawlayer_50|
-    c1sind,@, c2sind,@, c3sind,@,
-    init,%card_selector_init
+    itemind,2,
+    init,%card_selector_init,
+    update,%card_selector_update;
+    
+    itemsinds;,@,@,@;
+    items;,;
 ]]
 
 |[card_selector_init]| function(a)
-    _g.card(35,       a.c1sind, false)
-    _g.card(35+21,    a.c2sind, true)
-    _g.card(35+21+21, a.c3sind, false)
+    add(a.items, _g.card(35,       a.itemsinds[1], false))
+    add(a.items, _g.card(35+21,    a.itemsinds[2], true))
+    add(a.items, _g.card(35+21+21, a.itemsinds[3], false))
+end $$
+
+|[card_selector_update]| function(a)
+    if xbtnp() ~= 0 then
+        a.itemind = mid(1, a.itemind+xbtnp(), 3)
+    end
+
+    for i=1,#a.items do
+        a.items[i].selected = i == a.itemind
+    end
+
+    if g_level_state.curr != 'card_select' and g_level_state.curr != 'move_select' then
+        a:kill()
+    end
 end $$
 
 zclass[[level_state,actor|

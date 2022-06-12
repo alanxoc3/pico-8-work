@@ -34,3 +34,6 @@ function zbtn(f, a) return f(a) and f(a+1) and 0 or f(a) and -1 or f(a+1) and 1 
 function xbtn() return zbtn(btn, 0) end
 function ybtn() return zbtn(btn, 2) end
 
+function xbtnp() return zbtn(btnp, 0) end
+function ybtnp() return zbtn(btnp, 2) end
+

@@ -92,7 +92,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,tile_sprite_draw,@,possible_move_obj_update,@,possible_move_obj_draw,@,test_init,@,test_update,@,test_draw,@,game_init,@,game_update,@,game_draw,@,card_draw,@,card_normal_update,@,card_selector_init,@,card_select_init,@,move_select_init,@,level_state_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,tile_sprite_draw,@,possible_move_obj_update,@,possible_move_obj_draw,@,test_init,@,test_update,@,test_draw,@,game_init,@,game_update,@,game_draw,@,card_draw,@,card_normal_update,@,card_selector_init,@,card_selector_update,@,card_select_init,@,move_select_init,@,level_state_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@]],function(a,stateName)
 a.next_state=a.next_state or stateName
 end,function(a,stateName)
 a.next_state,a.isnew=nil
@@ -217,9 +217,19 @@ if g_level_state.curr!="card_select"and g_level_state.curr!="move_select"then
 a:kill()
 end
 end,function(a)
-_g.card(35,a.c1sind,false)
-_g.card(35+21,a.c2sind,true)
-_g.card(35+21+21,a.c3sind,false)
+add(a.items,_g.card(35,a.itemsinds[1],false))
+add(a.items,_g.card(35+21,a.itemsinds[2],true))
+add(a.items,_g.card(35+21+21,a.itemsinds[3],false))
+end,function(a)
+if xbtnp()~=0 then
+a.itemind=mid(1,a.itemind+xbtnp(),3)
+end
+for i=1,#a.items do
+a.items[i].selected=i==a.itemind
+end
+if g_level_state.curr!="card_select"and g_level_state.curr!="move_select"then
+a:kill()
+end
 end,function(a)
 _g.card_selector(64,66,70)
 a.moves=get_move_coordinates("move")
@@ -270,6 +280,8 @@ end
 function zbtn(f,a)return f(a)and f(a+1)and 0 or f(a)and-1 or f(a+1)and 1 or 0 end
 function xbtn()return zbtn(btn,0)end
 function ybtn()return zbtn(btn,2)end
+function xbtnp()return zbtn(btnp,0)end
+function ybtnp()return zbtn(btnp,2)end
 zclass[[actor,timer|load,%actor_load,loadlogic,%actor_loadlogic,state,%actor_state,kill,%actor_kill,clean,%actor_clean,is_alive,%actor_is_alive,alive,yes,duration,null,curr,start,next,null,isnew,yes,init,nop,update,nop,destroyed,nop;]]
 zclass[[drawlayer_50|]]
 zclass[[timer|timers;,;start_timer,%timer_reset_timer,end_timer,%timer_end_timer,is_active,%timer_is_active,get_elapsed_percent,%timer_get_elapsed_percent,tick,%timer_tick,]]
@@ -308,10 +320,10 @@ local width=91
 local mult=sgn(sin(t()/7))*2+round(cos(t()/3))
 local inc=.05
 color(15)
-line()for i=-.01,1,inc do line(tlx+i*width,cos(i*mult)*amp+tly+1)end
-line()for i=-.01,1,inc do line(tlx+i*width,-cos(i*mult)*amp1+tly+90)end
-line()for i=-.01,1,inc do line(cos(i*mult)*amp2+tlx+1,tly+i*width)end
-line()for i=-.01,1,inc do line(-cos(i*mult)*amp3+tlx+90,tly+i*width)end
+line()for i=0,1,inc do line(tlx+i*width,cos(i*mult)*amp+tly+1)end
+line()for i=0,1,inc do line(tlx+i*width,-cos(i*mult)*amp1+tly+90)end
+line()for i=0,1,inc do line(cos(i*mult)*amp2+tlx+1,tly+i*width)end
+line()for i=0,1,inc do line(-cos(i*mult)*amp3+tlx+90,tly+i*width)end
 local midr=7/2*13
 for ind,tile in pairs(g_grid)do
 local x,y=unpack_grid_index(ind)
@@ -322,14 +334,14 @@ spr(sind,scr_x(x)-6,scr_y(y)-6,2,2)
 end
 end
 color(7)
-line()for i=-.01,1,inc do line(tlx+i*width,cos(i*mult)*amp+tly-1)end
-line()for i=-.01,1,inc do line(tlx+i*width,cos(i*mult)*amp+tly)end
-line()for i=-.01,1,inc do line(tlx+i*width,-cos(i*mult)*amp1+tly+91)end
-line()for i=-.01,1,inc do line(tlx+i*width,-cos(i*mult)*amp1+tly+92)end
-line()for i=-.01,1,inc do line(cos(i*mult)*amp2+tlx-1,tly+i*width)end
-line()for i=-.01,1,inc do line(cos(i*mult)*amp2+tlx,tly+i*width)end
-line()for i=-.01,1,inc do line(-cos(i*mult)*amp3+tlx+91,tly+i*width)end
-line()for i=-.01,1,inc do line(-cos(i*mult)*amp3+tlx+92,tly+i*width)end
+line()for i=0,1,inc do line(tlx+i*width,cos(i*mult)*amp+tly-1)end
+line()for i=0,1,inc do line(tlx+i*width,cos(i*mult)*amp+tly)end
+line()for i=0,1,inc do line(tlx+i*width,-cos(i*mult)*amp1+tly+91)end
+line()for i=0,1,inc do line(tlx+i*width,-cos(i*mult)*amp1+tly+92)end
+line()for i=0,1,inc do line(cos(i*mult)*amp2+tlx-1,tly+i*width)end
+line()for i=0,1,inc do line(cos(i*mult)*amp2+tlx,tly+i*width)end
+line()for i=0,1,inc do line(-cos(i*mult)*amp3+tlx+91,tly+i*width)end
+line()for i=0,1,inc do line(-cos(i*mult)*amp3+tlx+92,tly+i*width)end
 end
 function set_grid(level)
 local mapx,mapy=level%16,level\16
@@ -352,7 +364,7 @@ function unpack_grid_index(index)
 return index%7,index\7
 end
 zclass[[card,actor,vec,drawlayer_50|x,@,sind,@,selected,@,y,141,draw,%card_draw;start;duration,.25,next,normal,dy,-2;normal;dy,0,update,%card_normal_update;ending;update,nop,duration,.25,dy,2;]]
-zclass[[card_selector,actor,vec,drawlayer_50|c1sind,@,c2sind,@,c3sind,@,init,%card_selector_init]]
+zclass[[card_selector,actor,vec,drawlayer_50|itemind,2,init,%card_selector_init,update,%card_selector_update;itemsinds;,@,@,@;items;,;]]
 zclass[[level_state,actor|update,%level_state_update,curr,level_intro;level_intro;init,nop,next,card_select;card_select;init,%card_select_init,next,move_select;move_select;init,%move_select_init,next,player_update;player_update;init,nop,next,enemy_update;enemy_update;init,nop,next,card_select;]]
 function get_move_coordinates(move_type)
 if move_type=="move"then
