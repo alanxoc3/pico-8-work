@@ -37,3 +37,4 @@ function ybtn() return zbtn(btn, 2) end
 function xbtnp() return zbtn(btnp, 0) end
 function ybtnp() return zbtn(btnp, 2) end
 
+function zsgn(num) return num == 0 and 0 or sgn(num) end

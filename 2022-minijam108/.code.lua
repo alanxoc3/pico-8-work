@@ -263,6 +263,47 @@ for m in all(a.moves)do
 _g[m.type](a,a.itemind,m.x,m.y)
 end
 end,function(a)
+local cur_move_x=a.moves[a.moves_ind].x
+local cur_move_y=a.moves[a.moves_ind].y
+local next_ind=a.moves_ind
+if xbtnp()~=0 then
+local smallest_next=8
+local smallest_axis_diff=8
+for i=1,#a.moves do
+local m=a.moves[i]
+local diff=m.x-cur_move_x
+if zsgn(diff)==xbtnp()then
+if abs(diff)<smallest_next then
+smallest_next=abs(diff)
+smallest_axis_diff=abs(m.y-cur_move_y)
+next_ind=i
+elseif abs(diff)==smallest_next and abs(m.y-cur_move_y)<smallest_axis_diff then
+smallest_next=abs(diff)
+smallest_axis_diff=abs(m.y-cur_move_y)
+next_ind=i
+end
+end
+end
+elseif ybtnp()~=0 then
+local smallest_next=8
+local smallest_axis_diff=8
+for i=1,#a.moves do
+local m=a.moves[i]
+local diff=m.y-cur_move_y
+if zsgn(diff)==ybtnp()then
+if abs(diff)<smallest_next then
+smallest_next=abs(diff)
+smallest_axis_diff=abs(m.x-cur_move_x)
+next_ind=i
+elseif abs(diff)==smallest_next and abs(m.x-cur_move_x)<smallest_axis_diff then
+smallest_next=abs(diff)
+smallest_axis_diff=abs(m.x-cur_move_x)
+next_ind=i
+end
+end
+end
+end
+a.moves_ind=next_ind
 if btnp(5)then
 a:load"card_select"
 end
@@ -303,6 +344,7 @@ function xbtn()return zbtn(btn,0)end
 function ybtn()return zbtn(btn,2)end
 function xbtnp()return zbtn(btnp,0)end
 function ybtnp()return zbtn(btnp,2)end
+function zsgn(num)return num==0 and 0 or sgn(num)end
 zclass[[actor,timer|load,%actor_load,loadlogic,%actor_loadlogic,state,%actor_state,kill,%actor_kill,clean,%actor_clean,is_alive,%actor_is_alive,alive,yes,duration,null,curr,start,next,null,isnew,yes,init,nop,update,nop,destroyed,nop;]]
 zclass[[drawlayer_50|]]
 zclass[[timer|timers;,;start_timer,%timer_reset_timer,end_timer,%timer_end_timer,is_active,%timer_is_active,get_elapsed_percent,%timer_get_elapsed_percent,tick,%timer_tick,]]
