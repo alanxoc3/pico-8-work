@@ -27,10 +27,10 @@ zclass[[hermit,tile_sprite,drawlayer_50|
 
 zclass[[sword,tile_sprite,drawlayer_50|
     x,@, y,@,
-    sy,16,
+    sy,8,
     sx,6,
-    sw,2, sh,3,
-    sind,128
+    sw,2, sh,2,
+    sind,200
 ]]
 
 zclass[[enemy|]]
@@ -41,43 +41,15 @@ zclass[[snake,tile_sprite,enemy,drawlayer_50|
     sind,196
 ]]
 
-zclass[[pos_move,tile_sprite,actor,drawlayer_50|
-    sind,140,
-    sx,4, sy,4,
-    sw,1, sh,1,
-    gamestate,@, itemind,@, x,@, y,@,
+zclass[[pos_real,tile_sprite,actor|
+    gamestate,@, itemind,@, x,@, y,@, sind,@, sel_sind,@,
+    sw,1, sh,1, sx,3, sy,3,
     update,%possible_move_obj_update;
 ]]
 
-zclass[[pos_sword,tile_sprite,actor,drawlayer_50|
-    sind,141,
-    sx,4, sy,4,
-    sw,1, sh,1,
-    gamestate,@, itemind,@, x,@, y,@,
-    update,%possible_move_obj_update;
-]]
-
-zclass[[pos_attack,tile_sprite,actor,drawlayer_50|
-    sind,141,
-    sx,4, sy,4,
-    sw,1, sh,1,
-    gamestate,@, itemind,@, x,@, y,@,
-    update,%possible_move_obj_update;
-]]
-
-zclass[[pos_move_small,tile_sprite,actor,drawlayer_50|
-    sind,171,
-    sx,4, sy,4,
-    sw,1, sh,1,
-    gamestate,@, itemind,@, x,@, y,@,
-    update,%possible_move_small_obj_update;
-]]
-
-zclass[[pos_sword_small,tile_sprite,actor,drawlayer_50|
-    sind,155,
-    sx,4, sy,4,
-    sw,1, sh,1,
-    gamestate,@, itemind,@, x,@, y,@,
+zclass[[pos_preview,tile_sprite,actor,drawlayer_50|
+    gamestate,@, itemind,@, x,@, y,@, sind,@, sel_sind,@,
+    sw,1, sh,1, sx,3, sy,3,
     update,%possible_move_small_obj_update;
 ]]
 
@@ -105,6 +77,10 @@ zclass[[selected_move,actor,drawlayer_50|
 end $$
 
 |[selected_move_draw]| function(a)
-    local coord = g_level_state.moves[g_level_state.moves_ind]
-    rect(scr_x(coord.x)-10, scr_y(coord.y)-10, scr_x(coord.x)+10, scr_y(coord.y)+10, 1)
+    for m in all(g_level_state.moves) do
+        spr(m.sind, scr_x(m.x)-3, scr_y(m.y)-3)
+    end
+
+    local m = g_level_state.moves[g_level_state.moves_ind]
+    spr(m.sel_sind, scr_x(m.x)-5, scr_y(m.y)-5, 2, 2)
 end $$

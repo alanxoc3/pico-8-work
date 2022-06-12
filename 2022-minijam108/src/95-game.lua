@@ -169,7 +169,7 @@ end $$
 |[card_select_init]| function(a)
     local moves = get_move_coordinates(a.items[a.itemind].sind)
     for m in all(moves) do
-        _g[m.type_small](a, a.itemind, m.x, m.y)
+        _g.pos_preview(a, a.itemind, m.x, m.y, m.sind, m.sel_sind)
     end
 end $$
 
@@ -182,7 +182,7 @@ end $$
     if a.itemind ~= prev_ind then
         local moves = get_move_coordinates(a.items[a.itemind].sind)
         for m in all(moves) do
-            _g[m.type_small](a, a.itemind, m.x, m.y)
+            _g.pos_preview(a, a.itemind, m.x, m.y, m.sind, m.sel_sind)
         end
     end
 
@@ -201,51 +201,37 @@ end $$
     _g.selected_move()
 
     for m in all(a.moves) do
-        _g[m.type](a, a.itemind, m.x, m.y)
+        _g.pos_real(a, a.itemind, m.x, m.y, m.sind, m.sel_sind)
     end
 end $$
+
+function move_select_update_helper(moves, ind, btnpress, default, axis, default_key, axis_key)
+    local smallest_diff, smallest_axis_diff = 16, 16
+
+    for i=1,#moves do
+        local m = moves[i]
+        local diff, axis_diff = m[default_key] - default, m[axis_key] - axis
+        if zsgn(diff) == btnpress then
+            if abs(axis_diff) < abs(smallest_axis_diff) then
+                smallest_diff, smallest_axis_diff, ind = diff, axis_diff, i
+            elseif abs(axis_diff) == abs(smallest_axis_diff) and abs(diff) < abs(smallest_diff) then
+                smallest_diff, smallest_axis_diff, ind = diff, axis_diff, i
+            elseif abs(axis_diff) == abs(smallest_axis_diff) and abs(diff) == abs(smallest_diff) and axis_diff < smallest_axis_diff then
+                smallest_diff, smallest_axis_diff, ind = diff, axis_diff, i
+            end
+        end
+    end
+
+    return ind
+end
 
 |[move_select_update]| function(a)
     local cur_move_x = a.moves[a.moves_ind].x
     local cur_move_y = a.moves[a.moves_ind].y
     local next_ind = a.moves_ind
 
-    if xbtnp() ~= 0 then
-        local smallest_next = 8
-        local smallest_axis_diff = 8
-        for i=1,#a.moves do
-            local m = a.moves[i]
-            local diff = m.x - cur_move_x
-            if zsgn(diff) == xbtnp() then
-                if abs(diff) < smallest_next then
-                    smallest_next = abs(diff)
-                    smallest_axis_diff = abs(m.y - cur_move_y)
-                    next_ind = i
-                elseif abs(diff) == smallest_next and abs(m.y - cur_move_y) < smallest_axis_diff then
-                    smallest_next = abs(diff)
-                    smallest_axis_diff = abs(m.y - cur_move_y)
-                    next_ind = i
-                end
-            end
-        end
-    elseif ybtnp() ~= 0 then
-        local smallest_next = 8
-        local smallest_axis_diff = 8
-        for i=1,#a.moves do
-            local m = a.moves[i]
-            local diff = m.y - cur_move_y
-            if zsgn(diff) == ybtnp() then
-                if abs(diff) < smallest_next then
-                    smallest_next = abs(diff)
-                    smallest_axis_diff = abs(m.x - cur_move_x)
-                    next_ind = i
-                elseif abs(diff) == smallest_next and abs(m.x - cur_move_x) < smallest_axis_diff then
-                    smallest_next = abs(diff)
-                    smallest_axis_diff = abs(m.x - cur_move_x)
-                    next_ind = i
-                end
-            end
-        end
+        if xbtnp() ~= 0 then next_ind = move_select_update_helper(a.moves, a.moves_ind, xbtnp(), cur_move_x, cur_move_y, 'x', 'y')
+    elseif ybtnp() ~= 0 then next_ind = move_select_update_helper(a.moves, a.moves_ind, ybtnp(), cur_move_y, cur_move_x, 'y', 'x')
     end
 
     a.moves_ind = next_ind
@@ -300,8 +286,8 @@ function is_spot_attackable(x, y)
     return is_spot_valid(x, y) and spot.entity and spot.entity.parents.enemy
 end
 
-function add_spot(list, x, y, type, type_small)
-    add(list, {x=x, y=y, type=type, type_small=type_small})
+function add_spot(list, x, y, sind, sel_sind)
+    add(list, {x=x, y=y, sind=sind, sel_sind=sel_sind})
 end
 
 function add_spot_if_movable(list, x, y, ...)
@@ -321,27 +307,27 @@ function get_move_coordinates(move_type)
     local sc = find_sword_on_grid()
     local spots = {}
     if move_type == 64 then
-        add_spot(spots, sc.x, sc.y, 'pos_sword', 'pos_sword_small')
+        add_spot(spots, sc.x, sc.y, 142, 156)
     elseif move_type == 66 then
-        add_spot_if_attackable(spots, pc.x+1, pc.y, 'pos_sword', 'pos_sword_small')
-        add_spot_if_attackable(spots, pc.x-1, pc.y, 'pos_sword', 'pos_sword_small')
-        add_spot_if_attackable(spots, pc.x, pc.y+1, 'pos_sword', 'pos_sword_small')
-        add_spot_if_attackable(spots, pc.x, pc.y-1, 'pos_sword', 'pos_sword_small')
+        add_spot_if_attackable(spots, pc.x+1, pc.y,   142, 156)
+        add_spot_if_attackable(spots, pc.x-1, pc.y,   142, 156)
+        add_spot_if_attackable(spots, pc.x, pc.y+1,   142, 156)
+        add_spot_if_attackable(spots, pc.x, pc.y-1,   142, 156)
 
-        add_spot_if_attackable(spots, pc.x-1, pc.y-1, 'pos_sword', 'pos_sword_small')
-        add_spot_if_attackable(spots, pc.x-1, pc.y+1, 'pos_sword', 'pos_sword_small')
-        add_spot_if_attackable(spots, pc.x+1, pc.y+1, 'pos_sword', 'pos_sword_small')
-        add_spot_if_attackable(spots, pc.x+1, pc.y-1, 'pos_sword', 'pos_sword_small')
+        add_spot_if_attackable(spots, pc.x-1, pc.y-1, 142, 156)
+        add_spot_if_attackable(spots, pc.x-1, pc.y+1, 142, 156)
+        add_spot_if_attackable(spots, pc.x+1, pc.y+1, 142, 156)
+        add_spot_if_attackable(spots, pc.x+1, pc.y-1, 142, 156)
     elseif move_type == 70 then
-        add_spot_if_movable(spots, pc.x+1, pc.y, 'pos_move', 'pos_move_small')
-        add_spot_if_movable(spots, pc.x-1, pc.y, 'pos_move', 'pos_move_small')
-        add_spot_if_movable(spots, pc.x, pc.y+1, 'pos_move', 'pos_move_small')
-        add_spot_if_movable(spots, pc.x, pc.y-1, 'pos_move', 'pos_move_small')
+        add_spot_if_movable(spots, pc.x+1, pc.y,   143, 158)
+        add_spot_if_movable(spots, pc.x-1, pc.y,   143, 158)
+        add_spot_if_movable(spots, pc.x, pc.y+1,   143, 158)
+        add_spot_if_movable(spots, pc.x, pc.y-1,   143, 158)
 
-        add_spot_if_movable(spots, pc.x-1, pc.y-1, 'pos_move', 'pos_move_small')
-        add_spot_if_movable(spots, pc.x-1, pc.y+1, 'pos_move', 'pos_move_small')
-        add_spot_if_movable(spots, pc.x+1, pc.y+1, 'pos_move', 'pos_move_small')
-        add_spot_if_movable(spots, pc.x+1, pc.y-1, 'pos_move', 'pos_move_small')
+        add_spot_if_movable(spots, pc.x-1, pc.y-1, 143, 158)
+        add_spot_if_movable(spots, pc.x-1, pc.y+1, 143, 158)
+        add_spot_if_movable(spots, pc.x+1, pc.y+1, 143, 158)
+        add_spot_if_movable(spots, pc.x+1, pc.y-1, 143, 158)
     end
 
     return spots
