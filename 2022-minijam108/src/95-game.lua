@@ -223,6 +223,9 @@ function find_on_grid(predicate)
 end
 
 function find_sword_on_grid()
+    return find_on_grid(function(spot)
+        return spot.entity == g_sword
+    end)[1]
 end
 
 function find_pl_on_grid()
@@ -241,6 +244,11 @@ function is_spot_empty(x, y)
     return is_spot_valid(x, y) and spot.entity == nil
 end
 
+function is_spot_movable(x, y)
+    local spot = g_grid[y*7+x]
+    return is_spot_valid(x, y) and spot.entity and spot.entity.id == 'sword'
+end
+
 function is_spot_attackable(x, y)
     local spot = g_grid[y*7+x]
     return is_spot_valid(x, y) and spot.entity and spot.entity.parents.enemy
@@ -250,8 +258,8 @@ function add_spot(list, x, y, type, type_small)
     add(list, {x=x, y=y, type=type, type_small=type_small})
 end
 
-function add_spot_if_empty(list, x, y, ...)
-    if is_spot_empty(x, y) then
+function add_spot_if_movable(list, x, y, ...)
+    if is_spot_empty(x, y) or is_spot_movable(x, y) then
         add_spot(list, x, y, ...)
     end
 end
@@ -264,9 +272,10 @@ end
 
 function get_move_coordinates(move_type)
     local pc = find_pl_on_grid()
+    local sc = find_sword_on_grid()
     local spots = {}
     if move_type == 64 then
-        add_spot(spots, pc.x+1, pc.y, 'pos_sword', 'pos_sword_small')
+        add_spot(spots, sc.x, sc.y, 'pos_sword', 'pos_sword_small')
     elseif move_type == 66 then
         add_spot_if_attackable(spots, pc.x+1, pc.y, 'pos_sword', 'pos_sword_small')
         add_spot_if_attackable(spots, pc.x-1, pc.y, 'pos_sword', 'pos_sword_small')
@@ -278,15 +287,15 @@ function get_move_coordinates(move_type)
         add_spot_if_attackable(spots, pc.x+1, pc.y+1, 'pos_sword', 'pos_sword_small')
         add_spot_if_attackable(spots, pc.x+1, pc.y-1, 'pos_sword', 'pos_sword_small')
     elseif move_type == 70 then
-        add_spot_if_empty(spots, pc.x+1, pc.y, 'pos_move', 'pos_move_small')
-        add_spot_if_empty(spots, pc.x-1, pc.y, 'pos_move', 'pos_move_small')
-        add_spot_if_empty(spots, pc.x, pc.y+1, 'pos_move', 'pos_move_small')
-        add_spot_if_empty(spots, pc.x, pc.y-1, 'pos_move', 'pos_move_small')
+        add_spot_if_movable(spots, pc.x+1, pc.y, 'pos_move', 'pos_move_small')
+        add_spot_if_movable(spots, pc.x-1, pc.y, 'pos_move', 'pos_move_small')
+        add_spot_if_movable(spots, pc.x, pc.y+1, 'pos_move', 'pos_move_small')
+        add_spot_if_movable(spots, pc.x, pc.y-1, 'pos_move', 'pos_move_small')
 
-        add_spot_if_empty(spots, pc.x-1, pc.y-1, 'pos_move', 'pos_move_small')
-        add_spot_if_empty(spots, pc.x-1, pc.y+1, 'pos_move', 'pos_move_small')
-        add_spot_if_empty(spots, pc.x+1, pc.y+1, 'pos_move', 'pos_move_small')
-        add_spot_if_empty(spots, pc.x+1, pc.y-1, 'pos_move', 'pos_move_small')
+        add_spot_if_movable(spots, pc.x-1, pc.y-1, 'pos_move', 'pos_move_small')
+        add_spot_if_movable(spots, pc.x-1, pc.y+1, 'pos_move', 'pos_move_small')
+        add_spot_if_movable(spots, pc.x+1, pc.y+1, 'pos_move', 'pos_move_small')
+        add_spot_if_movable(spots, pc.x+1, pc.y-1, 'pos_move', 'pos_move_small')
     end
 
     return spots
