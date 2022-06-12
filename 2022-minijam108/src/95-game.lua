@@ -145,102 +145,6 @@ end $$
     end
 end $$
 
-zclass[[level_state,actor|
-    itemind,2,
-    curr,pre_card_select;
-
-    items;,;
-
-    pre_card_select;     init,%pre_card_select_init, duration,0, next,card_select;
-    card_select;         init,%card_select_init, update,%card_select_update, next,move_select;
-    move_select;         init,%move_select_init, update,%move_select_update;
-    player_update;       init,nop,               nop, next,enemy_update;
-    enemy_update;        init,nop,               nop, next,card_select;
-]]
-
-|[pre_card_select_init]| function(a)
-    a.items = {
-        _g.card(35,       128, false),
-        _g.card(35+21,    130, true),
-        _g.card(35+21+21, 134, false)
-    }
-end $$
-
-|[card_select_init]| function(a)
-    local moves = get_move_coordinates(a.items[a.itemind].sind)
-    for m in all(moves) do
-        _g.pos_preview(a, a.itemind, m.x, m.y, m.sind, m.sel_sind)
-    end
-end $$
-
-|[card_select_update]| function(a)
-    local prev_ind = a.itemind
-    if xbtnp() ~= 0 then
-        a.itemind = mid(1, a.itemind +xbtnp(), 3)
-    end
-
-    if a.itemind ~= prev_ind then
-        local moves = get_move_coordinates(a.items[a.itemind].sind)
-        for m in all(moves) do
-            _g.pos_preview(a, a.itemind, m.x, m.y, m.sind, m.sel_sind)
-        end
-    end
-
-    for i=1,#a.items do
-        a.items[i].selected = i == a.itemind
-    end
-
-    if btnp'4' then
-        a:load'move_select'
-    end
-end $$
-
-|[move_select_init]| function(a)
-    a.moves = get_move_coordinates(a.items[a.itemind].sind)
-    a.moves_ind = 1
-    _g.selected_move()
-
-    for m in all(a.moves) do
-        _g.pos_real(a, a.itemind, m.x, m.y, m.sind, m.sel_sind)
-    end
-end $$
-
-function move_select_update_helper(moves, ind, btnpress, default, axis, default_key, axis_key)
-    local smallest_diff, smallest_axis_diff = 16, 16
-
-    for i=1,#moves do
-        local m = moves[i]
-        local diff, axis_diff = m[default_key] - default, m[axis_key] - axis
-        if zsgn(diff) == btnpress then
-            if abs(axis_diff) < abs(smallest_axis_diff) then
-                smallest_diff, smallest_axis_diff, ind = diff, axis_diff, i
-            elseif abs(axis_diff) == abs(smallest_axis_diff) and abs(diff) < abs(smallest_diff) then
-                smallest_diff, smallest_axis_diff, ind = diff, axis_diff, i
-            elseif abs(axis_diff) == abs(smallest_axis_diff) and abs(diff) == abs(smallest_diff) and axis_diff < smallest_axis_diff then
-                smallest_diff, smallest_axis_diff, ind = diff, axis_diff, i
-            end
-        end
-    end
-
-    return ind
-end
-
-|[move_select_update]| function(a)
-    local cur_move_x = a.moves[a.moves_ind].x
-    local cur_move_y = a.moves[a.moves_ind].y
-    local next_ind = a.moves_ind
-
-        if xbtnp() ~= 0 then next_ind = move_select_update_helper(a.moves, a.moves_ind, xbtnp(), cur_move_x, cur_move_y, 'x', 'y')
-    elseif ybtnp() ~= 0 then next_ind = move_select_update_helper(a.moves, a.moves_ind, ybtnp(), cur_move_y, cur_move_x, 'y', 'x')
-    end
-
-    a.moves_ind = next_ind
-
-    if btnp(5) then
-        a:load'card_select'
-    end
-end $$
-
 -- returns list of {{x=1,y=1}}
 function find_on_grid(predicate)
     local l = {}
@@ -339,4 +243,22 @@ end
     -- for each next move, make a new object
 
 -- Object has it's own reference of where it is. Object is also in the grid. So you can loop through the grid and loop through function on all the objects.
--- 
+
+zclass[[status_text,actor,vec,drawlayer_50|
+    text,@, checkstate,@, 
+    x,64, y,146,
+    draw,%status_text_draw;
+    start;duration,.25, next,normal, dy,-2;
+    normal;dy,0, update,%status_text_update;
+    ending;update,nop, duration,.25, dy,2;
+]]
+
+|[status_text_draw]| function(a)
+    print("\^w"..a.text.."\^-w", a.x-#a.text*4, a.y, 7)
+end $$
+
+|[status_text_update]| function(a)
+    if g_level_state.curr ~= a.checkstate then
+        a:kill()
+    end
+end $$

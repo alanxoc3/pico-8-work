@@ -92,7 +92,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,tile_sprite_draw,@,hermit_update,@,possible_move_obj_update,@,possible_move_small_obj_update,@,selected_move_update,@,selected_move_draw,@,test_init,@,test_update,@,test_draw,@,game_init,@,game_update,@,game_draw,@,card_draw,@,card_normal_update,@,pre_card_select_init,@,card_select_init,@,card_select_update,@,move_select_init,@,move_select_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,tile_sprite_draw,@,hermit_update,@,possible_move_obj_update,@,possible_move_small_obj_update,@,selected_move_update,@,selected_move_draw,@,pre_card_select_init,@,card_select_init,@,card_select_update,@,move_select_init,@,move_select_update,@,player_update_init,@,baddie_update_init,@,test_init,@,test_update,@,test_draw,@,game_init,@,game_update,@,game_draw,@,card_draw,@,card_normal_update,@,status_text_draw,@,status_text_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@]],function(a,stateName)
 a.next_state=a.next_state or stateName
 end,function(a,stateName)
 a.next_state,a.isnew=nil
@@ -213,37 +213,6 @@ spr(m.sind,scr_x(m.x)-3,scr_y(m.y)-3)
 end
 local m=g_level_state.moves[g_level_state.moves_ind]
 spr(m.sel_sind,scr_x(m.x)-5,scr_y(m.y)-5,2,2)
-end,function(a)a.color+=1 end,function(a)a.x+=xbtn()a.y+=ybtn()end,function(a)circfill(a.x,a.y,2,a.color)end,function()
-g_level=0
-g_level_state=_g.level_state()
-g_grid=set_grid(g_level)
-_g.fader_in()
-_g.test_obj(64,64)
-end,function()
-zcall(loop_entities,[[1;,timer,tick;2;,actor,state;3;,mov,mov_update;4;,vec,vec_update;]])
-end,function()
-rectfill(0,0,127,127,12)
-g_offx,g_offy=64,53
-draw_tiles()
-loop_entities("drawlayer_50","draw")
-if g_debug then
-rect(0,0,127,127,8)
-end
-end,function(a)
-local offy=0
-if a.selected then
-offy=-2
-spr(168,a.x,a.y+offy-1,2,2)
-spr(168,a.x,a.y+offy,2,2)
-spr(141,a.x+4,a.y+16)
-elseif g_level_state.curr!="card_select"then
-offy=13
-end
-spr(a.sind,a.x,a.y+offy,2,2)
-end,function(a)
-if g_level_state.curr!="card_select"and g_level_state.curr!="move_select"then
-a:kill()
-end
 end,function(a)
 a.items={
 _g.card(35,128,false),
@@ -289,6 +258,49 @@ end
 a.moves_ind=next_ind
 if btnp(5)then
 a:load"card_select"
+elseif btnp(4)then
+a:load"player_update"
+end
+end,function(a)
+_g.status_text("hermit turn","player_update")
+end,function(a)
+_g.status_text("baddie turn","baddie_update")
+end,function(a)a.color+=1 end,function(a)a.x+=xbtn()a.y+=ybtn()end,function(a)circfill(a.x,a.y,2,a.color)end,function()
+g_level=0
+g_level_state=_g.level_state()
+g_grid=set_grid(g_level)
+_g.fader_in()
+_g.test_obj(64,64)
+end,function()
+zcall(loop_entities,[[1;,timer,tick;2;,actor,state;3;,mov,mov_update;4;,vec,vec_update;]])
+end,function()
+rectfill(0,0,127,127,12)
+g_offx,g_offy=64,53
+draw_tiles()
+loop_entities("drawlayer_50","draw")
+if g_debug then
+rect(0,0,127,127,8)
+end
+end,function(a)
+local offy=0
+if a.selected then
+offy=-2
+spr(168,a.x,a.y+offy-1,2,2)
+spr(168,a.x,a.y+offy,2,2)
+spr(141,a.x+4,a.y+16)
+elseif g_level_state.curr!="card_select"then
+offy=13
+end
+spr(a.sind,a.x,a.y+offy,2,2)
+end,function(a)
+if g_level_state.curr!="card_select"and g_level_state.curr!="move_select"then
+a:kill()
+end
+end,function(a)
+print("\^w"..a.text.."\^-w",a.x-#a.text*4,a.y,7)
+end,function(a)
+if g_level_state.curr ~=a.checkstate then
+a:kill()
 end
 end,function(a)
 poke(0x5f43,0xff)
@@ -351,6 +363,24 @@ zclass[[snake,tile_sprite,enemy,drawlayer_50|x,@,y,@,sind,196]]
 zclass[[pos_real,tile_sprite,actor|gamestate,@,itemind,@,x,@,y,@,sind,@,sel_sind,@,update,%possible_move_obj_update;]]
 zclass[[pos_preview,tile_sprite,actor,drawlayer_50|gamestate,@,itemind,@,x,@,y,@,sind,@,sel_sind,@,update,%possible_move_small_obj_update;]]
 zclass[[selected_move,actor,drawlayer_50|update,%selected_move_update,draw,%selected_move_draw]]
+zclass[[level_state,actor|itemind,2,curr,pre_card_select;items;,;pre_card_select;init,%pre_card_select_init,update,nop,duration,0,next,card_select;card_select;init,%card_select_init,update,%card_select_update;move_select;init,%move_select_init,update,%move_select_update;player_update;init,%player_update_init,update,nop,duration,1,next,baddie_update;baddie_update;init,%baddie_update_init,update,nop,duration,1,next,pre_card_select;]]
+function move_select_update_helper(moves,ind,btnpress,default,axis,default_key,axis_key)
+local smallest_diff,smallest_axis_diff=16,16
+for i=1,#moves do
+local m=moves[i]
+local diff,axis_diff=m[default_key]-default,m[axis_key]-axis
+if zsgn(diff)==btnpress then
+if abs(axis_diff)<abs(smallest_axis_diff)then
+smallest_diff,smallest_axis_diff,ind=diff,axis_diff,i
+elseif abs(axis_diff)==abs(smallest_axis_diff)and abs(diff)<abs(smallest_diff)then
+smallest_diff,smallest_axis_diff,ind=diff,axis_diff,i
+elseif abs(axis_diff)==abs(smallest_axis_diff)and abs(diff)==abs(smallest_diff)and axis_diff<smallest_axis_diff then
+smallest_diff,smallest_axis_diff,ind=diff,axis_diff,i
+end
+end
+end
+return ind
+end
 zclass[[test_obj,actor,drawlayer_50|x,@,y,@,color,7,init,%test_init,update,%test_update,draw,%test_draw;]]
 function round(num)return flr(num+.5)end
 function print_vert_wobble(text,x,y,col,off,wob)
@@ -419,24 +449,6 @@ function unpack_grid_index(index)
 return index%7,index\7
 end
 zclass[[card,actor,vec,drawlayer_50|x,@,sind,@,selected,@,y,141,draw,%card_draw;start;duration,.25,next,normal,dy,-2;normal;dy,0,update,%card_normal_update;ending;update,nop,duration,.25,dy,2;]]
-zclass[[level_state,actor|itemind,2,curr,pre_card_select;items;,;pre_card_select;init,%pre_card_select_init,duration,0,next,card_select;card_select;init,%card_select_init,update,%card_select_update,next,move_select;move_select;init,%move_select_init,update,%move_select_update;player_update;init,nop,nop,next,enemy_update;enemy_update;init,nop,nop,next,card_select;]]
-function move_select_update_helper(moves,ind,btnpress,default,axis,default_key,axis_key)
-local smallest_diff,smallest_axis_diff=16,16
-for i=1,#moves do
-local m=moves[i]
-local diff,axis_diff=m[default_key]-default,m[axis_key]-axis
-if zsgn(diff)==btnpress then
-if abs(axis_diff)<abs(smallest_axis_diff)then
-smallest_diff,smallest_axis_diff,ind=diff,axis_diff,i
-elseif abs(axis_diff)==abs(smallest_axis_diff)and abs(diff)<abs(smallest_diff)then
-smallest_diff,smallest_axis_diff,ind=diff,axis_diff,i
-elseif abs(axis_diff)==abs(smallest_axis_diff)and abs(diff)==abs(smallest_diff)and axis_diff<smallest_axis_diff then
-smallest_diff,smallest_axis_diff,ind=diff,axis_diff,i
-end
-end
-end
-return ind
-end
 function find_on_grid(predicate)
 local l={}
 for y=0,6 do
@@ -514,6 +526,7 @@ add_spot_if_movable(spots,pc.x+1,pc.y-1,143,158)
 end
 return spots
 end
+zclass[[status_text,actor,vec,drawlayer_50|text,@,checkstate,@,x,64,y,146,draw,%status_text_draw;start;duration,.25,next,normal,dy,-2;normal;dy,0,update,%status_text_update;ending;update,nop,duration,.25,dy,2;]]
 g_fade,g_fade_table=1,zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,1,0,0,0,0;3;,3,3,3,3,1,1,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,0,0,0,0;6;,6,6,13,13,5,5,0,0;7;,7,7,6,13,13,5,0,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,0,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,0,0,0;13;,13,13,5,5,1,0,0,0;14;,14,14,13,4,2,2,0,0;15;,15,15,13,13,5,5,0,0;]]
 function fade(threshold)
 for c=0,15 do
