@@ -309,8 +309,8 @@ local midr=7/2*13
 return y*13+g_offy-midr+13/2-1
 end
 zclass[[tile_sprite,pos|sx,8,sy,8,sw,2,sh,2,draw,%tile_sprite_draw]]
-zclass[[hermit,tile_sprite,drawlayer_50|x,@,y,@,sind,1]]
-zclass[[sword,tile_sprite,drawlayer_50|x,@,y,@,sy,14,sx,6,sw,2,sh,3,sind,128]]
+zclass[[hermit,tile_sprite,drawlayer_50|x,@,y,@,sy,12,sx,9,sind,1]]
+zclass[[sword,tile_sprite,drawlayer_50|x,@,y,@,sy,18,sx,6,sw,2,sh,3,sind,128]]
 zclass[[enemy|]]
 zclass[[snake,tile_sprite,enemy,drawlayer_50|x,@,y,@,sx,3,sy,8,sw,1,sh,2,sind,196]]
 zclass[[pos_move,tile_sprite,actor,drawlayer_50|sind,140,sx,4,sy,4,sw,1,sh,1,gamestate,@,itemind,@,x,@,y,@,update,%possible_move_obj_update;]]
