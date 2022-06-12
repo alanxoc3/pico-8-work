@@ -9,22 +9,33 @@ function scr_y(y)
 end
 
 zclass[[tile_sprite,pos|
-    sx,8, sy,8,
-    sw,2, sh,2,
     draw,%tile_sprite_draw
 ]]
 
 |[tile_sprite_draw]| function(a)
-    spr(a.sind, scr_x(a.x)-a.sx, scr_y(a.y)-a.sy, a.sw, a.sh)
+    if a.sind then
+        spr(a.sind, scr_x(a.x)-g_spr_info[a.sind][3], scr_y(a.y)-g_spr_info[a.sind][4], g_spr_info[a.sind][1], g_spr_info[a.sind][2])
+    end
 end $$
 
-zclass[[hermit,tile_sprite,drawlayer_50|
-    x,@, y,@,
-    sy,21,
-    sx,8,
-    sw,2, sh,4,
-    sind,0
+zclass[[hermit,actor,tile_sprite,drawlayer_50|
+    x,@, y,@, update,%hermit_update
 ]]
+
+|[hermit_update]| function(a)
+    local xdiff = g_sword.x - a.x
+    local ydiff = g_sword.y - a.y
+        if xdiff == 0 and ydiff < 0 then a.sind = 0
+    elseif xdiff == 0 and ydiff > 0 then a.sind = 2
+    elseif ydiff == 0 and xdiff < 0 then a.sind = 4
+    elseif ydiff == 0 and xdiff > 0 then a.sind = 36
+
+    elseif xdiff > 0 and ydiff > 0 then a.sind = 67
+    elseif xdiff > 0 and ydiff < 0 then a.sind = 64
+    elseif xdiff < 0 and ydiff > 0 then a.sind = 70
+    elseif xdiff < 0 and ydiff < 0 then a.sind = 73
+    end
+end $$
 
 zclass[[sword|
     x,@, y,@
@@ -33,20 +44,16 @@ zclass[[sword|
 zclass[[enemy|]]
 zclass[[snake,tile_sprite,enemy,drawlayer_50|
     x,@, y,@,
-    sx,3,sy,8,
-    sw,1,sh,2,
     sind,196
 ]]
 
 zclass[[pos_real,tile_sprite,actor|
     gamestate,@, itemind,@, x,@, y,@, sind,@, sel_sind,@,
-    sw,1, sh,1, sx,3, sy,3,
     update,%possible_move_obj_update;
 ]]
 
 zclass[[pos_preview,tile_sprite,actor,drawlayer_50|
     gamestate,@, itemind,@, x,@, y,@, sind,@, sel_sind,@,
-    sw,1, sh,1, sx,3, sy,3,
     update,%possible_move_small_obj_update;
 ]]
 
