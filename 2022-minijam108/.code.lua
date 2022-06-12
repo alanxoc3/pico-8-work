@@ -381,6 +381,83 @@ end
 end
 return ind
 end
+function get_move_coordinates(move_type)
+local pc=find_pl_on_grid()
+local sc=find_sword_on_grid()
+local spots={}
+if move_type==128 then
+add_spot(spots,sc.x,sc.y,142,156)
+elseif move_type==130 then
+add_spot_if_attackable(spots,pc.x+1,pc.y,142,156)
+add_spot_if_attackable(spots,pc.x-1,pc.y,142,156)
+add_spot_if_attackable(spots,pc.x,pc.y+1,142,156)
+add_spot_if_attackable(spots,pc.x,pc.y-1,142,156)
+add_spot_if_attackable(spots,pc.x-1,pc.y-1,142,156)
+add_spot_if_attackable(spots,pc.x-1,pc.y+1,142,156)
+add_spot_if_attackable(spots,pc.x+1,pc.y+1,142,156)
+add_spot_if_attackable(spots,pc.x+1,pc.y-1,142,156)
+elseif move_type==134 then
+add_spot_if_movable(spots,pc.x+1,pc.y,143,158)
+add_spot_if_movable(spots,pc.x-1,pc.y,143,158)
+add_spot_if_movable(spots,pc.x,pc.y+1,143,158)
+add_spot_if_movable(spots,pc.x,pc.y-1,143,158)
+add_spot_if_movable(spots,pc.x-1,pc.y-1,143,158)
+add_spot_if_movable(spots,pc.x-1,pc.y+1,143,158)
+add_spot_if_movable(spots,pc.x+1,pc.y+1,143,158)
+add_spot_if_movable(spots,pc.x+1,pc.y-1,143,158)
+end
+return spots
+end
+function find_on_grid(predicate)
+local l={}
+for y=0,6 do
+for x=0,6 do
+if predicate(g_grid[y*7+x])then
+add(l,{x=x,y=y})
+end
+end
+end
+return l
+end
+function find_sword_on_grid()
+return find_on_grid(function(spot)
+return spot.entity==g_sword
+end)[1]
+end
+function find_pl_on_grid()
+return find_on_grid(function(spot)
+return spot.entity==g_pl
+end)[1]
+end
+function is_spot_valid(x,y)
+local spot=g_grid[y*7+x]
+return x>=0 and x<=6 and y>=0 and y<=6 and spot.active
+end
+function is_spot_empty(x,y)
+local spot=g_grid[y*7+x]
+return is_spot_valid(x,y)and spot.entity==nil
+end
+function is_spot_movable(x,y)
+local spot=g_grid[y*7+x]
+return is_spot_valid(x,y)and spot.entity and spot.entity.id=="sword"
+end
+function is_spot_attackable(x,y)
+local spot=g_grid[y*7+x]
+return is_spot_valid(x,y)and spot.entity and spot.entity.parents.enemy
+end
+function add_spot(list,x,y,sind,sel_sind)
+add(list,{x=x,y=y,sind=sind,sel_sind=sel_sind})
+end
+function add_spot_if_movable(list,x,y,...)
+if is_spot_empty(x,y)or is_spot_movable(x,y)then
+add_spot(list,x,y,...)
+end
+end
+function add_spot_if_attackable(list,x,y,...)
+if is_spot_empty(x,y)or is_spot_attackable(x,y)then
+add_spot(list,x,y,...)
+end
+end
 zclass[[test_obj,actor,drawlayer_50|x,@,y,@,color,7,init,%test_init,update,%test_update,draw,%test_draw;]]
 function round(num)return flr(num+.5)end
 function print_vert_wobble(text,x,y,col,off,wob)
@@ -449,83 +526,6 @@ function unpack_grid_index(index)
 return index%7,index\7
 end
 zclass[[card,actor,vec,drawlayer_50|x,@,sind,@,selected,@,y,141,draw,%card_draw;start;duration,.25,next,normal,dy,-2;normal;dy,0,update,%card_normal_update;ending;update,nop,duration,.25,dy,2;]]
-function find_on_grid(predicate)
-local l={}
-for y=0,6 do
-for x=0,6 do
-if predicate(g_grid[y*7+x])then
-add(l,{x=x,y=y})
-end
-end
-end
-return l
-end
-function find_sword_on_grid()
-return find_on_grid(function(spot)
-return spot.entity==g_sword
-end)[1]
-end
-function find_pl_on_grid()
-return find_on_grid(function(spot)
-return spot.entity==g_pl
-end)[1]
-end
-function is_spot_valid(x,y)
-local spot=g_grid[y*7+x]
-return x>=0 and x<=6 and y>=0 and y<=6 and spot.active
-end
-function is_spot_empty(x,y)
-local spot=g_grid[y*7+x]
-return is_spot_valid(x,y)and spot.entity==nil
-end
-function is_spot_movable(x,y)
-local spot=g_grid[y*7+x]
-return is_spot_valid(x,y)and spot.entity and spot.entity.id=="sword"
-end
-function is_spot_attackable(x,y)
-local spot=g_grid[y*7+x]
-return is_spot_valid(x,y)and spot.entity and spot.entity.parents.enemy
-end
-function add_spot(list,x,y,sind,sel_sind)
-add(list,{x=x,y=y,sind=sind,sel_sind=sel_sind})
-end
-function add_spot_if_movable(list,x,y,...)
-if is_spot_empty(x,y)or is_spot_movable(x,y)then
-add_spot(list,x,y,...)
-end
-end
-function add_spot_if_attackable(list,x,y,...)
-if is_spot_empty(x,y)or is_spot_attackable(x,y)then
-add_spot(list,x,y,...)
-end
-end
-function get_move_coordinates(move_type)
-local pc=find_pl_on_grid()
-local sc=find_sword_on_grid()
-local spots={}
-if move_type==128 then
-add_spot(spots,sc.x,sc.y,142,156)
-elseif move_type==130 then
-add_spot_if_attackable(spots,pc.x+1,pc.y,142,156)
-add_spot_if_attackable(spots,pc.x-1,pc.y,142,156)
-add_spot_if_attackable(spots,pc.x,pc.y+1,142,156)
-add_spot_if_attackable(spots,pc.x,pc.y-1,142,156)
-add_spot_if_attackable(spots,pc.x-1,pc.y-1,142,156)
-add_spot_if_attackable(spots,pc.x-1,pc.y+1,142,156)
-add_spot_if_attackable(spots,pc.x+1,pc.y+1,142,156)
-add_spot_if_attackable(spots,pc.x+1,pc.y-1,142,156)
-elseif move_type==134 then
-add_spot_if_movable(spots,pc.x+1,pc.y,143,158)
-add_spot_if_movable(spots,pc.x-1,pc.y,143,158)
-add_spot_if_movable(spots,pc.x,pc.y+1,143,158)
-add_spot_if_movable(spots,pc.x,pc.y-1,143,158)
-add_spot_if_movable(spots,pc.x-1,pc.y-1,143,158)
-add_spot_if_movable(spots,pc.x-1,pc.y+1,143,158)
-add_spot_if_movable(spots,pc.x+1,pc.y+1,143,158)
-add_spot_if_movable(spots,pc.x+1,pc.y-1,143,158)
-end
-return spots
-end
 zclass[[status_text,actor,vec,drawlayer_50|text,@,checkstate,@,x,64,y,146,draw,%status_text_draw;start;duration,.25,next,normal,dy,-2;normal;dy,0,update,%status_text_update;ending;update,nop,duration,.25,dy,2;]]
 g_fade,g_fade_table=1,zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,1,0,0,0,0;3;,3,3,3,3,1,1,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,0,0,0,0;6;,6,6,13,13,5,5,0,0;7;,7,7,6,13,13,5,0,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,0,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,0,0,0;13;,13,13,5,5,1,0,0,0;14;,14,14,13,4,2,2,0,0;15;,15,15,13,13,5,5,0,0;]]
 function fade(threshold)
