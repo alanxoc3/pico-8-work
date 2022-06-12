@@ -92,7 +92,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,tile_sprite_draw,@,possible_move_obj_update,@,possible_move_small_obj_update,@,test_init,@,test_update,@,test_draw,@,game_init,@,game_update,@,game_draw,@,card_draw,@,card_normal_update,@,pre_card_select_init,@,card_select_init,@,card_select_update,@,move_select_init,@,move_select_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,tile_sprite_draw,@,possible_move_obj_update,@,possible_move_small_obj_update,@,selected_move_update,@,selected_move_draw,@,test_init,@,test_update,@,test_draw,@,game_init,@,game_update,@,game_draw,@,card_draw,@,card_normal_update,@,pre_card_select_init,@,card_select_init,@,card_select_update,@,move_select_init,@,move_select_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@]],function(a,stateName)
 a.next_state=a.next_state or stateName
 end,function(a,stateName)
 a.next_state,a.isnew=nil
@@ -189,6 +189,13 @@ end,function(a)
 if a.gamestate.itemind ~=a.itemind or a.gamestate.curr ~="card_select"then
 a:kill()
 end
+end,function(a)
+if g_level_state.curr ~="move_select"then
+a:kill()
+end
+end,function(a)
+local coord=g_level_state.moves[g_level_state.moves_ind]
+rect(scr_x(coord.x)-10,scr_y(coord.y)-10,scr_x(coord.x)+10,scr_y(coord.y)+10,1)
 end,function(a)a.color+=1 end,function(a)a.x+=xbtn()a.y+=ybtn()end,function(a)circfill(a.x,a.y,2,a.color)end,function()
 g_level=0
 g_level_state=_g.level_state()
@@ -250,6 +257,8 @@ a:load"move_select"
 end
 end,function(a)
 a.moves=get_move_coordinates(a.items[a.itemind].sind)
+a.moves_ind=1
+_g.selected_move()
 for m in all(a.moves)do
 _g[m.type](a,a.itemind,m.x,m.y)
 end
@@ -310,7 +319,7 @@ return y*13+g_offy-midr+13/2-1
 end
 zclass[[tile_sprite,pos|sx,8,sy,8,sw,2,sh,2,draw,%tile_sprite_draw]]
 zclass[[hermit,tile_sprite,drawlayer_50|x,@,y,@,sy,12,sx,9,sind,1]]
-zclass[[sword,tile_sprite,drawlayer_50|x,@,y,@,sy,18,sx,6,sw,2,sh,3,sind,128]]
+zclass[[sword,tile_sprite,drawlayer_50|x,@,y,@,sy,17,sx,6,sw,2,sh,3,sind,128]]
 zclass[[enemy|]]
 zclass[[snake,tile_sprite,enemy,drawlayer_50|x,@,y,@,sx,3,sy,8,sw,1,sh,2,sind,196]]
 zclass[[pos_move,tile_sprite,actor,drawlayer_50|sind,140,sx,4,sy,4,sw,1,sh,1,gamestate,@,itemind,@,x,@,y,@,update,%possible_move_obj_update;]]
@@ -318,6 +327,7 @@ zclass[[pos_sword,tile_sprite,actor,drawlayer_50|sind,141,sx,4,sy,4,sw,1,sh,1,ga
 zclass[[pos_attack,tile_sprite,actor,drawlayer_50|sind,141,sx,4,sy,4,sw,1,sh,1,gamestate,@,itemind,@,x,@,y,@,update,%possible_move_obj_update;]]
 zclass[[pos_move_small,tile_sprite,actor,drawlayer_50|sind,171,sx,4,sy,4,sw,1,sh,1,gamestate,@,itemind,@,x,@,y,@,update,%possible_move_small_obj_update;]]
 zclass[[pos_sword_small,tile_sprite,actor,drawlayer_50|sind,155,sx,4,sy,4,sw,1,sh,1,gamestate,@,itemind,@,x,@,y,@,update,%possible_move_small_obj_update;]]
+zclass[[selected_move,actor,drawlayer_50|update,%selected_move_update,draw,%selected_move_draw]]
 zclass[[test_obj,actor,drawlayer_50|x,@,y,@,color,7,init,%test_init,update,%test_update,draw,%test_draw;]]
 function round(num)return flr(num+.5)end
 function print_vert_wobble(text,x,y,col,off,wob)

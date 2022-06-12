@@ -197,6 +197,8 @@ end $$
 
 |[move_select_init]| function(a)
     a.moves = get_move_coordinates(a.items[a.itemind].sind)
+    a.moves_ind = 1
+    _g.selected_move()
 
     for m in all(a.moves) do
         _g[m.type](a, a.itemind, m.x, m.y)
