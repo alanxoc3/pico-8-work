@@ -25,6 +25,7 @@ zclass[[hermit,tile_sprite,drawlayer_50|
 
 zclass[[sword,tile_sprite,drawlayer_50|
     x,@, y,@,
+    sy,16,
     sw,2, sh,3,
     sind,128
 ]]
