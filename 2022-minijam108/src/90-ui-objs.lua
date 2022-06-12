@@ -23,6 +23,12 @@ zclass[[hermit,tile_sprite,drawlayer_50|
     sind,SPR_PL
 ]]
 
+zclass[[sword,tile_sprite,drawlayer_50|
+    x,@, y,@,
+    sw,2, sh,3,
+    sind,128
+]]
+
 zclass[[enemy|]]
 zclass[[snake,tile_sprite,enemy,drawlayer_50|
     x,@, y,@,

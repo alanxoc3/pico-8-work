@@ -310,6 +310,7 @@ return y*13+g_offy-midr+13/2-1
 end
 zclass[[tile_sprite,pos|sx,8,sy,8,sw,2,sh,2,draw,%tile_sprite_draw]]
 zclass[[hermit,tile_sprite,drawlayer_50|x,@,y,@,sind,1]]
+zclass[[sword,tile_sprite,drawlayer_50|x,@,y,@,sw,2,sh,3,sind,128]]
 zclass[[enemy|]]
 zclass[[snake,tile_sprite,enemy,drawlayer_50|x,@,y,@,sx,3,sy,8,sw,1,sh,2,sind,196]]
 zclass[[pos_move,tile_sprite,actor,drawlayer_50|sind,140,sx,4,sy,4,sw,1,sh,1,gamestate,@,itemind,@,x,@,y,@,update,%possible_move_obj_update;]]
@@ -370,6 +371,9 @@ local spot={active=true}
 if objind==240 then
 spot.entity=_g.hermit(x,y)
 g_pl=spot.entity
+elseif objind==246 then
+spot.entity=_g.sword(x,y)
+g_sword=spot.entity
 elseif objind==242 then
 spot.entity=_g.snake(x,y)
 end

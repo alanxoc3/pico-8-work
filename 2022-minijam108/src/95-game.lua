@@ -96,6 +96,10 @@ function set_grid(level)
             if objind == MAP_PL then
                 spot.entity = _g.hermit(x, y)
                 g_pl = spot.entity
+
+            elseif objind == MAP_SWORD then
+                spot.entity = _g.sword(x, y)
+                g_sword = spot.entity
                 
             elseif objind == MAP_SNAKE then
                 spot.entity = _g.snake(x, y)
