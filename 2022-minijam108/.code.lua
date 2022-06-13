@@ -226,6 +226,9 @@ end
 local m=g_level_state.moves[g_level_state.moves_ind]
 spr(m.sel_sind,scr_x(m.x)-5,scr_y(m.y)-5,2,2)
 end,function(a)
+if a.target_x==g_sword.target_x and a.target_y==g_sword.target_y then
+a:kill()
+end
 if a.dx<0 then a.sind=42
 elseif a.dx>0 then a.sind=46
 elseif a.dy<0 then a.sind=40
@@ -246,6 +249,20 @@ rnd_item(possible_spots)
 end,function(a)
 a.item_inds={get_random_card_ind(),get_random_card_ind(),get_random_card_ind()}
 end,function(a)
+if is_level_win()then
+a:kill()
+_g.fader_out(function()
+g_level+=1
+g_tl:load"game"
+end)
+elseif is_level_lose()then
+a:kill()
+_g.fader_out(function()
+g_tl:load"game"
+end)
+else
+a:load"card_select"
+end
 a.items={}
 for i=1,#a.item_inds do
 add(a.items,_g.card(35+(i-1)*21,a.item_inds[i],false))
@@ -321,6 +338,7 @@ a.path=a.baddie:get_path()
 end
 end,function(a)
 if a.timers.baddie_update.elapsed and a.timers.baddie_update.elapsed>.5 and a.reset_turn_timer then
+if a.baddie then
 a.reset_turn_timer=false
 local spot=deli(a.path,1)
 a.baddie.target_x,a.baddie.target_y=spot.x,spot.y
@@ -340,9 +358,12 @@ a:load"pre_card_select"
 end
 end
 end)
+else
+a.reset_turn_timer=false
+a:load"pre_card_select"
+end
 end
 end,function()
-g_level=0
 g_level_state=_g.level_state()
 g_grid=set_grid(g_level)
 _g.fader_in()
@@ -454,10 +475,12 @@ zclass[[pos_preview,actor,drawlayer_50|gamestate,@,itemind,@,x,@,y,@,sind,@,sel_
 zclass[[selected_move,actor,drawlayer_50|update,%selected_move_update,draw,%selected_move_draw]]
 zclass[[enemy|get_path,nil]]
 zclass[[snake,tile_entity,enemy,drawlayer_50|x,@,y,@,target_x,~x,target_y,~y,sind,40,get_path,%snake_get_path,update,%snake_update]]
-zclass[[level_state,actor|itemind,2,items;,;start;init,%level_state_init,update,nop,duration,0,next,pre_card_select;pre_card_select;init,%pre_card_select_init,update,nop,duration,0,next,card_select;card_select;init,%card_select_init,update,%card_select_update;move_select;init,%move_select_init,update,%move_select_update;player_update;init,%player_update_init,update,%player_update_update;baddie_update;init,%baddie_update_init,update,%baddie_update_update;]]
+zclass[[level_state,actor|itemind,2,items;,;start;init,%level_state_init,update,nop,duration,0,next,pre_card_select;pre_card_select;init,%pre_card_select_init;card_select;init,%card_select_init,update,%card_select_update;move_select;init,%move_select_init,update,%move_select_update;player_update;init,%player_update_init,update,%player_update_update;baddie_update;init,%baddie_update_init,update,%baddie_update_update;]]
 function get_random_card_ind()
 return rnd_item{128,130,134,160,164,166}
 end
+function is_level_win()return not get_next_baddie{}end
+function is_level_lose()return not g_pl:is_alive()end
 function move_select_update_helper(moves,ind,btnpress,default,axis,default_key,axis_key)
 local smallest_diff,smallest_axis_diff=16,16
 for i=1,#moves do
@@ -598,6 +621,7 @@ return{
 {x=plx,y=ply,sx=x,sy=y}
 }
 end
+g_level=0
 function round(num)return flr(num+.5)end
 function print_vert_wobble(text,x,y,col,off,wob)
 for i=1,#text do

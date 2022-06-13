@@ -12,6 +12,10 @@ zclass[[snake,tile_entity,enemy,drawlayer_50|
 ]]
 
 |[snake_update]| function(a)
+    if a.target_x == g_sword.target_x and a.target_y == g_sword.target_y then
+        a:kill()
+    end
+
         if a.dx < 0 then a.sind = 42
     elseif a.dx > 0 then a.sind = 46
     elseif a.dy < 0 then a.sind = 40
