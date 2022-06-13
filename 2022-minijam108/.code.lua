@@ -416,6 +416,7 @@ local m=a.moves[a.moves_ind]
 a.path=m.gen_path(m.x,m.y)
 a.reset_turn_timer=true
 a.item_inds[a.itemind]=get_random_card_ind()
+a.initial_enemy_count=get_enemy_count()
 end,function(a)
 if a.timers.player_update.elapsed and a.timers.player_update.elapsed>.5 and a.reset_turn_timer then
 a.reset_turn_timer=false
@@ -427,7 +428,11 @@ if #a.path>0 then
 a.reset_turn_timer=true
 else
 a.reset_turn_timer=false
+if a.initial_enemy_count>get_enemy_count()then
+a:load"pre_card_select"
+else
 a:load"baddie_update"
+end
 end
 end)
 end
@@ -634,6 +639,12 @@ end
 end
 end
 return ind
+end
+function get_enemy_count()
+local enemy_coords=find_on_grid(function(spot)
+return spot.entity and spot.entity.parents.enemy
+end)
+return enemy_coords and #enemy_coords or 0
 end
 function get_next_baddie(visited_baddies)
 local bad_coords=find_on_grid(function(spot)

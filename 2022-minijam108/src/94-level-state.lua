@@ -123,12 +123,21 @@ end
 end $$
 
 -- PLAYER UPDATE
+function get_enemy_count()
+    local enemy_coords =  find_on_grid(function(spot)
+        return spot.entity and spot.entity.parents.enemy
+    end)
+
+    return enemy_coords and #enemy_coords or 0
+end
+
 |[player_update_init]| function(a)
     _g.status_text("hermit turn", 'player_update')
     local m = a.moves[a.moves_ind]
     a.path = m.gen_path(m.x, m.y)
     a.reset_turn_timer = true
     a.item_inds[a.itemind] = get_random_card_ind()
+    a.initial_enemy_count = get_enemy_count()
 end $$
 
 |[player_update_update]| function(a)
@@ -143,7 +152,12 @@ end $$
                 a.reset_turn_timer = true
             else
                 a.reset_turn_timer = false
-                a:load'baddie_update'
+
+                if a.initial_enemy_count > get_enemy_count() then
+                    a:load'pre_card_select'
+                else
+                    a:load'baddie_update'
+                end
             end
         end)
     end
