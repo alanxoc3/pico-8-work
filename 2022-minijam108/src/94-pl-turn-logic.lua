@@ -4,32 +4,32 @@ function get_move_coordinates(move_type)
     local sc = {x=g_sword.target_x, y=g_sword.target_y}
     local spots = {}
     if move_type == 128 then
-        add_spot(spots, pc.x, pc.y, 142, 156, path_spin)
+        add_spot(spots, pc.x, pc.y, 'attack', path_spin)
 
     elseif move_type == 130 then
-        add_spot_if_attackable(spots, pc.x+1, pc.y,   142, 156, path_slice)
-        add_spot_if_attackable(spots, pc.x-1, pc.y,   142, 156, path_slice)
-        add_spot_if_attackable(spots, pc.x, pc.y+1,   142, 156, path_slice)
-        add_spot_if_attackable(spots, pc.x, pc.y-1,   142, 156, path_slice)
+        add_spot_if_attackable(spots, pc.x+1, pc.y,   'attack', path_slice)
+        add_spot_if_attackable(spots, pc.x-1, pc.y,   'attack', path_slice)
+        add_spot_if_attackable(spots, pc.x, pc.y+1,   'attack', path_slice)
+        add_spot_if_attackable(spots, pc.x, pc.y-1,   'attack', path_slice)
 
-        add_spot_if_attackable(spots, pc.x-1, pc.y-1, 142, 156, path_slice)
-        add_spot_if_attackable(spots, pc.x-1, pc.y+1, 142, 156, path_slice)
-        add_spot_if_attackable(spots, pc.x+1, pc.y+1, 142, 156, path_slice)
-        add_spot_if_attackable(spots, pc.x+1, pc.y-1, 142, 156, path_slice)
+        add_spot_if_attackable(spots, pc.x-1, pc.y-1, 'attack', path_slice)
+        add_spot_if_attackable(spots, pc.x-1, pc.y+1, 'attack', path_slice)
+        add_spot_if_attackable(spots, pc.x+1, pc.y+1, 'attack', path_slice)
+        add_spot_if_attackable(spots, pc.x+1, pc.y-1, 'attack', path_slice)
 
     elseif move_type == 132 then
-        add_spot_if_movable(spots, sc.x, sc.y,   143, 158, path_thrust)
+        add_spot_if_movable(spots, sc.x, sc.y,   'move', path_thrust)
 
     elseif move_type == 134 then
-        add_spot_if_movable(spots, pc.x+1, pc.y,   143, 158, path_move)
-        add_spot_if_movable(spots, pc.x-1, pc.y,   143, 158, path_move)
-        add_spot_if_movable(spots, pc.x, pc.y+1,   143, 158, path_move)
-        add_spot_if_movable(spots, pc.x, pc.y-1,   143, 158, path_move)
+        add_spot_if_movable(spots, pc.x+1, pc.y,   'move', path_move)
+        add_spot_if_movable(spots, pc.x-1, pc.y,   'move', path_move)
+        add_spot_if_movable(spots, pc.x, pc.y+1,   'move', path_move)
+        add_spot_if_movable(spots, pc.x, pc.y-1,   'move', path_move)
 
-        add_spot_if_movable(spots, pc.x-1, pc.y-1, 143, 158, path_move)
-        add_spot_if_movable(spots, pc.x-1, pc.y+1, 143, 158, path_move)
-        add_spot_if_movable(spots, pc.x+1, pc.y+1, 143, 158, path_move)
-        add_spot_if_movable(spots, pc.x+1, pc.y-1, 143, 158, path_move)
+        add_spot_if_movable(spots, pc.x-1, pc.y-1, 'move', path_move)
+        add_spot_if_movable(spots, pc.x-1, pc.y+1, 'move', path_move)
+        add_spot_if_movable(spots, pc.x+1, pc.y+1, 'move', path_move)
+        add_spot_if_movable(spots, pc.x+1, pc.y-1, 'move', path_move)
 
     elseif move_type == 136 then
         for ang=0,8 do
@@ -53,7 +53,7 @@ function get_move_coordinates(move_type)
             end
 
             if is_good then
-                add_spot(spots, cur_x-xdir, cur_y-ydir, 143, 158, path_charge)
+                add_spot(spots, cur_x-xdir, cur_y-ydir, 'move', path_charge)
             end
         end
 
@@ -64,7 +64,7 @@ function get_move_coordinates(move_type)
 
         for coord in all(coords) do
             if not is_spot_puddle(coord.x, coord.y) then
-                add_spot(spots, coord.x, coord.y,   143, 158, path_swap)
+                add_spot(spots, coord.x, coord.y,   'move', path_swap)
             end
         end
 
@@ -93,7 +93,7 @@ function get_move_coordinates(move_type)
             end
 
             if good then
-                add_spot(spots, pc.x, pc.y, 143, 158, function()
+                add_spot(spots, pc.x, pc.y, 'move', function()
                     local copy_reverse_prev_path = {}
                     for spot in all(reverse_prev_path) do
                         add(copy_reverse_prev_path, spot)
@@ -105,20 +105,20 @@ function get_move_coordinates(move_type)
 
     elseif move_type == 164 then
     elseif move_type == 166 then
-        add_spot_if_movable(spots, pc.x+2, pc.y,   143, 158, path_move)
-        add_spot_if_movable(spots, pc.x-2, pc.y,   143, 158, path_move)
-        add_spot_if_movable(spots, pc.x, pc.y+2,   143, 158, path_move)
-        add_spot_if_movable(spots, pc.x, pc.y-2,   143, 158, path_move)
+        add_spot_if_movable(spots, pc.x+2, pc.y,   'move', path_move)
+        add_spot_if_movable(spots, pc.x-2, pc.y,   'move', path_move)
+        add_spot_if_movable(spots, pc.x, pc.y+2,   'move', path_move)
+        add_spot_if_movable(spots, pc.x, pc.y-2,   'move', path_move)
 
-        add_spot_if_movable(spots, pc.x-2, pc.y-2, 143, 158, path_move)
-        add_spot_if_movable(spots, pc.x-2, pc.y+2, 143, 158, path_move)
-        add_spot_if_movable(spots, pc.x+2, pc.y+2, 143, 158, path_move)
-        add_spot_if_movable(spots, pc.x+2, pc.y-2, 143, 158, path_move)
+        add_spot_if_movable(spots, pc.x-2, pc.y-2, 'move', path_move)
+        add_spot_if_movable(spots, pc.x-2, pc.y+2, 'move', path_move)
+        add_spot_if_movable(spots, pc.x+2, pc.y+2, 'move', path_move)
+        add_spot_if_movable(spots, pc.x+2, pc.y-2, 'move', path_move)
     end
 
     -- idle spot if there is nothing to do
     if #spots == 0 then
-        add_spot(spots, pc.x, pc.y, 143, 158, function() return {{x=pc.x, y=pc.y, sx=sc.x, sy=sc.y}} end)
+        add_spot(spots, pc.x, pc.y, 'move', function() return {{x=pc.x, y=pc.y, sx=sc.x, sy=sc.y}} end)
     end
 
     return spots
@@ -169,8 +169,8 @@ function is_spot_attackable(x, y)
     return is_spot_valid(x, y) and spot.entity and spot.entity.parents.enemy
 end
 
-function add_spot(list, x, y, sind, sel_sind, gen_path)
-    add(list, {x=x, y=y, sind=sind, sel_sind=sel_sind, gen_path=gen_path})
+function add_spot(list, x, y, seltype, gen_path)
+    add(list, {x=x, y=y, seltype=seltype, gen_path=gen_path})
 end
 
 function add_spot_if_movable(list, x, y, ...)

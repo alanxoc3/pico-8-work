@@ -86,7 +86,7 @@ end $$
 -- DEBUG_END
 
 zclass[[pos_preview,actor,drawlayer_50|
-    gamestate,@, itemind,@, x,@, y,@, sind,@, sel_sind,@,
+    gamestate,@, itemind,@, x,@, y,@, sind,@,
     update,%possible_move_small_obj_update,
     draw,%tile_sprite_draw
 ]]
@@ -116,9 +116,9 @@ end $$
 
 |[selected_move_draw]| function(a)
     for m in all(g_level_state.moves) do
-        spr(m.sind, scr_x(m.x)-3, scr_y(m.y)-3)
+        spr(g_icon_lookup[m.seltype].s, scr_x(m.x)-3, scr_y(m.y)-3)
     end
 
     local m = g_level_state.moves[g_level_state.moves_ind]
-    spr(m.sel_sind, scr_x(m.x)-5, scr_y(m.y)-5, 2, 2)
+    spr(g_icon_lookup[m.seltype].l, scr_x(m.x)-5, scr_y(m.y)-5, 2, 2)
 end $$

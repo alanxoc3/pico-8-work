@@ -225,10 +225,10 @@ a:kill()
 end
 end,function(a)
 for m in all(g_level_state.moves)do
-spr(m.sind,scr_x(m.x)-3,scr_y(m.y)-3)
+spr(g_icon_lookup[m.seltype].s,scr_x(m.x)-3,scr_y(m.y)-3)
 end
 local m=g_level_state.moves[g_level_state.moves_ind]
-spr(m.sel_sind,scr_x(m.x)-5,scr_y(m.y)-5,2,2)
+spr(g_icon_lookup[m.seltype].l,scr_x(m.x)-5,scr_y(m.y)-5,2,2)
 end,function(a)
 a.sind=rnd_item(a.possible_sinds)
 end,function(a)
@@ -375,7 +375,6 @@ end
 end,function(a)
 local moves=get_move_coordinates(a.items[a.itemind].sind)
 for m in all(moves)do
-_g.pos_preview(a,a.itemind,m.x,m.y,m.sind,m.sel_sind)
 end
 end,function(a)
 local prev_ind=a.itemind
@@ -385,7 +384,6 @@ end
 if a.itemind ~=prev_ind then
 local moves=get_move_coordinates(a.items[a.itemind].sind)
 for m in all(moves)do
-_g.pos_preview(a,a.itemind,m.x,m.y,m.sind,m.sel_sind)
 end
 end
 for i=1,#a.items do
@@ -487,6 +485,7 @@ draw_tiles()
 loop_entities("drawlayer_25","draw")
 loop_entities("drawlayer_30","draw")
 loop_entities("drawlayer_50","draw")
+loop_entities("drawlayer_75","draw")
 local txtfunc=function()
 print_vert_wobble("stabby crabby",64-46-14,53-46-6,7,1,1)
 print_vert_wobble("level "..(g_level+1),64-46+99,53-46-6+7*3,7,1,1)
@@ -621,7 +620,8 @@ zclass[[actor,timer|load,%actor_load,loadlogic,%actor_loadlogic,state,%actor_sta
 zclass[[drawlayer_25|]]
 zclass[[drawlayer_30|]]
 zclass[[drawlayer_50|]]
-g_spr_info=zobj[[0;,2,4,8,21;2;,2,4,6,10;4;,4,2,21,6;36;,4,2,10,9;64;,3,3,7,17;67;,3,3,6,7;70;,3,3,16,6;73;,3,3,17,16;142;,1,1,3,3;143;,1,1,3,3;138;,2,2,0,0;170;,2,2,0,0;40;,2,2,6,8;42;,2,2,6,8;44;,2,2,6,8;46;,2,2,6,8;08;,2,2,6,8;10;,2,2,6,8;12;,2,2,6,8;14;,2,2,6,8;224;,2,2,6,8;226;,2,2,6,8;200;,2,2,6,8;228;,2,2,6,8;192;,2,2,6,8;196;,2,2,6,8;194;,2,2,6,8;198;,2,2,6,8;230;,2,2,6,8;76;,2,2,6,8;78;,2,2,6,8;232;,2,2,6,8;168;,2,2,6,6;]]
+zclass[[drawlayer_75|]]
+g_spr_info=zobj[[0;,2,4,8,21;2;,2,4,6,10;4;,4,2,21,6;36;,4,2,10,9;64;,3,3,7,17;67;,3,3,6,7;70;,3,3,16,6;73;,3,3,17,16;142;,1,1,3,3;143;,1,1,3,3;190;,1,1,0,3;189;,1,1,0,3;138;,2,2,0,0;170;,2,2,0,0;40;,2,2,6,8;42;,2,2,6,8;44;,2,2,6,8;46;,2,2,6,8;08;,2,2,6,8;10;,2,2,6,8;12;,2,2,6,8;14;,2,2,6,8;224;,2,2,6,8;226;,2,2,6,8;200;,2,2,6,8;228;,2,2,6,8;192;,2,2,6,8;196;,2,2,6,8;194;,2,2,6,8;198;,2,2,6,8;230;,2,2,6,8;76;,2,2,6,8;78;,2,2,6,8;232;,2,2,6,8;168;,2,2,6,6;]]
 function draw_outline(color,drawfunc)
 for c=1,15 do pal(c,color)end
 local ox,oy=%0x5f28,%0x5f2a
@@ -634,6 +634,7 @@ end
 g_card_namemap=zobj[[128,spin,130,stab,132,thrust,134,move,136,charge,160,swap,162,undo,164,idle,166,jump;]]
 g_card_colormap=zobj[[128,8,130,8,132,8,134,11,136,11,160,10,162,10,164,10,166,11;]]
 g_card_colormap_outline=zobj[[128,2,130,2,132,2,134,3,136,3,160,4,162,4,164,4,166,3;]]
+g_icon_lookup=zobj[[move;s,190,m,143,l,158;attack;s,189,m,142,l,156;]]
 function zspr(sind,x,y,sw,sh,xf,yf)
 sw,sh=sw or 1,sh or 1
 xf,yf=xf and xf<0,yf and yf<0
@@ -659,7 +660,7 @@ zclass[[tile_entity,mov,actor|to_target,%tile_entity_to_target,target_x,null,tar
 zclass[[puddle,actor,drawlayer_25|x,@,y,@,sind,168,target_x,~x,target_y,~y,draw,%tile_sprite_draw]]
 zclass[[hermit,mov,actor,drawlayer_50|x,@,y,@,target_x,~x,target_y,~y,to_target,%tile_entity_to_target,draw,%tile_sprite_draw,destroyed,%hermit_destroyed,update,%hermit_update]]
 zclass[[sword,actor,drawlayer_50|target_x,@,target_y,@,draw,%sword_draw_debug]]
-zclass[[pos_preview,actor,drawlayer_50|gamestate,@,itemind,@,x,@,y,@,sind,@,sel_sind,@,update,%possible_move_small_obj_update,draw,%tile_sprite_draw]]
+zclass[[pos_preview,actor,drawlayer_50|gamestate,@,itemind,@,x,@,y,@,sind,@,update,%possible_move_small_obj_update,draw,%tile_sprite_draw]]
 zclass[[selected_move,actor,drawlayer_50|update,%selected_move_update,draw,%selected_move_draw]]
 zclass[[enemy|get_path,nil,init,%enemy_init,update,%enemy_update,check_collision,%enemy_check_collision]]
 zclass[[snake,tile_entity,enemy,drawlayer_30|x,@,y,@,target_x,~x,target_y,~y,get_path,%snake_get_path,setsind2,%snake_setsind2;possible_sinds;,42,46,40,44;]]
@@ -725,27 +726,27 @@ local pc={x=g_pl.target_x,y=g_pl.target_y}
 local sc={x=g_sword.target_x,y=g_sword.target_y}
 local spots={}
 if move_type==128 then
-add_spot(spots,pc.x,pc.y,142,156,path_spin)
+add_spot(spots,pc.x,pc.y,"attack",path_spin)
 elseif move_type==130 then
-add_spot_if_attackable(spots,pc.x+1,pc.y,142,156,path_slice)
-add_spot_if_attackable(spots,pc.x-1,pc.y,142,156,path_slice)
-add_spot_if_attackable(spots,pc.x,pc.y+1,142,156,path_slice)
-add_spot_if_attackable(spots,pc.x,pc.y-1,142,156,path_slice)
-add_spot_if_attackable(spots,pc.x-1,pc.y-1,142,156,path_slice)
-add_spot_if_attackable(spots,pc.x-1,pc.y+1,142,156,path_slice)
-add_spot_if_attackable(spots,pc.x+1,pc.y+1,142,156,path_slice)
-add_spot_if_attackable(spots,pc.x+1,pc.y-1,142,156,path_slice)
+add_spot_if_attackable(spots,pc.x+1,pc.y,"attack",path_slice)
+add_spot_if_attackable(spots,pc.x-1,pc.y,"attack",path_slice)
+add_spot_if_attackable(spots,pc.x,pc.y+1,"attack",path_slice)
+add_spot_if_attackable(spots,pc.x,pc.y-1,"attack",path_slice)
+add_spot_if_attackable(spots,pc.x-1,pc.y-1,"attack",path_slice)
+add_spot_if_attackable(spots,pc.x-1,pc.y+1,"attack",path_slice)
+add_spot_if_attackable(spots,pc.x+1,pc.y+1,"attack",path_slice)
+add_spot_if_attackable(spots,pc.x+1,pc.y-1,"attack",path_slice)
 elseif move_type==132 then
-add_spot_if_movable(spots,sc.x,sc.y,143,158,path_thrust)
+add_spot_if_movable(spots,sc.x,sc.y,"move",path_thrust)
 elseif move_type==134 then
-add_spot_if_movable(spots,pc.x+1,pc.y,143,158,path_move)
-add_spot_if_movable(spots,pc.x-1,pc.y,143,158,path_move)
-add_spot_if_movable(spots,pc.x,pc.y+1,143,158,path_move)
-add_spot_if_movable(spots,pc.x,pc.y-1,143,158,path_move)
-add_spot_if_movable(spots,pc.x-1,pc.y-1,143,158,path_move)
-add_spot_if_movable(spots,pc.x-1,pc.y+1,143,158,path_move)
-add_spot_if_movable(spots,pc.x+1,pc.y+1,143,158,path_move)
-add_spot_if_movable(spots,pc.x+1,pc.y-1,143,158,path_move)
+add_spot_if_movable(spots,pc.x+1,pc.y,"move",path_move)
+add_spot_if_movable(spots,pc.x-1,pc.y,"move",path_move)
+add_spot_if_movable(spots,pc.x,pc.y+1,"move",path_move)
+add_spot_if_movable(spots,pc.x,pc.y-1,"move",path_move)
+add_spot_if_movable(spots,pc.x-1,pc.y-1,"move",path_move)
+add_spot_if_movable(spots,pc.x-1,pc.y+1,"move",path_move)
+add_spot_if_movable(spots,pc.x+1,pc.y+1,"move",path_move)
+add_spot_if_movable(spots,pc.x+1,pc.y-1,"move",path_move)
 elseif move_type==136 then
 for ang=0,8 do
 local xdir,ydir=zsgn(cos(ang/8)),zsgn(sin(ang/8))
@@ -764,7 +765,7 @@ end
 is_good=true
 end
 if is_good then
-add_spot(spots,cur_x-xdir,cur_y-ydir,143,158,path_charge)
+add_spot(spots,cur_x-xdir,cur_y-ydir,"move",path_charge)
 end
 end
 elseif move_type==160 then
@@ -773,7 +774,7 @@ return spot.entity and spot.entity.parents.enemy
 end)
 for coord in all(coords)do
 if not is_spot_puddle(coord.x,coord.y)then
-add_spot(spots,coord.x,coord.y,143,158,path_swap)
+add_spot(spots,coord.x,coord.y,"move",path_swap)
 end
 end
 elseif move_type==162 then
@@ -800,7 +801,7 @@ break
 end
 end
 if good then
-add_spot(spots,pc.x,pc.y,143,158,function()
+add_spot(spots,pc.x,pc.y,"move",function()
 local copy_reverse_prev_path={}
 for spot in all(reverse_prev_path)do
 add(copy_reverse_prev_path,spot)
@@ -811,17 +812,17 @@ end
 end
 elseif move_type==164 then
 elseif move_type==166 then
-add_spot_if_movable(spots,pc.x+2,pc.y,143,158,path_move)
-add_spot_if_movable(spots,pc.x-2,pc.y,143,158,path_move)
-add_spot_if_movable(spots,pc.x,pc.y+2,143,158,path_move)
-add_spot_if_movable(spots,pc.x,pc.y-2,143,158,path_move)
-add_spot_if_movable(spots,pc.x-2,pc.y-2,143,158,path_move)
-add_spot_if_movable(spots,pc.x-2,pc.y+2,143,158,path_move)
-add_spot_if_movable(spots,pc.x+2,pc.y+2,143,158,path_move)
-add_spot_if_movable(spots,pc.x+2,pc.y-2,143,158,path_move)
+add_spot_if_movable(spots,pc.x+2,pc.y,"move",path_move)
+add_spot_if_movable(spots,pc.x-2,pc.y,"move",path_move)
+add_spot_if_movable(spots,pc.x,pc.y+2,"move",path_move)
+add_spot_if_movable(spots,pc.x,pc.y-2,"move",path_move)
+add_spot_if_movable(spots,pc.x-2,pc.y-2,"move",path_move)
+add_spot_if_movable(spots,pc.x-2,pc.y+2,"move",path_move)
+add_spot_if_movable(spots,pc.x+2,pc.y+2,"move",path_move)
+add_spot_if_movable(spots,pc.x+2,pc.y-2,"move",path_move)
 end
 if #spots==0 then
-add_spot(spots,pc.x,pc.y,143,158,function()return{{x=pc.x,y=pc.y,sx=sc.x,sy=sc.y}}end)
+add_spot(spots,pc.x,pc.y,"move",function()return{{x=pc.x,y=pc.y,sx=sc.x,sy=sc.y}}end)
 end
 return spots
 end
@@ -862,8 +863,8 @@ function is_spot_attackable(x,y)
 local spot=g_grid[y*7+x]
 return is_spot_valid(x,y)and spot.entity and spot.entity.parents.enemy
 end
-function add_spot(list,x,y,sind,sel_sind,gen_path)
-add(list,{x=x,y=y,sind=sind,sel_sind=sel_sind,gen_path=gen_path})
+function add_spot(list,x,y,seltype,gen_path)
+add(list,{x=x,y=y,seltype=seltype,gen_path=gen_path})
 end
 function add_spot_if_movable(list,x,y,...)
 if not is_spot_puddle(x,y)and(is_spot_empty(x,y)or is_spot_movable(x,y))then
@@ -1040,7 +1041,7 @@ end
 function unpack_grid_index(index)
 return index%7,index\7
 end
-zclass[[card,actor,vec,drawlayer_50|x,@,sind,@,selected,@,y,141,draw,%card_draw;start;duration,.25,next,normal,dy,-2;normal;dy,0,update,%card_normal_update;ending;update,nop,duration,.25,dy,2;]]
+zclass[[card,actor,vec,drawlayer_75|x,@,sind,@,selected,@,y,141,draw,%card_draw;start;duration,.25,next,normal,dy,-2;normal;dy,0,update,%card_normal_update;ending;update,nop,duration,.25,dy,2;]]
 zclass[[status_text,actor,vec,drawlayer_50|text,@,checkstate,@,x,64,y,144,draw,%status_text_draw;start;duration,.25,next,normal,dy,-2;normal;dy,0,update,%status_text_update;ending;update,nop,duration,.25,dy,2;]]
 g_fade,g_fade_table=1,zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,1,0,0,0,0;3;,3,3,3,3,1,1,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,0,0,0,0;6;,6,6,13,13,5,5,0,0;7;,7,7,6,13,13,5,0,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,0,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,0,0,0;13;,13,13,5,5,1,0,0,0;14;,14,14,13,4,2,2,0,0;15;,15,15,13,13,5,5,0,0;]]
 function fade(threshold)

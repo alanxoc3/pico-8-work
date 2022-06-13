@@ -33,6 +33,7 @@ function round(num) return flr(num + .5) end
     loop_entities('drawlayer_25', 'draw')
     loop_entities('drawlayer_30', 'draw')
     loop_entities('drawlayer_50', 'draw')
+    loop_entities('drawlayer_75', 'draw')
 
     local txtfunc = function()
         print_vert_wobble("stabby crabby", 64-46-14, 53-46-6, 7, 1, 1)
@@ -159,7 +160,7 @@ function unpack_grid_index(index)
     return index%7, index\7
 end
 
-zclass[[card,actor,vec,drawlayer_50|
+zclass[[card,actor,vec,drawlayer_75|
     x,@, sind,@, selected,@,
     y,141,
     draw,%card_draw;

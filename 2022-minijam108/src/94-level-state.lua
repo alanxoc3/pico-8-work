@@ -53,7 +53,7 @@ end $$
 |[card_select_init]| function(a)
     local moves = get_move_coordinates(a.items[a.itemind].sind)
     for m in all(moves) do
-        _g.pos_preview(a, a.itemind, m.x, m.y, m.sind, m.sel_sind)
+        --_g.pos_preview(a, a.itemind, m.x, m.y, g_icon_lookup[m.seltype].s)
     end
 end $$
 
@@ -66,7 +66,7 @@ end $$
     if a.itemind ~= prev_ind then
         local moves = get_move_coordinates(a.items[a.itemind].sind)
         for m in all(moves) do
-            _g.pos_preview(a, a.itemind, m.x, m.y, m.sind, m.sel_sind)
+            --_g.pos_preview(a, a.itemind, m.x, m.y, g_icon_lookup[m.seltype].s)
         end
     end
 

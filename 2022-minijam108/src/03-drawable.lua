@@ -3,6 +3,7 @@
 zclass[[drawlayer_25|]] -- puddle
 zclass[[drawlayer_30|]] -- enemies
 zclass[[drawlayer_50|]] -- pl
+zclass[[drawlayer_75|]] -- ui
 
 g_spr_info = zobj[[
      0;,2,4,8,21; -- crab straight
@@ -27,6 +28,8 @@ g_spr_info = zobj[[
 
     142;,1,1,3,3; -- icons
     143;,1,1,3,3;
+    190;,1,1,0,3;
+    189;,1,1,0,3;
     --156;,2,2,0,0;
     --158;,2,2,0,0;
 
@@ -105,6 +108,11 @@ g_card_colormap_outline = zobj[[
     162,4,
     164,4,
     166,3;
+]]
+
+g_icon_lookup = zobj[[
+    move; s,190, m,143, l,158;
+    attack; s,189, m,142, l,156;
 ]]
 
 -- used everwhere
