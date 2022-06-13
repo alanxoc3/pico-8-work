@@ -76,6 +76,10 @@ function is_spot_on_sword(x, y)
     return x == g_sword.target_x and y == g_sword.target_y
 end
 
+function is_spot_on_player(x, y)
+    return x == g_pl.target_x and y == g_pl.target_y
+end
+
 function is_spot_movable(x, y)
     local spot = g_grid[y*7+x]
     return is_spot_valid(x, y) and spot.entity and spot.entity.id == 'sword'

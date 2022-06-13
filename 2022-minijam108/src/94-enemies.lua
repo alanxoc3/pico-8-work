@@ -1,10 +1,19 @@
 zclass[[enemy|
     get_path,nil,
-    init,%enemy_init
+    init,%enemy_init,
+    check_collision,%enemy_check_collision
 ]]
 
 |[enemy_init]| function(a)
     a.sind = rnd_item(a.possible_sinds)
+end $$
+
+|[enemy_check_collision]| function(a)
+    if a.target_x == g_sword.target_x and a.target_y == g_sword.target_y then
+        a:kill()
+    elseif a.target_x == g_pl.target_x and a.target_y == g_pl.target_y then
+        g_pl:kill()
+    end
 end $$
 
 zclass[[snake,tile_entity,enemy,drawlayer_30|
@@ -18,12 +27,6 @@ zclass[[snake,tile_entity,enemy,drawlayer_30|
 ]]
 
 |[snake_update]| function(a)
-    if a.target_x == g_sword.target_x and a.target_y == g_sword.target_y then
-        a:kill()
-    elseif a.target_x == g_pl.target_x and a.target_y == g_pl.target_y then
-        g_pl:kill()
-    end
-
         if a.dx < 0 then a.sind = 42
     elseif a.dx > 0 then a.sind = 46
     elseif a.dy < 0 then a.sind = 40
@@ -57,12 +60,6 @@ zclass[[seagull,tile_entity,enemy,drawlayer_30|
 ]]
 
 |[seagull_update]| function(a)
-    if a.target_x == g_sword.target_x and a.target_y == g_sword.target_y then
-        a:kill()
-    elseif a.target_x == g_pl.target_x and a.target_y == g_pl.target_y then
-        g_pl:kill()
-    end
-
         if a.dx < 0 and a.dy < 0 then a.sind = 10
     elseif a.dx < 0 and a.dy > 0 then a.sind = 12
     elseif a.dx > 0 and a.dy < 0 then a.sind = 08
@@ -97,12 +94,6 @@ zclass[[fox,tile_entity,enemy,drawlayer_30|
 ]]
 
 |[fox_update]| function(a)
-    if a.target_x == g_sword.target_x and a.target_y == g_sword.target_y then
-        a:kill()
-    elseif a.target_x == g_pl.target_x and a.target_y == g_pl.target_y then
-        g_pl:kill()
-    end
-
         if a.dx < 0 and a.dy < 0 then a.sind = 224
     elseif a.dx < 0 and a.dy > 0 then a.sind = 226
     elseif a.dx > 0 and a.dy < 0 then a.sind = 200
@@ -119,7 +110,21 @@ end $$
     local path = {{x=a.target_x, y=a.target_y}}
     local xdir, ydir = zsgn(g_pl.target_x - a.target_x), zsgn(g_pl.target_y - a.target_y)
 
+    -- first test the direction, don't want a sword
     local cur_x, cur_y = a.target_x, a.target_y
+    while true do
+        cur_x += xdir cur_y += ydir
+        if not is_spot_empty(cur_x, cur_y)     then break
+        elseif is_spot_on_player(cur_x, cur_y) then break
+        elseif is_spot_on_sword(cur_x, cur_y)  then
+            local ang = atan2(xdir, ydir) + rnd_item{-.125, .125}
+            xdir, ydir = zsgn(cos(ang)), zsgn(sin(ang))
+            break
+        end
+    end
+
+    -- reset and you have a direction for sure
+    cur_x, cur_y = a.target_x, a.target_y
     while true do
         cur_x += xdir cur_y += ydir
         if is_spot_empty(cur_x, cur_y) then

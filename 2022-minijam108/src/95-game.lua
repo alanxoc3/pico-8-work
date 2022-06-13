@@ -11,10 +11,11 @@ end $$
     zcall(loop_entities, [[
         1 ;,timer,       tick;
         2 ;,actor,       state;
-        3 ;,tile_entity, to_target;
-        4 ;,hermit, to_target;
-        5 ;,mov,         mov_update;
-        6 ;,vec,         vec_update;
+        3 ;,enemy,       check_collision;
+        4 ;,tile_entity, to_target;
+        5 ;,hermit,      to_target;
+        6 ;,mov,         mov_update;
+        7 ;,vec,         vec_update;
     ]])
 
     update_grid()
