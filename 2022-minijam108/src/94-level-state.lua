@@ -131,30 +131,26 @@ end $$
 end $$
 
 -- BADDIE UPDATE
-function get_baddie_list()
+function get_next_baddie(visited_baddies)
     local bad_coords = find_on_grid(function(spot)
-        return spot.entity and spot.entity.parents.enemy
+        return spot.entity and spot.entity.parents.enemy and not visited_baddies[spot.entity]
     end)
 
-    local badlist = {}
-    for coord in all(bad_coords) do
-        local ent = g_grid[coord.y*7+coord.x].entity
-        add(badlist, {entity=ent, path=ent:get_path()})
+    if #bad_coords > 0 then
+        local coord = bad_coords[1]
+        return g_grid[coord.y*7+coord.x].entity
     end
-    return badlist
 end
 
 |[baddie_update_init]| function(a)
     _g.status_text("baddie turn", 'baddie_update')
-    local m = a.moves[a.moves_ind]
     a.reset_turn_timer = true
-    a.item_inds[a.itemind] = get_random_card_ind()
-    a.baddie_list = get_baddie_list()
 
-    if #a.baddie_list > 0 then
-        local it = deli(a.baddie_list, 1)
-        a.baddie = it.entity
-        a.path = it.path
+    a.visited_baddies = {}
+    a.baddie = get_next_baddie(a.visited_baddies)
+    if a.baddie then
+        a.visited_baddies[a.baddie] = true
+        a.path = a.baddie:get_path()
     end
 end $$
 
@@ -167,14 +163,17 @@ end $$
         a:start_timer('turn_tick', .25, function()
             if #a.path > 0 then
                 a.reset_turn_timer = true
-            elseif #a.baddie_list > 0 then
-                local it = deli(a.baddie_list, 1)
-                a.baddie = it.entity
-                a.path = it.path
-                a.reset_turn_timer = true
             else
-                a.reset_turn_timer = false
-                a:load'pre_card_select'
+                local next_baddie = get_next_baddie(a.visited_baddies)
+                if next_baddie then
+                    a.baddie = next_baddie
+                    a.visited_baddies[a.baddie] = true
+                    a.path = a.baddie:get_path()
+                    a.reset_turn_timer = true
+                else
+                    a.reset_turn_timer = false
+                    a:load'pre_card_select'
+                end
             end
         end)
     end
