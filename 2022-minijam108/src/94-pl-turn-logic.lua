@@ -4,7 +4,7 @@ function get_move_coordinates(move_type)
     local sc = {x=g_sword.target_x, y=g_sword.target_y}
     local spots = {}
     if move_type == 128 then
-        add_spot(spots, sc.x, sc.y, 142, 156, path_spin)
+        add_spot(spots, pc.x, pc.y, 142, 156, path_spin)
 
     elseif move_type == 130 then
         add_spot_if_attackable(spots, pc.x+1, pc.y,   142, 156, path_slice)
@@ -27,6 +27,17 @@ function get_move_coordinates(move_type)
         add_spot_if_movable(spots, pc.x-1, pc.y+1, 143, 158, path_move)
         add_spot_if_movable(spots, pc.x+1, pc.y+1, 143, 158, path_move)
         add_spot_if_movable(spots, pc.x+1, pc.y-1, 143, 158, path_move)
+
+    elseif move_type == 166 then
+        add_spot_if_movable(spots, pc.x+2, pc.y,   143, 158, path_move)
+        add_spot_if_movable(spots, pc.x-2, pc.y,   143, 158, path_move)
+        add_spot_if_movable(spots, pc.x, pc.y+2,   143, 158, path_move)
+        add_spot_if_movable(spots, pc.x, pc.y-2,   143, 158, path_move)
+
+        add_spot_if_movable(spots, pc.x-2, pc.y-2, 143, 158, path_move)
+        add_spot_if_movable(spots, pc.x-2, pc.y+2, 143, 158, path_move)
+        add_spot_if_movable(spots, pc.x+2, pc.y+2, 143, 158, path_move)
+        add_spot_if_movable(spots, pc.x+2, pc.y-2, 143, 158, path_move)
     end
 
     return spots
@@ -75,6 +86,10 @@ function add_spot_if_movable(list, x, y, ...)
 end
 
 function add_spot_if_attackable(list, x, y, ...)
+    if x == g_sword.target_x and y == g_sword.target_y then
+        return
+    end
+
     if is_spot_empty(x, y) or is_spot_attackable(x, y) then
         add_spot(list, x, y, ...)
     end
@@ -84,7 +99,11 @@ end
 function path_move(x, y)
     local path = {}
 
-    add(path, {x=x, y=y, sx=x+1, sy=y})
+    local plx, ply = g_pl.target_x,    g_pl.target_y
+    local swx, swy = g_sword.target_x, g_sword.target_y
+    local xdiff, ydiff = swx-plx, swy-ply
+
+    add(path, {x=x, y=y, sx=x+xdiff, sy=y+ydiff})
 
     return path
 end
@@ -93,14 +112,31 @@ function path_spin(x, y)
     local path = {}
 
     local plx, ply = g_pl.target_x,    g_pl.target_y
-    local swx, swy = x, y
+    local swx, swy = g_sword.target_x, g_sword.target_y
     local xdiff, ydiff = swx-plx, swy-ply
     local initial_ang = atan2(xdiff,ydiff)
 
     for i=0,8 do
-        local spin_x = zsgn(cos(initial_ang+i/8))
-        local spin_y = zsgn(sin(initial_ang+i/8))
+        local spin_x = zsgn(cos(initial_ang-i/8))
+        local spin_y = zsgn(sin(initial_ang-i/8))
+        printh("x: "..spin_x.." | y: "..spin_y)
         add(path, {x=plx, y=ply, sx=plx+spin_x, sy=ply+spin_y})
+    end
+
+    return path
+end
+
+function path_slice(x, y)
+    local plx, ply = g_pl.target_x,    g_pl.target_y
+    local swx, swy = g_sword.target_x, g_sword.target_y
+
+    local path = {{x=plx, y=ply, sx=swx, sy=swy}}
+
+    -- local xdiff, ydiff = swx-plx, swy-ply
+    -- local initial_ang = atan2(xdiff,ydiff)
+
+    if x == swx or y == swy then
+        add(path, {x=plx, y=ply, sx=x, sy=y})
     end
 
     return path

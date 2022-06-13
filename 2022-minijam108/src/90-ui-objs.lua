@@ -54,11 +54,14 @@ zclass[[hermit,tile_entity,actor,drawlayer_50|
     end
 end $$
 
-zclass[[sword|
-    x,@, y,@,
-    target_x,~x,
-    target_y,~y,
+zclass[[sword,drawlayer_50|
+    target_x,@, target_y,@,
+    draw,%sword_draw_debug
 ]]
+
+|[sword_draw_debug]| function(a)
+    circ(scr_x(a.target_x), scr_y(a.target_y), 11, 7)
+end $$
 
 zclass[[enemy|]]
 zclass[[snake,tile_entity,enemy,drawlayer_50|

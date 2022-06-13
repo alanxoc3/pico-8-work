@@ -1,9 +1,9 @@
 zclass[[level_state,actor|
     itemind,2,
-    curr,pre_card_select;
 
     items;,;
 
+    start;               init,%level_state_init,     update,nop,                 duration,0, next,pre_card_select;
     pre_card_select;     init,%pre_card_select_init, update,nop,                 duration,0, next,card_select;
     card_select;         init,%card_select_init,     update,%card_select_update;
     move_select;         init,%move_select_init,     update,%move_select_update;
@@ -11,13 +11,22 @@ zclass[[level_state,actor|
     baddie_update;       init,%baddie_update_init,   update,nop,                 duration,1, next,pre_card_select;
 ]]
 
+function get_random_card_ind()
+    return rnd_item{128, 130, 134, 166}
+end
+
+|[level_state_init]| function(a)
+    a.item_inds = { get_random_card_ind(), get_random_card_ind(), get_random_card_ind() }
+end $$
+
 -- PRE CARD SELECT --
 |[pre_card_select_init]| function(a)
-    a.items = {
-        _g.card(35,       128, false),
-        _g.card(35+21,    130, true),
-        _g.card(35+21+21, 134, false)
-    }
+    a.items = {}
+    for i=1,#a.item_inds do
+        add(a.items, _g.card(35+(i-1)*21, a.item_inds[i], false))
+    end
+
+    a.items[a.itemind].selected = true
 end $$
 
 -- CARD SELECT --
@@ -101,14 +110,15 @@ end $$
     local m = a.moves[a.moves_ind]
     a.path = m.gen_path(m.x, m.y)
     a.reset_pl_timer = true
+    a.item_inds[a.itemind] = get_random_card_ind()
 end $$
 
 |[player_update_update]| function(a)
-    if a.reset_pl_timer then
+    if a.timers.player_update.elapsed and a.timers.player_update.elapsed > .5 and a.reset_pl_timer then
         a.reset_pl_timer = false
         local spot = deli(a.path, 1)
         g_pl.target_x, g_pl.target_y, g_sword.target_x, g_sword.target_y = spot.x, spot.y, spot.sx, spot.sy
-        a:start_timer('pltick', .75, function()
+        a:start_timer('pltick', .25, function()
             if #a.path > 0 then
                 a.reset_pl_timer = true
             else
