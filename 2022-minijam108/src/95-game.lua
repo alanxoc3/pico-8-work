@@ -39,7 +39,7 @@ function round(num) return flr(num + .5) end
         print_vert_wobble("level "..(g_level+1), 64-46+99, 53-46-6+7*3, 7, 1, 1)
     end
 
-    draw_outline(1, txtfunc)
+    draw_outline(12, txtfunc)
     txtfunc()
 
     if g_debug then
@@ -50,6 +50,12 @@ end $$
 function print_vert_wobble(text, x, y, col, off, wob)
     for i=1,#text do
         print("\^w"..sub(text, i, i).."\^-w", x+wob*((i+off+t())\1%2), y+i*7, col)
+    end
+end
+
+function print_horiz_wobble(text, x, y, col, off, wob)
+    for i=1,#text do
+        print("\^w"..sub(text, i, i).."\^-w", x+i*8, y+wob*((i+off+t())\1%2), col)
     end
 end
 
@@ -174,10 +180,10 @@ zclass[[card,actor,vec,drawlayer_50|
 
         local name = g_card_namemap[a.sind]
         local txtfunc = function()
-            print("\^w"..name.."\^-w", 71, a.y+3, g_card_colormap[a.sind])
+            print_horiz_wobble(name, 63, a.y+3, 7, 0, 1)
         end
 
-        draw_outline(1, txtfunc)
+        -- draw_outline(g_card_colormap_outline[a.sind], txtfunc)
         txtfunc()
     elseif g_level_state.curr != 'card_select' then
         offy = 13

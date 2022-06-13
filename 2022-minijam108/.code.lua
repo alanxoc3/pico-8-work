@@ -341,7 +341,6 @@ if is_good and #local_path>0 then
 add(possible_spots,{x=local_path[1].x,y=local_path[1].y,remaining=local_path})
 end
 end
-printh(#possible_spots)
 local smartest=get_smartest_direction(possible_spots,a.target_x,a.target_y)
 if smartest then
 for spot in all(smartest.remaining)do
@@ -492,7 +491,7 @@ local txtfunc=function()
 print_vert_wobble("stabby crabby",64-46-14,53-46-6,7,1,1)
 print_vert_wobble("level "..(g_level+1),64-46+99,53-46-6+7*3,7,1,1)
 end
-draw_outline(1,txtfunc)
+draw_outline(12,txtfunc)
 txtfunc()
 if g_debug then
 rect(0,0,127,127,8)
@@ -507,9 +506,8 @@ draw_outline(7,func)
 spr(141,a.x+4,a.y+16)
 local name=g_card_namemap[a.sind]
 local txtfunc=function()
-print("\^w"..name.."\^-w",71,a.y+3,g_card_colormap[a.sind])
+print_horiz_wobble(name,63,a.y+3,7,0,1)
 end
-draw_outline(1,txtfunc)
 txtfunc()
 elseif g_level_state.curr!="card_select"then
 offy=13
@@ -635,6 +633,7 @@ pal()
 end
 g_card_namemap=zobj[[128,spin,130,stab,132,thrust,134,move,136,charge,160,swap,162,undo,164,idle,166,jump;]]
 g_card_colormap=zobj[[128,8,130,8,132,8,134,11,136,11,160,10,162,10,164,10,166,11;]]
+g_card_colormap_outline=zobj[[128,2,130,2,132,2,134,3,136,3,160,4,162,4,164,4,166,3;]]
 function zspr(sind,x,y,sw,sh,xf,yf)
 sw,sh=sw or 1,sh or 1
 xf,yf=xf and xf<0,yf and yf<0
@@ -674,7 +673,6 @@ for i=1,#possible_spots do
 local spot=possible_spots[i]
 local ang=atan2(spot.x-x,spot.y-y)
 if abs(ideal_ang-ang)<smallest_ang_diff then
-printh(""..ideal_ang.." || "..ang)
 smallest_ang_diff=abs(ideal_ang-ang)
 selected_spot=i
 end
@@ -784,9 +782,19 @@ if pp then
 local good=true
 local reverse_prev_path={}
 for i=#pp,1,-1 do
-local x,y,sx,sy,duration=pp[i].x,pp[i].y,pp[i].sx,pp[i].sy,pp[i].duration
-add(reverse_prev_path,{x=x,y=y,sx=sx,sy=sy,duration=duration})
-if not is_spot_empty(x,y)or is_spot_puddle(x,y)then
+local x,y,sx,sy,duration,isswap=pp[i].x,pp[i].y,pp[i].sx,pp[i].sy,pp[i].duration,pp[i].isswap
+local func=nil
+if isswap and i==1 then
+func=function()
+local entity=g_grid[y*7+x].entity
+if entity then
+entity.target_x=g_pl.target_x
+entity.target_y=g_pl.target_y
+end
+end
+end
+add(reverse_prev_path,{isswap=isswap,x=x,y=y,sx=sx,sy=sy,duration=duration,func=func})
+if not isswap and(not is_spot_empty(x,y)or is_spot_puddle(x,y))then
 good=false
 break
 end
@@ -899,14 +907,13 @@ function path_swap(x,y)
 local plx,ply=g_pl.target_x,g_pl.target_y
 local swx,swy=g_sword.target_x,g_sword.target_y
 local xdiff,ydiff=swx-plx,swy-ply
-local path={{x=plx,y=ply,sx=swx,sy=swy}}
-add(path,{x=x,y=y,sx=x+xdiff,sy=y+ydiff,func=function()
-printh("TEST")
+local path={{isswap=true,x=plx,y=ply,sx=swx,sy=swy}}
+add(path,{isswap=true,x=x,y=y,sx=x+xdiff,sy=y+ydiff,func=function()
 local entity=g_grid[y*7+x].entity
-printh(entity.id)
-printh(g_pl.target_x)
+if entity then
 entity.target_x=g_pl.target_x
 entity.target_y=g_pl.target_y
+end
 end})
 return path
 end
@@ -948,6 +955,11 @@ function round(num)return flr(num+.5)end
 function print_vert_wobble(text,x,y,col,off,wob)
 for i=1,#text do
 print("\^w"..sub(text,i,i).."\^-w",x+wob*((i+off+t())\1%2),y+i*7,col)
+end
+end
+function print_horiz_wobble(text,x,y,col,off,wob)
+for i=1,#text do
+print("\^w"..sub(text,i,i).."\^-w",x+i*8,y+wob*((i+off+t())\1%2),col)
 end
 end
 function draw_tiles()

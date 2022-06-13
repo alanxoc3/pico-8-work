@@ -95,6 +95,18 @@ g_card_colormap = zobj[[
     166,11;
 ]]
 
+g_card_colormap_outline = zobj[[
+    128,2,
+    130,2,
+    132,2,
+    134,3,
+    136,3,
+    160,4,
+    162,4,
+    164,4,
+    166,3;
+]]
+
 -- used everwhere
 function zspr(sind, x, y, sw, sh, xf, yf)
     sw, sh = sw or 1, sh or 1
