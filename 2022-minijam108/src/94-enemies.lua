@@ -187,33 +187,41 @@ end $$
 
 |[fox_get_path]| function(a)
     local path = {{x=a.target_x, y=a.target_y}}
-    local xdir, ydir = zsgn(g_pl.target_x - a.target_x), zsgn(g_pl.target_y - a.target_y)
 
     -- get all non sword and non empty directions
     -- create possible one with only the first thing
     -- use smart thing
 
-    -- first test the direction, don't want a sword
-    local cur_x, cur_y = a.target_x, a.target_y
-    while true do
-        cur_x += xdir cur_y += ydir
-        if is_spot_puddle(cur_x, cur_y) or not is_spot_empty(cur_x, cur_y)     then break
-        elseif is_spot_on_player(cur_x, cur_y) then break
-        elseif is_spot_on_sword(cur_x, cur_y)  then
-            local ang = atan2(xdir, ydir) + rnd_item{-.125, .125}
-            xdir, ydir = zsgn(cos(ang)), zsgn(sin(ang))
-            break
+    local possible_spots = {}
+    for i=0,7 do
+        local local_path = {}
+        local xdir, ydir = zsgn(cos(i/8)), zsgn(sin(i/8))
+        local is_good = false
+
+        local cur_x, cur_y = a.target_x, a.target_y
+        while true do
+            cur_x += xdir cur_y += ydir
+            if is_spot_puddle(cur_x, cur_y) or not is_spot_empty(cur_x, cur_y) then break
+            elseif is_spot_on_sword(cur_x, cur_y) then
+                is_good = false
+                break
+            end
+
+            add(local_path, {x=cur_x, y=cur_y})
+            is_good = true
+        end
+
+        if is_good and #local_path > 0 then
+            add(possible_spots, {x=local_path[1].x, y=local_path[1].y, remaining=local_path})
         end
     end
 
-    -- reset and you have a direction for sure
-    cur_x, cur_y = a.target_x, a.target_y
-    while true do
-        cur_x += xdir cur_y += ydir
-        if not is_spot_puddle(cur_x, cur_y) and is_spot_empty(cur_x, cur_y) then
-            add(path, {x=cur_x, y=cur_y})
-        else
-            break
+    printh(#possible_spots)
+
+    local smartest = get_smartest_direction(possible_spots, a.target_x, a.target_y)
+    if smartest then
+        for spot in all(smartest.remaining) do
+            add(path, spot)
         end
     end
 
