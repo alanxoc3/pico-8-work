@@ -242,7 +242,7 @@ end,function(a)
 local possible_spots={}
 for i=0,3 do
 local x,y=round(cos(i/4))+a.target_x,round(sin(i/4))+a.target_y
-if is_spot_empty(x,y)then
+if is_spot_empty(x,y)and not is_spot_on_sword(x,y)then
 add(possible_spots,{x=x,y=y})
 end
 end
@@ -265,7 +265,7 @@ end,function(a)
 local possible_spots={}
 for i=0,3 do
 local x,y=round(cos(.125+i/4))+a.target_x,round(sin(.125+i/4))+a.target_y
-if is_spot_empty(x,y)then
+if is_spot_empty(x,y)and not is_spot_on_sword(x,y)then
 add(possible_spots,{x=x,y=y})
 end
 end
@@ -628,6 +628,9 @@ end
 function is_spot_empty(x,y)
 local spot=g_grid[y*7+x]
 return is_spot_valid(x,y)and spot.entity==nil
+end
+function is_spot_on_sword(x,y)
+return x==g_sword.target_x and y==g_sword.target_y
 end
 function is_spot_movable(x,y)
 local spot=g_grid[y*7+x]
