@@ -77,6 +77,7 @@ g_card_namemap = zobj[[
     134,"move",
     136,"charge",
     160,"swap",
+    162,"undo",
     164,"idle",
     166,"jump";
 ]]

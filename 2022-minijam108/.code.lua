@@ -416,6 +416,7 @@ end,function(a)
 _g.status_text("hermit turn","player_update")
 local m=a.moves[a.moves_ind]
 a.path=m.gen_path(m.x,m.y)
+a.prev_path=m.gen_path(m.x,m.y)
 a.reset_turn_timer=true
 a.item_inds[a.itemind]=get_random_card_ind()
 a.initial_enemy_count=get_enemy_count()
@@ -614,7 +615,7 @@ end end
 camera(ox,oy)
 pal()
 end
-g_card_namemap=zobj[[128,spin,130,stab,134,move,136,charge,160,swap,164,idle,166,jump;]]
+g_card_namemap=zobj[[128,spin,130,stab,134,move,136,charge,160,swap,162,undo,164,idle,166,jump;]]
 function zspr(sind,x,y,sw,sh,xf,yf)
 sw,sh=sw or 1,sh or 1
 xf,yf=xf and xf<0,yf and yf<0
@@ -666,7 +667,7 @@ end
 zclass[[fox,tile_entity,enemy,drawlayer_30|x,@,y,@,target_x,~x,target_y,~y,get_path,%fox_get_path,setsind2,%fox_setsind2;possible_sinds;,224,226,200,228,192,196,194,198;]]
 zclass[[level_state,actor|itemind,2,items;,;start;init,%level_state_init,update,nop,duration,0,next,pre_card_select;pre_card_select;init,%pre_card_select_init;card_select;init,%card_select_init,update,%card_select_update;move_select;init,%move_select_init,update,%move_select_update;player_update;init,%player_update_init,update,%player_update_update;baddie_update;init,%baddie_update_init,update,%baddie_update_update;]]
 function get_random_card_ind()
-return rnd_item{128,130,134,136,160,164,166}
+return rnd_item{128,130,134,136,160,162,164,166}
 end
 function is_level_win()return not get_next_baddie{}end
 function is_level_lose()return not g_pl:is_alive()end
@@ -754,6 +755,29 @@ end)
 for coord in all(coords)do
 if not is_spot_puddle(coord.x,coord.y)then
 add_spot(spots,coord.x,coord.y,143,158,path_swap)
+end
+end
+elseif move_type==162 then
+local pp=g_level_state.prev_path
+if pp then
+local good=true
+local reverse_prev_path={}
+for i=#pp,1,-1 do
+local x,y,sx,sy,duration=pp[i].x,pp[i].y,pp[i].sx,pp[i].sy,pp[i].duration
+add(reverse_prev_path,{x=x,y=y,sx=sx,sy=sy,duration=duration})
+if not is_spot_empty(x,y)or is_spot_puddle(x,y)then
+good=false
+break
+end
+end
+if good then
+add_spot(spots,pc.x,pc.y,143,158,function()
+local copy_reverse_prev_path={}
+for spot in all(reverse_prev_path)do
+add(copy_reverse_prev_path,spot)
+end
+return copy_reverse_prev_path
+end)
 end
 end
 elseif move_type==164 then
@@ -986,7 +1010,7 @@ end
 zclass[[fader,actor|ecs_exclusions;actor,yes,timer,yes;]]
 zclass[[fader_out,fader|start;duration,.5,destroyed,@,update,%fader_out_update]]
 zclass[[fader_in,fader|start;duration,.5,update,%fader_in_update]]
-zclass[[game_state,actor|ecs_exclusions;actor,true;init,%game_state_init,curr,logo;logo;state_init,%logo_init,update,nop,draw,%logo_draw,duration,2.5,next,title;title;state_init,nop,update,%title_update,draw,%title_draw;game;state_init,%game_init,update,%game_update,draw,%game_draw;lvlwin;state_init,nop,update,%lvlwin_update,draw,%lvlwin_draw;lvllose;state_init,nop,update,%lvllose_update,draw,%lvllose_draw;]]
+zclass[[game_state,actor|ecs_exclusions;actor,true;init,%game_state_init,curr,game;logo;state_init,%logo_init,update,nop,draw,%logo_draw,duration,2.5,next,title;title;state_init,nop,update,%title_update,draw,%title_draw;game;state_init,%game_init,update,%game_update,draw,%game_draw;lvlwin;state_init,nop,update,%lvlwin_update,draw,%lvlwin_draw;lvllose;state_init,nop,update,%lvllose_update,draw,%lvllose_draw;]]
 function _init()
 g_tl=_g.game_state()
 end

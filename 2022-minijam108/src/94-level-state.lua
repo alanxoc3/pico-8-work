@@ -12,7 +12,7 @@ zclass[[level_state,actor|
 ]]
 
 function get_random_card_ind()
-    return rnd_item{128, 130, 134, 136, 160, 164, 166}
+    return rnd_item{128, 130, 134, 136, 160, 162, 164, 166}
 end
 
 function is_level_win()  return not get_next_baddie{} end
@@ -136,7 +136,10 @@ end
 |[player_update_init]| function(a)
     _g.status_text("hermit turn", 'player_update')
     local m = a.moves[a.moves_ind]
+
     a.path = m.gen_path(m.x, m.y)
+    a.prev_path = m.gen_path(m.x, m.y)
+
     a.reset_turn_timer = true
     a.item_inds[a.itemind] = get_random_card_ind()
     a.initial_enemy_count = get_enemy_count()

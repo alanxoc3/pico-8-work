@@ -65,6 +65,31 @@ function get_move_coordinates(move_type)
             end
         end
 
+    elseif move_type == 162 then
+        local pp = g_level_state.prev_path
+        if pp then
+            local good = true
+            local reverse_prev_path = {}
+            for i=#pp,1,-1 do
+                local x, y, sx, sy, duration = pp[i].x, pp[i].y, pp[i].sx, pp[i].sy, pp[i].duration
+                add(reverse_prev_path, {x=x, y=y, sx=sx, sy=sy, duration=duration})
+                if not is_spot_empty(x, y) or is_spot_puddle(x, y) then
+                    good = false
+                    break
+                end
+            end
+
+            if good then
+                add_spot(spots, pc.x, pc.y, 143, 158, function()
+                    local copy_reverse_prev_path = {}
+                    for spot in all(reverse_prev_path) do
+                        add(copy_reverse_prev_path, spot)
+                    end
+                    return copy_reverse_prev_path
+                end)
+            end
+        end
+
     elseif move_type == 164 then
     elseif move_type == 166 then
         add_spot_if_movable(spots, pc.x+2, pc.y,   143, 158, path_move)
