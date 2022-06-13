@@ -32,6 +32,13 @@ end $$
     end
 end $$
 
+zclass[[puddle,tile_entity,actor,drawlayer_25|
+    x,@, y,@,
+    sind,168,
+    target_x,~x,
+    target_y,~y
+]]
+
 zclass[[hermit,tile_entity,actor,drawlayer_50|
     x,@, y,@,
     target_x,~x,

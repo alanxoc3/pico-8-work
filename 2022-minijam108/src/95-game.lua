@@ -25,6 +25,7 @@ function round(num) return flr(num + .5) end
     g_offx, g_offy = 64, 53
     draw_tiles()
 
+    loop_entities('drawlayer_25', 'draw')
     loop_entities('drawlayer_50', 'draw')
 
     if g_debug then
@@ -97,6 +98,9 @@ function set_grid(level)
             elseif objind == MAP_SWORD then
                 spot.entity = _g.sword(x, y)
                 g_sword = spot.entity
+
+            elseif objind == MAP_PUDDLE then
+                spot.entity = _g.puddle(x, y)
                 
             elseif objind == MAP_SNAKE then
                 spot.entity = _g.snake(x, y)

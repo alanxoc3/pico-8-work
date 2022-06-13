@@ -1,5 +1,6 @@
 -- start with drawlayer_50 and divide by 2 if something needs to go forward or backward
 -- max = 99, min = 00
+zclass[[drawlayer_25|]]
 zclass[[drawlayer_50|]]
 
 g_spr_info = zobj[[
@@ -35,6 +36,8 @@ g_spr_info = zobj[[
     42;,2,2,6,8;
     44;,2,2,6,8;
     46;,2,2,6,8;
+
+    168;,2,2,6,6;
 ]]
 
 function draw_outline(color, drawfunc)

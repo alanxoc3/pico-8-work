@@ -353,6 +353,7 @@ end,function()
 rectfill(0,0,127,127,12)
 g_offx,g_offy=64,53
 draw_tiles()
+loop_entities("drawlayer_25","draw")
 loop_entities("drawlayer_50","draw")
 if g_debug then
 rect(0,0,127,127,8)
@@ -421,8 +422,9 @@ function xbtnp()return zbtn(btnp,0)end
 function ybtnp()return zbtn(btnp,2)end
 function zsgn(num)return num==0 and 0 or sgn(num)end
 zclass[[actor,timer|load,%actor_load,loadlogic,%actor_loadlogic,state,%actor_state,kill,%actor_kill,clean,%actor_clean,is_alive,%actor_is_alive,alive,yes,duration,null,curr,start,next,null,isnew,yes,init,nop,update,nop,destroyed,nop;]]
+zclass[[drawlayer_25|]]
 zclass[[drawlayer_50|]]
-g_spr_info=zobj[[0;,2,4,8,21;2;,2,4,6,10;4;,4,2,21,6;36;,4,2,10,9;64;,3,3,7,17;67;,3,3,6,7;70;,3,3,16,6;73;,3,3,17,16;142;,1,1,3,3;143;,1,1,3,3;138;,2,2,0,0;170;,2,2,0,0;40;,2,2,6,8;42;,2,2,6,8;44;,2,2,6,8;46;,2,2,6,8;]]
+g_spr_info=zobj[[0;,2,4,8,21;2;,2,4,6,10;4;,4,2,21,6;36;,4,2,10,9;64;,3,3,7,17;67;,3,3,6,7;70;,3,3,16,6;73;,3,3,17,16;142;,1,1,3,3;143;,1,1,3,3;138;,2,2,0,0;170;,2,2,0,0;40;,2,2,6,8;42;,2,2,6,8;44;,2,2,6,8;46;,2,2,6,8;168;,2,2,6,6;]]
 function draw_outline(color,drawfunc)
 for c=1,15 do pal(c,color)end
 local ox,oy=%0x5f28,%0x5f2a
@@ -445,6 +447,7 @@ local midr=7/2*13
 return y*13+g_offy-midr+13/2-1
 end
 zclass[[tile_entity,mov,actor|to_target,%tile_entity_to_target,target_x,null,target_y,null,draw,%tile_sprite_draw]]
+zclass[[puddle,tile_entity,actor,drawlayer_25|x,@,y,@,sind,168,target_x,~x,target_y,~y]]
 zclass[[hermit,tile_entity,actor,drawlayer_50|x,@,y,@,target_x,~x,target_y,~y,update,%hermit_update]]
 zclass[[sword,drawlayer_50|target_x,@,target_y,@,draw,%sword_draw_debug]]
 zclass[[pos_preview,actor,drawlayer_50|gamestate,@,itemind,@,x,@,y,@,sind,@,sel_sind,@,update,%possible_move_small_obj_update,draw,%tile_sprite_draw]]
@@ -650,6 +653,8 @@ g_pl=spot.entity
 elseif objind==113 then
 spot.entity=_g.sword(x,y)
 g_sword=spot.entity
+elseif objind==114 then
+spot.entity=_g.puddle(x,y)
 elseif objind==115 then
 spot.entity=_g.snake(x,y)
 end
