@@ -367,7 +367,7 @@ function ybtnp()return zbtn(btnp,2)end
 function zsgn(num)return num==0 and 0 or sgn(num)end
 zclass[[actor,timer|load,%actor_load,loadlogic,%actor_loadlogic,state,%actor_state,kill,%actor_kill,clean,%actor_clean,is_alive,%actor_is_alive,alive,yes,duration,null,curr,start,next,null,isnew,yes,init,nop,update,nop,destroyed,nop;]]
 zclass[[drawlayer_50|]]
-g_spr_info=zobj[[0;,2,4,8,21;2;,2,4,0,0;4;,4,2,0,0;36;,4,2,10,9;64;,3,3,0,0;67;,3,3,0,0;70;,3,3,0,0;73;,3,3,0,0;142;,1,1,3,3;143;,1,1,3,3;138;,2,2,0,0;170;,2,2,0,0;196;,2,2,4,8;]]
+g_spr_info=zobj[[0;,2,4,8,21;2;,2,4,6,10;4;,4,2,21,6;36;,4,2,10,9;64;,3,3,7,17;67;,3,3,6,7;70;,3,3,16,6;73;,3,3,17,16;142;,1,1,3,3;143;,1,1,3,3;138;,2,2,0,0;170;,2,2,0,0;196;,2,2,4,8;]]
 zclass[[timer|timers;,;start_timer,%timer_reset_timer,end_timer,%timer_end_timer,is_active,%timer_is_active,get_elapsed_percent,%timer_get_elapsed_percent,tick,%timer_tick,]]
 zclass[[pos|x,0,y,0,dist_point,%pos_dist_point]]
 zclass[[vec,pos|dx,0,dy,0,vec_update,%vec_update]]
@@ -475,6 +475,19 @@ end
 function path_move(x,y)
 local path={}
 add(path,{x=x,y=y,sx=x+1,sy=y})
+return path
+end
+function path_spin(x,y)
+local path={}
+local plx,ply=g_pl.target_x,g_pl.target_y
+local swx,swy=x,y
+local xdiff,ydiff=swx-plx,swy-ply
+local initial_ang=atan2(xdiff,ydiff)
+for i=0,8 do
+local spin_x=zsgn(cos(initial_ang+i/8))
+local spin_y=zsgn(sin(initial_ang+i/8))
+add(path,{x=plx,y=ply,sx=plx+spin_x,sy=ply+spin_y})
+end
 return path
 end
 zclass[[test_obj,actor,drawlayer_50|x,@,y,@,color,7,init,%test_init,update,%test_update,draw,%test_draw;]]

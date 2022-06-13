@@ -89,6 +89,23 @@ function path_move(x, y)
     return path
 end
 
+function path_spin(x, y)
+    local path = {}
+
+    local plx, ply = g_pl.target_x,    g_pl.target_y
+    local swx, swy = x, y
+    local xdiff, ydiff = swx-plx, swy-ply
+    local initial_ang = atan2(xdiff,ydiff)
+
+    for i=0,8 do
+        local spin_x = zsgn(cos(initial_ang+i/8))
+        local spin_y = zsgn(sin(initial_ang+i/8))
+        add(path, {x=plx, y=ply, sx=plx+spin_x, sy=ply+spin_y})
+    end
+
+    return path
+end
+
 -- how do enemy paths work?
 
 -- hermit turn moves spaces until all path spaces are used.
