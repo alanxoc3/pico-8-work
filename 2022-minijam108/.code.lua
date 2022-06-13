@@ -92,7 +92,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,tile_entity_to_target,@,tile_sprite_draw,@,hermit_destroyed,@,hermit_update,@,sword_draw_debug,@,possible_move_obj_update,@,possible_move_small_obj_update,@,selected_move_update,@,selected_move_draw,@,enemy_init,@,enemy_check_collision,@,enemy_update,@,snake_setsind2,@,snake_get_path,@,frog_setsind2,@,frog_get_path,@,seagull_setsind2,@,seagull_get_path,@,fox_setsind2,@,fox_get_path,@,level_state_init,@,pre_card_select_init,@,card_select_init,@,card_select_update,@,move_select_init,@,move_select_update,@,player_update_init,@,player_update_update,@,baddie_update_init,@,baddie_update_update,@,game_init,@,game_update,@,game_draw,@,card_draw,@,card_normal_update,@,status_text_draw,@,status_text_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,lvlwin_update,@,lvlwin_draw,@,lvllose_update,@,lvllose_draw,@,title_update,@,title_draw,@,game_state_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,tile_entity_to_target,@,tile_sprite_draw,@,hermit_destroyed,@,hermit_update,@,sword_draw_debug,@,possible_move_obj_update,@,possible_move_small_obj_update,@,selected_move_update,@,selected_move_draw,@,enemy_init,@,enemy_check_collision,@,enemy_update,@,snake_setsind2,@,snake_get_path,@,frog_setsind2,@,frog_get_path,@,seagull_setsind2,@,seagull_get_path,@,fox_setsind2,@,fox_get_path,@,level_state_init,@,pre_card_select_init,@,card_select_update,@,move_select_init,@,move_select_update,@,player_update_init,@,player_update_update,@,baddie_update_init,@,baddie_update_update,@,game_init,@,game_update,@,game_draw,@,card_draw,@,card_normal_update,@,status_text_draw,@,status_text_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,lvlwin_update,@,lvlwin_draw,@,lvllose_update,@,lvllose_draw,@,title_update,@,title_draw,@,game_state_init,@]],function(a,stateName)
 a.next_state=a.next_state or stateName
 end,function(a,stateName)
 a.next_state,a.isnew=nil
@@ -377,18 +377,9 @@ end
 a.items[a.itemind].selected=true
 end
 end,function(a)
-local moves=get_move_coordinates(a.items[a.itemind].sind)
-for m in all(moves)do
-end
-end,function(a)
 local prev_ind=a.itemind
 if xbtnp()~=0 then
 a.itemind=mid(1,a.itemind+xbtnp(),3)
-end
-if a.itemind ~=prev_ind then
-local moves=get_move_coordinates(a.items[a.itemind].sind)
-for m in all(moves)do
-end
 end
 for i=1,#a.items do
 a.items[i].selected=i==a.itemind
@@ -486,16 +477,12 @@ end,function()
 rectfill(0,0,127,127,12)
 g_offx,g_offy=64,53
 draw_tiles()
+print_vert_wobble("stabby crabby",64-46-14,53-46-6,7,1,1)
+print_vert_wobble("level "..(g_level+1),64-46+99,53-46-6+7*3,7,1,1)
 loop_entities("drawlayer_25","draw")
 loop_entities("drawlayer_30","draw")
 loop_entities("drawlayer_50","draw")
 loop_entities("drawlayer_75","draw")
-local txtfunc=function()
-print_vert_wobble("stabby crabby",64-46-14,53-46-6,7,1,1)
-print_vert_wobble("level "..(g_level+1),64-46+99,53-46-6+7*3,7,1,1)
-end
-draw_outline(12,txtfunc)
-txtfunc()
 if g_debug then
 rect(0,0,127,127,8)
 end
@@ -638,7 +625,7 @@ end
 g_card_namemap=zobj[[128,spin,130,stab,132,thrust,134,move,136,charge,160,swap,162,undo,164,idle,166,jump;]]
 g_card_colormap=zobj[[128,8,130,8,132,8,134,11,136,11,160,10,162,10,164,10,166,11;]]
 g_card_colormap_outline=zobj[[128,2,130,2,132,2,134,3,136,3,160,4,162,4,164,4,166,3;]]
-g_icon_lookup=zobj[[move;s,190,m,143,l,158;attack;s,189,m,142,l,156;]]
+g_icon_lookup=zobj[[move;s,120,l,142;attack;s,119,l,156;special;s,121,l,174;]]
 function zspr(sind,x,y,sw,sh,xf,yf)
 sw,sh=sw or 1,sh or 1
 xf,yf=xf and xf<0,yf and yf<0
@@ -687,7 +674,7 @@ return possible_spots[selected_spot]
 end
 end
 zclass[[fox,tile_entity,enemy,drawlayer_30|x,@,y,@,target_x,~x,target_y,~y,get_path,%fox_get_path,setsind2,%fox_setsind2;possible_sinds;,224,226,200,228,192,196,194,198;]]
-zclass[[level_state,actor|itemind,2,items;,;start;init,%level_state_init,update,nop,duration,0,next,pre_card_select;pre_card_select;init,%pre_card_select_init;card_select;init,%card_select_init,update,%card_select_update;move_select;init,%move_select_init,update,%move_select_update;player_update;init,%player_update_init,update,%player_update_update;baddie_update;init,%baddie_update_init,update,%baddie_update_update;]]
+zclass[[level_state,actor|itemind,2,items;,;start;init,%level_state_init,update,nop,duration,0,next,pre_card_select;pre_card_select;init,%pre_card_select_init;card_select;init,nop,update,%card_select_update;move_select;init,%move_select_init,update,%move_select_update;player_update;init,%player_update_init,update,%player_update_update;baddie_update;init,%baddie_update_init,update,%baddie_update_update;]]
 function get_random_card_ind()
 return rnd_item{128,130,132,134,136,160,162,164,166}
 end
@@ -741,7 +728,10 @@ add_spot_if_attackable(spots,pc.x-1,pc.y+1,"attack",path_slice)
 add_spot_if_attackable(spots,pc.x+1,pc.y+1,"attack",path_slice)
 add_spot_if_attackable(spots,pc.x+1,pc.y-1,"attack",path_slice)
 elseif move_type==132 then
-add_spot_if_movable(spots,sc.x,sc.y,"move",path_thrust)
+if not is_spot_puddle(sc.x,sc.y)and(is_spot_empty(sc.x,sc.y)or is_spot_movable(sc.x,sc.y))then
+local xdiff,ydiff=sc.x-pc.x,sc.y-pc.y
+add_spot(spots,sc.x+xdiff,sc.y+ydiff,"attack",path_thrust)
+end
 elseif move_type==134 then
 add_spot_if_movable(spots,pc.x+1,pc.y,"move",path_move)
 add_spot_if_movable(spots,pc.x-1,pc.y,"move",path_move)
@@ -778,7 +768,7 @@ return spot.entity and spot.entity.parents.enemy
 end)
 for coord in all(coords)do
 if not is_spot_puddle(coord.x,coord.y)then
-add_spot(spots,coord.x,coord.y,"move",path_swap)
+add_spot(spots,coord.x,coord.y,"special",path_swap)
 end
 end
 elseif move_type==162 then
@@ -805,7 +795,7 @@ break
 end
 end
 if good then
-add_spot(spots,pc.x,pc.y,"move",function()
+add_spot(spots,pc.x,pc.y,"special",function()
 local copy_reverse_prev_path={}
 for spot in all(reverse_prev_path)do
 add(copy_reverse_prev_path,spot)
@@ -815,6 +805,7 @@ end)
 end
 end
 elseif move_type==164 then
+add_spot(spots,pc.x,pc.y,"special",function()return{{x=pc.x,y=pc.y,sx=sc.x,sy=sc.y}}end)
 elseif move_type==166 then
 add_spot_if_movable(spots,pc.x+2,pc.y,"move",path_move)
 add_spot_if_movable(spots,pc.x-2,pc.y,"move",path_move)
@@ -985,7 +976,7 @@ line()for i=0,1,inc do line(-cos(i*mult)*amp3+tlx+90,tly+i*width)end
 local midr=7/2*13
 for ind,tile in pairs(g_grid)do
 local x,y=unpack_grid_index(ind)
-if tile.active then
+if tile.active and not tile.puddle then
 local sind=138
 if(y*7+x)%2==0 then sind=170 end
 spr(sind,scr_x(x)-6,scr_y(y)-6,2,2)

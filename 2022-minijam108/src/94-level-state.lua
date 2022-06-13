@@ -5,7 +5,7 @@ zclass[[level_state,actor|
 
     start;               init,%level_state_init,     update,nop,                 duration,0, next,pre_card_select;
     pre_card_select;     init,%pre_card_select_init;
-    card_select;         init,%card_select_init,     update,%card_select_update;
+    card_select;         init,nop,                   update,%card_select_update;
     move_select;         init,%move_select_init,     update,%move_select_update;
     player_update;       init,%player_update_init,   update,%player_update_update;
     baddie_update;       init,%baddie_update_init,   update,%baddie_update_update;
@@ -53,25 +53,10 @@ end $$
     end
 end $$
 
--- CARD SELECT --
-|[card_select_init]| function(a)
-    local moves = get_move_coordinates(a.items[a.itemind].sind)
-    for m in all(moves) do
-        --_g.pos_preview(a, a.itemind, m.x, m.y, g_icon_lookup[m.seltype].s)
-    end
-end $$
-
 |[card_select_update]| function(a)
     local prev_ind = a.itemind
     if xbtnp() ~= 0 then
         a.itemind = mid(1, a.itemind +xbtnp(), 3)
-    end
-
-    if a.itemind ~= prev_ind then
-        local moves = get_move_coordinates(a.items[a.itemind].sind)
-        for m in all(moves) do
-            --_g.pos_preview(a, a.itemind, m.x, m.y, g_icon_lookup[m.seltype].s)
-        end
     end
 
     for i=1,#a.items do

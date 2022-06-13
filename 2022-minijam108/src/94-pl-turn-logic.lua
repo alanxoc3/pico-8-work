@@ -18,7 +18,10 @@ function get_move_coordinates(move_type)
         add_spot_if_attackable(spots, pc.x+1, pc.y-1, 'attack', path_slice)
 
     elseif move_type == 132 then
-        add_spot_if_movable(spots, sc.x, sc.y,   'move', path_thrust)
+        if not is_spot_puddle(sc.x, sc.y) and (is_spot_empty(sc.x, sc.y) or is_spot_movable(sc.x, sc.y)) then
+            local xdiff, ydiff = sc.x-pc.x, sc.y-pc.y
+            add_spot(spots, sc.x+xdiff, sc.y+ydiff, 'attack', path_thrust)
+        end
 
     elseif move_type == 134 then
         add_spot_if_movable(spots, pc.x+1, pc.y,   'move', path_move)
@@ -64,7 +67,7 @@ function get_move_coordinates(move_type)
 
         for coord in all(coords) do
             if not is_spot_puddle(coord.x, coord.y) then
-                add_spot(spots, coord.x, coord.y,   'move', path_swap)
+                add_spot(spots, coord.x, coord.y,   'special', path_swap)
             end
         end
 
@@ -93,7 +96,7 @@ function get_move_coordinates(move_type)
             end
 
             if good then
-                add_spot(spots, pc.x, pc.y, 'move', function()
+                add_spot(spots, pc.x, pc.y, 'special', function()
                     local copy_reverse_prev_path = {}
                     for spot in all(reverse_prev_path) do
                         add(copy_reverse_prev_path, spot)
@@ -104,6 +107,8 @@ function get_move_coordinates(move_type)
         end
 
     elseif move_type == 164 then
+        add_spot(spots, pc.x, pc.y, 'special', function() return {{x=pc.x, y=pc.y, sx=sc.x, sy=sc.y}} end)
+
     elseif move_type == 166 then
         add_spot_if_movable(spots, pc.x+2, pc.y,   'move', path_move)
         add_spot_if_movable(spots, pc.x-2, pc.y,   'move', path_move)

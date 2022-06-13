@@ -111,8 +111,9 @@ g_card_colormap_outline = zobj[[
 ]]
 
 g_icon_lookup = zobj[[
-    move; s,190, m,143, l,158;
-    attack; s,189, m,142, l,156;
+    move;    s,120, l,142;
+    attack;  s,119, l,156;
+    special; s,121, l,174;
 ]]
 
 -- used everwhere

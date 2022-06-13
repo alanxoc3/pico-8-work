@@ -30,18 +30,13 @@ function round(num) return flr(num + .5) end
     g_offx, g_offy = 64, 53
     draw_tiles()
 
+    print_vert_wobble("stabby crabby", 64-46-14, 53-46-6, 7, 1, 1)
+    print_vert_wobble("level "..(g_level+1), 64-46+99, 53-46-6+7*3, 7, 1, 1)
+
     loop_entities('drawlayer_25', 'draw')
     loop_entities('drawlayer_30', 'draw')
     loop_entities('drawlayer_50', 'draw')
     loop_entities('drawlayer_75', 'draw')
-
-    local txtfunc = function()
-        print_vert_wobble("stabby crabby", 64-46-14, 53-46-6, 7, 1, 1)
-        print_vert_wobble("level "..(g_level+1), 64-46+99, 53-46-6+7*3, 7, 1, 1)
-    end
-
-    draw_outline(12, txtfunc)
-    txtfunc()
 
     if g_debug then
         rect(0, 0, 127, 127, 8)
@@ -81,7 +76,7 @@ function draw_tiles()
     local midr = 7/2*TILE_RADIUS
     for ind, tile in pairs(g_grid) do
         local x,y = unpack_grid_index(ind)
-        if tile.active then
+        if tile.active and not tile.puddle then
             local sind = TILE_SPR_1
             if (y*7+x)%2 == 0 then sind = TILE_SPR_2 end
             spr(sind, scr_x(x)-6, scr_y(y)-6, 2, 2)
