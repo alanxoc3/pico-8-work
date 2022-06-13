@@ -66,6 +66,42 @@ end $$
     return path
 end $$
 
+zclass[[frog,tile_entity,enemy,drawlayer_30|
+    x,@, y,@,
+    target_x,~x,
+    target_y,~y,
+    get_path,%frog_get_path,
+    setsind2,%frog_setsind2;
+
+    possible_sinds; ,230,76,78,232;
+]]
+
+|[frog_setsind2]| function(a, dx, dy)
+        if dx < 0 then return 230
+    elseif dx > 0 then return 76
+    elseif dy < 0 then return 78
+    elseif dy > 0 then return 232
+    end
+end $$
+
+|[frog_get_path]| function(a)
+    local path = {{x=a.target_x, y=a.target_y}}
+    local possible_spots = {}
+    for i=0,3 do
+        local x, y = round(cos(i/4))*2+a.target_x, round(sin(i/4))*2+a.target_y
+        if is_spot_empty(x, y) and not is_spot_puddle(x, y) and not is_spot_on_sword(x, y) then
+            add(possible_spots, {x=x, y=y})
+        end
+    end
+
+    local smartest = get_smartest_direction(possible_spots, a.target_x, a.target_y)
+    if smartest then
+        add(path, smartest)
+    end
+
+    return path
+end $$
+
 zclass[[seagull,tile_entity,enemy,drawlayer_30|
     x,@, y,@,
     target_x,~x,
@@ -152,6 +188,10 @@ end $$
 |[fox_get_path]| function(a)
     local path = {{x=a.target_x, y=a.target_y}}
     local xdir, ydir = zsgn(g_pl.target_x - a.target_x), zsgn(g_pl.target_y - a.target_y)
+
+    -- get all non sword and non empty directions
+    -- create possible one with only the first thing
+    -- use smart thing
 
     -- first test the direction, don't want a sword
     local cur_x, cur_y = a.target_x, a.target_y
