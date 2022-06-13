@@ -526,6 +526,13 @@ camera()
 end,function(a)
 if a.timers.gamewin.elapsed and a.timers.gamewin.elapsed>=1.5 and not does_entity_exist"fader"then
 _g.fader_out(function()
+if dget(0)<=0 or dget(0)>g_turn_count then
+dset(0,g_turn_count)
+dset(1,g_death_count)
+end
+g_level=0
+g_death_count=0
+g_turn_count=0
 a:load"title"
 end)
 end
@@ -540,10 +547,6 @@ draw_outline(1,func)
 func()
 end,function(a)
 if a.timers.lvlwin.elapsed and a.timers.lvlwin.elapsed>=1.5 and not does_entity_exist"fader"then
-if dget(0)<=0 or dget(0)>g_turn_count then
-dset(0,g_turn_count)
-dset(1,g_death_count)
-end
 _g.fader_out(function()
 a:load"game"
 end)
@@ -971,9 +974,6 @@ return{
 {x=plx,y=ply,sx=swx,sy=swy}
 }
 end
-g_level=0
-g_death_count=0
-g_turn_count=0
 function round(num)return flr(num+.5)end
 function print_vert_wobble(text,x,y,col,off,wob)
 for i=1,#text do
@@ -1074,6 +1074,9 @@ end
 zclass[[fader,actor|ecs_exclusions;actor,yes,timer,yes;]]
 zclass[[fader_out,fader|start;duration,.5,destroyed,@,update,%fader_out_update]]
 zclass[[fader_in,fader|start;duration,.5,update,%fader_in_update]]
+g_level=0
+g_death_count=0
+g_turn_count=0
 cartdata"stabby_crabby"
 menuitem(1,"reset high score",function()
 memset(0x5e00,0,64)

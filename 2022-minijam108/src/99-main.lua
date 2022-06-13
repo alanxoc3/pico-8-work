@@ -1,3 +1,7 @@
+g_level = 0
+g_death_count = 0
+g_turn_count = 0
+
 cartdata"stabby_crabby"
 menuitem(1, "reset high score", function()
    memset(REAL_SAVE_LOCATION, 0, SAVE_LENGTH)
@@ -20,6 +24,15 @@ zclass[[game_state,actor|
 |[gamewin_update]| function(a)
     if a.timers.gamewin.elapsed and a.timers.gamewin.elapsed >= 1.5 and not does_entity_exist'fader' then
         _g.fader_out(function()
+            if dget(0) <= 0 or dget(0) > g_turn_count then
+                dset(0, g_turn_count)
+                dset(1, g_death_count)
+            end
+
+            g_level = 0
+            g_death_count = 0
+            g_turn_count = 0
+
             a:load'title'
         end)
     end
@@ -39,11 +52,6 @@ end $$
 
 |[lvlwin_update]| function(a)
     if a.timers.lvlwin.elapsed and a.timers.lvlwin.elapsed >= 1.5 and not does_entity_exist'fader' then
-        if dget(0) <= 0 or dget(0) > g_turn_count then
-            dset(0, g_turn_count)
-            dset(1, g_death_count)
-        end
-
         _g.fader_out(function()
             a:load'game'
         end)
