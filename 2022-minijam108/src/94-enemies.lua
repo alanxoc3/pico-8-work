@@ -1,14 +1,20 @@
 zclass[[enemy|
-    get_path,nil
+    get_path,nil,
+    init,%enemy_init
 ]]
+
+|[enemy_init]| function(a)
+    a.sind = rnd_item(a.possible_sinds)
+end $$
 
 zclass[[snake,tile_entity,enemy,drawlayer_30|
     x,@, y,@,
     target_x,~x,
     target_y,~y,
-    sind,40,
     get_path,%snake_get_path,
-    update,%snake_update
+    update,%snake_update;
+
+    possible_sinds; ,42,46,40,44;
 ]]
 
 |[snake_update]| function(a)
@@ -44,9 +50,10 @@ zclass[[seagull,tile_entity,enemy,drawlayer_30|
     x,@, y,@,
     target_x,~x,
     target_y,~y,
-    sind,10,
     get_path,%seagull_get_path,
-    update,%seagull_update
+    update,%seagull_update;
+
+    possible_sinds; ,10,12,8,14;
 ]]
 
 |[seagull_update]| function(a)
@@ -76,4 +83,51 @@ end $$
         {x=a.target_x, y=a.target_y},
         rnd_item(possible_spots)
     }
+end $$
+
+-- FOX
+zclass[[fox,tile_entity,enemy,drawlayer_30|
+    x,@, y,@,
+    target_x,~x,
+    target_y,~y,
+    get_path,%fox_get_path,
+    update,%fox_update;
+
+    possible_sinds; ,224,226,200,228,192,196,194,198;
+]]
+
+|[fox_update]| function(a)
+    if a.target_x == g_sword.target_x and a.target_y == g_sword.target_y then
+        a:kill()
+    elseif a.target_x == g_pl.target_x and a.target_y == g_pl.target_y then
+        g_pl:kill()
+    end
+
+        if a.dx < 0 and a.dy < 0 then a.sind = 224
+    elseif a.dx < 0 and a.dy > 0 then a.sind = 226
+    elseif a.dx > 0 and a.dy < 0 then a.sind = 200
+    elseif a.dy > 0 and a.dy > 0 then a.sind = 228
+
+    elseif a.dx == 0 and a.dy < 0 then a.sind = 192
+    elseif a.dx == 0 and a.dy > 0 then a.sind = 196
+    elseif a.dx < 0 and a.dy == 0 then a.sind = 194
+    elseif a.dy > 0 and a.dy == 0 then a.sind = 198
+    end
+end $$
+
+|[fox_get_path]| function(a)
+    local path = {{x=a.target_x, y=a.target_y}}
+    local xdir, ydir = zsgn(g_pl.target_x - a.target_x), zsgn(g_pl.target_y - a.target_y)
+
+    local cur_x, cur_y = a.target_x, a.target_y
+    while true do
+        cur_x += xdir cur_y += ydir
+        if is_spot_empty(cur_x, cur_y) then
+            add(path, {x=cur_x, y=cur_y})
+        else
+            break
+        end
+    end
+
+    return path
 end $$
