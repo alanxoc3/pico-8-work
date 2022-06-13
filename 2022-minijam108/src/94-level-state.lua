@@ -104,11 +104,11 @@ end $$
 end $$
 
 |[player_update_update]| function(a)
-    if a.reset_pl_timer then
+    if a.timers.player_update.elapsed and a.timers.player_update.elapsed > .5 and a.reset_pl_timer then
         a.reset_pl_timer = false
         local spot = deli(a.path, 1)
         g_pl.target_x, g_pl.target_y, g_sword.target_x, g_sword.target_y = spot.x, spot.y, spot.sx, spot.sy
-        a:start_timer('pltick', .75, function()
+        a:start_timer('pltick', .25, function()
             if #a.path > 0 then
                 a.reset_pl_timer = true
             else
