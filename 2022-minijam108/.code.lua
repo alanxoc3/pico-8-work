@@ -558,7 +558,7 @@ zclass[[seagull,tile_entity,enemy,drawlayer_30|x,@,y,@,target_x,~x,target_y,~y,g
 zclass[[fox,tile_entity,enemy,drawlayer_30|x,@,y,@,target_x,~x,target_y,~y,get_path,%fox_get_path,setsind2,%fox_setsind2;possible_sinds;,224,226,200,228,192,196,194,198;]]
 zclass[[level_state,actor|itemind,2,items;,;start;init,%level_state_init,update,nop,duration,0,next,pre_card_select;pre_card_select;init,%pre_card_select_init;card_select;init,%card_select_init,update,%card_select_update;move_select;init,%move_select_init,update,%move_select_update;player_update;init,%player_update_init,update,%player_update_update;baddie_update;init,%baddie_update_init,update,%baddie_update_update;]]
 function get_random_card_ind()
-return rnd_item{128,130,134,160,164,166}
+return rnd_item{128,130,134,136,160,164,166}
 end
 function is_level_win()return not get_next_baddie{}end
 function is_level_lose()return not g_pl:is_alive()end
@@ -612,6 +612,27 @@ add_spot_if_movable(spots,pc.x-1,pc.y-1,143,158,path_move)
 add_spot_if_movable(spots,pc.x-1,pc.y+1,143,158,path_move)
 add_spot_if_movable(spots,pc.x+1,pc.y+1,143,158,path_move)
 add_spot_if_movable(spots,pc.x+1,pc.y-1,143,158,path_move)
+elseif move_type==136 then
+for ang=0,8 do
+local xdir,ydir=zsgn(cos(ang/8)),zsgn(sin(ang/8))
+local sxdir,sxdir=sc.x-pc.x,sc.y-pc.y
+local cur_x,cur_y=pc.x,pc.y
+local is_good=false
+while true do
+cur_x+=xdir
+cur_y+=ydir
+if not is_spot_valid(cur_x,cur_y)or is_spot_puddle(cur_x,cur_y)then
+break
+elseif not is_spot_empty(cur_x,cur_y)and not(sxdir==xdir and sydir==ydir)then
+is_good=false
+break
+end
+is_good=true
+end
+if is_good then
+add_spot_if_movable(spots,cur_x-xdir,cur_y-ydir,143,158,path_charge)
+end
+end
 elseif move_type==160 then
 local coords=find_on_grid(function(spot)
 return spot.entity and spot.entity.parents.enemy
@@ -694,6 +715,23 @@ local swx,swy=g_sword.target_x,g_sword.target_y
 local xdiff,ydiff=swx-plx,swy-ply
 local path={{x=plx,y=ply,sx=swx,sy=swy}}
 add(path,{x=x,y=y,sx=x+xdiff,sy=y+ydiff})
+return path
+end
+function path_charge(x,y)
+local plx,ply=g_pl.target_x,g_pl.target_y
+local swx,swy=g_sword.target_x,g_sword.target_y
+local xdiff,ydiff=swx-plx,swy-ply
+local path={{x=plx,y=ply,sx=swx,sy=swy}}
+local xdir,ydir=zsgn(x-plx),zsgn(y-ply)
+local cur_x,cur_y=plx,ply
+while true do
+cur_x+=xdir
+cur_y+=ydir
+add(path,{x=cur_x,y=cur_y,sx=cur_x+xdiff,sy=cur_y+ydiff})
+if cur_x==x and cur_y==y then
+break
+end
+end
 return path
 end
 function path_swap(x,y)
