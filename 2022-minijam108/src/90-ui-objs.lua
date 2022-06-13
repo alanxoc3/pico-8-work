@@ -39,10 +39,12 @@ zclass[[puddle,tile_entity,actor,drawlayer_25|
     target_y,~y
 ]]
 
-zclass[[hermit,tile_entity,actor,drawlayer_50|
+zclass[[hermit,mov,actor,drawlayer_50|
     x,@, y,@,
     target_x,~x,
     target_y,~y,
+    to_target,%tile_entity_to_target,
+    draw,%tile_sprite_draw,
     update,%hermit_update
 ]]
 
@@ -62,13 +64,18 @@ zclass[[hermit,tile_entity,actor,drawlayer_50|
 end $$
 
 zclass[[sword,drawlayer_50|
-    target_x,@, target_y,@,
-    draw,%sword_draw_debug
+    target_x,@, target_y,@
+
+    -- DEBUG_BEGIN
+    ,draw,%sword_draw_debug
+    -- DEBUG_END
 ]]
 
+-- DEBUG_BEGIN
 |[sword_draw_debug]| function(a)
     circ(scr_x(a.target_x), scr_y(a.target_y), 11, 7)
 end $$
+-- DEBUG_END
 
 zclass[[pos_preview,actor,drawlayer_50|
     gamestate,@, itemind,@, x,@, y,@, sind,@, sel_sind,@,

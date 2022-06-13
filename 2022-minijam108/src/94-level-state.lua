@@ -4,7 +4,7 @@ zclass[[level_state,actor|
     items;,;
 
     start;               init,%level_state_init,     update,nop,                 duration,0, next,pre_card_select;
-    pre_card_select;     init,%pre_card_select_init, update,nop,                 duration,0, next,card_select;
+    pre_card_select;     init,%pre_card_select_init;
     card_select;         init,%card_select_init,     update,%card_select_update;
     move_select;         init,%move_select_init,     update,%move_select_update;
     player_update;       init,%player_update_init,   update,%player_update_update;
@@ -15,18 +15,36 @@ function get_random_card_ind()
     return rnd_item{128, 130, 134, 160, 164, 166}
 end
 
+function is_level_win()  return not get_next_baddie{} end
+function is_level_lose() return not g_pl:is_alive()   end
+
 |[level_state_init]| function(a)
     a.item_inds = { get_random_card_ind(), get_random_card_ind(), get_random_card_ind() }
 end $$
 
 -- PRE CARD SELECT --
 |[pre_card_select_init]| function(a)
-    a.items = {}
-    for i=1,#a.item_inds do
-        add(a.items, _g.card(35+(i-1)*21, a.item_inds[i], false))
-    end
+    if is_level_win() then
+        a:kill()
+        _g.fader_out(function()
+            g_level += 1
+            g_tl:load'game'
+        end)
+    elseif is_level_lose() then
+        a:kill()
+        _g.fader_out(function()
+            g_tl:load'game'
+        end)
+    else
+        a:load'card_select'
 
-    a.items[a.itemind].selected = true
+        a.items = {}
+        for i=1,#a.item_inds do
+            add(a.items, _g.card(35+(i-1)*21, a.item_inds[i], false))
+        end
+
+        a.items[a.itemind].selected = true
+    end
 end $$
 
 -- CARD SELECT --
@@ -156,26 +174,31 @@ end $$
 
 |[baddie_update_update]| function(a)
     if a.timers.baddie_update.elapsed and a.timers.baddie_update.elapsed > .5 and a.reset_turn_timer then
-        a.reset_turn_timer = false
-        local spot = deli(a.path, 1)
-        a.baddie.target_x, a.baddie.target_y = spot.x, spot.y
+        if a.baddie then
+            a.reset_turn_timer = false
+            local spot = deli(a.path, 1)
+            a.baddie.target_x, a.baddie.target_y = spot.x, spot.y
 
-        a:start_timer('turn_tick', .25, function()
-            if #a.path > 0 then
-                a.reset_turn_timer = true
-            else
-                local next_baddie = get_next_baddie(a.visited_baddies)
-                if next_baddie then
-                    a.baddie = next_baddie
-                    a.visited_baddies[a.baddie] = true
-                    a.path = a.baddie:get_path()
+            a:start_timer('turn_tick', .25, function()
+                if #a.path > 0 then
                     a.reset_turn_timer = true
                 else
-                    a.reset_turn_timer = false
-                    a:load'pre_card_select'
+                    local next_baddie = get_next_baddie(a.visited_baddies)
+                    if next_baddie then
+                        a.baddie = next_baddie
+                        a.visited_baddies[a.baddie] = true
+                        a.path = a.baddie:get_path()
+                        a.reset_turn_timer = true
+                    else
+                        a.reset_turn_timer = false
+                        a:load'pre_card_select'
+                    end
                 end
-            end
-        end)
+            end)
+        else
+            a.reset_turn_timer = false
+            a:load'pre_card_select'
+        end
     end
 end $$
 

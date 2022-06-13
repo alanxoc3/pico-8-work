@@ -1,9 +1,10 @@
 -- BASIC EXAMPLE FOR SIMPLE GAME BELOW:
+
+g_level = 0
+
 |[game_init]| function()
-    g_level = 0
     g_level_state = _g.level_state()
     g_grid = set_grid(g_level)
-    _g.fader_in()
 end $$
 
 |[game_update]| function()
@@ -11,8 +12,9 @@ end $$
         1 ;,timer,       tick;
         2 ;,actor,       state;
         3 ;,tile_entity, to_target;
-        4 ;,mov,         mov_update;
-        5 ;,vec,         vec_update;
+        4 ;,hermit, to_target;
+        5 ;,mov,         mov_update;
+        6 ;,vec,         vec_update;
     ]])
 
     update_grid()
@@ -26,6 +28,7 @@ function round(num) return flr(num + .5) end
     draw_tiles()
 
     loop_entities('drawlayer_25', 'draw')
+    loop_entities('drawlayer_30', 'draw')
     loop_entities('drawlayer_50', 'draw')
 
     if g_debug then
@@ -92,12 +95,10 @@ function set_grid(level)
             local spot = {active = true}
 
             if objind == MAP_PL then
-                spot.entity = _g.hermit(x, y)
-                g_pl = spot.entity
+                g_pl = _g.hermit(x, y)
 
             elseif objind == MAP_SWORD then
-                spot.entity = _g.sword(x, y)
-                g_sword = spot.entity
+                g_sword = _g.sword(x, y)
 
             elseif objind == MAP_PUDDLE then
                 spot.entity = _g.puddle(x, y)

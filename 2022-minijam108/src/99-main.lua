@@ -1,10 +1,17 @@
 -- TEMPLATE TOKEN COUNT: 1045
 zclass[[game_state,actor|
     ecs_exclusions;actor,true; -- remove game_state from the actor group
-    curr,game;
-    logo; init,%logo_init, update,nop,          draw,%logo_draw, duration,2.5, next,game;
-    game; init,%game_init, update,%game_update, draw,%game_draw;
+    init,%game_state_init, curr,game;
+
+    logo; state_init,%logo_init, update,nop,          draw,%logo_draw, duration,2.5, next,game;
+    game; state_init,%game_init, update,%game_update, draw,%game_draw;
 ]]
+
+|[game_state_init]| function(state)
+    clean_all_entities'game_state'
+    _g.fader_in()
+    state:state_init()
+end $$
 
 function _init()
     g_tl = _g.game_state()
