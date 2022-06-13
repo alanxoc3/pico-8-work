@@ -129,7 +129,6 @@ function get_smartest_direction(possible_spots, x, y)
         local spot = possible_spots[i]
         local ang = atan2(spot.x - x, spot.y - y)
         if abs(ideal_ang-ang) < smallest_ang_diff then
-            printh(""..ideal_ang.." || "..ang)
             smallest_ang_diff = abs(ideal_ang-ang)
             selected_spot = i
         end
@@ -215,8 +214,6 @@ end $$
             add(possible_spots, {x=local_path[1].x, y=local_path[1].y, remaining=local_path})
         end
     end
-
-    printh(#possible_spots)
 
     local smartest = get_smartest_direction(possible_spots, a.target_x, a.target_y)
     if smartest then

@@ -341,7 +341,6 @@ if is_good and #local_path>0 then
 add(possible_spots,{x=local_path[1].x,y=local_path[1].y,remaining=local_path})
 end
 end
-printh(#possible_spots)
 local smartest=get_smartest_direction(possible_spots,a.target_x,a.target_y)
 if smartest then
 for spot in all(smartest.remaining)do
@@ -674,7 +673,6 @@ for i=1,#possible_spots do
 local spot=possible_spots[i]
 local ang=atan2(spot.x-x,spot.y-y)
 if abs(ideal_ang-ang)<smallest_ang_diff then
-printh(""..ideal_ang.." || "..ang)
 smallest_ang_diff=abs(ideal_ang-ang)
 selected_spot=i
 end
@@ -686,7 +684,7 @@ end
 zclass[[fox,tile_entity,enemy,drawlayer_30|x,@,y,@,target_x,~x,target_y,~y,get_path,%fox_get_path,setsind2,%fox_setsind2;possible_sinds;,224,226,200,228,192,196,194,198;]]
 zclass[[level_state,actor|itemind,2,items;,;start;init,%level_state_init,update,nop,duration,0,next,pre_card_select;pre_card_select;init,%pre_card_select_init;card_select;init,%card_select_init,update,%card_select_update;move_select;init,%move_select_init,update,%move_select_update;player_update;init,%player_update_init,update,%player_update_update;baddie_update;init,%baddie_update_init,update,%baddie_update_update;]]
 function get_random_card_ind()
-return rnd_item{128,130,132,134,136,160,162,164,166}
+return rnd_item{162,160}
 end
 function is_level_win()return not get_next_baddie{}end
 function is_level_lose()return not g_pl:is_alive()end
@@ -784,9 +782,19 @@ if pp then
 local good=true
 local reverse_prev_path={}
 for i=#pp,1,-1 do
-local x,y,sx,sy,duration=pp[i].x,pp[i].y,pp[i].sx,pp[i].sy,pp[i].duration
-add(reverse_prev_path,{x=x,y=y,sx=sx,sy=sy,duration=duration})
-if not is_spot_empty(x,y)or is_spot_puddle(x,y)then
+local x,y,sx,sy,duration,isswap=pp[i].x,pp[i].y,pp[i].sx,pp[i].sy,pp[i].duration,pp[i].isswap
+local func=nil
+if isswap and i==1 then
+func=function()
+local entity=g_grid[y*7+x].entity
+if entity then
+entity.target_x=g_pl.target_x
+entity.target_y=g_pl.target_y
+end
+end
+end
+add(reverse_prev_path,{isswap=isswap,x=x,y=y,sx=sx,sy=sy,duration=duration,func=func})
+if not isswap and(not is_spot_empty(x,y)or is_spot_puddle(x,y))then
 good=false
 break
 end
@@ -899,14 +907,13 @@ function path_swap(x,y)
 local plx,ply=g_pl.target_x,g_pl.target_y
 local swx,swy=g_sword.target_x,g_sword.target_y
 local xdiff,ydiff=swx-plx,swy-ply
-local path={{x=plx,y=ply,sx=swx,sy=swy}}
-add(path,{x=x,y=y,sx=x+xdiff,sy=y+ydiff,func=function()
-printh("TEST")
+local path={{isswap=true,x=plx,y=ply,sx=swx,sy=swy}}
+add(path,{isswap=true,x=x,y=y,sx=x+xdiff,sy=y+ydiff,func=function()
 local entity=g_grid[y*7+x].entity
-printh(entity.id)
-printh(g_pl.target_x)
+if entity then
 entity.target_x=g_pl.target_x
 entity.target_y=g_pl.target_y
+end
 end})
 return path
 end

@@ -74,9 +74,19 @@ function get_move_coordinates(move_type)
             local good = true
             local reverse_prev_path = {}
             for i=#pp,1,-1 do
-                local x, y, sx, sy, duration = pp[i].x, pp[i].y, pp[i].sx, pp[i].sy, pp[i].duration
-                add(reverse_prev_path, {x=x, y=y, sx=sx, sy=sy, duration=duration})
-                if not is_spot_empty(x, y) or is_spot_puddle(x, y) then
+                local x, y, sx, sy, duration, isswap = pp[i].x, pp[i].y, pp[i].sx, pp[i].sy, pp[i].duration, pp[i].isswap
+                local func = nil
+                if isswap and i == 1 then
+                    func = function()
+                        local entity = g_grid[y*7+x].entity
+                        if entity then
+                            entity.target_x = g_pl.target_x
+                            entity.target_y = g_pl.target_y
+                        end
+                    end
+                end
+                add(reverse_prev_path, {isswap=isswap, x=x, y=y, sx=sx, sy=sy, duration=duration, func=func})
+                if not isswap and (not is_spot_empty(x, y) or is_spot_puddle(x, y)) then
                     good = false
                     break
                 end
@@ -215,15 +225,14 @@ function path_swap(x, y)
     local plx, ply = g_pl.target_x,    g_pl.target_y
     local swx, swy = g_sword.target_x, g_sword.target_y
     local xdiff, ydiff = swx-plx, swy-ply
-    local path = {{x=plx, y=ply, sx=swx, sy=swy}}
+    local path = {{isswap=true, x=plx, y=ply, sx=swx, sy=swy}}
 
-    add(path, {x=x, y=y, sx=x+xdiff, sy=y+ydiff, func=function()
-        printh("TEST")
+    add(path, {isswap=true, x=x, y=y, sx=x+xdiff, sy=y+ydiff, func=function()
         local entity = g_grid[y*7+x].entity
-        printh(entity.id)
-        printh(g_pl.target_x)
-        entity.target_x = g_pl.target_x
-        entity.target_y = g_pl.target_y
+        if entity then
+            entity.target_x = g_pl.target_x
+            entity.target_y = g_pl.target_y
+        end
     end})
 
     return path
