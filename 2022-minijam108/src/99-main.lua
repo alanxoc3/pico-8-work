@@ -35,6 +35,16 @@ function _update60()
         3;,fader,state;
         4;,game_state,state;
     ]])
+
+    -- DEBUG_BEGIN
+    if btn(5) and xbtnp() ~= 0 then
+        g_level += xbtnp()
+
+        _g.fader_out(function()
+            g_tl:load'game'
+        end)
+    end
+    -- DEBUG_END
 end
 
 function _draw()

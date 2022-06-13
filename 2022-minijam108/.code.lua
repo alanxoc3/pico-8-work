@@ -791,6 +791,12 @@ if btn(4)and btnp(5)then g_debug=not g_debug end
 zcall(loop_entities,[[1;,actor,clean;2;,fader,clean;]])
 register_entities()
 zcall(loop_entities,[[1;,fader,tick;2;,game_state,tick;3;,fader,state;4;,game_state,state;]])
+if btn(5)and xbtnp()~=0 then
+g_level+=xbtnp()
+_g.fader_out(function()
+g_tl:load"game"
+end)
+end
 end
 function _draw()
 cls()
