@@ -83,6 +83,18 @@ g_card_namemap = zobj[[
     166,"jump";
 ]]
 
+g_card_colormap = zobj[[
+    128,8,
+    130,8,
+    132,8,
+    134,11,
+    136,11,
+    160,10,
+    162,10,
+    164,10,
+    166,11;
+]]
+
 -- used everwhere
 function zspr(sind, x, y, sw, sh, xf, yf)
     sw, sh = sw or 1, sh or 1

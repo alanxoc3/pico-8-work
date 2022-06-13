@@ -168,7 +168,12 @@ zclass[[card,actor,vec,drawlayer_50|
         spr(141,a.x+4, a.y+16)
 
         local name = g_card_namemap[a.sind]
-        print("\^w"..name.."\^-w", 71, a.y+3, 7)
+        local txtfunc = function()
+            print("\^w"..name.."\^-w", 71, a.y+3, g_card_colormap[a.sind])
+        end
+
+        draw_outline(1, txtfunc)
+        txtfunc()
     elseif g_level_state.curr != 'card_select' then
         offy = 13
     end

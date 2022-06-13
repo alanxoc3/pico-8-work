@@ -500,7 +500,11 @@ if a.selected then
 draw_outline(7,func)
 spr(141,a.x+4,a.y+16)
 local name=g_card_namemap[a.sind]
-print("\^w"..name.."\^-w",71,a.y+3,7)
+local txtfunc=function()
+print("\^w"..name.."\^-w",71,a.y+3,g_card_colormap[a.sind])
+end
+draw_outline(1,txtfunc)
+txtfunc()
 elseif g_level_state.curr!="card_select"then
 offy=13
 end
@@ -616,6 +620,7 @@ camera(ox,oy)
 pal()
 end
 g_card_namemap=zobj[[128,spin,130,stab,132,thrust,134,move,136,charge,160,swap,162,undo,164,idle,166,jump;]]
+g_card_colormap=zobj[[128,8,130,8,132,8,134,11,136,11,160,10,162,10,164,10,166,11;]]
 function zspr(sind,x,y,sw,sh,xf,yf)
 sw,sh=sw or 1,sh or 1
 xf,yf=xf and xf<0,yf and yf<0
