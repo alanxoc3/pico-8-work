@@ -12,7 +12,7 @@ zclass[[level_state,actor|
 ]]
 
 function get_random_card_ind()
-    return rnd_item{128, 130, 134, 166}
+    return rnd_item{128, 130, 134, 160, 164, 166}
 end
 
 |[level_state_init]| function(a)
@@ -118,6 +118,7 @@ end $$
         a.reset_pl_timer = false
         local spot = deli(a.path, 1)
         g_pl.target_x, g_pl.target_y, g_sword.target_x, g_sword.target_y = spot.x, spot.y, spot.sx, spot.sy
+
         a:start_timer('pltick', .25, function()
             if #a.path > 0 then
                 a.reset_pl_timer = true

@@ -28,6 +28,8 @@ function get_move_coordinates(move_type)
         add_spot_if_movable(spots, pc.x+1, pc.y+1, 143, 158, path_move)
         add_spot_if_movable(spots, pc.x+1, pc.y-1, 143, 158, path_move)
 
+    elseif move_type == 160 then
+    elseif move_type == 164 then
     elseif move_type == 166 then
         add_spot_if_movable(spots, pc.x+2, pc.y,   143, 158, path_move)
         add_spot_if_movable(spots, pc.x-2, pc.y,   143, 158, path_move)
@@ -38,6 +40,11 @@ function get_move_coordinates(move_type)
         add_spot_if_movable(spots, pc.x-2, pc.y+2, 143, 158, path_move)
         add_spot_if_movable(spots, pc.x+2, pc.y+2, 143, 158, path_move)
         add_spot_if_movable(spots, pc.x+2, pc.y-2, 143, 158, path_move)
+    end
+
+    -- idle spot if there is nothing to do
+    if #spots == 0 then
+        add_spot(spots, pc.x, pc.y, 143, 158, function() return {{x=pc.x, y=pc.y, sx=sc.x, sy=sc.y}} end)
     end
 
     return spots
@@ -135,10 +142,7 @@ function path_slice(x, y)
     -- local xdiff, ydiff = swx-plx, swy-ply
     -- local initial_ang = atan2(xdiff,ydiff)
 
-    if x == swx or y == swy then
-        add(path, {x=plx, y=ply, sx=x, sy=y})
-    end
-
+    add(path, {x=plx, y=ply, sx=x, sy=y})
     return path
 end
 

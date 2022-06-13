@@ -92,7 +92,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,tile_entity_to_target,@,tile_sprite_draw,@,hermit_update,@,sword_draw_debug,@,possible_move_obj_update,@,possible_move_small_obj_update,@,selected_move_update,@,selected_move_draw,@,level_state_init,@,pre_card_select_init,@,card_select_init,@,card_select_update,@,move_select_init,@,move_select_update,@,player_update_init,@,player_update_update,@,baddie_update_init,@,test_init,@,test_update,@,test_draw,@,game_init,@,game_update,@,game_draw,@,card_draw,@,card_normal_update,@,status_text_draw,@,status_text_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,tile_entity_to_target,@,tile_sprite_draw,@,hermit_update,@,sword_draw_debug,@,possible_move_obj_update,@,possible_move_small_obj_update,@,selected_move_update,@,selected_move_draw,@,level_state_init,@,pre_card_select_init,@,card_select_init,@,card_select_update,@,move_select_init,@,move_select_update,@,player_update_init,@,player_update_update,@,baddie_update_init,@,game_init,@,game_update,@,game_draw,@,card_draw,@,card_normal_update,@,status_text_draw,@,status_text_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@]],function(a,stateName)
 a.next_state=a.next_state or stateName
 end,function(a,stateName)
 a.next_state,a.isnew=nil
@@ -294,12 +294,11 @@ end)
 end
 end,function(a)
 _g.status_text("baddie turn","baddie_update")
-end,function(a)a.color+=1 end,function(a)a.x+=xbtn()a.y+=ybtn()end,function(a)circfill(a.x,a.y,2,a.color)end,function()
+end,function()
 g_level=0
 g_level_state=_g.level_state()
 g_grid=set_grid(g_level)
 _g.fader_in()
-_g.test_obj(64,64)
 end,function()
 zcall(loop_entities,[[1;,timer,tick;2;,actor,state;3;,tile_entity,to_target;4;,mov,mov_update;5;,vec,vec_update;]])
 update_grid()
@@ -397,7 +396,7 @@ zclass[[pos_preview,actor,drawlayer_50|gamestate,@,itemind,@,x,@,y,@,sind,@,sel_
 zclass[[selected_move,actor,drawlayer_50|update,%selected_move_update,draw,%selected_move_draw]]
 zclass[[level_state,actor|itemind,2,items;,;start;init,%level_state_init,update,nop,duration,0,next,pre_card_select;pre_card_select;init,%pre_card_select_init,update,nop,duration,0,next,card_select;card_select;init,%card_select_init,update,%card_select_update;move_select;init,%move_select_init,update,%move_select_update;player_update;init,%player_update_init,update,%player_update_update;baddie_update;init,%baddie_update_init,update,nop,duration,1,next,pre_card_select;]]
 function get_random_card_ind()
-return rnd_item{128,130,134,166}
+return rnd_item{128,130,134,160,164,166}
 end
 function move_select_update_helper(moves,ind,btnpress,default,axis,default_key,axis_key)
 local smallest_diff,smallest_axis_diff=16,16
@@ -440,6 +439,8 @@ add_spot_if_movable(spots,pc.x-1,pc.y-1,143,158,path_move)
 add_spot_if_movable(spots,pc.x-1,pc.y+1,143,158,path_move)
 add_spot_if_movable(spots,pc.x+1,pc.y+1,143,158,path_move)
 add_spot_if_movable(spots,pc.x+1,pc.y-1,143,158,path_move)
+elseif move_type==160 then
+elseif move_type==164 then
 elseif move_type==166 then
 add_spot_if_movable(spots,pc.x+2,pc.y,143,158,path_move)
 add_spot_if_movable(spots,pc.x-2,pc.y,143,158,path_move)
@@ -449,6 +450,9 @@ add_spot_if_movable(spots,pc.x-2,pc.y-2,143,158,path_move)
 add_spot_if_movable(spots,pc.x-2,pc.y+2,143,158,path_move)
 add_spot_if_movable(spots,pc.x+2,pc.y+2,143,158,path_move)
 add_spot_if_movable(spots,pc.x+2,pc.y-2,143,158,path_move)
+end
+if #spots==0 then
+add_spot(spots,pc.x,pc.y,143,158,function()return{{x=pc.x,y=pc.y,sx=sc.x,sy=sc.y}}end)
 end
 return spots
 end
@@ -521,12 +525,9 @@ function path_slice(x,y)
 local plx,ply=g_pl.target_x,g_pl.target_y
 local swx,swy=g_sword.target_x,g_sword.target_y
 local path={{x=plx,y=ply,sx=swx,sy=swy}}
-if x==swx or y==swy then
 add(path,{x=plx,y=ply,sx=x,sy=y})
-end
 return path
 end
-zclass[[test_obj,actor,drawlayer_50|x,@,y,@,color,7,init,%test_init,update,%test_update,draw,%test_draw;]]
 function round(num)return flr(num+.5)end
 function print_vert_wobble(text,x,y,col,off,wob)
 for i=1,#text do
