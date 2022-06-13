@@ -659,7 +659,7 @@ end
 is_good=true
 end
 if is_good then
-add_spot_if_movable(spots,cur_x-xdir,cur_y-ydir,143,158,path_charge)
+add_spot(spots,cur_x-xdir,cur_y-ydir,143,158,path_charge)
 end
 end
 elseif move_type==160 then

@@ -41,7 +41,7 @@ function get_move_coordinates(move_type)
 
                 if not is_spot_valid(cur_x, cur_y) or is_spot_puddle(cur_x, cur_y) then
                     break
-                elseif not is_spot_empty(cur_x, cur_y) and not (sxdir == xdir and sydir == ydir)then
+                elseif not is_spot_empty(cur_x, cur_y) and not (sxdir == xdir and sydir == ydir) then
                     is_good = false
                     break
                 end
@@ -50,7 +50,7 @@ function get_move_coordinates(move_type)
             end
 
             if is_good then
-                add_spot_if_movable(spots, cur_x-xdir, cur_y-ydir, 143, 158, path_charge)
+                add_spot(spots, cur_x-xdir, cur_y-ydir, 143, 158, path_charge)
             end
         end
 
