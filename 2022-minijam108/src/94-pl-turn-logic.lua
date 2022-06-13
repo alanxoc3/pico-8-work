@@ -27,6 +27,17 @@ function get_move_coordinates(move_type)
         add_spot_if_movable(spots, pc.x-1, pc.y+1, 143, 158, path_move)
         add_spot_if_movable(spots, pc.x+1, pc.y+1, 143, 158, path_move)
         add_spot_if_movable(spots, pc.x+1, pc.y-1, 143, 158, path_move)
+
+    elseif move_type == 166 then
+        add_spot_if_movable(spots, pc.x+2, pc.y,   143, 158, path_move)
+        add_spot_if_movable(spots, pc.x-2, pc.y,   143, 158, path_move)
+        add_spot_if_movable(spots, pc.x, pc.y+2,   143, 158, path_move)
+        add_spot_if_movable(spots, pc.x, pc.y-2,   143, 158, path_move)
+
+        add_spot_if_movable(spots, pc.x-2, pc.y-2, 143, 158, path_move)
+        add_spot_if_movable(spots, pc.x-2, pc.y+2, 143, 158, path_move)
+        add_spot_if_movable(spots, pc.x+2, pc.y+2, 143, 158, path_move)
+        add_spot_if_movable(spots, pc.x+2, pc.y-2, 143, 158, path_move)
     end
 
     return spots
