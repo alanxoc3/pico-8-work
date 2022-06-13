@@ -19,10 +19,15 @@ zclass[[game_state,actor|
 end $$
 
 |[lvlwin_draw]| function(a)
-    cls(0)
-    print_wide_centered("next level",              64, 53, 7)
-    print_wide_centered("turns: "..g_turn_count,   64, 75, 7)
-    print_wide_centered("deaths: "..g_death_count, 64, 83, 7)
+    cls(12)
+    local func = function()
+        print_wide_centered("next level",              64, 53, 7)
+        print_wide_centered("turns: "..g_turn_count,   64, 75, 7)
+        print_wide_centered("deaths: "..g_death_count, 64, 83, 7)
+    end
+
+    draw_outline(1, func)
+    func()
 end $$
 
 |[lvllose_update]| function(a)
@@ -34,10 +39,15 @@ end $$
 end $$
 
 |[lvllose_draw]| function(a)
-    cls(0)
-    print_wide_centered("retry level",             64, 53, 7)
-    print_wide_centered("turns: "..g_turn_count,   64, 75, 7)
-    print_wide_centered("deaths: "..g_death_count, 64, 83, 7)
+    cls(12)
+    local func = function()
+        print_wide_centered("retry level",             64, 53, 7)
+        print_wide_centered("turns: "..g_turn_count,   64, 75, 7)
+        print_wide_centered("deaths: "..g_death_count, 64, 83, 7)
+    end
+
+    draw_outline(1, func)
+    func()
 end $$
 
 |[title_update]| function(a)

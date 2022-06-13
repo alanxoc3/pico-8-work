@@ -488,6 +488,12 @@ draw_tiles()
 loop_entities("drawlayer_25","draw")
 loop_entities("drawlayer_30","draw")
 loop_entities("drawlayer_50","draw")
+local txtfunc=function()
+print_vert_wobble("stabby crabby",64-46-14,53-46-6,7,1,1)
+print_vert_wobble("level "..(g_level+1),64-46+99,53-46-6+7*3,7,1,1)
+end
+draw_outline(1,txtfunc)
+txtfunc()
 if g_debug then
 rect(0,0,127,127,8)
 end
@@ -536,10 +542,14 @@ a:load"game"
 end)
 end
 end,function(a)
-cls(0)
+cls(12)
+local func=function()
 print_wide_centered("next level",64,53,7)
 print_wide_centered("turns: "..g_turn_count,64,75,7)
 print_wide_centered("deaths: "..g_death_count,64,83,7)
+end
+draw_outline(1,func)
+func()
 end,function(a)
 if a.timers.lvllose.elapsed and a.timers.lvllose.elapsed>=1.5 and not does_entity_exist"fader"then
 _g.fader_out(function()
@@ -547,10 +557,14 @@ a:load"game"
 end)
 end
 end,function(a)
-cls(0)
+cls(12)
+local func=function()
 print_wide_centered("retry level",64,53,7)
 print_wide_centered("turns: "..g_turn_count,64,75,7)
 print_wide_centered("deaths: "..g_death_count,64,83,7)
+end
+draw_outline(1,func)
+func()
 end,function(a)
 if a.timers.title.elapsed and a.timers.title.elapsed>=1.5 and not does_entity_exist"fader"then
 _g.fader_out(function()
@@ -939,12 +953,6 @@ end
 function draw_tiles()
 local tlx,tly=g_offx-46,g_offy-46
 rectfill(tlx,tly,tlx+90,tly+90,15)
-local txtfunc=function()
-print_vert_wobble("stabby crabby",tlx-14,tly-6,7,1,1)
-print_vert_wobble("level "..(g_level+1),tlx+99,tly-6+7*3,7,1,1)
-end
-draw_outline(1,txtfunc)
-txtfunc()
 local amp=cos(.9)*.4+.8
 local amp1=cos(.25+.9)*.4+.8
 local amp2=cos(.5+.9)*.4+.8

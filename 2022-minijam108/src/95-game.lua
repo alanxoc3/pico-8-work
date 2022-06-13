@@ -34,6 +34,14 @@ function round(num) return flr(num + .5) end
     loop_entities('drawlayer_30', 'draw')
     loop_entities('drawlayer_50', 'draw')
 
+    local txtfunc = function()
+        print_vert_wobble("stabby crabby", 64-46-14, 53-46-6, 7, 1, 1)
+        print_vert_wobble("level "..(g_level+1), 64-46+99, 53-46-6+7*3, 7, 1, 1)
+    end
+
+    draw_outline(1, txtfunc)
+    txtfunc()
+
     if g_debug then
         rect(0, 0, 127, 127, 8)
     end
@@ -48,14 +56,6 @@ end
 function draw_tiles()
     local tlx, tly = g_offx-46, g_offy-46
     rectfill(tlx,tly,tlx+90,tly+90,15)
-    
-    local txtfunc = function()
-        print_vert_wobble("stabby crabby", tlx-14, tly-6, 7, 1, 1)
-        print_vert_wobble("level "..(g_level+1), tlx+99, tly-6+7*3, 7, 1, 1)
-    end
-
-    draw_outline(1, txtfunc)
-    txtfunc()
     
     local amp=cos(.9)*.4+.8
     local amp1=cos(.25+.9)*.4+.8
