@@ -92,7 +92,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,tile_entity_to_target,@,tile_sprite_draw,@,hermit_update,@,sword_draw_debug,@,possible_move_obj_update,@,possible_move_small_obj_update,@,selected_move_update,@,selected_move_draw,@,snake_update,@,snake_get_path,@,level_state_init,@,pre_card_select_init,@,card_select_init,@,card_select_update,@,move_select_init,@,move_select_update,@,player_update_init,@,player_update_update,@,baddie_update_init,@,baddie_update_update,@,game_init,@,game_update,@,game_draw,@,card_draw,@,card_normal_update,@,status_text_draw,@,status_text_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,game_state_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,tile_entity_to_target,@,tile_sprite_draw,@,hermit_update,@,sword_draw_debug,@,possible_move_obj_update,@,possible_move_small_obj_update,@,selected_move_update,@,selected_move_draw,@,snake_update,@,snake_get_path,@,seagull_update,@,seagull_get_path,@,level_state_init,@,pre_card_select_init,@,card_select_init,@,card_select_update,@,move_select_init,@,move_select_update,@,player_update_init,@,player_update_update,@,baddie_update_init,@,baddie_update_update,@,game_init,@,game_update,@,game_draw,@,card_draw,@,card_normal_update,@,status_text_draw,@,status_text_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,game_state_init,@]],function(a,stateName)
 a.next_state=a.next_state or stateName
 end,function(a,stateName)
 a.next_state,a.isnew=nil
@@ -240,6 +240,29 @@ end,function(a)
 local possible_spots={}
 for i=0,3 do
 local x,y=round(cos(i/4))+a.target_x,round(sin(i/4))+a.target_y
+if is_spot_empty(x,y)then
+add(possible_spots,{x=x,y=y})
+end
+end
+return{
+{x=a.target_x,y=a.target_y},
+rnd_item(possible_spots)
+}
+end,function(a)
+if a.target_x==g_sword.target_x and a.target_y==g_sword.target_y then
+a:kill()
+elseif a.target_x==g_pl.target_x and a.target_y==g_pl.target_y then
+g_pl:kill()
+end
+if a.dx<0 and dy<0 then a.sind=10
+elseif a.dx<0 and dy>0 then a.sind=12
+elseif a.dx>0 and dy<0 then a.sind=08
+elseif a.dy>0 and dy>0 then a.sind=14
+end
+end,function(a)
+local possible_spots={}
+for i=0,3 do
+local x,y=round(cos(.125+i/4))+a.target_x,round(sin(.125+i/4))+a.target_y
 if is_spot_empty(x,y)then
 add(possible_spots,{x=x,y=y})
 end
@@ -482,6 +505,7 @@ zclass[[pos_preview,actor,drawlayer_50|gamestate,@,itemind,@,x,@,y,@,sind,@,sel_
 zclass[[selected_move,actor,drawlayer_50|update,%selected_move_update,draw,%selected_move_draw]]
 zclass[[enemy|get_path,nil]]
 zclass[[snake,tile_entity,enemy,drawlayer_30|x,@,y,@,target_x,~x,target_y,~y,sind,40,get_path,%snake_get_path,update,%snake_update]]
+zclass[[seagull,tile_entity,enemy,drawlayer_30|x,@,y,@,target_x,~x,target_y,~y,sind,10,get_path,%seagull_get_path,update,%seagull_update]]
 zclass[[level_state,actor|itemind,2,items;,;start;init,%level_state_init,update,nop,duration,0,next,pre_card_select;pre_card_select;init,%pre_card_select_init;card_select;init,%card_select_init,update,%card_select_update;move_select;init,%move_select_init,update,%move_select_update;player_update;init,%player_update_init,update,%player_update_update;baddie_update;init,%baddie_update_init,update,%baddie_update_update;]]
 function get_random_card_ind()
 return rnd_item{128,130,134,160,164,166}
