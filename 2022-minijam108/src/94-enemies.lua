@@ -6,7 +6,7 @@ zclass[[snake,tile_entity,enemy,drawlayer_50|
     x,@, y,@,
     target_x,~x,
     target_y,~y,
-    sind,196,
+    sind,40,
     get_path,%snake_get_path
 ]]
 

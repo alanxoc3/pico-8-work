@@ -415,7 +415,7 @@ function ybtnp()return zbtn(btnp,2)end
 function zsgn(num)return num==0 and 0 or sgn(num)end
 zclass[[actor,timer|load,%actor_load,loadlogic,%actor_loadlogic,state,%actor_state,kill,%actor_kill,clean,%actor_clean,is_alive,%actor_is_alive,alive,yes,duration,null,curr,start,next,null,isnew,yes,init,nop,update,nop,destroyed,nop;]]
 zclass[[drawlayer_50|]]
-g_spr_info=zobj[[0;,2,4,8,21;2;,2,4,6,10;4;,4,2,21,6;36;,4,2,10,9;64;,3,3,7,17;67;,3,3,6,7;70;,3,3,16,6;73;,3,3,17,16;142;,1,1,3,3;143;,1,1,3,3;138;,2,2,0,0;170;,2,2,0,0;196;,2,2,4,8;]]
+g_spr_info=zobj[[0;,2,4,8,21;2;,2,4,6,10;4;,4,2,21,6;36;,4,2,10,9;64;,3,3,7,17;67;,3,3,6,7;70;,3,3,16,6;73;,3,3,17,16;142;,1,1,3,3;143;,1,1,3,3;138;,2,2,0,0;170;,2,2,0,0;40;,2,2,4,8;]]
 function draw_outline(color,drawfunc)
 for c=1,15 do pal(c,color)end
 local ox,oy=%0x5f28,%0x5f2a
@@ -443,7 +443,7 @@ zclass[[sword,drawlayer_50|target_x,@,target_y,@,draw,%sword_draw_debug]]
 zclass[[pos_preview,actor,drawlayer_50|gamestate,@,itemind,@,x,@,y,@,sind,@,sel_sind,@,update,%possible_move_small_obj_update,draw,%tile_sprite_draw]]
 zclass[[selected_move,actor,drawlayer_50|update,%selected_move_update,draw,%selected_move_draw]]
 zclass[[enemy|get_path,nil]]
-zclass[[snake,tile_entity,enemy,drawlayer_50|x,@,y,@,target_x,~x,target_y,~y,sind,196,get_path,%snake_get_path]]
+zclass[[snake,tile_entity,enemy,drawlayer_50|x,@,y,@,target_x,~x,target_y,~y,sind,40,get_path,%snake_get_path]]
 zclass[[level_state,actor|itemind,2,items;,;start;init,%level_state_init,update,nop,duration,0,next,pre_card_select;pre_card_select;init,%pre_card_select_init,update,nop,duration,0,next,card_select;card_select;init,%card_select_init,update,%card_select_update;move_select;init,%move_select_init,update,%move_select_update;player_update;init,%player_update_init,update,%player_update_update;baddie_update;init,%baddie_update_init,update,%baddie_update_update;]]
 function get_random_card_ind()
 return rnd_item{128,130,134,160,164,166}

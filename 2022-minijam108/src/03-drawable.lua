@@ -31,7 +31,7 @@ g_spr_info = zobj[[
     138;,2,2,0,0; -- ground
     170;,2,2,0,0;
 
-    196;,2,2,4,8; -- enemies
+    40;,2,2,4,8; -- enemies
 ]]
 
 function draw_outline(color, drawfunc)
