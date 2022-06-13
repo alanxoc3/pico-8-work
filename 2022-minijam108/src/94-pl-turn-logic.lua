@@ -60,7 +60,9 @@ function get_move_coordinates(move_type)
         end)
 
         for coord in all(coords) do
-            add_spot(spots, coord.x, coord.y,   143, 158, path_swap)
+            if not is_spot_puddle(coord.x, coord.y) then
+                add_spot(spots, coord.x, coord.y,   143, 158, path_swap)
+            end
         end
 
     elseif move_type == 164 then

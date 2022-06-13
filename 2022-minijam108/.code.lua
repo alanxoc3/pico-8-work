@@ -638,7 +638,9 @@ local coords=find_on_grid(function(spot)
 return spot.entity and spot.entity.parents.enemy
 end)
 for coord in all(coords)do
+if not is_spot_puddle(coord.x,coord.y)then
 add_spot(spots,coord.x,coord.y,143,158,path_swap)
+end
 end
 elseif move_type==164 then
 elseif move_type==166 then
