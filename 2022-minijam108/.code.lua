@@ -92,7 +92,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,tile_entity_to_target,@,tile_sprite_draw,@,hermit_destroyed,@,hermit_update,@,sword_draw_debug,@,possible_move_obj_update,@,possible_move_small_obj_update,@,selected_move_update,@,selected_move_draw,@,enemy_init,@,enemy_check_collision,@,enemy_update,@,snake_setsind2,@,snake_get_path,@,frog_setsind2,@,frog_get_path,@,seagull_setsind2,@,seagull_get_path,@,fox_setsind2,@,fox_get_path,@,level_state_init,@,pre_card_select_init,@,card_select_init,@,card_select_update,@,move_select_init,@,move_select_update,@,player_update_init,@,player_update_update,@,baddie_update_init,@,baddie_update_update,@,game_init,@,game_update,@,game_draw,@,card_draw,@,card_normal_update,@,status_text_draw,@,status_text_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,game_state_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,tile_entity_to_target,@,tile_sprite_draw,@,hermit_destroyed,@,hermit_update,@,sword_draw_debug,@,possible_move_obj_update,@,possible_move_small_obj_update,@,selected_move_update,@,selected_move_draw,@,enemy_init,@,enemy_check_collision,@,enemy_update,@,snake_setsind2,@,snake_get_path,@,frog_setsind2,@,frog_get_path,@,seagull_setsind2,@,seagull_get_path,@,fox_setsind2,@,fox_get_path,@,level_state_init,@,pre_card_select_init,@,card_select_init,@,card_select_update,@,move_select_init,@,move_select_update,@,player_update_init,@,player_update_update,@,baddie_update_init,@,baddie_update_update,@,game_init,@,game_update,@,game_draw,@,card_draw,@,card_normal_update,@,status_text_draw,@,status_text_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,lvlwin_update,@,lvlwin_draw,@,lvllose_update,@,lvllose_draw,@,title_update,@,title_draw,@,game_state_init,@]],function(a,stateName)
 a.next_state=a.next_state or stateName
 end,function(a,stateName)
 a.next_state,a.isnew=nil
@@ -356,14 +356,16 @@ if is_level_win()then
 a:kill()
 _g.fader_out(function()
 g_level+=1
-g_tl:load"game"
+g_tl:load"lvlwin"
 end)
 elseif is_level_lose()then
+g_death_count+=1
 a:kill()
 _g.fader_out(function()
-g_tl:load"game"
+g_tl:load"lvllose"
 end)
 else
+g_turn_count+=1
 a:load"card_select"
 a.items={}
 for i=1,#a.item_inds do
@@ -522,6 +524,39 @@ g_fade=cos(a:get_elapsed_percent"logo")+1
 camera(g_fade>.5 and rnd_one())
 zspr(108,64,64,4,2)
 camera()
+end,function(a)
+if a.timers.lvlwin.elapsed and a.timers.lvlwin.elapsed>=1.5 and not does_entity_exist"fader"then
+_g.fader_out(function()
+a:load"game"
+end)
+end
+end,function(a)
+cls(0)
+print_wide_centered("next level",64,53,7)
+print_wide_centered("turns: "..g_turn_count,64,75,7)
+print_wide_centered("deaths: "..g_death_count,64,83,7)
+end,function(a)
+if a.timers.lvllose.elapsed and a.timers.lvllose.elapsed>=1.5 and not does_entity_exist"fader"then
+_g.fader_out(function()
+a:load"game"
+end)
+end
+end,function(a)
+cls(0)
+print_wide_centered("retry level",64,53,7)
+print_wide_centered("turns: "..g_turn_count,64,75,7)
+print_wide_centered("deaths: "..g_death_count,64,83,7)
+end,function(a)
+if a.timers.title.elapsed and a.timers.title.elapsed>=1.5 and not does_entity_exist"fader"then
+_g.fader_out(function()
+a:load"game"
+end)
+end
+end,function(a)
+cls(12)
+print("\^wstabby\^-w",41,40,7)
+print("\^wcrabby\^-w",41,83,7)
+zspr(202,64,64,4,4)
 end,function(state)
 clean_all_entities"game_state"
 _g.fader_in()
@@ -580,6 +615,15 @@ camera(ox,oy)
 pal()
 end
 g_card_namemap=zobj[[128,spin,130,stab,134,move,136,charge,160,swap,164,idle,166,jump;]]
+function zspr(sind,x,y,sw,sh,xf,yf)
+sw,sh=sw or 1,sh or 1
+xf,yf=xf and xf<0,yf and yf<0
+x,y=x-sw*4,y-sh*4
+spr(sind,flr(x+.5),flr(y+.5),sw,sh,xf,yf)
+end
+function print_wide_centered(text,x,y,color)
+print("\^w"..text.."\^-w",x-#text*4,y-2,color)
+end
 zclass[[timer|timers;,;start_timer,%timer_reset_timer,end_timer,%timer_end_timer,is_active,%timer_is_active,get_elapsed_percent,%timer_get_elapsed_percent,tick,%timer_tick,]]
 zclass[[pos|x,0,y,0,dist_point,%pos_dist_point]]
 zclass[[vec,pos|dx,0,dy,0,vec_update,%vec_update]]
@@ -843,6 +887,8 @@ return{
 }
 end
 g_level=0
+g_death_count=0
+g_turn_count=0
 function round(num)return flr(num+.5)end
 function print_vert_wobble(text,x,y,col,off,wob)
 for i=1,#text do
@@ -940,7 +986,7 @@ end
 zclass[[fader,actor|ecs_exclusions;actor,yes,timer,yes;]]
 zclass[[fader_out,fader|start;duration,.5,destroyed,@,update,%fader_out_update]]
 zclass[[fader_in,fader|start;duration,.5,update,%fader_in_update]]
-zclass[[game_state,actor|ecs_exclusions;actor,true;init,%game_state_init,curr,logo;logo;state_init,%logo_init,update,nop,draw,%logo_draw,duration,2.5,next,game;game;state_init,%game_init,update,%game_update,draw,%game_draw;]]
+zclass[[game_state,actor|ecs_exclusions;actor,true;init,%game_state_init,curr,logo;logo;state_init,%logo_init,update,nop,draw,%logo_draw,duration,2.5,next,title;title;state_init,nop,update,%title_update,draw,%title_draw;game;state_init,%game_init,update,%game_update,draw,%game_draw;lvlwin;state_init,nop,update,%lvlwin_update,draw,%lvlwin_draw;lvllose;state_init,nop,update,%lvllose_update,draw,%lvllose_draw;]]
 function _init()
 g_tl=_g.game_state()
 end
