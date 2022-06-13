@@ -228,6 +228,8 @@ spr(m.sel_sind,scr_x(m.x)-5,scr_y(m.y)-5,2,2)
 end,function(a)
 if a.target_x==g_sword.target_x and a.target_y==g_sword.target_y then
 a:kill()
+elseif a.target_x==g_pl.target_x and a.target_y==g_pl.target_y then
+g_pl:kill()
 end
 if a.dx<0 then a.sind=42
 elseif a.dx>0 then a.sind=46
@@ -367,13 +369,14 @@ end,function()
 g_level_state=_g.level_state()
 g_grid=set_grid(g_level)
 end,function()
-zcall(loop_entities,[[1;,timer,tick;2;,actor,state;3;,tile_entity,to_target;4;,mov,mov_update;5;,vec,vec_update;]])
+zcall(loop_entities,[[1;,timer,tick;2;,actor,state;3;,tile_entity,to_target;4;,hermit,to_target;5;,mov,mov_update;6;,vec,vec_update;]])
 update_grid()
 end,function()
 rectfill(0,0,127,127,12)
 g_offx,g_offy=64,53
 draw_tiles()
 loop_entities("drawlayer_25","draw")
+loop_entities("drawlayer_30","draw")
 loop_entities("drawlayer_50","draw")
 if g_debug then
 rect(0,0,127,127,8)
@@ -447,6 +450,7 @@ function ybtnp()return zbtn(btnp,2)end
 function zsgn(num)return num==0 and 0 or sgn(num)end
 zclass[[actor,timer|load,%actor_load,loadlogic,%actor_loadlogic,state,%actor_state,kill,%actor_kill,clean,%actor_clean,is_alive,%actor_is_alive,alive,yes,duration,null,curr,start,next,null,isnew,yes,init,nop,update,nop,destroyed,nop;]]
 zclass[[drawlayer_25|]]
+zclass[[drawlayer_30|]]
 zclass[[drawlayer_50|]]
 g_spr_info=zobj[[0;,2,4,8,21;2;,2,4,6,10;4;,4,2,21,6;36;,4,2,10,9;64;,3,3,7,17;67;,3,3,6,7;70;,3,3,16,6;73;,3,3,17,16;142;,1,1,3,3;143;,1,1,3,3;138;,2,2,0,0;170;,2,2,0,0;40;,2,2,6,8;42;,2,2,6,8;44;,2,2,6,8;46;,2,2,6,8;168;,2,2,6,6;]]
 function draw_outline(color,drawfunc)
@@ -472,12 +476,12 @@ return y*13+g_offy-midr+13/2-1
 end
 zclass[[tile_entity,mov,actor|to_target,%tile_entity_to_target,target_x,null,target_y,null,draw,%tile_sprite_draw]]
 zclass[[puddle,tile_entity,actor,drawlayer_25|x,@,y,@,sind,168,target_x,~x,target_y,~y]]
-zclass[[hermit,tile_entity,actor,drawlayer_50|x,@,y,@,target_x,~x,target_y,~y,update,%hermit_update]]
+zclass[[hermit,mov,actor,drawlayer_50|x,@,y,@,target_x,~x,target_y,~y,to_target,%tile_entity_to_target,draw,%tile_sprite_draw,update,%hermit_update]]
 zclass[[sword,drawlayer_50|target_x,@,target_y,@,draw,%sword_draw_debug]]
 zclass[[pos_preview,actor,drawlayer_50|gamestate,@,itemind,@,x,@,y,@,sind,@,sel_sind,@,update,%possible_move_small_obj_update,draw,%tile_sprite_draw]]
 zclass[[selected_move,actor,drawlayer_50|update,%selected_move_update,draw,%selected_move_draw]]
 zclass[[enemy|get_path,nil]]
-zclass[[snake,tile_entity,enemy,drawlayer_50|x,@,y,@,target_x,~x,target_y,~y,sind,40,get_path,%snake_get_path,update,%snake_update]]
+zclass[[snake,tile_entity,enemy,drawlayer_30|x,@,y,@,target_x,~x,target_y,~y,sind,40,get_path,%snake_get_path,update,%snake_update]]
 zclass[[level_state,actor|itemind,2,items;,;start;init,%level_state_init,update,nop,duration,0,next,pre_card_select;pre_card_select;init,%pre_card_select_init;card_select;init,%card_select_init,update,%card_select_update;move_select;init,%move_select_init,update,%move_select_update;player_update;init,%player_update_init,update,%player_update_update;baddie_update;init,%baddie_update_init,update,%baddie_update_update;]]
 function get_random_card_ind()
 return rnd_item{128,130,134,160,164,166}
@@ -675,11 +679,9 @@ for x=0,6 do
 local objind=mget(mapx*8+x,mapy*8+y)
 local spot={active=true}
 if objind==112 then
-spot.entity=_g.hermit(x,y)
-g_pl=spot.entity
+g_pl=_g.hermit(x,y)
 elseif objind==113 then
-spot.entity=_g.sword(x,y)
-g_sword=spot.entity
+g_sword=_g.sword(x,y)
 elseif objind==114 then
 spot.entity=_g.puddle(x,y)
 elseif objind==115 then
