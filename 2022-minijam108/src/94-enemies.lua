@@ -74,12 +74,28 @@ zclass[[seagull,tile_entity,enemy,drawlayer_30|
     end
 end $$
 
+function get_smartest_direction(possible_spots, x, y)
+    local smallest_ang_diff = 10
+    local selected_spot
+    local ideal_ang = atan2(g_pl.target_x - x, g_pl.target_y - y)
+
+    for i=1,#possible_spots do
+        local spot = possible_spots[i]
+        local ang = atan2(spot.x - x, spot.y - y)
+        if abs(ideal_ang-ang) < smallest_ang_diff then
+            printh(""..ideal_ang.." || "..ang)
+            smallest_ang_diff = abs(ideal_ang-ang)
+            selected_spot = i
+        end
+    end
+
+    if selected_spot then
+        return possible_spots[selected_spot]
+    end
+end
+
 |[seagull_get_path]| function(a)
     local path = {{x=a.target_x, y=a.target_y}}
-
-    local ideal_ang = atan2(g_pl.target_x - a.target_x, g_pl.target_y - a.target_y)
-    local smallest_ang_diff = 10
-    local selected_spot = 0
 
     local possible_spots = {}
     for i=0,3 do
@@ -88,15 +104,12 @@ end $$
 
         if is_spot_empty(x, y) and not is_spot_on_sword(x, y) then
             add(possible_spots, {x=x, y=y})
-            if abs(ideal_ang-ang) < smallest_ang_diff then
-                smallest_ang_diff = abs(ideal_ang-ang)
-                selected_spot = #possible_spots
-            end
         end
     end
 
-    if selected_spot ~= 0 then
-        add(path, possible_spots[selected_spot])
+    local smartest = get_smartest_direction(possible_spots, a.target_x, a.target_y)
+    if smartest then
+        add(path, smartest)
     end
 
     return path

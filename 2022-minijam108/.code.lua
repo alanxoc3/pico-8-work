@@ -267,23 +267,17 @@ elseif dy>0 and dy>0 then return 14
 end
 end,function(a)
 local path={{x=a.target_x,y=a.target_y}}
-local ideal_ang=atan2(g_pl.target_x-a.target_x,g_pl.target_y-a.target_y)
-local smallest_ang_diff=10
-local selected_spot=0
 local possible_spots={}
 for i=0,3 do
 local ang=.125+i/4
 local x,y=round(cos(ang))+a.target_x,round(sin(ang))+a.target_y
 if is_spot_empty(x,y)and not is_spot_on_sword(x,y)then
 add(possible_spots,{x=x,y=y})
-if abs(ideal_ang-ang)<smallest_ang_diff then
-smallest_ang_diff=abs(ideal_ang-ang)
-selected_spot=#possible_spots
 end
 end
-end
-if selected_spot ~=0 then
-add(path,possible_spots[selected_spot])
+local smartest=get_smartest_direction(possible_spots,a.target_x,a.target_y)
+if smartest then
+add(path,smartest)
 end
 return path
 end,function(a,dx,dy)
@@ -564,6 +558,23 @@ zclass[[selected_move,actor,drawlayer_50|update,%selected_move_update,draw,%sele
 zclass[[enemy|get_path,nil,init,%enemy_init,update,%enemy_update,check_collision,%enemy_check_collision]]
 zclass[[snake,tile_entity,enemy,drawlayer_30|x,@,y,@,target_x,~x,target_y,~y,get_path,%snake_get_path,setsind2,%snake_setsind2;possible_sinds;,42,46,40,44;]]
 zclass[[seagull,tile_entity,enemy,drawlayer_30|x,@,y,@,target_x,~x,target_y,~y,get_path,%seagull_get_path,setsind2,%seagull_setsind2;possible_sinds;,10,12,8,14;]]
+function get_smartest_direction(possible_spots,x,y)
+local smallest_ang_diff=10
+local selected_spot
+local ideal_ang=atan2(g_pl.target_x-x,g_pl.target_y-y)
+for i=1,#possible_spots do
+local spot=possible_spots[i]
+local ang=atan2(spot.x-x,spot.y-y)
+if abs(ideal_ang-ang)<smallest_ang_diff then
+printh(""..ideal_ang.." || "..ang)
+smallest_ang_diff=abs(ideal_ang-ang)
+selected_spot=i
+end
+end
+if selected_spot then
+return possible_spots[selected_spot]
+end
+end
 zclass[[fox,tile_entity,enemy,drawlayer_30|x,@,y,@,target_x,~x,target_y,~y,get_path,%fox_get_path,setsind2,%fox_setsind2;possible_sinds;,224,226,200,228,192,196,194,198;]]
 zclass[[level_state,actor|itemind,2,items;,;start;init,%level_state_init,update,nop,duration,0,next,pre_card_select;pre_card_select;init,%pre_card_select_init;card_select;init,%card_select_init,update,%card_select_update;move_select;init,%move_select_init,update,%move_select_update;player_update;init,%player_update_init,update,%player_update_update;baddie_update;init,%baddie_update_init,update,%baddie_update_update;]]
 function get_random_card_ind()
