@@ -142,15 +142,17 @@ zclass[[card,actor,vec,drawlayer_50|
 
 |[card_draw]| function(a)
     local offy = 0
+    local func = function()
+        spr(a.sind, a.x, a.y+offy-2, 2, 2)
+    end
+
     if a.selected then
-        offy = -2
-        spr(168, a.x, a.y+offy-1, 2, 2)
-        spr(168, a.x, a.y+offy, 2, 2)
+        draw_outline(7, func)
         spr(141,a.x+4, a.y+16)
     elseif g_level_state.curr != 'card_select' then
         offy = 13
     end
-    spr(a.sind, a.x, a.y+offy, 2, 2)
+    func()
 end $$
 
 |[card_normal_update]| function(a)

@@ -8,7 +8,7 @@ zclass[[level_state,actor|
     card_select;         init,%card_select_init,     update,%card_select_update;
     move_select;         init,%move_select_init,     update,%move_select_update;
     player_update;       init,%player_update_init,   update,%player_update_update;
-    baddie_update;       init,%baddie_update_init,   update,nop,                 duration,1, next,pre_card_select;
+    baddie_update;       init,%baddie_update_init,   update,%baddie_update_update;
 ]]
 
 function get_random_card_ind()
@@ -109,21 +109,21 @@ end $$
     _g.status_text("hermit turn", 'player_update')
     local m = a.moves[a.moves_ind]
     a.path = m.gen_path(m.x, m.y)
-    a.reset_pl_timer = true
+    a.reset_turn_timer = true
     a.item_inds[a.itemind] = get_random_card_ind()
 end $$
 
 |[player_update_update]| function(a)
-    if a.timers.player_update.elapsed and a.timers.player_update.elapsed > .5 and a.reset_pl_timer then
-        a.reset_pl_timer = false
+    if a.timers.player_update.elapsed and a.timers.player_update.elapsed > .5 and a.reset_turn_timer then
+        a.reset_turn_timer = false
         local spot = deli(a.path, 1)
         g_pl.target_x, g_pl.target_y, g_sword.target_x, g_sword.target_y = spot.x, spot.y, spot.sx, spot.sy
 
-        a:start_timer('pltick', .25, function()
+        a:start_timer('turn_tick', .25, function()
             if #a.path > 0 then
-                a.reset_pl_timer = true
+                a.reset_turn_timer = true
             else
-                a.reset_pl_timer = false
+                a.reset_turn_timer = false
                 a:load'baddie_update'
             end
         end)
@@ -131,6 +131,52 @@ end $$
 end $$
 
 -- BADDIE UPDATE
+function get_baddie_list()
+    local bad_coords = find_on_grid(function(spot)
+        return spot.entity and spot.entity.parents.enemy
+    end)
+
+    local badlist = {}
+    for coord in all(bad_coords) do
+        local ent = g_grid[coord.y*7+coord.x].entity
+        add(badlist, {entity=ent, path=ent:get_path()})
+    end
+    return badlist
+end
+
 |[baddie_update_init]| function(a)
     _g.status_text("baddie turn", 'baddie_update')
+    local m = a.moves[a.moves_ind]
+    a.reset_turn_timer = true
+    a.item_inds[a.itemind] = get_random_card_ind()
+    a.baddie_list = get_baddie_list()
+
+    if #a.baddie_list > 0 then
+        local it = deli(a.baddie_list, 1)
+        a.baddie = it.entity
+        a.path = it.path
+    end
 end $$
+
+|[baddie_update_update]| function(a)
+    if a.timers.baddie_update.elapsed and a.timers.baddie_update.elapsed > .5 and a.reset_turn_timer then
+        a.reset_turn_timer = false
+        local spot = deli(a.path, 1)
+        a.baddie.target_x, a.baddie.target_y = spot.x, spot.y
+
+        a:start_timer('turn_tick', .25, function()
+            if #a.path > 0 then
+                a.reset_turn_timer = true
+            elseif #a.baddie_list > 0 then
+                local it = deli(a.baddie_list, 1)
+                a.baddie = it.entity
+                a.path = it.path
+                a.reset_turn_timer = true
+            else
+                a.reset_turn_timer = false
+                a:load'pre_card_select'
+            end
+        end)
+    end
+end $$
+

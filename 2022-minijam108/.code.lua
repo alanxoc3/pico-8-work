@@ -92,7 +92,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,tile_entity_to_target,@,tile_sprite_draw,@,hermit_update,@,sword_draw_debug,@,possible_move_obj_update,@,possible_move_small_obj_update,@,selected_move_update,@,selected_move_draw,@,level_state_init,@,pre_card_select_init,@,card_select_init,@,card_select_update,@,move_select_init,@,move_select_update,@,player_update_init,@,player_update_update,@,baddie_update_init,@,game_init,@,game_update,@,game_draw,@,card_draw,@,card_normal_update,@,status_text_draw,@,status_text_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,tile_entity_to_target,@,tile_sprite_draw,@,hermit_update,@,sword_draw_debug,@,possible_move_obj_update,@,possible_move_small_obj_update,@,selected_move_update,@,selected_move_draw,@,snake_get_path,@,level_state_init,@,pre_card_select_init,@,card_select_init,@,card_select_update,@,move_select_init,@,move_select_update,@,player_update_init,@,player_update_update,@,baddie_update_init,@,baddie_update_update,@,game_init,@,game_update,@,game_draw,@,card_draw,@,card_normal_update,@,status_text_draw,@,status_text_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@]],function(a,stateName)
 a.next_state=a.next_state or stateName
 end,function(a,stateName)
 a.next_state,a.isnew=nil
@@ -226,6 +226,18 @@ end
 local m=g_level_state.moves[g_level_state.moves_ind]
 spr(m.sel_sind,scr_x(m.x)-5,scr_y(m.y)-5,2,2)
 end,function(a)
+local possible_spots={}
+for i=0,3 do
+local x,y=round(cos(i/4))+a.target_x,round(sin(i/4))+a.target_y
+if is_spot_empty(x,y)then
+add(possible_spots,{x=x,y=y})
+end
+end
+return{
+{x=a.target_x,y=a.target_y},
+rnd_item(possible_spots)
+}
+end,function(a)
 a.item_inds={get_random_card_ind(),get_random_card_ind(),get_random_card_ind()}
 end,function(a)
 a.items={}
@@ -276,24 +288,52 @@ end,function(a)
 _g.status_text("hermit turn","player_update")
 local m=a.moves[a.moves_ind]
 a.path=m.gen_path(m.x,m.y)
-a.reset_pl_timer=true
+a.reset_turn_timer=true
 a.item_inds[a.itemind]=get_random_card_ind()
 end,function(a)
-if a.timers.player_update.elapsed and a.timers.player_update.elapsed>.5 and a.reset_pl_timer then
-a.reset_pl_timer=false
+if a.timers.player_update.elapsed and a.timers.player_update.elapsed>.5 and a.reset_turn_timer then
+a.reset_turn_timer=false
 local spot=deli(a.path,1)
 g_pl.target_x,g_pl.target_y,g_sword.target_x,g_sword.target_y=spot.x,spot.y,spot.sx,spot.sy
-a:start_timer("pltick",.25,function()
+a:start_timer("turn_tick",.25,function()
 if #a.path>0 then
-a.reset_pl_timer=true
+a.reset_turn_timer=true
 else
-a.reset_pl_timer=false
+a.reset_turn_timer=false
 a:load"baddie_update"
 end
 end)
 end
 end,function(a)
 _g.status_text("baddie turn","baddie_update")
+local m=a.moves[a.moves_ind]
+a.reset_turn_timer=true
+a.item_inds[a.itemind]=get_random_card_ind()
+a.baddie_list=get_baddie_list()
+if #a.baddie_list>0 then
+local it=deli(a.baddie_list,1)
+a.baddie=it.entity
+a.path=it.path
+end
+end,function(a)
+if a.timers.baddie_update.elapsed and a.timers.baddie_update.elapsed>.5 and a.reset_turn_timer then
+a.reset_turn_timer=false
+local spot=deli(a.path,1)
+a.baddie.target_x,a.baddie.target_y=spot.x,spot.y
+a:start_timer("turn_tick",.25,function()
+if #a.path>0 then
+a.reset_turn_timer=true
+elseif #a.baddie_list>0 then
+local it=deli(a.baddie_list,1)
+a.baddie=it.entity
+a.path=it.path
+a.reset_turn_timer=true
+else
+a.reset_turn_timer=false
+a:load"pre_card_select"
+end
+end)
+end
 end,function()
 g_level=0
 g_level_state=_g.level_state()
@@ -312,15 +352,16 @@ rect(0,0,127,127,8)
 end
 end,function(a)
 local offy=0
+local func=function()
+spr(a.sind,a.x,a.y+offy-2,2,2)
+end
 if a.selected then
-offy=-2
-spr(168,a.x,a.y+offy-1,2,2)
-spr(168,a.x,a.y+offy,2,2)
+draw_outline(7,func)
 spr(141,a.x+4,a.y+16)
 elseif g_level_state.curr!="card_select"then
 offy=13
 end
-spr(a.sind,a.x,a.y+offy,2,2)
+func()
 end,function(a)
 if g_level_state.curr!="card_select"and g_level_state.curr!="move_select"then
 a:kill()
@@ -375,6 +416,15 @@ function zsgn(num)return num==0 and 0 or sgn(num)end
 zclass[[actor,timer|load,%actor_load,loadlogic,%actor_loadlogic,state,%actor_state,kill,%actor_kill,clean,%actor_clean,is_alive,%actor_is_alive,alive,yes,duration,null,curr,start,next,null,isnew,yes,init,nop,update,nop,destroyed,nop;]]
 zclass[[drawlayer_50|]]
 g_spr_info=zobj[[0;,2,4,8,21;2;,2,4,6,10;4;,4,2,21,6;36;,4,2,10,9;64;,3,3,7,17;67;,3,3,6,7;70;,3,3,16,6;73;,3,3,17,16;142;,1,1,3,3;143;,1,1,3,3;138;,2,2,0,0;170;,2,2,0,0;196;,2,2,4,8;]]
+function draw_outline(color,drawfunc)
+for c=1,15 do pal(c,color)end
+local ox,oy=%0x5f28,%0x5f2a
+for y=-1,1 do for x=-1,1 do
+camera(ox+x,oy+y)drawfunc()
+end end
+camera(ox,oy)
+pal()
+end
 zclass[[timer|timers;,;start_timer,%timer_reset_timer,end_timer,%timer_end_timer,is_active,%timer_is_active,get_elapsed_percent,%timer_get_elapsed_percent,tick,%timer_tick,]]
 zclass[[pos|x,0,y,0,dist_point,%pos_dist_point]]
 zclass[[vec,pos|dx,0,dy,0,vec_update,%vec_update]]
@@ -390,11 +440,11 @@ end
 zclass[[tile_entity,mov,actor|to_target,%tile_entity_to_target,target_x,null,target_y,null,draw,%tile_sprite_draw]]
 zclass[[hermit,tile_entity,actor,drawlayer_50|x,@,y,@,target_x,~x,target_y,~y,update,%hermit_update]]
 zclass[[sword,drawlayer_50|target_x,@,target_y,@,draw,%sword_draw_debug]]
-zclass[[enemy|]]
-zclass[[snake,tile_entity,enemy,drawlayer_50|x,@,y,@,target_x,~x,target_y,~y,sind,196]]
 zclass[[pos_preview,actor,drawlayer_50|gamestate,@,itemind,@,x,@,y,@,sind,@,sel_sind,@,update,%possible_move_small_obj_update,draw,%tile_sprite_draw]]
 zclass[[selected_move,actor,drawlayer_50|update,%selected_move_update,draw,%selected_move_draw]]
-zclass[[level_state,actor|itemind,2,items;,;start;init,%level_state_init,update,nop,duration,0,next,pre_card_select;pre_card_select;init,%pre_card_select_init,update,nop,duration,0,next,card_select;card_select;init,%card_select_init,update,%card_select_update;move_select;init,%move_select_init,update,%move_select_update;player_update;init,%player_update_init,update,%player_update_update;baddie_update;init,%baddie_update_init,update,nop,duration,1,next,pre_card_select;]]
+zclass[[enemy|get_path,nil]]
+zclass[[snake,tile_entity,enemy,drawlayer_50|x,@,y,@,target_x,~x,target_y,~y,sind,196,get_path,%snake_get_path]]
+zclass[[level_state,actor|itemind,2,items;,;start;init,%level_state_init,update,nop,duration,0,next,pre_card_select;pre_card_select;init,%pre_card_select_init,update,nop,duration,0,next,card_select;card_select;init,%card_select_init,update,%card_select_update;move_select;init,%move_select_init,update,%move_select_update;player_update;init,%player_update_init,update,%player_update_update;baddie_update;init,%baddie_update_init,update,%baddie_update_update;]]
 function get_random_card_ind()
 return rnd_item{128,130,134,160,164,166}
 end
@@ -414,6 +464,17 @@ end
 end
 end
 return ind
+end
+function get_baddie_list()
+local bad_coords=find_on_grid(function(spot)
+return spot.entity and spot.entity.parents.enemy
+end)
+local badlist={}
+for coord in all(bad_coords)do
+local ent=g_grid[coord.y*7+coord.x].entity
+add(badlist,{entity=ent,path=ent:get_path()})
+end
+return badlist
 end
 function get_move_coordinates(move_type)
 local pc={x=g_pl.target_x,y=g_pl.target_y}
@@ -524,9 +585,10 @@ end
 function path_slice(x,y)
 local plx,ply=g_pl.target_x,g_pl.target_y
 local swx,swy=g_sword.target_x,g_sword.target_y
-local path={{x=plx,y=ply,sx=swx,sy=swy}}
-add(path,{x=plx,y=ply,sx=x,sy=y})
-return path
+return{
+{x=plx,y=ply,sx=swx,sy=swy},
+{x=plx,y=ply,sx=x,sy=y}
+}
 end
 function round(num)return flr(num+.5)end
 function print_vert_wobble(text,x,y,col,off,wob)

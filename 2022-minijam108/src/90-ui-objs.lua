@@ -63,14 +63,6 @@ zclass[[sword,drawlayer_50|
     circ(scr_x(a.target_x), scr_y(a.target_y), 11, 7)
 end $$
 
-zclass[[enemy|]]
-zclass[[snake,tile_entity,enemy,drawlayer_50|
-    x,@, y,@,
-    target_x,~x,
-    target_y,~y,
-    sind,196
-]]
-
 zclass[[pos_preview,actor,drawlayer_50|
     gamestate,@, itemind,@, x,@, y,@, sind,@, sel_sind,@,
     update,%possible_move_small_obj_update,

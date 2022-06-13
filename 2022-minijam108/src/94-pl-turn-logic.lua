@@ -137,13 +137,10 @@ function path_slice(x, y)
     local plx, ply = g_pl.target_x,    g_pl.target_y
     local swx, swy = g_sword.target_x, g_sword.target_y
 
-    local path = {{x=plx, y=ply, sx=swx, sy=swy}}
-
-    -- local xdiff, ydiff = swx-plx, swy-ply
-    -- local initial_ang = atan2(xdiff,ydiff)
-
-    add(path, {x=plx, y=ply, sx=x, sy=y})
-    return path
+    return {
+        {x=plx, y=ply, sx=swx, sy=swy},
+        {x=plx, y=ply, sx=x, sy=y}
+    }
 end
 
 -- how do enemy paths work?
