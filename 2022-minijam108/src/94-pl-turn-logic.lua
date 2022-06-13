@@ -202,18 +202,16 @@ function path_swap(x, y)
 end
 
 function path_spin(x, y)
-    local path = {}
-
     local plx, ply = g_pl.target_x,    g_pl.target_y
     local swx, swy = g_sword.target_x, g_sword.target_y
     local xdiff, ydiff = swx-plx, swy-ply
     local initial_ang = atan2(xdiff,ydiff)
+    local path = {{x=plx, y=ply, sx=swx, sy=swy}}
 
-    for i=0,8 do
+    for i=1,8 do
         local spin_x = zsgn(cos(initial_ang-i/8))
         local spin_y = zsgn(sin(initial_ang-i/8))
-        printh("x: "..spin_x.." | y: "..spin_y)
-        add(path, {x=plx, y=ply, sx=plx+spin_x, sy=ply+spin_y})
+        add(path, {x=plx, y=ply, sx=plx+spin_x, sy=ply+spin_y, duration=.125})
     end
 
     return path

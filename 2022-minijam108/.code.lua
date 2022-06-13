@@ -422,7 +422,7 @@ a.reset_turn_timer=false
 local spot=deli(a.path,1)
 if spot.func then spot.func()end
 g_pl.target_x,g_pl.target_y,g_sword.target_x,g_sword.target_y=spot.x,spot.y,spot.sx,spot.sy
-a:start_timer("turn_tick",.25,function()
+a:start_timer("turn_tick",spot.duration or.25,function()
 if #a.path>0 then
 a.reset_turn_timer=true
 else
@@ -808,16 +808,15 @@ end})
 return path
 end
 function path_spin(x,y)
-local path={}
 local plx,ply=g_pl.target_x,g_pl.target_y
 local swx,swy=g_sword.target_x,g_sword.target_y
 local xdiff,ydiff=swx-plx,swy-ply
 local initial_ang=atan2(xdiff,ydiff)
-for i=0,8 do
+local path={{x=plx,y=ply,sx=swx,sy=swy}}
+for i=1,8 do
 local spin_x=zsgn(cos(initial_ang-i/8))
 local spin_y=zsgn(sin(initial_ang-i/8))
-printh("x: "..spin_x.." | y: "..spin_y)
-add(path,{x=plx,y=ply,sx=plx+spin_x,sy=ply+spin_y})
+add(path,{x=plx,y=ply,sx=plx+spin_x,sy=ply+spin_y,duration=.125})
 end
 return path
 end

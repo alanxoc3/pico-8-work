@@ -138,7 +138,7 @@ end $$
         if spot.func then spot.func() end
         g_pl.target_x, g_pl.target_y, g_sword.target_x, g_sword.target_y = spot.x, spot.y, spot.sx, spot.sy
 
-        a:start_timer('turn_tick', .25, function()
+        a:start_timer('turn_tick', spot.duration or .25, function()
             if #a.path > 0 then
                 a.reset_turn_timer = true
             else
