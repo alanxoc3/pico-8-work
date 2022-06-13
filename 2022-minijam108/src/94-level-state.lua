@@ -12,8 +12,7 @@ zclass[[level_state,actor|
 ]]
 
 function get_random_card_ind()
-    -- return rnd_item{128, 130, 132, 134, 136, 160, 162, 164, 166}
-    return rnd_item{162, 160} --28, 130, 132, 134, 136, 160, 162, 164, 166}
+    return rnd_item{128, 130, 132, 134, 136, 160, 162, 164, 166}
 end
 
 function is_level_win()  return not get_next_baddie{} end
