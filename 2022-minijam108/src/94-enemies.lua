@@ -7,8 +7,17 @@ zclass[[snake,tile_entity,enemy,drawlayer_50|
     target_x,~x,
     target_y,~y,
     sind,40,
-    get_path,%snake_get_path
+    get_path,%snake_get_path,
+    update,%snake_update
 ]]
+
+|[snake_update]| function(a)
+        if a.dx < 0 then a.sind = 42
+    elseif a.dx > 0 then a.sind = 46
+    elseif a.dy < 0 then a.sind = 40
+    elseif a.dy > 0 then a.sind = 44
+    end
+end $$
 
 |[snake_get_path]| function(a)
     local possible_spots = {}

@@ -92,7 +92,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,tile_entity_to_target,@,tile_sprite_draw,@,hermit_update,@,sword_draw_debug,@,possible_move_obj_update,@,possible_move_small_obj_update,@,selected_move_update,@,selected_move_draw,@,snake_get_path,@,level_state_init,@,pre_card_select_init,@,card_select_init,@,card_select_update,@,move_select_init,@,move_select_update,@,player_update_init,@,player_update_update,@,baddie_update_init,@,baddie_update_update,@,game_init,@,game_update,@,game_draw,@,card_draw,@,card_normal_update,@,status_text_draw,@,status_text_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,tile_entity_to_target,@,tile_sprite_draw,@,hermit_update,@,sword_draw_debug,@,possible_move_obj_update,@,possible_move_small_obj_update,@,selected_move_update,@,selected_move_draw,@,snake_update,@,snake_get_path,@,level_state_init,@,pre_card_select_init,@,card_select_init,@,card_select_update,@,move_select_init,@,move_select_update,@,player_update_init,@,player_update_update,@,baddie_update_init,@,baddie_update_update,@,game_init,@,game_update,@,game_draw,@,card_draw,@,card_normal_update,@,status_text_draw,@,status_text_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@]],function(a,stateName)
 a.next_state=a.next_state or stateName
 end,function(a,stateName)
 a.next_state,a.isnew=nil
@@ -225,6 +225,12 @@ spr(m.sind,scr_x(m.x)-3,scr_y(m.y)-3)
 end
 local m=g_level_state.moves[g_level_state.moves_ind]
 spr(m.sel_sind,scr_x(m.x)-5,scr_y(m.y)-5,2,2)
+end,function(a)
+if a.dx<0 then a.sind=42
+elseif a.dx>0 then a.sind=46
+elseif a.dy<0 then a.sind=40
+elseif a.dy>0 then a.sind=44
+end
 end,function(a)
 local possible_spots={}
 for i=0,3 do
@@ -416,7 +422,7 @@ function ybtnp()return zbtn(btnp,2)end
 function zsgn(num)return num==0 and 0 or sgn(num)end
 zclass[[actor,timer|load,%actor_load,loadlogic,%actor_loadlogic,state,%actor_state,kill,%actor_kill,clean,%actor_clean,is_alive,%actor_is_alive,alive,yes,duration,null,curr,start,next,null,isnew,yes,init,nop,update,nop,destroyed,nop;]]
 zclass[[drawlayer_50|]]
-g_spr_info=zobj[[0;,2,4,8,21;2;,2,4,6,10;4;,4,2,21,6;36;,4,2,10,9;64;,3,3,7,17;67;,3,3,6,7;70;,3,3,16,6;73;,3,3,17,16;142;,1,1,3,3;143;,1,1,3,3;138;,2,2,0,0;170;,2,2,0,0;40;,2,2,4,8;]]
+g_spr_info=zobj[[0;,2,4,8,21;2;,2,4,6,10;4;,4,2,21,6;36;,4,2,10,9;64;,3,3,7,17;67;,3,3,6,7;70;,3,3,16,6;73;,3,3,17,16;142;,1,1,3,3;143;,1,1,3,3;138;,2,2,0,0;170;,2,2,0,0;40;,2,2,6,8;42;,2,2,6,8;44;,2,2,6,8;46;,2,2,6,8;]]
 function draw_outline(color,drawfunc)
 for c=1,15 do pal(c,color)end
 local ox,oy=%0x5f28,%0x5f2a
@@ -444,7 +450,7 @@ zclass[[sword,drawlayer_50|target_x,@,target_y,@,draw,%sword_draw_debug]]
 zclass[[pos_preview,actor,drawlayer_50|gamestate,@,itemind,@,x,@,y,@,sind,@,sel_sind,@,update,%possible_move_small_obj_update,draw,%tile_sprite_draw]]
 zclass[[selected_move,actor,drawlayer_50|update,%selected_move_update,draw,%selected_move_draw]]
 zclass[[enemy|get_path,nil]]
-zclass[[snake,tile_entity,enemy,drawlayer_50|x,@,y,@,target_x,~x,target_y,~y,sind,40,get_path,%snake_get_path]]
+zclass[[snake,tile_entity,enemy,drawlayer_50|x,@,y,@,target_x,~x,target_y,~y,sind,40,get_path,%snake_get_path,update,%snake_update]]
 zclass[[level_state,actor|itemind,2,items;,;start;init,%level_state_init,update,nop,duration,0,next,pre_card_select;pre_card_select;init,%pre_card_select_init,update,nop,duration,0,next,card_select;card_select;init,%card_select_init,update,%card_select_update;move_select;init,%move_select_init,update,%move_select_update;player_update;init,%player_update_init,update,%player_update_update;baddie_update;init,%baddie_update_init,update,%baddie_update_update;]]
 function get_random_card_ind()
 return rnd_item{128,130,134,160,164,166}
@@ -599,7 +605,7 @@ function draw_tiles()
 local tlx,tly=g_offx-46,g_offy-46
 rectfill(tlx,tly,tlx+90,tly+90,15)
 print_vert_wobble("stabby crabby",tlx-14,tly-6,7,1,1)
-print_vert_wobble("level "..g_level,tlx+99,tly-6+7*3,7,1,1)
+print_vert_wobble("level "..(g_level+1),tlx+99,tly-6+7*3,7,1,1)
 local amp=cos(.9)*.4+.8
 local amp1=cos(.25+.9)*.4+.8
 local amp2=cos(.5+.9)*.4+.8

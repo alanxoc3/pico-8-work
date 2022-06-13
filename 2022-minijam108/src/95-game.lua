@@ -43,7 +43,7 @@ function draw_tiles()
     rectfill(tlx,tly,tlx+90,tly+90,15)
     
     print_vert_wobble("stabby crabby", tlx-14, tly-6, 7, 1, 1)
-    print_vert_wobble("level "..g_level, tlx+99, tly-6+7*3, 7, 1, 1)
+    print_vert_wobble("level "..(g_level+1), tlx+99, tly-6+7*3, 7, 1, 1)
     
     local amp=cos(.9)*.4+.8
     local amp1=cos(.25+.9)*.4+.8
