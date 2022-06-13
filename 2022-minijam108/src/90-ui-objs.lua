@@ -32,11 +32,12 @@ end $$
     end
 end $$
 
-zclass[[puddle,tile_entity,actor,drawlayer_25|
+zclass[[puddle,actor,drawlayer_25|
     x,@, y,@,
     sind,168,
     target_x,~x,
-    target_y,~y
+    target_y,~y,
+    draw,%tile_sprite_draw
 ]]
 
 zclass[[hermit,mov,actor,drawlayer_50|

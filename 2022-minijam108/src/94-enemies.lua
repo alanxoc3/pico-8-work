@@ -45,7 +45,7 @@ end $$
     local possible_spots = {}
     for i=0,3 do
         local x, y = round(cos(i/4))+a.target_x, round(sin(i/4))+a.target_y
-        if is_spot_empty(x, y) and not is_spot_on_sword(x, y) then
+        if is_spot_empty(x, y) and not is_spot_puddle(x, y) and not is_spot_on_sword(x, y) then
             add(possible_spots, {x=x, y=y})
         end
     end
@@ -121,7 +121,7 @@ end $$
     local cur_x, cur_y = a.target_x, a.target_y
     while true do
         cur_x += xdir cur_y += ydir
-        if not is_spot_empty(cur_x, cur_y)     then break
+        if is_spot_puddle(cur_x, cur_y) or not is_spot_empty(cur_x, cur_y)     then break
         elseif is_spot_on_player(cur_x, cur_y) then break
         elseif is_spot_on_sword(cur_x, cur_y)  then
             local ang = atan2(xdir, ydir) + rnd_item{-.125, .125}
@@ -134,7 +134,7 @@ end $$
     cur_x, cur_y = a.target_x, a.target_y
     while true do
         cur_x += xdir cur_y += ydir
-        if is_spot_empty(cur_x, cur_y) then
+        if not is_spot_puddle(cur_x, cur_y) and is_spot_empty(cur_x, cur_y) then
             add(path, {x=cur_x, y=cur_y})
         else
             break

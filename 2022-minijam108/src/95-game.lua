@@ -102,7 +102,7 @@ function set_grid(level)
                 g_sword = _g.sword(x, y)
 
             elseif objind == MAP_PUDDLE then
-                spot.entity = _g.puddle(x, y)
+                spot.puddle = _g.puddle(x, y)
                 
             elseif objind == MAP_SNAKE then
                 spot.entity = _g.snake(x, y)

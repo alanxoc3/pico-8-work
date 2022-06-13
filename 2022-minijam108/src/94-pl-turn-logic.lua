@@ -88,6 +88,11 @@ function is_spot_on_player(x, y)
     return x == g_pl.target_x and y == g_pl.target_y
 end
 
+function is_spot_puddle(x, y)
+    local spot = g_grid[y*7+x]
+    return is_spot_valid(x, y) and spot.puddle
+end
+
 function is_spot_movable(x, y)
     local spot = g_grid[y*7+x]
     return is_spot_valid(x, y) and spot.entity and spot.entity.id == 'sword'
@@ -103,7 +108,7 @@ function add_spot(list, x, y, sind, sel_sind, gen_path)
 end
 
 function add_spot_if_movable(list, x, y, ...)
-    if is_spot_empty(x, y) or is_spot_movable(x, y) then
+    if not is_spot_puddle(x, y) and (is_spot_empty(x, y) or is_spot_movable(x, y)) then
         add_spot(list, x, y, ...)
     end
 end

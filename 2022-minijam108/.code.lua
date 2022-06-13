@@ -251,7 +251,7 @@ end,function(a)
 local possible_spots={}
 for i=0,3 do
 local x,y=round(cos(i/4))+a.target_x,round(sin(i/4))+a.target_y
-if is_spot_empty(x,y)and not is_spot_on_sword(x,y)then
+if is_spot_empty(x,y)and not is_spot_puddle(x,y)and not is_spot_on_sword(x,y)then
 add(possible_spots,{x=x,y=y})
 end
 end
@@ -293,7 +293,7 @@ local xdir,ydir=zsgn(g_pl.target_x-a.target_x),zsgn(g_pl.target_y-a.target_y)
 local cur_x,cur_y=a.target_x,a.target_y
 while true do
 cur_x+=xdir cur_y+=ydir
-if not is_spot_empty(cur_x,cur_y)then break
+if is_spot_puddle(cur_x,cur_y)or not is_spot_empty(cur_x,cur_y)then break
 elseif is_spot_on_player(cur_x,cur_y)then break
 elseif is_spot_on_sword(cur_x,cur_y)then
 local ang=atan2(xdir,ydir)+rnd_item{-.125,.125}
@@ -304,7 +304,7 @@ end
 cur_x,cur_y=a.target_x,a.target_y
 while true do
 cur_x+=xdir cur_y+=ydir
-if is_spot_empty(cur_x,cur_y)then
+if not is_spot_puddle(cur_x,cur_y)and is_spot_empty(cur_x,cur_y)then
 add(path,{x=cur_x,y=cur_y})
 else
 break
@@ -547,7 +547,7 @@ local midr=7/2*13
 return y*13+g_offy-midr+13/2-1
 end
 zclass[[tile_entity,mov,actor|to_target,%tile_entity_to_target,target_x,null,target_y,null,draw,%tile_sprite_draw]]
-zclass[[puddle,tile_entity,actor,drawlayer_25|x,@,y,@,sind,168,target_x,~x,target_y,~y]]
+zclass[[puddle,actor,drawlayer_25|x,@,y,@,sind,168,target_x,~x,target_y,~y,draw,%tile_sprite_draw]]
 zclass[[hermit,mov,actor,drawlayer_50|x,@,y,@,target_x,~x,target_y,~y,to_target,%tile_entity_to_target,draw,%tile_sprite_draw,destroyed,%hermit_destroyed,update,%hermit_update]]
 zclass[[sword,actor,drawlayer_50|target_x,@,target_y,@,draw,%sword_draw_debug]]
 zclass[[pos_preview,actor,drawlayer_50|gamestate,@,itemind,@,x,@,y,@,sind,@,sel_sind,@,update,%possible_move_small_obj_update,draw,%tile_sprite_draw]]
@@ -660,6 +660,10 @@ end
 function is_spot_on_player(x,y)
 return x==g_pl.target_x and y==g_pl.target_y
 end
+function is_spot_puddle(x,y)
+local spot=g_grid[y*7+x]
+return is_spot_valid(x,y)and spot.puddle
+end
 function is_spot_movable(x,y)
 local spot=g_grid[y*7+x]
 return is_spot_valid(x,y)and spot.entity and spot.entity.id=="sword"
@@ -672,7 +676,7 @@ function add_spot(list,x,y,sind,sel_sind,gen_path)
 add(list,{x=x,y=y,sind=sind,sel_sind=sel_sind,gen_path=gen_path})
 end
 function add_spot_if_movable(list,x,y,...)
-if is_spot_empty(x,y)or is_spot_movable(x,y)then
+if not is_spot_puddle(x,y)and(is_spot_empty(x,y)or is_spot_movable(x,y))then
 add_spot(list,x,y,...)
 end
 end
@@ -784,7 +788,7 @@ g_pl=_g.hermit(x,y)
 elseif objind==113 then
 g_sword=_g.sword(x,y)
 elseif objind==114 then
-spot.entity=_g.puddle(x,y)
+spot.puddle=_g.puddle(x,y)
 elseif objind==115 then
 spot.entity=_g.snake(x,y)
 elseif objind==116 then
