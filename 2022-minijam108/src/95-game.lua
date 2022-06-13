@@ -105,6 +105,9 @@ function set_grid(level)
                 
             elseif objind == MAP_SNAKE then
                 spot.entity = _g.snake(x, y)
+
+            elseif objind == MAP_SEAGULL then
+                spot.entity = _g.seagull(x, y)
             end
 
             grid[y*7+x] = spot

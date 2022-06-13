@@ -56,10 +56,10 @@ zclass[[seagull,tile_entity,enemy,drawlayer_30|
         g_pl:kill()
     end
 
-        if a.dx < 0 and dy < 0 then a.sind = 10
-    elseif a.dx < 0 and dy > 0 then a.sind = 12
-    elseif a.dx > 0 and dy < 0 then a.sind = 08
-    elseif a.dy > 0 and dy > 0 then a.sind = 14
+        if a.dx < 0 and a.dy < 0 then a.sind = 10
+    elseif a.dx < 0 and a.dy > 0 then a.sind = 12
+    elseif a.dx > 0 and a.dy < 0 then a.sind = 08
+    elseif a.dy > 0 and a.dy > 0 then a.sind = 14
     end
 end $$
 

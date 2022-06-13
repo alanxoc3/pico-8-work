@@ -254,10 +254,10 @@ a:kill()
 elseif a.target_x==g_pl.target_x and a.target_y==g_pl.target_y then
 g_pl:kill()
 end
-if a.dx<0 and dy<0 then a.sind=10
-elseif a.dx<0 and dy>0 then a.sind=12
-elseif a.dx>0 and dy<0 then a.sind=08
-elseif a.dy>0 and dy>0 then a.sind=14
+if a.dx<0 and a.dy<0 then a.sind=10
+elseif a.dx<0 and a.dy>0 then a.sind=12
+elseif a.dx>0 and a.dy<0 then a.sind=08
+elseif a.dy>0 and a.dy>0 then a.sind=14
 end
 end,function(a)
 local possible_spots={}
@@ -475,7 +475,7 @@ zclass[[actor,timer|load,%actor_load,loadlogic,%actor_loadlogic,state,%actor_sta
 zclass[[drawlayer_25|]]
 zclass[[drawlayer_30|]]
 zclass[[drawlayer_50|]]
-g_spr_info=zobj[[0;,2,4,8,21;2;,2,4,6,10;4;,4,2,21,6;36;,4,2,10,9;64;,3,3,7,17;67;,3,3,6,7;70;,3,3,16,6;73;,3,3,17,16;142;,1,1,3,3;143;,1,1,3,3;138;,2,2,0,0;170;,2,2,0,0;40;,2,2,6,8;42;,2,2,6,8;44;,2,2,6,8;46;,2,2,6,8;168;,2,2,6,6;]]
+g_spr_info=zobj[[0;,2,4,8,21;2;,2,4,6,10;4;,4,2,21,6;36;,4,2,10,9;64;,3,3,7,17;67;,3,3,6,7;70;,3,3,16,6;73;,3,3,17,16;142;,1,1,3,3;143;,1,1,3,3;138;,2,2,0,0;170;,2,2,0,0;40;,2,2,6,8;42;,2,2,6,8;44;,2,2,6,8;46;,2,2,6,8;08;,2,2,6,8;10;,2,2,6,8;12;,2,2,6,8;14;,2,2,6,8;168;,2,2,6,6;]]
 function draw_outline(color,drawfunc)
 for c=1,15 do pal(c,color)end
 local ox,oy=%0x5f28,%0x5f2a
@@ -710,6 +710,8 @@ elseif objind==114 then
 spot.entity=_g.puddle(x,y)
 elseif objind==115 then
 spot.entity=_g.snake(x,y)
+elseif objind==116 then
+spot.entity=_g.seagull(x,y)
 end
 grid[y*7+x]=spot
 end
