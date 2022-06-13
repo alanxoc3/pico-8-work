@@ -92,7 +92,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,tile_entity_to_target,@,tile_sprite_draw,@,hermit_destroyed,@,hermit_update,@,sword_draw_debug,@,possible_move_obj_update,@,possible_move_small_obj_update,@,selected_move_update,@,selected_move_draw,@,enemy_init,@,enemy_check_collision,@,enemy_update,@,snake_setsind2,@,snake_get_path,@,frog_setsind2,@,frog_get_path,@,seagull_setsind2,@,seagull_get_path,@,fox_setsind2,@,fox_get_path,@,level_state_init,@,pre_card_select_init,@,card_select_update,@,move_select_init,@,move_select_update,@,player_update_init,@,player_update_update,@,baddie_update_init,@,baddie_update_update,@,game_init,@,game_update,@,game_draw,@,card_draw,@,card_normal_update,@,status_text_draw,@,status_text_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,lvlwin_update,@,lvlwin_draw,@,lvllose_update,@,lvllose_draw,@,title_update,@,title_draw,@,game_state_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,tile_entity_to_target,@,tile_sprite_draw,@,hermit_destroyed,@,hermit_update,@,sword_draw_debug,@,possible_move_obj_update,@,possible_move_small_obj_update,@,selected_move_update,@,selected_move_draw,@,enemy_init,@,enemy_check_collision,@,enemy_update,@,snake_setsind2,@,snake_get_path,@,frog_setsind2,@,frog_get_path,@,seagull_setsind2,@,seagull_get_path,@,fox_setsind2,@,fox_get_path,@,level_state_init,@,pre_card_select_init,@,card_select_update,@,move_select_init,@,move_select_update,@,player_update_init,@,player_update_update,@,baddie_update_init,@,baddie_update_update,@,game_init,@,game_update,@,game_draw,@,card_draw,@,card_normal_update,@,status_text_draw,@,status_text_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,gamewin_update,@,gamewin_draw,@,lvlwin_update,@,lvlwin_draw,@,lvllose_update,@,lvllose_draw,@,title_update,@,title_draw,@,game_state_init,@]],function(a,stateName)
 a.next_state=a.next_state or stateName
 end,function(a,stateName)
 a.next_state,a.isnew=nil
@@ -355,7 +355,7 @@ if is_level_win()then
 a:kill()
 _g.fader_out(function()
 g_level+=1
-if g_level>=51 then
+if g_level>=50 then
 g_tl:load"gamewin"
 else
 g_tl:load"lvlwin"
@@ -524,7 +524,26 @@ camera(g_fade>.5 and rnd_one())
 zspr(108,64,64,4,2)
 camera()
 end,function(a)
+if a.timers.gamewin.elapsed and a.timers.gamewin.elapsed>=1.5 and not does_entity_exist"fader"then
+_g.fader_out(function()
+a:load"title"
+end)
+end
+end,function(a)
+cls(12)
+local func=function()
+print_wide_centered("you win",64,53,7)
+print_wide_centered("turns: "..g_turn_count,64,75,7)
+print_wide_centered("deaths: "..g_death_count,64,83,7)
+end
+draw_outline(1,func)
+func()
+end,function(a)
 if a.timers.lvlwin.elapsed and a.timers.lvlwin.elapsed>=1.5 and not does_entity_exist"fader"then
+if dget(0)<=0 or dget(0)>g_turn_count then
+dset(0,g_turn_count)
+dset(1,g_death_count)
+end
 _g.fader_out(function()
 a:load"game"
 end)
@@ -561,8 +580,16 @@ end)
 end
 end,function(a)
 cls(12)
-print("\^wstabby\^-w",41,40,7)
-print("\^wcrabby\^-w",41,83,7)
+local func=function()
+print_wide_centered("stabby",64,39+2,7)
+print_wide_centered("crabby",64,83+2,7)
+if dget(0)>0 then
+print_wide_centered("hi turns: "..dget(0),64,20+91,7)
+print_wide_centered("hi deaths: "..dget(1),64,20+99,7)
+end
+end
+draw_outline(1,func)
+func()
 zspr(202,64,64,4,4)
 end,function(state)
 clean_all_entities"game_state"
@@ -676,7 +703,7 @@ end
 zclass[[fox,tile_entity,enemy,drawlayer_30|x,@,y,@,target_x,~x,target_y,~y,get_path,%fox_get_path,setsind2,%fox_setsind2;possible_sinds;,224,226,200,228,192,196,194,198;]]
 zclass[[level_state,actor|itemind,2,items;,;start;init,%level_state_init,update,nop,duration,0,next,pre_card_select;pre_card_select;init,%pre_card_select_init;card_select;init,nop,update,%card_select_update;move_select;init,%move_select_init,update,%move_select_update;player_update;init,%player_update_init,update,%player_update_update;baddie_update;init,%baddie_update_init,update,%baddie_update_update;]]
 function get_random_card_ind()
-return rnd_item{128,130,132,134,136,160,162,164,166}
+return rnd_item{128,130,130,132,134,134,136,160,162,164,166}
 end
 function is_level_win()return not get_next_baddie{}end
 function is_level_lose()return not g_pl:is_alive()end
@@ -1047,7 +1074,12 @@ end
 zclass[[fader,actor|ecs_exclusions;actor,yes,timer,yes;]]
 zclass[[fader_out,fader|start;duration,.5,destroyed,@,update,%fader_out_update]]
 zclass[[fader_in,fader|start;duration,.5,update,%fader_in_update]]
-zclass[[game_state,actor|ecs_exclusions;actor,true;init,%game_state_init,curr,game;logo;state_init,%logo_init,update,nop,draw,%logo_draw,duration,2.5,next,title;title;state_init,nop,update,%title_update,draw,%title_draw;game;state_init,%game_init,update,%game_update,draw,%game_draw;lvlwin;state_init,nop,update,%lvlwin_update,draw,%lvlwin_draw;lvllose;state_init,nop,update,%lvllose_update,draw,%lvllose_draw;]]
+cartdata"stabby_crabby"
+menuitem(1,"reset high score",function()
+memset(0x5e00,0,64)
+extcmd"reset"
+end)
+zclass[[game_state,actor|ecs_exclusions;actor,true;init,%game_state_init,curr,logo;logo;state_init,%logo_init,update,nop,draw,%logo_draw,duration,2.5,next,title;title;state_init,nop,update,%title_update,draw,%title_draw;game;state_init,%game_init,update,%game_update,draw,%game_draw;lvlwin;state_init,nop,update,%lvlwin_update,draw,%lvlwin_draw;gamewin;state_init,nop,update,%gamewin_update,draw,%gamewin_draw;lvllose;state_init,nop,update,%lvllose_update,draw,%lvllose_draw;]]
 function _init()
 g_tl=_g.game_state()
 end

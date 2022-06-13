@@ -12,7 +12,8 @@ zclass[[level_state,actor|
 ]]
 
 function get_random_card_ind()
-    return rnd_item{128, 130, 132, 134, 136, 160, 162, 164, 166}
+    -- 130 134 are stab and move. Those are slightly more common as they are the basics
+    return rnd_item{128, 130, 130, 132, 134, 134, 136, 160, 162, 164, 166}
 end
 
 function is_level_win()  return not get_next_baddie{} end
@@ -28,7 +29,7 @@ end $$
         a:kill()
         _g.fader_out(function()
             g_level += 1
-            if g_level >= 51 then
+            if g_level >= 50 then
                 g_tl:load'gamewin'
             else
                 g_tl:load'lvlwin'
