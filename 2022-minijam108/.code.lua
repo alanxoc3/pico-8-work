@@ -615,7 +615,7 @@ add_spot_if_movable(spots,pc.x+1,pc.y-1,143,158,path_move)
 elseif move_type==136 then
 for ang=0,8 do
 local xdir,ydir=zsgn(cos(ang/8)),zsgn(sin(ang/8))
-local sxdir,sxdir=sc.x-pc.x,sc.y-pc.y
+local sxdir,sydir=sc.x-pc.x,sc.y-pc.y
 local cur_x,cur_y=pc.x,pc.y
 local is_good=false
 while true do
