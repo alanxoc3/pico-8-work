@@ -367,7 +367,7 @@ else
 a:load"card_select"
 a.items={}
 for i=1,#a.item_inds do
-add(a.items,_g.card(35+(i-1)*21,a.item_inds[i],false))
+add(a.items,_g.card(9+(i-1)*21,a.item_inds[i],false))
 end
 a.items[a.itemind].selected=true
 end
@@ -496,6 +496,8 @@ end
 if a.selected then
 draw_outline(7,func)
 spr(141,a.x+4,a.y+16)
+local name=g_card_namemap[a.sind]
+print("\^w"..name.."\^-w",71,a.y+3,7)
 elseif g_level_state.curr!="card_select"then
 offy=13
 end
@@ -577,6 +579,7 @@ end end
 camera(ox,oy)
 pal()
 end
+g_card_namemap=zobj[[128,spin,130,stab,134,move,136,charge,160,swap,164,idle,166,jump;]]
 zclass[[timer|timers;,;start_timer,%timer_reset_timer,end_timer,%timer_end_timer,is_active,%timer_is_active,get_elapsed_percent,%timer_get_elapsed_percent,tick,%timer_tick,]]
 zclass[[pos|x,0,y,0,dist_point,%pos_dist_point]]
 zclass[[vec,pos|dx,0,dy,0,vec_update,%vec_update]]
@@ -927,7 +930,7 @@ function unpack_grid_index(index)
 return index%7,index\7
 end
 zclass[[card,actor,vec,drawlayer_50|x,@,sind,@,selected,@,y,141,draw,%card_draw;start;duration,.25,next,normal,dy,-2;normal;dy,0,update,%card_normal_update;ending;update,nop,duration,.25,dy,2;]]
-zclass[[status_text,actor,vec,drawlayer_50|text,@,checkstate,@,x,64,y,146,draw,%status_text_draw;start;duration,.25,next,normal,dy,-2;normal;dy,0,update,%status_text_update;ending;update,nop,duration,.25,dy,2;]]
+zclass[[status_text,actor,vec,drawlayer_50|text,@,checkstate,@,x,64,y,144,draw,%status_text_draw;start;duration,.25,next,normal,dy,-2;normal;dy,0,update,%status_text_update;ending;update,nop,duration,.25,dy,2;]]
 g_fade,g_fade_table=1,zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,1,0,0,0,0;3;,3,3,3,3,1,1,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,0,0,0,0;6;,6,6,13,13,5,5,0,0;7;,7,7,6,13,13,5,0,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,0,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,0,0,0;13;,13,13,5,5,1,0,0,0;14;,14,14,13,4,2,2,0,0;15;,15,15,13,13,5,5,0,0;]]
 function fade(threshold)
 for c=0,15 do

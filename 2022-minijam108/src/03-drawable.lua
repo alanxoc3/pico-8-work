@@ -70,3 +70,13 @@ function draw_outline(color, drawfunc)
     camera(ox, oy)
     pal()
 end
+
+g_card_namemap = zobj[[
+    128,"spin",
+    130,"stab",
+    134,"move",
+    136,"charge",
+    160,"swap",
+    164,"idle",
+    166,"jump";
+]]

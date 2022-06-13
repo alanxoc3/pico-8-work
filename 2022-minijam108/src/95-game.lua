@@ -164,6 +164,9 @@ zclass[[card,actor,vec,drawlayer_50|
     if a.selected then
         draw_outline(7, func)
         spr(141,a.x+4, a.y+16)
+
+        local name = g_card_namemap[a.sind]
+        print("\^w"..name.."\^-w", 71, a.y+3, 7)
     elseif g_level_state.curr != 'card_select' then
         offy = 13
     end
@@ -179,7 +182,7 @@ end $$
 -- returns list of {{x=1,y=1}}
 zclass[[status_text,actor,vec,drawlayer_50|
     text,@, checkstate,@, 
-    x,64, y,146,
+    x,64, y,144,
     draw,%status_text_draw;
     start;duration,.25, next,normal, dy,-2;
     normal;dy,0, update,%status_text_update;

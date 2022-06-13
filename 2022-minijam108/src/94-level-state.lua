@@ -40,7 +40,7 @@ end $$
 
         a.items = {}
         for i=1,#a.item_inds do
-            add(a.items, _g.card(35+(i-1)*21, a.item_inds[i], false))
+            add(a.items, _g.card(9+(i-1)*21, a.item_inds[i], false))
         end
 
         a.items[a.itemind].selected = true
