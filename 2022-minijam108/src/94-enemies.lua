@@ -176,12 +176,12 @@ zclass[[fox,tile_entity,enemy,drawlayer_30|
         if dx < 0 and dy < 0 then return 224
     elseif dx < 0 and dy > 0 then return 226
     elseif dx > 0 and dy < 0 then return 200
-    elseif dy > 0 and dy > 0 then return 228
+    elseif dx > 0 and dy > 0 then return 228
 
-    elseif dx == 0 and dy < 0 then return 192
-    elseif dx == 0 and dy > 0 then return 196
-    elseif dx < 0 and dy == 0 then return 194
-    elseif dy > 0 and dy == 0 then return 198
+    elseif dx == 0 and dy < 0  then return 192
+    elseif dx == 0 and dy > 0  then return 196
+    elseif dx < 0  and dy == 0 then return 194
+    elseif dx > 0  and dy == 0 then return 198
     end
 end $$
 
