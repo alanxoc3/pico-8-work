@@ -28,14 +28,16 @@ end $$
         a:kill()
         _g.fader_out(function()
             g_level += 1
-            g_tl:load'game'
+            g_tl:load'lvlwin'
         end)
     elseif is_level_lose() then
+        g_death_count += 1
         a:kill()
         _g.fader_out(function()
-            g_tl:load'game'
+            g_tl:load'lvllose'
         end)
     else
+        g_turn_count += 1
         a:load'card_select'
 
         a.items = {}

@@ -1,6 +1,8 @@
 -- BASIC EXAMPLE FOR SIMPLE GAME BELOW:
 
 g_level = 0
+g_death_count = 0
+g_turn_count = 0
 
 |[game_init]| function()
     g_level_state = _g.level_state()
