@@ -28,7 +28,11 @@ end $$
         a:kill()
         _g.fader_out(function()
             g_level += 1
-            g_tl:load'lvlwin'
+            if g_level >= 51 then
+                g_tl:load'gamewin'
+            else
+                g_tl:load'lvlwin'
+            end
         end)
     elseif is_level_lose() then
         g_death_count += 1
