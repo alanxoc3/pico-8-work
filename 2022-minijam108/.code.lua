@@ -625,7 +625,7 @@ end
 g_card_namemap=zobj[[128,spin,130,stab,132,thrust,134,move,136,charge,160,swap,162,undo,164,idle,166,jump;]]
 g_card_colormap=zobj[[128,8,130,8,132,8,134,11,136,11,160,10,162,10,164,10,166,11;]]
 g_card_colormap_outline=zobj[[128,2,130,2,132,2,134,3,136,3,160,4,162,4,164,4,166,3;]]
-g_icon_lookup=zobj[[move;s,120,l,142;attack;s,119,l,156;special;s,121,l,174;]]
+g_icon_lookup=zobj[[move;s,120,l,142;attack;s,119,l,156;special;s,121,l,174;disable;s,64,l,206;]]
 function zspr(sind,x,y,sw,sh,xf,yf)
 sw,sh=sw or 1,sh or 1
 xf,yf=xf and xf<0,yf and yf<0
@@ -794,8 +794,8 @@ good=false
 break
 end
 end
-if good then
-add_spot(spots,pc.x,pc.y,"special",function()
+if good and #reverse_prev_path>0 then
+add_spot(spots,reverse_prev_path[#reverse_prev_path].x,reverse_prev_path[#reverse_prev_path].y,"special",function()
 local copy_reverse_prev_path={}
 for spot in all(reverse_prev_path)do
 add(copy_reverse_prev_path,spot)
@@ -817,7 +817,7 @@ add_spot_if_movable(spots,pc.x+2,pc.y+2,"move",path_move)
 add_spot_if_movable(spots,pc.x+2,pc.y-2,"move",path_move)
 end
 if #spots==0 then
-add_spot(spots,pc.x,pc.y,"move",function()return{{x=pc.x,y=pc.y,sx=sc.x,sy=sc.y}}end)
+add_spot(spots,pc.x,pc.y,"disable",function()return{{x=pc.x,y=pc.y,sx=sc.x,sy=sc.y}}end)
 end
 return spots
 end

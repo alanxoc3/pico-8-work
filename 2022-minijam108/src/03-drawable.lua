@@ -114,6 +114,7 @@ g_icon_lookup = zobj[[
     move;    s,120, l,142;
     attack;  s,119, l,156;
     special; s,121, l,174;
+    disable; s,64,  l,206;
 ]]
 
 -- used everwhere

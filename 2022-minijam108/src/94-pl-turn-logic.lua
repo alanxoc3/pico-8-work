@@ -95,8 +95,8 @@ function get_move_coordinates(move_type)
                 end
             end
 
-            if good then
-                add_spot(spots, pc.x, pc.y, 'special', function()
+            if good and #reverse_prev_path > 0 then
+                add_spot(spots, reverse_prev_path[#reverse_prev_path].x, reverse_prev_path[#reverse_prev_path].y, 'special', function()
                     local copy_reverse_prev_path = {}
                     for spot in all(reverse_prev_path) do
                         add(copy_reverse_prev_path, spot)
@@ -123,7 +123,7 @@ function get_move_coordinates(move_type)
 
     -- idle spot if there is nothing to do
     if #spots == 0 then
-        add_spot(spots, pc.x, pc.y, 'move', function() return {{x=pc.x, y=pc.y, sx=sc.x, sy=sc.y}} end)
+        add_spot(spots, pc.x, pc.y, 'disable', function() return {{x=pc.x, y=pc.y, sx=sc.x, sy=sc.y}} end)
     end
 
     return spots
