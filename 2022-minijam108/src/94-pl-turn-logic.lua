@@ -17,6 +17,9 @@ function get_move_coordinates(move_type)
         add_spot_if_attackable(spots, pc.x+1, pc.y+1, 142, 156, path_slice)
         add_spot_if_attackable(spots, pc.x+1, pc.y-1, 142, 156, path_slice)
 
+    elseif move_type == 132 then
+        add_spot_if_movable(spots, sc.x, sc.y,   143, 158, path_thrust)
+
     elseif move_type == 134 then
         add_spot_if_movable(spots, pc.x+1, pc.y,   143, 158, path_move)
         add_spot_if_movable(spots, pc.x-1, pc.y,   143, 158, path_move)
@@ -249,6 +252,18 @@ function path_slice(x, y)
     return {
         {x=plx, y=ply, sx=swx, sy=swy},
         {x=plx, y=ply, sx=x, sy=y}
+    }
+end
+
+function path_thrust(x, y)
+    local plx, ply = g_pl.target_x,    g_pl.target_y
+    local swx, swy = g_sword.target_x, g_sword.target_y
+    local xdiff, ydiff = swx-plx, swy-ply
+
+    return {
+        {x=plx, y=ply, sx=swx, sy=swy},
+        {x=swx, y=swy, sx=swx+xdiff, sy=swy+ydiff},
+        {x=plx, y=ply, sx=swx, sy=swy}
     }
 end
 

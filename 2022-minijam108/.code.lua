@@ -615,7 +615,7 @@ end end
 camera(ox,oy)
 pal()
 end
-g_card_namemap=zobj[[128,spin,130,stab,134,move,136,charge,160,swap,162,undo,164,idle,166,jump;]]
+g_card_namemap=zobj[[128,spin,130,stab,132,thrust,134,move,136,charge,160,swap,162,undo,164,idle,166,jump;]]
 function zspr(sind,x,y,sw,sh,xf,yf)
 sw,sh=sw or 1,sh or 1
 xf,yf=xf and xf<0,yf and yf<0
@@ -667,7 +667,7 @@ end
 zclass[[fox,tile_entity,enemy,drawlayer_30|x,@,y,@,target_x,~x,target_y,~y,get_path,%fox_get_path,setsind2,%fox_setsind2;possible_sinds;,224,226,200,228,192,196,194,198;]]
 zclass[[level_state,actor|itemind,2,items;,;start;init,%level_state_init,update,nop,duration,0,next,pre_card_select;pre_card_select;init,%pre_card_select_init;card_select;init,%card_select_init,update,%card_select_update;move_select;init,%move_select_init,update,%move_select_update;player_update;init,%player_update_init,update,%player_update_update;baddie_update;init,%baddie_update_init,update,%baddie_update_update;]]
 function get_random_card_ind()
-return rnd_item{128,130,134,136,160,162,164,166}
+return rnd_item{128,130,132,134,136,160,162,164,166}
 end
 function is_level_win()return not get_next_baddie{}end
 function is_level_lose()return not g_pl:is_alive()end
@@ -718,6 +718,8 @@ add_spot_if_attackable(spots,pc.x-1,pc.y-1,142,156,path_slice)
 add_spot_if_attackable(spots,pc.x-1,pc.y+1,142,156,path_slice)
 add_spot_if_attackable(spots,pc.x+1,pc.y+1,142,156,path_slice)
 add_spot_if_attackable(spots,pc.x+1,pc.y-1,142,156,path_slice)
+elseif move_type==132 then
+add_spot_if_movable(spots,sc.x,sc.y,143,158,path_thrust)
 elseif move_type==134 then
 add_spot_if_movable(spots,pc.x+1,pc.y,143,158,path_move)
 add_spot_if_movable(spots,pc.x-1,pc.y,143,158,path_move)
@@ -908,6 +910,16 @@ local swx,swy=g_sword.target_x,g_sword.target_y
 return{
 {x=plx,y=ply,sx=swx,sy=swy},
 {x=plx,y=ply,sx=x,sy=y}
+}
+end
+function path_thrust(x,y)
+local plx,ply=g_pl.target_x,g_pl.target_y
+local swx,swy=g_sword.target_x,g_sword.target_y
+local xdiff,ydiff=swx-plx,swy-ply
+return{
+{x=plx,y=ply,sx=swx,sy=swy},
+{x=swx,y=swy,sx=swx+xdiff,sy=swy+ydiff},
+{x=plx,y=ply,sx=swx,sy=swy}
 }
 end
 g_level=0
