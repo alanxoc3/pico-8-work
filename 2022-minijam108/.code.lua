@@ -248,6 +248,7 @@ elseif dy<0 then return 40
 elseif dy>0 then return 44
 end
 end,function(a)
+local path={{x=a.target_x,y=a.target_y}}
 local possible_spots={}
 for i=0,3 do
 local x,y=round(cos(i/4))+a.target_x,round(sin(i/4))+a.target_y
@@ -255,10 +256,18 @@ if is_spot_empty(x,y)and not is_spot_puddle(x,y)and not is_spot_on_sword(x,y)the
 add(possible_spots,{x=x,y=y})
 end
 end
-return{
-{x=a.target_x,y=a.target_y},
-rnd_item(possible_spots)
-}
+if #possible_spots>0 then
+local xdiff,ydiff=abs(g_pl.target_x-a.target_x),abs(g_pl.target_y-a.target_y)
+if xdiff<=1 and ydiff<=1 then
+local smartest=get_smartest_direction(possible_spots,a.target_x,a.target_y)
+if smartest then
+add(path,smartest)
+end
+else
+add(path,rnd_item(possible_spots))
+end
+end
+return path
 end,function(a,dx,dy)
 if dx<0 and dy<0 then return 10
 elseif dx<0 and dy>0 then return 12
