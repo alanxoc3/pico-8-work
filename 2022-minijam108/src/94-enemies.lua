@@ -75,18 +75,31 @@ zclass[[seagull,tile_entity,enemy,drawlayer_30|
 end $$
 
 |[seagull_get_path]| function(a)
+    local path = {{x=a.target_x, y=a.target_y}}
+
+    local ideal_ang = atan2(g_pl.target_x - a.target_x, g_pl.target_y - a.target_y)
+    local smallest_ang_diff = 10
+    local selected_spot = 0
+
     local possible_spots = {}
     for i=0,3 do
-        local x, y = round(cos(.125+i/4))+a.target_x, round(sin(.125+i/4))+a.target_y
+        local ang = .125+i/4
+        local x, y = round(cos(ang))+a.target_x, round(sin(ang))+a.target_y
+
         if is_spot_empty(x, y) and not is_spot_on_sword(x, y) then
             add(possible_spots, {x=x, y=y})
+            if abs(ideal_ang-ang) < smallest_ang_diff then
+                smallest_ang_diff = abs(ideal_ang-ang)
+                selected_spot = #possible_spots
+            end
         end
     end
 
-    return {
-        {x=a.target_x, y=a.target_y},
-        rnd_item(possible_spots)
-    }
+    if selected_spot ~= 0 then
+        add(path, possible_spots[selected_spot])
+    end
+
+    return path
 end $$
 
 -- FOX
