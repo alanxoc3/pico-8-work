@@ -638,13 +638,13 @@ for y=0,6 do
 for x=0,6 do
 local objind=mget(mapx*8+x,mapy*8+y)
 local spot={active=true}
-if objind==240 then
+if objind==112 then
 spot.entity=_g.hermit(x,y)
 g_pl=spot.entity
-elseif objind==246 then
+elseif objind==113 then
 spot.entity=_g.sword(x,y)
 g_sword=spot.entity
-elseif objind==242 then
+elseif objind==115 then
 spot.entity=_g.snake(x,y)
 end
 grid[y*7+x]=spot
