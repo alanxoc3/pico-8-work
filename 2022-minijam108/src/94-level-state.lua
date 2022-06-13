@@ -135,6 +135,7 @@ end $$
     if a.timers.player_update.elapsed and a.timers.player_update.elapsed > .5 and a.reset_turn_timer then
         a.reset_turn_timer = false
         local spot = deli(a.path, 1)
+        if spot.func then spot.func() end
         g_pl.target_x, g_pl.target_y, g_sword.target_x, g_sword.target_y = spot.x, spot.y, spot.sx, spot.sy
 
         a:start_timer('turn_tick', .25, function()

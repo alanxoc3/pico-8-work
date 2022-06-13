@@ -29,6 +29,14 @@ function get_move_coordinates(move_type)
         add_spot_if_movable(spots, pc.x+1, pc.y-1, 143, 158, path_move)
 
     elseif move_type == 160 then
+        local coords = find_on_grid(function(spot)
+            return spot.entity and spot.entity.parents.enemy
+        end)
+
+        for coord in all(coords) do
+            add_spot(spots, coord.x, coord.y,   143, 158, path_swap)
+        end
+
     elseif move_type == 164 then
     elseif move_type == 166 then
         add_spot_if_movable(spots, pc.x+2, pc.y,   143, 158, path_move)
@@ -112,13 +120,30 @@ end
 
 -- GEN PATHS --
 function path_move(x, y)
-    local path = {}
-
     local plx, ply = g_pl.target_x,    g_pl.target_y
     local swx, swy = g_sword.target_x, g_sword.target_y
     local xdiff, ydiff = swx-plx, swy-ply
+    local path = {{x=plx, y=ply, sx=swx, sy=swy}}
 
     add(path, {x=x, y=y, sx=x+xdiff, sy=y+ydiff})
+
+    return path
+end
+
+function path_swap(x, y)
+    local plx, ply = g_pl.target_x,    g_pl.target_y
+    local swx, swy = g_sword.target_x, g_sword.target_y
+    local xdiff, ydiff = swx-plx, swy-ply
+    local path = {{x=plx, y=ply, sx=swx, sy=swy}}
+
+    add(path, {x=x, y=y, sx=x+xdiff, sy=y+ydiff, func=function()
+        printh("TEST")
+        local entity = g_grid[y*7+x].entity
+        printh(entity.id)
+        printh(g_pl.target_x)
+        entity.target_x = g_pl.target_x
+        entity.target_y = g_pl.target_y
+    end})
 
     return path
 end

@@ -1,6 +1,7 @@
 zclass[[enemy|
     get_path,nil,
     init,%enemy_init,
+    update,%enemy_update,
     check_collision,%enemy_check_collision
 ]]
 
@@ -16,21 +17,27 @@ end $$
     end
 end $$
 
+|[enemy_update]| function(a)
+    if a.speed > 0 then
+        a.sind = a:setsind2(zsgn(cos(a.ang)), zsgn(sin(a.ang))) or a.sind
+    end
+end $$
+
 zclass[[snake,tile_entity,enemy,drawlayer_30|
     x,@, y,@,
     target_x,~x,
     target_y,~y,
     get_path,%snake_get_path,
-    update,%snake_update;
+    setsind2,%snake_setsind2;
 
     possible_sinds; ,42,46,40,44;
 ]]
 
-|[snake_update]| function(a)
-        if a.dx < 0 then a.sind = 42
-    elseif a.dx > 0 then a.sind = 46
-    elseif a.dy < 0 then a.sind = 40
-    elseif a.dy > 0 then a.sind = 44
+|[snake_setsind2]| function(a, dx, dy)
+        if dx < 0 then return 42
+    elseif dx > 0 then return 46
+    elseif dy < 0 then return 40
+    elseif dy > 0 then return 44
     end
 end $$
 
@@ -54,16 +61,16 @@ zclass[[seagull,tile_entity,enemy,drawlayer_30|
     target_x,~x,
     target_y,~y,
     get_path,%seagull_get_path,
-    update,%seagull_update;
+    setsind2,%seagull_setsind2;
 
     possible_sinds; ,10,12,8,14;
 ]]
 
-|[seagull_update]| function(a)
-        if a.dx < 0 and a.dy < 0 then a.sind = 10
-    elseif a.dx < 0 and a.dy > 0 then a.sind = 12
-    elseif a.dx > 0 and a.dy < 0 then a.sind = 08
-    elseif a.dy > 0 and a.dy > 0 then a.sind = 14
+|[seagull_setsind2]| function(a, dx, dy)
+        if dx < 0 and dy < 0 then return 10
+    elseif dx < 0 and dy > 0 then return 12
+    elseif dx > 0 and dy < 0 then return 08
+    elseif dy > 0 and dy > 0 then return 14
     end
 end $$
 
@@ -88,21 +95,21 @@ zclass[[fox,tile_entity,enemy,drawlayer_30|
     target_x,~x,
     target_y,~y,
     get_path,%fox_get_path,
-    update,%fox_update;
+    setsind2,%fox_setsind2;
 
     possible_sinds; ,224,226,200,228,192,196,194,198;
 ]]
 
-|[fox_update]| function(a)
-        if a.dx < 0 and a.dy < 0 then a.sind = 224
-    elseif a.dx < 0 and a.dy > 0 then a.sind = 226
-    elseif a.dx > 0 and a.dy < 0 then a.sind = 200
-    elseif a.dy > 0 and a.dy > 0 then a.sind = 228
+|[fox_setsind2]| function(a, dx, dy)
+        if dx < 0 and dy < 0 then return 224
+    elseif dx < 0 and dy > 0 then return 226
+    elseif dx > 0 and dy < 0 then return 200
+    elseif dy > 0 and dy > 0 then return 228
 
-    elseif a.dx == 0 and a.dy < 0 then a.sind = 192
-    elseif a.dx == 0 and a.dy > 0 then a.sind = 196
-    elseif a.dx < 0 and a.dy == 0 then a.sind = 194
-    elseif a.dy > 0 and a.dy == 0 then a.sind = 198
+    elseif dx == 0 and dy < 0 then return 192
+    elseif dx == 0 and dy > 0 then return 196
+    elseif dx < 0 and dy == 0 then return 194
+    elseif dy > 0 and dy == 0 then return 198
     end
 end $$
 

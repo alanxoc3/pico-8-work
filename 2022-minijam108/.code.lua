@@ -92,7 +92,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,tile_entity_to_target,@,tile_sprite_draw,@,hermit_update,@,sword_draw_debug,@,possible_move_obj_update,@,possible_move_small_obj_update,@,selected_move_update,@,selected_move_draw,@,enemy_init,@,enemy_check_collision,@,snake_update,@,snake_get_path,@,seagull_update,@,seagull_get_path,@,fox_update,@,fox_get_path,@,level_state_init,@,pre_card_select_init,@,card_select_init,@,card_select_update,@,move_select_init,@,move_select_update,@,player_update_init,@,player_update_update,@,baddie_update_init,@,baddie_update_update,@,game_init,@,game_update,@,game_draw,@,card_draw,@,card_normal_update,@,status_text_draw,@,status_text_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,game_state_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,tile_entity_to_target,@,tile_sprite_draw,@,hermit_destroyed,@,hermit_update,@,sword_draw_debug,@,possible_move_obj_update,@,possible_move_small_obj_update,@,selected_move_update,@,selected_move_draw,@,enemy_init,@,enemy_check_collision,@,enemy_update,@,snake_setsind2,@,snake_get_path,@,seagull_setsind2,@,seagull_get_path,@,fox_setsind2,@,fox_get_path,@,level_state_init,@,pre_card_select_init,@,card_select_init,@,card_select_update,@,move_select_init,@,move_select_update,@,player_update_init,@,player_update_update,@,baddie_update_init,@,baddie_update_update,@,game_init,@,game_update,@,game_draw,@,card_draw,@,card_normal_update,@,status_text_draw,@,status_text_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,game_state_init,@]],function(a,stateName)
 a.next_state=a.next_state or stateName
 end,function(a,stateName)
 a.next_state,a.isnew=nil
@@ -187,12 +187,16 @@ a.y=a.target_y
 a.speed=0
 else
 a.ang=atan2(xdiff,ydiff)
-a.speed=.1
+a.speed=.05
 end
 end,function(a)
 if a.sind then
 spr(a.sind,scr_x(a.x)-g_spr_info[a.sind][3],scr_y(a.y)-g_spr_info[a.sind][4],g_spr_info[a.sind][1],g_spr_info[a.sind][2])
 end
+end,function(a)
+g_sword.target_x=-100
+g_sword.target_y=-100
+g_sword:kill()
 end,function(a)
 local xdiff=g_sword.target_x-a.target_x
 local ydiff=g_sword.target_y-a.target_y
@@ -234,10 +238,14 @@ elseif a.target_x==g_pl.target_x and a.target_y==g_pl.target_y then
 g_pl:kill()
 end
 end,function(a)
-if a.dx<0 then a.sind=42
-elseif a.dx>0 then a.sind=46
-elseif a.dy<0 then a.sind=40
-elseif a.dy>0 then a.sind=44
+if a.speed>0 then
+a.sind=a:setsind2(zsgn(cos(a.ang)),zsgn(sin(a.ang)))or a.sind
+end
+end,function(a,dx,dy)
+if dx<0 then return 42
+elseif dx>0 then return 46
+elseif dy<0 then return 40
+elseif dy>0 then return 44
 end
 end,function(a)
 local possible_spots={}
@@ -251,11 +259,11 @@ return{
 {x=a.target_x,y=a.target_y},
 rnd_item(possible_spots)
 }
-end,function(a)
-if a.dx<0 and a.dy<0 then a.sind=10
-elseif a.dx<0 and a.dy>0 then a.sind=12
-elseif a.dx>0 and a.dy<0 then a.sind=08
-elseif a.dy>0 and a.dy>0 then a.sind=14
+end,function(a,dx,dy)
+if dx<0 and dy<0 then return 10
+elseif dx<0 and dy>0 then return 12
+elseif dx>0 and dy<0 then return 08
+elseif dy>0 and dy>0 then return 14
 end
 end,function(a)
 local possible_spots={}
@@ -269,15 +277,15 @@ return{
 {x=a.target_x,y=a.target_y},
 rnd_item(possible_spots)
 }
-end,function(a)
-if a.dx<0 and a.dy<0 then a.sind=224
-elseif a.dx<0 and a.dy>0 then a.sind=226
-elseif a.dx>0 and a.dy<0 then a.sind=200
-elseif a.dy>0 and a.dy>0 then a.sind=228
-elseif a.dx==0 and a.dy<0 then a.sind=192
-elseif a.dx==0 and a.dy>0 then a.sind=196
-elseif a.dx<0 and a.dy==0 then a.sind=194
-elseif a.dy>0 and a.dy==0 then a.sind=198
+end,function(a,dx,dy)
+if dx<0 and dy<0 then return 224
+elseif dx<0 and dy>0 then return 226
+elseif dx>0 and dy<0 then return 200
+elseif dy>0 and dy>0 then return 228
+elseif dx==0 and dy<0 then return 192
+elseif dx==0 and dy>0 then return 196
+elseif dx<0 and dy==0 then return 194
+elseif dy>0 and dy==0 then return 198
 end
 end,function(a)
 local path={{x=a.target_x,y=a.target_y}}
@@ -374,6 +382,7 @@ end,function(a)
 if a.timers.player_update.elapsed and a.timers.player_update.elapsed>.5 and a.reset_turn_timer then
 a.reset_turn_timer=false
 local spot=deli(a.path,1)
+if spot.func then spot.func()end
 g_pl.target_x,g_pl.target_y,g_sword.target_x,g_sword.target_y=spot.x,spot.y,spot.sx,spot.sy
 a:start_timer("turn_tick",.25,function()
 if #a.path>0 then
@@ -503,6 +512,14 @@ function ybtn()return zbtn(btn,2)end
 function xbtnp()return zbtn(btnp,0)end
 function ybtnp()return zbtn(btnp,2)end
 function zsgn(num)return num==0 and 0 or sgn(num)end
+function approx_dist(dx,dy)
+local maskx,masky=dx>>31,dy>>31
+local a0,b0=(dx+maskx)^^maskx,(dy+masky)^^masky
+if a0>b0 then
+return a0*0.9609+b0*0.3984
+end
+return b0*0.9609+a0*0.3984
+end
 zclass[[actor,timer|load,%actor_load,loadlogic,%actor_loadlogic,state,%actor_state,kill,%actor_kill,clean,%actor_clean,is_alive,%actor_is_alive,alive,yes,duration,null,curr,start,next,null,isnew,yes,init,nop,update,nop,destroyed,nop;]]
 zclass[[drawlayer_25|]]
 zclass[[drawlayer_30|]]
@@ -531,14 +548,14 @@ return y*13+g_offy-midr+13/2-1
 end
 zclass[[tile_entity,mov,actor|to_target,%tile_entity_to_target,target_x,null,target_y,null,draw,%tile_sprite_draw]]
 zclass[[puddle,tile_entity,actor,drawlayer_25|x,@,y,@,sind,168,target_x,~x,target_y,~y]]
-zclass[[hermit,mov,actor,drawlayer_50|x,@,y,@,target_x,~x,target_y,~y,to_target,%tile_entity_to_target,draw,%tile_sprite_draw,update,%hermit_update]]
-zclass[[sword,drawlayer_50|target_x,@,target_y,@,draw,%sword_draw_debug]]
+zclass[[hermit,mov,actor,drawlayer_50|x,@,y,@,target_x,~x,target_y,~y,to_target,%tile_entity_to_target,draw,%tile_sprite_draw,destroyed,%hermit_destroyed,update,%hermit_update]]
+zclass[[sword,actor,drawlayer_50|target_x,@,target_y,@,draw,%sword_draw_debug]]
 zclass[[pos_preview,actor,drawlayer_50|gamestate,@,itemind,@,x,@,y,@,sind,@,sel_sind,@,update,%possible_move_small_obj_update,draw,%tile_sprite_draw]]
 zclass[[selected_move,actor,drawlayer_50|update,%selected_move_update,draw,%selected_move_draw]]
-zclass[[enemy|get_path,nil,init,%enemy_init,check_collision,%enemy_check_collision]]
-zclass[[snake,tile_entity,enemy,drawlayer_30|x,@,y,@,target_x,~x,target_y,~y,get_path,%snake_get_path,update,%snake_update;possible_sinds;,42,46,40,44;]]
-zclass[[seagull,tile_entity,enemy,drawlayer_30|x,@,y,@,target_x,~x,target_y,~y,get_path,%seagull_get_path,update,%seagull_update;possible_sinds;,10,12,8,14;]]
-zclass[[fox,tile_entity,enemy,drawlayer_30|x,@,y,@,target_x,~x,target_y,~y,get_path,%fox_get_path,update,%fox_update;possible_sinds;,224,226,200,228,192,196,194,198;]]
+zclass[[enemy|get_path,nil,init,%enemy_init,update,%enemy_update,check_collision,%enemy_check_collision]]
+zclass[[snake,tile_entity,enemy,drawlayer_30|x,@,y,@,target_x,~x,target_y,~y,get_path,%snake_get_path,setsind2,%snake_setsind2;possible_sinds;,42,46,40,44;]]
+zclass[[seagull,tile_entity,enemy,drawlayer_30|x,@,y,@,target_x,~x,target_y,~y,get_path,%seagull_get_path,setsind2,%seagull_setsind2;possible_sinds;,10,12,8,14;]]
+zclass[[fox,tile_entity,enemy,drawlayer_30|x,@,y,@,target_x,~x,target_y,~y,get_path,%fox_get_path,setsind2,%fox_setsind2;possible_sinds;,224,226,200,228,192,196,194,198;]]
 zclass[[level_state,actor|itemind,2,items;,;start;init,%level_state_init,update,nop,duration,0,next,pre_card_select;pre_card_select;init,%pre_card_select_init;card_select;init,%card_select_init,update,%card_select_update;move_select;init,%move_select_init,update,%move_select_update;player_update;init,%player_update_init,update,%player_update_update;baddie_update;init,%baddie_update_init,update,%baddie_update_update;]]
 function get_random_card_ind()
 return rnd_item{128,130,134,160,164,166}
@@ -596,6 +613,12 @@ add_spot_if_movable(spots,pc.x-1,pc.y+1,143,158,path_move)
 add_spot_if_movable(spots,pc.x+1,pc.y+1,143,158,path_move)
 add_spot_if_movable(spots,pc.x+1,pc.y-1,143,158,path_move)
 elseif move_type==160 then
+local coords=find_on_grid(function(spot)
+return spot.entity and spot.entity.parents.enemy
+end)
+for coord in all(coords)do
+add_spot(spots,coord.x,coord.y,143,158,path_swap)
+end
 elseif move_type==164 then
 elseif move_type==166 then
 add_spot_if_movable(spots,pc.x+2,pc.y,143,158,path_move)
@@ -662,11 +685,26 @@ add_spot(list,x,y,...)
 end
 end
 function path_move(x,y)
-local path={}
 local plx,ply=g_pl.target_x,g_pl.target_y
 local swx,swy=g_sword.target_x,g_sword.target_y
 local xdiff,ydiff=swx-plx,swy-ply
+local path={{x=plx,y=ply,sx=swx,sy=swy}}
 add(path,{x=x,y=y,sx=x+xdiff,sy=y+ydiff})
+return path
+end
+function path_swap(x,y)
+local plx,ply=g_pl.target_x,g_pl.target_y
+local swx,swy=g_sword.target_x,g_sword.target_y
+local xdiff,ydiff=swx-plx,swy-ply
+local path={{x=plx,y=ply,sx=swx,sy=swy}}
+add(path,{x=x,y=y,sx=x+xdiff,sy=y+ydiff,func=function()
+printh("TEST")
+local entity=g_grid[y*7+x].entity
+printh(entity.id)
+printh(g_pl.target_x)
+entity.target_x=g_pl.target_x
+entity.target_y=g_pl.target_y
+end})
 return path
 end
 function path_spin(x,y)

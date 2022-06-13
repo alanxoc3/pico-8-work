@@ -42,3 +42,12 @@ function xbtnp() return zbtn(btnp, 0) end
 function ybtnp() return zbtn(btnp, 2) end
 
 function zsgn(num) return num == 0 and 0 or sgn(num) end
+
+function approx_dist(dx,dy)
+    local maskx,masky=dx>>31,dy>>31
+    local a0,b0=(dx+maskx)^^maskx,(dy+masky)^^masky
+    if a0>b0 then
+        return a0*0.9609+b0*0.3984
+    end
+    return b0*0.9609+a0*0.3984
+end

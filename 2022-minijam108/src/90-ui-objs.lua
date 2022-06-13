@@ -22,7 +22,7 @@ zclass[[tile_entity,mov,actor|
         a.speed = 0
     else
         a.ang = atan2(xdiff, ydiff)
-        a.speed = .1
+        a.speed = .05
     end
 end $$
 
@@ -45,8 +45,15 @@ zclass[[hermit,mov,actor,drawlayer_50|
     target_y,~y,
     to_target,%tile_entity_to_target,
     draw,%tile_sprite_draw,
+    destroyed,%hermit_destroyed,
     update,%hermit_update
 ]]
+
+|[hermit_destroyed]| function(a)
+    g_sword.target_x = -100
+    g_sword.target_y = -100
+    g_sword:kill()
+end $$
 
 |[hermit_update]| function(a)
     local xdiff = g_sword.target_x - a.target_x
@@ -63,7 +70,7 @@ zclass[[hermit,mov,actor,drawlayer_50|
     end
 end $$
 
-zclass[[sword,drawlayer_50|
+zclass[[sword,actor,drawlayer_50|
     target_x,@, target_y,@
 
     -- DEBUG_BEGIN
