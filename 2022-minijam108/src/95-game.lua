@@ -5,7 +5,6 @@ g_level = 0
 |[game_init]| function()
     g_level_state = _g.level_state()
     g_grid = set_grid(g_level)
-    _g.fader_in()
 end $$
 
 |[game_update]| function()

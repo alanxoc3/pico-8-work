@@ -37,14 +37,14 @@ end $$
         end)
     else
         a:load'card_select'
-    end
-    
-    a.items = {}
-    for i=1,#a.item_inds do
-        add(a.items, _g.card(35+(i-1)*21, a.item_inds[i], false))
-    end
 
-    a.items[a.itemind].selected = true
+        a.items = {}
+        for i=1,#a.item_inds do
+            add(a.items, _g.card(35+(i-1)*21, a.item_inds[i], false))
+        end
+
+        a.items[a.itemind].selected = true
+    end
 end $$
 
 -- CARD SELECT --
