@@ -1,30 +1,32 @@
 -- sword path, move path.
 function get_move_coordinates(move_type)
-    local pc = find_pl_on_grid()
-    local sc = find_sword_on_grid()
+    local pc = {x=g_pl.target_x,    y=g_pl.target_y}
+    local sc = {x=g_sword.target_x, y=g_sword.target_y}
     local spots = {}
     if move_type == 128 then
-        add_spot(spots, sc.x, sc.y, 142, 156)
+        add_spot(spots, sc.x, sc.y, 142, 156, path_spin)
+
     elseif move_type == 130 then
-        add_spot_if_attackable(spots, pc.x+1, pc.y,   142, 156)
-        add_spot_if_attackable(spots, pc.x-1, pc.y,   142, 156)
-        add_spot_if_attackable(spots, pc.x, pc.y+1,   142, 156)
-        add_spot_if_attackable(spots, pc.x, pc.y-1,   142, 156)
+        add_spot_if_attackable(spots, pc.x+1, pc.y,   142, 156, path_slice)
+        add_spot_if_attackable(spots, pc.x-1, pc.y,   142, 156, path_slice)
+        add_spot_if_attackable(spots, pc.x, pc.y+1,   142, 156, path_slice)
+        add_spot_if_attackable(spots, pc.x, pc.y-1,   142, 156, path_slice)
 
-        add_spot_if_attackable(spots, pc.x-1, pc.y-1, 142, 156)
-        add_spot_if_attackable(spots, pc.x-1, pc.y+1, 142, 156)
-        add_spot_if_attackable(spots, pc.x+1, pc.y+1, 142, 156)
-        add_spot_if_attackable(spots, pc.x+1, pc.y-1, 142, 156)
+        add_spot_if_attackable(spots, pc.x-1, pc.y-1, 142, 156, path_slice)
+        add_spot_if_attackable(spots, pc.x-1, pc.y+1, 142, 156, path_slice)
+        add_spot_if_attackable(spots, pc.x+1, pc.y+1, 142, 156, path_slice)
+        add_spot_if_attackable(spots, pc.x+1, pc.y-1, 142, 156, path_slice)
+
     elseif move_type == 134 then
-        add_spot_if_movable(spots, pc.x+1, pc.y,   143, 158)
-        add_spot_if_movable(spots, pc.x-1, pc.y,   143, 158)
-        add_spot_if_movable(spots, pc.x, pc.y+1,   143, 158)
-        add_spot_if_movable(spots, pc.x, pc.y-1,   143, 158)
+        add_spot_if_movable(spots, pc.x+1, pc.y,   143, 158, path_move)
+        add_spot_if_movable(spots, pc.x-1, pc.y,   143, 158, path_move)
+        add_spot_if_movable(spots, pc.x, pc.y+1,   143, 158, path_move)
+        add_spot_if_movable(spots, pc.x, pc.y-1,   143, 158, path_move)
 
-        add_spot_if_movable(spots, pc.x-1, pc.y-1, 143, 158)
-        add_spot_if_movable(spots, pc.x-1, pc.y+1, 143, 158)
-        add_spot_if_movable(spots, pc.x+1, pc.y+1, 143, 158)
-        add_spot_if_movable(spots, pc.x+1, pc.y-1, 143, 158)
+        add_spot_if_movable(spots, pc.x-1, pc.y-1, 143, 158, path_move)
+        add_spot_if_movable(spots, pc.x-1, pc.y+1, 143, 158, path_move)
+        add_spot_if_movable(spots, pc.x+1, pc.y+1, 143, 158, path_move)
+        add_spot_if_movable(spots, pc.x+1, pc.y-1, 143, 158, path_move)
     end
 
     return spots
@@ -40,18 +42,6 @@ function find_on_grid(predicate)
         end
     end
     return l
-end
-
-function find_sword_on_grid()
-    return find_on_grid(function(spot)
-        return spot.entity == g_sword
-    end)[1]
-end
-
-function find_pl_on_grid()
-    return find_on_grid(function(spot)
-        return spot.entity == g_pl
-    end)[1]
 end
 
 function is_spot_valid(x, y)
@@ -74,8 +64,8 @@ function is_spot_attackable(x, y)
     return is_spot_valid(x, y) and spot.entity and spot.entity.parents.enemy
 end
 
-function add_spot(list, x, y, sind, sel_sind)
-    add(list, {x=x, y=y, sind=sind, sel_sind=sel_sind})
+function add_spot(list, x, y, sind, sel_sind, gen_path)
+    add(list, {x=x, y=y, sind=sind, sel_sind=sel_sind, gen_path=gen_path})
 end
 
 function add_spot_if_movable(list, x, y, ...)
@@ -89,3 +79,20 @@ function add_spot_if_attackable(list, x, y, ...)
         add_spot(list, x, y, ...)
     end
 end
+
+-- GEN PATHS --
+function path_move(x, y)
+    local path = {}
+
+    add(path, {x=x, y=y, sx=x+1, sy=y})
+
+    return path
+end
+
+-- how do enemy paths work?
+
+-- hermit turn moves spaces until all path spaces are used.
+-- enemy turns go one at a time. Starting from top left.
+-- a function will return the path for the enemy.
+
+-- everything is constantly moving to where it is on the grid.

@@ -8,9 +8,23 @@ function scr_y(y)
     return y*TILE_RADIUS+g_offy-midr+TILE_RADIUS/2-1
 end
 
-zclass[[tile_sprite,pos|
+zclass[[tile_entity,mov,actor|
+    to_target,%tile_entity_to_target,
+    target_x,null, target_y,null,
     draw,%tile_sprite_draw
 ]]
+
+|[tile_entity_to_target]| function(a)
+    local xdiff, ydiff = a.target_x - a.x, a.target_y - a.y
+    if abs(xdiff) < .25 and abs(ydiff) < .25 then
+        a.x = a.target_x
+        a.y = a.target_y
+        a.speed = 0
+    else
+        a.ang = atan2(xdiff, ydiff)
+        a.speed = .1
+    end
+end $$
 
 |[tile_sprite_draw]| function(a)
     if a.sind then
@@ -18,13 +32,16 @@ zclass[[tile_sprite,pos|
     end
 end $$
 
-zclass[[hermit,actor,tile_sprite,drawlayer_50|
-    x,@, y,@, update,%hermit_update
+zclass[[hermit,tile_entity,actor,drawlayer_50|
+    x,@, y,@,
+    target_x,~x,
+    target_y,~y,
+    update,%hermit_update
 ]]
 
 |[hermit_update]| function(a)
-    local xdiff = g_sword.x - a.x
-    local ydiff = g_sword.y - a.y
+    local xdiff = g_sword.target_x - a.target_x
+    local ydiff = g_sword.target_y - a.target_y
         if xdiff == 0 and ydiff < 0 then a.sind = 0
     elseif xdiff == 0 and ydiff > 0 then a.sind = 2
     elseif ydiff == 0 and xdiff < 0 then a.sind = 4
@@ -38,23 +55,23 @@ zclass[[hermit,actor,tile_sprite,drawlayer_50|
 end $$
 
 zclass[[sword|
-    x,@, y,@
+    x,@, y,@,
+    target_x,~x,
+    target_y,~y,
 ]]
 
 zclass[[enemy|]]
-zclass[[snake,tile_sprite,enemy,drawlayer_50|
+zclass[[snake,tile_entity,enemy,drawlayer_50|
     x,@, y,@,
+    target_x,~x,
+    target_y,~y,
     sind,196
 ]]
 
-zclass[[pos_real,tile_sprite,actor|
+zclass[[pos_preview,actor,drawlayer_50|
     gamestate,@, itemind,@, x,@, y,@, sind,@, sel_sind,@,
-    update,%possible_move_obj_update;
-]]
-
-zclass[[pos_preview,tile_sprite,actor,drawlayer_50|
-    gamestate,@, itemind,@, x,@, y,@, sind,@, sel_sind,@,
-    update,%possible_move_small_obj_update;
+    update,%possible_move_small_obj_update,
+    draw,%tile_sprite_draw
 ]]
 
 |[possible_move_obj_update]| function(a)

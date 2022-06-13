@@ -6,6 +6,9 @@ B_RIGHT: ➡️
 B_X: ❎
 B_O: 🅾️
 
+DEFAULT_INERTIA: .80
+MIN_SPEED: .01
+
 # Sprites
 SPR_LOGO_W: 4
 SPR_LOGO_H: 2

@@ -7,7 +7,7 @@ zclass[[level_state,actor|
     pre_card_select;     init,%pre_card_select_init, update,nop,                 duration,0, next,card_select;
     card_select;         init,%card_select_init,     update,%card_select_update;
     move_select;         init,%move_select_init,     update,%move_select_update;
-    player_update;       init,%player_update_init,   update,nop,                 duration,1, next,baddie_update;
+    player_update;       init,%player_update_init,   update,%player_update_update;
     baddie_update;       init,%baddie_update_init,   update,nop,                 duration,1, next,pre_card_select;
 ]]
 
@@ -55,10 +55,6 @@ end $$
     a.moves = get_move_coordinates(a.items[a.itemind].sind)
     a.moves_ind = 1
     _g.selected_move()
-
-    for m in all(a.moves) do
-        _g.pos_real(a, a.itemind, m.x, m.y, m.sind, m.sel_sind)
-    end
 end $$
 
 function move_select_update_helper(moves, ind, btnpress, default, axis, default_key, axis_key)
@@ -102,9 +98,28 @@ end $$
 -- PLAYER UPDATE
 |[player_update_init]| function(a)
     _g.status_text("hermit turn", 'player_update')
+    local m = a.moves[a.moves_ind]
+    a.path = m.gen_path(m.x, m.y)
+    a.reset_pl_timer = true
 end $$
 
--- PLAYER UPDATE
+|[player_update_update]| function(a)
+    if a.reset_pl_timer then
+        a.reset_pl_timer = false
+        local spot = deli(a.path, 1)
+        g_pl.target_x, g_pl.target_y, g_sword.target_x, g_sword.target_y = spot.x, spot.y, spot.sx, spot.sy
+        a:start_timer('pltick', .75, function()
+            if #a.path > 0 then
+                a.reset_pl_timer = true
+            else
+                a.reset_pl_timer = false
+                a:load'baddie_update'
+            end
+        end)
+    end
+end $$
+
+-- BADDIE UPDATE
 |[baddie_update_init]| function(a)
     _g.status_text("baddie turn", 'baddie_update')
 end $$

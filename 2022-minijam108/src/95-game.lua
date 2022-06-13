@@ -16,9 +16,12 @@ end $$
     zcall(loop_entities, [[
         1 ;,timer,       tick;
         2 ;,actor,       state;
-        3 ;,mov,         mov_update;
-        4 ;,vec,         vec_update;
+        3 ;,tile_entity, to_target;
+        4 ;,mov,         mov_update;
+        5 ;,vec,         vec_update;
     ]])
+
+    update_grid()
 end $$
 
 function round(num) return flr(num + .5) end
@@ -110,6 +113,23 @@ function set_grid(level)
     end
 
     return grid
+end
+
+-- call every frame. loop through tile entities
+function update_grid()
+    for y=0,6 do
+        for x=0,6 do
+            local spot = g_grid[y*7+x]
+            spot.entity = nil
+        end
+    end
+    
+    for te in all(g_zclass_entities.tile_entity) do
+        local spot = g_grid[te.target_y*7+te.target_x]
+        if spot.active then
+            spot.entity = te
+        end
+    end
 end
 
 -- gets the coordinates for the center of each tile
