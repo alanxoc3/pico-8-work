@@ -73,17 +73,7 @@ end $$
 
 zclass[[sword,actor,drawlayer_50|
     target_x,@, target_y,@
-
-    -- DEBUG_BEGIN
-    ,draw,%sword_draw_debug
-    -- DEBUG_END
 ]]
-
--- DEBUG_BEGIN
-|[sword_draw_debug]| function(a)
-    circ(scr_x(a.target_x), scr_y(a.target_y), 11, 7)
-end $$
--- DEBUG_END
 
 zclass[[pos_preview,actor,drawlayer_50|
     gamestate,@, itemind,@, x,@, y,@, sind,@,

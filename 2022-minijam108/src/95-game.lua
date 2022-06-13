@@ -50,6 +50,12 @@ function print_horiz_wobble(text, x, y, col, off, wob)
     end
 end
 
+function print_horiz_wobble_centered(text, x, y, col, off, wob)
+    for i=1,#text do
+        print("\^w"..sub(text, i, i).."\^-w", x+i*8-#text*5, y+wob*((i+off+t())\1%2), col)
+    end
+end
+
 function draw_tiles()
     local tlx, tly = g_offx-46, g_offy-46
     rectfill(tlx,tly,tlx+90,tly+90,15)

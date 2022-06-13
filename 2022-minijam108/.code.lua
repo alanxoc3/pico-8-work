@@ -92,7 +92,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,tile_entity_to_target,@,tile_sprite_draw,@,hermit_destroyed,@,hermit_update,@,sword_draw_debug,@,possible_move_obj_update,@,possible_move_small_obj_update,@,selected_move_update,@,selected_move_draw,@,enemy_init,@,enemy_check_collision,@,enemy_update,@,snake_setsind2,@,snake_get_path,@,frog_setsind2,@,frog_get_path,@,seagull_setsind2,@,seagull_get_path,@,fox_setsind2,@,fox_get_path,@,level_state_init,@,pre_card_select_init,@,card_select_update,@,move_select_init,@,move_select_update,@,player_update_init,@,player_update_update,@,baddie_update_init,@,baddie_update_update,@,game_init,@,game_update,@,game_draw,@,card_draw,@,card_normal_update,@,status_text_draw,@,status_text_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,gamewin_update,@,gamewin_draw,@,lvlwin_update,@,lvlwin_draw,@,lvllose_update,@,lvllose_draw,@,title_update,@,title_draw,@,game_state_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,tile_entity_to_target,@,tile_sprite_draw,@,hermit_destroyed,@,hermit_update,@,possible_move_obj_update,@,possible_move_small_obj_update,@,selected_move_update,@,selected_move_draw,@,enemy_init,@,enemy_check_collision,@,enemy_update,@,snake_setsind2,@,snake_get_path,@,frog_setsind2,@,frog_get_path,@,seagull_setsind2,@,seagull_get_path,@,fox_setsind2,@,fox_get_path,@,level_state_init,@,pre_card_select_init,@,card_select_update,@,move_select_init,@,move_select_update,@,player_update_init,@,player_update_update,@,baddie_update_init,@,baddie_update_update,@,game_init,@,game_update,@,game_draw,@,card_draw,@,card_normal_update,@,status_text_draw,@,status_text_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,gamewin_update,@,gamewin_draw,@,lvlwin_update,@,lvlwin_draw,@,lvllose_update,@,lvllose_draw,@,title_update,@,title_draw,@,game_state_init,@]],function(a,stateName)
 a.next_state=a.next_state or stateName
 end,function(a,stateName)
 a.next_state,a.isnew=nil
@@ -209,8 +209,6 @@ elseif xdiff>0 and ydiff<0 then a.sind=64
 elseif xdiff<0 and ydiff>0 then a.sind=70
 elseif xdiff<0 and ydiff<0 then a.sind=73
 end
-end,function(a)
-circ(scr_x(a.target_x),scr_y(a.target_y),11,7)
 end,function(a)
 if a.gamestate.curr ~="move_select"then
 a:kill()
@@ -524,9 +522,9 @@ camera(g_fade>.5 and rnd_one())
 zspr(108,64,64,4,2)
 camera()
 end,function(a)
-if a.timers.gamewin.elapsed and a.timers.gamewin.elapsed>=1.5 and not does_entity_exist"fader"then
+if(btnp(4)or btnp(5))and not does_entity_exist"fader"then
 _g.fader_out(function()
-if dget(0)<=0 or dget(0)>g_turn_count then
+if g_turn_count>0 and(dget(0)<=0 or dget(0)>g_turn_count)then
 dset(0,g_turn_count)
 dset(1,g_death_count)
 end
@@ -537,16 +535,25 @@ a:load"title"
 end)
 end
 end,function(a)
+local el=(a.timers.gamewin.elapsed or 0)%15
 cls(12)
-local func=function()
-print_wide_centered("you win",64,53,7)
-print_wide_centered("turns: "..g_turn_count,64,75,7)
-print_wide_centered("deaths: "..g_death_count,64,83,7)
-end
-draw_outline(1,func)
-func()
+print_horiz_wobble_centered("you win",64,30-20-4,7,0,1)
+print_wide_centered("turns: "..g_turn_count,64,75-20-20-15,7)
+print_wide_centered("deaths: "..g_death_count,64,82-20-20-15,7)
+spr(42,150-el*30,42,2,2)
+spr(4,200-el*34,44,4,2)
+spr(36,-270+el*34,42,4,2)
+spr(46,-260+el*30,42,2,2)
+spr(46,-270+el*30,42-10,2,2)
+spr(46,-275+el*30,42+11,2,2)
+spr(46,-280+el*30,42,2,2)
+print_wide_centered("code/sfx by:",64,90,7)
+print_wide_centered("@alanxoc3",64,97,7)
+print_wide_centered("gfx/sfx by:",64,110,7)
+print_wide_centered("@greatcadet",64,117,7)
+print_press()
 end,function(a)
-if a.timers.lvlwin.elapsed and a.timers.lvlwin.elapsed>=1.5 and not does_entity_exist"fader"then
+if a.timers.lvlwin.elapsed and a.timers.lvlwin.elapsed>=2.5 and not does_entity_exist"fader"then
 _g.fader_out(function()
 a:load"game"
 end)
@@ -558,10 +565,9 @@ print_wide_centered("next level",64,53,7)
 print_wide_centered("turns: "..g_turn_count,64,75,7)
 print_wide_centered("deaths: "..g_death_count,64,83,7)
 end
-draw_outline(1,func)
 func()
 end,function(a)
-if a.timers.lvllose.elapsed and a.timers.lvllose.elapsed>=1.5 and not does_entity_exist"fader"then
+if a.timers.lvllose.elapsed and a.timers.lvllose.elapsed>=2.5 and not does_entity_exist"fader"then
 _g.fader_out(function()
 a:load"game"
 end)
@@ -573,27 +579,26 @@ print_wide_centered("retry level",64,53,7)
 print_wide_centered("turns: "..g_turn_count,64,75,7)
 print_wide_centered("deaths: "..g_death_count,64,83,7)
 end
-draw_outline(1,func)
 func()
 end,function(a)
-if a.timers.title.elapsed and a.timers.title.elapsed>=1.5 and not does_entity_exist"fader"then
+if(btnp(4)or btnp(5))and not does_entity_exist"fader"then
 _g.fader_out(function()
 a:load"game"
 end)
 end
 end,function(a)
 cls(12)
-local func=function()
-print_wide_centered("stabby",64,39+2,7)
-print_wide_centered("crabby",64,83+2,7)
-if dget(0)>0 then
-print_wide_centered("hi turns: "..dget(0),64,20+91,7)
-print_wide_centered("hi deaths: "..dget(1),64,20+99,7)
-end
-end
-draw_outline(1,func)
-func()
-zspr(202,64,64,4,4)
+local yoff=48+8-2+1-20
+print_horiz_wobble_centered("stabby",64,yoff-24,7,0,1)
+print_horiz_wobble_centered("crabby",64,yoff+18,7,0,1)
+print_wide_centered("high score",64,90,7)
+print_wide_centered("==========",64,97,7)
+local turn,death="n/a","n/a"
+if dget(0)>0 then turn=dget(0)death=dget(1)end
+print_wide_centered("turns: "..turn,64,110,7)
+print_wide_centered("deaths: "..death,64,117,7)
+print_press()
+zspr(202,64,yoff,4,4)
 end,function(state)
 clean_all_entities"game_state"
 _g.fader_in()
@@ -680,7 +685,7 @@ end
 zclass[[tile_entity,mov,actor|to_target,%tile_entity_to_target,target_x,null,target_y,null,draw,%tile_sprite_draw]]
 zclass[[puddle,actor,drawlayer_25|x,@,y,@,sind,168,target_x,~x,target_y,~y,draw,%tile_sprite_draw]]
 zclass[[hermit,mov,actor,drawlayer_50|x,@,y,@,target_x,~x,target_y,~y,to_target,%tile_entity_to_target,draw,%tile_sprite_draw,destroyed,%hermit_destroyed,update,%hermit_update]]
-zclass[[sword,actor,drawlayer_50|target_x,@,target_y,@,draw,%sword_draw_debug]]
+zclass[[sword,actor,drawlayer_50|target_x,@,target_y,@]]
 zclass[[pos_preview,actor,drawlayer_50|gamestate,@,itemind,@,x,@,y,@,sind,@,update,%possible_move_small_obj_update,draw,%tile_sprite_draw]]
 zclass[[selected_move,actor,drawlayer_50|update,%selected_move_update,draw,%selected_move_draw]]
 zclass[[enemy|get_path,nil,init,%enemy_init,update,%enemy_update,check_collision,%enemy_check_collision]]
@@ -985,6 +990,11 @@ for i=1,#text do
 print("\^w"..sub(text,i,i).."\^-w",x+i*8,y+wob*((i+off+t())\1%2),col)
 end
 end
+function print_horiz_wobble_centered(text,x,y,col,off,wob)
+for i=1,#text do
+print("\^w"..sub(text,i,i).."\^-w",x+i*8-#text*5,y+wob*((i+off+t())\1%2),col)
+end
+end
 function draw_tiles()
 local tlx,tly=g_offx-46,g_offy-46
 rectfill(tlx,tly,tlx+90,tly+90,15)
@@ -1083,6 +1093,12 @@ memset(0x5e00,0,64)
 extcmd"reset"
 end)
 zclass[[game_state,actor|ecs_exclusions;actor,true;init,%game_state_init,curr,logo;logo;state_init,%logo_init,update,nop,draw,%logo_draw,duration,2.5,next,title;title;state_init,nop,update,%title_update,draw,%title_draw;game;state_init,%game_init,update,%game_update,draw,%game_draw;lvlwin;state_init,nop,update,%lvlwin_update,draw,%lvlwin_draw;gamewin;state_init,nop,update,%gamewin_update,draw,%gamewin_draw;lvllose;state_init,nop,update,%lvllose_update,draw,%lvllose_draw;]]
+function print_press()
+if t()%1<.5 then
+print_wide_centered("press",64,14+64-7,7)
+print_wide_centered("❎ or 🅾️  ",64,14+64,7)
+end
+end
 function _init()
 g_tl=_g.game_state()
 end
