@@ -92,7 +92,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,tile_entity_to_target,@,tile_sprite_draw,@,hermit_destroyed,@,hermit_update,@,possible_move_obj_update,@,possible_move_small_obj_update,@,selected_move_update,@,selected_move_draw,@,enemy_init,@,enemy_check_collision,@,enemy_update,@,snake_setsind2,@,snake_get_path,@,frog_setsind2,@,frog_get_path,@,seagull_setsind2,@,seagull_get_path,@,fox_setsind2,@,fox_get_path,@,level_state_init,@,pre_card_select_init,@,card_select_update,@,move_select_init,@,move_select_update,@,player_update_init,@,player_update_update,@,baddie_update_init,@,baddie_update_update,@,game_init,@,game_update,@,game_draw,@,card_draw,@,card_normal_update,@,status_text_draw,@,status_text_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,gamewin_update,@,gamewin_draw,@,lvlwin_update,@,lvlwin_draw,@,lvllose_update,@,lvllose_draw,@,title_update,@,title_draw,@,game_state_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,draw_circle,@,move_up,@,move_slow,@,update_particles,@,tile_entity_to_target,@,tile_sprite_draw,@,hermit_destroyed,@,hermit_update,@,possible_move_obj_update,@,possible_move_small_obj_update,@,selected_move_update,@,selected_move_draw,@,shake_dead_draw,@,enemy_destroyed,@,enemy_init,@,enemy_check_collision,@,enemy_dying,@,enemy_update,@,snake_setsind2,@,snake_get_path,@,frog_setsind2,@,frog_get_path,@,seagull_setsind2,@,seagull_get_path,@,fox_setsind2,@,fox_get_path,@,level_state_init,@,pre_card_select_init,@,card_select_update,@,move_select_init,@,move_select_update,@,player_update_init,@,player_update_update,@,baddie_update_init,@,baddie_update_update,@,game_init,@,game_update,@,game_draw,@,card_draw,@,card_normal_update,@,status_text_draw,@,status_text_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,gamewin_update,@,gamewin_draw,@,lvlwin_update,@,lvlwin_draw,@,lvllose_update,@,lvllose_draw,@,title_update,@,title_draw,@,game_state_init,@]],function(a,stateName)
 a.next_state=a.next_state or stateName
 end,function(a,stateName)
 a.next_state,a.isnew=nil
@@ -180,6 +180,24 @@ if ay==0 and abs(a.dy)<.01 then a.dy=0 end
 end,function(a,x,y)
 a.ang=atan2(x-a.x,y-a.y)
 end,function(a)
+circfill(scr_x(a.x),scr_y(a.y),2,a.color)
+end,function(a)
+a.dx=rnd(.2)-.1
+a.dy=-rnd(.2)-.1
+end,function(a)
+a.dx=rnd(.5)-.25
+a.dy=rnd(.5)-.25
+end,function(a)
+for i=1,a.rate do
+if flr_rnd(a.chance)==0 then
+a.create_func(
+a.x+rnd(a.rx*2)-a.rx,
+a.y+rnd(a.ry*2)-a.ry,
+a.color
+)
+end
+end
+end,function(a)
 local xdiff,ydiff=a.target_x-a.x,a.target_y-a.y
 if abs(xdiff)<.25 and abs(ydiff)<.25 then
 a.x=a.target_x
@@ -191,7 +209,7 @@ a.speed=.05
 end
 end,function(a)
 if a.sind then
-spr(a.sind,scr_x(a.x)-g_spr_info[a.sind][3],scr_y(a.y)-g_spr_info[a.sind][4],g_spr_info[a.sind][1],g_spr_info[a.sind][2])
+spr(a.sind,(a.shake_x or 0)+scr_x(a.x)-g_spr_info[a.sind][3],(a.shake_y or 0)+scr_y(a.y)-g_spr_info[a.sind][4],g_spr_info[a.sind][1],g_spr_info[a.sind][2])
 end
 end,function(a)
 g_sword.target_x=-100
@@ -228,6 +246,13 @@ end
 local m=g_level_state.moves[g_level_state.moves_ind]
 spr(g_icon_lookup[m.seltype].l,scr_x(m.x)-5,scr_y(m.y)-5,2,2)
 end,function(a)
+if a.sind then
+spr(a.sind,rnd_one()+scr_x(a.x)-g_spr_info[a.sind][3],rnd_one()+scr_y(a.y)-g_spr_info[a.sind][4],g_spr_info[a.sind][1],g_spr_info[a.sind][2])
+end
+end,function(a)
+printh("DIE")
+_g.shake_dead(a.sind,a.x,a.y)
+end,function(a)
 a.sind=rnd_item(a.possible_sinds)
 end,function(a)
 if a.target_x==g_sword.target_x and a.target_y==g_sword.target_y then
@@ -235,6 +260,9 @@ a:kill()
 elseif a.target_x==g_pl.target_x and a.target_y==g_pl.target_y then
 g_pl:kill()
 end
+end,function(a)
+a.shake_x=rnd_item{-1,0,1}
+a.shake_y=rnd_item{-1,0,1}
 end,function(a)
 if a.speed>0 then
 a.sind=a:setsind2(zsgn(cos(a.ang)),zsgn(sin(a.ang)))or a.sind
@@ -469,7 +497,7 @@ end,function()
 g_level_state=_g.level_state()
 g_grid=set_grid(g_level)
 end,function()
-zcall(loop_entities,[[1;,timer,tick;2;,actor,state;3;,enemy,check_collision;4;,tile_entity,to_target;5;,hermit,to_target;6;,mov,mov_update;7;,vec,vec_update;]])
+zcall(loop_entities,[[1;,timer,tick;2;,actor,state;3;,enemy,check_collision;4;,tile_entity,to_target;5;,hermit,to_target;6;,mov,mov_update;7;,vec,vec_update;8;,particle_spawner,update_particles;]])
 update_grid()
 end,function()
 rectfill(0,0,127,127,12)
@@ -674,6 +702,8 @@ zclass[[timer|timers;,;start_timer,%timer_reset_timer,end_timer,%timer_end_timer
 zclass[[pos|x,0,y,0,dist_point,%pos_dist_point]]
 zclass[[vec,pos|dx,0,dy,0,vec_update,%vec_update]]
 zclass[[mov,vec|ang,0,speed,0,mov_update,%mov_update,towards_point,%mov_towards_point]]
+zclass[[powerup_particle,vec,drawlayer_25|x,@,y,@,color,@,draw,%draw_circle,init,%move_up;start;duration,.25;]]
+zclass[[particle_spawner|rx,.25,ry,.25,rate,1,chance,3,create_func,%powerup_particle,update_particles,%update_particles,color,8;]]
 function scr_x(x)
 local midr=7/2*13
 return x*13+g_offx-midr+13/2-1
@@ -682,13 +712,14 @@ function scr_y(y)
 local midr=7/2*13
 return y*13+g_offy-midr+13/2-1
 end
-zclass[[tile_entity,mov,actor|to_target,%tile_entity_to_target,target_x,null,target_y,null,draw,%tile_sprite_draw]]
+zclass[[tile_entity,mov,actor|to_target,%tile_entity_to_target,target_x,null,target_y,null,shake_x,0,shake_y,0,draw,%tile_sprite_draw]]
 zclass[[puddle,actor,drawlayer_25|x,@,y,@,sind,168,target_x,~x,target_y,~y,draw,%tile_sprite_draw]]
 zclass[[hermit,mov,actor,drawlayer_50|x,@,y,@,target_x,~x,target_y,~y,to_target,%tile_entity_to_target,draw,%tile_sprite_draw,destroyed,%hermit_destroyed,update,%hermit_update]]
 zclass[[sword,actor,drawlayer_50|target_x,@,target_y,@]]
 zclass[[pos_preview,actor,drawlayer_50|gamestate,@,itemind,@,x,@,y,@,sind,@,update,%possible_move_small_obj_update,draw,%tile_sprite_draw]]
 zclass[[selected_move,actor,drawlayer_50|update,%selected_move_update,draw,%selected_move_draw]]
-zclass[[enemy|get_path,nil,init,%enemy_init,update,%enemy_update,check_collision,%enemy_check_collision]]
+zclass[[shake_dead,particle_spawner,pos,actor,drawlayer_30|sind,@,x,@,y,@,draw,%shake_dead_draw;start;duration,.5;]]
+zclass[[enemy,pos|get_path,nil,init,%enemy_init,update,%enemy_update,destroyed,%enemy_destroyed,check_collision,%enemy_check_collision;]]
 zclass[[snake,tile_entity,enemy,drawlayer_30|x,@,y,@,target_x,~x,target_y,~y,get_path,%snake_get_path,setsind2,%snake_setsind2;possible_sinds;,42,46,40,44;]]
 zclass[[frog,tile_entity,enemy,drawlayer_30|x,@,y,@,target_x,~x,target_y,~y,get_path,%frog_get_path,setsind2,%frog_setsind2;possible_sinds;,230,76,78,232;]]
 zclass[[seagull,tile_entity,enemy,drawlayer_30|x,@,y,@,target_x,~x,target_y,~y,get_path,%seagull_get_path,setsind2,%seagull_setsind2;possible_sinds;,10,12,8,14;]]

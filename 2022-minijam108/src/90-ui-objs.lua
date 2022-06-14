@@ -11,6 +11,7 @@ end
 zclass[[tile_entity,mov,actor|
     to_target,%tile_entity_to_target,
     target_x,null, target_y,null,
+    shake_x,0, shake_y,0,
     draw,%tile_sprite_draw
 ]]
 
@@ -28,7 +29,7 @@ end $$
 
 |[tile_sprite_draw]| function(a)
     if a.sind then
-        spr(a.sind, scr_x(a.x)-g_spr_info[a.sind][3], scr_y(a.y)-g_spr_info[a.sind][4], g_spr_info[a.sind][1], g_spr_info[a.sind][2])
+        spr(a.sind, (a.shake_x or 0) + scr_x(a.x)-g_spr_info[a.sind][3], (a.shake_y or 0) + scr_y(a.y)-g_spr_info[a.sind][4], g_spr_info[a.sind][1], g_spr_info[a.sind][2])
     end
 end $$
 

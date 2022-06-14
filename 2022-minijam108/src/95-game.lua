@@ -13,6 +13,7 @@ end $$
         5 ;,hermit,      to_target;
         6 ;,mov,         mov_update;
         7 ;,vec,         vec_update;
+        8 ;,particle_spawner, update_particles;
     ]])
 
     update_grid()

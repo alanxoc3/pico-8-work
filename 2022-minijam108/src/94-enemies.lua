@@ -1,9 +1,26 @@
-zclass[[enemy|
+zclass[[shake_dead,particle_spawner,pos,actor,drawlayer_30|
+    sind,@, x,@, y,@, draw,%shake_dead_draw;
+    start; duration,.5;
+]]
+
+|[shake_dead_draw]| function(a)
+    if a.sind then
+        spr(a.sind, rnd_one() + scr_x(a.x)-g_spr_info[a.sind][3], rnd_one() + scr_y(a.y)-g_spr_info[a.sind][4], g_spr_info[a.sind][1], g_spr_info[a.sind][2])
+    end
+end $$
+
+zclass[[enemy,pos|
     get_path,nil,
     init,%enemy_init,
     update,%enemy_update,
-    check_collision,%enemy_check_collision
+    destroyed,%enemy_destroyed,
+    check_collision,%enemy_check_collision;
 ]]
+
+|[enemy_destroyed]| function(a)
+    printh("DIE")
+    _g.shake_dead(a.sind, a.x, a.y)
+end $$
 
 |[enemy_init]| function(a)
     a.sind = rnd_item(a.possible_sinds)
@@ -15,6 +32,11 @@ end $$
     elseif a.target_x == g_pl.target_x and a.target_y == g_pl.target_y then
         g_pl:kill()
     end
+end $$
+
+|[enemy_dying]| function(a)
+    a.shake_x = rnd_item{-1, 0, 1}
+    a.shake_y = rnd_item{-1, 0, 1}
 end $$
 
 |[enemy_update]| function(a)
