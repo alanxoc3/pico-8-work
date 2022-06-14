@@ -37,7 +37,6 @@ zclass[[fader_out,fader|
 ]]
 
 |[fader_out_update]| function(a)
-    poke(0x5f43, 0xff)
     g_fade = a:get_elapsed_percent'start'
 end $$
 

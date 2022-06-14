@@ -55,6 +55,7 @@ zclass[[hermit,mov,actor,drawlayer_50|
     g_sword.target_x = -100
     g_sword.target_y = -100
     g_sword:kill()
+    _g.shake_dead(a.sind, a.x, a.y, 18)
 end $$
 
 |[hermit_update]| function(a)

@@ -1,6 +1,11 @@
 cartdata"stabby_crabby"
-menuitem(1, "reset high score", function()
-    memset(REAL_SAVE_LOCATION, 0, SAVE_LENGTH)
+menuitem(1, "reset save state", function()
+    memset(REAL_SAVE_LOCATION+2, 0, SAVE_LENGTH-2)
+    extcmd'reset'
+end)
+
+menuitem(2, "reset high score", function()
+    memset(REAL_SAVE_LOCATION, 0, 2)
     extcmd'reset'
 end)
 
@@ -9,6 +14,8 @@ memcpy(MEM_SAVE_LOCATION, REAL_SAVE_LOCATION, SAVE_LENGTH)
 function save()
     memcpy(REAL_SAVE_LOCATION, MEM_SAVE_LOCATION, SAVE_LENGTH)
 end
+
+is_music_playing = false
 
 -- hi turn death | level death turn | level state
 function hi_turn()       return peek(MEM_SAVE_LOCATION+0) end
@@ -27,15 +34,17 @@ function set_g_turn_count(num)  return poke(MEM_SAVE_LOCATION+4, num) end
 -- TEMPLATE TOKEN COUNT: 1045
 zclass[[game_state,actor|
     ecs_exclusions;actor,true; -- remove game_state from the actor group
-    init,%game_state_init, curr,game;
+    init,%game_state_init, curr,logo;
 
-    logo;    state_init,%logo_init,   update,nop,             draw,%logo_draw,  duration,2.5, next,title;
-    title;   state_init,nop,          update,%title_update,   draw,%title_draw;
-    game;    state_init,%game_init,   update,%game_update,    draw,%game_draw;
-    lvlwin;  state_init,nop,          update,%lvlwin_update,  draw,%lvlwin_draw;
-    gamewin; state_init,nop,          update,%gamewin_update, draw,%gamewin_draw;
-    lvllose; state_init,nop,          update,%lvllose_update, draw,%lvllose_draw;
+    logo;    state_init,%logo_init,    update,nop,             draw,%logo_draw,  duration,2.5, next,title;
+    title;   state_init,nop,           update,%title_update,   draw,%title_draw;
+    game;    state_init,%game_init,    update,%game_update,    draw,%game_draw;
+    lvlwin;  state_init,nop,           update,%lvlwin_update,  draw,%lvlwin_draw;
+    gamewin; state_init,%gamewin_init, update,%gamewin_update, draw,%gamewin_draw;
+    lvllose; state_init,nop,           update,%lvllose_update, draw,%lvllose_draw;
 ]]
+
+|[gamewin_init]| function(a) end $$
 
 |[gamewin_update]| function(a)
     if (btnp(4) or btnp(5)) and not does_entity_exist'fader' then
@@ -77,7 +86,7 @@ end
     spr(46, -275+el*30, 42+11, 2, 2)
     spr(46, -280+el*30, 42, 2, 2)
 
-    print_wide_centered("code/sfx by:",   64, 90, 7)
+    print_wide_centered("code by:",       64, 90, 7)
     print_wide_centered("@alanxoc3",      64, 97, 7)
 
     print_wide_centered("gfx/sfx by:",    64, 110, 7)
@@ -127,6 +136,7 @@ end $$
 |[title_update]| function(a)
     if (btnp(4) or btnp(5)) and not does_entity_exist'fader' then
         _g.fader_out(function()
+            if not is_music_playing then is_music_playing = true music(48) end
             a:load'game'
         end)
     end
@@ -182,15 +192,15 @@ function _update60()
         4;,game_state,state;
     ]])
 
---     -- DEBUG_BEGIN
---     if btn(5) and xbtnp() ~= 0 then
---         set_g_level(g_level()+xbtnp)
--- 
---         _g.fader_out(function()
---             g_tl:load'game'
---         end)
---     end
---     -- DEBUG_END
+     -- DEBUG_BEGIN
+     if btn(5) and xbtnp() ~= 0 then
+         set_g_level(g_level()+xbtnp())
+ 
+         _g.fader_out(function()
+             g_tl:load'game'
+         end)
+     end
+     -- DEBUG_END
 end
 
 function _draw()

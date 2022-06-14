@@ -1,7 +1,11 @@
 zclass[[shake_dead,pos,actor,drawlayer_30|
-    sind,@, x,@, y,@, draw,%shake_dead_draw;
-    start; duration,.5;
+    sind,@, x,@, y,@, sound,@, draw,%shake_dead_draw;
+    start; init,%shake_dead_init, duration,.5;
 ]]
+
+|[shake_dead_init]| function(a)
+    sfx(a.sound, 3)
+end $$
 
 |[shake_dead_draw]| function(a)
     if a.sind then
@@ -18,8 +22,7 @@ zclass[[enemy,pos|
 ]]
 
 |[enemy_destroyed]| function(a)
-    printh("DIE")
-    _g.shake_dead(a.sind, a.x, a.y)
+    _g.shake_dead(a.sind, a.x, a.y, a.sound)
 end $$
 
 |[enemy_init]| function(a)
@@ -50,6 +53,7 @@ zclass[[snake,tile_entity,enemy,drawlayer_30|
     target_x,~x,
     target_y,~y,
     get_path,%snake_get_path,
+    sound,22,
     setsind2,%snake_setsind2;
 
     possible_sinds; ,42,46,40,44;
@@ -92,6 +96,7 @@ zclass[[frog,tile_entity,enemy,drawlayer_30|
     x,@, y,@,
     target_x,~x,
     target_y,~y,
+    sound,20,
     get_path,%frog_get_path,
     setsind2,%frog_setsind2;
 
@@ -128,6 +133,7 @@ zclass[[seagull,tile_entity,enemy,drawlayer_30|
     x,@, y,@,
     target_x,~x,
     target_y,~y,
+    sound,21,
     get_path,%seagull_get_path,
     setsind2,%seagull_setsind2;
 
@@ -187,6 +193,7 @@ zclass[[fox,tile_entity,enemy,drawlayer_30|
     x,@, y,@,
     target_x,~x,
     target_y,~y,
+    sound,23,
     get_path,%fox_get_path,
     setsind2,%fox_setsind2;
 

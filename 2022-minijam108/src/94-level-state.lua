@@ -66,12 +66,16 @@ end $$
     if xbtnp() ~= 0 then
         a.itemind = mid(1, a.itemind +xbtnp(), 5)
     end
+    if prev_ind ~= a.itemind then
+        sfx(26, 3)
+    end
 
     for i=1,#a.items do
         a.items[i].selected = i == a.itemind
     end
 
     if btnp'4' then
+        sfx(26, 3)
         a:load'move_select'
     end
 end $$
@@ -115,8 +119,10 @@ end
     a.moves_ind = next_ind
 
     if btnp(5) then
+        sfx(26, 3)
         a:load'card_select'
     elseif btnp(4) then
+        sfx(26, 3)
         a:load'player_update'
     end
 end $$

@@ -92,7 +92,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,draw_circle,@,move_up,@,move_slow,@,update_particles,@,tile_entity_to_target,@,tile_sprite_draw,@,hermit_destroyed,@,hermit_update,@,possible_move_obj_update,@,possible_move_small_obj_update,@,selected_move_update,@,selected_move_draw,@,shake_dead_draw,@,enemy_destroyed,@,enemy_init,@,enemy_check_collision,@,enemy_dying,@,enemy_update,@,snake_setsind2,@,snake_get_path,@,frog_setsind2,@,frog_get_path,@,seagull_setsind2,@,seagull_get_path,@,fox_setsind2,@,fox_get_path,@,level_state_init,@,pre_card_select_init,@,card_select_update,@,move_select_init,@,move_select_update,@,player_update_init,@,player_update_update,@,baddie_update_init,@,baddie_update_update,@,game_init,@,game_update,@,game_draw,@,card_draw,@,card_normal_update,@,status_text_draw,@,status_text_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,gamewin_update,@,gamewin_draw,@,lvlwin_update,@,lvlwin_draw,@,lvllose_update,@,lvllose_draw,@,title_update,@,title_draw,@,game_state_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,draw_circle,@,move_up,@,move_slow,@,update_particles,@,tile_entity_to_target,@,tile_sprite_draw,@,hermit_destroyed,@,hermit_update,@,possible_move_obj_update,@,possible_move_small_obj_update,@,selected_move_update,@,selected_move_draw,@,shake_dead_init,@,shake_dead_draw,@,enemy_destroyed,@,enemy_init,@,enemy_check_collision,@,enemy_dying,@,enemy_update,@,snake_setsind2,@,snake_get_path,@,frog_setsind2,@,frog_get_path,@,seagull_setsind2,@,seagull_get_path,@,fox_setsind2,@,fox_get_path,@,level_state_init,@,pre_card_select_init,@,card_select_update,@,move_select_init,@,move_select_update,@,player_update_init,@,player_update_update,@,baddie_update_init,@,baddie_update_update,@,game_init,@,game_update,@,game_draw,@,card_draw,@,card_normal_update,@,status_text_draw,@,status_text_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,gamewin_init,@,gamewin_update,@,gamewin_draw,@,lvlwin_update,@,lvlwin_draw,@,lvllose_update,@,lvllose_draw,@,title_update,@,title_draw,@,game_state_init,@]],function(a,stateName)
 a.next_state=a.next_state or stateName
 end,function(a,stateName)
 a.next_state,a.isnew=nil
@@ -216,6 +216,7 @@ end,function(a)
 g_sword.target_x=-100
 g_sword.target_y=-100
 g_sword:kill()
+_g.shake_dead(a.sind,a.x,a.y,18)
 end,function(a)
 local xdiff=g_sword.target_x-a.target_x
 local ydiff=g_sword.target_y-a.target_y
@@ -247,12 +248,13 @@ end
 local m=g_level_state.moves[g_level_state.moves_ind]
 spr(g_icon_lookup[m.seltype].l,scr_x(m.x)-5,scr_y(m.y)-5,2,2)
 end,function(a)
+sfx(a.sound,3)
+end,function(a)
 if a.sind then
 spr(a.sind,rnd_one()+scr_x(a.x)-g_spr_info[a.sind][3],rnd_one()+scr_y(a.y)-g_spr_info[a.sind][4],g_spr_info[a.sind][1],g_spr_info[a.sind][2])
 end
 end,function(a)
-printh("DIE")
-_g.shake_dead(a.sind,a.x,a.y)
+_g.shake_dead(a.sind,a.x,a.y,a.sound)
 end,function(a)
 a.sind=rnd_item(a.possible_sinds)
 end,function(a)
@@ -408,10 +410,14 @@ local prev_ind=a.itemind
 if xbtnp()~=0 then
 a.itemind=mid(1,a.itemind+xbtnp(),5)
 end
+if prev_ind ~=a.itemind then
+sfx(26,3)
+end
 for i=1,#a.items do
 a.items[i].selected=i==a.itemind
 end
 if btnp"4"then
+sfx(26,3)
 a:load"move_select"
 end
 end,function(a)
@@ -427,8 +433,10 @@ elseif ybtnp()~=0 then next_ind=move_select_update_helper(a.moves,a.moves_ind,yb
 end
 a.moves_ind=next_ind
 if btnp(5)then
+sfx(26,3)
 a:load"card_select"
 elseif btnp(4)then
+sfx(26,3)
 a:load"player_update"
 end
 end,function(a)
@@ -541,7 +549,6 @@ if g_level_state.curr ~=a.checkstate then
 a:kill()
 end
 end,function(a)
-poke(0x5f43,0xff)
 g_fade=a:get_elapsed_percent"start"
 end,function(a)
 g_fade=1-a:get_elapsed_percent"start"
@@ -550,7 +557,7 @@ g_fade=cos(a:get_elapsed_percent"logo")+1
 camera(g_fade>.5 and rnd_one())
 zspr(108,64,64,4,2)
 camera()
-end,function(a)
+end,function(a)end,function(a)
 if(btnp(4)or btnp(5))and not does_entity_exist"fader"then
 _g.fader_out(function()
 if g_turn_count()>0 and(hi_turn()<=0 or hi_turn()>g_turn_count())then
@@ -577,7 +584,7 @@ spr(46,-260+el*30,42,2,2)
 spr(46,-270+el*30,42-10,2,2)
 spr(46,-275+el*30,42+11,2,2)
 spr(46,-280+el*30,42,2,2)
-print_wide_centered("code/sfx by:",64,90,7)
+print_wide_centered("code by:",64,90,7)
 print_wide_centered("@alanxoc3",64,97,7)
 print_wide_centered("gfx/sfx by:",64,110,7)
 print_wide_centered("@greatcadet",64,117,7)
@@ -613,6 +620,7 @@ func()
 end,function(a)
 if(btnp(4)or btnp(5))and not does_entity_exist"fader"then
 _g.fader_out(function()
+if not is_music_playing then is_music_playing=true music(48)end
 a:load"game"
 end)
 end
@@ -721,11 +729,11 @@ zclass[[hermit,mov,actor,drawlayer_50|x,@,y,@,target_x,~x,target_y,~y,to_target,
 zclass[[sword,actor,drawlayer_50|target_x,@,target_y,@]]
 zclass[[pos_preview,actor,drawlayer_50|gamestate,@,itemind,@,x,@,y,@,sind,@,update,%possible_move_small_obj_update,draw,%tile_sprite_draw]]
 zclass[[selected_move,actor,drawlayer_50|update,%selected_move_update,draw,%selected_move_draw]]
-zclass[[shake_dead,pos,actor,drawlayer_30|sind,@,x,@,y,@,draw,%shake_dead_draw;start;duration,.5;]]
+zclass[[shake_dead,pos,actor,drawlayer_30|sind,@,x,@,y,@,sound,@,draw,%shake_dead_draw;start;init,%shake_dead_init,duration,.5;]]
 zclass[[enemy,pos|get_path,nil,init,%enemy_init,update,%enemy_update,destroyed,%enemy_destroyed,check_collision,%enemy_check_collision;]]
-zclass[[snake,tile_entity,enemy,drawlayer_30|x,@,y,@,target_x,~x,target_y,~y,get_path,%snake_get_path,setsind2,%snake_setsind2;possible_sinds;,42,46,40,44;]]
-zclass[[frog,tile_entity,enemy,drawlayer_30|x,@,y,@,target_x,~x,target_y,~y,get_path,%frog_get_path,setsind2,%frog_setsind2;possible_sinds;,230,76,78,232;]]
-zclass[[seagull,tile_entity,enemy,drawlayer_30|x,@,y,@,target_x,~x,target_y,~y,get_path,%seagull_get_path,setsind2,%seagull_setsind2;possible_sinds;,10,12,8,14;]]
+zclass[[snake,tile_entity,enemy,drawlayer_30|x,@,y,@,target_x,~x,target_y,~y,get_path,%snake_get_path,sound,22,setsind2,%snake_setsind2;possible_sinds;,42,46,40,44;]]
+zclass[[frog,tile_entity,enemy,drawlayer_30|x,@,y,@,target_x,~x,target_y,~y,sound,20,get_path,%frog_get_path,setsind2,%frog_setsind2;possible_sinds;,230,76,78,232;]]
+zclass[[seagull,tile_entity,enemy,drawlayer_30|x,@,y,@,target_x,~x,target_y,~y,sound,21,get_path,%seagull_get_path,setsind2,%seagull_setsind2;possible_sinds;,10,12,8,14;]]
 function get_smartest_direction(possible_spots,x,y)
 local smallest_ang_diff=10
 local selected_spot
@@ -742,7 +750,7 @@ if selected_spot then
 return possible_spots[selected_spot]
 end
 end
-zclass[[fox,tile_entity,enemy,drawlayer_30|x,@,y,@,target_x,~x,target_y,~y,get_path,%fox_get_path,setsind2,%fox_setsind2;possible_sinds;,224,226,200,228,192,196,194,198;]]
+zclass[[fox,tile_entity,enemy,drawlayer_30|x,@,y,@,target_x,~x,target_y,~y,sound,23,get_path,%fox_get_path,setsind2,%fox_setsind2;possible_sinds;,224,226,200,228,192,196,194,198;]]
 zclass[[level_state,actor|itemind,3,items;,;start;init,%level_state_init,update,nop,duration,0,next,pre_card_select;pre_card_select;init,%pre_card_select_init;card_select;init,nop,update,%card_select_update;move_select;init,%move_select_init,update,%move_select_update;player_update;init,%player_update_init,update,%player_update_update;baddie_update;init,%baddie_update_init,update,%baddie_update_update;]]
 function get_random_green_ind()
 return rnd_item{134,134,136,166}
@@ -1125,14 +1133,19 @@ zclass[[fader,actor|ecs_exclusions;actor,yes,timer,yes;]]
 zclass[[fader_out,fader|start;duration,.5,destroyed,@,update,%fader_out_update]]
 zclass[[fader_in,fader|start;duration,.5,update,%fader_in_update]]
 cartdata"stabby_crabby"
-menuitem(1,"reset high score",function()
-memset(0x5e00,0,64)
+menuitem(1,"reset save state",function()
+memset(0x5e00+2,0,64-2)
+extcmd"reset"
+end)
+menuitem(2,"reset high score",function()
+memset(0x5e00,0,2)
 extcmd"reset"
 end)
 memcpy(0x5d00,0x5e00,64)
 function save()
 memcpy(0x5e00,0x5d00,64)
 end
+is_music_playing=false
 function hi_turn()return peek(0x5d00+0)end
 function hi_death()return peek(0x5d00+1)end
 function g_level()return peek(0x5d00+2)end
@@ -1143,7 +1156,7 @@ function set_hi_death(num)return poke(0x5d00+1,num)end
 function set_g_level(num)return poke(0x5d00+2,num)end
 function set_g_death_count(num)return poke(0x5d00+3,num)end
 function set_g_turn_count(num)return poke(0x5d00+4,num)end
-zclass[[game_state,actor|ecs_exclusions;actor,true;init,%game_state_init,curr,game;logo;state_init,%logo_init,update,nop,draw,%logo_draw,duration,2.5,next,title;title;state_init,nop,update,%title_update,draw,%title_draw;game;state_init,%game_init,update,%game_update,draw,%game_draw;lvlwin;state_init,nop,update,%lvlwin_update,draw,%lvlwin_draw;gamewin;state_init,nop,update,%gamewin_update,draw,%gamewin_draw;lvllose;state_init,nop,update,%lvllose_update,draw,%lvllose_draw;]]
+zclass[[game_state,actor|ecs_exclusions;actor,true;init,%game_state_init,curr,logo;logo;state_init,%logo_init,update,nop,draw,%logo_draw,duration,2.5,next,title;title;state_init,nop,update,%title_update,draw,%title_draw;game;state_init,%game_init,update,%game_update,draw,%game_draw;lvlwin;state_init,nop,update,%lvlwin_update,draw,%lvlwin_draw;gamewin;state_init,%gamewin_init,update,%gamewin_update,draw,%gamewin_draw;lvllose;state_init,nop,update,%lvllose_update,draw,%lvllose_draw;]]
 function print_press()
 if t()%1<.5 then
 print_wide_centered("press",64,14+64-7,7)
@@ -1158,6 +1171,12 @@ if btn(4)and btnp(5)then g_debug=not g_debug end
 zcall(loop_entities,[[1;,actor,clean;2;,fader,clean;]])
 register_entities()
 zcall(loop_entities,[[1;,fader,tick;2;,game_state,tick;3;,fader,state;4;,game_state,state;]])
+if btn(5)and xbtnp()~=0 then
+set_g_level(g_level()+xbtnp())
+_g.fader_out(function()
+g_tl:load"game"
+end)
+end
 end
 function _draw()
 cls()
