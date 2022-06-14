@@ -347,7 +347,7 @@ end
 end
 return path
 end,function(a)
-a.item_inds={get_random_card_ind(),get_random_card_ind(),get_random_card_ind()}
+a.item_inds={get_random_card_ind(),get_random_card_ind(),get_random_card_ind(),get_random_card_ind(),get_random_card_ind()}
 end,function(a)
 if is_level_win()then
 a:kill()
@@ -370,14 +370,14 @@ g_turn_count+=1
 a:load"card_select"
 a.items={}
 for i=1,#a.item_inds do
-add(a.items,_g.card(9+(i-1)*21,a.item_inds[i],false))
+add(a.items,_g.card(22+(i-1)*17,a.item_inds[i],false))
 end
 a.items[a.itemind].selected=true
 end
 end,function(a)
 local prev_ind=a.itemind
 if xbtnp()~=0 then
-a.itemind=mid(1,a.itemind+xbtnp(),3)
+a.itemind=mid(1,a.itemind+xbtnp(),5)
 end
 for i=1,#a.items do
 a.items[i].selected=i==a.itemind
@@ -473,10 +473,10 @@ zcall(loop_entities,[[1;,timer,tick;2;,actor,state;3;,enemy,check_collision;4;,t
 update_grid()
 end,function()
 rectfill(0,0,127,127,12)
-g_offx,g_offy=64,53
+g_offx,g_offy=64,51
 draw_tiles()
-print_vert_wobble("stabby crabby",64-46-14,53-46-6,7,1,1)
-print_vert_wobble("level "..(g_level+1),64-46+99,53-46-6+7*3,7,1,1)
+print_vert_wobble("stabby crabby",4,1-2,7,1,1)
+print_vert_wobble("level "..(g_level+1),117,22-2,7,1,1)
 loop_entities("drawlayer_25","draw")
 loop_entities("drawlayer_30","draw")
 loop_entities("drawlayer_50","draw")
@@ -494,7 +494,7 @@ draw_outline(7,func)
 spr(141,a.x+4,a.y+16)
 local name=g_card_namemap[a.sind]
 local txtfunc=function()
-print_horiz_wobble(name,63,a.y+3,7,0,1)
+print_horiz_wobble_centered(name,61,a.y-11,7,0,1)
 end
 txtfunc()
 elseif g_level_state.curr!="card_select"then
@@ -709,7 +709,7 @@ return possible_spots[selected_spot]
 end
 end
 zclass[[fox,tile_entity,enemy,drawlayer_30|x,@,y,@,target_x,~x,target_y,~y,get_path,%fox_get_path,setsind2,%fox_setsind2;possible_sinds;,224,226,200,228,192,196,194,198;]]
-zclass[[level_state,actor|itemind,2,items;,;start;init,%level_state_init,update,nop,duration,0,next,pre_card_select;pre_card_select;init,%pre_card_select_init;card_select;init,nop,update,%card_select_update;move_select;init,%move_select_init,update,%move_select_update;player_update;init,%player_update_init,update,%player_update_update;baddie_update;init,%baddie_update_init,update,%baddie_update_update;]]
+zclass[[level_state,actor|itemind,3,items;,;start;init,%level_state_init,update,nop,duration,0,next,pre_card_select;pre_card_select;init,%pre_card_select_init;card_select;init,nop,update,%card_select_update;move_select;init,%move_select_init,update,%move_select_update;player_update;init,%player_update_init,update,%player_update_update;baddie_update;init,%baddie_update_init,update,%baddie_update_update;]]
 function get_random_card_ind()
 return rnd_item{128,130,130,132,134,134,136,160,162,164,166}
 end
@@ -1073,7 +1073,7 @@ end
 function unpack_grid_index(index)
 return index%7,index\7
 end
-zclass[[card,actor,vec,drawlayer_75|x,@,sind,@,selected,@,y,141,draw,%card_draw;start;duration,.25,next,normal,dy,-2;normal;dy,0,update,%card_normal_update;ending;update,nop,duration,.25,dy,2;]]
+zclass[[card,actor,vec,drawlayer_75|x,@,sind,@,selected,@,y,146,draw,%card_draw;start;duration,.25,next,normal,dy,-2;normal;dy,0,update,%card_normal_update;ending;update,nop,duration,.25,dy,2;]]
 zclass[[status_text,actor,vec,drawlayer_50|text,@,checkstate,@,x,64,y,144,draw,%status_text_draw;start;duration,.25,next,normal,dy,-2;normal;dy,0,update,%status_text_update;ending;update,nop,duration,.25,dy,2;]]
 g_fade,g_fade_table=1,zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,1,0,0,0,0;3;,3,3,3,3,1,1,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,0,0,0,0;6;,6,6,13,13,5,5,0,0;7;,7,7,6,13,13,5,0,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,0,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,0,0,0;13;,13,13,5,5,1,0,0,0;14;,14,14,13,4,2,2,0,0;15;,15,15,13,13,5,5,0,0;]]
 function fade(threshold)
@@ -1092,7 +1092,7 @@ menuitem(1,"reset high score",function()
 memset(0x5e00,0,64)
 extcmd"reset"
 end)
-zclass[[game_state,actor|ecs_exclusions;actor,true;init,%game_state_init,curr,logo;logo;state_init,%logo_init,update,nop,draw,%logo_draw,duration,2.5,next,title;title;state_init,nop,update,%title_update,draw,%title_draw;game;state_init,%game_init,update,%game_update,draw,%game_draw;lvlwin;state_init,nop,update,%lvlwin_update,draw,%lvlwin_draw;gamewin;state_init,nop,update,%gamewin_update,draw,%gamewin_draw;lvllose;state_init,nop,update,%lvllose_update,draw,%lvllose_draw;]]
+zclass[[game_state,actor|ecs_exclusions;actor,true;init,%game_state_init,curr,game;logo;state_init,%logo_init,update,nop,draw,%logo_draw,duration,2.5,next,title;title;state_init,nop,update,%title_update,draw,%title_draw;game;state_init,%game_init,update,%game_update,draw,%game_draw;lvlwin;state_init,nop,update,%lvlwin_update,draw,%lvlwin_draw;gamewin;state_init,nop,update,%gamewin_update,draw,%gamewin_draw;lvllose;state_init,nop,update,%lvllose_update,draw,%lvllose_draw;]]
 function print_press()
 if t()%1<.5 then
 print_wide_centered("press",64,14+64-7,7)

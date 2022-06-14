@@ -22,11 +22,11 @@ function round(num) return flr(num + .5) end
 |[game_draw]| function()
     rectfill(0,0,127,127,12)
 
-    g_offx, g_offy = 64, 53
+    g_offx, g_offy = 64, 51
     draw_tiles()
 
-    print_vert_wobble("stabby crabby", 64-46-14, 53-46-6, 7, 1, 1)
-    print_vert_wobble("level "..(g_level+1), 64-46+99, 53-46-6+7*3, 7, 1, 1)
+    print_vert_wobble("stabby crabby",       4,   1-2,  7, 1, 1)
+    print_vert_wobble("level "..(g_level+1), 117, 22-2, 7, 1, 1)
 
     loop_entities('drawlayer_25', 'draw')
     loop_entities('drawlayer_30', 'draw')
@@ -158,7 +158,7 @@ end
 
 zclass[[card,actor,vec,drawlayer_75|
     x,@, sind,@, selected,@,
-    y,141,
+    y,146, -- 141
     draw,%card_draw;
     start;duration,.25, next,normal, dy,-2;
     normal;dy,0, update,%card_normal_update;
@@ -177,7 +177,7 @@ zclass[[card,actor,vec,drawlayer_75|
 
         local name = g_card_namemap[a.sind]
         local txtfunc = function()
-            print_horiz_wobble(name, 63, a.y+3, 7, 0, 1)
+            print_horiz_wobble_centered(name, 61, a.y-11, 7, 0, 1)
         end
 
         -- draw_outline(g_card_colormap_outline[a.sind], txtfunc)

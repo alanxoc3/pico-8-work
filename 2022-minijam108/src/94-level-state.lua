@@ -1,5 +1,5 @@
 zclass[[level_state,actor|
-    itemind,2,
+    itemind,3,
 
     items;,;
 
@@ -20,7 +20,7 @@ function is_level_win()  return not get_next_baddie{} end
 function is_level_lose() return not g_pl:is_alive()   end
 
 |[level_state_init]| function(a)
-    a.item_inds = { get_random_card_ind(), get_random_card_ind(), get_random_card_ind() }
+    a.item_inds = { get_random_card_ind(), get_random_card_ind(), get_random_card_ind(), get_random_card_ind(), get_random_card_ind() }
 end $$
 
 -- PRE CARD SELECT --
@@ -47,7 +47,7 @@ end $$
 
         a.items = {}
         for i=1,#a.item_inds do
-            add(a.items, _g.card(9+(i-1)*21, a.item_inds[i], false))
+            add(a.items, _g.card(22+(i-1)*17, a.item_inds[i], false))
         end
 
         a.items[a.itemind].selected = true
@@ -57,7 +57,7 @@ end $$
 |[card_select_update]| function(a)
     local prev_ind = a.itemind
     if xbtnp() ~= 0 then
-        a.itemind = mid(1, a.itemind +xbtnp(), 3)
+        a.itemind = mid(1, a.itemind +xbtnp(), 5)
     end
 
     for i=1,#a.items do
