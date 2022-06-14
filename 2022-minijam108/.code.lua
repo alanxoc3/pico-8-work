@@ -180,7 +180,7 @@ if ay==0 and abs(a.dy)<.01 then a.dy=0 end
 end,function(a,x,y)
 a.ang=atan2(x-a.x,y-a.y)
 end,function(a)
-circfill(scr_x(a.x),scr_y(a.y),2,a.color)
+circfill(scr_x(a.x),scr_y(a.y),a.r,a.color)
 end,function(a)
 a.dx=rnd(.2)-.1
 a.dy=-rnd(.2)-.1
@@ -193,7 +193,8 @@ if flr_rnd(a.chance)==0 then
 a.create_func(
 a.x+rnd(a.rx*2)-a.rx,
 a.y+rnd(a.ry*2)-a.ry,
-a.color
+a.color,
+1+rnd(2)
 )
 end
 end
@@ -375,7 +376,7 @@ end
 end
 return path
 end,function(a)
-a.item_inds={get_random_card_ind(),get_random_card_ind(),get_random_card_ind(),get_random_card_ind(),get_random_card_ind()}
+a.item_inds={get_random_card_ind(),get_random_green_ind(),get_random_red_ind(),get_random_green_ind(),get_random_card_ind()}
 end,function(a)
 if is_level_win()then
 a:kill()
@@ -702,8 +703,8 @@ zclass[[timer|timers;,;start_timer,%timer_reset_timer,end_timer,%timer_end_timer
 zclass[[pos|x,0,y,0,dist_point,%pos_dist_point]]
 zclass[[vec,pos|dx,0,dy,0,vec_update,%vec_update]]
 zclass[[mov,vec|ang,0,speed,0,mov_update,%mov_update,towards_point,%mov_towards_point]]
-zclass[[powerup_particle,vec,drawlayer_25|x,@,y,@,color,@,draw,%draw_circle,init,%move_up;start;duration,.25;]]
-zclass[[particle_spawner|rx,.25,ry,.25,rate,1,chance,3,create_func,%powerup_particle,update_particles,%update_particles,color,8;]]
+zclass[[powerup_particle,vec,drawlayer_25|x,@,y,@,color,@,r,@,draw,%draw_circle,init,%move_up;start;duration,.25;]]
+zclass[[particle_spawner|rx,.25,ry,.25,rate,1,chance,3,create_func,%powerup_particle,update_particles,%update_particles,color,7;]]
 function scr_x(x)
 local midr=7/2*13
 return x*13+g_offx-midr+13/2-1
@@ -718,7 +719,7 @@ zclass[[hermit,mov,actor,drawlayer_50|x,@,y,@,target_x,~x,target_y,~y,to_target,
 zclass[[sword,actor,drawlayer_50|target_x,@,target_y,@]]
 zclass[[pos_preview,actor,drawlayer_50|gamestate,@,itemind,@,x,@,y,@,sind,@,update,%possible_move_small_obj_update,draw,%tile_sprite_draw]]
 zclass[[selected_move,actor,drawlayer_50|update,%selected_move_update,draw,%selected_move_draw]]
-zclass[[shake_dead,particle_spawner,pos,actor,drawlayer_30|sind,@,x,@,y,@,draw,%shake_dead_draw;start;duration,.5;]]
+zclass[[shake_dead,pos,actor,drawlayer_30|sind,@,x,@,y,@,draw,%shake_dead_draw;start;duration,.5;]]
 zclass[[enemy,pos|get_path,nil,init,%enemy_init,update,%enemy_update,destroyed,%enemy_destroyed,check_collision,%enemy_check_collision;]]
 zclass[[snake,tile_entity,enemy,drawlayer_30|x,@,y,@,target_x,~x,target_y,~y,get_path,%snake_get_path,setsind2,%snake_setsind2;possible_sinds;,42,46,40,44;]]
 zclass[[frog,tile_entity,enemy,drawlayer_30|x,@,y,@,target_x,~x,target_y,~y,get_path,%frog_get_path,setsind2,%frog_setsind2;possible_sinds;,230,76,78,232;]]
@@ -741,8 +742,14 @@ end
 end
 zclass[[fox,tile_entity,enemy,drawlayer_30|x,@,y,@,target_x,~x,target_y,~y,get_path,%fox_get_path,setsind2,%fox_setsind2;possible_sinds;,224,226,200,228,192,196,194,198;]]
 zclass[[level_state,actor|itemind,3,items;,;start;init,%level_state_init,update,nop,duration,0,next,pre_card_select;pre_card_select;init,%pre_card_select_init;card_select;init,nop,update,%card_select_update;move_select;init,%move_select_init,update,%move_select_update;player_update;init,%player_update_init,update,%player_update_update;baddie_update;init,%baddie_update_init,update,%baddie_update_update;]]
+function get_random_green_ind()
+return rnd_item{134,134,136,166}
+end
+function get_random_red_ind()
+return rnd_item{130,130,128,132}
+end
 function get_random_card_ind()
-return rnd_item{128,130,130,132,134,134,136,160,162,164,166}
+return rnd_item{128,130,132,134,136,160,162,164,166}
 end
 function is_level_win()return not get_next_baddie{}end
 function is_level_lose()return not g_pl:is_alive()end

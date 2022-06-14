@@ -1,4 +1,4 @@
-zclass[[shake_dead,particle_spawner,pos,actor,drawlayer_30|
+zclass[[shake_dead,pos,actor,drawlayer_30|
     sind,@, x,@, y,@, draw,%shake_dead_draw;
     start; duration,.5;
 ]]

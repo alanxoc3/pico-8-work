@@ -11,16 +11,23 @@ zclass[[level_state,actor|
     baddie_update;       init,%baddie_update_init,   update,%baddie_update_update;
 ]]
 
+function get_random_green_ind()
+    return rnd_item{134, 134, 136, 166} -- double move
+end
+
+function get_random_red_ind()
+    return rnd_item{130, 130, 128, 132} -- double stab
+end
+
 function get_random_card_ind()
-    -- 130 134 are stab and move. Those are slightly more common as they are the basics
-    return rnd_item{128, 130, 130, 132, 134, 134, 136, 160, 162, 164, 166}
+    return rnd_item{128, 130, 132, 134, 136, 160, 162, 164, 166}
 end
 
 function is_level_win()  return not get_next_baddie{} end
 function is_level_lose() return not g_pl:is_alive()   end
 
 |[level_state_init]| function(a)
-    a.item_inds = { get_random_card_ind(), get_random_card_ind(), get_random_card_ind(), get_random_card_ind(), get_random_card_ind() }
+    a.item_inds = { get_random_card_ind(), get_random_green_ind(), get_random_red_ind(), get_random_green_ind(), get_random_card_ind() }
 end $$
 
 -- PRE CARD SELECT --

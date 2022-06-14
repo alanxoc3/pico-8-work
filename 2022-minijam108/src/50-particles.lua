@@ -1,5 +1,5 @@
 |[draw_circle]| function(a)
-    circfill(scr_x(a.x), scr_y(a.y), 2, a.color)
+    circfill(scr_x(a.x), scr_y(a.y), a.r, a.color)
 end $$
 
 |[move_up]| function(a)
@@ -13,7 +13,7 @@ end $$
 end $$
 
 zclass[[powerup_particle,vec,drawlayer_25|
-    x,@, y,@, color,@,
+    x,@, y,@, color,@, r,@,
     draw,%draw_circle,
     init,%move_up;
 
@@ -22,7 +22,7 @@ zclass[[powerup_particle,vec,drawlayer_25|
 
 zclass[[particle_spawner|
     rx,.25, ry,.25, rate,1, chance,3, create_func,%powerup_particle,
-    update_particles,%update_particles, color,8;
+    update_particles,%update_particles, color,7;
 ]]
 
 |[update_particles]| function(a)
@@ -31,7 +31,8 @@ zclass[[particle_spawner|
             a.create_func(
                 a.x + rnd(a.rx*2)-a.rx,
                 a.y + rnd(a.ry*2)-a.ry,
-                a.color
+                a.color,
+                1+rnd(2)
             )
         end
     end
