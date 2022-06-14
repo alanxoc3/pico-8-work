@@ -1,7 +1,7 @@
 pico-8 cartridge // http://www.pico-8.com
 version 35
 __lua__
--- game
+-- stabby crabby
 -- amorg
 
 -- unobfuscated code at:
