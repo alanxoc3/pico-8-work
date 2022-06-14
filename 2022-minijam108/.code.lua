@@ -381,24 +381,24 @@ end,function(a)
 if is_level_win()then
 a:kill()
 _g.fader_out(function()
-g_level+=1
-if g_level>=50 then
+set_g_level(g_level()+1)
+if g_level()>=50 then
 g_tl:load"gamewin"
 else
 g_tl:load"lvlwin"
 end
 end)
 elseif is_level_lose()then
-g_death_count+=1
+set_g_death_count(g_death_count()+1)
 a:kill()
 _g.fader_out(function()
 g_tl:load"lvllose"
 end)
 else
-g_turn_count+=1
+set_g_turn_count(g_turn_count()+1)
 a:load"card_select"
 a.items={}
-for i=1,#a.item_inds do
+for i=1,5 do
 add(a.items,_g.card(22+(i-1)*17,a.item_inds[i],false))
 end
 a.items[a.itemind].selected=true
@@ -496,7 +496,7 @@ end
 end
 end,function()
 g_level_state=_g.level_state()
-g_grid=set_grid(g_level)
+g_grid=set_grid(g_level())
 end,function()
 zcall(loop_entities,[[1;,timer,tick;2;,actor,state;3;,enemy,check_collision;4;,tile_entity,to_target;5;,hermit,to_target;6;,mov,mov_update;7;,vec,vec_update;8;,particle_spawner,update_particles;]])
 update_grid()
@@ -505,7 +505,7 @@ rectfill(0,0,127,127,12)
 g_offx,g_offy=64,51
 draw_tiles()
 print_vert_wobble("stabby crabby",4,1-2,7,1,1)
-print_vert_wobble("level "..(g_level+1),117,22-2,7,1,1)
+print_vert_wobble("level "..(g_level()+1),117,22-2,7,1,1)
 loop_entities("drawlayer_25","draw")
 loop_entities("drawlayer_30","draw")
 loop_entities("drawlayer_50","draw")
@@ -553,13 +553,14 @@ camera()
 end,function(a)
 if(btnp(4)or btnp(5))and not does_entity_exist"fader"then
 _g.fader_out(function()
-if g_turn_count>0 and(dget(0)<=0 or dget(0)>g_turn_count)then
-dset(0,g_turn_count)
-dset(1,g_death_count)
+if g_turn_count()>0 and(hi_turn()<=0 or hi_turn()>g_turn_count())then
+set_hi_turn(g_turn_count())
+set_hi_death(g_death_count())
 end
-g_level=0
-g_death_count=0
-g_turn_count=0
+set_g_level(0)
+set_g_death_count(0)
+set_g_turn_count(0)
+save()
 a:load"title"
 end)
 end
@@ -567,8 +568,8 @@ end,function(a)
 local el=(a.timers.gamewin.elapsed or 0)%15
 cls(12)
 print_horiz_wobble_centered("you win",64,30-20-4,7,0,1)
-print_wide_centered("turns: "..g_turn_count,64,75-20-20-15,7)
-print_wide_centered("deaths: "..g_death_count,64,82-20-20-15,7)
+print_wide_centered("turns: "..g_turn_count(),64,75-20-20-15,7)
+print_wide_centered("deaths: "..g_death_count(),64,82-20-20-15,7)
 spr(42,150-el*30,42,2,2)
 spr(4,200-el*34,44,4,2)
 spr(36,-270+el*34,42,4,2)
@@ -591,8 +592,8 @@ end,function(a)
 cls(12)
 local func=function()
 print_wide_centered("next level",64,53,7)
-print_wide_centered("turns: "..g_turn_count,64,75,7)
-print_wide_centered("deaths: "..g_death_count,64,83,7)
+print_wide_centered("turns: "..g_turn_count(),64,75,7)
+print_wide_centered("deaths: "..g_death_count(),64,83,7)
 end
 func()
 end,function(a)
@@ -605,8 +606,8 @@ end,function(a)
 cls(12)
 local func=function()
 print_wide_centered("retry level",64,53,7)
-print_wide_centered("turns: "..g_turn_count,64,75,7)
-print_wide_centered("deaths: "..g_death_count,64,83,7)
+print_wide_centered("turns: "..g_turn_count(),64,75,7)
+print_wide_centered("deaths: "..g_death_count(),64,83,7)
 end
 func()
 end,function(a)
@@ -623,12 +624,13 @@ print_horiz_wobble_centered("crabby",64,yoff+18,7,0,1)
 print_wide_centered("high score",64,90,7)
 print_wide_centered("==========",64,97,7)
 local turn,death="n/a","n/a"
-if dget(0)>0 then turn=dget(0)death=dget(1)end
+if hi_turn()>0 then turn=hi_turn()death=hi_death()end
 print_wide_centered("turns: "..turn,64,110,7)
 print_wide_centered("deaths: "..death,64,117,7)
 print_press()
 zspr(202,64,yoff,4,4)
 end,function(state)
+save()
 clean_all_entities"game_state"
 _g.fader_in()
 state:state_init()
@@ -1122,14 +1124,25 @@ end
 zclass[[fader,actor|ecs_exclusions;actor,yes,timer,yes;]]
 zclass[[fader_out,fader|start;duration,.5,destroyed,@,update,%fader_out_update]]
 zclass[[fader_in,fader|start;duration,.5,update,%fader_in_update]]
-g_level=0
-g_death_count=0
-g_turn_count=0
 cartdata"stabby_crabby"
 menuitem(1,"reset high score",function()
 memset(0x5e00,0,64)
 extcmd"reset"
 end)
+memcpy(0x5d00,0x5e00,64)
+function save()
+memcpy(0x5e00,0x5d00,64)
+end
+function hi_turn()return peek(0x5d00+0)end
+function hi_death()return peek(0x5d00+1)end
+function g_level()return peek(0x5d00+2)end
+function g_death_count()return peek(0x5d00+3)end
+function g_turn_count()return peek(0x5d00+4)end
+function set_hi_turn(num)return poke(0x5d00+0,num)end
+function set_hi_death(num)return poke(0x5d00+1,num)end
+function set_g_level(num)return poke(0x5d00+2,num)end
+function set_g_death_count(num)return poke(0x5d00+3,num)end
+function set_g_turn_count(num)return poke(0x5d00+4,num)end
 zclass[[game_state,actor|ecs_exclusions;actor,true;init,%game_state_init,curr,game;logo;state_init,%logo_init,update,nop,draw,%logo_draw,duration,2.5,next,title;title;state_init,nop,update,%title_update,draw,%title_draw;game;state_init,%game_init,update,%game_update,draw,%game_draw;lvlwin;state_init,nop,update,%lvlwin_update,draw,%lvlwin_draw;gamewin;state_init,nop,update,%gamewin_update,draw,%gamewin_draw;lvllose;state_init,nop,update,%lvllose_update,draw,%lvllose_draw;]]
 function print_press()
 if t()%1<.5 then
@@ -1145,12 +1158,6 @@ if btn(4)and btnp(5)then g_debug=not g_debug end
 zcall(loop_entities,[[1;,actor,clean;2;,fader,clean;]])
 register_entities()
 zcall(loop_entities,[[1;,fader,tick;2;,game_state,tick;3;,fader,state;4;,game_state,state;]])
-if btn(5)and xbtnp()~=0 then
-g_level+=xbtnp()
-_g.fader_out(function()
-g_tl:load"game"
-end)
-end
 end
 function _draw()
 cls()

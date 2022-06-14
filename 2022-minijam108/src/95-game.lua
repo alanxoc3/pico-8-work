@@ -1,7 +1,7 @@
 -- BASIC EXAMPLE FOR SIMPLE GAME BELOW:
 |[game_init]| function()
     g_level_state = _g.level_state()
-    g_grid = set_grid(g_level)
+    g_grid = set_grid(g_level())
 end $$
 
 |[game_update]| function()
@@ -27,7 +27,7 @@ function round(num) return flr(num + .5) end
     draw_tiles()
 
     print_vert_wobble("stabby crabby",       4,   1-2,  7, 1, 1)
-    print_vert_wobble("level "..(g_level+1), 117, 22-2, 7, 1, 1)
+    print_vert_wobble("level "..(g_level()+1), 117, 22-2, 7, 1, 1)
 
     loop_entities('drawlayer_25', 'draw')
     loop_entities('drawlayer_30', 'draw')

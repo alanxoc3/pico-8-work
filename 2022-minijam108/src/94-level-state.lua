@@ -35,25 +35,25 @@ end $$
     if is_level_win() then
         a:kill()
         _g.fader_out(function()
-            g_level += 1
-            if g_level >= 50 then
+            set_g_level(g_level()+1)
+            if g_level() >= 50 then
                 g_tl:load'gamewin'
             else
                 g_tl:load'lvlwin'
             end
         end)
     elseif is_level_lose() then
-        g_death_count += 1
+        set_g_death_count(g_death_count()+1)
         a:kill()
         _g.fader_out(function()
             g_tl:load'lvllose'
         end)
     else
-        g_turn_count += 1
+        set_g_turn_count(g_turn_count()+1)
         a:load'card_select'
 
         a.items = {}
-        for i=1,#a.item_inds do
+        for i=1,5 do
             add(a.items, _g.card(22+(i-1)*17, a.item_inds[i], false))
         end
 
