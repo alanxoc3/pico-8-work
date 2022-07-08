@@ -1,5 +1,6 @@
-zclass[[person,target_with_tbox,simple_spr,drawlayer_50|
+zclass[[person,solid,target_with_tbox,simple_spr,drawlayer_50|
     text,, sy,-2,
+    rx,.375, ry,.375,
     trx,.5, try,.5,
     target_with_tbox_disable_callback,%person_target_with_tbox_disable_callback
 ]]
@@ -14,7 +15,7 @@ end $$
     load_room(%MEM_ROOM_IND, g_pl.x, g_pl.y, g_pl.xf)
 end $$
 
-zclass[[navyblock,solid,person|
+zclass[[navyblock,person|
     x,@, y,@,
     cname,"navy", cspr,SPR_NAVY, sind,SPR_NAVY,
     text,"my sister has been in^the forest all day.^find something to^protect yourself with^and bring her home.",
