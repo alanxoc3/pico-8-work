@@ -32,6 +32,7 @@ help him save the Land of Hi-roll from the forces of evil.
 
 ## Tokens & Features
 friday...
+TODO: "m" in an empty room in mapbuilder crashes it (preview?)
 TODO: player weapons stun slimy
 TODO: chest logic
 TODO: banjo over people text logic
