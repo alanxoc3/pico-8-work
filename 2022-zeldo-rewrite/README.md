@@ -15,7 +15,7 @@ help him save the Land of Hi-roll from the forces of evil.
 7 long
 - DONE village
 - DONE forest
-- TODO field/mountain
+- DONE field/mountain
 - DONE castle/cannon
 - DONE crypt
 - DONE ivan boss fight (based on computer room)
