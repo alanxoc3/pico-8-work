@@ -4,7 +4,7 @@
     cube = create_dice(64, 64)
     g_room_bounds = _g.room_bounds(8, 8, 8, 8, 0, 0)
     cube.dir = 1
-    _g.ant(64, 64)
+    _g.ant(8, 8)
 end $$
 
 |[game_update]| function()
