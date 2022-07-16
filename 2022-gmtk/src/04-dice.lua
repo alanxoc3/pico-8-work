@@ -174,7 +174,18 @@ function make_cam()
     }
 end
 
-function draw_model(a)
+zclass[[dice,actor,drawlayer_50|
+    x,@, y,@, xdir,@,
+
+    cam,@, model,@,
+
+    draw,%dice_draw_model,
+    roll,%dice_roll,
+    sit,%dice_sit,
+    update,%dice_update
+]]
+
+|[dice_draw_model]| function(a)
     local model=a.model
     local cam=a.cam
 	local m={
@@ -207,87 +218,49 @@ function draw_model(a)
 			polytex(verts)
 		end
 	end
-end
+end $$
 
-function _init()
-    cube = {
-        x=63, y=63,
-        is_sit = true,
-        cam=make_cam(63.5,63.5),
-        model=prepare_model({
+|[dice_roll]| function(a, dir)
+    if a.is_sit then
+        a.is_sit=false
+        a.cam.dx_ang = .0625*dir
+        a.cam.dy_ang = -.0037*dir
+        a.cam.dz_ang = .0332*dir
+        a.cam.dx_frc = 1
+        a.cam.dy_frc = 1
+        a.cam.dz_frc = 1
+    end
+end $$
+
+|[dice_sit]| function(a)
+    if not a.is_sit then
+        a.is_sit = true
+        a.cam.dx_frc = .8
+        a.cam.dy_frc = .8
+        a.cam.dz_frc = .8
+    end
+end $$
+
+|[dice_update]| function(a)
+    a.cam:control()
+end $$
+
+function create_dice(x, y)
+    return _g.dice(x, y, 1, make_cam(63.5,63.5), prepare_model({
             v={
                 {0,0,0}, {1,0,0}, {1,0,1}, {0,0,1},
                 {0,1,0}, {1,1,0}, {1,1,1}, {0,1,1},
             },
             f={
-                {3,4,8,7,uv={0,0,2,0,2,2,0,2}}, -- 1
-                {4,1,5,8,uv={2,0,4,0,4,2,2,2}}, -- 2
-                {1,4,3,2,uv={4,0,6,0,6,2,4,2}}, -- 3
-                {5,6,7,8,uv={0,2,2,2,2,4,0,4}}, -- 4
-                {2,3,7,6,uv={2,2,4,2,4,4,2,4}}, -- 5
-                {1,2,6,5,uv={4,2,6,2,6,4,4,4}}, -- 6
+                {3,4,8,7,uv=zobj[[,0,60,2,60,2,62,0,62]]}, -- 1
+                {4,1,5,8,uv=zobj[[,2,60,4,60,4,62,2,62]]}, -- 2
+                {1,4,3,2,uv=zobj[[,4,60,6,60,6,62,4,62]]}, -- 3
+                {5,6,7,8,uv=zobj[[,0,62,2,62,2,64,0,64]]}, -- 4
+                {2,3,7,6,uv=zobj[[,2,62,4,62,4,64,2,64]]}, -- 5
+                {1,2,6,5,uv=zobj[[,4,62,6,62,6,64,4,64]]}, -- 6
             }
-        }),
-        draw=draw_model,
-        roll=function(a)
-            if a.is_sit then
-                local a_spd = (sgn(flr(rnd(2))-.5)*8)/128
-                local b_spd = (rnd()-.5)*12/128
-                local c_spd = (rnd()-.5)*12/128
-
-                a.is_sit=false
-                local pick = flr(rnd()*3)
-                if pick == 0 then
-                    a.cam.dx_ang = a_spd
-                    a.cam.dy_ang = b_spd
-                    a.cam.dz_ang = c_spd
-
-                    a.cam.dx_frc = 1
-                    a.cam.dy_frc = .9
-                    a.cam.dz_frc = .8
-                elseif pick == 1 then
-                    a.cam.dx_ang = c_spd
-                    a.cam.dy_ang = a_spd
-                    a.cam.dz_ang = b_spd
-
-                    a.cam.dx_frc = .8
-                    a.cam.dy_frc = 1
-                    a.cam.dz_frc = .9
-                else
-                    a.cam.dx_ang = b_spd
-                    a.cam.dy_ang = c_spd
-                    a.cam.dz_ang = a_spd
-
-                    a.cam.dx_frc = .9
-                    a.cam.dy_frc = .8
-                    a.cam.dz_frc = 1
-                end
-            end
-        end,
-        sit=function(a)
-            if not a.is_sit then
-                a.is_sit = true
-                a.cam.dx_frc = .8
-                a.cam.dy_frc = .8
-                a.cam.dz_frc = .8
-            end
-        end,
-        update=function(a)
-            a.cam:control()
-        end
-    }
-end
-
-function _update()
-    if btn(4) then cube:roll()
-              else cube:sit() end
-    
-    cube:update()
-end
-
-function _draw()
-    cls()
-    cube:draw()
+        })
+    )
 end
 
 -- textured edge renderer

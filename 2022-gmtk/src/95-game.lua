@@ -6,10 +6,16 @@ zclass[[test_obj,actor,drawlayer_50|x,@,y,@,color,7,init,%test_init,update,%test
 
 |[game_init]| function()
     _g.fader_in()
+    cube = create_dice(64, 64)
+    cube.dir = 1
     _g.test_obj(64, 64)
 end $$
 
 |[game_update]| function()
+    if btnp(0) then cube.dir = -1 elseif btnp(1) then cube.dir = 1 end
+    if btn(4) then cube:roll(cube.dir)
+              else cube:sit() end
+
     loop_entities('actor', 'state')
 end $$
 
