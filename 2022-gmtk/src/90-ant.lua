@@ -20,5 +20,5 @@ end $$
 end $$
 
 |[ant_draw]| function(a)
-    circfill(a.x, a.y, 2, a.color)
+    circfill(a.x*8, a.y*8, 2, a.color)
 end $$

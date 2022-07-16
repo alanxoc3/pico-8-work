@@ -30,10 +30,9 @@ end $$
 end $$
 
 |[adjust_deltas_for_tiles]| function(a)
-    for tx=flr(g_room_bounds.x-g_room_bounds.rx),ceil(g_room_bounds.x+g_room_bounds.rx) do
-        for ty=flr(g_room_bounds.y-g_room_bounds.ry),ceil(g_room_bounds.y+g_room_bounds.ry) do
-            printh("tx: "..tx.." ty: "..ty)    
-            if fget(mget(g_room_bounds.tx_off+tx, g_room_bounds.tx_off+ty), 0) then
+    for tx=flr(a.x-a.rx)-1,ceil(a.x+a.rx) do
+        for ty=flr(a.y-a.ry)-1,ceil(a.y+a.ry) do
+            if fget(mget(g_room_bounds.tx_off+tx, g_room_bounds.ty_off+ty), 0) then
                 local rx, ry = .5, .5
                 a.dx, a.dy = a:calc_deltas{x=tx+.5, y=ty+.5, rx=rx, ry=ry}
             end
