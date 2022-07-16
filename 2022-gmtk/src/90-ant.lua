@@ -1,6 +1,9 @@
 zclass[[ant,actor,tcol,mov,drawlayer_50|
     x,@,y,@,
-    rx,.375, ry,.375,
+    rx,.375, ry,.5,
+
+    sind,7,
+    xf,yes,
 
     color,7,
     init,%ant_init,
@@ -18,6 +21,7 @@ end $$
 
     if g_zbtn_0 ~= 0 then
         a.ax = (a.touching_ground and .065 or .065) * g_zbtn_0
+        a.xf = a.ax < 0
     end
 
     if a:is_active'jump'       then a.dy = -.375
@@ -34,6 +38,26 @@ end $$
         end
     end
 
+    if not a.touching_ground and (a.touching_left_wall or a.touching_right_wall) then
+        a.sind = 23
+    elseif not a.touching_ground then
+        a.sind = 9
+    else
+        if a.dx ~= 0 then
+            if t()%.25 < .125 then
+                a.sind = 7
+            else
+                a.sind = 8
+            end
+        else
+            if t()%1 < .5 then
+                a.sind = 7
+            else
+                a.sind = 8
+            end
+        end
+    end
+
     if not a.touching_ground and a.touching_left_wall then
         a.dy -= 0
         a.dy -= 0.125/4
@@ -45,7 +69,7 @@ end $$
 end $$
 
 |[ant_draw]| function(a)
-    circfill(a.x*8, a.y*8, 2, a.color)
+    zspr(a.sind, a.x*8, a.y*8, 1, 1, a.xf, false)
 end $$
 
 |[ant_tile_hit]| function(a, dir)
