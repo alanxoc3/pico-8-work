@@ -159,16 +159,16 @@ function make_cam(x0,y0,focal)
 	return {
 		pos={0,0,0},
 		control=function(self,dist)
-			if(btn(0)) dyangle+=1
-			if(btn(1)) dyangle-=1
-			if(btn(2)) dzangle+=1
-			if(btn(3)) dzangle-=1
+			if(btnp(0)) dyangle+=8
+			if(btnp(1)) dyangle-=8
+			if(btnp(2)) dzangle+=8
+			if(btnp(3)) dzangle-=8
 			
 			yangle+=dyangle/128
 			zangle+=dzangle/128
 			-- friction
-			dyangle*=0.8
-			dzangle*=0.8
+			dyangle=0
+			dzangle=0
 
 			local m=make_m_from_euler(zangle,yangle,0)
 			local pos=m_fwd(m)
@@ -190,11 +190,11 @@ function make_cam(x0,y0,focal)
 			self.pos=pos
 		end,
 		project=function(self,verts)
-			local n,f=0.1,.175
+			local n,f=0.1,.15
 			for i,v in pairs(verts) do
 				local x,y,z=v[1],v[2],v[3]
-				z=z*f/(f-n)+f*n/(f-n)
-				local w=focal/z
+				-- z=z*f/(f-n)+f*n/(f-n)
+				local w=24/z
 				verts[i]={x=x0+x*w,y=y0-y*w,w=w,u=v.u,v=v.v}
 			end
 			return verts
