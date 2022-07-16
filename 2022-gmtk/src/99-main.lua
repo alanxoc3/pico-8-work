@@ -1,7 +1,7 @@
 -- TEMPLATE TOKEN COUNT: 1045
 zclass[[game_state,actor|
     ecs_exclusions;actor,true; -- remove game_state from the actor group
-    curr,logo;
+    curr,game;
     logo; init,%logo_init, update,nop,          draw,%logo_draw, duration,2.5, next,game;
     game; init,%game_init, update,%game_update, draw,%game_draw;
 ]]
@@ -11,6 +11,8 @@ function _init()
 end
 
 function _update60()
+    g_zbtn_0, g_zbtn_2 = zbtn(btn, 0), zbtn(btn, 2)
+
     -- DEBUG_BEGIN
     if btn(4) and btnp(5) then g_debug = not g_debug end
     -- DEBUG_END
