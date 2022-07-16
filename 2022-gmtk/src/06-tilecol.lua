@@ -52,10 +52,10 @@ end
 |[adjust_deltas_for_screen]| function(a)
     if a.should_collide_with_screen_edge then
         local box = {
-            x =g_room_bounds.x-a.dx,
-            y =g_room_bounds.y-a.dy,
-            rx=g_room_bounds.rx,
-            ry=g_room_bounds.ry
+            x =g_room_bounds.x+g_room_bounds.w/2-a.dx,
+            y =g_room_bounds.y+g_room_bounds.h/2-a.dy,
+            rx=g_room_bounds.w/2,
+            ry=g_room_bounds.h/2
         }
 
         a.dx = get_delta_axis2(a.dx, a.x, a.rx, box.x, box.rx)

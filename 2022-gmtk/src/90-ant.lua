@@ -3,7 +3,7 @@ zclass[[ant,actor,tcol,mov,drawlayer_50|
     rx,.375, ry,.5,
 
     sind,7,
-    xf,yes,
+    xf,no,
 
     color,7,
     init,%ant_init,
@@ -24,7 +24,7 @@ end $$
         a.xf = a.ax < 0
     end
 
-    if a:is_active'jump'       then a.dy = -.375
+    if a:is_active'jump'       then a.dy = -.4
     elseif a:is_active'ldjump' then a.ax =  .25 a.dy =  .25
     elseif a:is_active'lujump' then a.ax =  .25 a.dy = -.375
     elseif a:is_active'rdjump' then a.ax = -.25 a.dy =  .25

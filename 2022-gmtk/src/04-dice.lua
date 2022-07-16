@@ -214,7 +214,7 @@ zclass[[dice,actor,drawlayer_50|
 				verts[k]=p
 			end
 			-- transform to camera & draw			
-		 verts=cam:project(verts, a.x, a.y)
+		 verts=cam:project(verts, a.x*8, a.y*8)
 			polytex(verts)
 		end
 	end
