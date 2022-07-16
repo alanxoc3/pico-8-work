@@ -9,16 +9,11 @@ g_levels = zobj[[
 |[game_init]| function()
     g_room_bounds = g_levels[1]
     _g.fader_in()
-    cube = create_dice(find_in_room(16, 8, 8))
-    cube.dir = 1
-    _g.ant(find_in_room(32))
+    g_dice = create_dice(find_in_room(16, 8, 8))
+    g_ant = _g.ant(find_in_room(32))
 end $$
 
 |[game_update]| function()
-    if btnp(0) then cube.dir = -1 elseif btnp(1) then cube.dir = 1 end
-    if btn(4) then cube:roll(cube.dir)
-              else cube:sit() end
-
     zcall(loop_entities, [[
         1 ;,timer,       tick;
         2 ;,actor,       state;
@@ -50,8 +45,10 @@ end $$
 end $$
 
 |[game_draw]| function()
+    camera(g_ant.x*8-64, 0)
     rect(0, 0, 127, 127, 8)
 
-    map(g_room_bounds.tx_off, g_room_bounds.ty_off, 0, 0, g_room_bounds.w, g_room_bounds.h)
+    map(g_room_bounds.tx_off, g_room_bounds.ty_off, 0, 0, g_room_bounds.w, g_room_bounds.h, 0x80)
     loop_entities('drawlayer_50', 'draw')
+    camera()
 end $$

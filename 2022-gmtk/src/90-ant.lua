@@ -17,20 +17,20 @@ zclass[[ant,actor,tcol,mov,drawlayer_50|
 end $$
 
 |[ant_update]| function(a)
-    a.dy += 0.125/2
+    a.ay = 0.125/8
 
     if g_zbtn_0 ~= 0 then
         a.ax = (a.touching_ground and .065 or .065) * g_zbtn_0
         a.xf = a.ax < 0
     end
 
-    if a:is_active'jump'       then a.dy = -.4
-    elseif a:is_active'ldjump' then a.ax =  .25 a.dy =  .25
-    elseif a:is_active'lujump' then a.ax =  .25 a.dy = -.375
-    elseif a:is_active'rdjump' then a.ax = -.25 a.dy =  .25
-    elseif a:is_active'rujump' then a.ax = -.25 a.dy = -.375
+    if a:is_active'jump'       then a.dy = -.2
+    elseif a:is_active'ldjump' then a.ax =  .125 a.dy =  .25/2
+    elseif a:is_active'lujump' then a.ax =  .125 a.dy = -.25
+    elseif a:is_active'rdjump' then a.ax = -.125 a.dy =  .25/2
+    elseif a:is_active'rujump' then a.ax = -.125 a.dy = -.25
     else
-        if btnp(4) then
+        if btn(4) then
             if a.touching_ground then a:start_timer('jump', .125)
             elseif a.touching_left_wall  then a:start_timer(btn'3' and 'ldjump' or 'lujump', .125/2)
             elseif a.touching_right_wall then a:start_timer(btn'3' and 'rdjump' or 'rujump', .125/2)
@@ -65,8 +65,6 @@ end $$
     end
 
     if not a.touching_ground and a.touching_left_wall then
-        a.dy -= 0
-        a.dy -= 0.125/4
     end
 
     a.touching_ground = false

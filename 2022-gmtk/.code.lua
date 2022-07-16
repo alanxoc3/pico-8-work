@@ -289,18 +289,18 @@ end
 end,function(a)
 a.color+=1
 end,function(a)
-a.dy+=0.125/2
+a.ay=0.125/8
 if g_zbtn_0 ~=0 then
 a.ax=(a.touching_ground and.065 or.065)*g_zbtn_0
 a.xf=a.ax<0
 end
-if a:is_active"jump"then a.dy=-.4
-elseif a:is_active"ldjump"then a.ax=.25 a.dy=.25
-elseif a:is_active"lujump"then a.ax=.25 a.dy=-.375
-elseif a:is_active"rdjump"then a.ax=-.25 a.dy=.25
-elseif a:is_active"rujump"then a.ax=-.25 a.dy=-.375
+if a:is_active"jump"then a.dy=-.2
+elseif a:is_active"ldjump"then a.ax=.125 a.dy=.25/2
+elseif a:is_active"lujump"then a.ax=.125 a.dy=-.25
+elseif a:is_active"rdjump"then a.ax=-.125 a.dy=.25/2
+elseif a:is_active"rujump"then a.ax=-.125 a.dy=-.25
 else
-if btnp(4)then
+if btn(4)then
 if a.touching_ground then a:start_timer("jump",.125)
 elseif a.touching_left_wall then a:start_timer(btn"3"and "ldjump"or "lujump",.125/2)
 elseif a.touching_right_wall then a:start_timer(btn"3"and "rdjump"or "rujump",.125/2)
@@ -333,8 +333,6 @@ end
 end
 end
 if not a.touching_ground and a.touching_left_wall then
-a.dy-=0
-a.dy-=0.125/4
 end
 a.touching_ground=false
 a.touching_left_wall=false
@@ -352,22 +350,20 @@ end
 end,function()
 g_room_bounds=g_levels[1]
 _g.fader_in()
-cube=create_dice(find_in_room(16,8,8))
-cube.dir=1
-_g.ant(find_in_room(32))
+g_dice=create_dice(find_in_room(16,8,8))
+g_ant=_g.ant(find_in_room(32))
 end,function()
-if btnp(0)then cube.dir=-1 elseif btnp(1)then cube.dir=1 end
-if btn(4)then cube:roll(cube.dir)
-else cube:sit()end
 zcall(loop_entities,[[1;,timer,tick;2;,actor,state;3;,mov,mov_update;4;,tcol,coll_tile,@;5;,collidable,adjust_deltas_for_tiles;6;,vec,vec_update;]],function(x,y)
 return x>=g_room_bounds.x and x<g_room_bounds.w and
 y>=g_room_bounds.y and y<g_room_bounds.h and
 fget(mget(g_room_bounds.tx_off+x,g_room_bounds.ty_off+y),0)
 end)
 end,function()
+camera(g_ant.x*8-64,0)
 rect(0,0,127,127,8)
-map(g_room_bounds.tx_off,g_room_bounds.ty_off,0,0,g_room_bounds.w,g_room_bounds.h)
+map(g_room_bounds.tx_off,g_room_bounds.ty_off,0,0,g_room_bounds.w,g_room_bounds.h,0x80)
 loop_entities("drawlayer_50","draw")
+camera()
 end,function(a)
 poke(0x5f43,0xff)
 g_fade=a:get_elapsed_percent"start"
