@@ -41,7 +41,13 @@ end $$
     if not a.touching_ground and (a.touching_left_wall or a.touching_right_wall) then
         a.sind = 23
     elseif not a.touching_ground then
-        a.sind = 9
+        if a:is_active'jump' then
+            a.sind = 9
+        elseif a.dy > 0 then
+            a.sind = 11
+        else
+            a.sind = 10
+        end
     else
         if a.dx ~= 0 then
             if t()%.25 < .125 then
