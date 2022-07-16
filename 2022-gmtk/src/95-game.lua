@@ -16,9 +16,14 @@ end $$
         1 ;,timer,       tick;
         2 ;,actor,       state;
         3 ;,mov,         mov_update;
-        4 ;,collidable,  adjust_deltas_for_tiles;
-        5 ;,vec,         vec_update;
-    ]])
+        4 ;,tcol,        coll_tile, @;
+        5 ;,collidable,  adjust_deltas_for_tiles;
+        6 ;,vec,         vec_update;
+    ]], function(x, y)
+         return x >= g_room_bounds.x - g_room_bounds.rx and x < g_room_bounds.x + g_room_bounds.rx and
+                y >= g_room_bounds.y - g_room_bounds.ry and y < g_room_bounds.y + g_room_bounds.ry and
+                fget(mget(g_room_bounds.tx_off+x, g_room_bounds.ty_off+y), 0)
+      end)
 
     --zcall(loop_entities, [[
     --    pls,@, solids,@, room,@, statitems,@;

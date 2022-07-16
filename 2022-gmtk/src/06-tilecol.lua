@@ -62,3 +62,38 @@ end
         a.dy = get_delta_axis2(a.dy, a.y, a.ry, box.y, box.ry)
     end
 end $$
+
+zclass[[tcol,vec,box|
+   tile_solid,yes,
+   tile_hit,nop,
+   coll_tile,%tcol_coll_tile
+]]
+
+|[tcol_coll_tile]| function(a, solid_func)
+   local x, dx = coll_tile_help(a.x, a.y, a.dx, a.rx, a.ry, 0, a, a.tile_hit, solid_func)
+   local y, dy = coll_tile_help(a.y, a.x, a.dy, a.ry, a.rx, 2, a, a.tile_hit, function(y, x) return solid_func(x, y) end)
+   if a.tile_solid then
+      a.x, a.y, a.dx, a.dy = x, y, dx, dy
+   end
+end $$
+
+function coll_tile_help(pos, per, spd, pos_rad, per_rad, dir, a, hit_func, solid_func)
+   local coll_tile_bounds = function(pos, rad)
+      return flr(pos - rad), -flr(-(pos + rad)) - 1
+   end
+
+   local pos_min, pos_max = coll_tile_bounds(pos + spd, pos_rad)
+   local per_min, per_max = coll_tile_bounds(per, per_rad)
+
+   for j=per_min, per_max do
+      if spd < 0 and solid_func(pos_min, j) then
+         hit_func(a, dir)
+         return pos_min + pos_rad + 1, 0
+      elseif spd > 0 and solid_func(pos_max, j) then
+         hit_func(a, dir+1)
+         return pos_max - pos_rad, 0
+      end
+   end
+
+   return pos, spd
+end
