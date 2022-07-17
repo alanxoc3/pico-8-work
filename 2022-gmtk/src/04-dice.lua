@@ -129,12 +129,12 @@ end
 
 function make_cam()
     return {
-        x_ang=0, dx_ang=0, dx_frc=1,
-        y_ang=0, dy_ang=0, dy_frc=1,
-        z_ang=0, dz_ang=0, dz_frc=1,
+        x_ang=rnd(1), dx_ang=0, dx_frc=1,
+        y_ang=rnd(1), dy_ang=0, dy_frc=1,
+        z_ang=rnd(1), dz_ang=0, dz_frc=1,
 
         pos={0,0,0},
-        control=function(a)
+        control=function(a, size) -- size is 0 to 1
             a.x_ang+=a.dx_ang
             a.y_ang+=a.dy_ang
             a.z_ang+=a.dz_ang
@@ -145,7 +145,7 @@ function make_cam()
 
             local m=make_m_from_euler(a.z_ang,a.y_ang,a.x_ang)
             local pos=m_fwd(m)
-            v_scale(pos,2)
+            v_scale(pos,size*4+2)
 
             -- inverse view matrix
             -- only invert orientation part
@@ -174,15 +174,20 @@ function make_cam()
     }
 end
 
-zclass[[dice,actor,drawlayer_50|
-    x,@, y,@, xdir,@,
-
+zclass[[dice,actor,mov,box,drawlayer_50|
+    x,@, y,@, dx,@, dy,@,
     cam,@, model,@,
 
+    dir,~dx,
+    ix,.85,
+    is_sit,yes,
+    rx,1,ry,1,
     draw,%dice_draw_model,
     roll,%dice_roll,
     sit,%dice_sit,
-    update,%dice_update
+    update,%dice_update;
+    curr,life;
+    life;duration,1.25;
 ]]
 
 |[dice_draw_model]| function(a)
@@ -192,7 +197,8 @@ zclass[[dice,actor,drawlayer_50|
 		1,0,0,0,
 		0,1,0,0,
 		0,0,1,0,
-		-0.5,-0.5,-0.5,1}
+		-0.5,-0.5,-0.5,1
+    }
 
 	-- cam pos in object space
 	local cam_pos=m_inv_x_v(m,cam.pos)
@@ -223,9 +229,9 @@ end $$
 |[dice_roll]| function(a, dir)
     if a.is_sit then
         a.is_sit=false
-        a.cam.dx_ang = .0625*dir
-        a.cam.dy_ang = -.0037*dir
-        a.cam.dz_ang = .0332*dir
+        a.cam.dx_ang = .0625*dir/3
+        a.cam.dy_ang = -.0037*dir/3
+        a.cam.dz_ang = .0332*dir/3
         a.cam.dx_frc = 1
         a.cam.dy_frc = 1
         a.cam.dz_frc = 1
@@ -242,25 +248,33 @@ end $$
 end $$
 
 |[dice_update]| function(a)
-    a.cam:control()
+    a:roll(sgn(a.dir))
+    a.ay = .0125
+    a.cam:control(1-a:get_elapsed_percent'life')
 end $$
 
-function create_dice(x, y)
-    return _g.dice(x, y, 1, make_cam(63.5,63.5), prepare_model({
-            v={
-                {0,0,0}, {1,0,0}, {1,0,1}, {0,0,1},
-                {0,1,0}, {1,1,0}, {1,1,1}, {0,1,1},
-            },
-            f={
-                {3,4,8,7,uv=zobj[[,122,0,124,0,124,2,122,2]]}, -- 1
-                {4,1,5,8,uv=zobj[[,124,0,126,0,126,2,124,2]]}, -- 2
-                {1,4,3,2,uv=zobj[[,126,0,128,0,128,2,126,2]]}, -- 3
-                {5,6,7,8,uv=zobj[[,122,2,124,2,124,4,122,4]]}, -- 4
-                {2,3,7,6,uv=zobj[[,124,2,126,2,126,4,124,4]]}, -- 5
-                {1,2,6,5,uv=zobj[[,126,2,128,2,128,4,126,4]]}, -- 6
-            }
-        })
-    )
+function create_dice(x, y, ax, dir)
+    local create_dice_defaults = function()
+        return _g.dice(x, y, -dir*(.25+rnd(.75)), -(rnd(.25)+.125), make_cam(63.5,63.5), prepare_model({
+                v={
+                    {0,0,0}, {1,0,0}, {1,0,1}, {0,0,1},
+                    {0,1,0}, {1,1,0}, {1,1,1}, {0,1,1},
+                },
+                f={
+                    {3,4,8,7,uv=zobj[[,122,0,124,0,124,2,122,2]]}, -- 1
+                    {4,1,5,8,uv=zobj[[,124,0,126,0,126,2,124,2]]}, -- 2
+                    {1,4,3,2,uv=zobj[[,126,0,128,0,128,2,126,2]]}, -- 3
+                    {5,6,7,8,uv=zobj[[,122,2,124,2,124,4,122,4]]}, -- 4
+                    {2,3,7,6,uv=zobj[[,124,2,126,2,126,4,124,4]]}, -- 5
+                    {1,2,6,5,uv=zobj[[,126,2,128,2,128,4,126,4]]}, -- 6
+                }
+            })
+        )
+    end
+
+    for i=0,flr(rnd(6)) do
+        create_dice_defaults()
+    end
 end
 
 -- textured edge renderer
@@ -290,7 +304,7 @@ function polytex(v)
 				local a,au,av,b,bu,bv=x[1],x[2],x[3],x0,u0,v0
 				if(a>b) a,au,av,b,bu,bv=b,bu,bv,a,au,av
 				
-				local x0,x1=ceil(a),min(ceil(b)-1,127)
+				local x0,x1=ceil(a),ceil(b)-1
 				if x0<=x1 then
 					local dab=b-a
 					local dau,dav=(bu-au)/dab,(bv-av)/dab

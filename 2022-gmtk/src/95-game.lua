@@ -9,7 +9,6 @@ g_levels = zobj[[
 |[game_init]| function()
     g_room_bounds = g_levels[1]
     _g.fader_in()
-    g_dice = create_dice(find_in_room(16, 8, 8))
     g_ant = _g.ant(find_in_room(32))
 end $$
 

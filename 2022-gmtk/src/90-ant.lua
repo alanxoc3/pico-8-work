@@ -17,7 +17,7 @@ zclass[[ant,actor,tcol,mov,drawlayer_50|
 end $$
 
 |[ant_update]| function(a)
-    a.ay = 0.125/8
+    a.ay = .015
 
     if g_zbtn_0 ~= 0 then
         a.ax = (a.touching_ground and .065 or .065) * g_zbtn_0
@@ -31,11 +31,16 @@ end $$
     elseif a:is_active'rujump' then a.ax = -.125 a.dy = -.25
     else
         if btn(4) then
-            if a.touching_ground then a:start_timer('jump', .125)
+            if a.touching_ground         then a:start_timer('jump', .125)
             elseif a.touching_left_wall  then a:start_timer(btn'3' and 'ldjump' or 'lujump', .125/2)
             elseif a.touching_right_wall then a:start_timer(btn'3' and 'rdjump' or 'rujump', .125/2)
             end
         end
+    end
+
+    if btn(5) and not a:is_active'diceroll' then
+        a:start_timer('diceroll', .5)
+        create_dice(a.x, a.y, 0, a.xf and 1 or -1)
     end
 
     if not a.touching_ground and (a.touching_left_wall or a.touching_right_wall) then

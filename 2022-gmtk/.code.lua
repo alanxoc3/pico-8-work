@@ -167,7 +167,8 @@ local m={
 1,0,0,0,
 0,1,0,0,
 0,0,1,0,
--0.5,-0.5,-0.5,1}
+-0.5,-0.5,-0.5,1
+}
 local cam_pos=m_inv_x_v(m,cam.pos)
 m=m_x_m(cam.m,m)
 for _,face in pairs(model.f)do
@@ -186,9 +187,9 @@ end
 end,function(a,dir)
 if a.is_sit then
 a.is_sit=false
-a.cam.dx_ang=.0625*dir
-a.cam.dy_ang=-.0037*dir
-a.cam.dz_ang=.0332*dir
+a.cam.dx_ang=.0625*dir/3
+a.cam.dy_ang=-.0037*dir/3
+a.cam.dz_ang=.0332*dir/3
 a.cam.dx_frc=1
 a.cam.dy_frc=1
 a.cam.dz_frc=1
@@ -201,7 +202,9 @@ a.cam.dy_frc=.8
 a.cam.dz_frc=.8
 end
 end,function(a)
-a.cam:control()
+a:roll(sgn(a.dir))
+a.ay=.0125
+a.cam:control(1-a:get_elapsed_percent"life")
 end,function(a,b)
 return not a:outside(b)and not a:inside(b)
 end,function(a,b)
@@ -246,11 +249,10 @@ a.y+=a.dy
 end,function(a)
 a.dx+=a.ax
 a.dy+=a.ay
-a.dx*=DEFAULT_INERTIA a.dy*=1
+a.dx*=a.ix a.dy*=a.iy
 if abs(a.dx)<MIN_SPEED then a.dx=0 end
 if abs(a.dy)<MIN_SPEED then a.dy=0 end
-if abs(a.dx)>MAX_SPEED then a.dx=MAX_SPEED end
-if abs(a.dy)>MAX_SPEED then a.dy=MAX_SPEED end
+if abs(a.dy)>MAX_SPEED then a.dy=sgn(a.dy)*MAX_SPEED end
 a.ax=0 a.ay=0
 end,function(a,b)
 local box={x=b.x-a.dx,y=b.y-a.dy,rx=b.rx,ry=b.ry}
@@ -289,7 +291,7 @@ end
 end,function(a)
 a.color+=1
 end,function(a)
-a.ay=0.125/8
+a.ay=.015
 if g_zbtn_0 ~=0 then
 a.ax=(a.touching_ground and.065 or.065)*g_zbtn_0
 a.xf=a.ax<0
@@ -306,6 +308,10 @@ elseif a.touching_left_wall then a:start_timer(btn"3"and "ldjump"or "lujump",.12
 elseif a.touching_right_wall then a:start_timer(btn"3"and "rdjump"or "rujump",.125/2)
 end
 end
+end
+if btn(5)and not a:is_active"diceroll"then
+a:start_timer("diceroll",.5)
+create_dice(a.x,a.y,0,a.xf and 1 or-1)
 end
 if not a.touching_ground and(a.touching_left_wall or a.touching_right_wall)then
 a.sind=23
@@ -350,7 +356,6 @@ end
 end,function()
 g_room_bounds=g_levels[1]
 _g.fader_in()
-g_dice=create_dice(find_in_room(16,8,8))
 g_ant=_g.ant(find_in_room(32))
 end,function()
 zcall(loop_entities,[[1;,timer,tick;2;,actor,state;3;,mov,mov_update;4;,tcol,coll_tile,@;5;,collidable,adjust_deltas_for_tiles;6;,vec,vec_update;]],function(x,y)
@@ -510,11 +515,11 @@ return model
 end
 function make_cam()
 return{
-x_ang=0,dx_ang=0,dx_frc=1,
-y_ang=0,dy_ang=0,dy_frc=1,
-z_ang=0,dz_ang=0,dz_frc=1,
+x_ang=rnd(1),dx_ang=0,dx_frc=1,
+y_ang=rnd(1),dy_ang=0,dy_frc=1,
+z_ang=rnd(1),dz_ang=0,dz_frc=1,
 pos={0,0,0},
-control=function(a)
+control=function(a,size)
 a.x_ang+=a.dx_ang
 a.y_ang+=a.dy_ang
 a.z_ang+=a.dz_ang
@@ -523,7 +528,7 @@ a.dy_ang*=a.dy_frc
 a.dz_ang*=a.dz_frc
 local m=make_m_from_euler(a.z_ang,a.y_ang,a.x_ang)
 local pos=m_fwd(m)
-v_scale(pos,2)
+v_scale(pos,size*4+2)
 m[2],m[5]=m[5],m[2]
 m[3],m[9]=m[9],m[3]
 m[7],m[10]=m[10],m[7]
@@ -546,9 +551,10 @@ return verts
 end
 }
 end
-zclass[[dice,actor,drawlayer_50|x,@,y,@,xdir,@,cam,@,model,@,draw,%dice_draw_model,roll,%dice_roll,sit,%dice_sit,update,%dice_update]]
-function create_dice(x,y)
-return _g.dice(x,y,1,make_cam(63.5,63.5),prepare_model({
+zclass[[dice,actor,mov,box,drawlayer_50|x,@,y,@,dx,@,dy,@,cam,@,model,@,dir,~dx,ix,.85,is_sit,yes,rx,1,ry,1,draw,%dice_draw_model,roll,%dice_roll,sit,%dice_sit,update,%dice_update;curr,life;life;duration,1.25;]]
+function create_dice(x,y,ax,dir)
+local create_dice_defaults=function()
+return _g.dice(x,y,-dir*(.25+rnd(.75)),-(rnd(.25)+.125),make_cam(63.5,63.5),prepare_model({
 v={
 {0,0,0},{1,0,0},{1,0,1},{0,0,1},
 {0,1,0},{1,1,0},{1,1,1},{0,1,1},
@@ -563,6 +569,10 @@ f={
 }
 })
 )
+end
+for i=0,flr(rnd(6))do
+create_dice_defaults()
+end
 end
 function polytex(v)
 local p0,nodes=v[#v],{}
@@ -585,7 +595,7 @@ local x=nodes[y]
 if x then
 local a,au,av,b,bu,bv=x[1],x[2],x[3],x0,u0,v0
 if(a>b)a,au,av,b,bu,bv=b,bu,bv,a,au,av
-local x0,x1=ceil(a),min(ceil(b)-1,127)
+local x0,x1=ceil(a),ceil(b)-1
 if x0<=x1 then
 local dab=b-a
 local dau,dav=(bu-au)/dab,(bv-av)/dab
@@ -614,8 +624,7 @@ return abs(xp)-rx/tdrx<1 and tdx+sgn(xp)*(rx+tdrx)-(x-dx)or dx
 end
 zclass[[pos|x,0,y,0,dist_point,%pos_dist_point]]
 zclass[[vec,pos|dx,0,dy,0,vec_update,%vec_update]]
-zclass[[mov,vec|ax,0,ay,0,mov_update,%mov_update,towards_point,%mov_towards_point]]
-DEFAULT_INERTIA=.8
+zclass[[mov,vec|ax,0,ay,0,ix,.8,iy,1,mov_update,%mov_update,towards_point,%mov_towards_point]]
 MIN_SPEED=.0125
 MAX_SPEED=.75
 zclass[[room_bounds,box|x,@,y,@,rx,@,ry,@,tx_off,@,ty_off,@]]
