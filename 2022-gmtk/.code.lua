@@ -528,7 +528,7 @@ a.dy_ang*=a.dy_frc
 a.dz_ang*=a.dz_frc
 local m=make_m_from_euler(a.z_ang,a.y_ang,a.x_ang)
 local pos=m_fwd(m)
-v_scale(pos,size*4+2)
+v_scale(pos,size*2.25+2)
 m[2],m[5]=m[5],m[2]
 m[3],m[9]=m[9],m[3]
 m[7],m[10]=m[10],m[7]
@@ -551,7 +551,7 @@ return verts
 end
 }
 end
-zclass[[dice,actor,mov,box,drawlayer_50|x,@,y,@,dx,@,dy,@,cam,@,model,@,dir,~dx,ix,.85,is_sit,yes,rx,1,ry,1,draw,%dice_draw_model,roll,%dice_roll,sit,%dice_sit,update,%dice_update;curr,life;life;duration,1.25;]]
+zclass[[dice,actor,mov,box,drawlayer_50|x,@,y,@,dx,@,dy,@,cam,@,model,@,dir,~dx,ix,.85,is_sit,yes,rx,1,ry,1,draw,%dice_draw_model,roll,%dice_roll,sit,%dice_sit,update,%dice_update;curr,life;life;duration,1.5;]]
 function create_dice(x,y,ax,dir)
 local create_dice_defaults=function()
 return _g.dice(x,y,-dir*(.25+rnd(.75)),-(rnd(.25)+.125),make_cam(63.5,63.5),prepare_model({

@@ -145,7 +145,7 @@ function make_cam()
 
             local m=make_m_from_euler(a.z_ang,a.y_ang,a.x_ang)
             local pos=m_fwd(m)
-            v_scale(pos,size*4+2)
+            v_scale(pos,size*2.25+2)
 
             -- inverse view matrix
             -- only invert orientation part
@@ -187,7 +187,7 @@ zclass[[dice,actor,mov,box,drawlayer_50|
     sit,%dice_sit,
     update,%dice_update;
     curr,life;
-    life;duration,1.25;
+    life;duration,1.5;
 ]]
 
 |[dice_draw_model]| function(a)
