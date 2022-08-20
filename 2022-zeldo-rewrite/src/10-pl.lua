@@ -458,17 +458,20 @@ end $$
     local yoff = 0
     local xf = a.xf
     local top = 91
-    if does_entity_exist'banjo' then
+    if does_entity_exist'shield' or does_entity_exist'sword' or does_entity_exist'bow' then
         -- xf = g_si%2*2-1
         top = 92
+    elseif does_entity_exist'brang' then
+        -- xf = g_si%2*2-1
+        top = 95
+    elseif does_entity_exist'banjo' then
+        top = g_fi%4 < 2 and 92 or 95
     elseif does_entity_exist'held_to_throw' then
         top = a.item:is_alive() and 93 or 94
     end
 
-    local headoff=a.item and a.item.id == 'banjo' and g_si%2 or 0
-
     zspr(a.sind, a.x*8+xoff, a.y*8-2+yoff, 1, 1, xf)
-    zspr(top,    a.x*8+xoff, a.y*8-2+yoff+headoff, 1, 1, xf)
+    zspr(top,    a.x*8+xoff, a.y*8-2+yoff, 1, 1, xf)
 
     if a.item.visible then
         zspr(a.item.sind, a.item.x*8+xoff, yoff+a.item.y*8+a.item.sy, 1, 1, xf)

@@ -42,6 +42,8 @@ TODO: when items go up, slight bug
 TODO: standardize stun
 TODO: standardize ma time
 TODO: pot ma override
+TODO: duck hold no interact
+TODO: interact always override hurtable
 
 saturday...
 TODO: fix item offsets (many items are either off or sometimes off)
