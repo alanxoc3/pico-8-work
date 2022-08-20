@@ -420,11 +420,12 @@ sfx(5,-2)
 sfx(6,-2)
 sfx(7,-2)
 if(g_rstat_right:get()or{}).id=="saveplat"and a:get_elapsed_percent"min_play"and a:get_elapsed_percent"min_play">=1 then
-zcall(poke,[[1;,0x5d02,@;2;,0x5d03,@;3;,0x5d04,@;]],a.anchoring.x*16,
+zcall(poke,[[1;,0x5d02,@;2;,0x5d03,@;3;,0x5d04,@;4;,0x5d08,4;]],a.anchoring.x*16,
 a.anchoring.y*16,
 (a.anchoring.xf+1)\2
 )
 memcpy(0x5e00,0x5d00,64)
+poke(0x5d08,6)
 _g.tbox("great banjo playing.^saving complete!",nop)
 end
 end,function(a)

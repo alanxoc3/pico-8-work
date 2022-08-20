@@ -265,15 +265,17 @@ end $$
 
     if (g_rstat_right:get() or {}).id == 'saveplat' and a:get_elapsed_percent'min_play' and a:get_elapsed_percent'min_play' >= 1 then
         zcall(poke, [[
-            1;,MEM_PL_X,     @;
-            2;,MEM_PL_Y,     @;
-            3;,MEM_PL_XF,    @;
+            1;,MEM_PL_X,       @;
+            2;,MEM_PL_Y,       @;
+            3;,MEM_PL_XF,      @;
+            4;,MEM_ITEM_INDEX, 4; -- start with nothing
         ]], a.anchoring.x*POS_MULTIPLIER_FOR_MEMORY,
             a.anchoring.y*POS_MULTIPLIER_FOR_MEMORY,
             (a.anchoring.xf+1)\2
         )
 
         memcpy(REAL_SAVE_LOCATION, MEM_SAVE_LOCATION, SAVE_LENGTH)
+        poke(MEM_ITEM_INDEX, 6) -- reset to banjo
         _g.tbox("great banjo playing.^saving complete!", nop)
     end
 end $$

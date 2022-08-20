@@ -36,12 +36,12 @@ friday...
 TODO: player weapons stun slimy
 TODO: chest logic
 TODO: collision river bridge fix
-TODO: pot ma override
-TODO: save start not banjo
 TODO: banjo over people text logic
-TODO: work on banjo song and get timing right
 TODO: money system & money object appear under pot
 TODO: when items go up, slight bug
+TODO: standardize stun
+TODO: standardize ma time
+TODO: pot ma override
 
 saturday...
 TODO: fix item offsets (many items are either off or sometimes off)
