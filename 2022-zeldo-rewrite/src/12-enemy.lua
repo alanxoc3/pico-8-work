@@ -81,8 +81,8 @@ zclass[[miny_actual,slimy_shared  |
 end $$
 
 |[slimy_destroyed]| function(a)
-    _g.miny_actual(a.x, a.y, -.2)
-    _g.miny_actual(a.x, a.y, .2)
+    _g.miny_actual(rnd'1', a.x, a.y, -.2)
+    _g.miny_actual(rnd'1', a.x, a.y, .2)
 end $$
 
 |[slimy_start]| function(a)

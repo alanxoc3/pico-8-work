@@ -241,15 +241,15 @@ zclass[[banjo,anchor,actor|
     speed_multiplier, .5,
     initial_energy, .125,
     gradual_energy, 0,
-    offy,-.05,
+    offy,0,
 
-    sy,-2,
+    sy,-3,
     sind,SPR_BANJO;
 
-    start;    init,%banjo_start_init, offdy,.0625, duration,.08, next,min_play;
+    start;    init,%banjo_start_init, offdy,.125, duration,.03, next,min_play;
     min_play; init,nop, offdy,0, duration,2, next,normal;
-    normal;   init,nop, offy,.25, next,ending;
-    ending;   init,%banjo_ending_init, offdy,-.0625, duration,.08;
+    normal;   init,nop, next,ending;
+    ending;   init,%banjo_ending_init, offdy,-.125, duration,.03;
 ]]
 
 |[banjo_start_init]| function(a)
@@ -290,7 +290,7 @@ zclass[[brang,collidable,simple_spr,drawlayer_50,mov,actor,statitem|
 
     visible,no,
     block_direction, yes,
-    speed_multiplier, 0,
+    speed_multiplier, .5,
     initial_energy, .125,
     gradual_energy, 0,
 
@@ -463,8 +463,10 @@ end $$
         top = a.item:is_alive() and 93 or 94
     end
 
+    local headoff=a.item and a.item.id == 'banjo' and g_si%2 or 0
+
     zspr(a.sind, a.x*8+xoff, a.y*8-2+yoff, 1, 1, xf)
-    zspr(top,    a.x*8+xoff, a.y*8-2+yoff, 1, 1, xf)
+    zspr(top,    a.x*8+xoff, a.y*8-2+yoff+headoff, 1, 1, xf)
 
     if a.item.visible then
         zspr(a.item.sind, a.item.x*8+xoff, yoff+a.item.y*8+a.item.sy, 1, 1, xf)

@@ -44,8 +44,6 @@ function load_save_state()
             13;,MEM_HAS_BOMB   , 1;
             14;,MEM_HAS_BANJO   , 1;
             15;,MEM_HAS_BRANG  , 1;
-
-            
         ]])
     end
 end
