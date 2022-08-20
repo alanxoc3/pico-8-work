@@ -23,8 +23,10 @@ end $$
 
 |[adjust_deltas_for_solids]| function(a, list)
     foreach(list, function(b)
-        local box = {x=b.x-a.dx, y=b.y-a.dy, rx=b.rx, ry=b.ry}
-        a.dx, a.dy = a:getdelta(box, a.dx, a.dy)
+        if a ~= b then
+            local box = {x=b.x-a.dx, y=b.y-a.dy, rx=b.rx, ry=b.ry}
+            a.dx, a.dy = a:getdelta(box, a.dx, a.dy)
+        end
     end)
 end $$
 
@@ -37,6 +39,7 @@ end $$
 
                 if not fget(sind,1) or fget(sind,1) and a.should_collide_below then
                     if fget(sind,2) then rx, ry = .375, .375 end
+                    if fget(sind,3) then rx, ry = .375, .625 end
                     a.dx, a.dy = a:calc_deltas{x=tx+.5, y=ty+.5, rx=rx, ry=ry}
                 end
             end

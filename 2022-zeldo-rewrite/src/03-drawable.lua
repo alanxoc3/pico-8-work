@@ -28,8 +28,8 @@ zclass[[auto_outline,timer|
 |[auto_outline_draw]| function(a)
     local ox, oy = %0x5f28, %0x5f2a
     local stunned = a:is_active'stunned'
-    
-    camera(ox+(stunned and rnd_one() or 0), oy)
+    local yoff = sin(a:get_elapsed_percent'stunned'/2)*4
+    camera(ox, oy-yoff)
     draw_outline(stunned and 2 or 1, function() a:drawout() end)
     a:drawout()
     pal()

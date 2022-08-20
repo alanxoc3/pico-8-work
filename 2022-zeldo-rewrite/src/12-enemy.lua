@@ -1,9 +1,9 @@
 |[slimy]| function(x, y)
-    _g.explode(x, y, 4, 1, function() _g.slimy_actual(x, y) end)
+    _g.explode(x, y, 4, 1, function() _g.slimy_actual(rnd'1', x, y) end)
 end $$
 
 |[miny]| function(x, y)
-    _g.explode(x, y, 4, 1, function() _g.miny_actual(x, y, 0) end)
+    _g.explode(x, y, 4, 1, function() _g.miny_actual(rnd'1', x, y, 0) end)
 end $$
 
 -- enemy can collide with the player
@@ -41,24 +41,42 @@ end $$
 zclass[[slimy_shared,ma_right,actor,collidable,healthobj,mov,enemy,simple_spr,drawlayer_50|
     rx, .25, ry, .25,
     statcollide,%slimy_statcollide,
+    drawout,%slimy_draw,
+    pl_collide_func,%slimy_pl_collide_func,
     max_health,5;
 
-    stunned; pl_collide_func,nop, speed,0, sx,0, sy,0, duration,0, next,start;
-    start;   pl_collide_func,nop, speed,0, sx,0, sy,0, update,%slimy_start, duration, 1,   next,shake;
-    shake;   speed,0,             update,%slimy_shake, duration, .25, next,jump;
-    jump;    pl_collide_func,%slimy_pl_collide_func, speed,.025, sx,0,       update,%slimy_jump,  duration, .25, next,start;
+    stunned; init,nop, speed,0, sx,0, duration,0, next,idle;
+    start;   next,idle;
+    idle;    init,nop, speed,0, sx,0, update,%slimy_start, duration, 1,   next,bounce_1;
+    bounce_1;init,%slimy_bounce, speed,0, update,nop, duration,.0625, next,bounce_2;
+    bounce_2;init,%slimy_bounce, speed,0, update,nop, duration,.0625, next,jump;
+    jump;    init,%slimy_jump_init, update,nop, pl_collide_func,%slimy_pl_collide_func, speed,.025, sx,0, duration, .25, next,idle;
 ]]
 
-zclass[[slimy_actual,slimy_shared| x,@, y,@, cspr,118, cname,"slimy", sind,118, max_health,5, destroyed,%slimy_destroyed;          stunned;sind,118; start;sind,118; jump;sind,119; ]]
-zclass[[miny_actual,slimy_shared|  x,@, y,@, dy,@, cspr,116, cname,"miny",  sind,116, max_health,1; destroyed,%standard_explosion; stunned;sind,116; start;sind,116; jump;sind,117; ]]
+zclass[[slimy_actual,slimy_shared |
+    start;duration,@;
+    x,@, y,@, cspr,118, cname,"slimy", sind,118, max_health,5, destroyed,%slimy_destroyed;
+    stunned;sind,118;
+    idle;sind,118;
+    jump;sind,119;
+]]
+
+zclass[[miny_actual,slimy_shared  |
+    start;duration,@;
+    x,@, y,@, dy,@, cspr,116, cname,"miny", sind,116, max_health,1, destroyed,%standard_explosion;
+    stunned;sind,116;
+    idle;sind,116;
+    jump;sind,117;
+]]
 
 |[slimy_pl_collide_func]| function(a, pl)
-    if not pl:is_active'stunned' then
-        a.speed = 0
-        a:start_timer('isma', 2)
-        pl:start_timer('stunned', .375, nop)
-        pl:start_timer('pushed', .125, nop)
+    a.speed = 0
+    a:start_timer('isma', 2)
+    if a:is_active'jump' then
+        pl:start_timer('pushed', .25, nop)
         pl.ang = atan2(a.xf, pl.y-a.y)
+
+        pl:hurt(0)
     end
 end $$
 
@@ -72,12 +90,23 @@ end $$
     a.target_ang = atan2(g_pl.x-a.x, g_pl.y-a.y)
 end $$
 
-|[slimy_shake]| function(a)
-    a.sx = rnd_one()
+|[slimy_bounce]| function(a)
+    if a.sind == a.idle.sind then
+        a.sind = a.jump.sind
+    else
+        a.sind = a.idle.sind
+    end
 end $$
 
-|[slimy_jump]| function(a)
-    a.ang, a.sy = a.target_ang, sin(a:get_elapsed_percent'jump'/2)*8
+|[slimy_jump_init]| function(a)
+    a.ang = a.target_ang
+    a:start_timer('jumpanim', .25)
+    -- a.stunned.duration = rnd"1"
+end $$
+
+|[slimy_draw]| function(a)
+    a.sy = sin(a:get_elapsed_percent'jumpanim'/2)*8
+    _g.simple_spr_draw(a)
 end $$
 
 |[slimy_statcollide]| function(a, items)
@@ -85,9 +114,8 @@ end $$
         if not a:outside(item) and item:is_alive() then
             a:start_timer('isma', 2)
 
+            a:hurt(item.damage)
             if not a:is_active'stunned' then
-                a:load'stunned'
-                a:hurt(item.damage)
                 if item.should_use_xf then
                     a.dx += item.pushspeed*item.xf
                 else

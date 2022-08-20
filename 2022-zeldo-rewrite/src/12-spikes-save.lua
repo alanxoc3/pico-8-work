@@ -12,10 +12,7 @@ zclass[[spike,enemy,simple_spr,actor,drawlayer_25|
 ]]
 
 |[spike_pl_collide_func]| function(a, pl)
-    if not pl:is_active'stunned' then
-        pl:start_timer('stunned', .125, nop)
-        pl:hurt(1)
-    end
+    pl:hurt(1)
 end $$
 
 zclass[[r1spike,spike|x,@,y,@,xf, 1;start;duration,0;]]

@@ -47,7 +47,7 @@ zclass[[held_to_throw,anchor,actor|
     visible,yes,
     block_direction, no,
     speed_multiplier, .5,
-    initial_energy, .3,
+    initial_energy, .125,
     gradual_energy, 0,
     offy,-.25,
     sy,-2,
@@ -65,7 +65,7 @@ end $$
 
 zclass[[pot_held,held_to_throw   |anchoring,@, xf,@, sind,49,       item_thrown,%pot_thrown, sy,-3]]
 zclass[[quack_held,held_to_throw |anchoring,@, xf,@, sind,32,       item_thrown,%quack_thrown, sy,-4]]
-zclass[[bomb_held,held_to_throw  |anchoring,@, xf,@, sind,SPR_BOMB, item_thrown,%bomb]]
+zclass[[bomb_held,held_to_throw  |anchoring,@, xf,@, sind,SPR_BOMB, item_thrown,%bomb, initial_energy,.3]]
 
 zclass[[item_throwing,collidable,mov,box,simple_spr,drawlayer_50,actor|
     rx,.25, ry,.25;
@@ -119,8 +119,8 @@ zclass[[mask,anchor,actor|
 
     visible,yes,
     block_direction, no,
-    speed_multiplier, 2,
-    initial_energy, .4,
+    speed_multiplier, 1,
+    initial_energy, .25,
     gradual_energy, 0,
 
     offy, .2,
@@ -182,7 +182,7 @@ end $$
 
 zclass[[shield,item_horizontal,actor,statitem|
     anchoring,@, xf,@,
-    rx,.25, ry,.5,
+    rx,.5, ry,.5,
 
     damage,        0,
     stunlen,       2,
@@ -190,7 +190,7 @@ zclass[[shield,item_horizontal,actor,statitem|
     should_use_xf, yes,
     item_hit_func, %shield_item_hit_func,
 
-    plpushspeed,     .125,
+    plpushspeed,     0,
     visible,yes,
     block_direction, yes,
     speed_multiplier, .5,
@@ -291,7 +291,7 @@ zclass[[brang,collidable,simple_spr,drawlayer_50,mov,actor,statitem|
     visible,no,
     block_direction, yes,
     speed_multiplier, 0,
-    initial_energy, .25,
+    initial_energy, .125,
     gradual_energy, 0,
 
     should_collide_below,no,
@@ -300,7 +300,7 @@ zclass[[brang,collidable,simple_spr,drawlayer_50,mov,actor,statitem|
     sind,SPR_BRANG;
     
     start; init,%brang_start_init, speed,.075, duration,.125, next,normal;
-    normal;init,nop, speed,0, duration,1.5, update,%brang_normal_update, next,ending;
+    normal;init,nop, speed,0, update,%brang_normal_update, next,ending;
     ending;init,%brang_ending_init, speed,0, speed,0, update,%brang_ending_update, duration,.125, adjust_deltas_for_solids,nop, adjust_deltas_for_tiles,nop;
     final;init,nop, update,nop, alive,no;
 ]]
@@ -410,9 +410,9 @@ end $$
     -- item logic
     if not item.alive then item = a.default_item end
 
-    if a:is_active'stunned' or btn(BTN_ITEM_SELECT) or does_entity_exist'tbox' or does_entity_exist'fader' or a.is_energy_cooling_down or not btn'BTN_ITEM_USE' then
+    if a:is_active'stunned' or btn'BTN_ITEM_SELECT' or does_entity_exist'tbox' or does_entity_exist'fader' or a.is_energy_cooling_down or not btn'BTN_ITEM_USE' then
         item:kill()
-    elseif not a:is_active'stunned' and not a.is_energy_cooling_down and item.is_default and btn'BTN_ITEM_USE' then
+    elseif not a:is_active'stunned_cooldown' and not a:is_active'stunned' and not a.is_energy_cooling_down and item.is_default and btn'BTN_ITEM_USE' then
         local item_func = a.item_funcs[peek'MEM_ITEM_INDEX']
         if item_func then
             item = item_func(a, a.xf) or item
@@ -422,7 +422,8 @@ end $$
 
     -- speed & xf logic
     if a:is_active'pushed' then
-        a.speed = (1-a:get_elapsed_percent'stunned')*PL_STUN_SPEED
+        a.speed = (1-a:get_elapsed_percent'pushed')*PL_STUN_SPEED
+        printh'test'
     else
         a.speed = 0
     end
@@ -439,7 +440,7 @@ end $$
         end
     end
 
-    if not a:is_active'stunned' then
+    if not btn'BTN_ITEM_SELECT' and not a:is_active'stunned' then
         a.target_energy = max(0, a.target_energy + item.gradual_energy)
     end
     if a.target_energy == 0 then a.is_energy_cooling_down = false
@@ -454,8 +455,8 @@ end $$
 end $$
 
 |[pl_drawout]| function(a)
-    local xoff = 0 -- a:is_active'stunned' and rnd_one() or 0
-    local yoff = 0 -- a:is_active'stunned' and cos(g_fi/4) or 0
+    local xoff = 0
+    local yoff = 0
     local xf = a.xf
     local top = 91
     if does_entity_exist'banjo' then
