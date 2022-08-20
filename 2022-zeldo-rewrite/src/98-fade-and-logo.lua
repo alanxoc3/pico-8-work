@@ -19,12 +19,64 @@ g_fade, g_fade_table = 1, zobj[[
 15; ,15 ,15 ,13 ,13 ,5  ,5  ,0  ,0;
 ]]
 
+g_fade_table_gray = zobj[[
+0;  ,0,  0  ;
+1;  ,1,  1  ;
+2;  ,2,  5  ;
+3;  ,3,  13 ;
+4;  ,4,  13 ;
+5;  ,5,  5  ;
+6;  ,6,  6  ;
+7;  ,7,  7  ;
+8;  ,8,  13 ;
+9;  ,9,  6  ;
+10; ,10, 7  ;
+11; ,11, 7  ;
+12; ,12, 7  ;
+13; ,13, 13 ;
+14; ,14, 6  ;
+15; ,15, 6  ;
+]]
+
+-- 2 4 7 8 14
+g_fade_table_red = zobj[[
+0;  ,0,  0  ;
+1;  ,1,  2  ;
+2;  ,2,  2  ;
+3;  ,3,  4 ;
+4;  ,4,  4 ;
+5;  ,5,  2  ;
+6;  ,6,  4  ;
+7;  ,7,  14  ;
+8;  ,8,  8 ;
+9;  ,9,  14  ;
+10; ,10, 14  ;
+11; ,11, 8  ;
+12; ,12, 7  ;
+13; ,13, 4 ;
+14; ,14, 8  ;
+15; ,15, 14  ;
+]]
+
 -- takes a percent between 0 and 1
 -- 0 means no fade (regular)
 -- 1 means completely black
 function fade(threshold)
     for c=0,15 do
         pal(c,g_fade_table[c][1+flr(7*min(1, max(0, threshold)))],1)
+    end
+end
+
+-- 0 = no fade. 1 = gray
+function gray_fade(threshold)
+    for c=0,15 do
+        pal(c,g_fade_table_gray[c][1+threshold])
+    end
+end
+
+function red_fade(threshold)
+    for c=0,15 do
+        pal(c,g_fade_table_red[c][1+threshold])
     end
 end
 

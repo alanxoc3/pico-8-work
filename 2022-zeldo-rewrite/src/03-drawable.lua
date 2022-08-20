@@ -27,10 +27,14 @@ zclass[[auto_outline,timer|
 ]]
 |[auto_outline_draw]| function(a)
     local ox, oy = %0x5f28, %0x5f2a
+    local injured = a:is_active'injured'
     local stunned = a:is_active'stunned'
-    local yoff = sin(a:get_elapsed_percent'stunned'/2)*4
-    camera(ox, oy-yoff)
-    draw_outline(stunned and 2 or 1, function() a:drawout() end)
+    local yoff = sin(a:get_elapsed_percent'stunned'/2)*5+sin(a:get_elapsed_percent'injured'/2)*5
+    local xoff = 0 -- stunned and sin(t()*16) or 0
+    camera(ox-xoff, oy-yoff)
+    draw_outline(1, function() a:drawout() end)
+    if stunned then gray_fade(1) end
+    if injured then red_fade(1) end
     a:drawout()
     pal()
     camera(ox, oy)

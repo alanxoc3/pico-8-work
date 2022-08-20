@@ -345,10 +345,7 @@ zclass[[bomb_explode,enemy,box,actor,statitem|
 ]]
 
 |[bomb_pl_hit]| function(a, pl)
-    if not pl:is_active'stunned' then
-        pl:start_timer('stunned', .3, nop)
-        pl:hurt'5'
-    end
+    pl:hurt'5'
 end $$
 
 --| ITEM CODE LOGIC |--
@@ -410,9 +407,9 @@ end $$
     -- item logic
     if not item.alive then item = a.default_item end
 
-    if a:is_active'stunned' or btn'BTN_ITEM_SELECT' or does_entity_exist'tbox' or does_entity_exist'fader' or a.is_energy_cooling_down or not btn'BTN_ITEM_USE' then
+    if a:is_active'injured' or a:is_active'stunned' or btn'BTN_ITEM_SELECT' or does_entity_exist'tbox' or does_entity_exist'fader' or a.is_energy_cooling_down or not btn'BTN_ITEM_USE' then
         item:kill()
-    elseif not a:is_active'stunned_cooldown' and not a:is_active'stunned' and not a.is_energy_cooling_down and item.is_default and btn'BTN_ITEM_USE' then
+    elseif not a:is_active'injured' and not a:is_active'stunned' and not a.is_energy_cooling_down and item.is_default and btn'BTN_ITEM_USE' then
         local item_func = a.item_funcs[peek'MEM_ITEM_INDEX']
         if item_func then
             item = item_func(a, a.xf) or item
@@ -430,7 +427,7 @@ end $$
 
     if not a:inside(g_room_bounds) then
         a.ang, a.speed = atan2(a:abside(g_room_bounds)), PL_SPEED
-    elseif not a:is_active'stunned' and not a:is_active'pushed' and not does_entity_exist'fader' and not does_entity_exist'tbox' and not btn(BTN_ITEM_SELECT) then
+    elseif not a:is_active'injured'and not a:is_active'stunned' and not a:is_active'pushed' and not does_entity_exist'fader' and not does_entity_exist'tbox' and not btn(BTN_ITEM_SELECT) then
         if g_zbtn_0 | g_zbtn_2 ~= 0 then
             a.ang, a.speed = atan2(g_zbtn_0, g_zbtn_2), PL_SPEED*item.speed_multiplier
 
@@ -440,7 +437,7 @@ end $$
         end
     end
 
-    if not btn'BTN_ITEM_SELECT' and not a:is_active'stunned' then
+    if not btn'BTN_ITEM_SELECT' and not a:is_active'injured' and not a:is_active'stunned' then
         a.target_energy = max(0, a.target_energy + item.gradual_energy)
     end
     if a.target_energy == 0 then a.is_energy_cooling_down = false

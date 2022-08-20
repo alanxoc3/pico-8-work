@@ -76,7 +76,7 @@ zclass[[miny_actual,slimy_shared  |
         pl:start_timer('pushed', .25, nop)
         pl.ang = atan2(a.xf, pl.y-a.y)
 
-        pl:hurt(0)
+        pl:stun()
     end
 end $$
 
