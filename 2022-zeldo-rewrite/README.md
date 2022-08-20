@@ -1,6 +1,6 @@
 # Not The Story of Zeldo
-Lank wakes up from a good night's rest only to find Hi-roll in danger! You gotta
-help him save the Land of Hi-roll from the forces of evil.
+Lank wakes up from a good night's rest only to find Hi-roll in danger! Ya gotta
+help him save the Land of Hi-roll from the FORCES-OF-EVIL.
 
 ## Sprite Flag Reference
 ```
@@ -32,7 +32,6 @@ help him save the Land of Hi-roll from the forces of evil.
 
 ## Tokens & Features
 friday...
-TODO: "m" in an empty room in mapbuilder crashes it (preview?)
 TODO: player weapons stun slimy
 TODO: chest logic
 TODO: banjo over people text logic

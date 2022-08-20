@@ -431,7 +431,7 @@ function prvw_update(key)
 
     if g_pane then
         update_grid(g_link_grid)
-    else
+    elseif get_cur_room() then
         g_config_item = max(min(g_config_item+ybtnp(), #g_config_items), 1)
         g_config_items[g_config_item].set(xbtnp())
     end
