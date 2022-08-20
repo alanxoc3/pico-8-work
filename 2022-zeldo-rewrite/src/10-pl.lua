@@ -430,7 +430,7 @@ end $$
 
     if not a:inside(g_room_bounds) then
         a.ang, a.speed = atan2(a:abside(g_room_bounds)), PL_SPEED
-    elseif not a:is_active'pushed' and not does_entity_exist'fader' and not does_entity_exist'tbox' and not btn(BTN_ITEM_SELECT) then
+    elseif not a:is_active'stunned' and not a:is_active'pushed' and not does_entity_exist'fader' and not does_entity_exist'tbox' and not btn(BTN_ITEM_SELECT) then
         if g_zbtn_0 | g_zbtn_2 ~= 0 then
             a.ang, a.speed = atan2(g_zbtn_0, g_zbtn_2), PL_SPEED*item.speed_multiplier
 
