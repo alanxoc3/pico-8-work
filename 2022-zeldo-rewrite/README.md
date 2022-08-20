@@ -39,7 +39,7 @@ TODO: collision river bridge fix
 TODO: banjo over people text logic
 TODO: money system & money object appear under pot
 TODO: when items go up, slight bug
-TODO: standardize stun
+TODO: standardize stun NEXT
 TODO: standardize ma time
 TODO: pot ma override
 TODO: duck hold no interact

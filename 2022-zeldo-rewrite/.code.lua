@@ -464,13 +464,12 @@ end
 end
 if a:is_active"pushed"then
 a.speed=(1-a:get_elapsed_percent"pushed")*.025
-printh"test"
 else
 a.speed=0
 end
 if not a:inside(g_room_bounds)then
 a.ang,a.speed=atan2(a:abside(g_room_bounds)),.025
-elseif not a:is_active"injured"and not a:is_active"stunned"and not a:is_active"pushed"and not does_entity_exist"fader"and not does_entity_exist"tbox"and not btn(5)then
+elseif not a:is_active"injured"and not a:is_active"stunned"and not a:is_active"pushed"and not does_entity_exist"fader"and not does_entity_exist"tbox"and not btn"5"then
 if g_zbtn_0|g_zbtn_2 ~=0 then
 a.ang,a.speed=atan2(g_zbtn_0,g_zbtn_2),.025*item.speed_multiplier
 if not item.block_direction and cos(a.ang)~=0 then
@@ -486,7 +485,7 @@ elseif a.target_energy>=1 then a.is_energy_cooling_down=true
 end
 local diff=a.target_energy-a.energy
 a.energy+=zsgn(diff)*min(abs(diff),.03125)
-a.item,a.sind=item,a.dx|a.dy ~=0 and 88+t()*12%3 or 88
+a.item=item
 end,function(a)
 local xoff=0
 local yoff=0
@@ -501,7 +500,7 @@ top=g_fi%4<2 and 92 or 95
 elseif does_entity_exist"held_to_throw"then
 top=a.item:is_alive()and 93 or 94
 end
-zspr(a.sind,a.x*8+xoff,a.y*8-2+yoff,1,1,xf)
+zspr(a.dx|a.dy ~=0 and 88+t()*12%3 or 88,a.x*8+xoff,a.y*8-2+yoff,1,1,xf)
 zspr(top,a.x*8+xoff,a.y*8-2+yoff,1,1,xf)
 if a.item.visible then
 zspr(a.item.sind,a.item.x*8+xoff,yoff+a.item.y*8+a.item.sy,1,1,xf)
@@ -940,7 +939,7 @@ zclass[[sword,item_horizontal,actor,statitem|anchoring,@,xf,@,rx,.375,ry,.25,dam
 zclass[[banjo,anchor,actor|anchoring,@,xf,@,visible,yes,block_direction,no,speed_multiplier,.5,initial_energy,.125,gradual_energy,0,offy,0,sy,-3,sind,1;start;init,%banjo_start_init,offdy,.125,duration,.03,next,min_play;min_play;init,nop,offdy,0,duration,2,next,normal;normal;init,nop,next,ending;ending;init,%banjo_ending_init,offdy,-.125,duration,.03;]]
 zclass[[brang,collidable,simple_spr,drawlayer_50,mov,actor,statitem|anchoring,@,xf,@,rx,.25,ry,.25,damage,0,stunlen,.25,pushspeed,.25,should_use_xf,no,item_hit_func,~kill,visible,no,block_direction,yes,speed_multiplier,.5,initial_energy,.125,gradual_energy,0,should_collide_below,no,offspeed,.125,drawout,%brang_drawout,sind,4;start;init,%brang_start_init,speed,.075,duration,.125,next,normal;normal;init,nop,speed,0,update,%brang_normal_update,next,ending;ending;init,%brang_ending_init,speed,0,speed,0,update,%brang_ending_update,duration,.125,adjust_deltas_for_solids,nop,adjust_deltas_for_tiles,nop;final;init,nop,update,nop,alive,no;]]
 zclass[[bomb_explode,enemy,box,actor,statitem|x,@,y,@,rx,1,ry,1,damage,5,stunlen,1,pushspeed,.25,should_use_xf,no,item_hit_func,nop,pl_collide_func,%bomb_pl_hit;start;duration,.25;]]
-zclass[[pl,ma_left,actor,mov,collidable,auto_outline,healthobj,drawlayer_50|cname,lank,cspr,103,x,@,y,@,xf,@,health,@,max_health,@,sind,88,rx,.375,ry,.375,should_collide_with_screen_edge,no,update,%pl_update,energy,0,is_energy_cooling_down,no,target_energy,0,destroyed,%pl_destroyed,drawout,%pl_drawout;item_funcs;5,%sword,2,%mask,8,%bow,3,%shield,0,%bomb_held,6,%banjo,4,%interact,7,%brang;default_item;visible,no,is_default,yes,block_direction,no,speed_multiplier,1,alive,yes,gradual_energy,-.0078125,initial_energy,0,kill,nop;item,~default_item;]]
+zclass[[pl,ma_left,actor,mov,collidable,auto_outline,healthobj,drawlayer_50|cname,lank,cspr,103,x,@,y,@,xf,@,health,@,max_health,@,rx,.375,ry,.375,should_collide_with_screen_edge,no,update,%pl_update,energy,0,is_energy_cooling_down,no,target_energy,0,destroyed,%pl_destroyed,drawout,%pl_drawout;item_funcs;5,%sword,2,%mask,8,%bow,3,%shield,0,%bomb_held,6,%banjo,4,%interact,7,%brang;default_item;visible,no,is_default,yes,block_direction,no,speed_multiplier,1,alive,yes,gradual_energy,-.0078125,initial_energy,0,kill,nop;item,~default_item;]]
 function draw_bar(x1,y1,x2,y2,percent,align,fg,bg,og)
 if x1>x2 then x1-=3 x2-=3 end
 local bar_off=x2-x1-min(percent,1)*(x2-x1)
