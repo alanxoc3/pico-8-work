@@ -120,8 +120,8 @@ zclass[[mask,anchor,actor|
     visible,yes,
     block_direction, no,
     speed_multiplier, 1,
-    initial_energy, .25,
-    gradual_energy, 0,
+    initial_energy, 0,
+    gradual_energy, 0.0078125,
 
     offy, .2,
     sy,-2,
@@ -360,7 +360,34 @@ end $$
 -- a few timers that affect the player:
     -- pushed: is the player being pushed in a direction. this has only one speed.
     -- stunned: is the player being hurt? this shakes the screen and prevents items, but not movement.
-zclass[[pl,ma_left,actor,mov,collidable,auto_outline,healthobj,drawlayer_50|
+
+zclass[[maskcheck|maskcheck,%maskcheck_func]]
+
+-- true means there is no mask
+|[maskcheck_func]| function(a, override)
+    return override or not a.item or a.item.id ~= 'mask'
+end $$
+
+zclass[[pushable,mov|
+    push_ang,0,
+    push,%pushable_push,
+    update_push,%pushable_update_push
+]]
+
+|[pushable_push]| function(a, ang, duration, override)
+    if a:maskcheck(override) then
+        a:start_timer('push', duration)
+        a.push_ang = ang
+    end
+end $$
+
+|[pushable_update_push]| function(a)
+    if a:is_active'push' then
+        a.ang, a.speed = a.push_ang, (1-a:get_elapsed_percent'pushed')*PL_STUN_SPEED
+    end
+end $$
+
+zclass[[pl,ma_left,pushable,actor,mov,collidable,auto_outline,healthobj,drawlayer_50|
     cname,"lank", cspr,SPR_PL_WHOLE,
     x,@, y,@, xf,@, health,@, max_health,@,
     rx,PL_RADIUS,ry,PL_RADIUS,
@@ -405,8 +432,9 @@ end $$
 -- resets dead item to default
 -- kills item
 -- creates item / updates energy
--- sets speed (pushed or control or 0 (stun/injure/fader/tbox/itemselect) or leaving room)
--- energy logic (replenish) / 
+-- sets speed (control or 0 (stun/injure/fader/tbox/itemselect) or leaving room)
+-- energy logic (replenish) only when no item in use, and no for many things...
+
 |[pl_update]| function(a)
     -- global update
     a:start_timer('isma', 0)
@@ -423,16 +451,12 @@ end $$
         end
     end
 
-    -- speed & xf logic
-    if a:is_active'pushed' then
-        a.speed = (1-a:get_elapsed_percent'pushed')*PL_STUN_SPEED
-    else
-        a.speed = 0
+    a.speed = 0
+    if not a:inside(g_room_bounds) then
+        a:push(atan2(a:abside(g_room_bounds)), 5, true)
     end
 
-    if not a:inside(g_room_bounds) then
-        a.ang, a.speed = atan2(a:abside(g_room_bounds)), PL_SPEED
-    elseif not a:is_active'injured'and not a:is_active'stunned' and not a:is_active'pushed' and not does_entity_exist'fader' and not does_entity_exist'tbox' and not btn'BTN_ITEM_SELECT' then
+    if not a:is_active'injured' and not a:is_active'stunned' and not does_entity_exist'fader' and not does_entity_exist'tbox' and not btn'BTN_ITEM_SELECT' then
         if g_zbtn_0 | g_zbtn_2 ~= 0 then
             a.ang, a.speed = atan2(g_zbtn_0, g_zbtn_2), PL_SPEED*item.speed_multiplier
 

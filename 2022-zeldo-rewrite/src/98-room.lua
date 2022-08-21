@@ -30,17 +30,18 @@ end $$
 
         1 ;,timer,       tick;
         2 ;,actor,       state;
-        3 ;,mov,         mov_update;
-        4 ;,enemy,       pl_collide_func_batch, ~pls;
-        5 ;,collidable,  adjust_deltas_for_solids, ~solids;
-        6 ;,collidable,  adjust_deltas_for_tiles, ~room;
-        7 ;,collidable,  adjust_deltas_for_screen;
-        8 ;,vec,         vec_update;
-        9 ;,slimy_shared,statcollide, ~statitems;
-        10;,anchor,      update_anchor;
-        11;,target,      update_target, ~pls;
-        12;,rstat,       update;
-        13;,healthobj,   health_update;
+        3 ;,pushable,    update_push;
+        4 ;,mov,         mov_update;
+        5 ;,enemy,       pl_collide_func_batch, ~pls;
+        6 ;,collidable,  adjust_deltas_for_solids, ~solids;
+        7 ;,collidable,  adjust_deltas_for_tiles, ~room;
+        8 ;,collidable,  adjust_deltas_for_screen;
+        9 ;,vec,         vec_update;
+        10;,slimy_shared,statcollide, ~statitems;
+        11;,anchor,      update_anchor;
+        12;,target,      update_target, ~pls;
+        13;,rstat,       update;
+        14;,healthobj,   health_update;
     ]], g_zclass_entities.pl, g_zclass_entities.solid, g_rooms[peek'MEM_ROOM_IND'], g_zclass_entities.statitem)
 
     if not does_entity_exist'energybar' and g_pl.energy ~= 0 then

@@ -1,5 +1,5 @@
 -- an object that has health
-zclass[[healthobj|
+zclass[[healthobj,maskcheck|
     max_health, 1,
 
     hurt,%healthobj_hurt,
@@ -8,7 +8,7 @@ zclass[[healthobj|
 ]]
 
 |[healthobj_hurt]| function(a, amount)
-    if not a:is_active'injured' and not a:is_active'injured_cooldown' then
+    if a:maskcheck() and not a:is_active'injured' and not a:is_active'injured_cooldown' then
         a:start_timer('injured', .25, function()
             if a.health <= 0 then
                 a:kill()
@@ -21,7 +21,7 @@ zclass[[healthobj|
 end $$
 
 |[healthobj_stun]| function(a, amount)
-    if not a:is_active'stunned' and not a:is_active'stunned_cooldown' then
+    if a:maskcheck() and not a:is_active'stunned' and not a:is_active'stunned_cooldown' then
         a:start_timer('stunned', .25, function()
             if a.health <= 0 then
                 a:kill()
