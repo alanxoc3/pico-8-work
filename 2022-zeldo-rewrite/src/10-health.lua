@@ -20,9 +20,10 @@ zclass[[healthobj,maskcheck|
     end
 end $$
 
-|[healthobj_stun]| function(a, amount)
+|[healthobj_stun]| function(a, length)
     if a:maskcheck() and not a:is_active'stunned' and not a:is_active'stunned_cooldown' then
-        a:start_timer('stunned', .25, function()
+        a:start_timer('stunned_jump', .25)
+        a:start_timer('stunned', .25+length, function()
             if a.health <= 0 then
                 a:kill()
             else

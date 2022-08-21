@@ -197,7 +197,7 @@ zclass[[shield,item_horizontal,actor,statitem|
     initial_energy, .125,
     gradual_energy, 0,
 
-    sy,-2,
+    sy,-1,
     offspeed,.105,
     sind,SPR_SHIELD;
 ]]
@@ -219,7 +219,7 @@ zclass[[sword,item_horizontal,actor,statitem|
     initial_energy, .125,
     gradual_energy, 0,
 
-    sy,-2,
+    sy,-1,
     offspeed,.125,
     sind,SPR_SWORD;
 ]]

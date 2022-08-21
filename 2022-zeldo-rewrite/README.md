@@ -33,13 +33,14 @@ help him save the Land of Hi-roll from the FORCES-OF-EVIL.
 
 ## Tokens & Features
 friday...
-TODO: player weapons stun slimy
 TODO: chest logic
 TODO: collision river bridge fix
 TODO: banjo over people text logic
 TODO: money system & money object appear under pot
 TODO: when items go up, slight bug
-TODO: standardize stun NEXT
+TODO: standardize stun
+TODO: player weapons stun slimy
+TODO: refactor - consolidate stun logic
 TODO: standardize ma time
 TODO: pot ma override
 TODO: duck hold no interact
@@ -48,7 +49,6 @@ TODO: interact always override hurtable
 saturday...
 TODO: fix item offsets (many items are either off or sometimes off)
 TODO: token crunch for 30 minutes
-TODO: refactor - consolidate stun logic
 TODO: bomb blow up crate
 TODO: first boss (lime)
 TODO: mask particle effect

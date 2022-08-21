@@ -74,7 +74,7 @@ zclass[[miny_actual,slimy_shared  |
     a:start_timer('isma', 2)
     if a:is_active'jump' then
         pl:push(atan2(a.xf, pl.y-a.y), .125)
-        pl:stun()
+        pl:stun'.25'
     end
 end $$
 
