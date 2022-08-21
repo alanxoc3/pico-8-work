@@ -59,6 +59,9 @@ TODO: think of more enemies
 TODO: think about chicken collection for cannon logic (throw chicken onto a platform)
 
 ```
+2022-08-20 -- mask polish stun hurt banjo
+    6613
+
 2022-06-02 -- potthrow quackthrow arrowwallbug timerlogicchange
     6117 6229 6287 6266 6240
 
