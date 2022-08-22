@@ -14,9 +14,10 @@ zclass[[room_bounds,box|x,@,y,@,rx,@,ry,@]]
 
     g_pl = _g.pl(peek'MEM_PL_X'/POS_MULTIPLIER_FOR_MEMORY, peek'MEM_PL_Y'/POS_MULTIPLIER_FOR_MEMORY, peek'MEM_PL_XF'*2-1, peek'MEM_PL_HEALTH', peek'MEM_PL_MAX_HEALTH')
     g_fairy = _g.fairy(g_pl.x, g_pl.y-.125)
-    g_rstat_left, g_rstat_inventory, g_rstat_right = _g.rstat(-1, 10, 'ma_left'), _g.rstat(0, 64, 'ma_middle'), _g.rstat(1, 118, 'ma_right')
+    g_rstat_left, g_rstat_inventory, g_rstat_right = _g.rstat(-1, 9, 'ma_left'), _g.rstat(0, 64, 'ma_middle'), _g.rstat(1, 119, 'ma_right')
 
     _g.inventory(g_pl)
+    _g.energybar(g_pl)
 
     -- create the objects in the room
     foreach(r.objects, function(obj_template)
@@ -44,10 +45,6 @@ end $$
         14;,healthobj,   health_update;
     ]], g_zclass_entities.pl, g_zclass_entities.solid, g_rooms[peek'MEM_ROOM_IND'], g_zclass_entities.statitem)
 
-    if not does_entity_exist'energybar' and g_pl.energy ~= 0 then
-        _g.energybar(g_pl)
-    end
-
     poke(MEM_PL_HEALTH, g_pl.health)
     poke(MEM_PL_MAX_HEALTH, g_pl.max_health)
 
@@ -73,6 +70,17 @@ end $$
 end $$
 
 |[room_draw]| function(state)
+
+    local dx, dy = 64,20
+    draw_card(dx    , dy, 6  , 4.5  , 0, 0,  function() spr(0 , 2,  0) end , nop)
+    draw_card(dx+12 , dy, 4.5, 4.5, 0, 0,  function() spr(6 , 0,  0) end , nop)
+    draw_card(dx+22 , dy, 4.5, 4.5, 0, 0,  function() spr(4 , 0,  0) end , nop)
+    draw_card(dx+32 , dy, 4.5, 4.5, 0, 0,  function() spr(3 , 0,  0) end , nop)
+    draw_card(dx+42 , dy, 4.5, 4.5, 0, 0,  function() spr(8 , 0, -1) end , nop)
+    draw_card(dx-11 , dy, 4.5, 4.5, 0, 0,  function() spr(2 , 0, -1) end ,  nop)
+    draw_card(dx-21 , dy, 4.5, 4.5, 0, 0,  function() spr(7 , 0, -1) end , nop)
+    draw_card(dx-31 , dy, 4.5, 4.5, 0, 0,  function() spr(5 , 0,  0) end , nop)
+    draw_card(dx-41 , dy, 4.5, 4.5, 0, 0,  function() spr(1 , 0, -1) end , nop)
     isorty(g_zclass_entities['drawlayer_50'])
 
     local coffx = 0 -- g_pl:is_active'stunned' and cos(g_fi/4) or 0
@@ -97,6 +105,31 @@ end $$
             3;,drawlayer_99, draw;
         ]])
     end)
+
+    local cx, cy = 9,57
+    --draw_card(cx     , cy     , 6  , 5  , 0, 0,  function() spr(0 , 2,  1) end , nop)
+    --draw_card(cx+1   , cy+10+2, 4.5, 4.5, 0, 0,  function() spr(6 , 0,  0) end , nop)
+    --draw_card(cx     , cy+20+3, 4.5, 4.5, 0, 0,  function() spr(5 , 0,  0) end , nop)
+    --draw_card(cx+1   , cy+30+4, 4.5, 4.5, 0, 0,  function() spr(3 , 0,  0) end , nop)
+    --draw_card(cx     , cy-10-1, 4.5, 4.5, 0, 0,  function() spr(2 , 0, -1) end ,  nop)
+    --draw_card(cx+1   , cy-20-2  , 4.5, 4.5, 0, 0,  function() spr(8 , 0, -1) end , nop)
+    --draw_card(cx     , cy-30-3  , 4.5, 4.5, 0, 0,  function() spr(1 , 0, -1) end , nop)
+
+    -- draw_card(cx   , cy-32, 4.5, 4.5, 0, 0,  function() spr(7 , 0, -1) end , nop)
+    -- draw_card(cx-8 , cy-24, 4.5, 4.5, 0, 0,  function() spr(8 , 0, -1) end , nop)
+    -- draw_card(cx   , cy-16, 4.5, 4.5, 0, 0,  function() spr(1 , 0, -1) end , nop)
+    -- draw_card(cx-8 , cy-8, 4.5, 4.5, 0, 0,  function() spr(2 , 0, -1) end,  nop)
+    -- draw_card(cx   , cy   , 4.5, 4.5, 0, 0,  function() spr(0 , 0,  1) end , nop)
+    -- draw_card(cx-8 , cy+8, 4.5, 4.5, 0, 0,  function() spr(3 , 0,  0) end , nop)
+    -- draw_card(cx   , cy+16, 4.5, 4.5, 0, 0,  function() spr(6 , 0,  0) end , nop)
+    -- draw_card(cx-8 , cy+24, 4.5, 4.5, 0, 0,  function() spr(4 , 0,  0) end , nop)
+    -- draw_card(cx   , cy+32, 4.5, 4.5, 0, 0,  function() spr(5 , 0,  0) end , nop)
+
+    --draw_card(cx-5 , cy-30, 4.5, 4.5, 0, 0,  function() spr(7 , 0, -1) end , nop)
+    --draw_card(cx+5 , cy-30, 4.5, 4.5, 0, 0,  function() spr(8 , 0, -1) end , nop)
+    --draw_card(cx-5 , cy-40, 4.5, 4.5, 0, 0,  function() spr(7 , 0, -1) end , nop)
+    --draw_card(cx+5 , cy-40, 4.5, 4.5, 0, 0,  function() spr(8 , 0, -1) end , nop)
+    --draw_card(cx+5 , cy-50, 4.5, 4.5, 0, 0,  function() spr(8 , 0, -1) end , nop)
 end $$
 
 function load_room(rind, x, y, xf)

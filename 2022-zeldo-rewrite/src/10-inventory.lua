@@ -45,14 +45,18 @@ end $$
     local percent = a.curr == 'contract' and (1-a:get_elapsed_percent'contract') or a:get_elapsed_percent'expand'
     for item in all(a) do
         local exist = peek(item.mem_loc) ~= 0
-        local sind = exist and item.sind or 0
-        local sxo, syo = exist and item.sxo or 0, exist and item.syo or 0
+        -- local sind = exist and item.sind or 0
+        local sxo, syo = item.sxo, item.syo
         
         local drawfunc = function()
-            zspr(sind, sxo+a.pl.x*8+item.xoff*percent, syo+a.pl.y*8+item.yoff*percent, 1, 1, item.flip_enabled and a.pl.xf or item.xf)
+            zspr(item.sind, sxo+a.pl.x*8+item.xoff*percent, syo+a.pl.y*8+item.yoff*percent, 1, 1, item.flip_enabled and a.pl.xf or item.xf)
         end
 
+        if exist then
         draw_outline(item.index == a.ind and 2 or 1, drawfunc)
+        if not exist then shade_fade(1) end
         drawfunc()
+        pal()
+    end
     end
 end $$

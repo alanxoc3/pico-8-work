@@ -357,13 +357,16 @@ end,function(a)
 local percent=a.curr=="contract"and(1-a:get_elapsed_percent"contract")or a:get_elapsed_percent"expand"
 for item in all(a)do
 local exist=peek(item.mem_loc)~=0
-local sind=exist and item.sind or 0
-local sxo,syo=exist and item.sxo or 0,exist and item.syo or 0
+local sxo,syo=item.sxo,item.syo
 local drawfunc=function()
-zspr(sind,sxo+a.pl.x*8+item.xoff*percent,syo+a.pl.y*8+item.yoff*percent,1,1,item.flip_enabled and a.pl.xf or item.xf)
+zspr(item.sind,sxo+a.pl.x*8+item.xoff*percent,syo+a.pl.y*8+item.yoff*percent,1,1,item.flip_enabled and a.pl.xf or item.xf)
 end
+if exist then
 draw_outline(item.index==a.ind and 2 or 1,drawfunc)
+if not exist then shade_fade(1)end
 drawfunc()
+pal()
+end
 end
 end,function(a)
 zspr(a.sind,a.x*8+a.sx,a.y*8+a.sy,a.sw,a.sh,a.xf,a.yf)
@@ -514,16 +517,16 @@ if a.item.visible then
 zspr(a.item.sind,a.item.x*8+xoff,yoff+a.item.y*8+a.item.sy,1,1,xf)
 end
 end,function(a)
-if a.obj.energy==0 then a:kill()end
+if not a.obj.alive then a:kill()end
 end,function(a)
 local is_cooldown=g_pl.is_energy_cooling_down and g_pl.energy>=g_pl.target_energy
-local fg=is_cooldown and 1 or(g_pl.energy>.5 and 8 or 12)
-local bg=is_cooldown and 1 or(g_pl.energy>.5 and 2 or 1)
-local yoff=a.y+(g_pl.is_energy_cooling_down and-cos(g_fi/4)or 0)
-camera(0,-yoff)
-zcall(draw_bar,[[1;,18,6,109,11,@,0,@,@,1]],1-g_pl.energy,
+local fg=is_cooldown and 13 or 6
+local bg=is_cooldown and 13 or 6
+local yoff=a.y
+draw_card(64,yoff,46,4.5,0,0,function()
+zcall(draw_bar,[[1;,2,1,89,5,@,0,@,@,13]],1-g_pl.energy,
 fg,bg)
-camera()
+end,nop)
 end,function(a)
 local buffer=g_zclass_entities[a.entity_type]
 local cur_obj=a.stat and a.stat.obj
@@ -541,18 +544,18 @@ end,function(a)
 return a.stat and a.stat.obj
 end,function(a)
 local obj=a.obj
+local has_health=obj.parents and obj.parents.healthobj
+draw_card(a.x+31,a.y+1,21.5,has_health and 10 or 8,2,4,function()
 if align ~=0 then
-zcamera(a.x+2,a.y,function()
-local xyo=-8*a.align-1
-if obj.cname then zprinttbox(obj.cname,xyo,-10,a.align,7,5)end
-if obj.parents and obj.parents.healthobj then
-draw_bar(xyo,-2,xyo-35*a.align,1,obj.display_health,-1,11,3,1)
-zprinttbox(flr(obj.health).."/"..obj.max_health,xyo,4,a.align,7,5)
+spr(obj.cspr,0,-1,1,1,a.align>0)
+local xyo=10
+if obj.cname then zprinttbox(obj.cname.." $1",10,0,-1,7,5)end
+if has_health then
+draw_bar(-1,9,37,13,obj.display_health,-1,11,3,13)
+pset(-1,9,1)
+pset(37,9,1)
 end
-end)
 end
-draw_card(a.x,a.y+(does_entity_exist"tbox"and 0 or-cos(g_si/4)*a.align),6,8,2,4,function()
-spr(obj.cspr,0,0,1,1,a.align>0)
 end,nop)
 end,function(a)
 a.texts=split(a.rawtext,"^")
@@ -579,12 +582,13 @@ end
 end
 a.anim=min(textslen,a.anim+.5)
 end,function(a)
-draw_card(65,a.y,46.5,10,2.5,5,
+draw_card(64,a.y,46,10,2.5,5,
 function()
 zcall(zprinttbox,[[1;,@,0,-2,-1,7,5;2;,@,0,6,-1,7,5;]],a.line_1 or "",a.line_2 or "")
 end,function()
 if a.done then
-zspr(38,44,16+g_si%2)
+zspr(38,86,10+g_si%2)
+zspr(38,86,2+g_si%2)
 end
 end)
 end,function(a)
@@ -737,16 +741,14 @@ end
 g_room_bounds=_g.room_bounds(r.w/2,r.h/2,r.w/2-.375,r.h/2-.375)
 g_pl=_g.pl(peek"0x5d02"/16,peek"0x5d03"/16,peek"0x5d04"*2-1,peek"0x5d19",peek"0x5d20")
 g_fairy=_g.fairy(g_pl.x,g_pl.y-.125)
-g_rstat_left,g_rstat_inventory,g_rstat_right=_g.rstat(-1,10,"ma_left"),_g.rstat(0,64,"ma_middle"),_g.rstat(1,118,"ma_right")
+g_rstat_left,g_rstat_inventory,g_rstat_right=_g.rstat(-1,9,"ma_left"),_g.rstat(0,64,"ma_middle"),_g.rstat(1,119,"ma_right")
 _g.inventory(g_pl)
+_g.energybar(g_pl)
 foreach(r.objects,function(obj_template)
 _g[g_obj_map[obj_template.index]](obj_template.x+.5,obj_template.y+.5)
 end)
 end,function(state)
 zcall(loop_entities,[[pls,@,solids,@,room,@,statitems,@;1;,timer,tick;2;,actor,state;3;,pushable,update_push;4;,mov,mov_update;5;,enemy,pl_collide_func_batch,~pls;6;,collidable,adjust_deltas_for_solids,~solids;7;,collidable,adjust_deltas_for_tiles,~room;8;,collidable,adjust_deltas_for_screen;9;,vec,vec_update;10;,slimy_shared,statcollide,~statitems;11;,anchor,update_anchor;12;,target,update_target,~pls;13;,rstat,update;14;,healthobj,health_update;]],g_zclass_entities.pl,g_zclass_entities.solid,g_rooms[peek"0x5d01"],g_zclass_entities.statitem)
-if not does_entity_exist"energybar"and g_pl.energy ~=0 then
-_g.energybar(g_pl)
-end
 poke(0x5d19,g_pl.health)
 poke(0x5d20,g_pl.max_health)
 if not does_entity_exist"fader"and not g_pl:inside(g_room_bounds)then
@@ -763,20 +765,36 @@ zcall(load_room,[[1;,135,6,5,@;]],g_pl.xf)
 end
 end
 end,function(state)
+local dx,dy=64,20
+draw_card(dx,dy,6,4.5,0,0,function()spr(0,2,0)end,nop)
+draw_card(dx+12,dy,4.5,4.5,0,0,function()spr(6,0,0)end,nop)
+draw_card(dx+22,dy,4.5,4.5,0,0,function()spr(4,0,0)end,nop)
+draw_card(dx+32,dy,4.5,4.5,0,0,function()spr(3,0,0)end,nop)
+draw_card(dx+42,dy,4.5,4.5,0,0,function()spr(8,0,-1)end,nop)
+draw_card(dx-11,dy,4.5,4.5,0,0,function()spr(2,0,-1)end,nop)
+draw_card(dx-21,dy,4.5,4.5,0,0,function()spr(7,0,-1)end,nop)
+draw_card(dx-31,dy,4.5,4.5,0,0,function()spr(5,0,0)end,nop)
+draw_card(dx-41,dy,4.5,4.5,0,0,function()spr(1,0,-1)end,nop)
 isorty(g_zclass_entities["drawlayer_50"])
 local coffx=0
-draw_room(g_rooms[peek"0x5d01"],64+coffx,57,function()
+draw_room(g_rooms[peek"0x5d01"],64+coffx,64,function()
 zcall(loop_entities,[[1;,drawlayer_25,draw;2;,drawlayer_50,draw;3;,drawlayer_75,draw;]])
+if g_debug then
+for inst in all(g_zclass_entities["box"])do
+scr_zrect(inst.x,inst.y,inst.rx,inst.ry,8)
+end
+end
 end,function()
 zcall(loop_entities,[[1;,drawlayer_90,draw;2;,drawlayer_95,draw;3;,drawlayer_99,draw;]])
 end)
+local cx,cy=9,57
 end,function()
 _g.title_logo()
 end,function()
 if does_entity_exist"fader"then return end
 zcall(loop_entities,[[1;,timer,tick;2;,actor,state;]])
 end,function()
-draw_room(g_rooms[136],64,57,nop,nop)
+draw_room(g_rooms[136],64,64,nop,nop)
 zcall(loop_entities,[[1;,drawlayer_99,draw;]])
 zcall(zprinttbox,[[1;,code/sfx:  @alanxoc3  ,64,104,0,7,5;2;,tile/spr:  @greatcadet,64,114,0,7,5;3;,amorg games presents,64,6,0,7,5;]])
 end,function(a)
@@ -953,11 +971,11 @@ function draw_bar(x1,y1,x2,y2,percent,align,fg,bg,og)
 if x1>x2 then x1-=3 x2-=3 end
 local bar_off=x2-x1-min(percent,1)*(x2-x1)
 if align==0 then bar_off/=2 end
+rectfill(x1,y1,x1,y2,og)
+rectfill(x2,y1,x2,y2,og)
 if percent>0 then
 local xx=ceil(x1+(align>=0 and bar_off or 0))
 local yy=flr(x2-(align<=0 and bar_off or 0))
-rectfill(x1,y1,x1,y2,og)
-rectfill(x2,y1,x2,y2,og)
 rectfill(xx,y1,yy,y2,fg)
 rectfill(xx,y2,yy,y2,bg)
 end
@@ -979,13 +997,13 @@ pset(x2-i,y1+i)pset(x2-i,y2-i)
 end
 zcamera(cam_x,cam_y,post_card_func)
 end
-zclass[[energybar,vec,actor,drawlayer_95|obj,@,y,-14,draw,%energybar_draw;start;dy,1,duration,.2,next,normal;normal;dy,0,update,%energybar_update;ending;dy,-1,duration,.2;]]
+zclass[[energybar,vec,actor,drawlayer_99|obj,@,y,-5,draw,%energybar_draw;start;dy,1,duration,.2,next,normal;normal;dy,0,update,%energybar_update;ending;dy,-1,duration,.2;]]
 zclass[[ma_left|]]
 zclass[[ma_middle|]]
 zclass[[ma_right|]]
 zclass[[rstat|align,@,x,@,entity_type,@,update,%rstat_update,get,%rstat_get;]]
-zclass[[stat,vec,actor,drawlayer_95|align,@,x,@,obj,@,y,140,draw,%stat_draw;start;dy,-2,duration,.2,next,normal;normal;dy,0;ending;dy,2,duration,.2;]]
-zclass[[tbox,vec,actor,drawlayer_99|rawtext,@,destroyed,@,y,140,cur_text_index,1,anim,0,line_1,,line_2,,update,%tbox_update,draw,%tbox_draw;texts;,;start;dy,-2,duration,.2,next,normal,update,nop,init,%tbox_init;normal;dy,0,anim,0,done,no,update,%tbox_update,init,nop;ending;dy,2,update,nop,duration,.2,init,nop;]]
+zclass[[stat,vec,actor,drawlayer_95|align,@,x,@,obj,@,y,141,draw,%stat_draw;start;dy,-2,duration,.2,next,normal;normal;dy,0;ending;dy,2,duration,.2;]]
+zclass[[tbox,vec,actor,drawlayer_99|rawtext,@,destroyed,@,y,142,cur_text_index,1,anim,0,line_1,,line_2,,update,%tbox_update,draw,%tbox_draw;texts;,;start;dy,-2,duration,.2,next,normal,update,nop,init,%tbox_init;normal;dy,0,anim,0,done,no,update,%tbox_update,init,nop;ending;dy,2,update,nop,duration,.2,init,nop;]]
 zclass[[fairy,actor,mov,drawlayer_50|x,@,y,@,update,%fairy_update,draw,%fairy_draw]]
 function draw_tail(x,y,dx,dy,mult)
 for i=-2,2 do
@@ -1051,6 +1069,11 @@ for c=0,15 do
 pal(c,g_fade_table_gray[c][1+threshold])
 end
 end
+function shade_fade()
+for c=0,15 do
+pal(c,13)
+end
+end
 function red_fade(threshold)
 for c=0,15 do
 pal(c,g_fade_table_red[c][1+threshold])
@@ -1083,7 +1106,7 @@ zclass[[game_state,actor|ecs_exclusions;actor,yes,timer,yes;curr,room,init,%game
 function load_save_state()
 memcpy(0x5d00,0x5e00,64)
 if peek"0x5d00"==0 then
-zcall(poke,[[1;,0x5d00,1;2;,0x5d01,136;3;,0x5d02,48;4;,0x5d03,48;5;,0x5d04,1;6;,0x5d08,4;7;,0x5d19,10;8;,0x5d20,10;9;,0x5d16,1;10;,0x5d11,1;11;,0x5d13,1;12;,0x5d10,1;13;,0x5d15,1;14;,0x5d14,1;15;,0x5d12,1;16;,0x5d17,1;]])
+zcall(poke,[[1;,0x5d00,1;2;,0x5d01,136;3;,0x5d02,48;4;,0x5d03,48;5;,0x5d04,1;6;,0x5d08,4;7;,0x5d19,10;8;,0x5d20,10;9;,0x5d16,1;10;,0x5d11,1;11;,0x5d13,1;12;,0x5d15,1;13;,0x5d14,1;14;,0x5d12,1;15;,0x5d17,1;16;,0x5d10,1;]])
 end
 end
 function _init()
@@ -1093,6 +1116,7 @@ g_tile_animation_lookup=create_tile_animation_lookup(g_rooms[0])
 end
 function _update60()
 g_zbtn_0,g_zbtn_2=zbtn(btn,0),zbtn(btn,2)
+if btn(4)and btnp(5)then g_debug=not g_debug end
 zcall(loop_entities,[[1;,actor,clean;2;,fader,clean;]])
 register_entities()
 zcall(loop_entities,[[1;,fader,tick;2;,game_state,tick;3;,fader,state;4;,game_state,state;]])
@@ -1102,4 +1126,7 @@ g_si,g_fi=g_slow_animation.index,g_fast_animation.index
 cls()
 loop_entities("game_state","draw")
 fade(g_fade)
+if g_debug then
+zcall(rect,[[1;,17,12,110,18,1;2;,17,95,110,101,1;3;,17,0,110,5,1;4;,17,122,110,127,1;5;,0,0,17,127,1;6;,110,0,127,127,1;]])
+end
 end

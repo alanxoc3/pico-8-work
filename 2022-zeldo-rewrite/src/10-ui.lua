@@ -4,11 +4,12 @@ function draw_bar(x1,y1,x2,y2,percent,align,fg,bg,og)
     local bar_off = x2-x1-min(percent, 1)*(x2-x1)
     if align == 0 then bar_off /= 2 end
 
+    rectfill(x1, y1, x1, y2, og)
+    rectfill(x2, y1, x2, y2, og)
+
     if percent > 0 then
         local xx = ceil(x1+(align >= 0 and bar_off or 0))
         local yy = flr(x2-(align <= 0 and bar_off or 0))
-        rectfill(x1, y1, x1, y2, og)
-        rectfill(x2, y1, x2, y2, og)
         rectfill(xx, y1, yy, y2, fg)
         rectfill(xx, y2, yy, y2, bg)
    end
@@ -36,8 +37,8 @@ function draw_card(x, y, rx, ry, coffx, coffy, card_func, post_card_func)
 end
 
 -- controls the right stat so there is only ever 1 instance
-zclass[[energybar,vec,actor,drawlayer_95|
-    obj,@, y,-14, draw,%energybar_draw;
+zclass[[energybar,vec,actor,drawlayer_99|
+    obj,@, y,-5, draw,%energybar_draw;
 
     start;  dy,1,  duration,.2, next,normal;
     normal; dy,0,  update,%energybar_update;
@@ -45,23 +46,27 @@ zclass[[energybar,vec,actor,drawlayer_95|
 ]]
 
 |[energybar_update]| function(a)
-    if a.obj.energy == 0 then a:kill() end
+    if not a.obj.alive then a:kill() end
 end $$
 
 |[energybar_draw]| function(a)
     local is_cooldown = g_pl.is_energy_cooling_down and g_pl.energy >= g_pl.target_energy
-    local fg = is_cooldown and 1 or (g_pl.energy > .5 and 8 or 12)
-    local bg = is_cooldown and 1 or (g_pl.energy > .5 and 2 or 1)
+    local fg = is_cooldown and 13 or 6 -- (g_pl.energy > .5 and 8 or 11)
+    local bg = is_cooldown and 13 or 6 -- (g_pl.energy > .5 and 2 or 3)
 
-    local yoff = a.y + (g_pl.is_energy_cooling_down and -cos(g_fi/4) or 0)
-    camera(0, -yoff)
+    local yoff = a.y -- + (g_pl.is_energy_cooling_down and -cos(g_fi/4) or 0)
 
-    zcall(draw_bar, [[
-        1;,18,6,109,11,@,0,@,@,1
-    ]], 1-g_pl.energy,
-    fg, bg)
+    draw_card(64, yoff, 46, 4.5, 0, 0, function()
+        zcall(draw_bar, [[
+            1;,2,1,89,5,@,0,@,@,13
+        ]], 1-g_pl.energy,
+        fg, bg)
+    end, nop)
 
-    camera()
+    -- camera(0, -yoff)
+
+
+    -- camera()
 end $$
 
 zclass[[ma_left|]]
@@ -97,7 +102,7 @@ end $$
 end $$
 
 zclass[[stat,vec,actor,drawlayer_95|
-    align,@, x,@, obj,@, y,140, draw,%stat_draw;
+    align,@, x,@, obj,@, y,141, draw,%stat_draw;
 
     start;  dy,-2, duration,.2, next,normal;
     normal; dy,0;
@@ -106,26 +111,29 @@ zclass[[stat,vec,actor,drawlayer_95|
 
 |[stat_draw]| function(a)
     local obj = a.obj
-    if align ~= 0 then
-        zcamera(a.x+2, a.y, function()
-            local xyo = -8*a.align-1
-            if obj.cname then zprinttbox(obj.cname, xyo, -10, a.align, 7, 5) end
+    local has_health = obj.parents and obj.parents.healthobj
+    draw_card(a.x+31, a.y+1, 21.5, has_health and 10 or 8, 2, 4, function()
+        if align ~= 0 then
+            spr(obj.cspr, 0, -1, 1, 1, a.align > 0)
+            local xyo = 10-- -8*a.align-1
+            if obj.cname then zprinttbox(obj.cname.." $1", 10, 0, -1, 7, 5) end
             
-            if obj.parents and obj.parents.healthobj then
-                draw_bar(xyo, -2, xyo-35*a.align, 1, obj.display_health, -1, 11, 3, 1)
-                zprinttbox(flr(obj.health)..'/'..obj.max_health, xyo, 4, a.align, 7, 5)
+            if has_health then
+                draw_bar(-1, 9, 37, 13, obj.display_health, -1, 11, 3, 13)
+                pset(-1,9,1)
+                pset(37,9,1)
+                -- zprinttbox(flr(obj.health)..'/'..obj.max_health, xyo, 4, a.align, 7, 5)
             end
-        end)
-    end
-
-    draw_card(a.x, a.y+(does_entity_exist'tbox' and 0 or -cos(g_si/4)*a.align), 6, 8, 2, 4, function()
-        spr(obj.cspr, 0, 0, 1, 1, a.align > 0)
+        end
     end, nop)
+
+    --draw_card(a.x, a.y+(does_entity_exist'tbox' and 0 or -cos(g_si/4)*a.align), 6, 8, 2, 4, function()
+    --end, nop)
 end $$
 
 zclass[[tbox,vec,actor,drawlayer_99|
     rawtext,@, destroyed,@,
-    y,140,
+    y,142,
     cur_text_index,1,
     anim,0,
     line_1,,
@@ -170,7 +178,7 @@ end $$
 end $$
 
 |[tbox_draw]| function(a)
-    draw_card(65, a.y, 46.5, 10, 2.5, 5,
+    draw_card(64, a.y, 46, 10, 2.5, 5,
     function()
         zcall(zprinttbox, [[
             1;,@,0,-2,-1,7,5;
@@ -178,7 +186,8 @@ end $$
         ]], a.line_1 or "", a.line_2 or "")
     end, function()
         if a.done then
-            zspr(38, 44, 16+g_si%2)
+            zspr(38, 86, 10+g_si%2)
+            zspr(38, 86, 2+g_si%2)
         end
     end)
 end $$

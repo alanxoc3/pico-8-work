@@ -74,6 +74,12 @@ function gray_fade(threshold)
     end
 end
 
+function shade_fade()
+    for c=0,15 do
+        pal(c,13)
+    end
+end
+
 function red_fade(threshold)
     for c=0,15 do
         pal(c,g_fade_table_red[c][1+threshold])
