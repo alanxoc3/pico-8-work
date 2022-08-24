@@ -141,7 +141,7 @@ zclass[[bow,item_horizontal,actor|
     initial_energy, .25,
     gradual_energy, 0,
 
-    sy,-2,
+    sy,-1,
     offspeed,.105,
     sind,SPR_BOW;
 
@@ -219,7 +219,7 @@ zclass[[sword,item_horizontal,actor,statitem|
     initial_energy, .125,
     gradual_energy, 0,
 
-    sy,-1,
+    sy,0,
     offspeed,.125,
     sind,SPR_SWORD;
 ]]
@@ -451,10 +451,6 @@ end $$
         end
     end
 
-    if btn'BTN_ITEM_SELECT' and a.inventory.curr == 'start' then
-        a.inventory:load()
-    end
-
     a.speed = 0
     if not a:inside(g_room_bounds) then
         a:push(atan2(a:abside(g_room_bounds)), 5, true)
@@ -470,7 +466,7 @@ end $$
         end
     end
 
-    if not btn'BTN_ITEM_SELECT' and not a:is_active'injured' and not a:is_active'stunned' then
+    if not a:is_active'injured' and not a:is_active'stunned' then
         a.target_energy = max(0, a.target_energy + item.gradual_energy)
     end
 

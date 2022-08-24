@@ -18,7 +18,7 @@ zclass[[inventory,actor,vec,drawlayer_90|
 ]]
 
 |[inventory_update]| function(a)
-    if not btn'BTN_ITEM_SELECT' then
+    if not btn'BTN_ITEM_SELECT' or does_entity_exist'fader' then
         a:load()
     else
         local dir = zbtn(btnp, 0)

@@ -40,15 +40,7 @@ end
 -- controls the right stat so there is only ever 1 instance
 zclass[[energybar,vec,actor,drawlayer_99|
     obj,@, y,20, draw,%energybar_draw;
-
-    --start;  dy,0,  duration,.2, next,normal;
-    start; dy,0,  update,%energybar_update;
-    -- ending; dy,0, duration,.2;
 ]]
-
-|[energybar_update]| function(a)
-    if not a.obj.alive then a:kill() end
-end $$
 
 |[energybar_draw]| function(a)
     local is_cooldown = g_pl.is_energy_cooling_down and g_pl.energy >= g_pl.target_energy
