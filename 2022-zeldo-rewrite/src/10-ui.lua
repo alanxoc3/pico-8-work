@@ -13,19 +13,22 @@ function draw_bar(x1,y1,x2,y2,percent,align,fg,bg,og)
    end
 end
 
+-- improves performance for draw_card below
+|[card_table_cache]| zobj[[
+    1;,1,0,-1,0,13;
+    2;,0,1,0,-1,13;
+    3;,2,1,-2,-1,1;
+    4;,1,2,-1,-2,1;
+]] $$
+
 function draw_card(x, y, rx, ry, coffx, coffy, card_func, post_card_func)
     camera()
     local x1, x2, y1, y2 = x-rx, x+rx-1, y-ry, y+ry-1
     local cam_x, cam_y = x1+coffx, y1+coffy
 
-    zcall(function(xx1, yy1, xx2, yy2, col)
+    zcall_tbl(function(xx1, yy1, xx2, yy2, col)
         rectfill(x1+xx1,y1+yy1,x2+xx2,y2+yy2,col)
-    end, [[
-        1;,1,0,-1,0,13;
-        2;,0,1,0,-1,13;
-        3;,2,1,-2,-1,1;
-        4;,1,2,-1,-2,1;
-    ]])
+    end, _g.card_table_cache)
 
     clip(x1+2,y1+2,x2-x1-3,y2-y1-3)
     zcamera(cam_x, cam_y, card_func)
