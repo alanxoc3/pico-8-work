@@ -16,7 +16,7 @@ zclass[[pot,solid,class_with_target,drawlayer_50,ma_right,simple_spr|
 ]]
 
 |[pot_callback_touch]| function(a)
-    if peek'MEM_ITEM_INDEX' == 4 then
+    if peek'MEM_ITEM_INDEX' == ITEM_IND_INTERACT then
         a:start_timer('isma', 0)
     end
 end $$

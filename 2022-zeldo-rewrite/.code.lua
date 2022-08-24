@@ -592,7 +592,7 @@ scr_pset(a.x,a.y,13)
 end,function(a)
 zcall_tbl(_g.wall,a.walls)
 end,function(a)
-if peek"0x5d08"==4 then
+if peek"0x5d08"==5 then
 a:start_timer("isma",0)
 end
 end,function(a)
