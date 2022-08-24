@@ -389,7 +389,7 @@ end $$
 
 zclass[[pl,ma_left,pushable,actor,mov,collidable,auto_outline,healthobj,drawlayer_50|
     cname,"lank", cspr,SPR_PL_WHOLE,
-    x,@, y,@, xf,@, health,@, max_health,@,
+    x,@, y,@, xf,@, health,@, max_health,@, inventory,@,
     rx,PL_RADIUS,ry,PL_RADIUS,
     should_collide_with_screen_edge,no,
 
@@ -401,14 +401,14 @@ zclass[[pl,ma_left,pushable,actor,mov,collidable,auto_outline,healthobj,drawlaye
     drawout,%pl_drawout;
 
     item_funcs;
-        ITEM_IND_SWORD,%sword,
-        ITEM_IND_MASK,%mask,
-        ITEM_IND_BOW,%bow,
-        ITEM_IND_SHIELD,%shield,
-        ITEM_IND_BOMB,%bomb_held,
-        ITEM_IND_BANJO,%banjo,
-        ITEM_IND_INTERACT,%interact,
-        ITEM_IND_BRANG,%brang;
+        ITEM_IND_BANJO    ,%banjo,
+        ITEM_IND_BOMB     ,%bomb_held,
+        ITEM_IND_BOW      ,%bow,
+        ITEM_IND_SWORD    ,%sword,
+        ITEM_IND_INTERACT ,%interact,
+        ITEM_IND_SHIELD   ,%shield,
+        ITEM_IND_BRANG    ,%brang,
+        ITEM_IND_MASK     ,%mask;
 
     default_item;
         visible,no,
@@ -449,6 +449,10 @@ end $$
             item = item_func(a, a.xf) or item
             a.target_energy += item.initial_energy
         end
+    end
+
+    if btn'BTN_ITEM_SELECT' and a.inventory.curr == 'start' then
+        a.inventory:load()
     end
 
     a.speed = 0

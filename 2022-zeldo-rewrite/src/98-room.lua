@@ -12,11 +12,18 @@ zclass[[room_bounds,box|x,@,y,@,rx,@,ry,@]]
 
     g_room_bounds = _g.room_bounds(r.w/2, r.h/2, r.w/2-.375, r.h/2-.375)
 
-    g_pl = _g.pl(peek'MEM_PL_X'/POS_MULTIPLIER_FOR_MEMORY, peek'MEM_PL_Y'/POS_MULTIPLIER_FOR_MEMORY, peek'MEM_PL_XF'*2-1, peek'MEM_PL_HEALTH', peek'MEM_PL_MAX_HEALTH')
+    g_pl = _g.pl(
+        peek'MEM_PL_X'/POS_MULTIPLIER_FOR_MEMORY,
+        peek'MEM_PL_Y'/POS_MULTIPLIER_FOR_MEMORY,
+        peek'MEM_PL_XF'*2-1,
+        peek'MEM_PL_HEALTH',
+        peek'MEM_PL_MAX_HEALTH',
+        _g.inventory()
+    )
+
     g_fairy = _g.fairy(g_pl.x, g_pl.y-.125)
     g_rstat_left, g_rstat_right = _g.rstat(1, 9, 'ma_left'), _g.rstat(-1, 58, 'ma_right')
 
-    _g.inventory(g_pl)
     _g.energybar(g_pl)
 
     -- create the objects in the room
@@ -70,17 +77,6 @@ end $$
 end $$
 
 |[room_draw]| function(state)
-
-    local dx, dy = 64,20
-    draw_card(dx    , dy, 6  , 4.5  , 0, 0,  function() spr(0 , 2,  0) end , nop)
-    draw_card(dx+12 , dy, 4.5, 4.5, 0, 0,  function() spr(6 , 0,  0) end , nop)
-    draw_card(dx+22 , dy, 4.5, 4.5, 0, 0,  function() spr(4 , 0,  0) end , nop)
-    draw_card(dx+32 , dy, 4.5, 4.5, 0, 0,  function() spr(3 , 0,  0) end , nop)
-    draw_card(dx+42 , dy, 4.5, 4.5, 0, 0,  function() spr(8 , 0, -1) end , nop)
-    draw_card(dx-11 , dy, 4.5, 4.5, 0, 0,  function() spr(2 , 0, -1) end ,  nop)
-    draw_card(dx-21 , dy, 4.5, 4.5, 0, 0,  function() spr(7 , 0, -1) end , nop)
-    draw_card(dx-31 , dy, 4.5, 4.5, 0, 0,  function() spr(5 , 0,  0) end , nop)
-    draw_card(dx-41 , dy, 4.5, 4.5, 0, 0,  function() spr(1 , 0, -1) end , nop)
     isorty(g_zclass_entities['drawlayer_50'])
 
     local coffx = 0 -- g_pl:is_active'stunned' and cos(g_fi/4) or 0

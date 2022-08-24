@@ -140,8 +140,8 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,animation_init,@,auto_outline_draw,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,explode_draw,@,standard_explosion,@,calc_deltas,@,adjust_deltas_for_solids,@,adjust_deltas_for_tiles,@,adjust_deltas_for_screen,@,healthobj_hurt,@,healthobj_stun,@,healthobj_health_update,@,inventory_start_init,@,inventory_start_update,@,inventory_press_update,@,inventory_draw,@,simple_spr_draw,@,anchor_update_anchor,@,targettouch_update_target,@,interact,@,held_to_throw_ending_init,@,item_throwing_update,@,quack_thrown_destroyed,@,bomb_destroyed,@,pellet_update,@,pellet_draw,@,bow_ending_init,@,shield_item_hit_func,@,sword_item_hit_func,@,banjo_start_init,@,banjo_ending_init,@,brang_drawout,@,brang_start_init,@,brang_normal_update,@,brang_ending_init,@,brang_ending_update,@,bomb_pl_hit,@,item_horizontal_start_init,@,item_horizontal_normal_init,@,item_horizontal_ending_init,@,maskcheck_func,@,pushable_push,@,pushable_update_push,@,pl_destroyed,@,pl_update,@,pl_drawout,@,energybar_update,@,energybar_draw,@,rstat_update,@,rstat_get,@,stat_update,@,stat_draw,@,tbox_init,@,tbox_update,@,tbox_draw,@,fairy_update,@,fairy_draw,@,spawn_walls,@,pot_callback_touch,@,house_init,@,person_target_with_tbox_disable_callback,@,person_target_with_tbox_finish_callback,@,class_with_target_init,@,target_with_tbox_target_func,@,sign_target_with_tbox_disable_callback,@,slimy,@,miny,@,quack_change_dir,@,quack_pl_collide_func,@,enemy_pl_collide_func_batch,@,slimy_pl_collide_func,@,slimy_destroyed,@,slimy_start,@,slimy_bounce,@,slimy_jump_init,@,slimy_draw,@,slimy_statcollide,@,spike_pl_collide_func,@,saveplat_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,gameover_control_ending,@,gameover_init,@,gameover_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,simple_update,@,title_draw,@,title_logo_update,@,title_logo_drawout,@,game_state_init,@]],function(a,stateName)
-a.next_state=a.next_state or stateName
+_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,animation_init,@,auto_outline_draw,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update,@,mov_update,@,mov_towards_point,@,explode_draw,@,standard_explosion,@,calc_deltas,@,adjust_deltas_for_solids,@,adjust_deltas_for_tiles,@,adjust_deltas_for_screen,@,healthobj_hurt,@,healthobj_stun,@,healthobj_health_update,@,inventory_update,@,inventory_start_update,@,inventory_draw,@,simple_spr_draw,@,anchor_update_anchor,@,targettouch_update_target,@,interact,@,held_to_throw_ending_init,@,item_throwing_update,@,quack_thrown_destroyed,@,bomb_destroyed,@,pellet_update,@,pellet_draw,@,bow_ending_init,@,shield_item_hit_func,@,sword_item_hit_func,@,banjo_start_init,@,banjo_ending_init,@,brang_drawout,@,brang_start_init,@,brang_normal_update,@,brang_ending_init,@,brang_ending_update,@,bomb_pl_hit,@,item_horizontal_start_init,@,item_horizontal_normal_init,@,item_horizontal_ending_init,@,maskcheck_func,@,pushable_push,@,pushable_update_push,@,pl_destroyed,@,pl_update,@,pl_drawout,@,energybar_update,@,energybar_draw,@,rstat_update,@,rstat_get,@,stat_update,@,stat_draw,@,tbox_init,@,tbox_update,@,tbox_draw,@,fairy_update,@,fairy_draw,@,spawn_walls,@,pot_callback_touch,@,house_init,@,person_target_with_tbox_disable_callback,@,person_target_with_tbox_finish_callback,@,class_with_target_init,@,target_with_tbox_target_func,@,sign_target_with_tbox_disable_callback,@,slimy,@,miny,@,quack_change_dir,@,quack_pl_collide_func,@,enemy_pl_collide_func_batch,@,slimy_pl_collide_func,@,slimy_destroyed,@,slimy_start,@,slimy_bounce,@,slimy_jump_init,@,slimy_draw,@,slimy_statcollide,@,spike_pl_collide_func,@,saveplat_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,gameover_control_ending,@,gameover_init,@,gameover_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,simple_update,@,title_draw,@,title_logo_update,@,title_logo_drawout,@,game_state_init,@]],function(a,stateName)
+a.next_state=stateName or a.next
 end,function(a,stateName)
 a.next_state,a.isnew=nil
 if stateName=="dead"then
@@ -337,36 +337,24 @@ a.display_health=a.display_health or a.health/a.max_health
 local diff=a.health/a.max_health-a.display_health
 a.display_health+=zsgn(diff)*min(abs(diff),.05)
 end,function(a)
-a.cspr=peek"0x5d08" ~=4 and a[peek"0x5d08"+1].sind
-end,function(a)
-if peek"0x5d08" ~=4 then
-a:start_timer("isma",0)
-end
-if not g_pl:is_active"injured"and not g_pl:is_active"stunned"and not does_entity_exist"fader"and not does_entity_exist"tbox"and not does_entity_exist"banjo"and btn"5"then
-poke(0x5d08,9)
-a.ind=4
-a:load"expand"
+if not btn"5"then
+a:load()
+else
+poke(0x5d08,max(1,min(9,peek"0x5d08"+zbtn(btnp,0))))
 end
 end,function(a)
-a.ind=mid(0,2,a.ind%3+zbtn(btnp,0))+mid(0,2,a.ind\3+zbtn(btnp,2))*3
-if g_pl:is_active"injured"or g_pl:is_active"stunned"or does_entity_exist"fader"or does_entity_exist"tbox"or not btn"5"then
-poke(0x5d08,peek(a[a.ind+1].mem_loc)~=0 and a.ind or 4)
-a:load"contract"
+if not does_entity_exist"fader"and btn"5"then
+a:load()
 end
 end,function(a)
-local percent=a.curr=="contract"and(1-a:get_elapsed_percent"contract")or a:get_elapsed_percent"expand"
-for item in all(a)do
+for i,item in ipairs(a)do
 local exist=peek(item.mem_loc)~=0
-local sxo,syo=item.sxo,item.syo
-local drawfunc=function()
-zspr(item.sind,sxo+a.pl.x*8+item.xoff*percent,syo+a.pl.y*8+item.yoff*percent,1,1,item.flip_enabled and a.pl.xf or item.xf)
-end
+local current=peek"0x5d08"==i
+draw_card(a.x+item.x,current and 9 or a.y+item.y,item.w,item.h,0,0,function()
 if exist then
-draw_outline(item.index==a.ind and 2 or 1,drawfunc)
-if not exist then shade_fade(1)end
-drawfunc()
-pal()
+spr(item.sind,item.sxo,item.syo)
 end
+end,nop)
 end
 end,function(a)
 zspr(a.sind,a.x*8+a.sx,a.y*8+a.sy,a.sw,a.sh,a.xf,a.yf)
@@ -475,6 +463,9 @@ if item_func then
 item=item_func(a,a.xf)or item
 a.target_energy+=item.initial_energy
 end
+end
+if btn"5"and a.inventory.curr=="start"then
+a.inventory:load()
 end
 a.speed=0
 if not a:inside(g_room_bounds)then
@@ -614,7 +605,7 @@ load_room(a.room,4,5,g_pl.xf)
 end)
 end,function(a)
 a.xf=sgn(g_pl.x-a.x)
-return peek"0x5d08" ~=4
+return peek"0x5d08" ~=5
 end,function(a)
 poke(a.memloc_trigger,a.memloc_trigger_value)
 load_room(%0x5d01,g_pl.x,g_pl.y,g_pl.xf)
@@ -633,7 +624,7 @@ end)
 end
 end
 end,function(a)
-return peek"0x5d08" ~=4
+return peek"0x5d08" ~=5
 end,function(x,y)
 _g.explode(x,y,4,1,function()_g.slimy_actual(rnd"1",x,y)end)
 end,function(x,y)
@@ -694,7 +685,7 @@ end)
 end,function(a,pl)
 pl:hurt(1)
 end,function(a)
-if not a:outside(g_pl)and peek"0x5d08"==0 then
+if not a:outside(g_pl)and peek"0x5d08"==1 then
 a:start_timer("isma",.01)
 end
 end,function(a)
@@ -737,10 +728,16 @@ g_music_ind=mus
 music(mus,0,7)
 end
 g_room_bounds=_g.room_bounds(r.w/2,r.h/2,r.w/2-.375,r.h/2-.375)
-g_pl=_g.pl(peek"0x5d02"/16,peek"0x5d03"/16,peek"0x5d04"*2-1,peek"0x5d19",peek"0x5d20")
+g_pl=_g.pl(
+peek"0x5d02"/16,
+peek"0x5d03"/16,
+peek"0x5d04"*2-1,
+peek"0x5d19",
+peek"0x5d20",
+_g.inventory()
+)
 g_fairy=_g.fairy(g_pl.x,g_pl.y-.125)
 g_rstat_left,g_rstat_right=_g.rstat(1,9,"ma_left"),_g.rstat(-1,58,"ma_right")
-_g.inventory(g_pl)
 _g.energybar(g_pl)
 foreach(r.objects,function(obj_template)
 _g[g_obj_map[obj_template.index]](obj_template.x+.5,obj_template.y+.5)
@@ -763,16 +760,6 @@ zcall(load_room,[[1;,135,6,5,@;]],g_pl.xf)
 end
 end
 end,function(state)
-local dx,dy=64,20
-draw_card(dx,dy,6,4.5,0,0,function()spr(0,2,0)end,nop)
-draw_card(dx+12,dy,4.5,4.5,0,0,function()spr(6,0,0)end,nop)
-draw_card(dx+22,dy,4.5,4.5,0,0,function()spr(4,0,0)end,nop)
-draw_card(dx+32,dy,4.5,4.5,0,0,function()spr(3,0,0)end,nop)
-draw_card(dx+42,dy,4.5,4.5,0,0,function()spr(8,0,-1)end,nop)
-draw_card(dx-11,dy,4.5,4.5,0,0,function()spr(2,0,-1)end,nop)
-draw_card(dx-21,dy,4.5,4.5,0,0,function()spr(7,0,-1)end,nop)
-draw_card(dx-31,dy,4.5,4.5,0,0,function()spr(5,0,0)end,nop)
-draw_card(dx-41,dy,4.5,4.5,0,0,function()spr(1,0,-1)end,nop)
 isorty(g_zclass_entities["drawlayer_50"])
 local coffx=0
 draw_room(g_rooms[peek"0x5d01"],64+coffx,64,function()
@@ -938,7 +925,7 @@ return dx
 end
 end
 zclass[[healthobj,maskcheck|max_health,1,hurt,%healthobj_hurt,stun,%healthobj_stun,health_update,%healthobj_health_update]]
-zclass[[inventory,actor,drawlayer_90,ma_middle|pl,@,ind,4;start;init,%inventory_start_init,update,%inventory_start_update,draw,nop;press;init,nop,update,%inventory_press_update,draw,%inventory_draw;expand;init,nop,update,nop,draw,%inventory_draw,duration,.0625,next,press;contract;init,nop,update,nop,draw,%inventory_draw,duration,.0625,next,start;7;mem_loc,0x5d17,index,0,name,banjo,sxo,0,syo,1,xoff,-7,yoff,-9,sind,1,xf,-1;2;mem_loc,0x5d10,index,1,name,bowl,sxo,1,syo,-1,xoff,0,yoff,-10,sind,8,xf,1;3;mem_loc,0x5d15,index,2,name,mask,sxo,2,syo,2,xoff,7,yoff,-9,sind,3,xf,1;4;mem_loc,0x5d13,index,3,name,shield,sxo,-1,syo,0,xoff,-8,yoff,-1,sind,6,xf,-1;5;mem_loc,0x5dff,sxo,0,syo,0,xoff,0,yoff,0,sind,0,xf,1;6;mem_loc,0x5d16,index,5,name,sword,sxo,1,syo,0,xoff,8,yoff,-1,sind,2,xf,1;1;mem_loc,0x5d12,index,6,name,bomb,sxo,2,syo,1,xoff,-7,yoff,5,sind,5,xf,1;8;mem_loc,0x5d11,index,7,name,brang,sxo,1,syo,1,xoff,0,yoff,6,sind,4,xf,1;9;mem_loc,0x5d14,index,8,name,bow,sxo,0,syo,0,xoff,7,yoff,5,sind,7,xf,1;10;mem_loc,0x5d00,index,4,sxo,0,syo,-2,xoff,0,yoff,0,sind,103,xf,1,flip_enabled,on;]]
+zclass[[inventory,actor,vec,drawlayer_90|ind,5,x,64,y,-9,draw,%inventory_draw;start;next,open,dy,0,update,%inventory_start_update;open;next,normal,dy,2,update,nop,duration,.1;normal;next,close,dy,0,update,%inventory_update;close;next,start,dy,-2,duration,.1,update,nop;1;mem_loc,0x5d10,sxo,0,syo,-1,x,-41,y,0,w,4.5,h,4.5,sind,1;2;mem_loc,0x5d11,sxo,0,syo,0,x,-31,y,0,w,4.5,h,4.5,sind,5;3;mem_loc,0x5d12,sxo,0,syo,-1,x,-21,y,0,w,4.5,h,4.5,sind,7;4;mem_loc,0x5d13,sxo,0,syo,-1,x,-11,y,0,w,4.5,h,4.5,sind,2;5;mem_loc,0x5d00,sxo,2,syo,0,x,0,y,0,w,6,h,4.5,sind,0;6;mem_loc,0x5d14,sxo,0,syo,0,x,12,y,0,w,4.5,h,4.5,sind,6;7;mem_loc,0x5d15,sxo,0,syo,0,x,22,y,0,w,4.5,h,4.5,sind,4;8;mem_loc,0x5d16,sxo,0,syo,0,x,32,y,0,w,4.5,h,4.5,sind,3;9;mem_loc,0x5d17,sxo,0,syo,-1,x,42,y,0,w,4.5,h,4.5,sind,8;]]
 zclass[[solid,box|]]
 zclass[[wall,solid,anchor|anchoring,@,offx,@,offy,@,rx,@,ry,@]]
 zclass[[simple_spr,auto_outline,pos|drawout,%simple_spr_draw,sind,0,sw,1,sh,1,xf,1,yf,1,sx,0,sy,0]]
@@ -964,7 +951,7 @@ zclass[[brang,collidable,simple_spr,drawlayer_50,mov,actor,statitem|anchoring,@,
 zclass[[bomb_explode,enemy,box,actor,statitem|x,@,y,@,rx,1,ry,1,damage,5,stunlen,1,pushspeed,.25,should_use_xf,no,item_hit_func,nop,pl_collide_func,%bomb_pl_hit;start;duration,.25;]]
 zclass[[maskcheck|maskcheck,%maskcheck_func]]
 zclass[[pushable,mov|push_ang,0,push,%pushable_push,update_push,%pushable_update_push]]
-zclass[[pl,ma_left,pushable,actor,mov,collidable,auto_outline,healthobj,drawlayer_50|cname,lank,cspr,103,x,@,y,@,xf,@,health,@,max_health,@,rx,.375,ry,.375,should_collide_with_screen_edge,no,update,%pl_update,energy,0,is_energy_cooling_down,no,target_energy,0,destroyed,%pl_destroyed,drawout,%pl_drawout;item_funcs;5,%sword,2,%mask,8,%bow,3,%shield,6,%bomb_held,0,%banjo,4,%interact,7,%brang;default_item;visible,no,is_default,yes,block_direction,no,speed_multiplier,1,alive,yes,gradual_energy,-.0078125,initial_energy,0,kill,nop;item,~default_item;]]
+zclass[[pl,ma_left,pushable,actor,mov,collidable,auto_outline,healthobj,drawlayer_50|cname,lank,cspr,103,x,@,y,@,xf,@,health,@,max_health,@,inventory,@,rx,.375,ry,.375,should_collide_with_screen_edge,no,update,%pl_update,energy,0,is_energy_cooling_down,no,target_energy,0,destroyed,%pl_destroyed,drawout,%pl_drawout;item_funcs;1,%banjo,2,%bomb_held,3,%bow,4,%sword,5,%interact,6,%shield,7,%brang,8,%mask;default_item;visible,no,is_default,yes,block_direction,no,speed_multiplier,1,alive,yes,gradual_energy,-.0078125,initial_energy,0,kill,nop;item,~default_item;]]
 function draw_bar(x1,y1,x2,y2,percent,align,fg,bg,og)
 local bar_off=x2-x1-min(percent,1)*(x2-x1)
 if align==0 then bar_off/=2 end
@@ -991,12 +978,11 @@ pset(x1+2,y1+2,1)pset(x1+2,y2-2,1)
 pset(x2-2,y1+2,1)pset(x2-2,y2-2,1)
 zcamera(cam_x,cam_y,post_card_func)
 end
-zclass[[energybar,vec,actor,drawlayer_99|obj,@,y,-5,draw,%energybar_draw;start;dy,1,duration,.2,next,normal;normal;dy,0,update,%energybar_update;ending;dy,-1,duration,.2;]]
+zclass[[energybar,vec,actor,drawlayer_99|obj,@,y,20,draw,%energybar_draw;start;dy,0,update,%energybar_update;]]
 zclass[[ma_left|]]
-zclass[[ma_middle|]]
 zclass[[ma_right|]]
 zclass[[rstat|align,@,x,@,entity_type,@,update,%rstat_update,get,%rstat_get;]]
-zclass[[stat,vec,actor,drawlayer_95|align,@,x,@,obj,@,y,141,draw,%stat_draw,update,%stat_update;start;dy,-2,duration,.2,next,normal;normal;dy,0;ending;dy,2,duration,.2;]]
+zclass[[stat,vec,actor,drawlayer_95|align,@,x,@,obj,@,y,129,draw,%stat_draw,update,%stat_update;start;dy,-2,duration,.1,next,normal;normal;dy,0;ending;dy,2,duration,.1;]]
 zclass[[tbox,vec,actor,drawlayer_99|rawtext,@,destroyed,@,y,142,cur_text_index,1,anim,0,line_1,,line_2,,update,%tbox_update,draw,%tbox_draw;texts;,;start;dy,-2,duration,.2,next,normal,update,nop,init,%tbox_init;normal;dy,0,anim,0,done,no,update,%tbox_update,init,nop;ending;dy,2,update,nop,duration,.2,init,nop;]]
 zclass[[fairy,actor,mov,drawlayer_50|x,@,y,@,update,%fairy_update,draw,%fairy_draw]]
 function draw_tail(x,y,dx,dy,mult)
@@ -1100,7 +1086,7 @@ zclass[[game_state,actor|ecs_exclusions;actor,yes,timer,yes;curr,room,init,%game
 function load_save_state()
 memcpy(0x5d00,0x5e00,64)
 if peek"0x5d00"==0 then
-zcall(poke,[[1;,0x5d00,1;2;,0x5d01,136;3;,0x5d02,48;4;,0x5d03,48;5;,0x5d04,1;6;,0x5d08,4;7;,0x5d19,10;8;,0x5d20,10;9;,0x5d16,1;10;,0x5d11,1;11;,0x5d13,1;12;,0x5d15,1;13;,0x5d14,1;14;,0x5d12,1;15;,0x5d17,1;16;,0x5d10,1;]])
+zcall(poke,[[1;,0x5d00,1;2;,0x5d01,136;3;,0x5d02,48;4;,0x5d03,48;5;,0x5d04,1;6;,0x5d08,5;7;,0x5d19,10;8;,0x5d20,10;9;,0x5d13,1;10;,0x5d15,1;11;,0x5d14,1;12;,0x5d16,1;13;,0x5d12,1;14;,0x5d11,1;]])
 end
 end
 function _init()

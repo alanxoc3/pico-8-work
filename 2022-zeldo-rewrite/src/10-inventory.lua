@@ -1,62 +1,44 @@
-zclass[[inventory,actor,drawlayer_90,ma_middle|
-    pl,@, ind,4;
-    start;    init,%inventory_start_init, update,%inventory_start_update, draw,nop;
-    press;    init,nop,                   update,%inventory_press_update, draw,%inventory_draw;
-    expand;   init,nop, update,nop, draw,%inventory_draw, duration,.0625, next,press;
-    contract; init,nop, update,nop, draw,%inventory_draw, duration,.0625, next,start;
+zclass[[inventory,actor,vec,drawlayer_90|
+    ind,5, x,64, y,-9, draw,%inventory_draw;
 
-    ITEM_IND_NEXT_BANJO;    mem_loc,MEM_HAS_BANJO   , index,ITEM_IND_BANJO ,   name,banjo , sxo,0,  syo,1 , xoff,-7, yoff ,-9 , sind,SPR_BANJO,  xf,-1;
-    ITEM_IND_NEXT_BOWL;     mem_loc,MEM_HAS_BOWL    , index,ITEM_IND_BOWL  ,   name,bowl  , sxo,1,  syo,-1, xoff,0 , yoff ,-10, sind,SPR_BOWL,   xf,1;
-    ITEM_IND_NEXT_MASK;     mem_loc,MEM_HAS_MASK    , index,ITEM_IND_MASK  ,   name,mask  , sxo,2,  syo,2 , xoff,7 , yoff ,-9 , sind,SPR_MASK,   xf,1;
-    ITEM_IND_NEXT_SHIELD;   mem_loc,MEM_HAS_SHIELD  , index,ITEM_IND_SHIELD,   name,shield, sxo,-1, syo,0 , xoff,-8, yoff ,-1 , sind,SPR_SHIELD, xf,-1;
-    ITEM_IND_NEXT_INTERACT; mem_loc,MEM_ALWAYS_FALSE,                                       sxo,0,  syo,0 , xoff,0 , yoff ,0  , sind,0,          xf,1;
-    ITEM_IND_NEXT_SWORD;    mem_loc,MEM_HAS_SWORD   , index,ITEM_IND_SWORD,    name,sword , sxo,1,  syo,0 , xoff,8 , yoff ,-1 , sind,SPR_SWORD,  xf,1;
-    ITEM_IND_NEXT_BOMB;     mem_loc,MEM_HAS_BOMB    , index,ITEM_IND_BOMB,     name,bomb ,  sxo,2,  syo,1 , xoff,-7, yoff ,5  , sind,SPR_BOMB,   xf,1;
-    ITEM_IND_NEXT_BRANG;    mem_loc,MEM_HAS_BRANG   , index,ITEM_IND_BRANG,    name,brang , sxo,1,  syo,1 , xoff,0 , yoff ,6  , sind,SPR_BRANG,  xf,1;
-    ITEM_IND_NEXT_BOW;      mem_loc,MEM_HAS_BOW     , index,ITEM_IND_BOW,      name,bow   , sxo,0,  syo,0 , xoff,7 , yoff ,5  , sind,SPR_BOW,    xf,1;
-    10;                     mem_loc,MEM_ALWAYS_TRUE , index,ITEM_IND_INTERACT,              sxo,0,  syo,-2, xoff,0 , yoff ,0  , sind,103,        xf,1, flip_enabled,on;
+    start;  next,open,   dy,0,  update,%inventory_start_update;
+    open;   next,normal, dy,2,  update,nop, duration,.1;
+    normal; next,close,  dy,0,  update,%inventory_update;
+    close;  next,start,  dy,-2, duration,.1, update,nop;
+
+    ITEM_IND_BANJO;    mem_loc,MEM_HAS_BANJO  , sxo,0, syo,-1, x,-41, y,0, w,4.5, h,4.5, sind,SPR_BANJO;
+    ITEM_IND_BOMB;     mem_loc,MEM_HAS_BOMB   , sxo,0, syo, 0, x,-31, y,0, w,4.5, h,4.5, sind,SPR_BOMB;
+    ITEM_IND_BOW;      mem_loc,MEM_HAS_BOW    , sxo,0, syo,-1, x,-21, y,0, w,4.5, h,4.5, sind,SPR_BOW;
+    ITEM_IND_SWORD;    mem_loc,MEM_HAS_SWORD  , sxo,0, syo,-1, x,-11, y,0, w,4.5, h,4.5, sind,SPR_SWORD;
+    ITEM_IND_INTERACT; mem_loc,MEM_ALWAYS_TRUE, sxo,2, syo, 0, x,0,   y,0, w,6,   h,4.5, sind,0;
+    ITEM_IND_SHIELD;   mem_loc,MEM_HAS_SHIELD , sxo,0, syo, 0, x,12,  y,0, w,4.5, h,4.5, sind,SPR_SHIELD;
+    ITEM_IND_BRANG;    mem_loc,MEM_HAS_BRANG  , sxo,0, syo, 0, x,22,  y,0, w,4.5, h,4.5, sind,SPR_BRANG;
+    ITEM_IND_MASK;     mem_loc,MEM_HAS_MASK   , sxo,0, syo, 0, x,32,  y,0, w,4.5, h,4.5, sind,SPR_MASK;
+    ITEM_IND_BOWL;     mem_loc,MEM_HAS_BOWL   , sxo,0, syo,-1, x,42,  y,0, w,4.5, h,4.5, sind,SPR_BOWL;
 ]]
 
-|[inventory_start_init]| function(a)
-    a.cspr = peek'MEM_ITEM_INDEX' ~= 4 and a[peek'MEM_ITEM_INDEX'+1].sind
+|[inventory_update]| function(a)
+    if not btn'BTN_ITEM_SELECT' then
+        a:load()
+    else
+        poke(MEM_ITEM_INDEX, max(1, min(9, peek'MEM_ITEM_INDEX' + zbtn(btnp, 0))))
+    end
 end $$
 
 |[inventory_start_update]| function(a)
-    if peek'MEM_ITEM_INDEX' ~= 4 then
-        a:start_timer('isma', 0)
-    end
-
-    if not g_pl:is_active'injured' and not g_pl:is_active'stunned' and not does_entity_exist'fader' and not does_entity_exist'tbox' and not does_entity_exist'banjo' and btn'BTN_ITEM_SELECT' then
-        poke(MEM_ITEM_INDEX, 9) -- 9 is one more than the highest index
-        a.ind = 4
-        a:load'expand'
-    end
-end $$
-
-|[inventory_press_update]| function(a)
-    a.ind = mid(0,2,a.ind%3+zbtn(btnp,0)) + mid(0,2,a.ind\3+zbtn(btnp,2))*3
-    if g_pl:is_active'injured' or g_pl:is_active'stunned' or does_entity_exist'fader' or does_entity_exist'tbox' or not btn'BTN_ITEM_SELECT' then
-        poke(MEM_ITEM_INDEX, peek(a[a.ind+1].mem_loc) ~= 0 and a.ind or 4)
-        a:load'contract'
+    if not does_entity_exist'fader' and btn'BTN_ITEM_SELECT' then
+        a:load()
     end
 end $$
 
 |[inventory_draw]| function(a)
-    local percent = a.curr == 'contract' and (1-a:get_elapsed_percent'contract') or a:get_elapsed_percent'expand'
-    for item in all(a) do
+    for i, item in ipairs(a) do
         local exist = peek(item.mem_loc) ~= 0
-        -- local sind = exist and item.sind or 0
-        local sxo, syo = item.sxo, item.syo
-        
-        local drawfunc = function()
-            zspr(item.sind, sxo+a.pl.x*8+item.xoff*percent, syo+a.pl.y*8+item.yoff*percent, 1, 1, item.flip_enabled and a.pl.xf or item.xf)
-        end
-
-        if exist then
-        draw_outline(item.index == a.ind and 2 or 1, drawfunc)
-        if not exist then shade_fade(1) end
-        drawfunc()
-        pal()
-    end
+        local current = peek'MEM_ITEM_INDEX' == i
+        draw_card(a.x+item.x , current and 9 or a.y+item.y, item.w, item.h, 0, 0,  function()
+            if exist then
+                spr(item.sind, item.sxo, item.syo)
+            end
+        end , nop)
     end
 end $$

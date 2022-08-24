@@ -28,7 +28,7 @@ zclass[[actor,timer|
 
 -- if load is called multiple times, the first load is used.
 |[actor_load]| function(a, stateName)
-    a.next_state = a.next_state or stateName
+    a.next_state = stateName or a.next
 end $$
 
 -- Load the given state into the actor, by applying the properties of the sub-object

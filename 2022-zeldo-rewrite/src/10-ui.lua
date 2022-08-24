@@ -39,11 +39,11 @@ end
 
 -- controls the right stat so there is only ever 1 instance
 zclass[[energybar,vec,actor,drawlayer_99|
-    obj,@, y,-5, draw,%energybar_draw;
+    obj,@, y,20, draw,%energybar_draw;
 
-    start;  dy,1,  duration,.2, next,normal;
-    normal; dy,0,  update,%energybar_update;
-    ending; dy,-1, duration,.2;
+    --start;  dy,0,  duration,.2, next,normal;
+    start; dy,0,  update,%energybar_update;
+    -- ending; dy,0, duration,.2;
 ]]
 
 |[energybar_update]| function(a)
@@ -71,7 +71,6 @@ end $$
 end $$
 
 zclass[[ma_left|]]
-zclass[[ma_middle|]]
 zclass[[ma_right|]]
 
 zclass[[rstat|
@@ -103,11 +102,11 @@ end $$
 end $$
 
 zclass[[stat,vec,actor,drawlayer_95|
-    align,@, x,@, obj,@, y,141, draw,%stat_draw, update,%stat_update;
+    align,@, x,@, obj,@, y,129, draw,%stat_draw, update,%stat_update;
 
-    start;  dy,-2, duration,.2, next,normal;
+    start;  dy,-2, duration,.1, next,normal;
     normal; dy,0;
-    ending; dy,2, duration,.2;
+    ending; dy,2, duration,.1;
 ]]
 
 |[stat_update]| function(a)

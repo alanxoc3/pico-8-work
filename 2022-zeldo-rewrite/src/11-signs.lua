@@ -53,7 +53,7 @@ zclass[[sign,target_with_tbox,solid,simple_spr,drawlayer_50|
 ]]
 
 |[sign_target_with_tbox_disable_callback]| function(a)
-    return peek'MEM_ITEM_INDEX' ~= 4
+    return peek'MEM_ITEM_INDEX' ~= ITEM_IND_INTERACT
 end $$
 
 zclass[[signtest,sign|x,@,y,@,text,  "mary had a^little lamb^little lamb^little lamb^mary had a^little lamb^whose fleece was^white as yo face"]]

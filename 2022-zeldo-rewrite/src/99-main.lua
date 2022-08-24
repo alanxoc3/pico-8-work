@@ -29,22 +29,23 @@ function load_save_state()
     if peek'MEM_SAVE_LOCATION' == 0 then
         zcall(poke, [[
             1 ;,MEM_SAVE_LOCATION ,1;
-            2 ;,MEM_ROOM_IND  ,136;
-            3 ;,MEM_PL_X      ,48;
-            4 ;,MEM_PL_Y      ,48;
-            5 ;,MEM_PL_XF     ,1;
-            6 ;,MEM_ITEM_INDEX,4;
-            7 ;,MEM_PL_HEALTH,10;
-            8 ;,MEM_PL_MAX_HEALTH,10;
+            2 ;,MEM_ROOM_IND      ,136;
+            3 ;,MEM_PL_X          ,48;
+            4 ;,MEM_PL_Y          ,48;
+            5 ;,MEM_PL_XF         ,1;
+            6 ;,MEM_ITEM_INDEX    ,ITEM_IND_INTERACT;
+            7 ;,MEM_PL_HEALTH     ,10;
+            8 ;,MEM_PL_MAX_HEALTH ,10;
 
             9 ;,MEM_HAS_SWORD  , 1;
             10;,MEM_HAS_BRANG  , 1;
-            11;,MEM_HAS_SHIELD   , 1;
+            11;,MEM_HAS_SHIELD , 1;
+
             12;,MEM_HAS_MASK   , 1;
             13;,MEM_HAS_BOW   , 1;
             14;,MEM_HAS_BOMB   , 1;
-            15;,MEM_HAS_BANJO   , 1;
-            16;,MEM_HAS_BOWL  , 1;
+            --15;,MEM_HAS_BANJO   , 1;
+            --16;,MEM_HAS_BOWL  , 1;
         ]])
     end
 end
