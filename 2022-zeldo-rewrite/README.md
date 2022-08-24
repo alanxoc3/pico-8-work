@@ -25,10 +25,10 @@ help him save the Land of Hi-roll from the FORCES-OF-EVIL.
 7 short
 - TODO title screen
 - TODO intro (cut scene)
-- TODO game over
 - TODO graveyard (village + crypt)
 - DONE forest boss
 - DONE computer room
+- TODO game over
 - TODO house
 
 ## Tokens & Features
