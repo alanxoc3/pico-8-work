@@ -268,14 +268,14 @@ end $$
             1;,MEM_PL_X,       @;
             2;,MEM_PL_Y,       @;
             3;,MEM_PL_XF,      @;
-            4;,MEM_ITEM_INDEX, 4; -- start with nothing
+            4;,MEM_ITEM_INDEX, ITEM_IND_INTERACT;
         ]], a.anchoring.x*POS_MULTIPLIER_FOR_MEMORY,
             a.anchoring.y*POS_MULTIPLIER_FOR_MEMORY,
             (a.anchoring.xf+1)\2
         )
 
         memcpy(REAL_SAVE_LOCATION, MEM_SAVE_LOCATION, SAVE_LENGTH)
-        poke(MEM_ITEM_INDEX, 6) -- reset to banjo
+        poke(MEM_ITEM_INDEX, ITEM_IND_BANJO) -- reset to banjo
         _g.tbox("great banjo playing.^saving complete!", nop)
     end
 end $$

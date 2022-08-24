@@ -340,7 +340,13 @@ end,function(a)
 if not btn"5"then
 a:load()
 else
-poke(0x5d08,max(1,min(9,peek"0x5d08"+zbtn(btnp,0))))
+local dir=zbtn(btnp,0)
+for i=peek"0x5d08"+dir,5+dir*4,dir do
+if peek(a[i].mem_loc)~=0 then
+poke(0x5d08,i)
+return
+end
+end
 end
 end,function(a)
 if not does_entity_exist"fader"and btn"5"then
@@ -350,9 +356,9 @@ end,function(a)
 for i,item in ipairs(a)do
 local exist=peek(item.mem_loc)~=0
 local current=peek"0x5d08"==i
-draw_card(a.x+item.x,current and 9 or a.y+item.y,item.w,item.h,0,0,function()
+draw_card(a.x+item.x,current and 9 or a.y+item.y,item.w,4.5,0,0,function()
 if exist then
-spr(item.sind,item.sxo,item.syo)
+spr(item.sind,item.sxo)
 end
 end,nop)
 end
@@ -411,12 +417,12 @@ sfx(5,-2)
 sfx(6,-2)
 sfx(7,-2)
 if(g_rstat_right:get()or{}).id=="saveplat"and a:get_elapsed_percent"min_play"and a:get_elapsed_percent"min_play">=1 then
-zcall(poke,[[1;,0x5d02,@;2;,0x5d03,@;3;,0x5d04,@;4;,0x5d08,4;]],a.anchoring.x*16,
+zcall(poke,[[1;,0x5d02,@;2;,0x5d03,@;3;,0x5d04,@;4;,0x5d08,5;]],a.anchoring.x*16,
 a.anchoring.y*16,
 (a.anchoring.xf+1)\2
 )
 memcpy(0x5e00,0x5d00,64)
-poke(0x5d08,6)
+poke(0x5d08,1)
 _g.tbox("great banjo playing.^saving complete!",nop)
 end
 end,function(a)
@@ -764,11 +770,6 @@ isorty(g_zclass_entities["drawlayer_50"])
 local coffx=0
 draw_room(g_rooms[peek"0x5d01"],64+coffx,64,function()
 zcall(loop_entities,[[1;,drawlayer_25,draw;2;,drawlayer_50,draw;3;,drawlayer_75,draw;]])
-if g_debug then
-for inst in all(g_zclass_entities["box"])do
-scr_zrect(inst.x,inst.y,inst.rx,inst.ry,8)
-end
-end
 end,function()
 zcall(loop_entities,[[1;,drawlayer_90,draw;2;,drawlayer_95,draw;3;,drawlayer_99,draw;]])
 end)
@@ -925,7 +926,7 @@ return dx
 end
 end
 zclass[[healthobj,maskcheck|max_health,1,hurt,%healthobj_hurt,stun,%healthobj_stun,health_update,%healthobj_health_update]]
-zclass[[inventory,actor,vec,drawlayer_90|ind,5,x,64,y,-9,draw,%inventory_draw;start;next,open,dy,0,update,%inventory_start_update;open;next,normal,dy,2,update,nop,duration,.1;normal;next,close,dy,0,update,%inventory_update;close;next,start,dy,-2,duration,.1,update,nop;1;mem_loc,0x5d10,sxo,0,syo,-1,x,-41,y,0,w,4.5,h,4.5,sind,1;2;mem_loc,0x5d11,sxo,0,syo,0,x,-31,y,0,w,4.5,h,4.5,sind,5;3;mem_loc,0x5d12,sxo,0,syo,-1,x,-21,y,0,w,4.5,h,4.5,sind,7;4;mem_loc,0x5d13,sxo,0,syo,-1,x,-11,y,0,w,4.5,h,4.5,sind,2;5;mem_loc,0x5d00,sxo,2,syo,0,x,0,y,0,w,6,h,4.5,sind,0;6;mem_loc,0x5d14,sxo,0,syo,0,x,12,y,0,w,4.5,h,4.5,sind,6;7;mem_loc,0x5d15,sxo,0,syo,0,x,22,y,0,w,4.5,h,4.5,sind,4;8;mem_loc,0x5d16,sxo,0,syo,0,x,32,y,0,w,4.5,h,4.5,sind,3;9;mem_loc,0x5d17,sxo,0,syo,-1,x,42,y,0,w,4.5,h,4.5,sind,8;]]
+zclass[[inventory,actor,vec,drawlayer_90|ind,5,x,64,y,-9,draw,%inventory_draw;start;next,open,dy,0,update,%inventory_start_update;open;next,normal,dy,2,update,nop,duration,.1;normal;next,close,dy,0,update,%inventory_update;close;next,start,dy,-2,duration,.1,update,nop;1;mem_loc,0x5d10,sxo,0,x,-41,y,0,w,4.5,sind,1;2;mem_loc,0x5d11,sxo,0,x,-31,y,0,w,4.5,sind,5;3;mem_loc,0x5d12,sxo,0,x,-21,y,0,w,4.5,sind,7;4;mem_loc,0x5d13,sxo,0,x,-11,y,0,w,4.5,sind,2;5;mem_loc,0x5d00,sxo,2,x,0,y,0,w,6,sind,0;6;mem_loc,0x5d14,sxo,0,x,12,y,0,w,4.5,sind,6;7;mem_loc,0x5d15,sxo,0,x,22,y,0,w,4.5,sind,4;8;mem_loc,0x5d16,sxo,0,x,32,y,0,w,4.5,sind,3;9;mem_loc,0x5d17,sxo,0,x,42,y,0,w,4.5,sind,8;]]
 zclass[[solid,box|]]
 zclass[[wall,solid,anchor|anchoring,@,offx,@,offy,@,rx,@,ry,@]]
 zclass[[simple_spr,auto_outline,pos|drawout,%simple_spr_draw,sind,0,sw,1,sh,1,xf,1,yf,1,sx,0,sy,0]]
@@ -1086,7 +1087,7 @@ zclass[[game_state,actor|ecs_exclusions;actor,yes,timer,yes;curr,room,init,%game
 function load_save_state()
 memcpy(0x5d00,0x5e00,64)
 if peek"0x5d00"==0 then
-zcall(poke,[[1;,0x5d00,1;2;,0x5d01,136;3;,0x5d02,48;4;,0x5d03,48;5;,0x5d04,1;6;,0x5d08,5;7;,0x5d19,10;8;,0x5d20,10;9;,0x5d13,1;10;,0x5d15,1;11;,0x5d14,1;12;,0x5d16,1;13;,0x5d12,1;14;,0x5d11,1;]])
+zcall(poke,[[1;,0x5d00,1;2;,0x5d01,136;3;,0x5d02,48;4;,0x5d03,48;5;,0x5d04,1;6;,0x5d08,5;7;,0x5d19,10;8;,0x5d20,10;9;,0x5d13,1;10;,0x5d15,1;11;,0x5d14,1;12;,0x5d16,1;13;,0x5d10,1;14;,0x5d17,1;15;,0x5d12,1;16;,0x5d11,1;]])
 end
 end
 function _init()
@@ -1096,7 +1097,6 @@ g_tile_animation_lookup=create_tile_animation_lookup(g_rooms[0])
 end
 function _update60()
 g_zbtn_0,g_zbtn_2=zbtn(btn,0),zbtn(btn,2)
-if btn(4)and btnp(5)then g_debug=not g_debug end
 zcall(loop_entities,[[1;,actor,clean;2;,fader,clean;]])
 register_entities()
 zcall(loop_entities,[[1;,fader,tick;2;,game_state,tick;3;,fader,state;4;,game_state,state;]])
@@ -1106,7 +1106,4 @@ g_si,g_fi=g_slow_animation.index,g_fast_animation.index
 cls()
 loop_entities("game_state","draw")
 fade(g_fade)
-if g_debug then
-zcall(rect,[[1;,17,12,110,18,1;2;,17,95,110,101,1;3;,17,0,110,5,1;4;,17,122,110,127,1;5;,0,0,17,127,1;6;,110,0,127,127,1;]])
-end
 end

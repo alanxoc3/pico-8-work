@@ -42,10 +42,10 @@ function load_save_state()
             11;,MEM_HAS_SHIELD , 1;
 
             12;,MEM_HAS_MASK   , 1;
-            13;,MEM_HAS_BOW   , 1;
-            14;,MEM_HAS_BOMB   , 1;
-            --15;,MEM_HAS_BANJO   , 1;
-            --16;,MEM_HAS_BOWL  , 1;
+            13;,MEM_HAS_BANJO   , 1;
+            14;,MEM_HAS_BOWL  , 1;
+            15;,MEM_HAS_BOW   , 1;
+            16;,MEM_HAS_BOMB   , 1;
         ]])
     end
 end
