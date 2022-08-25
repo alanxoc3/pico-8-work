@@ -38,6 +38,7 @@ zclass[[mov,vec|
     a.dx *= DEFAULT_INERTIA a.dy *= DEFAULT_INERTIA
     if ax == 0 and abs(a.dx) < MIN_SPEED then a.dx = 0 end
     if ay == 0 and abs(a.dy) < MIN_SPEED then a.dy = 0 end
+    a.speed = 0
 end $$
 
 |[mov_towards_point]| function(a, x, y)

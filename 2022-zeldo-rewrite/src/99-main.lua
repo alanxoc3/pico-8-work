@@ -86,19 +86,4 @@ function _draw()
     cls()
     loop_entities('game_state', 'draw')
     fade(g_fade)
-
-    -- DEBUG_BEGIN
-    if g_debug then
-        zcall(rect, [[
-            1;,17,12,110,18,1;
-            2;,17,95,110,101,1;
-
-            3;,17,0,110,5,1;
-            4;,17,122,110,127,1;
-
-            5;,0,0,17,127,1;
-            6;,110,0,127,127,1;
-        ]])
-    end
-    -- DEBUG_END
 end

@@ -182,13 +182,13 @@ end $$
 
 zclass[[shield,item_horizontal,actor,statitem|
     anchoring,@, xf,@,
-    rx,.5, ry,.5,
+    rx,.375, ry,.375,
 
     damage,        0,
     stunlen,       2,
     pushspeed,     .25,
     should_use_xf, yes,
-    item_hit_func, %shield_item_hit_func,
+    item_hit_func, nop,
 
     plpushspeed,     0,
     visible,yes,
@@ -224,12 +224,7 @@ zclass[[sword,item_horizontal,actor,statitem|
     sind,SPR_SWORD;
 ]]
 
-|[shield_item_hit_func]| function(a)
-    a.anchoring.dx -= a.plpushspeed*a.xf
-end $$
-
 |[sword_item_hit_func]| function(a)
-    a.anchoring.dx -= a.plpushspeed*a.xf
     a:kill()
 end $$
 
@@ -292,7 +287,7 @@ zclass[[brang,collidable,simple_spr,drawlayer_50,mov,actor,statitem|
 
     visible,no,
     block_direction, yes,
-    speed_multiplier, .5,
+    speed_multiplier, 0,
     initial_energy, .125,
     gradual_energy, 0,
 
@@ -301,9 +296,9 @@ zclass[[brang,collidable,simple_spr,drawlayer_50,mov,actor,statitem|
     drawout,%brang_drawout,
     sind,SPR_BRANG;
     
-    start; init,%brang_start_init, speed,.075, duration,.125, next,normal;
-    normal;init,nop, speed,0, update,%brang_normal_update, next,ending;
-    ending;init,%brang_ending_init, speed,0, speed,0, update,%brang_ending_update, duration,.125, adjust_deltas_for_solids,nop, adjust_deltas_for_tiles,nop;
+    start; init,%brang_start_init, update,%brang_start_update, duration,.125, next,normal;
+    normal;init,nop, update,%brang_normal_update, next,ending;
+    ending;init,%brang_ending_init, update,%brang_ending_update, duration,.125, adjust_deltas_for_solids,nop, adjust_deltas_for_tiles,nop;
     final;init,nop, update,nop, alive,no;
 ]]
 
@@ -314,6 +309,10 @@ end $$
 |[brang_start_init]| function(a)
     a.x, a.y = a.anchoring.x, a.anchoring.y
     a.ang = atan2(a.xf, 0)
+end $$
+
+|[brang_start_update]| function(a)
+    a.speed = .05
 end $$
 
 |[brang_normal_update]| function(a)
@@ -377,6 +376,8 @@ zclass[[pushable,mov|
 |[pushable_push]| function(a, ang, duration, override)
     if a:maskcheck(override) then
         a:start_timer('push', duration)
+        a:start_timer('push_jump', .25)
+
         a.push_ang = ang
     end
 end $$

@@ -8,8 +8,8 @@ zclass[[healthobj,maskcheck|
     health_update,%healthobj_health_update
 ]]
 
-|[healthobj_hurt]| function(a, amount)
-    if a:maskcheck() and not a:is_active'injured' and not a:is_active'injured_cooldown' then
+|[healthobj_hurt]| function(a, amount, callback)
+    if a:is_alive() and a:maskcheck() and not a:is_active'injured' and not a:is_active'injured_cooldown' then
         a:start_timer('injured', .25, function()
             if a.health <= 0 then
                 a:kill()
@@ -17,13 +17,19 @@ zclass[[healthobj,maskcheck|
                 a:start_timer('injured_cooldown', .25)
             end
         end)
+
+        callback = callback or nop
+        callback()
+
         a.health = max(0, min((a.health or a.max_health)-amount, a.max_health))
     end
 end $$
 
-|[healthobj_stun]| function(a, length)
+|[healthobj_stun]| function(a, length, callback)
     if a:maskcheck() and not a:is_active'stunned' and not a:is_active'stunned_cooldown' then
         a:stun_callback()
+        callback = callback or nop
+        callback()
         a:start_timer('stunned_jump', .25)
         a:start_timer('stunned', .25+length, function()
             if a.health <= 0 then
