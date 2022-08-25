@@ -42,7 +42,7 @@ end
 
 -- controls the right stat so there is only ever 1 instance
 zclass[[energybar,vec,actor,drawlayer_99|
-    obj,@, y,20, draw,nop -- %energybar_draw;
+    obj,@, y,20, draw,%energybar_draw;
 ]]
 
 |[energybar_draw]| function(a)
