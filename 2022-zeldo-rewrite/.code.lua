@@ -356,7 +356,7 @@ end,function(a)
 for i,item in ipairs(a)do
 local exist=peek(item.mem_loc)~=0
 local current=peek"0x5d08"==i
-draw_card(a.x+item.x,current and 9 or a.y+item.y,item.w,4.5,0,0,function()
+draw_card(a.x+item.x,a.y+item.y,item.w,4.5,0,0,function()
 if exist then
 spr(item.sind,item.sxo)
 end
@@ -932,7 +932,7 @@ return dx
 end
 end
 zclass[[healthobj,maskcheck|max_health,1,hurt,%healthobj_hurt,stun,%healthobj_stun,health_update,%healthobj_health_update]]
-zclass[[inventory,actor,vec,drawlayer_90|ind,5,x,64,y,-9,draw,%inventory_draw;start;next,open,dy,0,update,%inventory_start_update;open;next,normal,dy,2,update,nop,duration,.1;normal;next,close,dy,0,update,%inventory_update;close;next,start,dy,-2,duration,.1,update,nop;1;mem_loc,0x5d10,sxo,0,x,-41,y,0,w,4.5,sind,1;2;mem_loc,0x5d11,sxo,0,x,-31,y,0,w,4.5,sind,5;3;mem_loc,0x5d12,sxo,0,x,-21,y,0,w,4.5,sind,7;4;mem_loc,0x5d13,sxo,0,x,-11,y,0,w,4.5,sind,2;5;mem_loc,0x5d00,sxo,2,x,0,y,0,w,6,sind,0;6;mem_loc,0x5d14,sxo,0,x,12,y,0,w,4.5,sind,6;7;mem_loc,0x5d15,sxo,0,x,22,y,0,w,4.5,sind,4;8;mem_loc,0x5d16,sxo,0,x,32,y,0,w,4.5,sind,3;9;mem_loc,0x5d17,sxo,0,x,42,y,0,w,4.5,sind,8;]]
+zclass[[inventory,actor,vec,drawlayer_99|ind,5,x,64,y,-2,draw,%inventory_draw;start;next,open,dy,0,update,%inventory_start_update;open;next,normal,dy,2,update,nop,duration,.1;normal;next,close,dy,0,update,%inventory_update;close;next,start,dy,-2,duration,.1,update,nop;1;mem_loc,0x5d10,sxo,0,x,-21,y,5,w,4.5,sind,1;2;mem_loc,0x5d11,sxo,0,x,-21,y,-5,w,4.5,sind,5;3;mem_loc,0x5d12,sxo,0,x,-11,y,5,w,4.5,sind,7;4;mem_loc,0x5d13,sxo,0,x,-11,y,-5,w,4.5,sind,2;5;mem_loc,0x5d00,sxo,2,x,0,y,0,w,6,sind,0;6;mem_loc,0x5d14,sxo,0,x,12,y,-5,w,4.5,sind,6;7;mem_loc,0x5d15,sxo,0,x,12,y,5,w,4.5,sind,4;8;mem_loc,0x5d16,sxo,0,x,22,y,-5,w,4.5,sind,3;9;mem_loc,0x5d17,sxo,0,x,22,y,5,w,4.5,sind,8;]]
 zclass[[solid,box|]]
 zclass[[wall,solid,anchor|anchoring,@,offx,@,offy,@,rx,@,ry,@]]
 zclass[[simple_spr,auto_outline,pos|drawout,%simple_spr_draw,sind,0,sw,1,sh,1,xf,1,yf,1,sx,0,sy,0]]
@@ -985,7 +985,7 @@ pset(x1+2,y1+2,1)pset(x1+2,y2-2,1)
 pset(x2-2,y1+2,1)pset(x2-2,y2-2,1)
 zcamera(cam_x,cam_y,post_card_func)
 end
-zclass[[energybar,vec,actor,drawlayer_99|obj,@,y,20,draw,%energybar_draw;]]
+zclass[[energybar,vec,actor,drawlayer_99|obj,@,y,20,draw,nop]]
 zclass[[ma_left|]]
 zclass[[ma_right|]]
 zclass[[rstat|align,@,x,@,entity_type,@,update,%rstat_update,get,%rstat_get;]]
