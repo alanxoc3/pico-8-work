@@ -56,10 +56,10 @@ zclass[[sign,target_with_tbox,solid,simple_spr,drawlayer_50|
     return peek'MEM_ITEM_INDEX' ~= ITEM_IND_INTERACT
 end $$
 
-zclass[[signtest,sign|x,@,y,@,text,  "mary had a^little lamb^little lamb^little lamb^mary had a^little lamb^whose fleece was^white as yo face"]]
-zclass[[signlank,  sign|x,@,y,@,text,"lanks house"]]
-zclass[[signkeep,  sign|x,@,y,@,text,"keeps house"]]
-zclass[[signnavy,  sign|x,@,y,@,text,"navys house"]]
-zclass[[signteach, sign|x,@,y,@,text,"teachs house"]]
-zclass[[signlark,  sign|x,@,y,@,text,"larks house"]]
-zclass[[signjane,  sign|x,@,y,@,text,"janes house"]]
+zclass[[signtest,sign|x,@,y,@,text,  "SPR_SIGN^mary had a^little lamb^little lamb^little lamb^mary had a^little lamb^whose fleece was^white as yo face"]]
+zclass[[signlank,  sign|x,@,y,@,text,"SPR_SIGN^lanks house"]]
+zclass[[signkeep,  sign|x,@,y,@,text,"SPR_SIGN^keeps house"]]
+zclass[[signnavy,  sign|x,@,y,@,text,"SPR_SIGN^navys house"]]
+zclass[[signteach, sign|x,@,y,@,text,"SPR_SIGN^teachs house"]]
+zclass[[signlark,  sign|x,@,y,@,text,"SPR_SIGN^larks house"]]
+zclass[[signjane,  sign|x,@,y,@,text,"SPR_SIGN^janes house"]]

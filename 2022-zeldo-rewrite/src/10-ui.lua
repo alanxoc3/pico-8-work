@@ -148,6 +148,7 @@ zclass[[tbox,vec,actor,drawlayer_99|
 
 |[tbox_init]| function(a)
     a.texts = split(a.rawtext, "^")
+    a.sind = deli(a.texts, 1)
 end $$
 
 |[tbox_update]| function(a)
@@ -188,4 +189,9 @@ end $$
             zspr(38, 86, 9+g_si%2)
         end
     end, nop)
+
+    draw_card(118, a.y, 6, 6, 2, 2,
+        function()
+            spr(a.sind, 0, 0, 1, 1, true)
+        end, nop)
 end $$

@@ -423,7 +423,7 @@ a.anchoring.y*16,
 )
 memcpy(0x5e00,0x5d00,64)
 poke(0x5d08,1)
-_g.tbox("great banjo playing.^saving complete!",nop)
+_g.tbox("10^great banjo playing.^saving complete!",nop)
 end
 end,function(a)
 zspr(a.sind,a.x*8+a.sx,a.y*8+a.sy,1,1,cos(g_fi/5),sin(g_fi/5))
@@ -551,6 +551,7 @@ end
 end,nop)
 end,function(a)
 a.texts=split(a.rawtext,"^")
+a.sind=deli(a.texts,1)
 end,function(a)
 local text1=a.texts[a.cur_text_index]
 local text2=a.texts[a.cur_text_index+1]or ""
@@ -580,6 +581,10 @@ zcall(zprinttbox,[[1;,@,0,-2,-1,7,5;2;,@,0,6,-1,7,5;]],a.line_1 or "",a.line_2 o
 if a.done then
 zspr(38,86,9+g_si%2)
 end
+end,nop)
+draw_card(118,a.y,6,6,2,2,
+function()
+spr(a.sind,0,0,1,1,true)
 end,nop)
 end,function(a)
 local relact=g_rstat_right:get()or g_pl
@@ -713,12 +718,13 @@ load_save_state()
 _g.gameover_control()
 state.game_over_sind,state.game_over_text=unpack(rnd_item(zobj[[1;,32,quack quack;2;,68,and play with me;3;,9,to save hi-roll;4;,81,in time for dinner;5;,83,and make me rich;6;,96,the banjo awaits you;7;,99,for your fans;8;,118,splat splat boing;]]))
 end,function(state)
+draw_card(64,64,46,10,2.5,5,function()end,nop)
 local drawfunc=function()
 zspr(state.game_over_sind,0,g_si%2,1,1,true,false,1)
 end
-zcall(zprinttbox,[[1;,come back lank,64,38,0,10,4,1;2;,@,64,69,0,7,5,1;]],state.game_over_text)
-draw_card(64,56+g_si%2,6,8,2,4,function()
-spr(state.game_over_sind,0,0)
+zcall(zprinttbox,[[1;,come back lank,21,57,-1,10,4,1;2;,@,21,65,-1,7,5,1;]],state.game_over_text)
+draw_card(118,64,6,6,2,2,function()
+spr(state.game_over_sind,0,0,1,1,true)
 end,nop)
 end,function(state)
 local r=g_rooms[peek"0x5d01"]
@@ -765,6 +771,11 @@ isorty(g_zclass_entities["drawlayer_50"])
 local coffx=0
 draw_room(g_rooms[peek"0x5d01"],64+coffx,64,function()
 zcall(loop_entities,[[1;,drawlayer_25,draw;2;,drawlayer_50,draw;3;,drawlayer_75,draw;]])
+if g_debug then
+for inst in all(g_zclass_entities["box"])do
+scr_zrect(inst.x,inst.y,inst.rx,inst.ry,8)
+end
+end
 end,function()
 zcall(loop_entities,[[1;,drawlayer_90,draw;2;,drawlayer_95,draw;3;,drawlayer_99,draw;]])
 end)
@@ -931,7 +942,7 @@ zclass[[statitem,box|]]
 zclass[[held_to_throw,anchor,actor|visible,yes,block_direction,no,speed_multiplier,.5,initial_energy,.125,gradual_energy,0,offy,-.25,sy,-2,item_thrown,nop,sy,-2,offspeed,.185;start;init,nop,offdy,-.0625,duration,.08,next,normal;normal;init,nop,offdy,0,offy,-.5;ending;visible,no,init,%held_to_throw_ending_init,duration,.16;]]
 zclass[[pot_held,held_to_throw|anchoring,@,xf,@,sind,49,item_thrown,%pot_thrown,sy,-3]]
 zclass[[quack_held,held_to_throw|anchoring,@,xf,@,sind,32,item_thrown,%quack_thrown,sy,-4]]
-zclass[[bomb_held,held_to_throw|anchoring,@,xf,@,sind,5,item_thrown,%bomb,initial_energy,.3]]
+zclass[[bomb_held,held_to_throw|anchoring,@,xf,@,sind,5,item_thrown,%bomb,initial_energy,.3,sy,-3]]
 zclass[[item_throwing,collidable,mov,box,simple_spr,drawlayer_50,actor|rx,.25,ry,.25;start;duration,.15,update,%item_throwing_update,next,wait;wait;speed,0,update,nop;]]
 zclass[[bomb,item_throwing|x,@,y,@,xf,@,speed,@,ang,@,sind,5,destroyed,%bomb_destroyed;wait;duration,.7;]]
 zclass[[pot_thrown,item_throwing|x,@,y,@,xf,@,speed,@,ang,@,sind,49,destroyed,%standard_explosion;wait;duration,.05;]]
@@ -1003,24 +1014,24 @@ zclass[[house227,house|x,@,y,@,room,227]]
 zclass[[house228,house|x,@,y,@,room,228]]
 zclass[[house229,house|x,@,y,@,xf,-1,room,229]]
 zclass[[person,solid,target_with_tbox,simple_spr,drawlayer_50|text,,sy,-2,rx,.375,ry,.375,trx,.5,try,.5,target_with_tbox_disable_callback,%person_target_with_tbox_disable_callback]]
-zclass[[navyblock,person|x,@,y,@,cname,navy,cspr,97,sind,97,text,my sister has been in^the forest all day.^find something to^protect yourself with^and bring her home.,rx,.375,ry,1,memloc_trigger,0x5d09,memloc_trigger_value,1,target_with_tbox_finish_callback,%person_target_with_tbox_finish_callback|0x5d09|0]]
+zclass[[navyblock,person|x,@,y,@,cname,navy,cspr,97,sind,97,text,97^my sister has been in^the forest all day.^find something to^protect yourself with^and bring her home.,rx,.375,ry,1,memloc_trigger,0x5d09,memloc_trigger_value,1,target_with_tbox_finish_callback,%person_target_with_tbox_finish_callback|0x5d09|0]]
 zclass[[navyhouse,person|x,@,y,@,cname,navy,cspr,97,sind,97,text,im navy in a house|0x5d09|1]]
 zclass[[bobblock,solid,person|x,@,y,@,cname,bob,cspr,80,sind,80,text,im bob outside,ry,1,memloc_trigger,0x5d18,memloc_trigger_value,1,target_with_tbox_finish_callback,%person_target_with_tbox_finish_callback|0x5d18|0]]
-zclass[[bobhouse,person|x,@,y,@,cname,bob,cspr,80,sind,80,text,im bob in a house|0x5d18|1]]
-zclass[[jane,person|x,@,y,@,cname,jane,cspr,81,sind,81,text,im jane in a house]]
-zclass[[teach,person|x,@,y,@,cname,teach,cspr,96,sind,96,text,im teach in a house]]
-zclass[[keep,person|x,@,y,@,cname,keep,cspr,83,sind,83,text,im keep in a house]]
-zclass[[lark,person|x,@,y,@,cname,lark,cspr,99,sind,99,text,im lark in a house]]
+zclass[[bobhouse,person|x,@,y,@,cname,bob,cspr,80,sind,80,text,80^im bob in a house|0x5d18|1]]
+zclass[[jane,person|x,@,y,@,cname,jane,cspr,81,sind,81,text,81^im jane in a house]]
+zclass[[teach,person|x,@,y,@,cname,teach,cspr,96,sind,96,text,96^im teach in a house]]
+zclass[[keep,person|x,@,y,@,cname,keep,cspr,83,sind,83,text,83^im keep in a house]]
+zclass[[lark,person|x,@,y,@,cname,lark,cspr,99,sind,99,text,99^im lark in a house]]
 zclass[[class_with_target,actor|trx,0,try,0,tx,0,ty,0,init,%class_with_target_init,callback_touch,nop,callback_outside,nop]]
 zclass[[target_with_tbox,class_with_target,ma_right|callback_touch,%target_with_tbox_target_func,target_with_tbox_disable_callback,nop,target_with_tbox_finish_callback,nop]]
 zclass[[sign,target_with_tbox,solid,simple_spr,drawlayer_50|text,,rx,.375,ry,.375,sy,-2,target_with_tbox_disable_callback,%sign_target_with_tbox_disable_callback,cname,sign,cspr,24,sind,24,trx,.125,try,.375,tx,0,ty,.25]]
-zclass[[signtest,sign|x,@,y,@,text,mary had a^little lamb^little lamb^little lamb^mary had a^little lamb^whose fleece was^white as yo face]]
-zclass[[signlank,sign|x,@,y,@,text,lanks house]]
-zclass[[signkeep,sign|x,@,y,@,text,keeps house]]
-zclass[[signnavy,sign|x,@,y,@,text,navys house]]
-zclass[[signteach,sign|x,@,y,@,text,teachs house]]
-zclass[[signlark,sign|x,@,y,@,text,larks house]]
-zclass[[signjane,sign|x,@,y,@,text,janes house]]
+zclass[[signtest,sign|x,@,y,@,text,24^mary had a^little lamb^little lamb^little lamb^mary had a^little lamb^whose fleece was^white as yo face]]
+zclass[[signlank,sign|x,@,y,@,text,24^lanks house]]
+zclass[[signkeep,sign|x,@,y,@,text,24^keeps house]]
+zclass[[signnavy,sign|x,@,y,@,text,24^navys house]]
+zclass[[signteach,sign|x,@,y,@,text,24^teachs house]]
+zclass[[signlark,sign|x,@,y,@,text,24^larks house]]
+zclass[[signjane,sign|x,@,y,@,text,24^janes house]]
 zclass[[enemy,box|pl_collide_func_batch,%enemy_pl_collide_func_batch,pl_collide_func,nop]]
 zclass[[quack,ma_right,actor,collidable,mov,enemy,simple_spr,drawlayer_50|x,@,y,@,rx,.25,ry,.25,sy,-2,speed,.0125,pl_collide_func,%quack_pl_collide_func,sind,32,cspr,32,cname,quack;start;init,%quack_change_dir,duration,1,next,start;]]
 zclass[[slimy_shared,ma_right,actor,collidable,healthobj,mov,enemy,simple_spr,drawlayer_50|rx,.25,ry,.25,statcollide,%slimy_statcollide,drawout,%slimy_draw,pl_collide_func,%slimy_pl_collide_func,max_health,5;stunned;init,nop,speed,0,sx,0,duration,0,next,idle;start;next,idle;idle;init,nop,speed,0,sx,0,update,%slimy_start,duration,1,next,bounce_1;bounce_1;init,%slimy_bounce,speed,0,update,nop,duration,.0625,next,bounce_2;bounce_2;init,%slimy_bounce,speed,0,update,nop,duration,.0625,next,jump;jump;init,%slimy_jump_init,update,nop,pl_collide_func,%slimy_pl_collide_func,speed,.025,sx,0,duration,.25,next,idle;]]
@@ -1092,6 +1103,7 @@ g_tile_animation_lookup=create_tile_animation_lookup(g_rooms[0])
 end
 function _update60()
 g_zbtn_0,g_zbtn_2=zbtn(btn,0),zbtn(btn,2)
+if btn(4)and btnp(5)then g_debug=not g_debug end
 zcall(loop_entities,[[1;,actor,clean;2;,fader,clean;]])
 register_entities()
 zcall(loop_entities,[[1;,fader,tick;2;,game_state,tick;3;,fader,state;4;,game_state,state;]])
@@ -1101,4 +1113,7 @@ g_si,g_fi=g_slow_animation.index,g_fast_animation.index
 cls()
 loop_entities("game_state","draw")
 fade(g_fade)
+if g_debug then
+zcall(rect,[[1;,17,12,110,18,1;2;,17,95,110,101,1;3;,17,0,110,5,1;4;,17,122,110,127,1;5;,0,0,17,127,1;6;,110,0,127,127,1;]])
+end
 end

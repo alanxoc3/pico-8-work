@@ -8,6 +8,7 @@ zclass[[gameover_control,actor|
 end $$
 
 |[gameover_init]| function(state)
+--    _- _g.tbox"SPR_NAVY^come back lank^from the forest"
     poke(0x5f43, 0) -- ensure music is not faded anymore
     music'-1'
     sfx'3'
@@ -30,16 +31,18 @@ end $$
 end $$
 
 |[gameover_draw]| function(state)
+    draw_card(64, 64, 46, 10, 2.5, 5, function() end, nop)
+
     local drawfunc = function()
         zspr(state.game_over_sind, 0, g_si%2, 1, 1, true, false, 1)
     end
 
     zcall(zprinttbox, [[
-        1;,"come back lank", 64, 38,0,  10, 4, 1;
-        2;,@,                64, 69, 0, 7, 5, 1;
+        1;,"come back lank", 21, 57,-1,  10, 4, 1;
+        2;,@,                21, 65, -1, 7, 5, 1;
     ]], state.game_over_text)
 
-    draw_card(64, 56+g_si%2, 6, 8, 2, 4, function()
-        spr(state.game_over_sind, 0, 0)
+    draw_card(118, 64, 6, 6, 2, 2, function()
+        spr(state.game_over_sind, 0, 0, 1, 1, true)
     end, nop)
 end $$

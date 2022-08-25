@@ -65,7 +65,7 @@ end $$
 
 zclass[[pot_held,held_to_throw   |anchoring,@, xf,@, sind,49,       item_thrown,%pot_thrown, sy,-3]]
 zclass[[quack_held,held_to_throw |anchoring,@, xf,@, sind,32,       item_thrown,%quack_thrown, sy,-4]]
-zclass[[bomb_held,held_to_throw  |anchoring,@, xf,@, sind,SPR_BOMB, item_thrown,%bomb, initial_energy,.3]]
+zclass[[bomb_held,held_to_throw  |anchoring,@, xf,@, sind,SPR_BOMB, item_thrown,%bomb, initial_energy,.3, sy,-3]]
 
 zclass[[item_throwing,collidable,mov,box,simple_spr,drawlayer_50,actor|
     rx,.25, ry,.25;
@@ -276,7 +276,7 @@ end $$
 
         memcpy(REAL_SAVE_LOCATION, MEM_SAVE_LOCATION, SAVE_LENGTH)
         poke(MEM_ITEM_INDEX, ITEM_IND_BANJO) -- reset to banjo
-        _g.tbox("great banjo playing.^saving complete!", nop)
+        _g.tbox("SPR_SAVE^great banjo playing.^saving complete!", nop)
     end
 end $$
 

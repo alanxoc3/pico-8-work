@@ -44,9 +44,11 @@ TODO: refactor - consolidate stun logic
 TODO: standardize ma time
 TODO: pot ma override
 TODO: duck hold no interact
+TODO: double ma bug
 TODO: interact always override hurtable
 
 saturday...
+TODO: right ma sprite shouldn't be flipped
 TODO: fix item offsets (many items are either off or sometimes off)
 TODO: token crunch for 30 minutes
 TODO: bomb blow up crate
