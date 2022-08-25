@@ -2,6 +2,7 @@
 zclass[[healthobj,maskcheck|
     max_health, 1,
 
+    stun_callback,nop,
     hurt,%healthobj_hurt,
     stun,%healthobj_stun,
     health_update,%healthobj_health_update
@@ -22,6 +23,7 @@ end $$
 
 |[healthobj_stun]| function(a, length)
     if a:maskcheck() and not a:is_active'stunned' and not a:is_active'stunned_cooldown' then
+        a:stun_callback()
         a:start_timer('stunned_jump', .25)
         a:start_timer('stunned', .25+length, function()
             if a.health <= 0 then

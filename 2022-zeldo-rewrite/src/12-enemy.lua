@@ -43,15 +43,26 @@ zclass[[slimy_shared,ma_right,actor,collidable,healthobj,mov,enemy,simple_spr,dr
     statcollide,%slimy_statcollide,
     drawout,%slimy_draw,
     pl_collide_func,%slimy_pl_collide_func,
+    stun_callback,%slimy_stun_callback,
     max_health,5;
 
-    stunned; init,nop, speed,0, sx,0, duration,0, next,idle;
-    start;   next,idle;
-    idle;    init,nop, speed,0, sx,0, update,%slimy_start, duration, 1,   next,bounce_1;
-    bounce_1;init,%slimy_bounce, speed,0, update,nop, duration,.0625, next,bounce_2;
-    bounce_2;init,%slimy_bounce, speed,0, update,nop, duration,.0625, next,jump;
-    jump;    init,%slimy_jump_init, update,nop, pl_collide_func,%slimy_pl_collide_func, speed,.025, sx,0, duration, .25, next,idle;
+    start;     next,idle;
+    stunstate; init,nop, update,%slimy_stunstate, speed,0, next,idle;
+    idle;      init,nop, speed,0, update,%slimy_start, duration, 1,   next,bounce_1;
+    bounce_1;  init,%slimy_bounce, speed,0, update,nop, duration,.0625, next,bounce_2;
+    bounce_2;  init,%slimy_bounce, speed,0, update,nop, duration,.0625, next,jump;
+    jump;      init,%slimy_jump_init, update,nop, pl_collide_func,%slimy_pl_collide_func, speed,.025, duration, .25, next,idle;
 ]]
+
+|[slimy_stun_callback]| function(a)
+    a:load'stunstate'
+end $$
+
+|[slimy_stunstate]| function(a)
+    if not a:is_active'stunned' then
+        a:load()
+    end
+end $$
 
 zclass[[slimy_actual,slimy_shared |
     start;duration,@;
@@ -112,7 +123,7 @@ end $$
         if not a:outside(item) and item:is_alive() then
             a:start_timer('isma', 2)
 
-            a:hurt(item.damage)
+            if item.damage > 0 then a:hurt(item.damage) else a:stun(1) end
             if not a:is_active'stunned' then
                 if item.should_use_xf then
                     a.dx += item.pushspeed*item.xf
