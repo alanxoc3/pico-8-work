@@ -431,7 +431,7 @@ a.anchoring.y*16,
 )
 memcpy(0x5e00,0x5d00,64)
 poke(0x5d08,1)
-_g.tbox("10^great banjo playing.^saving complete!",nop)
+_g.tbox("96^great banjo playing.^saving complete!",nop)
 end
 end,function(a)
 zspr(a.sind,a.x*8+a.sx,a.y*8+a.sy,1,1,cos(g_fi/5),sin(g_fi/5))

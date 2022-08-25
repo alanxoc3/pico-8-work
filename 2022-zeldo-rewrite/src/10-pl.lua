@@ -271,7 +271,7 @@ end $$
 
         memcpy(REAL_SAVE_LOCATION, MEM_SAVE_LOCATION, SAVE_LENGTH)
         poke(MEM_ITEM_INDEX, ITEM_IND_BANJO) -- reset to banjo
-        _g.tbox("SPR_SAVE^great banjo playing.^saving complete!", nop)
+        _g.tbox("SPR_TEACH^great banjo playing.^saving complete!", nop)
     end
 end $$
 
