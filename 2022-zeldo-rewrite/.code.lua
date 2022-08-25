@@ -340,8 +340,8 @@ end,function(a)
 if not btn"5"or does_entity_exist"fader"then
 a:load()
 else
-local dir=zbtn(btnp,0)
-for i=peek"0x5d08"+dir,5+dir*4,dir do
+local dir=zbtn(btnp,0)+zbtn(btnp,2)
+for i=peek"0x5d08"+dir,5+zsgn(dir)*4,dir do
 if peek(a[i].mem_loc)~=0 then
 poke(0x5d08,i)
 return

@@ -21,8 +21,8 @@ zclass[[inventory,actor,vec,drawlayer_90|
     if not btn'BTN_ITEM_SELECT' or does_entity_exist'fader' then
         a:load()
     else
-        local dir = zbtn(btnp, 0)
-        for i=peek'MEM_ITEM_INDEX'+dir,5+dir*4,dir do
+        local dir = zbtn(btnp, 0) + zbtn(btnp, 2)
+        for i=peek'MEM_ITEM_INDEX'+dir,5+zsgn(dir)*4,dir do
             if peek(a[i].mem_loc) ~= 0 then
                 poke(MEM_ITEM_INDEX, i)
                 return
