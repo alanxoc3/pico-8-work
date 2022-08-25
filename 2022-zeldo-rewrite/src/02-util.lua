@@ -14,6 +14,10 @@ function zspr(sind, x, y, sw, sh, xf, yf)
     spr(sind, flr(x+.5), flr(y+.5), sw, sh, xf, yf)
 end
 
+function should_interact()
+    return btn'BTN_ITEM_USE' and not btn'BTN_ITEM_SELECT' and not does_entity_exist'tbox'
+end
+
 -- used with ui
 function zcamera(x, y, func)
     camera(-x, -y) func() camera()

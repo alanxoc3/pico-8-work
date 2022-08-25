@@ -2,7 +2,7 @@ zclass[[inventory,actor,vec,drawlayer_90|
     ind,5, x,64, y,-9, draw,%inventory_draw;
 
     start;  next,open,   dy,0,  init,nop, update,%inventory_start_update;
-    open;   next,normal, dy,2,  init,nop, update,nop, duration,.1;
+    open;   next,normal, dy,2,  init,nop, update,%inventory_open_update, duration,.1, cachedir,0;
     normal; next,close,  dy,0,  init,%inventory_normal_init, update,%inventory_update;
     close;  next,start,  dy,-2, init,nop, duration,.1, update,nop;
 
@@ -17,11 +17,16 @@ zclass[[inventory,actor,vec,drawlayer_90|
     ITEM_IND_BOWL;     mem_loc,MEM_HAS_BOWL   , sxo,0, x,42,  y,0, w,4.5, sind,SPR_BOWL;
 ]]
 
+|[inventory_open_update]| function(a)
+    a.cachedir += zbtn(btnp, 0)
+end $$
+
 |[inventory_update]| function(a)
-    if not btn'BTN_ITEM_SELECT' or does_entity_exist'fader' then
+    if does_entity_exist'tbox' or not btn'BTN_ITEM_SELECT' or does_entity_exist'fader' then
         a:load()
     else
-        local dir = zbtn(btnp, 0) + zbtn(btnp, 2)
+        local dir = zbtn(btnp, 0) + a.cachedir
+        a.cachedir = 0
         for i=peek'MEM_ITEM_INDEX'+dir,5+zsgn(dir)*4,dir do
             if peek(a[i].mem_loc) ~= 0 then
                 poke(MEM_ITEM_INDEX, i)
@@ -32,7 +37,7 @@ zclass[[inventory,actor,vec,drawlayer_90|
 end $$
 
 |[inventory_start_update]| function(a)
-    if not does_entity_exist'fader' and btn'BTN_ITEM_SELECT' then
+    if not does_entity_exist'tbox' and not does_entity_exist'fader' and btn'BTN_ITEM_SELECT' then
         a:load()
     end
 end $$

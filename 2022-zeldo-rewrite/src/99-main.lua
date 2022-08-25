@@ -53,7 +53,7 @@ end
 function _init()
     load_save_state()
 
-    -- poke2(0x5f5c, BTN_DELAY) -- set custom delay
+    poke2(0x5f5c, 6) -- custom press delay... a bit more than the default hold delay
     g_si, g_fi, g_state, g_rooms = 0, 0, _g.game_state(), decode_map()
     g_tile_animation_lookup = create_tile_animation_lookup(g_rooms[ANIMATION_ROOM_INDEX])
 end

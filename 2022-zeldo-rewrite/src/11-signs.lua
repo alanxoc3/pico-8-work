@@ -35,7 +35,7 @@ zclass[[target_with_tbox,class_with_target,ma_right|
 |[target_with_tbox_target_func]| function(a)
     if not a:target_with_tbox_disable_callback() then
         a:start_timer('isma',.1)
-        if btnp'4' and not does_entity_exist'tbox' then
+        if should_interact() then
             _g.tbox(a.text, function()
                 a:target_with_tbox_finish_callback()
             end)
