@@ -81,10 +81,12 @@ zclass[[miny_actual,slimy_shared  |
 |[slimy_pl_collide_func]| function(a, pl)
     a.speed = 0
     a:start_timer('isma', 2)
-    if a:is_active'jump' then
-        pl:push(atan2(a.xf, pl.y-a.y), .125)
-        pl:stun'.25'
-    end
+        if a:is_active'jump' then
+            pl:push(atan2(a.xf, pl.y-a.y), .125)
+            pl:stun'.25'
+        else
+            pl:push(atan2(pl:abside(a)), .03125)
+        end
 end $$
 
 |[slimy_destroyed]| function(a)
@@ -120,12 +122,12 @@ end $$
     foreach(items, function(item)
         if not a:outside(item) and item:is_alive() then
             local did_hit = false
-            if item.damage > 0 then
+            if item.damage then
                 a:hurt(item.damage, function()
                     did_hit = true
                 end)
-            elseif item.id == 'brang' then
-                a:stun(1, function()
+            elseif item.should_stun then
+                a:stun(1.5, function()
                     did_hit = true
                 end)
             end
@@ -133,17 +135,15 @@ end $$
             if did_hit then
                 a:start_timer('isma', 2)
                 item:item_hit_func()
+            end
 
+            if item.should_push or did_hit then
                 if item.should_use_xf then
                     a:push(atan2(item.xf, item.y-a.y), .125)
                 else
                     local abx, aby = a:abside(item)
                     a:push(atan2(abx, aby), .125)
                 end
-            end
-
-            if item.id == 'shield' then
-                a:push(atan2(item.xf, a.y-item.y), .0625)
             end
         end
     end)

@@ -13,7 +13,7 @@
 --| ITEM STAT |
 -- item stats need these: (sword, pellet, bomb_held, brang, shield)
     -- damage: how much damage to do to enemies
-    -- stunlen: how much time enemy should be stunned after hit
+    -- should_stun: should the enemy be stunned when hit?
     -- pushspeed: how fast the enemy should be pushed
     -- should_use_xf: should push speed be reflected by the xf or position
     -- item_hit_func: a function that gets when it hits the enemy
@@ -153,7 +153,6 @@ zclass[[pellet,vec,collidable,actor,drawlayer_50,statitem|
     x,@, y,@, dx, @, xf, @,
 
     damage,        1,
-    stunlen,       .125,
     pushspeed,     .375,
     should_use_xf, yes,
     item_hit_func, ~kill,
@@ -184,12 +183,11 @@ zclass[[shield,item_horizontal,actor,statitem|
     anchoring,@, xf,@,
     rx,.375, ry,.375,
 
-    damage,        0,
-    stunlen,       2,
     pushspeed,     .25,
     should_use_xf, yes,
     item_hit_func, nop,
 
+    should_push, yes,
     plpushspeed,     0,
     visible,yes,
     block_direction, yes,
@@ -200,14 +198,15 @@ zclass[[shield,item_horizontal,actor,statitem|
     sy,-1,
     offspeed,.105,
     sind,SPR_SHIELD;
+
+    start; should_stun,yes;
+    normal; should_stun,no;
 ]]
 
 zclass[[sword,item_horizontal,actor,statitem|
     anchoring,@, xf,@,
     rx, .375, ry, .25,
 
-    damage,        2,
-    stunlen,       .25,
     pushspeed,     .25,
     should_use_xf, yes,
     item_hit_func, %sword_item_hit_func,
@@ -222,6 +221,8 @@ zclass[[sword,item_horizontal,actor,statitem|
     sy,0,
     offspeed,.125,
     sind,SPR_SWORD;
+    start;  damage, 2;
+    normal; damage, 1;
 ]]
 
 |[sword_item_hit_func]| function(a)
@@ -279,11 +280,11 @@ zclass[[brang,collidable,simple_spr,drawlayer_50,mov,actor,statitem|
     anchoring,@, xf,@,
     rx,.25, ry,.25,
 
-    damage,        0,
-    stunlen,       .25,
+    should_push,yes,
     pushspeed,     .25,
     should_use_xf, no,
     item_hit_func, ~kill,
+    should_stun,yes,
 
     visible,no,
     block_direction, yes,
@@ -336,7 +337,6 @@ end $$
 zclass[[bomb_explode,enemy,box,actor,statitem|
     x,@, y,@, rx,1, ry,1,
     damage,5,
-    stunlen,1,
     pushspeed,.25,
     should_use_xf,no,
     item_hit_func,nop,
