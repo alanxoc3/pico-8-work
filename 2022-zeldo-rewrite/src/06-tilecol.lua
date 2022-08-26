@@ -16,21 +16,18 @@ zclass[[collidable,box,vec|
     adjust_deltas_for_screen,%adjust_deltas_for_screen
 ]]
 
-|[calc_deltas]| function(a, b)
-    local box = {x=b.x-a.dx, y=b.y-a.dy, rx=b.rx, ry=b.ry}
-    return a:getdelta(box, a.dx, a.dy)
-end $$
+|[set_x_delta]| function(a, b) a.dx, _ = a:getdelta(b, a.dx, 0) end $$
+|[set_y_delta]| function(a, b) _, a.dy = a:getdelta(b, 0, a.dy) end $$
 
-|[adjust_deltas_for_solids]| function(a, list)
+|[adjust_deltas_for_solids]| function(a, setdelta, list)
     foreach(list, function(b)
         if a ~= b then
-            local box = {x=b.x-a.dx, y=b.y-a.dy, rx=b.rx, ry=b.ry}
-            a.dx, a.dy = a:getdelta(box, a.dx, a.dy)
+            setdelta(a, b)
         end
     end)
 end $$
 
-|[adjust_deltas_for_tiles]| function(a, room)
+|[adjust_deltas_for_tiles]| function(a, setdelta, room)
     for tx=max(flr(a.x-a.rx)-1,0),min(ceil(a.x+a.rx),ROOM_W-1) do
         for ty=flr(a.y-a.ry)-1,ceil(a.y+a.ry) do
             local sind = get_solid_tile(room, ty*ROOM_W+tx)
@@ -40,26 +37,33 @@ end $$
                 if not fget(sind,1) or fget(sind,1) and a.should_collide_below then
                     if fget(sind,2) then rx, ry = .375, .375 end
                     if fget(sind,3) then rx, ry = .375, .625 end
-                    a.dx, a.dy = a:calc_deltas{x=tx+.5, y=ty+.5, rx=rx, ry=ry}
+                    setdelta(a, {x=tx+.5, y=ty+.5, rx=rx, ry=ry})
                 end
             end
         end
     end
 end $$
 
-function get_delta_axis2(dx, x, rx, tdx, tdrx)
-    local xp = (x-tdx)/tdrx
-    if abs(xp)+rx/tdrx > 1 then
-        return tdx+sgn(xp)*(tdrx-rx)-(x-dx)
-    else
-        return dx
-    end
-end
+|[set_x_delta2]| function(a, b)
+    b = {x=b.x-a.dx, y=b.y, rx=b.rx, ry=b.ry}
 
-|[adjust_deltas_for_screen]| function(a)
+    local p = (a.x-b.x)/b.dx
+    if abs(p)+a.rx/b.dx > 1 then
+        a.dx = b.x+sgn(p)*(b.dx-a.rx)-(a.x-a.dx)
+    end
+end $$
+
+|[set_y_delta2]| function(a, b)
+    b = {x=b.x, y=b.y-a.dy, rx=b.rx, ry=b.ry}
+
+    local p = (a.y-b.y)/b.dy
+    if abs(p)+a.ry/b.dy > 1 then
+        a.dy = b.y+sgn(p)*(b.dy-a.ry)-(a.y-a.dy)
+    end
+end $$
+
+|[adjust_deltas_for_screen]| function(a, setdelta2)
     if a.should_collide_with_screen_edge then
-        local box = {x=g_room_bounds.x-a.dx, y=g_room_bounds.y-a.dy, rx=g_room_bounds.rx, ry=g_room_bounds.ry}
-        a.dx = get_delta_axis2(a.dx, a.x, a.rx, box.x, box.rx)
-        a.dy = get_delta_axis2(a.dy, a.y, a.ry, box.y, box.ry)
+        setdelta2(a, g_room_bounds)
     end
 end $$

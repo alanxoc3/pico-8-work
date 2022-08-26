@@ -44,6 +44,7 @@ function get_delta_axis(dx, x, rx, tdx, tdrx)
 end
 
 |[box_getdelta]| function(a, b, dx, dy)
+    local b = {x=b.x-dx, y=b.y-dy, rx=b.rx, ry=b.ry}
     local abx, aby = a:abside(b)
     local xp, yp = a:side(b)
 
@@ -53,9 +54,9 @@ end
         elseif aby ~= 0 and zsgn(dy) == -aby then
             dy = get_delta_axis(dy, a.y, a.ry, b.y, b.ry)
 
-        elseif aby ~= 0 then --and zsgn(xp) ~= zsgn(dx) then
+        elseif aby ~= 0 then
             dx = get_delta_axis(dx, a.x, a.rx, b.x, b.rx)
-        elseif abx ~= 0 then -- and zsgn(yp) ~= zsgn(dy) then
+        elseif abx ~= 0 then
             dy = get_delta_axis(dy, a.y, a.ry, b.y, b.ry)
         end
     end

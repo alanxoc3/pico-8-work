@@ -41,7 +41,7 @@ zclass[[house,actor,simple_spr,drawlayer_50|
 
     walls;1;,~, .75, .5,.25,.375;
     walls;2;,~,-.75, .5,.25,.375;
-    walls;3;,~,    0,.25,.75,.125;
+    walls;3;,~,    0,.25,.5,.125;
 ]]
 
 |[house_init]| function(a)

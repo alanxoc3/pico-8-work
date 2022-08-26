@@ -34,18 +34,15 @@ help him save the Land of Hi-roll from the FORCES-OF-EVIL.
 ## Tokens & Features
 friday...
 TODO: chest logic
-TODO: collision river bridge fix
 TODO: banjo over people text logic
 TODO: money system & money object appear under pot
 TODO: when items go up, slight bug
-TODO: standardize stun
-TODO: player weapons stun slimy
-TODO: refactor - consolidate stun logic
 TODO: standardize ma time
 TODO: pot ma override
 TODO: duck hold no interact
 TODO: double ma bug
 TODO: interact always override hurtable
+TODO: fix pot throw
 
 saturday...
 TODO: right ma sprite shouldn't be flipped
@@ -61,6 +58,9 @@ TODO: think of more enemies
 TODO: think about chicken collection for cannon logic (throw chicken onto a platform)
 
 ```
+2022-08-26 -- stunlogic collaxis
+    6653
+
 2022-08-20 -- mask polish stun hurt banjo
     6613
 

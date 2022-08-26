@@ -18,10 +18,13 @@ zclass[[pos|
 end $$
 
 -- position with a speed
-zclass[[vec,pos|dx,0,dy,0,vec_update,%vec_update]]
+zclass[[vec,pos|dx,0,dy,0,vec_update_x,%vec_update_x,vec_update_y,%vec_update_y]]
 
-|[vec_update]| function(a)
+|[vec_update_x]| function(a)
     a.x += a.dx
+end $$
+
+|[vec_update_y]| function(a)
     a.y += a.dy
 end $$
 
