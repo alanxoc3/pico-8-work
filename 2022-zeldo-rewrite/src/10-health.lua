@@ -32,11 +32,7 @@ end $$
         callback()
         a:start_timer('stunned_jump', .25)
         a:start_timer('stunned', .25+length, function()
-            if a.health <= 0 then
-                a:kill()
-            else
-                a:start_timer('stunned_cooldown', .25)
-            end
+            a:start_timer('stunned_cooldown', .25)
         end)
     end
 end $$

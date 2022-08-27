@@ -35,6 +35,7 @@ TODO: chest with sword
 TODO: banjo with lark text logic
 TODO: standardize ma time
 TODO: pot ma override
+TODO: remove duck throw
 TODO: duck follow logic
 TODO: interact always override hurtable
 TODO: item going up snap/fix
@@ -129,18 +130,18 @@ Canon  - Proposed to zeldo with squareforce. Weirdo dressed as santa. Gave Lime 
 Zeldo  - Canon proposed to her with squareforce.
 
 ## Item Locations
-Sword  - From chest in forest.
-Bowl   - From soup Jane gives you in village.
-Banjo  - From Teach in village.
-Bomb   - From cannon in mountains.
-Brang  - 4 coins from shop in village.
-Shield - 4 coins from shop in field. Need brang.
-Sling  - 4 coins from shop in forest. Need bomb.
-Mask   - 4 coins from shop in crypt.
+Sword  - Mandatory. From chest in forest.
+Bowl   - Mandatory. From soup Jane gives you in village.
+Banjo  - Optional.  From Teach in village.
+Bomb   - Mandatory. From cannon in mountains.
+Brang  - Optional.  4 coins from shop in village.
+Shield - Optional.  4 coins from shop in field. Need brang.
+Sling  - Optional.  4 coins from shop in forest. Need bomb.
+Mask   - Optional.  4 coins from shop in crypt.
 
 ## Duck Locations
 Duck #1 - Fores. Room after Lime.
-Duck #2 - Village.
+Duck #2 - Village. Near Janes house. This moves Bob when you talk to him with soup.
 Duck #3 - Field.
 Duck #4 - Mount.
 
@@ -185,18 +186,14 @@ Ghost
 - Start game.
 - Flash back, Zeldo and lank talk. Zeldo leaves. Lank gets attacked. Fade to black.
 - In house. Fairy talk to you whatever.
-- Grab banjo.
-- Learn to play.
-- Get money from playing to people.
-- Get boomerang or shield.
+- Talk to teach for banjo.
+- Unlock field and/or forest. Field needs chicken.
 - Go through woods. Navy lets you in.
 - Get sword from chest.
 - Fight and kill Lime & Mask.
-- Navy is sad. Give you bowl.
-- Grab duck. Give to Jane. Says come back later till soup is done (beat lime)
-- Get soup. Give to Bob. Soup is like potion.
+- Navy is sad. Give you college savings.
 - Go to ice castle
-- Gather ducks for switches.
+- Gather ducks across hiroll.
 - Dodge ball
 - Tennis
 - Reveal. Get bomb.
@@ -271,10 +268,13 @@ you can buy that mask too after you get bombs.
 
 ivan says cannon is the creepy guy who gave her the mask.
 
-banjo belongs to lark's father.
+sword belongs to lark's father.
 
 you dare to drink duck soup next to a duck's grave? How dare you.
 i think you need to learn a lesson.
 
 soup is temporary
 
+my daughter is trapped behind this giant rock. if only someone had a bomb to save her.
+mwa heh ha... i've been waiting for you. you must be that creep that wants to marry my daughter.
+if you want to see her that bad, you'll have to get through this crypt i filled with monsters. heh.
