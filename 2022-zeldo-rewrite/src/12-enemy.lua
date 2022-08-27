@@ -12,13 +12,13 @@ zclass[[enemy,box|
     pl_collide_func,nop
 ]]
 
-zclass[[quack,ma_right,actor,collidable,mov,enemy,simple_spr,drawlayer_50|
+zclass[[quack,propel,ma_right,actor,collidable,mov,enemy,simple_spr,drawlayer_50|
     x,@, y,@, rx, .25, ry, .25,
     sy,-2,
-    speed,.0125,
+    propel_speed,.0125,
     pl_collide_func,%quack_pl_collide_func,
     sind,32, cspr,32, cname,"quack";
-    start; init,%quack_change_dir, duration,1, next,start;
+    start; init,%quack_change_dir, update,~propel, duration,1, next,start;
 ]]
 
 |[quack_change_dir]| function(a)

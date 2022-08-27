@@ -23,7 +23,7 @@ g_obj_map = split[[
 ,bobblock    -- 18  | 80  | 1  | 1
 ,bobhouse    -- 19  | 80  | 1  | 1
 
-,bedbot_r    -- 20  | 0   | 1  | 1
+,bedbot_r    -- 20  | 55  | 1  | 1
 ,teach       -- 21  | 96  | 1  | 1
 ,jane        -- 22  | 81  | 1  | 1
 ,lark        -- 23  | 99  | 1  | 1

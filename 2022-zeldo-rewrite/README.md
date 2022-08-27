@@ -31,24 +31,24 @@ help him save the Land of Hi-roll from the FORCES-OF-EVIL.
 
 ## Tokens & Features
 friday...
-TODO: chest logic
-TODO: banjo over people text logic
-TODO: money under pot
-TODO: buy item from keep
-TODO: when items go up, slight bug
+TODO: chest with sword
+TODO: banjo with lark text logic
 TODO: standardize ma time
 TODO: pot ma override
-TODO: duck hold no interact
+TODO: duck follow logic
 TODO: double ma bug
 TODO: interact always override hurtable
-TODO: fix pot throw
+TODO: item going up snap/fix
 TODO: chicken follow not throw
 TODO: buy item logic
 TODO: get item logic
+TODO: duplicate duck bug
+TODO: lank 0 health bug when hit while leaving room
 
 saturday...
 TODO: right ma sprite shouldn't be flipped
 TODO: fix item offsets (many items are either off or sometimes off)
+TODO: when items go up, slight bug
 TODO: token crunch for 30 minutes
 TODO: bomb blow up crate
 TODO: first boss (lime)

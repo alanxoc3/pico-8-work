@@ -18,6 +18,12 @@
     -- should_use_xf: should push speed be reflected by the xf or position
     -- item_hit_func: a function that gets when it hits the enemy
 
+zclass[[propel,vec|propel,%propel_func, propel_speed,0]]
+
+|[propel_func]| function(a)
+    a.speed = a.propel_speed
+end $$
+
 zclass[[statitem,box|]] -- if the item hits an enemy, the enemy becomes the new stat
 
 --| ITEM ZCLASS LOGIC |--
@@ -60,40 +66,37 @@ zclass[[held_to_throw,anchor,actor|
 ]]
 
 |[held_to_throw_ending_init]| function(a)
-    a.item_thrown(a.anchoring.x, a.anchoring.y, a.anchoring.xf, .06+a.anchoring.speed, atan2(a.anchoring.xf, g_zbtn_2))
+    a.item_thrown(a.anchoring.x, a.anchoring.y, a.anchoring.xf, .06+a.anchoring.speed, atan2(a.anchoring.xf, 0))
 end $$
 
 zclass[[pot_held,held_to_throw   |anchoring,@, xf,@, sind,49,       item_thrown,%pot_thrown, sy,-3]]
 zclass[[quack_held,held_to_throw |anchoring,@, xf,@, sind,32,       item_thrown,%quack_thrown, sy,-4]]
 zclass[[bomb_held,held_to_throw  |anchoring,@, xf,@, sind,SPR_BOMB, item_thrown,%bomb, initial_energy,.3, sy,-3]]
 
-zclass[[item_throwing,collidable,mov,box,simple_spr,drawlayer_50,actor|
+zclass[[item_throwing,propel,collidable,mov,box,simple_spr,drawlayer_50,actor|
     rx,.25, ry,.25;
-
-    start; duration, .15, update,%item_throwing_update, next,wait;
-    wait; speed,0, update,nop;
+    start; duration, .15, update,%item_throwing_update;
 ]]
 
 |[item_throwing_update]| function(a)
     a.sy = sin(a:get_elapsed_percent'start'/4+.25)*7
+    a:propel()
 end $$
 
 zclass[[bomb,item_throwing|
-    x,@, y,@, xf,@, speed,@, ang,@,
+    x,@, y,@, xf,@, propel_speed,@, ang,@,
+    should_collide_below, no,
     sind,SPR_BOMB, destroyed,%bomb_destroyed;
-    wait; duration, .7;
 ]]
 
 zclass[[pot_thrown,item_throwing|
-    x,@, y,@, xf,@, speed,@, ang,@,
+    x,@, y,@, xf,@, propel_speed,@, ang,@,
     sind,49, destroyed,%standard_explosion;
-    wait; duration, .05;
 ]]
 
 zclass[[quack_thrown,item_throwing|
-    x,@, y,@, xf,@, speed,@, ang,@,
+    x,@, y,@, xf,@, propel_speed,@, ang,@,
     sind,32, destroyed,%quack_thrown_destroyed;
-    wait; duration, .05;
 ]]
 
 |[quack_thrown_destroyed]| function(a)
