@@ -63,18 +63,32 @@ zclass[[teach,person|
     text,"SPR_TEACH^im teach in a house"
 ]]
 
-zclass[[keep,person|
+zclass[[lark,person|
+    x,@, y,@,
+    cname,"lark", cspr,SPR_LARK, sind,SPR_LARK,
+    text,"SPR_LARK^im lark in a house"
+]]
+
+zclass[[keep_parent,person|
     x,@, y,@,
     cname,"keep", cspr,SPR_KEEP, sind,SPR_KEEP,
     gettext,%keep_gettext
 ]]
 
 |[keep_gettext]| function(a)
-    return "SPR_KEEP^scram kid. you only^have 99 coins.^come back later with^more money.", nop
+    if peek(a.memloc) ~= 0 then
+        return "SPR_KEEP^visit my 3 cousins^for more deals.", nop
+    elseif peek'MEM_MONEY' >= 4 then
+        return "SPR_KEEP^thanks for the coins.^have this "..a.item_name..".", function()
+            poke(a.memloc, 1)
+            poke(MEM_MONEY, peek'MEM_MONEY'-4)
+        end
+    else
+        return "SPR_KEEP^4 coins will buy you^something good.", nop
+    end
 end $$
 
-zclass[[lark,person|
-    x,@, y,@,
-    cname,"lark", cspr,SPR_LARK, sind,SPR_LARK,
-    text,"SPR_LARK^im lark in a house"
-]]
+zclass[[keep_brang, keep_parent|x,@, y,@,item_name,"boomerang", memloc, MEM_HAS_BRANG]]
+zclass[[keep_shield,keep_parent|x,@, y,@,item_name,"shield",    memloc, MEM_HAS_SHIELD]]
+zclass[[keep_sling, keep_parent|x,@, y,@,item_name,"slingshot", memloc, MEM_HAS_BOW]]
+zclass[[keep_mask,  keep_parent|x,@, y,@,item_name,"duck mask", memloc, MEM_HAS_MASK]]

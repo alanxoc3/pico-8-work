@@ -1,4 +1,4 @@
-g_obj_map=split[[bedpillow,bedblanket,pot,house231,navyblock,signlank,signkeep,signnavy,signteach,signlark,signjane,house224,house225,house226,house227,house228,house229,navyhouse,bobblock,bobhouse,keep,teach,jane,lark,r1spike,r2spike,l1spike,l2spike,saveplat,woodtbl,greytbl,soupbucket,slimy,miny,woodcrate,quack,coin,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil]]
+g_obj_map=split[[bedpillow,bedblanket,pot,house231,navyblock,signlank,signkeep,signnavy,signteach,signlark,signjane,house224,house225,house226,house227,house228,house229,navyhouse,bobblock,bobhouse,nil,teach,jane,lark,r1spike,r2spike,l1spike,l2spike,saveplat,woodtbl,greytbl,soupbucket,slimy,miny,woodcrate,quack,nil,keep_brang,keep_shield,keep_sling,keep_mask,nil,nil,nil,nil,nil,nil,nil,coin_1,coin_2,coin_3,coin_4,coin_5,coin_6,coin_7,coin_8,coin_9,coin_10,coin_11,coin_12,coin_13,coin_14,coin_15,coin_16,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil]]
 function decode_map()
 local rooms,cur_loc={},0x2000
 local peek_inc=function()
@@ -45,6 +45,13 @@ end
 rooms[room_ind]=room
 end
 return rooms
+end
+function create_coin(memloc)
+return function(x,y)
+if peek(memloc)==0 then
+_g.coin(x,y,memloc)
+end
+end
 end
 g_zclass_constructors,g_zclass_entities,g_zclass_new_entities={},{},{}
 function zclass(meta_and_att_str)
@@ -140,7 +147,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,animation_init,@,auto_outline_draw,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update_x,@,vec_update_y,@,mov_update,@,mov_towards_point,@,explode_draw,@,standard_explosion,@,set_x_delta,@,set_y_delta,@,adjust_deltas_for_solids,@,adjust_deltas_for_tiles,@,set_x_delta2,@,set_y_delta2,@,adjust_deltas_for_screen,@,healthobj_hurt,@,healthobj_stun,@,healthobj_health_update,@,inventory_open_update,@,inventory_update,@,inventory_start_update,@,inventory_normal_init,@,inventory_draw,@,simple_spr_draw,@,anchor_update_anchor,@,targettouch_update_target,@,coin_pl_collide_func,@,interact,@,held_to_throw_ending_init,@,item_throwing_update,@,quack_thrown_destroyed,@,bomb_destroyed,@,pellet_update,@,pellet_draw,@,bow_ending_init,@,sword_item_hit_func,@,banjo_start_init,@,banjo_ending_init,@,brang_drawout,@,brang_start_init,@,brang_start_update,@,brang_normal_update,@,brang_ending_init,@,brang_ending_update,@,bomb_pl_hit,@,item_horizontal_start_init,@,item_horizontal_normal_init,@,item_horizontal_ending_init,@,maskcheck_func,@,pushable_push,@,pushable_update_push,@,pl_destroyed,@,pl_update,@,pl_drawout,@,card_table_cache,@,coin_count_start,@,coin_count_normal,@,coin_coint_draw,@,energybar_draw,@,rstat_update,@,rstat_get,@,stat_update,@,stat_draw,@,tbox_init,@,tbox_update,@,tbox_draw,@,fairy_update,@,fairy_draw,@,spawn_walls,@,pot_callback_touch,@,house_init,@,person_target_with_tbox_disable_callback,@,person_target_with_tbox_finish_callback,@,keep_gettext,@,class_with_target_init,@,target_with_tbox_gettext,@,target_with_tbox_target_func,@,sign_target_with_tbox_disable_callback,@,slimy,@,miny,@,quack_change_dir,@,quack_pl_collide_func,@,enemy_pl_collide_func_batch,@,slimy_propel,@,slimy_stun_callback,@,slimy_stunstate,@,slimy_pl_collide_func,@,slimy_destroyed,@,slimy_start,@,slimy_bounce,@,slimy_jump_init,@,slimy_draw,@,slimy_statcollide,@,spike_pl_collide_func,@,saveplat_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,gameover_control_ending,@,gameover_init,@,gameover_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,simple_update,@,title_draw,@,title_logo_update,@,title_logo_drawout,@,game_state_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,animation_init,@,auto_outline_draw,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update_x,@,vec_update_y,@,mov_update,@,mov_towards_point,@,explode_draw,@,standard_explosion,@,set_x_delta,@,set_y_delta,@,adjust_deltas_for_solids,@,adjust_deltas_for_tiles,@,set_x_delta2,@,set_y_delta2,@,adjust_deltas_for_screen,@,healthobj_hurt,@,healthobj_stun,@,healthobj_health_update,@,inventory_open_update,@,inventory_update,@,inventory_start_update,@,inventory_normal_init,@,inventory_draw,@,simple_spr_draw,@,anchor_update_anchor,@,targettouch_update_target,@,coin_pl_collide_func,@,coin_1,@,coin_2,@,coin_3,@,coin_4,@,coin_5,@,coin_6,@,coin_7,@,coin_8,@,coin_9,@,coin_10,@,coin_11,@,coin_12,@,coin_13,@,coin_14,@,coin_15,@,coin_16,@,interact,@,held_to_throw_ending_init,@,item_throwing_update,@,quack_thrown_destroyed,@,bomb_destroyed,@,pellet_update,@,pellet_draw,@,bow_ending_init,@,sword_item_hit_func,@,banjo_start_init,@,banjo_ending_init,@,brang_drawout,@,brang_start_init,@,brang_start_update,@,brang_normal_update,@,brang_ending_init,@,brang_ending_update,@,bomb_pl_hit,@,item_horizontal_start_init,@,item_horizontal_normal_init,@,item_horizontal_ending_init,@,maskcheck_func,@,pushable_push,@,pushable_update_push,@,pl_destroyed,@,pl_update,@,pl_drawout,@,card_table_cache,@,coin_count_start,@,coin_count_normal,@,coin_coint_draw,@,energybar_draw,@,rstat_update,@,rstat_get,@,stat_update,@,stat_draw,@,tbox_init,@,tbox_update,@,tbox_draw,@,fairy_update,@,fairy_draw,@,spawn_walls,@,pot_callback_touch,@,house_init,@,person_target_with_tbox_disable_callback,@,person_target_with_tbox_finish_callback,@,keep_gettext,@,class_with_target_init,@,target_with_tbox_gettext,@,target_with_tbox_target_func,@,sign_target_with_tbox_disable_callback,@,slimy,@,miny,@,quack_change_dir,@,quack_pl_collide_func,@,enemy_pl_collide_func_batch,@,slimy_propel,@,slimy_stun_callback,@,slimy_stunstate,@,slimy_pl_collide_func,@,slimy_destroyed,@,slimy_start,@,slimy_bounce,@,slimy_jump_init,@,slimy_draw,@,slimy_statcollide,@,spike_pl_collide_func,@,saveplat_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,gameover_control_ending,@,gameover_init,@,gameover_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,simple_update,@,title_draw,@,title_logo_update,@,title_logo_drawout,@,game_state_init,@]],function(a,stateName)
 a.next_state=stateName or a.next
 end,function(a,stateName)
 a.next_state,a.isnew=nil
@@ -396,8 +403,9 @@ end
 end)
 end,function(a,pl)
 poke(0x5d21,peek"0x5d21"+1)
+poke(a.memloc,1)
 a:kill()
-end,function(...)
+end,create_coin"0x5d21",create_coin"0x5d22",create_coin"0x5d23",create_coin"0x5d24",create_coin"0x5d25",create_coin"0x5d26",create_coin"0x5d27",create_coin"0x5d28",create_coin"0x5d29",create_coin"0x5d2a",create_coin"0x5d2b",create_coin"0x5d2c",create_coin"0x5d2d",create_coin"0x5d2e",create_coin"0x5d2f",create_coin"0x5d30",function(...)
 local obj=g_rstat_right:get()
 if obj then
 if obj.id=="pot"then
@@ -644,7 +652,16 @@ end,function(a)
 poke(a.memloc_trigger,a.memloc_trigger_value)
 load_room(%0x5d01,g_pl.x,g_pl.y,g_pl.xf)
 end,function(a)
-return "83^scram kid. you only^have 99 coins.^come back later with^more money.",nop
+if peek(a.memloc)~=0 then
+return "83^visit my 3 cousins^for more deals.",nop
+elseif peek"0x5d21">=4 then
+return "83^thanks for the coins.^have this "..a.item_name..".",function()
+poke(a.memloc,1)
+poke(0x5d21,peek"0x5d21"-4)
+end
+else
+return "83^4 coins will buy you^something good.",nop
+end
 end,function(a)
 _g.target(a.trx,a.try,a.tx,a.ty,a,
 function()a:callback_touch()end,
@@ -993,7 +1010,7 @@ zclass[[wall,solid,anchor|anchoring,@,offx,@,offy,@,rx,@,ry,@]]
 zclass[[simple_spr,auto_outline,pos|drawout,%simple_spr_draw,sind,0,sw,1,sh,1,xf,1,yf,1,sx,0,sy,0]]
 zclass[[anchor,pos|update_anchor,%anchor_update_anchor;offx,0,offy,0,offdx,0,offdy,0,anchoring;,]]
 zclass[[target,anchor,box|rx,@,ry,@,offx,@,offy,@,anchoring,@,callback_touch,@,callback_outside,@,update_target,%targettouch_update_target]]
-zclass[[coin,actor,enemy,simple_spr,drawlayer_50|x,@,y,@,rx,.125,ry,.125,sind,36,draw,~drawout,pl_collide_func,%coin_pl_collide_func]]
+zclass[[coin,actor,enemy,simple_spr,drawlayer_50|x,@,y,@,memloc,@,rx,.125,ry,.125,sind,36,draw,~drawout,pl_collide_func,%coin_pl_collide_func]]
 zclass[[statitem,box|]]
 zclass[[held_to_throw,anchor,actor|visible,yes,block_direction,no,speed_multiplier,.5,initial_energy,.125,gradual_energy,0,offy,-.25,sy,-2,item_thrown,nop,sy,-2,offspeed,.185;start;init,nop,offdy,-.0625,duration,.08,next,normal;normal;init,nop,offdy,0,offy,-.5;ending;visible,no,init,%held_to_throw_ending_init,duration,.16;]]
 zclass[[pot_held,held_to_throw|anchoring,@,xf,@,sind,49,item_thrown,%pot_thrown,sy,-3]]
@@ -1077,8 +1094,12 @@ zclass[[bobblock,solid,person|x,@,y,@,cname,bob,cspr,80,sind,80,text,im bob outs
 zclass[[bobhouse,person|x,@,y,@,cname,bob,cspr,80,sind,80,text,80^im bob in a house|0x5d18|1]]
 zclass[[jane,person|x,@,y,@,cname,jane,cspr,81,sind,81,text,81^im jane in a house]]
 zclass[[teach,person|x,@,y,@,cname,teach,cspr,96,sind,96,text,96^im teach in a house]]
-zclass[[keep,person|x,@,y,@,cname,keep,cspr,83,sind,83,gettext,%keep_gettext]]
 zclass[[lark,person|x,@,y,@,cname,lark,cspr,99,sind,99,text,99^im lark in a house]]
+zclass[[keep_parent,person|x,@,y,@,cname,keep,cspr,83,sind,83,gettext,%keep_gettext]]
+zclass[[keep_brang,keep_parent|x,@,y,@,item_name,boomerang,memloc,0x5d15]]
+zclass[[keep_shield,keep_parent|x,@,y,@,item_name,shield,memloc,0x5d14]]
+zclass[[keep_sling,keep_parent|x,@,y,@,item_name,slingshot,memloc,0x5d12]]
+zclass[[keep_mask,keep_parent|x,@,y,@,item_name,duck mask,memloc,0x5d16]]
 zclass[[class_with_target,actor|trx,0,try,0,tx,0,ty,0,init,%class_with_target_init,callback_touch,nop,callback_outside,nop]]
 zclass[[target_with_tbox,class_with_target,ma_right|text,,gettext,%target_with_tbox_gettext,callback_touch,%target_with_tbox_target_func,target_with_tbox_disable_callback,nop,target_with_tbox_finish_callback,nop]]
 zclass[[sign,target_with_tbox,solid,simple_spr,drawlayer_50|rx,.375,ry,.375,sy,-2,target_with_tbox_disable_callback,%sign_target_with_tbox_disable_callback,cname,sign,cspr,24,sind,24,trx,.125,try,.375,tx,0,ty,.25]]
@@ -1150,7 +1171,7 @@ zclass[[game_state,actor|ecs_exclusions;actor,yes,timer,yes;curr,room,init,%game
 function load_save_state()
 memcpy(0x5d00,0x5e00,64)
 if peek"0x5d00"==0 then
-zcall(poke,[[1;,0x5d00,1;2;,0x5d01,136;3;,0x5d02,44;4;,0x5d03,26;5;,0x5d04,1;6;,0x5d08,5;7;,0x5d19,10;8;,0x5d20,10;9;,0x5d13,1;10;,0x5d15,1;11;,0x5d14,1;12;,0x5d16,1;13;,0x5d10,1;14;,0x5d17,1;15;,0x5d12,1;16;,0x5d11,1;]])
+zcall(poke,[[1;,0x5d00,1;2;,0x5d01,136;3;,0x5d02,44;4;,0x5d03,26;5;,0x5d04,1;6;,0x5d08,5;7;,0x5d19,10;8;,0x5d20,10;]])
 end
 end
 function _init()

@@ -37,13 +37,30 @@ zclass[[target,anchor,box|
 end $$
 
 zclass[[coin,actor,enemy,simple_spr,drawlayer_50|
-    x,@, y,@, rx,.125, ry, .125, sind,SPR_COIN,
+    x,@, y,@, memloc,@, rx,.125, ry, .125, sind,SPR_COIN,
     draw,~drawout,
     pl_collide_func,%coin_pl_collide_func
 ]]
 
 |[coin_pl_collide_func]| function(a, pl)
     poke(MEM_MONEY, peek'MEM_MONEY'+1)
+    poke(a.memloc, 1)
     a:kill()
 end $$
 
+|[coin_1]|  create_coin'MEM_COIN_1'  $$
+|[coin_2]|  create_coin'MEM_COIN_2'  $$
+|[coin_3]|  create_coin'MEM_COIN_3'  $$
+|[coin_4]|  create_coin'MEM_COIN_4'  $$
+|[coin_5]|  create_coin'MEM_COIN_5'  $$
+|[coin_6]|  create_coin'MEM_COIN_6'  $$
+|[coin_7]|  create_coin'MEM_COIN_7'  $$
+|[coin_8]|  create_coin'MEM_COIN_8'  $$
+|[coin_9]|  create_coin'MEM_COIN_9'  $$
+|[coin_10]| create_coin'MEM_COIN_10' $$
+|[coin_11]| create_coin'MEM_COIN_11' $$
+|[coin_12]| create_coin'MEM_COIN_12' $$
+|[coin_13]| create_coin'MEM_COIN_13' $$
+|[coin_14]| create_coin'MEM_COIN_14' $$
+|[coin_15]| create_coin'MEM_COIN_15' $$
+|[coin_16]| create_coin'MEM_COIN_16' $$

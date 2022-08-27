@@ -6,30 +6,28 @@ help him save the Land of Hi-roll from the FORCES-OF-EVIL.
 ```
 0: solid
 1: not solid for flying things
-2: rx=.375 ry=.375 (default is .5)
-3: rx=.5   ry=.625
+2: rx=.375 ry=.375 (for trees)
+3: rx=.375 ry=.625 (for river)
 ```
 
 ## Songs
 16 songs in total:
 
 7 long
-- DONE village
-- DONE forest
-- DONE field/mountain
-- DONE castle/cannon
-- DONE crypt
-- DONE ivan boss fight (based on computer room)
-- TODO endless mode
-
-7 short
-- TODO title screen
-- TODO intro (cut scene)
-- TODO graveyard (village + crypt)
-- DONE forest boss
-- DONE computer room
-- TODO game over
-- TODO house
+- long: village
+- long: forest
+- long: field/mountain
+- long: castle/cannon
+- long: crypt
+- long: ivan boss fight (based on computer room)
+- long: endless mode
+- shrt: title screen
+- shrt: intro (cut scene)
+- shrt: graveyard (village + crypt)
+- shrt: forest boss
+- shrt: computer room
+- shrt: game over
+- shrt: house
 
 ## Tokens & Features
 friday...
@@ -44,6 +42,9 @@ TODO: duck hold no interact
 TODO: double ma bug
 TODO: interact always override hurtable
 TODO: fix pot throw
+TODO: chicken follow not throw
+TODO: buy item logic
+TODO: get item logic
 
 saturday...
 TODO: right ma sprite shouldn't be flipped
@@ -141,7 +142,7 @@ Mask   - 4 coins from shop in crypt.
 
 ## Duck Locations
 Duck #1 - Fores. Room after Lime.
-Duck #2 - Field.
+Duck #2 - Village.
 Duck #3 - Field.
 Duck #4 - Mount.
 
@@ -151,7 +152,7 @@ Coin #2  - Vilag: Play banjo for Lark.
 Coin #3  - Vilag: In bob's bed.
 Coin #4  - Vilag: Chest in lank's room.
 Coin #5  - Vilag: Crate in teach's house.
-Coin #6  - Vilag: Next to tombstone in graveyard.
+Coin #6  - Vilag: Talk to Navy after Lime is dead.
 Coin #7  - Vilag: Pot in gravedigger house.
 Coin #8  - Fores: Hidden room.
 Coin #9  - Fores: Field.
@@ -159,7 +160,7 @@ Coin #10 - Fores:
 Coin #11 - Field:
 Coin #12 - Field:
 Coin #13 - Field: 
-Coin #14 - Crypt: Talk to Navy in graveyard after Lime is dead.
+Coin #14 - Crypt: Next to tombstone in graveyard.
 Coin #15 - Crypt: Graveyard/Crypt.
 Coin #16 - Crypt: Graveyard/Crypt.
 
