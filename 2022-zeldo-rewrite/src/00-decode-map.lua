@@ -1,6 +1,6 @@
 g_obj_map = split[[
  bedpillow   -- 0   | 39  | 1  | 1
-,bedblanket  -- 1   | 55  | 1  | 1
+,bedbot_l    -- 1   | 55  | 1  | 1
 ,pot         -- 2   | 49  | 1  | 1
 ,house231    -- 3   | 174 | 2  | 2
 ,navyblock   -- 4   | 97  | 1  | 1
@@ -23,7 +23,7 @@ g_obj_map = split[[
 ,bobblock    -- 18  | 80  | 1  | 1
 ,bobhouse    -- 19  | 80  | 1  | 1
 
-,nil         -- 20  | 0   | 1  | 1
+,bedbot_r    -- 20  | 0   | 1  | 1
 ,teach       -- 21  | 96  | 1  | 1
 ,jane        -- 22  | 81  | 1  | 1
 ,lark        -- 23  | 99  | 1  | 1

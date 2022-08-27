@@ -18,7 +18,7 @@ end $$
 zclass[[navyblock,person|
     x,@, y,@,
     cname,"navy", cspr,SPR_NAVY, sind,SPR_NAVY,
-    text,"SPR_NAVY^my sister has been in^the forest all day.^find something to^protect yourself with^and bring her home.",
+    text,"SPR_NAVY^my sister has been in^the forest all day.^please bring her back^home!",
 
     rx,.375, ry,1,
     memloc_trigger,MEM_IS_NAVY_HOME, memloc_trigger_value,1,
@@ -54,7 +54,7 @@ zclass[[bobhouse,person|
 zclass[[jane,person|
     x,@, y,@,
     cname,"jane", cspr,SPR_JANE, sind,SPR_JANE,
-    text,"SPR_JANE^im jane in a house"
+    text,"SPR_JANE^what should i make my^hubby for lunch?"
 ]]
 
 zclass[[teach,person|
