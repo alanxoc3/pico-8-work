@@ -22,9 +22,10 @@ zclass[[room_bounds,box|x,@,y,@,rx,@,ry,@]]
     )
 
     g_fairy = _g.fairy(g_pl.x, g_pl.y-.125)
-    g_rstat_left, g_rstat_right = _g.rstat(1, 9, 'ma_left'), _g.rstat(-1, 58, 'ma_right')
+    g_rstat_left, g_rstat_right = _g.rstat(1, 36, 'ma_left'), _g.rstat(-1, 93, 'ma_right')
 
     _g.energybar(g_pl)
+    _g.coin_count()
 
     -- create the objects in the room
     foreach(r.objects, function(obj_template)
@@ -33,6 +34,21 @@ zclass[[room_bounds,box|x,@,y,@,rx,@,ry,@]]
 end $$
 
 |[room_update]| function(state)
+    -- DEBUG_BEGIN
+    -- easy way to save
+    if btnp'BTN_ITEM_SELECT' and g_pl and g_pl:is_alive() then
+        zcall(poke, [[
+            1;,MEM_PL_X,       @;
+            2;,MEM_PL_Y,       @;
+            3;,MEM_PL_XF,      @;
+        ]], g_pl.x*POS_MULTIPLIER_FOR_MEMORY,
+            g_pl.y*POS_MULTIPLIER_FOR_MEMORY,
+            (g_pl.xf+1)\2
+        )
+        memcpy(REAL_SAVE_LOCATION, MEM_SAVE_LOCATION, SAVE_LENGTH)
+    end
+    -- DEBUG_END
+
     zcall(loop_entities, [[
         pls,@, solids,@, room,@, statitems,@;
 

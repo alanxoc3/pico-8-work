@@ -30,8 +30,8 @@ function load_save_state()
         zcall(poke, [[
             1 ;,MEM_SAVE_LOCATION ,1;
             2 ;,MEM_ROOM_IND      ,136;
-            3 ;,MEM_PL_X          ,48;
-            4 ;,MEM_PL_Y          ,48;
+            3 ;,MEM_PL_X          ,44;
+            4 ;,MEM_PL_Y          ,26;
             5 ;,MEM_PL_XF         ,1;
             6 ;,MEM_ITEM_INDEX    ,ITEM_IND_INTERACT;
             7 ;,MEM_PL_HEALTH     ,10;
@@ -86,4 +86,8 @@ function _draw()
     cls()
     loop_entities('game_state', 'draw')
     fade(g_fade)
+    -- DEBUG_BEGIN
+    camera()
+    rect(0, 0, 127, 127, 8)
+    -- DEBUG_END
 end

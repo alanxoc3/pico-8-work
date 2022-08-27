@@ -1,5 +1,5 @@
 zclass[[person,solid,target_with_tbox,simple_spr,drawlayer_50|
-    text,, sy,-2,
+    sy,-2,
     rx,.375, ry,.375,
     trx,.5, try,.5,
     target_with_tbox_disable_callback,%person_target_with_tbox_disable_callback
@@ -66,8 +66,12 @@ zclass[[teach,person|
 zclass[[keep,person|
     x,@, y,@,
     cname,"keep", cspr,SPR_KEEP, sind,SPR_KEEP,
-    text,"SPR_KEEP^im keep in a house"
+    gettext,%keep_gettext
 ]]
+
+|[keep_gettext]| function(a)
+    return "SPR_KEEP^scram kid. you only^have 99 coins.^come back later with^more money.", nop
+end $$
 
 zclass[[lark,person|
     x,@, y,@,

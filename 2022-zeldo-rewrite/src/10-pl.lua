@@ -374,12 +374,8 @@ zclass[[pushable,mov|
 ]]
 
 |[pushable_push]| function(a, ang, duration, override)
-    if a:maskcheck(override) then
-        a:start_timer('push', duration)
-        a:start_timer('push_jump', .25)
-
-        a.push_ang = ang
-    end
+    a:start_timer('push', duration)
+    a.push_ang = ang
 end $$
 
 |[pushable_update_push]| function(a)

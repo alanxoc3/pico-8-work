@@ -35,3 +35,15 @@ zclass[[target,anchor,box|
         end
     end)
 end $$
+
+zclass[[coin,actor,enemy,simple_spr,drawlayer_50|
+    x,@, y,@, rx,.125, ry, .125, sind,SPR_COIN,
+    draw,~drawout,
+    pl_collide_func,%coin_pl_collide_func
+]]
+
+|[coin_pl_collide_func]| function(a, pl)
+    poke(MEM_MONEY, peek'MEM_MONEY'+1)
+    a:kill()
+end $$
+

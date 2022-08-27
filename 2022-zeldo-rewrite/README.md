@@ -35,7 +35,8 @@ help him save the Land of Hi-roll from the FORCES-OF-EVIL.
 friday...
 TODO: chest logic
 TODO: banjo over people text logic
-TODO: money system & money object appear under pot
+TODO: money under pot
+TODO: buy item from keep
 TODO: when items go up, slight bug
 TODO: standardize ma time
 TODO: pot ma override
@@ -128,15 +129,39 @@ Lark   - Mayor of town.
 Canon  - Proposed to zeldo with squareforce. Weirdo dressed as santa. Gave Lime the mask.
 Zeldo  - Canon proposed to her with squareforce.
 
-## Items
-- Shield 99
-- Brang  99
-- Mega Sword (only effective against evil)
-- Bowl - drink it
-- Banjo - play it (use for saving & earn money)
-- Bomb - place and hold release to blow up (longer hold, stamina goes up) (or timer)
-- Bow  - 999
-- Mask - 999 Hold down item button. Stamina goes down quickly. Pauses everything in the room.
+## Item Locations
+Sword  - From chest in forest.
+Bowl   - From soup Jane gives you in village.
+Banjo  - From Teach in village.
+Bomb   - From cannon in mountains.
+Brang  - 4 coins from shop in village.
+Shield - 4 coins from shop in field. Need brang.
+Sling  - 4 coins from shop in forest. Need bomb.
+Mask   - 4 coins from shop in crypt.
+
+## Duck Locations
+Duck #1 - Fores. Room after Lime.
+Duck #2 - Field.
+Duck #3 - Field.
+Duck #4 - Mount.
+
+## Coin Locations
+Coin #1  - Vilag: Behind keep's house.
+Coin #2  - Vilag: Play banjo for Lark.
+Coin #3  - Vilag: In bob's bed.
+Coin #4  - Vilag: Chest in lank's room.
+Coin #5  - Vilag: Crate in teach's house.
+Coin #6  - Vilag: Next to tombstone in graveyard.
+Coin #7  - Vilag: Pot in gravedigger house.
+Coin #8  - Fores: Hidden room.
+Coin #9  - Fores: Field.
+Coin #10 - Fores:
+Coin #11 - Field:
+Coin #12 - Field:
+Coin #13 - Field: 
+Coin #14 - Crypt: Talk to Navy in graveyard after Lime is dead.
+Coin #15 - Crypt: Graveyard/Crypt.
+Coin #16 - Crypt: Graveyard/Crypt.
 
 ## Enemies
 Batty      - Everywhere.
@@ -204,12 +229,14 @@ Lime:
 Canon:
     - dodgeball/tennis
 
+Duck Spirit:
+    - idk
+
 Grover:
     - zeldo's dad
 
 Ivan:
     - repeat of previous bosses + something else?
-    - duck with mask???
 
 ## Areas
 Ice Castle, Graveyard, Zeldo Home, Field, Mountain Area, Spike Forest, Village
