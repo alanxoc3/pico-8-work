@@ -60,8 +60,18 @@ zclass[[jane,person|
 zclass[[teach,person|
     x,@, y,@,
     cname,"teach", cspr,SPR_TEACH, sind,SPR_TEACH,
-    text,"SPR_TEACH^im teach in a house"
+    gettext,%teach_gettext
 ]]
+
+|[teach_gettext]| function(a)
+    if peek'MEM_HAS_BANJO' == 0 then
+        return "SPR_TEACH^the almighty power of^music is now yours!^take this banjo.", function()
+            poke(MEM_HAS_BANJO, 1)
+        end
+    else
+        return "SPR_TEACH^try playing the banjo^on a save platform.", nop
+    end
+end $$
 
 zclass[[lark,person|
     x,@, y,@,
@@ -91,4 +101,4 @@ end $$
 zclass[[keep_brang, keep_parent|x,@, y,@,item_name,"boomerang", memloc, MEM_HAS_BRANG]]
 zclass[[keep_shield,keep_parent|x,@, y,@,item_name,"shield",    memloc, MEM_HAS_SHIELD]]
 zclass[[keep_sling, keep_parent|x,@, y,@,item_name,"slingshot", memloc, MEM_HAS_BOW]]
-zclass[[keep_mask,  keep_parent|x,@, y,@,item_name,"duck mask", memloc, MEM_HAS_MASK]]
+zclass[[keep_mask,  keep_parent|x,@, y,@,item_name,"scary mask",      memloc, MEM_HAS_MASK]]
