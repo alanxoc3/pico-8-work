@@ -18,10 +18,13 @@ zclass[[pos|
 end $$
 
 -- position with a speed
-zclass[[vec,pos|dx,0,dy,0,vec_update,%vec_update]]
+zclass[[vec,pos|dx,0,dy,0,vec_update_x,%vec_update_x,vec_update_y,%vec_update_y]]
 
-|[vec_update]| function(a)
+|[vec_update_x]| function(a)
     a.x += a.dx
+end $$
+
+|[vec_update_y]| function(a)
     a.y += a.dy
 end $$
 
@@ -38,6 +41,7 @@ zclass[[mov,vec|
     a.dx *= DEFAULT_INERTIA a.dy *= DEFAULT_INERTIA
     if ax == 0 and abs(a.dx) < MIN_SPEED then a.dx = 0 end
     if ay == 0 and abs(a.dy) < MIN_SPEED then a.dy = 0 end
+    a.speed = 0
 end $$
 
 |[mov_towards_point]| function(a, x, y)

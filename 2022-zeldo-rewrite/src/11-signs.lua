@@ -27,24 +27,31 @@ zclass[[class_with_target,actor|
 end $$
 
 zclass[[target_with_tbox,class_with_target,ma_right|
+    text,,
+    
+    gettext,%target_with_tbox_gettext,
     callback_touch,%target_with_tbox_target_func,
     target_with_tbox_disable_callback,nop,
     target_with_tbox_finish_callback,nop
 ]]
 
+|[target_with_tbox_gettext]| function(a)
+    return a.text, function()
+        a:target_with_tbox_finish_callback()
+    end
+end $$
+
 |[target_with_tbox_target_func]| function(a)
     if not a:target_with_tbox_disable_callback() then
-        a:start_timer('isma',.1)
-        if btnp'4' and not does_entity_exist'tbox' then
-            _g.tbox(a.text, function()
-                a:target_with_tbox_finish_callback()
-            end)
+        a:start_timer('isma',0)
+        if should_interact() then
+            _g.tbox(a:gettext())
         end
     end
 end $$
 
 zclass[[sign,target_with_tbox,solid,simple_spr,drawlayer_50|
-    text,,rx,.375,ry,.375,
+    rx,.375,ry,.375,
     sy,-2,
     target_with_tbox_disable_callback,%sign_target_with_tbox_disable_callback,
     cname,"sign",cspr,SPR_SIGN,
@@ -52,8 +59,9 @@ zclass[[sign,target_with_tbox,solid,simple_spr,drawlayer_50|
     trx,.125, try,.375, tx,0, ty,.25
 ]]
 
-|[sign_target_with_tbox_disable_callback]| function(a)
-    return peek'MEM_ITEM_INDEX' ~= ITEM_IND_INTERACT
+-- really this is used in a lot of places... I should refactor...
+|[sign_target_with_tbox_disable_callback]| function()
+    return peek'MEM_ITEM_INDEX' ~= ITEM_IND_INTERACT or not g_pl.item.is_default
 end $$
 
 zclass[[signtest,sign|x,@,y,@,text,  "SPR_SIGN^mary had a^little lamb^little lamb^little lamb^mary had a^little lamb^whose fleece was^white as yo face"]]

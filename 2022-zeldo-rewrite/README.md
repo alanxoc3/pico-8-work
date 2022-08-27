@@ -6,50 +6,48 @@ help him save the Land of Hi-roll from the FORCES-OF-EVIL.
 ```
 0: solid
 1: not solid for flying things
-2: rx=.375 ry=.375 (default is .5)
-3: rx=.5   ry=.625
+2: rx=.375 ry=.375 (for trees)
+3: rx=.375 ry=.625 (for river)
 ```
 
 ## Songs
 16 songs in total:
 
 7 long
-- DONE village
-- DONE forest
-- DONE field/mountain
-- DONE castle/cannon
-- DONE crypt
-- DONE ivan boss fight (based on computer room)
-- TODO endless mode
-
-7 short
-- TODO title screen
-- TODO intro (cut scene)
-- TODO graveyard (village + crypt)
-- DONE forest boss
-- DONE computer room
-- TODO game over
-- TODO house
+- long: village
+- long: forest
+- long: field/mountain
+- long: castle/cannon
+- long: crypt
+- long: ivan boss fight (based on computer room)
+- long: endless mode
+- shrt: title screen
+- shrt: intro (cut scene)
+- shrt: graveyard (village + crypt)
+- shrt: forest boss
+- shrt: computer room
+- shrt: game over
+- shrt: house
 
 ## Tokens & Features
 friday...
-TODO: chest logic
-TODO: collision river bridge fix
-TODO: banjo over people text logic
-TODO: money system & money object appear under pot
-TODO: when items go up, slight bug
-TODO: standardize stun
-TODO: player weapons stun slimy
-TODO: refactor - consolidate stun logic
+TODO: chest with sword
+TODO: banjo with lark text logic
 TODO: standardize ma time
 TODO: pot ma override
-TODO: duck hold no interact
-TODO: double ma bug
+TODO: remove duck throw
+TODO: duck follow logic
 TODO: interact always override hurtable
+TODO: item going up snap/fix
+TODO: chicken follow not throw
+TODO: get item logic
+TODO: lank 0 health bug when hit while leaving room
+TODO: remove collision for bomb in air
 
 saturday...
 TODO: right ma sprite shouldn't be flipped
 TODO: fix item offsets (many items are either off or sometimes off)
+TODO: when items go up, slight bug
 TODO: token crunch for 30 minutes
 TODO: bomb blow up crate
 TODO: first boss (lime)
@@ -61,6 +59,9 @@ TODO: think of more enemies
 TODO: think about chicken collection for cannon logic (throw chicken onto a platform)
 
 ```
+2022-08-26 -- stunlogic collaxis
+    6653
+
 2022-08-20 -- mask polish stun hurt banjo
     6613
 
@@ -128,15 +129,39 @@ Lark   - Mayor of town.
 Canon  - Proposed to zeldo with squareforce. Weirdo dressed as santa. Gave Lime the mask.
 Zeldo  - Canon proposed to her with squareforce.
 
-## Items
-- Shield 99
-- Brang  99
-- Mega Sword (only effective against evil)
-- Bowl - drink it
-- Banjo - play it (use for saving & earn money)
-- Bomb - place and hold release to blow up (longer hold, stamina goes up) (or timer)
-- Bow  - 999
-- Mask - 999 Hold down item button. Stamina goes down quickly. Pauses everything in the room.
+## Item Locations
+Sword  - Mandatory. From chest in forest.
+Bowl   - Mandatory. From soup Jane gives you in village.
+Banjo  - Optional.  From Teach in village.
+Bomb   - Mandatory. From cannon in mountains.
+Brang  - Optional.  4 coins from shop in village.
+Shield - Optional.  4 coins from shop in field. Need brang.
+Sling  - Optional.  4 coins from shop in forest. Need bomb.
+Mask   - Optional.  4 coins from shop in crypt.
+
+## Duck Locations
+Duck #1 - Fores. Room after Lime.
+Duck #2 - Village. Near Janes house. This moves Bob when you talk to him with soup.
+Duck #3 - Field.
+Duck #4 - Mount.
+
+## Coin Locations
+Coin #1  - Vilag: Behind keep's house.
+Coin #2  - Vilag: Play banjo for Lark.
+Coin #3  - Vilag: In bob's bed.
+Coin #4  - Vilag: Chest in lank's room.
+Coin #5  - Vilag: Crate in teach's house.
+Coin #6  - Vilag: Talk to Navy after Lime is dead.
+Coin #7  - Vilag: Pot in gravedigger house.
+Coin #8  - Fores: Hidden room.
+Coin #9  - Fores: Field.
+Coin #10 - Fores:
+Coin #11 - Field:
+Coin #12 - Field:
+Coin #13 - Field: 
+Coin #14 - Crypt: Next to tombstone in graveyard.
+Coin #15 - Crypt: Graveyard/Crypt.
+Coin #16 - Crypt: Graveyard/Crypt.
 
 ## Enemies
 Batty      - Everywhere.
@@ -161,18 +186,14 @@ Ghost
 - Start game.
 - Flash back, Zeldo and lank talk. Zeldo leaves. Lank gets attacked. Fade to black.
 - In house. Fairy talk to you whatever.
-- Grab banjo.
-- Learn to play.
-- Get money from playing to people.
-- Get boomerang or shield.
+- Talk to teach for banjo.
+- Unlock field and/or forest. Field needs chicken.
 - Go through woods. Navy lets you in.
 - Get sword from chest.
 - Fight and kill Lime & Mask.
-- Navy is sad. Give you bowl.
-- Grab duck. Give to Jane. Says come back later till soup is done (beat lime)
-- Get soup. Give to Bob. Soup is like potion.
+- Navy is sad. Give you college savings.
 - Go to ice castle
-- Gather ducks for switches.
+- Gather ducks across hiroll.
 - Dodge ball
 - Tennis
 - Reveal. Get bomb.
@@ -204,12 +225,14 @@ Lime:
 Canon:
     - dodgeball/tennis
 
+Duck Spirit:
+    - idk
+
 Grover:
     - zeldo's dad
 
 Ivan:
     - repeat of previous bosses + something else?
-    - duck with mask???
 
 ## Areas
 Ice Castle, Graveyard, Zeldo Home, Field, Mountain Area, Spike Forest, Village
@@ -245,10 +268,13 @@ you can buy that mask too after you get bombs.
 
 ivan says cannon is the creepy guy who gave her the mask.
 
-banjo belongs to lark's father.
+sword belongs to lark's father.
 
 you dare to drink duck soup next to a duck's grave? How dare you.
 i think you need to learn a lesson.
 
 soup is temporary
 
+my daughter is trapped behind this giant rock. if only someone had a bomb to save her.
+mwa heh ha... i've been waiting for you. you must be that creep that wants to marry my daughter.
+if you want to see her that bad, you'll have to get through this crypt i filled with monsters. heh.

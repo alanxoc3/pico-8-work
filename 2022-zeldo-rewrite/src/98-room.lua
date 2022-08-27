@@ -22,9 +22,10 @@ zclass[[room_bounds,box|x,@,y,@,rx,@,ry,@]]
     )
 
     g_fairy = _g.fairy(g_pl.x, g_pl.y-.125)
-    g_rstat_left, g_rstat_right = _g.rstat(1, 9, 'ma_left'), _g.rstat(-1, 58, 'ma_right')
+    g_rstat_left, g_rstat_right = _g.rstat(1, 36, 'ma_left'), _g.rstat(-1, 93, 'ma_right')
 
     _g.energybar(g_pl)
+    _g.coin_count()
 
     -- create the objects in the room
     foreach(r.objects, function(obj_template)
@@ -33,6 +34,21 @@ zclass[[room_bounds,box|x,@,y,@,rx,@,ry,@]]
 end $$
 
 |[room_update]| function(state)
+    -- DEBUG_BEGIN
+    -- easy way to save
+    if btnp'BTN_ITEM_SELECT' and g_pl and g_pl:is_alive() then
+        zcall(poke, [[
+            1;,MEM_PL_X,       @;
+            2;,MEM_PL_Y,       @;
+            3;,MEM_PL_XF,      @;
+        ]], g_pl.x*POS_MULTIPLIER_FOR_MEMORY,
+            g_pl.y*POS_MULTIPLIER_FOR_MEMORY,
+            (g_pl.xf+1)\2
+        )
+        memcpy(REAL_SAVE_LOCATION, MEM_SAVE_LOCATION, SAVE_LENGTH)
+    end
+    -- DEBUG_END
+
     zcall(loop_entities, [[
         pls,@, solids,@, room,@, statitems,@;
 
@@ -41,15 +57,22 @@ end $$
         3 ;,pushable,    update_push;
         4 ;,mov,         mov_update;
         5 ;,enemy,       pl_collide_func_batch, ~pls;
-        6 ;,collidable,  adjust_deltas_for_solids, ~solids;
-        7 ;,collidable,  adjust_deltas_for_tiles, ~room;
-        8 ;,collidable,  adjust_deltas_for_screen;
-        9 ;,vec,         vec_update;
-        10;,slimy_shared,statcollide, ~statitems;
-        11;,anchor,      update_anchor;
-        12;,target,      update_target, ~pls;
-        13;,rstat,       update;
-        14;,healthobj,   health_update;
+
+        6 ;,collidable,  adjust_deltas_for_solids, %set_x_delta, ~solids;
+        7 ;,collidable,  adjust_deltas_for_tiles,  %set_x_delta, ~room;
+        8 ;,collidable,  adjust_deltas_for_screen, %set_x_delta2;
+        9 ;,vec,         vec_update_x;
+
+        10;,collidable,  adjust_deltas_for_solids, %set_y_delta, ~solids;
+        11;,collidable,  adjust_deltas_for_tiles,  %set_y_delta, ~room;
+        12;,collidable,  adjust_deltas_for_screen, %set_y_delta2;
+        13;,vec,         vec_update_y;
+
+        14;,slimy_shared,statcollide, ~statitems;
+        15;,anchor,      update_anchor;
+        16;,target,      update_target, ~pls;
+        17;,rstat,       buffer_update;
+        18;,healthobj,   health_update;
     ]], g_zclass_entities.pl, g_zclass_entities.solid, g_rooms[peek'MEM_ROOM_IND'], g_zclass_entities.statitem)
 
     poke(MEM_PL_HEALTH, g_pl.health)

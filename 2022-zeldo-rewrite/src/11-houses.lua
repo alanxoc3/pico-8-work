@@ -5,7 +5,7 @@ end $$
 zclass[[woodtbl   ,solid,drawlayer_50,simple_spr|x,@,y,@,rx,.375,ry,.375,draw,~drawout,sind,16]]
 zclass[[greytbl   ,solid,drawlayer_50,simple_spr|x,@,y,@,rx,.375,ry,.375,draw,~drawout,sind,17]]
 zclass[[soupbucket,solid,drawlayer_50,simple_spr|x,@,y,@,rx,.375,ry,.375,draw,~drawout,sind,18]]
-zclass[[woodcrate ,solid,drawlayer_50,simple_spr|x,@,y,@,rx,.375,ry,.375,draw,~drawout,sind,35]]
+zclass[[woodcrate ,solid,drawlayer_50,simple_spr|x,@,y,@,rx,.375,ry,.25,draw,~drawout,sind,35]]
 
 zclass[[pot,solid,class_with_target,drawlayer_50,ma_right,simple_spr|
     x,@,y,@,
@@ -16,20 +16,29 @@ zclass[[pot,solid,class_with_target,drawlayer_50,ma_right,simple_spr|
 ]]
 
 |[pot_callback_touch]| function(a)
-    if peek'MEM_ITEM_INDEX' == ITEM_IND_INTERACT then
+    if not _g.sign_target_with_tbox_disable_callback() then
         a:start_timer('isma', 0)
     end
 end $$
 
-zclass[[bedblanket,actor,simple_spr,drawlayer_50|
+zclass[[bedbot_l,actor,simple_spr,drawlayer_50|
     x,@, y,@,
     sind,55,
     init,%spawn_walls;
 
-    walls;1;,~, -.25, .25, .25, .25;
-    walls;2;,~,  .25, .25, .25, .25;
-    -- walls;1;,~,    .375, .25,.375,.25;
-    --walls;2;,~,   -.375, .25,.375,.25;
+    walls;1;,~,     0, .25, .75, .25;
+    walls;2;,~,  .625,   0, .25, .25;
+    walls;3;,~, -.625, -.5, .25, 1;
+]]
+
+zclass[[bedbot_r,actor,simple_spr,drawlayer_50|
+    x,@, y,@,
+    sind,55,
+    init,%spawn_walls;
+
+    walls;1;,~,     0, .25, .75, .25;
+    walls;2;,~, -.625,   0, .25, .25;
+    walls;3;,~,  .625, -.5, .25, 1;
 ]]
 
 zclass[[bedpillow,simple_spr,drawlayer_25|x,@,y,@,sind,39]]
@@ -41,7 +50,7 @@ zclass[[house,actor,simple_spr,drawlayer_50|
 
     walls;1;,~, .75, .5,.25,.375;
     walls;2;,~,-.75, .5,.25,.375;
-    walls;3;,~,    0,.25,.75,.125;
+    walls;3;,~,    0,.25,.5,.125;
 ]]
 
 |[house_init]| function(a)

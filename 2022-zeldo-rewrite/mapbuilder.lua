@@ -9,7 +9,7 @@ CON_TILE   = 254
 CON_END    = 255
 LAST_ROOM_INDEX = 223
 
-#include src/00-zobj.lua
+#include src/01-zobj.lua
 #include src/00-decode-map.lua
 
 g_fills = {}

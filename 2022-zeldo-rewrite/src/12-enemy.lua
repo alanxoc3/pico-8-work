@@ -1,9 +1,9 @@
 |[slimy]| function(x, y)
-    _g.explode(x, y, 4, 1, function() _g.slimy_actual(rnd'1', x, y) end)
+    _g.explode(x, y, 4, 1, function() _g.slimy_actual(rnd'1'+.75, x, y) end)
 end $$
 
 |[miny]| function(x, y)
-    _g.explode(x, y, 4, 1, function() _g.miny_actual(rnd'1', x, y, 0) end)
+    _g.explode(x, y, 4, 1, function() _g.miny_actual(rnd'1'+.75, x, y, 0) end)
 end $$
 
 -- enemy can collide with the player
@@ -12,13 +12,13 @@ zclass[[enemy,box|
     pl_collide_func,nop
 ]]
 
-zclass[[quack,ma_right,actor,collidable,mov,enemy,simple_spr,drawlayer_50|
+zclass[[quack,propel,ma_right,actor,collidable,mov,enemy,simple_spr,drawlayer_50|
     x,@, y,@, rx, .25, ry, .25,
     sy,-2,
-    speed,.0125,
+    propel_speed,.0125,
     pl_collide_func,%quack_pl_collide_func,
     sind,32, cspr,32, cname,"quack";
-    start; init,%quack_change_dir, duration,1, next,start;
+    start; init,%quack_change_dir, update,~propel, duration,1, next,start;
 ]]
 
 |[quack_change_dir]| function(a)
@@ -27,7 +27,9 @@ zclass[[quack,ma_right,actor,collidable,mov,enemy,simple_spr,drawlayer_50|
 end $$
 
 |[quack_pl_collide_func]| function(a, pl)
-    a:start_timer('isma', 0)
+    if not _g.sign_target_with_tbox_disable_callback() then
+        a:start_timer('isma', 0)
+    end
 end $$
 
 |[enemy_pl_collide_func_batch]| function(a, others)
@@ -38,44 +40,55 @@ end $$
     end)
 end $$
 
-zclass[[slimy_shared,ma_right,actor,collidable,healthobj,mov,enemy,simple_spr,drawlayer_50|
+zclass[[slimy_shared,ma_right,pushable,actor,collidable,healthobj,enemy,simple_spr,drawlayer_50|
     rx, .25, ry, .25,
     statcollide,%slimy_statcollide,
     drawout,%slimy_draw,
     pl_collide_func,%slimy_pl_collide_func,
-    max_health,5;
+    stun_callback,%slimy_stun_callback,
+    max_health,5,
+    curr,idle;
 
-    stunned; init,nop, speed,0, sx,0, duration,0, next,idle;
-    start;   next,idle;
-    idle;    init,nop, speed,0, sx,0, update,%slimy_start, duration, 1,   next,bounce_1;
-    bounce_1;init,%slimy_bounce, speed,0, update,nop, duration,.0625, next,bounce_2;
-    bounce_2;init,%slimy_bounce, speed,0, update,nop, duration,.0625, next,jump;
-    jump;    init,%slimy_jump_init, update,nop, pl_collide_func,%slimy_pl_collide_func, speed,.025, sx,0, duration, .25, next,idle;
+    stunstate; init,nop, update,%slimy_stunstate, next,idle;
+    idle;      init,nop, update,%slimy_start, next,bounce_1;
+    bounce_1;  init,%slimy_bounce, update,nop, duration,.0625, next,bounce_2;
+    bounce_2;  init,%slimy_bounce, update,nop, duration,.0625, next,jump;
+    jump;      init,%slimy_jump_init, update,%slimy_propel, pl_collide_func,%slimy_pl_collide_func, duration, .25, next,idle;
 ]]
 
+|[slimy_propel]| function(a)
+    a.speed = .025
+end $$
+
+|[slimy_stun_callback]| function(a)
+    a:load'stunstate'
+end $$
+
+|[slimy_stunstate]| function(a)
+    if not a:is_active'stunned' then
+        a:load()
+    end
+end $$
+
 zclass[[slimy_actual,slimy_shared |
-    start;duration,@;
+    idle;sind,118,duration,@; jump;sind,119;
     x,@, y,@, cspr,118, cname,"slimy", sind,118, max_health,5, destroyed,%slimy_destroyed;
-    stunned;sind,118;
-    idle;sind,118;
-    jump;sind,119;
 ]]
 
 zclass[[miny_actual,slimy_shared  |
-    start;duration,@;
+    idle;sind,116,duration,@; jump;sind,117;
     x,@, y,@, dy,@, cspr,116, cname,"miny", sind,116, max_health,1, destroyed,%standard_explosion;
-    stunned;sind,116;
-    idle;sind,116;
-    jump;sind,117;
 ]]
 
 |[slimy_pl_collide_func]| function(a, pl)
     a.speed = 0
     a:start_timer('isma', 2)
-    if a:is_active'jump' then
-        pl:push(atan2(a.xf, pl.y-a.y), .125)
-        pl:stun'.25'
-    end
+        if a:is_active'jump' then
+            pl:push(atan2(a.xf, pl.y-a.y), .125)
+            pl:stun'.25'
+        else
+            pl:push(atan2(pl:abside(a)), .03125)
+        end
 end $$
 
 |[slimy_destroyed]| function(a)
@@ -110,20 +123,30 @@ end $$
 |[slimy_statcollide]| function(a, items)
     foreach(items, function(item)
         if not a:outside(item) and item:is_alive() then
-            a:start_timer('isma', 2)
-
-            a:hurt(item.damage)
-            if not a:is_active'stunned' then
-                if item.should_use_xf then
-                    a.dx += item.pushspeed*item.xf
-                else
-                    local abx, aby = a:abside(item)
-                    a.dx += item.pushspeed*abx
-                    a.dy += item.pushspeed*aby
-                end
+            local did_hit = false
+            if item.damage then
+                a:hurt(item.damage, function()
+                    did_hit = true
+                end)
+            elseif item.should_stun then
+                a:stun(1.5, function()
+                    did_hit = true
+                end)
             end
 
-            item:item_hit_func()
+            if did_hit then
+                a:start_timer('isma', 2)
+                item:item_hit_func()
+            end
+
+            if item.should_push or did_hit then
+                if item.should_use_xf then
+                    a:push(atan2(item.xf, item.y-a.y), .125)
+                else
+                    local abx, aby = a:abside(item)
+                    a:push(atan2(abx, aby), .125)
+                end
+            end
         end
     end)
 end $$

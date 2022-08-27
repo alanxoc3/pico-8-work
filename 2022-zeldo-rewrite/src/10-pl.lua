@@ -13,10 +13,16 @@
 --| ITEM STAT |
 -- item stats need these: (sword, pellet, bomb_held, brang, shield)
     -- damage: how much damage to do to enemies
-    -- stunlen: how much time enemy should be stunned after hit
+    -- should_stun: should the enemy be stunned when hit?
     -- pushspeed: how fast the enemy should be pushed
     -- should_use_xf: should push speed be reflected by the xf or position
     -- item_hit_func: a function that gets when it hits the enemy
+
+zclass[[propel,vec|propel,%propel_func, propel_speed,0]]
+
+|[propel_func]| function(a)
+    a.speed = a.propel_speed
+end $$
 
 zclass[[statitem,box|]] -- if the item hits an enemy, the enemy becomes the new stat
 
@@ -32,7 +38,8 @@ zclass[[statitem,box|]] -- if the item hits an enemy, the enemy becomes the new 
 
 |[interact]| function(...)
     local obj = g_rstat_right:get()
-    if obj then
+    -- the is_alive check is needed because there was a duplication bug
+    if obj and obj:is_alive() then
         if obj.id == 'pot' then
             obj:kill()
             return _g.pot_held(...)
@@ -60,40 +67,41 @@ zclass[[held_to_throw,anchor,actor|
 ]]
 
 |[held_to_throw_ending_init]| function(a)
-    a.item_thrown(a.anchoring.x, a.anchoring.y, a.anchoring.xf, .06+a.anchoring.speed, atan2(a.anchoring.xf, g_zbtn_2))
+    a.item_thrown(a.anchoring.x, a.anchoring.y, a.anchoring.xf, .06+a.anchoring.speed, atan2(a.anchoring.xf, 0))
 end $$
 
 zclass[[pot_held,held_to_throw   |anchoring,@, xf,@, sind,49,       item_thrown,%pot_thrown, sy,-3]]
 zclass[[quack_held,held_to_throw |anchoring,@, xf,@, sind,32,       item_thrown,%quack_thrown, sy,-4]]
-zclass[[bomb_held,held_to_throw  |anchoring,@, xf,@, sind,SPR_BOMB, item_thrown,%bomb, initial_energy,.3, sy,-3]]
+zclass[[bomb_held,held_to_throw  |anchoring,@, xf,@, sind,SPR_BOMB, item_thrown,%bomb, initial_energy,.4, sy,-3]]
 
-zclass[[item_throwing,collidable,mov,box,simple_spr,drawlayer_50,actor|
+zclass[[item_throwing,propel,mov,box,simple_spr,drawlayer_50,actor|
     rx,.25, ry,.25;
-
-    start; duration, .15, update,%item_throwing_update, next,wait;
-    wait; speed,0, update,nop;
+    start; duration, .15, update,%item_throwing_update;
 ]]
 
 |[item_throwing_update]| function(a)
     a.sy = sin(a:get_elapsed_percent'start'/4+.25)*7
+    a:propel()
 end $$
 
 zclass[[bomb,item_throwing|
-    x,@, y,@, xf,@, speed,@, ang,@,
+    x,@, y,@, xf,@, propel_speed,@, ang,@,
+    should_collide_below, no,
     sind,SPR_BOMB, destroyed,%bomb_destroyed;
-    wait; duration, .7;
 ]]
 
-zclass[[pot_thrown,item_throwing|
-    x,@, y,@, xf,@, speed,@, ang,@,
-    sind,49, destroyed,%standard_explosion;
-    wait; duration, .05;
+zclass[[pot_thrown,item_throwing,statitem|
+    x,@, y,@, xf,@, propel_speed,@, ang,@,
+    sind,49, destroyed,%standard_explosion,
+    should_stun,yes,
+    should_use_xf,yes,
+    item_hit_func,nop,
+    should_push,yes;
 ]]
 
 zclass[[quack_thrown,item_throwing|
-    x,@, y,@, xf,@, speed,@, ang,@,
+    x,@, y,@, xf,@, propel_speed,@, ang,@,
     sind,32, destroyed,%quack_thrown_destroyed;
-    wait; duration, .05;
 ]]
 
 |[quack_thrown_destroyed]| function(a)
@@ -153,7 +161,6 @@ zclass[[pellet,vec,collidable,actor,drawlayer_50,statitem|
     x,@, y,@, dx, @, xf, @,
 
     damage,        1,
-    stunlen,       .125,
     pushspeed,     .375,
     should_use_xf, yes,
     item_hit_func, ~kill,
@@ -182,14 +189,13 @@ end $$
 
 zclass[[shield,item_horizontal,actor,statitem|
     anchoring,@, xf,@,
-    rx,.5, ry,.5,
+    rx,.375, ry,.375,
 
-    damage,        0,
-    stunlen,       2,
     pushspeed,     .25,
     should_use_xf, yes,
-    item_hit_func, %shield_item_hit_func,
+    item_hit_func, nop,
 
+    should_push, yes,
     plpushspeed,     0,
     visible,yes,
     block_direction, yes,
@@ -200,14 +206,15 @@ zclass[[shield,item_horizontal,actor,statitem|
     sy,-1,
     offspeed,.105,
     sind,SPR_SHIELD;
+
+    start; should_stun,yes;
+    normal; should_stun,no;
 ]]
 
 zclass[[sword,item_horizontal,actor,statitem|
     anchoring,@, xf,@,
     rx, .375, ry, .25,
 
-    damage,        2,
-    stunlen,       .25,
     pushspeed,     .25,
     should_use_xf, yes,
     item_hit_func, %sword_item_hit_func,
@@ -222,14 +229,11 @@ zclass[[sword,item_horizontal,actor,statitem|
     sy,0,
     offspeed,.125,
     sind,SPR_SWORD;
+    start;  damage, 2;
+    normal; damage, 1;
 ]]
 
-|[shield_item_hit_func]| function(a)
-    a.anchoring.dx -= a.plpushspeed*a.xf
-end $$
-
 |[sword_item_hit_func]| function(a)
-    a.anchoring.dx -= a.plpushspeed*a.xf
     a:kill()
 end $$
 
@@ -276,7 +280,7 @@ end $$
 
         memcpy(REAL_SAVE_LOCATION, MEM_SAVE_LOCATION, SAVE_LENGTH)
         poke(MEM_ITEM_INDEX, ITEM_IND_BANJO) -- reset to banjo
-        _g.tbox("SPR_SAVE^great banjo playing.^saving complete!", nop)
+        _g.tbox("SPR_TEACH^great banjo playing.^saving complete!", nop)
     end
 end $$
 
@@ -284,15 +288,15 @@ zclass[[brang,collidable,simple_spr,drawlayer_50,mov,actor,statitem|
     anchoring,@, xf,@,
     rx,.25, ry,.25,
 
-    damage,        0,
-    stunlen,       .25,
+    should_push,yes,
     pushspeed,     .25,
     should_use_xf, no,
     item_hit_func, ~kill,
+    should_stun,yes,
 
     visible,no,
     block_direction, yes,
-    speed_multiplier, .5,
+    speed_multiplier, 0,
     initial_energy, .125,
     gradual_energy, 0,
 
@@ -301,9 +305,9 @@ zclass[[brang,collidable,simple_spr,drawlayer_50,mov,actor,statitem|
     drawout,%brang_drawout,
     sind,SPR_BRANG;
     
-    start; init,%brang_start_init, speed,.075, duration,.125, next,normal;
-    normal;init,nop, speed,0, update,%brang_normal_update, next,ending;
-    ending;init,%brang_ending_init, speed,0, speed,0, update,%brang_ending_update, duration,.125, adjust_deltas_for_solids,nop, adjust_deltas_for_tiles,nop;
+    start; init,%brang_start_init, update,%brang_start_update, duration,.125, next,normal;
+    normal;init,nop, update,%brang_normal_update, next,ending;
+    ending;init,%brang_ending_init, update,%brang_ending_update, duration,.125, adjust_deltas_for_solids,nop, adjust_deltas_for_tiles,nop;
     final;init,nop, update,nop, alive,no;
 ]]
 
@@ -314,6 +318,10 @@ end $$
 |[brang_start_init]| function(a)
     a.x, a.y = a.anchoring.x, a.anchoring.y
     a.ang = atan2(a.xf, 0)
+end $$
+
+|[brang_start_update]| function(a)
+    a.speed = .05
 end $$
 
 |[brang_normal_update]| function(a)
@@ -337,7 +345,6 @@ end $$
 zclass[[bomb_explode,enemy,box,actor,statitem|
     x,@, y,@, rx,1, ry,1,
     damage,5,
-    stunlen,1,
     pushspeed,.25,
     should_use_xf,no,
     item_hit_func,nop,
@@ -375,10 +382,8 @@ zclass[[pushable,mov|
 ]]
 
 |[pushable_push]| function(a, ang, duration, override)
-    if a:maskcheck(override) then
-        a:start_timer('push', duration)
-        a.push_ang = ang
-    end
+    a:start_timer('push', duration)
+    a.push_ang = ang
 end $$
 
 |[pushable_update_push]| function(a)

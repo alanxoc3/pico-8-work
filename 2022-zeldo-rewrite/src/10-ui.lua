@@ -40,9 +40,32 @@ function draw_card(x, y, rx, ry, coffx, coffy, card_func, post_card_func)
     zcamera(cam_x, cam_y, post_card_func)
 end
 
+zclass[[coin_count,vec,actor,drawlayer_90|
+    y,142, draw,%coin_coint_draw;
+    start;  next,open,   dy,0,  update,%coin_count_start;
+    open;   next,normal, dy,-2, update,nop, duration,.2;
+    normal; next,close,  dy,0,  update,%coin_count_normal;
+    close;  next,start,  dy,2,  update,nop, duration,.2;
+]]
+
+|[coin_count_start]| function(a)
+    if peek'MEM_MONEY' ~= 0 then a:load() end
+end $$
+
+|[coin_count_normal]| function(a)
+    if peek'MEM_MONEY' == 0 then a:load() end
+end $$
+
+|[coin_coint_draw]| function(a)
+    draw_card(64, a.y, 9, 5, 0, 0, function()
+        spr(SPR_COIN_UI, 1, 0)
+        zprinttbox(tostr(peek'MEM_MONEY'), 12, 2, 0, 7, 5)
+    end, nop)
+end $$
+
 -- controls the right stat so there is only ever 1 instance
 zclass[[energybar,vec,actor,drawlayer_99|
-    obj,@, y,20, draw,nop -- %energybar_draw;
+    obj,@, y,20, draw,%energybar_draw;
 ]]
 
 |[energybar_draw]| function(a)
@@ -68,66 +91,67 @@ end $$
 zclass[[ma_left|]]
 zclass[[ma_right|]]
 
-zclass[[rstat|
+zclass[[rstat,vec,actor,drawlayer_95|
     align,@, x,@, entity_type,@,
-    update,%rstat_update,
-    get,%rstat_get;
+    y,141, draw,%stat_draw,
+    buffer_update,%rstat_update, get,%rstat_get;
+
+    start;  next,open,   dy,0,  update,%stat_idle;
+    open;   next,normal, dy,-2, update,nop,          duration,.2;
+    normal; next,close,  dy,0,  update,%stat_normal;
+    close;  next,start,  dy,2,  update,nop,          duration,.2;
 ]]
+
+|[stat_idle]| function(a)
+    a.obj = nil
+    if a.next_obj and a.next_obj:is_alive() then
+        a.obj = a.next_obj
+        a.next_obj = nil
+        a:load()
+    end
+end $$
 
 |[rstat_update]| function(a)
     local buffer = g_zclass_entities[a.entity_type]
-
-    local cur_obj = a.stat and a.stat.obj
+    local cur_obj = a:get()
     local new_obj = nil
 
     for obj in all(buffer) do
-        if obj:is_active'isma' then
+        if obj:is_active'isma' and obj:is_alive() then
             new_obj = obj
-            if obj == cur_obj then return end
         end
+        if obj == cur_obj then return end
     end
-    if does_entity_exist'tbox' then return end
-    
-    if a.stat then a.stat:load'ending' end
-    a.stat = new_obj and _g.stat(a.align, a.x, new_obj)
+
+    a.next_obj = new_obj
 end $$
 
 |[rstat_get]| function(a)
-    return a.stat and a.stat.obj
+    return a.obj and a.obj:is_alive() and a.obj
 end $$
 
-zclass[[stat,vec,actor,drawlayer_95|
-    align,@, x,@, obj,@, y,129, draw,%stat_draw, update,%stat_update;
-
-    start;  dy,-2, duration,.1, next,normal;
-    normal; dy,0;
-    ending; dy,2, duration,.1;
-]]
-
-|[stat_update]| function(a)
-    --if a.align < 0 then
-    --    if does_entity_exist'tbox' then
-    --        a.y = min(110-12, a.y+.75)
-    --    else
-    --        a.y = max(110, a.y-1)
-    --    end
-    --end
+|[stat_normal]| function(a)
+    if a.new_obj or not a.obj:is_alive() or not a.obj:is_active'isma' then
+        a:load()
+    end
 end $$
 
 |[stat_draw]| function(a)
     local obj = a.obj
-    local has_health = obj.parents and obj.parents.healthobj
-    draw_card(a.x+31, a.y+1, 21.5, has_health and 9 or 6, 2, 4, function()
-        local xxo = 15.5-15.5*a.align-1
-        spr(obj.cspr, xxo, -2, 1, 1, a.align < 0)
-        local xyo = 19.5+19.5*a.align
-        if obj.cname then zprinttbox(obj.cname, xyo, -1, a.align, 7, 5) end
-        if has_health then
-            draw_bar(19-a.align*19-1, 7, 19+a.align*19-1, 11, obj.display_health, -1, 8, 2, 13)
-            pset(-1,7,1)
-            pset(37,7,1)
-        end
-    end, nop)
+    if obj then
+        local has_health = obj.parents and obj.parents.healthobj
+        draw_card(a.x, a.y+1, 17.5, has_health and 9 or 6, 2, 4, function()
+            local xxo = 11.5-11.5*a.align-1
+            spr(obj.cspr, xxo, -2, 1, 1, a.align < 0)
+            local xyo = 15.5+15.5*a.align
+            if obj.cname then zprinttbox(obj.cname, xyo, -1, a.align, 7, 5) end
+            if has_health then
+                draw_bar(15-a.align*15-1, 7, 15+a.align*15-1, 11, obj.display_health, -1, 8, 2, 13)
+                pset(-1,7,1)
+                pset(29,7,1)
+            end
+        end, nop)
+    end
 end $$
 
 zclass[[tbox,vec,actor,drawlayer_99|

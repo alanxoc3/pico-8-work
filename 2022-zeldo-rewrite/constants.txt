@@ -68,24 +68,26 @@ SPR_PL_FEET_3: 90
 SPR_PL_WHOLE: 103
 
 SPR_INTERACT:  0
-SPR_BANJO:  1
-SPR_SWORD:  2
-SPR_MASK:   3
-SPR_BRANG:  4
-SPR_BOMB:   5
-SPR_SHIELD: 6
-SPR_BOW:    7
-SPR_BOWL:   8
-SPR_SAVE:   10
-SPR_SIGN:   24
-SPR_BOB:    80
-SPR_JANE:   81
-SPR_KEEP:   83
-SPR_TEACH:  96
-SPR_NAVY:   97
-SPR_LARK:   99
-SPR_HOUSE: 174
-SPR_FAIRY_CARD: 9
+SPR_BANJO:     1
+SPR_SWORD:     2
+SPR_MASK:      3
+SPR_BRANG:     4
+SPR_BOMB:      5
+SPR_SHIELD:    6
+SPR_BOW:       7
+SPR_BOWL:      8
+SPR_FAIRY_UI:  9
+SPR_SAVE:      10
+SPR_COIN_UI:   22
+SPR_SIGN:      24
+SPR_COIN:      36
+SPR_BOB:       80
+SPR_JANE:      81
+SPR_KEEP:      83
+SPR_TEACH:     96
+SPR_NAVY:      97
+SPR_LARK:      99
+SPR_HOUSE:     174
 
 # A zdset/get takes 0-255. So to have decimal places, use the multiplier.
 # This is like the precision to store the position.
@@ -121,13 +123,19 @@ MEM_ROOM_IND:      0x5d01
 MEM_PL_X:          0x5d02
 MEM_PL_Y:          0x5d03
 MEM_PL_XF:         0x5d04
-
 MEM_RET_ROOM_IND:  0x5d05
 MEM_RET_PL_X:      0x5d06
 MEM_RET_PL_Y:      0x5d07
 MEM_ITEM_INDEX:    0x5d08
 
 MEM_IS_NAVY_HOME:  0x5d09
+MEM_IS_BOB_HOME:   0x5d0a
+MEM_PL_HEALTH:     0x5d0b
+MEM_PL_MAX_HEALTH: 0x5d0c
+MEM_MONEY:         0x5d0d
+
+IDK:               0x5d0e
+IDK:               0x5d0f
 
 MEM_HAS_BANJO:     0x5d10
 MEM_HAS_BOMB:      0x5d11
@@ -138,9 +146,31 @@ MEM_HAS_BRANG:     0x5d15
 MEM_HAS_MASK:      0x5d16
 MEM_HAS_BOWL:      0x5d17
 
-MEM_IS_BOB_HOME:   0x5d18
+IDK:               0x5d18
+IDK:               0x5d19
+IDK:               0x5d1a
+IDK:               0x5d1b
+IDK:               0x5d1c
+IDK:               0x5d1d
+IDK:               0x5d1e
+IDK:               0x5d1f
 
-MEM_PL_HEALTH:     0x5d19
-MEM_PL_MAX_HEALTH: 0x5d20
+# hidden coins
+MEM_COIN_1:        0x5d20
+MEM_COIN_2:        0x5d21
+MEM_COIN_3:        0x5d22
+MEM_COIN_4:        0x5d23
+MEM_COIN_5:        0x5d24
+MEM_COIN_6:        0x5d25
+MEM_COIN_7:        0x5d26
+MEM_COIN_8:        0x5d27
+MEM_COIN_9:        0x5d28
+MEM_COIN_10:       0x5d29
+MEM_COIN_11:       0x5d2a
+MEM_COIN_12:       0x5d2b
+MEM_COIN_13:       0x5d2c
+MEM_COIN_14:       0x5d2d
+MEM_COIN_15:       0x5d2e
+MEM_COIN_16:       0x5d2f
 
 MEM_ALWAYS_FALSE:  0x5dff
