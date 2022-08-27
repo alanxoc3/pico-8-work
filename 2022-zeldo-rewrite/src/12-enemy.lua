@@ -27,7 +27,9 @@ zclass[[quack,propel,ma_right,actor,collidable,mov,enemy,simple_spr,drawlayer_50
 end $$
 
 |[quack_pl_collide_func]| function(a, pl)
-    a:start_timer('isma', 0)
+    if not _g.sign_target_with_tbox_disable_callback() then
+        a:start_timer('isma', 0)
+    end
 end $$
 
 |[enemy_pl_collide_func_batch]| function(a, others)

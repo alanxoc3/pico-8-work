@@ -38,7 +38,8 @@ zclass[[statitem,box|]] -- if the item hits an enemy, the enemy becomes the new 
 
 |[interact]| function(...)
     local obj = g_rstat_right:get()
-    if obj then
+    -- the is_alive check is needed because there was a duplication bug
+    if obj and obj:is_alive() then
         if obj.id == 'pot' then
             obj:kill()
             return _g.pot_held(...)
@@ -71,9 +72,9 @@ end $$
 
 zclass[[pot_held,held_to_throw   |anchoring,@, xf,@, sind,49,       item_thrown,%pot_thrown, sy,-3]]
 zclass[[quack_held,held_to_throw |anchoring,@, xf,@, sind,32,       item_thrown,%quack_thrown, sy,-4]]
-zclass[[bomb_held,held_to_throw  |anchoring,@, xf,@, sind,SPR_BOMB, item_thrown,%bomb, initial_energy,.3, sy,-3]]
+zclass[[bomb_held,held_to_throw  |anchoring,@, xf,@, sind,SPR_BOMB, item_thrown,%bomb, initial_energy,.4, sy,-3]]
 
-zclass[[item_throwing,propel,collidable,mov,box,simple_spr,drawlayer_50,actor|
+zclass[[item_throwing,propel,mov,box,simple_spr,drawlayer_50,actor|
     rx,.25, ry,.25;
     start; duration, .15, update,%item_throwing_update;
 ]]
@@ -89,9 +90,13 @@ zclass[[bomb,item_throwing|
     sind,SPR_BOMB, destroyed,%bomb_destroyed;
 ]]
 
-zclass[[pot_thrown,item_throwing|
+zclass[[pot_thrown,item_throwing,statitem|
     x,@, y,@, xf,@, propel_speed,@, ang,@,
-    sind,49, destroyed,%standard_explosion;
+    sind,49, destroyed,%standard_explosion,
+    should_stun,yes,
+    should_use_xf,yes,
+    item_hit_func,nop,
+    should_push,yes;
 ]]
 
 zclass[[quack_thrown,item_throwing|

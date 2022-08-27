@@ -7,7 +7,7 @@ zclass[[person,solid,target_with_tbox,simple_spr,drawlayer_50|
 
 |[person_target_with_tbox_disable_callback]| function(a)
     a.xf = sgn(g_pl.x-a.x)
-    return peek'MEM_ITEM_INDEX' ~= ITEM_IND_INTERACT
+    return _g.sign_target_with_tbox_disable_callback()
 end $$
 
 |[person_target_with_tbox_finish_callback]| function(a)

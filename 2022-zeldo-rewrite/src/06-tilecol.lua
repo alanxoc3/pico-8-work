@@ -47,18 +47,18 @@ end $$
 |[set_x_delta2]| function(a, b)
     b = {x=b.x-a.dx, y=b.y, rx=b.rx, ry=b.ry}
 
-    local p = (a.x-b.x)/b.dx
-    if abs(p)+a.rx/b.dx > 1 then
-        a.dx = b.x+sgn(p)*(b.dx-a.rx)-(a.x-a.dx)
+    local p = (a.x-b.x)/b.rx
+    if abs(p)+a.rx/b.rx > 1 then
+        a.dx = b.x+sgn(p)*(b.rx-a.rx)-(a.x-a.dx)
     end
 end $$
 
 |[set_y_delta2]| function(a, b)
     b = {x=b.x, y=b.y-a.dy, rx=b.rx, ry=b.ry}
 
-    local p = (a.y-b.y)/b.dy
-    if abs(p)+a.ry/b.dy > 1 then
-        a.dy = b.y+sgn(p)*(b.dy-a.ry)-(a.y-a.dy)
+    local p = (a.y-b.y)/b.ry
+    if abs(p)+a.ry/b.ry > 1 then
+        a.dy = b.y+sgn(p)*(b.ry-a.ry)-(a.y-a.dy)
     end
 end $$
 

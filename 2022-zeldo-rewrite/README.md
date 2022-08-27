@@ -36,14 +36,12 @@ TODO: banjo with lark text logic
 TODO: standardize ma time
 TODO: pot ma override
 TODO: duck follow logic
-TODO: double ma bug
 TODO: interact always override hurtable
 TODO: item going up snap/fix
 TODO: chicken follow not throw
-TODO: buy item logic
 TODO: get item logic
-TODO: duplicate duck bug
 TODO: lank 0 health bug when hit while leaving room
+TODO: remove collision for bomb in air
 
 saturday...
 TODO: right ma sprite shouldn't be flipped

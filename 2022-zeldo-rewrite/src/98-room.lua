@@ -60,18 +60,18 @@ end $$
 
         6 ;,collidable,  adjust_deltas_for_solids, %set_x_delta, ~solids;
         7 ;,collidable,  adjust_deltas_for_tiles,  %set_x_delta, ~room;
-        8 ;,collidable,  adjust_deltas_for_screen  %set_x_delta;
+        8 ;,collidable,  adjust_deltas_for_screen, %set_x_delta2;
         9 ;,vec,         vec_update_x;
 
         10;,collidable,  adjust_deltas_for_solids, %set_y_delta, ~solids;
         11;,collidable,  adjust_deltas_for_tiles,  %set_y_delta, ~room;
-        12;,collidable,  adjust_deltas_for_screen  %set_y_delta;
+        12;,collidable,  adjust_deltas_for_screen, %set_y_delta2;
         13;,vec,         vec_update_y;
 
         14;,slimy_shared,statcollide, ~statitems;
         15;,anchor,      update_anchor;
         16;,target,      update_target, ~pls;
-        17;,rstat,       update;
+        17;,rstat,       buffer_update;
         18;,healthobj,   health_update;
     ]], g_zclass_entities.pl, g_zclass_entities.solid, g_rooms[peek'MEM_ROOM_IND'], g_zclass_entities.statitem)
 

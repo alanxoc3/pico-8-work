@@ -43,7 +43,7 @@ end $$
 
 |[target_with_tbox_target_func]| function(a)
     if not a:target_with_tbox_disable_callback() then
-        a:start_timer('isma',.1)
+        a:start_timer('isma',0)
         if should_interact() then
             _g.tbox(a:gettext())
         end
@@ -59,8 +59,9 @@ zclass[[sign,target_with_tbox,solid,simple_spr,drawlayer_50|
     trx,.125, try,.375, tx,0, ty,.25
 ]]
 
-|[sign_target_with_tbox_disable_callback]| function(a)
-    return peek'MEM_ITEM_INDEX' ~= ITEM_IND_INTERACT
+-- really this is used in a lot of places... I should refactor...
+|[sign_target_with_tbox_disable_callback]| function()
+    return peek'MEM_ITEM_INDEX' ~= ITEM_IND_INTERACT or not g_pl.item.is_default
 end $$
 
 zclass[[signtest,sign|x,@,y,@,text,  "SPR_SIGN^mary had a^little lamb^little lamb^little lamb^mary had a^little lamb^whose fleece was^white as yo face"]]

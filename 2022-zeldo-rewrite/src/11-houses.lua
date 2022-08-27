@@ -16,7 +16,7 @@ zclass[[pot,solid,class_with_target,drawlayer_50,ma_right,simple_spr|
 ]]
 
 |[pot_callback_touch]| function(a)
-    if peek'MEM_ITEM_INDEX' == ITEM_IND_INTERACT then
+    if not _g.sign_target_with_tbox_disable_callback() then
         a:start_timer('isma', 0)
     end
 end $$
