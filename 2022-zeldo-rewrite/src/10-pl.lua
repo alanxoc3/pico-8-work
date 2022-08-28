@@ -72,7 +72,7 @@ end $$
 
 zclass[[pot_held,held_to_throw   |anchoring,@, xf,@, sind,49,       item_thrown,%pot_thrown, sy,-3]]
 zclass[[quack_held,held_to_throw |anchoring,@, xf,@, sind,32,       item_thrown,%quack_thrown, sy,-4]]
-zclass[[bomb_held,held_to_throw  |anchoring,@, xf,@, sind,SPR_BOMB, item_thrown,%bomb, initial_energy,.4, sy,-3]]
+zclass[[bomb_held,held_to_throw  |anchoring,@, xf,@, sind,SPR_BOMB, item_thrown,%bomb, initial_energy,1, sy,-3]]
 
 zclass[[item_throwing,propel,mov,box,simple_spr,drawlayer_50,actor|
     rx,.25, ry,.25;
@@ -382,8 +382,10 @@ zclass[[pushable,mov|
 ]]
 
 |[pushable_push]| function(a, ang, duration, override)
-    a:start_timer('push', duration)
-    a.push_ang = ang
+    if not a:is_active'push' then
+        a:start_timer('push', duration)
+        a.push_ang = ang
+    end
 end $$
 
 |[pushable_update_push]| function(a)

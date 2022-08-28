@@ -34,6 +34,8 @@ friday...
 TODO: chest with sword
 TODO: banjo with lark text logic
 TODO: remove duck throw
+TODO: bugfix navy talk when fading
+TODO: bugfix bomb hold when no energy
 TODO: duck follow logic
 TODO: banjo makes enemies dance (not attack you)
 TODO: item going up snap/fix

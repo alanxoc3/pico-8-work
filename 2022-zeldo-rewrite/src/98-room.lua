@@ -69,10 +69,11 @@ end $$
         13;,vec,         vec_update_y;
 
         14;,slimy_shared,statcollide, ~statitems;
-        15;,anchor,      update_anchor;
-        16;,target,      update_target, ~pls;
-        17;,rstat,       buffer_update;
-        18;,healthobj,   health_update;
+        15;,slimy_boss,statcollide, ~statitems;
+        16;,anchor,      update_anchor;
+        17;,target,      update_target, ~pls;
+        18;,rstat,       buffer_update;
+        19;,healthobj,   health_update;
     ]], g_zclass_entities.pl, g_zclass_entities.solid, g_rooms[peek'MEM_ROOM_IND'], g_zclass_entities.statitem)
 
     poke(MEM_PL_HEALTH, g_pl.health)

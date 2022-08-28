@@ -1,5 +1,5 @@
 |[slimy]| function(x, y)
-    _g.explode(x, y, 4, 1, function() _g.slimy_actual(rnd'1'+.75, x, y) end)
+    _g.explode(x, y, 4, 1, function() _g.slimy_actual(rnd'1'+.75, x, y, 0) end)
 end $$
 
 |[miny]| function(x, y)
@@ -41,11 +41,11 @@ end $$
     end)
 end $$
 
-zclass[[slimy_boss,ma_battle,pushable,actor,collidable,healthobj,enemy,simple_spr,drawlayer_50|
-    x,@, y,@, cspr,104, cname,"slimy", sind,104, destroyed,%slimy_destroyed;
+zclass[[slimy_boss,ma_battle,pushable,actor,collidable,enemy,healthobj,simple_spr,drawlayer_50|
+    x,@, y,@, cspr,104, cname,"slimy", sind,104, destroyed,%slimyboss_destroyed;
 
-    rx, .5, ry, .5,
-    sw,2,sh,2,
+    rx, .25, ry, .25,
+    sw,1,sh,1,sy,-1,
     should_dance,yes,
     statcollide,%slimy_statcollide,
     drawout,%slimy_draw,
@@ -56,21 +56,60 @@ zclass[[slimy_boss,ma_battle,pushable,actor,collidable,healthobj,enemy,simple_sp
     start; init,%slimyboss_init, duration,0, next,idle;
 
     stunstate; init,nop, update,%slimy_stunstate, next,idle;
-    idle;      init,nop, update,%slimy_start, next,bounce_1, sind,104,duration,.75;
+    idle;      init,nop, update,%slimyboss_start, next,bounce_1, sind,104,duration,.75;
     bounce_1;  init,%slimy_bounce, update,nop, duration,.0625, next,bounce_2;
     bounce_2;  init,%slimy_bounce, update,nop, duration,.0625, next,jump;
-    jump;      sind,106,init,%slimy_jump_init, update,%slimy_propel, pl_collide_func,%slimy_pl_collide_func, duration, .25, next,idle;
+    jump;      sind,105,init,%slimy_jump_init, update,%slimyboss_jump, pl_collide_func,%slimy_pl_collide_func, duration, .75, next,idle;
 ]]
 
-|[slimyboss_init]| function(a)
-    for i=0,3 do
-        _g.slimy_boss_minion(a.x, a.y, cos(i/4+.125)*.4, sin(i/4+.125)*.4)
+|[slimyboss_destroyed]| function(a)
+    _g.slimy_actual(.75, a.x, a.y, -.2)
+    _g.slimy_actual(.75, a.x, a.y, .2)
+end $$
+
+|[slimyboss_start]| function(a)
+    _g.slimy_start(a)
+    for i=0,7 do
+        local cur_minion = a.minions[i+1]
+        if cur_minion:is_alive() then
+            cur_minion.xf = a.xf
+        end
     end
 end $$
 
-zclass[[slimy_boss_minion,slimy_shared|
+|[slimyboss_jump]| function(a)
+    _g.slimy_propel(a)
+    local rad = 1.5 --1.5+sin(.5+a:get_elapsed_percent'jump'/2)
+    for i=0,7 do
+        local cur_minion = a.minions[i+1]
+        if cur_minion:is_alive() then
+            local ang = atan2(cur_minion.offx, cur_minion.offy)-.01*a.xf
+            cur_minion.offx, cur_minion.offy = cos(ang)*rad, sin(ang)*rad
+        end
+    end
+end $$
+
+|[slimyboss_init]| function(a)
+    a.minions = {}
+    for i=0,7 do
+        --if i % 2 == 0 then
+        --    --add(a.minions, _g.slimy_boss_minion(a, a.x, a.y, cos(i/8+.125)*1.5, sin(i/8+.125)*1.5))
+        --else
+        --end
+        add(a.minions, _g.slimy_boss_minion_2(a, a.x, a.y, cos(i/8+.125)*1.5, sin(i/8+.125)*1.5))
+    end
+end $$
+
+zclass[[slimy_boss_minion,slimy_shared,anchor|
     idle;sind,118,duration,.75; jump;sind,119;
-    x,@, y,@, dx,@, dy,@, cspr,118, cname,"slimy", sind,118, max_health,10, destroyed,%slimy_destroyed;
+    idle;update,nop;
+    anchoring,@, x,@, y,@, offx,@, offy,@, cspr,118, cname,"slimy", sind,118, max_health,5, destroyed,%slimy_destroyed;
+]]
+
+zclass[[slimy_boss_minion_2,slimy_shared,anchor|
+    idle;sind,116,duration,.75; jump;sind,117;
+    idle;update,nop;
+    anchoring,@, x,@, y,@, offx,@, offy,@, cspr,116, cname,"miny", sind,116, max_health,1, destroyed,%standard_explosion;
 ]]
 
 zclass[[slimy_shared,ma_battle,pushable,actor,collidable,healthobj,enemy,simple_spr,drawlayer_50|
@@ -105,8 +144,8 @@ end $$
 end $$
 
 zclass[[slimy_actual,slimy_shared |
-    idle;sind,118,duration,@; jump;sind,119;
-    x,@, y,@, cspr,118, cname,"slimy", sind,118, max_health,5, destroyed,%slimy_destroyed;
+    idle;sind,118,duration,@; jump;sind,119,duration,.5;
+    x,@, y,@, dy,@, cspr,118, cname,"slimy", sind,118, max_health,5, destroyed,%slimy_destroyed;
 ]]
 
 zclass[[miny_actual,slimy_shared  |
@@ -118,16 +157,16 @@ zclass[[miny_actual,slimy_shared  |
     a.speed = 0
     a:start_timer('isma', 2)
         if a:is_active'jump' then
-            pl:push(atan2(a.xf, pl.y-a.y), .125)
-            pl:stun'.25'
+            --pl:stun'.25'
+            pl:push(atan2(a.xf, pl.y-a.y), .25)
         else
-            pl:push(atan2(pl:abside(a)), .03125)
+            pl:push(atan2(a.xf, pl.y-a.y), .03125)
         end
 end $$
 
 |[slimy_destroyed]| function(a)
-    _g.miny_actual(rnd'1', a.x, a.y, -.2)
-    _g.miny_actual(rnd'1', a.x, a.y, .2)
+    _g.miny_actual(rnd'1'+.75, a.x, a.y, -.2)
+    _g.miny_actual(rnd'1'+.75, a.x, a.y, .2)
 end $$
 
 |[slimy_start]| function(a)
@@ -145,12 +184,11 @@ end $$
 
 |[slimy_jump_init]| function(a)
     a.ang = a.target_ang
-    a:start_timer('jumpanim', .25)
+    a:start_timer('jumpanim', a.jump.duration)
     -- a.stunned.duration = rnd"1"
 end $$
 
 |[slimy_draw]| function(a)
-    a.sy = sin(a:get_elapsed_percent'jumpanim'/2)*8
     _g.simple_spr_draw(a)
 end $$
 
