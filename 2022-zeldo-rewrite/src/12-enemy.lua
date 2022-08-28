@@ -63,8 +63,8 @@ zclass[[slimy_boss,ma_battle,pushable,actor,collidable,healthobj,enemy,simple_sp
 ]]
 
 |[slimyboss_init]| function(a)
-    for i=0,5 do
-        _g.slimy_boss_minion(a.x, a.y, cos(i/6)*.4, sin(i/6)*.4)
+    for i=0,3 do
+        _g.slimy_boss_minion(a.x, a.y, cos(i/4+.125)*.4, sin(i/4+.125)*.4)
     end
 end $$
 
