@@ -9,7 +9,7 @@ zclass[[simple_spr,auto_outline,pos|
     sind,0, sw,1, sh,1, xf,1, yf,1, sx,0, sy,0
 ]]
 |[simple_spr_draw]| function(a)
-    local sy = sin(a:get_elapsed_percent'jumpanim'/2)*8
+    local sy = sin(a:get_elapsed_percent'jump'/2)*8
     local xf = a.xf
     if a.should_dance and does_entity_exist'banjo' then
         xf = (g_si%2-.5)*2
