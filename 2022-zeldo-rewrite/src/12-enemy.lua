@@ -41,6 +41,11 @@ end $$
     end)
 end $$
 
+zclass[[slimy_boss,slimy_shared |
+    idle;sind,118,duration,1; jump;sind,119;
+    x,@, y,@, cspr,118, cname,"slimy", sind,118, max_health,5, destroyed,%slimy_destroyed;
+]]
+
 zclass[[slimy_shared,ma_battle,pushable,actor,collidable,healthobj,enemy,simple_spr,drawlayer_50|
     rx, .25, ry, .25,
     should_dance,yes,
