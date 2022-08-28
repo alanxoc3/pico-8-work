@@ -35,6 +35,7 @@ TODO: chest with sword
 TODO: banjo with lark text logic
 TODO: remove duck throw
 TODO: duck follow logic
+TODO: banjo makes enemies dance (not attack you)
 TODO: item going up snap/fix
 TODO: replace gameover with tbox
 TODO: chicken follow not throw
