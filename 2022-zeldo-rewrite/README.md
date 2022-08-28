@@ -39,12 +39,9 @@ TODO: remove duck throw
 TODO: duck follow logic
 TODO: interact always override hurtable
 TODO: item going up snap/fix
+TODO: replace gameover with tbox
 TODO: chicken follow not throw
 TODO: get item logic
-TODO: lank 0 health bug when hit while leaving room
-TODO: remove collision for bomb in air
-
-saturday...
 TODO: right ma sprite shouldn't be flipped
 TODO: fix item offsets (many items are either off or sometimes off)
 TODO: when items go up, slight bug
@@ -52,13 +49,14 @@ TODO: token crunch for 30 minutes
 TODO: bomb blow up crate
 TODO: first boss (lime)
 TODO: mask particle effect
-
-sunday...
 TODO: polish until beating first boss
 TODO: think of more enemies
 TODO: think about chicken collection for cannon logic (throw chicken onto a platform)
 
 ```
+2022-08-27 -- money polish
+    6948
+
 2022-08-26 -- stunlogic collaxis
     6653
 

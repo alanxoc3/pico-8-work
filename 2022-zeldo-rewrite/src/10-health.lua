@@ -9,7 +9,7 @@ zclass[[healthobj,maskcheck|
 ]]
 
 |[healthobj_hurt]| function(a, amount, callback)
-    if a:is_alive() and a:maskcheck() and not a:is_active'injured' and not a:is_active'injured_cooldown' then
+    if not does_entity_exist'fader' and a:is_alive() and a:maskcheck() and not a:is_active'injured' and not a:is_active'injured_cooldown' then
         a:start_timer('injured', .25, function()
             if a.health <= 0 then
                 a:kill()

@@ -78,7 +78,7 @@ end $$
     poke(MEM_PL_HEALTH, g_pl.health)
     poke(MEM_PL_MAX_HEALTH, g_pl.max_health)
 
-    if not does_entity_exist'fader' and not g_pl:inside(g_room_bounds) then
+    if not does_entity_exist'fader' and (not g_pl:inside(g_room_bounds) or peek'MEM_PL_HEALTH' <= 0) then
         local abx, aby = g_pl:abside(g_room_bounds)
         local nri = peek'MEM_ROOM_IND' + aby*16+abx
 
@@ -124,49 +124,28 @@ end $$
             3;,drawlayer_99, draw;
         ]])
     end)
-
-    local cx, cy = 9,57
-    --draw_card(cx     , cy     , 6  , 5  , 0, 0,  function() spr(0 , 2,  1) end , nop)
-    --draw_card(cx+1   , cy+10+2, 4.5, 4.5, 0, 0,  function() spr(6 , 0,  0) end , nop)
-    --draw_card(cx     , cy+20+3, 4.5, 4.5, 0, 0,  function() spr(5 , 0,  0) end , nop)
-    --draw_card(cx+1   , cy+30+4, 4.5, 4.5, 0, 0,  function() spr(3 , 0,  0) end , nop)
-    --draw_card(cx     , cy-10-1, 4.5, 4.5, 0, 0,  function() spr(2 , 0, -1) end ,  nop)
-    --draw_card(cx+1   , cy-20-2  , 4.5, 4.5, 0, 0,  function() spr(8 , 0, -1) end , nop)
-    --draw_card(cx     , cy-30-3  , 4.5, 4.5, 0, 0,  function() spr(1 , 0, -1) end , nop)
-
-    -- draw_card(cx   , cy-32, 4.5, 4.5, 0, 0,  function() spr(7 , 0, -1) end , nop)
-    -- draw_card(cx-8 , cy-24, 4.5, 4.5, 0, 0,  function() spr(8 , 0, -1) end , nop)
-    -- draw_card(cx   , cy-16, 4.5, 4.5, 0, 0,  function() spr(1 , 0, -1) end , nop)
-    -- draw_card(cx-8 , cy-8, 4.5, 4.5, 0, 0,  function() spr(2 , 0, -1) end,  nop)
-    -- draw_card(cx   , cy   , 4.5, 4.5, 0, 0,  function() spr(0 , 0,  1) end , nop)
-    -- draw_card(cx-8 , cy+8, 4.5, 4.5, 0, 0,  function() spr(3 , 0,  0) end , nop)
-    -- draw_card(cx   , cy+16, 4.5, 4.5, 0, 0,  function() spr(6 , 0,  0) end , nop)
-    -- draw_card(cx-8 , cy+24, 4.5, 4.5, 0, 0,  function() spr(4 , 0,  0) end , nop)
-    -- draw_card(cx   , cy+32, 4.5, 4.5, 0, 0,  function() spr(5 , 0,  0) end , nop)
-
-    --draw_card(cx-5 , cy-30, 4.5, 4.5, 0, 0,  function() spr(7 , 0, -1) end , nop)
-    --draw_card(cx+5 , cy-30, 4.5, 4.5, 0, 0,  function() spr(8 , 0, -1) end , nop)
-    --draw_card(cx-5 , cy-40, 4.5, 4.5, 0, 0,  function() spr(7 , 0, -1) end , nop)
-    --draw_card(cx+5 , cy-40, 4.5, 4.5, 0, 0,  function() spr(8 , 0, -1) end , nop)
-    --draw_card(cx+5 , cy-50, 4.5, 4.5, 0, 0,  function() spr(8 , 0, -1) end , nop)
 end $$
 
 function load_room(rind, x, y, xf)
     if not does_entity_exist'fader' then
         -- explode created with fader.... init won't be called.
         _g.fader_out(function()
-            zcall(poke, [[
-                1;,MEM_ROOM_IND, @;
-                2;,MEM_PL_X,     @;
-                3;,MEM_PL_Y,     @;
-                4;,MEM_PL_XF,    @;
-            ]], rind,
-                x*POS_MULTIPLIER_FOR_MEMORY,
-                y*POS_MULTIPLIER_FOR_MEMORY,
-                (xf+1)\2
-            )
+            if peek'MEM_PL_HEALTH' <= 0 then
+                g_state:load'gameover'
+            else
+                zcall(poke, [[
+                    1;,MEM_ROOM_IND, @;
+                    2;,MEM_PL_X,     @;
+                    3;,MEM_PL_Y,     @;
+                    4;,MEM_PL_XF,    @;
+                ]], rind,
+                    x*POS_MULTIPLIER_FOR_MEMORY,
+                    y*POS_MULTIPLIER_FOR_MEMORY,
+                    (xf+1)\2
+                )
 
-            g_state:load'room'
+                g_state:load'room'
+            end
         end)
     end
 end

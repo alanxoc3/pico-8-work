@@ -402,7 +402,7 @@ zclass[[pl,ma_left,pushable,actor,mov,collidable,auto_outline,healthobj,drawlaye
     energy,0,
     is_energy_cooling_down,no,
     target_energy,0,
-    destroyed,%pl_destroyed,
+    destroyed,%standard_explosion,
     drawout,%pl_drawout;
 
     item_funcs;
@@ -427,11 +427,6 @@ zclass[[pl,ma_left,pushable,actor,mov,collidable,auto_outline,healthobj,drawlaye
 
     item,~default_item;
 ]]
-
-|[pl_destroyed]| function(a)
-    _g.standard_explosion(a)
-    _g.fader_out(function() g_state:load'gameover' end)
-end $$
 
 -- every frame: updates isma / update display energy
 -- resets dead item to default

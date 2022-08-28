@@ -147,7 +147,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,animation_init,@,auto_outline_draw,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update_x,@,vec_update_y,@,mov_update,@,mov_towards_point,@,explode_draw,@,standard_explosion,@,set_x_delta,@,set_y_delta,@,adjust_deltas_for_solids,@,adjust_deltas_for_tiles,@,set_x_delta2,@,set_y_delta2,@,adjust_deltas_for_screen,@,healthobj_hurt,@,healthobj_stun,@,healthobj_health_update,@,inventory_open_update,@,inventory_update,@,inventory_start_update,@,inventory_normal_init,@,inventory_draw,@,simple_spr_draw,@,anchor_update_anchor,@,targettouch_update_target,@,coin_pl_collide_func,@,coin_1,@,coin_2,@,coin_3,@,coin_4,@,coin_5,@,coin_6,@,coin_7,@,coin_8,@,coin_9,@,coin_10,@,coin_11,@,coin_12,@,coin_13,@,coin_14,@,coin_15,@,coin_16,@,propel_func,@,interact,@,held_to_throw_ending_init,@,item_throwing_update,@,quack_thrown_destroyed,@,bomb_destroyed,@,pellet_update,@,pellet_draw,@,bow_ending_init,@,sword_item_hit_func,@,banjo_start_init,@,banjo_ending_init,@,brang_drawout,@,brang_start_init,@,brang_start_update,@,brang_normal_update,@,brang_ending_init,@,brang_ending_update,@,bomb_pl_hit,@,item_horizontal_start_init,@,item_horizontal_normal_init,@,item_horizontal_ending_init,@,maskcheck_func,@,pushable_push,@,pushable_update_push,@,pl_destroyed,@,pl_update,@,pl_drawout,@,card_table_cache,@,coin_count_start,@,coin_count_normal,@,coin_coint_draw,@,energybar_draw,@,stat_idle,@,rstat_update,@,rstat_get,@,stat_normal,@,stat_draw,@,tbox_init,@,tbox_update,@,tbox_draw,@,fairy_update,@,fairy_draw,@,spawn_walls,@,pot_callback_touch,@,house_init,@,person_target_with_tbox_disable_callback,@,person_target_with_tbox_finish_callback,@,teach_gettext,@,keep_gettext,@,class_with_target_init,@,target_with_tbox_gettext,@,target_with_tbox_target_func,@,sign_target_with_tbox_disable_callback,@,slimy,@,miny,@,quack_change_dir,@,quack_pl_collide_func,@,enemy_pl_collide_func_batch,@,slimy_propel,@,slimy_stun_callback,@,slimy_stunstate,@,slimy_pl_collide_func,@,slimy_destroyed,@,slimy_start,@,slimy_bounce,@,slimy_jump_init,@,slimy_draw,@,slimy_statcollide,@,spike_pl_collide_func,@,saveplat_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,gameover_control_ending,@,gameover_init,@,gameover_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,simple_update,@,title_draw,@,title_logo_update,@,title_logo_drawout,@,game_state_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,animation_init,@,auto_outline_draw,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update_x,@,vec_update_y,@,mov_update,@,mov_towards_point,@,explode_draw,@,standard_explosion,@,set_x_delta,@,set_y_delta,@,adjust_deltas_for_solids,@,adjust_deltas_for_tiles,@,set_x_delta2,@,set_y_delta2,@,adjust_deltas_for_screen,@,healthobj_hurt,@,healthobj_stun,@,healthobj_health_update,@,inventory_open_update,@,inventory_update,@,inventory_start_update,@,inventory_normal_init,@,inventory_draw,@,simple_spr_draw,@,anchor_update_anchor,@,targettouch_update_target,@,coin_pl_collide_func,@,coin_1,@,coin_2,@,coin_3,@,coin_4,@,coin_5,@,coin_6,@,coin_7,@,coin_8,@,coin_9,@,coin_10,@,coin_11,@,coin_12,@,coin_13,@,coin_14,@,coin_15,@,coin_16,@,propel_func,@,interact,@,held_to_throw_ending_init,@,item_throwing_update,@,quack_thrown_destroyed,@,bomb_destroyed,@,pellet_update,@,pellet_draw,@,bow_ending_init,@,sword_item_hit_func,@,banjo_start_init,@,banjo_ending_init,@,brang_drawout,@,brang_start_init,@,brang_start_update,@,brang_normal_update,@,brang_ending_init,@,brang_ending_update,@,bomb_pl_hit,@,item_horizontal_start_init,@,item_horizontal_normal_init,@,item_horizontal_ending_init,@,maskcheck_func,@,pushable_push,@,pushable_update_push,@,pl_update,@,pl_drawout,@,card_table_cache,@,coin_count_start,@,coin_count_normal,@,coin_coint_draw,@,energybar_draw,@,stat_idle,@,rstat_update,@,rstat_get,@,stat_normal,@,stat_draw,@,tbox_init,@,tbox_update,@,tbox_draw,@,fairy_update,@,fairy_draw,@,spawn_walls,@,pot_callback_touch,@,house_init,@,person_target_with_tbox_disable_callback,@,person_target_with_tbox_finish_callback,@,teach_gettext,@,keep_gettext,@,class_with_target_init,@,target_with_tbox_gettext,@,target_with_tbox_target_func,@,sign_target_with_tbox_disable_callback,@,slimy,@,miny,@,quack_change_dir,@,quack_pl_collide_func,@,enemy_pl_collide_func_batch,@,slimy_propel,@,slimy_stun_callback,@,slimy_stunstate,@,slimy_pl_collide_func,@,slimy_destroyed,@,slimy_start,@,slimy_bounce,@,slimy_jump_init,@,slimy_draw,@,slimy_statcollide,@,spike_pl_collide_func,@,saveplat_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,gameover_control_ending,@,gameover_init,@,gameover_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,simple_update,@,title_draw,@,title_logo_update,@,title_logo_drawout,@,game_state_init,@]],function(a,stateName)
 a.next_state=stateName or a.next
 end,function(a,stateName)
 a.next_state,a.isnew=nil
@@ -326,7 +326,7 @@ if a.should_collide_with_screen_edge then
 setdelta2(a,g_room_bounds)
 end
 end,function(a,amount,callback)
-if a:is_alive()and a:maskcheck()and not a:is_active"injured"and not a:is_active"injured_cooldown"then
+if not does_entity_exist"fader"and a:is_alive()and a:maskcheck()and not a:is_active"injured"and not a:is_active"injured_cooldown"then
 a:start_timer("injured",.25,function()
 if a.health<=0 then
 a:kill()
@@ -480,9 +480,6 @@ end,function(a)
 if a:is_active"push"then
 a.ang,a.speed=a.push_ang,(1-a:get_elapsed_percent"pushed")*.025
 end
-end,function(a)
-_g.standard_explosion(a)
-_g.fader_out(function()g_state:load"gameover" end)
 end,function(a)
 a:start_timer("isma",0)
 local item=a.item
@@ -849,7 +846,7 @@ end
 zcall(loop_entities,[[pls,@,solids,@,room,@,statitems,@;1;,timer,tick;2;,actor,state;3;,pushable,update_push;4;,mov,mov_update;5;,enemy,pl_collide_func_batch,~pls;6;,collidable,adjust_deltas_for_solids,%set_x_delta,~solids;7;,collidable,adjust_deltas_for_tiles,%set_x_delta,~room;8;,collidable,adjust_deltas_for_screen,%set_x_delta2;9;,vec,vec_update_x;10;,collidable,adjust_deltas_for_solids,%set_y_delta,~solids;11;,collidable,adjust_deltas_for_tiles,%set_y_delta,~room;12;,collidable,adjust_deltas_for_screen,%set_y_delta2;13;,vec,vec_update_y;14;,slimy_shared,statcollide,~statitems;15;,anchor,update_anchor;16;,target,update_target,~pls;17;,rstat,buffer_update;18;,healthobj,health_update;]],g_zclass_entities.pl,g_zclass_entities.solid,g_rooms[peek"0x5d01"],g_zclass_entities.statitem)
 poke(0x5d0b,g_pl.health)
 poke(0x5d0c,g_pl.max_health)
-if not does_entity_exist"fader"and not g_pl:inside(g_room_bounds)then
+if not does_entity_exist"fader"and(not g_pl:inside(g_room_bounds)or peek"0x5d0b"<=0)then
 local abx,aby=g_pl:abside(g_room_bounds)
 local nri=peek"0x5d01"+aby*16+abx
 if peek"0x5d01">223 then
@@ -875,7 +872,6 @@ end
 end,function()
 zcall(loop_entities,[[1;,drawlayer_90,draw;2;,drawlayer_95,draw;3;,drawlayer_99,draw;]])
 end)
-local cx,cy=9,57
 end,function()
 _g.title_logo()
 end,function()
@@ -1051,7 +1047,7 @@ zclass[[brang,collidable,simple_spr,drawlayer_50,mov,actor,statitem|anchoring,@,
 zclass[[bomb_explode,enemy,box,actor,statitem|x,@,y,@,rx,1,ry,1,damage,5,pushspeed,.25,should_use_xf,no,item_hit_func,nop,pl_collide_func,%bomb_pl_hit;start;duration,.25;]]
 zclass[[maskcheck|maskcheck,%maskcheck_func]]
 zclass[[pushable,mov|push_ang,0,push,%pushable_push,update_push,%pushable_update_push]]
-zclass[[pl,ma_left,pushable,actor,mov,collidable,auto_outline,healthobj,drawlayer_50|cname,lank,cspr,103,x,@,y,@,xf,@,health,@,max_health,@,inventory,@,rx,.375,ry,.375,should_collide_with_screen_edge,no,update,%pl_update,energy,0,is_energy_cooling_down,no,target_energy,0,destroyed,%pl_destroyed,drawout,%pl_drawout;item_funcs;1,%banjo,2,%bomb_held,3,%bow,4,%sword,5,%interact,6,%shield,7,%brang,8,%mask;default_item;visible,no,is_default,yes,block_direction,no,speed_multiplier,1,alive,yes,gradual_energy,-.0078125,initial_energy,0,kill,nop;item,~default_item;]]
+zclass[[pl,ma_left,pushable,actor,mov,collidable,auto_outline,healthobj,drawlayer_50|cname,lank,cspr,103,x,@,y,@,xf,@,health,@,max_health,@,inventory,@,rx,.375,ry,.375,should_collide_with_screen_edge,no,update,%pl_update,energy,0,is_energy_cooling_down,no,target_energy,0,destroyed,%standard_explosion,drawout,%pl_drawout;item_funcs;1,%banjo,2,%bomb_held,3,%bow,4,%sword,5,%interact,6,%shield,7,%brang,8,%mask;default_item;visible,no,is_default,yes,block_direction,no,speed_multiplier,1,alive,yes,gradual_energy,-.0078125,initial_energy,0,kill,nop;item,~default_item;]]
 function draw_bar(x1,y1,x2,y2,percent,align,fg,bg,og)
 local bar_off=x2-x1-min(percent,1)*(x2-x1)
 if align==0 then bar_off/=2 end
@@ -1172,12 +1168,16 @@ zclass[[room_bounds,box|x,@,y,@,rx,@,ry,@]]
 function load_room(rind,x,y,xf)
 if not does_entity_exist"fader"then
 _g.fader_out(function()
+if peek"0x5d0b"<=0 then
+g_state:load"gameover"
+else
 zcall(poke,[[1;,0x5d01,@;2;,0x5d02,@;3;,0x5d03,@;4;,0x5d04,@;]],rind,
 x*16,
 y*16,
 (xf+1)\2
 )
 g_state:load"room"
+end
 end)
 end
 end
