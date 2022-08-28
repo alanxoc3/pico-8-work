@@ -41,9 +41,36 @@ end $$
     end)
 end $$
 
-zclass[[slimy_boss,slimy_shared |
-    idle;sind,120,duration,1; jump;sind,121;
-    x,@, y,@, cspr,120, cname,"slimy", sind,120, max_health,5, destroyed,%slimy_destroyed;
+zclass[[slimy_boss,ma_battle,pushable,actor,collidable,healthobj,enemy,simple_spr,drawlayer_50|
+    idle;sind,120,duration,.75; jump;sind,121;
+    x,@, y,@, cspr,120, cname,"slimy", sind,120, destroyed,%slimy_destroyed;
+
+    rx, .5, ry, .5,
+    should_dance,yes,
+    statcollide,%slimy_statcollide,
+    drawout,%slimy_draw,
+    pl_collide_func,%slimy_pl_collide_func,
+    stun_callback,%slimy_stun_callback,
+    max_health,10;
+    start; init,%slimyboss_init, duration,0, next,idle;
+
+    stunstate; init,nop, update,%slimy_stunstate, next,idle;
+    idle;      init,%slimyboss_idle_init, update,%slimy_start, next,bounce_1;
+    bounce_1;  init,%slimy_bounce, update,nop, duration,.0625, next,bounce_2;
+    bounce_2;  init,%slimy_bounce, update,nop, duration,.0625, next,jump;
+    jump;      init,%slimy_jump_init, update,%slimy_propel, pl_collide_func,%slimy_pl_collide_func, duration, .25, next,idle;
+]]
+
+|[slimyboss_init]| function(a)
+    _g.slimy_boss_minion(a.x, a.y, 0, .2)
+    _g.slimy_boss_minion(a.x, a.y, 0, -.2)
+    _g.slimy_boss_minion(a.x, a.y, .2, 0)
+    _g.slimy_boss_minion(a.x, a.y, -.2, 0)
+end $$
+
+zclass[[slimy_boss_minion,slimy_shared|
+    idle;sind,118,duration,.75; jump;sind,119;
+    x,@, y,@, dx,@, dy,@, cspr,118, cname,"slimy", sind,118, max_health,10, destroyed,%slimy_destroyed;
 ]]
 
 zclass[[slimy_shared,ma_battle,pushable,actor,collidable,healthobj,enemy,simple_spr,drawlayer_50|
