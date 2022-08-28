@@ -5,9 +5,9 @@ zclass[[spike,enemy,simple_spr,actor,drawlayer_25|
     draw,~drawout;
 
     start;   next,down;
-    down;    sind,52, duration,.775, next,middle1;
+    down;    sind,52, duration,.9, next,middle1;
     middle1; sind,53, duration,.05, next,up;
-    up;      pl_collide_func,%spike_pl_collide_func, sind,54, duration,.125,  next,middle2;
+    up;      pl_collide_func,%spike_pl_collide_func, sind,54, duration,.25,  next,middle2;
     middle2; pl_collide_func,nop, sind,53, duration,.05, next,down;
 ]]
 
@@ -16,10 +16,10 @@ zclass[[spike,enemy,simple_spr,actor,drawlayer_25|
 end $$
 
 zclass[[r1spike,spike|x,@,y,@,xf, 1;start;duration,0;]]
-zclass[[r2spike,spike|x,@,y,@,xf, 1;start;duration,.5;]]
+zclass[[r2spike,spike|x,@,y,@,xf, 1;start;duration,.625;]]
 
 zclass[[l1spike,spike|x,@,y,@,xf,-1;start;duration,0;]]
-zclass[[l2spike,spike|x,@,y,@,xf,-1;start;duration,.5;]]
+zclass[[l2spike,spike|x,@,y,@,xf,-1;start;duration,.625;]]
 
 zclass[[saveplat,ma_interact,box,simple_spr,actor,drawlayer_25|
     x,@, y,@, rx,.375, ry,.375,
