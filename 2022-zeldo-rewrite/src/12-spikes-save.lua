@@ -21,7 +21,7 @@ zclass[[r2spike,spike|x,@,y,@,xf, 1;start;duration,.5;]]
 zclass[[l1spike,spike|x,@,y,@,xf,-1;start;duration,0;]]
 zclass[[l2spike,spike|x,@,y,@,xf,-1;start;duration,.5;]]
 
-zclass[[saveplat,ma_right,box,simple_spr,actor,drawlayer_25|
+zclass[[saveplat,ma_interact,box,simple_spr,actor,drawlayer_25|
     x,@, y,@, rx,.375, ry,.375,
     cname,"save", cspr,10,
     sind,40, sw,2, sh,2, draw,~drawout,

@@ -12,7 +12,7 @@ zclass[[enemy,box|
     pl_collide_func,nop
 ]]
 
-zclass[[quack,propel,ma_right,actor,collidable,mov,enemy,simple_spr,drawlayer_50|
+zclass[[quack,propel,ma_interact,actor,collidable,mov,enemy,simple_spr,drawlayer_50|
     x,@, y,@, rx, .25, ry, .25,
     sy,-2,
     propel_speed,.0125,
@@ -40,7 +40,7 @@ end $$
     end)
 end $$
 
-zclass[[slimy_shared,ma_right,pushable,actor,collidable,healthobj,enemy,simple_spr,drawlayer_50|
+zclass[[slimy_shared,ma_battle,pushable,actor,collidable,healthobj,enemy,simple_spr,drawlayer_50|
     rx, .25, ry, .25,
     statcollide,%slimy_statcollide,
     drawout,%slimy_draw,

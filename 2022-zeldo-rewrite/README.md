@@ -33,17 +33,15 @@ help him save the Land of Hi-roll from the FORCES-OF-EVIL.
 friday...
 TODO: chest with sword
 TODO: banjo with lark text logic
-TODO: standardize ma time
-TODO: pot ma override
 TODO: remove duck throw
 TODO: duck follow logic
-TODO: interact always override hurtable
 TODO: item going up snap/fix
 TODO: replace gameover with tbox
 TODO: chicken follow not throw
 TODO: get item logic
 TODO: right ma sprite shouldn't be flipped
 TODO: fix item offsets (many items are either off or sometimes off)
+TODO: don't wait for ma for picking things up/interacting (pot, duck?)
 TODO: when items go up, slight bug
 TODO: token crunch for 30 minutes
 TODO: bomb blow up crate
@@ -54,8 +52,8 @@ TODO: think of more enemies
 TODO: think about chicken collection for cannon logic (throw chicken onto a platform)
 
 ```
-2022-08-27 -- money polish
-    6948
+2022-08-27 -- money mapolish
+    6948 6955
 
 2022-08-26 -- stunlogic collaxis
     6653
@@ -276,3 +274,5 @@ soup is temporary
 my daughter is trapped behind this giant rock. if only someone had a bomb to save her.
 mwa heh ha... i've been waiting for you. you must be that creep that wants to marry my daughter.
 if you want to see her that bad, you'll have to get through this crypt i filled with monsters. heh.
+
+2 different levels of ma. Battle level and interact level. Interact level is higher priority.

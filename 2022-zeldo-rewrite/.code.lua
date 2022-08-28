@@ -559,20 +559,17 @@ a.next_obj=nil
 a:load()
 end
 end,function(a)
-local buffer=g_zclass_entities[a.entity_type]
-local cur_obj=a:get()
-local new_obj=nil
+local buffer,cur_obj,new_lvl,new_obj,should_exit=g_zclass_entities[a.entity_type],a:get(),-1
 for obj in all(buffer)do
-if obj:is_active"isma"and obj:is_alive()then
-new_obj=obj
+if obj:is_active"isma"and obj:is_alive()and(obj.ma_level>new_lvl or obj==cur_obj and obj.ma_level>=new_lvl)then
+new_obj,new_lvl=obj,obj.ma_level
 end
-if obj==cur_obj then return end
 end
 a.next_obj=new_obj
 end,function(a)
 return a.obj and a.obj:is_alive()and a.obj
 end,function(a)
-if a.new_obj or not a.obj:is_alive()or not a.obj:is_active"isma"then
+if a.next_obj ~=a.obj then
 a:load()
 end
 end,function(a)
@@ -1076,8 +1073,10 @@ zcamera(cam_x,cam_y,post_card_func)
 end
 zclass[[coin_count,vec,actor,drawlayer_90|y,142,draw,%coin_coint_draw;start;next,open,dy,0,update,%coin_count_start;open;next,normal,dy,-2,update,nop,duration,.2;normal;next,close,dy,0,update,%coin_count_normal;close;next,start,dy,2,update,nop,duration,.2;]]
 zclass[[energybar,vec,actor,drawlayer_99|obj,@,y,20,draw,%energybar_draw;]]
-zclass[[ma_left|]]
-zclass[[ma_right|]]
+zclass[[ma_left|ma_level,0]]
+zclass[[ma_right|ma_level,0]]
+zclass[[ma_battle,ma_right|ma_level,0]]
+zclass[[ma_interact,ma_right|ma_level,1]]
 zclass[[rstat,vec,actor,drawlayer_95|align,@,x,@,entity_type,@,y,141,draw,%stat_draw,buffer_update,%rstat_update,get,%rstat_get;start;next,open,dy,0,update,%stat_idle;open;next,normal,dy,-2,update,nop,duration,.2;normal;next,close,dy,0,update,%stat_normal;close;next,start,dy,2,update,nop,duration,.2;]]
 zclass[[tbox,vec,actor,drawlayer_99|rawtext,@,destroyed,@,y,142,cur_text_index,1,anim,0,line_1,,line_2,,update,%tbox_update,draw,%tbox_draw;texts;,;start;dy,-2,duration,.2,next,normal,update,nop,init,%tbox_init;normal;dy,0,anim,0,done,no,update,%tbox_update,init,nop;ending;dy,2,update,nop,duration,.2,init,nop;]]
 zclass[[fairy,actor,mov,drawlayer_50|x,@,y,@,update,%fairy_update,draw,%fairy_draw]]
@@ -1091,7 +1090,7 @@ zclass[[woodtbl,solid,drawlayer_50,simple_spr|x,@,y,@,rx,.375,ry,.375,draw,~draw
 zclass[[greytbl,solid,drawlayer_50,simple_spr|x,@,y,@,rx,.375,ry,.375,draw,~drawout,sind,17]]
 zclass[[soupbucket,solid,drawlayer_50,simple_spr|x,@,y,@,rx,.375,ry,.375,draw,~drawout,sind,18]]
 zclass[[woodcrate,solid,drawlayer_50,simple_spr|x,@,y,@,rx,.375,ry,.25,draw,~drawout,sind,35]]
-zclass[[pot,solid,class_with_target,drawlayer_50,ma_right,simple_spr|x,@,y,@,cspr,49,cname,pot,sind,49,rx,.375,ry,.375,trx,.5,try,.5,callback_touch,%pot_callback_touch]]
+zclass[[pot,solid,class_with_target,drawlayer_50,ma_interact,simple_spr|x,@,y,@,cspr,49,cname,pot,sind,49,rx,.375,ry,.375,trx,.5,try,.5,callback_touch,%pot_callback_touch]]
 zclass[[bedbot_l,actor,simple_spr,drawlayer_50|x,@,y,@,sind,55,init,%spawn_walls;walls;1;,~,0,.25,.75,.25;walls;2;,~,.625,0,.25,.25;walls;3;,~,-.625,-.5,.25,1;]]
 zclass[[bedbot_r,actor,simple_spr,drawlayer_50|x,@,y,@,sind,55,init,%spawn_walls;walls;1;,~,0,.25,.75,.25;walls;2;,~,-.625,0,.25,.25;walls;3;,~,.625,-.5,.25,1;]]
 zclass[[bedpillow,simple_spr,drawlayer_25|x,@,y,@,sind,39]]
@@ -1117,7 +1116,7 @@ zclass[[keep_shield,keep_parent|x,@,y,@,item_name,shield,memloc,0x5d14]]
 zclass[[keep_sling,keep_parent|x,@,y,@,item_name,slingshot,memloc,0x5d12]]
 zclass[[keep_mask,keep_parent|x,@,y,@,item_name,scary mask,memloc,0x5d16]]
 zclass[[class_with_target,actor|trx,0,try,0,tx,0,ty,0,init,%class_with_target_init,callback_touch,nop,callback_outside,nop]]
-zclass[[target_with_tbox,class_with_target,ma_right|text,,gettext,%target_with_tbox_gettext,callback_touch,%target_with_tbox_target_func,target_with_tbox_disable_callback,nop,target_with_tbox_finish_callback,nop]]
+zclass[[target_with_tbox,class_with_target,ma_interact|text,,gettext,%target_with_tbox_gettext,callback_touch,%target_with_tbox_target_func,target_with_tbox_disable_callback,nop,target_with_tbox_finish_callback,nop]]
 zclass[[sign,target_with_tbox,solid,simple_spr,drawlayer_50|rx,.375,ry,.375,sy,-2,target_with_tbox_disable_callback,%sign_target_with_tbox_disable_callback,cname,sign,cspr,24,sind,24,trx,.125,try,.375,tx,0,ty,.25]]
 zclass[[signtest,sign|x,@,y,@,text,24^mary had a^little lamb^little lamb^little lamb^mary had a^little lamb^whose fleece was^white as yo face]]
 zclass[[signlank,sign|x,@,y,@,text,24^lanks house]]
@@ -1127,8 +1126,8 @@ zclass[[signteach,sign|x,@,y,@,text,24^teachs house]]
 zclass[[signlark,sign|x,@,y,@,text,24^larks house]]
 zclass[[signjane,sign|x,@,y,@,text,24^janes house]]
 zclass[[enemy,box|pl_collide_func_batch,%enemy_pl_collide_func_batch,pl_collide_func,nop]]
-zclass[[quack,propel,ma_right,actor,collidable,mov,enemy,simple_spr,drawlayer_50|x,@,y,@,rx,.25,ry,.25,sy,-2,propel_speed,.0125,pl_collide_func,%quack_pl_collide_func,sind,32,cspr,32,cname,quack;start;init,%quack_change_dir,update,~propel,duration,1,next,start;]]
-zclass[[slimy_shared,ma_right,pushable,actor,collidable,healthobj,enemy,simple_spr,drawlayer_50|rx,.25,ry,.25,statcollide,%slimy_statcollide,drawout,%slimy_draw,pl_collide_func,%slimy_pl_collide_func,stun_callback,%slimy_stun_callback,max_health,5,curr,idle;stunstate;init,nop,update,%slimy_stunstate,next,idle;idle;init,nop,update,%slimy_start,next,bounce_1;bounce_1;init,%slimy_bounce,update,nop,duration,.0625,next,bounce_2;bounce_2;init,%slimy_bounce,update,nop,duration,.0625,next,jump;jump;init,%slimy_jump_init,update,%slimy_propel,pl_collide_func,%slimy_pl_collide_func,duration,.25,next,idle;]]
+zclass[[quack,propel,ma_interact,actor,collidable,mov,enemy,simple_spr,drawlayer_50|x,@,y,@,rx,.25,ry,.25,sy,-2,propel_speed,.0125,pl_collide_func,%quack_pl_collide_func,sind,32,cspr,32,cname,quack;start;init,%quack_change_dir,update,~propel,duration,1,next,start;]]
+zclass[[slimy_shared,ma_battle,pushable,actor,collidable,healthobj,enemy,simple_spr,drawlayer_50|rx,.25,ry,.25,statcollide,%slimy_statcollide,drawout,%slimy_draw,pl_collide_func,%slimy_pl_collide_func,stun_callback,%slimy_stun_callback,max_health,5,curr,idle;stunstate;init,nop,update,%slimy_stunstate,next,idle;idle;init,nop,update,%slimy_start,next,bounce_1;bounce_1;init,%slimy_bounce,update,nop,duration,.0625,next,bounce_2;bounce_2;init,%slimy_bounce,update,nop,duration,.0625,next,jump;jump;init,%slimy_jump_init,update,%slimy_propel,pl_collide_func,%slimy_pl_collide_func,duration,.25,next,idle;]]
 zclass[[slimy_actual,slimy_shared|idle;sind,118,duration,@;jump;sind,119;x,@,y,@,cspr,118,cname,slimy,sind,118,max_health,5,destroyed,%slimy_destroyed;]]
 zclass[[miny_actual,slimy_shared|idle;sind,116,duration,@;jump;sind,117;x,@,y,@,dy,@,cspr,116,cname,miny,sind,116,max_health,1,destroyed,%standard_explosion;]]
 zclass[[spike,enemy,simple_spr,actor,drawlayer_25|sind,52,rx,.25,ry,.25,sy,0,draw,~drawout;start;next,down;down;sind,52,duration,.65,next,middle1;middle1;sind,53,duration,.05,next,up;up;pl_collide_func,%spike_pl_collide_func,sind,54,duration,.25,next,middle2;middle2;pl_collide_func,nop,sind,53,duration,.05,next,down;]]
@@ -1136,7 +1135,7 @@ zclass[[r1spike,spike|x,@,y,@,xf,1;start;duration,0;]]
 zclass[[r2spike,spike|x,@,y,@,xf,1;start;duration,.5;]]
 zclass[[l1spike,spike|x,@,y,@,xf,-1;start;duration,0;]]
 zclass[[l2spike,spike|x,@,y,@,xf,-1;start;duration,.5;]]
-zclass[[saveplat,ma_right,box,simple_spr,actor,drawlayer_25|x,@,y,@,rx,.375,ry,.375,cname,save,cspr,10,sind,40,sw,2,sh,2,draw,~drawout,update,%saveplat_update;]]
+zclass[[saveplat,ma_interact,box,simple_spr,actor,drawlayer_25|x,@,y,@,rx,.375,ry,.375,cname,save,cspr,10,sind,40,sw,2,sh,2,draw,~drawout,update,%saveplat_update;]]
 g_fade,g_fade_table=1,zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,1,0,0,0,0;3;,3,3,3,3,1,1,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,0,0,0,0;6;,6,6,13,13,5,5,0,0;7;,7,7,6,13,13,5,0,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,0,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,0,0,0;13;,13,13,5,5,1,0,0,0;14;,14,14,13,4,2,2,0,0;15;,15,15,13,13,5,5,0,0;]]
 g_fade_table_gray=zobj[[0;,0,0;1;,1,1;2;,2,5;3;,3,13;4;,4,13;5;,5,5;6;,6,6;7;,7,7;8;,8,13;9;,9,6;10;,10,7;11;,11,7;12;,12,7;13;,13,13;14;,14,6;15;,15,6;]]
 g_fade_table_red=zobj[[0;,0,0;1;,1,2;2;,2,2;3;,3,4;4;,4,4;5;,5,2;6;,6,4;7;,7,14;8;,8,8;9;,9,14;10;,10,14;11;,11,8;12;,12,7;13;,13,4;14;,14,8;15;,15,14;]]

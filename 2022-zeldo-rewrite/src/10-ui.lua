@@ -88,8 +88,12 @@ zclass[[energybar,vec,actor,drawlayer_99|
     -- camera()
 end $$
 
-zclass[[ma_left|]]
-zclass[[ma_right|]]
+zclass[[ma_left|ma_level,0]]
+zclass[[ma_right|ma_level,0]]
+
+-- 2 levels of ma_right. battle and interact. interact always trumps battle.
+zclass[[ma_battle,ma_right|ma_level,0]]
+zclass[[ma_interact,ma_right|ma_level,1]]
 
 zclass[[rstat,vec,actor,drawlayer_95|
     align,@, x,@, entity_type,@,
@@ -112,15 +116,12 @@ zclass[[rstat,vec,actor,drawlayer_95|
 end $$
 
 |[rstat_update]| function(a)
-    local buffer = g_zclass_entities[a.entity_type]
-    local cur_obj = a:get()
-    local new_obj = nil
+    local buffer, cur_obj, new_lvl, new_obj, should_exit = g_zclass_entities[a.entity_type], a:get(), -1
 
     for obj in all(buffer) do
-        if obj:is_active'isma' and obj:is_alive() then
-            new_obj = obj
+        if obj:is_active'isma' and obj:is_alive() and (obj.ma_level > new_lvl or obj == cur_obj and obj.ma_level >= new_lvl) then
+            new_obj, new_lvl = obj, obj.ma_level
         end
-        if obj == cur_obj then return end
     end
 
     a.next_obj = new_obj
@@ -131,7 +132,7 @@ end $$
 end $$
 
 |[stat_normal]| function(a)
-    if a.new_obj or not a.obj:is_alive() or not a.obj:is_active'isma' then
+    if a.next_obj ~= a.obj then
         a:load()
     end
 end $$

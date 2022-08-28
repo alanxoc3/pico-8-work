@@ -26,7 +26,7 @@ zclass[[class_with_target,actor|
     )
 end $$
 
-zclass[[target_with_tbox,class_with_target,ma_right|
+zclass[[target_with_tbox,class_with_target,ma_interact|
     text,,
     
     gettext,%target_with_tbox_gettext,

@@ -7,7 +7,7 @@ zclass[[greytbl   ,solid,drawlayer_50,simple_spr|x,@,y,@,rx,.375,ry,.375,draw,~d
 zclass[[soupbucket,solid,drawlayer_50,simple_spr|x,@,y,@,rx,.375,ry,.375,draw,~drawout,sind,18]]
 zclass[[woodcrate ,solid,drawlayer_50,simple_spr|x,@,y,@,rx,.375,ry,.25,draw,~drawout,sind,35]]
 
-zclass[[pot,solid,class_with_target,drawlayer_50,ma_right,simple_spr|
+zclass[[pot,solid,class_with_target,drawlayer_50,ma_interact,simple_spr|
     x,@,y,@,
     cspr,49, cname,"pot", sind,49,
     rx,.375,ry,.375,
