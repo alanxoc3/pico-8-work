@@ -713,8 +713,8 @@ a:pl_collide_func(other)
 end
 end)
 end,function(a)
-for i=0,5 do
-_g.slimy_boss_minion(a.x,a.y,cos(i/6)*.4,sin(i/6)*.4)
+for i=0,3 do
+_g.slimy_boss_minion(a.x,a.y,cos(i/4+.125)*.4,sin(i/4+.125)*.4)
 end
 end,function(a)
 a.speed=.025
