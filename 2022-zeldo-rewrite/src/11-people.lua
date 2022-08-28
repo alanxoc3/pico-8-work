@@ -1,5 +1,6 @@
 zclass[[person,solid,target_with_tbox,simple_spr,drawlayer_50|
     sy,-2,
+    should_dance,yes,
     rx,.375, ry,.375,
     trx,.5, try,.5,
     target_with_tbox_disable_callback,%person_target_with_tbox_disable_callback

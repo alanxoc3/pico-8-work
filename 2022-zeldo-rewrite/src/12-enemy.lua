@@ -14,6 +14,7 @@ zclass[[enemy,box|
 
 zclass[[quack,propel,ma_interact,actor,collidable,mov,enemy,simple_spr,drawlayer_50|
     x,@, y,@, rx, .25, ry, .25,
+    should_dance,yes,
     sy,-2,
     propel_speed,.0125,
     pl_collide_func,%quack_pl_collide_func,
@@ -42,6 +43,7 @@ end $$
 
 zclass[[slimy_shared,ma_battle,pushable,actor,collidable,healthobj,enemy,simple_spr,drawlayer_50|
     rx, .25, ry, .25,
+    should_dance,yes,
     statcollide,%slimy_statcollide,
     drawout,%slimy_draw,
     pl_collide_func,%slimy_pl_collide_func,

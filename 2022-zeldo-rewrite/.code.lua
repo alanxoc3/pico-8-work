@@ -385,7 +385,11 @@ end
 end,nop)
 end
 end,function(a)
-zspr(a.sind,a.x*8+a.sx,a.y*8+a.sy,a.sw,a.sh,a.xf,a.yf)
+local xf=a.xf
+if a.should_dance and does_entity_exist"banjo"then
+xf=(g_si%2-.5)*2
+end
+zspr(a.sind,a.x*8+a.sx,a.y*8+a.sy,a.sw,a.sh,xf,a.yf)
 end,function(a)
 a.offx+=a.offdx a.offy+=a.offdy
 a.x,a.y=a.anchoring.x+a.offx,a.anchoring.y+a.offy
@@ -1019,7 +1023,7 @@ zclass[[healthobj,maskcheck|max_health,1,stun_callback,nop,hurt,%healthobj_hurt,
 zclass[[inventory,actor,vec,drawlayer_90|ind,5,x,64,y,-9,draw,%inventory_draw;start;next,open,dy,0,init,nop,update,%inventory_start_update;open;next,normal,dy,2,init,nop,update,%inventory_open_update,duration,.1,cachedir,0;normal;next,close,dy,0,init,%inventory_normal_init,update,%inventory_update;close;next,start,dy,-2,init,nop,duration,.1,update,nop;1;mem_loc,0x5d10,sxo,0,x,-41,y,0,w,4.5,sind,1;2;mem_loc,0x5d11,sxo,0,x,-31,y,0,w,4.5,sind,5;3;mem_loc,0x5d12,sxo,0,x,-21,y,0,w,4.5,sind,7;4;mem_loc,0x5d13,sxo,0,x,-11,y,0,w,4.5,sind,2;5;mem_loc,0x5d00,sxo,2,x,0,y,0,w,6,sind,0;6;mem_loc,0x5d14,sxo,0,x,12,y,0,w,4.5,sind,6;7;mem_loc,0x5d15,sxo,0,x,22,y,0,w,4.5,sind,4;8;mem_loc,0x5d16,sxo,0,x,32,y,0,w,4.5,sind,3;9;mem_loc,0x5d17,sxo,0,x,42,y,0,w,4.5,sind,8;]]
 zclass[[solid,box|]]
 zclass[[wall,solid,anchor|anchoring,@,offx,@,offy,@,rx,@,ry,@]]
-zclass[[simple_spr,auto_outline,pos|drawout,%simple_spr_draw,sind,0,sw,1,sh,1,xf,1,yf,1,sx,0,sy,0]]
+zclass[[simple_spr,auto_outline,pos|drawout,%simple_spr_draw,should_dance,no,sind,0,sw,1,sh,1,xf,1,yf,1,sx,0,sy,0]]
 zclass[[anchor,pos|update_anchor,%anchor_update_anchor;offx,0,offy,0,offdx,0,offdy,0,anchoring;,]]
 zclass[[target,anchor,box|rx,@,ry,@,offx,@,offy,@,anchoring,@,callback_touch,@,callback_outside,@,update_target,%targettouch_update_target]]
 zclass[[coin,actor,enemy,simple_spr,drawlayer_50|x,@,y,@,memloc,@,rx,.125,ry,.125,sind,36,draw,~drawout,pl_collide_func,%coin_pl_collide_func]]
@@ -1102,7 +1106,7 @@ zclass[[house226,house|x,@,y,@,room,226]]
 zclass[[house227,house|x,@,y,@,room,227]]
 zclass[[house228,house|x,@,y,@,room,228]]
 zclass[[house229,house|x,@,y,@,xf,-1,room,229]]
-zclass[[person,solid,target_with_tbox,simple_spr,drawlayer_50|sy,-2,rx,.375,ry,.375,trx,.5,try,.5,target_with_tbox_disable_callback,%person_target_with_tbox_disable_callback]]
+zclass[[person,solid,target_with_tbox,simple_spr,drawlayer_50|sy,-2,should_dance,yes,rx,.375,ry,.375,trx,.5,try,.5,target_with_tbox_disable_callback,%person_target_with_tbox_disable_callback]]
 zclass[[navyblock,person|x,@,y,@,cname,navy,cspr,97,sind,97,text,97^my sister has been in^the forest all day.^please bring her back^home!,rx,.375,ry,1,memloc_trigger,0x5d09,memloc_trigger_value,1,target_with_tbox_finish_callback,%person_target_with_tbox_finish_callback|0x5d09|0]]
 zclass[[navyhouse,person|x,@,y,@,cname,navy,cspr,97,sind,97,text,im navy in a house|0x5d09|1]]
 zclass[[bobblock,solid,person|x,@,y,@,cname,bob,cspr,80,sind,80,text,im bob outside,ry,1,memloc_trigger,0x5d0a,memloc_trigger_value,1,target_with_tbox_finish_callback,%person_target_with_tbox_finish_callback|0x5d0a|0]]
@@ -1126,8 +1130,8 @@ zclass[[signteach,sign|x,@,y,@,text,24^teachs house]]
 zclass[[signlark,sign|x,@,y,@,text,24^larks house]]
 zclass[[signjane,sign|x,@,y,@,text,24^janes house]]
 zclass[[enemy,box|pl_collide_func_batch,%enemy_pl_collide_func_batch,pl_collide_func,nop]]
-zclass[[quack,propel,ma_interact,actor,collidable,mov,enemy,simple_spr,drawlayer_50|x,@,y,@,rx,.25,ry,.25,sy,-2,propel_speed,.0125,pl_collide_func,%quack_pl_collide_func,sind,32,cspr,32,cname,quack;start;init,%quack_change_dir,update,~propel,duration,1,next,start;]]
-zclass[[slimy_shared,ma_battle,pushable,actor,collidable,healthobj,enemy,simple_spr,drawlayer_50|rx,.25,ry,.25,statcollide,%slimy_statcollide,drawout,%slimy_draw,pl_collide_func,%slimy_pl_collide_func,stun_callback,%slimy_stun_callback,max_health,5,curr,idle;stunstate;init,nop,update,%slimy_stunstate,next,idle;idle;init,nop,update,%slimy_start,next,bounce_1;bounce_1;init,%slimy_bounce,update,nop,duration,.0625,next,bounce_2;bounce_2;init,%slimy_bounce,update,nop,duration,.0625,next,jump;jump;init,%slimy_jump_init,update,%slimy_propel,pl_collide_func,%slimy_pl_collide_func,duration,.25,next,idle;]]
+zclass[[quack,propel,ma_interact,actor,collidable,mov,enemy,simple_spr,drawlayer_50|x,@,y,@,rx,.25,ry,.25,should_dance,yes,sy,-2,propel_speed,.0125,pl_collide_func,%quack_pl_collide_func,sind,32,cspr,32,cname,quack;start;init,%quack_change_dir,update,~propel,duration,1,next,start;]]
+zclass[[slimy_shared,ma_battle,pushable,actor,collidable,healthobj,enemy,simple_spr,drawlayer_50|rx,.25,ry,.25,should_dance,yes,statcollide,%slimy_statcollide,drawout,%slimy_draw,pl_collide_func,%slimy_pl_collide_func,stun_callback,%slimy_stun_callback,max_health,5,curr,idle;stunstate;init,nop,update,%slimy_stunstate,next,idle;idle;init,nop,update,%slimy_start,next,bounce_1;bounce_1;init,%slimy_bounce,update,nop,duration,.0625,next,bounce_2;bounce_2;init,%slimy_bounce,update,nop,duration,.0625,next,jump;jump;init,%slimy_jump_init,update,%slimy_propel,pl_collide_func,%slimy_pl_collide_func,duration,.25,next,idle;]]
 zclass[[slimy_actual,slimy_shared|idle;sind,118,duration,@;jump;sind,119;x,@,y,@,cspr,118,cname,slimy,sind,118,max_health,5,destroyed,%slimy_destroyed;]]
 zclass[[miny_actual,slimy_shared|idle;sind,116,duration,@;jump;sind,117;x,@,y,@,dy,@,cspr,116,cname,miny,sind,116,max_health,1,destroyed,%standard_explosion;]]
 zclass[[spike,enemy,simple_spr,actor,drawlayer_25|sind,52,rx,.25,ry,.25,sy,0,draw,~drawout;start;next,down;down;sind,52,duration,.9,next,middle1;middle1;sind,53,duration,.05,next,up;up;pl_collide_func,%spike_pl_collide_func,sind,54,duration,.25,next,middle2;middle2;pl_collide_func,nop,sind,53,duration,.05,next,down;]]
