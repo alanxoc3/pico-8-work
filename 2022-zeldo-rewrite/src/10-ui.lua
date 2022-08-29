@@ -93,7 +93,8 @@ zclass[[ma_right|ma_level,0]]
 
 -- 2 levels of ma_right. battle and interact. interact always trumps battle.
 zclass[[ma_battle,ma_right|ma_level,0]]
-zclass[[ma_interact,ma_right|ma_level,1]]
+zclass[[ma_boss,ma_right|ma_level,1]]
+zclass[[ma_interact,ma_right|ma_level,2]]
 
 zclass[[rstat,vec,actor,drawlayer_95|
     align,@, x,@, entity_type,@,

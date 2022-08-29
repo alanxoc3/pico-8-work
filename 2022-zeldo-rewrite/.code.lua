@@ -147,7 +147,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,animation_init,@,auto_outline_draw,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update_x,@,vec_update_y,@,mov_update,@,mov_towards_point,@,explode_draw,@,standard_explosion,@,set_x_delta,@,set_y_delta,@,adjust_deltas_for_solids,@,adjust_deltas_for_tiles,@,set_x_delta2,@,set_y_delta2,@,adjust_deltas_for_screen,@,healthobj_hurt,@,healthobj_stun,@,healthobj_health_update,@,inventory_open_update,@,inventory_update,@,inventory_start_update,@,inventory_normal_init,@,inventory_draw,@,simple_spr_draw,@,anchor_update_anchor,@,targettouch_update_target,@,coin_pl_collide_func,@,coin_1,@,coin_2,@,coin_3,@,coin_4,@,coin_5,@,coin_6,@,coin_7,@,coin_8,@,coin_9,@,coin_10,@,coin_11,@,coin_12,@,coin_13,@,coin_14,@,coin_15,@,coin_16,@,propel_func,@,interact,@,held_to_throw_ending_init,@,item_throwing_update,@,quack_thrown_destroyed,@,bomb_destroyed,@,pellet_update,@,pellet_draw,@,bow_ending_init,@,sword_item_hit_func,@,banjo_start_init,@,banjo_ending_init,@,brang_drawout,@,brang_start_init,@,brang_start_update,@,brang_normal_update,@,brang_ending_init,@,brang_ending_update,@,bomb_pl_hit,@,item_horizontal_start_init,@,item_horizontal_normal_init,@,item_horizontal_ending_init,@,maskcheck_func,@,pushable_push,@,pushable_update_push,@,pl_update,@,pl_drawout,@,card_table_cache,@,coin_count_start,@,coin_count_normal,@,coin_coint_draw,@,energybar_draw,@,stat_idle,@,rstat_update,@,rstat_get,@,stat_normal,@,stat_draw,@,tbox_init,@,tbox_update,@,tbox_draw,@,fairy_update,@,fairy_draw,@,spawn_walls,@,pot_callback_touch,@,house_init,@,person_target_with_tbox_disable_callback,@,person_target_with_tbox_finish_callback,@,teach_gettext,@,keep_gettext,@,class_with_target_init,@,target_with_tbox_gettext,@,target_with_tbox_target_func,@,sign_target_with_tbox_disable_callback,@,quack_change_dir,@,quack_pl_collide_func,@,enemy_pl_collide_func_batch,@,slimyboss_destroyed,@,slimyboss_start,@,slimyboss_jump,@,slimyboss_init,@,slimy_minion_update,@,slimy,@,slimy_destroyed,@,miny,@,slimy_propel,@,slimy_stun_callback,@,slimy_stunstate,@,slimy_pl_collide_func,@,slimy_start,@,slimy_bounce,@,slimy_jump_init,@,slimy_draw,@,slimy_statcollide,@,spike_pl_collide_func,@,saveplat_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,gameover_control_ending,@,gameover_init,@,gameover_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,simple_update,@,title_draw,@,title_logo_update,@,title_logo_drawout,@,game_state_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,animation_init,@,auto_outline_draw,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update_x,@,vec_update_y,@,mov_update,@,mov_towards_point,@,explode_draw,@,standard_explosion,@,set_x_delta,@,set_y_delta,@,adjust_deltas_for_solids,@,adjust_deltas_for_tiles,@,set_x_delta2,@,set_y_delta2,@,adjust_deltas_for_screen,@,healthobj_hurt,@,healthobj_stun,@,healthobj_health_update,@,inventory_open_update,@,inventory_update,@,inventory_start_update,@,inventory_normal_init,@,inventory_draw,@,simple_spr_draw,@,anchor_update_anchor,@,targettouch_update_target,@,coin_pl_collide_func,@,coin_1,@,coin_2,@,coin_3,@,coin_4,@,coin_5,@,coin_6,@,coin_7,@,coin_8,@,coin_9,@,coin_10,@,coin_11,@,coin_12,@,coin_13,@,coin_14,@,coin_15,@,coin_16,@,propel_func,@,interact,@,held_to_throw_ending_init,@,item_throwing_update,@,quack_thrown_destroyed,@,bomb_destroyed,@,pellet_update,@,pellet_draw,@,bow_ending_init,@,sword_item_hit_func,@,banjo_start_init,@,banjo_ending_init,@,brang_drawout,@,brang_start_init,@,brang_start_update,@,brang_normal_update,@,brang_ending_init,@,brang_ending_update,@,bomb_pl_hit,@,item_horizontal_start_init,@,item_horizontal_normal_init,@,item_horizontal_ending_init,@,maskcheck_func,@,pushable_push,@,pushable_update_push,@,pl_update,@,pl_drawout,@,card_table_cache,@,coin_count_start,@,coin_count_normal,@,coin_coint_draw,@,energybar_draw,@,stat_idle,@,rstat_update,@,rstat_get,@,stat_normal,@,stat_draw,@,tbox_init,@,tbox_update,@,tbox_draw,@,fairy_update,@,fairy_draw,@,spawn_walls,@,pot_callback_touch,@,house_init,@,person_target_with_tbox_disable_callback,@,person_target_with_tbox_finish_callback,@,teach_gettext,@,keep_gettext,@,class_with_target_init,@,target_with_tbox_gettext,@,target_with_tbox_target_func,@,sign_target_with_tbox_disable_callback,@,quack_change_dir,@,quack_pl_collide_func,@,enemy_pl_collide_func_batch,@,slimy_boss_stateless_update,@,slimy_boss_jump_init,@,slimy_boss_idle_init,@,slimyboss_destroyed,@,slimyboss_start,@,slimyboss_jump,@,slimyboss_init,@,minion_to_miny,@,slimy_minion_pl_collide,@,slimy_minion_update,@,slimy,@,slimy_destroyed,@,miny,@,slimy_propel,@,slimy_stun_callback,@,slimy_stunstate,@,slimy_pl_collide_func,@,slimy_start,@,slimy_bounce,@,slimy_jump_init,@,slimy_draw,@,slimy_statcollide,@,spike_pl_collide_func,@,saveplat_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,gameover_control_ending,@,gameover_init,@,gameover_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,simple_update,@,title_draw,@,title_logo_update,@,title_logo_drawout,@,game_state_init,@]],function(a,stateName)
 a.next_state=stateName or a.next
 end,function(a,stateName)
 a.next_state,a.isnew=nil
@@ -168,6 +168,7 @@ elseif a.next_state then
 a:loadlogic(a.next_state)
 end
 a:update()
+a:stateless_update()
 end,function(a)
 return a:is_active"ending"==nil and a.alive
 end,function(a)
@@ -387,7 +388,7 @@ end
 end,nop)
 end
 end,function(a)
-local sy=sin(a:get_elapsed_percent"jump"/2)*8
+local sy=sin(a:get_elapsed_percent"jumpanim"/2)*8
 local xf=a.xf
 if a.should_dance and does_entity_exist"banjo"then
 xf=(g_si%2-.5)*2
@@ -481,10 +482,8 @@ pl:hurt"5"
 end,function(a)a.offdx=a.xf*a.offspeed end,function(a)a.offx=abs(a.offx*8)\1/8*sgn(a.offx)end,function(a)a:normal_init()a.offdx=-a.xf*a.offspeed end,function(a,override)
 return override or not a.item or a.item.id ~="mask"
 end,function(a,ang,duration,override)
-if not a:is_active"push"then
 a:start_timer("push",duration)
 a.push_ang=ang
-end
 end,function(a)
 if a:is_active"push"then
 a.ang,a.speed=a.push_ang,(1-a:get_elapsed_percent"pushed")*.025
@@ -714,8 +713,37 @@ a:pl_collide_func(other)
 end
 end)
 end,function(a)
-_g.slimy_actual(.75,a.x,a.y,-.2)
-_g.slimy_actual(.75,a.x,a.y,.2)
+a:start_timer("isma",0)
+end,function(a)
+local x,y=a.x,a.y
+if #g_zclass_entities["slimy_shared"]<3 then
+_g.miny_actual(rnd".5"+.25,x,y,0,0)
+end
+if not a.moving_away and a:dist_point(g_pl.x,g_pl.y)<2.5 then
+a.ang=atan2(a.x-g_pl.x,a.y-g_pl.y)
+a.moving_away=true
+else
+a.ang=a.target_ang
+a.moving_away=false
+end
+a:start_timer("jumpanim",a.jump.duration)
+end,function(a)
+for i=0,7 do
+local cur_minion=a.minions[i+1]
+if not cur_minion:is_alive()then
+if cur_minion.respawn_wait<=0 then
+a.minions[i+1]=_g.slimy_boss_minion_2(a,a.x,a.y,i/8+a.minion_ang_offset)
+else
+cur_minion.respawn_wait-=1
+end
+end
+end
+end,function(a)
+_g.explode(a.x,a.y,4,1,function()
+foreach(g_zclass_entities["slimy_shared"],function(b)
+b:kill()
+end)
+end)
 end,function(a)
 _g.slimy_start(a)
 for i=0,7 do
@@ -726,36 +754,46 @@ end
 end
 end,function(a)
 _g.slimy_propel(a)
-local rad=1.5
+a.minion_ang_offset-=.01*a.xf
 for i=0,7 do
 local cur_minion=a.minions[i+1]
 if cur_minion:is_alive()then
-local ang=atan2(cur_minion.offx,cur_minion.offy)-.01*a.xf
-cur_minion.offx,cur_minion.offy=cos(ang)*rad,sin(ang)*rad
+a.minions[i+1].minion_ang=i/8+a.minion_ang_offset
 end
 end
 end,function(a)
 a.minions={}
 for i=0,7 do
-add(a.minions,_g.slimy_boss_minion_2(a,a.x,a.y,cos(i/8+.125)*1.5,sin(i/8+.125)*1.5))
+add(a.minions,_g.slimy_boss_minion_2(a,a.x,a.y,i/8+a.minion_ang_offset))
 end
 end,function(a)
-a.sind=12+a.anchoring.sind
-if a.anchoring:is_active"jump"and not a:is_active"jump"then
-a:start_timer("jump",a.anchoring.jump.duration)
+_g.miny_actual(rnd"1"+.75,a.x,a.y,0,0)
+end,function(a,pl)
+_g.slimy_pl_collide_func(a.anchoring,pl)
+end,function(a)
+a.sind=a.anchoring.sind-4
+if a.minion_rad<a.minion_target_rad then a.minion_rad+=.125 end
+if a.minion_rad>a.minion_target_rad then a.minion_rad-=.125 end
+if a.anchoring:is_active"stunned"and not a:is_active"stunned"then
+a:start_timer("stunned",0)
 end
+if a.anchoring:is_active"jumpanim"and not a:is_active"jumpanim"then
+a:start_timer("jumpanim",a.anchoring.jump.duration)
+end
+a.offx=cos(a.minion_ang)*a.minion_rad
+a.offy=sin(a.minion_ang)*a.minion_rad
 if not a.anchoring:is_alive()then
 a:kill()
 end
 end,function(x,y)
-_g.explode(x,y,4,1,function()_g.slimy_actual(rnd"1"+.75,x,y,0)end)
+_g.explode(x,y,4,1,function()_g.slimy_actual(rnd"1"+.75,x,y,0,0)end)
 end,function(a)
-_g.miny_actual(rnd"1"+.75,a.x,a.y,-.2)
-_g.miny_actual(rnd"1"+.75,a.x,a.y,.2)
+_g.miny_actual(rnd"1"+.75,a.x,a.y,0,-.2)
+_g.miny_actual(rnd"1"+.75,a.x,a.y,0,.2)
 end,function(x,y)
-_g.explode(x,y,4,1,function()_g.miny_actual(rnd"1"+.75,x,y,0)end)
+_g.explode(x,y,4,1,function()_g.miny_actual(rnd"1"+.75,x,y,0,0)end)
 end,function(a)
-a.speed=.025
+a.speed=a.jumpspeed
 end,function(a)
 a:load"stunstate"
 end,function(a)
@@ -763,12 +801,11 @@ if not a:is_active"stunned"then
 a:load()
 end
 end,function(a,pl)
-a.speed=0
 a:start_timer("isma",2)
 if a:is_active"jump"then
-pl:push(atan2(a.xf,pl.y-a.y),.25)
+pl:push(atan2(pl.x-a.x,pl.y-a.y),.25)
 elseif not a:is_active"stunned"then
-pl:push(atan2(a.xf,pl.y-a.y),.03125)
+pl:push(atan2(pl.x-a.x,pl.y-a.y),.03125)
 end
 end,function(a)
 a.xf=sgn(g_pl.x-a.x)
@@ -781,6 +818,7 @@ a.sind=a.idle.sind
 end
 end,function(a)
 a.ang=a.target_ang
+a:start_timer("jumpanim",a.jump.duration)
 end,function(a)
 _g.simple_spr_draw(a)
 end,function(a,items)
@@ -873,7 +911,7 @@ foreach(r.objects,function(obj_template)
 _g[g_obj_map[obj_template.index]](obj_template.x+.5,obj_template.y+.5)
 end)
 end,function(state)
-if btnp"5"and g_pl and g_pl:is_alive()then
+if g_debug and btnp"5"and g_pl and g_pl:is_alive()then
 zcall(poke,[[1;,0x5d02,@;2;,0x5d03,@;3;,0x5d04,@;]],g_pl.x*16,
 g_pl.y*16,
 (g_pl.xf+1)\2
@@ -977,7 +1015,7 @@ function scr_zrect(...)scr_help_four(zrect,...)end
 function scr_zrectfill(...)scr_help_four(zrectfill,...)end
 function scr_line(...)scr_help_four(line,...)end
 function scr_pset(x,y,color)pset(8*x,8*y,color)end
-zclass[[actor,timer|load,%actor_load,loadlogic,%actor_loadlogic,state,%actor_state,kill,%actor_kill,clean,%actor_clean,is_alive,%actor_is_alive,alive,yes,duration,null,curr,start,next,null,isnew,yes,init,nop,update,nop,destroyed,nop;]]
+zclass[[actor,timer|load,%actor_load,loadlogic,%actor_loadlogic,state,%actor_state,kill,%actor_kill,clean,%actor_clean,is_alive,%actor_is_alive,alive,yes,duration,null,curr,start,next,null,isnew,yes,init,nop,stateless_update,nop,update,nop,destroyed,nop;]]
 zclass[[drawlayer_25|]]
 zclass[[drawlayer_50|]]
 zclass[[drawlayer_75|]]
@@ -1116,7 +1154,8 @@ zclass[[energybar,vec,actor,drawlayer_99|obj,@,y,20,draw,%energybar_draw;]]
 zclass[[ma_left|ma_level,0]]
 zclass[[ma_right|ma_level,0]]
 zclass[[ma_battle,ma_right|ma_level,0]]
-zclass[[ma_interact,ma_right|ma_level,1]]
+zclass[[ma_boss,ma_right|ma_level,1]]
+zclass[[ma_interact,ma_right|ma_level,2]]
 zclass[[rstat,vec,actor,drawlayer_95|align,@,x,@,entity_type,@,y,141,draw,%stat_draw,buffer_update,%rstat_update,get,%rstat_get;start;next,open,dy,0,update,%stat_idle;open;next,normal,dy,-2,update,nop,duration,.2;normal;next,close,dy,0,update,%stat_normal;close;next,start,dy,2,update,nop,duration,.2;]]
 zclass[[tbox,vec,actor,drawlayer_99|rawtext,@,destroyed,@,y,142,cur_text_index,1,anim,0,line_1,,line_2,,update,%tbox_update,draw,%tbox_draw;texts;,;start;dy,-2,duration,.2,next,normal,update,nop,init,%tbox_init;normal;dy,0,anim,0,done,no,update,%tbox_update,init,nop;ending;dy,2,update,nop,duration,.2,init,nop;]]
 zclass[[fairy,actor,mov,drawlayer_50|x,@,y,@,update,%fairy_update,draw,%fairy_draw]]
@@ -1167,11 +1206,11 @@ zclass[[signlark,sign|x,@,y,@,text,24^larks house]]
 zclass[[signjane,sign|x,@,y,@,text,24^janes house]]
 zclass[[enemy,box|pl_collide_func_batch,%enemy_pl_collide_func_batch,pl_collide_func,nop]]
 zclass[[quack,propel,ma_interact,actor,collidable,mov,enemy,simple_spr,drawlayer_50|x,@,y,@,rx,.25,ry,.25,should_dance,yes,sy,-2,propel_speed,.0125,pl_collide_func,%quack_pl_collide_func,sind,32,cspr,32,cname,quack;start;init,%quack_change_dir,update,~propel,duration,1,next,start;]]
-zclass[[slimy_boss,ma_battle,pushable,actor,collidable,enemy,healthobj,simple_spr,drawlayer_50|x,@,y,@,cspr,104,cname,slobs,sind,104,destroyed,%slimyboss_destroyed;rx,.25,ry,.25,sw,1,sh,1,sy,-1,should_dance,yes,statcollide,%slimy_statcollide,drawout,%slimy_draw,pl_collide_func,%slimy_pl_collide_func,stun_callback,%slimy_stun_callback,max_health,10;start;init,%slimyboss_init,duration,0,next,idle;stunstate;init,nop,update,%slimy_stunstate,next,idle;idle;init,nop,update,%slimyboss_start,next,bounce_1,sind,104,duration,.75;bounce_1;init,%slimy_bounce,update,nop,duration,.0625,next,bounce_2;bounce_2;init,%slimy_bounce,update,nop,duration,.0625,next,jump;jump;sind,105,init,%slimy_jump_init,update,%slimyboss_jump,pl_collide_func,%slimy_pl_collide_func,duration,.75,next,idle;]]
-zclass[[slimy_boss_minion_2,healthobj,pushable,anchor,actor,simple_spr,drawlayer_50,enemy|anchoring,@,x,@,y,@,offx,@,offy,@,update,%slimy_minion_update,pl_collide_func,%slimy_pl_collide_func,rx,.25,ry,.25,statcollide,%slimy_statcollide,cspr,116,cname,miny,max_health,1,destroyed,%standard_explosion;]]
-zclass[[slimy_actual,slimy_shared|idle;sind,118,duration,@;jump;sind,119,duration,.5;x,@,y,@,dy,@,cspr,118,cname,slimy,sind,118,max_health,5,destroyed,%slimy_destroyed;]]
-zclass[[miny_actual,slimy_shared|idle;sind,116,duration,@;jump;sind,117;x,@,y,@,dy,@,cspr,116,cname,miny,sind,116,max_health,1,destroyed,%standard_explosion;]]
-zclass[[slimy_shared,ma_battle,pushable,actor,collidable,healthobj,enemy,simple_spr,drawlayer_50|rx,.25,ry,.25,should_dance,yes,statcollide,%slimy_statcollide,drawout,%slimy_draw,pl_collide_func,%slimy_pl_collide_func,stun_callback,%slimy_stun_callback,max_health,5,curr,idle;stunstate;init,nop,update,%slimy_stunstate,next,idle;idle;init,nop,update,%slimy_start,next,bounce_1;bounce_1;init,%slimy_bounce,update,nop,duration,.0625,next,bounce_2;bounce_2;init,%slimy_bounce,update,nop,duration,.0625,next,jump;jump;init,%slimy_jump_init,update,%slimy_propel,pl_collide_func,%slimy_pl_collide_func,duration,.25,next,idle;]]
+zclass[[slimy_boss,ma_boss,pushable,actor,collidable,enemy,healthobj,simple_spr,drawlayer_50|x,@,y,@,cspr,120,cname,slobs,sind,120,destroyed,%slimyboss_destroyed;stateless_update,%slimy_boss_stateless_update,rx,.5,ry,.5,sw,1,sh,1,sy,-1,should_dance,yes,statcollide,%slimy_statcollide,drawout,%slimy_draw,pl_collide_func,%slimy_pl_collide_func,stun_callback,%slimy_stun_callback,minion_ang_offset,.125,max_health,10;start;init,%slimyboss_init,duration,0,next,idle;stunstate;init,nop,update,%slimy_stunstate,next,idle;idle;init,%slimy_boss_idle_init,update,%slimyboss_start,next,bounce_1,sind,120,duration,.75;bounce_1;init,%slimy_bounce,update,nop,duration,.0625,next,bounce_2;bounce_2;init,%slimy_bounce,update,nop,duration,.0625,next,jump;jump;jumpspeed,.05,sind,121,init,%slimy_boss_jump_init,update,%slimyboss_jump,duration,.25,next,idle;]]
+zclass[[slimy_boss_minion_2,healthobj,pushable,anchor,actor,simple_spr,drawlayer_50,enemy|anchoring,@,x,@,y,@,minion_ang,@,minion_rad,0,minion_target_rad,1.5,respawn_wait,5,update,%slimy_minion_update,pl_collide_func,%slimy_minion_pl_collide,rx,.25,ry,.25,statcollide,%slimy_statcollide,cspr,116,cname,miny,max_health,1,destroyed,%standard_explosion;]]
+zclass[[slimy_actual,slimy_shared|idle;sind,118,duration,@;jump;sind,119,duration,.5;x,@,y,@,dx,@,dy,@,cspr,118,cname,slimy,sind,118,max_health,5,destroyed,%slimy_destroyed;]]
+zclass[[miny_actual,slimy_shared|idle;sind,116,duration,@;jump;sind,117;x,@,y,@,dx,@,dy,@,cspr,116,cname,miny,sind,116,max_health,1,destroyed,%standard_explosion;]]
+zclass[[slimy_shared,ma_battle,pushable,actor,collidable,healthobj,enemy,simple_spr,drawlayer_50|rx,.25,ry,.25,should_dance,yes,statcollide,%slimy_statcollide,drawout,%slimy_draw,pl_collide_func,%slimy_pl_collide_func,stun_callback,%slimy_stun_callback,max_health,5,curr,idle;stunstate;init,nop,update,%slimy_stunstate,next,idle;idle;init,nop,update,%slimy_start,next,bounce_1;bounce_1;init,%slimy_bounce,update,nop,duration,.0625,next,bounce_2;bounce_2;init,%slimy_bounce,update,nop,duration,.0625,next,jump;jump;jumpspeed,.025,init,%slimy_jump_init,update,%slimy_propel,pl_collide_func,%slimy_pl_collide_func,duration,.25,next,idle;]]
 zclass[[spike,enemy,simple_spr,actor,drawlayer_25|sind,52,rx,.25,ry,.25,sy,0,draw,~drawout;start;next,down;down;sind,52,duration,.9,next,middle1;middle1;sind,53,duration,.05,next,up;up;pl_collide_func,%spike_pl_collide_func,sind,54,duration,.25,next,middle2;middle2;pl_collide_func,nop,sind,53,duration,.05,next,down;]]
 zclass[[r1spike,spike|x,@,y,@,xf,1;start;duration,0;]]
 zclass[[r2spike,spike|x,@,y,@,xf,1;start;duration,.625;]]
@@ -1180,7 +1219,7 @@ zclass[[l2spike,spike|x,@,y,@,xf,-1;start;duration,.625;]]
 zclass[[saveplat,ma_interact,box,simple_spr,actor,drawlayer_25|x,@,y,@,rx,.375,ry,.375,cname,save,cspr,10,sind,40,sw,2,sh,2,draw,~drawout,update,%saveplat_update;]]
 g_fade,g_fade_table=1,zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,1,0,0,0,0;3;,3,3,3,3,1,1,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,0,0,0,0;6;,6,6,13,13,5,5,0,0;7;,7,7,6,13,13,5,0,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,0,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,0,0,0;13;,13,13,5,5,1,0,0,0;14;,14,14,13,4,2,2,0,0;15;,15,15,13,13,5,5,0,0;]]
 g_fade_table_gray=zobj[[0;,0,0;1;,1,1;2;,2,5;3;,3,13;4;,4,13;5;,5,5;6;,6,6;7;,7,7;8;,8,13;9;,9,6;10;,10,7;11;,11,7;12;,12,7;13;,13,13;14;,14,6;15;,15,6;]]
-g_fade_table_red=zobj[[0;,0,0;1;,1,2;2;,2,2;3;,3,4;4;,4,4;5;,5,2;6;,6,4;7;,7,8;8;,8,8;9;,9,14;10;,10,14;11;,11,8;12;,12,7;13;,13,4;14;,14,8;15;,15,14;]]
+g_fade_table_red=zobj[[0;,0,0;1;,1,2;2;,2,2;3;,3,8;4;,4,4;5;,5,2;6;,6,4;7;,7,8;8;,8,8;9;,9,14;10;,10,14;11;,11,8;12;,12,7;13;,13,4;14;,14,8;15;,15,14;]]
 function fade(threshold)
 for c=0,15 do
 pal(c,g_fade_table[c][1+flr(7*min(1,max(0,threshold)))],1)

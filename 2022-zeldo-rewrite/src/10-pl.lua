@@ -382,10 +382,8 @@ zclass[[pushable,mov|
 ]]
 
 |[pushable_push]| function(a, ang, duration, override)
-    if not a:is_active'push' then
-        a:start_timer('push', duration)
-        a.push_ang = ang
-    end
+    a:start_timer('push', duration)
+    a.push_ang = ang
 end $$
 
 |[pushable_update_push]| function(a)

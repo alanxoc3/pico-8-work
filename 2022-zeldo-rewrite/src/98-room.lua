@@ -36,7 +36,7 @@ end $$
 |[room_update]| function(state)
     -- DEBUG_BEGIN
     -- easy way to save
-    if btnp'BTN_ITEM_SELECT' and g_pl and g_pl:is_alive() then
+    if g_debug and btnp'BTN_ITEM_SELECT' and g_pl and g_pl:is_alive() then
         zcall(poke, [[
             1;,MEM_PL_X,       @;
             2;,MEM_PL_Y,       @;

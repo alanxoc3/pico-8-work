@@ -22,6 +22,7 @@ zclass[[actor,timer|
     isnew,    yes,
 
     init,      nop,
+    stateless_update,    nop,
     update,    nop,
     destroyed, nop;
 ]]
@@ -64,6 +65,7 @@ end $$
 
     -- per-frame update
     a:update()
+    a:stateless_update()
 end $$
 
 |[actor_is_alive]| function(a)
