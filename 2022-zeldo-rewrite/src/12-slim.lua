@@ -2,6 +2,8 @@
 zclass[[slimy_boss,ma_boss,pushable,actor,collidable,enemy,healthobj,simple_spr,drawlayer_50|
     x,@, y,@, cspr,120, cname,"slobs", sind,120, destroyed,%slimyboss_destroyed;
 
+    did_spin,no,
+    minion_target_rad,1.5,
     stateless_update,%slimy_boss_stateless_update,
     rx,.5,ry,.5,
     sw,1,sh,1,sy,-1,
@@ -11,30 +13,40 @@ zclass[[slimy_boss,ma_boss,pushable,actor,collidable,enemy,healthobj,simple_spr,
     pl_collide_func,%slimy_pl_collide_func,
     stun_callback,%slimy_stun_callback,
     minion_ang_offset,.125,
-    max_health,10;
+    max_health,20;
 
     start; init,%slimyboss_init, duration,0, next,idle;
 
     stunstate; init,nop, update,%slimy_stunstate, next,idle;
-    idle;      init,%slimy_boss_idle_init, update,%slimyboss_start, next,bounce_1, sind,120,duration,.75;
+    idle;      minion_target_rad,1.5, init,%slimy_boss_idle_init, update,%slimyboss_start, sind,120,duration,.75;
+
     bounce_1;  init,%slimy_bounce, update,nop, duration,.0625, next,bounce_2;
     bounce_2;  init,%slimy_bounce, update,nop, duration,.0625, next,jump;
     jump;      jumpspeed,.05,sind,121,init,%slimy_boss_jump_init, update,%slimyboss_jump, duration, .25, next,idle;
+
+    spin_bounce; init,%slimy_bounce, update,nop, duration,.0625, next,spin;
+    spin;      init,nop, update,%slimy_boss_spin_update, next,idle, duration,.75;
 ]]
+
+|[slimy_boss_spin_update]| function(a)
+    a.minion_ang_offset -= .02*a.xf
+    a.minion_target_rad = 1.5-sin(a:get_elapsed_percent'spin'/2)*2
+end $$
 
 |[slimy_boss_stateless_update]| function(a)
     a:start_timer('isma', 0)
+
+    for i=0,7 do
+        local cur_minion = a.minions[i+1]
+        if cur_minion:is_alive() then
+            a.minions[i+1].minion_ang = i/8+a.minion_ang_offset
+        end
+    end
 end $$
 
 |[slimy_boss_jump_init]| function(a)
-    local x, y = a.x, a.y
-
-    if #g_zclass_entities['slimy_shared'] < 3 then
-        _g.miny_actual(rnd'.5'+.25, x, y, 0, 0)
-    end
-
     if not a.moving_away and a:dist_point(g_pl.x, g_pl.y) < 2.5 then
-        a.ang = atan2(a.x-g_pl.x, a.y-g_pl.y)
+        a.ang = atan2(5.5-a.x, 4.5-a.y)
         a.moving_away = true
     else
         a.ang = a.target_ang
@@ -44,15 +56,30 @@ end $$
 end $$
 
 |[slimy_boss_idle_init]| function(a)
+    local dead_count = 0
     for i=0,7 do
+        local ang = i/8+a.minion_ang_offset
         local cur_minion = a.minions[i+1]
         if not cur_minion:is_alive() then
+            dead_count += 1
             if cur_minion.respawn_wait <= 0 then
-                a.minions[i+1] = _g.slimy_boss_minion_2(a, a.x, a.y, i/8+a.minion_ang_offset)
+                a.minions[i+1] = _g.slimy_boss_minion_2(a, a.x, a.y, ang)
             else
                 cur_minion.respawn_wait -= 1
             end
         end
+    end
+
+    if #g_zclass_entities['slimy_shared'] == 0 then
+        _g.miny(2.5+7*flr_rnd'2', 2.5+5*flr_rnd'2')
+    end
+
+    if dead_count < 4 and not a.did_spin and flr_rnd'2' == 0 then
+        a.next = 'spin_bounce'
+        a.did_spin = true
+    else
+        a.next = 'bounce_1'
+        a.did_spin = false
     end
 end $$
 
@@ -77,12 +104,6 @@ end $$
 |[slimyboss_jump]| function(a)
     _g.slimy_propel(a)
     a.minion_ang_offset -= .01*a.xf
-    for i=0,7 do
-        local cur_minion = a.minions[i+1]
-        if cur_minion:is_alive() then
-            a.minions[i+1].minion_ang = i/8+a.minion_ang_offset
-        end
-    end
 end $$
 
 |[slimyboss_init]| function(a)
@@ -96,8 +117,7 @@ end $$
 zclass[[slimy_boss_minion_2,healthobj,pushable,anchor,actor,simple_spr,drawlayer_50,enemy|
     anchoring,@, x,@, y,@, minion_ang,@,
     minion_rad,0,
-    minion_target_rad,1.5,
-    respawn_wait,5,
+    respawn_wait,2,
     update,%slimy_minion_update,
     pl_collide_func,%slimy_minion_pl_collide,
     rx,.25,ry,.25,
@@ -116,8 +136,8 @@ end $$
 
 |[slimy_minion_update]| function(a)
     a.sind = a.anchoring.sind-4
-    if a.minion_rad < a.minion_target_rad then a.minion_rad += .125 end
-    if a.minion_rad > a.minion_target_rad then a.minion_rad -= .125 end
+    if a.minion_rad < a.anchoring.minion_target_rad then a.minion_rad += .125 end
+    if a.minion_rad > a.anchoring.minion_target_rad then a.minion_rad -= .125 end
 
     if a.anchoring:is_active'stunned' and not a:is_active'stunned' then
         a:start_timer('stunned', 0)
