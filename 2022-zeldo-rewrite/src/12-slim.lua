@@ -19,7 +19,6 @@ zclass[[slobs,ma_boss,pushable,actor,collidable,enemy,healthobj,simple_spr,drawl
     x,@, y,@, cspr,120, cname,"slobs", sind,120, destroyed,%slimyboss_destroyed;
 
     did_spin,no,
-    minion_target_rad,1.5,
     stateless_update,%slimy_boss_stateless_update,
     rx,.5,ry,.5,
     sw,1,sh,1,sy,-1,
@@ -31,24 +30,26 @@ zclass[[slobs,ma_boss,pushable,actor,collidable,enemy,healthobj,simple_spr,drawl
     minion_ang_offset,.125,
     max_health,20;
 
-    start; init,%slimyboss_init, duration,0, next,idle;
+    
+    defaults; init,nop, update,nop, minion_target_rad,1.5;
 
-    stunstate; init,nop, update,%slimy_stunstate, next,idle;
+    start; init,%slimyboss_init, duration,.25, next,idle;
+    stunstate; update,%slimy_stunstate, next,idle;
 
-    idle;      minion_target_rad,1.5, init,nop, update,nop, sind,120, duration,.75, pl_collide_func,%slimy_pl_collide_func, next,idle_face;
+    idle;      minion_target_rad,1.5, sind,120, duration,.75, pl_collide_func,%slimy_pl_collide_func, next,idle_face;
     idle_face; init,%slimy_boss_idle_init, update,%slimyboss_start, duration,.25;
 
-    bounce_1;  init,%slimy_bounce, update,nop, duration,.0625, next,bounce_2;
-    bounce_2;  init,%slimy_bounce, update,nop, duration,.0625, next,jump;
+    bounce_1;  init,%slimy_bounce, duration,.0625, next,bounce_2;
+    bounce_2;  init,%slimy_bounce, duration,.0625, next,jump;
     jump;      jumpspeed,.05,sind,121,init,%slimy_boss_jump_init, update,%slimyboss_jump, duration, .25, next,idle;
 
-    spin_bounce; init,%slimy_bounce, update,nop, duration,.0625, next,spin;
-    spin;        init,nop, update,%slimy_boss_spin_update, next,idle, duration,.75;
+    spin_bounce; init,%slimy_bounce, duration,.0625, next,spin;
+    spin;        update,%slimy_boss_spin_update, next,idle, duration,.75;
 ]]
 
 |[slimy_boss_spin_update]| function(a)
     a.minion_ang_offset -= .02*a.xf
-    a.minion_target_rad = 1.5-sin(a:get_elapsed_percent'spin'/2)*2
+    a.minion_target_rad = 1.5-sin(a:get_elapsed_percent'spin'/2)*1.5
 end $$
 
 |[slimy_boss_stateless_update]| function(a)

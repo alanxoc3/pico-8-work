@@ -44,6 +44,7 @@ end $$
     else
         a:end_timer(a.curr)
         a.next, a.duration = nil -- default values, unless overridden by next line
+        for k, v in pairs(a.defaults) do a[k] = v end
         for k, v in pairs(a[stateName]) do a[k] = v end
         a.curr = stateName
         a:start_timer(a.curr, a.duration, a.duration and function() a:load(a.next or 'dead') end)

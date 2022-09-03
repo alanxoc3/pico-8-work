@@ -31,7 +31,6 @@ help him save the Land of Hi-roll from the FORCES-OF-EVIL.
 
 ## Tokens & Features
 TODO: chest with sword
-TODO: zobj defaults?
 TODO: banjo with lark text logic
 TODO: remove duck throw
 TODO: bugfix navy talk when fading
@@ -44,6 +43,7 @@ TODO: chicken follow not throw
 TODO: get item logic
 TODO: right ma sprite shouldn't be flipped
 TODO: fix item offsets (many items are either off or sometimes off)
+TODO: refactor using actor default
 TODO: don't wait for ma for picking things up/interacting (pot, duck?)
 TODO: when items go up, slight bug
 TODO: token crunch for 30 minutes
