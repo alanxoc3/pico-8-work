@@ -29,7 +29,7 @@ zclass[[slobs,ma_boss,pushable,actor,collidable,enemy,healthobj,simple_spr,drawl
     pl_collide_func,%slimy_pl_collide_func,
     stun_callback,%slimy_stun_callback,
     minion_ang_offset,.125,
-    max_health,2;
+    max_health,20;
 
     start; init,%slimyboss_init, duration,0, next,idle;
 
