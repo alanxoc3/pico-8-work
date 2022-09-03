@@ -288,7 +288,7 @@ zclass[[brang,collidable,simple_spr,drawlayer_50,mov,actor,statitem|
     anchoring,@, xf,@,
     rx,.25, ry,.25,
 
-    should_push,yes,
+    should_push,no,
     pushspeed,     .25,
     should_use_xf, no,
     item_hit_func, ~kill,

@@ -69,7 +69,7 @@ end $$
         13;,vec,         vec_update_y;
 
         14;,slimy_shared,statcollide, ~statitems;
-        15;,slimy_boss,statcollide, ~statitems;
+        15;,slobs,statcollide, ~statitems;
         16;,slimy_boss_minion_2,statcollide, ~statitems;
         17;,anchor,      update_anchor;
         18;,target,      update_target, ~pls;

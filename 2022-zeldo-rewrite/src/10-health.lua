@@ -28,7 +28,7 @@ zclass[[healthobj,maskcheck|
 end $$
 
 |[healthobj_stun]| function(a, length, callback)
-    if a.id ~= 'pl' or (a:maskcheck() and not a:is_active'stunned' and not a:is_active'stunned_cooldown') then
+    if (a:maskcheck() and not a:is_active'stunned' and not a:is_active'stunned_cooldown') then
         a:stun_callback()
         callback = callback or nop
         callback()

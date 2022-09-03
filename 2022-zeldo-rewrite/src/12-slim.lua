@@ -1,5 +1,21 @@
 -- BOSS
-zclass[[slimy_boss,ma_boss,pushable,actor,collidable,enemy,healthobj,simple_spr,drawlayer_50|
+zclass[[slimy_boss_fight|]]
+zclass[[slobs_miny,actor,slimy_boss_fight|
+    update,%slimy_minion_spawner_update
+]]
+
+|[slimy_minion_spawner_update]| function(a)
+    if not a.spawning and (not a.anchoring or (a.anchoring and not a.anchoring:is_alive())) then
+        a.spawning, a.anchoring = true
+
+        local x, y = 2.5+7*flr_rnd'2', 2.5+5*flr_rnd'2'
+        _g.explode(x, y, 4, 1, function() 
+            a.anchoring, a.spawning = _g.miny_actual(rnd'1'+.75, x, y, 0, 0)
+        end)
+    end
+end $$
+
+zclass[[slobs,ma_boss,pushable,actor,collidable,enemy,healthobj,simple_spr,drawlayer_50|
     x,@, y,@, cspr,120, cname,"slobs", sind,120, destroyed,%slimyboss_destroyed;
 
     did_spin,no,
@@ -13,19 +29,21 @@ zclass[[slimy_boss,ma_boss,pushable,actor,collidable,enemy,healthobj,simple_spr,
     pl_collide_func,%slimy_pl_collide_func,
     stun_callback,%slimy_stun_callback,
     minion_ang_offset,.125,
-    max_health,20;
+    max_health,2;
 
     start; init,%slimyboss_init, duration,0, next,idle;
 
     stunstate; init,nop, update,%slimy_stunstate, next,idle;
-    idle;      minion_target_rad,1.5, init,%slimy_boss_idle_init, update,%slimyboss_start, sind,120,duration,.75;
+
+    idle;      minion_target_rad,1.5, init,nop, update,nop, sind,120, duration,.75, pl_collide_func,%slimy_pl_collide_func, next,idle_face;
+    idle_face; init,%slimy_boss_idle_init, update,%slimyboss_start, duration,.25;
 
     bounce_1;  init,%slimy_bounce, update,nop, duration,.0625, next,bounce_2;
     bounce_2;  init,%slimy_bounce, update,nop, duration,.0625, next,jump;
     jump;      jumpspeed,.05,sind,121,init,%slimy_boss_jump_init, update,%slimyboss_jump, duration, .25, next,idle;
 
     spin_bounce; init,%slimy_bounce, update,nop, duration,.0625, next,spin;
-    spin;      init,nop, update,%slimy_boss_spin_update, next,idle, duration,.75;
+    spin;        init,nop, update,%slimy_boss_spin_update, next,idle, duration,.75;
 ]]
 
 |[slimy_boss_spin_update]| function(a)
@@ -41,6 +59,10 @@ end $$
         if cur_minion:is_alive() then
             a.minions[i+1].minion_ang = i/8+a.minion_ang_offset
         end
+    end
+
+    if a:is_active'stunned' then
+        a:load'stunstate'
     end
 end $$
 
@@ -70,10 +92,6 @@ end $$
         end
     end
 
-    if #g_zclass_entities['slimy_shared'] == 0 then
-        _g.miny(2.5+7*flr_rnd'2', 2.5+5*flr_rnd'2')
-    end
-
     if dead_count < 4 and not a.did_spin and flr_rnd'2' == 0 then
         a.next = 'spin_bounce'
         a.did_spin = true
@@ -84,8 +102,12 @@ end $$
 end $$
 
 |[slimyboss_destroyed]| function(a)
+    for i=0,1,.125 do
+        _g.miny_actual(rnd'1'+.75, a.x, a.y, sin(i)*.3, cos(i)*.3)
+    end
+
     _g.explode(a.x, a.y, 4, 1, function()
-        foreach(g_zclass_entities['slimy_shared'], function(b)
+        foreach(g_zclass_entities['slimy_boss_fight'], function(b)
             b:kill()
         end)
     end)
@@ -114,7 +136,7 @@ end $$
 end $$
 
 -- MINION
-zclass[[slimy_boss_minion_2,healthobj,pushable,anchor,actor,simple_spr,drawlayer_50,enemy|
+zclass[[slimy_boss_minion_2,healthobj,pushable,anchor,actor,simple_spr,drawlayer_50,enemy,slimy_boss_fight|
     anchoring,@, x,@, y,@, minion_ang,@,
     minion_rad,0,
     respawn_wait,2,
@@ -136,12 +158,13 @@ end $$
 
 |[slimy_minion_update]| function(a)
     a.sind = a.anchoring.sind-4
-    if a.minion_rad < a.anchoring.minion_target_rad then a.minion_rad += .125 end
-    if a.minion_rad > a.anchoring.minion_target_rad then a.minion_rad -= .125 end
 
-    if a.anchoring:is_active'stunned' and not a:is_active'stunned' then
-        a:start_timer('stunned', 0)
-    end
+    --if a.anchoring:is_active'stunned' and not a:is_active'stunned' then
+    --    a:start_timer('stunned', 0)
+    --end
+
+    if not a:is_active'stunned' and a.minion_rad < a.anchoring.minion_target_rad then a.minion_rad += .125 end
+    if a.minion_rad > a.anchoring.minion_target_rad then a.minion_rad -= .125 end
 
     if a.anchoring:is_active'jumpanim' and not a:is_active'jumpanim' then
         a:start_timer('jumpanim', a.anchoring.jump.duration)
@@ -192,7 +215,7 @@ zclass[[slimy_shared,ma_battle,pushable,actor,collidable,healthobj,enemy,simple_
     curr,idle;
 
     stunstate; init,nop, update,%slimy_stunstate, next,idle;
-    idle;      init,nop, update,%slimy_start, next,bounce_1;
+    idle;      init,nop, update,%slimy_start, next,bounce_1, pl_collide_func,%slimy_pl_collide_func;
     bounce_1;  init,%slimy_bounce, update,nop, duration,.0625, next,bounce_2;
     bounce_2;  init,%slimy_bounce, update,nop, duration,.0625, next,jump;
     jump;      jumpspeed,.025, init,%slimy_jump_init, update,%slimy_propel, pl_collide_func,%slimy_pl_collide_func, duration, .25, next,idle;
@@ -216,7 +239,7 @@ end $$
     a:start_timer('isma', 2)
     if a:is_active'jump' then
         pl:push(atan2(pl.x-a.x, pl.y-a.y), .25)
-    elseif not a:is_active'stunned' then
+    else
         pl:push(atan2(pl.x-a.x, pl.y-a.y), .03125)
     end
 end $$
@@ -252,7 +275,7 @@ end $$
                     did_hit = true
                 end)
             elseif item.should_stun then
-                a:stun(1.5, function()
+                a:stun(3, function()
                     did_hit = true
                 end)
             end

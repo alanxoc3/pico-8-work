@@ -45,8 +45,8 @@ g_obj_map = split[[
 ,keep_shield -- 38  | 83  | 1  | 1
 ,keep_sling  -- 39  | 83  | 1  | 1
 ,keep_mask   -- 40  | 83  | 1  | 1
-,slimy_boss  -- 41  | 120 | 1  | 1
-,nil         -- 42  | 0   | 1  | 1
+,slobs       -- 41  | 120 | 1  | 1
+,slobs_miny  -- 42  | 117 | 1  | 1
 ,nil         -- 43  | 0   | 1  | 1
 ,nil         -- 44  | 0   | 1  | 1
 ,nil         -- 45  | 0   | 1  | 1
