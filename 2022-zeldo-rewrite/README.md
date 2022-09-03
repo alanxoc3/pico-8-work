@@ -30,7 +30,8 @@ help him save the Land of Hi-roll from the FORCES-OF-EVIL.
 - shrt: house
 
 ## Tokens & Features
-friday...
+TODO: slob stun bug
+TODO: slob miny spawn double bug
 TODO: chest with sword
 TODO: banjo with lark text logic
 TODO: remove duck throw
