@@ -140,6 +140,7 @@ zclass[[slimy_boss_minion_2,healthobj,pushable,anchor,actor,simple_spr,drawlayer
     anchoring,@, x,@, y,@, minion_ang,@,
     minion_rad,0,
     respawn_wait,2,
+    should_dance,yes,
     update,%slimy_minion_update,
     pl_collide_func,%slimy_minion_pl_collide,
     rx,.25,ry,.25,
@@ -157,7 +158,7 @@ end $$
 end $$
 
 |[slimy_minion_update]| function(a)
-    a.sind = a.anchoring.sind-4
+    a.sind = 104
 
     --if a.anchoring:is_active'stunned' and not a:is_active'stunned' then
     --    a:start_timer('stunned', 0)

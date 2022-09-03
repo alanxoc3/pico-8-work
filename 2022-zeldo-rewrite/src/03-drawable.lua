@@ -29,8 +29,9 @@ zclass[[auto_outline,timer|
     local ox, oy = %0x5f28, %0x5f2a
     local injured = a:is_active'injured'
     local stunned = a:is_active'stunned'
-    local yoff = sin(a:get_elapsed_percent'stunned_jump'/2)*5+sin(a:get_elapsed_percent'injured'/2)*5
-    local xoff = 0 -- stunned and sin(t()*16) or 0
+    local yoff = ((does_entity_exist'banjo' and a.should_dance or stunned) and g_si%3 == 0 and sin(g_fi/4) or 0) + sin(a:get_elapsed_percent'jumpanim'/2)*8+sin(a:get_elapsed_percent'stunned_jump'/2)*5+sin(a:get_elapsed_percent'injured'/2)*5
+    local xoff = 0 -- (does_entity_exist'banjo' and a.should_dance or stunned) and sin(g_fi/4) or 0
+
     camera(ox-xoff, oy-yoff)
     draw_outline(1, function() a:drawout() end)
     if stunned then gray_fade(1) end
