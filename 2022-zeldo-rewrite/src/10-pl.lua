@@ -61,8 +61,9 @@ zclass[[held_to_throw,anchor,actor|
 
     item_thrown,nop, sy,-2, offspeed,.185;
 
-    start;    init,nop, offdy,-.0625, duration,.08, next,normal;
-    normal;   init,nop, offdy,0, offy,-.5;
+    defaults; init,nop, offdy,0;
+    start;    offdy,-.0625, duration,.08, next,normal;
+    normal;   offy,-.5;
     ending;   visible,no, init,%held_to_throw_ending_init, duration,.16;
 ]]
 
@@ -250,9 +251,10 @@ zclass[[banjo,anchor,actor|
     sy,-3,
     sind,SPR_BANJO;
 
+    defaults; init,nop;
     start;    init,%banjo_start_init, offdy,.125, duration,.03, next,min_play;
-    min_play; init,nop, offdy,0, duration,2, next,normal;
-    normal;   init,nop, next,ending;
+    min_play; offdy,0, duration,2, next,normal;
+    normal;   next,ending;
     ending;   init,%banjo_ending_init, offdy,-.125, duration,.03;
 ]]
 
@@ -305,10 +307,11 @@ zclass[[brang,collidable,simple_spr,drawlayer_50,mov,actor,statitem|
     drawout,%brang_drawout,
     sind,SPR_BRANG;
     
+    defaults; init,nop;
     start; init,%brang_start_init, update,%brang_start_update, duration,.125, next,normal;
-    normal;init,nop, update,%brang_normal_update, next,ending;
+    normal;update,%brang_normal_update, next,ending;
     ending;init,%brang_ending_init, update,%brang_ending_update, duration,.125, adjust_deltas_for_solids,nop, adjust_deltas_for_tiles,nop;
-    final;init,nop, update,nop, alive,no;
+    final;update,nop, alive,no;
 ]]
 
 |[brang_drawout]| function(a)

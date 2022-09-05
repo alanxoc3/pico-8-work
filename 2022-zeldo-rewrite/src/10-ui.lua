@@ -42,10 +42,11 @@ end
 
 zclass[[coin_count,vec,actor,drawlayer_90|
     y,142, draw,%coin_coint_draw;
-    start;  next,open,   dy,0,  update,%coin_count_start;
-    open;   next,normal, dy,-2, update,nop, duration,.2;
-    normal; next,close,  dy,0,  update,%coin_count_normal;
-    close;  next,start,  dy,2,  update,nop, duration,.2;
+    defaults; dy,0, update,nop;
+    start;  next,open,   update,%coin_count_start;
+    open;   next,normal, dy,-2, duration,.2;
+    normal; next,close,  update,%coin_count_normal;
+    close;  next,start,  dy,2,  duration,.2;
 ]]
 
 |[coin_count_start]| function(a)
@@ -101,10 +102,11 @@ zclass[[rstat,vec,actor,drawlayer_95|
     y,141, draw,%stat_draw,
     buffer_update,%rstat_update, get,%rstat_get;
 
-    start;  next,open,   dy,0,  update,%stat_idle;
-    open;   next,normal, dy,-2, update,nop,          duration,.2;
-    normal; next,close,  dy,0,  update,%stat_normal;
-    close;  next,start,  dy,2,  update,nop,          duration,.2;
+    defaults; dy,0, update,nop;
+    start;  next,open,   update,%stat_idle;
+    open;   next,normal, dy,-2, duration,.2;
+    normal; next,close,  update,%stat_normal;
+    close;  next,start,  dy,2,  duration,.2;
 ]]
 
 |[stat_idle]| function(a)
@@ -167,9 +169,10 @@ zclass[[tbox,vec,actor,drawlayer_99|
     draw,%tbox_draw;
 
     texts;,;
-    start;  dy,-2, duration,.2, next,normal, update,nop, init,%tbox_init;
-    normal; dy,0,  anim,0, done,no, update,%tbox_update, init,nop;
-    ending; dy,2,  update,nop, duration,.2, init,nop;
+    defaults; init,nop, update,nop;
+    start;  dy,-2, duration,.2, next,normal, init,%tbox_init;
+    normal; dy,0,  anim,0, done,no, update,%tbox_update;
+    ending; dy,2,  duration,.2;
 ]]
 
 |[tbox_init]| function(a)

@@ -61,7 +61,7 @@ zclass[[sign,target_with_tbox,solid,simple_spr,drawlayer_50|
 
 -- really this is used in a lot of places... I should refactor...
 |[sign_target_with_tbox_disable_callback]| function()
-    return peek'MEM_ITEM_INDEX' ~= ITEM_IND_INTERACT or not g_pl.item.is_default
+    return does_entity_exist'fader' or peek'MEM_ITEM_INDEX' ~= ITEM_IND_INTERACT or not g_pl.item.is_default
 end $$
 
 zclass[[signtest,sign|x,@,y,@,text,  "SPR_SIGN^mary had a^little lamb^little lamb^little lamb^mary had a^little lamb^whose fleece was^white as yo face"]]

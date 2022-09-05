@@ -2,6 +2,32 @@
 Lank wakes up from a good night's rest only to find Hi-roll in danger! Ya gotta
 help him save the Land of Hi-roll from the FORCES-OF-EVIL.
 
+# Todo List
+TODO: slime refactor
+TODO: chest with sword
+TODO: banjo with lark text logic
+TODO: add "i am glitch"
+TODO: bugfix bomb hold when no energy
+TODO: banjo makes enemies dance (not attack you)
+TODO: item going up snap/fix
+TODO: replace gameover with tbox
+TODO: chicken follow not throw
+TODO: get item logic
+TODO: right ma sprite shouldn't be flipped
+TODO: fix item offsets (many items are either off or sometimes off)
+TODO: when items go up, slight bug
+TODO: token crunch for 30 minutes
+TODO: bomb blow up crate
+TODO: first boss (lime)
+TODO: mask particle effect
+TODO: polish until beating first boss
+TODO: think of more enemies
+TODO: think about chicken collection for cannon logic (throw chicken onto a platform)
+TODO: remove duck throw
+TODO: duck throw
+TODO: duck follow logic
+TODO: don't wait for ma for picking things up/interacting (pot, duck?)
+
 ## Sprite Flag Reference
 ```
 0: solid
@@ -14,7 +40,7 @@ help him save the Land of Hi-roll from the FORCES-OF-EVIL.
 16 songs in total:
 
 7 long
-- long: village
+- long: village/house
 - long: forest
 - long: field/mountain
 - long: castle/cannon
@@ -28,90 +54,6 @@ help him save the Land of Hi-roll from the FORCES-OF-EVIL.
 - shrt: computer room
 - shrt: game over
 - shrt: house
-
-## Tokens & Features
-TODO: chest with sword
-TODO: banjo with lark text logic
-TODO: remove duck throw
-TODO: bugfix navy talk when fading
-TODO: bugfix bomb hold when no energy
-TODO: duck follow logic
-TODO: banjo makes enemies dance (not attack you)
-TODO: item going up snap/fix
-TODO: replace gameover with tbox
-TODO: chicken follow not throw
-TODO: get item logic
-TODO: right ma sprite shouldn't be flipped
-TODO: fix item offsets (many items are either off or sometimes off)
-TODO: refactor using actor default
-TODO: don't wait for ma for picking things up/interacting (pot, duck?)
-TODO: when items go up, slight bug
-TODO: token crunch for 30 minutes
-TODO: bomb blow up crate
-TODO: first boss (lime)
-TODO: mask particle effect
-TODO: polish until beating first boss
-TODO: think of more enemies
-TODO: think about chicken collection for cannon logic (throw chicken onto a platform)
-
-```
-2022-08-27 -- money mapolish
-    6948 6955
-
-2022-08-26 -- stunlogic collaxis
-    6653
-
-2022-08-20 -- mask polish stun hurt banjo
-    6613
-
-2022-06-02 -- potthrow quackthrow arrowwallbug timerlogicchange
-    6117 6229 6287 6266 6240
-
-2022-06-01 -- slimestun gameoverwork mapwork
-    5905 6117
-
-2022-05-31 -- betterbomb
-    5804 5867 5905
-
-2022-05-30 -- spawnin enemycollision otherstuff
-    5396 5434 5558 5804
-
-2022-05-29 -- insidecollision save arrow
-    5098 5093 5092 5071 5058 5055 5166 5272 5246 5316 5396
-
-2022-05-28 -- banjo brang bombfix bob keep teach jane lark energylimit objs
-    4821 4835 4946 4972 4978 5035 5022 5028 5038 5050 5005 5098
-
-2022-05-27 -- simplifyma expandinventory sword energy mask bow shield bomb
-    4438 4426 4488 4483 4528 4549 4680 4692 4689 3739 4722 4742 4785 4835 4821
-
-2022-05-26 -- tileflags tokencrunch singlema fairyfollow
-    4421 4515 4511 4512 4504 4495 4485 4480 4468 4437 4394 4431 4427 4424 4438
-
-2022-05-25 -- isorty memcondcreate navy fairypolish
-    4265 4263 4323 4311 4307 4317 4375 4466 4423 4421
-
-2022-05-24 -- house savelogic
-    4198 4183 4250 4344 4355 4296 4265
-
-2022-05-23 -- solids signworks collisionfix housebasic 
-    3920 4057 4045 4198
-
-2022-05-22 -- ui tbox uipolish placeobjs itemswitchui
-    3347 3553 3597 3648 3756 3782 3785 3878 3920
-
-2022-05-21 -- tilecol planim autooutline inventory explode btndelay
-    2801 3128 3183 3214 3144 3093 3167 3188 3298 3277 3351 3347
-
-2022-05-20 -- mov box pl fairy roomtran
-    2040 2457 2546 2591 2682 2669 2700 2801
-
-2022-05-19 -- tile animation title gameover
-    1657 2048 2046 2042 2040
-
-2022-05-15 -- engine map
-    0000 1665 1654 1653 1655 1657
-```
 
 ## Characters
 Lank   - Main character.

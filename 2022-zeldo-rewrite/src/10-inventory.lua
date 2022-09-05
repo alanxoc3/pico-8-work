@@ -1,10 +1,11 @@
 zclass[[inventory,actor,vec,drawlayer_90|
     ind,5, x,64, y,-9, draw,%inventory_draw;
 
-    start;  next,open,   dy,0,  init,nop, update,%inventory_start_update;
-    open;   next,normal, dy,2,  init,nop, update,%inventory_open_update, duration,.1, cachedir,0;
-    normal; next,close,  dy,0,  init,%inventory_normal_init, update,%inventory_update;
-    close;  next,start,  dy,-2, init,nop, duration,.1, update,nop;
+    defaults; dy,0, init,nop, update,nop;
+    start;    next,open,                       update,%inventory_start_update;
+    open;     next,normal, dy,2,  duration,.1, update,%inventory_open_update, cachedir,0;
+    normal;   next,close,                      update,%inventory_update, init,%inventory_normal_init;
+    close;    next,start,  dy,-2, duration,.1;
 
     ITEM_IND_BANJO;    mem_loc,MEM_HAS_BANJO  , sxo,0, x,-41, y,0, w,4.5, sind,SPR_BANJO;
     ITEM_IND_BOMB;     mem_loc,MEM_HAS_BOMB   , sxo,0, x,-31, y,0, w,4.5, sind,SPR_BOMB;
