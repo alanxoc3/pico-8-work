@@ -70,11 +70,12 @@ end $$
 end $$
 
 |[actor_is_alive]| function(a)
-    return a:is_active'ending' == nil and a.alive
+    return not a.effectively_dead and a:is_active'ending' == nil and a.alive
 end $$
 
 -- If there is an ending state, call that. Otherwise, just set alive to false.
 |[actor_kill]| function(a)
+    a.effectively_dead = true
     if a.ending then
         if a.curr == 'start' then
             a.next = 'ending'

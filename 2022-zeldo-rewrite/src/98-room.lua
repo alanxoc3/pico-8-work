@@ -50,7 +50,7 @@ end $$
     -- DEBUG_END
 
     zcall(loop_entities, [[
-        pls,@, solids,@, room,@, statitems,@;
+        pls,@, solids,@, room,@, statitems,@, smaller_slimes,@;
 
         1 ;,timer,       tick;
         2 ;,actor,       state;
@@ -68,14 +68,15 @@ end $$
         12;,collidable,  adjust_deltas_for_screen, %set_y_delta2;
         13;,vec,         vec_update_y;
 
-        14;,slimy_shared,statcollide, ~statitems;
-        15;,slobs,statcollide, ~statitems;
-        16;,slimy_boss_minion_2,statcollide, ~statitems;
-        17;,anchor,      update_anchor;
-        18;,target,      update_target, ~pls;
-        19;,rstat,       buffer_update;
-        20;,healthobj,   health_update;
-    ]], g_zclass_entities.pl, g_zclass_entities.solid, g_rooms[peek'MEM_ROOM_IND'], g_zclass_entities.statitem)
+        14;,smaller_slimes,statcollide, ~smaller_slimes;
+        15;,smaller_slimes,statcollide, ~statitems;
+        16;,slobs,statcollide, ~statitems;
+        17;,slimy_boss_minion_2,statcollide, ~statitems;
+        18;,anchor,      update_anchor;
+        19;,target,      update_target, ~pls;
+        20;,rstat,       buffer_update;
+        21;,healthobj,   health_update;
+    ]], g_zclass_entities.pl, g_zclass_entities.solid, g_rooms[peek'MEM_ROOM_IND'], g_zclass_entities.statitem, g_zclass_entities.smaller_slimes)
 
     poke(MEM_PL_HEALTH, g_pl.health)
     poke(MEM_PL_MAX_HEALTH, g_pl.max_health)

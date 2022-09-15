@@ -147,7 +147,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,animation_init,@,auto_outline_draw,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update_x,@,vec_update_y,@,mov_update,@,mov_towards_point,@,explode_draw,@,standard_explosion,@,set_x_delta,@,set_y_delta,@,adjust_deltas_for_solids,@,adjust_deltas_for_tiles,@,set_x_delta2,@,set_y_delta2,@,adjust_deltas_for_screen,@,healthobj_hurt,@,healthobj_stun,@,healthobj_health_update,@,inventory_open_update,@,inventory_update,@,inventory_start_update,@,inventory_normal_init,@,inventory_draw,@,simple_spr_draw,@,anchor_update_anchor,@,targettouch_update_target,@,coin_pl_collide_func,@,coin_1,@,coin_2,@,coin_3,@,coin_4,@,coin_5,@,coin_6,@,coin_7,@,coin_8,@,coin_9,@,coin_10,@,coin_11,@,coin_12,@,coin_13,@,coin_14,@,coin_15,@,coin_16,@,propel_func,@,interact,@,held_to_throw_ending_init,@,item_throwing_update,@,quack_thrown_destroyed,@,bomb_destroyed,@,pellet_update,@,pellet_draw,@,bow_ending_init,@,sword_item_hit_func,@,banjo_start_init,@,banjo_ending_init,@,brang_drawout,@,brang_start_init,@,brang_start_update,@,brang_normal_update,@,brang_ending_init,@,brang_ending_update,@,bomb_pl_hit,@,item_horizontal_start_init,@,item_horizontal_normal_init,@,item_horizontal_ending_init,@,maskcheck_func,@,pushable_push,@,pushable_update_push,@,pl_update,@,pl_drawout,@,card_table_cache,@,coin_count_start,@,coin_count_normal,@,coin_coint_draw,@,energybar_draw,@,stat_idle,@,rstat_update,@,rstat_get,@,stat_normal,@,stat_draw,@,tbox_init,@,tbox_update,@,tbox_draw,@,fairy_update,@,fairy_draw,@,spawn_walls,@,pot_callback_touch,@,house_init,@,person_target_with_tbox_disable_callback,@,person_target_with_tbox_finish_callback,@,teach_gettext,@,keep_gettext,@,class_with_target_init,@,target_with_tbox_gettext,@,target_with_tbox_target_func,@,sign_target_with_tbox_disable_callback,@,quack_change_dir,@,quack_pl_collide_func,@,enemy_pl_collide_func_batch,@,slimy_minion_spawner_update,@,slimy_boss_spin_update,@,slimy_boss_stateless_update,@,slimy_boss_jump_init,@,slimy_boss_idle_init,@,slimyboss_destroyed,@,slimyboss_start,@,slimyboss_jump,@,slimyboss_init,@,minion_to_miny,@,slimy_minion_pl_collide,@,slimy_minion_update,@,slimy,@,slimy_destroyed,@,miny,@,slimy_propel,@,slimy_stun_callback,@,slimy_stunstate,@,slimy_pl_collide_func,@,slimy_start,@,slimy_bounce,@,slimy_jump_init,@,slimy_draw,@,slimy_statcollide,@,spike_pl_collide_func,@,saveplat_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,gameover_control_ending,@,gameover_init,@,gameover_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,simple_update,@,title_draw,@,title_logo_update,@,title_logo_drawout,@,game_state_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,animation_init,@,auto_outline_draw,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update_x,@,vec_update_y,@,mov_update,@,mov_towards_point,@,explode_draw,@,standard_explosion,@,set_x_delta,@,set_y_delta,@,adjust_deltas_for_solids,@,adjust_deltas_for_tiles,@,set_x_delta2,@,set_y_delta2,@,adjust_deltas_for_screen,@,healthobj_hurt,@,healthobj_stun,@,healthobj_health_update,@,inventory_open_update,@,inventory_update,@,inventory_start_update,@,inventory_normal_init,@,inventory_draw,@,simple_spr_draw,@,anchor_update_anchor,@,targettouch_update_target,@,coin_pl_collide_func,@,coin_1,@,coin_2,@,coin_3,@,coin_4,@,coin_5,@,coin_6,@,coin_7,@,coin_8,@,coin_9,@,coin_10,@,coin_11,@,coin_12,@,coin_13,@,coin_14,@,coin_15,@,coin_16,@,propel_func,@,interact,@,held_to_throw_ending_init,@,item_throwing_update,@,quack_thrown_destroyed,@,bomb_destroyed,@,pellet_update,@,pellet_draw,@,bow_ending_init,@,sword_item_hit_func,@,banjo_start_init,@,banjo_ending_init,@,brang_drawout,@,brang_start_init,@,brang_start_update,@,brang_normal_update,@,brang_ending_init,@,brang_ending_update,@,bomb_pl_hit,@,item_horizontal_start_init,@,item_horizontal_normal_init,@,item_horizontal_ending_init,@,maskcheck_func,@,pushable_push,@,pushable_update_push,@,pl_update,@,pl_drawout,@,card_table_cache,@,coin_count_start,@,coin_count_normal,@,coin_coint_draw,@,energybar_draw,@,stat_idle,@,rstat_update,@,rstat_get,@,stat_normal,@,stat_draw,@,tbox_init,@,tbox_update,@,tbox_draw,@,fairy_update,@,fairy_draw,@,spawn_walls,@,pot_callback_touch,@,house_init,@,person_target_with_tbox_disable_callback,@,person_target_with_tbox_finish_callback,@,teach_gettext,@,keep_gettext,@,class_with_target_init,@,target_with_tbox_gettext,@,target_with_tbox_target_func,@,sign_target_with_tbox_disable_callback,@,quack_change_dir,@,quack_pl_collide_func,@,enemy_pl_collide_func_batch,@,slimy_parent_statcollide,@,slimy_minion_spawner_update,@,slimy_boss_idle_update,@,slimy_boss_spin_update,@,slimy_boss_stateless_update,@,slimy_boss_jump_init,@,slimy_boss_idle_init,@,slimyboss_destroyed,@,slimyboss_jump,@,slimyboss_init,@,minion_to_miny,@,slimy_minion_pl_collide,@,slimy_minion_update,@,slimy,@,slimy_destroyed,@,miny,@,slimy_propel,@,slimy_stun_callback,@,slimy_stunstate,@,slimy_pl_collide_func,@,slimy_start,@,slimy_bounce,@,slimy_jump_init,@,spike_pl_collide_func,@,saveplat_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,gameover_control_ending,@,gameover_init,@,gameover_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,simple_update,@,title_draw,@,title_logo_update,@,title_logo_drawout,@,game_state_init,@]],function(a,stateName)
 a.next_state=stateName or a.next
 end,function(a,stateName)
 a.next_state,a.isnew=nil
@@ -171,8 +171,9 @@ end
 a:update()
 a:stateless_update()
 end,function(a)
-return a:is_active"ending"==nil and a.alive
+return not a.effectively_dead and a:is_active"ending"==nil and a.alive
 end,function(a)
+a.effectively_dead=true
 if a.ending then
 if a.curr=="start"then
 a.next="ending"
@@ -712,17 +713,42 @@ if not a:outside(other)then
 a:pl_collide_func(other)
 end
 end)
-end,function(a)
-if not a.spawning and(not a.anchoring or(a.anchoring and not a.anchoring:is_alive()))then
-a.spawning,a.anchoring=true
-local x,y=2.5+7*flr_rnd"2",2.5+5*flr_rnd"2"
-_g.explode(x,y,4,1,function()
-a.anchoring,a.spawning=_g.miny_actual(rnd"1"+.75,x,y,0,0)
+end,function(a,items)
+foreach(items,function(item)
+if item ~=a and not a:outside(item)and item:is_alive()then
+local did_hit=false
+if item.damage then
+a:hurt(item.damage,function()
+did_hit=true
 end)
+elseif item.should_stun then
+a:stun(3,function()
+did_hit=true
+end)
+end
+if did_hit then
+a:start_timer("isma",2)
+item:item_hit_func()
+end
+if item.should_push or did_hit then
+if item.should_use_xf then
+a:push(atan2(item.xf,item.y-a.y),.05)
+else
+local abx,aby=a:abside(item)
+a:push(atan2(abx,aby),.05)
+end
+end
+end
+end)
+end,function(a)
+end,function(a)
+if a.health<=8 then
+a.minion_ang_offset-=.01*a.xf
+a.minion_target_rad=1.5-sin(a:get_elapsed_percent"idle"/2)
 end
 end,function(a)
 a.minion_ang_offset-=.02*a.xf
-a.minion_target_rad=1.5-sin(a:get_elapsed_percent"spin"/2)*1.5
+a.minion_target_rad=1.5-sin(a:get_elapsed_percent"spin"/2)*1
 end,function(a)
 a:start_timer("isma",0)
 for i=0,7 do
@@ -751,46 +777,34 @@ local cur_minion=a.minions[i+1]
 if not cur_minion:is_alive()then
 dead_count+=1
 if cur_minion.respawn_wait<=0 then
-a.minions[i+1]=_g.slimy_boss_minion_2(a,a.x,a.y,ang)
+a.minions[i+1]=_g.slimy_boss_minion_2(a,a.x,a.y,ang,1-2*flr_rnd"2")
 else
 cur_minion.respawn_wait-=1
 end
 end
 end
-if dead_count<4 and not a.did_spin and flr_rnd"2"==0 then
-a.next="spin_bounce"
-a.did_spin=true
-else
-a.next="bounce_1"
-a.did_spin=false
+if not a.minion or not a.minion:is_alive()then
+a.minion=_g.miny_actual(a.x,a.y-.125,0,0)
 end
 end,function(a)
-for i=0,1,.125 do
-_g.miny_actual(rnd"1"+.75,a.x,a.y,sin(i)*.3,cos(i)*.3)
-end
+_g.slimy_actual(a.x,a.y-.125,0,0)
+_g.slimy_actual(a.x,a.y+.125,0,0)
 _g.explode(a.x,a.y,4,1,function()
 foreach(g_zclass_entities["slimy_boss_fight"],function(b)
 b:kill()
 end)
 end)
 end,function(a)
-_g.slimy_start(a)
-for i=0,7 do
-local cur_minion=a.minions[i+1]
-if cur_minion:is_alive()then
-cur_minion.xf=a.xf
-end
-end
-end,function(a)
 _g.slimy_propel(a)
-a.minion_ang_offset-=.01*a.xf
+a.minion_ang_offset-=.02*a.xf
 end,function(a)
 a.minions={}
 for i=0,7 do
-add(a.minions,_g.slimy_boss_minion_2(a,a.x,a.y,i/8+a.minion_ang_offset))
+add(a.minions,_g.slimy_boss_minion_2(a,a.x,a.y,i/8+a.minion_ang_offset,1-2*flr_rnd"2"))
 end
+_g.slimy_start(a)
 end,function(a)
-_g.miny_actual(rnd"1"+.75,a.x,a.y,0,0)
+_g.miny_actual(a.x,a.y,0,0)
 end,function(a,pl)
 _g.slimy_pl_collide_func(a.anchoring,pl)
 end,function(a)
@@ -805,13 +819,11 @@ a.offy=sin(a.minion_ang)*a.minion_rad
 if not a.anchoring:is_alive()then
 a:kill()
 end
+end,function(x,y)_g.slimy_actual(x,y,0,0)end,function(a)
+_g.miny_actual(a.x,a.y+.125,0,0)
+_g.miny_actual(a.x,a.y-.125,0,0)
 end,function(x,y)
-_g.explode(x,y,4,1,function()_g.slimy_actual(rnd"1"+.75,x,y,0,0)end)
-end,function(a)
-_g.miny_actual(rnd"1"+.75,a.x,a.y,0,-.2)
-_g.miny_actual(rnd"1"+.75,a.x,a.y,0,.2)
-end,function(x,y)
-_g.explode(x,y,4,1,function()_g.miny_actual(rnd"1"+.75,x,y,0,0)end)
+_g.miny_actual(x,y,0,0)
 end,function(a)
 a.speed=a.jumpspeed
 end,function(a)
@@ -839,35 +851,6 @@ end
 end,function(a)
 a.ang=a.target_ang
 a:start_timer("jumpanim",a.jump.duration)
-end,function(a)
-_g.simple_spr_draw(a)
-end,function(a,items)
-foreach(items,function(item)
-if not a:outside(item)and item:is_alive()then
-local did_hit=false
-if item.damage then
-a:hurt(item.damage,function()
-did_hit=true
-end)
-elseif item.should_stun then
-a:stun(3,function()
-did_hit=true
-end)
-end
-if did_hit then
-a:start_timer("isma",2)
-item:item_hit_func()
-end
-if item.should_push or did_hit then
-if item.should_use_xf then
-a:push(atan2(item.xf,item.y-a.y),.125)
-else
-local abx,aby=a:abside(item)
-a:push(atan2(abx,aby),.125)
-end
-end
-end
-end)
 end,function(a,pl)
 pl:hurt(1)
 end,function(a)
@@ -938,7 +921,7 @@ g_pl.y*16,
 )
 memcpy(0x5e00,0x5d00,64)
 end
-zcall(loop_entities,[[pls,@,solids,@,room,@,statitems,@;1;,timer,tick;2;,actor,state;3;,pushable,update_push;4;,mov,mov_update;5;,enemy,pl_collide_func_batch,~pls;6;,collidable,adjust_deltas_for_solids,%set_x_delta,~solids;7;,collidable,adjust_deltas_for_tiles,%set_x_delta,~room;8;,collidable,adjust_deltas_for_screen,%set_x_delta2;9;,vec,vec_update_x;10;,collidable,adjust_deltas_for_solids,%set_y_delta,~solids;11;,collidable,adjust_deltas_for_tiles,%set_y_delta,~room;12;,collidable,adjust_deltas_for_screen,%set_y_delta2;13;,vec,vec_update_y;14;,slimy_shared,statcollide,~statitems;15;,slobs,statcollide,~statitems;16;,slimy_boss_minion_2,statcollide,~statitems;17;,anchor,update_anchor;18;,target,update_target,~pls;19;,rstat,buffer_update;20;,healthobj,health_update;]],g_zclass_entities.pl,g_zclass_entities.solid,g_rooms[peek"0x5d01"],g_zclass_entities.statitem)
+zcall(loop_entities,[[pls,@,solids,@,room,@,statitems,@,smaller_slimes,@;1;,timer,tick;2;,actor,state;3;,pushable,update_push;4;,mov,mov_update;5;,enemy,pl_collide_func_batch,~pls;6;,collidable,adjust_deltas_for_solids,%set_x_delta,~solids;7;,collidable,adjust_deltas_for_tiles,%set_x_delta,~room;8;,collidable,adjust_deltas_for_screen,%set_x_delta2;9;,vec,vec_update_x;10;,collidable,adjust_deltas_for_solids,%set_y_delta,~solids;11;,collidable,adjust_deltas_for_tiles,%set_y_delta,~room;12;,collidable,adjust_deltas_for_screen,%set_y_delta2;13;,vec,vec_update_y;14;,smaller_slimes,statcollide,~smaller_slimes;15;,smaller_slimes,statcollide,~statitems;16;,slobs,statcollide,~statitems;17;,slimy_boss_minion_2,statcollide,~statitems;18;,anchor,update_anchor;19;,target,update_target,~pls;20;,rstat,buffer_update;21;,healthobj,health_update;]],g_zclass_entities.pl,g_zclass_entities.solid,g_rooms[peek"0x5d01"],g_zclass_entities.statitem,g_zclass_entities.smaller_slimes)
 poke(0x5d0b,g_pl.health)
 poke(0x5d0c,g_pl.max_health)
 if not does_entity_exist"fader"and(not g_pl:inside(g_room_bounds)or peek"0x5d0b"<=0)then
@@ -1226,13 +1209,14 @@ zclass[[signlark,sign|x,@,y,@,text,24^larks house]]
 zclass[[signjane,sign|x,@,y,@,text,24^janes house]]
 zclass[[enemy,box|pl_collide_func_batch,%enemy_pl_collide_func_batch,pl_collide_func,nop]]
 zclass[[quack,propel,ma_interact,actor,collidable,mov,enemy,simple_spr,drawlayer_50|x,@,y,@,rx,.25,ry,.25,should_dance,yes,sy,-2,propel_speed,.0125,pl_collide_func,%quack_pl_collide_func,sind,32,cspr,32,cname,quack;start;init,%quack_change_dir,update,~propel,duration,1,next,start;]]
+zclass[[slimy_parent,pushable,actor,healthobj,enemy,simple_spr,drawlayer_50|should_push,yes,should_dance,yes,statcollide,%slimy_parent_statcollide]]
 zclass[[slimy_boss_fight|]]
 zclass[[slobs_miny,actor,slimy_boss_fight|update,%slimy_minion_spawner_update]]
-zclass[[slobs,ma_boss,pushable,actor,collidable,enemy,healthobj,simple_spr,drawlayer_50|x,@,y,@,cspr,120,cname,slobs,sind,120,destroyed,%slimyboss_destroyed;did_spin,no,stateless_update,%slimy_boss_stateless_update,rx,.5,ry,.5,sw,1,sh,1,sy,-1,should_dance,yes,statcollide,%slimy_statcollide,drawout,%slimy_draw,pl_collide_func,%slimy_pl_collide_func,stun_callback,%slimy_stun_callback,minion_ang_offset,.125,max_health,20;defaults;init,nop,update,nop,minion_target_rad,1.5;start;init,%slimyboss_init,duration,.25,next,idle;stunstate;update,%slimy_stunstate,next,idle;idle;minion_target_rad,1.5,sind,120,duration,.75,pl_collide_func,%slimy_pl_collide_func,next,idle_face;idle_face;init,%slimy_boss_idle_init,update,%slimyboss_start,duration,.25;bounce_1;init,%slimy_bounce,duration,.0625,next,bounce_2;bounce_2;init,%slimy_bounce,duration,.0625,next,jump;jump;jumpspeed,.05,sind,121,init,%slimy_boss_jump_init,update,%slimyboss_jump,duration,.25,next,idle;spin_bounce;init,%slimy_bounce,duration,.0625,next,spin;spin;update,%slimy_boss_spin_update,next,idle,duration,.75;]]
-zclass[[slimy_boss_minion_2,healthobj,pushable,anchor,actor,simple_spr,drawlayer_50,enemy,slimy_boss_fight|anchoring,@,x,@,y,@,minion_ang,@,minion_rad,0,respawn_wait,2,should_dance,yes,update,%slimy_minion_update,pl_collide_func,%slimy_minion_pl_collide,rx,.25,ry,.25,statcollide,%slimy_statcollide,cspr,116,cname,miny,max_health,1,destroyed,%standard_explosion;]]
-zclass[[slimy_actual,slimy_shared|idle;sind,118,duration,@;jump;sind,119,duration,.5;x,@,y,@,dx,@,dy,@,cspr,118,cname,slimy,sind,118,max_health,5,destroyed,%slimy_destroyed;]]
-zclass[[miny_actual,slimy_shared|idle;sind,116,duration,@;jump;sind,117;x,@,y,@,dx,@,dy,@,cspr,116,cname,miny,sind,116,max_health,1,destroyed,%standard_explosion;]]
-zclass[[slimy_shared,ma_battle,pushable,actor,collidable,healthobj,enemy,simple_spr,drawlayer_50|rx,.25,ry,.25,should_dance,yes,statcollide,%slimy_statcollide,drawout,%slimy_draw,pl_collide_func,%slimy_pl_collide_func,stun_callback,%slimy_stun_callback,max_health,5,curr,idle;stunstate;init,nop,update,%slimy_stunstate,next,idle;idle;init,nop,update,%slimy_start,next,bounce_1,pl_collide_func,%slimy_pl_collide_func;bounce_1;init,%slimy_bounce,update,nop,duration,.0625,next,bounce_2;bounce_2;init,%slimy_bounce,update,nop,duration,.0625,next,jump;jump;jumpspeed,.025,init,%slimy_jump_init,update,%slimy_propel,pl_collide_func,%slimy_pl_collide_func,duration,.25,next,idle;]]
+zclass[[slobs,slimy_parent,ma_boss,collidable|x,@,y,@,cspr,120,cname,slobs,sind,120,destroyed,%slimyboss_destroyed;moving_away,yes,did_spin,no,stateless_update,%slimy_boss_stateless_update,rx,.5,ry,.5,sy,-1,pl_collide_func,%slimy_pl_collide_func,stun_callback,%slimy_stun_callback,minion_ang_offset,.125,max_health,16;defaults;init,nop,update,nop,minion_target_rad,1.5;start;init,%slimyboss_init,duration,.25,next,idle;stunstate;update,%slimy_stunstate,next,idle;idle;sind,120,update,%slimy_boss_idle_update,duration,.5,next,idle_face;idle_face;sind,121,init,%slimy_boss_idle_init,update,%slimy_start,duration,.0625,next,bounce;bounce;sind,120,duration,.0625,next,jump;jump;jumpspeed,.05,sind,121,init,%slimy_boss_jump_init,update,%slimyboss_jump,duration,.25,next,idle;]]
+zclass[[slimy_boss_minion_2,slimy_parent,anchor,slimy_boss_fight|anchoring,@,x,@,y,@,minion_ang,@,xf,@,minion_rad,0,respawn_wait,4,update,%slimy_minion_update,pl_collide_func,%slimy_minion_pl_collide,rx,.25,ry,.25,cspr,116,cname,miny,max_health,1,destroyed,%standard_explosion;]]
+zclass[[smaller_slimes|]]
+zclass[[slimy_actual,slimy_parent,ma_battle,collidable,smaller_slimes|x,@,y,@,dx,@,dy,@,idle_sind,118,jump_sind,119,cspr,~idle_sind,cname,slimy,sind,~idle_sind,destroyed,%slimy_destroyed,rx,.375,ry,.375,max_health,4,pl_collide_func,%slimy_pl_collide_func,stun_callback,%slimy_stun_callback,curr,idle;defaults;init,nop,update,nop;stunstate;next,idle,update,%slimy_stunstate;idle;next,bounce_1,update,%slimy_start,sind,~idle_sind,duration,.5;bounce_1;next,bounce_2,duration,.0625,sind,~jump_sind;bounce_2;next,jump,duration,.0625,sind,~idle_sind;jump;next,idle,init,%slimy_jump_init,jumpspeed,.025,update,%slimy_propel,duration,.25,sind,~jump_sind;]]
+zclass[[miny_actual,slimy_parent,ma_battle,collidable,smaller_slimes|x,@,y,@,dx,@,dy,@,idle_sind,116,jump_sind,117,cspr,~idle_sind,cname,miny,sind,~idle_sind,destroyed,%standard_explosion,rx,.25,ry,.25,max_health,1,pl_collide_func,%slimy_pl_collide_func,stun_callback,%slimy_stun_callback,curr,idle;defaults;init,nop,update,nop;stunstate;next,idle,update,%slimy_stunstate;idle;next,bounce_1,update,%slimy_start,sind,~idle_sind,duration,.5;bounce_1;next,bounce_2,duration,.0625,sind,~jump_sind;bounce_2;next,jump,duration,.0625,sind,~idle_sind;jump;next,idle,init,%slimy_jump_init,jumpspeed,.025,update,%slimy_propel,duration,.25,sind,~jump_sind;]]
 zclass[[spike,enemy,simple_spr,actor,drawlayer_25|sind,52,rx,.25,ry,.25,sy,0,draw,~drawout;defaults;pl_collide_func,nop;start;next,down;down;next,middle1,sind,52,duration,.9;middle1;next,up,sind,53,duration,.05;up;next,middle2,sind,54,pl_collide_func,%spike_pl_collide_func,duration,.25;middle2;next,down,sind,53,duration,.05;]]
 zclass[[r1spike,spike|x,@,y,@,xf,1;start;duration,0;]]
 zclass[[r2spike,spike|x,@,y,@,xf,1;start;duration,.625;]]

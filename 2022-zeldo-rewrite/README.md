@@ -3,11 +3,14 @@ Lank wakes up from a good night's rest only to find Hi-roll in danger! Ya gotta
 help him save the Land of Hi-roll from the FORCES-OF-EVIL.
 
 # Todo List
+TODO: eliminate randomness
 TODO: slime refactor
 TODO: chest with sword
+TODO: fix miny logic
 TODO: banjo with lark text logic
-TODO: add "i am glitch"
+TODO: add "i am glitch" (fixes in lark section)
 TODO: bugfix bomb hold when no energy
+TODO: bed collision box fix
 TODO: banjo makes enemies dance (not attack you)
 TODO: item going up snap/fix
 TODO: replace gameover with tbox
