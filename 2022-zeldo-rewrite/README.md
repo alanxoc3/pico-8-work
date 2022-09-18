@@ -3,6 +3,8 @@ Lank wakes up from a good night's rest only to find Hi-roll in danger! Ya gotta
 help him save the Land of Hi-roll from the FORCES-OF-EVIL.
 
 # Todo List
+TODO: 3 jump then bouncy shot
+TODO: no spikes when you beat boss?
 TODO: eliminate randomness
 TODO: slime refactor
 TODO: chest with sword

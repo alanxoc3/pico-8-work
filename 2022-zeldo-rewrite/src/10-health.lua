@@ -1,6 +1,7 @@
 -- an object that has health
 zclass[[healthobj,maskcheck|
     max_health, 1,
+    invincible,no,
 
     stun_callback,nop,
     hurt,%healthobj_hurt,
@@ -9,7 +10,7 @@ zclass[[healthobj,maskcheck|
 ]]
 
 |[healthobj_hurt]| function(a, amount, callback)
-    if not does_entity_exist'fader' and a:is_alive() and a:maskcheck() and not a:is_active'injured' and not a:is_active'injured_cooldown' then
+    if not a.invincible and not does_entity_exist'fader' and a:is_alive() and a:maskcheck() and not a:is_active'injured' and not a:is_active'injured_cooldown' then
         a:end_timer'stunned'
         a:end_timer'stunned_cooldown'
         a:start_timer('injured', .25, function()
