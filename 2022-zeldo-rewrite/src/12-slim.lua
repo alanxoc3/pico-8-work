@@ -73,7 +73,8 @@ zclass[[slobs,slimy_parent,ma_boss,collidable,drawlayer_50|
     jump;      jumpspeed,.025,sind,121,init,%slimy_boss_jump_init, update,%slimyboss_jump, duration, .25, next,idle;
 
     shotgun_jump;   minion_target_rad,.5, jumpspeed,.025,sind,121,init,%slimy_boss_jump_init, duration, .25, next,shotgun;
-    shotgun;        minion_target_rad,.5, init,%slobs_shotgun_init, duration,.75, next,idle;
+    shotgun;        minion_target_rad,.5, init,%slobs_shotgun_init, duration,.75, next,shotgun_jump_2;
+    shotgun_jump_2;   minion_target_rad,.5, jumpspeed,.025,sind,121,init,%slimy_boss_jump_init, duration, .25, next,idle;
 ]]
 
 |[slobs_shotgun_init]| function(a)
@@ -337,10 +338,10 @@ end $$
 |[slimy_pl_collide_func]| function(a, pl)
     if not a.collide_disabled then
         a:start_timer('isma', 2)
+            pl:push(atan2(pl.x-a.x, pl.y-a.y), .1)
         if a:is_active'jump' then
-            pl:push(atan2(pl.x-a.x, pl.y-a.y), .25)
         else
-            pl:push(atan2(pl.x-a.x, pl.y-a.y), .03125)
+            --pl:push(atan2(pl.x-a.x, pl.y-a.y), .03125)
         end
     end
 end $$
