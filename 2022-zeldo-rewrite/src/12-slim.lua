@@ -11,6 +11,7 @@ zclass[[slimy_parent,pushable,actor,healthobj,enemy,simple_spr,drawlayer_50|
             local did_hit = false
             if item.damage then
                 a:hurt(item.damage, function()
+                    a.should_regen = true
                     did_hit = true
                 end)
             elseif item.should_stun then
@@ -55,21 +56,21 @@ zclass[[slobs,slimy_parent,ma_boss,collidable|
     pl_collide_func,%slimy_pl_collide_func,
     stun_callback,%slimy_stun_callback,
     minion_ang_offset,.125,
-    max_health,16;
+    max_health,8;
 
     defaults; init,nop, update,nop, minion_target_rad,1.5;
 
     start; init,%slimyboss_init, duration,.25, next,idle;
     stunstate; update,%slimy_stunstate, next,idle;
 
-    idle;      sind,120, update,%slimy_boss_idle_update, duration,.5, next,idle_face;
-    idle_face; sind,121, init,%slimy_boss_idle_init, update,%slimy_start, duration,.0625, next,bounce;
+    idle;      sind,120, init,%slimy_boss_idle_init, update,%slimy_boss_idle_update, duration,.5, next,idle_face;
+    idle_face; sind,121, update,%slimy_start, duration,.0625, next,bounce;
     bounce;  sind,120, duration,.0625, next,jump;
-    jump;      jumpspeed,.05,sind,121,init,%slimy_boss_jump_init, update,%slimyboss_jump, duration, .25, next,idle;
+    jump;      jumpspeed,.025,sind,121,init,%slimy_boss_jump_init, update,%slimyboss_jump, duration, .25, next,idle;
 ]]
 
 |[slimy_boss_idle_update]| function(a)
-    if a.health <= 8 then
+    if a.health <= 4 then
         a.minion_ang_offset -= .01*a.xf
         a.minion_target_rad = 1.5-sin(a:get_elapsed_percent'idle'/2)
     end
@@ -84,8 +85,18 @@ end $$
     a:start_timer('isma', 0)
 
     for i=0,7 do
+        local ang = i/8+a.minion_ang_offset
         local cur_minion = a.minions[i+1]
-        if cur_minion:is_alive() then
+
+        if a.health and (a.health > 0) and a.should_regen and (not cur_minion or not cur_minion:is_alive()) then
+            a.minions[i+1] = _g.slimy_boss_minion_2(a, a.x, a.y, ang, 1-2*flr_rnd'2')
+        end
+    end
+    a.should_regen = false
+
+    for i=0,7 do
+        local cur_minion = a.minions[i+1]
+        if cur_minion and cur_minion:is_alive() then
             a.minions[i+1].minion_ang = i/8+a.minion_ang_offset
         end
     end
@@ -97,8 +108,8 @@ end $$
 
 |[slimy_boss_jump_init]| function(a)
     if not a.moving_away and a:dist_point(g_pl.x, g_pl.y) < 2.5 then
-        a.ang = atan2(5.5-a.x, 4.5-a.y)
-        a.moving_away = true
+        a.ang = a.target_ang -- atan2(5.5-a.x, 4.5-a.y)
+        --a.moving_away = true
     else
         a.ang = a.target_ang
         a.moving_away = false
@@ -107,28 +118,17 @@ end $$
 end $$
 
 |[slimy_boss_idle_init]| function(a)
-    local dead_count = 0
-    for i=0,7 do
-        local ang = i/8+a.minion_ang_offset
-        local cur_minion = a.minions[i+1]
-        if not cur_minion:is_alive() then
-            dead_count += 1
-            if cur_minion.respawn_wait <= 0 then
-                a.minions[i+1] = _g.slimy_boss_minion_2(a, a.x, a.y, ang, 1-2*flr_rnd'2')
-            else
-                cur_minion.respawn_wait -= 1
-            end
-        end
-    end
 
     if not a.minion or not a.minion:is_alive() then
-        a.minion = _g.miny_actual(a.x, a.y-.125, 0, 0)
+        --a.minion = _g.miny_actual(a.x, a.y-.125, 0, 0)
     end
 end $$
 
 |[slimyboss_destroyed]| function(a)
-    _g.slimy_actual(a.x, a.y-.125, 0, 0)
-    _g.slimy_actual(a.x, a.y+.125, 0, 0)
+    _g.slimy_actual(a.x-.125, a.y-.125, 0, 0)
+    _g.slimy_actual(a.x-.125, a.y+.125, 0, 0)
+    _g.slimy_actual(a.x+.125, a.y+.125, 0, 0)
+    _g.slimy_actual(a.x+.125, a.y-.125, 0, 0)
 
     _g.explode(a.x, a.y, 4, 1, function()
         foreach(g_zclass_entities['slimy_boss_fight'], function(b)
@@ -146,9 +146,6 @@ end $$
 
 |[slimyboss_init]| function(a)
     a.minions = {}
-    for i=0,7 do
-        add(a.minions, _g.slimy_boss_minion_2(a, a.x, a.y, i/8+a.minion_ang_offset, 1-2*flr_rnd'2'))
-    end
     _g.slimy_start(a)
 end $$
 
@@ -205,7 +202,7 @@ zclass[[slimy_actual,slimy_parent,ma_battle,collidable,smaller_slimes|
     cspr,~idle_sind, cname,"slimy", sind,~idle_sind, destroyed,%slimy_destroyed,
 
     rx, .375, ry, .375,
-    max_health,4,
+    max_health,2,
     pl_collide_func,%slimy_pl_collide_func,
     stun_callback,%slimy_stun_callback,
     curr,idle;

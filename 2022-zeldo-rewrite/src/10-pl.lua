@@ -230,7 +230,7 @@ zclass[[sword,item_horizontal,actor,statitem|
     sy,0,
     offspeed,.125,
     sind,SPR_SWORD;
-    start;  damage, 2;
+    start;  damage, 1;
     normal; damage, 1;
 ]]
 

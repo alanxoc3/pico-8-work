@@ -719,6 +719,7 @@ if item ~=a and not a:outside(item)and item:is_alive()then
 local did_hit=false
 if item.damage then
 a:hurt(item.damage,function()
+a.should_regen=true
 did_hit=true
 end)
 elseif item.should_stun then
@@ -742,7 +743,7 @@ end
 end)
 end,function(a)
 end,function(a)
-if a.health<=8 then
+if a.health<=4 then
 a.minion_ang_offset-=.01*a.xf
 a.minion_target_rad=1.5-sin(a:get_elapsed_percent"idle"/2)
 end
@@ -752,8 +753,16 @@ a.minion_target_rad=1.5-sin(a:get_elapsed_percent"spin"/2)*1
 end,function(a)
 a:start_timer("isma",0)
 for i=0,7 do
+local ang=i/8+a.minion_ang_offset
 local cur_minion=a.minions[i+1]
-if cur_minion:is_alive()then
+if a.health and(a.health>0)and a.should_regen and(not cur_minion or not cur_minion:is_alive())then
+a.minions[i+1]=_g.slimy_boss_minion_2(a,a.x,a.y,ang,1-2*flr_rnd"2")
+end
+end
+a.should_regen=false
+for i=0,7 do
+local cur_minion=a.minions[i+1]
+if cur_minion and cur_minion:is_alive()then
 a.minions[i+1].minion_ang=i/8+a.minion_ang_offset
 end
 end
@@ -762,33 +771,20 @@ a:load"stunstate"
 end
 end,function(a)
 if not a.moving_away and a:dist_point(g_pl.x,g_pl.y)<2.5 then
-a.ang=atan2(5.5-a.x,4.5-a.y)
-a.moving_away=true
+a.ang=a.target_ang
 else
 a.ang=a.target_ang
 a.moving_away=false
 end
 a:start_timer("jumpanim",a.jump.duration)
 end,function(a)
-local dead_count=0
-for i=0,7 do
-local ang=i/8+a.minion_ang_offset
-local cur_minion=a.minions[i+1]
-if not cur_minion:is_alive()then
-dead_count+=1
-if cur_minion.respawn_wait<=0 then
-a.minions[i+1]=_g.slimy_boss_minion_2(a,a.x,a.y,ang,1-2*flr_rnd"2")
-else
-cur_minion.respawn_wait-=1
-end
-end
-end
 if not a.minion or not a.minion:is_alive()then
-a.minion=_g.miny_actual(a.x,a.y-.125,0,0)
 end
 end,function(a)
-_g.slimy_actual(a.x,a.y-.125,0,0)
-_g.slimy_actual(a.x,a.y+.125,0,0)
+_g.slimy_actual(a.x-.125,a.y-.125,0,0)
+_g.slimy_actual(a.x-.125,a.y+.125,0,0)
+_g.slimy_actual(a.x+.125,a.y+.125,0,0)
+_g.slimy_actual(a.x+.125,a.y-.125,0,0)
 _g.explode(a.x,a.y,4,1,function()
 foreach(g_zclass_entities["slimy_boss_fight"],function(b)
 b:kill()
@@ -799,9 +795,6 @@ _g.slimy_propel(a)
 a.minion_ang_offset-=.02*a.xf
 end,function(a)
 a.minions={}
-for i=0,7 do
-add(a.minions,_g.slimy_boss_minion_2(a,a.x,a.y,i/8+a.minion_ang_offset,1-2*flr_rnd"2"))
-end
 _g.slimy_start(a)
 end,function(a)
 _g.miny_actual(a.x,a.y,0,0)
@@ -1119,7 +1112,7 @@ zclass[[mask,anchor,actor|anchoring,@,xf,@,visible,yes,block_direction,no,speed_
 zclass[[bow,item_horizontal,actor|anchoring,@,xf,@,visible,yes,block_direction,yes,speed_multiplier,.5,initial_energy,.25,gradual_energy,0,sy,-1,offspeed,.105,sind,7;ending;init,%item_horizontal_ending_init,duration,.08;ending;init,%bow_ending_init,duration,.08;]]
 zclass[[pellet,vec,collidable,actor,drawlayer_50,statitem|x,@,y,@,dx,@,xf,@,damage,1,pushspeed,.375,should_use_xf,yes,item_hit_func,~kill,should_collide_below,no,rx,.25,ry,.25,destroyed,%standard_explosion,draw,%pellet_draw;start;update,%pellet_update,duration,.5;]]
 zclass[[shield,item_horizontal,actor,statitem|anchoring,@,xf,@,rx,.375,ry,.375,pushspeed,.25,should_use_xf,yes,item_hit_func,nop,should_push,yes,plpushspeed,0,visible,yes,block_direction,yes,speed_multiplier,.5,initial_energy,.125,gradual_energy,0,sy,-1,offspeed,.105,sind,6;start;should_stun,yes;normal;should_stun,no;]]
-zclass[[sword,item_horizontal,actor,statitem|anchoring,@,xf,@,rx,.375,ry,.25,pushspeed,.25,should_use_xf,yes,item_hit_func,%sword_item_hit_func,plpushspeed,.125,visible,yes,block_direction,yes,speed_multiplier,.5,initial_energy,.125,gradual_energy,0,sy,0,offspeed,.125,sind,2;start;damage,2;normal;damage,1;]]
+zclass[[sword,item_horizontal,actor,statitem|anchoring,@,xf,@,rx,.375,ry,.25,pushspeed,.25,should_use_xf,yes,item_hit_func,%sword_item_hit_func,plpushspeed,.125,visible,yes,block_direction,yes,speed_multiplier,.5,initial_energy,.125,gradual_energy,0,sy,0,offspeed,.125,sind,2;start;damage,1;normal;damage,1;]]
 zclass[[banjo,anchor,actor|anchoring,@,xf,@,visible,yes,block_direction,no,speed_multiplier,.5,initial_energy,.125,gradual_energy,0,offy,0,sy,-3,sind,1;defaults;init,nop;start;init,%banjo_start_init,offdy,.125,duration,.03,next,min_play;min_play;offdy,0,duration,2,next,normal;normal;next,ending;ending;init,%banjo_ending_init,offdy,-.125,duration,.03;]]
 zclass[[brang,collidable,simple_spr,drawlayer_50,mov,actor,statitem|anchoring,@,xf,@,rx,.25,ry,.25,should_push,no,pushspeed,.25,should_use_xf,no,item_hit_func,~kill,should_stun,yes,visible,no,block_direction,yes,speed_multiplier,0,initial_energy,.125,gradual_energy,0,should_collide_below,no,offspeed,.125,drawout,%brang_drawout,sind,4;defaults;init,nop;start;init,%brang_start_init,update,%brang_start_update,duration,.125,next,normal;normal;update,%brang_normal_update,next,ending;ending;init,%brang_ending_init,update,%brang_ending_update,duration,.125,adjust_deltas_for_solids,nop,adjust_deltas_for_tiles,nop;final;update,nop,alive,no;]]
 zclass[[bomb_explode,enemy,box,actor,statitem|x,@,y,@,rx,1,ry,1,damage,5,pushspeed,.25,should_use_xf,no,item_hit_func,nop,pl_collide_func,%bomb_pl_hit;start;duration,.25;]]
@@ -1212,10 +1205,10 @@ zclass[[quack,propel,ma_interact,actor,collidable,mov,enemy,simple_spr,drawlayer
 zclass[[slimy_parent,pushable,actor,healthobj,enemy,simple_spr,drawlayer_50|should_push,yes,should_dance,yes,statcollide,%slimy_parent_statcollide]]
 zclass[[slimy_boss_fight|]]
 zclass[[slobs_miny,actor,slimy_boss_fight|update,%slimy_minion_spawner_update]]
-zclass[[slobs,slimy_parent,ma_boss,collidable|x,@,y,@,cspr,120,cname,slobs,sind,120,destroyed,%slimyboss_destroyed;moving_away,yes,did_spin,no,stateless_update,%slimy_boss_stateless_update,rx,.5,ry,.5,sy,-1,pl_collide_func,%slimy_pl_collide_func,stun_callback,%slimy_stun_callback,minion_ang_offset,.125,max_health,16;defaults;init,nop,update,nop,minion_target_rad,1.5;start;init,%slimyboss_init,duration,.25,next,idle;stunstate;update,%slimy_stunstate,next,idle;idle;sind,120,update,%slimy_boss_idle_update,duration,.5,next,idle_face;idle_face;sind,121,init,%slimy_boss_idle_init,update,%slimy_start,duration,.0625,next,bounce;bounce;sind,120,duration,.0625,next,jump;jump;jumpspeed,.05,sind,121,init,%slimy_boss_jump_init,update,%slimyboss_jump,duration,.25,next,idle;]]
+zclass[[slobs,slimy_parent,ma_boss,collidable|x,@,y,@,cspr,120,cname,slobs,sind,120,destroyed,%slimyboss_destroyed;moving_away,yes,did_spin,no,stateless_update,%slimy_boss_stateless_update,rx,.5,ry,.5,sy,-1,pl_collide_func,%slimy_pl_collide_func,stun_callback,%slimy_stun_callback,minion_ang_offset,.125,max_health,8;defaults;init,nop,update,nop,minion_target_rad,1.5;start;init,%slimyboss_init,duration,.25,next,idle;stunstate;update,%slimy_stunstate,next,idle;idle;sind,120,init,%slimy_boss_idle_init,update,%slimy_boss_idle_update,duration,.5,next,idle_face;idle_face;sind,121,update,%slimy_start,duration,.0625,next,bounce;bounce;sind,120,duration,.0625,next,jump;jump;jumpspeed,.025,sind,121,init,%slimy_boss_jump_init,update,%slimyboss_jump,duration,.25,next,idle;]]
 zclass[[slimy_boss_minion_2,slimy_parent,anchor,slimy_boss_fight|anchoring,@,x,@,y,@,minion_ang,@,xf,@,minion_rad,0,respawn_wait,4,update,%slimy_minion_update,pl_collide_func,%slimy_minion_pl_collide,rx,.25,ry,.25,cspr,116,cname,miny,max_health,1,destroyed,%standard_explosion;]]
 zclass[[smaller_slimes|]]
-zclass[[slimy_actual,slimy_parent,ma_battle,collidable,smaller_slimes|x,@,y,@,dx,@,dy,@,idle_sind,118,jump_sind,119,cspr,~idle_sind,cname,slimy,sind,~idle_sind,destroyed,%slimy_destroyed,rx,.375,ry,.375,max_health,4,pl_collide_func,%slimy_pl_collide_func,stun_callback,%slimy_stun_callback,curr,idle;defaults;init,nop,update,nop;stunstate;next,idle,update,%slimy_stunstate;idle;next,bounce_1,update,%slimy_start,sind,~idle_sind,duration,.5;bounce_1;next,bounce_2,duration,.0625,sind,~jump_sind;bounce_2;next,jump,duration,.0625,sind,~idle_sind;jump;next,idle,init,%slimy_jump_init,jumpspeed,.025,update,%slimy_propel,duration,.25,sind,~jump_sind;]]
+zclass[[slimy_actual,slimy_parent,ma_battle,collidable,smaller_slimes|x,@,y,@,dx,@,dy,@,idle_sind,118,jump_sind,119,cspr,~idle_sind,cname,slimy,sind,~idle_sind,destroyed,%slimy_destroyed,rx,.375,ry,.375,max_health,2,pl_collide_func,%slimy_pl_collide_func,stun_callback,%slimy_stun_callback,curr,idle;defaults;init,nop,update,nop;stunstate;next,idle,update,%slimy_stunstate;idle;next,bounce_1,update,%slimy_start,sind,~idle_sind,duration,.5;bounce_1;next,bounce_2,duration,.0625,sind,~jump_sind;bounce_2;next,jump,duration,.0625,sind,~idle_sind;jump;next,idle,init,%slimy_jump_init,jumpspeed,.025,update,%slimy_propel,duration,.25,sind,~jump_sind;]]
 zclass[[miny_actual,slimy_parent,ma_battle,collidable,smaller_slimes|x,@,y,@,dx,@,dy,@,idle_sind,116,jump_sind,117,cspr,~idle_sind,cname,miny,sind,~idle_sind,destroyed,%standard_explosion,rx,.25,ry,.25,max_health,1,pl_collide_func,%slimy_pl_collide_func,stun_callback,%slimy_stun_callback,curr,idle;defaults;init,nop,update,nop;stunstate;next,idle,update,%slimy_stunstate;idle;next,bounce_1,update,%slimy_start,sind,~idle_sind,duration,.5;bounce_1;next,bounce_2,duration,.0625,sind,~jump_sind;bounce_2;next,jump,duration,.0625,sind,~idle_sind;jump;next,idle,init,%slimy_jump_init,jumpspeed,.025,update,%slimy_propel,duration,.25,sind,~jump_sind;]]
 zclass[[spike,enemy,simple_spr,actor,drawlayer_25|sind,52,rx,.25,ry,.25,sy,0,draw,~drawout;defaults;pl_collide_func,nop;start;next,down;down;next,middle1,sind,52,duration,.9;middle1;next,up,sind,53,duration,.05;up;next,middle2,sind,54,pl_collide_func,%spike_pl_collide_func,duration,.25;middle2;next,down,sind,53,duration,.05;]]
 zclass[[r1spike,spike|x,@,y,@,xf,1;start;duration,0;]]
