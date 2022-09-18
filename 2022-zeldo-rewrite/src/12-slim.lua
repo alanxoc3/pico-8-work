@@ -58,7 +58,7 @@ zclass[[slobs,slimy_parent,ma_boss,collidable|
     minion_ang_offset,.125,
     max_health,8;
 
-    defaults; init,nop, update,nop, minion_target_rad,1.5;
+    defaults; init,nop, update,nop, minion_target_rad,1.25;
 
     start; init,%slimyboss_init, duration,.25, next,idle;
     stunstate; update,%slimy_stunstate, next,idle;
