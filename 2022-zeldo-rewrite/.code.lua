@@ -745,18 +745,20 @@ end,function(a)
 end,function(a)
 if a.health<=4 then
 a.minion_ang_offset-=.01*a.xf
-a.minion_target_rad=1.5-sin(a:get_elapsed_percent"idle"/2)
+a.minion_target_rad=1.5-sin(a:get_elapsed_percent"idle"/2)*.75
 end
 end,function(a)
 a.minion_ang_offset-=.02*a.xf
 a.minion_target_rad=1.5-sin(a:get_elapsed_percent"spin"/2)*1
 end,function(a)
 a:start_timer("isma",0)
+local regen_count=0
 for i=0,7 do
 local ang=i/8+a.minion_ang_offset
 local cur_minion=a.minions[i+1]
-if a.health and(a.health>0)and a.should_regen and(not cur_minion or not cur_minion:is_alive())then
+if regen_count<3 and a.health and(a.health>0)and a.should_regen and(not cur_minion or not cur_minion:is_alive())then
 a.minions[i+1]=_g.slimy_boss_minion_2(a,a.x,a.y,ang,1-2*flr_rnd"2")
+regen_count+=1
 end
 end
 a.should_regen=false
