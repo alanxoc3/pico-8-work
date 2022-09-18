@@ -771,7 +771,8 @@ a:load"stunstate"
 end
 end,function(a)
 if not a.moving_away and a:dist_point(g_pl.x,g_pl.y)<2.5 then
-a.ang=a.target_ang
+a.ang=atan2(5.5-a.x,4.5-a.y)
+a.moving_away=true
 else
 a.ang=a.target_ang
 a.moving_away=false
