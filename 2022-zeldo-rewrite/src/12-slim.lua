@@ -40,21 +40,14 @@ zclass[[slimy_parent,pushable,actor,healthobj,enemy,simple_spr|
 end $$
 
 zclass[[slimy_boss_fight|]]
-zclass[[slobs_miny,actor,slimy_boss_fight|
-    update,%slimy_minion_spawner_update
-]]
-
-|[slimy_minion_spawner_update]| function(a)
-end $$
 
 zclass[[slobs,slimy_parent,ma_boss,collidable,drawlayer_50|
     x,@, y,@, cspr,120, cname,"slobs", sind,120, destroyed,%slimyboss_destroyed;
 
-    should_regen,yes,
     jump_num,0,
+    should_regen,yes,
     moving_away,yes,
     did_spin,no,
-    stateless_update,%slimy_boss_stateless_update,
     rx,.5,ry,.5,
     sy,-1,
     pl_collide_func,%slimy_pl_collide_func,
@@ -62,25 +55,25 @@ zclass[[slobs,slimy_parent,ma_boss,collidable,drawlayer_50|
     minion_ang_offset,.125,
     max_health,8;
 
-    defaults; init,nop, update,nop, minion_target_rad,1.25, sind,120, collide_disabled,no, visible,yes, invincible, no;
+    minions;,;
+    defaults; shaking,no, init,nop, update,nop, minion_target_rad,1.25, sind,120, collide_disabled,no, visible,yes, invincible, no;
 
-    start; init,%slimyboss_init, duration,.25, next,idle;
+    start;next,realstart, duration,0;
+    realstart;init,%slimyboss_init, duration,.25, next,idle, stateless_update,%slimy_boss_stateless_update;
     stunstate; update,%slimy_stunstate, next,idle;
 
-    idle;      init,%slimy_boss_idle_init, update,%slimy_boss_idle_update, duration,.5, next,idle_face;
+    idle;      init,%slimy_boss_idle_init, update,%slimy_boss_idle_update, duration,.75, next,idle_face;
     idle_face; sind,121, update,%slimy_start, duration,.0625, next,bounce;
     bounce;    init,%slobs_calc_next, duration,.0625;
     jump;      jumpspeed,.025,sind,121,init,%slimy_boss_jump_init, update,%slimyboss_jump, duration, .25, next,idle;
 
-    shotgun_jump;   minion_target_rad,.5, jumpspeed,.025,sind,121,init,%slimy_boss_jump_init, duration, .25, next,shotgun;
-    shotgun;        minion_target_rad,.5, init,%slobs_shotgun_init, duration,.75, next,shotgun_jump_2;
-    shotgun_jump_2;   minion_target_rad,.5, jumpspeed,.025,sind,121,init,%slimy_boss_jump_init, duration, .25, next,idle;
+    shotgun_jump;   invincible,yes, minion_target_rad,.5, jumpspeed,.025,sind,121,init,%slimy_boss_jump_init, duration, .25, next,shotgun;
+    shotgun;        invincible,yes, minion_target_rad,.5, init,%slobs_shotgun_init, duration,.75, next,shotgun_jump_2, shaking,yes;
+    shotgun_jump_2; invincible,yes, minion_target_rad,.5, jumpspeed,.025,sind,121,init,%slimy_boss_jump_init, duration, .25, next,idle;
 ]]
 
 |[slobs_shotgun_init]| function(a)
-    a.sind = 98
-    -- a.collide_disabled = true
-    a.invincible = true
+    a.sind = SPR_LIME_HURT
     for i=0,7 do
         local ang = i/8+a.minion_ang_offset
         if a.minions[i+1] and a.minions[i+1]:is_alive() then
@@ -115,6 +108,17 @@ end $$
 
 |[slimy_boss_stateless_update]| function(a)
     a:start_timer('isma', 0)
+
+    for i=0,7 do
+        local ang = i/8+a.minion_ang_offset
+        local cur_minion = a.minions[i+1]
+
+        if a.should_regen and a.health and (a.health > 0) and (not cur_minion or not cur_minion:is_alive()) then
+            a.minions[i+1] = _g.slimy_boss_minion_2(a, a.x, a.y, ang, 1-2*flr_rnd'2')
+        end
+    end
+    a.should_regen = false
+
     for i=0,7 do
         local cur_minion = a.minions[i+1]
         if cur_minion and cur_minion:is_alive() then
@@ -139,33 +143,37 @@ end $$
 end $$
 
 |[slimy_boss_idle_init]| function(a)
-    --local regen_count = 0
-    for i=0,7 do
-        local ang = i/8+a.minion_ang_offset
-        local cur_minion = a.minions[i+1]
-
-        if a.should_regen and a.health and (a.health > 0) and (not cur_minion or not cur_minion:is_alive()) then
-            a.minions[i+1] = _g.slimy_boss_minion_2(a, a.x, a.y, ang, 1-2*flr_rnd'2')
-        end
-    end
-    a.should_regen = false
-
     if not a.minion or not a.minion:is_alive() then
         --a.minion = _g.miny_actual(a.x, a.y-.125, 0, 0)
     end
 end $$
 
-|[slimyboss_destroyed]| function(a)
-    _g.slimy_actual(a.x-.125, a.y-.125, 0, 0)
-    _g.slimy_actual(a.x-.125, a.y+.125, 0, 0)
-    _g.slimy_actual(a.x+.125, a.y+.125, 0, 0)
-    _g.slimy_actual(a.x+.125, a.y-.125, 0, 0)
+zclass[[slobs_exit_ball,actor,simple_spr,drawlayer_75|
+    x,@, y,@, minion_ang,@,
+    start_x,~x, start_y,~y,
+    sind,106,
+    update,%slimy_ball_update,
+    destroyed,%standard_explosion,
+    minion_target_rad,3, 
+    minion_rad,.5,
+    max_health,1;
 
+    start; duration,.25;
+]]
+
+|[slimyboss_destroyed]| function(a)
+    for i=0,7 do
+        _g.slobs_exit_ball(a.x, a.y, i/8)
+    end
+
+    music'16'
     _g.explode(a.x, a.y, 4, 1, function()
         foreach(g_zclass_entities['slimy_boss_fight'], function(b)
             b:kill()
         end)
     end)
+
+    _g.limebeat(a.x, a.y)
 end $$
 
 |[slimyboss_jump]| function(a)
@@ -176,7 +184,10 @@ end $$
 end $$
 
 |[slimyboss_init]| function(a)
-    a.minions = {}
+    for inst in all(g_zclass_entities.blockade) do
+        inst:load'open'
+    end
+    
     _g.slimy_start(a)
 end $$
 
@@ -190,8 +201,8 @@ zclass[[slimy_boss_ball,slimy_parent,slimy_boss_fight,drawlayer_75|
     pl_collide_func,%slimy_minion_pl_collide,
     rx,.5,ry,.5, max_health,1;
 
-    start; minion_target_rad,3, duration,.5, next,ending;
-    ending; minion_target_rad,.25, duration,.25;
+    start; minion_target_rad,3, duration,.5, next,compress;
+    compress; minion_target_rad,.25, duration,.25;
 ]]
 
 zclass[[slimy_boss_ball_small,slimy_parent,slimy_boss_fight,drawlayer_75|
@@ -203,8 +214,8 @@ zclass[[slimy_boss_ball_small,slimy_parent,slimy_boss_fight,drawlayer_75|
     pl_collide_func,%slimy_minion_pl_collide,
     rx,.25,ry,.25, max_health,1;
 
-    start; minion_target_rad,3, duration,.5, next,ending;
-    ending; minion_target_rad,.25, duration,.25;
+    start; minion_target_rad,3, duration,.5, next,compress;
+    compress; minion_target_rad,.25, duration,.25;
 ]]
 
 |[slimy_ball_update]| function(a)
@@ -224,7 +235,7 @@ zclass[[slimy_boss_minion_2,slimy_parent,anchor,slimy_boss_fight,drawlayer_75|
     pl_collide_func,%slimy_minion_pl_collide,
     rx,.25,ry,.25,
 
-    max_health,1, destroyed,%standard_explosion;
+    max_health,1;-- , destroyed,%standard_explosion;
 ]]
 
 |[minion_to_miny]| function(a)

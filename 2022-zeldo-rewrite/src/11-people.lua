@@ -1,4 +1,4 @@
-zclass[[person,solid,target_with_tbox,simple_spr,drawlayer_50|
+zclass[[person,actor,solid,target_with_tbox,simple_spr,drawlayer_50|
     sy,-2,
     should_dance,yes,
     rx,.375, ry,.375,
@@ -19,7 +19,7 @@ end $$
 zclass[[navyblock,person|
     x,@, y,@,
     cname,"navy", cspr,SPR_NAVY, sind,SPR_NAVY,
-    text,"SPR_NAVY^my sister has been in^the forest all day.^please bring her back^home!",
+    text,"SPR_NAVY^my sister has been in^the forest all day.^please ask her to^come back home.",
 
     rx,.375, ry,1,
     memloc_trigger,MEM_IS_NAVY_HOME, memloc_trigger_value,1,
@@ -33,6 +33,64 @@ zclass[[navyhouse,person|
     text,"im navy in a house"
 |MEM_IS_NAVY_HOME|1
 ]]
+
+zclass[[limeboss,person|
+    x,@, y,@,
+    cname,"lime", cspr,SPR_LIME, sind,SPR_LIME,
+    text,"SPR_LIME^my brother sent you^right?^he must be really^worried about me.^i can come home now.^^...^^wait! what is that?",
+
+    rx,.375, ry,.375,
+    target_with_tbox_finish_callback,%lime_callback
+|MEM_IS_SLOBS_DEAD|0
+]]
+
+zclass[[limebeat,person|
+    x,@, y,@,
+    cname,"lime", cspr,SPR_LIME_HURT, sind,SPR_LIME_HURT,
+    text,"SPR_LIME_HURT^ouchies. thanks for^saving my life.^now i will go home.",
+    target_with_tbox_disable_callback,%sign_target_with_tbox_disable_callback,
+
+    rx,.375, ry,.375,
+    memloc_trigger,MEM_IS_SLOBS_DEAD, memloc_trigger_value,1,
+    target_with_tbox_finish_callback,%person_target_with_tbox_finish_callback
+]]
+
+|[lime_callback]| function(a)
+    a:kill()
+    deregister_entity(a.target)
+    _g.limestatue(a.x, a.y, a.xf)
+    for i=0,7 do
+        _g.explode(a.x+cos(i/8)*3, a.y+sin(i/8)*3, 4, 1, function()
+            _g.slobs_enter_ball(a.x, a.y, i/8)
+        end)
+    end
+end $$
+
+zclass[[slobs_enter_ball,actor,simple_spr,drawlayer_75|
+    x,@, y,@, minion_ang,@,
+    start_x,~x, start_y,~y,
+    sind,106,
+    update,%slimy_ball_update,
+    minion_target_rad,.5, 
+    minion_rad,3,
+    max_health,1;
+
+    start; duration,.25;
+]]
+
+zclass[[limestatue,actor,simple_spr,drawlayer_50|
+    x,@,y,@, xf,@,
+    sind,SPR_LIME, sy,-2,
+    shaking,yes,
+    destroyed,%limestatue_destroyed;
+
+    start; duration,.5;
+]]
+
+|[limestatue_destroyed]| function(a)
+    music'21'
+    _g.slobs(a.x, a.y)
+end $$
 
 zclass[[bobblock,solid,person|
     x,@, y,@,

@@ -86,7 +86,9 @@ SPR_JANE:      81
 SPR_KEEP:      83
 SPR_TEACH:     96
 SPR_NAVY:      97
+SPR_LIME_HURT: 98
 SPR_LARK:      99
+SPR_LIME:      101
 SPR_HOUSE:     174
 
 # A zdset/get takes 0-255. So to have decimal places, use the multiplier.
@@ -134,7 +136,7 @@ MEM_PL_HEALTH:     0x5d0b
 MEM_PL_MAX_HEALTH: 0x5d0c
 MEM_MONEY:         0x5d0d
 
-IDK:               0x5d0e
+MEM_IS_SLOBS_DEAD: 0x5d0e
 IDK:               0x5d0f
 
 MEM_HAS_BANJO:     0x5d10

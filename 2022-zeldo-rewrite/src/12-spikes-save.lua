@@ -16,6 +16,25 @@ zclass[[spike,enemy,simple_spr,actor,drawlayer_25|
     pl:hurt(1)
 end $$
 
+zclass[[blockade,simple_spr,actor,drawlayer_25|
+    x,@, y,@,
+    draw,~drawout,
+    curr,closed;
+
+    close;  next,closed, sind,26, init,%blockade_close_init, duration,.05;
+    closed; next,open,   sind,25;
+    open;   next,opened, sind,26, init,%blockade_open_init,  duration,.05;
+    opened; next,close,  sind,27;
+]]
+
+|[blockade_close_init]| function(a)
+    if a.wall then deregister_entity(a.wall) a.wall = nil end
+end $$
+
+|[blockade_open_init]| function(a)
+    if not a.wall then a.wall = _g.wall(a, 0, 0, .375, .375) end
+end $$
+
 zclass[[r1spike,spike|x,@,y,@,xf, 1;start;duration,0;]]
 zclass[[r2spike,spike|x,@,y,@,xf, 1;start;duration,.625;]]
 

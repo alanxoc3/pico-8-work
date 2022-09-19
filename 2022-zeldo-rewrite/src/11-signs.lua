@@ -20,7 +20,7 @@ zclass[[class_with_target,actor|
 ]]
 
 |[class_with_target_init]| function(a)
-    _g.target(a.trx, a.try, a.tx, a.ty, a,
+    a.target = _g.target(a.trx, a.try, a.tx, a.ty, a,
         function() a:callback_touch() end,
         function() a:callback_outside() end
     )

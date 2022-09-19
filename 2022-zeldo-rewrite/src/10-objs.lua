@@ -15,7 +15,7 @@ zclass[[simple_spr,auto_outline,pos|
         if a.should_dance and does_entity_exist'banjo' then
             xf = (g_si%2-.5)*2
         end
-        zspr(a.sind, a.x*8+a.sx, a.y*8+a.sy, a.sw, a.sh, xf, a.yf)
+        zspr(a.sind, a.x*8+a.sx + (a.shaking and sin(t()*4) or 0), a.y*8+a.sy, a.sw, a.sh, xf, a.yf)
     end
 end $$
 
