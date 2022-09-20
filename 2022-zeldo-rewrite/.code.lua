@@ -1239,8 +1239,8 @@ zclass[[limeboss,person|x,@,y,@,cname,lime,cspr,101,sind,101,text,101^my brother
 zclass[[limebeat,person|x,@,y,@,cname,lime,cspr,98,sind,98,text,98^ouchies. thanks for^saving my life.^now i will go home.,target_with_tbox_disable_callback,%sign_target_with_tbox_disable_callback,rx,.375,ry,.375,memloc_trigger,0x5d0e,memloc_trigger_value,1,target_with_tbox_finish_callback,%person_target_with_tbox_finish_callback]]
 zclass[[slobs_enter_ball,actor,simple_spr,drawlayer_75|x,@,y,@,minion_ang,@,start_x,~x,start_y,~y,sind,106,update,%slimy_ball_update,minion_target_rad,.5,minion_rad,3,max_health,1;start;duration,.25;]]
 zclass[[limestatue,actor,simple_spr,drawlayer_50|x,@,y,@,xf,@,sind,101,sy,-2,shaking,yes,destroyed,%limestatue_destroyed;start;duration,.5;]]
-zclass[[bobblock,solid,person|x,@,y,@,cname,bob,cspr,80,sind,80,text,im bob outside,ry,1,memloc_trigger,0x5d0a,memloc_trigger_value,1,target_with_tbox_finish_callback,%person_target_with_tbox_finish_callback|0x5d0a|0]]
-zclass[[bobhouse,person|x,@,y,@,cname,bob,cspr,80,sind,80,text,80^im bob in a house|0x5d0a|1]]
+zclass[[bobblock,solid,person|x,@,y,@,xf,-1,cname,bob,cspr,80,sind,80,text,80^hi lank. i am hungry.^^i mean i am fixing^the road.,ry,1,memloc_trigger,0x5d0a,memloc_trigger_value,1,target_with_tbox_finish_callback,%person_target_with_tbox_finish_callback|0x5d0a|0]]
+zclass[[bobhouse,person|x,@,y,@,cname,bob,cspr,80,sind,80,text,80^this is some tasty^duck soup.|0x5d0a|1]]
 zclass[[jane,person|x,@,y,@,cname,jane,cspr,81,sind,81,text,81^what should i make my^hubby for lunch?]]
 zclass[[teach,person|x,@,y,@,cname,teach,cspr,96,sind,96,gettext,%teach_gettext]]
 zclass[[lark,person|x,@,y,@,cname,lark,cspr,99,sind,99,text,99^im lark in a house]]
@@ -1332,7 +1332,7 @@ zclass[[game_state,actor|ecs_exclusions;actor,yes,timer,yes;curr,room,init,%game
 function load_save_state()
 memcpy(0x5d00,0x5e00,64)
 if peek"0x5d00"==0 then
-zcall(poke,[[1;,0x5d00,1;2;,0x5d01,136;3;,0x5d02,44;4;,0x5d03,26;5;,0x5d04,1;6;,0x5d08,5;7;,0x5d0b,10;8;,0x5d0c,10;9;,0x5d13,1;]])
+zcall(poke,[[1;,0x5d00,1;2;,0x5d01,224;3;,0x5d02,24;4;,0x5d03,34;5;,0x5d05,121;6;,0x5d06,96;7;,0x5d07,72;8;,0x5d04,1;9;,0x5d08,5;10;,0x5d0b,10;11;,0x5d0c,10;12;,0x5d13,1;]])
 end
 end
 function _init()

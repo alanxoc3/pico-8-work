@@ -94,8 +94,9 @@ end $$
 
 zclass[[bobblock,solid,person|
     x,@, y,@,
+    xf,-1,
     cname,"bob", cspr,SPR_BOB, sind,SPR_BOB,
-    text,"im bob outside",
+    text,"SPR_BOB^hi lank. i am hungry.^^i mean i am fixing^the road.",
 
     ry,1,
     memloc_trigger,MEM_IS_BOB_HOME, memloc_trigger_value,1,
@@ -106,7 +107,7 @@ zclass[[bobblock,solid,person|
 zclass[[bobhouse,person|
     x,@, y,@,
     cname,"bob", cspr,SPR_BOB, sind,SPR_BOB,
-    text,"SPR_BOB^im bob in a house"
+    text,"SPR_BOB^this is some tasty^duck soup."
 |MEM_IS_BOB_HOME|1
 ]]
 

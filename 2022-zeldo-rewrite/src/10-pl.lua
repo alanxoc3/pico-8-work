@@ -484,6 +484,7 @@ zclass[[pl,ma_left,pushable,actor,mov,collidable,auto_outline,healthobj,drawlaye
 end $$
 
 |[pl_drawout]| function(a)
+    -- printh("x "..(a.x*16).." y "..(a.y*16))
     local xoff = 0
     local yoff = 0
     local xf = a.xf
