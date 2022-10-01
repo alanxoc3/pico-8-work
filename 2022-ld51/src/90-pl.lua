@@ -1,13 +1,13 @@
-zclass[[follow_ant,actor,mov|
-    anchor,@, x,0, y,0, init,%follow_ant_init, update,%follow_ant_update
+zclass[[follow_panda,actor,mov|
+    anchor,@, x,0, y,0, init,%follow_panda_init, update,%follow_panda_update
 ]]
 
-|[follow_ant_init]| function(a)
+|[follow_panda_init]| function(a)
     a.x = a.anchor.x
     a.y = a.anchor.y
 end $$
 
-|[follow_ant_update]| function(a)
+|[follow_panda_update]| function(a)
     local dist = a:dist_point(a.anchor.x, a.anchor.y)
 
     if dist > .125 then
@@ -19,7 +19,7 @@ end $$
     printh(dist)
 end $$
 
-zclass[[ant,actor,tcol,mov,drawlayer_50|
+zclass[[panda,actor,tcol,mov,drawlayer_50|
     x,@,y,@,
     rx,.375, ry,.5,
 
@@ -27,17 +27,17 @@ zclass[[ant,actor,tcol,mov,drawlayer_50|
     xf,no,
 
     color,7,
-    init,%ant_init,
-    update,%ant_update,
-    draw,%ant_draw,
-    tile_hit,%ant_tile_hit
+    init,%panda_init,
+    update,%panda_update,
+    draw,%panda_draw,
+    tile_hit,%panda_tile_hit
 ]]
 
-|[ant_init]| function(a)
+|[panda_init]| function(a)
     a.color += 1
 end $$
 
-|[ant_update]| function(a)
+|[panda_update]| function(a)
     a.ay = .015
 
     if g_zbtn_0 ~= 0 then
@@ -98,11 +98,11 @@ end $$
     a.touching_right_wall = false
 end $$
 
-|[ant_draw]| function(a)
+|[panda_draw]| function(a)
     zspr(a.sind, a.x*8, a.y*8, 1, 1, a.xf, false)
 end $$
 
-|[ant_tile_hit]| function(a, dir)
+|[panda_tile_hit]| function(a, dir)
     if dir == 3 then a.touching_ground = true end
 
     if dir == 0 then
