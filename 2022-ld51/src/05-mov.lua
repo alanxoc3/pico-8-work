@@ -28,7 +28,7 @@ end $$
 -- able to contribute to acceleration with direction and speed
 zclass[[mov,vec|
     ax,0, ay,0,
-    ix,.8, iy,1,
+    ix,1, iy,1,
     mov_update,%mov_update,
     towards_point,%mov_towards_point
 ]]

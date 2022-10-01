@@ -58,6 +58,7 @@ zclass[[panda,actor,tcol,mov,drawlayer_50|
     col_pbox,%panda_col_pbox,
     update,%panda_update,
     draw,%panda_draw,
+    controls,%panda_controls,
     tile_hit,%panda_tile_hit
 ]]
 
@@ -74,26 +75,53 @@ end $$
     a.color += 1
 end $$
 
-|[panda_update]| function(a)
-    a.ay = .015
-
+|[panda_controls]| function(a)
+    a.ix = .8
     if g_zbtn_0 ~= 0 then
-        a.ax = (a.touching_ground and .065/2 or .065/2) * g_zbtn_0
+        a.ax += (a.touching_ground and .065/2 or .065/2) * g_zbtn_0
         a.xf = a.ax < 0
     end
+end $$
 
-    if a:is_active'jump'       then a.dy = -.2
-    elseif a:is_active'ldjump' then a.ax =  .125 a.dy =  .25/2
-    elseif a:is_active'lujump' then a.ax =  .125 a.dy = -.25
-    elseif a:is_active'rdjump' then a.ax = -.125 a.dy =  .25/2
-    elseif a:is_active'rujump' then a.ax = -.125 a.dy = -.25
-    else
-        if btn(4) then
-            if a.touching_ground         then a:start_timer('jump', .125)
-            elseif a.touching_left_wall  then a:start_timer(btn'3' and 'ldjump' or 'lujump', .125/2)
-            elseif a.touching_right_wall then a:start_timer(btn'3' and 'rdjump' or 'rujump', .125/2)
-            end
+|[panda_update]| function(a)
+    a.ay = .015 -- gravity
+    a.ix = .95
+
+    if a:is_active'ujump'      then a.dy = -.15
+    elseif a:is_active'djump'  then a.dy =  .15
+    elseif a:is_active'lujump' then a.dy = -.15 a.dx = -.15
+    elseif a:is_active'ldjump' then a.dy =  .15 a.dx = -.15
+    elseif a:is_active'rujump' then a.dy = -.15 a.dx =  .15
+    elseif a:is_active'rdjump' then a.dy =  .15 a.dx =  .15
+    elseif btn(4) and a.touching_ground then
+        if g_zbtn_0 > 0 then
+            a:start_timer('rujump', .125)
+        elseif g_zbtn_0 < 0 then
+            a:start_timer('lujump', .125)
+        else
+            a:start_timer('ujump', .125)
         end
+    elseif btn(4) and a.touching_left_wall then
+        a.active_ledge = 'left'
+        a.ay = 0 a.dx = -.125 a.dy = 0
+        if g_zbtn_2 ~= 0 then
+            a.ay = .065 * g_zbtn_2
+        end
+    elseif btn(4) and a.touching_right_wall then
+        a.active_ledge = 'right'
+        a.ay = 0 a.dx = .125 a.dy = 0
+        if g_zbtn_2 ~= 0 then
+            a.ay = .065 * g_zbtn_2
+        end
+    elseif not btn(4) and a.active_ledge == 'left' then
+        a:start_timer(btn'3' and 'rdjump' or 'rujump', .125/2)
+        a.active_ledge = nil
+    elseif not btn(4) and a.active_ledge == 'right' then
+        a:start_timer(btn'3' and 'ldjump' or 'lujump', .125/2)
+        a.active_ledge = nil
+    elseif a.touching_ground then
+        a:controls()
+    else
     end
 
     if not a.touching_ground and (a.touching_left_wall or a.touching_right_wall) then

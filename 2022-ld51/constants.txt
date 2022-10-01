@@ -13,3 +13,10 @@ SPR_LOGO_H: 2
 FADE_SPEED: .5
 
 CAMERA_Y_SPEED: 1
+
+# FLAG INDEX
+# 0 - solid block
+# 1 - slant left
+# 2 - slant right
+# 3 - platform
+# 7 - visible block

@@ -22,15 +22,15 @@ end $$
         7 ;,vec,         vec_update;
         8 ;,anchor,      update_anchor;
     ]], function(x, y)
-         return x >= g_bounds.x and x < g_bounds.w and
-                y >= g_bounds.y and y < g_bounds.h and
+         return x >= g_bounds.x and x <= g_bounds.w and
+                y >= g_bounds.y and y <= g_bounds.h and
                 fget(mget(g_bounds.tx_off+x, g_bounds.ty_off+y), 0)
       end, g_zclass_entities.pbox)
 end $$
 
 |[game_draw]| function()
     local camera_x = max(g_bounds.x, min((g_bounds.w-8)*8, g_pl.x*8-32))
-    local camera_y = max(g_bounds.y, min((g_bounds.h-8)*8, g_follow_panda.y*8-32))
+    local camera_y = max(g_bounds.y, min((g_bounds.h-8)*8, g_pl.y*8-32))
 
     camera(camera_x, camera_y)
     rect(0, 0, 63, 63, 8)
