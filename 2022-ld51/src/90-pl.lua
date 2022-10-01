@@ -84,34 +84,31 @@ end $$
     a.ix = .95
 
     if a:is_active'ujump'      then a.dy = -.15
+    a:controls()
     elseif a:is_active'djump'  then a.dy =  .15
-    elseif a:is_active'lujump' then a.dy = -.15 a.dx = -.15
-    elseif a:is_active'ldjump' then a.dy =  .15 a.dx = -.15
-    elseif a:is_active'rujump' then a.dy = -.15 a.dx =  .15
-    elseif a:is_active'rdjump' then a.dy =  .15 a.dx =  .15
+    elseif a:is_active'lujump' then a.dy = -.15 a.dx = -.15 a.xf = true
+    elseif a:is_active'ldjump' then a.dy =  .15 a.dx = -.15 a.xf = true
+    elseif a:is_active'rujump' then a.dy = -.15 a.dx =  .15 a.xf = false
+    elseif a:is_active'rdjump' then a.dy =  .15 a.dx =  .15 a.xf = false
     elseif btn(4) and a.touching_ground then
-        if g_zbtn_0 > 0 then
-            a:start_timer('rujump', .125)
-        elseif g_zbtn_0 < 0 then
-            a:start_timer('lujump', .125)
-        else
-            a:start_timer('ujump', .125)
-        end
-    elseif btn(4) and a.touching_left_wall then
+        a:controls()
+        a:start_timer('ujump', .125)
+    elseif (btn(4) and a.active_ledge == 'left')  or (btnp(4) and a.touching_left_wall) then
         a.active_ledge = 'left'
         a.ay = 0 a.dx = -.125 a.dy = 0
-    elseif btn(4) and a.touching_right_wall then
+    elseif (btn(4) and a.active_ledge == 'right') or (btnp(4) and a.touching_right_wall) then
         a.active_ledge = 'right'
         a.ay = 0 a.dx = .125 a.dy = 0
     elseif not btn(4) and a.active_ledge == 'left' then
-        a:start_timer(btn'3' and 'rdjump' or 'rujump', .125/2)
+        a:start_timer(btn'3' and 'rdjump' or 'rujump', .125/2, function() a:start_timer('jump_recoil', .125) end)
         a.active_ledge = nil
     elseif not btn(4) and a.active_ledge == 'right' then
-        a:start_timer(btn'3' and 'ldjump' or 'lujump', .125/2)
+        a:start_timer(btn'3' and 'ldjump' or 'lujump', .125/2, function() a:start_timer('jump_recoil', .125) end)
         a.active_ledge = nil
     elseif a.touching_ground then
         a:controls()
-    else
+    elseif not a:is_active'jump_recoil' then
+        a:controls()
     end
 
     if a.active_ledge then
