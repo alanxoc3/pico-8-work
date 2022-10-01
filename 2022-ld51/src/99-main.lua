@@ -14,6 +14,8 @@ function _init()
 end
 
 function _update60()
+    g_zbtn_0, g_zbtn_2 = zbtn(btn, 0), zbtn(btn, 2)
+
     -- DEBUG_BEGIN
     if btn(4) and btnp(5) then g_debug = not g_debug end
     -- DEBUG_END
