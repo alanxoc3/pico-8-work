@@ -49,11 +49,11 @@ zclass[[fader_in,fader|
     g_fade = 1 - a:get_elapsed_percent'start'
 end $$
 
-|[logo_init]| function() sfx(63, 0) end $$
+|[logo_init]| function() sfx(0, 0) end $$
 
 |[logo_draw]| function(a)
     g_fade = cos(a:get_elapsed_percent'logo')+1
     camera(g_fade > .5 and rnd_one())
-    zspr(SPR_LOGO, 64, 64, SPR_LOGO_W, SPR_LOGO_H)
+    zspr(SPR_LOGO, 32, 32, SPR_LOGO_W, SPR_LOGO_H)
     camera()
 end $$

@@ -6,7 +6,7 @@ zclass[[test_obj,actor,drawlayer_50|x,@,y,@,color,7,init,%test_init,update,%test
 
 |[game_init]| function()
     _g.fader_in()
-    _g.test_obj(64, 64)
+    _g.test_obj(32, 32)
 end $$
 
 |[game_update]| function()
@@ -14,6 +14,6 @@ end $$
 end $$
 
 |[game_draw]| function()
-    rect(0, 0, 127, 127, 8)
+    rect(0, 0, 63, 63, 8)
     loop_entities('drawlayer_50', 'draw')
 end $$

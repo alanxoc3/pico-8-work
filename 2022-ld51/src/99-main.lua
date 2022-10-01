@@ -6,6 +6,9 @@ zclass[[game_state,actor|
     game; init,%game_init, update,%game_update, draw,%game_draw;
 ]]
 
+-- make the screen big
+poke(0x5f2c, 3)
+
 function _init()
     g_tl = _g.game_state()
 end
