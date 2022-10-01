@@ -18,9 +18,18 @@ zclass[[follow_panda,mov|
 |[follow_panda_update]| function(a)
     a.x = a.anchor.x
 
-    if a.anchor.touching_ground or a.anchor.active_ledge then
-        local dist = a.anchor.y - a.y
+    if a.anchor.touching_ground then
+        if g_zbtn_2 > 0 then
+            a.yoff = 1
+        elseif g_zbtn_2 < 0 then
+            a.yoff = -1
+        else
+            a.yoff = 0
+        end
+    end
 
+    if a.anchor.touching_ground or a.anchor.active_ledge then
+        local dist = (a.anchor.y+a.yoff) - a.y
         a.y += dist/4
     end
 end $$
@@ -43,7 +52,7 @@ zclass[[pbox_hold,anchor,drawlayer_75|
 
 zclass[[panda,actor,collidable,mov,drawlayer_50|
     x,@,y,@,
-    rx,.375, ry,.375,
+    rx,.25, ry,.25,
 
     sind,1,
     xf,no,
@@ -83,22 +92,27 @@ end $$
     a.ay = .015 -- gravity
     a.ix = .95
 
-    if a:is_active'ujump'      then a.dy = -.15
-    a:controls()
-    elseif a:is_active'djump'  then a.dy =  .15
+    if a:is_active'ujump'      then a.dy = -.15 a:controls()
+    elseif a:is_active'djump'  then a.dy =  .15 a:controls()
     elseif a:is_active'lujump' then a.dy = -.15 a.dx = -.15 a.xf = true
     elseif a:is_active'ldjump' then a.dy =  .15 a.dx = -.15 a.xf = true
     elseif a:is_active'rujump' then a.dy = -.15 a.dx =  .15 a.xf = false
     elseif a:is_active'rdjump' then a.dy =  .15 a.dx =  .15 a.xf = false
     elseif btn(4) and a.touching_ground then
         a:controls()
-        a:start_timer('ujump', .125)
+        if btn(3) then
+            a:start_timer('djump', .125)
+        else
+            a:start_timer('ujump', .125)
+        end
     elseif (btn(4) and a.active_ledge == 'left')  or (btnp(4) and a.touching_left_wall) then
         a.active_ledge = 'left'
         a.ay = 0 a.dx = -.125 a.dy = 0
+        if g_zbtn_2 ~= 0 then a.ay = .065/2 * g_zbtn_2 end
     elseif (btn(4) and a.active_ledge == 'right') or (btnp(4) and a.touching_right_wall) then
         a.active_ledge = 'right'
         a.ay = 0 a.dx = .125 a.dy = 0
+        if g_zbtn_2 ~= 0 then a.ay = .065/2 * g_zbtn_2 end
     elseif not btn(4) and a.active_ledge == 'left' then
         a:start_timer(btn'3' and 'rdjump' or 'rujump', .125/2, function() a:start_timer('jump_recoil', .125) end)
         a.active_ledge = nil

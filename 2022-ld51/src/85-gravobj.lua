@@ -35,5 +35,12 @@ end $$
                 a.dy = 0
             end
         end
+    elseif fget(loc, 3) then -- platform
+        local b = {x=tx, y=ty, rx=.5, ry=.5}
+        local xp, yp, magx, magy = _g.box_side2(a, b)
+        if not a:is_active'djump' and  abs(xp) <= 1 and a.y <= ty-.5 and a.dy >= 0 then
+            _, a.dy = a:getdelta(b, 0, a.dy)
+            a.touching_ground = true
+        end
     end
 end $$
