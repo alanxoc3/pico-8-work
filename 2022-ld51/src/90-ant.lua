@@ -1,3 +1,24 @@
+zclass[[follow_ant,actor,mov|
+    anchor,@, x,0, y,0, init,%follow_ant_init, update,%follow_ant_update
+]]
+
+|[follow_ant_init]| function(a)
+    a.x = a.anchor.x
+    a.y = a.anchor.y
+end $$
+
+|[follow_ant_update]| function(a)
+    local dist = a:dist_point(a.anchor.x, a.anchor.y)
+
+    if dist > .125 then
+        local ang = atan2(a.anchor.x-a.x, a.anchor.y-a.y)
+        a.x += cos(ang)*dist/4
+        a.y += sin(ang)*dist/4
+    end
+
+    printh(dist)
+end $$
+
 zclass[[ant,actor,tcol,mov,drawlayer_50|
     x,@,y,@,
     rx,.375, ry,.5,
@@ -20,7 +41,7 @@ end $$
     a.ay = .015
 
     if g_zbtn_0 ~= 0 then
-        a.ax = (a.touching_ground and .065 or .065) * g_zbtn_0
+        a.ax = (a.touching_ground and .065/2 or .065/2) * g_zbtn_0
         a.xf = a.ax < 0
     end
 

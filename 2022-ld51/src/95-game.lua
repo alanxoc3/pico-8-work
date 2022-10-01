@@ -10,6 +10,7 @@ g_levels = zobj[[
     g_room_bounds = g_levels[1]
     _g.fader_in()
     g_ant = _g.ant(find_in_room(32))
+    g_follow_ant = _g.follow_ant(g_ant)
 end $$
 
 |[game_update]| function()
@@ -28,7 +29,7 @@ end $$
 end $$
 
 |[game_draw]| function()
-    camera(g_ant.x*8-32, 64)
+    camera(g_ant.x*8-32, g_follow_ant.y*8-32)
     rect(0, 0, 63, 63, 8)
 
     map(g_room_bounds.tx_off, g_room_bounds.ty_off, 0, 0, g_room_bounds.w, g_room_bounds.h, 0x80)
