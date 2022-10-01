@@ -15,8 +15,6 @@ end $$
         a.x += cos(ang)*dist/4
         a.y += sin(ang)*dist/4
     end
-
-    printh(dist)
 end $$
 
 zclass[[panda,actor,tcol,mov,drawlayer_50|
@@ -57,11 +55,6 @@ end $$
             elseif a.touching_right_wall then a:start_timer(btn'3' and 'rdjump' or 'rujump', .125/2)
             end
         end
-    end
-
-    if btn(5) and not a:is_active'diceroll' then
-        a:start_timer('diceroll', .5)
-        create_dice(a.x, a.y, 0, a.xf and 1 or -1)
     end
 
     if not a.touching_ground and (a.touching_left_wall or a.touching_right_wall) then

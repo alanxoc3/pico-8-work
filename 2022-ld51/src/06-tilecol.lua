@@ -32,7 +32,7 @@ end $$
 |[adjust_deltas_for_tiles]| function(a)
     for tx=flr(a.x-a.rx)-1,ceil(a.x+a.rx) do
         for ty=flr(a.y-a.ry)-1,ceil(a.y+a.ry) do
-            if fget(mget(g_room_bounds.tx_off+tx, g_room_bounds.ty_off+ty), 0) then
+            if fget(mget(g_bounds.tx_off+tx, g_bounds.ty_off+ty), 0) then
                 local rx, ry = .5, .5
                 a.dx, a.dy = a:calc_deltas{x=tx+.5, y=ty+.5, rx=rx, ry=ry}
             end
@@ -52,10 +52,10 @@ end
 |[adjust_deltas_for_screen]| function(a)
     if a.should_collide_with_screen_edge then
         local box = {
-            x =g_room_bounds.x+g_room_bounds.w/2-a.dx,
-            y =g_room_bounds.y+g_room_bounds.h/2-a.dy,
-            rx=g_room_bounds.w/2,
-            ry=g_room_bounds.h/2
+            x =g_bounds.x+g_bounds.w/2-a.dx,
+            y =g_bounds.y+g_bounds.h/2-a.dy,
+            rx=g_bounds.w/2,
+            ry=g_bounds.h/2
         }
 
         a.dx = get_delta_axis2(a.dx, a.x, a.rx, box.x, box.rx)
