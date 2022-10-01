@@ -18,32 +18,31 @@ zclass[[pos|
 end $$
 
 -- position with a speed
-zclass[[vec,pos|dx,0,dy,0,vec_update,%vec_update]]
+zclass[[vec,pos|dx,0,dy,0,vec_update_x,%vec_update_x,vec_update_y,%vec_update_y]]
 
-|[vec_update]| function(a)
+|[vec_update_x]| function(a)
     a.x += a.dx
+end $$
+
+|[vec_update_y]| function(a)
     a.y += a.dy
 end $$
+
+MIN_SPEED=.0125
+MAX_SPEED=.75
 
 -- able to contribute to acceleration with direction and speed
 zclass[[mov,vec|
     ax,0, ay,0,
     ix,1, iy,1,
-    mov_update,%mov_update,
-    towards_point,%mov_towards_point
+    mov_update,%mov_update
 ]]
 
-MIN_SPEED=.0125
-MAX_SPEED=.75
-
 |[mov_update]| function(a)
-    a.dx += a.ax
-    a.dy += a.ay
+    a.dx += a.ax a.dy += a.ay
     a.dx *= a.ix a.dy *= a.iy
-
     if abs(a.dx) < MIN_SPEED then a.dx = 0 end
     if abs(a.dy) < MIN_SPEED then a.dy = 0 end
-    -- if abs(a.dx) > MAX_SPEED then a.dx = sgn(a.dx)*MAX_SPEED end
     if abs(a.dy) > MAX_SPEED then a.dy = sgn(a.dy)*MAX_SPEED end
     a.ax = 0 a.ay = 0
 end $$

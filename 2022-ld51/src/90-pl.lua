@@ -1,4 +1,4 @@
-zclass[[pbox,actor,tcol,mov,drawlayer_25|
+zclass[[pbox,actor,collidable,mov,drawlayer_25|
     x,@, y,@,
     rx,.375, ry,.375,
     sind,13,
@@ -11,22 +11,17 @@ zclass[[pbox,actor,tcol,mov,drawlayer_25|
     a.ay = .015
 end $$
 
-zclass[[follow_panda,actor,mov|
-    anchor,@, x,0, y,0, init,%follow_panda_init, update,%follow_panda_update
+zclass[[follow_panda,mov|
+    anchor,@, x,0, y,0, update,%follow_panda_update
 ]]
 
-|[follow_panda_init]| function(a)
-    a.x = a.anchor.x
-    a.y = a.anchor.y
-end $$
-
 |[follow_panda_update]| function(a)
-    local dist = a:dist_point(a.anchor.x, a.anchor.y)
+    a.x = a.anchor.x
 
-    if dist > .125 then
-        local ang = atan2(a.anchor.x-a.x, a.anchor.y-a.y)
-        a.x += cos(ang)*dist/4
-        a.y += sin(ang)*dist/4
+    if a.anchor.touching_ground or a.anchor.active_ledge then
+        local dist = a.anchor.y - a.y
+
+        a.y += dist/4
     end
 end $$
 
@@ -46,9 +41,9 @@ zclass[[pbox_hold,anchor,drawlayer_75|
     draw,%panda_draw
 ]]
 
-zclass[[panda,actor,tcol,mov,drawlayer_50|
+zclass[[panda,actor,collidable,mov,drawlayer_50|
     x,@,y,@,
-    rx,.375, ry,.5,
+    rx,.375, ry,.375,
 
     sind,1,
     xf,no,
@@ -84,6 +79,7 @@ end $$
 end $$
 
 |[panda_update]| function(a)
+    printh("x: "..a.x.." | y: "..a.y)
     a.ay = .015 -- gravity
     a.ix = .95
 
@@ -104,15 +100,9 @@ end $$
     elseif btn(4) and a.touching_left_wall then
         a.active_ledge = 'left'
         a.ay = 0 a.dx = -.125 a.dy = 0
-        if g_zbtn_2 ~= 0 then
-            a.ay = .065 * g_zbtn_2
-        end
     elseif btn(4) and a.touching_right_wall then
         a.active_ledge = 'right'
         a.ay = 0 a.dx = .125 a.dy = 0
-        if g_zbtn_2 ~= 0 then
-            a.ay = .065 * g_zbtn_2
-        end
     elseif not btn(4) and a.active_ledge == 'left' then
         a:start_timer(btn'3' and 'rdjump' or 'rujump', .125/2)
         a.active_ledge = nil
@@ -124,7 +114,7 @@ end $$
     else
     end
 
-    if not a.touching_ground and (a.touching_left_wall or a.touching_right_wall) then
+    if a.active_ledge then
         a.sind = 37
     elseif not a.touching_ground then
         if a:is_active'jump' then

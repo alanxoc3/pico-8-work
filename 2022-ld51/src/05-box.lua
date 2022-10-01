@@ -27,6 +27,12 @@ end $$
     return (a.x-b.x)/b.rx, (a.y-b.y)/b.ry, a.rx/b.rx, a.ry/b.ry
 end $$
 
+|[box_side2]| function(a, b)
+    local magx = a.rx+b.rx
+    local magy = a.ry+b.ry
+    return (a.x-b.x)/magx, (a.y-b.y)/magy, magx, magy
+end $$
+
 function zsgn(num)
     return num == 0 and 0 or sgn(num)
 end
@@ -44,6 +50,7 @@ function get_delta_axis(dx, x, rx, tdx, tdrx)
 end
 
 |[box_getdelta]| function(a, b, dx, dy)
+    local b = {x=b.x-dx, y=b.y-dy, rx=b.rx, ry=b.ry}
     local abx, aby = a:abside(b)
     local xp, yp = a:side(b)
 
@@ -53,9 +60,30 @@ end
         elseif aby ~= 0 and zsgn(dy) == -aby then
             dy = get_delta_axis(dy, a.y, a.ry, b.y, b.ry)
 
-        elseif aby ~= 0 then --and zsgn(xp) ~= zsgn(dx) then
+        elseif aby ~= 0 then
             dx = get_delta_axis(dx, a.x, a.rx, b.x, b.rx)
-        elseif abx ~= 0 then -- and zsgn(yp) ~= zsgn(dy) then
+        elseif abx ~= 0 then
+            dy = get_delta_axis(dy, a.y, a.ry, b.y, b.ry)
+        end
+    end
+
+    return dx, dy
+end $$
+
+|[box_getdelta]| function(a, b, dx, dy)
+    local b = {x=b.x-dx, y=b.y-dy, rx=b.rx, ry=b.ry}
+    local abx, aby = a:abside(b)
+    local xp, yp = a:side(b)
+
+    if not a:outside(b) then
+        if abx ~= 0 and zsgn(dx) == -abx then
+            dx = get_delta_axis(dx, a.x, a.rx, b.x, b.rx)
+        elseif aby ~= 0 and zsgn(dy) == -aby then
+            dy = get_delta_axis(dy, a.y, a.ry, b.y, b.ry)
+
+        elseif aby ~= 0 then
+            dx = get_delta_axis(dx, a.x, a.rx, b.x, b.rx)
+        elseif abx ~= 0 then
             dy = get_delta_axis(dy, a.y, a.ry, b.y, b.ry)
         end
     end
