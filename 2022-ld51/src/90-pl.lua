@@ -50,7 +50,7 @@ zclass[[panda,actor,tcol,mov,drawlayer_50|
     x,@,y,@,
     rx,.375, ry,.5,
 
-    sind,7,
+    sind,1,
     xf,no,
 
     color,7,
@@ -97,27 +97,27 @@ end $$
     end
 
     if not a.touching_ground and (a.touching_left_wall or a.touching_right_wall) then
-        a.sind = 23
+        a.sind = 37
     elseif not a.touching_ground then
         if a:is_active'jump' then
-            a.sind = 9
+            a.sind = 21
         elseif a.dy > 0 then
-            a.sind = 11
+            a.sind = 20
         else
-            a.sind = 10
+            a.sind = 21
         end
     else
         if a.dx ~= 0 then
             if t()%.25 < .125 then
-                a.sind = 7
+                a.sind = 3
             else
-                a.sind = 8
+                a.sind = 2
             end
         else
             if t()%1 < .5 then
-                a.sind = 7
+                a.sind = 1
             else
-                a.sind = 8
+                a.sind = 2
             end
         end
     end
