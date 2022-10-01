@@ -1,3 +1,16 @@
+zclass[[pbox,actor,tcol,mov,drawlayer_25|
+    x,@, y,@,
+    rx,.375, ry,.375,
+    sind,13,
+    update,%pbox_update,
+    draw,%panda_draw,
+    normal,yes
+]]
+
+|[pbox_update]| function(a)
+    a.ay = .015
+end $$
+
 zclass[[follow_panda,actor,mov|
     anchor,@, x,0, y,0, init,%follow_panda_init, update,%follow_panda_update
 ]]
@@ -17,6 +30,22 @@ end $$
     end
 end $$
 
+zclass[[anchor,pos|
+    update_anchor,%anchor_update_anchor;
+    offx,0, offy,0,
+    anchoring;,
+]]
+|[anchor_update_anchor]| function(a)
+    a.x, a.y = a.anchoring.x+a.offx, a.anchoring.y+a.offy
+end $$
+
+zclass[[pbox_hold,anchor,drawlayer_75|
+    anchoring,@,
+    sind,13,
+    offy,-.75,
+    draw,%panda_draw
+]]
+
 zclass[[panda,actor,tcol,mov,drawlayer_50|
     x,@,y,@,
     rx,.375, ry,.5,
@@ -26,10 +55,20 @@ zclass[[panda,actor,tcol,mov,drawlayer_50|
 
     color,7,
     init,%panda_init,
+    col_pbox,%panda_col_pbox,
     update,%panda_update,
     draw,%panda_draw,
     tile_hit,%panda_tile_hit
 ]]
+
+|[panda_col_pbox]| function(a, pboxes)
+    foreach(pboxes, function(pbox)
+        if a:touching(pbox) and btnp(2) then
+            pbox:kill()
+            _g.pbox_hold(a)
+        end
+    end)
+end $$
 
 |[panda_init]| function(a)
     a.color += 1
@@ -81,9 +120,6 @@ end $$
                 a.sind = 8
             end
         end
-    end
-
-    if not a.touching_ground and a.touching_left_wall then
     end
 
     a.touching_ground = false
