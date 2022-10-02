@@ -11,22 +11,25 @@ end $$
 |[game_update]| function()
     zcall(loop_entities, [[
         col_tile_func,@,
-        pboxes,@;
+        pandas,@;
         1 ;,timer,       tick;
         2 ;,actor,       state;
         3 ;,mov,         mov_update;
         4 ;,tcol,        coll_tile, ~col_tile_func;
-        5 ;,collidable,  adjust_deltas_for_tiles, %grav_x_tile_check;
-        6 ;,vec,         vec_update_x;
-        7 ;,collidable,  adjust_deltas_for_tiles, %grav_y_tile_check;
-        8 ;,vec,         vec_update_y;
-        9 ;,follow_panda,update;
-        10;,anchor,      update_anchor;
+
+        5 ;,panda,  adjust_deltas_for_solids, %set_x_delta, ~pandas;
+        6 ;,collidable,  adjust_deltas_for_tiles, %grav_x_tile_check;
+        7 ;,vec,         vec_update_x;
+        8 ;,panda,  adjust_deltas_for_solids, %set_y_delta, ~pandas;
+        9 ;,collidable,  adjust_deltas_for_tiles, %grav_y_tile_check;
+        10;,vec,         vec_update_y;
+        11;,follow_panda,update;
+        12;,anchor,      update_anchor;
     ]], function(x, y)
          return x >= g_bounds.x and x <= g_bounds.w and
                 y >= g_bounds.y and y <= g_bounds.h and
                 fget(mget(g_bounds.tx_off+x, g_bounds.ty_off+y), 0)
-      end, g_zclass_entities.pbox)
+      end, g_zclass_entities.panda)
 end $$
 
 |[game_draw]| function()

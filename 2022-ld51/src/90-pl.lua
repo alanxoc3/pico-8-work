@@ -89,15 +89,12 @@ zclass[[panda,actor,collidable,mov,drawlayer_50|
     sind,1,
     xf,no,
 
-    color,7,
-    init,%panda_init,
     draw,%panda_draw,
     tile_hit,%panda_tile_hit;
-]]
 
-|[panda_init]| function(a)
-    a.color += 1
-end $$
+    start;duration,1, next,normal;
+    normal;solid,yes;
+]]
 
 JMPSP = .125
 
