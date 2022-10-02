@@ -1,3 +1,22 @@
+zclass[[pbox_spawn,actor,box,drawlayer_20|
+    x,@, y,@, rx,.5, ry,.5,
+    sind,98,
+    update,%pbox_spawn_update
+]]
+
+|[pbox_spawn_update]| function(a)
+    if g_pbox:touching(a) then
+        a.draw = nop
+    else
+        a.draw = _g.panda_draw
+        foreach(g_pbox.pandas, function(panda)
+            if a:touching(panda) then
+                g_pbox.x, g_pbox.y = a.x, a.y-.5
+            end
+        end)
+    end
+end $$
+
 zclass[[pbox,actor,collidable,mov,drawlayer_25|
     x,@, y,@,
 
@@ -32,27 +51,40 @@ end $$
     end)
 
     g_pl = _g.panda(a.x, a.y, {}, function(aa)
-        add(aa.moves, {btn(3), btn(4), btnp(5), zbtn(btn, 0), zbtn(btn, 2)})
+        add(aa.moves, {btn(3), btn(4), zbtn(btn, 0), zbtn(btn, 2)})
         _g.panda_update_control(aa, unpack(aa.moves[#aa.moves]))
-    end)
+    end, true)
 
     a.pandas = {g_pl}
 
     foreach(moves, function(m)
-        if #a.pandas < 3 then
+        if #a.pandas < 2 then
             add(a.pandas, _g.panda(a.x, a.y, m, function(a)
                 if not a.move_ind then a.move_ind = 1 end
                 if a.move_ind <= #a.moves then
                     _g.panda_update_control(a, unpack(a.moves[a.move_ind]))
                     a.move_ind += 1
+                else
+                    a:kill()
                 end
-            end))
+            end, false))
         end
     end)
 end $$
 
 |[pbox_update]| function(a)
     a.ay = .015
+
+    local reload = true
+    foreach(a.pandas, function(panda)
+        if panda.alive then
+            reload = false
+        end
+    end)
+
+    if reload then
+        a:load'idle'
+    end
 end $$
 
 zclass[[follow_panda,mov|
@@ -61,8 +93,14 @@ zclass[[follow_panda,mov|
 
 |[follow_panda_update]| function(a)
     local anchor = g_pbox
-    if g_pl then
-        anchor = g_pl
+    for i=#g_pbox.pandas, 1, -1 do
+        if g_pbox.pandas[i].alive then
+            anchor = g_pbox.pandas[i]
+        end
+    end
+
+    if anchor.id == 'panda' and btnp(5) then
+        anchor:kill()
     end
 
     if anchor.touching_ground then
@@ -98,11 +136,11 @@ zclass[[anchor,pos|
 end $$
 
 zclass[[panda,actor,collidable,mov,drawlayer_50|
-    x,@,y,@,moves,@,update,@,
+    x,@,y,@,moves,@,update,@,is_main,@,
     rx,.25, ry,.25,
     should_collide_with_screen_edge,yes,
 
-    sind,1,
+    sind,0,
     xf,no,
 
     touching_panda,yes,
@@ -115,15 +153,13 @@ zclass[[panda,actor,collidable,mov,drawlayer_50|
 
 JMPSP = .125
 
-|[panda_update_control]| function(a, b3, b4, bp5, zbtn0, zbtn2)
+|[panda_update_control]| function(a, b3, b4, zbtn0, zbtn2)
     a.ax = 0
     a.ay = .015 -- gravity
     a.ix = .95
     a.iy = 1
 
-    if bp5 then
-        g_pbox.x, g_pbox.y, a.x, a.y = a.x, a.y, g_pbox.x, g_pbox.y
-    elseif b4 and a.think_touch_ground then
+    if b4 and a.think_touch_ground then
         a:start_timer('jump', .1)
         if b3 then
             a.jumpdx, a.jumpdy = false, JMPSP
@@ -239,6 +275,10 @@ JMPSP = .125
     a.touching_left_wall = false
     a.touching_right_wall = false
     a.touching_ground = false
+
+    if not a.is_main then
+        a.sind += 16
+    end
 end $$
 
 |[panda_draw]| function(a)

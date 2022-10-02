@@ -6,6 +6,20 @@ g_bounds = zobj[[x,0, y,0, w,128, h,64, tx_off,0, ty_off,0]]
     _g.fader_in()
     g_pbox = _g.pbox(find_in_room(16))
     g_follow_panda = _g.follow_panda()
+
+    for y=g_bounds.ty_off,g_bounds.ty_off+g_bounds.h-1 do
+        for x=g_bounds.tx_off,g_bounds.tx_off+g_bounds.w-1 do
+            if mget(x, y) == 104 then
+                --_g.breakable_platform(x, y)
+                mset(x, y, 0)
+            elseif mget(x, y) == 98 then
+                _g.pbox_spawn(x+.5, y+.5)
+                mset(x, y, 0)
+            end
+        end
+    end
+
+    return def_x, def_y
 end $$
 
 |[game_update]| function()
@@ -42,9 +56,10 @@ end $$
     camera(camera_x, camera_y)
 
     map(g_bounds.tx_off, g_bounds.ty_off, 0, 0, g_bounds.w, g_bounds.h, 0x80)
-    loop_entities('drawlayer_25', 'draw') -- box
+    loop_entities('drawlayer_20', 'draw') -- checkpoint
+    loop_entities('drawlayer_25', 'draw') -- pbox
     loop_entities('drawlayer_50', 'draw') -- pl
-    loop_entities('drawlayer_75', 'draw') -- box hold
+    loop_entities('drawlayer_75', 'draw') -- na
 
     -- DEBUG_BEGIN
     if g_debug then
