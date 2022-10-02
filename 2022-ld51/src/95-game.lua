@@ -4,10 +4,8 @@ g_bounds = zobj[[x,0, y,0, w,128, h,64, tx_off,0, ty_off,0]]
 
 |[game_init]| function()
     _g.fader_in()
-    g_pl = _g.panda(find_in_room(48))
     g_pbox = _g.pbox(find_in_room(16))
-    g_follow_panda = _g.follow_panda(g_pl)
-    g_switcher = _g.switcher(g_pl, g_pbox)
+    g_follow_panda = _g.follow_panda()
 end $$
 
 |[game_update]| function()

@@ -1,36 +1,60 @@
-zclass[[switcher,actor|
-    a,@, b,@,
-    curr,idle;
-    idle; duration,10, init,%switch_pl_and_box, next,idle;
-]]
-
-|[switch_pl_and_box]| function(a)
-    local x, y = a.a.x, a.a.y
-    a.a.x, a.a.y = a.b.x, a.b.y
-    a.b.x, a.b.y = x, y
-end $$
-
 zclass[[pbox,actor,collidable,mov,drawlayer_25|
     x,@, y,@,
     rx,.25, ry,.25,
     sind,13,
     update,%pbox_update,
     draw,%panda_draw,
-    normal,yes
+    normal,yes,
+    curr,idle;
+    pandas;,;
+
+    idle; duration,10, init,%spawn_panda, next,idle;
 ]]
+
+|[spawn_panda]| function(a)
+    local moves = {}
+    foreach(a.pandas, function(panda)
+        add(moves, panda.moves)
+        panda:kill()
+    end)
+
+    g_pl = _g.panda(a.x, a.y, {}, function(a)
+        add(a.moves, {btn(3), btn(4), btnp(4), zbtn(btn, 0), zbtn(btn, 2)})
+        _g.panda_update_control(a, unpack(a.moves[#a.moves]))
+    end)
+
+    a.pandas = {g_pl}
+
+    foreach(moves, function(m)
+        if #a.pandas < 3 then
+            add(a.pandas, _g.panda(a.x, a.y, m, function(a)
+                if not a.move_ind then a.move_ind = 1 end
+                if a.move_ind <= #a.moves then
+                    _g.panda_update_control(a, unpack(a.moves[a.move_ind]))
+                    a.move_ind += 1
+                end
+            end))
+        end
+    end)
+end $$
 
 |[pbox_update]| function(a)
     a.ay = .015
 end $$
 
 zclass[[follow_panda,mov|
-    anchor,@, x,0, y,0, update,%follow_panda_update
+    x,0, y,0, update,%follow_panda_update
 ]]
 
 |[follow_panda_update]| function(a)
-    a.x = a.anchor.x
+    local anchor = g_pbox
+    if g_pl then
+        anchor = g_pl
+    end
 
-    if a.anchor.touching_ground and not a.anchor.active_ledge then
+    a.x = anchor.x
+
+    if anchor.touching_ground and not anchor.active_ledge then
         if g_zbtn_2 > 0 then
             a.yoff = 1
         elseif g_zbtn_2 < 0 then
@@ -42,8 +66,8 @@ zclass[[follow_panda,mov|
         a.yoff = 0
     end
 
-    if a.anchor.touching_ground or a.anchor.active_ledge then
-        local dist = (a.anchor.y+a.yoff) - a.y
+    if anchor.touching_ground or anchor.active_ledge then
+        local dist = (anchor.y+a.yoff) - a.y
         a.y += dist/4
     end
 end $$
@@ -59,7 +83,7 @@ zclass[[anchor,pos|
 end $$
 
 zclass[[panda,actor,collidable,mov,drawlayer_50|
-    x,@,y,@,
+    x,@,y,@,moves,@,update,@,
     rx,.25, ry,.25,
 
     sind,1,
@@ -67,40 +91,30 @@ zclass[[panda,actor,collidable,mov,drawlayer_50|
 
     color,7,
     init,%panda_init,
-    update,%panda_update,
     draw,%panda_draw,
-    controls,%panda_controls,
-    tile_hit,%panda_tile_hit
+    tile_hit,%panda_tile_hit;
 ]]
 
 |[panda_init]| function(a)
     a.color += 1
 end $$
 
-|[panda_controls]| function(a)
-    a.ix = .8
-    if g_zbtn_0 ~= 0 then
-        a.ax += (a.touching_ground and .065/3 or .065/3) * g_zbtn_0
-        a.xf = a.ax < 0
-    end
-end $$
-
 JMPSP = .125
 
-|[panda_update]| function(a)
+|[panda_update_control]| function(a, b3, b4, bp4, zbtn0, zbtn2)
     a.ax = 0
     a.ay = .015 -- gravity
     a.ix = .95
     a.iy = 1
 
-    if btnp(4) and a.think_touch_ground then
+    if b4 and a.think_touch_ground then
         a:start_timer('jump', .1)
-        if btn(3) then
+        if b3 then
             a.jumpdx, a.jumpdy = false, JMPSP
         else
             a.jumpdx, a.jumpdy = false, -JMPSP
         end
-    elseif (btn(4) and a.active_ledge == 'left')  or (btnp(4) and a.touching_left_wall) then
+    elseif (b4 and a.active_ledge == 'left')  or (bp4 and a.touching_left_wall) then
         a:end_timer'jump'
 
         if a.think_touch_ground then
@@ -108,13 +122,13 @@ JMPSP = .125
         elseif a.touching_left_wall then
             a.active_ledge = 'left'
             a.ay = 0 a.dx = -JMPSP a.iy = .8
-            if g_zbtn_2 ~= 0 then a.ay = .065/4 * g_zbtn_2 else a.dy = 0 end
+            if zbtn2 ~= 0 then a.ay = .065/4 * zbtn2 else a.dy = 0 end
         else
             a.active_ledge = nil
             a:start_timer('jump', .1)
             a.jumpdx, a.jumpdy = 0, -JMPSP/2
         end
-    elseif (btn(4) and a.active_ledge == 'right') or (btnp(4) and a.touching_right_wall) then
+    elseif (b4 and a.active_ledge == 'right') or (bp4 and a.touching_right_wall) then
         a:end_timer'jump'
 
         if a.think_touch_ground then
@@ -122,28 +136,28 @@ JMPSP = .125
         elseif a.touching_right_wall then
             a.active_ledge = 'right'
             a.ay = 0 a.dx = JMPSP a.iy = .8
-            if g_zbtn_2 ~= 0 then a.ay = .065/4 * g_zbtn_2 else a.dy = 0 end
+            if zbtn2 ~= 0 then a.ay = .065/4 * zbtn2 else a.dy = 0 end
         else
             a.active_ledge = nil
             a:start_timer('jump', .1)
             a.jumpdx, a.jumpdy = 0, -JMPSP/2
         end
-    elseif not btn(4) and a.active_ledge == 'left' then
+    elseif not b4 and a.active_ledge == 'left' then
         a:start_timer('jump', .1)
         a:start_timer('jump_recoil', .1)
 
-        if btn'3' then
+        if b3 then
             a.jumpdx, a.jumpdy = JMPSP, JMPSP
         else
             a.jumpdx, a.jumpdy = JMPSP, -JMPSP
         end
 
         a.active_ledge = nil
-    elseif not btn(4) and a.active_ledge == 'right' then
+    elseif not b4 and a.active_ledge == 'right' then
         a:start_timer('jump', .1)
         a:start_timer('jump_recoil', .1)
 
-        if btn'3' then
+        if b3 then
             a.jumpdx, a.jumpdy = -JMPSP, JMPSP/2
         else
             a.jumpdx, a.jumpdy = -JMPSP, -JMPSP/2
@@ -159,7 +173,11 @@ JMPSP = .125
     end
 
     if not a:is_active'jump_recoil' and not a.active_ledge then
-        a:controls()
+        a.ix = .8
+        if zbtn0 ~= 0 then
+            a.ax += (a.touching_ground and .065/3 or .065/3) * zbtn0
+            a.xf = a.ax < 0
+        end
     else
         if a.dx > 0 then a.xf = false end
         if a.dx < 0 then a.xf = true end
