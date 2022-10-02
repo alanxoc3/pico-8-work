@@ -171,9 +171,9 @@ JMPSP = .125
         if a:is_active'jump' then
             a.sind = 4
         elseif a.dy > 0 then
-            a.sind = 5
-        else
             a.sind = 6
+        else
+            a.sind = 5
         end
     else
         if a.dx ~= 0 then
