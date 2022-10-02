@@ -169,11 +169,11 @@ JMPSP = .125
         a.sind = 37
     elseif not a.think_touch_ground then
         if a:is_active'jump' then
-            a.sind = 21
+            a.sind = 4
         elseif a.dy > 0 then
-            a.sind = 20
+            a.sind = 6
         else
-            a.sind = 21
+            a.sind = 5
         end
     else
         if a.dx ~= 0 then
