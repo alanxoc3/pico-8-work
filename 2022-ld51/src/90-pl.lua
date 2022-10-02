@@ -49,7 +49,7 @@ end $$
 zclass[[pbox_hold,anchor,drawlayer_75|
     anchoring,@,
     sind,13,
-    offy,-.75,
+    offy,-.5,
     draw,%panda_draw
 ]]
 
