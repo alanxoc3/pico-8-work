@@ -13,7 +13,6 @@
 
         local predx = a.dx
         a.dx, _ = a:getdelta({x=tx, y=ty, rx=.5, ry=.5}, a.dx, 0)
-        printh("predx: "..predx.." | dx: "..a.dx)
     end
 end $$
 
@@ -38,7 +37,7 @@ end $$
     elseif fget(loc, 3) then -- platform
         local b = {x=tx, y=ty, rx=.5, ry=.5}
         local xp, yp, magx, magy = _g.box_side2(a, b)
-        if not a:is_active'djump' and  abs(xp) <= 1 and a.y <= ty-.5 and a.dy >= 0 then
+        if not (a:is_active'jump' and a.jumpdy > 0) and  abs(xp) <= 1 and a.y <= ty-.5 and a.dy >= 0 then
             _, a.dy = a:getdelta(b, 0, a.dy)
             a.touching_ground = true
         end

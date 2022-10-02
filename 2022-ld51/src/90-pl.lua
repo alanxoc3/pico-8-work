@@ -18,7 +18,7 @@ zclass[[follow_panda,mov|
 |[follow_panda_update]| function(a)
     a.x = a.anchor.x
 
-    if a.anchor.touching_ground then
+    if a.anchor.touching_ground and not a.anchor.active_ledge then
         if g_zbtn_2 > 0 then
             a.yoff = 1
         elseif g_zbtn_2 < 0 then
@@ -26,6 +26,8 @@ zclass[[follow_panda,mov|
         else
             a.yoff = 0
         end
+    else
+        a.yoff = 0
     end
 
     if a.anchor.touching_ground or a.anchor.active_ledge then
@@ -39,6 +41,7 @@ zclass[[anchor,pos|
     offx,0, offy,0,
     anchoring;,
 ]]
+
 |[anchor_update_anchor]| function(a)
     a.x, a.y = a.anchoring.x+a.offx, a.anchoring.y+a.offy
 end $$
@@ -82,52 +85,94 @@ end $$
 |[panda_controls]| function(a)
     a.ix = .8
     if g_zbtn_0 ~= 0 then
-        a.ax += (a.touching_ground and .065/2 or .065/2) * g_zbtn_0
+        a.ax += (a.touching_ground and .065/3 or .065/3) * g_zbtn_0
         a.xf = a.ax < 0
     end
 end $$
 
+JMPSP = .125
+
 |[panda_update]| function(a)
-    printh("x: "..a.x.." | y: "..a.y)
+    a.ax = 0
     a.ay = .015 -- gravity
     a.ix = .95
+    a.iy = 1
 
-    if a:is_active'ujump'      then a.dy = -.15 a:controls()
-    elseif a:is_active'djump'  then a.dy =  .15 a:controls()
-    elseif a:is_active'lujump' then a.dy = -.15 a.dx = -.15 a.xf = true
-    elseif a:is_active'ldjump' then a.dy =  .15 a.dx = -.15 a.xf = true
-    elseif a:is_active'rujump' then a.dy = -.15 a.dx =  .15 a.xf = false
-    elseif a:is_active'rdjump' then a.dy =  .15 a.dx =  .15 a.xf = false
-    elseif btn(4) and a.touching_ground then
-        a:controls()
+    if btnp(4) and a.think_touch_ground then
+        a:start_timer('jump', .1)
         if btn(3) then
-            a:start_timer('djump', .125)
+            a.jumpdx, a.jumpdy = false, JMPSP
         else
-            a:start_timer('ujump', .125)
+            a.jumpdx, a.jumpdy = false, -JMPSP
         end
     elseif (btn(4) and a.active_ledge == 'left')  or (btnp(4) and a.touching_left_wall) then
-        a.active_ledge = 'left'
-        a.ay = 0 a.dx = -.125 a.dy = 0
-        if g_zbtn_2 ~= 0 then a.ay = .065/2 * g_zbtn_2 end
+        a:end_timer'jump'
+
+        if a.think_touch_ground then
+            a.active_ledge = nil
+        elseif a.touching_left_wall then
+            a.active_ledge = 'left'
+            a.ay = 0 a.dx = -JMPSP a.iy = .8
+            if g_zbtn_2 ~= 0 then a.ay = .065/4 * g_zbtn_2 else a.dy = 0 end
+        else
+            a.active_ledge = nil
+            a:start_timer('jump', .1)
+            a.jumpdx, a.jumpdy = 0, -JMPSP/2
+        end
     elseif (btn(4) and a.active_ledge == 'right') or (btnp(4) and a.touching_right_wall) then
-        a.active_ledge = 'right'
-        a.ay = 0 a.dx = .125 a.dy = 0
-        if g_zbtn_2 ~= 0 then a.ay = .065/2 * g_zbtn_2 end
+        a:end_timer'jump'
+
+        if a.think_touch_ground then
+            a.active_ledge = nil
+        elseif a.touching_right_wall then
+            a.active_ledge = 'right'
+            a.ay = 0 a.dx = JMPSP a.iy = .8
+            if g_zbtn_2 ~= 0 then a.ay = .065/4 * g_zbtn_2 else a.dy = 0 end
+        else
+            a.active_ledge = nil
+            a:start_timer('jump', .1)
+            a.jumpdx, a.jumpdy = 0, -JMPSP/2
+        end
     elseif not btn(4) and a.active_ledge == 'left' then
-        a:start_timer(btn'3' and 'rdjump' or 'rujump', .125/2, function() a:start_timer('jump_recoil', .125) end)
+        a:start_timer('jump', .1)
+        a:start_timer('jump_recoil', .1)
+
+        if btn'3' then
+            a.jumpdx, a.jumpdy = JMPSP, JMPSP
+        else
+            a.jumpdx, a.jumpdy = JMPSP, -JMPSP
+        end
+
         a.active_ledge = nil
     elseif not btn(4) and a.active_ledge == 'right' then
-        a:start_timer(btn'3' and 'ldjump' or 'lujump', .125/2, function() a:start_timer('jump_recoil', .125) end)
+        a:start_timer('jump', .1)
+        a:start_timer('jump_recoil', .1)
+
+        if btn'3' then
+            a.jumpdx, a.jumpdy = -JMPSP, JMPSP/2
+        else
+            a.jumpdx, a.jumpdy = -JMPSP, -JMPSP/2
+        end
+
         a.active_ledge = nil
-    elseif a.touching_ground then
+    end
+
+    if a:is_active'jump' then
+        a.dx = a.jumpdx or a.dx
+        a.dy = a.jumpdy or a.dy
+        printh(a.dy)
+    end
+
+    if not a:is_active'jump_recoil' and not a.active_ledge then
         a:controls()
-    elseif not a:is_active'jump_recoil' then
-        a:controls()
+    else
+        if a.dx > 0 then a.xf = false end
+        if a.dx < 0 then a.xf = true end
     end
 
     if a.active_ledge then
         a.sind = 37
-    elseif not a.touching_ground then
+    elseif not a.think_touch_ground then
         if a:is_active'jump' then
             a.sind = 21
         elseif a.dy > 0 then
@@ -151,9 +196,17 @@ end $$
         end
     end
 
-    a.touching_ground = false
+    if not a.touching_ground and a.think_touch_ground and not a:is_active'ground_timer' then
+        a:start_timer('ground_timer', .075, function()
+            a.think_touch_ground = false
+        end)
+    elseif a.touching_ground then
+        a.think_touch_ground = true
+    end
+
     a.touching_left_wall = false
     a.touching_right_wall = false
+    a.touching_ground = false
 end $$
 
 |[panda_draw]| function(a)

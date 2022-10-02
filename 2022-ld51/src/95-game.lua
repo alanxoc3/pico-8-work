@@ -36,7 +36,6 @@ end $$
     local camera_y = max(g_bounds.y, min((g_bounds.h-8)*8, g_follow_panda.y*8-32))
 
     camera(camera_x, camera_y)
-    rect(0, 0, 63, 63, 8)
 
     map(g_bounds.tx_off, g_bounds.ty_off, 0, 0, g_bounds.w, g_bounds.h, 0x80)
     loop_entities('drawlayer_25', 'draw') -- box

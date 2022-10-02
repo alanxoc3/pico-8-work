@@ -9,6 +9,9 @@ zclass[[game_state,actor|
 -- make the screen big
 poke(0x5f2c, 3)
 
+-- never repeat btnp
+poke(0x5f5c, 255)
+
 function _init()
     g_tl = _g.game_state()
 end
@@ -36,7 +39,7 @@ function _update60()
 end
 
 function _draw()
-    cls()
+    cls(12)
     loop_entities('game_state', 'draw')
     fade(g_fade)
 end
