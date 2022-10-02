@@ -33,7 +33,7 @@ end $$
 end $$
 
 |[set_x_delta2]| function(a, b)
-    b = {x=b.x-a.dx, y=b.y, rx=b.rx, ry=b.ry}
+    b = {x=b.x+b.w/2-a.dx, y=b.y+b.h/2, rx=b.w/2, ry=b.h/2}
 
     local p = (a.x-b.x)/b.rx
     if abs(p)+a.rx/b.rx > 1 then
@@ -42,7 +42,7 @@ end $$
 end $$
 
 |[set_y_delta2]| function(a, b)
-    b = {x=b.x, y=b.y-a.dy, rx=b.rx, ry=b.ry}
+    b = {x=b.x+b.w/2, y=b.y+b.h/2-a.dy, rx=b.w/2, ry=b.h/2}
 
     local p = (a.y-b.y)/b.ry
     if abs(p)+a.ry/b.ry > 1 then
@@ -52,6 +52,6 @@ end $$
 
 |[adjust_deltas_for_screen]| function(a, setdelta2)
     if a.should_collide_with_screen_edge then
-        setdelta2(a, g_room_bounds)
+        setdelta2(a, g_bounds)
     end
 end $$

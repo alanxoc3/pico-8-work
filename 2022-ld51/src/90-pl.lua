@@ -1,5 +1,7 @@
 zclass[[pbox,actor,collidable,mov,drawlayer_25|
     x,@, y,@,
+
+    should_collide_with_screen_edge,yes,
     rx,.25, ry,.25,
     sind,13,
     update,%pbox_update,
@@ -9,7 +11,7 @@ zclass[[pbox,actor,collidable,mov,drawlayer_25|
     curr,idle;
     pandas;,;
 
-    idle; duration,5, init,%spawn_panda, next,idle;
+    idle; duration,10, init,%spawn_panda, next,idle;
 ]]
 
 |[pandas_col_y]| function(a)
@@ -98,6 +100,7 @@ end $$
 zclass[[panda,actor,collidable,mov,drawlayer_50|
     x,@,y,@,moves,@,update,@,
     rx,.25, ry,.25,
+    should_collide_with_screen_edge,yes,
 
     sind,1,
     xf,no,

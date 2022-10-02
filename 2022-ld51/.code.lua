@@ -243,20 +243,20 @@ checkfunc(a,tx+.5,ty+.5,mget(g_bounds.tx_off+tx,g_bounds.ty_off+ty))
 end
 end
 end,function(a,b)
-b={x=b.x-a.dx,y=b.y,rx=b.rx,ry=b.ry}
+b={x=b.x+b.w/2-a.dx,y=b.y+b.h/2,rx=b.w/2,ry=b.h/2}
 local p=(a.x-b.x)/b.rx
 if abs(p)+a.rx/b.rx>1 then
 a.dx=b.x+sgn(p)*(b.rx-a.rx)-(a.x-a.dx)
 end
 end,function(a,b)
-b={x=b.x,y=b.y-a.dy,rx=b.rx,ry=b.ry}
+b={x=b.x+b.w/2,y=b.y+b.h/2-a.dy,rx=b.w/2,ry=b.h/2}
 local p=(a.y-b.y)/b.ry
 if abs(p)+a.ry/b.ry>1 then
 a.dy=b.y+sgn(p)*(b.ry-a.ry)-(a.y-a.dy)
 end
 end,function(a,setdelta2)
 if a.should_collide_with_screen_edge then
-setdelta2(a,g_room_bounds)
+setdelta2(a,g_bounds)
 end
 end,function(a,tx,ty,loc)
 if fget(loc,0)then
@@ -481,7 +481,7 @@ _g.fader_in()
 g_pbox=_g.pbox(find_in_room(16))
 g_follow_panda=_g.follow_panda()
 end,function()
-zcall(loop_entities,[[col_tile_func,@,pandas,@;1;,timer,tick;2;,actor,state;3;,mov,mov_update;4;,tcol,coll_tile,~col_tile_func;5;,collidable,adjust_deltas_for_tiles,%grav_x_tile_check;6;,vec,vec_update_x;7;,pbox,pandas_col_y;8;,collidable,adjust_deltas_for_tiles,%grav_y_tile_check;9;,vec,vec_update_y;10;,follow_panda,update;11;,anchor,update_anchor;]],function(x,y)
+zcall(loop_entities,[[col_tile_func,@,pandas,@;1;,timer,tick;2;,actor,state;3;,mov,mov_update;4;,tcol,coll_tile,~col_tile_func;5;,collidable,adjust_deltas_for_tiles,%grav_x_tile_check;6;,collidable,adjust_deltas_for_screen,%set_x_delta2;7;,vec,vec_update_x;8;,pbox,pandas_col_y;9;,collidable,adjust_deltas_for_tiles,%grav_y_tile_check;10;,collidable,adjust_deltas_for_screen,%set_y_delta2;11;,vec,vec_update_y;12;,follow_panda,update;13;,anchor,update_anchor;]],function(x,y)
 return x>=g_bounds.x and x<=g_bounds.w and
 y>=g_bounds.y and y<=g_bounds.h and
 fget(mget(g_bounds.tx_off+x,g_bounds.ty_off+y),0)
@@ -494,6 +494,11 @@ map(g_bounds.tx_off,g_bounds.ty_off,0,0,g_bounds.w,g_bounds.h,0x80)
 loop_entities("drawlayer_25","draw")
 loop_entities("drawlayer_50","draw")
 loop_entities("drawlayer_75","draw")
+if g_debug then
+for inst in all(g_zclass_entities["box"])do
+scr_zrect(inst.x,inst.y,inst.rx,inst.ry,8)
+end
+end
 camera()
 end,function(a)
 poke(0x5f43,0xff)
@@ -568,10 +573,10 @@ end
 end
 return def_x,def_y
 end
-zclass[[pbox,actor,collidable,mov,drawlayer_25|x,@,y,@,rx,.25,ry,.25,sind,13,update,%pbox_update,draw,%panda_draw,pandas_col_y,%pandas_col_y,normal,yes,curr,idle;pandas;,;idle;duration,5,init,%spawn_panda,next,idle;]]
+zclass[[pbox,actor,collidable,mov,drawlayer_25|x,@,y,@,should_collide_with_screen_edge,yes,rx,.25,ry,.25,sind,13,update,%pbox_update,draw,%panda_draw,pandas_col_y,%pandas_col_y,normal,yes,curr,idle;pandas;,;idle;duration,10,init,%spawn_panda,next,idle;]]
 zclass[[follow_panda,mov|x,0,y,43,update,%follow_panda_update]]
 zclass[[anchor,pos|update_anchor,%anchor_update_anchor;offx,0,offy,0,anchoring;,]]
-zclass[[panda,actor,collidable,mov,drawlayer_50|x,@,y,@,moves,@,update,@,rx,.25,ry,.25,sind,1,xf,no,touching_panda,yes,draw,%panda_draw,tile_hit,%panda_tile_hit;start;duration,1,next,normal;normal;solid,yes;]]
+zclass[[panda,actor,collidable,mov,drawlayer_50|x,@,y,@,moves,@,update,@,rx,.25,ry,.25,should_collide_with_screen_edge,yes,sind,1,xf,no,touching_panda,yes,draw,%panda_draw,tile_hit,%panda_tile_hit;start;duration,1,next,normal;normal;solid,yes;]]
 JMPSP=.125
 g_bounds=zobj[[x,0,y,0,w,128,h,64,tx_off,0,ty_off,0]]
 g_fade,g_fade_table=1,zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,1,0,0,0,0;3;,3,3,3,3,1,1,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,0,0,0,0;6;,6,6,13,13,5,5,0,0;7;,7,7,6,13,13,5,0,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,0,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,0,0,0;13;,13,13,5,5,1,0,0,0;14;,14,14,13,4,2,2,0,0;15;,15,15,13,13,5,5,0,0;]]
@@ -591,6 +596,7 @@ g_tl=_g.game_state()
 end
 function _update60()
 g_zbtn_0,g_zbtn_2=zbtn(btn,0),zbtn(btn,2)
+if btn(4)and btnp(5)then g_debug=not g_debug end
 zcall(loop_entities,[[1;,actor,clean;2;,fader,clean;]])
 register_entities()
 zcall(loop_entities,[[1;,fader,tick;2;,game_state,tick;3;,fader,state;4;,game_state,state;]])
