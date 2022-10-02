@@ -230,7 +230,19 @@ if abs(a.dx)<MIN_SPEED then a.dx=0 end
 if abs(a.dy)<MIN_SPEED then a.dy=0 end
 if abs(a.dy)>MAX_SPEED then a.dy=sgn(a.dy)*MAX_SPEED end
 a.ax=0 a.ay=0
-end,function(a,b)if b.solid and a.solid then a.dx,_=a:getdelta(b,a.dx,0)end end,function(a,b)if b.solid and a.solid then _,a.dy=a:getdelta(b,0,a.dy)end end,function(a,setdelta,list)
+end,function(a,b)
+if b.solid and a.solid then
+a.dx,_=a:getdelta(b,a.dx,0)
+end
+end,function(a,b)
+if b.solid and a.solid then
+_,a.dy=a:getdelta(b,0,a.dy)
+local below={x=b.x,y=b.y-.125,rx=.25,ry=.25}
+if a:touching(below)then
+a.touching_ground=true
+end
+end
+end,function(a,setdelta,list)
 foreach(list,function(b)
 if a ~=b then
 setdelta(a,b)
