@@ -5,8 +5,9 @@ g_bounds = zobj[[x,0, y,0, w,128, h,64, tx_off,0, ty_off,0]]
 |[game_init]| function()
     _g.fader_in()
     g_pl = _g.panda(find_in_room(48))
-    _g.pbox(find_in_room(16))
+    g_pbox = _g.pbox(find_in_room(16))
     g_follow_panda = _g.follow_panda(g_pl)
+    g_switcher = _g.switcher(g_pl, g_pbox)
 end $$
 
 |[game_update]| function()
@@ -15,15 +16,14 @@ end $$
         pboxes,@;
         1 ;,timer,       tick;
         2 ;,actor,       state;
-        3 ;,panda,       col_pbox, ~pboxes;
-        4 ;,mov,         mov_update;
-        5 ;,tcol,        coll_tile, ~col_tile_func;
-        6 ;,collidable,  adjust_deltas_for_tiles, %grav_x_tile_check;
-        7 ;,vec,         vec_update_x;
-        8 ;,collidable,  adjust_deltas_for_tiles, %grav_y_tile_check;
-        9 ;,vec,         vec_update_y;
-        10;,follow_panda,update;
-        11 ;,anchor,      update_anchor;
+        3 ;,mov,         mov_update;
+        4 ;,tcol,        coll_tile, ~col_tile_func;
+        5 ;,collidable,  adjust_deltas_for_tiles, %grav_x_tile_check;
+        6 ;,vec,         vec_update_x;
+        7 ;,collidable,  adjust_deltas_for_tiles, %grav_y_tile_check;
+        8 ;,vec,         vec_update_y;
+        9 ;,follow_panda,update;
+        10;,anchor,      update_anchor;
     ]], function(x, y)
          return x >= g_bounds.x and x <= g_bounds.w and
                 y >= g_bounds.y and y <= g_bounds.h and
