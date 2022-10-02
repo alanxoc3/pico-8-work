@@ -17,10 +17,10 @@ end $$
         3 ;,mov,         mov_update;
         4 ;,tcol,        coll_tile, ~col_tile_func;
 
-        5 ;,panda,  adjust_deltas_for_solids, %set_x_delta, ~pandas;
+        5 ;,pbox,        pandas_col_x;
         6 ;,collidable,  adjust_deltas_for_tiles, %grav_x_tile_check;
         7 ;,vec,         vec_update_x;
-        8 ;,panda,  adjust_deltas_for_solids, %set_y_delta, ~pandas;
+        8 ;,pbox,        pandas_col_y;
         9 ;,collidable,  adjust_deltas_for_tiles, %grav_y_tile_check;
         10;,vec,         vec_update_y;
         11;,follow_panda,update;

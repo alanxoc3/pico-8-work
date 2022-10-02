@@ -1,14 +1,14 @@
 |[set_x_delta]| function(a, b)
     if b.solid and a.solid then
-        a.dx, _ = a:getdelta(b, a.dx, 0)
+        --a.dx, _ = a:getdelta(b, a.dx, 0)
     end
 end $$
 
 |[set_y_delta]| function(a, b)
     if b.solid and a.solid then
-        _, a.dy = a:getdelta(b, 0, a.dy)
-        local below = {x=b.x, y=b.y-.125, rx=.25, ry=.25}
-        if a:touching(below) then
+        --_, a.dy = a:getdelta(b, 0, a.dy)
+        if a:touching(b) then
+            a.touching_panda = true
             a.touching_ground = true
         end
     end

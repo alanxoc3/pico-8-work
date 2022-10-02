@@ -4,12 +4,26 @@ zclass[[pbox,actor,collidable,mov,drawlayer_25|
     sind,13,
     update,%pbox_update,
     draw,%panda_draw,
+    pandas_col_x,%pandas_col_x,
+    pandas_col_y,%pandas_col_y,
     normal,yes,
     curr,idle;
     pandas;,;
 
-    idle; duration,10, init,%spawn_panda, next,idle;
+    idle; duration,5, init,%spawn_panda, next,idle;
 ]]
+
+|[pandas_col_x]| function(a)
+    for i=2,#a.pandas do
+        _g.set_x_delta(a.pandas[i], a.pandas[1])
+    end
+end $$
+
+|[pandas_col_y]| function(a)
+    for i=2,#a.pandas do
+        _g.set_y_delta(a.pandas[i], a.pandas[1])
+    end
+end $$
 
 |[spawn_panda]| function(a)
     local moves = {}
@@ -18,9 +32,9 @@ zclass[[pbox,actor,collidable,mov,drawlayer_25|
         panda:kill()
     end)
 
-    g_pl = _g.panda(a.x, a.y, {}, function(a)
-        add(a.moves, {btn(3), btn(4), btnp(4), zbtn(btn, 0), zbtn(btn, 2)})
-        _g.panda_update_control(a, unpack(a.moves[#a.moves]))
+    g_pl = _g.panda(a.x, a.y, {}, function(aa)
+        add(aa.moves, {btn(3), btn(4), btnp(4), btnp(5), zbtn(btn, 0), zbtn(btn, 2)})
+        _g.panda_update_control(aa, unpack(aa.moves[#aa.moves]))
     end)
 
     a.pandas = {g_pl}
@@ -43,7 +57,7 @@ end $$
 end $$
 
 zclass[[follow_panda,mov|
-    x,0, y,0, update,%follow_panda_update
+    x,0, y,43, update,%follow_panda_update
 ]]
 
 |[follow_panda_update]| function(a)
@@ -53,23 +67,7 @@ zclass[[follow_panda,mov|
     end
 
     a.x = anchor.x
-
-    if anchor.touching_ground and not anchor.active_ledge then
-        if g_zbtn_2 > 0 then
-            a.yoff = 1
-        elseif g_zbtn_2 < 0 then
-            a.yoff = -1
-        else
-            a.yoff = 0
-        end
-    else
-        a.yoff = 0
-    end
-
-    if anchor.touching_ground or anchor.active_ledge then
-        local dist = (anchor.y+a.yoff) - a.y
-        a.y += dist/4
-    end
+    a.y = anchor.y
 end $$
 
 zclass[[anchor,pos|
@@ -88,29 +86,34 @@ zclass[[panda,actor,collidable,mov,drawlayer_50|
 
     sind,1,
     xf,no,
+    solid,yes,
 
+    touching_panda,yes,
     draw,%panda_draw,
     tile_hit,%panda_tile_hit;
-
-    start;duration,1, next,normal;
-    normal;solid,yes;
 ]]
 
 JMPSP = .125
 
-|[panda_update_control]| function(a, b3, b4, bp4, zbtn0, zbtn2)
+|[panda_update_control]| function(a, b3, b4, bp4, bp5, zbtn0, zbtn2)
     a.ax = 0
     a.ay = .015 -- gravity
     a.ix = .95
     a.iy = 1
 
-    if b4 and a.think_touch_ground then
+    if bp5 then
+        g_pbox.x, g_pbox.y, a.x, a.y = a.x, a.y, g_pbox.x, g_pbox.y
+    elseif b4 and a.think_touch_ground then
         a:start_timer('jump', .1)
         if b3 then
             a.jumpdx, a.jumpdy = false, JMPSP
         else
             a.jumpdx, a.jumpdy = false, -JMPSP
         end
+    elseif a.touching_panda then
+        a:start_timer('jump', .1)
+        a.jumpdx, a.jumpdy = false, -JMPSP
+        a.touching_panda = false
     elseif (b4 and a.active_ledge == 'left')  or (bp4 and a.touching_left_wall) then
         a:end_timer'jump'
 
