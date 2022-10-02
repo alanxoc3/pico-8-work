@@ -1,17 +1,18 @@
 |[grav_x_tile_check]| function(a, tx, ty, loc)
     if fget(loc, 0) then
-        local tile_box_left  = {x=tx+.125, y=ty, rx=.5, ry=.375}
-        local tile_box_right = {x=tx-.125, y=ty, rx=.5, ry=.375}
+        if fget(loc, 4) then
+            local tile_box_left  = {x=tx+.125, y=ty, rx=.5, ry=.375}
+            local tile_box_right = {x=tx-.125, y=ty, rx=.5, ry=.375}
 
-        if a:touching(tile_box_left) then
-            a.touching_left_wall = true
+            if a:touching(tile_box_left) then
+                a.touching_left_wall = true
+            end
+
+            if a:touching(tile_box_right) then
+                a.touching_right_wall = true
+            end
         end
 
-        if a:touching(tile_box_right) then
-            a.touching_right_wall = true
-        end
-
-        local predx = a.dx
         a.dx, _ = a:getdelta({x=tx, y=ty, rx=.5, ry=.5}, a.dx, 0)
     end
 end $$

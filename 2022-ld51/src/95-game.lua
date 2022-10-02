@@ -17,14 +17,13 @@ end $$
         3 ;,mov,         mov_update;
         4 ;,tcol,        coll_tile, ~col_tile_func;
 
-        5 ;,pbox,        pandas_col_x;
-        6 ;,collidable,  adjust_deltas_for_tiles, %grav_x_tile_check;
-        7 ;,vec,         vec_update_x;
-        8 ;,pbox,        pandas_col_y;
-        9 ;,collidable,  adjust_deltas_for_tiles, %grav_y_tile_check;
-        10;,vec,         vec_update_y;
-        11;,follow_panda,update;
-        12;,anchor,      update_anchor;
+        5 ;,collidable,  adjust_deltas_for_tiles, %grav_x_tile_check;
+        6 ;,vec,         vec_update_x;
+        7 ;,pbox,        pandas_col_y;
+        8 ;,collidable,  adjust_deltas_for_tiles, %grav_y_tile_check;
+        9 ;,vec,         vec_update_y;
+        10;,follow_panda,update;
+        11;,anchor,      update_anchor;
     ]], function(x, y)
          return x >= g_bounds.x and x <= g_bounds.w and
                 y >= g_bounds.y and y <= g_bounds.h and

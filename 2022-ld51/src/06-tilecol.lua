@@ -1,19 +1,3 @@
-|[set_x_delta]| function(a, b)
-    if b.solid and a.solid then
-        --a.dx, _ = a:getdelta(b, a.dx, 0)
-    end
-end $$
-
-|[set_y_delta]| function(a, b)
-    if b.solid and a.solid then
-        --_, a.dy = a:getdelta(b, 0, a.dy)
-        if a:touching(b) then
-            a.touching_panda = true
-            a.touching_ground = true
-        end
-    end
-end $$
-
 -- a: vec,box -- b: box --
 function get_solid_tile(room, index)
     local t2 = room.tiles_2[index]

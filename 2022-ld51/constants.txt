@@ -19,4 +19,5 @@ CAMERA_Y_SPEED: 1
 # 1 - slant left
 # 2 - slant right
 # 3 - platform
+# 4 - climbable
 # 7 - visible block

@@ -4,7 +4,6 @@ zclass[[pbox,actor,collidable,mov,drawlayer_25|
     sind,13,
     update,%pbox_update,
     draw,%panda_draw,
-    pandas_col_x,%pandas_col_x,
     pandas_col_y,%pandas_col_y,
     normal,yes,
     curr,idle;
@@ -13,15 +12,13 @@ zclass[[pbox,actor,collidable,mov,drawlayer_25|
     idle; duration,5, init,%spawn_panda, next,idle;
 ]]
 
-|[pandas_col_x]| function(a)
-    for i=2,#a.pandas do
-        _g.set_x_delta(a.pandas[i], a.pandas[1])
-    end
-end $$
-
 |[pandas_col_y]| function(a)
     for i=2,#a.pandas do
-        _g.set_y_delta(a.pandas[i], a.pandas[1])
+        local aa, bb = a.pandas[i], a.pandas[1]
+        if aa.solid and bb.solid and aa:touching(bb) then
+            aa.touching_panda = true
+            aa.touching_ground = true
+        end
     end
 end $$
 
@@ -33,7 +30,7 @@ end $$
     end)
 
     g_pl = _g.panda(a.x, a.y, {}, function(aa)
-        add(aa.moves, {btn(3), btn(4), btnp(4), btnp(5), zbtn(btn, 0), zbtn(btn, 2)})
+        add(aa.moves, {btn(3), btn(4), btnp(5), zbtn(btn, 0), zbtn(btn, 2)})
         _g.panda_update_control(aa, unpack(aa.moves[#aa.moves]))
     end)
 
@@ -66,8 +63,26 @@ zclass[[follow_panda,mov|
         anchor = g_pl
     end
 
+    if anchor.touching_ground then
+        if g_zbtn_2 > 0 then
+            a.yoff = 1
+        elseif g_zbtn_2 < 0 then
+            a.yoff = -1
+        else
+            a.yoff = 0
+        end
+    else
+        a.yoff = 0
+    end
+
     a.x = anchor.x
-    a.y = anchor.y
+
+    local dist = (anchor.y+a.yoff) - a.y
+    if abs(dist) > .125 then
+        a.y += dist/4
+    else
+        a.y = anchor.y+a.yoff
+    end
 end $$
 
 zclass[[anchor,pos|
@@ -86,16 +101,18 @@ zclass[[panda,actor,collidable,mov,drawlayer_50|
 
     sind,1,
     xf,no,
-    solid,yes,
 
     touching_panda,yes,
     draw,%panda_draw,
     tile_hit,%panda_tile_hit;
+
+    start;  duration,1, next,normal;
+    normal; solid,yes;
 ]]
 
 JMPSP = .125
 
-|[panda_update_control]| function(a, b3, b4, bp4, bp5, zbtn0, zbtn2)
+|[panda_update_control]| function(a, b3, b4, bp5, zbtn0, zbtn2)
     a.ax = 0
     a.ay = .015 -- gravity
     a.ix = .95
@@ -114,7 +131,7 @@ JMPSP = .125
         a:start_timer('jump', .1)
         a.jumpdx, a.jumpdy = false, -JMPSP
         a.touching_panda = false
-    elseif (b4 and a.active_ledge == 'left')  or (bp4 and a.touching_left_wall) then
+    elseif (b4 and a.active_ledge == 'left')  or (b4 and a.touching_left_wall) then
         a:end_timer'jump'
 
         if a.think_touch_ground then
@@ -128,7 +145,7 @@ JMPSP = .125
             a:start_timer('jump', .1)
             a.jumpdx, a.jumpdy = 0, -JMPSP/2
         end
-    elseif (b4 and a.active_ledge == 'right') or (bp4 and a.touching_right_wall) then
+    elseif (b4 and a.active_ledge == 'right') or (b4 and a.touching_right_wall) then
         a:end_timer'jump'
 
         if a.think_touch_ground then
@@ -169,7 +186,6 @@ JMPSP = .125
     if a:is_active'jump' then
         a.dx = a.jumpdx or a.dx
         a.dy = a.jumpdy or a.dy
-        printh(a.dy)
     end
 
     if not a:is_active'jump_recoil' and not a.active_ledge then
