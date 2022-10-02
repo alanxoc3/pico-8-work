@@ -490,11 +490,6 @@ map(g_bounds.tx_off,g_bounds.ty_off,0,0,g_bounds.w,g_bounds.h,0x80)
 loop_entities("drawlayer_25","draw")
 loop_entities("drawlayer_50","draw")
 loop_entities("drawlayer_75","draw")
-if g_debug then
-for inst in all(g_zclass_entities["box"])do
-scr_zrect(inst.x,inst.y,inst.rx,inst.ry,8)
-end
-end
 camera()
 end,function(a)
 poke(0x5f43,0xff)
@@ -592,7 +587,6 @@ g_tl=_g.game_state()
 end
 function _update60()
 g_zbtn_0,g_zbtn_2=zbtn(btn,0),zbtn(btn,2)
-if btn(4)and btnp(5)then g_debug=not g_debug end
 zcall(loop_entities,[[1;,actor,clean;2;,fader,clean;]])
 register_entities()
 zcall(loop_entities,[[1;,fader,tick;2;,game_state,tick;3;,fader,state;4;,game_state,state;]])
