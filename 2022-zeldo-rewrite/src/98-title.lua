@@ -7,6 +7,8 @@ end $$
     zcall(loop_entities, [[
         1;,timer, tick;
         2;,actor, state;
+        3;,vec,   vec_update_x;
+        4;,vec,   vec_update_y;
     ]])
 end $$
 

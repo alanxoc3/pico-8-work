@@ -9,10 +9,10 @@ zclass[[game_state,actor|
     ecs_exclusions;actor,yes,timer,yes; -- remove game_state from the actor group
     curr,room, init,%game_state_init;
 
-    logo;     state_init,%logo_init,     update,%simple_update, draw,%logo_draw, duration,2.5, next,title;
-    title;    state_init,%title_init,    update,%simple_update, draw,%title_draw;
-    room;     state_init,%room_init,     update,%room_update,   draw,%room_draw;
-    gameover; state_init,%gameover_init, update,%simple_update, draw,%gameover_draw;
+    logo;     state_init,%logo_init,     update,%simple_update,   draw,%logo_draw, duration,2.5, next,title;
+    title;    state_init,%title_init,    update,%simple_update,   draw,%title_draw;
+    room;     state_init,%room_init,     update,%room_update,     draw,%room_draw;
+    gameover; state_init,%gameover_init, update,%gameover_update, draw,%gameover_draw;
 ]]
 
 |[game_state_init]| function(state)
