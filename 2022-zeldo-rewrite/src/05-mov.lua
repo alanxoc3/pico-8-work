@@ -18,7 +18,12 @@ zclass[[pos|
 end $$
 
 -- position with a speed
-zclass[[vec,pos|dx,0,dy,0,vec_update_x,%vec_update_x,vec_update_y,%vec_update_y]]
+zclass[[vec,pos|
+    dx,0,dy,0,
+    vec_update_x,%vec_update_x,
+    vec_update_y,%vec_update_y,
+    vec_mov_towards_point,%vec_mov_towards_point
+]]
 
 |[vec_update_x]| function(a)
     a.x += a.dx
@@ -26,6 +31,14 @@ end $$
 
 |[vec_update_y]| function(a)
     a.y += a.dy
+end $$
+
+|[vec_mov_towards_point]| function(a, x, y, speed)
+    local ang = atan2(x-a.x, y-a.y)
+    local dist = a:dist_point(x, y)
+    local new_speed = speed > dist and dist or speed
+    a.dx = new_speed*cos(ang)
+    a.dy = new_speed*sin(ang)
 end $$
 
 -- able to contribute to acceleration with direction and speed

@@ -42,37 +42,48 @@ zclass[[statitem,box|]] -- if the item hits an enemy, the enemy becomes the new 
     if obj and obj:is_alive() then
         if obj.id == 'pot' then
             obj:kill()
-            return _g.pot_held(...)
+            return _g.pot_held(obj, ...)
         elseif obj.id == 'quack' then
             obj:kill()
-            return _g.quack_held(...)
+            return _g.quack_held(obj, ...)
         end
     end
 end $$
 
-zclass[[held_to_throw,anchor,actor|
+zclass[[held_to_throw,vec,actor|
     visible,yes,
     block_direction, no,
     speed_multiplier, .5,
     initial_energy, .125,
     gradual_energy, 0,
-    offy,-.25,
     sy,-2,
 
-    item_thrown,nop, sy,-2, offspeed,.185;
+    item_thrown,nop, sy,-2;
 
-    defaults; init,nop, offdy,0;
-    start;    offdy,-.0625, duration,.08, next,normal;
+    defaults; init,nop, update,%held_to_throw_update;
+    start;    init,%held_to_throw_beg, duration,.1, next,normal;
     normal;   offy,-.5;
     ending;   visible,no, init,%held_to_throw_ending_init, duration,.16;
 ]]
+
+|[held_to_throw_beg]| function(a)
+    if a.fromobj then
+        a.x, a.y = a.fromobj.x, a.fromobj.y
+    else
+        a.x, a.y = a.anchoring.x, a.anchoring.y
+    end
+end $$
+
+|[held_to_throw_update]| function(a)
+    a:vec_mov_towards_point(a.anchoring.x, a.anchoring.y-.5, .15)
+end $$
 
 |[held_to_throw_ending_init]| function(a)
     a.item_thrown(a.anchoring.x, a.anchoring.y, a.anchoring.xf, .06+a.anchoring.speed, atan2(a.anchoring.xf, 0))
 end $$
 
-zclass[[pot_held,held_to_throw   |anchoring,@, xf,@, sind,49,       item_thrown,%pot_thrown, sy,-3]]
-zclass[[quack_held,held_to_throw |anchoring,@, xf,@, sind,32,       item_thrown,%quack_thrown, sy,-4]]
+zclass[[pot_held,held_to_throw   |fromobj,@, anchoring,@, xf,@, sind,49,       item_thrown,%pot_thrown, sy,-3]]
+zclass[[quack_held,held_to_throw |fromobj,@, anchoring,@, xf,@, sind,32,       item_thrown,%quack_thrown, sy,-4]]
 zclass[[bomb_held,held_to_throw  |anchoring,@, xf,@, sind,SPR_BOMB, item_thrown,%bomb, initial_energy,1, sy,-3]]
 
 zclass[[item_throwing,propel,mov,box,simple_spr,drawlayer_50,actor|
@@ -444,7 +455,7 @@ zclass[[pl,ma_left,pushable,actor,mov,collidable,auto_outline,healthobj,drawlaye
     local item = a.item
     if not item.alive then item = a.default_item end
 
-    if a:is_active'injured' or a:is_active'stunned' or btn'BTN_ITEM_SELECT' or does_entity_exist'tbox' or does_entity_exist'fader' or a.is_energy_cooling_down or not btn'BTN_ITEM_USE' then
+    if a:is_active'injured' or a:is_active'stunned' or btn'BTN_ITEM_SELECT' or does_entity_exist'tbox' or does_entity_exist'fader' or (item.gradual_energy > 0 and a.is_energy_cooling_down) or not btn'BTN_ITEM_USE' then
         item:kill()
     elseif not a:is_active'injured' and not a:is_active'stunned' and not a.is_energy_cooling_down and item.is_default and btn'BTN_ITEM_USE' then
         local item_func = a.item_funcs[peek'MEM_ITEM_INDEX']

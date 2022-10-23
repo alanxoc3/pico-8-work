@@ -25,6 +25,7 @@ zclass[[anchor,pos|
     offdx,0, offdy,0,
     anchoring;,
 ]]
+
 |[anchor_update_anchor]| function(a)
     a.offx+=a.offdx a.offy+=a.offdy
     a.x, a.y = a.anchoring.x+a.offx, a.anchoring.y+a.offy

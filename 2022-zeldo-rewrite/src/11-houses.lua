@@ -11,7 +11,7 @@ zclass[[pot,solid,class_with_target,drawlayer_50,ma_interact,simple_spr|
     x,@,y,@,
     cspr,49, cname,"pot", sind,49,
     rx,.375,ry,.375,
-    trx,.5,try,.5,
+    trx,.5,try,.125,
     callback_touch,%pot_callback_touch
 ]]
 

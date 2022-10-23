@@ -131,7 +131,7 @@ end $$
 end $$
 
 |[rstat_get]| function(a)
-    return a.obj and a.obj:is_alive() and a.obj
+    return a.curr == 'normal' and a.obj and a.obj:is_alive() and a.obj
 end $$
 
 |[stat_normal]| function(a)
