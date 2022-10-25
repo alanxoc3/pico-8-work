@@ -412,6 +412,7 @@ zclass[[pl,ma_left,pushable,actor,mov,collidable,auto_outline,healthobj,drawlaye
     rx,PL_RADIUS,ry,PL_RADIUS,
     should_collide_with_screen_edge,no,
 
+    should_dance,yes,
     update,%pl_update,
     energy,0,
     is_energy_cooling_down,no,

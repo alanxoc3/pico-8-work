@@ -190,7 +190,7 @@ end,function(a)
 local ox,oy=%0x5f28,%0x5f2a
 local injured=a:is_active"injured"
 local stunned=a:is_active"stunned"
-local yoff=((does_entity_exist"banjo"and a.should_dance or stunned)and g_si%3==0 and sin(g_fi/4)or 0)+sin(a:get_elapsed_percent"jumpanim"/2)*8+sin(a:get_elapsed_percent"stunned_jump"/2)*5+sin(a:get_elapsed_percent"injured"/2)*5
+local yoff=((does_entity_exist"banjo"and a.should_dance or stunned)and sin(g_fi/5)or 0)+sin(a:get_elapsed_percent"jumpanim"/2)*8+sin(a:get_elapsed_percent"stunned_jump"/2)*5+sin(a:get_elapsed_percent"injured"/2)*5
 local xoff=0
 camera(ox-xoff,oy-yoff)
 draw_outline(1,function()a:drawout()end)
@@ -399,7 +399,6 @@ end,function(a)
 if a.visible then
 local xf=a.xf
 if a.should_dance and does_entity_exist"banjo"then
-xf=(g_si%2-.5)*2
 end
 zspr(a.sind,a.x*8+a.sx+(a.shaking and sin(t()*4)or 0),a.y*8+a.sy,a.sw,a.sh,xf,a.yf)
 end
@@ -971,13 +970,6 @@ foreach(r.objects,function(obj_template)
 _g[g_obj_map[obj_template.index]](obj_template.x+.5,obj_template.y+.5)
 end)
 end,function(state)
-if g_debug and btnp"5"and g_pl and g_pl:is_alive()then
-zcall(poke,[[1;,0x5d02,@;2;,0x5d03,@;3;,0x5d04,@;]],g_pl.x*16,
-g_pl.y*16,
-(g_pl.xf+1)\2
-)
-memcpy(0x5e00,0x5d00,64)
-end
 zcall(loop_entities,[[pls,@,solids,@,room,@,statitems,@,smaller_slimes,@;1;,timer,tick;2;,actor,state;3;,pushable,update_push;4;,mov,mov_update;5;,enemy,pl_collide_func_batch,~pls;6;,collidable,adjust_deltas_for_solids,%set_x_delta,~solids;7;,collidable,adjust_deltas_for_tiles,%set_x_delta,~room;8;,collidable,adjust_deltas_for_screen,%set_x_delta2;9;,vec,vec_update_x;10;,collidable,adjust_deltas_for_solids,%set_y_delta,~solids;11;,collidable,adjust_deltas_for_tiles,%set_y_delta,~room;12;,collidable,adjust_deltas_for_screen,%set_y_delta2;13;,vec,vec_update_y;14;,smaller_slimes,statcollide,~smaller_slimes;15;,smaller_slimes,statcollide,~statitems;16;,slobs,statcollide,~statitems;17;,slimy_boss_minion_2,statcollide,~statitems;18;,anchor,update_anchor;19;,target,update_target,~pls;20;,rstat,buffer_update;21;,healthobj,health_update;]],g_zclass_entities.pl,g_zclass_entities.solid,g_rooms[peek"0x5d01"],g_zclass_entities.statitem,g_zclass_entities.smaller_slimes)
 poke(0x5d0b,g_pl.health)
 poke(0x5d0c,g_pl.max_health)
@@ -996,14 +988,8 @@ end
 end
 end,function(state)
 isorty(g_zclass_entities["drawlayer_50"])
-local coffx=0
-draw_room(g_rooms[peek"0x5d01"],64+coffx,64,function()
+draw_room(g_rooms[peek"0x5d01"],64,64,function()
 zcall(loop_entities,[[1;,drawlayer_25,draw;2;,drawlayer_50,draw;3;,drawlayer_75,draw;]])
-if g_debug then
-for inst in all(g_zclass_entities["box"])do
-scr_zrect(inst.x,inst.y,inst.rx,inst.ry,8)
-end
-end
 end,function()
 zcall(loop_entities,[[1;,drawlayer_90,draw;2;,drawlayer_95,draw;3;,drawlayer_99,draw;]])
 end)
@@ -1182,7 +1168,7 @@ zclass[[brang,collidable,simple_spr,drawlayer_50,mov,actor,statitem|anchoring,@,
 zclass[[bomb_explode,enemy,box,actor,statitem|x,@,y,@,rx,1,ry,1,damage,5,pushspeed,.25,should_use_xf,no,item_hit_func,nop,pl_collide_func,%bomb_pl_hit;start;duration,.25;]]
 zclass[[maskcheck|maskcheck,%maskcheck_func]]
 zclass[[pushable,mov|push_ang,0,push,%pushable_push,update_push,%pushable_update_push]]
-zclass[[pl,ma_left,pushable,actor,mov,collidable,auto_outline,healthobj,drawlayer_50|cname,lank,cspr,103,x,@,y,@,xf,@,health,@,max_health,@,inventory,@,rx,.375,ry,.375,should_collide_with_screen_edge,no,update,%pl_update,energy,0,is_energy_cooling_down,no,target_energy,0,destroyed,%standard_explosion,drawout,%pl_drawout;item_funcs;1,%banjo,2,%bomb_held,3,%bow,4,%sword,5,%interact,6,%shield,7,%brang,8,%mask;default_item;visible,no,is_default,yes,block_direction,no,speed_multiplier,1,alive,yes,gradual_energy,-.0078125,initial_energy,0,kill,nop;item,~default_item;]]
+zclass[[pl,ma_left,pushable,actor,mov,collidable,auto_outline,healthobj,drawlayer_50|cname,lank,cspr,103,x,@,y,@,xf,@,health,@,max_health,@,inventory,@,rx,.375,ry,.375,should_collide_with_screen_edge,no,should_dance,yes,update,%pl_update,energy,0,is_energy_cooling_down,no,target_energy,0,destroyed,%standard_explosion,drawout,%pl_drawout;item_funcs;1,%banjo,2,%bomb_held,3,%bow,4,%sword,5,%interact,6,%shield,7,%brang,8,%mask;default_item;visible,no,is_default,yes,block_direction,no,speed_multiplier,1,alive,yes,gradual_energy,-.0078125,initial_energy,0,kill,nop;item,~default_item;]]
 function draw_bar(x1,y1,x2,y2,percent,align,fg,bg,og)
 local bar_off=x2-x1-min(percent,1)*(x2-x1)
 if align==0 then bar_off/=2 end
@@ -1351,7 +1337,6 @@ g_tile_animation_lookup=create_tile_animation_lookup(g_rooms[0])
 end
 function _update60()
 g_zbtn_0,g_zbtn_2=zbtn(btn,0),zbtn(btn,2)
-if btn(4)and btnp(5)then g_debug=not g_debug end
 zcall(loop_entities,[[1;,actor,clean;2;,fader,clean;]])
 register_entities()
 zcall(loop_entities,[[1;,fader,tick;2;,game_state,tick;3;,fader,state;4;,game_state,state;]])
@@ -1361,6 +1346,4 @@ g_si,g_fi=g_slow_animation.index,g_fast_animation.index
 cls()
 loop_entities("game_state","draw")
 fade(g_fade)
-camera()
-rect(0,0,127,127,8)
 end
