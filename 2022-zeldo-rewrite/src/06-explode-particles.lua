@@ -10,5 +10,6 @@ zclass[[explode,actor,drawlayer_50|
 end $$
 
 |[standard_explosion]| function(a)
+    sfx(3,3,8,4)
     _g.explode(a.x, a.y, 4, 1, nop)
 end $$

@@ -16,6 +16,7 @@ zclass[[game_state,actor|
 ]]
 
 |[game_state_init]| function(state)
+    sfx(-1,3) -- in case there was an issue with stopping active sfx
     clean_all_entities'game_state'
     _g.fader_in()
     g_slow_animation = _g.animation'.5'

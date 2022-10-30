@@ -147,10 +147,14 @@ zclass[[mask,anchor,actor|
     sy,-2,
     sind,SPR_MASK;
 
-    start;  offdy,-.0625, duration,.08, next,normal;
+    defaults; init,nop;
+    start;  init,%mask_init, offdy,-.0625, duration,.08, next,normal;
     normal; offy,-.125, offdy,0;
-    ending; offdy,.0625, duration,.08;
+    ending; init,%mask_end, offdy,.0625, duration,.08;
 ]]
+
+|[mask_init]| function() sfx(3,3,28) end $$
+|[mask_end]| function() sfx(3,3,4,4) end $$
 
 zclass[[bow,item_horizontal,actor|
     anchoring,@, xf,@,
@@ -165,7 +169,6 @@ zclass[[bow,item_horizontal,actor|
     offspeed,.105,
     sind,SPR_BOW;
 
-    ending; init,%item_horizontal_ending_init, duration,.08;
     ending; init,%bow_ending_init, duration,.08;
 ]]
 
@@ -330,6 +333,7 @@ zclass[[brang,collidable,simple_spr,drawlayer_50,mov,actor,statitem|
 end $$
 
 |[brang_start_init]| function(a)
+    _g.mask_init()
     a.x, a.y = a.anchoring.x, a.anchoring.y
     a.ang = atan2(a.xf, 0)
 end $$
@@ -348,6 +352,7 @@ end $$
 
 |[brang_ending_init]| function(a)
     a.end_x, a.end_y = a.x, a.y
+    _g.mask_end()
 end $$
 
 |[brang_ending_update]| function(a)
@@ -372,9 +377,9 @@ zclass[[bomb_explode,enemy,box,actor,statitem|
 end $$
 
 --| ITEM CODE LOGIC |--
-|[item_horizontal_start_init]|  function(a) a.offdx = a.xf*a.offspeed end $$
+|[item_horizontal_start_init]|  function(a) sfx(3,3,0,4) a.offdx = a.xf*a.offspeed end $$
 |[item_horizontal_normal_init]| function(a) a.offx = abs(a.offx*8)\1/8*sgn(a.offx) end $$
-|[item_horizontal_ending_init]| function(a) a:normal_init() a.offdx = -a.xf*a.offspeed end $$
+|[item_horizontal_ending_init]| function(a) sfx(3,3,4,4) a:normal_init() a.offdx = -a.xf*a.offspeed end $$
 
 --| PL LOGIC |--
 

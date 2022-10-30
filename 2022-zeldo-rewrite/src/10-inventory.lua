@@ -31,6 +31,7 @@ end $$
         for i=peek'MEM_ITEM_INDEX'+dir,5+zsgn(dir)*4,dir do
             if peek(a[i].mem_loc) ~= 0 then
                 poke(MEM_ITEM_INDEX, i)
+                sfx(3,3,20,4)
                 return
             end
         end
@@ -40,6 +41,7 @@ end $$
 |[inventory_start_update]| function(a)
     if not does_entity_exist'tbox' and not does_entity_exist'fader' and btn'BTN_ITEM_SELECT' then
         a:load()
+        sfx(3,3,12,4)
     end
 end $$
 

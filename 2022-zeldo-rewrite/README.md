@@ -12,10 +12,8 @@ TODO: fix miny logic
 TODO: banjo with lark text logic
 TODO: add "i am glitch" (fixes in lark section)
 TODO: bugfix bomb hold when no energy
-TODO: bed collision box fix
 TODO: banjo makes enemies dance (not attack you)
 TODO: item going up snap/fix
-TODO: replace gameover with tbox
 TODO: chicken follow not throw
 TODO: get item logic
 TODO: right ma sprite shouldn't be flipped

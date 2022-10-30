@@ -147,7 +147,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,animation_init,@,auto_outline_draw,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update_x,@,vec_update_y,@,vec_mov_towards_point,@,mov_update,@,mov_towards_point,@,explode_draw,@,standard_explosion,@,set_x_delta,@,set_y_delta,@,adjust_deltas_for_solids,@,adjust_deltas_for_tiles,@,set_x_delta2,@,set_y_delta2,@,adjust_deltas_for_screen,@,healthobj_hurt,@,healthobj_stun,@,healthobj_health_update,@,inventory_open_update,@,inventory_update,@,inventory_start_update,@,inventory_normal_init,@,inventory_draw,@,simple_spr_draw,@,anchor_update_anchor,@,targettouch_update_target,@,coin_pl_collide_func,@,coin_1,@,coin_2,@,coin_3,@,coin_4,@,coin_5,@,coin_6,@,coin_7,@,coin_8,@,coin_9,@,coin_10,@,coin_11,@,coin_12,@,coin_13,@,coin_14,@,coin_15,@,coin_16,@,propel_func,@,interact,@,held_to_throw_beg,@,held_to_throw_update,@,held_to_throw_ending_init,@,item_throwing_update,@,quack_thrown_destroyed,@,bomb_destroyed,@,pellet_update,@,pellet_draw,@,bow_ending_init,@,sword_item_hit_func,@,banjo_start_init,@,banjo_ending_init,@,brang_drawout,@,brang_start_init,@,brang_start_update,@,brang_normal_update,@,brang_ending_init,@,brang_ending_update,@,bomb_pl_hit,@,item_horizontal_start_init,@,item_horizontal_normal_init,@,item_horizontal_ending_init,@,maskcheck_func,@,pushable_push,@,pushable_update_push,@,pl_update,@,pl_drawout,@,card_table_cache,@,coin_count_start,@,coin_count_normal,@,coin_coint_draw,@,energybar_draw,@,stat_idle,@,rstat_update,@,rstat_get,@,stat_normal,@,stat_draw,@,tbox_init,@,tbox_update,@,tbox_draw,@,fairy_update,@,fairy_draw,@,spawn_walls,@,pot_callback_touch,@,house_init,@,person_target_with_tbox_disable_callback,@,person_target_with_tbox_finish_callback,@,lime_callback,@,limestatue_destroyed,@,teach_gettext,@,keep_gettext,@,class_with_target_init,@,target_with_tbox_gettext,@,target_with_tbox_target_func,@,sign_target_with_tbox_disable_callback,@,quack_change_dir,@,quack_pl_collide_func,@,enemy_pl_collide_func_batch,@,slimy_parent_statcollide,@,slobs_shotgun_init,@,slobs_calc_next,@,slimy_boss_idle_update,@,slimy_boss_spin_update,@,slimy_boss_stateless_update,@,slimy_boss_jump_init,@,slimy_boss_idle_init,@,slimyboss_destroyed,@,slimyboss_jump,@,slimyboss_init,@,slimy_ball_update,@,minion_to_miny,@,slimy_minion_pl_collide,@,slimy_minion_update,@,slimy,@,slimy_destroyed,@,miny,@,slimy_propel,@,slimy_stun_callback,@,slimy_stunstate,@,slimy_pl_collide_func,@,slimy_start,@,slimy_bounce,@,slimy_jump_init,@,spike_pl_collide_func,@,blockade_close_init,@,blockade_open_init,@,saveplat_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,gameover_update,@,gameover_init,@,gameover_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,simple_update,@,title_draw,@,title_logo_update,@,title_logo_drawout,@,game_state_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,animation_init,@,auto_outline_draw,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,box_touching,@,box_outside,@,box_inside,@,box_side,@,box_abside,@,box_getdelta,@,pos_dist_point,@,vec_update_x,@,vec_update_y,@,vec_mov_towards_point,@,mov_update,@,mov_towards_point,@,explode_draw,@,standard_explosion,@,set_x_delta,@,set_y_delta,@,adjust_deltas_for_solids,@,adjust_deltas_for_tiles,@,set_x_delta2,@,set_y_delta2,@,adjust_deltas_for_screen,@,healthobj_hurt,@,healthobj_stun,@,healthobj_health_update,@,inventory_open_update,@,inventory_update,@,inventory_start_update,@,inventory_normal_init,@,inventory_draw,@,simple_spr_draw,@,anchor_update_anchor,@,targettouch_update_target,@,coin_pl_collide_func,@,coin_1,@,coin_2,@,coin_3,@,coin_4,@,coin_5,@,coin_6,@,coin_7,@,coin_8,@,coin_9,@,coin_10,@,coin_11,@,coin_12,@,coin_13,@,coin_14,@,coin_15,@,coin_16,@,propel_func,@,interact,@,held_to_throw_beg,@,held_to_throw_update,@,held_to_throw_ending_init,@,item_throwing_update,@,quack_thrown_destroyed,@,bomb_destroyed,@,mask_init,@,mask_end,@,pellet_update,@,pellet_draw,@,bow_ending_init,@,sword_item_hit_func,@,banjo_start_init,@,banjo_ending_init,@,brang_drawout,@,brang_start_init,@,brang_start_update,@,brang_normal_update,@,brang_ending_init,@,brang_ending_update,@,bomb_pl_hit,@,item_horizontal_start_init,@,item_horizontal_normal_init,@,item_horizontal_ending_init,@,maskcheck_func,@,pushable_push,@,pushable_update_push,@,pl_update,@,pl_drawout,@,card_table_cache,@,coin_count_start,@,coin_count_normal,@,coin_coint_draw,@,energybar_draw,@,stat_idle,@,rstat_update,@,rstat_get,@,stat_normal,@,stat_draw,@,tbox_init,@,tbox_update,@,tbox_draw,@,fairy_update,@,fairy_draw,@,spawn_walls,@,pot_callback_touch,@,house_init,@,person_target_with_tbox_disable_callback,@,person_target_with_tbox_finish_callback,@,lime_callback,@,limestatue_destroyed,@,teach_gettext,@,keep_gettext,@,class_with_target_init,@,target_with_tbox_gettext,@,target_with_tbox_target_func,@,sign_target_with_tbox_disable_callback,@,quack_change_dir,@,quack_pl_collide_func,@,enemy_pl_collide_func_batch,@,slimy_parent_statcollide,@,slobs_shotgun_init,@,slobs_calc_next,@,slimy_boss_idle_update,@,slimy_boss_spin_update,@,slimy_boss_stateless_update,@,slimy_boss_jump_init,@,slimy_boss_idle_init,@,slimyboss_destroyed,@,slimyboss_jump,@,slimyboss_init,@,slimy_ball_update,@,minion_to_miny,@,slimy_minion_pl_collide,@,slimy_minion_update,@,slimy,@,slimy_destroyed,@,miny,@,slimy_propel,@,slimy_stun_callback,@,slimy_stunstate,@,slimy_pl_collide_func,@,slimy_start,@,slimy_bounce,@,slimy_jump_init,@,spike_pl_collide_func,@,blockade_close_init,@,blockade_open_init,@,saveplat_update,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,gameover_update,@,gameover_init,@,gameover_draw,@,room_init,@,room_update,@,room_draw,@,title_init,@,simple_update,@,title_draw,@,title_logo_update,@,title_logo_drawout,@,game_state_init,@]],function(a,stateName)
 a.next_state=stateName or a.next
 end,function(a,stateName)
 a.next_state,a.isnew=nil
@@ -297,6 +297,7 @@ for i=0,a.len-1 do
 scr_zrect(a.x+sin(a:get_elapsed_percent"start"/2)*cos(i/a.len+.125),a.y+sin(a:get_elapsed_percent"start"/2)*sin(i/a.len+.125),i%a.mod*.125+.125,i%a.mod*.125+.125,1)
 end
 end,function(a)
+sfx(3,3,8,4)
 _g.explode(a.x,a.y,4,1,nop)
 end,function(a,b)a.dx,_=a:getdelta(b,a.dx,0)end,function(a,b)_,a.dy=a:getdelta(b,0,a.dy)end,function(a,setdelta,list)
 foreach(list,function(b)
@@ -375,6 +376,7 @@ a.cachedir=0
 for i=peek"0x5d08"+dir,5+zsgn(dir)*4,dir do
 if peek(a[i].mem_loc)~=0 then
 poke(0x5d08,i)
+sfx(3,3,20,4)
 return
 end
 end
@@ -382,6 +384,7 @@ end
 end,function(a)
 if not does_entity_exist"tbox"and not does_entity_exist"fader"and btn"5"then
 a:load()
+sfx(3,3,12,4)
 end
 end,function(a)
 poke(0x5d08,5)
@@ -448,7 +451,7 @@ _g.quack(a.x,a.y)
 end,function(a)
 _g.explode(a.x,a.y,8,2,nop)
 _g.bomb_explode(a.x,a.y)
-end,function(a)
+end,function()sfx(3,3,28)end,function()sfx(3,3,4,4)end,function(a)
 if a.dx==0 then a:kill()end
 end,function(a)
 draw_tail(a.x,a.y-.25,a.dx,0,3)
@@ -478,6 +481,7 @@ end
 end,function(a)
 zspr(a.sind,a.x*8+a.sx,a.y*8+a.sy,1,1,cos(g_fi/5),sin(g_fi/5))
 end,function(a)
+_g.mask_init()
 a.x,a.y=a.anchoring.x,a.anchoring.y
 a.ang=atan2(a.xf,0)
 end,function(a)
@@ -489,13 +493,14 @@ a.ang,a.speed=atan2(g_zbtn_0,g_zbtn_2),.0375
 end
 end,function(a)
 a.end_x,a.end_y=a.x,a.y
+_g.mask_end()
 end,function(a)
 local percent=a:get_elapsed_percent"ending"
 a.x=a.end_x+(a.anchoring.x-a.end_x)*percent
 a.y=a.end_y+(a.anchoring.y-a.end_y)*percent
 end,function(a,pl)
 pl:hurt"5"
-end,function(a)a.offdx=a.xf*a.offspeed end,function(a)a.offx=abs(a.offx*8)\1/8*sgn(a.offx)end,function(a)a:normal_init()a.offdx=-a.xf*a.offspeed end,function(a,override)
+end,function(a)sfx(3,3,0,4)a.offdx=a.xf*a.offspeed end,function(a)a.offx=abs(a.offx*8)\1/8*sgn(a.offx)end,function(a)sfx(3,3,4,4)a:normal_init()a.offdx=-a.xf*a.offspeed end,function(a,override)
 return override or not a.item or a.item.id ~="mask"
 end,function(a,ang,duration,override)
 a:start_timer("push",duration)
@@ -937,10 +942,6 @@ _g.fader_out(function()g_state:load"room" end)
 end)
 poke(0x5f43,0)
 music"-1"
-sfx"3"
-sfx(5,-2)
-sfx(6,-2)
-sfx(7,-2)
 g_music_ind=-1
 load_save_state()
 end,function(state)
@@ -970,6 +971,13 @@ foreach(r.objects,function(obj_template)
 _g[g_obj_map[obj_template.index]](obj_template.x+.5,obj_template.y+.5)
 end)
 end,function(state)
+if g_debug and btnp"5"and g_pl and g_pl:is_alive()then
+zcall(poke,[[1;,0x5d02,@;2;,0x5d03,@;3;,0x5d04,@;]],g_pl.x*16,
+g_pl.y*16,
+(g_pl.xf+1)\2
+)
+memcpy(0x5e00,0x5d00,64)
+end
 zcall(loop_entities,[[pls,@,solids,@,room,@,statitems,@,smaller_slimes,@;1;,timer,tick;2;,actor,state;3;,pushable,update_push;4;,mov,mov_update;5;,enemy,pl_collide_func_batch,~pls;6;,collidable,adjust_deltas_for_solids,%set_x_delta,~solids;7;,collidable,adjust_deltas_for_tiles,%set_x_delta,~room;8;,collidable,adjust_deltas_for_screen,%set_x_delta2;9;,vec,vec_update_x;10;,collidable,adjust_deltas_for_solids,%set_y_delta,~solids;11;,collidable,adjust_deltas_for_tiles,%set_y_delta,~room;12;,collidable,adjust_deltas_for_screen,%set_y_delta2;13;,vec,vec_update_y;14;,smaller_slimes,statcollide,~smaller_slimes;15;,smaller_slimes,statcollide,~statitems;16;,slobs,statcollide,~statitems;17;,slimy_boss_minion_2,statcollide,~statitems;18;,anchor,update_anchor;19;,target,update_target,~pls;20;,rstat,buffer_update;21;,healthobj,health_update;]],g_zclass_entities.pl,g_zclass_entities.solid,g_rooms[peek"0x5d01"],g_zclass_entities.statitem,g_zclass_entities.smaller_slimes)
 poke(0x5d0b,g_pl.health)
 poke(0x5d0c,g_pl.max_health)
@@ -990,6 +998,11 @@ end,function(state)
 isorty(g_zclass_entities["drawlayer_50"])
 draw_room(g_rooms[peek"0x5d01"],64,64,function()
 zcall(loop_entities,[[1;,drawlayer_25,draw;2;,drawlayer_50,draw;3;,drawlayer_75,draw;]])
+if g_debug then
+for inst in all(g_zclass_entities["box"])do
+scr_zrect(inst.x,inst.y,inst.rx,inst.ry,8)
+end
+end
 end,function()
 zcall(loop_entities,[[1;,drawlayer_90,draw;2;,drawlayer_95,draw;3;,drawlayer_99,draw;]])
 end)
@@ -1015,6 +1028,7 @@ if g_si%2==0 then
 zcall(zprinttbox,[[1;,🅾️ or ❎ to play  ,64,68,0,7,5;]])
 end
 end,function(state)
+sfx(-1,3)
 clean_all_entities"game_state"
 _g.fader_in()
 g_slow_animation=_g.animation".5"
@@ -1158,8 +1172,8 @@ zclass[[bomb,item_throwing|x,@,y,@,xf,@,propel_speed,@,ang,@,should_collide_belo
 zclass[[pot_thrown,item_throwing,statitem|x,@,y,@,xf,@,propel_speed,@,ang,@,sind,49,destroyed,%standard_explosion,should_stun,yes,should_use_xf,yes,item_hit_func,nop,should_push,yes;]]
 zclass[[quack_thrown,item_throwing|x,@,y,@,xf,@,propel_speed,@,ang,@,sind,32,destroyed,%quack_thrown_destroyed;]]
 zclass[[item_horizontal,anchor|offspeed,0,normal_init,%item_horizontal_normal_init;start;init,%item_horizontal_start_init,duration,.08,next,normal;normal;init,%item_horizontal_normal_init,offdx,0;ending;init,%item_horizontal_ending_init,duration,.08;]]
-zclass[[mask,anchor,actor|anchoring,@,xf,@,visible,yes,block_direction,no,speed_multiplier,1,initial_energy,0,gradual_energy,0.0078125,offy,.2,sy,-2,sind,3;start;offdy,-.0625,duration,.08,next,normal;normal;offy,-.125,offdy,0;ending;offdy,.0625,duration,.08;]]
-zclass[[bow,item_horizontal,actor|anchoring,@,xf,@,visible,yes,block_direction,yes,speed_multiplier,.5,initial_energy,.25,gradual_energy,0,sy,-1,offspeed,.105,sind,7;ending;init,%item_horizontal_ending_init,duration,.08;ending;init,%bow_ending_init,duration,.08;]]
+zclass[[mask,anchor,actor|anchoring,@,xf,@,visible,yes,block_direction,no,speed_multiplier,1,initial_energy,0,gradual_energy,0.0078125,offy,.2,sy,-2,sind,3;defaults;init,nop;start;init,%mask_init,offdy,-.0625,duration,.08,next,normal;normal;offy,-.125,offdy,0;ending;init,%mask_end,offdy,.0625,duration,.08;]]
+zclass[[bow,item_horizontal,actor|anchoring,@,xf,@,visible,yes,block_direction,yes,speed_multiplier,.5,initial_energy,.25,gradual_energy,0,sy,-1,offspeed,.105,sind,7;ending;init,%bow_ending_init,duration,.08;]]
 zclass[[pellet,vec,collidable,actor,drawlayer_50,statitem|x,@,y,@,dx,@,xf,@,damage,1,pushspeed,.375,should_use_xf,yes,item_hit_func,~kill,should_collide_below,no,rx,.25,ry,.25,destroyed,%standard_explosion,draw,%pellet_draw;start;update,%pellet_update,duration,.5;]]
 zclass[[shield,item_horizontal,actor,statitem|anchoring,@,xf,@,rx,.375,ry,.375,pushspeed,.25,should_use_xf,yes,item_hit_func,nop,should_push,yes,plpushspeed,0,visible,yes,block_direction,yes,speed_multiplier,.5,initial_energy,.125,gradual_energy,0,sy,-1,offspeed,.105,sind,6;start;should_stun,yes;normal;should_stun,no;]]
 zclass[[sword,item_horizontal,actor,statitem|anchoring,@,xf,@,rx,.375,ry,.25,pushspeed,.25,should_use_xf,yes,item_hit_func,%sword_item_hit_func,plpushspeed,.125,visible,yes,block_direction,yes,speed_multiplier,.5,initial_energy,.125,gradual_energy,0,sy,0,offspeed,.125,sind,2;start;damage,1;normal;damage,1;]]
@@ -1216,8 +1230,8 @@ zclass[[greytbl,solid,drawlayer_50,simple_spr|x,@,y,@,rx,.375,ry,.375,draw,~draw
 zclass[[soupbucket,solid,drawlayer_50,simple_spr|x,@,y,@,rx,.375,ry,.375,draw,~drawout,sind,18]]
 zclass[[woodcrate,solid,drawlayer_50,simple_spr|x,@,y,@,rx,.375,ry,.25,draw,~drawout,sind,35]]
 zclass[[pot,solid,class_with_target,drawlayer_50,ma_interact,simple_spr|x,@,y,@,cspr,49,cname,pot,sind,49,rx,.375,ry,.375,trx,.5,try,.125,callback_touch,%pot_callback_touch]]
-zclass[[bedbot_l,actor,simple_spr,drawlayer_50|x,@,y,@,sind,55,init,%spawn_walls;walls;1;,~,0,.25,.75,.25;walls;2;,~,.625,0,.25,.25;walls;3;,~,-.625,-.5,.25,1;]]
-zclass[[bedbot_r,actor,simple_spr,drawlayer_50|x,@,y,@,sind,55,init,%spawn_walls;walls;1;,~,0,.25,.75,.25;walls;2;,~,-.625,0,.25,.25;walls;3;,~,.625,-.5,.25,1;]]
+zclass[[bedbot_l,actor,simple_spr,drawlayer_50|x,@,y,@,sind,55,init,%spawn_walls;walls;1;,~,0,.25,.75,.25;walls;2;,~,0.5625,0,0.1875,.25;walls;3;,~,-.625,-.5,.25,1;]]
+zclass[[bedbot_r,actor,simple_spr,drawlayer_50|x,@,y,@,sind,55,init,%spawn_walls;walls;1;,~,0,.25,.75,.25;walls;2;,~,-0.5625,0,0.1875,.25;walls;3;,~,.625,-.5,.25,1;]]
 zclass[[bedpillow,simple_spr,drawlayer_25|x,@,y,@,sind,39]]
 zclass[[house,actor,simple_spr,drawlayer_50|cspr,174,sind,174,sw,2,sh,2,init,%house_init;walls;1;,~,.75,.5,.25,.375;walls;2;,~,-.75,.5,.25,.375;walls;3;,~,0,.25,.5,.125;]]
 zclass[[house231,house|x,@,y,@,xf,-1,room,231]]
@@ -1337,6 +1351,7 @@ g_tile_animation_lookup=create_tile_animation_lookup(g_rooms[0])
 end
 function _update60()
 g_zbtn_0,g_zbtn_2=zbtn(btn,0),zbtn(btn,2)
+if btn(4)and btnp(5)then g_debug=not g_debug end
 zcall(loop_entities,[[1;,actor,clean;2;,fader,clean;]])
 register_entities()
 zcall(loop_entities,[[1;,fader,tick;2;,game_state,tick;3;,fader,state;4;,game_state,state;]])
@@ -1346,4 +1361,6 @@ g_si,g_fi=g_slow_animation.index,g_fast_animation.index
 cls()
 loop_entities("game_state","draw")
 fade(g_fade)
+camera()
+rect(0,0,127,127,8)
 end

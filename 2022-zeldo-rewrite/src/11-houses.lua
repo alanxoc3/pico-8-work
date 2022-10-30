@@ -27,7 +27,7 @@ zclass[[bedbot_l,actor,simple_spr,drawlayer_50|
     init,%spawn_walls;
 
     walls;1;,~,     0, .25, .75, .25;
-    walls;2;,~,  .625,   0, .25, .25;
+    walls;2;,~,  0.5625,   0, 0.1875, .25;
     walls;3;,~, -.625, -.5, .25, 1;
 ]]
 
@@ -37,7 +37,7 @@ zclass[[bedbot_r,actor,simple_spr,drawlayer_50|
     init,%spawn_walls;
 
     walls;1;,~,     0, .25, .75, .25;
-    walls;2;,~, -.625,   0, .25, .25;
+    walls;2;,~, -0.5625, 0, 0.1875, .25;
     walls;3;,~,  .625, -.5, .25, 1;
 ]]
 
