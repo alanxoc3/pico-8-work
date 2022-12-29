@@ -56,7 +56,7 @@ TODO: don't wait for ma for picking things up/interacting (pot, duck?)
 - shrt: forest boss
 - shrt: computer room
 - shrt: game over
-- shrt: house
+- shrt: meh?
 
 ## Characters
 Lank   - Main character.
