@@ -140,8 +140,8 @@ zclass[[mask,anchor,actor|
     visible,yes,
     block_direction, no,
     speed_multiplier, 1,
-    initial_energy, 0,
-    gradual_energy, 0.0078125,
+    initial_energy, .375,
+    gradual_energy, 0,
 
     offy, .2,
     sy,-2,
@@ -153,8 +153,8 @@ zclass[[mask,anchor,actor|
     ending; init,%mask_end, offdy,.0625, duration,.08;
 ]]
 
-|[mask_init]| function() sfx(3,3,28) end $$
-|[mask_end]| function() sfx(3,3,4,4) end $$
+|[mask_init]| function() sfx(3,3,0,4) end $$
+|[mask_end]| function() sfx(3,3,8,4) end $$
 
 zclass[[bow,item_horizontal,actor|
     anchoring,@, xf,@,
@@ -363,7 +363,7 @@ end $$
 
 zclass[[bomb_explode,enemy,box,actor,statitem|
     x,@, y,@, rx,1, ry,1,
-    damage,5,
+    damage,3,
     pushspeed,.25,
     should_use_xf,no,
     item_hit_func,nop,
@@ -379,7 +379,7 @@ end $$
 --| ITEM CODE LOGIC |--
 |[item_horizontal_start_init]|  function(a) sfx(3,3,0,4) a.offdx = a.xf*a.offspeed end $$
 |[item_horizontal_normal_init]| function(a) a.offx = abs(a.offx*8)\1/8*sgn(a.offx) end $$
-|[item_horizontal_ending_init]| function(a) sfx(3,3,4,4) a:normal_init() a.offdx = -a.xf*a.offspeed end $$
+|[item_horizontal_ending_init]| function(a) sfx(3,3,8,4) a:normal_init() a.offdx = -a.xf*a.offspeed end $$
 
 --| PL LOGIC |--
 

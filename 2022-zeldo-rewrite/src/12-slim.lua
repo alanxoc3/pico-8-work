@@ -349,7 +349,9 @@ end $$
 |[slimy_pl_collide_func]| function(a, pl)
     if not a.collide_disabled then
         a:start_timer('isma', 2)
+        if not does_entity_exist'mask' then
             pl:push(atan2(pl.x-a.x, pl.y-a.y), .1)
+        end
         if a:is_active'jump' then
         else
             --pl:push(atan2(pl.x-a.x, pl.y-a.y), .03125)

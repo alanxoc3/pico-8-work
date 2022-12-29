@@ -100,6 +100,14 @@ end $$
             zcall(load_room, [[1;,LOST_ROOM_INDEX,LOST_ROOM_START_X,LOST_ROOM_START_Y,@;]], g_pl.xf) 
         end
     end
+
+    if does_entity_exist'mask' then
+        poke(0x5f40, 0x0f)
+        --poke(0x5f42, 0xf0)
+    else
+        poke(0x5f40, 0x00)
+        --poke(0x5f42, 0x00)
+    end
 end $$
 
 |[room_draw]| function(state)
@@ -126,6 +134,15 @@ end $$
             3;,drawlayer_99, draw;
         ]])
     end)
+
+    -- -- glitch effect
+    -- if does_entity_exist'mask' then
+    -- local row = flr(rnd(128*64))
+    -- local width = flr(rnd(128))
+    -- local row2 = flr(rnd(128*64-width))
+    -- local offset = flr(rnd(64-width))
+    -- memcpy(0x6000+row, 0x6000+row2, width)
+    -- end
 end $$
 
 function load_room(rind, x, y, xf)

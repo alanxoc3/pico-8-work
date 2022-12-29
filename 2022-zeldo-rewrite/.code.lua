@@ -370,13 +370,14 @@ a.cachedir+=zbtn(btnp,0)
 end,function(a)
 if does_entity_exist"tbox"or not btn"5"or does_entity_exist"fader"then
 a:load()
+sfx(3,3,8,4)
 else
 local dir=zbtn(btnp,0)+a.cachedir
 a.cachedir=0
 for i=peek"0x5d08"+dir,5+zsgn(dir)*4,dir do
 if peek(a[i].mem_loc)~=0 then
 poke(0x5d08,i)
-sfx(3,3,20,4)
+sfx(3,3,4,4)
 return
 end
 end
@@ -384,7 +385,7 @@ end
 end,function(a)
 if not does_entity_exist"tbox"and not does_entity_exist"fader"and btn"5"then
 a:load()
-sfx(3,3,12,4)
+sfx(3,3,0,4)
 end
 end,function(a)
 poke(0x5d08,5)
@@ -451,7 +452,7 @@ _g.quack(a.x,a.y)
 end,function(a)
 _g.explode(a.x,a.y,8,2,nop)
 _g.bomb_explode(a.x,a.y)
-end,function()sfx(3,3,28)end,function()sfx(3,3,4,4)end,function(a)
+end,function()sfx(3,3,0,4)end,function()sfx(3,3,8,4)end,function(a)
 if a.dx==0 then a:kill()end
 end,function(a)
 draw_tail(a.x,a.y-.25,a.dx,0,3)
@@ -500,7 +501,7 @@ a.x=a.end_x+(a.anchoring.x-a.end_x)*percent
 a.y=a.end_y+(a.anchoring.y-a.end_y)*percent
 end,function(a,pl)
 pl:hurt"5"
-end,function(a)sfx(3,3,0,4)a.offdx=a.xf*a.offspeed end,function(a)a.offx=abs(a.offx*8)\1/8*sgn(a.offx)end,function(a)sfx(3,3,4,4)a:normal_init()a.offdx=-a.xf*a.offspeed end,function(a,override)
+end,function(a)sfx(3,3,0,4)a.offdx=a.xf*a.offspeed end,function(a)a.offx=abs(a.offx*8)\1/8*sgn(a.offx)end,function(a)sfx(3,3,8,4)a:normal_init()a.offdx=-a.xf*a.offspeed end,function(a,override)
 return override or not a.item or a.item.id ~="mask"
 end,function(a,ang,duration,override)
 a:start_timer("push",duration)
@@ -896,7 +897,9 @@ end
 end,function(a,pl)
 if not a.collide_disabled then
 a:start_timer("isma",2)
+if not does_entity_exist"mask"then
 pl:push(atan2(pl.x-a.x,pl.y-a.y),.1)
+end
 if a:is_active"jump"then
 else
 end
@@ -993,6 +996,11 @@ end
 else
 zcall(load_room,[[1;,135,6,5,@;]],g_pl.xf)
 end
+end
+if does_entity_exist"mask"then
+poke(0x5f40,0x0f)
+else
+poke(0x5f40,0x00)
 end
 end,function(state)
 isorty(g_zclass_entities["drawlayer_50"])
@@ -1154,7 +1162,7 @@ return fget(t2,0)and t2
 end
 zclass[[collidable,box,vec|calc_deltas,%calc_deltas,should_collide_below,yes,should_collide_with_screen_edge,yes,adjust_deltas_for_solids,%adjust_deltas_for_solids,adjust_deltas_for_tiles,%adjust_deltas_for_tiles,adjust_deltas_for_screen,%adjust_deltas_for_screen]]
 zclass[[healthobj,maskcheck|max_health,1,invincible,no,stun_callback,nop,hurt,%healthobj_hurt,stun,%healthobj_stun,health_update,%healthobj_health_update]]
-zclass[[inventory,actor,vec,drawlayer_90|ind,5,x,64,y,-9,draw,%inventory_draw;defaults;dy,0,init,nop,update,nop;start;next,open,update,%inventory_start_update;open;next,normal,dy,2,duration,.1,update,%inventory_open_update,cachedir,0;normal;next,close,update,%inventory_update,init,%inventory_normal_init;close;next,start,dy,-2,duration,.1;1;mem_loc,0x5d10,sxo,0,x,-41,y,0,w,4.5,sind,1;2;mem_loc,0x5d11,sxo,0,x,-31,y,0,w,4.5,sind,5;3;mem_loc,0x5d12,sxo,0,x,-21,y,0,w,4.5,sind,7;4;mem_loc,0x5d13,sxo,0,x,-11,y,0,w,4.5,sind,2;5;mem_loc,0x5d00,sxo,2,x,0,y,0,w,6,sind,0;6;mem_loc,0x5d14,sxo,0,x,12,y,0,w,4.5,sind,6;7;mem_loc,0x5d15,sxo,0,x,22,y,0,w,4.5,sind,4;8;mem_loc,0x5d16,sxo,0,x,32,y,0,w,4.5,sind,3;9;mem_loc,0x5d17,sxo,0,x,42,y,0,w,4.5,sind,8;]]
+zclass[[inventory,actor,vec,drawlayer_90|ind,5,x,64,y,-9,draw,%inventory_draw;defaults;dy,0,init,nop,update,nop;start;next,open,update,%inventory_start_update;open;next,normal,dy,2,duration,.1,update,%inventory_open_update,cachedir,0;normal;next,close,update,%inventory_update,init,%inventory_normal_init;close;next,start,dy,-2,duration,.1;1;mem_loc,0x5d10,sxo,0,x,-41,y,0,w,4.5,sind,1;2;mem_loc,0x5d11,sxo,0,x,-31,y,0,w,4.5,sind,5;3;mem_loc,0x5d12,sxo,0,x,-21,y,0,w,4.5,sind,7;4;mem_loc,0x5d13,sxo,0,x,-11,y,0,w,4.5,sind,2;5;mem_loc,0x5d00,sxo,2,x,0,y,0,w,6,sind,0;6;mem_loc,0x5d14,sxo,0,x,12,y,0,w,4.5,sind,6;7;mem_loc,0x5d15,sxo,0,x,22,y,0,w,4.5,sind,4;8;mem_loc,0x5d16,sxo,-1,x,32,y,0,w,4.5,sind,3;9;mem_loc,0x5d17,sxo,0,x,42,y,0,w,4.5,sind,8;]]
 zclass[[solid,box|]]
 zclass[[wall,solid,anchor|anchoring,@,offx,@,offy,@,rx,@,ry,@]]
 zclass[[simple_spr,auto_outline,pos|drawout,%simple_spr_draw,visible,yes,should_dance,no,sind,0,sw,1,sh,1,xf,1,yf,1,sx,0,sy,0]]
@@ -1172,14 +1180,14 @@ zclass[[bomb,item_throwing|x,@,y,@,xf,@,propel_speed,@,ang,@,should_collide_belo
 zclass[[pot_thrown,item_throwing,statitem|x,@,y,@,xf,@,propel_speed,@,ang,@,sind,49,destroyed,%standard_explosion,should_stun,yes,should_use_xf,yes,item_hit_func,nop,should_push,yes;]]
 zclass[[quack_thrown,item_throwing|x,@,y,@,xf,@,propel_speed,@,ang,@,sind,32,destroyed,%quack_thrown_destroyed;]]
 zclass[[item_horizontal,anchor|offspeed,0,normal_init,%item_horizontal_normal_init;start;init,%item_horizontal_start_init,duration,.08,next,normal;normal;init,%item_horizontal_normal_init,offdx,0;ending;init,%item_horizontal_ending_init,duration,.08;]]
-zclass[[mask,anchor,actor|anchoring,@,xf,@,visible,yes,block_direction,no,speed_multiplier,1,initial_energy,0,gradual_energy,0.0078125,offy,.2,sy,-2,sind,3;defaults;init,nop;start;init,%mask_init,offdy,-.0625,duration,.08,next,normal;normal;offy,-.125,offdy,0;ending;init,%mask_end,offdy,.0625,duration,.08;]]
+zclass[[mask,anchor,actor|anchoring,@,xf,@,visible,yes,block_direction,no,speed_multiplier,1,initial_energy,.375,gradual_energy,0,offy,.2,sy,-2,sind,3;defaults;init,nop;start;init,%mask_init,offdy,-.0625,duration,.08,next,normal;normal;offy,-.125,offdy,0;ending;init,%mask_end,offdy,.0625,duration,.08;]]
 zclass[[bow,item_horizontal,actor|anchoring,@,xf,@,visible,yes,block_direction,yes,speed_multiplier,.5,initial_energy,.25,gradual_energy,0,sy,-1,offspeed,.105,sind,7;ending;init,%bow_ending_init,duration,.08;]]
 zclass[[pellet,vec,collidable,actor,drawlayer_50,statitem|x,@,y,@,dx,@,xf,@,damage,1,pushspeed,.375,should_use_xf,yes,item_hit_func,~kill,should_collide_below,no,rx,.25,ry,.25,destroyed,%standard_explosion,draw,%pellet_draw;start;update,%pellet_update,duration,.5;]]
 zclass[[shield,item_horizontal,actor,statitem|anchoring,@,xf,@,rx,.375,ry,.375,pushspeed,.25,should_use_xf,yes,item_hit_func,nop,should_push,yes,plpushspeed,0,visible,yes,block_direction,yes,speed_multiplier,.5,initial_energy,.125,gradual_energy,0,sy,-1,offspeed,.105,sind,6;start;should_stun,yes;normal;should_stun,no;]]
 zclass[[sword,item_horizontal,actor,statitem|anchoring,@,xf,@,rx,.375,ry,.25,pushspeed,.25,should_use_xf,yes,item_hit_func,%sword_item_hit_func,plpushspeed,.125,visible,yes,block_direction,yes,speed_multiplier,.5,initial_energy,.125,gradual_energy,0,sy,0,offspeed,.125,sind,2;start;damage,1;normal;damage,1;]]
 zclass[[banjo,anchor,actor|anchoring,@,xf,@,visible,yes,block_direction,no,speed_multiplier,.5,initial_energy,.125,gradual_energy,0,offy,0,sy,-3,sind,1;defaults;init,nop;start;init,%banjo_start_init,offdy,.125,duration,.03,next,min_play;min_play;offdy,0,duration,2,next,normal;normal;next,ending;ending;init,%banjo_ending_init,offdy,-.125,duration,.03;]]
 zclass[[brang,collidable,simple_spr,drawlayer_50,mov,actor,statitem|anchoring,@,xf,@,rx,.25,ry,.25,should_push,no,pushspeed,.25,should_use_xf,no,item_hit_func,~kill,should_stun,yes,visible,no,block_direction,yes,speed_multiplier,0,initial_energy,.125,gradual_energy,0,should_collide_below,no,offspeed,.125,drawout,%brang_drawout,sind,4;defaults;init,nop;start;init,%brang_start_init,update,%brang_start_update,duration,.125,next,normal;normal;update,%brang_normal_update,next,ending;ending;init,%brang_ending_init,update,%brang_ending_update,duration,.125,adjust_deltas_for_solids,nop,adjust_deltas_for_tiles,nop;final;update,nop,alive,no;]]
-zclass[[bomb_explode,enemy,box,actor,statitem|x,@,y,@,rx,1,ry,1,damage,5,pushspeed,.25,should_use_xf,no,item_hit_func,nop,pl_collide_func,%bomb_pl_hit;start;duration,.25;]]
+zclass[[bomb_explode,enemy,box,actor,statitem|x,@,y,@,rx,1,ry,1,damage,3,pushspeed,.25,should_use_xf,no,item_hit_func,nop,pl_collide_func,%bomb_pl_hit;start;duration,.25;]]
 zclass[[maskcheck|maskcheck,%maskcheck_func]]
 zclass[[pushable,mov|push_ang,0,push,%pushable_push,update_push,%pushable_update_push]]
 zclass[[pl,ma_left,pushable,actor,mov,collidable,auto_outline,healthobj,drawlayer_50|cname,lank,cspr,103,x,@,y,@,xf,@,health,@,max_health,@,inventory,@,rx,.375,ry,.375,should_collide_with_screen_edge,no,should_dance,yes,update,%pl_update,energy,0,is_energy_cooling_down,no,target_energy,0,destroyed,%standard_explosion,drawout,%pl_drawout;item_funcs;1,%banjo,2,%bomb_held,3,%bow,4,%sword,5,%interact,6,%shield,7,%brang,8,%mask;default_item;visible,no,is_default,yes,block_direction,no,speed_multiplier,1,alive,yes,gradual_energy,-.0078125,initial_energy,0,kill,nop;item,~default_item;]]
