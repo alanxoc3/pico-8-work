@@ -43,9 +43,9 @@ TODO: don't wait for ma for picking things up/interacting (pot, duck?)
 16 songs in total:
 
 7 long
-- long: village/house
-- long: forest
-- long: field/mountain
+- long:       village/house
+- long:       forest
+- long+short: field/mountain
 - long: castle/cannon
 - long: crypt
 - long: ivan boss fight (based on computer room)
