@@ -164,7 +164,7 @@ function px9_comp(x0,y0,w,h,dest,vget)
         dest+=1
     end
 
-    return dest --dest0
+    return dest-dest0
 end
 
 
@@ -175,11 +175,11 @@ function log(logstr)
 end
 
 
-ENCODE_OFFSET=8
+ENCODE_OFFSET=6
 function encode_cart(cartname)
     reload(0x8000, 0x0000, 0x2000, cartname)
-    ENCODE_OFFSET += px9_comp(0,0,128,128,ENCODE_OFFSET,function(...) return vget(0x8000, ...) end)
     log("pos: "..ENCODE_OFFSET)
+    ENCODE_OFFSET += px9_comp(0,0,128,128,ENCODE_OFFSET,function(...) return vget(0x8000, ...) end)
     return ENCODE_OFFSET
 end
 
@@ -187,10 +187,11 @@ cls()
 memset(0x0000, 0, 0x3100)
 local write_len = 0
 
+reload(0x2000, 0x2000, 0x1000, "129-151.p8")
+
 poke2(0x0000, ENCODE_OFFSET) encode_cart("001-064.p8")
 poke2(0x0002, ENCODE_OFFSET) encode_cart("065-128.p8")
 poke2(0x0004, ENCODE_OFFSET) encode_cart("129-151.p8")
-poke2(0x0006, ENCODE_OFFSET) encode_cart("pokedex.p8")
 
-cstore(0x0000, 0x0000, 0x3100, "game.p8")
+cstore(0x0000, 0x0000, 0x3000, "game.p8")
 log("done!")
