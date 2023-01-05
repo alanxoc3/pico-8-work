@@ -35,13 +35,13 @@ function _draw()
     spr(btn(5) and 172 or 140, 47, 88)
 
     -- small screen
-    spr(103, 76, 26, 5, 1)
+    spr(103, 77, 27, 5, 1)
     -- zprint("\"gOTTA cATCH", 97, 40, 7, 0)
     -- zprint("100 tYRANITAR", 97, 50, 7, 0)
 
     -- credits
     -- zprint("bY",                 97, 40+40, 7, 0)
-    zprint("aMORG gAMES",           97, 40+50, 7, 0)
+    zprint("aMORG gAMES",           97, 41+50, 7, 0)
     -- zprint("tHEGREATCADET",      97, 40+52, 7, 0)
     camera()
 end
