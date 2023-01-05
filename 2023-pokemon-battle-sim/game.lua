@@ -10,12 +10,15 @@ function _init()
     extract_sheet(1)
     extract_sheet(2)
 
-    memcpy(0x0000, 0xe000, 0x2000)
+    -- Need the pokedex tiles to stay loaded. This starts at sprite index #96.
+    memcpy(0x0000, 0xc000, 0x2000)
 end
 
 function _draw()
     cls()
-    memcpy(0x6000, 0x0000, 0x2000)
+    -- memcpy(0x6000, 0x0000, 0x2000)
+    map(0,16,0,0,16,16)
+    map(16,16,0,0,16,16)
     -- spr(0,0,0,16,16)
 end
 
