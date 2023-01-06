@@ -19,6 +19,11 @@ Modes are:
 - Browse mode (by number)
 - Party
 - Battle simulator
+  - Gym Leaders
+  - Elite Four
+  - Legendaries
+  - Areas (Includes Trainers)
+  - Random Encounter
 - guess who
 - Settings (metric system, text speed)
 - Credits

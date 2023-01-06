@@ -1,3 +1,13 @@
+function _draw()
+    cls()
+    -- draw the pokedex, use camera to change position
+    camera(0,-20)
+    draw_back_panel()
+    draw_right_flap()
+    draw_left_flap()
+    camera()
+end
+
 -- ! means male. ? means female. for nidoran.
 function wobble_text(text, x, y, color)
     x -= #text*2
@@ -33,10 +43,6 @@ function zprint(str, x, y, color, align)
 
     print(str, x, y, color)
 end
-
-function _init() end
-
-function _update60() end
 
 -- pixels are 0 to 37 (38x38 screen)
 function draw_main_screen()
@@ -100,15 +106,4 @@ function draw_back_panel()
     spr((tval > 1) and 119 or 121, 15-1, 10)
     spr((tval > 2) and 118 or 121, 10-1, 10)
     spr((tval > 3) and 122 or 123, 3,  10)
-end
-
-function _draw()
-    cls()
-
-    -- draw the pokedex, use camera to change position
-    camera(0,-20)
-    draw_back_panel()
-    draw_right_flap()
-    draw_left_flap()
-    camera()
 end

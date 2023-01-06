@@ -7,6 +7,13 @@ zclass[[game_state,actor|
 ]]
 
 function _init()
+    extract_sheet(0)
+    extract_sheet(1)
+    extract_sheet(2)
+
+    -- Need the pokedex tiles to stay loaded. This starts at sprite index #96.
+    memcpy(0x0000, 0xc000, 0x2000)
+
     g_tl = _g.game_state()
 end
 
