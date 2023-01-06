@@ -212,6 +212,35 @@ zclass[[actor,timer|load,%actor_load,loadlogic,%actor_loadlogic,state,%actor_sta
 zclass[[drawlayer_50|]]
 zclass[[timer|timers;,;start_timer,%timer_reset_timer,end_timer,%timer_end_timer,is_active,%timer_is_active,get_elapsed_percent,%timer_get_elapsed_percent,tick,%timer_tick,]]
 zclass[[test_obj,actor,drawlayer_50|x,@,y,@,color,7,init,%test_init,update,%test_update,draw,%test_draw;]]
+function smap(cx,cy,cw,ch,sx,sy,sw,sh,flipx,flipy,layers)
+if(sw<0)flipx=not flipx sx+=sw
+if(sh<0)flipy=not flipy sy+=sh
+sw,sh=abs(sw),abs(sh)
+local dx,dy=cw/sw,ch/sh
+if flipx then
+cx+=cw
+dx=-dx
+end
+if flipy then
+cy+=ch
+dy=-dy
+end
+if(sx<0)cx-=sx*dx sx=0
+if(sy<0)cy-=sy*dy sy=0
+if(sw>128)sw=128
+if(sh>128)sh=128
+if sh<sw then
+for y=sy,sy+sh-1 do
+tline(sx,y,sx+sw-1,y,cx,cy,dx,0,layers)
+cy+=dy
+end
+else
+for x=sx,sx+sw-1 do
+tline(x,sy,x,sy+sh-1,cx,cy,0,dy,layers)
+cx+=dx
+end
+end
+end
 function wobble_text(text,x,y,color)
 x-=#text*2
 local t1=""
@@ -241,8 +270,8 @@ elseif align>0 then x-=#str*4+1 end
 print(str,x,y,color)
 end
 function draw_main_screen()
-sspr(0,0,16,16,23,0+t()*2%2,16,16)
-sspr(0,0,16,16,-1,21+(t()*2+1)%2,16,16,true)
+sspr(0,0,16,16,23,0+t()*2%2,16,16,true)
+sspr(0,0,16,16,-1,21+(t()*2+1)%2,16,16,false)
 end
 function draw_screen(xoff,yoff,w,h,bg_color,screen_func)
 local ox,oy=%0x5f28,%0x5f2a
@@ -254,7 +283,7 @@ camera(ox,oy)
 clip()
 end
 function draw_left_flap()
-draw_screen(12,29,38,38,5,draw_main_screen)
+draw_screen(12,29,38,38,13,draw_main_screen)
 map(103,21,-1,16,8,11)
 spr(btn(0)and 186 or 154,07,84)
 spr(btn(1)and 188 or 156,23,84)
@@ -266,7 +295,9 @@ end
 function draw_right_flap()
 draw_screen(74,25,46,14,5,function()wobble_text("nidoran?",46/2,4,6)end)
 draw_screen(74,73,46,22,5,function()sspr(32,32,16,16,1,1,16,16,true)end)
-map(111,21,-1+8*8+2,16,8,11)
+palt(5,true)
+smap(111,21,8,11,-1+8*8+2,16,8*8,11*8)
+palt(5,false)
 spr(btn(0)and 100 or 99,73,48)spr(btn(0)and 100 or 99,89,56)
 spr(btn(1)and 100 or 99,89,48)spr(btn(1)and 100 or 99,81,56)
 spr(btn(2)and 100 or 99,81,48)spr(btn(2)and 100 or 99,97,56)
@@ -276,7 +307,9 @@ spr(btn(5)and 100 or 99,113,48)spr(btn(5)and 100 or 99,73,56)
 end
 function draw_closed_flap()
 map(95,21,-1,16,8,11)
-spr(128,3,56)
+if btn(0)or btn(1)or btn(2)or btn(3)or btn(4)or btn(5)then
+spr(129,3,56)
+end
 end
 function draw_back_panel()
 map(119,20,-1,8,9,12)
