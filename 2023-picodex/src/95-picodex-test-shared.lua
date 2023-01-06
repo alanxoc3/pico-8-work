@@ -1,12 +1,4 @@
-function _draw()
-    cls()
-    -- draw the pokedex, use camera to change position
-    camera(0,-20)
-    draw_back_panel()
-    draw_right_flap()
-    draw_left_flap()
-    camera()
-end
+-- these are shared with the pokedex test
 
 -- ! means male. ? means female. for nidoran.
 function wobble_text(text, x, y, color)
@@ -70,20 +62,13 @@ end
 function draw_left_flap()
     draw_screen(12, 29, 38, 38, 5, draw_main_screen)
 
-    map(103,  20, -1,  8, 8,  12)
+    map(103,  21, -1,  16, 8,  11)
     spr(btn(0) and 186 or 154, 07, 84) -- button presses
     spr(btn(1) and 188 or 156, 23, 84)
     spr(btn(2) and 171 or 139, 15, 80)
     spr(btn(3) and 187 or 155, 15, 88)
     spr(btn(4) and 170 or 138, 39, 84)
     spr(btn(5) and 172 or 140, 47, 84)
-
-    spr(btn(0) and 100 or 99, 73,  48) spr(btn(0) and 100 or 99, 89,  56)
-    spr(btn(1) and 100 or 99, 89,  48) spr(btn(1) and 100 or 99, 81,  56)
-    spr(btn(2) and 100 or 99, 81,  48) spr(btn(2) and 100 or 99, 97,  56)
-    spr(btn(3) and 100 or 99, 97,  48) spr(btn(3) and 100 or 99, 105, 56)
-    spr(btn(4) and 100 or 99, 105, 48) spr(btn(4) and 100 or 99, 113, 56)
-    spr(btn(5) and 100 or 99, 113, 48) spr(btn(5) and 100 or 99, 73,  56)
 end
 
 function draw_right_flap()
@@ -91,8 +76,29 @@ function draw_right_flap()
     draw_screen(74, 73, 46, 22,  5, function() sspr(32,32,16,16,1,1,16,16,true) end)
     --draw_screen(106, 73, 14, 14, 5, function() sspr(64,32,16,16,1,1,12,12,true) end)
 
-    map(111,  20, -1+8*8+2, 8, 8, 12)
+    map(111,  21, -1+8*8+2, 16, 8, 11)
 
+    spr(btn(0) and 100 or 99, 73,  48) spr(btn(0) and 100 or 99, 89,  56)
+    spr(btn(1) and 100 or 99, 89,  48) spr(btn(1) and 100 or 99, 81,  56)
+    spr(btn(2) and 100 or 99, 81,  48) spr(btn(2) and 100 or 99, 97,  56)
+    spr(btn(3) and 100 or 99, 97,  48) spr(btn(3) and 100 or 99, 105, 56)
+    spr(btn(4) and 100 or 99, 105, 48) spr(btn(4) and 100 or 99, 113, 56)
+    spr(btn(5) and 100 or 99, 113, 48) spr(btn(5) and 100 or 99, 73,  56)
+
+    --spr(103, 77, 90, 5, 1)
+    --spr(103, 77, 53, 5, 1)
+    --zprint("aMORG gAMES",           97, 41+50, 7, 0)
+
+end
+
+function draw_closed_flap()
+    -- draw_screen(74, 25, 46, 14,  5, function() wobble_text("nidoran?", 46/2, 4, 6) end)
+    -- draw_screen(74, 73, 46, 22,  5, function() sspr(32,32,16,16,1,1,16,16,true) end)
+    --draw_screen(106, 73, 14, 14, 5, function() sspr(64,32,16,16,1,1,12,12,true) end)
+
+    map(95,  21, -1, 16, 8, 11)
+
+    spr(128, 3, 56)
     --spr(103, 77, 90, 5, 1)
     --spr(103, 77, 53, 5, 1)
     --zprint("aMORG gAMES",           97, 41+50, 7, 0)
