@@ -92,7 +92,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,test_init,@,test_update,@,test_draw,@,game_init,@,game_update,@,game_draw,@,main_update,@,main_drawl,@,gamefadein_init,@,closed_update,@,closed_draw,@,closing_draw,@,light_init,@,opened_draw,@,opening_draw,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,test_init,@,test_update,@,test_draw,@,game_init,@,game_update,@,game_draw,@,main_update,@,main_drawl,@,gamefadein_init,@,closed_update,@,closed_draw,@,closing_draw,@,light_init,@,opened_draw,@,opening_draw,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,game_state_init,@]],function(a,stateName)
 a.next_state=stateName or a.next
 end,function(a,stateName)
 a.next_state,a.isnew=nil
@@ -180,12 +180,12 @@ function()a.modes:drawtr()end,
 function()a.modes:drawbr()end,
 4)
 end,function(a)
-if btnp"2"or btnp"0"then a.main_hover_index=(a.main_hover_index-1)%c_modes.len end
-if btnp"3"or btnp"1"then a.main_hover_index=(a.main_hover_index+1)%c_modes.len end
+if btnp"2"or btnp"0"then poke(0x5ef8,(@0x5ef8-1)%c_modes.len)end
+if btnp"3"or btnp"1"then poke(0x5ef8,(@0x5ef8+1)%c_modes.len)end
 end,function(a)
 rectfill(0,14,37,23,1)
 for i=0,4 do
-local text,y=c_modes[(i+a.main_hover_index)%c_modes.len].name,c_mode_positions[i+1]
+local text,y=c_modes[(i+@0x5ef8+2)%c_modes.len].name,c_mode_positions[i+1]
 if i==2 then
 wobble_text(text,19,y,13)
 else
@@ -222,6 +222,9 @@ g_fade=cos(a:get_elapsed_percent"logo")+1
 camera(g_fade>.5 and rnd_one())
 zspr(108,64,64,4,2)
 camera()
+end,function(state)
+clean_all_entities("game_state","fader_in")
+state:sinit()
 end)
 function zspr(sind,x,y,sw,sh,...)
 sw,sh=sw or 1,sh or 1
@@ -253,8 +256,8 @@ zclass[[timer|timers;,;start_timer,%timer_reset_timer,end_timer,%timer_end_timer
 g_pokemon_list=split("bulbasaur,ivysaur,venusaur,charmander,charmeleon,charizard,squirtle,wartortle,blastoise,caterpie,metapod,butterfree,weedle,kakuna,beedrill,pidgey,pidgeotto,pidgeot,rattata,raticate,spearow,fearow,ekans,arbok,pikachu,raichu,sandshrew,sandslash,nidoran?,nidorina,nidoqueen,nidoran!,nidorino,nidoking,clefairy,clefable,vulpix,ninetales,jigglypuff,wigglytuff,zubat,golbat,oddish,gloom,vileplume,paras,parasect,venonat,venomoth,diglett,dugtrio,meowth,persian,psyduck,golduck,mankey,primeape,growlithe,arcanine,poliwag,poliwhirl,poliwrath,abra,kadabra,alakazam,machop,machoke,machamp,bellsprout,weepinbell,victreebel,tentacool,tentacruel,geodude,graveler,golem,ponyta,rapidash,slowpoke,slowbro,magnemite,magneton,farfetch'd,doduo,dodrio,seel,dewgong,grimer,muk,shellder,cloyster,gastly,haunter,gengar,onix,drowzee,hypno,krabby,kingler,voltorb,electrode,exeggcute,exeggutor,cubone,marowak,hitmonlee,hitmonchan,lickitung,koffing,weezing,rhyhorn,rhydon,chansey,tangela,kangaskhan,horsea,seadra,goldeen,seaking,staryu,starmie,mr mime,scyther,jynx,electabuzz,magmar,pinsir,tauros,magikarp,gyarados,lapras,ditto,eevee,vaporeon,jolteon,flareon,porygon,omanyte,omastar,kabuto,kabutops,aerodactyl,snorlax,articuno,zapdos,moltres,dratini,dragonair,dragonite,mewtwo,mew")
 g_pokemon_list[0]="missingno"
 zclass[[test_obj,actor,drawlayer_50|x,@,y,@,color,7,init,%test_init,update,%test_update,draw,%test_draw;]]
-zclass[[modes,actor|drawl,nop,drawtr,nop,drawbr,nop,curr,main,main_hover_index,0;defaults;init,nop,update,nop,drawl,nop,drawtr,nop,drawbr,nop;main;update,%main_update,drawl,%main_drawl;browse;update,%main_update,drawl,%main_drawl;]]
-c_modes=zobj[[len,6;0;name,battle,state,battle;1;name,party,state,party;2;name,browse,state,browse;3;name,quiz,state,quiz;4;name,config,state,config;5;name,credits,state,credits;]]
+zclass[[modes,actor|drawl,nop,drawtr,nop,drawbr,nop,curr,main;defaults;init,nop,update,nop,drawl,nop,drawtr,nop,drawbr,nop;main;update,%main_update,drawl,%main_drawl;browse;update,%main_update,drawl,%main_drawl;]]
+c_modes=zobj[[len,6;4;name,battle,state,battle;5;name,party,state,party;0;name,browse,state,browse;1;name,quiz,state,quiz;2;name,config,state,config;3;name,credits,state,credits;]]
 c_mode_positions=split"1,8,16,25,32"
 function draw_picodex(rotation,l_screen,tr_screen,br_screen,light,backbuttonheld)
 light=light or 0
@@ -441,7 +444,7 @@ vset(x,y,v)
 end
 end
 end
-zclass[[game_state,actor|curr,fadein;ecs_exclusions;actor,true;defaults;init,nop,update,nop,draw,nop,light,0,backbuttonheld,no,modes,;logo;next,fadein,init,%logo_init,update,nop,draw,%logo_draw,duration,2.5;fadein;next,game,duration,0,init,%gamefadein_init;closed;next,opening,update,%closed_update,draw,%closed_draw;opening;next,starting_1,duration,.25,draw,%opening_draw;starting_1;next,starting_2,light,1,duration,.125,init,%light_init,draw,%opened_draw;starting_2;next,starting_3,light,2,duration,.125,init,%light_init,draw,%opened_draw;starting_3;next,game,light,3,duration,.125,init,%light_init,draw,%opened_draw;game;next,closing,light,4,init,%game_init,update,%game_update,draw,%game_draw;closing;next,closed,duration,.25,update,nop,draw,%closing_draw;]]
+zclass[[game_state,actor|curr,fadein;init,%game_state_init;ecs_exclusions;actor,yes;defaults;sinit,nop,update,nop,draw,nop,light,0,backbuttonheld,no,modes,;logo;next,fadein,sinit,%logo_init,update,nop,draw,%logo_draw,duration,2.5;fadein;next,game,duration,0,sinit,%gamefadein_init;closed;next,opening,update,%closed_update,draw,%closed_draw;opening;next,starting_1,duration,.25,draw,%opening_draw;starting_1;next,starting_2,light,1,duration,.125,sinit,%light_init,draw,%opened_draw;starting_2;next,starting_3,light,2,duration,.125,sinit,%light_init,draw,%opened_draw;starting_3;next,game,light,3,duration,.125,sinit,%light_init,draw,%opened_draw;game;next,closing,light,4,sinit,%game_init,update,%game_update,draw,%game_draw;closing;next,closed,duration,.25,update,nop,draw,%closing_draw;]]
 function _init()
 memset(0x8000,0,0x7fff)
 menuitem(1,"swap 🅾️/❎",function()

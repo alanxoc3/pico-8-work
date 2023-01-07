@@ -7,27 +7,34 @@ zclass[[game_state,actor|
     curr,logo;
     -- NORMAL_END
 
-    ecs_exclusions; actor,true; -- remove game_state from the actor group
-    defaults;       init,nop, update,nop, draw,nop, light,0, backbuttonheld,no, modes,;
+    init,%game_state_init;
+    ecs_exclusions; actor,yes; -- remove game_state from the actor group
+    defaults;       sinit,nop, update,nop, draw,nop, light,0, backbuttonheld,no, modes,;
 
-    logo; next,fadein, init,%logo_init, update,nop, draw,%logo_draw, duration,2.5;
+    logo; next,fadein, sinit,%logo_init, update,nop, draw,%logo_draw, duration,2.5;
 
     -- DEBUG_BEGIN
-    fadein; next,game, duration,0, init,%gamefadein_init;
+    fadein; next,game, duration,0, sinit,%gamefadein_init;
     -- DEBUG_END
 
     -- NORMAL_BEGIN
-    fadein; next,closed, duration,0, init,%gamefadein_init;
+    fadein; next,closed, duration,0, sinit,%gamefadein_init;
     -- NORMAL_END
 
-    closed;     next,opening,                                             update,%closed_update, draw,%closed_draw;
-    opening;    next,starting_1,          duration,.25,                                          draw,%opening_draw;
-    starting_1; next,starting_2, light,1, duration,.125, init,%light_init,                       draw,%opened_draw;
-    starting_2; next,starting_3, light,2, duration,.125, init,%light_init,                       draw,%opened_draw;
-    starting_3; next,game,       light,3, duration,.125, init,%light_init,                       draw,%opened_draw;
-    game;       next,closing,    light,4,               init,%game_init,  update,%game_update,   draw,%game_draw;
-    closing;    next,closed,              duration,.25,                   update,nop,            draw,%closing_draw;
+    closed;     next,opening,                                               update,%closed_update, draw,%closed_draw;
+    opening;    next,starting_1,          duration,.25,                                            draw,%opening_draw;
+    starting_1; next,starting_2, light,1, duration,.125, sinit,%light_init,                        draw,%opened_draw;
+    starting_2; next,starting_3, light,2, duration,.125, sinit,%light_init,                        draw,%opened_draw;
+    starting_3; next,game,       light,3, duration,.125, sinit,%light_init,                        draw,%opened_draw;
+    game;       next,closing,    light,4,                sinit,%game_init,  update,%game_update,   draw,%game_draw;
+    closing;    next,closed,              duration,.25,                     update,nop,            draw,%closing_draw;
 ]]
+
+-- every state change will clean up all the entities.
+|[game_state_init]| function(state)
+    clean_all_entities('game_state', 'fader_in')
+    state:sinit()
+end $$
 
 function _init()
     -- clear all the read only memory. testing things out showed that this doesn't get cleared automatically.
