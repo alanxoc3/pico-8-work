@@ -166,6 +166,10 @@ end)
 end,function(a)a.color+=1 end,function(a)a.x+=xbtn()a.y+=ybtn()end,function(a)circfill(a.x,a.y,2,a.color)end,function(a)
 _g.test_obj(64,64)
 sfx(61,0)
+menuitem(1,"close picodex",function()
+menuitem(1)
+a:load"closing"
+end)
 end,function(a)
 loop_entities("actor","state")
 end,function(a)
@@ -184,6 +188,7 @@ end
 end,function(a)
 draw_picodex(-1,nop,nop,nop,a.light,a.backbuttonheld)
 end,function(a)
+draw_picodex(cos(a:get_elapsed_percent"closing"/2),nop,nop,nop)
 end,function(a)
 sfx(60,0)
 end,function(a)
@@ -310,39 +315,32 @@ spr(btn(3)and 187 or 155,15,81)
 spr(btn(4)and 170 or 138,39,77)
 spr(btn(5)and 172 or 140,47,77)
 end
-function draw_right_flap(flap_rotation,backbuttonheld,topscreen_func,botscreen_func,b1,b2,b3,b4,b5,b6,b7,b8,b9,b10,b11,b12)
+function draw_right_flap(flap_rotation,backbuttonheld,topscreen_func,botscreen_func,b0,b1,b2,b3,b4,b5)
 if flap_rotation<0 then
 smap(0,0,8,11,8*8*(1-abs(flap_rotation))-1,9,8*8*abs(flap_rotation),11*8)
-if flap_rotation==-1 and backbuttonheld then spr(129,3,49)end
+if flap_rotation==-1 and backbuttonheld then spr(123,3,49)end
 elseif flap_rotation>0 then
 if flap_rotation==1 then palt(5,true)end
 smap(16,0,8,11,65,9,8*8*flap_rotation,11*8)
 if flap_rotation==1 then palt(5,false)
 draw_screen(74,18,46,14,5,topscreen_func)
 draw_screen(74,66,46,22,5,botscreen_func)
-if b1 then spr(100,73,41)end
-if b2 then spr(100,89,41)end
-if b3 then spr(100,81,41)end
-if b4 then spr(100,97,41)end
-if b5 then spr(100,105,41)end
-if b6 then spr(100,113,41)end
-if b7 then spr(100,73,49)end
-if b8 then spr(100,81,49)end
-if b9 then spr(100,89,49)end
-if b10 then spr(100,97,49)end
-if b11 then spr(100,105,49)end
-if b12 then spr(100,113,49)end
+if b0 then spr(100,73,41)spr(100,113,49)end
+if b1 then spr(100,81,41)spr(100,105,49)end
+if b2 then spr(100,89,41)spr(100,97,49)end
+if b3 then spr(100,97,41)spr(100,89,49)end
+if b4 then spr(100,105,41)spr(100,81,49)end
+if b5 then spr(100,113,41)spr(100,73,49)end
 end
 end
-end
-function draw_closed_flap()
 end
 function draw_back_panel(light)
+local rate=t()*10
 map(24,0,-1,1,9,12)
-spr((light>0)and 120 or 121,19,3)
-spr((light>1)and 119 or 121,14,3)
-spr((light>2)and 118 or 121,9,3)
-spr((light>3)and 122 or 123,3,3)
+spr((light>0)and(rate%11<1 and 131 or 130)or 132,19,3)
+spr((light>1)and(rate%13<1 and 131 or 129)or 132,14,3)
+spr((light>2)and(rate%17<1 and 131 or 128)or 132,9,3)
+spr((light>3)and(rate%43<1 and 134 or 133)or 135,3,3)
 end
 g_fade,g_fade_table=1,zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,1,0,0,0,0;3;,3,3,3,3,1,1,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,0,0,0,0;6;,6,6,13,13,5,5,0,0;7;,7,7,6,13,13,5,0,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,0,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,0,0,0;13;,13,13,5,5,1,0,0,0;14;,14,14,13,4,2,2,0,0;15;,15,15,13,13,5,5,0,0;]]
 function fade(threshold)
@@ -424,7 +422,7 @@ vset(x,y,v)
 end
 end
 end
-zclass[[game_state,actor|curr,fadein;ecs_exclusions;actor,true;defaults;init,nop,update,nop,draw,nop,light,0,backbuttonheld,no;logo;next,fadein,init,%logo_init,update,nop,draw,%logo_draw,duration,2.5;fadein;next,closed,duration,0,init,%gamefadein_init;closed;next,opening,init,nop,update,%closed_update,draw,%closed_draw;opening;next,starting_1,duration,.25,init,nop,update,nop,draw,%opening_draw;starting_1;next,starting_2,light,1,duration,.25,init,%light_init,update,%game_update,draw,%opened_draw;starting_2;next,starting_3,light,2,duration,.25,init,%light_init,update,%game_update,draw,%opened_draw;starting_3;next,game,light,3,duration,.25,init,%light_init,update,%game_update,draw,%opened_draw;game;next,closing,light,4,init,%game_init,update,%game_update,draw,%game_draw;closing;next,closed,duration,1,init,nop,update,%game_update,draw,%closing_draw;]]
+zclass[[game_state,actor|curr,fadein;ecs_exclusions;actor,true;defaults;init,nop,update,nop,draw,nop,light,0,backbuttonheld,no;logo;next,fadein,init,%logo_init,update,nop,draw,%logo_draw,duration,2.5;fadein;next,closed,duration,0,init,%gamefadein_init;closed;next,opening,update,%closed_update,draw,%closed_draw;opening;next,starting_1,duration,.25,draw,%opening_draw;starting_1;next,starting_2,light,1,duration,.125,init,%light_init,draw,%opened_draw;starting_2;next,starting_3,light,2,duration,.125,init,%light_init,draw,%opened_draw;starting_3;next,game,light,3,duration,.125,init,%light_init,draw,%opened_draw;game;next,closing,light,4,init,%game_init,update,%game_update,draw,%game_draw;closing;next,closed,duration,.25,update,nop,draw,%closing_draw;]]
 function _init()
 cls()
 sfx(62,0)

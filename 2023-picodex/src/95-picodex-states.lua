@@ -19,6 +19,7 @@ end $$
 end $$
 
 |[closing_draw]| function(a)
+    draw_picodex(cos(a:get_elapsed_percent'closing'/2), nop, nop, nop)
 end $$
 
 |[light_init]| function(a)
@@ -154,12 +155,12 @@ function draw_left_flap(screen_func, b0, b1, b2, b3, b4, b5)
 end
 
 -- flap_rotation is between -1 and 1. -1 means closed, 1 means open.
-function draw_right_flap(flap_rotation, backbuttonheld, topscreen_func, botscreen_func, b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12)
+function draw_right_flap(flap_rotation, backbuttonheld, topscreen_func, botscreen_func, b0, b1, b2, b3, b4, b5)
     if flap_rotation < 0 then
         smap(0, 0, 8, 11, 8*8*(1-abs(flap_rotation))-1, 9, 8*8*abs(flap_rotation), 11*8)
 
         -- once the rotation changes, the back button is released.
-        if flap_rotation == -1 and backbuttonheld then spr(129, 3, 49) end
+        if flap_rotation == -1 and backbuttonheld then spr(123, 3, 49) end
 
     elseif flap_rotation > 0 then
         if flap_rotation == 1 then palt(5, true) end
@@ -168,29 +169,21 @@ function draw_right_flap(flap_rotation, backbuttonheld, topscreen_func, botscree
             draw_screen(74, 18, 46, 14,  5, topscreen_func)
             draw_screen(74, 66, 46, 22,  5, botscreen_func)
 
-            if b1  then spr(100, 73,  41) end
-            if b2  then spr(100, 89,  41) end
-            if b3  then spr(100, 81,  41) end
-            if b4  then spr(100, 97,  41) end
-            if b5  then spr(100, 105, 41) end
-            if b6  then spr(100, 113, 41) end
-            if b7  then spr(100, 73,  49) end
-            if b8  then spr(100, 81,  49) end
-            if b9  then spr(100, 89,  49) end
-            if b10 then spr(100, 97,  49) end
-            if b11 then spr(100, 105, 49) end
-            if b12 then spr(100, 113, 49) end
+            if b0 then spr(100, 73,  41) spr(100, 113, 49) end
+            if b1 then spr(100, 81,  41) spr(100, 105, 49) end
+            if b2 then spr(100, 89,  41) spr(100, 97,  49) end
+            if b3 then spr(100, 97,  41) spr(100, 89,  49) end
+            if b4 then spr(100, 105, 41) spr(100, 81,  49) end
+            if b5 then spr(100, 113, 41) spr(100, 73,  49) end
         end
     end
 end
 
-function draw_closed_flap()
-end
-
 function draw_back_panel(light)
+    local rate = t()*10
     map(24, 0, -1,  1, 9, 12)
-    spr((light > 0) and 120 or 121, 19, 3)
-    spr((light > 1) and 119 or 121, 14, 3)
-    spr((light > 2) and 118 or 121, 9,  3)
-    spr((light > 3) and 122 or 123, 3,  3)
+    spr((light > 0) and (rate%11<1 and 131 or 130) or 132, 19, 3)
+    spr((light > 1) and (rate%13<1 and 131 or 129) or 132, 14, 3)
+    spr((light > 2) and (rate%17<1 and 131 or 128) or 132, 9,  3)
+    spr((light > 3) and (rate%43<1 and 134 or 133) or 135, 3,  3)
 end

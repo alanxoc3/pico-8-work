@@ -7,6 +7,11 @@ zclass[[test_obj,actor,drawlayer_50|x,@,y,@,color,7,init,%test_init,update,%test
 |[game_init]| function(a)
     _g.test_obj(64, 64)
     sfx(61,0)
+    menuitem(1, "close picodex", function()
+        menuitem(1)
+        a:load'closing'
+    end)
+
 end $$
 
 |[game_update]| function(a)
