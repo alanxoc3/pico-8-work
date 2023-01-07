@@ -1,18 +1,5 @@
 pico-8 cartridge // http://www.pico-8.com
 version 39
-__lua__
-#include src/95-picodex-test-shared.lua
-
-function _draw()
-    cls()
-    -- draw the pokedex, use camera to change position
-    camera(0,-20)
-    draw_back_panel()
-    draw_right_flap()
-    draw_left_flap()
-    --draw_closed_flap()
-    camera()
-end
 __gfx__
 0000000a0a000000000000070000100000000000000cc0c000000000000000000000000000000004000000010000000000000000000000000000090000000000
 00000a0aaa000000000007070c1c10100000000000ccccc000000000000000000044000000000044000000010000000000000000000000000000999000000000
