@@ -92,7 +92,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,test_init,@,test_update,@,test_draw,@,game_init,@,game_update,@,game_draw,@,gamefadein_init,@,closed_draw,@,closed_update,@,closing_draw,@,light_init,@,opened_draw,@,opening_draw,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,test_init,@,test_update,@,test_draw,@,game_init,@,game_update,@,game_draw,@,gamefadein_init,@,closed_update,@,closed_draw,@,closing_draw,@,light_init,@,opened_draw,@,opening_draw,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@]],function(a,stateName)
 a.next_state=stateName or a.next
 end,function(a,stateName)
 a.next_state,a.isnew=nil
@@ -163,34 +163,33 @@ foreach(finished_timers,function(timer)
 timer.active=false
 timer.callback(a)
 end)
-end,function(a)a.color+=1 end,function(a)a.x+=xbtn()a.y+=ybtn()end,function(a)circfill(a.x,a.y,2,a.color)end,function()
+end,function(a)a.color+=1 end,function(a)a.x+=xbtn()a.y+=ybtn()end,function(a)circfill(a.x,a.y,2,a.color)end,function(a)
 _g.test_obj(64,64)
-end,function()
+sfx(61,0)
+end,function(a)
 loop_entities("actor","state")
-end,function()
+end,function(a)
 cls()
-camera(0,-20)
-draw_back_panel()
-draw_right_flap()
-draw_left_flap()
-draw_closed_flap()
-camera()
+draw_picodex(1,nop,nop,nop,a.light)
 end,function(a)
 _g.fader_in()
 sfx(-2,0)
 end,function(a)
-rect(0,0,127,127,14)
-local rotation=sin(t())
-camera(-28+(rotation+1)*14,-15)
-draw_back_panel(0)
-draw_left_flap(nop)
-draw_right_flap(rotation,true,nop,nop)
-camera(0,0)
+if btn()& 0x1f==0 and a.backbuttonheld then
+a.backbuttonheld=false
+a:load()
+elseif btn()& 0x1f ~=0 then
+a.backbuttonheld=true
+end
+end,function(a)
+draw_picodex(-1,nop,nop,nop,a.light,a.backbuttonheld)
 end,function(a)
 end,function(a)
+sfx(60,0)
 end,function(a)
+draw_picodex(1,nop,nop,nop,a.light)
 end,function(a)
-end,function(a)
+draw_picodex(-cos(a:get_elapsed_percent"opening"/2),nop,nop,nop)
 end,function(a)
 poke(0x5f43,0xff)
 g_fade=a:get_elapsed_percent"start"
@@ -230,6 +229,14 @@ zclass[[actor,timer|load,%actor_load,loadlogic,%actor_loadlogic,state,%actor_sta
 zclass[[drawlayer_50|]]
 zclass[[timer|timers;,;start_timer,%timer_reset_timer,end_timer,%timer_end_timer,is_active,%timer_is_active,get_elapsed_percent,%timer_get_elapsed_percent,tick,%timer_tick,]]
 zclass[[test_obj,actor,drawlayer_50|x,@,y,@,color,7,init,%test_init,update,%test_update,draw,%test_draw;]]
+function draw_picodex(rotation,l_screen,tr_screen,br_screen,light,backbuttonheld)
+local b0,b1,b2,b3,b4,b5=btn"0",btn"1",btn"2",btn"3",btn"4",btn"5"
+camera(-28+(rotation+1)*14,-15)
+draw_back_panel(light or 0)
+draw_left_flap(l_screen,b0,b1,b2,b3,b4,b5)
+draw_right_flap(rotation,backbuttonheld,tr_screen,br_screen,b0,b1,b2,b3,b4,b5)
+camera(0,0)
+end
 function smap(cx,cy,cw,ch,sx,sy,sw,sh,flipx)
 local dx,dy=cw/sw,ch/sh
 if flipx then
@@ -293,7 +300,7 @@ screen_func()
 camera(ox,oy)
 clip()
 end
-function draw_left_flap(screen_func)
+function draw_left_flap(screen_func,b0,b1,b2,b3,b4,b5)
 draw_screen(12,22,38,38,13,screen_func)
 map(8,0,-1,9,8,11)
 spr(btn(0)and 186 or 154,07,77)
@@ -303,10 +310,10 @@ spr(btn(3)and 187 or 155,15,81)
 spr(btn(4)and 170 or 138,39,77)
 spr(btn(5)and 172 or 140,47,77)
 end
-function draw_right_flap(flap_rotation,backbutton,topscreen_func,botscreen_func,b1,b2,b3,b4,b5,b6,b7,b8,b9,b10,b11,b12)
+function draw_right_flap(flap_rotation,backbuttonheld,topscreen_func,botscreen_func,b1,b2,b3,b4,b5,b6,b7,b8,b9,b10,b11,b12)
 if flap_rotation<0 then
 smap(0,0,8,11,8*8*(1-abs(flap_rotation))-1,9,8*8*abs(flap_rotation),11*8)
-if flap_rotation==-1 and not backbutton then spr(129,3,49)end
+if flap_rotation==-1 and backbuttonheld then spr(129,3,49)end
 elseif flap_rotation>0 then
 if flap_rotation==1 then palt(5,true)end
 smap(16,0,8,11,65,9,8*8*flap_rotation,11*8)
@@ -417,7 +424,7 @@ vset(x,y,v)
 end
 end
 end
-zclass[[game_state,actor|curr,fadein;ecs_exclusions;actor,true;defaults;init,nop,update,nop,draw,nop,light,0;logo;next,fadein,init,%logo_init,update,nop,draw,%logo_draw,duration,2.5;fadein;next,closed,duration,0,init,%gamefadein_init;closed;next,opening,init,nop,update,%closed_update,draw,%closed_draw;opening;next,starting_1,duration,1,init,nop,update,nop,draw,%opening_draw;starting_1;next,starting_2,duration,3,init,nop,update,%game_update,draw,%opened_draw;starting_2;next,starting_3,light,1,duration,3,init,%light_init,update,%game_update,draw,%opened_draw;starting_3;next,starting_4,light,2,duration,3,init,%light_init,update,%game_update,draw,%opened_draw;starting_4;next,game,light,3,duration,3,init,%light_init,update,%game_update,draw,%opened_draw;game;next,closing,light,4,init,%game_init,update,%game_update,draw,%game_draw;closing;next,closed,duration,1,init,nop,update,%game_update,draw,%closing_draw;]]
+zclass[[game_state,actor|curr,fadein;ecs_exclusions;actor,true;defaults;init,nop,update,nop,draw,nop,light,0,backbuttonheld,no;logo;next,fadein,init,%logo_init,update,nop,draw,%logo_draw,duration,2.5;fadein;next,closed,duration,0,init,%gamefadein_init;closed;next,opening,init,nop,update,%closed_update,draw,%closed_draw;opening;next,starting_1,duration,.25,init,nop,update,nop,draw,%opening_draw;starting_1;next,starting_2,light,1,duration,.25,init,%light_init,update,%game_update,draw,%opened_draw;starting_2;next,starting_3,light,2,duration,.25,init,%light_init,update,%game_update,draw,%opened_draw;starting_3;next,game,light,3,duration,.25,init,%light_init,update,%game_update,draw,%opened_draw;game;next,closing,light,4,init,%game_init,update,%game_update,draw,%game_draw;closing;next,closed,duration,1,init,nop,update,%game_update,draw,%closing_draw;]]
 function _init()
 cls()
 sfx(62,0)

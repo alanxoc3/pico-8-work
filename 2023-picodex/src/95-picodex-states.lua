@@ -4,34 +4,48 @@
     sfx(-2,0) -- stop the creepy logo sound from looping
 end $$
 
-|[closed_draw]| function(a)
-    rect(0,0,127,127,14)
-    local rotation = sin(t())
-
-    camera(-28+(rotation+1)*14,-15)
-    draw_back_panel(0)
-    draw_left_flap(nop)
-    draw_right_flap(rotation, true, nop, nop)
-
-    camera(0,0)
+|[closed_update]| function(a)
+    -- if player 1 pressed any button, go to the next state.
+    if btn() & 0x1f == 0 and a.backbuttonheld then
+        a.backbuttonheld = false
+        a:load()
+    elseif btn() & 0x1f ~= 0 then
+        a.backbuttonheld = true
+    end
 end $$
 
-|[closed_update]| function(a)
+|[closed_draw]| function(a)
+    draw_picodex(-1, nop, nop, nop, a.light, a.backbuttonheld)
 end $$
 
 |[closing_draw]| function(a)
 end $$
 
 |[light_init]| function(a)
+    sfx(60,0)
 end $$
 
 |[opened_draw]| function(a)
+    draw_picodex(1, nop, nop, nop, a.light)
 end $$
 
 |[opening_draw]| function(a)
+    draw_picodex(-cos(a:get_elapsed_percent'opening'/2), nop, nop, nop)
 end $$
 
 -- utility funcs
+
+function draw_picodex(rotation, l_screen, tr_screen, br_screen, light, backbuttonheld)
+    local b0, b1, b2, b3, b4, b5 = btn'0', btn'1', btn'2', btn'3', btn'4', btn'5'
+
+    camera(-28+(rotation+1)*14,-15)
+    draw_back_panel(light or 0)
+    draw_left_flap(l_screen, b0, b1, b2, b3, b4, b5)
+    draw_right_flap(rotation, backbuttonheld, tr_screen, br_screen, b0, b1, b2, b3, b4, b5)
+
+    camera(0,0)
+end
+
 -- https://www.lexaloffle.com/bbs/?tid=38931
 -- c = map, s = screen
 function smap(cx,cy,cw,ch,sx,sy,sw,sh,flipx)
@@ -127,7 +141,7 @@ function draw_screen(xoff, yoff, w, h, bg_color, screen_func)
     clip()
 end
 
-function draw_left_flap(screen_func)
+function draw_left_flap(screen_func, b0, b1, b2, b3, b4, b5)
     draw_screen(12, 22, 38, 38, 13, screen_func)
 
     map(8,  0, -1,  9, 8,  11)
@@ -140,10 +154,12 @@ function draw_left_flap(screen_func)
 end
 
 -- flap_rotation is between -1 and 1. -1 means closed, 1 means open.
-function draw_right_flap(flap_rotation, backbutton, topscreen_func, botscreen_func, b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12)
+function draw_right_flap(flap_rotation, backbuttonheld, topscreen_func, botscreen_func, b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12)
     if flap_rotation < 0 then
         smap(0, 0, 8, 11, 8*8*(1-abs(flap_rotation))-1, 9, 8*8*abs(flap_rotation), 11*8)
-        if flap_rotation == -1 and not backbutton then spr(129, 3, 49) end
+
+        -- once the rotation changes, the back button is released.
+        if flap_rotation == -1 and backbuttonheld then spr(129, 3, 49) end
 
     elseif flap_rotation > 0 then
         if flap_rotation == 1 then palt(5, true) end

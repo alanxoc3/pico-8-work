@@ -4,21 +4,16 @@ zclass[[test_obj,actor,drawlayer_50|x,@,y,@,color,7,init,%test_init,update,%test
 |[test_update]| function(a) a.x += xbtn() a.y += ybtn()    end $$
 |[test_draw]|   function(a) circfill(a.x, a.y, 2, a.color) end $$
 
-|[game_init]| function()
+|[game_init]| function(a)
     _g.test_obj(64, 64)
+    sfx(61,0)
 end $$
 
-|[game_update]| function()
+|[game_update]| function(a)
     loop_entities('actor', 'state')
 end $$
 
-|[game_draw]| function()
+|[game_draw]| function(a)
     cls()
-    -- draw the pokedex, use camera to change position
-    camera(0,-20)
-    draw_back_panel()
-    draw_right_flap()
-    draw_left_flap()
-    draw_closed_flap()
-    camera()
+    draw_picodex(1, nop, nop, nop, a.light)
 end $$
