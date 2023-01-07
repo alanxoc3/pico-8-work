@@ -37,12 +37,12 @@ end $$
 -- utility funcs
 
 function draw_picodex(rotation, l_screen, tr_screen, br_screen, light, backbuttonheld)
-    local b0, b1, b2, b3, b4, b5 = btn'0', btn'1', btn'2', btn'3', btn'4', btn'5'
+    light = light or 0
 
     camera(-28+(rotation+1)*14,-15)
-    draw_back_panel(light or 0)
-    draw_left_flap(l_screen, b0, b1, b2, b3, b4, b5)
-    draw_right_flap(rotation, backbuttonheld, tr_screen, br_screen, b0, b1, b2, b3, b4, b5)
+    draw_back_panel(light)
+    draw_left_flap(light >= 4, l_screen)
+    draw_right_flap(light >= 4, rotation, backbuttonheld, tr_screen, br_screen)
 
     camera(0,0)
 end
@@ -119,43 +119,30 @@ function zprint(str, x, y, color, align)
     print(str, x, y, color)
 end
 
--- pixels are 0 to 37 (38x38 screen)
-function draw_main_screen()
-    --local fill_pattern = t()\1 % 2 == 0 and 0b1010010110100101 or 0b0101101001011010
-    --local fill_pattern = t()*2\1 % 2 == 0 and 0b1111000011110000 or 0b0000111100001111
-    --fillp(fill_pattern)
-    --rectfill(0,0,37,37,0x5d)
-    --fillp()
-    sspr(0,0,16,16,23,0+t()*2%2,16,16, true)
-    sspr(0,0,16,16,-1,21+(t()*2+1)%2,16,16, false)
-end
-
-function draw_screen(xoff, yoff, w, h, bg_color, screen_func)
+function draw_screen(xoff, yoff, w, h, screen_func)
     local ox, oy = %0x5f28, %0x5f2a
     clip(-ox+xoff,-oy+yoff,w,h)
     camera(ox-xoff, oy-yoff)
-
-    rectfill(0,0,w,h,   bg_color)
-
     screen_func()
     camera(ox, oy)
     clip()
 end
 
-function draw_left_flap(screen_func, b0, b1, b2, b3, b4, b5)
-    draw_screen(12, 22, 38, 38, 13, screen_func)
+function draw_left_flap(is_on, screen_func)
+    rectfill(-1+5,  9+5, 8*8-5,  11*8-5, is_on and 13 or 5)
+    if is_on then draw_screen(12, 22, 38, 38, screen_func) end
 
     map(8,  0, -1,  9, 8,  11)
-    spr(btn(0) and 186 or 154, 07, 77) -- button presses
-    spr(btn(1) and 188 or 156, 23, 77)
-    spr(btn(2) and 171 or 139, 15, 73)
-    spr(btn(3) and 187 or 155, 15, 81)
-    spr(btn(4) and 170 or 138, 39, 77)
-    spr(btn(5) and 172 or 140, 47, 77)
+    spr(g_bl and 186 or 154, 07, 77) -- button presses
+    spr(g_br and 188 or 156, 23, 77)
+    spr(g_bu and 171 or 139, 15, 73)
+    spr(g_bd and 187 or 155, 15, 81)
+    spr(g_bo and 170 or 138, 39, 77)
+    spr(g_bx and 172 or 140, 47, 77)
 end
 
 -- flap_rotation is between -1 and 1. -1 means closed, 1 means open.
-function draw_right_flap(flap_rotation, backbuttonheld, topscreen_func, botscreen_func, b0, b1, b2, b3, b4, b5)
+function draw_right_flap(is_on, flap_rotation, backbuttonheld, topscreen_func, botscreen_func)
     if flap_rotation < 0 then
         smap(0, 0, 8, 11, 8*8*(1-abs(flap_rotation))-1, 9, 8*8*abs(flap_rotation), 11*8)
 
@@ -163,18 +150,20 @@ function draw_right_flap(flap_rotation, backbuttonheld, topscreen_func, botscree
         if flap_rotation == -1 and backbuttonheld then spr(123, 3, 49) end
 
     elseif flap_rotation > 0 then
-        if flap_rotation == 1 then palt(5, true) end
-        smap(16, 0, 8, 11, 65, 9, 8*8*flap_rotation, 11*8)
-        if flap_rotation == 1 then palt(5, false)
-            draw_screen(74, 18, 46, 14,  5, topscreen_func)
-            draw_screen(74, 66, 46, 22,  5, botscreen_func)
+        rectfill(65+5, 9+5, 65+8*8*flap_rotation-5, 9+11*8-5, is_on and 13 or 5)
+        if flap_rotation == 1 and is_on then
+            draw_screen(74, 18, 46, 14, topscreen_func)
+            draw_screen(74, 66, 46, 22, botscreen_func)
+        end
 
-            if b0 then spr(100, 73,  41) spr(100, 113, 49) end
-            if b1 then spr(100, 81,  41) spr(100, 105, 49) end
-            if b2 then spr(100, 89,  41) spr(100, 97,  49) end
-            if b3 then spr(100, 97,  41) spr(100, 89,  49) end
-            if b4 then spr(100, 105, 41) spr(100, 81,  49) end
-            if b5 then spr(100, 113, 41) spr(100, 73,  49) end
+        smap(16, 0, 8, 11, 65, 9, 8*8*flap_rotation, 11*8)
+        if flap_rotation == 1 then
+            if g_bl then spr(100, 73,  41) spr(100, 113, 49) end
+            if g_br then spr(100, 81,  41) spr(100, 105, 49) end
+            if g_bu then spr(100, 89,  41) spr(100, 97,  49) end
+            if g_bd then spr(100, 97,  41) spr(100, 89,  49) end
+            if g_bo then spr(100, 105, 41) spr(100, 81,  49) end
+            if g_bx then spr(100, 113, 41) spr(100, 73,  49) end
         end
     end
 end

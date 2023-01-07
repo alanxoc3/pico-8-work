@@ -92,7 +92,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,test_init,@,test_update,@,test_draw,@,game_init,@,game_update,@,game_draw,@,modes_update,@,modes_drawl,@,gamefadein_init,@,closed_update,@,closed_draw,@,closing_draw,@,light_init,@,opened_draw,@,opening_draw,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,test_init,@,test_update,@,test_draw,@,game_init,@,game_update,@,game_draw,@,main_update,@,main_drawl,@,gamefadein_init,@,closed_update,@,closed_draw,@,closing_draw,@,light_init,@,opened_draw,@,opening_draw,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@]],function(a,stateName)
 a.next_state=stateName or a.next
 end,function(a,stateName)
 a.next_state,a.isnew=nil
@@ -166,8 +166,8 @@ end)
 end,function(a)a.color+=1 end,function(a)a.x+=xbtn()a.y+=ybtn()end,function(a)circfill(a.x,a.y,2,a.color)end,function(a)
 a.modes=_g.modes()
 sfx(61,0)
-menuitem(1,"close picodex",function()
-menuitem(1)
+menuitem(2,"close picodex",function()
+menuitem(2)
 a:load"closing"
 end)
 end,function(a)
@@ -180,12 +180,12 @@ function()a.modes:drawtr()end,
 function()a.modes:drawbr()end,
 4)
 end,function(a)
-if btnp"2"or btnp"0"then a.main_hover_index=(a.main_hover_index-1)%#c_mode_names end
-if btnp"3"or btnp"1"then a.main_hover_index=(a.main_hover_index+1)%#c_mode_names end
+if btnp"2"or btnp"0"then a.main_hover_index=(a.main_hover_index-1)%c_modes.len end
+if btnp"3"or btnp"1"then a.main_hover_index=(a.main_hover_index+1)%c_modes.len end
 end,function(a)
 rectfill(0,14,37,23,1)
 for i=0,4 do
-local text,y=c_mode_names[(i+a.main_hover_index+3)%#c_mode_names+1],c_mode_positions[i+1]
+local text,y=c_modes[(i+a.main_hover_index)%c_modes.len].name,c_mode_positions[i+1]
 if i==2 then
 wobble_text(text,19,y,13)
 else
@@ -253,15 +253,15 @@ zclass[[timer|timers;,;start_timer,%timer_reset_timer,end_timer,%timer_end_timer
 g_pokemon_list=split("bulbasaur,ivysaur,venusaur,charmander,charmeleon,charizard,squirtle,wartortle,blastoise,caterpie,metapod,butterfree,weedle,kakuna,beedrill,pidgey,pidgeotto,pidgeot,rattata,raticate,spearow,fearow,ekans,arbok,pikachu,raichu,sandshrew,sandslash,nidoran?,nidorina,nidoqueen,nidoran!,nidorino,nidoking,clefairy,clefable,vulpix,ninetales,jigglypuff,wigglytuff,zubat,golbat,oddish,gloom,vileplume,paras,parasect,venonat,venomoth,diglett,dugtrio,meowth,persian,psyduck,golduck,mankey,primeape,growlithe,arcanine,poliwag,poliwhirl,poliwrath,abra,kadabra,alakazam,machop,machoke,machamp,bellsprout,weepinbell,victreebel,tentacool,tentacruel,geodude,graveler,golem,ponyta,rapidash,slowpoke,slowbro,magnemite,magneton,farfetch'd,doduo,dodrio,seel,dewgong,grimer,muk,shellder,cloyster,gastly,haunter,gengar,onix,drowzee,hypno,krabby,kingler,voltorb,electrode,exeggcute,exeggutor,cubone,marowak,hitmonlee,hitmonchan,lickitung,koffing,weezing,rhyhorn,rhydon,chansey,tangela,kangaskhan,horsea,seadra,goldeen,seaking,staryu,starmie,mr mime,scyther,jynx,electabuzz,magmar,pinsir,tauros,magikarp,gyarados,lapras,ditto,eevee,vaporeon,jolteon,flareon,porygon,omanyte,omastar,kabuto,kabutops,aerodactyl,snorlax,articuno,zapdos,moltres,dratini,dragonair,dragonite,mewtwo,mew")
 g_pokemon_list[0]="missingno"
 zclass[[test_obj,actor,drawlayer_50|x,@,y,@,color,7,init,%test_init,update,%test_update,draw,%test_draw;]]
-zclass[[modes,actor|drawl,nop,drawtr,nop,drawbr,nop,curr,main,main_hover_index,0;defaults;init,nop,update,nop,drawl,nop,drawtr,nop,drawbr,nop;main;update,%modes_update,drawl,%modes_drawl;browse;]]
-c_mode_names=split"browse,battle,config,battle,party"
+zclass[[modes,actor|drawl,nop,drawtr,nop,drawbr,nop,curr,main,main_hover_index,0;defaults;init,nop,update,nop,drawl,nop,drawtr,nop,drawbr,nop;main;update,%main_update,drawl,%main_drawl;browse;update,%main_update,drawl,%main_drawl;]]
+c_modes=zobj[[len,6;0;name,battle,state,battle;1;name,party,state,party;2;name,browse,state,browse;3;name,quiz,state,quiz;4;name,config,state,config;5;name,credits,state,credits;]]
 c_mode_positions=split"1,8,16,25,32"
 function draw_picodex(rotation,l_screen,tr_screen,br_screen,light,backbuttonheld)
-local b0,b1,b2,b3,b4,b5=btn"0",btn"1",btn"2",btn"3",btn"4",btn"5"
+light=light or 0
 camera(-28+(rotation+1)*14,-15)
-draw_back_panel(light or 0)
-draw_left_flap(l_screen,b0,b1,b2,b3,b4,b5)
-draw_right_flap(rotation,backbuttonheld,tr_screen,br_screen,b0,b1,b2,b3,b4,b5)
+draw_back_panel(light)
+draw_left_flap(light>=4,l_screen)
+draw_right_flap(light>=4,rotation,backbuttonheld,tr_screen,br_screen)
 camera(0,0)
 end
 function smap(cx,cy,cw,ch,sx,sy,sw,sh,flipx)
@@ -314,45 +314,43 @@ if align==0 then x-=#str*2
 elseif align>0 then x-=#str*4+1 end
 print(str,x,y,color)
 end
-function draw_main_screen()
-sspr(0,0,16,16,23,0+t()*2%2,16,16,true)
-sspr(0,0,16,16,-1,21+(t()*2+1)%2,16,16,false)
-end
-function draw_screen(xoff,yoff,w,h,bg_color,screen_func)
+function draw_screen(xoff,yoff,w,h,screen_func)
 local ox,oy=%0x5f28,%0x5f2a
 clip(-ox+xoff,-oy+yoff,w,h)
 camera(ox-xoff,oy-yoff)
-rectfill(0,0,w,h,bg_color)
 screen_func()
 camera(ox,oy)
 clip()
 end
-function draw_left_flap(screen_func,b0,b1,b2,b3,b4,b5)
-draw_screen(12,22,38,38,13,screen_func)
+function draw_left_flap(is_on,screen_func)
+rectfill(-1+5,9+5,8*8-5,11*8-5,is_on and 13 or 5)
+if is_on then draw_screen(12,22,38,38,screen_func)end
 map(8,0,-1,9,8,11)
-spr(btn(0)and 186 or 154,07,77)
-spr(btn(1)and 188 or 156,23,77)
-spr(btn(2)and 171 or 139,15,73)
-spr(btn(3)and 187 or 155,15,81)
-spr(btn(4)and 170 or 138,39,77)
-spr(btn(5)and 172 or 140,47,77)
+spr(g_bl and 186 or 154,07,77)
+spr(g_br and 188 or 156,23,77)
+spr(g_bu and 171 or 139,15,73)
+spr(g_bd and 187 or 155,15,81)
+spr(g_bo and 170 or 138,39,77)
+spr(g_bx and 172 or 140,47,77)
 end
-function draw_right_flap(flap_rotation,backbuttonheld,topscreen_func,botscreen_func,b0,b1,b2,b3,b4,b5)
+function draw_right_flap(is_on,flap_rotation,backbuttonheld,topscreen_func,botscreen_func)
 if flap_rotation<0 then
 smap(0,0,8,11,8*8*(1-abs(flap_rotation))-1,9,8*8*abs(flap_rotation),11*8)
 if flap_rotation==-1 and backbuttonheld then spr(123,3,49)end
 elseif flap_rotation>0 then
-if flap_rotation==1 then palt(5,true)end
+rectfill(65+5,9+5,65+8*8*flap_rotation-5,9+11*8-5,is_on and 13 or 5)
+if flap_rotation==1 and is_on then
+draw_screen(74,18,46,14,topscreen_func)
+draw_screen(74,66,46,22,botscreen_func)
+end
 smap(16,0,8,11,65,9,8*8*flap_rotation,11*8)
-if flap_rotation==1 then palt(5,false)
-draw_screen(74,18,46,14,5,topscreen_func)
-draw_screen(74,66,46,22,5,botscreen_func)
-if b0 then spr(100,73,41)spr(100,113,49)end
-if b1 then spr(100,81,41)spr(100,105,49)end
-if b2 then spr(100,89,41)spr(100,97,49)end
-if b3 then spr(100,97,41)spr(100,89,49)end
-if b4 then spr(100,105,41)spr(100,81,49)end
-if b5 then spr(100,113,41)spr(100,73,49)end
+if flap_rotation==1 then
+if g_bl then spr(100,73,41)spr(100,113,49)end
+if g_br then spr(100,81,41)spr(100,105,49)end
+if g_bu then spr(100,89,41)spr(100,97,49)end
+if g_bd then spr(100,97,41)spr(100,89,49)end
+if g_bo then spr(100,105,41)spr(100,81,49)end
+if g_bx then spr(100,113,41)spr(100,73,49)end
 end
 end
 end
@@ -446,6 +444,9 @@ end
 zclass[[game_state,actor|curr,fadein;ecs_exclusions;actor,true;defaults;init,nop,update,nop,draw,nop,light,0,backbuttonheld,no,modes,;logo;next,fadein,init,%logo_init,update,nop,draw,%logo_draw,duration,2.5;fadein;next,game,duration,0,init,%gamefadein_init;closed;next,opening,update,%closed_update,draw,%closed_draw;opening;next,starting_1,duration,.25,draw,%opening_draw;starting_1;next,starting_2,light,1,duration,.125,init,%light_init,draw,%opened_draw;starting_2;next,starting_3,light,2,duration,.125,init,%light_init,draw,%opened_draw;starting_3;next,game,light,3,duration,.125,init,%light_init,draw,%opened_draw;game;next,closing,light,4,init,%game_init,update,%game_update,draw,%game_draw;closing;next,closed,duration,.25,update,nop,draw,%closing_draw;]]
 function _init()
 memset(0x8000,0,0x7fff)
+menuitem(1,"swap 🅾️/❎",function()
+poke(0x5efa,@0x5efa==0 and 1 or 0)
+end)
 poke(0x5f5c,255)
 cls()
 sfx(62,0)
@@ -456,7 +457,17 @@ memcpy(0x0000,0xc000,0x2000)
 g_tl=_g.game_state()
 end
 function _update60()
-if btn(4)and btnp(5)then g_debug=not g_debug end
+g_bl=btn"0" g_br=btn"1"
+g_bu=btn"2" g_bd=btn"3"
+g_bo=btn"4" g_bx=btn"5"
+g_bpl=btnp"0" g_bpr=btnp"1"
+g_bpu=btnp"2" g_bpd=btnp"3"
+g_bpo=btnp"4" g_bpx=btnp"5"
+if@0x5efa==1 then
+g_bo,g_bx=g_bx,g_bo
+g_bpo,g_bpx=g_bpx,g_bpo
+end
+if g_bo and g_bpx then g_debug=not g_debug end
 zcall(loop_entities,[[1;,actor,clean;2;,fader,clean;]])
 register_entities()
 zcall(loop_entities,[[1;,fader,tick;2;,game_state,tick;3;,fader,state;4;,game_state,state;]])

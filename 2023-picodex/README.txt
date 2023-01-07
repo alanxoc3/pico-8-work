@@ -59,3 +59,4 @@ unlock missingno by:
 1 byte (bit) needed for unlocking missingno
 1 byte for guess pokemon score
 1 byte for picodown score
+1 byte for swap controls

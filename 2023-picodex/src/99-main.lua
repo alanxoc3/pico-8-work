@@ -33,6 +33,10 @@ function _init()
     -- clear all the read only memory. testing things out showed that this doesn't get cleared automatically.
     memset(0x8000, 0, 0x7fff)
 
+    menuitem(1, "swap 🅾️/❎", function()
+        poke(S_SWAP_CONTROLS, @S_SWAP_CONTROLS == 0 and 1 or 0)
+    end)
+
     poke(0x5f5c, 255) -- no key repeats allowed
 
     cls()
@@ -55,8 +59,20 @@ function _init()
 end
 
 function _update60()
+    g_bl  = btn'0'  g_br  = btn'1'
+    g_bu  = btn'2'  g_bd  = btn'3'
+    g_bo  = btn'4'  g_bx  = btn'5'
+    g_bpl = btnp'0' g_bpr = btnp'1'
+    g_bpu = btnp'2' g_bpd = btnp'3'
+    g_bpo = btnp'4' g_bpx = btnp'5'
+
+    if @S_SWAP_CONTROLS == 1 then
+        g_bo,  g_bx  = g_bx,  g_bo
+        g_bpo, g_bpx = g_bpx, g_bpo
+    end
+
     -- DEBUG_BEGIN
-    if btn(4) and btnp(5) then g_debug = not g_debug end
+    if g_bo and g_bpx then g_debug = not g_debug end
     -- DEBUG_END
 
     zcall(loop_entities, [[
