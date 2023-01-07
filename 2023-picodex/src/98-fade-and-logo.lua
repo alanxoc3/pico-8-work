@@ -49,7 +49,7 @@ zclass[[fader_in,fader|
     g_fade = 1 - a:get_elapsed_percent'start'
 end $$
 
-|[logo_init]| function() sfx(63, 0) end $$
+|[logo_init]| function() sfx(63,1) end $$
 
 |[logo_draw]| function(a)
     g_fade = cos(a:get_elapsed_percent'logo')+1

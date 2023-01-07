@@ -5,7 +5,6 @@ zclass[[test_obj,actor,drawlayer_50|x,@,y,@,color,7,init,%test_init,update,%test
 |[test_draw]|   function(a) circfill(a.x, a.y, 2, a.color) end $$
 
 |[game_init]| function()
-    _g.fader_in()
     _g.test_obj(64, 64)
 end $$
 

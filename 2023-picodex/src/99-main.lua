@@ -1,15 +1,31 @@
 -- TEMPLATE TOKEN COUNT: 1045
 zclass[[game_state,actor|
-    ecs_exclusions;actor,true; -- remove game_state from the actor group
-    curr,logo;
-    logo; init,%logo_init, update,nop,          draw,%logo_draw, duration,2.5, next,game;
-    game; init,%game_init, update,%game_update, draw,%game_draw;
+    curr,fadein;
+    ecs_exclusions; actor,true; -- remove game_state from the actor group
+    defaults;       init,nop, update,nop, draw,nop, light,0;
+
+    logo; next,fadein, init,%logo_init, update,nop, draw,%logo_draw, duration,2.5;
+    fadein; next,closed, duration,0, init,%gamefadein_init;
+
+    closed;     next,opening,                         init,nop,         update,%closed_update, draw,%closed_draw;
+    opening;    next,starting_1,          duration,1, init,nop,         update,nop,            draw,%opening_draw;
+    starting_1; next,starting_2,          duration,3, init,nop,         update,%game_update,   draw,%opened_draw;  -- no lights
+    starting_2; next,starting_3, light,1, duration,3, init,%light_init, update,%game_update,   draw,%opened_draw;  -- green
+    starting_3; next,starting_4, light,2, duration,3, init,%light_init, update,%game_update,   draw,%opened_draw;  -- yellow
+    starting_4; next,game,       light,3, duration,3, init,%light_init, update,%game_update,   draw,%opened_draw;  -- red
+    game;       next,closing,    light,4,             init,%game_init,  update,%game_update,   draw,%game_draw;    -- white
+    closing;    next,closed,              duration,1, init,nop,         update,%game_update,   draw,%closing_draw;
 ]]
 
 function _init()
+    cls()
+    sfx(62,0) -- a sound indicator that the came is actually running while loading
     extract_sheet(0)
     extract_sheet(1)
     extract_sheet(2)
+
+    poke(0x5f56, 0xe0) -- make map funcs point here instead
+    px9_decomp(0, 0, peek2(3*2), mget, mset)
 
     -- Need the pokedex tiles to stay loaded. This starts at sprite index #96.
     memcpy(0x0000, 0xc000, 0x2000)
@@ -41,4 +57,5 @@ function _draw()
     cls()
     loop_entities('game_state', 'draw')
     fade(g_fade)
+    --map(0,0,0,0,34,12) -- 0x6000, 0x0000, 0x2000)
 end

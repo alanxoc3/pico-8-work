@@ -22,13 +22,14 @@ zclass[[actor,timer|
     isnew,    yes,
 
     init,      nop,
+    stateless_update,    nop,
     update,    nop,
     destroyed, nop;
 ]]
 
 -- if load is called multiple times, the first load is used.
 |[actor_load]| function(a, stateName)
-    a.next_state = a.next_state or stateName
+    a.next_state = stateName or a.next
 end $$
 
 -- Load the given state into the actor, by applying the properties of the sub-object
@@ -43,6 +44,7 @@ end $$
     else
         a:end_timer(a.curr)
         a.next, a.duration = nil -- default values, unless overridden by next line
+        for k, v in pairs(a.defaults) do a[k] = v end
         for k, v in pairs(a[stateName]) do a[k] = v end
         a.curr = stateName
         a:start_timer(a.curr, a.duration, a.duration and function() a:load(a.next or 'dead') end)
@@ -64,14 +66,16 @@ end $$
 
     -- per-frame update
     a:update()
+    a:stateless_update()
 end $$
 
 |[actor_is_alive]| function(a)
-    return a:is_active'ending' == nil and a.alive
+    return not a.effectively_dead and a:is_active'ending' == nil and a.alive
 end $$
 
 -- If there is an ending state, call that. Otherwise, just set alive to false.
 |[actor_kill]| function(a)
+    a.effectively_dead = true
     if a.ending then
         if a.curr == 'start' then
             a.next = 'ending'

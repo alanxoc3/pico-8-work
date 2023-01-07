@@ -5,15 +5,6 @@ function extract_sheet(index)
         function(...) return vset(0x8000+index*0x2000, ...) end)
 end
 
-function h_draw()
-    cls()
-    -- memcpy(0x6000, 0x0000, 0x2000)
-    map(32,16,0,0,16,16)
-    map(0,16,0,0,16,16)
-    map(16,16,0,0,16,16)
-    -- spr(0,0,0,16,16)
-end
-
 function vget(offset, x, y)
     x = min(max(0, x), 127)\1
     y = y\1
