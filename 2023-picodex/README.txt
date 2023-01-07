@@ -1,20 +1,29 @@
 # Picodex
-## Credits
--- https://gamefaqs.gamespot.com/gameboy/924467-pokemon-green/faqs/12776
--- px9
--- smap
--- battle mechanics: https://www.smogon.com/rb/articles/rby_mechanics_guide
+A pokedex in pico-8. Comes complete with minigames, pokedex, and a battle simulator. Picodex is based on the generation 1 games and tries to stay true to the original games, though a few minor oversights in the original games may be corrected here.
 
-## Compilation
+## Specs
+```
+Screen 1 (Left):      38x38
+Screen 2 (Top-Right): 46x14
+Screen 3 (Top-Left):  46x22
+```
+
+## Building
 To compile the resources, run this:
 
 ```
 pico8 -x compile.lua
 ```
 
-To compile the code, run pico-compile, which is located in the /bin directory of this repo.
+To compile the code, run pico-compile, which is located in the /bin directory of this repository.
 
-## Design
+## Credits
+-- https://gamefaqs.gamespot.com/gameboy/924467-pokemon-green/faqs/12776
+-- px9
+-- smap
+-- battle mechanics: https://www.smogon.com/rb/articles/rby_mechanics_guide
+
+## Random Temporary Notes
 use the 
 
 Blue buttons on the right correspond to the different pokedex modes.
