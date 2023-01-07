@@ -92,7 +92,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,test_init,@,test_update,@,test_draw,@,game_init,@,game_update,@,game_draw,@,gamefadein_init,@,closed_update,@,closed_draw,@,closing_draw,@,light_init,@,opened_draw,@,opening_draw,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,test_init,@,test_update,@,test_draw,@,game_init,@,game_update,@,game_draw,@,modes_update,@,modes_drawl,@,gamefadein_init,@,closed_update,@,closed_draw,@,closing_draw,@,light_init,@,opened_draw,@,opening_draw,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@]],function(a,stateName)
 a.next_state=stateName or a.next
 end,function(a,stateName)
 a.next_state,a.isnew=nil
@@ -164,21 +164,34 @@ timer.active=false
 timer.callback(a)
 end)
 end,function(a)a.color+=1 end,function(a)a.x+=xbtn()a.y+=ybtn()end,function(a)circfill(a.x,a.y,2,a.color)end,function(a)
-_g.test_obj(64,64)
+a.modes=_g.modes()
 sfx(61,0)
 menuitem(1,"close picodex",function()
 menuitem(1)
 a:load"closing"
 end)
 end,function(a)
-loop_entities("actor","state")
+loop_entities("modes","state")
 end,function(a)
 cls()
-draw_picodex(1,function()
-for i=1,#g_modes do
-print(g_modes[i],1,i*6,1)
+draw_picodex(1,
+function()a.modes:drawl()end,
+function()a.modes:drawtr()end,
+function()a.modes:drawbr()end,
+4)
+end,function(a)
+if btnp"2"or btnp"0"then a.main_hover_index=(a.main_hover_index-1)%#c_mode_names end
+if btnp"3"or btnp"1"then a.main_hover_index=(a.main_hover_index+1)%#c_mode_names end
+end,function(a)
+rectfill(0,14,37,23,1)
+for i=0,4 do
+local text,y=c_mode_names[(i+a.main_hover_index+3)%#c_mode_names+1],c_mode_positions[i+1]
+if i==2 then
+wobble_text(text,19,y,13)
+else
+zprint(text,19,y,1,0)
 end
-end,nop,nop,a.light)
+end
 end,function(a)
 _g.fader_in()
 sfx(-2,0)
@@ -237,8 +250,12 @@ function ybtn()return zbtn(btn,2)end
 zclass[[actor,timer|load,%actor_load,loadlogic,%actor_loadlogic,state,%actor_state,kill,%actor_kill,clean,%actor_clean,is_alive,%actor_is_alive,alive,yes,duration,null,curr,start,next,null,isnew,yes,init,nop,stateless_update,nop,update,nop,destroyed,nop;]]
 zclass[[drawlayer_50|]]
 zclass[[timer|timers;,;start_timer,%timer_reset_timer,end_timer,%timer_end_timer,is_active,%timer_is_active,get_elapsed_percent,%timer_get_elapsed_percent,tick,%timer_tick,]]
+g_pokemon_list=split("bulbasaur,ivysaur,venusaur,charmander,charmeleon,charizard,squirtle,wartortle,blastoise,caterpie,metapod,butterfree,weedle,kakuna,beedrill,pidgey,pidgeotto,pidgeot,rattata,raticate,spearow,fearow,ekans,arbok,pikachu,raichu,sandshrew,sandslash,nidoran?,nidorina,nidoqueen,nidoran!,nidorino,nidoking,clefairy,clefable,vulpix,ninetales,jigglypuff,wigglytuff,zubat,golbat,oddish,gloom,vileplume,paras,parasect,venonat,venomoth,diglett,dugtrio,meowth,persian,psyduck,golduck,mankey,primeape,growlithe,arcanine,poliwag,poliwhirl,poliwrath,abra,kadabra,alakazam,machop,machoke,machamp,bellsprout,weepinbell,victreebel,tentacool,tentacruel,geodude,graveler,golem,ponyta,rapidash,slowpoke,slowbro,magnemite,magneton,farfetch'd,doduo,dodrio,seel,dewgong,grimer,muk,shellder,cloyster,gastly,haunter,gengar,onix,drowzee,hypno,krabby,kingler,voltorb,electrode,exeggcute,exeggutor,cubone,marowak,hitmonlee,hitmonchan,lickitung,koffing,weezing,rhyhorn,rhydon,chansey,tangela,kangaskhan,horsea,seadra,goldeen,seaking,staryu,starmie,mr mime,scyther,jynx,electabuzz,magmar,pinsir,tauros,magikarp,gyarados,lapras,ditto,eevee,vaporeon,jolteon,flareon,porygon,omanyte,omastar,kabuto,kabutops,aerodactyl,snorlax,articuno,zapdos,moltres,dratini,dragonair,dragonite,mewtwo,mew")
+g_pokemon_list[0]="missingno"
 zclass[[test_obj,actor,drawlayer_50|x,@,y,@,color,7,init,%test_init,update,%test_update,draw,%test_draw;]]
-g_modes=split"bROWSE,pARTY,bATTLE,qUIZ,cONFIG"
+zclass[[modes,actor|drawl,nop,drawtr,nop,drawbr,nop,curr,main,main_hover_index,0;defaults;init,nop,update,nop,drawl,nop,drawtr,nop,drawbr,nop;main;update,%modes_update,drawl,%modes_drawl;browse;]]
+c_mode_names=split"browse,battle,config,battle,party"
+c_mode_positions=split"1,8,16,25,32"
 function draw_picodex(rotation,l_screen,tr_screen,br_screen,light,backbuttonheld)
 local b0,b1,b2,b3,b4,b5=btn"0",btn"1",btn"2",btn"3",btn"4",btn"5"
 camera(-28+(rotation+1)*14,-15)
@@ -426,9 +443,10 @@ vset(x,y,v)
 end
 end
 end
-zclass[[game_state,actor|curr,fadein;ecs_exclusions;actor,true;defaults;init,nop,update,nop,draw,nop,light,0,backbuttonheld,no;logo;next,fadein,init,%logo_init,update,nop,draw,%logo_draw,duration,2.5;fadein;next,game,duration,0,init,%gamefadein_init;closed;next,opening,update,%closed_update,draw,%closed_draw;opening;next,starting_1,duration,.25,draw,%opening_draw;starting_1;next,starting_2,light,1,duration,.125,init,%light_init,draw,%opened_draw;starting_2;next,starting_3,light,2,duration,.125,init,%light_init,draw,%opened_draw;starting_3;next,game,light,3,duration,.125,init,%light_init,draw,%opened_draw;game;next,closing,light,4,init,%game_init,update,%game_update,draw,%game_draw;closing;next,closed,duration,.25,update,nop,draw,%closing_draw;]]
+zclass[[game_state,actor|curr,fadein;ecs_exclusions;actor,true;defaults;init,nop,update,nop,draw,nop,light,0,backbuttonheld,no,modes,;logo;next,fadein,init,%logo_init,update,nop,draw,%logo_draw,duration,2.5;fadein;next,game,duration,0,init,%gamefadein_init;closed;next,opening,update,%closed_update,draw,%closed_draw;opening;next,starting_1,duration,.25,draw,%opening_draw;starting_1;next,starting_2,light,1,duration,.125,init,%light_init,draw,%opened_draw;starting_2;next,starting_3,light,2,duration,.125,init,%light_init,draw,%opened_draw;starting_3;next,game,light,3,duration,.125,init,%light_init,draw,%opened_draw;game;next,closing,light,4,init,%game_init,update,%game_update,draw,%game_draw;closing;next,closed,duration,.25,update,nop,draw,%closing_draw;]]
 function _init()
 memset(0x8000,0,0x7fff)
+poke(0x5f5c,255)
 cls()
 sfx(62,0)
 extract_sheet(2)

@@ -8,7 +8,7 @@ zclass[[game_state,actor|
     -- NORMAL_END
 
     ecs_exclusions; actor,true; -- remove game_state from the actor group
-    defaults;       init,nop, update,nop, draw,nop, light,0, backbuttonheld,no;
+    defaults;       init,nop, update,nop, draw,nop, light,0, backbuttonheld,no, modes,;
 
     logo; next,fadein, init,%logo_init, update,nop, draw,%logo_draw, duration,2.5;
 
@@ -32,6 +32,8 @@ zclass[[game_state,actor|
 function _init()
     -- clear all the read only memory. testing things out showed that this doesn't get cleared automatically.
     memset(0x8000, 0, 0x7fff)
+
+    poke(0x5f5c, 255) -- no key repeats allowed
 
     cls()
     sfx(62,0) -- a sound indicator that the came is actually running while loading
