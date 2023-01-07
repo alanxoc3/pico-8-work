@@ -1,10 +1,3 @@
--- BASIC EXAMPLE FOR SIMPLE GAME BELOW:
-zclass[[test_obj,actor,drawlayer_50|x,@,y,@,color,7,init,%test_init,update,%test_update,draw,%test_draw;]]
-
-|[test_init]|   function(a) a.color += 1                   end $$
-|[test_update]| function(a) a.x += xbtn() a.y += ybtn()    end $$
-|[test_draw]|   function(a) circfill(a.x, a.y, 2, a.color) end $$
-
 zclass[[modes,actor|
     drawl,nop, drawtr,nop, drawbr,nop, curr,main;
     defaults; init,nop, update,nop, drawl,nop, drawtr,nop, drawbr,nop;
@@ -16,9 +9,15 @@ zclass[[modes,actor|
 |[game_init]| function(a)
     a.modes = _g.modes()
     sfx(61,0)
-    menuitem(2, "close picodex", function()
+
+    menuitem(1, "close picodex", function()
+        menuitem(1)
         menuitem(2)
         a:load'closing'
+    end)
+
+    menuitem(2, "swap 🅾️/❎", function()
+        poke(S_SWAP_CONTROLS, @S_SWAP_CONTROLS == 0 and 1 or 0)
     end)
 end $$
 
@@ -28,7 +27,7 @@ end $$
 
 |[game_draw]| function(a)
     cls()
-    draw_picodex(1,
+    draw_picodex(a:is_active'shaking', 1,
         function() a.modes:drawl() end,
         function() a.modes:drawtr() end, 
         function() a.modes:drawbr() end, 
@@ -49,15 +48,15 @@ c_modes = zobj[[
 c_mode_positions = split"1,8,16,25,32"
 
 |[main_update]| function(a)
-    if btnp'2' or btnp'0' then poke(S_MODE, (@S_MODE - 1) % c_modes.len) end
-    if btnp'3' or btnp'1' then poke(S_MODE, (@S_MODE + 1) % c_modes.len) end
+    if g_bpu or g_bpl then poke(S_MODE, (@S_MODE - 1) % c_modes.len) end
+    if g_bpd or g_bpr then poke(S_MODE, (@S_MODE + 1) % c_modes.len) end
 end $$
 
 |[main_drawl]| function(a)
         rectfill(0,14,37,23,1)
 
         for i=0,4 do
-            local text, y = c_modes[(i+@S_MODE+2)%c_modes.len].name, c_mode_positions[i+1]
+            local text, y = c_modes[(i-2+@S_MODE)%c_modes.len].name, c_mode_positions[i+1]
             if i == 2 then
                 wobble_text(text, 19, y, 13)
             else

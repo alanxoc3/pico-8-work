@@ -92,7 +92,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,test_init,@,test_update,@,test_draw,@,game_init,@,game_update,@,game_draw,@,main_update,@,main_drawl,@,gamefadein_init,@,closed_update,@,closed_draw,@,closing_draw,@,light_init,@,opened_draw,@,opening_draw,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,game_state_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,game_init,@,game_update,@,game_draw,@,main_update,@,main_drawl,@,gamefadein_init,@,closed_init,@,closed_update,@,closed_draw,@,closing_draw,@,light_init,@,opened_draw,@,opening_draw,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,game_state_init,@]],function(a,stateName)
 a.next_state=stateName or a.next
 end,function(a,stateName)
 a.next_state,a.isnew=nil
@@ -163,29 +163,33 @@ foreach(finished_timers,function(timer)
 timer.active=false
 timer.callback(a)
 end)
-end,function(a)a.color+=1 end,function(a)a.x+=xbtn()a.y+=ybtn()end,function(a)circfill(a.x,a.y,2,a.color)end,function(a)
+end,function(a)
 a.modes=_g.modes()
 sfx(61,0)
-menuitem(2,"close picodex",function()
+menuitem(1,"close picodex",function()
+menuitem(1)
 menuitem(2)
 a:load"closing"
+end)
+menuitem(2,"swap 🅾️/❎",function()
+poke(0x5efa,@0x5efa==0 and 1 or 0)
 end)
 end,function(a)
 loop_entities("modes","state")
 end,function(a)
 cls()
-draw_picodex(1,
+draw_picodex(a:is_active"shaking",1,
 function()a.modes:drawl()end,
 function()a.modes:drawtr()end,
 function()a.modes:drawbr()end,
 4)
 end,function(a)
-if btnp"2"or btnp"0"then poke(0x5ef8,(@0x5ef8-1)%c_modes.len)end
-if btnp"3"or btnp"1"then poke(0x5ef8,(@0x5ef8+1)%c_modes.len)end
+if g_bpu or g_bpl then poke(0x5ef8,(@0x5ef8-1)%c_modes.len)end
+if g_bpd or g_bpr then poke(0x5ef8,(@0x5ef8+1)%c_modes.len)end
 end,function(a)
 rectfill(0,14,37,23,1)
 for i=0,4 do
-local text,y=c_modes[(i+@0x5ef8+2)%c_modes.len].name,c_mode_positions[i+1]
+local text,y=c_modes[(i-2+@0x5ef8)%c_modes.len].name,c_mode_positions[i+1]
 if i==2 then
 wobble_text(text,19,y,13)
 else
@@ -196,22 +200,30 @@ end,function(a)
 _g.fader_in()
 sfx(-2,0)
 end,function(a)
+menuitem(1,"factory reset",function()
+sfx(59,0)
+memset(0x5e00,0,0x100)
+a:start_timer("shaking",.5)
+end)
+end,function(a)
 if btn()& 0x1f==0 and a.backbuttonheld then
 a.backbuttonheld=false
 a:load()
+menuitem(1)
 elseif btn()& 0x1f ~=0 then
 a.backbuttonheld=true
+menuitem(1)
 end
 end,function(a)
-draw_picodex(-1,nop,nop,nop,a.light,a.backbuttonheld)
+draw_picodex(a:is_active"shaking",-1,nop,nop,nop,a.light,a.backbuttonheld)
 end,function(a)
-draw_picodex(cos(a:get_elapsed_percent"closing"/2),nop,nop,nop)
+draw_picodex(a:is_active"shaking",cos(a:get_elapsed_percent"closing"/2),nop,nop,nop)
 end,function(a)
 sfx(60,0)
 end,function(a)
-draw_picodex(1,nop,nop,nop,a.light)
+draw_picodex(a:is_active"shaking",1,nop,nop,nop,a.light)
 end,function(a)
-draw_picodex(-cos(a:get_elapsed_percent"opening"/2),nop,nop,nop)
+draw_picodex(a:is_active"shaking",-cos(a:get_elapsed_percent"opening"/2),nop,nop,nop)
 end,function(a)
 poke(0x5f43,0xff)
 g_fade=a:get_elapsed_percent"start"
@@ -236,9 +248,6 @@ end
 function rnd_one(val)
 return(flr_rnd"3"-1)*(val or 1)
 end
-function btn_helper(f,a,b)
-return f(a)and f(b)and 0 or f(a)and 0xffff or f(b)and 1 or 0
-end
 function zcall_tbl(func,tbl)
 foreach(tbl,function(params)
 func(unpack(params))
@@ -247,21 +256,17 @@ end
 function zcall(func,text,...)
 zcall_tbl(func,zobj(text,...))
 end
-function zbtn(f,a)return f(a)and f(a+1)and 0 or f(a)and-1 or f(a+1)and 1 or 0 end
-function xbtn()return zbtn(btn,0)end
-function ybtn()return zbtn(btn,2)end
 zclass[[actor,timer|load,%actor_load,loadlogic,%actor_loadlogic,state,%actor_state,kill,%actor_kill,clean,%actor_clean,is_alive,%actor_is_alive,alive,yes,duration,null,curr,start,next,null,isnew,yes,init,nop,stateless_update,nop,update,nop,destroyed,nop;]]
 zclass[[drawlayer_50|]]
 zclass[[timer|timers;,;start_timer,%timer_reset_timer,end_timer,%timer_end_timer,is_active,%timer_is_active,get_elapsed_percent,%timer_get_elapsed_percent,tick,%timer_tick,]]
 g_pokemon_list=split("bulbasaur,ivysaur,venusaur,charmander,charmeleon,charizard,squirtle,wartortle,blastoise,caterpie,metapod,butterfree,weedle,kakuna,beedrill,pidgey,pidgeotto,pidgeot,rattata,raticate,spearow,fearow,ekans,arbok,pikachu,raichu,sandshrew,sandslash,nidoran?,nidorina,nidoqueen,nidoran!,nidorino,nidoking,clefairy,clefable,vulpix,ninetales,jigglypuff,wigglytuff,zubat,golbat,oddish,gloom,vileplume,paras,parasect,venonat,venomoth,diglett,dugtrio,meowth,persian,psyduck,golduck,mankey,primeape,growlithe,arcanine,poliwag,poliwhirl,poliwrath,abra,kadabra,alakazam,machop,machoke,machamp,bellsprout,weepinbell,victreebel,tentacool,tentacruel,geodude,graveler,golem,ponyta,rapidash,slowpoke,slowbro,magnemite,magneton,farfetch'd,doduo,dodrio,seel,dewgong,grimer,muk,shellder,cloyster,gastly,haunter,gengar,onix,drowzee,hypno,krabby,kingler,voltorb,electrode,exeggcute,exeggutor,cubone,marowak,hitmonlee,hitmonchan,lickitung,koffing,weezing,rhyhorn,rhydon,chansey,tangela,kangaskhan,horsea,seadra,goldeen,seaking,staryu,starmie,mr mime,scyther,jynx,electabuzz,magmar,pinsir,tauros,magikarp,gyarados,lapras,ditto,eevee,vaporeon,jolteon,flareon,porygon,omanyte,omastar,kabuto,kabutops,aerodactyl,snorlax,articuno,zapdos,moltres,dratini,dragonair,dragonite,mewtwo,mew")
 g_pokemon_list[0]="missingno"
-zclass[[test_obj,actor,drawlayer_50|x,@,y,@,color,7,init,%test_init,update,%test_update,draw,%test_draw;]]
 zclass[[modes,actor|drawl,nop,drawtr,nop,drawbr,nop,curr,main;defaults;init,nop,update,nop,drawl,nop,drawtr,nop,drawbr,nop;main;update,%main_update,drawl,%main_drawl;browse;update,%main_update,drawl,%main_drawl;]]
 c_modes=zobj[[len,6;4;name,battle,state,battle;5;name,party,state,party;0;name,browse,state,browse;1;name,quiz,state,quiz;2;name,config,state,config;3;name,credits,state,credits;]]
 c_mode_positions=split"1,8,16,25,32"
-function draw_picodex(rotation,l_screen,tr_screen,br_screen,light,backbuttonheld)
+function draw_picodex(shaking,rotation,l_screen,tr_screen,br_screen,light,backbuttonheld)
 light=light or 0
-camera(-28+(rotation+1)*14,-15)
+camera(-28+(rotation+1)*14+(shaking and flr(rnd(3)-1)or 0),-15)
 draw_back_panel(light)
 draw_left_flap(light>=4,l_screen)
 draw_right_flap(light>=4,rotation,backbuttonheld,tr_screen,br_screen)
@@ -444,12 +449,9 @@ vset(x,y,v)
 end
 end
 end
-zclass[[game_state,actor|curr,fadein;init,%game_state_init;ecs_exclusions;actor,yes;defaults;sinit,nop,update,nop,draw,nop,light,0,backbuttonheld,no,modes,;logo;next,fadein,sinit,%logo_init,update,nop,draw,%logo_draw,duration,2.5;fadein;next,game,duration,0,sinit,%gamefadein_init;closed;next,opening,update,%closed_update,draw,%closed_draw;opening;next,starting_1,duration,.25,draw,%opening_draw;starting_1;next,starting_2,light,1,duration,.125,sinit,%light_init,draw,%opened_draw;starting_2;next,starting_3,light,2,duration,.125,sinit,%light_init,draw,%opened_draw;starting_3;next,game,light,3,duration,.125,sinit,%light_init,draw,%opened_draw;game;next,closing,light,4,sinit,%game_init,update,%game_update,draw,%game_draw;closing;next,closed,duration,.25,update,nop,draw,%closing_draw;]]
+zclass[[game_state,actor|curr,fadein;init,%game_state_init;ecs_exclusions;actor,yes;defaults;sinit,nop,update,nop,draw,nop,light,0,backbuttonheld,no,modes,;logo;next,fadein,sinit,%logo_init,update,nop,draw,%logo_draw,duration,2.5;fadein;next,game,duration,0,sinit,%gamefadein_init;closed;next,opening,sinit,%closed_init,update,%closed_update,draw,%closed_draw;opening;next,starting_1,duration,.25,draw,%opening_draw;starting_1;next,starting_2,light,1,duration,.125,sinit,%light_init,draw,%opened_draw;starting_2;next,starting_3,light,2,duration,.125,sinit,%light_init,draw,%opened_draw;starting_3;next,game,light,3,duration,.125,sinit,%light_init,draw,%opened_draw;game;next,closing,light,4,sinit,%game_init,update,%game_update,draw,%game_draw;closing;next,closed,duration,.25,update,nop,draw,%closing_draw;]]
 function _init()
 memset(0x8000,0,0x7fff)
-menuitem(1,"swap 🅾️/❎",function()
-poke(0x5efa,@0x5efa==0 and 1 or 0)
-end)
 poke(0x5f5c,255)
 cls()
 sfx(62,0)

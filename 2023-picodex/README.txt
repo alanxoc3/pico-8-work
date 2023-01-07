@@ -17,6 +17,18 @@ pico8 -x compile.lua
 
 To compile the code, run pico-compile, which is located in the /bin directory of this repository.
 
+## Sfx
+Sound effects are stored in the `./129-151.p8` cartridge. The `compile.lua` script will copy those sound effects into the `game.p8` file. Here is what each sfx is:
+
+```
+00-37 Pokemon cries
+59    Factory reset noise
+60    Pokedex starting beep
+61    Pokedex started beep
+62    Logo bkgd
+63    Logo melody
+```
+
 ## Credits
 -- https://gamefaqs.gamespot.com/gameboy/924467-pokemon-green/faqs/12776
 -- px9

@@ -14,10 +14,6 @@ function rnd_one(val)
     return (flr_rnd'3'-1)*(val or 1)
 end
 
-function btn_helper(f, a, b)
-   return f(a) and f(b) and 0 or f(a) and 0xffff or f(b) and 1 or 0
-end
-
 function zcall_tbl(func, tbl)
     foreach(tbl, function(params)
         func(unpack(params))
@@ -28,9 +24,3 @@ end
 function zcall(func, text, ...)
     zcall_tbl(func, zobj(text, ...))
 end
-
-function zbtn(f, a) return f(a) and f(a+1) and 0 or f(a) and -1 or f(a+1) and 1 or 0 end
-
-function xbtn() return zbtn(btn, 0) end
-function ybtn() return zbtn(btn, 2) end
-

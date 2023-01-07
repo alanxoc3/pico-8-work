@@ -4,22 +4,33 @@
     sfx(-2,0) -- stop the creepy logo sound from looping
 end $$
 
+-- you can factory reset when the pokedex is closed
+|[closed_init]| function(a)
+    menuitem(1, "factory reset", function()
+        sfx(59,0)
+        memset(0x5e00, 0, 0x100)
+        a:start_timer('shaking', .5)
+    end)
+end $$
+
 |[closed_update]| function(a)
     -- if player 1 pressed any button, go to the next state.
     if btn() & 0x1f == 0 and a.backbuttonheld then
         a.backbuttonheld = false
         a:load()
+        menuitem(1) -- no factory reset now
     elseif btn() & 0x1f ~= 0 then
         a.backbuttonheld = true
+        menuitem(1) -- no factory reset now
     end
 end $$
 
 |[closed_draw]| function(a)
-    draw_picodex(-1, nop, nop, nop, a.light, a.backbuttonheld)
+    draw_picodex(a:is_active'shaking', -1, nop, nop, nop, a.light, a.backbuttonheld)
 end $$
 
 |[closing_draw]| function(a)
-    draw_picodex(cos(a:get_elapsed_percent'closing'/2), nop, nop, nop)
+    draw_picodex(a:is_active'shaking', cos(a:get_elapsed_percent'closing'/2), nop, nop, nop)
 end $$
 
 |[light_init]| function(a)
@@ -27,19 +38,19 @@ end $$
 end $$
 
 |[opened_draw]| function(a)
-    draw_picodex(1, nop, nop, nop, a.light)
+    draw_picodex(a:is_active'shaking', 1, nop, nop, nop, a.light)
 end $$
 
 |[opening_draw]| function(a)
-    draw_picodex(-cos(a:get_elapsed_percent'opening'/2), nop, nop, nop)
+    draw_picodex(a:is_active'shaking', -cos(a:get_elapsed_percent'opening'/2), nop, nop, nop)
 end $$
 
 -- utility funcs
 
-function draw_picodex(rotation, l_screen, tr_screen, br_screen, light, backbuttonheld)
+function draw_picodex(shaking, rotation, l_screen, tr_screen, br_screen, light, backbuttonheld)
     light = light or 0
 
-    camera(-28+(rotation+1)*14,-15)
+    camera(-28+(rotation+1)*14+(shaking and flr(rnd(3)-1) or 0),-15)
     draw_back_panel(light)
     draw_left_flap(light >= 4, l_screen)
     draw_right_flap(light >= 4, rotation, backbuttonheld, tr_screen, br_screen)
