@@ -92,7 +92,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,game_init,@,game_update,@,game_draw,@,main_update,@,main_drawl,@,gamefadein_init,@,closed_init,@,closed_update,@,closed_draw,@,closing_draw,@,light_init,@,opened_draw,@,opening_draw,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,game_state_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,game_init,@,game_update,@,game_draw,@,main_update,@,main_draw1,@,gamefadein_init,@,closed_init,@,closed_update,@,closed_draw,@,closing_draw,@,light_init,@,opened_draw,@,opening_draw,@,browse_update,@,browse_draw1,@,browse_draw2,@,browse_draw3,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,game_state_init,@]],function(a,stateName)
 a.next_state=stateName or a.next
 end,function(a,stateName)
 a.next_state,a.isnew=nil
@@ -179,13 +179,14 @@ loop_entities("modes","state")
 end,function(a)
 cls()
 draw_picodex(a:is_active"shaking",1,
-function()a.modes:drawl()end,
-function()a.modes:drawtr()end,
-function()a.modes:drawbr()end,
+function()a.modes:draw1()end,
+function()a.modes:draw2()end,
+function()a.modes:draw3()end,
 4)
 end,function(a)
 if g_bpu or g_bpl then poke(0x5ef8,(@0x5ef8-1)%c_modes.len)end
 if g_bpd or g_bpr then poke(0x5ef8,(@0x5ef8+1)%c_modes.len)end
+if g_bpx then a:load(c_modes[@0x5ef8].state)end
 end,function(a)
 rectfill(0,14,37,23,1)
 for i=0,4 do
@@ -225,6 +226,18 @@ draw_picodex(a:is_active"shaking",1,nop,nop,nop,a.light)
 end,function(a)
 draw_picodex(a:is_active"shaking",-cos(a:get_elapsed_percent"opening"/2),nop,nop,nop)
 end,function(a)
+if g_bpu then poke(0x5ef8,(@0x5ef8-1)%pkmn_len())end
+if g_bpd then poke(0x5ef8,(@0x5ef8+1)%pkmn_len())end
+if g_bpo then a:load"main" end
+end,function(a)
+for i=0,38*2-1,2 do
+line(i,0,i-38,38,0)
+line(i+1,0,i+1-38,38,0)
+end
+draw_pkmn(@0x5ef8+1,10,10)
+end,function(a)
+end,function(a)
+end,function(a)
 poke(0x5f43,0xff)
 g_fade=a:get_elapsed_percent"start"
 end,function(a)
@@ -261,7 +274,7 @@ zclass[[drawlayer_50|]]
 zclass[[timer|timers;,;start_timer,%timer_reset_timer,end_timer,%timer_end_timer,is_active,%timer_is_active,get_elapsed_percent,%timer_get_elapsed_percent,tick,%timer_tick,]]
 g_pokemon_list=split("bulbasaur,ivysaur,venusaur,charmander,charmeleon,charizard,squirtle,wartortle,blastoise,caterpie,metapod,butterfree,weedle,kakuna,beedrill,pidgey,pidgeotto,pidgeot,rattata,raticate,spearow,fearow,ekans,arbok,pikachu,raichu,sandshrew,sandslash,nidoran?,nidorina,nidoqueen,nidoran!,nidorino,nidoking,clefairy,clefable,vulpix,ninetales,jigglypuff,wigglytuff,zubat,golbat,oddish,gloom,vileplume,paras,parasect,venonat,venomoth,diglett,dugtrio,meowth,persian,psyduck,golduck,mankey,primeape,growlithe,arcanine,poliwag,poliwhirl,poliwrath,abra,kadabra,alakazam,machop,machoke,machamp,bellsprout,weepinbell,victreebel,tentacool,tentacruel,geodude,graveler,golem,ponyta,rapidash,slowpoke,slowbro,magnemite,magneton,farfetch'd,doduo,dodrio,seel,dewgong,grimer,muk,shellder,cloyster,gastly,haunter,gengar,onix,drowzee,hypno,krabby,kingler,voltorb,electrode,exeggcute,exeggutor,cubone,marowak,hitmonlee,hitmonchan,lickitung,koffing,weezing,rhyhorn,rhydon,chansey,tangela,kangaskhan,horsea,seadra,goldeen,seaking,staryu,starmie,mr mime,scyther,jynx,electabuzz,magmar,pinsir,tauros,magikarp,gyarados,lapras,ditto,eevee,vaporeon,jolteon,flareon,porygon,omanyte,omastar,kabuto,kabutops,aerodactyl,snorlax,articuno,zapdos,moltres,dratini,dragonair,dragonite,mewtwo,mew")
 g_pokemon_list[0]="missingno"
-zclass[[modes,actor|drawl,nop,drawtr,nop,drawbr,nop,curr,main;defaults;init,nop,update,nop,drawl,nop,drawtr,nop,drawbr,nop;main;update,%main_update,drawl,%main_drawl;browse;update,%main_update,drawl,%main_drawl;]]
+zclass[[modes,actor|draw1,nop,draw2,nop,draw3,nop,curr,main;defaults;init,nop,update,nop,draw1,nop,draw2,nop,draw3,nop;main;update,%main_update,draw1,%main_draw1;browse;update,%browse_update,draw1,%browse_draw1,draw2,%browse_draw2,draw3,%browse_draw3;]]
 c_modes=zobj[[len,6;4;name,battle,state,battle;5;name,party,state,party;0;name,browse,state,browse;1;name,quiz,state,quiz;2;name,config,state,config;3;name,credits,state,credits;]]
 c_mode_positions=split"1,8,16,25,32"
 function draw_picodex(shaking,rotation,l_screen,tr_screen,br_screen,light,backbuttonheld)
@@ -370,6 +383,22 @@ spr((light>1)and(rate%13<1 and 131 or 129)or 132,14,3)
 spr((light>2)and(rate%17<1 and 131 or 128)or 132,9,3)
 spr((light>3)and(rate%43<1 and 134 or 133)or 135,3,3)
 end
+g_loaded_row=16
+function draw_pkmn(num,x,y,sw,sh)
+sw=sw or 1
+sh=sh or 1
+local row=(num-1)/8\1
+local col=(num-1)%8
+if row ~=g_loaded_row then
+g_loaded_row=row
+memcpy(0x0000,0x8000+0x400*row,0x400)
+end
+local w,h=16*sw,16*sh
+sspr(col*16,0,16,16,x-w/2,y-h/2,w,h)
+end
+function pkmn_len()
+return@0x5eff ~=0 and 152 or 151
+end
 g_fade,g_fade_table=1,zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,1,0,0,0,0;3;,3,3,3,3,1,1,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,0,0,0,0;6;,6,6,13,13,5,5,0,0;7;,7,7,6,13,13,5,0,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,0,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,0,0,0;13;,13,13,5,5,1,0,0,0;14;,14,14,13,4,2,2,0,0;15;,15,15,13,13,5,5,0,0;]]
 function fade(threshold)
 for c=0,15 do
@@ -449,12 +478,14 @@ vset(x,y,v)
 end
 end
 end
-zclass[[game_state,actor|curr,fadein;init,%game_state_init;ecs_exclusions;actor,yes;defaults;sinit,nop,update,nop,draw,nop,light,0,backbuttonheld,no,modes,;logo;next,fadein,sinit,%logo_init,update,nop,draw,%logo_draw,duration,2.5;fadein;next,game,duration,0,sinit,%gamefadein_init;closed;next,opening,sinit,%closed_init,update,%closed_update,draw,%closed_draw;opening;next,starting_1,duration,.25,draw,%opening_draw;starting_1;next,starting_2,light,1,duration,.125,sinit,%light_init,draw,%opened_draw;starting_2;next,starting_3,light,2,duration,.125,sinit,%light_init,draw,%opened_draw;starting_3;next,game,light,3,duration,.125,sinit,%light_init,draw,%opened_draw;game;next,closing,light,4,sinit,%game_init,update,%game_update,draw,%game_draw;closing;next,closed,duration,.25,update,nop,draw,%closing_draw;]]
+zclass[[game_state,actor|curr,logo;init,%game_state_init;ecs_exclusions;actor,yes;defaults;sinit,nop,update,nop,draw,nop,light,0,backbuttonheld,no,modes,;logo;next,fadein,sinit,%logo_init,update,nop,draw,%logo_draw,duration,2.5;fadein;next,closed,duration,0,sinit,%gamefadein_init;closed;next,opening,sinit,%closed_init,update,%closed_update,draw,%closed_draw;opening;next,starting_1,duration,.25,draw,%opening_draw;starting_1;next,starting_2,light,1,duration,.125,sinit,%light_init,draw,%opened_draw;starting_2;next,starting_3,light,2,duration,.125,sinit,%light_init,draw,%opened_draw;starting_3;next,game,light,3,duration,.125,sinit,%light_init,draw,%opened_draw;game;next,closing,light,4,sinit,%game_init,update,%game_update,draw,%game_draw;closing;next,closed,duration,.25,update,nop,draw,%closing_draw;]]
 function _init()
 memset(0x8000,0,0x7fff)
 poke(0x5f5c,255)
 cls()
 sfx(62,0)
+extract_sheet(0)
+extract_sheet(1)
 extract_sheet(2)
 poke(0x5f56,0xe0)
 px9_decomp(0,0,peek2(3*2),mget,mset)
@@ -472,7 +503,6 @@ if@0x5efa==1 then
 g_bo,g_bx=g_bx,g_bo
 g_bpo,g_bpx=g_bpx,g_bpo
 end
-if g_bo and g_bpx then g_debug=not g_debug end
 zcall(loop_entities,[[1;,actor,clean;2;,fader,clean;]])
 register_entities()
 zcall(loop_entities,[[1;,fader,tick;2;,game_state,tick;3;,fader,state;4;,game_state,state;]])

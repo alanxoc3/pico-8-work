@@ -97,5 +97,4 @@ function _draw()
     cls()
     loop_entities('game_state', 'draw')
     fade(g_fade)
-    --map(0,0,0,0,34,12) -- 0x6000, 0x0000, 0x2000)
 end

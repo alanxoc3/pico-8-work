@@ -21,6 +21,7 @@ S_PARTY5:         0x5e78
 S_PARTY6:         0x5e96
 # ends at:        0x5eb4
 
+S_BROWSE_PKMN:    0x5ef8
 S_MODE:           0x5ef8
 S_METRIC:         0x5ef9
 S_SWAP_CONTROLS:  0x5efa

@@ -1,9 +1,9 @@
 zclass[[modes,actor|
-    drawl,nop, drawtr,nop, drawbr,nop, curr,main;
-    defaults; init,nop, update,nop, drawl,nop, drawtr,nop, drawbr,nop;
+    draw1,nop, draw2,nop, draw3,nop, curr,main;
+    defaults; init,nop, update,nop, draw1,nop, draw2,nop, draw3,nop;
 
-    main;   update,%main_update, drawl,%main_drawl;
-    browse; update,%main_update, drawl,%main_drawl;
+    main;   update,%main_update, draw1,%main_draw1;
+    browse; update,%browse_update, draw1,%browse_draw1, draw2,%browse_draw2, draw3,%browse_draw3;
 ]]
 
 |[game_init]| function(a)
@@ -28,9 +28,9 @@ end $$
 |[game_draw]| function(a)
     cls()
     draw_picodex(a:is_active'shaking', 1,
-        function() a.modes:drawl() end,
-        function() a.modes:drawtr() end, 
-        function() a.modes:drawbr() end, 
+        function() a.modes:draw1() end,
+        function() a.modes:draw2() end, 
+        function() a.modes:draw3() end, 
         4)
 end $$
 
@@ -50,9 +50,10 @@ c_mode_positions = split"1,8,16,25,32"
 |[main_update]| function(a)
     if g_bpu or g_bpl then poke(S_MODE, (@S_MODE - 1) % c_modes.len) end
     if g_bpd or g_bpr then poke(S_MODE, (@S_MODE + 1) % c_modes.len) end
+    if g_bpx then a:load(c_modes[@S_MODE].state) end
 end $$
 
-|[main_drawl]| function(a)
+|[main_draw1]| function(a)
         rectfill(0,14,37,23,1)
 
         for i=0,4 do
