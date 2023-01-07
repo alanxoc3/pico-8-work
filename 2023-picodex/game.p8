@@ -1,6 +1,11 @@
 pico-8 cartridge // http://www.pico-8.com
 version 39
 __lua__
+-- picodex
+-- by amorg
+
+cartdata"picodex"
+
 #include .code.lua
 __gfx__
 80002d113b12caa2ffff8ff7ffff78fd0a14423d6bd61fa8ffef2cf9ae343f79955cefcde812ffd9fca013cf9b84c8f4e0f4ee177db16af99fb5880d7cd2f4c2

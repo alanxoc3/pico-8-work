@@ -174,7 +174,11 @@ end,function(a)
 loop_entities("actor","state")
 end,function(a)
 cls()
-draw_picodex(1,nop,nop,nop,a.light)
+draw_picodex(1,function()
+for i=1,#g_modes do
+print(g_modes[i],1,i*6,1)
+end
+end,nop,nop,a.light)
 end,function(a)
 _g.fader_in()
 sfx(-2,0)
@@ -234,6 +238,7 @@ zclass[[actor,timer|load,%actor_load,loadlogic,%actor_loadlogic,state,%actor_sta
 zclass[[drawlayer_50|]]
 zclass[[timer|timers;,;start_timer,%timer_reset_timer,end_timer,%timer_end_timer,is_active,%timer_is_active,get_elapsed_percent,%timer_get_elapsed_percent,tick,%timer_tick,]]
 zclass[[test_obj,actor,drawlayer_50|x,@,y,@,color,7,init,%test_init,update,%test_update,draw,%test_draw;]]
+g_modes=split"bROWSE,pARTY,bATTLE,qUIZ,cONFIG"
 function draw_picodex(rotation,l_screen,tr_screen,br_screen,light,backbuttonheld)
 local b0,b1,b2,b3,b4,b5=btn"0",btn"1",btn"2",btn"3",btn"4",btn"5"
 camera(-28+(rotation+1)*14,-15)
@@ -352,7 +357,6 @@ zclass[[fader,actor|ecs_exclusions;actor,yes,timer,yes;]]
 zclass[[fader_out,fader|start;duration,.5,destroyed,@,update,%fader_out_update]]
 zclass[[fader_in,fader|start;duration,.5,update,%fader_in_update]]
 function extract_sheet(index)
-memset(0x8000+index*0x2000,0,0x2000)
 px9_decomp(0,0,peek2(index*2),
 function(...)return vget(0x8000+index*0x2000,...)end,
 function(...)return vset(0x8000+index*0x2000,...)end)
@@ -422,12 +426,11 @@ vset(x,y,v)
 end
 end
 end
-zclass[[game_state,actor|curr,fadein;ecs_exclusions;actor,true;defaults;init,nop,update,nop,draw,nop,light,0,backbuttonheld,no;logo;next,fadein,init,%logo_init,update,nop,draw,%logo_draw,duration,2.5;fadein;next,closed,duration,0,init,%gamefadein_init;closed;next,opening,update,%closed_update,draw,%closed_draw;opening;next,starting_1,duration,.25,draw,%opening_draw;starting_1;next,starting_2,light,1,duration,.125,init,%light_init,draw,%opened_draw;starting_2;next,starting_3,light,2,duration,.125,init,%light_init,draw,%opened_draw;starting_3;next,game,light,3,duration,.125,init,%light_init,draw,%opened_draw;game;next,closing,light,4,init,%game_init,update,%game_update,draw,%game_draw;closing;next,closed,duration,.25,update,nop,draw,%closing_draw;]]
+zclass[[game_state,actor|curr,fadein;ecs_exclusions;actor,true;defaults;init,nop,update,nop,draw,nop,light,0,backbuttonheld,no;logo;next,fadein,init,%logo_init,update,nop,draw,%logo_draw,duration,2.5;fadein;next,game,duration,0,init,%gamefadein_init;closed;next,opening,update,%closed_update,draw,%closed_draw;opening;next,starting_1,duration,.25,draw,%opening_draw;starting_1;next,starting_2,light,1,duration,.125,init,%light_init,draw,%opened_draw;starting_2;next,starting_3,light,2,duration,.125,init,%light_init,draw,%opened_draw;starting_3;next,game,light,3,duration,.125,init,%light_init,draw,%opened_draw;game;next,closing,light,4,init,%game_init,update,%game_update,draw,%game_draw;closing;next,closed,duration,.25,update,nop,draw,%closing_draw;]]
 function _init()
+memset(0x8000,0,0x7fff)
 cls()
 sfx(62,0)
-extract_sheet(0)
-extract_sheet(1)
 extract_sheet(2)
 poke(0x5f56,0xe0)
 px9_decomp(0,0,peek2(3*2),mget,mset)
@@ -435,6 +438,7 @@ memcpy(0x0000,0xc000,0x2000)
 g_tl=_g.game_state()
 end
 function _update60()
+if btn(4)and btnp(5)then g_debug=not g_debug end
 zcall(loop_entities,[[1;,actor,clean;2;,fader,clean;]])
 register_entities()
 zcall(loop_entities,[[1;,fader,tick;2;,game_state,tick;3;,fader,state;4;,game_state,state;]])

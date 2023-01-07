@@ -1,5 +1,4 @@
 function extract_sheet(index)
-    memset(0x8000+index*0x2000, 0, 0x2000)
     px9_decomp(0, 0, peek2(index*2),
         function(...) return vget(0x8000+index*0x2000, ...) end,
         function(...) return vset(0x8000+index*0x2000, ...) end)

@@ -12,6 +12,8 @@ binmode(STDOUT, "encoding(UTF-8)");
 # Constants to worry about:
 # DEBUG_BEGIN            -- marks the beginning of debug code. this code is left out of the generated .code.lua unless you pass in the --debug option.
 # DEBUG_END              -- marks the end of debug code.
+# NORMAL_BEGIN           -- marks the beginning of normal code. this code doesn't trigger in debug mode.
+# NORMAL_END             -- marks the end of normal code.
 # G_TABLE_INITIALIZATION -- if this is found in the code, it is replaced with a suitable initial value for the _g table
 
 # Syntax to worry about:

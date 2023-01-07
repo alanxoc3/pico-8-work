@@ -4,6 +4,8 @@ zclass[[test_obj,actor,drawlayer_50|x,@,y,@,color,7,init,%test_init,update,%test
 |[test_update]| function(a) a.x += xbtn() a.y += ybtn()    end $$
 |[test_draw]|   function(a) circfill(a.x, a.y, 2, a.color) end $$
 
+g_modes = split"bROWSE,pARTY,bATTLE,qUIZ,cONFIG"
+
 |[game_init]| function(a)
     _g.test_obj(64, 64)
     sfx(61,0)
@@ -20,5 +22,10 @@ end $$
 
 |[game_draw]| function(a)
     cls()
-    draw_picodex(1, nop, nop, nop, a.light)
+    draw_picodex(1, function()
+        for i=1,#g_modes do
+            print(g_modes[i], 1, i*6, 1)
+        end
+    end, nop, nop, a.light)
+
 end $$

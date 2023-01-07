@@ -1,11 +1,24 @@
--- TEMPLATE TOKEN COUNT: 1045
 zclass[[game_state,actor|
+    -- DEBUG_BEGIN
     curr,fadein;
+    -- DEBUG_END
+
+    -- NORMAL_BEGIN
+    curr,logo;
+    -- NORMAL_END
+
     ecs_exclusions; actor,true; -- remove game_state from the actor group
     defaults;       init,nop, update,nop, draw,nop, light,0, backbuttonheld,no;
 
     logo; next,fadein, init,%logo_init, update,nop, draw,%logo_draw, duration,2.5;
+
+    -- DEBUG_BEGIN
+    fadein; next,game, duration,0, init,%gamefadein_init;
+    -- DEBUG_END
+
+    -- NORMAL_BEGIN
     fadein; next,closed, duration,0, init,%gamefadein_init;
+    -- NORMAL_END
 
     closed;     next,opening,                                             update,%closed_update, draw,%closed_draw;
     opening;    next,starting_1,          duration,.25,                                          draw,%opening_draw;
@@ -17,10 +30,17 @@ zclass[[game_state,actor|
 ]]
 
 function _init()
+    -- clear all the read only memory. testing things out showed that this doesn't get cleared automatically.
+    memset(0x8000, 0, 0x7fff)
+
     cls()
     sfx(62,0) -- a sound indicator that the came is actually running while loading
+
+    -- NORMAL_BEGIN -- debug mode doesn't need to load these sheets for faster startup
     extract_sheet(0)
     extract_sheet(1)
+    -- NORMAL_END
+
     extract_sheet(2)
 
     poke(0x5f56, 0xe0) -- make map funcs point here instead
