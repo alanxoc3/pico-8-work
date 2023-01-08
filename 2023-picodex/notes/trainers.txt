@@ -308,10 +308,10 @@ youngster      - L21-nidoran_m
 trainer | boss | party | route
 
 beauty
-biker   L28-koffing    L28-weezing   L28-grimer   L29-muk    L29-voltorb
-birdkeeper   L30-pidgeotto   L30-fearow    L28-doduo   L28-dodrio     L33-farfetch'd   
-blackbelt   L31-primeape   L37-hitmonlee   L37-hitmonchan
-bugcatcher   L20-caterpie   L20-weedle    L20-venonat   L19-beedrill   L10-metapod   L11-kakuna
+biker        L28-koffing     L28-weezing     L28-grimer    L29-muk        L29-voltorb
+birdkeeper   L30-pidgeotto   L30-fearow      L28-doduo     L28-dodrio     L33-farfetch'd
+blackbelt    L31-primeape    L37-hitmonlee   L37-hitmonchan
+bugcatcher   L20-caterpie    L20-weedle      L20-venonat   L19-beedrill   L10-metapod   L11-kakuna
 burglar
 channeler
 cooltrainerm
