@@ -165,8 +165,8 @@ function draw_right_flap(is_on, flap_rotation, backbuttonheld, topscreen_func, b
     elseif flap_rotation > 0 then
         rectfill(65+5, 9+5, 65+8*8*flap_rotation-5, 9+11*8-5, is_on and 13 or 5)
         if flap_rotation == 1 and is_on then
-            draw_screen(74, 18, 46, 14, topscreen_func)
-            draw_screen(74, 66, 46, 22, botscreen_func)
+            draw_screen(74, 18, 46, 13, topscreen_func)
+            draw_screen(74, 67, 46, 21, botscreen_func)
         end
 
         smap(16, 0, 8, 11, 65, 9, 8*8*flap_rotation, 11*8)

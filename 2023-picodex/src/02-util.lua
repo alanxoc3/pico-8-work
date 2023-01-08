@@ -24,3 +24,7 @@ end
 function zcall(func, text, ...)
     zcall_tbl(func, zobj(text, ...))
 end
+
+function zcls(col)
+   rectfill(0x8000,0x8000,0x7fff,0x7fff,col or 0)
+end

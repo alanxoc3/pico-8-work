@@ -51,18 +51,30 @@ end
 
 |[browse_draw1]| function(a)
     rectfill(0,0,37,37,13)
-    --for i=0, 38*2-1, 2 do
-    --    line(i,0,i-38,38,0)
-    --    line(i+1,0,i+1-38,38,0)
-    --end
     draw_pkmn_out(@S_BROWSE_PKMN+1, 10, 10)
     zprint(format_num(@S_BROWSE_PKMN+1), 21, 7, 1, -1)
+    rectfill(0,20,37,20,1)
 end $$
 
 |[browse_draw2]| function(a)
-    wobble_text(c_pokemon[@S_BROWSE_PKMN+1].name, 46/2+1, 4, 1, 0)
+    zprint(c_pokemon[@S_BROWSE_PKMN+1].name, 46/2, 4, 1, 0)
 end $$
 
 |[browse_draw3]| function(a)
+    rectfill(0,0,46,22,13)
+    rectfill(0,0,6,46,1)
 
+    zprint(""..(c_pokemon[@S_BROWSE_PKMN+1].h/10).." m",  9, 3-1,  1, -1)
+    zprint(""..(c_pokemon[@S_BROWSE_PKMN+1].w/10).." kg", 9, 9-1,  1, -1)
+    zprint("transport", 9, 15-1,  1, -1)
+
+    print("h", 2, 3-1, 13) --
+    print("w", 2, 9-1, 13)-- 
+    print("s", 2, 15-1, 13)-- 
+
+
+    --zprint("ABCDEFGHIJKLM", 2+4, 1, 1, -1)
+    --zprint("ABCDEFGHIJKLM", 2+4, 6, 1, -1)
+    --zprint("ABCDEFGHIJKLM", 2+4, 11, 1, -1)
+    --zprint("ABCDEFGHIJKLM", 2+4, 16, 1, -1)
 end $$
