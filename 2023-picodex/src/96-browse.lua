@@ -25,18 +25,21 @@ end
     if g_bpu then poke(S_BROWSE_PKMN, (@S_BROWSE_PKMN-1)%pkmn_len()) end
     if g_bpd then poke(S_BROWSE_PKMN, (@S_BROWSE_PKMN+1)%pkmn_len()) end
     if g_bpo then a:load'main' end
+    if g_bpx then sfx(flr(rnd(9))) end
 end $$
 
 |[browse_draw1]| function(a)
-    for i=0, 38*2-1, 2 do
-        line(i,0,i-38,38,0)
-        line(i+1,0,i+1-38,38,0)
-    end
-    draw_pkmn(@S_BROWSE_PKMN+1, 10, 10)
+    rectfill(0,0,37,37,13)
+    --for i=0, 38*2-1, 2 do
+    --    line(i,0,i-38,38,0)
+    --    line(i+1,0,i+1-38,38,0)
+    --end
+    draw_pkmn(@S_BROWSE_PKMN+1, 10-1, 10-1)
+    zprint("#"..@S_BROWSE_PKMN+1, 38, 2, 1, 1)
 end $$
 
 |[browse_draw2]| function(a)
-
+    wobble_text(c_pokemon[@S_BROWSE_PKMN+1].name, 46/2+1, 4, 1, 0)
 end $$
 
 |[browse_draw3]| function(a)

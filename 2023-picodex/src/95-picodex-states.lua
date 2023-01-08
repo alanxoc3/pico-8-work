@@ -13,13 +13,15 @@ end $$
     end)
 end $$
 
+function any_btn() return g_bl or g_br or g_bu or g_bd or g_bx or g_bo end
+
 |[closed_update]| function(a)
     -- if player 1 pressed any button, go to the next state.
-    if btn() & 0x1f == 0 and a.backbuttonheld then
+    if not any_btn() and a.backbuttonheld then
         a.backbuttonheld = false
         a:load()
         menuitem(1) -- no factory reset now
-    elseif btn() & 0x1f ~= 0 then
+    elseif any_btn() then
         a.backbuttonheld = true
         menuitem(1) -- no factory reset now
     end
