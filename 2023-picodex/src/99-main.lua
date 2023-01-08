@@ -40,7 +40,8 @@ function _init()
     -- clear all the read only memory. testing things out showed that this doesn't get cleared automatically.
     memset(0x8000, 0, 0x7fff)
 
-    poke(0x5f5c, 255) -- no key repeats allowed
+    poke(0x5f5c, 15) -- set the initial delay before repeating. 255 means never repeat.
+    poke(0x5f5d, 5) -- set the repeating delay.
 
     cls()
     sfx(62,0) -- a sound indicator that the came is actually running while loading

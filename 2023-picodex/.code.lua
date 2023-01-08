@@ -241,8 +241,8 @@ if g_bpo then a:load"main" end
 if g_bpx then sfx(flr(rnd(9)))end
 end,function(a)
 rectfill(0,0,37,37,13)
-draw_pkmn(@0x5ef7+1,10-1,10-1)
-zprint("#"..@0x5ef7+1,38,2,1,1)
+draw_pkmn_out(@0x5ef7+1,10,10)
+zprint(format_num(@0x5ef7+1),21,7,1,-1)
 end,function(a)
 wobble_text(c_pokemon[@0x5ef7+1].name,46/2+1,4,1,0)
 end,function(a)
@@ -405,8 +405,25 @@ end
 local w,h=16*sw,16*sh
 sspr(col*16,0,16,16,x-w/2,y-h/2,w,h)
 end
+function draw_pkmn_out(num,x,y,sw,sh)
+for c=1,15 do pal(c,5)end
+for i=-1,1,2 do draw_pkmn(num,x-1,y+i,sw,sh)end
+for i=-1,1,2 do draw_pkmn(num,x+1,y+i,sw,sh)end
+for c=1,15 do pal(c,1)end
+for i=-1,1,2 do draw_pkmn(num,x+i,y,sw,sh)end
+for i=-1,1,2 do draw_pkmn(num,x,y+i,sw,sh)end
+for c=1,15 do pal(c,c)end
+draw_pkmn(num,x,y,sw,sh)
+end
 function pkmn_len()
 return@0x5eff ~=0 and 152 or 151
+end
+function format_num(num)
+local str=""..num
+for i=#str+1,3 do
+str="0"..str
+end
+return "#"..str
 end
 g_fade,g_fade_table=1,zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,1,0,0,0,0;3;,3,3,3,3,1,1,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,0,0,0,0;6;,6,6,13,13,5,5,0,0;7;,7,7,6,13,13,5,0,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,0,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,0,0,0;13;,13,13,5,5,1,0,0,0;14;,14,14,13,4,2,2,0,0;15;,15,15,13,13,5,5,0,0;]]
 function fade(threshold)
@@ -490,7 +507,8 @@ end
 zclass[[game_state,actor|curr,fadein;init,%game_state_init;ecs_exclusions;actor,yes;defaults;sinit,nop,update,nop,draw,nop,light,0,backbuttonheld,no,modes,;logo;next,fadein,sinit,%logo_init,update,nop,draw,%logo_draw,duration,2.5;fadein;next,game,duration,0,sinit,%gamefadein_init;closed;next,opening,sinit,%closed_init,update,%closed_update,draw,%closed_draw;opening;next,starting_1,duration,.25,draw,%opening_draw;starting_1;next,starting_2,light,1,duration,.125,sinit,%light_init,draw,%opened_draw;starting_2;next,starting_3,light,2,duration,.125,sinit,%light_init,draw,%opened_draw;starting_3;next,game,light,3,duration,.125,sinit,%light_init,draw,%opened_draw;game;next,closing,light,4,sinit,%game_init,update,%game_update,draw,%game_draw;closing;next,closed,duration,.25,update,nop,draw,%closing_draw;]]
 function _init()
 memset(0x8000,0,0x7fff)
-poke(0x5f5c,255)
+poke(0x5f5c,15)
+poke(0x5f5d,5)
 cls()
 sfx(62,0)
 extract_sheet(2)

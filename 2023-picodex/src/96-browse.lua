@@ -17,6 +17,19 @@ function draw_pkmn(num, x, y, sw, sh)
     sspr(col*16, 0, 16, 16, x-w/2, y-h/2, w, h)
 end
 
+function draw_pkmn_out(num, x, y, sw, sh)
+    for c=1,15 do pal(c,5) end
+    for i=-1,1,2 do draw_pkmn(num, x-1, y+i, sw, sh) end
+    for i=-1,1,2 do draw_pkmn(num, x+1, y+i, sw, sh) end
+
+    for c=1,15 do pal(c,1) end
+    for i=-1,1,2 do draw_pkmn(num, x+i, y, sw, sh) end
+    for i=-1,1,2 do draw_pkmn(num, x, y+i, sw, sh) end
+
+    for c=1,15 do pal(c, c) end
+    draw_pkmn(num, x, y, sw, sh)
+end
+
 function pkmn_len()
     return @S_MISSINGNO ~= 0 and 152 or 151
 end
@@ -28,14 +41,22 @@ end
     if g_bpx then sfx(flr(rnd(9))) end
 end $$
 
+function format_num(num)
+    local str = ''..num
+    for i=#str+1,3 do
+        str = '0'..str
+    end
+    return '#'..str
+end
+
 |[browse_draw1]| function(a)
     rectfill(0,0,37,37,13)
     --for i=0, 38*2-1, 2 do
     --    line(i,0,i-38,38,0)
     --    line(i+1,0,i+1-38,38,0)
     --end
-    draw_pkmn(@S_BROWSE_PKMN+1, 10-1, 10-1)
-    zprint("#"..@S_BROWSE_PKMN+1, 38, 2, 1, 1)
+    draw_pkmn_out(@S_BROWSE_PKMN+1, 10, 10)
+    zprint(format_num(@S_BROWSE_PKMN+1), 21, 7, 1, -1)
 end $$
 
 |[browse_draw2]| function(a)
