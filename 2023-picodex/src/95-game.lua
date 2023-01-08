@@ -55,14 +55,14 @@ c_mode_positions = split"1,8,16,25,32"
 end $$
 
 |[main_draw1]| function(a)
-        rectfill(0,14,37,23,1)
+        rectfill(0,14,39,23,1)
 
         for i=0,4 do
             local text, y = c_modes[(i-2+@S_MODE)%c_modes.len].name, c_mode_positions[i+1]
             if i == 2 then
-                wobble_text(text, 19, y, 13)
+                wobble_text(text, 20, y, 13)
             else
-                zprint(text, 19, y, 1, 0)
+                zprint(text, 20, y, 1, 0)
             end
         end
 end $$

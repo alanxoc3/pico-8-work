@@ -81,3 +81,11 @@ unlock missingno by:
 1 byte for guess pokemon score
 1 byte for picodown score
 1 byte for swap controls
+
+## Special unlockables
+Amnesia Psyduck -- quiz
+Surfing Pikachu -- guess who
+Missingno       -- battle
+
+guess who - surfing pikachu
+amnesia psyduck

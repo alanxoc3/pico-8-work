@@ -1,11 +1,5 @@
 zclass[[game_state,actor|
-    -- DEBUG_BEGIN
-    curr,fadein;
-    -- DEBUG_END
-
-    -- NORMAL_BEGIN
-    curr,logo;
-    -- NORMAL_END
+    curr,fadein; -- curr,logo;
 
     init,%game_state_init;
     ecs_exclusions; actor,yes; -- remove game_state from the actor group
@@ -13,13 +7,7 @@ zclass[[game_state,actor|
 
     logo; next,fadein, sinit,%logo_init, update,nop, draw,%logo_draw, duration,2.5;
 
-    -- DEBUG_BEGIN
-    fadein; next,game, duration,0, sinit,%gamefadein_init;
-    -- DEBUG_END
-
-    -- NORMAL_BEGIN
-    fadein; next,closed, duration,0, sinit,%gamefadein_init;
-    -- NORMAL_END
+    fadein; next,game, duration,0, sinit,%gamefadein_init; -- fadein; next,closed, duration,0, sinit,%gamefadein_init;
 
     closed;     next,opening,                            sinit,%closed_init, update,%closed_update, draw,%closed_draw;
     opening;    next,starting_1,          duration,.25,                                            draw,%opening_draw;

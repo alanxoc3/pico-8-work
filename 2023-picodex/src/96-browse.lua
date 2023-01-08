@@ -17,14 +17,17 @@ function draw_pkmn(num, x, y, sw, sh)
     sspr(col*16, 0, 16, 16, x-w/2, y-h/2, w, h)
 end
 
-function draw_pkmn_out(num, x, y, sw, sh)
-    for c=1,15 do pal(c,5) end
-    for i=-1,1,2 do draw_pkmn(num, x-1, y+i, sw, sh) end
-    for i=-1,1,2 do draw_pkmn(num, x+1, y+i, sw, sh) end
+function draw_pkmn_out(num, x, y, sw, sh, col)
+    sw = sw or 1
+    sh = sh or 1
+
+    for c=1,15 do pal(c,col) end
+    for i=-sh,sh,sh*2 do draw_pkmn(num, x-sw, y+i, sw, sh) end
+    for i=-sh,sh,sh*2 do draw_pkmn(num, x+sw, y+i, sw, sh) end
 
     for c=1,15 do pal(c,1) end
-    for i=-1,1,2 do draw_pkmn(num, x+i, y, sw, sh) end
-    for i=-1,1,2 do draw_pkmn(num, x, y+i, sw, sh) end
+    for i=-sw,sw,sw*2 do draw_pkmn(num, x+i, y, sw, sh) end
+    for i=-sh,sh,sh*2 do draw_pkmn(num, x, y+i, sw, sh) end
 
     for c=1,15 do pal(c, c) end
     draw_pkmn(num, x, y, sw, sh)
@@ -35,8 +38,8 @@ function pkmn_len()
 end
 
 |[browse_update]| function(a)
-    if g_bpu then poke(S_BROWSE_PKMN, (@S_BROWSE_PKMN-1)%pkmn_len()) end
-    if g_bpd then poke(S_BROWSE_PKMN, (@S_BROWSE_PKMN+1)%pkmn_len()) end
+    if g_bpl then poke(S_BROWSE_PKMN, (@S_BROWSE_PKMN-1)%pkmn_len()) end
+    if g_bpr then poke(S_BROWSE_PKMN, (@S_BROWSE_PKMN+1)%pkmn_len()) end
     if g_bpo then a:load'main' end
     if g_bpx then sfx(flr(rnd(9))) end
 end $$
@@ -50,10 +53,20 @@ function format_num(num)
 end
 
 |[browse_draw1]| function(a)
-    rectfill(0,0,37,37,13)
-    draw_pkmn_out(@S_BROWSE_PKMN+1, 10, 10)
-    zprint(format_num(@S_BROWSE_PKMN+1), 21, 7, 1, -1)
-    rectfill(0,20,37,20,1)
+    local types = zobj[[
+        0;pc,6,  sc,13;
+        1;pc,13, sc,5;
+        2;pc,9,  sc,4;
+        3;pc,11, sc,3;
+        4;pc,12, sc,13;
+    ]]
+
+    local type = c_bg_styles[c_pokemon[@S_BROWSE_PKMN+1].c] -- [1] -- types[@S_BROWSE_PKMN%5]
+
+    rectfill(0,0,39,39,type.pc)
+    draw_pkmn_out(@S_BROWSE_PKMN+1, 20, 20, 2, 2, type.sc)
+    -- zprint(format_num(@S_BROWSE_PKMN+1), 21, 7, 1, -1)
+    --rectfill(0,20,37,20,1)
 end $$
 
 |[browse_draw2]| function(a)

@@ -143,7 +143,7 @@ end
 
 function draw_left_flap(is_on, screen_func)
     rectfill(-1+5,  9+5, 8*8-5,  11*8-5, is_on and 13 or 5)
-    if is_on then draw_screen(12, 22, 38, 38, screen_func) end
+    if is_on then draw_screen(11, 21, 40, 40, screen_func) end
 
     map(8,  0, -1,  9, 8,  11)
     spr(g_bl and 186 or 154, 07, 77) -- button presses
