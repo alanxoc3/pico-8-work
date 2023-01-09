@@ -440,7 +440,7 @@ end
 local w,h=16*sw,16*sh
 sspr(col*16,0,16,16,x-w/2,y-h/2,w,h)
 end
-function draw_pkmn_out(num,x,y,orad,prad,col)
+function draw_pkmn_out(num,x,y,col,orad,prad)
 orad=orad or 1
 prad=prad or 1
 for c=1,15 do pal(c,col)end
@@ -462,39 +462,18 @@ str="0"..str
 end
 return "#"..str
 end
-function draw_party_screen(sel,p1,p2,p3,p4,p5,p6)
-rectfill(0,0,39,49,13)
-local poks={p1,p2,p3,p4,p5,p6}
-local drawbg=function(yoff)
-rect(-1,yoff-1,40,yoff+8,1)
-for i=0,5 do draw_pkmn_out(poks[i+1],6+i*6,4+yoff,1,.25,5)end
-end
-local ty=0+sel*9
-rectfill(0,ty-1,39,ty+22,6)
-rect(-1,ty-1,40,ty+22,1)
-draw_pkmn_out(p1,10,ty+11,1,1,5)
-draw_pkmn_out(p2,25,ty+7,1,.5,13)
-draw_pkmn_out(p3,35,ty+8,1,.375,13)
-draw_pkmn_out(p4,24,ty+17,1,.325,13)
-draw_pkmn_out(p5,31,ty+17,1,.2,13)
-draw_pkmn_out(p6,37,ty+17,1,.2,13)
-drawbg(sel*9-9-9)
-drawbg(sel*9-9)
-drawbg(sel*9+23)
-drawbg(sel*9+23+9)
-end
 function draw_party_screen(sel,...)
 rectfill(0,0,39,49,13)
 local poks={...}
 local drawbg=function(yoff)
 rect(-1,yoff-1,40,yoff+8,1)
-for i=0,5 do draw_pkmn_out(poks[i+1],5+i*6,4+yoff,1,.25,5)end
+for i=0,5 do draw_pkmn_out(poks[i+1],5+i*6,4+yoff,5,1,.25)end
 end
 local ty=0+sel*9
 rectfill(0,ty-1,39,ty+22,6)
 rect(-1,ty-1,40,ty+22,1)
 local locs=zobj[[0;,10,11,1;1;,25,7,.5;2;,35,8,.375;3;,24,17,.325;4;,31,17,.2;5;,37,17,.2;]]
-for i=0,5 do draw_pkmn_out(poks[i+1],locs[i][1],ty+locs[i][2],1,locs[i][3],13)end
+for i=0,5 do draw_pkmn_out(poks[i+1],locs[i][1],ty+locs[i][2],13,1,locs[i][3])end
 drawbg((sel*9+23)%41,(sel+1)%3)
 drawbg((sel*9+23+9)%41,(sel-1)%3)
 end
