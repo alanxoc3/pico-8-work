@@ -46,7 +46,7 @@ c_modes = zobj[[
     3; name,"credits", state,credits;
 ]]
 
-c_mode_positions = split"1,8,16,25,32"
+c_mode_positions = split"2,9,17,26,33"
 
 |[main_update]| function(a)
     if g_bpu or g_bpl then poke(S_MODE, (@S_MODE - 1) % c_modes.len) end
@@ -55,7 +55,7 @@ c_mode_positions = split"1,8,16,25,32"
 end $$
 
 |[main_draw1]| function(a)
-        rectfill(0,14,39,23,1)
+        rectfill(0,15,39,24,1)
 
         for i=0,4 do
             local text, y = c_modes[(i-2+@S_MODE)%c_modes.len].name, c_mode_positions[i+1]

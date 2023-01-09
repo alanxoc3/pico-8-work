@@ -172,7 +172,7 @@ end
 -- includes type effectiveness chart. according to the gen 1 games, which had bugs. i'm keeping the bugs :).
 c_types = zobj[[
     T_NORMAL;   bg,0, name,"normal",   T_NORMAL;   good;,;                                  T_NORMAL;   null;,T_GHOST;            T_NORMAL;   weak;,T_ROCK;
-    T_FIRE;     bg,2, name,"fire",     T_FIRE;     good;,T_GRASS,T_ICE,T_BUG;               T_FIRE;     null;,;                   T_FIRE;     weak;,T_FIRE,T_WATER,T_ROCK,T_DRAGON;
+    T_FIRE;     bg,8, name,"fire",     T_FIRE;     good;,T_GRASS,T_ICE,T_BUG;               T_FIRE;     null;,;                   T_FIRE;     weak;,T_FIRE,T_WATER,T_ROCK,T_DRAGON;
     T_WATER;    bg,4, name,"water",    T_WATER;    good;,T_FIRE,T_GROUND,T_ROCK;            T_WATER;    null;,;                   T_WATER;    weak;,T_DRAGON,T_GRASS,T_WATER;
     T_ELECTRIC; bg,2, name,"electric", T_ELECTRIC; good;,T_FLYING,T_WATER;                  T_ELECTRIC; null;,T_GROUND;           T_ELECTRIC; weak;,T_DRAGON,T_ELECTRIC,T_GRASS;
     T_GRASS;    bg,3, name,"grass",    T_GRASS;    good;,T_GROUND,T_ROCK,T_WATER;           T_GRASS;    null;,;                   T_GRASS;    weak;,T_BUG,T_DRAGON,T_FIRE,T_FLYING,T_GRASS,T_POISON;
@@ -183,7 +183,7 @@ c_types = zobj[[
     T_FLYING;   bg,0, name,"flying",   T_FLYING;   good;,T_BUG,T_FIGHTING,T_GRASS;          T_FLYING;   null;,;                   T_FLYING;   weak;,T_ELECTRIC,T_ROCK;
     T_PSYCHIC;  bg,1, name,"psychic",  T_PSYCHIC;  good;,T_FIGHTING,T_POISON;               T_PSYCHIC;  null;,;                   T_PSYCHIC;  weak;,T_PSYCHIC;
     T_BUG;      bg,3, name,"bug",      T_BUG;      good;,T_GRASS,T_PSYCHIC;                 T_BUG;      null;,;                   T_BUG;      weak;,T_FIGHTING,T_FIRE,T_FLYING,T_GHOST,T_POISON;
-    T_ROCK;     bg,2, name,"rock",     T_ROCK;     good;,T_BUG,T_FIRE,T_FLYING,T_ICE;       T_ROCK;     null;,;                   T_ROCK;     weak;,T_FIGHTING,T_GROUND;
+    T_ROCK;     bg,0, name,"rock",     T_ROCK;     good;,T_BUG,T_FIRE,T_FLYING,T_ICE;       T_ROCK;     null;,;                   T_ROCK;     weak;,T_FIGHTING,T_GROUND;
     T_GHOST;    bg,1, name,"ghost",    T_GHOST;    good;,T_GHOST;                           T_GHOST;    null;,T_NORMAL,T_PSYCHIC; T_GHOST;    weak;,;
     T_DRAGON;   bg,0, name,"dragon",   T_DRAGON;   good;,T_DRAGON;                          T_DRAGON;   null;,;                   T_DRAGON;   weak;,;
     T_BIRD;     bg,0, name,"bird",     T_BIRD;     good;,;                                  T_BIRD;     null;,;                   T_BIRD;     weak;,;
@@ -193,9 +193,10 @@ c_types = zobj[[
 c_bg_styles = zobj[[
     0;pc,6,  sc,13; -- normal
     1;pc,13, sc,5;  -- darker/psychic/poison/ghost
-    2;pc,9,  sc,4;  -- electric/ground/fire
+    2;pc,9,  sc,4;  -- electric/ground
     3;pc,11, sc,3;  -- grass
     4;pc,12, sc,13; -- water
+    5;pc,8,  sc,2;  -- fire
 ]]
 
 c_zmovetype = zobj[[
