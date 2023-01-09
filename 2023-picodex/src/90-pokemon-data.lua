@@ -191,13 +191,13 @@ c_types = zobj[[
 
 -- 5 bg styles
 c_bg_styles = zobj[[
-    0;pc,6,  sc,13; -- normal
-    1;pc,13, sc,5;  -- darker/psychic/poison/ghost
-    2;pc,9,  sc,4;  -- electric/ground
-    3;pc,11, sc,3;  -- grass
-    4;pc,12, sc,13; -- water
-    5;pc,8,  sc,2;  -- fire
-    6;pc,10, sc,4;  -- electric/ground
+    0;bg,6,  aa,13; -- normal
+    1;bg,13, aa,5;  -- darker/psychic/poison/ghost
+    2;bg,9,  aa,4;  -- electric/ground
+    3;bg,11, aa,3;  -- grass
+    4;bg,12, aa,5;  -- water
+    5;bg,8,  aa,2;  -- fire
+    6;bg,10, aa,4;  -- electric/ground
 ]]
 
 c_zmovetype = zobj[[

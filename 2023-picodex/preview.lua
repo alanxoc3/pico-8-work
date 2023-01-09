@@ -31,7 +31,7 @@ c_bg_styles = {
     [1]={pc=13, sc=5},  -- darker/psychic/poison/ghost
     [2]={pc=9,  sc=4},  -- electric/ground
     [3]={pc=11, sc=3},  -- grass
-    [4]={pc=12, sc=13}, -- water
+    [4]={pc=12, sc=5},  -- water
     [5]={pc=8,  sc=2},  -- fire
     [6]={pc=10, sc=4},  -- electric/ground
 }
