@@ -53,15 +53,7 @@ function format_num(num)
 end
 
 |[browse_draw1]| function(a)
-    local types = zobj[[
-        0;pc,6,  sc,13;
-        1;pc,13, sc,5;
-        2;pc,9,  sc,4;
-        3;pc,11, sc,3;
-        4;pc,12, sc,13;
-    ]]
-
-    local type = c_bg_styles[c_pokemon[@S_BROWSE_PKMN+1].background]
+    local type = c_bg_styles[ c_types[c_pokemon[@S_BROWSE_PKMN+1].type1].bg ]
     rectfill(0,0,39,39,type.pc)
     draw_pkmn_out(@S_BROWSE_PKMN+1, 20, 20, 2, 2, type.sc)
 end $$
