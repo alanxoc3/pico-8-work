@@ -3,7 +3,7 @@ A pokedex in pico-8. Comes complete with minigames, pokedex, and a battle simula
 
 ## Specs
 ```
-Screen 1 (Left):      38x38
+Screen 1 (Left):      40x40
 Screen 2 (Top-Right): 46x13
 Screen 3 (Top-Left):  46x21
 ```
@@ -52,7 +52,7 @@ Modes are:
   - customize parties
 - Battle
   - story (predefined fights, end in missingno)
-  - pokedown (fight pokemon in order, aim for high score)
+  - numeric (fight pokemon in order, aim for high score)
   - random fight (fight a completely random team)
   - party fight (fight one of the saved parties)
 - Quiz
@@ -75,6 +75,7 @@ unlock missingno by:
 
 256 bytes
 
+
 180 bytes to store up to 6 parties (5 nums per pokemon: pokemon move1 move2 move3 move4)
 6 bytes needed for the battles to win (8*6 is 48, there are 48 different battles)
 1 byte needed for current mode
@@ -91,3 +92,7 @@ Missingno       -- battle
 
 guess who - surfing pikachu
 amnesia psyduck
+
+## Things
+Random Party - Random pokemon w/default moves
+Random Moves - For predermined pokemon
