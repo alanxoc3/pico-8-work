@@ -13,17 +13,24 @@ end
 end $$
 
 |[browse_draw1]| function(a)
+    if @S_BROWSE_PKMN\4 < @S_BROWSE_VIEW   then printh("meh") poke(S_BROWSE_VIEW, @S_BROWSE_PKMN\4  ) end
+    if @S_BROWSE_PKMN\4 > @S_BROWSE_VIEW+3 then printh("meh") poke(S_BROWSE_VIEW, @S_BROWSE_PKMN\4-3) end
+
+    poke(S_BROWSE_VIEW, max(0, @S_BROWSE_VIEW))
+    poke(S_BROWSE_VIEW, min(152/4-4, @S_BROWSE_VIEW))
+    printh(@S_BROWSE_VIEW)
+
     for j=0,3 do
         for i=0,3 do
-            draw_pkmn_out(j*4+i, i*10+5, j*10+5, 5, .375)
+            draw_pkmn_out((@S_BROWSE_VIEW+j)*4+i, i*10+5, j*10+5, 5, .375)
         end
     end
 
-    local x, y = (@S_BROWSE_PKMN%4)*10+5, (@S_BROWSE_PKMN\4)*10+5
-    if @S_BROWSE_PKMN%4 == 0 then x+=1 end
-    if @S_BROWSE_PKMN%4 == 3 then x-=1 end
-    if @S_BROWSE_PKMN\4 == 0 then y+=1 end
-    if @S_BROWSE_PKMN\4 == 3 then y-=1 end
+    local x, y = (@S_BROWSE_PKMN%4)*10+5, (@S_BROWSE_PKMN\4-@S_BROWSE_VIEW)*10+5
+    if (@S_BROWSE_PKMN)%4 == 0 then x+=1 end
+    if (@S_BROWSE_PKMN)%4 == 3 then x-=1 end
+    if (@S_BROWSE_PKMN)\4-@S_BROWSE_VIEW == 0 then y+=1 end
+    if (@S_BROWSE_PKMN)\4-@S_BROWSE_VIEW == 3 then y-=1 end
     rectfill(x-7-1,y-7-1,x+6+1,y+6+1,13)
     rectfill(x-6-1,y-6-1,x+5+1,y+5+1,6)
     draw_pkmn_out(@S_BROWSE_PKMN, x, y, 13, .5)

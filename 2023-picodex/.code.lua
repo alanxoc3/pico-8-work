@@ -242,16 +242,21 @@ if g_bpd then set_browse"4" end
 if g_bpo then a:load"main" end
 if g_bpx then sfx(flr(rnd(9)))end
 end,function(a)
+if@0x5ef7\4<@0x5ef6 then printh("meh")poke(0x5ef6,@0x5ef7\4)end
+if@0x5ef7\4>@0x5ef6+3 then printh("meh")poke(0x5ef6,@0x5ef7\4-3)end
+poke(0x5ef6,max(0,@0x5ef6))
+poke(0x5ef6,min(152/4-4,@0x5ef6))
+printh(@0x5ef6)
 for j=0,3 do
 for i=0,3 do
-draw_pkmn_out(j*4+i,i*10+5,j*10+5,5,.375)
+draw_pkmn_out((@0x5ef6+j)*4+i,i*10+5,j*10+5,5,.375)
 end
 end
-local x,y=(@0x5ef7%4)*10+5,(@0x5ef7\4)*10+5
-if@0x5ef7%4==0 then x+=1 end
-if@0x5ef7%4==3 then x-=1 end
-if@0x5ef7\4==0 then y+=1 end
-if@0x5ef7\4==3 then y-=1 end
+local x,y=(@0x5ef7%4)*10+5,(@0x5ef7\4-@0x5ef6)*10+5
+if(@0x5ef7)%4==0 then x+=1 end
+if(@0x5ef7)%4==3 then x-=1 end
+if(@0x5ef7)\4-@0x5ef6==0 then y+=1 end
+if(@0x5ef7)\4-@0x5ef6==3 then y-=1 end
 rectfill(x-7-1,y-7-1,x+6+1,y+6+1,13)
 rectfill(x-6-1,y-6-1,x+5+1,y+5+1,6)
 draw_pkmn_out(@0x5ef7,x,y,13,.5)
@@ -266,13 +271,13 @@ zprint(""..(c_pokemon[@0x5ef7].width/10).." kg",9,9-1,1,-1)
 print("h",2,3-1,13)
 print("w",2,9-1,13)
 end,function(a)
-if g_bpu then poke(0x5ef6,max(0,@0x5ef6-1))end
-if g_bpd then poke(0x5ef6,min(2,@0x5ef6+1))end
+if g_bpu then poke(0x5ef4,max(0,@0x5ef4-1))end
+if g_bpd then poke(0x5ef4,min(2,@0x5ef4+1))end
 if g_bpl then poke(0x5ef7,(@0x5ef7-1)%152)end
 if g_bpr then poke(0x5ef7,(@0x5ef7+1)%152)end
 if g_bpo then a:load"main" end
 end,function(a)
-draw_party_screen(@0x5ef6,@0x5ef7,(@0x5ef7+1)%152,(@0x5ef7+2)%152,(@0x5ef7+3)%152,(@0x5ef7+4)%152,(@0x5ef7+5)%152)
+draw_party_screen(@0x5ef4,@0x5ef7,(@0x5ef7+1)%152,(@0x5ef7+2)%152,(@0x5ef7+3)%152,(@0x5ef7+4)%152,(@0x5ef7+5)%152)
 end,function(a)
 end,function(a)
 end,function(a)
