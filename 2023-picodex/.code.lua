@@ -240,13 +240,20 @@ if g_bpr then poke(0x5ef7,(@0x5ef7+1)%pkmn_len())end
 if g_bpo then a:load"main" end
 if g_bpx then sfx(flr(rnd(9)))end
 end,function(a)
-local type=c_bg_styles[c_types[c_pokemon[@0x5ef7+1].type1].bg]
-rectfill(0,0,39,39,type.pc)
-for j=0,3 do
-y=5+j*10
-draw_pkmn_out(@0x5ef7+1,6,y,1,.5,type.sc)
-for i=1,5 do
-draw_pkmn_out((@0x5ef7+1+i+j*8)%151,8+i*8,y,1,.25,type.sc)
+local type=c_bg_styles[0]
+rectfill(0,0,39,39,5)
+rectfill(0,9,39,30,6)
+rect(-1,9,40,30,1)
+for j=0,2 do
+local y=5+j*15
+local xoff=5
+local siz=.25
+if j==1 then siz=.5 y-=4 xoff=10
+draw_pkmn_out((@0x5ef7+1)%151,xoff-1,y+4,1,.875,5)
+for i=2,1,-1 do draw_pkmn_out((@0x5ef7+1+i+j*8)%151,12+i*11,y,1,siz,5)end
+for i=3,5 do draw_pkmn_out((@0x5ef7+1+i+j*8)%151,21+(i-3)*7,y+9,1,.25,5)end
+else
+for i=0,5 do draw_pkmn_out((@0x5ef7+1+i+j*8)%151,xoff+i*6,y,1,siz,5)end
 end
 end
 end,function(a)
