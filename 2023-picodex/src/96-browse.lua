@@ -22,15 +22,15 @@ function draw_pkmn_out(num, x, y, sw, sh, col)
     sh = sh or 1
 
     for c=1,15 do pal(c,col) end
-    for i=-sh,sh,sh*2 do draw_pkmn(num, x-sw, y+i, sw, sh) end
-    for i=-sh,sh,sh*2 do draw_pkmn(num, x+sw, y+i, sw, sh) end
+    for i=-sh,sh,sh*2 do draw_pkmn(num, x-sw, y+i, .5, .5) end
+    for i=-sh,sh,sh*2 do draw_pkmn(num, x+sw, y+i, .5, .5) end
 
     for c=1,15 do pal(c,1) end
-    for i=-sw,sw,sw*2 do draw_pkmn(num, x+i, y, sw, sh) end
-    for i=-sh,sh,sh*2 do draw_pkmn(num, x, y+i, sw, sh) end
+    for i=-sw,sw,sw*2 do draw_pkmn(num, x+i, y, .5, .5) end
+    for i=-sh,sh,sh*2 do draw_pkmn(num, x, y+i, .5, .5) end
 
     for c=1,15 do pal(c, c) end
-    draw_pkmn(num, x, y, sw, sh)
+    draw_pkmn(num, x, y, .5, .5)
 end
 
 function pkmn_len()
@@ -55,7 +55,7 @@ end
 |[browse_draw1]| function(a)
     local type = c_bg_styles[ c_types[c_pokemon[@S_BROWSE_PKMN+1].type1].bg ]
     rectfill(0,0,39,39,type.pc)
-    draw_pkmn_out(@S_BROWSE_PKMN+1, 20, 20, 2, 2, type.sc)
+    draw_pkmn_out(@S_BROWSE_PKMN+1, 20, 20, 1, 1, type.sc)
 end $$
 
 |[browse_draw2]| function(a)

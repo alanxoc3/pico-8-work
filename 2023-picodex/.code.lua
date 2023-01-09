@@ -242,7 +242,7 @@ if g_bpx then sfx(flr(rnd(9)))end
 end,function(a)
 local type=c_bg_styles[c_types[c_pokemon[@0x5ef7+1].type1].bg]
 rectfill(0,0,39,39,type.pc)
-draw_pkmn_out(@0x5ef7+1,20,20,2,2,type.sc)
+draw_pkmn_out(@0x5ef7+1,20,20,1,1,type.sc)
 end,function(a)
 zprint(c_pokemon[@0x5ef7+1].name,46/2,4,1,0)
 end,function(a)
@@ -436,13 +436,13 @@ function draw_pkmn_out(num,x,y,sw,sh,col)
 sw=sw or 1
 sh=sh or 1
 for c=1,15 do pal(c,col)end
-for i=-sh,sh,sh*2 do draw_pkmn(num,x-sw,y+i,sw,sh)end
-for i=-sh,sh,sh*2 do draw_pkmn(num,x+sw,y+i,sw,sh)end
+for i=-sh,sh,sh*2 do draw_pkmn(num,x-sw,y+i,.5,.5)end
+for i=-sh,sh,sh*2 do draw_pkmn(num,x+sw,y+i,.5,.5)end
 for c=1,15 do pal(c,1)end
-for i=-sw,sw,sw*2 do draw_pkmn(num,x+i,y,sw,sh)end
-for i=-sh,sh,sh*2 do draw_pkmn(num,x,y+i,sw,sh)end
+for i=-sw,sw,sw*2 do draw_pkmn(num,x+i,y,.5,.5)end
+for i=-sh,sh,sh*2 do draw_pkmn(num,x,y+i,.5,.5)end
 for c=1,15 do pal(c,c)end
-draw_pkmn(num,x,y,sw,sh)
+draw_pkmn(num,x,y,.5,.5)
 end
 function pkmn_len()
 return@0x5eff ~=0 and 152 or 151
