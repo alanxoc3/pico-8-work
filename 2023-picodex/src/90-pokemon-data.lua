@@ -174,7 +174,7 @@ c_types = zobj[[
     T_NORMAL;   bg,0, name,"normal",   T_NORMAL;   good;,;                                  T_NORMAL;   null;,T_GHOST;            T_NORMAL;   weak;,T_ROCK;
     T_FIRE;     bg,5, name,"fire",     T_FIRE;     good;,T_GRASS,T_ICE,T_BUG;               T_FIRE;     null;,;                   T_FIRE;     weak;,T_FIRE,T_WATER,T_ROCK,T_DRAGON;
     T_WATER;    bg,4, name,"water",    T_WATER;    good;,T_FIRE,T_GROUND,T_ROCK;            T_WATER;    null;,;                   T_WATER;    weak;,T_DRAGON,T_GRASS,T_WATER;
-    T_ELECTRIC; bg,2, name,"electric", T_ELECTRIC; good;,T_FLYING,T_WATER;                  T_ELECTRIC; null;,T_GROUND;           T_ELECTRIC; weak;,T_DRAGON,T_ELECTRIC,T_GRASS;
+    T_ELECTRIC; bg,6, name,"electric", T_ELECTRIC; good;,T_FLYING,T_WATER;                  T_ELECTRIC; null;,T_GROUND;           T_ELECTRIC; weak;,T_DRAGON,T_ELECTRIC,T_GRASS;
     T_GRASS;    bg,3, name,"grass",    T_GRASS;    good;,T_GROUND,T_ROCK,T_WATER;           T_GRASS;    null;,;                   T_GRASS;    weak;,T_BUG,T_DRAGON,T_FIRE,T_FLYING,T_GRASS,T_POISON;
     T_ICE;      bg,4, name,"ice",      T_ICE;      good;,T_DRAGON,T_FLYING,T_GRASS;         T_ICE;      null;,;                   T_ICE;      weak;,T_FIRE,T_ICE,T_WATER;
     T_FIGHTING; bg,2, name,"fighting", T_FIGHTING; good;,T_ICE,T_NORMAL,T_ROCK;             T_FIGHTING; null;,T_GHOST;            T_FIGHTING; weak;,T_BUG,T_FLYING,T_POISON,T_PSYCHIC;
@@ -197,6 +197,7 @@ c_bg_styles = zobj[[
     3;pc,11, sc,3;  -- grass
     4;pc,12, sc,13; -- water
     5;pc,8,  sc,2;  -- fire
+    6;pc,10, sc,4;  -- electric/ground
 ]]
 
 c_zmovetype = zobj[[
