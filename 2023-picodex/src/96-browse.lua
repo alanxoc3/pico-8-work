@@ -61,12 +61,9 @@ end
         4;pc,12, sc,13;
     ]]
 
-    local type = c_bg_styles[c_pokemon[@S_BROWSE_PKMN+1].c] -- [1] -- types[@S_BROWSE_PKMN%5]
-
+    local type = c_bg_styles[c_pokemon[@S_BROWSE_PKMN+1].background]
     rectfill(0,0,39,39,type.pc)
     draw_pkmn_out(@S_BROWSE_PKMN+1, 20, 20, 2, 2, type.sc)
-    -- zprint(format_num(@S_BROWSE_PKMN+1), 21, 7, 1, -1)
-    --rectfill(0,20,37,20,1)
 end $$
 
 |[browse_draw2]| function(a)
@@ -77,13 +74,13 @@ end $$
     rectfill(0,0,46,22,13)
     rectfill(0,0,6,46,1)
 
-    zprint(""..(c_pokemon[@S_BROWSE_PKMN+1].h/10).." m",  9, 3-1,  1, -1)
-    zprint(""..(c_pokemon[@S_BROWSE_PKMN+1].w/10).." kg", 9, 9-1,  1, -1)
-    zprint("transport", 9, 15-1,  1, -1)
+    zprint(""..(c_pokemon[@S_BROWSE_PKMN+1].height/10).." m",  9, 3-1,  1, -1)
+    zprint(""..(c_pokemon[@S_BROWSE_PKMN+1].width/10).." kg", 9, 9-1,  1, -1)
+    -- zprint("transport", 9, 15-1,  1, -1)
 
     print("h", 2, 3-1, 13) --
     print("w", 2, 9-1, 13)-- 
-    print("s", 2, 15-1, 13)-- 
+    -- print("s", 2, 15-1, 13)-- 
 
 
     --zprint("ABCDEFGHIJKLM", 2+4, 1, 1, -1)

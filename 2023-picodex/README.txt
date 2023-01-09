@@ -29,16 +29,18 @@ Sound effects are stored in the `./129-151.p8` cartridge. The `compile.lua` scri
 63    Logo melody
 ```
 
+
 ## Credits
--- https://gamefaqs.gamespot.com/gameboy/924467-pokemon-green/faqs/12776
 -- px9
 -- smap
 -- battle mechanics: https://www.smogon.com/rb/articles/rby_mechanics_guide
+-- https://gamefaqs.gamespot.com/gameboy/924467-pokemon-green/faqs/12776
+-- https://www.serebii.net/pokedex/000.shtml
+-- https://pokeapi.co/
+-- bulbapedia
 
 ## Random Temporary Notes
-use the 
-
-Blue buttons on the right correspond to the different pokedex modes.
+Move changes from gen 1 to gen 2: https://bulbapedia.bulbagarden.net/wiki/List_of_modified_moves
 
 Modes are:
 - Mode Select
