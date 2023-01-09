@@ -52,26 +52,33 @@ function format_num(num)
     return '#'..str
 end
 
-|[browse_draw1]| function(a)
-    local type = c_bg_styles[0]-- c_types[c_pokemon[@S_BROWSE_PKMN+1].type1].bg ]
-    rectfill(0,0,39,39,5)
+function draw_party_screen(sel,p1,p2,p3,p4,p5,p6)
+    rectfill(0,0,39,49,13)
+    local poks = {p1, p2, p3, p4, p5, p6}
 
-    rectfill(0, 9, 39, 30, 6)
-    rect    (-1, 9, 40, 30, 1)
-    for j=0,2 do
-        local y = 5+j*15
-        local xoff = 5
-        local siz = .25
-        if j == 1 then siz = .5 y -= 4 xoff=10
-
-        draw_pkmn_out((@S_BROWSE_PKMN+1)%151, xoff-1, y+4, 1, .875, 5)
-        for i=2,1,-1 do draw_pkmn_out((@S_BROWSE_PKMN+1+i+j*8)%151, 12+i    *11, y, 1, siz, 5) end
-        for i=3,5    do draw_pkmn_out((@S_BROWSE_PKMN+1+i+j*8)%151, 21+(i-3)*7, y+9, 1, .25, 5) end
-
-        else
-            for i=0,5 do draw_pkmn_out((@S_BROWSE_PKMN+1+i+j*8)%151, xoff+i*6, y, 1, siz, 5) end
-        end
+    local drawbg = function(yoff)
+        rect(-1, yoff-1, 40, yoff+8, 1)
+        for i=0,5 do draw_pkmn_out(poks[i+1], 6+i*6, 4+yoff, 1, .25, 5) end
     end
+
+    local ty = 0+sel*9
+    rectfill( 0, ty-1, 39, ty+22, 6)
+    rect    (-1, ty-1, 40, ty+22, 1)
+    draw_pkmn_out(p1, 10, ty+11, 1, 1, 5)
+    draw_pkmn_out(p2, 25, ty+7,  1, .5, 13)
+    draw_pkmn_out(p3, 35, ty+8,  1, .375, 13)
+    draw_pkmn_out(p4, 24, ty+17, 1, .325,  13)
+    draw_pkmn_out(p5, 31, ty+17, 1, .2,  13)
+    draw_pkmn_out(p6, 37, ty+17, 1, .2,  13)
+
+    drawbg(sel*9-9-9)
+    drawbg(sel*9-9)
+    drawbg(sel*9+23)
+    drawbg(sel*9+23+9)
+end
+
+|[browse_draw1]| function(a)
+    draw_party_screen(t()\1%3, @S_BROWSE_PKMN+1+0, @S_BROWSE_PKMN+1+1, @S_BROWSE_PKMN+1+2, @S_BROWSE_PKMN+1+3, @S_BROWSE_PKMN+1+4, @S_BROWSE_PKMN+1+5)
 end $$
 
 |[browse_draw2]| function(a)
