@@ -126,6 +126,7 @@ function wobble_text(text, x, y, color)
 end
 
 function zprint(str, x, y, color, align)
+    str = ""..str
     if align == 0    then x -= #str*2
     elseif align > 0 then x -= #str*4+1 end
 

@@ -3,7 +3,7 @@ zclass[[modes,actor|
     defaults; init,nop, update,nop, draw1,nop, draw2,nop, draw3,nop;
 
     main;   update,%main_update, draw1,%main_draw1;
-    browse; update,%browse_update, draw1,%browse_draw1, draw2,%browse_draw2, draw3,%browse_draw3;
+    browse; update,%browse_update, draw1,%browse_draw1, draw2,%browse_draw2, draw3,%browse_draw3, list_view,yes;
     battle; update,%battle_update, draw1,%battle_draw1, draw2,%battle_draw2, draw3,%battle_draw3;
     party;  update,%party_update,  draw1,%party_draw1,  draw2,%party_draw2,  draw3,%party_draw3;
 ]]

@@ -154,21 +154,6 @@ c_pokemon = zobj[[
     151;, "mew",         40,   4,  T_PSYCHIC,  T_NONE,      100, 100, 100, 100, 100;
 ]]
 
-for i=0,151 do
-    c_pokemon[i] = {
-        name       = c_pokemon[i][1],
-        width      = c_pokemon[i][2],
-        height     = c_pokemon[i][3],
-        type1      = c_pokemon[i][4],
-        type2      = c_pokemon[i][5],
-        hp         = c_pokemon[i][6],
-        attack     = c_pokemon[i][7],
-        defence    = c_pokemon[i][8],
-        speed      = c_pokemon[i][9],
-        special    = c_pokemon[i][10]
-    }
-end
-
 -- includes type effectiveness chart. according to the gen 1 games, which had bugs. i'm keeping the bugs :).
 c_types = zobj[[
     T_NORMAL;   bg,0, name,"normal",   T_NORMAL;   good;,;                                  T_NORMAL;   null;,T_GHOST;            T_NORMAL;   weak;,T_ROCK;

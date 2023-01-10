@@ -24,7 +24,7 @@ function draw_party_screen(sel,...)
 
     local drawbg = function(yoff)
         rect(-1, yoff-1, 40, yoff+8, 1)
-        for i=0,5 do draw_pkmn_out(poks[i+1], 5+i*6, 4+yoff, 5, .25) end
+        for i=0,5 do get_pokemon(poks[i+1]).draw(5+i*6, 4+yoff, 5, .25) end
     end
 
     local ty = 0+sel*9
@@ -40,7 +40,7 @@ function draw_party_screen(sel,...)
         5;,37,17,.2;
     ]]
 
-    for i=0,5 do draw_pkmn_out(poks[i+1], locs[i][1], ty+locs[i][2], 13, locs[i][3]) end
+    for i=0,5 do get_pokemon(poks[i+1]).draw(locs[i][1], ty+locs[i][2], 13, locs[i][3]) end
 
     drawbg((sel*9+23)  %41, (sel+1)%3)
     drawbg((sel*9+23+9)%41, (sel-1)%3)

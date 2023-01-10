@@ -25,6 +25,30 @@ zclass[[game_state,actor|
 end $$
 
 function _init()
+    -- initializing some data to make it easier to work with.
+    for i=0,151 do
+        c_pokemon[i] = {
+            name       = c_pokemon[i][1],
+            width      = c_pokemon[i][2],
+            height     = c_pokemon[i][3],
+            type1      = c_pokemon[i][4],
+            type2      = c_pokemon[i][5],
+            hp         = c_pokemon[i][6],
+            attack     = c_pokemon[i][7],
+            defence    = c_pokemon[i][8],
+            speed      = c_pokemon[i][9],
+            special    = c_pokemon[i][10],
+            draw       = function(...) draw_pkmn_out(i, ...) end,
+            num        = i,
+        }
+    end
+
+    c_pokemon[0].draw = function(...)
+        if @S_MISSINGNO ~= 0 then
+            draw_pkmn_out(i, ...)
+        end
+    end
+
     -- clear all the read only memory. testing things out showed that this doesn't get cleared automatically.
     memset(0x8000, 0, 0x7fff)
 
