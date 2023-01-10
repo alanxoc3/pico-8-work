@@ -311,7 +311,9 @@ if g_bpo then a:load"main" end
 end,function(a)
 draw_party_screen(@0x5ef4,@0x5ef7,(@0x5ef7+1)%152,(@0x5ef7+2)%152,(@0x5ef7+3)%152,(@0x5ef7+4)%152,(@0x5ef7+5)%152)
 end,function(a)
+zprint("party #"..@0x5ef4+1,46/2,4,1,0)
 end,function(a)
+print_draw3_message("select","your","party")
 end,function(a)
 poke(0x5f43,0xff)
 g_fade=a:get_elapsed_percent"start"
@@ -507,20 +509,26 @@ end
 function get_pokemon(num)
 return c_pokemon[num]
 end
+function print_draw3_message(top,mid,bot)
+rectfill(0,0,45,20,1)
+zprint(top,46/2,1,13,0)
+zprint(mid,46/2,8,13,0)
+zprint(bot,46/2,15,13,0)
+end
 function draw_party_screen(sel,...)
 rectfill(0,0,39,49,13)
 local poks={...}
 local drawbg=function(yoff)
-rect(-1,yoff-1,40,yoff+8,1)
-for i=0,5 do get_pokemon(poks[i+1]).draw(5+i*6,4+yoff,5,.25)end
+rect(-1,yoff-1,40,yoff+7,1)
+for i=0,5 do get_pokemon(poks[i+1]).draw(5+i*6,4+yoff,5,.2)end
 end
-local ty=0+sel*9
-rectfill(0,ty-1,39,ty+22,6)
-rect(-1,ty-1,40,ty+22,1)
-local locs=zobj[[0;,10,11,1;1;,25,7,.5;2;,35,8,.375;3;,24,17,.325;4;,31,17,.2;5;,37,17,.2;]]
+local ty=0+sel*8
+rectfill(0,ty,39,ty+23,6)
+rect(-1,ty,40,ty+23,13)
+local locs=zobj[[0;,10,12,1;1;,25,9,.5;2;,35,9,.375;3;,24,18,.2;4;,30,18,.2;5;,36,18,.2;]]
 for i=0,5 do get_pokemon(poks[i+1]).draw(locs[i][1],ty+locs[i][2],13,locs[i][3])end
-drawbg((sel*9+23)%41,(sel+1)%3)
-drawbg((sel*9+23+9)%41,(sel-1)%3)
+drawbg((sel*8+25)%41)
+drawbg((sel*8+25+8)%41)
 end
 g_fade,g_fade_table=1,zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,1,0,0,0,0;3;,3,3,3,3,1,1,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,0,0,0,0;6;,6,6,13,13,5,5,0,0;7;,7,7,6,13,13,5,0,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,0,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,0,0,0;13;,13,13,5,5,1,0,0,0;14;,14,14,13,4,2,2,0,0;15;,15,15,13,13,5,5,0,0;]]
 function fade(threshold)

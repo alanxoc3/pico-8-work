@@ -5,7 +5,7 @@ A pokedex in pico-8. Comes complete with minigames, pokedex, and a battle simula
 ```
 Screen 1 (Left):      40x40
 Screen 2 (Top-Right): 46x13
-Screen 3 (Top-Left):  46x21
+Screen 3 (Bot-Right): 46x21
 ```
 
 ## Building
