@@ -5,78 +5,86 @@ function set_browse(delta)
     end
 end
 
-|[browse_update]| function(a)
+function browseupdate_shared(a)
     set_browse'0'
     if g_bpl then set_browse'-1' end
     if g_bpr then set_browse'1'  end
+    if g_bpo then a:pop() end
+end
 
-    if a.list_view then
-        if g_bpu then set_browse'-4' end
-        if g_bpd then set_browse'4'  end
+|[browse_update]| function(a)
+    browseupdate_shared(a)
 
-        if g_bpo then a:load'main' end
-        if g_bpx then a.list_view = false end
-    else
-        if g_bpu then poke(S_BROWSE_SCREEN, max(0, @S_BROWSE_SCREEN-1)) end
-        if g_bpd then poke(S_BROWSE_SCREEN, min(1, @S_BROWSE_SCREEN+1)) end
+    if g_bpu then set_browse'-4' end
+    if g_bpd then set_browse'4'  end
 
-        if g_bpo then a.list_view = true end
-        if g_bpx then sfx(flr(rnd(9))) end
-    end
+    if g_bpx then a:push'browsestat' end
+end $$
+
+|[browsestat_update]| function(a)
+    browseupdate_shared(a)
+    printh(#a.stack)
+
+    if g_bpu then poke(S_BROWSE_SCREEN, max(0, @S_BROWSE_SCREEN-1)) end
+    if g_bpd then poke(S_BROWSE_SCREEN, min(1, @S_BROWSE_SCREEN+1)) end
+
+    if g_bpx then sfx(flr(rnd(9))) end
 end $$
 
 |[browse_draw1]| function(a)
     local pkmn = get_pokemon(@S_BROWSE_PKMN)
 
-    if a.list_view then
-        if @S_BROWSE_PKMN\4 < @S_BROWSE_VIEW   then poke(S_BROWSE_VIEW, @S_BROWSE_PKMN\4  ) end
-        if @S_BROWSE_PKMN\4 > @S_BROWSE_VIEW+3 then poke(S_BROWSE_VIEW, @S_BROWSE_PKMN\4-3) end
+    if @S_BROWSE_PKMN\4 < @S_BROWSE_VIEW   then poke(S_BROWSE_VIEW, @S_BROWSE_PKMN\4  ) end
+    if @S_BROWSE_PKMN\4 > @S_BROWSE_VIEW+3 then poke(S_BROWSE_VIEW, @S_BROWSE_PKMN\4-3) end
 
-        poke(S_BROWSE_VIEW, max(0, @S_BROWSE_VIEW))
-        poke(S_BROWSE_VIEW, min(152/4-4, @S_BROWSE_VIEW))
+    poke(S_BROWSE_VIEW, max(0, @S_BROWSE_VIEW))
+    poke(S_BROWSE_VIEW, min(152/4-4, @S_BROWSE_VIEW))
 
-        for j=0,3 do
-            for i=0,3 do
-                get_pokemon((@S_BROWSE_VIEW+j)*4+i).draw(i*10+5, j*10+5, 5, .375)
-            end
-        end
-
-        local x, y = (@S_BROWSE_PKMN%4)*10+5, (@S_BROWSE_PKMN\4-@S_BROWSE_VIEW)*10+5
-        if (@S_BROWSE_PKMN)%4 == 0 then x+=1 end
-        if (@S_BROWSE_PKMN)%4 == 3 then x-=1 end
-        if (@S_BROWSE_PKMN)\4-@S_BROWSE_VIEW == 0 then y+=1 end
-        if (@S_BROWSE_PKMN)\4-@S_BROWSE_VIEW == 3 then y-=1 end
-        rectfill(x-7-1,y-7-1,x+6+1,y+6+1,13)
-        rectfill(x-6-1,y-6-1,x+5+1,y+5+1,6)
-        pkmn.draw(x, y, 13, .5)
-        rect    (x-7  ,y-7  ,x+6  ,y+6  ,1)
-    else
-        local style = c_bg_styles[c_types[pkmn.type1].bg]
-        rectfill(0,0,39,39,style.bg)
-
-        if @S_BROWSE_SCREEN == 0 then
-            rectfill(0,32,39,39,style.aa)
-            pkmn.draw(20, 20, style.aa, 2, 2)
-        elseif @S_BROWSE_SCREEN == 1 then
-            rectfill(0,16,39,39,style.aa)
-            pkmn.draw(20, 10, style.aa, 1)
-            rectfill(0,21,39,39,1)
-            rectfill(6,21,33,39,7)
-
-            print("a",1,22,13) print("h",36,22,13)
-            print("d",1,28,13) print("s",36,28,13)
-            print("*",1,34,13) print("t",36,34,13)
-
-            rectfill(19,20,20,39,1)
-            rectfill(0,20,39,20,1)
-
-            local total = pkmn.attack + pkmn.hp + pkmn.defence + pkmn.speed + pkmn.special
-            print(pkmn.attack, 7,  2+20, 13)  zprint(pkmn.hp, 35, 2+20,  13, 1)
-            print(pkmn.defence, 7,  8+20, 13)  zprint(pkmn.speed, 35, 8+20,  13, 1)
-            print(pkmn.special, 7,  14+20, 13) zprint(total, 35, 14+20, 13, 1)
+    for j=0,3 do
+        for i=0,3 do
+            get_pokemon((@S_BROWSE_VIEW+j)*4+i).draw(i*10+5, j*10+5, 5, .375)
         end
     end
+
+    local x, y = (@S_BROWSE_PKMN%4)*10+5, (@S_BROWSE_PKMN\4-@S_BROWSE_VIEW)*10+5
+    if (@S_BROWSE_PKMN)%4 == 0 then x+=1 end
+    if (@S_BROWSE_PKMN)%4 == 3 then x-=1 end
+    if (@S_BROWSE_PKMN)\4-@S_BROWSE_VIEW == 0 then y+=1 end
+    if (@S_BROWSE_PKMN)\4-@S_BROWSE_VIEW == 3 then y-=1 end
+    rectfill(x-7-1,y-7-1,x+6+1,y+6+1,13)
+    rectfill(x-6-1,y-6-1,x+5+1,y+5+1,6)
+    pkmn.draw(x, y, 13, .5)
+    rect    (x-7  ,y-7  ,x+6  ,y+6  ,1)
 end $$
+
+|[browsestat_draw1]| function(a)
+    local pkmn = get_pokemon(@S_BROWSE_PKMN)
+    local style = c_bg_styles[c_types[pkmn.type1].bg]
+    rectfill(0,0,39,39,style.bg)
+
+    if @S_BROWSE_SCREEN == 0 then
+        rectfill(0,32,39,39,style.aa)
+        pkmn.draw(20, 20, style.aa, 2, 2)
+    elseif @S_BROWSE_SCREEN == 1 then
+        rectfill(0,16,39,39,style.aa)
+        pkmn.draw(20, 10, style.aa, 1)
+        rectfill(0,21,39,39,1)
+        rectfill(6,21,33,39,7)
+
+        print("a",1,22,13) print("h",36,22,13)
+        print("d",1,28,13) print("s",36,28,13)
+        print("*",1,34,13) print("t",36,34,13)
+
+        rectfill(19,20,20,39,1)
+        rectfill(0,20,39,20,1)
+
+        local total = pkmn.attack + pkmn.hp + pkmn.defence + pkmn.speed + pkmn.special
+        print(pkmn.attack, 7,  2+20, 13)  zprint(pkmn.hp, 35, 2+20,  13, 1)
+        print(pkmn.defence, 7,  8+20, 13)  zprint(pkmn.speed, 35, 8+20,  13, 1)
+        print(pkmn.special, 7,  14+20, 13) zprint(total, 35, 14+20, 13, 1)
+    end
+end $$
+
 
 |[browse_draw2]| function(a)
     zprint(get_pokemon(@S_BROWSE_PKMN).name, 46/2, 4, 1, 0)
