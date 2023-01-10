@@ -73,11 +73,14 @@ unlock missingno by:
 - winning the pokedown mode
 - getting to end of type quiz
 
-256 bytes
+plus num
 
+111 bytes to store 3 parties (1 byte per party for the party count. 6 bytes per pokemon: pokemon movecount move1 move2 move3 move4)
 
-180 bytes to store up to 6 parties (5 nums per pokemon: pokemon move1 move2 move3 move4)
-6 bytes needed for the battles to win (8*6 is 48, there are 48 different battles)
+enabled pokemon move1 move2 move3 move4
+enabled pokemon move1 move2 move3 move4
+enabled pokemon move1 move2 move3 move4
+
 1 byte needed for current mode
 2 bytes for settings
 1 byte (bit) needed for unlocking missingno

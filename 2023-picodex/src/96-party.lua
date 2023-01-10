@@ -5,11 +5,12 @@
     if g_bpl then poke(S_BROWSE_PKMN, (@S_BROWSE_PKMN-1)%152) end
     if g_bpr then poke(S_BROWSE_PKMN, (@S_BROWSE_PKMN+1)%152) end
 
-    if g_bpo then a:load'main' end
+    if g_bpo then a:pop() end
+    if g_bpx then a:push'editparty' end
 end $$
 
 |[party_draw1]| function(a)
-    draw_party_screen(@S_CUR_PARTY, @S_BROWSE_PKMN, (@S_BROWSE_PKMN+1)%152, (@S_BROWSE_PKMN+2)%152, (@S_BROWSE_PKMN+3)%152, (@S_BROWSE_PKMN+4)%152, (@S_BROWSE_PKMN+5)%152)
+    draw_party_screen(@S_CUR_PARTY)
 end $$
 
 |[party_draw2]| function(a)
@@ -27,13 +28,12 @@ function print_draw3_message(top, mid, bot)
     zprint(bot, 46/2, 15, 13, 0)
 end
 
-function draw_party_screen(sel,...)
+function draw_party_screen(sel, party1, party2, party3)
     rectfill(0,0,39,49,13)
-    local poks = {...}
 
-    local drawbg = function(yoff)
+    local drawbg = function(yoff, party)
         rect(-1, yoff-1, 40, yoff+7, 1)
-        for i=0,5 do get_pokemon(poks[i+1]).draw(5+i*6, 4+yoff, 5, .2) end
+        for i,v in ipairs(party) do get_pokemon(v.num).draw(5+(i-1)*6, 4+yoff, 5, .2) end
     end
 
     local ty = 0+sel*8
@@ -41,16 +41,48 @@ function draw_party_screen(sel,...)
     rect    ( -1, ty, 40, ty+23, 13)
 
     local locs = zobj[[
-        0;,10,12,1;
-        1;,25,9, .5;
-        2;,35,9, .375;
-        3;,24,18,.2;
-        4;,30,18,.2;
-        5;,36,18,.2;
+        1;,10,12,1;
+        2;,25,9, .5;
+        3;,35,9, .375;
+        4;,24,18,.2;
+        5;,30,18,.2;
+        6;,36,18,.2;
     ]]
 
-    for i=0,5 do get_pokemon(poks[i+1]).draw(locs[i][1], ty+locs[i][2], 13, locs[i][3]) end
+    for i,v in ipairs(get_party(sel)) do get_pokemon(v.num).draw(locs[i][1], ty+locs[i][2], 13, locs[i][3]) end
 
-    drawbg((sel*8+25)  %41)
-    drawbg((sel*8+25+8)%41)
+    drawbg((sel*8+25)  %41, get_party((sel+1)%3))
+    drawbg((sel*8+25+8)%41, get_party((sel+2)%3))
+end
+
+c_party_memlocs = zobj[[0,S_PARTY1, 1,S_PARTY2, 2,S_PARTY3]]
+function get_party(party_index) -- 0 to 2
+    local mem = c_party_memlocs[party_index]
+    local party, party_len = {}, peek(mem) % 7
+
+    for i=1,party_len do
+        local memstart = mem+1+(i-1)*5
+        local moves = {}
+        for i=1,4 do add(moves, peek(memstart+i)) end
+        add(party, { num=peek(memstart), moves=moves })
+    end
+    return party
+end
+
+function save_party(party_index, party) -- 0 to 2
+    local mem = c_party_memlocs[party_index]
+    local partylen = max(0, min(#party, 6))
+    poke(mem, partylen)
+
+    for i=1,min(#party, 6) do
+        local memstart = mem+1+(i-1)*5
+        local pkmn = party[i]
+
+        printh(pkmn.num)
+        printh(memstart)
+        poke(memstart, pkmn.num)
+        for i=1,4 do
+            poke(memstart+i, (pkmn.moves or {})[i] or 0)
+        end
+    end
 end
