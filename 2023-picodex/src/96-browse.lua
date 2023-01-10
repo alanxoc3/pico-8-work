@@ -55,9 +55,9 @@ end $$
         rectfill(0,0,39,39,style.bg)
 
         if @S_BROWSE_SCREEN == 0 then
+            rectfill(0,32,39,39,style.aa)
             pkmn.draw(20, 20, style.aa, 2, 2)
         elseif @S_BROWSE_SCREEN == 1 then
-
             rectfill(0,16,39,39,style.aa)
             pkmn.draw(20, 10, style.aa, 1)
             rectfill(0,21,39,39,1)

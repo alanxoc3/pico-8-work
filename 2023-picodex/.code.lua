@@ -274,6 +274,7 @@ else
 local style=c_bg_styles[c_types[pkmn.type1].bg]
 rectfill(0,0,39,39,style.bg)
 if@0x5ef5==0 then
+rectfill(0,32,39,39,style.aa)
 pkmn.draw(20,20,style.aa,2,2)
 elseif@0x5ef5==1 then
 rectfill(0,16,39,39,style.aa)
