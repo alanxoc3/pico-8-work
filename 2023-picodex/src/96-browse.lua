@@ -23,7 +23,6 @@ end $$
 
 |[browsestat_update]| function(a)
     browseupdate_shared(a)
-    printh(#a.stack)
 
     if g_bpu then poke(S_BROWSE_SCREEN, max(0, @S_BROWSE_SCREEN-1)) end
     if g_bpd then poke(S_BROWSE_SCREEN, min(1, @S_BROWSE_SCREEN+1)) end

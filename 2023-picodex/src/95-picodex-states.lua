@@ -49,13 +49,13 @@ end $$
 
 -- utility funcs
 
-function draw_picodex(shaking, rotation, l_screen, tr_screen, br_screen, light, backbuttonheld)
+function draw_picodex(shaking, rotation, l_screen, tr_screen, br_screen, light, backbuttonheld, top_row_buttons, bot_row_buttons)
     light = light or 0
 
     camera(-28+(rotation+1)*14+(shaking and flr(rnd(3)-1) or 0),-15)
     draw_back_panel(light)
     draw_left_flap(light >= 4, l_screen)
-    draw_right_flap(light >= 4, rotation, backbuttonheld, tr_screen, br_screen)
+    draw_right_flap(light >= 4, rotation, backbuttonheld, tr_screen, br_screen, top_row_buttons, bot_row_buttons)
 
     camera(0,0)
 end
@@ -156,7 +156,7 @@ function draw_left_flap(is_on, screen_func)
 end
 
 -- flap_rotation is between -1 and 1. -1 means closed, 1 means open.
-function draw_right_flap(is_on, flap_rotation, backbuttonheld, topscreen_func, botscreen_func)
+function draw_right_flap(is_on, flap_rotation, backbuttonheld, topscreen_func, botscreen_func, top_row_buttons, bot_row_buttons)
     if flap_rotation < 0 then
         smap(0, 0, 8, 11, 8*8*(1-abs(flap_rotation))-1, 9, 8*8*abs(flap_rotation), 11*8)
 
@@ -172,12 +172,8 @@ function draw_right_flap(is_on, flap_rotation, backbuttonheld, topscreen_func, b
 
         smap(16, 0, 8, 11, 65, 9, 8*8*flap_rotation, 11*8)
         if flap_rotation == 1 then
-            if g_bl then spr(100, 73,  41) spr(100, 113, 49) end
-            if g_br then spr(100, 81,  41) spr(100, 105, 49) end
-            if g_bu then spr(100, 89,  41) spr(100, 97,  49) end
-            if g_bd then spr(100, 97,  41) spr(100, 89,  49) end
-            if g_bo then spr(100, 105, 41) spr(100, 81,  49) end
-            if g_bx then spr(100, 113, 41) spr(100, 73,  49) end
+            if top_row_buttons then spr(100, 73+(top_row_buttons\1%6)*8,  41) end
+            if bot_row_buttons then spr(100, 73+(bot_row_buttons\1%6)*8,  49) end
         end
     end
 end

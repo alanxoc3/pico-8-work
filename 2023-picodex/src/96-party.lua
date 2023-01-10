@@ -78,8 +78,6 @@ function save_party(party_index, party) -- 0 to 2
         local memstart = mem+1+(i-1)*5
         local pkmn = party[i]
 
-        printh(pkmn.num)
-        printh(memstart)
         poke(memstart, pkmn.num)
         for i=1,4 do
             poke(memstart+i, (pkmn.moves or {})[i] or 0)

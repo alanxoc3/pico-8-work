@@ -9,12 +9,12 @@ zclass[[modes,actor|
 
     stack;,;
 
-    defaults; init,nop, update,nop, draw1,nop, draw2,nop, draw3,nop;
+    defaults; sub,0, init,nop, update,nop, draw1,nop, draw2,nop, draw3,nop;
 
     main;       update,%main_update,       draw1,%main_draw1;
     browse;     update,%browse_update,     draw1,%browse_draw1,     draw2,%browse_draw2,    draw3,%browse_draw3;
     browsestat; update,%browsestat_update, draw1,%browsestat_draw1, draw2,%browse_draw2,    draw3,%browse_draw3;
-    battle;     update,%battle_update,     draw1,%battle_draw1,     draw2,%battle_draw2,    draw3,%battle_draw3;
+    fight;      update,%fight_update,      draw1,%fight_draw1,      draw2,%fight_draw2,     draw3,%fight_draw3;
     party;      update,%party_update,      draw1,%party_draw1,      draw2,%party_draw2,     draw3,%party_draw3;
     editparty;  update,%editparty_update,  draw1,%editparty_draw1,  draw2,%editparty_draw2, draw3,%editparty_draw3;
 ]]
@@ -56,18 +56,18 @@ end $$
         function() a.modes:draw1() end,
         function() a.modes:draw2() end, 
         function() a.modes:draw3() end, 
-        4)
+        4, false, @S_MODE, #a.modes.stack)
 end $$
 
 -- if i run the minifier, we need a separate display name from the state it's mapped to.
 c_modes = zobj[[
     len,6;
-    4; name,"battle",  state,battle;
-    5; name,"party",   state,party;
-    0; name,"browse",  state,browse;
-    1; name,"quiz",    state,quiz;
-    2; name,"config",  state,config;
-    3; name,"credits", state,credits;
+    0; name,"browse",    state,browse;
+    1; name,"credits",   state,credits;
+    2; name,"fight",     state,fight;
+    3; name,"games",     state,games;
+    4; name,"party",     state,party;
+    5; name,"settings",  state,settings;
 ]]
 
 c_mode_positions = split"2,9,17,26,33"
