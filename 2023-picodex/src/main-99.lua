@@ -26,7 +26,7 @@ end $$
 
 function _init()
     -- initializing some data to make it easier to work with.
-    for i=0,151 do
+    for i=-2,151 do
         c_pokemon[i] = {
             name       = c_pokemon[i][1],
             width      = c_pokemon[i][2],
@@ -44,9 +44,7 @@ function _init()
     end
 
     c_pokemon[0].draw = function(...)
-        if @S_MISSINGNO ~= 0 then
-            draw_pkmn_out(i, ...)
-        end
+        draw_pkmn_out(@S_MISSINGNO ~= 0 and 0 or -2, ...)
     end
 
     -- clear all the read only memory. testing things out showed that this doesn't get cleared automatically.

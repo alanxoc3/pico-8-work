@@ -1,5 +1,7 @@
 c_pokemon = zobj[[
     -- name           w     h   t1          t2           hp   att  def  spd  spc  movenums/levels string
+   -2;,; -- invalid (col 6)
+   -1;,; -- invalid (col 13)
     0;,"missingno",   10,   10, T_BIRD,     T_NORMAL,    33,  136, 0,   29,  6,   43|12,1|1;
     ;, "bulbasaur",   69,   7,  T_GRASS,    T_POISON,    45,  49,  49,  45,  65,  88|79|105|70|108|107|106|110|22,1|1|7|13|20|27|34|41|48;
     ;, "ivysaur",     130,  10, T_GRASS,    T_POISON,    60,  62,  63,  60,  80,  88|105|79|70|108|107|106|110|22,1|1|1|13|22|30|38|46|54;

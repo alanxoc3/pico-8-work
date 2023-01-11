@@ -33,15 +33,19 @@ function draw_party_screen(sel, party1, party2, party3)
 
     local drawbg = function(yoff, party)
         rect(-1, yoff-1, 40, yoff+7, 1)
-        for i,v in ipairs(party) do get_pokemon(v.num).draw(5+(i-1)*6, 4+yoff, 5, .2) end
+
+        for i=1,6 do
+            get_pokemon(party[i] and party[i].num or -1).draw(5+(i-1)*6, 4+yoff, 5, .2)
+        end
     end
 
     local ty = 0+sel*8
     rectfill( 0, ty, 39, ty+23, 6)
     -- rect    ( -1, ty, 40, ty+23, 13)
 
-    for i,v in ipairs(get_party(sel)) do
-        get_pokemon(v.num).draw(8+(i-1)%3*12, ty+6+(i-1)\3*12, 5, .5)
+    local selparty = get_party(sel)
+    for i=1,6 do
+        get_pokemon(selparty[i] and selparty[i].num or -2).draw(8+(i-1)%3*12, ty+6+(i-1)\3*12, 13, .5)
     end
 
     drawbg((sel*8+25)  %41, get_party((sel+1)%3))

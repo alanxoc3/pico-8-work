@@ -84,11 +84,11 @@ end $$
     end
 end $$
 
-function draw2_pokeinfo(num) 
+function draw2_pokeinfo(num)
     zprint(get_pokemon(num).name, 46/2, 4, 1, 0)
 end
 
-function draw3_pokeinfo(num) 
+function draw3_pokeinfo(num)
     local pkmn = get_pokemon(num)
     rectfill(0,0,46,6,1)
 
@@ -107,6 +107,8 @@ end
 -- Num 1 would be bulbasaur.
 g_loaded_row = 16 -- default corresponds to the top row in the "129-151.p8" file.
 function draw_pkmn(num, x, y, sw, sh)
+    if num < 0 then rectfill(x-1, y-1,x,y-num%2,6) return end
+
     sw = sw or 1
     sh = sh or 1
 
