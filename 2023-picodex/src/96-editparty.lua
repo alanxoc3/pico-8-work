@@ -14,6 +14,7 @@
     --end
 
     if g_bpo then a:pop() end
+    if g_bpx then a:push'partyaction' end
 end $$
 
 |[editparty_draw1]| function(a)
@@ -36,9 +37,38 @@ end $$
 end $$
 
 |[editparty_draw2]| function(a)
-
+    local pkmn = get_party(@S_CUR_PARTY)[@S_PARTY_PKMN_NUM+1]
+    if pkmn then draw2_pokeinfo(pkmn.num) end
 end $$
 
 |[editparty_draw3]| function(a)
-    print_draw3_message("editing", "your", "party")
+    -- local pkmn = get_party(@S_CUR_PARTY)[@S_PARTY_PKMN_NUM+1]
+    -- if pkmn then draw3_pokeinfo(pkmn.num) end
+    print_draw3_message("now", "pick a", "spot")
+end $$
+
+c_partyactions = zobj[[
+    len,6;
+    0; name,"info",    state,browse,   desc,"view/pokemon/info";
+    1; name,"moves",   state,credits,  desc,"by/amorg/games";
+    2; name,"switch",     state,fight,    desc,"pokemon/battle/simulator";
+    3; name,"delete",     state,games,    desc,"minigames/and/quizzes";
+    4; name,"party",     state,party,    desc,"change/your/teams";
+    5; name,"settings",  state,settings, desc,"customize/this/picodex";
+]]
+
+|[partyaction_update]| function(a)
+    if g_bpo then a:pop() end
+end $$
+
+|[partyaction_draw1]| function(a)
+
+end $$
+
+|[partyaction_draw2]| function(a)
+
+end $$
+
+|[partyaction_draw3]| function(a)
+
 end $$

@@ -84,13 +84,12 @@ end $$
     end
 end $$
 
+function draw2_pokeinfo(num) 
+    zprint(get_pokemon(num).name, 46/2, 4, 1, 0)
+end
 
-|[browse_draw2]| function(a)
-    zprint(get_pokemon(@S_BROWSE_PKMN).name, 46/2, 4, 1, 0)
-end $$
-
-|[browse_draw3]| function(a)
-    local pkmn = get_pokemon(@S_BROWSE_PKMN)
+function draw3_pokeinfo(num) 
+    local pkmn = get_pokemon(num)
     rectfill(0,0,46,6,1)
 
     zprint(format_num(pkmn.num),  23, 1,  13, 0)
@@ -99,7 +98,10 @@ end $$
         rectfill(0,14,46,20,1)
         zprint(c_types[pkmn.type2].name, 23, 15, 13, 0)
     end
-end $$
+end
+
+|[browse_draw2]| function() draw2_pokeinfo(@S_BROWSE_PKMN) end $$
+|[browse_draw3]| function() draw3_pokeinfo(@S_BROWSE_PKMN) end $$
 
 -- Draw a pokemon by number. Pokemon is centered at x & y. sw and sh can be decimals.
 -- Num 1 would be bulbasaur.
