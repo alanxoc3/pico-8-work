@@ -1,19 +1,36 @@
 |[editparty_update]| function(a)
-    local test = {}
+    -- local test = {}
+
+    if g_bpu then poke(S_PARTY_PKMN_NUM, (@S_PARTY_PKMN_NUM-3)%6) end
+    if g_bpd then poke(S_PARTY_PKMN_NUM, (@S_PARTY_PKMN_NUM+3)%6) end
+
+    if g_bpl then poke(S_PARTY_PKMN_NUM, (@S_PARTY_PKMN_NUM-1)%6) end
+    if g_bpr then poke(S_PARTY_PKMN_NUM, (@S_PARTY_PKMN_NUM+1)%6) end
 
     -- temp randomize party
-    if g_bx then
-        for i=1,6 do add(test, {num=rnd(151)\1+1}) end
-        save_party(@S_CUR_PARTY, test)
-    end
+    --if g_bx then
+    --    for i=1,6 do add(test, {num=rnd(151)\1+1}) end
+    --    save_party(@S_CUR_PARTY, test)
+    --end
 
     if g_bpo then a:pop() end
 end $$
 
 |[editparty_draw1]| function(a)
-    for i,v in ipairs(get_party(@S_CUR_PARTY)) do
-        get_pokemon(v.num).draw(7+(i-1)%3*13, 20+(i-1)\3*13, 13, .625)
+    local party = get_party(@S_CUR_PARTY)
+
+    rectfill(0,0,39,39,1)
+    rectfill(-1,0+7,40,39-7,13)
+    rect(-1,0+7,40,39-7,1)
+    for i,v in ipairs(party) do
+        get_pokemon(v.num).draw(8+(i-1)%3*12, 14+(i-1)\3*12, 5, .5)
     end
+
+    local row, col = @S_PARTY_PKMN_NUM\3, @S_PARTY_PKMN_NUM%3
+    rect    (-2+col*12, 4+row*12, 17+col*12, 23+row*12, 13)
+    rect    (-1+col*12, 5+row*12, 16+col*12, 22+row*12, 1)
+    rectfill(0+col*12,  6+row*12, 15+col*12, 21+row*12, 6)
+    get_pokemon(party[@S_PARTY_PKMN_NUM+1].num).draw(8+col*12, 14+row*12, 13, .75)
 
     --get_pokemon(get_party(@S_CUR_PARTY)[1].num).draw(7+(1-1)%3*13, 20+(1-1)\3*13, 13, .825)
 end $$

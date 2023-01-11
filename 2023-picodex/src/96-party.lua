@@ -38,18 +38,23 @@ function draw_party_screen(sel, party1, party2, party3)
 
     local ty = 0+sel*8
     rectfill( 0, ty, 39, ty+23, 6)
-    rect    ( -1, ty, 40, ty+23, 13)
+    -- rect    ( -1, ty, 40, ty+23, 13)
 
-    local locs = zobj[[
-        1;,10,12,1;
-        2;,25,9, .5;
-        3;,35,9, .375;
-        4;,24,18,.2;
-        5;,30,18,.2;
-        6;,36,18,.2;
-    ]]
+    for i,v in ipairs(get_party(sel)) do
+        get_pokemon(v.num).draw(8+(i-1)%3*12, ty+6+(i-1)\3*12, 5, .5)
+    end
 
-    for i,v in ipairs(get_party(sel)) do get_pokemon(v.num).draw(locs[i][1], ty+locs[i][2], 13, locs[i][3]) end
+
+    --local locs = zobj[[
+    --    1;,10,12,1;
+    --    2;,25,9, .5;
+    --    3;,35,9, .375;
+    --    4;,24,18,.2;
+    --    5;,30,18,.2;
+    --    6;,36,18,.2;
+    --]]
+
+    -- for i,v in ipairs(get_party(sel)) do get_pokemon(v.num).draw(locs[i][1], ty+locs[i][2], 13, locs[i][3]) end
 
     drawbg((sel*8+25)  %41, get_party((sel+1)%3))
     drawbg((sel*8+25+8)%41, get_party((sel+2)%3))

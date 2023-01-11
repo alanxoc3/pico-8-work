@@ -192,175 +192,175 @@ c_zmovetype = zobj[[
 ]]
 
 c_moves = zobj[[
-    0;name,"struggle",       t,T_NORMAL,     z,Z_PHYSICAL,  p,-,     d,50,   a,—   ;
+    0;name,"struggle",       t,T_NORMAL,     z,Z_PHYSICAL,  p,-,  d,50,  a,—   ;
 
     -- tms
-    ; name,"mega-punch",     t,T_NORMAL,     z,Z_PHYSICAL,  p,20,    d,80,   a,.85 ; -- 1
-    ; name,"razor-wind",     t,T_NORMAL,     z,Z_SPECIAL,   p,10,    d,80,   a,1   ; -- 2
-    ; name,"swords-dance",   t,T_NORMAL,     z,Z_STATUS,    p,20,    d,—,    a,—   ; -- 3
-    ; name,"whirlwind",      t,T_NORMAL,     z,Z_STATUS,    p,20,    d,—,    a,—   ; -- 4
-    ; name,"mega-kick",      t,T_NORMAL,     z,Z_PHYSICAL,  p,5,     d,120,  a,.75 ; -- 5
-    ; name,"toxic",          t,T_POISON,     z,Z_STATUS,    p,10,    d,—,    a,.9  ; -- 6
-    ; name,"horn-drill",     t,T_NORMAL,     z,Z_PHYSICAL,  p,5,     d,—,    a,.3  ; -- 7
-    ; name,"body-slam",      t,T_NORMAL,     z,Z_PHYSICAL,  p,15,    d,85,   a,1   ; -- 8
-    ; name,"take-down",      t,T_NORMAL,     z,Z_PHYSICAL,  p,20,    d,90,   a,.85 ; -- 9
-    ; name,"double-edge",    t,T_NORMAL,     z,Z_PHYSICAL,  p,15,    d,120,  a,1   ; -- 10
-    ; name,"bubble-beam",    t,T_WATER,      z,Z_SPECIAL,   p,20,    d,65,   a,1   ; -- 11
-    ; name,"water-gun",      t,T_WATER,      z,Z_SPECIAL,   p,25,    d,40,   a,1   ; -- 12
-    ; name,"ice-beam",       t,T_ICE,        z,Z_SPECIAL,   p,10,    d,90,   a,1   ; -- 13
-    ; name,"blizzard",       t,T_ICE,        z,Z_SPECIAL,   p,5,     d,110,  a,.7  ; -- 14
-    ; name,"hyper-beam",     t,T_NORMAL,     z,Z_SPECIAL,   p,5,     d,150,  a,.9  ; -- 15
-    ; name,"pay-day",        t,T_NORMAL,     z,Z_PHYSICAL,  p,20,    d,40,   a,1   ; -- 16
-    ; name,"submission",     t,T_FIGHTING,   z,Z_PHYSICAL,  p,20,    d,80,   a,.8  ; -- 17
-    ; name,"counter",        t,T_FIGHTING,   z,Z_PHYSICAL,  p,20,    d,—,    a,1   ; -- 18
-    ; name,"seismic-toss",   t,T_FIGHTING,   z,Z_PHYSICAL,  p,20,    d,—,    a,1   ; -- 19
-    ; name,"rage",           t,T_NORMAL,     z,Z_PHYSICAL,  p,20,    d,20,   a,1   ; -- 20
-    ; name,"mega-drain",     t,T_GRASS,      z,Z_SPECIAL,   p,15,    d,40,   a,1   ; -- 21
-    ; name,"solar-beam",     t,T_GRASS,      z,Z_SPECIAL,   p,10,    d,120,  a,1   ; -- 22
-    ; name,"dragon-rage",    t,T_DRAGON,     z,Z_SPECIAL,   p,10,    d,—,    a,1   ; -- 23
-    ; name,"thunderbolt",    t,T_ELECTRIC,   z,Z_SPECIAL,   p,15,    d,90,   a,1   ; -- 24
-    ; name,"thunder",        t,T_ELECTRIC,   z,Z_SPECIAL,   p,10,    d,110,  a,.7  ; -- 25
-    ; name,"earthquake",     t,T_GROUND,     z,Z_PHYSICAL,  p,10,    d,100,  a,1   ; -- 26
-    ; name,"fissure",        t,T_GROUND,     z,Z_PHYSICAL,  p,5,     d,—,    a,.3  ; -- 27
-    ; name,"dig",            t,T_GROUND,     z,Z_PHYSICAL,  p,10,    d,80,   a,1   ; -- 28
-    ; name,"psychic",        t,T_PSYCHIC,    z,Z_SPECIAL,   p,10,    d,90,   a,1   ; -- 29
-    ; name,"teleport",       t,T_PSYCHIC,    z,Z_STATUS,    p,20,    d,—,    a,—   ; -- 30
-    ; name,"mimic",          t,T_NORMAL,     z,Z_STATUS,    p,10,    d,—,    a,—   ; -- 31
-    ; name,"double-team",    t,T_NORMAL,     z,Z_STATUS,    p,15,    d,—,    a,—   ; -- 32
-    ; name,"reflect",        t,T_PSYCHIC,    z,Z_STATUS,    p,20,    d,—,    a,—   ; -- 33
-    ; name,"bide",           t,T_NORMAL,     z,Z_PHYSICAL,  p,10,    d,—,    a,—   ; -- 34
-    ; name,"metronome",      t,T_NORMAL,     z,Z_STATUS,    p,10,    d,—,    a,—   ; -- 35
-    ; name,"self-destruct",  t,T_NORMAL,     z,Z_PHYSICAL,  p,5,     d,200,  a,1   ; -- 36
-    ; name,"egg-bomb",       t,T_NORMAL,     z,Z_PHYSICAL,  p,10,    d,100,  a,.75 ; -- 37
-    ; name,"fire-blast",     t,T_FIRE,       z,Z_SPECIAL,   p,5,     d,110,  a,.85 ; -- 38
-    ; name,"swift",          t,T_NORMAL,     z,Z_SPECIAL,   p,20,    d,60,   a,—   ; -- 39
-    ; name,"skull-bash",     t,T_NORMAL,     z,Z_PHYSICAL,  p,10,    d,130,  a,1   ; -- 40
-    ; name,"soft-boiled",    t,T_NORMAL,     z,Z_STATUS,    p,5,     d,—,    a,—   ; -- 41
-    ; name,"dream-eater",    t,T_PSYCHIC,    z,Z_SPECIAL,   p,15,    d,100,  a,1   ; -- 42
-    ; name,"sky-attack",     t,T_FLYING,     z,Z_PHYSICAL,  p,5,     d,140,  a,.9  ; -- 43
-    ; name,"rest",           t,T_PSYCHIC,    z,Z_STATUS,    p,5,     d,—,    a,—   ; -- 44
-    ; name,"thunder-wave",   t,T_ELECTRIC,   z,Z_STATUS,    p,20,    d,—,    a,.9  ; -- 45
-    ; name,"psywave",        t,T_PSYCHIC,    z,Z_SPECIAL,   p,15,    d,—,    a,1   ; -- 46
-    ; name,"explosion",      t,T_NORMAL,     z,Z_PHYSICAL,  p,5,     d,250,  a,1   ; -- 47
-    ; name,"rock-slide",     t,T_ROCK,       z,Z_PHYSICAL,  p,10,    d,75,   a,.9  ; -- 48
-    ; name,"tri-attack",     t,T_NORMAL,     z,Z_SPECIAL,   p,10,    d,80,   a,1   ; -- 49
-    ; name,"substitute",     t,T_NORMAL,     z,Z_STATUS,    p,10,    d,—,    a,—   ; -- 50
+    ; name,"mega-punch",     t,T_NORMAL,   z,Z_PHYSICAL,  p,20, d,80,  a,.85 ; -- 1
+    ; name,"razor-wind",     t,T_NORMAL,   z,Z_SPECIAL,   p,10, d,80,  a,1   ; -- 2
+    ; name,"swords-dance",   t,T_NORMAL,   z,Z_STATUS,    p,20,              ; -- 3
+    ; name,"whirlwind",      t,T_NORMAL,   z,Z_STATUS,    p,20,              ; -- 4
+    ; name,"mega-kick",      t,T_NORMAL,   z,Z_PHYSICAL,  p,5,  d,120, a,.75 ; -- 5
+    ; name,"toxic",          t,T_POISON,   z,Z_STATUS,    p,10,        a,.9  ; -- 6
+    ; name,"horn-drill",     t,T_NORMAL,   z,Z_PHYSICAL,  p,5,         a,.3  ; -- 7
+    ; name,"body-slam",      t,T_NORMAL,   z,Z_PHYSICAL,  p,15, d,85,  a,1   ; -- 8
+    ; name,"take-down",      t,T_NORMAL,   z,Z_PHYSICAL,  p,20, d,90,  a,.85 ; -- 9
+    ; name,"double-edge",    t,T_NORMAL,   z,Z_PHYSICAL,  p,15, d,120, a,1   ; -- 10
+    ; name,"bubble-beam",    t,T_WATER,    z,Z_SPECIAL,   p,20, d,65,  a,1   ; -- 11
+    ; name,"water-gun",      t,T_WATER,    z,Z_SPECIAL,   p,25, d,40,  a,1   ; -- 12
+    ; name,"ice-beam",       t,T_ICE,      z,Z_SPECIAL,   p,10, d,90,  a,1   ; -- 13
+    ; name,"blizzard",       t,T_ICE,      z,Z_SPECIAL,   p,5,  d,110, a,.7  ; -- 14
+    ; name,"hyper-beam",     t,T_NORMAL,   z,Z_SPECIAL,   p,5,  d,150, a,.9  ; -- 15
+    ; name,"pay-day",        t,T_NORMAL,   z,Z_PHYSICAL,  p,20, d,40,  a,1   ; -- 16
+    ; name,"submission",     t,T_FIGHTING, z,Z_PHYSICAL,  p,20, d,80,  a,.8  ; -- 17
+    ; name,"counter",        t,T_FIGHTING, z,Z_PHYSICAL,  p,20,        a,1   ; -- 18
+    ; name,"seismic-toss",   t,T_FIGHTING, z,Z_PHYSICAL,  p,20,        a,1   ; -- 19
+    ; name,"rage",           t,T_NORMAL,   z,Z_PHYSICAL,  p,20, d,20,  a,1   ; -- 20
+    ; name,"mega-drain",     t,T_GRASS,    z,Z_SPECIAL,   p,15, d,40,  a,1   ; -- 21
+    ; name,"solar-beam",     t,T_GRASS,    z,Z_SPECIAL,   p,10, d,120, a,1   ; -- 22
+    ; name,"dragon-rage",    t,T_DRAGON,   z,Z_SPECIAL,   p,10,        a,1   ; -- 23
+    ; name,"thunderbolt",    t,T_ELECTRIC, z,Z_SPECIAL,   p,15, d,90,  a,1   ; -- 24
+    ; name,"thunder",        t,T_ELECTRIC, z,Z_SPECIAL,   p,10, d,110, a,.7  ; -- 25
+    ; name,"earthquake",     t,T_GROUND,   z,Z_PHYSICAL,  p,10, d,100, a,1   ; -- 26
+    ; name,"fissure",        t,T_GROUND,   z,Z_PHYSICAL,  p,5,         a,.3  ; -- 27
+    ; name,"dig",            t,T_GROUND,   z,Z_PHYSICAL,  p,10, d,80,  a,1   ; -- 28
+    ; name,"psychic",        t,T_PSYCHIC,  z,Z_SPECIAL,   p,10, d,90,  a,1   ; -- 29
+    ; name,"teleport",       t,T_PSYCHIC,  z,Z_STATUS,    p,20,              ; -- 30
+    ; name,"mimic",          t,T_NORMAL,   z,Z_STATUS,    p,10,              ; -- 31
+    ; name,"double-team",    t,T_NORMAL,   z,Z_STATUS,    p,15,              ; -- 32
+    ; name,"reflect",        t,T_PSYCHIC,  z,Z_STATUS,    p,20,              ; -- 33
+    ; name,"bide",           t,T_NORMAL,   z,Z_PHYSICAL,  p,10,              ; -- 34
+    ; name,"metronome",      t,T_NORMAL,   z,Z_STATUS,    p,10,              ; -- 35
+    ; name,"self-destruct",  t,T_NORMAL,   z,Z_PHYSICAL,  p,5,  d,200, a,1   ; -- 36
+    ; name,"egg-bomb",       t,T_NORMAL,   z,Z_PHYSICAL,  p,10, d,100, a,.75 ; -- 37
+    ; name,"fire-blast",     t,T_FIRE,     z,Z_SPECIAL,   p,5,  d,110, a,.85 ; -- 38
+    ; name,"swift",          t,T_NORMAL,   z,Z_SPECIAL,   p,20, d,60,        ; -- 39
+    ; name,"skull-bash",     t,T_NORMAL,   z,Z_PHYSICAL,  p,10, d,130, a,1   ; -- 40
+    ; name,"soft-boiled",    t,T_NORMAL,   z,Z_STATUS,    p,5,               ; -- 41
+    ; name,"dream-eater",    t,T_PSYCHIC,  z,Z_SPECIAL,   p,15, d,100, a,1   ; -- 42
+    ; name,"sky-attack",     t,T_FLYING,   z,Z_PHYSICAL,  p,5,  d,140, a,.9  ; -- 43
+    ; name,"rest",           t,T_PSYCHIC,  z,Z_STATUS,    p,5,               ; -- 44
+    ; name,"thunder-wave",   t,T_ELECTRIC, z,Z_STATUS,    p,20,        a,.9  ; -- 45
+    ; name,"psywave",        t,T_PSYCHIC,  z,Z_SPECIAL,   p,15,        a,1   ; -- 46
+    ; name,"explosion",      t,T_NORMAL,   z,Z_PHYSICAL,  p,5,  d,250, a,1   ; -- 47
+    ; name,"rock-slide",     t,T_ROCK,     z,Z_PHYSICAL,  p,10, d,75,  a,.9  ; -- 48
+    ; name,"tri-attack",     t,T_NORMAL,   z,Z_SPECIAL,   p,10, d,80,  a,1   ; -- 49
+    ; name,"substitute",     t,T_NORMAL,   z,Z_STATUS,    p,10,              ; -- 50
 
     -- hms
-    ; name,"cut",            t,T_NORMAL,     z,Z_PHYSICAL,  p,30,    d,50,   a,.95 ; -- 51
-    ; name,"fly",            t,T_FLYING,     z,Z_PHYSICAL,  p,15,    d,90,   a,.95 ; -- 52
-    ; name,"surf",           t,T_WATER,      z,Z_SPECIAL,   p,15,    d,90,   a,1   ; -- 53
-    ; name,"strength",       t,T_NORMAL,     z,Z_PHYSICAL,  p,15,    d,80,   a,1   ; -- 54
-    ; name,"flash",          t,T_NORMAL,     z,Z_STATUS,    p,20,    d,—,    a,1   ; -- 55
+    ; name,"cut",            t,T_NORMAL,   z,Z_PHYSICAL,  p,30, d,50,  a,.95 ; -- 51
+    ; name,"fly",            t,T_FLYING,   z,Z_PHYSICAL,  p,15, d,90,  a,.95 ; -- 52
+    ; name,"surf",           t,T_WATER,    z,Z_SPECIAL,   p,15, d,90,  a,1   ; -- 53
+    ; name,"strength",       t,T_NORMAL,   z,Z_PHYSICAL,  p,15, d,80,  a,1   ; -- 54
+    ; name,"flash",          t,T_NORMAL,   z,Z_STATUS,    p,20,        a,1   ; -- 55
 
     -- remaining moves (besides struggle)
-    ; name,"pound",          t,T_NORMAL,     z,Z_PHYSICAL,  p,35,    d,40,   a,1   ; -- 56
-    ; name,"karate-chop",    t,T_FIGHTING,   z,Z_PHYSICAL,  p,25,    d,50,   a,1   ; -- 57
-    ; name,"double-slap",    t,T_NORMAL,     z,Z_PHYSICAL,  p,10,    d,15,   a,.85 ; -- 58
-    ; name,"comet-punch",    t,T_NORMAL,     z,Z_PHYSICAL,  p,15,    d,18,   a,.85 ; -- 59
-    ; name,"fire-punch",     t,T_FIRE,       z,Z_PHYSICAL,  p,15,    d,75,   a,1   ; -- 60
-    ; name,"ice-punch",      t,T_ICE,        z,Z_PHYSICAL,  p,15,    d,75,   a,1   ; -- 61
-    ; name,"thunder-punch",  t,T_ELECTRIC,   z,Z_PHYSICAL,  p,15,    d,75,   a,1   ; -- 62
-    ; name,"scratch",        t,T_NORMAL,     z,Z_PHYSICAL,  p,35,    d,40,   a,1   ; -- 63
-    ; name,"vice-grip",      t,T_NORMAL,     z,Z_PHYSICAL,  p,30,    d,55,   a,1   ; -- 64
-    ; name,"guillotine",     t,T_NORMAL,     z,Z_PHYSICAL,  p,5,     d,—,    a,.3  ; -- 65
-    ; name,"gust",           t,T_FLYING,     z,Z_SPECIAL,   p,35,    d,40,   a,1   ; -- 66
-    ; name,"wing-attack",    t,T_FLYING,     z,Z_PHYSICAL,  p,35,    d,60,   a,1   ; -- 67
-    ; name,"bind",           t,T_NORMAL,     z,Z_PHYSICAL,  p,20,    d,15,   a,.85 ; -- 68
-    ; name,"slam",           t,T_NORMAL,     z,Z_PHYSICAL,  p,20,    d,80,   a,.75 ; -- 69
-    ; name,"vine-whip",      t,T_GRASS,      z,Z_PHYSICAL,  p,25,    d,45,   a,1   ; -- 70
-    ; name,"stomp",          t,T_NORMAL,     z,Z_PHYSICAL,  p,20,    d,65,   a,1   ; -- 71
-    ; name,"double-kick",    t,T_FIGHTING,   z,Z_PHYSICAL,  p,30,    d,30,   a,1   ; -- 72
-    ; name,"jump-kick",      t,T_FIGHTING,   z,Z_PHYSICAL,  p,10,    d,100,  a,.95 ; -- 73
-    ; name,"rolling-kick",   t,T_FIGHTING,   z,Z_PHYSICAL,  p,15,    d,60,   a,.85 ; -- 74
-    ; name,"sand-attack",    t,T_GROUND,     z,Z_STATUS,    p,15,    d,—,    a,1   ; -- 75
-    ; name,"headbutt",       t,T_NORMAL,     z,Z_PHYSICAL,  p,15,    d,70,   a,1   ; -- 76
-    ; name,"horn-attack",    t,T_NORMAL,     z,Z_PHYSICAL,  p,25,    d,65,   a,1   ; -- 77
-    ; name,"fury-attack",    t,T_NORMAL,     z,Z_PHYSICAL,  p,20,    d,15,   a,.85 ; -- 78
-    ; name,"tackle",         t,T_NORMAL,     z,Z_PHYSICAL,  p,35,    d,40,   a,1   ; -- 79
-    ; name,"wrap",           t,T_NORMAL,     z,Z_PHYSICAL,  p,20,    d,15,   a,.9  ; -- 80
-    ; name,"thrash",         t,T_NORMAL,     z,Z_PHYSICAL,  p,10,    d,120,  a,1   ; -- 81
-    ; name,"tail-whip",      t,T_NORMAL,     z,Z_STATUS,    p,30,    d,—,    a,1   ; -- 82
-    ; name,"poison-sting",   t,T_POISON,     z,Z_PHYSICAL,  p,35,    d,15,   a,1   ; -- 83
-    ; name,"twineedle",      t,T_BUG,        z,Z_PHYSICAL,  p,20,    d,25,   a,1   ; -- 84
-    ; name,"pin-missile",    t,T_BUG,        z,Z_PHYSICAL,  p,20,    d,25,   a,.95 ; -- 85
-    ; name,"leer",           t,T_NORMAL,     z,Z_STATUS,    p,30,    d,—,    a,1   ; -- 86
-    ; name,"bite",           t,T_NORMAL,     z,Z_PHYSICAL,  p,25,    d,60,   a,1   ; -- 87
-    ; name,"growl",          t,T_NORMAL,     z,Z_STATUS,    p,40,    d,—,    a,1   ; -- 88
-    ; name,"roar",           t,T_NORMAL,     z,Z_STATUS,    p,20,    d,—,    a,—   ; -- 89
-    ; name,"sing",           t,T_NORMAL,     z,Z_STATUS,    p,15,    d,—,    a,.55 ; -- 90
-    ; name,"supersonic",     t,T_NORMAL,     z,Z_STATUS,    p,20,    d,—,    a,.55 ; -- 91
-    ; name,"sonic-boom",     t,T_NORMAL,     z,Z_SPECIAL,   p,20,    d,—,    a,.9  ; -- 92
-    ; name,"disable",        t,T_NORMAL,     z,Z_STATUS,    p,20,    d,—,    a,1   ; -- 93
-    ; name,"acid",           t,T_POISON,     z,Z_SPECIAL,   p,30,    d,40,   a,1   ; -- 94
-    ; name,"ember",          t,T_FIRE,       z,Z_SPECIAL,   p,25,    d,40,   a,1   ; -- 95
-    ; name,"flamethrower",   t,T_FIRE,       z,Z_SPECIAL,   p,15,    d,90,   a,1   ; -- 96
-    ; name,"mist",           t,T_ICE,        z,Z_STATUS,    p,30,    d,—,    a,—   ; -- 97
-    ; name,"hydro-pump",     t,T_WATER,      z,Z_SPECIAL,   p,5,     d,110,  a,.8  ; -- 98
-    ; name,"psybeam",        t,T_PSYCHIC,    z,Z_SPECIAL,   p,20,    d,65,   a,1   ; -- 99
-    ; name,"aurora-beam",    t,T_ICE,        z,Z_SPECIAL,   p,20,    d,65,   a,1   ; -- 100
-    ; name,"peck",           t,T_FLYING,     z,Z_PHYSICAL,  p,35,    d,35,   a,1   ; -- 101
-    ; name,"drill-peck",     t,T_FLYING,     z,Z_PHYSICAL,  p,20,    d,80,   a,1   ; -- 102
-    ; name,"low-kick",       t,T_FIGHTING,   z,Z_PHYSICAL,  p,20,    d,—,    a,1   ; -- 103
-    ; name,"absorb",         t,T_GRASS,      z,Z_SPECIAL,   p,25,    d,20,   a,1   ; -- 104
-    ; name,"leech-seed",     t,T_GRASS,      z,Z_STATUS,    p,10,    d,—,    a,.9  ; -- 105
-    ; name,"growth",         t,T_NORMAL,     z,Z_STATUS,    p,20,    d,—,    a,—   ; -- 106
-    ; name,"razor-leaf",     t,T_GRASS,      z,Z_PHYSICAL,  p,25,    d,55,   a,.95 ; -- 107
-    ; name,"poison-powder",  t,T_POISON,     z,Z_STATUS,    p,35,    d,—,    a,.75 ; -- 108
-    ; name,"stun-spore",     t,T_GRASS,      z,Z_STATUS,    p,30,    d,—,    a,.75 ; -- 109
-    ; name,"sleep-powder",   t,T_GRASS,      z,Z_STATUS,    p,15,    d,—,    a,.75 ; -- 110
-    ; name,"petal-dance",    t,T_GRASS,      z,Z_SPECIAL,   p,10,    d,120,  a,1   ; -- 111
-    ; name,"string-shot",    t,T_BUG,        z,Z_STATUS,    p,40,    d,—,    a,.95 ; -- 112
-    ; name,"fire-spin",      t,T_FIRE,       z,Z_SPECIAL,   p,15,    d,35,   a,.85 ; -- 113
-    ; name,"thunder-shock",  t,T_ELECTRIC,   z,Z_SPECIAL,   p,30,    d,40,   a,1   ; -- 114
-    ; name,"rock-throw",     t,T_ROCK,       z,Z_PHYSICAL,  p,15,    d,50,   a,.9  ; -- 115
-    ; name,"confusion",      t,T_PSYCHIC,    z,Z_SPECIAL,   p,25,    d,50,   a,1   ; -- 116
-    ; name,"hypnosis",       t,T_PSYCHIC,    z,Z_STATUS,    p,20,    d,—,    a,.6  ; -- 117
-    ; name,"meditate",       t,T_PSYCHIC,    z,Z_STATUS,    p,40,    d,—,    a,—   ; -- 118
-    ; name,"agility",        t,T_PSYCHIC,    z,Z_STATUS,    p,30,    d,—,    a,—   ; -- 119
-    ; name,"quick-attack",   t,T_NORMAL,     z,Z_PHYSICAL,  p,30,    d,40,   a,1   ; -- 120
-    ; name,"night-shade",    t,T_GHOST,      z,Z_SPECIAL,   p,15,    d,—,    a,1   ; -- 121
-    ; name,"screech",        t,T_NORMAL,     z,Z_STATUS,    p,40,    d,—,    a,.85 ; -- 122
-    ; name,"recover",        t,T_NORMAL,     z,Z_STATUS,    p,5,     d,—,    a,—   ; -- 123
-    ; name,"harden",         t,T_NORMAL,     z,Z_STATUS,    p,30,    d,—,    a,—   ; -- 124
-    ; name,"minimize",       t,T_NORMAL,     z,Z_STATUS,    p,10,    d,—,    a,—   ; -- 125
-    ; name,"smokescreen",    t,T_NORMAL,     z,Z_STATUS,    p,20,    d,—,    a,1   ; -- 126
-    ; name,"confuse-ray",    t,T_GHOST,      z,Z_STATUS,    p,10,    d,—,    a,1   ; -- 127
-    ; name,"withdraw",       t,T_WATER,      z,Z_STATUS,    p,40,    d,—,    a,—   ; -- 128
-    ; name,"defense-curl",   t,T_NORMAL,     z,Z_STATUS,    p,40,    d,—,    a,—   ; -- 129
-    ; name,"barrier",        t,T_PSYCHIC,    z,Z_STATUS,    p,20,    d,—,    a,—   ; -- 130
-    ; name,"light-screen",   t,T_PSYCHIC,    z,Z_STATUS,    p,30,    d,—,    a,—   ; -- 131
-    ; name,"haze",           t,T_ICE,        z,Z_STATUS,    p,30,    d,—,    a,—   ; -- 132
-    ; name,"focus-energy",   t,T_NORMAL,     z,Z_STATUS,    p,30,    d,—,    a,—   ; -- 133
-    ; name,"mirror-move",    t,T_FLYING,     z,Z_STATUS,    p,20,    d,—,    a,—   ; -- 134
-    ; name,"lick",           t,T_GHOST,      z,Z_PHYSICAL,  p,30,    d,30,   a,1   ; -- 135
-    ; name,"smog",           t,T_POISON,     z,Z_SPECIAL,   p,20,    d,30,   a,.7  ; -- 136
-    ; name,"sludge",         t,T_POISON,     z,Z_SPECIAL,   p,20,    d,65,   a,1   ; -- 137
-    ; name,"bone-club",      t,T_GROUND,     z,Z_PHYSICAL,  p,20,    d,65,   a,.85 ; -- 138
-    ; name,"waterfall",      t,T_WATER,      z,Z_PHYSICAL,  p,15,    d,80,   a,1   ; -- 139
-    ; name,"clamp",          t,T_WATER,      z,Z_PHYSICAL,  p,15,    d,35,   a,.85 ; -- 140
-    ; name,"spike-cannon",   t,T_NORMAL,     z,Z_PHYSICAL,  p,15,    d,20,   a,1   ; -- 141
-    ; name,"constrict",      t,T_NORMAL,     z,Z_PHYSICAL,  p,35,    d,10,   a,1   ; -- 142
-    ; name,"amnesia",        t,T_PSYCHIC,    z,Z_STATUS,    p,20,    d,—,    a,—   ; -- 143
-    ; name,"kinesis",        t,T_PSYCHIC,    z,Z_STATUS,    p,15,    d,—,    a,.8  ; -- 144
-    ; name,"high-jump-kick", t,T_FIGHTING,   z,Z_PHYSICAL,  p,10,    d,130,  a,.9  ; -- 145
-    ; name,"glare",          t,T_NORMAL,     z,Z_STATUS,    p,30,    d,—,    a,1   ; -- 146
-    ; name,"poison-gas",     t,T_POISON,     z,Z_STATUS,    p,40,    d,—,    a,.9  ; -- 147
-    ; name,"barrage",        t,T_NORMAL,     z,Z_PHYSICAL,  p,20,    d,15,   a,.85 ; -- 148
-    ; name,"leech-life",     t,T_BUG,        z,Z_PHYSICAL,  p,10,    d,80,   a,1   ; -- 149
-    ; name,"lovely-kiss",    t,T_NORMAL,     z,Z_STATUS,    p,10,    d,—,    a,.75 ; -- 150
-    ; name,"transform",      t,T_NORMAL,     z,Z_STATUS,    p,10,    d,—,    a,—   ; -- 151
-    ; name,"bubble",         t,T_WATER,      z,Z_SPECIAL,   p,30,    d,40,   a,1   ; -- 152
-    ; name,"dizzy-punch",    t,T_NORMAL,     z,Z_PHYSICAL,  p,10,    d,70,   a,1   ; -- 153
-    ; name,"spore",          t,T_GRASS,      z,Z_STATUS,    p,15,    d,—,    a,1   ; -- 154
-    ; name,"splash",         t,T_NORMAL,     z,Z_STATUS,    p,40,    d,—,    a,—   ; -- 155
-    ; name,"acid-armor",     t,T_POISON,     z,Z_STATUS,    p,20,    d,—,    a,—   ; -- 156
-    ; name,"crabhammer",     t,T_WATER,      z,Z_PHYSICAL,  p,10,    d,100,  a,.9  ; -- 157
-    ; name,"fury-swipes",    t,T_NORMAL,     z,Z_PHYSICAL,  p,15,    d,18,   a,.8  ; -- 158
-    ; name,"bonemerang",     t,T_GROUND,     z,Z_PHYSICAL,  p,10,    d,50,   a,.9  ; -- 159
-    ; name,"hyper-fang",     t,T_NORMAL,     z,Z_PHYSICAL,  p,15,    d,80,   a,.9  ; -- 160
-    ; name,"sharpen",        t,T_NORMAL,     z,Z_STATUS,    p,30,    d,—,    a,—   ; -- 161
-    ; name,"conversion",     t,T_NORMAL,     z,Z_STATUS,    p,30,    d,—,    a,—   ; -- 162
-    ; name,"super-fang",     t,T_NORMAL,     z,Z_PHYSICAL,  p,10,    d,—,    a,.9  ; -- 163
-    ; name,"slash",          t,T_NORMAL,     z,Z_PHYSICAL,  p,20,    d,70,   a,1   ; -- 164
+    ; name,"pound",          t,T_NORMAL,   z,Z_PHYSICAL,  p,35, d,40,  a,1   ; -- 56
+    ; name,"karate-chop",    t,T_FIGHTING, z,Z_PHYSICAL,  p,25, d,50,  a,1   ; -- 57
+    ; name,"double-slap",    t,T_NORMAL,   z,Z_PHYSICAL,  p,10, d,15,  a,.85 ; -- 58
+    ; name,"comet-punch",    t,T_NORMAL,   z,Z_PHYSICAL,  p,15, d,18,  a,.85 ; -- 59
+    ; name,"fire-punch",     t,T_FIRE,     z,Z_PHYSICAL,  p,15, d,75,  a,1   ; -- 60
+    ; name,"ice-punch",      t,T_ICE,      z,Z_PHYSICAL,  p,15, d,75,  a,1   ; -- 61
+    ; name,"thunder-punch",  t,T_ELECTRIC, z,Z_PHYSICAL,  p,15, d,75,  a,1   ; -- 62
+    ; name,"scratch",        t,T_NORMAL,   z,Z_PHYSICAL,  p,35, d,40,  a,1   ; -- 63
+    ; name,"vice-grip",      t,T_NORMAL,   z,Z_PHYSICAL,  p,30, d,55,  a,1   ; -- 64
+    ; name,"guillotine",     t,T_NORMAL,   z,Z_PHYSICAL,  p,5,         a,.3  ; -- 65
+    ; name,"gust",           t,T_FLYING,   z,Z_SPECIAL,   p,35, d,40,  a,1   ; -- 66
+    ; name,"wing-attack",    t,T_FLYING,   z,Z_PHYSICAL,  p,35, d,60,  a,1   ; -- 67
+    ; name,"bind",           t,T_NORMAL,   z,Z_PHYSICAL,  p,20, d,15,  a,.85 ; -- 68
+    ; name,"slam",           t,T_NORMAL,   z,Z_PHYSICAL,  p,20, d,80,  a,.75 ; -- 69
+    ; name,"vine-whip",      t,T_GRASS,    z,Z_PHYSICAL,  p,25, d,45,  a,1   ; -- 70
+    ; name,"stomp",          t,T_NORMAL,   z,Z_PHYSICAL,  p,20, d,65,  a,1   ; -- 71
+    ; name,"double-kick",    t,T_FIGHTING, z,Z_PHYSICAL,  p,30, d,30,  a,1   ; -- 72
+    ; name,"jump-kick",      t,T_FIGHTING, z,Z_PHYSICAL,  p,10, d,100, a,.95 ; -- 73
+    ; name,"rolling-kick",   t,T_FIGHTING, z,Z_PHYSICAL,  p,15, d,60,  a,.85 ; -- 74
+    ; name,"sand-attack",    t,T_GROUND,   z,Z_STATUS,    p,15,        a,1   ; -- 75
+    ; name,"headbutt",       t,T_NORMAL,   z,Z_PHYSICAL,  p,15, d,70,  a,1   ; -- 76
+    ; name,"horn-attack",    t,T_NORMAL,   z,Z_PHYSICAL,  p,25, d,65,  a,1   ; -- 77
+    ; name,"fury-attack",    t,T_NORMAL,   z,Z_PHYSICAL,  p,20, d,15,  a,.85 ; -- 78
+    ; name,"tackle",         t,T_NORMAL,   z,Z_PHYSICAL,  p,35, d,40,  a,1   ; -- 79
+    ; name,"wrap",           t,T_NORMAL,   z,Z_PHYSICAL,  p,20, d,15,  a,.9  ; -- 80
+    ; name,"thrash",         t,T_NORMAL,   z,Z_PHYSICAL,  p,10, d,120, a,1   ; -- 81
+    ; name,"tail-whip",      t,T_NORMAL,   z,Z_STATUS,    p,30,        a,1   ; -- 82
+    ; name,"poison-sting",   t,T_POISON,   z,Z_PHYSICAL,  p,35, d,15,  a,1   ; -- 83
+    ; name,"twineedle",      t,T_BUG,      z,Z_PHYSICAL,  p,20, d,25,  a,1   ; -- 84
+    ; name,"pin-missile",    t,T_BUG,      z,Z_PHYSICAL,  p,20, d,25,  a,.95 ; -- 85
+    ; name,"leer",           t,T_NORMAL,   z,Z_STATUS,    p,30,        a,1   ; -- 86
+    ; name,"bite",           t,T_NORMAL,   z,Z_PHYSICAL,  p,25, d,60,  a,1   ; -- 87
+    ; name,"growl",          t,T_NORMAL,   z,Z_STATUS,    p,40,        a,1   ; -- 88
+    ; name,"roar",           t,T_NORMAL,   z,Z_STATUS,    p,20,              ; -- 89
+    ; name,"sing",           t,T_NORMAL,   z,Z_STATUS,    p,15,        a,.55 ; -- 90
+    ; name,"supersonic",     t,T_NORMAL,   z,Z_STATUS,    p,20,        a,.55 ; -- 91
+    ; name,"sonic-boom",     t,T_NORMAL,   z,Z_SPECIAL,   p,20,        a,.9  ; -- 92
+    ; name,"disable",        t,T_NORMAL,   z,Z_STATUS,    p,20,        a,1   ; -- 93
+    ; name,"acid",           t,T_POISON,   z,Z_SPECIAL,   p,30, d,40,  a,1   ; -- 94
+    ; name,"ember",          t,T_FIRE,     z,Z_SPECIAL,   p,25, d,40,  a,1   ; -- 95
+    ; name,"flamethrower",   t,T_FIRE,     z,Z_SPECIAL,   p,15, d,90,  a,1   ; -- 96
+    ; name,"mist",           t,T_ICE,      z,Z_STATUS,    p,30,              ; -- 97
+    ; name,"hydro-pump",     t,T_WATER,    z,Z_SPECIAL,   p,5,  d,110, a,.8  ; -- 98
+    ; name,"psybeam",        t,T_PSYCHIC,  z,Z_SPECIAL,   p,20, d,65,  a,1   ; -- 99
+    ; name,"aurora-beam",    t,T_ICE,      z,Z_SPECIAL,   p,20, d,65,  a,1   ; -- 100
+    ; name,"peck",           t,T_FLYING,   z,Z_PHYSICAL,  p,35, d,35,  a,1   ; -- 101
+    ; name,"drill-peck",     t,T_FLYING,   z,Z_PHYSICAL,  p,20, d,80,  a,1   ; -- 102
+    ; name,"low-kick",       t,T_FIGHTING, z,Z_PHYSICAL,  p,20,        a,1   ; -- 103
+    ; name,"absorb",         t,T_GRASS,    z,Z_SPECIAL,   p,25, d,20,  a,1   ; -- 104
+    ; name,"leech-seed",     t,T_GRASS,    z,Z_STATUS,    p,10,        a,.9  ; -- 105
+    ; name,"growth",         t,T_NORMAL,   z,Z_STATUS,    p,20,              ; -- 106
+    ; name,"razor-leaf",     t,T_GRASS,    z,Z_PHYSICAL,  p,25, d,55,  a,.95 ; -- 107
+    ; name,"poison-powder",  t,T_POISON,   z,Z_STATUS,    p,35,        a,.75 ; -- 108
+    ; name,"stun-spore",     t,T_GRASS,    z,Z_STATUS,    p,30,        a,.75 ; -- 109
+    ; name,"sleep-powder",   t,T_GRASS,    z,Z_STATUS,    p,15,        a,.75 ; -- 110
+    ; name,"petal-dance",    t,T_GRASS,    z,Z_SPECIAL,   p,10, d,120, a,1   ; -- 111
+    ; name,"string-shot",    t,T_BUG,      z,Z_STATUS,    p,40,        a,.95 ; -- 112
+    ; name,"fire-spin",      t,T_FIRE,     z,Z_SPECIAL,   p,15, d,35,  a,.85 ; -- 113
+    ; name,"thunder-shock",  t,T_ELECTRIC, z,Z_SPECIAL,   p,30, d,40,  a,1   ; -- 114
+    ; name,"rock-throw",     t,T_ROCK,     z,Z_PHYSICAL,  p,15, d,50,  a,.9  ; -- 115
+    ; name,"confusion",      t,T_PSYCHIC,  z,Z_SPECIAL,   p,25, d,50,  a,1   ; -- 116
+    ; name,"hypnosis",       t,T_PSYCHIC,  z,Z_STATUS,    p,20,        a,.6  ; -- 117
+    ; name,"meditate",       t,T_PSYCHIC,  z,Z_STATUS,    p,40,              ; -- 118
+    ; name,"agility",        t,T_PSYCHIC,  z,Z_STATUS,    p,30,              ; -- 119
+    ; name,"quick-attack",   t,T_NORMAL,   z,Z_PHYSICAL,  p,30, d,40,  a,1   ; -- 120
+    ; name,"night-shade",    t,T_GHOST,    z,Z_SPECIAL,   p,15,        a,1   ; -- 121
+    ; name,"screech",        t,T_NORMAL,   z,Z_STATUS,    p,40,        a,.85 ; -- 122
+    ; name,"recover",        t,T_NORMAL,   z,Z_STATUS,    p,5,               ; -- 123
+    ; name,"harden",         t,T_NORMAL,   z,Z_STATUS,    p,30,              ; -- 124
+    ; name,"minimize",       t,T_NORMAL,   z,Z_STATUS,    p,10,              ; -- 125
+    ; name,"smokescreen",    t,T_NORMAL,   z,Z_STATUS,    p,20,        a,1   ; -- 126
+    ; name,"confuse-ray",    t,T_GHOST,    z,Z_STATUS,    p,10,        a,1   ; -- 127
+    ; name,"withdraw",       t,T_WATER,    z,Z_STATUS,    p,40,              ; -- 128
+    ; name,"defense-curl",   t,T_NORMAL,   z,Z_STATUS,    p,40,              ; -- 129
+    ; name,"barrier",        t,T_PSYCHIC,  z,Z_STATUS,    p,20,              ; -- 130
+    ; name,"light-screen",   t,T_PSYCHIC,  z,Z_STATUS,    p,30,              ; -- 131
+    ; name,"haze",           t,T_ICE,      z,Z_STATUS,    p,30,              ; -- 132
+    ; name,"focus-energy",   t,T_NORMAL,   z,Z_STATUS,    p,30,              ; -- 133
+    ; name,"mirror-move",    t,T_FLYING,   z,Z_STATUS,    p,20,              ; -- 134
+    ; name,"lick",           t,T_GHOST,    z,Z_PHYSICAL,  p,30, d,30,  a,1   ; -- 135
+    ; name,"smog",           t,T_POISON,   z,Z_SPECIAL,   p,20, d,30,  a,.7  ; -- 136
+    ; name,"sludge",         t,T_POISON,   z,Z_SPECIAL,   p,20, d,65,  a,1   ; -- 137
+    ; name,"bone-club",      t,T_GROUND,   z,Z_PHYSICAL,  p,20, d,65,  a,.85 ; -- 138
+    ; name,"waterfall",      t,T_WATER,    z,Z_PHYSICAL,  p,15, d,80,  a,1   ; -- 139
+    ; name,"clamp",          t,T_WATER,    z,Z_PHYSICAL,  p,15, d,35,  a,.85 ; -- 140
+    ; name,"spike-cannon",   t,T_NORMAL,   z,Z_PHYSICAL,  p,15, d,20,  a,1   ; -- 141
+    ; name,"constrict",      t,T_NORMAL,   z,Z_PHYSICAL,  p,35, d,10,  a,1   ; -- 142
+    ; name,"amnesia",        t,T_PSYCHIC,  z,Z_STATUS,    p,20,              ; -- 143
+    ; name,"kinesis",        t,T_PSYCHIC,  z,Z_STATUS,    p,15,        a,.8  ; -- 144
+    ; name,"high-jump-kick", t,T_FIGHTING, z,Z_PHYSICAL,  p,10, d,130, a,.9  ; -- 145
+    ; name,"glare",          t,T_NORMAL,   z,Z_STATUS,    p,30,        a,1   ; -- 146
+    ; name,"poison-gas",     t,T_POISON,   z,Z_STATUS,    p,40,        a,.9  ; -- 147
+    ; name,"barrage",        t,T_NORMAL,   z,Z_PHYSICAL,  p,20, d,15,  a,.85 ; -- 148
+    ; name,"leech-life",     t,T_BUG,      z,Z_PHYSICAL,  p,10, d,80,  a,1   ; -- 149
+    ; name,"lovely-kiss",    t,T_NORMAL,   z,Z_STATUS,    p,10,        a,.75 ; -- 150
+    ; name,"transform",      t,T_NORMAL,   z,Z_STATUS,    p,10,              ; -- 151
+    ; name,"bubble",         t,T_WATER,    z,Z_SPECIAL,   p,30, d,40,  a,1   ; -- 152
+    ; name,"dizzy-punch",    t,T_NORMAL,   z,Z_PHYSICAL,  p,10, d,70,  a,1   ; -- 153
+    ; name,"spore",          t,T_GRASS,    z,Z_STATUS,    p,15,        a,1   ; -- 154
+    ; name,"splash",         t,T_NORMAL,   z,Z_STATUS,    p,40,              ; -- 155
+    ; name,"acid-armor",     t,T_POISON,   z,Z_STATUS,    p,20,              ; -- 156
+    ; name,"crabhammer",     t,T_WATER,    z,Z_PHYSICAL,  p,10, d,100, a,.9  ; -- 157
+    ; name,"fury-swipes",    t,T_NORMAL,   z,Z_PHYSICAL,  p,15, d,18,  a,.8  ; -- 158
+    ; name,"bonemerang",     t,T_GROUND,   z,Z_PHYSICAL,  p,10, d,50,  a,.9  ; -- 159
+    ; name,"hyper-fang",     t,T_NORMAL,   z,Z_PHYSICAL,  p,15, d,80,  a,.9  ; -- 160
+    ; name,"sharpen",        t,T_NORMAL,   z,Z_STATUS,    p,30,              ; -- 161
+    ; name,"conversion",     t,T_NORMAL,   z,Z_STATUS,    p,30,              ; -- 162
+    ; name,"super-fang",     t,T_NORMAL,   z,Z_PHYSICAL,  p,10,        a,.9  ; -- 163
+    ; name,"slash",          t,T_NORMAL,   z,Z_PHYSICAL,  p,20, d,70,  a,1   ; -- 164
 ]]

@@ -1,4 +1,4 @@
-c_creditlist = split",,,,,,credits,,⬆️/⬇️  ,,,aLANXOC3,CODE,GFX|SFX,,tHE,gREAT,cADET,GFX|SFX,,wADLO,MAGIKARP,GYARADOS,,code,snippets,,zEP,fOR pX9,& pICO-8,,mOT,fOR sMAP,,pokemon,data,,bLBAPEDIA,,pOKEAPI,,sEREBII,,sMOGON,,vOLVOX,,nINTENDO,oF cOURSE,,,,gotta,catch,em,all,,,"
+c_creditlist = split",,,,,,credits,,⬇️/⬆️  ,,,alanxoc3,CODE,GFX|SFX,,the,great,cadet,GFX|SFX,,wadlo,MAGIKARP,GYARADOS,,,,,code,snippets,,,,,zep,FOR PX9,& PICO-8,,mot,FOR SMAP,,,,,pokemon,data,,,,,blbapedia,,pokeapi,,serebii,,smogon,,volvox,,nintendo,OF COURSE,,,,,gotta,catch,em all,"
 
 |[credits_init]| function(a)
     g_credits_offset = 5

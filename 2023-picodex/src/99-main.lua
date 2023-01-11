@@ -10,10 +10,10 @@ zclass[[game_state,actor|
     fadein; next,game, duration,0, sinit,%gamefadein_init; -- fadein; next,closed, duration,0, sinit,%gamefadein_init;
 
     closed;     next,opening,                            sinit,%closed_init, update,%closed_update, draw,%closed_draw;
-    opening;    next,starting_1,          duration,.25,                                            draw,%opening_draw;
-    starting_1; next,starting_2, light,1, duration,.125, sinit,%light_init,                        draw,%opened_draw;
-    starting_2; next,starting_3, light,2, duration,.125, sinit,%light_init,                        draw,%opened_draw;
-    starting_3; next,game,       light,3, duration,.125, sinit,%light_init,                        draw,%opened_draw;
+    opening;    next,starting_1,          duration,.25,                                             draw,%opening_draw;
+    starting_1; next,starting_2, light,1, duration,.125, sinit,%light_init,                         draw,%opened_draw;
+    starting_2; next,starting_3, light,2, duration,.125, sinit,%light_init,                         draw,%opened_draw;
+    starting_3; next,game,       light,3, duration,.125, sinit,%light_init,                         draw,%opened_draw;
     game;       next,closing,    light,4,                sinit,%game_init,   update,%game_update,   draw,%game_draw;
     closing;    next,closed,              duration,.25,                      update,nop,            draw,%closing_draw;
 ]]
