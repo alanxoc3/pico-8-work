@@ -31,6 +31,7 @@ function zobj_set(table, str, ...)
             end
             dest = table
         else
+            if statement == '' then statement = #dest+1 end
             if type(dest[statement]) ~= "table" then
                 dest[statement] = {}
             end
