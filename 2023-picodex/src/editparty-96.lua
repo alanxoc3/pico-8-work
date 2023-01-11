@@ -53,27 +53,12 @@ end $$
 end $$
 
 c_partyactions = zobj[[
-    len,6;
-    0; name,"info",    state,browse,   desc,"view/pokemon/info";
-    1; name,"moves",   state,credits,  desc,"by/amorg/games";
-    2; name,"switch",     state,fight,    desc,"pokemon/battle/simulator";
-    3; name,"delete",     state,games,    desc,"minigames/and/quizzes";
-    4; name,"party",     state,party,    desc,"change/your/teams";
-    5; name,"settings",  state,settings, desc,"customize/this/picodex";
+    ; name,"pokemon", state,main, desc,"by|amorg|games"           -- use browse pokemon selector
+   ;; name,"moves",   state,main, desc,"by|amorg|games"           -- use the menu system
+   ;; name,"switch",  state,main, desc,"pokemon|battle|simulator" -- use the edit party screen
+   ;; name,"delete",  state,main, desc,"minigames|and|quizzes"    -- use the edit party screen
 ]]
 
-|[partyaction_update]| function(a)
-    if g_bpo then a:pop() end
-end $$
-
-|[partyaction_draw1]| function(a)
-
-end $$
-
-|[partyaction_draw2]| function(a)
-
-end $$
-
-|[partyaction_draw3]| function(a)
-
-end $$
+|[partyaction_update]| function(a) menu_update(a, S_CURSOR_PARTYACTION, c_partyactions) end $$
+|[partyaction_draw1]|  function(a) menu_draw1 (a, S_CURSOR_PARTYACTION, c_partyactions) end $$
+|[partyaction_draw3]|  function(a) menu_draw3 (a, S_CURSOR_PARTYACTION, c_partyactions) end $$

@@ -1,4 +1,4 @@
--- entries is a list that looks like: { {name="displayname", state="mode-state", desc="description/3/lines"} ... }
+-- entries is a list that looks like: { {name="displayname", state="mode-state", desc="description|3|lines"} ... }
 -- mem is 2 bytes of memory. first byte is cursor, second byte is view.
 function menu_update(a, mem, entries)
     local c, v = peek(mem), peek(mem+1)
@@ -40,5 +40,5 @@ function menu_draw1(a, mem, entries)
 end
 
 function menu_draw3(a, mem, entries)
-    print_draw3_message(unpack(split(entries[@mem+1].desc, '/')))
+    print_draw3_message(unpack(split(entries[@mem+1].desc, '|')))
 end
