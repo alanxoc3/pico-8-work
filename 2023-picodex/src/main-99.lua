@@ -28,16 +28,18 @@ function _init()
     -- initializing some data to make it easier to work with.
     for i=-2,151 do
         c_pokemon[i] = {
-            name       = c_pokemon[i][1],
-            width      = c_pokemon[i][2],
-            height     = c_pokemon[i][3],
-            type1      = c_pokemon[i][4],
-            type2      = c_pokemon[i][5],
-            hp         = c_pokemon[i][6],
-            attack     = c_pokemon[i][7],
-            defence    = c_pokemon[i][8],
-            speed      = c_pokemon[i][9],
-            special    = c_pokemon[i][10],
+            name          = c_pokemon[i][1],
+            width         = c_pokemon[i][2],
+            height        = c_pokemon[i][3],
+            type1         = c_pokemon[i][4],
+            type2         = c_pokemon[i][5],
+            hp            = c_pokemon[i][6],
+            attack        = c_pokemon[i][7],
+            defence       = c_pokemon[i][8],
+            speed         = c_pokemon[i][9],
+            special       = c_pokemon[i][10],
+            moves_natural = parse_numlist(c_pokemon[i][11]),
+            moves_levels  = parse_numlist(c_pokemon[i][12]),
             draw       = function(...) draw_pkmn_out(i, ...) end,
             num        = i,
         }
@@ -56,15 +58,27 @@ function _init()
     cls()
     sfx(62,0) -- a sound indicator that the came is actually running while loading
 
-    -- NORMAL_BEGIN -- debug mode doesn't need to load these sheets for faster startup
-    extract_sheet(0)
-    extract_sheet(1)
-    -- NORMAL_END
+-- NORMAL_BEGIN -- debug mode doesn't need to load these sheets for faster startup
 
+    -- 0x0000
+    extract_sheet(0)
+
+    -- 0x0002
+    extract_sheet(1)
+
+-- NORMAL_END
+
+    -- 0x0004
     extract_sheet(2)
 
     poke(0x5f56, 0xe0) -- make map funcs point here instead
+
+    -- 0x0006
     px9_decomp(0, 0, peek2(3*2), mget, mset)
+
+    -- 0x0008
+    -- TODO
+
 
     -- Need the pokedex tiles to stay loaded. This starts at sprite index #96.
     memcpy(0x0000, 0xc000, 0x2000)
@@ -109,3 +123,19 @@ function _draw()
     loop_entities('game_state', 'draw')
     fade(g_fade)
 end
+
+function parse_numlist(str)
+    local tbl = {}
+    for x in all(split(str or '')) do
+        if type(x) == "number" then
+            add(tbl, x)
+        end
+    end
+    return tbl
+end
+
+-- how does it l
+-- 1-5|10|20
+
+-- 255 = dash
+-- 0   = next-pkmn

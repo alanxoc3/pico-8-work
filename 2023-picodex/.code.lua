@@ -726,6 +726,8 @@ attack=c_pokemon[i][7],
 defence=c_pokemon[i][8],
 speed=c_pokemon[i][9],
 special=c_pokemon[i][10],
+moves_natural=parse_numlist(c_pokemon[i][11]),
+moves_levels=parse_numlist(c_pokemon[i][12]),
 draw=function(...)draw_pkmn_out(i,...)end,
 num=i,
 }
@@ -765,4 +767,13 @@ function _draw()
 cls()
 loop_entities("game_state","draw")
 fade(g_fade)
+end
+function parse_numlist(str)
+local tbl={}
+for x in all(split(str or ""))do
+if type(x)=="number"then
+add(tbl,x)
+end
+end
+return tbl
 end
