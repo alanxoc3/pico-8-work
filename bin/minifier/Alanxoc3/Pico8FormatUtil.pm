@@ -21,7 +21,7 @@ fset print cursor color ceil cls camera oval ovalfill circ circfill line rect
 rectfill pal palt spr sspr add del deli all foreach pairs btn btnp sfx music
 mget mset map peek peek2 poke2 peek4 poke4 poke memcpy reload cstore memset max
 min mid flr cos sin atan2 sqrt abs rnd srand band bor bxor bnot shl shr
-cartdata dget dset sub sgn stop menuitem type tostr tonum extcmd ls fillp time
+cartdata dget dset sub sgn stop tline menuitem type tostr tonum extcmd ls fillp time
 assert t _update_buttons count mapdraw self ? __index rotl
 );
 
