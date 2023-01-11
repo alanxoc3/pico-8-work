@@ -93,7 +93,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,modes_push,@,modes_pop,@,game_init,@,game_update,@,game_draw,@,main_update,@,main_draw1,@,main_draw2,@,main_draw3,@,gamefadein_init,@,closed_init,@,closed_update,@,closed_draw,@,closing_draw,@,light_init,@,opened_draw,@,opening_draw,@,browse_update,@,browsestat_update,@,browse_draw1,@,browsestat_draw1,@,browse_draw2,@,browse_draw3,@,credits_init,@,credits_update,@,credits_draw1,@,editparty_update,@,editparty_draw1,@,editparty_draw2,@,editparty_draw3,@,partyaction_update,@,partyaction_draw1,@,partyaction_draw2,@,partyaction_draw3,@,fight_update,@,fight_draw1,@,fight_draw2,@,fight_draw3,@,party_update,@,party_draw1,@,party_draw2,@,party_draw3,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,game_state_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,modes_push,@,modes_pop,@,game_init,@,game_update,@,game_draw,@,main_update,@,main_draw1,@,main_draw3,@,main_draw2,@,gamefadein_init,@,closed_init,@,closed_update,@,closed_draw,@,closing_draw,@,light_init,@,opened_draw,@,opening_draw,@,browse_update,@,browsestat_update,@,browse_draw1,@,browsestat_draw1,@,browse_draw2,@,browse_draw3,@,credits_init,@,credits_update,@,credits_draw1,@,editparty_update,@,editparty_draw1,@,editparty_draw2,@,editparty_draw3,@,partyaction_update,@,partyaction_draw1,@,partyaction_draw2,@,partyaction_draw3,@,fight_update,@,fight_draw1,@,fight_draw2,@,fight_draw3,@,party_update,@,party_draw1,@,party_draw2,@,party_draw3,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,game_state_init,@]],function(a,stateName)
 a.next_state=stateName or a.next
 end,function(a,stateName)
 a.next_state,a.isnew=nil
@@ -189,22 +189,8 @@ draw_picodex(a:is_active"shaking",1,
 function()a.modes:draw1()end,
 function()a.modes:draw2()end,
 function()a.modes:draw3()end,
-4,false,@0x5ef8,#a.modes.stack)
-end,function(a)
-if g_bpu or g_bpl then poke(0x5ef8,(@0x5ef8-1)%c_modes.len)end
-if g_bpd or g_bpr then poke(0x5ef8,(@0x5ef8+1)%c_modes.len)end
-if g_bpx then a:push(c_modes[@0x5ef8].state)end
-end,function(a)
-rectfill(0,15,39,24,1)
-for i=0,4 do
-local text,y=c_modes[(i-2+@0x5ef8)%c_modes.len].name,c_mode_positions[i+1]
-if i==2 then
-wobble_text(text,20,y,13)
-else
-zprint(text,20,y,1,0)
-end
-end
-end,function(a)
+4,false,@0x5ef1,#a.modes.stack)
+end,function(a)menu_update(a,0x5ef1,c_modes)end,function(a)menu_draw1(a,0x5ef1,c_modes)end,function(a)menu_draw3(a,0x5ef1,c_modes)end,function(a)
 rectfill(0,0,46,13,13)
 pal(7,1)
 local xx=0
@@ -213,8 +199,6 @@ sspr(6*8+xx,6*8,v,8,xx+3,3.5+cos((t()+i)/4))
 xx+=v
 end
 pal()
-end,function(a)
-print_draw3_message(unpack(split(c_modes[@0x5ef8].desc,"/")))
 end,function(a)
 _g.fader_in()
 sfx(-2,0)
@@ -407,9 +391,38 @@ c_types=zobj[[0;bg,0,name,bird,0;good;,;0;null;,;0;weak;,;;bg,0,name,normal,1;go
 c_bg_styles=zobj[[0;bg,6,aa,13;;bg,13,aa,5;;bg,9,aa,4;;bg,11,aa,3;;bg,12,aa,5;;bg,8,aa,2;;bg,10,aa,4;]]
 c_zmovetype=zobj[[0;name,status;;name,physical;;name,special;]]
 c_moves=zobj[[0;name,struggle,t,1,z,1,p,-,d,50,a,—;;name,mega-punch,t,1,z,1,p,20,d,80,a,.85;;name,razor-wind,t,1,z,2,p,10,d,80,a,1;;name,swords-dance,t,1,z,0,p,20,;;name,whirlwind,t,1,z,0,p,20,;;name,mega-kick,t,1,z,1,p,5,d,120,a,.75;;name,toxic,t,8,z,0,p,10,a,.9;;name,horn-drill,t,1,z,1,p,5,a,.3;;name,body-slam,t,1,z,1,p,15,d,85,a,1;;name,take-down,t,1,z,1,p,20,d,90,a,.85;;name,double-edge,t,1,z,1,p,15,d,120,a,1;;name,bubble-beam,t,3,z,2,p,20,d,65,a,1;;name,water-gun,t,3,z,2,p,25,d,40,a,1;;name,ice-beam,t,6,z,2,p,10,d,90,a,1;;name,blizzard,t,6,z,2,p,5,d,110,a,.7;;name,hyper-beam,t,1,z,2,p,5,d,150,a,.9;;name,pay-day,t,1,z,1,p,20,d,40,a,1;;name,submission,t,7,z,1,p,20,d,80,a,.8;;name,counter,t,7,z,1,p,20,a,1;;name,seismic-toss,t,7,z,1,p,20,a,1;;name,rage,t,1,z,1,p,20,d,20,a,1;;name,mega-drain,t,5,z,2,p,15,d,40,a,1;;name,solar-beam,t,5,z,2,p,10,d,120,a,1;;name,dragon-rage,t,15,z,2,p,10,a,1;;name,thunderbolt,t,4,z,2,p,15,d,90,a,1;;name,thunder,t,4,z,2,p,10,d,110,a,.7;;name,earthquake,t,9,z,1,p,10,d,100,a,1;;name,fissure,t,9,z,1,p,5,a,.3;;name,dig,t,9,z,1,p,10,d,80,a,1;;name,psychic,t,11,z,2,p,10,d,90,a,1;;name,teleport,t,11,z,0,p,20,;;name,mimic,t,1,z,0,p,10,;;name,double-team,t,1,z,0,p,15,;;name,reflect,t,11,z,0,p,20,;;name,bide,t,1,z,1,p,10,;;name,metronome,t,1,z,0,p,10,;;name,self-destruct,t,1,z,1,p,5,d,200,a,1;;name,egg-bomb,t,1,z,1,p,10,d,100,a,.75;;name,fire-blast,t,2,z,2,p,5,d,110,a,.85;;name,swift,t,1,z,2,p,20,d,60,;;name,skull-bash,t,1,z,1,p,10,d,130,a,1;;name,soft-boiled,t,1,z,0,p,5,;;name,dream-eater,t,11,z,2,p,15,d,100,a,1;;name,sky-attack,t,10,z,1,p,5,d,140,a,.9;;name,rest,t,11,z,0,p,5,;;name,thunder-wave,t,4,z,0,p,20,a,.9;;name,psywave,t,11,z,2,p,15,a,1;;name,explosion,t,1,z,1,p,5,d,250,a,1;;name,rock-slide,t,13,z,1,p,10,d,75,a,.9;;name,tri-attack,t,1,z,2,p,10,d,80,a,1;;name,substitute,t,1,z,0,p,10,;;name,cut,t,1,z,1,p,30,d,50,a,.95;;name,fly,t,10,z,1,p,15,d,90,a,.95;;name,surf,t,3,z,2,p,15,d,90,a,1;;name,strength,t,1,z,1,p,15,d,80,a,1;;name,flash,t,1,z,0,p,20,a,1;;name,pound,t,1,z,1,p,35,d,40,a,1;;name,karate-chop,t,7,z,1,p,25,d,50,a,1;;name,double-slap,t,1,z,1,p,10,d,15,a,.85;;name,comet-punch,t,1,z,1,p,15,d,18,a,.85;;name,fire-punch,t,2,z,1,p,15,d,75,a,1;;name,ice-punch,t,6,z,1,p,15,d,75,a,1;;name,thunder-punch,t,4,z,1,p,15,d,75,a,1;;name,scratch,t,1,z,1,p,35,d,40,a,1;;name,vice-grip,t,1,z,1,p,30,d,55,a,1;;name,guillotine,t,1,z,1,p,5,a,.3;;name,gust,t,10,z,2,p,35,d,40,a,1;;name,wing-attack,t,10,z,1,p,35,d,60,a,1;;name,bind,t,1,z,1,p,20,d,15,a,.85;;name,slam,t,1,z,1,p,20,d,80,a,.75;;name,vine-whip,t,5,z,1,p,25,d,45,a,1;;name,stomp,t,1,z,1,p,20,d,65,a,1;;name,double-kick,t,7,z,1,p,30,d,30,a,1;;name,jump-kick,t,7,z,1,p,10,d,100,a,.95;;name,rolling-kick,t,7,z,1,p,15,d,60,a,.85;;name,sand-attack,t,9,z,0,p,15,a,1;;name,headbutt,t,1,z,1,p,15,d,70,a,1;;name,horn-attack,t,1,z,1,p,25,d,65,a,1;;name,fury-attack,t,1,z,1,p,20,d,15,a,.85;;name,tackle,t,1,z,1,p,35,d,40,a,1;;name,wrap,t,1,z,1,p,20,d,15,a,.9;;name,thrash,t,1,z,1,p,10,d,120,a,1;;name,tail-whip,t,1,z,0,p,30,a,1;;name,poison-sting,t,8,z,1,p,35,d,15,a,1;;name,twineedle,t,12,z,1,p,20,d,25,a,1;;name,pin-missile,t,12,z,1,p,20,d,25,a,.95;;name,leer,t,1,z,0,p,30,a,1;;name,bite,t,1,z,1,p,25,d,60,a,1;;name,growl,t,1,z,0,p,40,a,1;;name,roar,t,1,z,0,p,20,;;name,sing,t,1,z,0,p,15,a,.55;;name,supersonic,t,1,z,0,p,20,a,.55;;name,sonic-boom,t,1,z,2,p,20,a,.9;;name,disable,t,1,z,0,p,20,a,1;;name,acid,t,8,z,2,p,30,d,40,a,1;;name,ember,t,2,z,2,p,25,d,40,a,1;;name,flamethrower,t,2,z,2,p,15,d,90,a,1;;name,mist,t,6,z,0,p,30,;;name,hydro-pump,t,3,z,2,p,5,d,110,a,.8;;name,psybeam,t,11,z,2,p,20,d,65,a,1;;name,aurora-beam,t,6,z,2,p,20,d,65,a,1;;name,peck,t,10,z,1,p,35,d,35,a,1;;name,drill-peck,t,10,z,1,p,20,d,80,a,1;;name,low-kick,t,7,z,1,p,20,a,1;;name,absorb,t,5,z,2,p,25,d,20,a,1;;name,leech-seed,t,5,z,0,p,10,a,.9;;name,growth,t,1,z,0,p,20,;;name,razor-leaf,t,5,z,1,p,25,d,55,a,.95;;name,poison-powder,t,8,z,0,p,35,a,.75;;name,stun-spore,t,5,z,0,p,30,a,.75;;name,sleep-powder,t,5,z,0,p,15,a,.75;;name,petal-dance,t,5,z,2,p,10,d,120,a,1;;name,string-shot,t,12,z,0,p,40,a,.95;;name,fire-spin,t,2,z,2,p,15,d,35,a,.85;;name,thunder-shock,t,4,z,2,p,30,d,40,a,1;;name,rock-throw,t,13,z,1,p,15,d,50,a,.9;;name,confusion,t,11,z,2,p,25,d,50,a,1;;name,hypnosis,t,11,z,0,p,20,a,.6;;name,meditate,t,11,z,0,p,40,;;name,agility,t,11,z,0,p,30,;;name,quick-attack,t,1,z,1,p,30,d,40,a,1;;name,night-shade,t,14,z,2,p,15,a,1;;name,screech,t,1,z,0,p,40,a,.85;;name,recover,t,1,z,0,p,5,;;name,harden,t,1,z,0,p,30,;;name,minimize,t,1,z,0,p,10,;;name,smokescreen,t,1,z,0,p,20,a,1;;name,confuse-ray,t,14,z,0,p,10,a,1;;name,withdraw,t,3,z,0,p,40,;;name,defense-curl,t,1,z,0,p,40,;;name,barrier,t,11,z,0,p,20,;;name,light-screen,t,11,z,0,p,30,;;name,haze,t,6,z,0,p,30,;;name,focus-energy,t,1,z,0,p,30,;;name,mirror-move,t,10,z,0,p,20,;;name,lick,t,14,z,1,p,30,d,30,a,1;;name,smog,t,8,z,2,p,20,d,30,a,.7;;name,sludge,t,8,z,2,p,20,d,65,a,1;;name,bone-club,t,9,z,1,p,20,d,65,a,.85;;name,waterfall,t,3,z,1,p,15,d,80,a,1;;name,clamp,t,3,z,1,p,15,d,35,a,.85;;name,spike-cannon,t,1,z,1,p,15,d,20,a,1;;name,constrict,t,1,z,1,p,35,d,10,a,1;;name,amnesia,t,11,z,0,p,20,;;name,kinesis,t,11,z,0,p,15,a,.8;;name,high-jump-kick,t,7,z,1,p,10,d,130,a,.9;;name,glare,t,1,z,0,p,30,a,1;;name,poison-gas,t,8,z,0,p,40,a,.9;;name,barrage,t,1,z,1,p,20,d,15,a,.85;;name,leech-life,t,12,z,1,p,10,d,80,a,1;;name,lovely-kiss,t,1,z,0,p,10,a,.75;;name,transform,t,1,z,0,p,10,;;name,bubble,t,3,z,2,p,30,d,40,a,1;;name,dizzy-punch,t,1,z,1,p,10,d,70,a,1;;name,spore,t,5,z,0,p,15,a,1;;name,splash,t,1,z,0,p,40,;;name,acid-armor,t,8,z,0,p,20,;;name,crabhammer,t,3,z,1,p,10,d,100,a,.9;;name,fury-swipes,t,1,z,1,p,15,d,18,a,.8;;name,bonemerang,t,9,z,1,p,10,d,50,a,.9;;name,hyper-fang,t,1,z,1,p,15,d,80,a,.9;;name,sharpen,t,1,z,0,p,30,;;name,conversion,t,1,z,0,p,30,;;name,super-fang,t,1,z,1,p,10,a,.9;;name,slash,t,1,z,1,p,20,d,70,a,1;]]
+g_menu_view=0
+function menu_update(a,mem,entries)
+local c,v=peek(mem),peek(mem+1)
+if g_bpu then c=max(0,c-1)end
+if g_bpd then c=min(#entries-1,c+1)end
+if c<v then v=c end
+if c>v+4 then v=c-4 end
+if g_bpx then a:push(entries[c+1].state)end
+if g_bpo then a:pop()end
+poke(mem,c%#entries)poke(mem+1,v)
+end
+function menu_draw1(a,mem,entries)
+local c,v=peek(mem),peek(mem+1)
+local y=(5-min(#entries,5))*3.5\1
+rectfill(0,y+1+(c-v)*7,39,y+10+(c-v)*7,1)
+for i=1,#entries do
+local basey=y+(i-v)*7
+local yoff=0
+if i<c+1 then yoff-=2 end
+if i>c+1 then yoff+=1 end
+if i==c+1 then
+wobble_text(entries[i].name,20,basey-4,13)
+else
+zprint(entries[i].name,20,basey-3+yoff,i==c+1 and 13 or 1,0)
+end
+end
+end
+function menu_draw3(a,mem,entries)
+print_draw3_message(unpack(split(entries[@mem+1].desc,"/")))
+end
 zclass[[modes,actor|push,%modes_push,pop,%modes_pop,update,nop,draw1,nop,draw2,nop,draw3,nop,curr,main;stack;,;defaults;sub,0,init,nop,update,nop,draw1,nop,draw2,nop,draw3,nop;main;update,%main_update,draw1,%main_draw1,draw2,%main_draw2,draw3,%main_draw3;credits;update,%credits_update,draw1,%credits_draw1,draw2,%main_draw2,draw3,%main_draw3,init,%credits_init;browse;update,%browse_update,draw1,%browse_draw1,draw2,%browse_draw2,draw3,%browse_draw3;browsestat;update,%browsestat_update,draw1,%browsestat_draw1,draw2,%browse_draw2,draw3,%browse_draw3;fight;update,%fight_update,draw1,%fight_draw1,draw2,%fight_draw2,draw3,%fight_draw3;party;update,%party_update,draw1,%party_draw1,draw2,%party_draw2,draw3,%party_draw3;editparty;update,%editparty_update,draw1,%editparty_draw1,draw2,%editparty_draw2,draw3,%editparty_draw3;partyaction;update,%partyaction_update,draw1,%partyaction_draw1,draw2,%partyaction_draw2,draw3,%partyaction_draw3;]]
-c_modes=zobj[[len,6;0;name,browse,state,browse,desc,view/pokemon/info;1;name,credits,state,credits,desc,by/amorg/games;2;name,fight,state,fight,desc,pokemon/battle/simulator;3;name,games,state,games,desc,minigames/and/quizzes;4;name,party,state,party,desc,change/your/teams;5;name,settings,state,settings,desc,customize/this/picodex;]]
-c_mode_positions=split"2,9,17,26,33"
+c_modes=zobj[[;name,browse,state,browse,desc,view/pokemon/info;;name,credits,state,credits,desc,by/amorg/games;;name,fight,state,fight,desc,pokemon/battle/simulator;;name,games,state,games,desc,minigames/and/quizzes;;name,party,state,party,desc,change/your/teams;;name,settings,state,settings,desc,customize/this/picodex]]
 g_picodex_div=zobj[[,6,5,5,6,6,5,6]]
 function any_btn()return g_bl or g_br or g_bu or g_bd or g_bx or g_bo end
 function draw_picodex(shaking,rotation,l_screen,tr_screen,br_screen,light,backbuttonheld,top_row_buttons,bot_row_buttons)

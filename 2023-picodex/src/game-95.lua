@@ -58,40 +58,22 @@ end $$
         function() a.modes:draw1() end,
         function() a.modes:draw2() end, 
         function() a.modes:draw3() end, 
-        4, false, @S_MODE, #a.modes.stack)
+        4, false, @S_CURSOR_MODE, #a.modes.stack)
 end $$
 
 -- if i run the minifier, we need a separate display name from the state it's mapped to.
 c_modes = zobj[[
-    len,6;
-    0; name,"browse",    state,browse,   desc,"view/pokemon/info";
-    1; name,"credits",   state,credits,  desc,"by/amorg/games";
-    2; name,"fight",     state,fight,    desc,"pokemon/battle/simulator";
-    3; name,"games",     state,games,    desc,"minigames/and/quizzes";
-    4; name,"party",     state,party,    desc,"change/your/teams";
-    5; name,"settings",  state,settings, desc,"customize/this/picodex";
+    ;name,"browse",    state,browse,   desc,"view/pokemon/info"
+   ;;name,"credits",   state,credits,  desc,"by/amorg/games"
+   ;;name,"fight",     state,fight,    desc,"pokemon/battle/simulator"
+   ;;name,"games",     state,games,    desc,"minigames/and/quizzes"
+   ;;name,"party",     state,party,    desc,"change/your/teams"
+   ;;name,"settings",  state,settings, desc,"customize/this/picodex"
 ]]
 
-c_mode_positions = split"2,9,17,26,33"
-
-|[main_update]| function(a)
-    if g_bpu or g_bpl then poke(S_MODE, (@S_MODE - 1) % c_modes.len) end
-    if g_bpd or g_bpr then poke(S_MODE, (@S_MODE + 1) % c_modes.len) end
-    if g_bpx then a:push(c_modes[@S_MODE].state) end
-end $$
-
-|[main_draw1]| function(a)
-        rectfill(0,15,39,24,1)
-
-        for i=0,4 do
-            local text, y = c_modes[(i-2+@S_MODE)%c_modes.len].name, c_mode_positions[i+1]
-            if i == 2 then
-                wobble_text(text, 20, y, 13)
-            else
-                zprint(text, 20, y, 1, 0)
-            end
-        end
-end $$
+|[main_update]| function(a) menu_update(a, S_CURSOR_MODE, c_modes) end $$
+|[main_draw1]|  function(a) menu_draw1 (a, S_CURSOR_MODE, c_modes) end $$
+|[main_draw3]|  function(a) menu_draw3 (a, S_CURSOR_MODE, c_modes) end $$
 
 g_picodex_div = zobj[[,6,5,5,6,6,5,6]]
 |[main_draw2]| function(a)
@@ -107,6 +89,3 @@ g_picodex_div = zobj[[,6,5,5,6,6,5,6]]
     pal()
 end $$
 
-|[main_draw3]| function(a)
-    print_draw3_message(unpack(split(c_modes[@S_MODE].desc, '/')))
-end $$
