@@ -1,6 +1,5 @@
 -- entries is a list that looks like: { {name="displayname", state="mode-state", desc="description/3/lines"} ... }
 -- mem is 2 bytes of memory. first byte is cursor, second byte is view.
-g_menu_view = 0 -- this would technically reset with each view change...
 function menu_update(a, mem, entries)
     local c, v = peek(mem), peek(mem+1)
 
@@ -25,7 +24,7 @@ function menu_draw1(a, mem, entries)
     local c, v = peek(mem), peek(mem+1)
     local y = (5-min(#entries, 5))*3.5\1
 
-    rectfill(0, y+1+(c-v)*7, 39, y+10+(c-v)*7, 1)
+    rectfill(0, y+1+(c-v)*7-(c==0 and 1 or 0), 39, y+10+(c-v)*7+(c==#entries-1 and 1 or 0), 1)
 
     for i=1,#entries do
         local basey = y+(i-v)*7
