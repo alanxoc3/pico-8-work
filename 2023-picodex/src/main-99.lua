@@ -146,23 +146,24 @@ function normalize_pokemon_data()
     for i=-2,151 do
         local pkmn = c_pokemon[i] or {}
         local movelvls = {}
-        for i=11,#pkmn do
+        for i=12,#pkmn do
             add(movelvls, pkmn[i])
         end
 
         c_pokemon[i] = {
-            name     = pkmn[1],
-            width    = pkmn[2],
-            height   = pkmn[3],
-            type1    = pkmn[4],
-            type2    = pkmn[5],
-            hp       = pkmn[6],
-            attack   = pkmn[7],
-            defence  = pkmn[8],
-            speed    = pkmn[9],
-            special  = pkmn[10],
-            movelvls = movelvls,
-            moves    = all_pokemon_moves[i],
+            evolvesfrom = (pkmn[1] or 0) > 0 and i-pkmn[1] or nil,
+            name        = pkmn[2],
+            width       = pkmn[3],
+            height      = pkmn[4],
+            type1       = pkmn[5],
+            type2       = pkmn[6],
+            hp          = pkmn[7],
+            attack      = pkmn[8],
+            defence     = pkmn[9],
+            speed       = pkmn[10],
+            special     = pkmn[11],
+            movelvls    = movelvls,
+            moves       = all_pokemon_moves[i],
 
             -- get moves that the pokemon would have naturally learned at a level
             get_natural_moveset = function(level)

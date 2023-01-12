@@ -1,3 +1,6 @@
+-- TODO: maybe make it so you don't need a memory address with menu.
+-- TODO: cur pkmn should start when selecting
+
 |[editparty_update]| function(a)
     -- local test = {}
 
@@ -55,9 +58,17 @@ end $$
 c_partyactions = zobj[[
     ; name,"pokemon", state,partypkmn, desc,"change|the|pokemon",   func,%menu_state_callback -- use browse pokemon selector
    ;; name,"moves",   state,partymoves,desc,"change|pokemon|moves", func,%menu_state_callback -- use the menu system
-   ;; name,"switch",  state,main,      desc,"switch|pokemon|spot",  func,%menu_state_callback -- use the edit party screen
    ;; name,"delete",                   desc,"remove|from|party",    func,%partydel            -- use the edit party screen
 ]]
+
+function get_partyactions()
+    local party = get_party(@S_CUR_PARTY)
+    if party[@S_PARTY_PKMN_NUM+1] then
+        return c_partyactions
+    else
+        return {c_partyactions[1]}
+    end
+end
 
 |[partydel]| function(a, game)
     local party = get_party(@S_CUR_PARTY)
@@ -66,9 +77,10 @@ c_partyactions = zobj[[
     game:pop()
 end $$
 
-|[partyaction_update]| function(a) menu_update(a, S_CURSOR_PARTYACTION, c_partyactions) end $$
-|[partyaction_draw1]|  function(a) menu_draw1 (a, S_CURSOR_PARTYACTION, c_partyactions) end $$
-|[partyaction_draw3]|  function(a) menu_draw3 (a, S_CURSOR_PARTYACTION, c_partyactions) end $$
+|[partyaction_init]|   function(a) a.available_actions = get_partyactions() end $$
+|[partyaction_update]| function(a) menu_update(a, S_CURSOR_PARTYACTION, a.available_actions) end $$
+|[partyaction_draw1]|  function(a) menu_draw1 (a, S_CURSOR_PARTYACTION, a.available_actions) end $$
+|[partyaction_draw3]|  function(a) menu_draw3 (a, S_CURSOR_PARTYACTION, a.available_actions) end $$
 
 |[partypkmn_update]| function(a)
     browse_update(a, S_CURSOR_PARTY_PKMN)
@@ -111,10 +123,6 @@ end $$
 
 end $$
 
-
--- TODO: add a check so there are no duplicate moves in the moveset when saving.
--- TODO: maybe make it so you don't need a memory address with menu.
--- TODO: redo move db
 |[partymovesel_init]| function(a)
     -- should always start at 0, since every pokemon is different
     poke2(S_CURSOR_PARTYMSEL, 0)
@@ -123,7 +131,6 @@ end $$
     local movedict = {}
     local party = get_party(@S_CUR_PARTY)
     local partypkmn = party[@S_PARTY_PKMN_NUM+1]
-    foreach(partypkmn.moves, function(move) movedict[move] = true end)
 
     local pkmn = c_pokemon[partypkmn.num]
     printh(pkmn.name)
@@ -137,6 +144,14 @@ end $$
                 func=function(a, game)
                     local party = get_party(@S_CUR_PARTY)
                     local partypkmn = party[@S_PARTY_PKMN_NUM+1]
+
+                    -- if the move already exists on the pkmn, remove it.
+                    for i=1,4 do
+                        if partypkmn.moves[i] == m then
+                            partypkmn.moves[i] = nil
+                        end
+                    end
+
                     partypkmn.moves[@S_CURSOR_PARTYMOVES+1] = m
                     save_party(@S_CUR_PARTY, party)
                     game:pop()

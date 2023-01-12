@@ -71,7 +71,7 @@ function get_party(party_index) -- 0 to 2
         end
 
         if has_moves then
-            add(party, { num=peek(memstart), moves=moves })
+            party[i] = { num=peek(memstart), moves=moves }
         end
     end
 
