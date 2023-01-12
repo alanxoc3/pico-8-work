@@ -59,6 +59,9 @@ function _init()
             num        = i,
         }
 
+        -- TODO: fix this not 0
+        printh(#c_pokemon[i].moves_natural)
+
         -- maybe moves should be formatted like the menu thing...
         -- name (easy), state=nil, desc=type|pp|pow|type?, function
     end
@@ -162,7 +165,7 @@ end
 
 function parse_numlist(str)
     local tbl = {}
-    for x in all(split(str or '')) do
+    for x in all(split(str or '', '|')) do
         if type(x) == "number" then
             add(tbl, x)
         end

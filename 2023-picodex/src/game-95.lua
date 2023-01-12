@@ -23,7 +23,7 @@ zclass[[modes,actor|
     partypkmn;    update,%partypkmn_update,    draw1,%partypkmn_draw1,    draw2,%partypkmn_draw2, draw3,%partypkmn_draw3;
     partyswitch;  update,%partyswitch_update,  draw1,%partyswitch_draw1,  draw2,%editparty_draw2, draw3,%partyswitch_draw3;
     partymoves;   update,%partymoves_update,   draw1,%partymoves_draw1,   draw2,%editparty_draw2, draw3,%partymoves_draw3, init,%partymoves_init;
-    partymovesel; update,%partymovesel_update, draw1,%partymovesel_draw1, draw2,%editparty_draw2, draw3,%partymovesel_draw3;
+    partymovesel; update,%partymovesel_update, draw1,%partymovesel_draw1, draw2,%editparty_draw2, draw3,%partymovesel_draw3, init,%partymovesel_init;
 ]]
 
 |[modes_push]| function(a, newstate)
@@ -68,12 +68,12 @@ end $$
 
 -- if i run the minifier, we need a separate display name from the state it's mapped to.
 c_modes = zobj[[
-    ;name,"browse",    state,browse,   desc,"view|pokemon|info"
-   ;;name,"credits",   state,credits,  desc,"by|amorg|games"
-   ;;name,"fight",     state,fight,    desc,"pokemon|battle|simulator"
-   ;;name,"games",     state,games,    desc,"minigames|and|quizzes"
-   ;;name,"party",     state,party,    desc,"change|your|teams"
-   ;;name,"settings",  state,settings, desc,"customize|this|picodex"
+    ;name,"browse",    state,browse,   func,%menu_state_callback, desc,"view|pokemon|info"
+   ;;name,"credits",   state,credits,  func,%menu_state_callback, desc,"by|amorg|games"
+   ;;name,"fight",     state,fight,    func,%menu_state_callback, desc,"pokemon|battle|simulator"
+   ;;name,"games",     state,games,    func,%menu_state_callback, desc,"minigames|and|quizzes"
+   ;;name,"party",     state,party,    func,%menu_state_callback, desc,"change|your|teams"
+   ;;name,"settings",  state,settings, func,%menu_state_callback, desc,"customize|this|picodex"
 ]]
 
 |[main_update]| function(a) menu_update(a, S_CURSOR_MODE, c_modes) end $$

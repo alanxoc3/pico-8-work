@@ -83,9 +83,11 @@ Amnesia Psyduck -- quiz
 Surfing Pikachu -- guess who
 Missingno       -- battle
 
-guess who - surfing pikachu
-amnesia psyduck
+surfing pikachu (add surf as hm for pikachu) - raichu will auto-inherit it too
+amnesia psyduck (add amnesia as lvl 1 move for psyduck) - golduck will auto-inherit it too
 
 ## Things
 Random Party - Random pokemon w/default moves
 Random Moves - For predermined pokemon
+
+For moves, if it is learned twice, take the one that is learned at a higher level, unless one was learned at level 1, then take the one at level 1.

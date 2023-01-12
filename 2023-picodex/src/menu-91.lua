@@ -1,6 +1,14 @@
+|[menu_state_callback]| function(a, game)
+    if a.state then
+        game:push(a.state)
+    else
+        game:pop()
+    end
+end $$
+
 -- entries is a list that looks like: { {name="displayname", state="mode-state", desc="description|3|lines"} ... }
 -- mem is 2 bytes of memory. first byte is cursor, second byte is view.
-function menu_update(a, mem, entries)
+function menu_update(game, mem, entries)
     local c, v = peek(mem), peek(mem+1)
 
     -- wrap
@@ -16,22 +24,16 @@ function menu_update(a, mem, entries)
 
     if g_bpx then
         if entries[c+1].func then
-            entries[c+1].func()
-        end
-
-        if entries[c+1].state then
-            a:push(entries[c+1].state)
-        else
-            a:pop()
+            entries[c+1]:func(game)
         end
     end
 
-    if g_bpo then a:pop() end
+    if g_bpo then game:pop() end
 
     poke(mem, c%#entries) poke(mem+1, v)
 end
 
-function menu_draw1(a, mem, entries)
+function menu_draw1(game, mem, entries)
     local c, v = peek(mem), peek(mem+1)
     local y = (5-min(#entries, 5))*3.5\1
 
@@ -50,6 +52,6 @@ function menu_draw1(a, mem, entries)
     end
 end
 
-function menu_draw3(a, mem, entries)
+function menu_draw3(game, mem, entries)
     print_draw3_message(unpack(split(entries[@mem+1].desc, '|')))
 end
