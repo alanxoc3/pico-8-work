@@ -56,8 +56,10 @@ end $$
 end $$
 
 c_partyactions = zobj[[
-    ; name,"pokemon", state,partypkmn, desc,"change|the|pokemon",   func,%menu_state_callback -- use browse pokemon selector
-   ;; name,"moves",   state,partymoves,desc,"change|pokemon|moves", func,%menu_state_callback -- use the menu system
+    ; name,"pokemon", state,partypkmn, desc,"select|the|pokemon",   func,%menu_state_callback -- use browse pokemon selector
+   ;; name,"rand pkmn",                desc,"select|random|pokemon",func,%randpkmn
+   ;; name,"moves",   state,partymoves,desc,"select|the|moves",     func,%menu_state_callback -- use the menu system
+   ;; name,"rand move",                desc,"select|random|moves",  func,%randmove
    ;; name,"delete",                   desc,"remove|from|party",    func,%partydel            -- use the edit party screen
 ]]
 
@@ -66,7 +68,7 @@ function get_partyactions()
     if party[@S_PARTY_PKMN_NUM+1] then
         return c_partyactions
     else
-        return {c_partyactions[1]}
+        return {c_partyactions[1], c_partyactions[2]}
     end
 end
 
@@ -77,17 +79,58 @@ end
     game:pop()
 end $$
 
+-- random pokemon does not include missingno, i think that's a good default though
+|[randpkmn]| function(a, game)
+    save_party(@S_CUR_PARTY, set_default_party_pkmn(get_party(@S_CUR_PARTY), @S_PARTY_PKMN_NUM+1, flr_rnd(151)+1))
+    game:pop()
+end $$
+
+|[randmove]| function(a, game)
+    -- lazy randomization. if a move is duplicated, it is deleted.
+    for i=4,1,-1 do
+        local party = get_party(@S_CUR_PARTY)
+        local party_ind = @S_PARTY_PKMN_NUM+1
+        local pkmn = c_pokemon[party[party_ind].num]
+        save_party(@S_CUR_PARTY, set_party_pkmn_move(party, party_ind, i, pkmn.moves[flr_rnd(#pkmn.moves)+1]))
+    end
+
+    game:push'partymoves'
+end $$
+
+function set_default_party_pkmn(party, ind, num)
+    party[ind] = {num=num, moves=c_pokemon[num].get_natural_moveset(100)}
+    return party
+end
+
+function set_party_pkmn_move(party, ind, moveind, move)
+    local partypkmn = party[ind]
+
+    -- if the move already exists on the pkmn, remove it.
+    for i=1,4 do
+        if partypkmn.moves[i] == move then
+            partypkmn.moves[i] = nil
+        end
+    end
+
+    partypkmn.moves[moveind] = move
+    return party
+end
+
 |[partyaction_init]|   function(a) a.available_actions = get_partyactions() end $$
 |[partyaction_update]| function(a) menu_update(a, S_CURSOR_PARTYACTION, a.available_actions) end $$
 |[partyaction_draw1]|  function(a) menu_draw1 (a, S_CURSOR_PARTYACTION, a.available_actions) end $$
 |[partyaction_draw3]|  function(a) menu_draw3 (a, S_CURSOR_PARTYACTION, a.available_actions) end $$
 
+|[partypkmn_init]| function(a)
+    local party = get_party(@S_CUR_PARTY)
+    local partypkmn = party[@S_PARTY_PKMN_NUM+1]
+    if partypkmn then poke(S_CURSOR_PARTY_PKMN, partypkmn.num) end
+end $$
+
 |[partypkmn_update]| function(a)
     browse_update(a, S_CURSOR_PARTY_PKMN)
     if g_bpx then
-        local party = get_party(@S_CUR_PARTY)
-        party[@S_PARTY_PKMN_NUM+1] = {num=@S_CURSOR_PARTY_PKMN, moves=c_pokemon[@S_CURSOR_PARTY_PKMN].get_natural_moveset(100)}
-        save_party(@S_CUR_PARTY, party)
+        save_party(@S_CUR_PARTY, set_default_party_pkmn(get_party(@S_CUR_PARTY), @S_PARTY_PKMN_NUM+1, @S_CURSOR_PARTY_PKMN))
         a:pop() a:pop() -- pop twice, because you got here through a menu
     end
 end $$
