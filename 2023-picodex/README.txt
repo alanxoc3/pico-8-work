@@ -90,4 +90,4 @@ amnesia psyduck (add amnesia as lvl 1 move for psyduck) - golduck will auto-inhe
 Random Party - Random pokemon w/default moves
 Random Moves - For predermined pokemon
 
-For moves, if it is learned twice, take the one that is learned at a higher level, unless one was learned at level 1, then take the one at level 1.
+For moves, if it is learned twice, take the one that is learned at a higher level, unless one was learned at level 1, then take the one at level 1. And if a TM matches the move, remove the TM.
