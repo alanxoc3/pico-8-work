@@ -20,9 +20,9 @@ zclass[[modes,actor|
     party;        update,%party_update,        draw1,%party_draw1,        draw2,%party_draw2,     draw3,%party_draw3;
     editparty;    update,%editparty_update,    draw1,%editparty_draw1,    draw2,%editparty_draw2, draw3,%editparty_draw3;
     partyaction;  update,%partyaction_update,  draw1,%partyaction_draw1,  draw2,%editparty_draw2, draw3,%partyaction_draw3;
-    partypkmn;    update,%partypkmn_update,    draw1,%partypkmn_draw1,    draw2,%partypkmn_draw2, draw3,%partyaction_draw3;
+    partypkmn;    update,%partypkmn_update,    draw1,%partypkmn_draw1,    draw2,%partypkmn_draw2, draw3,%partypkmn_draw3;
     partyswitch;  update,%partyswitch_update,  draw1,%partyswitch_draw1,  draw2,%editparty_draw2, draw3,%partyswitch_draw3;
-    partymoves;   update,%partymoves_update,   draw1,%partymoves_draw1,   draw2,%editparty_draw2, draw3,%partymoves_draw3;
+    partymoves;   update,%partymoves_update,   draw1,%partymoves_draw1,   draw2,%editparty_draw2, draw3,%partymoves_draw3, init,%partymoves_init;
     partymovesel; update,%partymovesel_update, draw1,%partymovesel_draw1, draw2,%editparty_draw2, draw3,%partymovesel_draw3;
 ]]
 

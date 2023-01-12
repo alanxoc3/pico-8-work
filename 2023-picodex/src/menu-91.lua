@@ -14,7 +14,18 @@ function menu_update(a, mem, entries)
     if c < v then v = c end
     if c > v+4 then v = c-4 end
 
-    if g_bpx then a:push(entries[c+1].state) end
+    if g_bpx then
+        if entries[c+1].func then
+            entries[c+1].func()
+        end
+
+        if entries[c+1].state then
+            a:push(entries[c+1].state)
+        else
+            a:pop()
+        end
+    end
+
     if g_bpo then a:pop() end
 
     poke(mem, c%#entries) poke(mem+1, v)

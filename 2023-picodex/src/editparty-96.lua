@@ -53,11 +53,17 @@ end $$
 end $$
 
 c_partyactions = zobj[[
-    ; name,"pokemon", state,partypkmn, desc,"select|the|pokemon"       -- use browse pokemon selector
-   ;; name,"moves",   state,main,      desc,"by|amorg|games"           -- use the menu system
-   ;; name,"switch",  state,main,      desc,"pokemon|battle|simulator" -- use the edit party screen
-   ;; name,"delete",  state,main,      desc,"minigames|and|quizzes"    -- use the edit party screen
+    ; name,"pokemon", state,partypkmn, desc,"change|the|pokemon"                    -- use browse pokemon selector
+   ;; name,"moves",   state,main,      desc,"change|pokemon|moves"                        -- use the menu system
+   ;; name,"switch",  state,main,      desc,"switch|pokemon|spot"                 -- use the edit party screen
+   ;; name,"delete",                   desc,"remove|from|party",   func,%partydel -- use the edit party screen
 ]]
+
+|[partydel]| function()
+    local party = get_party(@S_CUR_PARTY)
+    party[@S_PARTY_PKMN_NUM+1] = nil
+    save_party(@S_CUR_PARTY, party)
+end $$
 
 |[partyaction_update]| function(a) menu_update(a, S_CURSOR_PARTYACTION, c_partyactions) end $$
 |[partyaction_draw1]|  function(a) menu_draw1 (a, S_CURSOR_PARTYACTION, c_partyactions) end $$
@@ -75,3 +81,32 @@ end $$
 
 |[partypkmn_draw1]| function(a) browse_draw1(a, S_CURSOR_PARTY_PKMN) end $$
 |[partypkmn_draw2]| function() draw2_pokeinfo(@S_CURSOR_PARTY_PKMN) end $$
+|[partypkmn_draw3]| function() draw3_pokeinfo(@S_CURSOR_PARTY_PKMN) end $$
+
+|[partymoves_init]| function(a)
+    --moves_natural = parse_numlist(c_pokemon[i][11]),
+
+    --local party = get_party(@S_CUR_PARTY)
+    --local pkmn = c_pokemon[party[@S_PARTY_PKMN_NUM+1].num]
+    --for i, m in ipairs(pkmn.moves_natural) do
+    --    c_moves[m]
+    --end
+end $$
+
+|[partymoves_update]| function(a)
+
+end $$
+
+|[partymoves_draw1]| function(a)
+
+end $$
+
+|[partymoves_draw2]| function(a)
+
+end $$
+
+|[partymoves_draw3]| function(a)
+
+end $$
+
+    --partymoves;   update,%partymoves_update,   draw1,%partymoves_draw1,   draw2,%editparty_draw2, draw3,%partymoves_draw3;
