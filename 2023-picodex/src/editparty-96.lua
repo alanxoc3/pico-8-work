@@ -128,7 +128,7 @@ end $$
     local pkmn = c_pokemon[partypkmn.num]
     printh(pkmn.name)
 
-    for m in all(pkmn.moves_natural) do
+    for m in all(pkmn.moves) do
         if not movedict[m] then
             movedict[m] = true
 

@@ -91,3 +91,6 @@ Random Party - Random pokemon w/default moves
 Random Moves - For predermined pokemon
 
 For moves, if it is learned twice, take the one that is learned at a higher level, unless one was learned at level 1, then take the one at level 1. And if a TM matches the move, remove the TM.
+
+Pkmn yellow has moveset changes: https://gamefaqs.gamespot.com/gameboy/198314-pokemon-yellow-version-special-pikachu-edition/answers/572415-what-pokemon-have-moveset-changes-from-red-and-blue
+So, this game includes moves from yellow,red, and blue

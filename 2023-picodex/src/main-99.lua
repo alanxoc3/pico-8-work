@@ -25,69 +25,6 @@ zclass[[game_state,actor|
 end $$
 
 function _init()
-    -- initializing some data to make it easier to work with.
-    -- -2 is for larger empty pkmn
-    -- -1 is for smaller empty pkmn
-    -- yes, i know it's a weird solution, but i don't care
-    for i=-2,151 do
-        local pkmn = c_pokemon[i] or {}
-        c_pokemon[i] = {
-            name          = pkmn[1],
-            width         = pkmn[2],
-            height        = pkmn[3],
-            type1         = pkmn[4],
-            type2         = pkmn[5],
-            hp            = pkmn[6],
-            attack        = pkmn[7],
-            defence       = pkmn[8],
-            speed         = pkmn[9],
-            special       = pkmn[10],
-            moves_natural = parse_numlist(pkmn[11]),
-            moves_levels  = parse_numlist(pkmn[12]),
-
-            -- get moves that the pokemon would have naturally learned at a level
-            get_natural_moveset = function(level)
-                                     local a, moves = c_pokemon[i], {}
-                                     for i=#a.moves_natural,1,-1 do
-                                        if a.moves_levels[i] <= level and #moves < 4 then
-                                           add(moves, a.moves_natural[i])
-                                        end
-                                     end
-                                     return moves
-                                  end,
-            draw       = function(...) draw_pkmn_out(i, ...) end,
-            num        = i,
-        }
-
-        -- TODO: fix this not 0
-        printh(#c_pokemon[i].moves_natural)
-
-        -- maybe moves should be formatted like the menu thing...
-        -- name (easy), state=nil, desc=type|pp|pow|type?, function
-    end
-
-    c_pokemon[0].draw = function(...)
-        draw_pkmn_out(@S_MISSINGNO ~= 0 and 0 or -2, ...)
-    end
-
-    -- initialize moves to make it easier to work with
-    for i=0,#c_moves do
-        local move = c_moves[i]
-        c_moves[i] = {
-            name     = move[1],
-            type     = move[2],
-            category = move[3],
-            pp       = move[4],
-            damage   = move[5],
-            accuracy = move[6],
-            istm     = i >= 1 and i <= 50,
-            tmid     = i,
-            ishm     = i >= 51 and i <= 55,
-            hmid     = i-50,
-            num      = i,
-        }
-    end
-
     -- clear all the read only memory. testing things out showed that this doesn't get cleared automatically.
     memset(0x8000, 0, 0x7fff)
 
@@ -116,8 +53,7 @@ function _init()
     px9_decomp(0, 0, peek2(3*2), mget, mset)
 
     -- 0x0008
-    -- TODO
-
+    normalize_pokemon_data()
 
     -- Need the pokedex tiles to stay loaded. This starts at sprite index #96.
     memcpy(0x0000, 0xc000, 0x2000)
@@ -171,6 +107,102 @@ function parse_numlist(str)
         end
     end
     return tbl
+end
+
+-- 255 is dashes. 0 is next pkmn. num is move index.
+function normalize_pokemon_data()
+    local all_pokemon_moves = {}
+    local movemem = peek2(8)
+
+    for i=0,151 do
+        local is_range = false
+        local moves = {}
+
+        while @movemem ~= 0 do
+            if @movemem == 255 then
+                is_range = true
+            elseif is_range then
+                for i=moves[#moves],@movemem do
+                    add(moves, i)
+                end
+                is_range = false
+            else
+                add(moves, @movemem)
+            end
+            movemem += 1
+        end
+
+        movemem += 1
+
+        all_pokemon_moves[i] = moves
+    end
+
+    -- first, get move data
+
+    -- initializing some data to make it easier to work with.
+    -- -2 is for larger empty pkmn
+    -- -1 is for smaller empty pkmn
+    -- yes, i know it's a weird solution, but i don't care
+    for i=-2,151 do
+        local pkmn = c_pokemon[i] or {}
+        local movelvls = {}
+        for i=11,#pkmn do
+            add(movelvls, pkmn[i])
+        end
+
+        c_pokemon[i] = {
+            name     = pkmn[1],
+            width    = pkmn[2],
+            height   = pkmn[3],
+            type1    = pkmn[4],
+            type2    = pkmn[5],
+            hp       = pkmn[6],
+            attack   = pkmn[7],
+            defence  = pkmn[8],
+            speed    = pkmn[9],
+            special  = pkmn[10],
+            movelvls = movelvls,
+            moves    = all_pokemon_moves[i],
+
+            -- get moves that the pokemon would have naturally learned at a level
+            get_natural_moveset = function(level)
+                                     local a, moveset = c_pokemon[i], {}
+                                     for i=#a.movelvls,1,-1 do
+                                        if a.movelvls[i] <= level and #moveset < 4 then
+                                           add(moveset, a.moves[i])
+                                        end
+                                     end
+                                     return moveset
+                                  end,
+            draw       = function(...) draw_pkmn_out(i, ...) end,
+            num        = i,
+        }
+
+        -- maybe moves should be formatted like the menu thing...
+        -- name (easy), state=nil, desc=type|pp|pow|type?, function
+    end
+
+    c_pokemon[0].draw = function(...)
+        draw_pkmn_out(@S_MISSINGNO ~= 0 and 0 or -2, ...)
+    end
+
+    -- initialize moves to make it easier to work with
+    for i=0,#c_moves do
+        local move = c_moves[i]
+        c_moves[i] = {
+            name     = move[1],
+            type     = move[2],
+            category = move[3],
+            pp       = move[4],
+            damage   = move[5],
+            accuracy = move[6],
+            istm     = i >= 1 and i <= 50,
+            tmid     = i,
+            ishm     = i >= 51 and i <= 55,
+            hmid     = i-50,
+            num      = i,
+        }
+    end
 end
 
 -- how does it l
