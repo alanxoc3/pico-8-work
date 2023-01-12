@@ -1,28 +1,17 @@
-function set_browse(delta)
-    poke(S_BROWSE_PKMN, (@S_BROWSE_PKMN+delta)%152)
-    if @S_BROWSE_PKMN == 0 and @S_MISSINGNO == 0 then
-        set_browse(sgn(delta))
-    end
-end
-
-function browseupdate_shared(a)
-    set_browse'0'
-    if g_bpl then set_browse'-1' end
-    if g_bpr then set_browse'1'  end
-    if g_bpo then a:pop() end
-end
-
 |[browse_update]| function(a)
-    browseupdate_shared(a)
-
-    if g_bpu then set_browse'-4' end
-    if g_bpd then set_browse'4'  end
-
+    browse_update(a, S_CURSOR_BROWSE)
     if g_bpx then a:push'browsestat' end
 end $$
 
+|[browse_draw1]| function(a)
+    browse_draw1(a, S_CURSOR_BROWSE)
+end $$
+
+|[browse_draw2]| function() draw2_pokeinfo(@S_CURSOR_BROWSE) end $$
+|[browse_draw3]| function() draw3_pokeinfo(@S_CURSOR_BROWSE) end $$
+
 |[browsestat_update]| function(a)
-    browseupdate_shared(a)
+    browseupdate_shared(a, S_CURSOR_BROWSE)
 
     if g_bpu then poke(S_BROWSE_SCREEN, max(0, @S_BROWSE_SCREEN-1)) end
     if g_bpd then poke(S_BROWSE_SCREEN, min(1, @S_BROWSE_SCREEN+1)) end
@@ -30,34 +19,8 @@ end $$
     if g_bpx then sfx(flr(rnd(9))) end
 end $$
 
-|[browse_draw1]| function(a)
-    local pkmn = get_pokemon(@S_BROWSE_PKMN)
-
-    if @S_BROWSE_PKMN\4 < @S_BROWSE_VIEW   then poke(S_BROWSE_VIEW, @S_BROWSE_PKMN\4  ) end
-    if @S_BROWSE_PKMN\4 > @S_BROWSE_VIEW+3 then poke(S_BROWSE_VIEW, @S_BROWSE_PKMN\4-3) end
-
-    poke(S_BROWSE_VIEW, max(0, @S_BROWSE_VIEW))
-    poke(S_BROWSE_VIEW, min(152/4-4, @S_BROWSE_VIEW))
-
-    for j=0,3 do
-        for i=0,3 do
-            get_pokemon((@S_BROWSE_VIEW+j)*4+i).draw(i*10+5, j*10+5, 5, .375)
-        end
-    end
-
-    local x, y = (@S_BROWSE_PKMN%4)*10+5, (@S_BROWSE_PKMN\4-@S_BROWSE_VIEW)*10+5
-    if (@S_BROWSE_PKMN)%4 == 0 then x+=1 end
-    if (@S_BROWSE_PKMN)%4 == 3 then x-=1 end
-    if (@S_BROWSE_PKMN)\4-@S_BROWSE_VIEW == 0 then y+=1 end
-    if (@S_BROWSE_PKMN)\4-@S_BROWSE_VIEW == 3 then y-=1 end
-    rectfill(x-7-1,y-7-1,x+6+1,y+6+1,13)
-    rectfill(x-6-1,y-6-1,x+5+1,y+5+1,6)
-    pkmn.draw(x, y, 13, .5)
-    rect    (x-7  ,y-7  ,x+6  ,y+6  ,1)
-end $$
-
 |[browsestat_draw1]| function(a)
-    local pkmn = get_pokemon(@S_BROWSE_PKMN)
+    local pkmn = get_pokemon(@S_CURSOR_BROWSE)
     local style = c_bg_styles[c_types[pkmn.type1].bg]
     rectfill(0,0,39,39,style.bg)
 
@@ -84,6 +47,55 @@ end $$
     end
 end $$
 
+function set_browse(delta, mem)
+    poke(mem, (@mem+delta)%152)
+    if @mem == 0 and @S_MISSINGNO == 0 then
+        set_browse(sgn(delta), mem) -- sgn can't be zero
+    end
+end
+
+function browseupdate_shared(a, mem)
+    set_browse(0, mem)
+    if g_bpl then set_browse(-1, mem) end
+    if g_bpr then set_browse(1, mem)  end
+    if g_bpo then a:pop() end
+end
+
+function browse_update(a, mem)
+    browseupdate_shared(a, mem)
+
+    if g_bpu then set_browse(-4, mem) end
+    if g_bpd then set_browse(4, mem)  end
+end
+
+function browse_draw1(a, mem)
+    local c, v = peek(mem), peek(mem+1)
+    local pkmn = get_pokemon(c)
+
+    if c\4 < v   then v = c\4   end
+    if c\4 > v+3 then v = c\4-3 end
+
+    v = max(0, min(152/4-4, v))
+
+    for j=0,3 do
+        for i=0,3 do
+            get_pokemon((v+j)*4+i).draw(i*10+5, j*10+5, 5, .375)
+        end
+    end
+
+    local x, y = (c%4)*10+5, (c\4-v)*10+5
+    if (c)%4 == 0 then x+=1 end
+    if (c)%4 == 3 then x-=1 end
+    if (c)\4-v == 0 then y+=1 end
+    if (c)\4-v == 3 then y-=1 end
+    rectfill(x-7-1,y-7-1,x+6+1,y+6+1,13)
+    rectfill(x-6-1,y-6-1,x+5+1,y+5+1,6)
+    pkmn.draw(x, y, 13, .5)
+    rect    (x-7  ,y-7  ,x+6  ,y+6  ,1)
+
+    poke(mem+1, v)
+end
+
 function draw2_pokeinfo(num)
     zprint(get_pokemon(num).name, 46/2, 4, 1, 0)
 end
@@ -99,9 +111,6 @@ function draw3_pokeinfo(num)
         zprint(c_types[pkmn.type2].name, 23, 15, 13, 0)
     end
 end
-
-|[browse_draw2]| function() draw2_pokeinfo(@S_BROWSE_PKMN) end $$
-|[browse_draw3]| function() draw3_pokeinfo(@S_BROWSE_PKMN) end $$
 
 -- Draw a pokemon by number. Pokemon is centered at x & y. sw and sh can be decimals.
 -- Num 1 would be bulbasaur.

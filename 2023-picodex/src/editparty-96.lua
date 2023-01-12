@@ -53,12 +53,25 @@ end $$
 end $$
 
 c_partyactions = zobj[[
-    ; name,"pokemon", state,main, desc,"by|amorg|games"           -- use browse pokemon selector
-   ;; name,"moves",   state,main, desc,"by|amorg|games"           -- use the menu system
-   ;; name,"switch",  state,main, desc,"pokemon|battle|simulator" -- use the edit party screen
-   ;; name,"delete",  state,main, desc,"minigames|and|quizzes"    -- use the edit party screen
+    ; name,"pokemon", state,partypkmn, desc,"select|the|pokemon"       -- use browse pokemon selector
+   ;; name,"moves",   state,main,      desc,"by|amorg|games"           -- use the menu system
+   ;; name,"switch",  state,main,      desc,"pokemon|battle|simulator" -- use the edit party screen
+   ;; name,"delete",  state,main,      desc,"minigames|and|quizzes"    -- use the edit party screen
 ]]
 
 |[partyaction_update]| function(a) menu_update(a, S_CURSOR_PARTYACTION, c_partyactions) end $$
 |[partyaction_draw1]|  function(a) menu_draw1 (a, S_CURSOR_PARTYACTION, c_partyactions) end $$
 |[partyaction_draw3]|  function(a) menu_draw3 (a, S_CURSOR_PARTYACTION, c_partyactions) end $$
+
+|[partypkmn_update]| function(a)
+    browse_update(a, S_CURSOR_PARTY_PKMN)
+    if g_bpx then
+        local party = get_party(@S_CUR_PARTY)
+        party[@S_PARTY_PKMN_NUM+1] = {num=@S_CURSOR_PARTY_PKMN, moves={2}}
+        save_party(@S_CUR_PARTY, party)
+        a:pop() a:pop() -- pop twice, because you got here through a menu
+    end
+end $$
+
+|[partypkmn_draw1]| function(a) browse_draw1(a, S_CURSOR_PARTY_PKMN) end $$
+|[partypkmn_draw2]| function() draw2_pokeinfo(@S_CURSOR_PARTY_PKMN) end $$

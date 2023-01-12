@@ -2,8 +2,8 @@
     if g_bpu then poke(S_CUR_PARTY, max(0, @S_CUR_PARTY-1)) end
     if g_bpd then poke(S_CUR_PARTY, min(2, @S_CUR_PARTY+1)) end
 
-    if g_bpl then poke(S_BROWSE_PKMN, (@S_BROWSE_PKMN-1)%152) end
-    if g_bpr then poke(S_BROWSE_PKMN, (@S_BROWSE_PKMN+1)%152) end
+    if g_bpl then poke(S_CURSOR_BROWSE, (@S_CURSOR_BROWSE-1)%152) end
+    if g_bpr then poke(S_CURSOR_BROWSE, (@S_CURSOR_BROWSE+1)%152) end
 
     if g_bpo then a:pop() end
     if g_bpx then a:push'editparty' end
@@ -52,32 +52,47 @@ function draw_party_screen(sel, party1, party2, party3)
     drawbg((sel*8+25+8)%41, get_party((sel+2)%3))
 end
 
+-- no moves means the pokemon is deleted
 c_party_memlocs = zobj[[0,S_PARTY1, 1,S_PARTY2, 2,S_PARTY3]]
 function get_party(party_index) -- 0 to 2
     local mem = c_party_memlocs[party_index]
-    local party, party_len = {}, peek(mem) % 7
+    local party = {}
 
-    for i=1,party_len do
-        local memstart = mem+1+(i-1)*5
+    for i=1,6 do
+        local memstart = mem+(i-1)*5
         local moves = {}
-        for i=1,4 do add(moves, peek(memstart+i)) end
-        add(party, { num=peek(memstart), moves=moves })
+        local has_moves = false
+        for i=1,4 do
+            local move = peek(memstart+i)
+            if move > 0 then
+                moves[i] = move
+                has_moves = true
+            end
+        end
+
+        if has_moves then
+            add(party, { num=peek(memstart), moves=moves })
+        end
     end
+
     return party
 end
 
 function save_party(party_index, party) -- 0 to 2
     local mem = c_party_memlocs[party_index]
-    local partylen = max(0, min(#party, 6))
-    poke(mem, partylen)
+    memset(mem,0,30)
 
-    for i=1,min(#party, 6) do
-        local memstart = mem+1+(i-1)*5
+    -- clear party and we'll replace it with the logic below
+
+    for i=1,6 do
+        local memstart = mem+(i-1)*5
         local pkmn = party[i]
+        if pkmn then
+            poke(memstart, pkmn.num)
 
-        poke(memstart, pkmn.num)
-        for i=1,4 do
-            poke(memstart+i, (pkmn.moves or {})[i] or 0)
+            for i=1,4 do
+                poke(memstart+i, pkmn.moves[i])
+            end
         end
     end
 end

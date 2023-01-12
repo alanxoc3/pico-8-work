@@ -12,8 +12,8 @@ SPR_LOGO_W: 4
 SPR_LOGO_H: 2
 FADE_SPEED: .5
 
-# party structure (31 bytes)
-#   1 | party count (0-6)
+# party structure (30 bytes)
+# if all the moves are 0 (struggle), the pokemon is not in the party
 #   5 | pokemon (1 num, 1 move, 1 move, 1 move, 1 move)
 #   5 | pokemon (1 num, 1 move, 1 move, 1 move, 1 move)
 #   5 | pokemon (1 num, 1 move, 1 move, 1 move, 1 move)
@@ -22,20 +22,22 @@ FADE_SPEED: .5
 #   5 | pokemon (1 num, 1 move, 1 move, 1 move, 1 move)
 
 # Save data
+# TODO, make these 1 less.
 S_PARTY1:         0x5e00
-S_PARTY2:         0x5e1f
-S_PARTY3:         0x5e3e
-# ends at:        0x5e5d
+S_PARTY2:         0x5e1e
+S_PARTY3:         0x5e3c
+# ends at:        0x5e5a
 
 # "CURSOR" save spots must have 2 bytes!!!
 
+S_CURSOR_PARTY_PKMN:  0x5eed
 S_CURSOR_PARTYACTION: 0x5eef
 S_CURSOR_MODE:        0x5ef1
 S_PARTY_PKMN_NUM:     0x5ef3
 S_CUR_PARTY:          0x5ef4
+
 S_BROWSE_SCREEN:      0x5ef5
-S_BROWSE_VIEW:        0x5ef6
-S_BROWSE_PKMN:        0x5ef7
+S_CURSOR_BROWSE:      0x5ef6
 
 S_METRIC:             0x5ef9
 S_SWAP_CONTROLS:      0x5efa
