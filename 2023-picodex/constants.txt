@@ -44,8 +44,8 @@ S_METRIC:             0x5ef9
 S_SWAP_CONTROLS:      0x5efa
 S_SCORE_BATTLES:      0x5efb
 S_SCORE_DIM:          0x5efc
-S_SCORE_SHAPE:        0x5efd
-S_SCORE_PICODOWN:     0x5efe
+S_AMNESIA_PSYDUCK:    0x5efd
+S_SURFING_PIKACHU:    0x5efe
 S_MISSINGNO:          0x5eff
 
 # Constant Indexes

@@ -91,7 +91,7 @@ end $$
         local party = get_party(@S_CUR_PARTY)
         local party_ind = @S_PARTY_PKMN_NUM+1
         local pkmn = c_pokemon[party[party_ind].num]
-        save_party(@S_CUR_PARTY, set_party_pkmn_move(party, party_ind, i, pkmn.moves[flr_rnd(#pkmn.moves)+1]))
+        save_party(@S_CUR_PARTY, set_party_pkmn_move(party, party_ind, i, pkmn.moves[flr_rnd(#pkmn.moves)+1].num))
     end
 
     game:push'partymoves'
@@ -147,7 +147,7 @@ end $$
 
     for i=1,4 do
         add(a.moveset, {
-            name=partypkmn.moves[i] and c_moves[partypkmn.moves[i]].name or "empty",
+            name=partypkmn.moves[i] and c_moves[partypkmn.moves[i]].name or "<empty>",
             func=function(a, game)
                 game:push'partymovesel'
             end
@@ -176,27 +176,15 @@ end $$
     local partypkmn = party[@S_PARTY_PKMN_NUM+1]
 
     local pkmn = c_pokemon[partypkmn.num]
-    printh(pkmn.name)
-
     for m in all(pkmn.moves) do
-        if not movedict[m] then
-            movedict[m] = true
+        if not movedict[m.num] then
+            movedict[m.num] = true
 
             add(a.movelist, {
-                name=c_moves[m].name,
+                name=c_moves[m.num].name,
+                ref=m.ref,
                 func=function(a, game)
-                    local party = get_party(@S_CUR_PARTY)
-                    local partypkmn = party[@S_PARTY_PKMN_NUM+1]
-
-                    -- if the move already exists on the pkmn, remove it.
-                    for i=1,4 do
-                        if partypkmn.moves[i] == m then
-                            partypkmn.moves[i] = nil
-                        end
-                    end
-
-                    partypkmn.moves[@S_CURSOR_PARTYMOVES+1] = m
-                    save_party(@S_CUR_PARTY, party)
+                    save_party(@S_CUR_PARTY, set_party_pkmn_move(get_party(@S_CUR_PARTY), @S_PARTY_PKMN_NUM+1, @S_CURSOR_PARTYMOVES+1, m.num))
                     game:pop()
                 end
             })
@@ -206,7 +194,12 @@ end $$
 
 |[partymovesel_update]| function(a) menu_update(a, S_CURSOR_PARTYMSEL, a.movelist) end $$
 |[partymovesel_draw1]|  function(a) menu_draw1 (a, S_CURSOR_PARTYMSEL, a.movelist) end $$
-|[partymovesel_draw2]|  function(a) end $$
+|[partymovesel_draw2]|  function(a) 
+    local move = a.movelist[@S_CURSOR_PARTYMSEL+1]
+    if move then
+        print(move.ref, 3, 3, 1)
+    end
+end $$
 |[partymovesel_draw3]|  function(a) end $$
 
     --partymoves;   update,%partymoves_update,   draw1,%partymoves_draw1,   draw2,%editparty_draw2, draw3,%partymoves_draw3;

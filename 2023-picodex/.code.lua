@@ -318,7 +318,7 @@ for i=4,1,-1 do
 local party=get_party(@0x5ef4)
 local party_ind=@0x5ef3+1
 local pkmn=c_pokemon[party[party_ind].num]
-save_party(@0x5ef4,set_party_pkmn_move(party,party_ind,i,pkmn.moves[flr_rnd(#pkmn.moves)+1]))
+save_party(@0x5ef4,set_party_pkmn_move(party,party_ind,i,pkmn.moves[flr_rnd(#pkmn.moves)+1].num))
 end
 game:push"partymoves"
 end,function(a)a.available_actions=get_partyactions()end,function(a)menu_update(a,0x5eef,a.available_actions)end,function(a)menu_draw1(a,0x5eef,a.available_actions)end,function(a)menu_draw3(a,0x5eef,a.available_actions)end,function(a)
@@ -338,7 +338,7 @@ local party=get_party(@0x5ef4)
 local partypkmn=party[@0x5ef3+1]
 for i=1,4 do
 add(a.moveset,{
-name=partypkmn.moves[i]and c_moves[partypkmn.moves[i]].name or "empty",
+name=partypkmn.moves[i]and c_moves[partypkmn.moves[i]].name or "<empty>",
 func=function(a,game)
 game:push"partymovesel"
 end
@@ -353,28 +353,25 @@ local movedict={}
 local party=get_party(@0x5ef4)
 local partypkmn=party[@0x5ef3+1]
 local pkmn=c_pokemon[partypkmn.num]
-printh(pkmn.name)
 for m in all(pkmn.moves)do
-if not movedict[m]then
-movedict[m]=true
+if not movedict[m.num]then
+movedict[m.num]=true
 add(a.movelist,{
-name=c_moves[m].name,
+name=c_moves[m.num].name,
+ref=m.ref,
 func=function(a,game)
-local party=get_party(@0x5ef4)
-local partypkmn=party[@0x5ef3+1]
-for i=1,4 do
-if partypkmn.moves[i]==m then
-partypkmn.moves[i]=nil
-end
-end
-partypkmn.moves[@0x5eeb+1]=m
-save_party(@0x5ef4,party)
+save_party(@0x5ef4,set_party_pkmn_move(get_party(@0x5ef4),@0x5ef3+1,@0x5eeb+1,m.num))
 game:pop()
 end
 })
 end
 end
-end,function(a)menu_update(a,0x5ee9,a.movelist)end,function(a)menu_draw1(a,0x5ee9,a.movelist)end,function(a)end,function(a)end,function(a)
+end,function(a)menu_update(a,0x5ee9,a.movelist)end,function(a)menu_draw1(a,0x5ee9,a.movelist)end,function(a)
+local move=a.movelist[@0x5ee9+1]
+if move then
+print(move.ref,3,3,1)
+end
+end,function(a)end,function(a)
 if g_bpx or g_bpo then a:pop()end
 end,function(a)
 rectfill(0,0,39,39,1)
@@ -472,7 +469,7 @@ end
 function menu_draw3(game,mem,entries)
 print_draw3_message(unpack(split(entries[@mem+1].desc,"|")))
 end
-zclass[[modes,actor|push,%modes_push,pop,%modes_pop,update,nop,draw1,nop,draw2,nop,draw3,nop,curr,main;stack;,;defaults;sub,0,init,nop,update,nop,draw1,nop,draw2,nop,draw3,nop;main;update,%main_update,draw1,%main_draw1,draw2,%main_draw2,draw3,%main_draw3;credits;update,%credits_update,draw1,%credits_draw1,draw2,%main_draw2,draw3,%main_draw3,credits_offset,5;browse;update,%browse_update,draw1,%browse_draw1,draw2,%browse_draw2,draw3,%browse_draw3;browsestat;update,%browsestat_update,draw1,%browsestat_draw1,draw2,%browse_draw2,draw3,%browse_draw3;fight;update,%fight_update,draw1,%fight_draw1,draw2,%fight_draw2,draw3,%fight_draw3;party;update,%party_update,draw1,%party_draw1,draw2,%party_draw2,draw3,%party_draw3;editparty;update,%editparty_update,draw1,%editparty_draw1,draw2,%editparty_draw2,draw3,%editparty_draw3;partyaction;update,%partyaction_update,draw1,%partyaction_draw1,draw2,%editparty_draw2,draw3,%partyaction_draw3,init,%partyaction_init;partypkmn;update,%partypkmn_update,draw1,%partypkmn_draw1,draw2,%partypkmn_draw2,draw3,%partypkmn_draw3,init,%partypkmn_init;partymoves;update,%partymoves_update,draw1,%partymoves_draw1,draw2,%editparty_draw2,draw3,%partymoves_draw3,init,%partymoves_init;partymovesel;update,%partymovesel_update,draw1,%partymovesel_draw1,draw2,%editparty_draw2,draw3,%partymovesel_draw3,init,%partymovesel_init;]]
+zclass[[modes,actor|push,%modes_push,pop,%modes_pop,update,nop,draw1,nop,draw2,nop,draw3,nop,curr,main;stack;,;defaults;sub,0,init,nop,update,nop,draw1,nop,draw2,nop,draw3,nop;main;update,%main_update,draw1,%main_draw1,draw2,%main_draw2,draw3,%main_draw3;credits;update,%credits_update,draw1,%credits_draw1,draw2,%main_draw2,draw3,%main_draw3,credits_offset,5;browse;update,%browse_update,draw1,%browse_draw1,draw2,%browse_draw2,draw3,%browse_draw3;browsestat;update,%browsestat_update,draw1,%browsestat_draw1,draw2,%browse_draw2,draw3,%browse_draw3;fight;update,%fight_update,draw1,%fight_draw1,draw2,%fight_draw2,draw3,%fight_draw3;party;update,%party_update,draw1,%party_draw1,draw2,%party_draw2,draw3,%party_draw3;editparty;update,%editparty_update,draw1,%editparty_draw1,draw2,%editparty_draw2,draw3,%editparty_draw3;partyaction;update,%partyaction_update,draw1,%partyaction_draw1,draw2,%editparty_draw2,draw3,%partyaction_draw3,init,%partyaction_init;partypkmn;update,%partypkmn_update,draw1,%partypkmn_draw1,draw2,%partypkmn_draw2,draw3,%partypkmn_draw3,init,%partypkmn_init;partymoves;update,%partymoves_update,draw1,%partymoves_draw1,draw2,%editparty_draw2,draw3,%partymoves_draw3,init,%partymoves_init;partymovesel;update,%partymovesel_update,draw1,%partymovesel_draw1,draw2,%partymovesel_draw2,draw3,%partymovesel_draw3,init,%partymovesel_init;]]
 c_modes=zobj[[;name,browse,state,browse,func,%menu_state_callback,desc,view|pokemon|info;;name,credits,state,credits,func,%menu_state_callback,desc,by|amorg|games;;name,fight,state,fight,func,%menu_state_callback,desc,pokemon|battle|simulator;;name,games,state,games,func,%menu_state_callback,desc,minigames|and|quizzes;;name,party,state,party,func,%menu_state_callback,desc,change|your|teams;;name,settings,state,settings,func,%menu_state_callback,desc,customize|this|picodex]]
 g_picodex_div=zobj[[,6,5,5,6,6,5,6]]
 function any_btn()return g_bl or g_br or g_bu or g_bd or g_bx or g_bo end
@@ -874,7 +871,20 @@ end
 return tbl
 end
 function normalize_pokemon_data()
-local all_pokemon_moves={}
+g_all_pokemon_moves={}
+for i=0,#c_moves do
+local move=c_moves[i]
+c_moves[i]={
+name=move[1],
+type=move[2],
+category=move[3],
+pp=move[4],
+damage=move[5],
+accuracy=move[6],
+ref=(i>=1 and i<=50 and "tm "..i)or(i>=51 and i<=55 and "hm "..(i-50)),
+num=i,
+}
+end
 local movemem=peek2(8)
 for i=0,151 do
 local is_range=false
@@ -893,7 +903,7 @@ end
 movemem+=1
 end
 movemem+=1
-all_pokemon_moves[i]=moves
+g_all_pokemon_moves[i]=moves
 end
 for i=-2,151 do
 local pkmn=c_pokemon[i]or{}
@@ -914,12 +924,12 @@ defence=pkmn[9],
 speed=pkmn[10],
 special=pkmn[11],
 movelvls=movelvls,
-moves=all_pokemon_moves[i],
+moves={},
 get_natural_moveset=function(level)
 local a,moveset=c_pokemon[i],{}
 for i=#a.movelvls,1,-1 do
 if a.movelvls[i]<=level and #moveset<4 then
-add(moveset,a.moves[i])
+add(moveset,a.moves[i].num)
 end
 end
 return moveset
@@ -931,20 +941,32 @@ end
 c_pokemon[0].draw=function(...)
 draw_pkmn_out(@0x5eff ~=0 and 0 or-2,...)
 end
-for i=0,#c_moves do
-local move=c_moves[i]
-c_moves[i]={
-name=move[1],
-type=move[2],
-category=move[3],
-pp=move[4],
-damage=move[5],
-accuracy=move[6],
-istm=i>=1 and i<=50,
-tmid=i,
-ishm=i>=51 and i<=55,
-hmid=i-50,
-num=i,
-}
+update_pokemon_moves()
+end
+function update_pokemon_moves()
+for i=0,151 do
+local pkmn,moves,movemap=c_pokemon[i],{},{}
+function set_move(m,reason)
+if not movemap[m]then
+movemap[m]=true
+local refmove=c_moves[m]
+add(moves,{
+ref=reason or refmove.ref,
+num=m
+})
+end
+end
+for i,m in ipairs(g_all_pokemon_moves[i])do
+set_move(m,pkmn.movelvls[i]and "lvl "..pkmn.movelvls[i])
+end
+if i==25 and@0x5efe ~=0 then set_move(53,"special")end
+if i==54 and@0x5efd ~=0 then set_move(143,"special")end
+pkmn.moves=moves
+while pkmn.evolvesfrom do
+pkmn=c_pokemon[pkmn.evolvesfrom]
+for m in all(pkmn.moves)do
+set_move(m.num,"previous")
+end
+end
 end
 end

@@ -111,7 +111,25 @@ end
 
 -- 255 is dashes. 0 is next pkmn. num is move index.
 function normalize_pokemon_data()
-    local all_pokemon_moves = {}
+    -- this is a global that the update_pokemon_moves function uses
+    g_all_pokemon_moves = {}
+
+    -- initialize moves first, because later logic uses this
+    for i=0,#c_moves do
+        local move = c_moves[i]
+        c_moves[i] = {
+            name     = move[1],
+            type     = move[2],
+            category = move[3],
+            pp       = move[4],
+            damage   = move[5],
+            accuracy = move[6],
+            ref      = (i >= 1 and i <= 50 and "tm "..i) or (i >= 51 and i <= 55 and "hm "..(i-50)),
+            num      = i,
+        }
+    end
+
+    -- next, get the moves for all the pokemon
     local movemem = peek2(8)
 
     for i=0,151 do
@@ -134,7 +152,7 @@ function normalize_pokemon_data()
 
         movemem += 1
 
-        all_pokemon_moves[i] = moves
+        g_all_pokemon_moves[i] = moves
     end
 
     -- first, get move data
@@ -163,14 +181,16 @@ function normalize_pokemon_data()
             speed       = pkmn[10],
             special     = pkmn[11],
             movelvls    = movelvls,
-            moves       = all_pokemon_moves[i],
+            moves       = {},
 
             -- get moves that the pokemon would have naturally learned at a level
+            -- TODO: maybe moves should be formatted like the menu thing...
+            -- TODO: name (easy), state=nil, desc=type|pp|pow|type?, function
             get_natural_moveset = function(level)
                                      local a, moveset = c_pokemon[i], {}
                                      for i=#a.movelvls,1,-1 do
                                         if a.movelvls[i] <= level and #moveset < 4 then
-                                           add(moveset, a.moves[i])
+                                           add(moveset, a.moves[i].num)
                                         end
                                      end
                                      return moveset
@@ -178,31 +198,49 @@ function normalize_pokemon_data()
             draw       = function(...) draw_pkmn_out(i, ...) end,
             num        = i,
         }
-
-        -- maybe moves should be formatted like the menu thing...
-        -- name (easy), state=nil, desc=type|pp|pow|type?, function
     end
 
     c_pokemon[0].draw = function(...)
         draw_pkmn_out(@S_MISSINGNO ~= 0 and 0 or -2, ...)
     end
 
-    -- initialize moves to make it easier to work with
-    for i=0,#c_moves do
-        local move = c_moves[i]
-        c_moves[i] = {
-            name     = move[1],
-            type     = move[2],
-            category = move[3],
-            pp       = move[4],
-            damage   = move[5],
-            accuracy = move[6],
-            istm     = i >= 1 and i <= 50,
-            tmid     = i,
-            ishm     = i >= 51 and i <= 55,
-            hmid     = i-50,
-            num      = i,
-        }
+    update_pokemon_moves()
+end
+
+-- this can be called if a move is added, also called at beginning of game
+function update_pokemon_moves()
+    for i=0,151 do
+        local pkmn, moves, movemap = c_pokemon[i], {}, {}
+
+        function set_move(m, reason)
+            if not movemap[m] then
+                movemap[m] = true
+                local refmove = c_moves[m]
+                add(moves, {
+                    ref=reason or refmove.ref,
+                    num=m
+                })
+            end
+        end
+
+        -- just add another loop for previous evolutions
+        for i, m in ipairs(g_all_pokemon_moves[i]) do
+            set_move(m, pkmn.movelvls[i] and "lvl "..pkmn.movelvls[i])
+        end
+
+        -- hard-coded unlockables
+        if i == 25 and @S_SURFING_PIKACHU ~= 0 then set_move(53,  "special") end
+        if i == 54 and @S_AMNESIA_PSYDUCK ~= 0 then set_move(143, "special") end
+
+        pkmn.moves = moves
+
+        -- this loop needs to be last, because it changes the "pkmn" variable
+        while pkmn.evolvesfrom do
+            pkmn = c_pokemon[pkmn.evolvesfrom]
+            for m in all(pkmn.moves) do
+                set_move(m.num, "previous")
+            end
+        end
     end
 end
 
