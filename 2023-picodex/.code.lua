@@ -602,7 +602,7 @@ map(24,0,-1,1,9,12)
 spr((light>0)and(rate%11<1 and 131 or 130)or 132,19,3)
 spr((light>1)and(rate%13<1 and 131 or 129)or 132,14,3)
 spr((light>2)and(rate%17<1 and 131 or 128)or 132,9,3)
-spr((light>3)and(rate%43<1 and 134 or 133)or 135,3,3)
+spr((light>3)and(rate%23<1 and 134 or 133)or 135,3,3)
 end
 function set_browse(delta,mem)
 poke(mem,(@mem+delta)%152)
@@ -793,10 +793,18 @@ local base_damage=(2*lvl*critical/5+2)*move_power*(attack/defence)/50+2
 return base_damage*stab*type1*type2*random
 end
 function begin_fight(game)
+local party1=get_fight_party(get_party(@0x5ef4),100)
+local party2=get_fight_party({{num=129,moves=c_pokemon[129].get_natural_moveset(10)}},100)
+game.fightdata=zobj([[party1,@,party2,@,active1,@,active2,@]],party1,party2,get_next_active(party1),get_next_active(party2))
+printh(tostring(game.fightdata))
 game:load"fight"
-game.fightdata={
-}
-printh(tostring(get_fight_party(get_party(@0x5ef4),100)))
+end
+function get_next_active(party)
+for i=1,6 do
+if party[i]and party[i].major ~=1 then
+return party_pkmn_to_active(party[i])
+end
+end
 end
 function get_fight_party(party,lvl)
 local fightparty={}
@@ -804,7 +812,6 @@ for i=1,6 do
 local cur=party[i]
 if cur then
 local pkmn=c_pokemon[cur.num]
-printh(pkmn.attack)
 fightparty[i]={
 num=cur.num,
 lvl=lvl,
@@ -815,11 +822,22 @@ speed=calc_max_stat(lvl,pkmn.speed),
 special=calc_max_stat(lvl,pkmn.special),
 moveids=(function()local m={}for i=1,4 do m[i]=cur.moves[i]end return m end)(),
 hp=calc_max_hp(lvl,pkmn.hp),
-moveids=(function()local m={}for i=1,4 do m[i]=cur.moves[i]and c_moves[cur.moves[i]].pp end return m end)(),
+movepps=(function()local m={}for i=1,4 do m[i]=cur.moves[i]and c_moves[cur.moves[i]].pp end return m end)(),
 }
 end
 end
 return fightparty
+end
+function party_pkmn_to_active(partypkmn)
+return{
+type1=c_pokemon[partypkmn.num].type1,
+type2=c_pokemon[partypkmn.num].type2,
+moveids=(function()local m={}for i=1,4 do m[i]=partypkmn.moveids[i]end return m end)(),
+movepps=partypkmn.movepps,
+stages=zobj[[special,0,defence,0,attack,0,speed,0,accuracy,0,evasion,0]],
+minor={},
+shared=partypkmn,
+}
 end
 g_fade,g_fade_table=1,zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,1,0,0,0,0;3;,3,3,3,3,1,1,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,0,0,0,0;6;,6,6,13,13,5,5,0,0;7;,7,7,6,13,13,5,0,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,0,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,0,0,0;13;,13,13,5,5,1,0,0,0;14;,14,14,13,4,2,2,0,0;15;,15,15,13,13,5,5,0,0;]]
 function fade(threshold)

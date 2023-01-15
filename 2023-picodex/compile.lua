@@ -169,8 +169,8 @@ end
 
 
 function log(logstr)
-    printh(logstr)
-    print(logstr)
+    printh(logstr or '')
+    print(logstr or '')
     flip()
 end
 
@@ -198,19 +198,19 @@ function myinit()
                                               log("end of cart     | pos: 0x4300")
                                               log()
 
-    poke2(0x0000, ENCODE_OFFSET) encode_cart     ("pokemon 0-63   ",    "001-064.p8", 128, 128, enc_vget)
-    poke2(0x0002, ENCODE_OFFSET) encode_cart     ("pokemon 64-127 ",  "065-128.p8", 128, 128, enc_vget)
-    poke2(0x0004, ENCODE_OFFSET) encode_cart     ("pokemon 128-151", "129-151.p8", 128, 128, enc_vget)
+    poke2(0x0000, ENCODE_OFFSET) encode_cart     ("pokemon 0-63   ",    "000-063.p8", 128, 128, enc_vget)
+    poke2(0x0002, ENCODE_OFFSET) encode_cart     ("pokemon 64-127 ",  "064-127.p8", 128, 128, enc_vget)
+    poke2(0x0004, ENCODE_OFFSET) encode_cart     ("pokemon 128-151", "128-151.p8", 128, 128, enc_vget)
 
     poke(0x5f56, 0xa0) -- mget points to the loaded map.
-    poke2(0x0006, ENCODE_OFFSET) encode_cart     ("picodex skin   ",    "129-151.p8", 34,  12,  mget)
+    poke2(0x0006, ENCODE_OFFSET) encode_cart     ("picodex skin   ",    "128-151.p8", 34,  12,  mget)
     poke2(0x0008, ENCODE_OFFSET) encode_move_data("pokemon moves  ", g_move_data)
 
                                               log("end of compile  | pos: "..tostr(ENCODE_OFFSET, 0x1))
 
     -- reserve the rest for sfx. as of writing, around 20 sfx slots were available here.
     -- need 10 for pkmn cries. and maybe a few random sfxes. not sure if we could fit an actual song or not...
-    reload(ENCODE_OFFSET, ENCODE_OFFSET, 0x4300 - ENCODE_OFFSET, "129-151.p8")
+    reload(ENCODE_OFFSET, ENCODE_OFFSET, 0x4300 - ENCODE_OFFSET, "128-151.p8")
 
                                               log("copy remaining  | pos: 0x4300 ")
 

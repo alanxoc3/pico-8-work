@@ -10,6 +10,8 @@
 -- swift:     always hits. no accuracy check. hits dig, fly, and pokemon behind substitute.
 -- frozen stat condition has 10% chance to unthaw
 -- pokemon can't receive status conditions from moves of one of their own types or resistances
+-- two abras that keep using teleport to switch out will not take poison damage.
+-- if opponent keeps using roar, preventing you from attacking (because you use roar/teleport/whirlwind/counter), then you don't take poison damage.
 
 -- a battle's turn consists of actions. once both players have made their moves, the actions are compiled, then applied one at a time. Each action has a status message.
 -- turn_actions = {
@@ -64,27 +66,21 @@ function calc_move_damage(lvl, attack, defence, critical, move_power)
 end
 
 function begin_fight(game)
-    game:load'fight'
+    local party1 = get_fight_party(get_party(@S_CUR_PARTY), 100)
+    local party2 = get_fight_party({  { num=129,moves=c_pokemon[129].get_natural_moveset(10) }  }, 100)
 
-    --gf_lvl    = 50
-    --gf_party1 = {}
-    --gf_party2 = {}
-
-    --status_condition
-    --hp
-    --pp
-
-    -- when you switch, pp, hp, and status condition are copied...
-    -- hp and status condition are easy. pp is not because of transform
-    -- okay, switch the moves table... that would work.
-
-
-    game.fightdata = {
-    }
+    game.fightdata = zobj([[
+        party1,@,
+        party2,@,
+        active1,@,
+        active2,@
+    ]], party1, party2, get_next_active(party1), get_next_active(party2))
 
     -- DEBUG_BEGIN
-    printh(tostring(get_fight_party(get_party(@S_CUR_PARTY), 100)))
+    printh(tostring(game.fightdata))
     -- DEBUG_END
+
+    game:load'fight'
 end
 
 |[fight_init]|   function(a)
@@ -95,6 +91,16 @@ end $$
 |[fight_draw2]|  function(a) end $$
 |[fight_draw3]|  function(a) end $$
 
+-- used to switch to the next pkmn at the start of the battle and when a pkmn is ko-ed.
+-- if this returns nil, the battle is over
+function get_next_active(party)
+    for i=1,6 do
+        if party[i] and party[i].major ~= C_MAJOR_FAINTED then
+            return party_pkmn_to_active(party[i])
+        end
+    end
+end
+
 -- converts a party into a party ready for battle
 function get_fight_party(party, lvl)
     local fightparty = {}
@@ -104,7 +110,6 @@ function get_fight_party(party, lvl)
         local cur = party[i]
         if cur then
             local pkmn = c_pokemon[cur.num]
-            printh(pkmn.attack)
             fightparty[i] = {
                 -- things that won't change
                 num     = cur.num,
@@ -118,7 +123,7 @@ function get_fight_party(party, lvl)
 
                 -- things that can change
                 hp      = calc_max_hp(lvl, pkmn.hp),
-                moveids = (function() local m = {} for i=1,4 do m[i] = cur.moves[i] and c_moves[cur.moves[i]].pp end return m end)(),
+                movepps = (function() local m = {} for i=1,4 do m[i] = cur.moves[i] and c_moves[cur.moves[i]].pp end return m end)(),
             }
         end
     end
@@ -126,61 +131,25 @@ function get_fight_party(party, lvl)
     return fightparty
 end
 
--- here is what an active pokemon looks like:
--- gf_active2 = {
---     type1    = normal, -- can be changed with conversion
---     type2    = grass,  -- can be changed with conversion
---     moveids  = { 0=13, 1=11, 2=96, 3=33 }, -- copied from shared. move id can change with mimic. or entire table can be changed with transform.
---     movepps  = { 0=10, 1=10, 2=10, 3=10 }, -- this is the same as shared.movepps, unless you use transform and switch it out.
+-- partypkmn must be non-nil and match the party table structure defined in get_fight_party 
+function party_pkmn_to_active(partypkmn)
+    return {
+        type1 = c_pokemon[partypkmn.num].type1,
+        type2 = c_pokemon[partypkmn.num].type2,
+        moveids = (function() local m = {} for i=1,4 do m[i] = partypkmn.moveids[i] end return m end)(),
+        movepps = partypkmn.movepps,
 
---     stages   = {
---         special  = 0, -- how much it is modified (-6 to 6)
---         defence  = 0, -- how much it is modified (-6 to 6)
---         attack   = 0, -- how much it is modified (-6 to 6)
---         speed    = 0, -- how much it is modified (-6 to 6)
---         accuracy = 0, -- how much it is modified (-6 to 6)
---         evasion  = 0, -- how much it is modified (-6 to 6)
---     },
+        -- these always start at zero
+        stages = zobj[[
+            special,0,
+            defence,0,
+            attack,0,
+            speed,0,
+            accuracy,0,
+            evasion,0
+        ]],
 
---     -- many minor status conditions
---     minor = {
---         confused   = false,
---         conversion = false,
---         critmove   = false,
---         decoyed    = false,
---         digging    = false,
---         flinching  = false,
---         flying     = false,
---         focused    = false,
---         misted     = false,
---         preparing  = false,
---         recharging = false,
---         reflected  = false,
---         screened   = false,
---         seeded     = false,
---         toxiced    = false,
---         transform  = false,
---     },
-
---     -- if you change something in shared, it is immediately applied to bench too, so it persists when you switch out.
---     shared = {
---         -- things that would change in a battle
---         hp = 100,
---         major = nil|frozen|poisoned|burned|sleeping|paralyzed|fainted,
---         movepps = { 0=10, 1=10, 2=10, 3=10 }, -- needs to be separate list so mimic works
---
---         -- other stuff in this table are things that wouldn't change in a battle
---         moveids = { 0=11, 1=19, 2=19, 3=13 },
---         num = 3 -- pokemon number (venasaur in this case)
---         lvl      = 50,  -- set at start of battle
---         maxhp    = 100, -- calculated from level
---         special  = 100, -- calculated from level
---         defence  = 100, -- calculated from level
---         attack   = 100, -- calculated from level
---         speed    = 100, -- calculated from level
---     }
--- }
-
-
--- generate party pokemon needs: num, moves, lvl
--- generate active pokemon needs: party pkmn
+        minor = {},
+        shared = partypkmn,
+    }
+end

@@ -184,5 +184,5 @@ function draw_back_panel(light)
     spr((light > 0) and (rate%11<1 and 131 or 130) or 132, 19, 3)
     spr((light > 1) and (rate%13<1 and 131 or 129) or 132, 14, 3)
     spr((light > 2) and (rate%17<1 and 131 or 128) or 132, 9,  3)
-    spr((light > 3) and (rate%43<1 and 134 or 133) or 135, 3,  3)
+    spr((light > 3) and (rate%23<1 and 134 or 133) or 135, 3,  3)
 end
