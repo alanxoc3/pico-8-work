@@ -3,23 +3,13 @@
 
 -- fire can't be burned by fire type moves. ice can't be frozen by ice type moves. ground can't be paralyzed by electric type moves. anyone can sleep. poison can't be poisoned by poison type moves.
 
--- modifications from pokemon stadium:
--- whirlwind: switch random pokemon from opponent
--- roar: switch random pokemon from opponent
--- teleport: switch random pokemon from user
--- fzn stat condition has 10% chance to unthaw
-
--- flinch... a few moves have a flinch chance.
--- if pokemon is faster, the slower pokemon might flinch instead of attack.
-
--- transform - mirror move copies currently transformed pokemon, not the moves it had before it was transformed. transform will do the same thing.
-
-
--- stat conditions are weird. I need a function like this:
--- set_status_condition(target-type, move-type, condition)
--- fire can't recieve burned by fire moves, ice is same, normal is same, 
--- no move can inflict a status condition on the same type or resisting type.
-
+-- main modifications from pokemon stadium:
+-- whirlwind: has later priority & switch random pokemon from opponent
+-- roar:      has later priority & switch random pokemon from opponent
+-- teleport:  has later priority & switch random pokemon from user
+-- swift:     always hits. no accuracy check. hits dig, fly, and pokemon behind substitute.
+-- frozen stat condition has 10% chance to unthaw
+-- pokemon can't receive status conditions from moves of one of their own types or resistances
 
 -- a battle's turn consists of actions. once both players have made their moves, the actions are compiled, then applied one at a time. Each action has a status message.
 -- turn_actions = {
@@ -76,43 +66,20 @@ end
 function begin_fight(game)
     game:load'fight'
 
-    -- there are only 3 priorities in og pkmn: counter, normal, quickattack
+    --gf_lvl    = 50
+    --gf_party1 = {}
+    --gf_party2 = {}
 
-    -- need both parties
-    -- how does party look like?
-    -- need 2 parties
-    -- each player has an "active" pokemon.
-    -- each player has a party.
-    -- roar and whirlwind work (switch with random benched pkmn)
-    
-    -- shared between active and benched:
-    -- major stat condition: burn, freeze, paralyze, poison, sleep
-    -- pp for moves
-    -- hp for health
+    --status_condition
+    --hp
+    --pp
 
-    -- speed, special, attack, defense
-    -- has mist? (makes it so stat reductions can't happen to you until you switch out)
-    -- has reflect
-    -- has light screen
-    -- each move can be disabled, unless it's the last move
-    -- things active pokemon has that can change:
-    -- which pokemon it is (transform)
-    -- is_transformed (needed to prevent infinite battles with two pokemon knowing transform)
-        -- need special logic around transform and mimic to prevent infinite battles
-    -- i need to store the last move recieved, so mirror move can work.
-    -- which type it is (conversion, transform)
-    -- which moves it has (transform, mimic)
-    -- evade and accuracy stats
-    -- semi-invulnerable state (dig)
-    -- semi-invulnerable state (fly)
-    -- is leech-seeded?
-    -- only active pkmn can have: confuse, flinch
+    -- when you switch, pp, hp, and status condition are copied...
+    -- hp and status condition are easy. pp is not because of transform
+    -- okay, switch the moves table... that would work.
 
-    -- confusion, Disable, Focus Energy, Leech Seed, Light Screen, Mist, and Reflect from both Pokemon and removes the target's major status condition
 
-    -- which major stat conditions (persists): burn, freeze, paralyze, poison, sleep
     game.fightdata = {
-        
     }
 end
 
@@ -121,3 +88,64 @@ end
 |[fight_draw1]|  function(a) end $$
 |[fight_draw2]|  function(a) end $$
 |[fight_draw3]|  function(a) end $$
+
+-- here is what an active pokemon looks like:
+-- gf_active2 = {
+--     type1    = normal, -- can be changed with conversion
+--     type2    = grass,  -- can be changed with conversion
+--     moveids  = { 0=13, 1=11, 2=96, 3=33 }, -- copied from shared. move id can change with mimic. or entire table can be changed with transform.
+--     movepps  = { 0=10, 1=10, 2=10, 3=10 }, -- this is the same as shared.movepps, unless you use transform and switch it out.
+
+--     stages   = {
+--         special  = 0, -- how much it is modified (-6 to 6)
+--         defence  = 0, -- how much it is modified (-6 to 6)
+--         attack   = 0, -- how much it is modified (-6 to 6)
+--         speed    = 0, -- how much it is modified (-6 to 6)
+--         accuracy = 0, -- how much it is modified (-6 to 6)
+--         evasion  = 0, -- how much it is modified (-6 to 6)
+--     },
+
+--     -- many minor status conditions
+--     minor = {
+--         confused   = false,
+--         conversion = false,
+--         critmove   = false,
+--         decoyed    = false,
+--         digging    = false,
+--         flinching  = false,
+--         flying     = false,
+--         focused    = false,
+--         misted     = false,
+--         preparing  = false,
+--         recharging = false,
+--         reflected  = false,
+--         screened   = false,
+--         seeded     = false,
+--         toxiced    = false,
+--         transform  = false,
+--     },
+
+--     -- if you change something in shared, it is immediately applied to bench too, so it persists when you switch out.
+--     shared = {
+--         -- things that would change in a battle
+--         hp = 100,
+--         major = nil|frozen|poisoned|burned|sleeping|paralyzed|fainted,
+--         movepps = { 0=10, 1=10, 2=10, 3=10 }, -- needs to be separate list so mimic works
+--
+--         -- other stuff in this table are things that wouldn't change in a battle
+--         moveids = { 0=11, 1=19, 2=19, 3=13 },
+--         num = 3 -- pokemon number (venasaur in this case)
+--         lvl      = 50,  -- set at start of battle
+--         maxhp    = 100, -- calculated from level
+--         special  = 100, -- calculated from level
+--         defence  = 100, -- calculated from level
+--         attack   = 100, -- calculated from level
+--         speed    = 100, -- calculated from level
+--         accuracy = 100, -- calculated from level
+--         evasion  = 100, -- calculated from level
+--     }
+-- }
+
+
+-- generate party pokemon needs: num, moves, lvl
+-- generate active pokemon needs: party pkmn
