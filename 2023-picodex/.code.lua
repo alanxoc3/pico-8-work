@@ -399,7 +399,8 @@ end,function(a)
 zprint("party #"..@0x5ef4+1,46/2,4,1,0)
 end,function(a)
 print_draw3_message("please","select a","party")
-end,function(a)end,function(a)end,function(a)end,function(a)end,function(a)end,function(a)
+end,function(a)
+end,function(a)end,function(a)end,function(a)end,function(a)end,function(a)
 poke(0x5f43,0xff)
 g_fade=a:get_elapsed_percent"start"
 end,function(a)
@@ -433,6 +434,27 @@ zcall_tbl(func,zobj(text,...))
 end
 function zcls(col)
 rectfill(0x8000,0x8000,0x7fff,0x7fff,col or 0)
+end
+function tostring(any)
+if type(any)~="table"then return tostr(any)end
+local str="{"
+local keys={}
+for i=1,#any do
+if str~="{"then str=str.."," end
+keys[i]=true
+str=str..tostring(any[i])
+end
+local sortedkeys={}
+for k,v in pairs(any)do
+if not keys[k]then
+add(sortedkeys,k)
+end
+end
+for k in all(sortedkeys)do
+if str~="{"then str=str.."," end
+str=str..tostring(k).."="..tostring(any[k])
+end
+return str.."}"
 end
 zclass[[actor,timer|load,%actor_load,loadlogic,%actor_loadlogic,state,%actor_state,kill,%actor_kill,clean,%actor_clean,is_alive,%actor_is_alive,alive,yes,duration,null,curr,start,next,null,isnew,yes,init,nop,stateless_update,nop,update,nop,destroyed,nop;]]
 zclass[[drawlayer_50|]]
@@ -764,8 +786,8 @@ end
 function get_stat_accuracy_multiplier(stage)
 return mid(1,1+stage/3,3)/mid(1,1-stage/3,3)
 end
-function calc_max_stat(base)return(base*2+93)*50*.01+5 end
-function calc_max_hp(base)return calc_max_stat(base,50)+5+50 end
+function calc_max_stat(lvl,base)return ceil(lvl*.01*(base*2+93))+5 end
+function calc_max_hp(lvl,base)return calc_max_stat(lvl,base)+5+lvl end
 function calc_move_damage(lvl,attack,defence,critical,move_power)
 local base_damage=(2*lvl*critical/5+2)*move_power*(attack/defence)/50+2
 return base_damage*stab*type1*type2*random
@@ -774,6 +796,30 @@ function begin_fight(game)
 game:load"fight"
 game.fightdata={
 }
+printh(tostring(get_fight_party(get_party(@0x5ef4),100)))
+end
+function get_fight_party(party,lvl)
+local fightparty={}
+for i=1,6 do
+local cur=party[i]
+if cur then
+local pkmn=c_pokemon[cur.num]
+printh(pkmn.attack)
+fightparty[i]={
+num=cur.num,
+lvl=lvl,
+maxhp=calc_max_hp(lvl,pkmn.hp),
+attack=calc_max_stat(lvl,pkmn.attack),
+defence=calc_max_stat(lvl,pkmn.defence),
+speed=calc_max_stat(lvl,pkmn.speed),
+special=calc_max_stat(lvl,pkmn.special),
+moveids=(function()local m={}for i=1,4 do m[i]=cur.moves[i]end return m end)(),
+hp=calc_max_hp(lvl,pkmn.hp),
+moveids=(function()local m={}for i=1,4 do m[i]=cur.moves[i]and c_moves[cur.moves[i]].pp end return m end)(),
+}
+end
+end
+return fightparty
 end
 g_fade,g_fade_table=1,zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,1,0,0,0,0;3;,3,3,3,3,1,1,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,0,0,0,0;6;,6,6,13,13,5,5,0,0;7;,7,7,6,13,13,5,0,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,0,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,0,0,0;13;,13,13,5,5,1,0,0,0;14;,14,14,13,4,2,2,0,0;15;,15,15,13,13,5,5,0,0;]]
 function fade(threshold)
@@ -861,8 +907,6 @@ poke(0x5f5c,15)
 poke(0x5f5d,5)
 cls()
 sfx(62,0)
-extract_sheet(0)
-extract_sheet(1)
 extract_sheet(2)
 poke(0x5f56,0xe0)
 px9_decomp(0,0,peek2(3*2),mget,mset)
@@ -881,6 +925,7 @@ if@0x5efa==1 then
 g_bo,g_bx=g_bx,g_bo
 g_bpo,g_bpx=g_bpx,g_bpo
 end
+if g_bo and g_bpx then g_debug=not g_debug end
 zcall(loop_entities,[[1;,actor,clean;2;,fader,clean;]])
 register_entities()
 zcall(loop_entities,[[1;,fader,tick;2;,game_state,tick;3;,fader,state;4;,game_state,state;]])
@@ -906,10 +951,9 @@ local move=c_moves[i]
 c_moves[i]={
 name=move[1],
 type=move[2],
-category=move[3],
-pp=move[4],
-damage=move[5],
-accuracy=move[6],
+pp=move[3],
+damage=move[4],
+accuracy=move[5],
 ref=(i>=1 and i<=50 and "tm "..i)or(i>=51 and i<=55 and "hm "..(i-50)),
 num=i,
 }

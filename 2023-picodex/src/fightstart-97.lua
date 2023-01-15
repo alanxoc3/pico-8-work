@@ -48,8 +48,8 @@ end
 
 -- C_LEVEL is the level of the pkmn. hardcoding as a constant for now, but it could be changed.
 -- thanks to bulbapedia: https://bulbapedia.bulbagarden.net/wiki/Stat#Stat
-function calc_max_stat(base) return (base*2+93)*C_LEVEL*.01 + 5 end
-function calc_max_hp(base)   return calc_max_stat(base, C_LEVEL) + 5 + C_LEVEL end
+function calc_max_stat(lvl, base) return ceil(lvl*.01*(base*2+93)) + 5 end
+function calc_max_hp(lvl, base)   return calc_max_stat(lvl, base) + 5 + lvl end
 
 function calc_move_damage(lvl, attack, defence, critical, move_power)
     -- critical is 1 or 2
@@ -81,13 +81,50 @@ function begin_fight(game)
 
     game.fightdata = {
     }
+
+    -- DEBUG_BEGIN
+    printh(tostring(get_fight_party(get_party(@S_CUR_PARTY), 100)))
+    -- DEBUG_END
 end
 
-|[fight_init]|   function(a) end $$
+|[fight_init]|   function(a)
+end $$
+
 |[fight_update]| function(a) end $$
 |[fight_draw1]|  function(a) end $$
 |[fight_draw2]|  function(a) end $$
 |[fight_draw3]|  function(a) end $$
+
+-- converts a party into a party ready for battle
+function get_fight_party(party, lvl)
+    local fightparty = {}
+
+    -- TODO: optimize for tokens
+    for i=1,6 do
+        local cur = party[i]
+        if cur then
+            local pkmn = c_pokemon[cur.num]
+            printh(pkmn.attack)
+            fightparty[i] = {
+                -- things that won't change
+                num     = cur.num,
+                lvl     = lvl,
+                maxhp   = calc_max_hp(lvl, pkmn.hp),
+                attack  = calc_max_stat(lvl, pkmn.attack),
+                defence = calc_max_stat(lvl, pkmn.defence),
+                speed   = calc_max_stat(lvl, pkmn.speed),
+                special = calc_max_stat(lvl, pkmn.special),
+                moveids = (function() local m = {} for i=1,4 do m[i] = cur.moves[i] end return m end)(),
+
+                -- things that can change
+                hp      = calc_max_hp(lvl, pkmn.hp),
+                moveids = (function() local m = {} for i=1,4 do m[i] = cur.moves[i] and c_moves[cur.moves[i]].pp end return m end)(),
+            }
+        end
+    end
+
+    return fightparty
+end
 
 -- here is what an active pokemon looks like:
 -- gf_active2 = {
@@ -141,8 +178,6 @@ end
 --         defence  = 100, -- calculated from level
 --         attack   = 100, -- calculated from level
 --         speed    = 100, -- calculated from level
---         accuracy = 100, -- calculated from level
---         evasion  = 100, -- calculated from level
 --     }
 -- }
 

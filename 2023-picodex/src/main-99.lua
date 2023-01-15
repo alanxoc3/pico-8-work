@@ -120,10 +120,9 @@ function normalize_pokemon_data()
         c_moves[i] = {
             name     = move[1],
             type     = move[2],
-            category = move[3],
-            pp       = move[4],
-            damage   = move[5],
-            accuracy = move[6],
+            pp       = move[3],
+            damage   = move[4],
+            accuracy = move[5],
             ref      = (i >= 1 and i <= 50 and "tm "..i) or (i >= 51 and i <= 55 and "hm "..(i-50)),
             num      = i,
         }

@@ -28,3 +28,28 @@ end
 function zcls(col)
    rectfill(0x8000,0x8000,0x7fff,0x7fff,col or 0)
 end
+
+-- DEBUG_BEGIN
+function tostring(any)
+    if type(any)~="table" then return tostr(any) end
+    local str = "{"
+    local keys = {}
+    for i=1,#any do
+        if str~="{" then str=str.."," end
+        keys[i] = true
+        str=str..tostring(any[i])
+    end
+    local sortedkeys = {}
+    for k,v in pairs(any) do
+        if not keys[k] then
+            add(sortedkeys, k)
+        end
+    end
+
+    for k in all(sortedkeys) do
+        if str~="{" then str=str.."," end
+        str=str..tostring(k).."="..tostring(any[k])
+    end
+    return str.."}"
+end
+-- DEBUG_END
