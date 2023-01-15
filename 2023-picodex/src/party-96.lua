@@ -1,12 +1,13 @@
+|[party_select]| function(a)
+    a:push'editparty'
+end $$
+
 |[party_update]| function(a)
     if g_bpu then poke(S_CUR_PARTY, max(0, @S_CUR_PARTY-1)) end
     if g_bpd then poke(S_CUR_PARTY, min(2, @S_CUR_PARTY+1)) end
 
-    if g_bpl then poke(S_CURSOR_BROWSE, (@S_CURSOR_BROWSE-1)%152) end
-    if g_bpr then poke(S_CURSOR_BROWSE, (@S_CURSOR_BROWSE+1)%152) end
-
     if g_bpo then a:pop() end
-    if g_bpx then a:push'editparty' end
+    if g_bpx then a:select_func() end
 end $$
 
 |[party_draw1]| function(a)
@@ -28,7 +29,7 @@ function print_draw3_message(top, mid, bot)
     zprint(bot, 46/2, 15, 13, 0)
 end
 
-function draw_party_screen(sel, party1, party2, party3)
+function draw_party_screen(sel)
     rectfill(0,0,39,49,13)
 
     local drawbg = function(yoff, party)

@@ -1,8 +1,9 @@
 c_pokemon = zobj[[
+    -- technically missingno has 0 defence, but this messes up damage calculation, so i give it 1.
     -- evol says how many numbers going up is the previous evolution. 0 means no previous evolution.
     -- every pokemon is either 0 or 1, except for eevee's evolved forms.
     -- evol "name"         w     h   t1          t2           hp   att  def  spd  spc  move levels
-   0;, 0,   "missingno",   10,   10, T_BIRD,     T_NORMAL,    33,  136, 0,   29,  6,   1,1                             -- 0
+   0;, 0,   "missingno",   10,   10, T_BIRD,     T_NORMAL,    33,  136, 1,   29,  6,   1,1                             -- 0
    ;;, 0,   "bulbasaur",   69,   7,  T_GRASS,    T_POISON,    45,  49,  49,  45,  65,  1,1,7,13,20,27,34,41,48         -- 1
    ;;, 1,   "ivysaur",     130,  10, T_GRASS,    T_POISON,    60,  62,  63,  60,  80,  1,1,7,13,22,30,38,46,54         -- 2
    ;;, 1,   "venusaur",    1000, 20, T_GRASS,    T_POISON,    80,  82,  83,  80,  100, 1,1,7,13,22,30,43,55,65         -- 3
@@ -156,24 +157,25 @@ c_pokemon = zobj[[
    ;;, 0,   "mew",         40,   4,  T_PSYCHIC,  T_NONE,      100, 100, 100, 100, 100, 1,10,20,30,40                   -- 151
 ]]
 
+-- pokemon moves can be physical or special. the order here is specific. odd numbers are physical. even numbers are special.
 -- includes type effectiveness chart. according to the gen 1 games, which had bugs. i'm keeping the bugs :).
 c_types = zobj[[
-    0;bg,0, name,"bird",     T_BIRD;     good;,;                                  T_BIRD;     null;,;                   T_BIRD;     weak;,
-   ;; bg,0, name,"normal",   T_NORMAL;   good;,;                                  T_NORMAL;   null;,T_GHOST;            T_NORMAL;   weak;,T_ROCK
-   ;; bg,5, name,"fire",     T_FIRE;     good;,T_GRASS,T_ICE,T_BUG;               T_FIRE;     null;,;                   T_FIRE;     weak;,T_FIRE,T_WATER,T_ROCK,T_DRAGON
-   ;; bg,4, name,"water",    T_WATER;    good;,T_FIRE,T_GROUND,T_ROCK;            T_WATER;    null;,;                   T_WATER;    weak;,T_DRAGON,T_GRASS,T_WATER
-   ;; bg,6, name,"electric", T_ELECTRIC; good;,T_FLYING,T_WATER;                  T_ELECTRIC; null;,T_GROUND;           T_ELECTRIC; weak;,T_DRAGON,T_ELECTRIC,T_GRASS
-   ;; bg,3, name,"grass",    T_GRASS;    good;,T_GROUND,T_ROCK,T_WATER;           T_GRASS;    null;,;                   T_GRASS;    weak;,T_BUG,T_DRAGON,T_FIRE,T_FLYING,T_GRASS,T_POISON
-   ;; bg,4, name,"ice",      T_ICE;      good;,T_DRAGON,T_FLYING,T_GRASS;         T_ICE;      null;,;                   T_ICE;      weak;,T_FIRE,T_ICE,T_WATER
-   ;; bg,2, name,"fighting", T_FIGHTING; good;,T_ICE,T_NORMAL,T_ROCK;             T_FIGHTING; null;,T_GHOST;            T_FIGHTING; weak;,T_BUG,T_FLYING,T_POISON,T_PSYCHIC
-   ;; bg,1, name,"poison",   T_POISON;   good;,T_BUG,T_GRASS;                     T_POISON;   null;,;                   T_POISON;   weak;,T_GHOST,T_GROUND,T_POISON,T_ROCK
-   ;; bg,2, name,"ground",   T_GROUND;   good;,T_ELECTRIC,T_FIRE,T_POISON,T_ROCK; T_GROUND;   null;,T_FLYING;           T_GROUND;   weak;,T_BUG,T_GRASS
-   ;; bg,0, name,"flying",   T_FLYING;   good;,T_BUG,T_FIGHTING,T_GRASS;          T_FLYING;   null;,;                   T_FLYING;   weak;,T_ELECTRIC,T_ROCK
-   ;; bg,1, name,"psychic",  T_PSYCHIC;  good;,T_FIGHTING,T_POISON;               T_PSYCHIC;  null;,;                   T_PSYCHIC;  weak;,T_PSYCHIC
-   ;; bg,3, name,"bug",      T_BUG;      good;,T_GRASS,T_PSYCHIC;                 T_BUG;      null;,;                   T_BUG;      weak;,T_FIGHTING,T_FIRE,T_FLYING,T_GHOST,T_POISON
-   ;; bg,0, name,"rock",     T_ROCK;     good;,T_BUG,T_FIRE,T_FLYING,T_ICE;       T_ROCK;     null;,;                   T_ROCK;     weak;,T_FIGHTING,T_GROUND
-   ;; bg,1, name,"ghost",    T_GHOST;    good;,T_GHOST;                           T_GHOST;    null;,T_NORMAL,T_PSYCHIC; T_GHOST;    weak;,
-   ;; bg,0, name,"dragon",   T_DRAGON;   good;,T_DRAGON;                          T_DRAGON;   null;,;                   T_DRAGON;   weak;,
+    T_BIRD;     bg,0, name,"bird";     T_BIRD;     good;,;                                  T_BIRD;     null;,;                   T_BIRD;     weak;,;
+    T_NORMAL;   bg,0, name,"normal";   T_NORMAL;   good;,;                                  T_NORMAL;   null;,T_GHOST;            T_NORMAL;   weak;,T_ROCK;
+    T_FIRE;     bg,5, name,"fire";     T_FIRE;     good;,T_GRASS,T_ICE,T_BUG;               T_FIRE;     null;,;                   T_FIRE;     weak;,T_FIRE,T_WATER,T_ROCK,T_DRAGON;
+    T_FIGHTING; bg,2, name,"fighting"; T_FIGHTING; good;,T_ICE,T_NORMAL,T_ROCK;             T_FIGHTING; null;,T_GHOST;            T_FIGHTING; weak;,T_BUG,T_FLYING,T_POISON,T_PSYCHIC;
+    T_WATER;    bg,4, name,"water";    T_WATER;    good;,T_FIRE,T_GROUND,T_ROCK;            T_WATER;    null;,;                   T_WATER;    weak;,T_DRAGON,T_GRASS,T_WATER;
+    T_POISON;   bg,1, name,"poison";   T_POISON;   good;,T_BUG,T_GRASS;                     T_POISON;   null;,;                   T_POISON;   weak;,T_GHOST,T_GROUND,T_POISON,T_ROCK;
+    T_ELECTRIC; bg,6, name,"electric"; T_ELECTRIC; good;,T_FLYING,T_WATER;                  T_ELECTRIC; null;,T_GROUND;           T_ELECTRIC; weak;,T_DRAGON,T_ELECTRIC,T_GRASS;
+    T_GROUND;   bg,2, name,"ground";   T_GROUND;   good;,T_ELECTRIC,T_FIRE,T_POISON,T_ROCK; T_GROUND;   null;,T_FLYING;           T_GROUND;   weak;,T_BUG,T_GRASS;
+    T_GRASS;    bg,3, name,"grass";    T_GRASS;    good;,T_GROUND,T_ROCK,T_WATER;           T_GRASS;    null;,;                   T_GRASS;    weak;,T_BUG,T_DRAGON,T_FIRE,T_FLYING,T_GRASS,T_POISON;
+    T_FLYING;   bg,0, name,"flying";   T_FLYING;   good;,T_BUG,T_FIGHTING,T_GRASS;          T_FLYING;   null;,;                   T_FLYING;   weak;,T_ELECTRIC,T_ROCK;
+    T_ICE;      bg,4, name,"ice";      T_ICE;      good;,T_DRAGON,T_FLYING,T_GRASS;         T_ICE;      null;,;                   T_ICE;      weak;,T_FIRE,T_ICE,T_WATER;
+    T_BUG;      bg,3, name,"bug";      T_BUG;      good;,T_GRASS,T_PSYCHIC;                 T_BUG;      null;,;                   T_BUG;      weak;,T_FIGHTING,T_FIRE,T_FLYING,T_GHOST,T_POISON;
+    T_PSYCHIC;  bg,1, name,"psychic";  T_PSYCHIC;  good;,T_FIGHTING,T_POISON;               T_PSYCHIC;  null;,;                   T_PSYCHIC;  weak;,T_PSYCHIC;
+    T_ROCK;     bg,0, name,"rock";     T_ROCK;     good;,T_BUG,T_FIRE,T_FLYING,T_ICE;       T_ROCK;     null;,;                   T_ROCK;     weak;,T_FIGHTING,T_GROUND;
+    T_DRAGON;   bg,0, name,"dragon";   T_DRAGON;   good;,T_DRAGON;                          T_DRAGON;   null;,;                   T_DRAGON;   weak;,;
+    T_GHOST;    bg,1, name,"ghost";    T_GHOST;    good;,T_GHOST;                           T_GHOST;    null;,T_NORMAL,T_PSYCHIC; T_GHOST;    weak;,
 ]]
 
 -- 5 bg styles
@@ -194,176 +196,176 @@ c_zmovetype = zobj[[
 ]]
 
 c_moves = zobj[[
-   -- "name",      type        category    pp  dmg  acc
-   0;, "struggle",  T_NORMAL,   Z_PHYSICAL, ,   50,
+   -- "name",      type        pp  dmg  acc
+   0;, "struggle",  T_NORMAL,   ,   50,
 
     -- tms
-   ;;, "megapunch", T_NORMAL,   Z_PHYSICAL, 20, 80,  .85 -- 1
-   ;;, "razorwind", T_NORMAL,   Z_SPECIAL,  10, 80,  1   -- 2
-   ;;, "swordance", T_NORMAL,   Z_STATUS,   20, ,        -- 3
-   ;;, "whirlwind", T_NORMAL,   Z_STATUS,   20, ,        -- 4
-   ;;, "megakick",  T_NORMAL,   Z_PHYSICAL, 5,  120, .75 -- 5
-   ;;, "toxic",     T_POISON,   Z_STATUS,   10, ,    .9  -- 6
-   ;;, "horndrill", T_NORMAL,   Z_PHYSICAL, 5,  ,    .3  -- 7
-   ;;, "bodyslam",  T_NORMAL,   Z_PHYSICAL, 15, 85,  1   -- 8
-   ;;, "takedown",  T_NORMAL,   Z_PHYSICAL, 20, 90,  .85 -- 9
-   ;;, "doubledge", T_NORMAL,   Z_PHYSICAL, 15, 120, 1   -- 10
-   ;;, "bublebeam", T_WATER,    Z_SPECIAL,  20, 65,  1   -- 11
-   ;;, "watergun",  T_WATER,    Z_SPECIAL,  25, 40,  1   -- 12
-   ;;, "icebeam",   T_ICE,      Z_SPECIAL,  10, 90,  1   -- 13
-   ;;, "blizzard",  T_ICE,      Z_SPECIAL,  5,  110, .7  -- 14
-   ;;, "hyperbeam", T_NORMAL,   Z_SPECIAL,  5,  150, .9  -- 15
-   ;;, "payday",    T_NORMAL,   Z_PHYSICAL, 20, 40,  1   -- 16
-   ;;, "submision", T_FIGHTING, Z_PHYSICAL, 20, 80,  .8  -- 17
-   ;;, "counter",   T_FIGHTING, Z_PHYSICAL, 20, ,    1   -- 18
-   ;;, "seismctss", T_FIGHTING, Z_PHYSICAL, 20, ,    1   -- 19
-   ;;, "rage",      T_NORMAL,   Z_PHYSICAL, 20, 20,  1   -- 20
-   ;;, "megadrain", T_GRASS,    Z_SPECIAL,  15, 40,  1   -- 21
-   ;;, "solarbeam", T_GRASS,    Z_SPECIAL,  10, 120, 1   -- 22
-   ;;, "drgonrage", T_DRAGON,   Z_SPECIAL,  10, ,    1   -- 23
-   ;;, "thndrbolt", T_ELECTRIC, Z_SPECIAL,  15, 90,  1   -- 24
-   ;;, "thunder",   T_ELECTRIC, Z_SPECIAL,  10, 110, .7  -- 25
-   ;;, "eartquake", T_GROUND,   Z_PHYSICAL, 10, 100, 1   -- 26
-   ;;, "fissure",   T_GROUND,   Z_PHYSICAL, 5,  ,    .3  -- 27
-   ;;, "dig",       T_GROUND,   Z_PHYSICAL, 10, 80,  1   -- 28
-   ;;, "psychic",   T_PSYCHIC,  Z_SPECIAL,  10, 90,  1   -- 29
-   ;;, "teleport",  T_PSYCHIC,  Z_STATUS,   20, ,        -- 30
-   ;;, "mimic",     T_NORMAL,   Z_STATUS,   10, ,        -- 31
-   ;;, "dubleteam", T_NORMAL,   Z_STATUS,   15, ,        -- 32
-   ;;, "reflect",   T_PSYCHIC,  Z_STATUS,   20, ,        -- 33
-   ;;, "bide",      T_NORMAL,   Z_PHYSICAL, 10, ,        -- 34
-   ;;, "metronome", T_NORMAL,   Z_STATUS,   10, ,        -- 35
-   ;;, "slfdstrct", T_NORMAL,   Z_PHYSICAL, 5,  200, 1   -- 36
-   ;;, "eggbomb",   T_NORMAL,   Z_PHYSICAL, 10, 100, .75 -- 37
-   ;;, "fireblast", T_FIRE,     Z_SPECIAL,  5,  110, .85 -- 38
-   ;;, "swift",     T_NORMAL,   Z_SPECIAL,  20, 60,      -- 39
-   ;;, "skullbash", T_NORMAL,   Z_PHYSICAL, 10, 130, 1   -- 40
-   ;;, "softboild", T_NORMAL,   Z_STATUS,   5,  ,        -- 41
-   ;;, "dreameatr", T_PSYCHIC,  Z_SPECIAL,  15, 100, 1   -- 42
-   ;;, "skyattack", T_FLYING,   Z_PHYSICAL, 5,  140, .9  -- 43
-   ;;, "rest",      T_PSYCHIC,  Z_STATUS,   5,  ,        -- 44
-   ;;, "thndrwave", T_ELECTRIC, Z_STATUS,   20, ,    .9  -- 45
-   ;;, "psywave",   T_PSYCHIC,  Z_SPECIAL,  15, ,    1   -- 46
-   ;;, "explosion", T_NORMAL,   Z_PHYSICAL, 5,  250, 1   -- 47
-   ;;, "rockslide", T_ROCK,     Z_PHYSICAL, 10, 75,  .9  -- 48
-   ;;, "triattack", T_NORMAL,   Z_SPECIAL,  10, 80,  1   -- 49
-   ;;, "sbstitute", T_NORMAL,   Z_STATUS,   10, ,        -- 50
+   ;;, "megapunch", T_NORMAL,   20, 80,  .85 -- 1
+   ;;, "razorwind", T_NORMAL,   10, 80,  1   -- 2
+   ;;, "swordance", T_NORMAL,   20, ,        -- 3
+   ;;, "whirlwind", T_NORMAL,   20, ,        -- 4
+   ;;, "megakick",  T_NORMAL,   5,  120, .75 -- 5
+   ;;, "toxic",     T_POISON,   10, ,    .9  -- 6
+   ;;, "horndrill", T_NORMAL,   5,  ,    .3  -- 7
+   ;;, "bodyslam",  T_NORMAL,   15, 85,  1   -- 8
+   ;;, "takedown",  T_NORMAL,   20, 90,  .85 -- 9
+   ;;, "doubledge", T_NORMAL,   15, 120, 1   -- 10
+   ;;, "bublebeam", T_WATER,    20, 65,  1   -- 11
+   ;;, "watergun",  T_WATER,    25, 40,  1   -- 12
+   ;;, "icebeam",   T_ICE,      10, 90,  1   -- 13
+   ;;, "blizzard",  T_ICE,      5,  110, .7  -- 14
+   ;;, "hyperbeam", T_NORMAL,   5,  150, .9  -- 15
+   ;;, "payday",    T_NORMAL,   20, 40,  1   -- 16
+   ;;, "submision", T_FIGHTING, 20, 80,  .8  -- 17
+   ;;, "counter",   T_FIGHTING, 20, ,    1   -- 18
+   ;;, "seismctss", T_FIGHTING, 20, ,    1   -- 19
+   ;;, "rage",      T_NORMAL,   20, 20,  1   -- 20
+   ;;, "megadrain", T_GRASS,    15, 40,  1   -- 21
+   ;;, "solarbeam", T_GRASS,    10, 120, 1   -- 22
+   ;;, "drgonrage", T_DRAGON,   10, ,    1   -- 23
+   ;;, "thndrbolt", T_ELECTRIC, 15, 90,  1   -- 24
+   ;;, "thunder",   T_ELECTRIC, 10, 110, .7  -- 25
+   ;;, "eartquake", T_GROUND,   10, 100, 1   -- 26
+   ;;, "fissure",   T_GROUND,   5,  ,    .3  -- 27
+   ;;, "dig",       T_GROUND,   10, 80,  1   -- 28
+   ;;, "psychic",   T_PSYCHIC,  10, 90,  1   -- 29
+   ;;, "teleport",  T_PSYCHIC,  20, ,        -- 30
+   ;;, "mimic",     T_NORMAL,   10, ,        -- 31
+   ;;, "dubleteam", T_NORMAL,   15, ,        -- 32
+   ;;, "reflect",   T_PSYCHIC,  20, ,        -- 33
+   ;;, "bide",      T_NORMAL,   10, ,        -- 34
+   ;;, "metronome", T_NORMAL,   10, ,        -- 35
+   ;;, "slfdstrct", T_NORMAL,   5,  200, 1   -- 36
+   ;;, "eggbomb",   T_NORMAL,   10, 100, .75 -- 37
+   ;;, "fireblast", T_FIRE,     5,  110, .85 -- 38
+   ;;, "swift",     T_NORMAL,   20, 60,      -- 39
+   ;;, "skullbash", T_NORMAL,   10, 130, 1   -- 40
+   ;;, "softboild", T_NORMAL,   5,  ,        -- 41
+   ;;, "dreameatr", T_PSYCHIC,  15, 100, 1   -- 42
+   ;;, "skyattack", T_FLYING,   5,  140, .9  -- 43
+   ;;, "rest",      T_PSYCHIC,  5,  ,        -- 44
+   ;;, "thndrwave", T_ELECTRIC, 20, ,    .9  -- 45
+   ;;, "psywave",   T_PSYCHIC,  15, ,    1   -- 46
+   ;;, "explosion", T_NORMAL,   5,  250, 1   -- 47
+   ;;, "rockslide", T_ROCK,     10, 75,  .9  -- 48
+   ;;, "triattack", T_NORMAL,   10, 80,  1   -- 49
+   ;;, "sbstitute", T_NORMAL,   10, ,        -- 50
 
     -- hms
-   ;;, "cut",       T_NORMAL,   Z_PHYSICAL, 30, 50,  .95 -- 51
-   ;;, "fly",       T_FLYING,   Z_PHYSICAL, 15, 90,  .95 -- 52
-   ;;, "surf",      T_WATER,    Z_SPECIAL,  15, 90,  1   -- 53
-   ;;, "strength",  T_NORMAL,   Z_PHYSICAL, 15, 80,  1   -- 54
-   ;;, "flash",     T_NORMAL,   Z_STATUS,   20, ,    1   -- 55
+   ;;, "cut",       T_NORMAL,   30, 50,  .95 -- 51
+   ;;, "fly",       T_FLYING,   15, 90,  .95 -- 52
+   ;;, "surf",      T_WATER,    15, 90,  1   -- 53
+   ;;, "strength",  T_NORMAL,   15, 80,  1   -- 54
+   ;;, "flash",     T_NORMAL,   20, ,    1   -- 55
 
     -- remaining moves (besides struggle)
-   ;;, "pound",     T_NORMAL,   Z_PHYSICAL, 35, 40,  1   -- 56
-   ;;, "karatechp", T_FIGHTING, Z_PHYSICAL, 25, 50,  1   -- 57
-   ;;, "dubleslap", T_NORMAL,   Z_PHYSICAL, 10, 15,  .85 -- 58
-   ;;, "cometpnch", T_NORMAL,   Z_PHYSICAL, 15, 18,  .85 -- 59
-   ;;, "firepunch", T_FIRE,     Z_PHYSICAL, 15, 75,  1   -- 60
-   ;;, "icepunch",  T_ICE,      Z_PHYSICAL, 15, 75,  1   -- 61
-   ;;, "thndrpnch", T_ELECTRIC, Z_PHYSICAL, 15, 75,  1   -- 62
-   ;;, "scratch",   T_NORMAL,   Z_PHYSICAL, 35, 40,  1   -- 63
-   ;;, "vicegrip",  T_NORMAL,   Z_PHYSICAL, 30, 55,  1   -- 64
-   ;;, "guilotine", T_NORMAL,   Z_PHYSICAL, 5,  ,    .3  -- 65
-   ;;, "gust",      T_FLYING,   Z_SPECIAL,  35, 40,  1   -- 66
-   ;;, "wingattck", T_FLYING,   Z_PHYSICAL, 35, 60,  1   -- 67
-   ;;, "bind",      T_NORMAL,   Z_PHYSICAL, 20, 15,  .85 -- 68
-   ;;, "slam",      T_NORMAL,   Z_PHYSICAL, 20, 80,  .75 -- 69
-   ;;, "vinewhip",  T_GRASS,    Z_PHYSICAL, 25, 45,  1   -- 70
-   ;;, "stomp",     T_NORMAL,   Z_PHYSICAL, 20, 65,  1   -- 71
-   ;;, "dublekick", T_FIGHTING, Z_PHYSICAL, 30, 30,  1   -- 72
-   ;;, "jumpkick",  T_FIGHTING, Z_PHYSICAL, 10, 100, .95 -- 73
-   ;;, "rolingkck", T_FIGHTING, Z_PHYSICAL, 15, 60,  .85 -- 74
-   ;;, "sandattck", T_GROUND,   Z_STATUS,   15, ,    1   -- 75
-   ;;, "headbutt",  T_NORMAL,   Z_PHYSICAL, 15, 70,  1   -- 76
-   ;;, "hornattck", T_NORMAL,   Z_PHYSICAL, 25, 65,  1   -- 77
-   ;;, "furyattck", T_NORMAL,   Z_PHYSICAL, 20, 15,  .85 -- 78
-   ;;, "tackle",    T_NORMAL,   Z_PHYSICAL, 35, 40,  1   -- 79
-   ;;, "wrap",      T_NORMAL,   Z_PHYSICAL, 20, 15,  .9  -- 80
-   ;;, "thrash",    T_NORMAL,   Z_PHYSICAL, 10, 120, 1   -- 81
-   ;;, "tailwhip",  T_NORMAL,   Z_STATUS,   30, ,    1   -- 82
-   ;;, "psnsting",  T_POISON,   Z_PHYSICAL, 35, 15,  1   -- 83
-   ;;, "twineedle", T_BUG,      Z_PHYSICAL, 20, 25,  1   -- 84
-   ;;, "pinmisile", T_BUG,      Z_PHYSICAL, 20, 25,  .95 -- 85
-   ;;, "leer",      T_NORMAL,   Z_STATUS,   30, ,    1   -- 86
-   ;;, "bite",      T_NORMAL,   Z_PHYSICAL, 25, 60,  1   -- 87
-   ;;, "growl",     T_NORMAL,   Z_STATUS,   40, ,    1   -- 88
-   ;;, "roar",      T_NORMAL,   Z_STATUS,   20, ,        -- 89
-   ;;, "sing",      T_NORMAL,   Z_STATUS,   15, ,    .55 -- 90
-   ;;, "suprsonic", T_NORMAL,   Z_STATUS,   20, ,    .55 -- 91
-   ;;, "sonicboom", T_NORMAL,   Z_SPECIAL,  20, ,    .9  -- 92
-   ;;, "disable",   T_NORMAL,   Z_STATUS,   20, ,    1   -- 93
-   ;;, "acid",      T_POISON,   Z_SPECIAL,  30, 40,  1   -- 94
-   ;;, "ember",     T_FIRE,     Z_SPECIAL,  25, 40,  1   -- 95
-   ;;, "flmethrwr", T_FIRE,     Z_SPECIAL,  15, 90,  1   -- 96
-   ;;, "mist",      T_ICE,      Z_STATUS,   30, ,        -- 97
-   ;;, "hydropump", T_WATER,    Z_SPECIAL,  5,  110, .8  -- 98
-   ;;, "psybeam",   T_PSYCHIC,  Z_SPECIAL,  20, 65,  1   -- 99
-   ;;, "aurorbeam", T_ICE,      Z_SPECIAL,  20, 65,  1   -- 100
-   ;;, "peck",      T_FLYING,   Z_PHYSICAL, 35, 35,  1   -- 101
-   ;;, "drillpeck", T_FLYING,   Z_PHYSICAL, 20, 80,  1   -- 102
-   ;;, "lowkick",   T_FIGHTING, Z_PHYSICAL, 20, ,    1   -- 103
-   ;;, "absorb",    T_GRASS,    Z_SPECIAL,  25, 20,  1   -- 104
-   ;;, "leechseed", T_GRASS,    Z_STATUS,   10, ,    .9  -- 105
-   ;;, "growth",    T_NORMAL,   Z_STATUS,   20, ,        -- 106
-   ;;, "razorleaf", T_GRASS,    Z_PHYSICAL, 25, 55,  .95 -- 107
-   ;;, "psnpowder", T_POISON,   Z_STATUS,   35, ,    .75 -- 108
-   ;;, "stunspore", T_GRASS,    Z_STATUS,   30, ,    .75 -- 109
-   ;;, "slppowder", T_GRASS,    Z_STATUS,   15, ,    .75 -- 110
-   ;;, "petldance", T_GRASS,    Z_SPECIAL,  10, 120, 1   -- 111
-   ;;, "stringsht", T_BUG,      Z_STATUS,   40, ,    .95 -- 112
-   ;;, "firespin",  T_FIRE,     Z_SPECIAL,  15, 35,  .85 -- 113
-   ;;, "thndrshck", T_ELECTRIC, Z_SPECIAL,  30, 40,  1   -- 114
-   ;;, "rockthrow", T_ROCK,     Z_PHYSICAL, 15, 50,  .9  -- 115
-   ;;, "confusion", T_PSYCHIC,  Z_SPECIAL,  25, 50,  1   -- 116
-   ;;, "hypnosis",  T_PSYCHIC,  Z_STATUS,   20, ,    .6  -- 117
-   ;;, "meditate",  T_PSYCHIC,  Z_STATUS,   40, ,        -- 118
-   ;;, "agility",   T_PSYCHIC,  Z_STATUS,   30, ,        -- 119
-   ;;, "quickatck", T_NORMAL,   Z_PHYSICAL, 30, 40,  1   -- 120
-   ;;, "niteshade", T_GHOST,    Z_SPECIAL,  15, ,    1   -- 121
-   ;;, "screech",   T_NORMAL,   Z_STATUS,   40, ,    .85 -- 122
-   ;;, "recover",   T_NORMAL,   Z_STATUS,   5,  ,        -- 123
-   ;;, "harden",    T_NORMAL,   Z_STATUS,   30, ,        -- 124
-   ;;, "minimize",  T_NORMAL,   Z_STATUS,   10, ,        -- 125
-   ;;, "smokescrn", T_NORMAL,   Z_STATUS,   20, ,    1   -- 126
-   ;;, "confusray", T_GHOST,    Z_STATUS,   10, ,    1   -- 127
-   ;;, "withdraw",  T_WATER,    Z_STATUS,   40, ,        -- 128
-   ;;, "defenscrl", T_NORMAL,   Z_STATUS,   40, ,        -- 129
-   ;;, "barrier",   T_PSYCHIC,  Z_STATUS,   20, ,        -- 130
-   ;;, "lightscrn", T_PSYCHIC,  Z_STATUS,   30, ,        -- 131
-   ;;, "haze",      T_ICE,      Z_STATUS,   30, ,        -- 132
-   ;;, "focusnrgy", T_NORMAL,   Z_STATUS,   30, ,        -- 133
-   ;;, "mirormove", T_FLYING,   Z_STATUS,   20, ,        -- 134
-   ;;, "lick",      T_GHOST,    Z_PHYSICAL, 30, 30,  1   -- 135
-   ;;, "smog",      T_POISON,   Z_SPECIAL,  20, 30,  .7  -- 136
-   ;;, "sludge",    T_POISON,   Z_SPECIAL,  20, 65,  1   -- 137
-   ;;, "boneclub",  T_GROUND,   Z_PHYSICAL, 20, 65,  .85 -- 138
-   ;;, "waterfall", T_WATER,    Z_PHYSICAL, 15, 80,  1   -- 139
-   ;;, "clamp",     T_WATER,    Z_PHYSICAL, 15, 35,  .85 -- 140
-   ;;, "spikcanon", T_NORMAL,   Z_PHYSICAL, 15, 20,  1   -- 141
-   ;;, "constrict", T_NORMAL,   Z_PHYSICAL, 35, 10,  1   -- 142
-   ;;, "amnesia",   T_PSYCHIC,  Z_STATUS,   20, ,        -- 143
-   ;;, "kinesis",   T_PSYCHIC,  Z_STATUS,   15, ,    .8  -- 144
-   ;;, "hghjmpkck", T_FIGHTING, Z_PHYSICAL, 10, 130, .9  -- 145
-   ;;, "glare",     T_NORMAL,   Z_STATUS,   30, ,    1   -- 146
-   ;;, "poisongas", T_POISON,   Z_STATUS,   40, ,    .9  -- 147
-   ;;, "barrage",   T_NORMAL,   Z_PHYSICAL, 20, 15,  .85 -- 148
-   ;;, "leechlife", T_BUG,      Z_PHYSICAL, 10, 80,  1   -- 149
-   ;;, "lovelykss", T_NORMAL,   Z_STATUS,   10, ,    .75 -- 150
-   ;;, "transform", T_NORMAL,   Z_STATUS,   10, ,        -- 151
-   ;;, "bubble",    T_WATER,    Z_SPECIAL,  30, 40,  1   -- 152
-   ;;, "dizypunch", T_NORMAL,   Z_PHYSICAL, 10, 70,  1   -- 153
-   ;;, "spore",     T_GRASS,    Z_STATUS,   15, ,    1   -- 154
-   ;;, "splash",    T_NORMAL,   Z_STATUS,   40, ,        -- 155
-   ;;, "acidarmor", T_POISON,   Z_STATUS,   20, ,        -- 156
-   ;;, "crbhammer", T_WATER,    Z_PHYSICAL, 10, 100, .9  -- 157
-   ;;, "furyswipe", T_NORMAL,   Z_PHYSICAL, 15, 18,  .8  -- 158
-   ;;, "bonemrang", T_GROUND,   Z_PHYSICAL, 10, 50,  .9  -- 159
-   ;;, "hyperfang", T_NORMAL,   Z_PHYSICAL, 15, 80,  .9  -- 160
-   ;;, "sharpen",   T_NORMAL,   Z_STATUS,   30, ,        -- 161
-   ;;, "convrsion", T_NORMAL,   Z_STATUS,   30, ,        -- 162
-   ;;, "superfang", T_NORMAL,   Z_PHYSICAL, 10, ,    .9  -- 163
-   ;;, "slash",     T_NORMAL,   Z_PHYSICAL, 20, 70,  1   -- 164
+   ;;, "pound",     T_NORMAL,   35, 40,  1   -- 56
+   ;;, "karatechp", T_FIGHTING, 25, 50,  1   -- 57
+   ;;, "dubleslap", T_NORMAL,   10, 15,  .85 -- 58
+   ;;, "cometpnch", T_NORMAL,   15, 18,  .85 -- 59
+   ;;, "firepunch", T_FIRE,     15, 75,  1   -- 60
+   ;;, "icepunch",  T_ICE,      15, 75,  1   -- 61
+   ;;, "thndrpnch", T_ELECTRIC, 15, 75,  1   -- 62
+   ;;, "scratch",   T_NORMAL,   35, 40,  1   -- 63
+   ;;, "vicegrip",  T_NORMAL,   30, 55,  1   -- 64
+   ;;, "guilotine", T_NORMAL,   5,  ,    .3  -- 65
+   ;;, "gust",      T_FLYING,   35, 40,  1   -- 66
+   ;;, "wingattck", T_FLYING,   35, 60,  1   -- 67
+   ;;, "bind",      T_NORMAL,   20, 15,  .85 -- 68
+   ;;, "slam",      T_NORMAL,   20, 80,  .75 -- 69
+   ;;, "vinewhip",  T_GRASS,    25, 45,  1   -- 70
+   ;;, "stomp",     T_NORMAL,   20, 65,  1   -- 71
+   ;;, "dublekick", T_FIGHTING, 30, 30,  1   -- 72
+   ;;, "jumpkick",  T_FIGHTING, 10, 100, .95 -- 73
+   ;;, "rolingkck", T_FIGHTING, 15, 60,  .85 -- 74
+   ;;, "sandattck", T_GROUND,   15, ,    1   -- 75
+   ;;, "headbutt",  T_NORMAL,   15, 70,  1   -- 76
+   ;;, "hornattck", T_NORMAL,   25, 65,  1   -- 77
+   ;;, "furyattck", T_NORMAL,   20, 15,  .85 -- 78
+   ;;, "tackle",    T_NORMAL,   35, 40,  1   -- 79
+   ;;, "wrap",      T_NORMAL,   20, 15,  .9  -- 80
+   ;;, "thrash",    T_NORMAL,   10, 120, 1   -- 81
+   ;;, "tailwhip",  T_NORMAL,   30, ,    1   -- 82
+   ;;, "psnsting",  T_POISON,   35, 15,  1   -- 83
+   ;;, "twineedle", T_BUG,      20, 25,  1   -- 84
+   ;;, "pinmisile", T_BUG,      20, 25,  .95 -- 85
+   ;;, "leer",      T_NORMAL,   30, ,    1   -- 86
+   ;;, "bite",      T_NORMAL,   25, 60,  1   -- 87
+   ;;, "growl",     T_NORMAL,   40, ,    1   -- 88
+   ;;, "roar",      T_NORMAL,   20, ,        -- 89
+   ;;, "sing",      T_NORMAL,   15, ,    .55 -- 90
+   ;;, "suprsonic", T_NORMAL,   20, ,    .55 -- 91
+   ;;, "sonicboom", T_NORMAL,   20, ,    .9  -- 92
+   ;;, "disable",   T_NORMAL,   20, ,    1   -- 93
+   ;;, "acid",      T_POISON,   30, 40,  1   -- 94
+   ;;, "ember",     T_FIRE,     25, 40,  1   -- 95
+   ;;, "flmethrwr", T_FIRE,     15, 90,  1   -- 96
+   ;;, "mist",      T_ICE,      30, ,        -- 97
+   ;;, "hydropump", T_WATER,    5,  110, .8  -- 98
+   ;;, "psybeam",   T_PSYCHIC,  20, 65,  1   -- 99
+   ;;, "aurorbeam", T_ICE,      20, 65,  1   -- 100
+   ;;, "peck",      T_FLYING,   35, 35,  1   -- 101
+   ;;, "drillpeck", T_FLYING,   20, 80,  1   -- 102
+   ;;, "lowkick",   T_FIGHTING, 20, ,    1   -- 103
+   ;;, "absorb",    T_GRASS,    25, 20,  1   -- 104
+   ;;, "leechseed", T_GRASS,    10, ,    .9  -- 105
+   ;;, "growth",    T_NORMAL,   20, ,        -- 106
+   ;;, "razorleaf", T_GRASS,    25, 55,  .95 -- 107
+   ;;, "psnpowder", T_POISON,   35, ,    .75 -- 108
+   ;;, "stunspore", T_GRASS,    30, ,    .75 -- 109
+   ;;, "slppowder", T_GRASS,    15, ,    .75 -- 110
+   ;;, "petldance", T_GRASS,    10, 120, 1   -- 111
+   ;;, "stringsht", T_BUG,      40, ,    .95 -- 112
+   ;;, "firespin",  T_FIRE,     15, 35,  .85 -- 113
+   ;;, "thndrshck", T_ELECTRIC, 30, 40,  1   -- 114
+   ;;, "rockthrow", T_ROCK,     15, 50,  .9  -- 115
+   ;;, "confusion", T_PSYCHIC,  25, 50,  1   -- 116
+   ;;, "hypnosis",  T_PSYCHIC,  20, ,    .6  -- 117
+   ;;, "meditate",  T_PSYCHIC,  40, ,        -- 118
+   ;;, "agility",   T_PSYCHIC,  30, ,        -- 119
+   ;;, "quickatck", T_NORMAL,   30, 40,  1   -- 120
+   ;;, "niteshade", T_GHOST,    15, ,    1   -- 121
+   ;;, "screech",   T_NORMAL,   40, ,    .85 -- 122
+   ;;, "recover",   T_NORMAL,   5,  ,        -- 123
+   ;;, "harden",    T_NORMAL,   30, ,        -- 124
+   ;;, "minimize",  T_NORMAL,   10, ,        -- 125
+   ;;, "smokescrn", T_NORMAL,   20, ,    1   -- 126
+   ;;, "confusray", T_GHOST,    10, ,    1   -- 127
+   ;;, "withdraw",  T_WATER,    40, ,        -- 128
+   ;;, "defenscrl", T_NORMAL,   40, ,        -- 129
+   ;;, "barrier",   T_PSYCHIC,  20, ,        -- 130
+   ;;, "lightscrn", T_PSYCHIC,  30, ,        -- 131
+   ;;, "haze",      T_ICE,      30, ,        -- 132
+   ;;, "focusnrgy", T_NORMAL,   30, ,        -- 133
+   ;;, "mirormove", T_FLYING,   20, ,        -- 134
+   ;;, "lick",      T_GHOST,    30, 30,  1   -- 135
+   ;;, "smog",      T_POISON,   20, 30,  .7  -- 136
+   ;;, "sludge",    T_POISON,   20, 65,  1   -- 137
+   ;;, "boneclub",  T_GROUND,   20, 65,  .85 -- 138
+   ;;, "waterfall", T_WATER,    15, 80,  1   -- 139
+   ;;, "clamp",     T_WATER,    15, 35,  .85 -- 140
+   ;;, "spikcanon", T_NORMAL,   15, 20,  1   -- 141
+   ;;, "constrict", T_NORMAL,   35, 10,  1   -- 142
+   ;;, "amnesia",   T_PSYCHIC,  20, ,        -- 143
+   ;;, "kinesis",   T_PSYCHIC,  15, ,    .8  -- 144
+   ;;, "hghjmpkck", T_FIGHTING, 10, 130, .9  -- 145
+   ;;, "glare",     T_NORMAL,   30, ,    1   -- 146
+   ;;, "poisongas", T_POISON,   40, ,    .9  -- 147
+   ;;, "barrage",   T_NORMAL,   20, 15,  .85 -- 148
+   ;;, "leechlife", T_BUG,      10, 80,  1   -- 149
+   ;;, "lovelykss", T_NORMAL,   10, ,    .75 -- 150
+   ;;, "transform", T_NORMAL,   10, ,        -- 151
+   ;;, "bubble",    T_WATER,    30, 40,  1   -- 152
+   ;;, "dizypunch", T_NORMAL,   10, 70,  1   -- 153
+   ;;, "spore",     T_GRASS,    15, ,    1   -- 154
+   ;;, "splash",    T_NORMAL,   40, ,        -- 155
+   ;;, "acidarmor", T_POISON,   20, ,        -- 156
+   ;;, "crbhammer", T_WATER,    10, 100, .9  -- 157
+   ;;, "furyswipe", T_NORMAL,   15, 18,  .8  -- 158
+   ;;, "bonemrang", T_GROUND,   10, 50,  .9  -- 159
+   ;;, "hyperfang", T_NORMAL,   15, 80,  .9  -- 160
+   ;;, "sharpen",   T_NORMAL,   30, ,        -- 161
+   ;;, "convrsion", T_NORMAL,   30, ,        -- 162
+   ;;, "superfang", T_NORMAL,   10, ,    .9  -- 163
+   ;;, "slash",     T_NORMAL,   20, 70,  1   -- 164
 ]]

@@ -15,9 +15,11 @@ zclass[[modes,actor|
     credits;      update,%credits_update,      draw1,%credits_draw1,      draw2,%main_draw2,         draw3,%main_draw3, credits_offset,5;
     browse;       update,%browse_update,       draw1,%browse_draw1,       draw2,%browse_draw2,       draw3,%browse_draw3;
     browsestat;   update,%browsestat_update,   draw1,%browsestat_draw1,   draw2,%browse_draw2,       draw3,%browse_draw3;
-    fight;        update,%fight_update,        draw1,%fight_draw1,        draw2,%fight_draw2,        draw3,%fight_draw3;
+    fightparty;   update,%party_update,        draw1,%party_draw1,        draw2,%party_draw2,        draw3,%party_draw3,        select_func,%fight_select;
+    fightsel;     update,%fightsel_update,     draw1,%fightsel_draw1,     draw2,%fightsel_draw2,     draw3,%fightsel_draw3,     init,%fightsel_init;
+    fight;        update,%fight_update,        draw1,%fight_draw1,        draw2,%fight_draw2,        draw3,%fight_draw3,        init,%fight_init;
 
-    party;        update,%party_update,        draw1,%party_draw1,        draw2,%party_draw2,        draw3,%party_draw3;
+    party;        update,%party_update,        draw1,%party_draw1,        draw2,%party_draw2,        draw3,%party_draw3,        select_func,%party_select;
     editparty;    update,%editparty_update,    draw1,%editparty_draw1,    draw2,%editparty_draw2,    draw3,%editparty_draw3;
     partyaction;  update,%partyaction_update,  draw1,%partyaction_draw1,  draw2,%editparty_draw2,    draw3,%partyaction_draw3,  init,%partyaction_init;
     partypkmn;    update,%partypkmn_update,    draw1,%partypkmn_draw1,    draw2,%partypkmn_draw2,    draw3,%partypkmn_draw3,    init,%partypkmn_init;
@@ -67,12 +69,12 @@ end $$
 
 -- if i run the minifier, we need a separate display name from the state it's mapped to.
 c_modes = zobj[[
-    ;name,"browse",    state,browse,   func,%menu_state_callback, desc,"view|pokemon|info"
-   ;;name,"credits",   state,credits,  func,%menu_state_callback, desc,"by|amorg|games"
-   ;;name,"fight",     state,fight,    func,%menu_state_callback, desc,"pokemon|battle|simulator"
-   ;;name,"games",     state,games,    func,%menu_state_callback, desc,"minigames|and|quizzes"
-   ;;name,"party",     state,party,    func,%menu_state_callback, desc,"change|your|teams"
-   ;;name,"settings",  state,settings, func,%menu_state_callback, desc,"customize|this|picodex"
+    ;name,"browse",    state,browse,     func,%menu_state_callback, desc,"view|pokemon|info"
+   ;;name,"credits",   state,credits,    func,%menu_state_callback, desc,"by|amorg|games"
+   ;;name,"fight",     state,fightparty, func,%menu_state_callback, desc,"pokemon|battle|simulator"
+   ;;name,"games",     state,games,      func,%menu_state_callback, desc,"minigames|and|quizzes"
+   ;;name,"party",     state,party,      func,%menu_state_callback, desc,"change|your|teams"
+   ;;name,"settings",  state,settings,   func,%menu_state_callback, desc,"customize|this|picodex"
 ]]
 
 |[main_update]| function(a) menu_update(a, S_CURSOR_MODE, c_modes) end $$

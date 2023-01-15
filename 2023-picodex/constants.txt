@@ -11,6 +11,7 @@ SPR_LOGO: 108
 SPR_LOGO_W: 4
 SPR_LOGO_H: 2
 FADE_SPEED: .5
+C_LEVEL: 50
 
 # party structure (30 bytes)
 # if all the moves are 0 (struggle), the pokemon is not in the party
@@ -29,7 +30,9 @@ S_PARTY3:         0x5e3c
 # ends at:        0x5e5a
 
 # "CURSOR" save spots must have 2 bytes!!!
+# Level is the level pokemon are in battles.
 
+S_CURSOR_FIGHTSEL:    0x5ee7
 S_CURSOR_PARTYMSEL:   0x5ee9
 S_CURSOR_PARTYMOVES:  0x5eeb
 S_CURSOR_PARTY_PKMN:  0x5eed
@@ -39,7 +42,6 @@ S_PARTY_PKMN_NUM:     0x5ef3
 S_CUR_PARTY:          0x5ef4
 S_BROWSE_SCREEN:      0x5ef5
 S_CURSOR_BROWSE:      0x5ef6
-
 S_METRIC:             0x5ef9
 S_SWAP_CONTROLS:      0x5efa
 S_SCORE_BATTLES:      0x5efb
@@ -49,27 +51,27 @@ S_SURFING_PIKACHU:    0x5efe
 S_MISSINGNO:          0x5eff
 
 # Constant Indexes
-Z_STATUS:   0
-Z_PHYSICAL: 1
+Z_PHYSICAL: 0
+Z_SPECIAL:  1
 Z_SPECIAL:  2
 
 T_NONE:     no
 T_BIRD:     0
 T_NORMAL:   1
 T_FIRE:     2
-T_WATER:    3
-T_ELECTRIC: 4
-T_GRASS:    5
-T_ICE:      6
-T_FIGHTING: 7
-T_POISON:   8
-T_GROUND:   9
-T_FLYING:   10
-T_PSYCHIC:  11
-T_BUG:      12
+T_FIGHTING: 3
+T_WATER:    4
+T_POISON:   5
+T_ELECTRIC: 6
+T_GROUND:   7
+T_GRASS:    8
+T_FLYING:   9
+T_ICE:      10
+T_BUG:      11
+T_PSYCHIC:  12
 T_ROCK:     13
-T_GHOST:    14
-T_DRAGON:   15
+T_DRAGON:   14
+T_GHOST:    15
 
 M_STRUGGLE:       0
 M_MEGA_PUNCH:     1

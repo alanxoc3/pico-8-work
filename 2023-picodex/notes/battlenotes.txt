@@ -1,0 +1,237 @@
+Here are some changes from the original game:
+https://bulbapedia.bulbagarden.net/wiki/Pok%C3%A9mon_Stadium_(English)#Changes
+
+Here are more differences from the original game:
+https://www.smogon.com/rb/articles/stadium_guide
+
+https://gamefaqs.gamespot.com/gameboy/367023-pokemon-red-version/faqs/64175/stat-modifiers
+
+My only concern is that you can't unfreeze your pokemon
+
+This explains advanced battling & dvs:
+https://gamefaqs.gamespot.com/gameboy/907714-pokemon-blue-version/faqs/54432
+
+This is probably the best reference for all the moves:
+http://www.psypokes.com/rby/attacks.php
+
+
+actions
+    message
+    newstate?
+    or function?
+
+what doe
+
+
+turn order...
+
+
+
+quick attack? speed wins
+normal speed wins (explode hurts user first)
+counter speed wins
+poison|toxic|burn
+leech seed
+
+
+
+
+
+switching
+moves (new pkmn can be sent out if ko-ed)
+poison|toxic|burn (pkmn can die here)
+leech seed (pkmn can die here)
+
+and how do messages work?
+
+if killed by recoil. opponent turn, hits new pkmn.o
+explosion kills itself. then hits other pokemon. in one turn.
+
+explosion has 2 actions. first kill itself, then hit other.
+recoil moves also have 2 actions. first attack, then recoil.
+
+absorb has 2 actions too? yes.
+
+an action can only hurt 1 pokemon. An action is also 1 message.
+
+
+action has:
+    message
+    function
+    which side
+    animation
+
+
+battle starts
+p1 vs bugcatcher
+
+battle starts with 2 actions. p1 (bottom) sends out pkmn as first action. p2 sends out pkmn as second action.
+
+battle options:
+- fight
+- switch
+- stats          ( shows paralysis burn... )
+- opponent stats ( shows paralysis/burn... )
+- exit
+
+a switch generates two actions? come back, then choose.
+
+can an action create another action? ex, grass attacks water, could it generate another
+
+
+action displays message first
+    wait .25 sec
+then does the animation
+    wait .25 sec
+then executes the function
+    wait .25 sec
+then next action
+
+for status moves...
+    pikachu use thndrwave
+    oddish is paralyzed
+
+hurt by (poison|toxic|burn)
+
+attack look like:
+bulbasaur
+   use
+leechseed
+
+different messages...
+
+growlithe uses|misses|continues amnesia|psychic|...
+growlithe is|isnot critmove|digging|flying|preparing|recharging|focused|misted|screened|reflected|decoyed|flinching|ko-ed|seeded|frozen|poisoned|toxiced|burned|sleeping|paralyzed|confused
+growlithe +100|+1|+2|-1|-100|... hp|special|speed|attack|defense|evasion|accuracy
+growlithe -100|+100 hp
+
+growlithe copies form|move|types # for transform & conversion
+growlithe falls back             # whirlwind/roar/teleport
+growlithe comes out              # whirlwind/roar/teleport
+growlithe does nothing           # move failed
+growlithe struggles to fight     # uses the move struggle
+
+it is super      effective
+it is not very   effective
+it is not        effective
+it is a critical hit
+
+for solarbeam, hyperbeam, trapping moves, rage, other multiturn moves, and struggle... there is no move menu when you select fight
+when you hover over a disabled move, it will say disabled in the br screen
+for metronome
+
+when turn starts, only a few actions are set:
+switch 1
+switch 2
+(determine speed)
+move 1
+move 2
+
+speed determines status effect application
+
+
+frozen|paralyzed|sleeping are manifest during move
+
+rest resets toxic counter
+
+
+
+    If the opposing Pokémon is under effect of a multi-turn attack, it doesn’t use an attack.
+        Hyper Beam check. If the last move the Pokémon chose for use is Hyper
+        Beam, the Pokémon"must recharge" and skips its attack and then Hyper Beam’s
+        effect ends. (If the Pokémon also flinches, the "X must recharge!" message
+        isn’t shown but Hyper Beam’s effect will still end.)
+
+turn_init()
+    -- priority 0 - n/a - switch
+    -- priority 1 - spd - quick attack
+    -- priority 2 - spd - main moves
+    -- priority 3 - spd - counter, whirlwind, roar, teleport
+
+    -- just figure out who goes first.
+    -- speed determines the first one. if both are in the same priority.
+    -- if speed is same, a coin is flipped
+
+turn_update()
+    p1 actions
+    p2 actions
+
+    switch (use pokemon speed to determine first)
+    attack (use pokemon speed to determine first)
+
+attack(move)
+    trapped   check
+    sleep     check
+    freeze    check
+    paralysis check
+    flinch    check
+    confusion check else damage pokemon
+
+    if none of the above status conditions
+        if not a multiturn attack (dig, fly, hyperbeam, solarbeam, rage, thrash)
+            lower pp for move
+
+        do whatever the attack does
+        -- if it aims on a pokemon, it will call the damage function and pass an attacker.
+
+    if poison/toxic/burn
+        damage(pkmn, amount)
+
+    if leech seed
+        damage(pkmn, amount)
+        heal(active, -amount)
+
+    -- each time a pkmn is damaged, check effective, substitute, defrost, rage, and ko-status. effective, defrost, sub and rage are checked for moves, not effects
+
+does_attack_hit(pkmn, attacker)
+    if pkmn.dig or pkmn.fly
+        return no
+    else
+        return smart things based on evasion and accuracy stats
+
+calculate_damage_amount()
+    -- need to factor in reflect & light screen & crit moves & focus energy -- think i have these now
+    -- need to factor in if burned
+    iscontact = (use movetype, movetype % 2 == 0)
+    strength = 0, .25, .5, 1, 2, 4 (use pkmn.type and movetype)
+    stab = 1, 1.5 (use attacker.type and movetype)
+
+    crit = smart_formula(attacker.focusenergy, attacker.critmove)
+    damage = smart_formula(stab, crit, amount, strength, iscontact) -- crit lvl stab strengtype1 strengthtype2
+
+    if (iscontact and pkmn.reflect) or (not iscontact and pkmn.lightscreen)
+        damage = damage*.5
+
+    ensure damage is an integer before applying it and damage must be at least 1.
+    damage = max(damage\1, 1)
+
+-- pkmn is the pokemon being damaged
+-- amount >= 0 and subtracts hp
+
+-- movetype == none means status attack (doesn't affect substitute)
+-- returns damage done
+damage(pkmn, amount, movetype)
+    if movetype != none and pkmn.substitute
+        pkmn.substitute.hp = max(0, pkmn.substitute.hp - amount)
+    else
+        pkmn.hp = max(0, pkmn.hp - amount)
+        
+    if pkmn.iskoed
+        add_ko_action()
+
+    if movetype != none and pkmn.israged
+        add_status_action(pkmn, attack, +1)
+
+    if movetype == fire and pkmn.frozen
+        add_status_action(pkmn is not frozen)
+
+damage_with_accuracy(pkmn, amount, movetype, attacker)
+    if attacker and not does_attack_hit(pkmn, attacker)
+        add_message("attack missed")
+        return 0, miss
+    else
+        return damage(...)
+
+
+heal(pkmn, amount)
+    pkmn.hp += amount
