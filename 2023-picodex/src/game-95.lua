@@ -17,7 +17,13 @@ zclass[[modes,actor|
     browsestat;   update,%browsestat_update,   draw1,%browsestat_draw1,   draw2,%browse_draw2,       draw3,%browse_draw3;
     fightparty;   update,%party_update,        draw1,%party_draw1,        draw2,%party_draw2,        draw3,%party_draw3,        select_func,%fight_select;
     fightsel;     update,%fightsel_update,     draw1,%fightsel_draw1,     draw2,%fightsel_draw2,     draw3,%fightsel_draw3,     init,%fightsel_init;
-    fight;        update,%fight_update,        draw1,%fight_draw1,        draw2,%fight_draw2,        draw3,%fight_draw3,        init,%fight_init;
+
+    -- these are the different states for a fight
+    p1sel;        next,p2sel, init,%p1sel_init;
+    p2sel;        next,turn1, init,%p2sel_init;
+    turn1;        next,turn2, update,%turn_update, draw1,%turn_draw1, draw2,%turn_draw2, draw3,%turn_draw3;
+    turn2;        next,p1sel, update,%turn_update, draw1,%turn_draw1, draw2,%turn_draw2, draw3,%turn_draw3;
+    -- also might want a "fight win"
 
     party;        update,%party_update,        draw1,%party_draw1,        draw2,%party_draw2,        draw3,%party_draw3,        select_func,%party_select;
     editparty;    update,%editparty_update,    draw1,%editparty_draw1,    draw2,%editparty_draw2,    draw3,%editparty_draw3;

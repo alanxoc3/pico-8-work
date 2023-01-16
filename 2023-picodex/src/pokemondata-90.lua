@@ -1,9 +1,9 @@
 c_pokemon = zobj[[
-    -- technically missingno has 0 defence, but this messes up damage calculation, so i give it 1.
+    -- missingno has 0 base defence, but this becomes 1 in a battle based on the logic in getstat.
     -- evol says how many numbers going up is the previous evolution. 0 means no previous evolution.
     -- every pokemon is either 0 or 1, except for eevee's evolved forms.
     -- evol "name"         w     h   t1          t2           hp   att  def  spd  spc  move levels
-   0;, 0,   "missingno",   10,   10, T_BIRD,     T_NORMAL,    33,  136, 1,   29,  6,   1,1                             -- 0
+   0;, 0,   "missingno",   10,   10, T_BIRD,     T_NORMAL,    33,  136, 0,   29,  6,   1,1                             -- 0
    ;;, 0,   "bulbasaur",   69,   7,  T_GRASS,    T_POISON,    45,  49,  49,  45,  65,  1,1,7,13,20,27,34,41,48         -- 1
    ;;, 1,   "ivysaur",     130,  10, T_GRASS,    T_POISON,    60,  62,  63,  60,  80,  1,1,7,13,22,30,38,46,54         -- 2
    ;;, 1,   "venusaur",    1000, 20, T_GRASS,    T_POISON,    80,  82,  83,  80,  100, 1,1,7,13,22,30,43,55,65         -- 3

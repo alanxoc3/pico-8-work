@@ -18,6 +18,22 @@ Fantastic references:
 
 --------------------------------------------------------------
 
+Main move modifications from pokemon stadium:
+
+    - whirlwind: has later priority & switch random pokemon from opponent.
+    - roar:      has later priority & switch random pokemon from opponent.
+    - teleport:  has later priority & switch random pokemon from user.
+    - swift:     always hits. no accuracy check. hits dig, fly, and pokemon behind substitute.
+
+Other modifications from pokemon stadium:
+
+    - an infinite battle is only possible if both sides keep switching
+    - status damage is not taken if a pokemon doesn't get a chance to attack due to roar, whirlwind, teleport, fainting, or switching.
+    - frozen stat condition has 10% chance to unthaw
+    - pokemon can't receive status conditions from moves of one of their own types or resistances
+    - two abras that keep using teleport to switch out will not take poison damage.
+    - if opponent keeps using roar, preventing you from attacking (because you use roar/teleport/whirlwind/counter), then you don't take poison damage.
+
 All possible messages:
 
     growlithe uses|misses|continues amnesia|psychic|...

@@ -29,6 +29,15 @@ Sound effects are stored in the `./129-151.p8` cartridge. The `compile.lua` scri
 63    Logo melody
 ```
 
+## Todos
+- I want the browse pkmn interface to include a "random" button between the bulbasaur and mew rows. This could be used for either browsing or selecting for party.
+- Random move should be one of the menu items in the move selection. There would be no button to randomize all moves.
+- Parties should be able to have a name. Might be cool to be able to export/import a party.
+- Pokemon info in browse interface should be similar to credit screen. You can scroll through it.
+- Credit screen shouldn't wrap.
+- Implement the battle system of course.
+- Maybe screen transitions should have a flash of some sort.
+
 ## Random Temporary Notes
 Move changes from gen 1 to gen 2: https://bulbapedia.bulbagarden.net/wiki/List_of_modified_moves
 
