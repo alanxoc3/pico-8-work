@@ -163,22 +163,20 @@ function normalize_pokemon_data()
     for i=-2,151 do
         local pkmn = c_pokemon[i] or {}
         local movelvls = {}
-        for i=12,#pkmn do
+        for i=10,#pkmn do
             add(movelvls, pkmn[i])
         end
 
         c_pokemon[i] = {
             evolvesfrom = (pkmn[1] or 0) > 0 and i-pkmn[1] or nil,
             name        = pkmn[2],
-            width       = pkmn[3],
-            height      = pkmn[4],
-            type1       = pkmn[5],
-            type2       = pkmn[6],
-            hp          = pkmn[7],
-            attack      = pkmn[8],
-            defence     = pkmn[9],
-            speed       = pkmn[10],
-            special     = pkmn[11],
+            type1       = pkmn[3],
+            type2       = pkmn[4],
+            hp          = pkmn[5],
+            attack      = pkmn[6],
+            defence     = pkmn[7],
+            speed       = pkmn[8],
+            special     = pkmn[9],
             movelvls    = movelvls,
             moves       = {},
 
