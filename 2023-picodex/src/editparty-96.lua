@@ -27,7 +27,7 @@ end $$
     rectfill(-1,0+7,40,39-7,13)
     rect(-1,0+7,40,39-7,1)
     for i=1,6 do
-        get_pokemon(party[i] and party[i].num or -2).draw(8+(i-1)%3*12, 14+(i-1)\3*12, 5, .5)
+        get_pokemon(party[i] and party[i].num or -2).draw(8+(i-1)%3*12, 14+(i-1)\3*12, 5, .5, .5)
     end
 
     local row, col = @S_PARTY_PKMN_NUM\3, @S_PARTY_PKMN_NUM%3
@@ -35,7 +35,7 @@ end $$
     rect    (-1+col*12, 5+row*12, 16+col*12, 22+row*12, 1)
     rectfill(0+col*12,  6+row*12, 15+col*12, 21+row*12, 6)
     local sel_pkmn = party[@S_PARTY_PKMN_NUM+1]
-    get_pokemon(sel_pkmn and sel_pkmn.num or -2).draw(8+col*12, 14+row*12, 13, .75)
+    get_pokemon(sel_pkmn and sel_pkmn.num or -2).draw(8+col*12, 14+row*12, 13, .75, .75)
 
     --get_pokemon(get_party(@S_CUR_PARTY)[1].num).draw(7+(1-1)%3*13, 20+(1-1)\3*13, 13, .825)
 end $$

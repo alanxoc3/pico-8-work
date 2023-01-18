@@ -34,8 +34,78 @@ end $$
     -- game.p0 = game.p0 == game.p1 and game.p2 or game.p1
 end $$
 
-|[turn_draw1]|  function(game)
+function draw_hp(x, y, hp, maxhp, status, align)
+    hp = max(ceil(hp), 0)
+    zprint(hp,    x+3*max(align, 0), y-2+5*align, 1, align)
+    zprint(status, x+3*max(align, 0), y-2-5*align, 5, align)
+    rectfill(x, y-1, x-align*ceil(hp/maxhp*17), y+1, 1)
+end
 
+|[turn_draw1]|  function(game)
+    -- Todo: next print hp
+    -- todo: after that, implement action system for turn
+
+    -- SIDE/SIDE/TEXT and space i guess
+    local a1, a2 = game.p1.active, game.p2.active
+    -- this is good positioning
+    --zprint(a1.shared.hp, 41, 29, 5, 1)
+    draw_hp(38, 30, a1.shared.hp, a1.shared.maxhp, "psn", 1)
+    draw_hp(1,  9,  a2.shared.hp, a2.shared.maxhp, "par",   -1)
+    c_pokemon[a1.shared.num].draw(   10, 40-10-t()%2\1, 5)
+    c_pokemon[a2.shared.num].draw(40-10,    10+t()%2\1, 5, -1)
+    if g_bx then a1.shared.hp -= 5 end
+
+    -- SIDE/SIDE/TEXT and space i guess
+    -- local a1, a2 = game.p1.active, game.p2.active
+    -- -- this is good positioning
+    -- c_pokemon[a1.shared.num].draw(   4, 40-11+t()%2\1, 5)
+    -- c_pokemon[a2.shared.num].draw(40-4,    11-t()%2\1, 5, -1)
+    -- --zprint(a1.shared.hp, 41, 29, 5, 1)
+    -- local yoff = -1
+    -- zprint("hp "..a1.shared.hp, 15, 29+yoff, 1, -1)
+    -- rectfill(15, 35+yoff, 30, 38+yoff, 11)
+    -- rect    (15, 35+yoff, 30, 38+yoff, 1)
+    -- rect    (15, 35+yoff, 37, 38+yoff, 1)
+
+    -- local yoff = -3
+    -- zprint("hp "..a2.shared.hp, 27, 5+yoff, 1, 1)
+    -- rectfill (24, 14+yoff, 6, 11+yoff, 11)
+    -- rect     (24, 14+yoff, 6, 11+yoff, 1)
+    -- rect     (24, 14+yoff, 2, 11+yoff, 1)
+    
+    -- SIDE/SIDE
+    -- local a1, a2 = game.p1.active, game.p2.active
+    -- -- this is good positioning
+    -- c_pokemon[a1.shared.num].draw(   5+t()%2\1, 40-10, 5)
+    -- c_pokemon[a2.shared.num].draw(40-5-t()%2\1, 10, 5, -1)
+    -- --zprint(a1.shared.hp, 41, 29, 5, 1)
+    -- local yoff = -6
+    -- --zprint("hp "..a1.shared.hp, 16, 40+yoff, 1, -1)
+    -- rectfill(16, 35+yoff, 31, 38+yoff, 11)
+    -- rect    (16, 35+yoff, 31, 38+yoff, 1)
+    -- rect    (16, 35+yoff, 38, 38+yoff, 1)
+    -- local yoff = -3 -- + sin(t()*2) +.5
+    -- --zprint(a2.shared.hp, 26, 5+yoff, 1, 1)
+    -- rectfill (23, 14+yoff, 5, 11+yoff, 11)
+    -- rect     (23, 14+yoff, 5, 11+yoff, 1)
+    -- rect     (23, 14+yoff, 1, 11+yoff, 1)
+    
+    -- ABOVE/BELOW
+    -- local a1, a2 = game.p1.active, game.p2.active
+    -- -- this is good positioning
+    -- c_pokemon[a1.shared.num].draw(   5, 40-15, 5)
+    -- c_pokemon[a2.shared.num].draw(40-5, 10+5, 5, -1)
+    -- --zprint(a1.shared.hp, 41, 29, 5, 1)
+    -- local yoff = 0
+    -- zprint("hp "..a1.shared.hp, 16, 40+yoff, 1, -1)
+    -- rectfill(2, 35+yoff, 30, 38+yoff, 11)
+    -- rect    (2, 35+yoff, 30, 38+yoff, 1)
+    -- rect    (2, 35+yoff, 37, 38+yoff, 1)
+    -- local yoff = -10 -- + sin(t()*2) +.5
+    -- zprint("hp "..a2.shared.hp, 27, 16+yoff, 1, 1)
+    -- rectfill (37, 14+yoff, 6, 11+yoff, 11)
+    -- rect     (37, 14+yoff, 6, 11+yoff, 1)
+    -- rect     (37, 14+yoff, 2, 11+yoff, 1)
 end $$
 
 |[turn_draw2]|  function(game)

@@ -252,7 +252,7 @@ rectfill(0,32,39,39,style.aa)
 pkmn.draw(20,20,style.aa,2,2)
 elseif@0x5ef5==1 then
 rectfill(0,16,39,39,style.aa)
-pkmn.draw(20,10,style.aa,1)
+pkmn.draw(20,10,style.aa)
 rectfill(0,21,39,39,1)
 rectfill(6,21,33,39,7)
 print("a",1,22,13)print("h",36,22,13)
@@ -288,14 +288,14 @@ rectfill(0,0,39,39,1)
 rectfill(-1,0+7,40,39-7,13)
 rect(-1,0+7,40,39-7,1)
 for i=1,6 do
-get_pokemon(party[i]and party[i].num or-2).draw(8+(i-1)%3*12,14+(i-1)\3*12,5,.5)
+get_pokemon(party[i]and party[i].num or-2).draw(8+(i-1)%3*12,14+(i-1)\3*12,5,.5,.5)
 end
 local row,col=@0x5ef3\3,@0x5ef3%3
 rect(-2+col*12,4+row*12,17+col*12,23+row*12,13)
 rect(-1+col*12,5+row*12,16+col*12,22+row*12,1)
 rectfill(0+col*12,6+row*12,15+col*12,21+row*12,6)
 local sel_pkmn=party[@0x5ef3+1]
-get_pokemon(sel_pkmn and sel_pkmn.num or-2).draw(8+col*12,14+row*12,13,.75)
+get_pokemon(sel_pkmn and sel_pkmn.num or-2).draw(8+col*12,14+row*12,13,.75,.75)
 end,function(a)
 local pkmn=get_party(@0x5ef4)[@0x5ef3+1]
 if pkmn then
@@ -416,6 +416,12 @@ game.p0=p1.priority>p2.priority and p1 or p2
 game:load()
 end,function(game)
 end,function(game)
+local a1,a2=game.p1.active,game.p2.active
+draw_hp(38,30,a1.shared.hp,a1.shared.maxhp,"psn",1)
+draw_hp(1,9,a2.shared.hp,a2.shared.maxhp,"par",-1)
+c_pokemon[a1.shared.num].draw(10,40-10-t()%2\1,5)
+c_pokemon[a2.shared.num].draw(40-10,10+t()%2\1,5,-1)
+if g_bx then a1.shared.hp-=5 end
 end,function(game)
 end,function(game)
 end,function(a)
@@ -615,12 +621,12 @@ end
 end
 end
 function draw_back_panel(light)
-local rate=t()*10
+local rate=t()*7
 map(24,0,-1,1,9,12)
 spr((light>0)and(rate%11<1 and 131 or 130)or 132,19,3)
 spr((light>1)and(rate%13<1 and 131 or 129)or 132,14,3)
 spr((light>2)and(rate%17<1 and 131 or 128)or 132,9,3)
-spr((light>3)and(rate%23<1 and 134 or 133)or 135,3,3)
+spr((light>3)and(rate%43<1 and 134 or 133)or 135,3,3)
 end
 function set_browse(delta,mem)
 poke(mem,(@mem+delta)%152)
@@ -647,7 +653,7 @@ if c\4>v+3 then v=c\4-3 end
 v=max(0,min(152/4-4,v))
 for j=0,3 do
 for i=0,3 do
-get_pokemon((v+j)*4+i).draw(i*10+5,j*10+5,5,.375)
+get_pokemon((v+j)*4+i).draw(i*10+5,j*10+5,5,.375,.375)
 end
 end
 local x,y=(c%4)*10+5,(c\4-v)*10+5
@@ -657,7 +663,7 @@ if(c)\4-v==0 then y+=1 end
 if(c)\4-v==3 then y-=1 end
 rectfill(x-7-1,y-7-1,x+6+1,y+6+1,13)
 rectfill(x-6-1,y-6-1,x+5+1,y+5+1,6)
-pkmn.draw(x,y,13,.5)
+pkmn.draw(x,y,13,.5,.5)
 rect(x-7,y-7,x+6,y+6,1)
 poke(mem+1,v)
 end
@@ -688,17 +694,18 @@ end
 local w,h=16*sw,16*sh
 sspr(col*16,0,16,16,x-w/2,y-h/2,w,h)
 end
-function draw_pkmn_out(num,x,y,col,scale_factor,outline_width)
-scale_factor=scale_factor or 1
-outline_width=outline_width or 1
+function draw_pkmn_out(num,x,y,col,xscale,yscale)
+xscale=xscale or 1
+yscale=yscale or 1
+local outline_width=max(abs(xscale),1)\ 1
 for c=1,15 do pal(c,col)end
-for i=-outline_width,outline_width,outline_width*2 do draw_pkmn(num,x-outline_width,y+i,scale_factor,scale_factor)end
-for i=-outline_width,outline_width,outline_width*2 do draw_pkmn(num,x+outline_width,y+i,scale_factor,scale_factor)end
+for i=-outline_width,outline_width,outline_width*2 do draw_pkmn(num,x-outline_width,y+i,xscale,yscale)end
+for i=-outline_width,outline_width,outline_width*2 do draw_pkmn(num,x+outline_width,y+i,xscale,yscale)end
 for c=1,15 do pal(c,1)end
-for i=-outline_width,outline_width,outline_width*2 do draw_pkmn(num,x+i,y,scale_factor,scale_factor)end
-for i=-outline_width,outline_width,outline_width*2 do draw_pkmn(num,x,y+i,scale_factor,scale_factor)end
+for i=-outline_width,outline_width,outline_width*2 do draw_pkmn(num,x+i,y,xscale,yscale)end
+for i=-outline_width,outline_width,outline_width*2 do draw_pkmn(num,x,y+i,xscale,yscale)end
 for c=1,15 do pal(c,c)end
-draw_pkmn(num,x,y,scale_factor,scale_factor)
+draw_pkmn(num,x,y,xscale,yscale)
 end
 function format_num(num)
 local str=""..num
@@ -745,14 +752,14 @@ rectfill(0,0,39,49,13)
 local drawbg=function(yoff,party)
 rect(-1,yoff-1,40,yoff+7,1)
 for i=1,6 do
-get_pokemon(party[i]and party[i].num or-1).draw(5+(i-1)*6,4+yoff,5,.2)
+get_pokemon(party[i]and party[i].num or-1).draw(5+(i-1)*6,4+yoff,5,.2,.2)
 end
 end
 local ty=0+sel*8
 rectfill(0,ty,39,ty+23,6)
 local selparty=get_party(sel)
 for i=1,6 do
-get_pokemon(selparty[i]and selparty[i].num or-2).draw(8+(i-1)%3*12,ty+6+(i-1)\3*12,13,.5)
+get_pokemon(selparty[i]and selparty[i].num or-2).draw(8+(i-1)%3*12,ty+6+(i-1)\3*12,13,.5,.5)
 end
 drawbg((sel*8+25)%41,get_party((sel+1)%3))
 drawbg((sel*8+25+8)%41,get_party((sel+2)%3))
@@ -791,6 +798,12 @@ poke(memstart+i,pkmn.moves[i])
 end
 end
 end
+end
+function draw_hp(x,y,hp,maxhp,status,align)
+hp=max(ceil(hp),0)
+zprint(hp,x+3*max(align,0),y-2+5*align,1,align)
+zprint(status,x+3*max(align,0),y-2-5*align,5,align)
+rectfill(x,y-1,x-align*ceil(hp/maxhp*17),y+1,1)
 end
 function get_crit_ratio(base_speed)
 return min(.99,(base_speed+76)/1024)

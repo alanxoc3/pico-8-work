@@ -29,7 +29,7 @@ end $$
         pkmn.draw(20, 20, style.aa, 2, 2)
     elseif @S_BROWSE_SCREEN == 1 then
         rectfill(0,16,39,39,style.aa)
-        pkmn.draw(20, 10, style.aa, 1)
+        pkmn.draw(20, 10, style.aa)
         rectfill(0,21,39,39,1)
         rectfill(6,21,33,39,7)
 
@@ -79,7 +79,7 @@ function browse_draw1(a, mem)
 
     for j=0,3 do
         for i=0,3 do
-            get_pokemon((v+j)*4+i).draw(i*10+5, j*10+5, 5, .375)
+            get_pokemon((v+j)*4+i).draw(i*10+5, j*10+5, 5, .375, .375)
         end
     end
 
@@ -90,7 +90,7 @@ function browse_draw1(a, mem)
     if (c)\4-v == 3 then y-=1 end
     rectfill(x-7-1,y-7-1,x+6+1,y+6+1,13)
     rectfill(x-6-1,y-6-1,x+5+1,y+5+1,6)
-    pkmn.draw(x, y, 13, .5)
+    pkmn.draw(x, y, 13, .5, .5)
     rect    (x-7  ,y-7  ,x+6  ,y+6  ,1)
 
     poke(mem+1, v)
@@ -133,20 +133,21 @@ function draw_pkmn(num, x, y, sw, sh)
     sspr(col*16, 0, 16, 16, x-w/2, y-h/2, w, h)
 end
 
-function draw_pkmn_out(num, x, y, col, scale_factor, outline_width)
-    scale_factor = scale_factor or 1
-    outline_width = outline_width or 1
+function draw_pkmn_out(num, x, y, col, xscale, yscale)
+    xscale = xscale or 1
+    yscale = yscale or 1
+    local outline_width = max(abs(xscale), 1) \ 1
 
     for c=1,15 do pal(c,col) end
-    for i=-outline_width,outline_width,outline_width*2 do draw_pkmn(num, x-outline_width, y+i, scale_factor, scale_factor) end
-    for i=-outline_width,outline_width,outline_width*2 do draw_pkmn(num, x+outline_width, y+i, scale_factor, scale_factor) end
+    for i=-outline_width,outline_width,outline_width*2 do draw_pkmn(num, x-outline_width, y+i, xscale, yscale) end
+    for i=-outline_width,outline_width,outline_width*2 do draw_pkmn(num, x+outline_width, y+i, xscale, yscale) end
 
     for c=1,15 do pal(c,1) end
-    for i=-outline_width,outline_width,outline_width*2 do draw_pkmn(num, x+i, y, scale_factor, scale_factor) end
-    for i=-outline_width,outline_width,outline_width*2 do draw_pkmn(num, x, y+i, scale_factor, scale_factor) end
+    for i=-outline_width,outline_width,outline_width*2 do draw_pkmn(num, x+i, y, xscale, yscale) end
+    for i=-outline_width,outline_width,outline_width*2 do draw_pkmn(num, x, y+i, xscale, yscale) end
 
     for c=1,15 do pal(c, c) end
-    draw_pkmn(num, x, y, scale_factor, scale_factor)
+    draw_pkmn(num, x, y, xscale, yscale)
 end
 
 function format_num(num)
