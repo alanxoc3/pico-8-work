@@ -93,13 +93,14 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,menu_state_callback,@,modes_push,@,modes_pop,@,game_init,@,game_update,@,game_draw,@,main_update,@,main_draw1,@,main_draw3,@,main_draw2,@,gamefadein_init,@,closed_init,@,closed_update,@,closed_draw,@,closing_draw,@,light_init,@,opened_draw,@,opening_draw,@,browse_update,@,browse_draw1,@,browse_draw2,@,browse_draw3,@,browsestat_update,@,browsestat_draw1,@,credits_update,@,credits_draw1,@,editparty_update,@,editparty_draw1,@,editparty_draw2,@,editparty_draw3,@,partydel,@,randpkmn,@,randmove,@,partyaction_init,@,partyaction_update,@,partyaction_draw1,@,partyaction_draw3,@,partypkmn_init,@,partypkmn_update,@,partypkmn_draw1,@,partypkmn_draw2,@,partypkmn_draw3,@,partymoves_init,@,partymoves_update,@,partymoves_draw1,@,partymoves_draw2,@,partymoves_draw3,@,partymovesel_init,@,partymovesel_update,@,partymovesel_draw1,@,partymovesel_draw2,@,partymovesel_draw3,@,fight_select,@,fightsel_init,@,fightsel_update,@,fightsel_draw1,@,fightsel_draw2,@,fightsel_draw3,@,party_select,@,party_update,@,party_draw1,@,party_draw2,@,party_draw3,@,p1sel_init,@,p2sel_init,@,turn_update,@,turn_draw1,@,turn_draw2,@,turn_draw3,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,game_state_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,menu_state_callback,@,modes_push,@,modes_pop,@,game_init,@,game_update,@,game_draw,@,main_update,@,main_draw1,@,main_draw3,@,main_draw2,@,gamefadein_init,@,closed_init,@,closed_update,@,closed_draw,@,closing_draw,@,light_init,@,opened_draw,@,opening_draw,@,browse_update,@,browse_draw1,@,browse_draw2,@,browse_draw3,@,browsestat_update,@,browsestat_draw1,@,credits_update,@,credits_draw1,@,editparty_update,@,editparty_draw1,@,editparty_draw2,@,editparty_draw3,@,partydel,@,randpkmn,@,randmove,@,partyaction_init,@,partyaction_update,@,partyaction_draw1,@,partyaction_draw3,@,partypkmn_init,@,partypkmn_update,@,partypkmn_draw1,@,partypkmn_draw2,@,partypkmn_draw3,@,partymoves_init,@,partymoves_update,@,partymoves_draw1,@,partymoves_draw2,@,partymoves_draw3,@,partymovesel_init,@,partymovesel_update,@,partymovesel_draw1,@,partymovesel_draw2,@,partymovesel_draw3,@,fight_select,@,fightsel_init,@,fightsel_update,@,fightsel_draw1,@,fightsel_draw2,@,fightsel_draw3,@,party_select,@,party_update,@,party_draw1,@,party_draw2,@,party_draw3,@,psel_init,@,psel_update,@,psel_draw3,@,turn_init,@,turn_finit,@,turn_update,@,turn_draw1,@,turn_draw2,@,turn_draw3,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,game_state_init,@]],function(a,stateName)
 a.next_state=stateName or a.next
 end,function(a,stateName)
 a.next_state,a.isnew=nil
 if stateName=="dead"then
 a.alive=false
 else
+a:finit()
 a:end_timer(a.curr)
 a.next,a.duration=nil
 for k,v in pairs(a.defaults)do a[k]=v end
@@ -400,45 +401,57 @@ zprint("party #"..@0x5ef4+1,46/2,4,1,0)
 end,function(a)
 print_draw3_message("please","select a","party")
 end,function(game)
-local p1=game.p1
-p1.actions={{message="wowsi,an,defens",logic=nop}}
+game.p0=game[game.p0key]
+local p0=game.p0
+p0.actions={{active=p0.active,message="#,uses,splash",logic=function()
+add(p0.actions,{active=p0.active,message="#,does,nothing",logic=nop})
+end}}
 local priority_class=1000
-p1.priority=min(3000,priority_class+p1.active:getstat"speed")
-game:load()
+p0.priority=min(3000,priority_class+p0.active:getstat"speed")
 end,function(game)
-local p2=game.p2
-p2.actions={{message="what,an,attack",logic=nop}}
-local priority_class=1000
-p2.priority=min(3000,priority_class+p2.active:getstat"speed")
+if g_bpx or g_bpo then
+game:load()
 local p1=game.p1
+local p2=game.p2
 if p1.priority==p2.priority then p2.priority+=sgn(rnd"2"-1)end
 game.p0=p1.priority>p2.priority and p1 or p2
-game:load()
-end,function(game)
-if game.action_timer==0 then
-game.cur_action=deli(game.p0.actions,1)
-elseif game.action_timer==30 then
+end
+end,function(game)print_draw3_message("planning","an","action")end,function(game)
+local action=deli(game.p0.actions,1)
+if action then
+game.cur_action=action
 game.cur_action.logic()
-elseif game.action_timer>30 and(g_bx or g_bo)then
-if #game.p0.actions==0 then
-game.p0=game.p0==game.p1 and game.p2 or game.p1
-game:load()
 else
-game.action_timer=-1
+game.cur_action={active=p0.active,message="nothing,to,do",logic=nop}
+game.cur_action.logic()
+end
+end,function(game)
+game.p0=game.p0==game.p1 and game.p2 or game.p1
+end,function(game)
+if g_bpx or g_bpo then
+local action=deli(game.p0.actions,1)
+if action then
+game.cur_action=action
+game.cur_action.logic()
+if game.p1.active.shared.hp<=0 then add(game.p0.actions,{active=game.p1.active,message="#,is,fainted",logic=nop})
+elseif game.p2.active.shared.hp<=0 then add(game.p0.actions,{active=game.p2.active,message="#,is,fainted",logic=nop})end
+else
+game:load()
 end
 end
-game.action_timer+=1
-game.action_timer=min(31,game.action_timer)
 end,function(game)
 local a1,a2=game.p1.active,game.p2.active
-draw_hp(38,30,a1.shared.hp,a1.shared.maxhp,"psn",1)
-draw_hp(1,9,a2.shared.hp,a2.shared.maxhp,"par",-1)
+local active=game.cur_action.active and game.p0.active
+draw_hp(38,30,a1.shared.hp,a1.shared.maxhp,a1.shared.major,1,active==game.p1.active and 6 or 1)
+draw_hp(1,9,a2.shared.hp,a2.shared.maxhp,a2.shared.major,-1,active==game.p2.active and 6 or 1)
 c_pokemon[a1.shared.num].draw(10,40-10-t()%2\1,5)
 c_pokemon[a2.shared.num].draw(40-10,10+t()%2\1,5,-1)
 end,function(game)
-print(game.p0.name,3,3,1)
+zprint(game.p0.name,23,4,1,0)
 end,function(game)
-print_draw3_message(unpack(split(game.cur_action.message)))
+local message_tbl=split(game.cur_action.message)
+if message_tbl[1]=="#"then message_tbl[1]=c_pokemon[game.cur_action.active.shared.num].name end
+print_draw3_message(unpack(message_tbl))
 end,function(a)
 poke(0x5f43,0xff)
 g_fade=a:get_elapsed_percent"start"
@@ -495,7 +508,7 @@ str=str..tostring(k).."="..tostring(any[k])
 end
 return str.."}"
 end
-zclass[[actor,timer|load,%actor_load,loadlogic,%actor_loadlogic,state,%actor_state,kill,%actor_kill,clean,%actor_clean,is_alive,%actor_is_alive,alive,yes,duration,null,curr,start,next,null,isnew,yes,init,nop,stateless_update,nop,update,nop,destroyed,nop;]]
+zclass[[actor,timer|load,%actor_load,loadlogic,%actor_loadlogic,state,%actor_state,kill,%actor_kill,clean,%actor_clean,is_alive,%actor_is_alive,alive,yes,duration,null,curr,start,next,null,isnew,yes,init,nop,finit,nop,stateless_update,nop,update,nop,destroyed,nop;]]
 zclass[[drawlayer_50|]]
 zclass[[timer|timers;,;start_timer,%timer_reset_timer,end_timer,%timer_end_timer,is_active,%timer_is_active,get_elapsed_percent,%timer_get_elapsed_percent,tick,%timer_tick,]]
 c_pokemon=zobj[[0;,0,missingno,0,1,33,136,0,29,6,1,1;;,0,bulbasaur,8,5,45,49,49,45,65,1,1,7,13,20,27,34,41,48;;,1,ivysaur,8,5,60,62,63,60,80,1,1,7,13,22,30,38,46,54;;,1,venusaur,8,5,80,82,83,80,100,1,1,7,13,22,30,43,55,65;;,0,charmander,2,no,39,52,43,65,50,1,1,9,15,22,30,38,46;;,1,charmeleon,2,no,58,64,58,80,65,1,1,9,15,24,33,42,56;;,1,charizard,2,9,78,84,78,100,85,1,1,9,15,24,36,46,55;;,0,squirtle,4,no,44,48,65,43,50,1,1,8,15,22,28,35,42;;,1,wartortle,4,no,59,63,80,58,65,1,1,8,15,24,31,39,47;;,1,blastoise,4,no,79,83,100,78,85,1,1,8,15,24,31,42,52;;,0,caterpie,11,no,45,30,35,45,20,1,1;;,1,metapod,11,no,50,20,55,30,25,1;;,1,butterfree,11,9,60,45,50,70,80,1,15,16,17,21,26,28,34;;,0,weedle,11,5,40,35,30,50,20,1,1;;,1,kakuna,11,5,45,25,50,35,25,1;;,1,beedrill,11,5,65,80,40,75,45,1,16,20,25,30,35;;,0,pidgey,1,9,40,45,40,56,35,1,5,12,19,28,36,44;;,1,pidgeotto,1,9,63,60,55,71,50,1,5,12,21,31,40,49;;,1,pidgeot,1,9,83,80,75,91,70,1,5,12,21,31,44,54;;,0,rattata,1,no,30,56,35,72,25,1,1,7,14,23,34;;,1,raticate,1,no,55,81,60,97,50,1,1,7,14,27,41;;,0,spearow,1,9,40,60,30,70,31,1,1,9,15,22,29,36;;,1,fearow,1,9,65,90,65,100,61,1,1,9,15,25,34,43;;,0,ekans,5,no,35,60,44,55,40,1,1,10,17,24,31,38;;,1,arbok,5,no,60,85,69,80,65,1,1,10,17,27,36,47;;,0,pikachu,6,no,35,55,30,90,50,1,1,6,9,15,16,20,26,26,33,43,50;;,1,raichu,6,no,60,90,55,100,90,1,1,1;;,0,sandshrew,7,no,50,75,85,40,30,1,10,17,24,31,38;;,1,sandslash,7,no,75,100,110,65,55,1,10,17,27,36,47;;,0,nidoran?,5,no,55,47,52,41,40,1,1,8,17,23,30,38,43;;,1,nidorina,5,no,70,62,67,56,55,1,1,8,19,27,36,46,50;;,1,nidoqueen,5,7,90,82,87,76,75,1,1,8,12,14,23;;,0,nidoran!,5,no,46,57,40,50,40,1,1,8,17,23,30,38,43;;,1,nidorino,5,no,61,72,57,65,55,1,1,8,19,27,36,46,50;;,1,nidoking,5,7,81,92,77,85,75,1,8,12,14,23;;,0,clefairy,1,no,70,45,48,35,60,1,1,13,18,24,31,39,48;;,1,clefable,1,no,95,70,73,60,85,1,1,1,1;;,0,vulpix,2,no,38,41,40,65,65,1,1,16,21,28,35,42;;,1,ninetales,2,no,73,76,75,100,100,1,1,1,1;;,0,jigglypuff,1,no,115,45,20,20,25,1,9,14,19,24,29,34,39;;,1,wigglytuff,1,no,140,70,45,45,50,1,1,1,1;;,0,zubat,5,9,40,45,35,55,40,1,10,15,21,28,36;;,1,golbat,5,9,75,80,70,90,75,1,1,10,15,21,32,43;;,0,oddish,8,5,45,50,55,30,75,1,15,17,19,24,33,46;;,1,gloom,8,5,60,65,70,40,85,1,15,17,19,28,38,52;;,1,vileplume,8,5,75,80,85,50,100,1,1,15,17,19;;,0,paras,11,8,35,70,55,25,55,1,13,20,27,34,41;;,1,parasect,11,8,60,95,80,30,80,1,13,20,30,39,48;;,0,venonat,11,5,60,55,50,45,40,1,1,11,19,24,27,30,35,38,43;;,1,venomoth,11,5,70,65,60,90,90,1,1,1,1,24,27,30,38,43,50;;,0,diglett,7,no,10,55,25,95,45,1,15,19,24,31,40;;,1,dugtrio,7,no,35,80,50,120,70,1,15,19,24,35,47;;,0,meowth,1,no,40,45,35,90,40,1,1,12,17,24,33,44;;,1,persian,1,no,65,70,60,115,65,1,1,12,17,24,37,51;;,0,psyduck,4,no,50,52,48,55,50,1,28,31,36,43,52;;,1,golduck,4,no,80,82,78,85,80,1,28,31,39,48,59;;,0,mankey,3,no,40,80,35,70,35,1,1,9,15,21,27,33,39,45;;,1,primeape,3,no,65,105,60,95,60,1,1,9,15,21,27,28,37,45,46;;,0,growlithe,2,no,55,70,45,60,50,1,1,18,23,30,39,50;;,1,arcanine,2,no,90,110,80,95,80,1,1,1,1;;,0,poliwag,4,no,40,50,40,90,40,1,16,19,25,31,38,45;;,1,poliwhirl,4,no,65,65,65,90,50,1,16,19,26,33,41,49;;,1,poliwrath,4,3,90,85,95,70,70,1,1,16,19;;,0,abra,12,no,25,20,15,90,105,1;;,1,kadabra,12,no,40,35,30,105,120,1,1,16,20,27,31,38,42;;,1,alakazam,12,no,55,50,45,120,135,1,1,16,20,27,31,38,42;;,0,machop,3,no,70,80,50,35,35,1,20,25,32,39,46;;,1,machoke,3,no,80,100,70,45,50,1,20,25,36,44,52;;,1,machamp,3,no,90,130,80,55,65,1,20,25,36,44,52;;,0,bellsprout,8,5,50,75,35,40,70,1,1,13,15,18,21,26,33,42;;,1,weepinbell,8,5,65,90,50,55,85,1,1,13,15,18,23,29,38,49;;,1,victreebel,8,5,80,105,65,70,100,1,1,1,13,15,18;;,0,tentacool,4,5,40,40,35,70,100,1,7,13,18,22,27,33,40,48;;,1,tentacruel,4,5,80,70,65,100,120,1,7,13,18,22,27,35,43,50;;,0,geodude,13,7,40,80,100,20,30,1,11,16,21,26,31,36;;,1,graveler,13,7,55,95,115,35,45,1,11,16,21,29,36,43;;,1,golem,13,7,80,110,130,45,55,1,11,16,21,29,36,43;;,0,ponyta,2,no,50,85,55,90,65,1,30,32,35,39,43,48;;,1,rapidash,2,no,65,100,70,105,80,1,30,32,35,39,47,55;;,0,slowpoke,4,12,90,65,65,15,40,1,18,22,27,33,40,48;;,1,slowbro,4,12,95,75,110,30,80,1,18,22,27,33,37,44,55;;,0,magnemite,6,no,25,35,70,45,95,1,21,25,29,35,41,47;;,1,magneton,6,no,50,60,95,70,120,1,21,25,29,38,46,54;;,0,farfetchd,1,9,52,65,55,60,58,1,1,7,15,23,31,39;;,0,doduo,1,9,35,85,45,75,35,1,20,24,30,36,40,44;;,1,dodrio,1,9,60,110,70,100,60,1,20,24,30,39,45,51;;,0,seel,4,no,65,45,55,45,70,1,30,35,40,45,50;;,1,dewgong,4,10,90,70,80,70,95,1,30,35,44,50,56;;,0,grimer,5,no,80,80,50,25,40,1,1,30,33,37,42,48,55;;,1,muk,5,no,105,105,75,50,65,1,1,30,33,37,45,53,60;;,0,shellder,4,no,30,65,100,40,45,1,1,18,23,30,39,50;;,1,cloyster,4,10,50,95,180,70,85,1,1,1,1,50;;,0,gastly,15,5,30,35,30,80,100,1,1,1,27,35;;,1,haunter,15,5,45,50,45,95,115,1,1,1,29,38;;,1,gengar,15,5,60,65,60,110,130,1,1,1,29,38;;,0,onix,13,7,35,45,160,70,30,1,1,15,19,25,33,43;;,0,drowzee,12,no,60,48,45,42,90,1,1,12,17,24,29,32,37;;,1,hypno,12,no,85,73,70,67,115,1,1,12,17,24,33,37,43;;,0,krabby,4,no,30,105,90,50,25,1,1,20,25,30,35,40;;,1,kingler,4,no,55,130,115,75,50,1,1,20,25,34,42,49;;,0,voltorb,6,no,40,30,50,100,55,1,1,17,22,29,36,43;;,1,electrode,6,no,60,50,70,140,80,1,1,17,22,29,40,50;;,0,exeggcute,8,12,60,40,80,40,60,1,1,25,28,32,37,42,48;;,1,exeggutor,8,12,95,95,85,55,125,1,1,28;;,0,cubone,7,no,50,50,95,35,40,1,10,13,18,25,31,38,43,46;;,1,marowak,7,no,60,80,110,45,50,1,10,13,18,25,33,41,48,55;;,0,hitmonlee,3,no,50,120,53,87,35,1,1,33,38,43,48,53;;,0,hitmonchan,3,no,50,105,79,76,35,1,1,33,38,43,48,53;;,0,lickitung,1,no,90,55,75,30,60,1,1,7,15,23,31,39;;,0,koffing,5,no,40,65,95,35,60,1,1,32,37,40,45,48;;,1,weezing,5,no,65,90,120,60,85,1,1,32,39,43,49,53;;,0,rhyhorn,7,13,80,85,95,25,30,1,30,35,40,45,50,55;;,1,rhydon,7,13,105,130,120,40,45,1,30,35,40,48,55,64;;,0,chansey,1,no,250,5,5,50,105,1,1,12,24,30,38,44,48,54;;,0,tangela,8,no,65,55,115,60,100,1,24,29,29,32,36,39,45,49;;,0,kangaskhan,1,no,105,95,80,90,40,1,1,26,31,36,41,46;;,0,horsea,4,no,30,40,70,60,70,1,19,24,30,37,45;;,1,seadra,4,no,55,65,95,85,95,1,19,24,30,41,52;;,0,goldeen,4,no,45,67,60,63,50,1,1,19,24,30,37,45,54;;,1,seaking,4,no,80,92,65,68,80,1,1,19,24,30,39,48,54;;,0,staryu,4,no,30,45,55,85,70,1,17,22,27,32,37,42,47;;,1,starmie,4,12,60,75,85,115,100,1,1,1;;,0,mr mime,12,no,40,45,65,90,100,1,15,23,31,39,47;;,0,scyther,11,9,70,110,80,105,55,1,17,20,24,29,35,42,50;;,0,jynx,10,12,65,50,35,95,95,1,1,18,23,31,39,47,58;;,0,electabuzz,6,no,65,83,57,105,85,1,1,34,37,42,49,54;;,0,magmar,2,no,65,95,57,93,85,1,36,39,43,48,52,55;;,0,pinsir,11,no,65,125,100,85,55,1,21,25,30,36,43,49,54;;,0,tauros,1,no,75,100,95,110,70,1,21,28,35,44,51;;,0,magikarp,4,no,20,10,55,80,20,1,15;;,1,gyarados,4,9,95,125,79,81,100,1,20,25,32,41,52;;,0,lapras,4,10,130,85,80,60,95,1,1,16,20,25,31,38,46;;,0,ditto,1,no,48,48,48,48,48,1;;,0,eevee,1,no,55,55,50,55,65,1,8,16,27,31,36,37,45;;,1,vaporeon,4,no,130,65,60,65,110,1,8,27,31,36,37,40,44,47,48,54;;,2,jolteon,6,no,65,65,60,130,110,1,8,27,31,37,42,42,47,48,54;;,3,flareon,2,no,65,130,60,65,110,1,8,27,31,37,40,42,44,47,48,54;;,0,porygon,1,no,65,60,70,40,75,1,1,1,23,28,35,42;;,0,omanyte,13,4,35,40,100,35,90,1,1,34,39,46,53;;,1,omastar,13,4,70,60,125,55,115,1,1,34,39,44,49;;,0,kabuto,13,4,30,80,90,55,45,1,1,34,39,44,49;;,1,kabutops,13,4,60,115,105,80,70,1,1,34,39,46,53;;,0,aerodactyl,13,9,80,105,65,130,60,1,1,33,38,45,54;;,0,snorlax,1,no,160,110,65,30,65,1,1,1,35,41,48,56;;,0,articuno,10,9,90,85,100,85,125,1,1,51,55,60;;,0,zapdos,6,9,90,90,85,100,125,1,1,51,55,60;;,0,moltres,2,9,90,100,90,90,125,1,1,51,55,60;;,0,dratini,14,no,41,64,45,50,50,1,1,10,20,30,40,50;;,1,dragonair,14,no,61,84,65,70,70,1,1,10,20,35,45,55;;,1,dragonite,14,9,91,134,95,80,100,1,1,10,20,35,45,60;;,0,mewtwo,12,no,106,110,90,130,154,1,1,1,63,66,70,75,81;;,0,mew,12,no,100,100,100,100,100,1,10,20,30,40]]
@@ -536,7 +549,7 @@ end
 function menu_draw3(game,mem,entries)
 print_draw3_message(unpack(split(entries[@mem+1].desc,"|")))
 end
-zclass[[modes,actor|push,%modes_push,pop,%modes_pop,update,nop,draw1,nop,draw2,nop,draw3,nop,curr,main;stack;,;defaults;sub,0,init,nop,update,nop,draw1,nop,draw2,nop,draw3,nop;main;update,%main_update,draw1,%main_draw1,draw2,%main_draw2,draw3,%main_draw3;credits;update,%credits_update,draw1,%credits_draw1,draw2,%main_draw2,draw3,%main_draw3,credits_offset,5;browse;update,%browse_update,draw1,%browse_draw1,draw2,%browse_draw2,draw3,%browse_draw3;browsestat;update,%browsestat_update,draw1,%browsestat_draw1,draw2,%browse_draw2,draw3,%browse_draw3;fightparty;update,%party_update,draw1,%party_draw1,draw2,%party_draw2,draw3,%party_draw3,select_func,%fight_select;fightsel;update,%fightsel_update,draw1,%fightsel_draw1,draw2,%fightsel_draw2,draw3,%fightsel_draw3,init,%fightsel_init;p1sel;next,p2sel,init,%p1sel_init,draw1,%turn_draw1;p2sel;next,turn1,init,%p2sel_init,draw1,%turn_draw1;turn1;next,turn2,update,%turn_update,draw1,%turn_draw1,draw2,%turn_draw2,draw3,%turn_draw3,action_timer,0,cur_action,null;turn2;next,p1sel,update,%turn_update,draw1,%turn_draw1,draw2,%turn_draw2,draw3,%turn_draw3,action_timer,0,cur_action,null;party;update,%party_update,draw1,%party_draw1,draw2,%party_draw2,draw3,%party_draw3,select_func,%party_select;editparty;update,%editparty_update,draw1,%editparty_draw1,draw2,%editparty_draw2,draw3,%editparty_draw3;partyaction;update,%partyaction_update,draw1,%partyaction_draw1,draw2,%editparty_draw2,draw3,%partyaction_draw3,init,%partyaction_init;partypkmn;update,%partypkmn_update,draw1,%partypkmn_draw1,draw2,%partypkmn_draw2,draw3,%partypkmn_draw3,init,%partypkmn_init;partymoves;update,%partymoves_update,draw1,%partymoves_draw1,draw2,%editparty_draw2,draw3,%partymoves_draw3,init,%partymoves_init;partymovesel;update,%partymovesel_update,draw1,%partymovesel_draw1,draw2,%partymovesel_draw2,draw3,%partymovesel_draw3,init,%partymovesel_init;]]
+zclass[[modes,actor|push,%modes_push,pop,%modes_pop,update,nop,draw1,nop,draw2,nop,draw3,nop,curr,main;stack;,;defaults;sub,0,init,nop,update,nop,finit,nop,draw1,nop,draw2,nop,draw3,nop;main;update,%main_update,draw1,%main_draw1,draw2,%main_draw2,draw3,%main_draw3;credits;update,%credits_update,draw1,%credits_draw1,draw2,%main_draw2,draw3,%main_draw3,credits_offset,5;browse;update,%browse_update,draw1,%browse_draw1,draw2,%browse_draw2,draw3,%browse_draw3;browsestat;update,%browsestat_update,draw1,%browsestat_draw1,draw2,%browse_draw2,draw3,%browse_draw3;fightparty;update,%party_update,draw1,%party_draw1,draw2,%party_draw2,draw3,%party_draw3,select_func,%fight_select;fightsel;update,%fightsel_update,draw1,%fightsel_draw1,draw2,%fightsel_draw2,draw3,%fightsel_draw3,init,%fightsel_init;p1sel;next,p2sel,update,%psel_update,draw1,%turn_draw1,draw2,%turn_draw2,draw3,%psel_draw3,init,%psel_init,cur_action,null,p0key,p1;p2sel;next,turn1,update,%psel_update,draw1,%turn_draw1,draw2,%turn_draw2,draw3,%psel_draw3,init,%psel_init,cur_action,null,p0key,p2;turn1;next,turn2,update,%turn_update,draw1,%turn_draw1,draw2,%turn_draw2,draw3,%turn_draw3,init,%turn_init,finit,%turn_finit,cur_action,null;turn2;next,p1sel,update,%turn_update,draw1,%turn_draw1,draw2,%turn_draw2,draw3,%turn_draw3,init,%turn_init,finit,%turn_finit,cur_action,null;party;update,%party_update,draw1,%party_draw1,draw2,%party_draw2,draw3,%party_draw3,select_func,%party_select;editparty;update,%editparty_update,draw1,%editparty_draw1,draw2,%editparty_draw2,draw3,%editparty_draw3;partyaction;update,%partyaction_update,draw1,%partyaction_draw1,draw2,%editparty_draw2,draw3,%partyaction_draw3,init,%partyaction_init;partypkmn;update,%partypkmn_update,draw1,%partypkmn_draw1,draw2,%partypkmn_draw2,draw3,%partypkmn_draw3,init,%partypkmn_init;partymoves;update,%partymoves_update,draw1,%partymoves_draw1,draw2,%editparty_draw2,draw3,%partymoves_draw3,init,%partymoves_init;partymovesel;update,%partymovesel_update,draw1,%partymovesel_draw1,draw2,%partymovesel_draw2,draw3,%partymovesel_draw3,init,%partymovesel_init;]]
 c_modes=zobj[[;name,browse,state,browse,func,%menu_state_callback,desc,view|pokemon|info;;name,credits,state,credits,func,%menu_state_callback,desc,by|amorg|games;;name,fight,state,fightparty,func,%menu_state_callback,desc,pokemon|battle|simulator;;name,games,state,games,func,%menu_state_callback,desc,minigames|and|quizzes;;name,party,state,party,func,%menu_state_callback,desc,change|your|teams;;name,settings,state,settings,func,%menu_state_callback,desc,customize|this|picodex]]
 g_picodex_div=zobj[[,6,5,5,6,6,5,6]]
 function any_btn()return g_bl or g_br or g_bu or g_bd or g_bx or g_bo end
@@ -814,11 +827,11 @@ end
 end
 end
 end
-function draw_hp(x,y,hp,maxhp,status,align)
+function draw_hp(x,y,hp,maxhp,status,align,col)
 hp=max(ceil(hp),0)
-zprint(hp,x+3*max(align,0),y-2+5*align,1,align)
-zprint(status,x+3*max(align,0),y-2-5*align,5,align)
-rectfill(x,y-1,x-align*ceil(hp/maxhp*17),y+1,1)
+zprint(hp,x+3*max(align,0),y-2+5*align,col,align)
+zprint(status or "",x+3*max(align,0),y-2-5*align,col,align)
+rectfill(x,y-1,x-align*ceil(hp/maxhp*17),y+1,col)
 end
 function get_crit_ratio(base_speed)
 return min(.99,(base_speed+76)/1024)
@@ -838,8 +851,8 @@ end
 function begin_fight(game)
 local party1=get_fight_party(get_party(@0x5ef4),100)
 local party2=get_fight_party({{num=129,moves=c_pokemon[129].get_natural_moveset(10)}},100)
-game.p1={name="player 1",iscpu=false,actions={},active=get_next_active(party1),party=party1}
-game.p2={name="bugcatcher",iscpu=true,actions={},active=get_next_active(party2),party=party2}
+game.p1={name="player 1",priority=0,iscpu=false,actions={},active=get_next_active(party1),party=party1}
+game.p2={name="bugcatcher",priority=0,iscpu=true,actions={},active=get_next_active(party2),party=party2}
 add(game.p1.actions,create_send_action(game.p1))
 add(game.p2.actions,create_send_action(game.p2))
 game.p0=game.p1

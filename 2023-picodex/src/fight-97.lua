@@ -1,79 +1,103 @@
-|[p1sel_init]| function(game)
-    local p1 = game.p1
-    p1.actions = {{message="wowsi,an,defens", logic=nop}}
+-- todo: make pkmn pick random move
+-- todo: logic should pass in p0, p2, move_parameters
+-- todo: dead pkmn should send out next
+-- todo: empty party should end battle
+|[psel_init]| function(game)
+    game.p0 = game[game.p0key]
+
+    local p0 = game.p0
+    p0.actions = {{active=p0.active, message="#,uses,splash", logic=function()
+        add(p0.actions, { active=p0.active, message="#,does,nothing", logic=nop })
+    end}}
+
+    -- p1.actions = {{active=p1.active, message="#,uses,tackle", logic=function()
+    --     add(p1.actions, {
+    --         active=game.p2.active, message="#,-100,hitpoints", logic=function()
+    --             game.p2.active.shared.hp -= 100
+    --         end
+    --     })
+    -- end}}
 
     local priority_class = C_PRIORITY_ATTACK
 
     -- speed can be between 1 and 999, so multiples of 1000 can be priority
     -- highest priority goes first. if priority is same, roll a dice to decide
-    p1.priority = min(C_PRIORITY_SWITCH, priority_class+p1.active:getstat'speed')
-
-    game:load()
+    p0.priority = min(C_PRIORITY_SWITCH, priority_class+p0.active:getstat'speed')
 end $$
 
-|[p2sel_init]| function(game)
-    local p2 = game.p2
-    p2.actions = {{message="what,an,attack", logic=nop}}
+|[psel_update]| function(game)
+    if g_bpx or g_bpo then
+        game:load()
 
-    local priority_class = C_PRIORITY_ATTACK
+        -- logic to determine who goes first
+        local p1 = game.p1
+        local p2 = game.p2
+        if p1.priority == p2.priority then p2.priority += sgn(rnd'2'-1) end
+        game.p0 = p1.priority > p2.priority and p1 or p2
+    end
+end $$
 
-    -- speed can be between 1 and 999, so multiples of 1000 can be priority
-    -- highest priority goes first. if priority is same, roll a dice to decide
-    p2.priority = min(C_PRIORITY_SWITCH, priority_class+p2.active:getstat'speed')
+|[psel_draw3]| function(game) print_draw3_message("planning", "an", "action") end $$
 
-    -- logic to determine who goes first
-    local p1 = game.p1
-    if p1.priority == p2.priority then p2.priority += sgn(rnd'2'-1) end
-    game.p0 = p1.priority > p2.priority and p1 or p2
-    game:load()
+|[turn_init]| function(game)
+    local action = deli(game.p0.actions, 1)
+    if action then
+        game.cur_action = action
+        game.cur_action.logic()
+    else
+        game.cur_action = {active=p0.active, message="nothing,to,do", logic=nop}
+        game.cur_action.logic()
+    end
+end $$
+
+|[turn_finit]| function(game)
+    -- switch p0 and go to the next state
+    game.p0 = game.p0 == game.p1 and game.p2 or game.p1
 end $$
 
 |[turn_update]| function(game)
-    if game.action_timer == 0 then
-        game.cur_action = deli(game.p0.actions, 1)
-    elseif game.action_timer == 30 then
-        -- do the action
-        game.cur_action.logic()
-    elseif game.action_timer > 30 and (g_bx or g_bo) then
-        if #game.p0.actions == 0 then
-            -- switch p0 and go to the next state
-            game.p0 = game.p0 == game.p1 and game.p2 or game.p1
-            game:load()
+    if g_bpx or g_bpo then
+        local action = deli(game.p0.actions, 1)
+        if action then
+            game.cur_action = action
+            game.cur_action.logic()
+
+            if     game.p1.active.shared.hp <= 0 then add(game.p0.actions, {active=game.p1.active, message="#,is,fainted", logic=nop})
+            elseif game.p2.active.shared.hp <= 0 then add(game.p0.actions, {active=game.p2.active, message="#,is,fainted", logic=nop}) end
         else
-            game.action_timer = -1
+            game:load()
         end
     end
-    
-    game.action_timer += 1
-    game.action_timer = min(31, game.action_timer)
 end $$
 
-function draw_hp(x, y, hp, maxhp, status, align)
+function draw_hp(x, y, hp, maxhp, status, align, col)
     hp = max(ceil(hp), 0)
-    zprint(hp,    x+3*max(align, 0), y-2+5*align, 1, align)
-    zprint(status, x+3*max(align, 0), y-2-5*align, 5, align)
-    rectfill(x, y-1, x-align*ceil(hp/maxhp*17), y+1, 1)
+    zprint(hp,           x+3*max(align, 0), y-2+5*align, col, align)
+    zprint(status or "", x+3*max(align, 0), y-2-5*align, col, align)
+    rectfill(x, y-1, x-align*ceil(hp/maxhp*17), y+1, col)
 end
 
 |[turn_draw1]|  function(game)
-    -- todo: after that, implement action system for turn
-
     -- SIDE/SIDE/TEXT and space i guess
     local a1, a2 = game.p1.active, game.p2.active
     -- this is good positioning
     --zprint(a1.shared.hp, 41, 29, 5, 1)
-    draw_hp(38, 30, a1.shared.hp, a1.shared.maxhp, "psn", 1)
-    draw_hp(1,  9,  a2.shared.hp, a2.shared.maxhp, "par",   -1)
+
+    local active = game.cur_action.active and game.p0.active
+    draw_hp(38, 30, a1.shared.hp, a1.shared.maxhp, a1.shared.major, 1,  active == game.p1.active and 6 or 1)
+    draw_hp(1,  9,  a2.shared.hp, a2.shared.maxhp, a2.shared.major, -1, active == game.p2.active and 6 or 1)
     c_pokemon[a1.shared.num].draw(   10, 40-10-t()%2\1, 5)
     c_pokemon[a2.shared.num].draw(40-10,    10+t()%2\1, 5, -1)
 end $$
 
 |[turn_draw2]|  function(game)
-    print(game.p0.name, 3, 3, 1)
+    zprint(game.p0.name, 23, 4, 1, 0)
 end $$
 
 |[turn_draw3]|  function(game)
-    print_draw3_message(unpack(split(game.cur_action.message)))
+    local message_tbl = split(game.cur_action.message)
+    if message_tbl[1] == '#' then message_tbl[1] = c_pokemon[game.cur_action.active.shared.num].name end
+    print_draw3_message(unpack(message_tbl))
 end $$
 
 

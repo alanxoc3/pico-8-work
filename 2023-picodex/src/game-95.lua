@@ -9,7 +9,7 @@ zclass[[modes,actor|
 
     stack;,;
 
-    defaults; sub,0, init,nop, update,nop, draw1,nop, draw2,nop, draw3,nop;
+    defaults; sub,0, init,nop, update,nop, finit,nop, draw1,nop, draw2,nop, draw3,nop;
 
     main;         update,%main_update,         draw1,%main_draw1,         draw2,%main_draw2,         draw3,%main_draw3;
     credits;      update,%credits_update,      draw1,%credits_draw1,      draw2,%main_draw2,         draw3,%main_draw3, credits_offset,5;
@@ -19,10 +19,10 @@ zclass[[modes,actor|
     fightsel;     update,%fightsel_update,     draw1,%fightsel_draw1,     draw2,%fightsel_draw2,     draw3,%fightsel_draw3,     init,%fightsel_init;
 
     -- these are the different states for a fight
-    p1sel;        next,p2sel, init,%p1sel_init, draw1,%turn_draw1;
-    p2sel;        next,turn1, init,%p2sel_init, draw1,%turn_draw1;
-    turn1;        next,turn2, update,%turn_update, draw1,%turn_draw1, draw2,%turn_draw2, draw3,%turn_draw3, action_timer,0, cur_action,null;
-    turn2;        next,p1sel, update,%turn_update, draw1,%turn_draw1, draw2,%turn_draw2, draw3,%turn_draw3, action_timer,0, cur_action,null;
+    p1sel;        next,p2sel, update,%psel_update, draw1,%turn_draw1, draw2,%turn_draw2, draw3,%psel_draw3, init,%psel_init, cur_action,null, p0key,p1;
+    p2sel;        next,turn1, update,%psel_update, draw1,%turn_draw1, draw2,%turn_draw2, draw3,%psel_draw3, init,%psel_init, cur_action,null, p0key,p2;
+    turn1;        next,turn2, update,%turn_update, draw1,%turn_draw1, draw2,%turn_draw2, draw3,%turn_draw3, init,%turn_init,  finit,%turn_finit, cur_action,null;
+    turn2;        next,p1sel, update,%turn_update, draw1,%turn_draw1, draw2,%turn_draw2, draw3,%turn_draw3, init,%turn_init,  finit,%turn_finit, cur_action,null;
     -- also might want a "fight win"
 
     party;        update,%party_update,        draw1,%party_draw1,        draw2,%party_draw2,        draw3,%party_draw3,        select_func,%party_select;

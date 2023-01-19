@@ -22,6 +22,7 @@ zclass[[actor,timer|
     isnew,    yes,
 
     init,      nop,
+    finit,     nop,
     stateless_update,    nop,
     update,    nop,
     destroyed, nop;
@@ -42,7 +43,9 @@ end $$
     if stateName == 'dead' then
         a.alive = false
     else
+        a:finit()
         a:end_timer(a.curr)
+
         a.next, a.duration = nil -- default values, unless overridden by next line
         for k, v in pairs(a.defaults) do a[k] = v end
         for k, v in pairs(a[stateName]) do a[k] = v end
