@@ -14,7 +14,14 @@ end
 -- how does a turn know
 function begin_fight(game)
     local party1 = get_fight_party(get_party(@S_CUR_PARTY), 100)
-    local party2 = get_fight_party({  { num=129,moves=c_pokemon[129].get_natural_moveset(10) }  }, 100)
+
+    -- create a random, strong-ish party
+    local party_draft = {}
+    for i=1,6 do
+        local num = 129 -- flr_rnd(151)+1
+        add(party_draft, { num=num, moves=c_pokemon[num].get_natural_moveset(10) })
+    end
+    local party2 = get_fight_party(party_draft, 100)
 
     game.p1 = { name="player 1",   priority=0, iscpu=false, actions={}, active=get_next_active(party1), party=party1 }
     game.p2 = { name="bugcatcher", priority=0, iscpu=true,  actions={}, active=get_next_active(party2), party=party2 }

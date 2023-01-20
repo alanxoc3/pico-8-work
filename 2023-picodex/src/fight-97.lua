@@ -1,24 +1,31 @@
--- todo: make pkmn pick random move
 -- todo: logic should pass in p0, p2, move_parameters
 -- todo: dead pkmn should send out next
 -- todo: empty party should end battle
+
 |[psel_init]| function(game)
     game.p0 = game[game.p0key]
 
     local p0 = game.p0
-    p0.actions = {{active=p0.active, message="#,uses,splash", logic=function()
-        add(p0.actions, { active=p0.active, message="#,does,nothing", logic=nop })
-    end}}
+    p0.actions = {}
 
-    -- p1.actions = {{active=p1.active, message="#,uses,tackle", logic=function()
-    --     add(p1.actions, {
-    --         active=game.p2.active, message="#,-100,hitpoints", logic=function()
-    --             game.p2.active.shared.hp -= 100
-    --         end
-    --     })
-    -- end}}
+    -- attacking
+    local moveslot = select_random_move_slot(p0.active)
+    local move = p0.active.moveids[moveslot] or M_STRUGGLE
+    add(p0.actions, {
+        active=p0.active,
+        message="#,uses,"..c_moves[move].name,
+        logic=function(s, o) -- self, other
+            generic_attack(s, o, moveslot)
+        end
+    })
 
     local priority_class = C_PRIORITY_ATTACK
+
+    -- hardcoding the only moves that can change priority for now. Maybe there is a more token efficient way to do this?
+    if move == M_QUICK_ATTACK then priority_class = C_PRIORITY_QUICKATTACK end
+    if move == M_COUNTER or move == M_WHIRLWIND or move == M_ROAR or move == M_TELEPORT then
+        priority_class = C_PRIORITY_COUNTER
+    end
 
     -- speed can be between 1 and 999, so multiples of 1000 can be priority
     -- highest priority goes first. if priority is same, roll a dice to decide
@@ -43,13 +50,16 @@ end $$
     local action = deli(game.p0.actions, 1)
     if action then
         game.cur_action = action
-        game.cur_action.logic()
+
+        -- todo: can this flip logic be combined with what's in finit?
+        game.cur_action.logic(game.p0, game.p0 == game.p1 and game.p2 or game.p1)
     else
         game.cur_action = {active=p0.active, message="nothing,to,do", logic=nop}
         game.cur_action.logic()
     end
 end $$
 
+-- finit gets executed on the same turn as init
 |[turn_finit]| function(game)
     -- switch p0 and go to the next state
     game.p0 = game.p0 == game.p1 and game.p2 or game.p1
@@ -100,19 +110,54 @@ end $$
     print_draw3_message(unpack(message_tbl))
 end $$
 
+---------------------------------------------------------------------------
 
+-- skip if the active pkmn isn't active anymore.
+function get_next_action(s, o)
 
+end
 
+-- returns move slot number. 0 means to use struggle.
+function select_random_move_slot(active)
+    local possible_moves = {}
 
+    for i=1,4 do
+        if active.moveids[i] and active.movepps[i] > 0 then
+            add(possible_moves, i)
+        end
+    end
+
+    return possible_moves[flr_rnd(#possible_moves)+1] or M_STRUGGLE
+end
+
+-- [s]elf pl, [o]ther pl, [m]ove slot
+function generic_attack(s, o, m)
+    local move = c_moves[s.active.moveids[m] or 0]
+
+    -- should only be nil for struggle?
+    if move.num != 0 then
+        s.active.movepps[m] -= 1
+    end
+
+    local dmg = move.damage -- calc_move_damage(s.active.shared.lvl, s.active.shared.attack, defence, critical, move_power)
+    if dmg > 0 then
+        add(s.actions, {
+            active=o.active, message="#,-"..dmg..",hitpoints", logic=function()
+                o.active.shared.hp = max(0, o.active.shared.hp-dmg)
+            end
+        })
+
+    -- otherwise, it is splash for now i guess
+    else
+        add(s.actions, {active=s.active, message="#,does,nothing", logic=nop})
+    end
+end
 
 -- turn_actions = {
 --   message?                  -- lowered attack
 --   function (does something) -- takes attack down 1
 --   koed!
 -- }
-
-
-
 
 -- there are stat stages for modifying moves. accuracy doesn't have same stat stages though: https://www.smogon.com/rb/articles/stadium_guide
 -- here is where the table came from: https://gamefaqs.gamespot.com/gameboy/367023-pokemon-red-version/faqs/64175/stat-modifiers

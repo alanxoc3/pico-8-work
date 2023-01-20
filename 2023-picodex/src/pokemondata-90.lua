@@ -195,18 +195,22 @@ c_zmovetype = zobj[[
     ; name,"special";
 ]]
 
+-- accuracy 2 means it can't miss.
+-- accuracy 0 means it affects the user.
+-- pp 0 means it is struggle
+-- dmg 0 means it likely changes status or has an effect.
 c_moves = zobj[[
    -- "name",      type        pp  dmg  acc
-   0;, "struggle",  T_NORMAL,   ,   50,
+   0;, "struggle",  T_NORMAL,   0,  50, 1
 
     -- tms
    ;;, "megapunch", T_NORMAL,   20, 80,  .85 -- 1
    ;;, "razorwind", T_NORMAL,   10, 80,  1   -- 2
-   ;;, "swordance", T_NORMAL,   20, ,        -- 3
-   ;;, "whirlwind", T_NORMAL,   20, ,        -- 4
+   ;;, "swordance", T_NORMAL,   20, 0,   0   -- 3
+   ;;, "whirlwind", T_NORMAL,   20, 0,   0   -- 4
    ;;, "megakick",  T_NORMAL,   5,  120, .75 -- 5
-   ;;, "toxic",     T_POISON,   10, ,    .9  -- 6
-   ;;, "horndrill", T_NORMAL,   5,  ,    .3  -- 7
+   ;;, "toxic",     T_POISON,   10, 0,   .9  -- 6
+   ;;, "horndrill", T_NORMAL,   5,  0,   .3  -- 7
    ;;, "bodyslam",  T_NORMAL,   15, 85,  1   -- 8
    ;;, "takedown",  T_NORMAL,   20, 90,  .85 -- 9
    ;;, "doubledge", T_NORMAL,   15, 120, 1   -- 10
@@ -217,46 +221,46 @@ c_moves = zobj[[
    ;;, "hyperbeam", T_NORMAL,   5,  150, .9  -- 15
    ;;, "payday",    T_NORMAL,   20, 40,  1   -- 16
    ;;, "submision", T_FIGHTING, 20, 80,  .8  -- 17
-   ;;, "counter",   T_FIGHTING, 20, ,    1   -- 18
-   ;;, "seismctss", T_FIGHTING, 20, ,    1   -- 19
+   ;;, "counter",   T_FIGHTING, 20, 0,   1   -- 18
+   ;;, "seismctss", T_FIGHTING, 20, 0,   1   -- 19
    ;;, "rage",      T_NORMAL,   20, 20,  1   -- 20
    ;;, "megadrain", T_GRASS,    15, 40,  1   -- 21
    ;;, "solarbeam", T_GRASS,    10, 120, 1   -- 22
-   ;;, "drgonrage", T_DRAGON,   10, ,    1   -- 23
+   ;;, "drgonrage", T_DRAGON,   10, 0,   1   -- 23
    ;;, "thndrbolt", T_ELECTRIC, 15, 90,  1   -- 24
    ;;, "thunder",   T_ELECTRIC, 10, 110, .7  -- 25
    ;;, "eartquake", T_GROUND,   10, 100, 1   -- 26
-   ;;, "fissure",   T_GROUND,   5,  ,    .3  -- 27
+   ;;, "fissure",   T_GROUND,   5,  0,   .3  -- 27
    ;;, "dig",       T_GROUND,   10, 80,  1   -- 28
    ;;, "psychic",   T_PSYCHIC,  10, 90,  1   -- 29
-   ;;, "teleport",  T_PSYCHIC,  20, ,        -- 30
-   ;;, "mimic",     T_NORMAL,   10, ,        -- 31
-   ;;, "dubleteam", T_NORMAL,   15, ,        -- 32
-   ;;, "reflect",   T_PSYCHIC,  20, ,        -- 33
-   ;;, "bide",      T_NORMAL,   10, ,        -- 34
-   ;;, "metronome", T_NORMAL,   10, ,        -- 35
+   ;;, "teleport",  T_PSYCHIC,  20, 0,   0   -- 30
+   ;;, "mimic",     T_NORMAL,   10, 0,   0   -- 31
+   ;;, "dubleteam", T_NORMAL,   15, 0,   0   -- 32
+   ;;, "reflect",   T_PSYCHIC,  20, 0,   0   -- 33
+   ;;, "bide",      T_NORMAL,   10, 0,   0   -- 34
+   ;;, "metronome", T_NORMAL,   10, 0,   0   -- 35
    ;;, "slfdstrct", T_NORMAL,   5,  200, 1   -- 36
    ;;, "eggbomb",   T_NORMAL,   10, 100, .75 -- 37
    ;;, "fireblast", T_FIRE,     5,  110, .85 -- 38
-   ;;, "swift",     T_NORMAL,   20, 60,      -- 39
+   ;;, "swift",     T_NORMAL,   20, 60,  2   -- 39
    ;;, "skullbash", T_NORMAL,   10, 130, 1   -- 40
-   ;;, "softboild", T_NORMAL,   5,  ,        -- 41
+   ;;, "softboild", T_NORMAL,   5,  0,   0   -- 41
    ;;, "dreameatr", T_PSYCHIC,  15, 100, 1   -- 42
    ;;, "skyattack", T_FLYING,   5,  140, .9  -- 43
-   ;;, "rest",      T_PSYCHIC,  5,  ,        -- 44
-   ;;, "thndrwave", T_ELECTRIC, 20, ,    .9  -- 45
-   ;;, "psywave",   T_PSYCHIC,  15, ,    1   -- 46
+   ;;, "rest",      T_PSYCHIC,  5,  0,   0   -- 44
+   ;;, "thndrwave", T_ELECTRIC, 20, 0,   .9  -- 45
+   ;;, "psywave",   T_PSYCHIC,  15, 0,   1   -- 46
    ;;, "explosion", T_NORMAL,   5,  250, 1   -- 47
    ;;, "rockslide", T_ROCK,     10, 75,  .9  -- 48
    ;;, "triattack", T_NORMAL,   10, 80,  1   -- 49
-   ;;, "sbstitute", T_NORMAL,   10, ,        -- 50
+   ;;, "sbstitute", T_NORMAL,   10, 0,   0   -- 50
 
     -- hms
    ;;, "cut",       T_NORMAL,   30, 50,  .95 -- 51
    ;;, "fly",       T_FLYING,   15, 90,  .95 -- 52
    ;;, "surf",      T_WATER,    15, 90,  1   -- 53
    ;;, "strength",  T_NORMAL,   15, 80,  1   -- 54
-   ;;, "flash",     T_NORMAL,   20, ,    1   -- 55
+   ;;, "flash",     T_NORMAL,   20, 0,   1   -- 55
 
     -- remaining moves (besides struggle)
    ;;, "pound",     T_NORMAL,   35, 40,  1   -- 56
@@ -268,7 +272,7 @@ c_moves = zobj[[
    ;;, "thndrpnch", T_ELECTRIC, 15, 75,  1   -- 62
    ;;, "scratch",   T_NORMAL,   35, 40,  1   -- 63
    ;;, "vicegrip",  T_NORMAL,   30, 55,  1   -- 64
-   ;;, "guilotine", T_NORMAL,   5,  ,    .3  -- 65
+   ;;, "guilotine", T_NORMAL,   5,  0,   .3  -- 65
    ;;, "gust",      T_FLYING,   35, 40,  1   -- 66
    ;;, "wingattck", T_FLYING,   35, 60,  1   -- 67
    ;;, "bind",      T_NORMAL,   20, 15,  .85 -- 68
@@ -278,66 +282,66 @@ c_moves = zobj[[
    ;;, "dublekick", T_FIGHTING, 30, 30,  1   -- 72
    ;;, "jumpkick",  T_FIGHTING, 10, 100, .95 -- 73
    ;;, "rolingkck", T_FIGHTING, 15, 60,  .85 -- 74
-   ;;, "sandattck", T_GROUND,   15, ,    1   -- 75
+   ;;, "sandattck", T_GROUND,   15, 0,   1   -- 75
    ;;, "headbutt",  T_NORMAL,   15, 70,  1   -- 76
    ;;, "hornattck", T_NORMAL,   25, 65,  1   -- 77
    ;;, "furyattck", T_NORMAL,   20, 15,  .85 -- 78
    ;;, "tackle",    T_NORMAL,   35, 40,  1   -- 79
    ;;, "wrap",      T_NORMAL,   20, 15,  .9  -- 80
    ;;, "thrash",    T_NORMAL,   10, 120, 1   -- 81
-   ;;, "tailwhip",  T_NORMAL,   30, ,    1   -- 82
+   ;;, "tailwhip",  T_NORMAL,   30, 0,   1   -- 82
    ;;, "psnsting",  T_POISON,   35, 15,  1   -- 83
    ;;, "twineedle", T_BUG,      20, 25,  1   -- 84
    ;;, "pinmisile", T_BUG,      20, 25,  .95 -- 85
-   ;;, "leer",      T_NORMAL,   30, ,    1   -- 86
+   ;;, "leer",      T_NORMAL,   30, 0,   1   -- 86
    ;;, "bite",      T_NORMAL,   25, 60,  1   -- 87
-   ;;, "growl",     T_NORMAL,   40, ,    1   -- 88
-   ;;, "roar",      T_NORMAL,   20, ,        -- 89
-   ;;, "sing",      T_NORMAL,   15, ,    .55 -- 90
-   ;;, "suprsonic", T_NORMAL,   20, ,    .55 -- 91
-   ;;, "sonicboom", T_NORMAL,   20, ,    .9  -- 92
-   ;;, "disable",   T_NORMAL,   20, ,    1   -- 93
+   ;;, "growl",     T_NORMAL,   40, 0,   1   -- 88
+   ;;, "roar",      T_NORMAL,   20, 0,   1   -- 89
+   ;;, "sing",      T_NORMAL,   15, 0,   .55 -- 90
+   ;;, "suprsonic", T_NORMAL,   20, 0,   .55 -- 91
+   ;;, "sonicboom", T_NORMAL,   20, 0,   .9  -- 92
+   ;;, "disable",   T_NORMAL,   20, 0,   1   -- 93
    ;;, "acid",      T_POISON,   30, 40,  1   -- 94
    ;;, "ember",     T_FIRE,     25, 40,  1   -- 95
    ;;, "flmethrwr", T_FIRE,     15, 90,  1   -- 96
-   ;;, "mist",      T_ICE,      30, ,        -- 97
+   ;;, "mist",      T_ICE,      30, 0,   0   -- 97
    ;;, "hydropump", T_WATER,    5,  110, .8  -- 98
    ;;, "psybeam",   T_PSYCHIC,  20, 65,  1   -- 99
    ;;, "aurorbeam", T_ICE,      20, 65,  1   -- 100
    ;;, "peck",      T_FLYING,   35, 35,  1   -- 101
    ;;, "drillpeck", T_FLYING,   20, 80,  1   -- 102
-   ;;, "lowkick",   T_FIGHTING, 20, ,    1   -- 103
+   ;;, "lowkick",   T_FIGHTING, 20, 0,   1   -- 103
    ;;, "absorb",    T_GRASS,    25, 20,  1   -- 104
-   ;;, "leechseed", T_GRASS,    10, ,    .9  -- 105
-   ;;, "growth",    T_NORMAL,   20, ,        -- 106
+   ;;, "leechseed", T_GRASS,    10, 0,   .9  -- 105
+   ;;, "growth",    T_NORMAL,   20, 0,   0   -- 106
    ;;, "razorleaf", T_GRASS,    25, 55,  .95 -- 107
-   ;;, "psnpowder", T_POISON,   35, ,    .75 -- 108
-   ;;, "stunspore", T_GRASS,    30, ,    .75 -- 109
-   ;;, "slppowder", T_GRASS,    15, ,    .75 -- 110
+   ;;, "psnpowder", T_POISON,   35, 0,   .75 -- 108
+   ;;, "stunspore", T_GRASS,    30, 0,   .75 -- 109
+   ;;, "slppowder", T_GRASS,    15, 0,   .75 -- 110
    ;;, "petldance", T_GRASS,    10, 120, 1   -- 111
-   ;;, "stringsht", T_BUG,      40, ,    .95 -- 112
+   ;;, "stringsht", T_BUG,      40, 0,   .95 -- 112
    ;;, "firespin",  T_FIRE,     15, 35,  .85 -- 113
    ;;, "thndrshck", T_ELECTRIC, 30, 40,  1   -- 114
    ;;, "rockthrow", T_ROCK,     15, 50,  .9  -- 115
    ;;, "confusion", T_PSYCHIC,  25, 50,  1   -- 116
-   ;;, "hypnosis",  T_PSYCHIC,  20, ,    .6  -- 117
-   ;;, "meditate",  T_PSYCHIC,  40, ,        -- 118
-   ;;, "agility",   T_PSYCHIC,  30, ,        -- 119
+   ;;, "hypnosis",  T_PSYCHIC,  20, 0,   .6  -- 117
+   ;;, "meditate",  T_PSYCHIC,  40, 0,   0   -- 118
+   ;;, "agility",   T_PSYCHIC,  30, 0,   0   -- 119
    ;;, "quickatck", T_NORMAL,   30, 40,  1   -- 120
-   ;;, "niteshade", T_GHOST,    15, ,    1   -- 121
-   ;;, "screech",   T_NORMAL,   40, ,    .85 -- 122
-   ;;, "recover",   T_NORMAL,   5,  ,        -- 123
-   ;;, "harden",    T_NORMAL,   30, ,        -- 124
-   ;;, "minimize",  T_NORMAL,   10, ,        -- 125
-   ;;, "smokescrn", T_NORMAL,   20, ,    1   -- 126
-   ;;, "confusray", T_GHOST,    10, ,    1   -- 127
-   ;;, "withdraw",  T_WATER,    40, ,        -- 128
-   ;;, "defenscrl", T_NORMAL,   40, ,        -- 129
-   ;;, "barrier",   T_PSYCHIC,  20, ,        -- 130
-   ;;, "lightscrn", T_PSYCHIC,  30, ,        -- 131
-   ;;, "haze",      T_ICE,      30, ,        -- 132
-   ;;, "focusnrgy", T_NORMAL,   30, ,        -- 133
-   ;;, "mirormove", T_FLYING,   20, ,        -- 134
+   ;;, "niteshade", T_GHOST,    15, 0,   1   -- 121
+   ;;, "screech",   T_NORMAL,   40, 0,   .85 -- 122
+   ;;, "recover",   T_NORMAL,   5,  0,   0   -- 123
+   ;;, "harden",    T_NORMAL,   30, 0,   0   -- 124
+   ;;, "minimize",  T_NORMAL,   10, 0,   0   -- 125
+   ;;, "smokescrn", T_NORMAL,   20, 0,   1   -- 126
+   ;;, "confusray", T_GHOST,    10, 0,   1   -- 127
+   ;;, "withdraw",  T_WATER,    40, 0,   0   -- 128
+   ;;, "defenscrl", T_NORMAL,   40, 0,   0   -- 129
+   ;;, "barrier",   T_PSYCHIC,  20, 0,   0   -- 130
+   ;;, "lightscrn", T_PSYCHIC,  30, 0,   0   -- 131
+   ;;, "haze",      T_ICE,      30, 0,   0   -- 132
+   ;;, "focusnrgy", T_NORMAL,   30, 0,   0   -- 133
+   ;;, "mirormove", T_FLYING,   20, 0,   0   -- 134
    ;;, "lick",      T_GHOST,    30, 30,  1   -- 135
    ;;, "smog",      T_POISON,   20, 30,  .7  -- 136
    ;;, "sludge",    T_POISON,   20, 65,  1   -- 137
@@ -346,26 +350,26 @@ c_moves = zobj[[
    ;;, "clamp",     T_WATER,    15, 35,  .85 -- 140
    ;;, "spikcanon", T_NORMAL,   15, 20,  1   -- 141
    ;;, "constrict", T_NORMAL,   35, 10,  1   -- 142
-   ;;, "amnesia",   T_PSYCHIC,  20, ,        -- 143
-   ;;, "kinesis",   T_PSYCHIC,  15, ,    .8  -- 144
+   ;;, "amnesia",   T_PSYCHIC,  20, 0,   0   -- 143
+   ;;, "kinesis",   T_PSYCHIC,  15, 0,   .8  -- 144
    ;;, "hghjmpkck", T_FIGHTING, 10, 130, .9  -- 145
-   ;;, "glare",     T_NORMAL,   30, ,    1   -- 146
-   ;;, "poisongas", T_POISON,   40, ,    .9  -- 147
+   ;;, "glare",     T_NORMAL,   30, 0,   1   -- 146
+   ;;, "poisongas", T_POISON,   40, 0,   .9  -- 147
    ;;, "barrage",   T_NORMAL,   20, 15,  .85 -- 148
    ;;, "leechlife", T_BUG,      10, 80,  1   -- 149
-   ;;, "lovelykss", T_NORMAL,   10, ,    .75 -- 150
-   ;;, "transform", T_NORMAL,   10, ,        -- 151
+   ;;, "lovelykss", T_NORMAL,   10, 0,   .75 -- 150
+   ;;, "transform", T_NORMAL,   10, 0,   0   -- 151
    ;;, "bubble",    T_WATER,    30, 40,  1   -- 152
    ;;, "dizypunch", T_NORMAL,   10, 70,  1   -- 153
-   ;;, "spore",     T_GRASS,    15, ,    1   -- 154
-   ;;, "splash",    T_NORMAL,   40, ,        -- 155
-   ;;, "acidarmor", T_POISON,   20, ,        -- 156
+   ;;, "spore",     T_GRASS,    15, 0,   1   -- 154
+   ;;, "splash",    T_NORMAL,   40, 0,   0   -- 155
+   ;;, "acidarmor", T_POISON,   20, 0,   0   -- 156
    ;;, "crbhammer", T_WATER,    10, 100, .9  -- 157
    ;;, "furyswipe", T_NORMAL,   15, 18,  .8  -- 158
    ;;, "bonemrang", T_GROUND,   10, 50,  .9  -- 159
    ;;, "hyperfang", T_NORMAL,   15, 80,  .9  -- 160
-   ;;, "sharpen",   T_NORMAL,   30, ,        -- 161
-   ;;, "convrsion", T_NORMAL,   30, ,        -- 162
-   ;;, "superfang", T_NORMAL,   10, ,    .9  -- 163
+   ;;, "sharpen",   T_NORMAL,   30, 0,   0   -- 161
+   ;;, "convrsion", T_NORMAL,   30, 0,   0   -- 162
+   ;;, "superfang", T_NORMAL,   10, 0,   .9  -- 163
    ;;, "slash",     T_NORMAL,   20, 70,  1   -- 164
 ]]

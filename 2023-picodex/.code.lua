@@ -403,10 +403,21 @@ print_draw3_message("please","select a","party")
 end,function(game)
 game.p0=game[game.p0key]
 local p0=game.p0
-p0.actions={{active=p0.active,message="#,uses,splash",logic=function()
-add(p0.actions,{active=p0.active,message="#,does,nothing",logic=nop})
-end}}
+p0.actions={}
+local moveslot=select_random_move_slot(p0.active)
+local move=p0.active.moveids[moveslot]or 0
+add(p0.actions,{
+active=p0.active,
+message="#,uses,"..c_moves[move].name,
+logic=function(s,o)
+generic_attack(s,o,moveslot)
+end
+})
 local priority_class=1000
+if move==120 then priority_class=2000 end
+if move==18 or move==4 or move==89 or move==30 then
+priority_class=0000
+end
 p0.priority=min(3000,priority_class+p0.active:getstat"speed")
 end,function(game)
 if g_bpx or g_bpo then
@@ -420,7 +431,7 @@ end,function(game)print_draw3_message("planning","an","action")end,function(game
 local action=deli(game.p0.actions,1)
 if action then
 game.cur_action=action
-game.cur_action.logic()
+game.cur_action.logic(game.p0,game.p0==game.p1 and game.p2 or game.p1)
 else
 game.cur_action={active=p0.active,message="nothing,to,do",logic=nop}
 game.cur_action.logic()
@@ -487,27 +498,6 @@ end
 function zcls(col)
 rectfill(0x8000,0x8000,0x7fff,0x7fff,col or 0)
 end
-function tostring(any)
-if type(any)~="table"then return tostr(any)end
-local str="{"
-local keys={}
-for i=1,#any do
-if str~="{"then str=str.."," end
-keys[i]=true
-str=str..tostring(any[i])
-end
-local sortedkeys={}
-for k,v in pairs(any)do
-if not keys[k]then
-add(sortedkeys,k)
-end
-end
-for k in all(sortedkeys)do
-if str~="{"then str=str.."," end
-str=str..tostring(k).."="..tostring(any[k])
-end
-return str.."}"
-end
 zclass[[actor,timer|load,%actor_load,loadlogic,%actor_loadlogic,state,%actor_state,kill,%actor_kill,clean,%actor_clean,is_alive,%actor_is_alive,alive,yes,duration,null,curr,start,next,null,isnew,yes,init,nop,finit,nop,stateless_update,nop,update,nop,destroyed,nop;]]
 zclass[[drawlayer_50|]]
 zclass[[timer|timers;,;start_timer,%timer_reset_timer,end_timer,%timer_end_timer,is_active,%timer_is_active,get_elapsed_percent,%timer_get_elapsed_percent,tick,%timer_tick,]]
@@ -515,7 +505,7 @@ c_pokemon=zobj[[0;,0,missingno,0,1,33,136,0,29,6,1,1;;,0,bulbasaur,8,5,45,49,49,
 c_types=zobj[[0;bg,0,name,bird;0;good;,;0;null;,;0;weak;,;1;bg,0,name,normal;1;good;,;1;null;,15;1;weak;,13;2;bg,5,name,fire;2;good;,8,10,11;2;null;,;2;weak;,2,4,13,14;3;bg,2,name,fighting;3;good;,10,1,13;3;null;,15;3;weak;,11,9,5,12;4;bg,4,name,water;4;good;,2,7,13;4;null;,;4;weak;,14,8,4;5;bg,1,name,poison;5;good;,11,8;5;null;,;5;weak;,15,7,5,13;6;bg,6,name,electric;6;good;,9,4;6;null;,7;6;weak;,14,6,8;7;bg,2,name,ground;7;good;,6,2,5,13;7;null;,9;7;weak;,11,8;8;bg,3,name,grass;8;good;,7,13,4;8;null;,;8;weak;,11,14,2,9,8,5;9;bg,0,name,flying;9;good;,11,3,8;9;null;,;9;weak;,6,13;10;bg,4,name,ice;10;good;,14,9,8;10;null;,;10;weak;,2,10,4;11;bg,3,name,bug;11;good;,8,12;11;null;,;11;weak;,3,2,9,15,5;12;bg,1,name,psychic;12;good;,3,5;12;null;,;12;weak;,12;13;bg,0,name,rock;13;good;,11,2,9,10;13;null;,;13;weak;,3,7;14;bg,0,name,dragon;14;good;,14;14;null;,;14;weak;,;15;bg,1,name,ghost;15;good;,15;15;null;,1,12;15;weak;,]]
 c_bg_styles=zobj[[0;bg,6,aa,13;;bg,13,aa,5;;bg,9,aa,4;;bg,11,aa,3;;bg,12,aa,5;;bg,8,aa,2;;bg,10,aa,4]]
 c_zmovetype=zobj[[0;name,status;;name,physical;;name,special;]]
-c_moves=zobj[[0;,struggle,1,,50,;;,megapunch,1,20,80,.85;;,razorwind,1,10,80,1;;,swordance,1,20,,;;,whirlwind,1,20,,;;,megakick,1,5,120,.75;;,toxic,5,10,,.9;;,horndrill,1,5,,.3;;,bodyslam,1,15,85,1;;,takedown,1,20,90,.85;;,doubledge,1,15,120,1;;,bublebeam,4,20,65,1;;,watergun,4,25,40,1;;,icebeam,10,10,90,1;;,blizzard,10,5,110,.7;;,hyperbeam,1,5,150,.9;;,payday,1,20,40,1;;,submision,3,20,80,.8;;,counter,3,20,,1;;,seismctss,3,20,,1;;,rage,1,20,20,1;;,megadrain,8,15,40,1;;,solarbeam,8,10,120,1;;,drgonrage,14,10,,1;;,thndrbolt,6,15,90,1;;,thunder,6,10,110,.7;;,eartquake,7,10,100,1;;,fissure,7,5,,.3;;,dig,7,10,80,1;;,psychic,12,10,90,1;;,teleport,12,20,,;;,mimic,1,10,,;;,dubleteam,1,15,,;;,reflect,12,20,,;;,bide,1,10,,;;,metronome,1,10,,;;,slfdstrct,1,5,200,1;;,eggbomb,1,10,100,.75;;,fireblast,2,5,110,.85;;,swift,1,20,60,;;,skullbash,1,10,130,1;;,softboild,1,5,,;;,dreameatr,12,15,100,1;;,skyattack,9,5,140,.9;;,rest,12,5,,;;,thndrwave,6,20,,.9;;,psywave,12,15,,1;;,explosion,1,5,250,1;;,rockslide,13,10,75,.9;;,triattack,1,10,80,1;;,sbstitute,1,10,,;;,cut,1,30,50,.95;;,fly,9,15,90,.95;;,surf,4,15,90,1;;,strength,1,15,80,1;;,flash,1,20,,1;;,pound,1,35,40,1;;,karatechp,3,25,50,1;;,dubleslap,1,10,15,.85;;,cometpnch,1,15,18,.85;;,firepunch,2,15,75,1;;,icepunch,10,15,75,1;;,thndrpnch,6,15,75,1;;,scratch,1,35,40,1;;,vicegrip,1,30,55,1;;,guilotine,1,5,,.3;;,gust,9,35,40,1;;,wingattck,9,35,60,1;;,bind,1,20,15,.85;;,slam,1,20,80,.75;;,vinewhip,8,25,45,1;;,stomp,1,20,65,1;;,dublekick,3,30,30,1;;,jumpkick,3,10,100,.95;;,rolingkck,3,15,60,.85;;,sandattck,7,15,,1;;,headbutt,1,15,70,1;;,hornattck,1,25,65,1;;,furyattck,1,20,15,.85;;,tackle,1,35,40,1;;,wrap,1,20,15,.9;;,thrash,1,10,120,1;;,tailwhip,1,30,,1;;,psnsting,5,35,15,1;;,twineedle,11,20,25,1;;,pinmisile,11,20,25,.95;;,leer,1,30,,1;;,bite,1,25,60,1;;,growl,1,40,,1;;,roar,1,20,,;;,sing,1,15,,.55;;,suprsonic,1,20,,.55;;,sonicboom,1,20,,.9;;,disable,1,20,,1;;,acid,5,30,40,1;;,ember,2,25,40,1;;,flmethrwr,2,15,90,1;;,mist,10,30,,;;,hydropump,4,5,110,.8;;,psybeam,12,20,65,1;;,aurorbeam,10,20,65,1;;,peck,9,35,35,1;;,drillpeck,9,20,80,1;;,lowkick,3,20,,1;;,absorb,8,25,20,1;;,leechseed,8,10,,.9;;,growth,1,20,,;;,razorleaf,8,25,55,.95;;,psnpowder,5,35,,.75;;,stunspore,8,30,,.75;;,slppowder,8,15,,.75;;,petldance,8,10,120,1;;,stringsht,11,40,,.95;;,firespin,2,15,35,.85;;,thndrshck,6,30,40,1;;,rockthrow,13,15,50,.9;;,confusion,12,25,50,1;;,hypnosis,12,20,,.6;;,meditate,12,40,,;;,agility,12,30,,;;,quickatck,1,30,40,1;;,niteshade,15,15,,1;;,screech,1,40,,.85;;,recover,1,5,,;;,harden,1,30,,;;,minimize,1,10,,;;,smokescrn,1,20,,1;;,confusray,15,10,,1;;,withdraw,4,40,,;;,defenscrl,1,40,,;;,barrier,12,20,,;;,lightscrn,12,30,,;;,haze,10,30,,;;,focusnrgy,1,30,,;;,mirormove,9,20,,;;,lick,15,30,30,1;;,smog,5,20,30,.7;;,sludge,5,20,65,1;;,boneclub,7,20,65,.85;;,waterfall,4,15,80,1;;,clamp,4,15,35,.85;;,spikcanon,1,15,20,1;;,constrict,1,35,10,1;;,amnesia,12,20,,;;,kinesis,12,15,,.8;;,hghjmpkck,3,10,130,.9;;,glare,1,30,,1;;,poisongas,5,40,,.9;;,barrage,1,20,15,.85;;,leechlife,11,10,80,1;;,lovelykss,1,10,,.75;;,transform,1,10,,;;,bubble,4,30,40,1;;,dizypunch,1,10,70,1;;,spore,8,15,,1;;,splash,1,40,,;;,acidarmor,5,20,,;;,crbhammer,4,10,100,.9;;,furyswipe,1,15,18,.8;;,bonemrang,7,10,50,.9;;,hyperfang,1,15,80,.9;;,sharpen,1,30,,;;,convrsion,1,30,,;;,superfang,1,10,,.9;;,slash,1,20,70,1]]
+c_moves=zobj[[0;,struggle,1,0,50,1;;,megapunch,1,20,80,.85;;,razorwind,1,10,80,1;;,swordance,1,20,0,0;;,whirlwind,1,20,0,0;;,megakick,1,5,120,.75;;,toxic,5,10,0,.9;;,horndrill,1,5,0,.3;;,bodyslam,1,15,85,1;;,takedown,1,20,90,.85;;,doubledge,1,15,120,1;;,bublebeam,4,20,65,1;;,watergun,4,25,40,1;;,icebeam,10,10,90,1;;,blizzard,10,5,110,.7;;,hyperbeam,1,5,150,.9;;,payday,1,20,40,1;;,submision,3,20,80,.8;;,counter,3,20,0,1;;,seismctss,3,20,0,1;;,rage,1,20,20,1;;,megadrain,8,15,40,1;;,solarbeam,8,10,120,1;;,drgonrage,14,10,0,1;;,thndrbolt,6,15,90,1;;,thunder,6,10,110,.7;;,eartquake,7,10,100,1;;,fissure,7,5,0,.3;;,dig,7,10,80,1;;,psychic,12,10,90,1;;,teleport,12,20,0,0;;,mimic,1,10,0,0;;,dubleteam,1,15,0,0;;,reflect,12,20,0,0;;,bide,1,10,0,0;;,metronome,1,10,0,0;;,slfdstrct,1,5,200,1;;,eggbomb,1,10,100,.75;;,fireblast,2,5,110,.85;;,swift,1,20,60,2;;,skullbash,1,10,130,1;;,softboild,1,5,0,0;;,dreameatr,12,15,100,1;;,skyattack,9,5,140,.9;;,rest,12,5,0,0;;,thndrwave,6,20,0,.9;;,psywave,12,15,0,1;;,explosion,1,5,250,1;;,rockslide,13,10,75,.9;;,triattack,1,10,80,1;;,sbstitute,1,10,0,0;;,cut,1,30,50,.95;;,fly,9,15,90,.95;;,surf,4,15,90,1;;,strength,1,15,80,1;;,flash,1,20,0,1;;,pound,1,35,40,1;;,karatechp,3,25,50,1;;,dubleslap,1,10,15,.85;;,cometpnch,1,15,18,.85;;,firepunch,2,15,75,1;;,icepunch,10,15,75,1;;,thndrpnch,6,15,75,1;;,scratch,1,35,40,1;;,vicegrip,1,30,55,1;;,guilotine,1,5,0,.3;;,gust,9,35,40,1;;,wingattck,9,35,60,1;;,bind,1,20,15,.85;;,slam,1,20,80,.75;;,vinewhip,8,25,45,1;;,stomp,1,20,65,1;;,dublekick,3,30,30,1;;,jumpkick,3,10,100,.95;;,rolingkck,3,15,60,.85;;,sandattck,7,15,0,1;;,headbutt,1,15,70,1;;,hornattck,1,25,65,1;;,furyattck,1,20,15,.85;;,tackle,1,35,40,1;;,wrap,1,20,15,.9;;,thrash,1,10,120,1;;,tailwhip,1,30,0,1;;,psnsting,5,35,15,1;;,twineedle,11,20,25,1;;,pinmisile,11,20,25,.95;;,leer,1,30,0,1;;,bite,1,25,60,1;;,growl,1,40,0,1;;,roar,1,20,0,1;;,sing,1,15,0,.55;;,suprsonic,1,20,0,.55;;,sonicboom,1,20,0,.9;;,disable,1,20,0,1;;,acid,5,30,40,1;;,ember,2,25,40,1;;,flmethrwr,2,15,90,1;;,mist,10,30,0,0;;,hydropump,4,5,110,.8;;,psybeam,12,20,65,1;;,aurorbeam,10,20,65,1;;,peck,9,35,35,1;;,drillpeck,9,20,80,1;;,lowkick,3,20,0,1;;,absorb,8,25,20,1;;,leechseed,8,10,0,.9;;,growth,1,20,0,0;;,razorleaf,8,25,55,.95;;,psnpowder,5,35,0,.75;;,stunspore,8,30,0,.75;;,slppowder,8,15,0,.75;;,petldance,8,10,120,1;;,stringsht,11,40,0,.95;;,firespin,2,15,35,.85;;,thndrshck,6,30,40,1;;,rockthrow,13,15,50,.9;;,confusion,12,25,50,1;;,hypnosis,12,20,0,.6;;,meditate,12,40,0,0;;,agility,12,30,0,0;;,quickatck,1,30,40,1;;,niteshade,15,15,0,1;;,screech,1,40,0,.85;;,recover,1,5,0,0;;,harden,1,30,0,0;;,minimize,1,10,0,0;;,smokescrn,1,20,0,1;;,confusray,15,10,0,1;;,withdraw,4,40,0,0;;,defenscrl,1,40,0,0;;,barrier,12,20,0,0;;,lightscrn,12,30,0,0;;,haze,10,30,0,0;;,focusnrgy,1,30,0,0;;,mirormove,9,20,0,0;;,lick,15,30,30,1;;,smog,5,20,30,.7;;,sludge,5,20,65,1;;,boneclub,7,20,65,.85;;,waterfall,4,15,80,1;;,clamp,4,15,35,.85;;,spikcanon,1,15,20,1;;,constrict,1,35,10,1;;,amnesia,12,20,0,0;;,kinesis,12,15,0,.8;;,hghjmpkck,3,10,130,.9;;,glare,1,30,0,1;;,poisongas,5,40,0,.9;;,barrage,1,20,15,.85;;,leechlife,11,10,80,1;;,lovelykss,1,10,0,.75;;,transform,1,10,0,0;;,bubble,4,30,40,1;;,dizypunch,1,10,70,1;;,spore,8,15,0,1;;,splash,1,40,0,0;;,acidarmor,5,20,0,0;;,crbhammer,4,10,100,.9;;,furyswipe,1,15,18,.8;;,bonemrang,7,10,50,.9;;,hyperfang,1,15,80,.9;;,sharpen,1,30,0,0;;,convrsion,1,30,0,0;;,superfang,1,10,0,.9;;,slash,1,20,70,1]]
 function menu_update(game,mem,entries)
 local c,v=peek(mem),peek(mem+1)
 if g_bpu then c=max(0,c-1)end
@@ -833,6 +823,33 @@ zprint(hp,x+3*max(align,0),y-2+5*align,col,align)
 zprint(status or "",x+3*max(align,0),y-2-5*align,col,align)
 rectfill(x,y-1,x-align*ceil(hp/maxhp*17),y+1,col)
 end
+function get_next_action(s,o)
+end
+function select_random_move_slot(active)
+local possible_moves={}
+for i=1,4 do
+if active.moveids[i]and active.movepps[i]>0 then
+add(possible_moves,i)
+end
+end
+return possible_moves[flr_rnd(#possible_moves)+1]or 0
+end
+function generic_attack(s,o,m)
+local move=c_moves[s.active.moveids[m]or 0]
+if move.num!=0 then
+s.active.movepps[m]-=1
+end
+local dmg=move.damage
+if dmg>0 then
+add(s.actions,{
+active=o.active,message="#,-"..dmg..",hitpoints",logic=function()
+o.active.shared.hp=max(0,o.active.shared.hp-dmg)
+end
+})
+else
+add(s.actions,{active=s.active,message="#,does,nothing",logic=nop})
+end
+end
 function get_crit_ratio(base_speed)
 return min(.99,(base_speed+76)/1024)
 end
@@ -850,7 +867,12 @@ return{active=pl.active,message="#,comes,out",logic=function(p1,p2)end}
 end
 function begin_fight(game)
 local party1=get_fight_party(get_party(@0x5ef4),100)
-local party2=get_fight_party({{num=129,moves=c_pokemon[129].get_natural_moveset(10)}},100)
+local party_draft={}
+for i=1,6 do
+local num=129
+add(party_draft,{num=num,moves=c_pokemon[num].get_natural_moveset(10)})
+end
+local party2=get_fight_party(party_draft,100)
 game.p1={name="player 1",priority=0,iscpu=false,actions={},active=get_next_active(party1),party=party1}
 game.p2={name="bugcatcher",priority=0,iscpu=true,actions={},active=get_next_active(party2),party=party2}
 add(game.p1.actions,create_send_action(game.p1))
@@ -994,6 +1016,8 @@ poke(0x5f5c,15)
 poke(0x5f5d,5)
 cls()
 sfx(62,0)
+extract_sheet(0)
+extract_sheet(1)
 extract_sheet(2)
 poke(0x5f56,0xe0)
 px9_decomp(0,0,peek2(3*2),mget,mset)
@@ -1012,7 +1036,6 @@ if@0x5efa==1 then
 g_bo,g_bx=g_bx,g_bo
 g_bpo,g_bpx=g_bpx,g_bpo
 end
-if g_bo and g_bpx then g_debug=not g_debug end
 zcall(loop_entities,[[1;,actor,clean;2;,fader,clean;]])
 register_entities()
 zcall(loop_entities,[[1;,fader,tick;2;,game_state,tick;3;,fader,state;4;,game_state,state;]])
