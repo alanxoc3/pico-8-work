@@ -17,7 +17,13 @@ end $$
     -- i could populate based on levels
     a.available_actions = {
         {name="bugcatcher", func=function(a, game)
-            begin_fight(game)
+            local cpu_party_draft = {}
+            for i=1,6 do
+                local num = flr_rnd(151)+1
+                add(cpu_party_draft, { num=num, moves=c_pokemon[num].get_natural_moveset(100) })
+            end
+
+            begin_fight(game, 100, get_party(@S_CUR_PARTY), cpu_party_draft, "player 1", "bugcatcher", false, false)
         end, desc="i|like|bugs"}
     }
 

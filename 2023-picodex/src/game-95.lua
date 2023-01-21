@@ -23,9 +23,10 @@ zclass[[modes,actor|
 
     -- these are the different states for a fight
     -- get to these with "begin_fight", because a few variables need to be set before entering the fight loop.
-    p1sel;        next,p2sel, update,%psel_update, draw1,%turn_draw1, draw2,%turn_draw2, draw3,%turn_draw3, init,%psel_init,  p0key,p1,          cur_action,no;
-    p2sel;        next,turn,  update,%psel_update, draw1,%turn_draw1, draw2,%turn_draw2, draw3,%turn_draw3, init,%psel_init,  p0key,p2,          cur_action,no;
-    turn;         next,p1sel, update,%turn_update, draw1,%turn_draw1, draw2,%turn_draw2, draw3,%turn_draw3,                   cur_action,no;
+    p1sel;        next,turn, update,%psel_update, draw1,%turn_draw1, draw2,%turn_draw2, draw3,%turn_draw3, init,%psel_init, p0key,p1,          cur_action,no;
+    turn;         next,turn, update,%turn_update, draw1,%turn_draw1, draw2,%turn_draw2, draw3,%turn_draw3, init,%turn_init, cur_action,no;
+
+    -- p2sel;        next,turn,  update,%psel_update, draw1,%turn_draw1, draw2,%turn_draw2, draw3,%turn_draw3, init,%psel_init, p0key,p2,          cur_action,no;
 
     party;        update,%party_update,        draw1,%party_draw1,        draw2,%party_draw2,        draw3,%party_draw3,        select_func,%party_select;
     editparty;    update,%editparty_update,    draw1,%editparty_draw1,    draw2,%editparty_draw2,    draw3,%editparty_draw3;

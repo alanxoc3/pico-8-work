@@ -3,51 +3,57 @@
 -- todo: empty party should end battle
 -- todo: implement a "one of" function, so you don't have these long if statements. And check if it saves tokens. gets rid of "x == y or x == z or ..."
 
-|[psel_init]| function(game)
-    game.p0 = game[game.p0key]
-
-    local p0 = game.p0
-    p0.actions = {}
-
-    -- attacking
-    local moveslot = select_random_move_slot(p0.active)
-    local move = p0.active.moveids[moveslot] or M_STRUGGLE
-    addaction(p0, p0, "#,uses,"..c_moves[move].name, function(s, o) -- self, other
-        generic_attack(s, o, moveslot)
-    end)
-
+-- pl,1-4,false - select a move slot  are move slots
+-- pl,0,false   - select default move (solar beam charge, hyper beam recharge, struggle, ...)
+-- pl,1-6,true  - switch with party slot
+function select_move(pl, slot, switch)
+    pl.actions = {}
     local priority_class = C_PRIORITY_ATTACK
 
-    -- hardcoding the only moves that can change priority for now. Maybe there is a more token efficient way to do this?
-    if move == M_QUICK_ATTACK then priority_class = C_PRIORITY_QUICKATTACK end
-    if move == M_COUNTER or move == M_WHIRLWIND or move == M_ROAR or move == M_TELEPORT then
-        priority_class = C_PRIORITY_COUNTER
+    if switch then
+        priority_class = C_PRIORITY_SWITCH
+    else
+        local move = pl.active.moveids[slot] or M_STRUGGLE
+        addaction(pl, pl, "#,uses,"..c_moves[move].name, function(s, o) -- self, other
+            generic_attack(s, o, slot)
+        end)
+
+        -- hardcoding the only moves that can change priority for now. Maybe there is a more token efficient way to do this?
+        if move == M_QUICK_ATTACK then priority_class = C_PRIORITY_QUICKATTACK end
+        if move == M_COUNTER or move == M_WHIRLWIND or move == M_ROAR or move == M_TELEPORT then
+            priority_class = C_PRIORITY_COUNTER
+        end
     end
 
     -- speed can be between 1 and 999, so multiples of 1000 can be priority
     -- highest priority goes first. if priority is same, roll a dice to decide
-    p0.priority = min(C_PRIORITY_SWITCH, priority_class+p0.active:getstat'speed')
+    pl.priority = min(C_PRIORITY_SWITCH, priority_class+pl.active:getstat'speed')
+end
 
-    game.cur_action = newaction(p0, "planning,an,action")
+|[psel_init]| function(game)
+    game.p0 = game[game.p0key]
+    game.cur_action = newaction(game.p0, "planning,an,action")
 end $$
 
 |[psel_update]| function(game)
     if g_bpx or g_bpo then
+        select_move(game.p0, select_random_move_slot(game.p0.active))
         game:load()
-
-        -- logic to determine who goes first
-        local p1 = game.p1
-        local p2 = game.p2
-        if p1.priority == p2.priority then p2.priority += sgn(rnd'2'-1) end
-        game.p0 = p1.priority > p2.priority and p1 or p2
     end
 end $$
 
--- finit gets executed on the same turn as init
--- todo: technically could be an init for just 1 turn
-|[turn_finit]| function(game)
-    -- switch p0 and go to the next state
-    game.p0 = get_other_pl(game, game.p0)
+|[turn_init]| function(game)
+    -- if there is no action, assume it's a computer player.
+    for p in all{game.p1, game.p2} do
+        if #p.actions == 0 then
+            select_move(p, select_random_move_slot(p.active))
+        end
+    end
+
+    -- p0 is equal to the higher priority
+    local p1, p2 = game.p1, game.p2
+    if p1.priority == p2.priority then p2.priority += sgn(rnd'2'-1) end
+    game.p0 = p1.priority > p2.priority and p1 or p2
 end $$
 
 |[turn_update]| function(game)

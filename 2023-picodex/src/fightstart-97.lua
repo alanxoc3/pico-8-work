@@ -5,22 +5,15 @@ function calc_max_hp(lvl, base)   return calc_max_stat(lvl, base) + 5 + lvl end
 -- fight is: turn -> turn -> { (p1 select) -> (p2 select) -> whogoesfirst -> turn -> turn -> ...repeat }
 -- in turn init, if there are no actions then go to p1 select
 -- in turn init, switch p0
--- in p1select, next is p2select. in p2select, next is turn1, turn2
--- how does a turn know
-function begin_fight(game)
-    local party1 = get_fight_party(get_party(@S_CUR_PARTY), 100)
-
-    -- create a random, strong-ish party
-    local party_draft = {}
-    for i=1,6 do
-        local num = 101 -- flr_rnd(151)+1
-        add(party_draft, { num=num, moves=c_pokemon[num].get_natural_moveset(100) })
-    end
-    local party2 = get_fight_party(party_draft, 100)
+-- 
+-- party1/party2: { {num=123, moves={1=3, 2=4, 3=31, 4=68 }}, ... }
+function begin_fight(game, lvl, party1, party2, name1, name2, iscpu1, iscpu2)
+    local party1, party2 = get_fight_party(party1, lvl), get_fight_party(party2, lvl)
 
     -- winlogic could be used for story mode.
-    game.p1 = { name="player 1",   priority=0, iscpu=false, actions={}, active=party_pkmn_to_active(get_next_active(party1)), party=party1, winlogic=nop }
-    game.p2 = { name="bugcatcher", priority=0, iscpu=true,  actions={}, active=party_pkmn_to_active(get_next_active(party2)), party=party2, winlogic=nop }
+    -- p1 has higher starting priority so game shows their pokemon to come out first
+    game.p1 = { name=name1, priority=1, iscpu=iscpu1, actions={}, active=party_pkmn_to_active(get_next_active(party1)), party=party1, winlogic=nop }
+    game.p2 = { name=name2, priority=0, iscpu=iscpu2, actions={}, active=party_pkmn_to_active(get_next_active(party2)), party=party2, winlogic=nop }
 
     add(game.p1.actions, newaction(game.p1, "#,comes,out"))
     add(game.p2.actions, newaction(game.p2, "#,comes,out"))
