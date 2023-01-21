@@ -27,6 +27,8 @@
     -- speed can be between 1 and 999, so multiples of 1000 can be priority
     -- highest priority goes first. if priority is same, roll a dice to decide
     p0.priority = min(C_PRIORITY_SWITCH, priority_class+p0.active:getstat'speed')
+
+    game.cur_action = newaction(p0, "planning,an,action")
 end $$
 
 |[psel_update]| function(game)
@@ -41,38 +43,38 @@ end $$
     end
 end $$
 
-|[psel_draw3]| function(game) print_draw3_message("planning", "an", "action") end $$
-
-|[turn_init]| function(game)
-    local action = deli(game.p0.actions, 1)
-    if action then
-        game.cur_action = action
-
-        -- todo: can this flip logic be combined with what's in finit?
-        game.cur_action.logic(game.p0, game.p0 == game.p1 and game.p2 or game.p1)
-    else
-        game.cur_action = {active=p0.active, message="nothing,to,do", logic=nop}
-        game.cur_action.logic()
-    end
-end $$
-
 -- finit gets executed on the same turn as init
+-- todo: technically could be an init for just 1 turn
 |[turn_finit]| function(game)
     -- switch p0 and go to the next state
-    game.p0 = game.p0 == game.p1 and game.p2 or game.p1
+    game.p0 = get_other_pl(game, game.p0)
 end $$
 
 |[turn_update]| function(game)
-    if g_bpx or g_bpo then
-        local action = pop_next_action(game.p0, game.p0 == game.p1 and game.p2 or game.p1)
+    if g_bpx or g_bpo or not game.cur_action then
+        -- check for win condition before selecting every action
+        for p in all{game.p1, game.p2} do
+            if not get_next_active(p.party) then
+                game:load'fightover'
+                return
+            end
+        end
+
+        local action = pop_next_action(game)
         if action then
             game.cur_action = action
-            action.logic()
+            local actionpl = game.cur_action.active == game.p1.active and game.p1 or game.p2
+
+            action.logic(actionpl, get_other_pl(game, actionpl), game)
         else
-            game:load()
+            game:load() -- next turn
         end
     end
 end $$
+
+function get_other_pl(game, pl)
+    return pl == game.p1 and game.p2 or game.p1   
+end
 
 function draw_hp(x, y, hp, maxhp, status, align, col)
     hp = max(ceil(hp), 0)
@@ -82,12 +84,7 @@ function draw_hp(x, y, hp, maxhp, status, align, col)
 end
 
 |[turn_draw1]|  function(game)
-    -- SIDE/SIDE/TEXT and space i guess
-    local a1, a2 = game.p1.active, game.p2.active
-    -- this is good positioning
-    --zprint(a1.shared.hp, 41, 29, 5, 1)
-
-    local active = game.cur_action.active and game.p0.active
+    local a1, a2, active = game.p1.active, game.p2.active, game.cur_action.active
     draw_hp(38, 30, a1.shared.hp, a1.shared.maxhp, a1.shared.major, 1,  active == game.p1.active and 6 or 1)
     draw_hp(1,  9,  a2.shared.hp, a2.shared.maxhp, a2.shared.major, -1, active == game.p2.active and 6 or 1)
     c_pokemon[a1.shared.num].draw(   10, 40-10-t()%2\1, 5)
@@ -95,7 +92,7 @@ end
 end $$
 
 |[turn_draw2]|  function(game)
-    zprint(game.p0.name, 23, 4, 1, 0)
+    zprint(game.cur_action.pl.name, 23, 4, 1, 0)
 end $$
 
 |[turn_draw3]|  function(game)
@@ -107,27 +104,45 @@ end $$
 ---------------------------------------------------------------------------
 
 function newaction(pactive, message, logic)
-    return {active=pactive.active, message=message, logic=logic or nop}
+    return {pl=pactive, active=pactive.active, message=message, logic=logic or nop}
 end
 
 function addaction(p0, ...)
     add(p0.actions, newaction(...))
 end
 
+-- switch if there is a next pokemon
+-- otherwise, do nothing. turn logic will check every turn if there is a win condition
+function logic_faint(s)
+    s.active.shared.major = C_MAJOR_FAINTED
+    local na = get_next_active(s.party)
+
+    if na then
+        s.active = party_pkmn_to_active(get_next_active(s.party))
+        addaction(s, s, "#,comes,out")
+    end
+end
+
 -- self pl, other pl
-function pop_next_action(s, o)
-    -- if the active pokemon has no hp, but not the faint status yet, return an action that makes the pokemon faint.
-    for p in all{s,o} do
+-- return faint action if no hp and not dead
+-- return nothing if end of turn
+function pop_next_action(game)
+    -- if an active pokemon has no hp, but not the faint status yet, return an action that makes the pokemon faint.
+    for p in all{game.p1,game.p2} do
         if p.active.shared.hp <= 0 and p.active.shared.major ~= C_MAJOR_FAINTED then
-            return newaction(s, "#,is,fainted")
+            return newaction(p, "#,is,fainted", logic_faint)
         end
     end
 
-    -- if the active pokemon shouldn't faint right now, find the next action that references a pokemon still on the field.
-    while #s.actions > 0 do
-        local action = deli(s.actions, 1)
-        if action.active == s.active or action.active == o.active then
-            return action
+    for s in all{game.p0, get_other_pl(game, game.p0)} do
+        local o = get_other_pl(game, s)
+
+        -- if the active pokemon shouldn't faint right now, find the next action that references a pokemon still on the field.
+        while #s.actions > 0 do
+            local action = deli(s.actions, 1)
+            if action.active.shared.major ~= C_MAJOR_FAINTED and (action.active == s.active or action.active == o.active) then
+                return action
+            end
         end
     end
 end

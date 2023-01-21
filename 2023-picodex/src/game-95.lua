@@ -18,12 +18,14 @@ zclass[[modes,actor|
     fightparty;   update,%party_update,        draw1,%party_draw1,        draw2,%party_draw2,        draw3,%party_draw3,        select_func,%fight_select;
     fightsel;     update,%fightsel_update,     draw1,%fightsel_draw1,     draw2,%fightsel_draw2,     draw3,%fightsel_draw3,     init,%fightsel_init;
 
+    -- p0 is the winner of the fight
+    fightover;    update,%fightover_update,    draw1,%fightover_draw1,    draw2,%fightover_draw2,    draw3,%fightover_draw3,    init,%fightover_init;
+
     -- these are the different states for a fight
-    p1sel;        next,p2sel, update,%psel_update, draw1,%turn_draw1, draw2,%turn_draw2, draw3,%psel_draw3, init,%psel_init, cur_action,null, p0key,p1;
-    p2sel;        next,turn1, update,%psel_update, draw1,%turn_draw1, draw2,%turn_draw2, draw3,%psel_draw3, init,%psel_init, cur_action,null, p0key,p2;
-    turn1;        next,turn2, update,%turn_update, draw1,%turn_draw1, draw2,%turn_draw2, draw3,%turn_draw3, init,%turn_init,  finit,%turn_finit, cur_action,null;
-    turn2;        next,p1sel, update,%turn_update, draw1,%turn_draw1, draw2,%turn_draw2, draw3,%turn_draw3, init,%turn_init,  finit,%turn_finit, cur_action,null;
-    -- also might want a "fight win"
+    -- get to these with "begin_fight", because a few variables need to be set before entering the fight loop.
+    p1sel;        next,p2sel, update,%psel_update, draw1,%turn_draw1, draw2,%turn_draw2, draw3,%turn_draw3, init,%psel_init,  p0key,p1,          cur_action,no;
+    p2sel;        next,turn,  update,%psel_update, draw1,%turn_draw1, draw2,%turn_draw2, draw3,%turn_draw3, init,%psel_init,  p0key,p2,          cur_action,no;
+    turn;         next,p1sel, update,%turn_update, draw1,%turn_draw1, draw2,%turn_draw2, draw3,%turn_draw3,                   cur_action,no;
 
     party;        update,%party_update,        draw1,%party_draw1,        draw2,%party_draw2,        draw3,%party_draw3,        select_func,%party_select;
     editparty;    update,%editparty_update,    draw1,%editparty_draw1,    draw2,%editparty_draw2,    draw3,%editparty_draw3;

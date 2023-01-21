@@ -2,11 +2,6 @@
 function calc_max_stat(lvl, base) return ceil(lvl*.01*(base*2+93)) + 5 end
 function calc_max_hp(lvl, base)   return calc_max_stat(lvl, base) + 5 + lvl end
 
-function create_send_action(pl)
-    -- this would also have an animation thing eventually
-    return { active=pl.active, message="#,comes,out", logic=function(p1, p2) end }
-end
-
 -- fight is: turn -> turn -> { (p1 select) -> (p2 select) -> whogoesfirst -> turn -> turn -> ...repeat }
 -- in turn init, if there are no actions then go to p1 select
 -- in turn init, switch p0
@@ -18,22 +13,23 @@ function begin_fight(game)
     -- create a random, strong-ish party
     local party_draft = {}
     for i=1,6 do
-        local num = 129 -- flr_rnd(151)+1
-        add(party_draft, { num=num, moves=c_pokemon[num].get_natural_moveset(10) })
+        local num = 101 -- flr_rnd(151)+1
+        add(party_draft, { num=num, moves=c_pokemon[num].get_natural_moveset(100) })
     end
     local party2 = get_fight_party(party_draft, 100)
 
-    game.p1 = { name="player 1",   priority=0, iscpu=false, actions={}, active=get_next_active(party1), party=party1 }
-    game.p2 = { name="bugcatcher", priority=0, iscpu=true,  actions={}, active=get_next_active(party2), party=party2 }
+    -- winlogic could be used for story mode.
+    game.p1 = { name="player 1",   priority=0, iscpu=false, actions={}, active=party_pkmn_to_active(get_next_active(party1)), party=party1, winlogic=nop }
+    game.p2 = { name="bugcatcher", priority=0, iscpu=true,  actions={}, active=party_pkmn_to_active(get_next_active(party2)), party=party2, winlogic=nop }
 
-    add(game.p1.actions, create_send_action(game.p1))
-    add(game.p2.actions, create_send_action(game.p2))
+    add(game.p1.actions, newaction(game.p1, "#,comes,out"))
+    add(game.p2.actions, newaction(game.p2, "#,comes,out"))
 
     -- how to switch the current player
     -- game.p0 = game.p0 == game.p1 and game.p2 or game.p1
     game.p0 = game.p1
 
-    game:push'turn1'
+    game:push'turn'
 end
 
 -- used to switch to the next pkmn at the start of the battle and when a pkmn is ko-ed.
@@ -41,7 +37,7 @@ end
 function get_next_active(party)
     for i=1,6 do
         if party[i] and party[i].major ~= C_MAJOR_FAINTED then
-            return party_pkmn_to_active(party[i])
+            return party[i]
         end
     end
 end
