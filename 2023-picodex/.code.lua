@@ -406,13 +406,9 @@ local p0=game.p0
 p0.actions={}
 local moveslot=select_random_move_slot(p0.active)
 local move=p0.active.moveids[moveslot]or 0
-add(p0.actions,{
-active=p0.active,
-message="#,uses,"..c_moves[move].name,
-logic=function(s,o)
+addaction(p0,p0,"#,uses,"..c_moves[move].name,function(s,o)
 generic_attack(s,o,moveslot)
-end
-})
+end)
 local priority_class=1000
 if move==120 then priority_class=2000 end
 if move==18 or move==4 or move==89 or move==30 then
@@ -440,12 +436,10 @@ end,function(game)
 game.p0=game.p0==game.p1 and game.p2 or game.p1
 end,function(game)
 if g_bpx or g_bpo then
-local action=deli(game.p0.actions,1)
+local action=pop_next_action(game.p0,game.p0==game.p1 and game.p2 or game.p1)
 if action then
 game.cur_action=action
-game.cur_action.logic()
-if game.p1.active.shared.hp<=0 then add(game.p0.actions,{active=game.p1.active,message="#,is,fainted",logic=nop})
-elseif game.p2.active.shared.hp<=0 then add(game.p0.actions,{active=game.p2.active,message="#,is,fainted",logic=nop})end
+action.logic()
 else
 game:load()
 end
@@ -823,7 +817,24 @@ zprint(hp,x+3*max(align,0),y-2+5*align,col,align)
 zprint(status or "",x+3*max(align,0),y-2-5*align,col,align)
 rectfill(x,y-1,x-align*ceil(hp/maxhp*17),y+1,col)
 end
-function get_next_action(s,o)
+function newaction(pactive,message,logic)
+return{active=pactive.active,message=message,logic=logic or nop}
+end
+function addaction(p0,...)
+add(p0.actions,newaction(...))
+end
+function pop_next_action(s,o)
+for p in all{s,o}do
+if p.active.shared.hp<=0 and p.active.shared.major ~=1 then
+return newaction(s,"#,is,fainted")
+end
+end
+while #s.actions>0 do
+local action=deli(s.actions,1)
+if action.active==s.active or action.active==o.active then
+return action
+end
+end
 end
 function select_random_move_slot(active)
 local possible_moves={}
@@ -841,13 +852,11 @@ s.active.movepps[m]-=1
 end
 local dmg=move.damage
 if dmg>0 then
-add(s.actions,{
-active=o.active,message="#,-"..dmg..",hitpoints",logic=function()
+addaction(s,o,"#,-"..dmg..",hitpoints",function()
 o.active.shared.hp=max(0,o.active.shared.hp-dmg)
-end
-})
+end)
 else
-add(s.actions,{active=s.active,message="#,does,nothing",logic=nop})
+addaction(s,s,"#,does,nothing")
 end
 end
 function get_crit_ratio(base_speed)
