@@ -10,12 +10,6 @@
     if g_bpl then poke(S_PARTY_PKMN_NUM, (@S_PARTY_PKMN_NUM-1)%6) end
     if g_bpr then poke(S_PARTY_PKMN_NUM, (@S_PARTY_PKMN_NUM+1)%6) end
 
-    -- temp randomize party
-    --if g_bx then
-    --    for i=1,6 do add(test, {num=rnd(151)\1+1}) end
-    --    save_party(@S_CUR_PARTY, test)
-    --end
-
     if g_bpo then a:pop() end
     if g_bpx then a:push'partyaction' end
 end $$
@@ -36,8 +30,6 @@ end $$
     rectfill(0+col*12,  6+row*12, 15+col*12, 21+row*12, 6)
     local sel_pkmn = party[@S_PARTY_PKMN_NUM+1]
     get_pokemon(sel_pkmn and sel_pkmn.num or -2).draw(8+col*12, 14+row*12, 13, .75, .75)
-
-    --get_pokemon(get_party(@S_CUR_PARTY)[1].num).draw(7+(1-1)%3*13, 20+(1-1)\3*13, 13, .825)
 end $$
 
 |[editparty_draw2]| function(a)

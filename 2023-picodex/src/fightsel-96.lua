@@ -23,7 +23,7 @@ end $$
                 add(cpu_party_draft, { num=num, moves=c_pokemon[num].get_natural_moveset(100) })
             end
 
-            begin_fight(game, 100, get_party(@S_CUR_PARTY), cpu_party_draft, "player 1", "bugcatcher", true, true)
+            begin_fight(game, 100, get_party(@S_CUR_PARTY), cpu_party_draft, "player 1", "bugcatcher", false, true)
         end, desc="i|like|bugs"}
     }
 

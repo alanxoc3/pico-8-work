@@ -8,7 +8,7 @@ end $$
 
 -- entries is a list that looks like: { {name="displayname", state="mode-state", desc="description|3|lines"} ... }
 -- mem is 2 bytes of memory. first byte is cursor, second byte is view.
-function menu_update(game, mem, entries)
+function menu_update(game, mem, entries, is_pop_disabled)
     local c, v = peek(mem), peek(mem+1)
 
     -- wrap
@@ -28,7 +28,7 @@ function menu_update(game, mem, entries)
         end
     end
 
-    if g_bpo then game:pop() end
+    if g_bpo and not is_pop_disabled then game:pop() end
 
     poke(mem, c%#entries) poke(mem+1, v)
 end

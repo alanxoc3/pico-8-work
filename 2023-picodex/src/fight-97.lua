@@ -1,4 +1,5 @@
--- todo: logic should pass in p0, p2, move_parameters
+-- todo: implement player selection
+-- todo: make fightover accept losing pl instead of winning pl. less tokens that way
 -- todo: implement a "one of" function, so you don't have these long if statements. And check if it saves tokens. gets rid of "x == y or x == z or ..."
 
 -- pl,1-4,false - select a move slot  are move slots
@@ -28,18 +29,6 @@ function select_move(pl, slot, switch)
     pl.priority = min(C_PRIORITY_SWITCH, priority_class+pl.active:getstat'speed')
 end
 
-|[psel_init]| function(game)
-    game.p0 = game[game.p0key]
-    game.cur_action = newaction(game.p0, "planning,an,action")
-end $$
-
-|[psel_update]| function(game)
-    if g_bpx or g_bpo then
-        select_move(game.p0, select_random_move_slot(game.p0.active))
-        game:load()
-    end
-end $$
-
 |[turn_init]| function(game)
     -- if there is no action, assume it's a computer player.
     for p in all{game.p1, game.p2} do
@@ -59,6 +48,7 @@ end $$
         -- check for win condition before selecting every action
         for p in all{game.p1, game.p2} do
             if not get_next_active(p.party) then
+                game.p0 = get_other_pl(game, p)
                 game:load'fightover'
                 return
             end
@@ -106,7 +96,8 @@ end $$
 end $$
 
 ---------------------------------------------------------------------------
-
+-- misc stuff
+---------------------------------------------------------------------------
 function newaction(pactive, message, logic)
     return {pl=pactive, active=pactive.active, message=message, logic=logic or nop}
 end
@@ -152,7 +143,7 @@ function pop_next_action(game)
 end
 
 -- returns move slot number. 0 means to use struggle.
-function select_random_move_slot(active)
+function get_possible_move_slots(active)
     local possible_moves = {}
 
     for i=1,4 do
@@ -161,6 +152,11 @@ function select_random_move_slot(active)
         end
     end
 
+    return possible_moves
+end
+
+function select_random_move_slot(active)
+    local possible_moves = get_possible_move_slots(active)
     return possible_moves[flr_rnd(#possible_moves)+1] or M_STRUGGLE
 end
 

@@ -62,6 +62,7 @@ S_PARTY3:         0x5e3c
 # "CURSOR" save spots must have 2 bytes!!!
 # Level is the level pokemon are in battles.
 
+S_CURSOR_PSELACTION:  0x5ee5
 S_CURSOR_FIGHTSEL:    0x5ee7
 S_CURSOR_PARTYMSEL:   0x5ee9
 S_CURSOR_PARTYMOVES:  0x5eeb

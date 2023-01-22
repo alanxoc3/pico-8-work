@@ -59,11 +59,12 @@ end $$
 -- This is expected to be called on each frame!
 |[actor_state]| function(a)
     -- actor created this frame
-    if a.isnew then
-        a:loadlogic(a.curr)
+    if a.isnew then a:loadlogic(a.curr) end
 
-    -- manually changed the state or timer is over
-    elseif a.next_state then
+    -- will keep calling init/finit until next_state is stable
+    -- this means an infinite loop is technically possible if states are misconfigured
+    -- but it also makes it so you can skip a state from running one framme if you want
+    while a.next_state do
         a:loadlogic(a.next_state)
     end
 

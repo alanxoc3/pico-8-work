@@ -12,15 +12,8 @@ function begin_fight(game, lvl, party1, party2, name1, name2, iscpu1, iscpu2)
 
     -- winlogic could be used for story mode.
     -- p1 has higher starting priority so game shows their pokemon to come out first
-    game.p1 = { name=name1, priority=1, actions={}, active=party_pkmn_to_active(get_next_active(party1)), party=party1, winlogic=nop }
-    game.p2 = { name=name2, priority=0, actions={}, active=party_pkmn_to_active(get_next_active(party2)), party=party2, winlogic=nop }
-
-    -- changes the game states for player action selection
-    game.turn.next = iscpu2 and 'turn' or 'p2sel'
-    if not iscpu1 then
-        game.turn.next = 'p1sel'
-        game.p1sel.next = iscpu2 and 'turn' or 'p2sel'
-    end
+    game.p1 = { name=name1, priority=1, iscpu=iscpu1, actions={}, active=party_pkmn_to_active(get_next_active(party1)), party=party1, winlogic=nop }
+    game.p2 = { name=name2, priority=0, iscpu=iscpu2, actions={}, active=party_pkmn_to_active(get_next_active(party2)), party=party2, winlogic=nop }
 
     add(game.p1.actions, newaction(game.p1, "#,comes,out"))
     add(game.p2.actions, newaction(game.p2, "#,comes,out"))
