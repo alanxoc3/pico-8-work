@@ -23,7 +23,9 @@ zclass[[modes,actor|
 
     -- these are the different states for a fight
     -- get to these with "begin_fight", because a few variables need to be set before entering the fight loop.
-    p1sel;        next,turn, update,%psel_update, draw1,%turn_draw1, draw2,%turn_draw2, draw3,%turn_draw3, init,%psel_init, p0key,p1,          cur_action,no;
+    -- the "next" state changes dynamically for p1sel and turn, based on human vs computer players.
+    p1sel;        next,turn, update,%psel_update, draw1,%turn_draw1, draw2,%turn_draw2, draw3,%turn_draw3, init,%psel_init, cur_action,no, p0key,p1;
+    p2sel;        next,turn, update,%psel_update, draw1,%turn_draw1, draw2,%turn_draw2, draw3,%turn_draw3, init,%psel_init, cur_action,no, p0key,p2;
     turn;         next,turn, update,%turn_update, draw1,%turn_draw1, draw2,%turn_draw2, draw3,%turn_draw3, init,%turn_init, cur_action,no;
 
     -- p2sel;        next,turn,  update,%psel_update, draw1,%turn_draw1, draw2,%turn_draw2, draw3,%turn_draw3, init,%psel_init, p0key,p2,          cur_action,no;

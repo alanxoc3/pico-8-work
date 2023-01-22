@@ -1,6 +1,4 @@
 -- todo: logic should pass in p0, p2, move_parameters
--- todo: dead pkmn should send out next
--- todo: empty party should end battle
 -- todo: implement a "one of" function, so you don't have these long if statements. And check if it saves tokens. gets rid of "x == y or x == z or ..."
 
 -- pl,1-4,false - select a move slot  are move slots
