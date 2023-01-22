@@ -284,18 +284,15 @@ if g_bpo then a:pop()end
 if g_bpx then a:push"partyaction" end
 end,function(a)
 local party=get_party(@0x5ef4)
-rectfill(0,0,39,39,1)
-rectfill(-1,0+7,40,39-7,13)
-rect(-1,0+7,40,39-7,1)
 for i=1,6 do
-get_pokemon(party[i]and party[i].num or-2).draw(8+(i-1)%3*12,14+(i-1)\3*12,5,.5,.5)
+get_pokemon(party[i]and party[i].num or-2).draw(8+(i-1)%3*11,14+(i-1)\3*12,5,.5,.5)
 end
 local row,col=@0x5ef3\3,@0x5ef3%3
 rect(-2+col*12,4+row*12,17+col*12,23+row*12,13)
 rect(-1+col*12,5+row*12,16+col*12,22+row*12,1)
 rectfill(0+col*12,6+row*12,15+col*12,21+row*12,6)
 local sel_pkmn=party[@0x5ef3+1]
-get_pokemon(sel_pkmn and sel_pkmn.num or-2).draw(8+col*12,14+row*12,13,.75,.75)
+get_pokemon(sel_pkmn and sel_pkmn.num or-2).draw(8+col*11,14+row*12,13,1,1)
 end,function(a)
 local pkmn=get_party(@0x5ef4)[@0x5ef3+1]
 if pkmn then

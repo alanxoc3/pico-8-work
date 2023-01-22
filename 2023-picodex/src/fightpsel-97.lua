@@ -62,3 +62,8 @@ end $$
 |[pselmove_draw1]|  function(game) menu_draw1 (game, S_CURSOR_PSELACTION, game.available_actions) end $$
 |[pselmove_draw2]|  function(game) end $$
 |[pselmove_draw3]|  function(game) end $$
+
+---------------------------------------------------------------------------
+-- psel switch menu
+---------------------------------------------------------------------------
+
