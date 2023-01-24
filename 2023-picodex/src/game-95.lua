@@ -52,6 +52,11 @@ end $$
 end $$
 
 |[game_init]| function(a)
+    -- we should always have these starter pokemon
+    poke(S_BULBASAUR,  1)
+    poke(S_CHARMANDER, 1)
+    poke(S_SQUIRTLE,   1)
+
     a.modes = _g.modes()
     sfx(61,0)
 
@@ -76,22 +81,22 @@ end $$
         function() a.modes:draw1() end,
         function() a.modes:draw2() end, 
         function() a.modes:draw3() end, 
-        4, false, @S_CURSOR_MODE, #a.modes.stack)
+        4, false, g_cursors.mode, #a.modes.stack)
 end $$
 
 -- if i run the minifier, we need a separate display name from the state it's mapped to.
 c_modes = zobj[[
-    ;name,"browse",    state,browse,     func,%menu_state_callback, desc,"view|pokemon|info"
-   ;;name,"credits",   state,credits,    func,%menu_state_callback, desc,"by|amorg|games"
-   ;;name,"fight",     state,fightparty, func,%menu_state_callback, desc,"pokemon|battle|simulator"
-   ;;name,"games",     state,games,      func,%menu_state_callback, desc,"minigames|and|quizzes"
-   ;;name,"party",     state,party,      func,%menu_state_callback, desc,"change|your|teams"
-   ;;name,"settings",  state,settings,   func,%menu_state_callback, desc,"customize|this|picodex"
+    ;name,"browse",   state,browse,     func,%menu_state_callback, desc,"view|pokemon|info"
+   ;;name,"teams",    state,party,      func,%menu_state_callback, desc,"edit|stored|teams"
+   ;;name,"computer", state,fightparty, func,%menu_state_callback, desc,"battle|against|computer"
+   ;;name,"player",   state,games,      func,%menu_state_callback, desc,"battle|against|player"
+   ;;name,"hoard",    state,settings,   func,%menu_state_callback, desc,"battle all|pokemon|in order"
+   ;;name,"info",     state,credits,    func,%menu_state_callback, desc,"help|and|credits"
 ]]
 
-|[main_update]| function(a) menu_update(a, S_CURSOR_MODE, c_modes) end $$
-|[main_draw1]|  function(a) menu_draw1 (a, S_CURSOR_MODE, c_modes) end $$
-|[main_draw3]|  function(a) menu_draw3 (a, S_CURSOR_MODE, c_modes) end $$
+|[main_update]| function(a) menu_update(a, 'mode', c_modes) end $$
+|[main_draw1]|  function(a) menu_draw1 (a, 'mode', c_modes) end $$
+|[main_draw3]|  function(a) menu_draw3 (a, 'mode', c_modes) end $$
 
 g_picodex_div = zobj[[,6,5,5,6,6,5,6]]
 |[main_draw2]| function(a)

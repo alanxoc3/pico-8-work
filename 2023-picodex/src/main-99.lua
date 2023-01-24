@@ -69,6 +69,13 @@ function _update60()
     g_bpu = btnp'2' g_bpd = btnp'3'
     g_bpo = btnp'4' g_bpx = btnp'5'
 
+    g_available_pokemon = {}
+    for i=0,151 do
+        if @(S_POKEMON+i) ~= 0 then
+            add(g_available_pokemon, i)
+        end
+    end
+
     if @S_SWAP_CONTROLS == 1 then
         g_bo,  g_bx  = g_bx,  g_bo
         g_bpo, g_bpx = g_bpx, g_bpo
@@ -195,10 +202,6 @@ function normalize_pokemon_data()
             draw       = function(...) draw_pkmn_out(i, ...) end,
             num        = i,
         }
-    end
-
-    c_pokemon[0].draw = function(...)
-        draw_pkmn_out(@S_MISSINGNO ~= 0 and 0 or -2, ...)
     end
 
     update_pokemon_moves()

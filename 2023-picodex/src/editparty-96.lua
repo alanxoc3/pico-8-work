@@ -36,7 +36,7 @@ end $$
 |[editparty_draw2]| function(a)
     local pkmn = get_party(@S_CUR_PARTY)[@S_PARTY_PKMN_NUM+1]
     if pkmn then
-        draw2_pokeinfo(pkmn.num)
+        draw2_pokeinfo(get_pokemon(pkmn.num))
     else
         zprint("spot #"..(@S_PARTY_PKMN_NUM+1), 46/2, 4, 1, 0)
     end
@@ -74,7 +74,7 @@ end $$
 
 -- random pokemon does not include missingno, i think that's a good default though
 |[randpkmn]| function(a, game)
-    save_party(@S_CUR_PARTY, set_default_party_pkmn(get_party(@S_CUR_PARTY), @S_PARTY_PKMN_NUM+1, flr_rnd(151)+1))
+    save_party(@S_CUR_PARTY, set_default_party_pkmn(get_party(@S_CUR_PARTY), @S_PARTY_PKMN_NUM+1, g_available_pokemon[flr_rnd(#g_available_pokemon)+1]))
     game:pop()
 end $$
 
@@ -110,27 +110,27 @@ function set_party_pkmn_move(party, ind, moveind, move)
 end
 
 |[partyaction_init]|   function(a) a.available_actions = get_partyactions() end $$
-|[partyaction_update]| function(a) menu_update(a, S_CURSOR_PARTYACTION, a.available_actions) end $$
-|[partyaction_draw1]|  function(a) menu_draw1 (a, S_CURSOR_PARTYACTION, a.available_actions) end $$
-|[partyaction_draw3]|  function(a) menu_draw3 (a, S_CURSOR_PARTYACTION, a.available_actions) end $$
+|[partyaction_update]| function(a) menu_update(a, 'partyaction', a.available_actions) end $$
+|[partyaction_draw1]|  function(a) menu_draw1 (a, 'partyaction', a.available_actions) end $$
+|[partyaction_draw3]|  function(a) menu_draw3 (a, 'partyaction', a.available_actions) end $$
 
 |[partypkmn_init]| function(a)
     local party = get_party(@S_CUR_PARTY)
     local partypkmn = party[@S_PARTY_PKMN_NUM+1]
-    if partypkmn then poke(S_CURSOR_PARTY_PKMN, partypkmn.num) end
+    if partypkmn then g_cursors.party_pkmn = partypkmn.num end
 end $$
 
 |[partypkmn_update]| function(a)
-    browse_update(a, S_CURSOR_PARTY_PKMN)
+    browse_update(a, 'party_pkmn')
     if g_bpx then
-        save_party(@S_CUR_PARTY, set_default_party_pkmn(get_party(@S_CUR_PARTY), @S_PARTY_PKMN_NUM+1, @S_CURSOR_PARTY_PKMN))
+        save_party(@S_CUR_PARTY, set_default_party_pkmn(get_party(@S_CUR_PARTY), @S_PARTY_PKMN_NUM+1, g_available_pokemon[g_cursors.party_pkmn]))
         a:pop() a:pop() -- pop twice, because you got here through a menu
     end
 end $$
 
-|[partypkmn_draw1]| function(a) browse_draw1(a, S_CURSOR_PARTY_PKMN) end $$
-|[partypkmn_draw2]| function() draw2_pokeinfo(@S_CURSOR_PARTY_PKMN) end $$
-|[partypkmn_draw3]| function() draw3_pokeinfo(@S_CURSOR_PARTY_PKMN) end $$
+|[partypkmn_draw1]| function(a) browse_draw1(a, 'party_pkmn') end $$
+|[partypkmn_draw2]| function() draw2_pokeinfo(get_browse_pokemon(g_cursors.party_pkmn)) end $$
+|[partypkmn_draw3]| function() draw3_pokeinfo(get_browse_pokemon(g_cursors.party_pkmn)) end $$
 
 |[partymoves_init]| function(a)
     a.moveset = {}
@@ -148,8 +148,8 @@ end $$
     end
 end $$
 
-|[partymoves_update]| function(a) menu_update(a, S_CURSOR_PARTYMOVES, a.moveset) end $$
-|[partymoves_draw1]|  function(a) menu_draw1 (a, S_CURSOR_PARTYMOVES, a.moveset) end $$
+|[partymoves_update]| function(a) menu_update(a, 'partymoves', a.moveset) end $$
+|[partymoves_draw1]|  function(a) menu_draw1 (a, 'partymoves', a.moveset) end $$
 
 |[partymoves_draw2]| function(a)
 
@@ -161,7 +161,7 @@ end $$
 
 |[partymovesel_init]| function(a)
     -- should always start at 0, since every pokemon is different
-    poke2(S_CURSOR_PARTYMSEL, 0)
+    g_cursors.partymsel, g_views.partymsel = 0, 0
 
     a.movelist = {}
     local movedict = {}
@@ -177,7 +177,7 @@ end $$
                 name=c_moves[m.num].name,
                 ref=m.ref,
                 func=function(a, game)
-                    save_party(@S_CUR_PARTY, set_party_pkmn_move(get_party(@S_CUR_PARTY), @S_PARTY_PKMN_NUM+1, @S_CURSOR_PARTYMOVES+1, m.num))
+                    save_party(@S_CUR_PARTY, set_party_pkmn_move(get_party(@S_CUR_PARTY), @S_PARTY_PKMN_NUM+1, g_cursors.partymoves+1, m.num))
                     game:pop()
                 end
             })
@@ -185,10 +185,10 @@ end $$
     end
 end $$
 
-|[partymovesel_update]| function(a) menu_update(a, S_CURSOR_PARTYMSEL, a.movelist) end $$
-|[partymovesel_draw1]|  function(a) menu_draw1 (a, S_CURSOR_PARTYMSEL, a.movelist) end $$
+|[partymovesel_update]| function(a) menu_update(a, 'partymsel', a.movelist) end $$
+|[partymovesel_draw1]|  function(a) menu_draw1 (a, 'partymsel', a.movelist) end $$
 |[partymovesel_draw2]|  function(a) 
-    local move = a.movelist[@S_CURSOR_PARTYMSEL+1]
+    local move = a.movelist[g_cursors.partymsel+1]
     if move then
         print(move.ref, 3, 3, 1)
     end

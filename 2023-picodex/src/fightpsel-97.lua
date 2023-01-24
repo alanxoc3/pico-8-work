@@ -9,7 +9,7 @@ c_pselactions = zobj[[
 
 |[psel_init]| function(game)
     game.p0 = game[game.p0key]
-    poke2(S_CURSOR_PSELACTION, 0)
+    g_cursors.pselaction = 0
 
     -- skip this state if the player is a cpu
     if game.p0.iscpu or #game.p0.actions > 0 then
@@ -20,8 +20,8 @@ c_pselactions = zobj[[
     end
 end $$
 
-|[pselactions_update]| function(game) menu_update(game, S_CURSOR_PSELACTION, c_pselactions, true) end $$
-|[pselactions_draw1]|  function(game) menu_draw1 (game, S_CURSOR_PSELACTION, c_pselactions) end $$
+|[pselactions_update]| function(game) menu_update(game, 'pselaction', c_pselactions, true) end $$
+|[pselactions_draw1]|  function(game) menu_draw1 (game, 'pselaction', c_pselactions) end $$
 |[pselactions_draw2]|  function(game) end $$
 |[pselactions_draw3]|  function(game) end $$
 
@@ -58,8 +58,8 @@ function err_beep() sfx'60' end -- todo: move and use this
     end
 end $$
 
-|[pselmove_update]| function(game) menu_update(game, S_CURSOR_PSELACTION, game.available_actions) end $$
-|[pselmove_draw1]|  function(game) menu_draw1 (game, S_CURSOR_PSELACTION, game.available_actions) end $$
+|[pselmove_update]| function(game) menu_update(game, 'pselaction', game.available_actions) end $$
+|[pselmove_draw1]|  function(game) menu_draw1 (game, 'pselaction', game.available_actions) end $$
 |[pselmove_draw2]|  function(game) end $$
 |[pselmove_draw3]|  function(game) end $$
 

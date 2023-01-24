@@ -30,7 +30,7 @@ end $$
     --name and func
 end $$
 
-|[fightsel_update]| function(a) menu_update(a, S_CURSOR_FIGHTSEL, a.available_actions) end $$
-|[fightsel_draw1]|  function(a) menu_draw1 (a, S_CURSOR_FIGHTSEL, a.available_actions) end $$
+|[fightsel_update]| function(a) menu_update(a, 'fightsel', a.available_actions) end $$
+|[fightsel_draw1]|  function(a) menu_draw1 (a, 'fightsel', a.available_actions) end $$
 |[fightsel_draw2]|  function(a) end $$
-|[fightsel_draw3]|  function(a) menu_draw3 (a, S_CURSOR_FIGHTSEL, a.available_actions) end $$
+|[fightsel_draw3]|  function(a) menu_draw3 (a, 'fightsel', a.available_actions) end $$
