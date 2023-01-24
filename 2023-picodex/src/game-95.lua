@@ -53,9 +53,19 @@ end $$
 
 |[game_init]| function(a)
     -- we should always have these starter pokemon
-    poke(S_BULBASAUR,  1)
-    poke(S_CHARMANDER, 1)
-    poke(S_SQUIRTLE,   1)
+    zcall(poke, [[
+        ;,S_BULBASAUR,  1
+       ;;,S_CHARMANDER, 1
+       ;;,S_SQUIRTLE,   1
+    ]])
+
+    -- unlock all pkmn
+    -- for i=0,151 do
+    --     poke(S_POKEMON+i, 1)
+    -- end
+
+    g_cursors = zobj[[ pselaction,0, fightsel,0, partymsel,0, partymoves,0, party_pkmn,0, partyaction,0, mode,0, browse,0 ]]
+    g_views   = zobj[[ pselaction,0, fightsel,0, partymsel,0, partymoves,0, party_pkmn,0, partyaction,0, mode,0, browse,0 ]]
 
     a.modes = _g.modes()
     sfx(61,0)

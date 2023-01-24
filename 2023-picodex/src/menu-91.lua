@@ -1,9 +1,3 @@
--- todo, move these to when picodex opens
-g_cursors = zobj[[ pselaction,0, fightsel,0, partymsel,0, partymoves,0, party_pkmn,0, partyaction,0, mode,0, browse,0 ]]
-g_views   = zobj[[ pselaction,0, fightsel,0, partymsel,0, partymoves,0, party_pkmn,0, partyaction,0, mode,0, browse,0 ]]
-
-
-
 |[menu_state_callback]| function(a, game)
     if a.state then
         game:push(a.state)
