@@ -19,8 +19,10 @@ function menu_update(game, key, entries, is_pop_disabled)
     if g_bpu then c = max(0, c-1) end
     if g_bpd then c = min(#entries-1, c+1) end
 
-    if c < v then v = c end
-    if c > v+4 then v = c-4 end
+    if c < v+1 then v = c-1 end
+    if c > v+3 then v = c-3 end
+    if #entries == 1 then v = -1 end
+    if #entries == 2 then v = -1 end
 
     if g_bpx then
         if entries[c+1].func then
@@ -36,19 +38,23 @@ end
 
 function menu_draw1(game, key, entries)
     local c, v = g_cursors[key], g_views[key]
-    local y = (5-min(#entries, 5))*3.5\1
+    local y = -5
 
-    rectfill(0, y+1+(c-v)*7-(c==0 and 1 or 0), 39, y+10+(c-v)*7+(c==#entries-1 and 1 or 0), 1)
+    rectfill(0, 0, 39, 39, 1)
+    rectfill(-1, y-v*8+3, 40, y-v*8+max(#entries, 3)*8+6, 13)
 
     for i=1,#entries do
         local basey = y+(i-v)*7
-        local yoff = 0
+        local yoff = 4
         if i < c+1 then yoff -= 2 end
-        if i > c+1 then yoff += 1 end
+        if i > c+1 then yoff += 3 end
         if i == c+1 then
-            wobble_text(entries[i].name, 20, basey-4, 13)
+            rectfill(0, yoff+basey-3-3, 39, yoff+basey+5, 5)
+            rectfill(0, yoff+basey-3-2, 39, yoff+basey+4, 1)
+            rectfill(0, yoff+basey-3-1, 39, yoff+basey+3, 6)
+            wobble_text(entries[i].name, 20, yoff+basey-3, 13)
         else
-            zprint(entries[i].name, 20, basey-3+yoff, i == c+1 and 13 or 1, 0)
+            zprint(entries[i].name, 20, basey-3+yoff, 1, 0)
         end
     end
 end

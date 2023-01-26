@@ -17,20 +17,35 @@ end $$
 -- todo: make this smaller
 |[editparty_draw1]| function(a)
     local party = get_party(@S_CUR_PARTY)
+    local xw, yw = .5, .5
+    local xp = 13
+    local xo, yo = 7, 20
 
-    --rectfill(0,0,39,39,1)
-    --rectfill(-1,0+7,40,39-7,13)
+    rectfill(0,  0,39,39, 1)
+    --rectfill(0, 11,39,11,13)
+    rectfill(-1,13,40,39,13)
     --rect(-1,0+7,40,39-7,1)
     for i=1,6 do
-        get_pokemon(party[i] and party[i].num or -2).draw(8+(i-1)%3*11, 14+(i-1)\3*12, 5, .5, .5)
+        get_pokemon(party[i] and party[i].num or -2).draw(xo+(i-1)%3*xp, yo+(i-1)\3*xp, 5, xw, yw)
     end
 
+    zprint("team #"..@S_CUR_PARTY+1, 20, 3, 13, 0)
+    --zprint("spot #"..@S_PARTY_PKMN_NUM+1, 20,34, 13, 0)
+    --rect(-1,  0, 19, 39, 5)
+    --rect(20,  0, 40, 39, 5)
+    --rect(-1, 13, 40, 26, 5)
+
     local row, col = @S_PARTY_PKMN_NUM\3, @S_PARTY_PKMN_NUM%3
-    rect    (-2+col*12, 4+row*12, 17+col*12, 23+row*12, 13)
-    rect    (-1+col*12, 5+row*12, 16+col*12, 22+row*12, 1)
-    rectfill(0+col*12,  6+row*12, 15+col*12, 21+row*12, 6)
-    local sel_pkmn = party[@S_PARTY_PKMN_NUM+1]
-    get_pokemon(sel_pkmn and sel_pkmn.num or -2).draw(8+col*11, 14+row*12, 13, 1, 1)
+    rectfill(xo+col*xp-9, yo+row*xp-9, xo+col*xp+8, yo+row*xp+8, 5)
+    rectfill(xo+col*xp-8, yo+row*xp-8, xo+col*xp+7, yo+row*xp+7, 1)
+    rectfill(xo+col*xp-7, yo+row*xp-7, xo+col*xp+6, yo+row*xp+6, 6)
+    get_pokemon(party[@S_PARTY_PKMN_NUM+1] and party[@S_PARTY_PKMN_NUM+1].num or -2).draw(xo+col*xp, yo+row*xp, 13, .625, .625)
+
+    --rect    (-4-2+col*12, -2+4+row*12, -1+17+col*12, 2+23+row*12, 13)
+    --rect    (-4-1+col*12, -2+5+row*12, -1+16+col*12, 2+22+row*12, 1)
+    --rectfill(-4-0+col*12, -2+6+row*12, -1+15+col*12, 2+21+row*12, 6)
+    --local sel_pkmn = party[@S_PARTY_PKMN_NUM+1]
+    --get_pokemon(sel_pkmn and sel_pkmn.num or -2).draw(8+col*11, yo+row*12, 13, 1, 1)
 end $$
 
 |[editparty_draw2]| function(a)

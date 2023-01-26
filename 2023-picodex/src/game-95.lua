@@ -31,7 +31,7 @@ zclass[[modes,actor|
     pselactions;  update,%pselactions_update,  draw1,%pselactions_draw1,  draw2,%turn_draw2,  draw3,%pselactions_draw3;
     pselmove;     update,%pselmove_update,     draw1,%pselmove_draw1,     draw2,%turn_draw2,  draw3,%pselmove_draw3, init,%pselmove_init;
 
-    party;        update,%party_update,        draw1,%party_draw1,        draw2,%party_draw2,        draw3,%party_draw3,        select_func,%party_select;
+    party;        update,%party_update,        draw1,%party_draw1,        draw2,%party_draw2,        draw3,%party_draw3,        init,%party_init, select_func,%party_select;
     editparty;    update,%editparty_update,    draw1,%editparty_draw1,    draw2,%editparty_draw2,    draw3,%editparty_draw3;
     partyaction;  update,%partyaction_update,  draw1,%partyaction_draw1,  draw2,%editparty_draw2,    draw3,%partyaction_draw3,  init,%partyaction_init;
     partypkmn;    update,%partypkmn_update,    draw1,%partypkmn_draw1,    draw2,%partypkmn_draw2,    draw3,%partypkmn_draw3,    init,%partypkmn_init;
@@ -64,8 +64,8 @@ end $$
     --     poke(S_POKEMON+i, 1)
     -- end
 
-    g_cursors = zobj[[ pselaction,0, fightsel,0, partymsel,0, partymoves,0, party_pkmn,0, partyaction,0, mode,0, browse,0 ]]
-    g_views   = zobj[[ pselaction,0, fightsel,0, partymsel,0, partymoves,0, party_pkmn,0, partyaction,0, mode,0, browse,0 ]]
+    g_cursors = zobj[[ party,0, pselaction,0, fightsel,0, partymsel,0, partymoves,0, party_pkmn,0, partyaction,0, mode,0, browse,0 ]]
+    g_views   = zobj[[ party,0, pselaction,0, fightsel,0, partymsel,0, partymoves,0, party_pkmn,0, partyaction,0, mode,0, browse,0 ]]
 
     a.modes = _g.modes()
     sfx(61,0)

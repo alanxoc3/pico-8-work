@@ -78,6 +78,7 @@ end
 function browse_draw1(a, key)
     local c, v = g_cursors[key]-1, g_views[key]
     local pkmn = get_browse_pokemon(c+1)
+    local xo, yo, pad = 5, 5, 10
 
     if c\4 < v   then v = c\4   end
     if c\4 > v+3 then v = c\4-3 end
@@ -86,16 +87,16 @@ function browse_draw1(a, key)
 
     for j=0,3 do
         for i=0,3 do
-            get_browse_pokemon((v+j)*4+i+1).draw(i*10+5, j*10+5, 5, .375, .375)
+            get_browse_pokemon((v+j)*4+i+1).draw(i*pad+xo, j*pad+yo, 5, .375, .375)
         end
     end
 
-    local x, y = (c%4)*10+5, (c\4-v)*10+5
+    local x, y = (c%4)*pad+xo, (c\4-v)*pad+yo
     if (c)%4 == 0 then x+=1 end
     if (c)%4 == 3 then x-=1 end
     if (c)\4-v == 0 then y+=1 end
     if (c)\4-v == 3 then y-=1 end
-    rectfill(x-7-1,y-7-1,x+6+1,y+6+1,13)
+    rectfill(x-7-1,y-7-1,x+6+1,y+6+1,5)
     rectfill(x-6-1,y-6-1,x+5+1,y+5+1,6)
     pkmn.draw(x, y, 13, .5, .5)
     rect    (x-7  ,y-7  ,x+6  ,y+6  ,1)
