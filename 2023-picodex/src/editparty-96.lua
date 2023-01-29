@@ -18,27 +18,31 @@ end $$
 |[editparty_draw1]| function(a)
     local party = get_party(@S_CUR_PARTY)
     local xw, yw = .5, .5
-    local xp = 13
+    local xp = 10
     local xo, yo = 7, 20
 
-    rectfill(0,  0,39,39, 1)
     --rectfill(0, 11,39,11,13)
-    rectfill(-1,13,40,39,13)
     --rect(-1,0+7,40,39-7,1)
+
+    local row, col = @S_PARTY_PKMN_NUM\3, @S_PARTY_PKMN_NUM%3
+    rectfill(xo+col*xp-8-1, yo+row*xp-8-1, xo+col*xp+7+1, yo+row*xp+7+1, 5)
+
     for i=1,6 do
-        get_pokemon(party[i] and party[i].num or -2).draw(xo+(i-1)%3*xp, yo+(i-1)\3*xp, 5, xw, yw)
+        local xoff, yoff = 0, 0
+        --if (i-1)%3 < col then xoff = -3 end
+        --if (i-1)%3 > col then xoff =  3 end
+        --if (i-1)\3 < row then yoff = -3 end
+        --if (i-1)\3 > row then yoff =  3 end
+        get_pokemon(party[i] and party[i].num or -2).draw(xoff+xo+(i-1)%3*xp, yoff+yo+(i-1)\3*xp, 5, xw, yw)
     end
 
-    zprint("team #"..@S_CUR_PARTY+1, 20, 3, 13, 0)
     --zprint("spot #"..@S_PARTY_PKMN_NUM+1, 20,34, 13, 0)
     --rect(-1,  0, 19, 39, 5)
     --rect(20,  0, 40, 39, 5)
     --rect(-1, 13, 40, 26, 5)
 
-    local row, col = @S_PARTY_PKMN_NUM\3, @S_PARTY_PKMN_NUM%3
-    rectfill(xo+col*xp-9, yo+row*xp-9, xo+col*xp+8, yo+row*xp+8, 5)
-    rectfill(xo+col*xp-8, yo+row*xp-8, xo+col*xp+7, yo+row*xp+7, 1)
-    rectfill(xo+col*xp-7, yo+row*xp-7, xo+col*xp+6, yo+row*xp+6, 6)
+    rectfill(xo+col*xp-7-1, yo+row*xp-7-1, xo+col*xp+6+1, yo+row*xp+6+1, 1)
+    rectfill(xo+col*xp-6-1, yo+row*xp-6-1, xo+col*xp+5+1, yo+row*xp+5+1, 6)
     get_pokemon(party[@S_PARTY_PKMN_NUM+1] and party[@S_PARTY_PKMN_NUM+1].num or -2).draw(xo+col*xp, yo+row*xp, 13, .625, .625)
 
     --rect    (-4-2+col*12, -2+4+row*12, -1+17+col*12, 2+23+row*12, 13)
@@ -46,6 +50,8 @@ end $$
     --rectfill(-4-0+col*12, -2+6+row*12, -1+15+col*12, 2+21+row*12, 6)
     --local sel_pkmn = party[@S_PARTY_PKMN_NUM+1]
     --get_pokemon(sel_pkmn and sel_pkmn.num or -2).draw(8+col*11, yo+row*12, 13, 1, 1)
+    rectfill(0, 0, 39, 12, 1)
+    zprint("team #"..@S_CUR_PARTY+1, 20+t()%2\1, 4, 13, 0)
 end $$
 
 |[editparty_draw2]| function(a)

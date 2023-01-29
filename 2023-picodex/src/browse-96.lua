@@ -76,30 +76,33 @@ function browse_update(a, key)
 end
 
 function browse_draw1(a, key)
+
+    rectfill(0,0,39,39,1)
+
     local c, v = g_cursors[key]-1, g_views[key]
     local pkmn = get_browse_pokemon(c+1)
-    local xo, yo, pad = 5, 5, 10
+    local xo, yo, pad = 5, 10, 10
+    local perow = 4
 
-    if c\4 < v   then v = c\4   end
-    if c\4 > v+3 then v = c\4-3 end
+    rectfill(0,-v*10+1+4,39,((max(#g_available_pokemon,9)-1)\perow-v+2)*10-1-5,13)
 
-    v = max(0, min(152/4-4, v))
+    if c\perow < v   then v = c\perow   end
+    if c\perow > v+2 then v = c\perow-2 end
 
-    for j=0,3 do
+    v = max(0, min(152\perow, v))
+
+    local x, y = (c%perow)*pad+xo, (c\perow-v)*pad+yo
+    rectfill(x-6-1,y-6-1,x+5+1,y+5+1,5)
+
+    for j=-1,3 do
         for i=0,3 do
-            get_browse_pokemon((v+j)*4+i+1).draw(i*pad+xo, j*pad+yo, 5, .375, .375)
+            get_browse_pokemon((v+j)*perow+i+1).draw(i*pad+xo, j*pad+yo, 5, .375, .375)
         end
     end
 
-    local x, y = (c%4)*pad+xo, (c\4-v)*pad+yo
-    if (c)%4 == 0 then x+=1 end
-    if (c)%4 == 3 then x-=1 end
-    if (c)\4-v == 0 then y+=1 end
-    if (c)\4-v == 3 then y-=1 end
-    rectfill(x-7-1,y-7-1,x+6+1,y+6+1,5)
-    rectfill(x-6-1,y-6-1,x+5+1,y+5+1,6)
-    pkmn.draw(x, y, 13, .5, .5)
-    rect    (x-7  ,y-7  ,x+6  ,y+6  ,1)
+    rectfill(x-5-1,y-5-1,x+4+1,y+4+1,6)
+    pkmn.draw(x, y, 13, .375, .375)
+    rect    (x-6-0  ,y-6-0  ,x+5+0  ,y+5+0  ,1)
 
     g_views[key] = v
 end

@@ -60,9 +60,9 @@ end $$
     ]])
 
     -- unlock all pkmn
-    -- for i=0,151 do
-    --     poke(S_POKEMON+i, 1)
-    -- end
+    for i=0,151 do
+        poke(S_POKEMON+i, 1)
+    end
 
     g_cursors = zobj[[ party,0, pselaction,0, fightsel,0, partymsel,0, partymoves,0, party_pkmn,0, partyaction,0, mode,0, browse,0 ]]
     g_views   = zobj[[ party,0, pselaction,0, fightsel,0, partymsel,0, partymoves,0, party_pkmn,0, partyaction,0, mode,0, browse,0 ]]

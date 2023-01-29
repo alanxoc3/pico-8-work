@@ -178,6 +178,9 @@ deli(a.stack)
 a:load(a.stack[#a.stack]or "main")
 end,function(a)
 zcall(poke,[[;,0x5e5b,1;;,0x5e5e,1;;,0x5e61,1]])
+for i=0,151 do
+poke(0x5e5a+i,1)
+end
 g_cursors=zobj[[party,0,pselaction,0,fightsel,0,partymsel,0,partymoves,0,party_pkmn,0,partyaction,0,mode,0,browse,0]]
 g_views=zobj[[party,0,pselaction,0,fightsel,0,partymsel,0,partymoves,0,party_pkmn,0,partyaction,0,mode,0,browse,0]]
 a.modes=_g.modes()
@@ -286,19 +289,19 @@ if g_bpx then a:push"partyaction" end
 end,function(a)
 local party=get_party(@0x5ef4)
 local xw,yw=.5,.5
-local xp=13
+local xp=10
 local xo,yo=7,20
-rectfill(0,0,39,39,1)
-rectfill(-1,13,40,39,13)
-for i=1,6 do
-get_pokemon(party[i]and party[i].num or-2).draw(xo+(i-1)%3*xp,yo+(i-1)\3*xp,5,xw,yw)
-end
-zprint("team #"..@0x5ef4+1,20,3,13,0)
 local row,col=@0x5ef3\3,@0x5ef3%3
-rectfill(xo+col*xp-9,yo+row*xp-9,xo+col*xp+8,yo+row*xp+8,5)
-rectfill(xo+col*xp-8,yo+row*xp-8,xo+col*xp+7,yo+row*xp+7,1)
-rectfill(xo+col*xp-7,yo+row*xp-7,xo+col*xp+6,yo+row*xp+6,6)
+rectfill(xo+col*xp-8-1,yo+row*xp-8-1,xo+col*xp+7+1,yo+row*xp+7+1,5)
+for i=1,6 do
+local xoff,yoff=0,0
+get_pokemon(party[i]and party[i].num or-2).draw(xoff+xo+(i-1)%3*xp,yoff+yo+(i-1)\3*xp,5,xw,yw)
+end
+rectfill(xo+col*xp-7-1,yo+row*xp-7-1,xo+col*xp+6+1,yo+row*xp+6+1,1)
+rectfill(xo+col*xp-6-1,yo+row*xp-6-1,xo+col*xp+5+1,yo+row*xp+5+1,6)
 get_pokemon(party[@0x5ef3+1]and party[@0x5ef3+1].num or-2).draw(xo+col*xp,yo+row*xp,13,.625,.625)
+rectfill(0,0,39,12,1)
+zprint("team #"..@0x5ef4+1,20+t()%2\1,4,13,0)
 end,function(a)
 local pkmn=get_party(@0x5ef4)[@0x5ef3+1]
 if pkmn then
@@ -503,7 +506,7 @@ c_pokemon=zobj[[0;,0,missingno,0,1,33,136,0,29,6,1,1;;,0,bulbasaur,8,5,45,49,49,
 c_types=zobj[[0;bg,0,name,bird;0;good;,;0;null;,;0;weak;,;1;bg,0,name,normal;1;good;,;1;null;,15;1;weak;,13;2;bg,5,name,fire;2;good;,8,10,11;2;null;,;2;weak;,2,4,13,14;3;bg,2,name,fighting;3;good;,10,1,13;3;null;,15;3;weak;,11,9,5,12;4;bg,4,name,water;4;good;,2,7,13;4;null;,;4;weak;,14,8,4;5;bg,1,name,poison;5;good;,11,8;5;null;,;5;weak;,15,7,5,13;6;bg,6,name,electric;6;good;,9,4;6;null;,7;6;weak;,14,6,8;7;bg,2,name,ground;7;good;,6,2,5,13;7;null;,9;7;weak;,11,8;8;bg,3,name,grass;8;good;,7,13,4;8;null;,;8;weak;,11,14,2,9,8,5;9;bg,0,name,flying;9;good;,11,3,8;9;null;,;9;weak;,6,13;10;bg,4,name,ice;10;good;,14,9,8;10;null;,;10;weak;,2,10,4;11;bg,3,name,bug;11;good;,8,12;11;null;,;11;weak;,3,2,9,15,5;12;bg,1,name,psychic;12;good;,3,5;12;null;,;12;weak;,12;13;bg,0,name,rock;13;good;,11,2,9,10;13;null;,;13;weak;,3,7;14;bg,0,name,dragon;14;good;,14;14;null;,;14;weak;,;15;bg,1,name,ghost;15;good;,15;15;null;,1,12;15;weak;,]]
 c_bg_styles=zobj[[0;bg,6,aa,13;;bg,13,aa,5;;bg,9,aa,4;;bg,11,aa,3;;bg,12,aa,5;;bg,8,aa,2;;bg,10,aa,4]]
 c_zmovetype=zobj[[0;name,status;;name,physical;;name,special;]]
-c_moves=zobj[[0;,struggle,1,0,50,1;;,megapunch,1,20,80,.85;;,razorwind,1,10,80,1;;,swordance,1,20,0,0;;,whirlwind,1,20,0,0;;,megakick,1,5,120,.75;;,toxic,5,10,0,.9;;,horndrill,1,5,0,.3;;,bodyslam,1,15,85,1;;,takedown,1,20,90,.85;;,doubledge,1,15,120,1;;,bublebeam,4,20,65,1;;,watergun,4,25,40,1;;,icebeam,10,10,90,1;;,blizzard,10,5,110,.7;;,hyperbeam,1,5,150,.9;;,payday,1,20,40,1;;,submision,3,20,80,.8;;,counter,3,20,0,1;;,seismctss,3,20,0,1;;,rage,1,20,20,1;;,megadrain,8,15,40,1;;,solarbeam,8,10,120,1;;,drgonrage,14,10,0,1;;,thndrbolt,6,15,90,1;;,thunder,6,10,110,.7;;,eartquake,7,10,100,1;;,fissure,7,5,0,.3;;,dig,7,10,80,1;;,psychic,12,10,90,1;;,teleport,12,20,0,0;;,mimic,1,10,0,0;;,dubleteam,1,15,0,0;;,reflect,12,20,0,0;;,bide,1,10,0,0;;,metronome,1,10,0,0;;,slfdstrct,1,5,200,1;;,eggbomb,1,10,100,.75;;,fireblast,2,5,110,.85;;,swift,1,20,60,2;;,skullbash,1,10,130,1;;,softboild,1,5,0,0;;,dreameatr,12,15,100,1;;,skyattack,9,5,140,.9;;,rest,12,5,0,0;;,thndrwave,6,20,0,.9;;,psywave,12,15,0,1;;,explosion,1,5,250,1;;,rockslide,13,10,75,.9;;,triattack,1,10,80,1;;,sbstitute,1,10,0,0;;,cut,1,30,50,.95;;,fly,9,15,90,.95;;,surf,4,15,90,1;;,strength,1,15,80,1;;,flash,1,20,0,1;;,pound,1,35,40,1;;,karatechp,3,25,50,1;;,dubleslap,1,10,15,.85;;,cometpnch,1,15,18,.85;;,firepunch,2,15,75,1;;,icepunch,10,15,75,1;;,thndrpnch,6,15,75,1;;,scratch,1,35,40,1;;,vicegrip,1,30,55,1;;,guilotine,1,5,0,.3;;,gust,9,35,40,1;;,wingattck,9,35,60,1;;,bind,1,20,15,.85;;,slam,1,20,80,.75;;,vinewhip,8,25,45,1;;,stomp,1,20,65,1;;,dublekick,3,30,30,1;;,jumpkick,3,10,100,.95;;,rolingkck,3,15,60,.85;;,sandattck,7,15,0,1;;,headbutt,1,15,70,1;;,hornattck,1,25,65,1;;,furyattck,1,20,15,.85;;,tackle,1,35,40,1;;,wrap,1,20,15,.9;;,thrash,1,10,120,1;;,tailwhip,1,30,0,1;;,psnsting,5,35,15,1;;,twineedle,11,20,25,1;;,pinmisile,11,20,25,.95;;,leer,1,30,0,1;;,bite,1,25,60,1;;,growl,1,40,0,1;;,roar,1,20,0,1;;,sing,1,15,0,.55;;,suprsonic,1,20,0,.55;;,sonicboom,1,20,0,.9;;,disable,1,20,0,1;;,acid,5,30,40,1;;,ember,2,25,40,1;;,flmethrwr,2,15,90,1;;,mist,10,30,0,0;;,hydropump,4,5,110,.8;;,psybeam,12,20,65,1;;,aurorbeam,10,20,65,1;;,peck,9,35,35,1;;,drillpeck,9,20,80,1;;,lowkick,3,20,0,1;;,absorb,8,25,20,1;;,leechseed,8,10,0,.9;;,growth,1,20,0,0;;,razorleaf,8,25,55,.95;;,psnpowder,5,35,0,.75;;,stunspore,8,30,0,.75;;,slppowder,8,15,0,.75;;,petldance,8,10,120,1;;,stringsht,11,40,0,.95;;,firespin,2,15,35,.85;;,thndrshck,6,30,40,1;;,rockthrow,13,15,50,.9;;,confusion,12,25,50,1;;,hypnosis,12,20,0,.6;;,meditate,12,40,0,0;;,agility,12,30,0,0;;,quickatck,1,30,40,1;;,niteshade,15,15,0,1;;,screech,1,40,0,.85;;,recover,1,5,0,0;;,harden,1,30,0,0;;,minimize,1,10,0,0;;,smokescrn,1,20,0,1;;,confusray,15,10,0,1;;,withdraw,4,40,0,0;;,defenscrl,1,40,0,0;;,barrier,12,20,0,0;;,lightscrn,12,30,0,0;;,haze,10,30,0,0;;,focusnrgy,1,30,0,0;;,mirormove,9,20,0,0;;,lick,15,30,30,1;;,smog,5,20,30,.7;;,sludge,5,20,65,1;;,boneclub,7,20,65,.85;;,waterfall,4,15,80,1;;,clamp,4,15,35,.85;;,spikcanon,1,15,20,1;;,constrict,1,35,10,1;;,amnesia,12,20,0,0;;,kinesis,12,15,0,.8;;,hghjmpkck,3,10,130,.9;;,glare,1,30,0,1;;,poisongas,5,40,0,.9;;,barrage,1,20,15,.85;;,leechlife,11,10,80,1;;,lovelykss,1,10,0,.75;;,transform,1,10,0,0;;,bubble,4,30,40,1;;,dizypunch,1,10,70,1;;,spore,8,15,0,1;;,splash,1,40,0,0;;,acidarmor,5,20,0,0;;,crbhammer,4,10,100,.9;;,furyswipe,1,15,18,.8;;,bonemrang,7,10,50,.9;;,hyperfang,1,15,80,.9;;,sharpen,1,30,0,0;;,convrsion,1,30,0,0;;,superfang,1,10,0,.9;;,slash,1,20,70,1]]
+c_moves=zobj[[0;,struggle,1,0,50,1;;,megapnch,1,20,80,.85;;,razrwind,1,10,80,1;;,swordanc,1,20,0,0;;,whrlwind,1,20,0,0;;,megakick,1,5,120,.75;;,toxic,5,10,0,.9;;,horndril,1,5,0,.3;;,bodyslam,1,15,85,1;;,takedown,1,20,90,.85;;,doubledg,1,15,120,1;;,bublbeam,4,20,65,1;;,watergun,4,25,40,1;;,icebeam,10,10,90,1;;,blizzard,10,5,110,.7;;,hyprbeam,1,5,150,.9;;,payday,1,20,40,1;;,submsion,3,20,80,.8;;,counter,3,20,0,1;;,siestoss,3,20,0,1;;,rage,1,20,20,1;;,megdrain,8,15,40,1;;,solrbeam,8,10,120,1;;,drgnrage,14,10,0,1;;,thndrblt,6,15,90,1;;,thunder,6,10,110,.7;;,earthqke,7,10,100,1;;,fissure,7,5,0,.3;;,dig,7,10,80,1;;,psychic,12,10,90,1;;,teleport,12,20,0,0;;,mimic,1,10,0,0;;,doubteam,1,15,0,0;;,reflect,12,20,0,0;;,bide,1,10,0,0;;,metronom,1,10,0,0;;,selfdstr,1,5,200,1;;,eggbomb,1,10,100,.75;;,fireblst,2,5,110,.85;;,swift,1,20,60,2;;,skulbash,1,10,130,1;;,softboil,1,5,0,0;;,dreameat,12,15,100,1;;,skyattck,9,5,140,.9;;,rest,12,5,0,0;;,thndrwav,6,20,0,.9;;,psywave,12,15,0,1;;,explsion,1,5,250,1;;,rockslid,13,10,75,.9;;,triattck,1,10,80,1;;,substute,1,10,0,0;;,cut,1,30,50,.95;;,fly,9,15,90,.95;;,surf,4,15,90,1;;,strength,1,15,80,1;;,flash,1,20,0,1;;,pound,1,35,40,1;;,karatchp,3,25,50,1;;,doublslp,1,10,15,.85;;,comtpnch,1,15,18,.85;;,firepnch,2,15,75,1;;,icepnch,10,15,75,1;;,thndpnch,6,15,75,1;;,scratch,1,35,40,1;;,vicegrip,1,30,55,1;;,guilotin,1,5,0,.3;;,gust,9,35,40,1;;,wingatck,9,35,60,1;;,bind,1,20,15,.85;;,slam,1,20,80,.75;;,vinewhip,8,25,45,1;;,stomp,1,20,65,1;;,doublkck,3,30,30,1;;,jumpkck,3,10,100,.95;;,rllngkck,3,15,60,.85;;,sandatck,7,15,0,1;;,headbutt,1,15,70,1;;,hornatck,1,25,65,1;;,furyatck,1,20,15,.85;;,tackle,1,35,40,1;;,wrap,1,20,15,.9;;,thrash,1,10,120,1;;,tailwhip,1,30,0,1;;,psnsting,5,35,15,1;;,twineedl,11,20,25,1;;,pinmisil,11,20,25,.95;;,leer,1,30,0,1;;,bite,1,25,60,1;;,growl,1,40,0,1;;,roar,1,20,0,1;;,sing,1,15,0,.55;;,supersnc,1,20,0,.55;;,sonicbm,1,20,0,.9;;,disable,1,20,0,1;;,acid,5,30,40,1;;,ember,2,25,40,1;;,flamthwr,2,15,90,1;;,mist,10,30,0,0;;,hydropmp,4,5,110,.8;;,psybeam,12,20,65,1;;,aurorabm,10,20,65,1;;,peck,9,35,35,1;;,drillpck,9,20,80,1;;,lowkick,3,20,0,1;;,absorb,8,25,20,1;;,leechsed,8,10,0,.9;;,growth,1,20,0,0;;,razrleaf,8,25,55,.95;;,psnpowdr,5,35,0,.75;;,stunspor,8,30,0,.75;;,slppowdr,8,15,0,.75;;,petldanc,8,10,120,1;;,strngsht,11,40,0,.95;;,firespin,2,15,35,.85;;,thndshck,6,30,40,1;;,rockthrw,13,15,50,.9;;,cnfusion,12,25,50,1;;,hypnosis,12,20,0,.6;;,meditate,12,40,0,0;;,agility,12,30,0,0;;,quickatk,1,30,40,1;;,nghtshde,15,15,0,1;;,screech,1,40,0,.85;;,recover,1,5,0,0;;,harden,1,30,0,0;;,minimize,1,10,0,0;;,smokscrn,1,20,0,1;;,cnfusray,15,10,0,1;;,withdraw,4,40,0,0;;,dfnscurl,1,40,0,0;;,barrier,12,20,0,0;;,lghtscrn,12,30,0,0;;,haze,10,30,0,0;;,fcsenrgy,1,30,0,0;;,mirrmove,9,20,0,0;;,lick,15,30,30,1;;,smog,5,20,30,.7;;,sludge,5,20,65,1;;,boneclub,7,20,65,.85;;,waterfal,4,15,80,1;;,clamp,4,15,35,.85;;,spikcann,1,15,20,1;;,constrct,1,35,10,1;;,amnesia,12,20,0,0;;,kinesis,12,15,0,.8;;,hijmpkck,3,10,130,.9;;,glare,1,30,0,1;;,psngas,5,40,0,.9;;,barrage,1,20,15,.85;;,leechlif,11,10,80,1;;,lovekiss,1,10,0,.75;;,tranform,1,10,0,0;;,bubble,4,30,40,1;;,dizypnch,1,10,70,1;;,spore,8,15,0,1;;,splash,1,40,0,0;;,acidarmr,5,20,0,0;;,crabhamr,4,10,100,.9;;,furyswps,1,15,18,.8;;,bonerang,7,10,50,.9;;,hyprfang,1,15,80,.9;;,sharpen,1,30,0,0;;,convrson,1,30,0,0;;,suprfang,1,10,0,.9;;,slash,1,20,70,1]]
 function menu_update(game,key,entries,is_pop_disabled)
 local c,v=g_cursors[key],g_views[key]
 if g_bpu then c=max(0,c-1)end
@@ -523,21 +526,19 @@ g_views[key]=v
 end
 function menu_draw1(game,key,entries)
 local c,v=g_cursors[key],g_views[key]
-local y=-5
+local y=-10
 rectfill(0,0,39,39,1)
-rectfill(-1,y-v*8+3,40,y-v*8+max(#entries,3)*8+6,13)
+rectfill(-1,-7-v*8+4,40,(max(#entries,3)-v)*10-6,13)
 for i=1,#entries do
-local basey=y+(i-v)*7
-local yoff=4
-if i<c+1 then yoff-=2 end
-if i>c+1 then yoff+=3 end
+local basey=y+(i-v)*10
+local yoff=0
 if i==c+1 then
-rectfill(0,yoff+basey-3-3,39,yoff+basey+5,5)
-rectfill(0,yoff+basey-3-2,39,yoff+basey+4,1)
-rectfill(0,yoff+basey-3-1,39,yoff+basey+3,6)
-wobble_text(entries[i].name,20,yoff+basey-3,13)
+rectfill(0,yoff+basey-5-3+1,39-0,yoff+basey+5+1,5)
+rectfill(0,yoff+basey-5-2+1,39-0,yoff+basey+4+1,1)
+rectfill(0,yoff+basey-5-1+1,39-0,yoff+basey+3+1,6)
+wobble_text(entries[i].name,20+t()*2\1%2,yoff+basey-3,13)
 else
-zprint(entries[i].name,20,basey-3+yoff,1,0)
+wobble_text(entries[i].name,20+i%2,basey-3+yoff,1,0)
 end
 end
 end
@@ -598,8 +599,8 @@ t1=t1..letter
 t2=t2.." "
 end
 end
-print(t1,x,y+(t()%2),color)
-print(t2,x,y+((t()+1)%2),color)
+print(t1,x,y,color)
+print(t2,x,y+1,color)
 end
 function zprint(str,x,y,color,align)
 str=""..str
@@ -670,26 +671,25 @@ if g_bpu then set_browse(-4,key)end
 if g_bpd then set_browse(4,key)end
 end
 function browse_draw1(a,key)
+rectfill(0,0,39,39,1)
 local c,v=g_cursors[key]-1,g_views[key]
 local pkmn=get_browse_pokemon(c+1)
-local xo,yo,pad=5,5,10
-if c\4<v then v=c\4 end
-if c\4>v+3 then v=c\4-3 end
-v=max(0,min(152/4-4,v))
-for j=0,3 do
+local xo,yo,pad=5,10,10
+local perow=4
+rectfill(0,-v*10+1+4,39,((max(#g_available_pokemon,9)-1)\perow-v+2)*10-1-5,13)
+if c\perow<v then v=c\perow end
+if c\perow>v+2 then v=c\perow-2 end
+v=max(0,min(152\perow,v))
+local x,y=(c%perow)*pad+xo,(c\perow-v)*pad+yo
+rectfill(x-6-1,y-6-1,x+5+1,y+5+1,5)
+for j=-1,3 do
 for i=0,3 do
-get_browse_pokemon((v+j)*4+i+1).draw(i*pad+xo,j*pad+yo,5,.375,.375)
+get_browse_pokemon((v+j)*perow+i+1).draw(i*pad+xo,j*pad+yo,5,.375,.375)
 end
 end
-local x,y=(c%4)*pad+xo,(c\4-v)*pad+yo
-if(c)%4==0 then x+=1 end
-if(c)%4==3 then x-=1 end
-if(c)\4-v==0 then y+=1 end
-if(c)\4-v==3 then y-=1 end
-rectfill(x-7-1,y-7-1,x+6+1,y+6+1,5)
-rectfill(x-6-1,y-6-1,x+5+1,y+5+1,6)
-pkmn.draw(x,y,13,.5,.5)
-rect(x-7,y-7,x+6,y+6,1)
+rectfill(x-5-1,y-5-1,x+4+1,y+4+1,6)
+pkmn.draw(x,y,13,.375,.375)
+rect(x-6-0,y-6-0,x+5+0,y+5+0,1)
 g_views[key]=v
 end
 function draw2_pokeinfo(pkmn)zprint(pkmn.name,46/2,4,1,0)end
@@ -1045,8 +1045,8 @@ end
 zclass[[game_state,actor|curr,fadein;init,%game_state_init;ecs_exclusions;actor,yes;defaults;sinit,nop,update,nop,draw,nop,light,0,backbuttonheld,no,modes,;logo;next,fadein,sinit,%logo_init,update,nop,draw,%logo_draw,duration,2.5;fadein;next,game,duration,0,sinit,%gamefadein_init;closed;next,opening,sinit,%closed_init,update,%closed_update,draw,%closed_draw;opening;next,starting_1,duration,.25,draw,%opening_draw;starting_1;next,starting_2,light,1,duration,.125,sinit,%light_init,draw,%opened_draw;starting_2;next,starting_3,light,2,duration,.125,sinit,%light_init,draw,%opened_draw;starting_3;next,game,light,3,duration,.125,sinit,%light_init,draw,%opened_draw;game;next,closing,light,4,sinit,%game_init,update,%game_update,draw,%game_draw;closing;next,closed,duration,.25,update,nop,draw,%closing_draw;]]
 function _init()
 memset(0x8000,0,0x7fff)
-poke(0x5f5c,15)
-poke(0x5f5d,5)
+poke(0x5f5c,12)
+poke(0x5f5d,2)
 cls()
 sfx(62,0)
 extract_sheet(0)

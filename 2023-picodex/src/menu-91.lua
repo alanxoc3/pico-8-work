@@ -38,23 +38,23 @@ end
 
 function menu_draw1(game, key, entries)
     local c, v = g_cursors[key], g_views[key]
-    local y = -5
+    local y = -10
 
     rectfill(0, 0, 39, 39, 1)
-    rectfill(-1, y-v*8+3, 40, y-v*8+max(#entries, 3)*8+6, 13)
+    rectfill(-1, -7-v*8+4, 40, (max(#entries, 3)-v)*10-6, 13)
 
     for i=1,#entries do
-        local basey = y+(i-v)*7
-        local yoff = 4
-        if i < c+1 then yoff -= 2 end
-        if i > c+1 then yoff += 3 end
+        local basey = y+(i-v)*10
+        local yoff = 0
+
         if i == c+1 then
-            rectfill(0, yoff+basey-3-3, 39, yoff+basey+5, 5)
-            rectfill(0, yoff+basey-3-2, 39, yoff+basey+4, 1)
-            rectfill(0, yoff+basey-3-1, 39, yoff+basey+3, 6)
-            wobble_text(entries[i].name, 20, yoff+basey-3, 13)
+            rectfill(0, yoff+basey-5-3+1, 39-0, yoff+basey+5+1, 5)
+            rectfill(0, yoff+basey-5-2+1, 39-0, yoff+basey+4+1, 1)
+            rectfill(0, yoff+basey-5-1+1, 39-0, yoff+basey+3+1, 6)
+            wobble_text(entries[i].name, 20+t()*2\1%2, yoff+basey-3, 13)
         else
-            zprint(entries[i].name, 20, basey-3+yoff, 1, 0)
+            -- wobble_text(entries[i].name, 20+t()*2\1%2, yoff+basey-3, 13)
+            wobble_text(entries[i].name, 20+i%2, basey-3+yoff, 1, 0)
         end
     end
 end

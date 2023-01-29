@@ -121,8 +121,8 @@ function wobble_text(text, x, y, color)
         end
     end
 
-    print(t1, x, y+(t()%2), color)
-    print(t2, x, y+((t()+1)%2), color)
+    print(t1, x, y, color)
+    print(t2, x, y+1, color)
 end
 
 function zprint(str, x, y, color, align)
