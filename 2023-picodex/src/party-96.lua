@@ -1,42 +1,57 @@
-|[party_select]| function(game)
-    game:push'editparty'
-end $$
+-- CHOOSE PARTY LOGIC --
+|[party_select]| function(game) game:push'editparty' end $$
 
 |[party_init]| function(game)
-    game.available_actions = {}
+    game.menu_party:refresh(zobj[[,1,2,3]], function(i)
+        return {
+            name="team #"..i,
+            select=function() game:select_func() end
+        }
+    end)
+end $$
 
-    for i=1,3 do
-        add(game.available_actions, {name="team #"..i, func=function()
-            poke(S_CUR_PARTY, i-1)
-            game:select_func()
-        end})
+|[party_update]| function(game) game.menu_party:update(game) end $$
+|[party_draw1]|  function(game) game.menu_party:draw1()  end $$
+
+-- CHOOSE PKMN IN PARTY LOGIC --
+-- this is used both in "editparty" and selecting a pkmn in battle.
+|[editparty_init]| function(game)
+    local party = get_party(game.menu_party.c)
+    game.menu_editparty:refresh(zobj[[,1,2,3,4,5,6]], function(i)
+        return {
+            select=function(entry, game) game:push'partyaction' end,
+            num=party[i] and party[i].num or -2
+        }
+    end)
+end $$
+
+|[editparty_update]| function(game)
+    game.menu_editparty:update(game)
+end $$
+
+-- todo: make this smaller
+|[editparty_draw1]| function(game)
+    rectfill(0,0,39,39,1)
+    game.menu_editparty:draw1()
+    zprint("team #"..game.menu_party.c+1, 20+t()%2\1, 31, 13, 0)
+end $$
+
+|[editparty_draw2]| function(game)
+    local pkmn = get_party(game.menu_party.c)[@S_PARTY_PKMN_NUM+1]
+    if pkmn then
+        draw2_pokeinfo(get_pokemon(pkmn.num))
+    else
+        zprint("spot #"..(@S_PARTY_PKMN_NUM+1), 46/2, 4, 1, 0)
     end
 end $$
 
-|[party_update]| function(a) menu_update(a, 'party', a.available_actions) end $$
-|[party_draw1]|  function(a) menu_draw1 (a, 'party', a.available_actions) end $$
--- |[party_draw3]|  function(a) menu_draw3 (a, 'party', a.available_actions) end $$
+|[editparty_draw3]| function(game)
+    -- local pkmn = get_party(game.menu_party.c)[@S_PARTY_PKMN_NUM+1]
+    -- if pkmn then draw3_pokeinfo(pkmn.num) end
+    print_draw3_message("now", "pick a", "spot")
+end $$
 
--- |[party_update]| function(a)
---     if g_bpu then poke(S_CUR_PARTY, max(0, @S_CUR_PARTY-1)) end
---     if g_bpd then poke(S_CUR_PARTY, min(2, @S_CUR_PARTY+1)) end
--- 
---     if g_bpo then a:pop() end
---     if g_bpx then a:select_func() end
--- end $$
--- 
--- |[party_draw1]| function(a)
---     draw_party_screen(@S_CUR_PARTY)
--- end $$
--- 
--- |[party_draw2]| function(a)
---     zprint("party #"..@S_CUR_PARTY+1, 46/2, 4, 1, 0)
--- end $$
--- 
--- |[party_draw3]| function(a)
---     print_draw3_message("please", "select a", "party")
--- end $$
-
+-- UTILITY FUNCTIONS --
 function print_draw3_message(top, mid, bot)
     rectfill(0,0,45,20,1)
     zprint(top, 46/2, 1,  13, 0)

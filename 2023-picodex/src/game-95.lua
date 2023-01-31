@@ -11,12 +11,15 @@ zclass[[modes,actor|
 
     defaults; sub,0, init,nop, update,nop, finit,nop, draw1,nop, draw2,nop, draw3,nop;
 
-    main;         update,%main_update,         draw1,%main_draw1,         draw2,%main_draw2,         draw3,%main_draw3;
-    credits;      update,%credits_update,      draw1,%credits_draw1,      draw2,%main_draw2,         draw3,%main_draw3, credits_offset,5;
-    browse;       update,%browse_update,       draw1,%browse_draw1,       draw2,%browse_draw2,       draw3,%browse_draw3;
+    main;         update,%main_update,         draw1,%main_draw1,         draw2,%main_draw2,         draw3,%main_draw3,   init,%main_init;
+    credits;      update,%credits_update,      draw1,%credits_draw1,      draw2,%main_draw2,         draw3,%main_draw3,   credits_offset,5;
+    browse;       update,%browse_update,       draw1,%browse_draw1,       draw2,%browse_draw2,       draw3,%browse_draw3, init,%browse_init;
     browsestat;   update,%browsestat_update,   draw1,%browsestat_draw1,   draw2,%browse_draw2,       draw3,%browse_draw3;
-    fightparty;   update,%party_update,        draw1,%party_draw1,        draw2,%party_draw2,        draw3,%party_draw3,        select_func,%fight_select;
     fightsel;     update,%fightsel_update,     draw1,%fightsel_draw1,     draw2,%fightsel_draw2,     draw3,%fightsel_draw3,     init,%fightsel_init;
+
+    -- party selects
+    fightparty;   update,%party_update,        draw1,%party_draw1,        draw2,%party_draw2,        draw3,%party_draw3,        init,%party_init, select_func,%fight_select;
+    party;        update,%party_update,        draw1,%party_draw1,        draw2,%party_draw2,        draw3,%party_draw3,        init,%party_init, select_func,%party_select;
 
     -- p0 is the winner of the fight
     fightover;    update,%fightover_update,    draw1,%fightover_draw1,    draw2,%fightover_draw2,    draw3,%fightover_draw3,    init,%fightover_init;
@@ -31,8 +34,7 @@ zclass[[modes,actor|
     pselactions;  update,%pselactions_update,  draw1,%pselactions_draw1,  draw2,%turn_draw2,  draw3,%pselactions_draw3;
     pselmove;     update,%pselmove_update,     draw1,%pselmove_draw1,     draw2,%turn_draw2,  draw3,%pselmove_draw3, init,%pselmove_init;
 
-    party;        update,%party_update,        draw1,%party_draw1,        draw2,%party_draw2,        draw3,%party_draw3,        init,%party_init, select_func,%party_select;
-    editparty;    update,%editparty_update,    draw1,%editparty_draw1,    draw2,%editparty_draw2,    draw3,%editparty_draw3;
+    editparty;    update,%editparty_update,    draw1,%editparty_draw1,    draw2,%editparty_draw2,    draw3,%editparty_draw3,    init,%editparty_init;
     partyaction;  update,%partyaction_update,  draw1,%partyaction_draw1,  draw2,%editparty_draw2,    draw3,%partyaction_draw3,  init,%partyaction_init;
     partypkmn;    update,%partypkmn_update,    draw1,%partypkmn_draw1,    draw2,%partypkmn_draw2,    draw3,%partypkmn_draw3,    init,%partypkmn_init;
     partymoves;   update,%partymoves_update,   draw1,%partymoves_draw1,   draw2,%editparty_draw2,    draw3,%partymoves_draw3,   init,%partymoves_init;
@@ -51,7 +53,7 @@ end $$
     a:load(a.stack[#a.stack] or 'main')
 end $$
 
-|[game_init]| function(a)
+|[game_init]| function(game)
     -- we should always have these starter pokemon
     zcall(poke, [[
         ;,S_BULBASAUR,  1
@@ -59,21 +61,28 @@ end $$
        ;;,S_SQUIRTLE,   1
     ]])
 
-    -- unlock all pkmn
-    for i=0,151 do
-        poke(S_POKEMON+i, 1)
-    end
+    -- cheat: unlock all pkmn
+    --for i=0,151 do
+    --    poke(S_POKEMON+i, 1)
+    --end
 
+    -- todo: remove me
     g_cursors = zobj[[ party,0, pselaction,0, fightsel,0, partymsel,0, partymoves,0, party_pkmn,0, partyaction,0, mode,0, browse,0 ]]
     g_views   = zobj[[ party,0, pselaction,0, fightsel,0, partymsel,0, partymoves,0, party_pkmn,0, partyaction,0, mode,0, browse,0 ]]
 
-    a.modes = _g.modes()
+    game.modes = _g.modes()
+    game.modes.menu_editparty = create_menu(_g.browse_drawentry, 3, 30, 30, 5)
+    game.modes.menu_browse    = create_menu(_g.browse_drawentry, 4)
+    game.modes.menu_main      = create_menu(_g.menu_drawentry)
+    game.modes.menu_party     = create_menu(_g.menu_drawentry)
+    game.modes.menu_fightsel  = create_menu(_g.menu_drawentry)
+
     sfx(61,0)
 
     menuitem(1, "close picodex", function()
         menuitem(1)
         menuitem(2)
-        a:load'closing'
+        game:load'closing'
     end)
 
     menuitem(2, "swap 🅾️/❎", function()
@@ -81,8 +90,8 @@ end $$
     end)
 end $$
 
-|[game_update]| function(a)
-    a.modes:state()
+|[game_update]| function(game)
+    game.modes:state()
 end $$
 
 |[game_draw]| function(a)
@@ -94,20 +103,24 @@ end $$
         4, false, g_cursors.mode, #a.modes.stack)
 end $$
 
--- if i run the minifier, we need a separate display name from the state it's mapped to.
-c_modes = zobj[[
-    ;name,"browse",   state,browse,     func,%menu_state_callback, desc,"view|pokemon|info"
-   ;;name,"teams",    state,party,      func,%menu_state_callback, desc,"edit|stored|teams"
-   ;;name,"computer", state,fightparty, func,%menu_state_callback, desc,"battle|against|computer"
-   ;;name,"player",   state,games,      func,%menu_state_callback, desc,"battle|against|player"
-   ;;name,"hoard",    state,settings,   func,%menu_state_callback, desc,"battle all|pokemon|in order"
-   ;;name,"info",     state,credits,    func,%menu_state_callback, desc,"help|and|credits"
-]]
+|[main_init]| function(game)
+    game.menu_main:refresh(
+        zobj[[
+            ;name,"browse",   state,browse,     select,%menu_state_callback, desc,"view|pokemon|info"
+           ;;name,"teams",    state,party,      select,%menu_state_callback, desc,"edit|stored|teams"
+           ;;name,"computer", state,fightparty, select,%menu_state_callback, desc,"battle|against|computer"
+           ;;name,"player",   state,games,      select,%menu_state_callback, desc,"battle|against|player"
+           ;;name,"hoard",    state,settings,   select,%menu_state_callback, desc,"battle all|pokemon|in order"
+           ;;name,"info",     state,credits,    select,%menu_state_callback, desc,"help|and|credits"
+        ]]
+    )
+end $$
 
-|[main_update]| function(a) menu_update(a, 'mode', c_modes) end $$
-|[main_draw1]|  function(a) menu_draw1 (a, 'mode', c_modes) end $$
-|[main_draw3]|  function(a) menu_draw3 (a, 'mode', c_modes) end $$
+|[main_update]| function(game) game.menu_main:update(game) end $$
+|[main_draw1]|  function(game) game.menu_main:draw1() end $$
+|[main_draw3]|  function(game) end $$
 
+-- picodex logo
 g_picodex_div = zobj[[,6,5,5,6,6,5,6]]
 |[main_draw2]| function(a)
     rectfill(0, 0, 46, 13, 13)

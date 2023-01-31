@@ -29,6 +29,13 @@ function zcls(col)
    rectfill(0x8000,0x8000,0x7fff,0x7fff,col or 0)
 end
 
+function zcamera(nx, ny, func)
+    local ox, oy = %0x5f28, %0x5f2a
+    camera(ox-nx, oy-ny)
+    func()
+    camera(ox, oy)
+end
+
 -- DEBUG_BEGIN
 function tostring(any)
     if type(any)~="table" then return tostr(any) end

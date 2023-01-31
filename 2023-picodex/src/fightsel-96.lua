@@ -1,10 +1,10 @@
-|[fight_select]| function(a)
+|[fight_select]| function(game)
     local party = get_party(@S_CUR_PARTY)
 
     -- can't fight with an empty party
     for i=1,6 do
         if party[i] then
-            a:push'fightsel'
+            game:push'fightsel'
             return
         end
     end
@@ -12,25 +12,22 @@
     sfx'60' -- idk, please just do any error sound
 end $$
 
-|[fightsel_init]| function(a)
-    -- hmmm....
-    -- i could populate based on levels
-    a.available_actions = {
-        {name="bugcatcher", func=function(a, game)
-            local cpu_party_draft = {}
-            for i=1,6 do
-                local num = flr_rnd(151)+1
-                add(cpu_party_draft, { num=num, moves=c_pokemon[num].get_natural_moveset(100) })
-            end
+|[fightsel_init]| function(game)
+    game.menu_fightsel:refresh({
+        {name="bugcatcher", select=function(a, game)
+                local cpu_party_draft = {}
+                for i=1,6 do
+                    local num = flr_rnd(151)+1
+                    add(cpu_party_draft, { num=num, moves=c_pokemon[num].get_natural_moveset(100) })
+                end
 
-            begin_fight(game, 100, get_party(@S_CUR_PARTY), cpu_party_draft, "player 1", "bugcatcher", false, true)
-        end, desc="i|like|bugs"}
-    }
-
-    --name and func
+                begin_fight(game, 100, get_party(@S_CUR_PARTY), cpu_party_draft, "player 1", "bugcatcher", false, true)
+            end, desc="i|like|bugs"
+        }
+    })
 end $$
 
-|[fightsel_update]| function(a) menu_update(a, 'fightsel', a.available_actions) end $$
-|[fightsel_draw1]|  function(a) menu_draw1 (a, 'fightsel', a.available_actions) end $$
-|[fightsel_draw2]|  function(a) end $$
-|[fightsel_draw3]|  function(a) menu_draw3 (a, 'fightsel', a.available_actions) end $$
+|[fightsel_update]| function(game) game.menu_fightsel:update(game) end $$
+|[fightsel_draw1]|  function(game) game.menu_fightsel:draw1()      end $$
+|[fightsel_draw2]|  function(game) end $$
+|[fightsel_draw3]|  function(game) end $$

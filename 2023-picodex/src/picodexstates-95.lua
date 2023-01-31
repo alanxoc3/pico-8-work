@@ -52,12 +52,11 @@ end $$
 function draw_picodex(shaking, rotation, l_screen, tr_screen, br_screen, light, backbuttonheld, top_row_buttons, bot_row_buttons)
     light = light or 0
 
-    camera(-28+(rotation+1)*14+(shaking and flr(rnd(3)-1) or 0),-15)
-    draw_back_panel(light)
-    draw_left_flap(light >= 4, l_screen)
-    draw_right_flap(light >= 4, rotation, backbuttonheld, tr_screen, br_screen, top_row_buttons, bot_row_buttons)
-
-    camera(0,0)
+    zcamera(28-(rotation+1)*14+(shaking and flr(rnd(3)-1) or 0), 15, function()
+        draw_back_panel(light)
+        draw_left_flap(light >= 4, l_screen)
+        draw_right_flap(light >= 4, rotation, backbuttonheld, tr_screen, br_screen, top_row_buttons, bot_row_buttons)
+    end)
 end
 
 -- https://www.lexaloffle.com/bbs/?tid=38931
@@ -134,11 +133,8 @@ function zprint(str, x, y, color, align)
 end
 
 function draw_screen(xoff, yoff, w, h, screen_func)
-    local ox, oy = %0x5f28, %0x5f2a
-    clip(-ox+xoff,-oy+yoff,w,h)
-    camera(ox-xoff, oy-yoff)
-    screen_func()
-    camera(ox, oy)
+    clip(-%0x5f28+xoff,-%0x5f2a+yoff,w,h)
+    zcamera(xoff, yoff, screen_func)
     clip()
 end
 

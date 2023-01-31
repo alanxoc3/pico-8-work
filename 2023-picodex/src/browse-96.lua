@@ -1,14 +1,67 @@
-|[browse_update]| function(a)
-    browse_update(a, 'browse')
-    if g_bpx then a:push'browsestat' end
+|[browse_update]| function(game)
+    game.menu_browse:update(game)
 end $$
 
-|[browse_draw1]| function(a)
-    browse_draw1(a, 'browse')
+|[browse_draw1]| function(game)
+    game.menu_browse:draw1()
 end $$
 
-|[browse_draw2]| function() draw2_pokeinfo(get_browse_pokemon(g_cursors.browse)) end $$
-|[browse_draw3]| function() draw3_pokeinfo(get_browse_pokemon(g_cursors.browse)) end $$
+|[browse_draw2]| function(game) draw2_pokeinfo(get_browse_pokemon(game.menu_browse.c+1)) end $$
+|[browse_draw3]| function(game) draw3_pokeinfo(get_browse_pokemon(game.menu_browse.c+1)) end $$
+
+|[browse_init]| function(game)
+    game.menu_browse:refresh(
+        g_available_pokemon,
+        function(num) return {select=function(entry, game) game:push'browsestat' end, num=num} end
+    )
+end $$
+
+function browse_draw1(a, key)
+    rectfill(0,0,39,39,1)
+
+    local c, v = g_cursors[key]-1, g_views[key]
+    local pkmn = get_browse_pokemon(c+1)
+    local xo, yo, pad = 5, 10, 10
+    local perow = 4
+
+    rectfill(0,-v*10+1+4,39,((max(#g_available_pokemon,9)-1)\perow-v+2)*10-1-5,13)
+
+    if c\perow < v   then v = c\perow   end
+    if c\perow > v+2 then v = c\perow-2 end
+
+    v = max(0, min(152\perow, v))
+
+    local x, y = (c%perow)*pad+xo, (c\perow-v)*pad+yo
+    rectfill(x-6-1,y-6-1,x+5+1,y+5+1,5)
+
+    for j=-1,3 do
+        for i=0,3 do
+            get_browse_pokemon((v+j)*perow+i+1).draw(i*pad+xo, j*pad+yo, 5, .375, .375)
+        end
+    end
+
+    rectfill(x-5-1,y-5-1,x+4+1,y+4+1,6)
+    pkmn.draw(x, y, 13, .375, .375)
+    rect    (x-6-0  ,y-6-0  ,x+5+0  ,y+5+0  ,1)
+
+    g_views[key] = v
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 |[browsestat_update]| function(a)
     browseupdate_shared(a, 'browse')
@@ -73,38 +126,6 @@ function browse_update(a, key)
 
     if g_bpu then set_browse(-4, key) end
     if g_bpd then set_browse(4, key)  end
-end
-
-function browse_draw1(a, key)
-
-    rectfill(0,0,39,39,1)
-
-    local c, v = g_cursors[key]-1, g_views[key]
-    local pkmn = get_browse_pokemon(c+1)
-    local xo, yo, pad = 5, 10, 10
-    local perow = 4
-
-    rectfill(0,-v*10+1+4,39,((max(#g_available_pokemon,9)-1)\perow-v+2)*10-1-5,13)
-
-    if c\perow < v   then v = c\perow   end
-    if c\perow > v+2 then v = c\perow-2 end
-
-    v = max(0, min(152\perow, v))
-
-    local x, y = (c%perow)*pad+xo, (c\perow-v)*pad+yo
-    rectfill(x-6-1,y-6-1,x+5+1,y+5+1,5)
-
-    for j=-1,3 do
-        for i=0,3 do
-            get_browse_pokemon((v+j)*perow+i+1).draw(i*pad+xo, j*pad+yo, 5, .375, .375)
-        end
-    end
-
-    rectfill(x-5-1,y-5-1,x+4+1,y+4+1,6)
-    pkmn.draw(x, y, 13, .375, .375)
-    rect    (x-6-0  ,y-6-0  ,x+5+0  ,y+5+0  ,1)
-
-    g_views[key] = v
 end
 
 function draw2_pokeinfo(pkmn) zprint(pkmn.name, 46/2, 4, 1, 0) end

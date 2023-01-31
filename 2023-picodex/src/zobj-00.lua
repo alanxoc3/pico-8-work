@@ -1,5 +1,5 @@
--- used everywhere
-function nop() end
+-- used everywhere. this is the identity function
+function nop(...) return ... end
 
 -- 193 tokens
 function zobj_eval(val, table, parameters)

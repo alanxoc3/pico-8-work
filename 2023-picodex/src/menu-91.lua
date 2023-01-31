@@ -1,6 +1,6 @@
-|[menu_state_callback]| function(a, game)
-    if a.state then
-        game:push(a.state)
+|[menu_state_callback]| function(entry, game)
+    if entry.state then
+        game:push(entry.state)
     else
         game:pop()
     end
@@ -10,10 +10,6 @@ end $$
 -- mem is 2 bytes of memory. first byte is cursor, second byte is view.
 function menu_update(game, key, entries, is_pop_disabled)
     local c, v = g_cursors[key], g_views[key]
-
-    -- wrap
-    --if g_bpu then c = (c - 1) % #entries end
-    --if g_bpd then c = (c + 1) % #entries end
 
     -- nowrap
     if g_bpu then c = max(0, c-1) end
