@@ -31,7 +31,7 @@ zclass[[modes,actor|
     p2sel;        next,turn,  init,%psel_init, p0key,p2;
     turn;         next,p1sel, update,%turn_update, draw1,%turn_draw1, draw2,%turn_draw2, draw3,%turn_draw3, init,%turn_init, cur_action,no;
 
-    pselactions;  update,%pselactions_update,  draw1,%pselactions_draw1,  draw2,%turn_draw2,  draw3,%pselactions_draw3;
+    pselactions;  update,%pselactions_update,  draw1,%pselactions_draw1,  draw2,%turn_draw2,  draw3,%pselactions_draw3, init,%pselactions_init;
     pselmove;     update,%pselmove_update,     draw1,%pselmove_draw1,     draw2,%turn_draw2,  draw3,%pselmove_draw3, init,%pselmove_init;
 
     editparty;    update,%editparty_update,    draw1,%editparty_draw1,    draw2,%editparty_draw2,    draw3,%editparty_draw3,    init,%editparty_init;
@@ -71,11 +71,17 @@ end $$
     g_views   = zobj[[ party,0, pselaction,0, fightsel,0, partymsel,0, partymoves,0, party_pkmn,0, partyaction,0, mode,0, browse,0 ]]
 
     game.modes = _g.modes()
-    game.modes.menu_editparty = create_menu(_g.browse_drawentry, 3, 30, 30, 5)
-    game.modes.menu_browse    = create_menu(_g.browse_drawentry, 4)
-    game.modes.menu_main      = create_menu(_g.menu_drawentry)
-    game.modes.menu_party     = create_menu(_g.menu_drawentry)
-    game.modes.menu_fightsel  = create_menu(_g.menu_drawentry)
+    game.modes.menu_editparty    = create_menu(_g.browse_drawentry, 3, 30, 30, 5) -- selecting a pkmn from party
+    game.modes.menu_browse       = create_menu(_g.browse_drawentry, 4) -- selecting a pkmn from dex (for browsing)
+    game.modes.menu_partypkmn    = create_menu(_g.browse_drawentry, 4) -- selecting a pkmn from dex (for adding to party)
+    game.modes.menu_main         = create_menu(_g.menu_drawentry) -- select a mode
+    game.modes.menu_party        = create_menu(_g.menu_drawentry) -- select a party (1, 2, 3)
+    game.modes.menu_fightsel     = create_menu(_g.menu_drawentry) -- select a computer to play against
+    game.modes.menu_partyaction  = create_menu(_g.menu_drawentry) -- edit party what to do (delete, edit moves, edit pkmn)
+    game.modes.menu_partymoves   = create_menu(_g.menu_drawentry) -- select 1 of 4 moves from a pokemon
+    game.modes.menu_partymovesel = create_menu(_g.menu_drawentry) -- select one of the moves a pokemon can learn (tms, hms, natural moves...)
+    game.modes.menu_pselmove     = create_menu(_g.menu_drawentry) -- select 1 of 4 moves from a pokemon (during battle) -- TODO: try merging with other move select
+    game.modes.menu_pselactions  = create_menu(_g.menu_drawentry) -- select an action during battle (fight, switch, forfeit)
 
     sfx(61,0)
 

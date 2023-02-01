@@ -2,6 +2,14 @@
 -- when updated, cursor position remains. entries change.
 -- when created, cursor position is 0.
 
+|[menu_state_callback]| function(entry, game)
+    if entry.state then
+        game:push(entry.state)
+    else
+        game:pop()
+    end
+end $$
+
 -- entries: { {select=f(entry, game), disabled=bool} ... }
 -- edraw: func(entry, selected)
 function create_menu(edraw, r, w, h, x, y)
@@ -27,9 +35,8 @@ end $$
 -- cursor is between 0 and #menu-1. view is set too
 |[menu2_set]| function(menu, delta)
     local newval = menu.c+delta
-    if newval == mid(0, newval, #menu-1) then
-        menu.c = newval
-    end
+    if newval == mid(0, newval, #menu-1) then menu.c = newval end
+    menu.c = mid(0, menu.c, #menu-1) -- always ensure the cursor is within bounds
 
     -- view logic
     if menu.c\menu.r < menu.v   then menu.v = menu.c\menu.r   end
