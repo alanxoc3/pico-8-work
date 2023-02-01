@@ -3,7 +3,6 @@
 ---------------------------------------------------------------------------
 |[psel_init]| function(game)
     game.p0 = game[game.p0key]
-    g_cursors.pselaction = 0
 
     -- skip this state if the player is a cpu
     if game.p0.iscpu or #game.p0.actions > 0 then

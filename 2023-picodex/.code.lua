@@ -226,8 +226,6 @@ deli(a.stack)
 a:load(a.stack[#a.stack]or "main")
 end,function(game)
 zcall(poke,[[;,0x5e5b,1;;,0x5e5e,1;;,0x5e61,1]])
-g_cursors=zobj[[party,0,pselaction,0,fightsel,0,partymsel,0,partymoves,0,party_pkmn,0,partyaction,0,mode,0,browse,0]]
-g_views=zobj[[party,0,pselaction,0,fightsel,0,partymsel,0,partymoves,0,party_pkmn,0,partyaction,0,mode,0,browse,0]]
 game.modes=_g.modes()
 game.modes.menu_editparty=create_menu(_g.browse_drawentry,3,30,30,5)
 game.modes.menu_browse=create_menu(_g.browse_drawentry,4)
@@ -257,7 +255,7 @@ draw_picodex(a:is_active"shaking",1,
 function()a.modes:draw1()end,
 function()a.modes:draw2()end,
 function()a.modes:draw3()end,
-4,false,g_cursors.mode,#a.modes.stack)
+4,false,a.modes.menu_main.c,#a.modes.stack)
 end,function(game)
 game.menu_main:refresh(
 zobj[[;name,browse,state,browse,select,%menu_state_callback,desc,view|pokemon|info;;name,teams,state,party,select,%menu_state_callback,desc,edit|stored|teams;;name,computer,state,fightparty,select,%menu_state_callback,desc,battle|against|computer;;name,player,state,games,select,%menu_state_callback,desc,battle|against|player;;name,hoard,state,settings,select,%menu_state_callback,desc,battle all|pokemon|in order;;name,info,state,credits,select,%menu_state_callback,desc,help|and|credits]]
@@ -304,13 +302,15 @@ game.menu_browse:refresh(
 g_available_pokemon,
 function(num)return{select=function(entry,game)game:push"browsestat" end,num=num}end
 )
-end,function(a)
-browseupdate_shared(a,"browse")
+end,function(game)
+if g_bpl then game.menu_browse:set(-1)end
+if g_bpr then game.menu_browse:set(1)end
+if g_bpo then game:pop()end
 if g_bpu then poke(0x5ef5,max(0,@0x5ef5-1))end
 if g_bpd then poke(0x5ef5,min(1,@0x5ef5+1))end
 if g_bpx then sfx(flr(rnd(9)))end
-end,function(a)
-local pkmn=get_browse_pokemon(g_cursors.browse)
+end,function(game)
+local pkmn=get_browse_pokemon(game.menu_browse.c+1)
 local style=c_bg_styles[c_types[pkmn.type1].bg]
 rectfill(0,0,39,39,style.bg)
 if@0x5ef5==0 then
@@ -381,7 +381,7 @@ return{
 name=c_moves[m.num].name,
 ref=m.ref,
 select=function(_,game)
-save_party(game.menu_party.c,set_party_pkmn_move(get_party(game.menu_party.c),@0x5ef3+1,g_cursors.partymoves+1,m.num))
+save_party(game.menu_party.c,set_party_pkmn_move(get_party(game.menu_party.c),@0x5ef3+1,game.menu_partymoves+1,m.num))
 game:pop()
 end
 }
@@ -483,7 +483,6 @@ if message_tbl[1]=="#"then message_tbl[1]=c_pokemon[game.cur_action.active.share
 print_draw3_message(unpack(message_tbl))
 end,function(game)
 game.p0=game[game.p0key]
-g_cursors.pselaction=0
 if game.p0.iscpu or #game.p0.actions>0 then
 game:load()
 else
@@ -661,24 +660,6 @@ spr((light>0)and(rate%11<.5 and 131 or 130)or 132,19,3)
 spr((light>1)and(rate%13<.5 and 131 or 129)or 132,14,3)
 spr((light>2)and(rate%17<.5 and 131 or 128)or 132,9,3)
 spr((light>3)and(rate%43<.5 and 134 or 133)or 135,3,3)
-end
-function set_browse(delta,key)
-local newval=g_cursors[key]+delta
-if newval==mid(1,#g_available_pokemon,newval)then
-g_cursors[key]=newval
-end
-g_cursors[key]=mid(1,#g_available_pokemon,g_cursors[key])
-end
-function browseupdate_shared(a,key)
-set_browse(0,key)
-if g_bpl then set_browse(-1,key)end
-if g_bpr then set_browse(1,key)end
-if g_bpo then a:pop()end
-end
-function browse_update(a,key)
-browseupdate_shared(a,key)
-if g_bpu then set_browse(-4,key)end
-if g_bpd then set_browse(4,key)end
 end
 function draw2_pokeinfo(pkmn)zprint(pkmn.name,46/2,4,1,0)end
 function draw3_pokeinfo(pkmn)

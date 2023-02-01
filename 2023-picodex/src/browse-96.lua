@@ -10,8 +10,10 @@
     )
 end $$
 
-|[browsestat_update]| function(a)
-    browseupdate_shared(a, 'browse')
+|[browsestat_update]| function(game)
+    if g_bpl then game.menu_browse:set(-1) end
+    if g_bpr then game.menu_browse:set(1)  end
+    if g_bpo then game:pop() end
 
     if g_bpu then poke(S_BROWSE_SCREEN, max(0, @S_BROWSE_SCREEN-1)) end
     if g_bpd then poke(S_BROWSE_SCREEN, min(1, @S_BROWSE_SCREEN+1)) end
@@ -19,8 +21,8 @@ end $$
     if g_bpx then sfx(flr(rnd(9))) end
 end $$
 
-|[browsestat_draw1]| function(a)
-    local pkmn = get_browse_pokemon(g_cursors.browse)
+|[browsestat_draw1]| function(game)
+    local pkmn = get_browse_pokemon(game.menu_browse.c+1)
     local style = c_bg_styles[c_types[pkmn.type1].bg]
     rectfill(0,0,39,39,style.bg)
 
@@ -51,29 +53,6 @@ end $$
         print(pkmn.special, 7,  14+20, 13) zprint(total, 35, 14+20, 13, 1)
     end
 end $$
-
-function set_browse(delta, key)
-    local newval = g_cursors[key]+delta
-    if newval == mid(1, #g_available_pokemon, newval) then
-        g_cursors[key] = newval
-    end
-
-    g_cursors[key] = mid(1, #g_available_pokemon, g_cursors[key])
-end
-
-function browseupdate_shared(a, key)
-    set_browse(0, key)
-    if g_bpl then set_browse(-1, key) end
-    if g_bpr then set_browse(1, key)  end
-    if g_bpo then a:pop() end
-end
-
-function browse_update(a, key)
-    browseupdate_shared(a, key)
-
-    if g_bpu then set_browse(-4, key) end
-    if g_bpd then set_browse(4, key)  end
-end
 
 function draw2_pokeinfo(pkmn) zprint(pkmn.name, 46/2, 4, 1, 0) end
 

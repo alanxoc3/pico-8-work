@@ -67,9 +67,6 @@ end $$
     --end
 
     -- todo: remove me
-    g_cursors = zobj[[ party,0, pselaction,0, fightsel,0, partymsel,0, partymoves,0, party_pkmn,0, partyaction,0, mode,0, browse,0 ]]
-    g_views   = zobj[[ party,0, pselaction,0, fightsel,0, partymsel,0, partymoves,0, party_pkmn,0, partyaction,0, mode,0, browse,0 ]]
-
     game.modes = _g.modes()
     game.modes.menu_editparty    = create_menu(_g.browse_drawentry, 3, 30, 30, 5) -- selecting a pkmn from party
     game.modes.menu_browse       = create_menu(_g.browse_drawentry, 4) -- selecting a pkmn from dex (for browsing)
@@ -106,7 +103,7 @@ end $$
         function() a.modes:draw1() end,
         function() a.modes:draw2() end, 
         function() a.modes:draw3() end, 
-        4, false, g_cursors.mode, #a.modes.stack)
+        4, false, a.modes.menu_main.c, #a.modes.stack)
 end $$
 
 |[main_init]| function(game)

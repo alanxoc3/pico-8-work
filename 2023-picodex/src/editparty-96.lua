@@ -94,7 +94,7 @@ end $$
             name=c_moves[m.num].name,
             ref=m.ref,
             select=function(_, game)
-                save_party(game.menu_party.c, set_party_pkmn_move(get_party(game.menu_party.c), @S_PARTY_PKMN_NUM+1, g_cursors.partymoves+1, m.num))
+                save_party(game.menu_party.c, set_party_pkmn_move(get_party(game.menu_party.c), @S_PARTY_PKMN_NUM+1, game.menu_partymoves+1, m.num))
                 game:pop()
             end
         }
@@ -104,9 +104,9 @@ end $$
 |[partymovesel_update]| function(game) game.menu_partymovesel:update(game) end $$
 |[partymovesel_draw1]|  function(game) game.menu_partymovesel:draw1() end $$
 |[partymovesel_draw2]|  function(game) 
-    --local move = game.movelist[g_cursors.partymsel+1]
+    --local move = game.menu_[....partymsel+1]
     --if move then
-        --print(move.ref, 3, 3, 1)
+    --    print(move.ref, 3, 3, 1)
     --end
 end $$
 
