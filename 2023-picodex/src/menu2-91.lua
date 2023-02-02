@@ -17,23 +17,23 @@ function create_menu(edraw, r, w, h, x, y)
         edraw,@,
         c,0, v,0, r,@,      -- cursor, view, per-row
         w,@, h,@, x,@, y,@, -- camera dimensions
-        update,%menu2_update,
-        draw1,%menu2_draw1,
-        set,%menu2_set,
-        cancel,%menu2_cancel,
-        refresh,%menu2_refresh
+        update,%menu_update,
+        draw1,%menu_draw1,
+        set,%menu_set,
+        cancel,%menu_cancel,
+        refresh,%menu_refresh
     ]], edraw, r or 1, w or 40, h or 40, x or 0, y or 0)
 end
 
-|[menu2_refresh]| function(menu, data, mapfunc)
+|[menu_refresh]| function(menu, data, mapfunc)
     while deli(menu) do end
     foreach(data, function(thing) add(menu, (mapfunc or nop)(thing)) end)
 end $$
 
-|[menu2_cancel]| function(game) game:pop() end $$
+|[menu_cancel]| function(game) game:pop() end $$
 
 -- cursor is between 0 and #menu-1. view is set too
-|[menu2_set]| function(menu, delta)
+|[menu_set]| function(menu, delta)
     local newval = menu.c+delta
     if newval == mid(0, newval, #menu-1) then menu.c = newval end
     menu.c = mid(0, menu.c, #menu-1) -- always ensure the cursor is within bounds
@@ -45,7 +45,7 @@ end $$
 end $$
 
 -- extra args are passed to callback, prob want to pass "game" there.
-|[menu2_update]| function(menu, game)
+|[menu_update]| function(menu, game)
     menu:set'0'
     if g_bpu then menu:set(-menu.r) end
     if g_bpd then menu:set( menu.r) end
@@ -56,7 +56,7 @@ end $$
 end $$
 
 -- todo: try token crunching here
-|[menu2_draw1]| function(menu)
+|[menu_draw1]| function(menu)
     local c, v = menu.c, menu.v
     local y = -10
     local cellw = menu.w\menu.r

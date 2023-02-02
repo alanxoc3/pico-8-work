@@ -62,9 +62,9 @@ end $$
     ]])
 
     -- cheat: unlock all pkmn
-    --for i=0,151 do
-    --    poke(S_POKEMON+i, 1)
-    --end
+    for i=0,151 do
+        poke(S_POKEMON+i, 1)
+    end
 
     -- todo: remove me
     game.modes = _g.modes()
