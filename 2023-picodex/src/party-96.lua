@@ -37,16 +37,16 @@ end $$
 end $$
 
 |[editparty_draw2]| function(game)
-    local pkmn = get_party(game.menu_party.c)[@S_PARTY_PKMN_NUM+1]
+    local pkmn = get_party(game.menu_party.c)[game.menu_editparty.c+1]
     if pkmn then
         draw2_pokeinfo(get_pokemon(pkmn.num))
     else
-        zprint("spot #"..(@S_PARTY_PKMN_NUM+1), 46/2, 4, 1, 0)
+        zprint("spot #"..(game.menu_editparty.c+1), 46/2, 4, 1, 0)
     end
 end $$
 
 |[editparty_draw3]| function(game)
-    -- local pkmn = get_party(game.menu_party.c)[@S_PARTY_PKMN_NUM+1]
+    -- local pkmn = get_party(game.menu_party.c)[game.menu_editparty.c+1]
     -- if pkmn then draw3_pokeinfo(pkmn.num) end
     print_draw3_message("now", "pick a", "spot")
 end $$
