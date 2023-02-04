@@ -13,60 +13,41 @@
 end $$
 
 |[browsestat_init]| function(game)
+    local c_mock = split",,stats,!hp 999,!atk 333,!def 123,!spc 1021,!spd 121"
+
+    game.menu_browse_stat:refresh(c_mock, function(txt)
+        local style = 3
+        if sub(txt,1,1) == '!' then
+            txt = sub(txt,2)
+            style = 1
+        end
+
+        return { name=txt, style=style }
+    end)
 end $$
 
 |[browsestat_update]| function(game)
+    game.menu_browse_stat:update(game)
+
     if g_bpl then game.menu_browse:set(-1) end
     if g_bpr then game.menu_browse:set(1)  end
-    if g_bpo then game:pop() end
-
-    if g_bpu then game.statscroll += 10 end -- poke(S_BROWSE_SCREEN, max(0, @S_BROWSE_SCREEN-1)) end
-    if g_bpd then game.statscroll -= 10 end -- poke(S_BROWSE_SCREEN, min(1, @S_BROWSE_SCREEN+1)) end
-
-    game.statscroll = mid(0, game.statscroll, -30)
-
-    -- if g_bpx then sfx(flr(rnd(9))) end
-    -- lvl
-    -- atk
-    -- dfn
-    -- spc
-    -- htp
-    -- spd
-    -- tot
 end $$
 
 |[browsestat_draw1]| function(game)
-    local pkmn = get_browse_pokemon(game.menu_browse.c+1)
-    local style = c_bg_styles[c_types[pkmn.type1].bg]
-    rectfill(0,0,39,39,style.bg)
+    game.menu_browse_stat:draw1()
 
-    zcamera(0, game.statscroll, function()
-        rectfill(0,32,39,39,style.aa)
-        pkmn.draw(20, 20, style.aa, 2, 2)
-
-        -- rectfill(0,16,39,39,style.aa)
-        -- pkmn.draw(20, 10, style.aa)
-        local off = 20
-        rectfill(0,21+off,39,39+off+10,1)
-        rectfill(6,21+off,33,39+off+10,1)
-
-        zcall(print, [[
-             ;,"atk:",2, 42,13
-            ;;,"def:",2, 49,13
-            ;;,"spc:",2, 56,13
-            ;;,"hit:",36,42,13
-            ;;,"s",36,48,13
-            ;;,"t",36,54,13
-        ]])
-
-        rectfill(19,20+off,20,39+off,1)
-        rectfill(0,20+off,39,20+off,1)
-
-        local total = pkmn.attack + pkmn.hp + pkmn.defence + pkmn.speed + pkmn.special
-        print(pkmn.attack,  7+13,  2+20+off, 13)  --zprint(pkmn.hp,    35, off+2+20,  13, 1)
-        print(pkmn.defence, 7+13,  8+20+off, 13)  --zprint(pkmn.speed, 35, off+8+20,  13, 1)
-        print(pkmn.special, 7+13,  14+20+off, 13) --zprint(total,      35, off+14+20, 13, 1)
+    zcamera(0, -game.menu_browse_stat.v*10, function()
+        local pkmn = get_browse_pokemon(game.menu_browse.c+1)
+        local style = c_bg_styles[c_types[pkmn.type1].bg]
+        rectfill(0, -15+20, 39, 4+20,style.bg)
+        rectfill(0,   1+20, 39, 4+20,style.aa)
+        pkmn.draw(20, -5+20, style.aa, 1, 1)
     end)
+
+    --local total = pkmn.attack + pkmn.hp + pkmn.defence + pkmn.speed + pkmn.special
+    --print(pkmn.attack,  7+13,  2+20+off, 13)  --zprint(pkmn.hp,    35, off+2+20,  13, 1)
+    --print(pkmn.defence, 7+13,  8+20+off, 13)  --zprint(pkmn.speed, 35, off+8+20,  13, 1)
+    --print(pkmn.special, 7+13,  14+20+off, 13) --zprint(total,      35, off+14+20, 13, 1)
 end $$
 
 function draw2_pokeinfo(pkmn) zprint(pkmn.name, 46/2, 4, 1, 0) end

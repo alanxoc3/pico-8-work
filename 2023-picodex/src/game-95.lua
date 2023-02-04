@@ -68,7 +68,7 @@ end $$
 
     -- todo: remove me
     game.modes = _g.modes()
-    game.modes.menu_editparty    = create_menu(_g.browse_drawentry, 3, 30, 30, 5) -- selecting a pkmn from party
+    game.modes.menu_editparty    = create_menu(_g.browse_drawentry, 3) -- selecting a pkmn from party
     game.modes.menu_browse       = create_menu(_g.browse_drawentry, 4) -- selecting a pkmn from dex (for browsing)
     game.modes.menu_partypkmn    = create_menu(_g.browse_drawentry, 4) -- selecting a pkmn from dex (for adding to party)
     game.modes.menu_main         = create_menu(_g.menu_drawentry) -- select a mode
@@ -79,7 +79,8 @@ end $$
     game.modes.menu_partymovesel = create_menu(_g.menu_drawentry) -- select one of the moves a pokemon can learn (tms, hms, natural moves...)
     game.modes.menu_pselmove     = create_menu(_g.menu_drawentry) -- select 1 of 4 moves from a pokemon (during battle) -- TODO: try merging with other move select
     game.modes.menu_pselactions  = create_menu(_g.menu_drawentry) -- select an action during battle (fight, switch, forfeit)
-    game.modes.menu_credits      = create_menu(_g.menu_drawentry)
+    game.modes.menu_credits      = create_menu_view(_g.menu_drawentry)
+    game.modes.menu_browse_stat  = create_menu_view(_g.menu_drawentry)
 
     sfx(61,0)
 

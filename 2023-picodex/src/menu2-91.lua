@@ -12,25 +12,25 @@ end $$
 
 -- maybe remove x&y? and w/h? -- those are only needed for 1 thing...
 -- and replace with view bounds?
-function create_menu_view(edraw, r, w, h, x, y)
+function create_menu_view(edraw, viewmin)
     return zobj([[
-        edraw,@,
-        v,0, r,@, w,@, h,@, x,@, y,@,
-        update,%mevu_view_update,
+        edraw,@, viewmin,@, v,~viewmin, r,1,
+        update,%menu_view_update,
         draw1,%menu_draw1,
         cancel,%menu_cancel,
         refresh,%menu_refresh
-    ]], edraw, r or 1, w or 40, h or 40, x or 0, y or 0)
+    ]], edraw, viewmin or 0)
 end
 
 -- entries: { {select=f(entry, game), disabled=bool} ... }
 -- edraw: func(entry, selected)
-function create_menu(...)
-    return zobj_set(create_menu_view(...), [[
+function create_menu(edraw, r)
+    return zobj_set(create_menu_view(edraw), [[
         c,0, -- cursor
+        r,@,
         update,%menu_update,
         set,%menu_set
-    ]])
+    ]], r or 1)
 end
 
 |[menu_refresh]| function(menu, data, mapfunc)
@@ -50,6 +50,13 @@ end $$
     if menu.c\menu.r < menu.v   then menu.v = menu.c\menu.r   end
     if menu.c\menu.r > menu.v+2 then menu.v = menu.c\menu.r-2 end
     menu.v = mid(0, menu.v, (#menu-1)\menu.r)
+end $$
+
+|[menu_view_update]| function(menu, game)
+    if g_bpo then game:pop() end
+    if g_bpu then menu.v-=1 end
+    if g_bpd then menu.v+=1 end
+    menu.v = mid(menu.viewmin, menu.v, #menu-3)
 end $$
 
 -- extra args are passed to callback, prob want to pass "game" there.
@@ -85,12 +92,13 @@ c_menustyles = zobj[[
 |[menu_draw1]| function(menu)
     local c, v = menu.c, menu.v
     local y = -10
-    local cellw = menu.w\menu.r
-    local x1, y1, x2, y2 = menu.x, menu.y, menu.x+menu.w-1, menu.y+menu.h-1
+    local cellw = menu.r > 1 and 10 or 40
+    local y1, y2 = 0, 39
+    local xoff = 20-(menu.r * cellw)/2
 
     -- bg shadow
     rectfill(0, y1, 39, y2, 1) -- bg shadow
-    --rectfill(0, menu.y+5-menu.v*10, 39, menu.y+4+(max(ceil(#menu/menu.r), menu.h\10-1)-menu.v)*10, t()%3)
+    rectfill(0, 0+5-menu.v*10, 39, 0+4+(max(ceil(#menu/menu.r), 40\10-1)-menu.v)*10, 13)
 
     -- selected bg
     --rect    (x-2, y-7, x+cellw+1, y+6, 5)
@@ -98,7 +106,7 @@ c_menustyles = zobj[[
     for i=0,menu.r*5-1 do
         local index = (menu.v-1)*menu.r+i+1
         local entry = menu[index]
-        local style_ind, x, y = (entry or {style=0}).style or 1, menu.x+i%menu.r*10, menu.y+i\menu.r*10
+        local style_ind, x, y = (entry or {style=0}).style or 1, xoff+i%menu.r*10, 0+i\menu.r*10
 
         if entry then
             if entry.disabled then style_ind = 3 end
@@ -109,7 +117,7 @@ c_menustyles = zobj[[
 
         if entry then
             rectfill(x, y-5, x+cellw-1, y+4, style.bg)
-            zcamera(i%menu.r*cellw+menu.x+cellw/2, menu.y+i\menu.r*10-3, function()
+            zcamera(i%menu.r*cellw+xoff+cellw/2, 0+i\menu.r*10-3, function()
                 menu.edraw(entry, style)
             end)
         end
