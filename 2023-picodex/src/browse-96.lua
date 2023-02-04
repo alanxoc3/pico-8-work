@@ -1,3 +1,5 @@
+-- todo: combine scrollable logic maybe (credits + browse stat)
+-- todo: make browse stat screen scrollable
 |[browse_update]| function(game) game.menu_browse:update(game) end $$
 |[browse_draw1]| function(game) game.menu_browse:draw1() end $$
 |[browse_draw2]| function(game) draw2_pokeinfo(get_browse_pokemon(game.menu_browse.c+1)) end $$
@@ -10,15 +12,27 @@
     )
 end $$
 
+|[browsestat_init]| function(game)
+end $$
+
 |[browsestat_update]| function(game)
     if g_bpl then game.menu_browse:set(-1) end
     if g_bpr then game.menu_browse:set(1)  end
     if g_bpo then game:pop() end
 
-    if g_bpu then poke(S_BROWSE_SCREEN, max(0, @S_BROWSE_SCREEN-1)) end
-    if g_bpd then poke(S_BROWSE_SCREEN, min(1, @S_BROWSE_SCREEN+1)) end
+    if g_bpu then game.statscroll += 10 end -- poke(S_BROWSE_SCREEN, max(0, @S_BROWSE_SCREEN-1)) end
+    if g_bpd then game.statscroll -= 10 end -- poke(S_BROWSE_SCREEN, min(1, @S_BROWSE_SCREEN+1)) end
 
-    if g_bpx then sfx(flr(rnd(9))) end
+    game.statscroll = mid(0, game.statscroll, -30)
+
+    -- if g_bpx then sfx(flr(rnd(9))) end
+    -- lvl
+    -- atk
+    -- dfn
+    -- spc
+    -- htp
+    -- spd
+    -- tot
 end $$
 
 |[browsestat_draw1]| function(game)
@@ -26,32 +40,33 @@ end $$
     local style = c_bg_styles[c_types[pkmn.type1].bg]
     rectfill(0,0,39,39,style.bg)
 
-    if @S_BROWSE_SCREEN == 0 then
+    zcamera(0, game.statscroll, function()
         rectfill(0,32,39,39,style.aa)
         pkmn.draw(20, 20, style.aa, 2, 2)
-    elseif @S_BROWSE_SCREEN == 1 then
-        rectfill(0,16,39,39,style.aa)
-        pkmn.draw(20, 10, style.aa)
-        rectfill(0,21,39,39,1)
-        rectfill(6,21,33,39,7)
+
+        -- rectfill(0,16,39,39,style.aa)
+        -- pkmn.draw(20, 10, style.aa)
+        local off = 20
+        rectfill(0,21+off,39,39+off+10,1)
+        rectfill(6,21+off,33,39+off+10,1)
 
         zcall(print, [[
-             ;,"a",1,22,13
-            ;;,"h",36,22,13
-            ;;,"d",1,28,13
-            ;;,"s",36,28,13
-            ;;,"*",1,34,13
-            ;;,"t",36,34,13
+             ;,"atk:",2, 42,13
+            ;;,"def:",2, 49,13
+            ;;,"spc:",2, 56,13
+            ;;,"hit:",36,42,13
+            ;;,"s",36,48,13
+            ;;,"t",36,54,13
         ]])
 
-        rectfill(19,20,20,39,1)
-        rectfill(0,20,39,20,1)
+        rectfill(19,20+off,20,39+off,1)
+        rectfill(0,20+off,39,20+off,1)
 
         local total = pkmn.attack + pkmn.hp + pkmn.defence + pkmn.speed + pkmn.special
-        print(pkmn.attack, 7,  2+20, 13)  zprint(pkmn.hp, 35, 2+20,  13, 1)
-        print(pkmn.defence, 7,  8+20, 13)  zprint(pkmn.speed, 35, 8+20,  13, 1)
-        print(pkmn.special, 7,  14+20, 13) zprint(total, 35, 14+20, 13, 1)
-    end
+        print(pkmn.attack,  7+13,  2+20+off, 13)  --zprint(pkmn.hp,    35, off+2+20,  13, 1)
+        print(pkmn.defence, 7+13,  8+20+off, 13)  --zprint(pkmn.speed, 35, off+8+20,  13, 1)
+        print(pkmn.special, 7+13,  14+20+off, 13) --zprint(total,      35, off+14+20, 13, 1)
+    end)
 end $$
 
 function draw2_pokeinfo(pkmn) zprint(pkmn.name, 46/2, 4, 1, 0) end

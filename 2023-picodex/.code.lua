@@ -93,7 +93,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,menu_state_callback,@,menu_refresh,@,menu_cancel,@,menu_set,@,menu_update,@,menu_draw1,@,menu_drawentry,@,browse_drawentry,@,modes_push,@,modes_pop,@,game_init,@,game_update,@,game_draw,@,main_init,@,main_update,@,main_draw1,@,main_draw3,@,main_draw2,@,gamefadein_init,@,closed_init,@,closed_update,@,closed_draw,@,closing_draw,@,light_init,@,opened_draw,@,opening_draw,@,browse_update,@,browse_draw1,@,browse_draw2,@,browse_draw3,@,browse_init,@,browsestat_update,@,browsestat_draw1,@,credits_update,@,credits_draw1,@,partydel,@,partyaction_init,@,partyaction_update,@,partyaction_draw1,@,partyaction_draw3,@,partypkmn_update,@,partypkmn_draw1,@,partypkmn_draw2,@,partypkmn_draw3,@,partypkmn_init,@,fightover_init,@,fightover_update,@,fightover_draw1,@,fightover_draw2,@,fightover_draw3,@,fight_select,@,fightsel_init,@,fightsel_update,@,fightsel_draw1,@,fightsel_draw2,@,fightsel_draw3,@,partymoves_init,@,partymoves_update,@,partymoves_draw1,@,partymoves_draw2,@,partymoves_draw3,@,partymovesel_init,@,partymovesel_update,@,partymovesel_draw1,@,partymovesel_draw2,@,partymovesel_draw3,@,party_select,@,party_init,@,party_update,@,party_draw1,@,editparty_init,@,editparty_update,@,editparty_draw1,@,editparty_draw2,@,editparty_draw3,@,turn_init,@,turn_update,@,turn_draw1,@,turn_draw2,@,turn_draw3,@,psel_init,@,pselactions_init,@,pselactions_update,@,pselactions_draw1,@,pselactions_draw2,@,pselactions_draw3,@,psel_forfeit,@,pselmove_init,@,pselmove_update,@,pselmove_draw1,@,pselmove_draw2,@,pselmove_draw3,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,game_state_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,menu_state_callback,@,menu_refresh,@,menu_cancel,@,menu_set,@,menu_update,@,menu_draw1,@,menu_drawentry,@,browse_drawentry,@,modes_push,@,modes_pop,@,game_init,@,game_update,@,game_draw,@,main_init,@,main_update,@,main_draw1,@,main_draw3,@,main_draw2,@,gamefadein_init,@,closed_init,@,closed_update,@,closed_draw,@,closing_draw,@,light_init,@,opened_draw,@,opening_draw,@,browse_update,@,browse_draw1,@,browse_draw2,@,browse_draw3,@,browse_init,@,browsestat_init,@,browsestat_update,@,browsestat_draw1,@,credits_update,@,credits_draw1,@,partydel,@,partyaction_init,@,partyaction_update,@,partyaction_draw1,@,partyaction_draw3,@,partypkmn_update,@,partypkmn_draw1,@,partypkmn_draw2,@,partypkmn_draw3,@,partypkmn_init,@,fightover_init,@,fightover_update,@,fightover_draw1,@,fightover_draw2,@,fightover_draw3,@,fight_select,@,fightsel_init,@,fightsel_update,@,fightsel_draw1,@,fightsel_draw2,@,fightsel_draw3,@,partymoves_init,@,partymoves_update,@,partymoves_draw1,@,partymoves_draw2,@,partymoves_draw3,@,partymovesel_init,@,partymovesel_update,@,partymovesel_draw1,@,partymovesel_draw2,@,partymovesel_draw3,@,party_select,@,party_init,@,party_update,@,party_draw1,@,editparty_init,@,editparty_update,@,editparty_draw1,@,editparty_draw2,@,editparty_draw3,@,turn_init,@,turn_update,@,turn_draw1,@,turn_draw2,@,turn_draw3,@,psel_init,@,pselactions_init,@,pselactions_update,@,pselactions_draw1,@,pselactions_draw2,@,pselactions_draw3,@,psel_forfeit,@,pselmove_init,@,pselmove_update,@,pselmove_draw1,@,pselmove_draw2,@,pselmove_draw3,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,game_state_init,@]],function(a,stateName)
 a.next_state=stateName or a.next
 end,function(a,stateName)
 a.next_state,a.isnew=nil
@@ -195,24 +195,24 @@ local cellw=menu.w\menu.r
 local x1,y1,x2,y2=menu.x,menu.y,menu.x+menu.w-1,menu.y+menu.h-1
 rectfill(0,y1,39,y2,1)
 rectfill(0,menu.y+5-menu.v*8,39,menu.y+4+(max(ceil(#menu/menu.r),menu.h\10-1)-menu.v)*10,13)
-local ii=menu.c
-local x,y=menu.x+ii%menu.r*10,menu.y+(ii\(menu.r)-menu.v)*10+10
-rect(x-2,y-7,x+cellw+1,y+6,5)
 for i=0,menu.r*5-1 do
 local entry=menu[(menu.v-1)*menu.r+i+1]
 if entry then
+local x,y=menu.x+i%menu.r*10,menu.y+i\menu.r*10
+rectfill(x,y-5,x+cellw-1,y+4,entry.disabled and 5 or 13)
 zcamera(i%menu.r*cellw+menu.x+cellw/2,menu.y+i\menu.r*10-3,function()
-menu.edraw(entry)
+menu.edraw(entry,false,i%2==0)
 end)
 end
 end
-rectfill(x-1,y-6,x+cellw,y+5,6)
+local ii=menu.c
+local x,y=menu.x+ii%menu.r*10,menu.y+(ii\(menu.r)-menu.v)*10+10
+rectfill(x,y-5,x+cellw-1,y+4,6)
 zcamera(x+cellw/2,y-3,function()
 menu.edraw(menu[ii+1],true)
 end)
-rect(x-1,y-6,x+cellw,y+5,1)
 end,function(entry,selected)
-wobble_text(entry.name,0,0,selected and 13 or 1)
+wobble_text(entry.name,0,0,selected and(entry.disabled and 5 or 13)or 1)
 end,function(entry,selected)
 local pkmn=get_pokemon(entry.num)
 if pkmn then
@@ -226,7 +226,7 @@ deli(a.stack)
 a:load(a.stack[#a.stack]or "main")
 end,function(game)
 zcall(poke,[[;,0x5e5b,1;;,0x5e5e,1;;,0x5e61,1]])
-for i=0,151 do
+for i=0,13 do
 poke(0x5e5a+i,1)
 end
 game.modes=_g.modes()
@@ -241,6 +241,7 @@ game.modes.menu_partymoves=create_menu(_g.menu_drawentry)
 game.modes.menu_partymovesel=create_menu(_g.menu_drawentry)
 game.modes.menu_pselmove=create_menu(_g.menu_drawentry)
 game.modes.menu_pselactions=create_menu(_g.menu_drawentry)
+game.modes.statscroll=0
 sfx(61,0)
 menuitem(1,"close picodex",function()
 menuitem(1)
@@ -261,7 +262,7 @@ function()a.modes:draw3()end,
 4,false,a.modes.menu_main.c,#a.modes.stack)
 end,function(game)
 game.menu_main:refresh(
-zobj[[;name,browse,state,browse,select,%menu_state_callback,desc,view|pokemon|info;;name,teams,state,party,select,%menu_state_callback,desc,edit|stored|teams;;name,computer,state,fightparty,select,%menu_state_callback,desc,battle|against|computer;;name,player,state,games,select,%menu_state_callback,desc,battle|against|player;;name,hoard,state,settings,select,%menu_state_callback,desc,battle all|pokemon|in order;;name,info,state,credits,select,%menu_state_callback,desc,help|and|credits]]
+zobj[[;name,browse,state,browse,select,%menu_state_callback,desc,view|pokemon|info;;name,teams,state,party,select,%menu_state_callback,desc,edit|stored|teams;;name,computer,state,fightparty,select,%menu_state_callback,desc,battle|against|computer;;name,player,state,games,select,%menu_state_callback,disabled,yes,desc,battle|against|player;;name,hoard,state,settings,select,%menu_state_callback,disabled,yes,desc,battle all|pokemon|in order;;name,info,state,credits,select,%menu_state_callback,desc,help|and|credits]]
 )
 end,function(game)game.menu_main:update(game)end,function(game)game.menu_main:draw1()end,function(game)end,function(a)
 rectfill(0,0,46,13,13)
@@ -306,42 +307,50 @@ g_available_pokemon,
 function(num)return{select=function(entry,game)game:push"browsestat" end,num=num}end
 )
 end,function(game)
+end,function(game)
 if g_bpl then game.menu_browse:set(-1)end
 if g_bpr then game.menu_browse:set(1)end
 if g_bpo then game:pop()end
-if g_bpu then poke(0x5ef5,max(0,@0x5ef5-1))end
-if g_bpd then poke(0x5ef5,min(1,@0x5ef5+1))end
-if g_bpx then sfx(flr(rnd(9)))end
+if g_bpu then game.statscroll+=10 end
+if g_bpd then game.statscroll-=10 end
+game.statscroll=mid(0,game.statscroll,-30)
 end,function(game)
 local pkmn=get_browse_pokemon(game.menu_browse.c+1)
 local style=c_bg_styles[c_types[pkmn.type1].bg]
 rectfill(0,0,39,39,style.bg)
-if@0x5ef5==0 then
+zcamera(0,game.statscroll,function()
 rectfill(0,32,39,39,style.aa)
 pkmn.draw(20,20,style.aa,2,2)
-elseif@0x5ef5==1 then
-rectfill(0,16,39,39,style.aa)
-pkmn.draw(20,10,style.aa)
-rectfill(0,21,39,39,1)
-rectfill(6,21,33,39,7)
-zcall(print,[[;,a,1,22,13;;,h,36,22,13;;,d,1,28,13;;,s,36,28,13;;,*,1,34,13;;,t,36,34,13]])
-rectfill(19,20,20,39,1)
-rectfill(0,20,39,20,1)
+local off=20
+rectfill(0,21+off,39,39+off+10,1)
+rectfill(6,21+off,33,39+off+10,1)
+zcall(print,[[;,atk:,2,42,13;;,def:,2,49,13;;,spc:,2,56,13;;,hit:,36,42,13;;,s,36,48,13;;,t,36,54,13]])
+rectfill(19,20+off,20,39+off,1)
+rectfill(0,20+off,39,20+off,1)
 local total=pkmn.attack+pkmn.hp+pkmn.defence+pkmn.speed+pkmn.special
-print(pkmn.attack,7,2+20,13)zprint(pkmn.hp,35,2+20,13,1)
-print(pkmn.defence,7,8+20,13)zprint(pkmn.speed,35,8+20,13,1)
-print(pkmn.special,7,14+20,13)zprint(total,35,14+20,13,1)
-end
+print(pkmn.attack,7+13,2+20+off,13)
+print(pkmn.defence,7+13,8+20+off,13)
+print(pkmn.special,7+13,14+20+off,13)
+end)
 end,function(a)
 if g_bpo then a:pop()end
-if g_bu then a.credits_offset-=1/6 end
-if g_bd then a.credits_offset+=1/6 end
-a.credits_offset=a.credits_offset%#c_creditlist
+if g_bpu then a.credits_offset-=10 end
+if g_bpd then a.credits_offset+=10 end
+a.credits_offset=mid(0,a.credits_offset,#c_creditlist*c_credwid-3*c_credwid)
 end,function(a)
 rectfill(0,0,39,39,1)
+zcamera(0,-a.credits_offset,function()
 for i,txt in ipairs(c_creditlist)do
-zprint(txt,20,(i-a.credits_offset)*6,13,0)
+local y=(i-1)*c_credwid+5
+local col,col2=1,5
+if sub(txt,1,1)=="!"then
+txt=sub(txt,2)
+col,col2=1,13
 end
+rectfill(-1,y,40,y+9,col2)
+wobble_text(txt,20,y+2,col)
+end
+end)
 end,function(entry,game)
 local party=get_party(game.menu_party.c)
 party[game.menu_editparty.c+1]=nil
@@ -561,7 +570,7 @@ c_moves=zobj[[0;,struggle,1,0,50,1;;,megapnch,1,20,80,.85;;,razrwind,1,10,80,1;;
 function create_menu(edraw,r,w,h,x,y)
 return zobj([[edraw,@,c,0,v,0,r,@,w,@,h,@,x,@,y,@,update,%menu_update,draw1,%menu_draw1,set,%menu_set,cancel,%menu_cancel,refresh,%menu_refresh]],edraw,r or 1,w or 40,h or 40,x or 0,y or 0)
 end
-zclass[[modes,actor|push,%modes_push,pop,%modes_pop,update,nop,draw1,nop,draw2,nop,draw3,nop,curr,main;stack;,;defaults;sub,0,init,nop,update,nop,finit,nop,draw1,nop,draw2,nop,draw3,nop;main;update,%main_update,draw1,%main_draw1,draw2,%main_draw2,draw3,%main_draw3,init,%main_init;credits;update,%credits_update,draw1,%credits_draw1,draw2,%main_draw2,draw3,%main_draw3,credits_offset,5;browse;update,%browse_update,draw1,%browse_draw1,draw2,%browse_draw2,draw3,%browse_draw3,init,%browse_init;browsestat;update,%browsestat_update,draw1,%browsestat_draw1,draw2,%browse_draw2,draw3,%browse_draw3;fightsel;update,%fightsel_update,draw1,%fightsel_draw1,draw2,%fightsel_draw2,draw3,%fightsel_draw3,init,%fightsel_init;fightparty;update,%party_update,draw1,%party_draw1,draw2,%party_draw2,draw3,%party_draw3,init,%party_init,select_func,%fight_select;party;update,%party_update,draw1,%party_draw1,draw2,%party_draw2,draw3,%party_draw3,init,%party_init,select_func,%party_select;fightover;update,%fightover_update,draw1,%fightover_draw1,draw2,%fightover_draw2,draw3,%fightover_draw3,init,%fightover_init;p1sel;next,p2sel,init,%psel_init,p0key,p1;p2sel;next,turn,init,%psel_init,p0key,p2;turn;next,p1sel,update,%turn_update,draw1,%turn_draw1,draw2,%turn_draw2,draw3,%turn_draw3,init,%turn_init,cur_action,no;pselactions;update,%pselactions_update,draw1,%pselactions_draw1,draw2,%turn_draw2,draw3,%pselactions_draw3,init,%pselactions_init;pselmove;update,%pselmove_update,draw1,%pselmove_draw1,draw2,%turn_draw2,draw3,%pselmove_draw3,init,%pselmove_init;editparty;update,%editparty_update,draw1,%editparty_draw1,draw2,%editparty_draw2,draw3,%editparty_draw3,init,%editparty_init;partyaction;update,%partyaction_update,draw1,%partyaction_draw1,draw2,%editparty_draw2,draw3,%partyaction_draw3,init,%partyaction_init;partypkmn;update,%partypkmn_update,draw1,%partypkmn_draw1,draw2,%partypkmn_draw2,draw3,%partypkmn_draw3,init,%partypkmn_init;partymoves;update,%partymoves_update,draw1,%partymoves_draw1,draw2,%editparty_draw2,draw3,%partymoves_draw3,init,%partymoves_init;partymovesel;update,%partymovesel_update,draw1,%partymovesel_draw1,draw2,%partymovesel_draw2,draw3,%partymovesel_draw3,init,%partymovesel_init;]]
+zclass[[modes,actor|push,%modes_push,pop,%modes_pop,update,nop,draw1,nop,draw2,nop,draw3,nop,curr,main;stack;,;defaults;sub,0,init,nop,update,nop,finit,nop,draw1,nop,draw2,nop,draw3,nop;main;update,%main_update,draw1,%main_draw1,draw2,%main_draw2,draw3,%main_draw3,init,%main_init;credits;update,%credits_update,draw1,%credits_draw1,draw2,%main_draw2,draw3,%main_draw3,credits_offset,0;browse;update,%browse_update,draw1,%browse_draw1,draw2,%browse_draw2,draw3,%browse_draw3,init,%browse_init;browsestat;update,%browsestat_update,draw1,%browsestat_draw1,draw2,%browse_draw2,draw3,%browse_draw3,init,%browsestat_init;fightsel;update,%fightsel_update,draw1,%fightsel_draw1,draw2,%fightsel_draw2,draw3,%fightsel_draw3,init,%fightsel_init;fightparty;update,%party_update,draw1,%party_draw1,draw2,%party_draw2,draw3,%party_draw3,init,%party_init,select_func,%fight_select;party;update,%party_update,draw1,%party_draw1,draw2,%party_draw2,draw3,%party_draw3,init,%party_init,select_func,%party_select;fightover;update,%fightover_update,draw1,%fightover_draw1,draw2,%fightover_draw2,draw3,%fightover_draw3,init,%fightover_init;p1sel;next,p2sel,init,%psel_init,p0key,p1;p2sel;next,turn,init,%psel_init,p0key,p2;turn;next,p1sel,update,%turn_update,draw1,%turn_draw1,draw2,%turn_draw2,draw3,%turn_draw3,init,%turn_init,cur_action,no;pselactions;update,%pselactions_update,draw1,%pselactions_draw1,draw2,%turn_draw2,draw3,%pselactions_draw3,init,%pselactions_init;pselmove;update,%pselmove_update,draw1,%pselmove_draw1,draw2,%turn_draw2,draw3,%pselmove_draw3,init,%pselmove_init;editparty;update,%editparty_update,draw1,%editparty_draw1,draw2,%editparty_draw2,draw3,%editparty_draw3,init,%editparty_init;partyaction;update,%partyaction_update,draw1,%partyaction_draw1,draw2,%editparty_draw2,draw3,%partyaction_draw3,init,%partyaction_init;partypkmn;update,%partypkmn_update,draw1,%partypkmn_draw1,draw2,%partypkmn_draw2,draw3,%partypkmn_draw3,init,%partypkmn_init;partymoves;update,%partymoves_update,draw1,%partymoves_draw1,draw2,%editparty_draw2,draw3,%partymoves_draw3,init,%partymoves_init;partymovesel;update,%partymovesel_update,draw1,%partymovesel_draw1,draw2,%partymovesel_draw2,draw3,%partymovesel_draw3,init,%partymovesel_init;]]
 g_picodex_div=zobj[[,6,5,5,6,6,5,6]]
 function any_btn()return g_bl or g_br or g_bu or g_bd or g_bx or g_bo end
 function draw_picodex(shaking,rotation,l_screen,tr_screen,br_screen,light,backbuttonheld,top_row_buttons,bot_row_buttons)
@@ -714,7 +723,8 @@ end
 function get_browse_pokemon(num)
 return c_pokemon[g_available_pokemon[num]]or{draw=nop}
 end
-c_creditlist=split",,,,,,credits,,⬇️/⬆️  ,,,alanxoc3,CODE,GFX|SFX,,the,great,cadet,GFX|SFX,,wadlo,MAGIKARP,GYARADOS,,,,,code,snippets,,,,,zep,FOR PX9,& PICO-8,,mot,FOR SMAP,,,,,pokemon,data,,,,,blbapedia,,pokeapi,,serebii,,smogon,,upokecntr,,volvox,,nintendo,OF COURSE,,,,,gotta,catch,em all,"
+c_creditlist=split"!alanxoc3,code,design,!gr8-cadet,graphics,sound,!wadlo,magikarp,gyarados,!snippets,zep: px9,mot: smap,!pkmn data,blbapedia,pokeapi,serebii,smogon,upokecntr,volvox,nintendo"
+c_credwid=10
 function set_default_party_pkmn(party,ind,num)
 party[ind]={num=num,moves=c_pokemon[num].get_natural_moveset(100)}
 return party

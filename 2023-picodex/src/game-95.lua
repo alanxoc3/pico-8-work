@@ -12,9 +12,9 @@ zclass[[modes,actor|
     defaults; sub,0, init,nop, update,nop, finit,nop, draw1,nop, draw2,nop, draw3,nop;
 
     main;         update,%main_update,         draw1,%main_draw1,         draw2,%main_draw2,         draw3,%main_draw3,   init,%main_init;
-    credits;      update,%credits_update,      draw1,%credits_draw1,      draw2,%main_draw2,         draw3,%main_draw3,   credits_offset,5;
+    credits;      update,%credits_update,      draw1,%credits_draw1,      draw2,%main_draw2,         draw3,%main_draw3,   credits_offset,0;
     browse;       update,%browse_update,       draw1,%browse_draw1,       draw2,%browse_draw2,       draw3,%browse_draw3, init,%browse_init;
-    browsestat;   update,%browsestat_update,   draw1,%browsestat_draw1,   draw2,%browse_draw2,       draw3,%browse_draw3;
+    browsestat;   update,%browsestat_update,   draw1,%browsestat_draw1,   draw2,%browse_draw2,       draw3,%browse_draw3, init,%browsestat_init;
     fightsel;     update,%fightsel_update,     draw1,%fightsel_draw1,     draw2,%fightsel_draw2,     draw3,%fightsel_draw3,     init,%fightsel_init;
 
     -- party selects
@@ -62,7 +62,7 @@ end $$
     ]])
 
     -- cheat: unlock all pkmn
-    for i=0,151 do
+    for i=0,13 do
         poke(S_POKEMON+i, 1)
     end
 
@@ -79,6 +79,7 @@ end $$
     game.modes.menu_partymovesel = create_menu(_g.menu_drawentry) -- select one of the moves a pokemon can learn (tms, hms, natural moves...)
     game.modes.menu_pselmove     = create_menu(_g.menu_drawentry) -- select 1 of 4 moves from a pokemon (during battle) -- TODO: try merging with other move select
     game.modes.menu_pselactions  = create_menu(_g.menu_drawentry) -- select an action during battle (fight, switch, forfeit)
+    game.modes.statscroll        = 0
 
     sfx(61,0)
 
@@ -112,8 +113,8 @@ end $$
             ;name,"browse",   state,browse,     select,%menu_state_callback, desc,"view|pokemon|info"
            ;;name,"teams",    state,party,      select,%menu_state_callback, desc,"edit|stored|teams"
            ;;name,"computer", state,fightparty, select,%menu_state_callback, desc,"battle|against|computer"
-           ;;name,"player",   state,games,      select,%menu_state_callback, desc,"battle|against|player"
-           ;;name,"hoard",    state,settings,   select,%menu_state_callback, desc,"battle all|pokemon|in order"
+           ;;name,"player",   state,games,      select,%menu_state_callback, disabled,yes, desc,"battle|against|player"
+           ;;name,"hoard",    state,settings,   select,%menu_state_callback, disabled,yes, desc,"battle all|pokemon|in order"
            ;;name,"info",     state,credits,    select,%menu_state_callback, desc,"help|and|credits"
         ]]
     )

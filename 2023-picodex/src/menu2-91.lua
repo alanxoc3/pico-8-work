@@ -67,29 +67,31 @@ end $$
     rectfill(0, menu.y+5-menu.v*8, 39, menu.y+4+(max(ceil(#menu/menu.r), menu.h\10-1)-menu.v)*10, 13)
 
     -- selected bg
-    local ii = menu.c
-    local x, y = menu.x+ii%menu.r*10, menu.y+(ii\(menu.r)-menu.v)*10+10
-    rect    (x-2, y-7, x+cellw+1, y+6, 5)
+    --rect    (x-2, y-7, x+cellw+1, y+6, 5)
 
     for i=0,menu.r*5-1 do
         local entry = menu[(menu.v-1)*menu.r+i+1]
         if entry then
+            local x, y = menu.x+i%menu.r*10, menu.y+i\menu.r*10
+            rectfill(x, y-5, x+cellw-1, y+4, entry.disabled and 5 or 13)
             zcamera(i%menu.r*cellw+menu.x+cellw/2, menu.y+i\menu.r*10-3, function()
-                menu.edraw(entry)
+                menu.edraw(entry, false, i%2 == 0)
             end)
         end
     end
 
-    rectfill(x-1, y-6, x+cellw, y+5, 6)
+    local ii = menu.c
+    local x, y = menu.x+ii%menu.r*10, menu.y+(ii\(menu.r)-menu.v)*10+10
+    rectfill(x, y-5, x+cellw-1, y+4, 6)
     zcamera(x+cellw/2, y-3, function()
         menu.edraw(menu[ii+1], true)
     end)
-    rect(x-1, y-6, x+cellw, y+5, 1)
+    --rect(x-1, y-6, x+cellw, y+5, 5)
 end $$
 
 -- requires a "name" field
 |[menu_drawentry]| function(entry, selected)
-    wobble_text(entry.name, 0, 0, selected and 13 or 1)
+    wobble_text(entry.name, 0, 0, selected and (entry.disabled and 5 or 13) or 1)
 end $$
 
 |[browse_drawentry]| function(entry, selected)
