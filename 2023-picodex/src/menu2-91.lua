@@ -10,19 +10,27 @@
     end
 end $$
 
--- entries: { {select=f(entry, game), disabled=bool} ... }
--- edraw: func(entry, selected)
-function create_menu(edraw, disable_cursor, r, w, h, x, y)
+-- maybe remove x&y? and w/h? -- those are only needed for 1 thing...
+-- and replace with view bounds?
+function create_menu_view(edraw, r, w, h, x, y)
     return zobj([[
         edraw,@,
-        c,0, v,0, has_cursor,@, r,@,      -- cursor, view, per-row
-        w,@, h,@, x,@, y,@, -- camera dimensions
-        update,%menu_update,
+        v,0, r,@, w,@, h,@, x,@, y,@,
+        update,%mevu_view_update,
         draw1,%menu_draw1,
-        set,%menu_set,
         cancel,%menu_cancel,
         refresh,%menu_refresh
-    ]], edraw, not disable_cursor, r or 1, w or 40, h or 40, x or 0, y or 0)
+    ]], edraw, r or 1, w or 40, h or 40, x or 0, y or 0)
+end
+
+-- entries: { {select=f(entry, game), disabled=bool} ... }
+-- edraw: func(entry, selected)
+function create_menu(...)
+    return zobj_set(create_menu_view(...), [[
+        c,0, -- cursor
+        update,%menu_update,
+        set,%menu_set
+    ]])
 end
 
 |[menu_refresh]| function(menu, data, mapfunc)
@@ -65,6 +73,15 @@ end $$
 end $$
 
 -- todo: try token crunching here
+-- todo: check if factory reset will reset surf on pikachu.
+-- 4 styles: 13,1 6,13 2,1, 8,2
+c_menustyles = zobj[[
+    ;bg,13, fg,1,  out,5
+   ;;bg,6,  fg,13, out,13
+   ;;bg,1,  fg,13,  out,2
+   ;;bg,5,  fg,13,  out,2
+]]
+
 |[menu_draw1]| function(menu)
     local c, v = menu.c, menu.v
     local y = -10
@@ -73,40 +90,41 @@ end $$
 
     -- bg shadow
     rectfill(0, y1, 39, y2, 1) -- bg shadow
-    rectfill(0, menu.y+5-menu.v*8, 39, menu.y+4+(max(ceil(#menu/menu.r), menu.h\10-1)-menu.v)*10, 5)
+    --rectfill(0, menu.y+5-menu.v*10, 39, menu.y+4+(max(ceil(#menu/menu.r), menu.h\10-1)-menu.v)*10, t()%3)
 
     -- selected bg
     --rect    (x-2, y-7, x+cellw+1, y+6, 5)
 
     for i=0,menu.r*5-1 do
-        local entry = menu[(menu.v-1)*menu.r+i+1]
+        local index = (menu.v-1)*menu.r+i+1
+        local entry = menu[index]
+        local style_ind, x, y = (entry or {style=0}).style or 1, menu.x+i%menu.r*10, menu.y+i\menu.r*10
+
         if entry then
-            local x, y = menu.x+i%menu.r*10, menu.y+i\menu.r*10
-            rectfill(x, y-5, x+cellw-1, y+4, entry.disabled and 2 or 13)
+            if entry.disabled then style_ind = 3 end
+            if index-1 == menu.c then style_ind += 1 end
+        end
+
+        local style = c_menustyles[style_ind]
+
+        if entry then
+            rectfill(x, y-5, x+cellw-1, y+4, style.bg)
             zcamera(i%menu.r*cellw+menu.x+cellw/2, menu.y+i\menu.r*10-3, function()
-                menu.edraw(entry, false, i%2 == 0)
+                menu.edraw(entry, style)
             end)
         end
     end
-
-    local ii = menu.c
-    local x, y = menu.x+ii%menu.r*10, menu.y+(ii\(menu.r)-menu.v)*10+10
-    rectfill(x, y-5, x+cellw-1, y+4, menu[ii+1].disabled and 8 or 6)
-    zcamera(x+cellw/2, y-3, function()
-        menu.edraw(menu[ii+1], true)
-    end)
-    --rect(x-1, y-6, x+cellw, y+5, 5)
 end $$
 
 -- requires a "name" field
-|[menu_drawentry]| function(entry, selected)
-    wobble_text(entry.name, 0, 0, selected and (entry.disabled and 2 or 13) or (entry.disabled and 1 or 1))
+|[menu_drawentry]| function(entry, style)
+    wobble_text(entry.name, 0, 0, style.fg)
 end $$
 
-|[browse_drawentry]| function(entry, selected)
+|[browse_drawentry]| function(entry, style)
     local pkmn = get_pokemon(entry.num)
 
     if pkmn then -- todo, is this if check needed?
-        pkmn.draw(0, 3, selected and 13 or 5, .375, .375)
+        pkmn.draw(0, 3, style.out, .375, .375)
     end
 end $$

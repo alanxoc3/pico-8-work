@@ -40,7 +40,7 @@ end $$
 |[editparty_draw1]| function(game)
     rectfill(0,0,39,39,1)
     game.menu_editparty:draw1()
-    zprint("team #"..game.menu_party.c+1, 20+t()%2\1, 31, 13, 0)
+    wobble_text("team #"..game.menu_party.c+1, 20+t()%2\1, 30, 13)
 end $$
 
 |[editparty_draw2]| function(game)
