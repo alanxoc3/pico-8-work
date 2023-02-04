@@ -12,17 +12,17 @@ end $$
 
 -- entries: { {select=f(entry, game), disabled=bool} ... }
 -- edraw: func(entry, selected)
-function create_menu(edraw, r, w, h, x, y)
+function create_menu(edraw, disable_cursor, r, w, h, x, y)
     return zobj([[
         edraw,@,
-        c,0, v,0, r,@,      -- cursor, view, per-row
+        c,0, v,0, has_cursor,@, r,@,      -- cursor, view, per-row
         w,@, h,@, x,@, y,@, -- camera dimensions
         update,%menu_update,
         draw1,%menu_draw1,
         set,%menu_set,
         cancel,%menu_cancel,
         refresh,%menu_refresh
-    ]], edraw, r or 1, w or 40, h or 40, x or 0, y or 0)
+    ]], edraw, not disable_cursor, r or 1, w or 40, h or 40, x or 0, y or 0)
 end
 
 |[menu_refresh]| function(menu, data, mapfunc)
@@ -51,7 +51,16 @@ end $$
     if g_bpd then menu:set( menu.r) end
     if g_bpl then menu:set'-1' end
     if g_bpr then menu:set'1' end
-    if g_bpx then (menu[menu.c+1].select or nop)(menu[menu.c+1], game) end
+
+    if g_bpx then
+        local entry = menu[menu.c+1]
+        if entry.disabled then
+            sfx'60'
+        elseif entry.select then
+            entry.select(entry, game)
+        end
+    end
+
     if g_bpo then menu.cancel(game) end
 end $$
 
@@ -64,7 +73,7 @@ end $$
 
     -- bg shadow
     rectfill(0, y1, 39, y2, 1) -- bg shadow
-    rectfill(0, menu.y+5-menu.v*8, 39, menu.y+4+(max(ceil(#menu/menu.r), menu.h\10-1)-menu.v)*10, 13)
+    rectfill(0, menu.y+5-menu.v*8, 39, menu.y+4+(max(ceil(#menu/menu.r), menu.h\10-1)-menu.v)*10, 5)
 
     -- selected bg
     --rect    (x-2, y-7, x+cellw+1, y+6, 5)
@@ -73,7 +82,7 @@ end $$
         local entry = menu[(menu.v-1)*menu.r+i+1]
         if entry then
             local x, y = menu.x+i%menu.r*10, menu.y+i\menu.r*10
-            rectfill(x, y-5, x+cellw-1, y+4, entry.disabled and 5 or 13)
+            rectfill(x, y-5, x+cellw-1, y+4, entry.disabled and 2 or 13)
             zcamera(i%menu.r*cellw+menu.x+cellw/2, menu.y+i\menu.r*10-3, function()
                 menu.edraw(entry, false, i%2 == 0)
             end)
@@ -82,7 +91,7 @@ end $$
 
     local ii = menu.c
     local x, y = menu.x+ii%menu.r*10, menu.y+(ii\(menu.r)-menu.v)*10+10
-    rectfill(x, y-5, x+cellw-1, y+4, 6)
+    rectfill(x, y-5, x+cellw-1, y+4, menu[ii+1].disabled and 8 or 6)
     zcamera(x+cellw/2, y-3, function()
         menu.edraw(menu[ii+1], true)
     end)
@@ -91,7 +100,7 @@ end $$
 
 -- requires a "name" field
 |[menu_drawentry]| function(entry, selected)
-    wobble_text(entry.name, 0, 0, selected and (entry.disabled and 5 or 13) or 1)
+    wobble_text(entry.name, 0, 0, selected and (entry.disabled and 2 or 13) or (entry.disabled and 1 or 1))
 end $$
 
 |[browse_drawentry]| function(entry, selected)

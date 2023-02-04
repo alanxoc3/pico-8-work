@@ -3,9 +3,16 @@
 
 |[party_init]| function(game)
     game.menu_party:refresh(zobj[[,1,2,3]], function(i)
+        local party = get_party(i-1)
+        local is_disabled = true
+        for i=1,6 do
+            if party[i] then is_disabled = false end
+        end
+
         return {
             name="team #"..i,
-            select=function() game:select_func() end
+            select=function() game:select_func() end,
+            disabled=game.disable_empty_party and is_disabled
         }
     end)
 end $$

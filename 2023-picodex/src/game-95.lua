@@ -18,8 +18,8 @@ zclass[[modes,actor|
     fightsel;     update,%fightsel_update,     draw1,%fightsel_draw1,     draw2,%fightsel_draw2,     draw3,%fightsel_draw3,     init,%fightsel_init;
 
     -- party selects
-    fightparty;   update,%party_update,        draw1,%party_draw1,        draw2,%party_draw2,        draw3,%party_draw3,        init,%party_init, select_func,%fight_select;
-    party;        update,%party_update,        draw1,%party_draw1,        draw2,%party_draw2,        draw3,%party_draw3,        init,%party_init, select_func,%party_select;
+    fightparty;   update,%party_update,        draw1,%party_draw1,        draw2,%party_draw2,        draw3,%party_draw3,        init,%party_init, disable_empty_party,yes, select_func,%fight_select;
+    party;        update,%party_update,        draw1,%party_draw1,        draw2,%party_draw2,        draw3,%party_draw3,        init,%party_init, disable_empty_party,no,  select_func,%party_select;
 
     -- p0 is the winner of the fight
     fightover;    update,%fightover_update,    draw1,%fightover_draw1,    draw2,%fightover_draw2,    draw3,%fightover_draw3,    init,%fightover_init;
@@ -68,9 +68,9 @@ end $$
 
     -- todo: remove me
     game.modes = _g.modes()
-    game.modes.menu_editparty    = create_menu(_g.browse_drawentry, 3, 30, 30, 5) -- selecting a pkmn from party
-    game.modes.menu_browse       = create_menu(_g.browse_drawentry, 4) -- selecting a pkmn from dex (for browsing)
-    game.modes.menu_partypkmn    = create_menu(_g.browse_drawentry, 4) -- selecting a pkmn from dex (for adding to party)
+    game.modes.menu_editparty    = create_menu(_g.browse_drawentry, false, 3, 30, 30, 5) -- selecting a pkmn from party
+    game.modes.menu_browse       = create_menu(_g.browse_drawentry, false, 4) -- selecting a pkmn from dex (for browsing)
+    game.modes.menu_partypkmn    = create_menu(_g.browse_drawentry, false, 4) -- selecting a pkmn from dex (for adding to party)
     game.modes.menu_main         = create_menu(_g.menu_drawentry) -- select a mode
     game.modes.menu_party        = create_menu(_g.menu_drawentry) -- select a party (1, 2, 3)
     game.modes.menu_fightsel     = create_menu(_g.menu_drawentry) -- select a computer to play against
@@ -110,12 +110,12 @@ end $$
 |[main_init]| function(game)
     game.menu_main:refresh(
         zobj[[
-            ;name,"browse",   state,browse,     select,%menu_state_callback, desc,"view|pokemon|info"
-           ;;name,"teams",    state,party,      select,%menu_state_callback, desc,"edit|stored|teams"
-           ;;name,"computer", state,fightparty, select,%menu_state_callback, desc,"battle|against|computer"
-           ;;name,"player",   state,games,      select,%menu_state_callback, disabled,yes, desc,"battle|against|player"
-           ;;name,"hoard",    state,settings,   select,%menu_state_callback, disabled,yes, desc,"battle all|pokemon|in order"
-           ;;name,"info",     state,credits,    select,%menu_state_callback, desc,"help|and|credits"
+            ;name,"browse",  state,browse,     select,%menu_state_callback, desc,"view|pokemon|info"
+           ;;name,"teams",   state,party,      select,%menu_state_callback, desc,"edit|stored|teams"
+           ;;name,"story",   state,fightparty, select,%menu_state_callback, desc,"battle|against|computer"
+           ;;name,"versus",  state,games,      select,%menu_state_callback, disabled,yes, desc,"battle|against|player"
+           ;;name,"hoard",   state,settings,   select,%menu_state_callback, disabled,yes, desc,"battle all|pokemon|in order"
+           ;;name,"credits", state,credits,    select,%menu_state_callback, desc,"help|and|credits"
         ]]
     )
 end $$

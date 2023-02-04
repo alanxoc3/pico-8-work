@@ -40,7 +40,6 @@ end $$
 
 -- todo: try making the minifier separate on underscores
 -- todo: support struggle
-function err_beep() sfx'60' end -- todo: move and use this
 |[pselmove_init]|   function(game)
     game.menu_pselmove:refresh(get_possible_move_slots(game.p0.active), function(move_slot)
         return {

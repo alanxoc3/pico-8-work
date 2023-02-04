@@ -1,15 +1,5 @@
 |[fight_select]| function(game)
-    local party = get_party(@S_CUR_PARTY)
-
-    -- can't fight with an empty party
-    for i=1,6 do
-        if party[i] then
-            game:push'fightsel'
-            return
-        end
-    end
-
-    sfx'60' -- idk, please just do any error sound
+    game:push'fightsel'
 end $$
 
 |[fightsel_init]| function(game)

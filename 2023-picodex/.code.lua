@@ -186,7 +186,14 @@ if g_bpu then menu:set(-menu.r)end
 if g_bpd then menu:set(menu.r)end
 if g_bpl then menu:set"-1" end
 if g_bpr then menu:set"1" end
-if g_bpx then(menu[menu.c+1].select or nop)(menu[menu.c+1],game)end
+if g_bpx then
+local entry=menu[menu.c+1]
+if entry.disabled then
+sfx"60"
+elseif entry.select then
+entry.select(entry,game)
+end
+end
 if g_bpo then menu.cancel(game)end
 end,function(menu)
 local c,v=menu.c,menu.v
@@ -194,12 +201,12 @@ local y=-10
 local cellw=menu.w\menu.r
 local x1,y1,x2,y2=menu.x,menu.y,menu.x+menu.w-1,menu.y+menu.h-1
 rectfill(0,y1,39,y2,1)
-rectfill(0,menu.y+5-menu.v*8,39,menu.y+4+(max(ceil(#menu/menu.r),menu.h\10-1)-menu.v)*10,13)
+rectfill(0,menu.y+5-menu.v*8,39,menu.y+4+(max(ceil(#menu/menu.r),menu.h\10-1)-menu.v)*10,5)
 for i=0,menu.r*5-1 do
 local entry=menu[(menu.v-1)*menu.r+i+1]
 if entry then
 local x,y=menu.x+i%menu.r*10,menu.y+i\menu.r*10
-rectfill(x,y-5,x+cellw-1,y+4,entry.disabled and 5 or 13)
+rectfill(x,y-5,x+cellw-1,y+4,entry.disabled and 2 or 13)
 zcamera(i%menu.r*cellw+menu.x+cellw/2,menu.y+i\menu.r*10-3,function()
 menu.edraw(entry,false,i%2==0)
 end)
@@ -207,12 +214,12 @@ end
 end
 local ii=menu.c
 local x,y=menu.x+ii%menu.r*10,menu.y+(ii\(menu.r)-menu.v)*10+10
-rectfill(x,y-5,x+cellw-1,y+4,6)
+rectfill(x,y-5,x+cellw-1,y+4,menu[ii+1].disabled and 8 or 6)
 zcamera(x+cellw/2,y-3,function()
 menu.edraw(menu[ii+1],true)
 end)
 end,function(entry,selected)
-wobble_text(entry.name,0,0,selected and(entry.disabled and 5 or 13)or 1)
+wobble_text(entry.name,0,0,selected and(entry.disabled and 2 or 13)or(entry.disabled and 1 or 1))
 end,function(entry,selected)
 local pkmn=get_pokemon(entry.num)
 if pkmn then
@@ -230,9 +237,9 @@ for i=0,13 do
 poke(0x5e5a+i,1)
 end
 game.modes=_g.modes()
-game.modes.menu_editparty=create_menu(_g.browse_drawentry,3,30,30,5)
-game.modes.menu_browse=create_menu(_g.browse_drawentry,4)
-game.modes.menu_partypkmn=create_menu(_g.browse_drawentry,4)
+game.modes.menu_editparty=create_menu(_g.browse_drawentry,false,3,30,30,5)
+game.modes.menu_browse=create_menu(_g.browse_drawentry,false,4)
+game.modes.menu_partypkmn=create_menu(_g.browse_drawentry,false,4)
 game.modes.menu_main=create_menu(_g.menu_drawentry)
 game.modes.menu_party=create_menu(_g.menu_drawentry)
 game.modes.menu_fightsel=create_menu(_g.menu_drawentry)
@@ -262,7 +269,7 @@ function()a.modes:draw3()end,
 4,false,a.modes.menu_main.c,#a.modes.stack)
 end,function(game)
 game.menu_main:refresh(
-zobj[[;name,browse,state,browse,select,%menu_state_callback,desc,view|pokemon|info;;name,teams,state,party,select,%menu_state_callback,desc,edit|stored|teams;;name,computer,state,fightparty,select,%menu_state_callback,desc,battle|against|computer;;name,player,state,games,select,%menu_state_callback,disabled,yes,desc,battle|against|player;;name,hoard,state,settings,select,%menu_state_callback,disabled,yes,desc,battle all|pokemon|in order;;name,info,state,credits,select,%menu_state_callback,desc,help|and|credits]]
+zobj[[;name,browse,state,browse,select,%menu_state_callback,desc,view|pokemon|info;;name,teams,state,party,select,%menu_state_callback,desc,edit|stored|teams;;name,story,state,fightparty,select,%menu_state_callback,desc,battle|against|computer;;name,versus,state,games,select,%menu_state_callback,disabled,yes,desc,battle|against|player;;name,hoard,state,settings,select,%menu_state_callback,disabled,yes,desc,battle all|pokemon|in order;;name,credits,state,credits,select,%menu_state_callback,desc,help|and|credits]]
 )
 end,function(game)game.menu_main:update(game)end,function(game)game.menu_main:draw1()end,function(game)end,function(a)
 rectfill(0,0,46,13,13)
@@ -342,10 +349,10 @@ rectfill(0,0,39,39,1)
 zcamera(0,-a.credits_offset,function()
 for i,txt in ipairs(c_creditlist)do
 local y=(i-1)*c_credwid+5
-local col,col2=1,5
+local col,col2=1,13
 if sub(txt,1,1)=="!"then
 txt=sub(txt,2)
-col,col2=1,13
+col,col2=13,6
 end
 rectfill(-1,y,40,y+9,col2)
 wobble_text(txt,20,y+2,col)
@@ -378,14 +385,7 @@ if g_bpo or g_bpx then
 game:pop()
 end
 end,function(game)print("todo",5,5,1)end,function(game)zprint("match over",23,4,1,0)end,function(game)print_draw3_message(game.p0.name,"is the","winner")end,function(game)
-local party=get_party(@0x5ef4)
-for i=1,6 do
-if party[i]then
 game:push"fightsel"
-return
-end
-end
-sfx"60"
 end,function(game)
 game.menu_fightsel:refresh({
 {name="bugcatcher",select=function(a,game)
@@ -426,9 +426,15 @@ end)
 end,function(game)game.menu_partymovesel:update(game)end,function(game)game.menu_partymovesel:draw1()end,function(game)
 end,function(_)end,function(game)game:push"editparty" end,function(game)
 game.menu_party:refresh(zobj[[,1,2,3]],function(i)
+local party=get_party(i-1)
+local is_disabled=true
+for i=1,6 do
+if party[i]then is_disabled=false end
+end
 return{
 name="team #"..i,
-select=function()game:select_func()end
+select=function()game:select_func()end,
+disabled=game.disable_empty_party and is_disabled
 }
 end)
 end,function(game)game.menu_party:update(game)end,function(game)game.menu_party:draw1()end,function(game)
@@ -567,10 +573,10 @@ c_types=zobj[[0;bg,0,name,bird;0;good;,;0;null;,;0;weak;,;1;bg,0,name,normal;1;g
 c_bg_styles=zobj[[0;bg,6,aa,13;;bg,13,aa,5;;bg,9,aa,4;;bg,11,aa,3;;bg,12,aa,5;;bg,8,aa,2;;bg,10,aa,4]]
 c_zmovetype=zobj[[0;name,status;;name,physical;;name,special;]]
 c_moves=zobj[[0;,struggle,1,0,50,1;;,megapnch,1,20,80,.85;;,razrwind,1,10,80,1;;,swordanc,1,20,0,0;;,whrlwind,1,20,0,0;;,megakick,1,5,120,.75;;,toxic,5,10,0,.9;;,horndril,1,5,0,.3;;,bodyslam,1,15,85,1;;,takedown,1,20,90,.85;;,doubledg,1,15,120,1;;,bublbeam,4,20,65,1;;,watergun,4,25,40,1;;,icebeam,10,10,90,1;;,blizzard,10,5,110,.7;;,hyprbeam,1,5,150,.9;;,payday,1,20,40,1;;,submsion,3,20,80,.8;;,counter,3,20,0,1;;,siestoss,3,20,0,1;;,rage,1,20,20,1;;,megdrain,8,15,40,1;;,solrbeam,8,10,120,1;;,drgnrage,14,10,0,1;;,thndrblt,6,15,90,1;;,thunder,6,10,110,.7;;,earthqke,7,10,100,1;;,fissure,7,5,0,.3;;,dig,7,10,80,1;;,psychic,12,10,90,1;;,teleport,12,20,0,0;;,mimic,1,10,0,0;;,doubteam,1,15,0,0;;,reflect,12,20,0,0;;,bide,1,10,0,0;;,metronom,1,10,0,0;;,selfdstr,1,5,200,1;;,eggbomb,1,10,100,.75;;,fireblst,2,5,110,.85;;,swift,1,20,60,2;;,skulbash,1,10,130,1;;,softboil,1,5,0,0;;,dreameat,12,15,100,1;;,skyattck,9,5,140,.9;;,rest,12,5,0,0;;,thndrwav,6,20,0,.9;;,psywave,12,15,0,1;;,explsion,1,5,250,1;;,rockslid,13,10,75,.9;;,triattck,1,10,80,1;;,substute,1,10,0,0;;,cut,1,30,50,.95;;,fly,9,15,90,.95;;,surf,4,15,90,1;;,strength,1,15,80,1;;,flash,1,20,0,1;;,pound,1,35,40,1;;,karatchp,3,25,50,1;;,doublslp,1,10,15,.85;;,comtpnch,1,15,18,.85;;,firepnch,2,15,75,1;;,icepnch,10,15,75,1;;,thndpnch,6,15,75,1;;,scratch,1,35,40,1;;,vicegrip,1,30,55,1;;,guilotin,1,5,0,.3;;,gust,9,35,40,1;;,wingatck,9,35,60,1;;,bind,1,20,15,.85;;,slam,1,20,80,.75;;,vinewhip,8,25,45,1;;,stomp,1,20,65,1;;,doublkck,3,30,30,1;;,jumpkck,3,10,100,.95;;,rllngkck,3,15,60,.85;;,sandatck,7,15,0,1;;,headbutt,1,15,70,1;;,hornatck,1,25,65,1;;,furyatck,1,20,15,.85;;,tackle,1,35,40,1;;,wrap,1,20,15,.9;;,thrash,1,10,120,1;;,tailwhip,1,30,0,1;;,psnsting,5,35,15,1;;,twineedl,11,20,25,1;;,pinmisil,11,20,25,.95;;,leer,1,30,0,1;;,bite,1,25,60,1;;,growl,1,40,0,1;;,roar,1,20,0,1;;,sing,1,15,0,.55;;,supersnc,1,20,0,.55;;,sonicbm,1,20,0,.9;;,disable,1,20,0,1;;,acid,5,30,40,1;;,ember,2,25,40,1;;,flamthwr,2,15,90,1;;,mist,10,30,0,0;;,hydropmp,4,5,110,.8;;,psybeam,12,20,65,1;;,aurorabm,10,20,65,1;;,peck,9,35,35,1;;,drillpck,9,20,80,1;;,lowkick,3,20,0,1;;,absorb,8,25,20,1;;,leechsed,8,10,0,.9;;,growth,1,20,0,0;;,razrleaf,8,25,55,.95;;,psnpowdr,5,35,0,.75;;,stunspor,8,30,0,.75;;,slppowdr,8,15,0,.75;;,petldanc,8,10,120,1;;,strngsht,11,40,0,.95;;,firespin,2,15,35,.85;;,thndshck,6,30,40,1;;,rockthrw,13,15,50,.9;;,cnfusion,12,25,50,1;;,hypnosis,12,20,0,.6;;,meditate,12,40,0,0;;,agility,12,30,0,0;;,quickatk,1,30,40,1;;,nghtshde,15,15,0,1;;,screech,1,40,0,.85;;,recover,1,5,0,0;;,harden,1,30,0,0;;,minimize,1,10,0,0;;,smokscrn,1,20,0,1;;,cnfusray,15,10,0,1;;,withdraw,4,40,0,0;;,dfnscurl,1,40,0,0;;,barrier,12,20,0,0;;,lghtscrn,12,30,0,0;;,haze,10,30,0,0;;,fcsenrgy,1,30,0,0;;,mirrmove,9,20,0,0;;,lick,15,30,30,1;;,smog,5,20,30,.7;;,sludge,5,20,65,1;;,boneclub,7,20,65,.85;;,waterfal,4,15,80,1;;,clamp,4,15,35,.85;;,spikcann,1,15,20,1;;,constrct,1,35,10,1;;,amnesia,12,20,0,0;;,kinesis,12,15,0,.8;;,hijmpkck,3,10,130,.9;;,glare,1,30,0,1;;,psngas,5,40,0,.9;;,barrage,1,20,15,.85;;,leechlif,11,10,80,1;;,lovekiss,1,10,0,.75;;,tranform,1,10,0,0;;,bubble,4,30,40,1;;,dizypnch,1,10,70,1;;,spore,8,15,0,1;;,splash,1,40,0,0;;,acidarmr,5,20,0,0;;,crabhamr,4,10,100,.9;;,furyswps,1,15,18,.8;;,bonerang,7,10,50,.9;;,hyprfang,1,15,80,.9;;,sharpen,1,30,0,0;;,convrson,1,30,0,0;;,suprfang,1,10,0,.9;;,slash,1,20,70,1]]
-function create_menu(edraw,r,w,h,x,y)
-return zobj([[edraw,@,c,0,v,0,r,@,w,@,h,@,x,@,y,@,update,%menu_update,draw1,%menu_draw1,set,%menu_set,cancel,%menu_cancel,refresh,%menu_refresh]],edraw,r or 1,w or 40,h or 40,x or 0,y or 0)
+function create_menu(edraw,disable_cursor,r,w,h,x,y)
+return zobj([[edraw,@,c,0,v,0,has_cursor,@,r,@,w,@,h,@,x,@,y,@,update,%menu_update,draw1,%menu_draw1,set,%menu_set,cancel,%menu_cancel,refresh,%menu_refresh]],edraw,not disable_cursor,r or 1,w or 40,h or 40,x or 0,y or 0)
 end
-zclass[[modes,actor|push,%modes_push,pop,%modes_pop,update,nop,draw1,nop,draw2,nop,draw3,nop,curr,main;stack;,;defaults;sub,0,init,nop,update,nop,finit,nop,draw1,nop,draw2,nop,draw3,nop;main;update,%main_update,draw1,%main_draw1,draw2,%main_draw2,draw3,%main_draw3,init,%main_init;credits;update,%credits_update,draw1,%credits_draw1,draw2,%main_draw2,draw3,%main_draw3,credits_offset,0;browse;update,%browse_update,draw1,%browse_draw1,draw2,%browse_draw2,draw3,%browse_draw3,init,%browse_init;browsestat;update,%browsestat_update,draw1,%browsestat_draw1,draw2,%browse_draw2,draw3,%browse_draw3,init,%browsestat_init;fightsel;update,%fightsel_update,draw1,%fightsel_draw1,draw2,%fightsel_draw2,draw3,%fightsel_draw3,init,%fightsel_init;fightparty;update,%party_update,draw1,%party_draw1,draw2,%party_draw2,draw3,%party_draw3,init,%party_init,select_func,%fight_select;party;update,%party_update,draw1,%party_draw1,draw2,%party_draw2,draw3,%party_draw3,init,%party_init,select_func,%party_select;fightover;update,%fightover_update,draw1,%fightover_draw1,draw2,%fightover_draw2,draw3,%fightover_draw3,init,%fightover_init;p1sel;next,p2sel,init,%psel_init,p0key,p1;p2sel;next,turn,init,%psel_init,p0key,p2;turn;next,p1sel,update,%turn_update,draw1,%turn_draw1,draw2,%turn_draw2,draw3,%turn_draw3,init,%turn_init,cur_action,no;pselactions;update,%pselactions_update,draw1,%pselactions_draw1,draw2,%turn_draw2,draw3,%pselactions_draw3,init,%pselactions_init;pselmove;update,%pselmove_update,draw1,%pselmove_draw1,draw2,%turn_draw2,draw3,%pselmove_draw3,init,%pselmove_init;editparty;update,%editparty_update,draw1,%editparty_draw1,draw2,%editparty_draw2,draw3,%editparty_draw3,init,%editparty_init;partyaction;update,%partyaction_update,draw1,%partyaction_draw1,draw2,%editparty_draw2,draw3,%partyaction_draw3,init,%partyaction_init;partypkmn;update,%partypkmn_update,draw1,%partypkmn_draw1,draw2,%partypkmn_draw2,draw3,%partypkmn_draw3,init,%partypkmn_init;partymoves;update,%partymoves_update,draw1,%partymoves_draw1,draw2,%editparty_draw2,draw3,%partymoves_draw3,init,%partymoves_init;partymovesel;update,%partymovesel_update,draw1,%partymovesel_draw1,draw2,%partymovesel_draw2,draw3,%partymovesel_draw3,init,%partymovesel_init;]]
+zclass[[modes,actor|push,%modes_push,pop,%modes_pop,update,nop,draw1,nop,draw2,nop,draw3,nop,curr,main;stack;,;defaults;sub,0,init,nop,update,nop,finit,nop,draw1,nop,draw2,nop,draw3,nop;main;update,%main_update,draw1,%main_draw1,draw2,%main_draw2,draw3,%main_draw3,init,%main_init;credits;update,%credits_update,draw1,%credits_draw1,draw2,%main_draw2,draw3,%main_draw3,credits_offset,0;browse;update,%browse_update,draw1,%browse_draw1,draw2,%browse_draw2,draw3,%browse_draw3,init,%browse_init;browsestat;update,%browsestat_update,draw1,%browsestat_draw1,draw2,%browse_draw2,draw3,%browse_draw3,init,%browsestat_init;fightsel;update,%fightsel_update,draw1,%fightsel_draw1,draw2,%fightsel_draw2,draw3,%fightsel_draw3,init,%fightsel_init;fightparty;update,%party_update,draw1,%party_draw1,draw2,%party_draw2,draw3,%party_draw3,init,%party_init,disable_empty_party,yes,select_func,%fight_select;party;update,%party_update,draw1,%party_draw1,draw2,%party_draw2,draw3,%party_draw3,init,%party_init,disable_empty_party,no,select_func,%party_select;fightover;update,%fightover_update,draw1,%fightover_draw1,draw2,%fightover_draw2,draw3,%fightover_draw3,init,%fightover_init;p1sel;next,p2sel,init,%psel_init,p0key,p1;p2sel;next,turn,init,%psel_init,p0key,p2;turn;next,p1sel,update,%turn_update,draw1,%turn_draw1,draw2,%turn_draw2,draw3,%turn_draw3,init,%turn_init,cur_action,no;pselactions;update,%pselactions_update,draw1,%pselactions_draw1,draw2,%turn_draw2,draw3,%pselactions_draw3,init,%pselactions_init;pselmove;update,%pselmove_update,draw1,%pselmove_draw1,draw2,%turn_draw2,draw3,%pselmove_draw3,init,%pselmove_init;editparty;update,%editparty_update,draw1,%editparty_draw1,draw2,%editparty_draw2,draw3,%editparty_draw3,init,%editparty_init;partyaction;update,%partyaction_update,draw1,%partyaction_draw1,draw2,%editparty_draw2,draw3,%partyaction_draw3,init,%partyaction_init;partypkmn;update,%partypkmn_update,draw1,%partypkmn_draw1,draw2,%partypkmn_draw2,draw3,%partypkmn_draw3,init,%partypkmn_init;partymoves;update,%partymoves_update,draw1,%partymoves_draw1,draw2,%editparty_draw2,draw3,%partymoves_draw3,init,%partymoves_init;partymovesel;update,%partymovesel_update,draw1,%partymovesel_draw1,draw2,%partymovesel_draw2,draw3,%partymovesel_draw3,init,%partymovesel_init;]]
 g_picodex_div=zobj[[,6,5,5,6,6,5,6]]
 function any_btn()return g_bl or g_br or g_bu or g_bd or g_bx or g_bo end
 function draw_picodex(shaking,rotation,l_screen,tr_screen,br_screen,light,backbuttonheld,top_row_buttons,bot_row_buttons)
@@ -723,7 +729,6 @@ end
 function get_browse_pokemon(num)
 return c_pokemon[g_available_pokemon[num]]or{draw=nop}
 end
-c_creditlist=split"!alanxoc3,code,design,!gr8-cadet,graphics,sound,!wadlo,magikarp,gyarados,!snippets,zep: px9,mot: smap,!pkmn data,blbapedia,pokeapi,serebii,smogon,upokecntr,volvox,nintendo"
 c_credwid=10
 function set_default_party_pkmn(party,ind,num)
 party[ind]={num=num,moves=c_pokemon[num].get_natural_moveset(100)}
@@ -873,7 +878,6 @@ function calc_move_damage(lvl,attack,defence,critical,move_power)
 local base_damage=(2*lvl*critical/5+2)*move_power*(attack/defence)/50+2
 return base_damage*stab*type1*type2*random
 end
-function err_beep()sfx"60" end
 function calc_max_stat(lvl,base)return ceil(lvl*.01*(base*2+93))+5 end
 function calc_max_hp(lvl,base)return calc_max_stat(lvl,base)+5+lvl end
 function begin_fight(game,lvl,party1,party2,name1,name2,iscpu1,iscpu2)
