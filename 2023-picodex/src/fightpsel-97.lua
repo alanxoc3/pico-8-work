@@ -16,7 +16,7 @@ end $$
 |[pselactions_init]| function(game)
     game.menu_pselactions:refresh(zobj[[
          ; name,"fight",   desc,"select|a|move",         select,%menu_state_callback, state,pselmove
-        ;; name,"switch",  desc,"change|active|pokemon", select,%menu_state_callback, state,pselswitch
+        ;; name,"switch",  desc,"change|active|pokemon", select,%menu_state_callback, state,pselswitch, disabled,yes
         ;; name,"forfeit", desc,"leave|the|fight",       select,%psel_forfeit
     ]])
 end $$

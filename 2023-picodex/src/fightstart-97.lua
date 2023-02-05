@@ -1,7 +1,3 @@
--- thanks to bulbapedia: https://bulbapedia.bulbagarden.net/wiki/Stat#Stat
-function calc_max_stat(lvl, base) return ceil(lvl*.01*(base*2+93)) + 5 end
-function calc_max_hp(lvl, base)   return calc_max_stat(lvl, base) + 5 + lvl end
-
 -- fight is: turn -> turn -> { (p1 select) -> (p2 select) -> whogoesfirst -> turn -> turn -> ...repeat }
 -- in turn init, if there are no actions then go to p1 select
 -- in turn init, switch p0
@@ -47,16 +43,16 @@ function get_fight_party(party, lvl)
             fightparty[i] = {
                 -- things that won't change
                 num     = cur.num,
-                lvl     = lvl,
-                maxhp   = calc_max_hp(lvl, pkmn.hp),
-                attack  = calc_max_stat(lvl, pkmn.attack),
-                defense = calc_max_stat(lvl, pkmn.defense),
-                speed   = calc_max_stat(lvl, pkmn.speed),
-                special = calc_max_stat(lvl, pkmn.special),
+                lvl     = pkmn.level,
+                maxhp   = pkmn.hp,
+                attack  = pkmn.attack,
+                defense = pkmn.defense,
+                speed   = pkmn.speed,
+                special = pkmn.special,
                 moveids = (function() local m = {} for i=1,4 do m[i] = cur.moves[i] end return m end)(),
 
                 -- things that can change
-                hp      = calc_max_hp(lvl, pkmn.hp),
+                hp      = pkmn.hp,
                 movepps = (function() local m = {} for i=1,4 do m[i] = cur.moves[i] and c_moves[cur.moves[i]].pp end return m end)(),
             }
         end

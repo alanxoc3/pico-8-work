@@ -116,6 +116,10 @@ function parse_numlist(str)
     return tbl
 end
 
+-- thanks to bulbapedia: https://bulbapedia.bulbagarden.net/wiki/Stat#Stat
+function calc_max_stat(lvl, base) return ceil(lvl*.01*(base*2+93)) + 5 end
+function calc_max_hp(lvl, base)   return calc_max_stat(lvl, base) + 5 + lvl end
+
 -- 255 is dashes. 0 is next pkmn. num is move index.
 function normalize_pokemon_data()
     -- this is a global that the update_pokemon_moves function uses
@@ -174,16 +178,17 @@ function normalize_pokemon_data()
             add(movelvls, pkmn[i])
         end
 
-        c_pokemon[i] = {
+        local newpkmn = {
             evolvesfrom = (pkmn[1] or 0) > 0 and i-pkmn[1] or nil,
             name        = pkmn[2],
             type1       = pkmn[3],
             type2       = pkmn[4],
-            hp          = pkmn[5],
-            attack      = pkmn[6],
-            defense     = pkmn[7],
-            speed       = pkmn[8],
-            special     = pkmn[9],
+            level       = 50,
+            hp          = calc_max_hp(50,   pkmn[5] or 0),
+            attack      = calc_max_stat(50, pkmn[6] or 0),
+            defense     = calc_max_stat(50, pkmn[7] or 0),
+            speed       = calc_max_stat(50, pkmn[8] or 0),
+            special     = calc_max_stat(50, pkmn[9] or 0),
             movelvls    = movelvls,
             moves       = {},
 
@@ -202,13 +207,16 @@ function normalize_pokemon_data()
             draw       = function(...) draw_pkmn_out(i, ...) end,
             num        = i,
         }
+
+        newpkmn.total = newpkmn.level + newpkmn.attack + newpkmn.defense + newpkmn.speed + newpkmn.special + newpkmn.hp
+        if newpkmn.evolvesfrom then
+            c_pokemon[newpkmn.evolvesfrom].evolvesto = i
+        end
+
+        c_pokemon[i] = newpkmn
     end
 
-    update_pokemon_moves()
-end
-
--- this can be called if a move is added, also called at beginning of game
-function update_pokemon_moves()
+    -- update the moves for each pokemon
     for i=0,151 do
         local pkmn, moves, movemap = c_pokemon[i], {}, {}
 
@@ -228,9 +236,9 @@ function update_pokemon_moves()
             set_move(m, pkmn.movelvls[i] and "lvl "..pkmn.movelvls[i])
         end
 
-        -- hard-coded unlockables
-        if i == 25 and @S_SURFING_PIKACHU ~= 0 then set_move(53,  "special") end
-        if i == 54 and @S_AMNESIA_PSYDUCK ~= 0 then set_move(143, "special") end
+        -- only 2 hard-coded unlockables (surfing pikachu & amnesia psyduck)
+        if i == 25 then set_move(53,  "event") end
+        if i == 54 then set_move(143, "event") end
 
         pkmn.moves = moves
 

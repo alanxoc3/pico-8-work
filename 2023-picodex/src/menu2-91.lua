@@ -56,6 +56,8 @@ end $$
     if g_bpo then game:pop() end
     if g_bpu then menu.v-=1 end
     if g_bpd then menu.v+=1 end
+    if g_bpl then menu.v-=1 end
+    if g_bpr then menu.v+=1 end
     menu.v = mid(menu.viewmin, menu.v, #menu-3)
 end $$
 

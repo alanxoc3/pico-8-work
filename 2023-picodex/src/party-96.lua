@@ -27,7 +27,14 @@ end $$
     local party = get_party(game.menu_party.c)
     game.menu_editparty:refresh(zobj[[,1,2,3,4,5,6]], function(i)
         return {
-            select=function(entry, game) game:push'partyaction' end,
+            select=function(entry, game)
+                local party = get_party(game.menu_party.c)
+                if party[game.menu_editparty.c+1] then
+                    game:push'partyaction'
+                else
+                    game:push'partypkmn'
+                end
+            end,
             num=party[i] and party[i].num or -2
         }
     end)
@@ -44,18 +51,17 @@ end $$
 end $$
 
 |[editparty_draw2]| function(game)
-    local pkmn = get_party(game.menu_party.c)[game.menu_editparty.c+1]
-    if pkmn then
-        draw2_pokeinfo(get_pokemon(pkmn.num))
-    else
-        zprint("spot #"..(game.menu_editparty.c+1), 46/2, 4, 1, 0)
-    end
+    zprint("spot #"..(game.menu_editparty.c+1), 46/2, 4, 1, 0)
 end $$
 
 |[editparty_draw3]| function(game)
-    -- local pkmn = get_party(game.menu_party.c)[game.menu_editparty.c+1]
-    -- if pkmn then draw3_pokeinfo(pkmn.num) end
-    print_draw3_message("now", "pick a", "spot")
+    local party = get_party(game.menu_party.c)
+    local partypkmn = party[game.menu_editparty.c+1]
+    if partypkmn then
+        draw3_pokeinfo(get_pokemon(partypkmn.num))
+    else
+        print_draw3_message("select", "your", "pokemon")
+    end
 end $$
 
 -- UTILITY FUNCTIONS --

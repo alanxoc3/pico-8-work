@@ -35,7 +35,7 @@ zclass[[modes,actor|
     pselmove;     update,%pselmove_update,     draw1,%pselmove_draw1,     draw2,%turn_draw2,  draw3,%pselmove_draw3, init,%pselmove_init;
 
     editparty;    update,%editparty_update,    draw1,%editparty_draw1,    draw2,%editparty_draw2,    draw3,%editparty_draw3,    init,%editparty_init;
-    partyaction;  update,%partyaction_update,  draw1,%partyaction_draw1,  draw2,%editparty_draw2,    draw3,%partyaction_draw3,  init,%partyaction_init;
+    partyaction;  update,%partyaction_update,  draw1,%partyaction_draw1,  draw2,%editparty_draw2,    draw3,%editparty_draw3,    init,%partyaction_init;
     partypkmn;    update,%partypkmn_update,    draw1,%partypkmn_draw1,    draw2,%partypkmn_draw2,    draw3,%partypkmn_draw3,    init,%partypkmn_init;
     partymoves;   update,%partymoves_update,   draw1,%partymoves_draw1,   draw2,%editparty_draw2,    draw3,%partymoves_draw3,   init,%partymoves_init;
     partymovesel; update,%partymovesel_update, draw1,%partymovesel_draw1, draw2,%partymovesel_draw2, draw3,%partymovesel_draw3, init,%partymovesel_init;
@@ -54,16 +54,11 @@ end $$
 end $$
 
 |[game_init]| function(game)
-    -- we should always have these starter pokemon
-    zcall(poke, [[
-        ;,S_BULBASAUR,  1
-       ;;,S_CHARMANDER, 1
-       ;;,S_SQUIRTLE,   1
-    ]])
-
-    -- cheat: unlock all pkmn
-    for i=0,151 do
-        poke(S_POKEMON+i, 1)
+    -- unlock all 1st evolutions (pkmn has more evolutions, but this is the first one)
+    for i=1,151 do
+        if c_pokemon[i].evolvesto and not c_pokemon[i].evolvesfrom then
+            poke(S_POKEMON+i, 1)
+        end
     end
 
     -- todo: remove me
@@ -113,17 +108,17 @@ end $$
         zobj[[
             ;name,"browse",  state,browse,     select,%menu_state_callback, desc,"view|pokemon|info"
            ;;name,"teams",   state,party,      select,%menu_state_callback, desc,"edit|stored|teams"
-           ;;name,"story",   state,fightparty, select,%menu_state_callback, desc,"battle|against|computer"
-           ;;name,"versus",  state,games,      select,%menu_state_callback, disabled,yes, desc,"battle|against|player"
-           ;;name,"hoard",   state,settings,   select,%menu_state_callback, disabled,yes, desc,"battle all|pokemon|in order"
-           ;;name,"credits", state,credits,    select,%menu_state_callback, desc,"help|and|credits"
+           ;;name,"versus",  state,games,      select,%menu_state_callback, desc,"custom|2 player|battle", disabled,yes
+           ;;name,"story",   state,fightparty, select,%menu_state_callback, desc,"battle|against|trainers"
+           ;;name,"hoard",   state,hoard,      select,%menu_state_callback, desc,"battle all|pokemon|in order", disabled,yes
+           ;;name,"credits", state,credits,    select,%menu_state_callback, desc,"by|amorg|games"
         ]]
     )
 end $$
 
 |[main_update]| function(game) game.menu_main:update(game) end $$
 |[main_draw1]|  function(game) game.menu_main:draw1() end $$
-|[main_draw3]|  function(game) end $$
+|[main_draw3]|  function(game) print_draw3_message(unpack(split(game.menu_main[game.menu_main.c+1].desc, '|'))) end $$
 
 -- picodex logo
 g_picodex_div = zobj[[,6,5,5,6,6,5,6]]

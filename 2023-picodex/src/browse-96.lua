@@ -16,17 +16,18 @@ end $$
     local pkmn = get_browse_pokemon(game.menu_browse.c+1)
 
     game.menu_browse_stat:refresh(zobj[[
-        ;key,hp,      name,"hp"
+        ;key,total,   name,"tot"
+       ;;key,hp,      name,"hp"
        ;;key,speed,   name,"spd"
+       ;;key,special, name,"spc"
        ;;key,attack,  name,"att"
        ;;key,defense, name,"def"
-       ;;key,special, name,"spc"
+       ;;key,level,   name,"lvl"
     ]], function(pair)
-        printh(pair.key)
         return { name=pair.name.." "..pkmn[pair.key] }
     end)
 
-    add(game.menu_browse_stat, {pkmn=game.menu_browse.c}, 1)
+    add(game.menu_browse_stat, {pkmn=g_available_pokemon[game.menu_browse.c+1]}, 1)
     add(game.menu_browse_stat, {hidden=true}, 2)
     add(game.menu_browse_stat, {name="stats", style=3}, 3)
 end $$
@@ -34,27 +35,27 @@ end $$
 |[browsestat_update]| function(game)
     game.menu_browse_stat:update(game)
 
-    if g_bpl then
-        game.menu_browse:set(-1)
-        _g.browsestat_init(game)
-    end
+    --if g_bpl then
+    --    game.menu_browse:set(-1)
+    --    _g.browsestat_init(game)
+    --end
 
-    if g_bpr then
-        game.menu_browse:set(1)
-        _g.browsestat_init(game)
-    end
+    --if g_bpr then
+    --    game.menu_browse:set(1)
+    --    _g.browsestat_init(game)
+    --end
 end $$
 
 |[browsestat_draw1]| function(game)
     game.menu_browse_stat:draw1()
 end $$
 
-function draw2_pokeinfo(pkmn) zprint(pkmn.name, 46/2, 4, 1, 0) end
+function draw2_pokeinfo(pkmn) zprint("pkmn "..format_num(pkmn.num), 46/2, 4, 1, 0) end
 
 function draw3_pokeinfo(pkmn)
     rectfill(0,0,46,6,1)
 
-    zprint(format_num(pkmn.num),  23, 1,  13, 0)
+    zprint(pkmn.name,  23, 1,  13, 0)
     zprint(c_types[pkmn.type1].name, 23, 8, 1, 0)
     if pkmn.type2 then
         rectfill(0,14,46,20,1)

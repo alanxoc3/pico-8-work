@@ -12,19 +12,15 @@ function set_default_party_pkmn(party, ind, num)
 end
 
 |[partyaction_init]|   function(game)
-    local possible_actions = zobj[[
-        ; name,"pokemon", state,partypkmn,  desc,"select|the|pokemon", select,%menu_state_callback -- use browse pokemon selector
-       ;; name,"moves",   state,partymoves, desc,"select|the|moves",   select,%menu_state_callback -- use the menu system
-       ;; name,"delete",                    desc,"remove|from|party",  select,%partydel            -- use the edit party screen
-    ]]
-
-    local party = get_party(game.menu_party.c)
-    game.menu_partyaction:refresh(party[game.menu_editparty.c+1] and possible_actions or {possible_actions[1]})
+    game.menu_partyaction:refresh(zobj[[
+        ; name,"info",   state,nop,        select,%menu_state_callback, disabled,yes -- use browse pokemon selector
+       ;; name,"moves",  state,partymoves, select,%menu_state_callback -- use the menu system
+       ;; name,"delete",                   select,%partydel            -- use the edit party screen
+    ]])
 end $$
 
 |[partyaction_update]| function(game) game.menu_partyaction:update(game) end $$
 |[partyaction_draw1]|  function(game) game.menu_partyaction:draw1()  end $$
-|[partyaction_draw3]|  function(game) end $$
 
 |[partypkmn_update]| function(game) game.menu_partypkmn:update(game) end $$
 |[partypkmn_draw1]|  function(game) game.menu_partypkmn:draw1() end $$
@@ -38,7 +34,7 @@ end $$
             return {
                 select=function(_, game)
                     save_party(game.menu_party.c, set_default_party_pkmn(get_party(game.menu_party.c), game.menu_editparty.c+1, g_available_pokemon[game.menu_partypkmn.c+1]))
-                    game:pop() game:pop() -- pop twice, because you got here through a menu
+                    game:pop()
                 end,
                 num=num
             }
