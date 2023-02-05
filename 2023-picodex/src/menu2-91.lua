@@ -103,7 +103,7 @@ c_menustyles = zobj[[
     -- selected bg
     --rect    (x-2, y-7, x+cellw+1, y+6, 5)
 
-    for i=0,menu.r*5-1 do
+    for i=-1,menu.r*5-1 do
         local index = (menu.v-1)*menu.r+i+1
         local entry = menu[index]
         local style_ind, x, y = (entry or {style=0}).style or 1, xoff+i%menu.r*10, 0+i\menu.r*10
@@ -115,7 +115,7 @@ c_menustyles = zobj[[
 
         local style = c_menustyles[style_ind]
 
-        if entry then
+        if entry and not entry.hidden then
             rectfill(x, y-5, x+cellw-1, y+4, style.bg)
             zcamera(i%menu.r*cellw+xoff+cellw/2, 0+i\menu.r*10-3, function()
                 menu.edraw(entry, style)
@@ -126,7 +126,15 @@ end $$
 
 -- requires a "name" field
 |[menu_drawentry]| function(entry, style)
-    wobble_text(entry.name, 0, 0, style.fg)
+    if entry.pkmn then
+        local pkmn = get_pokemon(entry.pkmn)
+        local style = c_bg_styles[c_types[pkmn.type1].bg]
+        rectfill(0-20,    5-10+3, 39-20, 24-10+3,style.bg)
+        rectfill(0-20,   21-10+3, 39-20, 24-10+3,style.aa)
+        pkmn.draw(20-20, -5+20-10+3, style.aa, 1, 1)
+    else
+        wobble_text(entry.name, 0, 0, style.fg)
+    end
 end $$
 
 |[browse_drawentry]| function(entry, style)

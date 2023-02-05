@@ -1,5 +1,5 @@
 c_pokemon = zobj[[
-    -- missingno has 0 base defence, but this becomes 1 in a battle based on the logic in getstat.
+    -- missingno has 0 base defense, but this becomes 1 in a battle based on the logic in getstat.
     -- evol says how many numbers going up is the previous evolution. 0 means no previous evolution.
     -- every pokemon is either 0 or 1, except for eevee's evolved forms.
     -- evol "name"         t1          t2           hp   att  def  spd  spc  move levels

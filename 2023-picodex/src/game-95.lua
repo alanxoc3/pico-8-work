@@ -62,7 +62,7 @@ end $$
     ]])
 
     -- cheat: unlock all pkmn
-    for i=0,13 do
+    for i=0,151 do
         poke(S_POKEMON+i, 1)
     end
 

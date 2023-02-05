@@ -169,7 +169,7 @@ function generic_attack(s, o, m)
         s.active.movepps[m] -= 1
     end
 
-    local dmg = move.damage -- calc_move_damage(s.active.shared.lvl, s.active.shared.attack, defence, critical, move_power)
+    local dmg = move.damage -- calc_move_damage(s.active.shared.lvl, s.active.shared.attack, defense, critical, move_power)
     if dmg > 0 then
         addaction(s, o, "#,-"..dmg..",hitpoints", function()
             o.active.shared.hp = max(0, o.active.shared.hp-dmg)
@@ -225,11 +225,11 @@ function move_accuracy_rate()
     return flr_rnd'256' == 0 and flr_rnd'256' == 0
 end
 
-function calc_move_damage(lvl, attack, defence, critical, move_power)
+function calc_move_damage(lvl, attack, defense, critical, move_power)
     -- critical is 1 or 2
-    -- need function for attack/defence ratio to prevent divide by zero
+    -- need function for attack/defense ratio to prevent divide by zero
     -- base_damage can be a max of 997
-    local base_damage = (2*lvl*critical/5+2)*move_power*(attack/defence)/50+2
+    local base_damage = (2*lvl*critical/5+2)*move_power*(attack/defense)/50+2
 
     -- stab is 1.5 of base damage if move type equals pkmn type
     -- types are .5, 1, or 2, based on move's effectivenes against the opposing dual type pokemon

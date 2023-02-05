@@ -13,41 +13,40 @@
 end $$
 
 |[browsestat_init]| function(game)
-    local c_mock = split",,stats,!hp 999,!atk 333,!def 123,!spc 1021,!spd 121"
+    local pkmn = get_browse_pokemon(game.menu_browse.c+1)
 
-    game.menu_browse_stat:refresh(c_mock, function(txt)
-        local style = 3
-        if sub(txt,1,1) == '!' then
-            txt = sub(txt,2)
-            style = 1
-        end
-
-        return { name=txt, style=style }
+    game.menu_browse_stat:refresh(zobj[[
+        ;key,hp,      name,"hp"
+       ;;key,speed,   name,"spd"
+       ;;key,attack,  name,"att"
+       ;;key,defense, name,"def"
+       ;;key,special, name,"spc"
+    ]], function(pair)
+        printh(pair.key)
+        return { name=pair.name.." "..pkmn[pair.key] }
     end)
+
+    add(game.menu_browse_stat, {pkmn=game.menu_browse.c}, 1)
+    add(game.menu_browse_stat, {hidden=true}, 2)
+    add(game.menu_browse_stat, {name="stats", style=3}, 3)
 end $$
 
 |[browsestat_update]| function(game)
     game.menu_browse_stat:update(game)
 
-    if g_bpl then game.menu_browse:set(-1) end
-    if g_bpr then game.menu_browse:set(1)  end
+    if g_bpl then
+        game.menu_browse:set(-1)
+        _g.browsestat_init(game)
+    end
+
+    if g_bpr then
+        game.menu_browse:set(1)
+        _g.browsestat_init(game)
+    end
 end $$
 
 |[browsestat_draw1]| function(game)
     game.menu_browse_stat:draw1()
-
-    zcamera(0, -game.menu_browse_stat.v*10, function()
-        local pkmn = get_browse_pokemon(game.menu_browse.c+1)
-        local style = c_bg_styles[c_types[pkmn.type1].bg]
-        rectfill(0, -15+20, 39, 4+20,style.bg)
-        rectfill(0,   1+20, 39, 4+20,style.aa)
-        pkmn.draw(20, -5+20, style.aa, 1, 1)
-    end)
-
-    --local total = pkmn.attack + pkmn.hp + pkmn.defence + pkmn.speed + pkmn.special
-    --print(pkmn.attack,  7+13,  2+20+off, 13)  --zprint(pkmn.hp,    35, off+2+20,  13, 1)
-    --print(pkmn.defence, 7+13,  8+20+off, 13)  --zprint(pkmn.speed, 35, off+8+20,  13, 1)
-    --print(pkmn.special, 7+13,  14+20+off, 13) --zprint(total,      35, off+14+20, 13, 1)
 end $$
 
 function draw2_pokeinfo(pkmn) zprint(pkmn.name, 46/2, 4, 1, 0) end

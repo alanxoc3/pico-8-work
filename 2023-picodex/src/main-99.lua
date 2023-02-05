@@ -181,7 +181,7 @@ function normalize_pokemon_data()
             type2       = pkmn[4],
             hp          = pkmn[5],
             attack      = pkmn[6],
-            defence     = pkmn[7],
+            defense     = pkmn[7],
             speed       = pkmn[8],
             special     = pkmn[9],
             movelvls    = movelvls,

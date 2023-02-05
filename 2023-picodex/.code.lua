@@ -208,7 +208,7 @@ local y1,y2=0,39
 local xoff=20-(menu.r*cellw)/2
 rectfill(0,y1,39,y2,1)
 rectfill(0,0+5-menu.v*10,39,0+4+(max(ceil(#menu/menu.r),40\10-1)-menu.v)*10,13)
-for i=0,menu.r*5-1 do
+for i=-1,menu.r*5-1 do
 local index=(menu.v-1)*menu.r+i+1
 local entry=menu[index]
 local style_ind,x,y=(entry or{style=0}).style or 1,xoff+i%menu.r*10,0+i\menu.r*10
@@ -217,7 +217,7 @@ if entry.disabled then style_ind=3 end
 if index-1==menu.c then style_ind+=1 end
 end
 local style=c_menustyles[style_ind]
-if entry then
+if entry and not entry.hidden then
 rectfill(x,y-5,x+cellw-1,y+4,style.bg)
 zcamera(i%menu.r*cellw+xoff+cellw/2,0+i\menu.r*10-3,function()
 menu.edraw(entry,style)
@@ -225,7 +225,15 @@ end)
 end
 end
 end,function(entry,style)
+if entry.pkmn then
+local pkmn=get_pokemon(entry.pkmn)
+local style=c_bg_styles[c_types[pkmn.type1].bg]
+rectfill(0-20,5-10+3,39-20,24-10+3,style.bg)
+rectfill(0-20,21-10+3,39-20,24-10+3,style.aa)
+pkmn.draw(20-20,-5+20-10+3,style.aa,1,1)
+else
 wobble_text(entry.name,0,0,style.fg)
+end
 end,function(entry,style)
 local pkmn=get_pokemon(entry.num)
 if pkmn then
@@ -239,7 +247,7 @@ deli(a.stack)
 a:load(a.stack[#a.stack]or "main")
 end,function(game)
 zcall(poke,[[;,0x5e5b,1;;,0x5e5e,1;;,0x5e61,1]])
-for i=0,13 do
+for i=0,151 do
 poke(0x5e5a+i,1)
 end
 game.modes=_g.modes()
@@ -321,36 +329,36 @@ g_available_pokemon,
 function(num)return{select=function(entry,game)game:push"browsestat" end,num=num}end
 )
 end,function(game)
-local c_mock=split",,stats,!hp 999,!atk 333,!def 123,!spc 1021,!spd 121"
-game.menu_browse_stat:refresh(c_mock,function(txt)
-local style=3
-if sub(txt,1,1)=="!"then
-txt=sub(txt,2)
-style=1
-end
-return{name=txt,style=style}
+local pkmn=get_browse_pokemon(game.menu_browse.c+1)
+game.menu_browse_stat:refresh(zobj[[;key,hp,name,hp;;key,speed,name,spd;;key,attack,name,att;;key,defense,name,def;;key,special,name,spc]],function(pair)
+printh(pair.key)
+return{name=pair.name.." "..pkmn[pair.key]}
 end)
+add(game.menu_browse_stat,{pkmn=game.menu_browse.c},1)
+add(game.menu_browse_stat,{hidden=true},2)
+add(game.menu_browse_stat,{name="stats",style=3},3)
 end,function(game)
 game.menu_browse_stat:update(game)
-if g_bpl then game.menu_browse:set(-1)end
-if g_bpr then game.menu_browse:set(1)end
+if g_bpl then
+game.menu_browse:set(-1)
+_g.browsestat_init(game)
+end
+if g_bpr then
+game.menu_browse:set(1)
+_g.browsestat_init(game)
+end
 end,function(game)
 game.menu_browse_stat:draw1()
-zcamera(0,-game.menu_browse_stat.v*10,function()
-local pkmn=get_browse_pokemon(game.menu_browse.c+1)
-local style=c_bg_styles[c_types[pkmn.type1].bg]
-rectfill(0,-15+20,39,4+20,style.bg)
-rectfill(0,1+20,39,4+20,style.aa)
-pkmn.draw(20,-5+20,style.aa,1,1)
-end)
 end,function(game)
 game.menu_credits:refresh(c_creditlist,function(txt)
-local style=3
-if sub(txt,1,1)=="!"then
-txt=sub(txt,2)
-style=1
+if type(txt)=="number"then
+return{pkmn=txt}
 end
-return{name=txt,style=style}
+local style=1
+if sub(txt,1,1)=="!"then
+txt,style=sub(txt,2),3
+end
+return{name=txt,style=style,hidden=txt==""}
 end)
 end,function(game)game.menu_credits:update(game)end,function(game)game.menu_credits:draw1()end,function(entry,game)
 local party=get_party(game.menu_party.c)
@@ -726,7 +734,7 @@ end
 function get_browse_pokemon(num)
 return c_pokemon[g_available_pokemon[num]]or{draw=nop}
 end
-c_creditlist=split"!alanxoc3,code,design,!gr8cadet,graphics,sound,!snippets,zep px9,mot smap,!pkmndata,blbpedia,pokeapi,serebii,smogon,upokcntr,volvox,nintendo,!fin"
+c_creditlist=split"110,,!alanxoc3,code,design,6,,!gr8cadet,graphics,sound,129,,!wadlo,magikarp,gyarados,123,,!snippets,zep px9,mot smap,137,,!pkmndata,blbpedia,pokeapi,serebii,smogon,upokcntr,volvox,nintendo"
 function set_default_party_pkmn(party,ind,num)
 party[ind]={num=num,moves=c_pokemon[num].get_natural_moveset(100)}
 return party
@@ -871,8 +879,8 @@ end
 function move_accuracy_rate()
 return flr_rnd"256"==0 and flr_rnd"256"==0
 end
-function calc_move_damage(lvl,attack,defence,critical,move_power)
-local base_damage=(2*lvl*critical/5+2)*move_power*(attack/defence)/50+2
+function calc_move_damage(lvl,attack,defense,critical,move_power)
+local base_damage=(2*lvl*critical/5+2)*move_power*(attack/defense)/50+2
 return base_damage*stab*type1*type2*random
 end
 function calc_max_stat(lvl,base)return ceil(lvl*.01*(base*2+93))+5 end
@@ -904,7 +912,7 @@ num=cur.num,
 lvl=lvl,
 maxhp=calc_max_hp(lvl,pkmn.hp),
 attack=calc_max_stat(lvl,pkmn.attack),
-defence=calc_max_stat(lvl,pkmn.defence),
+defense=calc_max_stat(lvl,pkmn.defense),
 speed=calc_max_stat(lvl,pkmn.speed),
 special=calc_max_stat(lvl,pkmn.special),
 moveids=(function()local m={}for i=1,4 do m[i]=cur.moves[i]end return m end)(),
@@ -921,7 +929,7 @@ type1=c_pokemon[partypkmn.num].type1,
 type2=c_pokemon[partypkmn.num].type2,
 moveids=(function()local m={}for i=1,4 do m[i]=partypkmn.moveids[i]end return m end)(),
 movepps=partypkmn.movepps,
-stages=zobj[[special,0,defence,0,attack,0,speed,0,accuracy,0,evasion,0]],
+stages=zobj[[special,0,defense,0,attack,0,speed,0,accuracy,0,evasion,0]],
 getstat=function(a,stat)
 local stage=a.stages[stat]
 return ceil(mid(1,999,
@@ -1113,7 +1121,7 @@ type1=pkmn[3],
 type2=pkmn[4],
 hp=pkmn[5],
 attack=pkmn[6],
-defence=pkmn[7],
+defense=pkmn[7],
 speed=pkmn[8],
 special=pkmn[9],
 movelvls=movelvls,

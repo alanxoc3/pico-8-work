@@ -50,7 +50,7 @@ function get_fight_party(party, lvl)
                 lvl     = lvl,
                 maxhp   = calc_max_hp(lvl, pkmn.hp),
                 attack  = calc_max_stat(lvl, pkmn.attack),
-                defence = calc_max_stat(lvl, pkmn.defence),
+                defense = calc_max_stat(lvl, pkmn.defense),
                 speed   = calc_max_stat(lvl, pkmn.speed),
                 special = calc_max_stat(lvl, pkmn.special),
                 moveids = (function() local m = {} for i=1,4 do m[i] = cur.moves[i] end return m end)(),
@@ -76,7 +76,7 @@ function party_pkmn_to_active(partypkmn)
         -- these always start at zero
         stages = zobj[[
             special,0,
-            defence,0,
+            defense,0,
             attack,0,
             speed,0,
             accuracy,0,
