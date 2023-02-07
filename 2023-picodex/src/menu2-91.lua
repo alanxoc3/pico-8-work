@@ -12,7 +12,7 @@ end $$
 
 -- maybe remove x&y? and w/h? -- those are only needed for 1 thing...
 -- and replace with view bounds?
-function create_menu_view(edraw, viewmin)
+|[create_menu_view]| function(edraw, viewmin)
     return zobj([[
         edraw,@, viewmin,@, v,~viewmin, r,1,
         update,%menu_view_update,
@@ -20,18 +20,18 @@ function create_menu_view(edraw, viewmin)
         cancel,%menu_cancel,
         refresh,%menu_refresh
     ]], edraw, viewmin or 0)
-end
+end $$
 
 -- entries: { {select=f(entry, game), disabled=bool} ... }
 -- edraw: func(entry, selected)
-function create_menu(edraw, r)
-    return zobj_set(create_menu_view(edraw), [[
+|[create_menu]| function(edraw, r)
+    return zobj_set(_g.create_menu_view(edraw), [[
         c,0, -- cursor
         r,@,
         update,%menu_update,
         set,%menu_set
     ]], r or 1)
-end
+end $$
 
 |[menu_refresh]| function(menu, data, mapfunc)
     while deli(menu) do end

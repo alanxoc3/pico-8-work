@@ -70,19 +70,25 @@ end $$
 
     -- todo: remove me and/or refactor me
     game.modes = _g.modes()
-    game.modes.browse.menu       = create_menu(_g.browse_drawentry, 4) -- selecting a pkmn from dex (for browsing)
-    game.modes.browsestat.menu   = create_menu_view(_g.menu_drawentry)
-    game.modes.credits.menu      = create_menu_view(_g.menu_drawentry)
-    game.modes.editparty.menu    = create_menu(_g.browse_drawentry, 3) -- selecting a pkmn from party
-    game.modes.fightsel.menu     = create_menu(_g.menu_drawentry) -- select a computer to play against
-    game.modes.main.menu         = create_menu(_g.menu_drawentry) -- select a mode
-    game.modes.partyaction.menu  = create_menu(_g.menu_drawentry) -- edit party what to do (delete, edit moves, edit pkmn)
-    game.modes.party.menu        = create_menu(_g.menu_drawentry) -- select a party (1, 2, 3)
-    game.modes.partymovesel.menu = create_menu(_g.menu_drawentry) -- select one of the moves a pokemon can learn (tms, hms, natural moves...)
-    game.modes.partymoves.menu   = create_menu(_g.menu_drawentry) -- select 1 of 4 moves from a pokemon
-    game.modes.partypkmn.menu    = create_menu(_g.browse_drawentry, 4) -- selecting a pkmn from dex (for adding to party)
-    game.modes.pselactions.menu  = create_menu(_g.menu_drawentry) -- select an action during battle (fight, switch, forfeit)
-    game.modes.pselmove.menu     = create_menu(_g.menu_drawentry) -- select 1 of 4 moves from a pokemon (during battle) -- TODO: try merging with other move select
+
+    zcall(function(menu_name, create_func, ...)
+        printh(menu_name)
+        game.modes[menu_name].menu = create_func(...)
+    end, [[
+        ;,browse,       %create_menu,      %browse_drawentry, 4 -- selecting a pkmn from dex (for browsing)
+       ;;,browsestat,   %create_menu_view, %menu_drawentry      
+       ;;,credits,      %create_menu_view, %menu_drawentry      
+       ;;,editparty,    %create_menu,      %browse_drawentry, 3 -- selecting a pkmn from party
+       ;;,fightsel,     %create_menu,      %menu_drawentry      -- select a computer to play against
+       ;;,main,         %create_menu,      %menu_drawentry      -- select a mode
+       ;;,partyaction,  %create_menu,      %menu_drawentry      -- edit party what to do (delete, edit moves, edit pkmn)
+       ;;,party,        %create_menu,      %menu_drawentry      -- select a party (1, 2, 3)
+       ;;,partymovesel, %create_menu,      %menu_drawentry      -- select one of the moves a pokemon can learn (tms, hms, natural moves...)
+       ;;,partymoves,   %create_menu,      %menu_drawentry      -- select 1 of 4 moves from a pokemon
+       ;;,partypkmn,    %create_menu,      %browse_drawentry, 4 -- selecting a pkmn from dex (for adding to party)
+       ;;,pselactions,  %create_menu,      %menu_drawentry      -- select an action during battle (fight, switch, forfeit)
+       ;;,pselmove,     %create_menu,      %menu_drawentry      -- select 1 of 4 moves from a pokemon (during battle) -- TODO: try merging with other move select
+    ]])
 
     game.modes.fightparty.menu   = game.modes.party.menu
 
