@@ -29,6 +29,13 @@ end $$
 
 |[browse_draw3]|       function(game) draw3_pokeinfo(get_browse_pokemon(game:cursor'browse'+1))    end $$
 |[main_draw3]|         function(game) print_draw3_message(split(game:entry'main'.desc, '|'))      end $$
-|[partypkmn_draw3]|    function(game) draw3_pokeinfo(get_browse_pokemon(game:cursor'partypkmn'+1)) end $$
+|[party_draw3]|    function(game) print_draw3_message(split"select,your,team")                 end $$
 |[pselactions_draw3]|  function(_)                                                                end $$
 |[pselmove_draw3]|     function(game)                                                             end $$
+|[fightover_draw3]|  function(game) print_draw3_message{game.p0.name, "is the", "winner"} end $$
+
+|[turn_draw3]|  function(game)
+    local message_tbl = split(game.cur_action.message)
+    if message_tbl[1] == '#' then message_tbl[1] = c_pokemon[game.cur_action.active.shared.num].name end
+    print_draw3_message(message_tbl)
+end $$

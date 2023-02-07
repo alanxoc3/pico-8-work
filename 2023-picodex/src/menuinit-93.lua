@@ -1,3 +1,5 @@
+|[fightover_init]| function(game) game.p0.winlogic() end $$
+
 |[main_init]| function(game)
     game.menu:refresh(
         zobj[[
@@ -6,7 +8,7 @@
            ;;name,"versus",  state,games,      select,%menu_state_callback, desc,"custom|2 player|battle", disabled,yes
            ;;name,"story",   state,fightparty, select,%menu_state_callback, desc,"battle|against|trainers"
            ;;name,"hoard",   state,hoard,      select,%menu_state_callback, desc,"battle all|pokemon|in order", disabled,yes
-           ;;name,"credits", state,credits,    select,%menu_state_callback, desc,"by|amorg|games"
+           ;;name,"credits", state,credits,    select,%menu_state_callback, desc,"made by|amorg|games"
         ]]
     )
 end $$
@@ -18,6 +20,7 @@ end $$
     )
 end $$
 
+-- todo: require game.pkmn to be set
 |[browsestat_init]| function(game)
     local pkmn = get_browse_pokemon(game:cursor'browse'+1)
 
@@ -88,7 +91,7 @@ end $$
         function(num)
             return {
                 select=function(_, game)
-                    save_party(game:cursor'party', set_default_party_pkmn(get_party(game:cursor'party'), game:cursor'editparty'+1, g_available_pokemon[game:cursor'partypkmn'+1]))
+                    save_party(game:cursor'party', set_default_party_pkmn(get_party(game:cursor'party'), game:cursor'editparty'+1, g_available_pokemon[game:cursor'browse'+1]))
                     game:pop()
                 end,
                 num=num
@@ -185,3 +188,16 @@ end $$
     end)
 end $$
 
+|[turn_init]| function(game)
+    -- if there is no action, assume it's a computer player.
+    for p in all{game.p1, game.p2} do
+        if #p.actions == 0 then
+            select_move(p, select_random_move_slot(p.active))
+        end
+    end
+
+    -- p0 is equal to the higher priority
+    local p1, p2 = game.p1, game.p2
+    if p1.priority == p2.priority then p2.priority += sgn(rnd'2'-1) end
+    game.p0 = p1.priority > p2.priority and p1 or p2
+end $$

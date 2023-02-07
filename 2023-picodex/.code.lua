@@ -93,7 +93,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,menu_state_callback,@,create_menu_view,@,create_menu,@,menu_refresh,@,menu_cancel,@,menu_set,@,menu_view_update,@,menu_update,@,menu_draw1,@,menu_drawentry,@,browse_drawentry,@,browse_draw2,@,editparty_draw2,@,partypkmn_draw2,@,pselactions_draw2,@,pselmove_draw2,@,partymovesel_draw2,@,main_draw2,@,editparty_draw3,@,partymovesel_draw3,@,partymoves_draw3,@,browse_draw3,@,main_draw3,@,partypkmn_draw3,@,pselactions_draw3,@,pselmove_draw3,@,main_init,@,browse_init,@,browsestat_init,@,credits_init,@,fightsel_init,@,partyaction_init,@,partypkmn_init,@,partymoves_init,@,partymovesel_init,@,pselmove_init,@,pselactions_init,@,party_init,@,editparty_init,@,modes_cursor,@,modes_entry,@,modes_push,@,modes_pop,@,game_init,@,game_update,@,game_draw,@,gamefadein_init,@,closed_init,@,closed_update,@,closed_draw,@,closing_draw,@,light_init,@,opened_draw,@,opening_draw,@,partydel,@,fightover_init,@,fightover_update,@,fightover_draw1,@,fightover_draw2,@,fightover_draw3,@,fight_select,@,party_select,@,turn_init,@,turn_update,@,turn_draw1,@,turn_draw2,@,turn_draw3,@,psel_init,@,psel_forfeit,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,game_state_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,menu_state_callback,@,create_menu_view,@,create_menu,@,menu_refresh,@,menu_cancel,@,menu_set,@,menu_view_update,@,menu_update,@,menu_draw1,@,menu_drawentry,@,browse_drawentry,@,fightover_draw1,@,editparty_draw1,@,turn_draw1,@,browse_draw2,@,editparty_draw2,@,fightover_draw2,@,pselactions_draw2,@,pselmove_draw2,@,partymovesel_draw2,@,main_draw2,@,turn_draw2,@,editparty_draw3,@,partymovesel_draw3,@,partymoves_draw3,@,browse_draw3,@,main_draw3,@,party_draw3,@,pselactions_draw3,@,pselmove_draw3,@,fightover_draw3,@,turn_draw3,@,fightover_init,@,main_init,@,browse_init,@,browsestat_init,@,credits_init,@,fightsel_init,@,partyaction_init,@,partypkmn_init,@,partymoves_init,@,partymovesel_init,@,pselmove_init,@,pselactions_init,@,party_init,@,editparty_init,@,turn_init,@,turn_update,@,fightover_update,@,browsestat_update,@,modes_default_update,@,modes_default_draw1,@,modes_cursor,@,modes_entry,@,modes_push,@,modes_pop,@,game_init,@,game_update,@,game_draw,@,gamefadein_init,@,closed_init,@,closed_update,@,closed_draw,@,closing_draw,@,opened_draw,@,opening_draw,@,beep,@,partydel,@,fight_select,@,party_select,@,psel_init,@,psel_forfeit,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,game_state_init,@]],function(a,stateName)
 a.next_state=stateName or a.next
 end,function(a,stateName)
 a.next_state,a.isnew=nil
@@ -186,11 +186,9 @@ if menu.c\menu.r>menu.v+2 then menu.v=menu.c\menu.r-2 end
 menu.v=mid(0,menu.v,(#menu-1)\menu.r)
 end,function(game)
 local menu=game.menu
-if g_bpo then game:pop()end
+if g_bpo then menu.cancel(game)end
 if g_bpu then menu.v-=1 end
 if g_bpd then menu.v+=1 end
-if g_bpl then menu.v-=1 end
-if g_bpr then menu.v+=1 end
 menu.v=mid(menu.viewmin,menu.v,#menu-3)
 end,function(game)
 local menu=game.menu
@@ -201,10 +199,8 @@ if g_bpl then menu:set"-1" end
 if g_bpr then menu:set"1" end
 if g_bpx then
 local entry=menu[menu.c+1]
-if entry.disabled then
-sfx"60"
-elseif entry.select then
-entry.select(entry,game)
+if entry.disabled then _g.beep()
+elseif entry.select then entry.select(entry,game)
 end
 end
 if g_bpo then menu.cancel(game)end
@@ -248,7 +244,16 @@ local pkmn=get_pokemon(entry.num)
 if pkmn then
 pkmn.draw(0,3,style.out,.375,.375)
 end
-end,function(game)draw2_pokeinfo(get_browse_pokemon(game:cursor"browse"+1))end,function(game)print_draw2_message("spot #"..(game:cursor"editparty"+1))end,function(game)draw2_pokeinfo(get_browse_pokemon(game:cursor"partypkmn"+1))end,function(_)end,function(game)end,function(game)
+end,function(game)print("todo",5,5,1)end,function(game)
+_g.modes_default_draw1(game)
+wobble_text("team #"..game:cursor"party"+1,20,27,1)
+end,function(game)
+local a1,a2,active=game.p1.active,game.p2.active,game.cur_action.active
+draw_hp(38,30,a1.shared.hp,a1.shared.maxhp,a1.shared.major,1,active==game.p1.active and 6 or 1)
+draw_hp(1,9,a2.shared.hp,a2.shared.maxhp,a2.shared.major,-1,active==game.p2.active and 6 or 1)
+c_pokemon[a1.shared.num].draw(10,40-10-t()%2\1,5)
+c_pokemon[a2.shared.num].draw(40-10,10+t()%2\1,5,-1)
+end,function(game)draw2_pokeinfo(get_browse_pokemon(game:cursor"browse"+1))end,function(game)print_draw2_message("spot #"..(game:cursor"editparty"+1))end,function(game)print_draw2_message"match over" end,function(_)end,function(game)end,function(game)
 local move=game:entry"partymovesel"
 print_draw2_message(move and move.ref)
 end,function()
@@ -260,6 +265,8 @@ sspr(6*8+xx,6*8,v,8,xx+3,3.5+cos((t()+i)/4))
 xx+=v
 end
 pal()
+end,function(game)
+print_draw2_message(game.cur_action.pl.name)
 end,function(game)
 local party=get_party(game:cursor"party")
 local partypkmn=party[game:cursor"editparty"+1]
@@ -280,9 +287,13 @@ if num then
 local move=c_moves[num]
 print_draw3_message{"."..c_types[move.type].name,move.pp.."/"..move.pp.." pp",move.damage.."/"..(move.accuracy*100\1).." sa"}
 end
-end,function(game)draw3_pokeinfo(get_browse_pokemon(game:cursor"browse"+1))end,function(game)print_draw3_message(split(game:entry"main".desc,"|"))end,function(game)draw3_pokeinfo(get_browse_pokemon(game:cursor"partypkmn"+1))end,function(_)end,function(game)end,function(game)
+end,function(game)draw3_pokeinfo(get_browse_pokemon(game:cursor"browse"+1))end,function(game)print_draw3_message(split(game:entry"main".desc,"|"))end,function(game)print_draw3_message(split"select,your,team")end,function(_)end,function(game)end,function(game)print_draw3_message{game.p0.name,"is the","winner"}end,function(game)
+local message_tbl=split(game.cur_action.message)
+if message_tbl[1]=="#"then message_tbl[1]=c_pokemon[game.cur_action.active.shared.num].name end
+print_draw3_message(message_tbl)
+end,function(game)game.p0.winlogic()end,function(game)
 game.menu:refresh(
-zobj[[;name,browse,state,browse,select,%menu_state_callback,desc,view|pokemon|info;;name,teams,state,party,select,%menu_state_callback,desc,edit|stored|teams;;name,versus,state,games,select,%menu_state_callback,desc,custom|2 player|battle,disabled,yes;;name,story,state,fightparty,select,%menu_state_callback,desc,battle|against|trainers;;name,hoard,state,hoard,select,%menu_state_callback,desc,battle all|pokemon|in order,disabled,yes;;name,credits,state,credits,select,%menu_state_callback,desc,by|amorg|games]]
+zobj[[;name,browse,state,browse,select,%menu_state_callback,desc,view|pokemon|info;;name,teams,state,party,select,%menu_state_callback,desc,edit|stored|teams;;name,versus,state,games,select,%menu_state_callback,desc,custom|2 player|battle,disabled,yes;;name,story,state,fightparty,select,%menu_state_callback,desc,battle|against|trainers;;name,hoard,state,hoard,select,%menu_state_callback,desc,battle all|pokemon|in order,disabled,yes;;name,credits,state,credits,select,%menu_state_callback,desc,made by|amorg|games]]
 )
 end,function(game)
 game.menu:refresh(
@@ -333,7 +344,7 @@ g_available_pokemon,
 function(num)
 return{
 select=function(_,game)
-save_party(game:cursor"party",set_default_party_pkmn(get_party(game:cursor"party"),game:cursor"editparty"+1,g_available_pokemon[game:cursor"partypkmn"+1]))
+save_party(game:cursor"party",set_default_party_pkmn(get_party(game:cursor"party"),game:cursor"editparty"+1,g_available_pokemon[game:cursor"browse"+1]))
 game:pop()
 end,
 num=num
@@ -406,7 +417,47 @@ end,
 num=party[i]and party[i].num or-2
 }
 end)
-end,function(game,menu_name)
+end,function(game)
+for p in all{game.p1,game.p2}do
+if #p.actions==0 then
+select_move(p,select_random_move_slot(p.active))
+end
+end
+local p1,p2=game.p1,game.p2
+if p1.priority==p2.priority then p2.priority+=sgn(rnd"2"-1)end
+game.p0=p1.priority>p2.priority and p1 or p2
+end,function(game)
+if g_bpx or not game.cur_action then
+for p in all{game.p1,game.p2}do
+if not get_next_active(p.party)then
+game.p0=get_other_pl(game,p)
+game:load"fightover"
+return
+end
+end
+local action=pop_next_action(game)
+if action then
+game.cur_action=action
+local actionpl=game.cur_action.active==game.p1.active and game.p1 or game.p2
+action.logic(actionpl,get_other_pl(game,actionpl),game)
+else
+game:load()
+end
+end
+if g_bpo then _g.beep()end
+end,function(game)
+if g_bpo then game:pop()end
+end,function(game)
+if g_bpl then
+game.browse.menu:set"-1"
+game:load"browsestat"
+end
+if g_bpr then
+game.browse.menu:set"1"
+game:load"browsestat"
+end
+_g.modes_default_update(game)
+end,function(game)game.menu.update(game)end,function(game)game.menu.draw1(game)end,function(game,menu_name)
 return game[menu_name].menu.c
 end,function(game,menu_name)
 return game[menu_name].menu[game[menu_name].menu.c+1]
@@ -424,10 +475,12 @@ end
 end
 game.modes=_g.modes()
 zcall(function(menu_name,create_func,...)
-printh(menu_name)
 game.modes[menu_name].menu=create_func(...)
-end,[[;,browse,%create_menu,%browse_drawentry,4;;,browsestat,%create_menu_view,%menu_drawentry;;,credits,%create_menu_view,%menu_drawentry;;,editparty,%create_menu,%browse_drawentry,3;;,fightsel,%create_menu,%menu_drawentry;;,main,%create_menu,%menu_drawentry;;,partyaction,%create_menu,%menu_drawentry;;,party,%create_menu,%menu_drawentry;;,partymovesel,%create_menu,%menu_drawentry;;,partymoves,%create_menu,%menu_drawentry;;,partypkmn,%create_menu,%browse_drawentry,4;;,pselactions,%create_menu,%menu_drawentry;;,pselmove,%create_menu,%menu_drawentry]])
+end,[[;,browse,%create_menu,%browse_drawentry,4;;,browsestat,%create_menu_view,%menu_drawentry;;,credits,%create_menu_view,%menu_drawentry;;,editparty,%create_menu,%browse_drawentry,3;;,fightsel,%create_menu,%menu_drawentry;;,main,%create_menu,%menu_drawentry;;,partyaction,%create_menu,%menu_drawentry;;,party,%create_menu,%menu_drawentry;;,partymovesel,%create_menu,%menu_drawentry;;,partymoves,%create_menu,%menu_drawentry;;,pselactions,%create_menu,%menu_drawentry;;,pselmove,%create_menu,%menu_drawentry]])
+game.modes.main.menu.cancel=_g.beep
+game.modes.pselactions.menu.cancel=_g.beep
 game.modes.fightparty.menu=game.modes.party.menu
+game.modes.partypkmn.menu=game.modes.browse.menu
 sfx(61,0)
 menuitem(1,"close picodex",function()
 menuitem(1)
@@ -469,62 +522,17 @@ draw_picodex(a:is_active"shaking",-1,nop,nop,nop,a.light,a.backbuttonheld)
 end,function(a)
 draw_picodex(a:is_active"shaking",cos(a:get_elapsed_percent"closing"/2),nop,nop,nop)
 end,function(a)
-sfx(60,0)
-end,function(a)
 draw_picodex(a:is_active"shaking",1,nop,nop,nop,a.light)
 end,function(a)
 draw_picodex(a:is_active"shaking",-cos(a:get_elapsed_percent"opening"/2),nop,nop,nop)
-end,function(entry,game)
+end,function()sfx(60,0)end,function(entry,game)
 local party=get_party(game:cursor"party")
 party[game:cursor"editparty"+1]=nil
 save_party(game:cursor"party",party)
 game:pop()
-end,function(game)game.p0.winlogic()end,function(game)
-if g_bpo or g_bpx then
-game:pop()
-end
-end,function(game)print("todo",5,5,1)end,function(game)print_draw2_message"match over" end,function(game)print_draw3_message{game.p0.name,"is the","winner"}end,function(game)
+end,function(game)
 game:push"fightsel"
 end,function(game)game:push"editparty" end,function(game)
-for p in all{game.p1,game.p2}do
-if #p.actions==0 then
-select_move(p,select_random_move_slot(p.active))
-end
-end
-local p1,p2=game.p1,game.p2
-if p1.priority==p2.priority then p2.priority+=sgn(rnd"2"-1)end
-game.p0=p1.priority>p2.priority and p1 or p2
-end,function(game)
-if g_bpx or g_bpo or not game.cur_action then
-for p in all{game.p1,game.p2}do
-if not get_next_active(p.party)then
-game.p0=get_other_pl(game,p)
-game:load"fightover"
-return
-end
-end
-local action=pop_next_action(game)
-if action then
-game.cur_action=action
-local actionpl=game.cur_action.active==game.p1.active and game.p1 or game.p2
-action.logic(actionpl,get_other_pl(game,actionpl),game)
-else
-game:load()
-end
-end
-end,function(game)
-local a1,a2,active=game.p1.active,game.p2.active,game.cur_action.active
-draw_hp(38,30,a1.shared.hp,a1.shared.maxhp,a1.shared.major,1,active==game.p1.active and 6 or 1)
-draw_hp(1,9,a2.shared.hp,a2.shared.maxhp,a2.shared.major,-1,active==game.p2.active and 6 or 1)
-c_pokemon[a1.shared.num].draw(10,40-10-t()%2\1,5)
-c_pokemon[a2.shared.num].draw(40-10,10+t()%2\1,5,-1)
-end,function(game)
-print_draw2_message(game.cur_action.pl.name)
-end,function(game)
-local message_tbl=split(game.cur_action.message)
-if message_tbl[1]=="#"then message_tbl[1]=c_pokemon[game.cur_action.active.shared.num].name end
-print_draw3_message(message_tbl)
-end,function(game)
 game.p0=game[game.p0key]
 if game.p0.iscpu or #game.p0.actions>0 then
 game:load()
@@ -593,13 +601,13 @@ rectfill(0,i*7,45,i*7+7,bg)
 zprint(txt,23,1+i*7,fg,0)
 end
 end
-c_pokemon=zobj[[0;,0,missingno,0,1,33,136,0,29,6,1,1;;,0,bulbasaur,8,5,45,49,49,45,65,1,1,7,13,20,27,34,41,48;;,1,ivysaur,8,5,60,62,63,60,80,1,1,7,13,22,30,38,46,54;;,1,venusaur,8,5,80,82,83,80,100,1,1,7,13,22,30,43,55,65;;,0,charmander,2,no,39,52,43,65,50,1,1,9,15,22,30,38,46;;,1,charmeleon,2,no,58,64,58,80,65,1,1,9,15,24,33,42,56;;,1,charizard,2,9,78,84,78,100,85,1,1,9,15,24,36,46,55;;,0,squirtle,4,no,44,48,65,43,50,1,1,8,15,22,28,35,42;;,1,wartortle,4,no,59,63,80,58,65,1,1,8,15,24,31,39,47;;,1,blastoise,4,no,79,83,100,78,85,1,1,8,15,24,31,42,52;;,0,caterpie,11,no,45,30,35,45,20,1,1;;,1,metapod,11,no,50,20,55,30,25,1;;,1,butterfree,11,9,60,45,50,70,80,1,15,16,17,21,26,28,34;;,0,weedle,11,5,40,35,30,50,20,1,1;;,1,kakuna,11,5,45,25,50,35,25,1;;,1,beedrill,11,5,65,80,40,75,45,1,16,20,25,30,35;;,0,pidgey,1,9,40,45,40,56,35,1,5,12,19,28,36,44;;,1,pidgeotto,1,9,63,60,55,71,50,1,5,12,21,31,40,49;;,1,pidgeot,1,9,83,80,75,91,70,1,5,12,21,31,44,54;;,0,rattata,1,no,30,56,35,72,25,1,1,7,14,23,34;;,1,raticate,1,no,55,81,60,97,50,1,1,7,14,27,41;;,0,spearow,1,9,40,60,30,70,31,1,1,9,15,22,29,36;;,1,fearow,1,9,65,90,65,100,61,1,1,9,15,25,34,43;;,0,ekans,5,no,35,60,44,55,40,1,1,10,17,24,31,38;;,1,arbok,5,no,60,85,69,80,65,1,1,10,17,27,36,47;;,0,pikachu,6,no,35,55,30,90,50,1,1,6,9,15,16,20,26,26,33,43,50;;,1,raichu,6,no,60,90,55,100,90,1,1,1;;,0,sandshrew,7,no,50,75,85,40,30,1,10,17,24,31,38;;,1,sandslash,7,no,75,100,110,65,55,1,10,17,27,36,47;;,0,nidoran?,5,no,55,47,52,41,40,1,1,8,17,23,30,38,43;;,1,nidorina,5,no,70,62,67,56,55,1,1,8,19,27,36,46,50;;,1,nidoqueen,5,7,90,82,87,76,75,1,1,8,12,14,23;;,0,nidoran!,5,no,46,57,40,50,40,1,1,8,17,23,30,38,43;;,1,nidorino,5,no,61,72,57,65,55,1,1,8,19,27,36,46,50;;,1,nidoking,5,7,81,92,77,85,75,1,8,12,14,23;;,0,clefairy,1,no,70,45,48,35,60,1,1,13,18,24,31,39,48;;,1,clefable,1,no,95,70,73,60,85,1,1,1,1;;,0,vulpix,2,no,38,41,40,65,65,1,1,16,21,28,35,42;;,1,ninetales,2,no,73,76,75,100,100,1,1,1,1;;,0,jigglypuff,1,no,115,45,20,20,25,1,9,14,19,24,29,34,39;;,1,wigglytuff,1,no,140,70,45,45,50,1,1,1,1;;,0,zubat,5,9,40,45,35,55,40,1,10,15,21,28,36;;,1,golbat,5,9,75,80,70,90,75,1,1,10,15,21,32,43;;,0,oddish,8,5,45,50,55,30,75,1,15,17,19,24,33,46;;,1,gloom,8,5,60,65,70,40,85,1,15,17,19,28,38,52;;,1,vileplume,8,5,75,80,85,50,100,1,1,15,17,19;;,0,paras,11,8,35,70,55,25,55,1,13,20,27,34,41;;,1,parasect,11,8,60,95,80,30,80,1,13,20,30,39,48;;,0,venonat,11,5,60,55,50,45,40,1,1,11,19,24,27,30,35,38,43;;,1,venomoth,11,5,70,65,60,90,90,1,1,1,1,24,27,30,38,43,50;;,0,diglett,7,no,10,55,25,95,45,1,15,19,24,31,40;;,1,dugtrio,7,no,35,80,50,120,70,1,15,19,24,35,47;;,0,meowth,1,no,40,45,35,90,40,1,1,12,17,24,33,44;;,1,persian,1,no,65,70,60,115,65,1,1,12,17,24,37,51;;,0,psyduck,4,no,50,52,48,55,50,1,28,31,36,43,52;;,1,golduck,4,no,80,82,78,85,80,1,28,31,39,48,59;;,0,mankey,3,no,40,80,35,70,35,1,1,9,15,21,27,33,39,45;;,1,primeape,3,no,65,105,60,95,60,1,1,9,15,21,27,28,37,45,46;;,0,growlithe,2,no,55,70,45,60,50,1,1,18,23,30,39,50;;,1,arcanine,2,no,90,110,80,95,80,1,1,1,1;;,0,poliwag,4,no,40,50,40,90,40,1,16,19,25,31,38,45;;,1,poliwhirl,4,no,65,65,65,90,50,1,16,19,26,33,41,49;;,1,poliwrath,4,3,90,85,95,70,70,1,1,16,19;;,0,abra,12,no,25,20,15,90,105,1;;,1,kadabra,12,no,40,35,30,105,120,1,1,16,20,27,31,38,42;;,1,alakazam,12,no,55,50,45,120,135,1,1,16,20,27,31,38,42;;,0,machop,3,no,70,80,50,35,35,1,20,25,32,39,46;;,1,machoke,3,no,80,100,70,45,50,1,20,25,36,44,52;;,1,machamp,3,no,90,130,80,55,65,1,20,25,36,44,52;;,0,bellsprout,8,5,50,75,35,40,70,1,1,13,15,18,21,26,33,42;;,1,weepinbell,8,5,65,90,50,55,85,1,1,13,15,18,23,29,38,49;;,1,victreebel,8,5,80,105,65,70,100,1,1,1,13,15,18;;,0,tentacool,4,5,40,40,35,70,100,1,7,13,18,22,27,33,40,48;;,1,tentacruel,4,5,80,70,65,100,120,1,7,13,18,22,27,35,43,50;;,0,geodude,13,7,40,80,100,20,30,1,11,16,21,26,31,36;;,1,graveler,13,7,55,95,115,35,45,1,11,16,21,29,36,43;;,1,golem,13,7,80,110,130,45,55,1,11,16,21,29,36,43;;,0,ponyta,2,no,50,85,55,90,65,1,30,32,35,39,43,48;;,1,rapidash,2,no,65,100,70,105,80,1,30,32,35,39,47,55;;,0,slowpoke,4,12,90,65,65,15,40,1,18,22,27,33,40,48;;,1,slowbro,4,12,95,75,110,30,80,1,18,22,27,33,37,44,55;;,0,magnemite,6,no,25,35,70,45,95,1,21,25,29,35,41,47;;,1,magneton,6,no,50,60,95,70,120,1,21,25,29,38,46,54;;,0,farfetchd,1,9,52,65,55,60,58,1,1,7,15,23,31,39;;,0,doduo,1,9,35,85,45,75,35,1,20,24,30,36,40,44;;,1,dodrio,1,9,60,110,70,100,60,1,20,24,30,39,45,51;;,0,seel,4,no,65,45,55,45,70,1,30,35,40,45,50;;,1,dewgong,4,10,90,70,80,70,95,1,30,35,44,50,56;;,0,grimer,5,no,80,80,50,25,40,1,1,30,33,37,42,48,55;;,1,muk,5,no,105,105,75,50,65,1,1,30,33,37,45,53,60;;,0,shellder,4,no,30,65,100,40,45,1,1,18,23,30,39,50;;,1,cloyster,4,10,50,95,180,70,85,1,1,1,1,50;;,0,gastly,15,5,30,35,30,80,100,1,1,1,27,35;;,1,haunter,15,5,45,50,45,95,115,1,1,1,29,38;;,1,gengar,15,5,60,65,60,110,130,1,1,1,29,38;;,0,onix,13,7,35,45,160,70,30,1,1,15,19,25,33,43;;,0,drowzee,12,no,60,48,45,42,90,1,1,12,17,24,29,32,37;;,1,hypno,12,no,85,73,70,67,115,1,1,12,17,24,33,37,43;;,0,krabby,4,no,30,105,90,50,25,1,1,20,25,30,35,40;;,1,kingler,4,no,55,130,115,75,50,1,1,20,25,34,42,49;;,0,voltorb,6,no,40,30,50,100,55,1,1,17,22,29,36,43;;,1,electrode,6,no,60,50,70,140,80,1,1,17,22,29,40,50;;,0,exeggcute,8,12,60,40,80,40,60,1,1,25,28,32,37,42,48;;,1,exeggutor,8,12,95,95,85,55,125,1,1,28;;,0,cubone,7,no,50,50,95,35,40,1,10,13,18,25,31,38,43,46;;,1,marowak,7,no,60,80,110,45,50,1,10,13,18,25,33,41,48,55;;,0,hitmonlee,3,no,50,120,53,87,35,1,1,33,38,43,48,53;;,0,hitmonchan,3,no,50,105,79,76,35,1,1,33,38,43,48,53;;,0,lickitung,1,no,90,55,75,30,60,1,1,7,15,23,31,39;;,0,koffing,5,no,40,65,95,35,60,1,1,32,37,40,45,48;;,1,weezing,5,no,65,90,120,60,85,1,1,32,39,43,49,53;;,0,rhyhorn,7,13,80,85,95,25,30,1,30,35,40,45,50,55;;,1,rhydon,7,13,105,130,120,40,45,1,30,35,40,48,55,64;;,0,chansey,1,no,250,5,5,50,105,1,1,12,24,30,38,44,48,54;;,0,tangela,8,no,65,55,115,60,100,1,24,29,29,32,36,39,45,49;;,0,kangaskhan,1,no,105,95,80,90,40,1,1,26,31,36,41,46;;,0,horsea,4,no,30,40,70,60,70,1,19,24,30,37,45;;,1,seadra,4,no,55,65,95,85,95,1,19,24,30,41,52;;,0,goldeen,4,no,45,67,60,63,50,1,1,19,24,30,37,45,54;;,1,seaking,4,no,80,92,65,68,80,1,1,19,24,30,39,48,54;;,0,staryu,4,no,30,45,55,85,70,1,17,22,27,32,37,42,47;;,1,starmie,4,12,60,75,85,115,100,1,1,1;;,0,mr mime,12,no,40,45,65,90,100,1,15,23,31,39,47;;,0,scyther,11,9,70,110,80,105,55,1,17,20,24,29,35,42,50;;,0,jynx,10,12,65,50,35,95,95,1,1,18,23,31,39,47,58;;,0,electabuzz,6,no,65,83,57,105,85,1,1,34,37,42,49,54;;,0,magmar,2,no,65,95,57,93,85,1,36,39,43,48,52,55;;,0,pinsir,11,no,65,125,100,85,55,1,21,25,30,36,43,49,54;;,0,tauros,1,no,75,100,95,110,70,1,21,28,35,44,51;;,0,magikarp,4,no,20,10,55,80,20,1,15;;,1,gyarados,4,9,95,125,79,81,100,1,20,25,32,41,52;;,0,lapras,4,10,130,85,80,60,95,1,1,16,20,25,31,38,46;;,0,ditto,1,no,48,48,48,48,48,1;;,0,eevee,1,no,55,55,50,55,65,1,8,16,27,31,36,37,45;;,1,vaporeon,4,no,130,65,60,65,110,1,8,27,31,36,37,40,44,47,48,54;;,2,jolteon,6,no,65,65,60,130,110,1,8,27,31,37,42,42,47,48,54;;,3,flareon,2,no,65,130,60,65,110,1,8,27,31,37,40,42,44,47,48,54;;,0,porygon,1,no,65,60,70,40,75,1,1,1,23,28,35,42;;,0,omanyte,13,4,35,40,100,35,90,1,1,34,39,46,53;;,1,omastar,13,4,70,60,125,55,115,1,1,34,39,44,49;;,0,kabuto,13,4,30,80,90,55,45,1,1,34,39,44,49;;,1,kabutops,13,4,60,115,105,80,70,1,1,34,39,46,53;;,0,aerodactyl,13,9,80,105,65,130,60,1,1,33,38,45,54;;,0,snorlax,1,no,160,110,65,30,65,1,1,1,35,41,48,56;;,0,articuno,10,9,90,85,100,85,125,1,1,51,55,60;;,0,zapdos,6,9,90,90,85,100,125,1,1,51,55,60;;,0,moltres,2,9,90,100,90,90,125,1,1,51,55,60;;,0,dratini,14,no,41,64,45,50,50,1,1,10,20,30,40,50;;,1,dragonair,14,no,61,84,65,70,70,1,1,10,20,35,45,55;;,1,dragonite,14,9,91,134,95,80,100,1,1,10,20,35,45,60;;,0,mewtwo,12,no,106,110,90,130,154,1,1,1,63,66,70,75,81;;,0,mew,12,no,100,100,100,100,100,1,10,20,30,40]]
+c_pokemon=zobj[[0;,0,missingno,0,1,33,136,0,29,6,1,1;;,0,bulbasaur,8,5,45,49,49,45,65,1,1,7,13,20,27,34,41,48;;,1,ivysaur,8,5,60,62,63,60,80,1,1,7,13,22,30,38,46,54;;,1,venusaur,8,5,80,82,83,80,100,1,1,7,13,22,30,43,55,65;;,0,charmander,2,no,39,52,43,65,50,1,1,9,15,22,30,38,46;;,1,charmeleon,2,no,58,64,58,80,65,1,1,9,15,24,33,42,56;;,1,charizard,2,9,78,84,78,100,85,1,1,9,15,24,36,46,55;;,0,squirtle,4,no,44,48,65,43,50,1,1,8,15,22,28,35,42;;,1,wartortle,4,no,59,63,80,58,65,1,1,8,15,24,31,39,47;;,1,blastoise,4,no,79,83,100,78,85,1,1,8,15,24,31,42,52;;,0,caterpie,11,no,45,30,35,45,20,1,1;;,1,metapod,11,no,50,20,55,30,25,1;;,1,butterfree,11,9,60,45,50,70,80,1,15,16,17,21,26,28,34;;,0,weedle,11,5,40,35,30,50,20,1,1;;,1,kakuna,11,5,45,25,50,35,25,1;;,1,beedrill,11,5,65,80,40,75,45,1,16,20,25,30,35;;,0,pidgey,1,9,40,45,40,56,35,1,5,12,19,28,36,44;;,1,pidgeotto,1,9,63,60,55,71,50,1,5,12,21,31,40,49;;,1,pidgeot,1,9,83,80,75,91,70,1,5,12,21,31,44,54;;,0,rattata,1,no,30,56,35,72,25,1,1,7,14,23,34;;,1,raticate,1,no,55,81,60,97,50,1,1,7,14,27,41;;,0,spearow,1,9,40,60,30,70,31,1,1,9,15,22,29,36;;,1,fearow,1,9,65,90,65,100,61,1,1,9,15,25,34,43;;,0,ekans,5,no,35,60,44,55,40,1,1,10,17,24,31,38;;,1,arbok,5,no,60,85,69,80,65,1,1,10,17,27,36,47;;,0,pikachu,6,no,35,55,30,90,50,1,1,6,9,15,16,20,26,26,33,43,50;;,1,raichu,6,no,60,90,55,100,90,1,1,1;;,0,sandshrew,7,no,50,75,85,40,30,1,10,17,24,31,38;;,1,sandslash,7,no,75,100,110,65,55,1,10,17,27,36,47;;,0,nidoran f,5,no,55,47,52,41,40,1,1,8,17,23,30,38,43;;,1,nidorina,5,no,70,62,67,56,55,1,1,8,19,27,36,46,50;;,1,nidoqueen,5,7,90,82,87,76,75,1,1,8,12,14,23;;,0,nidoran m,5,no,46,57,40,50,40,1,1,8,17,23,30,38,43;;,1,nidorino,5,no,61,72,57,65,55,1,1,8,19,27,36,46,50;;,1,nidoking,5,7,81,92,77,85,75,1,8,12,14,23;;,0,clefairy,1,no,70,45,48,35,60,1,1,13,18,24,31,39,48;;,1,clefable,1,no,95,70,73,60,85,1,1,1,1;;,0,vulpix,2,no,38,41,40,65,65,1,1,16,21,28,35,42;;,1,ninetales,2,no,73,76,75,100,100,1,1,1,1;;,0,jigglypuff,1,no,115,45,20,20,25,1,9,14,19,24,29,34,39;;,1,wigglytuff,1,no,140,70,45,45,50,1,1,1,1;;,0,zubat,5,9,40,45,35,55,40,1,10,15,21,28,36;;,1,golbat,5,9,75,80,70,90,75,1,1,10,15,21,32,43;;,0,oddish,8,5,45,50,55,30,75,1,15,17,19,24,33,46;;,1,gloom,8,5,60,65,70,40,85,1,15,17,19,28,38,52;;,1,vileplume,8,5,75,80,85,50,100,1,1,15,17,19;;,0,paras,11,8,35,70,55,25,55,1,13,20,27,34,41;;,1,parasect,11,8,60,95,80,30,80,1,13,20,30,39,48;;,0,venonat,11,5,60,55,50,45,40,1,1,11,19,24,27,30,35,38,43;;,1,venomoth,11,5,70,65,60,90,90,1,1,1,1,24,27,30,38,43,50;;,0,diglett,7,no,10,55,25,95,45,1,15,19,24,31,40;;,1,dugtrio,7,no,35,80,50,120,70,1,15,19,24,35,47;;,0,meowth,1,no,40,45,35,90,40,1,1,12,17,24,33,44;;,1,persian,1,no,65,70,60,115,65,1,1,12,17,24,37,51;;,0,psyduck,4,no,50,52,48,55,50,1,28,31,36,43,52;;,1,golduck,4,no,80,82,78,85,80,1,28,31,39,48,59;;,0,mankey,3,no,40,80,35,70,35,1,1,9,15,21,27,33,39,45;;,1,primeape,3,no,65,105,60,95,60,1,1,9,15,21,27,28,37,45,46;;,0,growlithe,2,no,55,70,45,60,50,1,1,18,23,30,39,50;;,1,arcanine,2,no,90,110,80,95,80,1,1,1,1;;,0,poliwag,4,no,40,50,40,90,40,1,16,19,25,31,38,45;;,1,poliwhirl,4,no,65,65,65,90,50,1,16,19,26,33,41,49;;,1,poliwrath,4,3,90,85,95,70,70,1,1,16,19;;,0,abra,12,no,25,20,15,90,105,1;;,1,kadabra,12,no,40,35,30,105,120,1,1,16,20,27,31,38,42;;,1,alakazam,12,no,55,50,45,120,135,1,1,16,20,27,31,38,42;;,0,machop,3,no,70,80,50,35,35,1,20,25,32,39,46;;,1,machoke,3,no,80,100,70,45,50,1,20,25,36,44,52;;,1,machamp,3,no,90,130,80,55,65,1,20,25,36,44,52;;,0,bellsprout,8,5,50,75,35,40,70,1,1,13,15,18,21,26,33,42;;,1,weepinbell,8,5,65,90,50,55,85,1,1,13,15,18,23,29,38,49;;,1,victreebel,8,5,80,105,65,70,100,1,1,1,13,15,18;;,0,tentacool,4,5,40,40,35,70,100,1,7,13,18,22,27,33,40,48;;,1,tentacruel,4,5,80,70,65,100,120,1,7,13,18,22,27,35,43,50;;,0,geodude,13,7,40,80,100,20,30,1,11,16,21,26,31,36;;,1,graveler,13,7,55,95,115,35,45,1,11,16,21,29,36,43;;,1,golem,13,7,80,110,130,45,55,1,11,16,21,29,36,43;;,0,ponyta,2,no,50,85,55,90,65,1,30,32,35,39,43,48;;,1,rapidash,2,no,65,100,70,105,80,1,30,32,35,39,47,55;;,0,slowpoke,4,12,90,65,65,15,40,1,18,22,27,33,40,48;;,1,slowbro,4,12,95,75,110,30,80,1,18,22,27,33,37,44,55;;,0,magnemite,6,no,25,35,70,45,95,1,21,25,29,35,41,47;;,1,magneton,6,no,50,60,95,70,120,1,21,25,29,38,46,54;;,0,farfetchd,1,9,52,65,55,60,58,1,1,7,15,23,31,39;;,0,doduo,1,9,35,85,45,75,35,1,20,24,30,36,40,44;;,1,dodrio,1,9,60,110,70,100,60,1,20,24,30,39,45,51;;,0,seel,4,no,65,45,55,45,70,1,30,35,40,45,50;;,1,dewgong,4,10,90,70,80,70,95,1,30,35,44,50,56;;,0,grimer,5,no,80,80,50,25,40,1,1,30,33,37,42,48,55;;,1,muk,5,no,105,105,75,50,65,1,1,30,33,37,45,53,60;;,0,shellder,4,no,30,65,100,40,45,1,1,18,23,30,39,50;;,1,cloyster,4,10,50,95,180,70,85,1,1,1,1,50;;,0,gastly,15,5,30,35,30,80,100,1,1,1,27,35;;,1,haunter,15,5,45,50,45,95,115,1,1,1,29,38;;,1,gengar,15,5,60,65,60,110,130,1,1,1,29,38;;,0,onix,13,7,35,45,160,70,30,1,1,15,19,25,33,43;;,0,drowzee,12,no,60,48,45,42,90,1,1,12,17,24,29,32,37;;,1,hypno,12,no,85,73,70,67,115,1,1,12,17,24,33,37,43;;,0,krabby,4,no,30,105,90,50,25,1,1,20,25,30,35,40;;,1,kingler,4,no,55,130,115,75,50,1,1,20,25,34,42,49;;,0,voltorb,6,no,40,30,50,100,55,1,1,17,22,29,36,43;;,1,electrode,6,no,60,50,70,140,80,1,1,17,22,29,40,50;;,0,exeggcute,8,12,60,40,80,40,60,1,1,25,28,32,37,42,48;;,1,exeggutor,8,12,95,95,85,55,125,1,1,28;;,0,cubone,7,no,50,50,95,35,40,1,10,13,18,25,31,38,43,46;;,1,marowak,7,no,60,80,110,45,50,1,10,13,18,25,33,41,48,55;;,0,hitmonlee,3,no,50,120,53,87,35,1,1,33,38,43,48,53;;,0,hitmonchan,3,no,50,105,79,76,35,1,1,33,38,43,48,53;;,0,lickitung,1,no,90,55,75,30,60,1,1,7,15,23,31,39;;,0,koffing,5,no,40,65,95,35,60,1,1,32,37,40,45,48;;,1,weezing,5,no,65,90,120,60,85,1,1,32,39,43,49,53;;,0,rhyhorn,7,13,80,85,95,25,30,1,30,35,40,45,50,55;;,1,rhydon,7,13,105,130,120,40,45,1,30,35,40,48,55,64;;,0,chansey,1,no,250,5,5,50,105,1,1,12,24,30,38,44,48,54;;,0,tangela,8,no,65,55,115,60,100,1,24,29,29,32,36,39,45,49;;,0,kangaskhan,1,no,105,95,80,90,40,1,1,26,31,36,41,46;;,0,horsea,4,no,30,40,70,60,70,1,19,24,30,37,45;;,1,seadra,4,no,55,65,95,85,95,1,19,24,30,41,52;;,0,goldeen,4,no,45,67,60,63,50,1,1,19,24,30,37,45,54;;,1,seaking,4,no,80,92,65,68,80,1,1,19,24,30,39,48,54;;,0,staryu,4,no,30,45,55,85,70,1,17,22,27,32,37,42,47;;,1,starmie,4,12,60,75,85,115,100,1,1,1;;,0,mr mime,12,no,40,45,65,90,100,1,15,23,31,39,47;;,0,scyther,11,9,70,110,80,105,55,1,17,20,24,29,35,42,50;;,0,jynx,10,12,65,50,35,95,95,1,1,18,23,31,39,47,58;;,0,electabuzz,6,no,65,83,57,105,85,1,1,34,37,42,49,54;;,0,magmar,2,no,65,95,57,93,85,1,36,39,43,48,52,55;;,0,pinsir,11,no,65,125,100,85,55,1,21,25,30,36,43,49,54;;,0,tauros,1,no,75,100,95,110,70,1,21,28,35,44,51;;,0,magikarp,4,no,20,10,55,80,20,1,15;;,1,gyarados,4,9,95,125,79,81,100,1,20,25,32,41,52;;,0,lapras,4,10,130,85,80,60,95,1,1,16,20,25,31,38,46;;,0,ditto,1,no,48,48,48,48,48,1;;,0,eevee,1,no,55,55,50,55,65,1,8,16,27,31,36,37,45;;,1,vaporeon,4,no,130,65,60,65,110,1,8,27,31,36,37,40,44,47,48,54;;,2,jolteon,6,no,65,65,60,130,110,1,8,27,31,37,42,42,47,48,54;;,3,flareon,2,no,65,130,60,65,110,1,8,27,31,37,40,42,44,47,48,54;;,0,porygon,1,no,65,60,70,40,75,1,1,1,23,28,35,42;;,0,omanyte,13,4,35,40,100,35,90,1,1,34,39,46,53;;,1,omastar,13,4,70,60,125,55,115,1,1,34,39,44,49;;,0,kabuto,13,4,30,80,90,55,45,1,1,34,39,44,49;;,1,kabutops,13,4,60,115,105,80,70,1,1,34,39,46,53;;,0,aerodactyl,13,9,80,105,65,130,60,1,1,33,38,45,54;;,0,snorlax,1,no,160,110,65,30,65,1,1,1,35,41,48,56;;,0,articuno,10,9,90,85,100,85,125,1,1,51,55,60;;,0,zapdos,6,9,90,90,85,100,125,1,1,51,55,60;;,0,moltres,2,9,90,100,90,90,125,1,1,51,55,60;;,0,dratini,14,no,41,64,45,50,50,1,1,10,20,30,40,50;;,1,dragonair,14,no,61,84,65,70,70,1,1,10,20,35,45,55;;,1,dragonite,14,9,91,134,95,80,100,1,1,10,20,35,45,60;;,0,mewtwo,12,no,106,110,90,130,154,1,1,1,63,66,70,75,81;;,0,mew,12,no,100,100,100,100,100,1,10,20,30,40]]
 c_types=zobj[[0;bg,0,name,bird;0;good;,;0;null;,;0;weak;,;1;bg,0,name,normal;1;good;,;1;null;,15;1;weak;,13;2;bg,5,name,fire;2;good;,8,10,11;2;null;,;2;weak;,2,4,13,14;3;bg,2,name,fighting;3;good;,10,1,13;3;null;,15;3;weak;,11,9,5,12;4;bg,4,name,water;4;good;,2,7,13;4;null;,;4;weak;,14,8,4;5;bg,1,name,poison;5;good;,11,8;5;null;,;5;weak;,15,7,5,13;6;bg,6,name,electric;6;good;,9,4;6;null;,7;6;weak;,14,6,8;7;bg,2,name,ground;7;good;,6,2,5,13;7;null;,9;7;weak;,11,8;8;bg,3,name,grass;8;good;,7,13,4;8;null;,;8;weak;,11,14,2,9,8,5;9;bg,0,name,flying;9;good;,11,3,8;9;null;,;9;weak;,6,13;10;bg,4,name,ice;10;good;,14,9,8;10;null;,;10;weak;,2,10,4;11;bg,3,name,bug;11;good;,8,12;11;null;,;11;weak;,3,2,9,15,5;12;bg,1,name,psychic;12;good;,3,5;12;null;,;12;weak;,12;13;bg,0,name,rock;13;good;,11,2,9,10;13;null;,;13;weak;,3,7;14;bg,0,name,dragon;14;good;,14;14;null;,;14;weak;,;15;bg,1,name,ghost;15;good;,15;15;null;,1,12;15;weak;,]]
 c_bg_styles=zobj[[0;bg,6,aa,13;;bg,13,aa,5;;bg,9,aa,4;;bg,11,aa,3;;bg,12,aa,5;;bg,8,aa,2;;bg,10,aa,4]]
 c_zmovetype=zobj[[0;name,status;;name,physical;;name,special;]]
 c_moves=zobj[[0;,struggle,1,0,50,1;;,megapnch,1,20,80,.85;;,razrwind,1,10,80,1;;,swordanc,1,20,0,0;;,whrlwind,1,20,0,0;;,megakick,1,5,120,.75;;,toxic,5,10,0,.9;;,horndril,1,5,0,.3;;,bodyslam,1,15,85,1;;,takedown,1,20,90,.85;;,doubledg,1,15,120,1;;,bublbeam,4,20,65,1;;,watergun,4,25,40,1;;,icebeam,10,10,90,1;;,blizzard,10,5,110,.7;;,hyprbeam,1,5,150,.9;;,payday,1,20,40,1;;,submsion,3,20,80,.8;;,counter,3,20,0,1;;,siestoss,3,20,0,1;;,rage,1,20,20,1;;,megdrain,8,15,40,1;;,solrbeam,8,10,120,1;;,drgnrage,14,10,0,1;;,thndrblt,6,15,90,1;;,thunder,6,10,110,.7;;,earthqke,7,10,100,1;;,fissure,7,5,0,.3;;,dig,7,10,80,1;;,psychic,12,10,90,1;;,teleport,12,20,0,0;;,mimic,1,10,0,0;;,doubteam,1,15,0,0;;,reflect,12,20,0,0;;,bide,1,10,0,0;;,metronom,1,10,0,0;;,selfdstr,1,5,200,1;;,eggbomb,1,10,100,.75;;,fireblst,2,5,110,.85;;,swift,1,20,60,2;;,skulbash,1,10,130,1;;,softboil,1,5,0,0;;,dreameat,12,15,100,1;;,skyattck,9,5,140,.9;;,rest,12,5,0,0;;,thndrwav,6,20,0,.9;;,psywave,12,15,0,1;;,explsion,1,5,250,1;;,rockslid,13,10,75,.9;;,triattck,1,10,80,1;;,substute,1,10,0,0;;,cut,1,30,50,.95;;,fly,9,15,90,.95;;,surf,4,15,90,1;;,strength,1,15,80,1;;,flash,1,20,0,1;;,pound,1,35,40,1;;,karatchp,3,25,50,1;;,doublslp,1,10,15,.85;;,comtpnch,1,15,18,.85;;,firepnch,2,15,75,1;;,icepnch,10,15,75,1;;,thndpnch,6,15,75,1;;,scratch,1,35,40,1;;,vicegrip,1,30,55,1;;,guilotin,1,5,0,.3;;,gust,9,35,40,1;;,wingatck,9,35,60,1;;,bind,1,20,15,.85;;,slam,1,20,80,.75;;,vinewhip,8,25,45,1;;,stomp,1,20,65,1;;,doublkck,3,30,30,1;;,jumpkck,3,10,100,.95;;,rllngkck,3,15,60,.85;;,sandatck,7,15,0,1;;,headbutt,1,15,70,1;;,hornatck,1,25,65,1;;,furyatck,1,20,15,.85;;,tackle,1,35,40,1;;,wrap,1,20,15,.9;;,thrash,1,10,120,1;;,tailwhip,1,30,0,1;;,psnsting,5,35,15,1;;,twineedl,11,20,25,1;;,pinmisil,11,20,25,.95;;,leer,1,30,0,1;;,bite,1,25,60,1;;,growl,1,40,0,1;;,roar,1,20,0,1;;,sing,1,15,0,.55;;,supersnc,1,20,0,.55;;,sonicbm,1,20,0,.9;;,disable,1,20,0,1;;,acid,5,30,40,1;;,ember,2,25,40,1;;,flamthwr,2,15,90,1;;,mist,10,30,0,0;;,hydropmp,4,5,110,.8;;,psybeam,12,20,65,1;;,aurorabm,10,20,65,1;;,peck,9,35,35,1;;,drillpck,9,20,80,1;;,lowkick,3,20,0,1;;,absorb,8,25,20,1;;,leechsed,8,10,0,.9;;,growth,1,20,0,0;;,razrleaf,8,25,55,.95;;,psnpowdr,5,35,0,.75;;,stunspor,8,30,0,.75;;,slppowdr,8,15,0,.75;;,petldanc,8,10,120,1;;,strngsht,11,40,0,.95;;,firespin,2,15,35,.85;;,thndshck,6,30,40,1;;,rockthrw,13,15,50,.9;;,cnfusion,12,25,50,1;;,hypnosis,12,20,0,.6;;,meditate,12,40,0,0;;,agility,12,30,0,0;;,quickatk,1,30,40,1;;,nghtshde,15,15,0,1;;,screech,1,40,0,.85;;,recover,1,5,0,0;;,harden,1,30,0,0;;,minimize,1,10,0,0;;,smokscrn,1,20,0,1;;,cnfusray,15,10,0,1;;,withdraw,4,40,0,0;;,dfnscurl,1,40,0,0;;,barrier,12,20,0,0;;,lghtscrn,12,30,0,0;;,haze,10,30,0,0;;,fcsenrgy,1,30,0,0;;,mirrmove,9,20,0,0;;,lick,15,30,30,1;;,smog,5,20,30,.7;;,sludge,5,20,65,1;;,boneclub,7,20,65,.85;;,waterfal,4,15,80,1;;,clamp,4,15,35,.85;;,spikcann,1,15,20,1;;,constrct,1,35,10,1;;,amnesia,12,20,0,0;;,kinesis,12,15,0,.8;;,hijmpkck,3,10,130,.9;;,glare,1,30,0,1;;,psngas,5,40,0,.9;;,barrage,1,20,15,.85;;,leechlif,11,10,80,1;;,lovekiss,1,10,0,.75;;,tranform,1,10,0,0;;,bubble,4,30,40,1;;,dizypnch,1,10,70,1;;,spore,8,15,0,1;;,splash,1,40,0,0;;,acidarmr,5,20,0,0;;,crabhamr,4,10,100,.9;;,furyswps,1,15,18,.8;;,bonerang,7,10,50,.9;;,hyprfang,1,15,80,.9;;,sharpen,1,30,0,0;;,convrson,1,30,0,0;;,suprfang,1,10,0,.9;;,slash,1,20,70,1]]
 c_menustyles=zobj[[;bg,13,fg,1,out,5;;bg,6,fg,13,out,13;;bg,1,fg,13,out,2;;bg,5,fg,13,out,2]]
-zclass[[modes,actor|cursor,%modes_cursor,entry,%modes_entry,push,%modes_push,pop,%modes_pop,update,nop,draw1,nop,draw2,nop,draw3,nop,curr,main;stack;,;defaults;menu,no,sub,0,init,nop,update,nop,post_menu_update,nop,finit,nop,draw1,nop,draw2,nop,draw3,nop;browse;init,%browse_init,update,%menu_update,draw1,%menu_draw1,draw2,%browse_draw2,draw3,%browse_draw3;browsestat;init,%browsestat_init,update,%menu_view_update,draw1,%menu_draw1,draw2,%browse_draw2,draw3,%browse_draw3;credits;init,%credits_init,update,%menu_view_update,draw1,%menu_draw1,draw2,%main_draw2,draw3,%main_draw3;editparty;init,%editparty_init,update,%menu_update,draw1,%menu_draw1,draw2,%editparty_draw2,draw3,%editparty_draw3;fightsel;init,%fightsel_init,update,%menu_update,draw1,%menu_draw1;main;init,%main_init,update,%menu_update,draw1,%menu_draw1,draw2,%main_draw2,draw3,%main_draw3;partyaction;init,%partyaction_init,update,%menu_update,draw1,%menu_draw1,draw2,%editparty_draw2,draw3,%editparty_draw3;partymovesel;init,%partymovesel_init,update,%menu_update,draw1,%menu_draw1,draw2,%partymovesel_draw2,draw3,%partymovesel_draw3;partymoves;init,%partymoves_init,update,%menu_update,draw1,%menu_draw1,draw2,%editparty_draw2,draw3,%partymoves_draw3;partypkmn;init,%partypkmn_init,update,%menu_update,draw1,%menu_draw1,draw2,%partypkmn_draw2,draw3,%partypkmn_draw3;pselactions;init,%pselactions_init,update,%menu_update,draw1,%menu_draw1,draw2,%turn_draw2,draw3,%pselactions_draw3;pselmove;init,%pselmove_init,update,%menu_update,draw1,%menu_draw1,draw2,%turn_draw2,draw3,%pselmove_draw3;party;init,%party_init,update,%menu_update,draw1,%menu_draw1,draw2,%party_draw2,draw3,%party_draw3,disable_empty_party,no,select_func,%party_select;fightparty;init,%party_init,update,%menu_update,draw1,%menu_draw1,draw2,%party_draw2,draw3,%party_draw3,disable_empty_party,yes,select_func,%fight_select;p1sel;next,p2sel,init,%psel_init,p0key,p1;p2sel;next,turn,init,%psel_init,p0key,p2;turn;next,p1sel,update,%turn_update,draw1,%turn_draw1,draw2,%turn_draw2,draw3,%turn_draw3,init,%turn_init,cur_action,no;fightover;update,%fightover_update,draw1,%fightover_draw1,draw2,%fightover_draw2,draw3,%fightover_draw3,init,%fightover_init;]]
+zclass[[modes,actor|cursor,%modes_cursor,entry,%modes_entry,push,%modes_push,pop,%modes_pop,update,nop,draw1,nop,draw2,nop,draw3,nop,curr,main;stack;,;defaults;menu,no,finit,nop,init,nop,update,%modes_default_update,draw1,%modes_default_draw1,draw2,nop,draw3,nop;browse;init,%browse_init,draw2,%browse_draw2,draw3,%browse_draw3;partypkmn;init,%partypkmn_init,draw2,%browse_draw2,draw3,%browse_draw3;browsestat;init,%browsestat_init,draw2,%browse_draw2,draw3,%browse_draw3,update,%browsestat_update;credits;init,%credits_init,draw2,%main_draw2,draw3,%main_draw3;editparty;init,%editparty_init,draw1,%editparty_draw1,draw2,%editparty_draw2,draw3,%editparty_draw3;fightsel;init,%fightsel_init;main;init,%main_init,draw2,%main_draw2,draw3,%main_draw3;partyaction;init,%partyaction_init,draw2,%editparty_draw2,draw3,%editparty_draw3;partymovesel;init,%partymovesel_init,draw2,%partymovesel_draw2,draw3,%partymovesel_draw3;partymoves;init,%partymoves_init,draw2,%editparty_draw2,draw3,%partymoves_draw3;pselactions;init,%pselactions_init,draw2,%turn_draw2,draw3,%pselactions_draw3;pselmove;init,%pselmove_init,draw2,%turn_draw2,draw3,%pselmove_draw3;party;init,%party_init,draw2,%main_draw2,draw3,%party_draw3,disable_empty_party,no,select_func,%party_select;fightparty;init,%party_init,draw2,%main_draw2,draw3,%party_draw3,disable_empty_party,yes,select_func,%fight_select;p1sel;next,p2sel,init,%psel_init,p0key,p1,update,nop,draw1,nop;p2sel;next,turn,init,%psel_init,p0key,p2,update,nop,draw1,nop;turn;next,p1sel,update,%turn_update,draw1,%turn_draw1,draw2,%turn_draw2,draw3,%turn_draw3,init,%turn_init,cur_action,no;fightover;init,%fightover_init,update,%fightover_update,draw1,%fightover_draw1,draw2,%fightover_draw2,draw3,%fightover_draw3;]]
 function any_btn()return g_bl or g_br or g_bu or g_bd or g_bx or g_bo end
 function draw_picodex(shaking,rotation,l_screen,tr_screen,br_screen,light,backbuttonheld,top_row_buttons,bot_row_buttons)
 light=light or 0
@@ -609,56 +617,27 @@ draw_left_flap(light>=4,l_screen)
 draw_right_flap(light>=4,rotation,backbuttonheld,tr_screen,br_screen,top_row_buttons,bot_row_buttons)
 end)
 end
-function smap(cx,cy,cw,ch,sx,sy,sw,sh,flipx)
-local dx,dy=cw/sw,ch/sh
-if flipx then
-cx+=cw
-dx=-dx
-end
-if(sx<0)cx-=sx*dx sx=0
-if(sy<0)cy-=sy*dy sy=0
-if(sw>128)sw=128
-if(sh>128)sh=128
-if sh<sw then
-for y=sy,sy+sh-1 do
-tline(sx,y,sx+sw-1,y,cx,cy,dx,0)
-cy+=dy
-end
-else
-for x=sx,sx+sw-1 do
-tline(x,sy,x,sy+sh-1,cx,cy,0,dy)
-cx+=dx
-end
+function picodex_map(cx,sx,sw)
+sw*=64
+for y=9,96 do
+tline(sx,y,sx+sw-1,y,cx,y/8-1.125,8/sw,0)
 end
 end
 function wobble_text(text,x,y,color)
-x-=#text*2
-local t1=""
-local t2=""
+local t1,t2="",""
 for i=1,#text do
-letter=sub(text,i,i)
-if letter=="!"then
-letter="\^:040e040e0e000000"
+local letter,switch=sub(text,i,i),i%2==0
+t1..=switch and " "or letter
+t2..=switch and letter or " "
 end
-if letter=="?"then
-letter="\^:0e0e040e04000000"
+zprint(t1,x,y,color,0)
+zprint(t2,x,y+1,color,0)
 end
-if i%2==0 then
-t1=t1.." "
-t2=t2..letter
-else
-t1=t1..letter
-t2=t2.." "
-end
-end
-print(t1,x,y,color)
-print(t2,x,y+1,color)
-end
-function zprint(str,x,y,color,align)
-str=""..str
-if align==0 then x-=#str*2
-elseif align>0 then x-=#str*4+1 end
-print(str,x,y,color)
+function zprint(text,x,y,color,align)
+text=""..text
+if align==0 then x-=#text*2
+elseif align>0 then x-=#text*4+1 end
+print(text,x,y,color)
 end
 function draw_screen(xoff,yoff,w,h,screen_func)
 clip(-%0x5f28+xoff,-%0x5f2a+yoff,w,h)
@@ -666,7 +645,7 @@ zcamera(xoff,yoff,screen_func)
 clip()
 end
 function draw_left_flap(is_on,screen_func)
-rectfill(-1+5,9+5,8*8-5,11*8-5,is_on and 13 or 5)
+rectfill(4,14,59,83,is_on and 13 or 5)
 if is_on then draw_screen(11,21,40,40,screen_func)end
 map(8,0,-1,9,8,11)
 spr(g_bl and 186 or 154,07,77)
@@ -678,7 +657,7 @@ spr(g_bx and 172 or 140,47,77)
 end
 function draw_right_flap(is_on,flap_rotation,backbuttonheld,topscreen_func,botscreen_func,top_row_buttons,bot_row_buttons)
 if flap_rotation<0 then
-smap(0,0,8,11,8*8*(1-abs(flap_rotation))-1,9,8*8*abs(flap_rotation),11*8)
+picodex_map(0,64*(1-abs(flap_rotation))-1,abs(flap_rotation))
 if flap_rotation==-1 and backbuttonheld then spr(123,3,49)end
 elseif flap_rotation>0 then
 rectfill(65+5,9+5,65+8*8*flap_rotation-5,9+11*8-5,is_on and 13 or 5)
@@ -686,7 +665,7 @@ if flap_rotation==1 and is_on then
 draw_screen(74,18,46,13,topscreen_func)
 draw_screen(74,67,46,21,botscreen_func)
 end
-smap(16,0,8,11,65,9,8*8*flap_rotation,11*8)
+picodex_map(16,65,flap_rotation)
 if flap_rotation==1 then
 if top_row_buttons then spr(100,73+(top_row_buttons\1%6)*8,41)end
 if bot_row_buttons then spr(100,73+(bot_row_buttons\1%6)*8,49)end
@@ -1025,7 +1004,7 @@ vset(x,y,v)
 end
 end
 end
-zclass[[game_state,actor|curr,fadein;init,%game_state_init;ecs_exclusions;actor,yes;defaults;sinit,nop,update,nop,draw,nop,light,0,backbuttonheld,no,modes,;logo;next,fadein,sinit,%logo_init,update,nop,draw,%logo_draw,duration,2.5;fadein;next,game,duration,0,sinit,%gamefadein_init;closed;next,opening,sinit,%closed_init,update,%closed_update,draw,%closed_draw;opening;next,starting_1,duration,.25,draw,%opening_draw;starting_1;next,starting_2,light,1,duration,.125,sinit,%light_init,draw,%opened_draw;starting_2;next,starting_3,light,2,duration,.125,sinit,%light_init,draw,%opened_draw;starting_3;next,game,light,3,duration,.125,sinit,%light_init,draw,%opened_draw;game;next,closing,light,4,sinit,%game_init,update,%game_update,draw,%game_draw;closing;next,closed,duration,.25,update,nop,draw,%closing_draw;]]
+zclass[[game_state,actor|curr,fadein;init,%game_state_init;ecs_exclusions;actor,yes;defaults;sinit,nop,update,nop,draw,nop,light,0,backbuttonheld,no,modes,;logo;next,fadein,sinit,%logo_init,update,nop,draw,%logo_draw,duration,2.5;fadein;next,game,duration,0,sinit,%gamefadein_init;closed;next,opening,sinit,%closed_init,update,%closed_update,draw,%closed_draw;opening;next,starting_1,duration,.25,draw,%opening_draw;starting_1;next,starting_2,light,1,duration,.125,sinit,%beep,draw,%opened_draw;starting_2;next,starting_3,light,2,duration,.125,sinit,%beep,draw,%opened_draw;starting_3;next,game,light,3,duration,.125,sinit,%beep,draw,%opened_draw;game;next,closing,light,4,sinit,%game_init,update,%game_update,draw,%game_draw;closing;next,closed,duration,.25,update,nop,draw,%closing_draw;]]
 function _init()
 memset(0x8000,0,0x7fff)
 poke(0x5f5c,12)

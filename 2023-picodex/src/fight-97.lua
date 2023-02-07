@@ -29,43 +29,6 @@ function select_move(pl, slot, switch)
     pl.priority = min(C_PRIORITY_SWITCH, priority_class+pl.active:getstat'speed')
 end
 
-|[turn_init]| function(game)
-    -- if there is no action, assume it's a computer player.
-    for p in all{game.p1, game.p2} do
-        if #p.actions == 0 then
-            select_move(p, select_random_move_slot(p.active))
-        end
-    end
-
-    -- p0 is equal to the higher priority
-    local p1, p2 = game.p1, game.p2
-    if p1.priority == p2.priority then p2.priority += sgn(rnd'2'-1) end
-    game.p0 = p1.priority > p2.priority and p1 or p2
-end $$
-
-|[turn_update]| function(game)
-    if g_bpx or g_bpo or not game.cur_action then
-        -- check for win condition before selecting every action
-        for p in all{game.p1, game.p2} do
-            if not get_next_active(p.party) then
-                game.p0 = get_other_pl(game, p)
-                game:load'fightover'
-                return
-            end
-        end
-
-        local action = pop_next_action(game)
-        if action then
-            game.cur_action = action
-            local actionpl = game.cur_action.active == game.p1.active and game.p1 or game.p2
-
-            action.logic(actionpl, get_other_pl(game, actionpl), game)
-        else
-            game:load() -- next turn
-        end
-    end
-end $$
-
 function get_other_pl(game, pl)
     return pl == game.p1 and game.p2 or game.p1   
 end
@@ -76,24 +39,6 @@ function draw_hp(x, y, hp, maxhp, status, align, col)
     zprint(status or "", x+3*max(align, 0), y-2-5*align, col, align)
     rectfill(x, y-1, x-align*ceil(hp/maxhp*17), y+1, col)
 end
-
-|[turn_draw1]|  function(game)
-    local a1, a2, active = game.p1.active, game.p2.active, game.cur_action.active
-    draw_hp(38, 30, a1.shared.hp, a1.shared.maxhp, a1.shared.major, 1,  active == game.p1.active and 6 or 1)
-    draw_hp(1,  9,  a2.shared.hp, a2.shared.maxhp, a2.shared.major, -1, active == game.p2.active and 6 or 1)
-    c_pokemon[a1.shared.num].draw(   10, 40-10-t()%2\1, 5)
-    c_pokemon[a2.shared.num].draw(40-10,    10+t()%2\1, 5, -1)
-end $$
-
-|[turn_draw2]|  function(game)
-    print_draw2_message(game.cur_action.pl.name)
-end $$
-
-|[turn_draw3]|  function(game)
-    local message_tbl = split(game.cur_action.message)
-    if message_tbl[1] == '#' then message_tbl[1] = c_pokemon[game.cur_action.active.shared.num].name end
-    print_draw3_message(message_tbl)
-end $$
 
 ---------------------------------------------------------------------------
 -- misc stuff

@@ -16,4 +16,5 @@ end $$
     -- must set game.p0 to the other player, so it shows they win
     game.p0 = get_other_pl(game, game.p0)
     game:load'fightover'
+    -- g_bpx = false
 end $$

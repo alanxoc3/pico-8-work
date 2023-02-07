@@ -1,21 +1,15 @@
--- these were needed, but now they aren't.
--- |[browse_draw1]|       function(game) game.menu_browse:draw1()       end $$
--- |[browsestat_draw1]|   function(game) game.menu_browse_stat:draw1()  end $$
--- |[credits_draw1]|      function(game) game.menu_credits:draw1()      end $$
--- |[fightsel_draw1]|     function(game) game.menu_fightsel:draw1()     end $$
--- |[partyaction_draw1]|  function(game) game.menu_partyaction:draw1()  end $$
--- |[party_draw1]|        function(game) game.menu_party:draw1()        end $$
--- |[partymoves_draw1]|   function(game) game.menu_partymoves:draw1()   end $$
--- |[partymovesel_draw1]| function(game) game.menu_partymovesel:draw1() end $$
--- |[partypkmn_draw1]|    function(game) game.menu_partypkmn:draw1()    end $$
--- |[pselactions_draw1]|  function(game) game.menu_pselactions:draw1()  end $$
--- |[pselmove_draw1]|     function(game) game.menu_pselmove:draw1()     end $$
+|[fightover_draw1]|  function(game) print("todo", 5, 5, 1) end $$
 
--- todo: reimplement this
--- |[editparty_draw1]| function(game)
---     game.menu_editparty:draw1()
---     wobble_text("team #"..game.menu_party.c+1, 20, 27, 1)
--- end $$
+|[editparty_draw1]| function(game)
+    _g.modes_default_draw1(game)
+    wobble_text("team #"..game:cursor'party'+1, 20, 27, 1)
+end $$
 
--- notes for battle
---c_creditlist = split"!stats,hp 999,atk 333,def 123,spc 1021,spd 121,acc 100%,eva 100%,!major,paralyze,!minor,tranform,fly,confuse,!fin"
+|[turn_draw1]|  function(game)
+    local a1, a2, active = game.p1.active, game.p2.active, game.cur_action.active
+    draw_hp(38, 30, a1.shared.hp, a1.shared.maxhp, a1.shared.major, 1,  active == game.p1.active and 6 or 1)
+    draw_hp(1,  9,  a2.shared.hp, a2.shared.maxhp, a2.shared.major, -1, active == game.p2.active and 6 or 1)
+    c_pokemon[a1.shared.num].draw(   10, 40-10-t()%2\1, 5)
+    c_pokemon[a2.shared.num].draw(40-10,    10+t()%2\1, 5, -1)
+end $$
+

@@ -1,3 +1,4 @@
+-- todo: test xbtn & ybtn token count vs not having them
 -- menu can be created or updated.
 -- when updated, cursor position remains. entries change.
 -- when created, cursor position is 0.
@@ -52,13 +53,12 @@ end $$
     menu.v = mid(0, menu.v, (#menu-1)\menu.r)
 end $$
 
+-- todo: remove bpl/bpr, they should have special logic instead (should it be overriden per thing?)
 |[menu_view_update]| function(game)
     local menu = game.menu
-    if g_bpo then game:pop() end
+    if g_bpo then menu.cancel(game) end
     if g_bpu then menu.v-=1 end
     if g_bpd then menu.v+=1 end
-    if g_bpl then menu.v-=1 end
-    if g_bpr then menu.v+=1 end
     menu.v = mid(menu.viewmin, menu.v, #menu-3)
 end $$
 
@@ -73,10 +73,8 @@ end $$
 
     if g_bpx then
         local entry = menu[menu.c+1]
-        if entry.disabled then
-            sfx'60'
-        elseif entry.select then
-            entry.select(entry, game)
+        if entry.disabled   then _g.beep()
+        elseif entry.select then entry.select(entry, game)
         end
     end
 
