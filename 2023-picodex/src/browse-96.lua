@@ -1,66 +1,9 @@
 -- todo: combine scrollable logic maybe (credits + browse stat)
 -- todo: make browse stat screen scrollable
-|[browse_update]| function(game) game.menu_browse:update(game) end $$
-|[browse_draw1]| function(game) game.menu_browse:draw1() end $$
-|[browse_draw2]| function(game) draw2_pokeinfo(get_browse_pokemon(game.menu_browse.c+1)) end $$
-|[browse_draw3]| function(game) draw3_pokeinfo(get_browse_pokemon(game.menu_browse.c+1)) end $$
-
-|[browse_init]| function(game)
-    game.menu_browse:refresh(
-        g_available_pokemon,
-        function(num) return {select=function(entry, game) game:push'browsestat' end, num=num} end
-    )
-end $$
-
-|[browsestat_init]| function(game)
-    local pkmn = get_browse_pokemon(game.menu_browse.c+1)
-
-    game.menu_browse_stat:refresh(zobj[[
-        ;key,total,   name,"tot"
-       ;;key,hp,      name,"hp"
-       ;;key,speed,   name,"spd"
-       ;;key,special, name,"spc"
-       ;;key,attack,  name,"att"
-       ;;key,defense, name,"def"
-       ;;key,level,   name,"lvl"
-    ]], function(pair)
-        return { name=pair.name.." "..pkmn[pair.key] }
-    end)
-
-    add(game.menu_browse_stat, {pkmn=g_available_pokemon[game.menu_browse.c+1]}, 1)
-    add(game.menu_browse_stat, {hidden=true}, 2)
-    add(game.menu_browse_stat, {name="stats", style=3}, 3)
-end $$
-
-|[browsestat_update]| function(game)
-    game.menu_browse_stat:update(game)
-
-    --if g_bpl then
-    --    game.menu_browse:set(-1)
-    --    _g.browsestat_init(game)
-    --end
-
-    --if g_bpr then
-    --    game.menu_browse:set(1)
-    --    _g.browsestat_init(game)
-    --end
-end $$
-
-|[browsestat_draw1]| function(game)
-    game.menu_browse_stat:draw1()
-end $$
-
-function draw2_pokeinfo(pkmn) zprint("pkmn "..format_num(pkmn.num), 46/2, 4, 1, 0) end
+function draw2_pokeinfo(pkmn) print_draw2_message("pkmn "..format_num(pkmn.num)) end
 
 function draw3_pokeinfo(pkmn)
-    rectfill(0,0,46,6,1)
-
-    zprint(pkmn.name,  23, 1,  13, 0)
-    zprint(c_types[pkmn.type1].name, 23, 8, 1, 0)
-    if pkmn.type2 then
-        rectfill(0,14,46,20,1)
-        zprint(c_types[pkmn.type2].name, 23, 15, 13, 0)
-    end
+    print_draw3_message{'.'..pkmn.name, c_types[pkmn.type1].name, pkmn.type2 and c_types[pkmn.type2].name or ''}
 end
 
 -- Draw a pokemon by number. Pokemon is centered at x & y. sw and sh can be decimals.

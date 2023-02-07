@@ -1,0 +1,13 @@
+-- these were needed, but now they are not needed.
+-- |[browsestat_update]|   function(game) game.menu_browse_stat:update(game)  end $$
+-- |[browse_update]|       function(game) game.menu_browse:update(game)       end $$
+-- |[credits_update]|      function(game) game.menu_credits:update(game)      end $$
+-- |[editparty_update]|    function(game) game.menu_editparty:update(game)    end $$
+-- |[fightsel_update]|     function(game) game.menu_fightsel:update(game)     end $$
+-- |[partyaction_update]|  function(game) game.menu_partyaction:update(game)  end $$
+-- |[partymovesel_update]| function(game) game.menu_partymovesel:update(game) end $$
+-- |[partymoves_update]|   function(game) game.menu_partymoves:update(game)   end $$
+-- |[partypkmn_update]|    function(game) game.menu_partypkmn:update(game)    end $$
+-- |[party_update]|        function(game) game.menu_party:update(game)        end $$
+-- |[pselactions_update]|  function(game) game.menu_pselactions:update(game)  end $$
+-- |[pselmove_update]|     function(game) game.menu_pselmove:update(game)     end $$

@@ -86,13 +86,13 @@ end
 end $$
 
 |[turn_draw2]|  function(game)
-    zprint(game.cur_action.pl.name, 23, 4, 1, 0)
+    print_draw2_message(game.cur_action.pl.name)
 end $$
 
 |[turn_draw3]|  function(game)
     local message_tbl = split(game.cur_action.message)
     if message_tbl[1] == '#' then message_tbl[1] = c_pokemon[game.cur_action.active.shared.num].name end
-    print_draw3_message(unpack(message_tbl))
+    print_draw3_message(message_tbl)
 end $$
 
 ---------------------------------------------------------------------------

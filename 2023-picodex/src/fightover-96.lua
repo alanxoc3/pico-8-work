@@ -7,5 +7,5 @@
 end $$
 
 |[fightover_draw1]|  function(game) print("todo", 5, 5, 1) end $$
-|[fightover_draw2]|  function(game) zprint("match over", 23, 4, 1, 0) end $$
-|[fightover_draw3]|  function(game) print_draw3_message(game.p0.name, "is the", "winner") end $$
+|[fightover_draw2]|  function(game) print_draw2_message"match over" end $$
+|[fightover_draw3]|  function(game) print_draw3_message{game.p0.name, "is the", "winner"} end $$

@@ -52,7 +52,8 @@ end $$
     menu.v = mid(0, menu.v, (#menu-1)\menu.r)
 end $$
 
-|[menu_view_update]| function(menu, game)
+|[menu_view_update]| function(game)
+    local menu = game.menu
     if g_bpo then game:pop() end
     if g_bpu then menu.v-=1 end
     if g_bpd then menu.v+=1 end
@@ -62,7 +63,8 @@ end $$
 end $$
 
 -- extra args are passed to callback, prob want to pass "game" there.
-|[menu_update]| function(menu, game)
+|[menu_update]| function(game)
+    local menu = game.menu
     menu:set'0'
     if g_bpu then menu:set(-menu.r) end
     if g_bpd then menu:set( menu.r) end
@@ -91,7 +93,8 @@ c_menustyles = zobj[[
    ;;bg,5,  fg,13,  out,2
 ]]
 
-|[menu_draw1]| function(menu)
+|[menu_draw1]| function(game)
+    local menu = game.menu
     local c, v = menu.c, menu.v
     local y = -10
     local cellw = menu.r > 1 and 10 or 40
