@@ -93,7 +93,7 @@ end
 function zobj(...)
 return zobj_set({},...)
 end
-_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,menu_state_callback,@,create_menu_view,@,create_menu,@,menu_refresh,@,menu_cancel,@,menu_set,@,menu_view_update,@,menu_update,@,menu_draw1,@,menu_drawentry,@,browse_drawentry,@,fightover_draw1,@,editparty_draw1,@,turn_draw1,@,browse_draw2,@,editparty_draw2,@,fightover_draw2,@,pselactions_draw2,@,pselmove_draw2,@,partymovesel_draw2,@,main_draw2,@,turn_draw2,@,editparty_draw3,@,partymovesel_draw3,@,partymoves_draw3,@,browse_draw3,@,main_draw3,@,party_draw3,@,pselactions_draw3,@,pselmove_draw3,@,fightover_draw3,@,turn_draw3,@,fightover_init,@,main_init,@,browse_init,@,browsestat_init,@,credits_init,@,fightsel_init,@,partyaction_init,@,partypkmn_init,@,partymoves_init,@,partymovesel_init,@,pselmove_init,@,pselactions_init,@,party_init,@,editparty_init,@,turn_init,@,turn_update,@,fightover_update,@,browsestat_update,@,modes_default_update,@,modes_default_draw1,@,modes_cursor,@,modes_entry,@,modes_push,@,modes_pop,@,game_init,@,game_update,@,game_draw,@,gamefadein_init,@,closed_init,@,closed_update,@,closed_draw,@,closing_draw,@,opened_draw,@,opening_draw,@,beep,@,partydel,@,fight_select,@,party_select,@,psel_init,@,psel_forfeit,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,game_state_init,@]],function(a,stateName)
+_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,menu_state_callback,@,create_menu_view,@,create_menu,@,menu_refresh,@,menu_cancel,@,menu_set,@,menu_view_update,@,menu_update,@,menu_draw1,@,menu_drawentry,@,browse_drawentry,@,fightover_draw1,@,editparty_draw1,@,turn_draw1,@,browse_draw2,@,editparty_draw2,@,fightover_draw2,@,pselactions_draw2,@,pselmove_draw2,@,partymovesel_draw2,@,main_draw2,@,turn_draw2,@,editparty_draw3,@,partymovesel_draw3,@,partymoves_draw3,@,browse_draw3,@,main_draw3,@,party_draw3,@,pselactions_draw3,@,pselmove_draw3,@,fightover_draw3,@,turn_draw3,@,fightover_init,@,main_init,@,browse_init,@,browsestat_init,@,partystat_init,@,credits_init,@,fightsel_init,@,partyaction_init,@,partypkmn_init,@,partymoves_init,@,partymovesel_init,@,pselmove_init,@,pselactions_init,@,party_init,@,editparty_init,@,turn_init,@,turn_update,@,fightover_update,@,browsestat_update,@,partystat_update,@,modes_default_update,@,modes_default_draw1,@,modes_cursor,@,modes_entry,@,modes_push,@,modes_pop,@,game_init,@,game_update,@,game_draw,@,gamefadein_init,@,closed_init,@,closed_update,@,closed_draw,@,closing_draw,@,opened_draw,@,opening_draw,@,beep,@,partydel,@,fight_select,@,party_select,@,psel_init,@,psel_forfeit,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@,game_state_init,@]],function(a,stateName)
 a.next_state=stateName or a.next
 end,function(a,stateName)
 a.next_state,a.isnew=nil
@@ -301,13 +301,11 @@ g_available_pokemon,
 function(num)return{select=function(entry,game)game:push"browsestat" end,num=num}end
 )
 end,function(game)
-local pkmn=get_browse_pokemon(game:cursor"browse"+1)
-game.menu:refresh(zobj[[;key,total,name,tot;;key,hp,name,hp;;key,speed,name,spd;;key,special,name,spc;;key,attack,name,att;;key,defense,name,def;;key,level,name,lvl]],function(pair)
-return{name=pair.name.." "..pkmn[pair.key]}
-end)
-add(game.menu,{pkmn=g_available_pokemon[game:cursor"browse"+1]},1)
-add(game.menu,{hidden=true},2)
-add(game.menu,{name="stats",style=3},3)
+update_stat_menu(game.menu,get_browse_pokemon(game:cursor"browse"+1))
+end,function(game)
+local party=get_party(game:cursor"party")
+local partypkmn=party[game:cursor"editparty"+1]
+update_stat_menu(game.menu,c_pokemon[partypkmn.num])
 end,function(game)
 game.menu:refresh(
 split"65,,!scores,pkmn ,hoard ,106,,!alanxoc3,code,design,6,,!gr8cadet,graphics,sound,129,,!wadlo,magikarp,gyarados,123,,!snippets,zep px9,mot smap,137,,!pkmndata,blbpedia,pokeapi,serebii,smogon,upokcntr,volvox,nintendo",
@@ -337,7 +335,7 @@ end,desc="i|like|bugs"
 }
 })
 end,function(game)
-game.menu:refresh(zobj[[;name,info,state,nop,select,%menu_state_callback,disabled,yes;;name,moves,state,partymoves,select,%menu_state_callback;;name,delete,select,%partydel]])
+game.menu:refresh(zobj[[;name,info,state,partystat,select,%menu_state_callback,;;name,moves,state,partymoves,select,%menu_state_callback;;name,delete,select,%partydel]])
 end,function(game)
 game.menu:refresh(
 g_available_pokemon,
@@ -407,7 +405,6 @@ local party=get_party(game:cursor"party")
 game.menu:refresh(zobj[[,1,2,3,4,5,6]],function(i)
 return{
 select=function(entry,game)
-local party=get_party(game:cursor"party")
 if party[game:cursor"editparty"+1]then
 game:push"partyaction"
 else
@@ -450,11 +447,33 @@ if g_bpo then game:pop()end
 end,function(game)
 if g_bpl then
 game.browse.menu:set"-1"
-game:load"browsestat"
+_g.browsestat_init(game)
 end
 if g_bpr then
 game.browse.menu:set"1"
-game:load"browsestat"
+_g.browsestat_init(game)
+end
+_g.modes_default_update(game)
+end,function(game)
+if g_bpl then
+local party=get_party(game:cursor"party")
+for i=game.editparty.menu.c-1,0,-1 do
+if party[i+1]then
+game.editparty.menu.c=i
+break
+end
+end
+_g.partystat_init(game)
+end
+if g_bpr then
+local party=get_party(game:cursor"party")
+for i=game.editparty.menu.c+1,5,1 do
+if party[i+1]then
+game.editparty.menu.c=i
+break
+end
+end
+_g.partystat_init(game)
 end
 _g.modes_default_update(game)
 end,function(game)game.menu.update(game)end,function(game)game.menu.draw1(game)end,function(game,menu_name)
@@ -476,7 +495,7 @@ end
 game.modes=_g.modes()
 zcall(function(menu_name,create_func,...)
 game.modes[menu_name].menu=create_func(...)
-end,[[;,browse,%create_menu,%browse_drawentry,4;;,browsestat,%create_menu_view,%menu_drawentry;;,credits,%create_menu_view,%menu_drawentry;;,editparty,%create_menu,%browse_drawentry,3;;,fightsel,%create_menu,%menu_drawentry;;,main,%create_menu,%menu_drawentry;;,partyaction,%create_menu,%menu_drawentry;;,party,%create_menu,%menu_drawentry;;,partymovesel,%create_menu,%menu_drawentry;;,partymoves,%create_menu,%menu_drawentry;;,pselactions,%create_menu,%menu_drawentry;;,pselmove,%create_menu,%menu_drawentry]])
+end,[[;,browse,%create_menu,%browse_drawentry,4;;,browsestat,%create_menu_view,%menu_drawentry;;,partystat,%create_menu_view,%menu_drawentry;;,credits,%create_menu_view,%menu_drawentry;;,editparty,%create_menu,%browse_drawentry,3;;,fightsel,%create_menu,%menu_drawentry;;,main,%create_menu,%menu_drawentry;;,partyaction,%create_menu,%menu_drawentry;;,party,%create_menu,%menu_drawentry;;,partymovesel,%create_menu,%menu_drawentry;;,partymoves,%create_menu,%menu_drawentry;;,pselactions,%create_menu,%menu_drawentry;;,pselmove,%create_menu,%menu_drawentry]])
 game.modes.main.menu.cancel=_g.beep
 game.modes.pselactions.menu.cancel=_g.beep
 game.modes.fightparty.menu=game.modes.party.menu
@@ -607,7 +626,7 @@ c_bg_styles=zobj[[0;bg,6,aa,13;;bg,13,aa,5;;bg,9,aa,4;;bg,11,aa,3;;bg,12,aa,5;;b
 c_zmovetype=zobj[[0;name,status;;name,physical;;name,special;]]
 c_moves=zobj[[0;,struggle,1,0,50,1;;,megapnch,1,20,80,.85;;,razrwind,1,10,80,1;;,swordanc,1,20,0,0;;,whrlwind,1,20,0,0;;,megakick,1,5,120,.75;;,toxic,5,10,0,.9;;,horndril,1,5,0,.3;;,bodyslam,1,15,85,1;;,takedown,1,20,90,.85;;,doubledg,1,15,120,1;;,bublbeam,4,20,65,1;;,watergun,4,25,40,1;;,icebeam,10,10,90,1;;,blizzard,10,5,110,.7;;,hyprbeam,1,5,150,.9;;,payday,1,20,40,1;;,submsion,3,20,80,.8;;,counter,3,20,0,1;;,siestoss,3,20,0,1;;,rage,1,20,20,1;;,megdrain,8,15,40,1;;,solrbeam,8,10,120,1;;,drgnrage,14,10,0,1;;,thndrblt,6,15,90,1;;,thunder,6,10,110,.7;;,earthqke,7,10,100,1;;,fissure,7,5,0,.3;;,dig,7,10,80,1;;,psychic,12,10,90,1;;,teleport,12,20,0,0;;,mimic,1,10,0,0;;,doubteam,1,15,0,0;;,reflect,12,20,0,0;;,bide,1,10,0,0;;,metronom,1,10,0,0;;,selfdstr,1,5,200,1;;,eggbomb,1,10,100,.75;;,fireblst,2,5,110,.85;;,swift,1,20,60,2;;,skulbash,1,10,130,1;;,softboil,1,5,0,0;;,dreameat,12,15,100,1;;,skyattck,9,5,140,.9;;,rest,12,5,0,0;;,thndrwav,6,20,0,.9;;,psywave,12,15,0,1;;,explsion,1,5,250,1;;,rockslid,13,10,75,.9;;,triattck,1,10,80,1;;,substute,1,10,0,0;;,cut,1,30,50,.95;;,fly,9,15,90,.95;;,surf,4,15,90,1;;,strength,1,15,80,1;;,flash,1,20,0,1;;,pound,1,35,40,1;;,karatchp,3,25,50,1;;,doublslp,1,10,15,.85;;,comtpnch,1,15,18,.85;;,firepnch,2,15,75,1;;,icepnch,10,15,75,1;;,thndpnch,6,15,75,1;;,scratch,1,35,40,1;;,vicegrip,1,30,55,1;;,guilotin,1,5,0,.3;;,gust,9,35,40,1;;,wingatck,9,35,60,1;;,bind,1,20,15,.85;;,slam,1,20,80,.75;;,vinewhip,8,25,45,1;;,stomp,1,20,65,1;;,doublkck,3,30,30,1;;,jumpkck,3,10,100,.95;;,rllngkck,3,15,60,.85;;,sandatck,7,15,0,1;;,headbutt,1,15,70,1;;,hornatck,1,25,65,1;;,furyatck,1,20,15,.85;;,tackle,1,35,40,1;;,wrap,1,20,15,.9;;,thrash,1,10,120,1;;,tailwhip,1,30,0,1;;,psnsting,5,35,15,1;;,twineedl,11,20,25,1;;,pinmisil,11,20,25,.95;;,leer,1,30,0,1;;,bite,1,25,60,1;;,growl,1,40,0,1;;,roar,1,20,0,1;;,sing,1,15,0,.55;;,supersnc,1,20,0,.55;;,sonicbm,1,20,0,.9;;,disable,1,20,0,1;;,acid,5,30,40,1;;,ember,2,25,40,1;;,flamthwr,2,15,90,1;;,mist,10,30,0,0;;,hydropmp,4,5,110,.8;;,psybeam,12,20,65,1;;,aurorabm,10,20,65,1;;,peck,9,35,35,1;;,drillpck,9,20,80,1;;,lowkick,3,20,0,1;;,absorb,8,25,20,1;;,leechsed,8,10,0,.9;;,growth,1,20,0,0;;,razrleaf,8,25,55,.95;;,psnpowdr,5,35,0,.75;;,stunspor,8,30,0,.75;;,slppowdr,8,15,0,.75;;,petldanc,8,10,120,1;;,strngsht,11,40,0,.95;;,firespin,2,15,35,.85;;,thndshck,6,30,40,1;;,rockthrw,13,15,50,.9;;,cnfusion,12,25,50,1;;,hypnosis,12,20,0,.6;;,meditate,12,40,0,0;;,agility,12,30,0,0;;,quickatk,1,30,40,1;;,nghtshde,15,15,0,1;;,screech,1,40,0,.85;;,recover,1,5,0,0;;,harden,1,30,0,0;;,minimize,1,10,0,0;;,smokscrn,1,20,0,1;;,cnfusray,15,10,0,1;;,withdraw,4,40,0,0;;,dfnscurl,1,40,0,0;;,barrier,12,20,0,0;;,lghtscrn,12,30,0,0;;,haze,10,30,0,0;;,fcsenrgy,1,30,0,0;;,mirrmove,9,20,0,0;;,lick,15,30,30,1;;,smog,5,20,30,.7;;,sludge,5,20,65,1;;,boneclub,7,20,65,.85;;,waterfal,4,15,80,1;;,clamp,4,15,35,.85;;,spikcann,1,15,20,1;;,constrct,1,35,10,1;;,amnesia,12,20,0,0;;,kinesis,12,15,0,.8;;,hijmpkck,3,10,130,.9;;,glare,1,30,0,1;;,psngas,5,40,0,.9;;,barrage,1,20,15,.85;;,leechlif,11,10,80,1;;,lovekiss,1,10,0,.75;;,tranform,1,10,0,0;;,bubble,4,30,40,1;;,dizypnch,1,10,70,1;;,spore,8,15,0,1;;,splash,1,40,0,0;;,acidarmr,5,20,0,0;;,crabhamr,4,10,100,.9;;,furyswps,1,15,18,.8;;,bonerang,7,10,50,.9;;,hyprfang,1,15,80,.9;;,sharpen,1,30,0,0;;,convrson,1,30,0,0;;,suprfang,1,10,0,.9;;,slash,1,20,70,1]]
 c_menustyles=zobj[[;bg,13,fg,1,out,5;;bg,6,fg,13,out,13;;bg,1,fg,13,out,2;;bg,5,fg,13,out,2]]
-zclass[[modes,actor|cursor,%modes_cursor,entry,%modes_entry,push,%modes_push,pop,%modes_pop,update,nop,draw1,nop,draw2,nop,draw3,nop,curr,main;stack;,;defaults;menu,no,finit,nop,init,nop,update,%modes_default_update,draw1,%modes_default_draw1,draw2,nop,draw3,nop;browse;init,%browse_init,draw2,%browse_draw2,draw3,%browse_draw3;partypkmn;init,%partypkmn_init,draw2,%browse_draw2,draw3,%browse_draw3;browsestat;init,%browsestat_init,draw2,%browse_draw2,draw3,%browse_draw3,update,%browsestat_update;credits;init,%credits_init,draw2,%main_draw2,draw3,%main_draw3;editparty;init,%editparty_init,draw1,%editparty_draw1,draw2,%editparty_draw2,draw3,%editparty_draw3;fightsel;init,%fightsel_init;main;init,%main_init,draw2,%main_draw2,draw3,%main_draw3;partyaction;init,%partyaction_init,draw2,%editparty_draw2,draw3,%editparty_draw3;partymovesel;init,%partymovesel_init,draw2,%partymovesel_draw2,draw3,%partymovesel_draw3;partymoves;init,%partymoves_init,draw2,%editparty_draw2,draw3,%partymoves_draw3;pselactions;init,%pselactions_init,draw2,%turn_draw2,draw3,%pselactions_draw3;pselmove;init,%pselmove_init,draw2,%turn_draw2,draw3,%pselmove_draw3;party;init,%party_init,draw2,%main_draw2,draw3,%party_draw3,disable_empty_party,no,select_func,%party_select;fightparty;init,%party_init,draw2,%main_draw2,draw3,%party_draw3,disable_empty_party,yes,select_func,%fight_select;p1sel;next,p2sel,init,%psel_init,p0key,p1,update,nop,draw1,nop;p2sel;next,turn,init,%psel_init,p0key,p2,update,nop,draw1,nop;turn;next,p1sel,update,%turn_update,draw1,%turn_draw1,draw2,%turn_draw2,draw3,%turn_draw3,init,%turn_init,cur_action,no;fightover;init,%fightover_init,update,%fightover_update,draw1,%fightover_draw1,draw2,%fightover_draw2,draw3,%fightover_draw3;]]
+zclass[[modes,actor|cursor,%modes_cursor,entry,%modes_entry,push,%modes_push,pop,%modes_pop,update,nop,draw1,nop,draw2,nop,draw3,nop,curr,main;stack;,;defaults;menu,no,finit,nop,init,nop,update,%modes_default_update,draw1,%modes_default_draw1,draw2,nop,draw3,nop;browse;init,%browse_init,draw2,%browse_draw2,draw3,%browse_draw3;partypkmn;init,%partypkmn_init,draw2,%browse_draw2,draw3,%browse_draw3;browsestat;init,%browsestat_init,draw2,%browse_draw2,draw3,%browse_draw3,update,%browsestat_update;partystat;init,%partystat_init,draw2,%editparty_draw2,draw3,%editparty_draw3,update,%partystat_update;credits;init,%credits_init,draw2,%main_draw2,draw3,%main_draw3;editparty;init,%editparty_init,draw2,%editparty_draw2,draw3,%editparty_draw3,draw1,%editparty_draw1;fightsel;init,%fightsel_init;main;init,%main_init,draw2,%main_draw2,draw3,%main_draw3;partyaction;init,%partyaction_init,draw2,%editparty_draw2,draw3,%editparty_draw3;partymovesel;init,%partymovesel_init,draw2,%partymovesel_draw2,draw3,%partymovesel_draw3;partymoves;init,%partymoves_init,draw2,%editparty_draw2,draw3,%partymoves_draw3;pselactions;init,%pselactions_init,draw2,%turn_draw2,draw3,%pselactions_draw3;pselmove;init,%pselmove_init,draw2,%turn_draw2,draw3,%pselmove_draw3;party;init,%party_init,draw2,%main_draw2,draw3,%party_draw3,disable_empty_party,no,select_func,%party_select;fightparty;init,%party_init,draw2,%main_draw2,draw3,%party_draw3,disable_empty_party,yes,select_func,%fight_select;p1sel;next,p2sel,init,%psel_init,p0key,p1,update,nop,draw1,nop;p2sel;next,turn,init,%psel_init,p0key,p2,update,nop,draw1,nop;turn;next,p1sel,update,%turn_update,draw1,%turn_draw1,draw2,%turn_draw2,draw3,%turn_draw3,init,%turn_init,cur_action,no;fightover;init,%fightover_init,update,%fightover_update,draw1,%fightover_draw1,draw2,%fightover_draw2,draw3,%fightover_draw3;]]
 function any_btn()return g_bl or g_br or g_bu or g_bd or g_bx or g_bo end
 function draw_picodex(shaking,rotation,l_screen,tr_screen,br_screen,light,backbuttonheld,top_row_buttons,bot_row_buttons)
 light=light or 0
@@ -723,6 +742,14 @@ return c_pokemon[num]
 end
 function get_browse_pokemon(num)
 return c_pokemon[g_available_pokemon[num]]or{draw=nop}
+end
+function update_stat_menu(menu,pkmn)
+menu:refresh(zobj[[;key,total,name,tot;;key,hp,name,hp;;key,speed,name,spd;;key,special,name,spc;;key,attack,name,att;;key,defense,name,def;;key,level,name,lvl]],function(pair)
+return{name=pair.name.." "..pkmn[pair.key]}
+end)
+add(menu,{pkmn=pkmn.num},1)
+add(menu,{hidden=true},2)
+add(menu,{name="stats",style=3},3)
 end
 function set_default_party_pkmn(party,ind,num)
 party[ind]={num=num,moves=c_pokemon[num].get_natural_moveset(100)}

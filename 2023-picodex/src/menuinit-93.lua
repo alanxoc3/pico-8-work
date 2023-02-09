@@ -20,25 +20,14 @@ end $$
     )
 end $$
 
--- todo: require game.pkmn to be set
 |[browsestat_init]| function(game)
-    local pkmn = get_browse_pokemon(game:cursor'browse'+1)
+    update_stat_menu(game.menu, get_browse_pokemon(game:cursor'browse'+1))
+end $$
 
-    game.menu:refresh(zobj[[
-        ;key,total,   name,"tot"
-       ;;key,hp,      name,"hp"
-       ;;key,speed,   name,"spd"
-       ;;key,special, name,"spc"
-       ;;key,attack,  name,"att"
-       ;;key,defense, name,"def"
-       ;;key,level,   name,"lvl"
-    ]], function(pair)
-        return { name=pair.name.." "..pkmn[pair.key] }
-    end)
-
-    add(game.menu, {pkmn=g_available_pokemon[game:cursor'browse'+1]}, 1)
-    add(game.menu, {hidden=true}, 2)
-    add(game.menu, {name="stats", style=3}, 3)
+|[partystat_init]| function(game)
+    local party = get_party(game:cursor'party')
+    local partypkmn = party[game:cursor'editparty'+1]
+    update_stat_menu(game.menu, c_pokemon[partypkmn.num])
 end $$
 
 |[credits_init]| function(game)
@@ -77,11 +66,11 @@ end $$
     })
 end $$
 
-|[partyaction_init]|   function(game)
+|[partyaction_init]| function(game)
     game.menu:refresh(zobj[[
-        ; name,"info",   state,nop,        select,%menu_state_callback, disabled,yes -- use browse pokemon selector
-       ;; name,"moves",  state,partymoves, select,%menu_state_callback -- use the menu system
-       ;; name,"delete",                   select,%partydel            -- use the edit party screen
+        ; name,"info",   state,partystat,  select,%menu_state_callback, -- use browse pokemon selector
+       ;; name,"moves",  state,partymoves, select,%menu_state_callback  -- use the menu system
+       ;; name,"delete",                   select,%partydel             -- use the edit party screen
     ]])
 end $$
 
@@ -176,7 +165,6 @@ end $$
     game.menu:refresh(zobj[[,1,2,3,4,5,6]], function(i)
         return {
             select=function(entry, game)
-                local party = get_party(game:cursor'party')
                 if party[game:cursor'editparty'+1] then
                     game:push'partyaction'
                 else

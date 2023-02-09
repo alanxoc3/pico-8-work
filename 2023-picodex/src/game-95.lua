@@ -1,3 +1,6 @@
+-- todo: try splitting minifier on underscore
+-- todo: rename "party" to "team" for consistency
+
 zclass[[modes,actor|
     cursor,%modes_cursor, -- gets the cursor for a menu
     entry,%modes_entry,   -- gets the entry the cursor is on
@@ -17,9 +20,10 @@ zclass[[modes,actor|
     -- menu states
     browse;       init,%browse_init,       draw2,%browse_draw2,    draw3,%browse_draw3;
     partypkmn;    init,%partypkmn_init,    draw2,%browse_draw2,    draw3,%browse_draw3;
-    browsestat;   init,%browsestat_init,   draw2,%browse_draw2,    draw3,%browse_draw3, update,%browsestat_update;
+    browsestat;   init,%browsestat_init,   draw2,%browse_draw2,    draw3,%browse_draw3,    update,%browsestat_update; -- view pkmn info in browse
+    partystat;    init,%partystat_init,    draw2,%editparty_draw2, draw3,%editparty_draw3, update,%partystat_update;  -- view pkmn info in teams
     credits;      init,%credits_init,      draw2,%main_draw2,      draw3,%main_draw3;
-    editparty;    init,%editparty_init,    draw1,%editparty_draw1, draw2,%editparty_draw2, draw3,%editparty_draw3    ;
+    editparty;    init,%editparty_init,    draw2,%editparty_draw2, draw3,%editparty_draw3, draw1,%editparty_draw1;
     fightsel;     init,%fightsel_init;
     main;         init,%main_init,         draw2,%main_draw2,         draw3,%main_draw3         ;
     partyaction;  init,%partyaction_init,  draw2,%editparty_draw2,    draw3,%editparty_draw3    ;
@@ -78,7 +82,8 @@ end $$
         game.modes[menu_name].menu = create_func(...)
     end, [[
         ;,browse,       %create_menu,      %browse_drawentry, 4 -- selecting a pkmn from dex (for browsing or changing team pkmn)
-       ;;,browsestat,   %create_menu_view, %menu_drawentry      
+       ;;,browsestat,   %create_menu_view, %menu_drawentry      -- info for pkmn in browse mode
+       ;;,partystat,    %create_menu_view, %menu_drawentry      -- info for pkmn in party mode
        ;;,credits,      %create_menu_view, %menu_drawentry      
        ;;,editparty,    %create_menu,      %browse_drawentry, 3 -- selecting a pkmn from party
        ;;,fightsel,     %create_menu,      %menu_drawentry      -- select a computer to play against
@@ -93,7 +98,8 @@ end $$
 
     game.modes.main.menu.cancel        = _g.beep -- only 2 menus you can't pop from.
     game.modes.pselactions.menu.cancel = _g.beep
-    game.modes.fightparty.menu   = game.modes.party.menu
+
+    game.modes.fightparty.menu   = game.modes.party.menu  -- these menus share the cursor position
     game.modes.partypkmn.menu    = game.modes.browse.menu
 
     sfx(61,0)

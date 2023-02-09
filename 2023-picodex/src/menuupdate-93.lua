@@ -32,12 +32,44 @@ end $$
 |[browsestat_update]| function(game)
     if g_bpl then
         game.browse.menu:set'-1'
-        game:load'browsestat'
+        _g.browsestat_init(game)
     end
 
     if g_bpr then
         game.browse.menu:set'1'
-        game:load'browsestat'
+        _g.browsestat_init(game)
+    end
+
+    _g.modes_default_update(game)
+end $$
+
+-- todo: maybe incorporate with "next pokemon" function
+-- todo: add xbtn/ybtn
+|[partystat_update]| function(game)
+    if g_bpl then
+        local party = get_party(game:cursor'party')
+
+        for i=game.editparty.menu.c-1,0,-1 do
+            if party[i+1] then
+                game.editparty.menu.c = i
+                break
+            end
+        end
+        
+        _g.partystat_init(game)
+    end
+
+    if g_bpr then
+        local party = get_party(game:cursor'party')
+
+        for i=game.editparty.menu.c+1,5,1 do
+            if party[i+1] then
+                game.editparty.menu.c = i
+                break
+            end
+        end
+        
+        _g.partystat_init(game)
     end
 
     _g.modes_default_update(game)

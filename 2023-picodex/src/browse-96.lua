@@ -59,3 +59,22 @@ end
 function get_browse_pokemon(num)
     return c_pokemon[g_available_pokemon[num]] or {draw=nop}
 end
+
+-- this is for populating the pokemon info menu (sometimes called browsestat in code)
+function update_stat_menu(menu, pkmn)
+    menu:refresh(zobj[[
+        ;key,total,   name,"tot"
+       ;;key,hp,      name,"hp"
+       ;;key,speed,   name,"spd"
+       ;;key,special, name,"spc"
+       ;;key,attack,  name,"att"
+       ;;key,defense, name,"def"
+       ;;key,level,   name,"lvl"
+    ]], function(pair)
+        return { name=pair.name.." "..pkmn[pair.key] }
+    end)
+
+    add(menu, {pkmn=pkmn.num}, 1)
+    add(menu, {hidden=true}, 2)
+    add(menu, {name="stats", style=3}, 3)
+end
