@@ -1,5 +1,6 @@
 |[browse_draw2]|      function(game) draw2_pokeinfo(get_browse_pokemon(game:cursor'browse'+1))    end $$
 |[editparty_draw2]|   function(game) print_draw2_message("spot #"..(game:cursor'editparty'+1))    end $$
+|[partymoves_draw2]|  function(game) print_draw2_message("move #"..(game:cursor'partymoves'+1))    end $$
 |[fightover_draw2]|   function(game) print_draw2_message"match over" end $$
 |[pselactions_draw2]| function(_)                                                                end $$
 |[pselmove_draw2]|    function(game)                                                             end $$

@@ -28,11 +28,11 @@ zclass[[modes,actor|
     main;         init,%main_init,         draw2,%main_draw2,         draw3,%main_draw3         ;
     partyaction;  init,%partyaction_init,  draw2,%editparty_draw2,    draw3,%editparty_draw3    ;
     partymovesel; init,%partymovesel_init, draw2,%partymovesel_draw2, draw3,%partymovesel_draw3 ;
-    partymoves;   init,%partymoves_init,   draw2,%editparty_draw2,    draw3,%partymoves_draw3   ;
+    partymoves;   init,%partymoves_init,   draw2,%partymoves_draw2,   draw3,%partymoves_draw3   ;
     pselactions;  init,%pselactions_init,  draw2,%turn_draw2,         draw3,%pselactions_draw3  ;
     pselmove;     init,%pselmove_init,     draw2,%turn_draw2,         draw3,%pselmove_draw3     ;
-    party;        init,%party_init,        draw2,%main_draw2,        draw3,%party_draw3, disable_empty_party,no,  select_func,%party_select;
-    fightparty;   init,%party_init,        draw2,%main_draw2,        draw3,%party_draw3, disable_empty_party,yes, select_func,%fight_select;
+    party;        init,%party_init,        draw2,%main_draw2,         draw3,%party_draw3, disable_empty_party,no,  select_func,%party_select;
+    fightparty;   init,%party_init,        draw2,%main_draw2,         draw3,%party_draw3, disable_empty_party,yes, select_func,%fight_select;
 
     -- non-menu states
     -- these are the different states for a fight

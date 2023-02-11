@@ -63,13 +63,14 @@ end
 -- this is for populating the pokemon info menu (sometimes called browsestat in code)
 function update_stat_menu(menu, pkmn)
     menu:refresh(zobj[[
-        ;key,total,   name,"tot"
-       ;;key,hp,      name,"hp"
+        ;key,hp,      name,"hp"
        ;;key,speed,   name,"spd"
        ;;key,special, name,"spc"
        ;;key,attack,  name,"att"
        ;;key,defense, name,"def"
-       ;;key,level,   name,"lvl"
+       --;;key,accuracy,name,"acc"
+       --;;key,evasion, name,"eva"
+       --;;key,level,   name,"lvl"
     ]], function(pair)
         return { name=pair.name.." "..pkmn[pair.key] }
     end)

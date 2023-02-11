@@ -24,6 +24,8 @@ end $$
     if num then
         local move = c_moves[num]
         print_draw3_message{'.'..c_types[move.type].name, move.pp..'/'..move.pp.." pp", move.damage..'/'..(move.accuracy*100\1).." sa"}
+    else
+        print_draw3_message{"select", "your", "move"}
     end
 end $$
 

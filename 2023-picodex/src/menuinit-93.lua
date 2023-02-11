@@ -5,7 +5,7 @@
         zobj[[
             ;name,"browse",  state,browse,     select,%menu_state_callback, desc,"view|pokemon|info"
            ;;name,"teams",   state,party,      select,%menu_state_callback, desc,"edit|stored|teams"
-           ;;name,"versus",  state,games,      select,%menu_state_callback, desc,"custom|2 player|battle", disabled,yes
+           ;;name,"fight",   state,games,      select,%menu_state_callback, desc,"custom|2 player|battle", disabled,yes
            ;;name,"story",   state,fightparty, select,%menu_state_callback, desc,"battle|against|trainers"
            ;;name,"hoard",   state,hoard,      select,%menu_state_callback, desc,"battle all|pokemon|in order", disabled,yes
            ;;name,"credits", state,credits,    select,%menu_state_callback, desc,"made by|amorg|games"
@@ -72,6 +72,8 @@ end $$
        ;; name,"moves",  state,partymoves, select,%menu_state_callback  -- use the menu system
        ;; name,"delete",                   select,%partydel             -- use the edit party screen
     ]])
+
+    game.partymovesel.menu.c = 0
 end $$
 
 |[partypkmn_init]| function(game)

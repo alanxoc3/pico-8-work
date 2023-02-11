@@ -33,11 +33,8 @@ function get_other_pl(game, pl)
     return pl == game.p1 and game.p2 or game.p1   
 end
 
-function draw_hp(x, y, hp, maxhp, status, align, col)
-    hp = max(ceil(hp), 0)
-    zprint(hp,           x+3*max(align, 0), y-2+5*align, col, align)
-    zprint(status or "", x+3*max(align, 0), y-2-5*align, col, align)
-    rectfill(x, y-1, x-align*ceil(hp/maxhp*17), y+1, col)
+function draw_hp(x, y, hp, maxhp, align, col)
+    rectfill(x, y-2, x-align*max(ceil(hp/maxhp*40), 0), y+2, col)
 end
 
 ---------------------------------------------------------------------------

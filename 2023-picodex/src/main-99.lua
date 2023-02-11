@@ -183,7 +183,6 @@ function normalize_pokemon_data()
             name        = pkmn[2],
             type1       = pkmn[3],
             type2       = pkmn[4],
-            level       = 50,
             hp          = calc_max_hp(50,   pkmn[5] or 0),
             attack      = calc_max_stat(50, pkmn[6] or 0),
             defense     = calc_max_stat(50, pkmn[7] or 0),
@@ -208,7 +207,6 @@ function normalize_pokemon_data()
             num        = i,
         }
 
-        newpkmn.total = newpkmn.level + newpkmn.attack + newpkmn.defense + newpkmn.speed + newpkmn.special + newpkmn.hp
         if newpkmn.evolvesfrom then
             c_pokemon[newpkmn.evolvesfrom].evolvesto = i
         end

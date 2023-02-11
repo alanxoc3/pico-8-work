@@ -121,7 +121,7 @@ function draw_right_flap(is_on, flap_rotation, backbuttonheld, topscreen_func, b
         picodex_map(16, 65, flap_rotation)
         if flap_rotation == 1 then
             if top_row_buttons then spr(100, 73+(top_row_buttons\1%6)*8,  41) end
-            if bot_row_buttons then spr(100, 73+(bot_row_buttons\1%6)*8,  49) end
+            if bot_row_buttons and bot_row_buttons > 0 then spr(100, 73+(bot_row_buttons\1-1)%6*8,  49) end
         end
     end
 end
