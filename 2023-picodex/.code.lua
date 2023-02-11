@@ -397,6 +397,7 @@ end
 end)
 end,function(game)
 game.menu:refresh(zobj[[;name,fight,desc,select|a|move,select,%menu_state_callback,state,pselmove;;name,switch,desc,change|active|pokemon,select,%menu_state_callback,state,pselswitch,disabled,yes;;name,forfeit,desc,leave|the|fight,select,%psel_forfeit]])
+game.menu.c=0
 end,function(game)
 game.menu:refresh(zobj[[,1,2,3]],function(i)
 local party=get_party(i-1)
@@ -499,7 +500,7 @@ a:load(a.stack[#a.stack]or "main")
 end,function(game)
 for i=1,151 do
 if c_pokemon[i].evolvesto and not c_pokemon[i].evolvesfrom then
-poke(0x5e5a+i,1)
+make_pkmn_available(i)
 end
 end
 game.modes=_g.modes()
@@ -775,23 +776,23 @@ end
 partypkmn.moves[moveind]=move
 return party
 end
-c_party_memlocs=zobj[[0,0x5e00,1,0x5e1e,2,0x5e3c]]
+c_party_memlocs=zobj[[0,0x5e00,1,0x5e24,2,0x5e48]]
 function get_party(party_index)
 local mem=c_party_memlocs[party_index]
 local party={}
 for i=1,6 do
-local memstart=mem+(i-1)*5
+local memstart=mem+(i-1)*6
 local moves={}
 local has_moves=false
 for i=1,4 do
-local move=peek(memstart+i)
+local move=@(memstart+i+1)
 if move>0 then
 moves[i]=move
 has_moves=true
 end
 end
 if has_moves then
-party[i]={num=peek(memstart),moves=moves}
+party[i]={lvl=@(memstart+1),num=@memstart,moves=moves}
 end
 end
 return party
@@ -1054,6 +1055,8 @@ normalize_pokemon_data()
 memcpy(0x0000,0xc000,0x2000)
 g_tl=_g.game_state()
 end
+function is_pkmn_available(num)return(@(0x5e6c+num\8)>>>(num%8)& 1)~=0 end
+function make_pkmn_available(num)poke((0x5e6c+num\8),@(0x5e6c+num\8)|(1<<(num%8)))end
 function _update60()
 g_bl=btn"0" g_br=btn"1"
 g_bu=btn"2" g_bd=btn"3"
@@ -1063,7 +1066,7 @@ g_bpu=btnp"2" g_bpd=btnp"3"
 g_bpo=btnp"4" g_bpx=btnp"5"
 g_available_pokemon={}
 for i=0,151 do
-if@(0x5e5a+i)~=0 then
+if is_pkmn_available(i)then
 add(g_available_pokemon,i)
 end
 end

@@ -44,27 +44,24 @@ C_MINOR_SEEDED:     20
 C_MINOR_TOXICED:    21
 C_MINOR_TRANSFORM:  22
 
-# party structure (30 bytes)
+# party structure (36 bytes)
 # if all the moves are 0 (struggle), the pokemon is not in the party
-#   5 | pokemon (1 num, 1 move, 1 move, 1 move, 1 move)
-#   5 | pokemon (1 num, 1 move, 1 move, 1 move, 1 move)
-#   5 | pokemon (1 num, 1 move, 1 move, 1 move, 1 move)
-#   5 | pokemon (1 num, 1 move, 1 move, 1 move, 1 move)
-#   5 | pokemon (1 num, 1 move, 1 move, 1 move, 1 move)
-#   5 | pokemon (1 num, 1 move, 1 move, 1 move, 1 move)
+#   6 | pokemon (1 num, 1 lvl, 1 move, 1 move, 1 move, 1 move)
+#   6 | pokemon (1 num, 1 lvl, 1 move, 1 move, 1 move, 1 move)
+#   6 | pokemon (1 num, 1 lvl, 1 move, 1 move, 1 move, 1 move)
+#   6 | pokemon (1 num, 1 lvl, 1 move, 1 move, 1 move, 1 move)
+#   6 | pokemon (1 num, 1 lvl, 1 move, 1 move, 1 move, 1 move)
+#   6 | pokemon (1 num, 1 lvl, 1 move, 1 move, 1 move, 1 move)
 
 # Save data
 S_PARTY1:         0x5e00
-S_PARTY2:         0x5e1e
-S_PARTY3:         0x5e3c
-# ends at:        0x5e5a
+S_PARTY2:         0x5e24
+S_PARTY3:         0x5e48
+# ends at:        0x5e6c
 
-# which pokemon are unlocked
-S_POKEMON:        0x5e5a
-# 152 pkmn ends:  0x5ef2
-
-# "CURSOR" save spots must have 2 bytes!!!
-# Level is the level pokemon are in battles.
+# which pokemon are unlocked. this is 8 pokemon per byte.
+S_POKEMON:        0x5e6c
+# 152 pkmn (19b): 0x5e7f
 
 # hoard hs goes here
 S_SWAP_CONTROLS:      0x5eff

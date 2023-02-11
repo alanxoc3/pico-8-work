@@ -12,11 +12,11 @@ function get_party(party_index) -- 0 to 2
     local party = {}
 
     for i=1,6 do
-        local memstart = mem+(i-1)*5
+        local memstart = mem+(i-1)*6
         local moves = {}
         local has_moves = false
         for i=1,4 do
-            local move = peek(memstart+i)
+            local move = @(memstart+i+1)
             if move > 0 then
                 moves[i] = move
                 has_moves = true
@@ -24,7 +24,7 @@ function get_party(party_index) -- 0 to 2
         end
 
         if has_moves then
-            party[i] = { num=peek(memstart), moves=moves }
+            party[i] = { lvl=@(memstart+1), num=@memstart, moves=moves }
         end
     end
 

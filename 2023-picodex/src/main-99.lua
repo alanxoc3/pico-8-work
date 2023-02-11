@@ -61,6 +61,9 @@ function _init()
     g_tl = _g.game_state()
 end
 
+function is_pkmn_available(num) return (@(S_POKEMON+num\8) >>> (num%8) & 1) ~= 0 end
+function make_pkmn_available(num) poke( (S_POKEMON+num\8), @(S_POKEMON+num\8)|(1<<(num%8)) ) end
+
 function _update60()
     g_bl  = btn'0'  g_br  = btn'1'
     g_bu  = btn'2'  g_bd  = btn'3'
@@ -71,7 +74,7 @@ function _update60()
 
     g_available_pokemon = {}
     for i=0,151 do
-        if @(S_POKEMON+i) ~= 0 then
+        if is_pkmn_available(i) then
             add(g_available_pokemon, i)
         end
     end

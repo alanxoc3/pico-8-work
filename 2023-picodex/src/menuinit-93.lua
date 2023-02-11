@@ -143,6 +143,7 @@ end $$
         ;; name,"switch",  desc,"change|active|pokemon", select,%menu_state_callback, state,pselswitch, disabled,yes
         ;; name,"forfeit", desc,"leave|the|fight",       select,%psel_forfeit
     ]])
+    game.menu.c = 0 -- set to zero, so default to fight. this seems sensible
 end $$
 
 |[party_init]| function(game)
