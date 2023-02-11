@@ -24,7 +24,7 @@ function get_party(party_index) -- 0 to 2
         end
 
         if has_moves then
-            party[i] = { lvl=@(memstart+1), num=@memstart, moves=moves }
+            party[i] = { level=@(memstart+1), num=@memstart, moves=moves }
         end
     end
 
@@ -33,18 +33,18 @@ end
 
 function save_party(party_index, party) -- 0 to 2
     local mem = c_party_memlocs[party_index]
-    memset(mem,0,30)
+    memset(mem,0,36)
 
     -- clear party and we'll replace it with the logic below
 
     for i=1,6 do
-        local memstart = mem+(i-1)*5
-        local pkmn = party[i]
+        local memstart, pkmn = mem+(i-1)*6, party[i]
         if pkmn then
             poke(memstart, pkmn.num)
+            poke(memstart+1, pkmn.level)
 
             for i=1,4 do
-                poke(memstart+i, pkmn.moves[i])
+                poke(memstart+i+1, pkmn.moves[i])
             end
         end
     end
