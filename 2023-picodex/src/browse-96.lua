@@ -78,9 +78,9 @@ function update_stat_menu(menu, pkmn)
        ;;key,attack,  name,"att"
        ;;key,defense, name,"def"
        ;;key,speed,   name,"spd"
+       ;;key,level,   name,"lvl"
        ;;key,accuracy,name,"acc"
        ;;key,evasion, name,"eva"
-       ;;key,level,   name,"lvl"
     ]], function(pair)
         if pkmn[pair.key] then
             add(menu, { name=pair.name.." "..pkmn[pair.key] })

@@ -71,7 +71,7 @@ end $$
     -- unlock all 1st evolutions (pkmn has more evolutions, but this is the first one)
     for i=1,151 do
         if c_pokemon[i].evolvesto and not c_pokemon[i].evolvesfrom then
-            make_pkmn_available(i)
+            poke(S_POKEMON+i, 1)
         end
     end
 

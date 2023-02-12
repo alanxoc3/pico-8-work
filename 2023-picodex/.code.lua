@@ -500,7 +500,7 @@ a:load(a.stack[#a.stack]or "main")
 end,function(game)
 for i=1,151 do
 if c_pokemon[i].evolvesto and not c_pokemon[i].evolvesfrom then
-make_pkmn_available(i)
+poke(0x5e5a+i,1)
 end
 end
 game.modes=_g.modes()
@@ -760,7 +760,7 @@ add(menu,{pkmn=pkmn.num})
 add(menu,{hidden=true})
 add(menu,{name="stats",style=3})
 add(menu,{name=pkmn.hp.."/"..pkmn.maxhp})
-foreach(zobj[[;key,special,name,spc;;key,attack,name,att;;key,defense,name,def;;key,speed,name,spd;;key,accuracy,name,acc;;key,evasion,name,eva;;key,level,name,lvl]],function(pair)
+foreach(zobj[[;key,special,name,spc;;key,attack,name,att;;key,defense,name,def;;key,speed,name,spd;;key,level,name,lvl;;key,accuracy,name,acc;;key,evasion,name,eva]],function(pair)
 if pkmn[pair.key]then
 add(menu,{name=pair.name.." "..pkmn[pair.key]})
 end
@@ -780,37 +780,37 @@ end
 partypkmn.moves[moveind]=move
 return party
 end
-c_party_memlocs=zobj[[0,0x5e00,1,0x5e24,2,0x5e48]]
+c_party_memlocs=zobj[[0,0x5e00,1,0x5e1e,2,0x5e3c]]
 function get_party(party_index)
 local mem=c_party_memlocs[party_index]
 local party={}
 for i=1,6 do
-local memstart=mem+(i-1)*6
+local memstart=mem+(i-1)*5
 local moves={}
 local has_moves=false
 for i=1,4 do
-local move=@(memstart+i+1)
+local move=peek(memstart+i)
 if move>0 then
 moves[i]=move
 has_moves=true
 end
 end
 if has_moves then
-party[i]={level=@(memstart+1),num=@memstart,moves=moves}
+party[i]={num=peek(memstart),moves=moves}
 end
 end
 return party
 end
 function save_party(party_index,party)
 local mem=c_party_memlocs[party_index]
-memset(mem,0,36)
+memset(mem,0,30)
 for i=1,6 do
-local memstart,pkmn=mem+(i-1)*6,party[i]
+local memstart=mem+(i-1)*5
+local pkmn=party[i]
 if pkmn then
 poke(memstart,pkmn.num)
-poke(memstart+1,pkmn.level)
 for i=1,4 do
-poke(memstart+i+1,pkmn.moves[i])
+poke(memstart+i,pkmn.moves[i])
 end
 end
 end
@@ -1059,18 +1059,11 @@ normalize_pokemon_data()
 memcpy(0x0000,0xc000,0x2000)
 g_tl=_g.game_state()
 end
-function is_pkmn_available(num)return(@(0x5e6c+num\8)>>>(num%8)& 1)~=0 end
-function make_pkmn_available(num)poke((0x5e6c+num\8),@(0x5e6c+num\8)|(1<<(num%8)))end
 function _update60()
-g_bl=btn"0" g_br=btn"1"
-g_bu=btn"2" g_bd=btn"3"
-g_bo=btn"4" g_bx=btn"5"
-g_bpl=btnp"0" g_bpr=btnp"1"
-g_bpu=btnp"2" g_bpd=btnp"3"
-g_bpo=btnp"4" g_bpx=btnp"5"
+g_bl,g_br,g_bu,g_bd,g_bo,g_bx,g_bpl,g_bpr,g_bpu,g_bpd,g_bpo,g_bpx=btn"0",btn"1",btn"2",btn"3",btn"4",btn"5",btnp"0",btnp"1",btnp"2",btnp"3",btnp"4",btnp"5"
 g_available_pokemon={}
 for i=0,151 do
-if is_pkmn_available(i)then
+if@(0x5e5a+i)>0 then
 add(g_available_pokemon,i)
 end
 end
