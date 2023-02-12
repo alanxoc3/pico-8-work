@@ -41,6 +41,7 @@ function get_fight_party(party, lvl)
         if cur then
             local pkmn = c_pokemon[cur.num]
             fightparty[i] = {
+                -- todo, try just copying all keys from pkmn
                 -- things that won't change
                 num     = cur.num,
                 lvl     = pkmn.level,

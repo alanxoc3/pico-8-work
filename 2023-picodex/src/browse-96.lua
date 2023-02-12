@@ -62,20 +62,28 @@ end
 
 -- this is for populating the pokemon info menu (sometimes called browsestat in code)
 function update_stat_menu(menu, pkmn)
-    menu:refresh(zobj[[
-        ;key,hp,      name,"hp"
-       ;;key,speed,   name,"spd"
-       ;;key,special, name,"spc"
+       -- ;,"basestat,hp,spd,spc,att,def"
+       --;;,"stats,hp,spd,spc,att,def,acc,eva,lvl"
+       --;;,"flags,burn,paralyze,poison,sleep,freeze,confuse"
+       --;;,"flamethwr,pp,kj
+
+    menu:refresh{}
+    add(menu, {pkmn=pkmn.num})
+    add(menu, {hidden=true})
+    add(menu, {name="stats", style=3})
+    add(menu, {name=pkmn.hp..'/'..pkmn.maxhp})
+
+    foreach(zobj[[
+        ;key,special, name,"spc"
        ;;key,attack,  name,"att"
        ;;key,defense, name,"def"
-       --;;key,accuracy,name,"acc"
-       --;;key,evasion, name,"eva"
-       --;;key,level,   name,"lvl"
+       ;;key,speed,   name,"spd"
+       ;;key,accuracy,name,"acc"
+       ;;key,evasion, name,"eva"
+       ;;key,level,   name,"lvl"
     ]], function(pair)
-        return { name=pair.name.." "..pkmn[pair.key] }
+        if pkmn[pair.key] then
+            add(menu, { name=pair.name.." "..pkmn[pair.key] })
+        end
     end)
-
-    add(menu, {pkmn=pkmn.num}, 1)
-    add(menu, {hidden=true}, 2)
-    add(menu, {name="stats", style=3}, 3)
 end

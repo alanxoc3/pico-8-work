@@ -120,8 +120,7 @@ function parse_numlist(str)
 end
 
 -- thanks to bulbapedia: https://bulbapedia.bulbagarden.net/wiki/Stat#Stat
-function calc_max_stat(lvl, base) return ceil(lvl*.01*(base*2+93)) + 5 end
-function calc_max_hp(lvl, base)   return calc_max_stat(lvl, base) + 5 + lvl end
+function calc_max_stat(base) return ceil(C_LEVEL*.01*(base*2+93)) + 5 end
 
 -- 255 is dashes. 0 is next pkmn. num is move index.
 function normalize_pokemon_data()
@@ -174,25 +173,29 @@ function normalize_pokemon_data()
     -- -2 is for larger empty pkmn
     -- -1 is for smaller empty pkmn
     -- yes, i know it's a weird solution, but i don't care
-    for i=-2,151 do
+    for i=0,151 do
         local pkmn = c_pokemon[i] or {}
         local movelvls = {}
         for i=10,#pkmn do
             add(movelvls, pkmn[i])
         end
 
+        -- todo: token crunch on this table
         local newpkmn = {
-            evolvesfrom = (pkmn[1] or 0) > 0 and i-pkmn[1] or nil,
-            name        = pkmn[2],
-            type1       = pkmn[3],
-            type2       = pkmn[4],
-            hp          = calc_max_hp(50,   pkmn[5] or 0),
-            attack      = calc_max_stat(50, pkmn[6] or 0),
-            defense     = calc_max_stat(50, pkmn[7] or 0),
-            speed       = calc_max_stat(50, pkmn[8] or 0),
-            special     = calc_max_stat(50, pkmn[9] or 0),
-            movelvls    = movelvls,
-            moves       = {},
+            evolvesfrom  = (pkmn[1] or 0) > 0 and i-pkmn[1] or nil,
+            name         = pkmn[2],
+            type1        = pkmn[3],
+            type2        = pkmn[4],
+
+            base_hp      = pkmn[5],
+            base_attack  = pkmn[6],
+            base_defense = pkmn[7],
+            base_speed   = pkmn[8],
+            base_special = pkmn[9],
+
+            level        = C_LEVEL,
+            movelvls     = movelvls,
+            moves        = {},
 
             -- get moves that the pokemon would have naturally learned at a level
             -- TODO: maybe moves should be formatted like the menu thing...
@@ -209,6 +212,13 @@ function normalize_pokemon_data()
             draw       = function(...) draw_pkmn_out(i, ...) end,
             num        = i,
         }
+
+        newpkmn.maxhp   = calc_max_stat(newpkmn.base_hp) + 5 + C_LEVEL -- slightly different formula for hp
+        newpkmn.attack  = calc_max_stat(newpkmn.base_attack)
+        newpkmn.defense = calc_max_stat(newpkmn.base_defense)
+        newpkmn.speed   = calc_max_stat(newpkmn.base_speed)
+        newpkmn.special = calc_max_stat(newpkmn.base_special)
+        newpkmn.hp      = newpkmn.maxhp
 
         if newpkmn.evolvesfrom then
             c_pokemon[newpkmn.evolvesfrom].evolvesto = i

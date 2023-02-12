@@ -286,13 +286,13 @@ end,function(game)
 local num=game:entry"partymovesel".num
 if num then
 local move=c_moves[num]
-print_draw3_message{"."..c_types[move.type].name,move.pp.."/"..move.pp.." pp",move.damage.."/"..(move.accuracy*100\1).." sa"}
+print_draw3_message{"."..c_types[move.type].name,move.pp.."/"..move.pp,move.damage.."P "..(move.accuracy*100\1).."A"}
 end
 end,function(game)
 local num=game:entry"partymoves".num
 if num then
 local move=c_moves[num]
-print_draw3_message{"."..c_types[move.type].name,move.pp.."/"..move.pp.." pp",move.damage.."/"..(move.accuracy*100\1).." sa"}
+print_draw3_message{"."..c_types[move.type].name,move.pp.."/"..move.pp,move.damage.."P "..(move.accuracy*100\1).."A"}
 else
 print_draw3_message{"select","your","move"}
 end
@@ -755,12 +755,16 @@ function get_browse_pokemon(num)
 return c_pokemon[g_available_pokemon[num]]or{draw=nop}
 end
 function update_stat_menu(menu,pkmn)
-menu:refresh(zobj[[;key,hp,name,hp;;key,speed,name,spd;;key,special,name,spc;;key,attack,name,att;;key,defense,name,def]],function(pair)
-return{name=pair.name.." "..pkmn[pair.key]}
+menu:refresh{}
+add(menu,{pkmn=pkmn.num})
+add(menu,{hidden=true})
+add(menu,{name="stats",style=3})
+add(menu,{name=pkmn.hp.."/"..pkmn.maxhp})
+foreach(zobj[[;key,special,name,spc;;key,attack,name,att;;key,defense,name,def;;key,speed,name,spd;;key,accuracy,name,acc;;key,evasion,name,eva;;key,level,name,lvl]],function(pair)
+if pkmn[pair.key]then
+add(menu,{name=pair.name.." "..pkmn[pair.key]})
+end
 end)
-add(menu,{pkmn=pkmn.num},1)
-add(menu,{hidden=true},2)
-add(menu,{name="stats",style=3},3)
 end
 function set_default_party_pkmn(party,ind,num)
 party[ind]={num=num,moves=c_pokemon[num].get_natural_moveset(100)}
@@ -1092,8 +1096,7 @@ end
 end
 return tbl
 end
-function calc_max_stat(lvl,base)return ceil(lvl*.01*(base*2+93))+5 end
-function calc_max_hp(lvl,base)return calc_max_stat(lvl,base)+5+lvl end
+function calc_max_stat(base)return ceil(50*.01*(base*2+93))+5 end
 function normalize_pokemon_data()
 g_all_pokemon_moves={}
 for i=0,#c_moves do
@@ -1128,7 +1131,7 @@ end
 movemem+=1
 g_all_pokemon_moves[i]=moves
 end
-for i=-2,151 do
+for i=0,151 do
 local pkmn=c_pokemon[i]or{}
 local movelvls={}
 for i=10,#pkmn do
@@ -1139,11 +1142,12 @@ evolvesfrom=(pkmn[1]or 0)>0 and i-pkmn[1]or nil,
 name=pkmn[2],
 type1=pkmn[3],
 type2=pkmn[4],
-hp=calc_max_hp(50,pkmn[5]or 0),
-attack=calc_max_stat(50,pkmn[6]or 0),
-defense=calc_max_stat(50,pkmn[7]or 0),
-speed=calc_max_stat(50,pkmn[8]or 0),
-special=calc_max_stat(50,pkmn[9]or 0),
+base_hp=pkmn[5],
+base_attack=pkmn[6],
+base_defense=pkmn[7],
+base_speed=pkmn[8],
+base_special=pkmn[9],
+level=50,
 movelvls=movelvls,
 moves={},
 get_natural_moveset=function(level)
@@ -1158,6 +1162,12 @@ end,
 draw=function(...)draw_pkmn_out(i,...)end,
 num=i,
 }
+newpkmn.maxhp=calc_max_stat(newpkmn.base_hp)+5+50
+newpkmn.attack=calc_max_stat(newpkmn.base_attack)
+newpkmn.defense=calc_max_stat(newpkmn.base_defense)
+newpkmn.speed=calc_max_stat(newpkmn.base_speed)
+newpkmn.special=calc_max_stat(newpkmn.base_special)
+newpkmn.hp=newpkmn.maxhp
 if newpkmn.evolvesfrom then
 c_pokemon[newpkmn.evolvesfrom].evolvesto=i
 end

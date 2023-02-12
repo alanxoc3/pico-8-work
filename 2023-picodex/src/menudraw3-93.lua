@@ -14,7 +14,7 @@ end $$
     local num = game:entry'partymovesel'.num
     if num then
         local move = c_moves[num]
-        print_draw3_message{'.'..c_types[move.type].name, move.pp..'/'..move.pp.." pp", move.damage..'/'..(move.accuracy*100\1).." sa"}
+        print_draw3_message{'.'..c_types[move.type].name, move.pp..'/'..move.pp, move.damage.."P "..(move.accuracy*100\1).."A"}
     end
 end $$
 
@@ -23,7 +23,7 @@ end $$
     local num = game:entry'partymoves'.num
     if num then
         local move = c_moves[num]
-        print_draw3_message{'.'..c_types[move.type].name, move.pp..'/'..move.pp.." pp", move.damage..'/'..(move.accuracy*100\1).." sa"}
+        print_draw3_message{'.'..c_types[move.type].name, move.pp..'/'..move.pp, move.damage.."P "..(move.accuracy*100\1).."A"}
     else
         print_draw3_message{"select", "your", "move"}
     end
