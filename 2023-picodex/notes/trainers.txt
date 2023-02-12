@@ -311,8 +311,6 @@ beauty
 biker        L28-koffing     L28-weezing     L28-grimer    L29-muk        L29-voltorb
 birdkeeper   L30-pidgeotto   L30-fearow      L28-doduo     L28-dodrio     L33-farfetch'd
 blackbelt    L31-primeape    L37-hitmonlee   L37-hitmonchan
-bugcatcher   L20-caterpie    L20-weedle      L20-venonat   L19-beedrill   L10-metapod   L11-kakuna
-burglar
 channeler
 cooltrainerm
 cooltrainerf
@@ -321,42 +319,103 @@ engineer
 fisherman
 gambler
 gentleman
-hiker
 juggler
-juniorm
 juniorf
-lass
 pokemaniac
+burglar
 psychic
 rocker
-rocket
 sailor
 scientist
-supernerd
 swimmer
 tamer
-youngster
-brock
+rocket
+
+
+    channeler ghastly
+    rocket
+    rocker
+    birdkeeper
+    safarizonepkmn chansey cubone doduo dragonair dratini exeggcute kangaskhan krabby magikarp marowak nidoran(f) nidoran(m) nidorina nidorino paras parasect pinsir psyduck rhyhorn scyther slowpoke tangela tauros venomoth venonat
+    supernerd
+    gentleman
+cueball
+
+
+places:
+    forest
+    brock    mt moon
+    misty    ss anne
+    surge    tower
+    erika    safari
+    koga     silph
+    sabrina  powerplant
+    blaine   seafoam
+    giovanni victory
+
+bugcatcher caterpie weedle venonat beedrill metapod kakuna
+forest
+junior diglett sandshrew
+
+brock geodude onix
+
+mtmoon
+youngster spearow
+hiker
+lass rattata nidoran jigglypuff
+
 misty
+
+    ssanne
+    engineer
+    sailor
+rocker
+
 ltsurge
-erika
-koga
+
+gambler
+tower
+beauty oddish bellsprout
+
+erika victreebel tangela vileplume
+
+biker
+safari
+juggler
+
+koga koffing muk weezing venomoth
+
+blackbelt
+silph
+psychic
+
 sabrina
-blaine
-giovanni
 
-ditto     - ditto     ditto     ditto     ditto     ditto
+    powerplant pikachu raichu magnemite magneton grimer muk voltorb electrode electabuzz zapdos
+    burglar (supernerds and scientists too)
+    supernerd
+scientist
 
-lorelei
-bruno
-agatha
-lance
+blaine growlithe ponyta rapidash arcanine ninetales
+    seafoam - articuno
+    fisherman
+    swimmer?
+tamer
+giovanni dugtrio nidoking nidoqueen persian rhydon rhyhorn
+    victory moltres
+    pokemaniac
+    cooltrainer
 
-blue      - blastoise pidgeot   alakazam  rhydon    arcanine  exeggutor
-red       - charizard scyther   persian   lapras    jolteon   dodrio
-oak       - venasaur  tauros    exeggutor arcanine  gyarados  kangaskhan
+lorelei Cloyster Dewgong Jynx Lapras Slowbro
+bruno Onix hitmonchan hitmonlee machamp
+agatha gengar golbat haunter arbok gengar
+lance gyarados dragonair aerodactyl dragonite
+blue      - blastoise pidgeot   alakazam  rhydon   arcanine  exeggutor
+red       - charizard scyther   persian   lapras   jolteon   dodrio
+oak       - venasaur  tauros    exeggutor snorlax  gyarados  kangaskhan
 
-gary      - eevee     sandslash alakazam  exeggutor magneton  ninetales
-ash       - pikachu   buterfree snorlax   charizard blastoise venasaur (https://www.serebii.net/gs/red.shtml)
+victory - moltres
 
-legendary - articuno  zapdos    moltres   mewtwo    mew       missingno
+legend - moltres articuno zapdos
+
+mewtwo - aerodactl kabutops omastar mew mewtwo

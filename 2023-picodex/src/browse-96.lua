@@ -10,7 +10,7 @@ end
 -- Num 1 would be bulbasaur.
 g_loaded_row = 16 -- default corresponds to the top row in the "129-151.p8" file.
 function draw_pkmn(num, x, y, sw, sh)
-    if num < 0 then rectfill(x-1, y-1,x,y-num%2,6) return end
+    if num < 0 then rectfill(x-1, y-1,x,y,6) return end
 
     sw = sw or 1
     sh = sh or 1
@@ -70,7 +70,7 @@ function update_stat_menu(menu, pkmn)
     menu:refresh{}
     add(menu, {pkmn=pkmn.num})
     add(menu, {hidden=true})
-    add(menu, {name="stats", style=3})
+    add(menu, {name="lvl 50", style=3})
     add(menu, {name=pkmn.hp..'/'..pkmn.maxhp})
 
     foreach(zobj[[
@@ -78,11 +78,14 @@ function update_stat_menu(menu, pkmn)
        ;;key,attack,  name,"att"
        ;;key,defense, name,"def"
        ;;key,speed,   name,"spd"
-       ;;key,level,   name,"lvl"
+       ;;key,total,   name,"tot"
+       --;;key,level,   name,"lvl"
        ;;key,accuracy,name,"acc"
        ;;key,evasion, name,"eva"
     ]], function(pair)
-        if pkmn[pair.key] then
+        if not pair.key then
+            add(menu, { name=pair.name, style=3 })
+        elseif pkmn[pair.key] then
             add(menu, { name=pair.name.." "..pkmn[pair.key] })
         end
     end)

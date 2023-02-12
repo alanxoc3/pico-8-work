@@ -141,9 +141,5 @@ end $$
 end $$
 
 |[browse_drawentry]| function(entry, style)
-    local pkmn = get_pokemon(entry.num)
-
-    if pkmn then -- todo, is this if check needed?
-        pkmn.draw(0, 3, style.out, .375, .375)
-    end
+    draw_pkmn_out(entry.num, 0, 3, style.out, .375, .375)
 end $$

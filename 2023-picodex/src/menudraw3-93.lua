@@ -5,7 +5,7 @@
     if partypkmn then
         draw3_pokeinfo(get_pokemon(partypkmn.num))
     else
-        print_draw3_message{"select", "your", "pokemon"}
+        print_draw3_message{".?????????", "????", "??????"}
     end
 end $$
 
@@ -25,13 +25,26 @@ end $$
         local move = c_moves[num]
         print_draw3_message{'.'..c_types[move.type].name, move.pp..'/'..move.pp, move.damage.."P "..(move.accuracy*100\1).."A"}
     else
-        print_draw3_message{"select", "your", "move"}
+        print_draw3_message{".????", "?/?", "??P ???A"}
     end
 end $$
 
-|[browse_draw3]|       function(game) draw3_pokeinfo(get_browse_pokemon(game:cursor'browse'+1))    end $$
+|[browse_draw3]|       function(game) draw3_pokeinfo(get_browse_pokemon(game:cursor'browse'+1))   end $$
 |[main_draw3]|         function(game) print_draw3_message(split(game:entry'main'.desc, '|'))      end $$
-|[party_draw3]|    function(game) print_draw3_message(split"select,your,team")                 end $$
+
+|[party_draw3]|        function(game)
+    local party = get_party(game:cursor'party')
+    local count, power = 0, 0
+    for i=1,6 do
+        if party[i] then
+            count += 1
+            power += c_pokemon[party[i].num].total
+        end
+    end
+
+    print_draw3_message{".team stats", "size "..count.."/6", "powr "..power}
+end $$
+
 |[pselactions_draw3]|  function(_)                                                                end $$
 |[pselmove_draw3]|     function(game)                                                             end $$
 |[fightover_draw3]|  function(game) print_draw3_message{game.p0.name, "is the", "winner"} end $$

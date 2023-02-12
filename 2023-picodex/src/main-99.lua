@@ -111,7 +111,8 @@ function parse_numlist(str)
 end
 
 -- thanks to bulbapedia: https://bulbapedia.bulbagarden.net/wiki/Stat#Stat
-function calc_max_stat(base) return ceil(C_LEVEL*.01*(base*2+93)) + 5 end
+-- this formula is much simpler at lvl 50, so I took some parts out.
+function calc_max_stat(base) return ceil(base+.5*93)+5 end
 
 -- 255 is dashes. 0 is next pkmn. num is move index.
 function normalize_pokemon_data()
@@ -205,10 +206,11 @@ function normalize_pokemon_data()
         }
 
         newpkmn.maxhp   = calc_max_stat(newpkmn.base_hp) + 5 + C_LEVEL -- slightly different formula for hp
+        newpkmn.special = calc_max_stat(newpkmn.base_special)
         newpkmn.attack  = calc_max_stat(newpkmn.base_attack)
         newpkmn.defense = calc_max_stat(newpkmn.base_defense)
         newpkmn.speed   = calc_max_stat(newpkmn.base_speed)
-        newpkmn.special = calc_max_stat(newpkmn.base_special)
+        newpkmn.total   = newpkmn.maxhp + newpkmn.special + newpkmn.attack + newpkmn.defense + newpkmn.speed
         newpkmn.hp      = newpkmn.maxhp
 
         if newpkmn.evolvesfrom then

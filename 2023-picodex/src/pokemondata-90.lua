@@ -373,3 +373,8 @@ c_moves = zobj[[
    ;;, "suprfang", T_NORMAL,   10, 0,   .9  -- 163
    ;;, "slash",    T_NORMAL,   20, 70,  1   -- 164
 ]]
+
+-- trainers are given moves at lvl 50
+c_trainers = zobj[[
+    ;,"bugcatch",
+]]

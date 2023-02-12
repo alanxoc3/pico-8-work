@@ -98,7 +98,7 @@ end $$
     game.menu:refresh(zobj[[,1,2,3,4]], function(i)
         return {
             num=partypkmn.moves[i],
-            name=partypkmn.moves[i] and c_moves[partypkmn.moves[i]].name or "<empty>",
+            name=partypkmn.moves[i] and c_moves[partypkmn.moves[i]].name or "???",
             select=function(_, game) game:push'partymovesel' end
         }
     end)
@@ -174,7 +174,7 @@ end $$
                     game:push'partypkmn'
                 end
             end,
-            num=party[i] and party[i].num or -2
+            num=party[i] and party[i].num or -1
         }
     end)
 end $$
