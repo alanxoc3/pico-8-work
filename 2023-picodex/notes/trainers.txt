@@ -1,421 +1,61 @@
-agatha         - L56-gengar     L56-golbat     L55-haunter    L58-arbok      L60-gengar
-beauty         - wigglytuff staryu seaking seadra rattata poliwag pikachu pidgeotto oddish meowth ivysaur horsea goldeen exeggcute clefairy bulbasaur bellsprout
-biker          - L25-koffing    L25-weezing    L25-koffing    L25-koffing    L25-weezing
-biker          - L26-grimer     L26-grimer     L26-grimer     L26-grimer
-biker          - L26-koffing    L26-koffing    L26-grimer     L26-koffing
-biker          - L28-grimer     L28-grimer     L28-koffing
-biker          - L28-koffing    L28-grimer     L28-weezing
-biker          - L28-koffing    L28-koffing    L28-weezing    L28-koffing    L28-grimer
-biker          - L28-weezing    L28-koffing    L28-weezing
-biker          - L29-grimer     L29-koffing
-biker          - L29-koffing    L29-grimer
-biker          - L29-koffing    L29-muk
-biker          - L29-voltorb    L29-voltorb
-biker          - L29-weezing    L29-muk
-biker          - L33-muk
-biker          - L33-weezing
-birdkeeper     - L26-pidgeotto  L26-farfetch'd L26-doduo      L26-pidgey
-birdkeeper     - L26-pidgey     L26-pidgeotto  L26-spearow    L26-fearow
-birdkeeper     - L26-spearow    L26-spearow    L26-fearow     L26-spearow
-birdkeeper     - L28-dodrio     L28-doduo      L28-doduo
-birdkeeper     - L28-spearow    L28-doduo      L28-spearow
-birdkeeper     - L29-pidgeotto  L29-fearow
-birdkeeper     - L29-pidgey     L29-pidgeotto
-birdkeeper     - L29-spearow    L29-fearow
-birdkeeper     - L30-fearow     L30-fearow     L30-pidgeotto
-birdkeeper     - L33-farfetch'd
-birdkeeper     - L34-dodrio
-blackbelt      - L31-machop     L31-mankey     L31-primeape
-blackbelt      - L31-mankey     L31-primeape
-blackbelt      - L32-machop     L32-machoke
-blackbelt      - L36-primeape
-blackbelt      - L37-hitmonlee  L37-hitmonchan
-blackbelt      - L38-machoke    L38-machop     L38-machoke
-blackbelt      - L40-machop     L40-machoke
-blackbelt      - L43-machoke
-blackbelt      - L43-machoke    L43-machop     L43-machoke
-blaine         - L42-growlithe  L40-ponyta     L42-rapidash   L47-arcanine
-brock          - L12-geodude    L14-onix
-bruno          - L53-onix       L55-hitmonchan L55-hitmonlee  L56-onix       L58-machamp
-bugcatcher     - L10-caterpie   L10-metapod    L10-caterpie
-bugcatcher     - L10-caterpie   L10-weedle     L10-caterpie
-bugcatcher     - L11-caterpie   L11-metapod
-bugcatcher     - L11-weedle     L11-kakuna
-bugcatcher     - L14-caterpie   L14-weedle
-bugcatcher     - L16-butterfree
-bugcatcher     - L19-beedrill   L19-beedrill
-bugcatcher     - L20-caterpie   L20-weedle     L20-venonat
-bugcatcher     - L7-weedle      L6-caterpie
-bugcatcher     - L7-weedle      L7-kakuna      L7-weedle
-bugcatcher     - L9-weedle
-bugcatcher     - L9-weedle      L9-kakuna      L9-caterpie    L9-metapod
-burglar        - L34-charmander L34-charmeleon
-burglar        - L34-growlithe  L34-ponyta
-burglar        - L36-growlithe  L36-vulpix     L36-ninetales
-burglar        - L37-vulpix     L37-growlithe
-burglar        - L38-ninetales
-burglar        - L41-ponyta
-channeler      - L22-ghastly
-channeler      - L22-ghastly    L22-ghastly
-channeler      - L22-haunter
-channeler      - L23-ghastly
-channeler      - L23-ghastly    L23-ghastly
-channeler      - L23-haunter
-channeler      - L24-ghastly
-channeler      - L30-ghastly    L30-ghastly    L30-haunter
-channeler      - L34-ghastly    L34-haunter
-channeler      - L38-haunter
-cooltrainerf   - L24-weepinbell L24-gloom      L24-ivysaur
-cooltrainerf   - L43-bellsprout L43-weepinbell L43-victreebel
-cooltrainerf   - L43-parasect   L43-dewgong    L43-chansey
-cooltrainerf   - L44-persian    L44-ninetales
-cooltrainerm   - L39-nidorino   L39-nidoking
-cooltrainerm   - L39-sandslash  L39-dugtrio
-cooltrainerm   - L42-ivysaur    L42-wartortle  L42-charmeleon L42-charizard
-cooltrainerm   - L43-executor   L43-cloyster   L43-arcanine
-cooltrainerm   - L43-kingler    L43-tentacruel L43-blastoise
-cooltrainerm   - L43-rhyhorn
-cueball        - L26-mankey     L26-mankey     L26-machoke    L26-machop
-cueball        - L28-machop     L28-mankey     L28-machop
-cueball        - L29-machop     L29-machoke
-cueball        - L29-mankey     L29-machop
-cueball        - L29-mankey     L29-primeape
-cueball        - L29-primeape   L29-machoke
-cueball        - L31-tentacool  L31-tentacool  L31-tentacruel
-cueball        - L33-machoke
-cueball        - L33-machop
-engineer       - L18-magnemite  L18-magnemite  L18-magneton
-engineer       - L21-magnemite
-erika          - L29-victreebel L24-tangela    L29-vileplume
-fisherman      - L17-tentacool  L17-staryu     L17-shellder
-fisherman      - L21-poliwag    L21-shellder   L21-goldeen    L21-horsea
-fisherman      - L22-goldeen    L22-poliwag    L22-goldeen
-fisherman      - L24-magikarp   L24-magikarp
-fisherman      - L24-tentacool  L24-goldeen
-fisherman      - L27-goldeen
-fisherman      - L27-magikarp   L27-magikarp   L27-magikarp   L27-magikarp   L27-magikarp L27-magikarp
-fisherman      - L28-seaking    L28-goldeen    L28-seaking    L28-seaking
-fisherman      - L31-shellder   L31-cloyster
-fisherman      - L33-seaking    L33-goldeen
-gambler        - L18-bellsprout L18-oddish
-gambler        - L18-growlithe  L18-vulpix
-gambler        - L18-poliwag    L18-horsea
-gambler        - L18-voltorb    L18-magnemite
-gambler        - L22-poliwag    L22-poliwag    L22-poliwhirl
-gambler        - L24-growlithe  L24-vulpix
-gentleman      - L18-growlithe  L18-growlithe
-gentleman      - L19-nidoran_m  L19-nidoran_f
-gentleman      - L23-pikachu
-ghost          - L30-marowak
-giovanni       - L25-onix       L24-rhyhorn    L29-kangaskhan
-giovanni       - L37-nidorino   L35-kangaskhan L37-rhyhorn    L41-nidoqueen
-giovanni       - L45-rhyhorn    L42-dugtrio    L44-nidoqueen  L45-nidoking   L50-rhydon
-hiker          - L10-geodude    L10-geodude    L10-onix
-hiker          - L13-geodude    L13-geodude    L13-machop     L13-geodude
-hiker          - L15-machop     L15-geodude
-hiker          - L17-onix
-hiker          - L19-geodude    L19-machop     L19-geodude    L19-geodude
-hiker          - L19-onix       L19-graveler
-hiker          - L20-geodude    L20-machop     L20-geodude
-hiker          - L20-machop     L20-onix
-hiker          - L20-onix       L20-onix       L20-geodude
-hiker          - L21-geodude    L21-geodude    L21-graveler
-hiker          - L21-geodude    L21-graveler
-hiker          - L21-geodude    L21-onix
-hiker          - L25-geodude
-juggler        - L29-kadabra    L29-mr_mime
-juggler        - L31-drowzee    L31-drowzee    L31-kadabra    L31-drowzee
-juggler        - L34-drowzee    L34-hypno
-juggler        - L34-drowzee    L34-kadabra
-juggler        - L38-hypno
-juggler        - L41-drowzee    L41-hypno      L41-kadabra    L41-kadabra
-juggler        - L48-mr_mime
-juniortrainerf - L16-pidgey     L16-pidgey     L16-pidgey
-juniortrainerf - L16-rattata    L16-pikachu
-juniortrainerf - L18-oddish     L18-bellsprout L18-oddish     L18-bellsprout
-juniortrainerf - L19-goldeen
-juniortrainerf - L19-pidgey     L19-rattata    L19-rattata    L19-bellsprout
-juniortrainerf - L20-meowth     L20-oddish     L20-pidgey
-juniortrainerf - L20-pikachu    L20-clefairy
-juniortrainerf - L21-jigglypuff L21-pidgey     L21-meowth
-juniortrainerf - L21-pidgey     L21-pidgeotto
-juniortrainerf - L22-bellsprout L22-clefairy
-juniortrainerf - L22-oddish     L22-bulbasaur
-juniortrainerf - L23-meowth
-juniortrainerf - L24-bulbasaur  L24-ivysaur
-juniortrainerf - L24-pidgey     L24-meowth     L24-rattata    L24-pikachu    L24-meowth
-juniortrainerf - L27-pidgey     L27-meowth     L27-pidgey     L27-pidgeotto
-juniortrainerf - L28-gloom      L28-oddish     L28-oddish
-juniortrainerf - L28-goldeen    L28-poliwag    L28-horsea
-juniortrainerf - L29-bellsprout L29-oddish     L29-tangela
-juniortrainerf - L29-pikachu    L29-raichu
-juniortrainerf - L30-poliwag    L30-poliwag
-juniortrainerf - L30-tentacool  L30-horsea     L30-seel
-juniortrainerf - L31-goldeen    L31-seaking
-juniortrainerf - L33-clefairy
-juniortrainerm - L11-diglett    L11-sandshrew
-juniortrainerm - L14-rattata    L14-ekans
-juniortrainerm - L16-spearow    L16-raticate
-juniortrainerm - L18-mankey
-juniortrainerm - L19-rattata    L19-diglett    L19-ekans      L19-sandshrew
-juniortrainerm - L20-squirtle
-juniortrainerm - L21-growlithe  L21-charmander
-juniortrainerm - L29-nidoran_m  L29-nidorino
-koga           - L37-koffing    L39-muk        L37-koffing    L43-weezing
-lance          - L58-gyarados   L56-dragonair  L56-dragonair  L60-aerodactyl L62-dragonite
-lass           - L10-rattata    L10-nidoran_m
-lass           - L11-oddish     L11-bellsprout
-lass           - L13-oddish     L13-pidgey     L13-oddish
-lass           - L14-clefairy
-lass           - L14-jigglypuff
-lass           - L14-pidgey     L14-nidoran_f
-lass           - L15-nidoran_m  L15-nidoran_f
-lass           - L16-pidgey     L16-nidoran_f
-lass           - L18-pidgey     L18-nidoran_f
-lass           - L19-pidgey     L19-rattata    L19-nidoran_m  L19-meowth     L19-pikachu
-lass           - L22-clefairy   L22-clefairy
-lass           - L23-bellsprout L23-weepinbell
-lass           - L23-nidoran_f  L23-nidorina
-lass           - L23-oddish     L23-gloom
-lass           - L24-meowth     L24-meowth     L24-meowth
-lass           - L9-pidgey      L9-pidgey
-lorelei        - L54-dewgong    L53-cloyster   L54-slowbro    L56-jynx       L56-lapras
-misty          - L18-staryu     L21-starmie
-pokemaniac     - L20-cubone     L20-slowpoke
-pokemaniac     - L20-slowpoke   L20-slowpoke   L20-slowpoke
-pokemaniac     - L22-charmander L22-cubone
-pokemaniac     - L25-slowpoke
-pokemaniac     - L40-charmeleon L40-lapras     L40-lickitung
-pokemaniac     - L23-cubone     L23-slowpoke
-psychic        - L31-kadabra    L31-slowpoke   L31-mr_mime    L31-kadabra
-psychic        - L33-slowpoke   L33-slowpoke   L33-slowbro
-psychic        - L34-mr_mime    L34-kadabra
-psychic        - L38-slowbro
-blue           - L18-pidgeotto  L15-abra       L15-rattata    L15-ivysaur
-blue           - L19-pidgeotto  L16-raticate   L18-kadabra    L20-ivysaur
-blue           - L25-pidgeotto  L23-growlithe  L22-exeggecute L20-kadabra    L25-ivysaur
-blue           - L37-pidgeot    L38-growlithe  L35-exeggute   L35-alakazam   L40-blastoise
-blue           - L37-pidgeot    L38-growlithe  L35-exeggute   L35-alakazam   L40-charizard
-blue           - L37-pidgeot    L38-growlithe  L35-exeggute   L35-alakazam   L40-venasaur
-blue           - L47-pidgeotto  L45-rhyhorn    L45-growlithe  L47-exeggcute  L50-alakazam L53-venasaur
-blue           - L61-pidgeot    L59-alakazam   L61-rhydon     L61-arcanine   L63-gyrados  L65-blastoise
-blue           - L61-pidgeot    L59-alakazam   L61-rhydon     L61-exeggutor  L63-gyrados  L65-charizard
-blue           - L61-pidgeot    L59-alakazam   L61-rhydon     L61-gyrados    L63-arcanine L65-venusaur
-rocker         - L20-voltorb    L20-magnemite  L20-voltorb
-rocker         - L29-voltorb    L29-electrode
-rocket         - L11-sandshrew  L11-rattata    L11-zubat
-rocket         - L12-zubat      L12-ekans
-rocket         - L13-rattata    L13-zubat
-rocket         - L15-ekans      L15-zubat
-rocket         - L16-raticate
-rocket         - L17-machop     L17-drowzee
-rocket         - L17-zubat      L17-koffing    L17-grimer     L17-zubat      L17-raticate
-rocket         - L19-rattata    L19-raticate   L19-rattata
-rocket         - L20-grimer     L20-koffing    L20-koffing
-rocket         - L20-raticate   L20-zubat
-rocket         - L20-rattata    L20-raticate   L20-drowzee
-rocket         - L21-drowzee    L21-machop
-rocket         - L21-koffing    L21-zubat
-rocket         - L21-machop     L21-machop
-rocket         - L21-raticate   L21-raticate
-rocket         - L22-grimer     L22-koffing
-rocket         - L23-ekans      L23-sandshrew  L23-arbok
-rocket         - L23-sandshrew  L23-ekans      L23-sandslash
-rocket         - L23-zubat      L23-rattata    L23-raticate   L23-zubat
-rocket         - L25-golbat     L25-zubat      L25-zubat      L25-raticate   L25-zubat
-rocket         - L25-rattata    L25-rattata    L25-zubat      L25-rattata    L25-ekans
-rocket         - L25-zubat      L25-zubat      L25-golbat
-rocket         - L26-koffing    L26-drowzee
-rocket         - L26-raticate   L26-arbok      L26-koffing    L26-golbat
-rocket         - L26-raticate   L26-zubat      L26-golbat     L26-rattata
-rocket         - L28-drowzee    L28-grimer     L28-machop
-rocket         - L28-ekans      L28-zubat      L28-cubone
-rocket         - L28-golbat     L28-drowzee    L28-hypno
-rocket         - L28-raticate   L28-hypno      L28-raticate
-rocket         - L28-weezing    L28-golbat     L28-koffing
-rocket         - L28-zubat      L28-zubat      L28-golbat
-rocket         - L29-cubone     L29-cubone
-rocket         - L29-cubone     L29-zubat
-rocket         - L29-machop     L29-drowzee
-rocket         - L29-machop     L29-machoke
-rocket         - L29-sandshrew  L29-sandslash
-rocket         - L33-arbok
-rocket         - L33-hypno
-rocket         - L33-machoke
-sabrina        - L38-kadabra    L37-mr_mime    L38-venomoth   L43-alakazam
-sailor         - L17-horsea     L17-horsea
-sailor         - L17-horsea     L17-shellder   L17-tentacool
-sailor         - L18-machop     L18-shellder
-sailor         - L18-tentacool  L18-staryu
-sailor         - L20-machop
-sailor         - L21-pikachu    L21-pikachu
-sailor         - L21-shellder
-scientist      - L23-electrode
-scientist      - L25-voltorb    L25-koffing    L25-magneton   L25-magnemite  L25-koffing
-scientist      - L26-grimer     L26-weezing    L26-koffing    L26-weezing
-scientist      - L26-magneton   L26-koffing    L26-weezing    L26-magnemite
-scientist      - L28-magnemite  L28-voltorb    L28-magneton
-scientist      - L28-voltorb    L28-koffing    L28-magneton
-scientist      - L29-electrode  L29-muk
-scientist      - L29-electrode  L29-weezing
-scientist      - L29-grimer     L29-electrode
-scientist      - L29-magnemite  L29-koffing
-scientist      - L33-magnemite
-scientist      - L33-magneton   L33-voltorb
-scientist      - L34-magnemite  L34-electrode
-supernerd      - L11-magnemite  L14-voltorb
-supernerd      - L12-grimer     L12-voltorb    L12-koffing
-supernerd      - L22-grimer     L22-muk        L22-grimer
-supernerd      - L22-voltorb    L22-koffing    L22-voltorb    L22-magnemite
-supernerd      - L26-koffing
-supernerd      - L34-ponyta     L34-charmander L34-vulpix     L34-growlithe
-supernerd      - L36-vulpix     L36-vulpix     L36-ninetales
-supernerd      - L37-growlithe  L37-vulpix
-supernerd      - L41-rapidash
-swimmer        - L16-horsea     L16-shellder
-swimmer        - L27-horsea     L27-tentacool  L27-tentacool  L27-goldeen
-swimmer        - L27-tentacool  L27-tentacool  L27-staryu     L27-horsea     L27-tentacruel
-swimmer        - L28-horsea     L28-horsea     L28-seadra     L28-horsea
-swimmer        - L29-goldeen    L29-horsea     L29-staryu
-swimmer        - L29-goldeen    L29-shellder   L29-seaking
-swimmer        - L30-horsea     L30-horsea
-swimmer        - L30-poliwag    L30-poliwag    L30-poliwhirl
-swimmer        - L30-tentacool  L30-shellder
-swimmer        - L31-shellder   L31-cloyster
-swimmer        - L32-poliwhirl  L32-tentacool  L32-seadra
-swimmer        - L33-seadra     L33-tentacruel
-swimmer        - L33-staryu     L33-wartortle
-swimmer        - L35-staryu
-swimmer        - L37-starmie
-tamer          - L33-arbok      L33-sandslash  L33-arbok
-tamer          - L34-sandslash  L34-arbok
-tamer          - L39-arbok      L39-tauros
-tamer          - L43-rhyhorn
-tamer          - L44-persian    L44-golduck
-youngster      - L10-rattata    L10-rattata    L10-zubat
-youngster      - L11-rattata    L11-ekans
-youngster      - L14-ekans      L14-sandshrew
-youngster      - L14-rattata    L14-ekans      L14-zubat
-youngster      - L14-spearow
-youngster      - L15-rattata    L15-spearow
-youngster      - L17-rattata    L17-rattata    L17-raticate
-youngster      - L17-slowpoke
-youngster      - L18-nidoran_m  L18-nidorino
-youngster      - L19-sandshrew  L19-zubat
-youngster      - L21-ekans
-youngster      - L21-nidoran_m
+TRAINER  PKMN1 PKMN2 PKMN3 PKMN4 PKMN5 PKMN6
 
-trainer | boss | party | route
+youngstr rattata pidgey caterpie spearow weedle bellsprout
+junior   ekans sandshrew rattata squirtle charmander bulbasaur
+bugcatch weedle paras kakuna caterpie metapod pinsir
 
-beauty
-biker        L28-koffing     L28-weezing     L28-grimer    L29-muk        L29-voltorb
-birdkeeper   L30-pidgeotto   L30-fearow      L28-doduo     L28-dodrio     L33-farfetch'd
-blackbelt    L31-primeape    L37-hitmonlee   L37-hitmonchan
-channeler
-cooltrainerm
-cooltrainerf
-cueball
-engineer
-fisherman
-gambler
-gentleman
-juggler
-juniorf
-pokemaniac
-burglar
-psychic
-rocker
-sailor
-scientist
-swimmer
-tamer
-rocket
+brock    geodude omanyte cubone vulpix kabuto onix
 
+lass     oddish meowth clefairy nidoranf doduo jigglypuff
+hiker    geodude diglett zubat machop paras graveler
+swimmer  horsea poliwag shellder magikarp staryu goldeen
 
-    channeler ghastly
-    rocket
-    rocker
-    birdkeeper
-    safarizonepkmn chansey cubone doduo dragonair dratini exeggcute kangaskhan krabby magikarp marowak nidoran(f) nidoran(m) nidorina nidorino paras parasect pinsir psyduck rhyhorn scyther slowpoke tangela tauros venomoth venonat
-    supernerd
-    gentleman
-cueball
+misty    staryu seadra psyduck seaking seel starmie
 
+gentlman growlithe nidoranm dratini ponyta pikachu eevee
+sailor   shellder tentacool psyduck poliwag krabby poliwhirl
+rocker   voltorb zubat venonat abra magnemite jolteon
 
-places:
-    forest
-    brock    mt moon
-    misty    ss anne
-    surge    tower
-    erika    safari
-    koga     silph
-    sabrina  powerplant
-    blaine   seafoam
-    giovanni victory
+ltsurge  pikachu jolteon voltorb electabuzz magneton raichu
 
-bugcatcher caterpie weedle venonat beedrill metapod kakuna
-forest
-junior diglett sandshrew
+channelr ghastly jigglypuff cubone clefairy haunter marowak
+gambler  pidgeotto graveler poliwhirl rhyhorn growlithe gloom
+beauty   bellsprout chansey wigglytuff weepinbell eevee clefable
 
-brock geodude onix
+erika    parasect victreebel exeggcute butterfree tangela vileplume
 
-mtmoon
-youngster spearow
-hiker
-lass rattata nidoran jigglypuff
+birdkeep doduo pidgeotto fearow farfetchd dodrio pidgeot
+biker    koffing mankey tentacool grimer machoke tentacruel
+juggler  venonat gloom mrmime drowzee electrode slowpoke
 
-misty
+koga     nidorina muk weezing beedrill nidorino venomoth
 
-    ssanne
-    engineer
-    sailor
-rocker
+blckbelt machop machoke hitmonlee mankey primeape hitmonchan
+rocket   sandslash raticate electrode golbat weezing arbok
+psychic  slowpoke abra slowbro drowzee exeggcute kadabra
 
-ltsurge
+sabrina  mrmime exeggutor kadabra jynx hypno alakazam
 
-gambler
-tower
-beauty oddish bellsprout
+scientst ditto victreebel ghastly venomoth hypno porygon
+pkmaniac chansey pinsir electabuzz scyther lickitung golduck
+suprnerd ponyta magneton primeape flareon vulpix rapidash
 
-erika victreebel tangela vileplume
+blaine   rapidash arcanine flareon ninetales golem magmar
 
-biker
-safari
-juggler
+fishrman goldeen tentacruel seadra seaking cloyster kingler
+cooltrnr dragonair parasect golduck wartortle charmeleon ivysaur
+tamer    marowak tauros sandslash raticate rhyhorn persian
 
-koga koffing muk weezing venomoth
+giovanni dugtrio nidoking persian nidoqueen kangaskhan rhydon
 
-blackbelt
-silph
-psychic
+lorelei  cloyster jynx vaporeon lapras slowbro dewgong
+bruno    onix hitmonchan omastar hitmonlee golem machamp
+agatha   golbat muk haunter vileplume arbok gengar
 
-sabrina
+lance    gyarados dragonair aerodactyl dragonite kabutops snorlax
 
-    powerplant pikachu raichu magnemite magneton grimer muk voltorb electrode electabuzz zapdos
-    burglar (supernerds and scientists too)
-    supernerd
-scientist
+blue     pidgeot alakazam rhydon arcanine exeggutor blastoise
+green    clefable gengar kangaskhan gyarados ninetales venusaur
+red      scyther snorlax lapras dodrio raichu charizard
 
-blaine growlithe ponyta rapidash arcanine ninetales
-    seafoam - articuno
-    fisherman
-    swimmer?
-tamer
-giovanni dugtrio nidoking nidoqueen persian rhydon rhyhorn
-    victory moltres
-    pokemaniac
-    cooltrainer
-
-lorelei Cloyster Dewgong Jynx Lapras Slowbro
-bruno Onix hitmonchan hitmonlee machamp
-agatha gengar golbat haunter arbok gengar
-lance gyarados dragonair aerodactyl dragonite
-blue      - blastoise pidgeot   alakazam  rhydon   arcanine  exeggutor
-red       - charizard scyther   persian   lapras   jolteon   dodrio
-oak       - venasaur  tauros    exeggutor snorlax  gyarados  kangaskhan
-
-victory - moltres
-
-legend - moltres articuno zapdos
-
-mewtwo - aerodactl kabutops omastar mew mewtwo
+legendry dragonite zapdos moltres articuno mewtwo mew
