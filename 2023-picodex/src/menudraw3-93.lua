@@ -1,7 +1,7 @@
 -- todo: make this smaller
 |[editparty_draw3]| function(game)
-    local party = get_party(game:cursor'party')
-    local partypkmn = party[game:cursor'editparty'+1]
+    local team = get_party(game:cursor'team1')
+    local partypkmn = team[game:cursor'editparty'+1]
     if partypkmn then
         draw3_pokeinfo(get_pokemon(partypkmn.num))
     else
@@ -33,12 +33,12 @@ end $$
 |[main_draw3]|         function(game) print_draw3_message(split(game:entry'main'.desc, '|'))      end $$
 
 |[party_draw3]|        function(game)
-    local party = get_party(game:cursor'party')
     local count, power = 0, 0
     for i=1,6 do
-        if party[i] then
+        local num = game:entry().team[i]
+        if num then
             count += 1
-            power += c_pokemon[party[i].num].total
+            power += c_pokemon[num].total
         end
     end
 

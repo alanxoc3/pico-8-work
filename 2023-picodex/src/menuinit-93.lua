@@ -1,12 +1,14 @@
+-- todo: make a function that loops from 1 to 6.
+
 |[fightover_init]| function(game) game.p0.winlogic() end $$
 
 |[main_init]| function(game)
     game.menu:refresh(
         zobj[[
             ;name,"browse",  state,browse,     select,%menu_state_callback, desc,"view|pokemon|info"
-           ;;name,"teams",   state,party,      select,%menu_state_callback, desc,"edit|stored|teams"
+           ;;name,"teams",   state,team1,      select,%menu_state_callback, desc,"edit|stored|teams"
            ;;name,"fight",   state,games,      select,%menu_state_callback, desc,"custom|2 player|battle", disabled,yes
-           ;;name,"story",   state,fightparty, select,%menu_state_callback, desc,"battle|against|trainers"
+           ;;name,"story",   state,team1fight, select,%menu_state_callback, desc,"battle|against|trainers"
            ;;name,"hoard",   state,hoard,      select,%menu_state_callback, desc,"battle all|pokemon|in order", disabled,yes
            ;;name,"credits", state,credits,    select,%menu_state_callback, desc,"made by|amorg|games"
         ]]
@@ -25,8 +27,8 @@ end $$
 end $$
 
 |[partystat_init]| function(game)
-    local party = get_party(game:cursor'party')
-    local partypkmn = party[game:cursor'editparty'+1]
+    local team = get_party(game:cursor'team1')
+    local partypkmn = team[game:cursor'editparty'+1]
     update_stat_menu(game.menu, c_pokemon[partypkmn.num])
 end $$
 
@@ -52,25 +54,35 @@ end $$
 end $$
 
 |[fightsel_init]| function(game)
-    game.menu:refresh({
-        {name="bugcatch", select=function(a, game)
+    game.menu:refresh(c_trainers, function(trainer, num)
+        local disabled, team = num-1 > @S_STORY, {}
+        for i=1,6 do team[i] = trainer[i+1] end
+
+        return {
+            name=trainer[1],
+            team=team,
+            disabled=disabled,
+            desc=disabled and "beat|previous|to unlock",
+            select=function(entry, game)
                 local cpu_party_draft = {}
                 for i=1,6 do
-                    local num = flr_rnd(151)+1
-                    add(cpu_party_draft, { num=num, moves=c_pokemon[num].get_natural_moveset(100) })
+                    local num = entry.team[i]
+                    if num then
+                        add(cpu_party_draft, { num=num, moves=c_pokemon[num].get_natural_moveset(100) })
+                    end
                 end
 
-                begin_fight(game, 100, get_party(game:cursor'party'), cpu_party_draft, "player 1", "bugcatcher", false, true)
-            end, desc="i|like|bugs"
+                begin_fight(game, get_party(game:cursor'team1'), cpu_party_draft, "player 1", "bugcatcher", false, true)
+            end
         }
-    })
+    end)
 end $$
 
 |[partyaction_init]| function(game)
     game.menu:refresh(zobj[[
         ; name,"info",   state,partystat,  select,%menu_state_callback, -- use browse pokemon selector
        ;; name,"moves",  state,partymoves, select,%menu_state_callback  -- use the menu system
-       ;; name,"delete",                   select,%partydel             -- use the edit party screen
+       ;; name,"delete",                   select,%partydel             -- use the edit team screen
     ]])
 
     game.partymovesel.menu.c = 0
@@ -82,7 +94,7 @@ end $$
         function(num)
             return {
                 select=function(_, game)
-                    save_party(game:cursor'party', set_default_party_pkmn(get_party(game:cursor'party'), game:cursor'editparty'+1, g_available_pokemon[game:cursor'browse'+1]))
+                    save_party(game:cursor'team1', set_default_party_pkmn(get_party(game:cursor'team1'), game:cursor'editparty'+1, g_available_pokemon[game:cursor'browse'+1]))
                     game:pop()
                 end,
                 num=num
@@ -92,8 +104,8 @@ end $$
 end $$
 
 |[partymoves_init]| function(game)
-    local party = get_party(game:cursor'party')
-    local partypkmn = party[game:cursor'editparty'+1]
+    local team = get_party(game:cursor'team1')
+    local partypkmn = team[game:cursor'editparty'+1]
 
     game.menu:refresh(zobj[[,1,2,3,4]], function(i)
         return {
@@ -105,8 +117,8 @@ end $$
 end $$
 
 |[partymovesel_init]| function(game)
-    local party = get_party(game:cursor'party')
-    local partypkmn = party[game:cursor'editparty'+1]
+    local team = get_party(game:cursor'team1')
+    local partypkmn = team[game:cursor'editparty'+1]
 
     local pkmn = c_pokemon[partypkmn.num]
     game.menu:refresh(pkmn.moves, function(m)
@@ -115,7 +127,7 @@ end $$
             num=m.num,
             ref=m.ref,
             select=function(_, game)
-                save_party(game:cursor'party', set_party_pkmn_move(get_party(game:cursor'party'), game:cursor'editparty'+1, game:cursor'partymoves'+1, m.num))
+                save_party(game:cursor'team1', set_party_pkmn_move(get_party(game:cursor'team1'), game:cursor'editparty'+1, game:cursor'partymoves'+1, m.num))
                 game:pop()
             end
         }
@@ -148,14 +160,17 @@ end $$
 
 |[party_init]| function(game)
     game.menu:refresh(zobj[[,1,2,3]], function(i)
-        local party = get_party(i-1)
+        local team = get_party(i-1)
+        local newteam = {}
         local is_disabled = true
+
         for i=1,6 do
-            if party[i] then is_disabled = false end
+            if team[i] then newteam[i] = team[i].num is_disabled = false end
         end
 
         return {
             name="team #"..i,
+            team=newteam,
             select=function() game:select_func() end,
             disabled=game.disable_empty_party and is_disabled
         }
@@ -164,17 +179,17 @@ end $$
 
 -- this is used both in "editparty" and selecting a pkmn in battle.
 |[editparty_init]| function(game)
-    local party = get_party(game:cursor'party')
+    local team = get_party(game:cursor'team1')
     game.menu:refresh(zobj[[,1,2,3,4,5,6]], function(i)
         return {
             select=function(entry, game)
-                if party[game:cursor'editparty'+1] then
+                if team[game:cursor'editparty'+1] then
                     game:push'partyaction'
                 else
                     game:push'partypkmn'
                 end
             end,
-            num=party[i] and party[i].num or -1
+            num=team[i] and team[i].num or -1
         }
     end)
 end $$

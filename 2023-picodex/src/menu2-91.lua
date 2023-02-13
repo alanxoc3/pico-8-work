@@ -36,7 +36,9 @@ end $$
 
 |[menu_refresh]| function(menu, data, mapfunc)
     while deli(menu) do end
-    foreach(data, function(thing) add(menu, (mapfunc or nop)(thing)) end)
+    for i=1,#data do
+        add(menu, (mapfunc or nop)(data[i], i))
+    end
 end $$
 
 |[menu_cancel]| function(game) game:pop() end $$

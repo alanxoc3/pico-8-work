@@ -2,7 +2,7 @@
 
 |[editparty_draw1]| function(game)
     _g.modes_default_draw1(game)
-    wobble_text("team #"..game:cursor'party'+1, 20, 27, 1)
+    wobble_text("team #"..game:cursor'team1'+1, 20, 27, 1)
 end $$
 
 -- todo: token crunching.

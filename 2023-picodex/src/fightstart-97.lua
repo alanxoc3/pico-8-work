@@ -3,8 +3,8 @@
 -- in turn init, switch p0
 -- 
 -- party1/party2: { {num=123, moves={1=3, 2=4, 3=31, 4=68 }}, ... }
-function begin_fight(game, lvl, party1, party2, name1, name2, iscpu1, iscpu2)
-    local party1, party2 = get_fight_party(party1, lvl), get_fight_party(party2, lvl)
+function begin_fight(game, party1, party2, name1, name2, iscpu1, iscpu2)
+    local party1, party2 = get_fight_party(party1), get_fight_party(party2)
 
     -- winlogic could be used for story mode.
     -- p1 has higher starting priority so game shows their pokemon to come out first
@@ -32,7 +32,7 @@ function get_next_active(party)
 end
 
 -- converts a party into a party ready for battle
-function get_fight_party(party, lvl)
+function get_fight_party(party)
     local fightparty = {}
 
     -- TODO: optimize for tokens

@@ -176,7 +176,9 @@ end,function(edraw,r)
 return zobj_set(_g.create_menu_view(edraw),[[c,0,r,@,update,%menu_update,set,%menu_set]],r or 1)
 end,function(menu,data,mapfunc)
 while deli(menu)do end
-foreach(data,function(thing)add(menu,(mapfunc or nop)(thing))end)
+for i=1,#data do
+add(menu,(mapfunc or nop)(data[i],i))
+end
 end,function(game)game:pop()end,function(menu,delta)
 local newval=menu.c+delta
 if newval==mid(0,newval,#menu-1)then menu.c=newval end
@@ -243,7 +245,7 @@ end,function(entry,style)
 draw_pkmn_out(entry.num,0,3,style.out,.375,.375)
 end,function(game)print("todo",5,5,1)end,function(game)
 _g.modes_default_draw1(game)
-wobble_text("team #"..game:cursor"party"+1,20,27,1)
+wobble_text("team #"..game:cursor"team1"+1,20,27,1)
 end,function(game)
 local a1,a2,active=game.p1.active,game.p2.active,game.cur_action.active
 local a1a,a2a=active==a1,active==a2
@@ -272,8 +274,8 @@ pal()
 end,function(game)
 print_draw2_message(game.cur_action.pl.name)
 end,function(game)
-local party=get_party(game:cursor"party")
-local partypkmn=party[game:cursor"editparty"+1]
+local team=get_party(game:cursor"team1")
+local partypkmn=team[game:cursor"editparty"+1]
 if partypkmn then
 draw3_pokeinfo(get_pokemon(partypkmn.num))
 else
@@ -294,12 +296,12 @@ else
 print_draw3_message{".????","?/?","??P ???A"}
 end
 end,function(game)draw3_pokeinfo(get_browse_pokemon(game:cursor"browse"+1))end,function(game)print_draw3_message(split(game:entry"main".desc,"|"))end,function(game)
-local party=get_party(game:cursor"party")
 local count,power=0,0
 for i=1,6 do
-if party[i]then
+local num=game:entry().team[i]
+if num then
 count+=1
-power+=c_pokemon[party[i].num].total
+power+=c_pokemon[num].total
 end
 end
 print_draw3_message{".team stats","size "..count.."/6","powr "..power}
@@ -309,7 +311,7 @@ if message_tbl[1]=="#"then message_tbl[1]=c_pokemon[game.cur_action.active.share
 print_draw3_message(message_tbl)
 end,function(game)game.p0.winlogic()end,function(game)
 game.menu:refresh(
-zobj[[;name,browse,state,browse,select,%menu_state_callback,desc,view|pokemon|info;;name,teams,state,party,select,%menu_state_callback,desc,edit|stored|teams;;name,fight,state,games,select,%menu_state_callback,desc,custom|2 player|battle,disabled,yes;;name,story,state,fightparty,select,%menu_state_callback,desc,battle|against|trainers;;name,hoard,state,hoard,select,%menu_state_callback,desc,battle all|pokemon|in order,disabled,yes;;name,credits,state,credits,select,%menu_state_callback,desc,made by|amorg|games]]
+zobj[[;name,browse,state,browse,select,%menu_state_callback,desc,view|pokemon|info;;name,teams,state,team1,select,%menu_state_callback,desc,edit|stored|teams;;name,fight,state,games,select,%menu_state_callback,desc,custom|2 player|battle,disabled,yes;;name,story,state,team1fight,select,%menu_state_callback,desc,battle|against|trainers;;name,hoard,state,hoard,select,%menu_state_callback,desc,battle all|pokemon|in order,disabled,yes;;name,credits,state,credits,select,%menu_state_callback,desc,made by|amorg|games]]
 )
 end,function(game)
 game.menu:refresh(
@@ -319,8 +321,8 @@ function(num)return{select=function(entry,game)game:push"browsestat" end,num=num
 end,function(game)
 update_stat_menu(game.menu,get_browse_pokemon(game:cursor"browse"+1))
 end,function(game)
-local party=get_party(game:cursor"party")
-local partypkmn=party[game:cursor"editparty"+1]
+local team=get_party(game:cursor"team1")
+local partypkmn=team[game:cursor"editparty"+1]
 update_stat_menu(game.menu,c_pokemon[partypkmn.num])
 end,function(game)
 game.menu:refresh(
@@ -339,17 +341,26 @@ end
 game.menu[4].name..=#g_available_pokemon
 game.menu[5].name..=0
 end,function(game)
-game.menu:refresh({
-{name="bugcatch",select=function(a,game)
+game.menu:refresh(c_trainers,function(trainer,num)
+local disabled,team=num-1>@0x5efd,{}
+for i=1,6 do team[i]=trainer[i+1]end
+return{
+name=trainer[1],
+team=team,
+disabled=disabled,
+desc=disabled and "beat|previous|to unlock",
+select=function(entry,game)
 local cpu_party_draft={}
 for i=1,6 do
-local num=flr_rnd(151)+1
+local num=entry.team[i]
+if num then
 add(cpu_party_draft,{num=num,moves=c_pokemon[num].get_natural_moveset(100)})
 end
-begin_fight(game,100,get_party(game:cursor"party"),cpu_party_draft,"player 1","bugcatcher",false,true)
-end,desc="i|like|bugs"
+end
+begin_fight(game,get_party(game:cursor"team1"),cpu_party_draft,"player 1","bugcatcher",false,true)
+end
 }
-})
+end)
 end,function(game)
 game.menu:refresh(zobj[[;name,info,state,partystat,select,%menu_state_callback,;;name,moves,state,partymoves,select,%menu_state_callback;;name,delete,select,%partydel]])
 game.partymovesel.menu.c=0
@@ -359,7 +370,7 @@ g_available_pokemon,
 function(num)
 return{
 select=function(_,game)
-save_party(game:cursor"party",set_default_party_pkmn(get_party(game:cursor"party"),game:cursor"editparty"+1,g_available_pokemon[game:cursor"browse"+1]))
+save_party(game:cursor"team1",set_default_party_pkmn(get_party(game:cursor"team1"),game:cursor"editparty"+1,g_available_pokemon[game:cursor"browse"+1]))
 game:pop()
 end,
 num=num
@@ -367,8 +378,8 @@ num=num
 end
 )
 end,function(game)
-local party=get_party(game:cursor"party")
-local partypkmn=party[game:cursor"editparty"+1]
+local team=get_party(game:cursor"team1")
+local partypkmn=team[game:cursor"editparty"+1]
 game.menu:refresh(zobj[[,1,2,3,4]],function(i)
 return{
 num=partypkmn.moves[i],
@@ -377,8 +388,8 @@ select=function(_,game)game:push"partymovesel" end
 }
 end)
 end,function(game)
-local party=get_party(game:cursor"party")
-local partypkmn=party[game:cursor"editparty"+1]
+local team=get_party(game:cursor"team1")
+local partypkmn=team[game:cursor"editparty"+1]
 local pkmn=c_pokemon[partypkmn.num]
 game.menu:refresh(pkmn.moves,function(m)
 return{
@@ -386,7 +397,7 @@ name=c_moves[m.num].name,
 num=m.num,
 ref=m.ref,
 select=function(_,game)
-save_party(game:cursor"party",set_party_pkmn_move(get_party(game:cursor"party"),game:cursor"editparty"+1,game:cursor"partymoves"+1,m.num))
+save_party(game:cursor"team1",set_party_pkmn_move(get_party(game:cursor"team1"),game:cursor"editparty"+1,game:cursor"partymoves"+1,m.num))
 game:pop()
 end
 }
@@ -407,29 +418,31 @@ game.menu:refresh(zobj[[;name,fight,desc,select|a|move,select,%menu_state_callba
 game.menu.c=0
 end,function(game)
 game.menu:refresh(zobj[[,1,2,3]],function(i)
-local party=get_party(i-1)
+local team=get_party(i-1)
+local newteam={}
 local is_disabled=true
 for i=1,6 do
-if party[i]then is_disabled=false end
+if team[i]then newteam[i]=team[i].num is_disabled=false end
 end
 return{
 name="team #"..i,
+team=newteam,
 select=function()game:select_func()end,
 disabled=game.disable_empty_party and is_disabled
 }
 end)
 end,function(game)
-local party=get_party(game:cursor"party")
+local team=get_party(game:cursor"team1")
 game.menu:refresh(zobj[[,1,2,3,4,5,6]],function(i)
 return{
 select=function(entry,game)
-if party[game:cursor"editparty"+1]then
+if team[game:cursor"editparty"+1]then
 game:push"partyaction"
 else
 game:push"partypkmn"
 end
 end,
-num=party[i]and party[i].num or-1
+num=team[i]and team[i].num or-1
 }
 end)
 end,function(game)
@@ -474,9 +487,9 @@ end
 _g.modes_default_update(game)
 end,function(game)
 if g_bpl then
-local party=get_party(game:cursor"party")
+local team=get_party(game:cursor"team1")
 for i=game.editparty.menu.c-1,0,-1 do
-if party[i+1]then
+if team[i+1]then
 game.editparty.menu.c=i
 break
 end
@@ -484,9 +497,9 @@ end
 _g.partystat_init(game)
 end
 if g_bpr then
-local party=get_party(game:cursor"party")
+local team=get_party(game:cursor"team1")
 for i=game.editparty.menu.c+1,5,1 do
-if party[i+1]then
+if team[i+1]then
 game.editparty.menu.c=i
 break
 end
@@ -497,7 +510,8 @@ _g.modes_default_update(game)
 end,function(game)game.menu.update(game)end,function(game)game.menu.draw1(game)end,function(game,menu_name)
 return game[menu_name].menu.c
 end,function(game,menu_name)
-return game[menu_name].menu[game[menu_name].menu.c+1]
+local menu=(menu_name and game[menu_name].menu or game.menu)
+return menu[menu.c+1]
 end,function(a,newstate)
 add(a.stack,newstate)
 a:load(newstate)
@@ -513,10 +527,11 @@ end
 game.modes=_g.modes()
 zcall(function(menu_name,create_func,...)
 game.modes[menu_name].menu=create_func(...)
-end,[[;,browse,%create_menu,%browse_drawentry,4;;,browsestat,%create_menu_view,%menu_drawentry;;,partystat,%create_menu_view,%menu_drawentry;;,credits,%create_menu_view,%menu_drawentry;;,editparty,%create_menu,%browse_drawentry,3;;,fightsel,%create_menu,%menu_drawentry;;,main,%create_menu,%menu_drawentry;;,partyaction,%create_menu,%menu_drawentry;;,party,%create_menu,%menu_drawentry;;,partymovesel,%create_menu,%menu_drawentry;;,partymoves,%create_menu,%menu_drawentry;;,pselactions,%create_menu,%menu_drawentry;;,pselmove,%create_menu,%menu_drawentry]])
+end,[[;,browse,%create_menu,%browse_drawentry,4;;,browsestat,%create_menu_view,%menu_drawentry;;,partystat,%create_menu_view,%menu_drawentry;;,credits,%create_menu_view,%menu_drawentry;;,editparty,%create_menu,%browse_drawentry,3;;,main,%create_menu,%menu_drawentry;;,partyaction,%create_menu,%menu_drawentry;;,partymovesel,%create_menu,%menu_drawentry;;,partymoves,%create_menu,%menu_drawentry;;,pselactions,%create_menu,%menu_drawentry;;,pselmove,%create_menu,%menu_drawentry;;,team1,%create_menu,%menu_drawentry;;,team2,%create_menu,%menu_drawentry]])
 game.modes.main.menu.cancel=_g.beep
 game.modes.pselactions.menu.cancel=_g.beep
-game.modes.fightparty.menu=game.modes.party.menu
+game.modes.team1fight.menu=game.modes.team1.menu
+game.modes.team2cpu.menu=game.modes.team2.menu
 game.modes.partypkmn.menu=game.modes.browse.menu
 sfx(61,0)
 menuitem(1,"close picodex",function()
@@ -563,12 +578,12 @@ draw_picodex(a:is_active"shaking",1,nop,nop,nop,a.light)
 end,function(a)
 draw_picodex(a:is_active"shaking",-cos(a:get_elapsed_percent"opening"/2),nop,nop,nop)
 end,function()sfx(60,0)end,function(entry,game)
-local party=get_party(game:cursor"party")
-party[game:cursor"editparty"+1]=nil
-save_party(game:cursor"party",party)
+local team=get_party(game:cursor"team1")
+team[game:cursor"editparty"+1]=nil
+save_party(game:cursor"team1",team)
 game:pop()
 end,function(game)
-game:push"fightsel"
+game:push"team2cpu"
 end,function(game)game:push"editparty" end,function(game)
 game.p0=game[game.p0key]
 if game.p0.iscpu or #game.p0.actions>0 then
@@ -645,7 +660,7 @@ c_zmovetype=zobj[[0;name,status;;name,physical;;name,special;]]
 c_moves=zobj[[0;,struggle,1,0,50,1;;,megapnch,1,20,80,.85;;,razrwind,1,10,80,1;;,swordanc,1,20,0,0;;,whrlwind,1,20,0,0;;,megakick,1,5,120,.75;;,toxic,5,10,0,.9;;,horndril,1,5,0,.3;;,bodyslam,1,15,85,1;;,takedown,1,20,90,.85;;,doubledg,1,15,120,1;;,bublbeam,4,20,65,1;;,watergun,4,25,40,1;;,icebeam,10,10,90,1;;,blizzard,10,5,110,.7;;,hyprbeam,1,5,150,.9;;,payday,1,20,40,1;;,submsion,3,20,80,.8;;,counter,3,20,0,1;;,siestoss,3,20,0,1;;,rage,1,20,20,1;;,megdrain,8,15,40,1;;,solrbeam,8,10,120,1;;,drgnrage,14,10,0,1;;,thndrblt,6,15,90,1;;,thunder,6,10,110,.7;;,earthqke,7,10,100,1;;,fissure,7,5,0,.3;;,dig,7,10,80,1;;,psychic,12,10,90,1;;,teleport,12,20,0,0;;,mimic,1,10,0,0;;,doubteam,1,15,0,0;;,reflect,12,20,0,0;;,bide,1,10,0,0;;,metronom,1,10,0,0;;,selfdstr,1,5,200,1;;,eggbomb,1,10,100,.75;;,fireblst,2,5,110,.85;;,swift,1,20,60,2;;,skulbash,1,10,130,1;;,softboil,1,5,0,0;;,dreameat,12,15,100,1;;,skyattck,9,5,140,.9;;,rest,12,5,0,0;;,thndrwav,6,20,0,.9;;,psywave,12,15,0,1;;,explsion,1,5,250,1;;,rockslid,13,10,75,.9;;,triattck,1,10,80,1;;,substute,1,10,0,0;;,cut,1,30,50,.95;;,fly,9,15,90,.95;;,surf,4,15,90,1;;,strength,1,15,80,1;;,flash,1,20,0,1;;,pound,1,35,40,1;;,karatchp,3,25,50,1;;,doublslp,1,10,15,.85;;,comtpnch,1,15,18,.85;;,firepnch,2,15,75,1;;,icepnch,10,15,75,1;;,thndpnch,6,15,75,1;;,scratch,1,35,40,1;;,vicegrip,1,30,55,1;;,guilotin,1,5,0,.3;;,gust,9,35,40,1;;,wingatck,9,35,60,1;;,bind,1,20,15,.85;;,slam,1,20,80,.75;;,vinewhip,8,25,45,1;;,stomp,1,20,65,1;;,doublkck,3,30,30,1;;,jumpkck,3,10,100,.95;;,rllngkck,3,15,60,.85;;,sandatck,7,15,0,1;;,headbutt,1,15,70,1;;,hornatck,1,25,65,1;;,furyatck,1,20,15,.85;;,tackle,1,35,40,1;;,wrap,1,20,15,.9;;,thrash,1,10,120,1;;,tailwhip,1,30,0,1;;,psnsting,5,35,15,1;;,twineedl,11,20,25,1;;,pinmisil,11,20,25,.95;;,leer,1,30,0,1;;,bite,1,25,60,1;;,growl,1,40,0,1;;,roar,1,20,0,1;;,sing,1,15,0,.55;;,supersnc,1,20,0,.55;;,sonicbm,1,20,0,.9;;,disable,1,20,0,1;;,acid,5,30,40,1;;,ember,2,25,40,1;;,flamthwr,2,15,90,1;;,mist,10,30,0,0;;,hydropmp,4,5,110,.8;;,psybeam,12,20,65,1;;,aurorabm,10,20,65,1;;,peck,9,35,35,1;;,drillpck,9,20,80,1;;,lowkick,3,20,0,1;;,absorb,8,25,20,1;;,leechsed,8,10,0,.9;;,growth,1,20,0,0;;,razrleaf,8,25,55,.95;;,psnpowdr,5,35,0,.75;;,stunspor,8,30,0,.75;;,slppowdr,8,15,0,.75;;,petldanc,8,10,120,1;;,strngsht,11,40,0,.95;;,firespin,2,15,35,.85;;,thndshck,6,30,40,1;;,rockthrw,13,15,50,.9;;,cnfusion,12,25,50,1;;,hypnosis,12,20,0,.6;;,meditate,12,40,0,0;;,agility,12,30,0,0;;,quickatk,1,30,40,1;;,nghtshde,15,15,0,1;;,screech,1,40,0,.85;;,recover,1,5,0,0;;,harden,1,30,0,0;;,minimize,1,10,0,0;;,smokscrn,1,20,0,1;;,cnfusray,15,10,0,1;;,withdraw,4,40,0,0;;,dfnscurl,1,40,0,0;;,barrier,12,20,0,0;;,lghtscrn,12,30,0,0;;,haze,10,30,0,0;;,fcsenrgy,1,30,0,0;;,mirrmove,9,20,0,0;;,lick,15,30,30,1;;,smog,5,20,30,.7;;,sludge,5,20,65,1;;,boneclub,7,20,65,.85;;,waterfal,4,15,80,1;;,clamp,4,15,35,.85;;,spikcann,1,15,20,1;;,constrct,1,35,10,1;;,amnesia,12,20,0,0;;,kinesis,12,15,0,.8;;,hijmpkck,3,10,130,.9;;,glare,1,30,0,1;;,psngas,5,40,0,.9;;,barrage,1,20,15,.85;;,leechlif,11,10,80,1;;,lovekiss,1,10,0,.75;;,tranform,1,10,0,0;;,bubble,4,30,40,1;;,dizypnch,1,10,70,1;;,spore,8,15,0,1;;,splash,1,40,0,0;;,acidarmr,5,20,0,0;;,crabhamr,4,10,100,.9;;,furyswps,1,15,18,.8;;,bonerang,7,10,50,.9;;,hyprfang,1,15,80,.9;;,sharpen,1,30,0,0;;,convrson,1,30,0,0;;,suprfang,1,10,0,.9;;,slash,1,20,70,1]]
 c_trainers=zobj[[;,youngstr,19,16,10,21,13,69;;,junior,23,27,19,7,4,1;;,bugcatch,13,46,14,10,11,127;;,brock,74,138,104,37,140,95;;,lass,43,52,35,29,84,39;;,hiker,74,50,41,66,46,75;;,swimmer,116,60,90,129,120,118;;,misty,120,117,54,119,86,121;;,gentlman,58,32,147,77,25,133;;,sailor,90,72,54,60,98,61;;,rocker,100,41,48,63,81,135;;,ltsurge,25,135,100,125,82,26;;,channelr,92,39,104,35,93,105;;,gambler,17,75,61,111,58,44;;,beauty,69,113,40,70,133,36;;,erika,47,71,102,12,114,45;;,birdkeep,84,17,22,83,85,18;;,biker,109,56,72,88,67,73;;,juggler,48,44,122,96,101,79;;,koga,30,89,110,15,33,49;;,blckbelt,66,67,106,56,57,107;;,rocket,28,20,101,42,110,24;;,psychic,79,63,80,96,102,64;;,sabrina,122,103,64,124,97,65;;,scientst,132,71,92,49,97,137;;,pkmaniac,113,127,125,123,108,55;;,suprnerd,77,82,57,136,37,78;;,blaine,78,59,136,38,76,126;;,fishrman,118,73,117,119,91,99;;,cooltrnr,148,47,55,8,5,2;;,tamer,105,128,28,20,111,53;;,giovanni,51,34,53,31,115,112;;,lorelei,91,124,134,131,80,87;;,bruno,95,107,139,106,76,68;;,agatha,42,89,93,45,24,94;;,lance,130,148,142,149,141,143;;,blue,18,65,112,59,103,9;;,green,36,94,115,130,38,3;;,red,123,143,131,85,26,6;;,legendry,149,145,146,144,150,151]]
 c_menustyles=zobj[[;bg,13,fg,1,out,5;;bg,6,fg,13,out,13;;bg,1,fg,13,out,2;;bg,5,fg,13,out,2]]
-zclass[[modes,actor|cursor,%modes_cursor,entry,%modes_entry,push,%modes_push,pop,%modes_pop,update,nop,draw1,nop,draw2,nop,draw3,nop,curr,main;stack;,;defaults;menu,no,finit,nop,init,nop,update,%modes_default_update,draw1,%modes_default_draw1,draw2,nop,draw3,nop;browse;init,%browse_init,draw2,%browse_draw2,draw3,%browse_draw3;partypkmn;init,%partypkmn_init,draw2,%browse_draw2,draw3,%browse_draw3;browsestat;init,%browsestat_init,draw2,%browse_draw2,draw3,%browse_draw3,update,%browsestat_update;partystat;init,%partystat_init,draw2,%editparty_draw2,draw3,%editparty_draw3,update,%partystat_update;credits;init,%credits_init,draw2,%main_draw2,draw3,%main_draw3;editparty;init,%editparty_init,draw2,%editparty_draw2,draw3,%editparty_draw3,draw1,%editparty_draw1;fightsel;init,%fightsel_init;main;init,%main_init,draw2,%main_draw2,draw3,%main_draw3;partyaction;init,%partyaction_init,draw2,%editparty_draw2,draw3,%editparty_draw3;partymovesel;init,%partymovesel_init,draw2,%partymovesel_draw2,draw3,%partymovesel_draw3;partymoves;init,%partymoves_init,draw2,%partymoves_draw2,draw3,%partymoves_draw3;pselactions;init,%pselactions_init,draw2,%turn_draw2,draw3,%pselactions_draw3;pselmove;init,%pselmove_init,draw2,%turn_draw2,draw3,%pselmove_draw3;party;init,%party_init,draw2,%main_draw2,draw3,%party_draw3,disable_empty_party,no,select_func,%party_select;fightparty;init,%party_init,draw2,%main_draw2,draw3,%party_draw3,disable_empty_party,yes,select_func,%fight_select;p1sel;next,p2sel,init,%psel_init,p0key,p1,update,nop,draw1,nop;p2sel;next,turn,init,%psel_init,p0key,p2,update,nop,draw1,nop;turn;next,p1sel,update,%turn_update,draw1,%turn_draw1,draw2,%turn_draw2,draw3,%turn_draw3,init,%turn_init,cur_action,no;fightover;init,%fightover_init,update,%fightover_update,draw1,%fightover_draw1,draw2,%fightover_draw2,draw3,%fightover_draw3;]]
+zclass[[modes,actor|cursor,%modes_cursor,entry,%modes_entry,push,%modes_push,pop,%modes_pop,update,nop,draw1,nop,draw2,nop,draw3,nop,curr,main;stack;,;defaults;menu,no,finit,nop,init,nop,update,%modes_default_update,draw1,%modes_default_draw1,draw2,nop,draw3,nop;browse;init,%browse_init,draw2,%browse_draw2,draw3,%browse_draw3;partypkmn;init,%partypkmn_init,draw2,%browse_draw2,draw3,%browse_draw3;browsestat;init,%browsestat_init,draw2,%browse_draw2,draw3,%browse_draw3,update,%browsestat_update;partystat;init,%partystat_init,draw2,%editparty_draw2,draw3,%editparty_draw3,update,%partystat_update;credits;init,%credits_init,draw2,%main_draw2,draw3,%main_draw3;editparty;init,%editparty_init,draw2,%editparty_draw2,draw3,%editparty_draw3,draw1,%editparty_draw1;main;init,%main_init,draw2,%main_draw2,draw3,%main_draw3;partyaction;init,%partyaction_init,draw2,%editparty_draw2,draw3,%editparty_draw3;partymovesel;init,%partymovesel_init,draw2,%partymovesel_draw2,draw3,%partymovesel_draw3;partymoves;init,%partymoves_init,draw2,%partymoves_draw2,draw3,%partymoves_draw3;pselactions;init,%pselactions_init,draw2,%turn_draw2,draw3,%pselactions_draw3;pselmove;init,%pselmove_init,draw2,%turn_draw2,draw3,%pselmove_draw3;team1;init,%party_init,draw2,%main_draw2,draw3,%party_draw3,disable_empty_party,no,select_func,%party_select;team1fight;init,%party_init,draw2,%main_draw2,draw3,%party_draw3,disable_empty_party,no,select_func,%fight_select;team2;init,%party_init,draw2,%main_draw2,draw3,%party_draw3,disable_empty_party,yes,select_func,%fight_select;team2cpu;init,%fightsel_init,draw2,%main_draw2,draw3,%party_draw3;p1sel;next,p2sel,init,%psel_init,p0key,p1,update,nop,draw1,nop;p2sel;next,turn,init,%psel_init,p0key,p2,update,nop,draw1,nop;turn;next,p1sel,update,%turn_update,draw1,%turn_draw1,draw2,%turn_draw2,draw3,%turn_draw3,init,%turn_init,cur_action,no;fightover;init,%fightover_init,update,%fightover_update,draw1,%fightover_draw1,draw2,%fightover_draw2,draw3,%fightover_draw3;]]
 function any_btn()return g_bl or g_br or g_bu or g_bd or g_bx or g_bo end
 function draw_picodex(shaking,rotation,l_screen,tr_screen,br_screen,light,backbuttonheld,top_row_buttons,bot_row_buttons)
 light=light or 0
@@ -776,9 +791,9 @@ add(menu,{name=pair.name.." "..pkmn[pair.key]})
 end
 end)
 end
-function set_default_party_pkmn(party,ind,num)
-party[ind]={num=num,moves=c_pokemon[num].get_natural_moveset(100)}
-return party
+function set_default_party_pkmn(team,ind,num)
+team[ind]={num=num,moves=c_pokemon[num].get_natural_moveset(100)}
+return team
 end
 function set_party_pkmn_move(party,ind,moveind,move)
 local partypkmn=party[ind]
@@ -915,8 +930,8 @@ function calc_move_damage(lvl,attack,defense,critical,move_power)
 local base_damage=(2*lvl*critical/5+2)*move_power*(attack/defense)/50+2
 return base_damage*stab*type1*type2*random
 end
-function begin_fight(game,lvl,party1,party2,name1,name2,iscpu1,iscpu2)
-local party1,party2=get_fight_party(party1,lvl),get_fight_party(party2,lvl)
+function begin_fight(game,party1,party2,name1,name2,iscpu1,iscpu2)
+local party1,party2=get_fight_party(party1),get_fight_party(party2)
 game.p1={name=name1,priority=1,iscpu=iscpu1,actions={},active=party_pkmn_to_active(get_next_active(party1)),party=party1,winlogic=nop}
 game.p2={name=name2,priority=0,iscpu=iscpu2,actions={},active=party_pkmn_to_active(get_next_active(party2)),party=party2,winlogic=nop}
 add(game.p1.actions,newaction(game.p1,"#,comes,out"))
@@ -931,7 +946,7 @@ return party[i]
 end
 end
 end
-function get_fight_party(party,lvl)
+function get_fight_party(party)
 local fightparty={}
 for i=1,6 do
 local cur=party[i]

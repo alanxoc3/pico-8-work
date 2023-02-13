@@ -47,10 +47,10 @@ end $$
 -- todo: add xbtn/ybtn
 |[partystat_update]| function(game)
     if g_bpl then
-        local party = get_party(game:cursor'party')
+        local team = get_party(game:cursor'team1')
 
         for i=game.editparty.menu.c-1,0,-1 do
-            if party[i+1] then
+            if team[i+1] then
                 game.editparty.menu.c = i
                 break
             end
@@ -60,10 +60,10 @@ end $$
     end
 
     if g_bpr then
-        local party = get_party(game:cursor'party')
+        local team = get_party(game:cursor'team1')
 
         for i=game.editparty.menu.c+1,5,1 do
-            if party[i+1] then
+            if team[i+1] then
                 game.editparty.menu.c = i
                 break
             end

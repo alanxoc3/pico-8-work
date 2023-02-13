@@ -1,3 +1,3 @@
 |[fight_select]| function(game)
-    game:push'fightsel'
+    game:push'team2cpu'
 end $$

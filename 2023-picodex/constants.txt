@@ -63,11 +63,9 @@ S_PARTY3:         0x5e3c
 S_POKEMON:        0x5e5a
 # 152 pkmn ends:  0x5ef2
 
-# "CURSOR" save spots must have 2 bytes!!!
-# Level is the level pokemon are in battles.
-
-# hoard hs goes here
-S_SWAP_CONTROLS:      0x5eff
+S_STORY:          0x5efd
+S_HOARD:          0x5efe
+S_SWAP_CONTROLS:  0x5eff
 
 # type numbers
 T_NONE:     no
