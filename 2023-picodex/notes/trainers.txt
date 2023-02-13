@@ -1,61 +1,41 @@
 TRAINER  PKMN1 PKMN2 PKMN3 PKMN4 PKMN5 PKMN6
-
 youngstr rattata pidgey caterpie spearow weedle bellsprout
 junior   ekans sandshrew rattata squirtle charmander bulbasaur
 bugcatch weedle paras kakuna caterpie metapod pinsir
-
 brock    geodude omanyte cubone vulpix kabuto onix
-
 lass     oddish meowth clefairy nidoranf doduo jigglypuff
 hiker    geodude diglett zubat machop paras graveler
 swimmer  horsea poliwag shellder magikarp staryu goldeen
-
 misty    staryu seadra psyduck seaking seel starmie
-
 gentlman growlithe nidoranm dratini ponyta pikachu eevee
 sailor   shellder tentacool psyduck poliwag krabby poliwhirl
 rocker   voltorb zubat venonat abra magnemite jolteon
-
 ltsurge  pikachu jolteon voltorb electabuzz magneton raichu
-
-channelr ghastly jigglypuff cubone clefairy haunter marowak
+channelr gastly jigglypuff cubone clefairy haunter marowak
 gambler  pidgeotto graveler poliwhirl rhyhorn growlithe gloom
 beauty   bellsprout chansey wigglytuff weepinbell eevee clefable
-
 erika    parasect victreebel exeggcute butterfree tangela vileplume
-
 birdkeep doduo pidgeotto fearow farfetchd dodrio pidgeot
 biker    koffing mankey tentacool grimer machoke tentacruel
 juggler  venonat gloom mrmime drowzee electrode slowpoke
-
 koga     nidorina muk weezing beedrill nidorino venomoth
-
 blckbelt machop machoke hitmonlee mankey primeape hitmonchan
 rocket   sandslash raticate electrode golbat weezing arbok
 psychic  slowpoke abra slowbro drowzee exeggcute kadabra
-
 sabrina  mrmime exeggutor kadabra jynx hypno alakazam
-
-scientst ditto victreebel ghastly venomoth hypno porygon
+scientst ditto victreebel gastly venomoth hypno porygon
 pkmaniac chansey pinsir electabuzz scyther lickitung golduck
 suprnerd ponyta magneton primeape flareon vulpix rapidash
-
 blaine   rapidash arcanine flareon ninetales golem magmar
-
 fishrman goldeen tentacruel seadra seaking cloyster kingler
 cooltrnr dragonair parasect golduck wartortle charmeleon ivysaur
 tamer    marowak tauros sandslash raticate rhyhorn persian
-
 giovanni dugtrio nidoking persian nidoqueen kangaskhan rhydon
-
 lorelei  cloyster jynx vaporeon lapras slowbro dewgong
 bruno    onix hitmonchan omastar hitmonlee golem machamp
 agatha   golbat muk haunter vileplume arbok gengar
-
 lance    gyarados dragonair aerodactyl dragonite kabutops snorlax
-
 blue     pidgeot alakazam rhydon arcanine exeggutor blastoise
 green    clefable gengar kangaskhan gyarados ninetales venusaur
 red      scyther snorlax lapras dodrio raichu charizard
-
 legendry dragonite zapdos moltres articuno mewtwo mew
