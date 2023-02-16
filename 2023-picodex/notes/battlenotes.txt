@@ -289,31 +289,47 @@ Active pokemon data structure:
 
         -- remember, that haze heals: confused, disabled, focused, misted, reflected, screened, seeded, toxiced
         -- remember, sleeping does not heal toxic or confuse
-        haze = {
-            confused   = false, -- confuseray/supersonic/confusion/psybeam/petaldance/thrash
-            disabled   = 1-4,   -- disable - lasts 1-7 turns. only 1 move may be disabled at a time (hence minor status)
-            focused    = false, -- focusenergy
-            misted     = false, -- mist
-            reflected  = false, -- reflect - half physical
-            screened   = false, -- lightscreen - half special
-            seeded     = false, -- leechseed
-            toxiced    = 1-16,  -- toxic - increase 1 each turn if poisoned. if not poison, then this gets unset
-        }
+        -- these could all be true
+        confused   = 1-4,   -- confuseray/supersonic/confusion/psybeam/petaldance/thrash
+        disable_m  = 1-4,   -- disable move - only 1 move may be disabled at a time
+        disable_t  = 0-7,   -- the timer for disable. this is 1-7 turns.
+        toxiced    = 1-16,  -- toxic - increase 1 each turn if poisoned. if not poison, then this gets unset
+        focused    = false, -- focusenergy
+        misted     = false, -- mist
+        reflected  = false, -- reflect - half physical
+        screened   = false, -- lightscreen - half special
+        seeded     = false, -- leechseed
 
         -- no need to store conversion, because conversion can be used infinitely many times
         critmove   = false, -- karatechop/slash/crabhammer/razorleaf
         flinching  = false, -- bite/boneclub/hyperfang/headbutt/stomp/lowkick/rollingkick -- resets at end of turn
-        substitute = false, -- substitute
-        transform  = false, -- transform - set, because you can't use transform once you are already transformed
+        substitute = hp, -- substitute
+        transform  = pkmn_num, -- transform - set, because you can't use transform once you are already transformed
 
         -- these ones are related, because they are all multiturn attacks, they all don't allow move selection
-        digging    = false, -- dig - uncontrollable + invincible (besides swift)
-        flying     = false, -- fly - uncontrollable + invincible (besides swift)
-        preparing  = false, -- skullbash/solarbeam/razorwind/skyattack - uncontrollable + next turn move
-        recharging = false, -- hyperbeam - uncontrollable 1 turn
+        preparing  = false -- dig/fly/skillbash/solarbeam/razorwind/skyattack, used in conjunction with onlymove
+        recharging = 2, -- hyperbeam - uncontrollable 1 turn, recharge should happen after 2 turns no matter what
 
-        rage       = false, -- rage                     - uncontrollable + use a move. attack increases each time you are hit, so no counter needed (use the stages counter)
-        thrashing  = false, -- petaldance/thrash        - uncontrollable + use a move. has a timer (2-3 turns) and get confused at the end
-        uncontrol  = false, -- bind/clamp/firespin/wrap - uncontrollable + use a move. is trapped? (timer 2-5 turns) recharging? preparing? thrashing?
-        trapped    = false, -- if you are trapped in a bind/clamp/firespin/wrap
+        rage       = false, -- rage                   - uncontrollable + use a move. attack increases each time you are hit, so no counter needed (use the stages counter)
+        thrashing  = 3-4, -- petaldance/thrash        - uncontrollable + use a move. has a timer (2-3 turns) and get confused at the end
+        trapping   = 2-5, -- bind/clamp/firespin/wrap - use a move. is trapped? (timer 2-5 turns)
+
+        onlymove   = num -- this is the moveid of a multiturn move or nil
+        hmm...
+
+        -- I want sleep/freeze/trap/flinch/paralyze/confuse to all stop multiturn moves.
+        -- I don't want disable to be able to disable an "onlymove"
+        -- you can always switch out? maybe. technically, dig & fly and some other moves prevent it though. trapping moves don't prevent it.
+        -- disable, confuse, thrashing, and trapping subtract 1 at end of each turn
+        -- before attacking, check if the other pokemon is trapping. you can't attack if they are. and they can't trap if they missed the trapping move.
+        -- if preparing, then don't use the move. instead, say "bulbasaur preparing solarbeam"
+        -- if recharging, then don't use the move. instead say "bulbasaur is recharging"
+        -- if your pokemon switches, trapping and trapped are set to false for the oppenent pokemon.
+        -- i should pass turn into move function!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        -- if onlymove == dig or onlymove == fly, you miss...
+        -- you can use a disabled move if it was duplicated with mimic
+
+        -- a move returns the accuracy and damage it would do, it is also able to perform any effects.
+        -- would things like confused would cause dig/fly to end.
+        -- 
     }

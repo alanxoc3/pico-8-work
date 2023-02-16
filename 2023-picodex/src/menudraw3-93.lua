@@ -9,18 +9,10 @@
     end
 end $$
 
--- todo: combine with partymoves_draw3
-|[partymovesel_draw3]|  function(game)
-    local num = game:entry'partymovesel'.num
-    if num then
-        local move = c_moves[num]
-        print_draw3_message{'.'..c_types[move.type].name, move.pp..'/'..move.pp, move.damage.."P "..(move.accuracy*100\1).."A"}
-    end
-end $$
-
--- todo: combine with partymoves_draw3
-|[partymoves_draw3]| function(game)
-    local num = game:entry'partymoves'.num
+-- todo: put "move" directly on entry so pp reflects correctly.
+-- for partymoves, partymovesel, pmovesel
+|[move_draw3]| function(game)
+    local num = game:entry().num
     if num then
         local move = c_moves[num]
         print_draw3_message{'.'..c_types[move.type].name, move.pp..'/'..move.pp, move.damage.."P "..(move.accuracy*100\1).."A"}
@@ -31,6 +23,7 @@ end $$
 
 |[browse_draw3]|       function(game) draw3_pokeinfo(get_browse_pokemon(game:cursor'browse'+1))   end $$
 |[main_draw3]|         function(game) print_draw3_message(split(game:entry'main'.desc, '|'))      end $$
+|[pselactions_draw3]|  function(game) print_draw3_message(split(game:entry'pselactions'.desc, '|'))      end $$
 
 |[party_draw3]|        function(game)
     local count, power = 0, 0
@@ -42,10 +35,9 @@ end $$
         end
     end
 
-    print_draw3_message{".team stats", "size "..count.."/6", "powr "..power}
+    print_draw3_message{".team stats", "pkm "..count.."/6", "pow "..power}
 end $$
 
-|[pselactions_draw3]|  function(_)                                                                end $$
 |[pselmove_draw3]|     function(game)                                                             end $$
 |[fightover_draw3]|  function(game) print_draw3_message{game.p0.name, "is the", "winner"} end $$
 

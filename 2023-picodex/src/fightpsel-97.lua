@@ -10,7 +10,7 @@
     end
 end $$
 
-|[psel_forfeit]| function(a, game)
+|[psel_forfeit]| function(game)
     game:pop()
 
     -- must set game.p0 to the other player, so it shows they win

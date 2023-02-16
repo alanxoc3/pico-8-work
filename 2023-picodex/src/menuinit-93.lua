@@ -1,6 +1,26 @@
 -- todo: make a function that loops from 1 to 6.
 
-|[fightover_init]| function(game) game.p0.winlogic() end $$
+|[fightover_init]| function(game)
+    local winner, loser = game.p0, get_other_pl(game, game.p0)
+    winner.winlogic()
+
+    game.menu:refresh{}
+
+    add(game.menu, {pkmn=winner.active.shared.num})
+    add(game.menu, {hidden=true})
+
+    add(game.menu, {name="winner", style=3})
+    add(game.menu, {name=winner.name})
+    add(game.menu, {name="6/6"})
+
+    add(game.menu, {pkmn=loser.active.shared.num})
+    add(game.menu, {hidden=true})
+
+    add(game.menu, {name="loser", style=3})
+    add(game.menu, {name=loser.name})
+    add(game.menu, {name="pkm 6/6"})
+
+end $$
 
 |[main_init]| function(game)
     game.menu:refresh(
@@ -18,7 +38,7 @@ end $$
 |[browse_init]| function(game)
     game.menu:refresh(
         g_available_pokemon,
-        function(num) return {select=function(entry, game) game:push'browsestat' end, num=num} end
+        function(num) return {select=function(game) game:push'browsestat' end, num=num} end
     )
 end $$
 
@@ -63,7 +83,7 @@ end $$
             team=team,
             disabled=disabled,
             desc=disabled and "beat|previous|to unlock",
-            select=function(entry, game)
+            select=function(game, entry)
                 local cpu_party_draft = {}
                 for i=1,6 do
                     local num = entry.team[i]
@@ -72,7 +92,7 @@ end $$
                     end
                 end
 
-                begin_fight(game, get_party(game:cursor'team1'), cpu_party_draft, "player 1", "bugcatcher", false, true)
+                begin_fight(game, get_party(game:cursor'team1'), cpu_party_draft, "player 1", entry.name, false, true)
             end
         }
     end)
@@ -93,7 +113,7 @@ end $$
         g_available_pokemon,
         function(num)
             return {
-                select=function(_, game)
+                select=function(game)
                     save_party(game:cursor'team1', set_default_party_pkmn(get_party(game:cursor'team1'), game:cursor'editparty'+1, g_available_pokemon[game:cursor'browse'+1]))
                     game:pop()
                 end,
@@ -111,7 +131,7 @@ end $$
         return {
             num=partypkmn.moves[i],
             name=partypkmn.moves[i] and c_moves[partypkmn.moves[i]].name or "???",
-            select=function(_, game) game:push'partymovesel' end
+            select=function(game) game:push'partymovesel' end
         }
     end)
 end $$
@@ -126,7 +146,7 @@ end $$
             name=c_moves[m.num].name,
             num=m.num,
             ref=m.ref,
-            select=function(_, game)
+            select=function()
                 save_party(game:cursor'team1', set_party_pkmn_move(get_party(game:cursor'team1'), game:cursor'editparty'+1, game:cursor'partymoves'+1, m.num))
                 game:pop()
             end
@@ -138,9 +158,10 @@ end $$
 -- todo: support struggle
 |[pselmove_init]|   function(game)
     game.menu:refresh(get_possible_move_slots(game.p0.active), function(move_slot)
+        local move = c_moves[game.p0.active.moveids[move_slot]]
         return {
-            name=c_moves[game.p0.active.moveids[move_slot]].name,
-            desc="todo",
+            name=move.name,
+            num=move.num,
             select=function()
                 game:pop() game:pop()
                 select_move(game.p0, move_slot)
@@ -151,11 +172,11 @@ end $$
 
 |[pselactions_init]| function(game)
     game.menu:refresh(zobj[[
-         ; name,"fight",   desc,"select|a|move",         select,%menu_state_callback, state,pselmove
+         ; name,"fight",   desc,"select|next|move",         select,%menu_state_callback, state,pselmove
+        ;; name,"random",  desc,"select|random|move",    select,%menu_cancel -- random logic is in the turn logic if move is empty, so just leave the menu
         ;; name,"switch",  desc,"change|active|pokemon", select,%menu_state_callback, state,pselswitch, disabled,yes
         ;; name,"forfeit", desc,"leave|the|fight",       select,%psel_forfeit
     ]])
-    game.menu.c = 0 -- set to zero, so default to fight. this seems sensible
 end $$
 
 |[party_init]| function(game)
@@ -182,7 +203,7 @@ end $$
     local team = get_party(game:cursor'team1')
     game.menu:refresh(zobj[[,1,2,3,4,5,6]], function(i)
         return {
-            select=function(entry, game)
+            select=function(game)
                 if team[game:cursor'editparty'+1] then
                     game:push'partyaction'
                 else

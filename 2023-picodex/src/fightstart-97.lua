@@ -17,6 +17,7 @@ function begin_fight(game, party1, party2, name1, name2, iscpu1, iscpu2)
     -- how to switch the current player
     -- game.p0 = game.p0 == game.p1 and game.p2 or game.p1
     game.p0 = game.p1
+    game.pselactions.menu.c, game.pselmove.menu.c = 0, 0 -- cursor should not copy previous fights
 
     game:push'turn'
 end
@@ -29,72 +30,4 @@ function get_next_active(party)
             return party[i]
         end
     end
-end
-
--- converts a party into a party ready for battle
-function get_fight_party(party)
-    local fightparty = {}
-
-    -- TODO: optimize for tokens
-    for i=1,6 do
-        local cur = party[i]
-        if cur then
-            local pkmn = c_pokemon[cur.num]
-            fightparty[i] = {
-                -- todo, try just copying all keys from pkmn
-                -- things that won't change
-                num     = cur.num,
-                lvl     = pkmn.level,
-                maxhp   = pkmn.hp,
-                attack  = pkmn.attack,
-                defense = pkmn.defense,
-                speed   = pkmn.speed,
-                special = pkmn.special,
-                moveids = (function() local m = {} for i=1,4 do m[i] = cur.moves[i] end return m end)(),
-
-                -- things that can change
-                hp      = pkmn.hp,
-                movepps = (function() local m = {} for i=1,4 do m[i] = cur.moves[i] and c_moves[cur.moves[i]].pp end return m end)(),
-            }
-        end
-    end
-
-    return fightparty
-end
-
--- partypkmn must be non-nil and match the party table structure defined in get_fight_party 
-function party_pkmn_to_active(partypkmn)
-    return {
-        type1 = c_pokemon[partypkmn.num].type1,
-        type2 = c_pokemon[partypkmn.num].type2,
-        moveids = (function() local m = {} for i=1,4 do m[i] = partypkmn.moveids[i] end return m end)(),
-        movepps = partypkmn.movepps,
-
-        -- these always start at zero
-        stages = zobj[[
-            special,0,
-            defense,0,
-            attack,0,
-            speed,0,
-            accuracy,0,
-            evasion,0
-        ]],
-
-        -- evasion and accuracy have a different formula: https://www.smogon.com/rb/articles/stadium_guide
-        -- all stats cap at 999: https://www.smogon.com/rb/articles/rby_mechanics_guide
-        -- and i'm giving it a min of 1 too, because zero messes things up
-        getstat = function(a, stat)
-            local stage = a.stages[stat]
-            return ceil(mid(1, 999,
-                a.shared[stat]*(
-                    (stat == 'evasion' or stat == 'accuracy')
-                    and mid(1, 1+stage/3, 3)/mid(1, 1-stage/3, 3)
-                     or mid(2, 2+stage,   8)/mid(2, 2-stage,   8)
-                )
-            ))
-        end,
-
-        minor = {},
-        shared = partypkmn,
-    }
 end

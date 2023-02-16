@@ -23,18 +23,19 @@ zclass[[modes,actor|
     browsestat;   init,%browsestat_init,   draw2,%browse_draw2,       draw3,%browse_draw3,    update,%browsestat_update; -- view pkmn info in browse
     partystat;    init,%partystat_init,    draw2,%editparty_draw2,    draw3,%editparty_draw3, update,%partystat_update;  -- view pkmn info in teams
     credits;      init,%credits_init,      draw2,%main_draw2,         draw3,%main_draw3;
+    fightover;    init,%fightover_init,    draw2,%fightover_draw2,    draw3,%fightover_draw3;
     editparty;    init,%editparty_init,    draw2,%editparty_draw2,    draw3,%editparty_draw3, draw1,%editparty_draw1;
     main;         init,%main_init,         draw2,%main_draw2,         draw3,%main_draw3         ;
     partyaction;  init,%partyaction_init,  draw2,%editparty_draw2,    draw3,%editparty_draw3    ;
-    partymovesel; init,%partymovesel_init, draw2,%partymovesel_draw2, draw3,%partymovesel_draw3 ;
-    partymoves;   init,%partymoves_init,   draw2,%partymoves_draw2,   draw3,%partymoves_draw3   ;
+    partymovesel; init,%partymovesel_init, draw2,%partymovesel_draw2, draw3,%move_draw3;
+    partymoves;   init,%partymoves_init,   draw2,%partymoves_draw2,   draw3,%move_draw3;
     pselactions;  init,%pselactions_init,  draw2,%turn_draw2,         draw3,%pselactions_draw3  ;
-    pselmove;     init,%pselmove_init,     draw2,%turn_draw2,         draw3,%pselmove_draw3     ;
+    pselmove;     init,%pselmove_init,     draw2,%turn_draw2,         draw3,%move_draw3;
 
-    team1;        init,%party_init,        draw2,%main_draw2,         draw3,%party_draw3, disable_empty_party,no,  select_func,%party_select;
-    team1fight;   init,%party_init,        draw2,%main_draw2,         draw3,%party_draw3, disable_empty_party,no,  select_func,%fight_select;
-    team2;        init,%party_init,        draw2,%main_draw2,         draw3,%party_draw3, disable_empty_party,yes, select_func,%fight_select;
-    team2cpu;     init,%fightsel_init,     draw2,%main_draw2,         draw3,%party_draw3;
+    team1;        init,%party_init,        draw2,%main_draw2,         draw3,%party_draw3, disable_empty_party,no,  select_func,%party_select;  -- t1
+    team1fight;   init,%party_init,        draw2,%main_draw2,         draw3,%party_draw3, disable_empty_party,yes,  select_func,%fight_select; -- s1
+    team2;        init,%party_init,        draw2,%main_draw2,         draw3,%party_draw3, disable_empty_party,yes, select_func,%fight_select;  -- ??
+    team2cpu;     init,%fightsel_init,     draw2,%main_draw2,         draw3,%party_draw3;                                                      -- t2
 
     -- fightsel;     init,%fightsel_init,     draw2,%main_draw2,         draw3,%party_draw3;
     -- fightparty;   init,%fightsel_init,     draw2,%main_draw2,         draw3,%party_draw3, disable_empty_party,yes, select_func,%fight_select;
@@ -46,7 +47,6 @@ zclass[[modes,actor|
     p1sel;        next,p2sel, init,%psel_init, p0key,p1, update,nop, draw1,nop;
     p2sel;        next,turn,  init,%psel_init, p0key,p2, update,nop, draw1,nop;
     turn;         next,p1sel,           update,%turn_update,      draw1,%turn_draw1,      draw2,%turn_draw2, draw3,%turn_draw3, init,%turn_init, cur_action,no;
-    fightover;    init,%fightover_init, update,%fightover_update, draw1,%fightover_draw1, draw2,%fightover_draw2, draw3,%fightover_draw3;
 ]]
 
 |[modes_default_update]| function(game) game.menu.update(game) end $$
@@ -90,7 +90,8 @@ end $$
         ;,browse,       %create_menu,      %browse_drawentry, 4 -- selecting a pkmn from dex (for browsing or changing team pkmn)
        ;;,browsestat,   %create_menu_view, %menu_drawentry      -- info for pkmn in browse mode
        ;;,partystat,    %create_menu_view, %menu_drawentry      -- info for pkmn in party mode
-       ;;,credits,      %create_menu_view, %menu_drawentry      
+       ;;,credits,      %create_menu_view, %menu_drawentry      -- credits view obviously
+       ;;,fightover,    %create_menu_view, %menu_drawentry      -- stats that display when you finish a fight
        ;;,editparty,    %create_menu,      %browse_drawentry, 3 -- selecting a pkmn from party
        ;;,main,         %create_menu,      %menu_drawentry      -- select a mode
        ;;,partyaction,  %create_menu,      %menu_drawentry      -- edit party what to do (delete, edit moves, edit pkmn)

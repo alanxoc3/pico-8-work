@@ -25,9 +25,9 @@
 end $$
 
 -- only "o" will go back
-|[fightover_update]| function(game)
-    if g_bpo then game:pop() end
-end $$
+-- |[fightover_update]| function(game)
+--     if g_bpo then game:pop() end
+-- end $$
 
 |[browsestat_update]| function(game)
     if g_bpl then

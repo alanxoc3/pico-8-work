@@ -1,5 +1,5 @@
 -- TODO: cur pkmn should start when selecting
-|[partydel]| function(entry, game)
+|[partydel]| function(game)
     local team = get_party(game:cursor'team1')
     team[game:cursor'editparty'+1] = nil
     save_party(game:cursor'team1', team)

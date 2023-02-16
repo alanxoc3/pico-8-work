@@ -3,7 +3,7 @@
 -- when updated, cursor position remains. entries change.
 -- when created, cursor position is 0.
 
-|[menu_state_callback]| function(entry, game)
+|[menu_state_callback]| function(game, entry)
     if entry.state then
         game:push(entry.state)
     else
@@ -23,7 +23,7 @@ end $$
     ]], edraw, viewmin or 0)
 end $$
 
--- entries: { {select=f(entry, game), disabled=bool} ... }
+-- entries: { {select=f(game, entry), disabled=bool} ... }
 -- edraw: func(entry, selected)
 |[create_menu]| function(edraw, r)
     return zobj_set(_g.create_menu_view(edraw), [[
@@ -76,7 +76,7 @@ end $$
     if g_bpx then
         local entry = menu[menu.c+1]
         if entry.disabled   then _g.beep()
-        elseif entry.select then entry.select(entry, game)
+        elseif entry.select then entry.select(game, entry)
         end
     end
 

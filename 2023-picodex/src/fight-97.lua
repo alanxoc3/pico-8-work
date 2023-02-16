@@ -52,12 +52,6 @@ end
 -- otherwise, do nothing. turn logic will check every turn if there is a win condition
 function logic_faint(s)
     s.active.shared.major = C_MAJOR_FAINTED
-    local na = get_next_active(s.party)
-
-    if na then
-        s.active = party_pkmn_to_active(get_next_active(s.party))
-        addaction(s, s, "#,comes,out")
-    end
 end
 
 -- self pl, other pl
@@ -66,8 +60,13 @@ end
 function pop_next_action(game)
     -- if an active pokemon has no hp, but not the faint status yet, return an action that makes the pokemon faint.
     for p in all{game.p1,game.p2} do
-        if p.active.shared.hp <= 0 and p.active.shared.major ~= C_MAJOR_FAINTED then
-            return newaction(p, "#,is,fainted", logic_faint)
+        if p.active.shared.hp <= 0 then
+            if p.active.shared.major ~= C_MAJOR_FAINTED then
+                return newaction(p, "#,is,fainted", logic_faint)
+            else
+                p.active = party_pkmn_to_active(get_next_active(p.party))
+                return newaction(p, "#,comes,out")
+            end
         end
     end
 
