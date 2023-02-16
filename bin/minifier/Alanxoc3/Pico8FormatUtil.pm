@@ -5,31 +5,31 @@ use experimental 'smartmatch';
 
 use Exporter;
 our @ISA = 'Exporter';
-our @EXPORT = qw(tokenize_lines populate_vars populate_funcs populate_funcs_with_content single_quotes_to_double remove_comments pop_text_logics remove_texts remove_spaces @lua_keywords multiline_string_replace get_imported_functions);
+our @EXPORT = qw(tokenize_constants tokenize_vars populate_vars populate_funcs populate_funcs_with_content single_quotes_to_double remove_comments pop_text_logics remove_texts remove_spaces @lua_keywords multiline_string_replace get_imported_functions);
 
 our @lua_keywords = qw(
-n b0d0 P_TEXT_LOGIC
+n b0d0 PTEXTLOGIC
 
 break do else elseif end false for function goto if in local nil not or repeat
 return then true until while and table string boolean unknown number
 
-ipairs unpack chr ord split label screen rec video audio_rec audio_end pause
-reset breadcrumb shutdown _g g_gunvals_raw _init _update _update60 _draw
-setmetatable getmetatable cocreate coresume lshr costatus cd yield load save
-folder ls run resume reboot stat info flip printh clip pget pset sget sset fget
-fset print cursor color ceil cls camera oval ovalfill circ circfill line rect
-rectfill pal palt spr sspr add del deli all foreach pairs btn btnp sfx music
-mget mset map peek peek2 poke2 peek4 poke4 poke memcpy reload cstore memset max
-min mid flr cos sin atan2 sqrt abs rnd srand band bor bxor bnot shl shr
-cartdata dget dset sub sgn stop tline menuitem type tostr tonum extcmd ls fillp time
-assert t _update_buttons count mapdraw self ? __index rotl
+_ipairs _unpack _chr _ord _split _label _screen _rec _video _audio_rec _audio_end _pause
+_reset _breadcrumb _shutdown _g _g_gunvals_raw _init _update _update60 _draw
+_setmetatable _getmetatable _cocreate _coresume _lshr _costatus _cd _yield _load _save
+_folder _ls _run _resume _reboot _stat _info _flip _printh _clip _pget _pset _sget _sset _fget
+_fset _print _cursor _color _ceil _cls _camera _oval _ovalfill _circ _circfill _line _rect
+_rectfill _pal _palt _spr _sspr _add _del _deli _all _foreach _pairs _btn _btnp _sfx _music
+_mget _mset _map _peek _peek2 _poke2 _peek4 _poke4 _poke _memcpy _reload _cstore _memset _max
+_min _mid _flr _cos _sin _atan2 _sqrt _abs _rnd _srand _band _bor _bxor _bnot _shl _shr
+_cartdata _dget _dset _sub _sgn _stop _tline _menuitem _type _tostr _tonum _extcmd _ls _fillp _time
+_assert _t _update_buttons _count _mapdraw _self _? __index _rotl _ENV
 );
 
 sub get_next_var_name {
    my $cur_chars_ref = shift;
    # Order of commonly used letters in the English language.
    # Saves *about* 30 compression tokens.
-   my $char_inc = "etaoinsrhldcumfpgwybvkxjqz_";
+   my $char_inc = "etaoinsrhldcumfpgwybvkxjqz";
 
    my @new_char_arr;
    my $next_bump = 1;
@@ -115,7 +115,10 @@ sub remove_comments {
 sub populate_vars {
    my $content = shift;
    my %vars;
-   while ($content =~ /[\W]*\b([a-z_]\w*)/g) {
+   # regex should match tokenize_lines
+
+   while ($content =~ /[\W]*\b([a-z_]\w*)/g) {                                                                                                                 
+   # new: while ($content =~ /[^a-zA-Z0-9]*([a-zA-Z][a-zA-Z0-9]*)/g) {
       if (not ($1 ~~ @lua_keywords)) {
         $vars{$1}++;
       }
@@ -160,7 +163,7 @@ sub text_logic {
    my $texts = shift;
    my $quote = shift;
    push @{$texts}, $quote;
-   return "\"P_TEXT_LOGIC\"";
+   return "\"PTEXTLOGIC\"";
 }
 
 # Removes tbox texts, similar to removing comments. ($|, "|)
@@ -174,7 +177,7 @@ sub remove_texts {
 sub pop_text_logics {
    my $content = shift;
    my $texts = shift;
-   $content =~ s/(P_TEXT_LOGIC)/shift @{$texts}/ge;
+   $content =~ s/(PTEXTLOGIC)/shift @{$texts}/ge;
    return $content
 }
 
@@ -224,10 +227,21 @@ sub get_imported_functions {
     return %imported_functions;
 }
 
-sub tokenize_lines {
+# constants can have underscores. vars are minified, underscore separated.
+# that's the reason for separating these methods out.
+sub tokenize_constants {
    my $content = shift;
    my $vars_ref = shift;
    $content =~ s/([\W]*\b)([a-zA-Z_]\w*)/test_eval($1,$2,$vars_ref)/ge;
+   return $content;
+}
+
+sub tokenize_vars {
+   my $content = shift;
+   my $vars_ref = shift;
+   # regex should match populate_vars
+   $content =~ s/([\W]*\b)([a-zA-Z_]\w*)/test_eval($1,$2,$vars_ref)/ge;
+   # new: $content =~ s/(\b|_)([a-zA-Z][a-zA-Z0-9]*)/test_eval($1,$2,$vars_ref)/ge;
    return $content;
 }
 

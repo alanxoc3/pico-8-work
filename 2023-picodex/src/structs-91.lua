@@ -1,11 +1,55 @@
 -- this file contains structures for:
--- team
 -- pokemon
 -- team_pokemon
 -- active_pokemon
+-- team
 
+-- thanks to bulbapedia: https://bulbapedia.bulbagarden.net/wiki/Stat#Stat
+-- this formula is much simpler at lvl 50, so I took some parts out.
+--|[calc_max_stat]| function(base)
+--    return _ceil(base+.5*93)+5
+--end $$
 
-
+-- in progress
+-- todo: switch the codebase to metatables
+-- |[create_pkmn]| function(num, name, type1, type2, evolvesfrom, evolvesto, base_attack, base_defense, base_special, base_speed, base_hp)
+--     local pkmn = zobj([[
+--         num,@, name,@, type1,@ type2,@, evolvesfrom,@, evolvesto,@,
+--         attack,@, defense,@, special,@, speed,@, maxhp,@, 
+--         ref,no, get,~pkmn_get, call,~pkmn_call,
+--         level,C_LEVEL
+--     ]], num, name, type1, type2, evolvesfrom, evolvesto,
+--         calc_max_stat(base_attack),
+--         calc_max_stat(base_defense),
+--         calc_max_stat(base_special),
+--         calc_max_stat(base_speed),
+--         calc_max_stat(base_hp)+5+C_LEVEL
+--     )
+-- 
+--     do
+--         local _ENV = pkmn
+--         total = attack + defense + special + speed + maxhp
+--     end
+--     
+--     return pkmn
+-- end $$
+-- 
+-- |[pkmn_get]| function(pkmn, key)
+--     while not pkmn[key] and pkmn.ref do
+--         pkmn = pkmn.ref
+--     end
+--     return pkmn[key]
+-- end $$
+-- 
+-- |[pkmn_call]| function(pkmn, key, ...)
+--     return (pkmn:get(key) or nop)(...)
+-- end $$
+-- 
+-- |[create_team_pkmn]| function()
+-- 
+-- end $$
+-- 
+-- 
 -- party: team power, alive size
 -- pokemon: 
 
@@ -18,7 +62,6 @@
 -- CURRENT BROWSE PKMN
 ---------------------- these never change
 -- pkmn {
---   ref, get(), call() -- these are for getting things from the parent.
 --   evolvesfrom
 --   evolvesto -- possibly don't need this one
 --   name
@@ -30,11 +73,6 @@
 --   get_natural_moveset -- takes no parameters
 --   draw
 --   num
---   maxhp   -- calced from the base and level. will need a diff form for crit ratio.
---   attack  -- calced from the base and level. will need a diff form for crit ratio.
---   defense -- calced from the base and level. will need a diff form for crit ratio.
---   speed   -- calced from the base and level. will need a diff form for crit ratio.
---   special -- calced from the base and level. will need a diff form for crit ratio.
 --   total   -- all the previous stats added together
 --   here, move ids is all the possible moves
 -- }
@@ -96,7 +134,7 @@
 -- }
 
 -- converts a party into a party ready for battle
-function get_fight_party(party)
+|[get_fight_party]| function(party)
     local fightparty = {}
 
     -- TODO: optimize for tokens
@@ -124,10 +162,10 @@ function get_fight_party(party)
     end
 
     return fightparty
-end
+end $$
 
 -- partypkmn must be non-nil and match the party table structure defined in get_fight_party 
-function party_pkmn_to_active(partypkmn)
+|[party_pkmn_to_active]| function(partypkmn)
     return {
         type1 = c_pokemon[partypkmn.num].type1,
         type2 = c_pokemon[partypkmn.num].type2,
@@ -146,14 +184,14 @@ function party_pkmn_to_active(partypkmn)
 
         -- evasion and accuracy have a different formula: https://www.smogon.com/rb/articles/stadium_guide
         -- all stats cap at 999: https://www.smogon.com/rb/articles/rby_mechanics_guide
-        -- and i'm giving it a min of 1 too, because zero messes things up
+        -- and i'm giving it a _min of 1 too, because zero messes things up
         getstat = function(a, stat)
             local stage = a.stages[stat]
-            return ceil(mid(1, 999,
+            return _ceil(_mid(1, 999,
                 a.shared[stat]*(
                     (stat == 'evasion' or stat == 'accuracy')
-                    and mid(1, 1+stage/3, 3)/mid(1, 1-stage/3, 3)
-                     or mid(2, 2+stage,   8)/mid(2, 2-stage,   8)
+                    and _mid(1, 1+stage/3, 3)/_mid(1, 1-stage/3, 3)
+                     or _mid(2, 2+stage,   8)/_mid(2, 2-stage,   8)
                 )
             ))
         end,
@@ -161,4 +199,4 @@ function party_pkmn_to_active(partypkmn)
         minor = {},
         shared = partypkmn,
     }
-end
+end $$

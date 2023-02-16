@@ -25,7 +25,7 @@ zclass[[modes,actor|
     credits;      init,%credits_init,      draw2,%main_draw2,         draw3,%main_draw3;
     fightover;    init,%fightover_init,    draw2,%fightover_draw2,    draw3,%fightover_draw3;
     editparty;    init,%editparty_init,    draw2,%editparty_draw2,    draw3,%editparty_draw3, draw1,%editparty_draw1;
-    main;         init,%main_init,         draw2,%main_draw2,         draw3,%main_draw3         ;
+    main;         init,~main_init,         draw2,~main_draw2,         draw3,~main_draw3         ;
     partyaction;  init,%partyaction_init,  draw2,%editparty_draw2,    draw3,%editparty_draw3    ;
     partymovesel; init,%partymovesel_init, draw2,%partymovesel_draw2, draw3,%move_draw3;
     partymoves;   init,%partymoves_init,   draw2,%partymoves_draw2,   draw3,%move_draw3;
@@ -49,79 +49,79 @@ zclass[[modes,actor|
     turn;         next,p1sel,           update,%turn_update,      draw1,%turn_draw1,      draw2,%turn_draw2, draw3,%turn_draw3, init,%turn_init, cur_action,no;
 ]]
 
-|[modes_default_update]| function(game) game.menu.update(game) end $$
-|[modes_default_draw1]|  function(game) game.menu.draw1(game)  end $$
+|[modes_default_update]| function(_ENV) menu.update(_ENV) end $$
+|[modes_default_draw1]|  function(_ENV) menu.draw1(_ENV)  end $$
 
-|[modes_cursor]| function(game, menu_name)
-    return game[menu_name].menu.c
+|[modes_cursor]| function(_ENV, menu_name)
+    return _ENV[menu_name].menu.c
 end $$
 
-|[modes_entry]| function(game, menu_name)
-    local menu = (menu_name and game[menu_name].menu or game.menu)
+|[modes_entry]| function(_ENV, menu_name)
+    local menu = (menu_name and _ENV[menu_name].menu or menu)
     return menu[menu.c+1]
 end $$
 
-|[modes_push]| function(a, newstate)
-    add(a.stack, newstate)
-    a:load(newstate)
+|[modes_push]| function(_ENV, newstate)
+    _add(stack, newstate)
+    _ENV:actor_load(newstate)
 end $$
 
-|[modes_pop]| function(a)
+|[modes_pop]| function(_ENV)
     -- delete the last item on the stack, then load the new last item.
     -- most modes on the stack won't have an init in this game.
-    deli(a.stack) 
-    a:load(a.stack[#a.stack] or 'main')
+    _deli(stack) 
+    _ENV:load(stack[#stack] or 'main')
 end $$
 
-|[game_init]| function(game)
+|[game_init]| function(_ENV)
     -- unlock all 1st evolutions (pkmn has more evolutions, but this is the first one)
     for i=1,151 do
         if c_pokemon[i].evolvesto and not c_pokemon[i].evolvesfrom then
-            poke(S_POKEMON+i, 1)
+            _poke(S_POKEMON+i, 1)
         end
     end
 
     -- todo: remove me and/or refactor me
-    game.modes = _g.modes()
+    modes = modes()
 
     zcall(function(menu_name, create_func, ...)
-        game.modes[menu_name].menu = create_func(...)
+        modes[menu_name].menu = create_func(...)
     end, [[
-        ;,browse,       %create_menu,      %browse_drawentry, 4 -- selecting a pkmn from dex (for browsing or changing team pkmn)
-       ;;,browsestat,   %create_menu_view, %menu_drawentry      -- info for pkmn in browse mode
-       ;;,partystat,    %create_menu_view, %menu_drawentry      -- info for pkmn in party mode
-       ;;,credits,      %create_menu_view, %menu_drawentry      -- credits view obviously
-       ;;,fightover,    %create_menu_view, %menu_drawentry      -- stats that display when you finish a fight
-       ;;,editparty,    %create_menu,      %browse_drawentry, 3 -- selecting a pkmn from party
-       ;;,main,         %create_menu,      %menu_drawentry      -- select a mode
-       ;;,partyaction,  %create_menu,      %menu_drawentry      -- edit party what to do (delete, edit moves, edit pkmn)
-       ;;,partymovesel, %create_menu,      %menu_drawentry      -- select one of the moves a pokemon can learn (tms, hms, natural moves...)
-       ;;,partymoves,   %create_menu,      %menu_drawentry      -- select 1 of 4 moves from a pokemon
-       ;;,pselactions,  %create_menu,      %menu_drawentry      -- select an action during battle (fight, switch, forfeit)
-       ;;,pselmove,     %create_menu,      %menu_drawentry      -- select 1 of 4 moves from a pokemon (during battle) -- TODO: try merging with other move select
+        ;,browse,       ~create_menu,      ~browse_drawentry, 4 -- selecting a pkmn from dex (for browsing or changing team pkmn)
+       ;;,browsestat,   ~create_menu_view, ~menu_drawentry      -- info for pkmn in browse mode
+       ;;,partystat,    ~create_menu_view, ~menu_drawentry      -- info for pkmn in party mode
+       ;;,credits,      ~create_menu_view, ~menu_drawentry      -- credits view obviously
+       ;;,fightover,    ~create_menu_view, ~menu_drawentry      -- stats that display when you finish a fight
+       ;;,editparty,    ~create_menu,      ~browse_drawentry, 3 -- selecting a pkmn from party
+       ;;,main,         ~create_menu,      ~menu_drawentry      -- select a mode
+       ;;,partyaction,  ~create_menu,      ~menu_drawentry      -- edit party what to do (delete, edit moves, edit pkmn)
+       ;;,partymovesel, ~create_menu,      ~menu_drawentry      -- select one of the moves a pokemon can learn (tms, hms, natural moves...)
+       ;;,partymoves,   ~create_menu,      ~menu_drawentry      -- select 1 of 4 moves from a pokemon
+       ;;,pselactions,  ~create_menu,      ~menu_drawentry      -- select an action during battle (fight, switch, forfeit)
+       ;;,pselmove,     ~create_menu,      ~menu_drawentry      -- select 1 of 4 moves from a pokemon (during battle) -- TODO: try merging with other move select
 
-       ;;,team1,        %create_menu,      %menu_drawentry      -- select a party (1, 2, 3, presets...)
-       ;;,team2,        %create_menu,      %menu_drawentry      -- select a party (1, 2, 3, presets...)
+       ;;,team1,        ~create_menu,      ~menu_drawentry      -- select a party (1, 2, 3, presets...)
+       ;;,team2,        ~create_menu,      ~menu_drawentry      -- select a party (1, 2, 3, presets...)
     ]])
 
-    game.modes.main.menu.cancel        = _g.beep -- only 2 menus you can't pop from.
-    game.modes.pselactions.menu.cancel = _g.beep
+    modes.main.menu.cancel        = beep -- only 2 menus you can't pop from.
+    modes.pselactions.menu.cancel = beep
 
     -- these menus share the cursor position
-    game.modes.team1fight.menu  = game.modes.team1.menu
-    game.modes.team2cpu.menu    = game.modes.team2.menu
-    game.modes.partypkmn.menu   = game.modes.browse.menu
+    modes.team1fight.menu  = modes.team1.menu
+    modes.team2cpu.menu    = modes.team2.menu
+    modes.partypkmn.menu   = modes.browse.menu
 
-    sfx(61,0)
+    _sfx(61,0)
 
-    menuitem(1, "close picodex", function()
-        menuitem(1) -- remove menu item
-        menuitem(2) -- remove menu item
-        game:load'closing'
+    _menuitem(1, "close picodex", function()
+        _menuitem(1) -- remove menu item
+        _menuitem(2) -- remove menu item
+        _ENV:load'closing'
     end)
 
-    menuitem(2, "swap 🅾️/❎", function()
-        poke(S_SWAP_CONTROLS, @S_SWAP_CONTROLS == 0 and 1 or 0)
+    _menuitem(2, "swap 🅾️/❎", function()
+        _poke(S_SWAP_CONTROLS, @S_SWAP_CONTROLS == 0 and 1 or 0)
     end)
 end $$
 
@@ -130,7 +130,7 @@ end $$
 end $$
 
 |[game_draw]| function(program)
-    cls()
+    _cls()
     draw_picodex(program:is_active'shaking', 1,
         function() program.modes:draw1() end,
         function() program.modes:draw2() end, 

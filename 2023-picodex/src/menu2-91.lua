@@ -26,7 +26,7 @@ end $$
 -- entries: { {select=f(game, entry), disabled=bool} ... }
 -- edraw: func(entry, selected)
 |[create_menu]| function(edraw, r)
-    return zobj_set(_g.create_menu_view(edraw), [[
+    return zobj_set(create_menu_view(edraw), [[
         c,0, -- cursor
         r,@,
         update,%menu_update,
@@ -35,9 +35,9 @@ end $$
 end $$
 
 |[menu_refresh]| function(menu, data, mapfunc)
-    while deli(menu) do end
+    while _deli(menu) do end
     for i=1,#data do
-        add(menu, (mapfunc or nop)(data[i], i))
+        _add(menu, (mapfunc or nop)(data[i], i))
     end
 end $$
 
@@ -46,13 +46,13 @@ end $$
 -- cursor is between 0 and #menu-1. view is set too
 |[menu_set]| function(menu, delta)
     local newval = menu.c+delta
-    if newval == mid(0, newval, #menu-1) then menu.c = newval end
-    menu.c = mid(0, menu.c, #menu-1) -- always ensure the cursor is within bounds
+    if newval == _mid(0, newval, #menu-1) then menu.c = newval end
+    menu.c = _mid(0, menu.c, #menu-1) -- always ensure the cursor is within bounds
 
     -- view logic
     if menu.c\menu.r < menu.v   then menu.v = menu.c\menu.r   end
     if menu.c\menu.r > menu.v+2 then menu.v = menu.c\menu.r-2 end
-    menu.v = mid(0, menu.v, (#menu-1)\menu.r)
+    menu.v = _mid(0, menu.v, (#menu-1)\menu.r)
 end $$
 
 -- todo: remove bpl/bpr, they should have special logic instead (should it be overriden per thing?)
@@ -61,7 +61,7 @@ end $$
     if g_bpo then menu.cancel(game) end
     if g_bpu then menu.v-=1 end
     if g_bpd then menu.v+=1 end
-    menu.v = mid(menu.viewmin, menu.v, #menu-3)
+    menu.v = _mid(menu.viewmin, menu.v, #menu-3)
 end $$
 
 -- extra args are passed to callback, prob want to pass "game" there.
@@ -75,7 +75,7 @@ end $$
 
     if g_bpx then
         local entry = menu[menu.c+1]
-        if entry.disabled   then _g.beep()
+        if entry.disabled   then beep()
         elseif entry.select then entry.select(game, entry)
         end
     end
@@ -102,11 +102,11 @@ c_menustyles = zobj[[
     local xoff = 20-(menu.r * cellw)/2
 
     -- bg shadow
-    rectfill(0, y1, 39, y2, 1) -- bg shadow
-    rectfill(0, 0+5-menu.v*10, 39, 0+4+(max(ceil(#menu/menu.r), 40\10-1)-menu.v)*10, 13)
+    _rectfill(0, y1, 39, y2, 1) -- bg shadow
+    _rectfill(0, 0+5-menu.v*10, 39, 0+4+(_max(_ceil(#menu/menu.r), 40\10-1)-menu.v)*10, 13)
 
     -- selected bg
-    --rect    (x-2, y-7, x+cellw+1, y+6, 5)
+    --_rect    (x-2, y-7, x+cellw+1, y+6, 5)
 
     for i=-1,menu.r*5-1 do
         local index = (menu.v-1)*menu.r+i+1
@@ -121,7 +121,7 @@ c_menustyles = zobj[[
         local style = c_menustyles[style_ind]
 
         if entry and not entry.hidden then
-            rectfill(x, y-5, x+cellw-1, y+4, style.bg)
+            _rectfill(x, y-5, x+cellw-1, y+4, style.bg)
             zcamera(i%menu.r*cellw+xoff+cellw/2, 0+i\menu.r*10-3, function()
                 menu.edraw(entry, style)
             end)
@@ -134,8 +134,8 @@ end $$
     if entry.pkmn then
         local pkmn = get_pokemon(entry.pkmn)
         local style = c_bg_styles[c_types[pkmn.type1].bg]
-        rectfill(0-20,    5-10+3, 39-20, 24-10+3,style.bg)
-        rectfill(0-20,   21-10+3, 39-20, 24-10+3,style.aa)
+        _rectfill(0-20,    5-10+3, 39-20, 24-10+3,style.bg)
+        _rectfill(0-20,   21-10+3, 39-20, 24-10+3,style.aa)
         pkmn.draw(20-20, -5+20-10+3, style.aa, 1, 1)
     else
         wobble_text(entry.name, 0, 0, style.fg)

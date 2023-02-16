@@ -25,14 +25,16 @@ zclass[[game_state,actor|
 end $$
 
 function _init()
+    local _ENV = _g
+
     -- clear all the read only memory. testing things out showed that this doesn't get cleared automatically.
-    memset(0x8000, 0, 0x7fff)
+    _memset(0x8000, 0, 0x7fff)
 
-    poke(0x5f5c, 12) -- set the initial delay before repeating. 255 means never repeat.
-    poke(0x5f5d, 2) -- set the repeating delay.
+    _poke(0x5f5c, 12) -- set the initial delay before repeating. 255 means never repeat.
+    _poke(0x5f5d, 2) -- set the repeating delay.
 
-    cls()
-    sfx(62,0) -- a sound indicator that the came is actually running while loading
+    _cls()
+    _sfx(62,0) -- a sound indicator that the came is actually running while loading
 
 -- NORMAL_BEGIN -- debug mode doesn't need to load these sheets for faster startup
 
@@ -47,26 +49,27 @@ function _init()
     -- 0x0004
     extract_sheet(2)
 
-    poke(0x5f56, 0xe0) -- make map funcs point here instead
+    _poke(0x5f56, 0xe0) -- make map funcs point here instead
 
     -- 0x0006
-    px9_decomp(0, 0, peek2(3*2), mget, mset)
+    px9_decomp(0, 0, _peek2(3*2), _mget, _mset)
 
     -- 0x0008
     normalize_pokemon_data()
 
     -- Need the pokedex tiles to stay loaded. This starts at sprite index #96.
-    memcpy(0x0000, 0xc000, 0x2000)
+    _memcpy(0x0000, 0xc000, 0x2000)
 
-    g_tl = _g.game_state()
+    g_tl = game_state()
 end
 
 function _update60()
-    g_bl, g_br, g_bu, g_bd, g_bo, g_bx, g_bpl, g_bpr, g_bpu, g_bpd, g_bpo, g_bpx = btn'0', btn'1', btn'2', btn'3', btn'4', btn'5', btnp'0', btnp'1', btnp'2', btnp'3', btnp'4', btnp'5'
+    local _ENV = _g
+    g_bl, g_br, g_bu, g_bd, g_bo, g_bx, g_bpl, g_bpr, g_bpu, g_bpd, g_bpo, g_bpx = _btn'0', _btn'1', _btn'2', _btn'3', _btn'4', _btn'5', _btnp'0', _btnp'1', _btnp'2', _btnp'3', _btnp'4', _btnp'5'
     g_available_pokemon = {}
     for i=0,151 do
         if @(S_POKEMON+i) > 0 then
-            add(g_available_pokemon, i)
+            _add(g_available_pokemon, i)
         end
     end
 
@@ -95,27 +98,30 @@ function _update60()
 end
 
 function _draw()
-    cls()
+    local _ENV = _g
+    _cls()
     loop_entities('game_state', 'draw')
     fade(g_fade)
 end
 
-function parse_numlist(str)
+|[parse_numlist]| function(str)
     local tbl = {}
-    for x in all(split(str or '', '|')) do
-        if type(x) == "number" then
-            add(tbl, x)
+    for x in _all(_split(str or '', '|')) do
+        if _type(x) == "number" then
+            _add(tbl, x)
         end
     end
     return tbl
-end
+end $$
 
 -- thanks to bulbapedia: https://bulbapedia.bulbagarden.net/wiki/Stat#Stat
 -- this formula is much simpler at lvl 50, so I took some parts out.
-function calc_max_stat(base) return ceil(base+.5*93)+5 end
+|[calc_max_stat]| function(base)
+    return _ceil(base+.5*93)+5
+end $$
 
 -- 255 is dashes. 0 is next pkmn. num is move index.
-function normalize_pokemon_data()
+|[normalize_pokemon_data]| function()
     -- this is a global that the update_pokemon_moves function uses
     g_all_pokemon_moves = {}
 
@@ -134,7 +140,7 @@ function normalize_pokemon_data()
     end
 
     -- next, get the moves for all the pokemon
-    local movemem = peek2(8)
+    local movemem = _peek2(8)
 
     for i=0,151 do
         local is_range = false
@@ -145,11 +151,11 @@ function normalize_pokemon_data()
                 is_range = true
             elseif is_range then
                 for i=moves[#moves],@movemem do
-                    add(moves, i)
+                    _add(moves, i)
                 end
                 is_range = false
             else
-                add(moves, @movemem)
+                _add(moves, @movemem)
             end
             movemem += 1
         end
@@ -169,7 +175,7 @@ function normalize_pokemon_data()
         local pkmn = c_pokemon[i] or {}
         local movelvls = {}
         for i=10,#pkmn do
-            add(movelvls, pkmn[i])
+            _add(movelvls, pkmn[i])
         end
 
         -- todo: token crunch on this table
@@ -196,7 +202,7 @@ function normalize_pokemon_data()
                                      local a, moveset = c_pokemon[i], {}
                                      for i=#a.movelvls,1,-1 do
                                         if a.movelvls[i] <= level and #moveset < 4 then
-                                           add(moveset, a.moves[i].num)
+                                           _add(moveset, a.moves[i].num)
                                         end
                                      end
                                      return moveset
@@ -228,15 +234,15 @@ function normalize_pokemon_data()
             if not movemap[m] then
                 movemap[m] = true
                 local refmove = c_moves[m]
-                add(moves, {
+                _add(moves, {
                     ref=reason or refmove.ref,
                     num=m
                 })
             end
         end
 
-        -- just add another loop for previous evolutions
-        for i, m in ipairs(g_all_pokemon_moves[i]) do
+        -- just _add another loop for previous evolutions
+        for i, m in _ipairs(g_all_pokemon_moves[i]) do
             set_move(m, pkmn.movelvls[i] and "lvl "..pkmn.movelvls[i])
         end
 
@@ -249,12 +255,12 @@ function normalize_pokemon_data()
         -- this loop needs to be last, because it changes the "pkmn" variable
         while pkmn.evolvesfrom do
             pkmn = c_pokemon[pkmn.evolvesfrom]
-            for m in all(pkmn.moves) do
+            for m in _all(pkmn.moves) do
                 set_move(m.num, "previous")
             end
         end
     end
-end
+end $$
 
 -- how does it l
 -- 1-5|10|20

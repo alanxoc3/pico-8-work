@@ -59,7 +59,7 @@ end $$
     elseif timer.duration <= 0 then return 1
     end
 
-    return min(1, (timer.elapsed or 0)/timer.duration)
+    return _min(1, (timer.elapsed or 0)/timer.duration)
 end $$
 
 -- true means active. false means inactive. nil means doesn't exist.
@@ -71,12 +71,12 @@ end $$
 -- This is expected to be called once per frame (at 60 FPS)!
 |[timer_tick]| function(a)
     local finished_timers = {}
-    for name, timer in pairs(a.timers) do
+    for name, timer in _pairs(a.timers) do
         if timer.active then
             if timer.elapsed then
                 timer.elapsed = timer.elapsed + 1/60
                 if timer.duration and timer.elapsed >= timer.duration then
-                    add(finished_timers, timer)
+                    _add(finished_timers, timer)
                 end
             elseif not timer.elapsed then
                 timer.elapsed = 0
@@ -84,8 +84,8 @@ end $$
         end
     end
 
-    -- need separate loop for the scenario if callback tries to add another timer
-    foreach(finished_timers, function(timer)
+    -- need separate loop for the scenario if callback tries to _add another timer
+    _foreach(finished_timers, function(timer)
         timer.active = false
         timer.callback(a)
     end)

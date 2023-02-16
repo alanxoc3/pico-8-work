@@ -6,7 +6,7 @@
     game:pop()
 end $$
 
-function set_default_party_pkmn(team, ind, num)
+|[set_default_party_pkmn]| function(team, ind, num)
     team[ind] = {num=num, moves=c_pokemon[num].get_natural_moveset(100)}
     return team
-end
+end $$

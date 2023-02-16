@@ -4,7 +4,18 @@ __lua__
 -- picodex
 -- by amorg
 
-cartdata"picodex"
+-- api start with _
+_g = {}
+for k,v in pairs(_ENV) do
+ if ord(k) ~= 95 then
+  _g['_'..k] = v
+ end
+end
+
+setmetatable(_ENV, {__index=_g})
+--_ENV = _api
+
+_cartdata"picodex"
 
 #include .code.lua
 __gfx__

@@ -2,7 +2,7 @@
 |[turn_update]| function(game)
     if g_bpx or not game.cur_action then
         -- check for win condition before selecting every action
-        for p in all{game.p1, game.p2} do
+        for p in _all{game.p1, game.p2} do
             if not get_next_active(p.party) then
                 game.p0 = get_other_pl(game, p)
                 game:load'fightover'
@@ -21,7 +21,7 @@
         end
     end
 
-    if g_bpo then _g.beep() end
+    if g_bpo then beep() end
 end $$
 
 -- only "o" will go back
@@ -32,19 +32,19 @@ end $$
 |[browsestat_update]| function(game)
     if g_bpl then
         game.browse.menu:set'-1'
-        _g.browsestat_init(game)
+        browsestat_init(game)
     end
 
     if g_bpr then
         game.browse.menu:set'1'
-        _g.browsestat_init(game)
+        browsestat_init(game)
     end
 
-    _g.modes_default_update(game)
+    modes_default_update(game)
 end $$
 
 -- todo: maybe incorporate with "next pokemon" function
--- todo: add xbtn/ybtn
+-- todo: _add xbtn/ybtn
 |[partystat_update]| function(game)
     if g_bpl then
         local team = get_party(game:cursor'team1')
@@ -56,7 +56,7 @@ end $$
             end
         end
         
-        _g.partystat_init(game)
+        partystat_init(game)
     end
 
     if g_bpr then
@@ -69,8 +69,8 @@ end $$
             end
         end
         
-        _g.partystat_init(game)
+        partystat_init(game)
     end
 
-    _g.modes_default_update(game)
+    modes_default_update(game)
 end $$

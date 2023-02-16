@@ -5,7 +5,7 @@
         -- draw3: 
     -- select move to learn
 
-function set_party_pkmn_move(party, ind, moveind, move)
+|[set_party_pkmn_move]| function(party, ind, moveind, move)
     local partypkmn = party[ind]
 
     -- if the move already exists on the pkmn, remove it.
@@ -17,4 +17,4 @@ function set_party_pkmn_move(party, ind, moveind, move)
 
     partypkmn.moves[moveind] = move
     return party
-end
+end $$

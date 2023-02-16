@@ -22,8 +22,8 @@ end $$
 end $$
 
 |[browse_draw3]|       function(game) draw3_pokeinfo(get_browse_pokemon(game:cursor'browse'+1))   end $$
-|[main_draw3]|         function(game) print_draw3_message(split(game:entry'main'.desc, '|'))      end $$
-|[pselactions_draw3]|  function(game) print_draw3_message(split(game:entry'pselactions'.desc, '|'))      end $$
+|[main_draw3]|         function(game) print_draw3_message(_split(game:entry'main'.desc, '|'))      end $$
+|[pselactions_draw3]|  function(game) print_draw3_message(_split(game:entry'pselactions'.desc, '|'))      end $$
 
 |[party_draw3]|        function(game)
     local count, power = 0, 0
@@ -42,7 +42,7 @@ end $$
 |[fightover_draw3]|  function(game) print_draw3_message{game.p0.name, "is the", "winner"} end $$
 
 |[turn_draw3]|  function(game)
-    local message_tbl = split(game.cur_action.message)
+    local message_tbl = _split(game.cur_action.message)
     if message_tbl[1] == '#' then message_tbl[1] = c_pokemon[game.cur_action.active.shared.num].name end
     print_draw3_message(message_tbl)
 end $$
