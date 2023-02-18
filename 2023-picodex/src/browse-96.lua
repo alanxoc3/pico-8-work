@@ -1,17 +1,17 @@
 -- todo: combine scrollable logic maybe (credits + browse stat)
 -- todo: make browse stat screen scrollable
-|[draw2_pokeinfo]| function(pkmn)
-    print_draw2_message("pkmn "..format_num(pkmn.num))
+|[f_draw2_pokeinfo]| function(pkmn)
+    f_print_draw2_message("pkmn "..f_format_num(pkmn.num))
 end $$
 
-|[draw3_pokeinfo]| function(pkmn)
-    print_draw3_message{'.'..pkmn.name, c_types[pkmn.type1].name, pkmn.type2 and c_types[pkmn.type2].name or ''}
+|[f_draw3_pokeinfo]| function(pkmn)
+    f_print_draw3_message{'.'..pkmn.name, c_types[pkmn.type1].name, pkmn.type2 and c_types[pkmn.type2].name or ''}
 end $$
 
 -- Draw a pokemon by number. Pokemon is centered at x & y. sw and sh can be decimals.
 -- Num 1 would be bulbasaur.
 g_loaded_row = 16 -- default corresponds to the top row in the "129-151.p8" file.
-|[draw_pkmn]| function(num, x, y, sw, sh)
+|[f_draw_pkmn]| function(num, x, y, sw, sh)
     if num < 0 then _rectfill(x-1, y-1,x,y,6) return end
 
     sw = sw or 1
@@ -29,24 +29,24 @@ g_loaded_row = 16 -- default corresponds to the top row in the "129-151.p8" file
     _sspr(col*16, 0, 16, 16, x-w/2, y-h/2, w, h)
 end $$
 
-|[draw_pkmn_out]| function(num, x, y, col, xscale, yscale)
+|[f_draw_pkmn_out]| function(num, x, y, col, xscale, yscale)
     xscale = xscale or 1
     yscale = yscale or 1
     local outline_width = _max(_abs(xscale), 1) \ 1
 
     for c=1,15 do _pal(c,col) end
-    for i=-outline_width,outline_width,outline_width*2 do draw_pkmn(num, x-outline_width, y+i, xscale, yscale) end
-    for i=-outline_width,outline_width,outline_width*2 do draw_pkmn(num, x+outline_width, y+i, xscale, yscale) end
+    for i=-outline_width,outline_width,outline_width*2 do f_draw_pkmn(num, x-outline_width, y+i, xscale, yscale) end
+    for i=-outline_width,outline_width,outline_width*2 do f_draw_pkmn(num, x+outline_width, y+i, xscale, yscale) end
 
     for c=1,15 do _pal(c,1) end
-    for i=-outline_width,outline_width,outline_width*2 do draw_pkmn(num, x+i, y, xscale, yscale) end
-    for i=-outline_width,outline_width,outline_width*2 do draw_pkmn(num, x, y+i, xscale, yscale) end
+    for i=-outline_width,outline_width,outline_width*2 do f_draw_pkmn(num, x+i, y, xscale, yscale) end
+    for i=-outline_width,outline_width,outline_width*2 do f_draw_pkmn(num, x, y+i, xscale, yscale) end
 
     for c=1,15 do _pal(c, c) end
-    draw_pkmn(num, x, y, xscale, yscale)
+    f_draw_pkmn(num, x, y, xscale, yscale)
 end $$
 
-|[format_num]| function(num)
+|[f_format_num]| function(num)
     local str = ''..num
     for i=#str+1,3 do
         str = '0'..str
@@ -54,16 +54,16 @@ end $$
     return '#'..str
 end $$
 
-|[get_pokemon]| function(num)
+|[f_get_pokemon]| function(num)
     return c_pokemon[num]
 end $$
 
-|[get_browse_pokemon]| function(num)
-    return c_pokemon[g_available_pokemon[num]] or {draw=nop}
+|[f_get_browse_pokemon]| function(num)
+    return c_pokemon[g_available_pokemon[num]] or {draw=f_nop}
 end $$
 
 -- this is for populating the pokemon info menu (sometimes called browsestat in code)
-|[update_stat_menu]| function(menu, pkmn)
+|[f_update_stat_menu]| function(menu, pkmn)
        -- ;,"basestat,hp,spd,spc,att,def"
        --;;,"stats,hp,spd,spc,att,def,acc,eva,lvl"
        --;;,"flags,burn,paralyze,poison,sleep,freeze,confuse"
@@ -75,7 +75,7 @@ end $$
     _add(menu, {name="lvl 50", style=3})
     _add(menu, {name=pkmn.hp..'/'..pkmn.maxhp})
 
-    _foreach(zobj[[
+    _foreach(f_zobj[[
         ;key,special, name,"spc"
        ;;key,attack,  name,"att"
        ;;key,defense, name,"def"

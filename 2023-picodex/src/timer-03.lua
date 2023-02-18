@@ -17,7 +17,7 @@
 
 -- callback when timer is complete
 -- no callback for forever timers
--- there can be a callback, but it can be a nop if you really want nothing done...
+-- there can be a callback, but it can be a f_nop if you really want nothing done...
 -- unless you want to manually trigger the timer to end
 -- so is duration = 0 == 1 step or is it forever or is it non existant
 -- hmm... 
@@ -31,28 +31,28 @@
 -- 0 duration = 1 step
 -- > 0 duration = blah
 
-zclass[[timer|
+f_zclass[[timer|
     timers;             ,;
-    start_timer,        %timer_reset_timer,
-    end_timer,          %timer_end_timer,
+    start_timer,        %f_timer_reset_timer,
+    end_timer,          %f_timer_end_timer,
 
-    is_active,          %timer_is_active,
-    get_elapsed_percent,%timer_get_elapsed_percent,
-    tick,               %timer_tick,
+    is_active,          %f_timer_is_active,
+    get_elapsed_percent,%f_timer_get_elapsed_percent,
+    tick,               %f_timer_tick,
 ]]
 
-|[timer_reset_timer]| function(a, timer_name, duration, callback)
+|[f_timer_reset_timer]| function(a, timer_name, duration, callback)
     a.timers[timer_name] = { active=true, elapsed=false, duration=duration and 0+duration, callback=callback or function() end }
 end $$
 
-|[timer_end_timer]| function(a, timer_name)
+|[f_timer_end_timer]| function(a, timer_name)
     if a.timers[timer_name] then
         a.timers[timer_name].elapsed = a.timers[timer_name].duration or a.timers[timer_name].elapsed
         a.timers[timer_name].active = false
     end
 end $$
 
-|[timer_get_elapsed_percent]| function(a, timer_name)
+|[f_timer_get_elapsed_percent]| function(a, timer_name)
     local timer = a.timers[timer_name]
     if not timer then return 0
     elseif not timer.duration then return 0
@@ -63,13 +63,13 @@ end $$
 end $$
 
 -- true means active. false means inactive. nil means doesn't exist.
-|[timer_is_active]| function(a, timer_name)
+|[f_timer_is_active]| function(a, timer_name)
     local timer = a.timers[timer_name]
     return timer and timer.active
 end $$
 
 -- This is expected to be called once per frame (at 60 FPS)!
-|[timer_tick]| function(a)
+|[f_timer_tick]| function(a)
     local finished_timers = {}
     for name, timer in _pairs(a.timers) do
         if timer.active then

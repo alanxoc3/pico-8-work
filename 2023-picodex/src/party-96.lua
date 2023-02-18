@@ -1,6 +1,6 @@
 -- todo: remove x,y,w,h
 -- CHOOSE PARTY LOGIC --
-|[party_select]| function(game)
+|[f_party_select]| function(game)
     game:push'editparty'
 end $$
 
@@ -8,8 +8,8 @@ end $$
 
 -- UTILITY FUNCTIONS --
 -- no moves means the pokemon is deleted
-c_party_memlocs = zobj[[0,S_PARTY1, 1,S_PARTY2, 2,S_PARTY3]]
-|[get_party]| function(party_index) -- 0 to 2
+c_party_memlocs = f_zobj[[0,S_PARTY1, 1,S_PARTY2, 2,S_PARTY3]]
+|[f_get_party]| function(party_index) -- 0 to 2
     local mem = c_party_memlocs[party_index]
     local party = {}
 
@@ -33,7 +33,7 @@ c_party_memlocs = zobj[[0,S_PARTY1, 1,S_PARTY2, 2,S_PARTY3]]
     return party
 end $$
 
-|[save_party]| function(party_index, party) -- 0 to 2
+|[f_save_party]| function(party_index, party) -- 0 to 2
     local mem = c_party_memlocs[party_index]
     _memset(mem,0,30)
 

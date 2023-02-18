@@ -3,7 +3,7 @@
 |[g_fade]| 1 $$
 
 -- todo: remove the first number row (;; syntax)
-|[g_fade_table]| zobj[[
+|[g_fade_table]| f_zobj[[
     0;  ,0  ,0  ,0  ,0  ,0  ,0  ,0  ,0;
     1;  ,1  ,1  ,1  ,1  ,0  ,0  ,0  ,0;
     2;  ,2  ,2  ,2  ,1  ,0  ,0  ,0  ,0;
@@ -23,40 +23,40 @@
 ]] $$
 
 -- takes a percent between 0 and 1
--- 0 means no fade (regular)
+-- 0 means no f_fade (regular)
 -- 1 means completely black
-|[fade]| function(threshold)
+|[f_fade]| function(threshold)
     for c=0,15 do
         _pal(c,g_fade_table[c][1+_flr(7*_min(1, _max(0, threshold)))],1)
     end
 end $$
 
-zclass[[fader,actor|
+f_zclass[[fader,actor|
     ecs_exclusions;actor,yes,timer,yes;
 ]]
 
-zclass[[fader_out,fader|
-    start; duration,FADE_SPEED, destroyed,@, update,%fader_out_update
+f_zclass[[fader_out,fader|
+    start; duration,FADE_SPEED, destroyed,@, update,%f_fader_out_update
 ]]
 
-|[fader_out_update]| function(a)
+|[f_fader_out_update]| function(a)
     _poke(0x5f43, 0xff)
     _g.g_fade = a:get_elapsed_percent'start'
 end $$
 
-zclass[[fader_in,fader|
-    start; duration,FADE_SPEED, update,%fader_in_update
+f_zclass[[fader_in,fader|
+    start; duration,FADE_SPEED, update,%f_fader_in_update
 ]]
 
-|[fader_in_update]| function(a)
+|[f_fader_in_update]| function(a)
     _g.g_fade = 1 - a:get_elapsed_percent'start'
 end $$
 
-|[logo_init]| function() _sfx(63,1) end $$
+|[f_logo_init]| function() _sfx(63,1) end $$
 
-|[logo_draw]| function(a)
+|[f_logo_draw]| function(a)
     _g.g_fade = _cos(a:get_elapsed_percent'logo')+1
-    _camera(g_fade > .5 and rnd_one())
-    zspr(SPR_LOGO, 64, 64, SPR_LOGO_W, SPR_LOGO_H)
+    _camera(g_fade > .5 and f_rnd_one())
+    f_zspr(SPR_LOGO, 64, 64, SPR_LOGO_W, SPR_LOGO_H)
     _camera()
 end $$

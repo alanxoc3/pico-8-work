@@ -1,17 +1,17 @@
-|[browse_draw2]|      function(game) draw2_pokeinfo(get_browse_pokemon(game:cursor'browse'+1))    end $$
-|[editparty_draw2]|   function(game) print_draw2_message("spot #"..(game:cursor'editparty'+1))    end $$
-|[partymoves_draw2]|  function(game) print_draw2_message("move #"..(game:cursor'partymoves'+1))    end $$
-|[fightover_draw2]|   function(game) print_draw2_message"match over" end $$
-|[pselactions_draw2]| function(_)                                                                end $$
-|[pselmove_draw2]|    function(game)                                                             end $$
+|[f_browse_draw2]|      function(game) f_draw2_pokeinfo(f_get_browse_pokemon(game:cursor'browse'+1))    end $$
+|[f_editparty_draw2]|   function(game) f_print_draw2_message("spot #"..(game:cursor'editparty'+1))    end $$
+|[f_partymoves_draw2]|  function(game) f_print_draw2_message("move #"..(game:cursor'partymoves'+1))    end $$
+|[f_fightover_draw2]|   function(game) f_print_draw2_message"match over" end $$
+|[f_pselactions_draw2]| function(_)                                                                end $$
+|[f_pselmove_draw2]|    function(game)                                                             end $$
 
-|[partymovesel_draw2]|  function(game) 
+|[f_partymovesel_draw2]|  function(game) 
     local move = game:entry'partymovesel'
-    print_draw2_message(move and move.ref)
+    f_print_draw2_message(move and move.ref)
 end $$
 
 -- picodex logo
-|[main_draw2]| function()
+|[f_main_draw2]| function()
     _rectfill(0, 0, 46, 13, 13)
     _pal(7,1)
 
@@ -24,6 +24,6 @@ end $$
     _pal()
 end $$
 
-|[turn_draw2]|  function(game)
-    print_draw2_message(game.cur_action.pl.name)
+|[f_turn_draw2]|  function(game)
+    f_print_draw2_message(game.cur_action.pl.name)
 end $$

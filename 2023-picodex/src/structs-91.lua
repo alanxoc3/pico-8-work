@@ -6,24 +6,24 @@
 
 -- thanks to bulbapedia: https://bulbapedia.bulbagarden.net/wiki/Stat#Stat
 -- this formula is much simpler at lvl 50, so I took some parts out.
---|[calc_max_stat]| function(base)
+--|[f_calc_max_stat]| function(base)
 --    return _ceil(base+.5*93)+5
 --end $$
 
 -- in progress
 -- todo: switch the codebase to metatables
--- |[create_pkmn]| function(num, name, type1, type2, evolvesfrom, evolvesto, base_attack, base_defense, base_special, base_speed, base_hp)
---     local pkmn = zobj([[
+-- |[f_create_pkmn]| function(num, name, type1, type2, evolvesfrom, evolvesto, base_attack, base_defense, base_special, base_speed, base_hp)
+--     local pkmn = f_zobj([[
 --         num,@, name,@, type1,@ type2,@, evolvesfrom,@, evolvesto,@,
 --         attack,@, defense,@, special,@, speed,@, maxhp,@, 
---         ref,no, get,~pkmn_get, call,~pkmn_call,
+--         ref,no, get,~f_pkmn_get, call,~f_pkmn_call,
 --         level,C_LEVEL
 --     ]], num, name, type1, type2, evolvesfrom, evolvesto,
---         calc_max_stat(base_attack),
---         calc_max_stat(base_defense),
---         calc_max_stat(base_special),
---         calc_max_stat(base_speed),
---         calc_max_stat(base_hp)+5+C_LEVEL
+--         f_calc_max_stat(base_attack),
+--         f_calc_max_stat(base_defense),
+--         f_calc_max_stat(base_special),
+--         f_calc_max_stat(base_speed),
+--         f_calc_max_stat(base_hp)+5+C_LEVEL
 --     )
 -- 
 --     do
@@ -34,18 +34,18 @@
 --     return pkmn
 -- end $$
 -- 
--- |[pkmn_get]| function(pkmn, key)
+-- |[f_pkmn_get]| function(pkmn, key)
 --     while not pkmn[key] and pkmn.ref do
 --         pkmn = pkmn.ref
 --     end
 --     return pkmn[key]
 -- end $$
 -- 
--- |[pkmn_call]| function(pkmn, key, ...)
---     return (pkmn:get(key) or nop)(...)
+-- |[f_pkmn_call]| function(pkmn, key, ...)
+--     return (pkmn:get(key) or f_nop)(...)
 -- end $$
 -- 
--- |[create_team_pkmn]| function()
+-- |[f_create_team_pkmn]| function()
 -- 
 -- end $$
 -- 
@@ -134,7 +134,7 @@
 -- }
 
 -- converts a party into a party ready for battle
-|[get_fight_party]| function(party)
+|[f_get_fight_party]| function(party)
     local fightparty = {}
 
     -- TODO: optimize for tokens
@@ -164,8 +164,8 @@
     return fightparty
 end $$
 
--- partypkmn must be non-nil and match the party table structure defined in get_fight_party 
-|[party_pkmn_to_active]| function(partypkmn)
+-- partypkmn must be non-nil and match the party table structure defined in f_get_fight_party 
+|[f_party_pkmn_to_active]| function(partypkmn)
     return {
         type1 = c_pokemon[partypkmn.num].type1,
         type2 = c_pokemon[partypkmn.num].type2,
@@ -173,7 +173,7 @@ end $$
         movepps = partypkmn.movepps,
 
         -- these always start at zero
-        stages = zobj[[
+        stages = f_zobj[[
             special,0,
             defense,0,
             attack,0,

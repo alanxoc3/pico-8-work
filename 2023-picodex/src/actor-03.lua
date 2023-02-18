@@ -7,13 +7,13 @@
 -- * able to have a time limit on states if desired
 -- * init function when entering a state
 
-zclass[[actor,timer|
-    load,     %actor_load,
-    loadlogic,%actor_loadlogic,
-    state,    %actor_state,
-    kill,     %actor_kill,
-    clean,    %actor_clean,
-    is_alive, %actor_is_alive,
+f_zclass[[actor,timer|
+    load,     %f_actor_load,
+    loadlogic,%f_actor_loadlogic,
+    state,    %f_actor_state,
+    kill,     %f_actor_kill,
+    clean,    %f_actor_clean,
+    is_alive, %f_actor_is_alive,
 
     alive,    yes,
     duration, null,
@@ -21,15 +21,15 @@ zclass[[actor,timer|
     next,     null,
     isnew,    yes,
 
-    init,      nop,
-    finit,     nop,
-    stateless_update,    nop,
-    update,    nop,
-    destroyed, nop;
+    init,      %f_nop,
+    finit,     %f_nop,
+    stateless_update,    %f_nop,
+    update,    %f_nop,
+    destroyed, %f_nop;
 ]]
 
 -- if load is called multiple times, the first load is used.
-|[actor_load]| function(a, stateName)
+|[f_actor_load]| function(a, stateName)
     a.next_state = stateName or a.next
 end $$
 
@@ -37,7 +37,7 @@ end $$
 -- (at key=stateName) to the actor object. (If the given stateName is falsey, kill
 -- the actor.) Then set up the next state change to happen after the actor's duration,
 -- using stateName=actor.next.
-|[actor_loadlogic]| function(a, stateName)
+|[f_actor_loadlogic]| function(a, stateName)
     a.next_state, a.isnew = nil
 
     if stateName == 'dead' then
@@ -57,7 +57,7 @@ end $$
 end $$
 
 -- This is expected to be called on each frame!
-|[actor_state]| function(a)
+|[f_actor_state]| function(a)
     -- actor created this frame
     if a.isnew then a:loadlogic(a.curr) end
 
@@ -73,12 +73,12 @@ end $$
     a:stateless_update()
 end $$
 
-|[actor_is_alive]| function(a)
+|[f_actor_is_alive]| function(a)
     return not a.effectively_dead and a:is_active'ending' == nil and a.alive
 end $$
 
 -- If there is an ending state, call that. Otherwise, just set alive to false.
-|[actor_kill]| function(a)
+|[f_actor_kill]| function(a)
     a.effectively_dead = true
     if a.ending then
         if a.curr == 'start' then
@@ -93,4 +93,4 @@ end $$
 
 -- This is expected to be called at the beginning of each frame!
 -- If this is not called at the beginning, you could have a frame delay for things like explosions.
-|[actor_clean]| function(a) if not a.alive then a:destroyed() deregister_entity(a) end end $$
+|[f_actor_clean]| function(a) if not a.alive then a:destroyed() f_deregister_entity(a) end end $$

@@ -1,26 +1,26 @@
-zclass[[game_state,actor|
+f_zclass[[game_state,actor|
     curr,fadein; -- curr,logo;
 
-    init,%game_state_init;
+    init,%f_game_state_init;
     ecs_exclusions; actor,yes; -- remove game_state from the actor group
-    defaults;       sinit,nop, update,nop, draw,nop, light,0, backbuttonheld,no, modes,;
+    defaults;       sinit,%f_nop, update,%f_nop, draw,%f_nop, light,0, backbuttonheld,no, modes,;
 
-    logo; next,fadein, sinit,%logo_init, update,nop, draw,%logo_draw, duration,2.5;
+    logo; next,fadein, sinit,%f_logo_init, update,%f_nop, draw,%f_logo_draw, duration,2.5;
 
-    fadein; next,game, duration,0, sinit,%gamefadein_init; -- fadein; next,closed, duration,0, sinit,%gamefadein_init;
+    fadein; next,game, duration,0, sinit,%f_gamefadein_init; -- fadein; next,closed, duration,0, sinit,%f_gamefadein_init;
 
-    closed;     next,opening,                            sinit,%closed_init, update,%closed_update, draw,%closed_draw;
-    opening;    next,starting_1,          duration,.25,                                             draw,%opening_draw;
-    starting_1; next,starting_2, light,1, duration,.125, sinit,%beep, draw,%opened_draw;
-    starting_2; next,starting_3, light,2, duration,.125, sinit,%beep, draw,%opened_draw;
-    starting_3; next,game,       light,3, duration,.125, sinit,%beep, draw,%opened_draw;
-    game;       next,closing,    light,4,                sinit,%game_init,   update,%game_update,   draw,%game_draw;
-    closing;    next,closed,              duration,.25,                      update,nop,            draw,%closing_draw;
+    closed;     next,opening,                            sinit,%f_closed_init, update,%f_closed_update, draw,%f_closed_draw;
+    opening;    next,starting_1,          duration,.25,                                             draw,%f_opening_draw;
+    starting_1; next,starting_2, light,1, duration,.125, sinit,%f_beep, draw,%f_opened_draw;
+    starting_2; next,starting_3, light,2, duration,.125, sinit,%f_beep, draw,%f_opened_draw;
+    starting_3; next,game,       light,3, duration,.125, sinit,%f_beep, draw,%f_opened_draw;
+    game;       next,closing,    light,4,                sinit,%f_game_init,   update,%f_game_update,   draw,%f_game_draw;
+    closing;    next,closed,              duration,.25,                      update,%f_nop,            draw,%f_closing_draw;
 ]]
 
 -- every state change will clean up all the entities.
-|[game_state_init]| function(state)
-    clean_all_entities('game_state', 'fader_in')
+|[f_game_state_init]| function(state)
+    f_clean_all_entities('game_state', 'fader_in')
     state:sinit()
 end $$
 
@@ -39,23 +39,23 @@ function _init()
 -- NORMAL_BEGIN -- debug mode doesn't need to load these sheets for faster startup
 
     -- 0x0000
-    extract_sheet(0)
+    f_extract_sheet(0)
 
     -- 0x0002
-    extract_sheet(1)
+    f_extract_sheet(1)
 
 -- NORMAL_END
 
     -- 0x0004
-    extract_sheet(2)
+    f_extract_sheet(2)
 
     _poke(0x5f56, 0xe0) -- make map funcs point here instead
 
     -- 0x0006
-    px9_decomp(0, 0, _peek2(3*2), _mget, _mset)
+    f_px9_decomp(0, 0, _peek2(3*2), _mget, _mset)
 
     -- 0x0008
-    normalize_pokemon_data()
+    f_normalize_pokemon_data()
 
     -- Need the pokedex tiles to stay loaded. This starts at sprite index #96.
     _memcpy(0x0000, 0xc000, 0x2000)
@@ -82,14 +82,14 @@ function _update60()
     if g_bo and g_bpx then g_debug = not g_debug end
     -- DEBUG_END
 
-    zcall(loop_entities, [[
+    f_zcall(f_loop_entities, [[
         1;,actor,clean;
         2;,fader,clean;
     ]])
 
-    register_entities()
+    f_register_entities()
 
-    zcall(loop_entities, [[
+    f_zcall(f_loop_entities, [[
         1;,fader,tick;
         2;,game_state,tick;
         3;,fader,state;
@@ -100,11 +100,11 @@ end
 function _draw()
     local _ENV = _g
     _cls()
-    loop_entities('game_state', 'draw')
-    fade(g_fade)
+    f_loop_entities('game_state', 'draw')
+    f_fade(g_fade)
 end
 
-|[parse_numlist]| function(str)
+|[f_parse_numlist]| function(str)
     local tbl = {}
     for x in _all(_split(str or '', '|')) do
         if _type(x) == "number" then
@@ -116,12 +116,12 @@ end $$
 
 -- thanks to bulbapedia: https://bulbapedia.bulbagarden.net/wiki/Stat#Stat
 -- this formula is much simpler at lvl 50, so I took some parts out.
-|[calc_max_stat]| function(base)
+|[f_calc_max_stat]| function(base)
     return _ceil(base+.5*93)+5
 end $$
 
 -- 255 is dashes. 0 is next pkmn. num is move index.
-|[normalize_pokemon_data]| function()
+|[f_normalize_pokemon_data]| function()
     -- this is a global that the update_pokemon_moves function uses
     g_all_pokemon_moves = {}
 
@@ -207,15 +207,15 @@ end $$
                                      end
                                      return moveset
                                   end,
-            draw       = function(...) draw_pkmn_out(i, ...) end,
+            draw       = function(...) f_draw_pkmn_out(i, ...) end,
             num        = i,
         }
 
-        newpkmn.maxhp   = calc_max_stat(newpkmn.base_hp) + 5 + C_LEVEL -- slightly different formula for hp
-        newpkmn.special = calc_max_stat(newpkmn.base_special)
-        newpkmn.attack  = calc_max_stat(newpkmn.base_attack)
-        newpkmn.defense = calc_max_stat(newpkmn.base_defense)
-        newpkmn.speed   = calc_max_stat(newpkmn.base_speed)
+        newpkmn.maxhp   = f_calc_max_stat(newpkmn.base_hp) + 5 + C_LEVEL -- slightly different formula for hp
+        newpkmn.special = f_calc_max_stat(newpkmn.base_special)
+        newpkmn.attack  = f_calc_max_stat(newpkmn.base_attack)
+        newpkmn.defense = f_calc_max_stat(newpkmn.base_defense)
+        newpkmn.speed   = f_calc_max_stat(newpkmn.base_speed)
         newpkmn.total   = newpkmn.maxhp + newpkmn.special + newpkmn.attack + newpkmn.defense + newpkmn.speed
         newpkmn.hp      = newpkmn.maxhp
 

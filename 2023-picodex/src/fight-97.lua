@@ -5,7 +5,7 @@
 -- pl,1-4,false - select a move slot  are move slots
 -- pl,0,false   - select default move (solar beam charge, hyper beam recharge, struggle, ...)
 -- pl,1-6,true  - switch with party slot
-|[select_move]| function(pl, slot, switch)
+|[f_select_move]| function(pl, slot, switch)
     pl.actions = {}
     local priority_class = C_PRIORITY_ATTACK
 
@@ -13,8 +13,8 @@
         priority_class = C_PRIORITY_SWITCH
     else
         local move = pl.active.moveids[slot] or M_STRUGGLE
-        addaction(pl, pl, "#,uses,"..c_moves[move].name, function(s, o) -- self, other
-            generic_attack(s, o, slot)
+        f_addaction(pl, pl, "#,uses,"..c_moves[move].name, function(s, o) -- self, other
+            f_generic_attack(s, o, slot)
         end)
 
         -- hardcoding the only moves that can change priority for now. Maybe there is a more token efficient way to do this?
@@ -29,49 +29,49 @@
     pl.priority = _min(C_PRIORITY_SWITCH, priority_class+pl.active:getstat'speed')
 end $$
 
-|[get_other_pl]| function(game, pl)
+|[f_get_other_pl]| function(game, pl)
     return pl == game.p1 and game.p2 or game.p1   
 end $$
 
-|[draw_hp]| function(x, y, hp, maxhp, align, col)
+|[f_draw_hp]| function(x, y, hp, maxhp, align, col)
     _rectfill(x, y-2, x-align*_max(_ceil(hp/maxhp*40), 0), y+2, col)
 end $$
 
 ---------------------------------------------------------------------------
 -- misc stuff
 ---------------------------------------------------------------------------
-|[newaction]| function(pactive, message, logic)
-    return {pl=pactive, active=pactive.active, message=message, logic=logic or nop}
+|[f_newaction]| function(pactive, message, logic)
+    return {pl=pactive, active=pactive.active, message=message, logic=logic or f_nop}
 end $$
 
-|[addaction]| function(p0, ...)
-    _add(p0.actions, newaction(...))
+|[f_addaction]| function(p0, ...)
+    _add(p0.actions, f_newaction(...))
 end $$
 
 -- switch if there is a next pokemon
 -- otherwise, do nothing. turn logic will check every turn if there is a win condition
-|[logic_faint]| function(s)
+|[f_logic_faint]| function(s)
     s.active.shared.major = C_MAJOR_FAINTED
 end $$
 
 -- self pl, other pl
 -- return faint action if no hp and not dead
 -- return nothing if end of turn
-|[pop_next_action]| function(game)
+|[f_pop_next_action]| function(game)
     -- if an active pokemon has no hp, but not the faint status yet, return an action that makes the pokemon faint.
     for p in _all{game.p1,game.p2} do
         if p.active.shared.hp <= 0 then
             if p.active.shared.major ~= C_MAJOR_FAINTED then
-                return newaction(p, "#,is,fainted", logic_faint)
+                return f_newaction(p, "#,is,fainted", f_logic_faint)
             else
-                p.active = party_pkmn_to_active(get_next_active(p.party))
-                return newaction(p, "#,comes,out")
+                p.active = f_party_pkmn_to_active(f_get_next_active(p.party))
+                return f_newaction(p, "#,comes,out")
             end
         end
     end
 
-    for s in _all{game.p0, get_other_pl(game, game.p0)} do
-        local o = get_other_pl(game, s)
+    for s in _all{game.p0, f_get_other_pl(game, game.p0)} do
+        local o = f_get_other_pl(game, s)
 
         -- if the active pokemon shouldn't faint right now, find the next action that references a pokemon still on the field.
         while #s.actions > 0 do
@@ -84,7 +84,7 @@ end $$
 end $$
 
 -- returns move slot number. 0 means to use struggle.
-|[get_possible_move_slots]| function(active)
+|[f_get_possible_move_slots]| function(active)
     local possible_moves = {}
 
     for i=1,4 do
@@ -96,13 +96,13 @@ end $$
     return possible_moves
 end $$
 
-|[select_random_move_slot]| function(active)
-    local possible_moves = get_possible_move_slots(active)
-    return possible_moves[flr_rnd(#possible_moves)+1] or M_STRUGGLE
+|[f_select_random_move_slot]| function(active)
+    local possible_moves = f_get_possible_move_slots(active)
+    return possible_moves[f_flr_rnd(#possible_moves)+1] or M_STRUGGLE
 end $$
 
 -- [s]elf pl, [o]ther pl, [m]ove slot
-|[generic_attack]| function(s, o, m)
+|[f_generic_attack]| function(s, o, m)
     local move = c_moves[s.active.moveids[m] or 0]
 
     -- should only be nil for struggle?
@@ -110,15 +110,15 @@ end $$
         s.active.movepps[m] -= 1
     end
 
-    local dmg = move.damage -- calc_move_damage(s.active.shared.lvl, s.active.shared.attack, defense, critical, move_power)
+    local dmg = move.damage -- f_calc_move_damage(s.active.shared.lvl, s.active.shared.attack, defense, critical, move_power)
     if dmg > 0 then
-        addaction(s, o, "#,-"..dmg..",hitpoints", function()
+        f_addaction(s, o, "#,-"..dmg..",hitpoints", function()
             o.active.shared.hp = _max(0, o.active.shared.hp-dmg)
         end)
 
     -- otherwise, it is splash for now i guess
     else
-        addaction(s, s, "#,does,nothing")
+        f_addaction(s, s, "#,does,nothing")
     end
 end $$
 
@@ -152,7 +152,7 @@ end $$
 -- turn init will switch the 2 pokemon. select will set it.
 
 -- takes in the hard-coded base speed value for the pkmn, so electrode would have highest crit ratio.
-|[get_crit_ratio]| function(base_speed)
+|[f_get_crit_ratio]| function(base_speed)
     -- range is 0 to 255. then random roll is done out of 256, so high crit still has like a .5% chance of failing.
     -- todo: redo these slightly
     -- (bs+76)/4 | (bs+236)/2 | (bs+76)/4*8 (crit move)
@@ -162,11 +162,11 @@ end $$
 end $$
 
 -- pokemon rb just have one rnd check here. but stadium makes it two.
-|[move_accuracy_rate]| function()
-    return flr_rnd'256' == 0 and flr_rnd'256' == 0
+|[f_move_accuracy_rate]| function()
+    return f_flr_rnd'256' == 0 and f_flr_rnd'256' == 0
 end $$
 
-|[calc_move_damage]| function(lvl, attack, defense, critical, move_power)
+|[f_calc_move_damage]| function(lvl, attack, defense, critical, move_power)
     -- critical is 1 or 2
     -- need function for attack/defense ratio to prevent divide by zero
     -- base_damage can be a _max of 997

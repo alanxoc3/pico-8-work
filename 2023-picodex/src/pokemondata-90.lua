@@ -1,4 +1,4 @@
-|[c_pokemon]| zobj[[
+|[c_pokemon]| f_zobj[[
     -- missingno has 0 base defense, but this becomes 1 in a battle based on the logic in getstat.
     -- evol says how many numbers going up is the previous evolution. 0 means no previous evolution.
     -- every pokemon is either 0 or 1, except for eevee's evolved forms.
@@ -159,7 +159,7 @@
 
 -- pokemon moves can be physical or special. the order here is specific. odd numbers are physical. even numbers are special.
 -- includes type effectiveness chart. according to the gen 1 games, which had bugs. i'm keeping the bugs :).
-|[c_types]| zobj[[
+|[c_types]| f_zobj[[
     T_BIRD;     bg,0, name,"bird";     T_BIRD;     good;,;                                  T_BIRD;     null;,;                   T_BIRD;     weak;,;
     T_NORMAL;   bg,0, name,"normal";   T_NORMAL;   good;,;                                  T_NORMAL;   null;,T_GHOST;            T_NORMAL;   weak;,T_ROCK;
     T_FIRE;     bg,5, name,"fire";     T_FIRE;     good;,T_GRASS,T_ICE,T_BUG;               T_FIRE;     null;,;                   T_FIRE;     weak;,T_FIRE,T_WATER,T_ROCK,T_DRAGON;
@@ -179,7 +179,7 @@
 ]] $$
 
 -- 5 bg styles
-|[c_bg_styles]| zobj[[
+|[c_bg_styles]| f_zobj[[
     0;bg,6,  aa,13 -- normal
    ;; bg,13, aa,5  -- darker/psychic/poison/ghost
    ;; bg,9,  aa,4  -- electric/ground
@@ -189,7 +189,7 @@
    ;; bg,10, aa,4  -- electric/ground
 ]] $$
 
-|[c_zmovetype]| zobj[[
+|[c_zmovetype]| f_zobj[[
     0;name,"status";
     ; name,"physical";
     ; name,"special";
@@ -199,7 +199,7 @@
 -- accuracy 0 means it affects the user.
 -- pp 0 means it is struggle
 -- dmg 0 means it likely changes status or has an effect.
-|[c_moves]| zobj[[
+|[c_moves]| f_zobj[[
    --  "name",     type        pp  dmg  acc
    0;, "struggle", T_NORMAL,   0,  50, 1
 
@@ -375,7 +375,7 @@
 ]] $$
 
 -- trainers are given moves at lvl 50
-|[c_trainers]| zobj[[
+|[c_trainers]| f_zobj[[
     ;,"youngstr", P_RATTATA,   P_PIDGEY,    P_CATERPIE,  P_SPEAROW,   P_WEEDLE,    P_BELLSPROUT
    ;;,"junior",   P_EKANS,     P_SANDSHREW, P_RATTATA,   P_SQUIRTLE,  P_CHARMANDER,P_BULBASAUR
    ;;,"bugcatch", P_WEEDLE,    P_PARAS,     P_KAKUNA,    P_CATERPIE,  P_METAPOD,   P_PINSIR

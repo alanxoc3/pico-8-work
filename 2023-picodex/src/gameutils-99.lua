@@ -1,10 +1,10 @@
-|[extract_sheet]| function(index)
-    px9_decomp(0, 0, _peek2(index*2),
-        function(...) return vget(0x8000+index*0x2000, ...) end,
-        function(...) return vset(0x8000+index*0x2000, ...) end)
+|[f_extract_sheet]| function(index)
+    f_px9_decomp(0, 0, _peek2(index*2),
+        function(...) return f_vget(0x8000+index*0x2000, ...) end,
+        function(...) return f_vset(0x8000+index*0x2000, ...) end)
 end $$
 
-|[vget]| function(offset, x, y)
+|[f_vget]| function(offset, x, y)
     x = _min(_max(0, x), 127)\1
     y = y\1
 
@@ -13,7 +13,7 @@ end $$
     else             return (val & 0x0f) end
 end $$
 
-|[vset]| function(offset, x, y, val)
+|[f_vset]| function(offset, x, y, val)
     x = _min(_max(0, x), 127)\1
     y = y\1
 
@@ -26,7 +26,7 @@ end $$
 end $$
 
 -- thanks to zep
-|[px9_decomp]| function(x0,y0,src,vget,vset)
+|[f_px9_decomp]| function(x0,y0,src,f_vget,f_vset)
     local function vlist_val(l, val)
         local v,i=l[1],1
         while v!=val do
@@ -69,13 +69,13 @@ end $$
             if(splen<1) then
                 splen,predict=gnp"1",not predict
             end
-            local a=y>y0 and vget(x,y-1) or 0
+            local a=y>y0 and f_vget(x,y-1) or 0
             local l=pr[a] or {_unpack(el)}
             pr[a]=l
             local v=l[predict and 1 or gnp"2"]
             vlist_val(l, v)
             vlist_val(el, v)
-            vset(x,y,v)
+            f_vset(x,y,v)
         end
     end
 end $$
