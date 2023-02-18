@@ -1,15 +1,15 @@
 -- game state funcs
-|[gamefadein_init]| function(a)
+|[gamefadein_init]| function()
     fader_in()
     _sfx(-2,0) -- stop the creepy logo sound from looping
 end $$
 
 -- you can factory reset when the pokedex is closed
-|[closed_init]| function(a)
-    menuitem(1, "factory reset", function()
+|[closed_init]| function(_ENV)
+    _menuitem(1, "factory reset", function()
         _sfx(59,0)
         _memset(0x5e00, 0, 0x100)
-        a:start_timer('shaking', .5)
+        _ENV:start_timer('shaking', .5)
     end)
 end $$
 
@@ -17,32 +17,32 @@ end $$
     return g_bl or g_br or g_bu or g_bd or g_bx or g_bo
 end $$
 
-|[closed_update]| function(a)
+|[closed_update]| function(_ENV)
     -- if player 1 pressed any button, go to the next state.
-    if not any_btn() and a.backbuttonheld then
-        a.backbuttonheld = false
-        a:load()
+    if not any_btn() and backbuttonheld then
+        backbuttonheld = false
+        _ENV:load()
         _menuitem(1) -- no factory reset now
     elseif any_btn() then
-        a.backbuttonheld = true
+        backbuttonheld = true
         _menuitem(1) -- no factory reset now
     end
 end $$
 
-|[closed_draw]| function(a)
-    draw_picodex(a:is_active'shaking', -1, nop, nop, nop, a.light, a.backbuttonheld)
+|[closed_draw]| function(_ENV)
+    draw_picodex(_ENV:is_active'shaking', -1, nop, nop, nop, light, backbuttonheld)
 end $$
 
-|[closing_draw]| function(a)
-    draw_picodex(a:is_active'shaking', _cos(a:get_elapsed_percent'closing'/2), nop, nop, nop)
+|[closing_draw]| function(_ENV)
+    draw_picodex(_ENV:is_active'shaking', _cos(_ENV:get_elapsed_percent'closing'/2), nop, nop, nop)
 end $$
 
-|[opened_draw]| function(a)
-    draw_picodex(a:is_active'shaking', 1, nop, nop, nop, a.light)
+|[opened_draw]| function(_ENV)
+    draw_picodex(_ENV:is_active'shaking', 1, nop, nop, nop, light)
 end $$
 
-|[opening_draw]| function(a)
-    draw_picodex(a:is_active'shaking', -_cos(a:get_elapsed_percent'opening'/2), nop, nop, nop)
+|[opening_draw]| function(_ENV)
+    draw_picodex(_ENV:is_active'shaking', -_cos(_ENV:get_elapsed_percent'opening'/2), nop, nop, nop)
 end $$
 
 -- utility funcs

@@ -602,7 +602,7 @@ if c_pokemon[i].evolvesto and not c_pokemon[i].evolvesfrom then
 _poke(0x5e5a+i,1)
 end
 end
-modes=modes()
+modes=t_modes()
 zcall(function(menu_name,create_func,...)
 modes[menu_name].menu=create_func(...)
 end,[[;,browse,~create_menu,~browse_drawentry,4;;,browsestat,~create_menu_view,~menu_drawentry;;,partystat,~create_menu_view,~menu_drawentry;;,credits,~create_menu_view,~menu_drawentry;;,fightover,~create_menu_view,~menu_drawentry;;,editparty,~create_menu,~browse_drawentry,3;;,main,~create_menu,~menu_drawentry;;,partyaction,~create_menu,~menu_drawentry;;,partymovesel,~create_menu,~menu_drawentry;;,partymoves,~create_menu,~menu_drawentry;;,pselactions,~create_menu,~menu_drawentry;;,pselmove,~create_menu,~menu_drawentry;;,team1,~create_menu,~menu_drawentry;;,team2,~create_menu,~menu_drawentry]])
@@ -629,34 +629,34 @@ function()program.modes:draw1()end,
 function()program.modes:draw2()end,
 function()program.modes:draw3()end,
 4,false,program.modes.main.menu.c,#program.modes.stack)
-end,function(a)
+end,function()
 fader_in()
 _sfx(-2,0)
-end,function(a)
-menuitem(1,"factory reset",function()
+end,function(_ENV)
+_menuitem(1,"factory reset",function()
 _sfx(59,0)
 _memset(0x5e00,0,0x100)
-a:start_timer("shaking",.5)
+_ENV:start_timer("shaking",.5)
 end)
 end,function()
 return g_bl or g_br or g_bu or g_bd or g_bx or g_bo
-end,function(a)
-if not any_btn()and a.backbuttonheld then
-a.backbuttonheld=false
-a:load()
+end,function(_ENV)
+if not any_btn()and backbuttonheld then
+backbuttonheld=false
+_ENV:load()
 _menuitem(1)
 elseif any_btn()then
-a.backbuttonheld=true
+backbuttonheld=true
 _menuitem(1)
 end
-end,function(a)
-draw_picodex(a:is_active"shaking",-1,nop,nop,nop,a.light,a.backbuttonheld)
-end,function(a)
-draw_picodex(a:is_active"shaking",_cos(a:get_elapsed_percent"closing"/2),nop,nop,nop)
-end,function(a)
-draw_picodex(a:is_active"shaking",1,nop,nop,nop,a.light)
-end,function(a)
-draw_picodex(a:is_active"shaking",-_cos(a:get_elapsed_percent"opening"/2),nop,nop,nop)
+end,function(_ENV)
+draw_picodex(_ENV:is_active"shaking",-1,nop,nop,nop,light,backbuttonheld)
+end,function(_ENV)
+draw_picodex(_ENV:is_active"shaking",_cos(_ENV:get_elapsed_percent"closing"/2),nop,nop,nop)
+end,function(_ENV)
+draw_picodex(_ENV:is_active"shaking",1,nop,nop,nop,light)
+end,function(_ENV)
+draw_picodex(_ENV:is_active"shaking",-_cos(_ENV:get_elapsed_percent"opening"/2),nop,nop,nop)
 end,function()_sfx(60,0)end,function(shaking,rotation,l_screen,tr_screen,br_screen,light,backbuttonheld,top_row_buttons,bot_row_buttons)
 light=light or 0
 zcamera(28-(rotation+1)*14+(shaking and _flr(_rnd(3)-1)or 0),15,function()
@@ -1127,7 +1127,7 @@ end)
 zclass[[actor,timer|load,%actor_load,loadlogic,%actor_loadlogic,state,%actor_state,kill,%actor_kill,clean,%actor_clean,is_alive,%actor_is_alive,alive,yes,duration,null,curr,start,next,null,isnew,yes,init,nop,finit,nop,stateless_update,nop,update,nop,destroyed,nop;]]
 zclass[[timer|timers;,;start_timer,%timer_reset_timer,end_timer,%timer_end_timer,is_active,%timer_is_active,get_elapsed_percent,%timer_get_elapsed_percent,tick,%timer_tick,]]
 c_menustyles=zobj[[;bg,13,fg,1,out,5;;bg,6,fg,13,out,13;;bg,1,fg,13,out,2;;bg,5,fg,13,out,2]]
-zclass[[modes,actor|cursor,%modes_cursor,entry,%modes_entry,push,%modes_push,pop,%modes_pop,update,nop,draw1,nop,draw2,nop,draw3,nop,curr,main;stack;,;defaults;menu,no,finit,nop,init,nop,update,%modes_default_update,draw1,%modes_default_draw1,draw2,nop,draw3,nop;browse;init,%browse_init,draw2,%browse_draw2,draw3,%browse_draw3;partypkmn;init,%partypkmn_init,draw2,%browse_draw2,draw3,%browse_draw3;browsestat;init,%browsestat_init,draw2,%browse_draw2,draw3,%browse_draw3,update,%browsestat_update;partystat;init,%partystat_init,draw2,%editparty_draw2,draw3,%editparty_draw3,update,%partystat_update;credits;init,%credits_init,draw2,%main_draw2,draw3,%main_draw3;fightover;init,%fightover_init,draw2,%fightover_draw2,draw3,%fightover_draw3;editparty;init,%editparty_init,draw2,%editparty_draw2,draw3,%editparty_draw3,draw1,%editparty_draw1;main;init,~main_init,draw2,~main_draw2,draw3,~main_draw3;partyaction;init,%partyaction_init,draw2,%editparty_draw2,draw3,%editparty_draw3;partymovesel;init,%partymovesel_init,draw2,%partymovesel_draw2,draw3,%move_draw3;partymoves;init,%partymoves_init,draw2,%partymoves_draw2,draw3,%move_draw3;pselactions;init,%pselactions_init,draw2,%turn_draw2,draw3,%pselactions_draw3;pselmove;init,%pselmove_init,draw2,%turn_draw2,draw3,%move_draw3;team1;init,%party_init,draw2,%main_draw2,draw3,%party_draw3,disable_empty_party,no,select_func,%party_select;team1fight;init,%party_init,draw2,%main_draw2,draw3,%party_draw3,disable_empty_party,yes,select_func,%fight_select;team2;init,%party_init,draw2,%main_draw2,draw3,%party_draw3,disable_empty_party,yes,select_func,%fight_select;team2cpu;init,%fightsel_init,draw2,%main_draw2,draw3,%party_draw3;p1sel;next,p2sel,init,%psel_init,p0key,p1,update,nop,draw1,nop;p2sel;next,turn,init,%psel_init,p0key,p2,update,nop,draw1,nop;turn;next,p1sel,update,%turn_update,draw1,%turn_draw1,draw2,%turn_draw2,draw3,%turn_draw3,init,%turn_init,cur_action,no;]]
+zclass[[t_modes,actor|cursor,%modes_cursor,entry,%modes_entry,push,%modes_push,pop,%modes_pop,update,nop,draw1,nop,draw2,nop,draw3,nop,curr,main;stack;,;defaults;menu,no,finit,nop,init,nop,update,%modes_default_update,draw1,%modes_default_draw1,draw2,nop,draw3,nop;browse;init,%browse_init,draw2,%browse_draw2,draw3,%browse_draw3;partypkmn;init,%partypkmn_init,draw2,%browse_draw2,draw3,%browse_draw3;browsestat;init,%browsestat_init,draw2,%browse_draw2,draw3,%browse_draw3,update,%browsestat_update;partystat;init,%partystat_init,draw2,%editparty_draw2,draw3,%editparty_draw3,update,%partystat_update;credits;init,%credits_init,draw2,%main_draw2,draw3,%main_draw3;fightover;init,%fightover_init,draw2,%fightover_draw2,draw3,%fightover_draw3;editparty;init,%editparty_init,draw2,%editparty_draw2,draw3,%editparty_draw3,draw1,%editparty_draw1;main;init,~main_init,draw2,~main_draw2,draw3,~main_draw3;partyaction;init,%partyaction_init,draw2,%editparty_draw2,draw3,%editparty_draw3;partymovesel;init,%partymovesel_init,draw2,%partymovesel_draw2,draw3,%move_draw3;partymoves;init,%partymoves_init,draw2,%partymoves_draw2,draw3,%move_draw3;pselactions;init,%pselactions_init,draw2,%turn_draw2,draw3,%pselactions_draw3;pselmove;init,%pselmove_init,draw2,%turn_draw2,draw3,%move_draw3;team1;init,%party_init,draw2,%main_draw2,draw3,%party_draw3,disable_empty_party,no,select_func,%party_select;team1fight;init,%party_init,draw2,%main_draw2,draw3,%party_draw3,disable_empty_party,yes,select_func,%fight_select;team2;init,%party_init,draw2,%main_draw2,draw3,%party_draw3,disable_empty_party,yes,select_func,%fight_select;team2cpu;init,%fightsel_init,draw2,%main_draw2,draw3,%party_draw3;p1sel;next,p2sel,init,%psel_init,p0key,p1,update,nop,draw1,nop;p2sel;next,turn,init,%psel_init,p0key,p2,update,nop,draw1,nop;turn;next,p1sel,update,%turn_update,draw1,%turn_draw1,draw2,%turn_draw2,draw3,%turn_draw3,init,%turn_init,cur_action,no;]]
 g_loaded_row=16
 c_party_memlocs=zobj[[0,0x5e00,1,0x5e1e,2,0x5e3c]]
 zclass[[fader,actor|ecs_exclusions;actor,yes,timer,yes;]]

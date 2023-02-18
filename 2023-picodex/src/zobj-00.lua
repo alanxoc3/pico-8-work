@@ -74,5 +74,6 @@ zobj_set(_g, _G_ZOBJ_PARAMS)
 -- naming scheme:
 --  _blah - api func
 -- c_blah - global constant
+-- t_blah - global object template (class)
 -- f_blah - global function
 -- g_blah - global variable
