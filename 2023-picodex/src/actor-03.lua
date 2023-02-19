@@ -29,68 +29,73 @@ f_zclass[[actor,timer|
 ]]
 
 -- if load is called multiple times, the first load is used.
-|[f_actor_load]| function(a, stateName)
-    a.next_state = stateName or a.next
+|[f_actor_load]| function(_ENV, stateName)
+    next_state = stateName or next
 end $$
 
 -- Load the given state into the actor, by applying the properties of the sub-object
 -- (at key=stateName) to the actor object. (If the given stateName is falsey, kill
 -- the actor.) Then set up the next state change to happen after the actor's duration,
 -- using stateName=actor.next.
-|[f_actor_loadlogic]| function(a, stateName)
-    a.next_state, a.isnew = nil
+|[f_actor_loadlogic]| function(_ENV, stateName)
+    next_state, isnew = nil
 
     if stateName == 'dead' then
-        a.alive = false
+        alive = false
     else
-        a:finit()
-        a:end_timer(a.curr)
+        _ENV:finit()
+        _ENV:end_timer(curr)
 
-        a.next, a.duration = nil -- default values, unless overridden by next line
-        for k, v in _pairs(a.defaults) do a[k] = v end
-        for k, v in _pairs(a[stateName]) do a[k] = v end
-        a.curr = stateName
-        a:start_timer(a.curr, a.duration, a.duration and function() a:load(a.next or 'dead') end)
+        next, duration = nil -- default values, unless overridden by next line
+        for k, v in _pairs(defaults) do _ENV[k] = v end
+        for k, v in _pairs(_ENV[stateName]) do _ENV[k] = v end
+        curr = stateName
+        _ENV:start_timer(curr, duration, duration and function() _ENV:load(next or 'dead') end)
 
-        a:init()
+        _ENV:init()
     end
 end $$
 
 -- This is expected to be called on each frame!
-|[f_actor_state]| function(a)
+|[f_actor_state]| function(_ENV)
     -- actor created this frame
-    if a.isnew then a:loadlogic(a.curr) end
+    if isnew then _ENV:loadlogic(curr) end
 
     -- will keep calling init/finit until next_state is stable
     -- this means an infinite loop is technically possible if states are misconfigured
     -- but it also makes it so you can skip a state from running one framme if you want
-    while a.next_state do
-        a:loadlogic(a.next_state)
+    while next_state do
+        _ENV:loadlogic(next_state)
     end
 
     -- per-frame update
-    a:update()
-    a:stateless_update()
+    _ENV:update()
+    _ENV:stateless_update()
 end $$
 
-|[f_actor_is_alive]| function(a)
-    return not a.effectively_dead and a:is_active'ending' == nil and a.alive
+|[f_actor_is_alive]| function(_ENV)
+    return not effectively_dead and _ENV:is_active'ending' == nil and alive
 end $$
 
 -- If there is an ending state, call that. Otherwise, just set alive to false.
-|[f_actor_kill]| function(a)
-    a.effectively_dead = true
-    if a.ending then
-        if a.curr == 'start' then
-            a.next = 'ending'
-        elseif a:is_active'ending' == nil then
-            a:load'ending'
+|[f_actor_kill]| function(_ENV)
+    effectively_dead = true
+    if ending then
+        if curr == 'start' then
+            next = 'ending'
+        elseif _ENV:is_active'ending' == nil then
+            _ENV:load'ending'
         end
     else
-        a.alive = nil
+        alive = nil
     end
 end $$
 
 -- This is expected to be called at the beginning of each frame!
 -- If this is not called at the beginning, you could have a frame delay for things like explosions.
-|[f_actor_clean]| function(a) if not a.alive then a:destroyed() f_deregister_entity(a) end end $$
+|[f_actor_clean]| function(_ENV)
+    if not alive then
+        _ENV:destroyed()
+        f_deregister_entity(_ENV)
+    end
+end $$

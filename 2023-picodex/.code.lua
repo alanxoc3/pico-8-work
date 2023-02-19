@@ -108,43 +108,48 @@ local ox,oy=%0x5f28,%0x5f2a
 _camera(ox-nx,oy-ny)
 func()
 _camera(ox,oy)
-end,function(a,stateName)
-a.next_state=stateName or a.next
-end,function(a,stateName)
-a.next_state,a.isnew=nil
+end,function(_ENV,stateName)
+next_state=stateName or next
+end,function(_ENV,stateName)
+next_state,isnew=nil
 if stateName=="dead"then
-a.alive=false
+alive=false
 else
-a:finit()
-a:end_timer(a.curr)
-a.next,a.duration=nil
-for k,v in _pairs(a.defaults)do a[k]=v end
-for k,v in _pairs(a[stateName])do a[k]=v end
-a.curr=stateName
-a:start_timer(a.curr,a.duration,a.duration and function()a:load(a.next or "dead")end)
-a:init()
+_ENV:finit()
+_ENV:end_timer(curr)
+next,duration=nil
+for k,v in _pairs(defaults)do _ENV[k]=v end
+for k,v in _pairs(_ENV[stateName])do _ENV[k]=v end
+curr=stateName
+_ENV:start_timer(curr,duration,duration and function()_ENV:load(next or "dead")end)
+_ENV:init()
 end
-end,function(a)
-if a.isnew then a:loadlogic(a.curr)end
-while a.next_state do
-a:loadlogic(a.next_state)
+end,function(_ENV)
+if isnew then _ENV:loadlogic(curr)end
+while next_state do
+_ENV:loadlogic(next_state)
 end
-a:update()
-a:stateless_update()
-end,function(a)
-return not a.effectively_dead and a:is_active"ending"==nil and a.alive
-end,function(a)
-a.effectively_dead=true
-if a.ending then
-if a.curr=="start"then
-a.next="ending"
-elseif a:is_active"ending"==nil then
-a:load"ending"
+_ENV:update()
+_ENV:stateless_update()
+end,function(_ENV)
+return not effectively_dead and _ENV:is_active"ending"==nil and alive
+end,function(_ENV)
+effectively_dead=true
+if ending then
+if curr=="start"then
+next="ending"
+elseif _ENV:is_active"ending"==nil then
+_ENV:load"ending"
 end
 else
-a.alive=nil
+alive=nil
 end
-end,function(a)if not a.alive then a:destroyed()f_deregister_entity(a)end end,function(a,timer_name,duration,callback)
+end,function(_ENV)
+if not alive then
+_ENV:destroyed()
+f_deregister_entity(_ENV)
+end
+end,function(a,timer_name,duration,callback)
 a.timers[timer_name]={active=true,elapsed=false,duration=duration and 0+duration,callback=callback or function()end}
 end,function(a,timer_name)
 if a.timers[timer_name]then
