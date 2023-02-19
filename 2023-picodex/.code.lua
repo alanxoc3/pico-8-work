@@ -603,11 +603,7 @@ end,function(_ENV)
 _deli(stack)
 _ENV:load(stack[#stack]or "main")
 end,function(_ENV)
-for i=1,151 do
-if c_pokemon[i].evolvesto and not c_pokemon[i].evolvesfrom then
-_poke(0x5e5a+i,1)
-end
-end
+_foreach(_split"1,4,7,25,35,133",function(num)_poke(0x5e5a+num,1)end)
 modes=o_modes()
 f_zcall(function(menu_name,create_func,...)
 modes[menu_name].menu=create_func(...)

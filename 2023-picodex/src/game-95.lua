@@ -74,12 +74,15 @@ end $$
 end $$
 
 |[f_game_init]| function(_ENV)
-    -- unlock all 1st evolutions (pkmn has more evolutions, but this is the first one)
-    for i=1,151 do
-        if c_pokemon[i].evolvesto and not c_pokemon[i].evolvesfrom then
-            _poke(S_POKEMON+i, 1)
-        end
-    end
+    -- uncomment to unlock all 1st evolutions or cheat for all
+    -- for i=1,151 do
+    --     if c_pokemon[i].evolvesto and not c_pokemon[i].evolvesfrom then
+    --         _poke(S_POKEMON+i, 1)
+    --     end
+    -- end
+
+    -- f_zcall(function(num) _poke(S_POKEMON+num, 1) end, [[;]])
+    _foreach(_split'1,4,7,25,35,133', function(num) _poke(S_POKEMON+num, 1) end)
 
     -- todo: remove me and/or refactor me
     modes = o_modes()
