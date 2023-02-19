@@ -1,13 +1,13 @@
 -- 112 tokens
 
--- an actor is the basic thing in the game. think of an actor in a play. every
--- actor has a few basic roles:
--- * inherited timer functionality
+-- an o_actor is the basic thing in the game. think of an o_actor in a play. every
+-- o_actor has a few basic roles:
+-- * inherited o_timer functionality
 -- * able to die and be in different states
 -- * able to have a time limit on states if desired
 -- * init function when entering a state
 
-f_zclass[[actor,timer|
+f_zclass[[o_actor,o_timer|
     load,     %f_actor_load,
     loadlogic,%f_actor_loadlogic,
     state,    %f_actor_state,
@@ -33,10 +33,10 @@ f_zclass[[actor,timer|
     next_state = stateName or next
 end $$
 
--- Load the given state into the actor, by applying the properties of the sub-object
--- (at key=stateName) to the actor object. (If the given stateName is falsey, kill
--- the actor.) Then set up the next state change to happen after the actor's duration,
--- using stateName=actor.next.
+-- Load the given state into the o_actor, by applying the properties of the sub-object
+-- (at key=stateName) to the o_actor object. (If the given stateName is falsey, kill
+-- the o_actor.) Then set up the next state change to happen after the o_actor's duration,
+-- using stateName=o_actor.next.
 |[f_actor_loadlogic]| function(_ENV, stateName)
     next_state, isnew = nil
 
@@ -58,7 +58,7 @@ end $$
 
 -- This is expected to be called on each frame!
 |[f_actor_state]| function(_ENV)
-    -- actor created this frame
+    -- o_actor created this frame
     if isnew then _ENV:loadlogic(curr) end
 
     -- will keep calling init/finit until next_state is stable

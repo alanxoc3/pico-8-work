@@ -73,6 +73,10 @@ end $$
     menu[5].name ..= 0
 end $$
 
+|[f_inc_story]| function()
+    poke(S_STORY, min(@S_STORY+1, #c_trainers))
+end $$
+
 |[f_fightsel_init]| function(_ENV)
     menu:refresh(c_trainers, function(trainer, num)
         local disabled, team = num-1 > @S_STORY, {}
@@ -92,7 +96,7 @@ end $$
                     end
                 end
 
-                f_begin_fight(_ENV, f_get_party(_ENV:cursor'team1'), cpu_party_draft, "player 1", entry.name, false, true)
+                f_begin_fight(_ENV, f_get_party(_ENV:cursor'team1'), cpu_party_draft, "player 1", entry.name, false, true, f_inc_story, f_nop)
             end
         }
     end)

@@ -49,7 +49,7 @@ end $$
 -- You can make a class inherit the information of parents but NOT be added to that
 -- parent's ECS group by setting an exclusion in the template. Ex, instances of this
 -- actorwithoutparent f_zclass will be in the actorwithoutparent group, but not the
--- actor group: f_zclass[[actorwithoutparent,actor|ecs_exclusions;actor,true]]
+-- o_actor group: f_zclass[[actorwithoutparent,o_actor|ecs_exclusions;o_actor,true]]
 
 |[f_register_entities]| function()
     while #g_zclass_new_entities > 0 do

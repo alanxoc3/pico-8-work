@@ -1,7 +1,7 @@
 -- todo: try splitting minifier on underscore
 -- todo: rename "party" to "team" for consistency
 
-f_zclass[[t_modes,actor|
+f_zclass[[o_modes,o_actor|
     cursor,%f_modes_cursor, -- gets the cursor for a menu
     entry,%f_modes_entry,   -- gets the entry the cursor is on
     push,%f_modes_push,
@@ -82,7 +82,7 @@ end $$
     end
 
     -- todo: remove me and/or refactor me
-    modes = t_modes()
+    modes = o_modes()
 
     f_zcall(function(menu_name, create_func, ...)
         modes[menu_name].menu = create_func(...)

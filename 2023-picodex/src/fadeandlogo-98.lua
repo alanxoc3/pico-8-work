@@ -31,11 +31,11 @@
     end
 end $$
 
-f_zclass[[fader,actor|
-    ecs_exclusions;actor,yes,timer,yes;
+f_zclass[[o_fader,o_actor|
+    ecs_exclusions;o_actor,yes,o_timer,yes;
 ]]
 
-f_zclass[[fader_out,fader|
+f_zclass[[o_fader_out,o_fader|
     start; duration,FADE_SPEED, destroyed,@, update,%f_fader_out_update
 ]]
 
@@ -44,7 +44,7 @@ f_zclass[[fader_out,fader|
     _g.g_fade = a:get_elapsed_percent'start'
 end $$
 
-f_zclass[[fader_in,fader|
+f_zclass[[o_fader_in,o_fader|
     start; duration,FADE_SPEED, update,%f_fader_in_update
 ]]
 

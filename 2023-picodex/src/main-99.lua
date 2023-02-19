@@ -1,8 +1,8 @@
-f_zclass[[game_state,actor|
+f_zclass[[o_game_state,o_actor|
     curr,fadein; -- curr,logo;
 
     init,%f_game_state_init;
-    ecs_exclusions; actor,yes; -- remove game_state from the actor group
+    ecs_exclusions; o_actor,yes; -- remove o_game_state from the o_actor group
     defaults;       sinit,%f_nop, update,%f_nop, draw,%f_nop, light,0, backbuttonheld,no, modes,;
 
     logo; next,fadein, sinit,%f_logo_init, update,%f_nop, draw,%f_logo_draw, duration,2.5;
@@ -20,7 +20,7 @@ f_zclass[[game_state,actor|
 
 -- every state change will clean up all the entities.
 |[f_game_state_init]| function(state)
-    f_clean_all_entities('game_state', 'fader_in')
+    f_clean_all_entities('o_game_state', 'o_fader_in')
     state:sinit()
 end $$
 
@@ -60,7 +60,7 @@ function _init()
     -- Need the pokedex tiles to stay loaded. This starts at sprite index #96.
     _memcpy(0x0000, 0xc000, 0x2000)
 
-    g_tl = game_state()
+    g_tl = o_game_state()
 end
 
 function _update60()
@@ -83,24 +83,24 @@ function _update60()
     -- DEBUG_END
 
     f_zcall(f_loop_entities, [[
-        1;,actor,clean;
-        2;,fader,clean;
+        1;,o_actor,clean;
+        2;,o_fader,clean;
     ]])
 
     f_register_entities()
 
     f_zcall(f_loop_entities, [[
-        1;,fader,tick;
-        2;,game_state,tick;
-        3;,fader,state;
-        4;,game_state,state;
+        1;,o_fader,tick;
+        2;,o_game_state,tick;
+        3;,o_fader,state;
+        4;,o_game_state,state;
     ]])
 end
 
 function _draw()
     local _ENV = _g
     _cls()
-    f_loop_entities('game_state', 'draw')
+    f_loop_entities('o_game_state', 'draw')
     f_fade(g_fade)
 end
 

@@ -1,6 +1,6 @@
 -- game state funcs
 |[f_gamefadein_init]| function()
-    fader_in()
+    o_fader_in()
     _sfx(-2,0) -- stop the creepy logo sound from looping
 end $$
 
