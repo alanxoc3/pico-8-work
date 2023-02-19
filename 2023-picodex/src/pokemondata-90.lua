@@ -1,4 +1,4 @@
-c_pokemon = zobj[[
+|[c_pokemon]| f_zobj[[
     -- missingno has 0 base defense, but this becomes 1 in a battle based on the logic in getstat.
     -- evol says how many numbers going up is the previous evolution. 0 means no previous evolution.
     -- every pokemon is either 0 or 1, except for eevee's evolved forms.
@@ -86,7 +86,7 @@ c_pokemon = zobj[[
    ;;, 1,   "slowbro",     T_WATER,    T_PSYCHIC,   95,  75,  110, 30,  80,  1,18,22,27,33,37,44,55          -- 80
    ;;, 0,   "magnemite",   T_ELECTRIC, T_NONE,      25,  35,  70,  45,  95,  1,21,25,29,35,41,47             -- 81
    ;;, 1,   "magneton",    T_ELECTRIC, T_NONE,      50,  60,  95,  70,  120, 1,21,25,29,38,46,54             -- 82
-   ;;, 0,   "farfetch'd",  T_NORMAL,   T_FLYING,    52,  65,  55,  60,  58,  1,1,7,15,23,31,39               -- 83
+   ;;, 0,   "farfetchd",   T_NORMAL,   T_FLYING,    52,  65,  55,  60,  58,  1,1,7,15,23,31,39               -- 83
    ;;, 0,   "doduo",       T_NORMAL,   T_FLYING,    35,  85,  45,  75,  35,  1,20,24,30,36,40,44             -- 84
    ;;, 1,   "dodrio",      T_NORMAL,   T_FLYING,    60,  110, 70,  100, 60,  1,20,24,30,39,45,51             -- 85
    ;;, 0,   "seel",        T_WATER,    T_NONE,      65,  45,  55,  45,  70,  1,30,35,40,45,50                -- 86
@@ -155,11 +155,11 @@ c_pokemon = zobj[[
    ;;, 1,   "dragonite",   T_DRAGON,   T_FLYING,    91,  134, 95,  80,  100, 1,1,10,20,35,45,60              -- 149
    ;;, 0,   "mewtwo",      T_PSYCHIC,  T_NONE,      106, 110, 90,  130, 154, 1,1,1,63,66,70,75,81            -- 150
    ;;, 0,   "mew",         T_PSYCHIC,  T_NONE,      100, 100, 100, 100, 100, 1,10,20,30,40                   -- 151
-]]
+]] $$
 
 -- pokemon moves can be physical or special. the order here is specific. odd numbers are physical. even numbers are special.
 -- includes type effectiveness chart. according to the gen 1 games, which had bugs. i'm keeping the bugs :).
-c_types = zobj[[
+|[c_types]| f_zobj[[
     T_BIRD;     bg,0, name,"bird";     T_BIRD;     good;,;                                  T_BIRD;     null;,;                   T_BIRD;     weak;,;
     T_NORMAL;   bg,0, name,"normal";   T_NORMAL;   good;,;                                  T_NORMAL;   null;,T_GHOST;            T_NORMAL;   weak;,T_ROCK;
     T_FIRE;     bg,5, name,"fire";     T_FIRE;     good;,T_GRASS,T_ICE,T_BUG;               T_FIRE;     null;,;                   T_FIRE;     weak;,T_FIRE,T_WATER,T_ROCK,T_DRAGON;
@@ -176,10 +176,10 @@ c_types = zobj[[
     T_ROCK;     bg,0, name,"rock";     T_ROCK;     good;,T_BUG,T_FIRE,T_FLYING,T_ICE;       T_ROCK;     null;,;                   T_ROCK;     weak;,T_FIGHTING,T_GROUND;
     T_DRAGON;   bg,0, name,"dragon";   T_DRAGON;   good;,T_DRAGON;                          T_DRAGON;   null;,;                   T_DRAGON;   weak;,;
     T_GHOST;    bg,1, name,"ghost";    T_GHOST;    good;,T_GHOST;                           T_GHOST;    null;,T_NORMAL,T_PSYCHIC; T_GHOST;    weak;,
-]]
+]] $$
 
 -- 5 bg styles
-c_bg_styles = zobj[[
+|[c_bg_styles]| f_zobj[[
     0;bg,6,  aa,13 -- normal
    ;; bg,13, aa,5  -- darker/psychic/poison/ghost
    ;; bg,9,  aa,4  -- electric/ground
@@ -187,19 +187,19 @@ c_bg_styles = zobj[[
    ;; bg,12, aa,5  -- water
    ;; bg,8,  aa,2  -- fire
    ;; bg,10, aa,4  -- electric/ground
-]]
+]] $$
 
-c_zmovetype = zobj[[
+|[c_zmovetype]| f_zobj[[
     0;name,"status";
     ; name,"physical";
     ; name,"special";
-]]
+]] $$
 
 -- accuracy 2 means it can't miss.
 -- accuracy 0 means it affects the user.
 -- pp 0 means it is struggle
 -- dmg 0 means it likely changes status or has an effect.
-c_moves = zobj[[
+|[c_moves]| f_zobj[[
    --  "name",     type        pp  dmg  acc
    0;, "struggle", T_NORMAL,   0,  50, 1
 
@@ -372,9 +372,48 @@ c_moves = zobj[[
    ;;, "convrson", T_NORMAL,   30, 0,   0   -- 162
    ;;, "suprfang", T_NORMAL,   10, 0,   .9  -- 163
    ;;, "slash",    T_NORMAL,   20, 70,  1   -- 164
-]]
+]] $$
 
 -- trainers are given moves at lvl 50
-c_trainers = zobj[[
-    ;,"bugcatch",
-]]
+|[c_trainers]| f_zobj[[
+    ;,"youngstr", P_RATTATA,   P_PIDGEY,    P_CATERPIE,  P_SPEAROW,   P_WEEDLE,    P_BELLSPROUT
+   ;;,"junior",   P_EKANS,     P_SANDSHREW, P_RATTATA,   P_SQUIRTLE,  P_CHARMANDER,P_BULBASAUR
+   ;;,"bugcatch", P_WEEDLE,    P_PARAS,     P_KAKUNA,    P_CATERPIE,  P_METAPOD,   P_PINSIR
+   ;;,"brock",    P_GEODUDE,   P_OMANYTE,   P_CUBONE,    P_VULPIX,    P_KABUTO,    P_ONIX
+   ;;,"lass",     P_ODDISH,    P_MEOWTH,    P_CLEFAIRY,  P_NIDORANF,  P_DODUO,     P_JIGGLYPUFF
+   ;;,"hiker",    P_GEODUDE,   P_DIGLETT,   P_ZUBAT,     P_MACHOP,    P_PARAS,     P_GRAVELER
+   ;;,"swimmer",  P_HORSEA,    P_POLIWAG,   P_SHELLDER,  P_MAGIKARP,  P_STARYU,    P_GOLDEEN
+   ;;,"misty",    P_STARYU,    P_SEADRA,    P_PSYDUCK,   P_SEAKING,   P_SEEL,      P_STARMIE
+   ;;,"gentlman", P_GROWLITHE, P_NIDORANM,  P_DRATINI,   P_PONYTA,    P_SANDSHREW, P_EEVEE
+   ;;,"sailor",   P_SHELLDER,  P_TENTACOOL, P_PSYDUCK,   P_POLIWAG,   P_KRABBY,    P_POLIWHIRL
+   ;;,"rocker",   P_VOLTORB,   P_ZUBAT,     P_VENONAT,   P_MAGNEMITE, P_ABRA,      P_PIKACHU
+   ;;,"ltsurge",  P_PIKACHU,   P_JOLTEON,   P_VOLTORB,   P_ELECTABUZZ,P_MAGNETON,  P_RAICHU
+   ;;,"channelr", P_GASTLY,    P_JIGGLYPUFF,P_CUBONE,    P_CLEFAIRY,  P_HAUNTER,   P_MAROWAK
+   ;;,"gambler",  P_PIDGEOTTO, P_GRAVELER,  P_POLIWHIRL, P_RHYHORN,   P_GROWLITHE, P_GLOOM
+   ;;,"beauty",   P_BELLSPROUT,P_CHANSEY,   P_WIGGLYTUFF,P_WEEPINBELL,P_EEVEE,     P_CLEFABLE
+   ;;,"erika",    P_PARASECT,  P_VICTREEBEL,P_EXEGGCUTE, P_BUTTERFREE,P_TANGELA,   P_VILEPLUME
+   ;;,"birdkeep", P_DODUO,     P_PIDGEOTTO, P_FEAROW,    P_FARFETCHD, P_DODRIO,    P_PIDGEOT
+   ;;,"biker",    P_KOFFING,   P_MANKEY,    P_TENTACOOL, P_GRIMER,    P_MACHOKE,   P_TENTACRUEL
+   ;;,"juggler",  P_VENONAT,   P_GLOOM,     P_MRMIME,    P_DROWZEE,   P_ELECTRODE, P_SLOWPOKE
+   ;;,"koga",     P_NIDORINA,  P_MUK,       P_WEEZING,   P_BEEDRILL,  P_NIDORINO,  P_VENOMOTH
+   ;;,"blckbelt", P_MACHOP,    P_MACHOKE,   P_HITMONLEE, P_MANKEY,    P_PRIMEAPE,  P_HITMONCHAN
+   ;;,"rocket",   P_SANDSLASH, P_RATICATE,  P_ELECTRODE, P_GOLBAT,    P_WEEZING,   P_ARBOK
+   ;;,"psychic",  P_SLOWPOKE,  P_ABRA,      P_SLOWBRO,   P_DROWZEE,   P_EXEGGCUTE, P_KADABRA
+   ;;,"sabrina",  P_MRMIME,    P_EXEGGUTOR, P_KADABRA,   P_JYNX,      P_HYPNO,     P_ALAKAZAM
+   ;;,"scientst", P_DITTO,     P_VICTREEBEL,P_GASTLY,    P_VENOMOTH,  P_HYPNO,     P_PORYGON
+   ;;,"pkmaniac", P_CHANSEY,   P_PINSIR,    P_ELECTABUZZ,P_SCYTHER,   P_LICKITUNG, P_GOLDUCK
+   ;;,"suprnerd", P_PONYTA,    P_MAGNETON,  P_PRIMEAPE,  P_FLAREON,   P_VULPIX,    P_RAPIDASH
+   ;;,"blaine",   P_RAPIDASH,  P_ARCANINE,  P_FLAREON,   P_NINETALES, P_GOLEM,     P_MAGMAR
+   ;;,"fishrman", P_GOLDEEN,   P_TENTACRUEL,P_SEADRA,    P_SEAKING,   P_CLOYSTER,  P_KINGLER
+   ;;,"cooltrnr", P_DRAGONAIR, P_PARASECT,  P_GOLDUCK,   P_WARTORTLE, P_CHARMELEON,P_IVYSAUR
+   ;;,"tamer",    P_MAROWAK,   P_TAUROS,    P_SANDSLASH, P_RATICATE,  P_RHYHORN,   P_PERSIAN
+   ;;,"giovanni", P_DUGTRIO,   P_NIDOKING,  P_PERSIAN,   P_NIDOQUEEN, P_KANGASKHAN,P_RHYDON
+   ;;,"lorelei",  P_CLOYSTER,  P_JYNX,      P_VAPOREON,  P_LAPRAS,    P_SLOWBRO,   P_DEWGONG
+   ;;,"bruno",    P_ONIX,      P_HITMONCHAN,P_OMASTAR,   P_HITMONLEE, P_GOLEM,     P_MACHAMP
+   ;;,"agatha",   P_GOLBAT,    P_MUK,       P_HAUNTER,   P_VILEPLUME, P_ARBOK,     P_GENGAR
+   ;;,"lance",    P_GYARADOS,  P_DRAGONAIR, P_AERODACTYL,P_DRAGONITE, P_KABUTOPS,  P_SNORLAX
+   ;;,"blue",     P_PIDGEOT,   P_ALAKAZAM,  P_JOLTEON,   P_ARCANINE,  P_EXEGGUTOR, P_BLASTOISE
+   ;;,"green",    P_GENGAR,    P_KANGASKHAN,P_CLEFABLE,  P_GYARADOS,  P_NINETALES, P_VENUSAUR
+   ;;,"red",      P_SCYTHER,   P_SNORLAX,   P_RAICHU,    P_LAPRAS,    P_DODRIO,    P_CHARIZARD
+   ;;,"legendry", P_DRAGONITE, P_ZAPDOS,    P_MOLTRES,   P_ARTICUNO,  P_MEWTWO,    P_MEW
+]] $$

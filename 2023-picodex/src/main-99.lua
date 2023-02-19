@@ -1,72 +1,75 @@
-zclass[[game_state,actor|
+f_zclass[[o_game_state,o_actor|
     curr,fadein; -- curr,logo;
 
-    init,%game_state_init;
-    ecs_exclusions; actor,yes; -- remove game_state from the actor group
-    defaults;       sinit,nop, update,nop, draw,nop, light,0, backbuttonheld,no, modes,;
+    init,%f_game_state_init;
+    ecs_exclusions; o_actor,yes; -- remove o_game_state from the o_actor group
+    defaults;       sinit,%f_nop, update,%f_nop, draw,%f_nop, light,0, backbuttonheld,no, modes,;
 
-    logo; next,fadein, sinit,%logo_init, update,nop, draw,%logo_draw, duration,2.5;
+    logo; next,fadein, sinit,%f_logo_init, update,%f_nop, draw,%f_logo_draw, duration,2.5;
 
-    fadein; next,game, duration,0, sinit,%gamefadein_init; -- fadein; next,closed, duration,0, sinit,%gamefadein_init;
+    fadein; next,game, duration,0, sinit,%f_gamefadein_init; -- fadein; next,closed, duration,0, sinit,%f_gamefadein_init;
 
-    closed;     next,opening,                            sinit,%closed_init, update,%closed_update, draw,%closed_draw;
-    opening;    next,starting_1,          duration,.25,                                             draw,%opening_draw;
-    starting_1; next,starting_2, light,1, duration,.125, sinit,%beep, draw,%opened_draw;
-    starting_2; next,starting_3, light,2, duration,.125, sinit,%beep, draw,%opened_draw;
-    starting_3; next,game,       light,3, duration,.125, sinit,%beep, draw,%opened_draw;
-    game;       next,closing,    light,4,                sinit,%game_init,   update,%game_update,   draw,%game_draw;
-    closing;    next,closed,              duration,.25,                      update,nop,            draw,%closing_draw;
+    closed;     next,opening,                            sinit,%f_closed_init, update,%f_closed_update, draw,%f_closed_draw;
+    opening;    next,starting_1,          duration,.25,                                             draw,%f_opening_draw;
+    starting_1; next,starting_2, light,1, duration,.125, sinit,%f_beep, draw,%f_opened_draw;
+    starting_2; next,starting_3, light,2, duration,.125, sinit,%f_beep, draw,%f_opened_draw;
+    starting_3; next,game,       light,3, duration,.125, sinit,%f_beep, draw,%f_opened_draw;
+    game;       next,closing,    light,4,                sinit,%f_game_init,   update,%f_game_update,   draw,%f_game_draw;
+    closing;    next,closed,              duration,.25,                      update,%f_nop,            draw,%f_closing_draw;
 ]]
 
 -- every state change will clean up all the entities.
-|[game_state_init]| function(state)
-    clean_all_entities('game_state', 'fader_in')
+|[f_game_state_init]| function(state)
+    f_clean_all_entities('o_game_state', 'o_fader_in')
     state:sinit()
 end $$
 
 function _init()
+    local _ENV = _g
+
     -- clear all the read only memory. testing things out showed that this doesn't get cleared automatically.
-    memset(0x8000, 0, 0x7fff)
+    _memset(0x8000, 0, 0x7fff)
 
-    poke(0x5f5c, 12) -- set the initial delay before repeating. 255 means never repeat.
-    poke(0x5f5d, 2) -- set the repeating delay.
+    _poke(0x5f5c, 12) -- set the initial delay before repeating. 255 means never repeat.
+    _poke(0x5f5d, 2) -- set the repeating delay.
 
-    cls()
-    sfx(62,0) -- a sound indicator that the came is actually running while loading
+    _cls()
+    _sfx(62,0) -- a sound indicator that the came is actually running while loading
 
 -- NORMAL_BEGIN -- debug mode doesn't need to load these sheets for faster startup
 
     -- 0x0000
-    extract_sheet(0)
+    f_extract_sheet(0)
 
     -- 0x0002
-    extract_sheet(1)
+    f_extract_sheet(1)
 
 -- NORMAL_END
 
     -- 0x0004
-    extract_sheet(2)
+    f_extract_sheet(2)
 
-    poke(0x5f56, 0xe0) -- make map funcs point here instead
+    _poke(0x5f56, 0xe0) -- make map funcs point here instead
 
     -- 0x0006
-    px9_decomp(0, 0, peek2(3*2), mget, mset)
+    f_px9_decomp(0, 0, _peek2(3*2), _mget, _mset)
 
     -- 0x0008
-    normalize_pokemon_data()
+    f_normalize_pokemon_data()
 
     -- Need the pokedex tiles to stay loaded. This starts at sprite index #96.
-    memcpy(0x0000, 0xc000, 0x2000)
+    _memcpy(0x0000, 0xc000, 0x2000)
 
-    g_tl = _g.game_state()
+    g_tl = o_game_state()
 end
 
 function _update60()
-    g_bl, g_br, g_bu, g_bd, g_bo, g_bx, g_bpl, g_bpr, g_bpu, g_bpd, g_bpo, g_bpx = btn'0', btn'1', btn'2', btn'3', btn'4', btn'5', btnp'0', btnp'1', btnp'2', btnp'3', btnp'4', btnp'5'
+    local _ENV = _g
+    g_bl, g_br, g_bu, g_bd, g_bo, g_bx, g_bpl, g_bpr, g_bpu, g_bpd, g_bpo, g_bpx = _btn'0', _btn'1', _btn'2', _btn'3', _btn'4', _btn'5', _btnp'0', _btnp'1', _btnp'2', _btnp'3', _btnp'4', _btnp'5'
     g_available_pokemon = {}
     for i=0,151 do
         if @(S_POKEMON+i) > 0 then
-            add(g_available_pokemon, i)
+            _add(g_available_pokemon, i)
         end
     end
 
@@ -79,43 +82,46 @@ function _update60()
     if g_bo and g_bpx then g_debug = not g_debug end
     -- DEBUG_END
 
-    zcall(loop_entities, [[
-        1;,actor,clean;
-        2;,fader,clean;
+    f_zcall(f_loop_entities, [[
+        1;,o_actor,clean;
+        2;,o_fader,clean;
     ]])
 
-    register_entities()
+    f_register_entities()
 
-    zcall(loop_entities, [[
-        1;,fader,tick;
-        2;,game_state,tick;
-        3;,fader,state;
-        4;,game_state,state;
+    f_zcall(f_loop_entities, [[
+        1;,o_fader,tick;
+        2;,o_game_state,tick;
+        3;,o_fader,state;
+        4;,o_game_state,state;
     ]])
 end
 
 function _draw()
-    cls()
-    loop_entities('game_state', 'draw')
-    fade(g_fade)
+    local _ENV = _g
+    _cls()
+    f_loop_entities('o_game_state', 'draw')
+    f_fade(g_fade)
 end
 
-function parse_numlist(str)
+|[f_parse_numlist]| function(str)
     local tbl = {}
-    for x in all(split(str or '', '|')) do
-        if type(x) == "number" then
-            add(tbl, x)
+    for x in _all(_split(str or '', '|')) do
+        if _type(x) == "number" then
+            _add(tbl, x)
         end
     end
     return tbl
-end
+end $$
 
 -- thanks to bulbapedia: https://bulbapedia.bulbagarden.net/wiki/Stat#Stat
 -- this formula is much simpler at lvl 50, so I took some parts out.
-function calc_max_stat(base) return ceil(base+.5*93)+5 end
+|[f_calc_max_stat]| function(base)
+    return _ceil(base+.5*93)+5
+end $$
 
 -- 255 is dashes. 0 is next pkmn. num is move index.
-function normalize_pokemon_data()
+|[f_normalize_pokemon_data]| function()
     -- this is a global that the update_pokemon_moves function uses
     g_all_pokemon_moves = {}
 
@@ -134,7 +140,7 @@ function normalize_pokemon_data()
     end
 
     -- next, get the moves for all the pokemon
-    local movemem = peek2(8)
+    local movemem = _peek2(8)
 
     for i=0,151 do
         local is_range = false
@@ -145,11 +151,11 @@ function normalize_pokemon_data()
                 is_range = true
             elseif is_range then
                 for i=moves[#moves],@movemem do
-                    add(moves, i)
+                    _add(moves, i)
                 end
                 is_range = false
             else
-                add(moves, @movemem)
+                _add(moves, @movemem)
             end
             movemem += 1
         end
@@ -169,7 +175,7 @@ function normalize_pokemon_data()
         local pkmn = c_pokemon[i] or {}
         local movelvls = {}
         for i=10,#pkmn do
-            add(movelvls, pkmn[i])
+            _add(movelvls, pkmn[i])
         end
 
         -- todo: token crunch on this table
@@ -196,20 +202,20 @@ function normalize_pokemon_data()
                                      local a, moveset = c_pokemon[i], {}
                                      for i=#a.movelvls,1,-1 do
                                         if a.movelvls[i] <= level and #moveset < 4 then
-                                           add(moveset, a.moves[i].num)
+                                           _add(moveset, a.moves[i].num)
                                         end
                                      end
                                      return moveset
                                   end,
-            draw       = function(...) draw_pkmn_out(i, ...) end,
+            draw       = function(...) f_draw_pkmn_out(i, ...) end,
             num        = i,
         }
 
-        newpkmn.maxhp   = calc_max_stat(newpkmn.base_hp) + 5 + C_LEVEL -- slightly different formula for hp
-        newpkmn.special = calc_max_stat(newpkmn.base_special)
-        newpkmn.attack  = calc_max_stat(newpkmn.base_attack)
-        newpkmn.defense = calc_max_stat(newpkmn.base_defense)
-        newpkmn.speed   = calc_max_stat(newpkmn.base_speed)
+        newpkmn.maxhp   = f_calc_max_stat(newpkmn.base_hp) + 5 + C_LEVEL -- slightly different formula for hp
+        newpkmn.special = f_calc_max_stat(newpkmn.base_special)
+        newpkmn.attack  = f_calc_max_stat(newpkmn.base_attack)
+        newpkmn.defense = f_calc_max_stat(newpkmn.base_defense)
+        newpkmn.speed   = f_calc_max_stat(newpkmn.base_speed)
         newpkmn.total   = newpkmn.maxhp + newpkmn.special + newpkmn.attack + newpkmn.defense + newpkmn.speed
         newpkmn.hp      = newpkmn.maxhp
 
@@ -228,15 +234,15 @@ function normalize_pokemon_data()
             if not movemap[m] then
                 movemap[m] = true
                 local refmove = c_moves[m]
-                add(moves, {
+                _add(moves, {
                     ref=reason or refmove.ref,
                     num=m
                 })
             end
         end
 
-        -- just add another loop for previous evolutions
-        for i, m in ipairs(g_all_pokemon_moves[i]) do
+        -- just _add another loop for previous evolutions
+        for i, m in _ipairs(g_all_pokemon_moves[i]) do
             set_move(m, pkmn.movelvls[i] and "lvl "..pkmn.movelvls[i])
         end
 
@@ -249,12 +255,12 @@ function normalize_pokemon_data()
         -- this loop needs to be last, because it changes the "pkmn" variable
         while pkmn.evolvesfrom do
             pkmn = c_pokemon[pkmn.evolvesfrom]
-            for m in all(pkmn.moves) do
+            for m in _all(pkmn.moves) do
                 set_move(m.num, "previous")
             end
         end
     end
-end
+end $$
 
 -- how does it l
 -- 1-5|10|20

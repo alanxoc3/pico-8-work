@@ -3,7 +3,7 @@
 -- when updated, cursor position remains. entries change.
 -- when created, cursor position is 0.
 
-|[menu_state_callback]| function(entry, game)
+|[f_menu_state_callback]| function(game, entry)
     if entry.state then
         game:push(entry.state)
     else
@@ -13,57 +13,59 @@ end $$
 
 -- maybe remove x&y? and w/h? -- those are only needed for 1 thing...
 -- and replace with view bounds?
-|[create_menu_view]| function(edraw, viewmin)
-    return zobj([[
+|[f_create_menu_view]| function(edraw, viewmin)
+    return f_zobj([[
         edraw,@, viewmin,@, v,~viewmin, r,1,
-        update,%menu_view_update,
-        draw1,%menu_draw1,
-        cancel,%menu_cancel,
-        refresh,%menu_refresh
+        update,%f_menu_view_update,
+        draw1,%f_menu_draw1,
+        cancel,%f_menu_cancel,
+        refresh,%f_menu_refresh
     ]], edraw, viewmin or 0)
 end $$
 
--- entries: { {select=f(entry, game), disabled=bool} ... }
+-- entries: { {select=f(game, entry), disabled=bool} ... }
 -- edraw: func(entry, selected)
-|[create_menu]| function(edraw, r)
-    return zobj_set(_g.create_menu_view(edraw), [[
+|[f_create_menu]| function(edraw, r)
+    return f_zobj_set(f_create_menu_view(edraw), [[
         c,0, -- cursor
         r,@,
-        update,%menu_update,
-        set,%menu_set
+        update,%f_menu_update,
+        set,%f_menu_set
     ]], r or 1)
 end $$
 
-|[menu_refresh]| function(menu, data, mapfunc)
-    while deli(menu) do end
-    foreach(data, function(thing) add(menu, (mapfunc or nop)(thing)) end)
+|[f_menu_refresh]| function(menu, data, mapfunc)
+    while _deli(menu) do end
+    for i=1,#data do
+        _add(menu, (mapfunc or f_nop)(data[i], i))
+    end
 end $$
 
-|[menu_cancel]| function(game) game:pop() end $$
+|[f_menu_cancel]| function(game) game:pop() end $$
 
 -- cursor is between 0 and #menu-1. view is set too
-|[menu_set]| function(menu, delta)
+|[f_menu_set]| function(menu, delta)
     local newval = menu.c+delta
-    if newval == mid(0, newval, #menu-1) then menu.c = newval end
-    menu.c = mid(0, menu.c, #menu-1) -- always ensure the cursor is within bounds
+    if newval == _mid(0, newval, #menu-1) then menu.c = newval end
+    menu.c = _mid(0, menu.c, #menu-1) -- always ensure the cursor is within bounds
 
     -- view logic
     if menu.c\menu.r < menu.v   then menu.v = menu.c\menu.r   end
     if menu.c\menu.r > menu.v+2 then menu.v = menu.c\menu.r-2 end
-    menu.v = mid(0, menu.v, (#menu-1)\menu.r)
+    menu.v = _mid(0, menu.v, (#menu-1)\menu.r)
 end $$
 
 -- todo: remove bpl/bpr, they should have special logic instead (should it be overriden per thing?)
-|[menu_view_update]| function(game)
+|[f_menu_view_update]| function(game)
     local menu = game.menu
     if g_bpo then menu.cancel(game) end
     if g_bpu then menu.v-=1 end
     if g_bpd then menu.v+=1 end
-    menu.v = mid(menu.viewmin, menu.v, #menu-3)
+    menu.v = _mid(menu.viewmin, menu.v, #menu-3)
 end $$
 
 -- extra args are passed to callback, prob want to pass "game" there.
-|[menu_update]| function(game)
+|[f_menu_update]| function(game)
     local menu = game.menu
     menu:set'0'
     if g_bpu then menu:set(-menu.r) end
@@ -73,8 +75,8 @@ end $$
 
     if g_bpx then
         local entry = menu[menu.c+1]
-        if entry.disabled   then _g.beep()
-        elseif entry.select then entry.select(entry, game)
+        if entry.disabled   then f_beep()
+        elseif entry.select then entry.select(game, entry)
         end
     end
 
@@ -84,14 +86,14 @@ end $$
 -- todo: try token crunching here
 -- todo: check if factory reset will reset surf on pikachu.
 -- 4 styles: 13,1 6,13 2,1, 8,2
-c_menustyles = zobj[[
+c_menustyles = f_zobj[[
     ;bg,13, fg,1,  out,5
    ;;bg,6,  fg,13, out,13
    ;;bg,1,  fg,13,  out,2
    ;;bg,5,  fg,13,  out,2
 ]]
 
-|[menu_draw1]| function(game)
+|[f_menu_draw1]| function(game)
     local menu = game.menu
     local c, v = menu.c, menu.v
     local y = -10
@@ -100,11 +102,11 @@ c_menustyles = zobj[[
     local xoff = 20-(menu.r * cellw)/2
 
     -- bg shadow
-    rectfill(0, y1, 39, y2, 1) -- bg shadow
-    rectfill(0, 0+5-menu.v*10, 39, 0+4+(max(ceil(#menu/menu.r), 40\10-1)-menu.v)*10, 13)
+    _rectfill(0, y1, 39, y2, 1) -- bg shadow
+    _rectfill(0, 0+5-menu.v*10, 39, 0+4+(_max(_ceil(#menu/menu.r), 40\10-1)-menu.v)*10, 13)
 
     -- selected bg
-    --rect    (x-2, y-7, x+cellw+1, y+6, 5)
+    --_rect    (x-2, y-7, x+cellw+1, y+6, 5)
 
     for i=-1,menu.r*5-1 do
         local index = (menu.v-1)*menu.r+i+1
@@ -119,8 +121,8 @@ c_menustyles = zobj[[
         local style = c_menustyles[style_ind]
 
         if entry and not entry.hidden then
-            rectfill(x, y-5, x+cellw-1, y+4, style.bg)
-            zcamera(i%menu.r*cellw+xoff+cellw/2, 0+i\menu.r*10-3, function()
+            _rectfill(x, y-5, x+cellw-1, y+4, style.bg)
+            f_zcamera(i%menu.r*cellw+xoff+cellw/2, 0+i\menu.r*10-3, function()
                 menu.edraw(entry, style)
             end)
         end
@@ -128,18 +130,18 @@ c_menustyles = zobj[[
 end $$
 
 -- requires a "name" field
-|[menu_drawentry]| function(entry, style)
+|[f_menu_drawentry]| function(entry, style)
     if entry.pkmn then
-        local pkmn = get_pokemon(entry.pkmn)
+        local pkmn = f_get_pokemon(entry.pkmn)
         local style = c_bg_styles[c_types[pkmn.type1].bg]
-        rectfill(0-20,    5-10+3, 39-20, 24-10+3,style.bg)
-        rectfill(0-20,   21-10+3, 39-20, 24-10+3,style.aa)
+        _rectfill(0-20,    5-10+3, 39-20, 24-10+3,style.bg)
+        _rectfill(0-20,   21-10+3, 39-20, 24-10+3,style.aa)
         pkmn.draw(20-20, -5+20-10+3, style.aa, 1, 1)
     else
-        wobble_text(entry.name, 0, 0, style.fg)
+        f_wobble_text(entry.name, 0, 0, style.fg)
     end
 end $$
 
-|[browse_drawentry]| function(entry, style)
-    draw_pkmn_out(entry.num, 0, 3, style.out, .375, .375)
+|[f_browse_drawentry]| function(entry, style)
+    f_draw_pkmn_out(entry.num, 0, 3, style.out, .375, .375)
 end $$

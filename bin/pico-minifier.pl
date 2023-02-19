@@ -14,12 +14,13 @@ binmode(STDOUT, "encoding(UTF-8)");
 # DEBUG_END              -- marks the end of debug code.
 # NORMAL_BEGIN           -- marks the beginning of normal code. this code doesn't trigger in debug mode.
 # NORMAL_END             -- marks the end of normal code.
-# G_TABLE_INITIALIZATION -- if this is found in the code, it is replaced with a suitable initial value for the _g table
+# G_TABLE_KEY_STRING     -- this is used to help populate the _g table with "|[...]| ... $$" matches.
+# G_TABLE_VALUES         -- this is used to help populate the _g table with "|[...]| ... $$" matches.
 
 # Syntax to worry about:
 # ""    -- raw string, spaces are not deleted from a string with double quotes, and the minifier does not run on it. the minifier does run on strings with '...' or [[...]] though.
 # [[]]  -- zobj string, zobj strings are all put together into one variable, and replaced with an index. this is done so that all the strings could be serialized in pico-8 cart data if you want.
-# |[...]| $$ -- adds something to the _g table. name of item is specified between | and |. value is specified between | and $$.
+# |[...]| ... $$ -- adds something to the _g table. name of item is specified between | and |. value is specified between | and $$.
 
 my $minify;
 my $ignorelib;
@@ -56,21 +57,21 @@ while ( $content =~ s/\|\[\s*(\w+)\s*\]\|(.*?)\$\$//ms ) {
 
 if (length $global_keys and length $global_vals) {
     $global_keys = substr $global_keys, 1;
-    $content =~ s/G_TABLE_INITIALIZATION/"zobj([[".$global_keys."]]".$global_vals.")"/ge;
+    $content =~ s/_G_ZOBJ_PARAMS/"[[".$global_keys."]]".$global_vals/ge;
 } else {
-    $content =~ s/G_TABLE_INITIALIZATION/{}/g;
+    $content =~ s/_G_ZOBJ_PARAMS/"[[]]"/ge;
 }
 
 $content =~ s/GLOBAL_VALS/$global_vals/ge;
 
 # trimming, minimizing, replacing things
-$content = tokenize_lines($content, \%constants);
+$content = tokenize_constants($content, \%constants);
 my @texts;
 ($content, @texts) = remove_texts($content);
 
 if ($minify) {
     my %vars = populate_vars($content);
-    $content = tokenize_lines($content, \%vars);
+    $content = tokenize_vars($content, \%vars);
 }
 
 $content = single_quotes_to_double($content);
