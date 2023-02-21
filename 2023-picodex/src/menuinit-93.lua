@@ -145,13 +145,24 @@ end $$
 |[f_partymovesel_init]| function(_ENV)
     local team = f_get_party(_ENV:cursor'team1')
     local partypkmn = team[_ENV:cursor'editparty'+1]
-
     local pkmn = c_pokemon[partypkmn.num]
-    menu:refresh(pkmn.moves, function(m)
+
+    local moves = {}
+    local add_to_moves = function(movelist, prefix)
+        for i=1,#movelist do
+            _add(moves, {num=movelist[i], desc=prefix and prefix..i or c_moves[movelist[i]].ref or "error"})
+        end
+    end
+
+    add_to_moves(pkmn.moves_natural, "learn ")
+    add_to_moves(pkmn.moves_tm)
+    add_to_moves(pkmn.moves_event, "event ")
+
+    menu:refresh(moves, function(m)
         return {
             name=c_moves[m.num].name,
             num=m.num,
-            ref=m.ref,
+            ref=m.desc,
             select=function()
                 f_save_party(_ENV:cursor'team1', f_set_party_pkmn_move(f_get_party(_ENV:cursor'team1'), _ENV:cursor'editparty'+1, _ENV:cursor'partymoves'+1, m.num))
                 _ENV:pop()
@@ -160,7 +171,6 @@ end $$
     end)
 end $$
 
--- todo: try making the minifier separate on underscores
 -- todo: support struggle
 |[f_pselmove_init]|   function(_ENV)
     menu:refresh(f_get_possible_move_slots(p0.active), function(move_slot)

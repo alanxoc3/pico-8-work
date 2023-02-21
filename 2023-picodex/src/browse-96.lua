@@ -5,7 +5,7 @@
 end $$
 
 |[f_draw3_pokeinfo]| function(pkmn)
-    f_print_draw3_message{'.'..pkmn.name, c_types[pkmn.type1].name, pkmn.type2 and c_types[pkmn.type2].name or ''}
+    f_print_draw3_message{'.'..pkmn.name, c_types[pkmn.type1].name, c_types[pkmn.type2].name}
 end $$
 
 -- Draw a pokemon by number. Pokemon is centered at x & y. sw and sh can be decimals.

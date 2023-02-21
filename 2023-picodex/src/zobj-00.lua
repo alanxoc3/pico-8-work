@@ -4,12 +4,13 @@ function f_nop(...) return ... end
 -- 193 tokens
 function f_zobj_eval(val, table, parameters)
     -- 37: %, 126: ~
-    if     _ord(val) == 37              then return _g[_sub(val, 2)]
-    elseif val == '~'                   then return table
-    elseif _ord(val) == 126             then return table[_sub(val, 2)]
-    elseif val == '@'                   then return _deli(parameters, 1)
-    elseif val == 'yes'  or val == 'no' then return val=='yes'
-    elseif val == 'null' or val == ''   then return -- nil is inferred
+    if     _ord(val) == 37               then return _g[_sub(val, 2)]
+    elseif val == '~'                    then return table
+    elseif _ord(val) == 126              then return table[_sub(val, 2)]
+    elseif val == '@'                    then return _deli(parameters, 1)
+    elseif val == 'yes'   or val == 'no' then return val=='yes'
+    elseif val == 'empty'                then return ""
+    elseif val == 'null' or val == ''    then return -- nil is inferred
     end                                      return val
 end
 

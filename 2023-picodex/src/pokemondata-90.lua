@@ -1,5 +1,11 @@
 |[c_pokemon]| f_zobj[[]] $$
 
+-- thanks to bulbapedia: https://bulbapedia.bulbagarden.net/wiki/Stat#Stat
+-- this formula is much simpler at lvl 50, so I took some parts out.
+|[f_calc_max_stat]| function(base)
+    return _ceil(base+.5*93)+5
+end $$
+
 -- c_pokemon_raw just has data. it requires running it in order. and it can only be called when the game starts, before memory is overwritten.
 -- this makes populating c_pokemon much easier.
 |[f_populate_c_pokemon]| function()
@@ -14,11 +20,11 @@
         local DASH  = 254 -- is a dash/range
         local NEXT  = 255 -- is next pokemon
 
-        local movemem, pkmndata, is_range = _peek2(8), {}, false
+        local pkmndata, is_range = {}, false
         while @movemem ~= NEXT do
             if @movemem == DASH then
                 is_range = true
-            elseif is_range then
+                    elseif is_range then
                 for i=pkmndata[#pkmndata],@movemem do
                     _add(pkmndata, i)
                 end
@@ -32,7 +38,7 @@
 
         ---- PART 2 - populate most attributes ----
         local evolvesfrom = num-pkmndata[1]
-        c_pokemon[num] = f_zobj([[
+        local pkmn = f_zobj([[
             num,@,
             evolvesfrom,@,
             name,@,
@@ -64,29 +70,60 @@
         ---- PASS 3 - populate the moves ----
         -- todo: tms could be in a weird order for evolved forms. i should fix that
         if evolvesfrom < num then
-            _foreach(c_pokemon[evolvesfrom].moves_natural, function(move) _add(c_pokemon[num].moves_natural, move) end)
-            _foreach(c_pokemon[evolvesfrom].moves_tm,      function(move) _add(c_pokemon[num].moves_tm,      move) end)
-            _foreach(c_pokemon[evolvesfrom].moves_event,   function(move) _add(c_pokemon[num].moves_event,   move) end)
+            _foreach(c_pokemon[evolvesfrom].moves_natural, function(move) _add(pkmn.moves_natural, move) end)
+            _foreach(c_pokemon[evolvesfrom].moves_tm,      function(move) _add(pkmn.moves_tm,      move) end)
+            _foreach(c_pokemon[evolvesfrom].moves_event,   function(move) _add(pkmn.moves_event,   move) end)
         end
 
-        local move_bucket = c_pokemon[num].moves_natural
+        local move_bucket = pkmn.moves_natural
         for i=9,#pkmndata do
             local val = pkmndata[i]
             if val == TMHM then
-                move_bucket = c_pokemon[num].moves_tmhm
+                move_bucket = pkmn.moves_tm
             elseif val == EVENT then
-                move_bucket = c_pokemon[num].moves_event
+                move_bucket = pkmn.moves_event
             else
-                _add(moves_bucket, val)
+                _add(move_bucket, val)
             end
         end
+
+        ---- PASS 4 - add level specific data and other attributes to the pkmn ----
+        f_zobj_set(pkmn, [[
+            attack,@, defense,@, special,@, speed,@, maxhp,@, level,C_LEVEL
+        ]], f_calc_max_stat(pkmn.base_attack),
+            f_calc_max_stat(pkmn.base_defense),
+            f_calc_max_stat(pkmn.base_special),
+            f_calc_max_stat(pkmn.base_speed),
+            f_calc_max_stat(pkmn.base_maxhp)+5+C_LEVEL
+        )
+
+        pkmn.total = pkmn.attack + pkmn.defense + pkmn.special + pkmn.speed + pkmn.maxhp
+
+        pkmn.draw = function(...)
+            -- todo: if logic for surfing pikachu + amnesia psyduck?
+            f_draw_pkmn_out(pkmn.num, ...)
+        end
+
+        ---- PASS 5 - finally, set the pokemon to the c_pokemon array ----
+        c_pokemon[num] = pkmn
     end
+end $$
+
+|[f_get_natural_moveset]| function(num)
+    local pkmn, moveset = c_pokemon[num], {}
+    printh(#pkmn.moves_natural)
+    for i=#pkmn.moves_natural,1,-1 do
+      if #moveset < 4 then
+         _add(moveset, pkmn.moves_natural[i])
+      end
+    end
+    return moveset
 end $$
 
 -- pokemon moves can be physical or special. the order here is specific. odd numbers are physical. even numbers are special.
 -- includes type effectiveness chart. according to the gen 1 games, which had bugs. i'm keeping the bugs :).
 |[c_types]| f_zobj[[
-    T_BIRD;     bg,0, name,"bird";     T_BIRD;     good;,;                                  T_BIRD;     null;,;                   T_BIRD;     weak;,;
+    T_NONE;     bg,0, name,empty;      T_NONE;     good;,;                                  T_NONE;     null;,;                   T_NONE;     weak;,;
     T_NORMAL;   bg,0, name,"normal";   T_NORMAL;   good;,;                                  T_NORMAL;   null;,T_GHOST;            T_NORMAL;   weak;,T_ROCK;
     T_FIRE;     bg,5, name,"fire";     T_FIRE;     good;,T_GRASS,T_ICE,T_BUG;               T_FIRE;     null;,;                   T_FIRE;     weak;,T_FIRE,T_WATER,T_ROCK,T_DRAGON;
     T_FIGHTING; bg,2, name,"fighting"; T_FIGHTING; good;,T_ICE,T_NORMAL,T_ROCK;             T_FIGHTING; null;,T_GHOST;            T_FIGHTING; weak;,T_BUG,T_FLYING,T_POISON,T_PSYCHIC;
@@ -101,7 +138,8 @@ end $$
     T_PSYCHIC;  bg,1, name,"psychic";  T_PSYCHIC;  good;,T_FIGHTING,T_POISON;               T_PSYCHIC;  null;,;                   T_PSYCHIC;  weak;,T_PSYCHIC;
     T_ROCK;     bg,0, name,"rock";     T_ROCK;     good;,T_BUG,T_FIRE,T_FLYING,T_ICE;       T_ROCK;     null;,;                   T_ROCK;     weak;,T_FIGHTING,T_GROUND;
     T_DRAGON;   bg,0, name,"dragon";   T_DRAGON;   good;,T_DRAGON;                          T_DRAGON;   null;,;                   T_DRAGON;   weak;,;
-    T_GHOST;    bg,1, name,"ghost";    T_GHOST;    good;,T_GHOST;                           T_GHOST;    null;,T_NORMAL,T_PSYCHIC; T_GHOST;    weak;,
+    T_GHOST;    bg,1, name,"ghost";    T_GHOST;    good;,T_GHOST;                           T_GHOST;    null;,T_NORMAL,T_PSYCHIC; T_GHOST;    weak;,;
+    T_BIRD;     bg,0, name,"bird";     T_BIRD;     good;,;                                  T_BIRD;     null;,;                   T_BIRD;     weak;,
 ]] $$
 
 -- 5 bg styles

@@ -75,14 +75,23 @@ end $$
 
 |[f_game_init]| function(_ENV)
     -- uncomment to unlock all 1st evolutions or cheat for all
-    for i=0,151 do
+     for i=0,151 do
     --     if c_pokemon[i].evolvesto and not c_pokemon[i].evolvesfrom then
-             _poke(S_POKEMON+i, 1)
+           _poke(S_POKEMON+i, 1)
     --     end
      end
 
+    local party = {} -- default party for new games
     -- f_zcall(function(num) _poke(S_POKEMON+num, 1) end, [[;]])
-    _foreach(_split'1,4,7,25,35,133', function(num) _poke(S_POKEMON+num, 1) end)
+    _foreach(_split'133,7,35,1,25,4', function(num)
+        _add(party, {num=num, moves=f_get_natural_moveset(num)})
+        _poke(S_POKEMON+num, 1)
+    end)
+
+    if @S_NEW ~= 0 then
+        _poke(S_NEW, 1)
+        f_save_party(0, party)
+    end
 
     -- todo: remove me and/or refactor me
     modes = o_modes()

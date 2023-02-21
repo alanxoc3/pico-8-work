@@ -115,12 +115,6 @@ end
     return tbl
 end $$
 
--- thanks to bulbapedia: https://bulbapedia.bulbagarden.net/wiki/Stat#Stat
--- this formula is much simpler at lvl 50, so I took some parts out.
-|[f_calc_max_stat]| function(base)
-    return _ceil(base+.5*93)+5
-end $$
-
 -- how does it l
 -- 1-5|10|20
 
