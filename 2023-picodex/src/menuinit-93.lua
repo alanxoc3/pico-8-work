@@ -73,8 +73,9 @@ end $$
     menu[5].name ..= 0
 end $$
 
-|[f_inc_story]| function()
+|[f_story_winlogic]| function(pl, other)
     poke(S_STORY, min(@S_STORY+1, #c_trainers))
+    -- todo: add pokemon that were defeated to pokedex.
 end $$
 
 |[f_fightsel_init]| function(_ENV)
@@ -92,11 +93,12 @@ end $$
                 for i=1,6 do
                     local num = entry.team[i]
                     if num then
-                        _add(cpu_party_draft, { num=num, moves=c_pokemon[num].get_natural_moveset(100) })
+                        _add(cpu_party_draft, { num=num, moves=c_pokemon[num]:get_natural_moveset() })
                     end
                 end
 
-                f_begin_fight(_ENV, f_get_party(_ENV:cursor'team1'), cpu_party_draft, "player 1", entry.name, false, true, f_inc_story, f_nop)
+                -- |[f_begin_fight]| function(game, party1, party2, name1, name2, iscpu1, iscpu2, p1_die_logic, p2_die_logic, p1_win_logic, p2_win_logic)
+                f_begin_fight(_ENV, f_get_party(_ENV:cursor'team1'), cpu_party_draft, "player 1", entry.name, false, true, f_nop, f_nop, f_story_winlogic, f_nop)
             end
         }
     end)

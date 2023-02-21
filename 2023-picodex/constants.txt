@@ -67,9 +67,8 @@ S_STORY:          0x5efd
 S_HOARD:          0x5efe
 S_SWAP_CONTROLS:  0x5eff
 
-# type numbers
-T_NONE:     no
-T_BIRD:     0
+# type numbers, hard coded in compile and pokemon_data, so change those places if this changes.
+T_NONE:     0
 T_NORMAL:   1
 T_FIRE:     2
 T_FIGHTING: 3
@@ -85,6 +84,7 @@ T_PSYCHIC:  12
 T_ROCK:     13
 T_DRAGON:   14
 T_GHOST:    15
+T_BIRD:     16
 
 # pkmn numbers
 P_MISSINGNO:  0

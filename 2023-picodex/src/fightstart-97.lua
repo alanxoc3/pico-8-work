@@ -3,13 +3,19 @@
 -- in turn init, switch p0
 -- 
 -- party1/party2: { {num=123, moves={1=3, 2=4, 3=31, 4=68 }}, ... }
-|[f_begin_fight]| function(game, party1, party2, name1, name2, iscpu1, iscpu2, p1_winlogic, p2_winlogic)
+
+-- story - win (p1)   - p2 killed pkmn are added to picodex & increment trainer story
+-- hoard - win (both) - p2 killed pkmn are added to picodex
+-- hoard - die (p2)   - p2 adds a new pkmn to the party
+
+-- todo: token crunching here...
+|[f_begin_fight]| function(game, party1, party2, name1, name2, iscpu1, iscpu2, p1_die_logic, p2_die_logic, p1_win_logic, p2_win_logic)
     local party1, party2 = f_get_fight_party(party1), f_get_fight_party(party2)
 
     -- winlogic could be used for story mode.
     -- p1 has higher starting priority so game shows their pokemon to come out first
-    game.p1 = { name=name1, priority=1, iscpu=iscpu1, actions={}, active=f_party_pkmn_to_active(f_get_next_active(party1)), party=party1, winlogic=p1_winlogic }
-    game.p2 = { name=name2, priority=0, iscpu=iscpu2, actions={}, active=f_party_pkmn_to_active(f_get_next_active(party2)), party=party2, winlogic=p2_winlogic }
+    game.p1 = { name=name1, priority=1, iscpu=iscpu1, actions={}, active=f_party_pkmn_to_active(f_get_next_active(party1)), party=party1, winlogic=p1_win_logic, dielogic=p1_die_logic }
+    game.p2 = { name=name2, priority=0, iscpu=iscpu2, actions={}, active=f_party_pkmn_to_active(f_get_next_active(party2)), party=party2, winlogic=p2_win_logic, dielogic=p2_die_logic }
 
     _add(game.p1.actions, f_newaction(game.p1, "#,comes,out"))
     _add(game.p2.actions, f_newaction(game.p2, "#,comes,out"))

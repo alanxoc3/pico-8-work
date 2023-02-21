@@ -73,7 +73,7 @@ end $$
     _add(menu, {pkmn=pkmn.num})
     _add(menu, {hidden=true})
     _add(menu, {name="lvl 50", style=3})
-    _add(menu, {name=pkmn.hp..'/'..pkmn.maxhp})
+    _add(menu, {name=(pkmn.hp or pkmn.maxhp)..'/'..pkmn.maxhp})
 
     _foreach(f_zobj[[
         ;key,special, name,"spc"

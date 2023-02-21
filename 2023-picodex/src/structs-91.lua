@@ -10,49 +10,58 @@
 --    return _ceil(base+.5*93)+5
 --end $$
 
--- in progress
--- todo: switch the codebase to metatables
--- |[f_create_pkmn]| function(num, name, type1, type2, evolvesfrom, evolvesto, base_attack, base_defense, base_special, base_speed, base_hp)
---     local pkmn = f_zobj([[
---         num,@, name,@, type1,@ type2,@, evolvesfrom,@, evolvesto,@,
---         attack,@, defense,@, special,@, speed,@, maxhp,@, 
---         ref,no, get,~f_pkmn_get, call,~f_pkmn_call,
---         level,C_LEVEL
---     ]], num, name, type1, type2, evolvesfrom, evolvesto,
---         f_calc_max_stat(base_attack),
---         f_calc_max_stat(base_defense),
---         f_calc_max_stat(base_special),
---         f_calc_max_stat(base_speed),
---         f_calc_max_stat(base_hp)+5+C_LEVEL
---     )
--- 
---     do
---         local _ENV = pkmn
---         total = attack + defense + special + speed + maxhp
---     end
---     
---     return pkmn
--- end $$
--- 
--- |[f_pkmn_get]| function(pkmn, key)
---     while not pkmn[key] and pkmn.ref do
---         pkmn = pkmn.ref
---     end
---     return pkmn[key]
--- end $$
--- 
--- |[f_pkmn_call]| function(pkmn, key, ...)
---     return (pkmn:get(key) or f_nop)(...)
--- end $$
--- 
--- |[f_create_team_pkmn]| function()
--- 
--- end $$
--- 
--- 
+|[f_create_pkmn]| function(num, name, type1, type2, evolvesfrom, movelvls, base_attack, base_defense, base_special, base_speed, base_hp)
+    local pkmn = f_zobj([[
+        num,@, name,@, type1,@, type2,@, evolvesfrom,@, movelvls,@,
+        attack,@, defense,@, special,@, speed,@, maxhp,@,
+        ref,no, get,~f_pkmn_get, call,~f_pkmn_call,
+        level,C_LEVEL
+    ]], num, name, type1, type2, evolvesfrom, movelvls,
+        f_calc_max_stat(base_attack),
+        f_calc_max_stat(base_defense),
+        f_calc_max_stat(base_special),
+        f_calc_max_stat(base_speed),
+        f_calc_max_stat(base_hp)+5+C_LEVEL
+    )
+
+    -- todo movelvls moves_learnable get_natural_moveset
+    pkmn.total = pkmn.attack + pkmn.defense + pkmn.special + pkmn.speed + pkmn.maxhp
+
+    pkmn.draw = function(...)
+        -- todo: if logic for surfing pikachu + amnesia psyduck?
+        f_draw_pkmn_out(pkmn.num, ...)
+    end
+
+    pkmn.get_natural_moveset = function(pkmn)
+       local moveset = {}
+       for i=#pkmn.movelvls,1,-1 do
+          if #moveset < 4 then
+             _add(moveset, pkmn.moves[i].num)
+          end
+       end
+       return moveset
+    end
+
+    return pkmn
+end $$
+
+|[f_pkmn_get]| function(pkmn, key)
+    while not pkmn[key] and pkmn.ref do
+        pkmn = pkmn.ref
+    end
+    return pkmn[key]
+end $$
+
+|[f_pkmn_call]| function(pkmn, key, ...)
+    return (pkmn:get(key) or f_nop)(...)
+end $$
+
+|[f_create_team_pkmn]| function()
+
+end $$
+
 -- party: team power, alive size
 -- pokemon: 
-
 
 -- 3 levels of pokemon: browse, fightable, party, active
 
@@ -74,11 +83,10 @@
 --   draw
 --   num
 --   total   -- all the previous stats added together
---   here, move ids is all the possible moves
+--   here, move ids is all the possible moves... maybe
 -- }
 ---------------- these change
--- teampkmn {
---   ref, get(), call() -- these are for getting things from the parent. call does nothing if the func doesn't exist.
+-- teampkmn { -- index metatable to pkmn
 --   hp, hurt(), heal() -- should take in the 
 --   set_major
 --   moveids
@@ -88,9 +96,7 @@
 --   toactive() -- returns a new active pokemon, generated from this teampkmn.
 -- }
 ---------------- these change
--- activepkmn {
---   ref, get(), call() -- these are for getting things from the parent.
---
+-- activepkmn { -- index metatable to teampkmn
 --   set_minor() -- transform is number, mimic is number
 --   getstat()
 --   inc_stage()
@@ -125,12 +131,22 @@
 --   getmove(0-3), or get valid moves? ????
 
 -- }
---------------- team (or player)
+--------------- team (or player)... yes! i think...
 -- team {
 --   1-6 - each thing is a teampkmn
 --   can_switch() -- give it an index, it tells you if you can switch with that pkmn
 --   get_next()   -- returns the next party pokemon pokemon that 
---   active
+
+--   hoard_index = 6 -- only used for hoard
+--   active 
+--   name=name1
+--   priority=1
+--   iscpu=iscpu1
+--   actions={}
+--   active=f_party_pkmn_to_active(f_get_next_active(party1))
+--   party=party1
+--   winlogic=p1_win_logic
+--   dielogic=p1_die_logic
 -- }
 
 -- converts a party into a party ready for battle
@@ -147,7 +163,7 @@
                 -- things that won't change
                 num     = cur.num,
                 lvl     = pkmn.level,
-                maxhp   = pkmn.hp,
+                maxhp   = pkmn.maxhp,
                 attack  = pkmn.attack,
                 defense = pkmn.defense,
                 speed   = pkmn.speed,
@@ -155,7 +171,7 @@
                 moveids = (function() local m = {} for i=1,4 do m[i] = cur.moves[i] end return m end)(),
 
                 -- things that can change
-                hp      = pkmn.hp,
+                hp      = pkmn.maxhp,
                 movepps = (function() local m = {} for i=1,4 do m[i] = cur.moves[i] and c_moves[cur.moves[i]].pp end return m end)(),
             }
         end

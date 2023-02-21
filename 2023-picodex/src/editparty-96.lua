@@ -7,6 +7,6 @@
 end $$
 
 |[f_set_default_party_pkmn]| function(team, ind, num)
-    team[ind] = {num=num, moves=c_pokemon[num].get_natural_moveset(100)}
+    team[ind] = {num=num, moves=c_pokemon[num]:get_natural_moveset()}
     return team
 end $$
