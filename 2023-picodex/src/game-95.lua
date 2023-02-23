@@ -32,10 +32,12 @@ f_zclass[[o_modes,o_actor|
     pselactions;  init,%f_pselactions_init,  draw2,%f_turn_draw2,         draw3,%f_pselactions_draw3  ;
     pselmove;     init,%f_pselmove_init,     draw2,%f_turn_draw2,         draw3,%f_move_draw3;
 
-    team1;        init,%f_party_init,        draw2,%f_main_draw2,         draw3,%f_party_draw3, disable_empty_party,no,  select_func,%f_party_select;  -- t1
+    team1;        init,%f_party_init,        draw2,%f_main_draw2,         draw3,%f_party_draw3, disable_empty_party,no,   select_func,%f_party_select; -- t1
     team1fight;   init,%f_party_init,        draw2,%f_main_draw2,         draw3,%f_party_draw3, disable_empty_party,yes,  select_func,%f_fight_select; -- s1
-    team2;        init,%f_party_init,        draw2,%f_main_draw2,         draw3,%f_party_draw3, disable_empty_party,yes, select_func,%f_fight_select;  -- ??
-    team2cpu;     init,%f_fightsel_init,     draw2,%f_main_draw2,         draw3,%f_party_draw3;                                                      -- t2
+    team1hoard;   init,%f_party_init,        draw2,%f_main_draw2,         draw3,%f_party_draw3, disable_empty_party,yes,  select_func,%f_hoard_select; -- s1
+    trainers;     init,%f_fightsel_init,     draw2,%f_main_draw2,         draw3,%f_party_draw3;                                                        -- t2
+
+    -- team2;        init,%f_party_init,        draw2,%f_main_draw2,         draw3,%f_party_draw3, disable_empty_party,yes,  select_func,%f_fight_select; -- ??
 
     -- fightsel;     init,%f_fightsel_init,     draw2,%f_main_draw2,         draw3,%f_party_draw3;
     -- fightparty;   init,%f_fightsel_init,     draw2,%f_main_draw2,         draw3,%f_party_draw3, disable_empty_party,yes, select_func,%f_fight_select;
@@ -113,15 +115,15 @@ end $$
        ;;,pselmove,     ~f_create_menu,      ~f_menu_drawentry      -- select 1 of 4 moves from a pokemon (during battle) -- TODO: try merging with other move select
 
        ;;,team1,        ~f_create_menu,      ~f_menu_drawentry      -- select a party (1, 2, 3, presets...)
-       ;;,team2,        ~f_create_menu,      ~f_menu_drawentry      -- select a party (1, 2, 3, presets...)
+       ;;,trainers,     ~f_create_menu,      ~f_menu_drawentry      -- select a party (1, 2, 3, presets...)
     ]])
 
     modes.main.menu.cancel        = f_beep -- only 2 menus you can't pop from.
     modes.pselactions.menu.cancel = f_beep
 
     -- these menus share the cursor position
+    modes.team1hoard.menu  = modes.team1.menu
     modes.team1fight.menu  = modes.team1.menu
-    modes.team2cpu.menu    = modes.team2.menu
     modes.partypkmn.menu   = modes.browse.menu
 
     _sfx(61,0)

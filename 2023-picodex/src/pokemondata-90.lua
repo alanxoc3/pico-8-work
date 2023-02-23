@@ -24,8 +24,8 @@ end $$
         while @movemem ~= NEXT do
             if @movemem == DASH then
                 is_range = true
-                    elseif is_range then
-                for i=pkmndata[#pkmndata],@movemem do
+            elseif is_range then
+                for i=pkmndata[#pkmndata]+1,@movemem do
                     _add(pkmndata, i)
                 end
                 is_range = false
@@ -55,26 +55,19 @@ end $$
             moves_event,@
         ]],
             num, -- evl
-            evolvesfrom, -- evl
-            names[num+1],    -- nam
-            pkmndata[2],     -- ty1
-            pkmndata[3],     -- ty2
-            pkmndata[4],     -- xhp
-            pkmndata[5],     -- att
-            pkmndata[6],     -- def
-            pkmndata[7],     -- spd
-            pkmndata[8],     -- spc
+            evolvesfrom,  -- evl
+            names[num+1], -- nam
+            pkmndata[2],  -- ty1
+            pkmndata[3],  -- ty2
+            pkmndata[4],  -- xhp
+            pkmndata[5],  -- att
+            pkmndata[6],  -- def
+            pkmndata[7],  -- spd
+            pkmndata[8],  -- spc
             {}, {}, {}
         )
 
         ---- PASS 3 - populate the moves ----
-        -- todo: tms could be in a weird order for evolved forms. i should fix that
-        if evolvesfrom < num then
-            _foreach(c_pokemon[evolvesfrom].moves_natural, function(move) _add(pkmn.moves_natural, move) end)
-            _foreach(c_pokemon[evolvesfrom].moves_tm,      function(move) _add(pkmn.moves_tm,      move) end)
-            _foreach(c_pokemon[evolvesfrom].moves_event,   function(move) _add(pkmn.moves_event,   move) end)
-        end
-
         local move_bucket = pkmn.moves_natural
         for i=9,#pkmndata do
             local val = pkmndata[i]
@@ -86,6 +79,20 @@ end $$
                 _add(move_bucket, val)
             end
         end
+
+        -- todo: tms could be in a weird order for evolved forms. i should fix that
+        if evolvesfrom < num then
+            _foreach(c_pokemon[evolvesfrom].moves_natural, function(move) _add(pkmn.moves_natural, move) end)
+            _foreach(c_pokemon[evolvesfrom].moves_tm,      function(move) _add(pkmn.moves_tm,      move) end)
+            _foreach(c_pokemon[evolvesfrom].moves_event,   function(move) _add(pkmn.moves_event,   move) end)
+        end
+
+        local tm_map, tms = {}, {}
+        _foreach(pkmn.moves_tm, function(move) tm_map[move] = true end)
+        for i=1,54 do
+            if tm_map[i] then _add(tms, i) end
+        end
+        pkmn.moves_tm = tms
 
         ---- PASS 4 - add level specific data and other attributes to the pkmn ----
         f_zobj_set(pkmn, [[
@@ -111,11 +118,8 @@ end $$
 
 |[f_get_natural_moveset]| function(num)
     local pkmn, moveset = c_pokemon[num], {}
-    printh(#pkmn.moves_natural)
-    for i=#pkmn.moves_natural,1,-1 do
-      if #moveset < 4 then
-         _add(moveset, pkmn.moves_natural[i])
-      end
+    for i=1,min(4,#pkmn.moves_natural) do
+        _add(moveset, pkmn.moves_natural[i])
     end
     return moveset
 end $$
@@ -167,17 +171,17 @@ end $$
    --  "name",     type        pp  dmg  acc
    0;, "struggle", T_NORMAL,   0,  50, 1
 
-    -- tms
+   -- tms
    ;;, "megapnch", T_NORMAL,   20, 80,  .85 -- 1
    ;;, "razrwind", T_NORMAL,   10, 80,  1   -- 2
-   ;;, "swordanc", T_NORMAL,   20, 0,   0   -- 3
+   ;;, "sworddnc", T_NORMAL,   20, 0,   0   -- 3
    ;;, "whrlwind", T_NORMAL,   20, 0,   0   -- 4
    ;;, "megakick", T_NORMAL,   5,  120, .75 -- 5
    ;;, "toxic",    T_POISON,   10, 0,   .9  -- 6
-   ;;, "horndril", T_NORMAL,   5,  0,   .3  -- 7
+   ;;, "horndril", T_NORMAL,   5,  -1,  .3  -- 7
    ;;, "bodyslam", T_NORMAL,   15, 85,  1   -- 8
    ;;, "takedown", T_NORMAL,   20, 90,  .85 -- 9
-   ;;, "doubledg", T_NORMAL,   15, 120, 1   -- 10
+   ;;, "doubedge", T_NORMAL,   15, 120, 1   -- 10
    ;;, "bublbeam", T_WATER,    20, 65,  1   -- 11
    ;;, "watergun", T_WATER,    25, 40,  1   -- 12
    ;;, "icebeam",  T_ICE,      10, 90,  1   -- 13
@@ -185,35 +189,35 @@ end $$
    ;;, "hyprbeam", T_NORMAL,   5,  150, .9  -- 15
    ;;, "payday",   T_NORMAL,   20, 40,  1   -- 16
    ;;, "submsion", T_FIGHTING, 20, 80,  .8  -- 17
-   ;;, "counter",  T_FIGHTING, 20, 0,   1   -- 18
-   ;;, "siestoss", T_FIGHTING, 20, 0,   1   -- 19
+   ;;, "counter",  T_FIGHTING, 20, -1,  1   -- 18
+   ;;, "siestoss", T_FIGHTING, 20, -1,  1   -- 19
    ;;, "rage",     T_NORMAL,   20, 20,  1   -- 20
    ;;, "megdrain", T_GRASS,    15, 40,  1   -- 21
    ;;, "solrbeam", T_GRASS,    10, 120, 1   -- 22
-   ;;, "drgnrage", T_DRAGON,   10, 0,   1   -- 23
+   ;;, "drgnrage", T_DRAGON,   10, -1,  1   -- 23
    ;;, "thndrblt", T_ELECTRIC, 15, 90,  1   -- 24
    ;;, "thunder",  T_ELECTRIC, 10, 110, .7  -- 25
    ;;, "earthqke", T_GROUND,   10, 100, 1   -- 26
-   ;;, "fissure",  T_GROUND,   5,  0,   .3  -- 27
+   ;;, "fissure",  T_GROUND,   5,  -1,  .3  -- 27
    ;;, "dig",      T_GROUND,   10, 80,  1   -- 28
    ;;, "psychic",  T_PSYCHIC,  10, 90,  1   -- 29
    ;;, "teleport", T_PSYCHIC,  20, 0,   0   -- 30
    ;;, "mimic",    T_NORMAL,   10, 0,   0   -- 31
    ;;, "doubteam", T_NORMAL,   15, 0,   0   -- 32
    ;;, "reflect",  T_PSYCHIC,  20, 0,   0   -- 33
-   ;;, "bide",     T_NORMAL,   10, 0,   0   -- 34
+   ;;, "bide",     T_NORMAL,   10, -1,  0   -- 34
    ;;, "metronom", T_NORMAL,   10, 0,   0   -- 35
    ;;, "selfdstr", T_NORMAL,   5,  200, 1   -- 36
    ;;, "eggbomb",  T_NORMAL,   10, 100, .75 -- 37
    ;;, "fireblst", T_FIRE,     5,  110, .85 -- 38
-   ;;, "swift",    T_NORMAL,   20, 60,  2   -- 39
+   ;;, "swift",    T_NORMAL,   20, 60,  -1  -- 39
    ;;, "skulbash", T_NORMAL,   10, 130, 1   -- 40
    ;;, "softboil", T_NORMAL,   5,  0,   0   -- 41
    ;;, "dreameat", T_PSYCHIC,  15, 100, 1   -- 42
    ;;, "skyattck", T_FLYING,   5,  140, .9  -- 43
    ;;, "rest",     T_PSYCHIC,  5,  0,   0   -- 44
    ;;, "thndrwav", T_ELECTRIC, 20, 0,   .9  -- 45
-   ;;, "psywave",  T_PSYCHIC,  15, 0,   1   -- 46
+   ;;, "psywave",  T_PSYCHIC,  15, -1,  1   -- 46
    ;;, "explsion", T_NORMAL,   5,  250, 1   -- 47
    ;;, "rockslid", T_ROCK,     10, 75,  .9  -- 48
    ;;, "triattck", T_NORMAL,   10, 80,  1   -- 49
@@ -229,21 +233,21 @@ end $$
     -- remaining moves (besides struggle)
    ;;, "pound",    T_NORMAL,   35, 40,  1   -- 56
    ;;, "karatchp", T_FIGHTING, 25, 50,  1   -- 57
-   ;;, "doublslp", T_NORMAL,   10, 15,  .85 -- 58
+   ;;, "doubslap", T_NORMAL,   10, 15,  .85 -- 58
    ;;, "comtpnch", T_NORMAL,   15, 18,  .85 -- 59
    ;;, "firepnch", T_FIRE,     15, 75,  1   -- 60
    ;;, "icepnch",  T_ICE,      15, 75,  1   -- 61
    ;;, "thndpnch", T_ELECTRIC, 15, 75,  1   -- 62
    ;;, "scratch",  T_NORMAL,   35, 40,  1   -- 63
    ;;, "vicegrip", T_NORMAL,   30, 55,  1   -- 64
-   ;;, "guilotin", T_NORMAL,   5,  0,   .3  -- 65
+   ;;, "guilotin", T_NORMAL,   5,  -1,  .3  -- 65
    ;;, "gust",     T_FLYING,   35, 40,  1   -- 66
    ;;, "wingatck", T_FLYING,   35, 60,  1   -- 67
    ;;, "bind",     T_NORMAL,   20, 15,  .85 -- 68
    ;;, "slam",     T_NORMAL,   20, 80,  .75 -- 69
    ;;, "vinewhip", T_GRASS,    25, 45,  1   -- 70
    ;;, "stomp",    T_NORMAL,   20, 65,  1   -- 71
-   ;;, "doublkck", T_FIGHTING, 30, 30,  1   -- 72
+   ;;, "doubkick", T_FIGHTING, 30, 30,  1   -- 72
    ;;, "jumpkck",  T_FIGHTING, 10, 100, .95 -- 73
    ;;, "rllngkck", T_FIGHTING, 15, 60,  .85 -- 74
    ;;, "sandatck", T_GROUND,   15, 0,   1   -- 75
@@ -263,7 +267,7 @@ end $$
    ;;, "roar",     T_NORMAL,   20, 0,   1   -- 89
    ;;, "sing",     T_NORMAL,   15, 0,   .55 -- 90
    ;;, "supersnc", T_NORMAL,   20, 0,   .55 -- 91
-   ;;, "sonicbm",  T_NORMAL,   20, 0,   .9  -- 92
+   ;;, "sonicbom", T_NORMAL,   20, -1,  .9  -- 92
    ;;, "disable",  T_NORMAL,   20, 0,   1   -- 93
    ;;, "acid",     T_POISON,   30, 40,  1   -- 94
    ;;, "ember",    T_FIRE,     25, 40,  1   -- 95
@@ -292,7 +296,7 @@ end $$
    ;;, "meditate", T_PSYCHIC,  40, 0,   0   -- 118
    ;;, "agility",  T_PSYCHIC,  30, 0,   0   -- 119
    ;;, "quickatk", T_NORMAL,   30, 40,  1   -- 120
-   ;;, "nghtshde", T_GHOST,    15, 0,   1   -- 121
+   ;;, "nghtshde", T_GHOST,    15, -1,  1   -- 121
    ;;, "screech",  T_NORMAL,   40, 0,   .85 -- 122
    ;;, "recover",  T_NORMAL,   5,  0,   0   -- 123
    ;;, "harden",   T_NORMAL,   30, 0,   0   -- 124
@@ -305,7 +309,7 @@ end $$
    ;;, "lghtscrn", T_PSYCHIC,  30, 0,   0   -- 131
    ;;, "haze",     T_ICE,      30, 0,   0   -- 132
    ;;, "fcsenrgy", T_NORMAL,   30, 0,   0   -- 133
-   ;;, "mirrmove", T_FLYING,   20, 0,   0   -- 134
+   ;;, "mirrmove", T_FLYING,   20, -1,  0   -- 134
    ;;, "lick",     T_GHOST,    30, 30,  1   -- 135
    ;;, "smog",     T_POISON,   20, 30,  .7  -- 136
    ;;, "sludge",   T_POISON,   20, 65,  1   -- 137
@@ -334,7 +338,7 @@ end $$
    ;;, "hyprfang", T_NORMAL,   15, 80,  .9  -- 160
    ;;, "sharpen",  T_NORMAL,   30, 0,   0   -- 161
    ;;, "convrson", T_NORMAL,   30, 0,   0   -- 162
-   ;;, "suprfang", T_NORMAL,   10, 0,   .9  -- 163
+   ;;, "suprfang", T_NORMAL,   10, -1,  .9  -- 163
    ;;, "slash",    T_NORMAL,   20, 70,  1   -- 164
 ]] $$
 

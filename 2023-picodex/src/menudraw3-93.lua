@@ -15,9 +15,10 @@ end $$
     local num = game:entry().num
     if num then
         local move = c_moves[num]
-        f_print_draw3_message{'.'..c_types[move.type].name, move.pp..'/'..move.pp, move.damage.."P "..(move.accuracy*100\1).."A"}
+        local accuracy = move.accuracy*100\1
+        f_print_draw3_message{'.'..c_types[move.type].name, move.pp..'/'..move.pp, (move.damage >= 0 and move.damage or "??").."P "..(accuracy >= 0 and accuracy or "??").."A"}
     else
-        f_print_draw3_message{".????", "?/?", "??P ???A"}
+        f_print_draw3_message{".????", "?/?", "??P ??A"}
     end
 end $$
 

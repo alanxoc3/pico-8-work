@@ -90,7 +90,7 @@ c_menustyles = f_zobj[[
     ;bg,13, fg,1,  out,5
    ;;bg,6,  fg,13, out,13
    ;;bg,1,  fg,13,  out,2
-   ;;bg,5,  fg,13,  out,2
+   ;;bg,5,  fg,6,  out,2
 ]]
 
 |[f_menu_draw1]| function(game)

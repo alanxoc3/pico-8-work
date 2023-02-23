@@ -14,8 +14,9 @@
 
     -- winlogic could be used for story mode.
     -- p1 has higher starting priority so game shows their pokemon to come out first
-    game.p1 = { name=name1, priority=1, iscpu=iscpu1, actions={}, active=f_party_pkmn_to_active(f_get_next_active(party1)), party=party1, winlogic=p1_win_logic, dielogic=p1_die_logic }
-    game.p2 = { name=name2, priority=0, iscpu=iscpu2, actions={}, active=f_party_pkmn_to_active(f_get_next_active(party2)), party=party2, winlogic=p2_win_logic, dielogic=p2_die_logic }
+    -- hoard count is only used for p2. this is the index the hoard is currently on.
+    game.p1 = { name=name1, hoardind=6, deadnums={}, priority=1, iscpu=iscpu1, actions={}, active=f_party_pkmn_to_active(f_get_next_active(party1)), party=party1, winlogic=p1_win_logic, dielogic=p1_die_logic }
+    game.p2 = { name=name2, hoardind=6, deadnums={}, priority=0, iscpu=iscpu2, actions={}, active=f_party_pkmn_to_active(f_get_next_active(party2)), party=party2, winlogic=p2_win_logic, dielogic=p2_die_logic }
 
     _add(game.p1.actions, f_newaction(game.p1, "#,comes,out"))
     _add(game.p2.actions, f_newaction(game.p2, "#,comes,out"))

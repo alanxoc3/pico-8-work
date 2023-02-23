@@ -52,6 +52,8 @@ end $$
 -- otherwise, do nothing. turn logic will check every turn if there is a win condition
 |[f_logic_faint]| function(s)
     s.active.shared.major = C_MAJOR_FAINTED
+    s:dielogic()
+    _add(s.deadnums, s.active.shared.num) -- trainer battles and hoard unlock pokemon with this.
 end $$
 
 -- self pl, other pl

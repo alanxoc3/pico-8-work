@@ -91,4 +91,23 @@ end $$
             _add(menu, { name=pair.name.." "..pkmn[pair.key] })
         end
     end)
+
+    _add(menu, {name="moves", style=3})
+    _foreach(c_pokemon[pkmn.num].moves_natural, function(m)
+        _add(menu, {name=c_moves[m].name})
+    end)
+
+    if #c_pokemon[pkmn.num].moves_tm > 0 then
+        _add(menu, {name="machines", style=3})
+        _foreach(c_pokemon[pkmn.num].moves_tm, function(m)
+            _add(menu, {name=c_moves[m].name})
+        end)
+    end
+
+    if #c_pokemon[pkmn.num].moves_event > 0 then
+        _add(menu, {name="events", style=3})
+        _foreach(c_pokemon[pkmn.num].moves_event, function(m)
+            _add(menu, {name=c_moves[m].name})
+        end)
+    end
 end $$

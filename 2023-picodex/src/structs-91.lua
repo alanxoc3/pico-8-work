@@ -101,31 +101,35 @@ end $$
 --   dielogic=p1_die_logic
 -- }
 
+-- TODO: optimize for tokens
+|[f_create_party_pkmn]| function(num, moves)
+    local pkmn = c_pokemon[num]
+    return {
+        -- todo, try just copying all keys from pkmn
+        -- things that won't change
+        num     = num,
+        lvl     = pkmn.level,
+        maxhp   = pkmn.maxhp,
+        attack  = pkmn.attack,
+        defense = pkmn.defense,
+        speed   = pkmn.speed,
+        special = pkmn.special,
+        moveids = (function() local m = {} for i=1,4 do m[i] = moves[i] end return m end)(),
+
+        -- things that can change
+        hp      = pkmn.maxhp,
+        movepps = (function() local m = {} for i=1,4 do m[i] = moves[i] and c_moves[moves[i]].pp end return m end)(),
+    }
+end $$
+
 -- converts a party into a party ready for battle
 |[f_get_fight_party]| function(party)
     local fightparty = {}
 
-    -- TODO: optimize for tokens
     for i=1,6 do
         local cur = party[i]
         if cur then
-            local pkmn = c_pokemon[cur.num]
-            fightparty[i] = {
-                -- todo, try just copying all keys from pkmn
-                -- things that won't change
-                num     = cur.num,
-                lvl     = pkmn.level,
-                maxhp   = pkmn.maxhp,
-                attack  = pkmn.attack,
-                defense = pkmn.defense,
-                speed   = pkmn.speed,
-                special = pkmn.special,
-                moveids = (function() local m = {} for i=1,4 do m[i] = cur.moves[i] end return m end)(),
-
-                -- things that can change
-                hp      = pkmn.maxhp,
-                movepps = (function() local m = {} for i=1,4 do m[i] = cur.moves[i] and c_moves[cur.moves[i]].pp end return m end)(),
-            }
+            fightparty[i] = f_create_party_pkmn(cur.num, cur.moves)
         end
     end
 

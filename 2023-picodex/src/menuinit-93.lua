@@ -27,9 +27,9 @@ end $$
         f_zobj[[
             ;name,"browse",  state,browse,     select,%f_menu_state_callback, desc,"view|pokemon|info"
            ;;name,"teams",   state,team1,      select,%f_menu_state_callback, desc,"edit|stored|teams"
-           ;;name,"fight",   state,games,      select,%f_menu_state_callback, desc,"custom|2 player|battle", disabled,yes
            ;;name,"story",   state,team1fight, select,%f_menu_state_callback, desc,"battle|against|trainers"
-           ;;name,"hoard",   state,hoard,      select,%f_menu_state_callback, desc,"battle all|pokemon|in order", disabled,yes
+           ;;name,"hoard",   state,team1hoard, select,%f_menu_state_callback, desc,"battle all|pokemon|in order"
+           ;;name,"player",  state,player,     select,%f_menu_state_callback, desc,"custom|2 player|battle", disabled,yes
            ;;name,"credits", state,credits,    select,%f_menu_state_callback, desc,"made by|amorg|games"
         ]]
     )
@@ -93,7 +93,7 @@ end $$
                 for i=1,6 do
                     local num = entry.team[i]
                     if num then
-                        _add(cpu_party_draft, { num=num, moves=c_pokemon[num]:get_natural_moveset() })
+                        _add(cpu_party_draft, { num=num, moves=f_get_natural_moveset(num) })
                     end
                 end
 
@@ -148,19 +148,23 @@ end $$
     local pkmn = c_pokemon[partypkmn.num]
 
     local moves = {}
-    local add_to_moves = function(movelist, prefix)
-        for i=1,#movelist do
-            _add(moves, {num=movelist[i], desc=prefix and prefix..i or c_moves[movelist[i]].ref or "error"})
+    local add_to_moves = function(name, movelist, prefix)
+        if #movelist > 0 then
+            _add(moves, {name=name, disabled=true, desc=name})
+            for i=1,#movelist do
+                _add(moves, {name=c_moves[movelist[i]].name, num=movelist[i], desc=prefix or c_moves[movelist[i]].ref or "error"})
+            end
         end
     end
 
-    add_to_moves(pkmn.moves_natural, "learn ")
-    add_to_moves(pkmn.moves_tm)
-    add_to_moves(pkmn.moves_event, "event ")
+    add_to_moves("moves", pkmn.moves_natural, "learn")
+    add_to_moves("machines", pkmn.moves_tm)
+    add_to_moves("events", pkmn.moves_event, "event")
 
     menu:refresh(moves, function(m)
         return {
-            name=c_moves[m.num].name,
+            name=m.name,
+            disabled=m.disabled,
             num=m.num,
             ref=m.desc,
             select=function()
