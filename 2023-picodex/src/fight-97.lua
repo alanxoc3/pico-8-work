@@ -11,6 +11,13 @@
 
     if switch then
         priority_class = C_PRIORITY_SWITCH
+        f_addaction(pl, pl, "#,comes,back", function(s, o) -- self, other
+            s.active = f_party_pkmn_to_active(s.party[slot])
+            s.active.invisible = true
+            f_addaction(s, s, "#,comes,out", function(s, o) -- self, other
+                s.active.invisible = false
+            end)
+        end)
     else
         local move = pl.active.moveids[slot] or M_STRUGGLE
         f_addaction(pl, pl, "#,uses,"..c_moves[move].name, function(s, o) -- self, other

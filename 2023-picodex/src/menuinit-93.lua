@@ -4,6 +4,8 @@
     local winner, loser = p0, f_get_other_pl(_ENV, p0)
     winner.winlogic()
 
+    -- getting out of the win screen should take you to the main menu
+    stack = {stack[1]}
     menu:refresh{}
 
     _add(menu, {pkmn=winner.active.shared.num})
@@ -27,9 +29,9 @@ end $$
         f_zobj[[
             ;name,"browse",  state,browse,     select,%f_menu_state_callback, desc,"view|pokemon|info"
            ;;name,"teams",   state,team1,      select,%f_menu_state_callback, desc,"edit|stored|teams"
-           ;;name,"story",   state,team1fight, select,%f_menu_state_callback, desc,"battle|against|trainers"
+           ;;name,"story",   state,team1story, select,%f_menu_state_callback, desc,"battle|against|trainers"
            ;;name,"hoard",   state,team1hoard, select,%f_menu_state_callback, desc,"battle all|pokemon|in order"
-           ;;name,"player",  state,player,     select,%f_menu_state_callback, desc,"custom|2 player|battle", disabled,yes
+           ;;name,"match",   state,team1match, select,%f_menu_state_callback, desc,"custom|2 player|match"
            ;;name,"credits", state,credits,    select,%f_menu_state_callback, desc,"made by|amorg|games"
         ]]
     )
@@ -78,6 +80,10 @@ end $$
     -- todo: add pokemon that were defeated to pokedex.
 end $$
 
+-- todo: make it so you have to beat the latest trainer to unlock the next.
+--       currently, you just have to beat any trainer
+
+-- todo: make it so player 1 and player 2 don't share the same cursor in match mode.
 |[f_fightsel_init]| function(_ENV)
     menu:refresh(c_trainers, function(trainer, num)
         local disabled, team = num-1 > @S_STORY, {}
@@ -190,11 +196,12 @@ end $$
     end)
 end $$
 
+-- todo: make switch work
 |[f_pselactions_init]| function(_ENV)
     menu:refresh(f_zobj[[
-         ; name,"fight",   desc,"select|next|move",         select,%f_menu_state_callback, state,pselmove
+         ; name,"fight",   desc,"select|next|move",      select,%f_menu_state_callback, state,pselmove
         ;; name,"random",  desc,"select|random|move",    select,%f_menu_cancel -- random logic is in the turn logic if move is empty, so just leave the menu
-        ;; name,"switch",  desc,"change|active|pokemon", select,%f_menu_state_callback, state,pselswitch, disabled,yes
+        ;; name,"switch",  desc,"change|active|pokemon", select,%f_menu_state_callback, state,pselswitch
         ;; name,"forfeit", desc,"leave|the|fight",       select,%f_psel_forfeit
     ]])
 end $$
@@ -231,6 +238,22 @@ end $$
                 end
             end,
             num=team[i] and team[i].num or -1
+        }
+    end)
+end $$
+
+-- this is used both in "editparty" and selecting a pkmn in battle.
+-- todo: if a pokemon is dead, just draw a black shadow.
+|[f_pselswitch_init]| function(_ENV)
+    local team = f_get_party(_ENV:cursor'team1')
+    menu:refresh(f_zobj[[,1,2,3,4,5,6]], function(i)
+        local disabled = not p0.party[i] or p0.party[i].major == C_MAJOR_FAINTED
+        return {
+            select=disabled and f_beep or function()
+                _ENV:pop() _ENV:pop()
+                f_select_move(p0, i, true)
+            end,
+            num=p0.party[i] and p0.party[i].num or -1
         }
     end)
 end $$

@@ -6,6 +6,7 @@
         game:load()
     else
         game.cur_action = f_newaction(game.p0, "")
+        game.stack[#game.stack] = game.next
         game:push'pselactions'
     end
 end $$
