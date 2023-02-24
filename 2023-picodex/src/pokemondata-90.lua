@@ -149,7 +149,7 @@ end $$
 -- 5 bg styles
 |[c_bg_styles]| f_zobj[[
     0;bg,6,  aa,13 -- normal
-   ;; bg,13, aa,5  -- darker/psychic/poison/ghost
+   ;; bg,14, aa,4  -- darker/psychic/poison/ghost
    ;; bg,9,  aa,4  -- electric/ground
    ;; bg,11, aa,3  -- grass
    ;; bg,12, aa,5  -- water
@@ -365,7 +365,7 @@ end $$
 -- trainers are given moves at lvl 50
 |[c_trainers]| f_zobj[[
     ;,"youngstr", P_RATTATA,   P_PIDGEY,    P_CATERPIE,  P_SPEAROW,   P_WEEDLE,    P_BELLSPROUT
-   ;;,"junior",   P_EKANS,     P_SANDSHREW, P_RATTATA,   P_SQUIRTLE,  P_CHARMANDER,P_BULBASAUR
+   ;;,"junior",   P_EKANS,     P_SQUIRTLE,  P_SANDSHREW, P_CHARMANDER,P_RATTATA,   P_BULBASAUR
    ;;,"bugcatch", P_WEEDLE,    P_PARAS,     P_KAKUNA,    P_CATERPIE,  P_METAPOD,   P_PINSIR
    ;;,"brock",    P_GEODUDE,   P_OMANYTE,   P_CUBONE,    P_VULPIX,    P_KABUTO,    P_ONIX
 
@@ -400,7 +400,7 @@ end $$
    ;;,"blaine",   P_RAPIDASH,  P_ARCANINE,  P_FLAREON,   P_NINETALES, P_GOLEM,     P_MAGMAR
 
    ;;,"fishrman", P_GOLDEEN,   P_TENTACRUEL,P_SEADRA,    P_SEAKING,   P_CLOYSTER,  P_KINGLER
-   ;;,"cooltrnr", P_DRAGONAIR, P_PARASECT,  P_GOLDUCK,   P_WARTORTLE, P_CHARMELEON,P_IVYSAUR
+   ;;,"cooltrnr", P_DRAGONAIR, P_WARTORTLE, P_PARASECT,  P_CHARMELEON,P_POLIWRATH, P_IVYSAUR
    ;;,"tamer",    P_MAROWAK,   P_TAUROS,    P_SANDSLASH, P_RATICATE,  P_RHYHORN,   P_PERSIAN
    ;;,"giovanni", P_DUGTRIO,   P_NIDOKING,  P_PERSIAN,   P_NIDOQUEEN, P_KANGASKHAN,P_RHYDON
 

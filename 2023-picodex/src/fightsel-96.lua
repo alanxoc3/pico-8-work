@@ -40,5 +40,13 @@ end $$
     end
 
     -- |[f_begin_fight]| function(game, party1, party2, name1, name2, iscpu1, iscpu2, p1_die_logic, p2_die_logic, p1_win_logic, p2_win_logic)
-    f_begin_fight(_ENV, f_get_party(_ENV:cursor'team1'), cpu_party_draft, "player 1", "hoard", false, true, f_nop, f_hoard_death, f_story_winlogic, f_nop)
+    f_begin_fight(_ENV,
+        f_get_party(_ENV:cursor'team1'), cpu_party_draft,
+        "player 1", "hoard",
+        false, true,
+        f_nop, f_hoard_death,
+        f_nop, function(hoard)
+            poke(S_HOARD, mid(@S_HOARD, #hoard.deadnums, 255))
+        end
+    )
 end $$

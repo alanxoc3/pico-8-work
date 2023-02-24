@@ -84,13 +84,13 @@ end $$
 end $$
 
 -- todo: try token crunching here
--- todo: check if factory reset will reset surf on pikachu.
 -- 4 styles: 13,1 6,13 2,1, 8,2
 c_menustyles = f_zobj[[
     ;bg,13, fg,1,  out,5
    ;;bg,6,  fg,13, out,13
-   ;;bg,1,  fg,13, out,1
-   ;;bg,5,  fg,6,  out,5
+   ;;bg,5,  fg,1, out,1
+   ;;bg,6,  fg,5,  out,5
+   ;;bg,1,  fg,13,  out,5 -- this one is for credit/winmenu headers
 ]]
 
 |[f_menu_draw1]| function(game)

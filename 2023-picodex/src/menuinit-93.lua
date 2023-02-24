@@ -1,8 +1,6 @@
--- todo: make a function that loops from 1 to 6.
-
 |[f_fightover_init]| function(_ENV)
     local winner, loser = p0, f_get_other_pl(_ENV, p0)
-    winner.winlogic()
+    winner:winlogic(loser)
 
     -- getting out of the win screen should take you to the main menu
     stack = {stack[1]}
@@ -27,14 +25,23 @@ end $$
 |[f_main_init]| function(_ENV)
     menu:refresh(
         f_zobj[[
-            ;name,"browse",  state,browse,     select,%f_menu_state_callback, desc,"view|pokemon|info"
-           ;;name,"teams",   state,team1,      select,%f_menu_state_callback, desc,"edit|stored|teams"
-           ;;name,"story",   state,team1story, select,%f_menu_state_callback, desc,"battle|against|trainers"
-           ;;name,"hoard",   state,team1hoard, select,%f_menu_state_callback, desc,"battle all|pokemon|in order"
-           ;;name,"match",   state,team1match, select,%f_menu_state_callback, desc,"custom|2 player|match"
-           ;;name,"credits", state,credits,    select,%f_menu_state_callback, desc,"made by|amorg|games"
+            ;name,"browse",  state,browse,     select,%f_menu_state_callback, desc,".browse|"
+           ;;name,"edit",    state,team1,      select,%f_menu_state_callback, desc,".edit|stored|teams"
+           ;;name,"league",  state,team1story, select,%f_menu_state_callback, desc,".league|"
+           ;;name,"player",state,team1match, select,%f_menu_state_callback, desc,".player|custom|battles"
+           ;;name,"horde",   state,team1hoard, select,%f_menu_state_callback, desc,".hoard|"
+           ;;name,"credits", state,credits,    select,%f_menu_state_callback, desc,".credits|amorg|games"
         ]]
     )
+
+    menu[1].desc ..= #g_available_pokemon.."/151|pokemon"
+    menu[3].desc ..= (@S_STORY).."/40|trainers"
+    menu[5].desc ..= (@S_HOARD).."/151|pokemon"
+
+--    menu[4].name ..= 
+--    menu[5].name ..= @S_STORY
+--    menu[6].name ..= @S_HOARD
+
 end $$
 
 |[f_browse_init]| function(_ENV)
@@ -56,7 +63,7 @@ end $$
 
 |[f_credits_init]| function(_ENV)
     menu:refresh(
-        _split"65,,!scores,pkmn ,hoard ,106,,!alanxoc3,code,design,6,,!gr8cadet,graphics,sound,129,,!wadlo,magikarp,gyarados,123,,!snippets,zep px9,mot smap,137,,!pkmndata,blbpedia,pokeapi,serebii,smogon,upokcntr,volvox,nintendo",
+        _split"106,,!alanxoc3,code,design,6,,!gr8cadet,graphics,sound,129,,!wadlo,magikarp,gyarados,123,,!snippets,zep px9,mot smap,137,,!pkmndata,blbpedia,pokeapi,serebii,smogon,upokcntr,volvox,nintendo",
         function(txt)
             if _type(txt) == "number" then
                 return { pkmn=txt }
@@ -64,24 +71,20 @@ end $$
 
             local style = 1
             if _sub(txt,1,1) == '!' then
-                txt, style = _sub(txt,2), 3
+                txt, style = _sub(txt,2), 5
             end
 
             return { name=txt, style=style, hidden=txt=='' }
         end
     )
-
-    menu[4].name ..= #g_available_pokemon
-    menu[5].name ..= 0
 end $$
 
-|[f_story_winlogic]| function(pl, other)
-    poke(S_STORY, min(@S_STORY+1, #c_trainers))
-    -- todo: add pokemon that were defeated to pokedex.
+|[f_unlock_pkmn]| function(trainer)
+    -- add pokemon defeated to picodex
+    foreach(trainer.deadnums, function(num)
+        _poke(S_POKEMON+num, 1)
+    end)
 end $$
-
--- todo: make it so you have to beat the latest trainer to unlock the next.
---       currently, you just have to beat any trainer
 
 -- todo: make it so player 1 and player 2 don't share the same cursor in match mode.
 |[f_fightsel_init]| function(_ENV)
@@ -93,8 +96,7 @@ end $$
             name=trainer[1],
             team=team,
             disabled=disabled,
-            desc=disabled and "beat|previous|to unlock",
-            select=function(_ENV, entry)
+            select=function(game, entry)
                 local cpu_party_draft = {}
                 for i=1,6 do
                     local num = entry.team[i]
@@ -104,7 +106,15 @@ end $$
                 end
 
                 -- |[f_begin_fight]| function(game, party1, party2, name1, name2, iscpu1, iscpu2, p1_die_logic, p2_die_logic, p1_win_logic, p2_win_logic)
-                f_begin_fight(_ENV, f_get_party(_ENV:cursor'team1'), cpu_party_draft, "player 1", entry.name, false, true, f_nop, f_nop, f_story_winlogic, f_nop)
+                f_begin_fight(game,
+                    f_get_party(game:cursor'team1'), cpu_party_draft,
+                    "player 1", entry.name,
+                    false, true,
+                    f_nop, f_nop,
+                    function(pl, other)
+                        poke(S_STORY, mid(@S_STORY, num, #c_trainers))
+                        f_unlock_pkmn(other)
+                    end, f_nop)
             end
         }
     end)
@@ -154,18 +164,15 @@ end $$
     local pkmn = c_pokemon[partypkmn.num]
 
     local moves = {}
-    local add_to_moves = function(name, movelist, prefix)
-        if #movelist > 0 then
-            _add(moves, {name=name, disabled=true, desc=name})
-            for i=1,#movelist do
-                _add(moves, {name=c_moves[movelist[i]].name, num=movelist[i], desc=prefix or c_moves[movelist[i]].ref or "error"})
-            end
+    local add_to_moves = function(movelist, prefix)
+        for i=1,#movelist do
+            _add(moves, {name=c_moves[movelist[i]].name, num=movelist[i], desc=prefix or c_moves[movelist[i]].ref or "error"})
         end
     end
 
-    add_to_moves("moves", pkmn.moves_natural, "learn")
-    add_to_moves("machines", pkmn.moves_tm)
-    add_to_moves("events", pkmn.moves_event, "event")
+    add_to_moves(pkmn.moves_natural, "learn")
+    add_to_moves(pkmn.moves_tm)
+    add_to_moves(pkmn.moves_event, "event")
 
     menu:refresh(moves, function(m)
         return {

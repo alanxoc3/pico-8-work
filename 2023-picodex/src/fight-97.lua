@@ -1,5 +1,3 @@
--- todo: implement player selection
--- todo: make fightover accept losing pl instead of winning pl. less tokens that way
 -- todo: implement a "one of" function, so you don't have these long if statements. And check if it saves tokens. gets rid of "x == y or x == z or ..."
 
 -- pl,1-4,false - select a move slot  are move slots
