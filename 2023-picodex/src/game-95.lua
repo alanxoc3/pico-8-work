@@ -1,3 +1,4 @@
+-- todo: fix, when pokedex opens, browse (pkmn) score is 0/151, but should be at least 6.
 -- todo: try splitting minifier on underscore
 -- todo: rename "party" to "team" for consistency
 
