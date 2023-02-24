@@ -482,12 +482,12 @@ stack={stack[1]}
 menu:refresh{}
 _add(menu,{pkmn=winner.active.shared.num})
 _add(menu,{hidden=true})
-_add(menu,{name="winner",style=3})
+_add(menu,{name="winner",style=5})
 _add(menu,{name=winner.name})
 _add(menu,{name="6/6"})
 _add(menu,{pkmn=loser.active.shared.num})
 _add(menu,{hidden=true})
-_add(menu,{name="loser",style=3})
+_add(menu,{name="loser",style=5})
 _add(menu,{name=loser.name})
 _add(menu,{name="pkm 6/6"})
 end,function(_ENV)
@@ -902,27 +902,27 @@ end,function(menu,pkmn)
 menu:refresh{}
 _add(menu,{pkmn=pkmn.num})
 _add(menu,{hidden=true})
-_add(menu,{name="lvl 50",style=3})
+_add(menu,{name="lvl 50",style=5})
 _add(menu,{name=(pkmn.hp or pkmn.maxhp).."/"..pkmn.maxhp})
 _foreach(f_zobj[[;key,special,name,spc;;key,attack,name,att;;key,defense,name,def;;key,speed,name,spd;;key,total,name,tot;;key,accuracy,name,acc;;key,evasion,name,eva]],function(pair)
 if not pair.key then
-_add(menu,{name=pair.name,style=3})
+_add(menu,{name=pair.name,style=5})
 elseif pkmn[pair.key]then
 _add(menu,{name=pair.name.." "..pkmn[pair.key]})
 end
 end)
-_add(menu,{name="moves",style=3})
+_add(menu,{name="moves",style=5})
 _foreach(c_pokemon[pkmn.num].moves_natural,function(m)
 _add(menu,{name=c_moves[m].name})
 end)
 if #c_pokemon[pkmn.num].moves_tm>0 then
-_add(menu,{name="machines",style=3})
+_add(menu,{name="machines",style=5})
 _foreach(c_pokemon[pkmn.num].moves_tm,function(m)
 _add(menu,{name=c_moves[m].name})
 end)
 end
 if #c_pokemon[pkmn.num].moves_event>0 then
-_add(menu,{name="events",style=3})
+_add(menu,{name="events",style=5})
 _foreach(c_pokemon[pkmn.num].moves_event,function(m)
 _add(menu,{name=c_moves[m].name})
 end)

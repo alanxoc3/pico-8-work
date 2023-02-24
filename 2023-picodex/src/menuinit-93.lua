@@ -9,14 +9,14 @@
     _add(menu, {pkmn=winner.active.shared.num})
     _add(menu, {hidden=true})
 
-    _add(menu, {name="winner", style=3})
+    _add(menu, {name="winner", style=5})
     _add(menu, {name=winner.name})
     _add(menu, {name="6/6"})
 
     _add(menu, {pkmn=loser.active.shared.num})
     _add(menu, {hidden=true})
 
-    _add(menu, {name="loser", style=3})
+    _add(menu, {name="loser", style=5})
     _add(menu, {name=loser.name})
     _add(menu, {name="pkm 6/6"})
 

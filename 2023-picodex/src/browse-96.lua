@@ -72,7 +72,7 @@ end $$
     menu:refresh{}
     _add(menu, {pkmn=pkmn.num})
     _add(menu, {hidden=true})
-    _add(menu, {name="lvl 50", style=3})
+    _add(menu, {name="lvl 50", style=5})
     _add(menu, {name=(pkmn.hp or pkmn.maxhp)..'/'..pkmn.maxhp})
 
     _foreach(f_zobj[[
@@ -86,26 +86,26 @@ end $$
        ;;key,evasion, name,"eva"
     ]], function(pair)
         if not pair.key then
-            _add(menu, { name=pair.name, style=3 })
+            _add(menu, { name=pair.name, style=5 })
         elseif pkmn[pair.key] then
             _add(menu, { name=pair.name.." "..pkmn[pair.key] })
         end
     end)
 
-    _add(menu, {name="moves", style=3})
+    _add(menu, {name="moves", style=5})
     _foreach(c_pokemon[pkmn.num].moves_natural, function(m)
         _add(menu, {name=c_moves[m].name})
     end)
 
     if #c_pokemon[pkmn.num].moves_tm > 0 then
-        _add(menu, {name="machines", style=3})
+        _add(menu, {name="machines", style=5})
         _foreach(c_pokemon[pkmn.num].moves_tm, function(m)
             _add(menu, {name=c_moves[m].name})
         end)
     end
 
     if #c_pokemon[pkmn.num].moves_event > 0 then
-        _add(menu, {name="events", style=3})
+        _add(menu, {name="events", style=5})
         _foreach(c_pokemon[pkmn.num].moves_event, function(m)
             _add(menu, {name=c_moves[m].name})
         end)
