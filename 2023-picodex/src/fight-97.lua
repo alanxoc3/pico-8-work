@@ -58,7 +58,7 @@ end $$
 |[f_logic_faint]| function(s)
     s.active.shared.major = C_MAJOR_FAINTED
     s:dielogic()
-    _add(s.deadnums, s.active.shared.num) -- trainer battles and hoard unlock pokemon with this.
+    _add(s.deadnums, s.active.shared.num) -- trainer battles and horde unlock pokemon with this.
 end $$
 
 -- self pl, other pl

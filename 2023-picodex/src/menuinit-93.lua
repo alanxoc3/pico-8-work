@@ -29,7 +29,7 @@ end $$
            ;;name,"edit",    state,team1,      select,%f_menu_state_callback, desc,".edit|stored|teams"
            ;;name,"league",  state,team1story, select,%f_menu_state_callback, desc,".league|"
            ;;name,"player",state,team1match, select,%f_menu_state_callback, desc,".player|custom|battles"
-           ;;name,"horde",   state,team1hoard, select,%f_menu_state_callback, desc,".hoard|"
+           ;;name,"horde",   state,team1horde, select,%f_menu_state_callback, desc,".horde|"
            ;;name,"credits", state,credits,    select,%f_menu_state_callback, desc,".credits|amorg|games"
         ]]
     )

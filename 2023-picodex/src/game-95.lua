@@ -36,7 +36,7 @@ f_zclass[[o_modes,o_actor|
     team1;        init,%f_party_init,        draw2,%f_main_draw2,         draw3,%f_party_draw3, disable_empty_party,no,   select_func,%f_party_select; -- t1
     team1story;   init,%f_party_init,        draw2,%f_main_draw2,         draw3,%f_party_draw3, disable_empty_party,yes,  select_func,%f_story_select; -- s1
     team1match;   init,%f_party_init,        draw2,%f_main_draw2,         draw3,%f_party_draw3, disable_empty_party,yes,  select_func,%f_match_select; -- s1
-    team1hoard;   init,%f_party_init,        draw2,%f_main_draw2,         draw3,%f_party_draw3, disable_empty_party,yes,  select_func,%f_hoard_select; -- s1
+    team1horde;   init,%f_party_init,        draw2,%f_main_draw2,         draw3,%f_party_draw3, disable_empty_party,yes,  select_func,%f_horde_select; -- s1
 
     team2match;   init,%f_party_init,        draw2,%f_main_draw2,         draw3,%f_party_draw3, disable_empty_party,yes,  select_func,%f_match_start; -- s1
     team2story;   init,%f_fightsel_init,     draw2,%f_main_draw2,         draw3,%f_party_draw3;                                                       -- t2
@@ -124,7 +124,7 @@ end $$
     modes.pselactions.menu.cancel = f_beep
 
     -- these menus share the cursor position
-    modes.team1hoard.menu  = modes.team1.menu
+    modes.team1horde.menu  = modes.team1.menu
     modes.team1match.menu  = modes.team1.menu
     modes.team1story.menu  = modes.team1.menu
     modes.partypkmn.menu   = modes.browse.menu

@@ -89,7 +89,7 @@ end $$
 --   can_switch() -- give it an index, it tells you if you can switch with that pkmn
 --   get_next()   -- returns the next party pokemon pokemon that 
 
---   hoard_index = 6 -- only used for hoard
+--   horde_index = 6 -- only used for horde
 --   active 
 --   name=name1
 --   priority=1
