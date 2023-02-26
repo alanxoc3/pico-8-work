@@ -17,7 +17,7 @@ end $$
         -- this populates an array for the pokemon, based on data stored in the cartridge
         -- todo: put these in constants.txt
         local EVENT = 252 -- is event
-        local TMHM  = 253 -- is tm/hm
+        local TEACH = 253 -- is teach (tm/hm)
         local DASH  = 254 -- is a dash/range
         local NEXT  = 255 -- is next pokemon
 
@@ -52,7 +52,7 @@ end $$
             base_special,@,
 
             moves_natural,@,
-            moves_tm,@,
+            moves_teach,@,
             moves_event,@
         ]],
             num, -- evl
@@ -72,8 +72,8 @@ end $$
         local move_bucket = pkmn.moves_natural
         for i=9,#pkmndata do
             local val = pkmndata[i]
-            if val == TMHM then
-                move_bucket = pkmn.moves_tm
+            if val == TEACH then
+                move_bucket = pkmn.moves_teach
             elseif val == EVENT then
                 move_bucket = pkmn.moves_event
             else
@@ -81,19 +81,19 @@ end $$
             end
         end
 
-        -- todo: tms could be in a weird order for evolved forms. i should fix that
+        -- todo: teachs could be in a weird order for evolved forms. i should fix that
         if evolvesfrom < num then
             _foreach(c_pokemon[evolvesfrom].moves_natural, function(move) _add(pkmn.moves_natural, move) end)
-            _foreach(c_pokemon[evolvesfrom].moves_tm,      function(move) _add(pkmn.moves_tm,      move) end)
+            _foreach(c_pokemon[evolvesfrom].moves_teach,      function(move) _add(pkmn.moves_teach,      move) end)
             _foreach(c_pokemon[evolvesfrom].moves_event,   function(move) _add(pkmn.moves_event,   move) end)
         end
 
-        local tm_map, tms = {}, {}
-        _foreach(pkmn.moves_tm, function(move) tm_map[move] = true end)
+        local teach_map, teachs = {}, {}
+        _foreach(pkmn.moves_teach, function(move) teach_map[move] = true end)
         for i=1,54 do
-            if tm_map[i] then _add(tms, i) end
+            if teach_map[i] then _add(teachs, i) end
         end
-        pkmn.moves_tm = tms
+        pkmn.moves_teach = teachs
 
         ---- PASS 4 - add level specific data and other attributes to the pkmn ----
         f_zobj_set(pkmn, [[
@@ -177,7 +177,7 @@ end $$
    --  "name",     type        pp  dmg  acc
    0;, "struggle", T_NORMAL,   0,  50, 1
 
-   -- tms
+   -- teachs
    ;;, "megapnch", T_NORMAL,   20, 80,  .85 -- 1
    ;;, "razrwind", T_NORMAL,   10, 80,  1   -- 2
    ;;, "sworddnc", T_NORMAL,   20, 0,   0   -- 3
@@ -353,15 +353,13 @@ end $$
     for i=0,#c_moves_raw do
         local move = c_moves_raw[i]
         c_moves[i] = f_zobj([[
-            name,@, type,@, pp,@, damage,@, accuracy,@,
-            ref,@, num,@
+            name,@, type,@, pp,@, damage,@, accuracy,@, num,@
         ]],
             move[1],
             move[2],
             move[3],
             move[4],
             move[5],
-            (i >= 1 and i <= 50 and "tm "..i) or (i >= 51 and i <= 55 and "hm "..(i-50)),
             i
         )
     end

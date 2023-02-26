@@ -39,11 +39,6 @@ end $$
     menu[1].desc ..= count.."/151|pokemon"
     menu[3].desc ..= (@S_STORY).."/40|trainers"
     menu[5].desc ..= (@S_HOARD).."/151|pokemon"
-
---    menu[4].name ..= 
---    menu[5].name ..= @S_STORY
---    menu[6].name ..= @S_HOARD
-
 end $$
 
 |[f_browse_init_shared]| function(_ENV, selectfunc)
@@ -79,12 +74,6 @@ end $$
 
 |[f_browsestat_init]| function(_ENV)
     f_update_stat_menu(menu, c_pokemon[_ENV:cursor'browse'])
-end $$
-
-|[f_partystat_init]| function(_ENV)
-    local team = f_get_party(_ENV:cursor'team1')
-    local partypkmn = team[_ENV:cursor'editparty'+1]
-    f_update_stat_menu(menu, c_pokemon[partypkmn.num])
 end $$
 
 |[f_credits_init]| function(_ENV)
@@ -148,23 +137,46 @@ end $$
 
 |[f_partyaction_init]| function(_ENV)
     menu:refresh(f_zobj[[
-        ; name,"info",   state,partystat,  select,%f_menu_state_callback, -- use browse pokemon selector
-       ;; name,"moves",  state,partymoves, select,%f_menu_state_callback  -- use the menu system
-       ;; name,"delete",                   select,%f_partydel             -- use the edit team screen
+        ; name,"moves",  state,partymoves,  select,%f_menu_state_callback -- use the menu system
+       ;; name,"switch", state,switchparty, select,%f_menu_state_callback -- use browse pokemon selector
+       ;; name,"delete",                    select,%f_partydel            -- use the edit team screen
     ]])
 
     partymovesel.menu.c = 0
 end $$
 
-|[f_partymoves_init]| function(_ENV)
+|[f_moveaction_init]| function(_ENV)
+    menu:refresh(f_zobj[[
+        ; name,"change", state,partymovesel, select,%f_menu_state_callback
+       ;; name,"switch", state,partymoves, select,%f_menu_state_callback
+       ;; name,"delete", select,%f_movedel
+    ]])
+end $$
+
+|[f_movedel]| function(_ENV)
     local team = f_get_party(_ENV:cursor'team1')
     local partypkmn = team[_ENV:cursor'editparty'+1]
+    partypkmn.moves[_ENV:cursor'partymoves'+1] = nil
+    f_save_party(_ENV:cursor'team1', team)
+    _ENV:pop()
+
+    partypkmn = team[_ENV:cursor'editparty'+1]
+    -- pop thrice if the pokemon was deleted
+    if not partypkmn then
+        _ENV:pop()
+        _ENV:pop()
+    end
+end $$
+
+|[f_partymoves_init]| function(_ENV)
+    local team = f_get_party(_ENV:cursor'team1')
+    local partypkmn = team[_ENV:cursor'editparty'+1] or {moves={}}
 
     menu:refresh(f_zobj[[,1,2,3,4]], function(i)
         return {
             num=partypkmn.moves[i],
             name=partypkmn.moves[i] and c_moves[partypkmn.moves[i]].name or "???",
-            select=function(_ENV) _ENV:push'partymovesel' end
+            select=function(_ENV) _ENV:push'moveaction' end
         }
     end)
 end $$
@@ -177,13 +189,13 @@ end $$
     local moves = {}
     local add_to_moves = function(movelist, prefix)
         for i=1,#movelist do
-            _add(moves, {name=c_moves[movelist[i]].name, num=movelist[i], desc=prefix or c_moves[movelist[i]].ref or "error"})
+            _add(moves, {name=c_moves[movelist[i]].name, num=movelist[i], desc=prefix..i})
         end
     end
 
-    add_to_moves(pkmn.moves_natural, "learn")
-    add_to_moves(pkmn.moves_tm)
-    add_to_moves(pkmn.moves_event, "event")
+    add_to_moves(pkmn.moves_natural, "learn #")
+    add_to_moves(pkmn.moves_teach,      "teach #")
+    add_to_moves(pkmn.moves_event,   "event #")
 
     menu:refresh(moves, function(m)
         return {
@@ -193,6 +205,7 @@ end $$
             ref=m.desc,
             select=function()
                 f_save_party(_ENV:cursor'team1', f_set_party_pkmn_move(f_get_party(_ENV:cursor'team1'), _ENV:cursor'editparty'+1, _ENV:cursor'partymoves'+1, m.num))
+                _ENV:pop()
                 _ENV:pop()
             end
         }
@@ -254,6 +267,23 @@ end $$
                 else
                     _ENV:push'partypkmn'
                 end
+            end,
+            num=team[i] and team[i].num or -1
+        }
+    end)
+end $$
+
+-- todo: combine with editparty
+|[f_switchparty_init]| function(_ENV)
+    local team = f_get_party(_ENV:cursor'team1')
+    menu:refresh(f_zobj[[,1,2,3,4,5,6]], function(i)
+        return {
+            disabled=i==_ENV:cursor'editparty'+1,
+            select=function(_ENV)
+                local ind_one, ind_two = _ENV:cursor'editparty'+1, _ENV:cursor'switchparty'+1
+                team[ind_one], team[ind_two] = team[ind_two], team[ind_one]
+                f_save_party(_ENV:cursor'team1', team)
+                _ENV:pop() _ENV:pop()
             end,
             num=team[i] and team[i].num or -1
         }

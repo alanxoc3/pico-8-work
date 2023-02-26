@@ -22,12 +22,13 @@ f_zclass[[o_modes,o_actor|
     browse;       init,%f_browse_init,       draw2,%f_browse_draw2,       draw3,%f_browse_draw3;
     partypkmn;    init,%f_partypkmn_init,    draw2,%f_browse_draw2,       draw3,%f_browse_draw3;
     browsestat;   init,%f_browsestat_init,   draw2,%f_browse_draw2,       draw3,%f_browse_draw3,    update,%f_browsestat_update; -- view pkmn info in browse
-    partystat;    init,%f_partystat_init,    draw2,%f_editparty_draw2,    draw3,%f_editparty_draw3, update,%f_partystat_update;  -- view pkmn info in teams
     credits;      init,%f_credits_init,      draw2,%f_main_draw2,         draw3,%f_main_draw3;
     fightover;    init,%f_fightover_init,    draw2,%f_fightover_draw2,    draw3,%f_fightover_draw3;
     editparty;    init,%f_editparty_init,    draw2,%f_editparty_draw2,    draw3,%f_editparty_draw3, draw1,%f_editparty_draw1;
+    switchparty;  init,%f_switchparty_init,  draw2,%f_editparty_draw2,    draw3,%f_editparty_draw3, draw1,%f_editparty_draw1;
     main;         init,~f_main_init,         draw2,~f_main_draw2,         draw3,~f_main_draw3         ;
     partyaction;  init,%f_partyaction_init,  draw2,%f_editparty_draw2,    draw3,%f_editparty_draw3    ;
+    moveaction;   init,%f_moveaction_init,   draw2,%f_partymoves_draw2,   draw3,%f_move_draw3;
     partymovesel; init,%f_partymovesel_init, draw2,%f_partymovesel_draw2, draw3,%f_move_draw3;
     partymoves;   init,%f_partymoves_init,   draw2,%f_partymoves_draw2,   draw3,%f_move_draw3;
     pselactions;  init,%f_pselactions_init,  draw2,%f_turn_draw2,         draw3,%f_pselactions_draw3  ;
@@ -103,12 +104,13 @@ end $$
     end, [[
         ;,browse,       ~f_create_menu,      ~f_browse_drawentry, 4 -- selecting a pkmn from dex (for browsing or changing team pkmn)
        ;;,browsestat,   ~f_create_menu_view, ~f_menu_drawentry      -- info for pkmn in browse mode
-       ;;,partystat,    ~f_create_menu_view, ~f_menu_drawentry      -- info for pkmn in party mode
        ;;,credits,      ~f_create_menu_view, ~f_menu_drawentry      -- credits view obviously
        ;;,fightover,    ~f_create_menu_view, ~f_menu_drawentry      -- stats that display when you finish a fight
        ;;,editparty,    ~f_create_menu,      ~f_browse_drawentry, 3 -- selecting a pkmn from party
+       ;;,switchparty,  ~f_create_menu,      ~f_browse_drawentry, 3 -- selecting a pkmn from party
        ;;,main,         ~f_create_menu,      ~f_menu_drawentry      -- select a mode
        ;;,partyaction,  ~f_create_menu,      ~f_menu_drawentry      -- edit party what to do (delete, edit moves, edit pkmn)
+       ;;,moveaction,   ~f_create_menu,      ~f_menu_drawentry      -- selecting what to do with a move (switch, delete, select)
        ;;,partymovesel, ~f_create_menu,      ~f_menu_drawentry      -- select one of the moves a pokemon can learn (tms, hms, natural moves...)
        ;;,partymoves,   ~f_create_menu,      ~f_menu_drawentry      -- select 1 of 4 moves from a pokemon
 

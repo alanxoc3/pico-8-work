@@ -55,34 +55,5 @@ end $$
     f_modes_default_update(game)
 end $$
 
--- todo: maybe incorporate with "next pokemon" function
--- todo: _add xbtn/ybtn
-|[f_partystat_update]| function(game)
-    if g_bpl then
-        local team = f_get_party(game:cursor'team1')
-
-        for i=game.editparty.menu.c-1,0,-1 do
-            if team[i+1] then
-                game.editparty.menu.c = i
-                break
-            end
-        end
-        
-        f_partystat_init(game)
-    end
-
-    if g_bpr then
-        local team = f_get_party(game:cursor'team1')
-
-        for i=game.editparty.menu.c+1,5,1 do
-            if team[i+1] then
-                game.editparty.menu.c = i
-                break
-            end
-        end
-        
-        f_partystat_init(game)
-    end
-
-    f_modes_default_update(game)
-end $$
+-- todo: add xbtn/ybtn
+-- todo: browse shouldn't share cursor with edit party

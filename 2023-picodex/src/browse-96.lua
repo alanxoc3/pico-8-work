@@ -1,3 +1,4 @@
+-- todo: beep when lr on most lr of browsestat
 -- todo: combine scrollable logic maybe (credits + browse stat)
 -- todo: make browse stat screen scrollable
 |[f_draw2_pokeinfo]| function(pkmn)
@@ -17,8 +18,6 @@ end $$
 -- Num 1 would be bulbasaur.
 g_loaded_row = 16 -- default corresponds to the top row in the "129-151.p8" file.
 |[f_draw_pkmn]| function(num, x, y, sw, sh)
-    if num < 0 then _rectfill(x-1, y-1,x,y,6) return end
-
     sw = sw or 1
     sh = sh or 1
 
@@ -35,6 +34,8 @@ g_loaded_row = 16 -- default corresponds to the top row in the "129-151.p8" file
 end $$
 
 |[f_draw_pkmn_out]| function(num, x, y, col, xscale, yscale)
+    if num < 0 then _spr(107, x-4, y-4) return end
+
     xscale = xscale or 1
     yscale = yscale or 1
     local outline_width = _max(_abs(xscale), 1) \ 1
@@ -98,9 +99,9 @@ end $$
         _add(menu, {name=c_moves[m].name})
     end)
 
-    if #c_pokemon[pkmn.num].moves_tm > 0 then
+    if #c_pokemon[pkmn.num].moves_teach > 0 then
         _add(menu, {name="machines", style=5})
-        _foreach(c_pokemon[pkmn.num].moves_tm, function(m)
+        _foreach(c_pokemon[pkmn.num].moves_teach, function(m)
             _add(menu, {name=c_moves[m].name})
         end)
     end
