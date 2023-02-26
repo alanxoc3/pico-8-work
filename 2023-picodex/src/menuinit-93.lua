@@ -35,7 +35,7 @@ end $$
     )
 
     local count = 0
-    for i=0,151 do count += c_pokemon[i].available and 1 or 0 end
+    for i=0,151 do count += c_pokemon[i].available() and 1 or 0 end
     menu[1].desc ..= count.."/151|pokemon"
     menu[3].desc ..= (@S_STORY).."/40|trainers"
     menu[5].desc ..= (@S_HOARD).."/151|pokemon"
@@ -52,7 +52,7 @@ end $$
         function(num)
             return {
                 select=selectfunc,
-                disabled=not c_pokemon[num].available,
+                disabled=not c_pokemon[num].available(),
                 num=num
             }
         end

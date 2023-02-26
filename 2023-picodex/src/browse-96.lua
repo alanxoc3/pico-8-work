@@ -7,7 +7,7 @@ end $$
 
 |[f_draw3_pokeinfo]| function(num)
     local pkmn = c_pokemon[num] or {}
-    if pkmn.available then
+    if pkmn.available() then
         f_print_draw3_message{'.'..pkmn.name, c_types[pkmn.type1].name, c_types[pkmn.type2].name}
     else
         f_print_draw3_message{".?????????", "????", "??????"}

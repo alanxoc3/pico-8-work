@@ -109,12 +109,18 @@ end $$
 
         pkmn.browse_draw = function(...)
             -- todo: if logic for surfing pikachu + amnesia psyduck?
-            f_draw_pkmn_out(pkmn.available and pkmn.num or -1, ...)
+            f_draw_pkmn_out(pkmn.available() and pkmn.num or -1, ...)
         end
 
         pkmn.draw = function(...)
             -- todo: if logic for surfing pikachu + amnesia psyduck?
             f_draw_pkmn_out(pkmn.num, ...)
+        end
+
+        pkmn.available = function()
+            if pkmn.num > 0 then
+                return @(S_POKEMON+pkmn.num) > 0
+            end
         end
 
         ---- PASS 5 - finally, set the pokemon to the c_pokemon array ----
