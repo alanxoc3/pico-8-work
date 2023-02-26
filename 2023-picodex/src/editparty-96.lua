@@ -1,4 +1,3 @@
--- TODO: cur pkmn should start when selecting
 |[f_partydel]| function(game)
     local team = f_get_party(game:cursor'team1')
     team[game:cursor'editparty'+1] = nil

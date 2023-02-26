@@ -1,5 +1,3 @@
--- todo: implement a "one of" function, so you don't have these long if statements. And check if it saves tokens. gets rid of "x == y or x == z or ..."
-
 -- pl,1-4,false - select a move slot  are move slots
 -- pl,0,false   - select default move (solar beam charge, hyper beam recharge, struggle, ...)
 -- pl,1-6,true  - switch with party slot

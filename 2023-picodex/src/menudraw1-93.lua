@@ -1,5 +1,3 @@
-|[f_fightover_draw1]|  function(game) _print("todo", 5, 5, 1) end $$
-
 |[f_editparty_draw1]| function(game)
     f_modes_default_draw1(game)
     f_wobble_text("team #"..game:cursor'team1'+1, 20, 27, 1)

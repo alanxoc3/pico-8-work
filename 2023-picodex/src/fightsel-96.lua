@@ -1,5 +1,3 @@
--- todo: make it so when horde is over, it increments the horde high score
-
 |[f_story_select]| function(game) game:push'team2story' end $$
 |[f_match_select]| function(game) game:push'team2match' end $$
 
@@ -7,11 +5,6 @@
     -- |[f_begin_fight]| function(game, party1, party2, name1, name2, iscpu1, iscpu2, p1_die_logic, p2_die_logic, p1_win_logic, p2_win_logic)
     f_begin_fight(_ENV, f_get_party(_ENV:cursor'team1'), f_get_party(_ENV:cursor'team2match'), "player 1", "player 2", false, false, f_nop, f_nop, f_nop, f_nop)
 end $$
-
--- |[f_story_winlogic]| function(pl, other)
---     poke(S_STORY, min(@S_STORY+1, #c_trainers))
---     -- todo: add pokemon that were defeated to pokedex.
--- end $$
 
 |[f_horde_death]| function(p)
     -- first, shift everything in the party to the left.

@@ -1,6 +1,3 @@
--- todo: beep when lr on most lr of browsestat
--- todo: combine scrollable logic maybe (credits + browse stat)
--- todo: make browse stat screen scrollable
 |[f_draw2_pokeinfo]| function(pkmn)
     f_print_draw2_message("pkmn "..f_format_num(pkmn.num))
 end $$
