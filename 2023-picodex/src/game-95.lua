@@ -19,7 +19,7 @@ f_zclass[[o_modes,o_actor|
     -- menu states
     browse;       init,%f_browse_init,       draw2,%f_browse_draw2,       draw3,%f_browse_draw3;
     partypkmn;    init,%f_partypkmn_init,    draw2,%f_browse_draw2,       draw3,%f_browse_draw3;
-    browsestat;   init,%f_browsestat_init,   draw2,%f_browse_draw2,       draw3,%f_browse_draw3; -- view pkmn info in browse
+    browsestat;   init,%f_browsestat_init,   draw2,%f_browse_draw2,       draw3,%f_browse_draw3, update,%f_browsestat_update; -- view pkmn info in browse
     credits;      init,%f_credits_init,      draw2,%f_main_draw2,         draw3,%f_main_draw3;
     fightover;    init,%f_fightover_init,    draw2,%f_fightover_draw2,    draw3,%f_fightover_draw3;
     editparty;    init,%f_editparty_init,    draw2,%f_editparty_draw2,    draw3,%f_editparty_draw3, draw1,%f_editparty_draw1;

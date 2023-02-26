@@ -60,9 +60,7 @@ end $$
     local menu = game.menu
     if g_bpo then menu.cancel(game) end
     if g_bpu then menu.v-=1 end
-    if g_bpl then menu.v-=1 end
     if g_bpd then menu.v+=1 end
-    if g_bpr then menu.v+=1 end
     menu.v = _mid(menu.viewmin, menu.v, #menu-3)
 end $$
 

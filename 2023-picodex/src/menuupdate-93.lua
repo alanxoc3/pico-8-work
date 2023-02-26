@@ -24,6 +24,32 @@
     if g_bpo then f_beep() end
 end $$
 
+|[f_browsestat_update]| function(game)
+    if g_bpl then
+        for i=game.browse.menu.c-1,0,-1 do
+            if c_pokemon[i].available() then
+                game.browse.menu.c = i
+                break
+            end
+        end
+
+        f_browsestat_init(game)
+    end
+
+    if g_bpr then
+        for i=game.browse.menu.c+1,151 do
+            if c_pokemon[i].available() then
+                game.browse.menu.c = i
+                break
+            end
+        end
+
+        f_browsestat_init(game)
+    end
+
+    f_modes_default_update(game)
+end $$
+
 -- only "o" will go back
 -- |[f_fightover_update]| function(game)
 --     if g_bpo then game:pop() end
