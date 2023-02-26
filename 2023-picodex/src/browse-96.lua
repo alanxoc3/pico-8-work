@@ -94,20 +94,20 @@ end $$
         end
     end)
 
-    _add(menu, {name="moves", style=5})
+    _add(menu, {name="learn", style=5})
     _foreach(c_pokemon[pkmn.num].moves_natural, function(m)
         _add(menu, {name=c_moves[m].name})
     end)
 
     if #c_pokemon[pkmn.num].moves_teach > 0 then
-        _add(menu, {name="machines", style=5})
+        _add(menu, {name="teach", style=5})
         _foreach(c_pokemon[pkmn.num].moves_teach, function(m)
             _add(menu, {name=c_moves[m].name})
         end)
     end
 
     if #c_pokemon[pkmn.num].moves_event > 0 then
-        _add(menu, {name="events", style=5})
+        _add(menu, {name="event", style=5})
         _foreach(c_pokemon[pkmn.num].moves_event, function(m)
             _add(menu, {name=c_moves[m].name})
         end)

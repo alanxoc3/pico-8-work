@@ -470,7 +470,7 @@ count+=1
 power+=c_pokemon[num].total
 end
 end
-f_print_draw3_message{".team stats","pkm "..count.."/6","pow "..power}
+f_print_draw3_message{".team stats","pkmn "..count.."/6","pow "..power}
 end,function(game)end,function(game)f_print_draw3_message{game.p0.name,"is the","winner"}end,function(game)
 local message_tbl=_split(game.cur_action.message)
 if message_tbl[1]=="#"then message_tbl[1]=c_pokemon[game.cur_action.active.shared.num].name end
@@ -934,18 +934,18 @@ elseif pkmn[pair.key]then
 _add(menu,{name=pair.name.." "..pkmn[pair.key]})
 end
 end)
-_add(menu,{name="moves",style=5})
+_add(menu,{name="learn",style=5})
 _foreach(c_pokemon[pkmn.num].moves_natural,function(m)
 _add(menu,{name=c_moves[m].name})
 end)
 if #c_pokemon[pkmn.num].moves_teach>0 then
-_add(menu,{name="machines",style=5})
+_add(menu,{name="teach",style=5})
 _foreach(c_pokemon[pkmn.num].moves_teach,function(m)
 _add(menu,{name=c_moves[m].name})
 end)
 end
 if #c_pokemon[pkmn.num].moves_event>0 then
-_add(menu,{name="events",style=5})
+_add(menu,{name="event",style=5})
 _foreach(c_pokemon[pkmn.num].moves_event,function(m)
 _add(menu,{name=c_moves[m].name})
 end)

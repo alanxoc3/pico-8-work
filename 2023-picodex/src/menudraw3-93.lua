@@ -35,7 +35,7 @@ end $$
         end
     end
 
-    f_print_draw3_message{".team stats", "pkm "..count.."/6", "pow "..power}
+    f_print_draw3_message{".team stats", "pkmn "..count.."/6", "pow "..power}
 end $$
 
 |[f_pselmove_draw3]|     function(game)                                                             end $$
