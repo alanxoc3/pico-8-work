@@ -4,8 +4,13 @@
     f_print_draw2_message("pkmn "..f_format_num(pkmn.num))
 end $$
 
-|[f_draw3_pokeinfo]| function(pkmn)
-    f_print_draw3_message{'.'..pkmn.name, c_types[pkmn.type1].name, c_types[pkmn.type2].name}
+|[f_draw3_pokeinfo]| function(num)
+    local pkmn = c_pokemon[num] or {}
+    if pkmn.available then
+        f_print_draw3_message{'.'..pkmn.name, c_types[pkmn.type1].name, c_types[pkmn.type2].name}
+    else
+        f_print_draw3_message{".?????????", "????", "??????"}
+    end
 end $$
 
 -- Draw a pokemon by number. Pokemon is centered at x & y. sw and sh can be decimals.
@@ -56,10 +61,6 @@ end $$
 
 |[f_get_pokemon]| function(num)
     return c_pokemon[num]
-end $$
-
-|[f_get_browse_pokemon]| function(num)
-    return c_pokemon[g_available_pokemon[num]] or {draw=f_nop}
 end $$
 
 -- this is for populating the pokemon info menu (sometimes called browsestat in code)

@@ -2,11 +2,7 @@
 |[f_editparty_draw3]| function(game)
     local team = f_get_party(game:cursor'team1')
     local partypkmn = team[game:cursor'editparty'+1]
-    if partypkmn then
-        f_draw3_pokeinfo(f_get_pokemon(partypkmn.num))
-    else
-        f_print_draw3_message{".?????????", "????", "??????"}
-    end
+    f_draw3_pokeinfo(partypkmn and partypkmn.num or -1)
 end $$
 
 -- todo: put "move" directly on entry so pp reflects correctly.
@@ -22,7 +18,10 @@ end $$
     end
 end $$
 
-|[f_browse_draw3]|       function(game) f_draw3_pokeinfo(f_get_browse_pokemon(game:cursor'browse'+1))   end $$
+|[f_browse_draw3]|       function(game)
+    f_draw3_pokeinfo(game:cursor'browse')
+end $$
+
 |[f_main_draw3]|         function(game) f_print_draw3_message(_split(game:entry'main'.desc, '|'))      end $$
 |[f_pselactions_draw3]|  function(game) f_print_draw3_message(_split(game:entry'pselactions'.desc, '|'))      end $$
 

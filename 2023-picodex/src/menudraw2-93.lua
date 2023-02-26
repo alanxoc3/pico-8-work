@@ -1,4 +1,4 @@
-|[f_browse_draw2]|      function(game) f_draw2_pokeinfo(f_get_browse_pokemon(game:cursor'browse'+1)) end $$
+|[f_browse_draw2]|      function(game) f_draw2_pokeinfo(c_pokemon[game:cursor'browse']) end $$
 |[f_editparty_draw2]|   function(game) f_print_draw2_message("spot #"..(game:cursor'editparty'+1))    end $$
 |[f_partymoves_draw2]|  function(game) f_print_draw2_message("move #"..(game:cursor'partymoves'+1))    end $$
 |[f_fightover_draw2]|   function(game) f_print_draw2_message"match over" end $$

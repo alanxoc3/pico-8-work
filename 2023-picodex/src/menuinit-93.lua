@@ -34,7 +34,9 @@ end $$
         ]]
     )
 
-    menu[1].desc ..= #g_available_pokemon.."/151|pokemon"
+    local count = 0
+    for i=0,151 do count += c_pokemon[i].available and 1 or 0 end
+    menu[1].desc ..= count.."/151|pokemon"
     menu[3].desc ..= (@S_STORY).."/40|trainers"
     menu[5].desc ..= (@S_HOARD).."/151|pokemon"
 
@@ -44,15 +46,39 @@ end $$
 
 end $$
 
-|[f_browse_init]| function(_ENV)
+|[f_browse_init_shared]| function(_ENV, selectfunc)
+    local tbl = {}
+    for i=0,151 do
+        add(tbl, i)
+    end
+
     menu:refresh(
-        g_available_pokemon,
-        function(num) return {select=function(_ENV) _ENV:push'browsestat' end, num=num} end
+        tbl,
+        function(num)
+            return {
+                select=selectfunc,
+                disabled=not c_pokemon[num].available,
+                num=num
+            }
+        end
     )
 end $$
 
+|[f_browse_init]| function(_ENV)
+    f_browse_init_shared(_ENV, function(_ENV)
+        _ENV:push'browsestat'
+    end)
+end $$
+
+|[f_partypkmn_init]| function(_ENV)
+    f_browse_init_shared(_ENV, function(_ENV)
+        f_save_party(_ENV:cursor'team1', f_set_default_party_pkmn(f_get_party(_ENV:cursor'team1'), _ENV:cursor'editparty'+1, _ENV:cursor'browse'))
+        _ENV:pop()
+    end)
+end $$
+
 |[f_browsestat_init]| function(_ENV)
-    f_update_stat_menu(menu, f_get_browse_pokemon(_ENV:cursor'browse'+1))
+    f_update_stat_menu(menu, c_pokemon[_ENV:cursor'browse'])
 end $$
 
 |[f_partystat_init]| function(_ENV)
@@ -128,21 +154,6 @@ end $$
     ]])
 
     partymovesel.menu.c = 0
-end $$
-
-|[f_partypkmn_init]| function(_ENV)
-    menu:refresh(
-        g_available_pokemon,
-        function(num)
-            return {
-                select=function(_ENV)
-                    f_save_party(_ENV:cursor'team1', f_set_default_party_pkmn(f_get_party(_ENV:cursor'team1'), _ENV:cursor'editparty'+1, g_available_pokemon[_ENV:cursor'browse'+1]))
-                    _ENV:pop()
-                end,
-                num=num
-            }
-        end
-    )
 end $$
 
 |[f_partymoves_init]| function(_ENV)
