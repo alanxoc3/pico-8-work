@@ -87,7 +87,6 @@ end $$
     _foreach(_split'133,7,35,1,25,4', function(num)
         _add(party, {num=num, moves=f_get_natural_moveset(num)})
         _poke(S_POKEMON+num, 1)
-        _printh(num)
     end)
 
     if @S_NEW == 0 then

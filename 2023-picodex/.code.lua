@@ -743,7 +743,6 @@ local party={}
 _foreach(_split"133,7,35,1,25,4",function(num)
 _add(party,{num=num,moves=f_get_natural_moveset(num)})
 _poke(0x5e5a+num,1)
-_printh(num)
 end)
 if@0x5efc==0 then
 _poke(0x5efc,1)
