@@ -14,40 +14,53 @@ f_zclass[[o_modes,o_actor|
     stack;,;
 
     -- defaults are mostly functions, but also menu
-    defaults; menu,no, finit,%f_nop, init,%f_nop, update,%f_modes_default_update, draw1,%f_modes_default_draw1, draw2,%f_nop, draw3,%f_nop;
+    defaults;
+        menu,no,
+        ui_pl,"error",
+        finit,%f_nop,
+        init,%f_nop,
+        update,%f_modes_default_update,
+        draw1,%f_modes_default_draw1,
+        draw2,%f_nop,
+        draw3,%f_nop;
 
-    -- menu states
-    browse;       init,%f_browse_init,       draw2,%f_browse_draw2,       draw3,%f_browse_draw3;
-    partypkmn;    init,%f_partypkmn_init,    draw2,%f_browse_draw2,       draw3,%f_browse_draw3;
-    browsestat;   init,%f_browsestat_init,   draw2,%f_browse_draw2,       draw3,%f_browse_draw3, update,%f_browsestat_update; -- view pkmn info in browse
-    credits;      init,%f_credits_init,      draw2,%f_main_draw2,         draw3,%f_main_draw3;
-    fightover;    init,%f_fightover_init,    draw2,%f_fightover_draw2,    draw3,%f_fightover_draw3;
+    -- main
+    main; init,~f_main_init, draw2,~f_main_draw2, draw3,~f_main_draw3;
+
+    -- browse
+    browse;       init,%f_browse_init,     draw2,%f_browse_draw2, draw3,%f_browse_draw3;
+    browsestat;   init,%f_browsestat_init, draw2,%f_browse_draw2, draw3,%f_browse_draw3, update,%f_browsestat_update; -- view pkmn info in browse
+
+    -- edit
     editparty;    init,%f_editparty_init,    draw2,%f_editparty_draw2,    draw3,%f_editparty_draw3, draw1,%f_editparty_draw1;
+    partypkmn;    init,%f_partypkmn_init,    draw2,%f_browse_draw2,       draw3,%f_browse_draw3;
     switchparty;  init,%f_switchparty_init,  draw2,%f_editparty_draw2,    draw3,%f_editparty_draw3, draw1,%f_editparty_draw1;
-    main;         init,~f_main_init,         draw2,~f_main_draw2,         draw3,~f_main_draw3         ;
-    partyaction;  init,%f_partyaction_init,  draw2,%f_editparty_draw2,    draw3,%f_editparty_draw3    ;
+    partyaction;  init,%f_partyaction_init,  draw2,%f_editparty_draw2,    draw3,%f_editparty_draw3;
     moveaction;   init,%f_moveaction_init,   draw2,%f_partymoves_draw2,   draw3,%f_move_draw3;
     partymovesel; init,%f_partymovesel_init, draw2,%f_partymovesel_draw2, draw3,%f_move_draw3;
     partymoves;   init,%f_partymoves_init,   draw2,%f_partymoves_draw2,   draw3,%f_move_draw3;
-    pselactions;  init,%f_pselactions_init,  draw2,%f_turn_draw2,         draw3,%f_pselactions_draw3  ;
+
+    -- pre-fight menus
+    team1;        ui_pl,"player 1", init,%f_party_init,    draw2,%f_team_draw2, draw3,%f_party_draw3, disable_empty_party,no,   select_func,%f_party_select; -- t1
+    team1story;   ui_pl,"player 1", init,%f_party_init,    draw2,%f_team_draw2, draw3,%f_party_draw3, disable_empty_party,yes,  select_func,%f_story_select; -- s1
+    team1match;   ui_pl,"player 1", init,%f_party_init,    draw2,%f_team_draw2, draw3,%f_party_draw3, disable_empty_party,yes,  select_func,%f_match_select; -- s1
+    team1horde;   ui_pl,"player 1", init,%f_party_init,    draw2,%f_team_draw2, draw3,%f_party_draw3, disable_empty_party,yes,  select_func,%f_horde_select; -- s1
+    team2match;   ui_pl,"player 2", init,%f_party_init,    draw2,%f_team_draw2, draw3,%f_party_draw3, disable_empty_party,yes,  select_func,%f_match_start;  -- s1
+    team2story;   ui_pl,"trainer",  init,%f_fightsel_init, draw2,%f_team_draw2, draw3,%f_party_draw3;                                                        -- t2
+
+    -- in-fight menus
+    fightover;    init,%f_fightover_init,    draw2,%f_fightover_draw2,    draw3,%f_fightover_draw3;
+    pselactions;  init,%f_pselactions_init,  draw2,%f_turn_draw2,         draw3,%f_pselactions_draw3;
     pselmove;     init,%f_pselmove_init,     draw2,%f_turn_draw2,         draw3,%f_move_draw3;
     pselswitch;   init,%f_pselswitch_init,   draw2,%f_turn_draw2,         draw3,%f_pselactions_draw3, draw1,%f_editparty_draw1;
 
-    team1;        init,%f_party_init,        draw2,%f_main_draw2,         draw3,%f_party_draw3, disable_empty_party,no,   select_func,%f_party_select; -- t1
-    team1story;   init,%f_party_init,        draw2,%f_main_draw2,         draw3,%f_party_draw3, disable_empty_party,yes,  select_func,%f_story_select; -- s1
-    team1match;   init,%f_party_init,        draw2,%f_main_draw2,         draw3,%f_party_draw3, disable_empty_party,yes,  select_func,%f_match_select; -- s1
-    team1horde;   init,%f_party_init,        draw2,%f_main_draw2,         draw3,%f_party_draw3, disable_empty_party,yes,  select_func,%f_horde_select; -- s1
+    -- in-fight screens
+    p1sel;        next,p2sel, init,%f_psel_init, update,%f_nop,         draw1,%f_nop,        p0key,p1;
+    p2sel;        next,turn,  init,%f_psel_init, update,%f_nop,         draw1,%f_nop,        p0key,p2;
+    turn;         next,p1sel, init,%f_turn_init, update,%f_turn_update, draw1,%f_turn_draw1, draw2,%f_turn_draw2, draw3,%f_turn_draw3, cur_action,no;
 
-    team2match;   init,%f_party_init,        draw2,%f_main_draw2,         draw3,%f_party_draw3, disable_empty_party,yes,  select_func,%f_match_start; -- s1
-    team2story;   init,%f_fightsel_init,     draw2,%f_main_draw2,         draw3,%f_party_draw3;                                                       -- t2
-
-    -- non-menu states
-    -- these are the different states for a fight
-    -- get to these with "f_begin_fight", because a few variables need to be set before entering the fight loop.
-    -- the "next" state changes dynamically for p1sel and turn, based on human vs computer players.
-    p1sel;        next,p2sel, init,%f_psel_init, p0key,p1, update,%f_nop, draw1,%f_nop;
-    p2sel;        next,turn,  init,%f_psel_init, p0key,p2, update,%f_nop, draw1,%f_nop;
-    turn;         next,p1sel,           update,%f_turn_update,      draw1,%f_turn_draw1,      draw2,%f_turn_draw2, draw3,%f_turn_draw3, init,%f_turn_init, cur_action,no;
+    -- credits
+    credits;      init,%f_credits_init,      draw2,%f_main_draw2,         draw3,%f_main_draw3;
 ]]
 
 |[f_modes_default_update]| function(_ENV) menu.update(_ENV) end $$
@@ -132,13 +145,13 @@ end $$
 
     _sfx(61,0)
 
-    _menuitem(1, "close picodex", function()
-        _menuitem(1) -- remove menu item
+    _menuitem(2, "close picodex", function()
         _menuitem(2) -- remove menu item
+        _menuitem(3) -- remove menu item
         _ENV:load'closing'
     end)
 
-    _menuitem(2, "swap 🅾️/❎", function()
+    _menuitem(3, "swap 🅾️/❎", function()
         _poke(S_SWAP_CONTROLS, @S_SWAP_CONTROLS == 0 and 1 or 0)
     end)
 end $$

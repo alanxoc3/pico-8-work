@@ -9,13 +9,13 @@ f_zclass[[o_game_state,o_actor|
 
     fadein; next,game, duration,0, sinit,%f_gamefadein_init; -- fadein; next,closed, duration,0, sinit,%f_gamefadein_init;
 
-    closed;     next,opening,                            sinit,%f_closed_init, update,%f_closed_update, draw,%f_closed_draw;
-    opening;    next,starting_1,          duration,.25,                                             draw,%f_opening_draw;
-    starting_1; next,starting_2, light,1, duration,.125, sinit,%f_beep, draw,%f_opened_draw;
-    starting_2; next,starting_3, light,2, duration,.125, sinit,%f_beep, draw,%f_opened_draw;
-    starting_3; next,game,       light,3, duration,.125, sinit,%f_beep, draw,%f_opened_draw;
-    game;       next,closing,    light,4,                sinit,%f_game_init,   update,%f_game_update,   draw,%f_game_draw;
-    closing;    next,closed,              duration,.25,                      update,%f_nop,            draw,%f_closing_draw;
+    closed;     next,opening,                            sinit,%f_closed_init, draw,%f_closed_draw,  update,%f_closed_update;
+    opening;    next,starting_1,          duration,.25,                        draw,%f_opening_draw;
+    starting_1; next,starting_2, light,1, duration,.125, sinit,%f_beep,        draw,%f_opened_draw;
+    starting_2; next,starting_3, light,2, duration,.125, sinit,%f_beep,        draw,%f_opened_draw;
+    starting_3; next,game,       light,3, duration,.125, sinit,%f_beep,        draw,%f_opened_draw;
+    game;       next,closing,    light,4,                sinit,%f_game_init,   draw,%f_game_draw,    update,%f_game_update;
+    closing;    next,closed,              duration,.25,                        draw,%f_closing_draw, update,%f_nop;
 ]]
 
 -- every state change will clean up all the entities.
@@ -23,6 +23,10 @@ f_zclass[[o_game_state,o_actor|
     f_clean_all_entities('o_game_state', 'o_fader_in')
     state:sinit()
 end $$
+
+|[g_bgs]| {0b0111101111011110, ∧, ░, ▒} $$
+|[g_bg]| 0 $$
+
 
 function _init()
     local _ENV = _g
@@ -61,7 +65,11 @@ function _init()
     -- Need the pokedex tiles to stay loaded. This starts at sprite index #96.
     _memcpy(0x0000, 0xc000, 0x2000)
 
-    g_tl = o_game_state()
+    _menuitem(1, "change bg", function()
+        g_bg = (g_bg + 1) % 4
+    end)
+
+    g_picodex = o_game_state()
 end
 
 function _update60()

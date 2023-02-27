@@ -6,7 +6,7 @@ end $$
 
 -- you can factory reset when the pokedex is closed
 |[f_closed_init]| function(_ENV)
-    _menuitem(1, "factory reset", function()
+    _menuitem(2, "factory reset", function()
         _sfx(59,0)
         _memset(0x5e00, 0, 0x100)
         _ENV:start_timer('shaking', .5)
@@ -22,10 +22,10 @@ end $$
     if not f_any_btn() and backbuttonheld then
         backbuttonheld = false
         _ENV:load()
-        _menuitem(1) -- no factory reset now
+        _menuitem(2) -- no factory reset now
     elseif f_any_btn() then
         backbuttonheld = true
-        _menuitem(1) -- no factory reset now
+        _menuitem(2) -- no factory reset now
     end
 end $$
 
@@ -46,12 +46,28 @@ end $$
 end $$
 
 -- utility funcs
-|[f_beep]| function() _sfx(60, 0) end $$
+|[f_beep]| function()
+    if not g_picodex:is_active'beep' then
+        _sfx(60, 0)
+        g_picodex:start_timer('beep', .15)
+    end
+end $$
 
 |[f_draw_picodex]| function(shaking, rotation, l_screen, tr_screen, br_screen, light, backbuttonheld, top_row_buttons, bot_row_buttons)
     light = light or 0
 
-    f_zcamera(28-(rotation+1)*14+(shaking and _flr(_rnd(3)-1) or 0), 15, function()
+    printh(#_g.g_bgs)
+    _fillp(g_bgs[g_bg+1])
+    _rectfill(0,0,127,127,1)
+    _fillp()
+    --rect(0,0,127,127,1)
+    
+    local off = 1
+    f_zspr(102,                  64, off+9, 5, 1)
+    f_zprint("a pico-8 pokedex sim", 64, off+13, 7, 0)
+
+    -- f_zprint("picodex", 63, 20, 7, 0)
+    f_zcamera(28-(rotation+1)*14+(shaking and _flr(_rnd(3)-1) or 0), 25, function()
         f_draw_back_panel(light)
         f_draw_left_flap(light >= 4, l_screen)
         f_draw_right_flap(light >= 4, rotation, backbuttonheld, tr_screen, br_screen, top_row_buttons, bot_row_buttons)
@@ -103,6 +119,12 @@ end $$
     _spr(g_bd and 187 or 155, 15, 81)
     _spr(g_bo and 170 or 138, 39, 77)
     _spr(g_bx and 172 or 140, 47, 77)
+
+    if g_picodex:is_active'beep' then
+        --circ(50, 65, g_picodex:get_elapsed_percent'beep'*4+4, 1)
+        --circ(50, 65, g_picodex:get_elapsed_percent'beep'*4+5, 12)
+        circ(50, 65, g_picodex:get_elapsed_percent'beep'*5+3, 1)
+    end
 end $$
 
 -- flap_rotation is between -1 and 1. -1 means closed, 1 means open.
@@ -131,8 +153,8 @@ end $$
 |[f_draw_back_panel]| function(light)
     local rate = _t()*7
     _map(24, 0, -1,  1, 9, 12)
-    _spr((light > 0) and (rate%11<.5 and 131 or 130) or 132, 19, 3)
-    _spr((light > 1) and (rate%13<.5 and 131 or 129) or 132, 14, 3)
-    _spr((light > 2) and (rate%17<.5 and 131 or 128) or 132, 9,  3)
-    _spr((light > 3) and (rate%43<.5 and 134 or 133) or 135, 3,  3)
+    _spr((light > 0) and 130 or 132, 19, 3) -- or 131)
+    _spr((light > 1) and 129 or 132, 14, 3) -- or 131)
+    _spr((light > 2) and 128 or 132, 9,  3) -- or 131)
+    _spr((light > 3) and 133 or 135, 3,  3) -- or 134)
 end $$

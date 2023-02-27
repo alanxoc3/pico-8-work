@@ -26,24 +26,30 @@ end $$
 
 |[f_browsestat_update]| function(game)
     if g_bpl then
+        local stayed = true
         for i=game.browse.menu.c-1,0,-1 do
             if c_pokemon[i].available() then
                 game.browse.menu.c = i
+                stayed = false
                 break
             end
         end
 
+        if stayed then f_beep() end
         f_browsestat_init(game)
     end
 
     if g_bpr then
+        local stayed = true
         for i=game.browse.menu.c+1,151 do
             if c_pokemon[i].available() then
                 game.browse.menu.c = i
+                stayed = false
                 break
             end
         end
 
+        if stayed then f_beep() end
         f_browsestat_init(game)
     end
 

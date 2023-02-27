@@ -44,9 +44,24 @@ end $$
 |[f_menu_cancel]| function(game) game:pop() end $$
 
 -- cursor is between 0 and #menu-1. view is set too
-|[f_menu_set]| function(menu, delta)
-    local newval = menu.c+delta
-    if newval == _mid(0, newval, #menu-1) then menu.c = newval end
+|[f_menu_set]| function(menu, delta, is_ud)
+    if is_ud then
+        local newval = menu.c+delta*menu.r
+        if newval == _mid(0, newval, #menu-1) then
+            menu.c = newval
+        else
+            f_beep()
+        end
+    else
+        local newval = menu.c+delta
+        local left = menu.c - menu.c%menu.r
+        if newval == _mid(left, newval, left + menu.r-1) then
+            menu.c = newval
+        else
+            f_beep()
+        end
+    end
+
     menu.c = _mid(0, menu.c, #menu-1) -- always ensure the cursor is within bounds
 
     -- view logic
@@ -61,15 +76,19 @@ end $$
     if g_bpo then menu.cancel(game) end
     if g_bpu then menu.v-=1 end
     if g_bpd then menu.v+=1 end
+    local oldview = menu.v
     menu.v = _mid(menu.viewmin, menu.v, #menu-3)
+    if menu.v ~= oldview then
+        f_beep()
+    end
 end $$
 
 -- extra args are passed to callback, prob want to pass "game" there.
 |[f_menu_update]| function(game)
     local menu = game.menu
     menu:set'0'
-    if g_bpu then menu:set(-menu.r) end
-    if g_bpd then menu:set( menu.r) end
+    if g_bpu then menu:set(-1, true) end
+    if g_bpd then menu:set(1,  true) end
     if g_bpl then menu:set'-1' end
     if g_bpr then menu:set'1' end
 
