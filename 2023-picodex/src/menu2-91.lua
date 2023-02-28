@@ -1,4 +1,3 @@
--- todo: test xbtn & ybtn token count vs not having them
 -- menu can be created or updated.
 -- when updated, cursor position remains. entries change.
 -- when created, cursor position is 0.
@@ -78,17 +77,15 @@ end $$
 |[f_menu_view_update]| function(game)
     local menu = game.menu
     if g_bpo then menu.cancel(game) end
-    if g_bpu then menu.v-=1 end
-    if g_bpd then menu.v+=1 end
     if g_bpx then game:xfunc() end
-    if g_bpl then game:lfunc() end
-    if g_bpr then game:rfunc() end
+    menu.v+=g_bpv
+    if g_bph ~= 0 then game:lrfunc(g_bph) end
 
     local oldview = menu.v
     menu.v = _mid(menu.viewmin, menu.v, #menu-3)
     if menu.v ~= oldview then
         f_beep()
-    elseif g_bpu or g_bpd then
+    elseif g_bpv ~= 0 then
         f_beep_back()
     end
 end $$
@@ -97,10 +94,8 @@ end $$
 |[f_menu_update]| function(game)
     local menu = game.menu
     menu:set'0'
-    if g_bpu then menu:set(-1, true) end
-    if g_bpd then menu:set(1,  true) end
-    if g_bpl then menu:set'-1' end
-    if g_bpr then menu:set'1' end
+    menu:set(g_bpv, true)
+    menu:set(g_bph)
 
     if g_bpx then
         local entry = menu[menu.c+1]

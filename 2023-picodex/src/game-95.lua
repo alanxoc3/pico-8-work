@@ -17,7 +17,7 @@ f_zclass[[o_modes,o_actor|
         ui_pl,"error",
         finit,%f_nop,
         init,%f_nop,
-        rfunc,%f_nop, lfunc,%f_nop, xfunc,%f_nop,
+        lrfunc,%f_nop, xfunc,%f_nop,
         update,%f_modes_default_update,
         draw1,%f_modes_default_draw1,
         draw2,%f_nop,
@@ -28,7 +28,7 @@ f_zclass[[o_modes,o_actor|
 
     -- browse
     browse;       init,%f_browse_init,     draw2,%f_browse_draw2, draw3,%f_browse_draw3;
-    browsestat;   init,%f_browsestat_init, draw2,%f_browse_draw2, draw3,%f_browse_draw3, lfunc,%f_browsestat_lfunc, rfunc,%f_browsestat_rfunc, xfunc,%f_browsestat_xfunc; -- view pkmn info in browse
+    browsestat;   init,%f_browsestat_init, draw2,%f_browse_draw2, draw3,%f_browse_draw3, lrfunc,%f_browsestat_lrfunc, xfunc,%f_browsestat_xfunc; -- view pkmn info in browse
 
     -- edit
     editteam;    init,%f_editteam_init,    draw2,%f_editteam_draw2,    draw3,%f_editteam_draw3, draw1,%f_editteam_draw1;
@@ -59,7 +59,7 @@ f_zclass[[o_modes,o_actor|
     turn;         next,p1sel, init,%f_turn_init, update,%f_turn_update, draw1,%f_turn_draw1, draw2,%f_turn_draw2, draw3,%f_turn_draw3, cur_action,no;
 
     -- credits
-    credits;      init,%f_credits_init,      draw2,%f_main_draw2,         draw3,%f_main_draw3, lfunc,%f_beep, rfunc,%f_beep, xfunc,%f_credits_xfunc;
+    credits;      init,%f_credits_init,      draw2,%f_main_draw2,         draw3,%f_main_draw3, lrfunc,%f_beep, xfunc,%f_credits_xfunc;
 ]]
 
 |[f_modes_default_update]| function(_ENV) menu.update(_ENV) end $$

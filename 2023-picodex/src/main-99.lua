@@ -87,16 +87,13 @@ end
 
 function _update60()
     local _ENV = _g
-    g_bl, g_br, g_bu, g_bd, g_bo, g_bx, g_bpl, g_bpr, g_bpu, g_bpd, g_bpo, g_bpx = _btn'0', _btn'1', _btn'2', _btn'3', _btn'4', _btn'5', _btnp'0', _btnp'1', _btnp'2', _btnp'3', _btnp'4', _btnp'5'
+    g_bpo, g_bpx = _btnp'4', _btnp'5'
+    -- horizontal and vertical
+    g_bph, g_bpv = f_btn_helper(_btnp, 0, 1), f_btn_helper(_btnp, 2, 3)
 
     if @S_SWAP_CONTROLS == 1 then
-        g_bo,  g_bx  = g_bx,  g_bo
         g_bpo, g_bpx = g_bpx, g_bpo
     end
-
-    -- DEBUG_BEGIN
-    if g_bo and g_bpx then g_debug = not g_debug end
-    -- DEBUG_END
 
     f_zcall(f_loop_entities, [[
         1;,o_actor,clean;

@@ -15,7 +15,9 @@ end $$
 end $$
 
 |[f_any_btn]| function()
-    return g_bl or g_br or g_bu or g_bd or g_bx or g_bo
+    -- check for any button, besides pause button
+    -- bits 6/7 are pause button related, so ignore those
+    return _btn() & 0x3f ~= 0
 end $$
 
 |[f_closed_update]| function(_ENV)
@@ -109,12 +111,13 @@ end $$
     if is_on then f_draw_screen(11, 21, 40, 40, screen_func) end
 
     _map(8,  0, -1,  9, 8,  11)
-    _spr(g_bl and 186 or 154, 07, 77) -- button presses
-    _spr(g_br and 188 or 156, 23, 77)
-    _spr(g_bu and 171 or 139, 15, 73)
-    _spr(g_bd and 187 or 155, 15, 81)
-    _spr(g_bo and 170 or 138, 39, 77)
-    _spr(g_bx and 172 or 140, 47, 77)
+
+    _spr(_btn'0' and 186 or 154, 07, 77) -- button presses
+    _spr(_btn'1' and 188 or 156, 23, 77)
+    _spr(_btn'2' and 171 or 139, 15, 73)
+    _spr(_btn'3' and 187 or 155, 15, 81)
+    _spr(_btn'4' and 170 or 138, 39, 77)
+    _spr(_btn'5' and 172 or 140, 47, 77)
 
     if stat'46' >= 0 then
         circ(50, 65, 5+sin(t()*2), 12)

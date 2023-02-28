@@ -24,12 +24,12 @@
     if g_bpo then f_beep() end
 end $$
 
--- todo, combine lfunc and rfunc
-|[f_browsestat_lfunc]| function(game)
+-- lr is guaranteed to be -1 or 1
+|[f_browsestat_lrfunc]| function(_ENV, lr)
     local stayed = true
-    for i=game.browse.menu.c-1,0,-1 do
+    for i=browse.menu.c+lr,75.5+75.5*lr,lr do
         if c_pokemon[i].available() then
-            game.browse.menu.c = i
+            browse.menu.c = i
             stayed = false
             f_beep_back()
             break
@@ -37,22 +37,7 @@ end $$
     end
 
     if stayed then f_beep() end
-    f_browsestat_init(game)
-end $$
-
-|[f_browsestat_rfunc]| function(game)
-    local stayed = true
-    for i=game.browse.menu.c+1,151 do
-        if c_pokemon[i].available() then
-            game.browse.menu.c = i
-            stayed = false
-            f_beep_back()
-            break
-        end
-    end
-
-    if stayed then f_beep() end
-    f_browsestat_init(game)
+    f_browsestat_init(_ENV)
 end $$
 
 |[f_browsestat_xfunc]| function(game)
@@ -68,5 +53,4 @@ end $$
 --     if g_bpo then game:pop() end
 -- end $$
 
--- todo: add xbtn/ybtn
 -- todo: browse shouldn't share cursor with edit team
