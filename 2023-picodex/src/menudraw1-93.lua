@@ -1,4 +1,4 @@
-|[f_editparty_draw1]| function(game)
+|[f_editteam_draw1]| function(game)
     f_modes_default_draw1(game)
     f_wobble_text("team #"..game:cursor'team1'+1, 20, 27, 1)
 end $$

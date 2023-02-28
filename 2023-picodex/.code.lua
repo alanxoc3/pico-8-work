@@ -37,7 +37,7 @@ end
 function f_zobj(...)
 return f_zobj_set(_setmetatable({},{__index=_g}),...)
 end
-f_zobj_set(_g,[[g_zclass_constructors,@,g_zclass_entities,@,g_zclass_new_entities,@,f_zclass,@,f_register_entities,@,f_deregister_entity,@,f_call_not_nil,@,f_does_entity_exist,@,f_loop_entities,@,f_clean_all_entities,@,f_zobj,@,f_zobj_set,@,f_zobj_eval,@,f_nop,@,f_zspr,@,f_flr_rnd,@,f_rnd_one,@,f_zcall_tbl,@,f_zcall,@,f_zcls,@,f_zcamera,@,f_actor_load,@,f_actor_loadlogic,@,f_actor_state,@,f_actor_is_alive,@,f_actor_kill,@,f_actor_clean,@,f_timer_reset_timer,@,f_timer_end_timer,@,f_timer_get_elapsed_percent,@,f_timer_is_active,@,f_timer_tick,@,f_print_draw2_message,@,f_print_draw3_message,@,c_pokemon,@,f_calc_max_stat,@,f_populate_c_pokemon,@,f_get_natural_moveset,@,c_types,@,c_bg_styles,@,c_zmovetype,@,c_moves_raw,@,c_moves,@,f_populate_c_moves,@,c_trainers,@,f_menu_state_callback,@,f_create_menu_view,@,f_create_menu,@,f_menu_refresh,@,f_menu_cancel,@,f_menu_set,@,f_menu_view_update,@,f_menu_update,@,f_menu_draw1,@,f_menu_drawentry,@,f_browse_drawentry,@,f_create_team_pkmn,@,f_create_party_pkmn,@,f_get_fight_party,@,f_party_pkmn_to_active,@,f_editparty_draw1,@,f_turn_draw1,@,f_browse_draw2,@,f_editparty_draw2,@,f_partymoves_draw2,@,f_team_draw2,@,f_fightover_draw2,@,f_pselactions_draw2,@,f_pselmove_draw2,@,f_partymovesel_draw2,@,f_main_draw2,@,f_turn_draw2,@,f_editparty_draw3,@,f_move_draw3,@,f_browse_draw3,@,f_main_draw3,@,f_pselactions_draw3,@,f_party_draw3,@,f_pselmove_draw3,@,f_fightover_draw3,@,f_turn_draw3,@,f_fightover_init,@,f_main_init,@,f_browse_init_shared,@,f_browse_init,@,f_partypkmn_init,@,f_browsestat_init,@,f_credits_init,@,f_unlock_pkmn,@,f_fightsel_init,@,f_partyaction_init,@,f_moveaction_init,@,f_movedel,@,f_partymoves_init,@,f_partymovesel_init,@,f_pselmove_init,@,f_pselactions_init,@,f_party_init,@,f_editparty_init,@,f_switchparty_init,@,f_pselswitch_init,@,f_turn_init,@,f_turn_update,@,f_browsestat_update,@,f_modes_default_update,@,f_modes_default_draw1,@,f_modes_cursor,@,f_modes_entry,@,f_modes_push,@,f_modes_pop,@,f_game_init,@,f_game_update,@,f_game_draw1,@,f_game_draw2,@,f_game_draw3,@,f_moveup_init,@,f_closed_init,@,f_any_btn,@,f_closed_update,@,f_draw_picodex2,@,f_minisfx,@,f_beep_done,@,f_beep_okay,@,f_beep_back,@,f_beep,@,f_draw_picodex,@,f_picodex_map,@,f_wobble_text,@,f_zprint,@,f_draw_screen,@,f_draw_left_flap,@,f_draw_right_flap,@,f_draw_back_panel,@,f_draw2_pokeinfo,@,f_draw3_pokeinfo,@,f_draw_pkmn,@,f_draw_pkmn_out,@,f_format_num,@,f_get_pokemon,@,f_update_stat_menu,@,f_partydel,@,f_set_default_party_pkmn,@,f_story_select,@,f_match_select,@,f_match_start,@,f_horde_death,@,f_horde_select,@,f_set_party_pkmn_move,@,f_party_select,@,f_get_party,@,f_save_party,@,f_select_move,@,f_get_other_pl,@,f_draw_hp,@,f_newaction,@,f_addaction,@,f_logic_faint,@,f_pop_next_action,@,f_get_possible_move_slots,@,f_select_random_move_slot,@,f_generic_attack,@,f_get_crit_ratio,@,f_move_accuracy_rate,@,f_calc_move_damage,@,f_psel_init,@,f_psel_forfeit,@,f_begin_fight,@,f_get_next_active,@,f_extract_sheet,@,f_vget,@,f_vset,@,f_px9_decomp,@,f_game_state_init,@,g_bgs,@,f_logo_draw,@,f_parse_numlist,@]],{},{},{},function(meta_and_att_str)
+f_zobj_set(_g,[[g_zclass_constructors,@,g_zclass_entities,@,g_zclass_new_entities,@,f_zclass,@,f_register_entities,@,f_deregister_entity,@,f_call_not_nil,@,f_does_entity_exist,@,f_loop_entities,@,f_clean_all_entities,@,f_zobj,@,f_zobj_set,@,f_zobj_eval,@,f_nop,@,f_zspr,@,f_flr_rnd,@,f_rnd_one,@,f_zcall_tbl,@,f_zcall,@,f_zcls,@,f_zcamera,@,f_actor_load,@,f_actor_loadlogic,@,f_actor_state,@,f_actor_is_alive,@,f_actor_kill,@,f_actor_clean,@,f_timer_reset_timer,@,f_timer_end_timer,@,f_timer_get_elapsed_percent,@,f_timer_is_active,@,f_timer_tick,@,f_print_draw2_message,@,f_print_draw3_message,@,c_pokemon,@,f_calc_max_stat,@,f_populate_c_pokemon,@,f_get_natural_moveset,@,c_types,@,c_bg_styles,@,c_zmovetype,@,c_moves_raw,@,c_moves,@,f_populate_c_moves,@,c_trainers,@,f_menu_state_callback,@,f_create_menu_view,@,f_create_menu,@,f_menu_refresh,@,f_menu_cancel,@,f_menu_set,@,f_menu_view_update,@,f_menu_update,@,f_menu_draw1,@,f_menu_drawentry,@,f_browse_drawentry,@,f_create_team_pkmn,@,f_create_team_pkmn,@,f_get_fight_team,@,f_team_pkmn_to_active,@,f_editteam_draw1,@,f_turn_draw1,@,f_browse_draw2,@,f_editteam_draw2,@,f_teammoves_draw2,@,f_team_draw2,@,f_fightover_draw2,@,f_pselactions_draw2,@,f_pselmove_draw2,@,f_teammovesel_draw2,@,f_main_draw2,@,f_turn_draw2,@,f_editteam_draw3,@,f_move_draw3,@,f_browse_draw3,@,f_main_draw3,@,f_pselactions_draw3,@,f_team_draw3,@,f_pselmove_draw3,@,f_fightover_draw3,@,f_turn_draw3,@,f_fightover_init,@,f_main_init,@,f_browse_init_shared,@,f_browse_init,@,f_teampkmn_init,@,f_browsestat_init,@,f_credits_init,@,f_unlock_pkmn,@,f_fightsel_init,@,f_teamaction_init,@,f_moveaction_init,@,f_movedel,@,f_teammoves_init,@,f_teammovesel_init,@,f_pselmove_init,@,f_pselactions_init,@,f_team_init,@,f_editteam_init,@,f_switchteam_init,@,f_pselswitch_init,@,f_turn_init,@,f_turn_update,@,f_browsestat_lfunc,@,f_browsestat_rfunc,@,f_browsestat_xfunc,@,f_credits_xfunc,@,f_modes_default_update,@,f_modes_default_draw1,@,f_modes_cursor,@,f_modes_entry,@,f_modes_push,@,f_modes_pop,@,f_game_init,@,f_game_update,@,f_game_draw1,@,f_game_draw2,@,f_game_draw3,@,f_moveup_init,@,f_closed_init,@,f_any_btn,@,f_closed_update,@,f_draw_picodex2,@,f_minisfx,@,f_beep_done,@,f_beep_okay,@,f_beep_back,@,f_beep,@,f_draw_picodex,@,f_picodex_map,@,f_wobble_text,@,f_zprint,@,f_draw_screen,@,f_draw_left_flap,@,f_draw_right_flap,@,f_draw_back_panel,@,f_draw2_pokeinfo,@,f_draw3_pokeinfo,@,f_draw_pkmn,@,f_draw_pkmn_out,@,f_format_num,@,f_get_pokemon,@,f_update_stat_menu,@,f_teamdel,@,f_set_default_team_pkmn,@,f_story_select,@,f_match_select,@,f_match_start,@,f_horde_death,@,f_horde_select,@,f_set_team_pkmn_move,@,f_team_select,@,f_get_team,@,f_save_team,@,f_select_move,@,f_get_other_pl,@,f_draw_hp,@,f_newaction,@,f_addaction,@,f_logic_faint,@,f_pop_next_action,@,f_get_possible_move_slots,@,f_select_random_move_slot,@,f_generic_attack,@,f_get_crit_ratio,@,f_move_accuracy_rate,@,f_calc_move_damage,@,f_psel_init,@,f_psel_forfeit,@,f_begin_fight,@,f_get_next_active,@,f_extract_sheet,@,f_vget,@,f_vset,@,f_px9_decomp,@,f_game_state_init,@,g_bgs,@,f_logo_draw,@,f_parse_numlist,@]],{},{},{},function(meta_and_att_str)
 local meta,template,memloc,expected_memloc_value=_unpack(_split(meta_and_att_str,"|"))
 local parents=_split(meta)
 local class=_deli(parents,1)
@@ -270,7 +270,7 @@ pkmn.draw=function(...)
 f_draw_pkmn_out(pkmn.num,...)
 end
 pkmn.available=function()
-if pkmn.num>0 then
+if pkmn.num>=0 then
 return@(0x5e5a+pkmn.num)>0
 end
 end
@@ -317,6 +317,7 @@ if is_ud then
 local newval=menu.c+delta*menu.r
 if newval==_mid(0,newval,#menu-1)then
 menu.c=newval
+if 0+delta ~=0 then f_beep_back()end
 else
 f_beep()
 end
@@ -325,6 +326,7 @@ local newval=menu.c+delta
 local left=menu.c-menu.c%menu.r
 if newval==_mid(left,newval,left+menu.r-1)then
 menu.c=newval
+if 0+delta ~=0 then f_beep_back()end
 else
 f_beep()
 end
@@ -338,10 +340,15 @@ local menu=game.menu
 if g_bpo then menu.cancel(game)end
 if g_bpu then menu.v-=1 end
 if g_bpd then menu.v+=1 end
+if g_bpx then game:xfunc()end
+if g_bpl then game:lfunc()end
+if g_bpr then game:rfunc()end
 local oldview=menu.v
 menu.v=_mid(menu.viewmin,menu.v,#menu-3)
 if menu.v ~=oldview then
 f_beep()
+elseif g_bpu or g_bpd then
+f_beep_back()
 end
 end,function(game)
 local menu=game.menu
@@ -362,36 +369,30 @@ end
 if g_bpo then menu.cancel(game)end
 end,function(game)
 local menu=game.menu
-local c,v=menu.c,menu.v
-local y=-10
 local cellw=menu.r>1 and 10 or 40
-local y1,y2=0,39
 local xoff=20-(menu.r*cellw)/2
-_rectfill(0,y1,39,y2,1)
-_rectfill(0,0+5-menu.v*10,39,0+4+(_max(_ceil(#menu/menu.r),40\10-1)-menu.v)*10,13)
+f_zcall(_rectfill,[[;,0,0,39,39,1;;,0,@,39,@,13]],5-menu.v*10,4+(_max(_ceil(#menu/menu.r),3)-menu.v)*10)
 for i=-1,menu.r*5-1 do
 local index=(menu.v-1)*menu.r+i+1
 local entry=menu[index]
-local style_ind,x,y=(entry or{style=0}).style or 1,xoff+i%menu.r*10,0+i\menu.r*10
 if entry then
+local style_ind,x,y=entry.style or 1,xoff+i%menu.r*10,i\menu.r*10
 if entry.disabled then style_ind=3 end
 if index-1==menu.c then style_ind+=1 end
-end
-local style=c_menustyles[style_ind]
-if entry and not entry.hidden then
-_rectfill(x,y-5,x+cellw-1,y+4,style.bg)
-f_zcamera(i%menu.r*cellw+xoff+cellw/2,0+i\menu.r*10-3,function()
-menu.edraw(entry,style)
+if not entry.hidden then
+_rectfill(x,y-5,x+cellw-1,y+4,c_menustyles[style_ind].bg)
+f_zcamera(i%menu.r*cellw+xoff+cellw/2,i\menu.r*10-3,function()
+menu.edraw(entry,c_menustyles[style_ind])
 end)
+end
 end
 end
 end,function(entry,style)
 if entry.pkmn then
 local pkmn=f_get_pokemon(entry.pkmn)
 local style=c_bg_styles[c_types[pkmn.type1].bg]
-_rectfill(0-20,5-10+3,39-20,24-10+3,style.bg)
-_rectfill(0-20,21-10+3,39-20,24-10+3,style.aa)
-pkmn.draw(20-20,-5+20-10+3,style.aa,1,1)
+f_zcall(_rectfill,[[;,-20,-2,19,17,@;;,-20,14,19,17,@]],style.bg,style.aa)
+f_zcall(pkmn.draw,[[;,0,8,@,1,1]],style.aa)
 else
 f_wobble_text(entry.name,0,0,style.fg)
 end
@@ -412,21 +413,21 @@ moveids=(function()local m={}for i=1,4 do m[i]=moves[i]end return m end)(),
 hp=pkmn.maxhp,
 movepps=(function()local m={}for i=1,4 do m[i]=moves[i]and c_moves[moves[i]].pp end return m end)(),
 }
-end,function(party)
-local fightparty={}
+end,function(team)
+local fightteam={}
 for i=1,6 do
-local cur=party[i]
+local cur=team[i]
 if cur then
-fightparty[i]=f_create_party_pkmn(cur.num,cur.moves)
+fightteam[i]=f_create_team_pkmn(cur.num,cur.moves)
 end
 end
-return fightparty
-end,function(partypkmn)
+return fightteam
+end,function(teampkmn)
 return{
-type1=c_pokemon[partypkmn.num].type1,
-type2=c_pokemon[partypkmn.num].type2,
-moveids=(function()local m={}for i=1,4 do m[i]=partypkmn.moveids[i]end return m end)(),
-movepps=partypkmn.movepps,
+type1=c_pokemon[teampkmn.num].type1,
+type2=c_pokemon[teampkmn.num].type2,
+moveids=(function()local m={}for i=1,4 do m[i]=teampkmn.moveids[i]end return m end)(),
+movepps=teampkmn.movepps,
 stages=f_zobj[[special,0,defense,0,attack,0,speed,0,accuracy,0,evasion,0]],
 getstat=function(a,stat)
 local stage=a.stages[stat]
@@ -439,7 +440,7 @@ or _mid(2,2+stage,8)/_mid(2,2-stage,8)
 ))
 end,
 minor={},
-shared=partypkmn,
+shared=teampkmn,
 }
 end,function(game)
 f_modes_default_draw1(game)
@@ -461,8 +462,8 @@ f_zprint(a2.shared.hp.."H",1,6+2,13,-1)
 f_draw_hp(-1,8-6,a2.shared.hp,a2.shared.maxhp,-1,1)
 c_pokemon[a2.shared.num].draw(40-10,15,5,-1)
 end
-end,function(game)f_draw2_pokeinfo(c_pokemon[game:cursor"browse"])end,function(game)f_print_draw2_message("spot #"..(game:cursor"editparty"+1))end,function(game)f_print_draw2_message("move #"..(game:cursor"partymoves"+1))end,function(game)f_print_draw2_message(game.ui_pl)end,function(game)f_print_draw2_message"match over" end,function(_)end,function(game)end,function(game)
-local move=game:entry"partymovesel"
+end,function(game)f_draw2_pokeinfo(c_pokemon[game:cursor"browse"])end,function(game)f_print_draw2_message("spot #"..(game:cursor"editteam"+1))end,function(game)f_print_draw2_message("move #"..(game:cursor"teammoves"+1))end,function(game)f_print_draw2_message(game.ui_pl)end,function(game)f_print_draw2_message"match over" end,function(_)end,function(game)end,function(game)
+local move=game:entry"teammovesel"
 f_print_draw2_message(move and move.ref)
 end,function()
 _rectfill(0,0,46,13,13)
@@ -476,9 +477,9 @@ _pal()
 end,function(game)
 f_print_draw2_message(game.cur_action.pl.name)
 end,function(game)
-local team=f_get_party(game:cursor"team1")
-local partypkmn=team[game:cursor"editparty"+1]
-f_draw3_pokeinfo(partypkmn and partypkmn.num or-1)
+local team=f_get_team(game:cursor"team1")
+local teampkmn=team[game:cursor"editteam"+1]
+f_draw3_pokeinfo(teampkmn and teampkmn.num or-1)
 end,function(game)
 local num=game:entry().num
 if num then
@@ -549,7 +550,7 @@ _ENV:push"browsestat"
 end)
 end,function(_ENV)
 f_browse_init_shared(_ENV,function(_ENV)
-f_save_party(_ENV:cursor"team1",f_set_default_party_pkmn(f_get_party(_ENV:cursor"team1"),_ENV:cursor"editparty"+1,_ENV:cursor"browse"))
+f_save_team(_ENV:cursor"team1",f_set_default_team_pkmn(f_get_team(_ENV:cursor"team1"),_ENV:cursor"editteam"+1,_ENV:cursor"browse"))
 _ENV:pop()
 end)
 end,function(_ENV)
@@ -581,15 +582,15 @@ name=trainer[1],
 team=team,
 disabled=disabled,
 select=function(game,entry)
-local cpu_party_draft={}
+local cpu_team_draft={}
 for i=1,6 do
 local num=entry.team[i]
 if num then
-_add(cpu_party_draft,{num=num,moves=f_get_natural_moveset(num)})
+_add(cpu_team_draft,{num=num,moves=f_get_natural_moveset(num)})
 end
 end
 f_begin_fight(game,
-f_get_party(game:cursor"team1"),cpu_party_draft,
+f_get_team(game:cursor"team1"),cpu_team_draft,
 "player 1",entry.name,
 false,true,
 f_nop,f_nop,
@@ -601,35 +602,35 @@ end
 }
 end)
 end,function(_ENV)
-menu:refresh(f_zobj[[;name,moves,state,partymoves,select,%f_menu_state_callback;;name,switch,state,switchparty,select,%f_menu_state_callback;;name,delete,select,%f_partydel]])
-partymovesel.menu.c=0
+menu:refresh(f_zobj[[;name,moves,state,teammoves,select,%f_menu_state_callback;;name,switch,state,switchteam,select,%f_menu_state_callback;;name,delete,select,%f_teamdel]])
+teammovesel.menu.c=0
 end,function(_ENV)
-menu:refresh(f_zobj[[;name,change,state,partymovesel,select,%f_menu_state_callback;;name,switch,state,partymoves,select,%f_menu_state_callback;;name,delete,select,%f_movedel]])
+menu:refresh(f_zobj[[;name,change,state,teammovesel,select,%f_menu_state_callback;;name,switch,state,teammoves,select,%f_menu_state_callback;;name,delete,select,%f_movedel]])
 end,function(_ENV)
-local team=f_get_party(_ENV:cursor"team1")
-local partypkmn=team[_ENV:cursor"editparty"+1]
-partypkmn.moves[_ENV:cursor"partymoves"+1]=nil
-f_save_party(_ENV:cursor"team1",team)
+local team=f_get_team(_ENV:cursor"team1")
+local teampkmn=team[_ENV:cursor"editteam"+1]
+teampkmn.moves[_ENV:cursor"teammoves"+1]=nil
+f_save_team(_ENV:cursor"team1",team)
 _ENV:pop()
-partypkmn=team[_ENV:cursor"editparty"+1]
-if not partypkmn then
+teampkmn=team[_ENV:cursor"editteam"+1]
+if not teampkmn then
 _ENV:pop()
 _ENV:pop()
 end
 end,function(_ENV)
-local team=f_get_party(_ENV:cursor"team1")
-local partypkmn=team[_ENV:cursor"editparty"+1]or{moves={}}
+local team=f_get_team(_ENV:cursor"team1")
+local teampkmn=team[_ENV:cursor"editteam"+1]or{moves={}}
 menu:refresh(f_zobj[[,1,2,3,4]],function(i)
 return{
-num=partypkmn.moves[i],
-name=partypkmn.moves[i]and c_moves[partypkmn.moves[i]].name or "???",
+num=teampkmn.moves[i],
+name=teampkmn.moves[i]and c_moves[teampkmn.moves[i]].name or "???",
 select=function(_ENV)_ENV:push"moveaction" end
 }
 end)
 end,function(_ENV)
-local team=f_get_party(_ENV:cursor"team1")
-local partypkmn=team[_ENV:cursor"editparty"+1]
-local pkmn=c_pokemon[partypkmn.num]
+local team=f_get_team(_ENV:cursor"team1")
+local teampkmn=team[_ENV:cursor"editteam"+1]
+local pkmn=c_pokemon[teampkmn.num]
 local moves={}
 local add_to_moves=function(movelist,prefix)
 for i=1,#movelist do
@@ -646,7 +647,7 @@ disabled=m.disabled,
 num=m.num,
 ref=m.desc,
 select=function()
-f_save_party(_ENV:cursor"team1",f_set_party_pkmn_move(f_get_party(_ENV:cursor"team1"),_ENV:cursor"editparty"+1,_ENV:cursor"partymoves"+1,m.num))
+f_save_team(_ENV:cursor"team1",f_set_team_pkmn_move(f_get_team(_ENV:cursor"team1"),_ENV:cursor"editteam"+1,_ENV:cursor"teammoves"+1,m.num))
 _ENV:pop()
 _ENV:pop()
 end
@@ -668,7 +669,7 @@ end,function(_ENV)
 menu:refresh(f_zobj[[;name,fight,desc,select|next|move,select,%f_menu_state_callback,state,pselmove;;name,random,desc,select|random|move,select,%f_menu_cancel;;name,switch,desc,change|active|pokemon,select,%f_menu_state_callback,state,pselswitch;;name,forfeit,desc,leave|the|fight,select,%f_psel_forfeit]])
 end,function(_ENV)
 menu:refresh(f_zobj[[,1,2,3]],function(i)
-local team=f_get_party(i-1)
+local team=f_get_team(i-1)
 local newteam={}
 local is_disabled=true
 for i=1,6 do
@@ -678,47 +679,47 @@ return{
 name="team #"..i,
 team=newteam,
 select=function()_ENV:select_func()end,
-disabled=disable_empty_party and is_disabled
+disabled=disable_empty_team and is_disabled
 }
 end)
 end,function(_ENV)
-local team=f_get_party(_ENV:cursor"team1")
+local team=f_get_team(_ENV:cursor"team1")
 menu:refresh(f_zobj[[,1,2,3,4,5,6]],function(i)
 return{
 select=function(_ENV)
-if team[_ENV:cursor"editparty"+1]then
-_ENV:push"partyaction"
+if team[_ENV:cursor"editteam"+1]then
+_ENV:push"teamaction"
 else
-_ENV:push"partypkmn"
+_ENV:push"teampkmn"
 end
 end,
 num=team[i]and team[i].num or-1
 }
 end)
 end,function(_ENV)
-local team=f_get_party(_ENV:cursor"team1")
+local team=f_get_team(_ENV:cursor"team1")
 menu:refresh(f_zobj[[,1,2,3,4,5,6]],function(i)
 return{
-disabled=i==_ENV:cursor"editparty"+1,
+disabled=i==_ENV:cursor"editteam"+1,
 select=function(_ENV)
-local ind_one,ind_two=_ENV:cursor"editparty"+1,_ENV:cursor"switchparty"+1
+local ind_one,ind_two=_ENV:cursor"editteam"+1,_ENV:cursor"switchteam"+1
 team[ind_one],team[ind_two]=team[ind_two],team[ind_one]
-f_save_party(_ENV:cursor"team1",team)
+f_save_team(_ENV:cursor"team1",team)
 _ENV:pop()_ENV:pop()
 end,
 num=team[i]and team[i].num or-1
 }
 end)
 end,function(_ENV)
-local team=f_get_party(_ENV:cursor"team1")
+local team=f_get_team(_ENV:cursor"team1")
 menu:refresh(f_zobj[[,1,2,3,4,5,6]],function(i)
-local disabled=not p0.party[i]or p0.party[i].major==1
+local disabled=not p0.team[i]or p0.team[i].major==1
 return{
 select=disabled and f_beep or function()
 _ENV:pop()_ENV:pop()
 f_select_move(p0,i,true)
 end,
-num=p0.party[i]and p0.party[i].num or-1
+num=p0.team[i]and p0.team[i].num or-1
 }
 end)
 end,function(_ENV)
@@ -733,7 +734,7 @@ p0=p1.priority>p2.priority and p1 or p2
 end,function(game)
 if g_bpx or not game.cur_action then
 for p in _all{game.p1,game.p2}do
-if not f_get_next_active(p.party)then
+if not f_get_next_active(p.team)then
 game.p0=f_get_other_pl(game,p)
 game:load"fightover"
 return
@@ -750,32 +751,33 @@ end
 end
 if g_bpo then f_beep()end
 end,function(game)
-if g_bpl then
 local stayed=true
 for i=game.browse.menu.c-1,0,-1 do
 if c_pokemon[i].available()then
 game.browse.menu.c=i
 stayed=false
+f_beep_back()
 break
 end
 end
 if stayed then f_beep()end
 f_browsestat_init(game)
-end
-if g_bpr then
+end,function(game)
 local stayed=true
 for i=game.browse.menu.c+1,151 do
 if c_pokemon[i].available()then
 game.browse.menu.c=i
 stayed=false
+f_beep_back()
 break
 end
 end
 if stayed then f_beep()end
 f_browsestat_init(game)
-end
-if g_bpx then f_minisfx(game:cursor"browse")end
-f_modes_default_update(game)
+end,function(game)
+f_minisfx(game:cursor"browse")
+end,function()
+f_minisfx(f_flr_rnd"152")
 end,function(_ENV)menu.update(_ENV)end,function(_ENV)menu.draw1(_ENV)end,function(_ENV,menu_name)
 return _ENV[menu_name].menu.c
 end,function(_ENV,menu_name)
@@ -788,25 +790,23 @@ end,function(_ENV)
 _deli(stack)
 _ENV:load(stack[#stack]or "main")
 end,function(_ENV)
-local party={}
+for i=0,2 do
+_poke(0x5e5a+i,1)
+end
+local team={}
 _foreach(_split"133,7,35,1,25,4",function(num)
-_add(party,{num=num,moves=f_get_natural_moveset(num)})
+_add(team,{num=num,moves=f_get_natural_moveset(num)})
 _poke(0x5e5a+num,1)
 end)
 if@0x5efb==0 then
 _poke(0x5efb,1)
-f_save_party(0,party)
+f_save_team(0,team)
 end
 modes=o_modes()
 f_zcall(function(menu_name,create_func,...)
 modes[menu_name].menu=create_func(...)
-end,[[;,browse,~f_create_menu,~f_browse_drawentry,4;;,browsestat,~f_create_menu_view,~f_menu_drawentry;;,credits,~f_create_menu_view,~f_menu_drawentry;;,fightover,~f_create_menu_view,~f_menu_drawentry;;,editparty,~f_create_menu,~f_browse_drawentry,3;;,switchparty,~f_create_menu,~f_browse_drawentry,3;;,main,~f_create_menu,~f_menu_drawentry;;,partyaction,~f_create_menu,~f_menu_drawentry;;,moveaction,~f_create_menu,~f_menu_drawentry;;,partymovesel,~f_create_menu,~f_menu_drawentry;;,partymoves,~f_create_menu,~f_menu_drawentry;;,pselactions,~f_create_menu,~f_menu_drawentry;;,pselmove,~f_create_menu,~f_menu_drawentry;;,pselswitch,~f_create_menu,~f_browse_drawentry,3;;,team1,~f_create_menu,~f_menu_drawentry;;,team2story,~f_create_menu,~f_menu_drawentry;;,team2match,~f_create_menu,~f_menu_drawentry]])
-modes.main.menu.cancel=f_beep
-modes.pselactions.menu.cancel=f_beep
-modes.team1horde.menu=modes.team1.menu
-modes.team1match.menu=modes.team1.menu
-modes.team1story.menu=modes.team1.menu
-modes.partypkmn.menu=modes.browse.menu
+end,[[;,browse,~f_create_menu,~f_browse_drawentry,4;;,browsestat,~f_create_menu_view,~f_menu_drawentry;;,credits,~f_create_menu_view,~f_menu_drawentry;;,fightover,~f_create_menu_view,~f_menu_drawentry;;,editteam,~f_create_menu,~f_browse_drawentry,3;;,switchteam,~f_create_menu,~f_browse_drawentry,3;;,main,~f_create_menu,~f_menu_drawentry;;,teamaction,~f_create_menu,~f_menu_drawentry;;,moveaction,~f_create_menu,~f_menu_drawentry;;,teammovesel,~f_create_menu,~f_menu_drawentry;;,teammoves,~f_create_menu,~f_menu_drawentry;;,pselactions,~f_create_menu,~f_menu_drawentry;;,pselmove,~f_create_menu,~f_menu_drawentry;;,pselswitch,~f_create_menu,~f_browse_drawentry,3;;,team1,~f_create_menu,~f_menu_drawentry;;,team2story,~f_create_menu,~f_menu_drawentry;;,team2match,~f_create_menu,~f_menu_drawentry]])
+f_zobj_set(modes,[[team1menu,@,browsemenu,@;main;menu;cancel,%f_beep;pselactions;menu;cancel,%f_beep;team1horde;menu,~team1menu;team1match;menu,~team1menu;team1story;menu,~team1menu;teampkmn;menu,~browsemenu;]],modes.team1.menu,modes.browse.menu)
 f_beep_done()
 _menuitem(2,"close picodex",function()
 _menuitem(2)
@@ -990,34 +990,34 @@ _add(menu,{name=c_moves[m].name})
 end)
 end
 end,function(game)
-local team=f_get_party(game:cursor"team1")
-team[game:cursor"editparty"+1]=nil
-f_save_party(game:cursor"team1",team)
+local team=f_get_team(game:cursor"team1")
+team[game:cursor"editteam"+1]=nil
+f_save_team(game:cursor"team1",team)
 game:pop()
 end,function(team,ind,num)
 team[ind]={num=num,moves=f_get_natural_moveset(num)}
 return team
 end,function(game)game:push"team2story" end,function(game)game:push"team2match" end,function(_ENV)
-f_begin_fight(_ENV,f_get_party(_ENV:cursor"team1"),f_get_party(_ENV:cursor"team2match"),"player 1","player 2",false,false,f_nop,f_nop,f_nop,f_nop)
+f_begin_fight(_ENV,f_get_team(_ENV:cursor"team1"),f_get_team(_ENV:cursor"team2match"),"player 1","player 2",false,false,f_nop,f_nop,f_nop,f_nop)
 end,function(p)
-local newparty={}
+local newteam={}
 for i=1,6 do
-if p.party[i]and p.party[i].major ~=1 then
-_add(newparty,p.party[i])
+if p.team[i]and p.team[i].major ~=1 then
+_add(newteam,p.team[i])
 end
 end
-for i=#newparty+1,6 do
+for i=#newteam+1,6 do
 p.hordeind=(p.hordeind+1)%152
-newparty[i]=f_create_party_pkmn(p.hordeind,f_get_natural_moveset(p.hordeind))
+newteam[i]=f_create_team_pkmn(p.hordeind,f_get_natural_moveset(p.hordeind))
 end
-p.party=newparty
+p.team=newteam
 end,function(_ENV)
-local cpu_party_draft={}
+local cpu_team_draft={}
 for num=1,6 do
-_add(cpu_party_draft,{num=num,moves=f_get_natural_moveset(num)})
+_add(cpu_team_draft,{num=num,moves=f_get_natural_moveset(num)})
 end
 f_begin_fight(_ENV,
-f_get_party(_ENV:cursor"team1"),cpu_party_draft,
+f_get_team(_ENV:cursor"team1"),cpu_team_draft,
 "player 1","horde",
 false,true,
 f_nop,f_horde_death,
@@ -1025,20 +1025,20 @@ f_nop,function(horde)
 poke(0x5efd,mid(@0x5efd,#horde.deadnums,255))
 end
 )
-end,function(party,ind,moveind,move)
-local partypkmn=party[ind]
+end,function(team,ind,moveind,move)
+local teampkmn=team[ind]
 for i=1,4 do
-if partypkmn.moves[i]==move then
-partypkmn.moves[i]=nil
+if teampkmn.moves[i]==move then
+teampkmn.moves[i]=nil
 end
 end
-partypkmn.moves[moveind]=move
-return party
+teampkmn.moves[moveind]=move
+return team
 end,function(game)
-game:push"editparty"
-end,function(party_index)
-local mem=c_party_memlocs[party_index]
-local party={}
+game:push"editteam"
+end,function(team_index)
+local mem=c_team_memlocs[team_index]
+local team={}
 for i=1,6 do
 local memstart=mem+(i-1)*5
 local moves={}
@@ -1051,16 +1051,16 @@ has_moves=true
 end
 end
 if has_moves then
-party[i]={num=_peek(memstart),moves=moves}
+team[i]={num=_peek(memstart),moves=moves}
 end
 end
-return party
-end,function(party_index,party)
-local mem=c_party_memlocs[party_index]
+return team
+end,function(team_index,team)
+local mem=c_team_memlocs[team_index]
 _memset(mem,0,30)
 for i=1,6 do
 local memstart=mem+(i-1)*5
-local pkmn=party[i]
+local pkmn=team[i]
 if pkmn then
 _poke(memstart,pkmn.num)
 for i=1,4 do
@@ -1074,7 +1074,7 @@ local priority_class=1000
 if switch then
 priority_class=3000
 f_addaction(pl,pl,"#,comes,back",function(s,o)
-s.active=f_party_pkmn_to_active(s.party[slot])
+s.active=f_team_pkmn_to_active(s.team[slot])
 s.active.invisible=true
 f_addaction(s,s,"#,comes,out",function(s,o)
 s.active.invisible=false
@@ -1109,7 +1109,7 @@ if p.active.shared.hp<=0 then
 if p.active.shared.major ~=1 then
 return f_newaction(p,"#,is,fainted",f_logic_faint)
 else
-p.active=f_party_pkmn_to_active(f_get_next_active(p.party))
+p.active=f_team_pkmn_to_active(f_get_next_active(p.team))
 return f_newaction(p,"#,comes,out")
 end
 end
@@ -1167,19 +1167,19 @@ end,function(game)
 game:pop()
 game.p0=f_get_other_pl(game,game.p0)
 game:load"fightover"
-end,function(game,party1,party2,name1,name2,iscpu1,iscpu2,p1_die_logic,p2_die_logic,p1_win_logic,p2_win_logic)
-local party1,party2=f_get_fight_party(party1),f_get_fight_party(party2)
-game.p1={name=name1,hordeind=6,deadnums={},priority=1,iscpu=iscpu1,actions={},active=f_party_pkmn_to_active(f_get_next_active(party1)),party=party1,winlogic=p1_win_logic,dielogic=p1_die_logic}
-game.p2={name=name2,hordeind=6,deadnums={},priority=0,iscpu=iscpu2,actions={},active=f_party_pkmn_to_active(f_get_next_active(party2)),party=party2,winlogic=p2_win_logic,dielogic=p2_die_logic}
+end,function(game,team1,team2,name1,name2,iscpu1,iscpu2,p1_die_logic,p2_die_logic,p1_win_logic,p2_win_logic)
+local team1,team2=f_get_fight_team(team1),f_get_fight_team(team2)
+game.p1={name=name1,hordeind=6,deadnums={},priority=1,iscpu=iscpu1,actions={},active=f_team_pkmn_to_active(f_get_next_active(team1)),team=team1,winlogic=p1_win_logic,dielogic=p1_die_logic}
+game.p2={name=name2,hordeind=6,deadnums={},priority=0,iscpu=iscpu2,actions={},active=f_team_pkmn_to_active(f_get_next_active(team2)),team=team2,winlogic=p2_win_logic,dielogic=p2_die_logic}
 _add(game.p1.actions,f_newaction(game.p1,"#,comes,out"))
 _add(game.p2.actions,f_newaction(game.p2,"#,comes,out"))
 game.p0=game.p1
 game.pselactions.menu.c,game.pselmove.menu.c=0,0
 game:push"turn"
-end,function(party)
+end,function(team)
 for i=1,6 do
-if party[i]and party[i].major ~=1 then
-return party[i]
+if team[i]and team[i].major ~=1 then
+return team[i]
 end
 end
 end,function(index)
@@ -1270,9 +1270,9 @@ end)
 f_zclass[[o_actor,o_timer|load,%f_actor_load,loadlogic,%f_actor_loadlogic,state,%f_actor_state,kill,%f_actor_kill,clean,%f_actor_clean,is_alive,%f_actor_is_alive,alive,yes,duration,null,curr,start,next,null,isnew,yes,init,%f_nop,finit,%f_nop,stateless_update,%f_nop,update,%f_nop,destroyed,%f_nop;]]
 f_zclass[[o_timer|timers;,;start_timer,%f_timer_reset_timer,end_timer,%f_timer_end_timer,is_active,%f_timer_is_active,get_elapsed_percent,%f_timer_get_elapsed_percent,tick,%f_timer_tick,]]
 c_menustyles=f_zobj[[;bg,13,fg,1,out,5;;bg,6,fg,13,out,13;;bg,5,fg,1,out,5;;bg,6,fg,5,out,13;;bg,1,fg,13,out,5]]
-f_zclass[[o_modes,o_actor|cursor,%f_modes_cursor,entry,%f_modes_entry,push,%f_modes_push,pop,%f_modes_pop,update,%f_nop,draw1,%f_nop,draw2,%f_nop,draw3,%f_nop,curr,main;stack;,;defaults;menu,no,ui_pl,error,finit,%f_nop,init,%f_nop,update,%f_modes_default_update,draw1,%f_modes_default_draw1,draw2,%f_nop,draw3,%f_nop;main;init,~f_main_init,draw2,~f_main_draw2,draw3,~f_main_draw3;browse;init,%f_browse_init,draw2,%f_browse_draw2,draw3,%f_browse_draw3;browsestat;init,%f_browsestat_init,draw2,%f_browse_draw2,draw3,%f_browse_draw3,update,%f_browsestat_update;editparty;init,%f_editparty_init,draw2,%f_editparty_draw2,draw3,%f_editparty_draw3,draw1,%f_editparty_draw1;partypkmn;init,%f_partypkmn_init,draw2,%f_browse_draw2,draw3,%f_browse_draw3;switchparty;init,%f_switchparty_init,draw2,%f_editparty_draw2,draw3,%f_editparty_draw3,draw1,%f_editparty_draw1;partyaction;init,%f_partyaction_init,draw2,%f_editparty_draw2,draw3,%f_editparty_draw3;moveaction;init,%f_moveaction_init,draw2,%f_partymoves_draw2,draw3,%f_move_draw3;partymovesel;init,%f_partymovesel_init,draw2,%f_partymovesel_draw2,draw3,%f_move_draw3;partymoves;init,%f_partymoves_init,draw2,%f_partymoves_draw2,draw3,%f_move_draw3;team1;ui_pl,player 1,init,%f_party_init,draw2,%f_team_draw2,draw3,%f_party_draw3,disable_empty_party,no,select_func,%f_party_select;team1story;ui_pl,player 1,init,%f_party_init,draw2,%f_team_draw2,draw3,%f_party_draw3,disable_empty_party,yes,select_func,%f_story_select;team1match;ui_pl,player 1,init,%f_party_init,draw2,%f_team_draw2,draw3,%f_party_draw3,disable_empty_party,yes,select_func,%f_match_select;team1horde;ui_pl,player 1,init,%f_party_init,draw2,%f_team_draw2,draw3,%f_party_draw3,disable_empty_party,yes,select_func,%f_horde_select;team2match;ui_pl,player 2,init,%f_party_init,draw2,%f_team_draw2,draw3,%f_party_draw3,disable_empty_party,yes,select_func,%f_match_start;team2story;ui_pl,trainer,init,%f_fightsel_init,draw2,%f_team_draw2,draw3,%f_party_draw3;fightover;init,%f_fightover_init,draw2,%f_fightover_draw2,draw3,%f_fightover_draw3;pselactions;init,%f_pselactions_init,draw2,%f_turn_draw2,draw3,%f_pselactions_draw3;pselmove;init,%f_pselmove_init,draw2,%f_turn_draw2,draw3,%f_move_draw3;pselswitch;init,%f_pselswitch_init,draw2,%f_turn_draw2,draw3,%f_pselactions_draw3,draw1,%f_editparty_draw1;p1sel;next,p2sel,init,%f_psel_init,update,%f_nop,draw1,%f_nop,p0key,p1;p2sel;next,turn,init,%f_psel_init,update,%f_nop,draw1,%f_nop,p0key,p2;turn;next,p1sel,init,%f_turn_init,update,%f_turn_update,draw1,%f_turn_draw1,draw2,%f_turn_draw2,draw3,%f_turn_draw3,cur_action,no;credits;init,%f_credits_init,draw2,%f_main_draw2,draw3,%f_main_draw3;]]
+f_zclass[[o_modes,o_actor|cursor,%f_modes_cursor,entry,%f_modes_entry,push,%f_modes_push,pop,%f_modes_pop,update,%f_nop,draw1,%f_nop,draw2,%f_nop,draw3,%f_nop,curr,main;stack;,;defaults;menu,no,ui_pl,error,finit,%f_nop,init,%f_nop,rfunc,%f_nop,lfunc,%f_nop,xfunc,%f_nop,update,%f_modes_default_update,draw1,%f_modes_default_draw1,draw2,%f_nop,draw3,%f_nop;main;init,~f_main_init,draw2,~f_main_draw2,draw3,~f_main_draw3;browse;init,%f_browse_init,draw2,%f_browse_draw2,draw3,%f_browse_draw3;browsestat;init,%f_browsestat_init,draw2,%f_browse_draw2,draw3,%f_browse_draw3,lfunc,%f_browsestat_lfunc,rfunc,%f_browsestat_rfunc,xfunc,%f_browsestat_xfunc;editteam;init,%f_editteam_init,draw2,%f_editteam_draw2,draw3,%f_editteam_draw3,draw1,%f_editteam_draw1;switchteam;init,%f_switchteam_init,draw2,%f_editteam_draw2,draw3,%f_editteam_draw3,draw1,%f_editteam_draw1;teampkmn;init,%f_teampkmn_init,draw2,%f_browse_draw2,draw3,%f_browse_draw3;teamaction;init,%f_teamaction_init,draw2,%f_editteam_draw2,draw3,%f_editteam_draw3;moveaction;init,%f_moveaction_init,draw2,%f_teammoves_draw2,draw3,%f_move_draw3;teammovesel;init,%f_teammovesel_init,draw2,%f_teammovesel_draw2,draw3,%f_move_draw3;teammoves;init,%f_teammoves_init,draw2,%f_teammoves_draw2,draw3,%f_move_draw3;team1;ui_pl,player 1,init,%f_team_init,draw2,%f_team_draw2,draw3,%f_team_draw3,disable_empty_team,no,select_func,%f_team_select;team1story;ui_pl,player 1,init,%f_team_init,draw2,%f_team_draw2,draw3,%f_team_draw3,disable_empty_team,yes,select_func,%f_story_select;team1match;ui_pl,player 1,init,%f_team_init,draw2,%f_team_draw2,draw3,%f_team_draw3,disable_empty_team,yes,select_func,%f_match_select;team1horde;ui_pl,player 1,init,%f_team_init,draw2,%f_team_draw2,draw3,%f_team_draw3,disable_empty_team,yes,select_func,%f_horde_select;team2match;ui_pl,player 2,init,%f_team_init,draw2,%f_team_draw2,draw3,%f_team_draw3,disable_empty_team,yes,select_func,%f_match_start;team2story;ui_pl,trainer,init,%f_fightsel_init,draw2,%f_team_draw2,draw3,%f_team_draw3;fightover;init,%f_fightover_init,draw2,%f_fightover_draw2,draw3,%f_fightover_draw3;pselactions;init,%f_pselactions_init,draw2,%f_turn_draw2,draw3,%f_pselactions_draw3;pselmove;init,%f_pselmove_init,draw2,%f_turn_draw2,draw3,%f_move_draw3;pselswitch;init,%f_pselswitch_init,draw2,%f_turn_draw2,draw3,%f_pselactions_draw3,draw1,%f_editteam_draw1;p1sel;next,p2sel,init,%f_psel_init,update,%f_nop,draw1,%f_nop,p0key,p1;p2sel;next,turn,init,%f_psel_init,update,%f_nop,draw1,%f_nop,p0key,p2;turn;next,p1sel,init,%f_turn_init,update,%f_turn_update,draw1,%f_turn_draw1,draw2,%f_turn_draw2,draw3,%f_turn_draw3,cur_action,no;credits;init,%f_credits_init,draw2,%f_main_draw2,draw3,%f_main_draw3,lfunc,%f_beep,rfunc,%f_beep,xfunc,%f_credits_xfunc;]]
 g_loaded_row=16
-c_party_memlocs=f_zobj[[0,0x5e00,1,0x5e1e,2,0x5e3c]]
+c_team_memlocs=f_zobj[[0,0x5e00,1,0x5e1e,2,0x5e3c]]
 f_zclass[[o_game_state,o_actor|curr,moveup;init,%f_game_state_init;ecs_exclusions;o_actor,yes;defaults;foldstate,closed,light,0,backbuttonheld,no,sinit,%f_nop,update,%f_nop,draw,%f_nop,draw1,%f_nop,draw2,%f_nop,draw3,%f_nop,modes,;wait;next,moveup,duration,1,draw,%f_logo_draw;moveup;next,closed,duration,.125,draw,%f_draw_picodex2,sinit,%f_moveup_init;closed;foldstate,closed,next,opening,sinit,%f_closed_init,draw,%f_draw_picodex2,update,%f_closed_update;opening;foldstate,opening,next,starting_1,duration,.2,draw,%f_draw_picodex2;starting_1;foldstate,open,next,starting_2,light,1,duration,.2,sinit,%f_beep_okay,draw,%f_draw_picodex2;starting_2;foldstate,open,next,starting_3,light,2,duration,.2,sinit,%f_beep_back,draw,%f_draw_picodex2;starting_3;foldstate,open,next,game,light,3,duration,.2,sinit,%f_beep,draw,%f_draw_picodex2;game;foldstate,open,next,closing,light,4,sinit,%f_game_init,draw,%f_draw_picodex2,update,%f_game_update,draw1,%f_game_draw1,draw2,%f_game_draw2,draw3,%f_game_draw3;closing;foldstate,closing,next,closed,duration,.25,draw,%f_draw_picodex2,update,%f_nop;]]
 function _init()
 local _ENV=_g

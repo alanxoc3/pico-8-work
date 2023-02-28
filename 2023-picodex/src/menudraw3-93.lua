@@ -1,12 +1,12 @@
 -- todo: make this smaller
-|[f_editparty_draw3]| function(game)
-    local team = f_get_party(game:cursor'team1')
-    local partypkmn = team[game:cursor'editparty'+1]
-    f_draw3_pokeinfo(partypkmn and partypkmn.num or -1)
+|[f_editteam_draw3]| function(game)
+    local team = f_get_team(game:cursor'team1')
+    local teampkmn = team[game:cursor'editteam'+1]
+    f_draw3_pokeinfo(teampkmn and teampkmn.num or -1)
 end $$
 
 -- todo: put "move" directly on entry so pp reflects correctly.
--- for partymoves, partymovesel, pmovesel
+-- for teammoves, teammovesel, pmovesel
 |[f_move_draw3]| function(game)
     local num = game:entry().num
     if num then
@@ -25,7 +25,7 @@ end $$
 |[f_main_draw3]|         function(game) f_print_draw3_message(_split(game:entry'main'.desc, '|'))      end $$
 |[f_pselactions_draw3]|  function(game) f_print_draw3_message(_split(game:entry'pselactions'.desc, '|'))      end $$
 
-|[f_party_draw3]|        function(game)
+|[f_team_draw3]|        function(game)
     local count, power = 0, 0
     for i=1,6 do
         local num = game:entry().team[i]

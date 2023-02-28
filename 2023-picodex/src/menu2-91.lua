@@ -52,6 +52,7 @@ end $$
         local newval = menu.c+delta*menu.r
         if newval == _mid(0, newval, #menu-1) then
             menu.c = newval
+            if 0+delta ~= 0 then f_beep_back() end
         else
             f_beep()
         end
@@ -60,6 +61,7 @@ end $$
         local left = menu.c - menu.c%menu.r
         if newval == _mid(left, newval, left + menu.r-1) then
             menu.c = newval
+            if 0+delta ~= 0 then f_beep_back() end
         else
             f_beep()
         end
@@ -73,16 +75,21 @@ end $$
     menu.v = _mid(0, menu.v, (#menu-1)\menu.r)
 end $$
 
--- todo: remove bpl/bpr, they should have special logic instead (should it be overriden per thing?)
 |[f_menu_view_update]| function(game)
     local menu = game.menu
     if g_bpo then menu.cancel(game) end
     if g_bpu then menu.v-=1 end
     if g_bpd then menu.v+=1 end
+    if g_bpx then game:xfunc() end
+    if g_bpl then game:lfunc() end
+    if g_bpr then game:rfunc() end
+
     local oldview = menu.v
     menu.v = _mid(menu.viewmin, menu.v, #menu-3)
     if menu.v ~= oldview then
         f_beep()
+    elseif g_bpu or g_bpd then
+        f_beep_back()
     end
 end $$
 
@@ -108,7 +115,6 @@ end $$
     if g_bpo then menu.cancel(game) end
 end $$
 
--- todo: try token crunching here
 -- 4 styles: 13,1 6,13 2,1, 8,2
 c_menustyles = f_zobj[[
     ;bg,13, fg,1,  out,5
@@ -120,37 +126,32 @@ c_menustyles = f_zobj[[
 
 |[f_menu_draw1]| function(game)
     local menu = game.menu
-    local c, v = menu.c, menu.v
-    local y = -10
     local cellw = menu.r > 1 and 10 or 40
-    local y1, y2 = 0, 39
     local xoff = 20-(menu.r * cellw)/2
 
     -- bg shadow
-    _rectfill(0, y1, 39, y2, 1) -- bg shadow
-    _rectfill(0, 0+5-menu.v*10, 39, 0+4+(_max(_ceil(#menu/menu.r), 40\10-1)-menu.v)*10, 13)
-
-    -- selected bg
-    --_rect    (x-2, y-7, x+cellw+1, y+6, 5)
+    f_zcall(_rectfill, [[
+       ;,0,0,39,39,1 -- bg shadow
+      ;;,0,@,39,@,13 -- fg grey
+    ]], 5-menu.v*10, 4+(_max(_ceil(#menu/menu.r), 3)-menu.v)*10)
 
     for i=-1,menu.r*5-1 do
         local index = (menu.v-1)*menu.r+i+1
         local entry = menu[index]
-        local style_ind, x, y = (entry or {style=0}).style or 1, xoff+i%menu.r*10, 0+i\menu.r*10
 
         if entry then
+            local style_ind, x, y = entry.style or 1, xoff+i%menu.r*10, i\menu.r*10
             if entry.disabled then style_ind = 3 end
             if index-1 == menu.c then style_ind += 1 end
+
+            if not entry.hidden then
+                _rectfill(x, y-5, x+cellw-1, y+4, c_menustyles[style_ind].bg)
+                f_zcamera(i%menu.r*cellw+xoff+cellw/2, i\menu.r*10-3, function()
+                    menu.edraw(entry, c_menustyles[style_ind])
+                end)
+            end
         end
 
-        local style = c_menustyles[style_ind]
-
-        if entry and not entry.hidden then
-            _rectfill(x, y-5, x+cellw-1, y+4, style.bg)
-            f_zcamera(i%menu.r*cellw+xoff+cellw/2, 0+i\menu.r*10-3, function()
-                menu.edraw(entry, style)
-            end)
-        end
     end
 end $$
 
@@ -159,9 +160,13 @@ end $$
     if entry.pkmn then
         local pkmn = f_get_pokemon(entry.pkmn)
         local style = c_bg_styles[c_types[pkmn.type1].bg]
-        _rectfill(0-20,    5-10+3, 39-20, 24-10+3,style.bg)
-        _rectfill(0-20,   21-10+3, 39-20, 24-10+3,style.aa)
-        pkmn.draw(20-20, -5+20-10+3, style.aa, 1, 1)
+
+        f_zcall(_rectfill, [[
+           ;,-20,-2,19,17,@
+          ;;,-20,14,19,17,@
+        ]], style.bg, style.aa)
+
+        f_zcall(pkmn.draw, [[;,0,8,@,1,1]], style.aa)
     else
         f_wobble_text(entry.name, 0, 0, style.fg)
     end

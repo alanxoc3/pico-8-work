@@ -65,9 +65,9 @@ end $$
     end)
 end $$
 
-|[f_partypkmn_init]| function(_ENV)
+|[f_teampkmn_init]| function(_ENV)
     f_browse_init_shared(_ENV, function(_ENV)
-        f_save_party(_ENV:cursor'team1', f_set_default_party_pkmn(f_get_party(_ENV:cursor'team1'), _ENV:cursor'editparty'+1, _ENV:cursor'browse'))
+        f_save_team(_ENV:cursor'team1', f_set_default_team_pkmn(f_get_team(_ENV:cursor'team1'), _ENV:cursor'editteam'+1, _ENV:cursor'browse'))
         _ENV:pop()
     end)
 end $$
@@ -112,17 +112,17 @@ end $$
             team=team,
             disabled=disabled,
             select=function(game, entry)
-                local cpu_party_draft = {}
+                local cpu_team_draft = {}
                 for i=1,6 do
                     local num = entry.team[i]
                     if num then
-                        _add(cpu_party_draft, { num=num, moves=f_get_natural_moveset(num) })
+                        _add(cpu_team_draft, { num=num, moves=f_get_natural_moveset(num) })
                     end
                 end
 
-                -- |[f_begin_fight]| function(game, party1, party2, name1, name2, iscpu1, iscpu2, p1_die_logic, p2_die_logic, p1_win_logic, p2_win_logic)
+                -- |[f_begin_fight]| function(game, team1, team2, name1, name2, iscpu1, iscpu2, p1_die_logic, p2_die_logic, p1_win_logic, p2_win_logic)
                 f_begin_fight(game,
-                    f_get_party(game:cursor'team1'), cpu_party_draft,
+                    f_get_team(game:cursor'team1'), cpu_team_draft,
                     "player 1", entry.name,
                     false, true,
                     f_nop, f_nop,
@@ -135,56 +135,56 @@ end $$
     end)
 end $$
 
-|[f_partyaction_init]| function(_ENV)
+|[f_teamaction_init]| function(_ENV)
     menu:refresh(f_zobj[[
-        ; name,"moves",  state,partymoves,  select,%f_menu_state_callback -- use the menu system
-       ;; name,"switch", state,switchparty, select,%f_menu_state_callback -- use browse pokemon selector
-       ;; name,"delete",                    select,%f_partydel            -- use the edit team screen
+        ; name,"moves",  state,teammoves,  select,%f_menu_state_callback -- use the menu system
+       ;; name,"switch", state,switchteam, select,%f_menu_state_callback -- use browse pokemon selector
+       ;; name,"delete",                    select,%f_teamdel            -- use the edit team screen
     ]])
 
-    partymovesel.menu.c = 0
+    teammovesel.menu.c = 0
 end $$
 
 |[f_moveaction_init]| function(_ENV)
     menu:refresh(f_zobj[[
-        ; name,"change", state,partymovesel, select,%f_menu_state_callback
-       ;; name,"switch", state,partymoves, select,%f_menu_state_callback
+        ; name,"change", state,teammovesel, select,%f_menu_state_callback
+       ;; name,"switch", state,teammoves, select,%f_menu_state_callback
        ;; name,"delete", select,%f_movedel
     ]])
 end $$
 
 |[f_movedel]| function(_ENV)
-    local team = f_get_party(_ENV:cursor'team1')
-    local partypkmn = team[_ENV:cursor'editparty'+1]
-    partypkmn.moves[_ENV:cursor'partymoves'+1] = nil
-    f_save_party(_ENV:cursor'team1', team)
+    local team = f_get_team(_ENV:cursor'team1')
+    local teampkmn = team[_ENV:cursor'editteam'+1]
+    teampkmn.moves[_ENV:cursor'teammoves'+1] = nil
+    f_save_team(_ENV:cursor'team1', team)
     _ENV:pop()
 
-    partypkmn = team[_ENV:cursor'editparty'+1]
+    teampkmn = team[_ENV:cursor'editteam'+1]
     -- pop thrice if the pokemon was deleted
-    if not partypkmn then
+    if not teampkmn then
         _ENV:pop()
         _ENV:pop()
     end
 end $$
 
-|[f_partymoves_init]| function(_ENV)
-    local team = f_get_party(_ENV:cursor'team1')
-    local partypkmn = team[_ENV:cursor'editparty'+1] or {moves={}}
+|[f_teammoves_init]| function(_ENV)
+    local team = f_get_team(_ENV:cursor'team1')
+    local teampkmn = team[_ENV:cursor'editteam'+1] or {moves={}}
 
     menu:refresh(f_zobj[[,1,2,3,4]], function(i)
         return {
-            num=partypkmn.moves[i],
-            name=partypkmn.moves[i] and c_moves[partypkmn.moves[i]].name or "???",
+            num=teampkmn.moves[i],
+            name=teampkmn.moves[i] and c_moves[teampkmn.moves[i]].name or "???",
             select=function(_ENV) _ENV:push'moveaction' end
         }
     end)
 end $$
 
-|[f_partymovesel_init]| function(_ENV)
-    local team = f_get_party(_ENV:cursor'team1')
-    local partypkmn = team[_ENV:cursor'editparty'+1]
-    local pkmn = c_pokemon[partypkmn.num]
+|[f_teammovesel_init]| function(_ENV)
+    local team = f_get_team(_ENV:cursor'team1')
+    local teampkmn = team[_ENV:cursor'editteam'+1]
+    local pkmn = c_pokemon[teampkmn.num]
 
     local moves = {}
     local add_to_moves = function(movelist, prefix)
@@ -204,7 +204,7 @@ end $$
             num=m.num,
             ref=m.desc,
             select=function()
-                f_save_party(_ENV:cursor'team1', f_set_party_pkmn_move(f_get_party(_ENV:cursor'team1'), _ENV:cursor'editparty'+1, _ENV:cursor'partymoves'+1, m.num))
+                f_save_team(_ENV:cursor'team1', f_set_team_pkmn_move(f_get_team(_ENV:cursor'team1'), _ENV:cursor'editteam'+1, _ENV:cursor'teammoves'+1, m.num))
                 _ENV:pop()
                 _ENV:pop()
             end
@@ -237,9 +237,9 @@ end $$
     ]])
 end $$
 
-|[f_party_init]| function(_ENV)
+|[f_team_init]| function(_ENV)
     menu:refresh(f_zobj[[,1,2,3]], function(i)
-        local team = f_get_party(i-1)
+        local team = f_get_team(i-1)
         local newteam = {}
         local is_disabled = true
 
@@ -251,21 +251,21 @@ end $$
             name="team #"..i,
             team=newteam,
             select=function() _ENV:select_func() end,
-            disabled=disable_empty_party and is_disabled
+            disabled=disable_empty_team and is_disabled
         }
     end)
 end $$
 
--- this is used both in "editparty" and selecting a pkmn in battle.
-|[f_editparty_init]| function(_ENV)
-    local team = f_get_party(_ENV:cursor'team1')
+-- this is used both in "editteam" and selecting a pkmn in battle.
+|[f_editteam_init]| function(_ENV)
+    local team = f_get_team(_ENV:cursor'team1')
     menu:refresh(f_zobj[[,1,2,3,4,5,6]], function(i)
         return {
             select=function(_ENV)
-                if team[_ENV:cursor'editparty'+1] then
-                    _ENV:push'partyaction'
+                if team[_ENV:cursor'editteam'+1] then
+                    _ENV:push'teamaction'
                 else
-                    _ENV:push'partypkmn'
+                    _ENV:push'teampkmn'
                 end
             end,
             num=team[i] and team[i].num or -1
@@ -273,16 +273,16 @@ end $$
     end)
 end $$
 
--- todo: combine with editparty
-|[f_switchparty_init]| function(_ENV)
-    local team = f_get_party(_ENV:cursor'team1')
+-- todo: combine with editteam
+|[f_switchteam_init]| function(_ENV)
+    local team = f_get_team(_ENV:cursor'team1')
     menu:refresh(f_zobj[[,1,2,3,4,5,6]], function(i)
         return {
-            disabled=i==_ENV:cursor'editparty'+1,
+            disabled=i==_ENV:cursor'editteam'+1,
             select=function(_ENV)
-                local ind_one, ind_two = _ENV:cursor'editparty'+1, _ENV:cursor'switchparty'+1
+                local ind_one, ind_two = _ENV:cursor'editteam'+1, _ENV:cursor'switchteam'+1
                 team[ind_one], team[ind_two] = team[ind_two], team[ind_one]
-                f_save_party(_ENV:cursor'team1', team)
+                f_save_team(_ENV:cursor'team1', team)
                 _ENV:pop() _ENV:pop()
             end,
             num=team[i] and team[i].num or -1
@@ -290,18 +290,18 @@ end $$
     end)
 end $$
 
--- this is used both in "editparty" and selecting a pkmn in battle.
+-- this is used both in "editteam" and selecting a pkmn in battle.
 -- todo: if a pokemon is dead, just draw a black shadow.
 |[f_pselswitch_init]| function(_ENV)
-    local team = f_get_party(_ENV:cursor'team1')
+    local team = f_get_team(_ENV:cursor'team1')
     menu:refresh(f_zobj[[,1,2,3,4,5,6]], function(i)
-        local disabled = not p0.party[i] or p0.party[i].major == C_MAJOR_FAINTED
+        local disabled = not p0.team[i] or p0.team[i].major == C_MAJOR_FAINTED
         return {
             select=disabled and f_beep or function()
                 _ENV:pop() _ENV:pop()
                 f_select_move(p0, i, true)
             end,
-            num=p0.party[i] and p0.party[i].num or -1
+            num=p0.team[i] and p0.team[i].num or -1
         }
     end)
 end $$

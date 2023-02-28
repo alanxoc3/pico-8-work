@@ -118,7 +118,7 @@ end $$
         end
 
         pkmn.available = function()
-            if pkmn.num > 0 then
+            if pkmn.num >= 0 then -- shouldn't be -1
                 return @(S_POKEMON+pkmn.num) > 0
             end
         end

@@ -1,5 +1,3 @@
--- todo: rename "party" to "team" for consistency
-
 f_zclass[[o_modes,o_actor|
     cursor,%f_modes_cursor, -- gets the cursor for a menu
     entry,%f_modes_entry,   -- gets the entry the cursor is on
@@ -19,6 +17,7 @@ f_zclass[[o_modes,o_actor|
         ui_pl,"error",
         finit,%f_nop,
         init,%f_nop,
+        rfunc,%f_nop, lfunc,%f_nop, xfunc,%f_nop,
         update,%f_modes_default_update,
         draw1,%f_modes_default_draw1,
         draw2,%f_nop,
@@ -29,30 +28,30 @@ f_zclass[[o_modes,o_actor|
 
     -- browse
     browse;       init,%f_browse_init,     draw2,%f_browse_draw2, draw3,%f_browse_draw3;
-    browsestat;   init,%f_browsestat_init, draw2,%f_browse_draw2, draw3,%f_browse_draw3, update,%f_browsestat_update; -- view pkmn info in browse
+    browsestat;   init,%f_browsestat_init, draw2,%f_browse_draw2, draw3,%f_browse_draw3, lfunc,%f_browsestat_lfunc, rfunc,%f_browsestat_rfunc, xfunc,%f_browsestat_xfunc; -- view pkmn info in browse
 
     -- edit
-    editparty;    init,%f_editparty_init,    draw2,%f_editparty_draw2,    draw3,%f_editparty_draw3, draw1,%f_editparty_draw1;
-    partypkmn;    init,%f_partypkmn_init,    draw2,%f_browse_draw2,       draw3,%f_browse_draw3;
-    switchparty;  init,%f_switchparty_init,  draw2,%f_editparty_draw2,    draw3,%f_editparty_draw3, draw1,%f_editparty_draw1;
-    partyaction;  init,%f_partyaction_init,  draw2,%f_editparty_draw2,    draw3,%f_editparty_draw3;
-    moveaction;   init,%f_moveaction_init,   draw2,%f_partymoves_draw2,   draw3,%f_move_draw3;
-    partymovesel; init,%f_partymovesel_init, draw2,%f_partymovesel_draw2, draw3,%f_move_draw3;
-    partymoves;   init,%f_partymoves_init,   draw2,%f_partymoves_draw2,   draw3,%f_move_draw3;
+    editteam;    init,%f_editteam_init,    draw2,%f_editteam_draw2,    draw3,%f_editteam_draw3, draw1,%f_editteam_draw1;
+    switchteam;  init,%f_switchteam_init,  draw2,%f_editteam_draw2,    draw3,%f_editteam_draw3, draw1,%f_editteam_draw1;
+    teampkmn;    init,%f_teampkmn_init,    draw2,%f_browse_draw2,      draw3,%f_browse_draw3;
+    teamaction;  init,%f_teamaction_init,  draw2,%f_editteam_draw2,    draw3,%f_editteam_draw3;
+    moveaction;  init,%f_moveaction_init,  draw2,%f_teammoves_draw2,   draw3,%f_move_draw3;
+    teammovesel; init,%f_teammovesel_init, draw2,%f_teammovesel_draw2, draw3,%f_move_draw3;
+    teammoves;   init,%f_teammoves_init,   draw2,%f_teammoves_draw2,   draw3,%f_move_draw3;
 
     -- pre-fight menus
-    team1;        ui_pl,"player 1", init,%f_party_init,    draw2,%f_team_draw2, draw3,%f_party_draw3, disable_empty_party,no,   select_func,%f_party_select; -- t1
-    team1story;   ui_pl,"player 1", init,%f_party_init,    draw2,%f_team_draw2, draw3,%f_party_draw3, disable_empty_party,yes,  select_func,%f_story_select; -- s1
-    team1match;   ui_pl,"player 1", init,%f_party_init,    draw2,%f_team_draw2, draw3,%f_party_draw3, disable_empty_party,yes,  select_func,%f_match_select; -- s1
-    team1horde;   ui_pl,"player 1", init,%f_party_init,    draw2,%f_team_draw2, draw3,%f_party_draw3, disable_empty_party,yes,  select_func,%f_horde_select; -- s1
-    team2match;   ui_pl,"player 2", init,%f_party_init,    draw2,%f_team_draw2, draw3,%f_party_draw3, disable_empty_party,yes,  select_func,%f_match_start;  -- s1
-    team2story;   ui_pl,"trainer",  init,%f_fightsel_init, draw2,%f_team_draw2, draw3,%f_party_draw3;                                                        -- t2
+    team1;        ui_pl,"player 1", init,%f_team_init,    draw2,%f_team_draw2, draw3,%f_team_draw3, disable_empty_team,no,   select_func,%f_team_select; -- t1
+    team1story;   ui_pl,"player 1", init,%f_team_init,    draw2,%f_team_draw2, draw3,%f_team_draw3, disable_empty_team,yes,  select_func,%f_story_select; -- s1
+    team1match;   ui_pl,"player 1", init,%f_team_init,    draw2,%f_team_draw2, draw3,%f_team_draw3, disable_empty_team,yes,  select_func,%f_match_select; -- s1
+    team1horde;   ui_pl,"player 1", init,%f_team_init,    draw2,%f_team_draw2, draw3,%f_team_draw3, disable_empty_team,yes,  select_func,%f_horde_select; -- s1
+    team2match;   ui_pl,"player 2", init,%f_team_init,    draw2,%f_team_draw2, draw3,%f_team_draw3, disable_empty_team,yes,  select_func,%f_match_start;  -- s1
+    team2story;   ui_pl,"trainer",  init,%f_fightsel_init, draw2,%f_team_draw2, draw3,%f_team_draw3;                                                        -- t2
 
     -- in-fight menus
     fightover;    init,%f_fightover_init,    draw2,%f_fightover_draw2,    draw3,%f_fightover_draw3;
     pselactions;  init,%f_pselactions_init,  draw2,%f_turn_draw2,         draw3,%f_pselactions_draw3;
     pselmove;     init,%f_pselmove_init,     draw2,%f_turn_draw2,         draw3,%f_move_draw3;
-    pselswitch;   init,%f_pselswitch_init,   draw2,%f_turn_draw2,         draw3,%f_pselactions_draw3, draw1,%f_editparty_draw1;
+    pselswitch;   init,%f_pselswitch_init,   draw2,%f_turn_draw2,         draw3,%f_pselactions_draw3, draw1,%f_editteam_draw1;
 
     -- in-fight screens
     p1sel;        next,p2sel, init,%f_psel_init, update,%f_nop,         draw1,%f_nop,        p0key,p1;
@@ -60,7 +59,7 @@ f_zclass[[o_modes,o_actor|
     turn;         next,p1sel, init,%f_turn_init, update,%f_turn_update, draw1,%f_turn_draw1, draw2,%f_turn_draw2, draw3,%f_turn_draw3, cur_action,no;
 
     -- credits
-    credits;      init,%f_credits_init,      draw2,%f_main_draw2,         draw3,%f_main_draw3;
+    credits;      init,%f_credits_init,      draw2,%f_main_draw2,         draw3,%f_main_draw3, lfunc,%f_beep, rfunc,%f_beep, xfunc,%f_credits_xfunc;
 ]]
 
 |[f_modes_default_update]| function(_ENV) menu.update(_ENV) end $$
@@ -88,26 +87,23 @@ end $$
 end $$
 
 |[f_game_init]| function(_ENV)
-    -- uncomment to unlock all 1st evolutions or cheat for all
-    -- for i=0,151 do
-    --     if c_pokemon[i].evolvesto and not c_pokemon[i].evolvesfrom then
-    --     _poke(S_POKEMON+i, 1)
-    --     end
-    -- end
+    -- uncomment to cheat for all pkmn
+     for i=0,2 do
+         _poke(S_POKEMON+i, 1)
+     end
 
-    local party = {} -- default party for new games
+    local team = {} -- default team for new games
     -- f_zcall(function(num) _poke(S_POKEMON+num, 1) end, [[;]])
     _foreach(_split'133,7,35,1,25,4', function(num)
-        _add(party, {num=num, moves=f_get_natural_moveset(num)})
+        _add(team, {num=num, moves=f_get_natural_moveset(num)})
         _poke(S_POKEMON+num, 1)
     end)
 
     if @S_NEW == 0 then
         _poke(S_NEW, 1)
-        f_save_party(0, party)
+        f_save_team(0, team)
     end
 
-    -- todo: remove me and/or refactor me
     modes = o_modes()
 
     f_zcall(function(menu_name, create_func, ...)
@@ -117,32 +113,37 @@ end $$
        ;;,browsestat,   ~f_create_menu_view, ~f_menu_drawentry      -- info for pkmn in browse mode
        ;;,credits,      ~f_create_menu_view, ~f_menu_drawentry      -- credits view obviously
        ;;,fightover,    ~f_create_menu_view, ~f_menu_drawentry      -- stats that display when you finish a fight
-       ;;,editparty,    ~f_create_menu,      ~f_browse_drawentry, 3 -- selecting a pkmn from party
-       ;;,switchparty,  ~f_create_menu,      ~f_browse_drawentry, 3 -- selecting a pkmn from party
+       ;;,editteam,    ~f_create_menu,       ~f_browse_drawentry, 3 -- selecting a pkmn from team
+       ;;,switchteam,  ~f_create_menu,       ~f_browse_drawentry, 3 -- selecting a pkmn from team
        ;;,main,         ~f_create_menu,      ~f_menu_drawentry      -- select a mode
-       ;;,partyaction,  ~f_create_menu,      ~f_menu_drawentry      -- edit party what to do (delete, edit moves, edit pkmn)
+       ;;,teamaction,  ~f_create_menu,       ~f_menu_drawentry      -- edit team what to do (delete, edit moves, edit pkmn)
        ;;,moveaction,   ~f_create_menu,      ~f_menu_drawentry      -- selecting what to do with a move (switch, delete, select)
-       ;;,partymovesel, ~f_create_menu,      ~f_menu_drawentry      -- select one of the moves a pokemon can learn (tms, hms, natural moves...)
-       ;;,partymoves,   ~f_create_menu,      ~f_menu_drawentry      -- select 1 of 4 moves from a pokemon
+       ;;,teammovesel, ~f_create_menu,       ~f_menu_drawentry      -- select one of the moves a pokemon can learn (tms, hms, natural moves...)
+       ;;,teammoves,   ~f_create_menu,       ~f_menu_drawentry      -- select 1 of 4 moves from a pokemon
 
        ;;,pselactions,  ~f_create_menu,      ~f_menu_drawentry      -- select an action during battle (fight, switch, forfeit)
        ;;,pselmove,     ~f_create_menu,      ~f_menu_drawentry      -- select 1 of 4 moves from a pokemon (during battle) -- TODO: try merging with other move select
-       ;;,pselswitch,   ~f_create_menu,      ~f_browse_drawentry, 3 -- selecting a pkmn from party
+       ;;,pselswitch,   ~f_create_menu,      ~f_browse_drawentry, 3 -- selecting a pkmn from team
 
-       ;;,team1,        ~f_create_menu,      ~f_menu_drawentry      -- select a party
+       ;;,team1,        ~f_create_menu,      ~f_menu_drawentry      -- select a team
        ;;,team2story,   ~f_create_menu,      ~f_menu_drawentry      -- select a cpu trainer
-       ;;,team2match,   ~f_create_menu,      ~f_menu_drawentry      -- select a party
+       ;;,team2match,   ~f_create_menu,      ~f_menu_drawentry      -- select a team
     ]])
 
-    modes.main.menu.cancel        = f_beep -- only 2 menus you can't pop from.
-    modes.pselactions.menu.cancel = f_beep
+    f_zobj_set(modes, [[
+        team1menu,@, browsemenu,@;
 
-    -- these menus share the cursor position
-    modes.team1horde.menu  = modes.team1.menu
-    modes.team1match.menu  = modes.team1.menu
-    modes.team1story.menu  = modes.team1.menu
-    modes.partypkmn.menu   = modes.browse.menu
+        main;menu;cancel,%f_beep;
+        pselactions;menu;cancel,%f_beep;
 
+        team1horde;menu,~team1menu;
+        team1match;menu,~team1menu;
+        team1story;menu,~team1menu;
+        teampkmn;menu,~browsemenu;
+       
+    ]], modes.team1.menu, modes.browse.menu)
+
+    -- beep done when picodex has booted up!
     f_beep_done()
 
     _menuitem(2, "close picodex", function()

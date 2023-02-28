@@ -1,5 +1,5 @@
 f_zclass[[o_game_state,o_actor|
-    curr,moveup; -- curr,fadein;
+    curr,moveup;
 
     init,%f_game_state_init;
     ecs_exclusions; o_actor,yes; -- remove o_game_state from the o_actor group

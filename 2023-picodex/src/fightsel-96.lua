@@ -2,39 +2,39 @@
 |[f_match_select]| function(game) game:push'team2match' end $$
 
 |[f_match_start]| function(_ENV)
-    -- |[f_begin_fight]| function(game, party1, party2, name1, name2, iscpu1, iscpu2, p1_die_logic, p2_die_logic, p1_win_logic, p2_win_logic)
-    f_begin_fight(_ENV, f_get_party(_ENV:cursor'team1'), f_get_party(_ENV:cursor'team2match'), "player 1", "player 2", false, false, f_nop, f_nop, f_nop, f_nop)
+    -- |[f_begin_fight]| function(game, team1, team2, name1, name2, iscpu1, iscpu2, p1_die_logic, p2_die_logic, p1_win_logic, p2_win_logic)
+    f_begin_fight(_ENV, f_get_team(_ENV:cursor'team1'), f_get_team(_ENV:cursor'team2match'), "player 1", "player 2", false, false, f_nop, f_nop, f_nop, f_nop)
 end $$
 
 |[f_horde_death]| function(p)
-    -- first, shift everything in the party to the left.
-    local newparty = {}
+    -- first, shift everything in the team to the left.
+    local newteam = {}
     for i=1,6 do
-        if p.party[i] and p.party[i].major ~= C_MAJOR_FAINTED then
-            _add(newparty, p.party[i])
+        if p.team[i] and p.team[i].major ~= C_MAJOR_FAINTED then
+            _add(newteam, p.team[i])
         end
     end
 
     -- then add new pokemon
-    for i=#newparty+1,6 do
+    for i=#newteam+1,6 do
         -- wrap for missingno, then continue with bulbasaur again
         p.hordeind = (p.hordeind+1) % 152
-        newparty[i] = f_create_party_pkmn(p.hordeind, f_get_natural_moveset(p.hordeind))
+        newteam[i] = f_create_team_pkmn(p.hordeind, f_get_natural_moveset(p.hordeind))
     end
 
-    p.party = newparty
+    p.team = newteam
 end $$
 
 -- todo: dedup with f_fightsel_init
 |[f_horde_select]| function(_ENV)
-    local cpu_party_draft = {}
+    local cpu_team_draft = {}
     for num=1,6 do
-        _add(cpu_party_draft, { num=num, moves=f_get_natural_moveset(num) })
+        _add(cpu_team_draft, { num=num, moves=f_get_natural_moveset(num) })
     end
 
-    -- |[f_begin_fight]| function(game, party1, party2, name1, name2, iscpu1, iscpu2, p1_die_logic, p2_die_logic, p1_win_logic, p2_win_logic)
+    -- |[f_begin_fight]| function(game, team1, team2, name1, name2, iscpu1, iscpu2, p1_die_logic, p2_die_logic, p1_win_logic, p2_win_logic)
     f_begin_fight(_ENV,
-        f_get_party(_ENV:cursor'team1'), cpu_party_draft,
+        f_get_team(_ENV:cursor'team1'), cpu_team_draft,
         "player 1", "horde",
         false, true,
         f_nop, f_horde_death,

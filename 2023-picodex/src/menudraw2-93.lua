@@ -1,13 +1,13 @@
 |[f_browse_draw2]|      function(game) f_draw2_pokeinfo(c_pokemon[game:cursor'browse']) end $$
-|[f_editparty_draw2]|   function(game) f_print_draw2_message("spot #"..(game:cursor'editparty'+1)) end $$
-|[f_partymoves_draw2]|  function(game) f_print_draw2_message("move #"..(game:cursor'partymoves'+1)) end $$
+|[f_editteam_draw2]|   function(game) f_print_draw2_message("spot #"..(game:cursor'editteam'+1)) end $$
+|[f_teammoves_draw2]|  function(game) f_print_draw2_message("move #"..(game:cursor'teammoves'+1)) end $$
 |[f_team_draw2]|        function(game) f_print_draw2_message(game.ui_pl) end $$
 |[f_fightover_draw2]|   function(game) f_print_draw2_message"match over" end $$
 |[f_pselactions_draw2]| function(_) end $$
 |[f_pselmove_draw2]|    function(game) end $$
 
-|[f_partymovesel_draw2]|  function(game) 
-    local move = game:entry'partymovesel'
+|[f_teammovesel_draw2]|  function(game) 
+    local move = game:entry'teammovesel'
     f_print_draw2_message(move and move.ref)
 end $$
 

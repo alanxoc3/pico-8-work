@@ -1,6 +1,6 @@
 -- pl,1-4,false - select a move slot  are move slots
 -- pl,0,false   - select default move (solar beam charge, hyper beam recharge, struggle, ...)
--- pl,1-6,true  - switch with party slot
+-- pl,1-6,true  - switch with team slot
 |[f_select_move]| function(pl, slot, switch)
     pl.actions = {}
     local priority_class = C_PRIORITY_ATTACK
@@ -8,7 +8,7 @@
     if switch then
         priority_class = C_PRIORITY_SWITCH
         f_addaction(pl, pl, "#,comes,back", function(s, o) -- self, other
-            s.active = f_party_pkmn_to_active(s.party[slot])
+            s.active = f_team_pkmn_to_active(s.team[slot])
             s.active.invisible = true
             f_addaction(s, s, "#,comes,out", function(s, o) -- self, other
                 s.active.invisible = false
@@ -69,7 +69,7 @@ end $$
             if p.active.shared.major ~= C_MAJOR_FAINTED then
                 return f_newaction(p, "#,is,fainted", f_logic_faint)
             else
-                p.active = f_party_pkmn_to_active(f_get_next_active(p.party))
+                p.active = f_team_pkmn_to_active(f_get_next_active(p.team))
                 return f_newaction(p, "#,comes,out")
             end
         end

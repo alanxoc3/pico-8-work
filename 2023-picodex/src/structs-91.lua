@@ -14,10 +14,10 @@
 
 end $$
 
--- party: team power, alive size
+-- team: team power, alive size
 -- pokemon: 
 
--- 3 levels of pokemon: browse, fightable, party, active
+-- 3 levels of pokemon: browse, fightable, team, active
 
 -- ok, maybe there can be 1 base template with default values.
 -- you just copy a previous one to do whatever
@@ -43,7 +43,7 @@ end $$
 --   set_major
 --   moveids
 --   movepps
---   spot? this could be useful for checking if you can switch the active pkmn. generally, you can't move around the team/bench/party. you delete and create instead.
+--   spot? this could be useful for checking if you can switch the active pkmn. generally, you can't move around the team/bench/team. you delete and create instead.
 --   major none|paralyze|burn|frozen|poison|faint
 --   toactive() -- returns a new active pokemon, generated from this teampkmn.
 -- }
@@ -87,7 +87,7 @@ end $$
 -- team {
 --   1-6 - each thing is a teampkmn
 --   can_switch() -- give it an index, it tells you if you can switch with that pkmn
---   get_next()   -- returns the next party pokemon pokemon that 
+--   get_next()   -- returns the next team pokemon pokemon that 
 
 --   horde_index = 6 -- only used for horde
 --   active 
@@ -95,14 +95,14 @@ end $$
 --   priority=1
 --   iscpu=iscpu1
 --   actions={}
---   active=f_party_pkmn_to_active(f_get_next_active(party1))
---   party=party1
+--   active=f_team_pkmn_to_active(f_get_next_active(team1))
+--   team=team1
 --   winlogic=p1_win_logic
 --   dielogic=p1_die_logic
 -- }
 
 -- TODO: optimize for tokens
-|[f_create_party_pkmn]| function(num, moves)
+|[f_create_team_pkmn]| function(num, moves)
     local pkmn = c_pokemon[num]
     return {
         -- todo, try just copying all keys from pkmn
@@ -122,27 +122,27 @@ end $$
     }
 end $$
 
--- converts a party into a party ready for battle
-|[f_get_fight_party]| function(party)
-    local fightparty = {}
+-- converts a team into a team ready for battle
+|[f_get_fight_team]| function(team)
+    local fightteam = {}
 
     for i=1,6 do
-        local cur = party[i]
+        local cur = team[i]
         if cur then
-            fightparty[i] = f_create_party_pkmn(cur.num, cur.moves)
+            fightteam[i] = f_create_team_pkmn(cur.num, cur.moves)
         end
     end
 
-    return fightparty
+    return fightteam
 end $$
 
--- partypkmn must be non-nil and match the party table structure defined in f_get_fight_party 
-|[f_party_pkmn_to_active]| function(partypkmn)
+-- teampkmn must be non-nil and match the team table structure defined in f_get_fight_team 
+|[f_team_pkmn_to_active]| function(teampkmn)
     return {
-        type1 = c_pokemon[partypkmn.num].type1,
-        type2 = c_pokemon[partypkmn.num].type2,
-        moveids = (function() local m = {} for i=1,4 do m[i] = partypkmn.moveids[i] end return m end)(),
-        movepps = partypkmn.movepps,
+        type1 = c_pokemon[teampkmn.num].type1,
+        type2 = c_pokemon[teampkmn.num].type2,
+        moveids = (function() local m = {} for i=1,4 do m[i] = teampkmn.moveids[i] end return m end)(),
+        movepps = teampkmn.movepps,
 
         -- these always start at zero
         stages = f_zobj[[
@@ -169,6 +169,6 @@ end $$
         end,
 
         minor = {},
-        shared = partypkmn,
+        shared = teampkmn,
     }
 end $$

@@ -3,7 +3,7 @@
     if g_bpx or not game.cur_action then
         -- check for win condition before selecting every action
         for p in _all{game.p1, game.p2} do
-            if not f_get_next_active(p.party) then
+            if not f_get_next_active(p.team) then
                 game.p0 = f_get_other_pl(game, p)
                 game:load'fightover'
                 return
@@ -24,38 +24,43 @@
     if g_bpo then f_beep() end
 end $$
 
-|[f_browsestat_update]| function(game)
-    if g_bpl then
-        local stayed = true
-        for i=game.browse.menu.c-1,0,-1 do
-            if c_pokemon[i].available() then
-                game.browse.menu.c = i
-                stayed = false
-                break
-            end
+-- todo, combine lfunc and rfunc
+|[f_browsestat_lfunc]| function(game)
+    local stayed = true
+    for i=game.browse.menu.c-1,0,-1 do
+        if c_pokemon[i].available() then
+            game.browse.menu.c = i
+            stayed = false
+            f_beep_back()
+            break
         end
-
-        if stayed then f_beep() end
-        f_browsestat_init(game)
     end
 
-    if g_bpr then
-        local stayed = true
-        for i=game.browse.menu.c+1,151 do
-            if c_pokemon[i].available() then
-                game.browse.menu.c = i
-                stayed = false
-                break
-            end
-        end
+    if stayed then f_beep() end
+    f_browsestat_init(game)
+end $$
 
-        if stayed then f_beep() end
-        f_browsestat_init(game)
+|[f_browsestat_rfunc]| function(game)
+    local stayed = true
+    for i=game.browse.menu.c+1,151 do
+        if c_pokemon[i].available() then
+            game.browse.menu.c = i
+            stayed = false
+            f_beep_back()
+            break
+        end
     end
 
-    if g_bpx then f_minisfx(game:cursor'browse') end
+    if stayed then f_beep() end
+    f_browsestat_init(game)
+end $$
 
-    f_modes_default_update(game)
+|[f_browsestat_xfunc]| function(game)
+    f_minisfx(game:cursor'browse')
+end $$
+
+|[f_credits_xfunc]| function()
+    f_minisfx(f_flr_rnd'152')
 end $$
 
 -- only "o" will go back
@@ -64,4 +69,4 @@ end $$
 -- end $$
 
 -- todo: add xbtn/ybtn
--- todo: browse shouldn't share cursor with edit party
+-- todo: browse shouldn't share cursor with edit team

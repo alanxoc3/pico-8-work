@@ -5,16 +5,16 @@
         -- draw3: 
     -- select move to learn
 
-|[f_set_party_pkmn_move]| function(party, ind, moveind, move)
-    local partypkmn = party[ind]
+|[f_set_team_pkmn_move]| function(team, ind, moveind, move)
+    local teampkmn = team[ind]
 
     -- if the move already exists on the pkmn, remove it.
     for i=1,4 do
-        if partypkmn.moves[i] == move then
-            partypkmn.moves[i] = nil
+        if teampkmn.moves[i] == move then
+            teampkmn.moves[i] = nil
         end
     end
 
-    partypkmn.moves[moveind] = move
-    return party
+    teampkmn.moves[moveind] = move
+    return team
 end $$
