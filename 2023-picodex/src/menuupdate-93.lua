@@ -53,6 +53,8 @@ end $$
         f_browsestat_init(game)
     end
 
+    if g_bpx then f_minisfx(game:cursor'browse') end
+
     f_modes_default_update(game)
 end $$
 

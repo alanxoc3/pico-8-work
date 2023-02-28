@@ -1,3 +1,5 @@
+-- todo: pkmn cries. 19 sfx slots (8 per slot) could give me all 152 pkmn cries.
+-- todo: 3 channels for song. 1 for picodex noise/cry.
 -- game state funcs
 |[f_gamefadein_init]| function()
     o_fader_in()
@@ -46,18 +48,22 @@ end $$
 end $$
 
 -- utility funcs
-|[f_beep]| function()
-    if not g_picodex:is_active'beep' then
-        _sfx(60, 0)
-        g_picodex:start_timer('beep', .15)
-    end
+|[f_minisfx]| function(num)
+    g_last_minisfx=num
+    g_picodex:start_timer(0+num, .25)
+    _sfx(44+num\8, 0, num%8*4, 4)
 end $$
+
+-- |[f_stat_minisfx]| function() return stat'46' and g_last_minisfx                      end $$
+|[f_beep_okay]|    function() f_minisfx'152' end $$
+|[f_beep_back]|    function() f_minisfx'153' end $$
+|[f_beep]|         function() f_minisfx'154' end $$
+|[f_beep_done]|    function() f_minisfx'155' end $$
 
 |[f_draw_picodex]| function(shaking, rotation, l_screen, tr_screen, br_screen, light, backbuttonheld, top_row_buttons, bot_row_buttons)
     light = light or 0
 
-    printh(#_g.g_bgs)
-    _fillp(g_bgs[g_bg+1])
+    _fillp(g_bgs[@S_BG_PATTERN+1])
     _rectfill(0,0,127,127,1)
     _fillp()
     --rect(0,0,127,127,1)
@@ -120,10 +126,8 @@ end $$
     _spr(g_bo and 170 or 138, 39, 77)
     _spr(g_bx and 172 or 140, 47, 77)
 
-    if g_picodex:is_active'beep' then
-        --circ(50, 65, g_picodex:get_elapsed_percent'beep'*4+4, 1)
-        --circ(50, 65, g_picodex:get_elapsed_percent'beep'*4+5, 12)
-        circ(50, 65, g_picodex:get_elapsed_percent'beep'*5+3, 1)
+    if stat'46' >= 0 then
+        circ(50, 65, 5+sin(t()*2), 12)
     end
 end $$
 
@@ -153,8 +157,13 @@ end $$
 |[f_draw_back_panel]| function(light)
     local rate = _t()*7
     _map(24, 0, -1,  1, 9, 12)
-    _spr((light > 0) and 130 or 132, 19, 3) -- or 131)
-    _spr((light > 1) and 129 or 132, 14, 3) -- or 131)
-    _spr((light > 2) and 128 or 132, 9,  3) -- or 131)
-    _spr((light > 3) and 133 or 135, 3,  3) -- or 134)
+    
+    f_zcall(function(l, s, off, on, flash, x, y)
+        return _spr((light > l) and (g_picodex:is_active(s) and flash or on) or off, x, y)
+    end, [[
+         ;,0, 152, 132, 130, 131, 19, 3
+        ;;,1, 153, 132, 129, 131, 14, 3
+        ;;,2, 154, 132, 128, 131, 9,  3
+        ;;,3, 155, 135, 133, 134, 3,  3
+    ]])
 end $$

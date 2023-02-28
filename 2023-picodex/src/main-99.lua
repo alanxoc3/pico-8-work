@@ -10,12 +10,12 @@ f_zclass[[o_game_state,o_actor|
     fadein; next,game, duration,0, sinit,%f_gamefadein_init; -- fadein; next,closed, duration,0, sinit,%f_gamefadein_init;
 
     closed;     next,opening,                            sinit,%f_closed_init, draw,%f_closed_draw,  update,%f_closed_update;
-    opening;    next,starting_1,          duration,.25,                        draw,%f_opening_draw;
-    starting_1; next,starting_2, light,1, duration,.125, sinit,%f_beep,        draw,%f_opened_draw;
-    starting_2; next,starting_3, light,2, duration,.125, sinit,%f_beep,        draw,%f_opened_draw;
-    starting_3; next,game,       light,3, duration,.125, sinit,%f_beep,        draw,%f_opened_draw;
-    game;       next,closing,    light,4,                sinit,%f_game_init,   draw,%f_game_draw,    update,%f_game_update;
-    closing;    next,closed,              duration,.25,                        draw,%f_closing_draw, update,%f_nop;
+    opening;    next,starting_1,          duration,.2,                       draw,%f_opening_draw;
+    starting_1; next,starting_2, light,1, duration,.2, sinit,%f_beep_okay,   draw,%f_opened_draw;
+    starting_2; next,starting_3, light,2, duration,.2, sinit,%f_beep_back,   draw,%f_opened_draw;
+    starting_3; next,game,       light,3, duration,.2, sinit,%f_beep,        draw,%f_opened_draw;
+    game;       next,closing,    light,4,              sinit,%f_game_init, draw,%f_game_draw,    update,%f_game_update;
+    closing;    next,closed,              duration,.25,                      draw,%f_closing_draw, update,%f_nop;
 ]]
 
 -- every state change will clean up all the entities.
@@ -24,9 +24,7 @@ f_zclass[[o_game_state,o_actor|
     state:sinit()
 end $$
 
-|[g_bgs]| {0b0111101111011110, ∧, ░, ▒} $$
-|[g_bg]| 0 $$
-
+|[g_bgs]| {∧, ░, 0b0111101111011110, ◆, 0xffff} $$
 
 function _init()
     local _ENV = _g
@@ -34,7 +32,7 @@ function _init()
     -- clear all the read only memory. testing things out showed that this doesn't get cleared automatically.
     _memset(0x8000, 0, 0x7fff)
 
-    _poke(0x5f5c, 12) -- set the initial delay before repeating. 255 means never repeat.
+    _poke(0x5f5c, 8) -- set the initial delay before repeating. 255 means never repeat.
     _poke(0x5f5d, 2) -- set the repeating delay.
 
     _cls()
@@ -65,8 +63,8 @@ function _init()
     -- Need the pokedex tiles to stay loaded. This starts at sprite index #96.
     _memcpy(0x0000, 0xc000, 0x2000)
 
-    _menuitem(1, "change bg", function()
-        g_bg = (g_bg + 1) % 4
+    _menuitem(1, "change groove", function()
+        poke(S_BG_PATTERN, (@S_BG_PATTERN+1) % 5)
     end)
 
     g_picodex = o_game_state()

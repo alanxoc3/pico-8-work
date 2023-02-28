@@ -143,7 +143,7 @@ end $$
     modes.team1story.menu  = modes.team1.menu
     modes.partypkmn.menu   = modes.browse.menu
 
-    _sfx(61,0)
+    f_beep_done()
 
     _menuitem(2, "close picodex", function()
         _menuitem(2) -- remove menu item
