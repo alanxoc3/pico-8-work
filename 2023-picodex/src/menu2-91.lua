@@ -41,7 +41,10 @@ end $$
     end
 end $$
 
-|[f_menu_cancel]| function(game) game:pop() end $$
+|[f_menu_cancel]| function(game)
+    game:pop()
+    f_beep_back()
+end $$
 
 -- cursor is between 0 and #menu-1. view is set too
 |[f_menu_set]| function(menu, delta, is_ud)
@@ -94,8 +97,11 @@ end $$
 
     if g_bpx then
         local entry = menu[menu.c+1]
-        if entry.disabled   then f_beep()
-        elseif entry.select then entry.select(game, entry)
+        if entry.disabled then
+            f_beep()
+        elseif entry.select then
+            f_beep_okay()
+            entry.select(game, entry)
         end
     end
 

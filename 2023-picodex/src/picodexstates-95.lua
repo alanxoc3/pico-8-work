@@ -1,9 +1,8 @@
 -- todo: pkmn cries. 19 sfx slots (8 per slot) could give me all 152 pkmn cries.
 -- todo: 3 channels for song. 1 for picodex noise/cry.
 -- game state funcs
-|[f_gamefadein_init]| function()
-    o_fader_in()
-    _sfx(-2,0) -- stop the creepy logo sound from looping
+|[f_moveup_init]| function()
+    _sfx(-2,1) -- stop the creepy logo sound from looping
 end $$
 
 -- you can factory reset when the pokedex is closed
@@ -31,46 +30,37 @@ end $$
     end
 end $$
 
-|[f_closed_draw]| function(_ENV)
-    f_draw_picodex(_ENV:is_active'shaking', -1, f_nop, f_nop, f_nop, light, backbuttonheld)
-end $$
-
-|[f_closing_draw]| function(_ENV)
-    f_draw_picodex(_ENV:is_active'shaking', _cos(_ENV:get_elapsed_percent'closing'/2), f_nop, f_nop, f_nop)
-end $$
-
-|[f_opened_draw]| function(_ENV)
-    f_draw_picodex(_ENV:is_active'shaking', 1, f_nop, f_nop, f_nop, light)
-end $$
-
-|[f_opening_draw]| function(_ENV)
-    f_draw_picodex(_ENV:is_active'shaking', -_cos(_ENV:get_elapsed_percent'opening'/2), f_nop, f_nop, f_nop)
+|[f_draw_picodex2]| function(_ENV)
+    f_logo_draw()
+    f_zcamera(0, _ENV:get_elapsed_percent'moveup'*128-128, function()
+        f_draw_picodex(
+            _ENV:is_active'shaking',
+            foldstate == 'open' and 1 or foldstate == 'closed' and -1 or (foldstate == 'opening' and -1 or 1)*_cos(_ENV:get_elapsed_percent(foldstate)/2),
+            draw1, draw2,
+            draw3, light,
+            backbuttonheld
+        )
+    end)
 end $$
 
 -- utility funcs
 |[f_minisfx]| function(num)
-    g_last_minisfx=num
-    g_picodex:start_timer(0+num, .25)
+    g_picodex:start_timer((0+num <= 152) and 'pkmn' or 0+num, .25)
     _sfx(44+num\8, 0, num%8*4, 4)
 end $$
 
 -- |[f_stat_minisfx]| function() return stat'46' and g_last_minisfx                      end $$
-|[f_beep_okay]|    function() f_minisfx'152' end $$
-|[f_beep_back]|    function() f_minisfx'153' end $$
-|[f_beep]|         function() f_minisfx'154' end $$
-|[f_beep_done]|    function() f_minisfx'155' end $$
+|[f_beep_done]|    function() f_minisfx'152' end $$
+|[f_beep_okay]|    function() f_minisfx'153' end $$
+|[f_beep_back]|    function() f_minisfx'154' end $$
+|[f_beep]|         function() f_minisfx'155' end $$
 
 |[f_draw_picodex]| function(shaking, rotation, l_screen, tr_screen, br_screen, light, backbuttonheld, top_row_buttons, bot_row_buttons)
     light = light or 0
 
-    _fillp(g_bgs[@S_BG_PATTERN+1])
-    _rectfill(0,0,127,127,1)
-    _fillp()
-    --rect(0,0,127,127,1)
-    
     local off = 1
     f_zspr(102,                  64, off+9, 5, 1)
-    f_zprint("a pico-8 pokedex sim", 64, off+13, 7, 0)
+    f_zprint("a pICO-8 pOKEDEX sIM", 64, off+13, 7, 0)
 
     -- f_zprint("picodex", 63, 20, 7, 0)
     f_zcamera(28-(rotation+1)*14+(shaking and _flr(_rnd(3)-1) or 0), 25, function()
@@ -161,9 +151,9 @@ end $$
     f_zcall(function(l, s, off, on, flash, x, y)
         return _spr((light > l) and (g_picodex:is_active(s) and flash or on) or off, x, y)
     end, [[
-         ;,0, 152, 132, 130, 131, 19, 3
-        ;;,1, 153, 132, 129, 131, 14, 3
-        ;;,2, 154, 132, 128, 131, 9,  3
-        ;;,3, 155, 135, 133, 134, 3,  3
+         ;,0, 153,  132, 130, 131, 19, 3
+        ;;,1, 154,  132, 129, 131, 14, 3
+        ;;,2, 155,  132, 128, 131, 9,  3
+        ;;,3, pkmn, 135, 133, 134, 3,  3
     ]])
 end $$

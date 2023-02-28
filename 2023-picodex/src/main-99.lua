@@ -1,21 +1,27 @@
 f_zclass[[o_game_state,o_actor|
-    curr,fadein; -- curr,logo;
+    curr,moveup; -- curr,fadein;
 
     init,%f_game_state_init;
     ecs_exclusions; o_actor,yes; -- remove o_game_state from the o_actor group
-    defaults;       sinit,%f_nop, update,%f_nop, draw,%f_nop, light,0, backbuttonheld,no, modes,;
+    defaults;
+        foldstate,closed,
+        light,0,
+        backbuttonheld,no,
+        sinit,%f_nop, update,%f_nop, draw,%f_nop,
+        draw1,%f_nop, draw2,%f_nop, draw3,%f_nop,
+        modes,;
 
-    logo; next,fadein, sinit,%f_logo_init, update,%f_nop, draw,%f_logo_draw, duration,2.5;
+    wait;   next,moveup, duration,1, draw,%f_logo_draw;
+    moveup; next,closed, duration,.125, draw,%f_draw_picodex2, sinit,%f_moveup_init;
 
-    fadein; next,game, duration,0, sinit,%f_gamefadein_init; -- fadein; next,closed, duration,0, sinit,%f_gamefadein_init;
+    closed;     foldstate,closed,  next,opening,                          sinit,%f_closed_init, draw,%f_draw_picodex2, update,%f_closed_update;
+    opening;    foldstate,opening, next,starting_1,          duration,.2,                       draw,%f_draw_picodex2;
+    starting_1; foldstate,open,    next,starting_2, light,1, duration,.2, sinit,%f_beep_okay,   draw,%f_draw_picodex2;
+    starting_2; foldstate,open,    next,starting_3, light,2, duration,.2, sinit,%f_beep_back,   draw,%f_draw_picodex2;
+    starting_3; foldstate,open,    next,game,       light,3, duration,.2, sinit,%f_beep,        draw,%f_draw_picodex2;
+    game;       foldstate,open,    next,closing,    light,4,              sinit,%f_game_init,   draw,%f_draw_picodex2, update,%f_game_update, draw1,%f_game_draw1, draw2,%f_game_draw2, draw3,%f_game_draw3;
 
-    closed;     next,opening,                            sinit,%f_closed_init, draw,%f_closed_draw,  update,%f_closed_update;
-    opening;    next,starting_1,          duration,.2,                       draw,%f_opening_draw;
-    starting_1; next,starting_2, light,1, duration,.2, sinit,%f_beep_okay,   draw,%f_opened_draw;
-    starting_2; next,starting_3, light,2, duration,.2, sinit,%f_beep_back,   draw,%f_opened_draw;
-    starting_3; next,game,       light,3, duration,.2, sinit,%f_beep,        draw,%f_opened_draw;
-    game;       next,closing,    light,4,              sinit,%f_game_init, draw,%f_game_draw,    update,%f_game_update;
-    closing;    next,closed,              duration,.25,                      draw,%f_closing_draw, update,%f_nop;
+    closing;    foldstate,closing, next,closed,              duration,.25,                      draw,%f_draw_picodex2, update,%f_nop;
 ]]
 
 -- every state change will clean up all the entities.
@@ -26,6 +32,16 @@ end $$
 
 |[g_bgs]| {∧, ░, 0b0111101111011110, ◆, 0xffff} $$
 
+|[f_logo_draw]| function()
+    cls()
+    _fillp(g_bgs[@S_BG_PATTERN+1])
+    _rectfill(0,0,127,127,1)
+    _fillp()
+
+    f_zprint("aMORG gAMES", 64, 64+-4, 7, 0)
+    f_zprint("pRESENTS",    64, 64+3, 7, 0)
+end $$
+
 function _init()
     local _ENV = _g
 
@@ -35,8 +51,9 @@ function _init()
     _poke(0x5f5c, 8) -- set the initial delay before repeating. 255 means never repeat.
     _poke(0x5f5d, 2) -- set the repeating delay.
 
-    _cls()
-    _sfx(62,0) -- a sound indicator that the came is actually running while loading
+    g_picodex = o_game_state()
+    f_draw_picodex2(g_picodex)
+    _sfx(63,1,24)
 
 -- NORMAL_BEGIN -- debug mode doesn't need to load these sheets for faster startup
 
@@ -66,8 +83,6 @@ function _init()
     _menuitem(1, "change groove", function()
         poke(S_BG_PATTERN, (@S_BG_PATTERN+1) % 5)
     end)
-
-    g_picodex = o_game_state()
 end
 
 function _update60()
@@ -102,7 +117,6 @@ function _draw()
     local _ENV = _g
     _cls()
     f_loop_entities('o_game_state', 'draw')
-    f_fade(g_fade)
 end
 
 |[f_parse_numlist]| function(str)

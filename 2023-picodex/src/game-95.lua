@@ -160,11 +160,6 @@ end $$
     program.modes:state()
 end $$
 
-|[f_game_draw]| function(program)
-    _cls()
-    f_draw_picodex(program:is_active'shaking', 1,
-        function() program.modes:draw1() end,
-        function() program.modes:draw2() end, 
-        function() program.modes:draw3() end, 
-        4, false, program.modes.main.menu.c, #program.modes.stack)
-end $$
+|[f_game_draw1]| function() g_picodex.modes:draw1() end $$
+|[f_game_draw2]| function() g_picodex.modes:draw2() end $$
+|[f_game_draw3]| function() g_picodex.modes:draw3() end $$
