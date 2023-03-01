@@ -11,8 +11,8 @@ f_zclass[[o_game_state,o_actor|
         draw1,%f_nop, draw2,%f_nop, draw3,%f_nop,
         modes,;
 
-    wait;   next,moveup, duration,1, draw,%f_logo_draw;
-    moveup; next,closed, duration,.125, draw,%f_draw_picodex2, sinit,%f_moveup_init;
+    wait;   next,moveup, duration,1,    draw,%f_logo_draw;
+    moveup; next,closed, duration,.125, draw,%f_logo_draw, sinit,%f_moveup_init;
 
     closed;     foldstate,closed,  next,opening,                          sinit,%f_closed_init, draw,%f_draw_picodex2, update,%f_closed_update;
     opening;    foldstate,opening, next,starting_1,          duration,.2,                       draw,%f_draw_picodex2;
@@ -30,14 +30,8 @@ f_zclass[[o_game_state,o_actor|
     state:sinit()
 end $$
 
-|[g_bgs]| {∧, ░, 0b0111101111011110, ◆, 0xffff} $$
-
 |[f_logo_draw]| function()
-    cls()
-    _fillp(g_bgs[@S_BG_PATTERN+1])
-    _rectfill(0,0,127,127,1)
-    _fillp()
-
+    f_cool_bg()
     f_zprint("aMORG gAMES", 64, 64+-4, 7, 0)
     f_zprint("pRESENTS",    64, 64+3, 7, 0)
 end $$
@@ -52,7 +46,8 @@ function _init()
     _poke(0x5f5d, 2) -- set the repeating delay.
 
     g_picodex = o_game_state()
-    f_draw_picodex2(g_picodex)
+    f_logo_draw()
+    -- f_draw_picodex2(g_picodex)
     _sfx(63,1,24)
 
 -- NORMAL_BEGIN -- debug mode doesn't need to load these sheets for faster startup
@@ -81,7 +76,7 @@ function _init()
     _memcpy(0x0000, 0xc000, 0x2000)
 
     _menuitem(1, "change groove", function()
-        poke(S_BG_PATTERN, (@S_BG_PATTERN+1) % 5)
+        poke(S_BG_PATTERN, (@S_BG_PATTERN+1) % #g_bgs)
     end)
 end
 

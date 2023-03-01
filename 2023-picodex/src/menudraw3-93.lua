@@ -8,7 +8,7 @@ end $$
 -- todo: put "move" directly on entry so pp reflects correctly.
 -- for teammoves, teammovesel, pmovesel
 |[f_move_draw3]| function(game)
-    local num = game:entry().num
+    local num = game:entry(game.movemode).num
     if num then
         local move = c_moves[num]
         local accuracy = move.accuracy*100\1

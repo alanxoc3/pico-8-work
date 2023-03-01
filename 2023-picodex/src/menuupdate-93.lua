@@ -48,6 +48,11 @@ end $$
     f_minisfx(f_flr_rnd'152')
 end $$
 
+|[f_fightover_xfunc]| function(_ENV)
+    _printh(p0.active.shared.num)
+    f_minisfx(p0.active.shared.num)
+end $$
+
 -- only "o" will go back
 -- |[f_fightover_update]| function(game)
 --     if g_bpo then game:pop() end

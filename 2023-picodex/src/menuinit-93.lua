@@ -11,14 +11,14 @@
 
     _add(menu, {name="winner", style=5})
     _add(menu, {name=winner.name})
-    _add(menu, {name="6/6"})
+    _add(menu, {name=#winner.deadnums.." dead"})
 
     _add(menu, {pkmn=loser.active.shared.num})
     _add(menu, {hidden=true})
 
     _add(menu, {name="loser", style=5})
     _add(menu, {name=loser.name})
-    _add(menu, {name="pkm 6/6"})
+    _add(menu, {name=#loser.deadnums.." dead"})
 
 end $$
 
@@ -28,8 +28,8 @@ end $$
             ;name,"browse",  state,browse,     select,%f_menu_state_callback, desc,".browse|"
            ;;name,"edit",    state,team1,      select,%f_menu_state_callback, desc,".edit|stored|teams"
            ;;name,"league",  state,team1story, select,%f_menu_state_callback, desc,".league|"
-           ;;name,"player",state,team1match, select,%f_menu_state_callback, desc,".player|custom|battles"
-           ;;name,"horde",   state,team1horde, select,%f_menu_state_callback, desc,".horde|"
+           ;;name,'?????',   state,team1horde, select,%f_menu_state_callback, desc,".?????|defeat|league"
+           ;;name,"player",  state,team1match, select,%f_menu_state_callback, desc,".player|custom|battles"
            ;;name,"credits", state,credits,    select,%f_menu_state_callback, desc,".credits|amorg|games"
         ]]
     )
@@ -38,7 +38,13 @@ end $$
     for i=0,151 do count += c_pokemon[i].available() and 1 or 0 end
     menu[1].desc ..= count.."/151|pokemon"
     menu[3].desc ..= (@S_STORY).."/40|trainers"
-    menu[5].desc ..= (@S_HOARD).."/151|pokemon"
+
+    if @S_STORY < 40 then
+        menu[4].disabled = true
+    else
+        menu[4].name = "horde"
+        menu[4].desc = ".horde|"..(@S_HOARD).."/151|hi-score"
+    end
 end $$
 
 |[f_browse_init_shared]| function(_ENV, selectfunc)
@@ -139,33 +145,37 @@ end $$
     menu:refresh(f_zobj[[
         ; name,"moves",  state,teammoves,  select,%f_menu_state_callback -- use the menu system
        ;; name,"switch", state,switchteam, select,%f_menu_state_callback -- use browse pokemon selector
-       ;; name,"delete",                    select,%f_teamdel            -- use the edit team screen
+       ;; name,"delete",                   select,%f_teamdel            -- use the edit team screen
     ]])
 
     teammovesel.menu.c = 0
 end $$
 
 |[f_moveaction_init]| function(_ENV)
-    menu:refresh(f_zobj[[
+    -- todo: maybe combine this with a func that gets rid of empty slots, then you just check len
+    local team = f_get_team(_ENV:cursor'team1')
+    local teampkmn = team[_ENV:cursor'editteam'+1]
+    local count = 0 
+    for j=1,4 do
+        if teampkmn.moves[j] then count += 1 end
+    end
+
+    menu:refresh(f_zobj([[
         ; name,"change", state,teammovesel, select,%f_menu_state_callback
-       ;; name,"switch", state,teammoves, select,%f_menu_state_callback
-       ;; name,"delete", select,%f_movedel
-    ]])
+       ;; name,"switch", state,switchmoves, select,%f_menu_state_callback
+       ;; name,"delete", disabled,@,        select,%f_movedel
+    ]], count == 1))
 end $$
 
+-- todo: fix move an draw3, shouldn't always be question marks
+-- todo: fix pop, sd only pop to moves, not before
+-- todo: last del should be disabled
 |[f_movedel]| function(_ENV)
     local team = f_get_team(_ENV:cursor'team1')
     local teampkmn = team[_ENV:cursor'editteam'+1]
     teampkmn.moves[_ENV:cursor'teammoves'+1] = nil
     f_save_team(_ENV:cursor'team1', team)
     _ENV:pop()
-
-    teampkmn = team[_ENV:cursor'editteam'+1]
-    -- pop thrice if the pokemon was deleted
-    if not teampkmn then
-        _ENV:pop()
-        _ENV:pop()
-    end
 end $$
 
 |[f_teammoves_init]| function(_ENV)
@@ -176,9 +186,31 @@ end $$
         return {
             num=teampkmn.moves[i],
             name=teampkmn.moves[i] and c_moves[teampkmn.moves[i]].name or "???",
-            select=function(_ENV) _ENV:push'moveaction' end
+            select=function(_ENV) _ENV:push(teampkmn.moves[i] and 'moveaction' or 'teammovesel') end
         }
     end)
+end $$
+
+-- todo: merge logic with f_teammoves_init
+|[f_switchmoves_init]| function(_ENV)
+    local team = f_get_team(_ENV:cursor'team1')
+    local teampkmn = team[_ENV:cursor'editteam'+1] or {moves={}}
+    local disabled_ind = _ENV:cursor'teammoves'+1
+
+    menu:refresh(f_zobj[[,1,2,3,4]], function(i)
+        return {
+            num=teampkmn.moves[i],
+            name=teampkmn.moves[i] and c_moves[teampkmn.moves[i]].name or "???",
+            select=function(_ENV)
+                teampkmn.moves[i], teampkmn.moves[disabled_ind] = teampkmn.moves[disabled_ind], teampkmn.moves[i]
+                f_save_team(_ENV:cursor'team1', team)
+                _ENV:popuntil'teammoves'
+            end,
+            disabled=i == disabled_ind
+        }
+    end)
+
+    menu.c = teammoves.menu.c
 end $$
 
 |[f_teammovesel_init]| function(_ENV)
@@ -189,12 +221,18 @@ end $$
     local moves = {}
     local add_to_moves = function(movelist, prefix)
         for i=1,#movelist do
-            _add(moves, {name=c_moves[movelist[i]].name, num=movelist[i], desc=prefix..i})
+            local disabled = false
+            for j=1,4 do
+                if teampkmn.moves[j] == movelist[i] then
+                    disabled = true
+                end
+            end
+            _add(moves, {name=c_moves[movelist[i]].name, disabled=disabled, num=movelist[i], desc=prefix..i})
         end
     end
 
     add_to_moves(pkmn.moves_natural, "learn #")
-    add_to_moves(pkmn.moves_teach,      "teach #")
+    add_to_moves(pkmn.moves_teach,   "teach #")
     add_to_moves(pkmn.moves_event,   "event #")
 
     menu:refresh(moves, function(m)
@@ -205,8 +243,7 @@ end $$
             ref=m.desc,
             select=function()
                 f_save_team(_ENV:cursor'team1', f_set_team_pkmn_move(f_get_team(_ENV:cursor'team1'), _ENV:cursor'editteam'+1, _ENV:cursor'teammoves'+1, m.num))
-                _ENV:pop()
-                _ENV:pop()
+                _ENV:popuntil'teammoves'
             end
         }
     end)
@@ -227,7 +264,6 @@ end $$
     end)
 end $$
 
--- todo: make switch work
 |[f_pselactions_init]| function(_ENV)
     menu:refresh(f_zobj[[
          ; name,"fight",   desc,"select|next|move",      select,%f_menu_state_callback, state,pselmove
@@ -288,6 +324,7 @@ end $$
             num=team[i] and team[i].num or -1
         }
     end)
+    menu.c = editteam.menu.c
 end $$
 
 -- this is used both in "editteam" and selecting a pkmn in battle.
@@ -295,9 +332,10 @@ end $$
 |[f_pselswitch_init]| function(_ENV)
     local team = f_get_team(_ENV:cursor'team1')
     menu:refresh(f_zobj[[,1,2,3,4,5,6]], function(i)
-        local disabled = not p0.team[i] or p0.team[i].major == C_MAJOR_FAINTED
+        local disabled = not p0.team[i] or p0.active.shared == p0.team[i] or p0.team[i].major == C_MAJOR_FAINTED
         return {
-            select=disabled and f_beep or function()
+            disabled=disabled,
+            select=function()
                 _ENV:pop() _ENV:pop()
                 f_select_move(p0, i, true)
             end,

@@ -17,9 +17,12 @@ end $$
 
     -- then add new pokemon
     for i=#newteam+1,6 do
-        -- wrap for missingno, then continue with bulbasaur again
-        p.hordeind = (p.hordeind+1) % 152
-        newteam[i] = f_create_team_pkmn(p.hordeind, f_get_natural_moveset(p.hordeind))
+        if p.hordeind < 152 then
+            p.hordeind += 1
+
+            -- wrap for missingno. missingno is the last pokemon in horde
+            newteam[i] = f_create_team_pkmn(p.hordeind%152, f_get_natural_moveset(p.hordeind%152))
+        end
     end
 
     p.team = newteam

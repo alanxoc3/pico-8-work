@@ -3,6 +3,7 @@ f_zclass[[o_modes,o_actor|
     entry,%f_modes_entry,   -- gets the entry the cursor is on
     push,%f_modes_push,
     pop,%f_modes_pop,
+    popuntil,%f_modes_popuntil,
     update,%f_nop,
     draw1,%f_nop,
     draw2,%f_nop,
@@ -17,8 +18,9 @@ f_zclass[[o_modes,o_actor|
         ui_pl,"error",
         finit,%f_nop,
         init,%f_nop,
-        lrfunc,%f_nop, xfunc,%f_nop,
+        lrfunc,%f_beep, xfunc,%f_nop,
         update,%f_modes_default_update,
+        movemode,no,
         draw1,%f_modes_default_draw1,
         draw2,%f_nop,
         draw3,%f_nop;
@@ -35,9 +37,10 @@ f_zclass[[o_modes,o_actor|
     switchteam;  init,%f_switchteam_init,  draw2,%f_editteam_draw2,    draw3,%f_editteam_draw3, draw1,%f_editteam_draw1;
     teampkmn;    init,%f_teampkmn_init,    draw2,%f_browse_draw2,      draw3,%f_browse_draw3;
     teamaction;  init,%f_teamaction_init,  draw2,%f_editteam_draw2,    draw3,%f_editteam_draw3;
-    moveaction;  init,%f_moveaction_init,  draw2,%f_teammoves_draw2,   draw3,%f_move_draw3;
+    moveaction;  init,%f_moveaction_init,  draw2,%f_teammoves_draw2,   draw3,%f_move_draw3, movemode,teammoves;
     teammovesel; init,%f_teammovesel_init, draw2,%f_teammovesel_draw2, draw3,%f_move_draw3;
     teammoves;   init,%f_teammoves_init,   draw2,%f_teammoves_draw2,   draw3,%f_move_draw3;
+    switchmoves; init,%f_switchmoves_init, draw2,%f_teammoves_draw2,   draw3,%f_move_draw3;
 
     -- pre-fight menus
     team1;        ui_pl,"player 1", init,%f_team_init,    draw2,%f_team_draw2, draw3,%f_team_draw3, disable_empty_team,no,   select_func,%f_team_select; -- t1
@@ -48,7 +51,7 @@ f_zclass[[o_modes,o_actor|
     team2story;   ui_pl,"trainer",  init,%f_fightsel_init, draw2,%f_team_draw2, draw3,%f_team_draw3;                                                        -- t2
 
     -- in-fight menus
-    fightover;    init,%f_fightover_init,    draw2,%f_fightover_draw2,    draw3,%f_fightover_draw3;
+    fightover;    init,%f_fightover_init,    draw2,%f_fightover_draw2,    draw3,%f_fightover_draw3, xfunc,%f_fightover_xfunc;
     pselactions;  init,%f_pselactions_init,  draw2,%f_turn_draw2,         draw3,%f_pselactions_draw3;
     pselmove;     init,%f_pselmove_init,     draw2,%f_turn_draw2,         draw3,%f_move_draw3;
     pselswitch;   init,%f_pselswitch_init,   draw2,%f_turn_draw2,         draw3,%f_pselactions_draw3, draw1,%f_editteam_draw1;
@@ -59,7 +62,7 @@ f_zclass[[o_modes,o_actor|
     turn;         next,p1sel, init,%f_turn_init, update,%f_turn_update, draw1,%f_turn_draw1, draw2,%f_turn_draw2, draw3,%f_turn_draw3, cur_action,no;
 
     -- credits
-    credits;      init,%f_credits_init,      draw2,%f_main_draw2,         draw3,%f_main_draw3, lrfunc,%f_beep, xfunc,%f_credits_xfunc;
+    credits;      init,%f_credits_init,      draw2,%f_main_draw2,         draw3,%f_main_draw3, xfunc,%f_credits_xfunc;
 ]]
 
 |[f_modes_default_update]| function(_ENV) menu.update(_ENV) end $$
@@ -70,13 +73,20 @@ f_zclass[[o_modes,o_actor|
 end $$
 
 |[f_modes_entry]| function(_ENV, menu_name)
-    local menu = (menu_name and _ENV[menu_name].menu or menu)
+    local menu = menu_name and _ENV[menu_name].menu or menu
     return menu[menu.c+1]
 end $$
 
 |[f_modes_push]| function(_ENV, newstate)
     _add(stack, newstate)
     _ENV:f_actor_load(newstate)
+end $$
+
+-- pops until you reach a state useful for when you want to pop more than once
+|[f_modes_popuntil]| function(_ENV, untilstate)
+    while next_state ~= untilstate do
+        _ENV:pop()
+    end
 end $$
 
 |[f_modes_pop]| function(_ENV)
@@ -109,25 +119,26 @@ end $$
     f_zcall(function(menu_name, create_func, ...)
         modes[menu_name].menu = create_func(...)
     end, [[
-        ;,browse,       ~f_create_menu,      ~f_browse_drawentry, 4 -- selecting a pkmn from dex (for browsing or changing team pkmn)
-       ;;,browsestat,   ~f_create_menu_view, ~f_menu_drawentry      -- info for pkmn in browse mode
-       ;;,credits,      ~f_create_menu_view, ~f_menu_drawentry      -- credits view obviously
-       ;;,fightover,    ~f_create_menu_view, ~f_menu_drawentry      -- stats that display when you finish a fight
-       ;;,editteam,    ~f_create_menu,       ~f_browse_drawentry, 3 -- selecting a pkmn from team
-       ;;,switchteam,  ~f_create_menu,       ~f_browse_drawentry, 3 -- selecting a pkmn from team
-       ;;,main,         ~f_create_menu,      ~f_menu_drawentry      -- select a mode
-       ;;,teamaction,  ~f_create_menu,       ~f_menu_drawentry      -- edit team what to do (delete, edit moves, edit pkmn)
-       ;;,moveaction,   ~f_create_menu,      ~f_menu_drawentry      -- selecting what to do with a move (switch, delete, select)
-       ;;,teammovesel, ~f_create_menu,       ~f_menu_drawentry      -- select one of the moves a pokemon can learn (tms, hms, natural moves...)
-       ;;,teammoves,   ~f_create_menu,       ~f_menu_drawentry      -- select 1 of 4 moves from a pokemon
+        ;,browse,      ~f_create_menu,      ~f_browse_drawentry, 4 -- selecting a pkmn from dex (for browsing or changing team pkmn)
+       ;;,browsestat,  ~f_create_menu_view, ~f_menu_drawentry      -- info for pkmn in browse mode
+       ;;,credits,     ~f_create_menu_view, ~f_menu_drawentry      -- credits view obviously
+       ;;,fightover,   ~f_create_menu_view, ~f_menu_drawentry      -- stats that display when you finish a fight
+       ;;,editteam,    ~f_create_menu,      ~f_browse_drawentry, 3 -- selecting a pkmn from team
+       ;;,switchteam,  ~f_create_menu,      ~f_browse_drawentry, 3 -- selecting a pkmn from team
+       ;;,main,        ~f_create_menu,      ~f_menu_drawentry      -- select a mode
+       ;;,teamaction,  ~f_create_menu,      ~f_menu_drawentry      -- edit team what to do (delete, edit moves, edit pkmn)
+       ;;,moveaction,  ~f_create_menu,      ~f_menu_drawentry      -- selecting what to do with a move (switch, delete, select)
+       ;;,teammovesel, ~f_create_menu,      ~f_menu_drawentry      -- select one of the moves a pokemon can learn (tms, hms, natural moves...)
+       ;;,teammoves,   ~f_create_menu,      ~f_menu_drawentry      -- select 1 of 4 moves from a pokemon
+       ;;,switchmoves, ~f_create_menu,      ~f_menu_drawentry      -- switch 1 of 4 moves
 
-       ;;,pselactions,  ~f_create_menu,      ~f_menu_drawentry      -- select an action during battle (fight, switch, forfeit)
-       ;;,pselmove,     ~f_create_menu,      ~f_menu_drawentry      -- select 1 of 4 moves from a pokemon (during battle) -- TODO: try merging with other move select
-       ;;,pselswitch,   ~f_create_menu,      ~f_browse_drawentry, 3 -- selecting a pkmn from team
+       ;;,pselactions, ~f_create_menu,      ~f_menu_drawentry      -- select an action during battle (fight, switch, forfeit)
+       ;;,pselmove,    ~f_create_menu,      ~f_menu_drawentry      -- select 1 of 4 moves from a pokemon (during battle) -- TODO: try merging with other move select
+       ;;,pselswitch,  ~f_create_menu,      ~f_browse_drawentry, 3 -- selecting a pkmn from team
 
-       ;;,team1,        ~f_create_menu,      ~f_menu_drawentry      -- select a team
-       ;;,team2story,   ~f_create_menu,      ~f_menu_drawentry      -- select a cpu trainer
-       ;;,team2match,   ~f_create_menu,      ~f_menu_drawentry      -- select a team
+       ;;,team1,       ~f_create_menu,      ~f_menu_drawentry      -- select a team
+       ;;,team2story,  ~f_create_menu,      ~f_menu_drawentry      -- select a cpu trainer
+       ;;,team2match,  ~f_create_menu,      ~f_menu_drawentry      -- select a team
     ]])
 
     f_zobj_set(modes, [[
