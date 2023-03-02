@@ -28,21 +28,10 @@ end $$
     p.team = newteam
 end $$
 
--- todo: dedup with f_fightsel_init
 |[f_horde_select]| function(_ENV)
-    local cpu_team_draft = {}
-    for num=1,6 do
-        _add(cpu_team_draft, { num=num, moves=f_get_natural_moveset(num) })
-    end
-
-    -- |[f_begin_fight]| function(game, team1, team2, name1, name2, iscpu1, iscpu2, p1_die_logic, p2_die_logic, p1_win_logic, p2_win_logic)
-    f_begin_fight(_ENV,
-        _ENV:f_get_team_cursor'team1', cpu_team_draft,
-        "player 1", "horde",
-        false, true,
-        f_nop, f_horde_death,
-        f_nop, function(horde)
-            poke(S_HOARD, mid(@S_HOARD, #horde.deadnums, 255))
-        end
-    )
+    f_begin_fight_cpu(_ENV, _split'1,2,3,4,5,6', "horde", f_horde_death, function(_, other)
+        f_unlock_pkmn(other)
+    end, function(horde)
+        poke(S_HOARD, mid(@S_HOARD, #horde.deadnums, 255))
+    end)
 end $$

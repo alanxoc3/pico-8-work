@@ -34,6 +34,25 @@
     _ENV:push'turn'
 end $$
 
+-- horde and story share similar logic for cpu battle
+|[f_begin_fight_cpu]| function(_ENV, team, name, deathfunc, plwinfunc, cpuwinfunc)
+    local cpu_team_draft = {}
+    for i=1,6 do
+        local num = team[i]
+        if num then
+            _add(cpu_team_draft, { num=num, moves=f_get_natural_moveset(num) })
+        end
+    end
+
+    f_begin_fight(_ENV,
+        _ENV:f_get_team_cursor'team1', cpu_team_draft,
+        "player", name,
+        false, true,
+        f_nop,     deathfunc,
+        plwinfunc, cpuwinfunc
+    )
+end $$
+
 -- used to switch to the next pkmn at the start of the battle and when a pkmn is ko-ed.
 -- if this returns nil, the battle is over
 |[f_get_next_active]| function(team)

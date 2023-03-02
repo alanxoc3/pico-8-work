@@ -75,13 +75,13 @@ end $$
             end
         end
 
-        -- todo: teachs could be in a weird order for evolved forms. i should fix that
         if evolvesfrom < num then
             _foreach(c_pokemon[evolvesfrom].moves_natural, function(move) _add(pkmn.moves_natural, move) end)
             _foreach(c_pokemon[evolvesfrom].moves_teach,   function(move) _add(pkmn.moves_teach,   move) end)
             _foreach(c_pokemon[evolvesfrom].moves_event,   function(move) _add(pkmn.moves_event,   move) end)
         end
 
+        -- this is my ghetto sorting. it fixes weird ordering for new teachs on evolved forms (tm/hm order)
         local teach_map, teachs = {}, {}
         _foreach(pkmn.moves_teach, function(move) teach_map[move] = true end)
         for i=1,54 do
@@ -102,12 +102,12 @@ end $$
         pkmn.total = pkmn.attack + pkmn.defense + pkmn.special + pkmn.speed + pkmn.maxhp
 
         pkmn.browse_draw = function(...)
-            -- todo: if logic for surfing pikachu + amnesia psyduck?
+            -- todo (wait): if logic for surfing pikachu + amnesia psyduck?
             f_draw_pkmn_out(pkmn.available() and pkmn.num or -1, ...)
         end
 
         pkmn.draw = function(...)
-            -- todo: if logic for surfing pikachu + amnesia psyduck?
+            -- todo (wait): if logic for surfing pikachu + amnesia psyduck?
             f_draw_pkmn_out(pkmn.num, ...)
         end
 

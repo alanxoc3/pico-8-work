@@ -118,24 +118,10 @@ end $$
             team=team,
             disabled=disabled,
             select=function(game, entry)
-                local cpu_team_draft = {}
-                for i=1,6 do
-                    local num = entry.team[i]
-                    if num then
-                        _add(cpu_team_draft, { num=num, moves=f_get_natural_moveset(num) })
-                    end
-                end
-
-                -- |[f_begin_fight]| function(game, team1, team2, name1, name2, iscpu1, iscpu2, p1_die_logic, p2_die_logic, p1_win_logic, p2_win_logic)
-                f_begin_fight(game,
-                    _ENV:f_get_team_cursor'team1', cpu_team_draft,
-                    "player 1", entry.name,
-                    false, true,
-                    f_nop, f_nop,
-                    function(pl, other)
-                        poke(S_STORY, mid(@S_STORY, num, #c_trainers))
-                        f_unlock_pkmn(other)
-                    end, f_nop)
+                f_begin_fight_cpu(game, entry.team, entry.name, f_nop, function(pl, other)
+                    poke(S_STORY, mid(@S_STORY, num, #c_trainers))
+                    f_unlock_pkmn(other)
+                end, f_nop)
             end
         }
     end)
