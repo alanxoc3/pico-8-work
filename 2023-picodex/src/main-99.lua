@@ -11,7 +11,7 @@ f_zclass[[o_game_state,o_actor|
         draw1,%f_nop, draw2,%f_nop, draw3,%f_nop,
         modes,;
 
-    wait;   next,moveup, duration,1, draw,%f_draw_picodex2;
+    wait;   next,moveup, duration,.5, draw,%f_draw_picodex2;
     moveup; next,closed, duration,.5, draw,%f_draw_picodex2, sinit,%f_moveup_init;
 
     closed;     foldstate,closed,  next,opening,                          sinit,%f_closed_init, draw,%f_draw_picodex2, update,%f_closed_update;
@@ -30,13 +30,6 @@ f_zclass[[o_game_state,o_actor|
     state:sinit()
 end $$
 
-|[f_logo_draw]| function()
-    f_cool_bg()
-    rectfill(0, 64-6, 127, 64+9, 1)
-    f_zprint("aMORG gAMES", 64, 64+-4, 7, 0)
-    f_zprint("pRESENTS",    64, 64+3, 7, 0)
-end $$
-
 function _init()
     local _ENV = _g
 
@@ -47,20 +40,14 @@ function _init()
     _poke(0x5f5d, 2) -- set the repeating delay.
 
     g_picodex = o_game_state()
-    --f_logo_draw()
-    -- f_logo_draw()
     f_draw_picodex2(g_picodex)
     _sfx(63,1,24)
-
--- NORMAL_BEGIN -- debug mode doesn't need to load these sheets for faster startup
 
     -- 0x0000
     f_extract_sheet(0)
 
     -- 0x0002
     f_extract_sheet(1)
-
--- NORMAL_END
 
     -- 0x0004
     f_extract_sheet(2)
@@ -108,19 +95,3 @@ function _draw()
     _cls()
     f_loop_entities('o_game_state', 'draw')
 end
-
-|[f_parse_numlist]| function(str)
-    local tbl = {}
-    for x in _all(_split(str or '', '|')) do
-        if _type(x) == "number" then
-            _add(tbl, x)
-        end
-    end
-    return tbl
-end $$
-
--- how does it l
--- 1-5|10|20
-
--- 255 = dash
--- 0   = next-pkmn

@@ -98,9 +98,9 @@ end $$
 
 |[f_game_init]| function(_ENV)
     -- uncomment to cheat for all pkmn
-     for i=0,2 do
-         _poke(S_POKEMON+i, 1)
-     end
+    for i=1,151 do
+        _poke(S_POKEMON+i, 1)
+    end
 
     local team = {} -- default team for new games
     -- f_zcall(function(num) _poke(S_POKEMON+num, 1) end, [[;]])
