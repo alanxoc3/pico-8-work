@@ -3,24 +3,22 @@
     f_wobble_text("team #"..game:cursor'team1'+1, 20, 27, 1)
 end $$
 
--- todo: token crunching.
-|[f_turn_draw1]|  function(game)
-    local a1, a2, active = game.p1.active, game.p2.active, game.cur_action.active
-    local a1a, a2a = active == a1, active == a2
-    _rectfill(0,0,39,39,5)
-    _rectfill(0,5,39,34,13)
+|[f_turn_draw1]|  function(_ENV)
+    f_zcall(_rectfill, [[
+       ;0,0,39,39,5
+      ;;0,5,39,34,13
+    ]])
 
+    f_draw_battle_side(p1.active, cur_action.active == p1.active, 1)
+    f_draw_battle_side(p2.active, cur_action.active == p2.active, -1)
+end $$
+
+-- todo: maybe replace a1 with _ENV for slight token saving...
+|[f_draw_battle_side]| function(a1, a1a, flip)
     if a1.shared.major ~= C_MAJOR_FAINTED and not a1.invisible then
-        _pal(1,a1a and 6 or 1) _spr(198,20,26,3,1) _pal(1,1)
-        f_zprint(a1.shared.hp.."H", 41, 29-2, 13, 1)
-        f_draw_hp(40, 31+6, a1.shared.hp, a1.shared.maxhp,  1,  1)
-        c_pokemon[a1.shared.num].draw(   10, 40-15, 5)
-    end
-
-    if a2.shared.major ~= C_MAJOR_FAINTED and not a2.invisible then
-        _pal(1,a2a and 6 or 1) _spr(198,-4,7,3,1) _pal(1,1)
-        f_zprint(a2.shared.hp.."H", 1,  6+2,  13, -1)
-        f_draw_hp(-1,  8 -6, a2.shared.hp, a2.shared.maxhp, -1, 1)
-        c_pokemon[a2.shared.num].draw(40-10,    15, 5, -1)
+        _pal(1,a1a and 6 or 1) _spr(198,8+12*flip,16.5+9.5*flip,3,1) _pal(1,1)
+        f_zprint(a1.shared.hp.."H", 21+20*flip, 17.5+9.5*flip, 13, flip)
+        f_draw_hp(19.5+20.5*flip, 19.5+17.5*flip, a1.shared.hp, a1.shared.maxhp, flip, 1)
+        c_pokemon[a1.shared.num].draw(20-10*flip, 20+5*flip, 5, flip)
     end
 end $$
