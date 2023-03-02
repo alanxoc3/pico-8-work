@@ -15,6 +15,16 @@ FADE_SPEED: .5
 # CONSTANTS
 C_LEVEL: 50
 
+# this constant block is for parsing pkmn data stored in cartridge
+# event is event
+# teach is teach (tm/hm)
+# dash is a dash/range
+# next is next pokemon
+C_EVENT: 252
+C_TEACH: 253
+C_DASH:  254
+C_NEXT:  255
+
 C_PRIORITY_SWITCH:      3000
 C_PRIORITY_QUICKATTACK: 2000
 C_PRIORITY_ATTACK:      1000
@@ -63,10 +73,9 @@ S_PARTY3:         0x5e3c
 S_POKEMON:        0x5e5a
 # 152 pkmn ends:  0x5ef2
 
-S_NEW:            0x5efb
-S_STORY:          0x5efc
-S_HOARD:          0x5efd
-S_BG_PATTERN:     0x5efe
+S_NEW:            0x5efc
+S_STORY:          0x5efd
+S_HOARD:          0x5efe
 S_SWAP_CONTROLS:  0x5eff
 
 # type numbers, hard coded in compile and pokemon_data, so change those places if this changes.

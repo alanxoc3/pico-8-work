@@ -15,15 +15,9 @@ end $$
     for num=-1,151 do
         ---- PASS 1 - create array ----
         -- this populates an array for the pokemon, based on data stored in the cartridge
-        -- todo: put these in constants.txt
-        local EVENT = 252 -- is event
-        local TEACH = 253 -- is teach (tm/hm)
-        local DASH  = 254 -- is a dash/range
-        local NEXT  = 255 -- is next pokemon
-
         local pkmndata, is_range = {}, false
-        while @movemem ~= NEXT do
-            if @movemem == DASH then
+        while @movemem ~= C_NEXT do
+            if @movemem == C_DASH then
                 is_range = true
             elseif is_range then
                 for i=pkmndata[#pkmndata]+1,@movemem do
@@ -72,9 +66,9 @@ end $$
         local move_bucket = pkmn.moves_natural
         for i=9,#pkmndata do
             local val = pkmndata[i]
-            if val == TEACH then
+            if val == C_TEACH then
                 move_bucket = pkmn.moves_teach
-            elseif val == EVENT then
+            elseif val == C_EVENT then
                 move_bucket = pkmn.moves_event
             else
                 _add(move_bucket, val)

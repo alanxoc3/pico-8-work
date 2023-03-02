@@ -201,13 +201,9 @@ return _ceil(base+.5*93)+5
 end,function()
 local movemem,names=_peek2(8),split"missingno,bulbasaur,ivysaur,venusaur,charmander,charmeleon,charizard,squirtle,wartortle,blastoise,caterpie,metapod,butterfree,weedle,kakuna,beedrill,pidgey,pidgeotto,pidgeot,rattata,raticate,spearow,fearow,ekans,arbok,pikachu,raichu,sandshrew,sandslash,nidoran f,nidorina,nidoqueen,nidoran m,nidorino,nidoking,clefairy,clefable,vulpix,ninetales,jigglypuff,wigglytuff,zubat,golbat,oddish,gloom,vileplume,paras,parasect,venonat,venomoth,diglett,dugtrio,meowth,persian,psyduck,golduck,mankey,primeape,growlithe,arcanine,poliwag,poliwhirl,poliwrath,abra,kadabra,alakazam,machop,machoke,machamp,bellsprout,weepinbell,victreebel,tentacool,tentacruel,geodude,graveler,golem,ponyta,rapidash,slowpoke,slowbro,magnemite,magneton,farfetchd,doduo,dodrio,seel,dewgong,grimer,muk,shellder,cloyster,gastly,haunter,gengar,onix,drowzee,hypno,krabby,kingler,voltorb,electrode,exeggcute,exeggutor,cubone,marowak,hitmonlee,hitmonchan,lickitung,koffing,weezing,rhyhorn,rhydon,chansey,tangela,kangaskhan,horsea,seadra,goldeen,seaking,staryu,starmie,mr mime,scyther,jynx,electabuzz,magmar,pinsir,tauros,magikarp,gyarados,lapras,ditto,eevee,vaporeon,jolteon,flareon,porygon,omanyte,omastar,kabuto,kabutops,aerodactyl,snorlax,articuno,zapdos,moltres,dratini,dragonair,dragonite,mewtwo,mew"
 for num=-1,151 do
-local EVENT=252
-local TEACH=253
-local DASH=254
-local NEXT=255
 local pkmndata,is_range={},false
-while@movemem ~=NEXT do
-if@movemem==DASH then
+while@movemem ~=255 do
+if@movemem==254 then
 is_range=true
 elseif is_range then
 for i=pkmndata[#pkmndata]+1,@movemem do
@@ -237,9 +233,9 @@ pkmndata[8],
 local move_bucket=pkmn.moves_natural
 for i=9,#pkmndata do
 local val=pkmndata[i]
-if val==TEACH then
+if val==253 then
 move_bucket=pkmn.moves_teach
-elseif val==EVENT then
+elseif val==252 then
 move_bucket=pkmn.moves_event
 else
 _add(move_bucket,val)
@@ -517,12 +513,12 @@ f_zobj[[;name,browse,state,browse,select,%f_menu_state_callback,desc,.browse|;;n
 local count=0
 for i=0,151 do count+=c_pokemon[i].available()and 1 or 0 end
 menu[1].desc..=count.."/151|pokemon"
-menu[3].desc..=(@0x5efc).."/40|trainers"
-if@0x5efc<40 then
+menu[3].desc..=(@0x5efd).."/40|trainers"
+if@0x5efd<40 then
 menu[4].disabled=true
 else
 menu[4].name="horde"
-menu[4].desc=".horde|"..(@0x5efd).."/151|hi-score"
+menu[4].desc=".horde|"..(@0x5efe).."/151|hi-score"
 end
 end,function(_ENV,selectfunc)
 local tbl={}
@@ -570,7 +566,7 @@ _poke(0x5e5a+num,1)
 end)
 end,function(_ENV)
 menu:refresh(c_trainers,function(trainer,num)
-local disabled,team=num-1>@0x5efc,{}
+local disabled,team=num-1>@0x5efd,{}
 for i=1,6 do team[i]=trainer[i+1]end
 return{
 name=trainer[1],
@@ -590,7 +586,7 @@ _ENV:f_get_team_cursor"team1",cpu_team_draft,
 false,true,
 f_nop,f_nop,
 function(pl,other)
-poke(0x5efc,mid(@0x5efc,num,#c_trainers))
+poke(0x5efd,mid(@0x5efd,num,#c_trainers))
 f_unlock_pkmn(other)
 end,f_nop)
 end
@@ -812,8 +808,8 @@ _foreach(_split"133,7,35,1,25,4",function(num)
 _add(team,{num=num,moves=f_get_natural_moveset(num)})
 _poke(0x5e5a+num,1)
 end)
-if@0x5efb==0 then
-_poke(0x5efb,1)
+if@0x5efc==0 then
+_poke(0x5efc,1)
 f_save_team(0,team)
 end
 modes=o_modes()
@@ -1019,7 +1015,7 @@ _ENV:f_get_team_cursor"team1",cpu_team_draft,
 false,true,
 f_nop,f_horde_death,
 f_nop,function(horde)
-poke(0x5efd,mid(@0x5efd,#horde.deadnums,255))
+poke(0x5efe,mid(@0x5efe,#horde.deadnums,255))
 end
 )
 end,function(team,ind,moveind,move)
