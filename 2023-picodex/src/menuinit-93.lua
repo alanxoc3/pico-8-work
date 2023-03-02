@@ -73,7 +73,7 @@ end $$
 
 |[f_teampkmn_init]| function(_ENV)
     f_browse_init_shared(_ENV, function(_ENV)
-        f_save_team(_ENV:cursor'team1', f_set_default_team_pkmn(f_get_team(_ENV:cursor'team1'), _ENV:cursor'editteam'+1, _ENV:cursor'browse'))
+        f_save_team(_ENV:cursor'team1', f_set_default_team_pkmn(_ENV:f_get_team_cursor'team1', _ENV:cursor'editteam'+1, _ENV:cursor'browse'))
         _ENV:pop()
     end)
 end $$
@@ -128,7 +128,7 @@ end $$
 
                 -- |[f_begin_fight]| function(game, team1, team2, name1, name2, iscpu1, iscpu2, p1_die_logic, p2_die_logic, p1_win_logic, p2_win_logic)
                 f_begin_fight(game,
-                    f_get_team(game:cursor'team1'), cpu_team_draft,
+                    _ENV:f_get_team_cursor'team1', cpu_team_draft,
                     "player 1", entry.name,
                     false, true,
                     f_nop, f_nop,
@@ -153,7 +153,7 @@ end $$
 
 |[f_moveaction_init]| function(_ENV)
     -- todo: maybe combine this with a func that gets rid of empty slots, then you just check len
-    local team = f_get_team(_ENV:cursor'team1')
+    local team = _ENV:f_get_team_cursor'team1'
     local teampkmn = team[_ENV:cursor'editteam'+1]
     local count = 0 
     for j=1,4 do
@@ -171,7 +171,7 @@ end $$
 -- todo: fix pop, sd only pop to moves, not before
 -- todo: last del should be disabled
 |[f_movedel]| function(_ENV)
-    local team = f_get_team(_ENV:cursor'team1')
+    local team = _ENV:f_get_team_cursor'team1'
     local teampkmn = team[_ENV:cursor'editteam'+1]
     teampkmn.moves[_ENV:cursor'teammoves'+1] = nil
     f_save_team(_ENV:cursor'team1', team)
@@ -179,7 +179,7 @@ end $$
 end $$
 
 |[f_teammoves_init]| function(_ENV)
-    local team = f_get_team(_ENV:cursor'team1')
+    local team = _ENV:f_get_team_cursor'team1'
     local teampkmn = team[_ENV:cursor'editteam'+1] or {moves={}}
 
     menu:refresh(f_zobj[[,1,2,3,4]], function(i)
@@ -193,7 +193,7 @@ end $$
 
 -- todo: merge logic with f_teammoves_init
 |[f_switchmoves_init]| function(_ENV)
-    local team = f_get_team(_ENV:cursor'team1')
+    local team = _ENV:f_get_team_cursor'team1'
     local teampkmn = team[_ENV:cursor'editteam'+1] or {moves={}}
     local disabled_ind = _ENV:cursor'teammoves'+1
 
@@ -214,7 +214,7 @@ end $$
 end $$
 
 |[f_teammovesel_init]| function(_ENV)
-    local team = f_get_team(_ENV:cursor'team1')
+    local team = _ENV:f_get_team_cursor'team1'
     local teampkmn = team[_ENV:cursor'editteam'+1]
     local pkmn = c_pokemon[teampkmn.num]
 
@@ -242,7 +242,7 @@ end $$
             num=m.num,
             ref=m.desc,
             select=function()
-                f_save_team(_ENV:cursor'team1', f_set_team_pkmn_move(f_get_team(_ENV:cursor'team1'), _ENV:cursor'editteam'+1, _ENV:cursor'teammoves'+1, m.num))
+                f_save_team(_ENV:cursor'team1', f_set_team_pkmn_move(_ENV:f_get_team_cursor'team1', _ENV:cursor'editteam'+1, _ENV:cursor'teammoves'+1, m.num))
                 _ENV:popuntil'teammoves'
             end
         }
@@ -294,7 +294,7 @@ end $$
 
 -- this is used both in "editteam" and selecting a pkmn in battle.
 |[f_editteam_init]| function(_ENV)
-    local team = f_get_team(_ENV:cursor'team1')
+    local team = _ENV:f_get_team_cursor'team1'
     menu:refresh(f_zobj[[,1,2,3,4,5,6]], function(i)
         return {
             select=function(_ENV)
@@ -311,7 +311,7 @@ end $$
 
 -- todo: combine with editteam
 |[f_switchteam_init]| function(_ENV)
-    local team = f_get_team(_ENV:cursor'team1')
+    local team = _ENV:f_get_team_cursor'team1'
     menu:refresh(f_zobj[[,1,2,3,4,5,6]], function(i)
         return {
             disabled=i==_ENV:cursor'editteam'+1,
@@ -330,7 +330,7 @@ end $$
 -- this is used both in "editteam" and selecting a pkmn in battle.
 -- todo: if a pokemon is dead, just draw a black shadow.
 |[f_pselswitch_init]| function(_ENV)
-    local team = f_get_team(_ENV:cursor'team1')
+    local team = _ENV:f_get_team_cursor'team1'
     menu:refresh(f_zobj[[,1,2,3,4,5,6]], function(i)
         local disabled = not p0.team[i] or p0.active.shared == p0.team[i] or p0.team[i].major == C_MAJOR_FAINTED
         return {

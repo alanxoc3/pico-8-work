@@ -1,6 +1,6 @@
 -- todo: make this smaller
 |[f_editteam_draw3]| function(game)
-    local team = f_get_team(game:cursor'team1')
+    local team = game:f_get_team_cursor'team1'
     local teampkmn = team[game:cursor'editteam'+1]
     f_draw3_pokeinfo(teampkmn and teampkmn.num or -1)
 end $$

@@ -37,7 +37,7 @@ end $$
 
     -- |[f_begin_fight]| function(game, team1, team2, name1, name2, iscpu1, iscpu2, p1_die_logic, p2_die_logic, p1_win_logic, p2_win_logic)
     f_begin_fight(_ENV,
-        f_get_team(_ENV:cursor'team1'), cpu_team_draft,
+        _ENV:f_get_team_cursor'team1', cpu_team_draft,
         "player 1", "horde",
         false, true,
         f_nop, f_horde_death,

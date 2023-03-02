@@ -1,5 +1,5 @@
 |[f_teamdel]| function(game)
-    local team = f_get_team(game:cursor'team1')
+    local team = game:f_get_team_cursor'team1'
     team[game:cursor'editteam'+1] = nil
     f_save_team(game:cursor'team1', team)
     game:pop()
