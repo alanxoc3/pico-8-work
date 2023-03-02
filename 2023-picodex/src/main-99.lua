@@ -2,11 +2,11 @@ f_zclass[[o_game_state,o_actor|
     curr,wait;
 
     init,%f_game_state_init, light,0;
-    ecs_exclusions; o_actor,yes; -- remove o_game_state from the o_actor group
+    ecs_exclusions; o_actor,%c_yes; -- remove o_game_state from the o_actor group
     defaults;
         foldstate,closed,
         light,0,
-        backbuttonheld,no,
+        backbuttonheld,%c_no,
         sinit,%f_nop, update,%f_nop, draw,%f_nop,
         draw1,%f_nop, draw2,%f_nop, draw3,%f_nop,
         modes,;

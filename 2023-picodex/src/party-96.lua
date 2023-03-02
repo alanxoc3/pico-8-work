@@ -12,7 +12,7 @@ end $$
     return f_get_team(game:cursor(cursor))
 end $$
 
--- no moves means the pokemon is deleted
+-- %c_no moves means the pokemon is deleted
 c_team_memlocs = f_zobj[[0,S_PARTY1, 1,S_PARTY2, 2,S_PARTY3]]
 |[f_get_team]| function(team_index) -- 0 to 2
     local mem = c_team_memlocs[team_index]

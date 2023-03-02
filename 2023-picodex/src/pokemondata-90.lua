@@ -139,7 +139,7 @@ end $$
 -- pokemon moves can be physical or special. the order here is specific. odd numbers are physical. even numbers are special.
 -- includes type effectiveness chart. according to the gen 1 games, which had bugs. i'm keeping the bugs :).
 |[c_types]| f_zobj[[
-    T_NONE;     bg,0, name,empty;      T_NONE;     good;,;                                  T_NONE;     null;,;                   T_NONE;     weak;,;
+    T_NONE;     bg,0, name,%c_empty;        T_NONE;     good;,;                                  T_NONE;     null;,;                   T_NONE;     weak;,;
     T_NORMAL;   bg,0, name,"normal";   T_NORMAL;   good;,;                                  T_NORMAL;   null;,T_GHOST;            T_NORMAL;   weak;,T_ROCK;
     T_FIRE;     bg,5, name,"fire";     T_FIRE;     good;,T_GRASS,T_ICE,T_BUG;               T_FIRE;     null;,;                   T_FIRE;     weak;,T_FIRE,T_WATER,T_ROCK,T_DRAGON;
     T_FIGHTING; bg,2, name,"fighting"; T_FIGHTING; good;,T_ICE,T_NORMAL,T_ROCK;             T_FIGHTING; null;,T_GHOST;            T_FIGHTING; weak;,T_BUG,T_FLYING,T_POISON,T_PSYCHIC;

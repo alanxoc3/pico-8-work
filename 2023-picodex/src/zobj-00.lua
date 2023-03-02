@@ -1,20 +1,16 @@
 -- used everywhere. this is the identity function
-function f_nop(...) return ... end
-
 -- 193 tokens
 function f_zobj_eval(val, table, parameters)
     -- 37: %, 126: ~
-    if     _ord(val) == 37               then return _g[_sub(val, 2)]
-    elseif val == '~'                    then return table
-    elseif _ord(val) == 126              then return table[_sub(val, 2)]
-    elseif val == '@'                    then return _deli(parameters, 1)
-    elseif val == 'yes'   or val == 'no' then return val=='yes'
-    elseif val == 'empty'                then return ""
-    elseif val == 'null' or val == ''    then return -- nil is inferred
-    end                                      return val
+    if     _ord(val) == 37  then return _g[_sub(val, 2)]
+    elseif val == '~'       then return table
+    elseif _ord(val) == 126 then return table[_sub(val, 2)]
+    elseif val == '@'       then return _deli(parameters, 1)
+    elseif val == '#'       then return {} end
+    return val ~= '' and val or nil
 end
 
--- has an extra split call no matter key or val, but token & character count goes down from ztable-_ord
+-- has an extra split call %c_no matter key or val, but token & character count goes down from ztable-_ord
 function f_zobj_set(table, str, ...)
     local params, statements, dest = {...}, _split(str, ";"), table
     _foreach(statements, function(statement)
@@ -45,6 +41,10 @@ function f_zobj(...)
     return f_zobj_set(_setmetatable({}, {__index=_g}), ...)
 end
 
+-- first, set the basic constants/values used by global things.
+f_zobj_set(_g, [[c_yes,@, c_no,@, c_empty,@, f_nop,@]], true, false, "", function(...) return ... end)
+
+-- then set the global things.
 -- set the initial state of _g. _g is needed for ztable "%" references to work.
 -- see the perl preprocessor script for more info on G_TABLE_INITIALIZATION.
 -- technically, f_zobj sets the metatable to _g. That's recursive and bad, so we overwrite it to the global scope. This way we can access pico-8 api functions.
@@ -54,7 +54,6 @@ f_zobj_set(_g, _G_ZOBJ_PARAMS)
 |[f_zobj]|      f_zobj      $$
 |[f_zobj_set]|  f_zobj_set  $$
 |[f_zobj_eval]| f_zobj_eval $$
-|[f_nop]|       f_nop       $$
 
 -- if something isn't in global scope, it goes to _g... so pico8 api functions will take precedence over g. But table takes over api.
 -- i like this idea:

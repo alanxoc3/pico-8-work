@@ -152,7 +152,7 @@ end $$
 end $$
 
 |[f_moveaction_init]| function(_ENV)
-    -- todo: maybe combine this with a func that gets rid of empty slots, then you just check len
+    -- todo: maybe combine this with a func that gets rid of c_empty slots, then you just check len
     local team = _ENV:f_get_team_cursor'team1'
     local teampkmn = team[_ENV:cursor'editteam'+1]
     local count = 0 
@@ -267,7 +267,7 @@ end $$
 |[f_pselactions_init]| function(_ENV)
     menu:refresh(f_zobj[[
          ; name,"fight",   desc,"select|next|move",      select,%f_menu_state_callback, state,pselmove
-        ;; name,"random",  desc,"select|random|move",    select,%f_menu_cancel -- random logic is in the turn logic if move is empty, so just leave the menu
+        ;; name,"random",  desc,"select|random|move",    select,%f_menu_cancel -- random logic is in the turn logic if move is c_empty, so just leave the menu
         ;; name,"switch",  desc,"change|active|pokemon", select,%f_menu_state_callback, state,pselswitch
         ;; name,"forfeit", desc,"leave|the|fight",       select,%f_psel_forfeit
     ]])
@@ -345,7 +345,7 @@ end $$
 end $$
 
 |[f_turn_init]| function(_ENV)
-    -- if there is no action, assume it's a computer player.
+    -- if there is %c_no action, assume it's a computer player.
     for p in _all{p1, p2} do
         if #p.actions == 0 then
             f_select_move(p, f_select_random_move_slot(p.active))

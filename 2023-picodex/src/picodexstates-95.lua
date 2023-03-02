@@ -25,10 +25,10 @@ end $$
     if not f_any_btn() and backbuttonheld then
         backbuttonheld = false
         _ENV:load()
-        _menuitem(1) -- no factory reset now
+        _menuitem(1) -- %c_no factory reset now
     elseif f_any_btn() then
         backbuttonheld = true
-        _menuitem(1) -- no factory reset now
+        _menuitem(1) -- %c_no factory reset now
     end
 end $$
 

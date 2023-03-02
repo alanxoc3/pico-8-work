@@ -16,13 +16,13 @@
 -- something ridiculously small could also mean 1 step.
 
 -- callback when o_timer is complete
--- no callback for forever timers
+-- %c_no callback for forever timers
 -- there can be a callback, but it can be a f_nop if you really want nothing done...
 -- unless you want to manually trigger the o_timer to end
 -- so is duration = 0 == 1 step or is it forever or is it non existant
 -- hmm... 
 
--- if you need something forever, no point in using a o_timer, or just keep restarting your o_timer.
+-- if you need something forever, %c_no point in using a o_timer, or just keep restarting your o_timer.
 
 -- so duration of 0 is one step. the callback will be called as soon as it is executed. and the o_timer is considered "active" for that step.
 -- and percent is considered 1 for and after that step. maybe...

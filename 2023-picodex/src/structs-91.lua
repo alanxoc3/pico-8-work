@@ -76,14 +76,14 @@ end $$
 --   flying     -- fly - uncontrollable + invincible (besides swift)
 --   preparing  -- skullbash/solarbeam/razorwind/skyattack - uncontrollable + next turn move
 --   recharging -- hyperbeam - uncontrollable 1 turn
---   rage       -- rage                     - uncontrollable + use a move. attack increases each time you are hit, so no counter needed (use the stages counter)
+--   rage       -- rage                     - uncontrollable + use a move. attack increases each time you are hit, so %c_no counter needed (use the stages counter)
 --   thrashing  -- petaldance/thrash        - uncontrollable + use a move. has a o_timer (2-3 turns) and get confused at the end
 --   trapping   -- bind/clamp/firespin/wrap - uncontrollable + use a move. is trapped? (o_timer 2-5 turns) recharging? preparing? thrashing?
 --   trapped    -- if you are trapped in a bind/clamp/firespin/wrap
 --   getmove(0-3), or get valid moves? ????
 
 -- }
---------------- team (or player)... yes! i think...
+--------------- team (or player)... %c_yes! i think...
 -- team {
 --   1-6 - each thing is a teampkmn
 --   can_switch() -- give it an index, it tells you if you can switch with that pkmn

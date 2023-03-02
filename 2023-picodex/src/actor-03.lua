@@ -15,11 +15,9 @@ f_zclass[[o_actor,o_timer|
     clean,    %f_actor_clean,
     is_alive, %f_actor_is_alive,
 
-    alive,    yes,
-    duration, null,
+    alive,    %c_yes,
+    isnew,    %c_yes,
     curr,     start,
-    next,     null,
-    isnew,    yes,
 
     init,      %f_nop,
     finit,     %f_nop,
