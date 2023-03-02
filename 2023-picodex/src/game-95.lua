@@ -157,13 +157,13 @@ end $$
     -- beep done when picodex has booted up!
     f_beep_done()
 
-    _menuitem(2, "close picodex", function()
+    _menuitem(1, "close picodex", function()
+        _menuitem(1) -- remove menu item
         _menuitem(2) -- remove menu item
-        _menuitem(3) -- remove menu item
         _ENV:load'closing'
     end)
 
-    _menuitem(3, "swap 🅾️/❎", function()
+    _menuitem(2, "swap 🅾️/❎", function()
         _poke(S_SWAP_CONTROLS, @S_SWAP_CONTROLS == 0 and 1 or 0)
     end)
 end $$

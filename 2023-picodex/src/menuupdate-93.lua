@@ -49,7 +49,6 @@ end $$
 end $$
 
 |[f_fightover_xfunc]| function(_ENV)
-    _printh(p0.active.shared.num)
     f_minisfx(p0.active.shared.num)
 end $$
 

@@ -1,7 +1,7 @@
 f_zclass[[o_game_state,o_actor|
-    curr,moveup;
+    curr,wait;
 
-    init,%f_game_state_init;
+    init,%f_game_state_init, light,0;
     ecs_exclusions; o_actor,yes; -- remove o_game_state from the o_actor group
     defaults;
         foldstate,closed,
@@ -11,8 +11,8 @@ f_zclass[[o_game_state,o_actor|
         draw1,%f_nop, draw2,%f_nop, draw3,%f_nop,
         modes,;
 
-    wait;   next,moveup, duration,1,    draw,%f_logo_draw;
-    moveup; next,closed, duration,.125, draw,%f_logo_draw, sinit,%f_moveup_init;
+    wait;   next,moveup, duration,1, draw,%f_draw_picodex2;
+    moveup; next,closed, duration,.5, draw,%f_draw_picodex2, sinit,%f_moveup_init;
 
     closed;     foldstate,closed,  next,opening,                          sinit,%f_closed_init, draw,%f_draw_picodex2, update,%f_closed_update;
     opening;    foldstate,opening, next,starting_1,          duration,.2,                       draw,%f_draw_picodex2;
@@ -32,6 +32,7 @@ end $$
 
 |[f_logo_draw]| function()
     f_cool_bg()
+    rectfill(0, 64-6, 127, 64+9, 1)
     f_zprint("aMORG gAMES", 64, 64+-4, 7, 0)
     f_zprint("pRESENTS",    64, 64+3, 7, 0)
 end $$
@@ -46,8 +47,9 @@ function _init()
     _poke(0x5f5d, 2) -- set the repeating delay.
 
     g_picodex = o_game_state()
-    f_logo_draw()
-    -- f_draw_picodex2(g_picodex)
+    --f_logo_draw()
+    -- f_logo_draw()
+    f_draw_picodex2(g_picodex)
     _sfx(63,1,24)
 
 -- NORMAL_BEGIN -- debug mode doesn't need to load these sheets for faster startup
@@ -74,10 +76,6 @@ function _init()
 
     -- Need the pokedex tiles to stay loaded. This starts at sprite index #96.
     _memcpy(0x0000, 0xc000, 0x2000)
-
-    _menuitem(1, "change groove", function()
-        poke(S_BG_PATTERN, (@S_BG_PATTERN+1) % #g_bgs)
-    end)
 end
 
 function _update60()
