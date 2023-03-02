@@ -167,7 +167,6 @@ end $$
     ]], count == 1))
 end $$
 
--- todo: fix move an draw3, shouldn't always be question marks
 -- todo: fix pop, sd only pop to moves, not before
 -- todo: last del should be disabled
 |[f_movedel]| function(_ENV)
@@ -328,7 +327,6 @@ end $$
 end $$
 
 -- this is used both in "editteam" and selecting a pkmn in battle.
--- todo: if a pokemon is dead, just draw a black shadow.
 |[f_pselswitch_init]| function(_ENV)
     local team = _ENV:f_get_team_cursor'team1'
     menu:refresh(f_zobj[[,1,2,3,4,5,6]], function(i)

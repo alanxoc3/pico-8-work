@@ -1,5 +1,5 @@
 |[f_draw2_pokeinfo]| function(pkmn)
-    f_print_draw2_message("pkmn "..f_format_num(pkmn.num))
+    f_print_draw2_message("pkmn #"..pkmn.num)
 end $$
 
 |[f_draw3_pokeinfo]| function(num)
@@ -47,14 +47,6 @@ end $$
 
     for c=1,15 do _pal(c, c) end
     f_draw_pkmn(num, x, y, xscale, yscale)
-end $$
-
-|[f_format_num]| function(num)
-    local str = ''..num
-    for i=#str+1,3 do
-        str = '0'..str
-    end
-    return '#'..str
 end $$
 
 |[f_get_pokemon]| function(num)

@@ -78,7 +78,7 @@ end $$
         -- todo: teachs could be in a weird order for evolved forms. i should fix that
         if evolvesfrom < num then
             _foreach(c_pokemon[evolvesfrom].moves_natural, function(move) _add(pkmn.moves_natural, move) end)
-            _foreach(c_pokemon[evolvesfrom].moves_teach,      function(move) _add(pkmn.moves_teach,      move) end)
+            _foreach(c_pokemon[evolvesfrom].moves_teach,   function(move) _add(pkmn.moves_teach,   move) end)
             _foreach(c_pokemon[evolvesfrom].moves_event,   function(move) _add(pkmn.moves_event,   move) end)
         end
 

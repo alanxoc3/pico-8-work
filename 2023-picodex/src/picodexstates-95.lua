@@ -93,9 +93,10 @@ end $$
                 ;;,5, 172, 140, 50, 77
             ]])
 
-            if _stat'46' >= 0 then
-                f_zcall(_circ, [[;,53,65,@,12]], 5+_sin(_t()*2))
-            end
+            -- uncomment to enable a speaker circle
+            -- if _stat'46' >= 0 then
+            --     f_zcall(_circ, [[;,53,65,@,12]], 5+_sin(_t()*2))
+            -- end
 
             ----- RIGHT SIDE -----
             if rotation < 0 then

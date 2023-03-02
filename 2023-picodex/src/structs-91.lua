@@ -105,7 +105,7 @@ end $$
 |[f_create_team_pkmn]| function(num, moves)
     local pkmn = c_pokemon[num]
     return {
-        -- todo, try just copying all keys from pkmn
+        -- todo, try just copying all keys from pkmn, try metatables actually
         -- things that won't change
         num     = num,
         lvl     = pkmn.level,
