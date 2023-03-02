@@ -1181,15 +1181,15 @@ end,function(game)
 game:pop()
 game.p0=f_get_other_pl(game,game.p0)
 game:load"fightover"
-end,function(game,team1,team2,name1,name2,iscpu1,iscpu2,p1_die_logic,p2_die_logic,p1_win_logic,p2_win_logic)
+end,function(_ENV,team1,team2,name1,name2,iscpu1,iscpu2,p1_die_logic,p2_die_logic,p1_win_logic,p2_win_logic)
 local team1,team2=f_get_fight_team(team1),f_get_fight_team(team2)
-game.p1={name=name1,hordeind=6,deadnums={},priority=1,iscpu=iscpu1,actions={},active=f_team_pkmn_to_active(f_get_next_active(team1)),team=team1,winlogic=p1_win_logic,dielogic=p1_die_logic}
-game.p2={name=name2,hordeind=6,deadnums={},priority=0,iscpu=iscpu2,actions={},active=f_team_pkmn_to_active(f_get_next_active(team2)),team=team2,winlogic=p2_win_logic,dielogic=p2_die_logic}
-_add(game.p1.actions,f_newaction(game.p1,"#,comes,out"))
-_add(game.p2.actions,f_newaction(game.p2,"#,comes,out"))
-game.p0=game.p1
-game.pselactions.menu.c,game.pselmove.menu.c=0,0
-game:push"turn"
+p1=f_zobj([[hordeind,6,deadnums,#,actions,#,priority,1,name,@,iscpu,@,active,@,team,@,winlogic,@,dielogic,@]],name1,iscpu1,f_team_pkmn_to_active(f_get_next_active(team1)),team1,p1_win_logic,p1_die_logic)
+_add(p1.actions,f_newaction(p1,"#,comes,out"))
+p2=f_zobj([[hordeind,6,deadnums,#,actions,#,priority,1,name,@,iscpu,@,active,@,team,@,winlogic,@,dielogic,@]],name2,iscpu2,f_team_pkmn_to_active(f_get_next_active(team2)),team2,p2_win_logic,p2_die_logic)
+_add(p2.actions,f_newaction(p2,"#,comes,out"))
+p0=p1
+pselactions.menu.c,pselmove.menu.c=0,0
+_ENV:push"turn"
 end,function(team)
 for i=1,6 do
 if team[i]and team[i].major ~=1 then
