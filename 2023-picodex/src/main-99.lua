@@ -11,17 +11,17 @@ f_zclass[[o_game_state,o_actor|
         draw1,%f_nop, draw2,%f_nop, draw3,%f_nop,
         modes,;
 
-    wait;   next,moveup, duration,.5, draw,%f_draw_picodex2;
-    moveup; next,closed, duration,.5, draw,%f_draw_picodex2, sinit,%f_moveup_init;
+    wait;   next,moveup, duration,.5, draw,%f_draw_picodex;
+    moveup; next,closed, duration,.5, draw,%f_draw_picodex, sinit,%f_moveup_init;
 
-    closed;     foldstate,closed,  next,opening,                          sinit,%f_closed_init, draw,%f_draw_picodex2, update,%f_closed_update;
-    opening;    foldstate,opening, next,starting_1,          duration,.2,                       draw,%f_draw_picodex2;
-    starting_1; foldstate,open,    next,starting_2, light,1, duration,.2, sinit,%f_beep_okay,   draw,%f_draw_picodex2;
-    starting_2; foldstate,open,    next,starting_3, light,2, duration,.2, sinit,%f_beep_back,   draw,%f_draw_picodex2;
-    starting_3; foldstate,open,    next,game,       light,3, duration,.2, sinit,%f_beep,        draw,%f_draw_picodex2;
-    game;       foldstate,open,    next,closing,    light,4,              sinit,%f_game_init,   draw,%f_draw_picodex2, update,%f_game_update, draw1,%f_game_draw1, draw2,%f_game_draw2, draw3,%f_game_draw3;
+    closed;     foldstate,closed,  next,opening,                          sinit,%f_closed_init, draw,%f_draw_picodex, update,%f_closed_update;
+    opening;    foldstate,opening, next,starting_1,          duration,.2,                       draw,%f_draw_picodex;
+    starting_1; foldstate,open,    next,starting_2, light,1, duration,.2, sinit,%f_beep_okay,   draw,%f_draw_picodex;
+    starting_2; foldstate,open,    next,starting_3, light,2, duration,.2, sinit,%f_beep_back,   draw,%f_draw_picodex;
+    starting_3; foldstate,open,    next,game,       light,3, duration,.2, sinit,%f_beep,        draw,%f_draw_picodex;
+    game;       foldstate,open,    next,closing,    light,4,              sinit,%f_game_init,   draw,%f_draw_picodex, update,%f_game_update, draw1,%f_game_draw1, draw2,%f_game_draw2, draw3,%f_game_draw3;
 
-    closing;    foldstate,closing, next,closed,              duration,.25,                      draw,%f_draw_picodex2, update,%f_nop;
+    closing;    foldstate,closing, next,closed,              duration,.25,                      draw,%f_draw_picodex, update,%f_nop;
 ]]
 
 -- every state change will clean up all the entities.
@@ -40,7 +40,7 @@ function _init()
     _poke(0x5f5d, 2) -- set the repeating delay.
 
     g_picodex = o_game_state()
-    f_draw_picodex2(g_picodex)
+    f_draw_picodex(g_picodex)
     _sfx(63,1,24)
 
     -- 0x0000

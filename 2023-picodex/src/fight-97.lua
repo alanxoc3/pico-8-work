@@ -159,7 +159,7 @@ end $$
 -- takes in the hard-coded base speed value for the pkmn, so electrode would have highest crit ratio.
 |[f_get_crit_ratio]| function(base_speed)
     -- range is 0 to 255. then random roll is done out of 256, so high crit still has like a .5% chance of failing.
-    -- todo: redo these slightly
+    -- todo (wait): redo these slightly
     -- (bs+76)/4 | (bs+236)/2 | (bs+76)/4*8 (crit move)
     return _min(.99, (base_speed+76)/1024)
     -- slash:        _min(.99, (base_speed+76)/128)

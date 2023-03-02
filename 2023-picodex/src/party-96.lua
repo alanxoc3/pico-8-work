@@ -1,4 +1,3 @@
--- todo: remove x,y,w,h
 -- CHOOSE PARTY LOGIC --
 |[f_team_select]| function(game)
     game:push'editteam'
