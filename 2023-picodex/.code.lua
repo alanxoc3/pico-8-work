@@ -824,16 +824,17 @@ end,function(num)
 g_picodex:start_timer((0+num<=152)and "pkmn"or 0+num,.25)
 _sfx(44+num\8,0,num%8*4,4)
 end,function()f_minisfx"152" end,function()f_minisfx"153" end,function()f_minisfx"154" end,function()f_minisfx"155" end,function(_ENV)
-_cls(0)
+_cls"0"
 f_zcamera(0,128+sin(_ENV:get_elapsed_percent"moveup"/4)*128,function()
 f_zcall(f_zprint,[[;,aMORG gAMES,64,-68,7,0;;,pRESENTS,64,-61,7,0;;,a pICO-8 pOKEDEX sIM,64,15,7,0]])
 f_zcall(f_zspr,[[;,102,64,11,5,1]])
-local rotation=foldstate=="open"and 1 or foldstate=="closed"and-1 or(foldstate=="opening"and-1 or 1)*_cos(_ENV:get_elapsed_percent(foldstate)/2)
-local top_row_buttons=modes and modes.main.menu.c
-local bot_row_buttons=modes and #modes.stack
+local top_row_buttons,bot_row_buttons,rotation=modes and modes.main.menu.c,modes and #modes.stack-1,foldstate=="open"and 1 or foldstate=="closed"and-1 or(foldstate=="opening"and-1 or 1)*_cos(_ENV:get_elapsed_percent(foldstate)/2)
 f_zcamera(30-(rotation+1)*15+(_ENV:is_active"shaking"and f_flr_rnd"3"-1 or 0),27,function()
-_rectfill(5,16,60,85,light>=4 and 13 or 5)
-if light>=4 then f_draw_screen(14,21,40,40,draw1)end
+f_zcall(_rectfill,[[;,14,18,@,87,5]],63+max(0,rotation*54))
+if light>=4 then
+f_zcall(_rectfill,[[;,14,18,117,87,13]])
+f_zcall(f_draw_screen,[[;,14,21,40,40,@;;,71,18,46,13,@;;,71,67,46,21,@]],draw1,draw2,draw3)
+end
 f_zcall(_map,[[;,24,0,2,1,8,3;;,8,0,2,9,8,11]])
 f_zcall(function(l,s,off,on,flash,x,y)
 return _spr((light>l)and(g_picodex:is_active(s)and flash or on)or off,x,y)
@@ -841,18 +842,14 @@ end,[[;,0,153,132,130,131,22,3;;,1,154,132,129,131,17,3;;,2,155,132,128,131,12,3
 f_zcall(function(b,s1,s2,x,y)
 _spr(_btn(b)and s1 or s2,x,y)
 end,[[;,0,186,154,10,77;;,1,188,156,26,77;;,2,171,139,18,73;;,3,187,155,18,81;;,4,170,138,42,77;;,5,172,140,50,77]])
-if rotation<0 then
+if rotation<=0 then
 f_picodex_map(0,2+64*(1-_abs(rotation)),_abs(rotation))
 if rotation==-1 and backbuttonheld then _spr(123,6,49)end
-elseif rotation>0 then
-_rectfill(65+5-2,9+5,65+8*8*rotation-5-2,9+11*8-5,light>=4 and 13 or 5)
-if rotation==1 and light>=4 then
-f_zcall(f_draw_screen,[[;,71,18,46,13,@;;,71,67,46,21,@]],draw2,draw3)
-end
+else
 f_picodex_map(16,62,rotation)
 if rotation==1 then
-if top_row_buttons then _spr(100,70+(top_row_buttons\1%6)*8,41)end
-if bot_row_buttons and bot_row_buttons>0 then _spr(100,70+(bot_row_buttons\1-1)%6*8,49)end
+if top_row_buttons then _spr(100,70+top_row_buttons*8,41)end
+if bot_row_buttons and bot_row_buttons>=0 then _spr(100,70+bot_row_buttons*8,49)end
 end
 end
 end)

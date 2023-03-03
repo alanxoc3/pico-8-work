@@ -2,6 +2,7 @@
     f_zprint(txt or '', 23, 4, 1, 0)
 end $$
 
+-- todo: always fill in for i=0... no dot logic
 |[f_print_draw3_message]| function(tbl)
     for i=0,2 do
         local txt, bg, fg = tbl[i+1], 13, 1
