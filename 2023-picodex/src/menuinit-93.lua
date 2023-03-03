@@ -188,13 +188,12 @@ end $$
     menu.c = teammoves.menu.c
 end $$
 
--- todo: token crunching here
 |[f_teammovesel_init]| function(_ENV)
     local teampkmn = _ENV:f_get_pkmn_team_edit()
     local pkmn = c_pokemon[teampkmn.num]
 
     local moves = {}
-    local add_to_moves = function(movelist, prefix)
+    f_zcall(function(movelist, prefix)
         for i=1,#movelist do
             local disabled = false
             for j=1,4 do
@@ -204,11 +203,11 @@ end $$
             end
             _add(moves, {name=c_moves[movelist[i]].name, disabled=disabled, num=movelist[i], desc=prefix..i})
         end
-    end
-
-    add_to_moves(pkmn.moves_natural, "learn #")
-    add_to_moves(pkmn.moves_teach,   "teach #")
-    add_to_moves(pkmn.moves_event,   "event #")
+    end, [[
+       ;,@,"learn #"
+      ;;,@,"teach #"
+      ;;,@,"event #"
+    ]], pkmn.moves_natural, pkmn.moves_teach, pkmn.moves_event)
 
     menu:refresh(moves, function(m)
         return {
