@@ -1,8 +1,8 @@
 -- todo: make this smaller
 |[f_editteam_draw3]| function(game)
-    local team = game:f_get_team_cursor'team1'
-    local teampkmn = team[game:cursor'editteam'+1]
-    f_draw3_pokeinfo(teampkmn and teampkmn.num or -1)
+    local teampkmn = game:f_get_pkmn_team_edit()
+    _printh(teampkmn.num)
+    f_draw3_pokeinfo(teampkmn.num)
 end $$
 
 -- todo: put "move" directly on entry so pp reflects correctly.

@@ -139,8 +139,7 @@ end $$
 
 -- todo: teampkmn shortcut func
 |[f_moveaction_init]| function(_ENV)
-    local team = _ENV:f_get_team_cursor'team1'
-    local teampkmn = team[_ENV:cursor'editteam'+1]
+    local teampkmn = _ENV:f_get_pkmn_team_edit()
     local count = 0 
     for j=1,4 do
         if teampkmn.moves[j] then count += 1 end
@@ -156,17 +155,14 @@ end $$
 -- todo: fix pop, sd only pop to moves, not before
 -- todo: last del should be disabled
 |[f_movedel]| function(_ENV)
-    local team = _ENV:f_get_team_cursor'team1'
-    local teampkmn = team[_ENV:cursor'editteam'+1]
+    local teampkmn, team = _ENV:f_get_pkmn_team_edit()
     teampkmn.moves[_ENV:cursor'teammoves'+1] = nil
     f_save_team(_ENV:cursor'team1', team)
     _ENV:pop()
 end $$
 
 |[f_teammoves_init]| function(_ENV)
-    local team = _ENV:f_get_team_cursor'team1'
-    local teampkmn = team[_ENV:cursor'editteam'+1] or {moves={}}
-
+    local teampkmn = _ENV:f_get_pkmn_team_edit()
     menu:refresh(f_zobj[[,1,2,3,4]], function(i)
         return {
             num=teampkmn.moves[i],
@@ -178,8 +174,7 @@ end $$
 
 -- todo: merge logic with f_teammoves_init
 |[f_switchmoves_init]| function(_ENV)
-    local team = _ENV:f_get_team_cursor'team1'
-    local teampkmn = team[_ENV:cursor'editteam'+1] or {moves={}}
+    local teampkmn, team = _ENV:f_get_pkmn_team_edit()
     local disabled_ind = _ENV:cursor'teammoves'+1
 
     menu:refresh(f_zobj[[,1,2,3,4]], function(i)
@@ -199,8 +194,7 @@ end $$
 end $$
 
 |[f_teammovesel_init]| function(_ENV)
-    local team = _ENV:f_get_team_cursor'team1'
-    local teampkmn = team[_ENV:cursor'editteam'+1]
+    local teampkmn = _ENV:f_get_pkmn_team_edit()
     local pkmn = c_pokemon[teampkmn.num]
 
     local moves = {}
