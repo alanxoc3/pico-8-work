@@ -5,6 +5,11 @@
     if game.p0.iscpu or #game.p0.actions > 0 then
         game:load()
     else
+        -- this block is needed so in versus mode, players don't share cursor positions
+        game.pselactions.menu = game.p0.menu_action
+        game.pselmove.menu    = game.p0.menu_move
+        game.pselswitch.menu  = game.p0.menu_switch
+
         game.cur_action = f_newaction(game.p0, "")
         game.stack[#game.stack] = game.next
         game:push'pselactions'

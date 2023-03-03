@@ -1,3 +1,7 @@
+-- todo: fight action screen should display stats, not descriptions. switch screen should show this too. maybe exiting out of the select menu also shows this.
+-- todo: make the move pp actually display remaining pp in fight screen
+
+-- todo: token crunch here, specifically "_add" parts
 |[f_fightover_init]| function(_ENV)
     local winner, loser = p0, f_get_other_pl(_ENV, p0)
     winner:winlogic(loser)
@@ -107,7 +111,6 @@ end $$
     end)
 end $$
 
--- todo: make it so player 1 and player 2 don't share the same cursor in match mode.
 |[f_fightsel_init]| function(_ENV)
     menu:refresh(c_trainers, function(trainer, num)
         local disabled, team = num-1 > @S_STORY, {}
@@ -223,8 +226,8 @@ end $$
     end)
 end $$
 
--- todo: support struggle
-|[f_pselmove_init]|   function(_ENV)
+-- todo: (wait) support struggle
+|[f_pselmove_init]| function(_ENV)
     menu:refresh(f_get_possible_move_slots(p0.active), function(move_slot)
         local move = c_moves[p0.active.moveids[move_slot]]
         return {
@@ -241,7 +244,7 @@ end $$
 |[f_pselactions_init]| function(_ENV)
     menu:refresh(f_zobj[[
          ; name,"fight",   desc,"select|next|move",      select,%f_menu_state_callback, state,pselmove
-        ;; name,"random",  desc,"select|random|move",    select,%f_menu_cancel -- random logic is in the turn logic if move is c_empty, so just leave the menu
+        ;; name,"random",  desc,"select|random|move",    select,%f_modes_pop -- random logic is in the turn logic if move is c_empty, so just leave the menu
         ;; name,"switch",  desc,"change|active|pokemon", select,%f_menu_state_callback, state,pselswitch
         ;; name,"forfeit", desc,"leave|the|fight",       select,%f_psel_forfeit
     ]])

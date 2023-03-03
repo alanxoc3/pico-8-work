@@ -51,10 +51,3 @@ end $$
 |[f_fightover_xfunc]| function(_ENV)
     f_minisfx(p0.active.shared.num)
 end $$
-
--- only "o" will go back
--- |[f_fightover_update]| function(game)
---     if g_bpo then game:pop() end
--- end $$
-
--- todo: browse shouldn't share cursor with edit team

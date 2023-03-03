@@ -2,8 +2,10 @@
 |[f_match_select]| function(game) game:push'team2match' end $$
 
 |[f_match_start]| function(_ENV)
-    -- |[f_begin_fight]| function(game, team1, team2, name1, name2, iscpu1, iscpu2, p1_die_logic, p2_die_logic, p1_win_logic, p2_win_logic)
-    f_begin_fight(_ENV, f_get_team(_ENV:cursor'team1'), f_get_team(_ENV:cursor'team2match'), "player 1", "player 2", false, false, f_nop, f_nop, f_nop, f_nop)
+    f_begin_fight(_ENV,
+        {f_get_team(_ENV:cursor'team1'),      "player 1", false, f_nop, f_nop},
+        {f_get_team(_ENV:cursor'team2match'), "player 2", false, f_nop, f_nop}
+    )
 end $$
 
 |[f_horde_death]| function(p)

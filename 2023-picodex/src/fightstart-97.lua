@@ -8,29 +8,29 @@
 -- horde - win (both) - p2 killed pkmn are added to picodex
 -- horde - die (p2)   - p2 adds a new pkmn to the team
 
-|[f_begin_fight]| function(_ENV, team1, team2, name1, name2, iscpu1, iscpu2, p1_die_logic, p2_die_logic, p1_win_logic, p2_win_logic)
-    local team1, team2 = f_get_fight_team(team1), f_get_fight_team(team2)
-
+|[f_begin_fight]| function(_ENV, d1, d2)
     -- winlogic could be used for story mode.
     -- p1 has higher starting priority so game shows their pokemon to come out first
     -- horde count is only used for p2. this is the index the horde is currently on.
-    p1 = f_zobj([[
-        hordeind,6, deadnums,#, actions,#, priority,1,
-        name,@, iscpu,@, active,@, team,@, winlogic,@, dielogic,@
-    ]], name1, iscpu1, f_team_pkmn_to_active(f_get_next_active(team1)), team1, p1_win_logic, p1_die_logic)
-    _add(p1.actions, f_newaction(p1, "#,comes,out"))
 
-    p2 = f_zobj([[
-        hordeind,6, deadnums,#, actions,#, priority,1,
-        name,@, iscpu,@, active,@, team,@, winlogic,@, dielogic,@
-    ]], name2, iscpu2, f_team_pkmn_to_active(f_get_next_active(team2)), team2, p2_win_logic, p2_die_logic)
-    _add(p2.actions, f_newaction(p2, "#,comes,out"))
+    d1.key, d2.key = 'p1', 'p2'
+    for dd in _all{d1, d2} do
+        _ENV[dd.key] = f_zobj([[
+            hordeind,6, deadnums,#, actions,#, priority,1,
+            menu_action,@, menu_move,@, menu_switch,@, team,@, name,@, iscpu,@, dielogic,@, winlogic,@
+        ]], f_create_menu(f_menu_drawentry),
+            f_create_menu(f_menu_drawentry),
+            f_create_menu(f_browse_drawentry, 3),
+            _unpack(dd))
+        local _ENV=_ENV[dd.key]
+        menu_action.cancel, team = f_beep, f_get_fight_team(team)
+        active = f_team_pkmn_to_active(f_get_next_active(team))
+        _add(actions, f_newaction(_ENV, "#,comes,out"))
+    end
 
     -- how to switch the current player
-    -- game.p0 = game.p0 == game.p1 and game.p2 or game.p1
+    -- p0 = p0 == p1 and p2 or p1
     p0 = p1
-    pselactions.menu.c, pselmove.menu.c = 0, 0 -- cursor should not copy previous fights
-
     _ENV:push'turn'
 end $$
 
@@ -45,11 +45,8 @@ end $$
     end
 
     f_begin_fight(_ENV,
-        _ENV:f_get_team_cursor'team1', cpu_team_draft,
-        "player", name,
-        false, true,
-        f_nop,     deathfunc,
-        plwinfunc, cpuwinfunc
+        {_ENV:f_get_team_cursor'team1', "player", false, f_nop,     plwinfunc},
+        {cpu_team_draft,                name,     true,  deathfunc, cpuwinfunc}
     )
 end $$
 

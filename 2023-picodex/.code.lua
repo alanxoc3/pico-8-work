@@ -648,7 +648,7 @@ end
 }
 end)
 end,function(_ENV)
-menu:refresh(f_zobj[[;name,fight,desc,select|next|move,select,%f_menu_state_callback,state,pselmove;;name,random,desc,select|random|move,select,%f_menu_cancel;;name,switch,desc,change|active|pokemon,select,%f_menu_state_callback,state,pselswitch;;name,forfeit,desc,leave|the|fight,select,%f_psel_forfeit]])
+menu:refresh(f_zobj[[;name,fight,desc,select|next|move,select,%f_menu_state_callback,state,pselmove;;name,random,desc,select|random|move,select,%f_modes_pop;;name,switch,desc,change|active|pokemon,select,%f_menu_state_callback,state,pselswitch;;name,forfeit,desc,leave|the|fight,select,%f_psel_forfeit]])
 end,function(_ENV)
 menu:refresh(f_zobj[[,1,2,3]],function(i)
 local team=f_get_team(i-1)
@@ -782,7 +782,7 @@ end
 modes=o_modes()
 f_zcall(function(menu_name,create_func,...)
 modes[menu_name].menu=create_func(...)
-end,[[;,browse,~f_create_menu,~f_browse_drawentry,4;;,browsestat,~f_create_menu_view,~f_menu_drawentry;;,credits,~f_create_menu_view,~f_menu_drawentry;;,fightover,~f_create_menu_view,~f_menu_drawentry;;,editteam,~f_create_menu,~f_browse_drawentry,3;;,switchteam,~f_create_menu,~f_browse_drawentry,3;;,main,~f_create_menu,~f_menu_drawentry;;,teamaction,~f_create_menu,~f_menu_drawentry;;,moveaction,~f_create_menu,~f_menu_drawentry;;,teammovesel,~f_create_menu,~f_menu_drawentry;;,teammoves,~f_create_menu,~f_menu_drawentry;;,switchmoves,~f_create_menu,~f_menu_drawentry;;,pselactions,~f_create_menu,~f_menu_drawentry;;,pselmove,~f_create_menu,~f_menu_drawentry;;,pselswitch,~f_create_menu,~f_browse_drawentry,3;;,team1,~f_create_menu,~f_menu_drawentry;;,team2story,~f_create_menu,~f_menu_drawentry;;,team2match,~f_create_menu,~f_menu_drawentry]])
+end,[[;,browse,~f_create_menu,~f_browse_drawentry,4;;,browsestat,~f_create_menu_view,~f_menu_drawentry;;,credits,~f_create_menu_view,~f_menu_drawentry;;,fightover,~f_create_menu_view,~f_menu_drawentry;;,editteam,~f_create_menu,~f_browse_drawentry,3;;,switchteam,~f_create_menu,~f_browse_drawentry,3;;,main,~f_create_menu,~f_menu_drawentry;;,teamaction,~f_create_menu,~f_menu_drawentry;;,moveaction,~f_create_menu,~f_menu_drawentry;;,teammovesel,~f_create_menu,~f_menu_drawentry;;,teammoves,~f_create_menu,~f_menu_drawentry;;,switchmoves,~f_create_menu,~f_menu_drawentry;;,team1,~f_create_menu,~f_menu_drawentry;;,team2story,~f_create_menu,~f_menu_drawentry;;,team2match,~f_create_menu,~f_menu_drawentry]])
 f_zobj_set(modes,[[team1menu,@,browsemenu,@;main;menu;cancel,%f_beep;pselactions;menu;cancel,%f_beep;team1horde;menu,~team1menu;team1match;menu,~team1menu;team1story;menu,~team1menu;teampkmn;menu,~browsemenu;]],modes.team1.menu,modes.browse.menu)
 f_beep_done()
 _menuitem(1,"close picodex",function()
@@ -944,7 +944,10 @@ end,function(team,ind,num)
 team[ind]={num=num,moves=f_get_natural_moveset(num)}
 return team
 end,function(game)game:push"team2story" end,function(game)game:push"team2match" end,function(_ENV)
-f_begin_fight(_ENV,f_get_team(_ENV:cursor"team1"),f_get_team(_ENV:cursor"team2match"),"player 1","player 2",false,false,f_nop,f_nop,f_nop,f_nop)
+f_begin_fight(_ENV,
+{f_get_team(_ENV:cursor"team1"),"player 1",false,f_nop,f_nop},
+{f_get_team(_ENV:cursor"team2match"),"player 2",false,f_nop,f_nop}
+)
 end,function(p)
 local newteam={}
 for i=1,6 do
@@ -1104,6 +1107,9 @@ game.p0=game[game.p0key]
 if game.p0.iscpu or #game.p0.actions>0 then
 game:load()
 else
+game.pselactions.menu=game.p0.menu_action
+game.pselmove.menu=game.p0.menu_move
+game.pselswitch.menu=game.p0.menu_switch
 game.cur_action=f_newaction(game.p0,"")
 game.stack[#game.stack]=game.next
 game:push"pselactions"
@@ -1112,14 +1118,19 @@ end,function(game)
 game:pop()
 game.p0=f_get_other_pl(game,game.p0)
 game:load"fightover"
-end,function(_ENV,team1,team2,name1,name2,iscpu1,iscpu2,p1_die_logic,p2_die_logic,p1_win_logic,p2_win_logic)
-local team1,team2=f_get_fight_team(team1),f_get_fight_team(team2)
-p1=f_zobj([[hordeind,6,deadnums,#,actions,#,priority,1,name,@,iscpu,@,active,@,team,@,winlogic,@,dielogic,@]],name1,iscpu1,f_team_pkmn_to_active(f_get_next_active(team1)),team1,p1_win_logic,p1_die_logic)
-_add(p1.actions,f_newaction(p1,"#,comes,out"))
-p2=f_zobj([[hordeind,6,deadnums,#,actions,#,priority,1,name,@,iscpu,@,active,@,team,@,winlogic,@,dielogic,@]],name2,iscpu2,f_team_pkmn_to_active(f_get_next_active(team2)),team2,p2_win_logic,p2_die_logic)
-_add(p2.actions,f_newaction(p2,"#,comes,out"))
+end,function(_ENV,d1,d2)
+d1.key,d2.key="p1","p2"
+for dd in _all{d1,d2}do
+_ENV[dd.key]=f_zobj([[hordeind,6,deadnums,#,actions,#,priority,1,menu_action,@,menu_move,@,menu_switch,@,team,@,name,@,iscpu,@,dielogic,@,winlogic,@]],f_create_menu(f_menu_drawentry),
+f_create_menu(f_menu_drawentry),
+f_create_menu(f_browse_drawentry,3),
+_unpack(dd))
+local _ENV=_ENV[dd.key]
+menu_action.cancel,team=f_beep,f_get_fight_team(team)
+active=f_team_pkmn_to_active(f_get_next_active(team))
+_add(actions,f_newaction(_ENV,"#,comes,out"))
+end
 p0=p1
-pselactions.menu.c,pselmove.menu.c=0,0
 _ENV:push"turn"
 end,function(_ENV,team,name,deathfunc,plwinfunc,cpuwinfunc)
 local cpu_team_draft={}
@@ -1130,11 +1141,8 @@ _add(cpu_team_draft,{num=num,moves=f_get_natural_moveset(num)})
 end
 end
 f_begin_fight(_ENV,
-_ENV:f_get_team_cursor"team1",cpu_team_draft,
-"player",name,
-false,true,
-f_nop,deathfunc,
-plwinfunc,cpuwinfunc
+{_ENV:f_get_team_cursor"team1","player",false,f_nop,plwinfunc},
+{cpu_team_draft,name,true,deathfunc,cpuwinfunc}
 )
 end,function(team)
 for i=1,6 do

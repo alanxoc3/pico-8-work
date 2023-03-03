@@ -131,10 +131,6 @@ end $$
        ;;,teammoves,   ~f_create_menu,      ~f_menu_drawentry      -- select 1 of 4 moves from a pokemon
        ;;,switchmoves, ~f_create_menu,      ~f_menu_drawentry      -- switch 1 of 4 moves
 
-       ;;,pselactions, ~f_create_menu,      ~f_menu_drawentry      -- select an action during battle (fight, switch, forfeit)
-       ;;,pselmove,    ~f_create_menu,      ~f_menu_drawentry      -- select 1 of 4 moves from a pokemon (during battle) -- TODO: try merging with other move select
-       ;;,pselswitch,  ~f_create_menu,      ~f_browse_drawentry, 3 -- selecting a pkmn from team
-
        ;;,team1,       ~f_create_menu,      ~f_menu_drawentry      -- select a team
        ;;,team2story,  ~f_create_menu,      ~f_menu_drawentry      -- select a cpu trainer
        ;;,team2match,  ~f_create_menu,      ~f_menu_drawentry      -- select a team
