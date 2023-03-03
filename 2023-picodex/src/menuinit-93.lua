@@ -137,8 +137,8 @@ end $$
     teammovesel.menu.c = 0
 end $$
 
+-- todo: teampkmn shortcut func
 |[f_moveaction_init]| function(_ENV)
-    -- todo: maybe combine this with a func that gets rid of c_empty slots, then you just check len
     local team = _ENV:f_get_team_cursor'team1'
     local teampkmn = team[_ENV:cursor'editteam'+1]
     local count = 0 
@@ -277,6 +277,10 @@ end $$
     end)
 end $$
 
+|[f_get_team_num]| function(team, i)
+    return team[i] and team[i].num or -1
+end $$
+
 -- this is used both in "editteam" and selecting a pkmn in battle.
 |[f_editteam_init]| function(_ENV)
     local team = _ENV:f_get_team_cursor'team1'
@@ -289,12 +293,11 @@ end $$
                     _ENV:push'teampkmn'
                 end
             end,
-            num=team[i] and team[i].num or -1
+            num=f_get_team_num(team, i)
         }
     end)
 end $$
 
--- todo: combine with editteam
 |[f_switchteam_init]| function(_ENV)
     local team = _ENV:f_get_team_cursor'team1'
     menu:refresh(f_zobj[[,1,2,3,4,5,6]], function(i)
@@ -304,9 +307,9 @@ end $$
                 local ind_one, ind_two = _ENV:cursor'editteam'+1, _ENV:cursor'switchteam'+1
                 team[ind_one], team[ind_two] = team[ind_two], team[ind_one]
                 f_save_team(_ENV:cursor'team1', team)
-                _ENV:pop() _ENV:pop()
+                _ENV:popuntil'editteam'
             end,
-            num=team[i] and team[i].num or -1
+            num=f_get_team_num(team, i)
         }
     end)
     menu.c = editteam.menu.c
@@ -320,10 +323,11 @@ end $$
         return {
             disabled=disabled,
             select=function()
-                _ENV:pop() _ENV:pop()
+                _ENV:pop() _ENV:pop() -- pop twice. this could come from p1 or p2
+                --_printh(_ENV.stack[#_ENV.stack])
                 f_select_move(p0, i, true)
             end,
-            num=p0.team[i] and p0.team[i].num or -1
+            num=f_get_team_num(p0.team, i)
         }
     end)
 end $$
