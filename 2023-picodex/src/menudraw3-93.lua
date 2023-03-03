@@ -1,11 +1,8 @@
--- todo: make this smaller
 |[f_editteam_draw3]| function(game)
-    local teampkmn = game:f_get_pkmn_team_edit()
-    _printh(teampkmn.num)
-    f_draw3_pokeinfo(teampkmn.num)
+    f_draw3_pokeinfo(game:f_get_pkmn_team_edit().num)
 end $$
 
--- todo: put "move" directly on entry so pp reflects correctly.
+-- todo (wait): put "move" directly on entry so pp reflects correctly.
 -- for teammoves, teammovesel, pmovesel
 |[f_move_draw3]| function(game)
     local num = game:entry(game.movemode).num
@@ -18,7 +15,7 @@ end $$
     end
 end $$
 
-|[f_browse_draw3]|       function(game)
+|[f_browse_draw3]| function(game)
     f_draw3_pokeinfo(game:cursor'browse')
 end $$
 

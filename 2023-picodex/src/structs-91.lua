@@ -138,26 +138,26 @@ end $$
 
 -- teampkmn must be non-nil and match the team table structure defined in f_get_fight_team 
 |[f_team_pkmn_to_active]| function(teampkmn)
-    return {
-        type1 = c_pokemon[teampkmn.num].type1,
-        type2 = c_pokemon[teampkmn.num].type2,
-        moveids = (function() local m = {} for i=1,4 do m[i] = teampkmn.moveids[i] end return m end)(),
-        movepps = teampkmn.movepps,
+    local m = {}
+    for i=1,4 do
+        m[i] = teampkmn.moveids[i]
+    end
 
-        -- these always start at zero
-        stages = f_zobj[[
-            special,0,
-            defense,0,
-            attack,0,
-            speed,0,
-            accuracy,0,
-            evasion,0
-        ]],
+    return f_zobj([[
+        type1,@,   type2,@,
+        moveids,@, movepps,@,
+        shared,@,  getstat,@,
+        minor, #;
+        
+        stages; special,0, defense,0, attack,0, speed,0, accuracy,0, evasion,0;
+    ]], c_pokemon[teampkmn.num].type1,
+        c_pokemon[teampkmn.num].type2,
+        m, teampkmn.movepps, teampkmn,
 
         -- evasion and accuracy have a different formula: https://www.smogon.com/rb/articles/stadium_guide
         -- all stats cap at 999: https://www.smogon.com/rb/articles/rby_mechanics_guide
         -- and i'm giving it a _min of 1 too, because zero messes things up
-        getstat = function(a, stat)
+        function(a, stat)
             local stage = a.stages[stat]
             return _ceil(_mid(1, 999,
                 a.shared[stat]*(
@@ -166,9 +166,6 @@ end $$
                      or _mid(2, 2+stage,   8)/_mid(2, 2-stage,   8)
                 )
             ))
-        end,
-
-        minor = {},
-        shared = teampkmn,
-    }
+        end
+    )
 end $$

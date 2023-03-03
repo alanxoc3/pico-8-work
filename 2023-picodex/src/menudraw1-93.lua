@@ -13,12 +13,11 @@ end $$
     f_draw_battle_side(p2.active, cur_action.active == p2.active, -1)
 end $$
 
--- todo: maybe replace a1 with _ENV for slight token saving...
-|[f_draw_battle_side]| function(a1, a1a, flip)
-    if a1.shared.major ~= C_MAJOR_FAINTED and not a1.invisible then
+|[f_draw_battle_side]| function(_ENV, a1a, flip)
+    if shared.major ~= C_MAJOR_FAINTED and not invisible then
         _pal(1,a1a and 6 or 1) _spr(198,8+12*flip,16.5+9.5*flip,3,1) _pal(1,1)
-        f_zprint(a1.shared.hp.."H", 21+20*flip, 17.5+9.5*flip, 13, flip)
-        f_draw_hp(19.5+20.5*flip, 19.5+17.5*flip, a1.shared.hp, a1.shared.maxhp, flip, 1)
-        c_pokemon[a1.shared.num].draw(20-10*flip, 20+5*flip, 5, flip)
+        f_zprint(shared.hp.."H", 21+20*flip, 17.5+9.5*flip, 13, flip)
+        f_draw_hp(19.5+20.5*flip, 19.5+17.5*flip, shared.hp, shared.maxhp, flip, 1)
+        c_pokemon[shared.num].draw(20-10*flip, 20+5*flip, 5, flip)
     end
 end $$

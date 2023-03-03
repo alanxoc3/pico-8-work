@@ -415,13 +415,14 @@ end
 end
 return fightteam
 end,function(teampkmn)
-return{
-type1=c_pokemon[teampkmn.num].type1,
-type2=c_pokemon[teampkmn.num].type2,
-moveids=(function()local m={}for i=1,4 do m[i]=teampkmn.moveids[i]end return m end)(),
-movepps=teampkmn.movepps,
-stages=f_zobj[[special,0,defense,0,attack,0,speed,0,accuracy,0,evasion,0]],
-getstat=function(a,stat)
+local m={}
+for i=1,4 do
+m[i]=teampkmn.moveids[i]
+end
+return f_zobj([[type1,@,type2,@,moveids,@,movepps,@,shared,@,getstat,@,minor,#;stages;special,0,defense,0,attack,0,speed,0,accuracy,0,evasion,0;]],c_pokemon[teampkmn.num].type1,
+c_pokemon[teampkmn.num].type2,
+m,teampkmn.movepps,teampkmn,
+function(a,stat)
 local stage=a.stages[stat]
 return _ceil(_mid(1,999,
 a.shared[stat]*(
@@ -430,10 +431,8 @@ and _mid(1,1+stage/3,3)/_mid(1,1-stage/3,3)
 or _mid(2,2+stage,8)/_mid(2,2-stage,8)
 )
 ))
-end,
-minor={},
-shared=teampkmn,
-}
+end
+)
 end,function(game)
 f_modes_default_draw1(game)
 f_wobble_text("team #"..game:cursor"team1"+1,20,27,1)
@@ -441,12 +440,12 @@ end,function(_ENV)
 f_zcall(_rectfill,[[;0,0,39,39,5;;0,5,39,34,13]])
 f_draw_battle_side(p1.active,cur_action.active==p1.active,1)
 f_draw_battle_side(p2.active,cur_action.active==p2.active,-1)
-end,function(a1,a1a,flip)
-if a1.shared.major ~=1 and not a1.invisible then
+end,function(_ENV,a1a,flip)
+if shared.major ~=1 and not invisible then
 _pal(1,a1a and 6 or 1)_spr(198,8+12*flip,16.5+9.5*flip,3,1)_pal(1,1)
-f_zprint(a1.shared.hp.."H",21+20*flip,17.5+9.5*flip,13,flip)
-f_draw_hp(19.5+20.5*flip,19.5+17.5*flip,a1.shared.hp,a1.shared.maxhp,flip,1)
-c_pokemon[a1.shared.num].draw(20-10*flip,20+5*flip,5,flip)
+f_zprint(shared.hp.."H",21+20*flip,17.5+9.5*flip,13,flip)
+f_draw_hp(19.5+20.5*flip,19.5+17.5*flip,shared.hp,shared.maxhp,flip,1)
+c_pokemon[shared.num].draw(20-10*flip,20+5*flip,5,flip)
 end
 end,function(game)f_draw2_pokeinfo(c_pokemon[game:cursor"browse"])end,function(game)f_print_draw2_message("spot #"..(game:cursor"editteam"+1))end,function(game)f_print_draw2_message("move #"..(game:cursor"teammoves"+1))end,function(game)f_print_draw2_message(game.ui_pl)end,function(game)f_print_draw2_message"match over" end,function(_)end,function(game)end,function(game)
 local move=game:entry"teammovesel"
@@ -463,9 +462,7 @@ _pal()
 end,function(game)
 f_print_draw2_message(game.cur_action.pl.name)
 end,function(game)
-local teampkmn=game:f_get_pkmn_team_edit()
-_printh(teampkmn.num)
-f_draw3_pokeinfo(teampkmn.num)
+f_draw3_pokeinfo(game:f_get_pkmn_team_edit().num)
 end,function(game)
 local num=game:entry(game.movemode).num
 if num then
