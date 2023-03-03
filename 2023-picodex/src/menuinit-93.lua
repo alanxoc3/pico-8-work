@@ -1,5 +1,6 @@
 -- todo: fight action screen should display stats, not descriptions. switch screen should show this too. maybe exiting out of the select menu also shows this.
 -- todo: make the move pp actually display remaining pp in fight screen
+-- todo: try showing "s" after move strength, "p" after move pp fraction, and "h" after hp in hp stat
 
 -- todo: token crunch here, specifically "_add" parts
 |[f_fightover_init]| function(_ENV)
