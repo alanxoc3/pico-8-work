@@ -188,14 +188,8 @@ end)
 end,function(txt)
 f_zprint(txt or "",23,4,1,0)
 end,function(tbl)
-for i=0,2 do
-local txt,bg,fg=tbl[i+1],13,1
-if _sub(txt,1,1)=="."then
-txt,bg,fg=_sub(txt,2),1,13
-end
-_rectfill(0,i*7,45,i*7+7,bg)
-f_zprint(txt,23,1+i*7,fg,0)
-end
+f_zcall(_rectfill,[[;,0,0,45,6,1]])
+f_zcall(f_zprint,[[;,@,23,1,13,0;;,@,23,8,1,0;;,@,23,15,1,0]],unpack(tbl))
 end,f_zobj[[]],function(base)
 return _ceil(base+.5*93)+5
 end,function()
@@ -468,9 +462,9 @@ local num=game:entry(game.movemode).num
 if num then
 local move=c_moves[num]
 local accuracy=move.accuracy*100\1
-f_print_draw3_message{"."..c_types[move.type].name,move.pp.."/"..move.pp,(move.damage>=0 and move.damage or "??").."P "..(accuracy>=0 and accuracy or "??").."A"}
+f_print_draw3_message{c_types[move.type].name,move.pp.."/"..move.pp,(move.damage>=0 and move.damage or "??").."P "..(accuracy>=0 and accuracy or "??").."A"}
 else
-f_print_draw3_message{".????","?/?","??P ???A"}
+f_print_draw3_message{"????","?/?","??P ???A"}
 end
 end,function(game)
 f_draw3_pokeinfo(game:cursor"browse")
@@ -483,7 +477,7 @@ count+=1
 power+=c_pokemon[num].total
 end
 end
-f_print_draw3_message{".team stats","pkmn "..count.."/6","pow "..power}
+f_print_draw3_message{"team stats","pkmn "..count.."/6","pow "..power}
 end,function(game)end,function(game)f_print_draw3_message{game.p0.name,"is the","winner"}end,function(game)
 local message_tbl=_split(game.cur_action.message)
 if message_tbl[1]=="#"then message_tbl[1]=c_pokemon[game.cur_action.active.shared.num].name end
@@ -505,7 +499,7 @@ _add(menu,{name=loser.name})
 _add(menu,{name=#loser.deadnums.." dead"})
 end,function(_ENV)
 menu:refresh(
-f_zobj[[;name,browse,state,browse,select,%f_menu_state_callback,desc,.browse|;;name,edit,state,team1,select,%f_menu_state_callback,desc,.edit|stored|teams;;name,league,state,team1story,select,%f_menu_state_callback,desc,.league|;;name,?????,state,team1horde,select,%f_menu_state_callback,desc,.?????|beat|league;;name,player,state,team1match,select,%f_menu_state_callback,desc,.player|custom|battles;;name,credits,state,credits,select,%f_menu_state_callback,desc,.credits|amorg|games]]
+f_zobj[[;name,browse,state,browse,select,%f_menu_state_callback,desc,browse|;;name,edit,state,team1,select,%f_menu_state_callback,desc,edit|stored|teams;;name,league,state,team1story,select,%f_menu_state_callback,desc,league|;;name,?????,state,team1horde,select,%f_menu_state_callback,desc,?????|beat|league;;name,player,state,team1match,select,%f_menu_state_callback,desc,player|custom|battles;;name,credits,state,credits,select,%f_menu_state_callback,desc,credits|amorg|games]]
 )
 local count=0
 for i=0,151 do count+=c_pokemon[i].available()and 1 or 0 end
@@ -515,7 +509,7 @@ if@0x5efd<40 then
 menu[4].disabled=true
 else
 menu[4].name="horde"
-menu[4].desc=".horde|"..(@0x5efe).."/151|hi-score"
+menu[4].desc="horde|"..(@0x5efe).."/151|hi-score"
 end
 end,function(_ENV,selectfunc)
 local tbl={}
@@ -882,9 +876,9 @@ f_print_draw2_message("pkmn #"..pkmn.num)
 end,function(num)
 local pkmn=c_pokemon[num]or{}
 if pkmn.available()then
-f_print_draw3_message{"."..pkmn.name,c_types[pkmn.type1].name,c_types[pkmn.type2].name}
+f_print_draw3_message{pkmn.name,c_types[pkmn.type1].name,c_types[pkmn.type2].name}
 else
-f_print_draw3_message{".?????????","????","??????"}
+f_print_draw3_message{"?????????","????","??????"}
 end
 end,function(num,x,y,sw,sh)
 sw=sw or 1

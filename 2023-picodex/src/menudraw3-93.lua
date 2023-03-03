@@ -9,9 +9,9 @@ end $$
     if num then
         local move = c_moves[num]
         local accuracy = move.accuracy*100\1
-        f_print_draw3_message{'.'..c_types[move.type].name, move.pp..'/'..move.pp, (move.damage >= 0 and move.damage or "??").."P "..(accuracy >= 0 and accuracy or "??").."A"}
+        f_print_draw3_message{c_types[move.type].name, move.pp..'/'..move.pp, (move.damage >= 0 and move.damage or "??").."P "..(accuracy >= 0 and accuracy or "??").."A"}
     else
-        f_print_draw3_message{".????", "?/?", "??P ???A"}
+        f_print_draw3_message{"????", "?/?", "??P ???A"}
     end
 end $$
 
@@ -32,7 +32,7 @@ end $$
         end
     end
 
-    f_print_draw3_message{".team stats", "pkmn "..count.."/6", "pow "..power}
+    f_print_draw3_message{"team stats", "pkmn "..count.."/6", "pow "..power}
 end $$
 
 |[f_pselmove_draw3]|     function(game)                                                             end $$

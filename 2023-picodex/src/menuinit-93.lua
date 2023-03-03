@@ -25,12 +25,12 @@ end $$
 |[f_main_init]| function(_ENV)
     menu:refresh(
         f_zobj[[
-            ;name,"browse",  state,browse,     select,%f_menu_state_callback, desc,".browse|"
-           ;;name,"edit",    state,team1,      select,%f_menu_state_callback, desc,".edit|stored|teams"
-           ;;name,"league",  state,team1story, select,%f_menu_state_callback, desc,".league|"
-           ;;name,'?????',   state,team1horde, select,%f_menu_state_callback, desc,".?????|beat|league"
-           ;;name,"player",  state,team1match, select,%f_menu_state_callback, desc,".player|custom|battles"
-           ;;name,"credits", state,credits,    select,%f_menu_state_callback, desc,".credits|amorg|games"
+            ;name,"browse",  state,browse,     select,%f_menu_state_callback, desc,"browse|"
+           ;;name,"edit",    state,team1,      select,%f_menu_state_callback, desc,"edit|stored|teams"
+           ;;name,"league",  state,team1story, select,%f_menu_state_callback, desc,"league|"
+           ;;name,'?????',   state,team1horde, select,%f_menu_state_callback, desc,"?????|beat|league"
+           ;;name,"player",  state,team1match, select,%f_menu_state_callback, desc,"player|custom|battles"
+           ;;name,"credits", state,credits,    select,%f_menu_state_callback, desc,"credits|amorg|games"
         ]]
     )
 
@@ -43,7 +43,7 @@ end $$
         menu[4].disabled = true
     else
         menu[4].name = "horde"
-        menu[4].desc = ".horde|"..(@S_HOARD).."/151|hi-score"
+        menu[4].desc = "horde|"..(@S_HOARD).."/151|hi-score"
     end
 end $$
 
