@@ -137,7 +137,6 @@ end $$
     teammovesel.menu.c = 0
 end $$
 
--- todo: teampkmn shortcut func
 |[f_moveaction_init]| function(_ENV)
     local teampkmn = _ENV:f_get_pkmn_team_edit()
     local count = 0 
@@ -152,8 +151,6 @@ end $$
     ]], count == 1))
 end $$
 
--- todo: fix pop, sd only pop to moves, not before
--- todo: last del should be disabled
 |[f_movedel]| function(_ENV)
     local teampkmn, team = _ENV:f_get_pkmn_team_edit()
     teampkmn.moves[_ENV:cursor'teammoves'+1] = nil
@@ -161,38 +158,37 @@ end $$
     _ENV:pop()
 end $$
 
-|[f_teammoves_init]| function(_ENV)
-    local teampkmn = _ENV:f_get_pkmn_team_edit()
+|[f_moves_init_helper]| function(_ENV, disabled_ind, select_func)
+    local teampkmn, team = _ENV:f_get_pkmn_team_edit()
     menu:refresh(f_zobj[[,1,2,3,4]], function(i)
         return {
             num=teampkmn.moves[i],
             name=teampkmn.moves[i] and c_moves[teampkmn.moves[i]].name or "???",
-            select=function(_ENV) _ENV:push(teampkmn.moves[i] and 'moveaction' or 'teammovesel') end
+            select=function(_ENV) select_func(_ENV, i, teampkmn, team) end,
+            disabled=i == disabled_ind
         }
     end)
 end $$
 
--- todo: merge logic with f_teammoves_init
+|[f_teammoves_init]| function(_ENV)
+    f_moves_init_helper(_ENV, 0, function(_ENV, i, teampkmn)
+        _ENV:push(teampkmn.moves[i] and 'moveaction' or 'teammovesel')
+    end)
+end $$
+
 |[f_switchmoves_init]| function(_ENV)
-    local teampkmn, team = _ENV:f_get_pkmn_team_edit()
     local disabled_ind = _ENV:cursor'teammoves'+1
 
-    menu:refresh(f_zobj[[,1,2,3,4]], function(i)
-        return {
-            num=teampkmn.moves[i],
-            name=teampkmn.moves[i] and c_moves[teampkmn.moves[i]].name or "???",
-            select=function(_ENV)
-                teampkmn.moves[i], teampkmn.moves[disabled_ind] = teampkmn.moves[disabled_ind], teampkmn.moves[i]
-                f_save_team(_ENV:cursor'team1', team)
-                _ENV:popuntil'teammoves'
-            end,
-            disabled=i == disabled_ind
-        }
+    f_moves_init_helper(_ENV, disabled_ind, function(_ENV, i, teampkmn, team)
+        teampkmn.moves[i], teampkmn.moves[disabled_ind] = teampkmn.moves[disabled_ind], teampkmn.moves[i]
+        f_save_team(_ENV:cursor'team1', team)
+        _ENV:popuntil'teammoves'
     end)
 
     menu.c = teammoves.menu.c
 end $$
 
+-- todo: token crunching here
 |[f_teammovesel_init]| function(_ENV)
     local teampkmn = _ENV:f_get_pkmn_team_edit()
     local pkmn = c_pokemon[teampkmn.num]
