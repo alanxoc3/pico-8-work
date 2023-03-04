@@ -34,6 +34,7 @@ end $$
         ---- PART 2 - populate most attributes ----
         local evolvesfrom = num-pkmndata[1]
         local pkmn = f_zobj([[
+            moveids;,-1,-1,-1,-1;
             num,@,
             evolvesfrom,@,
             name,@,
@@ -91,7 +92,7 @@ end $$
 
         ---- PASS 4 - add level specific data and other attributes to the pkmn ----
         f_zobj_set(pkmn, [[
-            attack,@, defense,@, special,@, speed,@, maxhp,@, level,C_LEVEL
+            attack,@, defense,@, special,@, speed,@, maxhp,@, hp,~maxhp, level,C_LEVEL
         ]], f_calc_max_stat(pkmn.base_attack),
             f_calc_max_stat(pkmn.base_defense),
             f_calc_max_stat(pkmn.base_special),
@@ -101,9 +102,22 @@ end $$
 
         pkmn.total = pkmn.attack + pkmn.defense + pkmn.special + pkmn.speed + pkmn.maxhp
 
+        -- todo: token crunch on these funcs, mainly just separate them out & use zobj stuff
         pkmn.draw = function(pkmn, ...)
-            -- todo (wait): if logic for surfing pikachu + amnesia psyduck?
-            f_draw_pkmn_out(pkmn:available() and pkmn.num or -1, ...)
+            -- todo: incorporate transform ... transform into surfing pikachu should become surfing pikachu
+            local num = pkmn:available() and pkmn.num or -1
+            if num == P_PIKACHU and pkmn:hasmove(M_SURF)    then num = 158 end
+            if num == P_PSYDUCK and pkmn:hasmove(M_AMNESIA) then num = 159 end
+            f_draw_pkmn_out(num, ...)
+        end
+
+        pkmn.hasmove = function(pkmn, moveid)
+            for j=1,4 do
+                if pkmn.moveids[j] == moveid then
+                    return true
+                end
+            end
+            return false
         end
 
         pkmn.available = function(pkmn)
@@ -360,8 +374,8 @@ end $$
     end
 end $$
 
-
 -- trainers are given moves at lvl 50
+-- could get an error if a trainer doesn't have 6 pkmn, because of assumptions i make when starting a fight
 |[c_trainers]| f_zobj[[
     ;,"youngstr", P_RATTATA,   P_PIDGEY,    P_CATERPIE,  P_SPEAROW,   P_WEEDLE,    P_BELLSPROUT
    ;;,"bugcatch", P_WEEDLE,    P_PARAS,     P_KAKUNA,    P_CATERPIE,  P_METAPOD,   P_PINSIR

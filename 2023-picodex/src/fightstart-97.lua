@@ -38,10 +38,8 @@ end $$
 |[f_begin_fight_cpu]| function(_ENV, team, name, deathfunc, plwinfunc, cpuwinfunc)
     local cpu_team_draft = {}
     for i=1,6 do
-        local num = team[i]
-        if num then
-            _add(cpu_team_draft, { num=num, moves=f_get_natural_moveset(num) })
-        end
+        -- todo: maybe use f_set_default_team_pkmn
+        _add(cpu_team_draft, f_get_team_pkmn(team[i], f_get_natural_moveset(team[i])))
     end
 
     f_begin_fight(_ENV,

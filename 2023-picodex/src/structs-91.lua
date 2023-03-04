@@ -5,14 +5,10 @@
 -- team
 
 -- thanks to bulbapedia: https://bulbapedia.bulbagarden.net/wiki/Stat#Stat
--- this formula is much simpler at lvl 50, so I took some parts out.
+-- this formula is much simpler at level 50, so I took some parts out.
 --|[f_calc_max_stat]| function(base)
 --    return _ceil(base+.5*93)+5
 --end $$
-
-|[f_create_team_pkmn]| function()
-
-end $$
 
 -- team: team power, alive size
 -- pokemon: 
@@ -101,25 +97,16 @@ end $$
 --   dielogic=p1_die_logic
 -- }
 
--- TODO: optimize for tokens
-|[f_create_team_pkmn]| function(num, moves)
-    local pkmn = c_pokemon[num]
-    return {
-        -- todo, try just copying all keys from pkmn, try metatables actually
-        -- things that won't change
-        num     = num,
-        lvl     = pkmn.level,
-        maxhp   = pkmn.maxhp,
-        attack  = pkmn.attack,
-        defense = pkmn.defense,
-        speed   = pkmn.speed,
-        special = pkmn.special,
-        moveids = (function() local m = {} for i=1,4 do m[i] = moves[i] end return m end)(),
-
-        -- things that can change
-        hp      = pkmn.maxhp,
-        movepps = (function() local m = {} for i=1,4 do m[i] = moves[i] and c_moves[moves[i]].pp end return m end)(),
-    }
+-- todo: move c_pokemon setup and other related pkmn/team pkmn to this team struct file
+-- todo: add movepps attribute to c_pokemon maybe and also saved/edit team area. this function might be able to be combined with f_get_team_pkmn
+|[f_create_team_pkmn]| function(num, moveids)
+    -- todo: token crunch here, specifically can the function() parts be smaller
+    local teampkmn = f_zobj([[
+        moveids,@, movepps,@
+    ]], (function() local m = {} for i=1,4 do m[i] = moveids[i] end return m end)(),
+        (function() local m = {} for i=1,4 do m[i] = moveids[i] and c_moves[moveids[i]].pp end return m end)()
+    )
+    return _setmetatable(teampkmn, {__index=c_pokemon[num]})
 end $$
 
 -- converts a team into a team ready for battle
@@ -128,9 +115,7 @@ end $$
 
     for i=1,6 do
         local cur = team[i]
-        if cur then
-            fightteam[i] = f_create_team_pkmn(cur.num, cur.moves)
-        end
+        fightteam[i] = f_create_team_pkmn(cur.num, cur.moveids)
     end
 
     return fightteam
@@ -138,33 +123,23 @@ end $$
 
 -- teampkmn must be non-nil and match the team table structure defined in f_get_fight_team 
 |[f_team_pkmn_to_active]| function(teampkmn)
-    local m = {}
-    for i=1,4 do
-        m[i] = teampkmn.moveids[i]
-    end
-
-    local active = f_zobj([[
-        moveids,@, movepps,@,
-        shared,@,  getstat,@,
+    return _setmetatable(f_zobj([[
+        shared,@,  getstat,@, -- shared exists to check team[i] == active.shared and as a sure way to get original values
         minor, #;
         
         stages; special,0, defense,0, attack,0, speed,0, accuracy,0, evasion,0;
-    ]], m, teampkmn.movepps, teampkmn,
-
+    ]], teampkmn, function(a, stat)
         -- evasion and accuracy have a different formula: https://www.smogon.com/rb/articles/stadium_guide
         -- all stats cap at 999: https://www.smogon.com/rb/articles/rby_mechanics_guide
         -- and i'm giving it a _min of 1 too, because zero messes things up
-        function(a, stat)
-            local stage = a.stages[stat]
-            return _ceil(_mid(1, 999,
-                a.shared[stat]*(
-                    (stat == 'evasion' or stat == 'accuracy')
-                    and _mid(1, 1+stage/3, 3)/_mid(1, 1-stage/3, 3)
-                     or _mid(2, 2+stage,   8)/_mid(2, 2-stage,   8)
-                )
-            ))
-        end
-    )
 
-    return _setmetatable(active, {__index=c_pokemon[teampkmn.num]})
+        local stage = a.stages[stat]
+        return _ceil(_mid(1, 999,
+            a.shared[stat]*(
+                (stat == 'evasion' or stat == 'accuracy')
+                and _mid(1, 1+stage/3, 3)/_mid(1, 1-stage/3, 3)
+                 or _mid(2, 2+stage,   8)/_mid(2, 2-stage,   8)
+            )
+        ))
+    end), {__index=teampkmn})
 end $$

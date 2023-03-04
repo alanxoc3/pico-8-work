@@ -31,6 +31,8 @@ end $$
 end $$
 
 |[f_horde_select]| function(_ENV)
+    -- could get an error if horde had less than 6 when starting match, due to assumptions i make
+    -- so, just don't change that part in the code
     f_begin_fight_cpu(_ENV, _split'1,2,3,4,5,6', "horde", f_horde_death, function(_, other)
         f_unlock_pkmn(other)
     end, function(horde)

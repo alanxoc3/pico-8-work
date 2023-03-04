@@ -6,6 +6,6 @@
 end $$
 
 |[f_set_default_team_pkmn]| function(team, ind, num)
-    team[ind] = {num=num, moves=f_get_natural_moveset(num)}
+    team[ind] = f_get_team_pkmn(num, f_get_natural_moveset(num))
     return team
 end $$

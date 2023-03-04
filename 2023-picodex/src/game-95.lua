@@ -105,7 +105,8 @@ end $$
     local team = {} -- default team for new games
     -- f_zcall(function(num) _poke(S_POKEMON+num, 1) end, [[;]])
     _foreach(_split'133,7,35,1,25,4', function(num)
-        _add(team, {num=num, moves=f_get_natural_moveset(num)})
+        -- todo: maybe use f_set_default_team_pkmn
+        _add(team, f_get_team_pkmn(num, f_get_natural_moveset(num)))
         _poke(S_POKEMON+num, 1)
     end)
 

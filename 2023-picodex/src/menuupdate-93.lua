@@ -49,5 +49,5 @@ end $$
 end $$
 
 |[f_fightover_xfunc]| function(_ENV)
-    f_minisfx(p0.active.shared.num)
+    f_minisfx(p0.active.num)
 end $$

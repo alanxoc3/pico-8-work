@@ -50,12 +50,9 @@ end $$
 
 -- this is for populating the pokemon info menu (sometimes called browsestat in code)
 |[f_update_stat_menu]| function(menu, pkmn)
-       -- ;,"basestat,hp,spd,spc,att,def"
-       --;;,"stats,hp,spd,spc,att,def,acc,eva,lvl"
-       --;;,"flags,burn,paralyze,poison,sleep,freeze,confuse"
-       --;;,"flamethwr,pp,kj
-
     menu:refresh{}
+
+    -- todo: token crunch on this _add block
     _add(menu, {pkmn=pkmn})
     _add(menu, {hidden=true})
     _add(menu, {name="lvl 50", style=5})
@@ -67,7 +64,6 @@ end $$
        ;;key,defense, name,"def"
        ;;key,speed,   name,"spd"
        ;;key,total,   name,"tot"
-       --;;key,level,   name,"lvl"
        ;;key,accuracy,name,"acc"
        ;;key,evasion, name,"eva"
     ]], function(pair)

@@ -10,11 +10,12 @@
 
     -- if the move already exists on the pkmn, remove it.
     for i=1,4 do
-        if teampkmn.moves[i] == move then
-            teampkmn.moves[i] = nil
+        if teampkmn.moveids[i] == move then
+            -- todo: try -1 instead of nil
+            teampkmn.moveids[i] = nil
         end
     end
 
-    teampkmn.moves[moveind] = move
+    teampkmn.moveids[moveind] = move
     return team
 end $$

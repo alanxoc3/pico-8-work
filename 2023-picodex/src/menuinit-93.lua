@@ -1,8 +1,9 @@
 -- todo: fight action screen should display stats, not descriptions. switch screen should show this too. maybe exiting out of the select menu also shows this.
 -- todo: make the move pp actually display remaining pp in fight screen
 
--- todo: token crunch here, specifically "_add" parts
 |[f_fightover_init]| function(_ENV)
+    -- todo: token crunch here, specifically "_add" parts
+    -- todo: fightover cursor should always be at top
     local winner, loser = p0, f_get_other_pl(_ENV, p0)
     winner:winlogic(loser)
 
@@ -10,20 +11,22 @@
     stack = {stack[1]}
     menu:refresh{}
 
-    _add(menu, {pkmn=winner.active})
-    _add(menu, {hidden=true})
+    f_zobj_set(menu, [[
+       ;pkmn,@
+      ;;hidden,%c_yes
 
-    _add(menu, {name="winner", style=5})
-    _add(menu, {name=winner.name})
-    _add(menu, {name=#winner.deadnums.." dead"})
+      ;;name,"winner", style,5
+      ;;name,@
+      ;;name,@
 
-    _add(menu, {pkmn=loser.active})
-    _add(menu, {hidden=true})
+      ;;pkmn,@
+      ;;hidden,%c_yes
 
-    _add(menu, {name="loser", style=5})
-    _add(menu, {name=loser.name})
-    _add(menu, {name=#loser.deadnums.." dead"})
-
+      ;;name,"loser", style,5
+      ;;name,@
+      ;;name,@
+    ]], winner.active, winner.name, #winner.deadnums.." dead",
+        loser.active,  loser.name,  #loser.deadnums .." dead")
 end $$
 
 |[f_main_init]| function(_ENV)
@@ -145,7 +148,7 @@ end $$
     local teampkmn = _ENV:f_get_pkmn_team_edit()
     local count = 0 
     for j=1,4 do
-        if teampkmn.moves[j] then count += 1 end
+        if teampkmn.moveids[j] then count += 1 end
     end
 
     menu:refresh(f_zobj([[
@@ -157,7 +160,7 @@ end $$
 
 |[f_movedel]| function(_ENV)
     local teampkmn, team = _ENV:f_get_pkmn_team_edit()
-    teampkmn.moves[_ENV:cursor'teammoves'+1] = nil
+    teampkmn.moveids[_ENV:cursor'teammoves'+1] = nil
     f_save_team(_ENV:cursor'team1', team)
     _ENV:pop()
 end $$
@@ -166,8 +169,8 @@ end $$
     local teampkmn, team = _ENV:f_get_pkmn_team_edit()
     menu:refresh(f_zobj[[,1,2,3,4]], function(i)
         return {
-            num=teampkmn.moves[i],
-            name=teampkmn.moves[i] and c_moves[teampkmn.moves[i]].name or "???",
+            num=teampkmn.moveids[i],
+            name=teampkmn.moveids[i] and c_moves[teampkmn.moveids[i]].name or "???",
             select=function(_ENV) select_func(_ENV, i, teampkmn, team) end,
             disabled=i == disabled_ind
         }
@@ -176,7 +179,7 @@ end $$
 
 |[f_teammoves_init]| function(_ENV)
     f_moves_init_helper(_ENV, 0, function(_ENV, i, teampkmn)
-        _ENV:push(teampkmn.moves[i] and 'moveaction' or 'teammovesel')
+        _ENV:push(teampkmn.moveids[i] and 'moveaction' or 'teammovesel')
     end)
 end $$
 
@@ -184,7 +187,7 @@ end $$
     local disabled_ind = _ENV:cursor'teammoves'+1
 
     f_moves_init_helper(_ENV, disabled_ind, function(_ENV, i, teampkmn, team)
-        teampkmn.moves[i], teampkmn.moves[disabled_ind] = teampkmn.moves[disabled_ind], teampkmn.moves[i]
+        teampkmn.moveids[i], teampkmn.moveids[disabled_ind] = teampkmn.moveids[disabled_ind], teampkmn.moveids[i]
         f_save_team(_ENV:cursor'team1', team)
         _ENV:popuntil'teammoves'
     end)
@@ -196,16 +199,11 @@ end $$
     local teampkmn = _ENV:f_get_pkmn_team_edit()
     local pkmn = c_pokemon[teampkmn.num]
 
-    local moves = {}
+    local moveids = {}
     f_zcall(function(movelist, prefix)
         for i=1,#movelist do
-            local disabled = false
-            for j=1,4 do
-                if teampkmn.moves[j] == movelist[i] then
-                    disabled = true
-                end
-            end
-            _add(moves, {name=c_moves[movelist[i]].name, disabled=disabled, num=movelist[i], desc=prefix..i})
+            local moveind = movelist[i]
+            _add(moveids, {name=c_moves[moveind].name, disabled=teampkmn:hasmove(moveind), num=moveind, desc=prefix..i})
         end
     end, [[
        ;,@,"learn #"
@@ -213,7 +211,7 @@ end $$
       ;;,@,"event #"
     ]], pkmn.moves_natural, pkmn.moves_teach, pkmn.moves_event)
 
-    menu:refresh(moves, function(m)
+    menu:refresh(moveids, function(m)
         return {
             name=m.name,
             disabled=m.disabled,
@@ -274,7 +272,6 @@ end $$
     return team[i] and team[i].num or -1
 end $$
 
--- this is used both in "editteam" and selecting a pkmn in battle.
 |[f_editteam_init]| function(_ENV)
     local team = _ENV:f_get_team_cursor'team1'
     menu:refresh(f_zobj[[,1,2,3,4,5,6]], function(i)
@@ -308,7 +305,6 @@ end $$
     menu.c = editteam.menu.c
 end $$
 
--- this is used both in "editteam" and selecting a pkmn in battle.
 |[f_pselswitch_init]| function(_ENV)
     local team = _ENV:f_get_team_cursor'team1'
     menu:refresh(f_zobj[[,1,2,3,4,5,6]], function(i)
@@ -319,7 +315,7 @@ end $$
                 _ENV:pop() _ENV:pop() -- pop twice. this could come from p1 or p2
                 f_select_move(p0, i, true)
             end,
-            num=f_get_team_num(p0.team, i)
+            pkmn=p0.team[i]
         }
     end)
 end $$

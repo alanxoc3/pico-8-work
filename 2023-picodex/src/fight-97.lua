@@ -56,7 +56,7 @@ end $$
 |[f_logic_faint]| function(s)
     s.active.shared.major = C_MAJOR_FAINTED
     s:dielogic()
-    _add(s.deadnums, s.active.shared.num) -- trainer battles and horde unlock pokemon with this.
+    _add(s.deadnums, s.active.num) -- trainer battles and horde unlock pokemon with this.
 end $$
 
 -- self pl, other pl
@@ -65,8 +65,8 @@ end $$
 |[f_pop_next_action]| function(game)
     -- if an active pokemon has %c_no hp, but not the faint status yet, return an action that makes the pokemon faint.
     for p in _all{game.p1,game.p2} do
-        if p.active.shared.hp <= 0 then
-            if p.active.shared.major ~= C_MAJOR_FAINTED then
+        if p.active.hp <= 0 then
+            if p.active.major ~= C_MAJOR_FAINTED then
                 return f_newaction(p, "#,is,fainted", f_logic_faint)
             else
                 p.active = f_team_pkmn_to_active(f_get_next_active(p.team))
@@ -81,7 +81,7 @@ end $$
         -- if the active pokemon shouldn't faint right now, find the next action that references a pokemon still on the field.
         while #s.actions > 0 do
             local action = _deli(s.actions, 1)
-            if action.active.shared.major ~= C_MAJOR_FAINTED and (action.active == s.active or action.active == o.active) then
+            if action.active.major ~= C_MAJOR_FAINTED and (action.active == s.active or action.active == o.active) then
                 return action
             end
         end
@@ -115,7 +115,7 @@ end $$
         s.active.movepps[m] -= 1
     end
 
-    local dmg = move.damage -- f_calc_move_damage(s.active.shared.lvl, s.active.shared.attack, defense, critical, move_power)
+    local dmg = move.damage -- f_calc_move_damage(s.active.level, s.active.attack, defense, critical, move_power)
     if dmg > 0 then
         f_addaction(s, o, "#,-"..dmg..",hitpoints", function()
             o.active.shared.hp = _max(0, o.active.shared.hp-dmg)
@@ -171,11 +171,11 @@ end $$
     return f_flr_rnd'256' == 0 and f_flr_rnd'256' == 0
 end $$
 
-|[f_calc_move_damage]| function(lvl, attack, defense, critical, move_power)
+|[f_calc_move_damage]| function(level, attack, defense, critical, move_power)
     -- critical is 1 or 2
     -- need function for attack/defense ratio to prevent divide by zero
     -- base_damage can be a _max of 997
-    local base_damage = (2*lvl*critical/5+2)*move_power*(attack/defense)/50+2
+    local base_damage = (2*level*critical/5+2)*move_power*(attack/defense)/50+2
 
     -- stab is 1.5 of base damage if move type equals pkmn type
     -- types are .5, 1, or 2, based on move's effectivenes against the opposing dual type pokemon
