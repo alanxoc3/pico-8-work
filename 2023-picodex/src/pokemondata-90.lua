@@ -101,17 +101,12 @@ end $$
 
         pkmn.total = pkmn.attack + pkmn.defense + pkmn.special + pkmn.speed + pkmn.maxhp
 
-        pkmn.browse_draw = function(...)
+        pkmn.draw = function(pkmn, ...)
             -- todo (wait): if logic for surfing pikachu + amnesia psyduck?
-            f_draw_pkmn_out(pkmn.available() and pkmn.num or -1, ...)
+            f_draw_pkmn_out(pkmn:available() and pkmn.num or -1, ...)
         end
 
-        pkmn.draw = function(...)
-            -- todo (wait): if logic for surfing pikachu + amnesia psyduck?
-            f_draw_pkmn_out(pkmn.num, ...)
-        end
-
-        pkmn.available = function()
+        pkmn.available = function(pkmn)
             if pkmn.num >= 0 then -- shouldn't be -1
                 return @(S_POKEMON+pkmn.num) > 0
             end

@@ -1,5 +1,5 @@
 |[f_editteam_draw3]| function(game)
-    f_draw3_pokeinfo(game:f_get_pkmn_team_edit().num)
+    f_draw3_pokeinfo(game:f_get_pkmn_team_edit())
 end $$
 
 -- todo (wait): put "move" directly on entry so pp reflects correctly.
@@ -16,7 +16,7 @@ end $$
 end $$
 
 |[f_browse_draw3]| function(game)
-    f_draw3_pokeinfo(game:cursor'browse')
+    f_draw3_pokeinfo(game:entry'browse'.pkmn)
 end $$
 
 |[f_main_draw3]|         function(game) f_print_draw3_message(_split(game:entry'main'.desc, '|'))      end $$

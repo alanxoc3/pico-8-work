@@ -2,6 +2,13 @@
 -- when updated, cursor position remains. entries change.
 -- when created, cursor position is 0.
 
+-- entry has:
+-- - name|pkmn
+-- - select
+-- - disabled
+-- - hidden
+-- - state
+
 |[f_menu_state_callback]| function(game, entry)
     if entry.state then
         game:push(entry.state)
@@ -153,20 +160,19 @@ end $$
 -- requires a "name" field
 |[f_menu_drawentry]| function(entry, style)
     if entry.pkmn then
-        local pkmn = f_get_pokemon(entry.pkmn)
-        local style = c_bg_styles[c_types[pkmn.type1].bg]
+        local style = c_bg_styles[c_types[entry.pkmn.type1].bg]
 
         f_zcall(_rectfill, [[
            ;,-20,-2,19,17,@
           ;;,-20,14,19,17,@
         ]], style.bg, style.aa)
 
-        f_zcall(pkmn.draw, [[;,0,8,@,1,1]], style.aa)
+        entry.pkmn:draw(0,8,style.aa,1,1)
     else
         f_wobble_text(entry.name, 0, 0, style.fg)
     end
 end $$
 
 |[f_browse_drawentry]| function(entry, style)
-    c_pokemon[entry.num].browse_draw(0, 3, style.out, .375, .375)
+    entry.pkmn:draw(0, 3, style.out, .375, .375)
 end $$

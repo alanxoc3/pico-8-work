@@ -2,9 +2,8 @@
     f_print_draw2_message("pkmn #"..pkmn.num)
 end $$
 
-|[f_draw3_pokeinfo]| function(num)
-    local pkmn = c_pokemon[num] or {}
-    if pkmn.available() then
+|[f_draw3_pokeinfo]| function(pkmn)
+    if pkmn:available() then
         f_print_draw3_message{pkmn.name, c_types[pkmn.type1].name, c_types[pkmn.type2].name}
     else
         f_print_draw3_message{"?????????", "????", "??????"}
@@ -49,10 +48,6 @@ end $$
     f_draw_pkmn(num, x, y, xscale, yscale)
 end $$
 
-|[f_get_pokemon]| function(num)
-    return c_pokemon[num]
-end $$
-
 -- this is for populating the pokemon info menu (sometimes called browsestat in code)
 |[f_update_stat_menu]| function(menu, pkmn)
        -- ;,"basestat,hp,spd,spc,att,def"
@@ -61,7 +56,7 @@ end $$
        --;;,"flamethwr,pp,kj
 
     menu:refresh{}
-    _add(menu, {pkmn=pkmn.num})
+    _add(menu, {pkmn=pkmn})
     _add(menu, {hidden=true})
     _add(menu, {name="lvl 50", style=5})
     _add(menu, {name=(pkmn.hp or pkmn.maxhp)..'/'..pkmn.maxhp})

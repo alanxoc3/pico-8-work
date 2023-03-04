@@ -1,6 +1,5 @@
 -- todo: fight action screen should display stats, not descriptions. switch screen should show this too. maybe exiting out of the select menu also shows this.
 -- todo: make the move pp actually display remaining pp in fight screen
--- todo: try showing "s" after move strength, "p" after move pp fraction, and "h" after hp in hp stat
 
 -- todo: token crunch here, specifically "_add" parts
 |[f_fightover_init]| function(_ENV)
@@ -11,14 +10,14 @@
     stack = {stack[1]}
     menu:refresh{}
 
-    _add(menu, {pkmn=winner.active.shared.num})
+    _add(menu, {pkmn=winner.active})
     _add(menu, {hidden=true})
 
     _add(menu, {name="winner", style=5})
     _add(menu, {name=winner.name})
     _add(menu, {name=#winner.deadnums.." dead"})
 
-    _add(menu, {pkmn=loser.active.shared.num})
+    _add(menu, {pkmn=loser.active})
     _add(menu, {hidden=true})
 
     _add(menu, {name="loser", style=5})
@@ -40,7 +39,7 @@ end $$
     )
 
     local count = 0
-    for i=0,151 do count += c_pokemon[i].available() and 1 or 0 end
+    for i=0,151 do count += c_pokemon[i]:available() and 1 or 0 end
     menu[1].desc ..= count.."/151|pokemon"
     menu[3].desc ..= (@S_STORY).."/40|trainers"
 
@@ -61,10 +60,11 @@ end $$
     menu:refresh(
         tbl,
         function(num)
+            local pkmn = c_pokemon[num]
             return {
                 select=selectfunc,
-                disabled=not c_pokemon[num].available(),
-                num=num
+                disabled=not pkmn:available(),
+                pkmn=pkmn
             }
         end
     )
@@ -84,7 +84,7 @@ end $$
 end $$
 
 |[f_browsestat_init]| function(_ENV)
-    f_update_stat_menu(menu, c_pokemon[_ENV:cursor'browse'])
+    f_update_stat_menu(menu, _ENV:entry'browse'.pkmn)
 end $$
 
 |[f_credits_init]| function(_ENV)
@@ -92,7 +92,7 @@ end $$
         _split"106,,!alanxoc3,code,design,6,,!gr8cadet,graphics,sound,129,,!wadlo,magikarp,gyarados,123,,!snippets,zep px9,mot smap,137,,!pkmndata,blbpedia,pokeapi,serebii,smogon,upokcntr,volvox,nintendo",
         function(txt)
             if _type(txt) == "number" then
-                return { pkmn=txt }
+                return { pkmn=c_pokemon[txt] }
             end
 
             local style = 1
@@ -279,14 +279,14 @@ end $$
     local team = _ENV:f_get_team_cursor'team1'
     menu:refresh(f_zobj[[,1,2,3,4,5,6]], function(i)
         return {
+            pkmn=team[i],
             select=function(_ENV)
-                if team[_ENV:cursor'editteam'+1] then
+                if team[_ENV:cursor'editteam'+1]:available() then
                     _ENV:push'teamaction'
                 else
                     _ENV:push'teampkmn'
                 end
-            end,
-            num=f_get_team_num(team, i)
+            end
         }
     end)
 end $$
@@ -302,7 +302,7 @@ end $$
                 f_save_team(_ENV:cursor'team1', team)
                 _ENV:popuntil'editteam'
             end,
-            num=f_get_team_num(team, i)
+            pkmn=team[i]
         }
     end)
     menu.c = editteam.menu.c
@@ -317,7 +317,6 @@ end $$
             disabled=disabled,
             select=function()
                 _ENV:pop() _ENV:pop() -- pop twice. this could come from p1 or p2
-                --_printh(_ENV.stack[#_ENV.stack])
                 f_select_move(p0, i, true)
             end,
             num=f_get_team_num(p0.team, i)

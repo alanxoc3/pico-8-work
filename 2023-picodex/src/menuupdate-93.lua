@@ -28,7 +28,7 @@ end $$
 |[f_browsestat_lrfunc]| function(_ENV, lr)
     local stayed = true
     for i=browse.menu.c+lr,75.5+75.5*lr,lr do
-        if c_pokemon[i].available() then
+        if c_pokemon[i]:available() then
             browse.menu.c = i
             stayed = false
             f_beep_back()

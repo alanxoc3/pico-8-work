@@ -143,16 +143,13 @@ end $$
         m[i] = teampkmn.moveids[i]
     end
 
-    return f_zobj([[
-        type1,@,   type2,@,
+    local active = f_zobj([[
         moveids,@, movepps,@,
         shared,@,  getstat,@,
         minor, #;
         
         stages; special,0, defense,0, attack,0, speed,0, accuracy,0, evasion,0;
-    ]], c_pokemon[teampkmn.num].type1,
-        c_pokemon[teampkmn.num].type2,
-        m, teampkmn.movepps, teampkmn,
+    ]], m, teampkmn.movepps, teampkmn,
 
         -- evasion and accuracy have a different formula: https://www.smogon.com/rb/articles/stadium_guide
         -- all stats cap at 999: https://www.smogon.com/rb/articles/rby_mechanics_guide
@@ -168,4 +165,6 @@ end $$
             ))
         end
     )
+
+    return _setmetatable(active, {__index=c_pokemon[teampkmn.num]})
 end $$

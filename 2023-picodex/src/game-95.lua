@@ -4,6 +4,7 @@ f_zclass[[o_modes,o_actor|
     push,%f_modes_push,
     pop,%f_modes_pop,
     popuntil,%f_modes_popuntil,
+    pkmn,%f_nop,
     update,%f_nop,
     draw1,%f_nop,
     draw2,%f_nop,
@@ -35,12 +36,12 @@ f_zclass[[o_modes,o_actor|
     -- edit
     editteam;    init,%f_editteam_init,    draw2,%f_editteam_draw2,    draw3,%f_editteam_draw3, draw1,%f_editteam_draw1;
     switchteam;  init,%f_switchteam_init,  draw2,%f_editteam_draw2,    draw3,%f_editteam_draw3, draw1,%f_editteam_draw1;
-    teampkmn;    init,%f_teampkmn_init,    draw2,%f_browse_draw2,      draw3,%f_browse_draw3;
+    teampkmn;    init,%f_teampkmn_init,    draw2,%f_browse_draw2,      draw3,%f_browse_draw3  ;
     teamaction;  init,%f_teamaction_init,  draw2,%f_editteam_draw2,    draw3,%f_editteam_draw3;
-    moveaction;  init,%f_moveaction_init,  draw2,%f_teammoves_draw2,   draw3,%f_move_draw3, movemode,teammoves;
-    teammovesel; init,%f_teammovesel_init, draw2,%f_teammovesel_draw2, draw3,%f_move_draw3;
-    teammoves;   init,%f_teammoves_init,   draw2,%f_teammoves_draw2,   draw3,%f_move_draw3;
-    switchmoves; init,%f_switchmoves_init, draw2,%f_teammoves_draw2,   draw3,%f_move_draw3;
+    moveaction;  init,%f_moveaction_init,  draw2,%f_teammoves_draw2,   draw3,%f_move_draw3    , movemode,teammoves;
+    teammovesel; init,%f_teammovesel_init, draw2,%f_teammovesel_draw2, draw3,%f_move_draw3    ;
+    teammoves;   init,%f_teammoves_init,   draw2,%f_teammoves_draw2,   draw3,%f_move_draw3    ;
+    switchmoves; init,%f_switchmoves_init, draw2,%f_teammoves_draw2,   draw3,%f_move_draw3    ;
 
     -- pre-fight menus
     team1;        ui_pl,"player", init,%f_team_init,    draw2,%f_team_draw2, draw3,%f_team_draw3, disable_empty_team,%c_no,   select_func,%f_team_select; -- t1

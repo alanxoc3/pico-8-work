@@ -12,14 +12,14 @@ end $$
 -- there are 5 places that use this function, all editparty related
 |[f_get_pkmn_team_edit]| function(game)
     local team = f_get_team(game:cursor'team1')
-    return team[game:cursor'editteam'+1] or f_zobj[[num,-1, moves,#]], team
+    return team[game:cursor'editteam'+1], team
 end $$
 
 -- %c_no moves means the pokemon is deleted
 c_team_memlocs = f_zobj[[0,S_PARTY1, 1,S_PARTY2, 2,S_PARTY3]]
 |[f_get_team]| function(team_index) -- 0 to 2
     local mem = c_team_memlocs[team_index]
-    local team = {}
+    local team = f_zobj[[]]
 
     for i=1,6 do
         local memstart = mem+(i-1)*5
@@ -33,9 +33,8 @@ c_team_memlocs = f_zobj[[0,S_PARTY1, 1,S_PARTY2, 2,S_PARTY3]]
             end
         end
 
-        if has_moves then
-            team[i] = { num=_peek(memstart), moves=moves }
-        end
+        team[i] = f_zobj([[moves,@]], moves)
+        _setmetatable(team[i], {__index=c_pokemon[has_moves and @memstart or -1]})
     end
 
     return team
