@@ -160,17 +160,24 @@ end $$
 
 |[f_movedel]| function(_ENV)
     local teampkmn, team = _ENV:f_get_pkmn_team_edit()
-    teampkmn.moveids[_ENV:cursor'teammoves'+1] = nil
+    teampkmn.moveids[_ENV:cursor'teammoves'+1] = -1
     f_save_team(_ENV:cursor'team1', team)
     _ENV:pop()
 end $$
 
+--runtime error line 17 tab 0
+--name=moveind>=0 and c_moves[moveind].name or "???",
+--attempt to index field '?' (a nil value)
+
 |[f_moves_init_helper]| function(_ENV, disabled_ind, select_func)
     local teampkmn, team = _ENV:f_get_pkmn_team_edit()
     menu:refresh(f_zobj[[,1,2,3,4]], function(i)
+        local moveind = teampkmn.moveids[i] or -1
+        _printh(moveind) -- why 112 & 255? shouldn't have 255...
         return {
             num=teampkmn.moveids[i],
-            name=teampkmn.moveids[i] and c_moves[teampkmn.moveids[i]].name or "???",
+            -- todo: make move never nil
+            name=moveind >= 0 and c_moves[moveind].name or "???",
             select=function(_ENV) select_func(_ENV, i, teampkmn, team) end,
             disabled=i == disabled_ind
         }
@@ -218,18 +225,22 @@ end $$
             num=m.num,
             ref=m.desc,
             select=function()
-                f_save_team(_ENV:cursor'team1', f_set_team_pkmn_move(_ENV:f_get_team_cursor'team1', _ENV:cursor'editteam'+1, _ENV:cursor'teammoves'+1, m.num))
+                local team = _ENV:f_get_team_cursor'team1'
+                team[_ENV:cursor'editteam'+1].moveids[_ENV:cursor'teammoves'+1] = m.num
+                f_save_team(_ENV:cursor'team1', team)
                 _ENV:popuntil'teammoves'
             end
         }
     end)
 end $$
 
--- todo: (wait) support struggle
 |[f_pselmove_init]| function(_ENV)
-    menu:refresh(f_get_possible_move_slots(p0.active), function(move_slot)
+    -- todo: (wait) support struggle
+    -- todo: token crunching (replace with zobj)
+    menu:refresh(f_zobj[[,1,2,3,4]], function(move_slot)
         local move = c_moves[p0.active.moveids[move_slot]]
         return {
+            disabled=p0.active.movepps[move_slot] <= 0,
             name=move.name,
             num=move.num,
             select=function()

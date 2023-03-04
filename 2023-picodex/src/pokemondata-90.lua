@@ -1,137 +1,13 @@
 |[c_pokemon]| f_zobj[[]] $$
+|[c_pokemon_names]| split"missingno,bulbasaur,ivysaur,venusaur,charmander,charmeleon,charizard,squirtle,wartortle,blastoise,caterpie,metapod,butterfree,weedle,kakuna,beedrill,pidgey,pidgeotto,pidgeot,rattata,raticate,spearow,fearow,ekans,arbok,pikachu,raichu,sandshrew,sandslash,nidoran f,nidorina,nidoqueen,nidoran m,nidorino,nidoking,clefairy,clefable,vulpix,ninetales,jigglypuff,wigglytuff,zubat,golbat,oddish,gloom,vileplume,paras,parasect,venonat,venomoth,diglett,dugtrio,meowth,persian,psyduck,golduck,mankey,primeape,growlithe,arcanine,poliwag,poliwhirl,poliwrath,abra,kadabra,alakazam,machop,machoke,machamp,bellsprout,weepinbell,victreebel,tentacool,tentacruel,geodude,graveler,golem,ponyta,rapidash,slowpoke,slowbro,magnemite,magneton,farfetchd,doduo,dodrio,seel,dewgong,grimer,muk,shellder,cloyster,gastly,haunter,gengar,onix,drowzee,hypno,krabby,kingler,voltorb,electrode,exeggcute,exeggutor,cubone,marowak,hitmonlee,hitmonchan,lickitung,koffing,weezing,rhyhorn,rhydon,chansey,tangela,kangaskhan,horsea,seadra,goldeen,seaking,staryu,starmie,mr mime,scyther,jynx,electabuzz,magmar,pinsir,tauros,magikarp,gyarados,lapras,ditto,eevee,vaporeon,jolteon,flareon,porygon,omanyte,omastar,kabuto,kabutops,aerodactyl,snorlax,articuno,zapdos,moltres,dratini,dragonair,dragonite,mewtwo,mew" $$
 
 -- thanks to bulbapedia: https://bulbapedia.bulbagarden.net/wiki/Stat#Stat
 -- this formula is much simpler at lvl 50, so I took some parts out.
-|[f_calc_max_stat]| function(base)
+|[f_calc_max_stat]| function(base) -- todo: find a new home for this
     return _ceil(base+.5*93)+5
 end $$
 
--- c_pokemon_raw just has data. it requires running it in order. and it can only be called when the game starts, before memory is overwritten.
--- this makes populating c_pokemon much easier.
-|[f_populate_c_pokemon]| function()
-    local movemem, names = _peek2(8), split"missingno,bulbasaur,ivysaur,venusaur,charmander,charmeleon,charizard,squirtle,wartortle,blastoise,caterpie,metapod,butterfree,weedle,kakuna,beedrill,pidgey,pidgeotto,pidgeot,rattata,raticate,spearow,fearow,ekans,arbok,pikachu,raichu,sandshrew,sandslash,nidoran f,nidorina,nidoqueen,nidoran m,nidorino,nidoking,clefairy,clefable,vulpix,ninetales,jigglypuff,wigglytuff,zubat,golbat,oddish,gloom,vileplume,paras,parasect,venonat,venomoth,diglett,dugtrio,meowth,persian,psyduck,golduck,mankey,primeape,growlithe,arcanine,poliwag,poliwhirl,poliwrath,abra,kadabra,alakazam,machop,machoke,machamp,bellsprout,weepinbell,victreebel,tentacool,tentacruel,geodude,graveler,golem,ponyta,rapidash,slowpoke,slowbro,magnemite,magneton,farfetchd,doduo,dodrio,seel,dewgong,grimer,muk,shellder,cloyster,gastly,haunter,gengar,onix,drowzee,hypno,krabby,kingler,voltorb,electrode,exeggcute,exeggutor,cubone,marowak,hitmonlee,hitmonchan,lickitung,koffing,weezing,rhyhorn,rhydon,chansey,tangela,kangaskhan,horsea,seadra,goldeen,seaking,staryu,starmie,mr mime,scyther,jynx,electabuzz,magmar,pinsir,tauros,magikarp,gyarados,lapras,ditto,eevee,vaporeon,jolteon,flareon,porygon,omanyte,omastar,kabuto,kabutops,aerodactyl,snorlax,articuno,zapdos,moltres,dratini,dragonair,dragonite,mewtwo,mew"
-
-    -- -1 is for disabled things. this is never available.
-    for num=-1,151 do
-        ---- PASS 1 - create array ----
-        -- this populates an array for the pokemon, based on data stored in the cartridge
-        local pkmndata, is_range = {}, false
-        while @movemem ~= C_NEXT do
-            if @movemem == C_DASH then
-                is_range = true
-            elseif is_range then
-                for i=pkmndata[#pkmndata]+1,@movemem do
-                    _add(pkmndata, i)
-                end
-                is_range = false
-            else
-                _add(pkmndata, @movemem)
-            end
-            movemem += 1
-        end
-        movemem += 1
-
-        ---- PART 2 - populate most attributes ----
-        local evolvesfrom = num-pkmndata[1]
-        local pkmn = f_zobj([[
-            moveids;,-1,-1,-1,-1;
-            num,@,
-            evolvesfrom,@,
-            name,@,
-            type1,@,
-            type2,@,
-            base_maxhp,@,
-            base_attack,@,
-            base_defense,@,
-            base_speed,@,
-            base_special,@,
-
-            moves_natural,@,
-            moves_teach,@,
-            moves_event,@
-        ]],
-            num, -- evl
-            evolvesfrom,  -- evl
-            names[num+1], -- nam
-            pkmndata[2],  -- ty1
-            pkmndata[3],  -- ty2
-            pkmndata[4],  -- xhp
-            pkmndata[5],  -- att
-            pkmndata[6],  -- def
-            pkmndata[7],  -- spd
-            pkmndata[8],  -- spc
-            {}, {}, {}
-        )
-
-        ---- PASS 3 - populate the moves ----
-        local move_bucket = pkmn.moves_natural
-        for i=9,#pkmndata do
-            local val = pkmndata[i]
-            if val == C_TEACH then
-                move_bucket = pkmn.moves_teach
-            elseif val == C_EVENT then
-                move_bucket = pkmn.moves_event
-            else
-                _add(move_bucket, val)
-            end
-        end
-
-        if evolvesfrom < num then
-            _foreach(c_pokemon[evolvesfrom].moves_natural, function(move) _add(pkmn.moves_natural, move) end)
-            _foreach(c_pokemon[evolvesfrom].moves_teach,   function(move) _add(pkmn.moves_teach,   move) end)
-            _foreach(c_pokemon[evolvesfrom].moves_event,   function(move) _add(pkmn.moves_event,   move) end)
-        end
-
-        -- this is my ghetto sorting. it fixes weird ordering for new teachs on evolved forms (tm/hm order)
-        local teach_map, teachs = {}, {}
-        _foreach(pkmn.moves_teach, function(move) teach_map[move] = true end)
-        for i=1,54 do
-            if teach_map[i] then _add(teachs, i) end
-        end
-        pkmn.moves_teach = teachs
-
-        ---- PASS 4 - add level specific data and other attributes to the pkmn ----
-        f_zobj_set(pkmn, [[
-            attack,@, defense,@, special,@, speed,@, maxhp,@, hp,~maxhp, level,C_LEVEL
-        ]], f_calc_max_stat(pkmn.base_attack),
-            f_calc_max_stat(pkmn.base_defense),
-            f_calc_max_stat(pkmn.base_special),
-            f_calc_max_stat(pkmn.base_speed),
-            f_calc_max_stat(pkmn.base_maxhp)+5+C_LEVEL
-        )
-
-        pkmn.total = pkmn.attack + pkmn.defense + pkmn.special + pkmn.speed + pkmn.maxhp
-
-        -- todo: token crunch on these funcs, mainly just separate them out & use zobj stuff
-        pkmn.draw = function(pkmn, ...)
-            -- todo: incorporate transform ... transform into surfing pikachu should become surfing pikachu
-            local num = pkmn:available() and pkmn.num or -1
-            if num == P_PIKACHU and pkmn:hasmove(M_SURF)    then num = 158 end
-            if num == P_PSYDUCK and pkmn:hasmove(M_AMNESIA) then num = 159 end
-            f_draw_pkmn_out(num, ...)
-        end
-
-        pkmn.hasmove = function(pkmn, moveid)
-            for j=1,4 do
-                if pkmn.moveids[j] == moveid then
-                    return true
-                end
-            end
-            return false
-        end
-
-        pkmn.available = function(pkmn)
-            if pkmn.num >= 0 then -- shouldn't be -1
-                return @(S_POKEMON+pkmn.num) > 0
-            end
-        end
-
-        ---- PASS 5 - finally, set the pokemon to the c_pokemon array ----
-        c_pokemon[num] = pkmn
-    end
-end $$
-
-|[f_get_natural_moveset]| function(num)
+|[f_get_natural_moveset]| function(num) -- todo: find a new home for this
     local pkmn, moveset = c_pokemon[num], {}
     for i=1,min(4,#pkmn.moves_natural) do
         _add(moveset, pkmn.moves_natural[i])
@@ -184,7 +60,8 @@ end $$
 -- dmg 0 means it likely changes status or has an effect.
 |[c_moves_raw]| f_zobj[[
    --  "name",     type        pp  dmg  acc
-   0;, "struggle", T_NORMAL,   0,  50, 1
+  -1;, "none",     T_NONE,     0,  0,   0
+  ;0;, "struggle", T_NORMAL,   0,  50,  1
 
    -- teachs
    ;;, "megapnch", T_NORMAL,   20, 80,  .85 -- 1
@@ -359,7 +236,7 @@ end $$
 
 |[c_moves]| f_zobj[[]] $$
 |[f_populate_c_moves]| function()
-    for i=0,#c_moves_raw do
+    for i=-1,#c_moves_raw do
         local move = c_moves_raw[i]
         c_moves[i] = f_zobj([[
             name,@, type,@, pp,@, damage,@, accuracy,@, num,@

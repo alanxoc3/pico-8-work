@@ -1,101 +1,117 @@
--- this file contains structures for:
--- pokemon
--- team_pokemon
--- active_pokemon
--- team
+-- this file contains structures for pokemon
 
--- thanks to bulbapedia: https://bulbapedia.bulbagarden.net/wiki/Stat#Stat
--- this formula is much simpler at level 50, so I took some parts out.
---|[f_calc_max_stat]| function(base)
---    return _ceil(base+.5*93)+5
---end $$
+|[f_populate_c_pokemon]| function()
+    local movemem = _peek2'8'
 
--- team: team power, alive size
--- pokemon: 
+    -- -1 is for disabled things. this is never available.
+    for num=-1,151 do
+        ---- PASS 1 - create array ----
+        -- this populates an array for the pokemon, based on data stored in the cartridge
+        local pkmndata, is_range = {}, false
+        while @movemem ~= C_NEXT do
+            if @movemem == C_DASH then
+                is_range = true
+            elseif is_range then
+                for i=pkmndata[#pkmndata]+1,@movemem do
+                    _add(pkmndata, i)
+                end
+                is_range = false
+            else
+                _add(pkmndata, @movemem)
+            end
+            movemem += 1
+        end
+        movemem += 1
 
--- 3 levels of pokemon: browse, fightable, team, active
+        ---- PART 2 - populate most attributes ----
+        local evolvesfrom = num-pkmndata[1]
+        local pkmn = f_zobj([[
+            moveids;,-1,-1,-1,-1;
+            num,@, evolvesfrom,@, name,@,
+            type1,@, type2,@,
+            base_maxhp,@, base_attack,@, base_defense,@, base_speed,@, base_special,@,
+            moves_natural,@, moves_teach,@, moves_event,@
+        ]],
+            num, -- evl
+            evolvesfrom,  -- evl
+            c_pokemon_names[num+1], -- nam
+            pkmndata[2],  -- ty1
+            pkmndata[3],  -- ty2
+            pkmndata[4],  -- xhp
+            pkmndata[5],  -- att
+            pkmndata[6],  -- def
+            pkmndata[7],  -- spd
+            pkmndata[8],  -- spc
+            {}, {}, {}
+        )
 
--- ok, maybe there can be 1 base template with default values.
--- you just copy a previous one to do whatever
+        ---- PASS 3 - populate the moves ----
+        local move_bucket = pkmn.moves_natural
+        for i=9,#pkmndata do
+            local val = pkmndata[i]
+            if val == C_TEACH then
+                move_bucket = pkmn.moves_teach
+            elseif val == C_EVENT then
+                move_bucket = pkmn.moves_event
+            else
+                _add(move_bucket, val)
+            end
+        end
 
--- CURRENT BROWSE PKMN
----------------------- these never change
--- pkmn {
---   evolvesfrom
---   name
---   type1
---   type2
---   level -- constant of 50
---   movelvls
---   moves_learnable
---   draw
---   num
---   total   -- all the previous stats added together
---   here, move ids is all the possible moves... maybe
--- }
----------------- these change
--- teampkmn { -- index metatable to pkmn
---   hp, hurt(), heal() -- should take in the 
---   set_major
---   moveids
---   movepps
---   spot? this could be useful for checking if you can switch the active pkmn. generally, you can't move around the team/bench/team. you delete and create instead.
---   major none|paralyze|burn|frozen|poison|faint
---   toactive() -- returns a new active pokemon, generated from this teampkmn.
--- }
----------------- these change
--- activepkmn { -- index metatable to teampkmn
---   set_minor() -- transform is number, mimic is number
---   getstat()
---   inc_stage()
---   stages -6 to 6 - accuracy, attack, defense, speed, special, evasion
---   accuracy -- 100
---   evasion  -- 100
---   last_used_move -- needed for mirrormove and mimic. defaults to nil.
---   turn_damage_taken -- defaults to 0. needed for counter. reset after each turn. this would be set in the "hurt" function. this is partly why we need a separate "hurt" and "heal" function.
---   -- get_valid_moves() -- if this is 0, that means you use struggle. otherwise, it will return between 1 to 4 move ids. it will not return moves if they have 0 pp or if you are in a multiturn move, or if it is disabled.
---   -- minor statuses
---   confused   -- affected by haze
---   disable_m  -- disable move
---   disable_t  -- disable o_timer
---   focused    -- affected by haze
---   misted     -- affected by haze
---   reflected  -- affected by haze
---   screened   -- affected by haze
---   seeded     -- affected by haze
---   toxiced    -- affected by haze
---   critmove   -- karatechop/slash/crabhammer/razorleaf
---   flinching  -- bite/boneclub/hyperfang/headbutt/stomp/lowkick/rollingkick -- resets at end of turn
---   substitute -- substitute
---   transform  -- transform - set, because you can't use transform once you are already transformed
---   digging    -- dig - uncontrollable + invincible (besides swift)
---   flying     -- fly - uncontrollable + invincible (besides swift)
---   preparing  -- skullbash/solarbeam/razorwind/skyattack - uncontrollable + next turn move
---   recharging -- hyperbeam - uncontrollable 1 turn
---   rage       -- rage                     - uncontrollable + use a move. attack increases each time you are hit, so %c_no counter needed (use the stages counter)
---   thrashing  -- petaldance/thrash        - uncontrollable + use a move. has a o_timer (2-3 turns) and get confused at the end
---   trapping   -- bind/clamp/firespin/wrap - uncontrollable + use a move. is trapped? (o_timer 2-5 turns) recharging? preparing? thrashing?
---   trapped    -- if you are trapped in a bind/clamp/firespin/wrap
---   getmove(0-3), or get valid moves? ????
+        if evolvesfrom < num then
+            _foreach(c_pokemon[evolvesfrom].moves_natural, function(move) _add(pkmn.moves_natural, move) end)
+            _foreach(c_pokemon[evolvesfrom].moves_teach,   function(move) _add(pkmn.moves_teach,   move) end)
+            _foreach(c_pokemon[evolvesfrom].moves_event,   function(move) _add(pkmn.moves_event,   move) end)
+        end
 
--- }
---------------- team (or player)... %c_yes! i think...
--- team {
---   1-6 - each thing is a teampkmn
---   can_switch() -- give it an index, it tells you if you can switch with that pkmn
---   get_next()   -- returns the next team pokemon pokemon that 
+        -- this is my ghetto sorting. it fixes weird ordering for new teachs on evolved forms (tm/hm order)
+        local teach_map, teachs = {}, {}
+        _foreach(pkmn.moves_teach, function(move) teach_map[move] = true end)
+        for i=1,54 do
+            if teach_map[i] then _add(teachs, i) end
+        end
+        pkmn.moves_teach = teachs
 
---   horde_index = 6 -- only used for horde
---   active 
---   name=name1
---   priority=1
---   iscpu=iscpu1
---   actions={}
---   active=f_team_pkmn_to_active(f_get_next_active(team1))
---   team=team1
---   winlogic=p1_win_logic
---   dielogic=p1_die_logic
--- }
+        ---- PASS 4 - add level specific data and other attributes to the pkmn ----
+        f_zobj_set(pkmn, [[
+            attack,@, defense,@, special,@, speed,@, maxhp,@, hp,~maxhp, level,C_LEVEL
+        ]], f_calc_max_stat(pkmn.base_attack),
+            f_calc_max_stat(pkmn.base_defense),
+            f_calc_max_stat(pkmn.base_special),
+            f_calc_max_stat(pkmn.base_speed),
+            f_calc_max_stat(pkmn.base_maxhp)+5+C_LEVEL
+        )
+
+        pkmn.total = pkmn.attack + pkmn.defense + pkmn.special + pkmn.speed + pkmn.maxhp
+
+        -- todo: token crunch on these funcs, mainly just separate them out & use zobj stuff
+        pkmn.draw = function(pkmn, ...)
+            -- todo: incorporate transform ... transform into surfing pikachu should become surfing pikachu
+            local num = pkmn:available() and pkmn.num or -1
+            if num == P_PIKACHU and pkmn:hasmove(M_SURF)    then num = 158 end
+            if num == P_PSYDUCK and pkmn:hasmove(M_AMNESIA) then num = 159 end
+            f_draw_pkmn_out(num, ...)
+        end
+
+        pkmn.hasmove = function(pkmn, moveid)
+            for j=1,4 do
+                if pkmn.moveids[j] == moveid then
+                    return true
+                end
+            end
+            return false
+        end
+
+        pkmn.available = function(pkmn)
+            if pkmn.num >= 0 then -- shouldn't be -1
+                return @(S_POKEMON+pkmn.num) > 0
+            end
+        end
+
+        ---- PASS 5 - finally, set the pokemon to the c_pokemon array ----
+        c_pokemon[num] = pkmn
+    end
+end $$
 
 -- todo: move c_pokemon setup and other related pkmn/team pkmn to this team struct file
 -- todo: add movepps attribute to c_pokemon maybe and also saved/edit team area. this function might be able to be combined with f_get_team_pkmn

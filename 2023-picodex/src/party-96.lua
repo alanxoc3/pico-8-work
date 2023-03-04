@@ -26,10 +26,11 @@ c_team_memlocs = f_zobj[[0,S_PARTY1, 1,S_PARTY2, 2,S_PARTY3]]
         local moveids = {}
         local has_moves = false
         for i=1,4 do
-            local move = _peek(memstart+i)
-            if move > 0 then
-                moveids[i] = move
+            moveids[i] = _peek(memstart+i)
+            if moveids[i] > 0 then
                 has_moves = true
+            else
+                moveids[i] = -1
             end
         end
 
@@ -52,12 +53,10 @@ end $$
     for i=1,6 do
         local memstart = mem+(i-1)*5
         local pkmn = team[i]
-        if pkmn then
-            _poke(memstart, pkmn.num)
+        _poke(memstart, pkmn.num)
 
-            for i=1,4 do
-                _poke(memstart+i, pkmn.moveids[i])
-            end
+        for i=1,4 do
+            _poke(memstart+i, pkmn.moveids[i] > 0 and pkmn.moveids[i] or 0)
         end
     end
 end $$
