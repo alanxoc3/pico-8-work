@@ -18,7 +18,17 @@ end $$
 end $$
 
 |[f_main_draw3]|         function(game) f_print_draw3_message(_split(game:entry'main'.desc, '|'))      end $$
-|[f_pselactions_draw3]|  function(game) f_print_draw3_message(_split(game:entry'pselactions'.desc, '|'))      end $$
+
+|[f_fight_draw3_helper]| function(_ENV)
+    f_print_draw3_message{
+        name,
+        hp..'/'..maxhp,
+        "paralyzed" -- todo: show correct status here
+    }
+end $$
+
+|[f_pselactions_draw3]| function(_ENV) f_fight_draw3_helper(p0.active) end $$
+|[f_pselswitch_draw3]|  function(_ENV) f_fight_draw3_helper(_ENV:entry'pselswitch'.pkmn) end $$
 
 |[f_team_draw3]|        function(game)
     local count, power = 0, 0

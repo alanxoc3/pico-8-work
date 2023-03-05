@@ -55,7 +55,7 @@ f_zclass[[o_modes,o_actor|
     fightover;    init,%f_fightover_init,    draw2,%f_fightover_draw2,    draw3,%f_fightover_draw3, xfunc,%f_fightover_xfunc;
     pselactions;  init,%f_pselactions_init,  draw2,%f_turn_draw2,         draw3,%f_pselactions_draw3;
     pselmove;     init,%f_pselmove_init,     draw2,%f_turn_draw2,         draw3,%f_move_draw3;
-    pselswitch;   init,%f_pselswitch_init,   draw2,%f_turn_draw2,         draw3,%f_pselactions_draw3, draw1,%f_editteam_draw1;
+    pselswitch;   init,%f_pselswitch_init,   draw2,%f_turn_draw2,         draw3,%f_pselswitch_draw3, draw1,%f_editteam_draw1;
 
     -- in-fight screens
     p1sel;        next,p2sel, init,%f_psel_init, update,%f_nop,         draw1,%f_nop,        p0key,p1;

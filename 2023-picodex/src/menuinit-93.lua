@@ -251,10 +251,10 @@ end $$
 
 |[f_pselactions_init]| function(_ENV)
     menu:refresh(f_zobj[[
-         ; name,"fight",   desc,"select|next|move",      select,%f_menu_state_callback, state,pselmove
-        ;; name,"random",  desc,"select|random|move",    select,%f_modes_pop -- random logic is in the turn logic if move is c_empty, so just leave the menu
-        ;; name,"switch",  desc,"change|active|pokemon", select,%f_menu_state_callback, state,pselswitch
-        ;; name,"forfeit", desc,"leave|the|fight",       select,%f_psel_forfeit
+         ; name,"fight",   select,%f_menu_state_callback, state,pselmove
+        ;; name,"random",  select,%f_modes_pop -- random logic is in the turn logic if move is c_empty, so just leave the menu
+        ;; name,"switch",  select,%f_menu_state_callback, state,pselswitch
+        ;; name,"forfeit", select,%f_psel_forfeit
     ]])
 end $$
 
