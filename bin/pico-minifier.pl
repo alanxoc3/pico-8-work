@@ -47,22 +47,36 @@ if (not $debug_mode) {
 $content = remove_comments($content);
 
 # |...| ... $$ syntax
-my $global_keys = "";
-my $global_vals = "";
+
+my @global_keys_arr;
+my @global_vals_arr;
 while ( $content =~ s/\|\[\s*(\w+)\s*\]\|(.*?)\$\$//ms ) {
     my $name = $1; my $value = $2;
-    $global_keys .= ",".$1.",@";
-    $global_vals .= ",".$2;
+    push(@global_keys_arr, $1);
+    push(@global_vals_arr, $2);
 }
 
-if (length $global_keys and length $global_vals) {
-    $global_keys = substr $global_keys, 1;
-    $content =~ s/_G_ZOBJ_PARAMS/"[[".$global_keys."]]".$global_vals/ge;
-} else {
-    $content =~ s/_G_ZOBJ_PARAMS/"[[]]"/ge;
+my $groupsize = 100;
+my @keys_arr2;
+my @vals_arr2;
+
+while (my @keyschunk = splice @global_keys_arr, 0, $groupsize) {
+    my @valschunk = splice @global_vals_arr, 0, $groupsize;
+
+    my $keys_str = "";  for my $item (@keyschunk) { $keys_str .= ",".$item.",@"; };  push(@keys_arr2, $keys_str);
+    my $vals_str = "";  for my $item (@valschunk) { $vals_str .= ",".$item     ; };  push(@vals_arr2, $vals_str);
 }
 
-$content =~ s/GLOBAL_VALS/$global_vals/ge;
+my $finalzobjstr = "";
+for (my $i = 0; $i < scalar @keys_arr2; $i++) {
+    my $keystr = substr $keys_arr2[$i], 1;
+    my $valstr = $vals_arr2[$i];
+    $finalzobjstr .= "f_zobj_set(_g, [[".$keystr."]]".$valstr.")\n";
+}
+
+if (length $finalzobjstr) {
+    $content =~ s/_G_ZOBJ/$finalzobjstr/ge;
+}
 
 # trimming, minimizing, replacing things
 $content = tokenize_constants($content, \%constants);

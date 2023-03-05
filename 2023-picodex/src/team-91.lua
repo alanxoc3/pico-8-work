@@ -6,16 +6,43 @@
 -- runtime error line 17 tab 0
 -- elseif align>0 then x-=#text*4+1 end
 -- attempt to compare number with nil
+-- todo: make it so horde has a team size of more than 6
 
+|[f_unlock_pkmn]| function(trainer)
+    -- add pokemon defeated to picodex
+    foreach(f_get_team_dead(trainer.team), function(pkmn)
+        _poke(S_POKEMON+pkmn.num, 1)
+    end)
+end $$
+
+|[f_get_team_dead]| function(team)
+    local newteam = {}
+    foreach(team, function(pkmn)
+        if pkmn.num > -1 and pkmn.major == C_MAJOR_FAINTED then
+            _add(newteam, pkmn)
+        end
+    end)
+    return newteam
+end $$
+
+-- exclude missingno for reporting (like fight over and battle stat screens).
+-- but include it for whirlwind/teleport.
+-- that way missingno is more of a secret.
+|[f_get_team_live]| function(team, exclude_missingno)
+    local newteam = {}
+    foreach(team, function(pkmn)
+        if pkmn.num > (exclude_missingno and 0 or -1) and pkmn.major ~= C_MAJOR_FAINTED then
+            _add(newteam, pkmn)
+        end
+    end)
+    return newteam
+end $$
 
 -- used to switch to the next pkmn at the start of the battle and when a pkmn is ko-ed.
 -- if this returns nil, the battle is over
 |[f_get_next_active]| function(team)
-    for i=1,6 do
-        if not team[i]:isempty() and team[i].major ~= C_MAJOR_FAINTED then
-            return team[i]
-        end
-    end
+    -- include missingno, so it pops up in horde
+    return f_get_team_live(team)[1]
 end $$
 
 -- all non-browse pokemon are represented by this function
@@ -38,10 +65,9 @@ end $$
 |[f_get_fight_team]| function(team)
     local fightteam = {}
 
-    for i=1,6 do
-        local cur = team[i]
-        fightteam[i] = f_create_team_pkmn(cur.num, cur.mynewmoves)
-    end
+    foreach(team, function(pkmn)
+        _add(fightteam, f_create_team_pkmn(pkmn.num, pkmn.mynewmoves))
+    end)
 
     return fightteam
 end $$

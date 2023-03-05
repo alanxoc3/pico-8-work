@@ -1,7 +1,4 @@
--- todo: fight action screen should display stats, not descriptions. switch screen should show this too. maybe exiting out of the select menu also shows this.
--- todo: make the move pp actually display remaining pp in fight screen
 |[f_fightover_init]| function(_ENV)
-    -- todo: token crunch here, specifically "_add" parts
     local winner, loser = p0, f_get_other_pl(_ENV, p0)
     winner:winlogic(loser)
 
@@ -25,8 +22,8 @@
       ;;name,@, style,5
       ;;name,@
       ;;name,@
-    ]], winner.active, winner.name, '3'.." live", #winner.deadnums.." dead",
-        loser.active,  loser.name,  '3'.." live", #loser.deadnums .." dead")
+    ]], winner.active, winner.name, (#f_get_team_live(winner.team, true)).." live", (#f_get_team_dead(winner.team)).." dead",
+        loser.active,  loser.name,  (#f_get_team_live(loser .team, true)).." live", (#f_get_team_dead(loser .team)).." dead")
 end $$
 
 |[f_main_init]| function(_ENV)
@@ -109,13 +106,7 @@ end $$
     menu.v = 0
 end $$
 
-|[f_unlock_pkmn]| function(trainer)
-    -- add pokemon defeated to picodex
-    foreach(trainer.deadnums, function(num)
-        _poke(S_POKEMON+num, 1)
-    end)
-end $$
-
+-- 1,6 is hardcoded here because all trainers have exactly 6 pkmn
 |[f_fightsel_init]| function(_ENV)
     menu:refresh(c_trainers, function(trainer, num)
         local disabled, team = num-1 > @S_STORY, {}
@@ -341,17 +332,18 @@ end $$
     p0 = p1.priority > p2.priority and p1 or p2
 end $$
 
--- todo: make the things in this menu populate correctly
 |[f_pstat_init]| function(_ENV)
     menu:refresh{}
 
+    -- todo: make the things in this menu populate correctly
+    local player = p0.statplayer
     f_zobj_set(menu, [[
        ;pkmn,@
       ;;hidden,%c_yes
 
       ;;name,@, style,5
-      ;;name,"3 live"
-      ;;name,"2 dead"
+      ;;name,@
+      ;;name,@
 
       ;;name,"moves", style,5
       ;;name,"metrnome"
@@ -367,5 +359,5 @@ end $$
       ;;name,"confused"
       ;;name,"digging"
       ;;name,"flying"
-    ]], p0.statplayer.active, p0.statplayer.name)
+    ]], player.active, player.name, (#f_get_team_live(player.team, true)).." live", (#f_get_team_dead(player.team)).." dead")
 end $$

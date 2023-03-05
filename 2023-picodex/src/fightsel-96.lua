@@ -8,34 +8,22 @@
     )
 end $$
 
-|[f_horde_death]| function(p)
-    -- first, shift everything in the team to the left.
-    local newteam = {}
-    for i=1,6 do
-        if p.team[i] and p.team[i].major ~= C_MAJOR_FAINTED then
-            _add(newteam, p.team[i])
-        end
-    end
+|[f_horde_select]| function(_ENV)
+    local nums = {}
 
-    -- then add new pokemon
-    for i=#newteam+1,6 do
-        if p.hordeind < 152 then
-            p.hordeind += 1
+    -- mod here will add missingno (feature, not a bug :)
+    for i=1,152 do _add(nums, i%152) end
 
-            -- wrap for missingno. missingno is the last pokemon in horde
-            newteam[i] = f_create_team_pkmn(p.hordeind%152, f_get_natural_moveset(p.hordeind%152))
-        end
-    end
-
-    p.team = newteam
+    -- unlock pkmn and update high score regardless of win/lose
+    -- the only pokemon you can unlock is missingno,
+    -- since horde mode doesn't appear until after league
+    f_begin_fight_cpu(_ENV, nums, "horde", f_nop,
+        function(_, other) f_horde_win_func(other) end,
+        f_horde_win_func
+    )
 end $$
 
-|[f_horde_select]| function(_ENV)
-    -- could get an error if horde had less than 6 when starting match, due to assumptions i make
-    -- so, just don't change that part in the code
-    f_begin_fight_cpu(_ENV, _split'1,2,3,4,5,6', "horde", f_horde_death, function(_, other)
-        f_unlock_pkmn(other)
-    end, function(horde)
-        poke(S_HOARD, mid(@S_HOARD, #horde.deadnums, 255))
-    end)
+|[f_horde_win_func]| function(horde)
+    f_unlock_pkmn(horde)
+    poke(S_HOARD, mid(@S_HOARD, #f_get_team_dead(horde.team), 255))
 end $$

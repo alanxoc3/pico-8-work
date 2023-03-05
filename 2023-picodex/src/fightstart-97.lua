@@ -16,7 +16,7 @@
     d1.key, d2.key = 'p1', 'p2'
     for dd in _all{d1, d2} do
         _ENV[dd.key] = f_zobj([[
-            hordeind,6, deadnums,#, actions,#, priority,1,
+            actions,#, priority,1,
             menu_action,@, menu_move,@, menu_stats,@, menu_switch,@, team,@, name,@, iscpu,@, dielogic,@, winlogic,@
         ]], f_create_menu(f_menu_drawentry),
             f_create_menu(f_menu_drawentry),
@@ -25,6 +25,8 @@
             _unpack(dd))
         local _ENV=_ENV[dd.key]
         statplayer = _ENV
+
+        -- todo: look at usages, but the get_fight_team call here might not be needed
         menu_action.cancel, team = f_beep, f_get_fight_team(team)      
         active = f_team_pkmn_to_active(f_get_next_active(team))
         _add(actions, f_newaction(_ENV, "#,comes,out"))
@@ -39,10 +41,10 @@ end $$
 -- horde and story share similar logic for cpu battle
 |[f_begin_fight_cpu]| function(_ENV, team, name, deathfunc, plwinfunc, cpuwinfunc)
     local cpu_team_draft = {}
-    for i=1,6 do
+    _foreach(team, function(pkmn)
         -- todo: maybe use f_set_default_team_pkmn
-        _add(cpu_team_draft, f_create_team_pkmn(team[i], f_get_natural_moveset(team[i])))
-    end
+        _add(cpu_team_draft, f_create_team_pkmn(pkmn, f_get_natural_moveset(pkmn)))
+    end)
 
     f_begin_fight(_ENV,
         {_ENV:f_get_team_cursor'team1', "player", false, f_nop,     plwinfunc},
