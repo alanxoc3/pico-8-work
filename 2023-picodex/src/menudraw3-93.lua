@@ -2,14 +2,12 @@
     f_draw3_pokeinfo(game:f_get_pkmn_team_edit())
 end $$
 
--- todo (wait): put "move" directly on entry so pp reflects correctly.
 -- for teammoves, teammovesel, pmovesel
 |[f_move_draw3]| function(game)
-    local num = game:entry(game.movemode).num
-    if num and num >= 0 then -- todo: make moves never nil
-        local move = c_moves[num]
+    local move = game:entry(game.movemode).move
+    if move.num >= 0 then
         local accuracy = move.accuracy*100\1
-        f_print_draw3_message{c_types[move.type].name, move.pp..'/'..move.pp, (move.damage >= 0 and move.damage or "??").."P "..(accuracy >= 0 and accuracy or "??").."A"}
+        f_print_draw3_message{c_types[move.type].name, move.pp..'/'..move.maxpp, (move.damage >= 0 and move.damage or "??").."P "..(accuracy >= 0 and accuracy or "??").."A"}
     else
         f_print_draw3_message{"????", "?/?", "??P ???A"}
     end

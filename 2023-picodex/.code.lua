@@ -462,11 +462,10 @@ f_print_draw2_message(game.cur_action.pl.name)
 end,function(game)
 f_draw3_pokeinfo(game:f_get_pkmn_team_edit())
 end,function(game)
-local num=game:entry(game.movemode).num
-if num and num>=0 then
-local move=c_moves[num]
+local move=game:entry(game.movemode).move
+if move.num>=0 then
 local accuracy=move.accuracy*100\1
-f_print_draw3_message{c_types[move.type].name,move.pp.."/"..move.pp,(move.damage>=0 and move.damage or "??").."P "..(accuracy>=0 and accuracy or "??").."A"}
+f_print_draw3_message{c_types[move.type].name,move.pp.."/"..move.maxpp,(move.damage>=0 and move.damage or "??").."P "..(accuracy>=0 and accuracy or "??").."A"}
 else
 f_print_draw3_message{"????","?/?","??P ???A"}
 end
@@ -589,7 +588,7 @@ local teampkmn,team=_ENV:f_get_pkmn_team_edit()
 menu:refresh(f_zobj[[,1,2,3,4]],function(i)
 local moveind=teampkmn.mynewmoves[i]
 return{
-num=teampkmn.mynewmoves[i].num,
+move=teampkmn.mynewmoves[i],
 name=moveind.name,
 select=function(_ENV)select_func(_ENV,i,teampkmn,team)end,
 disabled=i==disabled_ind
@@ -621,7 +620,7 @@ menu:refresh(movemetadata,function(m)
 return{
 name=m.name,
 disabled=m.disabled,
-num=m.num,
+move=c_moves[m.num],
 ref=m.desc,
 select=function()
 local team=_ENV:f_get_team_cursor"team1"
@@ -637,7 +636,7 @@ local move=p0.active.mynewmoves[move_slot]
 return{
 disabled=p0.active.mynewmoves[move_slot].pp<=0,
 name=move.name,
-num=move.num,
+move=move,
 select=function()
 _ENV:pop()_ENV:pop()
 f_select_move(p0,move_slot)

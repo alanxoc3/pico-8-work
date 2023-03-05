@@ -172,7 +172,7 @@ end $$
         -- todo: token crunching here with moveind
         local moveind = teampkmn.mynewmoves[i]
         return {
-            num=teampkmn.mynewmoves[i].num,
+            move=teampkmn.mynewmoves[i],
             -- todo: make move never nil
             name=moveind.name,
             select=function(_ENV) select_func(_ENV, i, teampkmn, team) end,
@@ -219,7 +219,7 @@ end $$
         return {
             name=m.name,
             disabled=m.disabled,
-            num=m.num,
+            move=c_moves[m.num],
             ref=m.desc,
             select=function()
                 local team = _ENV:f_get_team_cursor'team1'
@@ -240,7 +240,7 @@ end $$
         return {
             disabled=p0.active.mynewmoves[move_slot].pp <= 0,
             name=move.name,
-            num=move.num,
+            move=move,
             select=function()
                 _ENV:pop() _ENV:pop()
                 f_select_move(p0, move_slot)
