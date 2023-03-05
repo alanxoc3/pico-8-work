@@ -18,6 +18,8 @@ end $$
 end $$
 
 |[f_main_draw3]|         function(game) f_print_draw3_message(_split(game:entry'main'.desc, '|'))      end $$
+|[f_pselactions_draw3]|         function(game) f_print_draw3_message(_split(game:entry'pselactions'.desc, '|'))      end $$
+|[f_pstat_draw3]| function(_ENV) f_fight_draw3_helper(p0.statplayer.active) end $$
 
 |[f_fight_draw3_helper]| function(_ENV)
     f_print_draw3_message{
@@ -27,7 +29,6 @@ end $$
     }
 end $$
 
-|[f_pselactions_draw3]| function(_ENV) f_fight_draw3_helper(p0.active) end $$
 |[f_pselswitch_draw3]|  function(_ENV) f_fight_draw3_helper(_ENV:entry'pselswitch'.pkmn) end $$
 
 |[f_team_draw3]|        function(game)

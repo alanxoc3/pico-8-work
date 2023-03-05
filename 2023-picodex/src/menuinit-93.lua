@@ -1,6 +1,5 @@
 -- todo: fight action screen should display stats, not descriptions. switch screen should show this too. maybe exiting out of the select menu also shows this.
 -- todo: make the move pp actually display remaining pp in fight screen
-
 |[f_fightover_init]| function(_ENV)
     -- todo: token crunch here, specifically "_add" parts
     local winner, loser = p0, f_get_other_pl(_ENV, p0)
@@ -10,23 +9,24 @@
     stack = {stack[1]}
     menu:refresh{}
 
+    -- todo: make live count actually correct
     f_zobj_set(menu, [[
         v,0 -- fight over view should always start on top. don't save position for this one.
       ;;pkmn,@
       ;;hidden,%c_yes
 
-      ;;name,"winner", style,5
+      ;;name,@, style,5
       ;;name,@
       ;;name,@
 
       ;;pkmn,@
       ;;hidden,%c_yes
 
-      ;;name,"loser", style,5
+      ;;name,@, style,5
       ;;name,@
       ;;name,@
-    ]], winner.active, winner.name, #winner.deadnums.." dead",
-        loser.active,  loser.name,  #loser.deadnums .." dead")
+    ]], winner.active, winner.name, '3'.." live", #winner.deadnums.." dead",
+        loser.active,  loser.name,  '3'.." live", #loser.deadnums .." dead")
 end $$
 
 |[f_main_init]| function(_ENV)
@@ -250,12 +250,14 @@ end $$
 end $$
 
 |[f_pselactions_init]| function(_ENV)
-    menu:refresh(f_zobj[[
-         ; name,"fight",   select,%f_menu_state_callback, state,pselmove
-        ;; name,"random",  select,%f_modes_pop -- random logic is in the turn logic if move is c_empty, so just leave the menu
-        ;; name,"switch",  select,%f_menu_state_callback, state,pselswitch
-        ;; name,"forfeit", select,%f_psel_forfeit
-    ]])
+    menu:refresh(f_zobj([[
+         ; name,"fight",  desc,"fight|select|move",       select,%f_menu_state_callback, state,pselmove
+        ;; name,"switch", desc,"switch|active|pokemon",   select,%f_menu_state_callback, state,pselswitch
+        ;; name,"stats",  desc,"stats|player &|opponent", select,%f_menu_state_callback, state,pstat
+        ;; name,"forfeit",  desc,"forfeit|pokemon|battle",  select,%f_psel_forfeit
+
+        -- ;; name,"random",desc,"random|random|move",  select,%f_psel_random -- random logic is in the turn logic if move is c_empty, so just leave the menu
+    ]], p0.name, f_get_other_pl(_ENV, p0).name))
 end $$
 
 |[f_team_init]| function(_ENV)
@@ -333,15 +335,37 @@ end $$
 end $$
 
 |[f_turn_init]| function(_ENV)
-    -- if there is %c_no action, assume it's a computer player.
-    for p in _all{p1, p2} do
-        if #p.actions == 0 then
-            f_select_move(p, f_select_random_move_slot(p.active))
-        end
-    end
-
     -- p0 is equal to the higher priority
     local p1, p2 = p1, p2
     if p1.priority == p2.priority then p2.priority += _sgn(_rnd'2'-1) end
     p0 = p1.priority > p2.priority and p1 or p2
+end $$
+
+-- todo: make the things in this menu populate correctly
+|[f_pstat_init]| function(_ENV)
+    menu:refresh{}
+
+    f_zobj_set(menu, [[
+       ;pkmn,@
+      ;;hidden,%c_yes
+
+      ;;name,@, style,5
+      ;;name,"3 live"
+      ;;name,"2 dead"
+
+      ;;name,"moves", style,5
+      ;;name,"metrnome"
+      ;;name,"none"
+      ;;name,"thrash"
+      ;;name,"firespin"
+
+      ;;name,"modifier", style,5
+      ;;name,"atk +1"
+      ;;name,"def -1"
+
+      ;;name,"state", style,5
+      ;;name,"confused"
+      ;;name,"digging"
+      ;;name,"flying"
+    ]], p0.statplayer.active, p0.statplayer.name)
 end $$

@@ -40,6 +40,17 @@ end $$
     f_browsestat_init(_ENV)
 end $$
 
+-- lr is guaranteed to be -1 or 1
+|[f_pstat_lrfunc]| function(_ENV)
+    p0.statplayer = f_get_other_pl(_ENV, p0.statplayer)
+    f_beep_back()
+    f_pstat_init(_ENV)
+end $$
+
+|[f_pstat_xfunc]| function(_ENV)
+    f_minisfx(p0.statplayer.active.num)
+end $$
+
 |[f_browsestat_xfunc]| function(game)
     f_minisfx(game:cursor'browse')
 end $$

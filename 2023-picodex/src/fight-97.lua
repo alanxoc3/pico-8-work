@@ -36,10 +36,6 @@ end $$
     return pl == game.p1 and game.p2 or game.p1   
 end $$
 
-|[f_draw_hp]| function(x, y, hp, maxhp, align, col)
-    _rectfill(x, y-2, x-align*_max(_ceil(hp/maxhp*40), 0), y+2, col)
-end $$
-
 ---------------------------------------------------------------------------
 -- misc stuff
 ---------------------------------------------------------------------------

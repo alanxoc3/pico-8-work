@@ -1,3 +1,5 @@
+-- todo: in battle, horizontal 1 px for accuracy attack (move with accuracy)
+-- todo: in battle, vertical 1 px for stat attack
 f_zclass[[o_modes,o_actor|
     cursor,%f_modes_cursor, -- gets the cursor for a menu
     entry,%f_modes_entry,   -- gets the entry the cursor is on
@@ -52,10 +54,12 @@ f_zclass[[o_modes,o_actor|
     team2story;   ui_pl,"trainer",  init,%f_fightsel_init, draw2,%f_team_draw2, draw3,%f_team_draw3;                                                        -- t2
 
     -- in-fight menus
-    fightover;    init,%f_fightover_init,    draw2,%f_fightover_draw2,    draw3,%f_fightover_draw3, xfunc,%f_fightover_xfunc;
-    pselactions;  init,%f_pselactions_init,  draw2,%f_turn_draw2,         draw3,%f_pselactions_draw3;
-    pselmove;     init,%f_pselmove_init,     draw2,%f_turn_draw2,         draw3,%f_move_draw3;
-    pselswitch;   init,%f_pselswitch_init,   draw2,%f_turn_draw2,         draw3,%f_pselswitch_draw3, draw1,%f_editteam_draw1;
+    fightover;    init,%f_fightover_init,   draw2,%f_fightover_draw2,    draw3,%f_fightover_draw3, xfunc,%f_fightover_xfunc;
+    pselactions;  init,%f_pselactions_init, draw2,%f_turn_draw2,         draw3,%f_pselactions_draw3;
+    pselmove;     init,%f_pselmove_init,    draw2,%f_turn_draw2,         draw3,%f_move_draw3;
+    pselswitch;   init,%f_pselswitch_init,  draw2,%f_turn_draw2,         draw3,%f_pselswitch_draw3, draw1,%f_editteam_draw1;
+    pstat;        init,%f_pstat_init,       draw2,%f_turn_draw2,         draw3,%f_pstat_draw3, lrfunc,%f_pstat_lrfunc, xfunc,%f_pstat_xfunc;
+    -- foestat;      init,%f_foestat_init,     draw2,%f_foestat_draw2,   draw3,%
 
     -- in-fight screens
     p1sel;        next,p2sel, init,%f_psel_init, update,%f_nop,         draw1,%f_nop,        p0key,p1;

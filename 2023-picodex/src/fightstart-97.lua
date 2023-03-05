@@ -17,13 +17,15 @@
     for dd in _all{d1, d2} do
         _ENV[dd.key] = f_zobj([[
             hordeind,6, deadnums,#, actions,#, priority,1,
-            menu_action,@, menu_move,@, menu_switch,@, team,@, name,@, iscpu,@, dielogic,@, winlogic,@
+            menu_action,@, menu_move,@, menu_stats,@, menu_switch,@, team,@, name,@, iscpu,@, dielogic,@, winlogic,@
         ]], f_create_menu(f_menu_drawentry),
             f_create_menu(f_menu_drawentry),
+            f_create_menu_view(f_menu_drawentry),
             f_create_menu(f_browse_drawentry, 3),
             _unpack(dd))
         local _ENV=_ENV[dd.key]
-        menu_action.cancel, team = f_beep, f_get_fight_team(team)
+        statplayer = _ENV
+        menu_action.cancel, team = f_beep, f_get_fight_team(team)      
         active = f_team_pkmn_to_active(f_get_next_active(team))
         _add(actions, f_newaction(_ENV, "#,comes,out"))
     end
