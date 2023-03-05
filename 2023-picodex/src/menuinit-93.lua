@@ -148,7 +148,7 @@ end $$
     local teampkmn = _ENV:f_get_pkmn_team_edit()
     local count = 0 
     for j=1,4 do
-        if teampkmn.moveids[j] then count += 1 end
+        if teampkmn.mynewmoves[j].num > 0 then count += 1 end
     end
 
     menu:refresh(f_zobj([[
@@ -160,24 +160,20 @@ end $$
 
 |[f_movedel]| function(_ENV)
     local teampkmn, team = _ENV:f_get_pkmn_team_edit()
-    teampkmn.moveids[_ENV:cursor'teammoves'+1] = -1
+    teampkmn.mynewmoves[_ENV:cursor'teammoves'+1] = f_create_move(-1)
     f_save_team(_ENV:cursor'team1', team)
     _ENV:pop()
 end $$
 
---runtime error line 17 tab 0
---name=moveind>=0 and c_moves[moveind].name or "???",
---attempt to index field '?' (a nil value)
-
 |[f_moves_init_helper]| function(_ENV, disabled_ind, select_func)
     local teampkmn, team = _ENV:f_get_pkmn_team_edit()
     menu:refresh(f_zobj[[,1,2,3,4]], function(i)
-        local moveind = teampkmn.moveids[i] or -1
-        _printh(moveind) -- why 112 & 255? shouldn't have 255...
+        -- todo: token crunching here with moveind
+        local moveind = teampkmn.mynewmoves[i]
         return {
-            num=teampkmn.moveids[i],
+            num=teampkmn.mynewmoves[i].num,
             -- todo: make move never nil
-            name=moveind >= 0 and c_moves[moveind].name or "???",
+            name=moveind.name,
             select=function(_ENV) select_func(_ENV, i, teampkmn, team) end,
             disabled=i == disabled_ind
         }
@@ -186,7 +182,7 @@ end $$
 
 |[f_teammoves_init]| function(_ENV)
     f_moves_init_helper(_ENV, 0, function(_ENV, i, teampkmn)
-        _ENV:push(teampkmn.moveids[i] and 'moveaction' or 'teammovesel')
+        _ENV:push(teampkmn.mynewmoves[i].num > 0 and 'moveaction' or 'teammovesel')
     end)
 end $$
 
@@ -194,7 +190,7 @@ end $$
     local disabled_ind = _ENV:cursor'teammoves'+1
 
     f_moves_init_helper(_ENV, disabled_ind, function(_ENV, i, teampkmn, team)
-        teampkmn.moveids[i], teampkmn.moveids[disabled_ind] = teampkmn.moveids[disabled_ind], teampkmn.moveids[i]
+        teampkmn.mynewmoves[i], teampkmn.mynewmoves[disabled_ind] = teampkmn.mynewmoves[disabled_ind], teampkmn.mynewmoves[i]
         f_save_team(_ENV:cursor'team1', team)
         _ENV:popuntil'teammoves'
     end)
@@ -206,11 +202,11 @@ end $$
     local teampkmn = _ENV:f_get_pkmn_team_edit()
     local pkmn = c_pokemon[teampkmn.num]
 
-    local moveids = {}
+    local movemetadata = {}
     f_zcall(function(movelist, prefix)
         for i=1,#movelist do
             local moveind = movelist[i]
-            _add(moveids, {name=c_moves[moveind].name, disabled=teampkmn:hasmove(moveind), num=moveind, desc=prefix..i})
+            _add(movemetadata, {name=c_moves[moveind].name, disabled=teampkmn:hasmove(moveind), num=moveind, desc=prefix..i})
         end
     end, [[
        ;,@,"learn #"
@@ -218,7 +214,7 @@ end $$
       ;;,@,"event #"
     ]], pkmn.moves_natural, pkmn.moves_teach, pkmn.moves_event)
 
-    menu:refresh(moveids, function(m)
+    menu:refresh(movemetadata, function(m)
         return {
             name=m.name,
             disabled=m.disabled,
@@ -226,7 +222,7 @@ end $$
             ref=m.desc,
             select=function()
                 local team = _ENV:f_get_team_cursor'team1'
-                team[_ENV:cursor'editteam'+1].moveids[_ENV:cursor'teammoves'+1] = m.num
+                team[_ENV:cursor'editteam'+1].mynewmoves[_ENV:cursor'teammoves'+1] = f_create_move(m.num)
                 f_save_team(_ENV:cursor'team1', team)
                 _ENV:popuntil'teammoves'
             end
@@ -235,12 +231,13 @@ end $$
 end $$
 
 |[f_pselmove_init]| function(_ENV)
+    -- todo: replace 1,2,3,4 with p0.active.mynewmoves
     -- todo: (wait) support struggle
     -- todo: token crunching (replace with zobj)
     menu:refresh(f_zobj[[,1,2,3,4]], function(move_slot)
-        local move = c_moves[p0.active.moveids[move_slot]]
+        local move = p0.active.mynewmoves[move_slot]
         return {
-            disabled=p0.active.movepps[move_slot] <= 0,
+            disabled=p0.active.mynewmoves[move_slot].pp <= 0,
             name=move.name,
             num=move.num,
             select=function()

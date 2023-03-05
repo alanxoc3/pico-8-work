@@ -7,14 +7,6 @@
     return _ceil(base+.5*93)+5
 end $$
 
-|[f_get_natural_moveset]| function(num) -- todo: find a new home for this
-    local pkmn, moveset = c_pokemon[num], {}
-    for i=1,min(4,#pkmn.moves_natural) do
-        _add(moveset, pkmn.moves_natural[i])
-    end
-    return moveset
-end $$
-
 -- pokemon moves can be physical or special. the order here is specific. odd numbers are physical. even numbers are special.
 -- includes type effectiveness chart. according to the gen 1 games, which had bugs. i'm keeping the bugs :).
 |[c_types]| f_zobj[[
@@ -58,6 +50,7 @@ end $$
 -- accuracy 0 means it affects the user.
 -- pp 0 means it is struggle
 -- dmg 0 means it likely changes status or has an effect.
+|[c_moves]| f_zobj[[]] $$
 |[c_moves_raw]| f_zobj[[
    --  "name",     type        pp  dmg  acc
   -1;, "none",     T_NONE,     0,  0,   0
@@ -233,23 +226,6 @@ end $$
    ;;, "suprfang", T_NORMAL,   10, -1,  .9  -- 163
    ;;, "slash",    T_NORMAL,   20, 70,  1   -- 164
 ]] $$
-
-|[c_moves]| f_zobj[[]] $$
-|[f_populate_c_moves]| function()
-    for i=-1,#c_moves_raw do
-        local move = c_moves_raw[i]
-        c_moves[i] = f_zobj([[
-            name,@, type,@, pp,@, damage,@, accuracy,@, num,@
-        ]],
-            move[1],
-            move[2],
-            move[3],
-            move[4],
-            move[5],
-            i
-        )
-    end
-end $$
 
 -- trainers are given moves at lvl 50
 -- could get an error if a trainer doesn't have 6 pkmn, because of assumptions i make when starting a fight

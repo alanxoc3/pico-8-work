@@ -23,25 +23,25 @@ c_team_memlocs = f_zobj[[0,S_PARTY1, 1,S_PARTY2, 2,S_PARTY3]]
 
     for i=1,6 do
         local memstart = mem+(i-1)*5
-        local moveids = {}
+        local mynewmoves = {}
         local has_moves = false
         for i=1,4 do
-            moveids[i] = _peek(memstart+i)
-            if moveids[i] > 0 then
+            mynewmoves[i] = f_create_move(_peek(memstart+i))
+            if mynewmoves[i].num > 0 then
                 has_moves = true
             else
-                moveids[i] = -1
+                mynewmoves[i] = f_create_move(-1)
             end
         end
 
-        team[i] = f_get_team_pkmn(has_moves and @memstart or -1, moveids)
+        team[i] = f_get_team_pkmn(has_moves and @memstart or -1, mynewmoves)
     end
 
     return team
 end $$
 
-|[f_get_team_pkmn]| function(num, moveids)
-    return _setmetatable(f_zobj([[moveids,@]], moveids), {__index=c_pokemon[num]})
+|[f_get_team_pkmn]| function(num, mynewmoves)
+    return _setmetatable(f_zobj([[mynewmoves,@]], mynewmoves), {__index=c_pokemon[num]})
 end $$
 
 |[f_save_team]| function(team_index, team) -- 0 to 2
@@ -56,7 +56,7 @@ end $$
         _poke(memstart, pkmn.num)
 
         for i=1,4 do
-            _poke(memstart+i, pkmn.moveids[i] > 0 and pkmn.moveids[i] or 0)
+            _poke(memstart+i, pkmn.mynewmoves[i].num > 0 and pkmn.mynewmoves[i].num or 0)
         end
     end
 end $$

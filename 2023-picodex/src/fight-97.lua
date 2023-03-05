@@ -15,14 +15,14 @@
             end)
         end)
     else
-        local move = pl.active.moveids[slot] or M_STRUGGLE
-        f_addaction(pl, pl, "#,uses,"..c_moves[move].name, function(s, o) -- self, other
+        local move = pl.active.mynewmoves[slot]
+        f_addaction(pl, pl, "#,uses,"..move.name, function(s, o) -- self, other
             f_generic_attack(s, o, slot)
         end)
 
         -- hardcoding the only moves that can change priority for now. Maybe there is a more token efficient way to do this?
-        if move == M_QUICK_ATTACK then priority_class = C_PRIORITY_QUICKATTACK end
-        if move == M_COUNTER or move == M_WHIRLWIND or move == M_ROAR or move == M_TELEPORT then
+        if move.num == M_QUICK_ATTACK then priority_class = C_PRIORITY_QUICKATTACK end
+        if move.num == M_COUNTER or move.num == M_WHIRLWIND or move.num == M_ROAR or move.num == M_TELEPORT then
             priority_class = C_PRIORITY_COUNTER
         end
     end
@@ -93,7 +93,7 @@ end $$
     local possible_moves = {}
 
     for i=1,4 do
-        if active.moveids[i] and active.movepps[i] > 0 then
+        if active.mynewmoves[i].num > 0 and active.mynewmoves[i].pp > 0 then
             _add(possible_moves, i)
         end
     end
@@ -108,11 +108,11 @@ end $$
 
 -- [s]elf pl, [o]ther pl, [m]ove slot
 |[f_generic_attack]| function(s, o, m)
-    local move = c_moves[s.active.moveids[m] or 0]
+    local move = s.active.mynewmoves[m]
 
-    -- should only be nil for struggle?
-    if move.num != 0 then
-        s.active.movepps[m] -= 1
+    -- only less than 0 for struggle and none moves. none move would never be selected though
+    if move.num > 0 then
+        s.active.mynewmoves[m].pp -= 1
     end
 
     local dmg = move.damage -- f_calc_move_damage(s.active.level, s.active.attack, defense, critical, move_power)

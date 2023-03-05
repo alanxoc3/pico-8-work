@@ -26,12 +26,13 @@
         ---- PART 2 - populate most attributes ----
         local evolvesfrom = num-pkmndata[1]
         local pkmn = f_zobj([[
-            moveids;,-1,-1,-1,-1;
+            mynewmoves,@,
             num,@, evolvesfrom,@, name,@,
             type1,@, type2,@,
             base_maxhp,@, base_attack,@, base_defense,@, base_speed,@, base_special,@,
             moves_natural,@, moves_teach,@, moves_event,@
         ]],
+            f_create_empty_moveset(), -- evl
             num, -- evl
             evolvesfrom,  -- evl
             c_pokemon_names[num+1], -- nam
@@ -95,7 +96,7 @@
 
         pkmn.hasmove = function(pkmn, moveid)
             for j=1,4 do
-                if pkmn.moveids[j] == moveid then
+                if pkmn.mynewmoves[j].num == moveid then
                     return true
                 end
             end
@@ -103,8 +104,9 @@
         end
 
         pkmn.available = function(pkmn)
+            -- pokemon in battles are always available, the "or shared" is what ensures that
             if pkmn.num >= 0 then -- shouldn't be -1
-                return @(S_POKEMON+pkmn.num) > 0
+                return @(S_POKEMON+pkmn.num) > 0 or pkmn.shared
             end
         end
 
@@ -115,13 +117,14 @@ end $$
 
 -- todo: move c_pokemon setup and other related pkmn/team pkmn to this team struct file
 -- todo: add movepps attribute to c_pokemon maybe and also saved/edit team area. this function might be able to be combined with f_get_team_pkmn
-|[f_create_team_pkmn]| function(num, moveids)
+|[f_create_team_pkmn]| function(num, mynewmoves)
     -- todo: token crunch here, specifically can the function() parts be smaller
-    local teampkmn = f_zobj([[
-        moveids,@, movepps,@
-    ]], (function() local m = {} for i=1,4 do m[i] = moveids[i] end return m end)(),
-        (function() local m = {} for i=1,4 do m[i] = moveids[i] and c_moves[moveids[i]].pp end return m end)()
-    )
+    local teampkmn = f_zobj[[mynewmoves,#]]
+    local m = teampkmn.mynewmoves
+    for i=1,4 do -- todo: maybe extract this out into a "copy moves" function
+        _printh(mynewmoves[i].num)
+        m[i] = f_create_move(mynewmoves[i].num)
+    end
     return _setmetatable(teampkmn, {__index=c_pokemon[num]})
 end $$
 
@@ -131,7 +134,8 @@ end $$
 
     for i=1,6 do
         local cur = team[i]
-        fightteam[i] = f_create_team_pkmn(cur.num, cur.moveids)
+        _printh("what")
+        fightteam[i] = f_create_team_pkmn(cur.num, cur.mynewmoves)
     end
 
     return fightteam
