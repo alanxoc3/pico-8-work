@@ -41,21 +41,11 @@ end $$
     local cpu_team_draft = {}
     for i=1,6 do
         -- todo: maybe use f_set_default_team_pkmn
-        _add(cpu_team_draft, f_get_team_pkmn(team[i], f_get_natural_moveset(team[i])))
+        _add(cpu_team_draft, f_create_team_pkmn(team[i], f_get_natural_moveset(team[i])))
     end
 
     f_begin_fight(_ENV,
         {_ENV:f_get_team_cursor'team1', "player", false, f_nop,     plwinfunc},
         {cpu_team_draft,                name,     true,  deathfunc, cpuwinfunc}
     )
-end $$
-
--- used to switch to the next pkmn at the start of the battle and when a pkmn is ko-ed.
--- if this returns nil, the battle is over
-|[f_get_next_active]| function(team)
-    for i=1,6 do
-        if not team[i]:isempty() and team[i].major ~= C_MAJOR_FAINTED then
-            return team[i]
-        end
-    end
 end $$

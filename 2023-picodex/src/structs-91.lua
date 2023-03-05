@@ -125,30 +125,6 @@
     end
 end $$
 
--- todo: move c_pokemon setup and other related pkmn/team pkmn to this team struct file
--- todo: add movepps attribute to c_pokemon maybe and also saved/edit team area. this function might be able to be combined with f_get_team_pkmn
-|[f_create_team_pkmn]| function(num, mynewmoves)
-    -- todo: token crunch here, specifically can the function() parts be smaller
-    local teampkmn = f_zobj[[mynewmoves,#]]
-    local m = teampkmn.mynewmoves
-    for i=1,4 do -- todo: maybe extract this out into a "copy moves" function
-        m[i] = f_create_move(mynewmoves[i].num)
-    end
-    return _setmetatable(teampkmn, {__index=c_pokemon[num]})
-end $$
-
--- converts a team into a team ready for battle
-|[f_get_fight_team]| function(team)
-    local fightteam = {}
-
-    for i=1,6 do
-        local cur = team[i]
-        fightteam[i] = f_create_team_pkmn(cur.num, cur.mynewmoves)
-    end
-
-    return fightteam
-end $$
-
 -- teampkmn must be non-nil and match the team table structure defined in f_get_fight_team 
 |[f_team_pkmn_to_active]| function(teampkmn)
     return _setmetatable(f_zobj([[

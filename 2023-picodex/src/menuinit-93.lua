@@ -35,8 +35,8 @@ end $$
             ;name,"browse",  state,browse,     select,%f_menu_state_callback, desc,"browse|"
            ;;name,"edit",    state,team1,      select,%f_menu_state_callback, desc,"edit|stored|teams"
            ;;name,"league",  state,team1story, select,%f_menu_state_callback, desc,"league|"
-           ;;name,'?????',   state,team1horde, select,%f_menu_state_callback, desc,"?????|beat|league"
            ;;name,"player",  state,team1match, select,%f_menu_state_callback, desc,"player|custom|battles"
+           ;;name,'?????',   state,team1horde, select,%f_menu_state_callback, desc,"?????|beat|league", disabled,%c_yes
            ;;name,"credits", state,credits,    select,%f_menu_state_callback, desc,"credits|amorg|games"
         ]]
     )
@@ -46,11 +46,11 @@ end $$
     menu[1].desc ..= count.."/151|pokemon"
     menu[3].desc ..= (@S_STORY).."/40|trainers"
 
-    if @S_STORY < 40 then
-        menu[4].disabled = true
-    else
-        menu[4].name = "horde"
-        menu[4].desc = "horde|"..(@S_HOARD).."/151|hi-score"
+    if @S_STORY >= 40 then
+        -- todo: slight token improvement with zobj_set
+        menu[5].disabled = false
+        menu[5].name = "horde"
+        menu[5].desc = "horde|"..(@S_HOARD).."/151|hi-score"
     end
 end $$
 
@@ -95,7 +95,7 @@ end $$
         _split"106,,!alanxoc3,code,design,6,,!gr8cadet,graphics,sound,129,,!wadlo,magikarp,gyarados,123,,!snippets,zep px9,mot smap,137,,!pkmndata,blbpedia,pokeapi,serebii,smogon,upokcntr,volvox,nintendo",
         function(txt)
             if _type(txt) == "number" then
-                return { pkmn=f_get_team_pkmn(txt) }
+                return { pkmn=f_create_team_pkmn(txt) }
             end
 
             local style = 1

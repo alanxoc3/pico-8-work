@@ -34,15 +34,10 @@ c_team_memlocs = f_zobj[[0,S_PARTY1, 1,S_PARTY2, 2,S_PARTY3]]
             end
         end
 
-        team[i] = f_get_team_pkmn(has_moves and @memstart or -1, mynewmoves)
+        team[i] = f_create_team_pkmn(has_moves and @memstart or -1, mynewmoves)
     end
 
     return team
-end $$
-
--- all non-browse pokemon are represented by this function
-|[f_get_team_pkmn]| function(num, mynewmoves)
-    return _setmetatable(f_zobj([[mynewmoves,@, browse,%c_no]], mynewmoves), {__index=c_pokemon[num]})
 end $$
 
 |[f_save_team]| function(team_index, team) -- 0 to 2
