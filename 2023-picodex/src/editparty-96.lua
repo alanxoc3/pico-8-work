@@ -1,6 +1,6 @@
 |[f_teamdel]| function(game)
     local team = game:f_get_team_cursor'team1'
-    team[game:cursor'editteam'+1] = nil
+    team[game:cursor'editteam'+1] = f_get_team_pkmn(-1, f_create_empty_moveset())
     f_save_team(game:cursor'team1', team)
     game:pop()
 end $$

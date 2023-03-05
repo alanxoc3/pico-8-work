@@ -3,7 +3,6 @@
 
 |[f_fightover_init]| function(_ENV)
     -- todo: token crunch here, specifically "_add" parts
-    -- todo: fightover cursor should always be at top
     local winner, loser = p0, f_get_other_pl(_ENV, p0)
     winner:winlogic(loser)
 
@@ -12,7 +11,8 @@
     menu:refresh{}
 
     f_zobj_set(menu, [[
-       ;pkmn,@
+        v,0 -- fight over view should always start on top. don't save position for this one.
+      ;;pkmn,@
       ;;hidden,%c_yes
 
       ;;name,"winner", style,5
@@ -95,7 +95,7 @@ end $$
         _split"106,,!alanxoc3,code,design,6,,!gr8cadet,graphics,sound,129,,!wadlo,magikarp,gyarados,123,,!snippets,zep px9,mot smap,137,,!pkmndata,blbpedia,pokeapi,serebii,smogon,upokcntr,volvox,nintendo",
         function(txt)
             if _type(txt) == "number" then
-                return { pkmn=c_pokemon[txt] }
+                return { pkmn=f_get_team_pkmn(txt) }
             end
 
             local style = 1
@@ -106,6 +106,7 @@ end $$
             return { name=txt, style=style, hidden=txt=='' }
         end
     )
+    menu.v = 0
 end $$
 
 |[f_unlock_pkmn]| function(trainer)
@@ -138,7 +139,7 @@ end $$
     menu:refresh(f_zobj[[
         ; name,"moves",  state,teammoves,  select,%f_menu_state_callback -- use the menu system
        ;; name,"switch", state,switchteam, select,%f_menu_state_callback -- use browse pokemon selector
-       ;; name,"delete",                   select,%f_teamdel            -- use the edit team screen
+       ;; name,"delete",                   select,%f_teamdel             -- use the edit team screen
     ]])
 
     teammovesel.menu.c = 0
@@ -264,7 +265,10 @@ end $$
         local is_disabled = true
 
         for i=1,6 do
-            if team[i] then newteam[i] = team[i].num is_disabled = false end
+            newteam[i] = team[i].num
+            if not team[i]:isempty() then
+                is_disabled = false
+            end
         end
 
         return {
@@ -316,7 +320,7 @@ end $$
 |[f_pselswitch_init]| function(_ENV)
     local team = _ENV:f_get_team_cursor'team1'
     menu:refresh(f_zobj[[,1,2,3,4,5,6]], function(i)
-        local disabled = not p0.team[i] or p0.active.shared == p0.team[i] or p0.team[i].major == C_MAJOR_FAINTED
+        local disabled = p0.team[i]:isempty() or p0.active.shared == p0.team[i] or p0.team[i].major == C_MAJOR_FAINTED
         return {
             disabled=disabled,
             select=function()

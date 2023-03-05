@@ -334,7 +334,7 @@ movemem+=1
 end
 movemem+=1
 local evolvesfrom=num-pkmndata[1]
-local pkmn=f_zobj([[mynewmoves,@,num,@,evolvesfrom,@,name,@,type1,@,type2,@,base_maxhp,@,base_attack,@,base_defense,@,base_speed,@,base_special,@,moves_natural,@,moves_teach,@,moves_event,@]],
+local pkmn=f_zobj([[browse,%c_yes,mynewmoves,@,num,@,evolvesfrom,@,name,@,type1,@,type2,@,base_maxhp,@,base_attack,@,base_defense,@,base_speed,@,base_special,@,moves_natural,@,moves_teach,@,moves_event,@]],
 f_create_empty_moveset(),
 num,
 evolvesfrom,
@@ -391,9 +391,17 @@ end
 end
 return false
 end
+pkmn.isempty=function(pkmn)
+for j=1,4 do
+if pkmn.mynewmoves[j].num ~=-1 then
+return false
+end
+end
+return true
+end
 pkmn.available=function(pkmn)
 if pkmn.num>=0 then
-return@(0x5e5a+pkmn.num)>0 or pkmn.shared
+return not pkmn.browse or@(0x5e5a+pkmn.num)>0
 end
 end
 c_pokemon[num]=pkmn
@@ -402,7 +410,6 @@ end,function(num,mynewmoves)
 local teampkmn=f_zobj[[mynewmoves,#]]
 local m=teampkmn.mynewmoves
 for i=1,4 do
-_printh(mynewmoves[i].num)
 m[i]=f_create_move(mynewmoves[i].num)
 end
 return _setmetatable(teampkmn,{__index=c_pokemon[num]})
@@ -410,7 +417,6 @@ end,function(team)
 local fightteam={}
 for i=1,6 do
 local cur=team[i]
-_printh("what")
 fightteam[i]=f_create_team_pkmn(cur.num,cur.mynewmoves)
 end
 return fightteam
@@ -485,7 +491,7 @@ local winner,loser=p0,f_get_other_pl(_ENV,p0)
 winner:winlogic(loser)
 stack={stack[1]}
 menu:refresh{}
-f_zobj_set(menu,[[;pkmn,@;;hidden,%c_yes;;name,winner,style,5;;name,@;;name,@;;pkmn,@;;hidden,%c_yes;;name,loser,style,5;;name,@;;name,@]],winner.active,winner.name,#winner.deadnums.." dead",
+f_zobj_set(menu,[[v,0;;pkmn,@;;hidden,%c_yes;;name,winner,style,5;;name,@;;name,@;;pkmn,@;;hidden,%c_yes;;name,loser,style,5;;name,@;;name,@]],winner.active,winner.name,#winner.deadnums.." dead",
 loser.active,loser.name,#loser.deadnums.." dead")
 end,function(_ENV)
 menu:refresh(
@@ -533,7 +539,7 @@ menu:refresh(
 _split"106,,!alanxoc3,code,design,6,,!gr8cadet,graphics,sound,129,,!wadlo,magikarp,gyarados,123,,!snippets,zep px9,mot smap,137,,!pkmndata,blbpedia,pokeapi,serebii,smogon,upokcntr,volvox,nintendo",
 function(txt)
 if _type(txt)=="number"then
-return{pkmn=c_pokemon[txt]}
+return{pkmn=f_get_team_pkmn(txt)}
 end
 local style=1
 if _sub(txt,1,1)=="!"then
@@ -542,6 +548,7 @@ end
 return{name=txt,style=style,hidden=txt==""}
 end
 )
+menu.v=0
 end,function(trainer)
 foreach(trainer.deadnums,function(num)
 _poke(0x5e5a+num,1)
@@ -645,7 +652,10 @@ local team=f_get_team(i-1)
 local newteam={}
 local is_disabled=true
 for i=1,6 do
-if team[i]then newteam[i]=team[i].num is_disabled=false end
+newteam[i]=team[i].num
+if not team[i]:isempty()then
+is_disabled=false
+end
 end
 return{
 name="team #"..i,
@@ -688,7 +698,7 @@ menu.c=editteam.menu.c
 end,function(_ENV)
 local team=_ENV:f_get_team_cursor"team1"
 menu:refresh(f_zobj[[,1,2,3,4,5,6]],function(i)
-local disabled=not p0.team[i]or p0.active.shared==p0.team[i]or p0.team[i].major==1
+local disabled=p0.team[i]:isempty()or p0.active.shared==p0.team[i]or p0.team[i].major==1
 return{
 disabled=disabled,
 select=function()
@@ -924,7 +934,7 @@ end)
 end
 end,function(game)
 local team=game:f_get_team_cursor"team1"
-team[game:cursor"editteam"+1]=nil
+team[game:cursor"editteam"+1]=f_get_team_pkmn(-1,f_create_empty_moveset())
 f_save_team(game:cursor"team1",team)
 game:pop()
 end,function(team,ind,num)
@@ -981,14 +991,14 @@ team[i]=f_get_team_pkmn(has_moves and@memstart or-1,mynewmoves)
 end
 return team
 end,function(num,mynewmoves)
-return _setmetatable(f_zobj([[mynewmoves,@]],mynewmoves),{__index=c_pokemon[num]})
+return _setmetatable(f_zobj([[mynewmoves,@,browse,%c_no]],mynewmoves),{__index=c_pokemon[num]})
 end,function(team_index,team)
 local mem=c_team_memlocs[team_index]
 _memset(mem,0,30)
 for i=1,6 do
 local memstart=mem+(i-1)*5
 local pkmn=team[i]
-_poke(memstart,pkmn.num)
+_poke(memstart,max(0,pkmn.num))
 for i=1,4 do
 _poke(memstart+i,pkmn.mynewmoves[i].num>0 and pkmn.mynewmoves[i].num or 0)
 end
@@ -1120,7 +1130,7 @@ f_begin_fight(_ENV,
 )
 end,function(team)
 for i=1,6 do
-if team[i]and team[i].major ~=1 then
+if not team[i]:isempty()and team[i].major ~=1 then
 return team[i]
 end
 end

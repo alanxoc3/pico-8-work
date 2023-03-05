@@ -52,7 +52,7 @@ end $$
 -- if this returns nil, the battle is over
 |[f_get_next_active]| function(team)
     for i=1,6 do
-        if team[i] and team[i].major ~= C_MAJOR_FAINTED then
+        if not team[i]:isempty() and team[i].major ~= C_MAJOR_FAINTED then
             return team[i]
         end
     end

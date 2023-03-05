@@ -26,6 +26,7 @@
         ---- PART 2 - populate most attributes ----
         local evolvesfrom = num-pkmndata[1]
         local pkmn = f_zobj([[
+            browse,%c_yes,
             mynewmoves,@,
             num,@, evolvesfrom,@, name,@,
             type1,@, type2,@,
@@ -103,10 +104,19 @@
             return false
         end
 
+        pkmn.isempty = function(pkmn)
+            for j=1,4 do
+                if pkmn.mynewmoves[j].num ~= -1 then
+                    return false
+                end
+            end
+            return true
+        end
+
         pkmn.available = function(pkmn)
-            -- pokemon in battles are always available, the "or shared" is what ensures that
+            -- non-browse pokemon are always available (credit, edit, and battle) the browse attribute represents that
             if pkmn.num >= 0 then -- shouldn't be -1
-                return @(S_POKEMON+pkmn.num) > 0 or pkmn.shared
+                return not pkmn.browse or @(S_POKEMON+pkmn.num) > 0
             end
         end
 
@@ -122,7 +132,6 @@ end $$
     local teampkmn = f_zobj[[mynewmoves,#]]
     local m = teampkmn.mynewmoves
     for i=1,4 do -- todo: maybe extract this out into a "copy moves" function
-        _printh(mynewmoves[i].num)
         m[i] = f_create_move(mynewmoves[i].num)
     end
     return _setmetatable(teampkmn, {__index=c_pokemon[num]})
@@ -134,7 +143,6 @@ end $$
 
     for i=1,6 do
         local cur = team[i]
-        _printh("what")
         fightteam[i] = f_create_team_pkmn(cur.num, cur.mynewmoves)
     end
 
