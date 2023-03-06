@@ -332,8 +332,8 @@ end $$
 |[f_pstat_init]| function(_ENV)
     menu:refresh{}
 
-    -- todo: make the things in this menu populate correctly
     local player = p0.statplayer
+    local moves = player.active.mynewmoves
     f_zobj_set(menu, [[
        ;pkmn,@
       ;;hidden,%c_yes
@@ -343,12 +343,15 @@ end $$
       ;;name,@
 
       ;;name,"moves", style,5
-      ;;name,"metrnome"
-      ;;name,"none"
-      ;;name,"thrash"
-      ;;name,"firespin"
+    ]], player.active, player.name, (#f_get_team_live(player.team, true)).." live", (#f_get_team_dead(player.team)).." dead")
 
-      ;;name,"modifier", style,5
+    _foreach(player.active.mynewmoves, function(move)
+        _add(menu, {name=move.name})
+    end)
+
+    -- todo: (wait) add modifiers and state to this list when those parts are implemented in the code
+    f_zobj_set(menu, [[
+       ;name,"modifier", style,5
       ;;name,"atk +1"
       ;;name,"def -1"
 
@@ -356,5 +359,5 @@ end $$
       ;;name,"confused"
       ;;name,"digging"
       ;;name,"flying"
-    ]], player.active, player.name, (#f_get_team_live(player.team, true)).." live", (#f_get_team_dead(player.team)).." dead")
+    ]])
 end $$

@@ -1,11 +1,6 @@
 -- this file contains logic around teams and creating a "team" pokemon
 -- todo: fix team stats draw3 numbers and make it say the team/trainers name instead of team stats
 
--- todo: fix this error: (when pokemon not first in party & not team 1.
--- runtime error line 17 tab 0
--- elseif align>0 then x-=#text*4+1 end
--- attempt to compare number with nil
-
 |[f_unlock_pkmn]| function(trainer)
     -- add pokemon defeated to picodex
     foreach(f_get_team_dead(trainer.team), function(pkmn)
