@@ -6,7 +6,7 @@
     stack = {stack[1]}
     menu:refresh{}
 
-    -- todo: make live count actually correct
+    -- todo: consider combining the parameter logic somehow for token crunching
     f_zobj_set(menu, [[
         v,0 -- fight over view should always start on top. don't save position for this one.
       ;;pkmn,@
@@ -164,7 +164,6 @@ end $$
         local moveind = teampkmn.mynewmoves[i]
         return {
             move=teampkmn.mynewmoves[i],
-            -- todo: make move never nil
             name=moveind.name,
             select=function(_ENV) select_func(_ENV, i, teampkmn, team) end,
             disabled=i == disabled_ind
@@ -223,18 +222,16 @@ end $$
 end $$
 
 |[f_pselmove_init]| function(_ENV)
-    -- todo: replace 1,2,3,4 with p0.active.mynewmoves
     -- todo: (wait) support struggle
     -- todo: token crunching (replace with zobj)
-    menu:refresh(f_zobj[[,1,2,3,4]], function(move_slot)
-        local move = p0.active.mynewmoves[move_slot]
+    menu:refresh(p0.active.mynewmoves, function(move)
         return {
-            disabled=p0.active.mynewmoves[move_slot].pp <= 0,
+            disabled=move.pp <= 0,
             name=move.name,
             move=move,
             select=function()
                 _ENV:pop() _ENV:pop()
-                f_select_move(p0, move_slot)
+                f_select_move(p0, move)
             end
         }
     end)

@@ -594,7 +594,7 @@ end
 }
 end)
 end)
-f_zobj_set(_g,[[f_teamaction_init,@,f_moveaction_init,@,f_movedel,@,f_moves_init_helper,@,f_teammoves_init,@,f_switchmoves_init,@,f_teammovesel_init,@,f_pselmove_init,@,f_pselactions_init,@,f_team_init,@,f_get_team_num,@,f_editteam_init,@,f_switchteam_init,@,f_pselswitch_init,@,f_turn_init,@,f_pstat_init,@,f_turn_update,@,f_browsestat_lrfunc,@,f_pstat_lrfunc,@,f_pstat_xfunc,@,f_browsestat_xfunc,@,f_credits_xfunc,@,f_fightover_xfunc,@,f_modes_default_update,@,f_modes_default_draw1,@,f_modes_cursor,@,f_modes_entry,@,f_modes_push,@,f_modes_popuntil,@,f_modes_pop,@,f_game_init,@,f_game_update,@,f_game_draw1,@,f_game_draw2,@,f_game_draw3,@,f_moveup_init,@,f_closed_init,@,f_any_btn,@,f_closed_update,@,f_minisfx,@,f_beep_done,@,f_beep_okay,@,f_beep_back,@,f_beep,@,f_draw_picodex,@,f_picodex_map,@,f_wobble_text,@,f_zprint,@,f_draw_screen,@,f_draw2_pokeinfo,@,f_draw3_pokeinfo,@,f_draw_pkmn,@,f_draw_pkmn_out,@,f_update_stat_menu,@,f_teamdel,@,f_set_default_team_pkmn,@,f_story_select,@,f_match_select,@,f_match_start,@,f_horde_select,@,f_horde_win_func,@,f_team_select,@,f_get_team_cursor,@,f_get_pkmn_team_edit,@,f_get_team,@,f_save_team,@,f_select_move,@,f_get_other_pl,@,f_newaction,@,f_addaction,@,f_logic_faint,@,f_pop_next_action,@,f_get_possible_move_slots,@,f_select_random_move_slot,@,f_generic_attack,@,f_get_crit_ratio,@,f_move_accuracy_rate,@,f_calc_move_damage,@,f_psel_init,@,f_psel_random,@,f_psel_forfeit,@,f_begin_fight,@,f_begin_fight_cpu,@,f_extract_sheet,@,f_vget,@,f_vset,@,f_px9_decomp,@,f_game_state_init,@]],function(_ENV)
+f_zobj_set(_g,[[f_teamaction_init,@,f_moveaction_init,@,f_movedel,@,f_moves_init_helper,@,f_teammoves_init,@,f_switchmoves_init,@,f_teammovesel_init,@,f_pselmove_init,@,f_pselactions_init,@,f_team_init,@,f_get_team_num,@,f_editteam_init,@,f_switchteam_init,@,f_pselswitch_init,@,f_turn_init,@,f_pstat_init,@,f_turn_update,@,f_browsestat_lrfunc,@,f_pstat_lrfunc,@,f_pstat_xfunc,@,f_browsestat_xfunc,@,f_credits_xfunc,@,f_fightover_xfunc,@,f_modes_default_update,@,f_modes_default_draw1,@,f_modes_cursor,@,f_modes_entry,@,f_modes_push,@,f_modes_popuntil,@,f_modes_pop,@,f_game_init,@,f_game_update,@,f_game_draw1,@,f_game_draw2,@,f_game_draw3,@,f_moveup_init,@,f_closed_init,@,f_any_btn,@,f_closed_update,@,f_minisfx,@,f_beep_done,@,f_beep_okay,@,f_beep_back,@,f_beep,@,f_draw_picodex,@,f_picodex_map,@,f_wobble_text,@,f_zprint,@,f_draw_screen,@,f_draw2_pokeinfo,@,f_draw3_pokeinfo,@,f_draw_pkmn,@,f_draw_pkmn_out,@,f_update_stat_menu,@,f_teamdel,@,f_set_default_team_pkmn,@,f_story_select,@,f_match_select,@,f_match_start,@,f_horde_select,@,f_horde_win_func,@,f_team_select,@,f_get_team_cursor,@,f_get_pkmn_team_edit,@,f_get_team,@,f_save_team,@,f_select_move,@,f_get_other_pl,@,f_newaction,@,f_addaction,@,f_logic_faint,@,f_pop_next_action,@,f_get_possible_moves,@,f_select_random_move,@,f_generic_attack,@,f_get_crit_ratio,@,f_move_accuracy_rate,@,f_calc_move_damage,@,f_psel_init,@,f_psel_random,@,f_psel_forfeit,@,f_begin_fight,@,f_begin_fight_cpu,@,f_extract_sheet,@,f_vget,@,f_vset,@,f_px9_decomp,@,f_game_state_init,@]],function(_ENV)
 menu:refresh(f_zobj[[;name,moves,state,teammoves,select,%f_menu_state_callback;;name,switch,state,switchteam,select,%f_menu_state_callback;;name,delete,select,%f_teamdel]])
 teammovesel.menu.c=0
 end,function(_ENV)
@@ -657,15 +657,14 @@ end
 }
 end)
 end,function(_ENV)
-menu:refresh(f_zobj[[,1,2,3,4]],function(move_slot)
-local move=p0.active.mynewmoves[move_slot]
+menu:refresh(p0.active.mynewmoves,function(move)
 return{
-disabled=p0.active.mynewmoves[move_slot].pp<=0,
+disabled=move.pp<=0,
 name=move.name,
 move=move,
 select=function()
 _ENV:pop()_ENV:pop()
-f_select_move(p0,move_slot)
+f_select_move(p0,move)
 end
 }
 end)
@@ -1034,7 +1033,7 @@ s.active.invisible=false
 end)
 end)
 else
-local move=pl.active.mynewmoves[slot]
+local move=slot
 f_addaction(pl,pl,"#,uses,"..move.name,function(s,o)
 f_generic_attack(s,o,slot)
 end)
@@ -1077,25 +1076,24 @@ end,function(active)
 local possible_moves={}
 for i=1,4 do
 if active.mynewmoves[i].num>0 and active.mynewmoves[i].pp>0 then
-_add(possible_moves,i)
+_add(possible_moves,active.mynewmoves[i])
 end
 end
 return possible_moves
 end,function(active)
-local possible_moves=f_get_possible_move_slots(active)
-return possible_moves[f_flr_rnd(#possible_moves)+1]or 0
-end,function(s,o,m)
-local move=s.active.mynewmoves[m]
+local possible_moves=f_get_possible_moves(active)
+return possible_moves[f_flr_rnd(#possible_moves)+1]or f_create_move(0)
+end,function(self,other,move)
 if move.num>0 then
-s.active.mynewmoves[m].pp-=1
+move.pp-=1
 end
 local dmg=move.damage
 if dmg>0 then
-f_addaction(s,o,"#,-"..dmg..",hitpoints",function()
-o.active.shared.hp=_max(0,o.active.shared.hp-dmg)
+f_addaction(self,other,"#,-"..dmg..",hitpoints",function()
+other.active.shared.hp=_max(0,other.active.shared.hp-dmg)
 end)
 else
-f_addaction(s,s,"#,does,nothing")
+f_addaction(self,self,"#,does,nothing")
 end
 end,function(base_speed)
 return _min(.99,(base_speed+76)/1024)
@@ -1107,7 +1105,7 @@ return base_damage*stab*type1*type2*random
 end,function(game)
 game.p0=game[game.p0key]
 if game.p0.iscpu then
-f_select_move(game.p0,f_select_random_move_slot(game.p0.active))
+f_select_move(game.p0,f_select_random_move(game.p0.active))
 game:load()
 elseif #game.p0.actions>0 then
 game:load()
@@ -1122,7 +1120,7 @@ game:push"pselactions"
 end
 end,function(game)
 game:pop()
-f_select_move(game.p0,f_select_random_move_slot(game.p0.active))
+f_select_move(game.p0,f_select_random_move(game.p0.active))
 end,function(game)
 game:pop()
 game.p0=f_get_other_pl(game,game.p0)

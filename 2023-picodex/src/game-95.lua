@@ -107,7 +107,6 @@ end $$
     -- poke(S_STORY, 40) -- gives you all trainers
 
     local team = {} -- default team for new games
-    -- f_zcall(function(num) _poke(S_POKEMON+num, 1) end, [[;]])
     for ind, num in _pairs(_split'133,7,35,1,25,4') do
         f_set_default_team_pkmn(team, ind, num)
         _poke(S_POKEMON+num, 1)

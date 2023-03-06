@@ -1,6 +1,8 @@
 -- pl,1-4,false - select a move slot  are move slots
 -- pl,0,false   - select default move (solar beam charge, hyper beam recharge, struggle, ...)
 -- pl,1-6,true  - switch with team slot
+
+-- todo: maybe extract out switch into something else, to keep this cleaner
 |[f_select_move]| function(pl, slot, switch)
     pl.actions = {}
     local priority_class = C_PRIORITY_ATTACK
@@ -15,7 +17,7 @@
             end)
         end)
     else
-        local move = pl.active.mynewmoves[slot]
+        local move = slot -- move is slot. this is hacky. do the above todo maybe to clean it up
         f_addaction(pl, pl, "#,uses,"..move.name, function(s, o) -- self, other
             f_generic_attack(s, o, slot)
         end)
@@ -83,42 +85,39 @@ end $$
     end
 end $$
 
--- returns move slot number. 0 means to use struggle.
-|[f_get_possible_move_slots]| function(active)
+-- returns possible moves that can be used in the fight.
+|[f_get_possible_moves]| function(active)
     local possible_moves = {}
 
     for i=1,4 do
         if active.mynewmoves[i].num > 0 and active.mynewmoves[i].pp > 0 then
-            _add(possible_moves, i)
+            _add(possible_moves, active.mynewmoves[i])
         end
     end
 
     return possible_moves
 end $$
 
-|[f_select_random_move_slot]| function(active)
-    local possible_moves = f_get_possible_move_slots(active)
-    return possible_moves[f_flr_rnd(#possible_moves)+1] or M_STRUGGLE
+|[f_select_random_move]| function(active)
+    local possible_moves = f_get_possible_moves(active)
+    return possible_moves[f_flr_rnd(#possible_moves)+1] or f_create_move(M_STRUGGLE)
 end $$
 
--- [s]elf pl, [o]ther pl, [m]ove slot
-|[f_generic_attack]| function(s, o, m)
-    local move = s.active.mynewmoves[m]
-
+|[f_generic_attack]| function(self, other, move)
     -- only less than 0 for struggle and none moves. none move would never be selected though
     if move.num > 0 then
-        s.active.mynewmoves[m].pp -= 1
+        move.pp -= 1
     end
 
-    local dmg = move.damage -- f_calc_move_damage(s.active.level, s.active.attack, defense, critical, move_power)
+    local dmg = move.damage -- f_calc_move_damage(self.active.level, self.active.attack, defense, critical, move_power)
     if dmg > 0 then
-        f_addaction(s, o, "#,-"..dmg..",hitpoints", function()
-            o.active.shared.hp = _max(0, o.active.shared.hp-dmg)
+        f_addaction(self, other, "#,-"..dmg..",hitpoints", function()
+            other.active.shared.hp = _max(0, other.active.shared.hp-dmg)
         end)
 
     -- otherwise, it is splash for now i guess
     else
-        f_addaction(s, s, "#,does,nothing")
+        f_addaction(self, self, "#,does,nothing")
     end
 end $$
 

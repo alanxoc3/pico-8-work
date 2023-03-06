@@ -3,7 +3,7 @@
 
     -- skip this state if the player is a cpu
     if game.p0.iscpu then
-        f_select_move(game.p0, f_select_random_move_slot(game.p0.active))
+        f_select_move(game.p0, f_select_random_move(game.p0.active))
         game:load()
     elseif #game.p0.actions > 0 then
         game:load()
@@ -22,7 +22,7 @@ end $$
 
 |[f_psel_random]| function(game)
     game:pop()
-    f_select_move(game.p0, f_select_random_move_slot(game.p0.active))
+    f_select_move(game.p0, f_select_random_move(game.p0.active))
 end $$
 
 |[f_psel_forfeit]| function(game)
