@@ -92,7 +92,7 @@ end $$
         _split"106,,!alanxoc3,code,design,6,,!gr8cadet,graphics,sound,129,,!wadlo,magikarp,gyarados,123,,!snippets,zep px9,mot smap,137,,!pkmndata,blbpedia,pokeapi,serebii,smogon,upokcntr,volvox,nintendo",
         function(txt)
             if _type(txt) == "number" then
-                return { pkmn=f_create_team_pkmn(txt) }
+                return { pkmn=f_create_team_pkmn(txt, f_create_empty_moveset()) }
             end
 
             local style = 1
