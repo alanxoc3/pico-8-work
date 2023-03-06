@@ -29,7 +29,7 @@
         -- todo: look at usages, but the get_fight_team call here might not be needed
         menu_action.cancel, team = f_beep, f_get_fight_team(team)      
         active = f_team_pkmn_to_active(f_get_next_active(team))
-        _add(actions, f_newaction(_ENV, "#,comes,out"))
+        _add(actions, f_newaction(_ENV, "|comes|out"))
     end
 
     -- how to switch the current player

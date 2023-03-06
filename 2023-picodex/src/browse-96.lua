@@ -4,9 +4,9 @@ end $$
 
 |[f_draw3_pokeinfo]| function(pkmn)
     if pkmn:available() then
-        f_print_draw3_message{pkmn.name, c_types[pkmn.type1].name, c_types[pkmn.type2].name}
+        f_print_draw3_message(pkmn.name.."|"..c_types[pkmn.type1].name.."|"..c_types[pkmn.type2].name)
     else
-        f_print_draw3_message{"?????????", "????", "??????"}
+        f_print_draw3_message"?????????|????|??????"
     end
 end $$
 

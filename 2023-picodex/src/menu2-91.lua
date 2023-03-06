@@ -17,7 +17,6 @@
     end
 end $$
 
--- todo: maybe remove x&y? and w/h? -- those are only needed for 1 thing...
 -- and replace with view bounds?
 |[f_create_menu_view]| function(edraw, viewmin)
     return f_zobj([[

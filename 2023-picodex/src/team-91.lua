@@ -41,7 +41,7 @@ end $$
 -- todo: win league game, stay in league tab
 -- assumes that mynewmoves parameter is open to modification for team. this doesn't copy moves.
 |[f_create_team_pkmn]| function(num, mynewmoves)
-    return _setmetatable(f_zobj([[mynewmoves,@, browse,%c_no]], mynewmoves), {__index=c_pokemon[num]})
+    return _setmetatable(f_zobj([[mynewmoves,@, major,C_MAJOR_NONE, browse,%c_no]], mynewmoves), {__index=c_pokemon[num]})
 end $$
 
 -- converts a team into a team ready for battle

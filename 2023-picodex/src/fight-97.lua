@@ -9,16 +9,16 @@
 
     if switch then
         priority_class = C_PRIORITY_SWITCH
-        f_addaction(pl, pl, "#,comes,back", function(s, o) -- self, other
+        f_addaction(pl, pl, "|comes|back", function(s, o) -- self, other
             s.active = f_team_pkmn_to_active(s.team[slot])
             s.active.invisible = true
-            f_addaction(s, s, "#,comes,out", function(s, o) -- self, other
+            f_addaction(s, s, "|comes|out", function(s, o) -- self, other
                 s.active.invisible = false
             end)
         end)
     else
         local move = slot -- move is slot. this is hacky. do the above todo maybe to clean it up
-        f_addaction(pl, pl, "#,uses,"..move.name, function(s, o) -- self, other
+        f_addaction(pl, pl, "|uses|"..move.name, function(s, o) -- self, other
             f_generic_attack(s, o, slot)
         end)
 
@@ -64,10 +64,10 @@ end $$
     for p in _all{game.p1,game.p2} do
         if p.active.hp <= 0 then
             if p.active.major ~= C_MAJOR_FAINTED then
-                return f_newaction(p, "#,is,fainted", f_logic_faint)
+                return f_newaction(p, "|is|fainted", f_logic_faint)
             else
                 p.active = f_team_pkmn_to_active(f_get_next_active(p.team))
-                return f_newaction(p, "#,comes,out")
+                return f_newaction(p, "|comes|out")
             end
         end
     end
@@ -111,13 +111,13 @@ end $$
 
     local dmg = move.damage -- f_calc_move_damage(self.active.level, self.active.attack, defense, critical, move_power)
     if dmg > 0 then
-        f_addaction(self, other, "#,-"..dmg..",hitpoints", function()
+        f_addaction(self, other, "|-"..dmg.."|hitpoints", function()
             other.active.shared.hp = _max(0, other.active.shared.hp-dmg)
         end)
 
     -- otherwise, it is splash for now i guess
     else
-        f_addaction(self, self, "#,does,nothing")
+        f_addaction(self, self, "|does|nothing")
     end
 end $$
 
