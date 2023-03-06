@@ -828,6 +828,8 @@ end,function(_ENV)
 _deli(stack)
 _ENV:load(stack[#stack]or "main")
 end,function(_ENV)
+for i=1,151 do _poke(0x5e5a+i,1)end
+poke(0x5efd,40)
 local team={}
 for ind,num in _pairs(_split"133,7,35,1,25,4")do
 f_set_default_team_pkmn(team,ind,num)
