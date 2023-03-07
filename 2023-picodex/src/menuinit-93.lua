@@ -3,8 +3,14 @@
     winner:winlogic(loser)
 
     -- getting out of the win screen should take you to the main menu
-    stack = {stack[1]}
+    -- stack = {stack[1]}
     menu:refresh{}
+
+    -- since horde and player don't have a "league" screen, this will go back to the main menu.
+    -- hacky for this specific scenario :)
+    menu.cancel = function(game)
+        game:popuntil'team2story'
+    end
 
     -- todo: consider combining the parameter logic somehow for token crunching
     f_zobj_set(menu, [[

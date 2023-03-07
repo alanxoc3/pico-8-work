@@ -1,5 +1,5 @@
--- todo: in battle, horizontal 1 px for accuracy attack (move with accuracy)
--- todo: in battle, vertical 1 px for stat attack
+-- todo: (wait) in battle, horizontal 1 px for accuracy attack (move with accuracy)
+-- todo: (wait) in battle, vertical 1 px for stat attack
 f_zclass[[o_modes,o_actor|
     cursor,%f_modes_cursor, -- gets the cursor for a menu
     entry,%f_modes_entry,   -- gets the entry the cursor is on
@@ -89,7 +89,7 @@ end $$
 
 -- pops until you reach a state useful for when you want to pop more than once
 |[f_modes_popuntil]| function(_ENV, untilstate)
-    while next_state ~= untilstate do
+    while next_state ~= untilstate and #stack > 0 do
         _ENV:pop()
     end
 end $$

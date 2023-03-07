@@ -533,8 +533,10 @@ f_print_draw3_message(game.cur_action.active.name..game.cur_action.message)
 end,function(_ENV)
 local winner,loser=p0,f_get_other_pl(_ENV,p0)
 winner:winlogic(loser)
-stack={stack[1]}
 menu:refresh{}
+menu.cancel=function(game)
+game:popuntil"team2story"
+end
 f_zobj_set(menu,[[v,0;;pkmn,@;;hidden,%c_yes;;name,@,style,5;;name,@;;name,@;;pkmn,@;;hidden,%c_yes;;name,@,style,5;;name,@;;name,@]],winner.active,winner.name,(#f_get_team_live(winner.team,true)).." live",(#f_get_team_dead(winner.team)).." dead",
 loser.active,loser.name,(#f_get_team_live(loser.team,true)).." live",(#f_get_team_dead(loser.team)).." dead")
 end,function(_ENV)
@@ -812,7 +814,7 @@ end,function(_ENV,newstate)
 _add(stack,newstate)
 _ENV:f_actor_load(newstate)
 end,function(_ENV,untilstate)
-while next_state ~=untilstate do
+while next_state ~=untilstate and #stack>0 do
 _ENV:pop()
 end
 end,function(_ENV)
