@@ -31,7 +31,7 @@ end $$
 
 |[f_pselswitch_draw3]|  function(_ENV) f_fight_draw3_helper(_ENV:entry'pselswitch'.pkmn) end $$
 
-|[f_team_draw3]|        function(game)
+|[f_team_draw3]| function(game)
     local count, power = 0, 0
     for i=1,6 do
         local num = game:entry().team[i]
@@ -41,7 +41,7 @@ end $$
         end
     end
 
-    f_print_draw3_message("team stats|pkmn "..count.."/6|pow "..power)
+    f_print_draw3_message(game:entry().name.."|pkmn "..count.."/6|pow "..power)
 end $$
 
 |[f_pselmove_draw3]| function(game) end $$

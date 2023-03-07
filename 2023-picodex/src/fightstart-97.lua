@@ -26,8 +26,7 @@
         local _ENV=_ENV[dd.key]
         statplayer = _ENV
 
-        -- todo: look at usages, but the get_fight_team call here might not be needed
-        menu_action.cancel, team = f_beep, f_get_fight_team(team)      
+        menu_action.cancel = f_beep
         active = f_team_pkmn_to_active(f_get_next_active(team))
         _add(actions, f_newaction(_ENV, "|comes|out"))
     end
@@ -39,12 +38,11 @@
 end $$
 
 -- horde and story share similar logic for cpu battle
-|[f_begin_fight_cpu]| function(_ENV, team, name, deathfunc, plwinfunc, cpuwinfunc)
+|[f_begin_fight_cpu]| function(_ENV, pkmn_nums, name, deathfunc, plwinfunc, cpuwinfunc)
     local cpu_team_draft = {}
-    _foreach(team, function(pkmn)
-        -- todo: maybe use f_set_default_team_pkmn
-        _add(cpu_team_draft, f_create_team_pkmn(pkmn, f_get_natural_moveset(pkmn)))
-    end)
+    for i=1,#pkmn_nums do
+        f_set_default_team_pkmn(cpu_team_draft, i, pkmn_nums[i])
+    end
 
     f_begin_fight(_ENV,
         {_ENV:f_get_team_cursor'team1', "player", false, f_nop,     plwinfunc},

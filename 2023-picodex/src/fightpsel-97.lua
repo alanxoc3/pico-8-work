@@ -15,7 +15,7 @@
         game.pstat.menu       = game.p0.menu_stats
 
         game.cur_action = f_newaction(game.p0, "")
-        game.stack[#game.stack] = game.curr
+        game.stack[#game.stack] = game.curr -- without this, next trainer's turn might be skipped
         game:push'pselactions'
     end
 end $$
@@ -31,5 +31,4 @@ end $$
     -- must set game.p0 to the other player, so it shows they win
     game.p0 = f_get_other_pl(game, game.p0)
     game:load'fightover'
-    -- g_bpx = false
 end $$

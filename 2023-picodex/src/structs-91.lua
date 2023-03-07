@@ -139,7 +139,7 @@ end $$
     end
 end $$
 
--- teampkmn must be non-nil and match the team table structure defined in f_get_fight_team 
+-- teampkmn must be non-nil and match the team table structure defined in f_create_team_pkmn
 |[f_team_pkmn_to_active]| function(teampkmn)
     return _setmetatable(f_zobj([[
         shared,@,  getstat,@, -- shared exists to check team[i] == active.shared and as a sure way to get original values

@@ -2,31 +2,31 @@
 -- pl,0,false   - select default move (solar beam charge, hyper beam recharge, struggle, ...)
 -- pl,1-6,true  - switch with team slot
 
--- todo: maybe extract out switch into something else, to keep this cleaner
-|[f_select_move]| function(pl, slot, switch)
+|[f_select_switch]| function(pl, slot)
+    f_addaction(pl, pl, "|comes|back", function(s, o) -- self, other
+        s.active = f_team_pkmn_to_active(s.team[slot])
+        s.active.invisible = true
+        f_addaction(s, s, "|comes|out", function(s, o) -- self, other
+            s.active.invisible = false
+        end)
+    end)
+
+    -- there are different levels of priority & switch is the highest one
+    pl.priority = C_PRIORITY_SWITCH
+end $$
+
+|[f_select_move]| function(pl, move)
     pl.actions = {}
     local priority_class = C_PRIORITY_ATTACK
 
-    if switch then
-        priority_class = C_PRIORITY_SWITCH
-        f_addaction(pl, pl, "|comes|back", function(s, o) -- self, other
-            s.active = f_team_pkmn_to_active(s.team[slot])
-            s.active.invisible = true
-            f_addaction(s, s, "|comes|out", function(s, o) -- self, other
-                s.active.invisible = false
-            end)
-        end)
-    else
-        local move = slot -- move is slot. this is hacky. do the above todo maybe to clean it up
-        f_addaction(pl, pl, "|uses|"..move.name, function(s, o) -- self, other
-            f_generic_attack(s, o, slot)
-        end)
+    f_addaction(pl, pl, "|uses|"..move.name, function(s, o) -- self, other
+        f_generic_attack(s, o, move)
+    end)
 
-        -- hardcoding the only moves that can change priority for now. Maybe there is a more token efficient way to do this?
-        if move.num == M_QUICK_ATTACK then priority_class = C_PRIORITY_QUICKATTACK end
-        if move.num == M_COUNTER or move.num == M_WHIRLWIND or move.num == M_ROAR or move.num == M_TELEPORT then
-            priority_class = C_PRIORITY_COUNTER
-        end
+    -- hardcoding the only moves that can change priority for now. Maybe there is a more token efficient way to do this?
+    if move.num == M_QUICK_ATTACK then priority_class = C_PRIORITY_QUICKATTACK end
+    if move.num == M_COUNTER or move.num == M_WHIRLWIND or move.num == M_ROAR or move.num == M_TELEPORT then
+        priority_class = C_PRIORITY_COUNTER
     end
 
     -- speed can be between 1 and 999, so multiples of 1000 can be priority
