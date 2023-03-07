@@ -8,23 +8,23 @@ c_major_names[0] = "" -- for "none" status
 -- pokemon moves can be physical or special. the order here is specific. odd numbers are physical. even numbers are special.
 -- includes type effectiveness chart. according to the gen 1 games, which had bugs. i'm keeping the bugs :).
 |[c_types]| f_zobj[[
-    T_NONE;     bg,0, name,%c_empty;   T_NONE;     good;,;                                  T_NONE;     null;,;                   T_NONE;     weak;,;
-    T_NORMAL;   bg,0, name,"normal";   T_NORMAL;   good;,;                                  T_NORMAL;   null;,T_GHOST;            T_NORMAL;   weak;,T_ROCK;
-    T_FIRE;     bg,5, name,"fire";     T_FIRE;     good;,T_GRASS,T_ICE,T_BUG;               T_FIRE;     null;,;                   T_FIRE;     weak;,T_FIRE,T_WATER,T_ROCK,T_DRAGON;
-    T_FIGHTING; bg,2, name,"fighting"; T_FIGHTING; good;,T_ICE,T_NORMAL,T_ROCK;             T_FIGHTING; null;,T_GHOST;            T_FIGHTING; weak;,T_BUG,T_FLYING,T_POISON,T_PSYCHIC;
-    T_WATER;    bg,4, name,"water";    T_WATER;    good;,T_FIRE,T_GROUND,T_ROCK;            T_WATER;    null;,;                   T_WATER;    weak;,T_DRAGON,T_GRASS,T_WATER;
-    T_POISON;   bg,1, name,"poison";   T_POISON;   good;,T_BUG,T_GRASS;                     T_POISON;   null;,;                   T_POISON;   weak;,T_GHOST,T_GROUND,T_POISON,T_ROCK;
-    T_ELECTRIC; bg,6, name,"electric"; T_ELECTRIC; good;,T_FLYING,T_WATER;                  T_ELECTRIC; null;,T_GROUND;           T_ELECTRIC; weak;,T_DRAGON,T_ELECTRIC,T_GRASS;
-    T_GROUND;   bg,2, name,"ground";   T_GROUND;   good;,T_ELECTRIC,T_FIRE,T_POISON,T_ROCK; T_GROUND;   null;,T_FLYING;           T_GROUND;   weak;,T_BUG,T_GRASS;
-    T_GRASS;    bg,3, name,"grass";    T_GRASS;    good;,T_GROUND,T_ROCK,T_WATER;           T_GRASS;    null;,;                   T_GRASS;    weak;,T_BUG,T_DRAGON,T_FIRE,T_FLYING,T_GRASS,T_POISON;
-    T_FLYING;   bg,0, name,"flying";   T_FLYING;   good;,T_BUG,T_FIGHTING,T_GRASS;          T_FLYING;   null;,;                   T_FLYING;   weak;,T_ELECTRIC,T_ROCK;
-    T_ICE;      bg,4, name,"ice";      T_ICE;      good;,T_DRAGON,T_FLYING,T_GRASS;         T_ICE;      null;,;                   T_ICE;      weak;,T_FIRE,T_ICE,T_WATER;
-    T_BUG;      bg,3, name,"bug";      T_BUG;      good;,T_GRASS,T_PSYCHIC;                 T_BUG;      null;,;                   T_BUG;      weak;,T_FIGHTING,T_FIRE,T_FLYING,T_GHOST,T_POISON;
-    T_PSYCHIC;  bg,1, name,"psychic";  T_PSYCHIC;  good;,T_FIGHTING,T_POISON;               T_PSYCHIC;  null;,;                   T_PSYCHIC;  weak;,T_PSYCHIC;
-    T_ROCK;     bg,0, name,"rock";     T_ROCK;     good;,T_BUG,T_FIRE,T_FLYING,T_ICE;       T_ROCK;     null;,;                   T_ROCK;     weak;,T_FIGHTING,T_GROUND;
-    T_DRAGON;   bg,0, name,"dragon";   T_DRAGON;   good;,T_DRAGON;                          T_DRAGON;   null;,;                   T_DRAGON;   weak;,;
-    T_GHOST;    bg,1, name,"ghost";    T_GHOST;    good;,T_GHOST;                           T_GHOST;    null;,T_NORMAL,T_PSYCHIC; T_GHOST;    weak;,;
-    T_BIRD;     bg,0, name,"bird";     T_BIRD;     good;,;                                  T_BIRD;     null;,;                   T_BIRD;     weak;,
+    T_NONE;     bg,0, name,%c_empty;
+    T_NORMAL;   bg,0, name,"normal",   T_GHOST,0,    T_ROCK,.5;
+    T_FIRE;     bg,5, name,"fire",     T_GRASS,2,    T_ICE,2,      T_BUG,2,       T_FIRE,.5,     T_WATER,.5,    T_ROCK,.5,   T_DRAGON,.5;
+    T_FIGHTING; bg,2, name,"fighting", T_ICE,2,      T_NORMAL,2,   T_ROCK,2,      T_GHOST,0,     T_BUG,.5,      T_FLYING,.5, T_POISON,.5, T_PSYCHIC,.5;
+    T_WATER;    bg,4, name,"water",    T_FIRE,2,     T_GROUND,2,   T_ROCK,2,      T_DRAGON,.5,   T_GRASS,.5,    T_WATER,.5;
+    T_POISON;   bg,1, name,"poison",   T_BUG,2,      T_GRASS,2,    T_GHOST,.5,    T_GROUND,.5,   T_POISON,.5,   T_ROCK,.5;
+    T_ELECTRIC; bg,6, name,"electric", T_FLYING,2,   T_WATER,2,    T_GROUND,0,    T_DRAGON,.5,   T_ELECTRIC,.5, T_GRASS,.5;
+    T_GROUND;   bg,2, name,"ground",   T_ELECTRIC,2, T_FIRE,2,     T_POISON,2,    T_ROCK,2,      T_FLYING,0,    T_BUG,.5,    T_GRASS,.5;
+    T_GRASS;    bg,3, name,"grass",    T_GROUND,2,   T_ROCK,2,     T_WATER,2,     T_BUG,.5,      T_DRAGON,.5,   T_FIRE,.5,   T_FLYING,.5, T_GRASS,.5, T_POISON,.5;
+    T_FLYING;   bg,0, name,"flying",   T_BUG,2,      T_FIGHTING,2, T_GRASS,2,     T_ELECTRIC,.5, T_ROCK,.5;
+    T_ICE;      bg,4, name,"ice",      T_DRAGON,2,   T_FLYING,2,   T_GRASS,2,     T_FIRE,.5,     T_ICE,.5,      T_WATER,.5;
+    T_BUG;      bg,3, name,"bug",      T_GRASS,2,    T_PSYCHIC,2,  T_FIGHTING,.5, T_FIRE,.5,     T_FLYING,.5,   T_GHOST,.5,  T_POISON,.5;
+    T_PSYCHIC;  bg,1, name,"psychic",  T_FIGHTING,2, T_POISON,2,   T_PSYCHIC,.5;
+    T_ROCK;     bg,0, name,"rock",     T_BUG,2,      T_FIRE,2,     T_FLYING,2,    T_ICE,2,       T_FIGHTING,.5, T_GROUND,.5;
+    T_DRAGON;   bg,0, name,"dragon",   T_DRAGON,2;
+    T_GHOST;    bg,1, name,"ghost",    T_GHOST,2,    T_NORMAL,0,   T_PSYCHIC,0;
+    T_BIRD;     bg,0, name,"bird";
 ]] $$
 
 -- 5 bg styles

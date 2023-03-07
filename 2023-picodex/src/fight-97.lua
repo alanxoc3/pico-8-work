@@ -109,7 +109,7 @@ end $$
         move.pp -= 1
     end
 
-    local dmg = move.damage -- f_calc_move_damage(self.active.level, self.active.attack, defense, critical, move_power)
+    local dmg = f_calc_move_damage(self.active, other.active, move)
     if dmg > 0 then
         f_addaction(self, other, "|-"..dmg.."|hitpoints", function()
             other.active.shared.hp = _max(0, other.active.shared.hp-dmg)
@@ -151,13 +151,17 @@ end $$
 -- turn init will switch the 2 pokemon. select will set it.
 
 -- takes in the hard-coded base speed value for the pkmn, so electrode would have highest crit ratio.
+-- todo: (wait) make high crit moves & focus energy work
 |[f_get_crit_ratio]| function(base_speed)
-    -- range is 0 to 255. then random roll is done out of 256, so high crit still has like a .5% chance of failing.
-    -- todo (wait): redo these slightly
-    -- (bs+76)/4 | (bs+236)/2 | (bs+76)/4*8 (crit move)
-    return _min(.99, (base_speed+76)/1024)
     -- slash:        _min(.99, (base_speed+76)/128)
     -- focus energy: _min(.99, (base_speed+236)/512)
+    -- focus energy + crit move: .99609
+
+    -- range is 0 to 255. then random roll is done out of 256, so high crit still has like a .5% chance of failing.
+    local ratio = (base_speed+76)/1024
+
+    -- decimal here is 255/256. close enough to the actual formula
+    return _rnd'1' < _min(.99609, ratio) and 2 or 1
 end $$
 
 -- pokemon rb just have one rnd check here. but stadium makes it two.
@@ -165,15 +169,25 @@ end $$
     return f_flr_rnd'256' == 0 and f_flr_rnd'256' == 0
 end $$
 
-|[f_calc_move_damage]| function(level, attack, defense, critical, move_power)
-    -- critical is 1 or 2
-    -- need function for attack/defense ratio to prevent divide by zero
-    -- base_damage can be a _max of 997
-    local base_damage = (2*level*critical/5+2)*move_power*(attack/defense)/50+2
+-- returns .5, 0, 1, or 2
+|[f_get_type_modifier]| function(move_type, pkmn_type)
+    return c_types[move_type][pkmn_type] or 1
+end $$
 
-    -- stab is 1.5 of base damage if move type equals pkmn type
-    -- types are .5, 1, or 2, based on move's effectivenes against the opposing dual type pokemon
-    -- random is between 217/255 and 255/255 inclusive
-    return base_damage*stab*type1*type2*random
+|[f_calc_move_damage]| function(attacker, defender, move)
+    -- this if check is needed for moves with a "-1" damage. though technically those moves shouldn't be called by this function.
+    if move.damage <= 0 then return 0 end
+
+    -- todo: token crunch this algorithm
+    local critical = f_get_crit_ratio(attacker.base_speed)
+    local stab = (move.type == attacker.type1 or move.type == attacker.type2) and 1.5 or 1
+    local base_damage = _min(997, (2*attacker.level*critical/5+2)*max(0, move.damage)*(attacker:getstat'attack'/defender:getstat'defense')/50+2)
+
+    -- end of formula multiplies by a random is a rab
+    return base_damage
+        *stab
+        *f_get_type_modifier(move.type, defender.type1)
+        *f_get_type_modifier(move.type, defender.type2)
+        *(_rnd'.15'+.85)\1
 end $$
 
