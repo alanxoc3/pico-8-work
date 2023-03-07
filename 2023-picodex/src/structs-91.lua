@@ -7,11 +7,57 @@
     return _ceil(base+.5*93)+5
 end $$
 
+-- both the default pokemon and shows the fields that should be on the pokemon
+-- this makes the f_populate_c_pokemon function easier to understand
+|[f_get_default_pokemon]| function()
+    return f_zobj([[
+        browse,%c_yes,
+        level,C_LEVEL,
+        attack,0, defense,0, special,0, speed,0, maxhp,0, hp,0, total,0,
+        base_maxhp,0, base_attack,0, base_defense,0, base_speed,0, base_special,0,
+
+        num,-1, evolvesfrom,-1, name," ",
+        type1,T_NONE, type2,T_NONE,
+        moves_natural,#, moves_teach,#, moves_event,#,
+
+        mynewmoves,@, draw,@, hasmove,@, isempty,@, available,@
+        
+    ]], f_create_empty_moveset(), function(pkmn, ...)
+        -- todo: wait -- incorporate transform ... transform into surfing pikachu should become surfing pikachu
+        local num = pkmn:available() and pkmn.num or -1
+        if num == P_PIKACHU and pkmn:hasmove(M_SURF)    then num = 158 end
+        if num == P_PSYDUCK and pkmn:hasmove(M_AMNESIA) then num = 159 end
+        f_draw_pkmn_out(num, ...)
+    end, function(pkmn, moveid)
+        for j=1,4 do
+            if pkmn.mynewmoves[j].num == moveid then
+                return true
+            end
+        end
+        return false
+    end, function(pkmn)
+        for j=1,4 do
+            if pkmn.mynewmoves[j].num ~= -1 then
+                return false
+            end
+        end
+        return true
+    end, function(pkmn)
+        -- non-browse pokemon are always available (credit, edit, and battle) the browse attribute represents that
+        if pkmn.num >= 0 then -- shouldn't be -1
+            return not pkmn.browse or @(S_POKEMON+pkmn.num) > 0
+        end
+    end)
+end $$
+
 |[f_populate_c_pokemon]| function()
     local movemem = _peek2'8'
 
     -- -1 is for disabled things. this is never available.
-    for num=-1,151 do
+    c_pokemon[-1] = f_get_default_pokemon()
+
+    -- and now set all the other pkmn
+    for num=0,151 do
         ---- PASS 1 - create array ----
         -- this populates an array for the pokemon, based on data stored in the cartridge
         local pkmndata, is_range = {}, false
@@ -32,16 +78,12 @@ end $$
 
         ---- PART 2 - populate most attributes ----
         local evolvesfrom = num-pkmndata[1]
-        local pkmn = f_zobj([[
-            browse,%c_yes,
-            mynewmoves,@,
+        local pkmn = f_get_default_pokemon()
+        f_zobj_set(pkmn, [[
             num,@, evolvesfrom,@, name,@,
             type1,@, type2,@,
-            base_maxhp,@, base_attack,@, base_defense,@, base_speed,@, base_special,@,
-            moves_natural,@, moves_teach,@, moves_event,@
-        ]],
-            f_create_empty_moveset(), -- evl
-            num, -- evl
+            base_maxhp,@, base_attack,@, base_defense,@, base_speed,@, base_special,@
+        ]], num, -- evl
             evolvesfrom,  -- evl
             c_pokemon_names[num+1], -- nam
             pkmndata[2],  -- ty1
@@ -50,8 +92,7 @@ end $$
             pkmndata[5],  -- att
             pkmndata[6],  -- def
             pkmndata[7],  -- spd
-            pkmndata[8],  -- spc
-            {}, {}, {}
+            pkmndata[8]   -- spc
         )
 
         ---- PASS 3 - populate the moves ----
@@ -92,40 +133,6 @@ end $$
         )
 
         pkmn.total = pkmn.attack + pkmn.defense + pkmn.special + pkmn.speed + pkmn.maxhp
-
-        -- todo: token crunch on these funcs, mainly just separate them out & use zobj stuff
-        pkmn.draw = function(pkmn, ...)
-            -- todo: incorporate transform ... transform into surfing pikachu should become surfing pikachu
-            local num = pkmn:available() and pkmn.num or -1
-            if num == P_PIKACHU and pkmn:hasmove(M_SURF)    then num = 158 end
-            if num == P_PSYDUCK and pkmn:hasmove(M_AMNESIA) then num = 159 end
-            f_draw_pkmn_out(num, ...)
-        end
-
-        pkmn.hasmove = function(pkmn, moveid)
-            for j=1,4 do
-                if pkmn.mynewmoves[j].num == moveid then
-                    return true
-                end
-            end
-            return false
-        end
-
-        pkmn.isempty = function(pkmn)
-            for j=1,4 do
-                if pkmn.mynewmoves[j].num ~= -1 then
-                    return false
-                end
-            end
-            return true
-        end
-
-        pkmn.available = function(pkmn)
-            -- non-browse pokemon are always available (credit, edit, and battle) the browse attribute represents that
-            if pkmn.num >= 0 then -- shouldn't be -1
-                return not pkmn.browse or @(S_POKEMON+pkmn.num) > 0
-            end
-        end
 
         ---- PASS 5 - finally, set the pokemon to the c_pokemon array ----
         c_pokemon[num] = pkmn

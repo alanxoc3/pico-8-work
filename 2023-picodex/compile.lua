@@ -296,8 +296,7 @@ end
 -- 1-50 are tms. 51-55 are hms. There shouldn't be anything higher than that.
 g_move_data =
 --v t1         t2        tm1tm2     hp  att def spd spc  learn                                    tm & event
-[[0|T_NONE    |T_NONE    |0  |0 |0   |0  |0   |0
-  0|T_BIRD    |T_NORMAL  |33 |136|0  |29 |6   |12|43                                   |TM |1-3|5|6|9-11|13|14|17|19|20|25-27|29|30|44|45|49-52
+[[0|T_BIRD    |T_NORMAL  |33 |136|0  |29 |6   |12|43                                   |TM |1-3|5|6|9-11|13|14|17|19|20|25-27|29|30|44|45|49-52
   0|T_GRASS   |T_POISON  |45 |49 |49 |45 |65  |22|105|106|107|110|108|70|79|88         |TM |3|6|8-10|20|21|31-34|44|50|51
   1|T_GRASS   |T_POISON  |60 |62 |63 |60 |80
   1|T_GRASS   |T_POISON  |80 |82 |83 |80 |100                                          |TM |15
