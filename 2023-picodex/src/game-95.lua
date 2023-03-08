@@ -103,7 +103,7 @@ end $$
 
 |[f_game_init]| function(_ENV)
     -- cheats!
-    for i=1,151 do _poke(S_POKEMON+i, 1) end -- gives you all pokemon
+    for i=0,151 do _poke(S_POKEMON+i, 1) end -- gives you all pokemon
     poke(S_STORY, 40) -- gives you all trainers
 
     local team = {} -- default team for new games

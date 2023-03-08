@@ -1,3 +1,6 @@
+-- todo: make gust/thunder hurt pokemon flying & deal double damage
+-- todo: make earthquake/fissure hurt pokemon digging & deal double damage
+
 -- this file contains structures for pokemon
 
 -- thanks to bulbapedia: https://bulbapedia.bulbagarden.net/wiki/Stat#Stat
@@ -14,6 +17,7 @@ end $$
         browse,%c_yes,
         level,C_LEVEL,
         attack,0, defense,0, special,0, speed,0, maxhp,0, hp,0, total,0,
+        accuracy,1, evasion,1, -- all pkmn have 1 accuracy & 1 evasion
         base_maxhp,0, base_attack,0, base_defense,0, base_speed,0, base_special,0,
 
         num,-1, evolvesfrom,-1, name," ",
@@ -139,21 +143,25 @@ end $$
     end
 end $$
 
+|[f_create_team_pkmn]| function(num, mynewmoves)
+    return _setmetatable(f_zobj([[mynewmoves,@, major,C_MAJOR_NONE, browse,%c_no]], mynewmoves), {__index=c_pokemon[num]})
+end $$
+
+-- todo: stages should be number based, not name based. that includes stats (attack, defense, ...)
 -- teampkmn must be non-nil and match the team table structure defined in f_create_team_pkmn
 |[f_team_pkmn_to_active]| function(teampkmn)
     return _setmetatable(f_zobj([[
+        accuracy,1, evasion,1,
         shared,@,  getstat,@, -- shared exists to check team[i] == active.shared and as a sure way to get original values
-        minor, #;
-        
-        stages; special,0, defense,0, attack,0, speed,0, accuracy,0, evasion,0;
+        stages,#;
     ]], teampkmn, function(a, stat)
         -- evasion and accuracy have a different formula: https://www.smogon.com/rb/articles/stadium_guide
         -- all stats cap at 999: https://www.smogon.com/rb/articles/rby_mechanics_guide
         -- and i'm giving it a _min of 1 too, because zero messes things up
 
-        local stage = a.stages[stat]
+        local stage = a.stages[stat] or 0
         return _ceil(_mid(1, 999,
-            a.shared[stat]*(
+            a[stat]*(
                 (stat == 'evasion' or stat == 'accuracy')
                 and _mid(1, 1+stage/3, 3)/_mid(1, 1-stage/3, 3)
                  or _mid(2, 2+stage,   8)/_mid(2, 2-stage,   8)

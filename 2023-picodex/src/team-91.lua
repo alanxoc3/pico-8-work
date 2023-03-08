@@ -38,8 +38,16 @@ end $$
 end $$
 
 -- assumes that mynewmoves parameter is open to modification for team. this doesn't copy moves.
-|[f_create_team_pkmn]| function(num, mynewmoves)
-    return _setmetatable(f_zobj([[mynewmoves,@, major,C_MAJOR_NONE, browse,%c_no]], mynewmoves), {__index=c_pokemon[num]})
+|[f_teamdel]| function(game)
+    local team = game:f_get_team_cursor'team1'
+    team[game:cursor'editteam'+1] = f_create_team_pkmn(-1, f_create_empty_moveset())
+    f_save_team(game:cursor'team1', team)
+    game:pop()
+end $$
+
+|[f_set_default_team_pkmn]| function(team, ind, num)
+    team[ind] = f_create_team_pkmn(num, f_get_natural_moveset(num))
+    return team
 end $$
 
 ---------- SAVE/LOAD TEAM LOGIC

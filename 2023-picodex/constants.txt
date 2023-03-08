@@ -38,23 +38,6 @@ C_MAJOR_PARALYZED: 4
 C_MAJOR_POISONED:  5
 C_MAJOR_SLEEPING:  6
 
-C_MINOR_CONFUSED:   7
-C_MINOR_CONVERSION: 8
-C_MINOR_CRITMOVE:   9
-C_MINOR_DECOYED:    10
-C_MINOR_DIGGING:    11
-C_MINOR_FLINCHING:  12
-C_MINOR_FLYING:     13
-C_MINOR_FOCUSED:    14
-C_MINOR_MISTED:     15
-C_MINOR_PREPARING:  16
-C_MINOR_RECHARGING: 17
-C_MINOR_REFLECTED:  18
-C_MINOR_SCREENED:   19
-C_MINOR_SEEDED:     20
-C_MINOR_TOXICED:    21
-C_MINOR_TRANSFORM:  22
-
 # party structure (30 bytes)
 # if all the moves are 0 (struggle), the pokemon is not in the party
 #   5 | pokemon (1 num, 1 move, 1 move, 1 move, 1 move)
@@ -96,7 +79,7 @@ T_PSYCHIC:  12
 T_ROCK:     13
 T_DRAGON:   14
 T_GHOST:    15
-T_BIRD:     16
+T_BIRD:     17
 
 # pkmn numbers
 P_MISSINGNO:  0

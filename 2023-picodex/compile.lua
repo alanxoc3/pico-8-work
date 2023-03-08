@@ -262,7 +262,7 @@ function encode_move_data(message, data)
                 elseif field == "T_ROCK"     then offsetpoke(13)
                 elseif field == "T_DRAGON"   then offsetpoke(14)
                 elseif field == "T_GHOST"    then offsetpoke(15)
-                elseif field == "T_BIRD"     then offsetpoke(16)
+                elseif field == "T_BIRD"     then offsetpoke(17)
                 elseif field == "TM"         then offsetpoke(TMHM)
                 elseif field == "EVENT"      then offsetpoke(EVENT)
                 else

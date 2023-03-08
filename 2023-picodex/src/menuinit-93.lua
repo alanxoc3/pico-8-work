@@ -335,6 +335,7 @@ end $$
     p0 = p1.priority > p2.priority and p1 or p2
 end $$
 
+-- todo: wait, experiment with moves. change name to "empty". And maybe remove empty moves from movelist in battle stat menu.
 |[f_pstat_init]| function(_ENV)
     menu:refresh{}
 
@@ -355,15 +356,26 @@ end $$
         _add(menu, {name=move.name})
     end)
 
-    -- todo: (wait) add modifiers and state to this list when those parts are implemented in the code
-    f_zobj_set(menu, [[
-       ;name,"modifier", style,5
-      ;;name,"atk +1"
-      ;;name,"def -1"
+    -- todo: token crunch, can I combine stages & flags logic below?
+    local stages = {}
+    _foreach(c_stages, function(s)
+        local stage = player.active.stages[s.key] or 0
+        if stage ~= 0 then
+            _add(stages, {name=s.name..' '..(stage > 0 and '+' or '-').._abs(stage)})
+        end
+    end)
 
-      ;;name,"state", style,5
-      ;;name,"confused"
-      ;;name,"digging"
-      ;;name,"flying"
-    ]])
+    if #stages > 0 then f_zobj_set(menu, [[;name,"modifier", style,5]]) end
+    _foreach(stages, function(f) _add(menu, f) end)
+
+    local flags = {}
+    _foreach(c_flags, function(f)
+        if player.active[f.key] then
+            -- todo: token crunch, you can probably just add f, since it has a name
+            _add(flags, {name=f.name})
+        end
+    end)
+
+    if #flags > 0 then f_zobj_set(menu, [[;name,"state", style,5]]) end
+    _foreach(flags, function(f) _add(menu, f) end)
 end $$

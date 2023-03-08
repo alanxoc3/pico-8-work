@@ -20,7 +20,7 @@ end $$
     local priority_class = C_PRIORITY_ATTACK
 
     f_addaction(pl, pl, "|uses|"..move.name, function(s, o) -- self, other
-        f_generic_attack(s, o, move)
+        move:func(s, o)
     end)
 
     -- hardcoding the only moves that can change priority for now. Maybe there is a more token efficient way to do this?
@@ -103,24 +103,6 @@ end $$
     return possible_moves[f_flr_rnd(#possible_moves)+1] or f_create_move(M_STRUGGLE)
 end $$
 
-|[f_generic_attack]| function(self, other, move)
-    -- only less than 0 for struggle and none moves. none move would never be selected though
-    if move.num > 0 then
-        move.pp -= 1
-    end
-
-    local dmg = f_calc_move_damage(self.active, other.active, move)
-    if dmg > 0 then
-        f_addaction(self, other, "|-"..dmg.."|hitpoints", function()
-            other.active.shared.hp = _max(0, other.active.shared.hp-dmg)
-        end)
-
-    -- otherwise, it is splash for now i guess
-    else
-        f_addaction(self, self, "|does|nothing")
-    end
-end $$
-
 -- turn_actions = {
 --   message?                  -- lowered attack
 --   function (does something) -- takes attack down 1
@@ -164,9 +146,9 @@ end $$
     return _rnd'1' < _min(.99609, ratio) and 2 or 1
 end $$
 
--- pokemon rb just have one rnd check here. but stadium makes it two.
-|[f_move_accuracy_rate]| function()
-    return f_flr_rnd'256' == 0 and f_flr_rnd'256' == 0
+-- pokemon stadium has a 1/65536 chance of a move missing
+|[f_does_move_miss]| function(attacker, defender, move)
+    return _rnd(defender.evasion) > move.accuracy/100*attacker:getstat'accuracy' or f_flr_rnd'256' == 0 and f_flr_rnd'256' == 0
 end $$
 
 -- returns .5, 0, 1, or 2
@@ -174,20 +156,41 @@ end $$
     return c_types[move_type][pkmn_type] or 1
 end $$
 
+-- see: https://web.archive.org/web/20140711082447/http://www.upokecenter.com/content/pokemon-red-version-blue-version-and-yellow-version-timing-notes
+-- and: https://bulbapedia.bulbagarden.net/wiki/Damage
 |[f_calc_move_damage]| function(attacker, defender, move)
     -- this if check is needed for moves with a "-1" damage. though technically those moves shouldn't be called by this function.
     if move.damage <= 0 then return 0 end
 
+    -- todo: need to factor in if burned
     -- todo: token crunch this algorithm
+    local iscontact = move.type % 2 == 1
     local critical = f_get_crit_ratio(attacker.base_speed)
     local stab = (move.type == attacker.type1 or move.type == attacker.type2) and 1.5 or 1
-    local base_damage = _min(997, (2*attacker.level*critical/5+2)*max(0, move.damage)*(attacker:getstat'attack'/defender:getstat'defense')/50+2)
+    local attack, defense = attacker:getstat'special', defender:getstat'special'
 
-    -- end of formula multiplies by a random is a rab
+    if iscontact then
+        attack, defense = attacker:getstat'attack', defender:getstat'defense'
+        if defender.reflected then
+            defense *= 2
+        end
+    elseif defender.screened then
+        defense *= 2
+    end
+
+    -- 3 is min, because 3+2=5... 5*1*.5*.5*.85\1 = 1, so this makes the lowest damage possible 1 (not zero)
+    local base_damage = _mid(
+        3, 997,
+        (2*attacker.level*critical/5+2)/50 -- [.44,.84]
+        *move.damage                       -- [6.6,210]   -- [15,250]
+        *mid(10, .2, attack/defense)       -- [1.32,2100]
+    )+2
+
+    -- max possible damage: 5994
+    -- end of formula multiplies by a random number (217/255)
     return base_damage
         *stab
         *f_get_type_modifier(move.type, defender.type1)
         *f_get_type_modifier(move.type, defender.type2)
         *(_rnd'.15'+.85)\1
 end $$
-
