@@ -41,6 +41,7 @@ function _init()
 
     g_picodex = o_game_state()
     f_draw_picodex(g_picodex)
+    _flip()
     _sfx(63,1,24)
 
     -- 0x0000

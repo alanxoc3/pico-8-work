@@ -147,25 +147,9 @@ end $$
     return _setmetatable(f_zobj([[mynewmoves,@, major,C_MAJOR_NONE, browse,%c_no]], mynewmoves), {__index=c_pokemon[num]})
 end $$
 
--- todo: stages should be number based, not name based. that includes stats (attack, defense, ...)
 -- teampkmn must be non-nil and match the team table structure defined in f_create_team_pkmn
 |[f_team_pkmn_to_active]| function(teampkmn)
     return _setmetatable(f_zobj([[
-        accuracy,1, evasion,1,
-        shared,@,  getstat,@, -- shared exists to check team[i] == active.shared and as a sure way to get original values
-        stages,#;
-    ]], teampkmn, function(a, stat)
-        -- evasion and accuracy have a different formula: https://www.smogon.com/rb/articles/stadium_guide
-        -- all stats cap at 999: https://www.smogon.com/rb/articles/rby_mechanics_guide
-        -- and i'm giving it a _min of 1 too, because zero messes things up
-
-        local stage = a.stages[stat] or 0
-        return _ceil(_mid(1, 999,
-            a[stat]*(
-                (stat == 'evasion' or stat == 'accuracy')
-                and _mid(1, 1+stage/3, 3)/_mid(1, 1-stage/3, 3)
-                 or _mid(2, 2+stage,   8)/_mid(2, 2-stage,   8)
-            )
-        ))
-    end), {__index=teampkmn})
+        accuracy,1, evasion,1, shared,@, stages,#;
+    ]], teampkmn), {__index=teampkmn})
 end $$

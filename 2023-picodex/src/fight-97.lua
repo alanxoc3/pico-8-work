@@ -31,7 +31,7 @@ end $$
 
     -- speed can be between 1 and 999, so multiples of 1000 can be priority
     -- highest priority goes first. if priority is same, roll a dice to decide
-    pl.priority = _min(C_PRIORITY_SWITCH, priority_class+pl.active:getstat'speed')
+    pl.priority = _min(C_PRIORITY_SWITCH, priority_class+pl.active:f_movehelp_getstat'speed')
 end $$
 
 |[f_get_other_pl]| function(game, pl)
@@ -148,7 +148,7 @@ end $$
 
 -- pokemon stadium has a 1/65536 chance of a move missing
 |[f_does_move_miss]| function(attacker, defender, move)
-    return _rnd(defender.evasion) > move.accuracy/100*attacker:getstat'accuracy' or f_flr_rnd'256' == 0 and f_flr_rnd'256' == 0
+    return _rnd(defender.evasion) > move.accuracy/100*attacker:f_movehelp_getstat'accuracy' or f_flr_rnd'256' == 0 and f_flr_rnd'256' == 0
 end $$
 
 -- returns .5, 0, 1, or 2
@@ -167,10 +167,10 @@ end $$
     local iscontact = move.type % 2 == 1
     local critical = f_get_crit_ratio(attacker.base_speed)
     local stab = (move.type == attacker.type1 or move.type == attacker.type2) and 1.5 or 1
-    local attack, defense = attacker:getstat'special', defender:getstat'special'
+    local attack, defense = attacker:f_movehelp_getstat'special', defender:f_movehelp_getstat'special'
 
     if iscontact then
-        attack, defense = attacker:getstat'attack', defender:getstat'defense'
+        attack, defense = attacker:f_movehelp_getstat'attack', defender:f_movehelp_getstat'defense'
         if defender.reflected then
             defense *= 2
         end

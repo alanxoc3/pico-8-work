@@ -23,7 +23,8 @@ Main move modifications from pokemon stadium:
     - whirlwind: has later priority & switch random pokemon from opponent.
     - roar:      has later priority & switch random pokemon from opponent.
     - teleport:  has later priority & switch random pokemon from user.
-    - swift:     always hits. no accuracy check. hits dig, fly, and pokemon behind substitute.
+    - swift:     always hits no matter what.
+    - transform: doesn't copy stat modifications
 
 Other modifications from pokemon stadium:
 

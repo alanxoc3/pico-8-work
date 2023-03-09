@@ -361,7 +361,7 @@ end $$
     _foreach(c_stages, function(s)
         local stage = player.active.stages[s.key] or 0
         if stage ~= 0 then
-            _add(stages, {name=s.name..' '..(stage > 0 and '+' or '-').._abs(stage)})
+            _add(stages, {name=s.name..' '..(stage > 0 and '+' or '-').._abs(stage)..'/6'})
         end
     end)
 

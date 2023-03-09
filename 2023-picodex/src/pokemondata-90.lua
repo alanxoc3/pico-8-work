@@ -80,7 +80,9 @@ c_major_names[0] = "" -- for "none" status
 -- pp 0 means it is struggle
 -- dmg 0 means it likely changes status or has an effect.
 |[c_moves]| f_zobj[[]] $$
-|[c_moves_raw]| f_zobj[[
+
+-- this can't be in the global zobj struct because it references "%" funcs.
+_g.c_moves_raw = f_zobj[[
    --  "name",     type        pp  dmg  acc
   -1;, "none",     T_NONE,     0,  0,   0, %f_nop
   ;0;, "struggle", T_BIRD,     0,  50,  1, %f_nop
@@ -142,7 +144,7 @@ c_major_names[0] = "" -- for "none" status
    ;;, "fly",      T_FLYING,   15, 90,  95,  %f_nop -- 52
    ;;, "surf",     T_WATER,    15, 90,  100, %f_move_default -- 53
    ;;, "strength", T_NORMAL,   15, 80,  100, %f_move_default -- 54
-   ;;, "flash",    T_NORMAL,   20, 0,   100, %f_nop -- 55
+   ;;, "flash",    T_NORMAL,   20, 0,   100, %f_move_stat_other, accuracy, -1 -- 55
 
     -- remaining moves (besides struggle)
    ;;, "pound",    T_NORMAL,   35, 40,  100, %f_move_default -- 56
@@ -164,20 +166,20 @@ c_major_names[0] = "" -- for "none" status
    ;;, "doubkick", T_FIGHTING, 30, 30,  100, %f_nop -- 72
    ;;, "jumpkck",  T_FIGHTING, 10, 100, 95,  %f_nop -- 73
    ;;, "rllngkck", T_FIGHTING, 15, 60,  85,  %f_nop -- 74
-   ;;, "sandatck", T_GROUND,   15, 0,   100, %f_nop -- 75
+   ;;, "sandatck", T_GROUND,   15, 0,   100, %f_move_stat_other, accuracy, -1 -- 75
    ;;, "headbutt", T_NORMAL,   15, 70,  100, %f_nop -- 76
    ;;, "hornatck", T_NORMAL,   25, 65,  100, %f_move_default -- 77
    ;;, "furyatck", T_NORMAL,   20, 15,  85,  %f_nop -- 78
    ;;, "tackle",   T_NORMAL,   35, 40,  100, %f_move_default -- 79
    ;;, "wrap",     T_NORMAL,   20, 15,  90,  %f_nop -- 80
    ;;, "thrash",   T_NORMAL,   10, 120, 100, %f_nop -- 81
-   ;;, "tailwhip", T_NORMAL,   30, 0,   100, %f_nop -- 82
+   ;;, "tailwhip", T_NORMAL,   30, 0,   100, %f_move_stat_other, defense, -1 -- 82
    ;;, "psnsting", T_POISON,   35, 15,  100, %f_nop -- 83
    ;;, "twineedl", T_BUG,      20, 25,  100, %f_nop -- 84
    ;;, "pinmisil", T_BUG,      20, 25,  95,  %f_nop -- 85
-   ;;, "leer",     T_NORMAL,   30, 0,   100, %f_nop -- 86
+   ;;, "leer",     T_NORMAL,   30, 0,   100, %f_move_stat_other, defense, -1 -- 86
    ;;, "bite",     T_NORMAL,   25, 60,  100, %f_nop -- 87
-   ;;, "growl",    T_NORMAL,   40, 0,   100, %f_nop -- 88
+   ;;, "growl",    T_NORMAL,   40, 0,   100, %f_move_stat_other, attack, -1 -- 88
    ;;, "roar",     T_NORMAL,   20, 0,   100, %f_nop -- 89
    ;;, "sing",     T_NORMAL,   15, 0,   55,  %f_nop -- 90
    ;;, "supersnc", T_NORMAL,   20, 0,   55,  %f_nop -- 91
@@ -201,7 +203,7 @@ c_major_names[0] = "" -- for "none" status
    ;;, "stunspor", T_GRASS,    30, 0,   75,  %f_nop -- 109
    ;;, "slppowdr", T_GRASS,    15, 0,   75,  %f_nop -- 110
    ;;, "petldanc", T_GRASS,    10, 120, 100, %f_nop -- 111
-   ;;, "strngsht", T_BUG,      40, 0,   95,  %f_nop -- 112
+   ;;, "strngsht", T_BUG,      40, 0,   95,  %f_move_stat_other, speed, -1 -- 112
    ;;, "firespin", T_FIRE,     15, 35,  85,  %f_nop -- 113
    ;;, "thndshck", T_ELECTRIC, 30, 40,  100, %f_nop -- 114
    ;;, "rockthrw", T_ROCK,     15, 50,  90,  %f_move_default -- 115
@@ -211,11 +213,11 @@ c_major_names[0] = "" -- for "none" status
    ;;, "agility",  T_PSYCHIC,  30, 0,   0,   %f_move_stat_self, speed, 2 -- 119
    ;;, "quickatk", T_NORMAL,   30, 40,  100, %f_nop -- 120
    ;;, "nghtshde", T_GHOST,    15, -1,  100, %f_nop -- 121
-   ;;, "screech",  T_NORMAL,   40, 0,   85,  %f_nop -- 122
+   ;;, "screech",  T_NORMAL,   40, 0,   85,  %f_move_stat_other, defense, -2 -- 122
    ;;, "recover",  T_NORMAL,   5,  0,   0,   %f_nop -- 123
    ;;, "harden",   T_NORMAL,   30, 0,   0,   %f_move_stat_self, defense, 1 -- 124
    ;;, "minimize", T_NORMAL,   10, 0,   0,   %f_move_stat_self, evasion, 1 -- 125
-   ;;, "smokscrn", T_NORMAL,   20, 0,   100, %f_nop -- 126
+   ;;, "smokscrn", T_NORMAL,   20, 0,   100, %f_move_stat_other, accuracy, -1 -- 126
    ;;, "cnfusray", T_GHOST,    10, 0,   100, %f_nop -- 127
    ;;, "withdraw", T_WATER,    40, 0,   0,   %f_move_stat_self, defense, 1 -- 128
    ;;, "dfnscurl", T_NORMAL,   40, 0,   0,   %f_move_stat_self, defense, 1 -- 129
@@ -233,14 +235,14 @@ c_major_names[0] = "" -- for "none" status
    ;;, "spikcann", T_NORMAL,   15, 20,  100, %f_nop -- 141
    ;;, "constrct", T_NORMAL,   35, 10,  100, %f_nop -- 142
    ;;, "amnesia",  T_PSYCHIC,  20, 0,   0,   %f_move_stat_self, special, 2 -- 143
-   ;;, "kinesis",  T_PSYCHIC,  15, 0,   80,  %f_nop -- 144
+   ;;, "kinesis",  T_PSYCHIC,  15, 0,   80,  %f_move_stat_other, accuracy, -1 -- 144
    ;;, "hijmpkck", T_FIGHTING, 10, 130, 90,  %f_nop -- 145
    ;;, "glare",    T_NORMAL,   30, 0,   100, %f_nop -- 146
    ;;, "psngas",   T_POISON,   40, 0,   90,  %f_nop -- 147
    ;;, "barrage",  T_NORMAL,   20, 15,  85,  %f_nop -- 148
    ;;, "leechlif", T_BUG,      10, 80,  100, %f_nop -- 149
    ;;, "lovekiss", T_NORMAL,   10, 0,   75,  %f_nop -- 150
-   ;;, "tranform", T_NORMAL,   10, 0,   0,   %f_nop -- 151
+   ;;, "tranform", T_NORMAL,   10, 0,   0,   %f_move_transform -- 151
    ;;, "bubble",   T_WATER,    30, 40,  100, %f_nop -- 152
    ;;, "dizypnch", T_NORMAL,   10, 70,  100, %f_move_default -- 153
    ;;, "spore",    T_GRASS,    15, 0,   100, %f_nop -- 154
@@ -254,7 +256,7 @@ c_major_names[0] = "" -- for "none" status
    ;;, "convrson", T_NORMAL,   30, 0,   0,   %f_nop -- 162
    ;;, "suprfang", T_NORMAL,   10, -1,  90,  %f_nop -- 163
    ;;, "slash",    T_NORMAL,   20, 70,  100, %f_nop -- 164
-]] $$
+]]
 
 -- trainers are given moves at lvl 50
 -- could get an error if a trainer doesn't have 6 pkmn, because of assumptions i make when starting a fight
