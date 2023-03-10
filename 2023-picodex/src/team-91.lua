@@ -114,7 +114,6 @@ end $$
             move[4],
             move[5],
             function(m, p0, other)
-                _printh(move[1])
                 return move[6](m, p0, other, _unpack(params))
             end,
             i

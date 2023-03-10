@@ -15,13 +15,24 @@
     pl.priority = C_PRIORITY_SWITCH
 end $$
 
+-- metronome would call this function as well as select_move
+|[f_movelogic]| function(self, move)
+    f_addaction(self, self, "|uses|"..move.name, function(self, other)
+        f_movehelp_update_pp(move)
+
+        if f_does_move_miss(self.active, other.active, move) then
+            f_addaction(self, self, "|missed|"..move.name)
+        else
+            move:func(self, other)
+        end
+    end)
+end $$
+
 |[f_select_move]| function(pl, move)
     pl.actions = {}
     local priority_class = C_PRIORITY_ATTACK
 
-    f_addaction(pl, pl, "|uses|"..move.name, function(s, o) -- self, other
-        move:func(s, o)
-    end)
+    f_movelogic(pl, move)
 
     -- hardcoding the only moves that can change priority for now. Maybe there is a more token efficient way to do this?
     if move.num == M_QUICK_ATTACK then priority_class = C_PRIORITY_QUICKATTACK end
@@ -148,6 +159,10 @@ end $$
 
 -- pokemon stadium has a 1/65536 chance of a move missing
 |[f_does_move_miss]| function(attacker, defender, move)
+    -- todo: token crunch, think about a ~= and func again.
+    if move.accuracy <= 0  then return false end -- this catches swift and self status moves
+    if defender.digging and move.num ~= M_FISSURE and move.num ~= M_EARTHQUAKE                          then return true end
+    if defender.flying  and move.num ~= M_GUST    and move.num ~= M_THUNDER and move.num ~= M_WHIRLWIND then return true end
     return _rnd(defender.evasion) > move.accuracy/100*attacker:f_movehelp_getstat'accuracy' or f_flr_rnd'256' == 0 and f_flr_rnd'256' == 0
 end $$
 
@@ -158,10 +173,8 @@ end $$
 
 -- see: https://web.archive.org/web/20140711082447/http://www.upokecenter.com/content/pokemon-red-version-blue-version-and-yellow-version-timing-notes
 -- and: https://bulbapedia.bulbagarden.net/wiki/Damage
+-- only returns "zero" if there is a resistance
 |[f_calc_move_damage]| function(attacker, defender, move)
-    -- this if check is needed for moves with a "-1" damage. though technically those moves shouldn't be called by this function.
-    if move.damage <= 0 then return 0 end
-
     -- todo: need to factor in if burned
     -- todo: token crunch this algorithm
     local iscontact = move.type % 2 == 1

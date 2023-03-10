@@ -31,8 +31,6 @@ end $$
 |[f_movehelp_getstat]| function(a, stat)
     -- evasion and accuracy have a different formula: https://www.smogon.com/rb/articles/stadium_guide
     -- all stats cap at 999: https://www.smogon.com/rb/articles/rby_mechanics_guide
-    -- and i'm giving it a _min of 1 too, because zero messes things up
-
     local stage = a.stages[stat] or 0
     return _ceil(_mid(1, 999,
         a[stat]*(
@@ -55,25 +53,15 @@ end $$
 ---------- move funcs ----------
 --------------------------------
 |[f_move_roar]| function(move, self, other)
-    f_movehelp_update_pp(move)
-
-    if f_does_move_miss(self.active, other.active, move) then
-        -- todo: token crunch combine missed logic with default move
-        f_addaction(self, self, "|missed|"..move.name)
+    local pkmn = f_movehelp_switch(other)
+    if pkmn then
+        f_select_switch(other, pkmn)
     else
-        local pkmn = f_movehelp_switch(other)
-        if pkmn then
-            f_select_switch(other, pkmn)
-        else
-            f_addaction(self, self, "|failed|"..move.name)
-        end
+        f_addaction(self, self, "|failed|"..move.name)
     end
-
 end $$
 
 |[f_move_stat_self]| function(move, self, other, key, stage)
-    f_movehelp_update_pp(move)
-
     -- todo: add message if stat does not increase
     if f_movehelp_incstat(self.active, key, stage) then
         -- todo: token crunch create function that formats a num with +/- & apply it to move_stat_self and battle logic
@@ -85,53 +73,33 @@ end $$
 
 -- todo: token crunch, combine logic with move_stat_self
 |[f_move_stat_other]| function(move, self, other, key, stage)
-    f_movehelp_update_pp(move)
-
-    if f_does_move_miss(self.active, other.active, move) then
-        -- todo: token crunch combine missed logic with default move
-        f_addaction(self, self, "|missed|"..move.name)
+    -- todo: add message if stat does not increase
+    if f_movehelp_incstat(other.active, key, stage) then
+        -- todo: token crunch create function that formats a num with +/- & apply it to move_stat_self and battle logic
+        f_addaction(self, other, "|-"..abs(stage).."/6|"..key)
     else
-        -- todo: add message if stat does not increase
-        if f_movehelp_incstat(other.active, key, stage) then
-            -- todo: token crunch create function that formats a num with +/- & apply it to move_stat_self and battle logic
-            f_addaction(self, other, "|-"..abs(stage).."/6|"..key)
-        else
-            f_addaction(self, self, "|failed|"..move.name)
-        end
+        f_addaction(self, self, "|failed|"..move.name)
     end
 end $$
 
 |[f_move_major_other]| function(move, self, other, majorind)
-    f_movehelp_update_pp(move)
-
-    if f_does_move_miss(self.active, other.active, move) then
-        -- todo: token crunch combine missed logic with default move and stat other
-        f_addaction(self, self, "|missed|"..move.name)
+    -- todo: add message if stat does not increase
+    if f_movehelp_major(other.active, majorind) then
+        f_addaction(self, other, "|is|"..c_major_names[majorind])
     else
-        -- todo: add message if stat does not increase
-        if f_movehelp_major(other.active, majorind) then
-            f_addaction(self, other, "|is|"..c_major_names[majorind])
-        else
-            f_addaction(self, self, "|failed|"..move.name)
-        end
+        f_addaction(self, self, "|failed|"..move.name)
     end
 end $$
 
 |[f_move_transform]| function(move, self, other)
-    f_movehelp_update_pp(move)
-
     if self.active.transform then
         f_addaction(self, self, "|failed|transform")
     else
         f_addaction(self, self, "|copied|"..other.active.name, function()
             self.active.transform = true
-            self.active.num     = other.active.num
-            self.active.attack  = other.active.attack
-            self.active.defense = other.active.defense
-            self.active.speed   = other.active.speed
-            self.active.special = other.active.special
-            self.active.type1   = other.active.type1
-            self.active.type2   = other.active.type2
+            foreach(split'num,attack,defense,speed,special,type1,type2', function(key)
+                self.active[key] = other.active[key]
+            end)
 
             self.active.mynewmoves = {}
             foreach(other.active.mynewmoves, function(m)
@@ -143,20 +111,32 @@ end $$
     end
 end $$
 
-|[f_move_default]| function(move, self, other)
-    f_movehelp_update_pp(move)
-
+|[f_movehelper_resistance]| function(move, self, other, func)
     local dmg = f_calc_move_damage(self.active, other.active, move)
     if dmg > 0 then
-        if f_does_move_miss(self.active, other.active, move) then
-            f_addaction(self, self, "|missed|"..move.name)
-        else
-            f_addaction(self, other, "|-"..dmg.."|hitpoints", function()
-                other.active.shared.hp = _max(0, other.active.shared.hp-dmg)
-            end)
-        end
-    -- otherwise, it is splash for now i guess
+        func(dmg)
     else
-        f_addaction(self, self, "|does|nothing")
+        f_addaction(self, other, "|resisted|"..move.name)
+    end
+end $$
+
+|[f_move_default]| function(move, self, other)
+    f_movehelper_resistance(move, self, other, function(dmg)
+        f_addaction(self, other, "|-"..dmg.."|hitpoints", function()
+            other.active.shared.hp = _max(0, other.active.shared.hp-dmg)
+        end)
+    end)
+end $$
+
+-- ohko moves only work on slower foes
+|[f_move_ohko]| function(move, self, other)
+    if self.active.speed >= other.active.speed then
+        f_movehelper_resistance(move, self, other, function()
+            f_addaction(self, other, "|-"..other.active.shared.hp.."|hitpoints", function()
+                other.active.shared.hp = 0
+            end)
+        end)
+    else
+        f_addaction(self, self, "|failed|"..move.name)
     end
 end $$

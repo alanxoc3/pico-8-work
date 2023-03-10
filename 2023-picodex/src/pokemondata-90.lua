@@ -82,6 +82,10 @@ c_major_names[0] = "none" -- for "none" status
 |[c_moves]| f_zobj[[]] $$
 
 -- this can't be in the global zobj struct because it references "%" funcs.
+
+-- accuracy: 0 means can't miss. -1 means can't miss, but displays "??". else means can miss.
+-- damage:   0 means no damage.  -1 means variable damage & shows  "??". else means normal dmg formula. n't miss. -1 means can't miss, but displays "??". else means can miss.
+-- pp:       0 means infinite pp. else means finite pp.
 _g.c_moves_raw = f_zobj[[
    --  "name",     type        pp  dmg  acc
   -1;, "none",     T_NONE,     0,  0,   0, %f_nop
@@ -91,10 +95,10 @@ _g.c_moves_raw = f_zobj[[
    ;;, "megapnch", T_NORMAL,   20, 80,  85,  %f_move_default                        -- 1
    ;;, "razrwind", T_NORMAL,   10, 80,  100, %f_nop                                 -- 2
    ;;, "sworddnc", T_NORMAL,   20, 0,   0,   %f_move_stat_self, attack, 2           -- 3
-   ;;, "whrlwind", T_NORMAL,   20, 0,   0,   %f_nop                                 -- 4   DIFF: switches opponent with random pokemon & hits pokemon using fly
+   ;;, "whrlwind", T_NORMAL,   20, 0,   85,  %f_nop                                 -- 4   DIFF: switches opponent with random pokemon & hits pokemon using fly
    ;;, "megakick", T_NORMAL,   5,  120, 75,  %f_move_default                        -- 5
    ;;, "toxic",    T_POISON,   10, 0,   90,  %f_nop                                 -- 6
-   ;;, "horndril", T_NORMAL,   5,  -1,  30,  %f_nop                                 -- 7
+   ;;, "horndril", T_NORMAL,   5,  -1,  30,  %f_move_ohko                           -- 7
    ;;, "bodyslam", T_NORMAL,   15, 85,  100, %f_nop                                 -- 8
    ;;, "takedown", T_NORMAL,   20, 90,  85,  %f_nop                                 -- 9
    ;;, "doubedge", T_NORMAL,   15, 120, 100, %f_nop                                 -- 10
@@ -105,35 +109,35 @@ _g.c_moves_raw = f_zobj[[
    ;;, "hyprbeam", T_NORMAL,   5,  150, 90,  %f_nop                                 -- 15
    ;;, "payday",   T_NORMAL,   20, 40,  100, %f_move_default                        -- 16
    ;;, "submsion", T_FIGHTING, 20, 80,  80,  %f_nop                                 -- 17
-   ;;, "counter",  T_FIGHTING, 20, -1,  100, %f_nop                                 -- 18
-   ;;, "siestoss", T_FIGHTING, 20, -1,  100, %f_nop                                 -- 19
-   ;;, "rage",     T_NORMAL,   20, 20,  100, %f_nop                                 -- 20
+   ;;, "counter",  T_FIGHTING, 20, -1,  100, %f_nop                                 -- 18  DIFF: respects resistance
+   ;;, "siestoss", T_FIGHTING, 20, -1,  100, %f_nop                                 -- 19  DIFF: respects resistance
+   ;;, "rage",     T_NORMAL,   20, 20,  100, %f_nop                                 -- 20  DIFF: you can switch out while using rage
    ;;, "megdrain", T_GRASS,    15, 40,  100, %f_nop                                 -- 21
    ;;, "solrbeam", T_GRASS,    10, 120, 100, %f_nop                                 -- 22
-   ;;, "drgnrage", T_DRAGON,   10, -1,  100, %f_nop                                 -- 23
+   ;;, "drgnrage", T_DRAGON,   10, -1,  100, %f_nop                                 -- 23  DIFF: respects resistance
    ;;, "thndrblt", T_ELECTRIC, 15, 90,  100, %f_nop                                 -- 24
    ;;, "thunder",  T_ELECTRIC, 10, 110, 70,  %f_nop                                 -- 25  DIFF: hits pokemon using fly + double damage
    ;;, "earthqke", T_GROUND,   10, 100, 100, %f_move_default                        -- 26  DIFF: hits pokemon using dig + double damage
-   ;;, "fissure",  T_GROUND,   5,  -1,  30,  %f_nop                                 -- 27  DIFF: hits pokemon underground
+   ;;, "fissure",  T_GROUND,   5,  -1,  30,  %f_move_ohko                           -- 27  DIFF: hits pokemon underground
    ;;, "dig",      T_GROUND,   10, 80,  100, %f_nop                                 -- 28
    ;;, "psychic",  T_PSYCHIC,  10, 90,  100, %f_nop                                 -- 29
    ;;, "teleport", T_PSYCHIC,  20, 0,   0,   %f_nop                                 -- 30  DIFF: switches with random pokemon from user's team
-   ;;, "mimic",    T_NORMAL,   10, 0,   0,   %f_nop                                 -- 31
+   ;;, "mimic",    T_NORMAL,   10, 0,   0,   %f_nop                                 -- 31  DIFF: doesn't miss
    ;;, "doubteam", T_NORMAL,   15, 0,   0,   %f_move_stat_self, evasion, 1          -- 32
    ;;, "reflect",  T_PSYCHIC,  20, 0,   0,   %f_nop                                 -- 33
-   ;;, "bide",     T_NORMAL,   10, -1,  0,   %f_nop                                 -- 34
-   ;;, "metronom", T_NORMAL,   10, 0,   0,   %f_nop                                 -- 35
+   ;;, "bide",     T_NORMAL,   10, -1,  100, %f_nop                                 -- 34  DIFF: doesn't bypass accuracy check & respects resistance
+   ;;, "metrnome", T_NORMAL,   10, 0,   0,   %f_nop                                 -- 35
    ;;, "selfdstr", T_NORMAL,   5,  200, 100, %f_nop                                 -- 36
    ;;, "eggbomb",  T_NORMAL,   10, 100, 75,  %f_move_default                        -- 37
    ;;, "fireblst", T_FIRE,     5,  110, 85,  %f_nop                                 -- 38
-   ;;, "swift",    T_NORMAL,   20, 60,  -1,  %f_nop                                 -- 39  DIFF: always hits, no matter what
+   ;;, "swift",    T_NORMAL,   20, 60,  0,   %f_move_default                        -- 39  DIFF: always hits, no matter what
    ;;, "skulbash", T_NORMAL,   10, 130, 100, %f_nop                                 -- 40
    ;;, "softboil", T_NORMAL,   5,  0,   0,   %f_nop                                 -- 41
    ;;, "dreameat", T_PSYCHIC,  15, 100, 100, %f_nop                                 -- 42
    ;;, "skyattck", T_FLYING,   5,  140, 90,  %f_nop                                 -- 43
    ;;, "rest",     T_PSYCHIC,  5,  0,   0,   %f_nop                                 -- 44
    ;;, "thndrwav", T_ELECTRIC, 20, 0,   90,  %f_move_major_other, C_MAJOR_PARALYZED -- 45
-   ;;, "psywave",  T_PSYCHIC,  15, -1,  100, %f_nop                                 -- 46
+   ;;, "psywave",  T_PSYCHIC,  15, -1,  100, %f_nop                                 -- 46  DIFF: respects resistance
    ;;, "explsion", T_NORMAL,   5,  250, 100, %f_nop                                 -- 47
    ;;, "rockslid", T_ROCK,     10, 75,  90,  %f_move_default                        -- 48
    ;;, "triattck", T_NORMAL,   10, 80,  100, %f_move_default                        -- 49
@@ -156,7 +160,7 @@ _g.c_moves_raw = f_zobj[[
    ;;, "thndpnch", T_ELECTRIC, 15, 75,  100, %f_nop                                 -- 62
    ;;, "scratch",  T_NORMAL,   35, 40,  100, %f_move_default                        -- 63
    ;;, "vicegrip", T_NORMAL,   30, 55,  100, %f_move_default                        -- 64
-   ;;, "guilotin", T_NORMAL,   5,  -1,  30,  %f_nop                                 -- 65
+   ;;, "guilotin", T_NORMAL,   5,  -1,  30,  %f_move_ohko                           -- 65
    ;;, "gust",     T_FLYING,   35, 40,  100, %f_move_default                        -- 66  DIFF: hits pokemon using fly & double damage
    ;;, "wingatck", T_FLYING,   35, 60,  100, %f_move_default                        -- 67
    ;;, "bind",     T_NORMAL,   20, 15,  85,  %f_nop                                 -- 68
@@ -183,7 +187,7 @@ _g.c_moves_raw = f_zobj[[
    ;;, "roar",     T_NORMAL,   20, 0,   100, %f_move_roar                           -- 89  DIFF: switches opponent with random pokemon
    ;;, "sing",     T_NORMAL,   15, 0,   55,  %f_move_major_other, C_MAJOR_SLEEPING  -- 90
    ;;, "supersnc", T_NORMAL,   20, 0,   55,  %f_nop                                 -- 91
-   ;;, "sonicbom", T_NORMAL,   20, -1,  90,  %f_nop                                 -- 92
+   ;;, "sonicbom", T_NORMAL,   20, -1,  90,  %f_nop                                 -- 92  DIFF: respects resistance
    ;;, "disable",  T_NORMAL,   20, 0,   100, %f_nop                                 -- 93
    ;;, "acid",     T_POISON,   30, 40,  100, %f_nop                                 -- 94
    ;;, "ember",    T_FIRE,     25, 40,  100, %f_nop                                 -- 95
@@ -212,7 +216,7 @@ _g.c_moves_raw = f_zobj[[
    ;;, "meditate", T_PSYCHIC,  40, 0,   0,   %f_move_stat_self, attack, 1           -- 118
    ;;, "agility",  T_PSYCHIC,  30, 0,   0,   %f_move_stat_self, speed, 2            -- 119
    ;;, "quickatk", T_NORMAL,   30, 40,  100, %f_move_default                        -- 120
-   ;;, "nghtshde", T_GHOST,    15, -1,  100, %f_nop                                 -- 121
+   ;;, "nghtshde", T_GHOST,    15, -1,  100, %f_nop                                 -- 121 DIFF: respects resistance now
    ;;, "screech",  T_NORMAL,   40, 0,   85,  %f_move_stat_other, defense, -2        -- 122
    ;;, "recover",  T_NORMAL,   5,  0,   0,   %f_nop                                 -- 123
    ;;, "harden",   T_NORMAL,   30, 0,   0,   %f_move_stat_self, defense, 1          -- 124
@@ -254,7 +258,7 @@ _g.c_moves_raw = f_zobj[[
    ;;, "hyprfang", T_NORMAL,   15, 80,  90,  %f_nop                                 -- 160
    ;;, "sharpen",  T_NORMAL,   30, 0,   0,   %f_move_stat_self, attack, 1           -- 161
    ;;, "convrson", T_NORMAL,   30, 0,   0,   %f_nop                                 -- 162
-   ;;, "suprfang", T_NORMAL,   10, -1,  90,  %f_nop                                 -- 163
+   ;;, "suprfang", T_NORMAL,   10, -1,  90,  %f_nop                                 -- 163 DIFF: respects resistance now
    ;;, "slash",    T_NORMAL,   20, 70,  100, %f_nop                                 -- 164
 ]]
 
