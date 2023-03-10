@@ -23,7 +23,9 @@ end $$
         if f_does_move_miss(self.active, other.active, move) then
             f_addaction(self, self, "|missed|"..move.name)
         else
-            move:func(self, other)
+            if move:func(self, other) then
+                f_addaction(self, self, "|failed|"..move.name)
+            end
         end
     end)
 end $$

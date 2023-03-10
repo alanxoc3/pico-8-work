@@ -108,16 +108,14 @@ end $$
         for i=7,#move do _add(params, move[i]) end
         c_moves[i] = f_zobj([[
             name,@, type,@, pp,@, maxpp,~pp, damage,@, accuracy,@, func,@, num,@
-        ]], move[1],
-            move[2],
-            move[3],
-            move[4],
-            move[5],
-            function(m, p0, other)
-                return move[6](m, p0, other, _unpack(params))
-            end,
-            i
-        )
+        ]], move[1], move[2], move[3], move[4], move[5], function(m, p0, other)
+            local envparams = f_zobj([[
+                move,@, self,@, other,@,
+                selfactive,@, otheractive,@,
+                param1,@, param2,@
+            ]], m, p0, other, p0.active, other.active)
+            return move[6](envparams, _unpack(params))
+        end, i)
     end
 end $$
 

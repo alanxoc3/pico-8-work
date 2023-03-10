@@ -52,67 +52,123 @@ end $$
 --------------------------------
 ---------- move funcs ----------
 --------------------------------
-|[f_move_roar]| function(move, self, other)
+-- move funcs take in "_ENV", which has some useful things
+-- returning "true" means the move failed
+
+|[f_move_implement]| function(_ENV)
+    -- todo: wait. remove me when all moves are done
+    f_addaction(self, self, "|not|implemented")
+end $$
+
+-- todo: moves should have a slot index (for mimic and maybe something else). metronome/mirrormove should pass it's slot index to the new move it creates.
+|[f_move_metronome]| function(_ENV)
+    -- movelogic will subtract pp from new move, so that doesn't matter
+    f_movelogic(self, f_create_move(f_flr_rnd(164)+1))
+end $$
+
+-- move funcs take in "_ENV", which has some useful things
+-- returning "true" means the move failed
+|[f_move_roar]| function(_ENV)
     local pkmn = f_movehelp_switch(other)
     if pkmn then
         f_select_switch(other, pkmn)
     else
-        f_addaction(self, self, "|failed|"..move.name)
+        return true
     end
 end $$
 
-|[f_move_stat_self]| function(move, self, other, key, stage)
-    -- todo: add message if stat does not increase
-    if f_movehelp_incstat(self.active, key, stage) then
+|[f_move_teleport]| function(_ENV)
+    local pkmn = f_movehelp_switch(self)
+    if pkmn then
+        f_select_switch(self, pkmn)
+    else
+        return true
+    end
+end $$
+
+|[f_move_stat_self]| function(_ENV, key, stage)
+    if f_movehelp_incstat(selfactive, key, stage) then
         -- todo: token crunch create function that formats a num with +/- & apply it to move_stat_self and battle logic
         f_addaction(self, self, "|+"..stage.."/6|"..key)
     else
-        f_addaction(self, self, "|failed|"..move.name)
+        return true
     end
 end $$
 
 -- todo: token crunch, combine logic with move_stat_self
-|[f_move_stat_other]| function(move, self, other, key, stage)
-    -- todo: add message if stat does not increase
-    if f_movehelp_incstat(other.active, key, stage) then
+|[f_move_stat_other]| function(_ENV, key, stage)
+    if f_movehelp_incstat(otheractive, key, stage) then
         -- todo: token crunch create function that formats a num with +/- & apply it to move_stat_self and battle logic
-        f_addaction(self, other, "|-"..abs(stage).."/6|"..key)
+        f_addaction(self, other, "|-".._abs(stage).."/6|"..key)
     else
-        f_addaction(self, self, "|failed|"..move.name)
+        return true
     end
 end $$
 
-|[f_move_major_other]| function(move, self, other, majorind)
-    -- todo: add message if stat does not increase
-    if f_movehelp_major(other.active, majorind) then
+|[f_move_toxic]| function(_ENV)
+    if f_move_major_other(_ENV, C_MAJOR_POISONED) and otheractive.major ~= C_MAJOR_POISONED then
+        return true
+    end
+
+    return f_move_minor_other(_ENV, 'toxiced')
+end $$
+
+|[f_move_splash]| function(_ENV)
+    f_addaction(self, self, "|does|nothing")
+end $$
+
+|[f_move_major_other]| function(_ENV, majorind)
+    if f_movehelp_major(otheractive, majorind) then
         f_addaction(self, other, "|is|"..c_major_names[majorind])
     else
-        f_addaction(self, self, "|failed|"..move.name)
+        return true
     end
 end $$
 
-|[f_move_transform]| function(move, self, other)
-    if self.active.transform then
-        f_addaction(self, self, "|failed|transform")
+-- for confuse, flinch, leechseed
+|[f_move_minor_other]| function(_ENV, minor)
+    if not otheractive[minor] then
+        otheractive[minor] = true
+        -- todo: minor here will break with minification... i should change minors to numbers instead
+        f_addaction(self, other, "|is|"..minor)
     else
-        f_addaction(self, self, "|copied|"..other.active.name, function()
-            self.active.transform = true
-            foreach(split'num,attack,defense,speed,special,type1,type2', function(key)
-                self.active[key] = other.active[key]
+        return true
+    end
+end $$
+
+-- for focusenergy...
+|[f_move_minor_self]| function(_ENV, minor)
+    if not selfactive[minor] then
+        selfactive[minor] = true
+        -- todo: minor here will break with minification... i should change minors to numbers instead
+        f_addaction(self, self, "|is|"..minor)
+    else
+        return true
+    end
+end $$
+
+|[f_move_transform]| function(_ENV)
+    if selfactive.transform then
+        return true
+    else
+        f_addaction(self, self, "|copied|"..otheractive.name, function()
+            selfactive.transform = true
+            _foreach(_split'num,attack,defense,speed,special,type1,type2', function(key)
+                selfactive[key] = otheractive[key]
             end)
 
-            self.active.mynewmoves = {}
-            foreach(other.active.mynewmoves, function(m)
+            selfactive.mynewmoves = {}
+            _foreach(otheractive.mynewmoves, function(m)
                 local newmove = f_create_move(m.num)
                 newmove.pp, newmove.maxpp = 5, 5
-                _add(self.active.mynewmoves, newmove)
+                _add(selfactive.mynewmoves, newmove)
             end)
         end)
     end
 end $$
 
-|[f_movehelper_resistance]| function(move, self, other, func)
-    local dmg = f_calc_move_damage(self.active, other.active, move)
+|[f_movehelper_resistance]| function(_ENV, func)
+    local dmg = f_calc_move_damage(selfactive, otheractive, move)
     if dmg > 0 then
         func(dmg)
     else
@@ -120,23 +176,38 @@ end $$
     end
 end $$
 
-|[f_move_default]| function(move, self, other)
-    f_movehelper_resistance(move, self, other, function(dmg)
+|[f_move_default]| function(_ENV)
+    f_movehelper_resistance(_ENV, function(dmg)
         f_addaction(self, other, "|-"..dmg.."|hitpoints", function()
-            other.active.shared.hp = _max(0, other.active.shared.hp-dmg)
+            otheractive.shared.hp = _max(0, otheractive.shared.hp-dmg)
         end)
     end)
 end $$
 
+-- for moves that do damage, then an extra effect
+-- todo: movepercent logic can probably be combined with movedefault logic ( could have < (percent or 0) and 100 means always apply
+|[f_move_percent]| function(_ENV, percent, func, ...)
+    local params = {...}
+    f_movehelper_resistance(_ENV, function(dmg)
+        f_addaction(self, other, "|-"..dmg.."|hitpoints", function()
+            otheractive.shared.hp = _max(0, otheractive.shared.hp-dmg)
+        end)
+
+        if _rnd'100' < percent then
+            func(_ENV, _unpack(params))
+        end
+    end)
+end $$
+
 -- ohko moves only work on slower foes
-|[f_move_ohko]| function(move, self, other)
-    if self.active.speed >= other.active.speed then
-        f_movehelper_resistance(move, self, other, function()
-            f_addaction(self, other, "|-"..other.active.shared.hp.."|hitpoints", function()
-                other.active.shared.hp = 0
+|[f_move_ohko]| function(_ENV)
+    if selfactive.speed >= otheractive.speed then
+        f_movehelper_resistance(_ENV, function()
+            f_addaction(self, other, "|-"..otheractive.shared.hp.."|hitpoints", function()
+                otheractive.shared.hp = 0
             end)
         end)
     else
-        f_addaction(self, self, "|failed|"..move.name)
+        return true
     end
 end $$
