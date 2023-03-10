@@ -25,6 +25,5 @@ end $$
     _pal()
 end $$
 
-|[f_turn_draw2]|  function(game)
-    f_print_draw2_message(game.cur_action.pl.name)
-end $$
+|[f_turn_draw2]|  function(game) f_print_draw2_message(game.cur_action.pl.name) end $$
+|[f_pstat_draw2]| function(game) f_print_draw2_message(game.p0.statplayer.name) end $$

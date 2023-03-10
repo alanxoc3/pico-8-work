@@ -4,11 +4,28 @@
 -- todo: initial wave: make every move do things (rest sets sleep...)
 -- todo: second wave: make states actually have an effect and unset properly (dig/rest/poison....)
 
+-- roar/whirlwind/teleport
+|[f_movehelp_switch]| function(pl)
+    local team = f_get_team_live(pl.team)
+    _del(team, pl.active.shared)
+
+    if #team > 0 then
+        return team[f_flr_rnd(#team)+1]
+    end
+end $$
+
 -- returns true if it increased, false otherwise
 |[f_movehelp_incstat]| function(a, stat, inc)
     local prev = a.stages[stat] or 0
     a.stages[stat] = mid(-6, 6, prev+inc)
     return prev ~= a.stages[stat]
+end $$
+
+|[f_movehelp_major]| function(a, major)
+    if a.shared.major == C_MAJOR_NONE then
+        a.shared.major = major
+        return true
+    end
 end $$
 
 |[f_movehelp_getstat]| function(a, stat)
@@ -37,6 +54,23 @@ end $$
 --------------------------------
 ---------- move funcs ----------
 --------------------------------
+|[f_move_roar]| function(move, self, other)
+    f_movehelp_update_pp(move)
+
+    if f_does_move_miss(self.active, other.active, move) then
+        -- todo: token crunch combine missed logic with default move
+        f_addaction(self, self, "|missed|"..move.name)
+    else
+        local pkmn = f_movehelp_switch(other)
+        if pkmn then
+            f_select_switch(other, pkmn)
+        else
+            f_addaction(self, self, "|failed|"..move.name)
+        end
+    end
+
+end $$
+
 |[f_move_stat_self]| function(move, self, other, key, stage)
     f_movehelp_update_pp(move)
 
@@ -61,6 +95,22 @@ end $$
         if f_movehelp_incstat(other.active, key, stage) then
             -- todo: token crunch create function that formats a num with +/- & apply it to move_stat_self and battle logic
             f_addaction(self, other, "|-"..abs(stage).."/6|"..key)
+        else
+            f_addaction(self, self, "|failed|"..move.name)
+        end
+    end
+end $$
+
+|[f_move_major_other]| function(move, self, other, majorind)
+    f_movehelp_update_pp(move)
+
+    if f_does_move_miss(self.active, other.active, move) then
+        -- todo: token crunch combine missed logic with default move and stat other
+        f_addaction(self, self, "|missed|"..move.name)
+    else
+        -- todo: add message if stat does not increase
+        if f_movehelp_major(other.active, majorind) then
+            f_addaction(self, other, "|is|"..c_major_names[majorind])
         else
             f_addaction(self, self, "|failed|"..move.name)
         end

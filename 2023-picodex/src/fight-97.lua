@@ -2,9 +2,9 @@
 -- pl,0,false   - select default move (solar beam charge, hyper beam recharge, struggle, ...)
 -- pl,1-6,true  - switch with team slot
 
-|[f_select_switch]| function(pl, slot)
+|[f_select_switch]| function(pl, pkmn)
     f_addaction(pl, pl, "|comes|back", function(s, o) -- self, other
-        s.active = f_team_pkmn_to_active(s.team[slot])
+        s.active = f_team_pkmn_to_active(pkmn)
         s.active.invisible = true
         f_addaction(s, s, "|comes|out", function(s, o) -- self, other
             s.active.invisible = false

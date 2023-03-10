@@ -58,7 +58,7 @@ f_zclass[[o_modes,o_actor|
     pselactions;  init,%f_pselactions_init, draw2,%f_turn_draw2,         draw3,%f_pselactions_draw3;
     pselmove;     init,%f_pselmove_init,    draw2,%f_turn_draw2,         draw3,%f_move_draw3;
     pselswitch;   init,%f_pselswitch_init,  draw2,%f_turn_draw2,         draw3,%f_pselswitch_draw3, draw1,%f_editteam_draw1;
-    pstat;        init,%f_pstat_init,       draw2,%f_turn_draw2,         draw3,%f_pstat_draw3, lrfunc,%f_pstat_lrfunc, xfunc,%f_pstat_xfunc;
+    pstat;        init,%f_pstat_init,       draw2,%f_pstat_draw2,        draw3,%f_pstat_draw3, lrfunc,%f_pstat_lrfunc, xfunc,%f_pstat_xfunc;
     -- foestat;      init,%f_foestat_init,     draw2,%f_foestat_draw2,   draw3,%
 
     -- in-fight screens

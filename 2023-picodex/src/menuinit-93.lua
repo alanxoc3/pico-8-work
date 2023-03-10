@@ -321,7 +321,7 @@ end $$
             disabled=disabled,
             select=function()
                 _ENV:pop() _ENV:pop() -- pop twice. this could come from p1 or p2
-                f_select_switch(p0, i)
+                f_select_switch(p0, p0.team[i])
             end,
             pkmn=p0.team[i]
         }

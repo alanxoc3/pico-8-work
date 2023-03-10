@@ -8,7 +8,7 @@ Move          Type     PP  Power Acc   Effect
 Confuse-Ray     Ghost       10  N/A     100%    Confuses the target.
 Supersonic      Normal      20  N/A     55%     Confuses the target.
 Roar            Normal      20  N/A     100%    Opponent sends out random pokemon.
-Whirlwind       Normal      20  N/A     100%    Opponent sends out random pokemon. Does not fail, though can miss. Does not affect flying pkmn.
+Whirlwind       Normal      20  N/A     100%    Opponent sends out random pokemon. Affects flying pokemon.
 Sand-Attack     Ground      15  N/A     100%    Lowers the target's Accuracy by 1 stage.
 Smokescreen     Normal      20  N/A     100%    Lowers the target's Accuracy by 1 stage.
 Flash           Normal      20  N/A     70%     Lowers the target's Accuracy by 1 stage.
@@ -19,9 +19,10 @@ Tail-Whip       Normal      30  N/A     100%    Lowers the target's Defense by 1
 Screech         Normal      10  N/A     85%     Lowers the target's Defense by 2 stages.
 String-Shot     Bug         40  N/A     95%     Lowers the target's Speed by 1 stage.
 Disable         Normal      20  N/A     55%     One randomly selected move of the target's cannot be selected for 1-7 turns. Disable only works on one move at a time. The target does nothing if it is about to use a move that becomes disabled.
+
 Thunder-Wave    Electric    20  N/A     100%    Paralyzes the target.
 Stun-Spore      Grass       30  N/A     75%     Paralyzes the target.
-Glare           Normal      30  N/A     75%     Paralyzes the target. This move works on Ghost-type Pokemon.
+Glare           Normal      30  N/A     75%     Paralyzes the target.
 Poison-Gas      Poison      40  N/A     55%     Poisons the target.
 Poisonpowder    Poison      35  N/A     75%     Poisons the target.
 Spore           Grass       15  N/A     100%    Puts the target to sleep.
@@ -29,6 +30,7 @@ Hypnosis        Psychic     20  N/A     60%     Puts the target to sleep.
 Lovely-Kiss     Normal      10  N/A     75%     Puts the target to sleep.
 Sing            Normal      15  N/A     55%     Puts the target to sleep.
 Sleep-Powder    Grass       15  N/A     75%     Puts the target to sleep.
+
 Toxic           Poison      10  N/A     85%     The target is badly poisoned, with the damage caused by poison doubling after each turn. However, Toxic poisoning will revert to normal poisoning if the poisoned Pokemon is switched out or uses Haze. Damage caused by Leech Seed will also increase as Toxic damage increases.
 Leech-Seed      Grass       10  N/A     90%     The user steals 1/16 of the target's max HP (or more if used in conjunction with Toxic) until either Pokemon uses Haze or the target is switched out or KO'ed; does not work on Grass-type Pokemon, but will work against Pokemon behind Substitutes.
 Mimic           Normal      10  N/A     100%    Set this move to a random one of the target pokemon.
