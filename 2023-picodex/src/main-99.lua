@@ -1,11 +1,11 @@
 f_zclass[[o_game_state,o_actor|
     curr,wait;
 
-    init,%f_game_state_init, light,0;
+    init,%f_game_state_init, light,4;
     ecs_exclusions; o_actor,%c_yes; -- remove o_game_state from the o_actor group
     defaults;
         foldstate,closed,
-        light,0,
+        light,4, sfx,-1,
         backbuttonheld,%c_no,
         sinit,%f_nop, update,%f_nop, draw,%f_nop,
         draw1,%f_nop, draw2,%f_nop, draw3,%f_nop,
@@ -16,10 +16,10 @@ f_zclass[[o_game_state,o_actor|
 
     closed;     foldstate,closed,  next,opening,                          sinit,%f_closed_init, draw,%f_draw_picodex, update,%f_closed_update;
     opening;    foldstate,opening, next,starting_1,          duration,.2,                       draw,%f_draw_picodex;
-    starting_1; foldstate,open,    next,starting_2, light,1, duration,.2, sinit,%f_beep_okay,   draw,%f_draw_picodex;
-    starting_2; foldstate,open,    next,starting_3, light,2, duration,.2, sinit,%f_beep_back,   draw,%f_draw_picodex;
-    starting_3; foldstate,open,    next,game,       light,3, duration,.2, sinit,%f_beep,        draw,%f_draw_picodex;
-    game;       foldstate,open,    next,closing,    light,4,              sinit,%f_game_init,   draw,%f_draw_picodex, update,%f_game_update, draw1,%f_game_draw1, draw2,%f_game_draw2, draw3,%f_game_draw3;
+    starting_1; foldstate,open,    next,starting_2, light,3, duration,.2, sfx,B_OKAY,           draw,%f_draw_picodex;
+    starting_2; foldstate,open,    next,starting_3, light,2, duration,.2, sfx,B_BACK,           draw,%f_draw_picodex;
+    starting_3; foldstate,open,    next,game,       light,1, duration,.2, sfx,B_ERROR,          draw,%f_draw_picodex;
+    game;       foldstate,open,    next,closing,    light,0,              sinit,%f_game_init,   draw,%f_draw_picodex, update,%f_game_update, draw1,%f_game_draw1, draw2,%f_game_draw2, draw3,%f_game_draw3;
 
     closing;    foldstate,closing, next,closed,              duration,.25,                      draw,%f_draw_picodex, update,%f_nop;
 ]]
@@ -27,6 +27,7 @@ f_zclass[[o_game_state,o_actor|
 -- every state change will clean up all the entities.
 |[f_game_state_init]| function(state)
     f_clean_all_entities('o_game_state', 'o_fader_in')
+    f_minisfx(state.sfx)
     state:sinit()
 end $$
 
@@ -36,24 +37,19 @@ function _init()
     -- clear all the read only memory. testing things out showed that this doesn't get cleared automatically.
     _memset(0x8000, 0, 0x7fff)
 
-    _poke(0x5f5c, 8) -- set the initial delay before repeating. 255 means never repeat.
-    _poke(0x5f5d, 2) -- set the repeating delay.
-
     g_picodex = o_game_state()
     f_draw_picodex(g_picodex)
     _flip()
-    _sfx(63,1,24)
+    f_minisfx'158'
+    f_extract_sheet(0) -- 0x0000
+    f_extract_sheet(1) -- 0x0002
+    f_extract_sheet(2) -- 0x0004
 
-    -- 0x0000
-    f_extract_sheet(0)
-
-    -- 0x0002
-    f_extract_sheet(1)
-
-    -- 0x0004
-    f_extract_sheet(2)
-
-    _poke(0x5f56, 0xe0) -- make map funcs point here instead
+    f_zcall(_poke, [[
+         ;,0x5f5c, 8    -- set the initial delay before repeating. 255 means never repeat.
+        ;;,0x5f5d, 2    -- set the repeating delay.
+        ;;,0x5f56, 0xe0 -- make map funcs point here instead
+    ]])
 
     -- 0x0006
     f_px9_decomp(0, 0, _peek2(3*2), _mget, _mset)

@@ -48,7 +48,7 @@ end $$
 
 |[f_menu_cancel]| function(game)
     game:pop()
-    f_beep_back()
+    f_minisfx'B_BACK'
 end $$
 
 -- cursor is between 0 and #menu-1. view is set too
@@ -57,7 +57,7 @@ end $$
         local newval = menu.c+delta*menu.r
         if newval == _mid(0, newval, #menu-1) then
             menu.c = newval
-            if 0+delta ~= 0 then f_beep_back() end
+            if 0+delta ~= 0 then f_minisfx'B_BACK' end
         else
             f_beep()
         end
@@ -66,7 +66,7 @@ end $$
         local left = menu.c - menu.c%menu.r
         if newval == _mid(left, newval, left + menu.r-1) then
             menu.c = newval
-            if 0+delta ~= 0 then f_beep_back() end
+            if 0+delta ~= 0 then f_minisfx'B_BACK' end
         else
             f_beep()
         end
@@ -92,7 +92,7 @@ end $$
     if menu.v ~= oldview then
         f_beep()
     elseif g_bpv ~= 0 then
-        f_beep_back()
+        f_minisfx'B_BACK'
     end
 end $$
 
@@ -108,7 +108,7 @@ end $$
         if entry.disabled then
             f_beep()
         elseif entry.select then
-            f_beep_okay()
+            f_minisfx'B_OKAY'
             entry.select(game, entry)
         end
     end

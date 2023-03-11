@@ -6,6 +6,11 @@ B_RIGHT: ➡️
 B_X: ❎
 B_O: 🅾️
 
+B_DONE:  152
+B_ERROR: 153
+B_BACK:  154
+B_OKAY:  155
+
 # Sprites
 SPR_LOGO: 108
 SPR_LOGO_W: 4

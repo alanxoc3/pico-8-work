@@ -33,15 +33,13 @@ end $$
 end $$
 
 -- utility funcs
+|[g_cur_light]| 0 $$
 |[f_minisfx]| function(num)
-    g_picodex:start_timer((0+num <= 152) and 'pkmn' or 0+num, .25)
+    _g.g_cur_light = max(0, 0+num-152)
     _sfx(44+num\8, 0, num%8*4, 4)
 end $$
 
-|[f_beep_done]|    function() f_minisfx'152' end $$
-|[f_beep_okay]|    function() f_minisfx'153' end $$
-|[f_beep_back]|    function() f_minisfx'154' end $$
-|[f_beep]|         function() f_minisfx'155' end $$
+|[f_beep]| function() f_minisfx'B_ERROR' end $$
 
 |[f_draw_picodex]| function(_ENV)
     _cls'0'
@@ -57,7 +55,7 @@ end $$
         f_zcamera(30-(rotation+1)*15+(_ENV:is_active'shaking' and f_flr_rnd'3'-1 or 0), 27, function()
             ----- SCREENS -----
             f_zcall(_rectfill, [[;,14,18,@,87,5]], 63+max(0, rotation*54))
-            if light >= 4 then
+            if light == 0 then
                 f_zcall(_rectfill, [[;,14,18,117,87,13]])
                 f_zcall(f_draw_screen, [[
                      ;,14, 21, 40, 40, @
@@ -72,13 +70,14 @@ end $$
               ;;, 8,0,2,9,8,11
             ]])
 
-            f_zcall(function(l, s, off, on, flash, x, y)
-                return _spr((light > l) and (g_picodex:is_active(s) and flash or on) or off, x, y)
+            f_zcall(function(l, off, on, flash, x, y)
+                _printh(g_cur_light)
+                return _spr((light <= l) and (g_cur_light == l and _stat'46'>=0 and flash or on) or off, x, y)
             end, [[
-                 ;,0, 153,  132, 130, 131, 22, 3
-                ;;,1, 154,  132, 129, 131, 17, 3
-                ;;,2, 155,  132, 128, 131, 12, 3
-                ;;,3, pkmn, 135, 133, 134, 6,  3
+                 ;,0, 135, 133, 134, 6,  3
+                ;;,1, 132, 128, 131, 12, 3
+                ;;,2, 132, 129, 131, 17, 3
+                ;;,3, 132, 130, 131, 22, 3
             ]])
 
             f_zcall(function(b, s1, s2, x, y)

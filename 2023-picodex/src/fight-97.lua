@@ -159,7 +159,7 @@ end $$
 
 -- takes in the hard-coded base speed value for the pkmn, so electrode would have highest crit ratio.
 -- todo: (wait) make high crit moves & focus energy work
-|[f_get_crit_ratio]| function(base_speed)
+|[f_get_crit_ratio]| function(_ENV)
     -- slash:        _min(.99, (base_speed+76)/128)
     -- focus energy: _min(.99, (base_speed+236)/512)
     -- focus energy + crit move: .99609
@@ -197,7 +197,7 @@ end $$
     -- todo: need to factor in if burned
     -- todo: token crunch this algorithm
     local iscontact = move.type % 2 == 1
-    local critical = f_get_crit_ratio(attacker.base_speed)
+    local critical = f_get_crit_ratio(attacker)
     local stab = (move.type == attacker.type1 or move.type == attacker.type2) and 1.5 or 1
     local attack, defense = attacker:f_movehelp_getstat'special', defender:f_movehelp_getstat'special'
 

@@ -31,7 +31,7 @@ end $$
         if c_pokemon[i]:available() then
             browse.menu.c = i
             stayed = false
-            f_beep_back()
+            f_minisfx'B_BACK'
             break
         end
     end
@@ -43,7 +43,7 @@ end $$
 -- lr is guaranteed to be -1 or 1
 |[f_pstat_lrfunc]| function(_ENV)
     p0.statplayer = f_get_other_pl(_ENV, p0.statplayer)
-    f_beep_back()
+    f_minisfx'B_BACK'
     f_pstat_init(_ENV)
 end $$
 

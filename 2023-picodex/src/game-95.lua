@@ -154,7 +154,7 @@ end $$
     ]], modes.team1.menu, modes.browse.menu)
 
     -- beep done when picodex has booted up!
-    f_beep_done()
+    f_minisfx'B_DONE'
 
     _menuitem(1, "close picodex", function()
         _menuitem(1) -- remove menu item

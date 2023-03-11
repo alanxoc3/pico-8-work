@@ -59,10 +59,7 @@ c_team_memlocs = f_zobj[[0,S_PARTY1, 1,S_PARTY2, 2,S_PARTY3]]
     local team = f_zobj[[]]
 
     for i=1,6 do
-        -- todo: token crunch these local vars.
-        local memstart = mem+(i-1)*5
-        local mynewmoves = {}
-        local has_moves = false
+        local memstart, mynewmoves, has_moves = mem+(i-1)*5, {}, false
         for i=1,4 do
             mynewmoves[i] = f_create_move(_peek(memstart+i), i)
             if mynewmoves[i].num > 0 then
@@ -85,9 +82,7 @@ end $$
     -- clear team and we'll replace it with the logic below
 
     for i=1,6 do
-        -- todo: token crunch these local vars.
-        local memstart = mem+(i-1)*5
-        local pkmn = team[i]
+        local memstart, pkmn = mem+(i-1)*5, team[i]
         _poke(memstart, max(0, pkmn.num))
 
         for i=1,4 do
@@ -137,5 +132,3 @@ end $$
     for i=1,4 do _add(moveset, f_create_move(-1)) end
     return moveset
 end $$
-
-

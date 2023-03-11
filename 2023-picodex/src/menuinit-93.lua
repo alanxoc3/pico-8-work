@@ -12,48 +12,36 @@
         game:popuntil'team2story'
     end
 
-    -- todo: consider combining the parameter logic somehow for token crunching
-    f_zobj_set(menu, [[
-        v,0 -- fight over view should always start on top. don't save position for this one.
-      ;;pkmn,@
-      ;;hidden,%c_yes
+    for pl in all{winner,loser} do
+        f_zobj_set(menu, [[
+            v,0 -- fight over view should always start on top. don't save position for this one.
+           ;pkmn,@
+          ;;hidden,%c_yes
 
-      ;;name,@, style,5
-      ;;name,@
-      ;;name,@
-
-      ;;pkmn,@
-      ;;hidden,%c_yes
-
-      ;;name,@, style,5
-      ;;name,@
-      ;;name,@
-    ]], winner.active, winner.name, (#f_get_team_live(winner.team, true)).." live", (#f_get_team_dead(winner.team)).." dead",
-        loser.active,  loser.name,  (#f_get_team_live(loser .team, true)).." live", (#f_get_team_dead(loser .team)).." dead")
+          ;;name,@, style,5
+          ;;name,@
+          ;;name,@
+        ]], pl.active, pl.name, (#f_get_team_live(pl.team, true)).." live", (#f_get_team_dead(pl.team)).." dead")
+    end
 end $$
 
 |[f_main_init]| function(_ENV)
+    local count = 0
+    for i=0,151 do count += c_pokemon[i]:available() and 1 or 0 end
+
     menu:refresh(
-        f_zobj[[
-            ;name,"browse",  state,browse,     select,%f_menu_state_callback, desc,"browse|"
+        f_zobj([[
+            ;name,"browse",  state,browse,     select,%f_menu_state_callback, desc,@
            ;;name,"edit",    state,team1,      select,%f_menu_state_callback, desc,"edit|stored|teams"
-           ;;name,"league",  state,team1story, select,%f_menu_state_callback, desc,"league|"
+           ;;name,"league",  state,team1story, select,%f_menu_state_callback, desc,@
            ;;name,"player",  state,team1match, select,%f_menu_state_callback, desc,"player|custom|battles"
            ;;name,'?????',   state,team1horde, select,%f_menu_state_callback, desc,"?????|beat|league", disabled,%c_yes
            ;;name,"credits", state,credits,    select,%f_menu_state_callback, desc,"credits|amorg|games"
-        ]]
+        ]], "browse|"..count.."/151|pokemon", "league|"..(@S_STORY).."/40|trainers")
     )
 
-    local count = 0
-    for i=0,151 do count += c_pokemon[i]:available() and 1 or 0 end
-    menu[1].desc ..= count.."/151|pokemon"
-    menu[3].desc ..= (@S_STORY).."/40|trainers"
-
     if @S_STORY >= 40 then
-        -- todo: slight token improvement with zobj_set
-        menu[5].disabled = false
-        menu[5].name = "horde"
-        menu[5].desc = "horde|"..(@S_HOARD).."/151|hi-score"
+        f_zobj_set(menu[5], [[disabled,%c_no, name,"horde", desc,@]], "horde|"..(@S_HOARD).."/151|hi-score")
     end
 end $$
 
@@ -166,11 +154,10 @@ end $$
 |[f_moves_init_helper]| function(_ENV, disabled_ind, select_func)
     local teampkmn, team = _ENV:f_get_pkmn_team_edit()
     menu:refresh(f_zobj[[,1,2,3,4]], function(i)
-        -- todo: token crunching here with moveind
-        local moveind = teampkmn.mynewmoves[i]
+        local move = teampkmn.mynewmoves[i]
         return {
-            move=teampkmn.mynewmoves[i],
-            name=moveind.name,
+            move=move,
+            name=move.name,
             select=function(_ENV) select_func(_ENV, i, teampkmn, team) end,
             disabled=i == disabled_ind
         }
@@ -229,17 +216,16 @@ end $$
 
 |[f_pselmove_init]| function(_ENV)
     -- todo: (wait) support struggle
-    -- todo: token crunching (replace with zobj)
     menu:refresh(p0.active.mynewmoves, function(move)
-        return {
-            disabled=move.pp <= 0,
-            name=move.name,
-            move=move,
-            select=function()
+        return f_zobj([[disabled,@, name,@, move,@, select,@]],
+            move.pp <= 0,
+            move.name,
+            move,
+            function()
                 _ENV:pop() _ENV:pop()
                 f_select_move(p0, move)
             end
-        }
+        )
     end)
 end $$
 
@@ -335,7 +321,7 @@ end $$
     p0 = p1.priority > p2.priority and p1 or p2
 end $$
 
--- todo: wait, experiment with moves. change name to "empty". And maybe remove empty moves from movelist in battle stat menu.
+-- todo: wait, Maybe remove empty moves from movelist in battle stat menu.
 |[f_pstat_init]| function(_ENV)
     menu:refresh{}
 
@@ -356,7 +342,6 @@ end $$
         _add(menu, {name=move.name})
     end)
 
-    -- todo: token crunch, can I combine stages & flags logic below?
     local stages = {}
     _foreach(c_stages, function(s)
         local stage = player.active.stages[s.key] or 0

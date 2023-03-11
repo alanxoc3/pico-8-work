@@ -31,32 +31,33 @@ end $$
 
 |[f_draw_pkmn_out]| function(num, x, y, col, xscale, yscale)
     if num < 0 then _spr(107, x-4, y-4) return end
-
-    xscale = xscale or 1
-    yscale = yscale or 1
+    xscale, yscale = xscale or 1, yscale or 1
     local outline_width = _max(_abs(xscale), 1) \ 1
 
-    for c=1,15 do _pal(c,col) end
-    for i=-outline_width,outline_width,outline_width*2 do f_draw_pkmn(num, x-outline_width, y+i, xscale, yscale) end
-    for i=-outline_width,outline_width,outline_width*2 do f_draw_pkmn(num, x+outline_width, y+i, xscale, yscale) end
+    f_zcall(function(color, v1, v2, v3, v4)
+        for c=1,15 do _pal(c,color) end
+        for i=-outline_width,outline_width,outline_width*2 do
+            f_draw_pkmn(num, x+(v1 or i), y+(v2 or i), xscale, yscale)
+            f_draw_pkmn(num, x+(v3 or i), y+(v4 or i), xscale, yscale) 
+        end
+    end, [[
+         ;,@, @, %c_no, @, %c_no
+        ;;,1, %c_no, 0, 0, %c_no
+    ]], col, -outline_width, outline_width)
 
-    for c=1,15 do _pal(c,1) end
-    for i=-outline_width,outline_width,outline_width*2 do f_draw_pkmn(num, x+i, y, xscale, yscale) end
-    for i=-outline_width,outline_width,outline_width*2 do f_draw_pkmn(num, x, y+i, xscale, yscale) end
-
-    for c=1,15 do _pal(c, c) end
-    f_draw_pkmn(num, x, y, xscale, yscale)
+    pal() f_draw_pkmn(num, x, y, xscale, yscale)
 end $$
 
 -- this is for populating the pokemon info menu (sometimes called browsestat in code)
 |[f_update_stat_menu]| function(menu, pkmn)
     menu:refresh{}
 
-    -- todo: token crunch on this _add block
-    _add(menu, {pkmn=pkmn})
-    _add(menu, {hidden=true})
-    _add(menu, {name="lvl 50", style=5})
-    _add(menu, {name=(pkmn.hp or pkmn.maxhp)..'/'..pkmn.maxhp})
+    f_zobj_set(menu, [[
+        ;pkmn,@
+       ;;hidden,%c_yes
+       ;;name,"lvl C_LEVEL", style,5
+       ;;name,@
+    ]], pkmn, (pkmn.hp or pkmn.maxhp)..'/'..pkmn.maxhp)
 
     _foreach(f_zobj[[
         ;key,special, name,"spc"
@@ -64,8 +65,6 @@ end $$
        ;;key,defense, name,"def"
        ;;key,speed,   name,"spd"
        ;;key,total,   name,"tot"
-       ;;key,accuracy,name,"acc"
-       ;;key,evasion, name,"eva"
     ]], function(pair)
         if not pair.key then
             _add(menu, { name=pair.name, style=5 })
@@ -74,22 +73,16 @@ end $$
         end
     end)
 
-    _add(menu, {name="learn", style=5})
-    _foreach(c_pokemon[pkmn.num].moves_natural, function(m)
-        _add(menu, {name=c_moves[m].name})
-    end)
-
-    if #c_pokemon[pkmn.num].moves_teach > 0 then
-        _add(menu, {name="teach", style=5})
-        _foreach(c_pokemon[pkmn.num].moves_teach, function(m)
-            _add(menu, {name=c_moves[m].name})
-        end)
-    end
-
-    if #c_pokemon[pkmn.num].moves_event > 0 then
-        _add(menu, {name="event", style=5})
-        _foreach(c_pokemon[pkmn.num].moves_event, function(m)
-            _add(menu, {name=c_moves[m].name})
-        end)
-    end
+    f_zcall(function(name, key)
+        if #c_pokemon[pkmn.num][key] > 0 then
+            _add(menu, {name=name, style=5})
+            _foreach(c_pokemon[pkmn.num][key], function(m)
+                _add(menu, {name=c_moves[m].name})
+            end)
+        end
+    end, [[
+         ;,"learn",moves_natural
+        ;;,"teach",moves_teach
+        ;;,"event",moves_event
+    ]])
 end $$
