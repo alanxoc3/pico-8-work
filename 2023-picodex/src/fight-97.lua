@@ -20,9 +20,15 @@ end $$
     f_addaction(self, self, "|uses|"..move.name, function(self, other)
         f_movehelp_update_pp(move)
 
+        -- explosion & self destruct hurt the user first, then they might miss, so this part of that logic must go outside the normal flow
+        if move.num == M_EXPLOSION or move.num == M_SELF_DESTRUCT then
+            f_move_setdmg_self(f_zobj([[self,@, selfactive,@]], self, self.active), self.active.hp)
+        end
+
         if f_does_move_miss(self.active, other.active, move) then
             f_addaction(self, self, "|missed|"..move.name)
         else
+            -- todo: might be nice if other things were supported (miss, fail, resist)
             if move:func(self, other) then
                 f_addaction(self, self, "|failed|"..move.name)
             end
@@ -78,7 +84,7 @@ end $$
         if p.active.hp <= 0 then
             if p.active.major ~= C_MAJOR_FAINTED then
                 return f_newaction(p, "|is|fainted", f_logic_faint)
-            else
+            elseif p ~= game.p0 then
                 p.active = f_team_pkmn_to_active(f_get_next_active(p.team))
                 return f_newaction(p, "|comes|out")
             end
@@ -94,6 +100,12 @@ end $$
             if action.active.major ~= C_MAJOR_FAINTED and (action.active == s.active or action.active == o.active) then
                 return action
             end
+        end
+
+        -- for explosion, you should finish the turn before switching in your pokemon
+        if s.active.hp <= 0 and s.active.major == C_MAJOR_FAINTED then
+            s.active = f_team_pkmn_to_active(f_get_next_active(s.team))
+            return f_newaction(s, "|comes|out")
         end
     end
 end $$
@@ -214,8 +226,8 @@ end $$
     local base_damage = _mid(
         3, 997,
         (2*attacker.level*critical/5+2)/50 -- [.44,.84]
-        *move.damage                       -- [6.6,210]   -- [15,250]
-        *mid(10, .2, attack/defense)       -- [1.32,2100]
+        *move.damage                       -- [6.6,285.6] -- [15,340]
+        *mid(10, .2, attack/defense)       -- [1.32,2856]
     )+2
 
     -- max possible damage: 5994

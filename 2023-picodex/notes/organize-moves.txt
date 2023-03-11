@@ -126,16 +126,7 @@ Super-Fang      Normal      10  Var     90%     This move halves the target's cu
 # rage (attack until someone is dead)
 # partial trapping moves (wrap, firespin...)
 
-Spike-Cannon    Normal      15  20      100%    Attacks 2-5 times in one turn; if one of these attacks breaks a target's Substitute, the target will take damage for the rest of the hits. This move has a 3/8 chance to hit twice, a 3/8 chance to hit three times, a 1/8 chance to hit four times and a 1/8 chance to hit five times.
-Barrage         Normal      20  15      85%     Attacks 2-5 times in one turn; if one of these attacks breaks a target's Substitute, the target will take damage for the rest of the hits. This move has a 3/8 chance to hit twice, a 3/8 chance to hit three times, a 1/8 chance to hit four times and a 1/8 chance to hit five times.
-Comet-Punch     Normal      15  18      85%     Attacks 2-5 times in one turn; if one of these attacks breaks a target's Substitute, the target will take damage for the rest of the hits. This move has a 3/8 chance to hit twice, a 3/8 chance to hit three times, a 1/8 chance to hit four times and a 1/8 chance to hit five times.
-Doubleslap      Normal      10  15      85%     Attacks 2-5 times in one turn; if one of these attacks breaks a target's Substitute, the target will take damage for the rest of the hits. This move has a 3/8 chance to hit twice, a 3/8 chance to hit three times, a 1/8 chance to hit four times and a 1/8 chance to hit five times.
-Fury-Attack     Normal      20  15      85%     Attacks 2-5 times in one turn; if one of these attacks breaks a target's Substitute, the target will take damage for the rest of the hits. This move has a 3/8 chance to hit twice, a 3/8 chance to hit three times, a 1/8 chance to hit four times and a 1/8 chance to hit five times.
-Fury-Swipes     Normal      15  10      80%     Attacks 2-5 times in one turn; if one of these attacks breaks a target's Substitute, the target will take damage for the rest of the hits. This move has a 3/8 chance to hit twice, a 3/8 chance to hit three times, a 1/8 chance to hit four times and a 1/8 chance to hit five times.
-Pin-Missile     Bug         20  14      85%     Attacks 2-5 times in one turn; if one of these attacks breaks a target's Substitute, the target will take damage for the rest of the hits. This move has a 3/8 chance to hit twice, a 3/8 chance to hit three times, a 1/8 chance to hit four times and a 1/8 chance to hit five times.
-Double-Kick     Fighting    30  30      100%    Strikes twice; if the first hit breaks the target's Substitute, the real Pokemon will take damage from the second hit.
-Bonemerang      Ground      10  50      90%     Strikes twice; if the first hit breaks the target's Substitute, the real Pokemon will take damage from the second hit.
-Twineedle       Bug         20  25      100%    Strikes twice; if the first hit breaks the target's Substitute, the real Pokemon will take damage from the second hit. Has a ~20% chance to poison the target .
+
 Dizzy-Punch     Normal      10  70      100%    Damages the target.
 Drill-Peck      Flying      20  80      100%    Damages the target.
 Earthquake      Ground      10  100     100%    Damages the target.
@@ -219,8 +210,17 @@ Absorb          Grass       20  20      100%    Restores the user's HP by 1/2 of
 Leech-Life      Bug         15  20      100%    Restores the user's HP by 1/2 of the damage inflicted on the target.
 Mega-Drain      Grass       10  40      100%    Restores the user's HP by 1/2 of the damage inflicted on the target.
 Dream-Eater     Psychic     15  100     100%    Restores the user's HP by 1/2 of the damage inflicted on the target but only works on a sleeping target.
+
 Explosion       Normal      5   170     100%    The Defense stat of other Pokemon is halved against this attack, essentially doubling the move's base power; causes the user to faint.
 Selfdestruct    Normal      5   130     100%    The Defense stat of other Pokemon is halved against this attack, essentially doubling the move's base power; causes the user to faint.
+
+Double-edge     Normal      15  100     100%    The user receives 1/4 recoil damage.
+Submission      Fighting    20  80      80%     The user receives 1/4 recoil damage.
+Take-Down       Normal      20  90      85%     The user receives 1/4 recoil damage.
+Struggle        Normal      1   50      100%    The user receives 1/4 recoil damage.
+Quick-Attack    Normal      30  40      100%    Usually goes first.
+
+MULTITURN MOVES:
 Petal-Dance     Grass       20  70      100%    The user attacks uncontrollably for 2-3 turns and then gets confused.
 Thrash          Normal      20  90      100%    The user attacks uncontrollably for 2-3 turns and then gets confused.
 Rage            Normal      20  20      100%    The user attacks uncontrollably until it faints or its target faints. During this time, the user's Attack increases by 1 stage for each time it is hit by the target. If this move misses, the user continues to attack but has only a 1/256 chance to land a hit.
@@ -232,8 +232,16 @@ Skull-Bash      Normal      15  100     100%    The user prepares on turn one, b
 Solarbeam       Grass       10  120     100%    The user prepares on turn one, becoming uncontrollable, and then attacks on turn two.
 Razor-Wind      Normal      10  80      75%     The user prepares on turn one, becoming uncontrollable, and then attacks on turn two.
 Sky-Attack      Flying      5   140     90%     The user prepares on turn one, becoming uncontrollable, and then attacks on turn two.
-Double-edge     Normal      15  100     100%    The user receives 1/4 recoil damage.
-Submission      Fighting    20  80      80%     The user receives 1/4 recoil damage.
-Take-Down       Normal      20  90      85%     The user receives 1/4 recoil damage.
-Struggle        Normal      1   50      100%    Used automatically when all of the user's other moves have run out of PP or are otherwise inaccessible. The user receives 1/4 recoil damage. Struggle is classified as a Normal-type move, so it is resisted by Rock-type Pokemon and cannot hit Ghost-type Pokemon at all.
-Quick-Attack    Normal      30  40      100%    Usually goes first.
+
+
+MULTIHIT MOVES
+Spike-Cannon    Normal      15  20      100%    Attacks 2-5 times in one turn; if one of these attacks breaks a target's Substitute, the target will take damage for the rest of the hits. This move has a 3/8 chance to hit twice, a 3/8 chance to hit three times, a 1/8 chance to hit four times and a 1/8 chance to hit five times.
+Barrage         Normal      20  15      85%     Attacks 2-5 times in one turn; if one of these attacks breaks a target's Substitute, the target will take damage for the rest of the hits. This move has a 3/8 chance to hit twice, a 3/8 chance to hit three times, a 1/8 chance to hit four times and a 1/8 chance to hit five times.
+Comet-Punch     Normal      15  18      85%     Attacks 2-5 times in one turn; if one of these attacks breaks a target's Substitute, the target will take damage for the rest of the hits. This move has a 3/8 chance to hit twice, a 3/8 chance to hit three times, a 1/8 chance to hit four times and a 1/8 chance to hit five times.
+Doubleslap      Normal      10  15      85%     Attacks 2-5 times in one turn; if one of these attacks breaks a target's Substitute, the target will take damage for the rest of the hits. This move has a 3/8 chance to hit twice, a 3/8 chance to hit three times, a 1/8 chance to hit four times and a 1/8 chance to hit five times.
+Fury-Attack     Normal      20  15      85%     Attacks 2-5 times in one turn; if one of these attacks breaks a target's Substitute, the target will take damage for the rest of the hits. This move has a 3/8 chance to hit twice, a 3/8 chance to hit three times, a 1/8 chance to hit four times and a 1/8 chance to hit five times.
+Fury-Swipes     Normal      15  10      80%     Attacks 2-5 times in one turn; if one of these attacks breaks a target's Substitute, the target will take damage for the rest of the hits. This move has a 3/8 chance to hit twice, a 3/8 chance to hit three times, a 1/8 chance to hit four times and a 1/8 chance to hit five times.
+Pin-Missile     Bug         20  14      85%     Attacks 2-5 times in one turn; if one of these attacks breaks a target's Substitute, the target will take damage for the rest of the hits. This move has a 3/8 chance to hit twice, a 3/8 chance to hit three times, a 1/8 chance to hit four times and a 1/8 chance to hit five times.
+Double-Kick     Fighting    30  30      100%    Strikes twice; if the first hit breaks the target's Substitute, the real Pokemon will take damage from the second hit.
+Bonemerang      Ground      10  50      90%     Strikes twice; if the first hit breaks the target's Substitute, the real Pokemon will take damage from the second hit.
+Twineedle       Bug         20  25      100%    Strikes twice; if the first hit breaks the target's Substitute, the real Pokemon will take damage from the second hit. Has a ~20% chance to poison the target .

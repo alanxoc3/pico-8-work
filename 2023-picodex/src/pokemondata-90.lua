@@ -88,7 +88,7 @@ c_major_names[0] = "none" -- for "none" status
 _g.c_moves_raw = f_zobj[[
    --  "name",     type        pp  dmg  acc
   -1;, "none",     T_NONE,     0,  0,   0,   %f_move_splash
-  ;0;, "struggle", T_BIRD,     0,  50,  1,   %f_move_implement
+  ;0;, "struggle", T_BIRD,     0,  50,  100, %f_move_recoil                                           -- 0   DIFF: ignores resistance now. hits ghost pokemon.
 
    -- teachs
    ;;, "megapnch", T_NORMAL,   20, 80,  85,  %f_move_default                                          -- 1
@@ -99,15 +99,15 @@ _g.c_moves_raw = f_zobj[[
    ;;, "toxic",    T_POISON,   10, 0,   90,  %f_move_toxic                                            -- 6
    ;;, "horndril", T_NORMAL,   5,  -1,  30,  %f_move_ohko                                             -- 7
    ;;, "bodyslam", T_NORMAL,   15, 85,  100, %f_move_percent,30,%f_move_major_other,C_MAJOR_PARALYZED -- 8
-   ;;, "takedown", T_NORMAL,   20, 90,  85,  %f_move_implement                                        -- 9
-   ;;, "doubedge", T_NORMAL,   15, 120, 100, %f_move_implement                                        -- 10
+   ;;, "takedown", T_NORMAL,   20, 90,  85,  %f_move_recoil                                           -- 9
+   ;;, "doubedge", T_NORMAL,   15, 120, 100, %f_move_recoil                                           -- 10
    ;;, "bublbeam", T_WATER,    20, 65,  100, %f_move_percent,10,%f_move_stat_other, speed, -1         -- 11
    ;;, "watergun", T_WATER,    25, 40,  100, %f_move_default                                          -- 12
    ;;, "icebeam",  T_ICE,      10, 90,  100, %f_move_percent,10,%f_move_major_other,C_MAJOR_FROZEN    -- 13
    ;;, "blizzard", T_ICE,      5,  110, 70,  %f_move_percent,10,%f_move_major_other,C_MAJOR_FROZEN    -- 14
    ;;, "hyprbeam", T_NORMAL,   5,  150, 90,  %f_move_implement                                        -- 15
    ;;, "payday",   T_NORMAL,   20, 40,  100, %f_move_default                                          -- 16
-   ;;, "submsion", T_FIGHTING, 20, 80,  80,  %f_move_implement                                        -- 17
+   ;;, "submsion", T_FIGHTING, 20, 80,  80,  %f_move_recoil                                           -- 17
    ;;, "counter",  T_FIGHTING, 20, -1,  100, %f_move_implement                                        -- 18  DIFF: respects resistance
    ;;, "seistoss", T_FIGHTING, 20, -1,  100, %f_move_setdmg,C_LEVEL                                   -- 19  DIFF: respects resistance
    ;;, "rage",     T_NORMAL,   20, 20,  100, %f_move_implement                                        -- 20  DIFF: you can switch out while using rage
@@ -126,7 +126,7 @@ _g.c_moves_raw = f_zobj[[
    ;;, "reflect",  T_PSYCHIC,  20, 0,   0,   %f_move_minor_self,reflected                             -- 33
    ;;, "bide",     T_NORMAL,   10, -1,  100, %f_move_implement                                        -- 34  DIFF: doesn't bypass accuracy check & respects resistance
    ;;, "metrnome", T_NORMAL,   10, 0,   0,   %f_move_metronome                                        -- 35
-   ;;, "selfdstr", T_NORMAL,   5,  200, 100, %f_move_implement                                        -- 36
+   ;;, "selfdstr", T_NORMAL,   5,  260, 100, %f_move_default                                          -- 36
    ;;, "eggbomb",  T_NORMAL,   10, 100, 75,  %f_move_default                                          -- 37
    ;;, "fireblst", T_FIRE,     5,  110, 85,  %f_move_percent,30,%f_move_major_other,C_MAJOR_BURNED    -- 38
    ;;, "swift",    T_NORMAL,   20, 60,  0,   %f_move_default                                          -- 39  DIFF: always hits, no matter what
@@ -137,7 +137,7 @@ _g.c_moves_raw = f_zobj[[
    ;;, "rest",     T_PSYCHIC,  5,  0,   0,   %f_move_implement                                        -- 44
    ;;, "thndrwav", T_ELECTRIC, 20, 0,   90,  %f_move_major_other, C_MAJOR_PARALYZED                   -- 45
    ;;, "psywave",  T_PSYCHIC,  15, -1,  100, %f_move_psywave                                          -- 46  DIFF: respects resistance
-   ;;, "explsion", T_NORMAL,   5,  250, 100, %f_move_implement                                        -- 47
+   ;;, "explsion", T_NORMAL,   5,  340, 100, %f_move_default                                          -- 47
    ;;, "rockslid", T_ROCK,     10, 75,  90,  %f_move_default                                          -- 48
    ;;, "triattck", T_NORMAL,   10, 80,  100, %f_move_default                                          -- 49
    ;;, "substute", T_NORMAL,   10, 0,   0,   %f_move_implement                                        -- 50
@@ -152,8 +152,8 @@ _g.c_moves_raw = f_zobj[[
     -- remaining moves (besides struggle)
    ;;, "pound",    T_NORMAL,   35, 40,  100, %f_move_default                                          -- 56
    ;;, "karatchp", T_FIGHTING, 25, 50,  100, %f_move_implement                                        -- 57
-   ;;, "doubslap", T_NORMAL,   10, 15,  85,  %f_move_implement                                        -- 58
-   ;;, "comtpnch", T_NORMAL,   15, 18,  85,  %f_move_implement                                        -- 59
+   ;;, "doubslap", T_NORMAL,   10, 15,  85,  %f_move_multihit_var                                     -- 58 DIFF: if KOs pkmn, will also hit new pokemon switched in
+   ;;, "comtpnch", T_NORMAL,   15, 18,  85,  %f_move_multihit_var                                     -- 59 DIFF: if KOs pkmn, will also hit new pokemon switched in
    ;;, "firepnch", T_FIRE,     15, 75,  100, %f_move_percent,10,%f_move_major_other,C_MAJOR_BURNED    -- 60
    ;;, "icepnch",  T_ICE,      15, 75,  100, %f_move_percent,10,%f_move_major_other,C_MAJOR_FROZEN    -- 61
    ;;, "thndpnch", T_ELECTRIC, 15, 75,  100, %f_move_percent,10,%f_move_major_other,C_MAJOR_PARALYZED -- 62
@@ -166,20 +166,20 @@ _g.c_moves_raw = f_zobj[[
    ;;, "slam",     T_NORMAL,   20, 80,  75,  %f_move_default                                          -- 69
    ;;, "vinewhip", T_GRASS,    25, 45,  100, %f_move_default                                          -- 70
    ;;, "stomp",    T_NORMAL,   20, 65,  100, %f_move_percent,30,%f_move_minor_other,flinching         -- 71
-   ;;, "doubkick", T_FIGHTING, 30, 30,  100, %f_move_implement                                        -- 72
+   ;;, "doubkick", T_FIGHTING, 30, 30,  100, %f_move_multihit_set,2                                   -- 72 DIFF: if KOs pkmn, will also hit new pokemon switched in
    ;;, "jumpkck",  T_FIGHTING, 10, 100, 95,  %f_move_implement                                        -- 73
    ;;, "rllngkck", T_FIGHTING, 15, 60,  85,  %f_move_percent,30,%f_move_minor_other,flinching         -- 74
    ;;, "sandatck", T_GROUND,   15, 0,   100, %f_move_stat_other, accuracy, -1                         -- 75
    ;;, "headbutt", T_NORMAL,   15, 70,  100, %f_move_percent,30,%f_move_minor_other,flinching         -- 76
    ;;, "hornatck", T_NORMAL,   25, 65,  100, %f_move_default                                          -- 77
-   ;;, "furyatck", T_NORMAL,   20, 15,  85,  %f_move_implement                                        -- 78
+   ;;, "furyatck", T_NORMAL,   20, 15,  85,  %f_move_multihit_var                                     -- 78 DIFF: if KOs pkmn, will also hit new pokemon switched in
    ;;, "tackle",   T_NORMAL,   35, 40,  100, %f_move_default                                          -- 79
    ;;, "wrap",     T_NORMAL,   20, 15,  90,  %f_move_implement                                        -- 80
    ;;, "thrash",   T_NORMAL,   10, 120, 100, %f_move_implement                                        -- 81
    ;;, "tailwhip", T_NORMAL,   30, 0,   100, %f_move_stat_other, defense, -1                          -- 82
    ;;, "psnsting", T_POISON,   35, 15,  100, %f_move_percent,20,%f_move_major_other,C_MAJOR_POISONED  -- 83
-   ;;, "twineedl", T_BUG,      20, 25,  100, %f_move_implement                                        -- 84
-   ;;, "pinmisil", T_BUG,      20, 25,  95,  %f_move_implement                                        -- 85
+   ;;, "twineedl", T_BUG,      20, 25,  100, %f_move_multihit_twin                                    -- 84 DIFF: if KOs pkmn, will also hit new pokemon switched in
+   ;;, "pinmisil", T_BUG,      20, 25,  95,  %f_move_multihit_var                                     -- 85 DIFF: if KOs pkmn, will also hit new pokemon switched in
    ;;, "leer",     T_NORMAL,   30, 0,   100, %f_move_stat_other, defense, -1                          -- 86
    ;;, "bite",     T_NORMAL,   25, 60,  100, %f_move_percent,10,%f_move_minor_other,flinching         -- 87
    ;;, "growl",    T_NORMAL,   40, 0,   100, %f_move_stat_other, attack, -1                           -- 88
@@ -235,14 +235,14 @@ _g.c_moves_raw = f_zobj[[
    ;;, "boneclub", T_GROUND,   20, 65,  85,  %f_move_percent,10,%f_move_minor_other,flinching         -- 138
    ;;, "watrfall", T_WATER,    15, 80,  100, %f_move_default                                          -- 139
    ;;, "clamp",    T_WATER,    15, 35,  85,  %f_move_implement                                        -- 140
-   ;;, "spikcann", T_NORMAL,   15, 20,  100, %f_move_implement                                        -- 141
+   ;;, "spikcann", T_NORMAL,   15, 20,  100, %f_move_multihit_var                                     -- 141 DIFF: if KOs pkmn, will also hit new pokemon switched in
    ;;, "constrct", T_NORMAL,   35, 10,  100, %f_move_percent,10,%f_move_stat_other, speed, -1         -- 142
    ;;, "amnesia",  T_PSYCHIC,  20, 0,   0,   %f_move_stat_self, special, 2                            -- 143
    ;;, "kinesis",  T_PSYCHIC,  15, 0,   80,  %f_move_stat_other, accuracy, -1                         -- 144
    ;;, "hijmpkck", T_FIGHTING, 10, 130, 90,  %f_move_implement                                        -- 145
    ;;, "glare",    T_NORMAL,   30, 0,   100, %f_move_major_other, C_MAJOR_PARALYZED                   -- 146
    ;;, "poisngas", T_POISON,   40, 0,   90,  %f_move_major_other, C_MAJOR_POISONED                    -- 147
-   ;;, "barrage",  T_NORMAL,   20, 15,  85,  %f_move_implement                                        -- 148
+   ;;, "barrage",  T_NORMAL,   20, 15,  85,  %f_move_multihit_var                                     -- 148 DIFF: if KOs pkmn, will also hit new pokemon switched in
    ;;, "leechlif", T_BUG,      10, 80,  100, %f_move_drain                                            -- 149
    ;;, "lovekiss", T_NORMAL,   10, 0,   75,  %f_move_major_other, C_MAJOR_SLEEPING                    -- 150
    ;;, "tranform", T_NORMAL,   10, 0,   0,   %f_move_transform                                        -- 151 DIFF: Does not copy stat stages
@@ -252,8 +252,8 @@ _g.c_moves_raw = f_zobj[[
    ;;, "splash",   T_NORMAL,   40, 0,   0,   %f_move_splash                                           -- 155
    ;;, "acidarmr", T_POISON,   20, 0,   0,   %f_move_stat_self, defense, 2                            -- 156
    ;;, "crabhamr", T_WATER,    10, 100, 90,  %f_move_implement                                        -- 157
-   ;;, "furyswps", T_NORMAL,   15, 18,  80,  %f_move_implement                                        -- 158
-   ;;, "bonerang", T_GROUND,   10, 50,  90,  %f_move_implement                                        -- 159
+   ;;, "furyswps", T_NORMAL,   15, 18,  80,  %f_move_multihit_var                                     -- 158 DIFF: if KOs pkmn, will also hit new pokemon switched in
+   ;;, "bonerang", T_GROUND,   10, 50,  90,  %f_move_multihit_set,2                                   -- 159 DIFF: if KOs pkmn, will also hit new pokemon switched in
    ;;, "hyprfang", T_NORMAL,   15, 80,  90,  %f_move_percent,10,%f_move_minor_other,flinching         -- 160
    ;;, "sharpen",  T_NORMAL,   30, 0,   0,   %f_move_stat_self, attack, 1                             -- 161
    ;;, "convrson", T_NORMAL,   30, 0,   0,   %f_move_conversion                                       -- 162

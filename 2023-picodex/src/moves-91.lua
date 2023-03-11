@@ -170,7 +170,8 @@ end $$
 end $$
 
 |[f_move_major_other]| function(_ENV, majorind)
-    if f_movehelp_major(otheractive, majorind) then
+    -- todo, prevent electric from getting paralyzed, fire from getting burned, ice frozen, grass leech, poison poisoned...
+    if f_get_type_advantage(move, otheractive) > 0 and f_movehelp_major(otheractive, majorind) then
         f_addaction(self, other, "|is|"..c_major_names[majorind])
     else
         return true
@@ -188,7 +189,7 @@ end $$
     end
 end $$
 
--- for focusenergy...
+-- for focusenergy, reflect, etc...
 |[f_move_minor_self]| function(_ENV, minor)
     if not selfactive[minor] then
         selfactive[minor] = true
@@ -200,6 +201,43 @@ end $$
 end $$
 
 ---------- DAMAGING MOVES BELOW ----------
+|[f_move_multihit_set]| function(_ENV, hitcount, endfunc)
+    if hitcount > 0 then
+        f_addaction(self, self, "|begin|hit #"..hitcount, function()
+            _ENV.otheractive = other.active
+            if f_move_default(_ENV) then
+                -- multihit can fail midway if a new pokemon enters in mid attack
+                f_addaction(self, self, "|failed|hit #"..hitcount)
+            end
+
+            f_move_multihit_set(_ENV, hitcount-1, endfunc)
+        end)
+    else
+        endfunc()
+    end
+end $$
+
+|[f_move_multihit_var]| function(_ENV, hitcount)
+    f_move_multihit_set(_ENV, 2+f_flr_rnd'4',f_nop)
+end $$
+
+|[f_move_multihit_twin]| function(_ENV)
+    f_move_multihit_set(_ENV, 2, function()
+        if _rnd'100' < 20 then
+            f_move_major_other(_ENV, C_MAJOR_POISONED)
+        end
+    end)
+end $$
+
+|[f_move_recoil]| function(_ENV)
+    local dmg = f_calc_move_damage(selfactive, otheractive, move)
+    if f_move_setdmg(_ENV, dmg) then
+        return true
+    else
+        f_move_setdmg_self(_ENV, max(1, dmg\4))
+    end
+end $$
+
 |[f_move_default]| function(_ENV)
     return f_move_setdmg(_ENV, f_calc_move_damage(selfactive, otheractive, move))
 end $$
@@ -217,7 +255,7 @@ end $$
     if f_move_setdmg(_ENV, dmg) then
         return true
     else
-        f_move_heal(max(dmg\2, 1))
+        f_move_heal(_ENV, max(dmg\2, 1))
     end
 end $$
 
@@ -261,4 +299,12 @@ end $$
     else
         return true -- todo: maybe instead of returning true, can return a message
     end
+end $$
+
+-- assumes non zero damage
+|[f_move_setdmg_self]| function(_ENV, dmg)
+    -- todo: combine with f_move_setdmg logic token & removed second shared
+    f_addaction(self, self, "|-"..dmg.."|hitpoints", function()
+        selfactive.shared.hp = _max(selfactive.shared.hp-dmg, 0)
+    end)
 end $$
