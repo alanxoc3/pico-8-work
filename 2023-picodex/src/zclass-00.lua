@@ -10,58 +10,14 @@
 -- a f_zclass has a few special attributes that should only be overidden in special cases:
 -- * id: a string of the class name of the f_zclass
 -- * parents: a list of all the ancestors of the f_zclass
--- * ecs_exclusions: a list of class lists that this f_zclass should not be added to
 -- * deregistered: an optional function that should be called when "" is called
-
-|[g_zclass_constructors]| {} $$
-|[g_zclass_entities]|     {} $$
-|[g_zclass_new_entities]| {} $$
-
-|[f_zclass]| function(meta_and_att_str)
-    local meta, template, memloc, expected_memloc_value = _unpack(_split(meta_and_att_str, '|'))
-    local parents = _split(meta)
-    local class = _deli(parents, 1)
-
-    -- ensure that entity lists are not nil, useful to always be able to assume this
-    g_zclass_entities[class] = g_zclass_entities[class] or {}
-
-    g_zclass_constructors[class] = function(inst, done, ...)
-        _foreach(parents, function(parent)
-            if not done[parent] then g_zclass_constructors[parent](inst, done) end
+|[f_zclass]| function(template, class, ...)
+    local parents = {...}
+    _g[class] = function(tbl)
+        foreach(parents, function(parent)
+            _g[parent](tbl)
         end)
-        done[class] = true -- avoid initializing class twice
-        inst.parents[class] = true -- useful for checking if instance inherits from this class (should not be overridden!)
-        _add(g_zclass_new_entities, {class, inst}) -- mark for addition to ECS (may be overridden by templates).
-        return f_zobj_set(inst, template, ...)
-    end
-
-    _g[class] = function(...)
-        if not memloc or _peek(memloc) == expected_memloc_value then
-            -- f_zobj is used instead of {}, because that adds the metatable.
-            return g_zclass_constructors[class](f_zobj([[id,@; parents;,;ecs_exclusions;,]], class), {}, ...)
-        end
-    end
-end $$
-
--- This function drains newly-created entities into the ECS. It should preferably
--- be called near the beginning of each iteration of the game loop.
-
--- You can make a class inherit the information of parents but NOT be added to that
--- parent's ECS group by setting an exclusion in the template. Ex, instances of this
--- actorwithoutparent f_zclass will be in the actorwithoutparent group, but not the
--- o_actor group: f_zclass[[actorwithoutparent,o_actor|ecs_exclusions;o_actor,true]]
-
-|[f_register_entities]| function()
-    while #g_zclass_new_entities > 0 do
-        local class, inst = _unpack(_deli(g_zclass_new_entities))
-        if not inst.ecs_exclusions[class] then _add(g_zclass_entities[class], inst) end
-    end
-end $$
-
--- Removes an entity from all the entity groups it was in when registered.
-|[f_deregister_entity]| function(inst, ...)
-    for class, entities in _pairs(g_zclass_entities) do
-        _del(entities, inst)
+        return f_zobj_set(tbl, template)
     end
 end $$
 
@@ -70,37 +26,4 @@ end $$
     if table and table[key] then
         return table[key](...)
     end
-end $$
-
--- Check if an entity exists.
-|[f_does_entity_exist]| function(entity_name)
-    return #g_zclass_entities[entity_name] > 0
-end $$
-
--- Loop through all the entities of a certain type and call a method on each one if that method exists.
-|[f_loop_entities]| function(class, method_name, ...)
-    for inst in _all(g_zclass_entities[class]) do
-        f_call_not_nil(inst, method_name, inst, ...)
-    end
-end $$
-
--- cleans all zclasses
-|[f_clean_all_entities]| function(...)
-    local objs_to_clean, exclusions = {}, {}
-    _foreach({...}, function(exclusion) exclusions[exclusion] = true end)
-    
-    for class,entities in _pairs(g_zclass_entities) do
-        for entity in _all(entities) do
-            objs_to_clean[entity] = entity.id
-        end
-    end
-
-    for obj,id in _pairs(objs_to_clean) do
-        if not exclusions[id] then
-            f_deregister_entity(obj)
-        end
-    end
-
-    -- optionally remove all new entities as well
-    g_zclass_new_entities = {}
 end $$

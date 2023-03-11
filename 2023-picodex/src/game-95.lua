@@ -1,6 +1,6 @@
 -- todo: (wait) in battle, horizontal 1 px for accuracy attack (move with accuracy)
 -- todo: (wait) in battle, vertical 1 px for stat attack
-f_zclass[[o_modes,o_actor|
+f_zclass([[
     cursor,%f_modes_cursor, -- gets the cursor for a menu
     entry,%f_modes_entry,   -- gets the entry the cursor is on
     push,%f_modes_push,
@@ -68,7 +68,7 @@ f_zclass[[o_modes,o_actor|
 
     -- credits
     credits;      init,%f_credits_init,      draw2,%f_main_draw2,         draw3,%f_main_draw3, xfunc,%f_credits_xfunc;
-]]
+]], 'o_modes', 'o_timer', 'o_actor')
 
 |[f_modes_default_update]| function(_ENV) menu.update(_ENV) end $$
 |[f_modes_default_draw1]|  function(_ENV) menu.draw1(_ENV)  end $$
@@ -117,7 +117,7 @@ end $$
         f_save_team(0, team)
     end
 
-    modes = o_modes()
+    modes = o_modes(f_zobj[[]])
 
     f_zcall(function(menu_name, create_func, ...)
         modes[menu_name].menu = create_func(...)

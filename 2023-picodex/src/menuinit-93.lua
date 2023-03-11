@@ -12,7 +12,7 @@
         game:popuntil'team2story'
     end
 
-    for pl in all{winner,loser} do
+    for pl in _all{winner,loser} do
         f_zobj_set(menu, [[
             v,0 -- fight over view should always start on top. don't save position for this one.
            ;pkmn,@

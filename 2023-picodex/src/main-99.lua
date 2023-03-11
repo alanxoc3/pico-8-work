@@ -1,8 +1,6 @@
-f_zclass[[o_game_state,o_actor|
+f_zclass([[
     curr,wait;
-
     init,%f_game_state_init, light,4;
-    ecs_exclusions; o_actor,%c_yes; -- remove o_game_state from the o_actor group
     defaults;
         foldstate,closed,
         light,4, sfx,-1,
@@ -22,11 +20,10 @@ f_zclass[[o_game_state,o_actor|
     game;       foldstate,open,    next,closing,    light,0,              sinit,%f_game_init,   draw,%f_draw_picodex, update,%f_game_update, draw1,%f_game_draw1, draw2,%f_game_draw2, draw3,%f_game_draw3;
 
     closing;    foldstate,closing, next,closed,              duration,.25,                      draw,%f_draw_picodex, update,%f_nop;
-]]
+]], 'o_game_state', 'o_timer', 'o_actor')
 
 -- every state change will clean up all the entities.
 |[f_game_state_init]| function(state)
-    f_clean_all_entities('o_game_state', 'o_fader_in')
     f_minisfx(state.sfx)
     state:sinit()
 end $$
@@ -37,7 +34,7 @@ function _init()
     -- clear all the read only memory. testing things out showed that this doesn't get cleared automatically.
     _memset(0x8000, 0, 0x7fff)
 
-    g_picodex = o_game_state()
+    g_picodex = o_game_state(f_zobj[[]])
     f_draw_picodex(g_picodex)
     _flip()
     f_minisfx'158'
@@ -72,23 +69,12 @@ function _update60()
         g_bpo, g_bpx = g_bpx, g_bpo
     end
 
-    f_zcall(f_loop_entities, [[
-        1;,o_actor,clean;
-        2;,o_fader,clean;
-    ]])
-
-    f_register_entities()
-
-    f_zcall(f_loop_entities, [[
-        1;,o_fader,tick;
-        2;,o_game_state,tick;
-        3;,o_fader,state;
-        4;,o_game_state,state;
-    ]])
+    f_call_not_nil(g_picodex, 'tick', g_picodex)
+    f_call_not_nil(g_picodex, 'state', g_picodex)
 end
 
 function _draw()
     local _ENV = _g
     _cls()
-    f_loop_entities('o_game_state', 'draw')
+    f_call_not_nil(g_picodex, 'draw', g_picodex)
 end

@@ -31,7 +31,7 @@
 -- 0 duration = 1 step
 -- > 0 duration = blah
 
-f_zclass[[o_timer|
+f_zclass([[
     timers;             ,;
     start_timer,        %f_timer_reset_timer,
     end_timer,          %f_timer_end_timer,
@@ -39,7 +39,7 @@ f_zclass[[o_timer|
     is_active,          %f_timer_is_active,
     get_elapsed_percent,%f_timer_get_elapsed_percent,
     tick,               %f_timer_tick,
-]]
+]], 'o_timer')
 
 |[f_timer_reset_timer]| function(a, timer_name, duration, callback)
     a.timers[timer_name] = { active=true, elapsed=false, duration=duration and 0+duration, callback=callback or function() end }

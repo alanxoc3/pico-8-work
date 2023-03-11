@@ -7,13 +7,10 @@
 -- * able to have a time limit on states if desired
 -- * init function when entering a state
 
-f_zclass[[o_actor,o_timer|
+f_zclass([[
     load,     %f_actor_load,
     loadlogic,%f_actor_loadlogic,
-    state,    %f_actor_state,
-    kill,     %f_actor_kill,
-    clean,    %f_actor_clean,
-    is_alive, %f_actor_is_alive,
+    state,    %f_actor_state;
 
     alive,    %c_yes,
     isnew,    %c_yes,
@@ -22,9 +19,8 @@ f_zclass[[o_actor,o_timer|
     init,      %f_nop,
     finit,     %f_nop,
     stateless_update,    %f_nop,
-    update,    %f_nop,
-    destroyed, %f_nop;
-]]
+    update,    %f_nop;
+]], 'o_actor')
 
 -- if load is called multiple times, the first load is used.
 |[f_actor_load]| function(_ENV, stateName)
@@ -69,31 +65,4 @@ end $$
     -- per-frame update
     _ENV:update()
     _ENV:stateless_update()
-end $$
-
-|[f_actor_is_alive]| function(_ENV)
-    return not effectively_dead and _ENV:is_active'ending' == nil and alive
-end $$
-
--- If there is an ending state, call that. Otherwise, just set alive to false.
-|[f_actor_kill]| function(_ENV)
-    effectively_dead = true
-    if ending then
-        if curr == 'start' then
-            next = 'ending'
-        elseif _ENV:is_active'ending' == nil then
-            _ENV:load'ending'
-        end
-    else
-        alive = nil
-    end
-end $$
-
--- This is expected to be called at the beginning of each frame!
--- If this is not called at the beginning, you could have a frame delay for things like explosions.
-|[f_actor_clean]| function(_ENV)
-    if not alive then
-        _ENV:destroyed()
-        f_deregister_entity(_ENV)
-    end
 end $$
