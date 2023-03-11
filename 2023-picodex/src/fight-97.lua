@@ -99,16 +99,28 @@ end $$
 end $$
 
 -- returns possible moves that can be used in the fight.
-|[f_get_possible_moves]| function(active)
-    local possible_moves = {}
+|[f_get_moves]| function(pkmn)
+    local moves = {}
 
-    for i=1,4 do
-        if active.mynewmoves[i].num > 0 and active.mynewmoves[i].pp > 0 then
-            _add(possible_moves, active.mynewmoves[i])
+    _foreach(pkmn.mynewmoves, function(m)
+        if m.num > 0 then
+            _add(moves, m)
         end
-    end
+    end)
 
-    return possible_moves
+    return moves
+end $$
+
+|[f_get_possible_moves]| function(pkmn)
+    local moves = {}
+
+    _foreach(f_get_moves(pkmn), function(m)
+        if m.pp > 0 then
+            _add(moves, m)
+        end
+    end)
+
+    return moves
 end $$
 
 |[f_select_random_move]| function(active)
@@ -173,6 +185,11 @@ end $$
     return c_types[move_type][pkmn_type] or 1
 end $$
 
+-- type advantage used to calculate resistance too
+|[f_get_type_advantage]| function(move, defender)
+    return f_get_type_modifier(move.type, defender.type1)*f_get_type_modifier(move.type, defender.type2)
+end $$
+
 -- see: https://web.archive.org/web/20140711082447/http://www.upokecenter.com/content/pokemon-red-version-blue-version-and-yellow-version-timing-notes
 -- and: https://bulbapedia.bulbagarden.net/wiki/Damage
 -- only returns "zero" if there is a resistance
@@ -205,7 +222,6 @@ end $$
     -- end of formula multiplies by a random number (217/255)
     return base_damage
         *stab
-        *f_get_type_modifier(move.type, defender.type1)
-        *f_get_type_modifier(move.type, defender.type2)
+        *f_get_type_advantage(move, defender)
         *(_rnd'.15'+.85)\1
 end $$

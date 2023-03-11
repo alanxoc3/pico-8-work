@@ -60,10 +60,62 @@ end $$
     f_addaction(self, self, "|not|implemented")
 end $$
 
--- todo: moves should have a slot index (for mimic and maybe something else). metronome/mirrormove should pass it's slot index to the new move it creates.
+|[f_move_mimic]| function(_ENV)
+    -- todo: can any logic be combined with transform?
+    local othermoves = f_get_moves(otheractive)
+    local newmove = f_create_move(othermoves[f_flr_rnd(#othermoves)+1].num, move.slot)
+    newmove.pp, newmove.maxpp = 5, 5
+    selfactive.mynewmoves[move.slot] = newmove
+    f_addaction(self, self, "|copied|"..newmove.name)
+end $$
+
+|[f_move_conversion]| function(_ENV)
+    -- todo: token crunch here
+    selfactive.type1 = otheractive.type1
+    selfactive.type2 = otheractive.type2
+    selfactive.conversion = true
+    f_addaction(self, self, "|copied|types")
+end $$
+
+|[f_move_transform]| function(_ENV)
+    if selfactive.transform then
+        return true
+    else
+        f_addaction(self, self, "|copied|"..otheractive.name, function()
+            selfactive.transform = true
+            _foreach(_split'num,attack,defense,speed,special,type1,type2', function(key)
+                selfactive[key] = otheractive[key]
+            end)
+
+            selfactive.mynewmoves = {}
+            _foreach(otheractive.mynewmoves, function(m)
+                local newmove = f_create_move(m.num)
+                newmove.pp, newmove.maxpp = 5, 5
+                _add(selfactive.mynewmoves, newmove)
+            end)
+        end)
+    end
+end $$
+
+-- recover and softboiled
+|[f_move_heal]| function(_ENV, amount)
+    amount = min(amount, selfactive.maxhp-selfactive.hp)
+    if amount > 0 then
+        f_addaction(self, self, "|+"..amount.."|hitpoints", function()
+            selfactive.shared.hp += amount
+        end)
+    else
+        return true
+    end
+end $$
+
+|[f_move_recover]| function(_ENV)
+    return f_move_heal(_ENV, selfactive.maxhp\2)
+end $$
+
 |[f_move_metronome]| function(_ENV)
     -- movelogic will subtract pp from new move, so that doesn't matter
-    f_movelogic(self, f_create_move(f_flr_rnd(164)+1))
+    f_movelogic(self, f_create_move(f_flr_rnd(164)+1, move.slot))
 end $$
 
 -- move funcs take in "_ENV", which has some useful things
@@ -147,67 +199,66 @@ end $$
     end
 end $$
 
-|[f_move_transform]| function(_ENV)
-    if selfactive.transform then
+---------- DAMAGING MOVES BELOW ----------
+|[f_move_default]| function(_ENV)
+    return f_move_setdmg(_ENV, f_calc_move_damage(selfactive, otheractive, move))
+end $$
+
+|[f_move_dreameater]| function(_ENV)
+    if selfactive.major == C_MAJOR_SLEEPING then
+        f_move_drain(_ENV)
+    else
+        return true
+    end
+end $$
+
+|[f_move_drain]| function(_ENV)
+    local dmg = f_calc_move_damage(selfactive, otheractive, move)
+    if f_move_setdmg(_ENV, dmg) then
         return true
     else
-        f_addaction(self, self, "|copied|"..otheractive.name, function()
-            selfactive.transform = true
-            _foreach(_split'num,attack,defense,speed,special,type1,type2', function(key)
-                selfactive[key] = otheractive[key]
-            end)
-
-            selfactive.mynewmoves = {}
-            _foreach(otheractive.mynewmoves, function(m)
-                local newmove = f_create_move(m.num)
-                newmove.pp, newmove.maxpp = 5, 5
-                _add(selfactive.mynewmoves, newmove)
-            end)
-        end)
+        f_move_heal(max(dmg\2, 1))
     end
-end $$
-
-|[f_movehelper_resistance]| function(_ENV, func)
-    local dmg = f_calc_move_damage(selfactive, otheractive, move)
-    if dmg > 0 then
-        func(dmg)
-    else
-        f_addaction(self, other, "|resisted|"..move.name)
-    end
-end $$
-
-|[f_move_default]| function(_ENV)
-    f_movehelper_resistance(_ENV, function(dmg)
-        f_addaction(self, other, "|-"..dmg.."|hitpoints", function()
-            otheractive.shared.hp = _max(0, otheractive.shared.hp-dmg)
-        end)
-    end)
 end $$
 
 -- for moves that do damage, then an extra effect
 -- todo: movepercent logic can probably be combined with movedefault logic ( could have < (percent or 0) and 100 means always apply
 |[f_move_percent]| function(_ENV, percent, func, ...)
-    local params = {...}
-    f_movehelper_resistance(_ENV, function(dmg)
-        f_addaction(self, other, "|-"..dmg.."|hitpoints", function()
-            otheractive.shared.hp = _max(0, otheractive.shared.hp-dmg)
-        end)
-
+    if f_move_default(_ENV) then
+        return true
+    else
         if _rnd'100' < percent then
-            func(_ENV, _unpack(params))
+            func(_ENV, ...)
         end
-    end)
+    end
 end $$
 
 -- ohko moves only work on slower foes
 |[f_move_ohko]| function(_ENV)
     if selfactive.speed >= otheractive.speed then
-        f_movehelper_resistance(_ENV, function()
-            f_addaction(self, other, "|-"..otheractive.shared.hp.."|hitpoints", function()
-                otheractive.shared.hp = 0
-            end)
-        end)
+        return f_move_setdmg(_ENV, otheractive.hp)
     else
         return true
+    end
+end $$
+
+-- ohko moves only work on slower foes
+|[f_move_psywave]| function(_ENV)
+    -- number is C_LEVEL*1.5 -- 75 in this case
+    return f_move_setdmg(_ENV, 1+f_flr_rnd'75')
+end $$
+
+|[f_move_superfang]| function(_ENV)
+    return f_move_setdmg(_ENV, max(otheractive.hp\2, 1))
+end $$
+
+-- zero damage means resistance
+|[f_move_setdmg]| function(_ENV, dmg)
+    if f_get_type_advantage(move, otheractive) > 0 then
+        f_addaction(self, other, "|-"..dmg.."|hitpoints", function()
+            otheractive.shared.hp = _max(otheractive.shared.hp-dmg, 0)
+        end)
+    else
+        return true -- todo: maybe instead of returning true, can return a message
     end
 end $$

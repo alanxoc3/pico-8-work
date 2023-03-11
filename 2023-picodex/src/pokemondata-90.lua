@@ -109,11 +109,11 @@ _g.c_moves_raw = f_zobj[[
    ;;, "payday",   T_NORMAL,   20, 40,  100, %f_move_default                                          -- 16
    ;;, "submsion", T_FIGHTING, 20, 80,  80,  %f_move_implement                                        -- 17
    ;;, "counter",  T_FIGHTING, 20, -1,  100, %f_move_implement                                        -- 18  DIFF: respects resistance
-   ;;, "siestoss", T_FIGHTING, 20, -1,  100, %f_move_implement                                        -- 19  DIFF: respects resistance
+   ;;, "seistoss", T_FIGHTING, 20, -1,  100, %f_move_setdmg,C_LEVEL                                   -- 19  DIFF: respects resistance
    ;;, "rage",     T_NORMAL,   20, 20,  100, %f_move_implement                                        -- 20  DIFF: you can switch out while using rage
-   ;;, "megdrain", T_GRASS,    15, 40,  100, %f_move_implement                                        -- 21
+   ;;, "megdrain", T_GRASS,    15, 40,  100, %f_move_drain                                            -- 21
    ;;, "solrbeam", T_GRASS,    10, 120, 100, %f_move_implement                                        -- 22
-   ;;, "drgnrage", T_DRAGON,   10, -1,  100, %f_move_implement                                        -- 23  DIFF: respects resistance
+   ;;, "drgnrage", T_DRAGON,   10, -1,  100, %f_move_setdmg,40                                        -- 23  DIFF: respects resistance
    ;;, "thndrblt", T_ELECTRIC, 15, 90,  100, %f_move_percent,10,%f_move_major_other,C_MAJOR_PARALYZED -- 24
    ;;, "thunder",  T_ELECTRIC, 10, 110, 70,  %f_move_percent,10,%f_move_major_other,C_MAJOR_PARALYZED -- 25  DIFF: hits pokemon using fly + double damage
    ;;, "earthqke", T_GROUND,   10, 100, 100, %f_move_default                                          -- 26  DIFF: hits pokemon using dig + double damage
@@ -121,7 +121,7 @@ _g.c_moves_raw = f_zobj[[
    ;;, "dig",      T_GROUND,   10, 80,  100, %f_move_implement                                        -- 28
    ;;, "psychic",  T_PSYCHIC,  10, 90,  100, %f_move_percent,30,%f_move_stat_other,special,-1         -- 29
    ;;, "teleport", T_PSYCHIC,  20, 0,   0,   %f_move_teleport                                         -- 30  DIFF: switches with random pokemon from user's team
-   ;;, "mimic",    T_NORMAL,   10, 0,   0,   %f_move_implement                                        -- 31  DIFF: doesn't miss and copies 5 pp like transform
+   ;;, "mimic",    T_NORMAL,   10, 0,   0,   %f_move_mimic                                            -- 31  DIFF: doesn't miss and copies 5 pp like transform
    ;;, "doubteam", T_NORMAL,   15, 0,   0,   %f_move_stat_self, evasion, 1                            -- 32
    ;;, "reflect",  T_PSYCHIC,  20, 0,   0,   %f_move_minor_self,reflected                             -- 33
    ;;, "bide",     T_NORMAL,   10, -1,  100, %f_move_implement                                        -- 34  DIFF: doesn't bypass accuracy check & respects resistance
@@ -131,12 +131,12 @@ _g.c_moves_raw = f_zobj[[
    ;;, "fireblst", T_FIRE,     5,  110, 85,  %f_move_percent,30,%f_move_major_other,C_MAJOR_BURNED    -- 38
    ;;, "swift",    T_NORMAL,   20, 60,  0,   %f_move_default                                          -- 39  DIFF: always hits, no matter what
    ;;, "skulbash", T_NORMAL,   10, 130, 100, %f_move_implement                                        -- 40
-   ;;, "softboil", T_NORMAL,   5,  0,   0,   %f_move_implement                                        -- 41
-   ;;, "dreameat", T_PSYCHIC,  15, 100, 100, %f_move_implement                                        -- 42
+   ;;, "softboil", T_NORMAL,   5,  0,   0,   %f_move_recover                                          -- 41
+   ;;, "dreameat", T_PSYCHIC,  15, 100, 100, %f_move_dreameater                                       -- 42
    ;;, "skyattck", T_FLYING,   5,  140, 90,  %f_move_implement                                        -- 43
    ;;, "rest",     T_PSYCHIC,  5,  0,   0,   %f_move_implement                                        -- 44
    ;;, "thndrwav", T_ELECTRIC, 20, 0,   90,  %f_move_major_other, C_MAJOR_PARALYZED                   -- 45
-   ;;, "psywave",  T_PSYCHIC,  15, -1,  100, %f_move_implement                                        -- 46  DIFF: respects resistance
+   ;;, "psywave",  T_PSYCHIC,  15, -1,  100, %f_move_psywave                                          -- 46  DIFF: respects resistance
    ;;, "explsion", T_NORMAL,   5,  250, 100, %f_move_implement                                        -- 47
    ;;, "rockslid", T_ROCK,     10, 75,  90,  %f_move_default                                          -- 48
    ;;, "triattck", T_NORMAL,   10, 80,  100, %f_move_default                                          -- 49
@@ -185,8 +185,8 @@ _g.c_moves_raw = f_zobj[[
    ;;, "growl",    T_NORMAL,   40, 0,   100, %f_move_stat_other, attack, -1                           -- 88
    ;;, "roar",     T_NORMAL,   20, 0,   100, %f_move_roar                                             -- 89  DIFF: switches opponent with random pokemon
    ;;, "sing",     T_NORMAL,   15, 0,   55,  %f_move_major_other, C_MAJOR_SLEEPING                    -- 90
-   ;;, "supersnc", T_NORMAL,   20, 0,   55,  %f_move_implement                                        -- 91
-   ;;, "sonicbom", T_NORMAL,   20, -1,  90,  %f_move_implement                                        -- 92  DIFF: respects resistance
+   ;;, "sprsonic", T_NORMAL,   20, 0,   55,  %f_move_minor_other, confused                            -- 91
+   ;;, "sonicbom", T_NORMAL,   20, -1,  90,  %f_move_setdmg,20                                        -- 92  DIFF: respects resistance
    ;;, "disable",  T_NORMAL,   20, 0,   100, %f_move_implement                                        -- 93
    ;;, "acid",     T_POISON,   30, 40,  100, %f_move_percent,10,%f_move_stat_other, defense, -1       -- 94
    ;;, "ember",    T_FIRE,     25, 40,  100, %f_move_percent,10,%f_move_major_other,C_MAJOR_BURNED    -- 95
@@ -198,7 +198,7 @@ _g.c_moves_raw = f_zobj[[
    ;;, "peck",     T_FLYING,   35, 35,  100, %f_move_default                                          -- 101
    ;;, "drillpck", T_FLYING,   20, 80,  100, %f_move_default                                          -- 102
    ;;, "lowkick",  T_FIGHTING, 20, 0,   100, %f_move_percent,30,%f_move_minor_other,flinching         -- 103
-   ;;, "absorb",   T_GRASS,    25, 20,  100, %f_move_implement                                        -- 104
+   ;;, "absorb",   T_GRASS,    25, 20,  100, %f_move_drain                                            -- 104
    ;;, "leechsed", T_GRASS,    10, 0,   90,  %f_move_minor_other,seeded                               -- 105
    ;;, "growth",   T_NORMAL,   20, 0,   0,   %f_move_stat_self, special, 1                            -- 106
    ;;, "razrleaf", T_GRASS,    25, 55,  95,  %f_move_implement                                        -- 107
@@ -215,13 +215,13 @@ _g.c_moves_raw = f_zobj[[
    ;;, "meditate", T_PSYCHIC,  40, 0,   0,   %f_move_stat_self, attack, 1                             -- 118
    ;;, "agility",  T_PSYCHIC,  30, 0,   0,   %f_move_stat_self, speed, 2                              -- 119
    ;;, "quickatk", T_NORMAL,   30, 40,  100, %f_move_default                                          -- 120
-   ;;, "nghtshde", T_GHOST,    15, -1,  100, %f_move_implement                                        -- 121 DIFF: respects resistance now
+   ;;, "ngtshade", T_GHOST,    15, -1,  100, %f_move_setdmg,C_LEVEL                                   -- 121 DIFF: respects resistance now
    ;;, "screech",  T_NORMAL,   40, 0,   85,  %f_move_stat_other, defense, -2                          -- 122
-   ;;, "recover",  T_NORMAL,   5,  0,   0,   %f_move_implement                                        -- 123
+   ;;, "recover",  T_NORMAL,   5,  0,   0,   %f_move_recover                                          -- 123
    ;;, "harden",   T_NORMAL,   30, 0,   0,   %f_move_stat_self, defense, 1                            -- 124
    ;;, "minimize", T_NORMAL,   10, 0,   0,   %f_move_stat_self, evasion, 1                            -- 125
    ;;, "smokscrn", T_NORMAL,   20, 0,   100, %f_move_stat_other, accuracy, -1                         -- 126
-   ;;, "cnfusray", T_GHOST,    10, 0,   100, %f_move_implement                                        -- 127
+   ;;, "cnfusray", T_GHOST,    10, 0,   100, %f_move_minor_other, confused                            -- 127
    ;;, "withdraw", T_WATER,    40, 0,   0,   %f_move_stat_self, defense, 1                            -- 128
    ;;, "dfnscurl", T_NORMAL,   40, 0,   0,   %f_move_stat_self, defense, 1                            -- 129
    ;;, "barrier",  T_PSYCHIC,  20, 0,   0,   %f_move_stat_self, defense, 2                            -- 130
@@ -243,7 +243,7 @@ _g.c_moves_raw = f_zobj[[
    ;;, "glare",    T_NORMAL,   30, 0,   100, %f_move_major_other, C_MAJOR_PARALYZED                   -- 146
    ;;, "poisngas", T_POISON,   40, 0,   90,  %f_move_major_other, C_MAJOR_POISONED                    -- 147
    ;;, "barrage",  T_NORMAL,   20, 15,  85,  %f_move_implement                                        -- 148
-   ;;, "leechlif", T_BUG,      10, 80,  100, %f_move_implement                                        -- 149
+   ;;, "leechlif", T_BUG,      10, 80,  100, %f_move_drain                                            -- 149
    ;;, "lovekiss", T_NORMAL,   10, 0,   75,  %f_move_major_other, C_MAJOR_SLEEPING                    -- 150
    ;;, "tranform", T_NORMAL,   10, 0,   0,   %f_move_transform                                        -- 151 DIFF: Does not copy stat stages
    ;;, "bubble",   T_WATER,    30, 40,  100, %f_move_percent,10,%f_move_stat_other, speed, -1         -- 152
@@ -256,8 +256,8 @@ _g.c_moves_raw = f_zobj[[
    ;;, "bonerang", T_GROUND,   10, 50,  90,  %f_move_implement                                        -- 159
    ;;, "hyprfang", T_NORMAL,   15, 80,  90,  %f_move_percent,10,%f_move_minor_other,flinching         -- 160
    ;;, "sharpen",  T_NORMAL,   30, 0,   0,   %f_move_stat_self, attack, 1                             -- 161
-   ;;, "convrson", T_NORMAL,   30, 0,   0,   %f_move_implement                                        -- 162
-   ;;, "suprfang", T_NORMAL,   10, -1,  90,  %f_move_implement                                        -- 163 DIFF: respects resistance now
+   ;;, "convrson", T_NORMAL,   30, 0,   0,   %f_move_conversion                                       -- 162
+   ;;, "suprfang", T_NORMAL,   10, -1,  90,  %f_move_superfang                                        -- 163 DIFF: respects resistance now
    ;;, "slash",    T_NORMAL,   20, 70,  100, %f_move_implement                                        -- 164
 ]]
 

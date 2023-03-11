@@ -149,7 +149,13 @@ end $$
 
 -- teampkmn must be non-nil and match the team table structure defined in f_create_team_pkmn
 |[f_team_pkmn_to_active]| function(teampkmn)
+    -- need to copy each move just for mimic to work when switching 
+    local moves = {}
+    _foreach(teampkmn.mynewmoves, function(m)
+        _add(moves, m)
+    end)
+
     return _setmetatable(f_zobj([[
-        accuracy,1, evasion,1, shared,@, stages,#;
-    ]], teampkmn), {__index=teampkmn})
+        accuracy,1, evasion,1, shared,@, stages,#, mynewmoves,@;
+    ]], teampkmn, moves), {__index=teampkmn})
 end $$

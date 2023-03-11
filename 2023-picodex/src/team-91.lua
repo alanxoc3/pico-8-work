@@ -64,7 +64,7 @@ c_team_memlocs = f_zobj[[0,S_PARTY1, 1,S_PARTY2, 2,S_PARTY3]]
         local mynewmoves = {}
         local has_moves = false
         for i=1,4 do
-            mynewmoves[i] = f_create_move(_peek(memstart+i))
+            mynewmoves[i] = f_create_move(_peek(memstart+i), i)
             if mynewmoves[i].num > 0 then
                 has_moves = true
             else
@@ -122,14 +122,14 @@ end $$
 |[f_get_natural_moveset]| function(num)
     local pkmn, moveset = c_pokemon[num], f_create_empty_moveset()
     for i=1,min(4,#pkmn.moves_natural) do
-        moveset[i] = f_create_move(pkmn.moves_natural[i])
+        moveset[i] = f_create_move(pkmn.moves_natural[i], i)
     end
     return moveset
 end $$
 
 -- move is between -1 and 
-|[f_create_move]| function(id)
-    return _setmetatable(f_zobj[[]], {__index=c_moves[id]})
+|[f_create_move]| function(id, slot)
+    return _setmetatable(f_zobj([[slot,@]], slot or 0), {__index=c_moves[id]})
 end $$
 
 |[f_create_empty_moveset]| function()
