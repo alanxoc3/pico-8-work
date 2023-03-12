@@ -1,5 +1,7 @@
+-- todo: token crunch, use _ENV instead of game here.
 |[f_psel_init]| function(game)
     game.p0 = game[game.p0key]
+    game.p0.active.turnstarthp = game.p0.active.hp -- for counter
 
     -- skip this state if the player is a cpu
     if game.p0.iscpu then

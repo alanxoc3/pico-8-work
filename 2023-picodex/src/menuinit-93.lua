@@ -344,7 +344,7 @@ end $$
 
     local stages = {}
     _foreach(c_stages, function(s)
-        local stage = player.active.stages[s.key] or 0
+        local stage = player.active.stages[s.key]
         if stage ~= 0 then
             _add(stages, {name=s.name..' '..(stage > 0 and '+' or '-').._abs(stage)..'/6'})
         end

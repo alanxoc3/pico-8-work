@@ -245,3 +245,52 @@ Pin-Missile     Bug         20  14      85%     Attacks 2-5 times in one turn; i
 Double-Kick     Fighting    30  30      100%    Strikes twice; if the first hit breaks the target's Substitute, the real Pokemon will take damage from the second hit.
 Bonemerang      Ground      10  50      90%     Strikes twice; if the first hit breaks the target's Substitute, the real Pokemon will take damage from the second hit.
 Twineedle       Bug         20  25      100%    Strikes twice; if the first hit breaks the target's Substitute, the real Pokemon will take damage from the second hit. Has a ~20% chance to poison the target .
+
+
+-- MULTI-TURN UNIQUE
+;;, "hyprbeam", T_NORMAL,   5,  150, 90,  %f_move_implement                                        -- 15
+;;, "rage",     T_NORMAL,   20, 20,  100, %f_move_implement                                        -- 20  DIFF: you can switch out while using rage
+;;, "bide",     T_NORMAL,   10, -1,  100, %f_move_implement                                        -- 34  DIFF: doesn't bypass accuracy check & respects resistance
+
+-- MULTITURN PREPARE
+;;, "razrwind", T_NORMAL,   10, 80,  100, %f_move_implement                                        -- 2
+;;, "solrbeam", T_GRASS,    10, 120, 100, %f_move_implement                                        -- 22
+;;, "skulbash", T_NORMAL,   10, 130, 100, %f_move_implement                                        -- 40
+;;, "skyattck", T_FLYING,   5,  140, 90,  %f_move_implement                                        -- 43
+
+-- MULTITURN INVINCIBLE
+;;, "fly",      T_FLYING,   15, 90,  95,  %f_move_implement                -- 52
+;;, "dig",      T_GROUND,   10, 80,  100, %f_move_implement                                        -- 28
+
+-- MULTITURN THRASH
+;;, "thrash",   T_NORMAL,   10, 120, 100, %f_move_implement                                        -- 81
+;;, "petldanc", T_GRASS,    10, 120, 100, %f_move_implement                                        -- 111
+
+-- MULTITURN TRAPPING
+;;, "wrap",     T_NORMAL,   20, 15,  90,  %f_move_implement                                        -- 80
+;;, "bind",     T_NORMAL,   20, 15,  85,  %f_move_implement                                        -- 68
+;;, "firespin", T_FIRE,     15, 35,  85,  %f_move_implement                                        -- 113
+;;, "clamp",    T_WATER,    15, 35,  85,  %f_move_implement                                        -- 140
+
+-- HI CRIT MOVES
+;;, "crabhamr", T_WATER,    10, 100, 90,  %f_move_implement                                        -- 157
+;;, "razrleaf", T_GRASS,    25, 55,  95,  %f_move_implement                                        -- 107
+;;, "slash",    T_NORMAL,   20, 70,  100, %f_move_implement                                        -- 164
+;;, "karatchp", T_FIGHTING, 25, 50,  100, %f_move_implement                                        -- 57
+
+-- get 1 recoil damage if miss
+;;, "jumpkck",  T_FIGHTING, 10, 100, 95,  %f_move_implement                                        -- 73
+;;, "hijmpkck", T_FIGHTING, 10, 130, 90,  %f_move_implement                                        -- 145
+
+-- similar to metronome
+;;, "mirrmove", T_FLYING,   20, -1,  0,   %f_move_implement                                        -- 134
+
+-- stat related effects
+;;, "haze",     T_ICE,      30, 0,   0,   %f_move_implement                                        -- 132 DIFF
+;;, "mist",     T_ICE,      30, 0,   0,   %f_move_implement                                        -- 97
+
+-- requires turn dmg counter
+;;, "counter",  T_FIGHTING, 20, -1,  100, %f_move_implement                                        -- 18  DIFF: respects resistance
+;;, "rest",     T_PSYCHIC,  5,  0,   0,   %f_move_implement                                        -- 44
+;;, "substute", T_NORMAL,   10, 0,   0,   %f_move_implement                                        -- 50
+;;, "disable",  T_NORMAL,   20, 0,   100, %f_move_implement                                        -- 93

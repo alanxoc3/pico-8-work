@@ -16,6 +16,7 @@
 end $$
 
 -- metronome would call this function as well as select_move
+-- todo: get _ENV working here & populated with correct things, actually, env should populate on add action
 |[f_movelogic]| function(self, move)
     f_addaction(self, self, "|uses|"..move.name, function(self, other)
         f_movehelp_update_pp(move)
@@ -27,7 +28,16 @@ end $$
 
         if f_does_move_miss(self.active, other.active, move) then
             f_addaction(self, self, "|missed|"..move.name)
+
+            if move.num == M_HIGH_JUMP_KICK or move.num == M_JUMP_KICK then
+                -- todo: will break until _ENV is working here
+                f_move_setdmg_self(_ENV, 1)
+            end
         else
+            if move.accuracy ~= 0 then -- -1 is swift, positive is most moves. mirrormove has 0 acc, so you can't copy that. haze is -1 too
+                other.active.lastmoverecv = move.num
+            end
+
             -- todo: might be nice if other things were supported (miss, fail, resist)
             if move:func(self, other) then
                 f_addaction(self, self, "|failed|"..move.name)
@@ -171,22 +181,27 @@ end $$
 
 -- takes in the hard-coded base speed value for the pkmn, so electrode would have highest crit ratio.
 -- todo: (wait) make high crit moves & focus energy work
-|[f_get_crit_ratio]| function(_ENV)
-    -- slash:        _min(.99, (base_speed+76)/128)
-    -- focus energy: _min(.99, (base_speed+236)/512)
-    -- focus energy + crit move: .99609
+
+-- this crit formula is slightly different than the original games.
+-- electrode 
+|[f_get_crit_ratio]| function(_ENV, movenum)
+    -- slash:        _min(.99, (base_speed+76)/128) -- times .3 is close enough
+    -- focus energy: _min(.99, (base_speed+236)/512) -- times .3 is close enough
+    -- focus energy + crit move: .99 -- with my damage calculation, technically, slowpoke ends up at 98
 
     -- range is 0 to 255. then random roll is done out of 256, so high crit still has like a .5% chance of failing.
-    local ratio = (base_speed+76)/1024
+    local divisor = 1024
+    if movenum == M_RAZOR_LEAF or movenum == M_SLASH or movenum == M_KARATE_CHOP or movenum == M_CRABHAMMER then divisor *= .3 end
+    if focused then divisor *= .3 end
 
     -- decimal here is 255/256. close enough to the actual formula
-    return _rnd'1' < _min(.99609, ratio) and 2 or 1
+    return _rnd'1' < _min(.99, (base_speed+76)/divisor) and 2 or 1
 end $$
 
 -- pokemon stadium has a 1/65536 chance of a move missing
 |[f_does_move_miss]| function(attacker, defender, move)
     -- todo: token crunch, think about a ~= and func again.
-    if move.accuracy <= 0  then return false end -- this catches swift and self status moves
+    if move.accuracy <= 0  then return false end -- this catches swift and self status moves... swift is negative
     if defender.digging and move.num ~= M_FISSURE and move.num ~= M_EARTHQUAKE                          then return true end
     if defender.flying  and move.num ~= M_GUST    and move.num ~= M_THUNDER and move.num ~= M_WHIRLWIND then return true end
     return _rnd(defender.evasion) > move.accuracy/100*attacker:f_movehelp_getstat'accuracy' or f_flr_rnd'256' == 0 and f_flr_rnd'256' == 0
@@ -209,7 +224,7 @@ end $$
     -- todo: need to factor in if burned
     -- todo: token crunch this algorithm
     local iscontact = move.type % 2 == 1
-    local critical = f_get_crit_ratio(attacker)
+    local critical = f_get_crit_ratio(attacker, move.num)
     local stab = (move.type == attacker.type1 or move.type == attacker.type2) and 1.5 or 1
     local attack, defense = attacker:f_movehelp_getstat'special', defender:f_movehelp_getstat'special'
 

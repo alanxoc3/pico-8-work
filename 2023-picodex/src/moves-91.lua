@@ -16,8 +16,10 @@ end $$
 
 -- returns true if it increased, false otherwise
 |[f_movehelp_incstat]| function(a, stat, inc)
-    local prev = a.stages[stat] or 0
-    a.stages[stat] = mid(-6, 6, prev+inc)
+    local prev = a.stages[stat]
+    if not a.misted then
+        a.stages[stat] = mid(-6, 6, prev+inc)
+    end
     return prev ~= a.stages[stat]
 end $$
 
@@ -31,7 +33,7 @@ end $$
 |[f_movehelp_getstat]| function(a, stat)
     -- evasion and accuracy have a different formula: https://www.smogon.com/rb/articles/stadium_guide
     -- all stats cap at 999: https://www.smogon.com/rb/articles/rby_mechanics_guide
-    local stage = a.stages[stat] or 0
+    local stage = a.stages[stat]
     return _ceil(_mid(1, 999,
         a[stat]*(
             (stat == 'evasion' or stat == 'accuracy')
@@ -97,6 +99,18 @@ end $$
     end
 end $$
 
+|[f_move_haze]| function(_ENV)
+    _foreach({other, self}, function(pl)
+        f_zobj_set(pl.active.stages, [[
+            special, 0, attack, 0,
+            defense, 0, speed,  0,
+            accuracy,0, evasion,0
+        ]])
+
+        f_addaction(self, pl, "|reset|modifiers")
+    end)
+end $$
+
 -- recover and softboiled
 |[f_move_heal]| function(_ENV, amount)
     amount = min(amount, selfactive.maxhp-selfactive.hp)
@@ -116,6 +130,14 @@ end $$
 |[f_move_metronome]| function(_ENV)
     -- movelogic will subtract pp from new move, so that doesn't matter
     f_movelogic(self, f_create_move(f_flr_rnd(164)+1, move.slot))
+end $$
+
+|[f_move_mirror_move]| function(_ENV)
+    if selfactive.lastmoverecv > 0 then
+        f_movelogic(self, f_create_move(selfactive.lastmoverecv, move.slot))
+    else
+        return true
+    end
 end $$
 
 -- move funcs take in "_ENV", which has some useful things
@@ -201,6 +223,22 @@ end $$
 end $$
 
 ---------- DAMAGING MOVES BELOW ----------
+|[f_move_rest]| function(_ENV)
+    selfactive.shared.major = C_MAJOR_SLEEPING
+    f_addaction(self, self, "|is|sleeping")
+    f_move_heal(_ENV, selfactive.maxhp)
+    selfactive.toxic = false
+end $$
+
+|[f_move_counter]| function(_ENV)
+    -- the modulus here is to check if the last move was a physical move
+    if c_moves[selfactive.lastmoverecv].type % 2 == 1 then
+        return f_move_setdmg(_ENV, (selfactive.turnstarthp-selfactive.hp)*2)
+    else
+        return true
+    end
+end $$
+
 |[f_move_multihit_set]| function(_ENV, hitcount, endfunc)
     if hitcount > 0 then
         f_addaction(self, self, "|begin|hit #"..hitcount, function()
@@ -292,7 +330,7 @@ end $$
 
 -- zero damage means resistance
 |[f_move_setdmg]| function(_ENV, dmg)
-    if f_get_type_advantage(move, otheractive) > 0 then
+    if dmg > 0 and f_get_type_advantage(move, otheractive) > 0 then
         f_addaction(self, other, "|-"..dmg.."|hitpoints", function()
             otheractive.shared.hp = _max(otheractive.shared.hp-dmg, 0)
         end)
