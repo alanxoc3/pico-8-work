@@ -33,6 +33,7 @@ c_major_names[0] = "none" -- for "none" status
     ;;name,"critmove" ,key,critmove
     ;;name,"decoyed"  ,key,decoyed
     ;;name,"digging"  ,key,digging
+    ;;name,"disable"  ,key,disabled
     ;;name,"flinch"   ,key,flinching
     ;;name,"flying"   ,key,flying
     ;;name,"focus"    ,key,focused
@@ -187,7 +188,7 @@ _g.c_moves_raw = f_zobj[[
    ;;, "sing",     T_NORMAL,   15, 0,   55,  %f_move_major_other, C_MAJOR_SLEEPING                    -- 90
    ;;, "sprsonic", T_NORMAL,   20, 0,   55,  %f_move_minor_other, confused                            -- 91
    ;;, "sonicbom", T_NORMAL,   20, -1,  90,  %f_move_setdmg,20                                        -- 92  DIFF: respects resistance
-   ;;, "disable",  T_NORMAL,   20, 0,   100, %f_move_implement                                        -- 93
+   ;;, "disable",  T_NORMAL,   20, 0,   100, %f_move_disable                                          -- 93  DIFF: lasts 2-7 turns
    ;;, "acid",     T_POISON,   30, 40,  100, %f_move_percent,10,%f_move_stat_other, defense, -1       -- 94
    ;;, "ember",    T_FIRE,     25, 40,  100, %f_move_percent,10,%f_move_major_other,C_MAJOR_BURNED    -- 95
    ;;, "flamthwr", T_FIRE,     15, 90,  100, %f_move_percent,10,%f_move_major_other,C_MAJOR_BURNED    -- 96

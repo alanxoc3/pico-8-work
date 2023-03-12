@@ -62,6 +62,17 @@ end $$
     f_addaction(self, self, "|not|implemented")
 end $$
 
+|[f_move_disable]| function(_ENV)
+    if other.disabled then return true end
+    local moves = f_get_possible_moves(otheractive)
+    if #moves == 0 then return true end
+
+    other.disabled = {
+        slot=moves[f_flr_rnd(#moves)+1].slot,
+        length=f_flr_rnd'6'+2
+    }
+end $$
+
 |[f_move_mimic]| function(_ENV)
     -- todo: can any logic be combined with transform?
     local othermoves = f_get_moves(otheractive)

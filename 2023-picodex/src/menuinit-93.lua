@@ -235,8 +235,6 @@ end $$
         ;; name,"switch", desc,"switch|active|pokemon",   select,%f_menu_state_callback, state,pselswitch
         ;; name,"stats",  desc,"stats|player &|opponent", select,%f_menu_state_callback, state,pstat
         ;; name,"forfeit",  desc,"forfeit|pokemon|battle",  select,%f_psel_forfeit
-
-        -- ;; name,"random",desc,"random|random|move",  select,%f_psel_random -- random logic is in the turn logic if move is c_empty, so just leave the menu
     ]], p0.name, f_get_other_pl(_ENV, p0).name))
 end $$
 

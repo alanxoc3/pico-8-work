@@ -272,25 +272,6 @@ Twineedle       Bug         20  25      100%    Strikes twice; if the first hit 
 ;;, "firespin", T_FIRE,     15, 35,  85,  %f_move_implement                                        -- 113
 ;;, "clamp",    T_WATER,    15, 35,  85,  %f_move_implement                                        -- 140
 
--- HI CRIT MOVES
-;;, "crabhamr", T_WATER,    10, 100, 90,  %f_move_implement                                        -- 157
-;;, "razrleaf", T_GRASS,    25, 55,  95,  %f_move_implement                                        -- 107
-;;, "slash",    T_NORMAL,   20, 70,  100, %f_move_implement                                        -- 164
-;;, "karatchp", T_FIGHTING, 25, 50,  100, %f_move_implement                                        -- 57
-
--- get 1 recoil damage if miss
-;;, "jumpkck",  T_FIGHTING, 10, 100, 95,  %f_move_implement                                        -- 73
-;;, "hijmpkck", T_FIGHTING, 10, 130, 90,  %f_move_implement                                        -- 145
-
--- similar to metronome
-;;, "mirrmove", T_FLYING,   20, -1,  0,   %f_move_implement                                        -- 134
-
--- stat related effects
-;;, "haze",     T_ICE,      30, 0,   0,   %f_move_implement                                        -- 132 DIFF
-;;, "mist",     T_ICE,      30, 0,   0,   %f_move_implement                                        -- 97
-
 -- requires turn dmg counter
-;;, "counter",  T_FIGHTING, 20, -1,  100, %f_move_implement                                        -- 18  DIFF: respects resistance
-;;, "rest",     T_PSYCHIC,  5,  0,   0,   %f_move_implement                                        -- 44
 ;;, "substute", T_NORMAL,   10, 0,   0,   %f_move_implement                                        -- 50
 ;;, "disable",  T_NORMAL,   20, 0,   100, %f_move_implement                                        -- 93

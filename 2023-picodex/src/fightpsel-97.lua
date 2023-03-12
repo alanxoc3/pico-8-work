@@ -22,11 +22,6 @@
     end
 end $$
 
-|[f_psel_random]| function(game)
-    game:pop()
-    f_select_move(game.p0, f_select_random_move(game.p0.active))
-end $$
-
 |[f_psel_forfeit]| function(game)
     game:pop()
 

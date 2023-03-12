@@ -3,11 +3,11 @@
 -- pl,1-6,true  - switch with team slot
 
 |[f_select_switch]| function(pl, pkmn)
-    f_addaction(pl, pl, "|comes|back", function(s, o) -- self, other
-        s.active = f_team_pkmn_to_active(pkmn)
-        s.active.invisible = true
-        f_addaction(s, s, "|comes|out", function(s, o) -- self, other
-            s.active.invisible = false
+    f_addaction(pl, pl, "|comes|back", function(params) -- self, other
+        params.self.active = f_team_pkmn_to_active(pkmn)
+        params.self.active.invisible = true
+        f_addaction(pl, pl, "|comes|out", function(_ENV) -- self, other
+            selfactive.invisible = false
         end)
     end)
 
@@ -18,15 +18,18 @@ end $$
 -- metronome would call this function as well as select_move
 -- todo: get _ENV working here & populated with correct things, actually, env should populate on add action
 |[f_movelogic]| function(self, move)
-    f_addaction(self, self, "|uses|"..move.name, function(self, other)
+    f_addaction(self, self, "|uses|"..move.name, function(params)
+        params.move = move
+
+        local _ENV = params
         f_movehelp_update_pp(move)
 
         -- explosion & self destruct hurt the user first, then they might miss, so this part of that logic must go outside the normal flow
         if move.num == M_EXPLOSION or move.num == M_SELF_DESTRUCT then
-            f_move_setdmg_self(f_zobj([[self,@, selfactive,@]], self, self.active), self.active.hp)
+            f_move_setdmg_self(_ENV, selfactive.hp)
         end
 
-        if f_does_move_miss(self.active, other.active, move) then
+        if f_does_move_miss(selfactive, otheractive, move) then
             f_addaction(self, self, "|missed|"..move.name)
 
             if move.num == M_HIGH_JUMP_KICK or move.num == M_JUMP_KICK then
@@ -35,11 +38,11 @@ end $$
             end
         else
             if move.accuracy ~= 0 then -- -1 is swift, positive is most moves. mirrormove has 0 acc, so you can't copy that. haze is -1 too
-                other.active.lastmoverecv = move.num
+                otheractive.lastmoverecv = move.num
             end
 
             -- todo: might be nice if other things were supported (miss, fail, resist)
-            if move:func(self, other) then
+            if move.func(_ENV) then
                 f_addaction(self, self, "|failed|"..move.name)
             end
         end
@@ -80,16 +83,52 @@ end $$
 
 -- switch if there is a next pokemon
 -- otherwise, do nothing. turn logic will check every turn if there is a win condition
-|[f_logic_faint]| function(s)
-    s.active.shared.major = C_MAJOR_FAINTED
-    s:dielogic()
+|[f_logic_faint]| function(_ENV)
+    selfactive.shared.major = C_MAJOR_FAINTED
+    self:dielogic()
+end $$
+
+-- only "x" will progress the fight. if you spam, at least you don't miss the end screen.
+|[f_turn_update]| function(game)
+    if g_bpo then f_beep() end
+
+    if g_bpx or not game.cur_action then
+        -- while loop exists for actions that don't have a message.
+        -- actions without a message are meant to optionally create actions.
+        while true do
+            -- check for win condition before selecting every action
+            for p in _all{game.p1, game.p2} do
+                if not f_get_next_active(p.team) then
+                    game.p0 = f_get_other_pl(game, p)
+                    game:load'fightover'
+                    return
+                end
+            end
+
+            local action = f_pop_next_action(game)
+            if action then
+                game.cur_action = action
+                local actionpl = game.cur_action.active == game.p1.active and game.p1 or game.p2
+                local envparams = f_zobj([[move,@, self,@, other,@]], move, actionpl, f_get_other_pl(game, actionpl))
+                envparams.selfactive = envparams.self.active
+                envparams.otheractive = envparams.other.active
+                action.logic(envparams)
+                if action.message then
+                    return
+                end
+            else
+                game:load() -- next turn
+                return
+            end
+        end
+    end
 end $$
 
 -- self pl, other pl
 -- return faint action if %c_no hp and not dead
 -- return nothing if end of turn
 |[f_pop_next_action]| function(game)
-    -- if an active pokemon has %c_no hp, but not the faint status yet, return an action that makes the pokemon faint.
+    -- if an active pokemon has no hp, but not the faint status yet, return an action that makes the pokemon faint.
     for p in _all{game.p1,game.p2} do
         if p.active.hp <= 0 then
             if p.active.major ~= C_MAJOR_FAINTED then
@@ -117,6 +156,10 @@ end $$
             s.active = f_team_pkmn_to_active(f_get_next_active(s.team))
             return f_newaction(s, "|comes|out")
         end
+
+        -- todo: here? this might be where end of turn logic would go. do end of turn logic, and at least include disabled logic for now.
+        -- if it hasn't been called before, call it now. pokemon that is switched in would have end of turn logic.
+        -- if s.isturnover
     end
 end $$
 
@@ -133,11 +176,12 @@ end $$
     return moves
 end $$
 
+-- todo: token crunch. use _ENV here
 |[f_get_possible_moves]| function(pkmn)
     local moves = {}
 
     _foreach(f_get_moves(pkmn), function(m)
-        if m.pp > 0 then
+        if m.pp > 0 and m.slot ~= (pkmn.disabled and pkmn.disabled.slot or 0) then
             _add(moves, m)
         end
     end)
