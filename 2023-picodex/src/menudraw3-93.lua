@@ -43,7 +43,6 @@ end $$
     f_print_draw3_message(game:entry().name.."|pkmn "..count.."/6|pow "..power)
 end $$
 
-|[f_pselmove_draw3]| function(game) end $$
 |[f_fightover_draw3]| function(game)
     f_print_draw3_message(game.p0.name.."|is the|winner")
 end $$

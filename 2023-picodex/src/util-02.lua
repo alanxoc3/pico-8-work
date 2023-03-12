@@ -4,6 +4,10 @@
     _spr(sind, x-sw*4, y-sh*4, sw, sh, ...)
 end $$
 
+|[f_beep]| function()
+    f_minisfx'B_ERROR'
+end $$
+
 -- gives a discrete random number: [0, x)
 |[f_flr_rnd]| function(x)
     return _flr(_rnd(x))

@@ -11,6 +11,7 @@
         game:load()
     else
         -- this block is needed so in versus mode, players don't share cursor positions
+        -- todo: please token crunch this block somehow
         game.pselactions.menu = game.p0.menu_action
         game.pselmove.menu    = game.p0.menu_move
         game.pselswitch.menu  = game.p0.menu_switch

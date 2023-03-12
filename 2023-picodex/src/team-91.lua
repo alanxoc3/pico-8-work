@@ -1,5 +1,4 @@
 -- this file contains logic around teams and creating a "team" pokemon
-
 |[f_unlock_pkmn]| function(trainer)
     -- add pokemon defeated to picodex
     foreach(f_get_team_dead(trainer.team), function(pkmn)

@@ -25,9 +25,10 @@ end $$
         moves_natural,#, moves_teach,#, moves_event,#,
 
         mynewmoves,@, draw,@, hasmove,@, isempty,@, available,@
-        
+
+        -- todo: token crunch below methods somehow...
     ]], f_create_empty_moveset(), function(pkmn, ...)
-        -- todo: wait -- incorporate transform ... transform into surfing pikachu should become surfing pikachu
+        -- todo: maybe combine this logic with f_draw_pkmn_out itself (since this is the only instance).
         local num = pkmn:available() and pkmn.num or -1
         if num == P_PIKACHU and pkmn:hasmove(M_SURF)    then num = 158 end
         if num == P_PSYDUCK and pkmn:hasmove(M_AMNESIA) then num = 159 end

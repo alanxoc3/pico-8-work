@@ -40,8 +40,6 @@ end $$
     _sfx(44+num\8, 0, num%8*4, 4)
 end $$
 
-|[f_beep]| function() f_minisfx'B_ERROR' end $$
-
 |[f_draw_picodex]| function(_ENV)
     _cls'0'
     f_zcamera(0, 128+sin(_ENV:get_elapsed_percent'moveup'/4)*128, function()
@@ -80,7 +78,6 @@ end $$
             ]])
 
             f_zcall(function(l, off, on, flash, x, y)
-                _printh(g_cur_light)
                 return _spr((light <= l) and (g_cur_light == l and _stat'46'>=0 and flash or on) or off, x, y)
             end, [[
                  ;,0, 135, 133, 134, 6,  3
