@@ -127,6 +127,7 @@ end $$
         pkmn.moves_teach = teachs
 
         ---- PASS 4 - add level specific data and other attributes to the pkmn ----
+        -- todo: token crunch, can this be smaller?
         f_zobj_set(pkmn, [[
             attack,@, defense,@, special,@, speed,@, maxhp,@, hp,~maxhp, level,C_LEVEL
         ]], f_calc_max_stat(pkmn.base_attack),

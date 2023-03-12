@@ -1,29 +1,60 @@
--- 266 tokens
+|[f_zclass]| function(template)
+    return f_zobj_set(f_zobj[[
+        load,      %f_actor_load,
+        loadlogic, %f_actor_loadlogic,
+        state,     %f_actor_state,
+        get_elapsed_percent,%f_actor_get_elapsed_percent,
 
--- f_zclass specifies a template for how objects of a type are constructed. A
--- single string is passed in as a parameter. A pipe separates the two parts of
--- that string. The first part contains a csv list of strings, the first item
--- in that list is the name of this "class", while the remaining items are
--- classes to inherit from (parents). The second part of the string is a f_zobj
--- definition specifying values.
+        timer, 0,
 
--- a f_zclass has a few special attributes that should only be overidden in special cases:
--- * id: a string of the class name of the f_zclass
--- * parents: a list of all the ancestors of the f_zclass
--- * deregistered: an optional function that should be called when "" is called
-|[f_zclass]| function(template, class, ...)
-    local parents = {...}
-    _g[class] = function(tbl)
-        foreach(parents, function(parent)
-            _g[parent](tbl)
-        end)
-        return f_zobj_set(tbl, template)
-    end
+        isnew, %c_yes,
+        curr,  start,
+
+        init,   %f_nop,
+        update, %f_nop;
+    ]], template)
 end $$
 
--- Call a function if the table and the table value are not nil.
-|[f_call_not_nil]| function(table, key, ...)
-    if table and table[key] then
-        return table[key](...)
+|[f_actor_get_elapsed_percent]| function(_ENV, key)
+    if key == curr then
+        return duration and timer/duration or 0
     end
+    
+    if _ENV[key] and _ENV[key].done then
+        return 1
+    end
+
+    return 0
+end $$
+
+|[f_actor_load]| function(_ENV, stateName)
+    next_state = stateName or next
+end $$
+
+|[f_actor_loadlogic]| function(_ENV, stateName)
+    timer, next_state, isnew, next, duration = 0
+
+    _ENV[curr].done = true
+    for k, v in _pairs(defaults) do _ENV[k] = v end
+    for k, v in _pairs(_ENV[stateName]) do _ENV[k] = v end
+
+    curr = stateName
+
+    _ENV:init()
+end $$
+
+|[f_actor_state]| function(_ENV)
+    timer += 1/60
+
+    if isnew then _ENV:loadlogic(curr) end
+
+    if duration and timer >= duration then
+        _ENV:load()
+    end
+
+    while next_state do
+        _ENV:loadlogic(next_state)
+    end
+
+    _ENV:update()
 end $$

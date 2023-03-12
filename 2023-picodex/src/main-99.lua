@@ -1,27 +1,3 @@
-f_zclass([[
-    curr,wait;
-    init,%f_game_state_init, light,4;
-    defaults;
-        foldstate,closed,
-        light,4, sfx,-1,
-        backbuttonheld,%c_no,
-        sinit,%f_nop, update,%f_nop, draw,%f_nop,
-        draw1,%f_nop, draw2,%f_nop, draw3,%f_nop,
-        modes,;
-
-    wait;   next,moveup, duration,.5, draw,%f_draw_picodex;
-    moveup; next,closed, duration,.5, draw,%f_draw_picodex, sinit,%f_moveup_init;
-
-    closed;     foldstate,closed,  next,opening,                          sinit,%f_closed_init, draw,%f_draw_picodex, update,%f_closed_update;
-    opening;    foldstate,opening, next,starting_1,          duration,.2,                       draw,%f_draw_picodex;
-    starting_1; foldstate,open,    next,starting_2, light,3, duration,.2, sfx,B_OKAY,           draw,%f_draw_picodex;
-    starting_2; foldstate,open,    next,starting_3, light,2, duration,.2, sfx,B_BACK,           draw,%f_draw_picodex;
-    starting_3; foldstate,open,    next,game,       light,1, duration,.2, sfx,B_ERROR,          draw,%f_draw_picodex;
-    game;       foldstate,open,    next,closing,    light,0,              sinit,%f_game_init,   draw,%f_draw_picodex, update,%f_game_update, draw1,%f_game_draw1, draw2,%f_game_draw2, draw3,%f_game_draw3;
-
-    closing;    foldstate,closing, next,closed,              duration,.25,                      draw,%f_draw_picodex, update,%f_nop;
-]], 'o_game_state', 'o_timer', 'o_actor')
-
 -- every state change will clean up all the entities.
 |[f_game_state_init]| function(state)
     f_minisfx(state.sfx)
@@ -34,7 +10,31 @@ function _init()
     -- clear all the read only memory. testing things out showed that this doesn't get cleared automatically.
     _memset(0x8000, 0, 0x7fff)
 
-    g_picodex = o_game_state(f_zobj[[]])
+    g_picodex = f_zclass[[
+        curr,wait;
+        init,%f_game_state_init, light,4;
+        defaults;
+            foldstate,closed,
+            light,4, sfx,-1,
+            backbuttonheld,%c_no,
+            sinit,%f_nop, update,%f_nop, draw,%f_nop,
+            draw1,%f_nop, draw2,%f_nop, draw3,%f_nop,
+            modes,;
+
+        wait;   next,moveup, duration,.5, draw,%f_draw_picodex;
+        moveup; next,closed, duration,.5, draw,%f_draw_picodex, sinit,%f_moveup_init;
+
+        shaking;    foldstate,closed,  next,closed,              duration,.5,                       draw,%f_draw_picodex;
+        closed;     foldstate,closed,  next,opening,                          sinit,%f_closed_init, draw,%f_draw_picodex, update,%f_closed_update;
+        opening;    foldstate,opening, next,starting_1,          duration,.2,                       draw,%f_draw_picodex;
+        starting_1; foldstate,open,    next,starting_2, light,3, duration,.2, sfx,B_OKAY,           draw,%f_draw_picodex;
+        starting_2; foldstate,open,    next,starting_3, light,2, duration,.2, sfx,B_BACK,           draw,%f_draw_picodex;
+        starting_3; foldstate,open,    next,game,       light,1, duration,.2, sfx,B_ERROR,          draw,%f_draw_picodex;
+        game;       foldstate,open,    next,closing,    light,0,              sinit,%f_game_init,   draw,%f_draw_picodex, update,%f_game_update, draw1,%f_game_draw1, draw2,%f_game_draw2, draw3,%f_game_draw3;
+
+        closing;    foldstate,closing, next,closed,              duration,.25,                      draw,%f_draw_picodex, update,%f_nop;
+    ]]
+
     f_draw_picodex(g_picodex)
     _flip()
     f_minisfx'158'
@@ -62,6 +62,7 @@ end
 function _update60()
     local _ENV = _g
     g_bpo, g_bpx = _btnp'4', _btnp'5'
+
     -- horizontal and vertical
     g_bph, g_bpv = f_btn_helper(_btnp, 0, 1), f_btn_helper(_btnp, 2, 3)
 
@@ -69,12 +70,10 @@ function _update60()
         g_bpo, g_bpx = g_bpx, g_bpo
     end
 
-    f_call_not_nil(g_picodex, 'tick', g_picodex)
-    f_call_not_nil(g_picodex, 'state', g_picodex)
+    g_picodex:state()
 end
 
 function _draw()
     local _ENV = _g
-    _cls()
-    f_call_not_nil(g_picodex, 'draw', g_picodex)
+    g_picodex:draw()
 end

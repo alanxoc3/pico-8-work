@@ -11,7 +11,7 @@ end $$
     _menuitem(1, "factory reset", function()
         _sfx(59,0)
         _memset(0x5e00, 0, 0x100)
-        _ENV:start_timer('shaking', .5)
+        _ENV:load'shaking'
     end)
 end $$
 
@@ -52,8 +52,16 @@ end $$
         ]])
         f_zcall(f_zspr, [[;,102,64,11,5,1]])
 
-        local top_row_buttons, bot_row_buttons, rotation = modes and modes.main.menu.c, modes and #modes.stack-1, foldstate == 'open' and 1 or foldstate == 'closed' and -1 or (foldstate == 'opening' and -1 or 1)*_cos(_ENV:get_elapsed_percent(foldstate)/2)
-        f_zcamera(30-(rotation+1)*15+(_ENV:is_active'shaking' and f_flr_rnd'3'-1 or 0), 27, function()
+        local top_row_buttons,
+              bot_row_buttons,
+              rotation =
+              modes and modes.main.menu.c,
+              modes and #modes.stack-1,
+              foldstate == 'open' and 1
+              or foldstate == 'closed' and -1
+              or (foldstate == 'opening' and -1 or 1)*_cos(_ENV:get_elapsed_percent(foldstate)/2)
+
+        f_zcamera(30-(rotation+1)*15+(curr == 'shaking' and f_flr_rnd'3'-1 or 0), 27, function()
             ----- SCREENS -----
             f_zcall(_rectfill, [[;,14,18,@,87,5]], 63+max(0, rotation*54))
             if light == 0 then

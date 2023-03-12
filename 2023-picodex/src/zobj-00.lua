@@ -54,25 +54,3 @@ _G_ZOBJ
 |[f_zobj]|      f_zobj      $$
 |[f_zobj_set]|  f_zobj_set  $$
 |[f_zobj_eval]| f_zobj_eval $$
-
--- if something isn't in global scope, it goes to _g... so pico8 api functions will take precedence over g. But table takes over api.
--- i like this idea:
-
--- api is just so i don't confuse myself when using api functions, though technically isn't needed if i don't use the same function name as a library function.
--- api, _g.api = _ENV, _ENV
-
--- scopes:
--- _ENV - pico8 api and global functions/variables
--- _g   - most functions in the game
--- obj  - the f_zobj table
-
--- how do I manage the complexity of the different scopes?
--- global could be just pico8 functions, but that means I can't have an "_add" function on things.
--- also if a new api function comes out, it could break me.
-
--- naming scheme:
---  _blah - api func
--- c_blah - global constant
--- t_blah - global object template (class)
--- f_blah - global function
--- g_blah - global variable

@@ -9,24 +9,11 @@ end $$
     return _flr(_rnd(x))
 end $$
 
--- gives a random value that is one of: -1, 0, 1
-|[f_rnd_one]| function(val)
-    return (f_flr_rnd'3'-1)*(val or 1)
-end $$
-
-|[f_zcall_tbl]| function(func, tbl)
-    _foreach(tbl, function(params)
-        func(_unpack(params))
-    end)
-end $$
-
 -- used everwhere
 |[f_zcall]| function(func, text, ...)
-    f_zcall_tbl(func, f_zobj(text, ...))
-end $$
-
-|[f_zcls]| function(col)
-   _rectfill(0x8000,0x8000,0x7fff,0x7fff,col or 0)
+    _foreach(f_zobj(text, ...), function(params)
+        func(_unpack(params))
+    end)
 end $$
 
 |[f_zcamera]| function(nx, ny, func)
