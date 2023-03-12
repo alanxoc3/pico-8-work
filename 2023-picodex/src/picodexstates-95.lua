@@ -9,7 +9,7 @@ end $$
 -- you can factory reset when the pokedex is closed
 |[f_closed_init]| function(_ENV)
     _menuitem(1, "factory reset", function()
-        _sfx(59,0)
+        -- todo: add an sfx here
         _memset(0x5e00, 0, 0x100)
         _ENV:load'shaking'
     end)

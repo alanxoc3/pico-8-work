@@ -123,11 +123,11 @@ end $$
 end $$
 
 -- recover and softboiled
-|[f_move_heal]| function(_ENV, amount)
-    amount = min(amount, selfactive.maxhp-selfactive.hp)
+|[f_move_heal]| function(_ENV, pl, amount)
+    amount = min(amount, pl.active.maxhp-pl.active.hp)
     if amount > 0 then
-        f_addaction(self, self, "|+"..amount.."|hitpoints", function()
-            selfactive.shared.hp += amount
+        f_addaction(self, pl, "|+"..amount.."|hitpoints", function()
+            pl.active.shared.hp += amount
         end)
     else
         return true
@@ -135,7 +135,7 @@ end $$
 end $$
 
 |[f_move_recover]| function(_ENV)
-    return f_move_heal(_ENV, selfactive.maxhp\2)
+    return f_move_heal(_ENV, self, selfactive.maxhp\2)
 end $$
 
 |[f_move_metronome]| function(_ENV)
@@ -237,7 +237,7 @@ end $$
 |[f_move_rest]| function(_ENV)
     selfactive.shared.major = C_MAJOR_SLEEPING
     f_addaction(self, self, "|is|sleeping")
-    f_move_heal(_ENV, selfactive.maxhp)
+    f_move_heal(_ENV, self, selfactive.maxhp)
     selfactive.toxic = false
 end $$
 
@@ -304,7 +304,7 @@ end $$
     if f_move_setdmg(_ENV, dmg) then
         return true
     else
-        f_move_heal(_ENV, max(dmg\2, 1))
+        f_move_heal(_ENV, self, max(dmg\2, 1))
     end
 end $$
 

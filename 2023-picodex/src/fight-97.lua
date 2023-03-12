@@ -16,8 +16,9 @@
 end $$
 
 -- metronome would call this function as well as select_move
--- todo: get _ENV working here & populated with correct things, actually, env should populate on add action
 |[f_movelogic]| function(self, move)
+    -- todo: premove logic goes here
+
     f_addaction(self, self, "|uses|"..move.name, function(params)
         params.move = move
 
@@ -46,6 +47,69 @@ end $$
                 f_addaction(self, self, "|failed|"..move.name)
             end
         end
+    end)
+end $$
+
+-- premove must create an action, otherwise the battle might crash
+|[f_premovelogic]| function(self, move)
+    -- f_addaction(self, self, "|uses|"..move.name, function(params)
+    --     params.move = move
+    --     local _ENV = params
+
+    --     C_MAJOR_SLEEPING - 1-3 turns, reset if switch out
+    --     C_MAJOR_FROZEN - 20% chance to unthaw
+    --     trapped
+    --     hyperbeamrecharge
+    --     disable
+    --     confuse - 50% self attack 1-4 turns
+    --     paralysis
+
+    --     f_movelogic(self, move)
+
+
+    --     ---- POST ----
+
+    --     -- check paralysis/frozen/flinch
+    --     -- preturn  - trapped sleep freeze paralysis flinch confusion
+
+
+    -- end)
+end $$
+
+-- todo: make minor statuses numbers instead
+|[f_postmove_logic]| function(self)
+    -- todo: i can probably token crunch this section
+    return f_newaction(self, false, function(_ENV)
+        local statdmg = max(selfactive.maxhp\16,1)
+        if selfactive.major == C_MAJOR_POISONED then
+            f_addaction(self, self, "|poison|damage")
+            f_move_setdmg_self(_ENV, statdmg)
+        end
+
+        if selfactive.major == C_MAJOR_BURNED then
+            f_addaction(self, self, "|burn|damage")
+            f_move_setdmg_self(_ENV, statdmg)
+        end
+
+        if selfactive.seeded then
+            f_addaction(self, self, "|seed|damage")
+            f_move_setdmg_self(_ENV, statdmg)
+            if otheractive.hp < otheractive.maxhp then
+                f_addaction(self, other, "|seed|heal")
+                f_move_heal(_ENV, other, statdmg)
+            end
+        end
+
+        if selfactive.confused then
+            selfactive.confused -= 1
+            if selfactive.confused <= 0 then
+                selfactive.confused = false
+            end
+        end
+
+        selfactive.flinching = false
+        -- todo: multiturncountdown
+        -- todo: sleepcountdown
     end)
 end $$
 
@@ -107,14 +171,16 @@ end $$
 
             local action = f_pop_next_action(game)
             if action then
-                game.cur_action = action
-                local actionpl = game.cur_action.active == game.p1.active and game.p1 or game.p2
+                local actionpl = action.active == game.p1.active and game.p1 or game.p2
                 local envparams = f_zobj([[move,@, self,@, other,@]], move, actionpl, f_get_other_pl(game, actionpl))
                 envparams.selfactive = envparams.self.active
                 envparams.otheractive = envparams.other.active
                 action.logic(envparams)
                 if action.message then
+                    -- this must be in the if statement, because you can't end with an invisible action (draw will fail).
+                    game.cur_action = action
                     return
+                else
                 end
             else
                 game:load() -- next turn
@@ -157,9 +223,10 @@ end $$
             return f_newaction(s, "|comes|out")
         end
 
-        -- todo: here? this might be where end of turn logic would go. do end of turn logic, and at least include disabled logic for now.
-        -- if it hasn't been called before, call it now. pokemon that is switched in would have end of turn logic.
-        -- if s.isturnover
+        if not s.turnover then
+            s.turnover = true
+            return f_postmove_logic(s)
+        end
     end
 end $$
 

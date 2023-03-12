@@ -88,7 +88,7 @@ c_major_names[0] = "none" -- for "none" status
 -- pp:       0 means infinite pp. else means finite pp.
 _g.c_moves_raw = f_zobj[[
    --  "name",     type        pp  dmg  acc
-  -1;, "none",     T_NONE,     0,  0,   0,   %f_move_splash
+  -1;, "none",     T_BIRD,     0,  40,  0,   %f_move_default                                          -- -1  This is the move used for confusion damage.
   ;0;, "struggle", T_BIRD,     0,  50,  100, %f_move_recoil                                           -- 0   DIFF: ignores resistance now. hits ghost pokemon.
 
    -- teachs
