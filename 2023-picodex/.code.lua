@@ -1144,6 +1144,24 @@ end
 end
 end)
 end,function(self,move)
+f_addaction(self,self,false,function(params)
+params.move=move
+local _ENV=params
+if selfactive.major==3 then
+if _rnd"1"<.2 then
+f_addaction(self,self,"|is not|frozen")
+selfactive.major=0
+else
+f_addaction(self,self,"|is|frozen")
+return
+end
+end
+if selfactive.flinching then
+f_addaction(self,self,"|is|flinching")
+return
+end
+f_movelogic(self,move)
+end)
 end,function(self)
 return f_newaction(self,false,function(_ENV)
 local statdmg=max(selfactive.maxhp\16,1)
@@ -1174,7 +1192,7 @@ end)
 end,function(pl,move)
 pl.actions={}
 local priority_class=1000
-f_movelogic(pl,move)
+f_premovelogic(pl,move)
 if move.num==120 then priority_class=2000 end
 if move.num==18 or move.num==4 or move.num==89 or move.num==30 then
 priority_class=0000

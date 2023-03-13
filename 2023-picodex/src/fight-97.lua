@@ -2,6 +2,7 @@
 -- pl,0,false   - select default move (solar beam charge, hyper beam recharge, struggle, ...)
 -- pl,1-6,true  - switch with team slot
 
+-- todo: refactor the way counter (and bide) work.
 |[f_select_switch]| function(pl, pkmn)
     f_addaction(pl, pl, "|comes|back", function(params) -- self, other
         params.self.active = f_team_pkmn_to_active(pkmn)
@@ -52,28 +53,35 @@ end $$
 
 -- premove must create an action, otherwise the battle might crash
 |[f_premovelogic]| function(self, move)
-    -- f_addaction(self, self, "|uses|"..move.name, function(params)
-    --     params.move = move
-    --     local _ENV = params
+    f_addaction(self, self, false, function(params)
+        params.move = move
+        local _ENV = params
 
-    --     C_MAJOR_SLEEPING - 1-3 turns, reset if switch out
-    --     C_MAJOR_FROZEN - 20% chance to unthaw
-    --     trapped
-    --     hyperbeamrecharge
-    --     disable
-    --     confuse - 50% self attack 1-4 turns
-    --     paralysis
+        -- C_MAJOR_SLEEPING - 1-3 turns, reset if switch out
 
-    --     f_movelogic(self, move)
+        if selfactive.major == C_MAJOR_FROZEN then
+            if _rnd'1' < .2 then
+                f_addaction(self, self, "|is not|frozen")
+                selfactive.major = C_MAJOR_NONE
+            else
+                f_addaction(self, self, "|is|frozen")
+                return
+            end
+        end
 
+        -- trapped
+        -- hyperbeamrecharge
+        -- disable
+        -- confuse - 50% self attack 1-4 turns
+        -- paralysis
 
-    --     ---- POST ----
+        if selfactive.flinching then
+            f_addaction(self, self, "|is|flinching")
+            return
+        end
 
-    --     -- check paralysis/frozen/flinch
-    --     -- preturn  - trapped sleep freeze paralysis flinch confusion
-
-
-    -- end)
+        f_movelogic(self, move)
+    end)
 end $$
 
 -- todo: make minor statuses numbers instead
@@ -117,7 +125,7 @@ end $$
     pl.actions = {}
     local priority_class = C_PRIORITY_ATTACK
 
-    f_movelogic(pl, move)
+    f_premovelogic(pl, move)
 
     -- hardcoding the only moves that can change priority for now. Maybe there is a more token efficient way to do this?
     if move.num == M_QUICK_ATTACK then priority_class = C_PRIORITY_QUICKATTACK end
