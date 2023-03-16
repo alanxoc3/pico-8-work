@@ -195,7 +195,7 @@ end $$
         return true
     end
 
-    return f_move_minor_other(_ENV, 'toxiced')
+    return f_move_other(_ENV, f_movehelp_minor, 'toxiced')
 end $$
 
 |[f_move_splash]| function(_ENV)
@@ -211,26 +211,21 @@ end $$
     end
 end $$
 
--- for confuse, flinch, leechseed
-|[f_move_minor_other]| function(_ENV, minor)
-    if not otheractive[minor] then
-        otheractive[minor] = true
+|[f_movehelp_minor]| function(_ENV, pl, minor, val)
+    if not pl.active[minor] then
+        pl.active[minor] = val or true
         -- todo: minor here will break with minification... i should change minors to numbers instead
-        f_addaction(self, other, "|becomes|"..minor)
+        f_addaction(self, pl, "|becomes|"..minor)
     else
         return true
     end
 end $$
 
--- for focusenergy, reflect, etc...
-|[f_move_minor_self]| function(_ENV, minor)
-    if not selfactive[minor] then
-        selfactive[minor] = true
-        -- todo: minor here will break with minification... i should change minors to numbers instead
-        f_addaction(self, self, "|is|"..c_flags[minor])
-    else
-        return true
-    end
+|[f_move_self]|  function(_ENV, func, ...) return func(_ENV, self,  ...) end $$
+|[f_move_other]| function(_ENV, func, ...) return func(_ENV, other, ...) end $$
+
+|[f_movehelp_confuse]| function(_ENV, pl)
+    return f_movehelp_minor(_ENV, pl, 'confused', f_flr_rnd'4'+1)
 end $$
 
 ---------- DAMAGING MOVES BELOW ----------
@@ -286,8 +281,18 @@ end $$
     f_move_default(_ENV)
 
     if selfactive.moveturn == 1 then
-        f_move_minor_self(_ENV, 'confused')
+        f_move_self(_ENV, f_movehelp_confuse, 'confused')
     end
+end $$
+
+-- todo: implement the "attack goes up" thing for rage
+|[f_move_rage]| function(_ENV)
+    -- todo: combine with thrash logic
+    if selfactive.moveturn == 0 then
+        f_set_moveturn(selfactive, -1, f_create_move(move.num, move.slot))
+    end
+
+    f_move_default(_ENV)
 end $$
 
 |[f_move_recoil]| function(_ENV)

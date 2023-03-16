@@ -131,7 +131,7 @@ end $$
             end
         end
 
-        selfactive.flinching = false
+        -- flinching is reset at the psel init level, so you can't be flinching the next turn.
         -- todo: multiturncountdown
         -- todo: sleepcountdown
     end)
