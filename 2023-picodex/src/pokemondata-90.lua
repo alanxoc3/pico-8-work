@@ -1,9 +1,12 @@
+-- DIFF: frozen stat will reset multiturn moves
+-- todo: figure out how to make preparing moves (solarbeam/skyattack), not use pp if it's the first turn.
+
 |[c_pokemon]| f_zobj[[]] $$
 |[c_pokemon_names]| split"missingno,bulbasaur,ivysaur,venusaur,charmander,charmeleon,charizard,squirtle,wartortle,blastoise,caterpie,metapod,butterfree,weedle,kakuna,beedrill,pidgey,pidgeotto,pidgeot,rattata,raticate,spearow,fearow,ekans,arbok,pikachu,raichu,sandshrew,sandslash,nidoran f,nidorina,nidoqueen,nidoran m,nidorino,nidoking,clefairy,clefable,vulpix,ninetales,jigglypuff,wigglytuff,zubat,golbat,oddish,gloom,vileplume,paras,parasect,venonat,venomoth,diglett,dugtrio,meowth,persian,psyduck,golduck,mankey,primeape,growlithe,arcanine,poliwag,poliwhirl,poliwrath,abra,kadabra,alakazam,machop,machoke,machamp,bellsprout,weepinbell,victreebel,tentacool,tentacruel,geodude,graveler,golem,ponyta,rapidash,slowpoke,slowbro,magnemite,magneton,farfetchd,doduo,dodrio,seel,dewgong,grimer,muk,shellder,cloyster,gastly,haunter,gengar,onix,drowzee,hypno,krabby,kingler,voltorb,electrode,exeggcute,exeggutor,cubone,marowak,hitmonlee,hitmonchan,lickitung,koffing,weezing,rhyhorn,rhydon,chansey,tangela,kangaskhan,horsea,seadra,goldeen,seaking,staryu,starmie,mr mime,scyther,jynx,electabuzz,magmar,pinsir,tauros,magikarp,gyarados,lapras,ditto,eevee,vaporeon,jolteon,flareon,porygon,omanyte,omastar,kabuto,kabutops,aerodactyl,snorlax,articuno,zapdos,moltres,dratini,dragonair,dragonite,mewtwo,mew" $$
 c_pokemon_names[0] = "" -- for "none" pkmn, technically not needed possibly (-1)
 
 |[c_major_names]| split"fainted,burned,frozen,paralyzed,poisoned,sleeping" $$
-c_major_names[0] = "none" -- for "none" status
+c_major_names[0] = "healthy" -- for "none" status
 
 -- pokemon moves can be physical or special. the order here is specific. odd numbers are physical. even numbers are special.
 -- includes type effectiveness chart. according to the gen 1 games, which had bugs. i'm keeping the bugs :).
@@ -27,24 +30,35 @@ c_major_names[0] = "none" -- for "none" status
     T_BIRD;     bg,0, name,"bird";
 ]] $$
 
+-- 0 means disabled
+-- -1 means it last forever
+-- positive means x turns left
 |[c_flags]| f_zobj[[
-     ;name,"confused" ,key,confused
-    ;;name,"convrson" ,key,conversion
-    ;;name,"critmove" ,key,critmove
-    ;;name,"decoyed"  ,key,decoyed
-    ;;name,"digging"  ,key,digging
-    ;;name,"disable"  ,key,disabled
-    ;;name,"flinch"   ,key,flinching
-    ;;name,"flying"   ,key,flying
-    ;;name,"focus"    ,key,focused
-    ;;name,"mist"     ,key,misted
-    ;;name,"prepare"  ,key,preparing
-    ;;name,"recharge" ,key,recharging
-    ;;name,"reflect"  ,key,reflected
-    ;;name,"screened" ,key,screened
-    ;;name,"seeded"   ,key,seeded
-    ;;name,"toxiced"  ,key,toxiced
-    ;;name,"tranform" ,key,transform
+    confused,   "confused", -- 1-4 turn
+    disabled,   "disable",  -- 2-7 turn -- disabled, disabled_move
+
+    critmove,   "critmove", -- turn
+    flinching,  "flinch",   -- turn
+
+    digging,    "digging",   -- 1 turn
+    flying,     "flying",    -- 1 turn
+    preparing,  "prepare",   -- 1 turn
+    recharging, "recharge",  -- 1 turn
+    raged,      "enraged",   -- no
+    thrashed,   "thrashing", -- 2-3
+    trapping,   "trapping",  -- 2-5 turns
+
+    trapped,    "trapped",  -- 2-5 turns
+
+    decoyed,    "decoyed",  -- no - kill-sub, num=hp
+    conversion, "convrson", -- no
+    focused,    "focus",    -- no
+    misted,     "mist",     -- no
+    reflected,  "reflect",  -- no
+    screened,   "screened", -- no
+    seeded,     "seeded",   -- no
+    toxiced,    "toxiced",  -- no
+    transform,  "tranform"  -- no
 ]] $$
 
 |[c_stages]| f_zobj[[
@@ -176,7 +190,7 @@ _g.c_moves_raw = f_zobj[[
    ;;, "furyatck", T_NORMAL,   20, 15,  85,  %f_move_multihit_var                                     -- 78  DIFF: if KOs pkmn, will also hit new pokemon switched in
    ;;, "tackle",   T_NORMAL,   35, 40,  100, %f_move_default                                          -- 79
    ;;, "wrap",     T_NORMAL,   20, 15,  90,  %f_move_implement                                        -- 80
-   ;;, "thrash",   T_NORMAL,   10, 120, 100, %f_move_implement                                        -- 81
+   ;;, "thrash",   T_NORMAL,   10, 120, 100, %f_move_thrash                                           -- 81
    ;;, "tailwhip", T_NORMAL,   30, 0,   100, %f_move_stat_other, defense, -1                          -- 82
    ;;, "psnsting", T_POISON,   35, 15,  100, %f_move_percent,20,%f_move_major_other,C_MAJOR_POISONED  -- 83
    ;;, "twineedl", T_BUG,      20, 25,  100, %f_move_multihit_twin                                    -- 84  DIFF: if KOs pkmn, will also hit new pokemon switched in
@@ -206,7 +220,7 @@ _g.c_moves_raw = f_zobj[[
    ;;, "psnpowdr", T_POISON,   35, 0,   75,  %f_move_major_other, C_MAJOR_POISONED                    -- 108
    ;;, "stunspor", T_GRASS,    30, 0,   75,  %f_move_major_other, C_MAJOR_PARALYZED                   -- 109
    ;;, "slppowdr", T_GRASS,    15, 0,   75,  %f_move_major_other, C_MAJOR_SLEEPING                    -- 110
-   ;;, "petldanc", T_GRASS,    10, 120, 100, %f_move_implement                                        -- 111
+   ;;, "petldanc", T_GRASS,    10, 120, 100, %f_move_thrash                                           -- 111
    ;;, "strngsht", T_BUG,      40, 0,   95,  %f_move_stat_other, speed, -1                            -- 112
    ;;, "firespin", T_FIRE,     15, 35,  85,  %f_move_implement                                        -- 113
    ;;, "thndshck", T_ELECTRIC, 30, 40,  100, %f_move_percent,10,%f_move_major_other,C_MAJOR_PARALYZED -- 114

@@ -216,7 +216,7 @@ end $$
     if not otheractive[minor] then
         otheractive[minor] = true
         -- todo: minor here will break with minification... i should change minors to numbers instead
-        f_addaction(self, other, "|is|"..minor)
+        f_addaction(self, other, "|becomes|"..minor)
     else
         return true
     end
@@ -227,7 +227,7 @@ end $$
     if not selfactive[minor] then
         selfactive[minor] = true
         -- todo: minor here will break with minification... i should change minors to numbers instead
-        f_addaction(self, self, "|is|"..minor)
+        f_addaction(self, self, "|is|"..c_flags[minor])
     else
         return true
     end
@@ -276,6 +276,18 @@ end $$
             f_move_major_other(_ENV, C_MAJOR_POISONED)
         end
     end)
+end $$
+
+|[f_move_thrash]| function(_ENV)
+    if selfactive.moveturn == 0 then
+        f_set_moveturn(selfactive, f_flr_rnd'2'+2, f_create_move(move.num, move.slot))
+    end
+
+    f_move_default(_ENV)
+
+    if selfactive.moveturn == 1 then
+        f_move_minor_self(_ENV, 'confused')
+    end
 end $$
 
 |[f_move_recoil]| function(_ENV)

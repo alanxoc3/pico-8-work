@@ -18,8 +18,6 @@ end $$
 
 -- metronome would call this function as well as select_move
 |[f_movelogic]| function(self, move)
-    -- todo: premove logic goes here
-
     f_addaction(self, self, "|uses|"..move.name, function(params)
         params.move = move
 
@@ -35,7 +33,6 @@ end $$
             f_addaction(self, self, "|missed|"..move.name)
 
             if move.num == M_HIGH_JUMP_KICK or move.num == M_JUMP_KICK then
-                -- todo: will break until _ENV is working here
                 f_move_setdmg_self(_ENV, 1)
             end
         else
@@ -51,15 +48,29 @@ end $$
     end)
 end $$
 
--- premove must create an action, otherwise the battle might crash
+-- no param means decrement 1, param means set to val
+-- you can't change if -1 (rage), gotta switch out to reset that move
+|[f_set_moveturn]| function(_ENV, newval, newcurmove)
+    -- todo: experiment with token crunching, maybe two if statements instead of 1 and or
+    if moveturn >= 0 then
+        moveturn = newval or max(0, moveturn-1)
+    end
+    curmove = newcurmove or curmove
+end $$
+
+-- premove must create at least 1 action, otherwise the battle might crash
 |[f_premovelogic]| function(self, move)
     f_addaction(self, self, false, function(params)
         params.move = move
         local _ENV = params
 
         -- C_MAJOR_SLEEPING - 1-3 turns, reset if switch out
+        if selfactive.major == C_MAJOR_SLEEPING then
+            f_set_moveturn(selfactive, 0)
+        end
 
         if selfactive.major == C_MAJOR_FROZEN then
+            f_set_moveturn(selfactive, 0)
             if _rnd'1' < .2 then
                 f_addaction(self, self, "|is not|frozen")
                 selfactive.major = C_MAJOR_NONE
@@ -88,6 +99,11 @@ end $$
 |[f_postmove_logic]| function(self)
     -- todo: i can probably token crunch this section
     return f_newaction(self, false, function(_ENV)
+        -- countdown multiturn
+
+        -- decrement the moveturn timer, if >0.
+        f_set_moveturn(selfactive)
+
         local statdmg = max(selfactive.maxhp\16,1)
         if selfactive.major == C_MAJOR_POISONED then
             f_addaction(self, self, "|poison|damage")
@@ -253,13 +269,20 @@ end $$
 
 -- todo: token crunch. use _ENV here
 |[f_get_possible_moves]| function(pkmn)
+    -- moves is both an array and a map
     local moves = {}
 
-    _foreach(f_get_moves(pkmn), function(m)
-        if m.pp > 0 and m.slot ~= (pkmn.disabled and pkmn.disabled.slot or 0) then
-            _add(moves, m)
-        end
-    end)
+    -- todo: check on curmove might not be necessary. and i should figure out how this works with metronome.
+    if pkmn.moveturn ~= 0 and pkmn.curmove then
+        _add(moves, pkmn.curmove)
+    else
+        _foreach(f_get_moves(pkmn), function(m)
+            if m.pp > 0 and m.slot ~= (pkmn.disabled and pkmn.disabled.slot or 0) then
+                _add(moves, m)
+                moves[m] = true -- this is to make "disabled" in the UI easier
+            end
+        end)
+    end
 
     return moves
 end $$

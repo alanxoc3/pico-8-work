@@ -30,8 +30,8 @@ end $$
     ]], f_create_empty_moveset(), function(pkmn, ...)
         -- todo: maybe combine this logic with f_draw_pkmn_out itself (since this is the only instance).
         local num = pkmn:available() and pkmn.num or -1
-        if num == P_PIKACHU and pkmn:hasmove(M_SURF)    then num = 158 end
-        if num == P_PSYDUCK and pkmn:hasmove(M_AMNESIA) then num = 159 end
+        if num == P_PIKACHU and pkmn:hasmove(M_SURF)    then num = 152 end
+        if num == P_PSYDUCK and pkmn:hasmove(M_AMNESIA) then num = 153 end
         f_draw_pkmn_out(num, ...)
     end, function(pkmn, moveid)
         for j=1,4 do
@@ -158,7 +158,15 @@ end $$
     end)
 
     return _setmetatable(f_zobj([[
-        lastmoverecv,0, accuracy,1, evasion,1, shared,@, mynewmoves,@, turnstarthp,@;
+        lastmoverecv,0, -- last move taken damage by, for mirrormove
+        accuracy,1,     -- accuracy stat for battle
+        evasion,1,      -- evasion stat for battle
+        moveturn,0,     -- turn move is on. > 0, decrements each turn. 0, is the same. -1, is multiturn move that doesn't end (rage).
+        -- curmove -- used for multiturn moves, if moveturn ~= 0, this must be set
+        shared,@,
+        mynewmoves,@,
+        turnstarthp,@;
+
         stages; special, 0, attack, 0,
                 defense, 0, speed,  0,
                 accuracy,0, evasion,0

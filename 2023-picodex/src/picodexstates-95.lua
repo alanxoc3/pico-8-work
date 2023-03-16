@@ -110,8 +110,8 @@ end $$
                 f_picodex_map(16, 62, rotation)
 
                 if rotation == 1 then
-                    if top_row_buttons then                          _spr(100, 70+top_row_buttons*8, 41) end
-                    if bot_row_buttons and bot_row_buttons >= 0 then _spr(100, 70+bot_row_buttons*8, 49) end
+                    if top_row_buttons then                          _spr(153, 70+top_row_buttons*8, 41) end
+                    if bot_row_buttons and bot_row_buttons >= 0 then _spr(153, 70+bot_row_buttons*8, 49) end
                 end
             end
         end)

@@ -215,10 +215,19 @@ end $$
 end $$
 
 |[f_pselmove_init]| function(_ENV)
-    -- todo: (wait) support struggle
+    local possible_moves = f_get_possible_moves(p0.active)
+
+    if p0.active.moveturn ~= 0 then
+        f_select_move(p0, p0.active.curmove)
+        _ENV:pop() _ENV:pop()
+    elseif #possible_moves == 0 then
+        f_select_move(p0, f_create_move(M_STRUGGLE))
+        _ENV:pop() _ENV:pop()
+    end
+
     menu:refresh(p0.active.mynewmoves, function(move)
         return f_zobj([[disabled,@, name,@, move,@, select,@]],
-            move.pp <= 0,
+            not possible_moves[move],
             move.name,
             move,
             function()
@@ -351,14 +360,15 @@ end $$
     if #stages > 0 then f_zobj_set(menu, [[;name,"modifier", style,5]]) end
     _foreach(stages, function(f) _add(menu, f) end)
 
-    local flags = {}
-    _foreach(c_flags, function(f)
-        if player.active[f.key] then
-            -- todo: token crunch, you can probably just add f, since it has a name
-            _add(flags, {name=f.name})
-        end
-    end)
-
-    if #flags > 0 then f_zobj_set(menu, [[;name,"state", style,5]]) end
-    _foreach(flags, function(f) _add(menu, f) end)
+-- todo: decide if I should include flags or not
+--     local flags = {}
+--     _foreach(c_flags, function(f)
+--         if player.active[f.key] then
+--             -- todo: token crunch, you can probably just add f, since it has a name
+--             _add(flags, {name=f.name})
+--         end
+--     end)
+-- 
+--     if #flags > 0 then f_zobj_set(menu, [[;name,"state", style,5]]) end
+--     _foreach(flags, function(f) _add(menu, f) end)
 end $$
