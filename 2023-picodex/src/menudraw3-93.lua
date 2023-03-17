@@ -8,7 +8,7 @@ end $$
     if move.num >= 0 then
         f_print_draw3_message(c_types[move.type].name.."|"..move.pp..'/'..move.maxpp.."|"..(move.damage >= 0 and move.damage or "??").."P "..(move.accuracy >= 0 and move.accuracy or "??").."A")
     else
-        f_print_draw3_message"????|?/?|??P ???A"
+        f_print_draw3_message"????|?/?|?P ?A"
     end
 end $$
 
@@ -17,8 +17,6 @@ end $$
 end $$
 
 |[f_main_draw3]|        function(game) f_print_draw3_message(game:entry'main'.desc) end $$
-|[f_pselactions_draw3]| function(game) f_print_draw3_message(game:entry'pselactions'.desc) end $$
-|[f_pstat_draw3]| function(_ENV) f_fight_draw3_helper(p0.statplayer.active) end $$
 
 |[f_fight_draw3_helper]| function(_ENV)
     if num > -1 then
@@ -29,6 +27,7 @@ end $$
 end $$
 
 |[f_pselswitch_draw3]|  function(_ENV) f_fight_draw3_helper(_ENV:entry'pselswitch'.pkmn) end $$
+|[f_pselactions_draw3]|  function(_ENV) f_fight_draw3_helper(p0.active) end $$
 
 |[f_team_draw3]| function(game)
     local count, power = 0, 0

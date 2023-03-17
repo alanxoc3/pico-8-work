@@ -21,13 +21,13 @@
           ;;name,@, style,5
           ;;name,@
           ;;name,@
-        ]], pl.active, pl.name, (#f_get_team_live(pl.team, true)).." live", (#f_get_team_dead(pl.team)).." dead")
+        ]], pl.active.shared, pl.name, (#f_get_team_live(pl.team, true)).." live", (#f_get_team_dead(pl.team)).." dead")
     end
 end $$
 
 |[f_main_init]| function(_ENV)
     local count = 0
-    for i=0,151 do count += c_pokemon[i]:available() and 1 or 0 end
+    for i=0,151 do count += c_pokemon[i]:f_pkmn_available() and 1 or 0 end
 
     menu:refresh(
         f_zobj([[
@@ -57,7 +57,7 @@ end $$
             local pkmn = c_pokemon[num]
             return {
                 select=selectfunc,
-                disabled=not pkmn:available(),
+                disabled=not pkmn:f_pkmn_available(),
                 pkmn=pkmn
             }
         end
@@ -190,7 +190,7 @@ end $$
     f_zcall(function(movelist, prefix)
         for i=1,#movelist do
             local moveind = movelist[i]
-            _add(movemetadata, {name=c_moves[moveind].name, disabled=teampkmn:hasmove(moveind), num=moveind, desc=prefix..i})
+            _add(movemetadata, {name=c_moves[moveind].name, disabled=teampkmn:f_pkmn_has_move(moveind), num=moveind, desc=prefix..i})
         end
     end, [[
        ;,@,"learn #"
@@ -239,12 +239,11 @@ end $$
 end $$
 
 |[f_pselactions_init]| function(_ENV)
-    menu:refresh(f_zobj([[
+    menu:refresh(f_zobj[[
          ; name,"fight",  desc,"fight|select|move",       select,%f_menu_state_callback, state,pselmove
         ;; name,"switch", desc,"switch|active|pokemon",   select,%f_menu_state_callback, state,pselswitch
-        ;; name,"stats",  desc,"stats|player &|opponent", select,%f_menu_state_callback, state,pstat
         ;; name,"forfeit",  desc,"forfeit|pokemon|battle",  select,%f_psel_forfeit
-    ]], p0.name, f_get_other_pl(_ENV, p0).name))
+    ]])
 end $$
 
 |[f_team_init]| function(_ENV)
@@ -255,7 +254,7 @@ end $$
 
         for i=1,6 do
             newteam[i] = team[i].num
-            if not team[i]:isempty() then
+            if not team[i]:f_pkmn_isempty() then
                 is_disabled = false
             end
         end
@@ -279,7 +278,7 @@ end $$
         return {
             pkmn=team[i],
             select=function(_ENV)
-                if team[_ENV:cursor'editteam'+1]:available() then
+                if team[_ENV:cursor'editteam'+1]:f_pkmn_available() then
                     _ENV:push'teamaction'
                 else
                     _ENV:push'teampkmn'
@@ -309,7 +308,7 @@ end $$
 |[f_pselswitch_init]| function(_ENV)
     local team = _ENV:f_get_team_cursor'team1'
     menu:refresh(f_zobj[[,1,2,3,4,5,6]], function(i)
-        local disabled = p0.team[i]:isempty() or p0.active.shared == p0.team[i] or p0.team[i].major == C_MAJOR_FAINTED
+        local disabled = p0.team[i]:f_pkmn_isempty() or p0.active.shared == p0.team[i] or p0.team[i].major == C_MAJOR_FAINTED
         return {
             disabled=disabled,
             select=function()
@@ -326,49 +325,4 @@ end $$
     local p1, p2 = p1, p2
     if p1.priority == p2.priority then p2.priority += _sgn(_rnd'2'-1) end
     p0 = p1.priority > p2.priority and p1 or p2
-end $$
-
--- todo: wait, Maybe remove empty moves from movelist in battle stat menu.
-|[f_pstat_init]| function(_ENV)
-    menu:refresh{}
-
-    local player = p0.statplayer
-    local moves = player.active.mynewmoves
-    f_zobj_set(menu, [[
-       ;pkmn,@
-      ;;hidden,%c_yes
-
-      ;;name,@, style,5
-      ;;name,@
-      ;;name,@
-
-      ;;name,"moves", style,5
-    ]], player.active, player.name, (#f_get_team_live(player.team, true)).." live", (#f_get_team_dead(player.team)).." dead")
-
-    _foreach(player.active.mynewmoves, function(move)
-        _add(menu, {name=move.name})
-    end)
-
-    local stages = {}
-    _foreach(c_stages, function(s)
-        local stage = player.active.stages[s.key]
-        if stage ~= 0 then
-            _add(stages, {name=s.name..' '..(stage > 0 and '+' or '-').._abs(stage)..'/6'})
-        end
-    end)
-
-    if #stages > 0 then f_zobj_set(menu, [[;name,"modifier", style,5]]) end
-    _foreach(stages, function(f) _add(menu, f) end)
-
--- todo: decide if I should include flags or not
---     local flags = {}
---     _foreach(c_flags, function(f)
---         if player.active[f.key] then
---             -- todo: token crunch, you can probably just add f, since it has a name
---             _add(flags, {name=f.name})
---         end
---     end)
--- 
---     if #flags > 0 then f_zobj_set(menu, [[;name,"state", style,5]]) end
---     _foreach(flags, function(f) _add(menu, f) end)
 end $$

@@ -51,11 +51,9 @@ end $$
 -- no param means decrement 1, param means set to val
 -- you can't change if -1 (rage), gotta switch out to reset that move
 |[f_set_moveturn]| function(_ENV, newval, newcurmove)
-    -- todo: experiment with token crunching, maybe two if statements instead of 1 and or
-    if moveturn >= 0 then
-        moveturn = newval or max(0, moveturn-1)
+    if moveturn == 0 then
+        moveturn, curmove = newval, newcurmove
     end
-    curmove = newcurmove or curmove
 end $$
 
 -- premove must create at least 1 action, otherwise the battle might crash
@@ -66,14 +64,14 @@ end $$
 
         -- C_MAJOR_SLEEPING - 1-3 turns, reset if switch out
         if selfactive.major == C_MAJOR_SLEEPING then
-            f_set_moveturn(selfactive, 0)
+            selfactive.moveturn = 0
         end
 
         if selfactive.major == C_MAJOR_FROZEN then
-            f_set_moveturn(selfactive, 0)
+            selfactive.moveturn = 0
             if _rnd'1' < .2 then
                 f_addaction(self, self, "|is not|frozen")
-                selfactive.major = C_MAJOR_NONE
+                selfactive.shared.major = C_MAJOR_NONE
             else
                 f_addaction(self, self, "|is|frozen")
                 return
@@ -83,6 +81,20 @@ end $$
         -- trapped
         -- hyperbeamrecharge
         -- disable
+
+        -- disable fails if the opponent is in the middle of a multiturn move or has only 1 move left
+        -- or should there be different behavior? could i just take the multiturn move out of the list of possible moves? i like that more, then struggle could be used. works for trapping too.
+        -- or it could simply stop the multiturn move. since it has such bad accuracy, maybe that's a good idea.
+        -- and how should trapping move when selecting a move? is it that the trapped can select a move, but the trapper can't? yes.
+        -- how does trapping moves work with thrash/rage/beams? multiturn moves are reset. thrash/rage/hyperbeam use a pp, but skyattack/solar beam don't.
+        -- any issues with metronome/mirrormove/mimic + multiturn moves? no, i don't think so.
+
+        -- if a move was used on the same turn disable was used
+        if selfactive.disabledslot == move.slot then
+            f_addaction(self, self, "|is|disabled")
+            return
+        end
+
         -- confuse - 50% self attack 1-4 turns
         -- paralysis
 
@@ -102,7 +114,9 @@ end $$
         -- countdown multiturn
 
         -- decrement the moveturn timer, if >0.
-        f_set_moveturn(selfactive)
+        if selfactive.moveturn > 0 then
+            selfactive.moveturn -= 1
+        end
 
         local statdmg = max(selfactive.maxhp\16,1)
         if selfactive.major == C_MAJOR_POISONED then
@@ -128,6 +142,16 @@ end $$
             selfactive.confused -= 1
             if selfactive.confused <= 0 then
                 selfactive.confused = false
+            end
+        end
+
+
+        if selfactive.disabledtimer > 0 then
+            selfactive.disabledtimer -= 1
+
+            if selfactive.disabledtimer == 0 then
+                f_addaction(self, self, "|"..selfactive.mynewmoves[selfactive.disabledslot].name.."|enabled")
+                selfactive.disabledslot = 0
             end
         end
 
@@ -173,6 +197,7 @@ end $$
 -- otherwise, do nothing. turn logic will check every turn if there is a win condition
 |[f_logic_faint]| function(_ENV)
     selfactive.shared.major = C_MAJOR_FAINTED
+    _printh("ac: "..selfactive.major.." | sh: "..selfactive.shared.major)
     self:dielogic()
 end $$
 
@@ -255,12 +280,16 @@ end $$
 end $$
 
 -- returns possible moves that can be used in the fight.
-|[f_get_moves]| function(pkmn)
+-- used for: mimic, disable, f_get_possible_moves
+-- mimic can mimic moves with no pp. disable/possible moves take pp/disabled into account.
+|[f_get_moves]| function(pkmn, ismimic)
+    -- moves is both an array and a map
     local moves = {}
 
     _foreach(pkmn.mynewmoves, function(m)
-        if m.num > 0 then
+        if m.num > 0 and (ismimic or m.pp > 0 and pkmn.disabledslot ~= m.slot) then
             _add(moves, m)
+            moves[m] = true -- this is to make "disabled" in the UI easier
         end
     end)
 
@@ -268,23 +297,15 @@ end $$
 end $$
 
 -- todo: token crunch. use _ENV here
+-- returns possible moves that can be used in the fight, and takes multiturn moves into account.
+-- used for: AI, player
 |[f_get_possible_moves]| function(pkmn)
-    -- moves is both an array and a map
-    local moves = {}
-
     -- todo: check on curmove might not be necessary. and i should figure out how this works with metronome.
     if pkmn.moveturn ~= 0 and pkmn.curmove then
-        _add(moves, pkmn.curmove)
+        return {pkmn.curmove} -- there is no ui for second-turn multiturn moves, so no key needs to be set.
     else
-        _foreach(f_get_moves(pkmn), function(m)
-            if m.pp > 0 and m.slot ~= (pkmn.disabled and pkmn.disabled.slot or 0) then
-                _add(moves, m)
-                moves[m] = true -- this is to make "disabled" in the UI easier
-            end
-        end)
+        return f_get_moves(pkmn)
     end
-
-    return moves
 end $$
 
 |[f_select_random_move]| function(active)

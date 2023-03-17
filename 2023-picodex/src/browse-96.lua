@@ -1,9 +1,35 @@
+-- todo: token crunch f_pkmn methods somehow... maybe change for loop type
+|[f_pkmn_has_move]| function(_ENV, moveid)
+    for j=1,4 do
+        if mynewmoves[j].num == moveid then
+            return true
+        end
+    end
+    return false
+end $$
+
+|[f_pkmn_isempty]| function(_ENV)
+    for j=1,4 do
+        if mynewmoves[j].num ~= -1 then
+            return false
+        end
+    end
+    return true
+end $$
+
+|[f_pkmn_available]| function(_ENV)
+    -- non-browse pokemon are always available (credit, edit, and battle) the browse attribute represents that
+    if num >= 0 then -- shouldn't be -1
+        return not browse or @(S_POKEMON+num) > 0
+    end
+end $$
+
 |[f_draw2_pokeinfo]| function(pkmn)
     f_print_draw2_message("pkmn #"..pkmn.num)
 end $$
 
 |[f_draw3_pokeinfo]| function(pkmn)
-    if pkmn:available() then
+    if pkmn:f_pkmn_available() then
         f_print_draw3_message(pkmn.name.."|"..c_types[pkmn.type1].name.."|"..c_types[pkmn.type2].name)
     else
         f_print_draw3_message"?????????|????|??????"
@@ -29,23 +55,30 @@ g_loaded_row = 16 -- default corresponds to the top row in the "129-151.p8" file
     _sspr(col*16, 0, 16, 16, x-w/2, y-h/2, w, h)
 end $$
 
-|[f_draw_pkmn_out]| function(num, x, y, col, xscale, yscale)
-    if num < 0 then _spr(107, x-4, y-4) return end
-    xscale, yscale = xscale or 1, yscale or 1
-    local outline_width = _max(_abs(xscale), 1) \ 1
+|[f_draw_pkmn_out]| function(_ENV, x, y, col, xscale, yscale)
+    -- todo: maybe combine this logic with f_draw_pkmn_out itself (since this is the only instance).
+    local num = _ENV:f_pkmn_available() and num or -1
+    if num == P_PIKACHU and _ENV:f_pkmn_has_move(M_SURF)    then num = 152 end
+    if num == P_PSYDUCK and _ENV:f_pkmn_has_move(M_AMNESIA) then num = 153 end
 
-    f_zcall(function(color, v1, v2, v3, v4)
-        for c=1,15 do _pal(c,color) end
-        for i=-outline_width,outline_width,outline_width*2 do
-            f_draw_pkmn(num, x+(v1 or i), y+(v2 or i), xscale, yscale)
-            f_draw_pkmn(num, x+(v3 or i), y+(v4 or i), xscale, yscale) 
-        end
-    end, [[
-         ;,@, @, %c_no, @, %c_no
-        ;;,1, %c_no, 0, 0, %c_no
-    ]], col, -outline_width, outline_width)
+    if not isactive or major ~= C_MAJOR_FAINTED and not invisible then
+        if num < 0 then _spr(107, x-4, y-4) return end
+        xscale, yscale = xscale or 1, yscale or 1
+        local outline_width = _max(_abs(xscale), 1) \ 1
 
-    pal() f_draw_pkmn(num, x, y, xscale, yscale)
+        f_zcall(function(color, v1, v2, v3, v4)
+            for c=1,15 do _pal(c,color) end
+            for i=-outline_width,outline_width,outline_width*2 do
+                f_draw_pkmn(num, x+(v1 or i), y+(v2 or i), xscale, yscale)
+                f_draw_pkmn(num, x+(v3 or i), y+(v4 or i), xscale, yscale) 
+            end
+        end, [[
+             ;,@, @, %c_no, @, %c_no
+            ;;,1, %c_no, 0, 0, %c_no
+        ]], col, -outline_width, outline_width)
+
+        pal() f_draw_pkmn(num, x, y, xscale, yscale)
+    end
 end $$
 
 -- this is for populating the pokemon info menu (sometimes called browsestat in code)

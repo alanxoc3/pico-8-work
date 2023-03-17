@@ -1,8 +1,15 @@
 -- todo: make it so showing a different player's stats also shows their name in draw2.
 -- todo: need something that takes percent & function for moves that have 10% chance to do something extra.
+-- todo: disable move needs to show disabled message if move is disabled on the same turn.
 
 -- todo: initial wave: make every move do things (rest sets sleep...)
 -- todo: second wave: make states actually have an effect and unset properly (dig/rest/poison....)
+
+-- todo: fix error, bonerang related bug
+-- runtime error line 17 tab 0
+-- endfunc()
+-- attempt to call local 'endfunc' (a nil value)
+-- at line 0 (tab 0)
 
 -- roar/whirlwind/teleport
 |[f_movehelp_switch]| function(pl)
@@ -63,19 +70,24 @@ end $$
 end $$
 
 |[f_move_disable]| function(_ENV)
-    if other.disabled then return true end
-    local moves = f_get_possible_moves(otheractive)
+    if otheractive.disabledtimer > 0 then return true end
+    local moves = f_get_moves(otheractive)
     if #moves == 0 then return true end
 
-    other.disabled = {
-        slot=moves[f_flr_rnd(#moves)+1].slot,
-        length=f_flr_rnd'6'+2
-    }
+    otheractive.disabledtimer = f_flr_rnd'6'+2
+    otheractive.disabledslot  = moves[f_flr_rnd(#moves)+1].slot
+    f_addaction(self, other, "|"..otheractive.mynewmoves[otheractive.disabledslot].name.."|disabled")
+
+    -- if the move disabled is a multiturn move, we need to stop the multiturn timer
+    -- no need to worry about trapping moves, because you won't be able to use disable during a trapping move
+    if otheractive.moveturn ~= 0 and otheractive.curmove.slot == otheractive.disabledslot then
+        otheractive.moveturn = 0
+    end
 end $$
 
 |[f_move_mimic]| function(_ENV)
     -- todo: can any logic be combined with transform?
-    local othermoves = f_get_moves(otheractive)
+    local othermoves = f_get_moves(otheractive, true)
     local newmove = f_create_move(othermoves[f_flr_rnd(#othermoves)+1].num, move.slot)
     newmove.pp, newmove.maxpp = 5, 5
     selfactive.mynewmoves[move.slot] = newmove
@@ -274,10 +286,7 @@ end $$
 end $$
 
 |[f_move_thrash]| function(_ENV)
-    if selfactive.moveturn == 0 then
-        f_set_moveturn(selfactive, f_flr_rnd'2'+2, f_create_move(move.num, move.slot))
-    end
-
+    f_set_moveturn(selfactive, f_flr_rnd'2'+2, f_create_move(move.num, move.slot))
     f_move_default(_ENV)
 
     if selfactive.moveturn == 1 then
@@ -286,12 +295,9 @@ end $$
 end $$
 
 -- todo: implement the "attack goes up" thing for rage
+-- todo: combine with thrash logic
 |[f_move_rage]| function(_ENV)
-    -- todo: combine with thrash logic
-    if selfactive.moveturn == 0 then
-        f_set_moveturn(selfactive, -1, f_create_move(move.num, move.slot))
-    end
-
+    f_set_moveturn(selfactive, -1, f_create_move(move.num, move.slot))
     f_move_default(_ENV)
 end $$
 

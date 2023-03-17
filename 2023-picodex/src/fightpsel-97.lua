@@ -17,7 +17,6 @@
         game.pselactions.menu = game.p0.menu_action
         game.pselmove.menu    = game.p0.menu_move
         game.pselswitch.menu  = game.p0.menu_switch
-        game.pstat.menu       = game.p0.menu_stats
 
         game.cur_action = f_newaction(game.p0, "")
         game.stack[#game.stack] = game.curr -- without this, next trainer's turn might be skipped

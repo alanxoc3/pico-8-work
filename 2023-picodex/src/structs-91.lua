@@ -1,5 +1,6 @@
 -- todo: make gust/thunder hurt pokemon flying & deal double damage
 -- todo: make earthquake/fissure hurt pokemon digging & deal double damage
+-- todo: an idea for compression crunching if I need it is to remove most "%" from ztable.
 
 -- this file contains structures for pokemon
 
@@ -24,35 +25,10 @@ end $$
         type1,T_NONE, type2,T_NONE,
         moves_natural,#, moves_teach,#, moves_event,#,
 
-        mynewmoves,@, draw,@, hasmove,@, isempty,@, available,@
+        draw,%f_draw_pkmn_out,
 
-        -- todo: token crunch below methods somehow...
-    ]], f_create_empty_moveset(), function(pkmn, ...)
-        -- todo: maybe combine this logic with f_draw_pkmn_out itself (since this is the only instance).
-        local num = pkmn:available() and pkmn.num or -1
-        if num == P_PIKACHU and pkmn:hasmove(M_SURF)    then num = 152 end
-        if num == P_PSYDUCK and pkmn:hasmove(M_AMNESIA) then num = 153 end
-        f_draw_pkmn_out(num, ...)
-    end, function(pkmn, moveid)
-        for j=1,4 do
-            if pkmn.mynewmoves[j].num == moveid then
-                return true
-            end
-        end
-        return false
-    end, function(pkmn)
-        for j=1,4 do
-            if pkmn.mynewmoves[j].num ~= -1 then
-                return false
-            end
-        end
-        return true
-    end, function(pkmn)
-        -- non-browse pokemon are always available (credit, edit, and battle) the browse attribute represents that
-        if pkmn.num >= 0 then -- shouldn't be -1
-            return not pkmn.browse or @(S_POKEMON+pkmn.num) > 0
-        end
-    end)
+        mynewmoves,@
+    ]], f_create_empty_moveset())
 end $$
 
 |[f_populate_c_pokemon]| function()
@@ -158,10 +134,13 @@ end $$
     end)
 
     return _setmetatable(f_zobj([[
-        lastmoverecv,0, -- last move taken damage by, for mirrormove
-        accuracy,1,     -- accuracy stat for battle
-        evasion,1,      -- evasion stat for battle
-        moveturn,0,     -- turn move is on. > 0, decrements each turn. 0, is the same. -1, is multiturn move that doesn't end (rage).
+        isactive,%c_yes, -- used for a drawing function, should draw fainted pokemon if they are not active, but not if they are active.
+        lastmoverecv,0,  -- last move taken damage by, for mirrormove
+        accuracy,1,      -- accuracy stat for battle
+        evasion,1,       -- evasion stat for battle
+        moveturn,0,      -- turn move is on. > 0, decrements each turn. 0, is the same. -1, is multiturn move that doesn't end (rage).
+        disabledtimer,0,
+
         -- curmove -- used for multiturn moves, if moveturn ~= 0, this must be set
         shared,@,
         mynewmoves,@,

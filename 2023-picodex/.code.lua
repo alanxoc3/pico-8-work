@@ -35,7 +35,7 @@ function f_zobj(...)
 return f_zobj_set(_setmetatable({},{__index=_g}),...)
 end
 f_zobj_set(_g,[[c_yes,@,c_no,@,c_empty,@,f_nop,@]],true,false,"",function(...)return...end)
-f_zobj_set(_g,[[f_zclass,@,f_actor_get_elapsed_percent,@,f_actor_load,@,f_actor_loadlogic,@,f_actor_state,@,f_zobj,@,f_zobj_set,@,f_zobj_eval,@,f_zspr,@,f_beep,@,f_flr_rnd,@,f_zcall,@,f_zcamera,@,f_btn_helper,@,f_print_draw2_message,@,f_print_draw3_message,@,c_pokemon,@,c_pokemon_names,@,c_major_names,@,c_types,@,c_flags,@,c_stages,@,c_bg_styles,@,c_zmovetype,@,c_moves,@,c_trainers,@,f_menu_state_callback,@,f_create_menu_view,@,f_create_menu,@,f_menu_refresh,@,f_menu_cancel,@,f_menu_set,@,f_menu_view_update,@,f_menu_update,@,f_menu_draw1,@,f_menu_drawentry,@,f_browse_drawentry,@,f_movehelp_switch,@,f_movehelp_incstat,@,f_movehelp_major,@,f_movehelp_getstat,@,f_movehelp_update_pp,@,f_move_implement,@,f_move_disable,@,f_move_mimic,@,f_move_conversion,@,f_move_transform,@,f_move_haze,@,f_move_heal,@,f_move_recover,@,f_move_metronome,@,f_move_mirror_move,@,f_move_roar,@,f_move_teleport,@,f_move_stat_self,@,f_move_stat_other,@,f_move_toxic,@,f_move_splash,@,f_move_major_other,@,f_movehelp_minor,@,f_move_self,@,f_move_other,@,f_movehelp_confuse,@,f_move_rest,@,f_move_counter,@,f_move_multihit_set,@,f_move_multihit_var,@,f_move_multihit_twin,@,f_move_thrash,@,f_move_rage,@,f_move_recoil,@,f_move_default,@,f_move_dreameater,@,f_move_drain,@,f_move_percent,@,f_move_ohko,@,f_move_psywave,@,f_move_superfang,@,f_move_setdmg,@,f_move_setdmg_self,@,f_calc_max_stat,@,f_get_default_pokemon,@,f_populate_c_pokemon,@,f_create_team_pkmn,@,f_team_pkmn_to_active,@,f_unlock_pkmn,@,f_get_team_dead,@,f_get_team_live,@,f_get_next_active,@,f_teamdel,@,f_set_default_team_pkmn,@,f_get_team,@,f_save_team,@,f_populate_c_moves,@,f_get_natural_moveset,@,f_create_move,@,f_create_empty_moveset,@,f_editteam_draw1,@,f_draw_hp,@,f_turn_draw1,@]],function(template)
+f_zobj_set(_g,[[f_zclass,@,f_actor_get_elapsed_percent,@,f_actor_load,@,f_actor_loadlogic,@,f_actor_state,@,f_zobj,@,f_zobj_set,@,f_zobj_eval,@,f_zspr,@,f_beep,@,f_flr_rnd,@,f_zcall,@,f_zcamera,@,f_btn_helper,@,f_print_draw2_message,@,f_print_draw3_message,@,c_pokemon,@,c_pokemon_names,@,c_major_names,@,c_types,@,c_flags,@,c_stages,@,c_bg_styles,@,c_zmovetype,@,c_moves,@,c_trainers,@,f_menu_state_callback,@,f_create_menu_view,@,f_create_menu,@,f_menu_refresh,@,f_menu_cancel,@,f_menu_set,@,f_menu_view_update,@,f_menu_update,@,f_menu_draw1,@,f_menu_drawentry,@,f_browse_drawentry,@,f_movehelp_switch,@,f_movehelp_incstat,@,f_movehelp_major,@,f_movehelp_getstat,@,f_movehelp_update_pp,@,f_move_implement,@,f_move_disable,@,f_move_mimic,@,f_move_conversion,@,f_move_transform,@,f_move_haze,@,f_move_heal,@,f_move_recover,@,f_move_metronome,@,f_move_mirror_move,@,f_move_roar,@,f_move_teleport,@,f_move_stat_self,@,f_move_stat_other,@,f_move_toxic,@,f_move_splash,@,f_move_major_other,@,f_movehelp_minor,@,f_move_self,@,f_move_other,@,f_movehelp_confuse,@,f_move_rest,@,f_move_counter,@,f_move_multihit_set,@,f_move_multihit_var,@,f_move_multihit_twin,@,f_move_thrash,@,f_move_rage,@,f_move_recoil,@,f_move_default,@,f_move_dreameater,@,f_move_drain,@,f_move_percent,@,f_move_ohko,@,f_move_psywave,@,f_move_superfang,@,f_move_setdmg,@,f_move_setdmg_self,@,f_calc_max_stat,@,f_get_default_pokemon,@,f_populate_c_pokemon,@,f_create_team_pkmn,@,f_team_pkmn_to_active,@,f_unlock_pkmn,@,f_get_team_dead,@,f_get_team_live,@,f_get_next_active,@,f_teamdel,@,f_set_default_team_pkmn,@,f_get_team,@,f_save_team,@,f_populate_c_moves,@,f_get_natural_moveset,@,f_create_move,@,f_create_empty_moveset,@,f_editteam_draw1,@,f_turn_draw1,@,f_browse_draw2,@]],function(template)
 return f_zobj_set(f_zobj[[load,%f_actor_load,loadlogic,%f_actor_loadlogic,state,%f_actor_state,get_elapsed_percent,%f_actor_get_elapsed_percent,timer,0,isnew,%c_yes,curr,start,init,%f_nop,update,%f_nop;]],template)
 end,function(_ENV,key)
 if key==curr then
@@ -219,15 +219,17 @@ end
 end,function(_ENV)
 f_addaction(self,self,"|not|implemented")
 end,function(_ENV)
-if other.disabled then return true end
-local moves=f_get_possible_moves(otheractive)
+if otheractive.disabledtimer>0 then return true end
+local moves=f_get_moves(otheractive)
 if #moves==0 then return true end
-other.disabled={
-slot=moves[f_flr_rnd(#moves)+1].slot,
-length=f_flr_rnd"6"+2
-}
+otheractive.disabledtimer=f_flr_rnd"6"+2
+otheractive.disabledslot=moves[f_flr_rnd(#moves)+1].slot
+f_addaction(self,other,"|"..otheractive.mynewmoves[otheractive.disabledslot].name.."|disabled")
+if otheractive.moveturn ~=0 and otheractive.curmove.slot==otheractive.disabledslot then
+otheractive.moveturn=0
+end
 end,function(_ENV)
-local othermoves=f_get_moves(otheractive)
+local othermoves=f_get_moves(otheractive,true)
 local newmove=f_create_move(othermoves[f_flr_rnd(#othermoves)+1].num,move.slot)
 newmove.pp,newmove.maxpp=5,5
 selfactive.mynewmoves[move.slot]=newmove
@@ -358,17 +360,13 @@ f_move_major_other(_ENV,5)
 end
 end)
 end,function(_ENV)
-if selfactive.moveturn==0 then
 f_set_moveturn(selfactive,f_flr_rnd"2"+2,f_create_move(move.num,move.slot))
-end
 f_move_default(_ENV)
 if selfactive.moveturn==1 then
 f_move_self(_ENV,f_movehelp_confuse,"confused")
 end
 end,function(_ENV)
-if selfactive.moveturn==0 then
 f_set_moveturn(selfactive,-1,f_create_move(move.num,move.slot))
-end
 f_move_default(_ENV)
 end,function(_ENV)
 local dmg=f_calc_move_damage(selfactive,otheractive,move)
@@ -425,30 +423,7 @@ end)
 end,function(base)
 return _ceil(base+.5*93)+5
 end,function()
-return f_zobj([[browse,%c_yes,level,50,attack,0,defense,0,special,0,speed,0,maxhp,0,hp,0,total,0,accuracy,1,evasion,1,base_maxhp,0,base_attack,0,base_defense,0,base_speed,0,base_special,0,num,-1,evolvesfrom,-1,name, ,type1,0,type2,0,moves_natural,#,moves_teach,#,moves_event,#,mynewmoves,@,draw,@,hasmove,@,isempty,@,available,@]],f_create_empty_moveset(),function(pkmn,...)
-local num=pkmn:available()and pkmn.num or-1
-if num==25 and pkmn:hasmove(53)then num=152 end
-if num==54 and pkmn:hasmove(143)then num=153 end
-f_draw_pkmn_out(num,...)
-end,function(pkmn,moveid)
-for j=1,4 do
-if pkmn.mynewmoves[j].num==moveid then
-return true
-end
-end
-return false
-end,function(pkmn)
-for j=1,4 do
-if pkmn.mynewmoves[j].num ~=-1 then
-return false
-end
-end
-return true
-end,function(pkmn)
-if pkmn.num>=0 then
-return not pkmn.browse or@(0x5e5a+pkmn.num)>0
-end
-end)
+return f_zobj([[browse,%c_yes,level,50,attack,0,defense,0,special,0,speed,0,maxhp,0,hp,0,total,0,accuracy,1,evasion,1,base_maxhp,0,base_attack,0,base_defense,0,base_speed,0,base_special,0,num,-1,evolvesfrom,-1,name, ,type1,0,type2,0,moves_natural,#,moves_teach,#,moves_event,#,draw,%f_draw_pkmn_out,mynewmoves,@]],f_create_empty_moveset())
 end,function()
 local movemem=_peek2"8"
 c_pokemon[-1]=f_get_default_pokemon()
@@ -519,7 +494,7 @@ local moves={}
 _foreach(teampkmn.mynewmoves,function(m)
 _add(moves,m)
 end)
-return _setmetatable(f_zobj([[lastmoverecv,0,accuracy,1,evasion,1,moveturn,0,shared,@,mynewmoves,@,turnstarthp,@;stages;special,0,attack,0,defense,0,speed,0,accuracy,0,evasion,0]],teampkmn,moves,teampkmn.hp),{__index=teampkmn})
+return _setmetatable(f_zobj([[isactive,%c_yes,lastmoverecv,0,accuracy,1,evasion,1,moveturn,0,disabledtimer,0,shared,@,mynewmoves,@,turnstarthp,@;stages;special,0,attack,0,defense,0,speed,0,accuracy,0,evasion,0]],teampkmn,moves,teampkmn.hp),{__index=teampkmn})
 end,function(trainer)
 foreach(f_get_team_dead(trainer.team),function(pkmn)
 _poke(0x5e5a+pkmn.num,1)
@@ -600,22 +575,19 @@ return moveset
 end,function(game)
 f_modes_default_draw1(game)
 f_wobble_text("team #"..game:cursor"team1"+1,20,27,1)
-end,function(x,y,hp,maxhp,align,col)
-_rectfill(x,y-2,x-align*_max(_ceil(hp/maxhp*40),0),y+2,col)
 end,function(_ENV)
-f_zcall(_rectfill,[[;,0,0,39,39,5;;,0,5,39,34,13]])
-f_draw_battle_side(p1.active,cur_action.active==p1.active,1)
-f_draw_battle_side(p2.active,cur_action.active==p2.active,-1)
-end)
-f_zobj_set(_g,[[f_draw_battle_side,@,f_browse_draw2,@,f_editteam_draw2,@,f_teammoves_draw2,@,f_team_draw2,@,f_fightover_draw2,@,f_pselactions_draw2,@,f_teammovesel_draw2,@,f_main_draw2,@,f_turn_draw2,@,f_pstat_draw2,@,f_editteam_draw3,@,f_move_draw3,@,f_browse_draw3,@,f_main_draw3,@,f_pselactions_draw3,@,f_pstat_draw3,@,f_fight_draw3_helper,@,f_pselswitch_draw3,@,f_team_draw3,@,f_fightover_draw3,@,f_turn_draw3,@,f_fightover_init,@,f_main_init,@,f_browse_init_shared,@,f_browse_init,@,f_teampkmn_init,@,f_browsestat_init,@,f_credits_init,@,f_fightsel_init,@,f_teamaction_init,@,f_moveaction_init,@,f_movedel,@,f_moves_init_helper,@,f_teammoves_init,@,f_switchmoves_init,@,f_teammovesel_init,@,f_pselmove_init,@,f_pselactions_init,@,f_team_init,@,f_get_team_num,@,f_editteam_init,@,f_switchteam_init,@,f_pselswitch_init,@,f_turn_init,@,f_pstat_init,@,f_browsestat_lrfunc,@,f_pstat_lrfunc,@,f_pstat_xfunc,@,f_browsestat_xfunc,@,f_credits_xfunc,@,f_fightover_xfunc,@,f_game_init,@,f_game_update,@,f_game_draw1,@,f_game_draw2,@,f_game_draw3,@,f_modes_default_update,@,f_modes_default_draw1,@,f_modes_cursor,@,f_modes_entry,@,f_modes_push,@,f_modes_popuntil,@,f_modes_pop,@,f_moveup_init,@,f_closed_init,@,f_any_btn,@,f_closed_update,@,g_cur_light,@,f_minisfx,@,f_draw_picodex,@,f_picodex_map,@,f_wobble_text,@,f_zprint,@,f_draw_screen,@,f_draw2_pokeinfo,@,f_draw3_pokeinfo,@,f_draw_pkmn,@,f_draw_pkmn_out,@,f_update_stat_menu,@,f_story_select,@,f_match_select,@,f_match_start,@,f_horde_select,@,f_horde_win_func,@,f_team_select,@,f_get_team_cursor,@,f_get_pkmn_team_edit,@,f_select_switch,@,f_movelogic,@,f_set_moveturn,@,f_premovelogic,@,f_postmove_logic,@,f_select_move,@,f_get_other_pl,@,f_newaction,@,f_addaction,@,f_logic_faint,@,f_turn_update,@,f_pop_next_action,@]],function(_ENV,a1a,flip)
-if major ~=1 and not invisible then
-local col=a1a and 6 or 1
-_pal(1,col)_spr(198,8+12*flip,16.5+9.5*flip,3,1)_pal(1,1)
-f_zprint(hp.."H",21+20*flip,17.5+9.5*flip,13,flip)
-f_draw_hp(19.5+20.5*flip,19.5+17.5*flip,hp,maxhp,flip,col)
-_ENV:draw(20-10*flip,20+5*flip,5,flip)
-end
-end,function(game)f_draw2_pokeinfo(c_pokemon[game:cursor"browse"])end,function(game)f_print_draw2_message("spot #"..(game:cursor"editteam"+1))end,function(game)f_print_draw2_message("move #"..(game:cursor"teammoves"+1))end,function(game)f_print_draw2_message(game.ui_pl)end,function(game)f_print_draw2_message"match over" end,function(_)end,function(game)
+local cra,p1a,p2a=cur_action.active,p1.active,p2.active
+local p1on,p2on=p1a==cra,p2a==cra
+local p1c,p2c=p1on and 6 or 1,p2on and 6 or 1
+f_zcall(_rectfill,[[;,0,0,39,6,5;;,0,33,39,39,5]])
+f_zcall(_rectfill,[[;,-1,33,@,41,@;;,40,-2,@,6,@]],-1+_max(_ceil(p1a.hp/p1a.maxhp*40),0),p1c,
+40-_max(_ceil(p2a.hp/p2a.maxhp*40),0),p2c)
+f_zcall(_rectfill,[[;,0,6,24,6,13;;,0,5,23,5,13;;,15,33,39,33,13;;,16,34,39,34,13]])
+f_zcall(f_zprint,[[;,@,2,34,13,-1;;,@,41,29,@,1;;,@,40,1,13,1;;,@,1,5,@,-1]],p1a.hp,"PAR",p1c,p2a.hp,"FZN",p2c)
+p1a:draw(10,23,5,1)
+p2a:draw(30,17,5,-1)
+end,function(game)f_draw2_pokeinfo(c_pokemon[game:cursor"browse"])end)
+f_zobj_set(_g,[[f_editteam_draw2,@,f_teammoves_draw2,@,f_team_draw2,@,f_fightover_draw2,@,f_pselactions_draw2,@,f_teammovesel_draw2,@,f_main_draw2,@,f_turn_draw2,@,f_editteam_draw3,@,f_move_draw3,@,f_browse_draw3,@,f_main_draw3,@,f_fight_draw3_helper,@,f_pselswitch_draw3,@,f_pselactions_draw3,@,f_team_draw3,@,f_fightover_draw3,@,f_turn_draw3,@,f_fightover_init,@,f_main_init,@,f_browse_init_shared,@,f_browse_init,@,f_teampkmn_init,@,f_browsestat_init,@,f_credits_init,@,f_fightsel_init,@,f_teamaction_init,@,f_moveaction_init,@,f_movedel,@,f_moves_init_helper,@,f_teammoves_init,@,f_switchmoves_init,@,f_teammovesel_init,@,f_pselmove_init,@,f_pselactions_init,@,f_team_init,@,f_get_team_num,@,f_editteam_init,@,f_switchteam_init,@,f_pselswitch_init,@,f_turn_init,@,f_browsestat_lrfunc,@,f_browsestat_xfunc,@,f_credits_xfunc,@,f_fightover_xfunc,@,f_game_init,@,f_game_update,@,f_game_draw1,@,f_game_draw2,@,f_game_draw3,@,f_modes_default_update,@,f_modes_default_draw1,@,f_modes_cursor,@,f_modes_entry,@,f_modes_push,@,f_modes_popuntil,@,f_modes_pop,@,f_moveup_init,@,f_closed_init,@,f_any_btn,@,f_closed_update,@,g_cur_light,@,f_minisfx,@,f_draw_picodex,@,f_picodex_map,@,f_wobble_text,@,f_zprint,@,f_draw_screen,@,f_pkmn_has_move,@,f_pkmn_isempty,@,f_pkmn_available,@,f_draw2_pokeinfo,@,f_draw3_pokeinfo,@,f_draw_pkmn,@,f_draw_pkmn_out,@,f_update_stat_menu,@,f_story_select,@,f_match_select,@,f_match_start,@,f_horde_select,@,f_horde_win_func,@,f_team_select,@,f_get_team_cursor,@,f_get_pkmn_team_edit,@,f_select_switch,@,f_movelogic,@,f_set_moveturn,@,f_premovelogic,@,f_postmove_logic,@,f_select_move,@,f_get_other_pl,@,f_newaction,@,f_addaction,@,f_logic_faint,@,f_turn_update,@,f_pop_next_action,@,f_get_moves,@,f_get_possible_moves,@,f_select_random_move,@,f_get_crit_ratio,@]],function(game)f_print_draw2_message("spot #"..(game:cursor"editteam"+1))end,function(game)f_print_draw2_message("move #"..(game:cursor"teammoves"+1))end,function(game)f_print_draw2_message(game.ui_pl)end,function(game)f_print_draw2_message"match over" end,function(_)end,function(game)
 local move=game:entry"teammovesel"
 f_print_draw2_message(move and move.ref)
 end,function()
@@ -627,24 +599,24 @@ _sspr(6*8+xx,6*8,v,8,xx+3,3.5+_cos((_t()+i)/4))
 xx+=v
 end
 _pal()
-end,function(game)f_print_draw2_message(game.cur_action.pl.name)end,function(game)f_print_draw2_message(game.p0.statplayer.name)end,function(game)
+end,function(game)f_print_draw2_message(game.cur_action.pl.name)end,function(game)
 f_draw3_pokeinfo(game:f_get_pkmn_team_edit())
 end,function(game)
 local move=game:entry(game.movemode).move
 if move.num>=0 then
 f_print_draw3_message(c_types[move.type].name.."|"..move.pp.."/"..move.maxpp.."|"..(move.damage>=0 and move.damage or "??").."P "..(move.accuracy>=0 and move.accuracy or "??").."A")
 else
-f_print_draw3_message"????|?/?|??P ???A"
+f_print_draw3_message"????|?/?|?P ?A"
 end
 end,function(game)
 f_draw3_pokeinfo(game:entry"browse".pkmn)
-end,function(game)f_print_draw3_message(game:entry"main".desc)end,function(game)f_print_draw3_message(game:entry"pselactions".desc)end,function(_ENV)f_fight_draw3_helper(p0.statplayer.active)end,function(_ENV)
+end,function(game)f_print_draw3_message(game:entry"main".desc)end,function(_ENV)
 if num>-1 then
 f_print_draw3_message(name.."|"..hp.."/"..maxhp.."|"..c_major_names[major])
 else
 f_print_draw3_message"?????????|???/???|"
 end
-end,function(_ENV)f_fight_draw3_helper(_ENV:entry"pselswitch".pkmn)end,function(game)
+end,function(_ENV)f_fight_draw3_helper(_ENV:entry"pselswitch".pkmn)end,function(_ENV)f_fight_draw3_helper(p0.active)end,function(game)
 local count,power=0,0
 for i=1,6 do
 local num=game:entry().team[i]
@@ -666,11 +638,11 @@ menu.cancel=function(game)
 game:popuntil"team2story"
 end
 for pl in _all{winner,loser}do
-f_zobj_set(menu,[[v,0;;pkmn,@;;hidden,%c_yes;;name,@,style,5;;name,@;;name,@]],pl.active,pl.name,(#f_get_team_live(pl.team,true)).." live",(#f_get_team_dead(pl.team)).." dead")
+f_zobj_set(menu,[[v,0;;pkmn,@;;hidden,%c_yes;;name,@,style,5;;name,@;;name,@]],pl.active.shared,pl.name,(#f_get_team_live(pl.team,true)).." live",(#f_get_team_dead(pl.team)).." dead")
 end
 end,function(_ENV)
 local count=0
-for i=0,151 do count+=c_pokemon[i]:available()and 1 or 0 end
+for i=0,151 do count+=c_pokemon[i]:f_pkmn_available()and 1 or 0 end
 menu:refresh(
 f_zobj([[;name,browse,state,browse,select,%f_menu_state_callback,desc,@;;name,edit,state,team1,select,%f_menu_state_callback,desc,edit|stored|teams;;name,league,state,team1story,select,%f_menu_state_callback,desc,@;;name,player,state,team1match,select,%f_menu_state_callback,desc,player|custom|battles;;name,?????,state,team1horde,select,%f_menu_state_callback,desc,?????|beat|league,disabled,%c_yes;;name,credits,state,credits,select,%f_menu_state_callback,desc,credits|amorg|games]],"browse|"..count.."/151|pokemon","league|"..(@0x5efd).."/40|trainers")
 )
@@ -688,7 +660,7 @@ function(num)
 local pkmn=c_pokemon[num]
 return{
 select=selectfunc,
-disabled=not pkmn:available(),
+disabled=not pkmn:f_pkmn_available(),
 pkmn=pkmn
 }
 end
@@ -780,7 +752,7 @@ local movemetadata={}
 f_zcall(function(movelist,prefix)
 for i=1,#movelist do
 local moveind=movelist[i]
-_add(movemetadata,{name=c_moves[moveind].name,disabled=teampkmn:hasmove(moveind),num=moveind,desc=prefix..i})
+_add(movemetadata,{name=c_moves[moveind].name,disabled=teampkmn:f_pkmn_has_move(moveind),num=moveind,desc=prefix..i})
 end
 end,[[;,@,learn #;;,@,teach #;;,@,event #]],pkmn.moves_natural,pkmn.moves_teach,pkmn.moves_event)
 menu:refresh(movemetadata,function(m)
@@ -818,7 +790,7 @@ end
 )
 end)
 end,function(_ENV)
-menu:refresh(f_zobj([[;name,fight,desc,fight|select|move,select,%f_menu_state_callback,state,pselmove;;name,switch,desc,switch|active|pokemon,select,%f_menu_state_callback,state,pselswitch;;name,stats,desc,stats|player &|opponent,select,%f_menu_state_callback,state,pstat;;name,forfeit,desc,forfeit|pokemon|battle,select,%f_psel_forfeit]],p0.name,f_get_other_pl(_ENV,p0).name))
+menu:refresh(f_zobj[[;name,fight,desc,fight|select|move,select,%f_menu_state_callback,state,pselmove;;name,switch,desc,switch|active|pokemon,select,%f_menu_state_callback,state,pselswitch;;name,forfeit,desc,forfeit|pokemon|battle,select,%f_psel_forfeit]])
 end,function(_ENV)
 menu:refresh(f_zobj[[,1,2,3]],function(i)
 local team=f_get_team(i-1)
@@ -826,7 +798,7 @@ local newteam={}
 local is_disabled=true
 for i=1,6 do
 newteam[i]=team[i].num
-if not team[i]:isempty()then
+if not team[i]:f_pkmn_isempty()then
 is_disabled=false
 end
 end
@@ -845,7 +817,7 @@ menu:refresh(f_zobj[[,1,2,3,4,5,6]],function(i)
 return{
 pkmn=team[i],
 select=function(_ENV)
-if team[_ENV:cursor"editteam"+1]:available()then
+if team[_ENV:cursor"editteam"+1]:f_pkmn_available()then
 _ENV:push"teamaction"
 else
 _ENV:push"teampkmn"
@@ -871,7 +843,7 @@ menu.c=editteam.menu.c
 end,function(_ENV)
 local team=_ENV:f_get_team_cursor"team1"
 menu:refresh(f_zobj[[,1,2,3,4,5,6]],function(i)
-local disabled=p0.team[i]:isempty()or p0.active.shared==p0.team[i]or p0.team[i].major==1
+local disabled=p0.team[i]:f_pkmn_isempty()or p0.active.shared==p0.team[i]or p0.team[i].major==1
 return{
 disabled=disabled,
 select=function()
@@ -885,27 +857,10 @@ end,function(_ENV)
 local p1,p2=p1,p2
 if p1.priority==p2.priority then p2.priority+=_sgn(_rnd"2"-1)end
 p0=p1.priority>p2.priority and p1 or p2
-end,function(_ENV)
-menu:refresh{}
-local player=p0.statplayer
-local moves=player.active.mynewmoves
-f_zobj_set(menu,[[;pkmn,@;;hidden,%c_yes;;name,@,style,5;;name,@;;name,@;;name,moves,style,5]],player.active,player.name,(#f_get_team_live(player.team,true)).." live",(#f_get_team_dead(player.team)).." dead")
-_foreach(player.active.mynewmoves,function(move)
-_add(menu,{name=move.name})
-end)
-local stages={}
-_foreach(c_stages,function(s)
-local stage=player.active.stages[s.key]
-if stage ~=0 then
-_add(stages,{name=s.name.." "..(stage>0 and "+"or "-").._abs(stage).."/6"})
-end
-end)
-if #stages>0 then f_zobj_set(menu,[[;name,modifier,style,5]])end
-_foreach(stages,function(f)_add(menu,f)end)
 end,function(_ENV,lr)
 local stayed=true
 for i=browse.menu.c+lr,75.5+75.5*lr,lr do
-if c_pokemon[i]:available()then
+if c_pokemon[i]:f_pkmn_available()then
 browse.menu.c=i
 stayed=false
 f_minisfx"154"
@@ -914,11 +869,7 @@ end
 end
 if stayed then f_beep()end
 f_browsestat_init(_ENV)
-end,function(_ENV)
-p0.statplayer=f_get_other_pl(_ENV,p0.statplayer)
-f_minisfx"154"
-f_pstat_init(_ENV)
-end,function(_ENV)f_minisfx(p0.statplayer.active.num)end,function(game)f_minisfx(game:cursor"browse")end,function()f_minisfx(f_flr_rnd"152")end,function(_ENV)f_minisfx(p0.active.num)end,function(_ENV)
+end,function(game)f_minisfx(game:cursor"browse")end,function()f_minisfx(f_flr_rnd"152")end,function(_ENV)f_minisfx(p0.active.num)end,function(_ENV)
 local team={}
 for ind,num in _pairs(_split"133,7,35,1,25,4")do
 f_set_default_team_pkmn(team,ind,num)
@@ -928,7 +879,7 @@ if@0x5efc==0 then
 _poke(0x5efc,1)
 f_save_team(0,team)
 end
-modes=f_zclass[[cursor,%f_modes_cursor,entry,%f_modes_entry,push,%f_modes_push,pop,%f_modes_pop,popuntil,%f_modes_popuntil,pkmn,%f_nop,update,%f_nop,draw1,%f_nop,draw2,%f_nop,draw3,%f_nop,curr,main;stack;,;defaults;menu,%c_no,ui_pl,error,finit,%f_nop,init,%f_nop,lrfunc,%f_beep,xfunc,%f_nop,update,%f_modes_default_update,movemode,%c_no,draw1,%f_modes_default_draw1,draw2,%f_nop,draw3,%f_nop;main;init,~f_main_init,draw2,~f_main_draw2,draw3,~f_main_draw3;browse;init,%f_browse_init,draw2,%f_browse_draw2,draw3,%f_browse_draw3;browsestat;init,%f_browsestat_init,draw2,%f_browse_draw2,draw3,%f_browse_draw3,lrfunc,%f_browsestat_lrfunc,xfunc,%f_browsestat_xfunc;editteam;init,%f_editteam_init,draw2,%f_editteam_draw2,draw3,%f_editteam_draw3,draw1,%f_editteam_draw1;switchteam;init,%f_switchteam_init,draw2,%f_editteam_draw2,draw3,%f_editteam_draw3,draw1,%f_editteam_draw1;teampkmn;init,%f_teampkmn_init,draw2,%f_browse_draw2,draw3,%f_browse_draw3;teamaction;init,%f_teamaction_init,draw2,%f_editteam_draw2,draw3,%f_editteam_draw3;moveaction;init,%f_moveaction_init,draw2,%f_teammoves_draw2,draw3,%f_move_draw3,movemode,teammoves;teammovesel;init,%f_teammovesel_init,draw2,%f_teammovesel_draw2,draw3,%f_move_draw3;teammoves;init,%f_teammoves_init,draw2,%f_teammoves_draw2,draw3,%f_move_draw3;switchmoves;init,%f_switchmoves_init,draw2,%f_teammoves_draw2,draw3,%f_move_draw3;team1;ui_pl,player,init,%f_team_init,draw2,%f_team_draw2,draw3,%f_team_draw3,disable_empty_team,%c_no,select_func,%f_team_select;team1story;ui_pl,player,init,%f_team_init,draw2,%f_team_draw2,draw3,%f_team_draw3,disable_empty_team,%c_yes,select_func,%f_story_select;team1match;ui_pl,player 1,init,%f_team_init,draw2,%f_team_draw2,draw3,%f_team_draw3,disable_empty_team,%c_yes,select_func,%f_match_select;team1horde;ui_pl,player,init,%f_team_init,draw2,%f_team_draw2,draw3,%f_team_draw3,disable_empty_team,%c_yes,select_func,%f_horde_select;team2match;ui_pl,player 2,init,%f_team_init,draw2,%f_team_draw2,draw3,%f_team_draw3,disable_empty_team,%c_yes,select_func,%f_match_start;team2story;ui_pl,trainer,init,%f_fightsel_init,draw2,%f_team_draw2,draw3,%f_team_draw3;fightover;init,%f_fightover_init,draw2,%f_fightover_draw2,draw3,%f_fightover_draw3,xfunc,%f_fightover_xfunc;pselactions;init,%f_pselactions_init,draw2,%f_turn_draw2,draw3,%f_pselactions_draw3;pselmove;init,%f_pselmove_init,draw2,%f_turn_draw2,draw3,%f_move_draw3;pselswitch;init,%f_pselswitch_init,draw2,%f_turn_draw2,draw3,%f_pselswitch_draw3,draw1,%f_editteam_draw1;pstat;init,%f_pstat_init,draw2,%f_pstat_draw2,draw3,%f_pstat_draw3,lrfunc,%f_pstat_lrfunc,xfunc,%f_pstat_xfunc;p1sel;next,p2sel,init,%f_psel_init,update,%f_nop,draw1,%f_nop,p0key,p1;p2sel;next,turn,init,%f_psel_init,update,%f_nop,draw1,%f_nop,p0key,p2;turn;next,p1sel,init,%f_turn_init,update,%f_turn_update,draw1,%f_turn_draw1,draw2,%f_turn_draw2,draw3,%f_turn_draw3,cur_action,%c_no;credits;init,%f_credits_init,draw2,%f_main_draw2,draw3,%f_main_draw3,xfunc,%f_credits_xfunc;]]
+modes=f_zclass[[cursor,%f_modes_cursor,entry,%f_modes_entry,push,%f_modes_push,pop,%f_modes_pop,popuntil,%f_modes_popuntil,pkmn,%f_nop,update,%f_nop,draw1,%f_nop,draw2,%f_nop,draw3,%f_nop,curr,main;stack;,;defaults;menu,%c_no,ui_pl,error,finit,%f_nop,init,%f_nop,lrfunc,%f_beep,xfunc,%f_nop,update,%f_modes_default_update,movemode,%c_no,draw1,%f_modes_default_draw1,draw2,%f_nop,draw3,%f_nop;main;init,~f_main_init,draw2,~f_main_draw2,draw3,~f_main_draw3;browse;init,%f_browse_init,draw2,%f_browse_draw2,draw3,%f_browse_draw3;browsestat;init,%f_browsestat_init,draw2,%f_browse_draw2,draw3,%f_browse_draw3,lrfunc,%f_browsestat_lrfunc,xfunc,%f_browsestat_xfunc;editteam;init,%f_editteam_init,draw2,%f_editteam_draw2,draw3,%f_editteam_draw3,draw1,%f_editteam_draw1;switchteam;init,%f_switchteam_init,draw2,%f_editteam_draw2,draw3,%f_editteam_draw3,draw1,%f_editteam_draw1;teampkmn;init,%f_teampkmn_init,draw2,%f_browse_draw2,draw3,%f_browse_draw3;teamaction;init,%f_teamaction_init,draw2,%f_editteam_draw2,draw3,%f_editteam_draw3;moveaction;init,%f_moveaction_init,draw2,%f_teammoves_draw2,draw3,%f_move_draw3,movemode,teammoves;teammovesel;init,%f_teammovesel_init,draw2,%f_teammovesel_draw2,draw3,%f_move_draw3;teammoves;init,%f_teammoves_init,draw2,%f_teammoves_draw2,draw3,%f_move_draw3;switchmoves;init,%f_switchmoves_init,draw2,%f_teammoves_draw2,draw3,%f_move_draw3;team1;ui_pl,player,init,%f_team_init,draw2,%f_team_draw2,draw3,%f_team_draw3,disable_empty_team,%c_no,select_func,%f_team_select;team1story;ui_pl,player,init,%f_team_init,draw2,%f_team_draw2,draw3,%f_team_draw3,disable_empty_team,%c_yes,select_func,%f_story_select;team1match;ui_pl,player 1,init,%f_team_init,draw2,%f_team_draw2,draw3,%f_team_draw3,disable_empty_team,%c_yes,select_func,%f_match_select;team1horde;ui_pl,player,init,%f_team_init,draw2,%f_team_draw2,draw3,%f_team_draw3,disable_empty_team,%c_yes,select_func,%f_horde_select;team2match;ui_pl,player 2,init,%f_team_init,draw2,%f_team_draw2,draw3,%f_team_draw3,disable_empty_team,%c_yes,select_func,%f_match_start;team2story;ui_pl,trainer,init,%f_fightsel_init,draw2,%f_team_draw2,draw3,%f_team_draw3;fightover;init,%f_fightover_init,draw2,%f_fightover_draw2,draw3,%f_fightover_draw3,xfunc,%f_fightover_xfunc;pselactions;init,%f_pselactions_init,draw2,%f_turn_draw2,draw3,%f_pselactions_draw3;pselmove;init,%f_pselmove_init,draw2,%f_turn_draw2,draw3,%f_move_draw3;pselswitch;init,%f_pselswitch_init,draw2,%f_turn_draw2,draw3,%f_pselswitch_draw3,draw1,%f_editteam_draw1;p1sel;next,p2sel,init,%f_psel_init,update,%f_nop,draw1,%f_nop,p0key,p1;p2sel;next,turn,init,%f_psel_init,update,%f_nop,draw1,%f_nop,p0key,p2;turn;next,p1sel,init,%f_turn_init,update,%f_turn_update,draw1,%f_turn_draw1,draw2,%f_turn_draw2,draw3,%f_turn_draw3,cur_action,%c_no;credits;init,%f_credits_init,draw2,%f_main_draw2,draw3,%f_main_draw3,xfunc,%f_credits_xfunc;]]
 f_zcall(function(menu_name,create_func,...)
 modes[menu_name].menu=create_func(...)
 end,[[;,browse,~f_create_menu,~f_browse_drawentry,4;;,browsestat,~f_create_menu_view,~f_menu_drawentry;;,credits,~f_create_menu_view,~f_menu_drawentry;;,fightover,~f_create_menu_view,~f_menu_drawentry;;,editteam,~f_create_menu,~f_browse_drawentry,3;;,switchteam,~f_create_menu,~f_browse_drawentry,3;;,main,~f_create_menu,~f_menu_drawentry;;,teamaction,~f_create_menu,~f_menu_drawentry;;,moveaction,~f_create_menu,~f_menu_drawentry;;,teammovesel,~f_create_menu,~f_menu_drawentry;;,teammoves,~f_create_menu,~f_menu_drawentry;;,switchmoves,~f_create_menu,~f_menu_drawentry;;,team1,~f_create_menu,~f_menu_drawentry;;,team2story,~f_create_menu,~f_menu_drawentry;;,team2match,~f_create_menu,~f_menu_drawentry]])
@@ -1041,10 +992,28 @@ end,function(xoff,yoff,w,h,screen_func)
 _clip(-%0x5f28+xoff,-%0x5f2a+yoff,w,h)
 f_zcamera(xoff,yoff,screen_func)
 _clip()
+end,function(_ENV,moveid)
+for j=1,4 do
+if mynewmoves[j].num==moveid then
+return true
+end
+end
+return false
+end,function(_ENV)
+for j=1,4 do
+if mynewmoves[j].num ~=-1 then
+return false
+end
+end
+return true
+end,function(_ENV)
+if num>=0 then
+return not browse or@(0x5e5a+num)>0
+end
 end,function(pkmn)
 f_print_draw2_message("pkmn #"..pkmn.num)
 end,function(pkmn)
-if pkmn:available()then
+if pkmn:f_pkmn_available()then
 f_print_draw3_message(pkmn.name.."|"..c_types[pkmn.type1].name.."|"..c_types[pkmn.type2].name)
 else
 f_print_draw3_message"?????????|????|??????"
@@ -1060,7 +1029,11 @@ _memcpy(0x0000,0x8000+0x400*row,0x400)
 end
 local w,h=16*sw,16*sh
 _sspr(col*16,0,16,16,x-w/2,y-h/2,w,h)
-end,function(num,x,y,col,xscale,yscale)
+end,function(_ENV,x,y,col,xscale,yscale)
+local num=_ENV:f_pkmn_available()and num or-1
+if num==25 and _ENV:f_pkmn_has_move(53)then num=152 end
+if num==54 and _ENV:f_pkmn_has_move(143)then num=153 end
+if not isactive or major ~=1 and not invisible then
 if num<0 then _spr(107,x-4,y-4)return end
 xscale,yscale=xscale or 1,yscale or 1
 local outline_width=_max(_abs(xscale),1)\ 1
@@ -1072,6 +1045,7 @@ f_draw_pkmn(num,x+(v3 or i),y+(v4 or i),xscale,yscale)
 end
 end,[[;,@,@,%c_no,@,%c_no;;,1,%c_no,0,0,%c_no]],col,-outline_width,outline_width)
 pal()f_draw_pkmn(num,x,y,xscale,yscale)
+end
 end,function(menu,pkmn)
 menu:refresh{}
 f_zobj_set(menu,[[;pkmn,@;;hidden,%c_yes;;name,lvl 50,style,5;;name,@]],pkmn,(pkmn.hp or pkmn.maxhp).."/"..pkmn.maxhp)
@@ -1144,26 +1118,29 @@ end
 end
 end)
 end,function(_ENV,newval,newcurmove)
-if moveturn>=0 then
-moveturn=newval or max(0,moveturn-1)
+if moveturn==0 then
+moveturn,curmove=newval,newcurmove
 end
-curmove=newcurmove or curmove
 end,function(self,move)
 f_addaction(self,self,false,function(params)
 params.move=move
 local _ENV=params
 if selfactive.major==6 then
-f_set_moveturn(selfactive,0)
+selfactive.moveturn=0
 end
 if selfactive.major==3 then
-f_set_moveturn(selfactive,0)
+selfactive.moveturn=0
 if _rnd"1"<.2 then
 f_addaction(self,self,"|is not|frozen")
-selfactive.major=0
+selfactive.shared.major=0
 else
 f_addaction(self,self,"|is|frozen")
 return
 end
+end
+if selfactive.disabledslot==move.slot then
+f_addaction(self,self,"|is|disabled")
+return
 end
 if selfactive.flinching then
 f_addaction(self,self,"|is|flinching")
@@ -1173,7 +1150,9 @@ f_movelogic(self,move)
 end)
 end,function(self)
 return f_newaction(self,false,function(_ENV)
-f_set_moveturn(selfactive)
+if selfactive.moveturn>0 then
+selfactive.moveturn-=1
+end
 local statdmg=max(selfactive.maxhp\16,1)
 if selfactive.major==5 then
 f_addaction(self,self,"|poison|damage")
@@ -1197,6 +1176,13 @@ if selfactive.confused<=0 then
 selfactive.confused=false
 end
 end
+if selfactive.disabledtimer>0 then
+selfactive.disabledtimer-=1
+if selfactive.disabledtimer==0 then
+f_addaction(self,self,"|"..selfactive.mynewmoves[selfactive.disabledslot].name.."|enabled")
+selfactive.disabledslot=0
+end
+end
 end)
 end,function(pl,move)
 pl.actions={}
@@ -1215,6 +1201,7 @@ end,function(p0,...)
 _add(p0.actions,f_newaction(...))
 end,function(_ENV)
 selfactive.shared.major=1
+_printh("ac: "..selfactive.major.." | sh: "..selfactive.shared.major)
 self:dielogic()
 end,function(game)
 if g_bpo then f_beep()end
@@ -1273,28 +1260,21 @@ s.turnover=true
 return f_postmove_logic(s)
 end
 end
-end)
-f_zobj_set(_g,[[f_get_moves,@,f_get_possible_moves,@,f_select_random_move,@,f_get_crit_ratio,@,f_does_move_miss,@,f_get_type_modifier,@,f_get_type_advantage,@,f_calc_move_damage,@,f_psel_init,@,f_psel_forfeit,@,f_begin_fight,@,f_begin_fight_cpu,@,f_extract_sheet,@,f_vget,@,f_vset,@,f_px9_decomp,@,f_game_state_init,@]],function(pkmn)
+end,function(pkmn,ismimic)
 local moves={}
 _foreach(pkmn.mynewmoves,function(m)
-if m.num>0 then
-_add(moves,m)
-end
-end)
-return moves
-end,function(pkmn)
-local moves={}
-if pkmn.moveturn ~=0 and pkmn.curmove then
-_add(moves,pkmn.curmove)
-else
-_foreach(f_get_moves(pkmn),function(m)
-if m.pp>0 and m.slot ~=(pkmn.disabled and pkmn.disabled.slot or 0)then
+if m.num>0 and(ismimic or m.pp>0 and pkmn.disabledslot ~=m.slot)then
 _add(moves,m)
 moves[m]=true
 end
 end)
-end
 return moves
+end,function(pkmn)
+if pkmn.moveturn ~=0 and pkmn.curmove then
+return{pkmn.curmove}
+else
+return f_get_moves(pkmn)
+end
 end,function(active)
 local possible_moves=f_get_possible_moves(active)
 return possible_moves[f_flr_rnd(#possible_moves)+1]or f_create_move(0)
@@ -1303,7 +1283,8 @@ local divisor=1024
 if movenum==107 or movenum==164 or movenum==57 or movenum==157 then divisor*=.3 end
 if focused then divisor*=.3 end
 return _rnd"1"<_min(.99,(base_speed+76)/divisor)and 2 or 1
-end,function(attacker,defender,move)
+end)
+f_zobj_set(_g,[[f_does_move_miss,@,f_get_type_modifier,@,f_get_type_advantage,@,f_calc_move_damage,@,f_psel_init,@,f_psel_forfeit,@,f_begin_fight,@,f_begin_fight_cpu,@,f_extract_sheet,@,f_vget,@,f_vset,@,f_px9_decomp,@,f_game_state_init,@]],function(attacker,defender,move)
 if move.accuracy<=0 then return false end
 if defender.digging and move.num ~=27 and move.num ~=26 then return true end
 if defender.flying and move.num ~=66 and move.num ~=25 and move.num ~=4 then return true end
@@ -1349,7 +1330,6 @@ else
 game.pselactions.menu=game.p0.menu_action
 game.pselmove.menu=game.p0.menu_move
 game.pselswitch.menu=game.p0.menu_switch
-game.pstat.menu=game.p0.menu_stats
 game.cur_action=f_newaction(game.p0,"")
 game.stack[#game.stack]=game.curr
 game:push"pselactions"
@@ -1361,13 +1341,11 @@ game:load"fightover"
 end,function(_ENV,d1,d2)
 d1.key,d2.key="p1","p2"
 for dd in _all{d1,d2}do
-_ENV[dd.key]=f_zobj([[actions,#,priority,1,menu_action,@,menu_move,@,menu_stats,@,menu_switch,@,team,@,name,@,iscpu,@,dielogic,@,winlogic,@]],f_create_menu(f_menu_drawentry),
+_ENV[dd.key]=f_zobj([[actions,#,priority,1,menu_action,@,menu_move,@,menu_switch,@,team,@,name,@,iscpu,@,dielogic,@,winlogic,@]],f_create_menu(f_menu_drawentry),
 f_create_menu(f_menu_drawentry),
-f_create_menu_view(f_menu_drawentry),
 f_create_menu(f_browse_drawentry,3),
 _unpack(dd))
 local _ENV=_ENV[dd.key]
-statplayer=_ENV
 menu_action.cancel=f_beep
 active=f_team_pkmn_to_active(f_get_next_active(team))
 _add(actions,f_newaction(_ENV,"|comes|out"))
@@ -1455,7 +1433,7 @@ state:sinit()
 end)
 c_pokemon_names[0]=""
 c_major_names[0]="healthy"
-_g.c_moves_raw=f_zobj[[-1;,none,17,0,40,0,%f_move_default;0;,struggle,17,0,50,100,%f_move_recoil;;,megapnch,1,20,80,85,%f_move_default;;,razrwind,1,10,80,100,%f_move_implement;;,sworddnc,1,20,0,0,%f_move_stat_self,attack,2;;,whrlwind,1,20,0,85,%f_move_roar;;,megakick,1,5,120,75,%f_move_default;;,toxic,5,10,0,90,%f_move_toxic;;,horndril,1,5,-1,30,%f_move_ohko;;,bodyslam,1,15,85,100,%f_move_percent,30,%f_move_major_other,4;;,takedown,1,20,90,85,%f_move_recoil;;,doubedge,1,15,120,100,%f_move_recoil;;,bublbeam,4,20,65,100,%f_move_percent,10,%f_move_stat_other,speed,-1;;,watergun,4,25,40,100,%f_move_default;;,icebeam,10,10,90,100,%f_move_percent,10,%f_move_major_other,3;;,blizzard,10,5,110,70,%f_move_percent,10,%f_move_major_other,3;;,hyprbeam,1,5,150,90,%f_move_implement;;,payday,1,20,40,100,%f_move_default;;,submsion,3,20,80,80,%f_move_recoil;;,counter,3,20,-1,100,%f_move_counter;;,seistoss,3,20,-1,100,%f_move_setdmg,50;;,rage,1,20,20,100,%f_move_rage;;,megdrain,8,15,40,100,%f_move_drain;;,solrbeam,8,10,120,100,%f_move_implement;;,drgnrage,14,10,-1,100,%f_move_setdmg,40;;,thndrblt,6,15,90,100,%f_move_percent,10,%f_move_major_other,4;;,thunder,6,10,110,70,%f_move_percent,10,%f_move_major_other,4;;,earthqke,7,10,100,100,%f_move_default;;,fissure,7,5,-1,30,%f_move_ohko;;,dig,7,10,80,100,%f_move_implement;;,psychic,12,10,90,100,%f_move_percent,30,%f_move_stat_other,special,-1;;,teleport,12,20,0,0,%f_move_teleport;;,mimic,1,10,0,0,%f_move_mimic;;,doubteam,1,15,0,0,%f_move_stat_self,evasion,1;;,reflect,12,20,0,0,%f_move_self,%f_movehelp_minor,reflected;;,bide,1,10,-1,100,%f_move_implement;;,metrnome,1,10,0,0,%f_move_metronome;;,selfdstr,1,5,260,100,%f_move_default;;,eggbomb,1,10,100,75,%f_move_default;;,fireblst,2,5,110,85,%f_move_percent,30,%f_move_major_other,2;;,swift,1,20,60,-1,%f_move_default;;,skulbash,1,10,130,100,%f_move_implement;;,softboil,1,5,0,0,%f_move_recover;;,dreameat,12,15,100,100,%f_move_dreameater;;,skyattck,9,5,140,90,%f_move_implement;;,rest,12,5,0,0,%f_move_rest;;,thndrwav,6,20,0,90,%f_move_major_other,4;;,psywave,12,15,-1,100,%f_move_psywave;;,explsion,1,5,340,100,%f_move_default;;,rockslid,13,10,75,90,%f_move_default;;,triattck,1,10,80,100,%f_move_default;;,substute,1,10,0,0,%f_move_implement;;,cut,1,30,50,95,%f_move_default;;,fly,9,15,90,95,%f_move_implement;;,surf,4,15,90,100,%f_move_default;;,strength,1,15,80,100,%f_move_default;;,flash,1,20,0,100,%f_move_stat_other,accuracy,-1;;,pound,1,35,40,100,%f_move_default;;,karatchp,3,25,50,100,%f_move_default;;,doubslap,1,10,15,85,%f_move_multihit_var;;,comtpnch,1,15,18,85,%f_move_multihit_var;;,firepnch,2,15,75,100,%f_move_percent,10,%f_move_major_other,2;;,icepnch,10,15,75,100,%f_move_percent,10,%f_move_major_other,3;;,thndpnch,6,15,75,100,%f_move_percent,10,%f_move_major_other,4;;,scratch,1,35,40,100,%f_move_default;;,vicegrip,1,30,55,100,%f_move_default;;,guilotin,1,5,-1,30,%f_move_ohko;;,gust,9,35,40,100,%f_move_default;;,wingatck,9,35,60,100,%f_move_default;;,bind,1,20,15,85,%f_move_implement;;,slam,1,20,80,75,%f_move_default;;,vinewhip,8,25,45,100,%f_move_default;;,stomp,1,20,65,100,%f_move_percent,30,%f_move_other,%f_movehelp_minor,flinching;;,doubkick,3,30,30,100,%f_move_multihit_set,2;;,jumpkick,3,10,100,95,%f_move_default;;,rllngkck,3,15,60,85,%f_move_percent,30,%f_move_other,%f_movehelp_minor,flinching;;,sandatck,7,15,0,100,%f_move_stat_other,accuracy,-1;;,headbutt,1,15,70,100,%f_move_percent,30,%f_move_other,%f_movehelp_minor,flinching;;,hornatck,1,25,65,100,%f_move_default;;,furyatck,1,20,15,85,%f_move_multihit_var;;,tackle,1,35,40,100,%f_move_default;;,wrap,1,20,15,90,%f_move_implement;;,thrash,1,10,120,100,%f_move_thrash;;,tailwhip,1,30,0,100,%f_move_stat_other,defense,-1;;,psnsting,5,35,15,100,%f_move_percent,20,%f_move_major_other,5;;,twineedl,11,20,25,100,%f_move_multihit_twin;;,pinmisil,11,20,25,95,%f_move_multihit_var;;,leer,1,30,0,100,%f_move_stat_other,defense,-1;;,bite,1,25,60,100,%f_move_percent,10,%f_move_other,%f_movehelp_minor,flinching;;,growl,1,40,0,100,%f_move_stat_other,attack,-1;;,roar,1,20,0,100,%f_move_roar;;,sing,1,15,0,55,%f_move_major_other,6;;,sprsonic,1,20,0,55,%f_move_other,%f_movehelp_confuse;;,sonicbom,1,20,-1,90,%f_move_setdmg,20;;,disable,1,20,0,100,%f_move_disable;;,acid,5,30,40,100,%f_move_percent,10,%f_move_stat_other,defense,-1;;,ember,2,25,40,100,%f_move_percent,10,%f_move_major_other,2;;,flamthwr,2,15,90,100,%f_move_percent,10,%f_move_major_other,2;;,mist,10,30,0,0,%f_move_self,%f_movehelp_minor,misted;;,hydropmp,4,5,110,80,%f_move_default;;,psybeam,12,20,65,100,%f_move_percent,10,%f_move_other,%f_movehelp_confuse;;,aurorabm,10,20,65,100,%f_move_percent,10,%f_move_stat_other,attack,-1;;,peck,9,35,35,100,%f_move_default;;,drillpck,9,20,80,100,%f_move_default;;,lowkick,3,20,0,100,%f_move_percent,30,%f_move_other,%f_movehelp_minor,flinching;;,absorb,8,25,20,100,%f_move_drain;;,leechsed,8,10,0,90,%f_move_other,%f_movehelp_minor,seeded;;,growth,1,20,0,0,%f_move_stat_self,special,1;;,razrleaf,8,25,55,95,%f_move_default;;,psnpowdr,5,35,0,75,%f_move_major_other,5;;,stunspor,8,30,0,75,%f_move_major_other,4;;,slppowdr,8,15,0,75,%f_move_major_other,6;;,petldanc,8,10,120,100,%f_move_thrash;;,strngsht,11,40,0,95,%f_move_stat_other,speed,-1;;,firespin,2,15,35,85,%f_move_implement;;,thndshck,6,30,40,100,%f_move_percent,10,%f_move_major_other,4;;,rockthrw,13,15,50,90,%f_move_default;;,cnfusion,12,25,50,100,%f_move_percent,10,%f_move_other,%f_movehelp_confuse;;,hypnosis,12,20,0,60,%f_move_major_other,6;;,meditate,12,40,0,0,%f_move_stat_self,attack,1;;,agility,12,30,0,0,%f_move_stat_self,speed,2;;,quickatk,1,30,40,100,%f_move_default;;,ngtshade,15,15,-1,100,%f_move_setdmg,50;;,screech,1,40,0,85,%f_move_stat_other,defense,-2;;,recover,1,5,0,0,%f_move_recover;;,harden,1,30,0,0,%f_move_stat_self,defense,1;;,minimize,1,10,0,0,%f_move_stat_self,evasion,1;;,smokscrn,1,20,0,100,%f_move_stat_other,accuracy,-1;;,cnfusray,15,10,0,100,%f_move_other,%f_movehelp_confuse;;,withdraw,4,40,0,0,%f_move_stat_self,defense,1;;,dfnscurl,1,40,0,0,%f_move_stat_self,defense,1;;,barrier,12,20,0,0,%f_move_stat_self,defense,2;;,lghtscrn,12,30,0,0,%f_move_self,%f_movehelp_minor,screened;;,haze,10,30,0,-1,%f_move_haze;;,fcsenrgy,1,30,0,0,%f_move_self,%f_movehelp_minor,focused;;,mirrmove,9,20,-1,0,%f_move_mirror_move;;,lick,15,30,30,100,%f_move_percent,30,%f_move_major_other,4;;,smog,5,20,30,70,%f_move_percent,30,%f_move_major_other,5;;,sludge,5,20,65,100,%f_move_percent,30,%f_move_major_other,5;;,boneclub,7,20,65,85,%f_move_percent,10,%f_move_other,%f_movehelp_minor,flinching;;,watrfall,4,15,80,100,%f_move_default;;,clamp,4,15,35,85,%f_move_implement;;,spikcann,1,15,20,100,%f_move_multihit_var;;,constrct,1,35,10,100,%f_move_percent,10,%f_move_stat_other,speed,-1;;,amnesia,12,20,0,0,%f_move_stat_self,special,2;;,kinesis,12,15,0,80,%f_move_stat_other,accuracy,-1;;,hijmpkck,3,10,130,90,%f_move_default;;,glare,1,30,0,100,%f_move_major_other,4;;,poisngas,5,40,0,90,%f_move_major_other,5;;,barrage,1,20,15,85,%f_move_multihit_var;;,leechlif,11,10,80,100,%f_move_drain;;,lovekiss,1,10,0,75,%f_move_major_other,6;;,tranform,1,10,0,0,%f_move_transform;;,bubble,4,30,40,100,%f_move_percent,10,%f_move_stat_other,speed,-1;;,dizypnch,1,10,70,100,%f_move_default;;,spore,8,15,0,100,%f_move_major_other,6;;,splash,1,40,0,0,%f_move_splash;;,acidarmr,5,20,0,0,%f_move_stat_self,defense,2;;,crabhamr,4,10,100,90,%f_move_default;;,furyswps,1,15,18,80,%f_move_multihit_var;;,bonerang,7,10,50,90,%f_move_multihit_set,2;;,hyprfang,1,15,80,90,%f_move_percent,10,%f_move_other,%f_movehelp_minor,flinching;;,sharpen,1,30,0,0,%f_move_stat_self,attack,1;;,convrson,1,30,0,0,%f_move_conversion;;,suprfang,1,10,-1,90,%f_move_superfang;;,slash,1,20,70,100,%f_move_default]]
+_g.c_moves_raw=f_zobj[[-1;,none,17,0,40,0,%f_move_default;0;,struggle,17,1,50,100,%f_move_recoil;;,megapnch,1,20,80,85,%f_move_default;;,razrwind,1,10,80,75,%f_move_implement;;,sworddnc,1,30,0,0,%f_move_stat_self,attack,2;;,whrlwind,1,20,0,100,%f_move_roar;;,megakick,1,5,120,75,%f_move_default;;,toxic,5,10,0,85,%f_move_toxic;;,horndril,1,5,-1,30,%f_move_ohko;;,bodyslam,1,15,85,100,%f_move_percent,30,%f_move_major_other,4;;,takedown,1,20,90,85,%f_move_recoil;;,doubedge,1,15,100,100,%f_move_recoil;;,bublbeam,4,20,65,100,%f_move_percent,10,%f_move_stat_other,speed,-1;;,watergun,4,25,40,100,%f_move_default;;,icebeam,10,10,95,100,%f_move_percent,10,%f_move_major_other,3;;,blizzard,10,5,120,90,%f_move_percent,10,%f_move_major_other,3;;,hyprbeam,1,5,150,90,%f_move_implement;;,payday,1,20,40,100,%f_move_default;;,submsion,3,20,80,80,%f_move_recoil;;,counter,3,20,-1,100,%f_move_counter;;,seistoss,3,20,-1,100,%f_move_setdmg,50;;,rage,1,20,20,100,%f_move_rage;;,megdrain,8,10,40,100,%f_move_drain;;,solrbeam,8,10,120,100,%f_move_implement;;,drgnrage,14,10,-1,100,%f_move_setdmg,40;;,thndrblt,6,15,95,100,%f_move_percent,10,%f_move_major_other,4;;,thunder,6,10,120,70,%f_move_percent,10,%f_move_major_other,4;;,earthqke,7,10,100,100,%f_move_default;;,fissure,7,5,-1,30,%f_move_ohko;;,dig,7,10,100,100,%f_move_implement;;,psychic,12,10,90,100,%f_move_percent,30,%f_move_stat_other,special,-1;;,teleport,12,20,0,0,%f_move_teleport;;,mimic,1,10,0,100,%f_move_mimic;;,doubteam,1,15,0,0,%f_move_stat_self,evasion,1;;,reflect,12,20,0,0,%f_move_self,%f_movehelp_minor,reflected;;,bide,1,10,-1,100,%f_move_implement;;,metrnome,1,10,0,0,%f_move_metronome;;,selfdstr,1,5,260,100,%f_move_default;;,eggbomb,1,10,100,75,%f_move_default;;,fireblst,2,5,120,85,%f_move_percent,30,%f_move_major_other,2;;,swift,1,20,60,-1,%f_move_default;;,skulbash,1,15,100,100,%f_move_implement;;,softboil,1,10,0,0,%f_move_recover;;,dreameat,12,15,100,100,%f_move_dreameater;;,skyattck,9,5,140,90,%f_move_implement;;,rest,12,10,0,0,%f_move_rest;;,thndrwav,6,20,0,100,%f_move_major_other,4;;,psywave,12,15,-1,80,%f_move_psywave;;,explsion,1,5,340,100,%f_move_default;;,rockslid,13,10,75,90,%f_move_default;;,triattck,1,10,80,100,%f_move_default;;,substute,1,10,0,0,%f_move_implement;;,cut,1,30,50,95,%f_move_default;;,fly,9,15,70,95,%f_move_implement;;,surf,4,15,95,100,%f_move_default;;,strength,1,15,80,100,%f_move_default;;,flash,1,20,0,70,%f_move_stat_other,accuracy,-1;;,pound,1,35,40,100,%f_move_default;;,karatchp,3,25,55,100,%f_move_default;;,doubslap,1,10,15,85,%f_move_multihit_var;;,comtpnch,1,15,18,85,%f_move_multihit_var;;,firepnch,2,15,75,100,%f_move_percent,10,%f_move_major_other,2;;,icepnch,10,15,75,100,%f_move_percent,10,%f_move_major_other,3;;,thndpnch,6,15,75,100,%f_move_percent,10,%f_move_major_other,4;;,scratch,1,35,40,100,%f_move_default;;,vicegrip,1,30,55,100,%f_move_default;;,guilotin,1,5,-1,30,%f_move_ohko;;,gust,9,35,40,100,%f_move_default;;,wingatck,9,35,35,100,%f_move_default;;,bind,1,20,15,75,%f_move_implement;;,slam,1,20,80,75,%f_move_default;;,vinewhip,8,10,35,100,%f_move_default;;,stomp,1,20,65,100,%f_move_percent,30,%f_move_other,%f_movehelp_minor,flinching;;,doubkick,3,30,30,100,%f_move_multihit_set,2,%f_nop;;,jumpkick,3,20,70,95,%f_move_default;;,rllngkck,3,15,60,85,%f_move_percent,30,%f_move_other,%f_movehelp_minor,flinching;;,sandatck,7,15,0,100,%f_move_stat_other,accuracy,-1;;,headbutt,1,15,70,100,%f_move_percent,30,%f_move_other,%f_movehelp_minor,flinching;;,hornatck,1,25,65,100,%f_move_default;;,furyatck,1,20,15,85,%f_move_multihit_var;;,tackle,1,35,35,95,%f_move_default;;,wrap,1,20,15,85,%f_move_implement;;,thrash,1,20,90,100,%f_move_thrash;;,tailwhip,1,30,0,100,%f_move_stat_other,defense,-1;;,psnsting,5,35,15,100,%f_move_percent,20,%f_move_major_other,5;;,twineedl,11,20,25,100,%f_move_multihit_twin;;,pinmisil,11,20,14,85,%f_move_multihit_var;;,leer,1,30,0,100,%f_move_stat_other,defense,-1;;,bite,1,25,60,100,%f_move_percent,10,%f_move_other,%f_movehelp_minor,flinching;;,growl,1,40,0,100,%f_move_stat_other,attack,-1;;,roar,1,20,0,100,%f_move_roar;;,sing,1,15,0,55,%f_move_major_other,6;;,sprsonic,1,20,0,55,%f_move_other,%f_movehelp_confuse;;,sonicbom,1,20,-1,90,%f_move_setdmg,20;;,disable,1,20,0,55,%f_move_disable;;,acid,5,30,40,100,%f_move_percent,10,%f_move_stat_other,defense,-1;;,ember,2,25,40,100,%f_move_percent,10,%f_move_major_other,2;;,flamthwr,2,15,95,100,%f_move_percent,10,%f_move_major_other,2;;,mist,10,30,0,0,%f_move_self,%f_movehelp_minor,misted;;,hydropmp,4,5,120,80,%f_move_default;;,psybeam,12,20,65,100,%f_move_percent,10,%f_move_other,%f_movehelp_confuse;;,aurorabm,10,20,65,100,%f_move_percent,10,%f_move_stat_other,attack,-1;;,peck,9,35,35,100,%f_move_default;;,drillpck,9,20,80,100,%f_move_default;;,lowkick,3,20,50,90,%f_move_percent,30,%f_move_other,%f_movehelp_minor,flinching;;,absorb,8,20,20,100,%f_move_drain;;,leechsed,8,10,0,90,%f_move_other,%f_movehelp_minor,seeded;;,growth,1,40,0,0,%f_move_stat_self,special,1;;,razrleaf,8,25,55,95,%f_move_default;;,psnpowdr,5,35,0,75,%f_move_major_other,5;;,stunspor,8,30,0,75,%f_move_major_other,4;;,slppowdr,8,15,0,75,%f_move_major_other,6;;,petldanc,8,20,70,100,%f_move_thrash;;,strngsht,11,40,0,95,%f_move_stat_other,speed,-1;;,firespin,2,15,15,70,%f_move_implement;;,thndshck,6,30,40,100,%f_move_percent,10,%f_move_major_other,4;;,rockthrw,13,15,50,65,%f_move_default;;,cnfusion,12,25,50,100,%f_move_percent,10,%f_move_other,%f_movehelp_confuse;;,hypnosis,12,20,0,60,%f_move_major_other,6;;,meditate,12,40,0,0,%f_move_stat_self,attack,1;;,agility,12,30,0,0,%f_move_stat_self,speed,2;;,quickatk,1,30,40,100,%f_move_default;;,ngtshade,15,15,-1,100,%f_move_setdmg,50;;,screech,1,10,0,85,%f_move_stat_other,defense,-2;;,recover,1,20,0,0,%f_move_recover;;,harden,1,30,0,0,%f_move_stat_self,defense,1;;,minimize,1,20,0,0,%f_move_stat_self,evasion,1;;,smokscrn,1,20,0,100,%f_move_stat_other,accuracy,-1;;,cnfusray,15,10,0,100,%f_move_other,%f_movehelp_confuse;;,withdraw,4,40,0,0,%f_move_stat_self,defense,1;;,dfnscurl,1,40,0,0,%f_move_stat_self,defense,1;;,barrier,12,30,0,0,%f_move_stat_self,defense,2;;,lghtscrn,12,30,0,0,%f_move_self,%f_movehelp_minor,screened;;,haze,10,30,0,-1,%f_move_haze;;,fcsenrgy,1,30,0,0,%f_move_self,%f_movehelp_minor,focused;;,mirrmove,9,20,-1,0,%f_move_mirror_move;;,lick,15,30,20,100,%f_move_percent,30,%f_move_major_other,4;;,smog,5,20,20,100,%f_move_percent,30,%f_move_major_other,5;;,sludge,5,20,65,100,%f_move_percent,30,%f_move_major_other,5;;,boneclub,7,20,65,85,%f_move_percent,10,%f_move_other,%f_movehelp_minor,flinching;;,watrfall,4,15,80,100,%f_move_default;;,clamp,4,10,35,75,%f_move_implement;;,spikcann,1,15,20,100,%f_move_multihit_var;;,constrct,1,35,10,100,%f_move_percent,10,%f_move_stat_other,speed,-1;;,amnesia,12,20,0,0,%f_move_stat_self,special,2;;,kinesis,12,15,0,80,%f_move_stat_other,accuracy,-1;;,hijmpkck,3,20,85,90,%f_move_default;;,glare,1,30,0,75,%f_move_major_other,4;;,poisngas,5,40,0,55,%f_move_major_other,5;;,barrage,1,20,15,85,%f_move_multihit_var;;,leechlif,11,15,20,100,%f_move_drain;;,lovekiss,1,10,0,75,%f_move_major_other,6;;,tranform,1,10,0,0,%f_move_transform;;,bubble,4,30,20,100,%f_move_percent,10,%f_move_stat_other,speed,-1;;,dizypnch,1,10,70,100,%f_move_default;;,spore,8,15,0,100,%f_move_major_other,6;;,splash,1,40,0,0,%f_move_splash;;,acidarmr,5,40,0,0,%f_move_stat_self,defense,2;;,crabhamr,4,10,90,85,%f_move_default;;,furyswps,1,15,10,80,%f_move_multihit_var;;,bonerang,7,10,50,90,%f_move_multihit_set,2,%f_nop;;,hyprfang,1,15,80,90,%f_move_percent,10,%f_move_other,%f_movehelp_minor,flinching;;,sharpen,1,30,0,0,%f_move_stat_self,attack,1;;,convrson,1,30,0,0,%f_move_conversion;;,suprfang,1,10,-1,90,%f_move_superfang;;,slash,1,20,70,100,%f_move_default]]
 c_menustyles=f_zobj[[;bg,13,fg,1,out,5;;bg,6,fg,13,out,13;;bg,5,fg,1,out,5;;bg,6,fg,5,out,5;;bg,1,fg,13,out,5]]
 c_team_memlocs=f_zobj[[0,0x5e00,1,0x5e1e,2,0x5e3c]]
 g_loaded_row=16
