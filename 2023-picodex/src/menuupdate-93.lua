@@ -14,6 +14,6 @@
     f_browsestat_init(_ENV)
 end $$
 
-|[f_browsestat_xfunc]| function(game) f_minisfx(game:cursor'browse')      end $$ 
-|[f_credits_xfunc]|    function()     f_minisfx(f_flr_rnd'152')           end $$
-|[f_fightover_xfunc]|  function(_ENV) f_minisfx(p0.active.num)            end $$
+|[f_browsestat_xfunc]| function(game) f_minisfx(game:cursor'browse') end $$ 
+|[f_credits_xfunc]|    function()     f_minisfx(f_flr_rnd'152')      end $$
+|[f_fightover_xfunc]|  function(_ENV) f_minisfx(p0.active.num)       end $$

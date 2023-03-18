@@ -1,15 +1,10 @@
+-- todo: pl select shouldn't share with edit select team cursor
 -- todo: make it so showing a different player's stats also shows their name in draw2.
 -- todo: need something that takes percent & function for moves that have 10% chance to do something extra.
 -- todo: disable move needs to show disabled message if move is disabled on the same turn.
 
 -- todo: initial wave: make every move do things (rest sets sleep...)
 -- todo: second wave: make states actually have an effect and unset properly (dig/rest/poison....)
-
--- todo: fix error, bonerang related bug
--- runtime error line 17 tab 0
--- endfunc()
--- attempt to call local 'endfunc' (a nil value)
--- at line 0 (tab 0)
 
 -- roar/whirlwind/teleport
 |[f_movehelp_switch]| function(pl)
@@ -77,21 +72,16 @@ end $$
     end
 end $$
 
-|[f_move_mimic]| function(_ENV)
-    -- todo: can any logic be combined with transform?
-    local othermoves = f_get_moves(otheractive, true)
-    local newmove = f_create_move(othermoves[f_flr_rnd(#othermoves)+1].num, move.slot)
+|[f_movehelp_movecopy]| function(_ENV, num, slot)
+    local newmove = f_create_move(num, slot)
     newmove.pp, newmove.maxpp = 5, 5
-    selfactive.mynewmoves[move.slot] = newmove
-    f_addaction(self, self, "|copied|"..newmove.name)
+    mynewmoves[slot] = newmove
+    return newmove
 end $$
 
-|[f_move_conversion]| function(_ENV)
-    -- todo: token crunch here
-    selfactive.type1 = otheractive.type1
-    selfactive.type2 = otheractive.type2
-    selfactive.conversion = true
-    f_addaction(self, self, "|copied|types")
+|[f_move_mimic]| function(_ENV)
+    local othermoves = f_get_moves(otheractive, true)
+    f_addaction(self, self, "|copied|"..f_movehelp_movecopy(selfactive, othermoves[f_flr_rnd(#othermoves)+1].num, move.slot).name)
 end $$
 
 |[f_move_transform]| function(_ENV)
@@ -106,12 +96,18 @@ end $$
 
             selfactive.mynewmoves = {}
             _foreach(otheractive.mynewmoves, function(m)
-                local newmove = f_create_move(m.num)
-                newmove.pp, newmove.maxpp = 5, 5
-                _add(selfactive.mynewmoves, newmove)
+                f_movehelp_movecopy(selfactive, m.num, m.slot)
             end)
         end)
     end
+end $$
+
+|[f_move_conversion]| function(_ENV)
+    f_zobj_set(selfactive, [[
+        type1,@, type2,@, conversion,%c_yes
+    ]], otheractive.type1, otheractive.type2)
+
+    f_addaction(self, self, "|copied|types")
 end $$
 
 |[f_move_haze]| function(_ENV)
@@ -130,7 +126,7 @@ end $$
 |[f_move_heal]| function(_ENV, pl, amount)
     amount = min(amount, pl.active.maxhp-pl.active.hp)
     if amount > 0 then
-        f_addaction(self, pl, "|+"..amount.."|hitpoints", function()
+        f_addaction(self, pl, f_format_num_sign(amount, "|hitpoints"), function()
             pl.active.shared.hp += amount
         end)
     else
@@ -175,20 +171,17 @@ end $$
     end
 end $$
 
-|[f_move_stat_self]| function(_ENV, key, stage)
-    if f_movehelp_incstat(selfactive, key, stage) then
-        -- todo: token crunch create function that formats a num with +/- & apply it to move_stat_self and battle logic
-        f_addaction(self, self, "|+"..stage.."/6|"..key)
-    else
-        return true
-    end
+|[f_format_num_sign]| function(num, remainder)
+    return (_sgn(num) > 0 and '|+' or '|-').._abs(num)..remainder
 end $$
 
--- todo: token crunch, combine logic with move_stat_self
-|[f_move_stat_other]| function(_ENV, key, stage)
-    if f_movehelp_incstat(otheractive, key, stage) then
-        -- todo: token crunch create function that formats a num with +/- & apply it to move_stat_self and battle logic
-        f_addaction(self, other, "|-".._abs(stage).."/6|"..key)
+|[f_move_self]|  function(_ENV, func, ...) return func(_ENV, self,  ...) end $$
+|[f_move_other]| function(_ENV, func, ...) return func(_ENV, other, ...) end $$
+
+-- leverages f_move_(self|other)
+|[f_move_stat]| function(_ENV, pl, key, stage)
+    if f_movehelp_incstat(pl.active, key, stage) then
+        f_addaction(self, pl, f_format_num_sign(stage, "/6|"..key))
     else
         return true
     end
@@ -217,6 +210,7 @@ end $$
 
 -- todo: break up the different conditions for custom messages.
 -- flinch/focus/screen/seed/mist/reflct/toxic
+-- leverages f_move_(self|other)
 |[f_movehelp_minor]| function(_ENV, pl, minor, val)
     if (pl.active[minor] or 0) == 0 then
         pl.active[minor] = val or 1
@@ -227,16 +221,12 @@ end $$
     end
 end $$
 
-|[f_move_self]|  function(_ENV, func, ...) return func(_ENV, self,  ...) end $$
-|[f_move_other]| function(_ENV, func, ...) return func(_ENV, other, ...) end $$
-
 |[f_movehelp_confuse]| function(_ENV, pl)
     return f_movehelp_minor(_ENV, pl, 'confused', f_flr_rnd'4'+1)
 end $$
 
 |[f_move_substitute]| function(_ENV)
-    -- todo: the max is probably not needed. if i'm tight on tokens, I can remove it. (add comment if i do saying a bound isn't needed
-    local subhp = _max(1, selfactive.maxhp\4)
+    local subhp = selfactive.maxhp\4 -- bound isn't needed here, because every pokemon has a maxhp of greater than 4.
     if subhp >= selfactive.hp or selfactive.substitute > 0 then
         return true
     end
@@ -292,6 +282,13 @@ end $$
     end)
 end $$
 
+-- todo: implement the "attack goes up" thing for rage
+-- todo: combine with thrash logic
+|[f_move_rage]| function(_ENV)
+    f_set_moveturn(selfactive, -1, f_create_move(move.num, move.slot))
+    f_move_default(_ENV)
+end $$
+
 |[f_move_thrash]| function(_ENV)
     f_set_moveturn(selfactive, f_flr_rnd'2'+2, f_create_move(move.num, move.slot))
     f_move_default(_ENV)
@@ -313,13 +310,6 @@ end $$
     end
 end $$
 
--- todo: implement the "attack goes up" thing for rage
--- todo: combine with thrash logic
-|[f_move_rage]| function(_ENV)
-    f_set_moveturn(selfactive, -1, f_create_move(move.num, move.slot))
-    f_move_default(_ENV)
-end $$
-
 |[f_move_recoil]| function(_ENV)
     local dmg = f_calc_move_damage(selfactive, otheractive, move)
     if f_move_setdmg(_ENV, dmg) then
@@ -329,8 +319,17 @@ end $$
     end
 end $$
 
-|[f_move_default]| function(_ENV)
-    return f_move_setdmg(_ENV, f_calc_move_damage(selfactive, otheractive, move))
+-- can either just do default damage, or an effect based on probability can be added after the default damage
+-- some moves have extra effects
+|[f_move_default]| function(_ENV, percent, func, ...)
+    if f_move_setdmg(_ENV, f_calc_move_damage(selfactive, otheractive, move)) then
+        return true
+    else
+        -- if percent is not specified, the func will never run, so func is required when percent is specified
+        if _rnd'100' < (percent or 0) then
+            func(_ENV, ...)
+        end
+    end
 end $$
 
 |[f_move_dreameater]| function(_ENV)
@@ -347,18 +346,6 @@ end $$
         return true
     else
         f_move_heal(_ENV, self, max(dmg\2, 1))
-    end
-end $$
-
--- for moves that do damage, then an extra effect
--- todo: movepercent logic can probably be combined with movedefault logic ( could have < (percent or 0) and 100 means always apply
-|[f_move_percent]| function(_ENV, percent, func, ...)
-    if f_move_default(_ENV) then
-        return true
-    else
-        if _rnd'100' < percent then
-            func(_ENV, ...)
-        end
     end
 end $$
 
@@ -382,10 +369,11 @@ end $$
 end $$
 
 -- zero damage means resistance
--- all opponent dmg goes through here. good, because it gives a central place to track substitute/counter/bide/rage information
+-- all opponent dmg goes through here.
+-- good, because it gives a central place to track substitute/counter/bide/rage information
 |[f_move_setdmg]| function(_ENV, dmg)
     if dmg > 0 and f_get_type_advantage(move, otheractive) > 0 then
-        f_addaction(self, other, "|-"..dmg.."|hitpoints", function()
+        f_addaction(self, other, f_format_num_sign(-dmg, "|hitpoints"), function()
             if otheractive.substitute > 0 then
                 otheractive.substitute = _max(otheractive.substitute-dmg, 0)
             else
@@ -398,13 +386,10 @@ end $$
 end $$
 
 -- assumes non zero damage
-
--- all self inflicting dmg goes here, includes:
--- recoil, confuse, poison, burn, seed, explode, substitute-create
+-- all self inflicting dmg goes here, includes: recoil, confuse, poison, burn, seed, explode, substitute-create
 -- that's good, because self inflicting damage should bypass substitute
 |[f_move_setdmg_self]| function(_ENV, dmg)
-    -- todo: combine with f_move_setdmg logic token & removed second shared
-    f_addaction(self, self, "|-"..dmg.."|hitpoints", function()
+    f_addaction(self, self, f_format_num_sign(-dmg, "|hitpoints"), function()
         selfactive.shared.hp = _max(selfactive.shared.hp-dmg, 0)
     end)
 end $$

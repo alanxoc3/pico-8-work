@@ -1,5 +1,5 @@
 |[f_extract_sheet]| function(index)
-    f_px9_decomp(0, 0, _peek2(index*2),
+    f_px9_decomp(_peek2(index*2),
         function(...) return f_vget(0x8000+index*0x2000, ...) end,
         function(...) return f_vset(0x8000+index*0x2000, ...) end)
 end $$
@@ -26,7 +26,7 @@ end $$
 end $$
 
 -- thanks to zep
-|[f_px9_decomp]| function(x0,y0,src,f_vget,f_vset)
+|[f_px9_decomp]| function(src,f_vget,f_vset)
     local function vlist_val(l, val)
         local v,i=l[1],1
         while v!=val do
@@ -63,13 +63,13 @@ end $$
 
     local w,h_1, eb,el,pr, x,y, splen, predict = gnp"1",gnp"0", gnp"1",{},{}, 0,0, 0
     for i=1,gnp"1" do _add(el,getval(eb)) end
-    for y=y0,y0+h_1 do
-        for x=x0,x0+w-1 do
+    for y=0,h_1 do
+        for x=0,w-1 do
             splen-=1
             if(splen<1) then
                 splen,predict=gnp"1",not predict
             end
-            local a=y>y0 and f_vget(x,y-1) or 0
+            local a=y>0 and f_vget(x,y-1) or 0
             local l=pr[a] or {_unpack(el)}
             pr[a]=l
             local v=l[predict and 1 or gnp"2"]

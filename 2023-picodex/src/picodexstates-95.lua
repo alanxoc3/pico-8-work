@@ -1,5 +1,4 @@
 -- todo (wait): pkmn cries. 19 sfx slots (8 per slot) could give me all 152 pkmn cries.
--- todo (wait): if low on tokens, try removing timer related logic.
 -- todo (wait): 3 channels for song. 1 for picodex noise/cry.
 -- game state funcs
 |[f_moveup_init]| function()

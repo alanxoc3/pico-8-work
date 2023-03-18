@@ -3,7 +3,6 @@
 -- pl,1-6,true  - switch with team slot
 
 -- todo: make it so exiting the screen for your turn will show the battle screen
-
 -- todo: refactor the way counter (and bide) work.
 |[f_select_switch]| function(pl, pkmn)
     f_addaction(pl, pl, "|comes|back", function(params) -- self, other
@@ -142,7 +141,10 @@ end $$
         end
 
         if selfactive.major == C_MAJOR_POISONED then
-            if selfactive.toxiced > 0 then statdmg *= selfactive.toxiced end
+            if selfactive.toxiced > 0 then
+                statdmg *= selfactive.toxiced
+                selfactive.toxiced += 1
+            end
             inflictstatdmg"|poison"
         end
 
@@ -286,6 +288,18 @@ end $$
     end
 end $$
 
+|[f_pkmn_has_move]| function(_ENV, moveid)
+    for m in _all(mynewmoves) do
+        if m.num == moveid then
+            return true
+        end
+    end
+end $$
+
+|[f_pkmn_isempty]| function(_ENV)
+    return #f_get_moves(_ENV, true) == 0
+end $$
+
 -- returns possible moves that can be used in the fight.
 -- used for: mimic, disable, f_get_possible_moves
 -- mimic can mimic moves with no pp. disable/possible moves take pp/disabled into account.
@@ -303,15 +317,14 @@ end $$
     return moves
 end $$
 
--- todo: token crunch. use _ENV here
--- returns possible moves that can be used in the fight, and takes multiturn moves into account.
 -- used for: AI, player
-|[f_get_possible_moves]| function(pkmn)
-    -- todo: check on curmove might not be necessary. and i should figure out how this works with metronome.
-    if pkmn.moveturn ~= 0 and pkmn.curmove then
-        return {pkmn.curmove} -- there is no ui for second-turn multiturn moves, so no key needs to be set.
+-- returns possible moves that can be used in the fight, and takes multiturn moves into account.
+|[f_get_possible_moves]| function(_ENV)
+    if moveturn ~= 0 then
+        -- curmove is always set when moveturn is set to something other than zero
+        return {curmove} -- there is no ui for second-turn multiturn moves, so no key needs to be set.
     else
-        return f_get_moves(pkmn)
+        return f_get_moves(_ENV)
     end
 end $$
 
@@ -320,40 +333,8 @@ end $$
     return possible_moves[f_flr_rnd(#possible_moves)+1] or f_create_move(M_STRUGGLE)
 end $$
 
--- turn_actions = {
---   message?                  -- lowered attack
---   function (does something) -- takes attack down 1
---   koed!
--- }
-
--- there are stat stages for modifying moves. accuracy doesn't have same stat stages though: https://www.smogon.com/rb/articles/stadium_guide
--- here is where the table came from: https://gamefaqs.gamespot.com/gameboy/367023-pokemon-red-version/faqs/64175/stat-modifiers
-
--- fire can't be burned by fire type moves. ice can't be frozen by ice type moves. ground can't be paralyzed by electric type moves. anyone can sleep. poison can't be poisoned by poison type moves.
-
--- a battle's turn consists of actions. once both players have made their moves, the actions are compiled, then applied one at a time. Each action has a status message.
--- turn_actions = {
---   message?                  -- lowered attack
---   function (does something) -- takes attack down 1
---   koed!
--- }
-
--- func that generates actions for status effects
--- func that generates actions for dealing damage
-
--- i use game states?
--- or battle uses extra states?
-
--- for fight
--- selecting action is a menu, so it pushes on the game stack
--- turn -> turn -> select -> turn -> turn -> select
--- turn init will switch the 2 pokemon. select will set it.
-
+-- this crit formula is only very slightly different than the original games. might be like 1% off.
 -- takes in the hard-coded base speed value for the pkmn, so electrode would have highest crit ratio.
--- todo: (wait) make high crit moves & focus energy work
-
--- this crit formula is slightly different than the original games.
--- electrode 
 |[f_get_crit_ratio]| function(_ENV, movenum)
     -- slash:        _min(.99, (base_speed+76)/128) -- times .3 is close enough
     -- focus energy: _min(.99, (base_speed+236)/512) -- times .3 is close enough
@@ -397,13 +378,9 @@ end $$
 -- only returns "zero" if there is a resistance
 |[f_calc_move_damage]| function(attacker, defender, move)
     -- todo: need to factor in if burned
-    -- todo: token crunch this algorithm
-    local iscontact = move.type % 2 == 1
-    local critical = f_get_crit_ratio(attacker, move.num)
-    local stab = (move.type == attacker.type1 or move.type == attacker.type2) and 1.5 or 1
     local attack, defense = attacker:f_movehelp_getstat'special', defender:f_movehelp_getstat'special'
 
-    if iscontact then
+    if move.type % 2 == 1 then -- iscontact
         attack, defense = attacker:f_movehelp_getstat'attack', defender:f_movehelp_getstat'defense'
         if defender.reflected then
             defense *= 2
@@ -415,7 +392,7 @@ end $$
     -- 3 is min, because 3+2=5... 5*1*.5*.5*.85\1 = 1, so this makes the lowest damage possible 1 (not zero)
     local base_damage = _mid(
         3, 997,
-        (2*attacker.level*critical/5+2)/50 -- [.44,.84]
+        (2*attacker.level*f_get_crit_ratio(attacker, move.num)/5+2)/50 -- [.44,.84]
         *move.damage                       -- [6.6,285.6] -- [15,340]
         *mid(10, .2, attack/defense)       -- [1.32,2856]
     )+2
@@ -423,7 +400,7 @@ end $$
     -- max possible damage: 5994
     -- end of formula multiplies by a random number (217/255)
     return base_damage
-        *stab
+        *((move.type == attacker.type1 or move.type == attacker.type2) and 1.5 or 1) -- stab
         *f_get_type_advantage(move, defender)
         *(_rnd'.15'+.85)\1
 end $$

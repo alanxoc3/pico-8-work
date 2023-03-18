@@ -1,33 +1,38 @@
--- todo: token crunch, use _ENV instead of game here.
-|[f_psel_init]| function(game)
-    game.p0 = game[game.p0key]
-    game.p0.active.turnstarthp = game.p0.active.hp -- for counter
-    game.p0.active.flinching = false -- set here so you can't flinch the next turn
-    game.p0.turnover = false
+|[f_psel_init]| function(_ENV)
+    p0 = _ENV[p0key]
+    do local _ENV=p0.active
+        turnstarthp = hp -- for counter
+        flinching = false -- set here so you can't flinch the next turn
+    end
+
+    p0.turnover = false
 
     -- skip this state if the player is a cpu
-    if game.p0.iscpu then
-        f_select_move(game.p0, f_select_random_move(game.p0.active))
-        game:load()
-    elseif #game.p0.actions > 0 then
-        game:load()
+    if p0.iscpu then
+        f_select_move(p0, f_select_random_move(p0.active))
+        _ENV:load()
+    elseif #p0.actions > 0 then
+        _ENV:load()
     else
         -- this block is needed so in versus mode, players don't share cursor positions
-        -- todo: please token crunch this block somehow
-        game.pselactions.menu = game.p0.menu_action
-        game.pselmove.menu    = game.p0.menu_move
-        game.pselswitch.menu  = game.p0.menu_switch
+        pselactions.menu,
+        pselmove.menu,
+        pselswitch.menu,
+        cur_action,
+        stack[#stack] = p0.menu_action,
+                        p0.menu_move,
+                        p0.menu_switch,
+                        f_newaction(p0, ""),
+                        curr -- without this, next trainer's turn might be skipped
 
-        game.cur_action = f_newaction(game.p0, "")
-        game.stack[#game.stack] = game.curr -- without this, next trainer's turn might be skipped
-        game:push'pselactions'
+        _ENV:push'pselactions'
     end
 end $$
 
-|[f_psel_forfeit]| function(game)
-    game:pop()
+|[f_psel_forfeit]| function(_ENV)
+    _ENV:pop()
 
     -- must set game.p0 to the other player, so it shows they win
-    game.p0 = f_get_other_pl(game, game.p0)
-    game:load'fightover'
+    p0 = _ENV:f_get_other_pl(p0)
+    _ENV:load'fightover'
 end $$

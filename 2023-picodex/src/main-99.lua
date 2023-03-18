@@ -49,7 +49,7 @@ function _init()
     ]])
 
     -- 0x0006
-    f_px9_decomp(0, 0, _peek2(3*2), _mget, _mset)
+    f_px9_decomp(_peek2(3*2), _mget, _mset)
 
     -- 0x0008
     f_populate_c_moves()

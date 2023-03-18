@@ -1,22 +1,3 @@
--- todo: token crunch f_pkmn methods somehow... maybe change for loop type
-|[f_pkmn_has_move]| function(_ENV, moveid)
-    for j=1,4 do
-        if mynewmoves[j].num == moveid then
-            return true
-        end
-    end
-    return false
-end $$
-
-|[f_pkmn_isempty]| function(_ENV)
-    for j=1,4 do
-        if mynewmoves[j].num ~= -1 then
-            return false
-        end
-    end
-    return true
-end $$
-
 |[f_pkmn_available]| function(_ENV)
     -- non-browse pokemon are always available (credit, edit, and battle) the browse attribute represents that
     if num >= 0 then -- shouldn't be -1
