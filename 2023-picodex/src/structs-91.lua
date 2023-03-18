@@ -140,6 +140,7 @@ end $$
         evasion,1,       -- evasion stat for battle
         moveturn,0,      -- turn move is on. > 0, decrements each turn. 0, is the same. -1, is multiturn move that doesn't end (rage).
         disabledtimer,0,
+        substitute,0,    -- for substitute obviously
 
         -- curmove -- used for multiturn moves, if moveturn ~= 0, this must be set
         shared,@,

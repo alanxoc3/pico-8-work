@@ -138,7 +138,7 @@ _g.c_moves_raw = f_zobj[[
    ;;, "reflect",  T_PSYCHIC,  20, 0,   0,    %f_move_self,%f_movehelp_minor,reflected                      -- 33
    ;;, "bide",     T_NORMAL,   10, -1,  100,  %f_move_implement                                             -- 34  DIFF: doesn't bypass accuracy check & respects resistance, counts damage done to substitute
    ;;, "metrnome", T_NORMAL,   10, 0,   0,    %f_move_metronome                                             -- 35
-   ;;, "selfdstr", T_NORMAL,   5,  260, 100,  %f_move_default                                               -- 36
+   ;;, "selfdstr", T_NORMAL,   5,  260, 100,  %f_move_default                                               -- 36  DIFF: user inflicts damage to self before damaging opponent, so you can't win a match by suicide
    ;;, "eggbomb",  T_NORMAL,   10, 100, 75,   %f_move_default                                               -- 37
    ;;, "fireblst", T_FIRE,     5,  120, 85,   %f_move_percent,30,%f_move_major_other,C_MAJOR_BURNED         -- 38
    ;;, "swift",    T_NORMAL,   20, 60,  -1,   %f_move_default                                               -- 39  DIFF: always hits when used, even against dig/fly, can't go past substitute though
@@ -149,10 +149,10 @@ _g.c_moves_raw = f_zobj[[
    ;;, "rest",     T_PSYCHIC,  10, 0,   0,    %f_move_rest                                                  -- 44
    ;;, "thndrwav", T_ELECTRIC, 20, 0,   100,  %f_move_major_other, C_MAJOR_PARALYZED                        -- 45
    ;;, "psywave",  T_PSYCHIC,  15, -1,  80,   %f_move_psywave                                               -- 46  DIFF: respects resistance
-   ;;, "explsion", T_NORMAL,   5,  340, 100,  %f_move_default                                               -- 47
+   ;;, "explsion", T_NORMAL,   5,  340, 100,  %f_move_default                                               -- 47  DIFF: user inflicts damage to self before damaging opponent, so you can't win a match by suicide
    ;;, "rockslid", T_ROCK,     10, 75,  90,   %f_move_default                                               -- 48
    ;;, "triattck", T_NORMAL,   10, 80,  100,  %f_move_default                                               -- 49
-   ;;, "substute", T_NORMAL,   10, 0,   0,    %f_move_implement                                             -- 50  DIFF: recoil moves damage user. only protects from direct enemy damage, user is still vulnerable to all other effects
+   ;;, "substute", T_NORMAL,   10, 0,   0,    %f_move_substitute                                            -- 50  DIFF: recoil moves damage user. only protects from direct enemy damage, user is still vulnerable to all other effects
    ;;, "cut",      T_NORMAL,   30, 50,  95,   %f_move_default                                               -- 51
    ;;, "fly",      T_FLYING,   15, 70,  95,   %f_move_implement                                             -- 52
    ;;, "surf",     T_WATER,    15, 95,  100,  %f_move_default                                               -- 53

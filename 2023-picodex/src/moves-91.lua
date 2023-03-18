@@ -240,6 +240,19 @@ end $$
     return f_movehelp_minor(_ENV, pl, 'confused', f_flr_rnd'4'+1)
 end $$
 
+|[f_move_substitute]| function(_ENV)
+    -- todo: the max is probably not needed. if i'm tight on tokens, I can remove it. (add comment if i do saying a bound isn't needed
+    local subhp = _max(1, selfactive.maxhp\4)
+    if subhp >= selfactive.hp or selfactive.substitute > 0 then
+        return true
+    end
+
+    f_move_setdmg_self(_ENV, subhp)
+    f_addaction(self, self, "|created|substitute", function()
+        selfactive.substitute = subhp
+    end)
+end $$
+
 ---------- DAMAGING MOVES BELOW ----------
 |[f_move_rest]| function(_ENV)
     selfactive.shared.major = C_MAJOR_SLEEPING
@@ -363,17 +376,26 @@ end $$
 end $$
 
 -- zero damage means resistance
+-- all opponent dmg goes through here. good, because it gives a central place to track substitute/counter/bide/rage information
 |[f_move_setdmg]| function(_ENV, dmg)
     if dmg > 0 and f_get_type_advantage(move, otheractive) > 0 then
         f_addaction(self, other, "|-"..dmg.."|hitpoints", function()
-            otheractive.shared.hp = _max(otheractive.shared.hp-dmg, 0)
-        end)
+            if otheractive.substitute > 0 then
+                otheractive.substitute = _max(otheractive.substitute-dmg, 0)
+            else
+                otheractive.shared.hp = _max(otheractive.shared.hp-dmg, 0)
+            end
+        end, otheractive.substitute > 0 and "substitute")
     else
         return true -- todo: maybe instead of returning true, can return a message
     end
 end $$
 
 -- assumes non zero damage
+
+-- all self inflicting dmg goes here, includes:
+-- recoil, confuse, poison, burn, seed, explode, substitute-create
+-- that's good, because self inflicting damage should bypass substitute
 |[f_move_setdmg_self]| function(_ENV, dmg)
     -- todo: combine with f_move_setdmg logic token & removed second shared
     f_addaction(self, self, "|-"..dmg.."|hitpoints", function()

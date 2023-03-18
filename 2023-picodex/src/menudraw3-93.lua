@@ -47,5 +47,5 @@ end $$
 end $$
 
 |[f_turn_draw3]|  function(game)
-    f_print_draw3_message(game.cur_action.active.name..game.cur_action.message)
+    f_print_draw3_message(game.cur_action.name..game.cur_action.message)
 end $$

@@ -185,8 +185,8 @@ end $$
 ---------------------------------------------------------------------------
 -- misc stuff
 ---------------------------------------------------------------------------
-|[f_newaction]| function(pactive, message, logic)
-    return {pl=pactive, active=pactive.active, message=message, logic=logic or f_nop}
+|[f_newaction]| function(pactive, message, logic, name)
+    return {pl=pactive, name=name or pactive.active.name, active=pactive.active, message=message, logic=logic or f_nop}
 end $$
 
 |[f_addaction]| function(p0, ...)

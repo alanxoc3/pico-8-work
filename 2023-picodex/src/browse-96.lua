@@ -61,6 +61,9 @@ end $$
     if num == P_PIKACHU and _ENV:f_pkmn_has_move(M_SURF)    then num = 152 end
     if num == P_PSYDUCK and _ENV:f_pkmn_has_move(M_AMNESIA) then num = 153 end
 
+    -- substitute check should go after pika/psyduck checks above, for if pika/psy know substitute
+    if substitute and substitute > 0 then num = 154 end
+
     if not isactive or major ~= C_MAJOR_FAINTED and not invisible then
         if num < 0 then _spr(107, x-4, y-4) return end
         xscale, yscale = xscale or 1, yscale or 1
