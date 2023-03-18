@@ -691,7 +691,7 @@ end,function(_ENV)
 f_update_stat_menu(menu,_ENV:entry"browse".pkmn)
 end,function(_ENV)
 menu:refresh(
-_split"106,,!alanxoc3,code+sfx,design,6,,!gr8cadet,graphics,playtest,129,,!wadlo,magikarp,playtest,123,,!zep,pico-8,px9 func,137,,!pkmndata,blbpedia,pokeapi,serebii,smogon,upokcntr,volvox,nintendo",
+_split"106,,!alanxoc3,code+sfx,design,6,,!gr8cadet,graphics,playtest,129,,!wadlo,magikarp,playtest,145,,!zep,pico-8,px9 func,137,,!pkmndata,blbpedia,pokeapi,serebii,smogon,upokcntr,volvox,nintendo",
 function(txt)
 if _type(txt)=="number"then
 return{pkmn=f_create_team_pkmn(txt,f_create_empty_moveset())}
@@ -1215,7 +1215,6 @@ end,function(p0,...)
 _add(p0.actions,f_newaction(...))
 end,function(_ENV)
 selfactive.shared.major=1
-_printh("ac: "..selfactive.major.." | sh: "..selfactive.shared.major)
 self:dielogic()
 end,function(game)
 if g_bpo then f_beep()end

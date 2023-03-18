@@ -11,4 +11,4 @@ files_in_order=$(ls ./src/*.lua | sort -t- -nk2)
 set -f; IFS='
 '
 cat $files_in_order \
-    | pico-minifier "$@" $(cat ./constants.txt 2>/dev/null | awk '/^[[:alnum:]_]/{gsub(/[[:blank:]]*:[[:blank:]]*/, ":"); print $0;}') > .code.lua
+    | pico-minifier "$@" $(cat ./constants.txt 2>/dev/null | awk '/^[[:alnum:]_]/{gsub(/[[:blank:]]*:[[:blank:]]*/, ":"); gsub(/#.*/, ""); print $0;}') > .code.lua

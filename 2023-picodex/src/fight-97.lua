@@ -2,6 +2,8 @@
 -- pl,0,false   - select default move (solar beam charge, hyper beam recharge, struggle, ...)
 -- pl,1-6,true  - switch with team slot
 
+-- todo: make it so exiting the screen for your turn will show the battle screen
+
 -- todo: refactor the way counter (and bide) work.
 |[f_select_switch]| function(pl, pkmn)
     f_addaction(pl, pl, "|comes|back", function(params) -- self, other
@@ -197,7 +199,6 @@ end $$
 -- otherwise, do nothing. turn logic will check every turn if there is a win condition
 |[f_logic_faint]| function(_ENV)
     selfactive.shared.major = C_MAJOR_FAINTED
-    _printh("ac: "..selfactive.major.." | sh: "..selfactive.shared.major)
     self:dielogic()
 end $$
 
