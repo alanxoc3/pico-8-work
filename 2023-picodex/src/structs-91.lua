@@ -104,17 +104,18 @@ end $$
         pkmn.moves_teach = teachs
 
         ---- PASS 4 - add level specific data and other attributes to the pkmn ----
-        -- todo: token crunch, can this be smaller?
-        f_zobj_set(pkmn, [[
-            attack,@, defense,@, special,@, speed,@, maxhp,@, hp,~maxhp, level,C_LEVEL
-        ]], f_calc_max_stat(pkmn.base_attack),
-            f_calc_max_stat(pkmn.base_defense),
-            f_calc_max_stat(pkmn.base_special),
-            f_calc_max_stat(pkmn.base_speed),
-            f_calc_max_stat(pkmn.base_maxhp)+5+C_LEVEL
-        )
+        do local _ENV=pkmn
+            f_zobj_set(_ENV, [[
+                attack,@, defense,@, special,@, speed,@, maxhp,@, hp,~maxhp, level,C_LEVEL
+            ]], f_calc_max_stat(base_attack),
+                f_calc_max_stat(base_defense),
+                f_calc_max_stat(base_special),
+                f_calc_max_stat(base_speed),
+                f_calc_max_stat(base_maxhp)+5+C_LEVEL
+            )
 
-        pkmn.total = pkmn.attack + pkmn.defense + pkmn.special + pkmn.speed + pkmn.maxhp
+            total = attack + defense + special + speed + maxhp
+        end
 
         ---- PASS 5 - finally, set the pokemon to the c_pokemon array ----
         c_pokemon[num] = pkmn
@@ -139,8 +140,12 @@ end $$
         accuracy,1,      -- accuracy stat for battle
         evasion,1,       -- evasion stat for battle
         moveturn,0,      -- turn move is on. > 0, decrements each turn. 0, is the same. -1, is multiturn move that doesn't end (rage).
-        disabledtimer,0,
+
+        -- minor conditions are all numbers ...
+        disabledtimer,0, -- how long the disabled move should last
+        confused,0,      -- for confusion, how long pkmn is confused
         substitute,0,    -- for substitute obviously
+        toxiced,0,       -- how bad the toxic is
 
         -- curmove -- used for multiturn moves, if moveturn ~= 0, this must be set
         shared,@,

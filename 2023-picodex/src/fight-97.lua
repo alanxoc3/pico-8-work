@@ -100,6 +100,11 @@ end $$
         end
 
         -- confuse - 50% self attack 1-4 turns
+        if selfactive.confused > 0 and f_flr_rnd'2' == 0 then
+            f_addaction(self, self, "|confuse|damage")
+            f_move_setdmg_self(_ENV, f_calc_move_damage(selfactive, otheractive, f_create_move(-1))) -- todo, try string here '-1'
+            return
+        end
         -- paralysis
 
         if selfactive.flinching then
@@ -111,56 +116,55 @@ end $$
     end)
 end $$
 
+|[f_decrement_timer]| function(active, key, endfunc)
+    if active[key] > 0 then
+        active[key] -= 1
+        if active[key] == 0 then
+            endfunc() -- todo, maybe default to f_nop? depends on token saving or not (wait)
+        end
+    end
+end $$
+
 -- todo: make minor statuses numbers instead
 |[f_postmove_logic]| function(self)
+
     -- todo: i can probably token crunch this section
     return f_newaction(self, false, function(_ENV)
-        -- countdown multiturn
+        -- flinching is reset at the psel init level, so you can't be flinching the next turn. no need to reset flinching here.
 
         -- decrement the moveturn timer, if >0.
-        if selfactive.moveturn > 0 then
-            selfactive.moveturn -= 1
-        end
+        selfactive:f_decrement_timer('moveturn', f_nop)
 
         local statdmg = max(selfactive.maxhp\16,1)
-        if selfactive.major == C_MAJOR_POISONED then
-            f_addaction(self, self, "|poison|damage")
+        local inflictstatdmg = function(title) -- title must start with "|" to save 2 tokens
+            f_addaction(self, self, title.."|damage")
             f_move_setdmg_self(_ENV, statdmg)
         end
 
-        if selfactive.major == C_MAJOR_BURNED then
-            f_addaction(self, self, "|burn|damage")
-            f_move_setdmg_self(_ENV, statdmg)
+        if selfactive.major == C_MAJOR_POISONED then
+            if selfactive.toxiced > 0 then statdmg *= selfactive.toxiced end
+            inflictstatdmg"|poison"
         end
+
+        if selfactive.major == C_MAJOR_BURNED then inflictstatdmg"|burn"   end
 
         if selfactive.seeded then
-            f_addaction(self, self, "|seed|damage")
-            f_move_setdmg_self(_ENV, statdmg)
+            inflictstatdmg"|seed"
             if otheractive.hp < otheractive.maxhp then
-                f_addaction(self, other, "|seed|heal")
+                f_addaction(self, other, "|seed|leeching")
                 f_move_heal(_ENV, other, statdmg)
             end
         end
 
-        if selfactive.confused then
-            selfactive.confused -= 1
-            if selfactive.confused <= 0 then
-                selfactive.confused = false
-            end
-        end
+        selfactive:f_decrement_timer('confused', function()
+            f_addaction(self, self, "|confusion|ended")
+        end)
 
+        selfactive:f_decrement_timer('disabledtimer', function()
+            f_addaction(self, self, "|"..selfactive.mynewmoves[selfactive.disabledslot].name.."|enabled")
+            selfactive.disabledslot = 0
+        end)
 
-        if selfactive.disabledtimer > 0 then
-            selfactive.disabledtimer -= 1
-
-            if selfactive.disabledtimer == 0 then
-                f_addaction(self, self, "|"..selfactive.mynewmoves[selfactive.disabledslot].name.."|enabled")
-                selfactive.disabledslot = 0
-            end
-        end
-
-        -- flinching is reset at the psel init level, so you can't be flinching the next turn.
-        -- todo: multiturncountdown
         -- todo: sleepcountdown
     end)
 end $$
@@ -357,6 +361,7 @@ end $$
 
     -- range is 0 to 255. then random roll is done out of 256, so high crit still has like a .5% chance of failing.
     local divisor = 1024
+    if movenum == -1 then return 1 end -- if confusion damage, you can't critical hit.
     if movenum == M_RAZOR_LEAF or movenum == M_SLASH or movenum == M_KARATE_CHOP or movenum == M_CRABHAMMER then divisor *= .3 end
     if focused then divisor *= .3 end
 

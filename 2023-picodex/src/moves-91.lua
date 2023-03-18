@@ -199,7 +199,7 @@ end $$
         return true
     end
 
-    return f_move_other(_ENV, f_movehelp_minor, 'toxiced')
+    return f_move_other(_ENV, f_movehelp_minor, 'toxiced', 1)
 end $$
 
 |[f_move_splash]| function(_ENV)
@@ -215,9 +215,11 @@ end $$
     end
 end $$
 
+-- todo: break up the different conditions for custom messages.
+-- flinch/focus/screen/seed/mist/reflct/toxic
 |[f_movehelp_minor]| function(_ENV, pl, minor, val)
-    if not pl.active[minor] then
-        pl.active[minor] = val or true
+    if (pl.active[minor] or 0) == 0 then
+        pl.active[minor] = val or 1
         -- todo: minor here will break with minification... i should change minors to numbers instead
         f_addaction(self, pl, "|becomes|"..minor)
     else
@@ -250,7 +252,7 @@ end $$
     selfactive.shared.major = C_MAJOR_SLEEPING
     f_addaction(self, self, "|is|sleeping")
     f_move_heal(_ENV, self, selfactive.maxhp)
-    selfactive.toxic = false
+    selfactive.toxiced = 0
 end $$
 
 |[f_move_counter]| function(_ENV)

@@ -102,13 +102,13 @@ c_major_names[0] = "healthy" -- for "none" status
 _g.c_moves_raw = f_zobj[[
    --  "name",     type        pp  dmg  acc
   -1;, "none",     T_BIRD,     0,  40,  0,    %f_move_default                                               -- -1  This is the move used for confusion damage.
-  ;0;, "struggle", T_BIRD,     1,  50,  100,  %f_move_recoil                                                -- 0   DIFF: ignores resistance now. hits ghost pokemon.
+  ;0;, "struggle", T_BIRD,     0,  50,  100,  %f_move_recoil                                                -- 0   DIFF: ignores resistance now. hits ghost pokemon.
    ;;, "megapnch", T_NORMAL,   20, 80,  85,   %f_move_default                                               -- 1
    ;;, "razrwind", T_NORMAL,   10, 80,  75,   %f_move_prepare                                               -- 2   DIFF: move resets when interrupted
    ;;, "sworddnc", T_NORMAL,   30, 0,   0,    %f_move_stat_self, attack, 2                                  -- 3
    ;;, "whrlwind", T_NORMAL,   20, 0,   100,  %f_move_roar                                                  -- 4   DIFF: switches opponent with random pokemon & hits pokemon using fly
    ;;, "megakick", T_NORMAL,   5,  120, 75,   %f_move_default                                               -- 5
-   ;;, "toxic",    T_POISON,   10, 0,   85,   %f_move_toxic                                                 -- 6
+   ;;, "toxic",    T_POISON,   10, 0,   85,   %f_move_toxic                                                 -- 6   DIFF: toxic counter does not affect leech seed dmg
    ;;, "horndril", T_NORMAL,   5,  -1,  30,   %f_move_ohko                                                  -- 7
    ;;, "bodyslam", T_NORMAL,   15, 85,  100,  %f_move_percent,30,%f_move_major_other,C_MAJOR_PARALYZED      -- 8
    ;;, "takedown", T_NORMAL,   20, 90,  85,   %f_move_recoil                                                -- 9
