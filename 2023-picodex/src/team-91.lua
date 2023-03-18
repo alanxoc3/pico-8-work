@@ -99,10 +99,14 @@ end $$
     for i=-1,#c_moves_raw do
         local move = c_moves_raw[i]
         local params = {}
+
         for i=7,#move do _add(params, move[i]) end
+
+        -- ofunc is used in accuracy check, for a charging move
+        -- todo: maybe some token crunching here. Instead of passing 1-6, unpack a table
         c_moves[i] = f_zobj([[
-            name,@, type,@, pp,@, maxpp,~pp, damage,@, accuracy,@, func,@, num,@
-        ]], move[1], move[2], move[3], move[4], move[5], function(envparams)
+            name,@, type,@, pp,@, maxpp,~pp, damage,@, accuracy,@, ofunc,@, func,@, num,@
+        ]], move[1], move[2], move[3], move[4], move[5], move[6], function(envparams)
             return move[6](envparams, _unpack(params))
         end, i)
     end

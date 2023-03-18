@@ -104,7 +104,7 @@ _g.c_moves_raw = f_zobj[[
   -1;, "none",     T_BIRD,     0,  40,  0,    %f_move_default                                               -- -1  This is the move used for confusion damage.
   ;0;, "struggle", T_BIRD,     1,  50,  100,  %f_move_recoil                                                -- 0   DIFF: ignores resistance now. hits ghost pokemon.
    ;;, "megapnch", T_NORMAL,   20, 80,  85,   %f_move_default                                               -- 1
-   ;;, "razrwind", T_NORMAL,   10, 80,  75,   %f_move_implement                                             -- 2
+   ;;, "razrwind", T_NORMAL,   10, 80,  75,   %f_move_prepare                                               -- 2   DIFF: move resets when interrupted
    ;;, "sworddnc", T_NORMAL,   30, 0,   0,    %f_move_stat_self, attack, 2                                  -- 3
    ;;, "whrlwind", T_NORMAL,   20, 0,   100,  %f_move_roar                                                  -- 4   DIFF: switches opponent with random pokemon & hits pokemon using fly
    ;;, "megakick", T_NORMAL,   5,  120, 75,   %f_move_default                                               -- 5
@@ -124,7 +124,7 @@ _g.c_moves_raw = f_zobj[[
    ;;, "seistoss", T_FIGHTING, 20, -1,  100,  %f_move_setdmg,C_LEVEL                                        -- 19  DIFF: respects resistance
    ;;, "rage",     T_NORMAL,   20, 20,  100,  %f_move_rage                                                  -- 20  DIFF: you can switch out while using rage, rage also ends when frozen/sleep/trapped/disabled, just like other multiturn moves
    ;;, "megdrain", T_GRASS,    10, 40,  100,  %f_move_drain                                                 -- 21
-   ;;, "solrbeam", T_GRASS,    10, 120, 100,  %f_move_implement                                             -- 22
+   ;;, "solrbeam", T_GRASS,    10, 120, 100,  %f_move_prepare                                               -- 22  DIFF: move resets when interrupted
    ;;, "drgnrage", T_DRAGON,   10, -1,  100,  %f_move_setdmg,40                                             -- 23  DIFF: respects resistance
    ;;, "thndrblt", T_ELECTRIC, 15, 95,  100,  %f_move_percent,10,%f_move_major_other,C_MAJOR_PARALYZED      -- 24
    ;;, "thunder",  T_ELECTRIC, 10, 120, 70,   %f_move_percent,10,%f_move_major_other,C_MAJOR_PARALYZED      -- 25  DIFF: hits pokemon using fly + double damage
@@ -142,10 +142,10 @@ _g.c_moves_raw = f_zobj[[
    ;;, "eggbomb",  T_NORMAL,   10, 100, 75,   %f_move_default                                               -- 37
    ;;, "fireblst", T_FIRE,     5,  120, 85,   %f_move_percent,30,%f_move_major_other,C_MAJOR_BURNED         -- 38
    ;;, "swift",    T_NORMAL,   20, 60,  -1,   %f_move_default                                               -- 39  DIFF: always hits when used, even against dig/fly, can't go past substitute though
-   ;;, "skulbash", T_NORMAL,   15, 100, 100,  %f_move_implement                                             -- 40
+   ;;, "skulbash", T_NORMAL,   15, 100, 100,  %f_move_prepare                                               -- 40  DIFF: move resets when interrupted
    ;;, "softboil", T_NORMAL,   10, 0,   0,    %f_move_recover                                               -- 41
    ;;, "dreameat", T_PSYCHIC,  15, 100, 100,  %f_move_dreameater                                            -- 42
-   ;;, "skyattck", T_FLYING,   5,  140, 90,   %f_move_implement                                             -- 43
+   ;;, "skyattck", T_FLYING,   5,  140, 90,   %f_move_prepare                                               -- 43  DIFF: move resets when interrupted
    ;;, "rest",     T_PSYCHIC,  10, 0,   0,    %f_move_rest                                                  -- 44
    ;;, "thndrwav", T_ELECTRIC, 20, 0,   100,  %f_move_major_other, C_MAJOR_PARALYZED                        -- 45
    ;;, "psywave",  T_PSYCHIC,  15, -1,  80,   %f_move_psywave                                               -- 46  DIFF: respects resistance

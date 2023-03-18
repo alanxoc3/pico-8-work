@@ -50,14 +50,6 @@ end $$
     ))
 end $$
 
--- move utility funcs
-|[f_movehelp_update_pp]| function(move)
-    -- only less than 0 for struggle and none moves. none move would never be selected though
-    if move.num > 0 then
-        move.pp -= 1
-    end
-end $$
-
 --------------------------------
 ---------- move funcs ----------
 --------------------------------
@@ -304,6 +296,18 @@ end $$
 
     if selfactive.moveturn == 1 then
         f_move_self(_ENV, f_movehelp_confuse, 'confused')
+    end
+end $$
+
+-- solarbeam/razorwind/skullbash/skyattack
+|[f_move_prepare]| function(_ENV)
+    f_set_moveturn(selfactive, 2, move)
+
+    if selfactive.moveturn == 1 then
+        f_move_default(_ENV)
+    else
+        f_addaction(self, self, "|preparing|attack")
+        move.pp += 1 -- increment 1 pp, since 1 pp was just used, if the attack is interrupted, a pp should not be consumed
     end
 end $$
 

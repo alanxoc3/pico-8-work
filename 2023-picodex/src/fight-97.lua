@@ -24,7 +24,9 @@ end $$
         params.move = move
 
         local _ENV = params
-        f_movehelp_update_pp(move)
+        if move.num > 0 then
+            move.pp -= 1
+        end
 
         -- explosion & self destruct hurt the user first, then they might miss, so this part of that logic must go outside the normal flow
         if move.num == M_EXPLOSION or move.num == M_SELF_DESTRUCT then
@@ -366,6 +368,10 @@ end $$
 |[f_does_move_miss]| function(attacker, defender, move)
     -- todo: token crunch, think about a ~= and func again.
     if move.accuracy <= 0  then return false end -- this catches swift and self status moves... swift is negative
+
+    -- charging moves can't miss on the turn they are charging
+    if move.ofunc == f_move_prepare and attacker.moveturn == 0 then return false end
+
     if defender.digging and move.num ~= M_FISSURE and move.num ~= M_EARTHQUAKE                          then return true end
     if defender.flying  and move.num ~= M_GUST    and move.num ~= M_THUNDER and move.num ~= M_WHIRLWIND then return true end
     return _rnd(defender.evasion) > move.accuracy/100*attacker:f_movehelp_getstat'accuracy' or f_flr_rnd'256' == 0 and f_flr_rnd'256' == 0
