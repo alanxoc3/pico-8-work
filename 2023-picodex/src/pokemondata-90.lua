@@ -1,6 +1,9 @@
 -- battle mechanic differences
--- DIFF: frozen stat will reset multiturn moves
+-- DIFF: frozen/sleep will reset multiturn moves
 -- DIFF: if a pokemon faints, the next pokemon in the party will automatically be sent out
+-- DIFF: pokemon have a 20% chance to unthaw
+
+-- todo: something to consider. For dig/fly/hypebeam, it would be nice to have alternate text on the second turn, instead of "blah|used|hyperbeam". so maybe i can do something for that.
 
 |[c_pokemon]| f_zobj[[]] $$
 |[c_pokemon_names]| split"missingno,bulbasaur,ivysaur,venusaur,charmander,charmeleon,charizard,squirtle,wartortle,blastoise,caterpie,metapod,butterfree,weedle,kakuna,beedrill,pidgey,pidgeotto,pidgeot,rattata,raticate,spearow,fearow,ekans,arbok,pikachu,raichu,sandshrew,sandslash,nidoran f,nidorina,nidoqueen,nidoran m,nidorino,nidoking,clefairy,clefable,vulpix,ninetales,jigglypuff,wigglytuff,zubat,golbat,oddish,gloom,vileplume,paras,parasect,venonat,venomoth,diglett,dugtrio,meowth,persian,psyduck,golduck,mankey,primeape,growlithe,arcanine,poliwag,poliwhirl,poliwrath,abra,kadabra,alakazam,machop,machoke,machamp,bellsprout,weepinbell,victreebel,tentacool,tentacruel,geodude,graveler,golem,ponyta,rapidash,slowpoke,slowbro,magnemite,magneton,farfetchd,doduo,dodrio,seel,dewgong,grimer,muk,shellder,cloyster,gastly,haunter,gengar,onix,drowzee,hypno,krabby,kingler,voltorb,electrode,exeggcute,exeggutor,cubone,marowak,hitmonlee,hitmonchan,lickitung,koffing,weezing,rhyhorn,rhydon,chansey,tangela,kangaskhan,horsea,seadra,goldeen,seaking,staryu,starmie,mr mime,scyther,jynx,electabuzz,magmar,pinsir,tauros,magikarp,gyarados,lapras,ditto,eevee,vaporeon,jolteon,flareon,porygon,omanyte,omastar,kabuto,kabutops,aerodactyl,snorlax,articuno,zapdos,moltres,dratini,dragonair,dragonite,mewtwo,mew" $$
@@ -35,6 +38,7 @@ c_major_names[0] = "healthy" -- for "none" status
 -- 0 means disabled
 -- -1 means it last forever
 -- positive means x turns left
+-- todo: this might be able to go away
 |[c_flags]| f_zobj[[
     -- todo: current - how to handle these?
     confused,   "confused", -- 1-4 turn
@@ -107,7 +111,7 @@ _g.c_moves_raw = f_zobj[[
    ;;, "megapnch", T_NORMAL,   20, 80,  85,   %f_move_default                                               -- 1
    ;;, "razrwind", T_NORMAL,   10, 80,  75,   %f_move_prepare                                               -- 2   DIFF: move resets when interrupted
    ;;, "sworddnc", T_NORMAL,   30, 0,   0,    %f_move_self, %f_move_stat, attack, 2                         -- 3
-   ;;, "whrlwind", T_NORMAL,   20, 0,   100,  %f_move_roar                                                  -- 4   DIFF: switches opponent with random pokemon & hits pokemon using fly
+   ;;, "whrlwind", T_NORMAL,   20, 0,   100,  %f_move_roar                                                  -- 4   DIFF: switches opponent with random pokemon
    ;;, "megakick", T_NORMAL,   5,  120, 75,   %f_move_default                                               -- 5
    ;;, "toxic",    T_POISON,   10, 0,   85,   %f_move_toxic                                                 -- 6   DIFF: toxic counter does not affect leech seed dmg
    ;;, "horndril", T_NORMAL,   5,  -1,  30,   %f_move_ohko                                                  -- 7
@@ -118,7 +122,7 @@ _g.c_moves_raw = f_zobj[[
    ;;, "watergun", T_WATER,    25, 40,  100,  %f_move_default                                               -- 12
    ;;, "icebeam",  T_ICE,      10, 95,  100,  %f_move_default,10,%f_move_major_other,C_MAJOR_FROZEN         -- 13
    ;;, "blizzard", T_ICE,      5,  120, 90,   %f_move_default,10,%f_move_major_other,C_MAJOR_FROZEN         -- 14
-   ;;, "hyprbeam", T_NORMAL,   5,  150, 90,   %f_move_implement                                             -- 15
+   ;;, "hyprbeam", T_NORMAL,   5,  150, 90,   %f_move_hyperbeam                                             -- 15
    ;;, "payday",   T_NORMAL,   20, 40,  100,  %f_move_default                                               -- 16
    ;;, "submsion", T_FIGHTING, 20, 80,  80,   %f_move_recoil                                                -- 17
    ;;, "counter",  T_FIGHTING, 20, -1,  100,  %f_move_counter                                               -- 18  DIFF: respects resistance, counts all physical damage taken during turn or taken by substitute
@@ -128,10 +132,10 @@ _g.c_moves_raw = f_zobj[[
    ;;, "solrbeam", T_GRASS,    10, 120, 100,  %f_move_prepare                                               -- 22  DIFF: move resets when interrupted
    ;;, "drgnrage", T_DRAGON,   10, -1,  100,  %f_move_setdmg,40                                             -- 23  DIFF: respects resistance
    ;;, "thndrblt", T_ELECTRIC, 15, 95,  100,  %f_move_default,10,%f_move_major_other,C_MAJOR_PARALYZED      -- 24
-   ;;, "thunder",  T_ELECTRIC, 10, 120, 70,   %f_move_default,10,%f_move_major_other,C_MAJOR_PARALYZED      -- 25  DIFF: hits pokemon using fly + double damage
-   ;;, "earthqke", T_GROUND,   10, 100, 100,  %f_move_default                                               -- 26  DIFF: hits pokemon using dig + double damage
-   ;;, "fissure",  T_GROUND,   5,  -1,  30,   %f_move_ohko                                                  -- 27  DIFF: hits pokemon underground
-   ;;, "dig",      T_GROUND,   10, 100, 100,  %f_move_implement                                             -- 28
+   ;;, "thunder",  T_ELECTRIC, 10, 120, 70,   %f_move_default,10,%f_move_major_other,C_MAJOR_PARALYZED      -- 25
+   ;;, "earthqke", T_GROUND,   10, 100, 100,  %f_move_default                                               -- 26
+   ;;, "fissure",  T_GROUND,   5,  -1,  30,   %f_move_ohko                                                  -- 27
+   ;;, "dig",      T_GROUND,   10, 100, 100,  %f_move_flydig,"digging"                                      -- 28
    ;;, "psychic",  T_PSYCHIC,  10, 90,  100,  %f_move_default,30,%f_move_other, %f_move_stat,special,-1     -- 29
    ;;, "teleport", T_PSYCHIC,  20, 0,   0,    %f_move_teleport                                              -- 30  DIFF: switches with random pokemon from user's team
    ;;, "mimic",    T_NORMAL,   10, 0,   100,  %f_move_mimic                                                 -- 31  DIFF: doesn't miss and copies 5 pp like transform
@@ -155,7 +159,7 @@ _g.c_moves_raw = f_zobj[[
    ;;, "triattck", T_NORMAL,   10, 80,  100,  %f_move_default                                               -- 49
    ;;, "substute", T_NORMAL,   10, 0,   0,    %f_move_substitute                                            -- 50  DIFF: recoil moves damage user. only protects from direct enemy damage, user is still vulnerable to all other effects
    ;;, "cut",      T_NORMAL,   30, 50,  95,   %f_move_default                                               -- 51
-   ;;, "fly",      T_FLYING,   15, 70,  95,   %f_move_implement                                             -- 52
+   ;;, "fly",      T_FLYING,   15, 70,  95,   %f_move_flydig,"flying"                                       -- 52
    ;;, "surf",     T_WATER,    15, 95,  100,  %f_move_default                                               -- 53
    ;;, "strength", T_NORMAL,   15, 80,  100,  %f_move_default                                               -- 54
    ;;, "flash",    T_NORMAL,   20, 0,   70,   %f_move_other, %f_move_stat, accuracy, -1                     -- 55
@@ -169,9 +173,9 @@ _g.c_moves_raw = f_zobj[[
    ;;, "scratch",  T_NORMAL,   35, 40,  100,  %f_move_default                                               -- 63
    ;;, "vicegrip", T_NORMAL,   30, 55,  100,  %f_move_default                                               -- 64
    ;;, "guilotin", T_NORMAL,   5,  -1,  30,   %f_move_ohko                                                  -- 65
-   ;;, "gust",     T_FLYING,   35, 40,  100,  %f_move_default                                               -- 66  DIFF: hits pokemon using fly & double damage
+   ;;, "gust",     T_FLYING,   35, 40,  100,  %f_move_default                                               -- 66
    ;;, "wingatck", T_FLYING,   35, 35,  100,  %f_move_default                                               -- 67
-   ;;, "bind",     T_NORMAL,   20, 15,  75,   %f_move_implement                                             -- 68
+   ;;, "bind",     T_NORMAL,   20, 15,  75,   %f_move_trapping                                              -- 68
    ;;, "slam",     T_NORMAL,   20, 80,  75,   %f_move_default                                               -- 69
    ;;, "vinewhip", T_GRASS,    10, 35,  100,  %f_move_default                                               -- 70
    ;;, "stomp",    T_NORMAL,   20, 65,  100,  %f_move_default,30,%f_move_other,%f_movehelp_minor,flinching  -- 71
@@ -183,7 +187,7 @@ _g.c_moves_raw = f_zobj[[
    ;;, "hornatck", T_NORMAL,   25, 65,  100,  %f_move_default                                               -- 77
    ;;, "furyatck", T_NORMAL,   20, 15,  85,   %f_move_multihit_var                                          -- 78  DIFF: if KOs pkmn, will also hit new pokemon switched in
    ;;, "tackle",   T_NORMAL,   35, 35,  95,   %f_move_default                                               -- 79
-   ;;, "wrap",     T_NORMAL,   20, 15,  85,   %f_move_implement                                             -- 80
+   ;;, "wrap",     T_NORMAL,   20, 15,  85,   %f_move_trapping                                              -- 80
    ;;, "thrash",   T_NORMAL,   20, 90,  100,  %f_move_thrash                                                -- 81
    ;;, "tailwhip", T_NORMAL,   30, 0,   100,  %f_move_other, %f_move_stat, defense, -1                      -- 82
    ;;, "psnsting", T_POISON,   35, 15,  100,  %f_move_default,20,%f_move_major_other,C_MAJOR_POISONED       -- 83
@@ -216,7 +220,7 @@ _g.c_moves_raw = f_zobj[[
    ;;, "slppowdr", T_GRASS,    15, 0,   75,   %f_move_major_other, C_MAJOR_SLEEPING                         -- 110
    ;;, "petldanc", T_GRASS,    20, 70,  100,  %f_move_thrash                                                -- 111
    ;;, "strngsht", T_BUG,      40, 0,   95,   %f_move_other, %f_move_stat, speed, -1                        -- 112
-   ;;, "firespin", T_FIRE,     15, 15,  70,   %f_move_implement                                             -- 113
+   ;;, "firespin", T_FIRE,     15, 15,  70,   %f_move_trapping                                              -- 113 DIFF: can thaw out frozen pokemon.
    ;;, "thndshck", T_ELECTRIC, 30, 40,  100,  %f_move_default,10,%f_move_major_other,C_MAJOR_PARALYZED      -- 114
    ;;, "rockthrw", T_ROCK,     15, 50,  65,   %f_move_default                                               -- 115
    ;;, "cnfusion", T_PSYCHIC,  25, 50,  100,  %f_move_default,10,%f_move_other,%f_movehelp_confuse          -- 116
@@ -243,7 +247,7 @@ _g.c_moves_raw = f_zobj[[
    ;;, "sludge",   T_POISON,   20, 65,  100,  %f_move_default,30,%f_move_major_other,C_MAJOR_POISONED       -- 137
    ;;, "boneclub", T_GROUND,   20, 65,  85,   %f_move_default,10,%f_move_other,%f_movehelp_minor,flinching  -- 138
    ;;, "watrfall", T_WATER,    15, 80,  100,  %f_move_default                                               -- 139
-   ;;, "clamp",    T_WATER,    10, 35,  75,   %f_move_implement                                             -- 140
+   ;;, "clamp",    T_WATER,    10, 35,  75,   %f_move_trapping                                              -- 140
    ;;, "spikcann", T_NORMAL,   15, 20,  100,  %f_move_multihit_var                                          -- 141 DIFF: if KOs pkmn, will also hit new pokemon switched in
    ;;, "constrct", T_NORMAL,   35, 10,  100,  %f_move_default,10,%f_move_other, %f_move_stat, speed, -1     -- 142
    ;;, "amnesia",  T_PSYCHIC,  20, 0,   0,    %f_move_self, %f_move_stat, special, 2                        -- 143

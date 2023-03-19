@@ -54,7 +54,7 @@ end $$
 -- no param means decrement 1, param means set to val
 -- you can't change if -1 (rage), gotta switch out to reset that move
 |[f_set_moveturn]| function(_ENV, newval, newcurmove)
-    if moveturn == 0 then
+    if not curmove and moveturn == 0 then
         moveturn, curmove = newval, newcurmove
     end
 end $$
@@ -65,15 +65,17 @@ end $$
         params.move = move
         local _ENV = params
 
+        selfactive:f_decrement_timer('moveturn', f_nop)
+
         -- C_MAJOR_SLEEPING - 1-3 turns, reset if switch out
         if selfactive.major == C_MAJOR_SLEEPING then
-            selfactive.moveturn = 0
         end
 
+        -- middle of rage... you freeze then immediately unfreeze... that shouldn't cost a pp, should it? If you are on your last pp, you wouldn't have a move this turn.
+        -- i think it shouldn't cost a pp in this case.
         if selfactive.major == C_MAJOR_FROZEN then
-            selfactive.moveturn = 0
             if _rnd'1' < .2 then
-                f_addaction(self, self, "|is not|frozen")
+                f_addaction(self, self, "|thawed|out")
                 selfactive.shared.major = C_MAJOR_NONE
             else
                 f_addaction(self, self, "|is|frozen")
@@ -82,6 +84,11 @@ end $$
         end
 
         -- trapped
+        if otheractive.curmove and otheractive.curmove.ofunc == f_move_trapping then
+            f_addaction(self, self, "|is|trapped")
+            return
+        end
+
         -- hyperbeamrecharge
         -- disable
 
@@ -131,8 +138,16 @@ end $$
     return f_newaction(self, false, function(_ENV)
         -- flinching is reset at the psel init level, so you can't be flinching the next turn. no need to reset flinching here.
 
-        -- decrement the moveturn timer, if >0.
-        selfactive:f_decrement_timer('moveturn', f_nop)
+        -- reset moveturn if you sleep or are frozen. this is done at end of the turn to prevent weird cases (you freeze then unfreeze same turn).
+        -- if you are using rage and freeze then unfreeze in the same turn, you continue your rage.
+        if selfactive.major == C_MAJOR_SLEEPING or selfactive.major == C_MAJOR_FROZEN then
+            selfactive.moveturn = 0
+        end
+
+        -- if the moveturn is zero, we must make sure curmove is nil, because some multiturn moves check the first move based on curmove == nil
+        if selfactive.moveturn == 0 then
+            selfactive.curmove = nil
+        end
 
         local statdmg = max(selfactive.maxhp\16,1)
         local inflictstatdmg = function(title) -- title must start with "|" to save 2 tokens
@@ -355,11 +370,15 @@ end $$
     -- todo: token crunch, think about a ~= and func again.
     if move.accuracy <= 0  then return false end -- this catches swift and self status moves... swift is negative
 
-    -- charging moves can't miss on the turn they are charging
-    if move.ofunc == f_move_prepare and attacker.moveturn == 0 then return false end
+    -- charging moves & fly/dig can't miss on the first turn
+    if (move.ofunc == f_move_prepare or move.ofunc == f_move_flydig) and not attacker.curmove then return false end
 
-    if defender.digging and move.num ~= M_FISSURE and move.num ~= M_EARTHQUAKE                          then return true end
-    if defender.flying  and move.num ~= M_GUST    and move.num ~= M_THUNDER and move.num ~= M_WHIRLWIND then return true end
+    -- attacker misses if defender is using fly/dig
+    if defender.curmove and defender.curmove.ofunc == f_move_flydig then return true end
+
+    -- attacker can't miss trapping moves if the first hit succeeded
+    if attacker.curmove and attacker.curmove.ofunc == f_move_trapping then return false end
+
     return _rnd(defender.evasion) > move.accuracy/100*attacker:f_movehelp_getstat'accuracy' or f_flr_rnd'256' == 0 and f_flr_rnd'256' == 0
 end $$
 

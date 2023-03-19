@@ -217,7 +217,7 @@ end $$
 |[f_pselmove_init]| function(_ENV)
     local possible_moves = f_get_possible_moves(p0.active)
 
-    if p0.active.moveturn ~= 0 then
+    if p0.active.curmove then
         f_select_move(p0, p0.active.curmove)
         _ENV:pop() _ENV:pop()
     elseif #possible_moves == 0 then

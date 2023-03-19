@@ -290,21 +290,53 @@ end $$
 end $$
 
 |[f_move_thrash]| function(_ENV)
-    f_set_moveturn(selfactive, f_flr_rnd'2'+2, f_create_move(move.num, move.slot))
+    f_set_moveturn(selfactive, f_flr_rnd'2'+1, f_create_move(move.num, move.slot))
     f_move_default(_ENV)
 
-    if selfactive.moveturn == 1 then
+    if selfactive.moveturn == 0 then
         f_move_self(_ENV, f_movehelp_confuse, 'confused')
+    end
+end $$
+
+-- todo: maybe add custom descriptions (binded/clamped/trapped/wrapped)?
+|[f_move_trapping]| function(_ENV)
+    if not selfactive.curmove then
+        f_set_moveturn(selfactive, f_flr_rnd'4'+1, f_create_move(move.num, move.slot))
+        f_addaction(self, self, "|"..move.name.."|begins")
+    end
+
+    f_move_default(_ENV)
+
+    if selfactive.moveturn == 0 then
+        f_addaction(self, self, "|"..move.name.."|ended")
+    end
+end $$
+
+|[f_move_flydig]| function(_ENV, desc) -- todo: i can probably get rid of "|started|" below
+    if selfactive.curmove then
+        f_move_default(_ENV)
+    else
+        f_addaction(self, self, "|started|"..desc, function()
+            f_set_moveturn(selfactive, 1, f_create_move(move.num, move.slot))
+        end)
+    end
+end $$
+
+|[f_move_hyperbeam]| function(_ENV)
+    if selfactive.curmove then
+        f_addaction(self, self, "|recharging|energy")
+    else
+        f_move_default(_ENV)
+        f_set_moveturn(selfactive, 1, f_create_move(move.num, move.slot))
     end
 end $$
 
 -- solarbeam/razorwind/skullbash/skyattack
 |[f_move_prepare]| function(_ENV)
-    f_set_moveturn(selfactive, 2, move)
-
-    if selfactive.moveturn == 1 then
+    if selfactive.curmove then
         f_move_default(_ENV)
     else
+        f_set_moveturn(selfactive, 1, move)
         f_addaction(self, self, "|preparing|attack")
         move.pp += 1 -- increment 1 pp, since 1 pp was just used, if the attack is interrupted, a pp should not be consumed
     end
