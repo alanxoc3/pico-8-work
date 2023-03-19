@@ -13,7 +13,7 @@ end $$
 -- returns true if it increased, false otherwise
 |[f_movehelp_incstat]| function(a, stat, inc)
     local prev = a.stages[stat]
-    if not a.misted then
+    if not a.misted or inc > 0 then
         a.stages[stat] = mid(-6, 6, prev+inc)
     end
     return prev ~= a.stages[stat]
@@ -40,7 +40,7 @@ end $$
 
 |[f_move_implement]| function(_ENV)
     -- todo: wait. remove me when all moves are done
-    f_addaction(self, self, "|not|implemented")
+    addaction(self, "|not|implemented")
 end $$
 
 |[f_move_disable]| function(_ENV)
@@ -50,7 +50,7 @@ end $$
 
     otheractive.disabledtimer = f_flr_rnd'6'+2
     otheractive.disabledslot  = moves[f_flr_rnd(#moves)+1].slot
-    f_addaction(self, other, "|"..otheractive.mynewmoves[otheractive.disabledslot].name.."|disabled")
+    addaction(other, "|"..otheractive.mynewmoves[otheractive.disabledslot].name.."|disabled")
 
     -- if the move disabled is a multiturn move, we need to stop the multiturn timer
     -- no need to worry about trapping moves, because you won't be able to use disable during a trapping move
@@ -68,14 +68,14 @@ end $$
 
 |[f_move_mimic]| function(_ENV)
     local othermoves = f_get_moves(otheractive, true)
-    f_addaction(self, self, "|copied|"..f_movehelp_movecopy(selfactive, othermoves[f_flr_rnd(#othermoves)+1].num, move.slot).name)
+    addaction(self, "|copied|"..f_movehelp_movecopy(selfactive, othermoves[f_flr_rnd(#othermoves)+1].num, move.slot).name)
 end $$
 
 |[f_move_transform]| function(_ENV)
     if selfactive.transform then
         return true
     else
-        f_addaction(self, self, "|copied|"..otheractive.name, function()
+        addaction(self, "|copied|"..otheractive.name, function()
             selfactive.transform = true
             _foreach(_split'num,attack,defense,speed,special,type1,type2', function(key)
                 selfactive[key] = otheractive[key]
@@ -94,7 +94,7 @@ end $$
         type1,@, type2,@, conversion,%c_yes
     ]], otheractive.type1, otheractive.type2)
 
-    f_addaction(self, self, "|copied|types")
+    addaction(self, "|copied|types")
 end $$
 
 |[f_move_haze]| function(_ENV)
@@ -105,7 +105,7 @@ end $$
             accuracy,0, evasion,0
         ]])
 
-        f_addaction(self, pl, "|reset|modifiers")
+        addaction(pl, "|reset|modifiers")
     end)
 end $$
 
@@ -113,7 +113,7 @@ end $$
 |[f_move_heal]| function(_ENV, pl, amount)
     amount = min(amount, pl.active.maxhp-pl.active.hp)
     if amount > 0 then
-        f_addaction(self, pl, f_format_num_sign(amount, "|hitpoints"), function()
+        addaction(pl, f_format_num_sign(amount, "|hitpoints"), function()
             pl.active.shared.hp += amount
         end)
     else
@@ -168,7 +168,7 @@ end $$
 -- leverages f_move_(self|other)
 |[f_move_stat]| function(_ENV, pl, key, stage)
     if f_movehelp_incstat(pl.active, key, stage) then
-        f_addaction(self, pl, f_format_num_sign(stage, "/6|"..key))
+        addaction(pl, f_format_num_sign(stage, "/6|"..key))
     else
         return true
     end
@@ -179,17 +179,17 @@ end $$
         return true
     end
 
-    return f_move_other(_ENV, f_movehelp_minor, 'toxiced', 1)
+    return f_move_other(_ENV, f_movehelp_minor, "|badly|poisoned", 'toxiced', 1)
 end $$
 
 |[f_move_splash]| function(_ENV)
-    f_addaction(self, self, "|does|nothing")
+    addaction(self, "|does|nothing")
 end $$
 
 |[f_move_major_other]| function(_ENV, majorind)
     -- todo, prevent electric from getting paralyzed, fire from getting burned, ice frozen, grass leech, poison poisoned...
     if f_get_type_advantage(move, otheractive) > 0 and otheractive.shared.major == C_MAJOR_NONE then
-        f_addaction(self, other, "|is|"..c_major_names[majorind], function()
+        addaction(other, "|is|"..c_major_names[majorind], function()
             otheractive.shared.major = majorind
         end)
     else
@@ -197,21 +197,23 @@ end $$
     end
 end $$
 
--- todo: break up the different conditions for custom messages.
--- flinch/focus/screen/seed/mist/reflct/toxic
 -- leverages f_move_(self|other)
-|[f_movehelp_minor]| function(_ENV, pl, minor, val)
+-- focus/screen/seed/mist/reflct/toxic
+|[f_movehelp_minor]| function(_ENV, pl, message, minor, val)
     if (pl.active[minor] or 0) == 0 then
         pl.active[minor] = val or 1
-        -- todo: minor here will break with minification... i should change minors to numbers instead
-        f_addaction(self, pl, "|becomes|"..minor)
+        addaction(pl, message)
     else
         return true
     end
 end $$
 
+|[f_movehelp_flinch]| function(_ENV, pl)
+    pl.active.flinching = true
+end $$
+
 |[f_movehelp_confuse]| function(_ENV, pl)
-    return f_movehelp_minor(_ENV, pl, 'confused', f_flr_rnd'4'+1)
+    return f_movehelp_minor(_ENV, pl, "|becomes|confused", 'confused', f_flr_rnd'4'+1)
 end $$
 
 |[f_move_substitute]| function(_ENV)
@@ -221,7 +223,7 @@ end $$
     end
 
     f_move_setdmg_self(_ENV, subhp)
-    f_addaction(self, self, "|created|substitute", function()
+    addaction(self, "|created|substitute", function()
         selfactive.substitute = subhp
     end)
 end $$
@@ -229,7 +231,7 @@ end $$
 ---------- DAMAGING MOVES BELOW ----------
 |[f_move_rest]| function(_ENV)
     selfactive.shared.major = C_MAJOR_SLEEPING
-    f_addaction(self, self, "|is|sleeping")
+    addaction(self, "|is|sleeping")
     f_move_heal(_ENV, self, selfactive.maxhp)
     selfactive.toxiced = 0
 end $$
@@ -245,11 +247,11 @@ end $$
 
 |[f_move_multihit_set]| function(_ENV, hitcount, endfunc)
     if hitcount > 0 then
-        f_addaction(self, self, "|begin|hit #"..hitcount, function()
+        addaction(self, "|begin|hit #"..hitcount, function()
             _ENV.otheractive = other.active
             if f_move_default(_ENV) then
                 -- multihit can fail midway if a new pokemon enters in mid attack
-                f_addaction(self, self, "|failed|hit #"..hitcount)
+                addaction(self, "|failed|hit #"..hitcount)
             end
 
             f_move_multihit_set(_ENV, hitcount-1, endfunc)
@@ -291,13 +293,13 @@ end $$
 |[f_move_trapping]| function(_ENV)
     if not selfactive.curmove then
         f_set_moveturn(selfactive, f_flr_rnd'4'+1, f_create_move(move.num, move.slot))
-        f_addaction(self, self, "|"..move.name.."|begins")
+        addaction(self, "|"..move.name.."|begins")
     end
 
     f_move_default(_ENV)
 
     if selfactive.moveturn == 0 then
-        f_addaction(self, self, "|"..move.name.."|ended")
+        addaction(self, "|"..move.name.."|ended")
     end
 end $$
 
@@ -305,7 +307,7 @@ end $$
     if selfactive.curmove then
         f_move_default(_ENV)
     else
-        f_addaction(self, self, "|started|"..desc, function()
+        addaction(self, "|started|"..desc, function()
             f_set_moveturn(selfactive, 1, f_create_move(move.num, move.slot))
         end)
     end
@@ -313,10 +315,14 @@ end $$
 
 |[f_move_hyperbeam]| function(_ENV)
     if selfactive.curmove then
-        f_addaction(self, self, "|recharging|energy")
+        addaction(self, "|recharging|energy")
     else
         f_move_default(_ENV)
-        f_set_moveturn(selfactive, 1, f_create_move(move.num, move.slot))
+
+        -- accuracy is set to 0, because recharge can't miss.
+        local m = f_create_move(move.num, move.slot)
+        m.accuracy = 0
+        f_set_moveturn(selfactive, 1, m)
     end
 end $$
 
@@ -326,7 +332,7 @@ end $$
         f_move_default(_ENV)
     else
         f_set_moveturn(selfactive, 1, move)
-        f_addaction(self, self, "|preparing|attack")
+        addaction(self, "|preparing|attack")
         move.pp += 1 -- increment 1 pp, since 1 pp was just used, if the attack is interrupted, a pp should not be consumed
     end
 end $$
@@ -394,7 +400,7 @@ end $$
 -- good, because it gives a central place to track substitute/counter/bide/rage information
 |[f_move_setdmg]| function(_ENV, dmg)
     if dmg > 0 and f_get_type_advantage(move, otheractive) > 0 then
-        f_addaction(self, other, f_format_num_sign(-dmg, "|hitpoints"), function()
+        addaction(other, f_format_num_sign(-dmg, "|hitpoints"), function()
             if otheractive.substitute > 0 then
                 otheractive.substitute = _max(otheractive.substitute-dmg, 0)
             else
@@ -410,7 +416,7 @@ end $$
 -- all self inflicting dmg goes here, includes: recoil, confuse, poison, burn, seed, explode, substitute-create
 -- that's good, because self inflicting damage should bypass substitute
 |[f_move_setdmg_self]| function(_ENV, dmg)
-    f_addaction(self, self, f_format_num_sign(-dmg, "|hitpoints"), function()
+    addaction(self, f_format_num_sign(-dmg, "|hitpoints"), function()
         selfactive.shared.hp = _max(selfactive.shared.hp-dmg, 0)
     end)
 end $$

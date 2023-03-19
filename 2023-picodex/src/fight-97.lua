@@ -33,7 +33,7 @@ end $$
         end
 
         if f_does_move_miss(selfactive, otheractive, move) then
-            f_addaction(self, self, "|missed|"..move.name)
+            addaction(self, "|missed|"..move.name)
 
             if move.num == M_HIGH_JUMP_KICK or move.num == M_JUMP_KICK then
                 f_move_setdmg_self(_ENV, 1)
@@ -45,7 +45,7 @@ end $$
 
             -- todo: might be nice if other things were supported (miss, fail, resist)
             if move.func(_ENV) then
-                f_addaction(self, self, "|failed|"..move.name)
+                addaction(self, "|failed|"..move.name)
             end
         end
     end)
@@ -75,46 +75,41 @@ end $$
         -- i think it shouldn't cost a pp in this case.
         if selfactive.major == C_MAJOR_FROZEN then
             if _rnd'1' < .2 then
-                f_addaction(self, self, "|thawed|out")
+                addaction(self, "|thawed|out")
                 selfactive.shared.major = C_MAJOR_NONE
             else
-                f_addaction(self, self, "|is|frozen")
+                addaction(self, "|is|frozen")
                 return
             end
         end
 
         -- trapped
         if otheractive.curmove and otheractive.curmove.ofunc == f_move_trapping then
-            f_addaction(self, self, "|is|trapped")
+            addaction(self, "|is|trapped")
             return
         end
 
-        -- hyperbeamrecharge
-        -- disable
-
-        -- disable fails if the opponent is in the middle of a multiturn move or has only 1 move left
-        -- or should there be different behavior? could i just take the multiturn move out of the list of possible moves? i like that more, then struggle could be used. works for trapping too.
-        -- or it could simply stop the multiturn move. since it has such bad accuracy, maybe that's a good idea.
         -- and how should trapping move when selecting a move? is it that the trapped can select a move, but the trapper can't? yes.
         -- how does trapping moves work with thrash/rage/beams? multiturn moves are reset. thrash/rage/hyperbeam use a pp, but skyattack/solar beam don't.
         -- any issues with metronome/mirrormove/mimic + multiturn moves? no, i don't think so.
 
         -- if a move was used on the same turn disable was used
         if selfactive.disabledslot == move.slot then
-            f_addaction(self, self, "|is|disabled")
+            addaction(self, "|is|disabled")
             return
         end
 
         -- confuse - 50% self attack 1-4 turns
         if selfactive.confused > 0 and f_flr_rnd'2' == 0 then
-            f_addaction(self, self, "|confuse|damage")
+            addaction(self, "|confuse|damage")
             f_move_setdmg_self(_ENV, f_calc_move_damage(selfactive, otheractive, f_create_move(-1))) -- todo, try string here '-1'
             return
         end
+
         -- paralysis
 
         if selfactive.flinching then
-            f_addaction(self, self, "|is|flinching")
+            addaction(self, "|is|flinching")
             return
         end
 
@@ -138,12 +133,15 @@ end $$
     return f_newaction(self, false, function(_ENV)
         -- flinching is reset at the psel init level, so you can't be flinching the next turn. no need to reset flinching here.
 
+        -- moveturn is also reset at the psel init level. if a condition lasts only 1 turn, jjj
+
         -- reset moveturn if you sleep or are frozen. this is done at end of the turn to prevent weird cases (you freeze then unfreeze same turn).
         -- if you are using rage and freeze then unfreeze in the same turn, you continue your rage.
         if selfactive.major == C_MAJOR_SLEEPING or selfactive.major == C_MAJOR_FROZEN then
             selfactive.moveturn = 0
         end
 
+        -- check for if the multiturn move ended naturally. an unnatural check is right before the player starts the turn.
         -- if the moveturn is zero, we must make sure curmove is nil, because some multiturn moves check the first move based on curmove == nil
         if selfactive.moveturn == 0 then
             selfactive.curmove = nil
@@ -151,7 +149,7 @@ end $$
 
         local statdmg = max(selfactive.maxhp\16,1)
         local inflictstatdmg = function(title) -- title must start with "|" to save 2 tokens
-            f_addaction(self, self, title.."|damage")
+            addaction(self, title.."|damage")
             f_move_setdmg_self(_ENV, statdmg)
         end
 
@@ -168,17 +166,17 @@ end $$
         if selfactive.seeded then
             inflictstatdmg"|seed"
             if otheractive.hp < otheractive.maxhp then
-                f_addaction(self, other, "|seed|leeching")
+                addaction(other, "|seed|leeching")
                 f_move_heal(_ENV, other, statdmg)
             end
         end
 
         selfactive:f_decrement_timer('confused', function()
-            f_addaction(self, self, "|confusion|ended")
+            addaction(self, "|confusion|ended")
         end)
 
         selfactive:f_decrement_timer('disabledtimer', function()
-            f_addaction(self, self, "|"..selfactive.mynewmoves[selfactive.disabledslot].name.."|enabled")
+            addaction(self, "|"..selfactive.mynewmoves[selfactive.disabledslot].name.."|enabled")
             selfactive.disabledslot = 0
         end)
 
@@ -246,9 +244,13 @@ end $$
             local action = f_pop_next_action(game)
             if action then
                 local actionpl = action.active == game.p1.active and game.p1 or game.p2
-                local envparams = f_zobj([[move,@, self,@, other,@]], move, actionpl, f_get_other_pl(game, actionpl))
+                local envparams = f_zobj([[move,@, self,@, other,@, addaction,@]], move, actionpl, f_get_other_pl(game, actionpl), function(...)
+                    f_addaction(actionpl, ...)
+                end)
+
                 envparams.selfactive = envparams.self.active
                 envparams.otheractive = envparams.other.active
+
                 action.logic(envparams)
                 if action.message then
                     -- this must be in the if statement, because you can't end with an invisible action (draw will fail).
