@@ -10,8 +10,8 @@
 c_pokemon_names[0] = "" -- for "none" pkmn, technically not needed possibly (-1)
 
 -- todo: add short names
-|[c_major_names]| split"fainted,burned,frozen,paralyzed,poisoned,sleeping" $$
-c_major_names[0] = "healthy" -- for "none" status
+|[c_major_names]|       f_zobj"0,none;,fainted,burned,frozen,paralyzed,poisoned,sleeping" $$
+|[c_major_names_short]| f_zobj"0,NON;,FNT,BRN,FZN,PAR,PSN,SLP" $$
 
 -- pokemon moves can be physical or special. the order here is specific. odd numbers are physical. even numbers are special.
 -- includes type effectiveness chart. according to the gen 1 games, which had bugs. i'm keeping the bugs :).

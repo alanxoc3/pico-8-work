@@ -229,6 +229,7 @@ end $$
 |[f_turn_update]| function(game)
     if g_bpo then f_beep() end
 
+    if g_bpx then f_minisfx'B_BACK' end
     if g_bpx or not game.cur_action then
         -- while loop exists for actions that don't have a message.
         -- actions without a message are meant to optionally create actions.

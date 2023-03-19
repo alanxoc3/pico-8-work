@@ -1,10 +1,4 @@
 -- todo: pl select shouldn't share with edit select team cursor
--- todo: make it so showing a different player's stats also shows their name in draw2.
--- todo: need something that takes percent & function for moves that have 10% chance to do something extra.
--- todo: disable move needs to show disabled message if move is disabled on the same turn.
-
--- todo: initial wave: make every move do things (rest sets sleep...)
--- todo: second wave: make states actually have an effect and unset properly (dig/rest/poison....)
 
 -- roar/whirlwind/teleport
 |[f_movehelp_switch]| function(pl)
@@ -23,13 +17,6 @@ end $$
         a.stages[stat] = mid(-6, 6, prev+inc)
     end
     return prev ~= a.stages[stat]
-end $$
-
-|[f_movehelp_major]| function(a, major)
-    if a.shared.major == C_MAJOR_NONE then
-        a.shared.major = major
-        return true
-    end
 end $$
 
 |[f_movehelp_getstat]| function(a, stat)
@@ -67,7 +54,7 @@ end $$
 
     -- if the move disabled is a multiturn move, we need to stop the multiturn timer
     -- no need to worry about trapping moves, because you won't be able to use disable during a trapping move
-    if otheractive.moveturn ~= 0 and otheractive.curmove.slot == otheractive.disabledslot then
+    if otheractive.curmove and otheractive.curmove.slot == otheractive.disabledslot then
         otheractive.moveturn = 0
     end
 end $$
@@ -201,8 +188,10 @@ end $$
 
 |[f_move_major_other]| function(_ENV, majorind)
     -- todo, prevent electric from getting paralyzed, fire from getting burned, ice frozen, grass leech, poison poisoned...
-    if f_get_type_advantage(move, otheractive) > 0 and f_movehelp_major(otheractive, majorind) then
-        f_addaction(self, other, "|is|"..c_major_names[majorind])
+    if f_get_type_advantage(move, otheractive) > 0 and otheractive.shared.major == C_MAJOR_NONE then
+        f_addaction(self, other, "|is|"..c_major_names[majorind], function()
+            otheractive.shared.major = majorind
+        end)
     else
         return true
     end

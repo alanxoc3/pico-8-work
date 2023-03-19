@@ -6,12 +6,15 @@
         get_elapsed_percent,%f_actor_get_elapsed_percent,
 
         timer, 0,
+        stacksize, 0, -- need a separate var for stack size for so buttons don't jitter on ui
 
         isnew, %c_yes,
         curr,  start,
 
         init,   %f_nop,
         update, %f_nop;
+
+        stack;,;
     ]], template)
 end $$
 
@@ -41,6 +44,7 @@ end $$
     curr = stateName
 
     _ENV:init()
+    stacksize = #stack
 end $$
 
 |[f_actor_state]| function(_ENV)
@@ -57,4 +61,22 @@ end $$
     end
 
     _ENV:update()
+end $$
+
+|[f_modes_popuntil]| function(_ENV, untilstate)
+    while next_state ~= untilstate and #stack > 0 do
+        _ENV:pop()
+    end
+end $$
+
+|[f_modes_pop]| function(_ENV)
+    -- delete the last item on the stack, then load the new last item.
+    -- most modes on the stack won't have an init in this game.
+    _deli(stack) 
+    _ENV:load(stack[#stack] or 'main')
+end $$
+
+|[f_modes_push]| function(_ENV, newstate)
+    _add(stack, newstate)
+    _ENV:f_actor_load(newstate)
 end $$

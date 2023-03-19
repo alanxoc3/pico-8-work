@@ -37,7 +37,7 @@ end $$
 
         ;;,@, 40,1, 13, 1
         ;;,@, 1, 5, @,  -1
-    ]], p1a.hp, "PAR", p1c, p2a.hp, "FZN", p2c)
+    ]], p1a.hp, c_major_names_short[p1a.major], p1c, p2a.hp, c_major_names_short[p2a.major], p2c)
 
     -- draw the pkmn
     -- todo: fix the invisible party pkmn in switch screen

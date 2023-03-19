@@ -53,7 +53,7 @@ end $$
               bot_row_buttons,
               rotation =
               modes and modes.main.menu.c,
-              modes and #modes.stack-1,
+              modes and modes.stacksize-1,
               foldstate == 'open' and 1
               or foldstate == 'closed' and -1
               or (foldstate == 'opening' and -1 or 1)*_cos(_ENV:get_elapsed_percent(foldstate)/2)

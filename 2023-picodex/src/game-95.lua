@@ -30,8 +30,6 @@
         draw3,%f_nop,
         curr,main;
 
-        stack;,;
-
         -- defaults are mostly functions, but also menu
         defaults;
             menu,%c_no,
@@ -151,23 +149,4 @@ end $$
 |[f_modes_entry]| function(_ENV, menu_name)
     local menu = menu_name and _ENV[menu_name].menu or menu
     return menu[menu.c+1]
-end $$
-
-|[f_modes_push]| function(_ENV, newstate)
-    _add(stack, newstate)
-    _ENV:f_actor_load(newstate)
-end $$
-
--- pops until you reach a state useful for when you want to pop more than once
-|[f_modes_popuntil]| function(_ENV, untilstate)
-    while next_state ~= untilstate and #stack > 0 do
-        _ENV:pop()
-    end
-end $$
-
-|[f_modes_pop]| function(_ENV)
-    -- delete the last item on the stack, then load the new last item.
-    -- most modes on the stack won't have an init in this game.
-    _deli(stack) 
-    _ENV:load(stack[#stack] or 'main')
 end $$
