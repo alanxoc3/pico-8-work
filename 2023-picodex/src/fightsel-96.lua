@@ -25,5 +25,5 @@ end $$
 
 |[f_horde_win_func]| function(horde)
     f_unlock_pkmn(horde)
-    poke(S_HOARD, mid(@S_HOARD, #f_get_team_dead(horde.team), 255))
+    _poke(S_HOARD, _mid(@S_HOARD, #f_get_team_dead(horde.team), 255))
 end $$

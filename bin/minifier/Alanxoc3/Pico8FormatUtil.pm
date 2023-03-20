@@ -117,8 +117,7 @@ sub populate_vars {
    my %vars;
    # regex should match tokenize_lines
 
-   while ($content =~ /[\W]*\b([a-z_]\w*)/g) {                                                                                                                 
-   # new: while ($content =~ /[^a-zA-Z0-9]*([a-zA-Z][a-zA-Z0-9]*)/g) {
+   while ($content =~ /[\W]*\b([a-z_]\w*)/g) {
       if (not ($1 ~~ @lua_keywords)) {
         $vars{$1}++;
       }
@@ -126,7 +125,7 @@ sub populate_vars {
 
    # assign most used tokens to correct variables.
    my @cur_chars;
-   foreach my $name (reverse sort { $vars{$a} <=> $vars{$b} } keys %vars) {
+   foreach my $name (reverse sort { $vars{$a} <=> $vars{$b} } sort keys %vars) {
        $vars{$name} = get_next_var_name(\@cur_chars);
    }
 

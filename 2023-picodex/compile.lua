@@ -182,7 +182,7 @@ function encode_cart(message, cartname, w, h, func)
 end
 
 function myinit()
-    ENCODE_OFFSET=10
+    ENCODE_OFFSET=12 -- this must be set to where data can start writing
     local enc_vget = function(...) return vget(0x8000, ...) end
 
     cls()
@@ -205,6 +205,7 @@ function myinit()
     poke(0x5f56, 0xa0) -- mget points to the loaded map.
     poke2(0x0006, ENCODE_OFFSET) encode_cart     ("picodex skin   ",    "128-151.p8", 34,  12,  mget)
     poke2(0x0008, ENCODE_OFFSET) encode_move_data("pokemon moves  ", g_move_data)
+    poke2(0x000a, ENCODE_OFFSET) encode_trnr_data("pokemon trnrs  ", g_trainer_data)
 
                                               log("end of compile  | pos: "..tostr(ENCODE_OFFSET, 0x1))
 
@@ -225,13 +226,17 @@ function offsetpoke(val)
     ENCODE_OFFSET += 1
 end
 
-EVENT = 252 -- is event
-TMHM  = 253 -- is tm/hm
-DASH  = 254 -- is a dash/range
-NEXT  = 255 -- is next pokemon
-function encode_move_data(message, data)
+function encode_trnr_data(message, data)
     log(message.." | pos: "..tostr(ENCODE_OFFSET, 0x1)) -- show numbers as hex
 
+    for tnum=0,39 do
+        for pnum=0,5 do
+            offsetpoke(data[tnum*6+pnum+1])
+        end
+    end
+end
+
+function strip_spaces(data)
     local newdata = ""
     for i=1,#data do
         local c = sub(data, i, i)
@@ -239,6 +244,17 @@ function encode_move_data(message, data)
             newdata = newdata..c
         end
     end
+    return newdata
+end
+
+EVENT = 252 -- is event
+TMHM  = 253 -- is tm/hm
+DASH  = 254 -- is a dash/range
+NEXT  = 255 -- is next pokemon
+function encode_move_data(message, data)
+    log(message.." | pos: "..tostr(ENCODE_OFFSET, 0x1)) -- show numbers as hex
+
+    local newdata = strip_spaces(data)
 
     newdata = split(newdata, "\n")
     for line in all(newdata) do
@@ -291,11 +307,101 @@ end
 -- 253 is tm/hm
 -- 254 is a dash/range
 -- 255 is next pokemon
+P_MISSINGNO   = 0 P_BULBASAUR   = 1 P_IVYSAUR     = 2 P_VENUSAUR    = 3
+P_CHARMANDER  = 4 P_CHARMELEON  = 5 P_CHARIZARD   = 6 P_SQUIRTLE    = 7
+P_WARTORTLE   = 8 P_BLASTOISE   = 9 P_CATERPIE    = 10 P_METAPOD     = 11
+P_BUTTERFREE  = 12 P_WEEDLE      = 13 P_KAKUNA      = 14 P_BEEDRILL    = 15
+P_PIDGEY      = 16 P_PIDGEOTTO   = 17 P_PIDGEOT     = 18 P_RATTATA     = 19
+P_RATICATE    = 20 P_SPEAROW     = 21 P_FEAROW      = 22 P_EKANS       = 23
+P_ARBOK       = 24 P_PIKACHU     = 25 P_RAICHU      = 26 P_SANDSHREW   = 27
+P_SANDSLASH   = 28 P_NIDORANF    = 29 P_NIDORINA    = 30 P_NIDOQUEEN   = 31
+P_NIDORANM    = 32 P_NIDORINO    = 33 P_NIDOKING    = 34 P_CLEFAIRY    = 35
+P_CLEFABLE    = 36 P_VULPIX      = 37 P_NINETALES   = 38 P_JIGGLYPUFF  = 39
+P_WIGGLYTUFF  = 40 P_ZUBAT       = 41 P_GOLBAT      = 42 P_ODDISH      = 43
+P_GLOOM       = 44 P_VILEPLUME   = 45 P_PARAS       = 46 P_PARASECT    = 47
+P_VENONAT     = 48 P_VENOMOTH    = 49 P_DIGLETT     = 50 P_DUGTRIO     = 51
+P_MEOWTH      = 52 P_PERSIAN     = 53 P_PSYDUCK     = 54 P_GOLDUCK     = 55
+P_MANKEY      = 56 P_PRIMEAPE    = 57 P_GROWLITHE   = 58 P_ARCANINE    = 59
+P_POLIWAG     = 60 P_POLIWHIRL   = 61 P_POLIWRATH   = 62 P_ABRA        = 63
+P_KADABRA     = 64 P_ALAKAZAM    = 65 P_MACHOP      = 66 P_MACHOKE     = 67
+P_MACHAMP     = 68 P_BELLSPROUT  = 69 P_WEEPINBELL  = 70 P_VICTREEBEL  = 71
+P_TENTACOOL   = 72 P_TENTACRUEL  = 73 P_GEODUDE     = 74 P_GRAVELER    = 75
+P_GOLEM       = 76 P_PONYTA      = 77 P_RAPIDASH    = 78 P_SLOWPOKE    = 79
+P_SLOWBRO     = 80 P_MAGNEMITE   = 81 P_MAGNETON    = 82 P_FARFETCHD   = 83
+P_DODUO       = 84 P_DODRIO      = 85 P_SEEL        = 86 P_DEWGONG     = 87
+P_GRIMER      = 88 P_MUK         = 89 P_SHELLDER    = 90 P_CLOYSTER    = 91
+P_GASTLY      = 92 P_HAUNTER     = 93 P_GENGAR      = 94 P_ONIX        = 95
+P_DROWZEE     = 96 P_HYPNO       = 97 P_KRABBY      = 98 P_KINGLER     = 99
+P_VOLTORB     = 100 P_ELECTRODE   = 101 P_EXEGGCUTE   = 102 P_EXEGGUTOR   = 103
+P_CUBONE      = 104 P_MAROWAK     = 105 P_HITMONLEE   = 106 P_HITMONCHAN  = 107
+P_LICKITUNG   = 108 P_KOFFING     = 109 P_WEEZING     = 110 P_RHYHORN     = 111
+P_RHYDON      = 112 P_CHANSEY     = 113 P_TANGELA     = 114 P_KANGASKHAN  = 115
+P_HORSEA      = 116 P_SEADRA      = 117 P_GOLDEEN     = 118 P_SEAKING     = 119
+P_STARYU      = 120 P_STARMIE     = 121 P_MRMIME      = 122 P_SCYTHER     = 123
+P_JYNX        = 124 P_ELECTABUZZ  = 125 P_MAGMAR      = 126 P_PINSIR      = 127
+P_TAUROS      = 128 P_MAGIKARP    = 129 P_GYARADOS    = 130 P_LAPRAS      = 131
+P_DITTO       = 132 P_EEVEE       = 133 P_VAPOREON    = 134 P_JOLTEON     = 135
+P_FLAREON     = 136 P_PORYGON     = 137 P_OMANYTE     = 138 P_OMASTAR     = 139
+P_KABUTO      = 140 P_KABUTOPS    = 141 P_AERODACTYL  = 142 P_SNORLAX     = 143
+P_ARTICUNO    = 144 P_ZAPDOS      = 145 P_MOLTRES     = 146 P_DRATINI     = 147
+P_DRAGONAIR   = 148 P_DRAGONITE   = 149 P_MEWTWO      = 150 P_MEW         = 151
+
+g_trainer_data = {
+   P_RATTATA,   P_PIDGEY,    P_CATERPIE,  P_SPEAROW,   P_WEEDLE,    P_BELLSPROUT, -- youngstr
+   P_WEEDLE,    P_PARAS,     P_KAKUNA,    P_CATERPIE,  P_METAPOD,   P_PINSIR,     -- bugcatch
+   P_EKANS,     P_SQUIRTLE,  P_SANDSHREW, P_CHARMANDER,P_RATTATA,   P_BULBASAUR,  -- junior
+   P_GEODUDE,   P_OMANYTE,   P_CUBONE,    P_VULPIX,    P_KABUTO,    P_ONIX,       -- brock
+
+   P_ODDISH,    P_MEOWTH,    P_CLEFAIRY,  P_NIDORANF,  P_DODUO,     P_JIGGLYPUFF, -- lass
+   P_GEODUDE,   P_DIGLETT,   P_ZUBAT,     P_MACHOP,    P_PARAS,     P_GRAVELER,   -- hiker
+   P_HORSEA,    P_POLIWAG,   P_SHELLDER,  P_MAGIKARP,  P_STARYU,    P_GOLDEEN,    -- swimmer
+   P_STARYU,    P_SEADRA,    P_PSYDUCK,   P_SEAKING,   P_SEEL,      P_STARMIE,    -- misty
+
+   P_GROWLITHE, P_NIDORANM,  P_DRATINI,   P_PONYTA,    P_SANDSHREW, P_EEVEE,      -- gentlman
+   P_SHELLDER,  P_TENTACOOL, P_PSYDUCK,   P_POLIWAG,   P_KRABBY,    P_POLIWHIRL,  -- sailor
+   P_VOLTORB,   P_ZUBAT,     P_VENONAT,   P_MAGNEMITE, P_ABRA,      P_PIKACHU,    -- rocker
+   P_PIKACHU,   P_JOLTEON,   P_VOLTORB,   P_ELECTABUZZ,P_MAGNETON,  P_RAICHU,     -- ltsurge
+
+   P_GASTLY,    P_JIGGLYPUFF,P_CUBONE,    P_CLEFAIRY,  P_HAUNTER,   P_MAROWAK,    -- channelr
+   P_PIDGEOTTO, P_GRAVELER,  P_POLIWHIRL, P_RHYHORN,   P_GROWLITHE, P_GLOOM,      -- gambler
+   P_BELLSPROUT,P_CHANSEY,   P_WIGGLYTUFF,P_WEEPINBELL,P_EEVEE,     P_CLEFABLE,   -- beauty
+   P_PARASECT,  P_VICTREEBEL,P_EXEGGCUTE, P_BUTTERFREE,P_TANGELA,   P_VILEPLUME,  -- erika
+
+   P_KOFFING,   P_MANKEY,    P_TENTACOOL, P_GRIMER,    P_MACHOKE,   P_TENTACRUEL, -- biker
+   P_DODUO,     P_PIDGEOTTO, P_FEAROW,    P_FARFETCHD, P_DODRIO,    P_PIDGEOT,    -- birdkeep
+   P_VENONAT,   P_GLOOM,     P_MRMIME,    P_DROWZEE,   P_ELECTRODE, P_SLOWPOKE,   -- juggler
+   P_NIDORINA,  P_MUK,       P_WEEZING,   P_BEEDRILL,  P_NIDORINO,  P_VENOMOTH,   -- koga
+
+   P_MACHOP,    P_MACHOKE,   P_HITMONLEE, P_MANKEY,    P_PRIMEAPE,  P_HITMONCHAN, -- blckbelt
+   P_SANDSLASH, P_RATICATE,  P_ELECTRODE, P_GOLBAT,    P_WEEZING,   P_ARBOK,      -- rocket
+   P_SLOWPOKE,  P_ABRA,      P_SLOWBRO,   P_DROWZEE,   P_EXEGGCUTE, P_KADABRA,    -- psychic
+   P_MRMIME,    P_EXEGGUTOR, P_KADABRA,   P_JYNX,      P_HYPNO,     P_ALAKAZAM,   -- sabrina
+
+   P_DITTO,     P_VICTREEBEL,P_GASTLY,    P_VENOMOTH,  P_HYPNO,     P_PORYGON,    -- scientst
+   P_CHANSEY,   P_PINSIR,    P_ELECTABUZZ,P_SCYTHER,   P_LICKITUNG, P_GOLDUCK,    -- pkmaniac
+   P_PONYTA,    P_MAGNETON,  P_PRIMEAPE,  P_FLAREON,   P_VULPIX,    P_RAPIDASH,   -- suprnerd
+   P_RAPIDASH,  P_ARCANINE,  P_FLAREON,   P_NINETALES, P_GOLEM,     P_MAGMAR,     -- blaine
+
+   P_DRAGONAIR, P_WARTORTLE, P_PARASECT,  P_CHARMELEON,P_POLIWRATH, P_IVYSAUR,    -- cooltrnr
+   P_GOLDEEN,   P_TENTACRUEL,P_SEADRA,    P_SEAKING,   P_CLOYSTER,  P_KINGLER,    -- fishrman
+   P_MAROWAK,   P_TAUROS,    P_SANDSLASH, P_RATICATE,  P_RHYHORN,   P_PERSIAN,    -- tamer
+   P_DUGTRIO,   P_NIDOKING,  P_PERSIAN,   P_NIDOQUEEN, P_KANGASKHAN,P_RHYDON,     -- giovanni
+
+   P_CLOYSTER,  P_JYNX,      P_VAPOREON,  P_LAPRAS,    P_SLOWBRO,   P_DEWGONG,    -- lorelei
+   P_ONIX,      P_HITMONCHAN,P_OMASTAR,   P_HITMONLEE, P_GOLEM,     P_MACHAMP,    -- bruno
+   P_GOLBAT,    P_MUK,       P_HAUNTER,   P_VILEPLUME, P_ARBOK,     P_GENGAR,     -- agatha
+   P_GYARADOS,  P_DRAGONAIR, P_AERODACTYL,P_DRAGONITE, P_KABUTOPS,  P_SNORLAX,    -- lance
+
+   P_PIDGEOT,   P_ALAKAZAM,  P_JOLTEON,   P_ARCANINE,  P_EXEGGUTOR, P_BLASTOISE,  -- blue
+   P_GENGAR,    P_KANGASKHAN,P_CLEFABLE,  P_GYARADOS,  P_NINETALES, P_VENUSAUR,   -- green
+   P_SCYTHER,   P_SNORLAX,   P_RAICHU,    P_LAPRAS,    P_DODRIO,    P_CHARIZARD,  -- red
+   P_DRAGONITE, P_ZAPDOS,    P_MOLTRES,   P_ARTICUNO,  P_MEWTWO,    P_MEW         -- legendry
+}
 
 -- from missingno (0) to mew (151), these are the tms they can learn.
 -- 1-50 are tms. 51-55 are hms. There shouldn't be anything higher than that.
 g_move_data =
---v t1         t2        tm1tm2     hp  att def spd spc  learn                                    tm & event
+--v t1         t2        hp  att def spd spc  learn                                    tm & event
 [[0|T_BIRD    |T_NORMAL  |33 |136|0  |29 |6   |12|43                                   |TM |1-3|5|6|9-11|13|14|17|19|20|25-27|29|30|44|45|49-52
   0|T_GRASS   |T_POISON  |45 |49 |49 |45 |65  |22|105|106|107|110|108|70|79|88         |TM |3|6|8-10|20|21|31-34|44|50|51
   1|T_GRASS   |T_POISON  |60 |62 |63 |60 |80

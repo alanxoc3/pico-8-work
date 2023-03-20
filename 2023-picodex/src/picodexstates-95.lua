@@ -35,13 +35,13 @@ end $$
 -- utility funcs
 |[g_cur_light]| 0 $$
 |[f_minisfx]| function(num)
-    _g.g_cur_light = max(0, 0+num-152)
+    _g.g_cur_light = _max(0, 0+num-152)
     _sfx(44+num\8, 0, num%8*4, 4)
 end $$
 
 |[f_draw_picodex]| function(_ENV)
     _cls'0'
-    f_zcamera(0, 128+sin(_ENV:get_elapsed_percent'moveup'/4)*128, function()
+    f_zcamera(0, 128+_sin(_ENV:get_elapsed_percent'moveup'/4)*128, function()
         f_zcall(f_zprint, [[
            ;,"aMORG gAMES"         ,64, -68,7,0
           ;;,"pRESENTS"            ,64, -61,7,0
@@ -60,7 +60,7 @@ end $$
 
         f_zcamera(30-(rotation+1)*15+(curr == 'shaking' and f_flr_rnd'3'-1 or 0), 27, function()
             ----- SCREENS -----
-            f_zcall(_rectfill, [[;,14,18,@,87,5]], 63+max(0, rotation*54))
+            f_zcall(_rectfill, [[;,14,18,@,87,5]], 63+_max(0, rotation*54))
             if light == 0 then
                 f_zcall(_rectfill, [[;,14,18,117,87,13]])
                 f_zcall(f_draw_screen, [[

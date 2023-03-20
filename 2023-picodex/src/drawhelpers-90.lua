@@ -9,5 +9,5 @@ end $$
        ;,@,23,1,13,0
       ;;,@,23,8,1,0
       ;;,@,23,15,1,0
-    ]], unpack(split(str, "|", false)))
+    ]], _unpack(_split(str, "|", false)))
 end $$

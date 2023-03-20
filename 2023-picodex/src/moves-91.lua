@@ -14,7 +14,7 @@ end $$
 |[f_movehelp_incstat]| function(a, stat, inc)
     local prev = a.stages[stat]
     if not a.misted or inc > 0 then
-        a.stages[stat] = mid(-6, 6, prev+inc)
+        a.stages[stat] = _mid(-6, 6, prev+inc)
     end
     return prev ~= a.stages[stat]
 end $$
@@ -111,7 +111,7 @@ end $$
 
 -- recover and softboiled
 |[f_move_heal]| function(_ENV, pl, amount)
-    amount = min(amount, pl.active.maxhp-pl.active.hp)
+    amount = _min(amount, pl.active.maxhp-pl.active.hp)
     if amount > 0 then
         addaction(pl, f_format_num_sign(amount, "|hitpoints"), function()
             pl.active.shared.hp += amount
@@ -168,7 +168,7 @@ end $$
 -- leverages f_move_(self|other)
 |[f_move_stat]| function(_ENV, pl, key, stage)
     if f_movehelp_incstat(pl.active, key, stage) then
-        addaction(pl, f_format_num_sign(stage, "/6|"..key))
+        addaction(pl, f_format_num_sign(stage, "/6|"..c_stages[key]))
     else
         return true
     end
@@ -342,7 +342,7 @@ end $$
     if f_move_setdmg(_ENV, dmg) then
         return true
     else
-        f_move_setdmg_self(_ENV, max(1, dmg\4))
+        f_move_setdmg_self(_ENV, _max(1, dmg\4))
     end
 end $$
 
@@ -372,7 +372,7 @@ end $$
     if f_move_setdmg(_ENV, dmg) then
         return true
     else
-        f_move_heal(_ENV, self, max(dmg\2, 1))
+        f_move_heal(_ENV, self, _max(dmg\2, 1))
     end
 end $$
 
@@ -392,7 +392,7 @@ end $$
 end $$
 
 |[f_move_superfang]| function(_ENV)
-    return f_move_setdmg(_ENV, max(otheractive.hp\2, 1))
+    return f_move_setdmg(_ENV, _max(otheractive.hp\2, 1))
 end $$
 
 -- zero damage means resistance

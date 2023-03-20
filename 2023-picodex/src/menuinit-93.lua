@@ -48,7 +48,7 @@ end $$
 |[f_browse_init_shared]| function(_ENV, selectfunc)
     local tbl = {}
     for i=0,151 do
-        add(tbl, i)
+        _add(tbl, i)
     end
 
     menu:refresh(
@@ -103,16 +103,13 @@ end $$
 -- 1,6 is hardcoded here because all trainers have exactly 6 pkmn
 |[f_fightsel_init]| function(_ENV)
     menu:refresh(c_trainers, function(trainer, num)
-        local disabled, team = num-1 > @S_STORY, {}
-        for i=1,6 do team[i] = trainer[i+1] end
-
         return {
-            name=trainer[1],
-            team=team,
-            disabled=disabled,
+            name=trainer.name,
+            team=trainer,
+            disabled=num-1 > @S_STORY,
             select=function(game, entry)
                 f_begin_fight_cpu(game, entry.team, entry.name, f_nop, function(pl, other)
-                    poke(S_STORY, mid(@S_STORY, num, #c_trainers))
+                    _poke(S_STORY, _mid(@S_STORY, num, #c_trainers)) -- todo: token crunch if low on tokens/compression, replace #c_trainers with "40", since there is a hard-coded limit
                     f_unlock_pkmn(other)
                 end, f_nop)
             end

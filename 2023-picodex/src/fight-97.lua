@@ -147,7 +147,7 @@ end $$
             selfactive.curmove = nil
         end
 
-        local statdmg = max(selfactive.maxhp\16,1)
+        local statdmg = _max(selfactive.maxhp\16,1)
         local inflictstatdmg = function(title) -- title must start with "|" to save 2 tokens
             addaction(self, title.."|damage")
             f_move_setdmg_self(_ENV, statdmg)
@@ -416,7 +416,7 @@ end $$
         3, 997,
         (2*attacker.level*f_get_crit_ratio(attacker, move.num)/5+2)/50 -- [.44,.84]
         *move.damage                       -- [6.6,285.6] -- [15,340]
-        *mid(10, .2, attack/defense)       -- [1.32,2856]
+        *_mid(10, .2, attack/defense)       -- [1.32,2856]
     )+2
 
     -- max possible damage: 5994

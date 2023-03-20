@@ -55,6 +55,17 @@ function _init()
     f_populate_c_moves()
     f_populate_c_pokemon()
 
+    -- 0x000a trainers
+    local trainer_loc = _peek2'0xa'
+    for i, v in _pairs(c_trainers) do
+        local tbl = {name=v}
+        for j=1,6 do
+            _add(tbl, _peek(trainer_loc))
+            trainer_loc += 1
+        end
+        c_trainers[i] = tbl
+    end
+
     -- Need the pokedex tiles to stay loaded. This starts at sprite index #96.
     _memcpy(0x0000, 0xc000, 0x2000)
 end

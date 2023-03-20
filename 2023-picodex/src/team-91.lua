@@ -1,14 +1,14 @@
 -- this file contains logic around teams and creating a "team" pokemon
 |[f_unlock_pkmn]| function(trainer)
     -- add pokemon defeated to picodex
-    foreach(f_get_team_dead(trainer.team), function(pkmn)
+    _foreach(f_get_team_dead(trainer.team), function(pkmn)
         _poke(S_POKEMON+pkmn.num, 1)
     end)
 end $$
 
 |[f_get_team_dead]| function(team)
     local newteam = {}
-    foreach(team, function(pkmn)
+    _foreach(team, function(pkmn)
         if pkmn.num > -1 and pkmn.major == C_MAJOR_FAINTED then
             _add(newteam, pkmn)
         end
@@ -21,7 +21,7 @@ end $$
 -- that way missingno is more of a secret.
 |[f_get_team_live]| function(team, exclude_missingno)
     local newteam = {}
-    foreach(team, function(pkmn)
+    _foreach(team, function(pkmn)
         if pkmn.num > (exclude_missingno and 0 or -1) and pkmn.major ~= C_MAJOR_FAINTED then
             _add(newteam, pkmn)
         end
@@ -82,7 +82,7 @@ end $$
 
     for i=1,6 do
         local memstart, pkmn = mem+(i-1)*5, team[i]
-        _poke(memstart, max(0, pkmn.num))
+        _poke(memstart, _max(0, pkmn.num))
 
         for i=1,4 do
             _poke(memstart+i, pkmn.mynewmoves[i].num > 0 and pkmn.mynewmoves[i].num or 0)
@@ -114,7 +114,7 @@ end $$
 
 |[f_get_natural_moveset]| function(num)
     local pkmn, moveset = c_pokemon[num], f_create_empty_moveset()
-    for i=1,min(4,#pkmn.moves_natural) do
+    for i=1,_min(4,#pkmn.moves_natural) do
         moveset[i] = f_create_move(pkmn.moves_natural[i], i)
     end
     return moveset

@@ -62,7 +62,7 @@ end $$
             ;;,1, %c_no, 0, 0, %c_no
         ]], col, -outline_width, outline_width)
 
-        pal() f_draw_pkmn(num, x, y, xscale, yscale)
+        _pal() f_draw_pkmn(num, x, y, xscale, yscale)
     end
 end $$
 
