@@ -966,7 +966,7 @@ _menuitem(1)
 end
 end,0,function(s)
 _g.mp=_max(0,0+s-152)
-_sfx(44+s\8,0,s%8*4,4)
+_sfx(54+s\16,0,s%16*2,2)
 end,function(_ENV)
 _cls"0"
 rm(0,128+_sin(_ENV:mm"uf"/4)*128,function()

@@ -36,7 +36,7 @@ end $$
 |[g_cur_light]| 0 $$
 |[f_minisfx]| function(num)
     _g.g_cur_light = _max(0, 0+num-152)
-    _sfx(44+num\8, 0, num%8*4, 4)
+    _sfx(54+num\16, 0, num%16*2, 2)
 end $$
 
 |[f_draw_picodex]| function(_ENV)
