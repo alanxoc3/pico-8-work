@@ -109,7 +109,7 @@ end $$
         c_moves[i] = f_zobj([[
             func,@, num,@, name,@, type,@, pp,@, maxpp,~pp, damage,@, accuracy,@, ofunc,@
         ]], function(envparams)
-            return move[6](envparams, _unpack(c_moves_raw[i]))
+            return ofunc(envparams, _unpack(c_moves_raw[i]))
         end, i, name, typ, pp, dmg, acc, ofunc)
         _printh("memloc: "..memloc.." | ")
 

@@ -142,7 +142,7 @@ _g.c_moves_raw = f_zobj[[
    ;;, "mimic",    %f_move_mimic                                                   -- 31  DIFF: doesn't miss and copies 5 pp like transform
    ;;, "doubteam", %f_move_self, %f_move_stat, evasion, 1                          -- 32
    ;;, "reflect",  %f_move_self,%f_movehelp_minor,"|raises|defense",reflected      -- 33
-   ;;, "bide",     %f_move_implement                                               -- 34  DIFF: doesn't bypass accuracy check & respects resistance, counts damage done to substitute
+   ;;, "bide",     %f_move_bide                                                    -- 34  DIFF: doesn't bypass accuracy check & respects resistance, counts damage done to substitute
    ;;, "metrnome", %f_move_metronome                                               -- 35
    ;;, "selfdstr", %f_move_default                                                 -- 36  DIFF: user inflicts damage to self before damaging opponent, so you can't win a match by suicide
    ;;, "eggbomb",  %f_move_default                                                 -- 37
