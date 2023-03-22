@@ -278,7 +278,7 @@ end $$
     -- the modulus here is to check if the last move was a physical move
     if not selfactive.curmove then
         f_set_moveturn(selfactive, f_flr_rnd'2'+1, f_create_move(move.num, move.slot))
-        --addaction(self, "|"..move.name.."|begins")
+        addaction(self, "|"..move.name.."|begins")
         selfactive.bidedmg = 0
     end
 
@@ -402,6 +402,26 @@ end $$
     return f_move_setdmg(_ENV, _max(otheractive.hp\2, 1))
 end $$
 
+-- 8190
+
+|[f_movehelp_setdmg]| function(_ENV, pl, dmg, isself)
+    local active = pl.active
+    local issub = not isself and active.substitute > 0
+    addaction(pl, f_format_num_sign(-dmg, "|hitpoints"), function()
+        active.bidedmg += dmg
+        -- rage increment
+        if active.curmove and active.curmove.num == M_RAGE then
+            f_move_stat(_ENV, pl, 'attack', 1)
+        end
+
+        if issub then
+            active.substitute = _max(active.substitute-dmg, 0)
+        else
+            active.shared.hp = _max(active.shared.hp-dmg, 0)
+        end
+    end, issub and "substitute")
+end $$
+
 -- zero damage means resistance
 -- all opponent dmg goes through here.
 -- good, because it gives a central place to track substitute/counter/bide/rage information
@@ -411,15 +431,7 @@ end $$
             otheractive.counterdmg += dmg
         end
 
-        otheractive.bidedmg += dmg
-
-        addaction(other, f_format_num_sign(-dmg, "|hitpoints"), function()
-            if otheractive.substitute > 0 then
-                otheractive.substitute = _max(otheractive.substitute-dmg, 0)
-            else
-                otheractive.shared.hp = _max(otheractive.shared.hp-dmg, 0)
-            end
-        end, otheractive.substitute > 0 and "substitute")
+        f_movehelp_setdmg(_ENV, other, dmg)
     else
         return true -- todo: maybe instead of returning true, can return a message
     end
@@ -429,8 +441,5 @@ end $$
 -- all self inflicting dmg goes here, includes: recoil, confuse, poison, burn, seed, explode, substitute-create
 -- that's good, because self inflicting damage should bypass substitute
 |[f_move_setdmg_self]| function(_ENV, dmg)
-    addaction(self, f_format_num_sign(-dmg, "|hitpoints"), function()
-        selfactive.bidedmg += dmg
-        selfactive.shared.hp = _max(selfactive.shared.hp-dmg, 0)
-    end)
+    f_movehelp_setdmg(_ENV, self, dmg, true)
 end $$
