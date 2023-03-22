@@ -1,14 +1,23 @@
+-- 8181 baseline
+
 -- pl,1-4,false - select a move slot  are move slots
 -- pl,0,false   - select default move (solar beam charge, hyper beam recharge, struggle, ...)
 -- pl,1-6,true  - switch with team slot
 
+-- todo: switch while trapped should stop the trapping
 -- todo: make it so exiting the screen for your turn will show the battle screen
 -- todo: refactor the way counter (and bide) work.
+|[f_pkmn_comes_out]| function(pl, pkmn)
+    pl.active = f_team_pkmn_to_active(pkmn)
+    return f_newaction(pl, "|comes|out")
+end $$
+
 |[f_select_switch]| function(pl, pkmn)
     f_addaction(pl, pl, "|comes|back", function(params) -- self, other
-        params.self.active, params.self.active.invisible = f_team_pkmn_to_active(pkmn), true
-        f_addaction(pl, pl, "|comes|out", function(_ENV) -- self, other
-            selfactive.invisible = false
+        params.selfactive.invisible = true
+
+        f_addaction(pl, pl, false, function()
+            _add(pl.actions, f_pkmn_comes_out(pl, pkmn))
         end)
     end)
 
@@ -215,13 +224,6 @@ end $$
     _add(p0.actions, f_newaction(...))
 end $$
 
--- switch if there is a next pokemon
--- otherwise, do nothing. turn logic will check every turn if there is a win condition
-|[f_logic_faint]| function(_ENV)
-    selfactive.shared.major = C_MAJOR_FAINTED
-    self:dielogic()
-end $$
-
 -- only "x" will progress the fight. if you spam, at least you don't miss the end screen.
 |[f_turn_update]| function(game)
     if g_bpo then f_beep() end
@@ -270,13 +272,16 @@ end $$
 -- return nothing if end of turn
 |[f_pop_next_action]| function(game)
     -- if an active pokemon has no hp, but not the faint status yet, return an action that makes the pokemon faint.
+    -- switch if there is a next pokemon
+    -- otherwise, do nothing. turn logic will check every turn if there is a win condition
     for p in _all{game.p1,game.p2} do
         if p.active.hp <= 0 then
             if p.active.major ~= C_MAJOR_FAINTED then
-                return f_newaction(p, "|is|fainted", f_logic_faint)
+                return f_newaction(p, "|is|fainted", function(_ENV)
+                    selfactive.shared.major = C_MAJOR_FAINTED
+                end)
             elseif p ~= game.p0 then
-                p.active = f_team_pkmn_to_active(f_get_next_active(p.team))
-                return f_newaction(p, "|comes|out")
+                return f_pkmn_comes_out(p, f_get_next_active(p.team))
             end
         end
     end
@@ -294,8 +299,7 @@ end $$
 
         -- for explosion, you should finish the turn before switching in your pokemon
         if s.active.hp <= 0 and s.active.major == C_MAJOR_FAINTED then
-            s.active = f_team_pkmn_to_active(f_get_next_active(s.team))
-            return f_newaction(s, "|comes|out")
+            return f_pkmn_comes_out(s, f_get_next_active(s.team))
         end
 
         if not s.turnover then
@@ -367,9 +371,8 @@ end $$
     return _rnd'1' < _min(.99, (base_speed+76)/divisor) and 2 or 1
 end $$
 
--- pokemon stadium has a 1/65536 chance of a move missing
+-- every move aimed at oppenent in pokemon stadium has a 1/65536 chance of a move missing, besides swift
 |[f_does_move_miss]| function(attacker, defender, move)
-    -- todo: token crunch, think about a ~= and func again.
     if move.accuracy <= 0  then return false end -- this catches swift and self status moves... swift is negative
 
     -- charging moves & fly/dig can't miss on the first turn
@@ -381,7 +384,7 @@ end $$
     -- attacker can't miss trapping moves if the first hit succeeded
     if attacker.curmove and attacker.curmove.ofunc == f_move_trapping then return false end
 
-    return _rnd(defender.evasion) > move.accuracy/100*attacker:f_movehelp_getstat'accuracy' or f_flr_rnd'256' == 0 and f_flr_rnd'256' == 0
+    return _rnd(defender:f_movehelp_getstat'evasion') > move.accuracy/100*attacker:f_movehelp_getstat'accuracy' or f_flr_rnd'256' == 0 and f_flr_rnd'256' == 0
 end $$
 
 -- returns .5, 0, 1, or 2

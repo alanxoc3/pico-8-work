@@ -40,7 +40,6 @@ end $$
     -- substitute check should go after pika/psyduck checks above, for if pika/psy know substitute
     if substitute and substitute > 0 then num = 154 end
 
-    -- todo: substitute should trump fly/dig
     if not isactive or major ~= C_MAJOR_FAINTED and not invisible and not (moveturn ~= 0 and curmove.ofunc == f_move_flydig) then
         if num < 0 then _spr(107, x-4, y-4) return end
         xscale, yscale = xscale or 1, yscale or 1

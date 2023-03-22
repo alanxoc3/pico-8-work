@@ -298,14 +298,22 @@ end $$
 
 -- todo: maybe add custom descriptions (binded/clamped/trapped/wrapped)?
 |[f_move_trapping]| function(_ENV)
+    -- the "trappedother" stuff is used to check if the opponent switched out.
+    -- the trapper will continue trapping 1 more turn if the opponent used teleport but if they switch, that wouldn't happen.
+    -- i think that's a cool strat
+    -- this is because teleport goes after all trapping moves.
     if not selfactive.curmove then
         f_set_moveturn(selfactive, f_flr_rnd'4'+1, f_create_move(move.num, move.slot))
         addaction(self, "|"..move.name.."|begins")
+        selfactive.trappedother = otheractive
     end
 
-    f_move_default(_ENV)
+    if selfactive.trappedother == otheractive then
+        f_move_default(_ENV)
+    end
 
-    if selfactive.moveturn == 0 then
+    if selfactive.moveturn == 0 or selfactive.trappedother ~= otheractive then
+        selfactive.moveturn, selfactive.trappedother = 0
         addaction(self, "|"..move.name.."|ended")
     end
 end $$

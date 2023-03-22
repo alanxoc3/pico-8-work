@@ -18,7 +18,7 @@ end $$
         browse,%c_yes,
         level,C_LEVEL,
         attack,0, defense,0, special,0, speed,0, maxhp,0, hp,0, total,0,
-        accuracy,1, evasion,1, -- all pkmn have 1 accuracy & 1 evasion
+        accuracy,100, evasion,100, -- all pkmn have 100 accuracy & 100 evasion. getstat doesn't work with decimal numbers
         base_maxhp,0, base_attack,0, base_defense,0, base_speed,0, base_special,0,
 
         num,-1, evolvesfrom,-1, name," ",
