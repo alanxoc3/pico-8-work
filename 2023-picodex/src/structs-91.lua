@@ -58,7 +58,7 @@ end $$
         movemem += 1
 
         ---- PART 2 - populate most attributes ----
-        local evolvesfrom = num-pkmndata[1]
+        local evolvesfrom = num-_deli(pkmndata, 1)
         local pkmn = f_get_default_pokemon()
         f_zobj_set(pkmn, [[
             num,@, evolvesfrom,@, name,@,
@@ -67,19 +67,15 @@ end $$
         ]], num, -- evl
             evolvesfrom,  -- evl
             c_pokemon_names[num+1], -- nam
-            -- todo: token crunch these with unpack...
-            pkmndata[2],  -- ty1
-            pkmndata[3],  -- ty2
-            pkmndata[4],  -- xhp
-            pkmndata[5],  -- att
-            pkmndata[6],  -- def
-            pkmndata[7],  -- spd
-            pkmndata[8]   -- spc
+
+            -- this shouldn't work, but it does. it's unpacking more than it needs to, but since it's at the end, that's fine
+            -- the "deli" above is important, because we don't want to include the "evol" key.
+            _unpack(pkmndata) -- ty1, ty2, xhp, att, def, spd, spc, .... and junk we don't care about
         )
 
         ---- PASS 3 - populate the moves ----
         local move_bucket = pkmn.moves_natural
-        for i=9,#pkmndata do
+        for i=8,#pkmndata do -- 8, not 9, because of deli above
             local val = pkmndata[i]
             if val == C_TEACH then
                 move_bucket = pkmn.moves_teach

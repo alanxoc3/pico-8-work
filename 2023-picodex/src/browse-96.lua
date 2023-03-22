@@ -21,11 +21,7 @@ end $$
 -- Num 1 would be bulbasaur.
 g_loaded_row = 16 -- default corresponds to the top row in the "129-151.p8" file.
 |[f_draw_pkmn]| function(num, x, y, sw, sh)
-    sw = sw or 1
-    sh = sh or 1
-
-    local row = num/8\1
-    local col = num%8
+    local row, col = num/8\1, num%8
 
     if row ~= g_loaded_row then
         g_loaded_row = row
@@ -37,7 +33,6 @@ g_loaded_row = 16 -- default corresponds to the top row in the "129-151.p8" file
 end $$
 
 |[f_draw_pkmn_out]| function(_ENV, x, y, col, xscale, yscale)
-    -- todo: maybe combine this logic with f_draw_pkmn_out itself (since this is the only instance).
     local num = _ENV:f_pkmn_available() and num or -1
     if num == P_PIKACHU and _ENV:f_pkmn_has_move(M_SURF)    then num = 152 end
     if num == P_PSYDUCK and _ENV:f_pkmn_has_move(M_AMNESIA) then num = 153 end
