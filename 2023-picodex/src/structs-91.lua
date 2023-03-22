@@ -143,6 +143,8 @@ end $$
         moveturn,0,      -- turn move is on. > 0, decrements each turn. 0, is the same. -1, is multiturn move that doesn't end (rage).
 
         -- minor conditions are all numbers ...
+        counterdmg,0,    -- resets to zero each turn
+        bidedmg,0,       -- resets to zero when using bide
         disabledtimer,0, -- how long the disabled move should last
         confused,0,      -- for confusion, how long pkmn is confused
         substitute,0,    -- for substitute obviously
@@ -150,11 +152,10 @@ end $$
 
         -- curmove -- used for multiturn moves, if moveturn ~= 0, this must be set
         shared,@,
-        mynewmoves,@,
-        turnstarthp,@;
+        mynewmoves,@;
 
         stages; special, 0, attack, 0,
                 defense, 0, speed,  0,
                 accuracy,0, evasion,0
-    ]], teampkmn, moves, teampkmn.hp), {__index=teampkmn})
+    ]], teampkmn, moves), {__index=teampkmn})
 end $$

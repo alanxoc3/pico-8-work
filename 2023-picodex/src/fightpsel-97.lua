@@ -1,8 +1,7 @@
 |[f_psel_init]| function(_ENV)
     p0 = _ENV[p0key]
     do local _ENV=p0.active
-        turnstarthp = hp -- for counter
-        flinching = false -- set here so you can't flinch the next turn
+        counterdmg, flinching = 0, false -- for counter, and so you can't flinch the next turn
     end
 
     p0.turnover = false

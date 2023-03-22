@@ -6,8 +6,7 @@
 -- todo: refactor the way counter (and bide) work.
 |[f_select_switch]| function(pl, pkmn)
     f_addaction(pl, pl, "|comes|back", function(params) -- self, other
-        params.self.active = f_team_pkmn_to_active(pkmn)
-        params.self.active.invisible = true
+        params.self.active, params.self.active.invisible = f_team_pkmn_to_active(pkmn), true
         f_addaction(pl, pl, "|comes|out", function(_ENV) -- self, other
             selfactive.invisible = false
         end)
