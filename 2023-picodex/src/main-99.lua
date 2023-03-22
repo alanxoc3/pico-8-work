@@ -38,9 +38,9 @@ function _init()
     f_draw_picodex(g_picodex)
     _flip()
     f_minisfx'158'
-    f_extract_sheet(0) -- 0x0000
-    f_extract_sheet(1) -- 0x0002
-    f_extract_sheet(2) -- 0x0004
+    f_extract_sheet(0x0) -- 0x0
+    f_extract_sheet(0x2) -- 0x2
+    f_extract_sheet(0x4) -- 0x4
 
     f_zcall(_poke, [[
          ;,0x5f5c, 8    -- set the initial delay before repeating. 255 means never repeat.
@@ -49,14 +49,16 @@ function _init()
     ]])
 
     -- 0x0006
-    f_px9_decomp(_peek2(3*2), _mget, _mset)
+    f_px9_decomp(_peek2'0x6', _mget, _mset)
 
     -- 0x0008
     f_populate_c_moves()
+
+    -- 0x000a
     f_populate_c_pokemon()
 
-    -- 0x000a trainers
-    local trainer_loc = _peek2'0xa'
+    -- 0x000c trainers
+    local trainer_loc = _peek2'0xc'
     for i, v in _pairs(c_trainers) do
         local tbl = {name=v}
         for j=1,6 do

@@ -107,172 +107,172 @@ c_pokemon_names[0] = "" -- for "none" pkmn, technically not needed possibly (-1)
 -- pp:       0 means infinite pp. else means finite pp.
 _g.c_moves_raw = f_zobj[[
    --  "name",     type        pp  dmg  acc
-  -1;, "none",     T_BIRD,     0,  40,  0,    %f_move_default                                                 -- -1  This is the move used for confusion damage.
-  ;0;, "struggle", T_BIRD,     0,  50,  100,  %f_move_recoil                                                  -- 0   DIFF: ignores resistance now. hits ghost pokemon.
-   ;;, "megapnch", T_NORMAL,   20, 80,  85,   %f_move_default                                                 -- 1
-   ;;, "razrwind", T_NORMAL,   10, 80,  75,   %f_move_prepare                                                 -- 2   DIFF: move resets when interrupted
-   ;;, "sworddnc", T_NORMAL,   30, 0,   0,    %f_move_self, %f_move_stat, attack, 2                           -- 3
-   ;;, "whrlwind", T_NORMAL,   20, 0,   100,  %f_move_roar                                                    -- 4   DIFF: switches opponent with random pokemon
-   ;;, "megakick", T_NORMAL,   5,  120, 75,   %f_move_default                                                 -- 5
-   ;;, "toxic",    T_POISON,   10, 0,   85,   %f_move_toxic                                                   -- 6   DIFF: toxic counter does not affect leech seed dmg
-   ;;, "horndril", T_NORMAL,   5,  -1,  30,   %f_move_ohko                                                    -- 7
-   ;;, "bodyslam", T_NORMAL,   15, 85,  100,  %f_move_default,30,%f_move_major_other,C_MAJOR_PARALYZED        -- 8
-   ;;, "takedown", T_NORMAL,   20, 90,  85,   %f_move_recoil                                                  -- 9
-   ;;, "doubedge", T_NORMAL,   15, 100, 100,  %f_move_recoil                                                  -- 10
-   ;;, "bublbeam", T_WATER,    20, 65,  100,  %f_move_default,10,%f_move_other, %f_move_stat, speed, -1       -- 11
-   ;;, "watergun", T_WATER,    25, 40,  100,  %f_move_default                                                 -- 12
-   ;;, "icebeam",  T_ICE,      10, 95,  100,  %f_move_default,10,%f_move_major_other,C_MAJOR_FROZEN           -- 13
-   ;;, "blizzard", T_ICE,      5,  120, 90,   %f_move_default,10,%f_move_major_other,C_MAJOR_FROZEN           -- 14
-   ;;, "hyprbeam", T_NORMAL,   5,  150, 90,   %f_move_hyperbeam                                               -- 15
-   ;;, "payday",   T_NORMAL,   20, 40,  100,  %f_move_default                                                 -- 16
-   ;;, "submsion", T_FIGHTING, 20, 80,  80,   %f_move_recoil                                                  -- 17
-   ;;, "counter",  T_FIGHTING, 20, -1,  100,  %f_move_counter                                                 -- 18  DIFF: respects resistance, counts all physical damage taken during turn or taken by substitute
-   ;;, "seistoss", T_FIGHTING, 20, -1,  100,  %f_move_setdmg,C_LEVEL                                          -- 19  DIFF: respects resistance
-   ;;, "rage",     T_NORMAL,   20, 20,  100,  %f_move_rage                                                    -- 20  DIFF: you can switch out while using rage, rage also ends when frozen/sleep/trapped/disabled, just like other multiturn moves
-   ;;, "megdrain", T_GRASS,    10, 40,  100,  %f_move_drain                                                   -- 21
-   ;;, "solrbeam", T_GRASS,    10, 120, 100,  %f_move_prepare                                                 -- 22  DIFF: move resets when interrupted
-   ;;, "drgnrage", T_DRAGON,   10, -1,  100,  %f_move_setdmg,40                                               -- 23  DIFF: respects resistance
-   ;;, "thndrblt", T_ELECTRIC, 15, 95,  100,  %f_move_default,10,%f_move_major_other,C_MAJOR_PARALYZED        -- 24
-   ;;, "thunder",  T_ELECTRIC, 10, 120, 70,   %f_move_default,10,%f_move_major_other,C_MAJOR_PARALYZED        -- 25
-   ;;, "earthqke", T_GROUND,   10, 100, 100,  %f_move_default                                                 -- 26
-   ;;, "fissure",  T_GROUND,   5,  -1,  30,   %f_move_ohko                                                    -- 27
-   ;;, "dig",      T_GROUND,   10, 100, 100,  %f_move_flydig,"digging"                                        -- 28
-   ;;, "psychic",  T_PSYCHIC,  10, 90,  100,  %f_move_default,30,%f_move_other, %f_move_stat,special,-1       -- 29
-   ;;, "teleport", T_PSYCHIC,  20, 0,   0,    %f_move_teleport                                                -- 30  DIFF: switches with random pokemon from user's team
-   ;;, "mimic",    T_NORMAL,   10, 0,   100,  %f_move_mimic                                                   -- 31  DIFF: doesn't miss and copies 5 pp like transform
-   ;;, "doubteam", T_NORMAL,   15, 0,   0,    %f_move_self, %f_move_stat, evasion, 1                          -- 32
-   ;;, "reflect",  T_PSYCHIC,  20, 0,   0,    %f_move_self,%f_movehelp_minor,"|raises|defense",reflected      -- 33
-   ;;, "bide",     T_NORMAL,   10, -1,  100,  %f_move_implement                                               -- 34  DIFF: doesn't bypass accuracy check & respects resistance, counts damage done to substitute
-   ;;, "metrnome", T_NORMAL,   10, 0,   0,    %f_move_metronome                                               -- 35
-   ;;, "selfdstr", T_NORMAL,   5,  260, 100,  %f_move_default                                                 -- 36  DIFF: user inflicts damage to self before damaging opponent, so you can't win a match by suicide
-   ;;, "eggbomb",  T_NORMAL,   10, 100, 75,   %f_move_default                                                 -- 37
-   ;;, "fireblst", T_FIRE,     5,  120, 85,   %f_move_default,30,%f_move_major_other,C_MAJOR_BURNED           -- 38
-   ;;, "swift",    T_NORMAL,   20, 60,  -1,   %f_move_default                                                 -- 39  DIFF: always hits when used, even against dig/fly, can't go past substitute though
-   ;;, "skulbash", T_NORMAL,   15, 100, 100,  %f_move_prepare                                                 -- 40  DIFF: move resets when interrupted
-   ;;, "softboil", T_NORMAL,   10, 0,   0,    %f_move_recover                                                 -- 41
-   ;;, "dreameat", T_PSYCHIC,  15, 100, 100,  %f_move_dreameater                                              -- 42
-   ;;, "skyattck", T_FLYING,   5,  140, 90,   %f_move_prepare                                                 -- 43  DIFF: move resets when interrupted
-   ;;, "rest",     T_PSYCHIC,  10, 0,   0,    %f_move_rest                                                    -- 44
-   ;;, "thndrwav", T_ELECTRIC, 20, 0,   100,  %f_move_major_other, C_MAJOR_PARALYZED                          -- 45
-   ;;, "psywave",  T_PSYCHIC,  15, -1,  80,   %f_move_psywave                                                 -- 46  DIFF: respects resistance
-   ;;, "explsion", T_NORMAL,   5,  340, 100,  %f_move_default                                                 -- 47  DIFF: user inflicts damage to self before damaging opponent, so you can't win a match by suicide
-   ;;, "rockslid", T_ROCK,     10, 75,  90,   %f_move_default                                                 -- 48
-   ;;, "triattck", T_NORMAL,   10, 80,  100,  %f_move_default                                                 -- 49
-   ;;, "substute", T_NORMAL,   10, 0,   0,    %f_move_substitute                                              -- 50  DIFF: recoil moves damage user. only protects from direct enemy damage, user is still vulnerable to all other effects
-   ;;, "cut",      T_NORMAL,   30, 50,  95,   %f_move_default                                                 -- 51
-   ;;, "fly",      T_FLYING,   15, 70,  95,   %f_move_flydig,"flying"                                         -- 52
-   ;;, "surf",     T_WATER,    15, 95,  100,  %f_move_default                                                 -- 53
-   ;;, "strength", T_NORMAL,   15, 80,  100,  %f_move_default                                                 -- 54
-   ;;, "flash",    T_NORMAL,   20, 0,   70,   %f_move_other, %f_move_stat, accuracy, -1                       -- 55
-   ;;, "pound",    T_NORMAL,   35, 40,  100,  %f_move_default                                                 -- 56
-   ;;, "karatchp", T_FIGHTING, 25, 55,  100,  %f_move_default                                                 -- 57
-   ;;, "doubslap", T_NORMAL,   10, 15,  85,   %f_move_multihit_var                                            -- 58  DIFF: if KOs pkmn, will also hit new pokemon switched in & hits after substitute
-   ;;, "comtpnch", T_NORMAL,   15, 18,  85,   %f_move_multihit_var                                            -- 59  DIFF: if KOs pkmn, will also hit new pokemon switched in & hits after substitute
-   ;;, "firepnch", T_FIRE,     15, 75,  100,  %f_move_default,10,%f_move_major_other,C_MAJOR_BURNED           -- 60
-   ;;, "icepnch",  T_ICE,      15, 75,  100,  %f_move_default,10,%f_move_major_other,C_MAJOR_FROZEN           -- 61
-   ;;, "thndpnch", T_ELECTRIC, 15, 75,  100,  %f_move_default,10,%f_move_major_other,C_MAJOR_PARALYZED        -- 62
-   ;;, "scratch",  T_NORMAL,   35, 40,  100,  %f_move_default                                                 -- 63
-   ;;, "vicegrip", T_NORMAL,   30, 55,  100,  %f_move_default                                                 -- 64
-   ;;, "guilotin", T_NORMAL,   5,  -1,  30,   %f_move_ohko                                                    -- 65
-   ;;, "gust",     T_FLYING,   35, 40,  100,  %f_move_default                                                 -- 66
-   ;;, "wingatck", T_FLYING,   35, 35,  100,  %f_move_default                                                 -- 67
-   ;;, "bind",     T_NORMAL,   20, 15,  75,   %f_move_trapping                                                -- 68
-   ;;, "slam",     T_NORMAL,   20, 80,  75,   %f_move_default                                                 -- 69
-   ;;, "vinewhip", T_GRASS,    10, 35,  100,  %f_move_default                                                 -- 70
-   ;;, "stomp",    T_NORMAL,   20, 65,  100,  %f_move_default,30,%f_move_other,%f_movehelp_flinch             -- 71
-   ;;, "doubkick", T_FIGHTING, 30, 30,  100,  %f_move_multihit_set,2,%f_nop                                   -- 72  DIFF: if KOs pkmn, will also hit new pokemon switched in
-   ;;, "jumpkick", T_FIGHTING, 20, 70,  95,   %f_move_default                                                 -- 73
-   ;;, "rllngkck", T_FIGHTING, 15, 60,  85,   %f_move_default,30,%f_move_other,%f_movehelp_flinch             -- 74
-   ;;, "sandatck", T_GROUND,   15, 0,   100,  %f_move_other, %f_move_stat, accuracy, -1                       -- 75
-   ;;, "headbutt", T_NORMAL,   15, 70,  100,  %f_move_default,30,%f_move_other,%f_movehelp_flinch             -- 76
-   ;;, "hornatck", T_NORMAL,   25, 65,  100,  %f_move_default                                                 -- 77
-   ;;, "furyatck", T_NORMAL,   20, 15,  85,   %f_move_multihit_var                                            -- 78  DIFF: if KOs pkmn, will also hit new pokemon switched in
-   ;;, "tackle",   T_NORMAL,   35, 35,  95,   %f_move_default                                                 -- 79
-   ;;, "wrap",     T_NORMAL,   20, 15,  85,   %f_move_trapping                                                -- 80
-   ;;, "thrash",   T_NORMAL,   20, 90,  100,  %f_move_thrash                                                  -- 81
-   ;;, "tailwhip", T_NORMAL,   30, 0,   100,  %f_move_other, %f_move_stat, defense, -1                        -- 82
-   ;;, "psnsting", T_POISON,   35, 15,  100,  %f_move_default,20,%f_move_major_other,C_MAJOR_POISONED         -- 83
-   ;;, "twineedl", T_BUG,      20, 25,  100,  %f_move_multihit_twin                                           -- 84  DIFF: if KOs pkmn, will also hit new pokemon switched in
-   ;;, "pinmisil", T_BUG,      20, 14,  85,   %f_move_multihit_var                                            -- 85  DIFF: if KOs pkmn, will also hit new pokemon switched in
-   ;;, "leer",     T_NORMAL,   30, 0,   100,  %f_move_other, %f_move_stat, defense, -1                        -- 86
-   ;;, "bite",     T_NORMAL,   25, 60,  100,  %f_move_default,10,%f_move_other,%f_movehelp_flinch             -- 87
-   ;;, "growl",    T_NORMAL,   40, 0,   100,  %f_move_other, %f_move_stat, attack, -1                         -- 88
-   ;;, "roar",     T_NORMAL,   20, 0,   100,  %f_move_roar                                                    -- 89  DIFF: switches opponent with random pokemon
-   ;;, "sing",     T_NORMAL,   15, 0,   55,   %f_move_major_other, C_MAJOR_SLEEPING                           -- 90
-   ;;, "sprsonic", T_NORMAL,   20, 0,   55,   %f_move_other,%f_movehelp_confuse                               -- 91
-   ;;, "sonicbom", T_NORMAL,   20, -1,  90,   %f_move_setdmg,20                                               -- 92  DIFF: respects resistance
-   ;;, "disable",  T_NORMAL,   20, 0,   55,   %f_move_disable                                                 -- 93  DIFF: lasts 2-7 turns
-   ;;, "acid",     T_POISON,   30, 40,  100,  %f_move_default,10,%f_move_other, %f_move_stat, defense, -1     -- 94
-   ;;, "ember",    T_FIRE,     25, 40,  100,  %f_move_default,10,%f_move_major_other,C_MAJOR_BURNED           -- 95
-   ;;, "flamthwr", T_FIRE,     15, 95,  100,  %f_move_default,10,%f_move_major_other,C_MAJOR_BURNED           -- 96
-   ;;, "mist",     T_ICE,      30, 0,   0,    %f_move_self,%f_movehelp_minor,"|stat lower|immunity",misted    -- 97  DIFF: protects against modifier decreases from damaging moves too
-   ;;, "hydropmp", T_WATER,    5,  120, 80,   %f_move_default                                                 -- 98
-   ;;, "psybeam",  T_PSYCHIC,  20, 65,  100,  %f_move_default,10,%f_move_other,%f_movehelp_confuse            -- 99
-   ;;, "aurorabm", T_ICE,      20, 65,  100,  %f_move_default,10,%f_move_other, %f_move_stat, attack, -1      -- 100
-   ;;, "peck",     T_FLYING,   35, 35,  100,  %f_move_default                                                 -- 101
-   ;;, "drillpck", T_FLYING,   20, 80,  100,  %f_move_default                                                 -- 102
-   ;;, "lowkick",  T_FIGHTING, 20, 50,  90,   %f_move_default,30,%f_move_other,%f_movehelp_flinch             -- 103
-   ;;, "absorb",   T_GRASS,    20, 20,  100,  %f_move_drain                                                   -- 104
-   ;;, "leechsed", T_GRASS,    10, 0,   90,   %f_move_other,%f_movehelp_minor,"|is now|seeded",seeded         -- 105
-   ;;, "growth",   T_NORMAL,   40, 0,   0,    %f_move_self, %f_move_stat, special, 1                          -- 106
-   ;;, "razrleaf", T_GRASS,    25, 55,  95,   %f_move_default                                                 -- 107
-   ;;, "psnpowdr", T_POISON,   35, 0,   75,   %f_move_major_other, C_MAJOR_POISONED                           -- 108
-   ;;, "stunspor", T_GRASS,    30, 0,   75,   %f_move_major_other, C_MAJOR_PARALYZED                          -- 109
-   ;;, "slppowdr", T_GRASS,    15, 0,   75,   %f_move_major_other, C_MAJOR_SLEEPING                           -- 110
-   ;;, "petldanc", T_GRASS,    20, 70,  100,  %f_move_thrash                                                  -- 111
-   ;;, "strngsht", T_BUG,      40, 0,   95,   %f_move_other, %f_move_stat, speed, -1                          -- 112
-   ;;, "firespin", T_FIRE,     15, 15,  70,   %f_move_trapping                                                -- 113 DIFF: can thaw out frozen pokemon.
-   ;;, "thndshck", T_ELECTRIC, 30, 40,  100,  %f_move_default,10,%f_move_major_other,C_MAJOR_PARALYZED        -- 114
-   ;;, "rockthrw", T_ROCK,     15, 50,  65,   %f_move_default                                                 -- 115
-   ;;, "cnfusion", T_PSYCHIC,  25, 50,  100,  %f_move_default,10,%f_move_other,%f_movehelp_confuse            -- 116
-   ;;, "hypnosis", T_PSYCHIC,  20, 0,   60,   %f_move_major_other, C_MAJOR_SLEEPING                           -- 117
-   ;;, "meditate", T_PSYCHIC,  40, 0,   0,    %f_move_self, %f_move_stat, attack, 1                           -- 118
-   ;;, "agility",  T_PSYCHIC,  30, 0,   0,    %f_move_self, %f_move_stat, speed, 2                            -- 119
-   ;;, "quickatk", T_NORMAL,   30, 40,  100,  %f_move_default                                                 -- 120
-   ;;, "ngtshade", T_GHOST,    15, -1,  100,  %f_move_setdmg,C_LEVEL                                          -- 121 DIFF: respects resistance now
-   ;;, "screech",  T_NORMAL,   10, 0,   85,   %f_move_other, %f_move_stat, defense, -2                        -- 122
-   ;;, "recover",  T_NORMAL,   20, 0,   0,    %f_move_recover                                                 -- 123
-   ;;, "harden",   T_NORMAL,   30, 0,   0,    %f_move_self, %f_move_stat, defense, 1                          -- 124
-   ;;, "minimize", T_NORMAL,   20, 0,   0,    %f_move_self, %f_move_stat, evasion, 1                          -- 125
-   ;;, "smokscrn", T_NORMAL,   20, 0,   100,  %f_move_other, %f_move_stat, accuracy, -1                       -- 126
-   ;;, "cnfusray", T_GHOST,    10, 0,   100,  %f_move_other,%f_movehelp_confuse                               -- 127
-   ;;, "withdraw", T_WATER,    40, 0,   0,    %f_move_self, %f_move_stat, defense, 1                          -- 128
-   ;;, "dfnscurl", T_NORMAL,   40, 0,   0,    %f_move_self, %f_move_stat, defense, 1                          -- 129
-   ;;, "barrier",  T_PSYCHIC,  30, 0,   0,    %f_move_self, %f_move_stat, defense, 2                          -- 130
-   ;;, "lghtscrn", T_PSYCHIC,  30, 0,   0,    %f_move_self,%f_movehelp_minor,"|raises|spcdefense",screened    -- 131
-   ;;, "haze",     T_ICE,      30, 0,   -1,   %f_move_haze                                                    -- 132 DIFF: only resets stat modifiers, applies even when mist is in effect
-   ;;, "fcsenrgy", T_NORMAL,   30, 0,   0,    %f_move_self,%f_movehelp_minor,"|raises|crit ratio",focused     -- 133
-   ;;, "mirrmove", T_FLYING,   20, -1,  0,    %f_move_mirror_move                                             -- 134
-   ;;, "lick",     T_GHOST,    30, 20,  100,  %f_move_default,30,%f_move_major_other,C_MAJOR_PARALYZED        -- 135 DIFF: super effective against psychic type now
-   ;;, "smog",     T_POISON,   20, 20,  100,  %f_move_default,30,%f_move_major_other,C_MAJOR_POISONED         -- 136
-   ;;, "sludge",   T_POISON,   20, 65,  100,  %f_move_default,30,%f_move_major_other,C_MAJOR_POISONED         -- 137
-   ;;, "boneclub", T_GROUND,   20, 65,  85,   %f_move_default,10,%f_move_other,%f_movehelp_flinch             -- 138
-   ;;, "watrfall", T_WATER,    15, 80,  100,  %f_move_default                                                 -- 139
-   ;;, "clamp",    T_WATER,    10, 35,  75,   %f_move_trapping                                                -- 140
-   ;;, "spikcann", T_NORMAL,   15, 20,  100,  %f_move_multihit_var                                            -- 141 DIFF: if KOs pkmn, will also hit new pokemon switched in
-   ;;, "constrct", T_NORMAL,   35, 10,  100,  %f_move_default,10,%f_move_other, %f_move_stat, speed, -1       -- 142
-   ;;, "amnesia",  T_PSYCHIC,  20, 0,   0,    %f_move_self, %f_move_stat, special, 2                          -- 143
-   ;;, "kinesis",  T_PSYCHIC,  15, 0,   80,   %f_move_other, %f_move_stat, accuracy, -1                       -- 144
-   ;;, "hijmpkck", T_FIGHTING, 20, 85,  90,   %f_move_default                                                 -- 145
-   ;;, "glare",    T_NORMAL,   30, 0,   75,   %f_move_major_other, C_MAJOR_PARALYZED                          -- 146
-   ;;, "poisngas", T_POISON,   40, 0,   55,   %f_move_major_other, C_MAJOR_POISONED                           -- 147
-   ;;, "barrage",  T_NORMAL,   20, 15,  85,   %f_move_multihit_var                                            -- 148 DIFF: if KOs pkmn, will also hit new pokemon switched in
-   ;;, "leechlif", T_BUG,      15, 20,  100,  %f_move_drain                                                   -- 149
-   ;;, "lovekiss", T_NORMAL,   10, 0,   75,   %f_move_major_other, C_MAJOR_SLEEPING                           -- 150
-   ;;, "tranform", T_NORMAL,   10, 0,   0,    %f_move_transform                                               -- 151 DIFF: Does not copy stat stages
-   ;;, "bubble",   T_WATER,    30, 20,  100,  %f_move_default,10,%f_move_other, %f_move_stat, speed, -1       -- 152
-   ;;, "dizypnch", T_NORMAL,   10, 70,  100,  %f_move_default                                                 -- 153
-   ;;, "spore",    T_GRASS,    15, 0,   100,  %f_move_major_other, C_MAJOR_SLEEPING                           -- 154
-   ;;, "splash",   T_NORMAL,   40, 0,   0,    %f_move_splash                                                  -- 155
-   ;;, "acidarmr", T_POISON,   40, 0,   0,    %f_move_self, %f_move_stat, defense, 2                          -- 156
-   ;;, "crabhamr", T_WATER,    10, 90,  85,   %f_move_default                                                 -- 157
-   ;;, "furyswps", T_NORMAL,   15, 10,  80,   %f_move_multihit_var                                            -- 158 DIFF: if KOs pkmn, will also hit new pokemon switched in
-   ;;, "bonerang", T_GROUND,   10, 50,  90,   %f_move_multihit_set,2,%f_nop                                   -- 159 DIFF: if KOs pkmn, will also hit new pokemon switched in
-   ;;, "hyprfang", T_NORMAL,   15, 80,  90,   %f_move_default,10,%f_move_other,%f_movehelp_flinch             -- 160
-   ;;, "sharpen",  T_NORMAL,   30, 0,   0,    %f_move_self, %f_move_stat, attack, 1                           -- 161
-   ;;, "convrson", T_NORMAL,   30, 0,   0,    %f_move_conversion                                              -- 162
-   ;;, "suprfang", T_NORMAL,   10, -1,  90,   %f_move_superfang                                               -- 163 DIFF: respects resistance now
-   ;;, "slash",    T_NORMAL,   20, 70,  100,  %f_move_default                                                 -- 164
+  -1;, "none",     %f_move_default                                                 -- -1  This is the move used for confusion damage.
+  ;0;, "struggle", %f_move_recoil                                                  -- 0   DIFF: ignores resistance now. hits ghost pokemon.
+   ;;, "megapnch", %f_move_default                                                 -- 1
+   ;;, "razrwind", %f_move_prepare                                                 -- 2   DIFF: move resets when interrupted
+   ;;, "sworddnc", %f_move_self, %f_move_stat, attack, 2                           -- 3
+   ;;, "whrlwind", %f_move_roar                                                    -- 4   DIFF: switches opponent with random pokemon
+   ;;, "megakick", %f_move_default                                                 -- 5
+   ;;, "toxic",    %f_move_toxic                                                   -- 6   DIFF: toxic counter does not affect leech seed dmg
+   ;;, "horndril", %f_move_ohko                                                    -- 7
+   ;;, "bodyslam", %f_move_default,30,%f_move_major_other,C_MAJOR_PARALYZED        -- 8
+   ;;, "takedown", %f_move_recoil                                                  -- 9
+   ;;, "doubedge", %f_move_recoil                                                  -- 10
+   ;;, "bublbeam", %f_move_default,10,%f_move_other, %f_move_stat, speed, -1       -- 11
+   ;;, "watergun", %f_move_default                                                 -- 12
+   ;;, "icebeam",  %f_move_default,10,%f_move_major_other,C_MAJOR_FROZEN           -- 13
+   ;;, "blizzard", %f_move_default,10,%f_move_major_other,C_MAJOR_FROZEN           -- 14
+   ;;, "hyprbeam", %f_move_hyperbeam                                               -- 15
+   ;;, "payday",   %f_move_default                                                 -- 16
+   ;;, "submsion", %f_move_recoil                                                  -- 17
+   ;;, "counter",  %f_move_counter                                                 -- 18  DIFF: respects resistance, counts all physical damage taken during turn or taken by substitute
+   ;;, "seistoss", %f_move_setdmg,C_LEVEL                                          -- 19  DIFF: respects resistance
+   ;;, "rage",     %f_move_rage                                                    -- 20  DIFF: you can switch out while using rage, rage also ends when frozen/sleep/trapped/disabled, just like other multiturn moves
+   ;;, "megdrain", %f_move_drain                                                   -- 21
+   ;;, "solrbeam", %f_move_prepare                                                 -- 22  DIFF: move resets when interrupted
+   ;;, "drgnrage", %f_move_setdmg,40                                               -- 23  DIFF: respects resistance
+   ;;, "thndrblt", %f_move_default,10,%f_move_major_other,C_MAJOR_PARALYZED        -- 24
+   ;;, "thunder",  %f_move_default,10,%f_move_major_other,C_MAJOR_PARALYZED        -- 25
+   ;;, "earthqke", %f_move_default                                                 -- 26
+   ;;, "fissure",  %f_move_ohko                                                    -- 27
+   ;;, "dig",      %f_move_flydig,"digging"                                        -- 28
+   ;;, "psychic",  %f_move_default,30,%f_move_other, %f_move_stat,special,-1       -- 29
+   ;;, "teleport", %f_move_teleport                                                -- 30  DIFF: switches with random pokemon from user's team
+   ;;, "mimic",    %f_move_mimic                                                   -- 31  DIFF: doesn't miss and copies 5 pp like transform
+   ;;, "doubteam", %f_move_self, %f_move_stat, evasion, 1                          -- 32
+   ;;, "reflect",  %f_move_self,%f_movehelp_minor,"|raises|defense",reflected      -- 33
+   ;;, "bide",     %f_move_implement                                               -- 34  DIFF: doesn't bypass accuracy check & respects resistance, counts damage done to substitute
+   ;;, "metrnome", %f_move_metronome                                               -- 35
+   ;;, "selfdstr", %f_move_default                                                 -- 36  DIFF: user inflicts damage to self before damaging opponent, so you can't win a match by suicide
+   ;;, "eggbomb",  %f_move_default                                                 -- 37
+   ;;, "fireblst", %f_move_default,30,%f_move_major_other,C_MAJOR_BURNED           -- 38
+   ;;, "swift",    %f_move_default                                                 -- 39  DIFF: always hits when used, even against dig/fly, can't go past substitute though
+   ;;, "skulbash", %f_move_prepare                                                 -- 40  DIFF: move resets when interrupted
+   ;;, "softboil", %f_move_recover                                                 -- 41
+   ;;, "dreameat", %f_move_dreameater                                              -- 42
+   ;;, "skyattck", %f_move_prepare                                                 -- 43  DIFF: move resets when interrupted
+   ;;, "rest",     %f_move_rest                                                    -- 44
+   ;;, "thndrwav", %f_move_major_other, C_MAJOR_PARALYZED                          -- 45
+   ;;, "psywave",  %f_move_psywave                                                 -- 46  DIFF: respects resistance
+   ;;, "explsion", %f_move_default                                                 -- 47  DIFF: user inflicts damage to self before damaging opponent, so you can't win a match by suicide
+   ;;, "rockslid", %f_move_default                                                 -- 48
+   ;;, "triattck", %f_move_default                                                 -- 49
+   ;;, "substute", %f_move_substitute                                              -- 50  DIFF: recoil moves damage user. only protects from direct enemy damage, user is still vulnerable to all other effects
+   ;;, "cut",      %f_move_default                                                 -- 51
+   ;;, "fly",      %f_move_flydig,"flying"                                         -- 52
+   ;;, "surf",     %f_move_default                                                 -- 53
+   ;;, "strength", %f_move_default                                                 -- 54
+   ;;, "flash",    %f_move_other, %f_move_stat, accuracy, -1                       -- 55
+   ;;, "pound",    %f_move_default                                                 -- 56
+   ;;, "karatchp", %f_move_default                                                 -- 57
+   ;;, "doubslap", %f_move_multihit_var                                            -- 58  DIFF: if KOs pkmn, will also hit new pokemon switched in & hits after substitute
+   ;;, "comtpnch", %f_move_multihit_var                                            -- 59  DIFF: if KOs pkmn, will also hit new pokemon switched in & hits after substitute
+   ;;, "firepnch", %f_move_default,10,%f_move_major_other,C_MAJOR_BURNED           -- 60
+   ;;, "icepnch",  %f_move_default,10,%f_move_major_other,C_MAJOR_FROZEN           -- 61
+   ;;, "thndpnch", %f_move_default,10,%f_move_major_other,C_MAJOR_PARALYZED        -- 62
+   ;;, "scratch",  %f_move_default                                                 -- 63
+   ;;, "vicegrip", %f_move_default                                                 -- 64
+   ;;, "guilotin", %f_move_ohko                                                    -- 65
+   ;;, "gust",     %f_move_default                                                 -- 66
+   ;;, "wingatck", %f_move_default                                                 -- 67
+   ;;, "bind",     %f_move_trapping                                                -- 68
+   ;;, "slam",     %f_move_default                                                 -- 69
+   ;;, "vinewhip", %f_move_default                                                 -- 70
+   ;;, "stomp",    %f_move_default,30,%f_move_other,%f_movehelp_flinch             -- 71
+   ;;, "doubkick", %f_move_multihit_set,2,%f_nop                                   -- 72  DIFF: if KOs pkmn, will also hit new pokemon switched in
+   ;;, "jumpkick", %f_move_default                                                 -- 73
+   ;;, "rllngkck", %f_move_default,30,%f_move_other,%f_movehelp_flinch             -- 74
+   ;;, "sandatck", %f_move_other, %f_move_stat, accuracy, -1                       -- 75
+   ;;, "headbutt", %f_move_default,30,%f_move_other,%f_movehelp_flinch             -- 76
+   ;;, "hornatck", %f_move_default                                                 -- 77
+   ;;, "furyatck", %f_move_multihit_var                                            -- 78  DIFF: if KOs pkmn, will also hit new pokemon switched in
+   ;;, "tackle",   %f_move_default                                                 -- 79
+   ;;, "wrap",     %f_move_trapping                                                -- 80
+   ;;, "thrash",   %f_move_thrash                                                  -- 81
+   ;;, "tailwhip", %f_move_other, %f_move_stat, defense, -1                        -- 82
+   ;;, "psnsting", %f_move_default,20,%f_move_major_other,C_MAJOR_POISONED         -- 83
+   ;;, "twineedl", %f_move_multihit_twin                                           -- 84  DIFF: if KOs pkmn, will also hit new pokemon switched in
+   ;;, "pinmisil", %f_move_multihit_var                                            -- 85  DIFF: if KOs pkmn, will also hit new pokemon switched in
+   ;;, "leer",     %f_move_other, %f_move_stat, defense, -1                        -- 86
+   ;;, "bite",     %f_move_default,10,%f_move_other,%f_movehelp_flinch             -- 87
+   ;;, "growl",    %f_move_other, %f_move_stat, attack, -1                         -- 88
+   ;;, "roar",     %f_move_roar                                                    -- 89  DIFF: switches opponent with random pokemon
+   ;;, "sing",     %f_move_major_other, C_MAJOR_SLEEPING                           -- 90
+   ;;, "sprsonic", %f_move_other,%f_movehelp_confuse                               -- 91
+   ;;, "sonicbom", %f_move_setdmg,20                                               -- 92  DIFF: respects resistance
+   ;;, "disable",  %f_move_disable                                                 -- 93  DIFF: lasts 2-7 turns
+   ;;, "acid",     %f_move_default,10,%f_move_other, %f_move_stat, defense, -1     -- 94
+   ;;, "ember",    %f_move_default,10,%f_move_major_other,C_MAJOR_BURNED           -- 95
+   ;;, "flamthwr", %f_move_default,10,%f_move_major_other,C_MAJOR_BURNED           -- 96
+   ;;, "mist",     %f_move_self,%f_movehelp_minor,"|stat lower|immunity",misted    -- 97  DIFF: protects against modifier decreases from damaging moves too
+   ;;, "hydropmp", %f_move_default                                                 -- 98
+   ;;, "psybeam",  %f_move_default,10,%f_move_other,%f_movehelp_confuse            -- 99
+   ;;, "aurorabm", %f_move_default,10,%f_move_other, %f_move_stat, attack, -1      -- 100
+   ;;, "peck",     %f_move_default                                                 -- 101
+   ;;, "drillpck", %f_move_default                                                 -- 102
+   ;;, "lowkick",  %f_move_default,30,%f_move_other,%f_movehelp_flinch             -- 103
+   ;;, "absorb",   %f_move_drain                                                   -- 104
+   ;;, "leechsed", %f_move_other,%f_movehelp_minor,"|is now|seeded",seeded         -- 105
+   ;;, "growth",   %f_move_self, %f_move_stat, special, 1                          -- 106
+   ;;, "razrleaf", %f_move_default                                                 -- 107
+   ;;, "psnpowdr", %f_move_major_other, C_MAJOR_POISONED                           -- 108
+   ;;, "stunspor", %f_move_major_other, C_MAJOR_PARALYZED                          -- 109
+   ;;, "slppowdr", %f_move_major_other, C_MAJOR_SLEEPING                           -- 110
+   ;;, "petldanc", %f_move_thrash                                                  -- 111
+   ;;, "strngsht", %f_move_other, %f_move_stat, speed, -1                          -- 112
+   ;;, "firespin", %f_move_trapping                                                -- 113 DIFF: can thaw out frozen pokemon.
+   ;;, "thndshck", %f_move_default,10,%f_move_major_other,C_MAJOR_PARALYZED        -- 114
+   ;;, "rockthrw", %f_move_default                                                 -- 115
+   ;;, "cnfusion", %f_move_default,10,%f_move_other,%f_movehelp_confuse            -- 116
+   ;;, "hypnosis", %f_move_major_other, C_MAJOR_SLEEPING                           -- 117
+   ;;, "meditate", %f_move_self, %f_move_stat, attack, 1                           -- 118
+   ;;, "agility",  %f_move_self, %f_move_stat, speed, 2                            -- 119
+   ;;, "quickatk", %f_move_default                                                 -- 120
+   ;;, "ngtshade", %f_move_setdmg,C_LEVEL                                          -- 121 DIFF: respects resistance now
+   ;;, "screech",  %f_move_other, %f_move_stat, defense, -2                        -- 122
+   ;;, "recover",  %f_move_recover                                                 -- 123
+   ;;, "harden",   %f_move_self, %f_move_stat, defense, 1                          -- 124
+   ;;, "minimize", %f_move_self, %f_move_stat, evasion, 1                          -- 125
+   ;;, "smokscrn", %f_move_other, %f_move_stat, accuracy, -1                       -- 126
+   ;;, "cnfusray", %f_move_other,%f_movehelp_confuse                               -- 127
+   ;;, "withdraw", %f_move_self, %f_move_stat, defense, 1                          -- 128
+   ;;, "dfnscurl", %f_move_self, %f_move_stat, defense, 1                          -- 129
+   ;;, "barrier",  %f_move_self, %f_move_stat, defense, 2                          -- 130
+   ;;, "lghtscrn", %f_move_self,%f_movehelp_minor,"|raises|spcdefense",screened    -- 131
+   ;;, "haze",     %f_move_haze                                                    -- 132 DIFF: only resets stat modifiers, applies even when mist is in effect
+   ;;, "fcsenrgy", %f_move_self,%f_movehelp_minor,"|raises|crit ratio",focused     -- 133
+   ;;, "mirrmove", %f_move_mirror_move                                             -- 134
+   ;;, "lick",     %f_move_default,30,%f_move_major_other,C_MAJOR_PARALYZED        -- 135 DIFF: super effective against psychic type now
+   ;;, "smog",     %f_move_default,30,%f_move_major_other,C_MAJOR_POISONED         -- 136
+   ;;, "sludge",   %f_move_default,30,%f_move_major_other,C_MAJOR_POISONED         -- 137
+   ;;, "boneclub", %f_move_default,10,%f_move_other,%f_movehelp_flinch             -- 138
+   ;;, "watrfall", %f_move_default                                                 -- 139
+   ;;, "clamp",    %f_move_trapping                                                -- 140
+   ;;, "spikcann", %f_move_multihit_var                                            -- 141 DIFF: if KOs pkmn, will also hit new pokemon switched in
+   ;;, "constrct", %f_move_default,10,%f_move_other, %f_move_stat, speed, -1       -- 142
+   ;;, "amnesia",  %f_move_self, %f_move_stat, special, 2                          -- 143
+   ;;, "kinesis",  %f_move_other, %f_move_stat, accuracy, -1                       -- 144
+   ;;, "hijmpkck", %f_move_default                                                 -- 145
+   ;;, "glare",    %f_move_major_other, C_MAJOR_PARALYZED                          -- 146
+   ;;, "poisngas", %f_move_major_other, C_MAJOR_POISONED                           -- 147
+   ;;, "barrage",  %f_move_multihit_var                                            -- 148 DIFF: if KOs pkmn, will also hit new pokemon switched in
+   ;;, "leechlif", %f_move_drain                                                   -- 149
+   ;;, "lovekiss", %f_move_major_other, C_MAJOR_SLEEPING                           -- 150
+   ;;, "tranform", %f_move_transform                                               -- 151 DIFF: Does not copy stat stages
+   ;;, "bubble",   %f_move_default,10,%f_move_other, %f_move_stat, speed, -1       -- 152
+   ;;, "dizypnch", %f_move_default                                                 -- 153
+   ;;, "spore",    %f_move_major_other, C_MAJOR_SLEEPING                           -- 154
+   ;;, "splash",   %f_move_splash                                                  -- 155
+   ;;, "acidarmr", %f_move_self, %f_move_stat, defense, 2                          -- 156
+   ;;, "crabhamr", %f_move_default                                                 -- 157
+   ;;, "furyswps", %f_move_multihit_var                                            -- 158 DIFF: if KOs pkmn, will also hit new pokemon switched in
+   ;;, "bonerang", %f_move_multihit_set,2,%f_nop                                   -- 159 DIFF: if KOs pkmn, will also hit new pokemon switched in
+   ;;, "hyprfang", %f_move_default,10,%f_move_other,%f_movehelp_flinch             -- 160
+   ;;, "sharpen",  %f_move_self, %f_move_stat, attack, 1                           -- 161
+   ;;, "convrson", %f_move_conversion                                              -- 162
+   ;;, "suprfang", %f_move_superfang                                               -- 163 DIFF: respects resistance now
+   ;;, "slash",    %f_move_default                                                 -- 164
 ]]
 
 -- could get an error if a trainer doesn't have 6 pkmn, because of assumptions i make when starting a fight

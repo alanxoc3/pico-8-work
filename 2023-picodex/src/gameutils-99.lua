@@ -1,7 +1,7 @@
 |[f_extract_sheet]| function(index)
-    f_px9_decomp(_peek2(index*2),
-        function(...) return f_vget(0x8000+index*0x2000, ...) end,
-        function(...) return f_vset(0x8000+index*0x2000, ...) end)
+    f_px9_decomp(_peek2(index),
+        function(...) return f_vget(0x8000+index*0x1000, ...) end,
+        function(...) return f_vset(0x8000+index*0x1000, ...) end)
 end $$
 
 |[f_vget]| function(offset, x, y)

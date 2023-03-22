@@ -182,7 +182,7 @@ function encode_cart(message, cartname, w, h, func)
 end
 
 function myinit()
-    ENCODE_OFFSET=12 -- this must be set to where data can start writing
+    ENCODE_OFFSET=14 -- this must be set to where data can start writing
     local enc_vget = function(...) return vget(0x8000, ...) end
 
     cls()
@@ -198,19 +198,19 @@ function myinit()
                                               log("end of cart     | pos: 0x4300")
                                               log()
 
-    poke2(0x0000, ENCODE_OFFSET) encode_cart     ("pokemon 0-63   ",    "000-063.p8", 128, 128, enc_vget)
-    poke2(0x0002, ENCODE_OFFSET) encode_cart     ("pokemon 64-127 ",  "064-127.p8", 128, 128, enc_vget)
+    poke2(0x0000, ENCODE_OFFSET) encode_cart     ("pokemon 0-63   ", "000-063.p8", 128, 128, enc_vget)
+    poke2(0x0002, ENCODE_OFFSET) encode_cart     ("pokemon 64-127 ", "064-127.p8", 128, 128, enc_vget)
     poke2(0x0004, ENCODE_OFFSET) encode_cart     ("pokemon 128-151", "128-151.p8", 128, 128, enc_vget)
 
     poke(0x5f56, 0xa0) -- mget points to the loaded map.
-    poke2(0x0006, ENCODE_OFFSET) encode_cart     ("picodex skin   ",    "128-151.p8", 34,  12,  mget)
-    poke2(0x0008, ENCODE_OFFSET) encode_move_data("pokemon moves  ", g_move_data)
-    poke2(0x000a, ENCODE_OFFSET) encode_trnr_data("pokemon trnrs  ", g_trainer_data)
+    poke2(0x0006, ENCODE_OFFSET) encode_cart     ("picodex skin   ", "128-151.p8", 32,  11,  mget)
+    poke2(0x0008, ENCODE_OFFSET) encode_move_data("move info      ", g_move_data)      -- 166*4 = 664
+    poke2(0x000a, ENCODE_OFFSET) encode_pkmv_data("pokemon moves  ", g_pkmn_move_data)
+    poke2(0x000c, ENCODE_OFFSET) encode_trnr_data("pokemon trnrs  ", g_trainer_data)   -- 40*6  = 240
 
                                               log("end of compile  | pos: "..tostr(ENCODE_OFFSET, 0x1))
 
-    -- reserve the rest for sfx. as of writing, around 20 sfx slots were available here.
-    -- need 10 for pkmn cries. and maybe a few random sfxes. not sure if we could fit an actual song or not...
+    -- reserve the rest for sfx. this is only 10 sfxs as of 2023-03-21.
     reload(ENCODE_OFFSET, ENCODE_OFFSET, 0x4300 - ENCODE_OFFSET, "128-151.p8")
 
                                               log("copy remaining  | pos: 0x4300 ")
@@ -224,6 +224,18 @@ end
 function offsetpoke(val)
     poke(ENCODE_OFFSET, val)
     ENCODE_OFFSET += 1
+end
+
+function encode_move_data(message, data)
+    log(message.." | pos: "..tostr(ENCODE_OFFSET, 0x1)) -- show numbers as hex
+
+    for movenum=1,166 do
+        for trait=1,4 do
+            local val = data[movenum][trait]
+            if trait > 1 then val \= 5 val += 1 end
+            offsetpoke(val)
+        end
+    end
 end
 
 function encode_trnr_data(message, data)
@@ -251,7 +263,7 @@ EVENT = 252 -- is event
 TMHM  = 253 -- is tm/hm
 DASH  = 254 -- is a dash/range
 NEXT  = 255 -- is next pokemon
-function encode_move_data(message, data)
+function encode_pkmv_data(message, data)
     log(message.." | pos: "..tostr(ENCODE_OFFSET, 0x1)) -- show numbers as hex
 
     local newdata = strip_spaces(data)
@@ -262,23 +274,23 @@ function encode_move_data(message, data)
             local fields = split(line, "|")
             for field in all(fields) do
                 if type(field) == "number"   then offsetpoke(field)
-                elseif field == "T_NONE"     then offsetpoke(0)
-                elseif field == "T_NORMAL"   then offsetpoke(1)
-                elseif field == "T_FIRE"     then offsetpoke(2)
-                elseif field == "T_FIGHTING" then offsetpoke(3)
-                elseif field == "T_WATER"    then offsetpoke(4)
-                elseif field == "T_POISON"   then offsetpoke(5)
-                elseif field == "T_ELECTRIC" then offsetpoke(6)
-                elseif field == "T_GROUND"   then offsetpoke(7)
-                elseif field == "T_GRASS"    then offsetpoke(8)
-                elseif field == "T_FLYING"   then offsetpoke(9)
-                elseif field == "T_ICE"      then offsetpoke(10)
-                elseif field == "T_BUG"      then offsetpoke(11)
-                elseif field == "T_PSYCHIC"  then offsetpoke(12)
-                elseif field == "T_ROCK"     then offsetpoke(13)
-                elseif field == "T_DRAGON"   then offsetpoke(14)
-                elseif field == "T_GHOST"    then offsetpoke(15)
-                elseif field == "T_BIRD"     then offsetpoke(17)
+                elseif field == "T_NONE"     then offsetpoke(T_NONE)
+                elseif field == "T_NORMAL"   then offsetpoke(T_NORMAL)
+                elseif field == "T_FIRE"     then offsetpoke(T_FIRE)
+                elseif field == "T_FIGHTING" then offsetpoke(T_FIGHTING)
+                elseif field == "T_WATER"    then offsetpoke(T_WATER)
+                elseif field == "T_POISON"   then offsetpoke(T_POISON)
+                elseif field == "T_ELECTRIC" then offsetpoke(T_ELECTRIC)
+                elseif field == "T_GROUND"   then offsetpoke(T_GROUND)
+                elseif field == "T_GRASS"    then offsetpoke(T_GRASS)
+                elseif field == "T_FLYING"   then offsetpoke(T_FLYING)
+                elseif field == "T_ICE"      then offsetpoke(T_ICE)
+                elseif field == "T_BUG"      then offsetpoke(T_BUG)
+                elseif field == "T_PSYCHIC"  then offsetpoke(T_PSYCHIC)
+                elseif field == "T_ROCK"     then offsetpoke(T_ROCK)
+                elseif field == "T_DRAGON"   then offsetpoke(T_DRAGON)
+                elseif field == "T_GHOST"    then offsetpoke(T_GHOST)
+                elseif field == "T_BIRD"     then offsetpoke(T_BIRD)
                 elseif field == "TM"         then offsetpoke(TMHM)
                 elseif field == "EVENT"      then offsetpoke(EVENT)
                 else
@@ -307,31 +319,42 @@ end
 -- 253 is tm/hm
 -- 254 is a dash/range
 -- 255 is next pokemon
-P_MISSINGNO   = 0 P_BULBASAUR   = 1 P_IVYSAUR     = 2 P_VENUSAUR    = 3
-P_CHARMANDER  = 4 P_CHARMELEON  = 5 P_CHARIZARD   = 6 P_SQUIRTLE    = 7
-P_WARTORTLE   = 8 P_BLASTOISE   = 9 P_CATERPIE    = 10 P_METAPOD     = 11
-P_BUTTERFREE  = 12 P_WEEDLE      = 13 P_KAKUNA      = 14 P_BEEDRILL    = 15
-P_PIDGEY      = 16 P_PIDGEOTTO   = 17 P_PIDGEOT     = 18 P_RATTATA     = 19
-P_RATICATE    = 20 P_SPEAROW     = 21 P_FEAROW      = 22 P_EKANS       = 23
-P_ARBOK       = 24 P_PIKACHU     = 25 P_RAICHU      = 26 P_SANDSHREW   = 27
-P_SANDSLASH   = 28 P_NIDORANF    = 29 P_NIDORINA    = 30 P_NIDOQUEEN   = 31
-P_NIDORANM    = 32 P_NIDORINO    = 33 P_NIDOKING    = 34 P_CLEFAIRY    = 35
-P_CLEFABLE    = 36 P_VULPIX      = 37 P_NINETALES   = 38 P_JIGGLYPUFF  = 39
-P_WIGGLYTUFF  = 40 P_ZUBAT       = 41 P_GOLBAT      = 42 P_ODDISH      = 43
-P_GLOOM       = 44 P_VILEPLUME   = 45 P_PARAS       = 46 P_PARASECT    = 47
-P_VENONAT     = 48 P_VENOMOTH    = 49 P_DIGLETT     = 50 P_DUGTRIO     = 51
-P_MEOWTH      = 52 P_PERSIAN     = 53 P_PSYDUCK     = 54 P_GOLDUCK     = 55
-P_MANKEY      = 56 P_PRIMEAPE    = 57 P_GROWLITHE   = 58 P_ARCANINE    = 59
-P_POLIWAG     = 60 P_POLIWHIRL   = 61 P_POLIWRATH   = 62 P_ABRA        = 63
-P_KADABRA     = 64 P_ALAKAZAM    = 65 P_MACHOP      = 66 P_MACHOKE     = 67
-P_MACHAMP     = 68 P_BELLSPROUT  = 69 P_WEEPINBELL  = 70 P_VICTREEBEL  = 71
-P_TENTACOOL   = 72 P_TENTACRUEL  = 73 P_GEODUDE     = 74 P_GRAVELER    = 75
-P_GOLEM       = 76 P_PONYTA      = 77 P_RAPIDASH    = 78 P_SLOWPOKE    = 79
-P_SLOWBRO     = 80 P_MAGNEMITE   = 81 P_MAGNETON    = 82 P_FARFETCHD   = 83
-P_DODUO       = 84 P_DODRIO      = 85 P_SEEL        = 86 P_DEWGONG     = 87
-P_GRIMER      = 88 P_MUK         = 89 P_SHELLDER    = 90 P_CLOYSTER    = 91
-P_GASTLY      = 92 P_HAUNTER     = 93 P_GENGAR      = 94 P_ONIX        = 95
-P_DROWZEE     = 96 P_HYPNO       = 97 P_KRABBY      = 98 P_KINGLER     = 99
+
+T_NONE     = 0  T_NORMAL   = 1
+T_FIRE     = 2  T_FIGHTING = 3
+T_WATER    = 4  T_POISON   = 5
+T_ELECTRIC = 6  T_GROUND   = 7
+T_GRASS    = 8  T_FLYING   = 9
+T_ICE      = 10 T_BUG      = 11
+T_PSYCHIC  = 12 T_ROCK     = 13
+T_DRAGON   = 14 T_GHOST    = 15
+T_BIRD     = 17
+
+P_MISSINGNO   = 0   P_BULBASAUR   = 1   P_IVYSAUR     = 2   P_VENUSAUR    = 3
+P_CHARMANDER  = 4   P_CHARMELEON  = 5   P_CHARIZARD   = 6   P_SQUIRTLE    = 7
+P_WARTORTLE   = 8   P_BLASTOISE   = 9   P_CATERPIE    = 10  P_METAPOD     = 11
+P_BUTTERFREE  = 12  P_WEEDLE      = 13  P_KAKUNA      = 14  P_BEEDRILL    = 15
+P_PIDGEY      = 16  P_PIDGEOTTO   = 17  P_PIDGEOT     = 18  P_RATTATA     = 19
+P_RATICATE    = 20  P_SPEAROW     = 21  P_FEAROW      = 22  P_EKANS       = 23
+P_ARBOK       = 24  P_PIKACHU     = 25  P_RAICHU      = 26  P_SANDSHREW   = 27
+P_SANDSLASH   = 28  P_NIDORANF    = 29  P_NIDORINA    = 30  P_NIDOQUEEN   = 31
+P_NIDORANM    = 32  P_NIDORINO    = 33  P_NIDOKING    = 34  P_CLEFAIRY    = 35
+P_CLEFABLE    = 36  P_VULPIX      = 37  P_NINETALES   = 38  P_JIGGLYPUFF  = 39
+P_WIGGLYTUFF  = 40  P_ZUBAT       = 41  P_GOLBAT      = 42  P_ODDISH      = 43
+P_GLOOM       = 44  P_VILEPLUME   = 45  P_PARAS       = 46  P_PARASECT    = 47
+P_VENONAT     = 48  P_VENOMOTH    = 49  P_DIGLETT     = 50  P_DUGTRIO     = 51
+P_MEOWTH      = 52  P_PERSIAN     = 53  P_PSYDUCK     = 54  P_GOLDUCK     = 55
+P_MANKEY      = 56  P_PRIMEAPE    = 57  P_GROWLITHE   = 58  P_ARCANINE    = 59
+P_POLIWAG     = 60  P_POLIWHIRL   = 61  P_POLIWRATH   = 62  P_ABRA        = 63
+P_KADABRA     = 64  P_ALAKAZAM    = 65  P_MACHOP      = 66  P_MACHOKE     = 67
+P_MACHAMP     = 68  P_BELLSPROUT  = 69  P_WEEPINBELL  = 70  P_VICTREEBEL  = 71
+P_TENTACOOL   = 72  P_TENTACRUEL  = 73  P_GEODUDE     = 74  P_GRAVELER    = 75
+P_GOLEM       = 76  P_PONYTA      = 77  P_RAPIDASH    = 78  P_SLOWPOKE    = 79
+P_SLOWBRO     = 80  P_MAGNEMITE   = 81  P_MAGNETON    = 82  P_FARFETCHD   = 83
+P_DODUO       = 84  P_DODRIO      = 85  P_SEEL        = 86  P_DEWGONG     = 87
+P_GRIMER      = 88  P_MUK         = 89  P_SHELLDER    = 90  P_CLOYSTER    = 91
+P_GASTLY      = 92  P_HAUNTER     = 93  P_GENGAR      = 94  P_ONIX        = 95
+P_DROWZEE     = 96  P_HYPNO       = 97  P_KRABBY      = 98  P_KINGLER     = 99
 P_VOLTORB     = 100 P_ELECTRODE   = 101 P_EXEGGCUTE   = 102 P_EXEGGUTOR   = 103
 P_CUBONE      = 104 P_MAROWAK     = 105 P_HITMONLEE   = 106 P_HITMONCHAN  = 107
 P_LICKITUNG   = 108 P_KOFFING     = 109 P_WEEZING     = 110 P_RHYHORN     = 111
@@ -398,9 +421,180 @@ g_trainer_data = {
    P_DRAGONITE, P_ZAPDOS,    P_MOLTRES,   P_ARTICUNO,  P_MEWTWO,    P_MEW         -- legendry
 }
 
+-- divide each by 5. -1 becomes 255.
+-- range is from [-1 to 68] aka [-5 to 340]
+g_move_data = {
+    {T_BIRD,     0,  40,  0  }, -- -1  none
+    {T_BIRD,     0,  50,  100}, -- 0   struggle
+    {T_NORMAL,   20, 80,  85 }, -- 1   megapnch
+    {T_NORMAL,   10, 80,  75 }, -- 2   razrwind
+    {T_NORMAL,   30, 0,   0  }, -- 3   sworddnc
+    {T_NORMAL,   20, 0,   100}, -- 4   whrlwind
+    {T_NORMAL,   5,  120, 75 }, -- 5   megakick
+    {T_POISON,   10, 0,   85 }, -- 6   toxic
+    {T_NORMAL,   5,  -5,  30 }, -- 7   horndril
+    {T_NORMAL,   15, 85,  100}, -- 8   bodyslam
+    {T_NORMAL,   20, 90,  85 }, -- 9   takedown
+    {T_NORMAL,   15, 100, 100}, -- 10  doubedge
+    {T_WATER,    20, 65,  100}, -- 11  bublbeam
+    {T_WATER,    25, 40,  100}, -- 12  watergun
+    {T_ICE,      10, 95,  100}, -- 13  icebeam
+    {T_ICE,      5,  120, 90 }, -- 14  blizzard
+    {T_NORMAL,   5,  150, 90 }, -- 15  hyprbeam
+    {T_NORMAL,   20, 40,  100}, -- 16  payday
+    {T_FIGHTING, 20, 80,  80 }, -- 17  submsion
+    {T_FIGHTING, 20, -5,  100}, -- 18  counter
+    {T_FIGHTING, 20, -5,  100}, -- 19  seistoss
+    {T_NORMAL,   20, 20,  100}, -- 20  rage
+    {T_GRASS,    10, 40,  100}, -- 21  megdrain
+    {T_GRASS,    10, 120, 100}, -- 22  solrbeam
+    {T_DRAGON,   10, -5,  100}, -- 23  drgnrage
+    {T_ELECTRIC, 15, 95,  100}, -- 24  thndrblt
+    {T_ELECTRIC, 10, 120, 70 }, -- 25  thunder
+    {T_GROUND,   10, 100, 100}, -- 26  earthqke
+    {T_GROUND,   5,  -5,  30 }, -- 27  fissure
+    {T_GROUND,   10, 100, 100}, -- 28  dig
+    {T_PSYCHIC,  10, 90,  100}, -- 29  psychic
+    {T_PSYCHIC,  20, 0,   0  }, -- 30  teleport
+    {T_NORMAL,   10, 0,   100}, -- 31  mimic
+    {T_NORMAL,   15, 0,   0  }, -- 32  doubteam
+    {T_PSYCHIC,  20, 0,   0  }, -- 33  reflect
+    {T_NORMAL,   10, -5,  100}, -- 34  bide
+    {T_NORMAL,   10, 0,   0  }, -- 35  metrnome
+    {T_NORMAL,   5,  260, 100}, -- 36  selfdstr
+    {T_NORMAL,   10, 100, 75 }, -- 37  eggbomb
+    {T_FIRE,     5,  120, 85 }, -- 38  fireblst
+    {T_NORMAL,   20, 60,  -5 }, -- 39  swift
+    {T_NORMAL,   15, 100, 100}, -- 40  skulbash
+    {T_NORMAL,   10, 0,   0  }, -- 41  softboil
+    {T_PSYCHIC,  15, 100, 100}, -- 42  dreameat
+    {T_FLYING,   5,  140, 90 }, -- 43  skyattck
+    {T_PSYCHIC,  10, 0,   0  }, -- 44  rest
+    {T_ELECTRIC, 20, 0,   100}, -- 45  thndrwav
+    {T_PSYCHIC,  15, -5,  80 }, -- 46  psywave
+    {T_NORMAL,   5,  340, 100}, -- 47  explsion
+    {T_ROCK,     10, 75,  90 }, -- 48  rockslid
+    {T_NORMAL,   10, 80,  100}, -- 49  triattck
+    {T_NORMAL,   10, 0,   0  }, -- 50  substute
+    {T_NORMAL,   30, 50,  95 }, -- 51  cut
+    {T_FLYING,   15, 70,  95 }, -- 52  fly
+    {T_WATER,    15, 95,  100}, -- 53  surf
+    {T_NORMAL,   15, 80,  100}, -- 54  strength
+    {T_NORMAL,   20, 0,   70 }, -- 55  flash
+    {T_NORMAL,   35, 40,  100}, -- 56  pound
+    {T_FIGHTING, 25, 55,  100}, -- 57  karatchp
+    {T_NORMAL,   10, 15,  85 }, -- 58  doubslap
+    {T_NORMAL,   15, 20,  85 }, -- 59  comtpnch
+    {T_FIRE,     15, 75,  100}, -- 60  firepnch
+    {T_ICE,      15, 75,  100}, -- 61  icepnch
+    {T_ELECTRIC, 15, 75,  100}, -- 62  thndpnch
+    {T_NORMAL,   35, 40,  100}, -- 63  scratch
+    {T_NORMAL,   30, 55,  100}, -- 64  vicegrip
+    {T_NORMAL,   5,  -5,  30 }, -- 65  guilotin
+    {T_FLYING,   35, 40,  100}, -- 66  gust
+    {T_FLYING,   35, 35,  100}, -- 67  wingatck
+    {T_NORMAL,   20, 15,  75 }, -- 68  bind
+    {T_NORMAL,   20, 80,  75 }, -- 69  slam
+    {T_GRASS,    10, 35,  100}, -- 70  vinewhip
+    {T_NORMAL,   20, 65,  100}, -- 71  stomp
+    {T_FIGHTING, 30, 30,  100}, -- 72  doubkick
+    {T_FIGHTING, 20, 70,  95 }, -- 73  jumpkick
+    {T_FIGHTING, 15, 60,  85 }, -- 74  rllngkck
+    {T_GROUND,   15, 0,   100}, -- 75  sandatck
+    {T_NORMAL,   15, 70,  100}, -- 76  headbutt
+    {T_NORMAL,   25, 65,  100}, -- 77  hornatck
+    {T_NORMAL,   20, 15,  85 }, -- 78  furyatck
+    {T_NORMAL,   35, 35,  95 }, -- 79  tackle
+    {T_NORMAL,   20, 15,  85 }, -- 80  wrap
+    {T_NORMAL,   20, 90,  100}, -- 81  thrash
+    {T_NORMAL,   30, 0,   100}, -- 82  tailwhip
+    {T_POISON,   35, 15,  100}, -- 83  psnsting
+    {T_BUG,      20, 25,  100}, -- 84  twineedl
+    {T_BUG,      20, 15,  85 }, -- 85  pinmisil
+    {T_NORMAL,   30, 0,   100}, -- 86  leer
+    {T_NORMAL,   25, 60,  100}, -- 87  bite
+    {T_NORMAL,   40, 0,   100}, -- 88  growl
+    {T_NORMAL,   20, 0,   100}, -- 89  roar
+    {T_NORMAL,   15, 0,   55 }, -- 90  sing
+    {T_NORMAL,   20, 0,   55 }, -- 91  sprsonic
+    {T_NORMAL,   20, -5,  90 }, -- 92  sonicbom
+    {T_NORMAL,   20, 0,   55 }, -- 93  disable
+    {T_POISON,   30, 40,  100}, -- 94  acid
+    {T_FIRE,     25, 40,  100}, -- 95  ember
+    {T_FIRE,     15, 95,  100}, -- 96  flamthwr
+    {T_ICE,      30, 0,   0  }, -- 97  mist
+    {T_WATER,    5,  120, 80 }, -- 98  hydropmp
+    {T_PSYCHIC,  20, 65,  100}, -- 99  psybeam
+    {T_ICE,      20, 65,  100}, -- 100 aurorabm
+    {T_FLYING,   35, 35,  100}, -- 101 peck
+    {T_FLYING,   20, 80,  100}, -- 102 drillpck
+    {T_FIGHTING, 20, 50,  90 }, -- 103 lowkick
+    {T_GRASS,    20, 20,  100}, -- 104 absorb
+    {T_GRASS,    10, 0,   90 }, -- 105 leechsed
+    {T_NORMAL,   40, 0,   0  }, -- 106 growth
+    {T_GRASS,    25, 55,  95 }, -- 107 razrleaf
+    {T_POISON,   35, 0,   75 }, -- 108 psnpowdr
+    {T_GRASS,    30, 0,   75 }, -- 109 stunspor
+    {T_GRASS,    15, 0,   75 }, -- 110 slppowdr
+    {T_GRASS,    20, 70,  100}, -- 111 petldanc
+    {T_BUG,      40, 0,   95 }, -- 112 strngsht
+    {T_FIRE,     15, 15,  70 }, -- 113 firespin
+    {T_ELECTRIC, 30, 40,  100}, -- 114 thndshck
+    {T_ROCK,     15, 50,  65 }, -- 115 rockthrw
+    {T_PSYCHIC,  25, 50,  100}, -- 116 cnfusion
+    {T_PSYCHIC,  20, 0,   60 }, -- 117 hypnosis
+    {T_PSYCHIC,  40, 0,   0  }, -- 118 meditate
+    {T_PSYCHIC,  30, 0,   0  }, -- 119 agility
+    {T_NORMAL,   30, 40,  100}, -- 120 quickatk
+    {T_GHOST,    15, -5,  100}, -- 121 ngtshade
+    {T_NORMAL,   10, 0,   85 }, -- 122 screech
+    {T_NORMAL,   20, 0,   0  }, -- 123 recover
+    {T_NORMAL,   30, 0,   0  }, -- 124 harden
+    {T_NORMAL,   20, 0,   0  }, -- 125 minimize
+    {T_NORMAL,   20, 0,   100}, -- 126 smokscrn
+    {T_GHOST,    10, 0,   100}, -- 127 cnfusray
+    {T_WATER,    40, 0,   0  }, -- 128 withdraw
+    {T_NORMAL,   40, 0,   0  }, -- 129 dfnscurl
+    {T_PSYCHIC,  30, 0,   0  }, -- 130 barrier
+    {T_PSYCHIC,  30, 0,   0  }, -- 131 lghtscrn
+    {T_ICE,      30, 0,   -5 }, -- 132 haze
+    {T_NORMAL,   30, 0,   0  }, -- 133 fcsenrgy
+    {T_FLYING,   20, -5,  0  }, -- 134 mirrmove
+    {T_GHOST,    30, 20,  100}, -- 135 lick
+    {T_POISON,   20, 20,  100}, -- 136 smog
+    {T_POISON,   20, 65,  100}, -- 137 sludge
+    {T_GROUND,   20, 65,  85 }, -- 138 boneclub
+    {T_WATER,    15, 80,  100}, -- 139 watrfall
+    {T_WATER,    10, 35,  75 }, -- 140 clamp
+    {T_NORMAL,   15, 20,  100}, -- 141 spikcann
+    {T_NORMAL,   35, 10,  100}, -- 142 constrct
+    {T_PSYCHIC,  20, 0,   0  }, -- 143 amnesia
+    {T_PSYCHIC,  15, 0,   80 }, -- 144 kinesis
+    {T_FIGHTING, 20, 85,  90 }, -- 145 hijmpkck
+    {T_NORMAL,   30, 0,   75 }, -- 146 glare
+    {T_POISON,   40, 0,   55 }, -- 147 poisngas
+    {T_NORMAL,   20, 15,  85 }, -- 148 barrage
+    {T_BUG,      15, 20,  100}, -- 149 leechlif
+    {T_NORMAL,   10, 0,   75 }, -- 150 lovekiss
+    {T_NORMAL,   10, 0,   0  }, -- 151 tranform
+    {T_WATER,    30, 20,  100}, -- 152 bubble
+    {T_NORMAL,   10, 70,  100}, -- 153 dizypnch
+    {T_GRASS,    15, 0,   100}, -- 154 spore
+    {T_NORMAL,   40, 0,   0  }, -- 155 splash
+    {T_POISON,   40, 0,   0  }, -- 156 acidarmr
+    {T_WATER,    10, 90,  85 }, -- 157 crabhamr
+    {T_NORMAL,   15, 10,  80 }, -- 158 furyswps
+    {T_GROUND,   10, 50,  90 }, -- 159 bonerang
+    {T_NORMAL,   15, 80,  90 }, -- 160 hyprfang
+    {T_NORMAL,   30, 0,   0  }, -- 161 sharpen
+    {T_NORMAL,   30, 0,   0  }, -- 162 convrson
+    {T_NORMAL,   10, -5,  90 }, -- 163 suprfang
+    {T_NORMAL,   20, 70,  100}  -- 164 slash
+}
+
 -- from missingno (0) to mew (151), these are the tms they can learn.
 -- 1-50 are tms. 51-55 are hms. There shouldn't be anything higher than that.
-g_move_data =
+g_pkmn_move_data =
 --v t1         t2        hp  att def spd spc  learn                                    tm & event
 [[0|T_BIRD    |T_NORMAL  |33 |136|0  |29 |6   |12|43                                   |TM |1-3|5|6|9-11|13|14|17|19|20|25-27|29|30|44|45|49-52
   0|T_GRASS   |T_POISON  |45 |49 |49 |45 |65  |22|105|106|107|110|108|70|79|88         |TM |3|6|8-10|20|21|31-34|44|50|51

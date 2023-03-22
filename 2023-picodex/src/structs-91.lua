@@ -32,7 +32,7 @@ end $$
 end $$
 
 |[f_populate_c_pokemon]| function()
-    local movemem = _peek2'8'
+    local movemem = _peek2'0xa'
 
     -- -1 is for disabled things. this is never available.
     c_pokemon[-1] = f_get_default_pokemon()
@@ -67,6 +67,7 @@ end $$
         ]], num, -- evl
             evolvesfrom,  -- evl
             c_pokemon_names[num+1], -- nam
+            -- todo: token crunch these with unpack...
             pkmndata[2],  -- ty1
             pkmndata[3],  -- ty2
             pkmndata[4],  -- xhp
