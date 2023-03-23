@@ -71,18 +71,8 @@ end $$
        ;;name,@
     ]], pkmn, (pkmn.hp or pkmn.maxhp)..'/'..pkmn.maxhp)
 
-    _foreach(f_zobj[[
-        ;key,special, name,"spc"
-       ;;key,attack,  name,"att"
-       ;;key,defense, name,"def"
-       ;;key,speed,   name,"spd"
-       ;;key,total,   name,"tot"
-    ]], function(pair)
-        if not pair.key then
-            _add(menu, { name=pair.name, style=5 })
-        elseif pkmn[pair.key] then
-            _add(menu, { name=pair.name.." "..pkmn[pair.key] })
-        end
+    _foreach(split'special,attack,defense,speed,total', function(key)
+        _add(menu, { name=c_stages[key].shortname.." "..pkmn[key] })
     end)
 
     f_zcall(function(name, key)

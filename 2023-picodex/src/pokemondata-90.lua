@@ -3,7 +3,6 @@
 -- DIFF: if a pokemon faints, the next pokemon in the party will automatically be sent out
 -- DIFF: pokemon have a 20% chance to unthaw
 
--- todo: don't have "+1 eva". I should have "+1 evasion" .... also, does evasion even work?
 -- todo: something to consider. For dig/fly/hypebeam, it would be nice to have alternate text on the second turn, instead of "blah|used|hyperbeam". so maybe i can do something for that.
 
 |[c_pokemon]| f_zobj[[]] $$
@@ -66,12 +65,13 @@ c_pokemon_names[0] = "" -- for "none" pkmn, technically not needed possibly (-1)
 ]] $$
 
 |[c_stages]| f_zobj[[
-    special,  "spc",
-    attack,   "att",
-    defense,  "def",
-    speed,    "spd",
-    accuracy, "acc",
-    evasion,  "eva"
+    special;  longname,"special", shortname, "spc"
+   ;attack;   longname,"attack",  shortname, "att"
+   ;defense;  longname,"defense", shortname, "def"
+   ;speed;    longname,"speed",   shortname, "spd"
+   ;total;                        shortname, "tot"
+   ;accuracy; longname,"accuracy"
+   ;evasion;  longname,"evasion"
 ]] $$
 
 -- 5 bg styles

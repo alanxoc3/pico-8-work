@@ -84,10 +84,7 @@ end $$
 end $$
 
 |[f_move_conversion]| function(_ENV)
-    f_zobj_set(selfactive, [[
-        type1,@, type2,@, conversion,%c_yes
-    ]], otheractive.type1, otheractive.type2)
-
+    f_zobj_set(selfactive, [[ type1,@, type2,@ ]], otheractive.type1, otheractive.type2)
     addaction(self, "|copied|types")
 end $$
 
@@ -99,7 +96,7 @@ end $$
             accuracy,0, evasion,0
         ]])
 
-        addaction(pl, "|reset|modifiers")
+        addaction(pl, "|reset|stat mods")
     end)
 end $$
 
@@ -162,7 +159,7 @@ end $$
 -- leverages f_move_(self|other)
 |[f_move_stat]| function(_ENV, pl, key, stage)
     if f_movehelp_incstat(pl.active, key, stage) then
-        addaction(pl, f_format_num_sign(stage, "/6|"..c_stages[key]))
+        addaction(pl, f_format_num_sign(stage, "/6|"..c_stages[key].longname))
     else
         return true
     end
@@ -267,7 +264,6 @@ end $$
     end)
 end $$
 
--- todo: implement the "attack goes up" thing for rage
 -- todo: combine with thrash logic
 |[f_move_rage]| function(_ENV)
     f_set_moveturn(selfactive, -1, f_create_move(move.num, move.slot))

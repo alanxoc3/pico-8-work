@@ -98,7 +98,7 @@ f_zprint(txt or "",23,4,1,0)
 end,function(str)
 f_zcall(_rectfill,[[;,0,0,45,6,1]])
 f_zcall(f_zprint,[[;,@,23,1,13,0;;,@,23,8,1,0;;,@,23,15,1,0]],_unpack(_split(str,"|",false)))
-end,f_zobj[[]],_split"missingno,bulbasaur,ivysaur,venusaur,charmander,charmeleon,charizard,squirtle,wartortle,blastoise,caterpie,metapod,butterfree,weedle,kakuna,beedrill,pidgey,pidgeotto,pidgeot,rattata,raticate,spearow,fearow,ekans,arbok,pikachu,raichu,sandshrew,sandslash,nidoran f,nidorina,nidoqueen,nidoran m,nidorino,nidoking,clefairy,clefable,vulpix,ninetales,jigglypuff,wigglytuff,zubat,golbat,oddish,gloom,vileplume,paras,parasect,venonat,venomoth,diglett,dugtrio,meowth,persian,psyduck,golduck,mankey,primeape,growlithe,arcanine,poliwag,poliwhirl,poliwrath,abra,kadabra,alakazam,machop,machoke,machamp,bellsprout,weepinbell,victreebel,tentacool,tentacruel,geodude,graveler,golem,ponyta,rapidash,slowpoke,slowbro,magnemite,magneton,farfetchd,doduo,dodrio,seel,dewgong,grimer,muk,shellder,cloyster,gastly,haunter,gengar,onix,drowzee,hypno,krabby,kingler,voltorb,electrode,exeggcute,exeggutor,cubone,marowak,hitmonlee,hitmonchan,lickitung,koffing,weezing,rhyhorn,rhydon,chansey,tangela,kangaskhan,horsea,seadra,goldeen,seaking,staryu,starmie,mr mime,scyther,jynx,electabuzz,magmar,pinsir,tauros,magikarp,gyarados,lapras,ditto,eevee,vaporeon,jolteon,flareon,porygon,omanyte,omastar,kabuto,kabutops,aerodactyl,snorlax,articuno,zapdos,moltres,dratini,dragonair,dragonite,mewtwo,mew",f_zobj"0,none;,fainted,burned,frozen,paralyzed,poisoned,sleeping",f_zobj"0,NON;,FNT,BRN,FZN,PAR,PSN,SLP",f_zobj[[0;bg,0,name,%c_empty;1;bg,0,name,normal,15,0,13,.5;2;bg,5,name,fire,8,2,10,2,11,2,2,.5,4,.5,13,.5,14,.5;3;bg,2,name,fighting,10,2,1,2,13,2,15,0,11,.5,9,.5,5,.5,12,.5;4;bg,4,name,water,2,2,7,2,13,2,14,.5,8,.5,4,.5;5;bg,1,name,poison,11,2,8,2,15,.5,7,.5,5,.5,13,.5;6;bg,6,name,electric,9,2,4,2,7,0,14,.5,6,.5,8,.5;7;bg,2,name,ground,6,2,2,2,5,2,13,2,9,0,11,.5,8,.5;8;bg,3,name,grass,7,2,13,2,4,2,11,.5,14,.5,2,.5,9,.5,8,.5,5,.5;9;bg,0,name,flying,11,2,3,2,8,2,6,.5,13,.5;10;bg,4,name,ice,14,2,9,2,8,2,2,.5,10,.5,4,.5;11;bg,3,name,bug,8,2,12,2,3,.5,2,.5,9,.5,15,.5,5,.5;12;bg,1,name,psychic,3,2,5,2,12,.5;13;bg,0,name,rock,11,2,2,2,9,2,10,2,3,.5,7,.5;14;bg,0,name,dragon,14,2;15;bg,1,name,ghost,15,2,1,0,12,0;17;bg,0,name,bird;]],f_zobj[[confused,confused,disabled,disable,digging,digging,flying,flying,preparing,prepare,recharging,recharge,flinching,flinch,thrashed,thrashing,trapping,trapping,trapped,trapped,raged,enraged,decoyed,decoyed,focused,focus,misted,mist,reflected,reflect,screened,screened,seeded,seeded,toxiced,toxiced,transform,tranform]],f_zobj[[special,spc,attack,att,defense,def,speed,spd,accuracy,acc,evasion,eva]],f_zobj[[0;bg,6,aa,13;;bg,14,aa,4;;bg,9,aa,4;;bg,11,aa,3;;bg,12,aa,5;;bg,8,aa,2;;bg,10,aa,4]],f_zobj[[0;name,status;;name,physical;;name,special;]],f_zobj[[]],_split"youngstr,bugcatch,junior,brock,lass,hiker,swimmer,misty,gentlman,sailor,rocker,ltsurge,channelr,gambler,beauty,erika,biker,birdkeep,juggler,koga,blckbelt,rocket,psychic,sabrina,scientst,pkmaniac,suprnerd,blaine,cooltrnr,fishrman,tamer,giovanni,lorelei,bruno,agatha,lance,blue,green,red,legendry",function(game,entry)
+end,f_zobj[[]],_split"missingno,bulbasaur,ivysaur,venusaur,charmander,charmeleon,charizard,squirtle,wartortle,blastoise,caterpie,metapod,butterfree,weedle,kakuna,beedrill,pidgey,pidgeotto,pidgeot,rattata,raticate,spearow,fearow,ekans,arbok,pikachu,raichu,sandshrew,sandslash,nidoran f,nidorina,nidoqueen,nidoran m,nidorino,nidoking,clefairy,clefable,vulpix,ninetales,jigglypuff,wigglytuff,zubat,golbat,oddish,gloom,vileplume,paras,parasect,venonat,venomoth,diglett,dugtrio,meowth,persian,psyduck,golduck,mankey,primeape,growlithe,arcanine,poliwag,poliwhirl,poliwrath,abra,kadabra,alakazam,machop,machoke,machamp,bellsprout,weepinbell,victreebel,tentacool,tentacruel,geodude,graveler,golem,ponyta,rapidash,slowpoke,slowbro,magnemite,magneton,farfetchd,doduo,dodrio,seel,dewgong,grimer,muk,shellder,cloyster,gastly,haunter,gengar,onix,drowzee,hypno,krabby,kingler,voltorb,electrode,exeggcute,exeggutor,cubone,marowak,hitmonlee,hitmonchan,lickitung,koffing,weezing,rhyhorn,rhydon,chansey,tangela,kangaskhan,horsea,seadra,goldeen,seaking,staryu,starmie,mr mime,scyther,jynx,electabuzz,magmar,pinsir,tauros,magikarp,gyarados,lapras,ditto,eevee,vaporeon,jolteon,flareon,porygon,omanyte,omastar,kabuto,kabutops,aerodactyl,snorlax,articuno,zapdos,moltres,dratini,dragonair,dragonite,mewtwo,mew",f_zobj"0,none;,fainted,burned,frozen,paralyzed,poisoned,sleeping",f_zobj"0,NON;,FNT,BRN,FZN,PAR,PSN,SLP",f_zobj[[0;bg,0,name,%c_empty;1;bg,0,name,normal,15,0,13,.5;2;bg,5,name,fire,8,2,10,2,11,2,2,.5,4,.5,13,.5,14,.5;3;bg,2,name,fighting,10,2,1,2,13,2,15,0,11,.5,9,.5,5,.5,12,.5;4;bg,4,name,water,2,2,7,2,13,2,14,.5,8,.5,4,.5;5;bg,1,name,poison,11,2,8,2,15,.5,7,.5,5,.5,13,.5;6;bg,6,name,electric,9,2,4,2,7,0,14,.5,6,.5,8,.5;7;bg,2,name,ground,6,2,2,2,5,2,13,2,9,0,11,.5,8,.5;8;bg,3,name,grass,7,2,13,2,4,2,11,.5,14,.5,2,.5,9,.5,8,.5,5,.5;9;bg,0,name,flying,11,2,3,2,8,2,6,.5,13,.5;10;bg,4,name,ice,14,2,9,2,8,2,2,.5,10,.5,4,.5;11;bg,3,name,bug,8,2,12,2,3,.5,2,.5,9,.5,15,.5,5,.5;12;bg,1,name,psychic,3,2,5,2,12,.5;13;bg,0,name,rock,11,2,2,2,9,2,10,2,3,.5,7,.5;14;bg,0,name,dragon,14,2;15;bg,1,name,ghost,15,2,1,0,12,0;17;bg,0,name,bird;]],f_zobj[[confused,confused,disabled,disable,digging,digging,flying,flying,preparing,prepare,recharging,recharge,flinching,flinch,thrashed,thrashing,trapping,trapping,trapped,trapped,raged,enraged,decoyed,decoyed,focused,focus,misted,mist,reflected,reflect,screened,screened,seeded,seeded,toxiced,toxiced,transform,tranform]],f_zobj[[special;longname,special,shortname,spc;attack;longname,attack,shortname,att;defense;longname,defense,shortname,def;speed;longname,speed,shortname,spd;total;shortname,tot;accuracy;longname,accuracy;evasion;longname,evasion]],f_zobj[[0;bg,6,aa,13;;bg,14,aa,4;;bg,9,aa,4;;bg,11,aa,3;;bg,12,aa,5;;bg,8,aa,2;;bg,10,aa,4]],f_zobj[[0;name,status;;name,physical;;name,special;]],f_zobj[[]],_split"youngstr,bugcatch,junior,brock,lass,hiker,swimmer,misty,gentlman,sailor,rocker,ltsurge,channelr,gambler,beauty,erika,biker,birdkeep,juggler,koga,blckbelt,rocket,psychic,sabrina,scientst,pkmaniac,suprnerd,blaine,cooltrnr,fishrman,tamer,giovanni,lorelei,bruno,agatha,lance,blue,green,red,legendry",function(game,entry)
 if entry.state then
 game:push(entry.state)
 else
@@ -252,12 +252,12 @@ end)
 end)
 end
 end,function(_ENV)
-f_zobj_set(selfactive,[[type1,@,type2,@,conversion,%c_yes]],otheractive.type1,otheractive.type2)
+f_zobj_set(selfactive,[[type1,@,type2,@]],otheractive.type1,otheractive.type2)
 addaction(self,"|copied|types")
 end,function(_ENV)
 _foreach({other,self},function(pl)
 f_zobj_set(pl.active.stages,[[special,0,attack,0,defense,0,speed,0,accuracy,0,evasion,0]])
-addaction(pl,"|reset|modifiers")
+addaction(pl,"|reset|stat mods")
 end)
 end,function(_ENV,pl,amount)
 amount=_min(amount,pl.active.maxhp-pl.active.hp)
@@ -296,7 +296,7 @@ end,function(num,remainder)
 return(_sgn(num)>0 and "|+"or "|-").._abs(num)..remainder
 end,function(_ENV,func,...)return func(_ENV,self,...)end,function(_ENV,func,...)return func(_ENV,other,...)end,function(_ENV,pl,key,stage)
 if f_movehelp_incstat(pl.active,key,stage)then
-addaction(pl,f_format_num_sign(stage,"/6|"..c_stages[key]))
+addaction(pl,f_format_num_sign(stage,"/6|"..c_stages[key].longname))
 else
 return true
 end
@@ -1086,12 +1086,8 @@ end
 end,function(menu,pkmn)
 menu:refresh{}
 f_zobj_set(menu,[[;pkmn,@;;hidden,%c_yes;;name,lvl 50,style,5;;name,@]],pkmn,(pkmn.hp or pkmn.maxhp).."/"..pkmn.maxhp)
-_foreach(f_zobj[[;key,special,name,spc;;key,attack,name,att;;key,defense,name,def;;key,speed,name,spd;;key,total,name,tot]],function(pair)
-if not pair.key then
-_add(menu,{name=pair.name,style=5})
-elseif pkmn[pair.key]then
-_add(menu,{name=pair.name.." "..pkmn[pair.key]})
-end
+_foreach(split"special,attack,defense,speed,total",function(key)
+_add(menu,{name=c_stages[key].shortname.." "..pkmn[key]})
 end)
 f_zcall(function(name,key)
 if #c_pokemon[pkmn.num][key]>0 then
