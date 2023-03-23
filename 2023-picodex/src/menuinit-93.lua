@@ -108,10 +108,10 @@ end $$
             team=trainer,
             disabled=num-1 > @S_STORY,
             select=function(game, entry)
-                f_begin_fight_cpu(game, entry.team, entry.name, f_nop, function(pl, other)
-                    _poke(S_STORY, _mid(@S_STORY, num, #c_trainers)) -- todo: token crunch if low on tokens/compression, replace #c_trainers with "40", since there is a hard-coded limit
+                f_begin_fight_cpu(game, entry.team, entry.name, function(pl, other)
+                    _poke(S_STORY, _mid(@S_STORY, num, 40)) -- 40 trainers, this is hard coded and won't change
                     f_unlock_pkmn(other)
-                end, f_nop)
+                end)
             end
         }
     end)
@@ -123,8 +123,6 @@ end $$
        ;; name,"switch", state,switchteam, select,%f_menu_state_callback -- use browse pokemon selector
        ;; name,"delete",                   select,%f_teamdel             -- use the edit team screen
     ]])
-
-    teammovesel.menu.c = 0
 end $$
 
 |[f_moveaction_init]| function(_ENV)

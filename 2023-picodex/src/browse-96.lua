@@ -40,7 +40,6 @@ end $$
     -- substitute check should go after pika/psyduck checks above, for if pika/psy know substitute
     if substitute and substitute > 0 then num = 154 end
 
-    -- todo: substitute should trump fly/dig
     if not isactive or major ~= C_MAJOR_FAINTED and not invisible and not (moveturn ~= 0 and curmove.ofunc == f_move_flydig) then
         if num < 0 then _spr(107, x-4, y-4) return end
         xscale, yscale = xscale or 1, yscale or 1
@@ -72,18 +71,8 @@ end $$
        ;;name,@
     ]], pkmn, (pkmn.hp or pkmn.maxhp)..'/'..pkmn.maxhp)
 
-    _foreach(f_zobj[[
-        ;key,special, name,"spc"
-       ;;key,attack,  name,"att"
-       ;;key,defense, name,"def"
-       ;;key,speed,   name,"spd"
-       ;;key,total,   name,"tot"
-    ]], function(pair)
-        if not pair.key then
-            _add(menu, { name=pair.name, style=5 })
-        elseif pkmn[pair.key] then
-            _add(menu, { name=pair.name.." "..pkmn[pair.key] })
-        end
+    _foreach(split'special,attack,defense,speed,total', function(key)
+        _add(menu, { name=c_stages[key].shortname.." "..pkmn[key] })
     end)
 
     f_zcall(function(name, key)

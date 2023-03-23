@@ -17,15 +17,14 @@
     for dd in _all{d1, d2} do
         _ENV[dd.key] = f_zobj([[
             actions,#, priority,1,
-            menu_action,@, menu_move,@, menu_switch,@, team,@, name,@, iscpu,@, dielogic,@, winlogic,@
+            menu_action,@, menu_move,@, menu_switch,@, team,@, name,@, iscpu,@, winlogic,@
         ]], f_create_menu(f_menu_drawentry),
             f_create_menu(f_menu_drawentry),
             f_create_menu(f_browse_drawentry, 3),
             _unpack(dd))
         local _ENV=_ENV[dd.key]
         menu_action.cancel = f_beep
-        active = f_team_pkmn_to_active(f_get_next_active(team))
-        _add(actions, f_newaction(_ENV, "|comes|out"))
+        _add(actions, f_pkmn_comes_out(_ENV, f_get_next_active(team)))
     end
 
     -- how to switch the current player
@@ -35,14 +34,14 @@
 end $$
 
 -- horde and story share similar logic for cpu battle
-|[f_begin_fight_cpu]| function(_ENV, pkmn_nums, name, deathfunc, plwinfunc, cpuwinfunc)
+|[f_begin_fight_cpu]| function(_ENV, pkmn_nums, name, plwinfunc)
     local cpu_team_draft = {}
     for i=1,#pkmn_nums do
         f_set_default_team_pkmn(cpu_team_draft, i, pkmn_nums[i])
     end
 
     f_begin_fight(_ENV,
-        {_ENV:f_get_team_cursor'team1', "player", false, f_nop,     plwinfunc},
-        {cpu_team_draft,                name,     true,  deathfunc, cpuwinfunc}
+        {_ENV:f_get_team_cursor'team1', "player", false, plwinfunc},
+        {cpu_team_draft,                name,     true,  f_nop}
     )
 end $$

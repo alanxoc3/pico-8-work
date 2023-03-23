@@ -12,16 +12,20 @@ s_hoard =         0x5efe
 s_swap_controls = 0x5eff
 
 function updatesavedata()
-    if g_select == 5 then
+    if g_select == 6 then
         memset(0x5e00, 0, 0x100)
     end
 
-    if g_select == 3 then
-        for i=0,151 do poke(s_pokemon+i, 1) end
+    if g_select == 5 then
+        poke(s_story,40)
     end
 
     if g_select == 4 then
-        poke(s_story,40)
+        poke(s_pokemon, 1)
+    end
+
+    if g_select == 3 then
+        for i=1,151 do poke(s_pokemon+i, 1) end
     end
 
     if g_select <= 2 then
@@ -48,7 +52,7 @@ function updatesavedata()
 end
 
 function _update60()
-    g_select = mid(0,5,g_select+ybtnp())
+    g_select = mid(0,6,g_select+ybtnp())
 
     if btnp(4) or btnp(5) then
         updatesavedata()
@@ -66,7 +70,8 @@ function _draw()
     print("load test party 2", 5, 13, 7)
     print("load test party 3", 5, 21, 7)
     print("unlock pokemon",    5, 29, 7)
-    print("unlock trainers",   5, 37, 7)
-    print("factory reset",     5, 45, 7)
+    print("unlock glitch",     5, 37, 7)
+    print("unlock trainers",   5, 45, 7)
+    print("factory reset",     5, 53, 7)
     camera()
 end

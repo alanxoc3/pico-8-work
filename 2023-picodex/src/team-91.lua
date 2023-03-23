@@ -111,7 +111,6 @@ end $$
         ]], function(envparams)
             return ofunc(envparams, _unpack(c_moves_raw[i]))
         end, i, name, typ, pp, dmg, acc, ofunc)
-        _printh("memloc: "..memloc.." | ")
 
         memloc+=4
     end

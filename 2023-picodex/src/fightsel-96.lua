@@ -3,8 +3,8 @@
 
 |[f_match_start]| function(_ENV)
     f_begin_fight(_ENV,
-        {f_get_team(_ENV:cursor'team1'),      "player 1", false, f_nop, f_nop},
-        {f_get_team(_ENV:cursor'team2match'), "player 2", false, f_nop, f_nop}
+        {f_get_team(_ENV:cursor'team1'),      "player 1", false, f_nop},
+        {f_get_team(_ENV:cursor'team2match'), "player 2", false, f_nop}
     )
 end $$
 
@@ -17,13 +17,8 @@ end $$
     -- unlock pkmn and update high score regardless of win/lose
     -- the only pokemon you can unlock is missingno,
     -- since horde mode doesn't appear until after league
-    f_begin_fight_cpu(_ENV, nums, "horde", f_nop,
-        function(_, other) f_horde_win_func(other) end,
-        f_horde_win_func
-    )
-end $$
-
-|[f_horde_win_func]| function(horde)
-    f_unlock_pkmn(horde)
-    _poke(S_HOARD, _mid(@S_HOARD, #f_get_team_dead(horde.team), 255))
+    f_begin_fight_cpu(_ENV, nums, "horde", function(_, other)
+        f_unlock_pkmn(other)
+        _poke(S_HOARD, _mid(@S_HOARD, #f_get_team_dead(other.team), 255))
+    end)
 end $$

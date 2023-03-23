@@ -3,14 +3,12 @@
 -- DIFF: if a pokemon faints, the next pokemon in the party will automatically be sent out
 -- DIFF: pokemon have a 20% chance to unthaw
 
--- todo: don't have "+1 eva". I should have "+1 evasion" .... also, does evasion even work?
 -- todo: something to consider. For dig/fly/hypebeam, it would be nice to have alternate text on the second turn, instead of "blah|used|hyperbeam". so maybe i can do something for that.
 
 |[c_pokemon]| f_zobj[[]] $$
 |[c_pokemon_names]| _split"missingno,bulbasaur,ivysaur,venusaur,charmander,charmeleon,charizard,squirtle,wartortle,blastoise,caterpie,metapod,butterfree,weedle,kakuna,beedrill,pidgey,pidgeotto,pidgeot,rattata,raticate,spearow,fearow,ekans,arbok,pikachu,raichu,sandshrew,sandslash,nidoran f,nidorina,nidoqueen,nidoran m,nidorino,nidoking,clefairy,clefable,vulpix,ninetales,jigglypuff,wigglytuff,zubat,golbat,oddish,gloom,vileplume,paras,parasect,venonat,venomoth,diglett,dugtrio,meowth,persian,psyduck,golduck,mankey,primeape,growlithe,arcanine,poliwag,poliwhirl,poliwrath,abra,kadabra,alakazam,machop,machoke,machamp,bellsprout,weepinbell,victreebel,tentacool,tentacruel,geodude,graveler,golem,ponyta,rapidash,slowpoke,slowbro,magnemite,magneton,farfetchd,doduo,dodrio,seel,dewgong,grimer,muk,shellder,cloyster,gastly,haunter,gengar,onix,drowzee,hypno,krabby,kingler,voltorb,electrode,exeggcute,exeggutor,cubone,marowak,hitmonlee,hitmonchan,lickitung,koffing,weezing,rhyhorn,rhydon,chansey,tangela,kangaskhan,horsea,seadra,goldeen,seaking,staryu,starmie,mr mime,scyther,jynx,electabuzz,magmar,pinsir,tauros,magikarp,gyarados,lapras,ditto,eevee,vaporeon,jolteon,flareon,porygon,omanyte,omastar,kabuto,kabutops,aerodactyl,snorlax,articuno,zapdos,moltres,dratini,dragonair,dragonite,mewtwo,mew" $$
 c_pokemon_names[0] = "" -- for "none" pkmn, technically not needed possibly (-1)
 
--- todo: add short names
 |[c_major_names]|       f_zobj"0,none;,fainted,burned,frozen,paralyzed,poisoned,sleeping" $$
 |[c_major_names_short]| f_zobj"0,NON;,FNT,BRN,FZN,PAR,PSN,SLP" $$
 
@@ -67,12 +65,13 @@ c_pokemon_names[0] = "" -- for "none" pkmn, technically not needed possibly (-1)
 ]] $$
 
 |[c_stages]| f_zobj[[
-    special,  "spc",
-    attack,   "att",
-    defense,  "def",
-    speed,    "spd",
-    accuracy, "acc",
-    evasion,  "eva"
+    special;  longname,"special", shortname, "spc"
+   ;attack;   longname,"attack",  shortname, "att"
+   ;defense;  longname,"defense", shortname, "def"
+   ;speed;    longname,"speed",   shortname, "spd"
+   ;total;                        shortname, "tot"
+   ;accuracy; longname,"accuracy"
+   ;evasion;  longname,"evasion"
 ]] $$
 
 -- 5 bg styles
