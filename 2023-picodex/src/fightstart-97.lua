@@ -1,5 +1,5 @@
 -- fight is: turn -> turn -> { (p1 select) -> (p2 select) -> whogoesfirst -> turn -> turn -> ...repeat }
--- in turn init, if there are %c_no actions then go to p1 select
+-- in turn init, if there are ~c_no actions then go to p1 select
 -- in turn init, switch p0
 -- 
 -- team1/team2: { {num=123, moves={1=3, 2=4, 3=31, 4=68 }}, ... }

@@ -281,7 +281,7 @@ end $$
 end $$
 
 -- self pl, other pl
--- return faint action if %c_no hp and not dead
+-- return faint action if ~c_no hp and not dead
 -- return nothing if end of turn
 |[f_pop_next_action]| function(game)
     -- if an active pokemon has no hp, but not the faint status yet, return an action that makes the pokemon faint.

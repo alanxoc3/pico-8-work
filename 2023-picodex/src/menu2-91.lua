@@ -21,10 +21,10 @@ end $$
 |[f_create_menu_view]| function(edraw, viewmin)
     return f_zobj([[
         edraw,@, viewmin,@, v,~viewmin, r,1,
-        update,%f_menu_view_update,
-        draw1,%f_menu_draw1,
-        cancel,%f_menu_cancel,
-        refresh,%f_menu_refresh
+        update,~f_menu_view_update,
+        draw1,~f_menu_draw1,
+        cancel,~f_menu_cancel,
+        refresh,~f_menu_refresh
     ]], edraw, viewmin or 0)
 end $$
 
@@ -34,8 +34,8 @@ end $$
     return f_zobj_set(f_create_menu_view(edraw), [[
         c,0, -- cursor
         r,@,
-        update,%f_menu_update,
-        set,%f_menu_set
+        update,~f_menu_update,
+        set,~f_menu_set
     ]], r or 1)
 end $$
 

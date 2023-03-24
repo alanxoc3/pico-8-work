@@ -52,8 +52,8 @@ end $$
                 f_draw_pkmn(num, x+(v3 or i), y+(v4 or i), xscale, yscale) 
             end
         end, [[
-             ;,@, @, %c_no, @, %c_no
-            ;;,1, %c_no, 0, 0, %c_no
+             ;,@, @, ~c_no, @, ~c_no
+            ;;,1, ~c_no, 0, 0, ~c_no
         ]], col, -outline_width, outline_width)
 
         _pal() f_draw_pkmn(num, x, y, xscale, yscale)
@@ -66,7 +66,7 @@ end $$
 
     f_zobj_set(menu, [[
         ;pkmn,@
-       ;;hidden,%c_yes
+       ;;hidden,~c_yes
        ;;name,"lvl C_LEVEL", style,5
        ;;name,@
     ]], pkmn, (pkmn.hp or pkmn.maxhp)..'/'..pkmn.maxhp)

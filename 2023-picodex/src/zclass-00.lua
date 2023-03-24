@@ -1,18 +1,18 @@
 |[f_zclass]| function(template)
     return f_zobj_set(f_zobj[[
-        load,      %f_actor_load,
-        loadlogic, %f_actor_loadlogic,
-        state,     %f_actor_state,
-        get_elapsed_percent,%f_actor_get_elapsed_percent,
+        load,      ~f_actor_load,
+        loadlogic, ~f_actor_loadlogic,
+        state,     ~f_actor_state,
+        get_elapsed_percent,~f_actor_get_elapsed_percent,
 
         timer, 0,
         stacksize, 0, -- need a separate var for stack size for so buttons don't jitter on ui
 
-        isnew, %c_yes,
+        isnew, ~c_yes,
         curr,  start,
 
-        init,   %f_nop,
-        update, %f_nop;
+        init,   ~f_nop,
+        update, ~f_nop;
 
         stack;,;
     ]], template)

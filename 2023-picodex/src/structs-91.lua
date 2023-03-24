@@ -1,5 +1,3 @@
--- todo: an idea for compression crunching if I need it is to remove most "%" from ztable.
-
 -- this file contains structures for pokemon
 
 -- thanks to bulbapedia: https://bulbapedia.bulbagarden.net/wiki/Stat#Stat
@@ -13,7 +11,7 @@ end $$
 -- this makes the f_populate_c_pokemon function easier to understand
 |[f_get_default_pokemon]| function()
     return f_zobj([[
-        browse,%c_yes,
+        browse,~c_yes,
         level,C_LEVEL,
         attack,0, defense,0, special,0, speed,0, maxhp,0, hp,0, total,0,
         accuracy,100, evasion,100, -- all pkmn have 100 accuracy & 100 evasion. getstat doesn't work with decimal numbers
@@ -23,7 +21,7 @@ end $$
         type1,T_NONE, type2,T_NONE,
         moves_natural,#, moves_teach,#, moves_event,#,
 
-        draw,%f_draw_pkmn_out,
+        draw,~f_draw_pkmn_out,
 
         mynewmoves,@
     ]], f_create_empty_moveset())
@@ -120,7 +118,7 @@ end $$
 end $$
 
 |[f_create_team_pkmn]| function(num, mynewmoves)
-    return _setmetatable(f_zobj([[mynewmoves,@, major,C_MAJOR_NONE, browse,%c_no]], mynewmoves), {__index=c_pokemon[num]})
+    return _setmetatable(f_zobj([[mynewmoves,@, major,C_MAJOR_NONE, browse,~c_no]], mynewmoves), {__index=c_pokemon[num]})
 end $$
 
 -- teampkmn must be non-nil and match the team table structure defined in f_create_team_pkmn
@@ -132,7 +130,7 @@ end $$
     end)
 
     return _setmetatable(f_zobj([[
-        isactive,%c_yes, -- used for a drawing function, should draw fainted pokemon if they are not active, but not if they are active.
+        isactive,~c_yes, -- used for a drawing function, should draw fainted pokemon if they are not active, but not if they are active.
         lastmoverecv,0,  -- last move taken damage by, for mirrormove
         accuracy,1,      -- accuracy stat for battle
         evasion,1,       -- evasion stat for battle

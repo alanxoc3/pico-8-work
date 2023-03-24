@@ -12,27 +12,27 @@ function _init()
 
     g_picodex = f_zclass[[
         curr,wait;
-        init,%f_game_state_init, light,4;
+        init,~f_game_state_init, light,4;
         defaults;
             foldstate,closed,
             light,4, sfx,-1,
-            backbuttonheld,%c_no,
-            sinit,%f_nop, update,%f_nop, draw,%f_nop,
-            draw1,%f_nop, draw2,%f_nop, draw3,%f_nop,
+            backbuttonheld,~c_no,
+            sinit,~f_nop, update,~f_nop, draw,~f_nop,
+            draw1,~f_nop, draw2,~f_nop, draw3,~f_nop,
             modes,;
 
-        wait;   next,moveup, duration,.5, draw,%f_draw_picodex;
-        moveup; next,closed, duration,.5, draw,%f_draw_picodex, sinit,%f_moveup_init;
+        wait;   next,moveup, duration,.5, draw,~f_draw_picodex;
+        moveup; next,closed, duration,.5, draw,~f_draw_picodex, sinit,~f_moveup_init;
 
-        shaking;    foldstate,closed,  next,closed,              duration,.5,                       draw,%f_draw_picodex;
-        closed;     foldstate,closed,  next,opening,                          sinit,%f_closed_init, draw,%f_draw_picodex, update,%f_closed_update;
-        opening;    foldstate,opening, next,starting_1,          duration,.2,                       draw,%f_draw_picodex;
-        starting_1; foldstate,open,    next,starting_2, light,3, duration,.2, sfx,B_OKAY,           draw,%f_draw_picodex;
-        starting_2; foldstate,open,    next,starting_3, light,2, duration,.2, sfx,B_BACK,           draw,%f_draw_picodex;
-        starting_3; foldstate,open,    next,game,       light,1, duration,.2, sfx,B_ERROR,          draw,%f_draw_picodex;
-        game;       foldstate,open,    next,closing,    light,0,              sinit,%f_game_init,   draw,%f_draw_picodex, update,%f_game_update, draw1,%f_game_draw1, draw2,%f_game_draw2, draw3,%f_game_draw3;
+        shaking;    foldstate,closed,  next,closed,              duration,.5,                       draw,~f_draw_picodex;
+        closed;     foldstate,closed,  next,opening,                          sinit,~f_closed_init, draw,~f_draw_picodex, update,~f_closed_update;
+        opening;    foldstate,opening, next,starting_1,          duration,.2,                       draw,~f_draw_picodex;
+        starting_1; foldstate,open,    next,starting_2, light,3, duration,.2, sfx,B_OKAY,           draw,~f_draw_picodex;
+        starting_2; foldstate,open,    next,starting_3, light,2, duration,.2, sfx,B_BACK,           draw,~f_draw_picodex;
+        starting_3; foldstate,open,    next,game,       light,1, duration,.2, sfx,B_ERROR,          draw,~f_draw_picodex;
+        game;       foldstate,open,    next,closing,    light,0,              sinit,~f_game_init,   draw,~f_draw_picodex, update,~f_game_update, draw1,~f_game_draw1, draw2,~f_game_draw2, draw3,~f_game_draw3;
 
-        closing;    foldstate,closing, next,closed,              duration,.25,                      draw,%f_draw_picodex, update,%f_nop;
+        closing;    foldstate,closing, next,closed,              duration,.25,                      draw,~f_draw_picodex, update,~f_nop;
     ]]
 
     f_draw_picodex(g_picodex)

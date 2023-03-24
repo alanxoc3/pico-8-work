@@ -1,16 +1,13 @@
 -- used everywhere. this is the identity function
 -- 193 tokens
 function f_zobj_eval(val, table, parameters)
-    -- 37: %, 126: ~
-    if     _ord(val) == 37  then return _g[_sub(val, 2)]
-    elseif val == '~'       then return table
-    elseif _ord(val) == 126 then return table[_sub(val, 2)]
+    if     _ord(val) == 126 then return table[_sub(val, 2)] -- 126 means "~"
     elseif val == '@'       then return _deli(parameters, 1)
     elseif val == '#'       then return {} end
     return val ~= '' and val or nil
 end
 
--- has an extra split call %c_no matter key or val, but token & character count goes down from ztable-_ord
+-- has an extra split call ~c_no matter key or val, but token & character count goes down from ztable-_ord
 function f_zobj_set(table, str, ...)
     local params, statements, dest = {...}, _split(str, ";"), table
     _foreach(statements, function(statement)

@@ -16,7 +16,7 @@
         f_zobj_set(menu, [[
             v,0 -- fight over view should always start on top. don't save position for this one.
           ;;pkmn,@
-          ;;hidden,%c_yes
+          ;;hidden,~c_yes
 
           ;;name,@, style,5
           ;;name,@
@@ -31,17 +31,17 @@ end $$
 
     menu:refresh(
         f_zobj([[
-            ;name,"browse",  state,browse,     select,%f_menu_state_callback, desc,@
-           ;;name,"edit",    state,team1,      select,%f_menu_state_callback, desc,"edit|stored|teams"
-           ;;name,"league",  state,team1story, select,%f_menu_state_callback, desc,@
-           ;;name,"player",  state,team1match, select,%f_menu_state_callback, desc,"player|custom|battles"
-           ;;name,'?????',   state,team1horde, select,%f_menu_state_callback, desc,"?????|beat|league", disabled,%c_yes
-           ;;name,"credits", state,credits,    select,%f_menu_state_callback, desc,"credits|amorg|games"
+            ;name,"browse",  state,browse,     select,~f_menu_state_callback, desc,@
+           ;;name,"edit",    state,team1,      select,~f_menu_state_callback, desc,"edit|stored|teams"
+           ;;name,"league",  state,team1story, select,~f_menu_state_callback, desc,@
+           ;;name,"player",  state,team1match, select,~f_menu_state_callback, desc,"player|custom|battles"
+           ;;name,'?????',   state,team1horde, select,~f_menu_state_callback, desc,"?????|beat|league", disabled,~c_yes
+           ;;name,"credits", state,credits,    select,~f_menu_state_callback, desc,"credits|amorg|games"
         ]], "browse|"..count.."/151|pokemon", "league|"..(@S_STORY).."/40|trainers")
     )
 
     if @S_STORY >= 40 then
-        f_zobj_set(menu[5], [[disabled,%c_no, name,"horde", desc,@]], "horde|"..(@S_HOARD).."/151|hi-score")
+        f_zobj_set(menu[5], [[disabled,~c_no, name,"horde", desc,@]], "horde|"..(@S_HOARD).."/151|hi-score")
     end
 end $$
 
@@ -119,9 +119,9 @@ end $$
 
 |[f_teamaction_init]| function(_ENV)
     menu:refresh(f_zobj[[
-        ; name,"moves",  state,teammoves,  select,%f_menu_state_callback -- use the menu system
-       ;; name,"switch", state,switchteam, select,%f_menu_state_callback -- use browse pokemon selector
-       ;; name,"delete",                   select,%f_teamdel             -- use the edit team screen
+        ; name,"moves",  state,teammoves,  select,~f_menu_state_callback -- use the menu system
+       ;; name,"switch", state,switchteam, select,~f_menu_state_callback -- use browse pokemon selector
+       ;; name,"delete",                   select,~f_teamdel             -- use the edit team screen
     ]])
 end $$
 
@@ -133,9 +133,9 @@ end $$
     end
 
     menu:refresh(f_zobj([[
-        ; name,"change", state,teammovesel, select,%f_menu_state_callback
-       ;; name,"switch", state,switchmoves, select,%f_menu_state_callback
-       ;; name,"delete", disabled,@,        select,%f_movedel
+        ; name,"change", state,teammovesel, select,~f_menu_state_callback
+       ;; name,"switch", state,switchmoves, select,~f_menu_state_callback
+       ;; name,"delete", disabled,@,        select,~f_movedel
     ]], count == 1))
 end $$
 
@@ -235,9 +235,9 @@ end $$
 
 |[f_pselactions_init]| function(_ENV)
     menu:refresh(f_zobj[[
-         ; name,"fight",  desc,"fight|select|move",       select,%f_menu_state_callback, state,pselmove
-        ;; name,"switch", desc,"switch|active|pokemon",   select,%f_menu_state_callback, state,pselswitch
-        ;; name,"forfeit",  desc,"forfeit|pokemon|battle",  select,%f_psel_forfeit
+         ; name,"fight",  desc,"fight|select|move",       select,~f_menu_state_callback, state,pselmove
+        ;; name,"switch", desc,"switch|active|pokemon",   select,~f_menu_state_callback, state,pselswitch
+        ;; name,"forfeit",  desc,"forfeit|pokemon|battle",  select,~f_psel_forfeit
     ]])
 end $$
 
