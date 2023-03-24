@@ -166,12 +166,12 @@ end $$
           ;;,-20,14,19,17,@
         ]], style.bg, style.aa)
 
-        entry.pkmn:draw(0,8,style.aa,1,1)
+        entry.pkmn:f_draw_pkmn_out(0,8,style.aa,1,1)
     else
         f_wobble_text(entry.name, 0, 0, style.fg)
     end
 end $$
 
 |[f_browse_drawentry]| function(entry, style)
-    entry.pkmn:draw(0, 3, style.out, .375, .375)
+    entry.pkmn:f_draw_pkmn_out(0, 3, style.out, .375, .375)
 end $$

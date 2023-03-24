@@ -21,8 +21,6 @@ end $$
         type1,T_NONE, type2,T_NONE,
         moves_natural,#, moves_teach,#, moves_event,#,
 
-        draw,~f_draw_pkmn_out,
-
         mynewmoves,@
     ]], f_create_empty_moveset())
 end $$

@@ -1,6 +1,6 @@
 -- every state change will clean up all the entities.
 |[f_game_state_init]| function(state)
-    f_minisfx(state.sfx)
+    if state.sfx then f_minisfx(state.sfx) end
     state:sinit()
 end $$
 
@@ -15,16 +15,16 @@ function _init()
         init,~f_game_state_init, light,4;
         defaults;
             foldstate,closed,
-            light,4, sfx,-1,
+            light,4, sfx,~c_no,
             backbuttonheld,~c_no,
             sinit,~f_nop, update,~f_nop, draw,~f_nop,
             draw1,~f_nop, draw2,~f_nop, draw3,~f_nop,
             modes,;
 
         wait;   next,moveup, duration,.5, draw,~f_draw_picodex;
-        moveup; next,closed, duration,.5, draw,~f_draw_picodex, sinit,~f_moveup_init;
+        moveup; next,closed, duration,.5, draw,~f_draw_picodex;
 
-        shaking;    foldstate,closed,  next,closed,              duration,.5,                       draw,~f_draw_picodex;
+        shaking;    foldstate,closed,  next,closed,              duration,.5, sfx,159,              draw,~f_draw_picodex;
         closed;     foldstate,closed,  next,opening,                          sinit,~f_closed_init, draw,~f_draw_picodex, update,~f_closed_update;
         opening;    foldstate,opening, next,starting_1,          duration,.2,                       draw,~f_draw_picodex;
         starting_1; foldstate,open,    next,starting_2, light,3, duration,.2, sfx,B_OKAY,           draw,~f_draw_picodex;
@@ -37,10 +37,10 @@ function _init()
 
     f_draw_picodex(g_picodex)
     _flip()
-    f_minisfx'158'
-    f_extract_sheet(0x0) -- 0x0
-    f_extract_sheet(0x2) -- 0x2
-    f_extract_sheet(0x4) -- 0x4
+    f_minisfx'155' f_extract_sheet(0x0) -- 0x0
+    f_minisfx'154' f_extract_sheet(0x2) -- 0x2
+    f_minisfx'153' f_extract_sheet(0x4) -- 0x4
+    f_minisfx'154'
 
     f_zcall(_poke, [[
          ;,0x5f5c, 8    -- set the initial delay before repeating. 255 means never repeat.

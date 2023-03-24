@@ -1,14 +1,9 @@
--- todo (wait): pkmn cries. 19 sfx slots (8 per slot) could give me all 152 pkmn cries.
--- todo (wait): 3 channels for song. 1 for picodex noise/cry.
+-- todo (wait): create a tiny song if there is room
 -- game state funcs
-|[f_moveup_init]| function()
-    _sfx(-2,1) -- stop the creepy logo sound from looping
-end $$
 
 -- you can factory reset when the pokedex is closed
 |[f_closed_init]| function(_ENV)
     _menuitem(1, "factory reset", function()
-        -- todo: add an sfx here
         _memset(0x5e00, 0, 0x100)
         _ENV:load'shaking'
     end)
@@ -45,7 +40,7 @@ end $$
         f_zcall(f_zprint, [[
            ;,"aMORG gAMES"         ,64, -68,7,0
           ;;,"pRESENTS"            ,64, -61,7,0
-          ;;,"a pICO-8 pOKEDEX sIM",64, 15 ,7,0
+          ;;,"a pOKEMON bATTLE sIM",64, 15 ,7,0
         ]])
         f_zcall(f_zspr, [[;,102,64,11,5,1]])
 

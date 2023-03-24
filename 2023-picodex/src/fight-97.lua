@@ -27,7 +27,9 @@ end $$
 
 -- metronome would call this function as well as select_move
 |[f_movelogic]| function(self, move)
-    f_addaction(self, self, "|uses|"..move.name, function(params)
+    local desc = self.active.curmove and "|resumes|" or (move.ofunc == f_move_multiturn and "|begins|" or "|uses|")
+
+    f_addaction(self, self, desc..move.name, function(params)
         params.move = move
 
         local _ENV = params
@@ -41,7 +43,7 @@ end $$
         end
 
         if f_does_move_miss(selfactive, otheractive, move) then
-            addaction(self, "|missed|"..move.name)
+            addaction(self, "|misses|"..move.name)
 
             if move.num == M_HIGH_JUMP_KICK or move.num == M_JUMP_KICK then
                 f_move_setdmg_self(_ENV, 1)
@@ -53,7 +55,7 @@ end $$
 
             -- todo: might be nice if other things were supported (miss, fail, resist)
             if move.func(_ENV) then
-                addaction(self, "|failed|"..move.name)
+                addaction(self, "|fails|"..move.name)
             end
         end
     end)
@@ -149,12 +151,10 @@ end $$
 
 -- todo: make minor statuses numbers instead
 |[f_postmove_logic]| function(self)
-
     -- todo: i can probably token crunch this section
     return f_newaction(self, false, function(_ENV)
         -- flinching is reset at the psel init level, so you can't be flinching the next turn. no need to reset flinching here.
-
-        -- moveturn is also reset at the psel init level. if a condition lasts only 1 turn, jjj
+        -- counterdmg is also reset at psel init level.
 
         -- reset moveturn if you sleep or are frozen. this is done at end of the turn to prevent weird cases (you freeze then unfreeze same turn).
         -- if you are using rage and freeze then unfreeze in the same turn, you continue your rage.

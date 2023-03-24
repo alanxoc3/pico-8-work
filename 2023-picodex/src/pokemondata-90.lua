@@ -98,7 +98,7 @@ _g.c_moves_raw = f_zobj[[
    ;;, "thunder",  ~f_move_default,10,~f_move_major_other,C_MAJOR_PARALYZED        -- 25
    ;;, "earthqke", ~f_move_default                                                 -- 26
    ;;, "fissure",  ~f_move_ohko                                                    -- 27
-   ;;, "dig",      ~f_move_flydig,"digging"                                        -- 28
+   ;;, "dig",      ~f_move_flydig,"|begins|digging"                                -- 28
    ;;, "psychic",  ~f_move_default,30,~f_move_other, ~f_move_stat,special,-1       -- 29
    ;;, "teleport", ~f_move_teleport                                                -- 30  DIFF: switches with random pokemon from user's team
    ;;, "mimic",    ~f_move_mimic                                                   -- 31  DIFF: doesn't miss and copies 5 pp like transform
@@ -122,7 +122,7 @@ _g.c_moves_raw = f_zobj[[
    ;;, "triattck", ~f_move_default                                                 -- 49
    ;;, "substute", ~f_move_substitute                                              -- 50  DIFF: recoil moves damage user. only protects from direct enemy damage, user is still vulnerable to all other effects
    ;;, "cut",      ~f_move_default                                                 -- 51
-   ;;, "fly",      ~f_move_flydig,"flying"                                         -- 52
+   ;;, "fly",      ~f_move_flydig,"|begins|flying"                                 -- 52
    ;;, "surf",     ~f_move_default                                                 -- 53
    ;;, "strength", ~f_move_default                                                 -- 54
    ;;, "flash",    ~f_move_other, ~f_move_stat, accuracy, -1                       -- 55

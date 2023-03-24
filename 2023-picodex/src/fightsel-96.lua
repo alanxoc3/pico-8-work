@@ -3,8 +3,8 @@
 
 |[f_match_start]| function(_ENV)
     f_begin_fight(_ENV,
-        {f_get_team(_ENV:cursor'team1'),      "player 1", false, f_nop},
-        {f_get_team(_ENV:cursor'team2match'), "player 2", false, f_nop}
+        f_zobj([[,@,"player 1", ~c_no, ~f_nop]], f_get_team(_ENV:cursor'team1match')),
+        f_zobj([[,@,"player 2", ~c_no, ~f_nop]], f_get_team(_ENV:cursor'team2match'))
     )
 end $$
 

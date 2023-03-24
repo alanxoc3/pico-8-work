@@ -1,4 +1,4 @@
--- todo: pl select shouldn't share with edit select team cursor
+-- todo: trapping moves are messed up when a pokemon faints
 
 -- roar/whirlwind/teleport
 |[f_movehelp_switch]| function(pl)
@@ -62,14 +62,14 @@ end $$
 
 |[f_move_mimic]| function(_ENV)
     local othermoves = f_get_moves(otheractive, true)
-    addaction(self, "|copied|"..f_movehelp_movecopy(selfactive, othermoves[f_flr_rnd(#othermoves)+1].num, move.slot).name)
+    addaction(self, "|copies|"..f_movehelp_movecopy(selfactive, othermoves[f_flr_rnd(#othermoves)+1].num, move.slot).name)
 end $$
 
 |[f_move_transform]| function(_ENV)
     if selfactive.transform then
         return true
     else
-        addaction(self, "|copied|"..otheractive.name, function()
+        addaction(self, "|copies|"..otheractive.name, function()
             selfactive.transform = true
             _foreach(_split'num,attack,defense,speed,special,type1,type2', function(key)
                 selfactive[key] = otheractive[key]
@@ -85,7 +85,7 @@ end $$
 
 |[f_move_conversion]| function(_ENV)
     f_zobj_set(selfactive, [[ type1,@, type2,@ ]], otheractive.type1, otheractive.type2)
-    addaction(self, "|copied|types")
+    addaction(self, "|copies|types")
 end $$
 
 |[f_move_haze]| function(_ENV)
@@ -96,7 +96,7 @@ end $$
             accuracy,0, evasion,0
         ]])
 
-        addaction(pl, "|reset|stat mods")
+        addaction(pl, "|resets|stats")
     end)
 end $$
 
@@ -222,57 +222,7 @@ end $$
     end)
 end $$
 
----------- DAMAGING MOVES BELOW ----------
-|[f_start_sleep_timer]| function(_ENV)
-    sleeping = f_flr_rnd'3'+2
-    -- ^^ If I change the sleep timer amount, remember that
-end $$
-
-|[f_move_rest]| function(_ENV)
-    selfactive.shared.major = C_MAJOR_SLEEPING
-    f_start_sleep_timer(selfactive) -- has check, must go after setting major
-    addaction(self, "|is|sleeping")
-    f_move_heal(_ENV, self, selfactive.maxhp)
-    selfactive.toxiced = 0
-end $$
-
-|[f_move_counter]| function(_ENV)
-    -- the modulus here is to check if the last move was a physical move
-    if selfactive.counterdmg > 0 then
-        f_move_setdmg(_ENV, selfactive.counterdmg*2)
-    else
-        return true
-    end
-end $$
-
-|[f_move_multihit_set]| function(_ENV, hitcount, endfunc)
-    if hitcount > 0 then
-        addaction(self, "|begin|hit #"..hitcount, function()
-            _ENV.otheractive = other.active
-            if f_move_default(_ENV) then
-                -- multihit can fail midway if a new pokemon enters in mid attack
-                addaction(self, "|failed|hit #"..hitcount)
-            end
-
-            f_move_multihit_set(_ENV, hitcount-1, endfunc)
-        end)
-    else
-        endfunc()
-    end
-end $$
-
-|[f_move_multihit_var]| function(_ENV, hitcount)
-    f_move_multihit_set(_ENV, 2+f_flr_rnd'4',f_nop)
-end $$
-
-|[f_move_multihit_twin]| function(_ENV)
-    f_move_multihit_set(_ENV, 2, function()
-        if _rnd'100' < 20 then
-            f_move_major_other(_ENV, C_MAJOR_POISONED)
-        end
-    end)
-end $$
-
+---------- MULTITURN MOVES ---------------
 -- todo: combine with thrash logic
 |[f_move_rage]| function(_ENV)
     f_set_moveturn(selfactive, -1, f_create_move(move.num, move.slot))
@@ -301,7 +251,6 @@ end $$
     end
 end $$
 
--- todo: maybe add custom descriptions (binded/clamped/trapped/wrapped)?
 |[f_move_trapping]| function(_ENV)
     -- the "trappedother" stuff is used to check if the opponent switched out.
     -- the trapper will continue trapping 1 more turn if the opponent used teleport but if they switch, that wouldn't happen.
@@ -309,7 +258,6 @@ end $$
     -- this is because teleport goes after all trapping moves.
     if not selfactive.curmove then
         f_set_moveturn(selfactive, f_flr_rnd'4'+1, f_create_move(move.num, move.slot))
-        addaction(self, "|"..move.name.."|begins")
         selfactive.trappedother = otheractive
     end
 
@@ -319,23 +267,33 @@ end $$
 
     if selfactive.moveturn == 0 or selfactive.trappedother ~= otheractive then
         selfactive.moveturn, selfactive.trappedother = 0
-        addaction(self, "|"..move.name.."|ended")
     end
 end $$
 
-|[f_move_flydig]| function(_ENV, desc) -- todo: i can probably get rid of "|started|" below
+|[f_move_flydig]| function(_ENV, desc)
     if selfactive.curmove then
         f_move_default(_ENV)
     else
-        addaction(self, "|started|"..desc, function()
+        addaction(self, desc, function()
             f_set_moveturn(selfactive, 1, f_create_move(move.num, move.slot))
         end)
     end
 end $$
 
+-- solarbeam/razorwind/skullbash/skyattack
+|[f_move_prepare]| function(_ENV)
+    if selfactive.curmove then
+        f_move_default(_ENV)
+    else
+        addaction(self, "|charges|energy")
+        f_set_moveturn(selfactive, 1, move)
+        move.pp += 1 -- increment 1 pp, since 1 pp was just used, if the attack is interrupted, a pp should not be consumed
+    end
+end $$
+
 |[f_move_hyperbeam]| function(_ENV)
     if selfactive.curmove then
-        addaction(self, "|recharging|energy")
+        addaction(self, "|recharges|energy")
     else
         f_move_default(_ENV)
 
@@ -346,15 +304,56 @@ end $$
     end
 end $$
 
--- solarbeam/razorwind/skullbash/skyattack
-|[f_move_prepare]| function(_ENV)
-    if selfactive.curmove then
-        f_move_default(_ENV)
+---------- DAMAGING MOVES BELOW ----------
+|[f_start_sleep_timer]| function(_ENV)
+    sleeping = f_flr_rnd'3'+2
+    -- ^^ If I change the sleep timer amount, remember that
+end $$
+
+|[f_move_rest]| function(_ENV)
+    selfactive.shared.major = C_MAJOR_SLEEPING
+    f_start_sleep_timer(selfactive) -- has check, must go after setting major
+    addaction(self, "|is|sleeping")
+    f_move_heal(_ENV, self, selfactive.maxhp)
+    selfactive.toxiced = 0
+end $$
+
+|[f_move_counter]| function(_ENV)
+    -- the modulus here is to check if the last move was a physical move
+    if selfactive.counterdmg > 0 then
+        f_move_setdmg(_ENV, selfactive.counterdmg*2)
     else
-        f_set_moveturn(selfactive, 1, move)
-        addaction(self, "|preparing|attack")
-        move.pp += 1 -- increment 1 pp, since 1 pp was just used, if the attack is interrupted, a pp should not be consumed
+        return true
     end
+end $$
+
+-- todo: weird order with multihit and rage (when it says +1 attack).
+|[f_move_multihit_set]| function(_ENV, hitcount, endfunc, isresume)
+    if hitcount > 0 then
+        addaction(self, isresume and "|resumes|"..move.name, function()
+            _ENV.otheractive = other.active -- needed because the fight logic removes new other actives
+            if f_move_default(_ENV) then
+                -- multihit can fail midway if a new pokemon enters in mid attack with resistance
+                addaction(self, "|fails|"..move.name)
+            else
+                f_move_multihit_set(_ENV, hitcount-1, endfunc, true)
+            end
+        end)
+    else
+        endfunc()
+    end
+end $$
+
+|[f_move_multihit_var]| function(_ENV, hitcount)
+    f_move_multihit_set(_ENV, 2+f_flr_rnd'4',f_nop)
+end $$
+
+|[f_move_multihit_twin]| function(_ENV)
+    f_move_multihit_set(_ENV, 2, function()
+        if _rnd'100' < 20 then
+            f_move_major_other(_ENV, C_MAJOR_POISONED)
+        end
+    end)
 end $$
 
 |[f_move_recoil]| function(_ENV)

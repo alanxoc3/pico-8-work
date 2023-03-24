@@ -35,3 +35,35 @@ sfx 61 - rhydon    chansey   | tangela  kangaskhan | horsea     seadra     | gol
 sfx 62 - tauros    magikarp  | gyarados lapras     | ditto      eevee      | vaporeon   jolteon    | flareon    porygon    | omanyte   omastar    | kabuto     kabutops   | aerodactyl snorlax
 sfx 63 - articuno  zapdos    | moltres  dratini    | dragonair  dragonite  | mewtwo     mew        | *okay      *back      | *error    *boot      | *logo      *todo      | *todo      *todo
 ```
+
+
+begin|hit #
+comes|back
+comes|out
+created|substitute
+does|nothing
+failed|hit #
+hitpoints
+hitpoints
+is now|
+is|sleeping
+resets|stats -- haze
+
+copies|{pkmn}
+copies|types
+copies|{move}    -- mimic
+
+charges|energy   -- solarbeam
+recharges|energy -- hyperbeam
+resumes|{move} -- multihit & multiturn
+
+misses|{move}
+fails|{move}
+uses|{move}
+
+f_move_rage
+f_move_bide
+f_move_thrash
+f_move_trapping
+f_move_flydig
+f_move_prepare

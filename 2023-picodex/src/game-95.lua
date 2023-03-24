@@ -1,5 +1,4 @@
--- todo: (wait) in battle, horizontal 1 px for accuracy attack (move with accuracy)
--- todo: (wait) in battle, vertical 1 px for stat attack
+-- todo: message when substitute breaks
 
 |[f_game_init]| function(_ENV)
     -- cheats!
@@ -61,11 +60,11 @@
         switchmoves; init,~f_switchmoves_init, draw2,~f_teammoves_draw2,   draw3,~f_move_draw3    ;
 
         -- pre-fight menus
-        team1;        ui_pl,"player", init,~f_team_init,    draw2,~f_team_draw2, draw3,~f_team_draw3, disable_empty_team,~c_no,   select_func,~f_team_select; -- t1
-        team1story;   ui_pl,"player", init,~f_team_init,    draw2,~f_team_draw2, draw3,~f_team_draw3, disable_empty_team,~c_yes,  select_func,~f_story_select; -- s1
-        team1match;   ui_pl,"player 1", init,~f_team_init,    draw2,~f_team_draw2, draw3,~f_team_draw3, disable_empty_team,~c_yes,  select_func,~f_match_select; -- s1
-        team1horde;   ui_pl,"player", init,~f_team_init,    draw2,~f_team_draw2, draw3,~f_team_draw3, disable_empty_team,~c_yes,  select_func,~f_horde_select; -- s1
-        team2match;   ui_pl,"player 2", init,~f_team_init,    draw2,~f_team_draw2, draw3,~f_team_draw3, disable_empty_team,~c_yes,  select_func,~f_match_start;  -- s1
+        team1;        ui_pl,"player",   init,~f_team_init,     draw2,~f_team_draw2, draw3,~f_team_draw3, disable_empty_team,~c_no,   select_func,~f_team_select; -- t1
+        team1story;   ui_pl,"player",   init,~f_team_init,     draw2,~f_team_draw2, draw3,~f_team_draw3, disable_empty_team,~c_yes,  select_func,~f_story_select; -- s1
+        team1match;   ui_pl,"player 1", init,~f_team_init,     draw2,~f_team_draw2, draw3,~f_team_draw3, disable_empty_team,~c_yes,  select_func,~f_match_select; -- s1
+        team1horde;   ui_pl,"player",   init,~f_team_init,     draw2,~f_team_draw2, draw3,~f_team_draw3, disable_empty_team,~c_yes,  select_func,~f_horde_select; -- s1
+        team2match;   ui_pl,"player 2", init,~f_team_init,     draw2,~f_team_draw2, draw3,~f_team_draw3, disable_empty_team,~c_yes,  select_func,~f_match_start;  -- s1
         team2story;   ui_pl,"trainer",  init,~f_fightsel_init, draw2,~f_team_draw2, draw3,~f_team_draw3;                                                        -- t2
 
         -- in-fight menus
@@ -100,6 +99,7 @@
        ;;,switchmoves, ~f_create_menu,      ~f_menu_drawentry      -- switch 1 of 4 moves
 
        ;;,team1,       ~f_create_menu,      ~f_menu_drawentry      -- select a team
+       ;;,team1match,  ~f_create_menu,      ~f_menu_drawentry      -- select a team, shouldn't share with team1, because this is for custom match.
        ;;,team2story,  ~f_create_menu,      ~f_menu_drawentry      -- select a cpu trainer
        ;;,team2match,  ~f_create_menu,      ~f_menu_drawentry      -- select a team
     ]])
@@ -111,7 +111,6 @@
         pselactions;menu;cancel,~f_beep;
 
         team1horde;menu,~team1menu;
-        team1match;menu,~team1menu;
         team1story;menu,~team1menu;
         teampkmn;menu,~browsemenu;
        
