@@ -180,8 +180,11 @@ end $$
 |[f_move_major_other]| function(_ENV, majorind)
     -- todo, prevent electric from getting paralyzed, fire from getting burned, ice frozen, grass leech, poison poisoned...
     if f_get_type_advantage(move, otheractive) > 0 and otheractive.shared.major == C_MAJOR_NONE then
-        addaction(other, "|is|"..c_major_names[majorind], function()
+        addaction(other, "|is now|"..c_major_names[majorind], function()
             otheractive.shared.major = majorind
+
+            -- every time major stat is set, sleep timer is set, but sleep timer isn't used unless pkmn is actually sleeping
+            f_start_sleep_timer(otheractive)
         end)
     else
         return true
@@ -220,8 +223,14 @@ end $$
 end $$
 
 ---------- DAMAGING MOVES BELOW ----------
+|[f_start_sleep_timer]| function(_ENV)
+    sleeping = f_flr_rnd'3'+2
+    -- ^^ If I change the sleep timer amount, remember that
+end $$
+
 |[f_move_rest]| function(_ENV)
     selfactive.shared.major = C_MAJOR_SLEEPING
+    f_start_sleep_timer(selfactive) -- has check, must go after setting major
     addaction(self, "|is|sleeping")
     f_move_heal(_ENV, self, selfactive.maxhp)
     selfactive.toxiced = 0

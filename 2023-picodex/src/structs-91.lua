@@ -1,5 +1,3 @@
--- todo: make gust/thunder hurt pokemon flying & deal double damage
--- todo: make earthquake/fissure hurt pokemon digging & deal double damage
 -- todo: an idea for compression crunching if I need it is to remove most "%" from ztable.
 
 -- this file contains structures for pokemon
@@ -87,9 +85,11 @@ end $$
         end
 
         if evolvesfrom < num then
-            _foreach(c_pokemon[evolvesfrom].moves_natural, function(move) _add(pkmn.moves_natural, move) end)
-            _foreach(c_pokemon[evolvesfrom].moves_teach,   function(move) _add(pkmn.moves_teach,   move) end)
-            _foreach(c_pokemon[evolvesfrom].moves_event,   function(move) _add(pkmn.moves_event,   move) end)
+            _foreach(_split'moves_natural,moves_teach,moves_event', function(key)
+                _foreach(c_pokemon[evolvesfrom][key], function(move)
+                    _add(pkmn[key], move)
+                end)
+            end)
         end
 
         -- this is my ghetto sorting. it fixes weird ordering for new teachs on evolved forms (tm/hm order)
@@ -138,11 +138,12 @@ end $$
         evasion,1,       -- evasion stat for battle
         moveturn,0,      -- turn move is on. > 0, decrements each turn. 0, is the same. -1, is multiturn move that doesn't end (rage).
 
-        -- minor conditions are all numbers ...
+        -- conditions are all numbers ...
         counterdmg,0,    -- resets to zero each turn
         bidedmg,0,       -- resets to zero when using bide
         disabledtimer,0, -- how long the disabled move should last
         confused,0,      -- for confusion, how long pkmn is confused
+        sleeping,@,      -- for sleeping, how long pkmn is sleeping. must start at non-zero in case a pokemon is switched in
         substitute,0,    -- for substitute obviously
         toxiced,0,       -- how bad the toxic is
 
@@ -153,5 +154,6 @@ end $$
         stages; special, 0, attack, 0,
                 defense, 0, speed,  0,
                 accuracy,0, evasion,0
-    ]], teampkmn, moves), {__index=teampkmn})
+    ]], f_flr_rnd'3'+2, teampkmn, moves), {__index=teampkmn})
+    -- ^^ hard-coding sleep timer here
 end $$

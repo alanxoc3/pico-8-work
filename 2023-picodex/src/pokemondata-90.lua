@@ -7,7 +7,7 @@
 
 |[c_pokemon]| f_zobj[[]] $$
 |[c_pokemon_names]| _split"missingno,bulbasaur,ivysaur,venusaur,charmander,charmeleon,charizard,squirtle,wartortle,blastoise,caterpie,metapod,butterfree,weedle,kakuna,beedrill,pidgey,pidgeotto,pidgeot,rattata,raticate,spearow,fearow,ekans,arbok,pikachu,raichu,sandshrew,sandslash,nidoran f,nidorina,nidoqueen,nidoran m,nidorino,nidoking,clefairy,clefable,vulpix,ninetales,jigglypuff,wigglytuff,zubat,golbat,oddish,gloom,vileplume,paras,parasect,venonat,venomoth,diglett,dugtrio,meowth,persian,psyduck,golduck,mankey,primeape,growlithe,arcanine,poliwag,poliwhirl,poliwrath,abra,kadabra,alakazam,machop,machoke,machamp,bellsprout,weepinbell,victreebel,tentacool,tentacruel,geodude,graveler,golem,ponyta,rapidash,slowpoke,slowbro,magnemite,magneton,farfetchd,doduo,dodrio,seel,dewgong,grimer,muk,shellder,cloyster,gastly,haunter,gengar,onix,drowzee,hypno,krabby,kingler,voltorb,electrode,exeggcute,exeggutor,cubone,marowak,hitmonlee,hitmonchan,lickitung,koffing,weezing,rhyhorn,rhydon,chansey,tangela,kangaskhan,horsea,seadra,goldeen,seaking,staryu,starmie,mr mime,scyther,jynx,electabuzz,magmar,pinsir,tauros,magikarp,gyarados,lapras,ditto,eevee,vaporeon,jolteon,flareon,porygon,omanyte,omastar,kabuto,kabutops,aerodactyl,snorlax,articuno,zapdos,moltres,dratini,dragonair,dragonite,mewtwo,mew" $$
-c_pokemon_names[0] = "" -- for "none" pkmn, technically not needed possibly (-1)
+-- c_pokemon_names[0] = "" -- for "none" pkmn, technically not needed possibly (-1)
 
 |[c_major_names]|       f_zobj"0,none;,fainted,burned,frozen,paralyzed,poisoned,sleeping" $$
 |[c_major_names_short]| f_zobj"0,NON;,FNT,BRN,FZN,PAR,PSN,SLP" $$
@@ -34,36 +34,6 @@ c_pokemon_names[0] = "" -- for "none" pkmn, technically not needed possibly (-1)
     T_BIRD;     bg,0, name,"bird";
 ]] $$
 
--- 0 means disabled
--- -1 means it last forever
--- positive means x turns left
--- todo: this might be able to go away
-|[c_flags]| f_zobj[[
-    -- todo: current - how to handle these?
-    confused,   "confused", -- 1-4 turn
-    disabled,   "disable",  -- 2-7 turn -- disabled, disabled_move
-
-    digging,    "digging",   -- 1 turn
-    flying,     "flying",    -- 1 turn
-    preparing,  "prepare",   -- 1 turn
-    recharging, "recharge",  -- 1 turn
-    flinching,  "flinch",   -- bool
-    thrashed,   "thrashing", -- 2-3
-    trapping,   "trapping",  -- 2-5 turns
-
-    trapped,    "trapped",  -- 2-5 turns
-
-    raged,      "enraged",   -- no - moveturn -1
-    decoyed,    "decoyed",  -- no - kill-sub, num=hp
-    focused,    "focus",    -- no
-    misted,     "mist",     -- no
-    reflected,  "reflect",  -- no
-    screened,   "screened", -- no
-    seeded,     "seeded",   -- no
-    toxiced,    "toxiced",  -- no
-    transform,  "tranform"  -- no
-]] $$
-
 |[c_stages]| f_zobj[[
     special;  longname,"special", shortname, "spc"
    ;attack;   longname,"attack",  shortname, "att"
@@ -84,13 +54,6 @@ c_pokemon_names[0] = "" -- for "none" pkmn, technically not needed possibly (-1)
    ;; bg,8,  aa,2  -- fire
    ;; bg,10, aa,4  -- electric/ground
 ]] $$
-
-|[c_zmovetype]| f_zobj[[
-    0;name,"status";
-    ; name,"physical";
-    ; name,"special";
-]] $$
-
 
 -- Agility      Raises the user's Speed by 2 stages.
 

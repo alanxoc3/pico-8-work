@@ -71,7 +71,7 @@ end $$
        ;;name,@
     ]], pkmn, (pkmn.hp or pkmn.maxhp)..'/'..pkmn.maxhp)
 
-    _foreach(split'special,attack,defense,speed,total', function(key)
+    _foreach(_split'special,attack,defense,speed,total', function(key)
         _add(menu, { name=c_stages[key].shortname.." "..pkmn[key] })
     end)
 

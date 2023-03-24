@@ -77,6 +77,15 @@ end $$
 
         -- C_MAJOR_SLEEPING - 1-3 turns, reset if switch out
         if selfactive.major == C_MAJOR_SLEEPING then
+            selfactive:f_decrement_timer('sleeping', function()
+                addaction(self, "|suddenly|woke up")
+                selfactive.shared.major = C_MAJOR_NONE
+            end)
+
+            if selfactive.major == C_MAJOR_SLEEPING then
+                addaction(self, "|fast|asleep")
+                return
+            end
         end
 
         -- middle of rage... you freeze then immediately unfreeze... that shouldn't cost a pp, should it? If you are on your last pp, you wouldn't have a move this turn.
@@ -115,6 +124,10 @@ end $$
         end
 
         -- paralysis
+        if selfactive.major == C_MAJOR_PARALYZED and f_flr_rnd'4' == 0 then
+            addaction(self, "|fully|paralyzed")
+            return
+        end
 
         if selfactive.flinching then
             addaction(self, "|is|flinching")
