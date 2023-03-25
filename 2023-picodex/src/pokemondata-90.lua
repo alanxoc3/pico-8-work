@@ -5,6 +5,13 @@
 
 -- todo: something to consider. For dig/fly/hypebeam, it would be nice to have alternate text on the second turn, instead of "blah|used|hyperbeam". so maybe i can do something for that.
 
+-- todo: might be fun to add a few more event pokemon -- slowbro, magikarp, dragonite, fearow, rapidash, flying pikachu
+--  juggler's slowbro - metronome (glitch)
+--  lance's dragonite - barrier (glitch)
+--  (super rare event) payday fearow & rapidash
+--  (super rare event) dragon rage magikarp
+--  (super rare event) flying pikachu -- idk how the sprite is decided for this - maybe only 1 or the other... yeah, only 1 event move can be learned.
+
 |[c_pokemon]| f_zobj[[]] $$
 |[c_pokemon_names]| _split"missingno,bulbasaur,ivysaur,venusaur,charmander,charmeleon,charizard,squirtle,wartortle,blastoise,caterpie,metapod,butterfree,weedle,kakuna,beedrill,pidgey,pidgeotto,pidgeot,rattata,raticate,spearow,fearow,ekans,arbok,pikachu,raichu,sandshrew,sandslash,nidoran f,nidorina,nidoqueen,nidoran m,nidorino,nidoking,clefairy,clefable,vulpix,ninetales,jigglypuff,wigglytuff,zubat,golbat,oddish,gloom,vileplume,paras,parasect,venonat,venomoth,diglett,dugtrio,meowth,persian,psyduck,golduck,mankey,primeape,growlithe,arcanine,poliwag,poliwhirl,poliwrath,abra,kadabra,alakazam,machop,machoke,machamp,bellsprout,weepinbell,victreebel,tentacool,tentacruel,geodude,graveler,golem,ponyta,rapidash,slowpoke,slowbro,magnemite,magneton,farfetchd,doduo,dodrio,seel,dewgong,grimer,muk,shellder,cloyster,gastly,haunter,gengar,onix,drowzee,hypno,krabby,kingler,voltorb,electrode,exeggcute,exeggutor,cubone,marowak,hitmonlee,hitmonchan,lickitung,koffing,weezing,rhyhorn,rhydon,chansey,tangela,kangaskhan,horsea,seadra,goldeen,seaking,staryu,starmie,mr mime,scyther,jynx,electabuzz,magmar,pinsir,tauros,magikarp,gyarados,lapras,ditto,eevee,vaporeon,jolteon,flareon,porygon,omanyte,omastar,kabuto,kabutops,aerodactyl,snorlax,articuno,zapdos,moltres,dratini,dragonair,dragonite,mewtwo,mew" $$
 -- c_pokemon_names[0] = "" -- for "none" pkmn, technically not needed possibly (-1)
