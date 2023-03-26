@@ -1,20 +1,13 @@
 |[f_zclass]| function(template)
     return f_zobj_set(f_zobj[[
-        load,      ~f_actor_load,
-        loadlogic, ~f_actor_loadlogic,
-        state,     ~f_actor_state,
-        get_elapsed_percent,~f_actor_get_elapsed_percent,
-
         timer, 0,
         stacksize, 0, -- need a separate var for stack size for so buttons don't jitter on ui
 
-        isnew, ~c_yes,
-        curr,  start,
-
+        isnew,  ~c_yes,
         init,   ~f_nop,
-        update, ~f_nop;
+        update, ~f_nop,
 
-        stack;,;
+        stack,#;
     ]], template)
 end $$
 
@@ -50,14 +43,14 @@ end $$
 |[f_actor_state]| function(_ENV)
     timer += 1/60
 
-    if isnew then _ENV:loadlogic(curr) end
+    if isnew then _ENV:f_actor_loadlogic(curr) end
 
     if duration and timer >= duration then
-        _ENV:load()
+        _ENV:f_actor_load()
     end
 
     while next_state do
-        _ENV:loadlogic(next_state)
+        _ENV:f_actor_loadlogic(next_state)
     end
 
     _ENV:update()
@@ -65,7 +58,7 @@ end $$
 
 |[f_modes_popuntil]| function(_ENV, untilstate)
     while next_state ~= untilstate and #stack > 0 do
-        _ENV:pop()
+        _ENV:f_modes_pop()
     end
 end $$
 
@@ -73,7 +66,7 @@ end $$
     -- delete the last item on the stack, then load the new last item.
     -- most modes on the stack won't have an init in this game.
     _deli(stack) 
-    _ENV:load(stack[#stack] or 'main')
+    _ENV:f_actor_load(stack[#stack] or 'main')
 end $$
 
 |[f_modes_push]| function(_ENV, newstate)

@@ -11,9 +11,9 @@
 
 |[f_menu_state_callback]| function(game, entry)
     if entry.state then
-        game:push(entry.state)
+        game:f_modes_push(entry.state)
     else
-        game:pop()
+        game:f_modes_pop()
     end
 end $$
 
@@ -47,7 +47,7 @@ end $$
 end $$
 
 |[f_menu_cancel]| function(game)
-    game:pop()
+    game:f_modes_pop()
     f_minisfx'B_BACK'
 end $$
 

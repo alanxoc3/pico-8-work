@@ -1,5 +1,3 @@
--- used everywhere. this is the identity function
--- 193 tokens
 function f_zobj_eval(val, table, parameters)
     if     _ord(val) == 126 then return table[_sub(val, 2)] -- 126 means "~"
     elseif val == '@'       then return _deli(parameters, 1)

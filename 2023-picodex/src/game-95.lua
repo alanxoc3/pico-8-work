@@ -17,23 +17,11 @@
     end
 
     modes = f_zclass[[
-        cursor,~f_modes_cursor, -- gets the cursor for a menu
-        entry,~f_modes_entry,   -- gets the entry the cursor is on
-        push,~f_modes_push,
-        pop,~f_modes_pop,
-        popuntil,~f_modes_popuntil,
-        pkmn,~f_nop,
-        update,~f_nop,
-        draw1,~f_nop,
-        draw2,~f_nop,
-        draw3,~f_nop,
         curr,main;
 
         -- defaults are mostly functions, but also menu
         defaults;
             menu,~c_no,
-            ui_pl,"error",
-            finit,~f_nop,
             init,~f_nop,
             lrfunc,~f_beep, xfunc,~f_nop,
             update,~f_modes_default_update,
@@ -116,13 +104,10 @@
        
     ]], modes.team1.menu, modes.browse.menu)
 
-    -- beep done when picodex has booted up!
-    f_minisfx'B_DONE'
-
     _menuitem(1, "close picodex", function()
-        _menuitem(1) -- remove menu item
-        _menuitem(2) -- remove menu item
-        _ENV:load'closing'
+        _menuitem(1) -- remove menu item, can't pass in string number here
+        _menuitem(2) -- remove menu item, can't pass in string number here
+        _ENV:f_actor_load'closing'
     end)
 
     _menuitem(2, "swap 🅾️/❎", function()
@@ -131,7 +116,7 @@
 end $$
 
 |[f_game_update]| function(program)
-    program.modes:state()
+    program.modes:f_actor_state()
 end $$
 
 |[f_game_draw1]| function() g_picodex.modes:draw1() end $$

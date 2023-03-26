@@ -13,7 +13,7 @@ end $$
     if pkmn:f_pkmn_available() then
         f_print_draw3_message(pkmn.name.."|"..c_types[pkmn.type1].name.."|"..c_types[pkmn.type2].name)
     else
-        f_print_draw3_message"?????????|????|??????"
+        f_print_draw3_message"none|n/a|"
     end
 end $$
 
@@ -34,8 +34,15 @@ end $$
 
 |[f_draw_pkmn_out]| function(_ENV, x, y, col, xscale, yscale)
     local num = _ENV:f_pkmn_available() and num or -1
-    if num == P_PIKACHU and _ENV:f_pkmn_has_move(M_SURF)    then num = 152 end
-    if num == P_PSYDUCK and _ENV:f_pkmn_has_move(M_AMNESIA) then num = 153 end
+
+    _foreach(f_zobj[[
+        ;,P_PIKACHU,M_SURF,   152
+       ;;,P_PSYDUCK,M_AMNESIA,153
+    ]], function(list)
+        if num == list[1] and _ENV:f_pkmn_has_move(list[2]) then
+            num = list[3]
+        end
+    end)
 
     -- substitute check should go after pika/psyduck checks above, for if pika/psy know substitute
     if substitute and substitute > 0 then num = 154 end
@@ -68,11 +75,10 @@ end $$
         ;pkmn,@
        ;;hidden,~c_yes
        ;;name,"lvl C_LEVEL", style,5
-       ;;name,@
-    ]], pkmn, (pkmn.hp or pkmn.maxhp)..'/'..pkmn.maxhp)
+    ]], pkmn)
 
-    _foreach(_split'special,attack,defense,speed,total', function(key)
-        _add(menu, { name=c_stages[key].shortname.." "..pkmn[key] })
+    _foreach(_split'maxhp,special,attack,defense,speed,total', function(key)
+        _add(menu, { name=c_stages[key].." "..pkmn[key] })
     end)
 
     f_zcall(function(name, key)

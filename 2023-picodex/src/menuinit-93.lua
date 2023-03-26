@@ -1,6 +1,6 @@
 |[f_fightover_init]| function(_ENV)
-    local winner, loser = p0, f_get_other_pl(_ENV, p0)
-    winner:winlogic(loser)
+    local plose = f_get_other_pl(_ENV, pwin)
+    pwin:winlogic(plose)
 
     -- getting out of the win screen should take you to the main menu
     -- stack = {stack[1]}
@@ -9,10 +9,10 @@
     -- since horde and player don't have a "league" screen, this will go back to the main menu.
     -- hacky for this specific scenario :)
     menu.cancel = function(game)
-        game:popuntil'team2story'
+        game:f_modes_popuntil'team2story'
     end
 
-    for pl in _all{winner,loser} do
+    for pl in _all{pwin,plose} do
         f_zobj_set(menu, [[
             v,0 -- fight over view should always start on top. don't save position for this one.
           ;;pkmn,@
@@ -35,14 +35,10 @@ end $$
            ;;name,"edit",    state,team1,      select,~f_menu_state_callback, desc,"edit|stored|teams"
            ;;name,"league",  state,team1story, select,~f_menu_state_callback, desc,@
            ;;name,"player",  state,team1match, select,~f_menu_state_callback, desc,"player|custom|battles"
-           ;;name,'?????',   state,team1horde, select,~f_menu_state_callback, desc,"?????|beat|league", disabled,~c_yes
+           ;;name,"horde",   state,team1horde, select,~f_menu_state_callback, desc,@
            ;;name,"credits", state,credits,    select,~f_menu_state_callback, desc,"credits|amorg|games"
-        ]], "browse|"..count.."/151|pokemon", "league|"..(@S_STORY).."/40|trainers")
+        ]], "browse|"..count.."/151|pokemon", "league|"..(@S_STORY).."/40|trainers", "horde|"..(@S_HOARD).."/151|hi-score")
     )
-
-    if @S_STORY >= 40 then
-        f_zobj_set(menu[5], [[disabled,~c_no, name,"horde", desc,@]], "horde|"..(@S_HOARD).."/151|hi-score")
-    end
 end $$
 
 |[f_browse_init_shared]| function(_ENV, selectfunc)
@@ -54,50 +50,46 @@ end $$
     menu:refresh(
         tbl,
         function(num)
-            local pkmn = c_pokemon[num]
-            return {
-                select=selectfunc,
-                disabled=not pkmn:f_pkmn_available(),
-                pkmn=pkmn
-            }
+            return f_zobj([[
+                select,@, disabled,@, pkmn,@
+            ]], selectfunc, not c_pokemon[num]:f_pkmn_available(), c_pokemon[num])
         end
     )
 end $$
 
 |[f_browse_init]| function(_ENV)
     f_browse_init_shared(_ENV, function(_ENV)
-        _ENV:push'browsestat'
+        _ENV:f_modes_push'browsestat'
     end)
 end $$
 
 |[f_teampkmn_init]| function(_ENV)
     f_browse_init_shared(_ENV, function(_ENV)
-        f_save_team(_ENV:cursor'team1', f_set_default_team_pkmn(_ENV:f_get_team_cursor'team1', _ENV:cursor'editteam'+1, _ENV:cursor'browse'))
-        _ENV:pop()
+        f_save_team(_ENV:f_modes_cursor'team1', f_set_default_team_pkmn(_ENV:f_get_team_cursor'team1', _ENV:f_modes_cursor'editteam'+1, _ENV:f_modes_cursor'browse'))
+        _ENV:f_modes_pop()
     end)
 end $$
 
 |[f_browsestat_init]| function(_ENV)
-    f_update_stat_menu(menu, _ENV:entry'browse'.pkmn)
+    f_update_stat_menu(menu, _ENV:f_modes_entry'browse'.pkmn)
 end $$
 
 |[f_credits_init]| function(_ENV)
     menu:refresh(
-        _split"106,,!alanxoc3,code+sfx,design,6,,!gr8cadet,graphics,playtest,129,,!wadlo,magikarp,playtest,145,,!zep,pico-8,px9 func,137,,!pkmndata,blbpedia,pokeapi,serebii,smogon,upokcntr,volvox,nintendo",
+        _split"106,,#alanxoc3,code+sfx,design,6,,#gr8cadet,graphics,playtest,129,,#wadlo,magikarp,playtest,145,,#zep,pico-8,px9 func,137,,#pkmndata,blbpedia,pokeapi,serebii,smogon,upokcntr,volvox,nintendo",
         function(txt)
             if _type(txt) == "number" then
                 return { pkmn=f_create_team_pkmn(txt, f_create_empty_moveset()) }
             end
 
             local style = 1
-            if _sub(txt,1,1) == '!' then
+            if _sub(txt,1,1) == '#' then
                 txt, style = _sub(txt,2), 5
             end
 
             return { name=txt, style=style, hidden=txt=='' }
         end
     )
-    menu.v = 0
 end $$
 
 -- 1,6 is hardcoded here because all trainers have exactly 6 pkmn
@@ -111,7 +103,7 @@ end $$
                 f_begin_fight_cpu(game, entry.team, entry.name, function(pl, other)
                     _poke(S_STORY, _mid(@S_STORY, num, 40)) -- 40 trainers, this is hard coded and won't change
                     f_unlock_pkmn(other)
-                end)
+                end, f_nop)
             end
         }
     end)
@@ -141,9 +133,9 @@ end $$
 
 |[f_movedel]| function(_ENV)
     local teampkmn, team = _ENV:f_get_pkmn_team_edit()
-    teampkmn.mynewmoves[_ENV:cursor'teammoves'+1] = f_create_move(-1)
-    f_save_team(_ENV:cursor'team1', team)
-    _ENV:pop()
+    teampkmn.mynewmoves[_ENV:f_modes_cursor'teammoves'+1] = f_create_move(-1)
+    f_save_team(_ENV:f_modes_cursor'team1', team)
+    _ENV:f_modes_pop()
 end $$
 
 |[f_moves_init_helper]| function(_ENV, disabled_ind, select_func)
@@ -161,17 +153,17 @@ end $$
 
 |[f_teammoves_init]| function(_ENV)
     f_moves_init_helper(_ENV, 0, function(_ENV, i, teampkmn)
-        _ENV:push(teampkmn.mynewmoves[i].num > 0 and 'moveaction' or 'teammovesel')
+        _ENV:f_modes_push(teampkmn.mynewmoves[i].num > 0 and 'moveaction' or 'teammovesel')
     end)
 end $$
 
 |[f_switchmoves_init]| function(_ENV)
-    local disabled_ind = _ENV:cursor'teammoves'+1
+    local disabled_ind = _ENV:f_modes_cursor'teammoves'+1
 
     f_moves_init_helper(_ENV, disabled_ind, function(_ENV, i, teampkmn, team)
         teampkmn.mynewmoves[i], teampkmn.mynewmoves[disabled_ind] = teampkmn.mynewmoves[disabled_ind], teampkmn.mynewmoves[i]
-        f_save_team(_ENV:cursor'team1', team)
-        _ENV:popuntil'teammoves'
+        f_save_team(_ENV:f_modes_cursor'team1', team)
+        _ENV:f_modes_popuntil'teammoves'
     end)
 
     menu.c = teammoves.menu.c
@@ -201,9 +193,9 @@ end $$
             ref=m.desc,
             select=function()
                 local team = _ENV:f_get_team_cursor'team1'
-                team[_ENV:cursor'editteam'+1].mynewmoves[_ENV:cursor'teammoves'+1] = f_create_move(m.num)
-                f_save_team(_ENV:cursor'team1', team)
-                _ENV:popuntil'teammoves'
+                team[_ENV:f_modes_cursor'editteam'+1].mynewmoves[_ENV:f_modes_cursor'teammoves'+1] = f_create_move(m.num)
+                f_save_team(_ENV:f_modes_cursor'team1', team)
+                _ENV:f_modes_popuntil'teammoves'
             end
         }
     end)
@@ -214,10 +206,10 @@ end $$
 
     if p0.active.curmove then
         f_select_move(p0, p0.active.curmove)
-        _ENV:pop() _ENV:pop()
+        _ENV:f_modes_pop() _ENV:f_modes_pop()
     elseif #possible_moves == 0 then
         f_select_move(p0, f_create_move(M_STRUGGLE))
-        _ENV:pop() _ENV:pop()
+        _ENV:f_modes_pop() _ENV:f_modes_pop()
     end
 
     menu:refresh(p0.active.mynewmoves, function(move)
@@ -226,7 +218,7 @@ end $$
             move.name,
             move,
             function()
-                _ENV:pop() _ENV:pop()
+                _ENV:f_modes_pop() _ENV:f_modes_pop()
                 f_select_move(p0, move)
             end
         )
@@ -235,9 +227,9 @@ end $$
 
 |[f_pselactions_init]| function(_ENV)
     menu:refresh(f_zobj[[
-         ; name,"fight",  desc,"fight|select|move",       select,~f_menu_state_callback, state,pselmove
-        ;; name,"switch", desc,"switch|active|pokemon",   select,~f_menu_state_callback, state,pselswitch
-        ;; name,"forfeit",  desc,"forfeit|pokemon|battle",  select,~f_psel_forfeit
+         ; name,"fight",   select,~f_menu_state_callback, state,pselmove
+        ;; name,"switch",  select,~f_menu_state_callback, state,pselswitch
+        ;; name,"forfeit", select,~f_psel_forfeit
     ]])
 end $$
 
@@ -273,10 +265,10 @@ end $$
         return {
             pkmn=team[i],
             select=function(_ENV)
-                if team[_ENV:cursor'editteam'+1]:f_pkmn_available() then
-                    _ENV:push'teamaction'
+                if team[_ENV:f_modes_cursor'editteam'+1]:f_pkmn_available() then
+                    _ENV:f_modes_push'teamaction'
                 else
-                    _ENV:push'teampkmn'
+                    _ENV:f_modes_push'teampkmn'
                 end
             end
         }
@@ -287,12 +279,12 @@ end $$
     local team = _ENV:f_get_team_cursor'team1'
     menu:refresh(f_zobj[[,1,2,3,4,5,6]], function(i)
         return {
-            disabled=i==_ENV:cursor'editteam'+1,
+            disabled=i==_ENV:f_modes_cursor'editteam'+1,
             select=function(_ENV)
-                local ind_one, ind_two = _ENV:cursor'editteam'+1, _ENV:cursor'switchteam'+1
+                local ind_one, ind_two = _ENV:f_modes_cursor'editteam'+1, _ENV:f_modes_cursor'switchteam'+1
                 team[ind_one], team[ind_two] = team[ind_two], team[ind_one]
-                f_save_team(_ENV:cursor'team1', team)
-                _ENV:popuntil'editteam'
+                f_save_team(_ENV:f_modes_cursor'team1', team)
+                _ENV:f_modes_popuntil'editteam'
             end,
             pkmn=team[i]
         }
@@ -307,7 +299,7 @@ end $$
         return {
             disabled=disabled,
             select=function()
-                _ENV:pop() _ENV:pop() -- pop twice. this could come from p1 or p2
+                _ENV:f_modes_pop() _ENV:f_modes_pop() -- pop twice. this could come from p1 or p2
                 f_select_switch(p0, p0.team[i])
             end,
             pkmn=p0.team[i]

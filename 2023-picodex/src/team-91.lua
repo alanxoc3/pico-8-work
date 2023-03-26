@@ -39,9 +39,9 @@ end $$
 -- assumes that mynewmoves parameter is open to modification for team. this doesn't copy moves.
 |[f_teamdel]| function(game)
     local team = game:f_get_team_cursor'team1'
-    team[game:cursor'editteam'+1] = f_create_team_pkmn(-1, f_create_empty_moveset())
-    f_save_team(game:cursor'team1', team)
-    game:pop()
+    team[game:f_modes_cursor'editteam'+1] = f_create_team_pkmn(-1, f_create_empty_moveset())
+    f_save_team(game:f_modes_cursor'team1', team)
+    game:f_modes_pop()
 end $$
 
 |[f_set_default_team_pkmn]| function(team, ind, num)

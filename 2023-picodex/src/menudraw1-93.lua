@@ -1,6 +1,6 @@
 |[f_editteam_draw1]| function(game)
     f_modes_default_draw1(game)
-    f_wobble_text("team #"..game:cursor'team1'+1, 20, 27, 1)
+    f_wobble_text("team #"..game:f_modes_cursor'team1'+1, 20, 27, 1)
 end $$
 
 |[f_turn_draw1]|  function(_ENV)

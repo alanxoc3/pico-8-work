@@ -254,8 +254,8 @@ end $$
             -- check for win condition before selecting every action
             for p in _all{game.p1, game.p2} do
                 if not f_get_next_active(p.team) then
-                    game.p0 = f_get_other_pl(game, p)
-                    game:load'fightover'
+                    game.pwin = f_get_other_pl(game, p)
+                    game:f_actor_load'fightover'
                     return
                 end
             end
@@ -278,7 +278,7 @@ end $$
                 else
                 end
             else
-                game:load() -- next turn
+                game:f_actor_load() -- next turn
                 return
             end
         end

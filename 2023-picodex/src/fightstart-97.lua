@@ -27,14 +27,11 @@
         _add(actions, f_pkmn_comes_out(_ENV, f_get_next_active(team)))
     end
 
-    -- how to switch the current player
-    -- p0 = p0 == p1 and p2 or p1
-    p0 = p1
-    _ENV:push'turn'
+    _ENV:f_modes_push'turn'
 end $$
 
 -- horde and story share similar logic for cpu battle
-|[f_begin_fight_cpu]| function(_ENV, pkmn_nums, name, plwinfunc)
+|[f_begin_fight_cpu]| function(_ENV, pkmn_nums, name, plwinfunc, cpuwinfunc)
     local cpu_team_draft = {}
     for i=1,#pkmn_nums do
         f_set_default_team_pkmn(cpu_team_draft, i, pkmn_nums[i])
@@ -42,6 +39,6 @@ end $$
 
     f_begin_fight(_ENV,
         {_ENV:f_get_team_cursor'team1', "player", false, plwinfunc},
-        {cpu_team_draft,                name,     true,  f_nop}
+        {cpu_team_draft,                name,     true,  cpuwinfunc}
     )
 end $$

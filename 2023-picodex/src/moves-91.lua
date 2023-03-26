@@ -102,7 +102,7 @@ end $$
 |[f_move_heal]| function(_ENV, pl, amount)
     amount = _min(amount, pl.active.maxhp-pl.active.hp)
     if amount > 0 then
-        addaction(pl, f_format_num_sign(amount, "|hitpoints"), function()
+        addaction(pl, f_format_num_sign(amount, "hp"), function()
             pl.active.shared.hp += amount
         end)
     else
@@ -147,8 +147,8 @@ end $$
     end
 end $$
 
-|[f_format_num_sign]| function(num, remainder)
-    return (_sgn(num) > 0 and '|+' or '|-').._abs(num)..remainder
+|[f_format_num_sign]| function(num, name)
+    return (_sgn(num) > 0 and "|+" or "|-").._abs(num).." "..name.."|change"
 end $$
 
 |[f_move_self]|  function(_ENV, func, ...) return func(_ENV, self,  ...) end $$
@@ -157,7 +157,7 @@ end $$
 -- leverages f_move_(self|other)
 |[f_move_stat]| function(_ENV, pl, key, stage)
     if f_movehelp_incstat(pl.active, key, stage) then
-        addaction(pl, f_format_num_sign(stage, "/6|"..c_stages[key].longname))
+        addaction(pl, f_format_num_sign(stage, c_stages[key]))
     else
         return true
     end
@@ -415,7 +415,7 @@ end $$
 |[f_movehelp_setdmg]| function(_ENV, pl, dmg, isself)
     local active = pl.active
     local issub = not isself and active.substitute > 0
-    addaction(pl, f_format_num_sign(-dmg, "|hitpoints"), function()
+    addaction(pl, f_format_num_sign(-dmg, "hp"), function()
         active.bidedmg += dmg
         -- rage increment
         if active.curmove and active.curmove.num == M_RAGE then

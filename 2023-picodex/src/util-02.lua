@@ -26,9 +26,3 @@ end $$
     func()
     _camera(ox, oy)
 end $$
-
--- ex: btn_helper(_btnp, 0, 1)
--- ex: btn_helper(_btnp, 2, 3)
-|[f_btn_helper]| function(f, a, b)
-    return f(a) and f(b) and 0 or f(a) and -1 or f(b) and 1 or 0
-end $$

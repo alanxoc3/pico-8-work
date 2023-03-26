@@ -1,11 +1,15 @@
-|[f_story_select]| function(game) game:push'team2story' end $$
-|[f_match_select]| function(game) game:push'team2match' end $$
+|[f_story_select]| function(game) game:f_modes_push'team2story' end $$
+|[f_match_select]| function(game) game:f_modes_push'team2match' end $$
 
 |[f_match_start]| function(_ENV)
     f_begin_fight(_ENV,
-        f_zobj([[,@,"player 1", ~c_no, ~f_nop]], f_get_team(_ENV:cursor'team1match')),
-        f_zobj([[,@,"player 2", ~c_no, ~f_nop]], f_get_team(_ENV:cursor'team2match'))
+        f_zobj([[,@,"player 1", ~c_no, ~f_nop]], f_get_team(_ENV:f_modes_cursor'team1match')),
+        f_zobj([[,@,"player 2", ~c_no, ~f_nop]], f_get_team(_ENV:f_modes_cursor'team2match'))
     )
+end $$
+
+|[f_update_horde]| function(_ENV)
+    _poke(S_HOARD, _mid(@S_HOARD, #f_get_team_dead(team), 152))
 end $$
 
 |[f_horde_select]| function(_ENV)
@@ -19,6 +23,6 @@ end $$
     -- since horde mode doesn't appear until after league
     f_begin_fight_cpu(_ENV, nums, "horde", function(_, other)
         f_unlock_pkmn(other)
-        _poke(S_HOARD, _mid(@S_HOARD, #f_get_team_dead(other.team), 255))
-    end)
+        f_update_horde(other)
+    end, f_update_horde)
 end $$

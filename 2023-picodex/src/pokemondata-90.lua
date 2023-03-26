@@ -42,13 +42,14 @@
 ]] $$
 
 |[c_stages]| f_zobj[[
-    special;  longname,"special", shortname, "spc"
-   ;attack;   longname,"attack",  shortname, "att"
-   ;defense;  longname,"defense", shortname, "def"
-   ;speed;    longname,"speed",   shortname, "spd"
-   ;total;                        shortname, "tot"
-   ;accuracy; longname,"accuracy"
-   ;evasion;  longname,"evasion"
+    maxhp,    "hp",
+    special,  "spc",
+    attack,   "att",
+    defense,  "def",
+    speed,    "spd",
+    total,    "tot",
+    accuracy, "acc",
+    evasion,  "eva"
 ]] $$
 
 -- 5 bg styles

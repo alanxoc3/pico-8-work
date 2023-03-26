@@ -11,8 +11,8 @@ function _init()
     _memset(0x8000, 0, 0x7fff)
 
     g_picodex = f_zclass[[
-        curr,wait;
-        init,~f_game_state_init, light,4;
+        curr,wait, init,~f_game_state_init, light,4; -- light,4 is needed here, otherwise, there is an error on startup
+
         defaults;
             foldstate,closed,
             light,4, sfx,~c_no,
@@ -24,15 +24,15 @@ function _init()
         wait;   next,moveup, duration,.5, draw,~f_draw_picodex;
         moveup; next,closed, duration,.5, draw,~f_draw_picodex;
 
-        shaking;    foldstate,closed,  next,closed,              duration,.5, sfx,159,              draw,~f_draw_picodex;
-        closed;     foldstate,closed,  next,opening,                          sinit,~f_closed_init, draw,~f_draw_picodex, update,~f_closed_update;
-        opening;    foldstate,opening, next,starting_1,          duration,.2,                       draw,~f_draw_picodex;
-        starting_1; foldstate,open,    next,starting_2, light,3, duration,.2, sfx,B_OKAY,           draw,~f_draw_picodex;
-        starting_2; foldstate,open,    next,starting_3, light,2, duration,.2, sfx,B_BACK,           draw,~f_draw_picodex;
-        starting_3; foldstate,open,    next,game,       light,1, duration,.2, sfx,B_ERROR,          draw,~f_draw_picodex;
-        game;       foldstate,open,    next,closing,    light,0,              sinit,~f_game_init,   draw,~f_draw_picodex, update,~f_game_update, draw1,~f_game_draw1, draw2,~f_game_draw2, draw3,~f_game_draw3;
+        shaking;    foldstate,closed,  next,closed,              duration,.5, sfx,159,                        draw,~f_draw_picodex;
+        closed;     foldstate,closed,  next,opening,                          sinit,~f_closed_init,           draw,~f_draw_picodex, update,~f_closed_update;
+        opening;    foldstate,opening, next,starting_1,          duration,.2,                                 draw,~f_draw_picodex;
+        starting_1; foldstate,open,    next,starting_2, light,3, duration,.2, sfx,B_OKAY,                     draw,~f_draw_picodex;
+        starting_2; foldstate,open,    next,starting_3, light,2, duration,.2, sfx,B_BACK,                     draw,~f_draw_picodex;
+        starting_3; foldstate,open,    next,game,       light,1, duration,.2, sfx,B_ERROR,                    draw,~f_draw_picodex;
+        game;       foldstate,open,    next,closing,    light,0,              sfx,B_DONE, sinit,~f_game_init, draw,~f_draw_picodex, update,~f_game_update, draw1,~f_game_draw1, draw2,~f_game_draw2, draw3,~f_game_draw3;
 
-        closing;    foldstate,closing, next,closed,              duration,.25,                      draw,~f_draw_picodex, update,~f_nop;
+        closing;    foldstate,closing, next,closed,              duration,.25,                                draw,~f_draw_picodex, update,~f_nop;
     ]]
 
     f_draw_picodex(g_picodex)
@@ -74,16 +74,13 @@ end
 
 function _update60()
     local _ENV = _g
-    g_bpo, g_bpx = _btnp'4', _btnp'5'
-
-    -- horizontal and vertical
-    g_bph, g_bpv = f_btn_helper(_btnp, 0, 1), f_btn_helper(_btnp, 2, 3)
+    g_bpo, g_bpx, g_bph, g_bpv = _btnp'4', _btnp'5', _btnp'0' and _btnp'1' and 0 or _btnp'0' and -1 or _btnp'1' and 1 or 0, _btnp'2' and _btnp'3' and 0 or _btnp'2' and -1 or _btnp'3' and 1 or 0
 
     if @S_SWAP_CONTROLS == 1 then
         g_bpo, g_bpx = g_bpx, g_bpo
     end
 
-    g_picodex:state()
+    g_picodex:f_actor_state()
 end
 
 function _draw()

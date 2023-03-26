@@ -5,7 +5,7 @@
 |[f_closed_init]| function(_ENV)
     _menuitem(1, "factory reset", function()
         _memset(0x5e00, 0, 0x100)
-        _ENV:load'shaking'
+        _ENV:f_actor_load'shaking'
     end)
 end $$
 
@@ -19,7 +19,7 @@ end $$
     -- if player 1 pressed any button, go to the next state.
     if not f_any_btn() and backbuttonheld then
         backbuttonheld = false
-        _ENV:load()
+        _ENV:f_actor_load()
         _menuitem(1) -- no factory reset now
     elseif f_any_btn() then
         backbuttonheld = true
@@ -36,7 +36,7 @@ end $$
 
 |[f_draw_picodex]| function(_ENV)
     _cls'0'
-    f_zcamera(0, 128+_sin(_ENV:get_elapsed_percent'moveup'/4)*128, function()
+    f_zcamera(0, 128+_sin(_ENV:f_actor_get_elapsed_percent'moveup'/4)*128, function()
         f_zcall(f_zprint, [[
            ;,"aMORG gAMES"         ,64, -68,7,0
           ;;,"pRESENTS"            ,64, -61,7,0
@@ -51,7 +51,7 @@ end $$
               modes and modes.stacksize-1,
               foldstate == 'open' and 1
               or foldstate == 'closed' and -1
-              or (foldstate == 'opening' and -1 or 1)*_cos(_ENV:get_elapsed_percent(foldstate)/2)
+              or (foldstate == 'opening' and -1 or 1)*_cos(_ENV:f_actor_get_elapsed_percent(foldstate)/2)
 
         f_zcamera(30-(rotation+1)*15+(curr == 'shaking' and f_flr_rnd'3'-1 or 0), 27, function()
             ----- SCREENS -----
