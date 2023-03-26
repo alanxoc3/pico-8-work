@@ -362,9 +362,6 @@ f_move_default(_ENV)
 else
 return true
 end
-if selfactive.moveturn==0 or selfactive.trappedother ~=otheractive then
-selfactive.moveturn,selfactive.trappedother=0
-end
 end,function(_ENV,desc)
 if selfactive.curmove then
 f_move_default(_ENV)
@@ -1183,7 +1180,7 @@ addaction(self,"|is|frozen")
 return
 end
 end
-if otheractive.curmove and otheractive.curmove.ofunc==f_move_trapping then
+if otheractive.trappedother==selfactive then
 addaction(self,"|is|trapped")
 return
 end
@@ -1215,11 +1212,14 @@ end
 end
 end,function(self)
 return f_newaction(self,false,function(_ENV)
-if selfactive.major==6 or selfactive.major==3 then
+if selfactive.major==6
+or selfactive.major==3
+or selfactive.trappedother and selfactive.trappedother ~=otheractive
+then
 selfactive.moveturn=0
 end
 if selfactive.moveturn==0 then
-selfactive.curmove=nil
+selfactive.trappedother,selfactive.curmove=nil
 end
 local statdmg=_max(selfactive.maxhp\16,1)
 local inflictstatdmg=function(title)

@@ -1,5 +1,3 @@
--- todo: trapping moves are messed up when a pokemon faints
-
 -- roar/whirlwind/teleport
 |[f_movehelp_switch]| function(pl)
     local team = f_get_team_live(pl.team)
@@ -264,12 +262,7 @@ end $$
     if selfactive.trappedother == otheractive then
         f_move_default(_ENV)
     else
-        return true -- fail if not equal
-    end
-
-    -- todo: trapping logic is incomplete
-    if selfactive.moveturn == 0 or selfactive.trappedother ~= otheractive then
-        selfactive.moveturn, selfactive.trappedother = 0
+        return true -- fail if not equal, this triggers if opponent is switched out this turn
     end
 end $$
 

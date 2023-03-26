@@ -103,7 +103,7 @@ end $$
         end
 
         -- trapped
-        if otheractive.curmove and otheractive.curmove.ofunc == f_move_trapping then
+        if otheractive.trappedother == selfactive then
             addaction(self, "|is|trapped")
             return
         end
@@ -158,14 +158,19 @@ end $$
 
         -- reset moveturn if you sleep or are frozen. this is done at end of the turn to prevent weird cases (you freeze then unfreeze same turn).
         -- if you are using rage and freeze then unfreeze in the same turn, you continue your rage.
-        if selfactive.major == C_MAJOR_SLEEPING or selfactive.major == C_MAJOR_FROZEN then
+        -- if opponent is slower, then dies from leech/psn/brn, the trapper could lose a turn
+        -- but that's just a super edge case, so i don't care about changing it
+        if selfactive.major == C_MAJOR_SLEEPING                                   -- sleep
+            or selfactive.major == C_MAJOR_FROZEN                                 -- freeze
+            or selfactive.trappedother and selfactive.trappedother ~= otheractive -- trapping & opponent switched
+        then
             selfactive.moveturn = 0
         end
 
         -- check for if the multiturn move ended naturally. an unnatural check is right before the player starts the turn.
         -- if the moveturn is zero, we must make sure curmove is nil, because some multiturn moves check the first move based on curmove == nil
         if selfactive.moveturn == 0 then
-            selfactive.curmove = nil
+            selfactive.trappedother, selfactive.curmove = nil
         end
 
         local statdmg = _max(selfactive.maxhp\16,1)
