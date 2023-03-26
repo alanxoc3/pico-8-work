@@ -359,6 +359,8 @@ selfactive.trappedother=otheractive
 end
 if selfactive.trappedother==otheractive then
 f_move_default(_ENV)
+else
+return true
 end
 if selfactive.moveturn==0 or selfactive.trappedother ~=otheractive then
 selfactive.moveturn,selfactive.trappedother=0

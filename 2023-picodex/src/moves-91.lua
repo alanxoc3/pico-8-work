@@ -263,8 +263,11 @@ end $$
 
     if selfactive.trappedother == otheractive then
         f_move_default(_ENV)
+    else
+        return true -- fail if not equal
     end
 
+    -- todo: trapping logic is incomplete
     if selfactive.moveturn == 0 or selfactive.trappedother ~= otheractive then
         selfactive.moveturn, selfactive.trappedother = 0
     end
