@@ -1,3 +1,5 @@
+-- todo: try outlining pkmn whos turn it is
+-- todo: try healthbar animation (or highlighting the bar, then status change happens)
 |[f_editteam_draw1]| function(game)
     f_modes_default_draw1(game)
     f_wobble_text("team #"..game:f_modes_cursor'team1'+1, 20, 27, 1)
@@ -17,9 +19,9 @@ end $$
     -- draw the health bars
     f_zcall(_rectfill, [[
          ;,-1, 33, @, 41, @
-        ;;,40, -2, @, 6,  @
-    ]], -1+_max(_ceil(p1a.hp/p1a.maxhp*40), 0), p1c, 
-        40-_max(_ceil(p2a.hp/p2a.maxhp*40), 0), p2c)
+        ;;,-1, -2, @, 6,  @
+    ]], _max(_ceil(p1a.hp/p1a.maxhp*40), 0)-1, p1c, 
+        _max(_ceil(p2a.hp/p2a.maxhp*40), 0)-1, p2c)
 
     -- shape the health bars, so they are kinda curvy
     f_zcall(_rectfill, [[

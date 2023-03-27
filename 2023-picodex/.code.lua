@@ -647,8 +647,8 @@ local fj,ib,iy=ir.c,tf.c,tx.c
 local gw,gp=ib==fj,iy==fj
 local ui,uo=gw and 6 or 1,gp and 6 or 1
 ef(_rectfill,[[;,0,0,39,6,5;;,0,33,39,39,5]])
-ef(_rectfill,[[;,-1,33,@,41,@;;,40,-2,@,6,@]],-1+_max(_ceil(ib.eq/ib.tc*40),0),ui,
-40-_max(_ceil(iy.eq/iy.tc*40),0),uo)
+ef(_rectfill,[[;,-1,33,@,41,@;;,-1,-2,@,6,@]],_max(_ceil(ib.eq/ib.tc*40),0)-1,ui,
+_max(_ceil(iy.eq/iy.tc*40),0)-1,uo)
 ef(_rectfill,[[;,0,6,24,6,13;;,0,5,23,5,13;;,15,33,39,33,13;;,16,34,39,34,13]])
 ef(ni,[[;,@,2,34,13,-1;;,@,41,29,@,1;;,@,40,1,13,1;;,@,1,5,@,-1]],ib.eq,pa[ib.en],ui,iy.eq,pa[iy.en],uo)
 ib:rk(10,23,5,1)

@@ -4,9 +4,7 @@
 -- pl,0,false   - select default move (solar beam charge, hyper beam recharge, struggle, ...)
 -- pl,1-6,true  - switch with team slot
 
--- todo: switch while trapped should stop the trapping
 -- todo: make it so exiting the screen for your turn will show the battle screen
--- todo: refactor the way counter (and bide) work.
 |[f_pkmn_comes_out]| function(pl, pkmn)
     pl.active = f_team_pkmn_to_active(pkmn)
     return f_newaction(pl, "|comes|out")
