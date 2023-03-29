@@ -8,7 +8,7 @@ end $$
 |[f_turn_draw1]|  function(_ENV)
     local cra, p1a, p2a = cur_action.active, p1.active, p2.active
     local p1on, p2on = p1a == cra, p2a == cra
-    local p1c, p2c = p1on and 6 or 1, p2on and 6 or 1
+    local p1c, p2c = 11, 11 -- p1on and 6 or 1, p2on and 6 or 1
     
     -- draw gray bg for health bars
     f_zcall(_rectfill, [[
@@ -18,30 +18,29 @@ end $$
 
     -- draw the health bars
     f_zcall(_rectfill, [[
-         ;,-1, 33, @, 41, @
-        ;;,-1, -2, @, 6,  @
-    ]], _max(_ceil(p1a.hp/p1a.maxhp*40), 0)-1, p1c, 
-        _max(_ceil(p2a.hp/p2a.maxhp*40), 0)-1, p2c)
+         ;,-1, 33, @, 41, 1
+        ;;,-1, -2, @, 6,  1
+    ]], _max(_ceil(p1a.hp/p1a.maxhp*40), 0)-1,
+        _max(_ceil(p2a.hp/p2a.maxhp*40), 0)-1)
 
     -- shape the health bars, so they are kinda curvy
     f_zcall(_rectfill, [[
-         ;,0, 6, 24,6, 13
-        ;;,0, 5, 23,5, 13
-
-        ;;,15,33,39,33,13
-        ;;,16,34,39,34,13
+         ;,15, 6, 39,6, 13
+        ;;,16, 5, 39,5, 13
+        ;;,0,33,24,33,13
+        ;;,0,34,23,34,13
     ]])
 
     -- print hp and major condition
     f_zcall(f_zprint, [[
-         ;,@, 2, 34, 13, -1
-        ;;,@, 41,29, @,  1
-
-        ;;,@, 40,1, 13, 1
-        ;;,@, 1, 5, @,  -1
-    ]], p1a.hp, c_major_names_short[p1a.major], p1c, p2a.hp, c_major_names_short[p2a.major], p2c)
+         ;,@, 40, 34, 13, 1
+        ;;,@, 40,27, 1,  1
+        ;;,@, 2,1,  13, -1
+        ;;,@, 2, 7,  1,  -1
+    ]], p1a.hp, c_major_names_short[p1a.major], p2a.hp, c_major_names_short[p2a.major])
 
     -- draw the pkmn
-    p1a:f_draw_pkmn_out(10, 23, 5, 1)
-    p2a:f_draw_pkmn_out(30, 17, 5, -1)
+    local p1s, p2s = 1, 1
+    p1a:f_draw_pkmn_out(10, 25, c_menu_styles[4], p1s,  p1s, p1on)
+    p2a:f_draw_pkmn_out(30, 15, c_menu_styles[4], -p2s, p2s, p2on)
 end $$

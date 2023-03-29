@@ -190,7 +190,6 @@ end $$
         if selfactive.seeded then
             inflictstatdmg"|seed"
             if otheractive.hp < otheractive.maxhp then
-                addaction(other, "|seed|leeching")
                 f_move_heal(_ENV, other, statdmg)
             end
         end

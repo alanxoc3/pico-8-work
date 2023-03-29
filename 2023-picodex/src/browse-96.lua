@@ -28,11 +28,10 @@ g_loaded_row = 16 -- default corresponds to the top row in the "129-151.p8" file
         _memcpy(0x0000, 0x8000+0x400*row, 0x400)
     end
 
-    local w, h = 16*sw, 16*sh
-    _sspr(col*16, 0, 16, 16, x-w/2, y-h/2, w, h)
+    _sspr(col*16, 0, 16, 16, x-sw*8, y-sh*8, sw*16, sh*16)
 end $$
 
-|[f_draw_pkmn_out]| function(_ENV, x, y, col, xscale, yscale)
+|[f_draw_pkmn_out]| function(_ENV, x, y, style, xscale, yscale, is_thick)
     local num = _ENV:f_pkmn_available() and num or -1
 
     _foreach(f_zobj[[
@@ -50,18 +49,34 @@ end $$
     if not isactive or major ~= C_MAJOR_FAINTED and not invisible and not (moveturn ~= 0 and curmove.ofunc == f_move_flydig) then
         if num < 0 then _spr(107, x-4, y-4) return end
         xscale, yscale = xscale or 1, yscale or 1
-        local outline_width = _max(_abs(xscale), 1) \ 1
+        local outline_width = 1
 
-        f_zcall(function(color, v1, v2, v3, v4)
-            for c=1,15 do _pal(c,color) end
-            for i=-outline_width,outline_width,outline_width*2 do
-                f_draw_pkmn(num, x+(v1 or i), y+(v2 or i), xscale, yscale)
-                f_draw_pkmn(num, x+(v3 or i), y+(v4 or i), xscale, yscale) 
+        local outline_func = function(color, v1, v2, v3, v4, outline_width)
+            if color > 0 then
+                for c=1,15 do _pal(c,color) end
+                for i=-1,1,2 do
+                    f_draw_pkmn(num, x+(v1 or i*outline_width), y+(v2 or i*outline_width), xscale, yscale)
+                    f_draw_pkmn(num, x+(v3 or i*outline_width), y+(v4 or i*outline_width), xscale, yscale) 
+                end
             end
-        end, [[
-             ;,@, @, ~c_no, @, ~c_no
-            ;;,1, ~c_no, 0, 0, ~c_no
-        ]], col, -outline_width, outline_width)
+        end
+
+        if is_thick then
+            f_zcall(outline_func, [[
+                bg,@
+
+                ;;,~bg, -2,    ~c_no, 2,     ~c_no, 1
+                ;;,~bg, ~c_no, -2,    ~c_no, 2,     1
+                ;;,~bg, -2,    0,     2,     0,     1
+                ;;,~bg, 0,     -2,    0,     2,     1
+
+            ]], style.bg)
+        end
+
+        f_zcall(outline_func, [[
+             ;,@, -1,    ~c_no, 1, ~c_no, 1
+            ;;,1, ~c_no, 0,     0, ~c_no, 1
+        ]], style.aa)
 
         _pal() f_draw_pkmn(num, x, y, xscale, yscale)
     end

@@ -116,15 +116,6 @@ end $$
     if g_bpo then menu.cancel(game) end
 end $$
 
--- 4 styles: 13,1 6,13 2,1, 8,2
-c_menustyles = f_zobj[[
-    ;bg,13, fg,1,  out,5
-   ;;bg,6,  fg,13, out,13
-   ;;bg,5,  fg,1,  out,5
-   ;;bg,6,  fg,5,  out,5
-   ;;bg,1,  fg,13, out,5 -- this one is for credit/winmenu headers
-]]
-
 |[f_menu_draw1]| function(game)
     local menu = game.menu
     local cellw = menu.r > 1 and 10 or 40
@@ -146,9 +137,9 @@ c_menustyles = f_zobj[[
             if index-1 == menu.c then style_ind += 1 end
 
             if not entry.hidden then
-                _rectfill(x, y-5, x+cellw-1, y+4, c_menustyles[style_ind].bg)
+                _rectfill(x, y-5, x+cellw-1, y+4, c_menu_styles[style_ind].bg)
                 f_zcamera(i%menu.r*cellw+xoff+cellw/2, i\menu.r*10-3, function()
-                    menu.edraw(entry, c_menustyles[style_ind])
+                    menu.edraw(entry, c_menu_styles[style_ind])
                 end)
             end
         end
@@ -159,19 +150,19 @@ end $$
 -- requires a "name" field
 |[f_menu_drawentry]| function(entry, style)
     if entry.pkmn then
-        local style = c_bg_styles[c_types[entry.pkmn.type1].bg]
+        local style = c_menu_styles[c_types[entry.pkmn.type1].bg]
 
         f_zcall(_rectfill, [[
            ;,-20,-2,19,17,@
           ;;,-20,14,19,17,@
         ]], style.bg, style.aa)
 
-        entry.pkmn:f_draw_pkmn_out(0,8,style.aa,1,1)
+        entry.pkmn:f_draw_pkmn_out(0,8,style,1,1)
     else
         f_wobble_text(entry.name, 0, 0, style.fg)
     end
 end $$
 
 |[f_browse_drawentry]| function(entry, style)
-    entry.pkmn:f_draw_pkmn_out(0, 3, style.out, .375, .375)
+    entry.pkmn:f_draw_pkmn_out(0, 3, style, .375, .375)
 end $$

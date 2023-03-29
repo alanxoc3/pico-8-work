@@ -102,7 +102,7 @@ end $$
 |[f_move_heal]| function(_ENV, pl, amount)
     amount = _min(amount, pl.active.maxhp-pl.active.hp)
     if amount > 0 then
-        addaction(pl, f_format_num_sign(amount, "hp"), function()
+        f_movehelp_hpchange(_ENV, pl, amount, function()
             pl.active.shared.hp += amount
         end)
     else
@@ -410,12 +410,19 @@ end $$
     return f_move_setdmg(_ENV, _max(otheractive.hp\2, 1))
 end $$
 
--- 8190
+|[f_movehelp_hpchange]| function(_ENV, pl, dmg, func, issub)
+    local dmgtxt = f_format_num_sign(dmg, "hp")
+    if not issub or pl.active.substitute + dmg < 0 then
+        addaction(pl, dmgtxt, f_nop, issub)
+    end
+    addaction(pl, dmgtxt, func, issub)
+end $$
 
 |[f_movehelp_setdmg]| function(_ENV, pl, dmg, isself)
     local active = pl.active
     local issub = not isself and active.substitute > 0
-    addaction(pl, f_format_num_sign(-dmg, "hp"), function()
+
+    f_movehelp_hpchange(_ENV, pl, -dmg, function()
         active.bidedmg += dmg
         -- rage increment
         if active.curmove and active.curmove.num == M_RAGE then

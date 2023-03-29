@@ -22,23 +22,23 @@
 -- pokemon moves can be physical or special. the order here is specific. odd numbers are physical. even numbers are special.
 -- includes type effectiveness chart. according to the gen 1 games, which had bugs. i'm keeping the bugs :).
 |[c_types]| f_zobj[[
-    T_NONE;     bg,0, name,~c_empty;
-    T_NORMAL;   bg,0, name,"normal",   T_GHOST,0,    T_ROCK,.5;
-    T_FIRE;     bg,5, name,"fire",     T_GRASS,2,    T_ICE,2,      T_BUG,2,       T_FIRE,.5,     T_WATER,.5,    T_ROCK,.5,   T_DRAGON,.5;
-    T_FIGHTING; bg,2, name,"fighting", T_ICE,2,      T_NORMAL,2,   T_ROCK,2,      T_GHOST,0,     T_BUG,.5,      T_FLYING,.5, T_POISON,.5, T_PSYCHIC,.5;
-    T_WATER;    bg,4, name,"water",    T_FIRE,2,     T_GROUND,2,   T_ROCK,2,      T_DRAGON,.5,   T_GRASS,.5,    T_WATER,.5;
-    T_POISON;   bg,1, name,"poison",   T_BUG,2,      T_GRASS,2,    T_GHOST,.5,    T_GROUND,.5,   T_POISON,.5,   T_ROCK,.5;
-    T_ELECTRIC; bg,6, name,"electric", T_FLYING,2,   T_WATER,2,    T_GROUND,0,    T_DRAGON,.5,   T_ELECTRIC,.5, T_GRASS,.5;
-    T_GROUND;   bg,2, name,"ground",   T_ELECTRIC,2, T_FIRE,2,     T_POISON,2,    T_ROCK,2,      T_FLYING,0,    T_BUG,.5,    T_GRASS,.5;
-    T_GRASS;    bg,3, name,"grass",    T_GROUND,2,   T_ROCK,2,     T_WATER,2,     T_BUG,.5,      T_DRAGON,.5,   T_FIRE,.5,   T_FLYING,.5, T_GRASS,.5, T_POISON,.5;
-    T_FLYING;   bg,0, name,"flying",   T_BUG,2,      T_FIGHTING,2, T_GRASS,2,     T_ELECTRIC,.5, T_ROCK,.5;
-    T_ICE;      bg,4, name,"ice",      T_DRAGON,2,   T_FLYING,2,   T_GRASS,2,     T_FIRE,.5,     T_ICE,.5,      T_WATER,.5;
-    T_BUG;      bg,3, name,"bug",      T_GRASS,2,    T_PSYCHIC,2,  T_FIGHTING,.5, T_FIRE,.5,     T_FLYING,.5,   T_GHOST,.5,  T_POISON,.5;
-    T_PSYCHIC;  bg,1, name,"psychic",  T_FIGHTING,2, T_POISON,2,   T_PSYCHIC,.5;
-    T_ROCK;     bg,0, name,"rock",     T_BUG,2,      T_FIRE,2,     T_FLYING,2,    T_ICE,2,       T_FIGHTING,.5, T_GROUND,.5;
-    T_DRAGON;   bg,0, name,"dragon",   T_DRAGON,2;
-    T_GHOST;    bg,1, name,"ghost",    T_GHOST,2,    T_NORMAL,0,   T_PSYCHIC,0;
-    T_BIRD;     bg,0, name,"bird";
+    T_NONE;     bg,2,  name,~c_empty;
+    T_NORMAL;   bg,2,  name,"normal",   T_GHOST,0,    T_ROCK,.5;
+    T_FIRE;     bg,10, name,"fire",     T_GRASS,2,    T_ICE,2,      T_BUG,2,       T_FIRE,.5,     T_WATER,.5,    T_ROCK,.5,   T_DRAGON,.5;
+    T_FIGHTING; bg,7,  name,"fighting", T_ICE,2,      T_NORMAL,2,   T_ROCK,2,      T_GHOST,0,     T_BUG,.5,      T_FLYING,.5, T_POISON,.5, T_PSYCHIC,.5;
+    T_WATER;    bg,9, name,"water",    T_FIRE,2,     T_GROUND,2,   T_ROCK,2,      T_DRAGON,.5,   T_GRASS,.5,    T_WATER,.5;
+    T_POISON;   bg,6,  name,"poison",   T_BUG,2,      T_GRASS,2,    T_GHOST,.5,    T_GROUND,.5,   T_POISON,.5,   T_ROCK,.5;
+    T_ELECTRIC; bg,11, name,"electric", T_FLYING,2,   T_WATER,2,    T_GROUND,0,    T_DRAGON,.5,   T_ELECTRIC,.5, T_GRASS,.5;
+    T_GROUND;   bg,7,  name,"ground",   T_ELECTRIC,2, T_FIRE,2,     T_POISON,2,    T_ROCK,2,      T_FLYING,0,    T_BUG,.5,    T_GRASS,.5;
+    T_GRASS;    bg,8,  name,"grass",    T_GROUND,2,   T_ROCK,2,     T_WATER,2,     T_BUG,.5,      T_DRAGON,.5,   T_FIRE,.5,   T_FLYING,.5, T_GRASS,.5, T_POISON,.5;
+    T_FLYING;   bg,2,  name,"flying",   T_BUG,2,      T_FIGHTING,2, T_GRASS,2,     T_ELECTRIC,.5, T_ROCK,.5;
+    T_ICE;      bg,9, name,"ice",      T_DRAGON,2,   T_FLYING,2,   T_GRASS,2,     T_FIRE,.5,     T_ICE,.5,      T_WATER,.5;
+    T_BUG;      bg,8,  name,"bug",      T_GRASS,2,    T_PSYCHIC,2,  T_FIGHTING,.5, T_FIRE,.5,     T_FLYING,.5,   T_GHOST,.5,  T_POISON,.5;
+    T_PSYCHIC;  bg,6,  name,"psychic",  T_FIGHTING,2, T_POISON,2,   T_PSYCHIC,.5;
+    T_ROCK;     bg,2,  name,"rock",     T_BUG,2,      T_FIRE,2,     T_FLYING,2,    T_ICE,2,       T_FIGHTING,.5, T_GROUND,.5;
+    T_DRAGON;   bg,2,  name,"dragon",   T_DRAGON,2;
+    T_GHOST;    bg,6,  name,"ghost",    T_GHOST,2,    T_NORMAL,0,   T_PSYCHIC,0;
+    T_BIRD;     bg,2,  name,"bird";
 ]] $$
 
 |[c_stages]| f_zobj[[
@@ -52,15 +52,20 @@
     evasion,  "eva"
 ]] $$
 
--- 5 bg styles
-|[c_bg_styles]| f_zobj[[
-    0;bg,6,  aa,13 -- normal
-   ;; bg,14, aa,4  -- darker/psychic/poison/ghost
-   ;; bg,9,  aa,4  -- electric/ground
-   ;; bg,11, aa,3  -- grass
-   ;; bg,12, aa,5  -- water
-   ;; bg,8,  aa,2  -- fire
-   ;; bg,10, aa,4  -- electric/ground
+-- 4 styles: 13,1 6,13 2,1, 8,2
+|[c_menu_styles]| f_zobj[[
+    ;bg,13, aa,5,  fg,1
+   ;;bg,6,  aa,13, fg,13  -- "normal" type and "selected" row
+   ;;bg,5,  aa,5,  fg,1
+   ;;bg,6,  aa,5,  fg,5   -- disable + default battle bkgd
+   ;;bg,1,  aa,5,  fg,13  -- this one is for credit/winmenu headers
+
+   ;;bg,14, aa,4   -- darker/psychic/poison/ghost
+   ;;bg,9,  aa,4   -- electric/ground
+   ;;bg,11, aa,3   -- grass
+   ;;bg,12, aa,5   -- water
+   ;;bg,8,  aa,2   -- fire
+   ;;bg,10, aa,4   -- electric/ground
 ]] $$
 
 -- Agility      Raises the user's Speed by 2 stages.
