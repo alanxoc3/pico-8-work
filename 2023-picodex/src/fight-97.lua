@@ -88,8 +88,6 @@ end $$
             end
         end
 
-        -- middle of rage... you freeze then immediately unfreeze... that shouldn't cost a pp, should it? If you are on your last pp, you wouldn't have a move this turn.
-        -- i think it shouldn't cost a pp in this case.
         if selfactive.major == C_MAJOR_FROZEN then
             if _rnd'1' < .2 then
                 addaction(self, "|thawed|out")
@@ -202,8 +200,6 @@ end $$
             addaction(self, "|"..selfactive.mynewmoves[selfactive.disabledslot].name.."|enabled")
             selfactive.disabledslot = 0
         end)
-
-        -- todo: sleepcountdown
     end)
 end $$
 

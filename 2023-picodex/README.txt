@@ -36,6 +36,8 @@ sfx 62 - tauros    magikarp  | gyarados lapras     | ditto      eevee      | vap
 sfx 63 - articuno  zapdos    | moltres  dratini    | dragonair  dragonite  | mewtwo     mew        | *okay      *back      | *error    *boot      | *logo      *todo      | *todo      *todo
 ```
 
+## workspace
+Here are some of the standard messages.
 
 begin|hit #
 comes|back

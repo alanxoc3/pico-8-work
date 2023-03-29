@@ -1,5 +1,3 @@
--- todo: try outlining pkmn whos turn it is
--- todo: try healthbar animation (or highlighting the bar, then status change happens)
 |[f_editteam_draw1]| function(game)
     f_modes_default_draw1(game)
     f_wobble_text("team #"..game:f_modes_cursor'team1'+1, 20, 27, 1)

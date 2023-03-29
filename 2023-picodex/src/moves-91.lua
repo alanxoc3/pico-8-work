@@ -1,3 +1,5 @@
+-- todo: text when not effective
+
 -- roar/whirlwind/teleport
 |[f_movehelp_switch]| function(pl)
     local team = f_get_team_live(pl.team)
@@ -221,10 +223,14 @@ end $$
 end $$
 
 ---------- MULTITURN MOVES ---------------
--- todo: combine with thrash logic
 |[f_move_rage]| function(_ENV)
-    f_set_moveturn(selfactive, -1, f_create_move(move.num, move.slot))
+    f_set_moveturn(selfactive, -1, move)
     f_move_default(_ENV)
+
+    -- rage consumes a pp each turn and ends when pp runs out, this is not the behavior of the OG games.
+    if move.pp <= 0 then
+        selfactive.moveturn, selfactive.curmove = 0
+    end
 end $$
 
 |[f_move_bide]| function(_ENV)
