@@ -48,7 +48,6 @@ while read -r number commithash ; do # magic is here
 done
 
 echo 'And finally creating the gif!'
-FIRST=$(fd 'all--\d+\.png' | sort -V | head -n 2 | tail -n 1)
-LAST=$(fd 'all--\d+\.png' | sort -V | tail -n 1)
-LONG=100
-convert -delay $LONG -loop 0 "$FIRST" -delay 5 -loop 0 $(fd 'all--\d+\.png' | sort -V) -delay $LONG -loop 0 "$LAST" final.gif
+FIRST=$(fd -I 'all--\d+\.png' | sort -V | head -n 1)
+LAST=$(fd -I 'all--\d+\.png' | sort -V | tail -n 1)
+convert -loop 0 "$FIRST" -delay 5 -loop 0 $(fd -I 'all--\d+\.png' | sort -V) -delay 500 -loop 0 "$LAST" final.gif
