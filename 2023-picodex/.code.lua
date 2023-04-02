@@ -436,7 +436,7 @@ func(_ENV,_unpack(params))
 end
 end)
 end,function(_ENV)
-if selfactive.major==6 then
+if otheractive.major==6 then
 f_move_drain(_ENV)
 else
 return true

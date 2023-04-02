@@ -377,7 +377,7 @@ end $$
 end $$
 
 |[f_move_dreameater]| function(_ENV)
-    if selfactive.major == C_MAJOR_SLEEPING then
+    if otheractive.major == C_MAJOR_SLEEPING then
         f_move_drain(_ENV)
     else
         return true
