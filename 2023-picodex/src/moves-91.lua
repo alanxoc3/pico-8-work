@@ -248,6 +248,15 @@ end $$
     end
 end $$
 
+|[f_move_psywave]| function(_ENV)
+    -- number is C_LEVEL*1.5 -- 75 in this case
+    f_move_setdmg(_ENV, 1+f_flr_rnd'75')
+end $$
+
+|[f_move_superfang]| function(_ENV)
+    f_move_setdmg(_ENV, _max(otheractive.hp\2, 1))
+end $$
+
 |[f_move_thrash]| function(_ENV)
     f_set_moveturn(selfactive, f_flr_rnd'2'+1, f_create_move(move.num, move.slot))
     f_move_default(_ENV)
@@ -357,9 +366,7 @@ end $$
 end $$
 
 |[f_move_recoil]| function(_ENV)
-    local dmg = f_calc_move_damage(selfactive, otheractive, move)
-
-    f_move_setdmg(_ENV, dmg, function()
+    f_move_setdmg(_ENV, false, function(dmg)
         f_move_setdmg_self(_ENV, _max(1, dmg\4))
     end)
 end $$
@@ -368,11 +375,17 @@ end $$
 -- some moves have extra effects
 |[f_move_default]| function(_ENV, percent, func, ...)
     local params = {...}
-    f_move_setdmg(_ENV, f_calc_move_damage(selfactive, otheractive, move), function()
+    f_move_setdmg(_ENV, false, function()
         -- if percent is not specified, the func will never run, so func is required when percent is specified
         if _rnd'100' < (percent or 0) then
             func(_ENV, _unpack(params))
         end
+    end)
+end $$
+
+|[f_move_drain]| function(_ENV)
+    f_move_setdmg(_ENV, false, function(dmg)
+        f_move_heal(_ENV, self, _max(dmg\2, 1))
     end)
 end $$
 
@@ -384,13 +397,6 @@ end $$
     end
 end $$
 
-|[f_move_drain]| function(_ENV)
-    local dmg = f_calc_move_damage(selfactive, otheractive, move)
-    f_move_setdmg(_ENV, dmg, function()
-        f_move_heal(_ENV, self, _max(dmg\2, 1))
-    end)
-end $$
-
 -- ohko moves only work on slower foes
 |[f_move_ohko]| function(_ENV)
     if selfactive.speed >= otheractive.speed then
@@ -398,16 +404,6 @@ end $$
     else
         return true
     end
-end $$
-
--- ohko moves only work on slower foes
-|[f_move_psywave]| function(_ENV)
-    -- number is C_LEVEL*1.5 -- 75 in this case
-    f_move_setdmg(_ENV, 1+f_flr_rnd'75')
-end $$
-
-|[f_move_superfang]| function(_ENV)
-    f_move_setdmg(_ENV, _max(otheractive.hp\2, 1))
 end $$
 
 |[f_movehelp_hpchange]| function(_ENV, pl, dmg, func, issub)
@@ -437,17 +433,22 @@ end $$
     end, issub and "substitute")
 end $$
 
--- zero damage means resistance
--- all opponent dmg goes through here.
+-- all opponent dmg goes through here
 -- good, because it gives a central place to track substitute/counter/bide/rage information
+----------------- param desc:
+-- dmg:      the amount of damage, assumes non-zero. false means calculate dmg from the move
+-- passfunc: if the move did damage, do this function, param to the function is the actual amount of damage done
 |[f_move_setdmg]| function(_ENV, dmg, passfunc)
-    if f_get_type_advantage(move, otheractive) > 0 then
+    dmg = dmg or f_calc_move_damage(selfactive, otheractive, move)
+
+    -- zero damage only means that attack was resisted. moves with set damage don't monitor resistance.
+    if dmg > 0 then
         if move.type % 2 == 1 then -- check if physical attack
             otheractive.counterdmg += dmg
         end
 
         f_movehelp_setdmg(_ENV, other, dmg)
-        if passfunc then passfunc() end
+        if passfunc then passfunc(dmg) end
     else
         addaction(other, "|resisted|attack")
     end

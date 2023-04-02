@@ -33,7 +33,7 @@ function f_zobj(...)
 return f_zobj_set(_setmetatable({},{__index=_g}),...)
 end
 f_zobj_set(_g,[[c_yes,@,c_no,@,c_empty,@,f_nop,@]],true,false,"",function(...)return...end)
-f_zobj_set(_g,[[f_zclass,@,f_actor_get_elapsed_percent,@,f_actor_load,@,f_actor_loadlogic,@,f_actor_state,@,f_modes_popuntil,@,f_modes_pop,@,f_modes_push,@,f_zobj,@,f_zobj_set,@,f_zobj_eval,@,f_zspr,@,f_beep,@,f_flr_rnd,@,f_zcall,@,f_zcamera,@,f_print_draw2_message,@,f_print_draw3_message,@,c_pokemon,@,c_pokemon_names,@,c_major_names,@,c_major_names_short,@,c_types,@,c_stages,@,c_menu_styles,@,c_moves,@,c_trainers,@,f_menu_state_callback,@,f_create_menu_view,@,f_create_menu,@,f_menu_refresh,@,f_menu_cancel,@,f_menu_set,@,f_menu_view_update,@,f_menu_update,@,f_menu_draw1,@,f_menu_drawentry,@,f_browse_drawentry,@,f_movehelp_switch,@,f_movehelp_incstat,@,f_movehelp_getstat,@,f_move_disable,@,f_movehelp_movecopy,@,f_move_mimic,@,f_move_transform,@,f_move_conversion,@,f_move_haze,@,f_move_heal,@,f_move_recover,@,f_move_metronome,@,f_move_mirror_move,@,f_move_roar,@,f_move_teleport,@,f_format_num_sign,@,f_move_self,@,f_move_other,@,f_move_stat,@,f_move_toxic,@,f_move_splash,@,f_move_major_other,@,f_movehelp_minor,@,f_movehelp_flinch,@,f_movehelp_confuse,@,f_move_substitute,@,f_move_rage,@,f_move_bide,@,f_move_thrash,@,f_move_trapping,@,f_move_flydig,@,f_move_prepare,@,f_move_hyperbeam,@,f_start_sleep_timer,@,f_move_rest,@,f_move_counter,@,f_move_multihit_set,@,f_move_multihit_var,@,f_move_multihit_twin,@,f_move_recoil,@,f_move_default,@,f_move_dreameater,@,f_move_drain,@,f_move_ohko,@,f_move_psywave,@,f_move_superfang,@,f_movehelp_hpchange,@,f_movehelp_setdmg,@,f_move_setdmg,@,f_move_setdmg_self,@,f_calc_max_stat,@,f_get_default_pokemon,@,f_populate_c_pokemon,@,f_create_team_pkmn,@,f_team_pkmn_to_active,@,f_unlock_pkmn,@,f_get_team_dead,@,f_get_team_live,@,f_get_next_active,@,f_teamdel,@,f_set_default_team_pkmn,@,f_get_team,@]],function(template)
+f_zobj_set(_g,[[f_zclass,@,f_actor_get_elapsed_percent,@,f_actor_load,@,f_actor_loadlogic,@,f_actor_state,@,f_modes_popuntil,@,f_modes_pop,@,f_modes_push,@,f_zobj,@,f_zobj_set,@,f_zobj_eval,@,f_zspr,@,f_beep,@,f_flr_rnd,@,f_zcall,@,f_zcamera,@,f_print_draw2_message,@,f_print_draw3_message,@,c_pokemon,@,c_pokemon_names,@,c_major_names,@,c_major_names_short,@,c_types,@,c_stages,@,c_menu_styles,@,c_moves,@,c_trainers,@,f_menu_state_callback,@,f_create_menu_view,@,f_create_menu,@,f_menu_refresh,@,f_menu_cancel,@,f_menu_set,@,f_menu_view_update,@,f_menu_update,@,f_menu_draw1,@,f_menu_drawentry,@,f_browse_drawentry,@,f_movehelp_switch,@,f_movehelp_incstat,@,f_movehelp_getstat,@,f_move_disable,@,f_movehelp_movecopy,@,f_move_mimic,@,f_move_transform,@,f_move_conversion,@,f_move_haze,@,f_move_heal,@,f_move_recover,@,f_move_metronome,@,f_move_mirror_move,@,f_move_roar,@,f_move_teleport,@,f_format_num_sign,@,f_move_self,@,f_move_other,@,f_move_stat,@,f_move_toxic,@,f_move_splash,@,f_move_major_other,@,f_movehelp_minor,@,f_movehelp_flinch,@,f_movehelp_confuse,@,f_move_substitute,@,f_move_rage,@,f_move_bide,@,f_move_psywave,@,f_move_superfang,@,f_move_thrash,@,f_move_trapping,@,f_move_flydig,@,f_move_prepare,@,f_move_hyperbeam,@,f_start_sleep_timer,@,f_move_rest,@,f_move_counter,@,f_move_multihit_set,@,f_move_multihit_var,@,f_move_multihit_twin,@,f_move_recoil,@,f_move_default,@,f_move_drain,@,f_move_dreameater,@,f_move_ohko,@,f_movehelp_hpchange,@,f_movehelp_setdmg,@,f_move_setdmg,@,f_move_setdmg_self,@,f_calc_max_stat,@,f_get_default_pokemon,@,f_populate_c_pokemon,@,f_create_team_pkmn,@,f_team_pkmn_to_active,@,f_unlock_pkmn,@,f_get_team_dead,@,f_get_team_live,@,f_get_next_active,@,f_teamdel,@,f_set_default_team_pkmn,@,f_get_team,@]],function(template)
 return f_zobj_set(f_zobj[[timer,0,stacksize,0,isnew,~c_yes,init,~f_nop,update,~f_nop,stack,#;]],template)
 end,function(_ENV,key)
 if key==curr then
@@ -351,6 +351,10 @@ end
 f_move_setdmg(_ENV,selfactive.bidedmg*2)
 end
 end,function(_ENV)
+f_move_setdmg(_ENV,1+f_flr_rnd"75")
+end,function(_ENV)
+f_move_setdmg(_ENV,_max(otheractive.hp\2,1))
+end,function(_ENV)
 f_set_moveturn(selfactive,f_flr_rnd"2"+1,f_create_move(move.num,move.slot))
 f_move_default(_ENV)
 if selfactive.moveturn==0 then
@@ -424,16 +428,19 @@ f_move_major_other(_ENV,5)
 end
 end)
 end,function(_ENV)
-local dmg=f_calc_move_damage(selfactive,otheractive,move)
-f_move_setdmg(_ENV,dmg,function()
+f_move_setdmg(_ENV,false,function(dmg)
 f_move_setdmg_self(_ENV,_max(1,dmg\4))
 end)
 end,function(_ENV,percent,func,...)
 local params={...}
-f_move_setdmg(_ENV,f_calc_move_damage(selfactive,otheractive,move),function()
+f_move_setdmg(_ENV,false,function()
 if _rnd"100"<(percent or 0)then
 func(_ENV,_unpack(params))
 end
+end)
+end,function(_ENV)
+f_move_setdmg(_ENV,false,function(dmg)
+f_move_heal(_ENV,self,_max(dmg\2,1))
 end)
 end,function(_ENV)
 if otheractive.major==6 then
@@ -442,20 +449,11 @@ else
 return true
 end
 end,function(_ENV)
-local dmg=f_calc_move_damage(selfactive,otheractive,move)
-f_move_setdmg(_ENV,dmg,function()
-f_move_heal(_ENV,self,_max(dmg\2,1))
-end)
-end,function(_ENV)
 if selfactive.speed>=otheractive.speed then
 f_move_setdmg(_ENV,otheractive.hp)
 else
 return true
 end
-end,function(_ENV)
-f_move_setdmg(_ENV,1+f_flr_rnd"75")
-end,function(_ENV)
-f_move_setdmg(_ENV,_max(otheractive.hp\2,1))
 end,function(_ENV,pl,dmg,func,issub)
 local dmgtxt=f_format_num_sign(dmg,"hp")
 if not issub or pl.active.substitute+dmg<0 then
@@ -477,12 +475,13 @@ active.shared.hp=_max(active.shared.hp-dmg,0)
 end
 end,issub and "substitute")
 end,function(_ENV,dmg,passfunc)
-if f_get_type_advantage(move,otheractive)>0 then
+dmg=dmg or f_calc_move_damage(selfactive,otheractive,move)
+if dmg>0 then
 if move.type%2==1 then
 otheractive.counterdmg+=dmg
 end
 f_movehelp_setdmg(_ENV,other,dmg)
-if passfunc then passfunc()end
+if passfunc then passfunc(dmg)end
 else
 addaction(other,"|resisted|attack")
 end

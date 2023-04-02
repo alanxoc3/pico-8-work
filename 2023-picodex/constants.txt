@@ -265,13 +265,13 @@ M_HYPER_BEAM:     15  # in stadium the user becomes uncontrollable during its ne
 M_PAY_DAY:        16  # the player picks up extra money after in-game battles; the money received is equal to: [users level * 2 * number of times pay day is used] the player does not lose money if the opponent uses pay day but the player wins the battle
 
 M_SUBMISSION:     17  # the user receives 1/4 recoil damage
-M_COUNTER:        18  # DIFF(respects resistance, counts all physical damage taken during turn or taken by substitute) almost always goes last; if an opponent strikes with a normal- or fighting-type attack before the users turn the user retaliates for twice the damage it had endured
-M_SEISMIC_TOSS:   19  # DIFF(respects resistance) does damage equal to users level hits ghost-type pokemon
+M_COUNTER:        18  # DIFF(counts all physical damage taken during turn or taken by substitute) almost always goes last; if an opponent strikes with a normal- or fighting-type attack before the users turn the user retaliates for twice the damage it had endured
+M_SEISMIC_TOSS:   19  # does damage equal to users level hits ghost-type pokemon
 M_RAGE:           20  # DIFF(you can switch out while using rage, rage ends when frozen/sleep/trapped/disabled, rage uses 1 pp each turn) the user attacks uncontrollably until it faints or its target faints during this time the users attack increases by 1 stage for each time it is hit by the target if this move misses the user continues to attack but has only a 1/256 chance to land a hit
 
 M_MEGA_DRAIN:     21  # restores the users hp by 1/2 of the damage inflicted on the target
 M_SOLAR_BEAM:     22  # DIFF(move resets when interrupted) the user prepares on turn one becoming uncontrollable and then attacks on turn two
-M_DRAGON_RAGE:    23  # DIFF(respects resistance) always deals 40 points of damage
+M_DRAGON_RAGE:    23  # always deals 40 points of damage
 M_THUNDERBOLT:    24  # has a ~10% chance to paralyze the target
 
 #### TEST 1 PARTY 2 ####
@@ -286,7 +286,7 @@ M_MIMIC:          31  # DIFF(doesn't miss and copies 5 pp like transform) this m
 M_DOUBLE_TEAM:    32  # raises the users evasion by 1 stage
 
 M_REFLECT:        33  # the user receives 1/2 damage from physical attacks until it switches out or either pokemon uses haze
-M_BIDE:           34  # DIFF(doesn't bypass accuracy check & respects resistance, counts damage done to substitute) the user absorbs all damage for 2-3 turns and then inflicts twice the absorbed damage on its target this move ignores the targets type but still cannot hit ghost-type pokemon
+M_BIDE:           34  # DIFF(doesn't bypass accuracy check & counts damage done to substitute) the user absorbs all damage for 2-3 turns and then inflicts twice the absorbed damage on its target this move ignores the targets type but still cannot hit ghost-type pokemon
 M_METRONOME:      35  # the user performs a randomly selected move; almost any move in the game could be picked metronome cannot generate itself struggle or any move that the user already knows
 M_SELF_DESTRUCT:  36  # DIFF(user inflicts damage to self before damaging opponent, so you can't win a match by suicide) the defense stat of other pokemon is halved against this attack essentially doubling the moves base power; causes the user to faint
 
@@ -301,7 +301,7 @@ M_SKY_ATTACK:     43  # DIFF(move resets when interrupted) the user prepares on 
 M_REST:           44  # the user is cured of status effects (and confusion) and recovers full hp but falls asleep for 2 turns (and then uses a third turn to wake up) however this move fails if the users current hp is 511 or 255 hp below its value at full health
 
 M_THUNDER_WAVE:   45  # paralyzes the target
-M_PSYWAVE:        46  # DIFF(respects resistance) randomly inflicts set damage between a minimum of 1 hp and a maximum of [15x the users level] hp
+M_PSYWAVE:        46  # randomly inflicts set damage between a minimum of 1 hp and a maximum of [15x the users level] hp
 M_EXPLOSION:      47  # DIFF(user inflicts damage to self before damaging opponent, so you can't win a match by suicide) the defense stat of other pokemon is halved against this attack essentially doubling the moves base power; causes the user to faint
 M_ROCK_SLIDE:     48  # damages the target
 
@@ -360,7 +360,7 @@ M_GROWL:          88  # lowers the targets attack by 1 stage
 M_ROAR:           89  # DIFF(switches opponent with random pokemon) escapes from wild battles; fails automatically in trainer and link battles
 M_SING:           90  # puts the target to sleep
 M_SUPERSONIC:     91  # confuses the target
-M_SONIC_BOOM:     92  # DIFF(respects resistance) always deals 20 points of damage
+M_SONIC_BOOM:     92  # always deals 20 points of damage
 
 M_DISABLE:        93  # DIFF(lasts 2-7 turns) one randomly selected move of the targets cannot be selected for 1-7 turns disable only works on one move at a time the target does nothing if it is about to use a move that becomes disabled
 M_ACID:           94  # has a ~10% chance to lower the targets defense by 1 stage
@@ -399,7 +399,7 @@ M_AGILITY:        119 # raises the users speed by 2 stages
 M_QUICK_ATTACK:   120 # usually goes first
 
 #### TEST 2 PARTY 3 ####
-M_NIGHT_SHADE:    121 # DIFF(respects resistance now) does damage equal to users level this move hits normal-type pokemon
+M_NIGHT_SHADE:    121 # does damage equal to users level this move hits normal-type pokemon
 M_SCREECH:        122 # lowers the targets defense by 2 stages
 M_RECOVER:        123 # restores 1/2 of the users max hp however this move fails if the users current hp is 511 or 255 hp below its value at full health
 M_HARDEN:         124 # raises the users defense by 1 stage
@@ -452,5 +452,5 @@ M_HYPER_FANG:     160 # has a ~10% chance to make the target flinch
 
 M_SHARPEN:        161 # raises the users attack by 1 stage
 M_CONVERSION:     162 # the users type changes to match the type of one of its four attacks this move fails if the user cannot change its type under this condition
-M_SUPER_FANG:     163 # DIFF(respects resistance now) this move halves the targets current hp
+M_SUPER_FANG:     163 # this move halves the targets current hp
 M_SLASH:          164 # has a high critical hit ratio
