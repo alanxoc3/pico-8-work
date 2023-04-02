@@ -488,6 +488,7 @@ otheractive.counterdmg+=dmg
 end
 f_movehelp_setdmg(_ENV,other,dmg)
 else
+addaction(other,"|resisted|attack")
 return true
 end
 end,function(_ENV,dmg)

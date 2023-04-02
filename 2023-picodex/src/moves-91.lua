@@ -454,7 +454,8 @@ end $$
 
         f_movehelp_setdmg(_ENV, other, dmg)
     else
-        return true -- todo: maybe instead of returning true, can return a message
+        addaction(other, "|resisted|attack")
+        return true
     end
 end $$
 
