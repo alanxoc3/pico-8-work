@@ -1149,7 +1149,7 @@ if move.accuracy ~=0 then
 otheractive.lastmoverecv=move.num
 end
 if move.func(_ENV)then
-addaction(self,"|fails|"..move.name)
+addaction(self,"|fails|attack")
 end
 end
 end)
@@ -1383,10 +1383,13 @@ local base_damage=_mid(
 *move.damage
 *_mid(10,.2,attack/defense)
 )+2
-return base_damage
+local advantage,dmg=f_get_type_advantage(move,defender),base_damage
 *((move.type==attacker.type1 or move.type==attacker.type2)and 1.5 or 1)
-*f_get_type_advantage(move,defender)
-*(_rnd".15"+.85)\1
+*(_rnd".15"+.85)
+if advantage>0 then
+return max(1,dmg*advantage\1)
+end
+return 0
 end,function(_ENV)
 p0=_ENV[p0key]
 do local _ENV=p0.active

@@ -53,7 +53,7 @@ end $$
 
             -- todo: might be nice if other things were supported (miss, fail, resist)
             if move.func(_ENV) then
-                addaction(self, "|fails|"..move.name)
+                addaction(self, "|fails|attack")
             end
         end
     end)
@@ -410,7 +410,7 @@ end $$
 
 -- see: https://web.archive.org/web/20140711082447/http://www.upokecenter.com/content/pokemon-red-version-blue-version-and-yellow-version-timing-notes
 -- and: https://bulbapedia.bulbagarden.net/wiki/Damage
--- only returns "zero" if there is a resistance
+-- only returns "zero" if there is a resistance, so damage is guaranteed to be at least 1 unless there is resistance.
 |[f_calc_move_damage]| function(attacker, defender, move)
     -- todo: need to factor in if burned
     local attack, defense = attacker:f_movehelp_getstat'special', defender:f_movehelp_getstat'special'
@@ -434,8 +434,13 @@ end $$
 
     -- max possible damage: 5994
     -- end of formula multiplies by a random number (217/255)
-    return base_damage
+    local advantage, dmg = f_get_type_advantage(move, defender), base_damage
         *((move.type == attacker.type1 or move.type == attacker.type2) and 1.5 or 1) -- stab
-        *f_get_type_advantage(move, defender)
-        *(_rnd'.15'+.85)\1
+        *(_rnd'.15'+.85)
+
+    if advantage > 0 then
+        return max(1, dmg*advantage\1)
+    end
+
+    return 0
 end $$
