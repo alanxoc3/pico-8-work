@@ -1,0 +1,171 @@
+Welcome to the world of PICO-8 Pokemon! Picodex is a generation 1 Pokemon battle simulator. The battle mechanics in picodex are mostly based on those in Pokemon Stadium 1, though some moves and mechanics have been slightly changed for various reasons. The "Movedex" section describes what each move does. An asterisk (*) next to a move's name indicates that the move in Picodex behaves differently than the same move in Pokemon Stadium 1.
+
++-----------------------------------------------------------------------------------------------------------------------------------------------+
+| move name | canonical name | description                                                                                                      |
++-----------+----------------+------------------------------------------------------------------------------------------------------------------+
+| struggle* | Struggle       | used when user can't use any more moves. doesn't take type effectiveness into account.                           |
+| megapnch  | Mega-Punch     | damages target.                                                                                                  |
+| razrwind  | Razor-Wind     | user prepares on turn one then attacks on turn two.                                                              |
+| sworddnc  | Swords-Dance   | raises users attack by 2 stages.                                                                                 |
+| whrlwind* | Whirlwind      | usually goes last. switches opponent's active pokemon with a random benched pokemon.                             |
+| megakick  | Mega-Kick      | damages target.                                                                                                  |
+| toxic     | Toxic          | target is badly poisoned with poison damage increasing each turn.                                                |
+| horndril  | Horn-Drill     | target faints. doesnt work on faster pokemon.                                                                    |
+| bodyslam  | Body-Slam      | 30% chance to paralyze target.                                                                                   |
+| takedown  | Take-Down      | user receives 1/4 recoil damage.                                                                                 |
+| doubedge  | Double-Edge    | user receives 1/4 recoil damage.                                                                                 |
+| bublbeam  | Bubble-Beam    | 10% chance to lower targets speed by 1 stage.                                                                    |
+| watergun  | Water-Gun      | damages target.                                                                                                  |
+| icebeam   | Ice-Beam       | 10% chance to freeze target.                                                                                     |
+| blizzard  | Blizzard       | 10% chance to freeze target.                                                                                     |
+| hyprbeam  | Hyper-Beam     | user attacks on one turn then recharges on turn two.                                                             |
+| payday*   | Pay-Day        | damages target.                                                                                                  |
+| submsion  | Submission     | user receives 1/4 recoil damage.                                                                                 |
+| counter*  | Counter        | usually goes last. user retaliates for twice the damage it endured from a physical attack this turn.             |
+| seistoss  | Seismic-Toss   | deals exactly 50 damage.                                                                                         |
+| rage*     | Rage           | user attacks uncontrollably and uses 1 pp each turn. raises users attack by 1 stage each time it is damaged.     |
+| megdrain  | Mega-Drain     | restores users hp by 1/2 of the damage inflicted on target.                                                      |
+| solrbeam  | Solar-Beam     | user prepares on turn one then attacks on turn two.                                                              |
+| drgnrage  | Dragon-Rage    | deals exactly 40 damage.                                                                                         |
+| thndrblt  | Thunderbolt    | 10% chance to paralyze target.                                                                                   |
+| thunder   | Thunder        | 10% chance to paralyze target.                                                                                   |
+| earthqke  | Earthquake     | damages target.                                                                                                  |
+| fissure   | Fissure        | target faints. doesnt work on faster pokemon.                                                                    |
+| dig       | Dig            | user prepares and is nearly invulnerable on turn one then attacks on turn two.                                   |
+| psychic   | Psychic        | 30% chance to lower targets special by 1 stage.                                                                  |
+| teleport* | Teleport       | usually goes last. switches user's active pokemon with a random benched pokemon.                                 |
+| mimic*    | Mimic          | this move is replaced by one of the target's moves at random with 5 pp. move is reset to mimic if user switches. |
+| doubteam  | Double-Team    | raises users evasion by 1 stage.                                                                                 |
+| reflect   | Reflect        | user receives 1/2 damage from physical attacks.                                                                  |
+| bide*     | Bide           | user endures damage for 2-3 turns then inflicts twice the damage endured. respects accuracy and type checks.     |
+| metrnome  | Metronome      | user performs a random move, excluding struggle.                                                                 |
+| selfdstr* | Self-Destruct  | user faints then does high amounts damage to target.                                                             |
+| eggbomb   | Egg-Bomb       | damages target.                                                                                                  |
+| fireblst  | Fire-Blast     | 30% chance to burn target.                                                                                       |
+| swift*    | Swift          | always hits target, bypassing all accuracy checks.                                                               |
+| skulbash  | Skull-Bash     | user prepares on turn one then attacks on turn two.                                                              |
+| softboil  | Soft-Boiled    | restores 1/2 of users max hp.                                                                                    |
+| dreameat  | Dream-Eater    | restores users hp by 1/2 of the damage inflicted on target but only works on a sleeping target.                  |
+| skyattck  | Sky-Attack     | user prepares on turn one then attacks on turn two.                                                              |
+| rest      | Rest           | user is cured of status effects and recovers full hp  but falls asleep.                                          |
+| thndrwav  | Thunder-Wave   | paralyzes target.                                                                                                |
+| psywave   | Psywave        | deals a random amount of damage between 1 and 75.                                                                |
+| explsion* | Explosion      | user faints then does high amounts damage to target.                                                             |
+| rockslid  | Rock-Slide     | damages target.                                                                                                  |
+| triattck  | Tri-Attack     | damages target.                                                                                                  |
+| substute* | Substitute     | user creates a decoy with 1/4 of its hp. opponent will damage substitute but user is vulnerable to effects.      |
+| cut       | Cut            | damages target.                                                                                                  |
+| fly       | Fly            | user prepares and is nearly invulnerable on turn one then attacks on turn two.                                   |
+| surf      | Surf           | damages target.                                                                                                  |
+| strength  | Strength       | damages target.                                                                                                  |
+| flash     | Flash          | lowers targets accuracy by 1 stage                                                                               |
+| pound     | Pound          | damages target.                                                                                                  |
+| karatchp  | Karate-Chop    | high critical hit ratio.                                                                                         |
+| doubslap* | Double-Slap    | attacks 2-5 times. if opponent faints, attack continues onto next target.                                        |
+| comtpnch* | Comet-Punch    | attacks 2-5 times. if opponent faints, attack continues onto next target.                                        |
+| firepnch  | Fire-Punch     | 10% chance to burn target.                                                                                       |
+| icepnch   | Ice-Punch      | 10% chance to freeze target.                                                                                     |
+| thndpnch  | Thunder-Punch  | 10% chance to paralyze target.                                                                                   |
+| scratch   | Scratch        | damages target.                                                                                                  |
+| vicegrip  | Vice-Grip      | damages target.                                                                                                  |
+| guilotin  | Guillotine     | target faints. doesnt work on faster pokemon.                                                                    |
+| gust      | Gust           | damages target.                                                                                                  |
+| wingatck  | Wing-Attack    | damages target.                                                                                                  |
+| bind      | Bind           | user attacks for 2-5 turns. target cannot move during this time.                                                 |
+| slam      | Slam           | damages target.                                                                                                  |
+| vinewhip  | Vine-Whip      | damages target.                                                                                                  |
+| stomp     | Stomp          | 30% chance to make target flinch.                                                                                |
+| doubkick* | Double-Kick    | attacks 2 times. if opponent faints, attack continues onto next target.                                          |
+| jumpkick  | Jump-Kick      | user receives 1 hp of recoil damage if attack misses.                                                            |
+| rllngkck  | Rolling-Kick   | 30% chance to make target flinch.                                                                                |
+| sandatck  | Sand-Attack    | lowers targets accuracy by 1 stage.                                                                              |
+| headbutt  | Headbutt       | 30% chance to make target flinch.                                                                                |
+| hornatck  | Horn-Attack    | damages target.                                                                                                  |
+| furyatck* | Fury-Attack    | attacks 2-5 times. if opponent faints, attack continues onto next target.                                        |
+| tackle    | Tackle         | damages target.                                                                                                  |
+| wrap      | Wrap           | user attacks for 2-5 turns. target cannot move during this time.                                                 |
+| thrash    | Thrash         | user attacks for 2-3 turns then gets confused afterwards.                                                        |
+| tailwhip  | Tail-Whip      | lowers targets defense by 1 stage.                                                                               |
+| psnsting  | Poison-Sting   | 20% chance to poison target.                                                                                     |
+| twineedl* | Twineedle      | attacks 2 times. if opponent faints, attack continues onto next target. 20% chance to poison target.             |
+| pinmisil* | Pin-Missile    | user attacks for 2-5 turns. target cannot move during this time.                                                 |
+| leer      | Leer           | lowers targets defense by 1 stage.                                                                               |
+| bite      | Bite           | 10% chance to make target flinch.                                                                                |
+| growl     | Growl          | lowers targets attack by 1 stage.                                                                                |
+| roar*     | Roar           | usually goes last. switches opponent's active pokemon with a random benched pokemon.                             |
+| sing      | Sing           | puts target to sleep.                                                                                            |
+| sprsonic  | Supersonic     | confuses target.                                                                                                 |
+| sonicbom  | Sonic-Boom     | deals exactly 20 damage.                                                                                         |
+| disable   | Disable        | one randomly selected move for target is disabled for 2-7 turns. fails if target is already disabled.            |
+| acid      | Acid           | 10% chance to lower targets defense by 1 stage.                                                                  |
+| ember     | Ember          | 10% chance to burn target.                                                                                       |
+| flamthwr  | Flamethrower   | 10% chance to burn target.                                                                                       |
+| mist      | Mist           | protects user from modifier decreases.                                                                           |
+| hydropmp  | Hydro-Pump     | damages target.                                                                                                  |
+| psybeam   | Psybeam        | 10% chance to confuse target.                                                                                    |
+| aurorabm  | Aurora-Beam    | 10% chance to lower targets attack by 1 stage.                                                                   |
+| peck      | Peck           | damages target.                                                                                                  |
+| drillpck  | Drill-Peck     | damages target.                                                                                                  |
+| lowkick   | Low-Kick       | 30% chance to make target flinch.                                                                                |
+| absorb    | Absorb         | restores users hp by 1/2 of the damage inflicted on target.                                                      |
+| leechsed  | Leech-Seed     | user steals 1/16 of targets max hp.                                                                              |
+| growth    | Growth         | raises users special by 1 stage.                                                                                 |
+| razrleaf  | Razor-Leaf     | high critical hit ratio.                                                                                         |
+| psnpowdr  | Poison-Powder  | poisons target.                                                                                                  |
+| stunspor  | Stun-Spore     | paralyzes target.                                                                                                |
+| slppowdr  | Sleep-Powder   | puts target to sleep.                                                                                            |
+| petldanc  | Petal-Dance    | user attacks for 2-3 turns then gets confused afterwards.                                                        |
+| strngsht  | String-Shot    | lowers targets speed by 1 stage.                                                                                 |
+| firespin  | Fire-Spin      | user attacks for 2-5 turns. target cannot move during this time.                                                 |
+| thndshck  | Thunder-Shock  | 10% chance to paralyze target.                                                                                   |
+| rockthrw  | Rock-Throw     | damages target.                                                                                                  |
+| cnfusion  | Confusion      | 10% chance to confuse target.                                                                                    |
+| hypnosis  | Hypnosis       | puts target to sleep.                                                                                            |
+| meditate  | Meditate       | raises users attack by 1 stage.                                                                                  |
+| agility   | Agility        | raises users speed by 2 stages.                                                                                  |
+| quickatk  | Quick-Attack   | usually goes first.                                                                                              |
+| ngtshade  | Night-Shade    | deals exactly 50 damage.                                                                                         |
+| screech   | Screech        | lowers targets defense by 2 stages.                                                                              |
+| recover   | Recover        | restores 1/2 of users max hp.                                                                                    |
+| harden    | Harden         | raises users defense by 1 stage.                                                                                 |
+| minimize  | Minimize       | raises users evasion by 1 stage.                                                                                 |
+| smokscrn  | Smokescreen    | lowers targets accuracy by 1 stage.                                                                              |
+| cnfusray  | Confuse-Ray    | confuses target.                                                                                                 |
+| withdraw  | Withdraw       | raises users defense by 1 stage.                                                                                 |
+| dfnscurl  | Defense-Curl   | raises users defense by 1 stage.                                                                                 |
+| barrier   | Barrier        | raises users defense by 2 stages.                                                                                |
+| lghtscrn  | Light-Screen   | user receives 1/2 damage from physical attacks.                                                                  |
+| haze*     | Haze           | resets stat modifiers from both pokemon.                                                                         |
+| fcsenrgy  | Focus-Energy   | raises critical hit ratio.                                                                                       |
+| mirrmove  | Mirror-Move    | user performs the last move executed by its target, excluding struggle.                                          |
+| lick      | Lick           | 30% chance to paralyze target.                                                                                   |
+| smog      | Smog           | 30% chance to poison target                                                                                      |
+| sludge    | Sludge         | 30% chance to poison target                                                                                      |
+| boneclub  | Bone-Club      | 10% chance to make target flinch                                                                                 |
+| watrfall  | Waterfall      | damages target.                                                                                                  |
+| clamp     | Clamp          | user attacks for 2-5 turns. target cannot move during this time.                                                 |
+| spikcann* | Spike-Cannon   | attacks 2-5 times. if opponent faints, attack continues onto next target.                                        |
+| constrct  | Constrict      | 10% chance to lower targets speed by 1 stage.                                                                    |
+| amnesia   | Amnesia        | raises users special by 2 stages.                                                                                |
+| kinesis   | Kinesis        | lowers targets accuracy by 1 stage.                                                                              |
+| hijmpkck  | High-Jump-Kick | user receives 1 hp of recoil damage if attack misses.                                                            |
+| glare     | Glare          | paralyzes target.                                                                                                |
+| poisngas  | Poison-Gas     | poisons target.                                                                                                  |
+| barrage*  | Barrage        | attacks 2-5 times. if opponent faints, attack continues onto next target.                                        |
+| leechlif  | Leech-Life     | restores users hp by 1/2 of the damage inflicted on target.                                                      |
+| lovekiss  | Lovely-Kiss    | puts target to sleep.                                                                                            |
+| tranform* | Transform      | user copies target stats, types, and moves. moves are all set to have 5 pp.                                      |
+| bubble    | Bubble         | 10% chance to lower targets speed by 1 stage.                                                                    |
+| dizypnch  | Dizzy-Punch    | damages target.                                                                                                  |
+| spore     | Spore          | puts target to sleep.                                                                                            |
+| splash    | Splash         | does nothing.                                                                                                    |
+| acidarmr  | Acid-Armor     | raises users defense by 2 stages.                                                                                |
+| crabhamr  | Crabhammer     | high critical hit ratio.                                                                                         |
+| furyswps* | Fury-Swipes    | attacks 2-5 times. if opponent faints, attack continues onto next target.                                        |
+| bonerang* | Bonemerang     | attacks 2 times. if opponent faints, attack continues onto next target.                                          |
+| hyprfang  | Hyper-Fang     | 10% chance to make target flinch.                                                                                |
+| sharpen   | Sharpen        | raises users attack by 1 stage.                                                                                  |
+| convrson* | Conversion     | users copies targets types.                                                                                      |
+| suprfang  | Super-Fang     | this move halves targets current hp. inflicts at least 1 damage.                                                 |
+| slash     | Slash          | high critical hit ratio.                                                                                         |
++-----------+----------------+------------------------------------------------------------------------------------------------------------------+
