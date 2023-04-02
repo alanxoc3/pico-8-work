@@ -1,3 +1,7 @@
+-- DIFF: frozen/sleep will reset multiturn moves.
+-- DIFF: if a pokemon faints, the next pokemon in the party will automatically be sent out.
+-- DIFF: pokemon have a 20% chance to unthaw.
+
 Welcome to the world of PICO-8 Pokemon! Picodex is a generation 1 Pokemon battle simulator. The battle mechanics in picodex are mostly based on
 those in Pokemon Stadium 1, though some moves and mechanics have been slightly changed for various reasons. The "Movedex" section describes what
 each move does. An asterisk (*) next to a move's name indicates that the move in Picodex behaves differently than the same move in Pokemon

@@ -1,3 +1,6 @@
+-- todo: leech seed should not affect grass type
+-- todo: speed change for par, att down when burn
+
 -- roar/whirlwind/teleport
 |[f_movehelp_switch]| function(pl)
     local team = f_get_team_live(pl.team)
@@ -176,7 +179,6 @@ end $$
 end $$
 
 |[f_move_major_other]| function(_ENV, majorind)
-    -- todo, prevent electric from getting paralyzed, fire from getting burned, ice frozen, grass leech, poison poisoned...
     if f_get_type_advantage(move, otheractive) > 0 and otheractive.shared.major == C_MAJOR_NONE then
         addaction(other, "|is now|"..c_major_names[majorind], function()
             otheractive.shared.major = majorind
@@ -439,13 +441,21 @@ end $$
 -- dmg:      the amount of damage, assumes non-zero. false means calculate dmg from the move
 -- passfunc: if the move did damage, do this function, param to the function is the actual amount of damage done
 |[f_move_setdmg]| function(_ENV, dmg, passfunc)
-    dmg = dmg or f_calc_move_damage(selfactive, otheractive, move)
+    local crit, advantage = false, 1
+    if not dmg then
+        dmg, crit, advantage = f_calc_move_damage(selfactive, otheractive, move)
+    end
 
     -- zero damage only means that attack was resisted. moves with set damage don't monitor resistance.
     if dmg > 0 then
         if move.type % 2 == 1 then -- check if physical attack
             otheractive.counterdmg += dmg
         end
+
+        if advantage > 1     then addaction(self, "|super|effective")
+        elseif advantage < 1 then addaction(self, "|not very|effective") end
+
+        if crit then addaction(self, "|critical|hit") end
 
         f_movehelp_setdmg(_ENV, other, dmg)
         if passfunc then passfunc(dmg) end

@@ -1,8 +1,4 @@
 -- battle mechanic differences
--- DIFF: frozen/sleep will reset multiturn moves
--- DIFF: if a pokemon faints, the next pokemon in the party will automatically be sent out
--- DIFF: pokemon have a 20% chance to unthaw
-
 -- todo: something to consider. For dig/fly/hypebeam, it would be nice to have alternate text on the second turn, instead of "blah|used|hyperbeam". so maybe i can do something for that.
 -- todo: something to consider. Minimize makes the sprite smaller.
 

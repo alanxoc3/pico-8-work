@@ -98,11 +98,7 @@ end $$
 |[f_populate_c_moves]| function()
     local memloc = _peek2'0x8'
     for i=-1,164 do -- there must be 166 loop interations as that matches the compile file (-1 to 164)
-        local typ = _peek(memloc+0)
-        local pp  = _peek(memloc+1)*5-5
-        local dmg = _peek(memloc+2)*5-5
-        local acc = _peek(memloc+3)*5-5
-        local name = _deli(c_moves_raw[i], 1)
+        local typ, pp, dmg, acc, name = _peek(memloc+0), _peek(memloc+1)*5-5, _peek(memloc+2)*5-5, _peek(memloc+3)*5-5, _deli(c_moves_raw[i], 1)
         local ofunc = _deli(c_moves_raw[i], 1)
 
         -- ofunc is used in accuracy check, for a charging move

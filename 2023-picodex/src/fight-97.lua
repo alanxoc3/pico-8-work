@@ -10,6 +10,14 @@
     return f_newaction(pl, "|comes|out")
 end $$
 
+|[f_in_moves]| function(movenum, str)
+    for m in all(split(str)) do
+        if m == movenum then
+            return true
+        end
+    end
+end $$
+
 |[f_select_switch]| function(pl, pkmn)
     f_addaction(pl, pl, "|comes|back", function(params) -- self, other
         params.selfactive.invisible = true
@@ -36,14 +44,14 @@ end $$
         end
 
         -- explosion & self destruct hurt the user first, then they might miss, so this part of that logic must go outside the normal flow
-        if move.num == M_EXPLOSION or move.num == M_SELF_DESTRUCT then
+        if f_in_moves(move.num, 'M_EXPLOSION,M_SELF_DESTRUCT') then
             f_move_setdmg_self(_ENV, selfactive.hp)
         end
 
         if f_does_move_miss(selfactive, otheractive, move) then
             addaction(self, "|misses|"..move.name)
 
-            if move.num == M_HIGH_JUMP_KICK or move.num == M_JUMP_KICK then
+            if f_in_moves(move.num, 'M_HIGH_JUMP_KICK,M_JUMP_KICK') then
                 f_move_setdmg_self(_ENV, 1)
             end
         else
@@ -98,41 +106,25 @@ end $$
             end
         end
 
-        -- trapped
         if otheractive.trappedother == selfactive then
             addaction(self, "|is|trapped")
-            return
-        end
 
-        -- and how should trapping move when selecting a move? is it that the trapped can select a move, but the trapper can't? yes.
-        -- how does trapping moves work with thrash/rage/beams? multiturn moves are reset. thrash/rage/hyperbeam use a pp, but skyattack/solar beam don't.
-        -- any issues with metronome/mirrormove/mimic + multiturn moves? no, i don't think so.
-
-        -- if a move was used on the same turn disable was used
-        if selfactive.disabledslot == move.slot then
+        elseif selfactive.disabledslot == move.slot then
             addaction(self, "|is|disabled")
-            return
-        end
 
-        -- confuse - 50% self attack 1-4 turns
-        if selfactive.confused > 0 and f_flr_rnd'2' == 0 then
+        elseif selfactive.confused > 0 and f_flr_rnd'2' == 0 then
             addaction(self, "|confuse|damage")
             f_move_setdmg_self(_ENV, f_calc_move_damage(selfactive, otheractive, f_create_move(-1))) -- todo, try string here '-1'
-            return
-        end
 
-        -- paralysis
-        if selfactive.major == C_MAJOR_PARALYZED and f_flr_rnd'4' == 0 then
+        elseif selfactive.major == C_MAJOR_PARALYZED and f_flr_rnd'4' == 0 then
             addaction(self, "|fully|paralyzed")
-            return
-        end
 
-        if selfactive.flinching then
+        elseif selfactive.flinching then
             addaction(self, "|is|flinching")
-            return
-        end
 
-        f_movelogic(self, move)
+        else
+            f_movelogic(self, move)
+        end
     end)
 end $$
 
@@ -140,14 +132,13 @@ end $$
     if active[key] > 0 then
         active[key] -= 1
         if active[key] == 0 then
-            endfunc() -- todo, maybe default to f_nop? depends on token saving or not (wait)
+            endfunc()
         end
     end
 end $$
 
 -- todo: make minor statuses numbers instead
 |[f_postmove_logic]| function(self)
-    -- todo: i can probably token crunch this section
     return f_newaction(self, false, function(_ENV)
         -- flinching is reset at the psel init level, so you can't be flinching the next turn. no need to reset flinching here.
         -- counterdmg is also reset at psel init level.
@@ -183,7 +174,7 @@ end $$
             inflictstatdmg"|poison"
         end
 
-        if selfactive.major == C_MAJOR_BURNED then inflictstatdmg"|burn"   end
+        if selfactive.major == C_MAJOR_BURNED then inflictstatdmg"|burn" end
 
         if selfactive.seeded then
             inflictstatdmg"|seed"
@@ -211,7 +202,7 @@ end $$
 
     -- hardcoding the only moves that can change priority for now. Maybe there is a more token efficient way to do this?
     if move.num == M_QUICK_ATTACK then priority_class = C_PRIORITY_QUICKATTACK end
-    if move.num == M_COUNTER or move.num == M_WHIRLWIND or move.num == M_ROAR or move.num == M_TELEPORT then
+    if f_in_moves(move.num, 'M_COUNTER,M_WHIRLWIND,M_ROAR,M_TELEPORT') then
         priority_class = C_PRIORITY_COUNTER
     end
 
@@ -375,7 +366,7 @@ end $$
     -- range is 0 to 255. then random roll is done out of 256, so high crit still has like a .5% chance of failing.
     local divisor = 1024
     if movenum == -1 then return 1 end -- if confusion damage, you can't critical hit.
-    if movenum == M_RAZOR_LEAF or movenum == M_SLASH or movenum == M_KARATE_CHOP or movenum == M_CRABHAMMER then divisor *= .3 end
+    if f_in_moves(movenum, 'M_RAZOR_LEAF,M_SLASH,M_KARATE_CHOP,M_CRABHAMMER') then divisor *= .3 end
     if focused then divisor *= .3 end
 
     -- decimal here is 255/256. close enough to the actual formula
@@ -411,6 +402,7 @@ end $$
 -- see: https://web.archive.org/web/20140711082447/http://www.upokecenter.com/content/pokemon-red-version-blue-version-and-yellow-version-timing-notes
 -- and: https://bulbapedia.bulbagarden.net/wiki/Damage
 -- only returns "zero" if there is a resistance, so damage is guaranteed to be at least 1 unless there is resistance.
+-- returns: dmg, iscrit, type ratio
 |[f_calc_move_damage]| function(attacker, defender, move)
     -- todo: need to factor in if burned
     local attack, defense = attacker:f_movehelp_getstat'special', defender:f_movehelp_getstat'special'
@@ -424,10 +416,12 @@ end $$
         defense *= 2
     end
 
+    local crit = f_get_crit_ratio(attacker, move.num)
+
     -- 3 is min, because 3+2=5... 5*1*.5*.5*.85\1 = 1, so this makes the lowest damage possible 1 (not zero)
     local base_damage = _mid(
         3, 997,
-        (2*attacker.level*f_get_crit_ratio(attacker, move.num)/5+2)/50 -- [.44,.84]
+        (2*attacker.level*crit/5+2)/50 -- [.44,.84]
         *move.damage                       -- [6.6,285.6] -- [15,340]
         *_mid(10, .2, attack/defense)       -- [1.32,2856]
     )+2
@@ -439,8 +433,8 @@ end $$
         *(_rnd'.15'+.85)
 
     if advantage > 0 then
-        return max(1, dmg*advantage\1)
+        return max(1, dmg*advantage\1), crit > 1, advantage
     end
 
-    return 0
+    return 0, false, 0
 end $$
