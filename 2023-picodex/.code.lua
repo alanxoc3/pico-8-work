@@ -345,6 +345,9 @@ addaction(self,"|"..move.name.."|begins")
 selfactive.bidedmg=0
 end
 if selfactive.moveturn==0 then
+if selfactive.bidedmg==0 then
+return true
+end
 f_move_setdmg(_ENV,selfactive.bidedmg*2)
 end
 end,function(_ENV)
@@ -406,11 +409,8 @@ end,function(_ENV,hitcount,endfunc,isresume)
 if hitcount>0 then
 addaction(self,isresume and "|resumes|"..move.name,function()
 _ENV.otheractive=other.active
-if f_move_default(_ENV)then
-addaction(self,"|fails|"..move.name)
-else
+f_move_default(_ENV)
 f_move_multihit_set(_ENV,hitcount-1,endfunc,true)
-end
 end)
 else
 endfunc()
@@ -425,19 +425,16 @@ end
 end)
 end,function(_ENV)
 local dmg=f_calc_move_damage(selfactive,otheractive,move)
-if f_move_setdmg(_ENV,dmg)then
-return true
-else
+f_move_setdmg(_ENV,dmg,function()
 f_move_setdmg_self(_ENV,_max(1,dmg\4))
-end
+end)
 end,function(_ENV,percent,func,...)
-if f_move_setdmg(_ENV,f_calc_move_damage(selfactive,otheractive,move))then
-return true
-else
+local params={...}
+f_move_setdmg(_ENV,f_calc_move_damage(selfactive,otheractive,move),function()
 if _rnd"100"<(percent or 0)then
-func(_ENV,...)
+func(_ENV,_unpack(params))
 end
-end
+end)
 end,function(_ENV)
 if selfactive.major==6 then
 f_move_drain(_ENV)
@@ -446,21 +443,19 @@ return true
 end
 end,function(_ENV)
 local dmg=f_calc_move_damage(selfactive,otheractive,move)
-if f_move_setdmg(_ENV,dmg)then
-return true
-else
+f_move_setdmg(_ENV,dmg,function()
 f_move_heal(_ENV,self,_max(dmg\2,1))
-end
+end)
 end,function(_ENV)
 if selfactive.speed>=otheractive.speed then
-return f_move_setdmg(_ENV,otheractive.hp)
+f_move_setdmg(_ENV,otheractive.hp)
 else
 return true
 end
 end,function(_ENV)
-return f_move_setdmg(_ENV,1+f_flr_rnd"75")
+f_move_setdmg(_ENV,1+f_flr_rnd"75")
 end,function(_ENV)
-return f_move_setdmg(_ENV,_max(otheractive.hp\2,1))
+f_move_setdmg(_ENV,_max(otheractive.hp\2,1))
 end,function(_ENV,pl,dmg,func,issub)
 local dmgtxt=f_format_num_sign(dmg,"hp")
 if not issub or pl.active.substitute+dmg<0 then
@@ -481,15 +476,15 @@ else
 active.shared.hp=_max(active.shared.hp-dmg,0)
 end
 end,issub and "substitute")
-end,function(_ENV,dmg)
-if dmg>0 and f_get_type_advantage(move,otheractive)>0 then
+end,function(_ENV,dmg,passfunc)
+if f_get_type_advantage(move,otheractive)>0 then
 if move.type%2==1 then
 otheractive.counterdmg+=dmg
 end
 f_movehelp_setdmg(_ENV,other,dmg)
+if passfunc then passfunc()end
 else
 addaction(other,"|resisted|attack")
-return true
 end
 end,function(_ENV,dmg)
 f_movehelp_setdmg(_ENV,self,dmg,true)
