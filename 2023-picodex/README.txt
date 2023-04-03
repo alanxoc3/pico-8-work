@@ -83,17 +83,9 @@ f_menu_cancel
 f_menu_refresh
 f_menu_set
 f_movedel
-f_movehelp_incstat
 f_pop_next_action
 f_populate_c_moves
 f_postmove_logic
 f_premovelogic
 f_psel_forfeit
 f_select_random_move
-
-
-TODO: fix this bug: with night shade or firespin. (charizard against gastly)
-runtime error line 10 tab 0
-passfunc(dmg)
-attempt to call upvalue 'passfunc' (a nil value)
-at line 0 (tab 0)
