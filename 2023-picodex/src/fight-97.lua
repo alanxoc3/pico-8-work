@@ -436,8 +436,8 @@ end $$
     if f_in_moves(move.num, 'M_RAZOR_LEAF,M_SLASH,M_KARATE_CHOP,M_CRABHAMMER') then divisor *= .3 end
     if focused then divisor *= .3 end
 
-    -- decimal here is 255/256. close enough to the actual formula
-    local crit = _rnd'1' < _min(.99, (base_speed+76)/divisor) and movenum ~= -1 and 2 or 1
+    -- decimal here is 255/256. close enough to the actual formula. >0 check filters out struggle and confuse dmg.
+    local crit = _rnd'1' < _min(.99, (attacker.base_speed+76)/divisor) and move.num > 0 and 2 or 1
     ----- END CRIT LOGIC
 
     -- 3 is min, because 3+2=5... 5*1*.5*.5*.85\1 = 1, so this makes the lowest damage possible 1 (not zero)
@@ -450,13 +450,13 @@ end $$
 
     -- max possible damage: 5994
     -- end of formula multiplies by a random number (217/255)
-    local advantage, dmg = f_get_type_advantage(move, defender), base_damage
+    local dmg, advantage = base_damage, f_get_type_advantage(move, defender)
         *((move.type == attacker.type1 or move.type == attacker.type2) and 1.5 or 1) -- stab
         *(_rnd'.15'+.85)
 
     if advantage > 0 then
-        return max(1, dmg*advantage\1), crit > 1, advantage
+        return max(1, dmg*advantage\1), crit > 1
     end
 
-    return 0, false, 0
+    return 0, false
 end $$
