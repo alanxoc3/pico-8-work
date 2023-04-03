@@ -483,11 +483,11 @@ active.shared.hp=_max(active.shared.hp-dmg,0)
 end
 end,issub and "substitute")
 end,function(_ENV,dmg,passfunc)
-local crit,advantage=false,1
+local crit,advantage=false,f_get_type_advantage(move,otheractive)
 if not dmg then
-dmg,crit,advantage=f_calc_move_damage(selfactive,otheractive,move)
+dmg,crit=f_calc_move_damage(selfactive,otheractive,move)
 end
-if dmg>0 then
+if advantage>0 then
 if move.type%2==1 then
 otheractive.counterdmg+=dmg
 end
@@ -1374,20 +1374,20 @@ end
 local divisor=1024
 if f_in_moves(move.num,"107,164,57,157 ")then divisor*=.3 end
 if focused then divisor*=.3 end
-local crit=_rnd"1"<_min(.99,(base_speed+76)/divisor)and movenum ~=-1 and 2 or 1
+local crit=_rnd"1"<_min(.99,(attacker.base_speed+76)/divisor)and move.num>0 and 2 or 1
 local base_damage=_mid(
 3,997,
 (100*crit/5+2)/50
 *move.damage
 *_mid(10,.2,attack/defense)
 )+2
-local advantage,dmg=f_get_type_advantage(move,defender),base_damage
+local dmg,advantage=base_damage,f_get_type_advantage(move,defender)
 *((move.type==attacker.type1 or move.type==attacker.type2)and 1.5 or 1)
 *(_rnd".15"+.85)
 if advantage>0 then
-return max(1,dmg*advantage\1),crit>1,advantage
+return max(1,dmg*advantage\1),crit>1
 end
-return 0,false,0
+return 0,false
 end,function(_ENV)
 p0=_ENV[p0key]
 do local _ENV=p0.active

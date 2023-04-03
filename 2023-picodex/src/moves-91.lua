@@ -1,6 +1,3 @@
--- todo: fire moves thaw ice
--- todo: actually, make set dmg moves respect resistance check
-
 -- roar/whirlwind/teleport
 |[f_movehelp_switch]| function(pl)
     local team = f_get_team_live(pl.team)
@@ -457,13 +454,13 @@ end $$
 -- dmg:      the amount of damage, assumes non-zero. false means calculate dmg from the move
 -- passfunc: if the move did damage, do this function, param to the function is the actual amount of damage done
 |[f_move_setdmg]| function(_ENV, dmg, passfunc)
-    local crit, advantage = false, 1
+    local crit, advantage = false, f_get_type_advantage(move, otheractive)
     if not dmg then
-        dmg, crit, advantage = f_calc_move_damage(selfactive, otheractive, move)
+        dmg, crit = f_calc_move_damage(selfactive, otheractive, move)
     end
 
     -- zero damage only means that attack was resisted. moves with set damage don't monitor resistance.
-    if dmg > 0 then
+    if advantage > 0 then
         if move.type % 2 == 1 then -- check if physical attack
             otheractive.counterdmg += dmg
         end
