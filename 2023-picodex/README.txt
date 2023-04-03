@@ -90,3 +90,10 @@ f_postmove_logic
 f_premovelogic
 f_psel_forfeit
 f_select_random_move
+
+
+TODO: fix this bug: with night shade or firespin. (charizard against gastly)
+runtime error line 10 tab 0
+passfunc(dmg)
+attempt to call upvalue 'passfunc' (a nil value)
+at line 0 (tab 0)
