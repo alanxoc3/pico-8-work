@@ -94,7 +94,7 @@ f_zprint(txt or "",23,4,1,0)
 end,function(str)
 f_zcall(_rectfill,[[;,0,0,45,6,1]])
 f_zcall(f_zprint,[[;,@,23,1,13,0;;,@,23,8,1,0;;,@,23,15,1,0]],_unpack(_split(str,"|",false)))
-end,f_zobj[[]],_split"missingno,bulbasaur,ivysaur,venusaur,charmander,charmeleon,charizard,squirtle,wartortle,blastoise,caterpie,metapod,butterfree,weedle,kakuna,beedrill,pidgey,pidgeotto,pidgeot,rattata,raticate,spearow,fearow,ekans,arbok,pikachu,raichu,sandshrew,sandslash,nidoran f,nidorina,nidoqueen,nidoran m,nidorino,nidoking,clefairy,clefable,vulpix,ninetales,jigglypuff,wigglytuff,zubat,golbat,oddish,gloom,vileplume,paras,parasect,venonat,venomoth,diglett,dugtrio,meowth,persian,psyduck,golduck,mankey,primeape,growlithe,arcanine,poliwag,poliwhirl,poliwrath,abra,kadabra,alakazam,machop,machoke,machamp,bellsprout,weepinbell,victreebel,tentacool,tentacruel,geodude,graveler,golem,ponyta,rapidash,slowpoke,slowbro,magnemite,magneton,farfetchd,doduo,dodrio,seel,dewgong,grimer,muk,shellder,cloyster,gastly,haunter,gengar,onix,drowzee,hypno,krabby,kingler,voltorb,electrode,exeggcute,exeggutor,cubone,marowak,hitmonlee,hitmonchan,lickitung,koffing,weezing,rhyhorn,rhydon,chansey,tangela,kangaskhan,horsea,seadra,goldeen,seaking,staryu,starmie,mr mime,scyther,jynx,electabuzz,magmar,pinsir,tauros,magikarp,gyarados,lapras,ditto,eevee,vaporeon,jolteon,flareon,porygon,omanyte,omastar,kabuto,kabutops,aerodactyl,snorlax,articuno,zapdos,moltres,dratini,dragonair,dragonite,mewtwo,mew",f_zobj"0,none;,fainted,burned,frozen,paralyzed,poisoned,sleeping",f_zobj"0, ;,FNT,BRN,FZN,PAR,PSN,SLP",f_zobj[[0;bg,2,name,~c_empty;1;bg,2,name,normal,15,0,13,.5;2;bg,10,name,fire,8,2,10,2,11,2,2,.5,4,.5,13,.5,14,.5;3;bg,7,name,fighting,10,2,1,2,13,2,15,0,11,.5,9,.5,5,.5,12,.5;4;bg,9,name,water,2,2,7,2,13,2,14,.5,8,.5,4,.5;5;bg,6,name,poison,11,2,8,2,15,.5,7,.5,5,.5,13,.5;6;bg,11,name,electric,9,2,4,2,7,0,14,.5,6,.5,8,.5;7;bg,7,name,ground,6,2,2,2,5,2,13,2,9,0,11,.5,8,.5;8;bg,8,name,grass,7,2,13,2,4,2,11,.5,14,.5,2,.5,9,.5,8,.5,5,.5;9;bg,2,name,flying,11,2,3,2,8,2,6,.5,13,.5;10;bg,9,name,ice,14,2,9,2,8,2,2,.5,10,.5,4,.5;11;bg,8,name,bug,8,2,12,2,3,.5,2,.5,9,.5,15,.5,5,.5;12;bg,6,name,psychic,3,2,5,2,12,.5;13;bg,2,name,rock,11,2,2,2,9,2,10,2,3,.5,7,.5;14;bg,2,name,dragon,14,2;15;bg,6,name,ghost,15,2,1,0,12,0;17;bg,2,name,bird;]],f_zobj[[maxhp,hp,special,spc,attack,att,defense,def,speed,spd,total,tot,accuracy,acc,evasion,eva]],f_zobj[[;bg,13,aa,5,fg,1;;bg,6,aa,13,fg,13;;bg,5,aa,5,fg,1;;bg,6,aa,5,fg,5;;bg,1,aa,5,fg,13;;bg,14,aa,4;;bg,9,aa,4;;bg,11,aa,3;;bg,12,aa,5;;bg,8,aa,2;;bg,10,aa,4]],f_zobj[[]],_split"youngstr,bugcatch,junior,brock,lass,hiker,swimmer,misty,gentlman,sailor,rocker,ltsurge,channelr,gambler,beauty,erika,biker,birdkeep,juggler,koga,blckbelt,rocket,psychic,sabrina,scientst,pkmaniac,suprnerd,blaine,cooltrnr,fishrman,tamer,giovanni,lorelei,bruno,agatha,lance,blue,green,red,legendry",function(game,entry)
+end,f_zobj[[]],_split"missingno,bulbasaur,ivysaur,venusaur,charmander,charmeleon,charizard,squirtle,wartortle,blastoise,caterpie,metapod,butterfree,weedle,kakuna,beedrill,pidgey,pidgeotto,pidgeot,rattata,raticate,spearow,fearow,ekans,arbok,pikachu,raichu,sandshrew,sandslash,nidoran f,nidorina,nidoqueen,nidoran m,nidorino,nidoking,clefairy,clefable,vulpix,ninetales,jigglypuff,wigglytuff,zubat,golbat,oddish,gloom,vileplume,paras,parasect,venonat,venomoth,diglett,dugtrio,meowth,persian,psyduck,golduck,mankey,primeape,growlithe,arcanine,poliwag,poliwhirl,poliwrath,abra,kadabra,alakazam,machop,machoke,machamp,bellsprout,weepinbell,victreebel,tentacool,tentacruel,geodude,graveler,golem,ponyta,rapidash,slowpoke,slowbro,magnemite,magneton,farfetchd,doduo,dodrio,seel,dewgong,grimer,muk,shellder,cloyster,gastly,haunter,gengar,onix,drowzee,hypno,krabby,kingler,voltorb,electrode,exeggcute,exeggutor,cubone,marowak,hitmonlee,hitmonchan,lickitung,koffing,weezing,rhyhorn,rhydon,chansey,tangela,kangaskhan,horsea,seadra,goldeen,seaking,staryu,starmie,mr mime,scyther,jynx,electabuzz,magmar,pinsir,tauros,magikarp,gyarados,lapras,ditto,eevee,vaporeon,jolteon,flareon,porygon,omanyte,omastar,kabuto,kabutops,aerodactyl,snorlax,articuno,zapdos,moltres,dratini,dragonair,dragonite,mewtwo,mew",f_zobj"0,none;,fainted,burned,frozen,paralyzed,poisoned,sleeping",f_zobj"0, ;,FNT,BRN,FZN,PAR,PSN,SLP",f_zobj[[0;bg,2,name,~c_empty;1;bg,2,name,normal,15,0,13,.5;2;bg,10,name,fire,8,2,10,2,11,2,2,.5,4,.5,13,.5,14,.5;3;bg,7,name,fighting,10,2,1,2,13,2,15,0,11,.5,9,.5,5,.5,12,.5;4;bg,9,name,water,2,2,7,2,13,2,14,.5,8,.5,4,.5;5;bg,6,name,poison,11,2,8,2,15,.5,7,.5,5,.5,13,.5;6;bg,11,name,electric,9,2,4,2,7,0,14,.5,6,.5,8,.5;7;bg,7,name,ground,6,2,2,2,5,2,13,2,9,0,11,.5,8,.5;8;bg,8,name,grass,7,2,13,2,4,2,11,.5,14,.5,2,.5,9,.5,8,.5,5,.5;9;bg,2,name,flying,11,2,3,2,8,2,6,.5,13,.5;10;bg,9,name,ice,14,2,9,2,8,2,2,.5,10,.5,4,.5;11;bg,8,name,bug,8,2,12,2,3,.5,2,.5,9,.5,15,.5,5,.5;12;bg,6,name,psychic,3,2,5,2,12,.5;13;bg,2,name,rock,11,2,2,2,9,2,10,2,3,.5,7,.5;14;bg,2,name,dragon,14,2;15;bg,6,name,ghost,15,2,1,0,12,2;17;bg,2,name,bird;]],f_zobj[[maxhp,hp,special,spc,attack,att,defense,def,speed,spd,total,tot,accuracy,acc,evasion,eva]],f_zobj[[;bg,13,aa,5,fg,1;;bg,6,aa,13,fg,13;;bg,5,aa,5,fg,1;;bg,6,aa,5,fg,5;;bg,1,aa,5,fg,13;;bg,14,aa,4;;bg,9,aa,4;;bg,11,aa,3;;bg,12,aa,5;;bg,8,aa,2;;bg,10,aa,4]],f_zobj[[]],_split"youngstr,bugcatch,junior,brock,lass,hiker,swimmer,misty,gentlman,sailor,rocker,ltsurge,channelr,gambler,beauty,erika,biker,birdkeep,juggler,koga,blckbelt,rocket,psychic,sabrina,scientst,pkmaniac,suprnerd,blaine,cooltrnr,fishrman,tamer,giovanni,lorelei,bruno,agatha,lance,blue,green,red,legendry",function(game,entry)
 if entry.state then
 game:f_modes_push(entry.state)
 else
@@ -402,7 +402,6 @@ selfactive.shared.major=6
 f_start_sleep_timer(selfactive)
 addaction(self,"|is|sleeping")
 f_move_heal(_ENV,self,selfactive.maxhp)
-selfactive.toxiced=0
 end,function(_ENV)
 if selfactive.counterdmg>0 then
 f_move_setdmg(_ENV,selfactive.counterdmg*2)
@@ -413,8 +412,9 @@ end,function(_ENV,hitcount,endfunc,isresume)
 if hitcount>0 then
 addaction(self,isresume and "|resumes|"..move.name,function()
 _ENV.otheractive=other.active
-f_move_default(_ENV)
+f_move_default(_ENV,100,function()
 f_move_multihit_set(_ENV,hitcount-1,endfunc,true)
+end)
 end)
 else
 endfunc()
@@ -456,11 +456,16 @@ return true
 end
 end,function(_ENV,pl,dmg,func,issub)
 local dmgtxt=f_format_num_sign(dmg,"hp")
-if not issub or pl.active.substitute+dmg<0 then
+local breaks=issub and pl.active.substitute+dmg<0
+if not issub or breaks then
 addaction(pl,dmgtxt,f_nop,issub)
 end
-addaction(pl,dmgtxt,func,issub)
-end,function(_ENV,pl,dmg,isself)
+addaction(pl,
+breaks and "|substitute|broke"or dmgtxt,
+func,
+issub
+)
+end,function(_ENV,pl,dmg,isself,passfunc)
 local active=pl.active
 local issub=not isself and active.substitute>0
 f_movehelp_hpchange(_ENV,pl,-dmg,function()
@@ -468,6 +473,7 @@ active.bidedmg+=dmg
 if active.curmove and active.curmove.num==20 then
 f_move_stat(_ENV,pl,"attack",1)
 end
+passfunc(dmg)
 if issub then
 active.substitute=_max(active.substitute-dmg,0)
 else
@@ -486,17 +492,16 @@ end
 if advantage>1 then addaction(self,"|super|effective")
 elseif advantage<1 then addaction(self,"|not very|effective")end
 if crit then addaction(self,"|critical|hit")end
-f_movehelp_setdmg(_ENV,other,dmg)
-if passfunc then passfunc(dmg)end
+f_movehelp_setdmg(_ENV,other,dmg,false,passfunc)
 else
 addaction(other,"|resisted|attack")
 end
 end,function(_ENV,dmg)
-f_movehelp_setdmg(_ENV,self,dmg,true)
+f_movehelp_setdmg(_ENV,self,dmg,true,f_nop)
 end,function(base)
 return _ceil(base+.5*93)+5
 end,function()
-return f_zobj([[browse,~c_yes,level,50,attack,0,defense,0,special,0,speed,0,maxhp,0,hp,0,total,0,accuracy,100,evasion,100,base_maxhp,0,base_attack,0,base_defense,0,base_speed,0,base_special,0,num,-1,evolvesfrom,-1,name, ,type1,0,type2,0,moves_natural,#,moves_teach,#,moves_event,#,mynewmoves,@]],f_create_empty_moveset())
+return f_zobj([[browse,~c_yes,attack,0,defense,0,special,0,speed,0,maxhp,0,hp,0,total,0,accuracy,100,evasion,100,base_maxhp,0,base_attack,0,base_defense,0,base_speed,0,base_special,0,num,-1,evolvesfrom,-1,name, ,type1,0,type2,0,moves_natural,#,moves_teach,#,moves_event,#,mynewmoves,@]],f_create_empty_moveset())
 end,function()
 local movemem=_peek2"0xa"
 c_pokemon[-1]=f_get_default_pokemon()
@@ -548,11 +553,11 @@ if teach_map[i]then _add(teachs,i)end
 end
 pkmn.moves_teach=teachs
 do local _ENV=pkmn
-f_zobj_set(_ENV,[[attack,@,defense,@,special,@,speed,@,maxhp,@,hp,~maxhp,level,50]],f_calc_max_stat(base_attack),
+f_zobj_set(_ENV,[[attack,@,defense,@,special,@,speed,@,maxhp,@,hp,~maxhp]],f_calc_max_stat(base_attack),
 f_calc_max_stat(base_defense),
 f_calc_max_stat(base_special),
 f_calc_max_stat(base_speed),
-f_calc_max_stat(base_maxhp)+5+50
+f_calc_max_stat(base_maxhp)+55
 )
 total=attack+defense+special+speed+maxhp
 end
@@ -1325,7 +1330,7 @@ return f_postmove_logic(s)
 end
 end
 end)
-f_zobj_set(_g,[[f_pkmn_has_move,@,f_pkmn_isempty,@,f_get_moves,@,f_get_possible_moves,@,f_select_random_move,@,f_get_crit_ratio,@,f_does_move_miss,@,f_get_type_modifier,@,f_get_type_advantage,@,f_calc_move_damage,@,f_psel_init,@,f_psel_forfeit,@,f_begin_fight,@,f_begin_fight_cpu,@,f_extract_sheet,@,f_vget,@,f_vset,@,f_px9_decomp,@,f_game_state_init,@]],function(_ENV,moveid)
+f_zobj_set(_g,[[f_pkmn_has_move,@,f_pkmn_isempty,@,f_get_moves,@,f_get_possible_moves,@,f_select_random_move,@,f_get_crit_ratio,@,f_does_move_miss,@,f_get_type_advantage,@,f_calc_move_damage,@,f_psel_init,@,f_psel_forfeit,@,f_begin_fight,@,f_begin_fight_cpu,@,f_extract_sheet,@,f_vget,@,f_vset,@,f_px9_decomp,@,f_game_state_init,@]],function(_ENV,moveid)
 for m in _all(mynewmoves)do
 if m.num==moveid then
 return true
@@ -1363,10 +1368,8 @@ if(move.ofunc==f_move_prepare or move.ofunc==f_move_flydig)and not attacker.curm
 if defender.curmove and defender.curmove.ofunc==f_move_flydig then return true end
 if attacker.curmove and attacker.curmove.ofunc==f_move_trapping then return false end
 return _rnd(defender:f_movehelp_getstat"evasion")>move.accuracy/100*attacker:f_movehelp_getstat"accuracy"or f_flr_rnd"256"==0 and f_flr_rnd"256"==0
-end,function(move_type,pkmn_type)
-return c_types[move_type][pkmn_type]or 1
 end,function(move,defender)
-return f_get_type_modifier(move.type,defender.type1)*f_get_type_modifier(move.type,defender.type2)
+return(c_types[move.type][defender.type1]or 1)*(c_types[move.type][defender.type2]or 1)
 end,function(attacker,defender,move)
 local attack,defense=attacker:f_movehelp_getstat"special",defender:f_movehelp_getstat"special"
 if move.type%2==1 then
@@ -1380,7 +1383,7 @@ end
 local crit=f_get_crit_ratio(attacker,move.num)
 local base_damage=_mid(
 3,997,
-(2*attacker.level*crit/5+2)/50
+(100*crit/5+2)/50
 *move.damage
 *_mid(10,.2,attack/defense)
 )+2

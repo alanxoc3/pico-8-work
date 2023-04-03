@@ -251,7 +251,6 @@ end $$
 end $$
 
 |[f_move_psywave]| function(_ENV)
-    -- number is C_LEVEL*1.5 -- 75 in this case
     f_move_setdmg(_ENV, 1+f_flr_rnd'75')
 end $$
 
@@ -330,7 +329,6 @@ end $$
     f_start_sleep_timer(selfactive) -- has check, must go after setting major
     addaction(self, "|is|sleeping")
     f_move_heal(_ENV, self, selfactive.maxhp)
-    selfactive.toxiced = 0
 end $$
 
 |[f_move_counter]| function(_ENV)
@@ -342,13 +340,13 @@ end $$
     end
 end $$
 
--- todo: weird order with multihit and rage (when it says +1 attack).
 |[f_move_multihit_set]| function(_ENV, hitcount, endfunc, isresume)
     if hitcount > 0 then
         addaction(self, isresume and "|resumes|"..move.name, function()
             _ENV.otheractive = other.active -- needed because the fight logic removes new other actives
-            f_move_default(_ENV)
-            f_move_multihit_set(_ENV, hitcount-1, endfunc, true)
+            f_move_default(_ENV, 100, function()
+                f_move_multihit_set(_ENV, hitcount-1, endfunc, true)
+            end)
         end)
     else
         endfunc()
@@ -410,13 +408,20 @@ end $$
 
 |[f_movehelp_hpchange]| function(_ENV, pl, dmg, func, issub)
     local dmgtxt = f_format_num_sign(dmg, "hp")
-    if not issub or pl.active.substitute + dmg < 0 then
+    local breaks = issub and pl.active.substitute + dmg < 0
+
+    if not issub or breaks then
         addaction(pl, dmgtxt, f_nop, issub)
     end
-    addaction(pl, dmgtxt, func, issub)
+
+    addaction(pl,
+        breaks and "|substitute|broke" or dmgtxt,
+        func,
+        issub
+    )
 end $$
 
-|[f_movehelp_setdmg]| function(_ENV, pl, dmg, isself)
+|[f_movehelp_setdmg]| function(_ENV, pl, dmg, isself, passfunc)
     local active = pl.active
     local issub = not isself and active.substitute > 0
 
@@ -426,6 +431,8 @@ end $$
         if active.curmove and active.curmove.num == M_RAGE then
             f_move_stat(_ENV, pl, 'attack', 1)
         end
+
+        passfunc(dmg)
 
         if issub then
             active.substitute = _max(active.substitute-dmg, 0)
@@ -457,8 +464,7 @@ end $$
 
         if crit then addaction(self, "|critical|hit") end
 
-        f_movehelp_setdmg(_ENV, other, dmg)
-        if passfunc then passfunc(dmg) end
+        f_movehelp_setdmg(_ENV, other, dmg, false, passfunc)
     else
         addaction(other, "|resisted|attack")
     end
@@ -468,5 +474,5 @@ end $$
 -- all self inflicting dmg goes here, includes: recoil, confuse, poison, burn, seed, explode, substitute-create
 -- that's good, because self inflicting damage should bypass substitute
 |[f_move_setdmg_self]| function(_ENV, dmg)
-    f_movehelp_setdmg(_ENV, self, dmg, true)
+    f_movehelp_setdmg(_ENV, self, dmg, true, f_nop)
 end $$

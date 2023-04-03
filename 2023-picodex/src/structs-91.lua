@@ -12,7 +12,6 @@ end $$
 |[f_get_default_pokemon]| function()
     return f_zobj([[
         browse,~c_yes,
-        level,C_LEVEL,
         attack,0, defense,0, special,0, speed,0, maxhp,0, hp,0, total,0,
         accuracy,100, evasion,100, -- all pkmn have 100 accuracy & 100 evasion. getstat doesn't work with decimal numbers
         base_maxhp,0, base_attack,0, base_defense,0, base_speed,0, base_special,0,
@@ -99,12 +98,12 @@ end $$
         ---- PASS 4 - add level specific data and other attributes to the pkmn ----
         do local _ENV=pkmn
             f_zobj_set(_ENV, [[
-                attack,@, defense,@, special,@, speed,@, maxhp,@, hp,~maxhp, level,C_LEVEL
+                attack,@, defense,@, special,@, speed,@, maxhp,@, hp,~maxhp
             ]], f_calc_max_stat(base_attack),
                 f_calc_max_stat(base_defense),
                 f_calc_max_stat(base_special),
                 f_calc_max_stat(base_speed),
-                f_calc_max_stat(base_maxhp)+5+C_LEVEL
+                f_calc_max_stat(base_maxhp)+55 -- really, this is 5 plus C_LEVEL. I'm hard coding c_level to be 50 in other places anyways though.
             )
 
             total = attack + defense + special + speed + maxhp

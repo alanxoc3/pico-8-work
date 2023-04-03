@@ -1,7 +1,5 @@
 -- battle mechanic differences
--- todo: something to consider. For dig/fly/hypebeam, it would be nice to have alternate text on the second turn, instead of "blah|used|hyperbeam". so maybe i can do something for that.
 -- todo: something to consider. Minimize makes the sprite smaller.
-
 -- todo: might be fun to add a few more event pokemon -- slowbro, magikarp, dragonite, fearow, rapidash, flying pikachu
 --  juggler's slowbro - metronome (glitch)
 --  lance's dragonite - barrier (glitch)
@@ -11,30 +9,27 @@
 
 |[c_pokemon]| f_zobj[[]] $$
 |[c_pokemon_names]| _split"missingno,bulbasaur,ivysaur,venusaur,charmander,charmeleon,charizard,squirtle,wartortle,blastoise,caterpie,metapod,butterfree,weedle,kakuna,beedrill,pidgey,pidgeotto,pidgeot,rattata,raticate,spearow,fearow,ekans,arbok,pikachu,raichu,sandshrew,sandslash,nidoran f,nidorina,nidoqueen,nidoran m,nidorino,nidoking,clefairy,clefable,vulpix,ninetales,jigglypuff,wigglytuff,zubat,golbat,oddish,gloom,vileplume,paras,parasect,venonat,venomoth,diglett,dugtrio,meowth,persian,psyduck,golduck,mankey,primeape,growlithe,arcanine,poliwag,poliwhirl,poliwrath,abra,kadabra,alakazam,machop,machoke,machamp,bellsprout,weepinbell,victreebel,tentacool,tentacruel,geodude,graveler,golem,ponyta,rapidash,slowpoke,slowbro,magnemite,magneton,farfetchd,doduo,dodrio,seel,dewgong,grimer,muk,shellder,cloyster,gastly,haunter,gengar,onix,drowzee,hypno,krabby,kingler,voltorb,electrode,exeggcute,exeggutor,cubone,marowak,hitmonlee,hitmonchan,lickitung,koffing,weezing,rhyhorn,rhydon,chansey,tangela,kangaskhan,horsea,seadra,goldeen,seaking,staryu,starmie,mr mime,scyther,jynx,electabuzz,magmar,pinsir,tauros,magikarp,gyarados,lapras,ditto,eevee,vaporeon,jolteon,flareon,porygon,omanyte,omastar,kabuto,kabutops,aerodactyl,snorlax,articuno,zapdos,moltres,dratini,dragonair,dragonite,mewtwo,mew" $$
--- c_pokemon_names[0] = "" -- for "none" pkmn, technically not needed possibly (-1)
-
 |[c_major_names]|       f_zobj"0,none;,fainted,burned,frozen,paralyzed,poisoned,sleeping" $$
-|[c_major_names_short]| f_zobj"0, ;,FNT,BRN,FZN,PAR,PSN,SLP" $$
+|[c_major_names_short]| f_zobj"0, ;,FNT,BRN,FZN,PAR,PSN,SLP" $$ -- keep the space here! needed for printing nothing in battle screen
 
 -- pokemon moves can be physical or special. the order here is specific. odd numbers are physical. even numbers are special.
--- includes type effectiveness chart. according to the gen 1 games, which had bugs. i'm keeping the bugs :).
 |[c_types]| f_zobj[[
     T_NONE;     bg,2,  name,~c_empty;
     T_NORMAL;   bg,2,  name,"normal",   T_GHOST,0,    T_ROCK,.5;
     T_FIRE;     bg,10, name,"fire",     T_GRASS,2,    T_ICE,2,      T_BUG,2,       T_FIRE,.5,     T_WATER,.5,    T_ROCK,.5,   T_DRAGON,.5;
     T_FIGHTING; bg,7,  name,"fighting", T_ICE,2,      T_NORMAL,2,   T_ROCK,2,      T_GHOST,0,     T_BUG,.5,      T_FLYING,.5, T_POISON,.5, T_PSYCHIC,.5;
-    T_WATER;    bg,9, name,"water",    T_FIRE,2,     T_GROUND,2,   T_ROCK,2,      T_DRAGON,.5,   T_GRASS,.5,    T_WATER,.5;
+    T_WATER;    bg,9,  name,"water",    T_FIRE,2,     T_GROUND,2,   T_ROCK,2,      T_DRAGON,.5,   T_GRASS,.5,    T_WATER,.5;
     T_POISON;   bg,6,  name,"poison",   T_BUG,2,      T_GRASS,2,    T_GHOST,.5,    T_GROUND,.5,   T_POISON,.5,   T_ROCK,.5;
     T_ELECTRIC; bg,11, name,"electric", T_FLYING,2,   T_WATER,2,    T_GROUND,0,    T_DRAGON,.5,   T_ELECTRIC,.5, T_GRASS,.5;
     T_GROUND;   bg,7,  name,"ground",   T_ELECTRIC,2, T_FIRE,2,     T_POISON,2,    T_ROCK,2,      T_FLYING,0,    T_BUG,.5,    T_GRASS,.5;
     T_GRASS;    bg,8,  name,"grass",    T_GROUND,2,   T_ROCK,2,     T_WATER,2,     T_BUG,.5,      T_DRAGON,.5,   T_FIRE,.5,   T_FLYING,.5, T_GRASS,.5, T_POISON,.5;
     T_FLYING;   bg,2,  name,"flying",   T_BUG,2,      T_FIGHTING,2, T_GRASS,2,     T_ELECTRIC,.5, T_ROCK,.5;
-    T_ICE;      bg,9, name,"ice",      T_DRAGON,2,   T_FLYING,2,   T_GRASS,2,     T_FIRE,.5,     T_ICE,.5,      T_WATER,.5;
+    T_ICE;      bg,9,  name,"ice",      T_DRAGON,2,   T_FLYING,2,   T_GRASS,2,     T_FIRE,.5,     T_ICE,.5,      T_WATER,.5;
     T_BUG;      bg,8,  name,"bug",      T_GRASS,2,    T_PSYCHIC,2,  T_FIGHTING,.5, T_FIRE,.5,     T_FLYING,.5,   T_GHOST,.5,  T_POISON,.5;
     T_PSYCHIC;  bg,6,  name,"psychic",  T_FIGHTING,2, T_POISON,2,   T_PSYCHIC,.5;
     T_ROCK;     bg,2,  name,"rock",     T_BUG,2,      T_FIRE,2,     T_FLYING,2,    T_ICE,2,       T_FIGHTING,.5, T_GROUND,.5;
     T_DRAGON;   bg,2,  name,"dragon",   T_DRAGON,2;
-    T_GHOST;    bg,6,  name,"ghost",    T_GHOST,2,    T_NORMAL,0,   T_PSYCHIC,0;
+    T_GHOST;    bg,6,  name,"ghost",    T_GHOST,2,    T_NORMAL,0,   T_PSYCHIC,2;
     T_BIRD;     bg,2,  name,"bird";
 ]] $$
 

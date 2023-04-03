@@ -1,4 +1,3 @@
--- todo (wait): create a tiny song if there is room
 -- game state funcs
 
 -- you can factory reset when the pokedex is closed

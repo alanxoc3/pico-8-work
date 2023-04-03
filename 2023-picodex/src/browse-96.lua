@@ -89,7 +89,7 @@ end $$
     f_zobj_set(menu, [[
         ;pkmn,@
        ;;hidden,~c_yes
-       ;;name,"lvl C_LEVEL", style,5
+       ;;name,"lvl 50", style,5
     ]], pkmn)
 
     _foreach(_split'maxhp,special,attack,defense,speed,total', function(key)

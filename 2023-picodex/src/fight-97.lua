@@ -59,7 +59,6 @@ end $$
                 otheractive.lastmoverecv = move.num
             end
 
-            -- todo: might be nice if other things were supported (miss, fail, resist)
             if move.func(_ENV) then
                 addaction(self, "|fails|attack")
             end
@@ -114,7 +113,7 @@ end $$
 
         elseif selfactive.confused > 0 and f_flr_rnd'2' == 0 then
             addaction(self, "|confuse|damage")
-            f_move_setdmg_self(_ENV, f_calc_move_damage(selfactive, otheractive, f_create_move(-1))) -- todo, try string here '-1'
+            f_move_setdmg_self(_ENV, f_calc_move_damage(selfactive, otheractive, f_create_move(-1))) -- can't be a string
 
         elseif selfactive.major == C_MAJOR_PARALYZED and f_flr_rnd'4' == 0 then
             addaction(self, "|fully|paralyzed")
@@ -137,7 +136,6 @@ end $$
     end
 end $$
 
--- todo: make minor statuses numbers instead
 |[f_postmove_logic]| function(self)
     return f_newaction(self, false, function(_ENV)
         -- flinching is reset at the psel init level, so you can't be flinching the next turn. no need to reset flinching here.
@@ -389,14 +387,9 @@ end $$
     return _rnd(defender:f_movehelp_getstat'evasion') > move.accuracy/100*attacker:f_movehelp_getstat'accuracy' or f_flr_rnd'256' == 0 and f_flr_rnd'256' == 0
 end $$
 
--- returns .5, 0, 1, or 2
-|[f_get_type_modifier]| function(move_type, pkmn_type)
-    return c_types[move_type][pkmn_type] or 1
-end $$
-
 -- type advantage used to calculate resistance too
 |[f_get_type_advantage]| function(move, defender)
-    return f_get_type_modifier(move.type, defender.type1)*f_get_type_modifier(move.type, defender.type2)
+    return (c_types[move.type][defender.type1] or 1)*(c_types[move.type][defender.type2] or 1)
 end $$
 
 -- see: https://web.archive.org/web/20140711082447/http://www.upokecenter.com/content/pokemon-red-version-blue-version-and-yellow-version-timing-notes
@@ -421,9 +414,9 @@ end $$
     -- 3 is min, because 3+2=5... 5*1*.5*.5*.85\1 = 1, so this makes the lowest damage possible 1 (not zero)
     local base_damage = _mid(
         3, 997,
-        (2*attacker.level*crit/5+2)/50 -- [.44,.84]
-        *move.damage                       -- [6.6,285.6] -- [15,340]
-        *_mid(10, .2, attack/defense)       -- [1.32,2856]
+        (100*crit/5+2)/50             -- [.44,.84], 100 comes from attacker.level*2, level is always 50
+        *move.damage                  -- [6.6,285.6] -- [15,340]
+        *_mid(10, .2, attack/defense) -- [1.32,2856]
     )+2
 
     -- max possible damage: 5994

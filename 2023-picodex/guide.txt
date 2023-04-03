@@ -1,6 +1,7 @@
 -- DIFF: frozen/sleep will reset multiturn moves.
 -- DIFF: if a pokemon faints, the next pokemon in the party will automatically be sent out.
--- DIFF: pokemon have a 20% chance to unthaw.
+-- DIFF: pokemon have a 20% chance to unthaw when frozen.
+-- DIFF: ghost is super effective against psychic
 
 Welcome to the world of PICO-8 Pokemon! Picodex is a generation 1 Pokemon battle simulator. The battle mechanics in picodex are mostly based on
 those in Pokemon Stadium 1, though some moves and mechanics have been slightly changed for various reasons. The "Movedex" section describes what
@@ -115,7 +116,7 @@ Stadium 1.
 | razrwind  | Razor-Wind     | user prepares on turn one then attacks on turn two.                                                              |
 | recover   | Recover        | restores 1/2 of users max hp.                                                                                    |
 | reflect   | Reflect        | user receives 1/2 damage from physical attacks.                                                                  |
-| rest      | Rest           | user is cured of status effects and recovers full hp  but falls asleep.                                          |
+| rest      | Rest           | user is cured of major status and recovers full hp but falls asleep.                                             |
 | rllngkck  | Rolling-Kick   | 30% chance to make target flinch.                                                                                |
 | roar*     | Roar           | usually goes last. switches opponent's active pokemon with a random benched pokemon.                             |
 | rockslid  | Rock-Slide     | damages target.                                                                                                  |
