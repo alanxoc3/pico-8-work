@@ -69,3 +69,28 @@ f_move_thrash
 f_move_trapping
 f_move_flydig
 f_move_prepare
+
+
+
+IF I NEED TO TAKE DOWN ON TOKENS/COMPRESSION....
+here are some functions that seem to be only used once and are referenced in code, so they could probably be removed.
+
+f_does_move_miss
+f_draw_screen
+f_fightover_xfunc
+f_get_crit_ratio
+f_get_natural_moveset
+f_horde_select
+f_match_select
+f_match_start
+f_menu_cancel
+f_menu_refresh
+f_menu_set
+f_movedel
+f_movehelp_incstat
+f_pop_next_action
+f_populate_c_moves
+f_postmove_logic
+f_premovelogic
+f_psel_forfeit
+f_select_random_move

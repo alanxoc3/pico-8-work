@@ -117,38 +117,3 @@ end $$
 |[f_create_team_pkmn]| function(num, mynewmoves)
     return _setmetatable(f_zobj([[mynewmoves,@, major,C_MAJOR_NONE, browse,~c_no]], mynewmoves), {__index=c_pokemon[num]})
 end $$
-
--- teampkmn must be non-nil and match the team table structure defined in f_create_team_pkmn
-|[f_team_pkmn_to_active]| function(teampkmn)
-    -- need to copy each move just for mimic to work when switching 
-    local moves = {}
-    _foreach(teampkmn.mynewmoves, function(m)
-        _add(moves, m)
-    end)
-
-    return _setmetatable(f_zobj([[
-        isactive,~c_yes, -- used for a drawing function, should draw fainted pokemon if they are not active, but not if they are active.
-        lastmoverecv,0,  -- last move taken damage by, for mirrormove
-        accuracy,1,      -- accuracy stat for battle
-        evasion,1,       -- evasion stat for battle
-        moveturn,0,      -- turn move is on. > 0, decrements each turn. 0, is the same. -1, is multiturn move that doesn't end (rage).
-
-        -- conditions are all numbers ...
-        counterdmg,0,    -- resets to zero each turn
-        bidedmg,0,       -- resets to zero when using bide
-        disabledtimer,0, -- how long the disabled move should last
-        confused,0,      -- for confusion, how long pkmn is confused
-        sleeping,@,      -- for sleeping, how long pkmn is sleeping. must start at non-zero in case a pokemon is switched in
-        substitute,0,    -- for substitute obviously
-        toxiced,0,       -- how bad the toxic is
-
-        -- curmove -- used for multiturn moves, if moveturn ~= 0, this must be set
-        shared,@,
-        mynewmoves,@;
-
-        stages; special, 0, attack, 0,
-                defense, 0, speed,  0,
-                accuracy,0, evasion,0
-    ]], f_flr_rnd'3'+2, teampkmn, moves), {__index=teampkmn})
-    -- ^^ hard-coding sleep timer here
-end $$

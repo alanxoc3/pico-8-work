@@ -1,4 +1,4 @@
--- todo: leech seed should not affect grass type
+-- todo: fire moves thaw ice
 
 -- roar/whirlwind/teleport
 |[f_movehelp_switch]| function(pl)
@@ -43,8 +43,7 @@ end $$
     local moves = f_get_moves(otheractive)
     if #moves == 0 then return true end
 
-    otheractive.disabledtimer = f_flr_rnd'6'+2
-    otheractive.disabledslot  = moves[f_flr_rnd(#moves)+1].slot
+    otheractive.disabledtimer, otheractive.disabledslot = f_flr_rnd'6'+2, moves[f_flr_rnd(#moves)+1].slot
     addaction(other, "|"..otheractive.mynewmoves[otheractive.disabledslot].name.."|disabled")
 
     -- if the move disabled is a multiturn move, we need to stop the multiturn timer
@@ -178,8 +177,12 @@ end $$
     addaction(self, "|does|nothing")
 end $$
 
+|[f_movehelp_effect_works]| function(_ENV)
+    return f_get_type_advantage(move, otheractive) > 0 and move.type ~= otheractive.type1 and move.type ~= otheractive.type2
+end $$
+
 |[f_move_major_other]| function(_ENV, majorind)
-    if f_get_type_advantage(move, otheractive) > 0 and otheractive.shared.major == C_MAJOR_NONE then
+    if f_movehelp_effect_works(_ENV) and otheractive.shared.major == C_MAJOR_NONE then
         addaction(other, "|is now|"..c_major_names[majorind], function()
             otheractive.shared.major = majorind
 
@@ -194,7 +197,7 @@ end $$
 -- leverages f_move_(self|other)
 -- focus/screen/seed/mist/reflct/toxic
 |[f_movehelp_minor]| function(_ENV, pl, message, minor, val)
-    if (pl.active[minor] or 0) == 0 then
+    if (pl.active[minor] or 0) == 0 and (pl ~= other or f_movehelp_effect_works(_ENV)) then
         pl.active[minor] = val or 1
         addaction(pl, message)
     else

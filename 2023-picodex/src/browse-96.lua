@@ -82,30 +82,3 @@ end $$
     end
 end $$
 
--- this is for populating the pokemon info menu (sometimes called browsestat in code)
-|[f_update_stat_menu]| function(menu, pkmn)
-    menu:refresh{}
-
-    f_zobj_set(menu, [[
-        ;pkmn,@
-       ;;hidden,~c_yes
-       ;;name,"lvl 50", style,5
-    ]], pkmn)
-
-    _foreach(_split'maxhp,special,attack,defense,speed,total', function(key)
-        _add(menu, { name=c_stages[key].." "..pkmn[key] })
-    end)
-
-    f_zcall(function(name, key)
-        if #c_pokemon[pkmn.num][key] > 0 then
-            _add(menu, {name=name, style=5})
-            _foreach(c_pokemon[pkmn.num][key], function(m)
-                _add(menu, {name=c_moves[m].name})
-            end)
-        end
-    end, [[
-         ;,"learn",moves_natural
-        ;;,"teach",moves_teach
-        ;;,"event",moves_event
-    ]])
-end $$
