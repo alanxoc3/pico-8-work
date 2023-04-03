@@ -45,7 +45,12 @@ end $$
 end $$
 
 |[f_set_default_team_pkmn]| function(team, ind, num)
-    team[ind] = f_create_team_pkmn(num, f_get_natural_moveset(num))
+    local pkmn, moveset = c_pokemon[num], f_create_empty_moveset()
+    for i=1,_min(4,#pkmn.moves_natural) do
+        moveset[i] = f_create_move(pkmn.moves_natural[i], i)
+    end
+
+    team[ind] = f_create_team_pkmn(num, moveset)
     return team
 end $$
 
@@ -110,14 +115,6 @@ end $$
 
         memloc+=4
     end
-end $$
-
-|[f_get_natural_moveset]| function(num)
-    local pkmn, moveset = c_pokemon[num], f_create_empty_moveset()
-    for i=1,_min(4,#pkmn.moves_natural) do
-        moveset[i] = f_create_move(pkmn.moves_natural[i], i)
-    end
-    return moveset
 end $$
 
 -- move is between -1 and 

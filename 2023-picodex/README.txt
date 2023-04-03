@@ -76,10 +76,6 @@ IF I NEED TO TAKE DOWN ON TOKENS/COMPRESSION....
 here are some functions that seem to be only used once and are referenced in code, so they could probably be removed.
 
 f_does_move_miss
-f_draw_screen
-f_fightover_xfunc
-f_get_crit_ratio
-f_get_natural_moveset
 f_horde_select
 f_match_select
 f_match_start

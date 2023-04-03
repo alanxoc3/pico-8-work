@@ -387,23 +387,6 @@ end $$
     return possible_moves[f_flr_rnd(#possible_moves)+1] or f_create_move(M_STRUGGLE)
 end $$
 
--- this crit formula is only very slightly different than the original games. might be like 1% off.
--- takes in the hard-coded base speed value for the pkmn, so electrode would have highest crit ratio.
-|[f_get_crit_ratio]| function(_ENV, movenum)
-    -- slash:        _min(.99, (base_speed+76)/128) -- times .3 is close enough
-    -- focus energy: _min(.99, (base_speed+236)/512) -- times .3 is close enough
-    -- focus energy + crit move: .99 -- with my damage calculation, technically, slowpoke ends up at 98
-
-    -- range is 0 to 255. then random roll is done out of 256, so high crit still has like a .5% chance of failing.
-    local divisor = 1024
-    if movenum == -1 then return 1 end -- if confusion damage, you can't critical hit.
-    if f_in_moves(movenum, 'M_RAZOR_LEAF,M_SLASH,M_KARATE_CHOP,M_CRABHAMMER') then divisor *= .3 end
-    if focused then divisor *= .3 end
-
-    -- decimal here is 255/256. close enough to the actual formula
-    return _rnd'1' < _min(.99, (base_speed+76)/divisor) and 2 or 1
-end $$
-
 -- every move aimed at oppenent in pokemon stadium has a 1/65536 chance of a move missing, besides swift
 |[f_does_move_miss]| function(attacker, defender, move)
     if move.accuracy <= 0  then return false end -- this catches swift and self status moves... swift is negative
@@ -441,7 +424,21 @@ end $$
         defense *= 2
     end
 
-    local crit = f_get_crit_ratio(attacker, move.num)
+    ----- BEGIN CRIT LOGIC
+    -- this crit formula is only very slightly different than the original games. might be like 1% off.
+    -- takes in the hard-coded base speed value for the pkmn, so electrode would have highest crit ratio.
+    -- slash:        _min(.99, (base_speed+76)/128) -- times .3 is close enough
+    -- focus energy: _min(.99, (base_speed+236)/512) -- times .3 is close enough
+    -- focus energy + crit move: .99 -- with my damage calculation, technically, slowpoke ends up at 98
+    -- range is 0 to 255. then random roll is done out of 256, so high crit still has like a .5% chance of failing.
+
+    local divisor = 1024
+    if f_in_moves(move.num, 'M_RAZOR_LEAF,M_SLASH,M_KARATE_CHOP,M_CRABHAMMER') then divisor *= .3 end
+    if focused then divisor *= .3 end
+
+    -- decimal here is 255/256. close enough to the actual formula
+    local crit = _rnd'1' < _min(.99, (base_speed+76)/divisor) and movenum ~= -1 and 2 or 1
+    ----- END CRIT LOGIC
 
     -- 3 is min, because 3+2=5... 5*1*.5*.5*.85\1 = 1, so this makes the lowest damage possible 1 (not zero)
     local base_damage = _mid(

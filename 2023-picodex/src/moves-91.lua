@@ -1,4 +1,5 @@
 -- todo: fire moves thaw ice
+-- todo: actually, make set dmg moves respect resistance check
 
 -- roar/whirlwind/teleport
 |[f_movehelp_switch]| function(pl)
@@ -182,7 +183,12 @@ end $$
 end $$
 
 |[f_move_major_other]| function(_ENV, majorind)
-    if f_movehelp_effect_works(_ENV) and otheractive.shared.major == C_MAJOR_NONE then
+    -- if you thawed out, you won't get burned that turn
+    if otheractive.shared.major == C_MAJOR_FROZEN and majorind == C_MAJOR_BURNED then
+        addaction(self, "|thawed|out")
+        selfactive.shared.major = C_MAJOR_NONE
+
+    elseif f_movehelp_effect_works(_ENV) and otheractive.shared.major == C_MAJOR_NONE then
         addaction(other, "|is now|"..c_major_names[majorind], function()
             otheractive.shared.major = majorind
 
