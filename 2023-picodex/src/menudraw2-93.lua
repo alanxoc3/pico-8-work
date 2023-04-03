@@ -3,7 +3,6 @@
 |[f_teammoves_draw2]|  function(game) f_print_draw2_message("move #"..(game:f_modes_cursor'teammoves'+1)) end $$
 |[f_team_draw2]|        function(game) f_print_draw2_message(game.ui_pl) end $$
 |[f_fightover_draw2]|   function(game) f_print_draw2_message"match over" end $$
-|[f_pselactions_draw2]| function(_) end $$
 
 |[f_teammovesel_draw2]|  function(game) 
     local move = game:f_modes_entry'teammovesel'

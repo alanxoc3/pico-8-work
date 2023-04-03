@@ -41,7 +41,7 @@ end $$
           ;;,"pRESENTS"            ,64, -61,7,0
           ;;,"a pOKEMON bATTLE sIM",64, 15 ,7,0
         ]])
-        f_zcall(f_zspr, [[;,102,64,11,5,1]])
+        f_zcall(_spr, [[;,102,44,7,5,1]])
 
         local top_row_buttons,
               bot_row_buttons,

@@ -1,9 +1,3 @@
--- draws a sprite centered on x & y.
-|[f_zspr]| function(sind, x, y, sw, sh, ...)
-    sw, sh = sw or 1, sh or 1
-    _spr(sind, x-sw*4, y-sh*4, sw, sh, ...)
-end $$
-
 |[f_beep]| function()
     f_minisfx'B_ERROR'
 end $$

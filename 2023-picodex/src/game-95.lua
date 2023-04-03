@@ -1,5 +1,3 @@
--- todo: message when substitute breaks
-
 |[f_game_init]| function(_ENV)
     -- cheats!
     -- for i=0,151 do _poke(S_POKEMON+i, 1) end -- gives you all pokemon

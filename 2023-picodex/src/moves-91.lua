@@ -1,5 +1,4 @@
 -- todo: leech seed should not affect grass type
--- todo: speed change for par, att down when burn
 
 -- roar/whirlwind/teleport
 |[f_movehelp_switch]| function(pl)
@@ -25,6 +24,7 @@ end $$
     -- all stats cap at 999: https://www.smogon.com/rb/articles/rby_mechanics_guide
     local stage = a.stages[stat]
     return _ceil(_mid(1, 999,
+        (stat == 'attack' and a.major == C_MAJOR_BURNED and .5 or stat == 'speed' and a.major == C_MAJOR_PARALYZED and .25 or 1)*
         a[stat]*(
             (stat == 'evasion' or stat == 'accuracy')
             and _mid(1, 1+stage/3, 3)/_mid(1, 1-stage/3, 3)

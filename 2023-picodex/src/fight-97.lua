@@ -397,7 +397,6 @@ end $$
 -- only returns "zero" if there is a resistance, so damage is guaranteed to be at least 1 unless there is resistance.
 -- returns: dmg, iscrit, type ratio
 |[f_calc_move_damage]| function(attacker, defender, move)
-    -- todo: need to factor in if burned
     local attack, defense = attacker:f_movehelp_getstat'special', defender:f_movehelp_getstat'special'
 
     if move.type % 2 == 1 then -- iscontact
