@@ -57,7 +57,11 @@ end $$
             f_zcall(_rectfill, [[;,14,18,@,87,5]], 63+_max(0, rotation*54))
             if light == 0 then
                 f_zcall(_rectfill, [[;,14,18,117,87,13]])
-                f_zcall(f_draw_screen, [[
+                f_zcall(function(xoff, yoff, w, h, screen_func)
+                    _clip(-%0x5f28+xoff,-%0x5f2a+yoff,w,h) -- todo: are the clips needed?
+                    f_zcamera(xoff, yoff, screen_func)
+                    _clip()
+                end, [[
                      ;,14, 21, 40, 40, @
                     ;;,71, 18, 46, 13, @
                     ;;,71, 67, 46, 21, @
@@ -137,10 +141,4 @@ end $$
     elseif align > 0 then x -= #text*4+1 end
 
     _print(text, x, y, color)
-end $$
-
-|[f_draw_screen]| function(xoff, yoff, w, h, screen_func)
-    _clip(-%0x5f28+xoff,-%0x5f2a+yoff,w,h)
-    f_zcamera(xoff, yoff, screen_func)
-    _clip()
 end $$
