@@ -107,13 +107,10 @@ end $$
         local entry = menu[menu.c+1]
         if entry.disabled then
             f_beep()
-            printh"me"
         elseif entry.sel then
             f_minisfx'B_OKAY'
-            printh"test"
             entry.sel(game, entry)
         end
-            printh"end"
     end
 
     if g_bpo then menu.cancel(game) end

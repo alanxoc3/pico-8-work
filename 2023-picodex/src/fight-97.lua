@@ -1,5 +1,3 @@
--- 8181 baseline
-
 -- pl,1-4,false - sel a move slot  are move slots
 -- pl,0,false   - sel default move (solar beam charge, hyper beam recharge, struggle, ...)
 -- pl,1-6,true  - switch with team slot
@@ -8,8 +6,9 @@
 
 -- pkmn must be non-nil and match the team table structure defined in f_create_team_pkmn
 |[f_pkmn_comes_out]| function(pl, pkmn)
-    -- need to copy each move just for mimic to work when switching 
-    local moves = {}
+    local txt, moves = "|enters|fight", {}
+
+    -- need to copy each move just for mimic to work when switching
     _foreach(pkmn.mynewmoves, function(m)
         _add(moves, m)
     end)
@@ -20,6 +19,7 @@
         accuracy,1,      -- accuracy stat for battle
         evasion,1,       -- evasion stat for battle
         moveturn,0,      -- turn move is on. > 0, decrements each turn. 0, is the same. -1, is multiturn move that doesn't end (rage).
+        invisible,~c_yes,
 
         -- conditions are all numbers ...
         counterdmg,0,    -- resets to zero each turn
@@ -40,7 +40,9 @@
     ]], f_flr_rnd'3'+2, pkmn, moves), {___index=pkmn})
     -- ^^ hard-coding sleep timer here
 
-    return f_newaction(pl, "|comes|out")
+    return f_newaction(pl, txt, function()
+        pl.active.invisible = false
+    end)
 end $$
 
 |[f_in_moves]| function(movenum, str)
@@ -310,7 +312,7 @@ end $$
     for p in _all{game.p1,game.p2} do
         if p.active.hp <= 0 then
             if p.active.major ~= C_MAJOR_FAINTED then
-                return f_newaction(p, "|is|fainted", function(_ENV)
+                return f_newaction(p, "|has|fainted", function(_ENV)
                     selfactive.shared.major = C_MAJOR_FAINTED
                 end)
             elseif p ~= game.p0 then

@@ -156,13 +156,10 @@ if g_bpx then
 local entry=menu[menu.c+1]
 if entry.disabled then
 f_beep()
-printh"me"
 elseif entry.sel then
 f_minisfx"155"
-printh"test"
 entry.sel(game,entry)
 end
-printh"end"
 end
 if g_bpo then menu.cancel(game)end
 end,function(game)
@@ -1121,12 +1118,14 @@ end,function(game)
 local team=f_get_team(game:f_modes_cursor"team1")
 return team[game:f_modes_cursor"editteam"+1],team
 end,function(pl,pkmn)
-local moves={}
+local txt,moves="|enters|fight",{}
 foreach(pkmn.mynewmoves,function(m)
 add(moves,m)
 end)
-pl.active=setmetatable(f_zobj("isactive,~c_yes,lastmoverecv,0,accuracy,1,evasion,1,moveturn,0,counterdmg,0,bidedmg,0,disabledtimer,0,confused,0,sleeping,@,substitute,0,toxiced,0,shared,@,mynewmoves,@;stages;special,0,attack,0,defense,0,speed,0,accuracy,0,evasion,0",f_flr_rnd"3"+2,pkmn,moves),{__index=pkmn})
-return f_newaction(pl,"|comes|out")
+pl.active=setmetatable(f_zobj("isactive,~c_yes,lastmoverecv,0,accuracy,1,evasion,1,moveturn,0,invisible,~c_yes,counterdmg,0,bidedmg,0,disabledtimer,0,confused,0,sleeping,@,substitute,0,toxiced,0,shared,@,mynewmoves,@;stages;special,0,attack,0,defense,0,speed,0,accuracy,0,evasion,0",f_flr_rnd"3"+2,pkmn,moves),{__index=pkmn})
+return f_newaction(pl,txt,function()
+pl.active.invisible=false
+end)
 end,function(movenum,str)
 for m in all(split(str))do
 if m==movenum then
@@ -1305,7 +1304,7 @@ end,function(game)
 for p in all{game.p1,game.p2}do
 if p.active.hp<=0 then
 if p.active.major ~=1 then
-return f_newaction(p,"|is|fainted",function(_ENV)
+return f_newaction(p,"|has|fainted",function(_ENV)
 selfactive.shared.major=1
 end)
 elseif p ~=game.p0 then
