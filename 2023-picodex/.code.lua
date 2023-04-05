@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 _g=setmetatable({},{__index=_ENV})
 _ENV=_g
 function f_zobj_eval(val,table,parameters)
@@ -700,7 +699,7 @@ power+=c_pokemon[num].total
 count+=1
 end
 end)
-f_print_draw3_message(game:f_modes_entry().name.."|len "..count.."/6|pow "..power)
+f_print_draw3_message(game:f_modes_entry().name.."|len "..count.."/6|pow "..power\10)
 end,function(game)
 f_print_draw3_message(game.pwin.name.."|is the|winner")
 end,function(game)
@@ -758,7 +757,7 @@ end
 end,";,learn,moves_natural;;,teach,moves_teach;;,event,moves_event")
 end,function(_ENV)
 menu:refresh(
-split"106,,#alanxoc3,code+sfx,design,6,,#gr8cadet,graphics,playtest,129,,#wadlo,magikarp,playtest,145,,#zep,pico-8,px9 func,137,,#pkmndata,blbpedia,pokeapi,serebii,smogon,upokcntr,volvox,nintendo",
+split"91,,#alanxoc3,code &,design,28,,#gr8cadet,pokemon,sprites,143,,#tigrwolf,battle,testing,127,,#tooling,px9 func,shrinko8,137,,#pkmndata,blbpedia,pokeapi,serebii,smogon,upokcntr,volvox,nintendo",
 function(txt)
 if type(txt)=="number"then
 return{pkmn=f_create_team_pkmn(txt,f_create_empty_moveset())}
@@ -1550,5 +1549,3 @@ function _draw()
 local _ENV=_g
 g_picodex:draw()
 end
-=======
->>>>>>> 7cbfee0 (Update sprites.)
