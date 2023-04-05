@@ -83,7 +83,6 @@ f_menu_cancel
 f_menu_refresh
 f_menu_set
 f_movedel
-f_movehelp_incstat
 f_pop_next_action
 f_populate_c_moves
 f_postmove_logic

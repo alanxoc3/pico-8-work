@@ -8,15 +8,6 @@
     end
 end $$
 
--- returns true if it increased, false otherwise
-|[f_movehelp_incstat]| function(a, stat, inc)
-    local prev = a.stages[stat]
-    if not a.misted or inc > 0 then
-        a.stages[stat] = _mid(-6, 6, prev+inc)
-    end
-    return prev ~= a.stages[stat]
-end $$
-
 |[f_movehelp_getstat]| function(a, stat)
     -- evasion and accuracy have a different formula: https://www.smogon.com/rb/articles/stadium_guide
     -- all stats cap at 999: https://www.smogon.com/rb/articles/rby_mechanics_guide
@@ -156,7 +147,12 @@ end $$
 
 -- leverages f_move_(self|other)
 |[f_move_stat]| function(_ENV, pl, key, stage)
-    if f_movehelp_incstat(pl.active, key, stage) then
+    local prev = pl.active.stages[key]
+    if not pl.active.misted or stage > 0 then
+        pl.active.stages[key] = _mid(-6, 6, prev+stage)
+    end
+
+    if prev ~= pl.active.stages[key] then
         addaction(pl, f_format_num_sign(stage, c_stages[key]))
     else
         return true
@@ -438,7 +434,7 @@ end $$
             f_move_stat(_ENV, pl, 'attack', 1)
         end
 
-        passfunc(dmg)
+        if passfunc then passfunc(dmg) end
 
         if issub then
             active.substitute = _max(active.substitute-dmg, 0)
