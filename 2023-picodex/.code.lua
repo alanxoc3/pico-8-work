@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 _g=setmetatable({},{__index=_ENV})
 _ENV=_g
 function f_zobj_eval(val,table,parameters)
@@ -1549,3 +1550,5 @@ function _draw()
 local _ENV=_g
 g_picodex:draw()
 end
+=======
+>>>>>>> 7cbfee0 (Update sprites.)
