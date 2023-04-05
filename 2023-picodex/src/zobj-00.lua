@@ -1,3 +1,7 @@
+-- This part must go first!
+_g=setmetatable({}, {___index=_ENV})
+_ENV = _g
+
 function f_zobj_eval(val, table, parameters)
     if     _ord(val) == 126 then return table[_sub(val, 2)] -- 126 means "~"
     elseif val == '@'       then return _deli(parameters, 1)
@@ -33,7 +37,7 @@ function f_zobj_set(table, str, ...)
 end
 
 function f_zobj(...)
-    return f_zobj_set(_setmetatable({}, {__index=_g}), ...)
+    return f_zobj_set(_setmetatable({}, {___index=_g}), ...)
 end
 
 -- first, set the basic constants/values used by global things.

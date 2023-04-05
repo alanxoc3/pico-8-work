@@ -6,7 +6,7 @@ end $$
 |[f_move_draw3]| function(game)
     local move = game:f_modes_entry(game.movemode).move
     if move.num >= 0 then
-        f_print_draw3_message(c_types[move.type].name.."|"..move.pp..'/'..move.maxpp.."|"..(move.damage >= 0 and move.damage or "??").."P "..(move.accuracy >= 0 and move.accuracy or "??").."A")
+        f_print_draw3_message(c_types[move.movetype].name.."|"..move.pp..'/'..move.maxpp.."|"..(move.damage >= 0 and move.damage or "??").."P "..(move.accuracy >= 0 and move.accuracy or "??").."A")
     else
         f_print_draw3_message"none|n/a|"
     end

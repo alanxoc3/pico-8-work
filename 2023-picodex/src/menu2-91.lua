@@ -4,7 +4,7 @@
 
 -- entry has:
 -- - name|pkmn
--- - select
+-- - sel
 -- - disabled
 -- - hidden
 -- - state
@@ -28,7 +28,7 @@ end $$
     ]], edraw, viewmin or 0)
 end $$
 
--- entries: { {select=f(game, entry), disabled=bool} ... }
+-- entries: { {sel=f(game, entry), disabled=bool} ... }
 -- edraw: func(entry, selected)
 |[f_create_menu]| function(edraw, r)
     return f_zobj_set(f_create_menu_view(edraw), [[
@@ -107,10 +107,13 @@ end $$
         local entry = menu[menu.c+1]
         if entry.disabled then
             f_beep()
-        elseif entry.select then
+            printh"me"
+        elseif entry.sel then
             f_minisfx'B_OKAY'
-            entry.select(game, entry)
+            printh"test"
+            entry.sel(game, entry)
         end
+            printh"end"
     end
 
     if g_bpo then menu.cancel(game) end

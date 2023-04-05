@@ -1,7 +1,7 @@
 -- 8181 baseline
 
--- pl,1-4,false - select a move slot  are move slots
--- pl,0,false   - select default move (solar beam charge, hyper beam recharge, struggle, ...)
+-- pl,1-4,false - sel a move slot  are move slots
+-- pl,0,false   - sel default move (solar beam charge, hyper beam recharge, struggle, ...)
 -- pl,1-6,true  - switch with team slot
 
 -- todo: make it so exiting the screen for your turn will show the battle screen
@@ -37,7 +37,7 @@
         stages; special, 0, attack, 0,
                 defense, 0, speed,  0,
                 accuracy,0, evasion,0
-    ]], f_flr_rnd'3'+2, pkmn, moves), {__index=pkmn})
+    ]], f_flr_rnd'3'+2, pkmn, moves), {___index=pkmn})
     -- ^^ hard-coding sleep timer here
 
     return f_newaction(pl, "|comes|out")
@@ -403,19 +403,19 @@ end $$
     return _rnd(defender:f_movehelp_getstat'evasion') > move.accuracy/100*attacker:f_movehelp_getstat'accuracy' or f_flr_rnd'256' == 0 and f_flr_rnd'256' == 0
 end $$
 
--- type advantage used to calculate resistance too
+-- movetype advantage used to calculate resistance too
 |[f_get_type_advantage]| function(move, defender)
-    return (c_types[move.type][defender.type1] or 1)*(c_types[move.type][defender.type2] or 1)
+    return (c_types[move.movetype][defender.type1] or 1)*(c_types[move.movetype][defender.type2] or 1)
 end $$
 
 -- see: https://web.archive.org/web/20140711082447/http://www.upokecenter.com/content/pokemon-red-version-blue-version-and-yellow-version-timing-notes
 -- and: https://bulbapedia.bulbagarden.net/wiki/Damage
 -- only returns "zero" if there is a resistance, so damage is guaranteed to be at least 1 unless there is resistance.
--- returns: dmg, iscrit, type ratio
+-- returns: dmg, iscrit, movetype ratio
 |[f_calc_move_damage]| function(attacker, defender, move)
     local attack, defense = attacker:f_movehelp_getstat'special', defender:f_movehelp_getstat'special'
 
-    if move.type % 2 == 1 then -- iscontact
+    if move.movetype % 2 == 1 then -- iscontact
         attack, defense = attacker:f_movehelp_getstat'attack', defender:f_movehelp_getstat'defense'
         if defender.reflected then
             defense *= 2
@@ -451,7 +451,7 @@ end $$
     -- max possible damage: 5994
     -- end of formula multiplies by a random number (217/255)
     local dmg, advantage = base_damage, f_get_type_advantage(move, defender)
-        *((move.type == attacker.type1 or move.type == attacker.type2) and 1.5 or 1) -- stab
+        *((move.movetype == attacker.type1 or move.movetype == attacker.type2) and 1.5 or 1) -- stab
         *(_rnd'.15'+.85)
 
     if advantage > 0 then

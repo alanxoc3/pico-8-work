@@ -3,6 +3,7 @@ use warnings;
 use experimental 'smartmatch';
 use Alanxoc3::Pico8FormatUtil;
 use Getopt::Long qw(GetOptions);
+use IPC::Open2;
 
 use utf8;
 use open qw(:std :utf8);
@@ -83,24 +84,42 @@ $content = tokenize_constants($content, \%constants);
 my @texts;
 ($content, @texts) = remove_texts($content);
 
-if ($minify) {
-    my %vars = populate_vars($content);
-    $content = tokenize_vars($content, \%vars);
-}
+# first pass through will remove leading underscores from some variables
+my %vars = populate_vars($content, 0);
+$content = tokenize_vars($content, \%vars); # todo - remove me
 
-$content = single_quotes_to_double($content);
+# remove spaces must go before cleaning up quotes
 $content = remove_spaces($content);
-$content = pop_text_logics($content, \@texts);
 
-# remove all newlines and quotes from multiline strings
+# remove quotes within multiline strings
 $content =~ s/\[\[.*?\]\]/$& =~ s|\n||rg/gimse;
 $content =~ s/\[\[.*?\]\]/$& =~ s|"||rg/gimse;
 $content =~ s/\[\[.*?\]\]/$& =~ s|'||rg/gimse;
 
-# This can be used to join all zobj strings on one line. Legacy functionality.
-# my $strings = "";
-# ($strings, $content) = multiline_string_replace($content);
-# $strings =~ s/"//g;
-# $content =~ s/ZOBJ_STRINGS/$strings/gme;
+# multiline & single quote become double quotes
+$content =~ s/\[\[(.*?)\]\]/"$1"/g;
+$content =~ s/'(.*?)'/"$1"/g;
+
+# all double quotes have a "global" comment beforehand, for shrinko8
+
+# second pass through minifies with shrinko8
+if ($minify) {
+    $content =~ s/"(.*?)"/--[[global]]"$1"/g;
+
+    # open(my $pipe, "|-", "cat");
+    # open2 my $out, my $in, "python3 ~/repos/shrinko8/shrinko8.py - - --minify --no-minify-rename --format lua --no-minify-lines --no-minify-tokens";
+    open2 my $out, my $in, "python3 ~/repos/shrinko8/shrinko8.py - - --minify --rename-members-as-globals --format lua --no-minify-lines --no-minify-tokens --preserve 'PTEXTLOGIC,' --rename-map .map.txt";
+    print $in $content;
+    close($in);
+
+    my $output = '';
+    while (<$out>) {
+        $output .= $_;  # Read the output of the command into a variable
+    }
+
+    $content = $output;
+}
+
+$content = pop_text_logics($content, \@texts);
 
 print $content;

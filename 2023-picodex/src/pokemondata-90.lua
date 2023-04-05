@@ -47,7 +47,7 @@
 -- 4 styles: 13,1 6,13 2,1, 8,2
 |[c_menu_styles]| f_zobj[[
     ;bg,13, aa,5,  fg,1
-   ;;bg,6,  aa,13, fg,13  -- "normal" type and "selected" row
+   ;;bg,6,  aa,13, fg,13  -- "normal" movetype and "selected" row
    ;;bg,5,  aa,5,  fg,1
    ;;bg,6,  aa,5,  fg,5   -- disable + default battle bkgd
    ;;bg,1,  aa,5,  fg,13  -- this one is for credit/winmenu headers
@@ -73,7 +73,7 @@
 -- damage:   0 means no damage.  -1 means variable damage & shows  "??". else means normal dmg formula. n't miss. -1 means can't miss, but displays "??". else means can miss.
 -- pp:       0 means infinite pp. else means finite pp.
 _g.c_moves_raw = f_zobj[[
-   --  "name",     type        pp  dmg  acc
+   --  "name",     movetype        pp  dmg  acc
   -1;, "none",     ~f_move_default -- -1  This is the move used for confusion damage.
   ;0;, "struggle", ~f_move_recoil
    ;;, "megapnch", ~f_move_default

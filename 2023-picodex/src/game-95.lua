@@ -77,17 +77,17 @@
        ;;,fightover,   ~f_create_menu_view, ~f_menu_drawentry      -- stats that display when you finish a fight
        ;;,editteam,    ~f_create_menu,      ~f_browse_drawentry, 3 -- selecting a pkmn from team
        ;;,switchteam,  ~f_create_menu,      ~f_browse_drawentry, 3 -- selecting a pkmn from team
-       ;;,main,        ~f_create_menu,      ~f_menu_drawentry      -- select a mode
+       ;;,main,        ~f_create_menu,      ~f_menu_drawentry      -- sel a mode
        ;;,teamaction,  ~f_create_menu,      ~f_menu_drawentry      -- edit team what to do (delete, edit moves, edit pkmn)
-       ;;,moveaction,  ~f_create_menu,      ~f_menu_drawentry      -- selecting what to do with a move (switch, delete, select)
-       ;;,teammovesel, ~f_create_menu,      ~f_menu_drawentry      -- select one of the moves a pokemon can learn (tms, hms, natural moves...)
-       ;;,teammoves,   ~f_create_menu,      ~f_menu_drawentry      -- select 1 of 4 moves from a pokemon
+       ;;,moveaction,  ~f_create_menu,      ~f_menu_drawentry      -- selecting what to do with a move (switch, delete, sel)
+       ;;,teammovesel, ~f_create_menu,      ~f_menu_drawentry      -- sel one of the moves a pokemon can learn (tms, hms, natural moves...)
+       ;;,teammoves,   ~f_create_menu,      ~f_menu_drawentry      -- sel 1 of 4 moves from a pokemon
        ;;,switchmoves, ~f_create_menu,      ~f_menu_drawentry      -- switch 1 of 4 moves
 
-       ;;,team1,       ~f_create_menu,      ~f_menu_drawentry      -- select a team
-       ;;,team1match,  ~f_create_menu,      ~f_menu_drawentry      -- select a team, shouldn't share with team1, because this is for custom match.
-       ;;,team2story,  ~f_create_menu,      ~f_menu_drawentry      -- select a cpu trainer
-       ;;,team2match,  ~f_create_menu,      ~f_menu_drawentry      -- select a team
+       ;;,team1,       ~f_create_menu,      ~f_menu_drawentry      -- sel a team
+       ;;,team1match,  ~f_create_menu,      ~f_menu_drawentry      -- sel a team, shouldn't share with team1, because this is for custom match.
+       ;;,team2story,  ~f_create_menu,      ~f_menu_drawentry      -- sel a cpu trainer
+       ;;,team2match,  ~f_create_menu,      ~f_menu_drawentry      -- sel a team
     ]])
 
     f_zobj_set(modes, [[

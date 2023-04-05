@@ -108,7 +108,7 @@ end $$
 
         -- ofunc is used in accuracy check, for a charging move
         c_moves[i] = f_zobj([[
-            func,@, num,@, name,@, type,@, pp,@, maxpp,~pp, damage,@, accuracy,@, ofunc,@
+            func,@, num,@, name,@, movetype,@, pp,@, maxpp,~pp, damage,@, accuracy,@, ofunc,@
         ]], function(envparams)
             return ofunc(envparams, _unpack(c_moves_raw[i]))
         end, i, name, typ, pp, dmg, acc, ofunc)
@@ -119,7 +119,7 @@ end $$
 
 -- move is between -1 and 
 |[f_create_move]| function(id, slot)
-    return _setmetatable(f_zobj([[slot,@]], slot or 0), {__index=c_moves[id]})
+    return _setmetatable(f_zobj([[slot,@]], slot or 0), {___index=c_moves[id]})
 end $$
 
 |[f_create_empty_moveset]| function()

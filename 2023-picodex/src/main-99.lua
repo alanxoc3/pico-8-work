@@ -4,7 +4,7 @@
     state:sinit()
 end $$
 
-function _init()
+function __init()
     local _ENV = _g
 
     -- clear all the read only memory. testing things out showed that this doesn't get cleared automatically.
@@ -72,7 +72,7 @@ function _init()
     _memcpy(0x0000, 0xc000, 0x2000)
 end
 
-function _update60()
+function __update60()
     local _ENV = _g
     g_bpo, g_bpx, g_bph, g_bpv = _btnp'4', _btnp'5', _btnp'0' and _btnp'1' and 0 or _btnp'0' and -1 or _btnp'1' and 1 or 0, _btnp'2' and _btnp'3' and 0 or _btnp'2' and -1 or _btnp'3' and 1 or 0
 
@@ -83,7 +83,7 @@ function _update60()
     g_picodex:f_actor_state()
 end
 
-function _draw()
+function __draw()
     local _ENV = _g
     g_picodex:draw()
 end

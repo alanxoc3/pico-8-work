@@ -31,12 +31,12 @@ end $$
 
     menu:refresh(
         f_zobj([[
-            ;name,"browse",  state,browse,     select,~f_menu_state_callback, desc,@
-           ;;name,"edit",    state,team1,      select,~f_menu_state_callback, desc,"edit|stored|teams"
-           ;;name,"league",  state,team1story, select,~f_menu_state_callback, desc,@
-           ;;name,"player",  state,team1match, select,~f_menu_state_callback, desc,"player|custom|battles"
-           ;;name,"horde",   state,team1horde, select,~f_menu_state_callback, desc,@
-           ;;name,"credits", state,credits,    select,~f_menu_state_callback, desc,"credits|amorg|games"
+            ;name,"browse",  state,browse,     sel,~f_menu_state_callback, desc,@
+           ;;name,"edit",    state,team1,      sel,~f_menu_state_callback, desc,"edit|stored|teams"
+           ;;name,"league",  state,team1story, sel,~f_menu_state_callback, desc,@
+           ;;name,"player",  state,team1match, sel,~f_menu_state_callback, desc,"player|custom|battles"
+           ;;name,"horde",   state,team1horde, sel,~f_menu_state_callback, desc,@
+           ;;name,"credits", state,credits,    sel,~f_menu_state_callback, desc,"credits|amorg|games"
         ]], "browse|"..count.."/151|pokemon", "league|"..(@S_STORY).."/40|trainers", "horde|"..(@S_HOARD).."/151|hi-score")
     )
 end $$
@@ -51,7 +51,7 @@ end $$
         tbl,
         function(num)
             return f_zobj([[
-                select,@, disabled,@, pkmn,@
+                sel,@, disabled,@, pkmn,@
             ]], selectfunc, not c_pokemon[num]:f_pkmn_available(), c_pokemon[num])
         end
     )
@@ -125,7 +125,7 @@ end $$
             name=trainer.name,
             team=trainer,
             disabled=num-1 > @S_STORY,
-            select=function(game, entry)
+            sel=function(game, entry)
                 f_begin_fight_cpu(game, entry.team, entry.name, function(pl, other)
                     _poke(S_STORY, _mid(@S_STORY, num, 40)) -- 40 trainers, this is hard coded and won't change
                     f_unlock_pkmn(other)
@@ -137,9 +137,9 @@ end $$
 
 |[f_teamaction_init]| function(_ENV)
     menu:refresh(f_zobj[[
-        ; name,"moves",  state,teammoves,  select,~f_menu_state_callback -- use the menu system
-       ;; name,"switch", state,switchteam, select,~f_menu_state_callback -- use browse pokemon selector
-       ;; name,"delete",                   select,~f_teamdel             -- use the edit team screen
+        ; name,"moves",  state,teammoves,  sel,~f_menu_state_callback -- use the menu system
+       ;; name,"switch", state,switchteam, sel,~f_menu_state_callback -- use browse pokemon selector
+       ;; name,"delete",                   sel,~f_teamdel             -- use the edit team screen
     ]])
 end $$
 
@@ -151,9 +151,9 @@ end $$
     end
 
     menu:refresh(f_zobj([[
-        ; name,"change", state,teammovesel, select,~f_menu_state_callback
-       ;; name,"switch", state,switchmoves, select,~f_menu_state_callback
-       ;; name,"delete", disabled,@,        select,~f_movedel
+        ; name,"change", state,teammovesel, sel,~f_menu_state_callback
+       ;; name,"switch", state,switchmoves, sel,~f_menu_state_callback
+       ;; name,"delete", disabled,@,        sel,~f_movedel
     ]], count == 1))
 end $$
 
@@ -171,7 +171,7 @@ end $$
         return {
             move=move,
             name=move.name,
-            select=function(_ENV) select_func(_ENV, i, teampkmn, team) end,
+            sel=function(_ENV) select_func(_ENV, i, teampkmn, team) end,
             disabled=i == disabled_ind
         }
     end)
@@ -217,7 +217,7 @@ end $$
             disabled=m.disabled,
             move=c_moves[m.num],
             ref=m.desc,
-            select=function()
+            sel=function()
                 local team = _ENV:f_get_team_cursor'team1'
                 team[_ENV:f_modes_cursor'editteam'+1].mynewmoves[_ENV:f_modes_cursor'teammoves'+1] = f_create_move(m.num)
                 f_save_team(_ENV:f_modes_cursor'team1', team)
@@ -239,7 +239,7 @@ end $$
     end
 
     menu:refresh(p0.active.mynewmoves, function(move)
-        return f_zobj([[disabled,@, name,@, move,@, select,@]],
+        return f_zobj([[disabled,@, name,@, move,@, sel,@]],
             not possible_moves[move],
             move.name,
             move,
@@ -253,9 +253,9 @@ end $$
 
 |[f_pselactions_init]| function(_ENV)
     menu:refresh(f_zobj[[
-         ; name,"fight",   select,~f_menu_state_callback, state,pselmove
-        ;; name,"switch",  select,~f_menu_state_callback, state,pselswitch
-        ;; name,"forfeit", select,~f_psel_forfeit
+         ; name,"fight",   sel,~f_menu_state_callback, state,pselmove
+        ;; name,"switch",  sel,~f_menu_state_callback, state,pselswitch
+        ;; name,"forfeit", sel,~f_psel_forfeit
     ]])
 end $$
 
@@ -275,7 +275,7 @@ end $$
         return {
             name="team #"..i,
             team=newteam,
-            select=function() _ENV:select_func() end,
+            sel=function() _ENV:select_func() end,
             disabled=disable_empty_team and is_disabled
         }
     end)
@@ -290,7 +290,7 @@ end $$
     menu:refresh(f_zobj[[,1,2,3,4,5,6]], function(i)
         return {
             pkmn=team[i],
-            select=function(_ENV)
+            sel=function(_ENV)
                 if team[_ENV:f_modes_cursor'editteam'+1]:f_pkmn_available() then
                     _ENV:f_modes_push'teamaction'
                 else
@@ -306,7 +306,7 @@ end $$
     menu:refresh(f_zobj[[,1,2,3,4,5,6]], function(i)
         return {
             disabled=i==_ENV:f_modes_cursor'editteam'+1,
-            select=function(_ENV)
+            sel=function(_ENV)
                 local ind_one, ind_two = _ENV:f_modes_cursor'editteam'+1, _ENV:f_modes_cursor'switchteam'+1
                 team[ind_one], team[ind_two] = team[ind_two], team[ind_one]
                 f_save_team(_ENV:f_modes_cursor'team1', team)
@@ -324,7 +324,7 @@ end $$
         local disabled = p0.team[i]:f_pkmn_isempty() or p0.active.shared == p0.team[i] or p0.team[i].major == C_MAJOR_FAINTED
         return {
             disabled=disabled,
-            select=function()
+            sel=function()
                 _ENV:f_modes_pop() _ENV:f_modes_pop() -- pop twice. this could come from p1 or p2
                 f_select_switch(p0, p0.team[i])
             end,

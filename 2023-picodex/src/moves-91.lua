@@ -172,7 +172,7 @@ end $$
 end $$
 
 |[f_movehelp_effect_works]| function(_ENV)
-    return f_get_type_advantage(move, otheractive) > 0 and move.type ~= otheractive.type1 and move.type ~= otheractive.type2
+    return f_get_type_advantage(move, otheractive) > 0 and move.movetype ~= otheractive.type1 and move.movetype ~= otheractive.type2
 end $$
 
 |[f_move_major_other]| function(_ENV, majorind)
@@ -457,7 +457,7 @@ end $$
 
     -- zero damage only means that attack was resisted. moves with set damage don't monitor resistance.
     if advantage > 0 then
-        if move.type % 2 == 1 then -- check if physical attack
+        if move.movetype % 2 == 1 then -- check if physical attack
             otheractive.counterdmg += dmg
         end
 

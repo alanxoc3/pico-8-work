@@ -4,12 +4,6 @@ __lua__
 -- picodex
 -- by amorg games
 cartdata"picodex"
-_g={}for k,v in pairs(_ENV)do
-if ord(k)~=95then
-_g['_'..k]=v
-end
-end
-setmetatable(_ENV,{__index=_g})
 #include .code.lua
 __gfx__
 e000f921ec422af2e7036133b114ffff8ff7ffff78fd0ae329d474168daf7b3424f7ffe3759e736137f7bcfcf2efc157c2fb8ff22185e9fa72df747fb3e713c9
