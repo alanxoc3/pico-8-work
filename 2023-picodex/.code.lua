@@ -297,7 +297,7 @@ end,function(_ENV)
 if f_move_major_other(_ENV,5)and otheractive.major ~=5 then
 return true
 end
-return f_move_other(_ENV,f_movehelp_minor,"|badly|poisoned","toxiced",1)
+return f_move_other(_ENV,f_movehelp_minor,"|badly|poisoned","toxiced")
 end,function(_ENV)
 addaction(self,"|does|nothing")
 end,function(_ENV)
