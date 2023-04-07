@@ -198,15 +198,14 @@ del(team,pl.active.shared)
 if #team>0 then
 return team[f_flr_rnd(#team)+1]
 end
-end,function(a,stat)
-local stage=a.stages[stat]
+end,function(_ENV,stat)
+local stage=stages[stat]
+if stat=="evasion" or stat=="accuracy" then
+return _ENV[stat]*mid(1,1+stage/3,3)/mid(1,1-stage/3,3)
+end
 return ceil(mid(1,999,
-(stat=="attack" and a.major==2 and.5 or stat=="speed" and a.major==4 and.25 or 1)*
-a[stat]*(
-(stat=="evasion" or stat=="accuracy")
-and mid(1,1+stage/3,3)/mid(1,1-stage/3,3)
-or mid(2,2+stage,8)/mid(2,2-stage,8)
-)
+(stat=="attack" and major==2 and.5 or stat=="speed" and major==4 and.25 or 1)*
+_ENV[stat]*mid(2,2+stage,8)/mid(2,2-stage,8)
 ))
 end,function(_ENV)
 end,function(_ENV,num,slot)

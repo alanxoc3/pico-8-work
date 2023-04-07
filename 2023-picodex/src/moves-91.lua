@@ -8,17 +8,18 @@
     end
 end $$
 
-|[f_movehelp_getstat]| function(a, stat)
+|[f_movehelp_getstat]| function(_ENV, stat)
+    local stage = stages[stat]
+
     -- evasion and accuracy have a different formula: https://www.smogon.com/rb/articles/stadium_guide
-    -- all stats cap at 999: https://www.smogon.com/rb/articles/rby_mechanics_guide
-    local stage = a.stages[stat]
+    if stat == 'evasion' or stat == 'accuracy' then
+        return _ENV[stat]*_mid(1, 1+stage/3, 3)/_mid(1, 1-stage/3, 3)
+    end
+
+    -- all other stats cap at 999: https://www.smogon.com/rb/articles/rby_mechanics_guide
     return _ceil(_mid(1, 999,
-        (stat == 'attack' and a.major == C_MAJOR_BURNED and .5 or stat == 'speed' and a.major == C_MAJOR_PARALYZED and .25 or 1)*
-        a[stat]*(
-            (stat == 'evasion' or stat == 'accuracy')
-            and _mid(1, 1+stage/3, 3)/_mid(1, 1-stage/3, 3)
-             or _mid(2, 2+stage,   8)/_mid(2, 2-stage,   8)
-        )
+        (stat == 'attack' and major == C_MAJOR_BURNED and .5 or stat == 'speed' and major == C_MAJOR_PARALYZED and .25 or 1)*
+        _ENV[stat]*_mid(2, 2+stage,   8)/_mid(2, 2-stage,   8)
     ))
 end $$
 
