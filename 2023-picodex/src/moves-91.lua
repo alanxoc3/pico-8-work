@@ -189,7 +189,7 @@ end $$
             otheractive.shared.major = majorind
 
             -- every time major stat is set, sleep timer is set, but sleep timer isn't used unless pkmn is actually sleeping
-            sleeping = f_flr_rnd'8'
+            otheractive.sleeping = f_flr_rnd'7'+1
             -- ^^ If I change the sleep timer amount, remember to change it somewhere else too!
         end)
     else

@@ -307,7 +307,7 @@ e.W.T=0
 elseif i.W.T==0and(n==6or t9(_ENV))then
 r(eT,"|is now|"..t4[n],function()
 i.W.T=n
-ti=b"8"
+i.ti=b"7"+1
 end)
 else
 return true
@@ -1125,7 +1125,7 @@ local f,t="|enters|fight",{}
 foreach(n.w,function(e)
 add(t,e)
 end)
-e.a=setmetatable(m("ai,~el,t_,0,A,1,eI,1,es,0,tO,~el,nA,0,nq,0,tf,0,nz,0,ti,@,ep,0,nj,0,W,@,w,@;ns;er,0,R,0,q,0,M,0,A,0,eI,0",b"8",n,t),{__index=n})
+e.a=setmetatable(m("ai,~el,t_,0,A,1,eI,1,es,0,tO,~el,nA,0,nq,0,tf,0,nz,0,ti,@,ep,0,nj,0,W,@,w,@;ns;er,0,R,0,q,0,M,0,A,0,eI,0",b"7"+1,n,t),{__index=n})
 return nP(e,f,function()
 e.a.tO=false
 end)
