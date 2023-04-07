@@ -25,6 +25,7 @@ tags
 !2022-gmtk/.code.lua
 !2022-ld51/.code.lua
 !2023-picodex/.code.lua
+!2023-picodex/.map.txt
 
 2023-picodex/spriteviewer/*.png
 2023-picodex/spriteviewer/*.p8

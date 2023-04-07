@@ -1,1559 +1,1559 @@
-_g=setmetatable({},{__index=_ENV})
-_ENV=_g
-function f_zobj_eval(val,table,parameters)
-if ord(val)==126 then return table[sub(val,2)]
-elseif val=="@" then return deli(parameters,1)
-elseif val=="#" then return{}end
-return val ~="" and val or nil
+eo=setmetatable({},{__index=_ENV})
+_ENV=eo
+function nG(e,n,t)
+if ord(e)==126then return n[sub(e,2)]
+elseif e=="@"then return deli(t,1)
+elseif e=="#"then return{}end
+return e~=""and e or nil
 end
-function f_zobj_set(table,str,...)
-local params,statements,dest={...},split(str,";"),table
-foreach(statements,function(statement)
-local tokens=split(statement)
-if #tokens>1 then
-if tokens[1]=="" then
-foreach(tokens,function(val)
-add(dest,f_zobj_eval(val,table,params))
+function F(f,n,...)
+local o,t,e={...},split(n,";"),f
+foreach(t,function(n)
+local t=split(n)
+if#t>1then
+if t[1]==""then
+foreach(t,function(n)
+add(e,nG(n,f,o))
 end)
 else
-for i=1,#tokens,2 do
-dest[tokens[i]]=f_zobj_eval(tokens[i+1],table,params)
+for n=1,#t,2do
+e[t[n]]=nG(t[n+1],f,o)
 end
 end
-dest=table
+e=f
 else
-if statement=="" then statement=#dest+1 end
-if type(dest[statement])~="table"then
-dest[statement]={}
+if n==""then n=#e+1end
+if type(e[n])~="table"then
+e[n]={}
 end
-dest=dest[statement]
+e=e[n]
 end
 end)
-return table
+return f
 end
-function f_zobj(...)
-return f_zobj_set(setmetatable({},{__index=_g}),...)
+function m(...)
+return F(setmetatable({},{__index=eo}),...)
 end
-f_zobj_set(_g,"c_yes,@,c_no,@,c_empty,@,f_nop,@",true,false,"",function(...)return...end)
-f_zobj_set(_g,"f_zobj,@,f_zobj_set,@,f_zobj_eval,@,f_zclass,@,f_actor_get_elapsed_percent,@,f_actor_load,@,f_actor_loadlogic,@,f_actor_state,@,f_modes_popuntil,@,f_modes_pop,@,f_modes_push,@,f_beep,@,f_flr_rnd,@,f_zcall,@,f_zcamera,@,f_print_draw2_message,@,f_print_draw3_message,@,c_pokemon,@,c_pokemon_names,@,c_major_names,@,c_major_names_short,@,c_types,@,c_stages,@,c_menu_styles,@,c_moves,@,c_trainers,@,f_menu_state_callback,@,f_create_menu_view,@,f_create_menu,@,f_menu_refresh,@,f_menu_cancel,@,f_menu_set,@,f_menu_view_update,@,f_menu_update,@,f_menu_draw1,@,f_menu_drawentry,@,f_browse_drawentry,@,f_movehelp_switch,@,f_movehelp_getstat,@,f_move_disable,@,f_movehelp_movecopy,@,f_move_mimic,@,f_move_transform,@,f_move_conversion,@,f_move_haze,@,f_move_heal,@,f_move_recover,@,f_move_metronome,@,f_move_mirror_move,@,f_move_roar,@,f_move_teleport,@,f_format_num_sign,@,f_move_self,@,f_move_other,@,f_move_stat,@,f_move_toxic,@,f_move_splash,@,f_movehelp_effect_works,@,f_move_major_other,@,f_movehelp_minor,@,f_movehelp_flinch,@,f_movehelp_confuse,@,f_move_minimize,@,f_move_substitute,@,f_move_rage,@,f_move_bide,@,f_move_psywave,@,f_move_superfang,@,f_move_thrash,@,f_move_trapping,@,f_move_flydig,@,f_move_prepare,@,f_move_hyperbeam,@,f_move_rest,@,f_move_counter,@,f_move_multihit_set,@,f_move_multihit_var,@,f_move_multihit_twin,@,f_move_recoil,@,f_move_default,@,f_move_drain,@,f_move_dreameater,@,f_move_ohko,@,f_movehelp_hpchange,@,f_movehelp_setdmg,@,f_move_setdmg,@,f_move_setdmg_self,@,f_calc_max_stat,@,f_get_default_pokemon,@,f_populate_c_pokemon,@,f_create_team_pkmn,@,f_unlock_pkmn,@,f_get_team_dead,@,f_get_team_live,@,f_get_next_active,@,f_teamdel,@,f_set_default_team_pkmn,@,f_get_team,@,f_save_team,@,f_populate_c_moves,@",f_zobj,f_zobj_set,f_zobj_eval,function(template)
-return f_zobj_set(f_zobj"timer,0,stacksize,0,isnew,~c_yes,init,~f_nop,update,~f_nop,stack,#;",template)
-end,function(_ENV,key)
-if key==curr then
-return duration and timer/duration or 0
+F(eo,"es,@,x,@,f7,@,L,@",true,false,"",function(...)return...end)
+F(eo,"m,@,F,@,nG,@,t2,@,tp,@,Y,@,tw,@,t5,@,nI,@,H,@,eP,@,eL,@,b,@,C,@,nC,@,eg,@,eE,@,U,@,f9,@,t3,@,tg,@,eH,@,tb,@,n_,@,na,@,nQ,@,e_,@,n2,@,J,@,fj,@,fz,@,fq,@,fA,@,fB,@,fD,@,Q,@,np,@,t4,@,eb,@,fF,@,tx,@,fH,@,fJ,@,fK,@,fM,@,nw,@,ty,@,fN,@,fQ,@,t6,@,fR,@,tk,@,z,@,E,@,v,@,fS,@,fU,@,t8,@,X,@,e4,@,ex,@,nd,@,fV,@,fW,@,fY,@,fZ,@,oe,@,on,@,t7,@,ni,@,nr,@,nm,@,ot,@,of,@,oo,@,nc,@,ey,@,o_,@,n5,@,f,@,n3,@,oa,@,nR,@,t9,@,tj,@,ea,@,eJ,@,nu,@,tz,@,od,@,ng,@,tq,@,nS,@,nU,@,nb,@,oi,@,nV,@,nl,@,e6,@,om,@",m,F,nG,function(e)
+return F(m"n4,0,tA,0,tB,~es,l,~L,ed,~L,eC,#;",e)
+end,function(_ENV,e)
+if e==ek then
+return ei and n4/ei or 0
 end
-if _ENV[key]and _ENV[key].done then
+if _ENV[e]and _ENV[e].oc then
 return 1
 end
 return 0
-end,function(_ENV,stateName)
-next_state=stateName or next
-end,function(_ENV,stateName)
-timer,next_state,isnew,next,duration=0
-_ENV[curr].done=true
-for k,v in pairs(defaults)do _ENV[k]=v end
-for k,v in pairs(_ENV[stateName])do _ENV[k]=v end
-curr=stateName
-_ENV:init()
-stacksize=#stack
+end,function(_ENV,e)
+nx=e or next
+end,function(_ENV,e)
+n4,nx,tB,next,ei=0
+_ENV[ek].oc=true
+for e,n in pairs(tD)do _ENV[e]=n end
+for n,t in pairs(_ENV[e])do _ENV[n]=t end
+ek=e
+_ENV:l()
+tA=#eC
 end,function(_ENV)
-timer+=1/60
-if isnew then _ENV:f_actor_loadlogic(curr)end
-if duration and timer>=duration then
-_ENV:f_actor_load()
+n4+=1/60
+if tB then _ENV:tw(ek)end
+if ei and n4>=ei then
+_ENV:Y()
 end
-while next_state do
-_ENV:f_actor_loadlogic(next_state)
+while nx do
+_ENV:tw(nx)
 end
-_ENV:update()
-end,function(_ENV,untilstate)
-while next_state ~=untilstate and #stack>0 do
-_ENV:f_modes_pop()
+_ENV:ed()
+end,function(_ENV,e)
+while nx~=e and#eC>0do
+_ENV:H()
 end
 end,function(_ENV)
-deli(stack)
-_ENV:f_actor_load(stack[#stack]or "main")
-end,function(_ENV,newstate)
-add(stack,newstate)
-_ENV:f_actor_load(newstate)
+deli(eC)
+_ENV:Y(eC[#eC]or"eK")
+end,function(_ENV,e)
+add(eC,e)
+_ENV:Y(e)
 end,function()
-f_minisfx"153"
-end,function(x)
-return flr(rnd(x))
-end,function(func,text,...)
-foreach(f_zobj(text,...),function(params)
-func(unpack(params))
+K"153"
+end,function(e)
+return flr(rnd(e))
+end,function(e,n,...)
+foreach(m(n,...),function(n)
+e(unpack(n))
 end)
-end,function(nx,ny,func)
-local ox,oy=%0x5f28,%0x5f2a
-camera(ox-nx,oy-ny)
-func()
-camera(ox,oy)
-end,function(txt)
-f_zprint(txt or "",23,4,1,0)
-end,function(str)
-f_zcall(rectfill,";,0,0,45,6,1")
-f_zcall(f_zprint,";,@,23,1,13,0;;,@,23,8,1,0;;,@,23,15,1,0",unpack(split(str,"|",false)))
-end,f_zobj"",split"missingno,bulbasaur,ivysaur,venusaur,charmander,charmeleon,charizard,squirtle,wartortle,blastoise,caterpie,metapod,butterfree,weedle,kakuna,beedrill,pidgey,pidgeotto,pidgeot,rattata,raticate,spearow,fearow,ekans,arbok,pikachu,raichu,sandshrew,sandslash,nidoran f,nidorina,nidoqueen,nidoran m,nidorino,nidoking,clefairy,clefable,vulpix,ninetales,jigglypuff,wigglytuff,zubat,golbat,oddish,gloom,vileplume,paras,parasect,venonat,venomoth,diglett,dugtrio,meowth,persian,psyduck,golduck,mankey,primeape,growlithe,arcanine,poliwag,poliwhirl,poliwrath,abra,kadabra,alakazam,machop,machoke,machamp,bellsprout,weepinbell,victreebel,tentacool,tentacruel,geodude,graveler,golem,ponyta,rapidash,slowpoke,slowbro,magnemite,magneton,farfetchd,doduo,dodrio,seel,dewgong,grimer,muk,shellder,cloyster,gastly,haunter,gengar,onix,drowzee,hypno,krabby,kingler,voltorb,electrode,exeggcute,exeggutor,cubone,marowak,hitmonlee,hitmonchan,lickitung,koffing,weezing,rhyhorn,rhydon,chansey,tangela,kangaskhan,horsea,seadra,goldeen,seaking,staryu,starmie,mr mime,scyther,jynx,electabuzz,magmar,pinsir,tauros,magikarp,gyarados,lapras,ditto,eevee,vaporeon,jolteon,flareon,porygon,omanyte,omastar,kabuto,kabutops,aerodactyl,snorlax,articuno,zapdos,moltres,dratini,dragonair,dragonite,mewtwo,mew",f_zobj"0,none;,fainted,burned,frozen,paralyzed,poisoned,sleeping",f_zobj"0, ;,FNT,BRN,FZN,PAR,PSN,SLP",f_zobj"0;bg,2,name,~c_empty;1;bg,2,name,normal,15,0,13,.5;2;bg,10,name,fire,8,2,10,2,11,2,2,.5,4,.5,13,.5,14,.5;3;bg,7,name,fighting,10,2,1,2,13,2,15,0,11,.5,9,.5,5,.5,12,.5;4;bg,9,name,water,2,2,7,2,13,2,14,.5,8,.5,4,.5;5;bg,6,name,poison,11,2,8,2,15,.5,7,.5,5,.5,13,.5;6;bg,11,name,electric,9,2,4,2,7,0,14,.5,6,.5,8,.5;7;bg,7,name,ground,6,2,2,2,5,2,13,2,9,0,11,.5,8,.5;8;bg,8,name,grass,7,2,13,2,4,2,11,.5,14,.5,2,.5,9,.5,8,.5,5,.5;9;bg,2,name,flying,11,2,3,2,8,2,6,.5,13,.5;10;bg,9,name,ice,14,2,9,2,8,2,2,.5,10,.5,4,.5;11;bg,8,name,bug,8,2,12,2,3,.5,2,.5,9,.5,15,.5,5,.5;12;bg,6,name,psychic,3,2,5,2,12,.5;13;bg,2,name,rock,11,2,2,2,9,2,10,2,3,.5,7,.5;14;bg,2,name,dragon,14,2;15;bg,6,name,ghost,15,2,1,0,12,2;17;bg,2,name,bird;",f_zobj"maxhp,hp,special,spc,attack,att,defense,def,speed,spd,total,tot,accuracy,acc,evasion,eva",f_zobj";bg,13,aa,5,fg,1;;bg,6,aa,13,fg,13;;bg,5,aa,5,fg,1;;bg,6,aa,5,fg,5;;bg,1,aa,5,fg,13;;bg,14,aa,4;;bg,9,aa,4;;bg,11,aa,3;;bg,12,aa,5;;bg,8,aa,2;;bg,10,aa,4",f_zobj"",split"youngstr,bugcatch,junior,brock,lass,hiker,swimmer,misty,gentlman,sailor,rocker,ltsurge,channelr,gambler,beauty,erika,biker,birdkeep,juggler,koga,blckbelt,rocket,psychic,sabrina,scientst,pkmaniac,suprnerd,blaine,cooltrnr,fishrman,tamer,giovanni,lorelei,bruno,agatha,lance,blue,green,red,legendry",function(game,entry)
-if entry.state then
-game:f_modes_push(entry.state)
+end,function(t,f,o)
+local e,n=%0x5f28,%0x5f2a
+camera(e-t,n-f)
+o()
+camera(e,n)
+end,function(e)
+eM(e or"",23,4,1,0)
+end,function(e)
+C(rectfill,";,0,0,45,6,1")
+C(eM,";,@,23,1,13,0;;,@,23,8,1,0;;,@,23,15,1,0",unpack(split(e,"|",false)))
+end,m"",split"missingno,bulbasaur,ivysaur,venusaur,charmander,charmeleon,charizard,squirtle,wartortle,blastoise,caterpie,metapod,butterfree,weedle,kakuna,beedrill,pidgey,pidgeotto,pidgeot,rattata,raticate,spearow,fearow,ekans,arbok,pikachu,raichu,sandshrew,sandslash,nidoran f,nidorina,nidoqueen,nidoran m,nidorino,nidoking,clefairy,clefable,vulpix,ninetales,jigglypuff,wigglytuff,zubat,golbat,oddish,gloom,vileplume,paras,parasect,venonat,venomoth,diglett,dugtrio,meowth,persian,psyduck,golduck,mankey,primeape,growlithe,arcanine,poliwag,poliwhirl,poliwrath,abra,kadabra,alakazam,machop,machoke,machamp,bellsprout,weepinbell,victreebel,tentacool,tentacruel,geodude,graveler,golem,ponyta,rapidash,slowpoke,slowbro,magnemite,magneton,farfetchd,doduo,dodrio,seel,dewgong,grimer,muk,shellder,cloyster,gastly,haunter,gengar,onix,drowzee,hypno,krabby,kingler,voltorb,electrode,exeggcute,exeggutor,cubone,marowak,hitmonlee,hitmonchan,lickitung,koffing,weezing,rhyhorn,rhydon,chansey,tangela,kangaskhan,horsea,seadra,goldeen,seaking,staryu,starmie,mr mime,scyther,jynx,electabuzz,magmar,pinsir,tauros,magikarp,gyarados,lapras,ditto,eevee,vaporeon,jolteon,flareon,porygon,omanyte,omastar,kabuto,kabutops,aerodactyl,snorlax,articuno,zapdos,moltres,dratini,dragonair,dragonite,mewtwo,mew",m"0,none;,fainted,burned,frozen,paralyzed,poisoned,sleeping",m"0, ;,FNT,BRN,FZN,PAR,PSN,SLP",m"0;c,2,n,~f7;1;c,2,n,normal,15,0,13,.5;2;c,10,n,fire,8,2,10,2,11,2,2,.5,4,.5,13,.5,14,.5;3;c,7,n,fighting,10,2,1,2,13,2,15,0,11,.5,9,.5,5,.5,12,.5;4;c,9,n,water,2,2,7,2,13,2,14,.5,8,.5,4,.5;5;c,6,n,poison,11,2,8,2,15,.5,7,.5,5,.5,13,.5;6;c,11,n,electric,9,2,4,2,7,0,14,.5,6,.5,8,.5;7;c,7,n,ground,6,2,2,2,5,2,13,2,9,0,11,.5,8,.5;8;c,8,n,grass,7,2,13,2,4,2,11,.5,14,.5,2,.5,9,.5,8,.5,5,.5;9;c,2,n,flying,11,2,3,2,8,2,6,.5,13,.5;10;c,9,n,ice,14,2,9,2,8,2,2,.5,10,.5,4,.5;11;c,8,n,bug,8,2,12,2,3,.5,2,.5,9,.5,15,.5,5,.5;12;c,6,n,psychic,3,2,5,2,12,.5;13;c,2,n,rock,11,2,2,2,9,2,10,2,3,.5,7,.5;14;c,2,n,dragon,14,2;15;c,6,n,ghost,15,2,1,0,12,2;17;c,2,n,bird;",m"V,hp,er,spc,R,att,q,def,M,spd,ny,tot,A,acc,e2,eva",m";c,13,em,5,nT,1;;c,6,em,13,nT,13;;c,5,em,5,nT,1;;c,6,em,5,nT,5;;c,1,em,5,nT,13;;c,14,em,4;;c,9,em,4;;c,11,em,3;;c,12,em,5;;c,8,em,2;;c,10,em,4",m"",split"youngstr,bugcatch,junior,brock,lass,hiker,swimmer,misty,gentlman,sailor,rocker,ltsurge,channelr,gambler,beauty,erika,biker,birdkeep,juggler,koga,blckbelt,rocket,psychic,sabrina,scientst,pkmaniac,suprnerd,blaine,cooltrnr,fishrman,tamer,giovanni,lorelei,bruno,agatha,lance,blue,green,red,legendry",function(e,n)
+if n.Z then
+e:eP(n.Z)
 else
-game:f_modes_pop()
+e:H()
 end
-end,function(edraw,viewmin)
-return f_zobj("edraw,@,viewmin,@,v,~viewmin,r,1,update,~f_menu_view_update,draw1,~f_menu_draw1,cancel,~f_menu_cancel,refresh,~f_menu_refresh",edraw,viewmin or 0)
-end,function(edraw,r)
-return f_zobj_set(f_create_menu_view(edraw),"c,0,r,@,update,~f_menu_update,set,~f_menu_set",r or 1)
-end,function(menu,data,mapfunc)
-while deli(menu)do end
-for i=1,#data do
-add(menu,(mapfunc or f_nop)(data[i],i))
+end,function(e,n)
+return m("ou,@,tF,@,S,~tF,y,1,ed,~fA,ec,~fD,ns,~fz,N,~fj",e,n or 0)
+end,function(e,n)
+return F(n2(e),"p,0,y,@,ed,~fB,nW,~fq",n or 1)
+end,function(e,n,f)
+while deli(e)do end
+for t=1,#n do
+add(e,(f or L)(n[t],t))
 end
-end,function(game)
-game:f_modes_pop()
-end,function(menu,delta,is_ud)
-if is_ud then
-local newval=menu.c+delta*menu.r
-if newval==mid(0,newval,#menu-1)then
-menu.c=newval
-if 0+delta ~=0 then f_minisfx"154" end
+end,function(e)
+e:H()
+end,function(e,n,t)
+if t then
+local t=e.p+n*e.y
+if t==mid(0,t,#e-1)then
+e.p=t
+if 0+n~=0then K"154"end
 else
-f_beep()
+eL()
 end
 else
-local newval=menu.c+delta
-local left=menu.c-menu.c%menu.r
-if newval==mid(left,newval,left+menu.r-1)then
-menu.c=newval
-if 0+delta ~=0 then f_minisfx"154" end
+local t=e.p+n
+local f=e.p-e.p%e.y
+if t==mid(f,t,f+e.y-1)then
+e.p=t
+if 0+n~=0then K"154"end
 else
-f_beep()
+eL()
 end
 end
-menu.c=mid(0,menu.c,#menu-1)
-if menu.c\menu.r<menu.v then menu.v=menu.c\menu.r end
-if menu.c\menu.r>menu.v+2 then menu.v=menu.c\menu.r-2 end
-menu.v=mid(0,menu.v,(#menu-1)\menu.r)
-end,function(game)
-local menu=game.menu
-if g_bpo then f_minisfx"154" menu.cancel(game)end
-if g_bpx then game:xfunc()end
-menu.v+=g_bpv
-if g_bph ~=0 then game:lrfunc(g_bph)end
-local oldview=menu.v
-menu.v=mid(menu.viewmin,menu.v,#menu-3)
-if menu.v ~=oldview then
-f_beep()
-elseif g_bpv ~=0 then
-f_minisfx"154"
+e.p=mid(0,e.p,#e-1)
+if e.p\e.y<e.S then e.S=e.p\e.y end
+if e.p\e.y>e.S+2then e.S=e.p\e.y-2end
+e.S=mid(0,e.S,(#e-1)\e.y)
+end,function(n)
+local e=n.o
+if eN then K"154"e.ns(n)end
+if e8 then n:n6()end
+e.S+=nY
+if nZ~=0then n:tH(nZ)end
+local n=e.S
+e.S=mid(e.tF,e.S,#e-3)
+if e.S~=n then
+eL()
+elseif nY~=0then
+K"154"
 end
-end,function(game)
-local menu=game.menu
-menu:set"0"
-menu:set(g_bpv,true)
-menu:set(g_bph)
-if g_bpx then
-local entry=menu[menu.c+1]
-if entry.disabled then
-f_beep()
-elseif entry.sel then
-f_minisfx"155"
-entry.sel(game,entry)
+end,function(t)
+local e=t.o
+e:nW"0"
+e:nW(nY,true)
+e:nW(nZ)
+if e8 then
+local n=e[e.p+1]
+if n.eu then
+eL()
+elseif n.I then
+K"155"
+n.I(t,n)
 end
 end
-if g_bpo then f_minisfx"154" menu.cancel(game)end
-end,function(game)
-local menu=game.menu
-local cellw=menu.r>1 and 10 or 40
-local xoff=20-(menu.r*cellw)/2
-f_zcall(rectfill,";,0,0,39,39,1;;,0,@,39,@,13",5-menu.v*10,4+(max(ceil(#menu/menu.r),3)-menu.v)*10)
-for i=-1,menu.r*5-1 do
-local index=(menu.v-1)*menu.r+i+1
-local entry=menu[index]
-if entry then
-local style_ind,x,y=entry.style or 1,xoff+i%menu.r*10,i\menu.r*10
-if entry.disabled then style_ind=3 end
-if index-1==menu.c then style_ind+=1 end
-if not entry.hidden then
-rectfill(x,y-5,x+cellw-1,y+4,c_menu_styles[style_ind].bg)
-f_zcamera(i%menu.r*cellw+xoff+cellw/2,i\menu.r*10-3,function()
-menu.edraw(entry,c_menu_styles[style_ind])
+if eN then K"154"e.ns(t)end
+end,function(n)
+local e=n.o
+local f=e.y>1and 10or 40
+local a=20-(e.y*f)/2
+C(rectfill,";,0,0,39,39,1;;,0,@,39,@,13",5-e.S*10,4+(max(ceil(#e/e.y),3)-e.S)*10)
+for n=-1,e.y*5-1do
+local d=(e.S-1)*e.y+n+1
+local t=e[d]
+if t then
+local o,i,r=t.nk or 1,a+n%e.y*10,n\e.y*10
+if t.eu then o=3end
+if d-1==e.p then o+=1end
+if not t.te then
+rectfill(i,r-5,i+f-1,r+4,n_[o].c)
+nC(n%e.y*f+a+f/2,n\e.y*10-3,function()
+e.ou(t,n_[o])
 end)
 end
 end
 end
-end,function(entry,style)
-if entry.pkmn then
-local style=c_menu_styles[c_types[entry.pkmn.type1].bg]
-f_zcall(rectfill,";,-20,-2,19,17,@;;,-20,14,19,17,@",style.bg,style.aa)
-entry.pkmn:f_draw_pkmn_out(0,8,style,1,1)
+end,function(e,n)
+if e.ee then
+local n=n_[eH[e.ee.eO].c]
+C(rectfill,";,-20,-2,19,17,@;;,-20,14,19,17,@",n.c,n.em)
+e.ee:n8(0,8,n,1,1)
 else
-f_wobble_text(entry.name,0,0,style.fg)
+tJ(e.n,0,0,n.nT)
 end
-end,function(entry,style)
-entry.pkmn:f_draw_pkmn_out(0,3,style,.375,.375)
-end,function(pl)
-local team=f_get_team_live(pl.team)
-del(team,pl.active.shared)
-if #team>0 then
-return team[f_flr_rnd(#team)+1]
+end,function(e,n)
+e.ee:n8(0,3,n,.375,.375)
+end,function(n)
+local e=nU(n.k)
+del(e,n.a.W)
+if#e>0then
+return e[b(#e)+1]
 end
-end,function(_ENV,stat)
-local stage=stages[stat]
-if stat=="evasion" or stat=="accuracy" then
-return _ENV[stat]*mid(1,1+stage/3,3)/mid(1,1-stage/3,3)
+end,function(_ENV,e)
+local n=n1[e]
+if e=="e2"or e=="A"then
+return _ENV[e]*mid(1,1+n/3,3)/mid(1,1-n/3,3)
 end
 return ceil(mid(1,999,
-(stat=="attack" and major==2 and.5 or stat=="speed" and major==4 and.25 or 1)*
-_ENV[stat]*mid(2,2+stage,8)/mid(2,2-stage,8)
+(e=="R"and T==2and.5or e=="M"and T==4and.25or 1)*
+_ENV[e]*mid(2,2+n,8)/mid(2,2-n,8)
 ))
 end,function(_ENV)
-if otheractive.disabledtimer>0 then return true end
-local moves=f_get_moves(otheractive)
-if #moves==0 then return true end
-otheractive.disabledtimer,otheractive.disabledslot=f_flr_rnd"6"+2,moves[f_flr_rnd(#moves)+1].slot
-addaction(other,"|"..otheractive.mynewmoves[otheractive.disabledslot].name.."|disabled")
-if otheractive.curmove and otheractive.curmove.slot==otheractive.disabledslot then
-otheractive.moveturn=0
+if i.tn>0then return true end
+local e=n7(i)
+if#e==0then return true end
+i.tn,i.eQ=b"6"+2,e[b(#e)+1].en
+r(e1,"|"..i.w[i.eQ].n.."|disabled")
+if i.g and i.g.en==i.eQ then
+i.e0=0
 end
-end,function(_ENV,num,slot)
-local newmove=f_create_move(num,slot)
-newmove.pp,newmove.maxpp=5,5
-mynewmoves[slot]=newmove
-return newmove
+end,function(_ENV,t,n)
+local e=B(t,n)
+e.e7,e.tK=5,5
+w[n]=e
+return e
 end,function(_ENV)
-local othermoves=f_get_moves(otheractive,true)
-addaction(self,"|copies|"..f_movehelp_movecopy(selfactive,othermoves[f_flr_rnd(#othermoves)+1].num,move.slot).name)
+local n=n7(i,true)
+r(O,"|copies|"..tx(e,n[b(#n)+1].d,u.en).n)
 end,function(_ENV)
-if selfactive.transform then
+if e.ol then
 return true
 else
-addaction(self,"|copies|"..otheractive.name,function()
-selfactive.transform=true
-foreach(split"num,attack,defense,speed,special,type1,type2",function(key)
-selfactive[key]=otheractive[key]
+r(O,"|copies|"..i.n,function()
+e.ol=true
+foreach(split"d,R,q,M,er,eO,ep",function(n)
+e[n]=i[n]
 end)
-selfactive.mynewmoves={}
-foreach(otheractive.mynewmoves,function(m)
-f_movehelp_movecopy(selfactive,m.num,m.slot)
+e.w={}
+foreach(i.w,function(n)
+tx(e,n.d,n.en)
 end)
 end)
 end
 end,function(_ENV)
-f_zobj_set(selfactive,"type1,@,type2,@",otheractive.type1,otheractive.type2)
-addaction(self,"|copies|types")
+F(e,"eO,@,ep,@",i.eO,i.ep)
+r(O,"|copies|types")
 end,function(_ENV)
-foreach({other,self},function(pl)
-f_zobj_set(pl.active.stages,"special,0,attack,0,defense,0,speed,0,accuracy,0,evasion,0,minimize,~c_no")
-addaction(pl,"|resets|stats")
+foreach({e1,O},function(e)
+F(e.a.n1,"er,0,R,0,q,0,M,0,A,0,e2,0,tM,~x")
+r(e,"|resets|stats")
 end)
-end,function(_ENV,pl,amount)
-amount=min(amount,pl.active.maxhp-pl.active.hp)
-if amount>0 then
-f_movehelp_hpchange(_ENV,pl,amount,function()
-pl.active.shared.hp+=amount
+end,function(_ENV,n,e)
+e=min(e,n.a.V-n.a.D)
+if e>0then
+t9(_ENV,n,e,function()
+n.a.W.D+=e
 end)
-else
-return true
-end
-end,function(_ENV)
-return f_move_heal(_ENV,self,selfactive.maxhp\2)
-end,function(_ENV)
-f_movelogic(self,f_create_move(f_flr_rnd(164)+1,move.slot))
-end,function(_ENV)
-if selfactive.lastmoverecv>0 then
-f_movelogic(self,f_create_move(selfactive.lastmoverecv,move.slot))
 else
 return true
 end
 end,function(_ENV)
-local pkmn=f_movehelp_switch(other)
-if pkmn then
-f_select_switch(other,pkmn)
+return nw(_ENV,O,e.V\2)
+end,function(_ENV)
+tt(O,B(b(164)+1,u.en))
+end,function(_ENV)
+if e.tf>0then
+tt(O,B(e.tf,u.en))
 else
 return true
 end
 end,function(_ENV)
-local pkmn=f_movehelp_switch(self)
-if pkmn then
-f_select_switch(self,pkmn)
-else
-return true
-end
-end,function(num,name)
-return(sgn(num)>0 and "|+"or "|-")..abs(num).." "..name.."|change"
-end,function(_ENV,func,...)return func(_ENV,self,...)end,function(_ENV,func,...)return func(_ENV,other,...)end,function(_ENV,pl,key,stage,func)
-local prev=pl.active.stages[key]
-if not pl.active.misted or stage>0 then
-pl.active.stages[key]=mid(-6,6,prev+stage)
-end
-if prev ~=pl.active.stages[key]then
-addaction(pl,f_format_num_sign(stage,c_stages[key]),func or f_nop)
+local e=t4(e1)
+if e then
+to(e1,e)
 else
 return true
 end
 end,function(_ENV)
-if f_move_major_other(_ENV,5)and otheractive.major ~=5 then
+local e=t4(O)
+if e then
+to(O,e)
+else
 return true
 end
-return f_move_other(_ENV,f_movehelp_minor,"|badly|poisoned","toxiced",1,true)
+end,function(e,n)
+return(sgn(e)>0and"|+"or"|-")..abs(e).." "..n.."|change"
+end,function(_ENV,e,...)return e(_ENV,O,...)end,function(_ENV,e,...)return e(_ENV,e1,...)end,function(_ENV,e,n,t,o)
+local f=e.a.n1[n]
+if not e.a.oT or t>0then
+e.a.n1[n]=mid(-6,6,f+t)
+end
+if f~=e.a.n1[n]then
+r(e,tk(t,tb[n]),o or L)
+else
+return true
+end
 end,function(_ENV)
-addaction(self,"|does|nothing")
+if X(_ENV,5)and i.T~=5then
+return true
+end
+return E(_ENV,e4,"|badly|poisoned","n9",1,true)
 end,function(_ENV)
-return f_get_type_advantage(move,otheractive)>0 and move.movetype ~=otheractive.type1 and move.movetype ~=otheractive.type2
-end,function(_ENV,majorind)
-if otheractive.shared.major==3 and majorind==2 then
-addaction(self,"|thawed|out")
-selfactive.shared.major=0
-elseif otheractive.shared.major==0 and(majorind==6 or f_movehelp_effect_works(_ENV))then
-addaction(other,"|is now|"..c_major_names[majorind],function()
-otheractive.shared.major=majorind
-sleeping=f_flr_rnd"8"
+r(O,"|does|nothing")
+end,function(_ENV)
+return t_(u,i)>0and u.eG~=i.eO and u.eG~=i.ep
+end,function(_ENV,n)
+if i.W.T==3and n==2then
+r(O,"|thawed|out")
+e.W.T=0
+elseif i.W.T==0and(n==6or t8(_ENV))then
+r(e1,"|is now|"..t3[n],function()
+i.W.T=n
+ta=b"8"
 end)
 else
 return true
 end
-end,function(_ENV,pl,message,minor,val,respect_type)
-if(pl.active[minor]or 0)==0 and(not respect_type or f_movehelp_effect_works(_ENV))then
-pl.active[minor]=val or 1
-addaction(pl,message)
+end,function(_ENV,e,t,n,f,o)
+if(e.a[n]or 0)==0and(not o or t8(_ENV))then
+e.a[n]=f or 1
+r(e,t)
 else
 return true
 end
-end,function(_ENV,pl)
-pl.active.flinching=true
-end,function(_ENV,pl)
-return f_movehelp_minor(_ENV,pl,"|becomes|confused","confused",f_flr_rnd"4"+1)
+end,function(_ENV,e)
+e.a.tN=true
+end,function(_ENV,e)
+return e4(_ENV,e,"|becomes|confused","nj",b"4"+1)
 end,function(_ENV)
-return f_move_stat(_ENV,self,"evasion",1,function()
-selfactive.minimize=.25
+return v(_ENV,O,"e2",1,function()
+e.tM=.25
 end)
 end,function(_ENV)
-local subhp=selfactive.maxhp\4
-if subhp>=selfactive.hp or selfactive.substitute>0 then
+local n=e.V\4
+if n>=e.D or e.ew>0then
 return true
 end
-f_move_setdmg_self(_ENV,subhp)
-addaction(self,"|created|substitute",function()
-selfactive.substitute=subhp
+eJ(_ENV,n)
+r(O,"|created|substitute",function()
+e.ew=n
 end)
 end,function(_ENV)
-f_set_moveturn(selfactive,-1,move)
-f_move_default(_ENV)
-if move.pp<=0 then
-selfactive.moveturn,selfactive.curmove=0
+e9(e,-1,u)
+f(_ENV)
+if u.e7<=0then
+e.e0,e.g=0
 end
 end,function(_ENV)
-if not selfactive.curmove then
-f_set_moveturn(selfactive,f_flr_rnd"2"+1,f_create_move(move.num,move.slot))
-addaction(self,"|"..move.name.."|begins")
-selfactive.bidedmg=0
+if not e.g then
+e9(e,b"2"+1,B(u.d,u.en))
+r(O,"|"..u.n.."|begins")
+e.nz=0
 end
-if selfactive.moveturn==0 then
-if selfactive.bidedmg==0 then
+if e.e0==0then
+if e.nz==0then
 return true
 end
-f_move_setdmg(_ENV,selfactive.bidedmg*2)
+ea(_ENV,e.nz*2)
 end
 end,function(_ENV)
-f_move_setdmg(_ENV,1+f_flr_rnd"75")
+ea(_ENV,1+b"75")
 end,function(_ENV)
-f_move_setdmg(_ENV,max(otheractive.hp\2,1))
+ea(_ENV,max(i.D\2,1))
 end,function(_ENV)
-f_set_moveturn(selfactive,f_flr_rnd"2"+1,f_create_move(move.num,move.slot))
-f_move_default(_ENV)
-if selfactive.moveturn==0 then
-f_move_self(_ENV,f_movehelp_confuse,"confused")
+e9(e,b"2"+1,B(u.d,u.en))
+f(_ENV)
+if e.e0==0then
+z(_ENV,nd,"nj")
 end
 end,function(_ENV)
-if not selfactive.curmove then
-f_set_moveturn(selfactive,f_flr_rnd"4"+1,f_create_move(move.num,move.slot))
-selfactive.trappedother=otheractive
+if not e.g then
+e9(e,b"4"+1,B(u.d,u.en))
+e.n0=i
 end
-if selfactive.trappedother==otheractive then
-f_move_default(_ENV)
-else
-return true
-end
-end,function(_ENV,desc)
-if selfactive.curmove then
-f_move_default(_ENV)
-else
-addaction(self,desc,function()
-f_set_moveturn(selfactive,1,f_create_move(move.num,move.slot))
-end)
-end
-end,function(_ENV)
-if selfactive.curmove then
-f_move_default(_ENV)
-else
-addaction(self,"|charges|energy")
-f_set_moveturn(selfactive,1,move)
-move.pp+=1
-end
-end,function(_ENV)
-if selfactive.curmove then
-addaction(self,"|recharges|energy")
-else
-f_move_default(_ENV)
-local m=f_create_move(move.num,move.slot)
-m.accuracy=0
-f_set_moveturn(selfactive,1,m)
-end
-end,function(_ENV)
-addaction(self,"|is|sleeping",function()
-selfactive.shared.major,selfactive.sleeping=6,2
-f_move_heal(_ENV,self,selfactive.maxhp)
-end)
-end,function(_ENV)
-if selfactive.counterdmg>0 then
-f_move_setdmg(_ENV,selfactive.counterdmg*2)
+if e.n0==i then
+f(_ENV)
 else
 return true
 end
-end,function(_ENV,hitcount,endfunc,isresume)
-if hitcount>0 then
-addaction(self,isresume and "|resumes|"..move.name,function()
-_ENV.otheractive=other.active
-f_move_default(_ENV,100,function()
-f_move_multihit_set(_ENV,hitcount-1,endfunc,true)
+end,function(_ENV,n)
+if e.g then
+f(_ENV)
+else
+r(O,n,function()
+e9(e,1,B(u.d,u.en))
+end)
+end
+end,function(_ENV)
+if e.g then
+f(_ENV)
+else
+r(O,"|charges|energy")
+e9(e,1,u)
+u.e7+=1
+end
+end,function(_ENV)
+if e.g then
+r(O,"|recharges|energy")
+else
+f(_ENV)
+local n=B(u.d,u.en)
+n.A=0
+e9(e,1,n)
+end
+end,function(_ENV)
+r(O,"|is|sleeping",function()
+e.W.T,e.ta=6,2
+nw(_ENV,O,e.V)
+end)
+end,function(_ENV)
+if e.nq>0then
+ea(_ENV,e.nq*2)
+else
+return true
+end
+end,function(_ENV,e,n,t)
+if e>0then
+r(O,t and"|resumes|"..u.n,function()
+_ENV.i=e1.a
+f(_ENV,100,function()
+nc(_ENV,e-1,n,true)
 end)
 end)
 else
-endfunc()
+n()
 end
-end,function(_ENV,hitcount)
-f_move_multihit_set(_ENV,2+f_flr_rnd"4",f_nop)
+end,function(_ENV,e)
+nc(_ENV,2+b"4",L)
 end,function(_ENV)
-f_move_multihit_set(_ENV,2,function()
-if rnd"100"<20 then
-f_move_major_other(_ENV,5)
-end
-end)
-end,function(_ENV)
-f_move_setdmg(_ENV,false,function(dmg)
-f_move_setdmg_self(_ENV,max(1,dmg\4))
-end)
-end,function(_ENV,percent,func,...)
-local params={...}
-f_move_setdmg(_ENV,false,function()
-if rnd"100"<(percent or 0)then
-func(_ENV,unpack(params))
+nc(_ENV,2,function()
+if rnd"100"<20then
+X(_ENV,5)
 end
 end)
 end,function(_ENV)
-f_move_setdmg(_ENV,false,function(dmg)
-f_move_heal(_ENV,self,max(dmg\2,1))
+ea(_ENV,false,function(e)
+eJ(_ENV,max(1,e\4))
+end)
+end,function(_ENV,e,n,...)
+local t={...}
+ea(_ENV,false,function()
+if rnd"100"<(e or 0)then
+n(_ENV,unpack(t))
+end
 end)
 end,function(_ENV)
-if otheractive.major==6 then
-f_move_drain(_ENV)
+ea(_ENV,false,function(e)
+nw(_ENV,O,max(e\2,1))
+end)
+end,function(_ENV)
+if i.T==6then
+n3(_ENV)
 else
 return true
 end
 end,function(_ENV)
-if selfactive.speed>=otheractive.speed then
-f_move_setdmg(_ENV,otheractive.hp)
+if e.M>=i.M then
+ea(_ENV,i.D)
 else
 return true
 end
-end,function(_ENV,pl,dmg,func,issub)
-local dmgtxt=f_format_num_sign(dmg,"hp")
-local breaks=issub and pl.active.substitute+dmg<0
-if not issub or breaks then
-addaction(pl,dmgtxt,f_nop,issub)
+end,function(_ENV,n,t,a,e)
+local f=tk(t,"hp")
+local o=e and n.a.ew+t<0
+if not e or o then
+r(n,f,L,e)
 end
-addaction(pl,
-breaks and "|substitute|broke"or dmgtxt,
-func,
-issub
+r(n,
+o and"|substitute|broke"or f,
+a,
+e
 )
-end,function(_ENV,pl,dmg,isself,passfunc)
-local active=pl.active
-local issub=not isself and active.substitute>0
-f_movehelp_hpchange(_ENV,pl,-dmg,function()
-active.bidedmg+=dmg
-if active.curmove and active.curmove.num==20 then
-f_move_stat(_ENV,pl,"attack",1)
+end,function(_ENV,t,n,a,f)
+local e=t.a
+local o=not a and e.ew>0
+t9(_ENV,t,-n,function()
+e.nz+=n
+if e.g and e.g.d==20then
+v(_ENV,t,"R",1)
 end
-if passfunc then passfunc(dmg)end
-if issub then
-active.substitute=max(active.substitute-dmg,0)
+if f then f(n)end
+if o then
+e.ew=max(e.ew-n,0)
 else
-active.shared.hp=max(active.shared.hp-dmg,0)
+e.W.D=max(e.W.D-n,0)
 end
-end,issub and "substitute")
-end,function(_ENV,dmg,passfunc)
-local crit,advantage=false,f_get_type_advantage(move,otheractive)
-if not dmg then
-dmg,crit=f_calc_move_damage(selfactive,otheractive,move)
+end,o and"substitute")
+end,function(_ENV,n,o)
+local f,t=false,t_(u,i)
+if not n then
+n,f=tQ(e,i,u)
 end
-if advantage>0 then
-if move.movetype%2==1 then
-otheractive.counterdmg+=dmg
+if t>0then
+if u.eG%2==1then
+i.nq+=n
 end
-if advantage>1 then addaction(self,"|super|effective")
-elseif advantage<1 then addaction(self,"|not very|effective")end
-if crit then addaction(self,"|critical|hit")end
-f_movehelp_setdmg(_ENV,other,dmg,false,passfunc)
+if t>1then r(O,"|super|effective")
+elseif t<1then r(O,"|not very|effective")end
+if f then r(O,"|critical|hit")end
+tj(_ENV,e1,n,false,o)
 else
-addaction(other,"|resisted|attack")
+r(e1,"|resisted|attack")
 end
-end,function(_ENV,dmg)
-f_movehelp_setdmg(_ENV,self,dmg,true,f_nop)
-end,function(base)
-return ceil(base+.5*93)+5
+end,function(_ENV,e)
+tj(_ENV,O,e,true,L)
+end,function(e)
+return ceil(e+.5*93)+5
 end,function()
-return f_zobj("browse,~c_yes,attack,0,defense,0,special,0,speed,0,maxhp,0,hp,0,total,0,accuracy,100,evasion,100,base_maxhp,0,base_attack,0,base_defense,0,base_speed,0,base_special,0,num,-1,evolvesfrom,-1,name, ,type1,0,type2,0,moves_natural,#,moves_teach,#,moves_event,#,mynewmoves,@",f_create_empty_moveset())
+return m("et,~es,R,0,q,0,er,0,M,0,V,0,D,0,ny,0,A,100,e2,100,tR,0,tS,0,tU,0,td,0,tV,0,d,-1,os,-1,n, ,eO,0,ep,0,eR,#,eS,#,nA,#,w,@",nB())
 end,function()
-local movemem=peek2"0xa"
-c_pokemon[-1]=f_get_default_pokemon()
-for num=0,151 do
-local pkmndata,is_range={},false
-while@movemem ~=255 do
-if@movemem==254 then
-is_range=true
-elseif is_range then
-for i=pkmndata[#pkmndata]+1,@movemem do
-add(pkmndata,i)
+local e=peek2"0xa"
+U[-1]=tz()
+for t=0,151do
+local n,f={},false
+while@e~=255do
+if@e==254then
+f=true
+elseif f then
+for t=n[#n]+1,@e do
+add(n,t)
 end
-is_range=false
+f=false
 else
-add(pkmndata,@movemem)
+add(n,@e)
 end
-movemem+=1
+e+=1
 end
-movemem+=1
-local evolvesfrom=num-deli(pkmndata,1)
-local pkmn=f_get_default_pokemon()
-f_zobj_set(pkmn,"num,@,evolvesfrom,@,name,@,type1,@,type2,@,base_maxhp,@,base_attack,@,base_defense,@,base_speed,@,base_special,@",num,
-evolvesfrom,
-c_pokemon_names[num+1],
-unpack(pkmndata)
+e+=1
+local f=t-deli(n,1)
+local e=tz()
+F(e,"d,@,os,@,n,@,eO,@,ep,@,tR,@,tS,@,tU,@,td,@,tV,@",t,
+f,
+f9[t+1],
+unpack(n)
 )
-local move_bucket=pkmn.moves_natural
-for i=8,#pkmndata do
-local val=pkmndata[i]
-if val==253 then
-move_bucket=pkmn.moves_teach
-elseif val==252 then
-move_bucket=pkmn.moves_event
+local o=e.eR
+for f=8,#n do
+local t=n[f]
+if t==253then
+o=e.eS
+elseif t==252then
+o=e.nA
 else
-add(move_bucket,val)
+add(o,t)
 end
 end
-if evolvesfrom<num then
-foreach(split"moves_natural,moves_teach,moves_event",function(key)
-foreach(c_pokemon[evolvesfrom][key],function(move)
-add(pkmn[key],move)
+if f<t then
+foreach(split"eR,eS,nA",function(n)
+foreach(U[f][n],function(t)
+add(e[n],t)
 end)
 end)
 end
-local teach_map,teachs={},{}
-foreach(pkmn.moves_teach,function(move)teach_map[move]=true end)
-for i=1,54 do
-if teach_map[i]then add(teachs,i)end
+local n,f={},{}
+foreach(e.eS,function(e)n[e]=true end)
+for e=1,54do
+if n[e]then add(f,e)end
 end
-pkmn.moves_teach=teachs
-do local _ENV=pkmn
-f_zobj_set(_ENV,"attack,@,defense,@,special,@,speed,@,maxhp,@,hp,~maxhp",f_calc_max_stat(base_attack),
-f_calc_max_stat(base_defense),
-f_calc_max_stat(base_special),
-f_calc_max_stat(base_speed),
-f_calc_max_stat(base_maxhp)+55
+e.eS=f
+do local _ENV=e
+F(_ENV,"R,@,q,@,er,@,M,@,V,@,D,~V",nu(tS),
+nu(tU),
+nu(tV),
+nu(td),
+nu(tR)+55
 )
-total=attack+defense+special+speed+maxhp
+ny=R+q+er+M+V
 end
-c_pokemon[num]=pkmn
+U[t]=e
 end
-end,function(num,mynewmoves)
-return setmetatable(f_zobj("mynewmoves,@,major,0,browse,~c_no",mynewmoves),{__index=c_pokemon[num]})
-end,function(trainer)
-foreach(f_get_team_dead(trainer.team),function(pkmn)
-poke(0x5e5a+pkmn.num,1)
+end,function(e,n)
+return setmetatable(m("w,@,T,0,et,~x",n),{__index=U[e]})
+end,function(e)
+foreach(nS(e.k),function(e)
+poke(0x5e5a+e.d,1)
 end)
-end,function(team)
-local newteam={}
-foreach(team,function(pkmn)
-if pkmn.num>-1 and pkmn.major==1 then
-add(newteam,pkmn)
-end
-end)
-return newteam
-end,function(team,exclude_missingno)
-local newteam={}
-foreach(team,function(pkmn)
-if pkmn.num>(exclude_missingno and 0 or-1)and pkmn.major ~=1 then
-add(newteam,pkmn)
+end,function(e)
+local n={}
+foreach(e,function(e)
+if e.d>-1and e.T==1then
+add(n,e)
 end
 end)
-return newteam
-end,function(team)
-return f_get_team_live(team)[1]
-end,function(game)
-local team=game:f_get_team_cursor"team1"
-team[game:f_modes_cursor"editteam"+1]=f_create_team_pkmn(-1,f_create_empty_moveset())
-f_save_team(game:f_modes_cursor"team1",team)
-game:f_modes_pop()
-end,function(team,ind,num)
-local pkmn,moveset=c_pokemon[num],f_create_empty_moveset()
-for i=1,min(4,#pkmn.moves_natural)do
-moveset[i]=f_create_move(pkmn.moves_natural[i],i)
+return n
+end,function(e,t)
+local n={}
+foreach(e,function(e)
+if e.d>(t and 0or-1)and e.T~=1then
+add(n,e)
 end
-team[ind]=f_create_team_pkmn(num,moveset)
-return team
-end,function(team_index)
-local mem=c_team_memlocs[team_index]
-local team=f_zobj""
-for i=1,6 do
-local memstart,mynewmoves,has_moves=mem+(i-1)*5,{},false
-for i=1,4 do
-mynewmoves[i]=f_create_move(peek(memstart+i),i)
-if mynewmoves[i].num>0 then
-has_moves=true
+end)
+return n
+end,function(e)
+return nU(e)[1]
+end,function(e)
+local n=e:ej"j"
+n[e:G"el"+1]=ng(-1,nB())
+e6(e:G"j",n)
+e:H()
+end,function(e,o,n)
+local t,f=U[n],nB()
+for e=1,min(4,#t.eR)do
+f[e]=B(t.eR[e],e)
+end
+e[o]=ng(n,f)
+return e
+end,function(e)
+local a=tW[e]
+local e=m""
+for t=1,6do
+local f,n,o=a+(t-1)*5,{},false
+for e=1,4do
+n[e]=B(peek(f+e),e)
+if n[e].d>0then
+o=true
 else
-mynewmoves[i]=f_create_move(-1)
+n[e]=B(-1)
 end
 end
-team[i]=f_create_team_pkmn(has_moves and@memstart or-1,mynewmoves)
+e[t]=ng(o and@f or-1,n)
 end
-return team
-end,function(team_index,team)
-local mem=c_team_memlocs[team_index]
-memset(mem,0,30)
-for i=1,6 do
-local memstart,pkmn=mem+(i-1)*5,team[i]
-poke(memstart,max(0,pkmn.num))
-for i=1,4 do
-poke(memstart+i,pkmn.mynewmoves[i].num>0 and pkmn.mynewmoves[i].num or 0)
+return e
+end,function(e,o)
+local n=tW[e]
+memset(n,0,30)
+for t=1,6do
+local f,e=n+(t-1)*5,o[t]
+poke(f,max(0,e.d))
+for n=1,4do
+poke(f+n,e.w[n].d>0and e.w[n].d or 0)
 end
 end
 end,function()
-local memloc=peek2"0x8"
-for i=-1,164 do
-local typ,pp,dmg,acc,name=peek(memloc+0),peek(memloc+1)*5-5,peek(memloc+2)*5-5,peek(memloc+3)*5-5,deli(c_moves_raw[i],1)
-local ofunc=deli(c_moves_raw[i],1)
-c_moves[i]=f_zobj("func,@,num,@,name,@,movetype,@,pp,@,maxpp,~pp,damage,@,accuracy,@,ofunc,@",function(envparams)
-return ofunc(envparams,unpack(c_moves_raw[i]))
-end,i,name,typ,pp,dmg,acc,ofunc)
-memloc+=4
+local e=peek2"0x8"
+for n=-1,164do
+local f,o,a,d,i=peek(e+0),peek(e+1)*5-5,peek(e+2)*5-5,peek(e+3)*5-5,deli(ti[n],1)
+local t=deli(ti[n],1)
+na[n]=m("o1,@,d,@,n,@,eG,@,e7,@,tK,~e7,tr,@,A,@,eU,@",function(e)
+return t(e,unpack(ti[n]))
+end,n,i,f,o,a,d,t)
+e+=4
 end
 end)
-f_zobj_set(_g,"f_create_move,@,f_create_empty_moveset,@,f_editteam_draw1,@,f_turn_draw1,@,f_browse_draw2,@,f_editteam_draw2,@,f_teammoves_draw2,@,f_team_draw2,@,f_fightover_draw2,@,f_teammovesel_draw2,@,f_main_draw2,@,f_turn_draw2,@,f_editteam_draw3,@,f_move_draw3,@,f_browse_draw3,@,f_main_draw3,@,f_fight_draw3_helper,@,f_pselswitch_draw3,@,f_pselactions_draw3,@,f_team_draw3,@,f_fightover_draw3,@,f_turn_draw3,@,f_fightover_init,@,f_main_init,@,f_browse_init_shared,@,f_browse_init,@,f_teampkmn_init,@,f_browsestat_init,@,f_credits_init,@,f_fightsel_init,@,f_teamaction_init,@,f_moveaction_init,@,f_movedel,@,f_moves_init_helper,@,f_teammoves_init,@,f_switchmoves_init,@,f_teammovesel_init,@,f_pselmove_init,@,f_pselactions_init,@,f_team_init,@,f_get_team_num,@,f_editteam_init,@,f_switchteam_init,@,f_pselswitch_init,@,f_turn_init,@,f_browsestat_lrfunc,@,f_browsestat_xfunc,@,f_credits_xfunc,@,f_fightover_xfunc,@,f_game_init,@,f_game_update,@,f_game_draw1,@,f_game_draw2,@,f_game_draw3,@,f_modes_default_update,@,f_modes_default_draw1,@,f_modes_cursor,@,f_modes_entry,@,f_closed_init,@,f_any_btn,@,f_closed_update,@,g_cur_light,@,f_minisfx,@,f_draw_picodex,@,f_picodex_map,@,f_wobble_text,@,f_zprint,@,f_pkmn_available,@,f_draw2_pokeinfo,@,f_draw3_pokeinfo,@,f_draw_pkmn_out,@,f_story_select,@,f_match_select,@,f_match_start,@,f_update_horde,@,f_horde_select,@,f_team_select,@,f_get_team_cursor,@,f_get_pkmn_team_edit,@,f_pkmn_comes_out,@,f_in_moves,@,f_select_switch,@,f_movelogic,@,f_set_moveturn,@,f_premovelogic,@,f_decrement_timer,@,f_postmove_logic,@,f_select_move,@,f_get_other_pl,@,f_newaction,@,f_addaction,@,f_turn_update,@,f_pop_next_action,@,f_pkmn_has_move,@,f_pkmn_isempty,@,f_get_moves,@,f_get_possible_moves,@,f_get_type_advantage,@,f_calc_move_damage,@,f_psel_init,@",function(id,slot)
-return setmetatable(f_zobj("slot,@",slot or 0),{__index=c_moves[id]})
+F(eo,"B,@,nB,@,tm,@,tc,@,tu,@,tl,@,tT,@,eV,@,o0,@,ov,@,tY,@,eW,@,ts,@,nv,@,t1,@,tZ,@,fe,@,oh,@,fn,@,eY,@,oP,@,ft,@,oE,@,oX,@,ff,@,oL,@,oO,@,fo,@,oG,@,oI,@,oC,@,o2,@,op,@,f_,@,ow,@,o5,@,o3,@,og,@,ob,@,nh,@,aI,@,o4,@,ox,@,oy,@,o6,@,ok,@,o8,@,o7,@,o9,@,oj,@,oz,@,oq,@,oA,@,oB,@,oD,@,fa,@,G,@,e5,@,oF,@,fd,@,oH,@,fi,@,K,@,ev,@,fr,@,tJ,@,eM,@,eZ,@,oJ,@,fm,@,n8,@,oK,@,oM,@,oN,@,fc,@,oQ,@,oR,@,ej,@,nP,@,nD,@,nF,@,to,@,tt,@,e9,@,oS,@,nH,@,oU,@,nJ,@,ne,@,nE,@,nX,@,oV,@,oW,@,fu,@,fl,@,n7,@,fT,@,t_,@,tQ,@,fs,@",function(e,n)
+return setmetatable(m("en,@",n or 0),{__index=na[e]})
 end,function()
-local moveset={}
-for i=1,4 do add(moveset,f_create_move(-1))end
-return moveset
-end,function(game)
-f_modes_default_draw1(game)
-f_wobble_text("team #"..game:f_modes_cursor"team1"+1,20,27,1)
+local e={}
+for n=1,4do add(e,B(-1))end
+return e
+end,function(e)
+fa(e)
+tJ("team #"..e:G"j"+1,20,27,1)
 end,function(_ENV)
-local cra,p1a,p2a=cur_action.active,p1.active,p2.active
-local p1on,p2on=p1a==cra,p2a==cra
-local p1c,p2c=11,11
-f_zcall(rectfill,";,0,0,39,6,5;;,0,33,39,39,5")
-f_zcall(rectfill,";,-1,33,@,41,1;;,-1,-2,@,6,1",max(ceil(p1a.hp/p1a.maxhp*40),0)-1,
-max(ceil(p2a.hp/p2a.maxhp*40),0)-1)
-f_zcall(rectfill,";,15,6,39,6,13;;,16,5,39,5,13;;,0,33,24,33,13;;,0,34,23,34,13")
-f_zcall(f_zprint,";,@,40,34,13,1;;,@,40,27,1,1;;,@,2,1,13,-1;;,@,2,7,1,-1",p1a.hp,c_major_names_short[p1a.major],p2a.hp,c_major_names_short[p2a.major])
-local p1s,p2s=1,1
-p1a:f_draw_pkmn_out(10,25,c_menu_styles[4],p1s,p1s,p1on)
-p2a:f_draw_pkmn_out(30,15,c_menu_styles[4],-p2s,p2s,p2on)
-end,function(game)f_draw2_pokeinfo(c_pokemon[game:f_modes_cursor"browse"])end,function(game)f_print_draw2_message("spot #"..(game:f_modes_cursor"editteam"+1))end,function(game)f_print_draw2_message("move #"..(game:f_modes_cursor"teammoves"+1))end,function(game)f_print_draw2_message(game.ui_pl)end,function(game)f_print_draw2_message"match over" end,function(game)
-local move=game:f_modes_entry"teammovesel"
-f_print_draw2_message(move and move.ref)
+local t,e,n=ez.a,eI.a,eq.a
+local o,a=e==t,n==t
+local t,f=11,11
+C(rectfill,";,0,0,39,6,5;;,0,33,39,39,5")
+C(rectfill,";,-1,33,@,41,1;;,-1,-2,@,6,1",max(ceil(e.D/e.V*40),0)-1,
+max(ceil(n.D/n.V*40),0)-1)
+C(rectfill,";,15,6,39,6,13;;,16,5,39,5,13;;,0,33,24,33,13;;,0,34,23,34,13")
+C(eM,";,@,40,34,13,1;;,@,40,27,1,1;;,@,2,1,13,-1;;,@,2,7,1,-1",e.D,tg[e.T],n.D,tg[n.T])
+local t,f=1,1
+e:n8(10,25,n_[4],t,t,o)
+n:n8(30,15,n_[4],-f,f,a)
+end,function(e)oJ(U[e:G"et"])end,function(e)eg("spot #"..(e:G"el"+1))end,function(e)eg("move #"..(e:G"eX"+1))end,function(e)eg(e.nn)end,function(e)eg"match over"end,function(n)
+local e=n:e5"nK"
+eg(e and e.oY)
 end,function()
 rectfill(0,0,46,13,13)
 pal(7,1)
-local xx=0
-for i,v in ipairs(split"6,5,5,6,6,5,6")do
-sspr(6*8+xx,6*8,v,8,xx+3,3.5+cos((t()+i)/4))
-xx+=v
+local e=0
+for f,n in ipairs(split"6,5,5,6,6,5,6")do
+sspr(6*8+e,6*8,n,8,e+3,3.5+cos((t()+f)/4))
+e+=n
 end
 pal()
-end,function(game)f_print_draw2_message(game.cur_action.pl.name)end,function(game)
-f_draw3_pokeinfo(game:f_get_pkmn_team_edit())
-end,function(game)
-local move=game:f_modes_entry(game.movemode).move
-if move.num>=0 then
-f_print_draw3_message(c_types[move.movetype].name.."|"..move.pp.."/"..move.maxpp.."|"..(move.damage>=0 and move.damage or "??").."P "..(move.accuracy>=0 and move.accuracy or "??").."A")
+end,function(e)eg(e.ez.oZ.n)end,function(e)
+fm(e:nP())
+end,function(n)
+local e=n:e5(n.f1).u
+if e.d>=0then
+eE(eH[e.eG].n.."|"..e.e7.."/"..e.tK.."|"..(e.tr>=0and e.tr or"??").."P "..(e.A>=0and e.A or"??").."A")
 else
-f_print_draw3_message"none|n/a|"
+eE"none|n/a|"
 end
-end,function(game)
-f_draw3_pokeinfo(game:f_modes_entry"browse".pkmn)
-end,function(game)
-f_print_draw3_message(game:f_modes_entry"main".desc)
+end,function(e)
+fm(e:e5"et".ee)
+end,function(e)
+eE(e:e5"eK".e3)
 end,function(_ENV)
-if num>-1 then
-f_print_draw3_message(name.."|"..hp.."/"..maxhp.."|"..c_major_names[major])
+if d>-1then
+eE(n.."|"..D.."/"..V.."|"..t3[T])
 else
-f_print_draw3_message"none|n/a|"
+eE"none|n/a|"
 end
-end,function(_ENV)f_fight_draw3_helper(_ENV:f_modes_entry"pselswitch".pkmn)end,function(_ENV)f_fight_draw3_helper(p0.active)end,function(game)
-local power,count=0,0
-foreach(game:f_modes_entry().team,function(num)
-if num>-1 then
-power+=c_pokemon[num].total
-count+=1
+end,function(_ENV)fe(_ENV:e5"t0".ee)end,function(_ENV)fe(s.a)end,function(e)
+local n,t=0,0
+foreach(e:e5().k,function(e)
+if e>-1then
+n+=U[e].ny
+t+=1
 end
 end)
-f_print_draw3_message(game:f_modes_entry().name.."|len "..count.."/6|pow "..power\10)
-end,function(game)
-f_print_draw3_message(game.pwin.name.."|is the|winner")
-end,function(game)
-f_print_draw3_message(game.cur_action.name..game.cur_action.message)
+eE(e:e5().n.."|len "..t.."/6|pow "..n\10)
+end,function(e)
+eE(e.nt.n.."|is the|winner")
+end,function(e)
+eE(e.ez.n..e.ez.f0)
 end,function(_ENV)
-local plose=f_get_other_pl(_ENV,pwin)
-pwin:winlogic(plose)
-menu:refresh{}
-menu.cancel=function(game)
-game:f_modes_popuntil"team2story"
+local n=ne(_ENV,nt)
+nt:ae(n)
+o:N{}
+o.ns=function(e)
+e:nI"tv"
 end
-for pl in all{pwin,plose}do
-f_zobj_set(menu,"v,0;;pkmn,@;;hidden,~c_yes;;name,@,style,5;;name,@;;name,@",pl.active.shared,pl.name,(#f_get_team_live(pl.team,true)).." live",(#f_get_team_dead(pl.team)).." dead")
+for e in all{nt,n}do
+F(o,"S,0;;ee,@;;te,~es;;n,@,nk,5;;n,@;;n,@",e.a.W,e.n,(#nU(e.k,true)).." live",(#nS(e.k)).." dead")
 end
 end,function(_ENV)
-local count=0
-for i=0,151 do count+=c_pokemon[i]:f_pkmn_available()and 1 or 0 end
-menu:refresh(
-f_zobj(";name,browse,state,browse,sel,~f_menu_state_callback,desc,@;;name,edit,state,team1,sel,~f_menu_state_callback,desc,edit|stored|teams;;name,league,state,team1story,sel,~f_menu_state_callback,desc,@;;name,versus,state,team1match,sel,~f_menu_state_callback,desc,versus|p1 vs p2|match;;name,horde,state,team1horde,sel,~f_menu_state_callback,desc,@;;name,credits,state,credits,sel,~f_menu_state_callback,desc,credits|amorg|games","browse|"..count.."/151|pokemon","league|"..(@0x5efd).."/40|trainers","horde|"..(@0x5efe).."/151|hi-score")
+local e=0
+for n=0,151do e+=U[n]:eZ()and 1or 0end
+o:N(
+m(";n,browse,Z,et,I,~e_,e3,@;;n,edit,Z,j,I,~e_,e3,edit|stored|teams;;n,league,Z,fv,I,~e_,e3,@;;n,versus,Z,th,I,~e_,e3,versus|p1 vs p2|match;;n,horde,Z,fh,I,~e_,e3,@;;n,credits,Z,fP,I,~e_,e3,credits|amorg|games","browse|"..e.."/151|pokemon","league|"..(@0x5efd).."/40|trainers","horde|"..(@0x5efe).."/151|hi-score")
 )
-end,function(_ENV,selectfunc)
-local tbl={}
-for i=0,151 do
-add(tbl,i)
+end,function(_ENV,n)
+local e={}
+for n=0,151do
+add(e,n)
 end
-menu:refresh(
-tbl,
-function(num)
-return f_zobj("sel,@,disabled,@,pkmn,@",selectfunc,not c_pokemon[num]:f_pkmn_available(),c_pokemon[num])
+o:N(
+e,
+function(e)
+return m("I,@,eu,@,ee,@",n,not U[e]:eZ(),U[e])
 end
 )
 end,function(_ENV)
-f_browse_init_shared(_ENV,function(_ENV)
-_ENV:f_modes_push"browsestat"
+ff(_ENV,function(_ENV)
+_ENV:eP"fE"
 end)
 end,function(_ENV)
-f_browse_init_shared(_ENV,function(_ENV)
-f_save_team(_ENV:f_modes_cursor"team1",f_set_default_team_pkmn(_ENV:f_get_team_cursor"team1",_ENV:f_modes_cursor"editteam"+1,_ENV:f_modes_cursor"browse"))
-_ENV:f_modes_pop()
+ff(_ENV,function(_ENV)
+e6(_ENV:G"j",nV(_ENV:ej"j",_ENV:G"el"+1,_ENV:G"et"))
+_ENV:H()
 end)
 end,function(_ENV)
-local pkmn=_ENV:f_modes_entry"browse".pkmn
-menu:refresh{}
-f_zobj_set(menu,";pkmn,@;;hidden,~c_yes;;name,lvl 50,style,5",pkmn)
-foreach(split"maxhp,special,attack,defense,speed,total",function(key)
-add(menu,{name=c_stages[key].." "..pkmn[key]})
+local e=_ENV:e5"et".ee
+o:N{}
+F(o,";ee,@;;te,~es;;n,lvl 50,nk,5",e)
+foreach(split"V,er,R,q,M,ny",function(n)
+add(o,{n=tb[n].." "..e[n]})
 end)
-f_zcall(function(name,key)
-if #c_pokemon[pkmn.num][key]>0 then
-add(menu,{name=name,style=5})
-foreach(c_pokemon[pkmn.num][key],function(m)
-add(menu,{name=c_moves[m].name})
+C(function(t,n)
+if#U[e.d][n]>0then
+add(o,{n=t,nk=5})
+foreach(U[e.d][n],function(e)
+add(o,{n=na[e].n})
 end)
 end
-end,";,learn,moves_natural;;,teach,moves_teach;;,event,moves_event")
+end,";,learn,eR;;,teach,eS;;,event,nA")
 end,function(_ENV)
-menu:refresh(
+o:N(
 split"91,,#alanxoc3,code &,design,28,,#gr8cadet,pokemon,sprites,143,,#tigrwolf,battle,testing,127,,#tooling,px9 func,shrinko8,137,,#pkmndata,blbpedia,pokeapi,serebii,smogon,upokcntr,volvox,nintendo",
-function(txt)
-if type(txt)=="number"then
-return{pkmn=f_create_team_pkmn(txt,f_create_empty_moveset())}
+function(e)
+if type(e)=="number"then
+return{ee=ng(e,nB())}
 end
-local style=1
-if sub(txt,1,1)=="#" then
-txt,style=sub(txt,2),5
+local n=1
+if sub(e,1,1)=="#"then
+e,n=sub(e,2),5
 end
-return{name=txt,style=style,hidden=txt==""}
+return{n=e,nk=n,te=e==""}
 end
 )
 end,function(_ENV)
-menu:refresh(c_trainers,function(trainer,num)
+o:N(nQ,function(e,n)
 return{
-name=trainer.name,
-team=trainer,
-disabled=num-1>@0x5efd,
-sel=function(game,entry)
-f_begin_fight_cpu(game,entry.team,entry.name,function(pl,other)
-poke(0x5efd,mid(@0x5efd,num,40))
-f_unlock_pkmn(other)
-end,f_nop)
+n=e.n,
+k=e,
+eu=n-1>@0x5efd,
+I=function(t,e)
+fX(t,e.k,e.n,function(t,e)
+poke(0x5efd,mid(@0x5efd,n,40))
+tq(e)
+end,L)
 end
 }
 end)
 end,function(_ENV)
-menu:refresh(f_zobj";name,moves,state,teammoves,sel,~f_menu_state_callback;;name,switch,state,switchteam,sel,~f_menu_state_callback;;name,delete,sel,~f_teamdel")
+o:N(m";n,moves,Z,eX,I,~e_;;n,switch,Z,tP,I,~e_;;n,delete,I,~oi")
 end,function(_ENV)
-local teampkmn=_ENV:f_get_pkmn_team_edit()
-local count=0
-for j=1,4 do
-if teampkmn.mynewmoves[j].num>0 then count+=1 end
+local n=_ENV:nP()
+local e=0
+for t=1,4do
+if n.w[t].d>0then e+=1end
 end
-menu:refresh(f_zobj(";name,change,state,teammovesel,sel,~f_menu_state_callback;;name,switch,state,switchmoves,sel,~f_menu_state_callback;;name,delete,disabled,@,sel,~f_movedel",count==1))
+o:N(m(";n,change,Z,nK,I,~e_;;n,switch,Z,fL,I,~e_;;n,delete,eu,@,I,~op",e==1))
 end,function(_ENV)
-local teampkmn,team=_ENV:f_get_pkmn_team_edit()
-teampkmn.mynewmoves[_ENV:f_modes_cursor"teammoves"+1]=f_create_move(-1)
-f_save_team(_ENV:f_modes_cursor"team1",team)
-_ENV:f_modes_pop()
-end,function(_ENV,disabled_ind,select_func)
-local teampkmn,team=_ENV:f_get_pkmn_team_edit()
-menu:refresh(f_zobj",1,2,3,4",function(i)
-local move=teampkmn.mynewmoves[i]
+local e,n=_ENV:nP()
+e.w[_ENV:G"eX"+1]=B(-1)
+e6(_ENV:G"j",n)
+_ENV:H()
+end,function(_ENV,f,a)
+local n,d=_ENV:nP()
+o:N(m",1,2,3,4",function(e)
+local t=n.w[e]
 return{
-move=move,
-name=move.name,
-sel=function(_ENV)select_func(_ENV,i,teampkmn,team)end,
-disabled=i==disabled_ind
+u=t,
+n=t.n,
+I=function(_ENV)a(_ENV,e,n,d)end,
+eu=e==f
 }
 end)
 end,function(_ENV)
-f_moves_init_helper(_ENV,0,function(_ENV,i,teampkmn)
-_ENV:f_modes_push(teampkmn.mynewmoves[i].num>0 and "moveaction" or "teammovesel")
+f_(_ENV,0,function(_ENV,e,n)
+_ENV:eP(n.w[e].d>0and"fO"or"nK")
 end)
 end,function(_ENV)
-local disabled_ind=_ENV:f_modes_cursor"teammoves"+1
-f_moves_init_helper(_ENV,disabled_ind,function(_ENV,i,teampkmn,team)
-teampkmn.mynewmoves[i],teampkmn.mynewmoves[disabled_ind]=teampkmn.mynewmoves[disabled_ind],teampkmn.mynewmoves[i]
-f_save_team(_ENV:f_modes_cursor"team1",team)
-_ENV:f_modes_popuntil"teammoves"
+local n=_ENV:G"eX"+1
+f_(_ENV,n,function(_ENV,t,e,f)
+e.w[t],e.w[n]=e.w[n],e.w[t]
+e6(_ENV:G"j",f)
+_ENV:nI"eX"
 end)
-menu.c=teammoves.menu.c
+o.p=eX.o.p
 end,function(_ENV)
-local teampkmn=_ENV:f_get_pkmn_team_edit()
-local pkmn=c_pokemon[teampkmn.num]
-local movemetadata={}
-f_zcall(function(movelist,prefix)
-for i=1,#movelist do
-local moveind=movelist[i]
-add(movemetadata,{name=c_moves[moveind].name,disabled=teampkmn:f_pkmn_has_move(moveind),num=moveind,desc=prefix..i})
+local n=_ENV:nP()
+local e=U[n.d]
+local t={}
+C(function(f,a)
+for o=1,#f do
+local e=f[o]
+add(t,{n=na[e].n,eu=n:fu(e),d=e,e3=a..o})
 end
-end,";,@,learn #;;,@,teach #;;,@,event #",pkmn.moves_natural,pkmn.moves_teach,pkmn.moves_event)
-menu:refresh(movemetadata,function(m)
+end,";,@,learn #;;,@,teach #;;,@,event #",e.eR,e.eS,e.nA)
+o:N(t,function(e)
 return{
-name=m.name,
-disabled=m.disabled,
-move=c_moves[m.num],
-ref=m.desc,
-sel=function()
-local team=_ENV:f_get_team_cursor"team1"
-team[_ENV:f_modes_cursor"editteam"+1].mynewmoves[_ENV:f_modes_cursor"teammoves"+1]=f_create_move(m.num)
-f_save_team(_ENV:f_modes_cursor"team1",team)
-_ENV:f_modes_popuntil"teammoves"
+n=e.n,
+eu=e.eu,
+u=na[e.d],
+oY=e.e3,
+I=function()
+local n=_ENV:ej"j"
+n[_ENV:G"el"+1].w[_ENV:G"eX"+1]=B(e.d)
+e6(_ENV:G"j",n)
+_ENV:nI"eX"
 end
 }
 end)
 end,function(_ENV)
-local possible_moves=f_get_possible_moves(p0.active)
-if p0.active.curmove then
-f_select_move(p0,p0.active.curmove)
-_ENV:f_modes_pop()_ENV:f_modes_pop()
-elseif #possible_moves==0 then
-f_select_move(p0,f_create_move(0))
-_ENV:f_modes_pop()_ENV:f_modes_pop()
+local n=fT(s.a)
+if s.a.g then
+nJ(s,s.a.g)
+_ENV:H()_ENV:H()
+elseif#n==0then
+nJ(s,B(0))
+_ENV:H()_ENV:H()
 end
-menu:refresh(p0.active.mynewmoves,function(move)
-return f_zobj("disabled,@,name,@,move,@,sel,@",
-not possible_moves[move],
-move.name,
-move,
+o:N(s.a.w,function(e)
+return m("eu,@,n,@,u,@,I,@",
+not n[e],
+e.n,
+e,
 function()
-_ENV:f_modes_pop()_ENV:f_modes_pop()
-f_select_move(p0,move)
+_ENV:H()_ENV:H()
+nJ(s,e)
 end
 )
 end)
 end,function(_ENV)
-menu:refresh(f_zobj";name,fight,sel,~f_menu_state_callback,state,pselmove;;name,switch,sel,~f_menu_state_callback,state,pselswitch;;name,forfeit,sel,~f_psel_forfeit")
+o:N(m";n,fight,I,~e_,Z,fG;;n,switch,I,~e_,Z,t0;;n,forfeit,I,~an")
 end,function(_ENV)
-menu:refresh(f_zobj",1,2,3",function(i)
-local team=f_get_team(i-1)
-local newteam={}
-local is_disabled=true
-for i=1,6 do
-newteam[i]=team[i].num
-if not team[i]:f_pkmn_isempty()then
-is_disabled=false
+o:N(m",1,2,3",function(e)
+local n=nl(e-1)
+local t={}
+local f=true
+for e=1,6do
+t[e]=n[e].d
+if not n[e]:fl()then
+f=false
 end
 end
 return{
-name="team #"..i,
-team=newteam,
-sel=function()_ENV:select_func()end,
-disabled=disable_empty_team and is_disabled
+n="team #"..e,
+k=t,
+I=function()_ENV:nL()end,
+eu=nO and f
 }
 end)
-end,function(team,i)
-return team[i]and team[i].num or-1
+end,function(e,n)
+return e[n]and e[n].d or-1
 end,function(_ENV)
-local team=_ENV:f_get_team_cursor"team1"
-menu:refresh(f_zobj",1,2,3,4,5,6",function(i)
+local e=_ENV:ej"j"
+o:N(m",1,2,3,4,5,6",function(n)
 return{
-pkmn=team[i],
-sel=function(_ENV)
-if team[_ENV:f_modes_cursor"editteam"+1]:f_pkmn_available()then
-_ENV:f_modes_push"teamaction"
+ee=e[n],
+I=function(_ENV)
+if e[_ENV:G"el"+1]:eZ()then
+_ENV:eP"fI"
 else
-_ENV:f_modes_push"teampkmn"
+_ENV:eP"fC"
 end
 end
 }
 end)
 end,function(_ENV)
-local team=_ENV:f_get_team_cursor"team1"
-menu:refresh(f_zobj",1,2,3,4,5,6",function(i)
+local e=_ENV:ej"j"
+o:N(m",1,2,3,4,5,6",function(n)
 return{
-disabled=i==_ENV:f_modes_cursor"editteam"+1,
-sel=function(_ENV)
-local ind_one,ind_two=_ENV:f_modes_cursor"editteam"+1,_ENV:f_modes_cursor"switchteam"+1
-team[ind_one],team[ind_two]=team[ind_two],team[ind_one]
-f_save_team(_ENV:f_modes_cursor"team1",team)
-_ENV:f_modes_popuntil"editteam"
+eu=n==_ENV:G"el"+1,
+I=function(_ENV)
+local n,t=_ENV:G"el"+1,_ENV:G"tP"+1
+e[n],e[t]=e[t],e[n]
+e6(_ENV:G"j",e)
+_ENV:nI"el"
 end,
-pkmn=team[i]
+ee=e[n]
 }
 end)
-menu.c=editteam.menu.c
+o.p=el.o.p
 end,function(_ENV)
-local team=_ENV:f_get_team_cursor"team1"
-menu:refresh(f_zobj",1,2,3,4,5,6",function(i)
-local disabled=p0.team[i]:f_pkmn_isempty()or p0.active.shared==p0.team[i]or p0.team[i].major==1
+local e=_ENV:ej"j"
+o:N(m",1,2,3,4,5,6",function(e)
+local n=s.k[e]:fl()or s.a.W==s.k[e]or s.k[e].T==1
 return{
-disabled=disabled,
-sel=function()
-_ENV:f_modes_pop()_ENV:f_modes_pop()
-f_select_switch(p0,p0.team[i])
+eu=n,
+I=function()
+_ENV:H()_ENV:H()
+to(s,s.k[e])
 end,
-pkmn=p0.team[i]
+ee=s.k[e]
 }
 end)
 end,function(_ENV)
-local p1,p2=p1,p2
-if p1.priority==p2.priority then p2.priority+=sgn(rnd"2"-1)end
-p0=p1.priority>p2.priority and p1 or p2
-end,function(_ENV,lr)
-local stayed=true
-for i=browse.menu.c+lr,75.5+75.5*lr,lr do
-if c_pokemon[i]:f_pkmn_available()then
-browse.menu.c,stayed=i
-f_minisfx"154"
+local n,e=eI,eq
+if n.eA==e.eA then e.eA+=sgn(rnd"2"-1)end
+s=n.eA>e.eA and n or e
+end,function(_ENV,e)
+local n=true
+for t=et.o.p+e,75.5+75.5*e,e do
+if U[t]:eZ()then
+et.o.p,n=t
+K"154"
 break
 end
 end
-if stayed then f_beep()end
-f_browsestat_init(_ENV)
-end,function(game)f_minisfx(game:f_modes_cursor"browse")end,function()f_minisfx(f_flr_rnd"152")end,function(_ENV)f_minisfx(pwin.active.num)end,function(_ENV)
-local team={}
-for ind,num in pairs(split"133,7,35,1,25,4")do
-f_set_default_team_pkmn(team,ind,num)
-poke(0x5e5a+num,1)
+if n then eL()end
+fo(_ENV)
+end,function(e)K(e:G"et")end,function()K(b"152")end,function(_ENV)K(nt.a.d)end,function(_ENV)
+local e={}
+for t,n in pairs(split"133,7,35,1,25,4")do
+nV(e,t,n)
+poke(0x5e5a+n,1)
 end
-if@0x5efc==0 then
+if@0x5efc==0then
 poke(0x5efc,1)
-f_save_team(0,team)
+e6(0,e)
 end
-modes=f_zclass"curr,main;defaults;menu,~c_no,init,~f_nop,lrfunc,~f_beep,xfunc,~f_nop,update,~f_modes_default_update,movemode,~c_no,draw1,~f_modes_default_draw1,draw2,~f_nop,draw3,~f_nop;main;init,~f_main_init,draw2,~f_main_draw2,draw3,~f_main_draw3;browse;init,~f_browse_init,draw2,~f_browse_draw2,draw3,~f_browse_draw3;browsestat;init,~f_browsestat_init,draw2,~f_browse_draw2,draw3,~f_browse_draw3,lrfunc,~f_browsestat_lrfunc,xfunc,~f_browsestat_xfunc;editteam;init,~f_editteam_init,draw2,~f_editteam_draw2,draw3,~f_editteam_draw3,draw1,~f_editteam_draw1;switchteam;init,~f_switchteam_init,draw2,~f_editteam_draw2,draw3,~f_editteam_draw3,draw1,~f_editteam_draw1;teampkmn;init,~f_teampkmn_init,draw2,~f_browse_draw2,draw3,~f_browse_draw3;teamaction;init,~f_teamaction_init,draw2,~f_editteam_draw2,draw3,~f_editteam_draw3;moveaction;init,~f_moveaction_init,draw2,~f_teammoves_draw2,draw3,~f_move_draw3,movemode,teammoves;teammovesel;init,~f_teammovesel_init,draw2,~f_teammovesel_draw2,draw3,~f_move_draw3;teammoves;init,~f_teammoves_init,draw2,~f_teammoves_draw2,draw3,~f_move_draw3;switchmoves;init,~f_switchmoves_init,draw2,~f_teammoves_draw2,draw3,~f_move_draw3;team1;ui_pl,player,init,~f_team_init,draw2,~f_team_draw2,draw3,~f_team_draw3,disable_empty_team,~c_no,select_func,~f_team_select;team1story;ui_pl,player,init,~f_team_init,draw2,~f_team_draw2,draw3,~f_team_draw3,disable_empty_team,~c_yes,select_func,~f_story_select;team1match;ui_pl,player 1,init,~f_team_init,draw2,~f_team_draw2,draw3,~f_team_draw3,disable_empty_team,~c_yes,select_func,~f_match_select;team1horde;ui_pl,player,init,~f_team_init,draw2,~f_team_draw2,draw3,~f_team_draw3,disable_empty_team,~c_yes,select_func,~f_horde_select;team2match;ui_pl,player 2,init,~f_team_init,draw2,~f_team_draw2,draw3,~f_team_draw3,disable_empty_team,~c_yes,select_func,~f_match_start;team2story;ui_pl,trainer,init,~f_fightsel_init,draw2,~f_team_draw2,draw3,~f_team_draw3;fightover;init,~f_fightover_init,draw2,~f_fightover_draw2,draw3,~f_fightover_draw3,xfunc,~f_fightover_xfunc;pselactions;init,~f_pselactions_init,draw2,~f_turn_draw2,draw3,~f_pselactions_draw3;pselmove;init,~f_pselmove_init,draw2,~f_turn_draw2,draw3,~f_move_draw3;pselswitch;init,~f_pselswitch_init,draw2,~f_turn_draw2,draw3,~f_pselswitch_draw3,draw1,~f_editteam_draw1;p1sel;next,p2sel,init,~f_psel_init,p0key,p1;p2sel;next,turn,init,~f_psel_init,p0key,p2;turn;next,p1sel,init,~f_turn_init,update,~f_turn_update,draw1,~f_turn_draw1,draw2,~f_turn_draw2,draw3,~f_turn_draw3,cur_action,~c_no;battleview;init,~f_nop,update,~f_psel_update,draw1,~f_turn_draw1,draw2,~f_turn_draw2,draw3,~f_pselactions_draw3;turnview;init,~f_nop,update,~f_psel_update,draw1,~f_turn_draw1,draw2,~f_turn_draw2,draw3,~f_turn_draw3;credits;init,~f_credits_init,draw2,~f_main_draw2,draw3,~f_main_draw3,xfunc,~f_credits_xfunc;"
-f_zcall(function(menu_name,create_func,...)
-modes[menu_name].menu=create_func(...)
-end,";,browse,~f_create_menu,~f_browse_drawentry,4;;,browsestat,~f_create_menu_view,~f_menu_drawentry;;,credits,~f_create_menu_view,~f_menu_drawentry;;,fightover,~f_create_menu_view,~f_menu_drawentry;;,editteam,~f_create_menu,~f_browse_drawentry,3;;,switchteam,~f_create_menu,~f_browse_drawentry,3;;,main,~f_create_menu,~f_menu_drawentry;;,teamaction,~f_create_menu,~f_menu_drawentry;;,moveaction,~f_create_menu,~f_menu_drawentry;;,teammovesel,~f_create_menu,~f_menu_drawentry;;,teammoves,~f_create_menu,~f_menu_drawentry;;,switchmoves,~f_create_menu,~f_menu_drawentry;;,team1,~f_create_menu,~f_menu_drawentry;;,team1match,~f_create_menu,~f_menu_drawentry;;,team2story,~f_create_menu,~f_menu_drawentry;;,team2match,~f_create_menu,~f_menu_drawentry")
-f_zobj_set(modes,"team1menu,@,browsemenu,@;main;menu;cancel,~f_beep;team1horde;menu,~team1menu;team1story;menu,~team1menu;teampkmn;menu,~browsemenu;",modes.team1.menu,modes.browse.menu)
+ef=t2"ek,eK;tD;o,~x,l,~L,tH,~eL,n6,~L,ed,~oD,f1,~x,ec,~fa,h,~L,P,~L;eK;l,~oX,h,~tY,P,~tZ;et;l,~oL,h,~tu,P,~t1;fE;l,~fo,h,~tu,P,~t1,tH,~ok,n6,~o8;el;l,~o4,h,~tl,P,~ts,ec,~tm;tP;l,~ox,h,~tl,P,~ts,ec,~tm;fC;l,~oO,h,~tu,P,~t1;fI;l,~oC,h,~tl,P,~ts;fO;l,~o2,h,~tT,P,~nv,f1,eX;nK;l,~o3,h,~ov,P,~nv;eX;l,~ow,h,~tT,P,~nv;fL;l,~o5,h,~tT,P,~nv;j;nn,player,l,~nh,h,~eV,P,~eY,nO,~x,nL,~oR;fv;nn,player,l,~nh,h,~eV,P,~eY,nO,~es,nL,~oK;th;nn,player 1,l,~nh,h,~eV,P,~eY,nO,~es,nL,~oM;fh;nn,player,l,~nh,h,~eV,P,~eY,nO,~es,nL,~oQ;tE;nn,player 2,l,~nh,h,~eV,P,~eY,nO,~es,nL,~oN;tv;nn,trainer,l,~oI,h,~eV,P,~eY;tX;l,~oE,h,~o0,P,~oP,n6,~o9;f2;l,~ob,h,~eW,P,~fn;fG;l,~og,h,~eW,P,~nv;t0;l,~oy,h,~eW,P,~oh,ec,~tm;at;next,af,l,~fs,fp,eI;af;next,fw,l,~fs,fp,eq;fw;next,at,l,~o6,ed,~oV,ec,~tc,h,~eW,P,~ft,ez,~x;ao;l,~L,ed,~f5,ec,~tc,h,~eW,P,~fn;a_;l,~L,ed,~f5,ec,~tc,h,~eW,P,~ft;fP;l,~oG,h,~tY,P,~tZ,n6,~o7;"
+C(function(e,n,...)
+ef[e].o=n(...)
+end,";,et,~J,~np,4;;,fE,~n2,~Q;;,fP,~n2,~Q;;,tX,~n2,~Q;;,el,~J,~np,3;;,tP,~J,~np,3;;,eK,~J,~Q;;,fI,~J,~Q;;,fO,~J,~Q;;,nK,~J,~Q;;,eX,~J,~Q;;,fL,~J,~Q;;,j,~J,~Q;;,th,~J,~Q;;,tv,~J,~Q;;,tE,~J,~Q")
+F(ef,"f3,@,aa,@;eK;o;ns,~eL;fh;o,~f3;fv;o,~f3;fC;o,~aa;",ef.j.o,ef.et.o)
 menuitem(1,"close picodex",function()
 menuitem(1)
 menuitem(2)
-_ENV:f_actor_load"closing"
+_ENV:Y"tL"
 end)
 menuitem(2,"swap 🅾️/❎",function()
-poke(0x5eff,@0x5eff==0 and 1 or 0)
+poke(0x5eff,@0x5eff==0and 1or 0)
 end)
-end,function(program)
-program.modes:f_actor_state()
-end,function()g_picodex.modes:draw1()end,function()g_picodex.modes:draw2()end,function()g_picodex.modes:draw3()end,function(_ENV)menu.update(_ENV)end,function(_ENV)menu.draw1(_ENV)end,function(_ENV,menu_name)
-return _ENV[menu_name].menu.c
-end,function(_ENV,menu_name)
-local menu=menu_name and _ENV[menu_name].menu or menu
-return menu[menu.c+1]
+end,function(e)
+e.ef:t5()
+end,function()nf.ef:ec()end,function()nf.ef:h()end,function()nf.ef:P()end,function(_ENV)o.ed(_ENV)end,function(_ENV)o.ec(_ENV)end,function(_ENV,e)
+return _ENV[e].o.p
+end,function(_ENV,e)
+local n=e and _ENV[e].o or o
+return n[n.p+1]
 end,function(_ENV)
 menuitem(1,"factory reset",function()
 memset(0x5e00,0,0x100)
-_ENV:f_actor_load"shaking"
+_ENV:Y"fg"
 end)
 end,function()
-return btn()& 0x3f ~=0
+return btn()&0x3f~=0
 end,function(_ENV)
-if not f_any_btn()and backbuttonheld then
-backbuttonheld=false
-_ENV:f_actor_load()
+if not fd()and nM then
+nM=false
+_ENV:Y()
 menuitem(1)
-elseif f_any_btn()then
-backbuttonheld=true
+elseif fd()then
+nM=true
 menuitem(1)
 end
-end,0,function(num)
-_g.g_cur_light=max(0,0+num-152)
-sfx(54+num\16,0,num%16*2,2)
+end,0,function(e)
+eo.fi=max(0,0+e-152)
+sfx(54+e\16,0,e%16*2,2)
 end,function(_ENV)
 cls"0"
-f_zcamera(0,128+sin(_ENV:f_actor_get_elapsed_percent"moveup"/4)*128,function()
-f_zcall(f_zprint,";,aMORG gAMES,64,-68,7,0;;,pRESENTS,64,-61,7,0;;,a pOKEMON bATTLE sIM,64,15,7,0")
-f_zcall(spr,";,102,44,7,5,1")
-local top_row_buttons,
-bot_row_buttons,
-rotation=
-modes and modes.main.menu.c,
-modes and modes.stacksize-1,
-foldstate=="open" and 1
-or foldstate=="closed" and-1
-or(foldstate=="opening" and-1 or 1)*cos(_ENV:f_actor_get_elapsed_percent(foldstate)/2)
-f_zcamera(30-(rotation+1)*15+(curr=="shaking" and f_flr_rnd"3"-1 or 0),27,function()
-f_zcall(rectfill,";,14,18,@,87,5",63+max(0,rotation*54))
-if light==0 then
-f_zcall(rectfill,";,14,18,117,87,13")
-f_zcall(function(xoff,yoff,w,h,screen_func)
-clip(-%0x5f28+xoff,-%0x5f2a+yoff,w,h)
-f_zcamera(xoff,yoff,screen_func)
+nC(0,128+sin(_ENV:tp"fb"/4)*128,function()
+C(eM,";,aMORG gAMES,64,-68,7,0;;,pRESENTS,64,-61,7,0;;,a pOKEMON bATTLE sIM,64,15,7,0")
+C(spr,";,102,44,7,5,1")
+local t,
+n,
+e=
+ef and ef.eK.o.p,
+ef and ef.tA-1,
+eT=="nN"and 1
+or eT=="eB"and-1
+or(eT=="tO"and-1or 1)*cos(_ENV:tp(eT)/2)
+nC(30-(e+1)*15+(ek=="fg"and b"3"-1or 0),27,function()
+C(rectfill,";,14,18,@,87,5",63+max(0,e*54))
+if eD==0then
+C(rectfill,";,14,18,117,87,13")
+C(function(e,n,t,f,o)
+clip(-%0x5f28+e,-%0x5f2a+n,t,f)
+nC(e,n,o)
 clip()
-end,";,14,21,40,40,@;;,71,18,46,13,@;;,71,67,46,21,@",draw1,draw2,draw3)
+end,";,14,21,40,40,@;;,71,18,46,13,@;;,71,67,46,21,@",ec,h,P)
 end
-f_zcall(map,";,24,0,2,1,8,3;;,8,0,2,9,8,11")
-f_zcall(function(l,off,on,flash,x,y)
-return spr((light<=l)and(g_cur_light==l and stat"46">=0 and flash or on)or off,x,y)
+C(map,";,24,0,2,1,8,3;;,8,0,2,9,8,11")
+C(function(e,n,t,f,o,a)
+return spr((eD<=e)and(fi==e and stat"46">=0and f or t)or n,o,a)
 end,";,0,135,133,134,6,3;;,1,132,128,131,12,3;;,2,132,129,131,17,3;;,3,132,130,131,22,3")
-f_zcall(function(b,s1,s2,x,y)
-spr(btn(b)and s1 or s2,x,y)
+C(function(e,n,t,f,o)
+spr(btn(e)and n or t,f,o)
 end,";,0,186,154,10,77;;,1,188,156,26,77;;,2,171,139,18,73;;,3,187,155,18,81;;,4,170,138,42,77;;,5,172,140,50,77")
-if rotation<=0 then
-f_picodex_map(0,2+64*(1-abs(rotation)),abs(rotation))
-if rotation==-1 and backbuttonheld then spr(123,6,49)end
+if e<=0then
+fr(0,2+64*(1-abs(e)),abs(e))
+if e==-1and nM then spr(123,6,49)end
 else
-f_picodex_map(16,62,rotation)
-if rotation==1 then
-if top_row_buttons then spr(153,70+top_row_buttons*8,41)end
-if bot_row_buttons and bot_row_buttons>=0 then spr(153,70+bot_row_buttons*8,49)end
+fr(16,62,e)
+if e==1then
+if t then spr(153,70+t*8,41)end
+if n and n>=0then spr(153,70+n*8,49)end
 end
 end
 end)
 end)
-end,function(cx,sx,sw)
-sw*=64
-for y=9,96 do
-tline(sx,y,sx+sw-1,y,cx,y/8-1.125,8/sw,0)
+end,function(f,t,e)
+e*=64
+for n=9,96do
+tline(t,n,t+e-1,n,f,n/8-1.125,8/e,0)
 end
-end,function(text,x,y,color)
-local t1,t2="",""
-for i=1,#text do
-local letter,switch=sub(text,i,i),i%2==0
-t1..=switch and " "or letter
-t2..=switch and letter or " "
+end,function(n,e,t,f)
+local o,a="",""
+for e=1,#n do
+local t,f=sub(n,e,e),e%2==0
+o..=f and" "or t
+a..=f and t or" "
 end
-f_zprint(t1,x,y,color,0)
-f_zprint(t2,x,y+1,color,0)
-end,function(text,x,y,color,align)
-text=""..text
-if align==0 then x-=#text*2
-elseif align>0 then x-=#text*4+1 end
-print(text,x,y,color)
+eM(o,e,t,f,0)
+eM(a,e,t+1,f,0)
+end,function(e,n,f,o,t)
+e=""..e
+if t==0then n-=#e*2
+elseif t>0then n-=#e*4+1end
+print(e,n,f,o)
 end,function(_ENV)
-if num>=0 then
-return not browse or@(0x5e5a+num)>0
+if d>=0then
+return not et or@(0x5e5a+d)>0
 end
-end,function(pkmn)
-f_print_draw2_message("pkmn #"..pkmn.num)
-end,function(pkmn)
-if pkmn:f_pkmn_available()then
-f_print_draw3_message(pkmn.name.."|"..c_types[pkmn.type1].name.."|"..c_types[pkmn.type2].name)
+end,function(e)
+eg("pkmn #"..e.d)
+end,function(e)
+if e:eZ()then
+eE(e.n.."|"..eH[e.eO].n.."|"..eH[e.ep].n)
 else
-f_print_draw3_message"none|n/a|"
+eE"none|n/a|"
 end
-end,function(_ENV,x,y,style,xscale,yscale,is_thick)
-local num,mini=_ENV:f_pkmn_available()and num or-1,8*(minimize or 1)
-xscale*=mini yscale*=mini
-local drawpkmn=function(x,y)
-local row,col=num/8\1,num%8
-if row ~=g_loaded_row then
-_g.g_loaded_row=row
-memcpy(0x0000,0x8000+0x400*row,0x400)
+end,function(_ENV,n,t,i,f,o,r)
+local e,a=_ENV:eZ()and d or-1,8*(tM or 1)
+f*=a o*=a
+local a=function(t,a)
+local n,d=e/8\1,e%8
+if n~=f4 then
+eo.f4=n
+memcpy(0x0000,0x8000+0x400*n,0x400)
 end
-sspr(col*16,0,16,16,x-xscale,y-yscale,xscale*2,yscale*2)
+sspr(d*16,0,16,16,t-f,a-o,f*2,o*2)
 end
-foreach(f_zobj";,25,53,152;;,54,143,153",function(list)
-if num==list[1]and _ENV:f_pkmn_has_move(list[2])then
-num=list[3]
+foreach(m";,25,53,152;;,54,143,153",function(n)
+if e==n[1]and _ENV:fu(n[2])then
+e=n[3]
 end
 end)
-if substitute and substitute>0 then num=154 end
-if not isactive or major ~=1 and not invisible and not(moveturn ~=0 and curmove.ofunc==f_move_flydig)then
-if num<0 then spr(107,x-4,y-4)return end
-local outline_width=1
-local outline_func=function(color,v1,v2,v3,v4,outline_width)
-if color>0 then
-for c=1,15 do pal(c,color)end
-for i=-1,1,2 do
-drawpkmn(x+(v1 or i*outline_width),y+(v2 or i*outline_width))
-drawpkmn(x+(v3 or i*outline_width),y+(v4 or i*outline_width))
+if ew and ew>0then e=154end
+if not ad or T~=1and not tG and not(e0~=0and g.eU==nr)then
+if e<0then spr(107,n-4,t-4)return end
+local e=1
+local e=function(f,o,d,i,r,e)
+if f>0then
+for e=1,15do pal(e,f)end
+for f=-1,1,2do
+a(n+(o or f*e),t+(d or f*e))
+a(n+(i or f*e),t+(r or f*e))
 end
 end
 end
-if is_thick then
-f_zcall(outline_func,"bg,@;;,~bg,-2,~c_no,2,~c_no,1;;,~bg,~c_no,-2,~c_no,2,1;;,~bg,-2,0,2,0,1;;,~bg,0,-2,0,2,1",style.bg)
+if r then
+C(e,"c,@;;,~c,-2,~x,2,~x,1;;,~c,~x,-2,~x,2,1;;,~c,-2,0,2,0,1;;,~c,0,-2,0,2,1",i.c)
 end
-f_zcall(outline_func,";,@,-1,~c_no,1,~c_no,1;;,1,~c_no,0,0,~c_no,1",style.aa)
-pal()drawpkmn(x,y)
+C(e,";,@,-1,~x,1,~x,1;;,1,~x,0,0,~x,1",i.em)
+pal()a(n,t)
 end
-end,function(game)game:f_modes_push"team2story" end,function(game)game:f_modes_push"team2match" end,function(_ENV)
-f_begin_fight(_ENV,
-f_zobj(",@,player 1,~c_no,~f_nop",f_get_team(_ENV:f_modes_cursor"team1match")),
-f_zobj(",@,player 2,~c_no,~f_nop",f_get_team(_ENV:f_modes_cursor"team2match"))
+end,function(e)e:eP"tv"end,function(e)e:eP"tE"end,function(_ENV)
+fx(_ENV,
+m(",@,player 1,~x,~L",nl(_ENV:G"th")),
+m(",@,player 2,~x,~L",nl(_ENV:G"tE"))
 )
 end,function(_ENV)
-poke(0x5efe,mid(@0x5efe,#f_get_team_dead(team),152))
+poke(0x5efe,mid(@0x5efe,#nS(k),152))
 end,function(_ENV)
-local nums={}
-for i=1,152 do add(nums,i%152)end
-f_begin_fight_cpu(_ENV,nums,"horde",function(_,other)
-f_unlock_pkmn(other)
-f_update_horde(other)
-end,f_update_horde)
-end,function(game)
-game:f_modes_push"editteam"
-end,function(game,cursor)
-return f_get_team(game:f_modes_cursor(cursor))
-end,function(game)
-local team=f_get_team(game:f_modes_cursor"team1")
-return team[game:f_modes_cursor"editteam"+1],team
-end,function(pl,pkmn)
-local txt,moves="|enters|fight",{}
-foreach(pkmn.mynewmoves,function(m)
-add(moves,m)
+local e={}
+for n=1,152do add(e,n%152)end
+fX(_ENV,e,"horde",function(n,e)
+tq(e)
+fc(e)
+end,fc)
+end,function(e)
+e:eP"el"
+end,function(e,n)
+return nl(e:G(n))
+end,function(e)
+local n=nl(e:G"j")
+return n[e:G"el"+1],n
+end,function(e,n)
+local f,t="|enters|fight",{}
+foreach(n.w,function(e)
+add(t,e)
 end)
-pl.active=setmetatable(f_zobj("isactive,~c_yes,lastmoverecv,0,accuracy,1,evasion,1,moveturn,0,invisible,~c_yes,counterdmg,0,bidedmg,0,disabledtimer,0,confused,0,sleeping,@,substitute,0,toxiced,0,shared,@,mynewmoves,@;stages;special,0,attack,0,defense,0,speed,0,accuracy,0,evasion,0",f_flr_rnd"8",pkmn,moves),{__index=pkmn})
-return f_newaction(pl,txt,function()
-pl.active.invisible=false
+e.a=setmetatable(m("ad,~es,tf,0,A,1,e2,1,e0,0,tG,~es,nq,0,nz,0,tn,0,nj,0,ta,@,ew,0,n9,0,W,@,w,@;n1;er,0,R,0,q,0,M,0,A,0,e2,0",b"8",n,t),{__index=n})
+return nE(e,f,function()
+e.a.tG=false
 end)
-end,function(movenum,str)
-for m in all(split(str))do
-if m==movenum then
+end,function(e,n)
+for t in all(split(n))do
+if t==e then
 return true
 end
 end
-end,function(pl,pkmn)
-f_addaction(pl,pl,"|leaves|fight",function(params)
-params.selfactive.invisible=true
-f_addaction(pl,pl,false,function()
-add(pl.actions,f_pkmn_comes_out(pl,pkmn))
+end,function(e,n)
+nX(e,e,"|leaves|fight",function(t)
+t.e.tG=true
+nX(e,e,false,function()
+add(e.eF,nD(e,n))
 end)
 end)
-pl.priority=3000
-end,function(self,move)
-local desc=self.active.curmove and "|resumes|"or(move.ofunc==f_move_multiturn and "|begins|"or "|uses|")
-f_addaction(self,self,desc..move.name,function(params)
-params.move=move
-local _ENV=params
-if move.num>0 then
-move.pp-=1
+e.eA=3000
+end,function(t,n)
+local f=t.a.g and"|resumes|"or(n.eU==aC and"|begins|"or"|uses|")
+nX(t,t,f..n.n,function(f)
+f.u=n
+local _ENV=f
+if n.d>0then
+n.e7-=1
 end
-if f_in_moves(move.num,"47,36 ")then
-f_move_setdmg_self(_ENV,selfactive.hp)
+if nF(n.d,"47,36 ")then
+eJ(_ENV,e.D)
 end
 if(function()
-if move.accuracy<=0 then return false end
-if(move.ofunc==f_move_prepare or move.ofunc==f_move_flydig)and not selfactive.curmove then return false end
-if otheractive.curmove and otheractive.curmove.ofunc==f_move_flydig then return true end
-if selfactive.curmove and selfactive.curmove.ofunc==f_move_trapping then return false end
-return rnd(otheractive:f_movehelp_getstat"evasion")>move.accuracy/100*selfactive:f_movehelp_getstat"accuracy" or f_flr_rnd"256"==0 and f_flr_rnd"256"==0
+if n.A<=0then return false end
+if(n.eU==nm or n.eU==nr)and not e.g then return false end
+if i.g and i.g.eU==nr then return true end
+if e.g and e.g.eU==ni then return false end
+return rnd(i:eb"e2")>n.A/100*e:eb"A"or b"256"==0and b"256"==0
 end)()then
-addaction(self,"|misses|"..move.name)
-if f_in_moves(move.num,"145,73 ")then
-f_move_setdmg_self(_ENV,1)
+r(t,"|misses|"..n.n)
+if nF(n.d,"145,73 ")then
+eJ(_ENV,1)
 end
 else
-if move.func(_ENV)then
-addaction(self,"|fails|attack")
+if n.o1(_ENV)then
+r(t,"|fails|attack")
 end
 end
-if move.accuracy ~=0 then
-otheractive.lastmoverecv=move.num
+if n.A~=0then
+i.tf=n.d
 end
 end)
-end,function(_ENV,newval,newcurmove)
-if not curmove and moveturn==0 then
-moveturn,curmove=newval,newcurmove
+end,function(_ENV,e,n)
+if not g and e0==0then
+e0,g=e,n
 end
-end,function(self,move)
-f_addaction(self,self,false,function(params)
-params.move=move
-local _ENV=params
-selfactive:f_decrement_timer("moveturn",f_nop)
-if selfactive.major==6 then
-selfactive:f_decrement_timer("sleeping",function()
-addaction(self,"|suddenly|woke up")
-selfactive.shared.major=0
+end,function(n,t)
+nX(n,n,false,function(f)
+f.u=t
+local _ENV=f
+e:nH("e0",L)
+if e.T==6then
+e:nH("ta",function()
+r(n,"|suddenly|woke up")
+e.W.T=0
 end)
-if selfactive.major==6 then
-addaction(self,"|fast|asleep")
+if e.T==6then
+r(n,"|fast|asleep")
 return
 end
 end
-if selfactive.major==3 then
-if rnd"1"<.2 then
-addaction(self,"|thawed|out")
-selfactive.shared.major=0
+if e.T==3then
+if rnd"1"<.2then
+r(n,"|thawed|out")
+e.W.T=0
 else
-addaction(self,"|is|frozen")
+r(n,"|is|frozen")
 return
 end
 end
-if otheractive.trappedother==selfactive then
-addaction(self,"|is|trapped")
-elseif selfactive.disabledslot==move.slot then
-addaction(self,"|is|disabled")
-elseif selfactive.confused>0 and f_flr_rnd"2"==0 then
-addaction(self,"|confuse|damage")
-f_move_setdmg_self(_ENV,f_calc_move_damage(selfactive,otheractive,f_create_move(-1)))
-elseif selfactive.major==4 and f_flr_rnd"4"==0 then
-addaction(self,"|fully|paralyzed")
-elseif selfactive.flinching then
-addaction(self,"|is|flinching")
+if i.n0==e then
+r(n,"|is|trapped")
+elseif e.eQ==t.en then
+r(n,"|is|disabled")
+elseif e.nj>0and b"2"==0then
+r(n,"|confuse|damage")
+eJ(_ENV,tQ(e,i,B(-1)))
+elseif e.T==4and b"4"==0then
+r(n,"|fully|paralyzed")
+elseif e.tN then
+r(n,"|is|flinching")
 else
-f_movelogic(self,move)
+tt(n,t)
 end
 end)
-end,function(active,key,endfunc)
-if active[key]>0 then
-active[key]-=1
-if active[key]==0 then
-endfunc()
+end,function(e,n,t)
+if e[n]>0then
+e[n]-=1
+if e[n]==0then
+t()
 end
 end
-end,function(self)
-return f_newaction(self,false,function(_ENV)
-if selfactive.major==6
-or selfactive.major==3
-or selfactive.trappedother and selfactive.trappedother ~=otheractive
+end,function(n)
+return nE(n,false,function(_ENV)
+if e.T==6
+or e.T==3
+or e.n0 and e.n0~=i
 then
-selfactive.moveturn=0
+e.e0=0
 end
-if selfactive.moveturn==0 then
-selfactive.trappedother,selfactive.curmove=nil
+if e.e0==0then
+e.n0,e.g=nil
 end
-local statdmg=max(selfactive.maxhp\16,1)
-local inflictstatdmg=function(title)
-addaction(self,title.."|damage")
-f_move_setdmg_self(_ENV,statdmg)
+local t=max(e.V\16,1)
+local f=function(e)
+r(n,e.."|damage")
+eJ(_ENV,t)
 end
-if selfactive.major==5 then
-if selfactive.toxiced>0 then
-statdmg*=selfactive.toxiced
-selfactive.toxiced+=1
+if e.T==5then
+if e.n9>0then
+t*=e.n9
+e.n9+=1
 end
-inflictstatdmg"|poison"
+f"|poison"
 end
-if selfactive.major==2 then inflictstatdmg"|burn" end
-if selfactive.seeded then
-inflictstatdmg"|seed"
-if otheractive.hp<otheractive.maxhp then
-f_move_heal(_ENV,other,statdmg)
+if e.T==2then f"|burn"end
+if e.ai then
+f"|seed"
+if i.D<i.V then
+nw(_ENV,e1,t)
 end
 end
-selfactive:f_decrement_timer("confused",function()
-addaction(self,"|confusion|ended")
+e:nH("nj",function()
+r(n,"|confusion|ended")
 end)
-selfactive:f_decrement_timer("disabledtimer",function()
-addaction(self,"|"..selfactive.mynewmoves[selfactive.disabledslot].name.."|enabled")
-selfactive.disabledslot=0
+e:nH("tn",function()
+r(n,"|"..e.w[e.eQ].n.."|enabled")
+e.eQ=0
 end)
 end)
-end,function(pl,move)
-pl.actions={}
-local priority_class=1000
-f_premovelogic(pl,move)
-if move.num==120 then priority_class=2000 end
-if f_in_moves(move.num,"18,4,89,30 ")then
-priority_class=0000
+end,function(e,n)
+e.eF={}
+local t=1000
+oS(e,n)
+if n.d==120then t=2000end
+if nF(n.d,"18,4,89,30 ")then
+t=0000
 end
-pl.priority=min(3000,priority_class+pl.active:f_movehelp_getstat"speed")
-end,function(game,pl)
-return pl==game.p1 and game.p2 or game.p1
-end,function(pactive,message,logic,name)
-return{pl=pactive,name=name or pactive.active.name,active=pactive.active,message=message,logic=logic or f_nop}
-end,function(p0,...)
-add(p0.actions,f_newaction(...))
-end,function(game)
-if g_bpo then f_beep()end
-if g_bpx then f_minisfx"154" end
-if g_bpx or not game.cur_action then
+e.eA=min(3000,t+e.a:eb"M")
+end,function(e,n)
+return n==e.eI and e.eq or e.eI
+end,function(e,n,t,f)
+return{oZ=e,n=f or e.a.n,a=e.a,f0=n,ar=t or L}
+end,function(e,...)
+add(e.eF,nE(...))
+end,function(e)
+if eN then eL()end
+if e8 then K"154"end
+if e8 or not e.ez then
 while true do
-for p in all{game.p1,game.p2}do
-if not f_get_next_active(p.team)then
-game.pwin=f_get_other_pl(game,p)
-game:f_actor_load"fightover"
+for n in all{e.eI,e.eq}do
+if not nb(n.k)then
+e.nt=ne(e,n)
+e:Y"tX"
 return
 end
 end
-local action=f_pop_next_action(game)
-if action then
-local actionpl=action.active==game.p1.active and game.p1 or game.p2
-local envparams=f_zobj("move,@,self,@,other,@,addaction,@",move,actionpl,f_get_other_pl(game,actionpl),function(...)
-f_addaction(actionpl,...)
+local n=oW(e)
+if n then
+local f=n.a==e.eI.a and e.eI or e.eq
+local t=m("u,@,O,@,e1,@,r,@",u,f,ne(e,f),function(...)
+nX(f,...)
 end)
-envparams.selfactive=envparams.self.active
-envparams.otheractive=envparams.other.active
-action.logic(envparams)
-if action.message then
-game.cur_action=action
+t.e=t.O.a
+t.i=t.e1.a
+n.ar(t)
+if n.f0 then
+e.ez=n
 return
 else
 end
 else
-game:f_actor_load()
+e:Y()
 return
 end
 end
 end
-end,function(game)
-for p in all{game.p1,game.p2}do
-if p.active.hp<=0 then
-if p.active.major ~=1 then
-return f_newaction(p,"|has|fainted",function(_ENV)
-selfactive.shared.major=1
+end,function(n)
+for t in all{n.eI,n.eq}do
+if t.a.D<=0then
+if t.a.T~=1then
+return nE(t,"|has|fainted",function(_ENV)
+e.W.T=1
 end)
-elseif p ~=game.p0 then
-return f_pkmn_comes_out(p,f_get_next_active(p.team))
+elseif t~=n.s then
+return nD(t,nb(t.k))
 end
 end
 end
-for s in all{game.p0,f_get_other_pl(game,game.p0)}do
-local o=f_get_other_pl(game,s)
-while #s.actions>0 do
-local action=deli(s.actions,1)
-if action.active.major ~=1 and(action.active==s.active or action.active==o.active)then
-return action
+for e in all{n.s,ne(n,n.s)}do
+local t=ne(n,e)
+while#e.eF>0do
+local n=deli(e.eF,1)
+if n.a.T~=1and(n.a==e.a or n.a==t.a)then
+return n
 end
 end
-if s.active.hp<=0 and s.active.major==1 then
-return f_pkmn_comes_out(s,f_get_next_active(s.team))
+if e.a.D<=0and e.a.T==1then
+return nD(e,nb(e.k))
 end
-if not s.turnover then
-s.turnover=true
-return f_postmove_logic(s)
+if not e.fy then
+e.fy=true
+return oU(e)
 end
 end
-end,function(_ENV,moveid)
-for m in all(mynewmoves)do
-if m.num==moveid then
+end,function(_ENV,e)
+for n in all(w)do
+if n.d==e then
 return true
 end
 end
 end,function(_ENV)
-return #f_get_moves(_ENV,true)==0
-end,function(pkmn,ismimic)
-local moves={}
-foreach(pkmn.mynewmoves,function(m)
-if m.num>0 and(ismimic or m.pp>0 and pkmn.disabledslot ~=m.slot)then
-add(moves,m)
-moves[m]=true
+return#n7(_ENV,true)==0
+end,function(t,f)
+local n={}
+foreach(t.w,function(e)
+if e.d>0and(f or e.e7>0and t.eQ~=e.en)then
+add(n,e)
+n[e]=true
 end
 end)
-return moves
+return n
 end,function(_ENV)
-if moveturn ~=0 then
-return{curmove}
+if e0~=0then
+return{g}
 else
-return f_get_moves(_ENV)
+return n7(_ENV)
 end
-end,function(move,defender)
-return(c_types[move.movetype][defender.type1]or 1)*(c_types[move.movetype][defender.type2]or 1)
-end,function(attacker,defender,move)
-local attack,defense=attacker:f_movehelp_getstat"special",defender:f_movehelp_getstat"special"
-if move.movetype%2==1 then
-attack,defense=attacker:f_movehelp_getstat"attack",defender:f_movehelp_getstat"defense"
-if defender.reflected then
-defense*=2
+end,function(e,n)
+return(eH[e.eG][n.eO]or 1)*(eH[e.eG][n.ep]or 1)
+end,function(n,t,e)
+local a,f=n:eb"er",t:eb"er"
+if e.eG%2==1then
+a,f=n:eb"R",t:eb"q"
+if t.am then
+f*=2
 end
-elseif defender.screened then
-defense*=2
+elseif t.ac then
+f*=2
 end
-local divisor=1024
-if f_in_moves(move.num,"107,164,57,157 ")then divisor*=.3 end
-if focused then divisor*=.3 end
-local crit=rnd"1"<min(.99,(attacker.base_speed+76)/divisor)and move.num>0 and 2 or 1
-local base_damage=mid(
+local o=1024
+if nF(e.d,"107,164,57,157 ")then o*=.3end
+if au then o*=.3end
+local d=rnd"1"<min(.99,(n.td+76)/o)and e.d>0and 2or 1
+local o=mid(
 3,997,
-(100*crit/5+2)/50
-*move.damage
-*mid(10,.2,attack/defense)
+(100*d/5+2)/50
+*e.tr
+*mid(10,.2,a/f)
 )+2
-local dmg,advantage=base_damage,f_get_type_advantage(move,defender)
-*((move.movetype==attacker.type1 or move.movetype==attacker.type2)and 1.5 or 1)
+local a,f=o,t_(e,t)
+*((e.eG==n.eO or e.eG==n.ep)and 1.5or 1)
 *(rnd".15"+.85)
-if advantage>0 then
-return max(1,dmg*advantage\1),crit>1
+if f>0then
+return max(1,a*f\1),d>1
 end
 return 0,false
 end,function(_ENV)
-p0=_ENV[p0key]
-do local _ENV=p0.active
-counterdmg,flinching=0,false
+s=_ENV[fp]
+do local _ENV=s.a
+nq,tN=0,false
 end
-p0.turnover=false
-if p0.iscpu then
-local possible_moves=f_get_possible_moves(p0.active)
-f_select_move(p0,possible_moves[f_flr_rnd(#possible_moves)+1]or f_create_move(0))
-_ENV:f_actor_load()
-elseif #p0.actions>0 then
-_ENV:f_actor_load()
+s.fy=false
+if s.al then
+local e=fT(s.a)
+nJ(s,e[b(#e)+1]or B(0))
+_ENV:Y()
+elseif#s.eF>0then
+_ENV:Y()
 else
-pselactions.menu,
-pselmove.menu,
-pselswitch.menu,
-cur_action,
-stack[#stack]=p0.menu_action,
-p0.menu_move,
-p0.menu_switch,
-f_newaction(p0,"|begins|turn"),
-curr
-_ENV:f_actor_load"turnview"
+f2.o,
+fG.o,
+t0.o,
+ez,
+eC[#eC]=s.f6,
+s.aT,
+s.as,
+nE(s,"|begins|turn"),
+ek
+_ENV:Y"a_"
 end
 end)
-f_zobj_set(_g,"f_psel_update,@,f_psel_forfeit,@,f_begin_fight,@,f_begin_fight_cpu,@,f_extract_sheet,@,f_vget,@,f_vset,@,f_px9_decomp,@,f_game_state_init,@",function(_ENV)
-if g_bpx then
-_ENV:f_modes_push"pselactions"
-f_minisfx"155"
+F(eo,"f5,@,an,@,fx,@,fX,@,a1,@,a0,@,av,@,fk,@,ah,@",function(_ENV)
+if e8 then
+_ENV:eP"f2"
+K"155"
 end
-if g_bpo then f_beep()end
+if eN then eL()end
 end,function(_ENV)
-_ENV:f_modes_pop()
-pwin=_ENV:f_get_other_pl(p0)
-_ENV:f_actor_load"fightover"
-end,function(_ENV,d1,d2)
-d1.key,d2.key="p1","p2"
-for dd in all{d1,d2}do
-_ENV[dd.key]=f_zobj("actions,#,priority,1,menu_action,@,menu_move,@,menu_switch,@,team,@,name,@,iscpu,@,winlogic,@",f_create_menu(f_menu_drawentry),
-f_create_menu(f_menu_drawentry),
-f_create_menu(f_browse_drawentry,3),
-unpack(dd))
-local pl=_ENV[dd.key]
-pl.menu_action.cancel=function()
-_ENV:f_modes_pop()
-_ENV:f_actor_load"battleview"
+_ENV:H()
+nt=_ENV:ne(s)
+_ENV:Y"tX"
+end,function(_ENV,e,t)
+e.tI,t.tI="eI","eq"
+for n in all{e,t}do
+_ENV[n.tI]=m("eF,#,eA,1,f6,@,aT,@,as,@,k,@,n,@,al,@,ae,@",J(Q),
+J(Q),
+J(np,3),
+unpack(n))
+local e=_ENV[n.tI]
+e.f6.ns=function()
+_ENV:H()
+_ENV:Y"ao"
 end
-add(pl.actions,f_pkmn_comes_out(pl,f_get_next_active(pl.team)))
+add(e.eF,nD(e,nb(e.k)))
 end
-_ENV:f_modes_push"turn"
-end,function(_ENV,pkmn_nums,name,plwinfunc,cpuwinfunc)
-local cpu_team_draft={}
-for i=1,#pkmn_nums do
-f_set_default_team_pkmn(cpu_team_draft,i,pkmn_nums[i])
+_ENV:eP"fw"
+end,function(_ENV,e,t,f,o)
+local n={}
+for t=1,#e do
+nV(n,t,e[t])
 end
-f_begin_fight(_ENV,
-{_ENV:f_get_team_cursor"team1","player",false,plwinfunc},
-{cpu_team_draft,name,true,cpuwinfunc}
+fx(_ENV,
+{_ENV:ej"j","player",false,f},
+{n,t,true,o}
 )
-end,function(index)
-f_px9_decomp(peek2(index),
-function(...)return f_vget(0x8000+index*0x1000,...)end,
-function(...)return f_vset(0x8000+index*0x1000,...)end)
-end,function(offset,x,y)
-x=min(max(0,x),127)\1
-local val=peek(y\1*64+offset+x\2)
-if x%2==1 then return(val & 0xf0)>>>4
-else return(val & 0x0f)end
-end,function(offset,x,y,val)
-x=min(max(0,x),127)\1
-local mem_coord=y\1*64+offset+x\2
-local oldval=peek(mem_coord)
-if x%2==1 then poke(mem_coord,(oldval & 0x0f)|(((val or 0)& 0x0f)<<4))
-else poke(mem_coord,(oldval & 0xf0)|(((val or 0)& 0x0f)<<0))
+end,function(e)
+fk(peek2(e),
+function(...)return a0(0x8000+e*0x1000,...)end,
+function(...)return av(0x8000+e*0x1000,...)end)
+end,function(t,e,f)
+e=min(max(0,e),127)\1
+local n=peek(f\1*64+t+e\2)
+if e%2==1then return(n&0xf0)>>>4
+else return(n&0x0f)end
+end,function(f,e,o,t)
+e=min(max(0,e),127)\1
+local n=o\1*64+f+e\2
+local f=peek(n)
+if e%2==1then poke(n,(f&0x0f)|(((t or 0)&0x0f)<<4))
+else poke(n,(f&0xf0)|(((t or 0)&0x0f)<<0))
 end
-end,function(src,f_vget,f_vset)
-local function vlist_val(l,val)
-local v,i=l[1],1
-while v!=val do
-i+=1
-v,l[i]=l[i],v
+end,function(t,r,m)
+local function a(e,f)
+local n,t=e[1],1
+while n!=f do
+t+=1
+n,e[t]=e[t],n
 end
-l[1]=val
+e[1]=f
 end
-local cache,cache_bits=0,0
-function getval(bits)
-if cache_bits<8 then
-cache_bits+=8
-cache+=@src>>cache_bits
-src+=1
+local e,n=0,0
+function f8(f)
+if n<8then
+n+=8
+e+=@t>>n
+t+=1
 end
-cache<<=bits
-local val=cache&0xffff
-cache^^=val
-cache_bits-=bits
-return val
+e<<=f
+local t=e&0xffff
+e^^=t
+n-=f
+return t
 end
-function gnp(n)
-local bits=0
+function no(n)
+local e=0
 repeat
-bits+=1
-local vv=getval(bits)
-n+=vv
-until vv<(1<<bits)-1
+e+=1
+local t=f8(e)
+n+=t
+until t<(1<<e)-1
 return n
 end
-local w,h_1,eb,el,pr,x,y,splen,predict=gnp"1",gnp"0",gnp"1",{},{},0,0,0
-for i=1,gnp"1" do add(el,getval(eb))end
-for y=0,h_1 do
-for x=0,w-1 do
-splen-=1
-if(splen<1)then
-splen,predict=gnp"1",not predict
+local i,d,f,e,o,c,u,n,t=no"1",no"0",no"1",{},{},0,0,0
+for n=1,no"1"do add(e,f8(f))end
+for f=0,d do
+for d=0,i-1do
+n-=1
+if(n<1)then
+n,t=no"1",not t
 end
-local a=y>0 and f_vget(x,y-1)or 0
-local l=pr[a]or{unpack(el)}
-pr[a]=l
-local v=l[predict and 1 or gnp"2"]
-vlist_val(l,v)
-vlist_val(el,v)
-f_vset(x,y,v)
+local i=f>0and r(d,f-1)or 0
+local n=o[i]or{unpack(e)}
+o[i]=n
+local o=n[t and 1or no"2"]
+a(n,o)
+a(e,o)
+m(d,f,o)
 end
 end
-end,function(state)
-if state.sfx then f_minisfx(state.sfx)end
-state:sinit()
+end,function(e)
+if e.aP then K(e.aP)end
+e:tC()
 end)
-_g.c_moves_raw=f_zobj"-1;,none,~f_move_default;0;,struggle,~f_move_recoil;;,megapnch,~f_move_default;;,razrwind,~f_move_prepare;;,sworddnc,~f_move_self,~f_move_stat,attack,2;;,whrlwind,~f_move_roar;;,megakick,~f_move_default;;,toxic,~f_move_toxic;;,horndril,~f_move_ohko;;,bodyslam,~f_move_default,30,~f_move_major_other,4;;,takedown,~f_move_recoil;;,doubedge,~f_move_recoil;;,bublbeam,~f_move_default,10,~f_move_other,~f_move_stat,speed,-1;;,watergun,~f_move_default;;,icebeam,~f_move_default,10,~f_move_major_other,3;;,blizzard,~f_move_default,10,~f_move_major_other,3;;,hyprbeam,~f_move_hyperbeam;;,payday,~f_move_default;;,submsion,~f_move_recoil;;,counter,~f_move_counter;;,seistoss,~f_move_setdmg,50;;,rage,~f_move_rage;;,megdrain,~f_move_drain;;,solrbeam,~f_move_prepare;;,drgnrage,~f_move_setdmg,40;;,thndrblt,~f_move_default,10,~f_move_major_other,4;;,thunder,~f_move_default,10,~f_move_major_other,4;;,earthqke,~f_move_default;;,fissure,~f_move_ohko;;,dig,~f_move_flydig,|begins|digging;;,psychic,~f_move_default,30,~f_move_other,~f_move_stat,special,-1;;,teleport,~f_move_teleport;;,mimic,~f_move_mimic;;,doubteam,~f_move_self,~f_move_stat,evasion,1;;,reflect,~f_move_self,~f_movehelp_minor,|raises|defense,reflected;;,bide,~f_move_bide;;,metrnome,~f_move_metronome;;,selfdstr,~f_move_default;;,eggbomb,~f_move_default;;,fireblst,~f_move_default,30,~f_move_major_other,2;;,swift,~f_move_default;;,skulbash,~f_move_prepare;;,softboil,~f_move_recover;;,dreameat,~f_move_dreameater;;,skyattck,~f_move_prepare;;,rest,~f_move_rest;;,thndrwav,~f_move_major_other,4;;,psywave,~f_move_psywave;;,explsion,~f_move_default;;,rockslid,~f_move_default;;,triattck,~f_move_default;;,substute,~f_move_substitute;;,cut,~f_move_default;;,fly,~f_move_flydig,|begins|flying;;,surf,~f_move_default;;,strength,~f_move_default;;,flash,~f_move_other,~f_move_stat,accuracy,-1;;,pound,~f_move_default;;,karatchp,~f_move_default;;,doubslap,~f_move_multihit_var;;,comtpnch,~f_move_multihit_var;;,firepnch,~f_move_default,10,~f_move_major_other,2;;,icepnch,~f_move_default,10,~f_move_major_other,3;;,thndpnch,~f_move_default,10,~f_move_major_other,4;;,scratch,~f_move_default;;,vicegrip,~f_move_default;;,guilotin,~f_move_ohko;;,gust,~f_move_default;;,wingatck,~f_move_default;;,bind,~f_move_trapping;;,slam,~f_move_default;;,vinewhip,~f_move_default;;,stomp,~f_move_default,30,~f_move_other,~f_movehelp_flinch;;,doubkick,~f_move_multihit_set,2,~f_nop;;,jumpkick,~f_move_default;;,rllngkck,~f_move_default,30,~f_move_other,~f_movehelp_flinch;;,sandatck,~f_move_other,~f_move_stat,accuracy,-1;;,headbutt,~f_move_default,30,~f_move_other,~f_movehelp_flinch;;,hornatck,~f_move_default;;,furyatck,~f_move_multihit_var;;,tackle,~f_move_default;;,wrap,~f_move_trapping;;,thrash,~f_move_thrash;;,tailwhip,~f_move_other,~f_move_stat,defense,-1;;,psnsting,~f_move_default,20,~f_move_major_other,5;;,twineedl,~f_move_multihit_twin;;,pinmisil,~f_move_multihit_var;;,leer,~f_move_other,~f_move_stat,defense,-1;;,bite,~f_move_default,10,~f_move_other,~f_movehelp_flinch;;,growl,~f_move_other,~f_move_stat,attack,-1;;,roar,~f_move_roar;;,sing,~f_move_major_other,6;;,sprsonic,~f_move_other,~f_movehelp_confuse;;,sonicbom,~f_move_setdmg,20;;,disable,~f_move_disable;;,acid,~f_move_default,10,~f_move_other,~f_move_stat,defense,-1;;,ember,~f_move_default,10,~f_move_major_other,2;;,flamthwr,~f_move_default,10,~f_move_major_other,2;;,mist,~f_move_self,~f_movehelp_minor,|stat lower|immunity,misted;;,hydropmp,~f_move_default;;,psybeam,~f_move_default,10,~f_move_other,~f_movehelp_confuse;;,aurorabm,~f_move_default,10,~f_move_other,~f_move_stat,attack,-1;;,peck,~f_move_default;;,drillpck,~f_move_default;;,lowkick,~f_move_default,30,~f_move_other,~f_movehelp_flinch;;,absorb,~f_move_drain;;,leechsed,~f_move_other,~f_movehelp_minor,|is now|seeded,seeded,1,~c_yes;;,growth,~f_move_self,~f_move_stat,special,1;;,razrleaf,~f_move_default;;,psnpowdr,~f_move_major_other,5;;,stunspor,~f_move_major_other,4;;,slppowdr,~f_move_major_other,6;;,petldanc,~f_move_thrash;;,strngsht,~f_move_other,~f_move_stat,speed,-1;;,firespin,~f_move_trapping;;,thndshck,~f_move_default,10,~f_move_major_other,4;;,rockthrw,~f_move_default;;,cnfusion,~f_move_default,10,~f_move_other,~f_movehelp_confuse;;,hypnosis,~f_move_major_other,6;;,meditate,~f_move_self,~f_move_stat,attack,1;;,agility,~f_move_self,~f_move_stat,speed,2;;,quickatk,~f_move_default;;,ngtshade,~f_move_setdmg,50;;,screech,~f_move_other,~f_move_stat,defense,-2;;,recover,~f_move_recover;;,harden,~f_move_self,~f_move_stat,defense,1;;,minimize,~f_move_minimize;;,smokscrn,~f_move_other,~f_move_stat,accuracy,-1;;,cnfusray,~f_move_other,~f_movehelp_confuse;;,withdraw,~f_move_self,~f_move_stat,defense,1;;,dfnscurl,~f_move_self,~f_move_stat,defense,1;;,barrier,~f_move_self,~f_move_stat,defense,2;;,lghtscrn,~f_move_self,~f_movehelp_minor,|raises|spcdefense,screened;;,haze,~f_move_haze;;,fcsenrgy,~f_move_self,~f_movehelp_minor,|raises|crit ratio,focused;;,mirrmove,~f_move_mirror_move;;,lick,~f_move_default,30,~f_move_major_other,4;;,smog,~f_move_default,30,~f_move_major_other,5;;,sludge,~f_move_default,30,~f_move_major_other,5;;,boneclub,~f_move_default,10,~f_move_other,~f_movehelp_flinch;;,watrfall,~f_move_default;;,clamp,~f_move_trapping;;,spikcann,~f_move_multihit_var;;,constrct,~f_move_default,10,~f_move_other,~f_move_stat,speed,-1;;,amnesia,~f_move_self,~f_move_stat,special,2;;,kinesis,~f_move_other,~f_move_stat,accuracy,-1;;,hijmpkck,~f_move_default;;,glare,~f_move_major_other,4;;,poisngas,~f_move_major_other,5;;,barrage,~f_move_multihit_var;;,leechlif,~f_move_drain;;,lovekiss,~f_move_major_other,6;;,tranform,~f_move_transform;;,bubble,~f_move_default,10,~f_move_other,~f_move_stat,speed,-1;;,dizypnch,~f_move_default;;,spore,~f_move_major_other,6;;,splash,~f_move_splash;;,acidarmr,~f_move_self,~f_move_stat,defense,2;;,crabhamr,~f_move_default;;,furyswps,~f_move_multihit_var;;,bonerang,~f_move_multihit_set,2,~f_nop;;,hyprfang,~f_move_default,10,~f_move_other,~f_movehelp_flinch;;,sharpen,~f_move_self,~f_move_stat,attack,1;;,convrson,~f_move_conversion;;,suprfang,~f_move_superfang;;,slash,~f_move_default"
-c_team_memlocs=f_zobj"0,0x5e00,1,0x5e1e,2,0x5e3c"
-g_loaded_row=16
+eo.ti=m"-1;,none,~f;0;,struggle,~n5;;,megapnch,~f;;,razrwind,~nm;;,sworddnc,~z,~v,R,2;;,whrlwind,~t6;;,megakick,~f;;,toxic,~fS;;,horndril,~nR;;,bodyslam,~f,30,~X,4;;,takedown,~n5;;,doubedge,~n5;;,bublbeam,~f,10,~E,~v,M,-1;;,watergun,~f;;,icebeam,~f,10,~X,3;;,blizzard,~f,10,~X,3;;,hyprbeam,~ot;;,payday,~f;;,submsion,~n5;;,counter,~oo;;,seistoss,~ea,50;;,rage,~fY;;,megdrain,~n3;;,solrbeam,~nm;;,drgnrage,~ea,40;;,thndrblt,~f,10,~X,4;;,thunder,~f,10,~X,4;;,earthqke,~f;;,fissure,~nR;;,dig,~nr,|begins|digging;;,psychic,~f,30,~E,~v,er,-1;;,teleport,~fR;;,mimic,~fH;;,doubteam,~z,~v,e2,1;;,reflect,~z,~e4,|raises|defense,am;;,bide,~fZ;;,metrnome,~fN;;,selfdstr,~f;;,eggbomb,~f;;,fireblst,~f,30,~X,2;;,swift,~f;;,skulbash,~nm;;,softboil,~ty;;,dreameat,~oa;;,skyattck,~nm;;,rest,~of;;,thndrwav,~X,4;;,psywave,~oe;;,explsion,~f;;,rockslid,~f;;,triattck,~f;;,substute,~fW;;,cut,~f;;,fly,~nr,|begins|flying;;,surf,~f;;,strength,~f;;,flash,~E,~v,A,-1;;,pound,~f;;,karatchp,~f;;,doubslap,~ey;;,comtpnch,~ey;;,firepnch,~f,10,~X,2;;,icepnch,~f,10,~X,3;;,thndpnch,~f,10,~X,4;;,scratch,~f;;,vicegrip,~f;;,guilotin,~nR;;,gust,~f;;,wingatck,~f;;,bind,~ni;;,slam,~f;;,vinewhip,~f;;,stomp,~f,30,~E,~ex;;,doubkick,~nc,2,~L;;,jumpkick,~f;;,rllngkck,~f,30,~E,~ex;;,sandatck,~E,~v,A,-1;;,headbutt,~f,30,~E,~ex;;,hornatck,~f;;,furyatck,~ey;;,tackle,~f;;,wrap,~ni;;,thrash,~t7;;,tailwhip,~E,~v,q,-1;;,psnsting,~f,20,~X,5;;,twineedl,~o_;;,pinmisil,~ey;;,leer,~E,~v,q,-1;;,bite,~f,10,~E,~ex;;,growl,~E,~v,R,-1;;,roar,~t6;;,sing,~X,6;;,sprsonic,~E,~nd;;,sonicbom,~ea,20;;,disable,~fF;;,acid,~f,10,~E,~v,q,-1;;,ember,~f,10,~X,2;;,flamthwr,~f,10,~X,2;;,mist,~z,~e4,|stat lower|immunity,oT;;,hydropmp,~f;;,psybeam,~f,10,~E,~nd;;,aurorabm,~f,10,~E,~v,R,-1;;,peck,~f;;,drillpck,~f;;,lowkick,~f,30,~E,~ex;;,absorb,~n3;;,leechsed,~E,~e4,|is now|seeded,ai,1,~es;;,growth,~z,~v,er,1;;,razrleaf,~f;;,psnpowdr,~X,5;;,stunspor,~X,4;;,slppowdr,~X,6;;,petldanc,~t7;;,strngsht,~E,~v,M,-1;;,firespin,~ni;;,thndshck,~f,10,~X,4;;,rockthrw,~f;;,cnfusion,~f,10,~E,~nd;;,hypnosis,~X,6;;,meditate,~z,~v,R,1;;,agility,~z,~v,M,2;;,quickatk,~f;;,ngtshade,~ea,50;;,screech,~E,~v,q,-2;;,recover,~ty;;,harden,~z,~v,q,1;;,minimize,~fV;;,smokscrn,~E,~v,A,-1;;,cnfusray,~E,~nd;;,withdraw,~z,~v,q,1;;,dfnscurl,~z,~v,q,1;;,barrier,~z,~v,q,2;;,lghtscrn,~z,~e4,|raises|spcdefense,ac;;,haze,~fM;;,fcsenrgy,~z,~e4,|raises|crit ratio,au;;,mirrmove,~fQ;;,lick,~f,30,~X,4;;,smog,~f,30,~X,5;;,sludge,~f,30,~X,5;;,boneclub,~f,10,~E,~ex;;,watrfall,~f;;,clamp,~ni;;,spikcann,~ey;;,constrct,~f,10,~E,~v,M,-1;;,amnesia,~z,~v,er,2;;,kinesis,~E,~v,A,-1;;,hijmpkck,~f;;,glare,~X,4;;,poisngas,~X,5;;,barrage,~ey;;,leechlif,~n3;;,lovekiss,~X,6;;,tranform,~fJ;;,bubble,~f,10,~E,~v,M,-1;;,dizypnch,~f;;,spore,~X,6;;,splash,~fU;;,acidarmr,~z,~v,q,2;;,crabhamr,~f;;,furyswps,~ey;;,bonerang,~nc,2,~L;;,hyprfang,~f,10,~E,~ex;;,sharpen,~z,~v,R,1;;,convrson,~fK;;,suprfang,~on;;,slash,~f"
+tW=m"0,0x5e00,1,0x5e1e,2,0x5e3c"
+f4=16
 function _init()
-local _ENV=_g
+local _ENV=eo
 memset(0x8000,0,0x7fff)
-g_picodex=f_zclass"curr,wait,init,~f_game_state_init,light,4;defaults;foldstate,closed,light,4,sfx,~c_no,backbuttonheld,~c_no,sinit,~f_nop,update,~f_nop,draw,~f_nop,draw1,~f_nop,draw2,~f_nop,draw3,~f_nop,modes,;wait;next,moveup,duration,.5,draw,~f_draw_picodex;moveup;next,closed,duration,.5,draw,~f_draw_picodex;shaking;foldstate,closed,next,closed,duration,.5,sfx,159,draw,~f_draw_picodex;closed;foldstate,closed,next,opening,sinit,~f_closed_init,draw,~f_draw_picodex,update,~f_closed_update;opening;foldstate,opening,next,starting_1,duration,.2,draw,~f_draw_picodex;starting_1;foldstate,open,next,starting_2,light,3,duration,.2,sfx,155,draw,~f_draw_picodex;starting_2;foldstate,open,next,starting_3,light,2,duration,.2,sfx,154,draw,~f_draw_picodex;starting_3;foldstate,open,next,game,light,1,duration,.2,sfx,153,draw,~f_draw_picodex;game;foldstate,open,next,closing,light,0,sfx,152,sinit,~f_game_init,draw,~f_draw_picodex,update,~f_game_update,draw1,~f_game_draw1,draw2,~f_game_draw2,draw3,~f_game_draw3;closing;foldstate,closing,next,closed,duration,.25,draw,~f_draw_picodex,update,~f_nop;"
-f_draw_picodex(g_picodex)
+nf=t2"ek,aE,l,~ah,eD,4;tD;eT,eB,eD,4,sfx,~x,nM,~x,tC,~L,ed,~L,eh,~L,ec,~L,h,~L,P,~L,ef,;aE;next,fb,ei,.5,eh,~ev;fb;next,eB,ei,.5,eh,~ev;fg;eT,eB,next,eB,ei,.5,sfx,159,eh,~ev;eB;eT,eB,next,tO,tC,~oF,eh,~ev,ed,~oH;tO;eT,tO,next,aX,ei,.2,eh,~ev;aX;eT,nN,next,aL,eD,3,ei,.2,sfx,155,eh,~ev;aL;eT,nN,next,aO,eD,2,ei,.2,sfx,154,eh,~ev;aO;eT,nN,next,aG,eD,1,ei,.2,sfx,153,eh,~ev;aG;eT,nN,next,tL,eD,0,sfx,152,tC,~oj,eh,~ev,ed,~oz,ec,~oq,h,~oA,P,~oB;tL;eT,tL,next,eB,ei,.25,eh,~ev,ed,~L;"
+ev(nf)
 flip()
-f_zcall(function(sfx_ind,sheet_loc)
-f_minisfx(sfx_ind)
-f_extract_sheet(sheet_loc)
+C(function(e,n)
+K(e)
+a1(n)
 end,";,155,0x0;;,154,0x2;;,153,0x4")
-f_minisfx"154"
-f_zcall(poke,";,0x5f5c,8;;,0x5f5d,2;;,0x5f56,0xe0")
-f_px9_decomp(peek2"0x6",mget,mset)
-f_populate_c_moves()
-f_populate_c_pokemon()
-local trainer_loc=peek2"0xc"
-for i,v in pairs(c_trainers)do
-local tbl={name=v}
-for j=1,6 do
-add(tbl,peek(trainer_loc))
-trainer_loc+=1
+K"154"
+C(poke,";,0x5f5c,8;;,0x5f5d,2;;,0x5f56,0xe0")
+fk(peek2"0x6",mget,mset)
+om()
+od()
+local e=peek2"0xc"
+for t,f in pairs(nQ)do
+local n={n=f}
+for t=1,6do
+add(n,peek(e))
+e+=1
 end
-c_trainers[i]=tbl
+nQ[t]=n
 end
-f_zcall(memcpy,";,0x0000,0xc000,0x2000")
+C(memcpy,";,0x0000,0xc000,0x2000")
 end
 function _update60()
-local _ENV=_g
-g_bpo,g_bpx,g_bph,g_bpv=btnp"4",btnp"5",btnp"0" and btnp"1" and 0 or btnp"0" and-1 or btnp"1" and 1 or 0,btnp"2" and btnp"3" and 0 or btnp"2" and-1 or btnp"3" and 1 or 0
-if@0x5eff==1 then
-g_bpo,g_bpx=g_bpx,g_bpo
+local _ENV=eo
+eN,e8,nZ,nY=btnp"4",btnp"5",btnp"0"and btnp"1"and 0or btnp"0"and-1or btnp"1"and 1or 0,btnp"2"and btnp"3"and 0or btnp"2"and-1or btnp"3"and 1or 0
+if@0x5eff==1then
+eN,e8=e8,eN
 end
-g_picodex:f_actor_state()
+nf:t5()
 end
 function _draw()
-local _ENV=_g
-g_picodex:draw()
+local _ENV=eo
+nf:eh()
 end
