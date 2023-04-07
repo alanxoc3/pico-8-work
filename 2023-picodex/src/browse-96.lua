@@ -33,6 +33,9 @@ end $$
 
 |[f_draw_pkmn_out]| function(_ENV, x, y, style, xscale, yscale, is_thick)
     local num = _ENV:f_pkmn_available() and num or -1
+    local mini = minimize or 1
+    xscale *= mini
+    yscale *= mini
 
     _foreach(f_zobj[[
         ;,P_PIKACHU,M_SURF,   152
@@ -48,7 +51,6 @@ end $$
 
     if not isactive or major ~= C_MAJOR_FAINTED and not invisible and not (moveturn ~= 0 and curmove.ofunc == f_move_flydig) then
         if num < 0 then _spr(107, x-4, y-4) return end
-        xscale, yscale = xscale or 1, yscale or 1
         local outline_width = 1
 
         local outline_func = function(color, v1, v2, v3, v4, outline_width)

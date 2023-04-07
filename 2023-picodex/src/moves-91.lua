@@ -84,7 +84,8 @@ end $$
         f_zobj_set(pl.active.stages, [[
             special, 0, attack, 0,
             defense, 0, speed,  0,
-            accuracy,0, evasion,0
+            accuracy,0, evasion,0,
+            minimize,~c_no
         ]])
 
         addaction(pl, "|resets|stats")
@@ -148,14 +149,14 @@ end $$
 |[f_move_other]| function(_ENV, func, ...) return func(_ENV, other, ...) end $$
 
 -- leverages f_move_(self|other)
-|[f_move_stat]| function(_ENV, pl, key, stage)
+|[f_move_stat]| function(_ENV, pl, key, stage, func)
     local prev = pl.active.stages[key]
     if not pl.active.misted or stage > 0 then
         pl.active.stages[key] = _mid(-6, 6, prev+stage)
     end
 
     if prev ~= pl.active.stages[key] then
-        addaction(pl, f_format_num_sign(stage, c_stages[key]))
+        addaction(pl, f_format_num_sign(stage, c_stages[key]), func or f_nop)
     else
         return true
     end
@@ -213,6 +214,12 @@ end $$
 
 |[f_movehelp_confuse]| function(_ENV, pl)
     return f_movehelp_minor(_ENV, pl, "|becomes|confused", 'confused', f_flr_rnd'4'+1)
+end $$
+
+|[f_move_minimize]| function(_ENV)
+    return f_move_stat(_ENV, self, 'evasion', 1, function()
+        selfactive.minimize = .25
+    end)
 end $$
 
 |[f_move_substitute]| function(_ENV)

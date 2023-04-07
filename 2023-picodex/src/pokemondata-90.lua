@@ -200,7 +200,7 @@ _g.c_moves_raw = f_zobj[[
    ;;, "screech",  ~f_move_other, ~f_move_stat, defense, -2
    ;;, "recover",  ~f_move_recover
    ;;, "harden",   ~f_move_self, ~f_move_stat, defense, 1
-   ;;, "minimize", ~f_move_self, ~f_move_stat, evasion, 1
+   ;;, "minimize", ~f_move_minimize
    ;;, "smokscrn", ~f_move_other, ~f_move_stat, accuracy, -1
    ;;, "cnfusray", ~f_move_other,~f_movehelp_confuse
    ;;, "withdraw", ~f_move_self, ~f_move_stat, defense, 1
