@@ -32,7 +32,7 @@ familiar with PS1 battle mechanics, most everything should behave the same besid
 Differences inspired by original handheld games:
 - Substitute only protects from damage done by opponent. Not against any effects.
 - Swift will never miss, bypassing all accuracy checks including when opponent uses dig/fly.
-- Sleep lasts 0-6 turns.
+- Sleep lasts 0-6 turns, unless caused by rest, then only 1 turn.
 
 Differences inspired by later Pokemon games:
 - Sleep, freeze, trapping moves, and disable can break a user free multiturn moves.

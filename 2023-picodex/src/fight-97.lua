@@ -31,7 +31,7 @@
         stages; special, 0, attack, 0,
                 defense, 0, speed,  0,
                 accuracy,0, evasion,0
-    ]], f_flr_rnd'3'+2, pkmn, moves), {___index=pkmn})
+    ]], f_flr_rnd'8', pkmn, moves), {___index=pkmn})
     -- ^^ hard-coding sleep timer here
 
     return f_newaction(pl, txt, function()

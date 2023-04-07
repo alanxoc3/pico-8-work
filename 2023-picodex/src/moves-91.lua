@@ -190,7 +190,8 @@ end $$
             otheractive.shared.major = majorind
 
             -- every time major stat is set, sleep timer is set, but sleep timer isn't used unless pkmn is actually sleeping
-            f_start_sleep_timer(otheractive)
+            sleeping = f_flr_rnd'8'
+            -- ^^ If I change the sleep timer amount, remember to change it somewhere else too!
         end)
     else
         return true
@@ -331,17 +332,12 @@ end $$
 end $$
 
 ---------- DAMAGING MOVES BELOW ----------
--- todo: change sleep timer to 0-6 turns
-|[f_start_sleep_timer]| function(_ENV)
-    sleeping = f_flr_rnd'3'+2
-    -- ^^ If I change the sleep timer amount, remember that
-end $$
-
 |[f_move_rest]| function(_ENV)
-    selfactive.shared.major = C_MAJOR_SLEEPING
-    f_start_sleep_timer(selfactive) -- has check, must go after setting major
-    addaction(self, "|is|sleeping")
-    f_move_heal(_ENV, self, selfactive.maxhp)
+    addaction(self, "|is|sleeping", function()
+        -- rest is always only 1 turn of sleeping, will of course change if switched out.
+        selfactive.shared.major, selfactive.sleeping = C_MAJOR_SLEEPING, 2
+        f_move_heal(_ENV, self, selfactive.maxhp)
+    end)
 end $$
 
 |[f_move_counter]| function(_ENV)
