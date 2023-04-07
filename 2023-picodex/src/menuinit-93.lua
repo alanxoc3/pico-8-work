@@ -1,4 +1,3 @@
--- todo: change sprites to bevlhc
 |[f_fightover_init]| function(_ENV)
     local plose = f_get_other_pl(_ENV, pwin)
     pwin:winlogic(plose)
