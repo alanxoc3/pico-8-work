@@ -6,18 +6,16 @@ end $$
 
 |[f_vget]| function(offset, x, y)
     x = _min(_max(0, x), 127)\1
-    y = y\1
 
-    local val = _peek(y*64+offset+x\2)
+    local val = _peek(y\1*64+offset+x\2)
     if x%2 == 1 then return (val & 0xf0) >>> 4
     else             return (val & 0x0f) end
 end $$
 
 |[f_vset]| function(offset, x, y, val)
     x = _min(_max(0, x), 127)\1
-    y = y\1
 
-    local mem_coord = y*64+offset+x\2
+    local mem_coord = y\1*64+offset+x\2
     local oldval = _peek(mem_coord)
 
     if x%2 == 1 then _poke(mem_coord, (oldval & 0x0f) | (((val or 0) & 0x0f) << 4))

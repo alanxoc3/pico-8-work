@@ -1,6 +1,6 @@
 |[f_browse_draw2]|      function(game) f_draw2_pokeinfo(c_pokemon[game:f_modes_cursor'browse']) end $$
-|[f_editteam_draw2]|   function(game) f_print_draw2_message("spot #"..(game:f_modes_cursor'editteam'+1)) end $$
-|[f_teammoves_draw2]|  function(game) f_print_draw2_message("move #"..(game:f_modes_cursor'teammoves'+1)) end $$
+|[f_editteam_draw2]|    function(game) f_print_draw2_message("spot #"..(game:f_modes_cursor'editteam'+1)) end $$
+|[f_teammoves_draw2]|   function(game) f_print_draw2_message("move #"..(game:f_modes_cursor'teammoves'+1)) end $$
 |[f_team_draw2]|        function(game) f_print_draw2_message(game.ui_pl) end $$
 |[f_fightover_draw2]|   function(game) f_print_draw2_message"match over" end $$
 

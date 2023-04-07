@@ -8,7 +8,9 @@
 
     -- skip this state if the player is a cpu
     if p0.iscpu then
-        f_select_move(p0, f_select_random_move(p0.active))
+        -- this is the computer's AI. it just selects a random move.
+        local possible_moves = f_get_possible_moves(p0.active)
+        f_select_move(p0, possible_moves[f_flr_rnd(#possible_moves)+1] or f_create_move(M_STRUGGLE))
         _ENV:f_actor_load()
     elseif #p0.actions > 0 then
         _ENV:f_actor_load()

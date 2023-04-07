@@ -48,7 +48,7 @@ end $$
 end $$
 
 |[f_select_switch]| function(pl, pkmn)
-    f_addaction(pl, pl, "|comes|back", function(params) -- self, other
+    f_addaction(pl, pl, "|leaves|fight", function(params) -- self, other
         params.selfactive.invisible = true
 
         f_addaction(pl, pl, false, function()
@@ -77,7 +77,21 @@ end $$
             f_move_setdmg_self(_ENV, selfactive.hp)
         end
 
-        if f_does_move_miss(selfactive, otheractive, move) then
+        if (function() -- miss logic
+            if move.accuracy <= 0  then return false end -- this catches swift and self status moves... swift is negative
+
+            -- charging moves & fly/dig can't miss on the first turn
+            if (move.ofunc == f_move_prepare or move.ofunc == f_move_flydig) and not selfactive.curmove then return false end
+
+            -- selfactive misses if otheractive is using fly/dig
+            if otheractive.curmove and otheractive.curmove.ofunc == f_move_flydig then return true end
+
+            -- selfactive can't miss trapping moves if the first hit succeeded
+            if selfactive.curmove and selfactive.curmove.ofunc == f_move_trapping then return false end
+
+            -- every move aimed at oppenent in pokemon stadium has a 1/65536 chance of a move missing, besides swift
+            return _rnd(otheractive:f_movehelp_getstat'evasion') > move.accuracy/100*selfactive:f_movehelp_getstat'accuracy' or f_flr_rnd'256' == 0 and f_flr_rnd'256' == 0
+        end)() then
             addaction(self, "|misses|"..move.name)
 
             if f_in_moves(move.num, 'M_HIGH_JUMP_KICK,M_JUMP_KICK') then
@@ -377,27 +391,6 @@ end $$
     else
         return f_get_moves(_ENV)
     end
-end $$
-
-|[f_select_random_move]| function(active)
-    local possible_moves = f_get_possible_moves(active)
-    return possible_moves[f_flr_rnd(#possible_moves)+1] or f_create_move(M_STRUGGLE)
-end $$
-
--- every move aimed at oppenent in pokemon stadium has a 1/65536 chance of a move missing, besides swift
-|[f_does_move_miss]| function(attacker, defender, move)
-    if move.accuracy <= 0  then return false end -- this catches swift and self status moves... swift is negative
-
-    -- charging moves & fly/dig can't miss on the first turn
-    if (move.ofunc == f_move_prepare or move.ofunc == f_move_flydig) and not attacker.curmove then return false end
-
-    -- attacker misses if defender is using fly/dig
-    if defender.curmove and defender.curmove.ofunc == f_move_flydig then return true end
-
-    -- attacker can't miss trapping moves if the first hit succeeded
-    if attacker.curmove and attacker.curmove.ofunc == f_move_trapping then return false end
-
-    return _rnd(defender:f_movehelp_getstat'evasion') > move.accuracy/100*attacker:f_movehelp_getstat'accuracy' or f_flr_rnd'256' == 0 and f_flr_rnd'256' == 0
 end $$
 
 -- movetype advantage used to calculate resistance too

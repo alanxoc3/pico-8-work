@@ -16,7 +16,9 @@ end $$
     f_draw3_pokeinfo(game:f_modes_entry'browse'.pkmn)
 end $$
 
-|[f_main_draw3]|        function(game) f_print_draw3_message(game:f_modes_entry'main'.desc) end $$
+|[f_main_draw3]| function(game)
+    f_print_draw3_message(game:f_modes_entry'main'.desc)
+end $$
 
 |[f_fight_draw3_helper]| function(_ENV)
     if num > -1 then

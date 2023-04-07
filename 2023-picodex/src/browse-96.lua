@@ -20,22 +20,20 @@ end $$
 -- Draw a pokemon by number. Pokemon is centered at x & y. sw and sh can be decimals.
 -- Num 1 would be bulbasaur.
 g_loaded_row = 16 -- default corresponds to the top row in the "129-151.p8" file.
-|[f_draw_pkmn]| function(num, x, y, sw, sh)
-    local row, col = num/8\1, num%8
-
-    if row ~= g_loaded_row then
-        g_loaded_row = row
-        _memcpy(0x0000, 0x8000+0x400*row, 0x400)
-    end
-
-    _sspr(col*16, 0, 16, 16, x-sw*8, y-sh*8, sw*16, sh*16)
-end $$
-
 |[f_draw_pkmn_out]| function(_ENV, x, y, style, xscale, yscale, is_thick)
-    local num = _ENV:f_pkmn_available() and num or -1
-    local mini = minimize or 1
-    xscale *= mini
-    yscale *= mini
+    local num, mini = _ENV:f_pkmn_available() and num or -1, 8*(minimize or 1)
+    xscale *= mini yscale *= mini
+
+    local drawpkmn = function(x, y)
+        local row, col = num/8\1, num%8
+
+        if row ~= g_loaded_row then
+            _g.g_loaded_row = row
+            _memcpy(0x0000, 0x8000+0x400*row, 0x400)
+        end
+
+        _sspr(col*16, 0, 16, 16, x-xscale, y-yscale, xscale*2, yscale*2)
+    end
 
     _foreach(f_zobj[[
         ;,P_PIKACHU,M_SURF,   152
@@ -57,8 +55,8 @@ end $$
             if color > 0 then
                 for c=1,15 do _pal(c,color) end
                 for i=-1,1,2 do
-                    f_draw_pkmn(num, x+(v1 or i*outline_width), y+(v2 or i*outline_width), xscale, yscale)
-                    f_draw_pkmn(num, x+(v3 or i*outline_width), y+(v4 or i*outline_width), xscale, yscale) 
+                    drawpkmn(x+(v1 or i*outline_width), y+(v2 or i*outline_width))
+                    drawpkmn(x+(v3 or i*outline_width), y+(v4 or i*outline_width)) 
                 end
             end
         end
@@ -80,7 +78,7 @@ end $$
             ;;,1, ~c_no, 0,     0, ~c_no, 1
         ]], style.aa)
 
-        _pal() f_draw_pkmn(num, x, y, xscale, yscale)
+        _pal() drawpkmn(x, y)
     end
 end $$
 

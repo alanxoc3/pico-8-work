@@ -37,9 +37,14 @@ function __init()
 
     f_draw_picodex(g_picodex)
     _flip()
-    f_minisfx'155' f_extract_sheet(0x0) -- 0x0
-    f_minisfx'154' f_extract_sheet(0x2) -- 0x2
-    f_minisfx'153' f_extract_sheet(0x4) -- 0x4
+    f_zcall(function(sfx_ind, sheet_loc)
+        f_minisfx(sfx_ind)
+        f_extract_sheet(sheet_loc) -- 0x0
+    end, [[
+        ;,155, 0x0
+       ;;,154, 0x2
+       ;;,153, 0x4
+    ]])
     f_minisfx'154'
 
     f_zcall(_poke, [[
@@ -69,7 +74,7 @@ function __init()
     end
 
     -- Need the pokedex tiles to stay loaded. This starts at sprite index #96.
-    _memcpy(0x0000, 0xc000, 0x2000)
+    f_zcall(_memcpy, [[;,0x0000, 0xc000, 0x2000]])
 end
 
 function __update60()
