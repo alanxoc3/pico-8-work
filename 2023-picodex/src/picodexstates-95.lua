@@ -58,7 +58,7 @@ end $$
             if light == 0 then
                 f_zcall(_rectfill, [[;,14,18,117,87,13]])
                 f_zcall(function(xoff, yoff, w, h, screen_func)
-                    _clip(-%0x5f28+xoff,-%0x5f2a+yoff,w,h) -- todo: are the clips needed?
+                    _clip(-%0x5f28+xoff,-%0x5f2a+yoff,w,h)
                     f_zcamera(xoff, yoff, screen_func)
                     _clip()
                 end, [[

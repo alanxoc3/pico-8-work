@@ -1,5 +1,4 @@
 -- battle mechanic differences
--- todo: something to consider. Minimize makes the sprite smaller.
 -- todo: might be fun to add a few more event pokemon -- slowbro, magikarp, dragonite, fearow, rapidash, flying pikachu
 --  juggler's slowbro - metronome (glitch)
 --  lance's dragonite - barrier (glitch)

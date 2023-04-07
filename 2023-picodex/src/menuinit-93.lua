@@ -1,4 +1,3 @@
--- todo: when fight is over and you press back, there is no sound effect.
 -- todo: change sprites to bevlhc
 |[f_fightover_init]| function(_ENV)
     local plose = f_get_other_pl(_ENV, pwin)

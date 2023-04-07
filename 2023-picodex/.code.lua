@@ -110,7 +110,6 @@ add(menu,(mapfunc or f_nop)(data[i],i))
 end
 end,function(game)
 game:f_modes_pop()
-f_minisfx"154"
 end,function(menu,delta,is_ud)
 if is_ud then
 local newval=menu.c+delta*menu.r
@@ -136,7 +135,7 @@ if menu.c\menu.r>menu.v+2 then menu.v=menu.c\menu.r-2 end
 menu.v=mid(0,menu.v,(#menu-1)\menu.r)
 end,function(game)
 local menu=game.menu
-if g_bpo then menu.cancel(game)end
+if g_bpo then f_minisfx"154" menu.cancel(game)end
 if g_bpx then game:xfunc()end
 menu.v+=g_bpv
 if g_bph ~=0 then game:lrfunc(g_bph)end
@@ -161,7 +160,7 @@ f_minisfx"155"
 entry.sel(game,entry)
 end
 end
-if g_bpo then menu.cancel(game)end
+if g_bpo then f_minisfx"154" menu.cancel(game)end
 end,function(game)
 local menu=game.menu
 local cellw=menu.r>1 and 10 or 40

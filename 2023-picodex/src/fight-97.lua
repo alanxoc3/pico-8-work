@@ -1,9 +1,3 @@
--- pl,1-4,false - sel a move slot  are move slots
--- pl,0,false   - sel default move (solar beam charge, hyper beam recharge, struggle, ...)
--- pl,1-6,true  - switch with team slot
-
--- todo: make it so exiting the screen for your turn will show the battle screen
-
 -- pkmn must be non-nil and match the team table structure defined in f_create_team_pkmn
 |[f_pkmn_comes_out]| function(pl, pkmn)
     local txt, moves = "|enters|fight", {}

@@ -48,7 +48,6 @@ end $$
 
 |[f_menu_cancel]| function(game)
     game:f_modes_pop()
-    f_minisfx'B_BACK'
 end $$
 
 -- cursor is between 0 and #menu-1. view is set too
@@ -82,7 +81,7 @@ end $$
 
 |[f_menu_view_update]| function(game)
     local menu = game.menu
-    if g_bpo then menu.cancel(game) end
+    if g_bpo then f_minisfx'B_BACK' menu.cancel(game) end
     if g_bpx then game:xfunc() end
     menu.v+=g_bpv
     if g_bph ~= 0 then game:lrfunc(g_bph) end
@@ -113,7 +112,7 @@ end $$
         end
     end
 
-    if g_bpo then menu.cancel(game) end
+    if g_bpo then f_minisfx'B_BACK' menu.cancel(game) end
 end $$
 
 |[f_menu_draw1]| function(game)
