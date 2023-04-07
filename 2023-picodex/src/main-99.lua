@@ -1,6 +1,6 @@
 -- every state change will clean up all the entities.
 |[f_game_state_init]| function(state)
-    if state.sfx then f_minisfx(state.sfx) end
+    if state.mysfx then f_minisfx(state.mysfx) end
     state:sinit()
 end $$
 
@@ -15,7 +15,7 @@ function __init()
 
         defaults;
             foldstate,closed,
-            light,4, sfx,~c_no,
+            light,4, mysfx,~c_no,
             backbuttonheld,~c_no,
             sinit,~f_nop, update,~f_nop, draw,~f_nop,
             draw1,~f_nop, draw2,~f_nop, draw3,~f_nop,
@@ -24,13 +24,13 @@ function __init()
         wait;   next,moveup, duration,.5, draw,~f_draw_picodex;
         moveup; next,closed, duration,.5, draw,~f_draw_picodex;
 
-        shaking;    foldstate,closed,  next,closed,              duration,.5, sfx,159,                        draw,~f_draw_picodex;
-        closed;     foldstate,closed,  next,opening,                          sinit,~f_closed_init,           draw,~f_draw_picodex, update,~f_closed_update;
-        opening;    foldstate,opening, next,starting_1,          duration,.2,                                 draw,~f_draw_picodex;
-        starting_1; foldstate,open,    next,starting_2, light,3, duration,.2, sfx,B_OKAY,                     draw,~f_draw_picodex;
-        starting_2; foldstate,open,    next,starting_3, light,2, duration,.2, sfx,B_BACK,                     draw,~f_draw_picodex;
-        starting_3; foldstate,open,    next,game,       light,1, duration,.2, sfx,B_ERROR,                    draw,~f_draw_picodex;
-        game;       foldstate,open,    next,closing,    light,0,              sfx,B_DONE, sinit,~f_game_init, draw,~f_draw_picodex, update,~f_game_update, draw1,~f_game_draw1, draw2,~f_game_draw2, draw3,~f_game_draw3;
+        shaking;    foldstate,closed,  next,closed,              duration,.5, mysfx,159,                        draw,~f_draw_picodex;
+        closed;     foldstate,closed,  next,opening,                          sinit,~f_closed_init,             draw,~f_draw_picodex, update,~f_closed_update;
+        opening;    foldstate,opening, next,starting_1,          duration,.2,                                   draw,~f_draw_picodex;
+        starting_1; foldstate,open,    next,starting_2, light,3, duration,.2, mysfx,B_OKAY,                     draw,~f_draw_picodex;
+        starting_2; foldstate,open,    next,starting_3, light,2, duration,.2, mysfx,B_BACK,                     draw,~f_draw_picodex;
+        starting_3; foldstate,open,    next,game,       light,1, duration,.2, mysfx,B_ERROR,                    draw,~f_draw_picodex;
+        game;       foldstate,open,    next,closing,    light,0,              mysfx,B_DONE, sinit,~f_game_init, draw,~f_draw_picodex, update,~f_game_update, draw1,~f_game_draw1, draw2,~f_game_draw2, draw3,~f_game_draw3;
 
         closing;    foldstate,closing, next,closed,              duration,.25,                                draw,~f_draw_picodex, update,~f_nop;
     ]]
