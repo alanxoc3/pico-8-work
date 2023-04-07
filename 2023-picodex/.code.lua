@@ -707,7 +707,7 @@ end,function(_ENV)
 local count=0
 for i=0,151 do count+=c_pokemon[i]:f_pkmn_available()and 1 or 0 end
 menu:refresh(
-f_zobj(";name,browse,state,browse,sel,~f_menu_state_callback,desc,@;;name,edit,state,team1,sel,~f_menu_state_callback,desc,edit|stored|teams;;name,versus,state,team1match,sel,~f_menu_state_callback,desc,versus|p1 vs p2|match;;name,league,state,team1story,sel,~f_menu_state_callback,desc,@;;name,horde,state,team1horde,sel,~f_menu_state_callback,desc,@;;name,credits,state,credits,sel,~f_menu_state_callback,desc,credits|amorg|games","browse|"..count.."/151|pokemon","league|"..(@0x5efd).."/40|trainers","horde|"..(@0x5efe).."/151|hi-score")
+f_zobj(";name,browse,state,browse,sel,~f_menu_state_callback,desc,@;;name,edit,state,team1,sel,~f_menu_state_callback,desc,edit|stored|teams;;name,league,state,team1story,sel,~f_menu_state_callback,desc,@;;name,versus,state,team1match,sel,~f_menu_state_callback,desc,versus|p1 vs p2|match;;name,horde,state,team1horde,sel,~f_menu_state_callback,desc,@;;name,credits,state,credits,sel,~f_menu_state_callback,desc,credits|amorg|games","browse|"..count.."/151|pokemon","league|"..(@0x5efd).."/40|trainers","horde|"..(@0x5efe).."/151|hi-score")
 )
 end,function(_ENV,selectfunc)
 local tbl={}
