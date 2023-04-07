@@ -1,7 +1,3 @@
--- todo: check if an endless mimic battle is possible.
--- todo: check if an endless mirror-move battle is possible.
--- todo: verify toxic still works. and toxic dmg should after rest.
-
 -- roar/whirlwind/teleport
 |[f_movehelp_switch]| function(pl)
     local team = f_get_team_live(pl.team)

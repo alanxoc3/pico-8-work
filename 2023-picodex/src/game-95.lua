@@ -65,9 +65,7 @@
 
         turn;         next,p1sel, init,~f_turn_init, update,~f_turn_update, draw1,~f_turn_draw1, draw2,~f_turn_draw2, draw3,~f_turn_draw3, cur_action,~c_no;
         battleview;               init,~f_nop,       update,~f_psel_update, draw1,~f_turn_draw1, draw2,~f_turn_draw2, draw3,~f_pselactions_draw3;
-
-        -- the init func can set the current action
-        -- turn;         next,p1sel, init,~f_psel_init, ;
+        turnview;                 init,~f_nop,       update,~f_psel_update, draw1,~f_turn_draw1, draw2,~f_turn_draw2, draw3,~f_turn_draw3;
 
         -- credits
         credits;      init,~f_credits_init,      draw2,~f_main_draw2,         draw3,~f_main_draw3, xfunc,~f_credits_xfunc;

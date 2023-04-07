@@ -20,10 +20,10 @@
         stack[#stack] = p0.menu_action,
                         p0.menu_move,
                         p0.menu_switch,
-                        f_newaction(p0, "||"),
+                        f_newaction(p0, "|begins|turn"),
                         curr
 
-        _ENV:f_modes_push'pselactions'
+        _ENV:f_actor_load'turnview'
     end
 end $$
 
