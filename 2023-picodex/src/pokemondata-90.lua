@@ -180,7 +180,7 @@ _g.c_moves_raw = f_zobj[[
    ;;, "drillpck", ~f_move_default
    ;;, "lowkick",  ~f_move_default,30,~f_move_other,~f_movehelp_flinch
    ;;, "absorb",   ~f_move_drain
-   ;;, "leechsed", ~f_move_other,~f_movehelp_minor,"|is now|seeded",seeded
+   ;;, "leechsed", ~f_move_other,~f_movehelp_minor,"|is now|seeded",seeded,1,~c_yes
    ;;, "growth",   ~f_move_self, ~f_move_stat, special, 1
    ;;, "razrleaf", ~f_move_default
    ;;, "psnpowdr", ~f_move_major_other, C_MAJOR_POISONED

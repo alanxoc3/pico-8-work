@@ -165,7 +165,7 @@ end $$
         return true
     end
 
-    return f_move_other(_ENV, f_movehelp_minor, "|badly|poisoned", 'toxiced')
+    return f_move_other(_ENV, f_movehelp_minor, "|badly|poisoned", 'toxiced', 1, true)
 end $$
 
 |[f_move_splash]| function(_ENV)
@@ -182,7 +182,8 @@ end $$
         addaction(self, "|thawed|out")
         selfactive.shared.major = C_MAJOR_NONE
 
-    elseif f_movehelp_effect_works(_ENV) and otheractive.shared.major == C_MAJOR_NONE then
+    -- sing works on ghost pokemon and should
+    elseif otheractive.shared.major == C_MAJOR_NONE and (majorind == C_MAJOR_SLEEPING or f_movehelp_effect_works(_ENV)) then
         addaction(other, "|is now|"..c_major_names[majorind], function()
             otheractive.shared.major = majorind
 
@@ -196,8 +197,8 @@ end $$
 
 -- leverages f_move_(self|other)
 -- focus/screen/seed/mist/reflct/toxic
-|[f_movehelp_minor]| function(_ENV, pl, message, minor, val)
-    if (pl.active[minor] or 0) == 0 and (pl ~= other or f_movehelp_effect_works(_ENV)) then
+|[f_movehelp_minor]| function(_ENV, pl, message, minor, val, respect_type)
+    if (pl.active[minor] or 0) == 0 and (not respect_type or f_movehelp_effect_works(_ENV)) then
         pl.active[minor] = val or 1
         addaction(pl, message)
     else
