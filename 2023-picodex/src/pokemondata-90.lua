@@ -108,7 +108,7 @@ _g.c_moves_raw = f_zobj[[
    ;;, "dig",      T_GROUND,   10, 100, 100, ~f_move_flydig,"|begins|digging"
    ;;, "psychic",  T_PSYCHIC,  10, 90,  100, ~f_move_default,30,~f_move_other, ~f_move_stat,special,-1
    ;;, "teleport", T_PSYCHIC,  20, 0,   0  , ~f_move_teleport
-   ;;, "mimic",    T_NORMAL,   10, 0,   100, ~f_move_mimic
+   ;;, "mimic",    T_NORMAL,   10, 0,   0  , ~f_move_mimic
    ;;, "doubteam", T_NORMAL,   15, 0,   0  , ~f_move_self, ~f_move_stat, evasion, 1
    ;;, "reflect",  T_PSYCHIC,  20, 0,   0  , ~f_move_self,~f_movehelp_minor,"|raises|defense",reflected
    ;;, "bide",     T_NORMAL,   10, -5,  100, ~f_move_bide

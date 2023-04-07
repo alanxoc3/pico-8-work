@@ -725,6 +725,7 @@ local t <- priority_class
 local t <- i
 local t <- predict
 local t <- i
+local t <- num
 local t <- dmg
 local t <- pkmn
 local t <- i

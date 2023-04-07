@@ -41,7 +41,6 @@ Differences inspired by later Pokemon games:
 - The freeze status condition has a 20% chance to unthaw the Pokemon each turn.
 - Hyper beam still needs to recharge if it knocks out the opponent Pokemon.
 - Haze only resets stat modifiers, it does not reset any special effects.
-- Mimic replaces the move's pp with "5" until switched out, just like transform.
 - Transform fails when opponent is transformed or user is already transformed.
 - Leech seed does not use the toxic counter.
 - Struggle bypasses type checks.
@@ -50,6 +49,7 @@ Differences inspired by personal preference:
 - All Pokemon are set to level 50 with the highest possible stats they can have for that level.
 - When you KO the target with a multihit move such as "Double Slap", your attack will continue onto the next Pokemon sent out.
 - If a Pokemon faints, the next Pokemon in the user's party is sent out automatically.
+- Mimic replaces the move's pp with "5", bypasses accuracy checks, and doesn't copy mimic.
 - Rage consumes 1 pp for each turn it is used.
 
 If you want more in depth detail into how PS1/Picodex battle mechanics work, I strongly recommend looking at this article from smogon:
