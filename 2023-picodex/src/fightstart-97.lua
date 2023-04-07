@@ -22,9 +22,12 @@
             f_create_menu(f_menu_drawentry),
             f_create_menu(f_browse_drawentry, 3),
             _unpack(dd))
-        local _ENV=_ENV[dd.key]
-        menu_action.cancel = f_beep
-        _add(actions, f_pkmn_comes_out(_ENV, f_get_next_active(team)))
+        local pl=_ENV[dd.key]
+        pl.menu_action.cancel = function()
+            _ENV:f_modes_pop()
+            _ENV:f_actor_load'battleview'
+        end
+        _add(pl.actions, f_pkmn_comes_out(pl, f_get_next_active(pl.team)))
     end
 
     _ENV:f_modes_push'turn'

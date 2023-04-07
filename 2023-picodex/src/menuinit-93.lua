@@ -1,3 +1,5 @@
+-- todo: when fight is over and you press back, there is no sound effect.
+-- todo: change sprites to bevlhc
 |[f_fightover_init]| function(_ENV)
     local plose = f_get_other_pl(_ENV, pwin)
     pwin:winlogic(plose)
@@ -33,8 +35,8 @@ end $$
         f_zobj([[
             ;name,"browse",  state,browse,     sel,~f_menu_state_callback, desc,@
            ;;name,"edit",    state,team1,      sel,~f_menu_state_callback, desc,"edit|stored|teams"
+           ;;name,"versus",  state,team1match, sel,~f_menu_state_callback, desc,"versus|p1 vs p2|match"
            ;;name,"league",  state,team1story, sel,~f_menu_state_callback, desc,@
-           ;;name,"player",  state,team1match, sel,~f_menu_state_callback, desc,"player|custom|battles"
            ;;name,"horde",   state,team1horde, sel,~f_menu_state_callback, desc,@
            ;;name,"credits", state,credits,    sel,~f_menu_state_callback, desc,"credits|amorg|games"
         ]], "browse|"..count.."/151|pokemon", "league|"..(@S_STORY).."/40|trainers", "horde|"..(@S_HOARD).."/151|hi-score")

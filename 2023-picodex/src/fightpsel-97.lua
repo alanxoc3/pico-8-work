@@ -13,7 +13,6 @@
     elseif #p0.actions > 0 then
         _ENV:f_actor_load()
     else
-        -- this block is needed so in versus mode, players don't share cursor positions
         pselactions.menu,
         pselmove.menu,
         pselswitch.menu,
@@ -21,11 +20,20 @@
         stack[#stack] = p0.menu_action,
                         p0.menu_move,
                         p0.menu_switch,
-                        f_newaction(p0, ""),
-                        curr -- without this, next trainer's turn might be skipped
+                        f_newaction(p0, "||"),
+                        curr
 
         _ENV:f_modes_push'pselactions'
     end
+end $$
+
+|[f_psel_update]| function(_ENV)
+    if g_bpx then
+        _ENV:f_modes_push'pselactions'
+        f_minisfx'B_OKAY'
+    end
+
+    if g_bpo then f_beep() end
 end $$
 
 |[f_psel_forfeit]| function(_ENV)

@@ -60,9 +60,14 @@
         pselswitch;   init,~f_pselswitch_init,  draw2,~f_turn_draw2,         draw3,~f_pselswitch_draw3, draw1,~f_editteam_draw1;
 
         -- in-fight screens
-        p1sel;        next,p2sel, init,~f_psel_init, update,~f_nop,         draw1,~f_nop,        p0key,p1;
-        p2sel;        next,turn,  init,~f_psel_init, update,~f_nop,         draw1,~f_nop,        p0key,p2;
+        p1sel;        next,p2sel, init,~f_psel_init, p0key,p1;
+        p2sel;        next,turn,  init,~f_psel_init, p0key,p2;
+
         turn;         next,p1sel, init,~f_turn_init, update,~f_turn_update, draw1,~f_turn_draw1, draw2,~f_turn_draw2, draw3,~f_turn_draw3, cur_action,~c_no;
+        battleview;               init,~f_nop,       update,~f_psel_update, draw1,~f_turn_draw1, draw2,~f_turn_draw2, draw3,~f_pselactions_draw3;
+
+        -- the init func can set the current action
+        -- turn;         next,p1sel, init,~f_psel_init, ;
 
         -- credits
         credits;      init,~f_credits_init,      draw2,~f_main_draw2,         draw3,~f_main_draw3, xfunc,~f_credits_xfunc;
@@ -94,7 +99,6 @@
         team1menu,@, browsemenu,@;
 
         main;menu;cancel,~f_beep;
-        pselactions;menu;cancel,~f_beep;
 
         team1horde;menu,~team1menu;
         team1story;menu,~team1menu;

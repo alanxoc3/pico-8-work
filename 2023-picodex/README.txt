@@ -70,8 +70,6 @@ f_move_trapping
 f_move_flydig
 f_move_prepare
 
-
-
 IF I NEED TO TAKE DOWN ON TOKENS/COMPRESSION....
 here are some functions that seem to be only used once and are referenced in code, so they could probably be removed.
 

@@ -295,6 +295,7 @@ end $$
                 else
                 end
             else
+                -- this if statement is needed for being able to show battle when selecting move.
                 game:f_actor_load() -- next turn
                 return
             end
