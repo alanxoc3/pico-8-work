@@ -1154,12 +1154,12 @@ if f_in_moves(move.num,"145,73 ")then
 f_move_setdmg_self(_ENV,1)
 end
 else
-if move.accuracy ~=0 then
-otheractive.lastmoverecv=move.num
-end
 if move.func(_ENV)then
 addaction(self,"|fails|attack")
 end
+end
+if move.accuracy ~=0 then
+otheractive.lastmoverecv=move.num
 end
 end)
 end,function(_ENV,newval,newcurmove)

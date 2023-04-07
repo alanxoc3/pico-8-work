@@ -15,7 +15,7 @@
 
     pl.active = _setmetatable(f_zobj([[
         isactive,~c_yes, -- used for a drawing function, should draw fainted pokemon if they are not active, but not if they are active.
-        lastmoverecv,0,  -- last move taken damage by, for mirrormove
+        lastmoverecv,0,  -- last move targeted at user, for mirrormove
         accuracy,1,      -- accuracy stat for battle
         evasion,1,       -- evasion stat for battle
         moveturn,0,      -- turn move is on. > 0, decrements each turn. 0, is the same. -1, is multiturn move that doesn't end (rage).
@@ -90,13 +90,13 @@ end $$
                 f_move_setdmg_self(_ENV, 1)
             end
         else
-            if move.accuracy ~= 0 then -- -1 is swift, positive is most moves. mirrormove has 0 acc, so you can't copy that. haze is -1 too
-                otheractive.lastmoverecv = move.num
-            end
-
             if move.func(_ENV) then
                 addaction(self, "|fails|attack")
             end
+        end
+
+        if move.accuracy ~= 0 then -- -1 is swift, positive is most moves. mirrormove has 0 acc, so you can't copy that. haze is -1 too
+            otheractive.lastmoverecv = move.num
         end
     end)
 end $$
