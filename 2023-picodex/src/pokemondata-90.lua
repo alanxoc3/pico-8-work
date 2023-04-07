@@ -1,5 +1,4 @@
 -- battle mechanic differences
--- todo: try moving some data back into code to free up sprite space
 -- todo: might be fun to add a few more event pokemon -- slowbro, magikarp, dragonite, fearow, rapidash, flying pikachu
 --  juggler's slowbro - metronome (glitch)
 --  lance's dragonite - barrier (glitch)
