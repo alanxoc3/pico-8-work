@@ -148,23 +148,20 @@ end $$
             end
         end
 
-        if otheractive.trappedother == selfactive then
-            addaction(self, "|is|trapped")
-
-        elseif selfactive.disabledslot == move.slot then
-            addaction(self, "|is|disabled")
-
-        elseif selfactive.confused > 0 and f_flr_rnd'2' == 0 then
-            addaction(self, "|confuse|damage")
-            f_move_setdmg_self(_ENV, f_calc_move_damage(selfactive, otheractive, f_create_move(-1))) -- can't be a string
-
-        elseif selfactive.major == C_MAJOR_PARALYZED and f_flr_rnd'4' == 0 then
-            addaction(self, "|fully|paralyzed")
-
-        elseif selfactive.flinching then
-            addaction(self, "|is|flinching")
-
+        if otheractive.trappedother == selfactive                          then addaction(self, "|is|trapped")
+        elseif selfactive.disabledslot == move.slot                        then addaction(self, "|is|disabled")
+        elseif selfactive.major == C_MAJOR_PARALYZED and f_flr_rnd'4' == 0 then addaction(self, "|fully|paralyzed")
+        elseif selfactive.flinching                                        then addaction(self, "|is|flinching")
         else
+            if selfactive.confused > 0 then
+                addaction(self, "|is|confused")
+                if f_flr_rnd'2' == 0 then
+                    addaction(self, "|hurt|itself")
+                    f_move_setdmg_self(_ENV, f_calc_move_damage(selfactive, otheractive, f_create_move(-1))) -- can't be a string
+                    return
+                end
+            end
+
             f_movelogic(self, move)
         end
     end)

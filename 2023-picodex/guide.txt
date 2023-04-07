@@ -50,7 +50,6 @@ Differences inspired by personal preference:
 - All Pokemon are set to level 50 with the highest possible stats they can have for that level.
 - When you KO the target with a multihit move such as "Double Slap", your attack will continue onto the next Pokemon sent out.
 - If a Pokemon faints, the next Pokemon in the user's party is sent out automatically.
-- Conversion copies the opponent's type rather than the type of a random move.
 - Rage consumes 1 pp for each turn it is used.
 
 If you want more in depth detail into how PS1/Picodex battle mechanics work, I strongly recommend looking at this article from smogon:

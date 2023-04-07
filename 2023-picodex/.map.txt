@@ -1,8 +1,8 @@
 global e <- selfactive
 global n <- name
 global f <- f_move_default
-global o <- menu
-global a <- active
+global o <- active
+global a <- menu
 global d <- num
 global i <- otheractive
 global r <- addaction
@@ -26,10 +26,10 @@ global p <- c
 global w <- mynewmoves
 global g <- curmove
 global b <- f_flr_rnd
-global x <- c_no
-global y <- r
-global k <- team
-global j <- team1
+global x <- r
+global y <- team
+global k <- team1
+global j <- c_no
 global z <- f_move_self
 global q <- defense
 global A <- accuracy
@@ -440,6 +440,7 @@ local e <- cache
 local e <- key
 local e <- moves
 local e <- pl
+local e <- pl
 local e <- pkmn
 local e <- pkmn
 local e <- i
@@ -466,7 +467,6 @@ local e <- newstate
 local e <- ox
 local e <- game
 local e <- menu
-local e <- pl
 local e <- pkmn
 local e <- pkmn
 local e <- num
@@ -856,6 +856,7 @@ local o <- passfunc
 local o <- ind
 local o <- team
 local o <- p1on
+local o <- select_func
 local o <- screen_func
 local o <- x
 local o <- y
@@ -874,7 +875,6 @@ local a <- func
 local a <- isself
 local a <- mem
 local a <- p2on
-local a <- select_func
 local a <- prefix
 local a <- y
 local a <- y

@@ -80,14 +80,14 @@ end $$
 
 |[f_move_haze]| function(_ENV)
     _foreach({other, self}, function(pl)
-        f_zobj_set(pl.active.stages, [[
-            special, 0, attack, 0,
-            defense, 0, speed,  0,
-            accuracy,0, evasion,0,
-            minimize,~c_no
-        ]])
-
-        addaction(pl, "|resets|stats")
+        addaction(pl, "|resets|stats", function()
+            f_zobj_set(pl.active.stages, [[
+                special, 0, attack, 0,
+                defense, 0, speed,  0,
+                accuracy,0, evasion,0
+            ]])
+            pl.active.minimize = false
+        end)
     end)
 end $$
 

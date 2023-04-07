@@ -363,13 +363,13 @@ g_trainer_data = {
    P_GEODUDE,   P_OMANYTE,   P_CUBONE,    P_VULPIX,    P_KABUTO,    P_ONIX,       -- brock
 
    P_ODDISH,    P_MEOWTH,    P_CLEFAIRY,  P_NIDORANF,  P_DODUO,     P_JIGGLYPUFF, -- lass
-   P_GEODUDE,   P_DIGLETT,   P_ZUBAT,     P_MACHOP,    P_PARAS,     P_GRAVELER,   -- hiker
+   P_GEODUDE,   P_PARAS,     P_DIGLETT,   P_ZUBAT,     P_GRAVELER,  P_MACHOP,     -- hiker
    P_HORSEA,    P_POLIWAG,   P_SHELLDER,  P_MAGIKARP,  P_STARYU,    P_GOLDEEN,    -- swimmer
    P_STARYU,    P_SEADRA,    P_PSYDUCK,   P_SEAKING,   P_SEEL,      P_STARMIE,    -- misty
 
    P_GROWLITHE, P_NIDORANM,  P_DRATINI,   P_PONYTA,    P_SANDSHREW, P_EEVEE,      -- gentlman
    P_SHELLDER,  P_TENTACOOL, P_PSYDUCK,   P_POLIWAG,   P_KRABBY,    P_POLIWHIRL,  -- sailor
-   P_VOLTORB,   P_ZUBAT,     P_VENONAT,   P_MAGNEMITE, P_ABRA,      P_PIKACHU,    -- rocker
+   P_VOLTORB,   P_ABRA,      P_ZUBAT,     P_VENONAT,   P_MAGNEMITE, P_PIKACHU,    -- rocker
    P_PIKACHU,   P_JOLTEON,   P_VOLTORB,   P_ELECTABUZZ,P_MAGNETON,  P_RAICHU,     -- ltsurge
 
    P_GASTLY,    P_JIGGLYPUFF,P_CUBONE,    P_CLEFAIRY,  P_HAUNTER,   P_MAROWAK,    -- channelr
