@@ -56,14 +56,13 @@ function __init()
     -- 0x0006
     f_px9_decomp(_peek2'0x6', _mget, _mset)
 
-    -- 0x0008
     f_populate_c_moves()
 
-    -- 0x000a
+    -- 0x0008
     f_populate_c_pokemon()
 
-    -- 0x000c trainers
-    local trainer_loc = _peek2'0xc'
+    -- 0x000a trainers
+    local trainer_loc = _peek2'0xa'
     for i, v in _pairs(c_trainers) do
         local tbl = {name=v}
         for j=1,6 do
