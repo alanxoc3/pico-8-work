@@ -563,7 +563,6 @@ local e <- newval
 local e <- title
 local e <- p0
 local e <- moveid
-local e <- hitcount
 local e <- game
 local e <- team
 local n <- move

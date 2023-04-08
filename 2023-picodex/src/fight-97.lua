@@ -257,8 +257,8 @@ end $$
 ---------------------------------------------------------------------------
 -- misc stuff
 ---------------------------------------------------------------------------
-|[f_newaction]| function(pactive, message, logic, name)
-    return f_zobj([[pl,@, name,@, active,@, message,@, logic,@]], pactive, name or pactive.active.name, pactive.active, message, logic or f_nop)
+|[f_newaction]| function(pactive, message, logic, name) -- name, message, and logic can be nil, pactive cannot
+    return f_zobj([[pl,@, name,@, active,@, message,@, logic,@]], pactive, name or pactive.active.name, pactive.active, message or false, logic or f_nop)
 end $$
 
 |[f_addaction]| function(p0, ...)
@@ -291,7 +291,6 @@ end $$
                 end)
 
                 envparams.selfactive, envparams.otheractive = envparams.self.active, envparams.other.active
-
                 action.logic(envparams)
                 if action.message then
                     -- this must be in the if statement, because you can't end with an invisible action (draw will fail).

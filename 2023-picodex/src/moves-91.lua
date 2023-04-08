@@ -356,8 +356,8 @@ end $$
     end
 end $$
 
-|[f_move_multihit_var]| function(_ENV, hitcount)
-    f_move_multihit_set(_ENV, 2+f_flr_rnd'4',f_nop)
+|[f_move_multihit_var]| function(_ENV)
+    f_move_multihit_set(_ENV, 2+f_flr_rnd'4', f_nop)
 end $$
 
 |[f_move_multihit_twin]| function(_ENV)
