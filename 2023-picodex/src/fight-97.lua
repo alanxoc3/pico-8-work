@@ -1,6 +1,6 @@
 -- pkmn must be non-nil and match the team table structure defined in f_create_team_pkmn
 |[f_pkmn_comes_out]| function(pl, pkmn)
-    local txt, moves = "|enters|fight", {}
+    local moves = {}
 
     -- need to copy each move just for mimic to work when switching
     _foreach(pkmn.mynewmoves, function(m)
@@ -34,7 +34,8 @@
     ]], f_flr_rnd'7'+1, pkmn, moves), {___index=pkmn})
     -- ^^ hard-coding sleep timer here
 
-    return f_newaction(pl, txt, function()
+    return f_newaction(pl, "|enters|fight", function()
+        f_minisfx(pl.active.num)
         pl.active.invisible = false
     end)
 end $$
@@ -257,7 +258,7 @@ end $$
 -- misc stuff
 ---------------------------------------------------------------------------
 |[f_newaction]| function(pactive, message, logic, name)
-    return {pl=pactive, name=name or pactive.active.name, active=pactive.active, message=message, logic=logic or f_nop}
+    return f_zobj([[pl,@, name,@, active,@, message,@, logic,@]], pactive, name or pactive.active.name, pactive.active, message, logic or f_nop)
 end $$
 
 |[f_addaction]| function(p0, ...)
@@ -289,8 +290,7 @@ end $$
                     f_addaction(actionpl, ...)
                 end)
 
-                envparams.selfactive = envparams.self.active
-                envparams.otheractive = envparams.other.active
+                envparams.selfactive, envparams.otheractive = envparams.self.active, envparams.other.active
 
                 action.logic(envparams)
                 if action.message then

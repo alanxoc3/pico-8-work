@@ -27,21 +27,21 @@ function __init()
         wait;   next,moveup, duration,.5, draw,~f_draw_picodex;
         moveup; next,closed, duration,.5, draw,~f_draw_picodex;
 
-        shaking;    foldstate,closed,  next,closed,              duration,.5, mysfx,159,                        draw,~f_draw_picodex;
+        shaking;    foldstate,closed,  next,closed,                duration,.5, mysfx,159,                        draw,~f_draw_picodex;
         closed;     foldstate,closed,  next,opening,                          sinit,~f_closed_init,             draw,~f_draw_picodex, update,~f_closed_update;
-        opening;    foldstate,opening, next,starting_1,          duration,.2,                                   draw,~f_draw_picodex;
+        opening;    foldstate,opening, next,starting_1,            duration,.2,                                   draw,~f_draw_picodex;
         starting_1; foldstate,open,    next,starting_2, light,3, duration,.2, mysfx,B_OKAY,                     draw,~f_draw_picodex;
         starting_2; foldstate,open,    next,starting_3, light,2, duration,.2, mysfx,B_BACK,                     draw,~f_draw_picodex;
         starting_3; foldstate,open,    next,game,       light,1, duration,.2, mysfx,B_ERROR,                    draw,~f_draw_picodex;
         game;       foldstate,open,    next,closing,    light,0,              mysfx,B_DONE, sinit,~f_game_init, draw,~f_draw_picodex, update,~f_game_update, draw1,~f_game_draw1, draw2,~f_game_draw2, draw3,~f_game_draw3;
 
-        closing;    foldstate,closing, next,closed,              duration,.25,                                draw,~f_draw_picodex, update,~f_nop;
+        closing;    foldstate,closing, next,closed,                duration,.25,                                draw,~f_draw_picodex, update,~f_nop;
     ]]
 
     f_draw_picodex(g_picodex)
     _flip()
 
-    _sfx(53, 3)
+    _sfx(53, 2)
     f_extract_sheet(0x0)
     f_extract_sheet(0x2)
     f_extract_sheet(0x4)
@@ -75,10 +75,9 @@ function __init()
     f_zcall(_memcpy, [[;,0x0000, 0xc000, 0x2000]])
 end
 
-g_music_speed = 96
 function __update60()
     local _ENV = _g
-    g_music_speed, g_bpo, g_bpx, g_bph, g_bpv = 96, _btnp'4', _btnp'5', _btnp'0' and _btnp'1' and 0 or _btnp'0' and -1 or _btnp'1' and 1 or 0, _btnp'2' and _btnp'3' and 0 or _btnp'2' and -1 or _btnp'3' and 1 or 0
+    g_bpo, g_bpx, g_bph, g_bpv = _btnp'4', _btnp'5', _btnp'0' and _btnp'1' and 0 or _btnp'0' and -1 or _btnp'1' and 1 or 0, _btnp'2' and _btnp'3' and 0 or _btnp'2' and -1 or _btnp'3' and 1 or 0
 
     if @S_SWAP_CONTROLS == 1 then
         g_bpo, g_bpx = g_bpx, g_bpo
@@ -86,7 +85,8 @@ function __update60()
 
     g_picodex:f_actor_state()
 
-    _poke(0x4055, g_music_speed)
+    -- you can set the music speed with this
+    -- _poke(0x4055, 96)
 end
 
 function __draw()

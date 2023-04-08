@@ -29,18 +29,18 @@ end $$
 -- move funcs take in "_ENV", which has some useful things
 -- returning "true" means the move failed
 |[f_move_disable]| function(_ENV)
-    -- if otheractive.disabledtimer > 0 then return true end
-    -- local moves = f_get_moves(otheractive)
-    -- if #moves == 0 then return true end
+    if otheractive.disabledtimer > 0 then return true end
+    local moves = f_get_moves(otheractive)
+    if #moves == 0 then return true end
 
-    -- otheractive.disabledtimer, otheractive.disabledslot = f_flr_rnd'6'+2, moves[f_flr_rnd(#moves)+1].slot
-    -- addaction(other, "|"..otheractive.mynewmoves[otheractive.disabledslot].name.."|disabled")
+    otheractive.disabledtimer, otheractive.disabledslot = f_flr_rnd'6'+2, moves[f_flr_rnd(#moves)+1].slot
+    addaction(other, "|"..otheractive.mynewmoves[otheractive.disabledslot].name.."|disabled")
 
-    -- -- if the move disabled is a multiturn move, we need to stop the multiturn timer
-    -- -- no need to worry about trapping moves, because you won't be able to use disable during a trapping move
-    -- if otheractive.curmove and otheractive.curmove.slot == otheractive.disabledslot then
-    --     otheractive.moveturn = 0
-    -- end
+    -- if the move disabled is a multiturn move, we need to stop the multiturn timer
+    -- no need to worry about trapping moves, because you won't be able to use disable during a trapping move
+    if otheractive.curmove and otheractive.curmove.slot == otheractive.disabledslot then
+        otheractive.moveturn = 0
+    end
 end $$
 
 |[f_movehelp_movecopy]| function(_ENV, num, slot)
@@ -125,26 +125,6 @@ end $$
     end
 end $$
 
--- move funcs take in "_ENV", which has some useful things
--- returning "true" means the move failed
-|[f_move_roar]| function(_ENV)
-    local pkmn = f_movehelp_switch(other)
-    if pkmn then
-        f_select_switch(other, pkmn)
-    else
-        return true
-    end
-end $$
-
-|[f_move_teleport]| function(_ENV)
-    local pkmn = f_movehelp_switch(self)
-    if pkmn then
-        f_select_switch(self, pkmn)
-    else
-        return true
-    end
-end $$
-
 |[f_format_num_sign]| function(num, name)
     return (_sgn(num) > 0 and "|+" or "|-").._abs(num).." "..name.."|change"
 end $$
@@ -161,6 +141,16 @@ end $$
 
     if prev ~= pl.active.stages[key] then
         addaction(pl, f_format_num_sign(stage, c_stages[key]), func or f_nop)
+    else
+        return true
+    end
+end $$
+
+-- for roar, whirlwind, teleport
+|[f_move_switch]| function(_ENV, pl)
+    local pkmn = f_movehelp_switch(pl)
+    if pkmn then
+        f_select_switch(pl, pkmn)
     else
         return true
     end

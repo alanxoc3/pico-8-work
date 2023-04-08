@@ -81,7 +81,7 @@ _g.c_moves_raw = f_zobj[[
    ;;, "megapnch", T_NORMAL,   20, 80,  85 , ~f_move_default
    ;;, "razrwind", T_NORMAL,   10, 80,  75 , ~f_move_prepare
    ;;, "sworddnc", T_NORMAL,   30, 0,   0  , ~f_move_self, ~f_move_stat, attack, 2
-   ;;, "whrlwind", T_NORMAL,   20, 0,   100, ~f_move_roar
+   ;;, "whrlwind", T_NORMAL,   20, 0,   100, ~f_move_other,~f_move_switch
    ;;, "megakick", T_NORMAL,   5,  120, 75 , ~f_move_default
    ;;, "toxic",    T_POISON,   10, 0,   85 , ~f_move_toxic
    ;;, "horndril", T_NORMAL,   5,  -5,  30 , ~f_move_ohko
@@ -107,7 +107,7 @@ _g.c_moves_raw = f_zobj[[
    ;;, "fissure",  T_GROUND,   5,  -5,  30 , ~f_move_ohko
    ;;, "dig",      T_GROUND,   10, 100, 100, ~f_move_flydig,"|begins|digging"
    ;;, "psychic",  T_PSYCHIC,  10, 90,  100, ~f_move_default,30,~f_move_other, ~f_move_stat,special,-1
-   ;;, "teleport", T_PSYCHIC,  20, 0,   0  , ~f_move_teleport
+   ;;, "teleport", T_PSYCHIC,  20, 0,   0  , ~f_move_self,~f_move_switch
    ;;, "mimic",    T_NORMAL,   10, 0,   0  , ~f_move_mimic
    ;;, "doubteam", T_NORMAL,   15, 0,   0  , ~f_move_self, ~f_move_stat, evasion, 1
    ;;, "reflect",  T_PSYCHIC,  20, 0,   0  , ~f_move_self,~f_movehelp_minor,"|raises|defense",reflected
@@ -166,7 +166,7 @@ _g.c_moves_raw = f_zobj[[
    ;;, "leer",     T_NORMAL,   30, 0,   100, ~f_move_other, ~f_move_stat, defense, -1
    ;;, "bite",     T_NORMAL,   25, 60,  100, ~f_move_default,10,~f_move_other,~f_movehelp_flinch
    ;;, "growl",    T_NORMAL,   40, 0,   100, ~f_move_other, ~f_move_stat, attack, -1
-   ;;, "roar",     T_NORMAL,   20, 0,   100, ~f_move_roar
+   ;;, "roar",     T_NORMAL,   20, 0,   100, ~f_move_other,~f_move_switch
    ;;, "sing",     T_NORMAL,   15, 0,   55 , ~f_move_major_other, C_MAJOR_SLEEPING
    ;;, "sprsonic", T_NORMAL,   20, 0,   55 , ~f_move_other,~f_movehelp_confuse
    ;;, "sonicbom", T_NORMAL,   20, -5,  90 , ~f_move_setdmg,20

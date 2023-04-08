@@ -62,10 +62,11 @@ S_PARTY3:         0x5e3c
 S_POKEMON:        0x5e5a
 # 152 pkmn ends:  0x5ef2
 
-S_NEW:            0x5efc
-S_STORY:          0x5efd
-S_HOARD:          0x5efe
-S_SWAP_CONTROLS:  0x5eff
+S_NEW:            0x5efb
+S_STORY:          0x5efc
+S_HOARD:          0x5efd
+S_SWAP_CONTROLS:  0x5efe
+S_TOGGLE_MUSIC:   0x5eff
 
 # type numbers, hard coded in compile and pokemon_data, so change those places if this changes.
 T_NONE:     0
