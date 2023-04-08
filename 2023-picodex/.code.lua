@@ -1394,7 +1394,7 @@ local a,f=o,ta(e,t)
 *((e.eL==n.eE or e.eL==n.ew)and 1.5or 1)
 *(rnd".15"+.85)
 if f>0then
-return max(1,a*f\1),d>1
+return mid(1,999,a*f\1),d>1
 end
 return 0,false
 end)

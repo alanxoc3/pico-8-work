@@ -454,7 +454,7 @@ end $$
         *(_rnd'.15'+.85)
 
     if advantage > 0 then
-        return max(1, dmg*advantage\1), crit > 1
+        return _mid(1, 999, dmg*advantage\1), crit > 1
     end
 
     return 0, false
