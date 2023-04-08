@@ -182,7 +182,7 @@ function encode_cart(message, cartname, w, h, func)
 end
 
 function myinit()
-    ENCODE_OFFSET=14 -- this must be set to where data can start writing
+    ENCODE_OFFSET=12 -- this must be set to where data can start writing
     local enc_vget = function(...) return vget(0x8000, ...) end
 
     cls()
@@ -204,9 +204,8 @@ function myinit()
 
     poke(0x5f56, 0xa0) -- mget points to the loaded map.
     poke2(0x0006, ENCODE_OFFSET) encode_cart     ("picodex skin   ", "128-151.p8", 32,  11,  mget)
-    poke2(0x0008, ENCODE_OFFSET) encode_move_data("move info      ", g_move_data)      -- 166*4 = 664
-    poke2(0x000a, ENCODE_OFFSET) encode_pkmv_data("pokemon moves  ", g_pkmn_move_data)
-    poke2(0x000c, ENCODE_OFFSET) encode_trnr_data("pokemon trnrs  ", g_trainer_data)   -- 40*6  = 240
+    poke2(0x0008, ENCODE_OFFSET) encode_pkmv_data("pokemon moves  ", g_pkmn_move_data)
+    poke2(0x000a, ENCODE_OFFSET) encode_trnr_data("pokemon trnrs  ", g_trainer_data)   -- 40*6  = 240
 
                                               log("end of compile  | pos: "..tostr(ENCODE_OFFSET, 0x1))
 
@@ -224,18 +223,6 @@ end
 function offsetpoke(val)
     poke(ENCODE_OFFSET, val)
     ENCODE_OFFSET += 1
-end
-
-function encode_move_data(message, data)
-    log(message.." | pos: "..tostr(ENCODE_OFFSET, 0x1)) -- show numbers as hex
-
-    for movenum=1,166 do
-        for trait=1,4 do
-            local val = data[movenum][trait]
-            if trait > 1 then val \= 5 val += 1 end
-            offsetpoke(val)
-        end
-    end
 end
 
 function encode_trnr_data(message, data)
@@ -376,13 +363,13 @@ g_trainer_data = {
    P_GEODUDE,   P_OMANYTE,   P_CUBONE,    P_VULPIX,    P_KABUTO,    P_ONIX,       -- brock
 
    P_ODDISH,    P_MEOWTH,    P_CLEFAIRY,  P_NIDORANF,  P_DODUO,     P_JIGGLYPUFF, -- lass
-   P_GEODUDE,   P_DIGLETT,   P_ZUBAT,     P_MACHOP,    P_PARAS,     P_GRAVELER,   -- hiker
+   P_GEODUDE,   P_PARAS,     P_DIGLETT,   P_ZUBAT,     P_GRAVELER,  P_MACHOP,     -- hiker
    P_HORSEA,    P_POLIWAG,   P_SHELLDER,  P_MAGIKARP,  P_STARYU,    P_GOLDEEN,    -- swimmer
    P_STARYU,    P_SEADRA,    P_PSYDUCK,   P_SEAKING,   P_SEEL,      P_STARMIE,    -- misty
 
    P_GROWLITHE, P_NIDORANM,  P_DRATINI,   P_PONYTA,    P_SANDSHREW, P_EEVEE,      -- gentlman
    P_SHELLDER,  P_TENTACOOL, P_PSYDUCK,   P_POLIWAG,   P_KRABBY,    P_POLIWHIRL,  -- sailor
-   P_VOLTORB,   P_ZUBAT,     P_VENONAT,   P_MAGNEMITE, P_ABRA,      P_PIKACHU,    -- rocker
+   P_VOLTORB,   P_ABRA,      P_ZUBAT,     P_VENONAT,   P_MAGNEMITE, P_PIKACHU,    -- rocker
    P_PIKACHU,   P_JOLTEON,   P_VOLTORB,   P_ELECTABUZZ,P_MAGNETON,  P_RAICHU,     -- ltsurge
 
    P_GASTLY,    P_JIGGLYPUFF,P_CUBONE,    P_CLEFAIRY,  P_HAUNTER,   P_MAROWAK,    -- channelr
@@ -419,177 +406,6 @@ g_trainer_data = {
    P_GENGAR,    P_KANGASKHAN,P_CLEFABLE,  P_GYARADOS,  P_NINETALES, P_VENUSAUR,   -- green
    P_SCYTHER,   P_SNORLAX,   P_RAICHU,    P_LAPRAS,    P_DODRIO,    P_CHARIZARD,  -- red
    P_DRAGONITE, P_ZAPDOS,    P_MOLTRES,   P_ARTICUNO,  P_MEWTWO,    P_MEW         -- legendry
-}
-
--- divide each by 5. -1 becomes 255.
--- range is from [-1 to 68] aka [-5 to 340]
-g_move_data = {
-    {T_BIRD,     0,  40,  0  }, -- -1  none
-    {T_BIRD,     0,  50,  100}, -- 0   struggle
-    {T_NORMAL,   20, 80,  85 }, -- 1   megapnch
-    {T_NORMAL,   10, 80,  75 }, -- 2   razrwind
-    {T_NORMAL,   30, 0,   0  }, -- 3   sworddnc
-    {T_NORMAL,   20, 0,   100}, -- 4   whrlwind
-    {T_NORMAL,   5,  120, 75 }, -- 5   megakick
-    {T_POISON,   10, 0,   85 }, -- 6   toxic
-    {T_NORMAL,   5,  -5,  30 }, -- 7   horndril
-    {T_NORMAL,   15, 85,  100}, -- 8   bodyslam
-    {T_NORMAL,   20, 90,  85 }, -- 9   takedown
-    {T_NORMAL,   15, 100, 100}, -- 10  doubedge
-    {T_WATER,    20, 65,  100}, -- 11  bublbeam
-    {T_WATER,    25, 40,  100}, -- 12  watergun
-    {T_ICE,      10, 95,  100}, -- 13  icebeam
-    {T_ICE,      5,  120, 90 }, -- 14  blizzard
-    {T_NORMAL,   5,  150, 90 }, -- 15  hyprbeam
-    {T_NORMAL,   20, 40,  100}, -- 16  payday
-    {T_FIGHTING, 20, 80,  80 }, -- 17  submsion
-    {T_FIGHTING, 20, -5,  100}, -- 18  counter
-    {T_FIGHTING, 20, -5,  100}, -- 19  seistoss
-    {T_NORMAL,   20, 20,  100}, -- 20  rage
-    {T_GRASS,    10, 40,  100}, -- 21  megdrain
-    {T_GRASS,    10, 120, 100}, -- 22  solrbeam
-    {T_DRAGON,   10, -5,  100}, -- 23  drgnrage
-    {T_ELECTRIC, 15, 95,  100}, -- 24  thndrblt
-    {T_ELECTRIC, 10, 120, 70 }, -- 25  thunder
-    {T_GROUND,   10, 100, 100}, -- 26  earthqke
-    {T_GROUND,   5,  -5,  30 }, -- 27  fissure
-    {T_GROUND,   10, 100, 100}, -- 28  dig
-    {T_PSYCHIC,  10, 90,  100}, -- 29  psychic
-    {T_PSYCHIC,  20, 0,   0  }, -- 30  teleport
-    {T_NORMAL,   10, 0,   100}, -- 31  mimic
-    {T_NORMAL,   15, 0,   0  }, -- 32  doubteam
-    {T_PSYCHIC,  20, 0,   0  }, -- 33  reflect
-    {T_NORMAL,   10, -5,  100}, -- 34  bide
-    {T_NORMAL,   10, 0,   0  }, -- 35  metrnome
-    {T_NORMAL,   5,  260, 100}, -- 36  selfdstr
-    {T_NORMAL,   10, 100, 75 }, -- 37  eggbomb
-    {T_FIRE,     5,  120, 85 }, -- 38  fireblst
-    {T_NORMAL,   20, 60,  -5 }, -- 39  swift
-    {T_NORMAL,   15, 100, 100}, -- 40  skulbash
-    {T_NORMAL,   10, 0,   0  }, -- 41  softboil
-    {T_PSYCHIC,  15, 100, 100}, -- 42  dreameat
-    {T_FLYING,   5,  140, 90 }, -- 43  skyattck
-    {T_PSYCHIC,  10, 0,   0  }, -- 44  rest
-    {T_ELECTRIC, 20, 0,   100}, -- 45  thndrwav
-    {T_PSYCHIC,  15, -5,  80 }, -- 46  psywave
-    {T_NORMAL,   5,  340, 100}, -- 47  explsion
-    {T_ROCK,     10, 75,  90 }, -- 48  rockslid
-    {T_NORMAL,   10, 80,  100}, -- 49  triattck
-    {T_NORMAL,   10, 0,   0  }, -- 50  substute
-    {T_NORMAL,   30, 50,  95 }, -- 51  cut
-    {T_FLYING,   15, 70,  95 }, -- 52  fly
-    {T_WATER,    15, 95,  100}, -- 53  surf
-    {T_NORMAL,   15, 80,  100}, -- 54  strength
-    {T_NORMAL,   20, 0,   70 }, -- 55  flash
-    {T_NORMAL,   35, 40,  100}, -- 56  pound
-    {T_FIGHTING, 25, 55,  100}, -- 57  karatchp
-    {T_NORMAL,   10, 15,  85 }, -- 58  doubslap
-    {T_NORMAL,   15, 20,  85 }, -- 59  comtpnch
-    {T_FIRE,     15, 75,  100}, -- 60  firepnch
-    {T_ICE,      15, 75,  100}, -- 61  icepnch
-    {T_ELECTRIC, 15, 75,  100}, -- 62  thndpnch
-    {T_NORMAL,   35, 40,  100}, -- 63  scratch
-    {T_NORMAL,   30, 55,  100}, -- 64  vicegrip
-    {T_NORMAL,   5,  -5,  30 }, -- 65  guilotin
-    {T_FLYING,   35, 40,  100}, -- 66  gust
-    {T_FLYING,   35, 35,  100}, -- 67  wingatck
-    {T_NORMAL,   20, 15,  75 }, -- 68  bind
-    {T_NORMAL,   20, 80,  75 }, -- 69  slam
-    {T_GRASS,    10, 35,  100}, -- 70  vinewhip
-    {T_NORMAL,   20, 65,  100}, -- 71  stomp
-    {T_FIGHTING, 30, 30,  100}, -- 72  doubkick
-    {T_FIGHTING, 20, 70,  95 }, -- 73  jumpkick
-    {T_FIGHTING, 15, 60,  85 }, -- 74  rllngkck
-    {T_GROUND,   15, 0,   100}, -- 75  sandatck
-    {T_NORMAL,   15, 70,  100}, -- 76  headbutt
-    {T_NORMAL,   25, 65,  100}, -- 77  hornatck
-    {T_NORMAL,   20, 15,  85 }, -- 78  furyatck
-    {T_NORMAL,   35, 35,  95 }, -- 79  tackle
-    {T_NORMAL,   20, 15,  85 }, -- 80  wrap
-    {T_NORMAL,   20, 90,  100}, -- 81  thrash
-    {T_NORMAL,   30, 0,   100}, -- 82  tailwhip
-    {T_POISON,   35, 15,  100}, -- 83  psnsting
-    {T_BUG,      20, 25,  100}, -- 84  twineedl
-    {T_BUG,      20, 15,  85 }, -- 85  pinmisil
-    {T_NORMAL,   30, 0,   100}, -- 86  leer
-    {T_NORMAL,   25, 60,  100}, -- 87  bite
-    {T_NORMAL,   40, 0,   100}, -- 88  growl
-    {T_NORMAL,   20, 0,   100}, -- 89  roar
-    {T_NORMAL,   15, 0,   55 }, -- 90  sing
-    {T_NORMAL,   20, 0,   55 }, -- 91  sprsonic
-    {T_NORMAL,   20, -5,  90 }, -- 92  sonicbom
-    {T_NORMAL,   20, 0,   55 }, -- 93  disable
-    {T_POISON,   30, 40,  100}, -- 94  acid
-    {T_FIRE,     25, 40,  100}, -- 95  ember
-    {T_FIRE,     15, 95,  100}, -- 96  flamthwr
-    {T_ICE,      30, 0,   0  }, -- 97  mist
-    {T_WATER,    5,  120, 80 }, -- 98  hydropmp
-    {T_PSYCHIC,  20, 65,  100}, -- 99  psybeam
-    {T_ICE,      20, 65,  100}, -- 100 aurorabm
-    {T_FLYING,   35, 35,  100}, -- 101 peck
-    {T_FLYING,   20, 80,  100}, -- 102 drillpck
-    {T_FIGHTING, 20, 50,  90 }, -- 103 lowkick
-    {T_GRASS,    20, 20,  100}, -- 104 absorb
-    {T_GRASS,    10, 0,   90 }, -- 105 leechsed
-    {T_NORMAL,   40, 0,   0  }, -- 106 growth
-    {T_GRASS,    25, 55,  95 }, -- 107 razrleaf
-    {T_POISON,   35, 0,   75 }, -- 108 psnpowdr
-    {T_GRASS,    30, 0,   75 }, -- 109 stunspor
-    {T_GRASS,    15, 0,   75 }, -- 110 slppowdr
-    {T_GRASS,    20, 70,  100}, -- 111 petldanc
-    {T_BUG,      40, 0,   95 }, -- 112 strngsht
-    {T_FIRE,     15, 15,  70 }, -- 113 firespin
-    {T_ELECTRIC, 30, 40,  100}, -- 114 thndshck
-    {T_ROCK,     15, 50,  65 }, -- 115 rockthrw
-    {T_PSYCHIC,  25, 50,  100}, -- 116 cnfusion
-    {T_PSYCHIC,  20, 0,   60 }, -- 117 hypnosis
-    {T_PSYCHIC,  40, 0,   0  }, -- 118 meditate
-    {T_PSYCHIC,  30, 0,   0  }, -- 119 agility
-    {T_NORMAL,   30, 40,  100}, -- 120 quickatk
-    {T_GHOST,    15, -5,  100}, -- 121 ngtshade
-    {T_NORMAL,   10, 0,   85 }, -- 122 screech
-    {T_NORMAL,   20, 0,   0  }, -- 123 recover
-    {T_NORMAL,   30, 0,   0  }, -- 124 harden
-    {T_NORMAL,   20, 0,   0  }, -- 125 minimize
-    {T_NORMAL,   20, 0,   100}, -- 126 smokscrn
-    {T_GHOST,    10, 0,   100}, -- 127 cnfusray
-    {T_WATER,    40, 0,   0  }, -- 128 withdraw
-    {T_NORMAL,   40, 0,   0  }, -- 129 dfnscurl
-    {T_PSYCHIC,  30, 0,   0  }, -- 130 barrier
-    {T_PSYCHIC,  30, 0,   0  }, -- 131 lghtscrn
-    {T_ICE,      30, 0,   -5 }, -- 132 haze
-    {T_NORMAL,   30, 0,   0  }, -- 133 fcsenrgy
-    {T_FLYING,   20, -5,  0  }, -- 134 mirrmove
-    {T_GHOST,    30, 20,  100}, -- 135 lick
-    {T_POISON,   20, 20,  100}, -- 136 smog
-    {T_POISON,   20, 65,  100}, -- 137 sludge
-    {T_GROUND,   20, 65,  85 }, -- 138 boneclub
-    {T_WATER,    15, 80,  100}, -- 139 watrfall
-    {T_WATER,    10, 35,  75 }, -- 140 clamp
-    {T_NORMAL,   15, 20,  100}, -- 141 spikcann
-    {T_NORMAL,   35, 10,  100}, -- 142 constrct
-    {T_PSYCHIC,  20, 0,   0  }, -- 143 amnesia
-    {T_PSYCHIC,  15, 0,   80 }, -- 144 kinesis
-    {T_FIGHTING, 20, 85,  90 }, -- 145 hijmpkck
-    {T_NORMAL,   30, 0,   75 }, -- 146 glare
-    {T_POISON,   40, 0,   55 }, -- 147 poisngas
-    {T_NORMAL,   20, 15,  85 }, -- 148 barrage
-    {T_BUG,      15, 20,  100}, -- 149 leechlif
-    {T_NORMAL,   10, 0,   75 }, -- 150 lovekiss
-    {T_NORMAL,   10, 0,   0  }, -- 151 tranform
-    {T_WATER,    30, 20,  100}, -- 152 bubble
-    {T_NORMAL,   10, 70,  100}, -- 153 dizypnch
-    {T_GRASS,    15, 0,   100}, -- 154 spore
-    {T_NORMAL,   40, 0,   0  }, -- 155 splash
-    {T_POISON,   40, 0,   0  }, -- 156 acidarmr
-    {T_WATER,    10, 90,  85 }, -- 157 crabhamr
-    {T_NORMAL,   15, 10,  80 }, -- 158 furyswps
-    {T_GROUND,   10, 50,  90 }, -- 159 bonerang
-    {T_NORMAL,   15, 80,  90 }, -- 160 hyprfang
-    {T_NORMAL,   30, 0,   0  }, -- 161 sharpen
-    {T_NORMAL,   30, 0,   0  }, -- 162 convrson
-    {T_NORMAL,   10, -5,  90 }, -- 163 suprfang
-    {T_NORMAL,   20, 70,  100}  -- 164 slash
 }
 
 -- from missingno (0) to mew (151), these are the tms they can learn.

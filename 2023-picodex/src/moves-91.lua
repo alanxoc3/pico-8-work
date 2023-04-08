@@ -52,7 +52,12 @@ end $$
 
 |[f_move_mimic]| function(_ENV)
     local othermoves = f_get_moves(otheractive, true)
-    addaction(self, "|copies|"..f_movehelp_movecopy(selfactive, othermoves[f_flr_rnd(#othermoves)+1].num, move.slot).name)
+    local num = othermoves[f_flr_rnd(#othermoves)+1].num
+    if num == M_MIMIC then
+        return true
+    end
+
+    addaction(self, "|copies|"..f_movehelp_movecopy(selfactive, num, move.slot).name)
 end $$
 
 |[f_move_transform]| function(_ENV)
@@ -80,14 +85,14 @@ end $$
 
 |[f_move_haze]| function(_ENV)
     _foreach({other, self}, function(pl)
-        f_zobj_set(pl.active.stages, [[
-            special, 0, attack, 0,
-            defense, 0, speed,  0,
-            accuracy,0, evasion,0,
-            minimize,~c_no
-        ]])
-
-        addaction(pl, "|resets|stats")
+        addaction(pl, "|resets|stats", function()
+            f_zobj_set(pl.active.stages, [[
+                special, 0, attack, 0,
+                defense, 0, speed,  0,
+                accuracy,0, evasion,0
+            ]])
+            pl.active.minimize = false
+        end)
     end)
 end $$
 
@@ -189,7 +194,7 @@ end $$
             otheractive.shared.major = majorind
 
             -- every time major stat is set, sleep timer is set, but sleep timer isn't used unless pkmn is actually sleeping
-            sleeping = f_flr_rnd'8'
+            otheractive.sleeping = f_flr_rnd'7'+1
             -- ^^ If I change the sleep timer amount, remember to change it somewhere else too!
         end)
     else

@@ -40,7 +40,7 @@ end $$
         end
     end)
 
-    f_print_draw3_message(game:f_modes_entry().name.."|len "..count.."/6|pow "..power\10)
+    f_print_draw3_message(game:f_modes_entry().name.."|len "..count.."/6|tot "..power)
 end $$
 
 |[f_fightover_draw3]| function(game)

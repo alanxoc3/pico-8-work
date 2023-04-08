@@ -101,19 +101,18 @@ end $$
 
 -- this is called on startup to populate c_moves
 |[f_populate_c_moves]| function()
-    local memloc = _peek2'0x8'
     for i=-1,164 do -- there must be 166 loop interations as that matches the compile file (-1 to 164)
-        local typ, pp, dmg, acc, name = _peek(memloc+0), _peek(memloc+1)*5-5, _peek(memloc+2)*5-5, _peek(memloc+3)*5-5, _deli(c_moves_raw[i], 1)
-        local ofunc = _deli(c_moves_raw[i], 1)
+        local params, ofunc = {}, _deli(c_moves_raw[i], 6)
+        for ii=6,#c_moves_raw[i] do
+            _add(params, deli(c_moves_raw[i], 6))
+        end
 
         -- ofunc is used in accuracy check, for a charging move
         c_moves[i] = f_zobj([[
-            func,@, num,@, name,@, movetype,@, pp,@, maxpp,~pp, damage,@, accuracy,@, ofunc,@
+            func,@, num,@, ofunc,@, name,@, movetype,@, pp,@, maxpp,~pp, damage,@, accuracy,@
         ]], function(envparams)
-            return ofunc(envparams, _unpack(c_moves_raw[i]))
-        end, i, name, typ, pp, dmg, acc, ofunc)
-
-        memloc+=4
+            return ofunc(envparams, _unpack(params))
+        end, i, ofunc, _unpack(c_moves_raw[i]))
     end
 end $$
 

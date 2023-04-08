@@ -25,7 +25,7 @@ end $$
 end $$
 
 |[f_populate_c_pokemon]| function()
-    local movemem = _peek2'0xa'
+    local movemem = _peek2'0x8'
 
     -- -1 is for disabled things. this is never available.
     c_pokemon[-1] = f_get_default_pokemon()
