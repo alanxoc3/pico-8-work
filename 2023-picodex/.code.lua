@@ -716,7 +716,7 @@ end,function(_ENV)
 local e=0
 for n=0,151do e+=U[n]:ne()and 1or 0end
 a:N(
-m(";n,browse,Z,et,G,~eo,e3,@;;n,edit,Z,j,G,~eo,e3,edit|stored|teams;;n,league,Z,fh,G,~eo,e3,@;;n,versus,Z,t2,G,~eo,e3,versus|p1 vs p2|match;;n,horde,Z,f2,G,~eo,e3,@;;n,credits,Z,f5,G,~eo,e3,credits|amorg|games","browse|"..e.."/151|pokemon","league|"..(@0x5efc).."/40|trainers","horde|"..(@0x5efd).."/151|hi-score")
+m(";n,browse,Z,et,G,~eo,e3,@;;n,edit,Z,j,G,~eo,e3,edit|stored|teams;;n,league,Z,fh,G,~eo,e3,@;;n,versus,Z,t2,G,~eo,e3,versus|p1 vs p2|match;;n,horde,Z,f2,G,~eo,e3,@;;n,credits,Z,f5,G,~eo,e3,credits|amorg|games","browse|"..e.."/151|pokemon","league|"..(@0x5efd).."/40|trainers","horde|"..(@0x5efe).."/151|hi-score")
 )
 end,function(_ENV,n)
 local e={}
@@ -772,10 +772,10 @@ a:N(nR,function(e,n)
 return{
 n=e.n,
 k=e,
-em=n-1>@0x5efc,
+em=n-1>@0x5efd,
 G=function(t,e)
 fE(t,e.k,e.n,function(t,e)
-poke(0x5efc,mid(@0x5efc,n,40))
+poke(0x5efd,mid(@0x5efd,n,40))
 tq(e)
 end,L)
 end
@@ -947,8 +947,8 @@ for t,n in pairs(split"133,7,35,1,25,4")do
 nY(e,t,n)
 poke(0x5e5a+n,1)
 end
-if@0x5efb==0then
-poke(0x5efb,1)
+if@0x5efc==0then
+poke(0x5efc,1)
 e8(0,e)
 end
 ef=tw"ey,eM;tD;a,~z,T,~L,tH,~eP,n7,~L,ed,~oD,fs,~z,e1,~fd,P,~L,E,~L;eM;T,~oP,P,~tZ,E,~fe;et;T,~oE,P,~tc,E,~ts;fP;T,~fo,P,~tc,E,~ts,tH,~oy,n7,~o7;ec;T,~ob,P,~tu,E,~tT,e1,~t1;t5;T,~ox,P,~tu,E,~tT,e1,~t1;fI;T,~oX,P,~tc,E,~ts;fG;T,~oG,P,~tu,E,~tT;fL;T,~oI,P,~tl,E,~nh,fs,e5;nN;T,~o3,P,~ov,E,~nh;e5;T,~ow,P,~tl,E,~nh;fX;T,~op,P,~tl,E,~nh;j;nt,player,T,~n2,P,~eW,E,~eZ,nL,~z,nX,~oR;fh;nt,player,T,~n2,P,~eW,E,~eZ,nL,~el,nX,~oK;t2;nt,player 1,T,~n2,P,~eW,E,~eZ,nL,~el,nX,~oM;f2;nt,player,T,~n2,P,~eW,E,~eZ,nL,~el,nX,~oQ;tP;nt,player 2,T,~n2,P,~eW,E,~eZ,nL,~el,nX,~oN;th;nt,trainer,T,~oO,P,~eW,E,~eZ;tE;T,~o5,P,~os,E,~o2,n7,~ok;fC;T,~og,P,~eY,E,~ft;fO;T,~o4,P,~eY,E,~nh;tv;T,~o6,P,~eY,E,~oh,e1,~t1;af;next,a_,T,~fl,fw,eO;a_;next,fp,T,~fl,fw,eq;fp;next,af,T,~o8,ed,~oV,e1,~tm,P,~eY,E,~ff,ez,~z;ao;T,~L,ed,~fT,e1,~tm,P,~eY,E,~ft;aa;T,~L,ed,~fT,e1,~tm,P,~eY,E,~ff;f5;T,~oL,P,~tZ,E,~fe,n7,~o9;"
@@ -963,7 +963,7 @@ sfx(53,2)
 _ENV:Y"tX"
 end)
 menuitem(2,"swap 🅾️/❎",function()
-poke(0x5efe,@0x5efe==0and 1or 0)
+poke(0x5eff,@0x5eff==0and 1or 0)
 end)
 end,function(e)
 e.ef:t4()
@@ -1107,7 +1107,7 @@ m(",@,player 1,~z,~L",nu(_ENV:O"t2")),
 m(",@,player 2,~z,~L",nu(_ENV:O"tP"))
 )
 end,function(_ENV)
-poke(0x5efd,mid(@0x5efd,#nV(k),152))
+poke(0x5efe,mid(@0x5efe,#nV(k),152))
 end,function(_ENV)
 local e={}
 for n=1,152do add(e,n%152)end
@@ -1550,7 +1550,7 @@ end
 function _update60()
 local _ENV=e_
 eQ,e7,tn,te=btnp"4",btnp"5",btnp"0"and btnp"1"and 0or btnp"0"and-1or btnp"1"and 1or 0,btnp"2"and btnp"3"and 0or btnp"2"and-1or btnp"3"and 1or 0
-if@0x5efe==1then
+if@0x5eff==1then
 eQ,e7=e7,eQ
 end
 n_:t4()
