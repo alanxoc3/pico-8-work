@@ -19,8 +19,6 @@ end $$
     if not f_any_btn() and backbuttonheld then
         backbuttonheld = false
         _ENV:f_actor_load()
-        f_minisfx'157'
-        sfx(-1,2)
     elseif f_any_btn() then
         if not backbuttonheld then
             f_minisfx'156'
@@ -113,7 +111,7 @@ end $$
             else
                 f_picodex_map(16, 62, rotation)
 
-                if rotation == 1 then
+                if rotation == 1 and curr == 'game' then
                     if top_row_buttons then                          _spr(153, 70+top_row_buttons*8, 41) end
                     if bot_row_buttons and bot_row_buttons >= 0 then _spr(153, 70+bot_row_buttons*8, 49) end
                 end

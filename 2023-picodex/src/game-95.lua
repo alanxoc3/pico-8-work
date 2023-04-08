@@ -107,7 +107,6 @@
     _menuitem(1, "close picodex", function()
         _menuitem(1) -- remove menu item, can't pass in string number here
         _menuitem(2) -- remove menu item, can't pass in string number here
-        _sfx(53, 2) -- this is also in main!
         _ENV:f_actor_load'closing'
     end)
 
