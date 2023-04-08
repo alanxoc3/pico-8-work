@@ -1,3 +1,6 @@
+-- todo: rest should reset toxic counter
+-- todo: consider making glare effect normal/ghost
+
 -- every state change will clean up all the entities.
 |[f_game_state_init]| function(state)
     if state.mysfx then f_minisfx(state.mysfx) end
@@ -37,15 +40,11 @@ function __init()
 
     f_draw_picodex(g_picodex)
     _flip()
-    f_zcall(function(sfx_ind, sheet_loc)
-        f_minisfx(sfx_ind)
-        f_extract_sheet(sheet_loc) -- 0x0
-    end, [[
-        ;,155, 0x0
-       ;;,154, 0x2
-       ;;,153, 0x4
-    ]])
-    f_minisfx'154'
+
+    _sfx(53, 3)
+    f_extract_sheet(0x0)
+    f_extract_sheet(0x2)
+    f_extract_sheet(0x4)
 
     f_zcall(_poke, [[
          ;,0x5f5c, 8    -- set the initial delay before repeating. 255 means never repeat.
@@ -76,15 +75,18 @@ function __init()
     f_zcall(_memcpy, [[;,0x0000, 0xc000, 0x2000]])
 end
 
+g_music_speed = 96
 function __update60()
     local _ENV = _g
-    g_bpo, g_bpx, g_bph, g_bpv = _btnp'4', _btnp'5', _btnp'0' and _btnp'1' and 0 or _btnp'0' and -1 or _btnp'1' and 1 or 0, _btnp'2' and _btnp'3' and 0 or _btnp'2' and -1 or _btnp'3' and 1 or 0
+    g_music_speed, g_bpo, g_bpx, g_bph, g_bpv = 96, _btnp'4', _btnp'5', _btnp'0' and _btnp'1' and 0 or _btnp'0' and -1 or _btnp'1' and 1 or 0, _btnp'2' and _btnp'3' and 0 or _btnp'2' and -1 or _btnp'3' and 1 or 0
 
     if @S_SWAP_CONTROLS == 1 then
         g_bpo, g_bpx = g_bpx, g_bpo
     end
 
     g_picodex:f_actor_state()
+
+    _poke(0x4055, g_music_speed)
 end
 
 function __draw()

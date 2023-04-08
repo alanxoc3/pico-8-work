@@ -117,6 +117,7 @@ end $$
 
 |[f_game_update]| function(program)
     program.modes:f_actor_state()
+    _g.g_music_speed \= 2
 end $$
 
 |[f_game_draw1]| function() g_picodex.modes:draw1() end $$
