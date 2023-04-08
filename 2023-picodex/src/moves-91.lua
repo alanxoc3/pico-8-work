@@ -329,7 +329,7 @@ end $$
 |[f_move_rest]| function(_ENV)
     addaction(self, "|is|sleeping", function()
         -- rest is always only 1 turn of sleeping, will of course change if switched out.
-        selfactive.shared.major, selfactive.sleeping = C_MAJOR_SLEEPING, 2
+        selfactive.shared.major, selfactive.sleeping, selfactive.toxiced = C_MAJOR_SLEEPING, 2, 0
         f_move_heal(_ENV, self, selfactive.maxhp)
     end)
 end $$

@@ -265,9 +265,22 @@ end $$
     _add(p0.actions, f_newaction(...))
 end $$
 
+|[f_psel_update]| function(_ENV)
+    if g_bpx then
+        _ENV:f_modes_push'pselactions'
+        f_minisfx'B_OKAY'
+    end
+
+    f_invalid_button()
+end $$
+
+|[f_invalid_button]| function()
+    if g_bpo or g_bph | g_bpv ~= 0 then f_beep() end
+end $$
+
 -- only "x" will progress the fight. if you spam, at least you don't miss the end screen.
 |[f_turn_update]| function(game)
-    if g_bpo then f_beep() end
+    f_invalid_button()
 
     if g_bpx then f_minisfx'B_BACK' end
     if g_bpx or not game.cur_action then

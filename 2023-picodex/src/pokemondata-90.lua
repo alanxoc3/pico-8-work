@@ -234,6 +234,5 @@ _g.c_moves_raw = f_zobj[[
 ]]
 
 -- could get an error if a trainer doesn't have 6 pkmn, because of assumptions i make when starting a fight
-
 -- this becomes a list of tables on init
 |[c_trainers]| _split"youngstr,bugcatch,junior,brock,lass,hiker,swimmer,misty,gentlman,sailor,rocker,ltsurge,channelr,gambler,beauty,erika,biker,birdkeep,juggler,koga,blckbelt,rocket,psychic,sabrina,scientst,pkmaniac,suprnerd,blaine,cooltrnr,fishrman,tamer,giovanni,lorelei,bruno,agatha,lance,blue,green,red,legendry" $$

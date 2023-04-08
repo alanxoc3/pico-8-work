@@ -1,6 +1,3 @@
--- todo: rest should reset toxic counter
--- todo: consider making glare effect normal/ghost
-
 -- every state change will clean up all the entities.
 |[f_game_state_init]| function(state)
     if state.mysfx then f_minisfx(state.mysfx) end

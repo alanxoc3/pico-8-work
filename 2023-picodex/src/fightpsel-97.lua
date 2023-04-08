@@ -29,15 +29,6 @@
     end
 end $$
 
-|[f_psel_update]| function(_ENV)
-    if g_bpx then
-        _ENV:f_modes_push'pselactions'
-        f_minisfx'B_OKAY'
-    end
-
-    if g_bpo then f_beep() end
-end $$
-
 |[f_psel_forfeit]| function(_ENV)
     _ENV:f_modes_pop()
 
