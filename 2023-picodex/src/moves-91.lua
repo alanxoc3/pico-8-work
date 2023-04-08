@@ -29,18 +29,18 @@ end $$
 -- move funcs take in "_ENV", which has some useful things
 -- returning "true" means the move failed
 |[f_move_disable]| function(_ENV)
-    if otheractive.disabledtimer > 0 then return true end
-    local moves = f_get_moves(otheractive)
-    if #moves == 0 then return true end
+    -- if otheractive.disabledtimer > 0 then return true end
+    -- local moves = f_get_moves(otheractive)
+    -- if #moves == 0 then return true end
 
-    otheractive.disabledtimer, otheractive.disabledslot = f_flr_rnd'6'+2, moves[f_flr_rnd(#moves)+1].slot
-    addaction(other, "|"..otheractive.mynewmoves[otheractive.disabledslot].name.."|disabled")
+    -- otheractive.disabledtimer, otheractive.disabledslot = f_flr_rnd'6'+2, moves[f_flr_rnd(#moves)+1].slot
+    -- addaction(other, "|"..otheractive.mynewmoves[otheractive.disabledslot].name.."|disabled")
 
-    -- if the move disabled is a multiturn move, we need to stop the multiturn timer
-    -- no need to worry about trapping moves, because you won't be able to use disable during a trapping move
-    if otheractive.curmove and otheractive.curmove.slot == otheractive.disabledslot then
-        otheractive.moveturn = 0
-    end
+    -- -- if the move disabled is a multiturn move, we need to stop the multiturn timer
+    -- -- no need to worry about trapping moves, because you won't be able to use disable during a trapping move
+    -- if otheractive.curmove and otheractive.curmove.slot == otheractive.disabledslot then
+    --     otheractive.moveturn = 0
+    -- end
 end $$
 
 |[f_movehelp_movecopy]| function(_ENV, num, slot)

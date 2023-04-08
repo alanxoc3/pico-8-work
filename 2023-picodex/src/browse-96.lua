@@ -45,7 +45,7 @@ g_loaded_row = 16 -- default corresponds to the top row in the "129-151.p8" file
     end)
 
     -- substitute check should go after pika/psyduck checks above, for if pika/psy know substitute
-    if substitute and substitute > 0 then num = 154 end
+    if substitute and substitute > 0 then num = 152 end
 
     if not isactive or major ~= C_MAJOR_FAINTED and not invisible and not (moveturn ~= 0 and curmove.ofunc == f_move_flydig) then
         if num < 0 then _spr(107, x-4, y-4) return end
