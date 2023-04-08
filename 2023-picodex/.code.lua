@@ -1,23 +1,23 @@
-Y=setmetatable({},{__index=_ENV})
-_ENV=Y
-function nL(e,n,t)
+e_=setmetatable({},{__index=_ENV})
+_ENV=e_
+function nG(e,n,t)
 if ord(e)==126then return n[sub(e,2)]
 elseif e=="@"then return deli(t,1)
 elseif e=="#"then return{}end
 return e~=""and e or nil
 end
-function F(f,n,...)
+function H(f,n,...)
 local o,t,e={...},split(n,";"),f
 foreach(t,function(n)
 local t=split(n)
 if#t>1then
 if t[1]==""then
 foreach(t,function(n)
-add(e,nL(n,f,o))
+add(e,nG(n,f,o))
 end)
 else
 for n=1,#t,2do
-e[t[n]]=nL(t[n+1],f,o)
+e[t[n]]=nG(t[n+1],f,o)
 end
 end
 e=f
@@ -31,56 +31,56 @@ end
 end)
 return f
 end
-function r(...)
-return F(setmetatable({},{__index=Y}),...)
+function m(...)
+return H(setmetatable({},{__index=e_}),...)
 end
-F(Y,"eu,@,j,@,fj,@,L,@",true,false,"",function(...)return...end)
-F(Y,"r,@,F,@,nL,@,tp,@,tw,@,Z,@,t3,@,t4,@,nO,@,H,@,ev,@,eE,@,b,@,C,@,nG,@,e4,@,eh,@,S,@,fz,@,tg,@,tb,@,eJ,@,tx,@,n_,@,na,@,nQ,@,eo,@,nI,@,J,@,fq,@,fA,@,fB,@,fD,@,fF,@,fH,@,N,@,nC,@,t6,@,eg,@,fJ,@,t8,@,fK,@,fM,@,fN,@,fQ,@,np,@,ty,@,fR,@,fS,@,t7,@,fU,@,t9,@,z,@,E,@,v,@,fV,@,fW,@,tk,@,X,@,eb,@,ex,@,nd,@,fY,@,fZ,@,oe,@,on,@,ot,@,of,@,tj,@,ni,@,nr,@,n0,@,oo,@,o_,@,oa,@,n1,@,e6,@,od,@,nw,@,f,@,n3,@,oi,@,nR,@,tz,@,tq,@,e_,@,eK,@,nm,@,tA,@,o0,@,n4,@,tB,@,nS,@,nU,@,ng,@,o1,@,nV,@,nc,@,e8,@,om,@",r,F,nL,function(e)
-return F(r"nb,0,tD,0,tF,~eu,l,~L,ea,~L,eG,#;",e)
+H(e_,"el,@,z,@,f9,@,L,@",true,false,"",function(...)return...end)
+H(e_,"m,@,H,@,nG,@,tw,@,tp,@,Y,@,t3,@,t4,@,nI,@,J,@,eh,@,eP,@,b,@,C,@,nC,@,e4,@,e2,@,U,@,fk,@,tg,@,tb,@,eJ,@,tx,@,na,@,nd,@,nR,@,eo,@,nw,@,K,@,fj,@,fz,@,fq,@,fA,@,fB,@,fD,@,Q,@,np,@,fF,@,eg,@,fH,@,t6,@,fJ,@,fK,@,fM,@,fN,@,n3,@,t8,@,fQ,@,fR,@,ty,@,x,@,l,@,h,@,nS,@,fS,@,fU,@,t7,@,X,@,eb,@,ex,@,ni,@,fV,@,fW,@,fY,@,fZ,@,oe,@,on,@,t9,@,nr,@,n0,@,n1,@,ot,@,of,@,o_,@,nm,@,e6,@,oo,@,n4,@,f,@,ng,@,oa,@,nU,@,tk,@,tj,@,ea,@,eK,@,nc,@,tz,@,od,@,nb,@,tq,@,nV,@,nW,@,nx,@,oi,@,nY,@,nu,@,e8,@,o0,@,q,@",m,H,nG,function(e)
+return H(m"n6,0,tA,0,tB,~el,T,~L,ed,~L,eG,#;",e)
 end,function(_ENV,e)
 if e==ey then
-return ed and nb/ed or 0
+return ei and n6/ei or 0
 end
-if _ENV[e]and _ENV[e].oc then
+if _ENV[e]and _ENV[e].o1 then
 return 1
 end
 return 0
 end,function(_ENV,e)
-nx=e or next
+n8=e or next
 end,function(_ENV,e)
-nb,nx,tF,next,ed=0
-_ENV[ey].oc=true
-for e,n in pairs(tH)do _ENV[e]=n end
+n6,n8,tB,next,ei=0
+_ENV[ey].o1=true
+for e,n in pairs(tD)do _ENV[e]=n end
 for n,t in pairs(_ENV[e])do _ENV[n]=t end
 ey=e
-_ENV:l()
-tD=#eG
+_ENV:T()
+tA=#eG
 end,function(_ENV)
-nb+=1/60
-if tF then _ENV:t3(ey)end
-if ed and nb>=ed then
-_ENV:Z()
+n6+=1/60
+if tB then _ENV:t3(ey)end
+if ei and n6>=ei then
+_ENV:Y()
 end
-while nx do
-_ENV:t3(nx)
+while n8 do
+_ENV:t3(n8)
 end
-_ENV:ea()
+_ENV:ed()
 end,function(_ENV,e)
-while nx~=e and#eG>0do
-_ENV:H()
+while n8~=e and#eG>0do
+_ENV:J()
 end
 end,function(_ENV)
 deli(eG)
-_ENV:Z(eG[#eG]or"eM")
+_ENV:Y(eG[#eG]or"eM")
 end,function(_ENV,e)
 add(eG,e)
-_ENV:Z(e)
+_ENV:Y(e)
 end,function()
-U"153"
+A"153"
 end,function(e)
 return flr(rnd(e))
 end,function(e,n,...)
-foreach(r(n,...),function(n)
+foreach(m(n,...),function(n)
 e(unpack(n))
 end)
 end,function(t,f,o)
@@ -93,281 +93,282 @@ eN(e or"",23,4,1,0)
 end,function(e)
 C(rectfill,";,0,0,45,6,1")
 C(eN,";,@,23,1,13,0;;,@,23,8,1,0;;,@,23,15,1,0",unpack(split(e,"|",false)))
-end,r"",split"missingno,bulbasaur,ivysaur,venusaur,charmander,charmeleon,charizard,squirtle,wartortle,blastoise,caterpie,metapod,butterfree,weedle,kakuna,beedrill,pidgey,pidgeotto,pidgeot,rattata,raticate,spearow,fearow,ekans,arbok,pikachu,raichu,sandshrew,sandslash,nidoran f,nidorina,nidoqueen,nidoran m,nidorino,nidoking,clefairy,clefable,vulpix,ninetales,jigglypuff,wigglytuff,zubat,golbat,oddish,gloom,vileplume,paras,parasect,venonat,venomoth,diglett,dugtrio,meowth,persian,psyduck,golduck,mankey,primeape,growlithe,arcanine,poliwag,poliwhirl,poliwrath,abra,kadabra,alakazam,machop,machoke,machamp,bellsprout,weepinbell,victreebel,tentacool,tentacruel,geodude,graveler,golem,ponyta,rapidash,slowpoke,slowbro,magnemite,magneton,farfetchd,doduo,dodrio,seel,dewgong,grimer,muk,shellder,cloyster,gastly,haunter,gengar,onix,drowzee,hypno,krabby,kingler,voltorb,electrode,exeggcute,exeggutor,cubone,marowak,hitmonlee,hitmonchan,lickitung,koffing,weezing,rhyhorn,rhydon,chansey,tangela,kangaskhan,horsea,seadra,goldeen,seaking,staryu,starmie,mr mime,scyther,jynx,electabuzz,magmar,pinsir,tauros,magikarp,gyarados,lapras,ditto,eevee,vaporeon,jolteon,flareon,porygon,omanyte,omastar,kabuto,kabutops,aerodactyl,snorlax,articuno,zapdos,moltres,dratini,dragonair,dragonite,mewtwo,mew",r"0,none;,fainted,burned,frozen,paralyzed,poisoned,sleeping",r"0, ;,FNT,BRN,FZN,PAR,PSN,SLP",r"0;m,2,n,~fj;1;m,2,n,normal,15,0,13,.5;2;m,10,n,fire,8,2,10,2,11,2,2,.5,4,.5,13,.5,14,.5;3;m,7,n,fighting,10,2,1,2,13,2,15,0,11,.5,9,.5,5,.5,12,.5;4;m,9,n,water,2,2,7,2,13,2,14,.5,8,.5,4,.5;5;m,6,n,poison,11,2,8,2,15,.5,7,.5,5,.5,13,.5;6;m,11,n,electric,9,2,4,2,7,0,14,.5,6,.5,8,.5;7;m,7,n,ground,6,2,2,2,5,2,13,2,9,0,11,.5,8,.5;8;m,8,n,grass,7,2,13,2,4,2,11,.5,14,.5,2,.5,9,.5,8,.5,5,.5;9;m,2,n,flying,11,2,3,2,8,2,6,.5,13,.5;10;m,9,n,ice,14,2,9,2,8,2,2,.5,10,.5,4,.5;11;m,8,n,bug,8,2,12,2,3,.5,2,.5,9,.5,15,.5,5,.5;12;m,6,n,psychic,3,2,5,2,12,.5;13;m,2,n,rock,11,2,2,2,9,2,10,2,3,.5,7,.5;14;m,2,n,dragon,14,2;15;m,6,n,ghost,15,2,1,0,12,2;17;m,2,n,bird;",r"V,hp,ei,spc,Q,att,q,def,K,spd,n6,tot,A,acc,eI,eva",r";m,13,er,5,nu,1;;m,6,er,13,nu,13;;m,5,er,5,nu,1;;m,6,er,5,nu,5;;m,1,er,5,nu,13;;m,14,er,4;;m,9,er,4;;m,11,er,3;;m,12,er,5;;m,8,er,2;;m,10,er,4",r"",split"youngstr,bugcatch,junior,brock,lass,hiker,swimmer,misty,gentlman,sailor,rocker,ltsurge,channelr,gambler,beauty,erika,biker,birdkeep,juggler,koga,blckbelt,rocket,psychic,sabrina,scientst,pkmaniac,suprnerd,blaine,cooltrnr,fishrman,tamer,giovanni,lorelei,bruno,agatha,lance,blue,green,red,legendry",function(e,n)
-if n.ee then
-e:ev(n.ee)
+end,m"",split"missingno,bulbasaur,ivysaur,venusaur,charmander,charmeleon,charizard,squirtle,wartortle,blastoise,caterpie,metapod,butterfree,weedle,kakuna,beedrill,pidgey,pidgeotto,pidgeot,rattata,raticate,spearow,fearow,ekans,arbok,pikachu,raichu,sandshrew,sandslash,nidoran f,nidorina,nidoqueen,nidoran m,nidorino,nidoking,clefairy,clefable,vulpix,ninetales,jigglypuff,wigglytuff,zubat,golbat,oddish,gloom,vileplume,paras,parasect,venonat,venomoth,diglett,dugtrio,meowth,persian,psyduck,golduck,mankey,primeape,growlithe,arcanine,poliwag,poliwhirl,poliwrath,abra,kadabra,alakazam,machop,machoke,machamp,bellsprout,weepinbell,victreebel,tentacool,tentacruel,geodude,graveler,golem,ponyta,rapidash,slowpoke,slowbro,magnemite,magneton,farfetchd,doduo,dodrio,seel,dewgong,grimer,muk,shellder,cloyster,gastly,haunter,gengar,onix,drowzee,hypno,krabby,kingler,voltorb,electrode,exeggcute,exeggutor,cubone,marowak,hitmonlee,hitmonchan,lickitung,koffing,weezing,rhyhorn,rhydon,chansey,tangela,kangaskhan,horsea,seadra,goldeen,seaking,staryu,starmie,mr mime,scyther,jynx,electabuzz,magmar,pinsir,tauros,magikarp,gyarados,lapras,ditto,eevee,vaporeon,jolteon,flareon,porygon,omanyte,omastar,kabuto,kabutops,aerodactyl,snorlax,articuno,zapdos,moltres,dratini,dragonair,dragonite,mewtwo,mew",m"0,none;,fainted,burned,frozen,paralyzed,poisoned,sleeping",m"0, ;,FNT,BRN,FZN,PAR,PSN,SLP",m"0;c,2,n,~f9;1;c,2,n,normal,15,0,13,.5;2;c,10,n,fire,8,2,10,2,11,2,2,.5,4,.5,13,.5,14,.5;3;c,7,n,fighting,10,2,1,2,13,2,15,0,11,.5,9,.5,5,.5,12,.5;4;c,9,n,water,2,2,7,2,13,2,14,.5,8,.5,4,.5;5;c,6,n,poison,11,2,8,2,15,.5,7,.5,5,.5,13,.5;6;c,11,n,electric,9,2,4,2,7,0,14,.5,6,.5,8,.5;7;c,7,n,ground,6,2,2,2,5,2,13,2,9,0,11,.5,8,.5;8;c,8,n,grass,7,2,13,2,4,2,11,.5,14,.5,2,.5,9,.5,8,.5,5,.5;9;c,2,n,flying,11,2,3,2,8,2,6,.5,13,.5;10;c,9,n,ice,14,2,9,2,8,2,2,.5,10,.5,4,.5;11;c,8,n,bug,8,2,12,2,3,.5,2,.5,9,.5,15,.5,5,.5;12;c,6,n,psychic,3,2,5,2,12,.5;13;c,2,n,rock,11,2,2,2,9,2,10,2,3,.5,7,.5;14;c,2,n,dragon,14,2;15;c,6,n,ghost,15,2,1,0,12,2;17;c,2,n,bird;",m"V,hp,er,spc,R,att,B,def,M,spd,ny,tot,D,acc,eI,eva",m";c,13,e0,5,nl,1;;c,6,e0,13,nl,13;;c,5,e0,5,nl,1;;c,6,e0,5,nl,5;;c,1,e0,5,nl,13;;c,14,e0,4;;c,9,e0,4;;c,11,e0,3;;c,12,e0,5;;c,8,e0,2;;c,10,e0,4",m"",split"youngstr,bugcatch,junior,brock,lass,hiker,swimmer,misty,gentlman,sailor,rocker,ltsurge,channelr,gambler,beauty,erika,biker,birdkeep,juggler,koga,blckbelt,rocket,psychic,sabrina,scientst,pkmaniac,suprnerd,blaine,cooltrnr,fishrman,tamer,giovanni,lorelei,bruno,agatha,lance,blue,green,red,legendry",function(e,n)
+if n.Z then
+e:eh(n.Z)
 else
-e:H()
+e:J()
 end
 end,function(e,n)
-return r("ou,@,tJ,@,R,~tJ,x,1,ea,~fD,e0,~fH,nl,~fA,M,~fq",e,n or 0)
+return m("om,@,tF,@,S,~tF,y,1,ed,~fA,e1,~fD,nT,~fz,N,~fj",e,n or 0)
 end,function(e,n)
-return F(nI(e),"p,0,x,@,ea,~fF,nW,~fB",n or 1)
+return H(nw(e),"w,0,y,@,ed,~fB,nZ,~fq",n or 1)
 end,function(e,n,f)
 while deli(e)do end
 for t=1,#n do
 add(e,(f or L)(n[t],t))
 end
 end,function(e)
-e:H()
+e:J()
 end,function(e,n,t)
 if t then
-local t=e.p+n*e.x
+local t=e.w+n*e.y
 if t==mid(0,t,#e-1)then
-e.p=t
-if 0+n~=0then U"154"end
+e.w=t
+if 0+n~=0then A"154"end
 else
-eE()
+eP()
 end
 else
-local t=e.p+n
-local f=e.p-e.p%e.x
-if t==mid(f,t,f+e.x-1)then
-e.p=t
-if 0+n~=0then U"154"end
+local t=e.w+n
+local f=e.w-e.w%e.y
+if t==mid(f,t,f+e.y-1)then
+e.w=t
+if 0+n~=0then A"154"end
 else
-eE()
+eP()
 end
 end
-e.p=mid(0,e.p,#e-1)
-if e.p\e.x<e.R then e.R=e.p\e.x end
-if e.p\e.x>e.R+2then e.R=e.p\e.x-2end
-e.R=mid(0,e.R,(#e-1)\e.x)
+e.w=mid(0,e.w,#e-1)
+if e.w\e.y<e.S then e.S=e.w\e.y end
+if e.w\e.y>e.S+2then e.S=e.w\e.y-2end
+e.S=mid(0,e.S,(#e-1)\e.y)
 end,function(n)
 local e=n.a
-if eQ then U"154"e.nl(n)end
-if e7 then n:n8()end
-e.R+=nY
-if nZ~=0then n:tK(nZ)end
-local n=e.R
-e.R=mid(e.tJ,e.R,#e-3)
-if e.R~=n then
-eE()
-elseif nY~=0then
-U"154"
+if eQ then A"154"e.nT(n)end
+if e7 then n:n7()end
+e.S+=te
+if tn~=0then n:tH(tn)end
+local n=e.S
+e.S=mid(e.tF,e.S,#e-3)
+if e.S~=n then
+eP()
+elseif te~=0then
+A"154"
 end
 end,function(t)
 local e=t.a
-e:nW"0"
-e:nW(nY,true)
-e:nW(nZ)
+e:nZ"0"
+e:nZ(te,true)
+e:nZ(tn)
 if e7 then
-local n=e[e.p+1]
-if n.e1 then
-eE()
-elseif n.I then
-U"155"
-n.I(t,n)
+local n=e[e.w+1]
+if n.em then
+eP()
+elseif n.G then
+A"155"
+n.G(t,n)
 end
 end
-if eQ then U"154"e.nl(t)end
+if eQ then A"154"e.nT(t)end
 end,function(n)
 local e=n.a
-local f=e.x>1and 10or 40
-local a=20-(e.x*f)/2
-C(rectfill,";,0,0,39,39,1;;,0,@,39,@,13",5-e.R*10,4+(max(ceil(#e/e.x),3)-e.R)*10)
-for n=-1,e.x*5-1do
-local d=(e.R-1)*e.x+n+1
+local f=e.y>1and 10or 40
+local a=20-(e.y*f)/2
+C(rectfill,";,0,0,39,39,1;;,0,@,39,@,13",5-e.S*10,4+(max(ceil(#e/e.y),3)-e.S)*10)
+for n=-1,e.y*5-1do
+local d=(e.S-1)*e.y+n+1
 local t=e[d]
 if t then
-local o,i,r=t.ny or 1,a+n%e.x*10,n\e.x*10
-if t.e1 then o=3end
-if d-1==e.p then o+=1end
-if not t.te then
-rectfill(i,r-5,i+f-1,r+4,n_[o].m)
-nG(n%e.x*f+a+f/2,n\e.x*10-3,function()
-e.ou(t,n_[o])
+local o,i,r=t.n9 or 1,a+n%e.y*10,n\e.y*10
+if t.em then o=3end
+if d-1==e.w then o+=1end
+if not t.tt then
+rectfill(i,r-5,i+f-1,r+4,na[o].c)
+nC(n%e.y*f+a+f/2,n\e.y*10-3,function()
+e.om(t,na[o])
 end)
 end
 end
 end
 end,function(e,n)
-if e.en then
-local n=n_[eJ[e.en.eX].m]
-C(rectfill,";,-20,-2,19,17,@;;,-20,14,19,17,@",n.m,n.er)
-e.en:n7(0,8,n,1,1)
+if e.ee then
+local n=na[eJ[e.ee.eE].c]
+C(rectfill,";,-20,-2,19,17,@;;,-20,14,19,17,@",n.c,n.e0)
+e.ee:nk(0,8,n,1,1)
 else
-tM(e.n,0,0,n.nu)
+tJ(e.n,0,0,n.nl)
 end
 end,function(e,n)
-e.en:n7(0,3,n,.375,.375)
+e.ee:nk(0,3,n,.375,.375)
 end,function(n)
-local e=nU(n.y)
+local e=nW(n.k)
 del(e,n.o.W)
 if#e>0then
 return e[b(#e)+1]
 end
 end,function(_ENV,e)
-local n=nT[e]
-if e=="eI"or e=="A"then
+local n=ns[e]
+if e=="eI"or e=="D"then
 return _ENV[e]*mid(1,1+n/3,3)/mid(1,1-n/3,3)
 end
 return ceil(mid(1,999,
-(e=="Q"and T==2and.5or e=="K"and T==4and.25or 1)*
+(e=="R"and s==2and.5or e=="M"and s==4and.25or 1)*
 _ENV[e]*mid(2,2+n,8)/mid(2,2-n,8)
 ))
 end,function(_ENV)
+if i.tf>0then return true end
+local e=nj(i)
+if#e==0then return true end
+i.tf,i.eR=b"6"+2,e[b(#e)+1].en
+r(eX,"|"..i.p[i.eR].n.."|disabled")
+if i.g and i.g.en==i.eR then
+i.eT=0
+end
 end,function(_ENV,t,n)
-local e=B(t,n)
-e.e9,e.tN=5,5
-w[n]=e
+local e=q(t,n)
+e.e9,e.tK=5,5
+p[n]=e
 return e
 end,function(_ENV)
-local n=tn(c,true)
+local n=nj(i,true)
 local t=n[b(#n)+1].d
 if t==31then
 return true
 end
-i(O,"|copies|"..t8(e,t,u.el).n)
+r(I,"|copies|"..t6(e,t,u.en).n)
 end,function(_ENV)
-if e.ol then
+if e.oc then
 return true
 else
-i(O,"|copies|"..c.n,function()
-e.ol=true
-foreach(split"d,Q,q,K,ei,eX,eC",function(n)
-e[n]=c[n]
+r(I,"|copies|"..i.n,function()
+e.oc=true
+foreach(split"d,R,B,M,er,eE,eC",function(n)
+e[n]=i[n]
 end)
-e.w={}
-foreach(c.w,function(n)
-t8(e,n.d,n.el)
+e.p={}
+foreach(i.p,function(n)
+t6(e,n.d,n.en)
 end)
 end)
 end
 end,function(_ENV)
-F(e,"eX,@,eC,@",c.eX,c.eC)
-i(O,"|copies|types")
+H(e,"eE,@,eC,@",i.eE,i.eC)
+r(I,"|copies|types")
 end,function(_ENV)
-foreach({e2,O},function(e)
-i(e,"|resets|stats",function()
-F(e.o.nT,"ei,0,Q,0,q,0,K,0,A,0,eI,0")
-e.o.tQ=false
+foreach({eX,I},function(e)
+r(e,"|resets|stats",function()
+H(e.o.ns,"er,0,R,0,B,0,M,0,D,0,eI,0")
+e.o.tM=false
 end)
 end)
 end,function(_ENV,n,e)
-e=min(e,n.o.V-n.o.D)
+e=min(e,n.o.V-n.o.F)
 if e>0then
-tz(_ENV,n,e,function()
-n.o.W.D+=e
+tk(_ENV,n,e,function()
+n.o.W.F+=e
 end)
 else
 return true
 end
 end,function(_ENV)
-return np(_ENV,O,e.V\2)
+return n3(_ENV,I,e.V\2)
 end,function(_ENV)
-tt(O,B(b(164)+1,u.el))
+t_(I,q(b(164)+1,u.en))
 end,function(_ENV)
-if e.tf>0then
-tt(O,B(e.tf,u.el))
-else
-return true
-end
-end,function(_ENV)
-local e=t6(e2)
-if e then
-to(e2,e)
-else
-return true
-end
-end,function(_ENV)
-local e=t6(O)
-if e then
-to(O,e)
+if e.to>0then
+t_(I,q(e.to,u.en))
 else
 return true
 end
 end,function(e,n)
 return(sgn(e)>0and"|+"or"|-")..abs(e).." "..n.."|change"
-end,function(_ENV,e,...)return e(_ENV,O,...)end,function(_ENV,e,...)return e(_ENV,e2,...)end,function(_ENV,e,n,t,o)
-local f=e.o.nT[n]
-if not e.o.oT or t>0then
-e.o.nT[n]=mid(-6,6,f+t)
+end,function(_ENV,e,...)return e(_ENV,I,...)end,function(_ENV,e,...)return e(_ENV,eX,...)end,function(_ENV,e,n,t,o)
+local f=e.o.ns[n]
+if not e.o.ou or t>0then
+e.o.ns[n]=mid(-6,6,f+t)
 end
-if f~=e.o.nT[n]then
-i(e,t9(t,tx[n]),o or L)
+if f~=e.o.ns[n]then
+r(e,ty(t,tx[n]),o or L)
+else
+return true
+end
+end,function(_ENV,e)
+local n=fF(e)
+if n then
+tN(e,n)
 else
 return true
 end
 end,function(_ENV)
-if X(_ENV,5)and c.T~=5then
+if X(_ENV,5)and i.s~=5then
 return true
 end
-return E(_ENV,eb,"|badly|poisoned","n9",1,true)
+return l(_ENV,eb,"|badly|poisoned","nz",1,true)
 end,function(_ENV)
-i(O,"|does|nothing")
+r(I,"|does|nothing")
 end,function(_ENV)
-return t_(u,c)>0and u.eL~=c.eX and u.eL~=c.eC
+return ta(u,i)>0and u.eL~=i.eE and u.eL~=i.eC
 end,function(_ENV,n)
-if c.W.T==3and n==2then
-i(O,"|thawed|out")
-e.W.T=0
-elseif c.W.T==0and(n==6or tk(_ENV))then
-i(e2,"|is now|"..tg[n],function()
-c.W.T=n
-c.ta=b"7"+1
+if i.W.s==3and n==2then
+r(I,"|thawed|out")
+e.W.s=0
+elseif i.W.s==0and(n==6or t7(_ENV))then
+r(eX,"|is now|"..tg[n],function()
+i.W.s=n
+i.td=b"7"+1
 end)
 else
 return true
 end
 end,function(_ENV,e,t,n,f,o)
-if(e.o[n]or 0)==0and(not o or tk(_ENV))then
+if(e.o[n]or 0)==0and(not o or t7(_ENV))then
 e.o[n]=f or 1
-i(e,t)
+r(e,t)
 else
 return true
 end
 end,function(_ENV,e)
-e.o.tR=true
+e.o.tQ=true
 end,function(_ENV,e)
-return eb(_ENV,e,"|becomes|confused","nk",b"4"+1)
+return eb(_ENV,e,"|becomes|confused","nq",b"4"+1)
 end,function(_ENV)
-return v(_ENV,O,"eI",1,function()
-e.tQ=.25
+return h(_ENV,I,"eI",1,function()
+e.tM=.25
 end)
 end,function(_ENV)
 local n=e.V\4
-if n>=e.D or e.ep>0then
+if n>=e.F or e.ew>0then
 return true
 end
 eK(_ENV,n)
-i(O,"|created|substitute",function()
-e.ep=n
+r(I,"|created|substitute",function()
+e.ew=n
 end)
 end,function(_ENV)
 ek(e,-1,u)
 f(_ENV)
 if u.e9<=0then
-e.e5,e.g=0
+e.eT,e.g=0
 end
 end,function(_ENV)
 if not e.g then
-ek(e,b"2"+1,B(u.d,u.el))
-i(O,"|"..u.n.."|begins")
-e.nj=0
+ek(e,b"2"+1,q(u.d,u.en))
+r(I,"|"..u.n.."|begins")
+e.nA=0
 end
-if e.e5==0then
-if e.nj==0then
+if e.eT==0then
+if e.nA==0then
 return true
 end
-e_(_ENV,e.nj*2)
+ea(_ENV,e.nA*2)
 end
 end,function(_ENV)
-e_(_ENV,1+b"75")
+ea(_ENV,1+b"75")
 end,function(_ENV)
-e_(_ENV,max(c.D\2,1))
+ea(_ENV,max(i.F\2,1))
 end,function(_ENV)
-ek(e,b"2"+1,B(u.d,u.el))
+ek(e,b"2"+1,q(u.d,u.en))
 f(_ENV)
-if e.e5==0then
-z(_ENV,nd,"nk")
+if e.eT==0then
+x(_ENV,ni,"nq")
 end
 end,function(_ENV)
 if not e.g then
-ek(e,b"4"+1,B(u.d,u.el))
-e.ns=c
+ek(e,b"4"+1,q(u.d,u.en))
+e.nv=i
 end
-if e.ns==c then
+if e.nv==i then
 f(_ENV)
 else
 return true
@@ -376,135 +377,135 @@ end,function(_ENV,n)
 if e.g then
 f(_ENV)
 else
-i(O,n,function()
-ek(e,1,B(u.d,u.el))
+r(I,n,function()
+ek(e,1,q(u.d,u.en))
 end)
 end
 end,function(_ENV)
 if e.g then
 f(_ENV)
 else
-i(O,"|charges|energy")
+r(I,"|charges|energy")
 ek(e,1,u)
 u.e9+=1
 end
 end,function(_ENV)
 if e.g then
-i(O,"|recharges|energy")
+r(I,"|recharges|energy")
 else
 f(_ENV)
-local n=B(u.d,u.el)
-n.A=0
+local n=q(u.d,u.en)
+n.D=0
 ek(e,1,n)
 end
 end,function(_ENV)
-i(O,"|is|sleeping",function()
-e.W.T,e.ta=6,2
-np(_ENV,O,e.V)
+r(I,"|is|sleeping",function()
+e.W.s,e.td=6,2
+n3(_ENV,I,e.V)
 end)
 end,function(_ENV)
-if e.nz>0then
-e_(_ENV,e.nz*2)
+if e.nB>0then
+ea(_ENV,e.nB*2)
 else
 return true
 end
 end,function(_ENV,e,n,t)
 if e>0then
-i(O,t and"|resumes|"..u.n,function()
-_ENV.c=e2.o
+r(I,t and"|resumes|"..u.n,function()
+_ENV.i=eX.o
 f(_ENV,100,function()
-n1(_ENV,e-1,n,true)
+nm(_ENV,e-1,n,true)
 end)
 end)
 else
 n()
 end
 end,function(_ENV,e)
-n1(_ENV,2+b"4",L)
+nm(_ENV,2+b"4",L)
 end,function(_ENV)
-n1(_ENV,2,function()
+nm(_ENV,2,function()
 if rnd"100"<20then
 X(_ENV,5)
 end
 end)
 end,function(_ENV)
-e_(_ENV,false,function(e)
+ea(_ENV,false,function(e)
 eK(_ENV,max(1,e\4))
 end)
 end,function(_ENV,e,n,...)
 local t={...}
-e_(_ENV,false,function()
+ea(_ENV,false,function()
 if rnd"100"<(e or 0)then
 n(_ENV,unpack(t))
 end
 end)
 end,function(_ENV)
-e_(_ENV,false,function(e)
-np(_ENV,O,max(e\2,1))
+ea(_ENV,false,function(e)
+n3(_ENV,I,max(e\2,1))
 end)
 end,function(_ENV)
-if c.T==6then
-n3(_ENV)
+if i.s==6then
+ng(_ENV)
 else
 return true
 end
 end,function(_ENV)
-if e.K>=c.K then
-e_(_ENV,c.D)
+if e.M>=i.M then
+ea(_ENV,i.F)
 else
 return true
 end
 end,function(_ENV,n,t,a,e)
-local f=t9(t,"hp")
-local o=e and n.o.ep+t<0
+local f=ty(t,"hp")
+local o=e and n.o.ew+t<0
 if not e or o then
-i(n,f,L,e)
+r(n,f,L,e)
 end
-i(n,
+r(n,
 o and"|substitute|broke"or f,
 a,
 e
 )
 end,function(_ENV,t,n,a,f)
 local e=t.o
-local o=not a and e.ep>0
-tz(_ENV,t,-n,function()
-e.nj+=n
+local o=not a and e.ew>0
+tk(_ENV,t,-n,function()
+e.nA+=n
 if e.g and e.g.d==20then
-v(_ENV,t,"Q",1)
+h(_ENV,t,"R",1)
 end
 if f then f(n)end
 if o then
-e.ep=max(e.ep-n,0)
+e.ew=max(e.ew-n,0)
 else
-e.W.D=max(e.W.D-n,0)
+e.W.F=max(e.W.F-n,0)
 end
 end,o and"substitute")
 end,function(_ENV,n,o)
-local f,t=false,t_(u,c)
+local f,t=false,ta(u,i)
 if not n then
-n,f=tS(e,c,u)
+n,f=tR(e,i,u)
 end
 if t>0then
 if u.eL%2==1then
-c.nz+=n
+i.nB+=n
 end
-if t>1then i(O,"|super|effective")
-elseif t<1then i(O,"|not very|effective")end
-if f then i(O,"|critical|hit")end
-tq(_ENV,e2,n,false,o)
+if t>1then r(I,"|super|effective")
+elseif t<1then r(I,"|not very|effective")end
+if f then r(I,"|critical|hit")end
+tj(_ENV,eX,n,false,o)
 else
-i(e2,"|resisted|attack")
+r(eX,"|resisted|attack")
 end
 end,function(_ENV,e)
-tq(_ENV,O,e,true,L)
+tj(_ENV,I,e,true,L)
 end,function(e)
 return ceil(e+.5*93)+5
 end,function()
-return r("et,~eu,Q,0,q,0,ei,0,K,0,V,0,D,0,n6,0,A,100,eI,100,tU,0,tV,0,tW,0,td,0,tY,0,d,-1,os,-1,n, ,eX,0,eC,0,eR,#,eS,#,nq,#,w,@",nA())
+return m("et,~el,R,0,B,0,er,0,M,0,V,0,F,0,ny,0,D,100,eI,100,tS,0,tU,0,tV,0,ti,0,tW,0,d,-1,ol,-1,n, ,eE,0,eC,0,eS,#,eU,#,tr,#,p,@",nD())
 end,function()
 local e=peek2"0x8"
-S[-1]=tA()
+U[-1]=tz()
 for t=0,151do
 local n,f={},false
 while@e~=255do
@@ -522,57 +523,57 @@ e+=1
 end
 e+=1
 local f=t-deli(n,1)
-local e=tA()
-F(e,"d,@,os,@,n,@,eX,@,eC,@,tU,@,tV,@,tW,@,td,@,tY,@",t,
+local e=tz()
+H(e,"d,@,ol,@,n,@,eE,@,eC,@,tS,@,tU,@,tV,@,ti,@,tW,@",t,
 f,
-fz[t+1],
+fk[t+1],
 unpack(n)
 )
-local o=e.eR
+local o=e.eS
 for f=8,#n do
 local t=n[f]
 if t==253then
-o=e.eS
+o=e.eU
 elseif t==252then
-o=e.nq
+o=e.tr
 else
 add(o,t)
 end
 end
 if f<t then
-foreach(split"eR,eS,nq",function(n)
-foreach(S[f][n],function(t)
+foreach(split"eS,eU",function(n)
+foreach(U[f][n],function(t)
 add(e[n],t)
 end)
 end)
 end
 local n,f={},{}
-foreach(e.eS,function(e)n[e]=true end)
+foreach(e.eU,function(e)n[e]=true end)
 for e=1,54do
 if n[e]then add(f,e)end
 end
-e.eS=f
+e.eU=f
 do local _ENV=e
-F(_ENV,"Q,@,q,@,ei,@,K,@,V,@,D,~V",nm(tV),
-nm(tW),
-nm(tY),
-nm(td),
-nm(tU)+55
+H(_ENV,"R,@,B,@,er,@,M,@,V,@,F,~V",nc(tU),
+nc(tV),
+nc(tW),
+nc(ti),
+nc(tS)+55
 )
-n6=Q+q+ei+K+V
+ny=R+B+er+M+V
 end
-S[t]=e
+U[t]=e
 end
 end,function(e,n)
-return setmetatable(r("w,@,T,0,et,~j",n),{__index=S[e]})
+return setmetatable(m("p,@,s,0,et,~z",n),{__index=U[e]})
 end,function(e)
-foreach(nS(e.y),function(e)
+foreach(nV(e.k),function(e)
 poke(0x5e5a+e.d,1)
 end)
 end,function(e)
 local n={}
 foreach(e,function(e)
-if e.d>-1and e.T==1then
+if e.d>-1and e.s==1then
 add(n,e)
 end
 end)
@@ -580,86 +581,86 @@ return n
 end,function(e,t)
 local n={}
 foreach(e,function(e)
-if e.d>(t and 0or-1)and e.T~=1then
+if e.d>(t and 0or-1)and e.s~=1then
 add(n,e)
 end
 end)
 return n
 end,function(e)
-return nU(e)[1]
+return nW(e)[1]
 end,function(e)
-local n=e:ej"k"
-n[e:G"em"+1]=n4(-1,nA())
-e8(e:G"k",n)
-e:H()
+local n=e:ej"j"
+n[e:O"ec"+1]=nb(-1,nD())
+e8(e:O"j",n)
+e:J()
 end,function(e,o,n)
-local t,f=S[n],nA()
-for e=1,min(4,#t.eR)do
-f[e]=B(t.eR[e],e)
+local t,f=U[n],nD()
+for e=1,min(4,#t.eS)do
+f[e]=q(t.eS[e],e)
 end
-e[o]=n4(n,f)
+e[o]=nb(n,f)
 return e
 end,function(e)
-local a=tZ[e]
-local e=r""
+local a=tY[e]
+local e=m""
 for t=1,6do
 local f,n,o=a+(t-1)*5,{},false
 for e=1,4do
-n[e]=B(peek(f+e),e)
+n[e]=q(peek(f+e),e)
 if n[e].d>0then
 o=true
 else
-n[e]=B(-1)
+n[e]=q(-1)
 end
 end
-e[t]=n4(o and@f or-1,n)
+e[t]=nb(o and@f or-1,n)
 end
 return e
 end,function(e,o)
-local n=tZ[e]
+local n=tY[e]
 memset(n,0,30)
 for t=1,6do
 local f,e=n+(t-1)*5,o[t]
 poke(f,max(0,e.d))
 for n=1,4do
-poke(f+n,e.w[n].d>0and e.w[n].d or 0)
+poke(f+n,e.p[n].d>0and e.p[n].d or 0)
 end
 end
 end,function()
 for e=-1,164do
-local n,t={},deli(nB[e],6)
-for t=6,#nB[e]do
-add(n,deli(nB[e],6))
+local n,t={},deli(nF[e],6)
+for t=6,#nF[e]do
+add(n,deli(nF[e],6))
 end
-na[e]=r("ov,@,d,@,eU,@,n,@,eL,@,e9,@,tN,~e9,ti,@,A,@",function(e)
+nd[e]=m("oT,@,d,@,eV,@,n,@,eL,@,e9,@,tK,~e9,t0,@,D,@",function(e)
 return t(e,unpack(n))
-end,e,t,unpack(nB[e]))
+end,e,t,unpack(nF[e]))
 end
+end,function(e,n)
+return setmetatable(m("en,@",n or 0),{__index=nd[e]})
 end)
-F(Y,"B,@,nA,@,tr,@,t0,@,t1,@,tm,@,tc,@,eV,@,oh,@,o2,@,fe,@,eW,@,tu,@,nv,@,tl,@,fn,@,ft,@,o5,@,ff,@,eY,@,oP,@,fo,@,oE,@,oX,@,f_,@,oL,@,oO,@,fa,@,oG,@,oI,@,oC,@,op,@,ow,@,fd,@,o3,@,o4,@,og,@,ob,@,ox,@,nh,@,aG,@,o6,@,o8,@,oy,@,o7,@,o9,@,ok,@,oj,@,oz,@,oq,@,oA,@,oB,@,oD,@,oF,@,oH,@,fi,@,G,@,ew,@,oJ,@,fr,@,oK,@,f0,@,U,@,eT,@,f1,@,tM,@,eN,@,eZ,@,oM,@,fm,@,n7,@,oN,@,oQ,@,oR,@,fc,@,oS,@,oU,@,ej,@,n2,@,nD,@,nF,@,to,@,tt,@,ek,@,oV,@,nH,@,oW,@,nJ,@,ne,@,n5,@,nP,@,oY,@,oZ,@,fu,@,fl,@,tn,@,fT,@,t_,@,tS,@,fs,@",function(e,n)
-return setmetatable(r("el,@",n or 0),{__index=na[e]})
-end,function()
+H(e_,"nD,@,t1,@,tm,@,tc,@,tu,@,tl,@,eW,@,os,@,ov,@,tZ,@,eY,@,tT,@,nh,@,ts,@,fe,@,fn,@,oh,@,ft,@,eZ,@,o2,@,ff,@,o5,@,oP,@,f_,@,oE,@,oX,@,fo,@,oL,@,oO,@,oG,@,oI,@,oC,@,fa,@,ow,@,op,@,o3,@,o4,@,og,@,n2,@,aL,@,ob,@,ox,@,o6,@,o8,@,oy,@,o7,@,o9,@,ok,@,oj,@,oz,@,oq,@,oA,@,oB,@,oD,@,fd,@,O,@,ep,@,oF,@,fi,@,oH,@,fr,@,A,@,es,@,f0,@,tJ,@,eN,@,ne,@,oJ,@,f1,@,nk,@,oK,@,oM,@,oN,@,fm,@,oQ,@,oR,@,ej,@,n5,@,nH,@,nJ,@,tN,@,t_,@,ek,@,oS,@,nK,@,oU,@,nM,@,nn,@,nP,@,nE,@,oV,@,oW,@,oY,@,fc,@,nj,@,fu,@,ta,@,tR,@,fl,@,fT,@",function()
 local e={}
-for n=1,4do add(e,B(-1))end
+for n=1,4do add(e,q(-1))end
 return e
 end,function(e)
-fi(e)
-tM("team #"..e:G"k"+1,20,27,1)
+fd(e)
+tJ("team #"..e:O"j"+1,20,27,1)
 end,function(_ENV)
 local t,e,n=ez.o,eO.o,eq.o
 local o,a=e==t,n==t
 local t,f=11,11
 C(rectfill,";,0,0,39,6,5;;,0,33,39,39,5")
-C(rectfill,";,-1,33,@,41,1;;,-1,-2,@,6,1",max(ceil(e.D/e.V*40),0)-1,
-max(ceil(n.D/n.V*40),0)-1)
+C(rectfill,";,-1,33,@,41,1;;,-1,-2,@,6,1",max(ceil(e.F/e.V*40),0)-1,
+max(ceil(n.F/n.V*40),0)-1)
 C(rectfill,";,15,6,39,6,13;;,16,5,39,5,13;;,0,33,24,33,13;;,0,34,23,34,13")
-C(eN,";,@,40,34,13,1;;,@,40,27,1,1;;,@,2,1,13,-1;;,@,2,7,1,-1",e.D,tb[e.T],n.D,tb[n.T])
+C(eN,";,@,40,34,13,1;;,@,40,27,1,1;;,@,2,1,13,-1;;,@,2,7,1,-1",e.F,tb[e.s],n.F,tb[n.s])
 local t,f=1,1
-e:n7(10,25,n_[4],t,t,o)
-n:n7(30,15,n_[4],-f,f,a)
-end,function(e)oM(S[e:G"et"])end,function(e)e4("spot #"..(e:G"em"+1))end,function(e)e4("move #"..(e:G"eP"+1))end,function(e)e4(e.nn)end,function(e)e4"match over"end,function(n)
-local e=n:ew"nK"
-e4(e and e.ae)
+e:nk(10,25,na[4],t,t,o)
+n:nk(30,15,na[4],-f,f,a)
+end,function(e)oJ(U[e:O"et"])end,function(e)e4("spot #"..(e:O"ec"+1))end,function(e)e4("move #"..(e:O"e5"+1))end,function(e)e4(e.nt)end,function(e)e4"match over"end,function(n)
+local e=n:ep"nN"
+e4(e and e.oZ)
 end,function()
 rectfill(0,0,46,13,13)
 pal(7,1)
@@ -669,362 +670,369 @@ sspr(6*8+e,6*8,n,8,e+3,3.5+cos((t()+f)/4))
 e+=n
 end
 pal()
-end,function(e)e4(e.ez.an.n)end,function(e)
-fm(e:n2())
+end,function(e)e4(e.ez.ae.n)end,function(e)
+f1(e:n5())
 end,function(n)
-local e=n:ew(n.fv).u
+local e=n:ep(n.fs).u
 if e.d>=0then
-eh(eJ[e.eL].n.."|"..e.e9.."/"..e.tN.."|"..(e.ti>=0and e.ti or"??").."P "..(e.A>=0and e.A or"??").."A")
+e2(eJ[e.eL].n.."|"..e.e9.."/"..e.tK.."|"..(e.t0>=0and e.t0 or"??").."P "..(e.D>=0and e.D or"??").."A")
 else
-eh"none|n/a|"
+e2"none|n/a|"
 end
 end,function(e)
-fm(e:ew"et".en)
+f1(e:ep"et".ee)
 end,function(e)
-eh(e:ew"eM".e3)
+e2(e:ep"eM".e3)
 end,function(_ENV)
 if d>-1then
-eh(n.."|"..D.."/"..V.."|"..tg[T])
+e2(n.."|"..F.."/"..V.."|"..tg[s])
 else
-eh"none|n/a|"
+e2"none|n/a|"
 end
-end,function(_ENV)ft(_ENV:ew"tT".en)end,function(_ENV)ft(s.o)end,function(e)
+end,function(_ENV)fn(_ENV:ep"tv".ee)end,function(_ENV)fn(v.o)end,function(e)
 local n,t=0,0
-foreach(e:ew().y,function(e)
+foreach(e:ep().k,function(e)
 if e>-1then
-n+=S[e].n6
+n+=U[e].ny
 t+=1
 end
 end)
-eh(e:ew().n.."|len "..t.."/6|tot "..n)
+e2(e:ep().n.."|len "..t.."/6|tot "..n)
 end,function(e)
-eh(e.nt.n.."|is the|winner")
+e2(e.nf.n.."|is the|winner")
 end,function(e)
-eh(e.ez.n..e.ez.fh)
+e2(e.ez.n..e.ez.fv)
 end,function(_ENV)
-local n=ne(_ENV,nt)
-nt:at(n)
-a:M{}
-a.nl=function(e)
-e:nO"ts"
+local n=nn(_ENV,nf)
+nf:an(n)
+a:N{}
+a.nT=function(e)
+e:nI"th"
 end
-for e in all{nt,n}do
-F(a,"R,0;;en,@;;te,~eu;;n,@,ny,5;;n,@;;n,@",e.o.W,e.n,(#nU(e.y,true)).." live",(#nS(e.y)).." dead")
+for e in all{nf,n}do
+H(a,"S,0;;ee,@;;tt,~el;;n,@,n9,5;;n,@;;n,@",e.o.W,e.n,(#nW(e.k,true)).." live",(#nV(e.k)).." dead")
 end
 end,function(_ENV)
 local e=0
-for n=0,151do e+=S[n]:eZ()and 1or 0end
-a:M(
-r(";n,browse,ee,et,I,~eo,e3,@;;n,edit,ee,k,I,~eo,e3,edit|stored|teams;;n,league,ee,f2,I,~eo,e3,@;;n,versus,ee,tv,I,~eo,e3,versus|p1 vs p2|match;;n,horde,ee,f5,I,~eo,e3,@;;n,credits,ee,fP,I,~eo,e3,credits|amorg|games","browse|"..e.."/151|pokemon","league|"..(@0x5efd).."/40|trainers","horde|"..(@0x5efe).."/151|hi-score")
+for n=0,151do e+=U[n]:ne()and 1or 0end
+a:N(
+m(";n,browse,Z,et,G,~eo,e3,@;;n,edit,Z,j,G,~eo,e3,edit|stored|teams;;n,league,Z,fh,G,~eo,e3,@;;n,versus,Z,t2,G,~eo,e3,versus|p1 vs p2|match;;n,horde,Z,f2,G,~eo,e3,@;;n,credits,Z,f5,G,~eo,e3,credits|amorg|games","browse|"..e.."/151|pokemon","league|"..(@0x5efc).."/40|trainers","horde|"..(@0x5efd).."/151|hi-score")
 )
 end,function(_ENV,n)
 local e={}
 for n=0,151do
 add(e,n)
 end
-a:M(
+a:N(
 e,
 function(e)
-return r("I,@,e1,@,en,@",n,not S[e]:eZ(),S[e])
+return m("G,@,em,@,ee,@",n,not U[e]:ne(),U[e])
 end
 )
 end,function(_ENV)
 f_(_ENV,function(_ENV)
-_ENV:ev"fE"
+_ENV:eh"fP"
 end)
 end,function(_ENV)
 f_(_ENV,function(_ENV)
-e8(_ENV:G"k",nV(_ENV:ej"k",_ENV:G"em"+1,_ENV:G"et"))
-_ENV:H()
+e8(_ENV:O"j",nY(_ENV:ej"j",_ENV:O"ec"+1,_ENV:O"et"))
+_ENV:J()
 end)
 end,function(_ENV)
-local e=_ENV:ew"et".en
-a:M{}
-F(a,";en,@;;te,~eu;;n,lvl 50,ny,5",e)
-foreach(split"V,ei,Q,q,K,n6",function(n)
+local e=_ENV:ep"et".ee
+a:N{}
+H(a,";ee,@;;tt,~el;;n,lvl 50,n9,5",e)
+foreach(split"V,er,R,B,M,ny",function(n)
 add(a,{n=tx[n].." "..e[n]})
 end)
 C(function(t,n)
-if#S[e.d][n]>0then
-add(a,{n=t,ny=5})
-foreach(S[e.d][n],function(e)
-add(a,{n=na[e].n})
+if#U[e.d][n]>0then
+add(a,{n=t,n9=5})
+foreach(U[e.d][n],function(e)
+add(a,{n=nd[e].n})
 end)
 end
-end,";,learn,eR;;,teach,eS;;,event,nq")
+end,";,learn,eS;;,teach,eU;;,event,tr")
 end,function(_ENV)
-a:M(
+a:N(
 split"91,,#alanxoc3,code &,design,28,,#gr8cadet,pokemon,sprites,143,,#tigrwolf,battle,testing,127,,#tooling,px9 func,shrinko8,137,,#pkmndata,blbpedia,pokeapi,serebii,smogon,upokcntr,volvox,nintendo",
 function(e)
 if type(e)=="number"then
-return{en=n4(e,nA())}
+return{ee=nb(e,nD())}
 end
 local n=1
 if sub(e,1,1)=="#"then
 e,n=sub(e,2),5
 end
-return{n=e,ny=n,te=e==""}
+return{n=e,n9=n,tt=e==""}
 end
 )
 end,function(_ENV)
-a:M(nQ,function(e,n)
+a:N(nR,function(e,n)
 return{
 n=e.n,
-y=e,
-e1=n-1>@0x5efd,
-I=function(t,e)
-fX(t,e.y,e.n,function(t,e)
-poke(0x5efd,mid(@0x5efd,n,40))
-tB(e)
+k=e,
+em=n-1>@0x5efc,
+G=function(t,e)
+fE(t,e.k,e.n,function(t,e)
+poke(0x5efc,mid(@0x5efc,n,40))
+tq(e)
 end,L)
 end
 }
 end)
 end,function(_ENV)
-a:M(r";n,moves,ee,eP,I,~eo;;n,switch,ee,th,I,~eo;;n,delete,I,~o1")
+a:N(m";n,moves,Z,e5,G,~eo;;n,switch,Z,t5,G,~eo;;n,delete,G,~oi")
 end,function(_ENV)
-local n=_ENV:n2()
+local n=_ENV:n5()
 local e=0
 for t=1,4do
-if n.w[t].d>0then e+=1end
+if n.p[t].d>0then e+=1end
 end
-a:M(r(";n,change,ee,nK,I,~eo;;n,switch,ee,fL,I,~eo;;n,delete,e1,@,I,~ow",e==1))
+a:N(m(";n,change,Z,nN,G,~eo;;n,switch,Z,fX,G,~eo;;n,delete,em,@,G,~oC",e==1))
 end,function(_ENV)
-local e,n=_ENV:n2()
-e.w[_ENV:G"eP"+1]=B(-1)
-e8(_ENV:G"k",n)
-_ENV:H()
+local e,n=_ENV:n5()
+e.p[_ENV:O"e5"+1]=q(-1)
+e8(_ENV:O"j",n)
+_ENV:J()
 end,function(_ENV,f,o)
-local n,d=_ENV:n2()
-a:M(r",1,2,3,4",function(e)
-local t=n.w[e]
+local n,d=_ENV:n5()
+a:N(m",1,2,3,4",function(e)
+local t=n.p[e]
 return{
 u=t,
 n=t.n,
-I=function(_ENV)o(_ENV,e,n,d)end,
-e1=e==f
+G=function(_ENV)o(_ENV,e,n,d)end,
+em=e==f
 }
 end)
 end,function(_ENV)
-fd(_ENV,0,function(_ENV,e,n)
-_ENV:ev(n.w[e].d>0and"fO"or"nK")
+fa(_ENV,0,function(_ENV,e,n)
+_ENV:eh(n.p[e].d>0and"fL"or"nN")
 end)
 end,function(_ENV)
-local n=_ENV:G"eP"+1
-fd(_ENV,n,function(_ENV,t,e,f)
-e.w[t],e.w[n]=e.w[n],e.w[t]
-e8(_ENV:G"k",f)
-_ENV:nO"eP"
+local n=_ENV:O"e5"+1
+fa(_ENV,n,function(_ENV,t,e,f)
+e.p[t],e.p[n]=e.p[n],e.p[t]
+e8(_ENV:O"j",f)
+_ENV:nI"e5"
 end)
-a.p=eP.a.p
+a.w=e5.a.w
 end,function(_ENV)
-local n=_ENV:n2()
-local e=S[n.d]
+local n=_ENV:n5()
+local e=U[n.d]
 local t={}
 C(function(f,a)
 for o=1,#f do
 local e=f[o]
-add(t,{n=na[e].n,e1=n:fu(e),d=e,e3=a..o})
+add(t,{n=nd[e].n,em=n:oY(e),d=e,e3=a..o})
 end
-end,";,@,learn #;;,@,teach #;;,@,event #",e.eR,e.eS,e.nq)
-a:M(t,function(e)
+end,";,@,learn #;;,@,teach #;;,@,event #",e.eS,e.eU,e.tr)
+a:N(t,function(e)
 return{
 n=e.n,
-e1=e.e1,
-u=na[e.d],
-ae=e.e3,
-I=function()
-local n=_ENV:ej"k"
-n[_ENV:G"em"+1].w[_ENV:G"eP"+1]=B(e.d)
-e8(_ENV:G"k",n)
-_ENV:nO"eP"
+em=e.em,
+u=nd[e.d],
+oZ=e.e3,
+G=function()
+local n=_ENV:ej"j"
+n[_ENV:O"ec"+1].p[_ENV:O"e5"+1]=q(e.d)
+e8(_ENV:O"j",n)
+_ENV:nI"e5"
 end
 }
 end)
 end,function(_ENV)
-local n=fT(s.o)
-if s.o.g then
-nJ(s,s.o.g)
-_ENV:H()_ENV:H()
+local n=fu(v.o)
+if v.o.g then
+nM(v,v.o.g)
+_ENV:J()_ENV:J()
 elseif#n==0then
-nJ(s,B(0))
-_ENV:H()_ENV:H()
+nM(v,q(0))
+_ENV:J()_ENV:J()
 end
-a:M(s.o.w,function(e)
-return r("e1,@,n,@,u,@,I,@",
+a:N(v.o.p,function(e)
+return m("em,@,n,@,u,@,G,@",
 not n[e],
 e.n,
 e,
 function()
-_ENV:H()_ENV:H()
-nJ(s,e)
+_ENV:J()_ENV:J()
+nM(v,e)
 end
 )
 end)
 end,function(_ENV)
-a:M(r";n,fight,I,~eo,ee,fG;;n,switch,I,~eo,ee,tT;;n,forfeit,I,~af")
+a:N(m";n,fight,G,~eo,Z,fO;;n,switch,G,~eo,Z,tv;;n,forfeit,G,~at")
 end,function(_ENV)
-a:M(r",1,2,3",function(e)
-local n=nc(e-1)
+a:N(m",1,2,3",function(e)
+local n=nu(e-1)
 local t={}
 local f=true
 for e=1,6do
 t[e]=n[e].d
-if not n[e]:fl()then
+if not n[e]:fc()then
 f=false
 end
 end
 return{
 n="team #"..e,
-y=t,
-I=function()_ENV:nE()end,
-e1=nX and f
+k=t,
+G=function()_ENV:nX()end,
+em=nL and f
 }
 end)
 end,function(e,n)
 return e[n]and e[n].d or-1
 end,function(_ENV)
-local e=_ENV:ej"k"
-a:M(r",1,2,3,4,5,6",function(n)
+local e=_ENV:ej"j"
+a:N(m",1,2,3,4,5,6",function(n)
 return{
-en=e[n],
-I=function(_ENV)
-if e[_ENV:G"em"+1]:eZ()then
-_ENV:ev"fI"
+ee=e[n],
+G=function(_ENV)
+if e[_ENV:O"ec"+1]:ne()then
+_ENV:eh"fG"
 else
-_ENV:ev"fC"
+_ENV:eh"fI"
 end
 end
 }
 end)
 end,function(_ENV)
-local e=_ENV:ej"k"
-a:M(r",1,2,3,4,5,6",function(n)
+local e=_ENV:ej"j"
+a:N(m",1,2,3,4,5,6",function(n)
 return{
-e1=n==_ENV:G"em"+1,
-I=function(_ENV)
-local n,t=_ENV:G"em"+1,_ENV:G"th"+1
+em=n==_ENV:O"ec"+1,
+G=function(_ENV)
+local n,t=_ENV:O"ec"+1,_ENV:O"t5"+1
 e[n],e[t]=e[t],e[n]
-e8(_ENV:G"k",e)
-_ENV:nO"em"
+e8(_ENV:O"j",e)
+_ENV:nI"ec"
 end,
-en=e[n]
+ee=e[n]
 }
 end)
-a.p=em.a.p
+a.w=ec.a.w
 end,function(_ENV)
-local e=_ENV:ej"k"
-a:M(r",1,2,3,4,5,6",function(e)
-local n=s.y[e]:fl()or s.o.W==s.y[e]or s.y[e].T==1
+local e=_ENV:ej"j"
+a:N(m",1,2,3,4,5,6",function(e)
+local n=v.k[e]:fc()or v.o.W==v.k[e]or v.k[e].s==1
 return{
-e1=n,
-I=function()
-_ENV:H()_ENV:H()
-to(s,s.y[e])
+em=n,
+G=function()
+_ENV:J()_ENV:J()
+tN(v,v.k[e])
 end,
-en=s.y[e]
+ee=v.k[e]
 }
 end)
 end,function(_ENV)
 local n,e=eO,eq
 if n.eA==e.eA then e.eA+=sgn(rnd"2"-1)end
-s=n.eA>e.eA and n or e
+v=n.eA>e.eA and n or e
 end,function(_ENV,e)
 local n=true
-for t=et.a.p+e,75.5+75.5*e,e do
-if S[t]:eZ()then
-et.a.p,n=t
-U"154"
+for t=et.a.w+e,75.5+75.5*e,e do
+if U[t]:ne()then
+et.a.w,n=t
+A"154"
 break
 end
 end
-if n then eE()end
-fa(_ENV)
-end,function(e)U(e:G"et")end,function()U(b"152")end,function(_ENV)U(nt.o.d)end,function(_ENV)
+if n then eP()end
+fo(_ENV)
+end,function(e)A(e:O"et")end,function()A(b"152")end,function(_ENV)A(nf.o.d)end,function(_ENV)
 local e={}
 for t,n in pairs(split"133,7,35,1,25,4")do
-nV(e,t,n)
+nY(e,t,n)
 poke(0x5e5a+n,1)
 end
-if@0x5efc==0then
-poke(0x5efc,1)
+if@0x5efb==0then
+poke(0x5efb,1)
 e8(0,e)
 end
-ef=tp"ey,eM;tH;a,~j,l,~L,tK,~eE,n8,~L,ea,~oH,fv,~j,e0,~fi,h,~L,P,~L;eM;l,~oX,h,~fe,P,~fn;et;l,~oL,h,~t1,P,~tl;fE;l,~fa,h,~t1,P,~tl,tK,~o9,n8,~ok;em;l,~o6,h,~tm,P,~tu,e0,~tr;th;l,~o8,h,~tm,P,~tu,e0,~tr;fC;l,~oO,h,~t1,P,~tl;fI;l,~oC,h,~tm,P,~tu;fO;l,~op,h,~tc,P,~nv,fv,eP;nK;l,~og,h,~o2,P,~nv;eP;l,~o3,h,~tc,P,~nv;fL;l,~o4,h,~tc,P,~nv;k;nn,player,l,~nh,h,~eV,P,~eY,nX,~j,nE,~oU;f2;nn,player,l,~nh,h,~eV,P,~eY,nX,~eu,nE,~oN;tv;nn,player 1,l,~nh,h,~eV,P,~eY,nX,~eu,nE,~oQ;f5;nn,player,l,~nh,h,~eV,P,~eY,nX,~eu,nE,~oS;t2;nn,player 2,l,~nh,h,~eV,P,~eY,nX,~eu,nE,~oR;ts;nn,trainer,l,~oI,h,~eV,P,~eY;t5;l,~oE,h,~oh,P,~oP,n8,~oz;fp;l,~ox,h,~eW,P,~ff;fG;l,~ob,h,~eW,P,~nv;tT;l,~oy,h,~eW,P,~o5,e0,~tr;ao;next,a_,l,~fs,fw,eO;a_;next,f3,l,~fs,fw,eq;f3;next,ao,l,~o7,ea,~oY,e0,~t0,h,~eW,P,~fo,ez,~j;aa;l,~L,ea,~f4,e0,~t0,h,~eW,P,~ff;ad;l,~L,ea,~f4,e0,~t0,h,~eW,P,~fo;fP;l,~oG,h,~fe,P,~fn,n8,~oj;"
+ef=tw"ey,eM;tD;a,~z,T,~L,tH,~eP,n7,~L,ed,~oD,fs,~z,e1,~fd,P,~L,E,~L;eM;T,~oP,P,~tZ,E,~fe;et;T,~oE,P,~tc,E,~ts;fP;T,~fo,P,~tc,E,~ts,tH,~oy,n7,~o7;ec;T,~ob,P,~tu,E,~tT,e1,~t1;t5;T,~ox,P,~tu,E,~tT,e1,~t1;fI;T,~oX,P,~tc,E,~ts;fG;T,~oG,P,~tu,E,~tT;fL;T,~oI,P,~tl,E,~nh,fs,e5;nN;T,~o3,P,~ov,E,~nh;e5;T,~ow,P,~tl,E,~nh;fX;T,~op,P,~tl,E,~nh;j;nt,player,T,~n2,P,~eW,E,~eZ,nL,~z,nX,~oR;fh;nt,player,T,~n2,P,~eW,E,~eZ,nL,~el,nX,~oK;t2;nt,player 1,T,~n2,P,~eW,E,~eZ,nL,~el,nX,~oM;f2;nt,player,T,~n2,P,~eW,E,~eZ,nL,~el,nX,~oQ;tP;nt,player 2,T,~n2,P,~eW,E,~eZ,nL,~el,nX,~oN;th;nt,trainer,T,~oO,P,~eW,E,~eZ;tE;T,~o5,P,~os,E,~o2,n7,~ok;fC;T,~og,P,~eY,E,~ft;fO;T,~o4,P,~eY,E,~nh;tv;T,~o6,P,~eY,E,~oh,e1,~t1;af;next,a_,T,~fl,fw,eO;a_;next,fp,T,~fl,fw,eq;fp;next,af,T,~o8,ed,~oV,e1,~tm,P,~eY,E,~ff,ez,~z;ao;T,~L,ed,~fT,e1,~tm,P,~eY,E,~ft;aa;T,~L,ed,~fT,e1,~tm,P,~eY,E,~ff;f5;T,~oL,P,~tZ,E,~fe,n7,~o9;"
 C(function(e,n,...)
 ef[e].a=n(...)
-end,";,et,~J,~nC,4;;,fE,~nI,~N;;,fP,~nI,~N;;,t5,~nI,~N;;,em,~J,~nC,3;;,th,~J,~nC,3;;,eM,~J,~N;;,fI,~J,~N;;,fO,~J,~N;;,nK,~J,~N;;,eP,~J,~N;;,fL,~J,~N;;,k,~J,~N;;,tv,~J,~N;;,ts,~J,~N;;,t2,~J,~N")
-F(ef,"fg,@,ai,@;eM;a;nl,~eE;f5;a,~fg;f2;a,~fg;fC;a,~ai;",ef.k.a,ef.et.a)
+end,";,et,~K,~np,4;;,fP,~nw,~Q;;,f5,~nw,~Q;;,tE,~nw,~Q;;,ec,~K,~np,3;;,t5,~K,~np,3;;,eM,~K,~Q;;,fG,~K,~Q;;,fL,~K,~Q;;,nN,~K,~Q;;,e5,~K,~Q;;,fX,~K,~Q;;,j,~K,~Q;;,t2,~K,~Q;;,th,~K,~Q;;,tP,~K,~Q")
+H(ef,"f3,@,ad,@;eM;a;nT,~eP;f2;a,~f3;fh;a,~f3;fI;a,~ad;",ef.j.a,ef.et.a)
 menuitem(1,"close picodex",function()
 menuitem(1)
 menuitem(2)
-_ENV:Z"tP"
+sfx(53,2)
+_ENV:Y"tX"
 end)
 menuitem(2,"swap 🅾️/❎",function()
-poke(0x5eff,@0x5eff==0and 1or 0)
+poke(0x5efe,@0x5efe==0and 1or 0)
 end)
 end,function(e)
 e.ef:t4()
-Y.tE\=2
-end,function()nf.ef:e0()end,function()nf.ef:h()end,function()nf.ef:P()end,function(_ENV)a.ea(_ENV)end,function(_ENV)a.e0(_ENV)end,function(_ENV,e)
-return _ENV[e].a.p
+end,function()n_.ef:e1()end,function()n_.ef:P()end,function()n_.ef:E()end,function(_ENV)a.ed(_ENV)end,function(_ENV)a.e1(_ENV)end,function(_ENV,e)
+return _ENV[e].a.w
 end,function(_ENV,e)
 local n=e and _ENV[e].a or a
-return n[n.p+1]
+return n[n.w+1]
 end,function(_ENV)
 menuitem(1,"factory reset",function()
 memset(0x5e00,0,0x100)
-_ENV:Z"fb"
+_ENV:Y"f4"
 end)
 end,function()
 return btn()&0x3f~=0
 end,function(_ENV)
-if not fr()and nM then
-nM=false
-_ENV:Z()
-menuitem(1)
-elseif fr()then
-nM=true
+if not fi()and nO then
+nO=false
+_ENV:Y()
+A"157"
+sfx(-1,2)
+elseif fi()then
+if not nO then
+A"156"
+end
+nO=true
 menuitem(1)
 end
 end,0,function(e)
-Y.f0=max(0,0+e-152)
-sfx(54+e\16,0,e%16*2,2)
+e+=0
+if e>152then
+e_.fr=e-152
+end
+sfx(54+e\16,e<=152and 1or 0,e%16*2,2)
 end,function(_ENV)
 cls"0"
-nG(0,128+sin(_ENV:tw"fx"/4)*128,function()
+nC(0,128+sin(_ENV:tp"fg"/4)*128,function()
 C(eN,";,aMORG gAMES,64,-68,7,0;;,pRESENTS,64,-61,7,0;;,a pOKEMON bATTLE sIM,64,15,7,0")
 C(spr,";,102,44,7,5,1")
 local t,
 n,
 e=
-ef and ef.eM.a.p,
-ef and ef.tD-1,
-ec=="nN"and 1
-or ec=="eB"and-1
-or(ec=="tX"and-1or 1)*cos(_ENV:tw(ec)/2)
-nG(30-(e+1)*15+(ey=="fb"and b"3"-1or 0),27,function()
+ef and ef.eM.a.w,
+ef and ef.tA-1,
+eu=="nQ"and 1
+or eu=="eB"and-1
+or(eu=="tL"and-1or 1)*cos(_ENV:tp(eu)/2)
+nC(30-(e+1)*15+(ey=="f4"and b"3"-1or 0),27,function()
 C(rectfill,";,14,18,@,87,5",63+max(0,e*54))
 if eD==0then
 C(rectfill,";,14,18,117,87,13")
 C(function(e,n,t,f,o)
 clip(-%0x5f28+e,-%0x5f2a+n,t,f)
-nG(e,n,o)
+nC(e,n,o)
 clip()
-end,";,14,21,40,40,@;;,71,18,46,13,@;;,71,67,46,21,@",e0,h,P)
+end,";,14,21,40,40,@;;,71,18,46,13,@;;,71,67,46,21,@",e1,P,E)
 end
 C(map,";,24,0,2,1,8,3;;,8,0,2,9,8,11")
 C(function(e,n,t,f,o,a)
-return spr((eD<=e)and(f0==e and stat"46">=0and f or t)or n,o,a)
+return spr((eD<=e)and((e==0and stat"47">=0or fr==e and stat"46">=0)and f or t)or n,o,a)
 end,";,0,135,133,134,6,3;;,1,132,128,131,12,3;;,2,132,129,131,17,3;;,3,132,130,131,22,3")
 C(function(e,n,t,f,o)
 spr(btn(e)and n or t,f,o)
 end,";,0,186,154,10,77;;,1,188,156,26,77;;,2,171,139,18,73;;,3,187,155,18,81;;,4,170,138,42,77;;,5,172,140,50,77")
 if e<=0then
-f1(0,2+64*(1-abs(e)),abs(e))
-if e==-1and nM then spr(123,6,49)end
+f0(0,2+64*(1-abs(e)),abs(e))
+if e==-1and nO then spr(123,6,49)end
 else
-f1(16,62,e)
+f0(16,62,e)
 if e==1then
 if t then spr(153,70+t*8,41)end
 if n and n>=0then spr(153,70+n*8,49)end
@@ -1058,75 +1066,71 @@ end
 end,function(e)
 e4("pkmn #"..e.d)
 end,function(e)
-if e:eZ()then
-eh(e.n.."|"..eJ[e.eX].n.."|"..eJ[e.eC].n)
+if e:ne()then
+e2(e.n.."|"..eJ[e.eE].n.."|"..eJ[e.eC].n)
 else
-eh"none|n/a|"
+e2"none|n/a|"
 end
-end,function(_ENV,n,t,i,f,o,m)
-local e,a=_ENV:eZ()and d or-1,8*(tQ or 1)
+end,function(_ENV,e,n,i,f,o,r)
+local t,a=_ENV:ne()and d or-1,8*(tM or 1)
 f*=a o*=a
-local a=function(t,a)
-local n,d=e/8\1,e%8
-if n~=f6 then
-Y.f6=n
-memcpy(0x0000,0x8000+0x400*n,0x400)
+local a=function(n,a)
+local e,d=t/8\1,t%8
+if e~=fb then
+e_.fb=e
+memcpy(0x0000,0x8000+0x400*e,0x400)
 end
-sspr(d*16,0,16,16,t-f,a-o,f*2,o*2)
+sspr(d*16,0,16,16,n-f,a-o,f*2,o*2)
 end
-foreach(r";,25,53,152;;,54,143,153",function(n)
-if e==n[1]and _ENV:fu(n[2])then
-e=n[3]
-end
-end)
-if ep and ep>0then e=152end
-if not ar or T~=1and not tL and not(e5~=0and g.eU==nr)then
-if e<0then spr(107,n-4,t-4)return end
-local e=1
-local e=function(f,o,d,i,r,e)
+if ew and ew>0then t=152end
+if not ai or s~=1and not tO and not(eT~=0and g.eV==n0)then
+if t<0then spr(107,e-4,n-4)return end
+local t=1
+local t=function(f,o,d,i,r,t)
 if f>0then
 for e=1,15do pal(e,f)end
 for f=-1,1,2do
-a(n+(o or f*e),t+(d or f*e))
-a(n+(i or f*e),t+(r or f*e))
+a(e+(o or f*t),n+(d or f*t))
+a(e+(i or f*t),n+(r or f*t))
 end
 end
 end
-if m then
-C(e,"m,@;;,~m,-2,~j,2,~j,1;;,~m,~j,-2,~j,2,1;;,~m,-2,0,2,0,1;;,~m,0,-2,0,2,1",i.m)
+if r then
+C(t,"c,@;;,~c,-2,~z,2,~z,1;;,~c,~z,-2,~z,2,1;;,~c,-2,0,2,0,1;;,~c,0,-2,0,2,1",i.c)
 end
-C(e,";,@,-1,~j,1,~j,1;;,1,~j,0,0,~j,1",i.er)
-pal()a(n,t)
+C(t,";,@,-1,~z,1,~z,1;;,1,~z,0,0,~z,1",i.e0)
+pal()a(e,n)
 end
-end,function(e)e:ev"ts"end,function(e)e:ev"t2"end,function(_ENV)
-f8(_ENV,
-r(",@,player 1,~j,~L",nc(_ENV:G"tv")),
-r(",@,player 2,~j,~L",nc(_ENV:G"t2"))
+end,function(e)e:eh"th"end,function(e)e:eh"tP"end,function(_ENV)
+fx(_ENV,
+m(",@,player 1,~z,~L",nu(_ENV:O"t2")),
+m(",@,player 2,~z,~L",nu(_ENV:O"tP"))
 )
 end,function(_ENV)
-poke(0x5efe,mid(@0x5efe,#nS(y),152))
+poke(0x5efd,mid(@0x5efd,#nV(k),152))
 end,function(_ENV)
 local e={}
 for n=1,152do add(e,n%152)end
-fX(_ENV,e,"horde",function(n,e)
-tB(e)
-fc(e)
-end,fc)
+fE(_ENV,e,"horde",function(n,e)
+tq(e)
+fm(e)
+end,fm)
 end,function(e)
-e:ev"em"
+e:eh"ec"
 end,function(e,n)
-return nc(e:G(n))
+return nu(e:O(n))
 end,function(e)
-local n=nc(e:G"k")
-return n[e:G"em"+1],n
+local n=nu(e:O"j")
+return n[e:O"ec"+1],n
 end,function(e,n)
-local f,t="|enters|fight",{}
-foreach(n.w,function(e)
+local t={}
+foreach(n.p,function(e)
 add(t,e)
 end)
-e.o=setmetatable(r("ar,~eu,tf,0,A,1,eI,1,e5,0,tL,~eu,nz,0,nj,0,a0,0,nk,0,ta,@,ep,0,n9,0,W,@,w,@;nT;ei,0,Q,0,q,0,K,0,A,0,eI,0",b"7"+1,n,t),{__index=n})
-return n5(e,f,function()
-e.o.tL=false
+e.o=setmetatable(m("ai,~el,to,0,D,1,eI,1,eT,0,tO,~el,nB,0,nA,0,tf,0,nq,0,td,@,ew,0,nz,0,W,@,p,@;ns;er,0,R,0,B,0,M,0,D,0,eI,0",b"7"+1,n,t),{__index=n})
+return nP(e,"|enters|fight",function()
+A(e.o.d)
+e.o.tO=false
 end)
 end,function(e,n)
 for t in all(split(n))do
@@ -1135,86 +1139,86 @@ return true
 end
 end
 end,function(e,n)
-nP(e,e,"|leaves|fight",function(t)
-t.e.tL=true
-nP(e,e,false,function()
-add(e.eF,nD(e,n))
+nE(e,e,"|leaves|fight",function(t)
+t.e.tO=true
+nE(e,e,false,function()
+add(e.eF,nH(e,n))
 end)
 end)
 e.eA=3000
 end,function(t,n)
-local f=t.o.g and"|resumes|"or(n.eU==aI and"|begins|"or"|uses|")
-nP(t,t,f..n.n,function(f)
+local f=t.o.g and"|resumes|"or(n.eV==aO and"|begins|"or"|uses|")
+nE(t,t,f..n.n,function(f)
 f.u=n
 local _ENV=f
 if n.d>0then
 n.e9-=1
 end
-if nF(n.d,"47,36 ")then
-eK(_ENV,e.D)
+if nJ(n.d,"47,36 ")then
+eK(_ENV,e.F)
 end
 if(function()
-if n.A<=0then return false end
-if(n.eU==n0 or n.eU==nr)and not e.g then return false end
-if c.g and c.g.eU==nr then return true end
-if e.g and e.g.eU==ni then return false end
-return rnd(c:eg"eI")>n.A/100*e:eg"A"or b"256"==0and b"256"==0
+if n.D<=0then return false end
+if(n.eV==n1 or n.eV==n0)and not e.g then return false end
+if i.g and i.g.eV==n0 then return true end
+if e.g and e.g.eV==nr then return false end
+return rnd(i:eg"eI")>n.D/100*e:eg"D"or b"256"==0and b"256"==0
 end)()then
-i(t,"|misses|"..n.n)
-if nF(n.d,"145,73 ")then
+r(t,"|misses|"..n.n)
+if nJ(n.d,"145,73 ")then
 eK(_ENV,1)
 end
 else
-if n.ov(_ENV)then
-i(t,"|fails|attack")
+if n.oT(_ENV)then
+r(t,"|fails|attack")
 end
 end
-if n.A~=0then
-c.tf=n.d
+if n.D~=0then
+i.to=n.d
 end
 end)
 end,function(_ENV,e,n)
-if not g and e5==0then
-e5,g=e,n
+if not g and eT==0then
+eT,g=e,n
 end
 end,function(n,t)
-nP(n,n,false,function(f)
+nE(n,n,false,function(f)
 f.u=t
 local _ENV=f
-e:nH("e5",L)
-if e.T==6then
-e:nH("ta",function()
-i(n,"|suddenly|woke up")
-e.W.T=0
+e:nK("eT",L)
+if e.s==6then
+e:nK("td",function()
+r(n,"|suddenly|woke up")
+e.W.s=0
 end)
-if e.T==6then
-i(n,"|fast|asleep")
+if e.s==6then
+r(n,"|fast|asleep")
 return
 end
 end
-if e.T==3then
+if e.s==3then
 if rnd"1"<.2then
-i(n,"|thawed|out")
-e.W.T=0
+r(n,"|thawed|out")
+e.W.s=0
 else
-i(n,"|is|frozen")
+r(n,"|is|frozen")
 return
 end
 end
-if c.ns==e then i(n,"|is|trapped")
-elseif e.tO==t.el then i(n,"|is|disabled")
-elseif e.T==4and b"4"==0then i(n,"|fully|paralyzed")
-elseif e.tR then i(n,"|is|flinching")
+if i.nv==e then r(n,"|is|trapped")
+elseif e.eR==t.en then r(n,"|is|disabled")
+elseif e.s==4and b"4"==0then r(n,"|fully|paralyzed")
+elseif e.tQ then r(n,"|is|flinching")
 else
-if e.nk>0then
-i(n,"|is|confused")
+if e.nq>0then
+r(n,"|is|confused")
 if b"2"==0then
-i(n,"|hurt|itself")
-eK(_ENV,tS(e,c,B(-1)))
+r(n,"|hurt|itself")
+eK(_ENV,tR(e,i,q(-1)))
 return
 end
 end
-tt(n,t)
+t_(n,t)
 end
 end)
 end,function(e,n,t)
@@ -1225,233 +1229,232 @@ t()
 end
 end
 end,function(n)
-return n5(n,false,function(_ENV)
-if e.T==6
-or e.T==3
-or e.ns and e.ns~=c
+return nP(n,false,function(_ENV)
+if e.s==6
+or e.s==3
+or e.nv and e.nv~=i
 then
-e.e5=0
+e.eT=0
 end
-if e.e5==0then
-e.ns,e.g=nil
+if e.eT==0then
+e.nv,e.g=nil
 end
 local t=max(e.V\16,1)
 local f=function(e)
-i(n,e.."|damage")
+r(n,e.."|damage")
 eK(_ENV,t)
 end
-if e.T==5then
-if e.n9>0then
-t*=e.n9
-e.n9+=1
+if e.s==5then
+if e.nz>0then
+t*=e.nz
+e.nz+=1
 end
 f"|poison"
 end
-if e.T==2then f"|burn"end
-if e.a1 then
+if e.s==2then f"|burn"end
+if e.ar then
 f"|seed"
-if c.D<c.V then
-np(_ENV,e2,t)
+if i.F<i.V then
+n3(_ENV,eX,t)
 end
 end
-e:nH("nk",function()
-i(n,"|confusion|ended")
+e:nK("nq",function()
+r(n,"|confusion|ended")
 end)
-e:nH("a0",function()
-i(n,"|"..e.w[e.tO].n.."|enabled")
-e.tO=0
+e:nK("tf",function()
+r(n,"|"..e.p[e.eR].n.."|enabled")
+e.eR=0
 end)
 end)
 end,function(e,n)
 e.eF={}
 local t=1000
-oV(e,n)
+oS(e,n)
 if n.d==120then t=2000end
-if nF(n.d,"18,4,89,30 ")then
+if nJ(n.d,"18,4,89,30 ")then
 t=0000
 end
-e.eA=min(3000,t+e.o:eg"K")
+e.eA=min(3000,t+e.o:eg"M")
 end,function(e,n)
 return n==e.eO and e.eq or e.eO
 end,function(e,n,t,f)
-return{an=e,n=f or e.o.n,o=e.o,fh=n,am=t or L}
+return m("ae,@,n,@,o,@,fv,@,a0,@",e,f or e.o.n,e.o,n,t or L)
 end,function(e,...)
-add(e.eF,n5(...))
+add(e.eF,nP(...))
 end,function(e)
-if eQ then eE()end
-if e7 then U"154"end
+if eQ then eP()end
+if e7 then A"154"end
 if e7 or not e.ez then
 while true do
 for n in all{e.eO,e.eq}do
-if not ng(n.y)then
-e.nt=ne(e,n)
-e:Z"t5"
+if not nx(n.k)then
+e.nf=nn(e,n)
+e:Y"tE"
 return
 end
 end
-local n=oZ(e)
+local n=oW(e)
 if n then
 local f=n.o==e.eO.o and e.eO or e.eq
-local t=r("u,@,O,@,e2,@,i,@",u,f,ne(e,f),function(...)
-nP(f,...)
+local t=m("u,@,I,@,eX,@,r,@",u,f,nn(e,f),function(...)
+nE(f,...)
 end)
-t.e=t.O.o
-t.c=t.e2.o
-n.am(t)
-if n.fh then
+t.e,t.i=t.I.o,t.eX.o
+n.a0(t)
+if n.fv then
 e.ez=n
 return
 else
 end
 else
-e:Z()
+e:Y()
 return
 end
 end
 end
 end,function(n)
 for t in all{n.eO,n.eq}do
-if t.o.D<=0then
-if t.o.T~=1then
-return n5(t,"|has|fainted",function(_ENV)
-e.W.T=1
+if t.o.F<=0then
+if t.o.s~=1then
+return nP(t,"|has|fainted",function(_ENV)
+e.W.s=1
 end)
-elseif t~=n.s then
-return nD(t,ng(t.y))
+elseif t~=n.v then
+return nH(t,nx(t.k))
 end
 end
 end
-for e in all{n.s,ne(n,n.s)}do
-local t=ne(n,e)
+for e in all{n.v,nn(n,n.v)}do
+local t=nn(n,e)
 while#e.eF>0do
 local n=deli(e.eF,1)
-if n.o.T~=1and(n.o==e.o or n.o==t.o)then
+if n.o.s~=1and(n.o==e.o or n.o==t.o)then
 return n
 end
 end
-if e.o.D<=0and e.o.T==1then
-return nD(e,ng(e.y))
+if e.o.F<=0and e.o.s==1then
+return nH(e,nx(e.k))
 end
-if not e.fy then
-e.fy=true
-return oW(e)
+if not e.f6 then
+e.f6=true
+return oU(e)
 end
 end
 end,function(_ENV,e)
-for n in all(w)do
+for n in all(p)do
 if n.d==e then
 return true
 end
 end
 end,function(_ENV)
-return#tn(_ENV,true)==0
+return#nj(_ENV,true)==0
 end,function(t,f)
 local n={}
-foreach(t.w,function(e)
-if e.d>0and(f or e.e9>0and t.tO~=e.el)then
+foreach(t.p,function(e)
+if e.d>0and(f or e.e9>0and t.eR~=e.en)then
 add(n,e)
 n[e]=true
 end
 end)
 return n
 end,function(_ENV)
-if e5~=0then
+if eT~=0then
 return{g}
 else
-return tn(_ENV)
+return nj(_ENV)
 end
 end,function(e,n)
-return(eJ[e.eL][n.eX]or 1)*(eJ[e.eL][n.eC]or 1)
+return(eJ[e.eL][n.eE]or 1)*(eJ[e.eL][n.eC]or 1)
 end,function(n,t,e)
-local a,f=n:eg"ei",t:eg"ei"
+local a,f=n:eg"er",t:eg"er"
 if e.eL%2==1then
-a,f=n:eg"Q",t:eg"q"
-if t.ac then
+a,f=n:eg"R",t:eg"B"
+if t.a1 then
 f*=2
 end
-elseif t.au then
+elseif t.am then
 f*=2
 end
 local o=1024
-if nF(e.d,"107,164,57,157 ")then o*=.3end
-if al then o*=.3end
-local d=rnd"1"<min(.99,(n.td+76)/o)and e.d>0and 2or 1
+if nJ(e.d,"107,164,57,157 ")then o*=.3end
+if ac then o*=.3end
+local d=rnd"1"<min(.99,(n.ti+76)/o)and e.d>0and 2or 1
 local o=mid(
 3,997,
 (100*d/5+2)/50
-*e.ti
+*e.t0
 *mid(10,.2,a/f)
 )+2
-local a,f=o,t_(e,t)
-*((e.eL==n.eX or e.eL==n.eC)and 1.5or 1)
+local a,f=o,ta(e,t)
+*((e.eL==n.eE or e.eL==n.eC)and 1.5or 1)
 *(rnd".15"+.85)
 if f>0then
 return max(1,a*f\1),d>1
 end
 return 0,false
 end,function(_ENV)
-s=_ENV[fw]
-do local _ENV=s.o
-nz,tR=0,false
+v=_ENV[fw]
+do local _ENV=v.o
+nB,tQ=0,false
 end
-s.fy=false
-if s.aT then
-local e=fT(s.o)
-nJ(s,e[b(#e)+1]or B(0))
-_ENV:Z()
-elseif#s.eF>0then
-_ENV:Z()
+v.f6=false
+if v.au then
+local e=fu(v.o)
+nM(v,e[b(#e)+1]or q(0))
+_ENV:Y()
+elseif#v.eF>0then
+_ENV:Y()
 else
-fp.a,
-fG.a,
-tT.a,
+fC.a,
+fO.a,
+tv.a,
 ez,
-eG[#eG]=s.f7,
-s.as,
-s.av,
-n5(s,"|begins|turn"),
+eG[#eG]=v.f8,
+v.al,
+v.aT,
+nP(v,"|begins|turn"),
 ey
-_ENV:Z"ad"
+_ENV:Y"aa"
 end
-end)
-F(Y,"f4,@,af,@,f8,@,fX,@,tG,@,ah,@,a2,@,f9,@,a5,@",function(_ENV)
-if e7 then
-_ENV:ev"fp"
-U"155"
-end
-if eQ then eE()end
 end,function(_ENV)
-_ENV:H()
-nt=_ENV:ne(s)
-_ENV:Z"t5"
+if e7 then
+_ENV:eh"fC"
+A"155"
+end
+if eQ then eP()end
+end)
+H(e_,"at,@,fx,@,fE,@,tG,@,as,@,av,@,fy,@,ah,@",function(_ENV)
+_ENV:J()
+nf=_ENV:nn(v)
+_ENV:Y"tE"
 end,function(_ENV,e,t)
 e.tI,t.tI="eO","eq"
 for n in all{e,t}do
-_ENV[n.tI]=r("eF,#,eA,1,f7,@,as,@,av,@,y,@,n,@,aT,@,at,@",J(N),
-J(N),
-J(nC,3),
+_ENV[n.tI]=m("eF,#,eA,1,f8,@,al,@,aT,@,k,@,n,@,au,@,an,@",K(Q),
+K(Q),
+K(np,3),
 unpack(n))
 local e=_ENV[n.tI]
-e.f7.nl=function()
-_ENV:H()
-_ENV:Z"aa"
+e.f8.nT=function()
+_ENV:J()
+_ENV:Y"ao"
 end
-add(e.eF,nD(e,ng(e.y)))
+add(e.eF,nH(e,nx(e.k)))
 end
-_ENV:ev"f3"
+_ENV:eh"fp"
 end,function(_ENV,e,t,f,o)
 local n={}
 for t=1,#e do
-nV(n,t,e[t])
+nY(n,t,e[t])
 end
-f8(_ENV,
-{_ENV:ej"k","player",false,f},
+fx(_ENV,
+{_ENV:ej"j","player",false,f},
 {n,t,true,o}
 )
 end,function(e)
-f9(peek2(e),
-function(...)return ah(0x8000+e*0x1000,...)end,
-function(...)return a2(0x8000+e*0x1000,...)end)
+fy(peek2(e),
+function(...)return as(0x8000+e*0x1000,...)end,
+function(...)return av(0x8000+e*0x1000,...)end)
 end,function(t,e,f)
 e=min(max(0,e),127)\1
 local n=peek(f\1*64+t+e\2)
@@ -1474,7 +1477,7 @@ end
 e[1]=f
 end
 local e,n=0,0
-function fk(f)
+function f7(f)
 if n<8then
 n+=8
 e+=@t>>n
@@ -1490,13 +1493,13 @@ function no(n)
 local e=0
 repeat
 e+=1
-local t=fk(e)
+local t=f7(e)
 n+=t
 until t<(1<<e)-1
 return n
 end
 local i,d,f,e,o,c,u,n,t=no"1",no"0",no"1",{},{},0,0,0
-for n=1,no"1"do add(e,fk(f))end
+for n=1,no"1"do add(e,f7(f))end
 for f=0,d do
 for d=0,i-1do
 n-=1
@@ -1513,48 +1516,46 @@ m(d,f,o)
 end
 end
 end,function(e)
-if e.eH then U(e.eH)end
+if e.eH then A(e.eH)end
 e:tC()
 end)
-Y.nB=r"-1;,none,17,0,40,0,~f;0;,struggle,17,0,50,100,~nw;;,megapnch,1,20,80,85,~f;;,razrwind,1,10,80,75,~n0;;,sworddnc,1,30,0,0,~z,~v,Q,2;;,whrlwind,1,20,0,100,~t7;;,megakick,1,5,120,75,~f;;,toxic,5,10,0,85,~fV;;,horndril,1,5,-5,30,~nR;;,bodyslam,1,15,85,100,~f,30,~X,4;;,takedown,1,20,90,85,~nw;;,doubedge,1,15,100,100,~nw;;,bublbeam,4,20,65,100,~f,10,~E,~v,K,-1;;,watergun,4,25,40,100,~f;;,icebeam,10,10,95,100,~f,10,~X,3;;,blizzard,10,5,120,90,~f,10,~X,3;;,hyprbeam,1,5,150,90,~oo;;,payday,1,20,40,100,~f;;,submsion,3,20,80,80,~nw;;,counter,3,20,-5,100,~oa;;,seistoss,3,20,-5,100,~e_,50;;,rage,1,20,20,100,~oe;;,megdrain,8,10,40,100,~n3;;,solrbeam,8,10,120,100,~n0;;,drgnrage,14,10,-5,100,~e_,40;;,thndrblt,6,15,95,100,~f,10,~X,4;;,thunder,6,10,120,70,~f,10,~X,4;;,earthqke,7,10,100,100,~f;;,fissure,7,5,-5,30,~nR;;,dig,7,10,100,100,~nr,|begins|digging;;,psychic,12,10,90,100,~f,30,~E,~v,ei,-1;;,teleport,12,20,0,0,~fU;;,mimic,1,10,0,0,~fK;;,doubteam,1,15,0,0,~z,~v,eI,1;;,reflect,12,20,0,0,~z,~eb,|raises|defense,ac;;,bide,1,10,-5,100,~on;;,metrnome,1,10,0,0,~fR;;,selfdstr,1,5,260,100,~f;;,eggbomb,1,10,100,75,~f;;,fireblst,2,5,120,85,~f,30,~X,2;;,swift,1,20,60,-5,~f;;,skulbash,1,15,100,100,~n0;;,softboil,1,10,0,0,~ty;;,dreameat,12,15,100,100,~oi;;,skyattck,9,5,140,90,~n0;;,rest,12,10,0,0,~o_;;,thndrwav,6,20,0,100,~X,4;;,psywave,12,15,-5,80,~ot;;,explsion,1,5,340,100,~f;;,rockslid,13,10,75,90,~f;;,triattck,1,10,80,100,~f;;,substute,1,10,0,0,~fZ;;,cut,1,30,50,95,~f;;,fly,9,15,70,95,~nr,|begins|flying;;,surf,4,15,95,100,~f;;,strength,1,15,80,100,~f;;,flash,1,20,0,70,~E,~v,A,-1;;,pound,1,35,40,100,~f;;,karatchp,3,25,55,100,~f;;,doubslap,1,10,15,85,~e6;;,comtpnch,1,15,20,85,~e6;;,firepnch,2,15,75,100,~f,10,~X,2;;,icepnch,10,15,75,100,~f,10,~X,3;;,thndpnch,6,15,75,100,~f,10,~X,4;;,scratch,1,35,40,100,~f;;,vicegrip,1,30,55,100,~f;;,guilotin,1,5,-5,30,~nR;;,gust,9,35,40,100,~f;;,wingatck,9,35,35,100,~f;;,bind,1,20,15,75,~ni;;,slam,1,20,80,75,~f;;,vinewhip,8,10,35,100,~f;;,stomp,1,20,65,100,~f,30,~E,~ex;;,doubkick,3,30,30,100,~n1,2,~L;;,jumpkick,3,20,70,95,~f;;,rllngkck,3,15,60,85,~f,30,~E,~ex;;,sandatck,7,15,0,100,~E,~v,A,-1;;,headbutt,1,15,70,100,~f,30,~E,~ex;;,hornatck,1,25,65,100,~f;;,furyatck,1,20,15,85,~e6;;,tackle,1,35,35,95,~f;;,wrap,1,20,15,85,~ni;;,thrash,1,20,90,100,~tj;;,tailwhip,1,30,0,100,~E,~v,q,-1;;,psnsting,5,35,15,100,~f,20,~X,5;;,twineedl,11,20,25,100,~od;;,pinmisil,11,20,15,85,~e6;;,leer,1,30,0,100,~E,~v,q,-1;;,bite,1,25,60,100,~f,10,~E,~ex;;,growl,1,40,0,100,~E,~v,Q,-1;;,roar,1,20,0,100,~t7;;,sing,1,15,0,55,~X,6;;,sprsonic,1,20,0,55,~E,~nd;;,sonicbom,1,20,-5,90,~e_,20;;,disable,1,20,0,55,~fJ;;,acid,5,30,40,100,~f,10,~E,~v,q,-1;;,ember,2,25,40,100,~f,10,~X,2;;,flamthwr,2,15,95,100,~f,10,~X,2;;,mist,10,30,0,0,~z,~eb,|stat lower|immunity,oT;;,hydropmp,4,5,120,80,~f;;,psybeam,12,20,65,100,~f,10,~E,~nd;;,aurorabm,10,20,65,100,~f,10,~E,~v,Q,-1;;,peck,9,35,35,100,~f;;,drillpck,9,20,80,100,~f;;,lowkick,3,20,50,90,~f,30,~E,~ex;;,absorb,8,20,20,100,~n3;;,leechsed,8,10,0,90,~E,~eb,|is now|seeded,a1,1,~eu;;,growth,1,40,0,0,~z,~v,ei,1;;,razrleaf,8,25,55,95,~f;;,psnpowdr,5,35,0,75,~X,5;;,stunspor,8,30,0,75,~X,4;;,slppowdr,8,15,0,75,~X,6;;,petldanc,8,20,70,100,~tj;;,strngsht,11,40,0,95,~E,~v,K,-1;;,firespin,2,15,15,70,~ni;;,thndshck,6,30,40,100,~f,10,~X,4;;,rockthrw,13,15,50,65,~f;;,cnfusion,12,25,50,100,~f,10,~E,~nd;;,hypnosis,12,20,0,60,~X,6;;,meditate,12,40,0,0,~z,~v,Q,1;;,agility,12,30,0,0,~z,~v,K,2;;,quickatk,1,30,40,100,~f;;,ngtshade,15,15,-5,100,~e_,50;;,screech,1,10,0,85,~E,~v,q,-2;;,recover,1,20,0,0,~ty;;,harden,1,30,0,0,~z,~v,q,1;;,minimize,1,20,0,0,~fY;;,smokscrn,1,20,0,100,~E,~v,A,-1;;,cnfusray,15,10,0,100,~E,~nd;;,withdraw,4,40,0,0,~z,~v,q,1;;,dfnscurl,1,40,0,0,~z,~v,q,1;;,barrier,12,30,0,0,~z,~v,q,2;;,lghtscrn,12,30,0,0,~z,~eb,|raises|spcdefense,au;;,haze,10,30,0,-5,~fQ;;,fcsenrgy,1,30,0,0,~z,~eb,|raises|crit ratio,al;;,mirrmove,9,20,-5,0,~fS;;,lick,15,30,20,100,~f,30,~X,4;;,smog,5,20,20,100,~f,30,~X,5;;,sludge,5,20,65,100,~f,30,~X,5;;,boneclub,7,20,65,85,~f,10,~E,~ex;;,watrfall,4,15,80,100,~f;;,clamp,4,10,35,75,~ni;;,spikcann,1,15,20,100,~e6;;,constrct,1,35,10,100,~f,10,~E,~v,K,-1;;,amnesia,12,20,0,0,~z,~v,ei,2;;,kinesis,12,15,0,80,~E,~v,A,-1;;,hijmpkck,3,20,85,90,~f;;,glare,1,30,0,75,~X,4;;,poisngas,5,40,0,55,~X,5;;,barrage,1,20,15,85,~e6;;,leechlif,11,15,20,100,~n3;;,lovekiss,1,10,0,75,~X,6;;,tranform,1,10,0,0,~fM;;,bubble,4,30,20,100,~f,10,~E,~v,K,-1;;,dizypnch,1,10,70,100,~f;;,spore,8,15,0,100,~X,6;;,splash,1,40,0,0,~fW;;,acidarmr,5,40,0,0,~z,~v,q,2;;,crabhamr,4,10,90,85,~f;;,furyswps,1,15,10,80,~e6;;,bonerang,7,10,50,90,~n1,2,~L;;,hyprfang,1,15,80,90,~f,10,~E,~ex;;,sharpen,1,30,0,0,~z,~v,Q,1;;,convrson,1,30,0,0,~fN;;,suprfang,1,10,-5,90,~of;;,slash,1,20,70,100,~f"
-tZ=r"0,0x5e00,1,0x5e1e,2,0x5e3c"
-f6=16
+e_.nF=m"-1;,none,17,0,40,0,~f;0;,struggle,17,0,50,100,~n4;;,megapnch,1,20,80,85,~f;;,razrwind,1,10,80,75,~n1;;,sworddnc,1,30,0,0,~x,~h,R,2;;,whrlwind,1,20,0,100,~l,~nS;;,megakick,1,5,120,75,~f;;,toxic,5,10,0,85,~fS;;,horndril,1,5,-5,30,~nU;;,bodyslam,1,15,85,100,~f,30,~X,4;;,takedown,1,20,90,85,~n4;;,doubedge,1,15,100,100,~n4;;,bublbeam,4,20,65,100,~f,10,~l,~h,M,-1;;,watergun,4,25,40,100,~f;;,icebeam,10,10,95,100,~f,10,~X,3;;,blizzard,10,5,120,90,~f,10,~X,3;;,hyprbeam,1,5,150,90,~ot;;,payday,1,20,40,100,~f;;,submsion,3,20,80,80,~n4;;,counter,3,20,-5,100,~o_;;,seistoss,3,20,-5,100,~ea,50;;,rage,1,20,20,100,~fY;;,megdrain,8,10,40,100,~ng;;,solrbeam,8,10,120,100,~n1;;,drgnrage,14,10,-5,100,~ea,40;;,thndrblt,6,15,95,100,~f,10,~X,4;;,thunder,6,10,120,70,~f,10,~X,4;;,earthqke,7,10,100,100,~f;;,fissure,7,5,-5,30,~nU;;,dig,7,10,100,100,~n0,|begins|digging;;,psychic,12,10,90,100,~f,30,~l,~h,er,-1;;,teleport,12,20,0,0,~x,~nS;;,mimic,1,10,0,0,~fJ;;,doubteam,1,15,0,0,~x,~h,eI,1;;,reflect,12,20,0,0,~x,~eb,|raises|defense,a1;;,bide,1,10,-5,100,~fZ;;,metrnome,1,10,0,0,~fQ;;,selfdstr,1,5,260,100,~f;;,eggbomb,1,10,100,75,~f;;,fireblst,2,5,120,85,~f,30,~X,2;;,swift,1,20,60,-5,~f;;,skulbash,1,15,100,100,~n1;;,softboil,1,10,0,0,~t8;;,dreameat,12,15,100,100,~oa;;,skyattck,9,5,140,90,~n1;;,rest,12,10,0,0,~of;;,thndrwav,6,20,0,100,~X,4;;,psywave,12,15,-5,80,~oe;;,explsion,1,5,340,100,~f;;,rockslid,13,10,75,90,~f;;,triattck,1,10,80,100,~f;;,substute,1,10,0,0,~fW;;,cut,1,30,50,95,~f;;,fly,9,15,70,95,~n0,|begins|flying;;,surf,4,15,95,100,~f;;,strength,1,15,80,100,~f;;,flash,1,20,0,70,~l,~h,D,-1;;,pound,1,35,40,100,~f;;,karatchp,3,25,55,100,~f;;,doubslap,1,10,15,85,~e6;;,comtpnch,1,15,20,85,~e6;;,firepnch,2,15,75,100,~f,10,~X,2;;,icepnch,10,15,75,100,~f,10,~X,3;;,thndpnch,6,15,75,100,~f,10,~X,4;;,scratch,1,35,40,100,~f;;,vicegrip,1,30,55,100,~f;;,guilotin,1,5,-5,30,~nU;;,gust,9,35,40,100,~f;;,wingatck,9,35,35,100,~f;;,bind,1,20,15,75,~nr;;,slam,1,20,80,75,~f;;,vinewhip,8,10,35,100,~f;;,stomp,1,20,65,100,~f,30,~l,~ex;;,doubkick,3,30,30,100,~nm,2,~L;;,jumpkick,3,20,70,95,~f;;,rllngkck,3,15,60,85,~f,30,~l,~ex;;,sandatck,7,15,0,100,~l,~h,D,-1;;,headbutt,1,15,70,100,~f,30,~l,~ex;;,hornatck,1,25,65,100,~f;;,furyatck,1,20,15,85,~e6;;,tackle,1,35,35,95,~f;;,wrap,1,20,15,85,~nr;;,thrash,1,20,90,100,~t9;;,tailwhip,1,30,0,100,~l,~h,B,-1;;,psnsting,5,35,15,100,~f,20,~X,5;;,twineedl,11,20,25,100,~oo;;,pinmisil,11,20,15,85,~e6;;,leer,1,30,0,100,~l,~h,B,-1;;,bite,1,25,60,100,~f,10,~l,~ex;;,growl,1,40,0,100,~l,~h,R,-1;;,roar,1,20,0,100,~l,~nS;;,sing,1,15,0,55,~X,6;;,sprsonic,1,20,0,55,~l,~ni;;,sonicbom,1,20,-5,90,~ea,20;;,disable,1,20,0,55,~fH;;,acid,5,30,40,100,~f,10,~l,~h,B,-1;;,ember,2,25,40,100,~f,10,~X,2;;,flamthwr,2,15,95,100,~f,10,~X,2;;,mist,10,30,0,0,~x,~eb,|stat lower|immunity,ou;;,hydropmp,4,5,120,80,~f;;,psybeam,12,20,65,100,~f,10,~l,~ni;;,aurorabm,10,20,65,100,~f,10,~l,~h,R,-1;;,peck,9,35,35,100,~f;;,drillpck,9,20,80,100,~f;;,lowkick,3,20,50,90,~f,30,~l,~ex;;,absorb,8,20,20,100,~ng;;,leechsed,8,10,0,90,~l,~eb,|is now|seeded,ar,1,~el;;,growth,1,40,0,0,~x,~h,er,1;;,razrleaf,8,25,55,95,~f;;,psnpowdr,5,35,0,75,~X,5;;,stunspor,8,30,0,75,~X,4;;,slppowdr,8,15,0,75,~X,6;;,petldanc,8,20,70,100,~t9;;,strngsht,11,40,0,95,~l,~h,M,-1;;,firespin,2,15,15,70,~nr;;,thndshck,6,30,40,100,~f,10,~X,4;;,rockthrw,13,15,50,65,~f;;,cnfusion,12,25,50,100,~f,10,~l,~ni;;,hypnosis,12,20,0,60,~X,6;;,meditate,12,40,0,0,~x,~h,R,1;;,agility,12,30,0,0,~x,~h,M,2;;,quickatk,1,30,40,100,~f;;,ngtshade,15,15,-5,100,~ea,50;;,screech,1,10,0,85,~l,~h,B,-2;;,recover,1,20,0,0,~t8;;,harden,1,30,0,0,~x,~h,B,1;;,minimize,1,20,0,0,~fV;;,smokscrn,1,20,0,100,~l,~h,D,-1;;,cnfusray,15,10,0,100,~l,~ni;;,withdraw,4,40,0,0,~x,~h,B,1;;,dfnscurl,1,40,0,0,~x,~h,B,1;;,barrier,12,30,0,0,~x,~h,B,2;;,lghtscrn,12,30,0,0,~x,~eb,|raises|spcdefense,am;;,haze,10,30,0,-5,~fN;;,fcsenrgy,1,30,0,0,~x,~eb,|raises|crit ratio,ac;;,mirrmove,9,20,-5,0,~fR;;,lick,15,30,20,100,~f,30,~X,4;;,smog,5,20,20,100,~f,30,~X,5;;,sludge,5,20,65,100,~f,30,~X,5;;,boneclub,7,20,65,85,~f,10,~l,~ex;;,watrfall,4,15,80,100,~f;;,clamp,4,10,35,75,~nr;;,spikcann,1,15,20,100,~e6;;,constrct,1,35,10,100,~f,10,~l,~h,M,-1;;,amnesia,12,20,0,0,~x,~h,er,2;;,kinesis,12,15,0,80,~l,~h,D,-1;;,hijmpkck,3,20,85,90,~f;;,glare,1,30,0,75,~X,4;;,poisngas,5,40,0,55,~X,5;;,barrage,1,20,15,85,~e6;;,leechlif,11,15,20,100,~ng;;,lovekiss,1,10,0,75,~X,6;;,tranform,1,10,0,0,~fK;;,bubble,4,30,20,100,~f,10,~l,~h,M,-1;;,dizypnch,1,10,70,100,~f;;,spore,8,15,0,100,~X,6;;,splash,1,40,0,0,~fU;;,acidarmr,5,40,0,0,~x,~h,B,2;;,crabhamr,4,10,90,85,~f;;,furyswps,1,15,10,80,~e6;;,bonerang,7,10,50,90,~nm,2,~L;;,hyprfang,1,15,80,90,~f,10,~l,~ex;;,sharpen,1,30,0,0,~x,~h,R,1;;,convrson,1,30,0,0,~fM;;,suprfang,1,10,-5,90,~on;;,slash,1,20,70,100,~f"
+tY=m"0,0x5e00,1,0x5e1e,2,0x5e3c"
+fb=16
 function _init()
-local _ENV=Y
+local _ENV=e_
 memset(0x8000,0,0x7fff)
-nf=tp"ey,aP,l,~a5,eD,4;tH;ec,eB,eD,4,eH,~j,nM,~j,tC,~L,ea,~L,es,~L,e0,~L,h,~L,P,~L,ef,;aP;next,fx,ed,.5,es,~eT;fx;next,eB,ed,.5,es,~eT;fb;ec,eB,next,eB,ed,.5,eH,159,es,~eT;eB;ec,eB,next,tX,tC,~oJ,es,~eT,ea,~oK;tX;ec,tX,next,aE,ed,.2,es,~eT;aE;ec,nN,next,aX,eD,3,ed,.2,eH,155,es,~eT;aX;ec,nN,next,aL,eD,2,ed,.2,eH,154,es,~eT;aL;ec,nN,next,aO,eD,1,ed,.2,eH,153,es,~eT;aO;ec,nN,next,tP,eD,0,eH,152,tC,~oq,es,~eT,ea,~oA,e0,~oB,h,~oD,P,~oF;tP;ec,tP,next,eB,ed,.25,es,~eT,ea,~L;"
-eT(nf)
+n_=tw"ey,a2,T,~ah,eD,4;tD;eu,eB,eD,4,eH,~z,nO,~z,tC,~L,ed,~L,ev,~L,e1,~L,P,~L,E,~L,ef,;a2;next,fg,ei,.5,ev,~es;fg;next,eB,ei,.5,ev,~es;f4;eu,eB,next,eB,ei,.5,eH,159,ev,~es;eB;eu,eB,next,tL,tC,~oF,ev,~es,ed,~oH;tL;eu,tL,next,a5,ei,.2,ev,~es;a5;eu,nQ,next,aP,eD,3,ei,.2,eH,155,ev,~es;aP;eu,nQ,next,aE,eD,2,ei,.2,eH,154,ev,~es;aE;eu,nQ,next,aX,eD,1,ei,.2,eH,153,ev,~es;aX;eu,nQ,next,tX,eD,0,eH,152,tC,~oj,ev,~es,ed,~oz,e1,~oq,P,~oA,E,~oB;tX;eu,tX,next,eB,ei,.25,ev,~es,ed,~L;"
+es(n_)
 flip()
-sfx(53,3)
+sfx(53,2)
 tG(0x0)
 tG(0x2)
 tG(0x4)
 C(poke,";,0x5f5c,8;;,0x5f5d,2;;,0x5f56,0xe0")
-f9(peek2"0x6",mget,mset)
-om()
+fy(peek2"0x6",mget,mset)
 o0()
+od()
 local e=peek2"0xa"
-for t,f in pairs(nQ)do
+for t,f in pairs(nR)do
 local n={n=f}
 for t=1,6do
 add(n,peek(e))
 e+=1
 end
-nQ[t]=n
+nR[t]=n
 end
 C(memcpy,";,0x0000,0xc000,0x2000")
 end
-tE=96
 function _update60()
-local _ENV=Y
-tE,eQ,e7,nZ,nY=96,btnp"4",btnp"5",btnp"0"and btnp"1"and 0or btnp"0"and-1or btnp"1"and 1or 0,btnp"2"and btnp"3"and 0or btnp"2"and-1or btnp"3"and 1or 0
-if@0x5eff==1then
+local _ENV=e_
+eQ,e7,tn,te=btnp"4",btnp"5",btnp"0"and btnp"1"and 0or btnp"0"and-1or btnp"1"and 1or 0,btnp"2"and btnp"3"and 0or btnp"2"and-1or btnp"3"and 1or 0
+if@0x5efe==1then
 eQ,e7=e7,eQ
 end
-nf:t4()
-poke(0x4055,tE)
+n_:t4()
 end
 function _draw()
-local _ENV=Y
-nf:es()
+local _ENV=e_
+n_:ev()
 end

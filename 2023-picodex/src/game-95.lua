@@ -107,6 +107,7 @@
     _menuitem(1, "close picodex", function()
         _menuitem(1) -- remove menu item, can't pass in string number here
         _menuitem(2) -- remove menu item, can't pass in string number here
+        _sfx(53, 2) -- this is also in main!
         _ENV:f_actor_load'closing'
     end)
 
@@ -117,7 +118,6 @@ end $$
 
 |[f_game_update]| function(program)
     program.modes:f_actor_state()
-    _g.g_music_speed \= 2
 end $$
 
 |[f_game_draw1]| function() g_picodex.modes:draw1() end $$

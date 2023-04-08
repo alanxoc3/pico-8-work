@@ -80,7 +80,7 @@ end $$
         end
 
         if evolvesfrom < num then
-            _foreach(_split'moves_natural,moves_teach,moves_event', function(key)
+            _foreach(_split'moves_natural,moves_teach', function(key)
                 _foreach(c_pokemon[evolvesfrom][key], function(move)
                     _add(pkmn[key], move)
                 end)

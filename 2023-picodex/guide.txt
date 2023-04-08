@@ -12,6 +12,7 @@ reference for those who may be less familiar with generation 1 of Pokemon or are
 Standard PICO-8 controls are recognized. Using a computer keboard, this would be: "arrows", "x", "z", and "enter".
 
 There are 6 modes in Picodex:
+
 - BROWSE: View all Pokemon you have unlocked along with stats and possible moves.
 - EDIT: Edit up to 3 teams. Customize Pokemon and movesets in each team.
 - LEAGUE: Battle against various computer trainers ranging from Bug Catchers to Pokemon League champions.
@@ -30,11 +31,13 @@ The Picodex battle system mostly follows the mechanics of the original Pokemon S
 familiar with PS1 battle mechanics, most everything should behave the same besides these intentional modifications:
 
 Differences inspired by original handheld games:
+
 - Substitute only protects from damage done by opponent. Not against any effects.
 - Swift will never miss, bypassing all accuracy checks including when opponent uses dig/fly.
 - Sleep lasts 0-6 turns, unless caused by rest, then only 1 turn.
 
 Differences inspired by later Pokemon games:
+
 - Sleep, freeze, trapping moves, and disable can break a user free multiturn moves.
 - Roar/Whirlwind switch the opponent's Pokemon with another random Pokemon.
 - Teleport switches the user's Pokemon with another random Pokemon.
@@ -46,6 +49,7 @@ Differences inspired by later Pokemon games:
 - Struggle bypasses type checks.
 
 Differences inspired by personal preference:
+
 - All Pokemon are set to level 50 with the highest possible stats they can have for that level.
 - When you KO the target with a multihit move such as "Double Slap", your attack will continue onto the next Pokemon sent out.
 - If a Pokemon faints, the next Pokemon in the user's party is sent out automatically.
@@ -59,9 +63,21 @@ https://www.smogon.com/rb/articles/stadium_guide
 | MOVEDEX                                                                                                                                       |
 +===============================================================================================================================================+
 
-Here is a list of all the moves in Picodex, along with a short description of what each move does:
+Picodex includes the standard movesets for all 151 Pokemon as well as a few extra moves from various events and glitches from the generation 1
+games. Those extra moves are:
 
-+-----------------------------------------------------------------------------------------------------------------------------------------------+
+- Slowbro with Metronome. From a Juggler in Pokemon Stadium 1.
+- Dragonite with Barrier. From Lance in Red/Blue/Green.
+- Psyduck with Amnesia. A prize Pokemon from Pokemon Stadium 1.
+- Fearow with Payday. From an in-person event.
+- Rapidash with Payday. From an in-person event.
+- Pickachu with Surf. From an in-person event.
+- Pickachu with Fly. From an in-person event.
+- Magikarp with Dragon Rage. From an in-person event.
+
+Here is a list of all the moves available in Picodex, along with a short description of what each move does:
+
++-----------+----------------+------------------------------------------------------------------------------------------------------------------+
 | move name | canonical name | description                                                                                                      |
 +-----------+----------------+------------------------------------------------------------------------------------------------------------------+
 | absorb    | Absorb         | damages target. restores users hp by 1/2 of damage inflicted.                                                    |

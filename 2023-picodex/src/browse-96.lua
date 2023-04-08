@@ -35,15 +35,6 @@ g_loaded_row = 16 -- default corresponds to the top row in the "129-151.p8" file
         _sspr(col*16, 0, 16, 16, x-xscale, y-yscale, xscale*2, yscale*2)
     end
 
-    _foreach(f_zobj[[
-        ;,P_PIKACHU,M_SURF,   152
-       ;;,P_PSYDUCK,M_AMNESIA,153
-    ]], function(list)
-        if num == list[1] and _ENV:f_pkmn_has_move(list[2]) then
-            num = list[3]
-        end
-    end)
-
     -- substitute check should go after pika/psyduck checks above, for if pika/psy know substitute
     if substitute and substitute > 0 then num = 152 end
 

@@ -19,8 +19,12 @@ end $$
     if not f_any_btn() and backbuttonheld then
         backbuttonheld = false
         _ENV:f_actor_load()
-        _menuitem(1) -- no factory reset now
+        f_minisfx'157'
+        sfx(-1,2)
     elseif f_any_btn() then
+        if not backbuttonheld then
+            f_minisfx'156'
+        end
         backbuttonheld = true
         _menuitem(1) -- no factory reset now
     end
@@ -29,8 +33,11 @@ end $$
 -- utility funcs
 |[g_cur_light]| 0 $$
 |[f_minisfx]| function(num)
-    _g.g_cur_light = _max(0, 0+num-152)
-    _sfx(54+num\16, 0, num%16*2, 2)
+    num += 0
+    if num > 152 then
+        _g.g_cur_light = num-152
+    end
+    _sfx(54+num\16, num <= 152 and 1 or 0, num%16*2, 2)
 end $$
 
 |[f_draw_picodex]| function(_ENV)
@@ -75,7 +82,7 @@ end $$
             ]])
 
             f_zcall(function(l, off, on, flash, x, y)
-                return _spr((light <= l) and (g_cur_light == l and _stat'46'>=0 and flash or on) or off, x, y)
+                return _spr((light <= l) and ((l == 0 and _stat'47'>=0 or g_cur_light == l and _stat'46'>=0) and flash or on) or off, x, y)
             end, [[
                  ;,0, 135, 133, 134, 6,  3
                 ;;,1, 132, 128, 131, 12, 3
