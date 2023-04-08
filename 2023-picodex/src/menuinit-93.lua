@@ -102,7 +102,7 @@ end $$
 
 |[f_credits_init]| function(_ENV)
     menu:refresh(
-        _split"91,,#alanxoc3,code &,design,28,,#gr8cadet,pokemon,sprites,143,,#tigrwolf,battle,testing,127,,#tooling,px9 func,shrinko8,137,,#pkmndata,blbpedia,pokeapi,serebii,smogon,upokcntr,volvox,nintendo",
+        _split"91,,#alanxoc3,code &,design,28,,#gr8cadet,pokemon,sprites,143,,#tigrwolf,battle,testing,129,,#wadlo,just,magikarp,127,,#tooling,px9 func,shrinko8,137,,#pkmndata,blbpedia,pokeapi,serebii,smogon,upokcntr,volvox,nintendo",
         function(txt)
             if _type(txt) == "number" then
                 return { pkmn=f_create_team_pkmn(txt, f_create_empty_moveset()) }

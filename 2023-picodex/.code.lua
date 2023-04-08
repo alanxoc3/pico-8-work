@@ -755,7 +755,7 @@ end
 end,";,learn,eS;;,teach,eU;;,event,tr")
 end,function(_ENV)
 a:N(
-split"91,,#alanxoc3,code &,design,28,,#gr8cadet,pokemon,sprites,143,,#tigrwolf,battle,testing,127,,#tooling,px9 func,shrinko8,137,,#pkmndata,blbpedia,pokeapi,serebii,smogon,upokcntr,volvox,nintendo",
+split"91,,#alanxoc3,code &,design,28,,#gr8cadet,pokemon,sprites,143,,#tigrwolf,battle,testing,129,,#wadlo,just,magikarp,127,,#tooling,px9 func,shrinko8,137,,#pkmndata,blbpedia,pokeapi,serebii,smogon,upokcntr,volvox,nintendo",
 function(e)
 if type(e)=="number"then
 return{ee=nb(e,nD())}
