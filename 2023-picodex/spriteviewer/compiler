@@ -16,12 +16,13 @@ git log --pretty=format:"COMMIT %h %n" --name-only |
     awk '{print NR " " $1}' |
 
 while read -r number commithash ; do # magic is here
+    fancynumber=$(printf "%03d" $number)
     echo "-------- $commithash:$number"
 
-    FILE1="000--$number"
-    FILE2="064--$number"
-    FILE3="128--$number"
-    FILE4="all--$number"
+    FILE1="000--$fancynumber"
+    FILE2="064--$fancynumber"
+    FILE3="128--$fancynumber"
+    FILE4="all--$fancynumber"
 
     if   git show "$commithash":2023-picodex/000-063.p8 >/dev/null 2>&1;            then git show "$commithash":2023-picodex/000-063.p8            | rg -v 'preview|__lua__' | sed 's/__gfx__/__lua__\n#include render.lua\n__gfx__/g' > "$FILE1.p8"
     elif git show "$commithash":2023-picodex/001-064.p8 >/dev/null 2>&1;            then git show "$commithash":2023-picodex/001-064.p8            | rg -v 'preview|__lua__' | sed 's/__gfx__/__lua__\n#include render.lua\n__gfx__/g' > "$FILE1.p8"
@@ -50,4 +51,5 @@ done
 echo 'And finally creating the gif!'
 FIRST=$(fd -I 'all--\d+\.png' | sort -V | head -n 1)
 LAST=$(fd -I 'all--\d+\.png' | sort -V | tail -n 1)
-convert -loop 0 "$FIRST" -delay 5 -loop 0 $(fd -I 'all--\d+\.png' | sort -V) -delay 500 -loop 0 "$LAST" final.gif
+convert -loop 0 "$FIRST" -delay 1 -loop 0 $(fd -I 'all--\d+\.png' | sort -V) -delay 1000 -loop 0 "$LAST" final.gif
+gifsicle -i final.gif -O3 -o final.gif
