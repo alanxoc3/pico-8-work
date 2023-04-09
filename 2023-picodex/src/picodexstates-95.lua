@@ -30,7 +30,6 @@ end $$
 
 -- utility funcs
 |[g_cur_light]| 0 $$
-|[g_cur_sound]| -1 $$
 |[f_minisfx]| function(num)
     g_cur_sound = num
 end $$

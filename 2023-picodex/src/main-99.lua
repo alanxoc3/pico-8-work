@@ -22,18 +22,18 @@ function __init()
             modes,;
 
         wait;   next,moveup, duration,.3, draw,~f_draw_picodex;
-        moveup; next,closed, duration,.3, draw,~f_draw_picodex, mysfx,159;
+        moveup; next,closed, duration,.3, draw,~f_draw_picodex, mysfx,157;
 
         shaking;    foldstate,closed,  next,closed,              duration,.3, mysfx,158,                        draw,~f_draw_picodex;
         closed;     foldstate,closed,  next,opening,             sinit,~f_closed_init,                          draw,~f_draw_picodex, update,~f_closed_update;
-        opening;    foldstate,opening, next,opened,              duration,.3, mysfx,157,                        draw,~f_draw_picodex;
+        opening;    foldstate,opening, next,opened,              duration,.3, mysfx,159,                        draw,~f_draw_picodex;
         opened;     foldstate,open,    next,starting_1,          duration,.2,                                   draw,~f_draw_picodex;
         starting_1; foldstate,open,    next,starting_2, light,3, duration,.3, mysfx,B_OKAY,                     draw,~f_draw_picodex;
         starting_2; foldstate,open,    next,starting_3, light,2, duration,.2, mysfx,B_BACK,                     draw,~f_draw_picodex;
         starting_3; foldstate,open,    next,game,       light,1, duration,.4, mysfx,B_ERROR,                    draw,~f_draw_picodex;
         game;       foldstate,open,    next,closing,    light,0,              mysfx,B_DONE, sinit,~f_game_init, draw,~f_draw_picodex, update,~f_game_update, draw1,~f_game_draw1, draw2,~f_game_draw2, draw3,~f_game_draw3;
 
-        closing;    foldstate,closing, next,closed, mysfx,157,               duration,.3,                                draw,~f_draw_picodex, update,~f_nop;
+        closing;    foldstate,closing, next,closed, mysfx,159,               duration,.3,                                draw,~f_draw_picodex, update,~f_nop;
     ]]
 
     f_draw_picodex(g_picodex)
