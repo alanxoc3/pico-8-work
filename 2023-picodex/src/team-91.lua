@@ -59,8 +59,7 @@ end $$
 -- 1,6 and 1,4 are hard-coded here. saved teams can't have less/more than 6 pkmn.
 c_team_memlocs = f_zobj[[0,S_PARTY1, 1,S_PARTY2, 2,S_PARTY3]]
 |[f_get_team]| function(team_index) -- 0 to 2
-    local mem = c_team_memlocs[team_index]
-    local team = f_zobj[[]]
+    local mem, team = c_team_memlocs[team_index], f_zobj[[]]
 
     for i=1,6 do
         local memstart, mynewmoves, has_moves = mem+(i-1)*5, {}, false

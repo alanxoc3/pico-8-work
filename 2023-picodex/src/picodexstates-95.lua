@@ -30,7 +30,12 @@ end $$
 
 -- utility funcs
 |[g_cur_light]| 0 $$
+|[g_cur_sound]| -1 $$
 |[f_minisfx]| function(num)
+    g_cur_sound = num
+end $$
+
+|[f_minisfx_now]| function(num)
     num += 0
     if num > 152 then
         _g.g_cur_light = num-152
