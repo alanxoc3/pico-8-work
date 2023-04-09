@@ -39,9 +39,9 @@ function __init()
     f_draw_picodex(g_picodex)
     _flip()
 
-    f_minisfx'153' f_extract_sheet(0x0)
-    f_minisfx'154' f_extract_sheet(0x2)
-    f_minisfx'155' f_extract_sheet(0x4)
+    f_minisfx_now'153' f_extract_sheet(0x0)
+    f_minisfx_now'154' f_extract_sheet(0x2)
+    f_minisfx_now'155' f_extract_sheet(0x4)
 
     f_zcall(_poke, [[
          ;,0x5f5c, 8    -- set the initial delay before repeating. 255 means never repeat.
@@ -84,6 +84,10 @@ function __update60()
 
     -- you can set the music speed with this
     -- _poke(0x4055, 96)
+    if g_cur_sound then
+        -- returns nothing, so sets to nil
+        g_cur_sound = f_minisfx_now(g_cur_sound)
+    end
 end
 
 function __draw()
