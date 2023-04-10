@@ -1,43 +1,39 @@
-+===============================================================================================================================================+
-| PICODEX GUIDE - BY ALANXOC3                                                                                                                   |
-+===============================================================================================================================================+
+# PICODEX - BY ALANXOC3
 
-Welcome to the world of PICO-8 Pokemon! Picodex is a complete generation 1 Pokemon battle simulator in PICO-8. This guide is an optional
-reference for those who may be less familiar with generation 1 of Pokemon or are just curious about the specifics of this simulator.
+Welcome to the world of PICO-8 Pokemon! Picodex is a complete generation 1 Pokemon battle simulator that fits within a single 32KB PICO-8 cartridge.
 
-+===============================================================================================================================================+
-| INSTRUCTIONS                                                                                                                                  |
-+===============================================================================================================================================+
-
-Standard PICO-8 controls are recognized. Using a computer keboard, this would be: "arrows", "x", "z", and "enter".
+Standard PICO-8 controls apply to this game. For a computer keyboard this is: "arrows", "x/z", "enter".
 
 There are 6 modes in Picodex:
+- `BROWSE`: View all Pokemon you have unlocked along with stats and possible moves.
+- `EDIT`: Edit up to 3 teams. Customize Pokemon and movesets in each team.
+- `LEAGUE`: Battle against various computer trainers ranging from Bug Catchers to Pokemon League champions.
+- `VERSUS`: Take turns playing a custom match between you and a friend.
+- `HORDE`: Have your team battle all 151 Pokemon in order with no breaks.
+- `CREDITS`: View the credits and acknowledgements.
 
-- BROWSE: View all Pokemon you have unlocked along with stats and possible moves.
-- EDIT: Edit up to 3 teams. Customize Pokemon and movesets in each team.
-- LEAGUE: Battle against various computer trainers ranging from Bug Catchers to Pokemon League champions.
-- PLAYER: Take turns playing a custom match between you and a friend.
-- HORDE: Have your team battle all 151 Pokemon in order with no breaks.
-- CREDITS: View the credits and acknowledgements.
+Picodex initially loads with only 6 Pokemon unlocked. You can unlock more Pokemon by defeating trainers in LEAGUE mode. Everytime you win a battle, you unlock all the Pokemon the opponent had as well as their entire moveset. Picodex will auto-save any Pokemon/trainers/scores you have unlocked, so don't be afraid to close it and play again later.
 
-Picodex initially loads with only 6 Pokemon unlocked. You can unlock more Pokemon by defeating trainers in LEAGUE mode. Everytime you win a
-battle, you unlock all the Pokemon the opponent had as well as their entire moveset.
+For the casual player, that's all you need to know to get started. Have fun unlocking all the Pokemon!
 
-+===============================================================================================================================================+
-| BATTLE MECHANICS                                                                                                                              |
-+===============================================================================================================================================+
+For competitive players, read on to find specific implementation details.
 
-The Picodex battle system mostly follows the mechanics of the original Pokemon Stadium 1 (PS1) game on the Nintendo 64. For those already
-familiar with PS1 battle mechanics, most everything should behave the same besides these intentional modifications:
+## BATTLE MECHANICS
 
-Differences inspired by original handheld games:
+The Picodex battle system follows the mechanics of the original Pokemon Stadium 1 (PS1) game on the Nintendo 64.
 
+If you are unfamiliar with how PS1 battle mechanics work, I strongly recommend these articles:
+- https://www.smogon.com/rb/articles/stadium_guide
+- https://www.smogon.com/rb/articles/rby_mechanics_guide
+
+For those already familiar with PS1 battle mechanics, most everything should behave as expected besides these intentional modifications:
+
+Modifications inspired by original handheld games:
 - Substitute only protects from damage done by opponent. Not against any effects.
 - Swift will never miss, bypassing all accuracy checks including when opponent uses dig/fly.
 - Sleep lasts 0-6 turns, unless caused by rest, then only 1 turn.
 
-Differences inspired by later Pokemon games:
-
+Modifications inspired by later Pokemon games:
 - Sleep, freeze, trapping moves, and disable can break a user free multiturn moves.
 - Roar/Whirlwind switch the opponent's Pokemon with another random Pokemon.
 - Teleport switches the user's Pokemon with another random Pokemon.
@@ -48,25 +44,17 @@ Differences inspired by later Pokemon games:
 - Leech seed does not use the toxic counter.
 - Struggle bypasses type checks.
 
-Differences inspired by personal preference:
-
+Modifications inspired by personal preference:
 - All Pokemon are set to level 50 with the highest possible stats they can have for that level.
 - When you KO the target with a multihit move such as "Double Slap", your attack will continue onto the next Pokemon sent out.
-- If a Pokemon faints, the next Pokemon in the user's party is sent out automatically.
+- If a Pokemon faints, the next Pokemon in the user's team is sent out automatically. This places more importance on team order.
 - Mimic replaces the move's pp with "5", bypasses accuracy checks, and doesn't copy mimic.
 - Rage consumes 1 pp for each turn it is used.
 - Damage calculation is capped at 999 damage.
 
-If you want more in depth detail into how PS1/Picodex battle mechanics work, I strongly recommend looking at this article from smogon:
-https://www.smogon.com/rb/articles/stadium_guide
+## MOVEDEX
 
-+===============================================================================================================================================+
-| MOVEDEX                                                                                                                                       |
-+===============================================================================================================================================+
-
-Picodex includes the standard movesets for all 151 Pokemon as well as a few extra moves from various events and glitches from the generation 1
-games. Those extra moves are:
-
+Picodex includes the standard movesets for all 151 Pokemon, as well as a few extra moves from various events and glitches for the generation 1 games. Those extra moves are:
 - Slowbro with Metronome. From a Juggler in Pokemon Stadium 1.
 - Dragonite with Barrier. From Lance in Red/Blue/Green.
 - Psyduck with Amnesia. A prize Pokemon from Pokemon Stadium 1.
@@ -78,9 +66,8 @@ games. Those extra moves are:
 
 Here is a list of all the moves available in Picodex, along with a short description of what each move does:
 
-+-----------+----------------+------------------------------------------------------------------------------------------------------------------+
 | move name | canonical name | description                                                                                                      |
-+-----------+----------------+------------------------------------------------------------------------------------------------------------------+
+| --------- | -------------- | -----------------------------------------------------------------------------------------------------------------|
 | absorb    | Absorb         | damages target. restores users hp by 1/2 of damage inflicted.                                                    |
 | acid      | Acid           | damages target. 10% chance to lower defense by 1 stage.                                                          |
 | acidarmr  | Acid Armor     | raises users defense by 2 stages.                                                                                |
@@ -246,4 +233,3 @@ Here is a list of all the moves available in Picodex, along with a short descrip
 | wingatck  | Wing Attack    | damages target.                                                                                                  |
 | withdraw  | Withdraw       | raises users defense by 1 stage.                                                                                 |
 | wrap      | Wrap           | damages target. repeats 2-5 turns. target cannot move during this time.                                          |
-+-----------+----------------+------------------------------------------------------------------------------------------------------------------+

@@ -8,4 +8,4 @@ A few ways to play picodex:
 - Run this command in PICO-8: `TODO`
 
 You can find the guide here:
-- https://github.com/alanxoc3/pico-8-work/blob/master/2023-picodex/guide.txt
+- https://github.com/alanxoc3/pico-8-work/blob/master/2023-picodex/guide.md
