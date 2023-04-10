@@ -108,7 +108,7 @@ if ($minify) {
 
     # open(my $pipe, "|-", "cat");
     # open2 my $out, my $in, "python3 ~/repos/shrinko8/shrinko8.py - - --minify --no-minify-rename --format lua --no-minify-lines --no-minify-tokens";
-    open2 my $out, my $in, "python3 ~/repos/shrinko8/shrinko8.py - - --minify --rename-members-as-globals --format lua --no-minify-lines --no-minify-tokens --preserve 'PTEXTLOGIC,' --rename-map .map.txt";
+    open2 my $out, my $in, "python3 ~/repos/shrinko8/shrinko8.py - - --minify --rename-members-as-globals --format lua --no-minify-tokens --preserve 'PTEXTLOGIC,' --rename-map .map.txt";
     print $in $content;
     close($in);
 

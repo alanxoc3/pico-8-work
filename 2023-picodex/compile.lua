@@ -228,7 +228,7 @@ end
 function encode_trnr_data(message, data)
     log(message.." | pos: "..tostr(ENCODE_OFFSET, 0x1)) -- show numbers as hex
 
-    for tnum=0,39 do
+    for tnum=0,19 do
         for pnum=0,5 do
             offsetpoke(data[tnum*6+pnum+1])
         end
@@ -356,32 +356,9 @@ P_KABUTO      = 140 P_KABUTOPS    = 141 P_AERODACTYL  = 142 P_SNORLAX     = 143
 P_ARTICUNO    = 144 P_ZAPDOS      = 145 P_MOLTRES     = 146 P_DRATINI     = 147
 P_DRAGONAIR   = 148 P_DRAGONITE   = 149 P_MEWTWO      = 150 P_MEW         = 151
 
+-- second half of trainer data is stored here. first half is stored in code.
+-- this was done at the very end of picodex implementation. had to remove newline characters from code to do so.
 g_trainer_data = {
-   P_RATTATA,   P_PIDGEY,    P_CATERPIE,  P_SPEAROW,   P_WEEDLE,    P_BELLSPROUT, -- youngstr
-   P_WEEDLE,    P_PARAS,     P_KAKUNA,    P_CATERPIE,  P_METAPOD,   P_PINSIR,     -- bugcatch
-   P_EKANS,     P_SQUIRTLE,  P_SANDSHREW, P_CHARMANDER,P_RATTATA,   P_BULBASAUR,  -- junior
-   P_GEODUDE,   P_OMANYTE,   P_CUBONE,    P_VULPIX,    P_KABUTO,    P_ONIX,       -- brock
-
-   P_ODDISH,    P_MEOWTH,    P_CLEFAIRY,  P_NIDORANF,  P_DODUO,     P_JIGGLYPUFF, -- lass
-   P_GEODUDE,   P_PARAS,     P_DIGLETT,   P_ZUBAT,     P_GRAVELER,  P_MACHOP,     -- hiker
-   P_HORSEA,    P_POLIWAG,   P_SHELLDER,  P_MAGIKARP,  P_STARYU,    P_GOLDEEN,    -- swimmer
-   P_STARYU,    P_SEADRA,    P_PSYDUCK,   P_SEAKING,   P_SEEL,      P_STARMIE,    -- misty
-
-   P_GROWLITHE, P_NIDORANM,  P_DRATINI,   P_PONYTA,    P_SANDSHREW, P_EEVEE,      -- gentlman
-   P_SHELLDER,  P_TENTACOOL, P_PSYDUCK,   P_POLIWAG,   P_KRABBY,    P_POLIWHIRL,  -- sailor
-   P_VOLTORB,   P_ABRA,      P_ZUBAT,     P_VENONAT,   P_MAGNEMITE, P_PIKACHU,    -- rocker
-   P_PIKACHU,   P_JOLTEON,   P_VOLTORB,   P_ELECTABUZZ,P_MAGNETON,  P_RAICHU,     -- ltsurge
-
-   P_GASTLY,    P_JIGGLYPUFF,P_CUBONE,    P_CLEFAIRY,  P_HAUNTER,   P_MAROWAK,    -- channelr
-   P_PIDGEOTTO, P_GRAVELER,  P_POLIWHIRL, P_RHYHORN,   P_GROWLITHE, P_GLOOM,      -- gambler
-   P_BELLSPROUT,P_CHANSEY,   P_WIGGLYTUFF,P_WEEPINBELL,P_EEVEE,     P_CLEFABLE,   -- beauty
-   P_PARASECT,  P_VICTREEBEL,P_EXEGGCUTE, P_BUTTERFREE,P_TANGELA,   P_VILEPLUME,  -- erika
-
-   P_KOFFING,   P_MANKEY,    P_TENTACOOL, P_GRIMER,    P_MACHOKE,   P_TENTACRUEL, -- biker
-   P_DODUO,     P_PIDGEOTTO, P_FEAROW,    P_FARFETCHD, P_DODRIO,    P_PIDGEOT,    -- birdkeep
-   P_VENONAT,   P_GLOOM,     P_MRMIME,    P_DROWZEE,   P_ELECTRODE, P_SLOWPOKE,   -- juggler
-   P_NIDORINA,  P_MUK,       P_WEEZING,   P_BEEDRILL,  P_NIDORINO,  P_VENOMOTH,   -- koga
-
    P_MACHOP,    P_MACHOKE,   P_HITMONLEE, P_MANKEY,    P_PRIMEAPE,  P_HITMONCHAN, -- blckbelt
    P_SANDSLASH, P_RATICATE,  P_ELECTRODE, P_GOLBAT,    P_WEEZING,   P_ARBOK,      -- rocket
    P_SLOWPOKE,  P_ABRA,      P_SLOWBRO,   P_DROWZEE,   P_EXEGGCUTE, P_KADABRA,    -- psychic

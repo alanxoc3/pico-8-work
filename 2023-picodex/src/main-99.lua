@@ -57,18 +57,16 @@ function __init()
     -- 0x0008
     f_populate_c_pokemon()
 
-    -- 0x000a trainers
+    -- at the end of picodex development, i stored half the trainers in code. half are stored in cartridge data.
     local trainer_loc = _peek2'0xa'
-    for i, v in _pairs(c_trainers) do
-        local tbl = {name=v}
+    for i=21,40 do
         for j=1,6 do
-            _add(tbl, _peek(trainer_loc))
+            _add(c_trainers[i], _peek(trainer_loc))
             trainer_loc += 1
         end
-        c_trainers[i] = tbl
     end
 
-    -- Need the pokedex tiles to stay loaded. This starts at sprite index #96.
+    -- Need the picodex tiles to stay loaded. This starts at sprite index #96.
     f_zcall(_memcpy, [[;,0x0000, 0xc000, 0x2000]])
 end
 
