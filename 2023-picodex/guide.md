@@ -14,9 +14,9 @@ There are 6 modes in Picodex:
 
 Picodex initially loads with only 6 Pokemon unlocked. You can unlock more Pokemon by defeating trainers in LEAGUE mode. Everytime you win a battle, you unlock all the Pokemon the opponent had as well as their entire moveset. Picodex will auto-save any Pokemon/trainers/scores you have unlocked, so don't be afraid to close it and play again later.
 
-For the casual player, that's all you need to know to get started. Have fun unlocking all the Pokemon!
+For the casual player, that's all you need to know to get started!
 
-For competitive players, read on to find specific implementation details.
+For competitive players, keep reading to find specific implementation details.
 
 ## BATTLE MECHANICS
 
