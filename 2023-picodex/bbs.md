@@ -1,5 +1,3 @@
-# PICODEX - BY ALANXOC3
-
 Welcome to the world of PICO-8 Pokemon! Picodex is a complete generation 1 Pokemon battle simulator, with slight modifications, that fits within a single 32KB PICO-8 cartridge.
 
 Standard PICO-8 controls apply to this game. For a computer keyboard this is: "arrows", "x/z", "enter".
@@ -14,8 +12,9 @@ There are 6 modes in Picodex:
 
 Picodex initially loads with only 6 Pokemon unlocked. You can unlock more Pokemon by defeating trainers in LEAGUE mode. Everytime you win a battle, you unlock all the Pokemon the opponent had as well as their entire moveset. Picodex will auto-save any Pokemon/trainers/scores you have unlocked, so don't be afraid to close it and play again later.
 
-## BATTLE MECHANICS
+If you want to learn more about the battle mechanics, expand this section:
 
+[hidden]
 The Picodex battle system follows the mechanics of the original Pokemon Stadium 1 (PS1) game on the Nintendo 64.
 
 For those unfamiliar with how Pokemon Stadium 1 battle mechanics work, I strongly recommend these articles:
@@ -47,9 +46,11 @@ Modifications inspired by personal preference:
 - Mimic replaces the move's pp with "5", bypasses accuracy checks, and doesn't copy mimic.
 - Rage consumes 1 pp for each turn it is used.
 - Damage calculation is capped at 999 damage.
+[/hidden]
 
-## MOVEDEX
+If you need a reference of all the moves and what they do, expand this section:
 
+[hidden]
 Picodex includes the standard movesets for all 151 Pokemon, as well as a few extra moves from various events and glitches for the generation 1 games. Those extra moves are:
 - Slowbro with Metronome. From a Juggler in Pokemon Stadium 1.
 - Dragonite with Barrier. From Lance in Red/Blue/Green.
@@ -62,6 +63,7 @@ Picodex includes the standard movesets for all 151 Pokemon, as well as a few ext
 
 Here is a list of all the moves available in Picodex, along with a short description of what each move does:
 
+```
 | move name | canonical name | description                                                                                                      |
 | --------- | -------------- | ---------------------------------------------------------------------------------------------------------------- |
 | absorb    | Absorb         | damages target. restores users hp by 1/2 of damage inflicted.                                                    |
@@ -229,3 +231,7 @@ Here is a list of all the moves available in Picodex, along with a short descrip
 | wingatck  | Wing Attack    | damages target.                                                                                                  |
 | withdraw  | Withdraw       | raises users defense by 1 stage.                                                                                 |
 | wrap      | Wrap           | damages target. repeats 2-5 turns. target cannot move during this time.                                          |
+```
+[/hidden]
+
+Anyways, that's everything you need to know to get started on your very own Picodex journey. Good luck catching 'em all!
