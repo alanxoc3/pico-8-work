@@ -55,6 +55,7 @@ Differences inspired by personal preference:
 - If a Pokemon faints, the next Pokemon in the user's party is sent out automatically.
 - Mimic replaces the move's pp with "5", bypasses accuracy checks, and doesn't copy mimic.
 - Rage consumes 1 pp for each turn it is used.
+- Damage calculation is capped at 999 damage.
 
 If you want more in depth detail into how PS1/Picodex battle mechanics work, I strongly recommend looking at this article from smogon:
 https://www.smogon.com/rb/articles/stadium_guide
