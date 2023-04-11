@@ -235,54 +235,57 @@ _g.c_moves_raw = f_zobj[[
 
 -- could get an error if a trainer doesn't have 6 pkmn, because of assumptions i make when starting a fight
 -- this becomes a list of tables on init
+
+|[c_trainer_names]| _split"youngstr,bugcatch,junior,brock,lass,hiker,swimmer,misty,gentlman,sailor,rocker,ltsurge,channelr,gambler,beauty,erika,biker,birdkeep,juggler,koga,blckbelt,rocket,psychic,sabrina,scientst,pkmaniac,suprnerd,blaine,cooltrnr,fishrman,tamer,giovanni,lorelei,bruno,agatha,lance,blue,green,red,legendry" $$
+
 |[c_trainers]| f_zobj[[
-     ;name,"youngstr" ;1;  ,P_RATTATA,    P_PIDGEY,     P_CATERPIE,   P_SPEAROW,    P_WEEDLE,     P_BELLSPROUT
-    ;;name,"bugcatch" ;2;  ,P_WEEDLE,     P_PARAS,      P_KAKUNA,     P_CATERPIE,   P_METAPOD,    P_PINSIR
-    ;;name,"junior"   ;3;  ,P_EKANS,      P_SQUIRTLE,   P_SANDSHREW,  P_CHARMANDER, P_RATTATA,    P_BULBASAUR
-    ;;name,"brock"    ;4;  ,P_GEODUDE,    P_OMANYTE,    P_CUBONE,     P_VULPIX,     P_KABUTO,     P_ONIX
+     ;,P_RATTATA,    P_PIDGEY,     P_CATERPIE,   P_SPEAROW,    P_WEEDLE,     P_BELLSPROUT
+    ;;,P_WEEDLE,     P_PARAS,      P_KAKUNA,     P_CATERPIE,   P_METAPOD,    P_PINSIR
+    ;;,P_EKANS,      P_SQUIRTLE,   P_SANDSHREW,  P_CHARMANDER, P_RATTATA,    P_BULBASAUR
+    ;;,P_GEODUDE,    P_OMANYTE,    P_CUBONE,     P_VULPIX,     P_KABUTO,     P_ONIX
 
-    ;;name,"lass"     ;5;  ,P_ODDISH,     P_MEOWTH,     P_CLEFAIRY,   P_NIDORANF,   P_DODUO,      P_JIGGLYPUFF
-    ;;name,"hiker"    ;6;  ,P_GEODUDE,    P_PARAS,      P_DIGLETT,    P_ZUBAT,      P_GRAVELER,   P_MACHOP
-    ;;name,"swimmer"  ;7;  ,P_HORSEA,     P_POLIWAG,    P_SHELLDER,   P_MAGIKARP,   P_STARYU,     P_GOLDEEN
-    ;;name,"misty"    ;8;  ,P_STARYU,     P_SEADRA,     P_PSYDUCK,    P_SEAKING,    P_SEEL,       P_STARMIE
+    ;;,P_ODDISH,     P_MEOWTH,     P_CLEFAIRY,   P_NIDORANF,   P_DODUO,      P_JIGGLYPUFF
+    ;;,P_GEODUDE,    P_PARAS,      P_DIGLETT,    P_ZUBAT,      P_GRAVELER,   P_MACHOP
+    ;;,P_HORSEA,     P_POLIWAG,    P_SHELLDER,   P_MAGIKARP,   P_STARYU,     P_GOLDEEN
+    ;;,P_STARYU,     P_SEADRA,     P_PSYDUCK,    P_SEAKING,    P_SEEL,       P_STARMIE
 
-    ;;name,"gentlman" ;9;  ,P_GROWLITHE,  P_NIDORANM,   P_DRATINI,    P_PONYTA,     P_SANDSHREW,  P_EEVEE
-    ;;name,"sailor"   ;10; ,P_SHELLDER,   P_TENTACOOL,  P_PSYDUCK,    P_POLIWAG,    P_KRABBY,     P_POLIWHIRL
-    ;;name,"rocker"   ;11; ,P_VOLTORB,    P_ABRA,       P_ZUBAT,      P_VENONAT,    P_MAGNEMITE,  P_PIKACHU
-    ;;name,"ltsurge"  ;12; ,P_PIKACHU,    P_JOLTEON,    P_VOLTORB,    P_ELECTABUZZ, P_MAGNETON,   P_RAICHU
+    ;;,P_GROWLITHE,  P_NIDORANM,   P_DRATINI,    P_PONYTA,     P_SANDSHREW,  P_EEVEE
+    ;;,P_SHELLDER,   P_TENTACOOL,  P_PSYDUCK,    P_POLIWAG,    P_KRABBY,     P_POLIWHIRL
+    ;;,P_VOLTORB,    P_ABRA,       P_ZUBAT,      P_VENONAT,    P_MAGNEMITE,  P_PIKACHU
+    ;;,P_PIKACHU,    P_JOLTEON,    P_VOLTORB,    P_ELECTABUZZ, P_MAGNETON,   P_RAICHU
 
-    ;;name,"channelr" ;13; ,P_GASTLY,     P_JIGGLYPUFF, P_CUBONE,     P_CLEFAIRY,   P_HAUNTER,    P_MAROWAK
-    ;;name,"gambler"  ;14; ,P_PIDGEOTTO,  P_GRAVELER,   P_POLIWHIRL,  P_RHYHORN,    P_GROWLITHE,  P_GLOOM
-    ;;name,"beauty"   ;15; ,P_BELLSPROUT, P_CHANSEY,    P_WIGGLYTUFF, P_WEEPINBELL, P_EEVEE,      P_CLEFABLE
-    ;;name,"erika"    ;16; ,P_PARASECT,   P_VICTREEBEL, P_EXEGGCUTE,  P_BUTTERFREE, P_TANGELA,    P_VILEPLUME
+    ;;,P_GASTLY,     P_JIGGLYPUFF, P_CUBONE,     P_CLEFAIRY,   P_HAUNTER,    P_MAROWAK
+    ;;,P_PIDGEOTTO,  P_GRAVELER,   P_POLIWHIRL,  P_RHYHORN,    P_GROWLITHE,  P_GLOOM
+    ;;,P_BELLSPROUT, P_CHANSEY,    P_WIGGLYTUFF, P_WEEPINBELL, P_EEVEE,      P_CLEFABLE
+    ;;,P_PARASECT,   P_VICTREEBEL, P_EXEGGCUTE,  P_BUTTERFREE, P_TANGELA,    P_VILEPLUME
 
-    ;;name,"biker"    ;17; ,P_KOFFING,    P_MANKEY,     P_TENTACOOL,  P_GRIMER,     P_MACHOKE,    P_TENTACRUEL
-    ;;name,"birdkeep" ;18; ,P_DODUO,      P_PIDGEOTTO,  P_FEAROW,     P_FARFETCHD,  P_DODRIO,     P_PIDGEOT
-    ;;name,"juggler"  ;19; ,P_VENONAT,    P_GLOOM,      P_MRMIME,     P_DROWZEE,    P_ELECTRODE,  P_SLOWPOKE
-    ;;name,"koga"     ;20; ,P_NIDORINA,   P_MUK,        P_WEEZING,    P_BEEDRILL,   P_NIDORINO,   P_VENOMOTH
+    ;;,P_KOFFING,    P_MANKEY,     P_TENTACOOL,  P_GRIMER,     P_MACHOKE,    P_TENTACRUEL
+    ;;,P_DODUO,      P_PIDGEOTTO,  P_FEAROW,     P_FARFETCHD,  P_DODRIO,     P_PIDGEOT
+    ;;,P_VENONAT,    P_GLOOM,      P_MRMIME,     P_DROWZEE,    P_ELECTRODE,  P_SLOWPOKE
+    ;;,P_NIDORINA,   P_MUK,        P_WEEZING,    P_BEEDRILL,   P_NIDORINO,   P_VENOMOTH
 
-    ;;name,"blckbelt"
-    ;;name,"rocket"
-    ;;name,"psychic"
-    ;;name,"sabrina"
+    ;;,P_MACHOP,     P_MACHOKE,    P_HITMONLEE,  P_MANKEY,     P_PRIMEAPE,   P_HITMONCHAN
+    ;;,P_SANDSLASH,  P_RATICATE,   P_ELECTRODE,  P_GOLBAT,     P_WEEZING,    P_ARBOK
+    ;;,P_SLOWPOKE,   P_ABRA,       P_SLOWBRO,    P_DROWZEE,    P_EXEGGCUTE,  P_KADABRA
+    ;;,P_MRMIME,     P_EXEGGUTOR,  P_KADABRA,    P_JYNX,       P_HYPNO,      P_ALAKAZAM
 
-    ;;name,"scientst"
-    ;;name,"pkmaniac"
-    ;;name,"suprnerd"
-    ;;name,"blaine"
+    ;;,P_DITTO,      P_VICTREEBEL, P_GASTLY,     P_VENOMOTH,   P_HYPNO,      P_PORYGON
+    ;;,P_CHANSEY,    P_PINSIR,     P_ELECTABUZZ, P_SCYTHER,    P_LICKITUNG,  P_GOLDUCK
+    ;;,P_PONYTA,     P_MAGNETON,   P_PRIMEAPE,   P_FLAREON,    P_VULPIX,     P_RAPIDASH
+    ;;,P_RAPIDASH,   P_ARCANINE,   P_FLAREON,    P_NINETALES,  P_GOLEM,      P_MAGMAR
 
-    ;;name,"cooltrnr"
-    ;;name,"fishrman"
-    ;;name,"tamer"
-    ;;name,"giovanni"
+    ;;,P_DRAGONAIR,  P_WARTORTLE,  P_PARASECT,   P_CHARMELEON, P_POLIWRATH,  P_IVYSAUR
+    ;;,P_GOLDEEN,    P_TENTACRUEL, P_SEADRA,     P_SEAKING,    P_CLOYSTER,   P_KINGLER
+    ;;,P_MAROWAK,    P_TAUROS,     P_SANDSLASH,  P_RATICATE,   P_RHYHORN,    P_PERSIAN
+    ;;,P_DUGTRIO,    P_NIDOKING,   P_PERSIAN,    P_NIDOQUEEN,  P_KANGASKHAN, P_RHYDON
 
-    ;;name,"lorelei"
-    ;;name,"bruno"
-    ;;name,"agatha"
-    ;;name,"lance"
+    ;;,P_CLOYSTER,   P_JYNX,       P_VAPOREON,   P_LAPRAS,     P_SLOWBRO,    P_DEWGONG
+    ;;,P_ONIX,       P_HITMONCHAN, P_OMASTAR,    P_HITMONLEE,  P_GOLEM,      P_MACHAMP
+    ;;,P_GOLBAT,     P_MUK,        P_HAUNTER,    P_VILEPLUME,  P_ARBOK,      P_GENGAR
+    ;;,P_GYARADOS,   P_DRAGONAIR,  P_AERODACTYL, P_DRAGONITE,  P_KABUTOPS,   P_SNORLAX
 
-    ;;name,"blue"
-    ;;name,"green"
-    ;;name,"red"
-    ;;name,"legendry"
+    ;;,P_PIDGEOT,    P_ALAKAZAM,   P_JOLTEON,    P_ARCANINE,   P_EXEGGUTOR,  P_BLASTOISE
+    ;;,P_GENGAR,     P_KANGASKHAN, P_CLEFABLE,   P_GYARADOS,   P_NINETALES,  P_VENUSAUR
+    ;;,P_SCYTHER,    P_SNORLAX,    P_RAICHU,     P_LAPRAS,     P_DODRIO,     P_CHARIZARD
+    ;;,P_DRAGONITE,  P_ZAPDOS,     P_MOLTRES,    P_ARTICUNO,   P_MEWTWO,     P_MEW
 ]] $$

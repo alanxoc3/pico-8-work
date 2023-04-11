@@ -182,7 +182,7 @@ function encode_cart(message, cartname, w, h, func)
 end
 
 function myinit()
-    ENCODE_OFFSET=12 -- this must be set to where data can start writing
+    ENCODE_OFFSET=10 -- this must be set to where data can start writing
     local enc_vget = function(...) return vget(0x8000, ...) end
 
     cls()
@@ -205,7 +205,6 @@ function myinit()
     poke(0x5f56, 0xa0) -- mget points to the loaded map.
     poke2(0x0006, ENCODE_OFFSET) encode_cart     ("picodex skin   ", "128-151.p8", 32,  11,  mget)
     poke2(0x0008, ENCODE_OFFSET) encode_pkmv_data("pokemon moves  ", g_pkmn_move_data)
-    poke2(0x000a, ENCODE_OFFSET) encode_trnr_data("pokemon trnrs  ", g_trainer_data)   -- 40*6  = 240
 
                                               log("end of compile  | pos: "..tostr(ENCODE_OFFSET, 0x1))
 
@@ -355,35 +354,6 @@ P_FLAREON     = 136 P_PORYGON     = 137 P_OMANYTE     = 138 P_OMASTAR     = 139
 P_KABUTO      = 140 P_KABUTOPS    = 141 P_AERODACTYL  = 142 P_SNORLAX     = 143
 P_ARTICUNO    = 144 P_ZAPDOS      = 145 P_MOLTRES     = 146 P_DRATINI     = 147
 P_DRAGONAIR   = 148 P_DRAGONITE   = 149 P_MEWTWO      = 150 P_MEW         = 151
-
--- second half of trainer data is stored here. first half is stored in code.
--- this was done at the very end of picodex implementation. had to remove newline characters from code to do so.
-g_trainer_data = {
-   P_MACHOP,    P_MACHOKE,   P_HITMONLEE, P_MANKEY,    P_PRIMEAPE,  P_HITMONCHAN, -- blckbelt
-   P_SANDSLASH, P_RATICATE,  P_ELECTRODE, P_GOLBAT,    P_WEEZING,   P_ARBOK,      -- rocket
-   P_SLOWPOKE,  P_ABRA,      P_SLOWBRO,   P_DROWZEE,   P_EXEGGCUTE, P_KADABRA,    -- psychic
-   P_MRMIME,    P_EXEGGUTOR, P_KADABRA,   P_JYNX,      P_HYPNO,     P_ALAKAZAM,   -- sabrina
-
-   P_DITTO,     P_VICTREEBEL,P_GASTLY,    P_VENOMOTH,  P_HYPNO,     P_PORYGON,    -- scientst
-   P_CHANSEY,   P_PINSIR,    P_ELECTABUZZ,P_SCYTHER,   P_LICKITUNG, P_GOLDUCK,    -- pkmaniac
-   P_PONYTA,    P_MAGNETON,  P_PRIMEAPE,  P_FLAREON,   P_VULPIX,    P_RAPIDASH,   -- suprnerd
-   P_RAPIDASH,  P_ARCANINE,  P_FLAREON,   P_NINETALES, P_GOLEM,     P_MAGMAR,     -- blaine
-
-   P_DRAGONAIR, P_WARTORTLE, P_PARASECT,  P_CHARMELEON,P_POLIWRATH, P_IVYSAUR,    -- cooltrnr
-   P_GOLDEEN,   P_TENTACRUEL,P_SEADRA,    P_SEAKING,   P_CLOYSTER,  P_KINGLER,    -- fishrman
-   P_MAROWAK,   P_TAUROS,    P_SANDSLASH, P_RATICATE,  P_RHYHORN,   P_PERSIAN,    -- tamer
-   P_DUGTRIO,   P_NIDOKING,  P_PERSIAN,   P_NIDOQUEEN, P_KANGASKHAN,P_RHYDON,     -- giovanni
-
-   P_CLOYSTER,  P_JYNX,      P_VAPOREON,  P_LAPRAS,    P_SLOWBRO,   P_DEWGONG,    -- lorelei
-   P_ONIX,      P_HITMONCHAN,P_OMASTAR,   P_HITMONLEE, P_GOLEM,     P_MACHAMP,    -- bruno
-   P_GOLBAT,    P_MUK,       P_HAUNTER,   P_VILEPLUME, P_ARBOK,     P_GENGAR,     -- agatha
-   P_GYARADOS,  P_DRAGONAIR, P_AERODACTYL,P_DRAGONITE, P_KABUTOPS,  P_SNORLAX,    -- lance
-
-   P_PIDGEOT,   P_ALAKAZAM,  P_JOLTEON,   P_ARCANINE,  P_EXEGGUTOR, P_BLASTOISE,  -- blue
-   P_GENGAR,    P_KANGASKHAN,P_CLEFABLE,  P_GYARADOS,  P_NINETALES, P_VENUSAUR,   -- green
-   P_SCYTHER,   P_SNORLAX,   P_RAICHU,    P_LAPRAS,    P_DODRIO,    P_CHARIZARD,  -- red
-   P_DRAGONITE, P_ZAPDOS,    P_MOLTRES,   P_ARTICUNO,  P_MEWTWO,    P_MEW         -- legendry
-}
 
 -- from missingno (0) to mew (151), these are the tms they can learn.
 -- 1-50 are tms. 51-55 are hms. There shouldn't be anything higher than that.
