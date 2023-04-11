@@ -9,10 +9,3 @@ A few ways to play picodex:
 
 You can find the guide here:
 - https://github.com/alanxoc3/pico-8-work/blob/master/2023-picodex/guide.md
-
-## Compression
-Release generated with shrinko8:
-
-```
-python3 /home/alan/repos/shrinko8/shrinko8.py game.p8 export.p8.png
-```
