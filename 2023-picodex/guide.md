@@ -51,9 +51,9 @@ Modifications inspired by personal preference:
 ## MOVEDEX
 
 Picodex includes the standard movesets for all 151 Pokemon, as well as a few extra moves from various events and glitches for the generation 1 games. Those extra moves are:
+- Fearow with Payday. From an in-person event.
 - Pickachu with Surf. From an in-person event.
 - Pickachu with Fly. From an in-person event.
-- Fearow with Payday. From an in-person event.
 - Psyduck with Amnesia. A prize Pokemon from Pokemon Stadium 1.
 - Rapidash with Payday. From an in-person event.
 - Slowbro with Metronome. From a Juggler in Pokemon Stadium 1.

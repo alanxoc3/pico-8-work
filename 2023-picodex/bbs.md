@@ -52,14 +52,14 @@ If you need a reference of all the moves and what they do, expand this section:
 
 [hidden]
 Picodex includes the standard movesets for all 151 Pokemon, as well as a few extra moves from various events and glitches for the generation 1 games. Those extra moves are:
-- Slowbro with Metronome. From a Juggler in Pokemon Stadium 1.
-- Dragonite with Barrier. From Lance in Red/Blue/Green.
-- Psyduck with Amnesia. A prize Pokemon from Pokemon Stadium 1.
 - Fearow with Payday. From an in-person event.
-- Rapidash with Payday. From an in-person event.
 - Pickachu with Surf. From an in-person event.
 - Pickachu with Fly. From an in-person event.
+- Psyduck with Amnesia. A prize Pokemon from Pokemon Stadium 1.
+- Rapidash with Payday. From an in-person event.
+- Slowbro with Metronome. From a Juggler in Pokemon Stadium 1.
 - Magikarp with Dragon Rage. From an in-person event.
+- Dragonite with Barrier. From Lance in Red/Blue/Green.
 
 Here is a list of all the moves available in Picodex, along with a short description of what each move does:
 
