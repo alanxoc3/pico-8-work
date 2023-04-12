@@ -59,7 +59,8 @@ function __init()
 
     -- at the end of picodex development, i stored half the trainers in code. half are stored in cartridge data.
     local trainer_loc = _peek2'0xa'
-    for i=21,40 do
+    for i=1,40 do
+        c_trainers[i] = {name=c_trainer_names[i]}
         for j=1,6 do
             _add(c_trainers[i], _peek(trainer_loc))
             trainer_loc += 1

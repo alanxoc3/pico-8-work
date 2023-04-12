@@ -16,7 +16,7 @@ end $$
 
     local xx = 0
     for i,v in _ipairs(_split'6,5,5,6,6,5,6') do
-        _sspr(6*8+xx, 6*8, v,8, xx+3, 3.5+_cos((_t()+i)/4))
+        _sspr(6*8+xx, 12*8, v,8, xx+3, 3.5+_cos((_t()+i)/4))
         xx += v
     end
 

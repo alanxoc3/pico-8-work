@@ -39,7 +39,7 @@ end $$
     if num > 152 then
         _g.g_cur_light = num-152
     end
-    _sfx(54+num\16, num <= 152 and 1 or 0, num%16*2, 2)
+    _sfx(59+num\32, num <= 152 and 1 or 0, num%32, 1)
 end $$
 
 |[f_draw_picodex]| function(_ENV)
@@ -50,7 +50,7 @@ end $$
           ;;,"pRESENTS"            ,64, -61,7,0
           ;;,"a pOKEMON bATTLE sIM",64, 15 ,7,0
         ]])
-        f_zcall(_spr, [[;,102,44,7,5,1]])
+        f_zcall(_spr, [[;,198,44,7,5,1]])
 
         local top_row_buttons,
               bot_row_buttons,
@@ -111,7 +111,7 @@ end $$
             ----- RIGHT SIDE -----
             if rotation <= 0 then
                 f_picodex_map(0, 2+64*(1-_abs(rotation)), _abs(rotation))
-                if rotation == -1 and backbuttonheld then _spr(123, 6, 49) end
+                if rotation == -1 and backbuttonheld then _spr(219, 6, 49) end
             else
                 f_picodex_map(16, 62, rotation)
 
