@@ -228,7 +228,7 @@ end
 function encode_trnr_data(message, data)
     log(message.." | pos: "..tostr(ENCODE_OFFSET, 0x1)) -- show numbers as hex
 
-    for tnum=0,19 do
+    for tnum=0,39 do
         for pnum=0,5 do
             offsetpoke(data[tnum*6+pnum+1])
         end

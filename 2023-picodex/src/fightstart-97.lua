@@ -9,6 +9,7 @@
 -- horde - die (p2)   - p2 adds a new pkmn to the team
 
 |[f_begin_fight]| function(_ENV, d1, d2)
+    f_minisfx(false)
     -- winlogic could be used for story mode.
     -- p1 has higher starting priority so game shows their pokemon to come out first
     -- horde count is only used for p2. this is the index the horde is currently on.
