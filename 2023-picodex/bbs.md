@@ -5,10 +5,10 @@ Standard PICO-8 controls apply to this game. For a computer keyboard this is: "a
 There are 6 modes in Picodex:
 - `BROWSE`: View all Pokemon you have unlocked along with stats and possible moves.
 - `EDIT`: Edit up to 3 teams. Customize Pokemon and movesets in each team.
-- `LEAGUE`: Battle against various computer trainers ranging from Bug Catchers to Pokemon League champions.
+- `LEAGUE`: Battle against trainers in the Pokemon league.
 - `VERSUS`: Take turns playing a custom match between you and a friend.
 - `HORDE`: Have your team battle all 151 Pokemon in order with no breaks.
-- `CREDITS`: View the credits and acknowledgements.
+- `CREDITS`: See who helped make the game.
 
 Picodex initially loads with only 6 Pokemon unlocked. You can unlock more Pokemon by defeating trainers in LEAGUE mode. Everytime you win a battle, you unlock all the Pokemon the opponent had as well as their entire moveset. Picodex will auto-save any Pokemon/trainers/scores you have unlocked, so don't be afraid to close it and play again later.
 
