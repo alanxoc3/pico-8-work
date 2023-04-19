@@ -18,9 +18,9 @@
     -- should_use_xf: should push speed be reflected by the xf or position
     -- item_hit_func: a function that gets when it hits the enemy
 
-zclass[[propel,vec|propel,%propel_func, propel_speed,0]]
+zclass[[propel,vec|propel,%f_propel_func, propel_speed,0]]
 
-|[propel_func]| function(a)
+|[f_propel_func]| function(a)
     a.speed = a.propel_speed
 end $$
 
@@ -36,7 +36,7 @@ zclass[[statitem,box|]] -- if the item hits an enemy, the enemy becomes the new 
    -- visible: should it be drawn with the player?
    -- alive: is the item alive?
 
-|[interact]| function(...)
+|[f_interact]| function(...)
     local obj = g_rstat_right:get()
     -- the is_alive check is needed because there was a duplication bug
     if obj and obj:is_alive() then
@@ -60,13 +60,13 @@ zclass[[held_to_throw,vec,actor|
 
     item_thrown,nop, sy,-2;
 
-    defaults; init,nop, update,%held_to_throw_update;
-    start;    init,%held_to_throw_beg, duration,.1, next,normal;
+    defaults; init,nop, update,%f_held_to_throw_update;
+    start;    init,%f_held_to_throw_beg, duration,.1, next,normal;
     normal;   offy,-.5;
-    ending;   visible,no, init,%held_to_throw_ending_init, duration,.16;
+    ending;   visible,no, init,%f_held_to_throw_ending_init, duration,.16;
 ]]
 
-|[held_to_throw_beg]| function(a)
+|[f_held_to_throw_beg]| function(a)
     if a.fromobj then
         a.x, a.y = a.fromobj.x, a.fromobj.y
     else
@@ -74,11 +74,11 @@ zclass[[held_to_throw,vec,actor|
     end
 end $$
 
-|[held_to_throw_update]| function(a)
-    a:vec_mov_towards_point(a.anchoring.x, a.anchoring.y-.5, .15)
+|[f_held_to_throw_update]| function(a)
+    a:f_vec_mov_towards_point(a.anchoring.x, a.anchoring.y-.5, .15)
 end $$
 
-|[held_to_throw_ending_init]| function(a)
+|[f_held_to_throw_ending_init]| function(a)
     a.item_thrown(a.anchoring.x, a.anchoring.y, a.anchoring.xf, .06+a.anchoring.speed, atan2(a.anchoring.xf, 0))
 end $$
 
@@ -88,10 +88,10 @@ zclass[[bomb_held,held_to_throw  |anchoring,@, xf,@, sind,SPR_BOMB, item_thrown,
 
 zclass[[item_throwing,propel,mov,box,simple_spr,drawlayer_50,actor|
     rx,.25, ry,.25;
-    start; duration, .15, update,%item_throwing_update;
+    start; duration, .15, update,%f_item_throwing_update;
 ]]
 
-|[item_throwing_update]| function(a)
+|[f_item_throwing_update]| function(a)
     a.sy = sin(a:get_elapsed_percent'start'/4+.25)*7
     a:propel()
 end $$
@@ -99,12 +99,12 @@ end $$
 zclass[[bomb,item_throwing|
     x,@, y,@, xf,@, propel_speed,@, ang,@,
     should_collide_below, no,
-    sind,SPR_BOMB, destroyed,%bomb_destroyed;
+    sind,SPR_BOMB, destroyed,%f_bomb_destroyed;
 ]]
 
 zclass[[pot_thrown,item_throwing,statitem|
     x,@, y,@, xf,@, propel_speed,@, ang,@,
-    sind,49, destroyed,%standard_explosion,
+    sind,49, destroyed,%f_standard_explosion,
     should_stun,yes,
     should_use_xf,yes,
     item_hit_func,nop,
@@ -113,25 +113,25 @@ zclass[[pot_thrown,item_throwing,statitem|
 
 zclass[[quack_thrown,item_throwing|
     x,@, y,@, xf,@, propel_speed,@, ang,@,
-    sind,32, destroyed,%quack_thrown_destroyed;
+    sind,32, destroyed,%f_quack_thrown_destroyed;
 ]]
 
-|[quack_thrown_destroyed]| function(a)
+|[f_quack_thrown_destroyed]| function(a)
     _g.quack(a.x, a.y)
 end $$
 
-|[bomb_destroyed]| function(a)
+|[f_bomb_destroyed]| function(a)
     _g.explode(a.x, a.y, 8, 2, nop)
     _g.bomb_explode(a.x, a.y)
 end $$
 
 zclass[[item_horizontal,anchor|
     offspeed,0,
-    normal_init,%item_horizontal_normal_init;
+    normal_init,%f_item_horizontal_normal_init;
 
-    start;  init,%item_horizontal_start_init,  duration,.08, next,normal;
-    normal; init,%item_horizontal_normal_init, offdx,0;
-    ending; init,%item_horizontal_ending_init, duration,.08;
+    start;  init,%f_item_horizontal_start_init,  duration,.08, next,normal;
+    normal; init,%f_item_horizontal_normal_init, offdx,0;
+    ending; init,%f_item_horizontal_ending_init, duration,.08;
 ]]
 
 zclass[[mask,anchor,actor|
@@ -148,13 +148,13 @@ zclass[[mask,anchor,actor|
     sind,SPR_MASK;
 
     defaults; init,nop;
-    start;  init,%mask_init, offdy,-.0625, duration,.08, next,normal;
+    start;  init,%f_mask_init, offdy,-.0625, duration,.08, next,normal;
     normal; offy,-.125, offdy,0;
-    ending; init,%mask_end, offdy,.0625, duration,.08;
+    ending; init,%f_mask_end, offdy,.0625, duration,.08;
 ]]
 
-|[mask_init]| function() sfx(3,3,0,4) end $$
-|[mask_end]| function() sfx(3,3,8,4) end $$
+|[f_mask_init]| function() sfx(3,3,0,4) end $$
+|[f_mask_end]| function() sfx(3,3,8,4) end $$
 
 zclass[[bow,item_horizontal,actor|
     anchoring,@, xf,@,
@@ -169,7 +169,7 @@ zclass[[bow,item_horizontal,actor|
     offspeed,.105,
     sind,SPR_BOW;
 
-    ending; init,%bow_ending_init, duration,.08;
+    ending; init,%f_bow_ending_init, duration,.08;
 ]]
 
 zclass[[pellet,vec,collidable,actor,drawlayer_50,statitem|
@@ -182,23 +182,23 @@ zclass[[pellet,vec,collidable,actor,drawlayer_50,statitem|
 
     should_collide_below,no,
     rx,.25, ry,.25,
-    destroyed,%standard_explosion,
-    draw,%pellet_draw;
+    destroyed,%f_standard_explosion,
+    draw,%f_pellet_draw;
 
-    start; update,%pellet_update, duration,.5;
+    start; update,%f_pellet_update, duration,.5;
 ]]
 
-|[pellet_update]| function(a)
+|[f_pellet_update]| function(a)
     if a.dx == 0 then a:kill() end
 end $$
 
-|[pellet_draw]| function(a)
+|[f_pellet_draw]| function(a)
     draw_tail(a.x, a.y-.25, a.dx, 0, 3)
     pset(a.x*8, a.y*8-2, 4)
 end $$
 
-|[bow_ending_init]| function(a)
-    _g.item_horizontal_ending_init(a)
+|[f_bow_ending_init]| function(a)
+    _g.f_item_horizontal_ending_init(a)
     _g.pellet(a.anchoring.x, a.anchoring.y, a.xf*.25, a.xf)
 end $$
 
@@ -232,7 +232,7 @@ zclass[[sword,item_horizontal,actor,statitem|
 
     pushspeed,     .25,
     should_use_xf, yes,
-    item_hit_func, %sword_item_hit_func,
+    item_hit_func, %f_sword_item_hit_func,
 
     plpushspeed,     .125,
     visible,yes,
@@ -248,7 +248,7 @@ zclass[[sword,item_horizontal,actor,statitem|
     normal; damage, 1;
 ]]
 
-|[sword_item_hit_func]| function(a)
+|[f_sword_item_hit_func]| function(a)
     a:kill()
 end $$
 
@@ -266,19 +266,19 @@ zclass[[banjo,anchor,actor|
     sind,SPR_BANJO;
 
     defaults; init,nop;
-    start;    init,%banjo_start_init, offdy,.125, duration,.03, next,min_play;
+    start;    init,%f_banjo_start_init, offdy,.125, duration,.03, next,min_play;
     min_play; offdy,0, duration,2, next,normal;
     normal;   next,ending;
-    ending;   init,%banjo_ending_init, offdy,-.125, duration,.03;
+    ending;   init,%f_banjo_ending_init, offdy,-.125, duration,.03;
 ]]
 
-|[banjo_start_init]| function(a)
+|[f_banjo_start_init]| function(a)
     sfx(5,0)
     sfx(6,1)
     sfx(7,2)
 end $$
 
-|[banjo_ending_init]| function(a)
+|[f_banjo_ending_init]| function(a)
     sfx(5,-2)
     sfx(6,-2)
     sfx(7,-2)
@@ -318,31 +318,31 @@ zclass[[brang,collidable,simple_spr,drawlayer_50,mov,actor,statitem|
 
     should_collide_below,no,
     offspeed,.125,
-    drawout,%brang_drawout,
+    drawout,%f_brang_drawout,
     sind,SPR_BRANG;
     
     defaults; init,nop;
-    start; init,%brang_start_init, update,%brang_start_update, duration,.125, next,normal;
-    normal;update,%brang_normal_update, next,ending;
-    ending;init,%brang_ending_init, update,%brang_ending_update, duration,.125, adjust_deltas_for_solids,nop, adjust_deltas_for_tiles,nop;
+    start; init,%f_brang_start_init, update,%f_brang_start_update, duration,.125, next,normal;
+    normal;update,%f_brang_normal_update, next,ending;
+    ending;init,%f_brang_ending_init, update,%f_brang_ending_update, duration,.125, f_adjust_deltas_for_solids,nop, f_adjust_deltas_for_tiles,nop;
     final;update,nop, alive,no;
 ]]
 
-|[brang_drawout]| function(a)
+|[f_brang_drawout]| function(a)
     zspr(a.sind, a.x*8+a.sx, a.y*8+a.sy, 1, 1, cos(g_fi/5), sin(g_fi/5))
 end $$
 
-|[brang_start_init]| function(a)
-    _g.mask_init()
+|[f_brang_start_init]| function(a)
+    _g.f_mask_init()
     a.x, a.y = a.anchoring.x, a.anchoring.y
     a.ang = atan2(a.xf, 0)
 end $$
 
-|[brang_start_update]| function(a)
+|[f_brang_start_update]| function(a)
     a.speed = .05
 end $$
 
-|[brang_normal_update]| function(a)
+|[f_brang_normal_update]| function(a)
     a.speed = 0
 
     if g_zbtn_0 | g_zbtn_2 ~= 0 then
@@ -350,12 +350,12 @@ end $$
     end
 end $$
 
-|[brang_ending_init]| function(a)
+|[f_brang_ending_init]| function(a)
     a.end_x, a.end_y = a.x, a.y
-    _g.mask_end()
+    _g.f_mask_end()
 end $$
 
-|[brang_ending_update]| function(a)
+|[f_brang_ending_update]| function(a)
     local percent = a:get_elapsed_percent'ending'
     a.x = a.end_x + (a.anchoring.x - a.end_x)*percent
     a.y = a.end_y + (a.anchoring.y - a.end_y)*percent
@@ -367,19 +367,19 @@ zclass[[bomb_explode,enemy,box,actor,statitem|
     pushspeed,.25,
     should_use_xf,no,
     item_hit_func,nop,
-    pl_collide_func,%bomb_pl_hit;
+    pl_collide_func,%f_bomb_pl_hit;
 
     start; duration,.25;
 ]]
 
-|[bomb_pl_hit]| function(a, pl)
+|[f_bomb_pl_hit]| function(a, pl)
     pl:hurt'5'
 end $$
 
 --| ITEM CODE LOGIC |--
-|[item_horizontal_start_init]|  function(a) sfx(3,3,0,4) a.offdx = a.xf*a.offspeed end $$
-|[item_horizontal_normal_init]| function(a) a.offx = abs(a.offx*8)\1/8*sgn(a.offx) end $$
-|[item_horizontal_ending_init]| function(a) sfx(3,3,8,4) a:normal_init() a.offdx = -a.xf*a.offspeed end $$
+|[f_item_horizontal_start_init]|  function(a) sfx(3,3,0,4) a.offdx = a.xf*a.offspeed end $$
+|[f_item_horizontal_normal_init]| function(a) a.offx = abs(a.offx*8)\1/8*sgn(a.offx) end $$
+|[f_item_horizontal_ending_init]| function(a) sfx(3,3,8,4) a:normal_init() a.offdx = -a.xf*a.offspeed end $$
 
 --| PL LOGIC |--
 
@@ -387,25 +387,25 @@ end $$
     -- pushed: is the player being pushed in a direction. this has only one speed.
     -- stunned: is the player being hurt? this shakes the screen and prevents items, but not movement.
 
-zclass[[maskcheck|maskcheck,%maskcheck_func]]
+zclass[[maskcheck|maskcheck,%f_maskcheck_func]]
 
 -- true means there is no mask
-|[maskcheck_func]| function(a, override)
+|[f_maskcheck_func]| function(a, override)
     return override or not a.item or a.item.id ~= 'mask'
 end $$
 
 zclass[[pushable,mov|
     push_ang,0,
-    push,%pushable_push,
-    update_push,%pushable_update_push
+    push,%f_pushable_push,
+    update_push,%f_pushable_update_push
 ]]
 
-|[pushable_push]| function(a, ang, duration, override)
+|[f_pushable_push]| function(a, ang, duration, override)
     a:start_timer('push', duration)
     a.push_ang = ang
 end $$
 
-|[pushable_update_push]| function(a)
+|[f_pushable_update_push]| function(a)
     if a:is_active'push' then
         a.ang, a.speed = a.push_ang, (1-a:get_elapsed_percent'pushed')*PL_STUN_SPEED
     end
@@ -418,19 +418,19 @@ zclass[[pl,ma_left,pushable,actor,mov,collidable,auto_outline,healthobj,drawlaye
     should_collide_with_screen_edge,no,
 
     should_dance,yes,
-    update,%pl_update,
+    update,%f_pl_update,
     energy,0,
     is_energy_cooling_down,no,
     target_energy,0,
-    destroyed,%standard_explosion,
-    drawout,%pl_drawout;
+    destroyed,%f_standard_explosion,
+    drawout,%f_pl_drawout;
 
     item_funcs;
         ITEM_IND_BANJO    ,%banjo,
         ITEM_IND_BOMB     ,%bomb_held,
         ITEM_IND_BOW      ,%bow,
         ITEM_IND_SWORD    ,%sword,
-        ITEM_IND_INTERACT ,%interact,
+        ITEM_IND_INTERACT ,%f_interact,
         ITEM_IND_SHIELD   ,%shield,
         ITEM_IND_BRANG    ,%brang,
         ITEM_IND_MASK     ,%mask;
@@ -455,7 +455,7 @@ zclass[[pl,ma_left,pushable,actor,mov,collidable,auto_outline,healthobj,drawlaye
 -- sets speed (control or 0 (stun/injure/fader/tbox/itemselect) or leaving room)
 -- energy logic (replenish) only when no item in use, and no for many things...
 
-|[pl_update]| function(a)
+|[f_pl_update]| function(a)
     -- global update
     a:start_timer('isma', 0)
     local item = a.item
@@ -500,7 +500,7 @@ zclass[[pl,ma_left,pushable,actor,mov,collidable,auto_outline,healthobj,drawlaye
     a.item = item
 end $$
 
-|[pl_drawout]| function(a)
+|[f_pl_drawout]| function(a)
     -- printh("x "..(a.x*16).." y "..(a.y*16))
     local xoff = 0
     local yoff = 0

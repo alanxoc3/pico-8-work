@@ -12,24 +12,12 @@ our @lua_keywords = qw(
 break do else elseif end false for function goto if in local nil not or repeat
 return then true until while and table string boolean unknown number
 
-_ENV _ _g
-
-ipairs unpack chr ord split label screen rec video audio_rec audio_end pause
-reset breadcrumb shutdown g g_gunvals_raw
-setmetatable getmetatable cocreate coresume lshr costatus cd yield load save
-folder ls run resume reboot stat info flip printh clip pget pset sget sset fget
-fset print cursor color ceil cls camera oval ovalfill circ circfill line rect
-rectfill pal palt spr sspr add del deli all foreach pairs btn btnp sfx music
-mget mset map peek peek2 poke2 peek4 poke4 poke memcpy reload cstore memset max
-min mid flr cos sin atan2 sqrt abs rnd srand band bor bxor bnot shl shr
-cartdata dget dset sub sgn stop tline menuitem type tostr tonum extcmd ls fillp time
-assert t update_buttons count mapdraw self ? rotl
+_ENV _
 );
 
 sub get_next_var_name {
    my $cur_chars_ref = shift;
    # Order of commonly used letters in the English language.
-   # Saves *about* 30 compression tokens.
    my $char_inc = "etaoinsrhldcumfpgwybvkxjqz";
 
    my @new_char_arr;

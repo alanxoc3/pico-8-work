@@ -7,15 +7,15 @@ end)
 
 zclass[[game_state,actor|
     ecs_exclusions;actor,yes,timer,yes; -- remove game_state from the actor group
-    curr,room, init,%game_state_init;
+    curr,room, init,%f_game_state_init;
 
-    logo;     state_init,%logo_init,     update,%simple_update,   draw,%logo_draw, duration,2.5, next,title;
-    title;    state_init,%title_init,    update,%simple_update,   draw,%title_draw;
-    room;     state_init,%room_init,     update,%room_update,     draw,%room_draw;
-    gameover; state_init,%gameover_init, update,%gameover_update, draw,%gameover_draw;
+    logo;     state_init,%f_logo_init,     update,%f_simple_update,   draw,%f_logo_draw, duration,2.5, next,title;
+    title;    state_init,%f_title_init,    update,%f_simple_update,   draw,%f_title_draw;
+    room;     state_init,%f_room_init,     update,%f_room_update,     draw,%f_room_draw;
+    gameover; state_init,%f_gameover_init, update,%f_gameover_update, draw,%f_gameover_draw;
 ]]
 
-|[game_state_init]| function(state)
+|[f_game_state_init]| function(state)
     sfx(-1,3) -- in case there was an issue with stopping active sfx
     clean_all_entities'game_state'
     _g.fader_in()
@@ -54,7 +54,7 @@ function load_save_state()
     end
 end
 
-function _init()
+function __init()
     load_save_state()
 
     poke2(0x5f5c, 6) -- custom press delay... a bit more than the default hold delay
@@ -62,7 +62,7 @@ function _init()
     g_tile_animation_lookup = create_tile_animation_lookup(g_rooms[ANIMATION_ROOM_INDEX])
 end
 
-function _update60()
+function __update60()
     -- a few places check for a button press, making global for token count sake
     g_zbtn_0, g_zbtn_2 = zbtn(btn, 0), zbtn(btn, 2)
 
@@ -85,7 +85,7 @@ function _update60()
     ]])
 end
 
-function _draw()
+function __draw()
     g_si, g_fi = g_slow_animation.index, g_fast_animation.index
     cls()
     loop_entities('game_state', 'draw')

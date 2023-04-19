@@ -2,12 +2,12 @@
 zclass[[pos|
     x,0,
     y,0,
-    dist_point,%pos_dist_point
+    dist_point,%f_pos_dist_point
 ]]
 
 -- fast approximate distance formula (no need for sqrt & ^2)
 -- stolen from a pico-8 forum
-|[pos_dist_point]| function(a, x, y)
+|[f_pos_dist_point]| function(a, x, y)
     local dx, dy = x-a.x, y-a.y
     local maskx,masky=dx>>31,dy>>31
     local a0,b0=(dx+maskx)^^maskx,(dy+masky)^^masky
@@ -20,20 +20,20 @@ end $$
 -- position with a speed
 zclass[[vec,pos|
     dx,0,dy,0,
-    vec_update_x,%vec_update_x,
-    vec_update_y,%vec_update_y,
-    vec_mov_towards_point,%vec_mov_towards_point
+    f_vec_update_x,%f_vec_update_x,
+    f_vec_update_y,%f_vec_update_y,
+    f_vec_mov_towards_point,%f_vec_mov_towards_point
 ]]
 
-|[vec_update_x]| function(a)
+|[f_vec_update_x]| function(a)
     a.x += a.dx
 end $$
 
-|[vec_update_y]| function(a)
+|[f_vec_update_y]| function(a)
     a.y += a.dy
 end $$
 
-|[vec_mov_towards_point]| function(a, x, y, speed)
+|[f_vec_mov_towards_point]| function(a, x, y, speed)
     local ang = atan2(x-a.x, y-a.y)
     local dist = a:dist_point(x, y)
     local new_speed = speed > dist and dist or speed
@@ -44,11 +44,11 @@ end $$
 -- able to contribute to acceleration with direction and speed
 zclass[[mov,vec|
     ang,0, speed,0,
-    mov_update,%mov_update,
-    towards_point,%mov_towards_point
+    f_mov_update,%f_mov_update,
+    towards_point,%f_mov_towards_point
 ]]
 
-|[mov_update]| function(a)
+|[f_mov_update]| function(a)
     local ax, ay = a.speed*cos(a.ang), a.speed*sin(a.ang)
     a.dx += ax a.dy += ay
     a.dx *= DEFAULT_INERTIA a.dy *= DEFAULT_INERTIA
@@ -57,6 +57,6 @@ zclass[[mov,vec|
     a.speed = 0
 end $$
 
-|[mov_towards_point]| function(a, x, y)
+|[f_mov_towards_point]| function(a, x, y)
     a.ang = atan2(x-a.x, y-a.y)
 end $$

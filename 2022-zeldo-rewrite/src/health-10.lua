@@ -4,12 +4,12 @@ zclass[[healthobj,maskcheck|
     invincible,no,
 
     stun_callback,nop,
-    hurt,%healthobj_hurt,
-    stun,%healthobj_stun,
-    health_update,%healthobj_health_update
+    hurt,%f_healthobj_hurt,
+    stun,%f_healthobj_stun,
+    health_update,%f_healthobj_health_update
 ]]
 
-|[healthobj_hurt]| function(a, amount, callback)
+|[f_healthobj_hurt]| function(a, amount, callback)
     if not a.invincible and not does_entity_exist'fader' and a:is_alive() and a:maskcheck() and not a:is_active'injured' and not a:is_active'injured_cooldown' then
         a:end_timer'stunned'
         a:end_timer'stunned_cooldown'
@@ -28,7 +28,7 @@ zclass[[healthobj,maskcheck|
     end
 end $$
 
-|[healthobj_stun]| function(a, length, callback)
+|[f_healthobj_stun]| function(a, length, callback)
     if (a:maskcheck() and not a:is_active'stunned' and not a:is_active'stunned_cooldown') then
         a:stun_callback()
         callback = callback or nop
@@ -40,7 +40,7 @@ end $$
     end
 end $$
 
-|[healthobj_health_update]| function(a)
+|[f_healthobj_health_update]| function(a)
     a.health = a.health or a.max_health
     a.display_health = a.display_health or a.health/a.max_health
 

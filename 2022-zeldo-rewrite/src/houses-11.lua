@@ -1,4 +1,4 @@
-|[spawn_walls]| function(a)
+|[f_spawn_walls]| function(a)
     zcall_tbl(_g.wall, a.walls)
 end $$
 
@@ -12,11 +12,11 @@ zclass[[pot,solid,class_with_target,drawlayer_50,ma_interact,simple_spr|
     cspr,49, cname,"pot", sind,49,
     rx,.375,ry,.375,
     trx,.5,try,.125,
-    callback_touch,%pot_callback_touch
+    callback_touch,%f_pot_callback_touch
 ]]
 
-|[pot_callback_touch]| function(a)
-    if not _g.sign_target_with_tbox_disable_callback() then
+|[f_pot_callback_touch]| function(a)
+    if not _g.f_sign_target_with_tbox_disable_callback() then
         a:start_timer('isma', 0)
     end
 end $$
@@ -24,7 +24,7 @@ end $$
 zclass[[bedbot_l,actor,simple_spr,drawlayer_50|
     x,@, y,@,
     sind,55,
-    init,%spawn_walls;
+    init,%f_spawn_walls;
 
     walls;1;,~,     0, .25, .75, .25;
     walls;2;,~,  0.5625,   0, 0.1875, .25;
@@ -34,7 +34,7 @@ zclass[[bedbot_l,actor,simple_spr,drawlayer_50|
 zclass[[bedbot_r,actor,simple_spr,drawlayer_50|
     x,@, y,@,
     sind,55,
-    init,%spawn_walls;
+    init,%f_spawn_walls;
 
     walls;1;,~,     0, .25, .75, .25;
     walls;2;,~, -0.5625, 0, 0.1875, .25;
@@ -46,15 +46,15 @@ zclass[[bedpillow,simple_spr,drawlayer_25|x,@,y,@,sind,39]]
 zclass[[house,actor,simple_spr,drawlayer_50|
     cspr,SPR_HOUSE,
     sind,SPR_HOUSE, sw,2, sh,2,
-    init,%house_init;
+    init,%f_house_init;
 
     walls;1;,~, .75, .5,.25,.375;
     walls;2;,~,-.75, .5,.25,.375;
     walls;3;,~,    0,.25,.5,.125;
 ]]
 
-|[house_init]| function(a)
-    _g.spawn_walls(a)
+|[f_house_init]| function(a)
+    _g.f_spawn_walls(a)
 
     zcall(_g.target, [[
         1;,.125,.125,0,.5,@,@,nop;

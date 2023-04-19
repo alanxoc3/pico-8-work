@@ -42,7 +42,7 @@ end
 
 -- used everwhere
 function zcall(func, text, ...)
-    zcall_tbl(func, zobj(text, ...))
+    zcall_tbl(func, f_zobj(text, ...))
 end
 
 -- explode logic

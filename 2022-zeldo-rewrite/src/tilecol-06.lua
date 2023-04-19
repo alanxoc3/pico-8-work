@@ -11,15 +11,15 @@ zclass[[collidable,box,vec|
     should_collide_below,yes,
     should_collide_with_screen_edge,yes,
 
-    adjust_deltas_for_solids,%adjust_deltas_for_solids,
-    adjust_deltas_for_tiles, %adjust_deltas_for_tiles,
-    adjust_deltas_for_screen,%adjust_deltas_for_screen
+    f_adjust_deltas_for_solids,%f_adjust_deltas_for_solids,
+    f_adjust_deltas_for_tiles, %f_adjust_deltas_for_tiles,
+    f_adjust_deltas_for_screen,%f_adjust_deltas_for_screen
 ]]
 
-|[set_x_delta]| function(a, b) a.dx, _ = a:getdelta(b, a.dx, 0) end $$
-|[set_y_delta]| function(a, b) _, a.dy = a:getdelta(b, 0, a.dy) end $$
+|[f_set_x_delta]| function(a, b) a.dx, _ = a:getdelta(b, a.dx, 0) end $$
+|[f_set_y_delta]| function(a, b) _, a.dy = a:getdelta(b, 0, a.dy) end $$
 
-|[adjust_deltas_for_solids]| function(a, setdelta, list)
+|[f_adjust_deltas_for_solids]| function(a, setdelta, list)
     foreach(list, function(b)
         if a ~= b then
             setdelta(a, b)
@@ -27,7 +27,7 @@ zclass[[collidable,box,vec|
     end)
 end $$
 
-|[adjust_deltas_for_tiles]| function(a, setdelta, room)
+|[f_adjust_deltas_for_tiles]| function(a, setdelta, room)
     for tx=max(flr(a.x-a.rx)-1,0),min(ceil(a.x+a.rx),ROOM_W-1) do
         for ty=flr(a.y-a.ry)-1,ceil(a.y+a.ry) do
             local sind = get_solid_tile(room, ty*ROOM_W+tx)
@@ -44,7 +44,7 @@ end $$
     end
 end $$
 
-|[set_x_delta2]| function(a, b)
+|[f_set_x_delta2]| function(a, b)
     b = {x=b.x-a.dx, y=b.y, rx=b.rx, ry=b.ry}
 
     local p = (a.x-b.x)/b.rx
@@ -53,7 +53,7 @@ end $$
     end
 end $$
 
-|[set_y_delta2]| function(a, b)
+|[f_set_y_delta2]| function(a, b)
     b = {x=b.x, y=b.y-a.dy, rx=b.rx, ry=b.ry}
 
     local p = (a.y-b.y)/b.ry
@@ -62,7 +62,7 @@ end $$
     end
 end $$
 
-|[adjust_deltas_for_screen]| function(a, setdelta2)
+|[f_adjust_deltas_for_screen]| function(a, setdelta2)
     if a.should_collide_with_screen_edge then
         setdelta2(a, g_room_bounds)
     end

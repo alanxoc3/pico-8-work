@@ -11,21 +11,21 @@ zclass[[drawlayer_99|]] -- above the card, title, textbox
 -- just a common timer so animation syncs between everything
 zclass[[animation,actor|
     index,0,
-    init,%animation_init;
+    init,%f_animation_init;
 
     start; duration,@, next,start
 ]]
 
-|[animation_init]| function(a)
+|[f_animation_init]| function(a)
     a.index += 1
     a.index %= 60 -- smooth because divisible by 2,3,4,5,6
 end $$
 
 zclass[[auto_outline,timer|
-    draw,%auto_outline_draw,
+    draw,%f_auto_outline_draw,
     outline_color,1
 ]]
-|[auto_outline_draw]| function(a)
+|[f_auto_outline_draw]| function(a)
     local ox, oy = %0x5f28, %0x5f2a
     local injured = a:is_active'injured'
     local stunned = a:is_active'stunned'

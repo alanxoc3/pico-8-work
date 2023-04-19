@@ -1,1 +1,1563 @@
-ea=setmetatable({},{__index=_ENV})_ENV=ea function nC(e,n,t)if ord(e)==126then return n[sub(e,2)]elseif e=="@"then return deli(t,1)elseif e=="#"then return{}end return e~=""and e or nil end function H(f,n,...)local o,t,e={...},split(n,";"),f foreach(t,function(n)local t=split(n)if#t>1then if t[1]==""then foreach(t,function(n)add(e,nC(n,f,o))end)else for n=1,#t,2do e[t[n]]=nC(t[n+1],f,o)end end e=f else if n==""then n=#e+1end if type(e[n])~="table"then e[n]={}end e=e[n]end end)return f end function m(...)return H(setmetatable({},{__index=ea}),...)end H(ea,"es,@,z,@,fq,@,L,@",true,false,"",function(...)return...end)H(ea,"m,@,H,@,nC,@,t3,@,t4,@,Y,@,tg,@,tb,@,np,@,J,@,eh,@,eG,@,b,@,C,@,nw,@,eb,@,e2,@,U,@,fA,@,tx,@,t8,@,eJ,@,t6,@,n_,@,na,@,fB,@,nV,@,ed,@,n3,@,K,@,fD,@,fF,@,fH,@,fJ,@,fK,@,fM,@,Q,@,n4,@,fN,@,ex,@,fQ,@,ty,@,fR,@,fS,@,fU,@,fV,@,ng,@,t7,@,fW,@,fY,@,t9,@,x,@,l,@,h,@,nW,@,fZ,@,oe,@,tk,@,X,@,e8,@,e6,@,nd,@,on,@,ot,@,of,@,oo,@,o_,@,oa,@,tj,@,ni,@,nr,@,n0,@,od,@,oi,@,o0,@,n1,@,ey,@,o1,@,nb,@,f,@,nx,@,om,@,nY,@,tz,@,tq,@,ei,@,eK,@,nm,@,tA,@,oc,@,n8,@,tB,@,nZ,@,te,@,n6,@,ou,@,tn,@,nc,@,e7,@,ol,@",m,H,nC,function(e)return H(m"ny,0,tD,0,tF,~es,T,~L,er,~L,eI,#;",e)end,function(_ENV,e)if e==eC then return Z and ny/Z or 0end if _ENV[e]and _ENV[e].oT then return 1end return 0end,function(_ENV,e)n7=e or next end,function(_ENV,e)ny,n7,tF,next,Z=0_ENV[eC].oT=true for e,n in pairs(tH)do _ENV[e]=n end for n,t in pairs(_ENV[e])do _ENV[n]=t end eC=e _ENV:T()tD=#eI end,function(_ENV)ny+=1/60if tF then _ENV:tg(eC)end if Z and ny>=Z then _ENV:Y()end while n7 do _ENV:tg(n7)end _ENV:er()end,function(_ENV,e)while n7~=e and#eI>0do _ENV:J()end end,function(_ENV)deli(eI)_ENV:Y(eI[#eI]or"eM")end,function(_ENV,e)add(eI,e)_ENV:Y(e)end,function()q"153"end,function(e)return flr(rnd(e))end,function(e,n,...)foreach(m(n,...),function(n)e(unpack(n))end)end,function(t,f,o)local e,n=%0x5f28,%0x5f2a camera(e-t,n-f)o()camera(e,n)end,function(e)eN(e or"",23,4,1,0)end,function(e)C(rectfill,";,0,0,45,6,1")C(eN,";,@,23,1,13,0;;,@,23,8,1,0;;,@,23,15,1,0",unpack(split(e,"|",false)))end,m"",split"missingno,bulbasaur,ivysaur,venusaur,charmander,charmeleon,charizard,squirtle,wartortle,blastoise,caterpie,metapod,butterfree,weedle,kakuna,beedrill,pidgey,pidgeotto,pidgeot,rattata,raticate,spearow,fearow,ekans,arbok,pikachu,raichu,sandshrew,sandslash,nidoran f,nidorina,nidoqueen,nidoran m,nidorino,nidoking,clefairy,clefable,vulpix,ninetales,jigglypuff,wigglytuff,zubat,golbat,oddish,gloom,vileplume,paras,parasect,venonat,venomoth,diglett,dugtrio,meowth,persian,psyduck,golduck,mankey,primeape,growlithe,arcanine,poliwag,poliwhirl,poliwrath,abra,kadabra,alakazam,machop,machoke,machamp,bellsprout,weepinbell,victreebel,tentacool,tentacruel,geodude,graveler,golem,ponyta,rapidash,slowpoke,slowbro,magnemite,magneton,farfetchd,doduo,dodrio,seel,dewgong,grimer,muk,shellder,cloyster,gastly,haunter,gengar,onix,drowzee,hypno,krabby,kingler,voltorb,electrode,exeggcute,exeggutor,cubone,marowak,hitmonlee,hitmonchan,lickitung,koffing,weezing,rhyhorn,rhydon,chansey,tangela,kangaskhan,horsea,seadra,goldeen,seaking,staryu,starmie,mr mime,scyther,jynx,electabuzz,magmar,pinsir,tauros,magikarp,gyarados,lapras,ditto,eevee,vaporeon,jolteon,flareon,porygon,omanyte,omastar,kabuto,kabutops,aerodactyl,snorlax,articuno,zapdos,moltres,dratini,dragonair,dragonite,mewtwo,mew",m"0,none;,fainted,burned,frozen,paralyzed,poisoned,sleeping",m"0, ;,FNT,BRN,FZN,PAR,PSN,SLP",m"0;c,2,n,~fq;1;c,2,n,normal,15,0,13,.5;2;c,10,n,fire,8,2,10,2,11,2,2,.5,4,.5,13,.5,14,.5;3;c,7,n,fighting,10,2,1,2,13,2,15,0,11,.5,9,.5,5,.5,12,.5;4;c,9,n,water,2,2,7,2,13,2,14,.5,8,.5,4,.5;5;c,6,n,poison,11,2,8,2,15,.5,7,.5,5,.5,13,.5;6;c,11,n,electric,9,2,4,2,7,0,14,.5,6,.5,8,.5;7;c,7,n,ground,6,2,2,2,5,2,13,2,9,0,11,.5,8,.5;8;c,8,n,grass,7,2,13,2,4,2,11,.5,14,.5,2,.5,9,.5,8,.5,5,.5;9;c,2,n,flying,11,2,3,2,8,2,6,.5,13,.5;10;c,9,n,ice,14,2,9,2,8,2,2,.5,10,.5,4,.5;11;c,8,n,bug,8,2,12,2,3,.5,2,.5,9,.5,15,.5,5,.5;12;c,6,n,psychic,3,2,5,2,12,.5;13;c,2,n,rock,11,2,2,2,9,2,10,2,3,.5,7,.5;14;c,2,n,dragon,14,2;15;c,6,n,ghost,15,2,1,0,12,2;17;c,2,n,bird;",m"V,hp,e0,spc,R,att,A,def,M,spd,n9,tot,B,acc,ep,eva",m";c,13,e1,5,nu,1;;c,6,e1,13,nu,13;;c,5,e1,5,nu,1;;c,6,e1,5,nu,5;;c,1,e1,5,nu,13;;c,14,e1,4;;c,9,e1,4;;c,11,e1,3;;c,12,e1,5;;c,8,e1,2;;c,10,e1,4",m"",split"youngstr,bugcatch,junior,brock,lass,hiker,swimmer,misty,gentlman,sailor,rocker,ltsurge,channelr,gambler,beauty,erika,biker,birdkeep,juggler,koga,blckbelt,rocket,psychic,sabrina,scientst,pkmaniac,suprnerd,blaine,cooltrnr,fishrman,tamer,giovanni,lorelei,bruno,agatha,lance,blue,green,red,legendry",m"",function(e,n)if n.ee then e:eh(n.ee)else e:J()end end,function(e,n)return m("os,@,tJ,@,S,~tJ,y,1,er,~fJ,em,~fM,nl,~fF,N,~fD",e,n or 0)end,function(e,n)return H(n3(e),"p,0,y,@,er,~fK,tt,~fH",n or 1)end,function(e,n,f)while deli(e)do end for t=1,#n do add(e,(f or L)(n[t],t))end end,function(e)e:J()end,function(e,n,t)if t then local t=e.p+n*e.y if t==mid(0,t,#e-1)then e.p=t if 0+n~=0then q"154"end else eG()end else local t=e.p+n local f=e.p-e.p%e.y if t==mid(f,t,f+e.y-1)then e.p=t if 0+n~=0then q"154"end else eG()end end e.p=mid(0,e.p,#e-1)if e.p\e.y<e.S then e.S=e.p\e.y end if e.p\e.y>e.S+2then e.S=e.p\e.y-2end e.S=mid(0,e.S,(#e-1)\e.y)end,function(n)local e=n.a if nT then q"154"e.nl(n)end if e9 then n:nk()end e.S+=nj if nz~=0then n:tK(nz)end local n=e.S e.S=mid(e.tJ,e.S,#e-3)if e.S~=n then eG()elseif nj~=0then q"154"end end,function(t)local e=t.a e:tt"0"e:tt(nj,true)e:tt(nz)if e9 then local n=e[e.p+1]if n.ec then eG()elseif n.G then q"155"n.G(t,n)end end if nT then q"154"e.nl(t)end end,function(n)local e=n.a local f=e.y>1and 10or 40local a=20-(e.y*f)/2C(rectfill,";,0,0,39,39,1;;,0,@,39,@,13",5-e.S*10,4+(max(ceil(#e/e.y),3)-e.S)*10)for n=-1,e.y*5-1do local d=(e.S-1)*e.y+n+1local t=e[d]if t then local o,i,r=t.nq or 1,a+n%e.y*10,n\e.y*10if t.ec then o=3end if d-1==e.p then o+=1end if not t.tf then rectfill(i,r-5,i+f-1,r+4,n_[o].c)nw(n%e.y*f+a+f/2,n\e.y*10-3,function()e.os(t,n_[o])end)end end end end,function(e,n)if e.en then local n=n_[eJ[e.en.eE].c]C(rectfill,";,-20,-2,19,17,@;;,-20,14,19,17,@",n.c,n.e1)e.en:nA(0,8,n,1,1)else tM(e.n,0,0,n.nu)end end,function(e,n)e.en:nA(0,3,n,.375,.375)end,function(n)local e=te(n.k)del(e,n.o.W)if#e>0then return e[b(#e)+1]end end,function(_ENV,e)local n=ns[e]if e=="ep"or e=="B"then return _ENV[e]*mid(1,1+n/3,3)/mid(1,1-n/3,3)end return ceil(mid(1,999,(e=="R"and s==2and.5or e=="M"and s==4and.25or 1)*_ENV[e]*mid(2,2+n,8)/mid(2,2-n,8)))end,function(_ENV)if i.to>0then return true end local e=nB(i)if#e==0then return true end i.to,i.eQ=b"6"+2,e[b(#e)+1].et r(eX,"|"..i.w[i.eQ].n.."|disabled")if i.g and i.g.et==i.eQ then i.ev=0end end,function(_ENV,t,n)local e=D(t,n)e.ek,e.tN=5,5w[n]=e return e end,function(_ENV)local n=nB(i,true)local t=n[b(#n)+1].d if t==31then return true end r(I,"|copies|"..ty(e,t,u.et).n)end,function(_ENV)if e.ov then return true else r(I,"|copies|"..i.n,function()e.ov=true foreach(split"d,R,A,M,e0,eE,ew",function(n)e[n]=i[n]end)e.w={}foreach(i.w,function(n)ty(e,n.d,n.et)end)end)end end,function(_ENV)H(e,"eE,@,ew,@",i.eE,i.ew)r(I,"|copies|types")end,function(_ENV)foreach({eX,I},function(e)r(e,"|resets|stats",function()H(e.o.ns,"e0,0,R,0,A,0,M,0,B,0,ep,0")e.o.tQ=false end)end)end,function(_ENV,n,e)e=min(e,n.o.V-n.o.F)if e>0then tz(_ENV,n,e,function()n.o.W.F+=e end)else return true end end,function(_ENV)return ng(_ENV,I,e.V\2)end,function(_ENV)t_(I,D(b(164)+1,u.et))end,function(_ENV)if e.ta>0then t_(I,D(e.ta,u.et))else return true end end,function(e,n)return(sgn(e)>0and"|+"or"|-")..abs(e).." "..n.."|change"end,function(_ENV,e,...)return e(_ENV,I,...)end,function(_ENV,e,...)return e(_ENV,eX,...)end,function(_ENV,e,n,t,o)local f=e.o.ns[n]if not e.o.oh or t>0then e.o.ns[n]=mid(-6,6,f+t)end if f~=e.o.ns[n]then r(e,t9(t,t6[n]),o or L)else return true end end,function(_ENV,e)local n=fN(e)if n then tR(e,n)else return true end end,function(_ENV)if X(_ENV,5)and i.s~=5then return true end return l(_ENV,e8,"|badly|poisoned","nv",1,true)end,function(_ENV)r(I,"|does|nothing")end,function(_ENV)return td(u,i)>0and u.eL~=i.eE and u.eL~=i.ew end,function(_ENV,n)if i.W.s==3and n==2then r(I,"|thawed|out")e.W.s=0elseif i.W.s==0and(n==6or tk(_ENV))then r(eX,"|is now|"..tx[n],function()i.W.s=n i.ti=b"7"+1end)else return true end end,function(_ENV,e,t,n,f,o)if(e.o[n]or 0)==0and(not o or tk(_ENV))then e.o[n]=f or 1r(e,t)else return true end end,function(_ENV,e)e.o.tS=true end,function(_ENV,e)return e8(_ENV,e,"|becomes|confused","nD",b"4"+1)end,function(_ENV)return h(_ENV,I,"ep",1,function()e.tQ=.25end)end,function(_ENV)local n=e.V\4if n>=e.F or e.e3>0then return true end eK(_ENV,n)r(I,"|created|substitute",function()e.e3=n end)end,function(_ENV)ej(e,-1,u)f(_ENV)if u.ek<=0then e.ev,e.g=0end end,function(_ENV)if not e.g then ej(e,b"2"+1,D(u.d,u.et))r(I,"|"..u.n.."|begins")e.nF=0end if e.ev==0then if e.nF==0then return true end ei(_ENV,e.nF*2)end end,function(_ENV)ei(_ENV,1+b"75")end,function(_ENV)ei(_ENV,max(i.F\2,1))end,function(_ENV)ej(e,b"2"+1,D(u.d,u.et))f(_ENV)if e.ev==0then x(_ENV,nd,"nD")end end,function(_ENV)if not e.g then ej(e,b"4"+1,D(u.d,u.et))e.nh=i end if e.nh==i then f(_ENV)else return true end end,function(_ENV,n)if e.g then f(_ENV)else r(I,n,function()ej(e,1,D(u.d,u.et))end)end end,function(_ENV)if e.g then f(_ENV)else r(I,"|charges|energy")ej(e,1,u)u.ek+=1end end,function(_ENV)if e.g then r(I,"|recharges|energy")else f(_ENV)local n=D(u.d,u.et)n.B=0ej(e,1,n)end end,function(_ENV)r(I,"|is|sleeping",function()e.W.s,e.ti,e.nv=6,2,0ng(_ENV,I,e.V)end)end,function(_ENV)if e.nH>0then ei(_ENV,e.nH*2)else return true end end,function(_ENV,e,n,t)if e>0then r(I,t and"|resumes|"..u.n,function()_ENV.i=eX.o f(_ENV,100,function()n1(_ENV,e-1,n,true)end)end)else n()end end,function(_ENV)n1(_ENV,2+b"4",L)end,function(_ENV)n1(_ENV,2,function()if rnd"100"<20then X(_ENV,5)end end)end,function(_ENV)ei(_ENV,false,function(e)eK(_ENV,max(1,e\4))end)end,function(_ENV,e,n,...)local t={...}ei(_ENV,false,function()if rnd"100"<(e or 0)then n(_ENV,unpack(t))end end)end,function(_ENV)ei(_ENV,false,function(e)ng(_ENV,I,max(e\2,1))end)end,function(_ENV)if i.s==6then nx(_ENV)else return true end end,function(_ENV)if e.M>=i.M then ei(_ENV,i.F)else return true end end,function(_ENV,n,t,a,e)local f=t9(t,"hp")local o=e and n.o.e3+t<0if not e or o then r(n,f,L,e)end r(n,o and"|substitute|broke"or f,a,e)end,function(_ENV,t,n,a,f)local e=t.o local o=not a and e.e3>0tz(_ENV,t,-n,function()e.nF+=n if e.g and e.g.d==20then h(_ENV,t,"R",1)end if f then f(n)end if o then e.e3=max(e.e3-n,0)else e.W.F=max(e.W.F-n,0)end end,o and"substitute")end,function(_ENV,n,o)local f,t=false,td(u,i)if not n then n,f=tU(e,i,u)end if t>0then if u.eL%2==1then i.nH+=n end if t>1then r(I,"|super|effective")elseif t<1then r(I,"|not very|effective")end if f then r(I,"|critical|hit")end tq(_ENV,eX,n,false,o)else r(eX,"|resisted|attack")end end,function(_ENV,e)tq(_ENV,I,e,true,L)end,function(e)return ceil(e+.5*93)+5end,function()return m("ef,~es,R,0,A,0,e0,0,M,0,V,0,F,0,n9,0,B,100,ep,100,tV,0,tW,0,tY,0,tr,0,tZ,0,d,-1,o2,-1,n, ,eE,0,ew,0,eR,#,eS,#,t0,#,w,@",nJ())end,function()local e=peek2"0x8"U[-1]=tA()for t=0,151do local n,f={},false while@e~=255do if@e==254then f=true elseif f then for t=n[#n]+1,@e do add(n,t)end f=false else add(n,@e)end e+=1end e+=1local f=t-deli(n,1)local e=tA()H(e,"d,@,o2,@,n,@,eE,@,ew,@,tV,@,tW,@,tY,@,tr,@,tZ,@",t,f,fA[t+1],unpack(n))local o=e.eR for f=8,#n do local t=n[f]if t==253then o=e.eS elseif t==252then o=e.t0 else add(o,t)end end if f<t then foreach(split"eR,eS",function(n)foreach(U[f][n],function(t)add(e[n],t)end)end)end local n,f={},{}foreach(e.eS,function(e)n[e]=true end)for e=1,54do if n[e]then add(f,e)end end e.eS=f do local _ENV=e H(_ENV,"R,@,A,@,e0,@,M,@,V,@,F,~V",nm(tW),nm(tY),nm(tZ),nm(tr),nm(tV)+55)n9=R+A+e0+M+V end U[t]=e end end,function(e,n)return setmetatable(m("w,@,s,0,ef,~z",n),{__index=U[e]})end,function(e)foreach(nZ(e.k),function(e)poke(0x5e5a+e.d,1)end)end,function(e)local n={}foreach(e,function(e)if e.d>-1and e.s==1then add(n,e)end end)return n end,function(e,t)local n={}foreach(e,function(e)if e.d>(t and 0or-1)and e.s~=1then add(n,e)end end)return n end,function(e)return te(e)[1]end,function(e)local n=e:ez"j"n[e:O"eu"+1]=n8(-1,nJ())e7(e:O"j",n)e:J()end,function(e,o,n)local t,f=U[n],nJ()for e=1,min(4,#t.eR)do f[e]=D(t.eR[e],e)end e[o]=n8(n,f)return e end,function(n)local a,e=fe[n],m""for t=1,6do local f,n,o=a+(t-1)*5,{},false for e=1,4do n[e]=D(peek(f+e),e)if n[e].d>0then o=true else n[e]=D(-1)end end e[t]=n8(o and@f or-1,n)end return e end,function(e,o)local n=fe[e]memset(n,0,30)for t=1,6do local f,e=n+(t-1)*5,o[t]poke(f,max(0,e.d))for n=1,4do poke(f+n,e.w[n].d>0and e.w[n].d or 0)end end end,function()for e=-1,164do local n,t={},deli(nK[e],6)for t=6,#nK[e]do add(n,deli(nK[e],6))end na[e]=m("o5,@,d,@,eU,@,n,@,eL,@,ek,@,tN,~ek,t1,@,B,@",function(e)return t(e,unpack(n))end,e,t,unpack(nK[e]))end end)H(ea,"D,@,nJ,@,tm,@,tc,@,tu,@,tl,@,tT,@,eV,@,oP,@,oE,@,fn,@,eW,@,ts,@,n2,@,tv,@,ft,@,ff,@,oX,@,fo,@,eY,@,oL,@,f_,@,oO,@,oG,@,fa,@,oI,@,oC,@,fd,@,op,@,ow,@,o3,@,o4,@,og,@,fi,@,ob,@,ox,@,o8,@,o6,@,oy,@,n5,@,ap,@,o7,@,o9,@,ok,@,oj,@,oz,@,oq,@,oA,@,oB,@,oD,@,oF,@,oH,@,oJ,@,oK,@,oM,@,fr,@,O,@,e4,@,oN,@,f0,@,oQ,@,f1,@,q,@,nM,@,el,@,fm,@,tM,@,eN,@,eZ,@,oR,@,fc,@,nA,@,oS,@,oU,@,oV,@,fu,@,oW,@,oY,@,ez,@,nP,@,nN,@,nQ,@,tR,@,t_,@,ej,@,oZ,@,nR,@,ae,@,nS,@,ne,@,nE,@,nX,@,fl,@,fT,@,an,@,at,@,af,@,fs,@,nB,@,fv,@",function(e,n)return setmetatable(m("et,@",n or 0),{__index=na[e]})end,function()local e={}for n=1,4do add(e,D(-1))end return e end,function(e)fr(e)tM("team #"..e:O"j"+1,20,27,1)end,function(_ENV)local t,e,n=eq.o,eO.o,eA.o local o,a=e==t,n==t local t,f=11,11C(rectfill,";,0,0,39,6,5;;,0,33,39,39,5")C(rectfill,";,-1,33,@,41,1;;,-1,-2,@,6,1",max(ceil(e.F/e.V*40),0)-1,max(ceil(n.F/n.V*40),0)-1)C(rectfill,";,15,6,39,6,13;;,16,5,39,5,13;;,0,33,24,33,13;;,0,34,23,34,13")C(eN,";,@,40,34,13,1;;,@,40,27,1,1;;,@,2,1,13,-1;;,@,2,7,1,-1",e.F,t8[e.s],n.F,t8[n.s])local t,f=1,1e:nA(10,25,n_[4],t,t,o)n:nA(30,15,n_[4],-f,f,a)end,function(e)oR(U[e:O"ef"])end,function(e)eb("spot #"..(e:O"eu"+1))end,function(e)eb("move #"..(e:O"e5"+1))end,function(e)eb(e.nn)end,function(e)eb"match over"end,function(n)local e=n:e4"nU"eb(e and e.ao)end,function()rectfill(0,0,46,13,13)pal(7,1)local e=0for f,n in ipairs(split"6,5,5,6,6,5,6")do sspr(6*8+e,12*8,n,8,e+3,3.5+cos((t()+f)/4))e+=n end pal()end,function(e)eb(e.eq.a_.n)end,function(e)fc(e:nP())end,function(n)local e=n:e4(n.fh).u if e.d>=0then e2(eJ[e.eL].n.."|"..e.ek.."/"..e.tN.."|"..(e.t1>=0and e.t1 or"??").."P "..(e.B>=0and e.B or"??").."A")else e2"none|n/a|"end end,function(e)fc(e:e4"ef".en)end,function(e)e2(e:e4"eM".eg)end,function(_ENV)if d>-1then e2(n.."|"..F.."/"..V.."|"..tx[s])else e2"none|n/a|"end end,function(_ENV)ff(_ENV:e4"th".en)end,function(_ENV)ff(v.o)end,function(e)local n,t=0,0foreach(e:e4().k,function(e)if e>-1then n+=U[e].n9 t+=1end end)e2(e:e4().n.."|len "..t.."/6|tot "..n)end,function(e)e2(e.nt.n.."|is the|winner")end,function(e)e2(e.eq.n..e.eq.f2)end,function(_ENV)local n=ne(_ENV,nt)nt:aa(n)a:N{}a.nl=function(e)e:np"t2"end for e in all{nt,n}do H(a,"S,0;;en,@;;tf,~es;;n,@,nq,5;;n,@;;n,@",e.o.W,e.n,(#te(e.k,true)).." live",(#nZ(e.k)).." dead")end end,function(_ENV)local e=0for n=0,151do e+=U[n]:eZ()and 1or 0end a:N(m(";n,browse,ee,ef,G,~ed,eg,@;;n,edit,ee,j,G,~ed,eg,edit|stored|teams;;n,league,ee,f5,G,~ed,eg,@;;n,versus,ee,t5,G,~ed,eg,versus|p1 vs p2|match;;n,horde,ee,fP,G,~ed,eg,@;;n,credits,ee,fE,G,~ed,eg,credits|amorg|games","browse|"..e.."/151|pokemon","league|"..(@0x5efd).."/40|trainers","horde|"..(@0x5efe).."/151|hi-score"))end,function(_ENV,n)local e={}for n=0,151do add(e,n)end a:N(e,function(e)return m("G,@,ec,@,en,@",n,not U[e]:eZ(),U[e])end)end,function(_ENV)fa(_ENV,function(_ENV)_ENV:eh"fX"end)end,function(_ENV)fa(_ENV,function(_ENV)e7(_ENV:O"j",tn(_ENV:ez"j",_ENV:O"eu"+1,_ENV:O"ef"))_ENV:J()end)end,function(_ENV)local e=_ENV:e4"ef".en a:N{}H(a,";en,@;;tf,~es;;n,lvl 50,nq,5",e)foreach(split"V,e0,R,A,M,n9",function(n)add(a,{n=t6[n].." "..e[n]})end)C(function(t,n)if#U[e.d][n]>0then add(a,{n=t,nq=5})foreach(U[e.d][n],function(e)add(a,{n=na[e].n})end)end end,";,learn,eR;;,teach,eS;;,event,t0")end,function(_ENV)a:N(split"91,,#alanxoc3,code &,design,28,,#gr8cadet,pokemon,sprites,143,,#tigrwolf,battle,testing,129,,#wadlo,just,magikarp,127,,#tooling,px9 func,shrinko8,137,,#pkmndata,blbpedia,pokeapi,serebii,smogon,upokcntr,volvox,nintendo",function(e)if type(e)=="number"then return{en=n8(e,nJ())}end local n=1if sub(e,1,1)=="#"then e,n=sub(e,2),5end return{n=e,nq=n,tf=e==""}end)end,function(_ENV)a:N(nV,function(e,n)return{n=e.n,k=e,ec=n-1>@0x5efd,G=function(t,e)fL(t,e.k,e.n,function(t,e)poke(0x5efd,mid(@0x5efd,n,40))tB(e)end,L)end}end)end,function(_ENV)a:N(m";n,moves,ee,e5,G,~ed;;n,switch,ee,tP,G,~ed;;n,delete,G,~ou")end,function(_ENV)local n=_ENV:nP()local e=0for t=1,4do if n.w[t].d>0then e+=1end end a:N(m(";n,change,ee,nU,G,~ed;;n,switch,ee,fO,G,~ed;;n,delete,ec,@,G,~og",e==1))end,function(_ENV)local e,n=_ENV:nP()e.w[_ENV:O"e5"+1]=D(-1)e7(_ENV:O"j",n)_ENV:J()end,function(_ENV,f,o)local n,d=_ENV:nP()a:N(m",1,2,3,4",function(e)local t=n.w[e]return{u=t,n=t.n,G=function(_ENV)o(_ENV,e,n,d)end,ec=e==f}end)end,function(_ENV)fi(_ENV,0,function(_ENV,e,n)_ENV:eh(n.w[e].d>0and"fG"or"nU")end)end,function(_ENV)local n=_ENV:O"e5"+1fi(_ENV,n,function(_ENV,t,e,f)e.w[t],e.w[n]=e.w[n],e.w[t]e7(_ENV:O"j",f)_ENV:np"e5"end)a.p=e5.a.p end,function(_ENV)local n=_ENV:nP()local e=U[n.d]local t={}C(function(f,a)for o=1,#f do local e=f[o]add(t,{n=na[e].n,ec=n:af(e),d=e,eg=a..o})end end,";,@,learn #;;,@,teach #;;,@,event #",e.eR,e.eS,e.t0)a:N(t,function(e)return{n=e.n,ec=e.ec,u=na[e.d],ao=e.eg,G=function()local n=_ENV:ez"j"n[_ENV:O"eu"+1].w[_ENV:O"e5"+1]=D(e.d)e7(_ENV:O"j",n)_ENV:np"e5"end}end)end,function(_ENV)local n=fv(v.o)if v.o.g then nS(v,v.o.g)_ENV:J()_ENV:J()elseif#n==0then nS(v,D(0))_ENV:J()_ENV:J()end a:N(v.o.w,function(e)return m("ec,@,n,@,u,@,G,@",not n[e],e.n,e,function()_ENV:J()_ENV:J()nS(v,e)end)end)end,function(_ENV)a:N(m";n,fight,G,~ed,ee,fI;;n,switch,G,~ed,ee,th;;n,forfeit,G,~ad")end,function(_ENV)a:N(m",1,2,3",function(e)local n=nc(e-1)local t={}local f=true for e=1,6do t[e]=n[e].d if not n[e]:fs()then f=false end end return{n="team #"..e,k=t,G=function()_ENV:nL()end,ec=nO and f}end)end,function(e,n)return e[n]and e[n].d or-1end,function(_ENV)local e=_ENV:ez"j"a:N(m",1,2,3,4,5,6",function(n)return{en=e[n],G=function(_ENV)if e[_ENV:O"eu"+1]:eZ()then _ENV:eh"fC"else _ENV:eh"fp"end end}end)end,function(_ENV)local e=_ENV:ez"j"a:N(m",1,2,3,4,5,6",function(n)return{ec=n==_ENV:O"eu"+1,G=function(_ENV)local n,t=_ENV:O"eu"+1,_ENV:O"tP"+1e[n],e[t]=e[t],e[n]e7(_ENV:O"j",e)_ENV:np"eu"end,en=e[n]}end)a.p=eu.a.p end,function(_ENV)local e=_ENV:ez"j"a:N(m",1,2,3,4,5,6",function(e)local n=v.k[e]:fs()or v.o.W==v.k[e]or v.k[e].s==1return{ec=n,G=function()_ENV:J()_ENV:J()tR(v,v.k[e])end,en=v.k[e]}end)end,function(_ENV)local n,e=eO,eA if n.eB==e.eB then e.eB+=sgn(rnd"2"-1)end v=n.eB>e.eB and n or e end,function(_ENV,e)local n=true for t=ef.a.p+e,75.5+75.5*e,e do if U[t]:eZ()then ef.a.p,n=t q"154"break end end if n then eG()end fd(_ENV)end,function(e)q(e:O"ef")end,function()q(b"152")end,function(_ENV)q(nt.o.d)end,function(_ENV)local e={}for t,n in pairs(split"133,7,35,1,25,4")do tn(e,t,n)poke(0x5e5a+n,1)end if@0x5efc==0then poke(0x5efc,1)e7(0,e)end eo=t3"eC,eM;tH;a,~z,T,~L,tK,~eG,nk,~L,er,~oM,fh,~z,em,~fr,P,~L,E,~L;eM;T,~oG,P,~fn,E,~ft;ef;T,~oI,P,~tu,E,~tv;fX;T,~fd,P,~tu,E,~tv,tK,~oz,nk,~oq;eu;T,~o7,P,~tl,E,~ts,em,~tm;tP;T,~o9,P,~tl,E,~ts,em,~tm;fp;T,~oC,P,~tu,E,~tv;fC;T,~o3,P,~tl,E,~ts;fG;T,~o4,P,~tT,E,~n2,fh,e5;nU;T,~o8,P,~oE,E,~n2;e5;T,~ob,P,~tT,E,~n2;fO;T,~ox,P,~tT,E,~n2;j;nn,player,T,~n5,P,~eV,E,~eY,nO,~z,nL,~oY;f5;nn,player,T,~n5,P,~eV,E,~eY,nO,~es,nL,~oS;t5;nn,player 1,T,~n5,P,~eV,E,~eY,nO,~es,nL,~oU;fP;nn,player,T,~n5,P,~eV,E,~eY,nO,~es,nL,~oW;tE;nn,player 2,T,~n5,P,~eV,E,~eY,nO,~es,nL,~oV;t2;nn,trainer,T,~ow,P,~eV,E,~eY;tX;T,~oO,P,~oP,E,~oL,nk,~oB;fw;T,~oy,P,~eW,E,~fo;fI;T,~o6,P,~eW,E,~n2;th;T,~ok,P,~eW,E,~oX,em,~tm;ai;next,ar,T,~f3,f4,eO;ar;next,fg,T,~f3,f4,eA;fg;next,ai,T,~oj,er,~an,em,~tc,P,~eW,E,~f_,eq,~z;a0;T,~L,er,~fl,em,~tc,P,~eW,E,~fo;a1;T,~L,er,~fl,em,~tc,P,~eW,E,~f_;fE;T,~op,P,~fn,E,~ft,nk,~oA;"C(function(e,n,...)eo[e].a=n(...)end,";,ef,~K,~n4,4;;,fX,~n3,~Q;;,fE,~n3,~Q;;,tX,~n3,~Q;;,eu,~K,~n4,3;;,tP,~K,~n4,3;;,eM,~K,~Q;;,fC,~K,~Q;;,fG,~K,~Q;;,nU,~K,~Q;;,e5,~K,~Q;;,fO,~K,~Q;;,j,~K,~Q;;,t5,~K,~Q;;,t2,~K,~Q;;,tE,~K,~Q")H(eo,"fb,@,am,@;eM;a;nl,~eG;fP;a,~fb;f5;a,~fb;fp;a,~am;",eo.j.a,eo.ef.a)menuitem(1,"close picodex",function()menuitem(1)menuitem(2)_ENV:Y"tL"end)menuitem(2,"swap 🅾️/❎",function()poke(0x5eff,@0x5eff==0and 1or 0)end)end,function(e)e.eo:tb()end,function()nf.eo:em()end,function()nf.eo:P()end,function()nf.eo:E()end,function(_ENV)a.er(_ENV)end,function(_ENV)a.em(_ENV)end,function(_ENV,e)return _ENV[e].a.p end,function(_ENV,e)local n=e and _ENV[e].a or a return n[n.p+1]end,function(_ENV)menuitem(1,"factory reset",function()memset(0x5e00,0,0x100)_ENV:Y"fx"end)end,function()return btn()&0x3f~=0end,function(_ENV)if not f0()and nG then nG=false _ENV:Y()elseif f0()then if not nG then q"156"end nG=true menuitem(1)end end,0,function(e)tO=e end,function(e)e+=0if e>152then ea.f1=e-152end sfx(59+e\32,e<=152and 1or 0,e%32,1)end,function(_ENV)cls"0"nw(0,128+sin(_ENV:t4"f8"/4)*128,function()C(eN,";,aMORG gAMES,64,-68,7,0;;,pRESENTS,64,-61,7,0;;,a pOKEMON bATTLE sIM,64,15,7,0")C(spr,";,198,44,7,5,1")local t,n,e=eo and eo.eM.a.p,eo and eo.tD-1,e_=="nI"and 1or e_=="eD"and-1or(e_=="tG"and-1or 1)*cos(_ENV:t4(e_)/2)nw(30-(e+1)*15+(eC=="fx"and b"3"-1or 0),27,function()C(rectfill,";,14,18,@,87,5",63+max(0,e*54))if eF==0then C(rectfill,";,14,18,117,87,13")C(function(e,n,t,f,o)clip(-%0x5f28+e,-%0x5f2a+n,t,f)nw(e,n,o)clip()end,";,14,21,40,40,@;;,71,18,46,13,@;;,71,67,46,21,@",em,P,E)end C(map,";,24,0,2,1,8,3;;,8,0,2,9,8,11")C(function(e,n,t,f,o,a)return spr((eF<=e)and((e==0and stat"47">=0or f1==e and stat"46">=0)and f or t)or n,o,a)end,";,0,135,133,134,6,3;;,1,132,128,131,12,3;;,2,132,129,131,17,3;;,3,132,130,131,22,3")C(function(e,n,t,f,o)spr(btn(e)and n or t,f,o)end,";,0,186,154,10,77;;,1,188,156,26,77;;,2,171,139,18,73;;,3,187,155,18,81;;,4,170,138,42,77;;,5,172,140,50,77")if e<=0then fm(0,2+64*(1-abs(e)),abs(e))if e==-1and nG then spr(219,6,49)end else fm(16,62,e)if e==1and eC=="f6"then if t then spr(153,70+t*8,41)end if n and n>=0then spr(153,70+n*8,49)end end end end)end)end,function(f,t,e)e*=64for n=9,96do tline(t,n,t+e-1,n,f,n/8-1.125,8/e,0)end end,function(n,e,t,f)local o,a="",""for e=1,#n do local t,f=sub(n,e,e),e%2==0o..=f and" "or t a..=f and t or" "end eN(o,e,t,f,0)eN(a,e,t+1,f,0)end,function(e,n,f,o,t)e=""..e if t==0then n-=#e*2elseif t>0then n-=#e*4+1end print(e,n,f,o)end,function(_ENV)if d>=0then return not ef or@(0x5e5a+d)>0end end,function(e)eb("pkmn #"..e.d)end,function(e)if e:eZ()then e2(e.n.."|"..eJ[e.eE].n.."|"..eJ[e.ew].n)else e2"none|n/a|"end end,function(_ENV,e,n,i,f,o,r)local t,a=_ENV:eZ()and d or-1,8*(tQ or 1)f*=a o*=a local a=function(n,a)local e,d=t/8\1,t%8if e~=fy then ea.fy=e memcpy(0x0000,0x8000+0x400*e,0x400)end sspr(d*16,0,16,16,n-f,a-o,f*2,o*2)end if e3 and e3>0then t=152end if not ac or s~=1and not tI and not(ev~=0and g.eU==nr)then if t<0then spr(203,e-4,n-4)return end local t=1local t=function(f,o,d,i,r,t)if f>0then for e=1,15do pal(e,f)end for f=-1,1,2do a(e+(o or f*t),n+(d or f*t))a(e+(i or f*t),n+(r or f*t))end end end if r then C(t,"c,@;;,~c,-2,~z,2,~z,1;;,~c,~z,-2,~z,2,1;;,~c,-2,0,2,0,1;;,~c,0,-2,0,2,1",i.c)end C(t,";,@,-1,~z,1,~z,1;;,1,~z,0,0,~z,1",i.e1)pal()a(e,n)end end,function(e)e:eh"t2"end,function(e)e:eh"tE"end,function(_ENV)f7(_ENV,m(",@,player 1,~z,~L",nc(_ENV:O"t5")),m(",@,player 2,~z,~L",nc(_ENV:O"tE")))end,function(_ENV)poke(0x5efe,mid(@0x5efe,#nZ(k),152))end,function(_ENV)local e={}for n=1,152do add(e,n%152)end fL(_ENV,e,"horde",function(n,e)tB(e)fu(e)end,fu)end,function(e)e:eh"eu"end,function(e,n)return nc(e:O(n))end,function(e)local n=nc(e:O"j")return n[e:O"eu"+1],n end,function(e,n)local t={}foreach(n.w,function(e)add(t,e)end)e.o=setmetatable(m("ac,~es,ta,0,B,1,ep,1,ev,0,tI,~es,nH,0,nF,0,to,0,nD,0,ti,@,e3,0,nv,0,W,@,w,@;ns;e0,0,R,0,A,0,M,0,B,0,ep,0",b"7"+1,n,t),{__index=n})return nE(e,"|enters|fight",function()q(e.o.d)e.o.tI=false end)end,function(e,n)for t in all(split(n))do if t==e then return true end end end,function(e,n)nX(e,e,"|leaves|fight",function(t)t.e.tI=true nX(e,e,false,function()add(e.eH,nN(e,n))end)end)e.eB=3000end,function(t,n)local f=t.o.g and"|resumes|"or(n.eU==aw and"|begins|"or"|uses|")nX(t,t,f..n.n,function(f)f.u=n local _ENV=f if n.d>0then n.ek-=1end if nQ(n.d,"47,36 ")then eK(_ENV,e.F)end if(function()if n.B<=0then return false end if(n.eU==n0 or n.eU==nr)and not e.g then return false end if i.g and i.g.eU==nr then return true end if e.g and e.g.eU==ni then return false end return rnd(i:ex"ep")>n.B/100*e:ex"B"or b"256"==0and b"256"==0end)()then r(t,"|misses|"..n.n)if nQ(n.d,"145,73 ")then eK(_ENV,1)end else if n.o5(_ENV)then r(t,"|fails|attack")end end if n.B~=0then i.ta=n.d end end)end,function(_ENV,e,n)if not g and ev==0then ev,g=e,n end end,function(n,t)nX(n,n,false,function(f)f.u=t local _ENV=f e:nR("ev",L)if e.s==6then e:nR("ti",function()r(n,"|suddenly|woke up")e.W.s=0end)if e.s==6then r(n,"|fast|asleep")return end end if e.s==3then if rnd"1"<.2then r(n,"|thawed|out")e.W.s=0else r(n,"|is|frozen")return end end if i.nh==e then r(n,"|is|trapped")elseif e.eQ==t.et then r(n,"|is|disabled")elseif e.s==4and b"4"==0then r(n,"|fully|paralyzed")elseif e.tS then r(n,"|is|flinching")else if e.nD>0then r(n,"|is|confused")if b"2"==0then r(n,"|hurt|itself")eK(_ENV,tU(e,i,D(-1)))return end end t_(n,t)end end)end,function(e,n,t)if e[n]>0then e[n]-=1if e[n]==0then t()end end end,function(n)return nE(n,false,function(_ENV)if e.s==6or e.s==3or e.nh and e.nh~=i then e.ev=0end if e.ev==0then e.nh,e.g=nil end local t=max(e.V\16,1)local f=function(e)r(n,e.."|damage")eK(_ENV,t)end if e.s==5then if e.nv>0then t*=e.nv e.nv+=1end f"|poison"end if e.s==2then f"|burn"end if e.au then f"|seed"if i.F<i.V then ng(_ENV,eX,t)end end e:nR("nD",function()r(n,"|confusion|ended")end)e:nR("to",function()r(n,"|"..e.w[e.eQ].n.."|enabled")e.eQ=0end)end)end,function(e,n)e.eH={}local t=1000oZ(e,n)if n.d==120then t=2000end if nQ(n.d,"18,4,89,30 ")then t=0000end e.eB=min(3000,t+e.o:ex"M")end,function(e,n)return n==e.eO and e.eA or e.eO end,function(e,n,t,f)return m("a_,@,n,@,o,@,f2,@,al,@",e,f or e.o.n,e.o,n or false,t or L)end,function(e,...)add(e.eH,nE(...))end,function(_ENV)if e9 then _ENV:eh"fw"q"155"end fT()end,function()if nT or nz|nj~=0then eG()end end,function(e)fT()if e9 then q"154"end if e9 or not e.eq then while true do for n in all{e.eO,e.eA}do if not n6(n.k)then e.nt=ne(e,n)e:Y"tX"return end end local n=at(e)if n then local f=n.o==e.eO.o and e.eO or e.eA local t=m("u,@,I,@,eX,@,r,@",u,f,ne(e,f),function(...)nX(f,...)end)t.e,t.i=t.I.o,t.eX.o n.al(t)if n.f2 then e.eq=n return else end else e:Y()return end end end end,function(n)for t in all{n.eO,n.eA}do if t.o.F<=0then if t.o.s~=1then return nE(t,"|has|fainted",function(_ENV)e.W.s=1end)elseif t~=n.v then return nN(t,n6(t.k))end end end for e in all{n.v,ne(n,n.v)}do local t=ne(n,e)while#e.eH>0do local n=deli(e.eH,1)if n.o.s~=1and(n.o==e.o or n.o==t.o)then return n end end if e.o.F<=0and e.o.s==1then return nN(e,n6(e.k))end if not e.f9 then e.f9=true return ae(e)end end end,function(_ENV,e)for n in all(w)do if n.d==e then return true end end end,function(_ENV)return#nB(_ENV,true)==0end,function(t,f)local n={}foreach(t.w,function(e)if e.d>0and(f or e.ek>0and t.eQ~=e.et)then add(n,e)n[e]=true end end)return n end,function(_ENV)if ev~=0then return{g}else return nB(_ENV)end end)H(ea,"td,@,tU,@,f3,@,ad,@,f7,@,fL,@,tC,@,aT,@,as,@,fk,@,av,@",function(e,n)return(eJ[e.eL][n.eE]or 1)*(eJ[e.eL][n.ew]or 1)end,function(n,t,e)local a,f=n:ex"e0",t:ex"e0"if e.eL%2==1then a,f=n:ex"R",t:ex"A"if t.ah then f*=2end elseif t.a2 then f*=2end local o=1024if nQ(e.d,"107,164,57,157 ")then o*=.3end if a5 then o*=.3end local d=rnd"1"<min(.99,(n.tr+76)/o)and e.d>0and 2or 1local o=mid(3,997,(100*d/5+2)/50*e.t1*mid(10,.2,a/f))+2local a,f=o,td(e,t)*((e.eL==n.eE or e.eL==n.ew)and 1.5or 1)*(rnd".15"+.85)if f>0then return mid(1,999,a*f\1),d>1end return 0,false end,function(_ENV)v=_ENV[f4]do local _ENV=v.o nH,tS=0,false end v.f9=false if v.aP then local e=fv(v.o)nS(v,e[b(#e)+1]or D(0))_ENV:Y()elseif#v.eH>0then _ENV:Y()else fw.a,fI.a,th.a,eq,eI[#eI]=v.fj,v.aE,v.aX,nE(v,"|begins|turn"),eC _ENV:Y"a1"end end,function(_ENV)_ENV:J()nt=_ENV:ne(v)_ENV:Y"tX"end,function(_ENV,e,t)q(false)e.tp,t.tp="eO","eA"for n in all{e,t}do _ENV[n.tp]=m("eH,#,eB,1,fj,@,aE,@,aX,@,k,@,n,@,aP,@,aa,@",K(Q),K(Q),K(n4,3),unpack(n))local e=_ENV[n.tp]e.fj.nl=function()_ENV:J()_ENV:Y"a0"end add(e.eH,nN(e,n6(e.k)))end _ENV:eh"fg"end,function(_ENV,e,t,f,o)local n={}for t=1,#e do tn(n,t,e[t])end f7(_ENV,{_ENV:ez"j","player",false,f},{n,t,true,o})end,function(e)fk(peek2(e),function(...)return aT(0x8000+e*0x1000,...)end,function(...)return as(0x8000+e*0x1000,...)end)end,function(t,e,f)e=min(max(0,e),127)\1local n=peek(f\1*64+t+e\2)if e%2==1then return(n&0xf0)>>>4else return(n&0x0f)end end,function(f,e,o,t)e=min(max(0,e),127)\1local n=o\1*64+f+e\2local f=peek(n)if e%2==1then poke(n,(f&0x0f)|(((t or 0)&0x0f)<<4))else poke(n,(f&0xf0)|(((t or 0)&0x0f)<<0))end end,function(t,r,m)local function a(e,f)local n,t=e[1],1while n!=f do t+=1n,e[t]=e[t],n end e[1]=f end local e,n=0,0function fz(f)if n<8then n+=8e+=@t>>n t+=1end e<<=f local t=e&0xffff e^^=t n-=f return t end function no(n)local e=0repeat e+=1local t=fz(e)n+=t until t<(1<<e)-1return n end local i,d,f,e,o,c,u,n,t=no"1",no"0",no"1",{},{},0,0,0for n=1,no"1"do add(e,fz(f))end for f=0,d do for d=0,i-1do n-=1if(n<1)then n,t=no"1",not t end local i=f>0and r(d,f-1)or 0local n=o[i]or{unpack(e)}o[i]=n local o=n[t and 1or no"2"]a(n,o)a(e,o)m(d,f,o)end end end,function(e)if e.eP then q(e.eP)end e:tw()end)ea.nK=m"-1;,none,17,0,40,0,~f;0;,struggle,17,0,50,100,~nb;;,megapnch,1,20,80,85,~f;;,razrwind,1,10,80,75,~n0;;,sworddnc,1,30,0,0,~x,~h,R,2;;,whrlwind,1,20,0,100,~l,~nW;;,megakick,1,5,120,75,~f;;,toxic,5,10,0,85,~fZ;;,horndril,1,5,-5,30,~nY;;,bodyslam,1,15,85,100,~f,30,~X,4;;,takedown,1,20,90,85,~nb;;,doubedge,1,15,100,100,~nb;;,bublbeam,4,20,65,100,~f,10,~l,~h,M,-1;;,watergun,4,25,40,100,~f;;,icebeam,10,10,95,100,~f,10,~X,3;;,blizzard,10,5,120,90,~f,10,~X,3;;,hyprbeam,1,5,150,90,~od;;,payday,1,20,40,100,~f;;,submsion,3,20,80,80,~nb;;,counter,3,20,-5,100,~o0;;,seistoss,3,20,-5,100,~ei,50;;,rage,1,20,20,100,~of;;,megdrain,8,10,40,100,~nx;;,solrbeam,8,10,120,100,~n0;;,drgnrage,14,10,-5,100,~ei,40;;,thndrblt,6,15,95,100,~f,10,~X,4;;,thunder,6,10,120,70,~f,10,~X,4;;,earthqke,7,10,100,100,~f;;,fissure,7,5,-5,30,~nY;;,dig,7,10,100,100,~nr,|begins|digging;;,psychic,12,10,90,100,~f,30,~l,~h,e0,-1;;,teleport,12,20,0,0,~x,~nW;;,mimic,1,10,0,0,~fR;;,doubteam,1,15,0,0,~x,~h,ep,1;;,reflect,12,20,0,0,~x,~e8,|raises|defense,ah;;,bide,1,10,-5,100,~oo;;,metrnome,1,10,0,0,~fW;;,selfdstr,1,5,260,100,~f;;,eggbomb,1,10,100,75,~f;;,fireblst,2,5,120,85,~f,30,~X,2;;,swift,1,20,60,-5,~f;;,skulbash,1,15,100,100,~n0;;,softboil,1,10,0,0,~t7;;,dreameat,12,15,100,100,~om;;,skyattck,9,5,140,90,~n0;;,rest,12,10,0,0,~oi;;,thndrwav,6,20,0,100,~X,4;;,psywave,12,15,-5,80,~o_;;,explsion,1,5,340,100,~f;;,rockslid,13,10,75,90,~f;;,triattck,1,10,80,100,~f;;,substute,1,10,0,0,~ot;;,cut,1,30,50,95,~f;;,fly,9,15,70,95,~nr,|begins|flying;;,surf,4,15,95,100,~f;;,strength,1,15,80,100,~f;;,flash,1,20,0,70,~l,~h,B,-1;;,pound,1,35,40,100,~f;;,karatchp,3,25,55,100,~f;;,doubslap,1,10,15,85,~ey;;,comtpnch,1,15,20,85,~ey;;,firepnch,2,15,75,100,~f,10,~X,2;;,icepnch,10,15,75,100,~f,10,~X,3;;,thndpnch,6,15,75,100,~f,10,~X,4;;,scratch,1,35,40,100,~f;;,vicegrip,1,30,55,100,~f;;,guilotin,1,5,-5,30,~nY;;,gust,9,35,40,100,~f;;,wingatck,9,35,35,100,~f;;,bind,1,20,15,75,~ni;;,slam,1,20,80,75,~f;;,vinewhip,8,10,35,100,~f;;,stomp,1,20,65,100,~f,30,~l,~e6;;,doubkick,3,30,30,100,~n1,2,~L;;,jumpkick,3,20,70,95,~f;;,rllngkck,3,15,60,85,~f,30,~l,~e6;;,sandatck,7,15,0,100,~l,~h,B,-1;;,headbutt,1,15,70,100,~f,30,~l,~e6;;,hornatck,1,25,65,100,~f;;,furyatck,1,20,15,85,~ey;;,tackle,1,35,35,95,~f;;,wrap,1,20,15,85,~ni;;,thrash,1,20,90,100,~tj;;,tailwhip,1,30,0,100,~l,~h,A,-1;;,psnsting,5,35,15,100,~f,20,~X,5;;,twineedl,11,20,25,100,~o1;;,pinmisil,11,20,15,85,~ey;;,leer,1,30,0,100,~l,~h,A,-1;;,bite,1,25,60,100,~f,10,~l,~e6;;,growl,1,40,0,100,~l,~h,R,-1;;,roar,1,20,0,100,~l,~nW;;,sing,1,15,0,55,~X,6;;,sprsonic,1,20,0,55,~l,~nd;;,sonicbom,1,20,-5,90,~ei,20;;,disable,1,20,0,55,~fQ;;,acid,5,30,40,100,~f,10,~l,~h,A,-1;;,ember,2,25,40,100,~f,10,~X,2;;,flamthwr,2,15,95,100,~f,10,~X,2;;,mist,10,30,0,0,~x,~e8,|stat lower|immunity,oh;;,hydropmp,4,5,120,80,~f;;,psybeam,12,20,65,100,~f,10,~l,~nd;;,aurorabm,10,20,65,100,~f,10,~l,~h,R,-1;;,peck,9,35,35,100,~f;;,drillpck,9,20,80,100,~f;;,lowkick,3,20,50,90,~f,30,~l,~e6;;,absorb,8,20,20,100,~nx;;,leechsed,8,10,0,90,~l,~e8,|is now|seeded,au,1,~es;;,growth,1,40,0,0,~x,~h,e0,1;;,razrleaf,8,25,55,95,~f;;,psnpowdr,5,35,0,75,~X,5;;,stunspor,8,30,0,75,~X,4;;,slppowdr,8,15,0,75,~X,6;;,petldanc,8,20,70,100,~tj;;,strngsht,11,40,0,95,~l,~h,M,-1;;,firespin,2,15,15,70,~ni;;,thndshck,6,30,40,100,~f,10,~X,4;;,rockthrw,13,15,50,65,~f;;,cnfusion,12,25,50,100,~f,10,~l,~nd;;,hypnosis,12,20,0,60,~X,6;;,meditate,12,40,0,0,~x,~h,R,1;;,agility,12,30,0,0,~x,~h,M,2;;,quickatk,1,30,40,100,~f;;,ngtshade,15,15,-5,100,~ei,50;;,screech,1,10,0,85,~l,~h,A,-2;;,recover,1,20,0,0,~t7;;,harden,1,30,0,0,~x,~h,A,1;;,minimize,1,20,0,0,~on;;,smokscrn,1,20,0,100,~l,~h,B,-1;;,cnfusray,15,10,0,100,~l,~nd;;,withdraw,4,40,0,0,~x,~h,A,1;;,dfnscurl,1,40,0,0,~x,~h,A,1;;,barrier,12,30,0,0,~x,~h,A,2;;,lghtscrn,12,30,0,0,~x,~e8,|raises|spcdefense,a2;;,haze,10,30,0,-5,~fV;;,fcsenrgy,1,30,0,0,~x,~e8,|raises|crit ratio,a5;;,mirrmove,9,20,-5,0,~fY;;,lick,15,30,20,100,~f,30,~X,4;;,smog,5,20,20,100,~f,30,~X,5;;,sludge,5,20,65,100,~f,30,~X,5;;,boneclub,7,20,65,85,~f,10,~l,~e6;;,watrfall,4,15,80,100,~f;;,clamp,4,10,35,75,~ni;;,spikcann,1,15,20,100,~ey;;,constrct,1,35,10,100,~f,10,~l,~h,M,-1;;,amnesia,12,20,0,0,~x,~h,e0,2;;,kinesis,12,15,0,80,~l,~h,B,-1;;,hijmpkck,3,20,85,90,~f;;,glare,1,30,0,75,~X,4;;,poisngas,5,40,0,55,~X,5;;,barrage,1,20,15,85,~ey;;,leechlif,11,15,20,100,~nx;;,lovekiss,1,10,0,75,~X,6;;,tranform,1,10,0,0,~fS;;,bubble,4,30,20,100,~f,10,~l,~h,M,-1;;,dizypnch,1,10,70,100,~f;;,spore,8,15,0,100,~X,6;;,splash,1,40,0,0,~oe;;,acidarmr,5,40,0,0,~x,~h,A,2;;,crabhamr,4,10,90,85,~f;;,furyswps,1,15,10,80,~ey;;,bonerang,7,10,50,90,~n1,2,~L;;,hyprfang,1,15,80,90,~f,10,~l,~e6;;,sharpen,1,30,0,0,~x,~h,R,1;;,convrson,1,30,0,0,~fU;;,suprfang,1,10,-5,90,~oa;;,slash,1,20,70,100,~f"fe=m"0,0x5e00,1,0x5e1e,2,0x5e3c"fy=16function _init()local _ENV=ea memset(0x8000,0,0x7fff)nf=t3"eC,aL,T,~av,eF,4;tH;e_,eD,eF,4,eP,~z,nG,~z,tw,~L,er,~L,eT,~L,em,~L,P,~L,E,~L,eo,;aL;next,f8,Z,.3,eT,~el;f8;next,eD,Z,.3,eT,~el,eP,157;fx;e_,eD,next,eD,Z,.3,eP,158,eT,~el;eD;e_,eD,next,tG,tw,~oN,eT,~el,er,~oQ;tG;e_,tG,next,aO,Z,.3,eP,159,eT,~el;aO;e_,nI,next,aG,Z,.2,eT,~el;aG;e_,nI,next,aI,eF,3,Z,.3,eP,155,eT,~el;aI;e_,nI,next,aC,eF,2,Z,.2,eP,154,eT,~el;aC;e_,nI,next,f6,eF,1,Z,.4,eP,153,eT,~el;f6;e_,nI,next,tL,eF,0,eP,152,tw,~oD,eT,~el,er,~oF,em,~oH,P,~oJ,E,~oK;tL;e_,tL,next,eD,eP,159,Z,.3,eT,~el,er,~L;"el(nf)flip()nM"153"tC(0x0)nM"154"tC(0x2)nM"155"tC(0x4)C(poke,";,0x5f5c,8;;,0x5f5d,2;;,0x5f56,0xe0")fk(peek2"0x6",mget,mset)ol()oc()local n=peek2"0xa"for e=1,40do nV[e]={n=fB[e]}for t=1,6do add(nV[e],peek(n))n+=1end end C(memcpy,";,0x0000,0xc000,0x2000")end function _update60()local _ENV=ea nT,e9,nz,nj=btnp"4",btnp"5",btnp"0"and btnp"1"and 0or btnp"0"and-1or btnp"1"and 1or 0,btnp"2"and btnp"3"and 0or btnp"2"and-1or btnp"3"and 1or 0if@0x5eff==1then nT,e9=e9,nT end nf:tb()if tO then tO=nM(tO)end end function _draw()local _ENV=ea nf:eT()end
+g=setmetatable({},{__index=_ENV})
+_ENV=g
+function f_zobj_eval(val,table,parameters)
+if ord(val)==126 then return table[sub(val,2)]
+elseif val=="@" then return deli(parameters,1)
+elseif val=="#" then return{}end
+return val ~="" and val or nil
+end
+function f_zobj_set(table,str,...)
+local params,statements,dest={...},split(str,";"),table
+foreach(statements,function(statement)
+local tokens=split(statement)
+if #tokens>1 then
+if tokens[1]=="" then
+foreach(tokens,function(val)
+add(dest,f_zobj_eval(val,table,params))
+end)
+else
+for i=1,#tokens,2 do
+dest[tokens[i]]=f_zobj_eval(tokens[i+1],table,params)
+end
+end
+dest=table
+else
+if statement=="" then statement=#dest+1 end
+if type(dest[statement])~="table"then
+dest[statement]={}
+end
+dest=dest[statement]
+end
+end)
+return table
+end
+function f_zobj(...)
+return f_zobj_set(setmetatable({},{__index=g}),...)
+end
+f_zobj_set(g,"c_yes,@,c_no,@,c_empty,@,f_nop,@",true,false,"",function(...)return...end)
+f_zobj_set(g,"f_zobj,@,f_zobj_set,@,f_zobj_eval,@,f_zclass,@,f_actor_get_elapsed_percent,@,f_actor_load,@,f_actor_loadlogic,@,f_actor_state,@,f_modes_popuntil,@,f_modes_pop,@,f_modes_push,@,f_beep,@,f_flr_rnd,@,f_zcall,@,f_zcamera,@,f_print_draw2_message,@,f_print_draw3_message,@,c_pokemon,@,c_pokemon_names,@,c_major_names,@,c_major_names_short,@,c_types,@,c_stages,@,c_menu_styles,@,c_moves,@,c_trainer_names,@,c_trainers,@,f_menu_state_callback,@,f_create_menu_view,@,f_create_menu,@,f_menu_refresh,@,f_menu_cancel,@,f_menu_set,@,f_menu_view_update,@,f_menu_update,@,f_menu_draw1,@,f_menu_drawentry,@,f_browse_drawentry,@,f_movehelp_switch,@,f_movehelp_getstat,@,f_move_disable,@,f_movehelp_movecopy,@,f_move_mimic,@,f_move_transform,@,f_move_conversion,@,f_move_haze,@,f_move_heal,@,f_move_recover,@,f_move_metronome,@,f_move_mirror_move,@,f_format_num_sign,@,f_move_self,@,f_move_other,@,f_move_stat,@,f_move_switch,@,f_move_toxic,@,f_move_splash,@,f_movehelp_effect_works,@,f_move_major_other,@,f_movehelp_minor,@,f_movehelp_flinch,@,f_movehelp_confuse,@,f_move_minimize,@,f_move_substitute,@,f_move_rage,@,f_move_bide,@,f_move_psywave,@,f_move_superfang,@,f_move_thrash,@,f_move_trapping,@,f_move_flydig,@,f_move_prepare,@,f_move_hyperbeam,@,f_move_rest,@,f_move_counter,@,f_move_multihit_set,@,f_move_multihit_var,@,f_move_multihit_twin,@,f_move_recoil,@,f_move_default,@,f_move_drain,@,f_move_dreameater,@,f_move_ohko,@,f_movehelp_hpchange,@,f_movehelp_setdmg,@,f_move_setdmg,@,f_move_setdmg_self,@,f_calc_max_stat,@,f_get_default_pokemon,@,f_populate_c_pokemon,@,f_create_team_pkmn,@,f_unlock_pkmn,@,f_get_team_dead,@,f_get_team_live,@,f_get_next_active,@,f_teamdel,@,f_set_default_team_pkmn,@,f_get_team,@,f_save_team,@,f_populate_c_moves,@",f_zobj,f_zobj_set,f_zobj_eval,function(template)
+return f_zobj_set(f_zobj"timer,0,stacksize,0,isnew,~c_yes,init,~f_nop,update,~f_nop,stack,#;",template)
+end,function(_ENV,key)
+if key==curr then
+return duration and timer/duration or 0
+end
+if _ENV[key]and _ENV[key].done then
+return 1
+end
+return 0
+end,function(_ENV,stateName)
+next_state=stateName or next
+end,function(_ENV,stateName)
+timer,next_state,isnew,next,duration=0
+_ENV[curr].done=true
+for k,v in pairs(defaults)do _ENV[k]=v end
+for k,v in pairs(_ENV[stateName])do _ENV[k]=v end
+curr=stateName
+_ENV:init()
+stacksize=#stack
+end,function(_ENV)
+timer+=1/60
+if isnew then _ENV:f_actor_loadlogic(curr)end
+if duration and timer>=duration then
+_ENV:f_actor_load()
+end
+while next_state do
+_ENV:f_actor_loadlogic(next_state)
+end
+_ENV:update()
+end,function(_ENV,untilstate)
+while next_state ~=untilstate and #stack>0 do
+_ENV:f_modes_pop()
+end
+end,function(_ENV)
+deli(stack)
+_ENV:f_actor_load(stack[#stack]or "main")
+end,function(_ENV,newstate)
+add(stack,newstate)
+_ENV:f_actor_load(newstate)
+end,function()
+f_minisfx"153"
+end,function(x)
+return flr(rnd(x))
+end,function(func,text,...)
+foreach(f_zobj(text,...),function(params)
+func(unpack(params))
+end)
+end,function(nx,ny,func)
+local ox,oy=%0x5f28,%0x5f2a
+camera(ox-nx,oy-ny)
+func()
+camera(ox,oy)
+end,function(txt)
+f_zprint(txt or "",23,4,1,0)
+end,function(str)
+f_zcall(rectfill,";,0,0,45,6,1")
+f_zcall(f_zprint,";,@,23,1,13,0;;,@,23,8,1,0;;,@,23,15,1,0",unpack(split(str,"|",false)))
+end,f_zobj"",split"missingno,bulbasaur,ivysaur,venusaur,charmander,charmeleon,charizard,squirtle,wartortle,blastoise,caterpie,metapod,butterfree,weedle,kakuna,beedrill,pidgey,pidgeotto,pidgeot,rattata,raticate,spearow,fearow,ekans,arbok,pikachu,raichu,sandshrew,sandslash,nidoran f,nidorina,nidoqueen,nidoran m,nidorino,nidoking,clefairy,clefable,vulpix,ninetales,jigglypuff,wigglytuff,zubat,golbat,oddish,gloom,vileplume,paras,parasect,venonat,venomoth,diglett,dugtrio,meowth,persian,psyduck,golduck,mankey,primeape,growlithe,arcanine,poliwag,poliwhirl,poliwrath,abra,kadabra,alakazam,machop,machoke,machamp,bellsprout,weepinbell,victreebel,tentacool,tentacruel,geodude,graveler,golem,ponyta,rapidash,slowpoke,slowbro,magnemite,magneton,farfetchd,doduo,dodrio,seel,dewgong,grimer,muk,shellder,cloyster,gastly,haunter,gengar,onix,drowzee,hypno,krabby,kingler,voltorb,electrode,exeggcute,exeggutor,cubone,marowak,hitmonlee,hitmonchan,lickitung,koffing,weezing,rhyhorn,rhydon,chansey,tangela,kangaskhan,horsea,seadra,goldeen,seaking,staryu,starmie,mr mime,scyther,jynx,electabuzz,magmar,pinsir,tauros,magikarp,gyarados,lapras,ditto,eevee,vaporeon,jolteon,flareon,porygon,omanyte,omastar,kabuto,kabutops,aerodactyl,snorlax,articuno,zapdos,moltres,dratini,dragonair,dragonite,mewtwo,mew",f_zobj"0,none;,fainted,burned,frozen,paralyzed,poisoned,sleeping",f_zobj"0, ;,FNT,BRN,FZN,PAR,PSN,SLP",f_zobj"0;bg,2,name,~c_empty;1;bg,2,name,normal,15,0,13,.5;2;bg,10,name,fire,8,2,10,2,11,2,2,.5,4,.5,13,.5,14,.5;3;bg,7,name,fighting,10,2,1,2,13,2,15,0,11,.5,9,.5,5,.5,12,.5;4;bg,9,name,water,2,2,7,2,13,2,14,.5,8,.5,4,.5;5;bg,6,name,poison,11,2,8,2,15,.5,7,.5,5,.5,13,.5;6;bg,11,name,electric,9,2,4,2,7,0,14,.5,6,.5,8,.5;7;bg,7,name,ground,6,2,2,2,5,2,13,2,9,0,11,.5,8,.5;8;bg,8,name,grass,7,2,13,2,4,2,11,.5,14,.5,2,.5,9,.5,8,.5,5,.5;9;bg,2,name,flying,11,2,3,2,8,2,6,.5,13,.5;10;bg,9,name,ice,14,2,9,2,8,2,2,.5,10,.5,4,.5;11;bg,8,name,bug,8,2,12,2,3,.5,2,.5,9,.5,15,.5,5,.5;12;bg,6,name,psychic,3,2,5,2,12,.5;13;bg,2,name,rock,11,2,2,2,9,2,10,2,3,.5,7,.5;14;bg,2,name,dragon,14,2;15;bg,6,name,ghost,15,2,1,0,12,2;17;bg,2,name,bird;",f_zobj"maxhp,hp,special,spc,attack,att,defense,def,speed,spd,total,tot,accuracy,acc,evasion,eva",f_zobj";bg,13,aa,5,fg,1;;bg,6,aa,13,fg,13;;bg,5,aa,5,fg,1;;bg,6,aa,5,fg,5;;bg,1,aa,5,fg,13;;bg,14,aa,4;;bg,9,aa,4;;bg,11,aa,3;;bg,12,aa,5;;bg,8,aa,2;;bg,10,aa,4",f_zobj"",split"youngstr,bugcatch,junior,brock,lass,hiker,swimmer,misty,gentlman,sailor,rocker,ltsurge,channelr,gambler,beauty,erika,biker,birdkeep,juggler,koga,blckbelt,rocket,psychic,sabrina,scientst,pkmaniac,suprnerd,blaine,cooltrnr,fishrman,tamer,giovanni,lorelei,bruno,agatha,lance,blue,green,red,legendry",f_zobj"",function(game,entry)
+if entry.state then
+game:f_modes_push(entry.state)
+else
+game:f_modes_pop()
+end
+end,function(edraw,viewmin)
+return f_zobj("edraw,@,viewmin,@,v,~viewmin,r,1,update,~f_menu_view_update,draw1,~f_menu_draw1,cancel,~f_menu_cancel,refresh,~f_menu_refresh",edraw,viewmin or 0)
+end,function(edraw,r)
+return f_zobj_set(f_create_menu_view(edraw),"c,0,r,@,update,~f_menu_update,set,~f_menu_set",r or 1)
+end,function(menu,data,mapfunc)
+while deli(menu)do end
+for i=1,#data do
+add(menu,(mapfunc or f_nop)(data[i],i))
+end
+end,function(game)
+game:f_modes_pop()
+end,function(menu,delta,is_ud)
+if is_ud then
+local newval=menu.c+delta*menu.r
+if newval==mid(0,newval,#menu-1)then
+menu.c=newval
+if 0+delta ~=0 then f_minisfx"154" end
+else
+f_beep()
+end
+else
+local newval=menu.c+delta
+local left=menu.c-menu.c%menu.r
+if newval==mid(left,newval,left+menu.r-1)then
+menu.c=newval
+if 0+delta ~=0 then f_minisfx"154" end
+else
+f_beep()
+end
+end
+menu.c=mid(0,menu.c,#menu-1)
+if menu.c\menu.r<menu.v then menu.v=menu.c\menu.r end
+if menu.c\menu.r>menu.v+2 then menu.v=menu.c\menu.r-2 end
+menu.v=mid(0,menu.v,(#menu-1)\menu.r)
+end,function(game)
+local menu=game.menu
+if g_bpo then f_minisfx"154" menu.cancel(game)end
+if g_bpx then game:xfunc()end
+menu.v+=g_bpv
+if g_bph ~=0 then game:lrfunc(g_bph)end
+local oldview=menu.v
+menu.v=mid(menu.viewmin,menu.v,#menu-3)
+if menu.v ~=oldview then
+f_beep()
+elseif g_bpv ~=0 then
+f_minisfx"154"
+end
+end,function(game)
+local menu=game.menu
+menu:set"0"
+menu:set(g_bpv,true)
+menu:set(g_bph)
+if g_bpx then
+local entry=menu[menu.c+1]
+if entry.disabled then
+f_beep()
+elseif entry.sel then
+f_minisfx"155"
+entry.sel(game,entry)
+end
+end
+if g_bpo then f_minisfx"154" menu.cancel(game)end
+end,function(game)
+local menu=game.menu
+local cellw=menu.r>1 and 10 or 40
+local xoff=20-(menu.r*cellw)/2
+f_zcall(rectfill,";,0,0,39,39,1;;,0,@,39,@,13",5-menu.v*10,4+(max(ceil(#menu/menu.r),3)-menu.v)*10)
+for i=-1,menu.r*5-1 do
+local index=(menu.v-1)*menu.r+i+1
+local entry=menu[index]
+if entry then
+local style_ind,x,y=entry.style or 1,xoff+i%menu.r*10,i\menu.r*10
+if entry.disabled then style_ind=3 end
+if index-1==menu.c then style_ind+=1 end
+if not entry.hidden then
+rectfill(x,y-5,x+cellw-1,y+4,c_menu_styles[style_ind].bg)
+f_zcamera(i%menu.r*cellw+xoff+cellw/2,i\menu.r*10-3,function()
+menu.edraw(entry,c_menu_styles[style_ind])
+end)
+end
+end
+end
+end,function(entry,style)
+if entry.pkmn then
+local style=c_menu_styles[c_types[entry.pkmn.type1].bg]
+f_zcall(rectfill,";,-20,-2,19,17,@;;,-20,14,19,17,@",style.bg,style.aa)
+entry.pkmn:f_draw_pkmn_out(0,8,style,1,1)
+else
+f_wobble_text(entry.name,0,0,style.fg)
+end
+end,function(entry,style)
+entry.pkmn:f_draw_pkmn_out(0,3,style,.375,.375)
+end,function(pl)
+local team=f_get_team_live(pl.team)
+del(team,pl.active.shared)
+if #team>0 then
+return team[f_flr_rnd(#team)+1]
+end
+end,function(_ENV,stat)
+local stage=stages[stat]
+if stat=="evasion" or stat=="accuracy" then
+return _ENV[stat]*mid(1,1+stage/3,3)/mid(1,1-stage/3,3)
+end
+return ceil(mid(1,999,
+(stat=="attack" and major==2 and.5 or stat=="speed" and major==4 and.25 or 1)*
+_ENV[stat]*mid(2,2+stage,8)/mid(2,2-stage,8)
+))
+end,function(_ENV)
+if otheractive.disabledtimer>0 then return true end
+local moves=f_get_moves(otheractive)
+if #moves==0 then return true end
+otheractive.disabledtimer,otheractive.disabledslot=f_flr_rnd"6"+2,moves[f_flr_rnd(#moves)+1].slot
+addaction(other,"|"..otheractive.mynewmoves[otheractive.disabledslot].name.."|disabled")
+if otheractive.curmove and otheractive.curmove.slot==otheractive.disabledslot then
+otheractive.moveturn=0
+end
+end,function(_ENV,num,slot)
+local newmove=f_create_move(num,slot)
+newmove.pp,newmove.maxpp=5,5
+mynewmoves[slot]=newmove
+return newmove
+end,function(_ENV)
+local othermoves=f_get_moves(otheractive,true)
+local num=othermoves[f_flr_rnd(#othermoves)+1].num
+if num==31 then
+return true
+end
+addaction(self,"|copies|"..f_movehelp_movecopy(selfactive,num,move.slot).name)
+end,function(_ENV)
+if selfactive.transform then
+return true
+else
+addaction(self,"|copies|"..otheractive.name,function()
+selfactive.transform=true
+foreach(split"num,attack,defense,speed,special,type1,type2",function(key)
+selfactive[key]=otheractive[key]
+end)
+selfactive.mynewmoves={}
+foreach(otheractive.mynewmoves,function(m)
+f_movehelp_movecopy(selfactive,m.num,m.slot)
+end)
+end)
+end
+end,function(_ENV)
+f_zobj_set(selfactive,"type1,@,type2,@",otheractive.type1,otheractive.type2)
+addaction(self,"|copies|types")
+end,function(_ENV)
+foreach({other,self},function(pl)
+addaction(pl,"|resets|stats",function()
+f_zobj_set(pl.active.stages,"special,0,attack,0,defense,0,speed,0,accuracy,0,evasion,0")
+pl.active.minimize=false
+end)
+end)
+end,function(_ENV,pl,amount)
+amount=min(amount,pl.active.maxhp-pl.active.hp)
+if amount>0 then
+f_movehelp_hpchange(_ENV,pl,amount,function()
+pl.active.shared.hp+=amount
+end)
+else
+return true
+end
+end,function(_ENV)
+return f_move_heal(_ENV,self,selfactive.maxhp\2)
+end,function(_ENV)
+f_movelogic(self,f_create_move(f_flr_rnd(164)+1,move.slot))
+end,function(_ENV)
+if selfactive.lastmoverecv>0 then
+f_movelogic(self,f_create_move(selfactive.lastmoverecv,move.slot))
+else
+return true
+end
+end,function(num,name)
+return(sgn(num)>0 and "|+"or "|-")..abs(num).." "..name.."|change"
+end,function(_ENV,func,...)return func(_ENV,self,...)end,function(_ENV,func,...)return func(_ENV,other,...)end,function(_ENV,pl,key,stage,func)
+local prev=pl.active.stages[key]
+if not pl.active.misted or stage>0 then
+pl.active.stages[key]=mid(-6,6,prev+stage)
+end
+if prev ~=pl.active.stages[key]then
+addaction(pl,f_format_num_sign(stage,c_stages[key]),func or f_nop)
+else
+return true
+end
+end,function(_ENV,pl)
+local pkmn=f_movehelp_switch(pl)
+if pkmn then
+f_select_switch(pl,pkmn)
+else
+return true
+end
+end,function(_ENV)
+if f_move_major_other(_ENV,5)and otheractive.major ~=5 then
+return true
+end
+return f_move_other(_ENV,f_movehelp_minor,"|badly|poisoned","toxiced",1,true)
+end,function(_ENV)
+addaction(self,"|does|nothing")
+end,function(_ENV)
+return f_get_type_advantage(move,otheractive)>0 and move.movetype ~=otheractive.type1 and move.movetype ~=otheractive.type2
+end,function(_ENV,majorind)
+if otheractive.shared.major==3 and majorind==2 then
+addaction(self,"|thawed|out")
+selfactive.shared.major=0
+elseif otheractive.shared.major==0 and(majorind==6 or f_movehelp_effect_works(_ENV))then
+addaction(other,"|is now|"..c_major_names[majorind],function()
+otheractive.shared.major=majorind
+otheractive.sleeping=f_flr_rnd"7"+1
+end)
+else
+return true
+end
+end,function(_ENV,pl,message,minor,val,respect_type)
+if(pl.active[minor]or 0)==0 and(not respect_type or f_movehelp_effect_works(_ENV))then
+pl.active[minor]=val or 1
+addaction(pl,message)
+else
+return true
+end
+end,function(_ENV,pl)
+pl.active.flinching=true
+end,function(_ENV,pl)
+return f_movehelp_minor(_ENV,pl,"|becomes|confused","confused",f_flr_rnd"4"+1)
+end,function(_ENV)
+return f_move_stat(_ENV,self,"evasion",1,function()
+selfactive.minimize=.25
+end)
+end,function(_ENV)
+local subhp=selfactive.maxhp\4
+if subhp>=selfactive.hp or selfactive.substitute>0 then
+return true
+end
+f_move_setdmg_self(_ENV,subhp)
+addaction(self,"|created|substitute",function()
+selfactive.substitute=subhp
+end)
+end,function(_ENV)
+f_set_moveturn(selfactive,-1,move)
+f_move_default(_ENV)
+if move.pp<=0 then
+selfactive.moveturn,selfactive.curmove=0
+end
+end,function(_ENV)
+if not selfactive.curmove then
+f_set_moveturn(selfactive,f_flr_rnd"2"+1,f_create_move(move.num,move.slot))
+addaction(self,"|"..move.name.."|begins")
+selfactive.bidedmg=0
+end
+if selfactive.moveturn==0 then
+if selfactive.bidedmg==0 then
+return true
+end
+f_move_setdmg(_ENV,selfactive.bidedmg*2)
+end
+end,function(_ENV)
+f_move_setdmg(_ENV,1+f_flr_rnd"75")
+end,function(_ENV)
+f_move_setdmg(_ENV,max(otheractive.hp\2,1))
+end,function(_ENV)
+f_set_moveturn(selfactive,f_flr_rnd"2"+1,f_create_move(move.num,move.slot))
+f_move_default(_ENV)
+if selfactive.moveturn==0 then
+f_move_self(_ENV,f_movehelp_confuse,"confused")
+end
+end,function(_ENV)
+if not selfactive.curmove then
+f_set_moveturn(selfactive,f_flr_rnd"4"+1,f_create_move(move.num,move.slot))
+selfactive.trappedother=otheractive
+end
+if selfactive.trappedother==otheractive then
+f_move_default(_ENV)
+else
+return true
+end
+end,function(_ENV,desc)
+if selfactive.curmove then
+f_move_default(_ENV)
+else
+addaction(self,desc,function()
+f_set_moveturn(selfactive,1,f_create_move(move.num,move.slot))
+end)
+end
+end,function(_ENV)
+if selfactive.curmove then
+f_move_default(_ENV)
+else
+addaction(self,"|charges|energy")
+f_set_moveturn(selfactive,1,move)
+move.pp+=1
+end
+end,function(_ENV)
+if selfactive.curmove then
+addaction(self,"|recharges|energy")
+else
+f_move_default(_ENV)
+local m=f_create_move(move.num,move.slot)
+m.accuracy=0
+f_set_moveturn(selfactive,1,m)
+end
+end,function(_ENV)
+addaction(self,"|is|sleeping",function()
+selfactive.shared.major,selfactive.sleeping,selfactive.toxiced=6,2,0
+f_move_heal(_ENV,self,selfactive.maxhp)
+end)
+end,function(_ENV)
+if selfactive.counterdmg>0 then
+f_move_setdmg(_ENV,selfactive.counterdmg*2)
+else
+return true
+end
+end,function(_ENV,hitcount,endfunc,isresume)
+if hitcount>0 then
+addaction(self,isresume and "|resumes|"..move.name,function()
+_ENV.otheractive=other.active
+f_move_default(_ENV,100,function()
+f_move_multihit_set(_ENV,hitcount-1,endfunc,true)
+end)
+end)
+else
+endfunc()
+end
+end,function(_ENV)
+f_move_multihit_set(_ENV,2+f_flr_rnd"4",f_nop)
+end,function(_ENV)
+f_move_multihit_set(_ENV,2,function()
+if rnd"100"<20 then
+f_move_major_other(_ENV,5)
+end
+end)
+end,function(_ENV)
+f_move_setdmg(_ENV,false,function(dmg)
+f_move_setdmg_self(_ENV,max(1,dmg\4))
+end)
+end,function(_ENV,percent,func,...)
+local params={...}
+f_move_setdmg(_ENV,false,function()
+if rnd"100"<(percent or 0)then
+func(_ENV,unpack(params))
+end
+end)
+end,function(_ENV)
+f_move_setdmg(_ENV,false,function(dmg)
+f_move_heal(_ENV,self,max(dmg\2,1))
+end)
+end,function(_ENV)
+if otheractive.major==6 then
+f_move_drain(_ENV)
+else
+return true
+end
+end,function(_ENV)
+if selfactive.speed>=otheractive.speed then
+f_move_setdmg(_ENV,otheractive.hp)
+else
+return true
+end
+end,function(_ENV,pl,dmg,func,issub)
+local dmgtxt=f_format_num_sign(dmg,"hp")
+local breaks=issub and pl.active.substitute+dmg<0
+if not issub or breaks then
+addaction(pl,dmgtxt,f_nop,issub)
+end
+addaction(pl,
+breaks and "|substitute|broke"or dmgtxt,
+func,
+issub
+)
+end,function(_ENV,pl,dmg,isself,passfunc)
+local active=pl.active
+local issub=not isself and active.substitute>0
+f_movehelp_hpchange(_ENV,pl,-dmg,function()
+active.bidedmg+=dmg
+if active.curmove and active.curmove.num==20 then
+f_move_stat(_ENV,pl,"attack",1)
+end
+if passfunc then passfunc(dmg)end
+if issub then
+active.substitute=max(active.substitute-dmg,0)
+else
+active.shared.hp=max(active.shared.hp-dmg,0)
+end
+end,issub and "substitute")
+end,function(_ENV,dmg,passfunc)
+local crit,advantage=false,f_get_type_advantage(move,otheractive)
+if not dmg then
+dmg,crit=f_calc_move_damage(selfactive,otheractive,move)
+end
+if advantage>0 then
+if move.movetype%2==1 then
+otheractive.counterdmg+=dmg
+end
+if advantage>1 then addaction(self,"|super|effective")
+elseif advantage<1 then addaction(self,"|not very|effective")end
+if crit then addaction(self,"|critical|hit")end
+f_movehelp_setdmg(_ENV,other,dmg,false,passfunc)
+else
+addaction(other,"|resisted|attack")
+end
+end,function(_ENV,dmg)
+f_movehelp_setdmg(_ENV,self,dmg,true,f_nop)
+end,function(base)
+return ceil(base+.5*93)+5
+end,function()
+return f_zobj("browse,~c_yes,attack,0,defense,0,special,0,speed,0,maxhp,0,hp,0,total,0,accuracy,100,evasion,100,base_maxhp,0,base_attack,0,base_defense,0,base_speed,0,base_special,0,num,-1,evolvesfrom,-1,name, ,type1,0,type2,0,moves_natural,#,moves_teach,#,moves_event,#,mynewmoves,@",f_create_empty_moveset())
+end,function()
+local movemem=peek2"0x8"
+c_pokemon[-1]=f_get_default_pokemon()
+for num=0,151 do
+local pkmndata,is_range={},false
+while@movemem ~=255 do
+if@movemem==254 then
+is_range=true
+elseif is_range then
+for i=pkmndata[#pkmndata]+1,@movemem do
+add(pkmndata,i)
+end
+is_range=false
+else
+add(pkmndata,@movemem)
+end
+movemem+=1
+end
+movemem+=1
+local evolvesfrom=num-deli(pkmndata,1)
+local pkmn=f_get_default_pokemon()
+f_zobj_set(pkmn,"num,@,evolvesfrom,@,name,@,type1,@,type2,@,base_maxhp,@,base_attack,@,base_defense,@,base_speed,@,base_special,@",num,
+evolvesfrom,
+c_pokemon_names[num+1],
+unpack(pkmndata)
+)
+local move_bucket=pkmn.moves_natural
+for i=8,#pkmndata do
+local val=pkmndata[i]
+if val==253 then
+move_bucket=pkmn.moves_teach
+elseif val==252 then
+move_bucket=pkmn.moves_event
+else
+add(move_bucket,val)
+end
+end
+if evolvesfrom<num then
+foreach(split"moves_natural,moves_teach",function(key)
+foreach(c_pokemon[evolvesfrom][key],function(move)
+add(pkmn[key],move)
+end)
+end)
+end
+local teach_map,teachs={},{}
+foreach(pkmn.moves_teach,function(move)teach_map[move]=true end)
+for i=1,54 do
+if teach_map[i]then add(teachs,i)end
+end
+pkmn.moves_teach=teachs
+do local _ENV=pkmn
+f_zobj_set(_ENV,"attack,@,defense,@,special,@,speed,@,maxhp,@,hp,~maxhp",f_calc_max_stat(base_attack),
+f_calc_max_stat(base_defense),
+f_calc_max_stat(base_special),
+f_calc_max_stat(base_speed),
+f_calc_max_stat(base_maxhp)+55
+)
+total=attack+defense+special+speed+maxhp
+end
+c_pokemon[num]=pkmn
+end
+end,function(num,mynewmoves)
+return setmetatable(f_zobj("mynewmoves,@,major,0,browse,~c_no",mynewmoves),{__index=c_pokemon[num]})
+end,function(trainer)
+foreach(f_get_team_dead(trainer.team),function(pkmn)
+poke(0x5e5a+pkmn.num,1)
+end)
+end,function(team)
+local newteam={}
+foreach(team,function(pkmn)
+if pkmn.num>-1 and pkmn.major==1 then
+add(newteam,pkmn)
+end
+end)
+return newteam
+end,function(team,exclude_missingno)
+local newteam={}
+foreach(team,function(pkmn)
+if pkmn.num>(exclude_missingno and 0 or-1)and pkmn.major ~=1 then
+add(newteam,pkmn)
+end
+end)
+return newteam
+end,function(team)
+return f_get_team_live(team)[1]
+end,function(game)
+local team=game:f_get_team_cursor"team1"
+team[game:f_modes_cursor"editteam"+1]=f_create_team_pkmn(-1,f_create_empty_moveset())
+f_save_team(game:f_modes_cursor"team1",team)
+game:f_modes_pop()
+end,function(team,ind,num)
+local pkmn,moveset=c_pokemon[num],f_create_empty_moveset()
+for i=1,min(4,#pkmn.moves_natural)do
+moveset[i]=f_create_move(pkmn.moves_natural[i],i)
+end
+team[ind]=f_create_team_pkmn(num,moveset)
+return team
+end,function(team_index)
+local mem,team=c_team_memlocs[team_index],f_zobj""
+for i=1,6 do
+local memstart,mynewmoves,has_moves=mem+(i-1)*5,{},false
+for i=1,4 do
+mynewmoves[i]=f_create_move(peek(memstart+i),i)
+if mynewmoves[i].num>0 then
+has_moves=true
+else
+mynewmoves[i]=f_create_move(-1)
+end
+end
+team[i]=f_create_team_pkmn(has_moves and@memstart or-1,mynewmoves)
+end
+return team
+end,function(team_index,team)
+local mem=c_team_memlocs[team_index]
+memset(mem,0,30)
+for i=1,6 do
+local memstart,pkmn=mem+(i-1)*5,team[i]
+poke(memstart,max(0,pkmn.num))
+for i=1,4 do
+poke(memstart+i,pkmn.mynewmoves[i].num>0 and pkmn.mynewmoves[i].num or 0)
+end
+end
+end,function()
+for i=-1,164 do
+local params,ofunc={},deli(c_moves_raw[i],6)
+for ii=6,#c_moves_raw[i]do
+add(params,deli(c_moves_raw[i],6))
+end
+c_moves[i]=f_zobj("func,@,num,@,ofunc,@,name,@,movetype,@,pp,@,maxpp,~pp,damage,@,accuracy,@",function(envparams)
+return ofunc(envparams,unpack(params))
+end,i,ofunc,unpack(c_moves_raw[i]))
+end
+end)
+f_zobj_set(g,"f_create_move,@,f_create_empty_moveset,@,f_editteam_draw1,@,f_turn_draw1,@,f_browse_draw2,@,f_editteam_draw2,@,f_teammoves_draw2,@,f_team_draw2,@,f_fightover_draw2,@,f_teammovesel_draw2,@,f_main_draw2,@,f_turn_draw2,@,f_editteam_draw3,@,f_move_draw3,@,f_browse_draw3,@,f_main_draw3,@,f_fight_draw3_helper,@,f_pselswitch_draw3,@,f_pselactions_draw3,@,f_team_draw3,@,f_fightover_draw3,@,f_turn_draw3,@,f_fightover_init,@,f_main_init,@,f_browse_init_shared,@,f_browse_init,@,f_teampkmn_init,@,f_browsestat_init,@,f_credits_init,@,f_fightsel_init,@,f_teamaction_init,@,f_moveaction_init,@,f_movedel,@,f_moves_init_helper,@,f_teammoves_init,@,f_switchmoves_init,@,f_teammovesel_init,@,f_pselmove_init,@,f_pselactions_init,@,f_team_init,@,f_get_team_num,@,f_editteam_init,@,f_switchteam_init,@,f_pselswitch_init,@,f_turn_init,@,f_browsestat_lrfunc,@,f_browsestat_xfunc,@,f_credits_xfunc,@,f_fightover_xfunc,@,f_game_init,@,f_game_update,@,f_game_draw1,@,f_game_draw2,@,f_game_draw3,@,f_modes_default_update,@,f_modes_default_draw1,@,f_modes_cursor,@,f_modes_entry,@,f_closed_init,@,f_any_btn,@,f_closed_update,@,g_cur_light,@,f_minisfx,@,f_minisfx_now,@,f_draw_picodex,@,f_picodex_map,@,f_wobble_text,@,f_zprint,@,f_pkmn_available,@,f_draw2_pokeinfo,@,f_draw3_pokeinfo,@,f_draw_pkmn_out,@,f_story_select,@,f_match_select,@,f_match_start,@,f_update_horde,@,f_horde_select,@,f_team_select,@,f_get_team_cursor,@,f_get_pkmn_team_edit,@,f_pkmn_comes_out,@,f_in_moves,@,f_select_switch,@,f_movelogic,@,f_set_moveturn,@,f_premovelogic,@,f_decrement_timer,@,f_postmove_logic,@,f_select_move,@,f_get_other_pl,@,f_newaction,@,f_addaction,@,f_psel_update,@,f_invalid_button,@,f_turn_update,@,f_pop_next_action,@,f_pkmn_has_move,@,f_pkmn_isempty,@,f_get_moves,@,f_get_possible_moves,@",function(id,slot)
+return setmetatable(f_zobj("slot,@",slot or 0),{__index=c_moves[id]})
+end,function()
+local moveset={}
+for i=1,4 do add(moveset,f_create_move(-1))end
+return moveset
+end,function(game)
+f_modes_default_draw1(game)
+f_wobble_text("team #"..game:f_modes_cursor"team1"+1,20,27,1)
+end,function(_ENV)
+local cra,p1a,p2a=cur_action.active,p1.active,p2.active
+local p1on,p2on=p1a==cra,p2a==cra
+local p1c,p2c=11,11
+f_zcall(rectfill,";,0,0,39,6,5;;,0,33,39,39,5")
+f_zcall(rectfill,";,-1,33,@,41,1;;,-1,-2,@,6,1",max(ceil(p1a.hp/p1a.maxhp*40),0)-1,
+max(ceil(p2a.hp/p2a.maxhp*40),0)-1)
+f_zcall(rectfill,";,15,6,39,6,13;;,16,5,39,5,13;;,0,33,24,33,13;;,0,34,23,34,13")
+f_zcall(f_zprint,";,@,40,34,13,1;;,@,40,27,1,1;;,@,2,1,13,-1;;,@,2,7,1,-1",p1a.hp,c_major_names_short[p1a.major],p2a.hp,c_major_names_short[p2a.major])
+local p1s,p2s=1,1
+p1a:f_draw_pkmn_out(10,25,c_menu_styles[4],p1s,p1s,p1on)
+p2a:f_draw_pkmn_out(30,15,c_menu_styles[4],-p2s,p2s,p2on)
+end,function(game)f_draw2_pokeinfo(c_pokemon[game:f_modes_cursor"browse"])end,function(game)f_print_draw2_message("spot #"..(game:f_modes_cursor"editteam"+1))end,function(game)f_print_draw2_message("move #"..(game:f_modes_cursor"teammoves"+1))end,function(game)f_print_draw2_message(game.ui_pl)end,function(game)f_print_draw2_message"match over" end,function(game)
+local move=game:f_modes_entry"teammovesel"
+f_print_draw2_message(move and move.ref)
+end,function()
+rectfill(0,0,46,13,13)
+pal(7,1)
+local xx=0
+for i,v in ipairs(split"6,5,5,6,6,5,6")do
+sspr(6*8+xx,12*8,v,8,xx+3,3.5+cos((t()+i)/4))
+xx+=v
+end
+pal()
+end,function(game)f_print_draw2_message(game.cur_action.pl.name)end,function(game)
+f_draw3_pokeinfo(game:f_get_pkmn_team_edit())
+end,function(game)
+local move=game:f_modes_entry(game.movemode).move
+if move.num>=0 then
+f_print_draw3_message(c_types[move.movetype].name.."|"..move.pp.."/"..move.maxpp.."|"..(move.damage>=0 and move.damage or "??").."P "..(move.accuracy>=0 and move.accuracy or "??").."A")
+else
+f_print_draw3_message"none|n/a|"
+end
+end,function(game)
+f_draw3_pokeinfo(game:f_modes_entry"browse".pkmn)
+end,function(game)
+f_print_draw3_message(game:f_modes_entry"main".desc)
+end,function(_ENV)
+if num>-1 then
+f_print_draw3_message(name.."|"..hp.."/"..maxhp.."|"..c_major_names[major])
+else
+f_print_draw3_message"none|n/a|"
+end
+end,function(_ENV)f_fight_draw3_helper(_ENV:f_modes_entry"pselswitch".pkmn)end,function(_ENV)f_fight_draw3_helper(p0.active)end,function(game)
+local power,count=0,0
+foreach(game:f_modes_entry().team,function(num)
+if num>-1 then
+power+=c_pokemon[num].total
+count+=1
+end
+end)
+f_print_draw3_message(game:f_modes_entry().name.."|len "..count.."/6|tot "..power)
+end,function(game)
+f_print_draw3_message(game.pwin.name.."|is the|winner")
+end,function(game)
+f_print_draw3_message(game.cur_action.name..game.cur_action.message)
+end,function(_ENV)
+local plose=f_get_other_pl(_ENV,pwin)
+pwin:winlogic(plose)
+menu:refresh{}
+menu.cancel=function(game)
+game:f_modes_popuntil"team2story"
+end
+for pl in all{pwin,plose}do
+f_zobj_set(menu,"v,0;;pkmn,@;;hidden,~c_yes;;name,@,style,5;;name,@;;name,@",pl.active.shared,pl.name,(#f_get_team_live(pl.team,true)).." live",(#f_get_team_dead(pl.team)).." dead")
+end
+end,function(_ENV)
+local count=0
+for i=0,151 do count+=c_pokemon[i]:f_pkmn_available()and 1 or 0 end
+menu:refresh(
+f_zobj(";name,browse,state,browse,sel,~f_menu_state_callback,desc,@;;name,edit,state,team1,sel,~f_menu_state_callback,desc,edit|stored|teams;;name,league,state,team1story,sel,~f_menu_state_callback,desc,@;;name,versus,state,team1match,sel,~f_menu_state_callback,desc,versus|p1 vs p2|match;;name,horde,state,team1horde,sel,~f_menu_state_callback,desc,@;;name,credits,state,credits,sel,~f_menu_state_callback,desc,credits|amorg|games","browse|"..count.."/151|pokemon","league|"..(@0x5efd).."/40|trainers","horde|"..(@0x5efe).."/151|hi-score")
+)
+end,function(_ENV,selectfunc)
+local tbl={}
+for i=0,151 do
+add(tbl,i)
+end
+menu:refresh(
+tbl,
+function(num)
+return f_zobj("sel,@,disabled,@,pkmn,@",selectfunc,not c_pokemon[num]:f_pkmn_available(),c_pokemon[num])
+end
+)
+end,function(_ENV)
+f_browse_init_shared(_ENV,function(_ENV)
+_ENV:f_modes_push"browsestat"
+end)
+end,function(_ENV)
+f_browse_init_shared(_ENV,function(_ENV)
+f_save_team(_ENV:f_modes_cursor"team1",f_set_default_team_pkmn(_ENV:f_get_team_cursor"team1",_ENV:f_modes_cursor"editteam"+1,_ENV:f_modes_cursor"browse"))
+_ENV:f_modes_pop()
+end)
+end,function(_ENV)
+local pkmn=_ENV:f_modes_entry"browse".pkmn
+menu:refresh{}
+f_zobj_set(menu,";pkmn,@;;hidden,~c_yes;;name,lvl 50,style,5",pkmn)
+foreach(split"maxhp,special,attack,defense,speed,total",function(key)
+add(menu,{name=c_stages[key].." "..pkmn[key]})
+end)
+f_zcall(function(name,key)
+if #c_pokemon[pkmn.num][key]>0 then
+add(menu,{name=name,style=5})
+foreach(c_pokemon[pkmn.num][key],function(m)
+add(menu,{name=c_moves[m].name})
+end)
+end
+end,";,learn,moves_natural;;,teach,moves_teach;;,event,moves_event")
+end,function(_ENV)
+menu:refresh(
+split"91,,#alanxoc3,code &,design,28,,#gr8cadet,pokemon,sprites,143,,#tigrwolf,battle,testing,129,,#wadlo,just,magikarp,127,,#tooling,px9 func,shrinko8,137,,#pkmndata,blbpedia,pokeapi,serebii,smogon,upokcntr,volvox,nintendo",
+function(txt)
+if type(txt)=="number"then
+return{pkmn=f_create_team_pkmn(txt,f_create_empty_moveset())}
+end
+local style=1
+if sub(txt,1,1)=="#" then
+txt,style=sub(txt,2),5
+end
+return{name=txt,style=style,hidden=txt==""}
+end
+)
+end,function(_ENV)
+menu:refresh(c_trainers,function(trainer,num)
+return{
+name=trainer.name,
+team=trainer,
+disabled=num-1>@0x5efd,
+sel=function(game,entry)
+f_begin_fight_cpu(game,entry.team,entry.name,function(pl,other)
+poke(0x5efd,mid(@0x5efd,num,40))
+f_unlock_pkmn(other)
+end,f_nop)
+end
+}
+end)
+end,function(_ENV)
+menu:refresh(f_zobj";name,moves,state,teammoves,sel,~f_menu_state_callback;;name,switch,state,switchteam,sel,~f_menu_state_callback;;name,delete,sel,~f_teamdel")
+end,function(_ENV)
+local teampkmn=_ENV:f_get_pkmn_team_edit()
+local count=0
+for j=1,4 do
+if teampkmn.mynewmoves[j].num>0 then count+=1 end
+end
+menu:refresh(f_zobj(";name,change,state,teammovesel,sel,~f_menu_state_callback;;name,switch,state,switchmoves,sel,~f_menu_state_callback;;name,delete,disabled,@,sel,~f_movedel",count==1))
+end,function(_ENV)
+local teampkmn,team=_ENV:f_get_pkmn_team_edit()
+teampkmn.mynewmoves[_ENV:f_modes_cursor"teammoves"+1]=f_create_move(-1)
+f_save_team(_ENV:f_modes_cursor"team1",team)
+_ENV:f_modes_pop()
+end,function(_ENV,disabled_ind,select_func)
+local teampkmn,team=_ENV:f_get_pkmn_team_edit()
+menu:refresh(f_zobj",1,2,3,4",function(i)
+local move=teampkmn.mynewmoves[i]
+return{
+move=move,
+name=move.name,
+sel=function(_ENV)select_func(_ENV,i,teampkmn,team)end,
+disabled=i==disabled_ind
+}
+end)
+end,function(_ENV)
+f_moves_init_helper(_ENV,0,function(_ENV,i,teampkmn)
+_ENV:f_modes_push(teampkmn.mynewmoves[i].num>0 and "moveaction" or "teammovesel")
+end)
+end,function(_ENV)
+local disabled_ind=_ENV:f_modes_cursor"teammoves"+1
+f_moves_init_helper(_ENV,disabled_ind,function(_ENV,i,teampkmn,team)
+teampkmn.mynewmoves[i],teampkmn.mynewmoves[disabled_ind]=teampkmn.mynewmoves[disabled_ind],teampkmn.mynewmoves[i]
+f_save_team(_ENV:f_modes_cursor"team1",team)
+_ENV:f_modes_popuntil"teammoves"
+end)
+menu.c=teammoves.menu.c
+end,function(_ENV)
+local teampkmn=_ENV:f_get_pkmn_team_edit()
+local pkmn=c_pokemon[teampkmn.num]
+local movemetadata={}
+f_zcall(function(movelist,prefix)
+for i=1,#movelist do
+local moveind=movelist[i]
+add(movemetadata,{name=c_moves[moveind].name,disabled=teampkmn:f_pkmn_has_move(moveind),num=moveind,desc=prefix..i})
+end
+end,";,@,learn #;;,@,teach #;;,@,event #",pkmn.moves_natural,pkmn.moves_teach,pkmn.moves_event)
+menu:refresh(movemetadata,function(m)
+return{
+name=m.name,
+disabled=m.disabled,
+move=c_moves[m.num],
+ref=m.desc,
+sel=function()
+local team=_ENV:f_get_team_cursor"team1"
+team[_ENV:f_modes_cursor"editteam"+1].mynewmoves[_ENV:f_modes_cursor"teammoves"+1]=f_create_move(m.num)
+f_save_team(_ENV:f_modes_cursor"team1",team)
+_ENV:f_modes_popuntil"teammoves"
+end
+}
+end)
+end,function(_ENV)
+local possible_moves=f_get_possible_moves(p0.active)
+if p0.active.curmove then
+f_select_move(p0,p0.active.curmove)
+_ENV:f_modes_pop()_ENV:f_modes_pop()
+elseif #possible_moves==0 then
+f_select_move(p0,f_create_move(0))
+_ENV:f_modes_pop()_ENV:f_modes_pop()
+end
+menu:refresh(p0.active.mynewmoves,function(move)
+return f_zobj("disabled,@,name,@,move,@,sel,@",
+not possible_moves[move],
+move.name,
+move,
+function()
+_ENV:f_modes_pop()_ENV:f_modes_pop()
+f_select_move(p0,move)
+end
+)
+end)
+end,function(_ENV)
+menu:refresh(f_zobj";name,fight,sel,~f_menu_state_callback,state,pselmove;;name,switch,sel,~f_menu_state_callback,state,pselswitch;;name,forfeit,sel,~f_psel_forfeit")
+end,function(_ENV)
+menu:refresh(f_zobj",1,2,3",function(i)
+local team=f_get_team(i-1)
+local newteam={}
+local is_disabled=true
+for i=1,6 do
+newteam[i]=team[i].num
+if not team[i]:f_pkmn_isempty()then
+is_disabled=false
+end
+end
+return{
+name="team #"..i,
+team=newteam,
+sel=function()_ENV:select_func()end,
+disabled=disable_empty_team and is_disabled
+}
+end)
+end,function(team,i)
+return team[i]and team[i].num or-1
+end,function(_ENV)
+local team=_ENV:f_get_team_cursor"team1"
+menu:refresh(f_zobj",1,2,3,4,5,6",function(i)
+return{
+pkmn=team[i],
+sel=function(_ENV)
+if team[_ENV:f_modes_cursor"editteam"+1]:f_pkmn_available()then
+_ENV:f_modes_push"teamaction"
+else
+_ENV:f_modes_push"teampkmn"
+end
+end
+}
+end)
+end,function(_ENV)
+local team=_ENV:f_get_team_cursor"team1"
+menu:refresh(f_zobj",1,2,3,4,5,6",function(i)
+return{
+disabled=i==_ENV:f_modes_cursor"editteam"+1,
+sel=function(_ENV)
+local ind_one,ind_two=_ENV:f_modes_cursor"editteam"+1,_ENV:f_modes_cursor"switchteam"+1
+team[ind_one],team[ind_two]=team[ind_two],team[ind_one]
+f_save_team(_ENV:f_modes_cursor"team1",team)
+_ENV:f_modes_popuntil"editteam"
+end,
+pkmn=team[i]
+}
+end)
+menu.c=editteam.menu.c
+end,function(_ENV)
+local team=_ENV:f_get_team_cursor"team1"
+menu:refresh(f_zobj",1,2,3,4,5,6",function(i)
+local disabled=p0.team[i]:f_pkmn_isempty()or p0.active.shared==p0.team[i]or p0.team[i].major==1
+return{
+disabled=disabled,
+sel=function()
+_ENV:f_modes_pop()_ENV:f_modes_pop()
+f_select_switch(p0,p0.team[i])
+end,
+pkmn=p0.team[i]
+}
+end)
+end,function(_ENV)
+local p1,p2=p1,p2
+if p1.priority==p2.priority then p2.priority+=sgn(rnd"2"-1)end
+p0=p1.priority>p2.priority and p1 or p2
+end,function(_ENV,lr)
+local stayed=true
+for i=browse.menu.c+lr,75.5+75.5*lr,lr do
+if c_pokemon[i]:f_pkmn_available()then
+browse.menu.c,stayed=i
+f_minisfx"154"
+break
+end
+end
+if stayed then f_beep()end
+f_browsestat_init(_ENV)
+end,function(game)f_minisfx(game:f_modes_cursor"browse")end,function()f_minisfx(f_flr_rnd"152")end,function(_ENV)f_minisfx(pwin.active.num)end,function(_ENV)
+local team={}
+for ind,num in pairs(split"133,7,35,1,25,4")do
+f_set_default_team_pkmn(team,ind,num)
+poke(0x5e5a+num,1)
+end
+if@0x5efc==0 then
+poke(0x5efc,1)
+f_save_team(0,team)
+end
+modes=f_zclass"curr,main;defaults;menu,~c_no,init,~f_nop,lrfunc,~f_beep,xfunc,~f_nop,update,~f_modes_default_update,movemode,~c_no,draw1,~f_modes_default_draw1,draw2,~f_nop,draw3,~f_nop;main;init,~f_main_init,draw2,~f_main_draw2,draw3,~f_main_draw3;browse;init,~f_browse_init,draw2,~f_browse_draw2,draw3,~f_browse_draw3;browsestat;init,~f_browsestat_init,draw2,~f_browse_draw2,draw3,~f_browse_draw3,lrfunc,~f_browsestat_lrfunc,xfunc,~f_browsestat_xfunc;editteam;init,~f_editteam_init,draw2,~f_editteam_draw2,draw3,~f_editteam_draw3,draw1,~f_editteam_draw1;switchteam;init,~f_switchteam_init,draw2,~f_editteam_draw2,draw3,~f_editteam_draw3,draw1,~f_editteam_draw1;teampkmn;init,~f_teampkmn_init,draw2,~f_browse_draw2,draw3,~f_browse_draw3;teamaction;init,~f_teamaction_init,draw2,~f_editteam_draw2,draw3,~f_editteam_draw3;moveaction;init,~f_moveaction_init,draw2,~f_teammoves_draw2,draw3,~f_move_draw3,movemode,teammoves;teammovesel;init,~f_teammovesel_init,draw2,~f_teammovesel_draw2,draw3,~f_move_draw3;teammoves;init,~f_teammoves_init,draw2,~f_teammoves_draw2,draw3,~f_move_draw3;switchmoves;init,~f_switchmoves_init,draw2,~f_teammoves_draw2,draw3,~f_move_draw3;team1;ui_pl,player,init,~f_team_init,draw2,~f_team_draw2,draw3,~f_team_draw3,disable_empty_team,~c_no,select_func,~f_team_select;team1story;ui_pl,player,init,~f_team_init,draw2,~f_team_draw2,draw3,~f_team_draw3,disable_empty_team,~c_yes,select_func,~f_story_select;team1match;ui_pl,player 1,init,~f_team_init,draw2,~f_team_draw2,draw3,~f_team_draw3,disable_empty_team,~c_yes,select_func,~f_match_select;team1horde;ui_pl,player,init,~f_team_init,draw2,~f_team_draw2,draw3,~f_team_draw3,disable_empty_team,~c_yes,select_func,~f_horde_select;team2match;ui_pl,player 2,init,~f_team_init,draw2,~f_team_draw2,draw3,~f_team_draw3,disable_empty_team,~c_yes,select_func,~f_match_start;team2story;ui_pl,trainer,init,~f_fightsel_init,draw2,~f_team_draw2,draw3,~f_team_draw3;fightover;init,~f_fightover_init,draw2,~f_fightover_draw2,draw3,~f_fightover_draw3,xfunc,~f_fightover_xfunc;pselactions;init,~f_pselactions_init,draw2,~f_turn_draw2,draw3,~f_pselactions_draw3;pselmove;init,~f_pselmove_init,draw2,~f_turn_draw2,draw3,~f_move_draw3;pselswitch;init,~f_pselswitch_init,draw2,~f_turn_draw2,draw3,~f_pselswitch_draw3,draw1,~f_editteam_draw1;p1sel;next,p2sel,init,~f_psel_init,p0key,p1;p2sel;next,turn,init,~f_psel_init,p0key,p2;turn;next,p1sel,init,~f_turn_init,update,~f_turn_update,draw1,~f_turn_draw1,draw2,~f_turn_draw2,draw3,~f_turn_draw3,cur_action,~c_no;battleview;init,~f_nop,update,~f_psel_update,draw1,~f_turn_draw1,draw2,~f_turn_draw2,draw3,~f_pselactions_draw3;turnview;init,~f_nop,update,~f_psel_update,draw1,~f_turn_draw1,draw2,~f_turn_draw2,draw3,~f_turn_draw3;credits;init,~f_credits_init,draw2,~f_main_draw2,draw3,~f_main_draw3,xfunc,~f_credits_xfunc;"
+f_zcall(function(menu_name,create_func,...)
+modes[menu_name].menu=create_func(...)
+end,";,browse,~f_create_menu,~f_browse_drawentry,4;;,browsestat,~f_create_menu_view,~f_menu_drawentry;;,credits,~f_create_menu_view,~f_menu_drawentry;;,fightover,~f_create_menu_view,~f_menu_drawentry;;,editteam,~f_create_menu,~f_browse_drawentry,3;;,switchteam,~f_create_menu,~f_browse_drawentry,3;;,main,~f_create_menu,~f_menu_drawentry;;,teamaction,~f_create_menu,~f_menu_drawentry;;,moveaction,~f_create_menu,~f_menu_drawentry;;,teammovesel,~f_create_menu,~f_menu_drawentry;;,teammoves,~f_create_menu,~f_menu_drawentry;;,switchmoves,~f_create_menu,~f_menu_drawentry;;,team1,~f_create_menu,~f_menu_drawentry;;,team1match,~f_create_menu,~f_menu_drawentry;;,team2story,~f_create_menu,~f_menu_drawentry;;,team2match,~f_create_menu,~f_menu_drawentry")
+f_zobj_set(modes,"team1menu,@,browsemenu,@;main;menu;cancel,~f_beep;team1horde;menu,~team1menu;team1story;menu,~team1menu;teampkmn;menu,~browsemenu;",modes.team1.menu,modes.browse.menu)
+menuitem(1,"close picodex",function()
+menuitem(1)
+menuitem(2)
+_ENV:f_actor_load"closing"
+end)
+menuitem(2,"swap 🅾️/❎",function()
+poke(0x5eff,@0x5eff==0 and 1 or 0)
+end)
+end,function(program)
+program.modes:f_actor_state()
+end,function()g_picodex.modes:draw1()end,function()g_picodex.modes:draw2()end,function()g_picodex.modes:draw3()end,function(_ENV)menu.update(_ENV)end,function(_ENV)menu.draw1(_ENV)end,function(_ENV,menu_name)
+return _ENV[menu_name].menu.c
+end,function(_ENV,menu_name)
+local menu=menu_name and _ENV[menu_name].menu or menu
+return menu[menu.c+1]
+end,function(_ENV)
+menuitem(1,"factory reset",function()
+memset(0x5e00,0,0x100)
+_ENV:f_actor_load"shaking"
+end)
+end,function()
+return btn()& 0x3f ~=0
+end,function(_ENV)
+if not f_any_btn()and backbuttonheld then
+backbuttonheld=false
+_ENV:f_actor_load()
+elseif f_any_btn()then
+if not backbuttonheld then
+f_minisfx"156"
+end
+backbuttonheld=true
+menuitem(1)
+end
+end,0,function(num)
+g_cur_sound=num
+end,function(num)
+num+=0
+if num>152 then
+g.g_cur_light=num-152
+end
+sfx(59+num\32,num<=152 and 1 or 0,num%32,1)
+end,function(_ENV)
+cls"0"
+f_zcamera(0,128+sin(_ENV:f_actor_get_elapsed_percent"moveup"/4)*128,function()
+f_zcall(f_zprint,";,aMORG gAMES,64,-68,7,0;;,pRESENTS,64,-61,7,0;;,a pOKEMON bATTLE sIM,64,15,7,0")
+f_zcall(spr,";,198,44,7,5,1")
+local top_row_buttons,
+bot_row_buttons,
+rotation=
+modes and modes.main.menu.c,
+modes and modes.stacksize-1,
+foldstate=="open" and 1
+or foldstate=="closed" and-1
+or(foldstate=="opening" and-1 or 1)*cos(_ENV:f_actor_get_elapsed_percent(foldstate)/2)
+f_zcamera(30-(rotation+1)*15+(curr=="shaking" and f_flr_rnd"3"-1 or 0),27,function()
+f_zcall(rectfill,";,14,18,@,87,5",63+max(0,rotation*54))
+if light==0 then
+f_zcall(rectfill,";,14,18,117,87,13")
+f_zcall(function(xoff,yoff,w,h,screen_func)
+clip(-%0x5f28+xoff,-%0x5f2a+yoff,w,h)
+f_zcamera(xoff,yoff,screen_func)
+clip()
+end,";,14,21,40,40,@;;,71,18,46,13,@;;,71,67,46,21,@",draw1,draw2,draw3)
+end
+f_zcall(map,";,24,0,2,1,8,3;;,8,0,2,9,8,11")
+f_zcall(function(l,off,on,flash,x,y)
+return spr((light<=l)and((l==0 and stat"47">=0 or g_cur_light==l and stat"46">=0)and flash or on)or off,x,y)
+end,";,0,135,133,134,6,3;;,1,132,128,131,12,3;;,2,132,129,131,17,3;;,3,132,130,131,22,3")
+f_zcall(function(b,s1,s2,x,y)
+spr(btn(b)and s1 or s2,x,y)
+end,";,0,186,154,10,77;;,1,188,156,26,77;;,2,171,139,18,73;;,3,187,155,18,81;;,4,170,138,42,77;;,5,172,140,50,77")
+if rotation<=0 then
+f_picodex_map(0,2+64*(1-abs(rotation)),abs(rotation))
+if rotation==-1 and backbuttonheld then spr(219,6,49)end
+else
+f_picodex_map(16,62,rotation)
+if rotation==1 and curr=="game" then
+if top_row_buttons then spr(153,70+top_row_buttons*8,41)end
+if bot_row_buttons and bot_row_buttons>=0 then spr(153,70+bot_row_buttons*8,49)end
+end
+end
+end)
+end)
+end,function(cx,sx,sw)
+sw*=64
+for y=9,96 do
+tline(sx,y,sx+sw-1,y,cx,y/8-1.125,8/sw,0)
+end
+end,function(text,x,y,color)
+local t1,t2="",""
+for i=1,#text do
+local letter,switch=sub(text,i,i),i%2==0
+t1..=switch and " "or letter
+t2..=switch and letter or " "
+end
+f_zprint(t1,x,y,color,0)
+f_zprint(t2,x,y+1,color,0)
+end,function(text,x,y,color,align)
+text=""..text
+if align==0 then x-=#text*2
+elseif align>0 then x-=#text*4+1 end
+print(text,x,y,color)
+end,function(_ENV)
+if num>=0 then
+return not browse or@(0x5e5a+num)>0
+end
+end,function(pkmn)
+f_print_draw2_message("pkmn #"..pkmn.num)
+end,function(pkmn)
+if pkmn:f_pkmn_available()then
+f_print_draw3_message(pkmn.name.."|"..c_types[pkmn.type1].name.."|"..c_types[pkmn.type2].name)
+else
+f_print_draw3_message"none|n/a|"
+end
+end,function(_ENV,x,y,style,xscale,yscale,is_thick)
+local num,mini=_ENV:f_pkmn_available()and num or-1,8*(minimize or 1)
+xscale*=mini yscale*=mini
+local drawpkmn=function(x,y)
+local row,col=num/8\1,num%8
+if row ~=g_loaded_row then
+g.g_loaded_row=row
+memcpy(0x0000,0x8000+0x400*row,0x400)
+end
+sspr(col*16,0,16,16,x-xscale,y-yscale,xscale*2,yscale*2)
+end
+if substitute and substitute>0 then num=152 end
+if not isactive or major ~=1 and not invisible and not(moveturn ~=0 and curmove.ofunc==f_move_flydig)then
+if num<0 then spr(203,x-4,y-4)return end
+local outline_width=1
+local outline_func=function(color,v1,v2,v3,v4,outline_width)
+if color>0 then
+for c=1,15 do pal(c,color)end
+for i=-1,1,2 do
+drawpkmn(x+(v1 or i*outline_width),y+(v2 or i*outline_width))
+drawpkmn(x+(v3 or i*outline_width),y+(v4 or i*outline_width))
+end
+end
+end
+if is_thick then
+f_zcall(outline_func,"bg,@;;,~bg,-2,~c_no,2,~c_no,1;;,~bg,~c_no,-2,~c_no,2,1;;,~bg,-2,0,2,0,1;;,~bg,0,-2,0,2,1",style.bg)
+end
+f_zcall(outline_func,";,@,-1,~c_no,1,~c_no,1;;,1,~c_no,0,0,~c_no,1",style.aa)
+pal()drawpkmn(x,y)
+end
+end,function(game)game:f_modes_push"team2story" end,function(game)game:f_modes_push"team2match" end,function(_ENV)
+f_begin_fight(_ENV,
+f_zobj(",@,player 1,~c_no,~f_nop",f_get_team(_ENV:f_modes_cursor"team1match")),
+f_zobj(",@,player 2,~c_no,~f_nop",f_get_team(_ENV:f_modes_cursor"team2match"))
+)
+end,function(_ENV)
+poke(0x5efe,mid(@0x5efe,#f_get_team_dead(team),152))
+end,function(_ENV)
+local nums={}
+for i=1,152 do add(nums,i%152)end
+f_begin_fight_cpu(_ENV,nums,"horde",function(_,other)
+f_unlock_pkmn(other)
+f_update_horde(other)
+end,f_update_horde)
+end,function(game)
+game:f_modes_push"editteam"
+end,function(game,cursor)
+return f_get_team(game:f_modes_cursor(cursor))
+end,function(game)
+local team=f_get_team(game:f_modes_cursor"team1")
+return team[game:f_modes_cursor"editteam"+1],team
+end,function(pl,pkmn)
+local moves={}
+foreach(pkmn.mynewmoves,function(m)
+add(moves,m)
+end)
+pl.active=setmetatable(f_zobj("isactive,~c_yes,lastmoverecv,0,accuracy,1,evasion,1,moveturn,0,invisible,~c_yes,counterdmg,0,bidedmg,0,disabledtimer,0,confused,0,sleeping,@,substitute,0,toxiced,0,shared,@,mynewmoves,@;stages;special,0,attack,0,defense,0,speed,0,accuracy,0,evasion,0",f_flr_rnd"7"+1,pkmn,moves),{__index=pkmn})
+return f_newaction(pl,"|enters|fight",function()
+f_minisfx(pl.active.num)
+pl.active.invisible=false
+end)
+end,function(movenum,str)
+for m in all(split(str))do
+if m==movenum then
+return true
+end
+end
+end,function(pl,pkmn)
+f_addaction(pl,pl,"|leaves|fight",function(params)
+params.selfactive.invisible=true
+f_addaction(pl,pl,false,function()
+add(pl.actions,f_pkmn_comes_out(pl,pkmn))
+end)
+end)
+pl.priority=3000
+end,function(self,move)
+local desc=self.active.curmove and "|resumes|"or(move.ofunc==f_move_multiturn and "|begins|"or "|uses|")
+f_addaction(self,self,desc..move.name,function(params)
+params.move=move
+local _ENV=params
+if move.num>0 then
+move.pp-=1
+end
+if f_in_moves(move.num,"47,36 ")then
+f_move_setdmg_self(_ENV,selfactive.hp)
+end
+if(function()
+if move.accuracy<=0 then return false end
+if(move.ofunc==f_move_prepare or move.ofunc==f_move_flydig)and not selfactive.curmove then return false end
+if otheractive.curmove and otheractive.curmove.ofunc==f_move_flydig then return true end
+if selfactive.curmove and selfactive.curmove.ofunc==f_move_trapping then return false end
+return rnd(otheractive:f_movehelp_getstat"evasion")>move.accuracy/100*selfactive:f_movehelp_getstat"accuracy" or f_flr_rnd"256"==0 and f_flr_rnd"256"==0
+end)()then
+addaction(self,"|misses|"..move.name)
+if f_in_moves(move.num,"145,73 ")then
+f_move_setdmg_self(_ENV,1)
+end
+else
+if move.func(_ENV)then
+addaction(self,"|fails|attack")
+end
+end
+if move.accuracy ~=0 then
+otheractive.lastmoverecv=move.num
+end
+end)
+end,function(_ENV,newval,newcurmove)
+if not curmove and moveturn==0 then
+moveturn,curmove=newval,newcurmove
+end
+end,function(self,move)
+f_addaction(self,self,false,function(params)
+params.move=move
+local _ENV=params
+selfactive:f_decrement_timer("moveturn",f_nop)
+if selfactive.major==6 then
+selfactive:f_decrement_timer("sleeping",function()
+addaction(self,"|suddenly|woke up")
+selfactive.shared.major=0
+end)
+if selfactive.major==6 then
+addaction(self,"|fast|asleep")
+return
+end
+end
+if selfactive.major==3 then
+if rnd"1"<.2 then
+addaction(self,"|thawed|out")
+selfactive.shared.major=0
+else
+addaction(self,"|is|frozen")
+return
+end
+end
+if otheractive.trappedother==selfactive then addaction(self,"|is|trapped")
+elseif selfactive.disabledslot==move.slot then addaction(self,"|is|disabled")
+elseif selfactive.major==4 and f_flr_rnd"4"==0 then addaction(self,"|fully|paralyzed")
+elseif selfactive.flinching then addaction(self,"|is|flinching")
+else
+if selfactive.confused>0 then
+addaction(self,"|is|confused")
+if f_flr_rnd"2"==0 then
+addaction(self,"|hurt|itself")
+f_move_setdmg_self(_ENV,f_calc_move_damage(selfactive,otheractive,f_create_move(-1)))
+return
+end
+end
+f_movelogic(self,move)
+end
+end)
+end,function(active,key,endfunc)
+if active[key]>0 then
+active[key]-=1
+if active[key]==0 then
+endfunc()
+end
+end
+end,function(self)
+return f_newaction(self,false,function(_ENV)
+if selfactive.major==6
+or selfactive.major==3
+or selfactive.trappedother and selfactive.trappedother ~=otheractive
+then
+selfactive.moveturn=0
+end
+if selfactive.moveturn==0 then
+selfactive.trappedother,selfactive.curmove=nil
+end
+local statdmg=max(selfactive.maxhp\16,1)
+local inflictstatdmg=function(title)
+addaction(self,title.."|damage")
+f_move_setdmg_self(_ENV,statdmg)
+end
+if selfactive.major==5 then
+if selfactive.toxiced>0 then
+statdmg*=selfactive.toxiced
+selfactive.toxiced+=1
+end
+inflictstatdmg"|poison"
+end
+if selfactive.major==2 then inflictstatdmg"|burn" end
+if selfactive.seeded then
+inflictstatdmg"|seed"
+if otheractive.hp<otheractive.maxhp then
+f_move_heal(_ENV,other,statdmg)
+end
+end
+selfactive:f_decrement_timer("confused",function()
+addaction(self,"|confusion|ended")
+end)
+selfactive:f_decrement_timer("disabledtimer",function()
+addaction(self,"|"..selfactive.mynewmoves[selfactive.disabledslot].name.."|enabled")
+selfactive.disabledslot=0
+end)
+end)
+end,function(pl,move)
+pl.actions={}
+local priority_class=1000
+f_premovelogic(pl,move)
+if move.num==120 then priority_class=2000 end
+if f_in_moves(move.num,"18,4,89,30 ")then
+priority_class=0000
+end
+pl.priority=min(3000,priority_class+pl.active:f_movehelp_getstat"speed")
+end,function(game,pl)
+return pl==game.p1 and game.p2 or game.p1
+end,function(pactive,message,logic,name)
+return f_zobj("pl,@,name,@,active,@,message,@,logic,@",pactive,name or pactive.active.name,pactive.active,message or false,logic or f_nop)
+end,function(p0,...)
+add(p0.actions,f_newaction(...))
+end,function(_ENV)
+if g_bpx then
+_ENV:f_modes_push"pselactions"
+f_minisfx"155"
+end
+f_invalid_button()
+end,function()
+if g_bpo or g_bph|g_bpv ~=0 then f_beep()end
+end,function(game)
+f_invalid_button()
+if g_bpx then f_minisfx"154" end
+if g_bpx or not game.cur_action then
+while true do
+for p in all{game.p1,game.p2}do
+if not f_get_next_active(p.team)then
+game.pwin=f_get_other_pl(game,p)
+game:f_actor_load"fightover"
+return
+end
+end
+local action=f_pop_next_action(game)
+if action then
+local actionpl=action.active==game.p1.active and game.p1 or game.p2
+local envparams=f_zobj("move,@,self,@,other,@,addaction,@",move,actionpl,f_get_other_pl(game,actionpl),function(...)
+f_addaction(actionpl,...)
+end)
+envparams.selfactive,envparams.otheractive=envparams.self.active,envparams.other.active
+action.logic(envparams)
+if action.message then
+game.cur_action=action
+return
+else
+end
+else
+game:f_actor_load()
+return
+end
+end
+end
+end,function(game)
+for p in all{game.p1,game.p2}do
+if p.active.hp<=0 then
+if p.active.major ~=1 then
+return f_newaction(p,"|has|fainted",function(_ENV)
+selfactive.shared.major=1
+end)
+elseif p ~=game.p0 then
+return f_pkmn_comes_out(p,f_get_next_active(p.team))
+end
+end
+end
+for s in all{game.p0,f_get_other_pl(game,game.p0)}do
+local o=f_get_other_pl(game,s)
+while #s.actions>0 do
+local action=deli(s.actions,1)
+if action.active.major ~=1 and(action.active==s.active or action.active==o.active)then
+return action
+end
+end
+if s.active.hp<=0 and s.active.major==1 then
+return f_pkmn_comes_out(s,f_get_next_active(s.team))
+end
+if not s.turnover then
+s.turnover=true
+return f_postmove_logic(s)
+end
+end
+end,function(_ENV,moveid)
+for m in all(mynewmoves)do
+if m.num==moveid then
+return true
+end
+end
+end,function(_ENV)
+return #f_get_moves(_ENV,true)==0
+end,function(pkmn,ismimic)
+local moves={}
+foreach(pkmn.mynewmoves,function(m)
+if m.num>0 and(ismimic or m.pp>0 and pkmn.disabledslot ~=m.slot)then
+add(moves,m)
+moves[m]=true
+end
+end)
+return moves
+end,function(_ENV)
+if moveturn ~=0 then
+return{curmove}
+else
+return f_get_moves(_ENV)
+end
+end)
+f_zobj_set(g,"f_get_type_advantage,@,f_calc_move_damage,@,f_psel_init,@,f_psel_forfeit,@,f_begin_fight,@,f_begin_fight_cpu,@,f_extract_sheet,@,f_vget,@,f_vset,@,f_px9_decomp,@,f_game_state_init,@",function(move,defender)
+return(c_types[move.movetype][defender.type1]or 1)*(c_types[move.movetype][defender.type2]or 1)
+end,function(attacker,defender,move)
+local attack,defense=attacker:f_movehelp_getstat"special",defender:f_movehelp_getstat"special"
+if move.movetype%2==1 then
+attack,defense=attacker:f_movehelp_getstat"attack",defender:f_movehelp_getstat"defense"
+if defender.reflected then
+defense*=2
+end
+elseif defender.screened then
+defense*=2
+end
+local divisor=1024
+if f_in_moves(move.num,"107,164,57,157 ")then divisor*=.3 end
+if focused then divisor*=.3 end
+local crit=rnd"1"<min(.99,(attacker.base_speed+76)/divisor)and move.num>0 and 2 or 1
+local base_damage=mid(
+3,997,
+(100*crit/5+2)/50
+*move.damage
+*mid(10,.2,attack/defense)
+)+2
+local dmg,advantage=base_damage,f_get_type_advantage(move,defender)
+*((move.movetype==attacker.type1 or move.movetype==attacker.type2)and 1.5 or 1)
+*(rnd".15"+.85)
+if advantage>0 then
+return mid(1,999,dmg*advantage\1),crit>1
+end
+return 0,false
+end,function(_ENV)
+p0=_ENV[p0key]
+do local _ENV=p0.active
+counterdmg,flinching=0,false
+end
+p0.turnover=false
+if p0.iscpu then
+local possible_moves=f_get_possible_moves(p0.active)
+f_select_move(p0,possible_moves[f_flr_rnd(#possible_moves)+1]or f_create_move(0))
+_ENV:f_actor_load()
+elseif #p0.actions>0 then
+_ENV:f_actor_load()
+else
+pselactions.menu,
+pselmove.menu,
+pselswitch.menu,
+cur_action,
+stack[#stack]=p0.menu_action,
+p0.menu_move,
+p0.menu_switch,
+f_newaction(p0,"|begins|turn"),
+curr
+_ENV:f_actor_load"turnview"
+end
+end,function(_ENV)
+_ENV:f_modes_pop()
+pwin=_ENV:f_get_other_pl(p0)
+_ENV:f_actor_load"fightover"
+end,function(_ENV,d1,d2)
+f_minisfx(false)
+d1.key,d2.key="p1","p2"
+for dd in all{d1,d2}do
+_ENV[dd.key]=f_zobj("actions,#,priority,1,menu_action,@,menu_move,@,menu_switch,@,team,@,name,@,iscpu,@,winlogic,@",f_create_menu(f_menu_drawentry),
+f_create_menu(f_menu_drawentry),
+f_create_menu(f_browse_drawentry,3),
+unpack(dd))
+local pl=_ENV[dd.key]
+pl.menu_action.cancel=function()
+_ENV:f_modes_pop()
+_ENV:f_actor_load"battleview"
+end
+add(pl.actions,f_pkmn_comes_out(pl,f_get_next_active(pl.team)))
+end
+_ENV:f_modes_push"turn"
+end,function(_ENV,pkmn_nums,name,plwinfunc,cpuwinfunc)
+local cpu_team_draft={}
+for i=1,#pkmn_nums do
+f_set_default_team_pkmn(cpu_team_draft,i,pkmn_nums[i])
+end
+f_begin_fight(_ENV,
+{_ENV:f_get_team_cursor"team1","player",false,plwinfunc},
+{cpu_team_draft,name,true,cpuwinfunc}
+)
+end,function(index)
+f_px9_decomp(peek2(index),
+function(...)return f_vget(0x8000+index*0x1000,...)end,
+function(...)return f_vset(0x8000+index*0x1000,...)end)
+end,function(offset,x,y)
+x=min(max(0,x),127)\1
+local val=peek(y\1*64+offset+x\2)
+if x%2==1 then return(val & 0xf0)>>>4
+else return(val & 0x0f)end
+end,function(offset,x,y,val)
+x=min(max(0,x),127)\1
+local mem_coord=y\1*64+offset+x\2
+local oldval=peek(mem_coord)
+if x%2==1 then poke(mem_coord,(oldval & 0x0f)|(((val or 0)& 0x0f)<<4))
+else poke(mem_coord,(oldval & 0xf0)|(((val or 0)& 0x0f)<<0))
+end
+end,function(src,f_vget,f_vset)
+local function vlist_val(l,val)
+local v,i=l[1],1
+while v!=val do
+i+=1
+v,l[i]=l[i],v
+end
+l[1]=val
+end
+local cache,cache_bits=0,0
+function getval(bits)
+if cache_bits<8 then
+cache_bits+=8
+cache+=@src>>cache_bits
+src+=1
+end
+cache<<=bits
+local val=cache&0xffff
+cache^^=val
+cache_bits-=bits
+return val
+end
+function gnp(n)
+local bits=0
+repeat
+bits+=1
+local vv=getval(bits)
+n+=vv
+until vv<(1<<bits)-1
+return n
+end
+local w,h_1,eb,el,pr,x,y,splen,predict=gnp"1",gnp"0",gnp"1",{},{},0,0,0
+for i=1,gnp"1" do add(el,getval(eb))end
+for y=0,h_1 do
+for x=0,w-1 do
+splen-=1
+if(splen<1)then
+splen,predict=gnp"1",not predict
+end
+local a=y>0 and f_vget(x,y-1)or 0
+local l=pr[a]or{unpack(el)}
+pr[a]=l
+local v=l[predict and 1 or gnp"2"]
+vlist_val(l,v)
+vlist_val(el,v)
+f_vset(x,y,v)
+end
+end
+end,function(state)
+if state.mysfx then f_minisfx(state.mysfx)end
+state:sinit()
+end)
+g.c_moves_raw=f_zobj"-1;,none,17,0,40,0,~f_move_default;0;,struggle,17,0,50,100,~f_move_recoil;;,megapnch,1,20,80,85,~f_move_default;;,razrwind,1,10,80,75,~f_move_prepare;;,sworddnc,1,30,0,0,~f_move_self,~f_move_stat,attack,2;;,whrlwind,1,20,0,100,~f_move_other,~f_move_switch;;,megakick,1,5,120,75,~f_move_default;;,toxic,5,10,0,85,~f_move_toxic;;,horndril,1,5,-5,30,~f_move_ohko;;,bodyslam,1,15,85,100,~f_move_default,30,~f_move_major_other,4;;,takedown,1,20,90,85,~f_move_recoil;;,doubedge,1,15,100,100,~f_move_recoil;;,bublbeam,4,20,65,100,~f_move_default,10,~f_move_other,~f_move_stat,speed,-1;;,watergun,4,25,40,100,~f_move_default;;,icebeam,10,10,95,100,~f_move_default,10,~f_move_major_other,3;;,blizzard,10,5,120,90,~f_move_default,10,~f_move_major_other,3;;,hyprbeam,1,5,150,90,~f_move_hyperbeam;;,payday,1,20,40,100,~f_move_default;;,submsion,3,20,80,80,~f_move_recoil;;,counter,3,20,-5,100,~f_move_counter;;,seistoss,3,20,-5,100,~f_move_setdmg,50;;,rage,1,20,20,100,~f_move_rage;;,megdrain,8,10,40,100,~f_move_drain;;,solrbeam,8,10,120,100,~f_move_prepare;;,drgnrage,14,10,-5,100,~f_move_setdmg,40;;,thndrblt,6,15,95,100,~f_move_default,10,~f_move_major_other,4;;,thunder,6,10,120,70,~f_move_default,10,~f_move_major_other,4;;,earthqke,7,10,100,100,~f_move_default;;,fissure,7,5,-5,30,~f_move_ohko;;,dig,7,10,100,100,~f_move_flydig,|begins|digging;;,psychic,12,10,90,100,~f_move_default,30,~f_move_other,~f_move_stat,special,-1;;,teleport,12,20,0,0,~f_move_self,~f_move_switch;;,mimic,1,10,0,0,~f_move_mimic;;,doubteam,1,15,0,0,~f_move_self,~f_move_stat,evasion,1;;,reflect,12,20,0,0,~f_move_self,~f_movehelp_minor,|raises|defense,reflected;;,bide,1,10,-5,100,~f_move_bide;;,metrnome,1,10,0,0,~f_move_metronome;;,selfdstr,1,5,260,100,~f_move_default;;,eggbomb,1,10,100,75,~f_move_default;;,fireblst,2,5,120,85,~f_move_default,30,~f_move_major_other,2;;,swift,1,20,60,-5,~f_move_default;;,skulbash,1,15,100,100,~f_move_prepare;;,softboil,1,10,0,0,~f_move_recover;;,dreameat,12,15,100,100,~f_move_dreameater;;,skyattck,9,5,140,90,~f_move_prepare;;,rest,12,10,0,0,~f_move_rest;;,thndrwav,6,20,0,100,~f_move_major_other,4;;,psywave,12,15,-5,80,~f_move_psywave;;,explsion,1,5,340,100,~f_move_default;;,rockslid,13,10,75,90,~f_move_default;;,triattck,1,10,80,100,~f_move_default;;,substute,1,10,0,0,~f_move_substitute;;,cut,1,30,50,95,~f_move_default;;,fly,9,15,70,95,~f_move_flydig,|begins|flying;;,surf,4,15,95,100,~f_move_default;;,strength,1,15,80,100,~f_move_default;;,flash,1,20,0,70,~f_move_other,~f_move_stat,accuracy,-1;;,pound,1,35,40,100,~f_move_default;;,karatchp,3,25,55,100,~f_move_default;;,doubslap,1,10,15,85,~f_move_multihit_var;;,comtpnch,1,15,20,85,~f_move_multihit_var;;,firepnch,2,15,75,100,~f_move_default,10,~f_move_major_other,2;;,icepnch,10,15,75,100,~f_move_default,10,~f_move_major_other,3;;,thndpnch,6,15,75,100,~f_move_default,10,~f_move_major_other,4;;,scratch,1,35,40,100,~f_move_default;;,vicegrip,1,30,55,100,~f_move_default;;,guilotin,1,5,-5,30,~f_move_ohko;;,gust,9,35,40,100,~f_move_default;;,wingatck,9,35,35,100,~f_move_default;;,bind,1,20,15,75,~f_move_trapping;;,slam,1,20,80,75,~f_move_default;;,vinewhip,8,10,35,100,~f_move_default;;,stomp,1,20,65,100,~f_move_default,30,~f_move_other,~f_movehelp_flinch;;,doubkick,3,30,30,100,~f_move_multihit_set,2,~f_nop;;,jumpkick,3,20,70,95,~f_move_default;;,rllngkck,3,15,60,85,~f_move_default,30,~f_move_other,~f_movehelp_flinch;;,sandatck,7,15,0,100,~f_move_other,~f_move_stat,accuracy,-1;;,headbutt,1,15,70,100,~f_move_default,30,~f_move_other,~f_movehelp_flinch;;,hornatck,1,25,65,100,~f_move_default;;,furyatck,1,20,15,85,~f_move_multihit_var;;,tackle,1,35,35,95,~f_move_default;;,wrap,1,20,15,85,~f_move_trapping;;,thrash,1,20,90,100,~f_move_thrash;;,tailwhip,1,30,0,100,~f_move_other,~f_move_stat,defense,-1;;,psnsting,5,35,15,100,~f_move_default,20,~f_move_major_other,5;;,twineedl,11,20,25,100,~f_move_multihit_twin;;,pinmisil,11,20,15,85,~f_move_multihit_var;;,leer,1,30,0,100,~f_move_other,~f_move_stat,defense,-1;;,bite,1,25,60,100,~f_move_default,10,~f_move_other,~f_movehelp_flinch;;,growl,1,40,0,100,~f_move_other,~f_move_stat,attack,-1;;,roar,1,20,0,100,~f_move_other,~f_move_switch;;,sing,1,15,0,55,~f_move_major_other,6;;,sprsonic,1,20,0,55,~f_move_other,~f_movehelp_confuse;;,sonicbom,1,20,-5,90,~f_move_setdmg,20;;,disable,1,20,0,55,~f_move_disable;;,acid,5,30,40,100,~f_move_default,10,~f_move_other,~f_move_stat,defense,-1;;,ember,2,25,40,100,~f_move_default,10,~f_move_major_other,2;;,flamthwr,2,15,95,100,~f_move_default,10,~f_move_major_other,2;;,mist,10,30,0,0,~f_move_self,~f_movehelp_minor,|stat lower|immunity,misted;;,hydropmp,4,5,120,80,~f_move_default;;,psybeam,12,20,65,100,~f_move_default,10,~f_move_other,~f_movehelp_confuse;;,aurorabm,10,20,65,100,~f_move_default,10,~f_move_other,~f_move_stat,attack,-1;;,peck,9,35,35,100,~f_move_default;;,drillpck,9,20,80,100,~f_move_default;;,lowkick,3,20,50,90,~f_move_default,30,~f_move_other,~f_movehelp_flinch;;,absorb,8,20,20,100,~f_move_drain;;,leechsed,8,10,0,90,~f_move_other,~f_movehelp_minor,|is now|seeded,seeded,1,~c_yes;;,growth,1,40,0,0,~f_move_self,~f_move_stat,special,1;;,razrleaf,8,25,55,95,~f_move_default;;,psnpowdr,5,35,0,75,~f_move_major_other,5;;,stunspor,8,30,0,75,~f_move_major_other,4;;,slppowdr,8,15,0,75,~f_move_major_other,6;;,petldanc,8,20,70,100,~f_move_thrash;;,strngsht,11,40,0,95,~f_move_other,~f_move_stat,speed,-1;;,firespin,2,15,15,70,~f_move_trapping;;,thndshck,6,30,40,100,~f_move_default,10,~f_move_major_other,4;;,rockthrw,13,15,50,65,~f_move_default;;,cnfusion,12,25,50,100,~f_move_default,10,~f_move_other,~f_movehelp_confuse;;,hypnosis,12,20,0,60,~f_move_major_other,6;;,meditate,12,40,0,0,~f_move_self,~f_move_stat,attack,1;;,agility,12,30,0,0,~f_move_self,~f_move_stat,speed,2;;,quickatk,1,30,40,100,~f_move_default;;,ngtshade,15,15,-5,100,~f_move_setdmg,50;;,screech,1,10,0,85,~f_move_other,~f_move_stat,defense,-2;;,recover,1,20,0,0,~f_move_recover;;,harden,1,30,0,0,~f_move_self,~f_move_stat,defense,1;;,minimize,1,20,0,0,~f_move_minimize;;,smokscrn,1,20,0,100,~f_move_other,~f_move_stat,accuracy,-1;;,cnfusray,15,10,0,100,~f_move_other,~f_movehelp_confuse;;,withdraw,4,40,0,0,~f_move_self,~f_move_stat,defense,1;;,dfnscurl,1,40,0,0,~f_move_self,~f_move_stat,defense,1;;,barrier,12,30,0,0,~f_move_self,~f_move_stat,defense,2;;,lghtscrn,12,30,0,0,~f_move_self,~f_movehelp_minor,|raises|spcdefense,screened;;,haze,10,30,0,-5,~f_move_haze;;,fcsenrgy,1,30,0,0,~f_move_self,~f_movehelp_minor,|raises|crit ratio,focused;;,mirrmove,9,20,-5,0,~f_move_mirror_move;;,lick,15,30,20,100,~f_move_default,30,~f_move_major_other,4;;,smog,5,20,20,100,~f_move_default,30,~f_move_major_other,5;;,sludge,5,20,65,100,~f_move_default,30,~f_move_major_other,5;;,boneclub,7,20,65,85,~f_move_default,10,~f_move_other,~f_movehelp_flinch;;,watrfall,4,15,80,100,~f_move_default;;,clamp,4,10,35,75,~f_move_trapping;;,spikcann,1,15,20,100,~f_move_multihit_var;;,constrct,1,35,10,100,~f_move_default,10,~f_move_other,~f_move_stat,speed,-1;;,amnesia,12,20,0,0,~f_move_self,~f_move_stat,special,2;;,kinesis,12,15,0,80,~f_move_other,~f_move_stat,accuracy,-1;;,hijmpkck,3,20,85,90,~f_move_default;;,glare,1,30,0,75,~f_move_major_other,4;;,poisngas,5,40,0,55,~f_move_major_other,5;;,barrage,1,20,15,85,~f_move_multihit_var;;,leechlif,11,15,20,100,~f_move_drain;;,lovekiss,1,10,0,75,~f_move_major_other,6;;,tranform,1,10,0,0,~f_move_transform;;,bubble,4,30,20,100,~f_move_default,10,~f_move_other,~f_move_stat,speed,-1;;,dizypnch,1,10,70,100,~f_move_default;;,spore,8,15,0,100,~f_move_major_other,6;;,splash,1,40,0,0,~f_move_splash;;,acidarmr,5,40,0,0,~f_move_self,~f_move_stat,defense,2;;,crabhamr,4,10,90,85,~f_move_default;;,furyswps,1,15,10,80,~f_move_multihit_var;;,bonerang,7,10,50,90,~f_move_multihit_set,2,~f_nop;;,hyprfang,1,15,80,90,~f_move_default,10,~f_move_other,~f_movehelp_flinch;;,sharpen,1,30,0,0,~f_move_self,~f_move_stat,attack,1;;,convrson,1,30,0,0,~f_move_conversion;;,suprfang,1,10,-5,90,~f_move_superfang;;,slash,1,20,70,100,~f_move_default"
+c_team_memlocs=f_zobj"0,0x5e00,1,0x5e1e,2,0x5e3c"
+g_loaded_row=16
+function _init()
+local _ENV=g
+memset(0x8000,0,0x7fff)
+g_picodex=f_zclass"curr,wait,init,~f_game_state_init,light,4;defaults;foldstate,closed,light,4,mysfx,~c_no,backbuttonheld,~c_no,sinit,~f_nop,update,~f_nop,draw,~f_nop,draw1,~f_nop,draw2,~f_nop,draw3,~f_nop,modes,;wait;next,moveup,duration,.3,draw,~f_draw_picodex;moveup;next,closed,duration,.3,draw,~f_draw_picodex,mysfx,157;shaking;foldstate,closed,next,closed,duration,.3,mysfx,158,draw,~f_draw_picodex;closed;foldstate,closed,next,opening,sinit,~f_closed_init,draw,~f_draw_picodex,update,~f_closed_update;opening;foldstate,opening,next,opened,duration,.3,mysfx,159,draw,~f_draw_picodex;opened;foldstate,open,next,starting_1,duration,.2,draw,~f_draw_picodex;starting_1;foldstate,open,next,starting_2,light,3,duration,.3,mysfx,155,draw,~f_draw_picodex;starting_2;foldstate,open,next,starting_3,light,2,duration,.2,mysfx,154,draw,~f_draw_picodex;starting_3;foldstate,open,next,game,light,1,duration,.4,mysfx,153,draw,~f_draw_picodex;game;foldstate,open,next,closing,light,0,mysfx,152,sinit,~f_game_init,draw,~f_draw_picodex,update,~f_game_update,draw1,~f_game_draw1,draw2,~f_game_draw2,draw3,~f_game_draw3;closing;foldstate,closing,next,closed,mysfx,159,duration,.3,draw,~f_draw_picodex,update,~f_nop;"
+f_draw_picodex(g_picodex)
+flip()
+f_minisfx_now"153" f_extract_sheet(0x0)
+f_minisfx_now"154" f_extract_sheet(0x2)
+f_minisfx_now"155" f_extract_sheet(0x4)
+f_zcall(poke,";,0x5f5c,8;;,0x5f5d,2;;,0x5f56,0xe0")
+f_px9_decomp(peek2"0x6",mget,mset)
+f_populate_c_moves()
+f_populate_c_pokemon()
+local trainer_loc=peek2"0xa"
+for i=1,40 do
+c_trainers[i]={name=c_trainer_names[i]}
+for j=1,6 do
+add(c_trainers[i],peek(trainer_loc))
+trainer_loc+=1
+end
+end
+f_zcall(memcpy,";,0x0000,0xc000,0x2000")
+end
+function _update60()
+local _ENV=g
+g_bpo,g_bpx,g_bph,g_bpv=btnp"4",btnp"5",btnp"0" and btnp"1" and 0 or btnp"0" and-1 or btnp"1" and 1 or 0,btnp"2" and btnp"3" and 0 or btnp"2" and-1 or btnp"3" and 1 or 0
+if@0x5eff==1 then
+g_bpo,g_bpx=g_bpx,g_bpo
+end
+g_picodex:f_actor_state()
+if g_cur_sound then
+g_cur_sound=f_minisfx_now(g_cur_sound)
+end
+end
+function _draw()
+local _ENV=g
+g_picodex:draw()
+end

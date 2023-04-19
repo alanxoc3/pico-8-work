@@ -4,7 +4,7 @@
 -- single string is passed in as a parameter. A pipe separates the two parts of
 -- that string. The first part contains a csv list of strings, the first item
 -- in that list is the name of this "class", while the remaining items are
--- classes to inherit from (parents). The second part of the string is a zobj
+-- classes to inherit from (parents). The second part of the string is a f_zobj
 -- definition specifying values.
 
 -- a zclass has a few special attributes that should only be overidden in special cases:
@@ -29,7 +29,7 @@ function zclass(meta_and_att_str)
         done[class] = true -- avoid initializing class twice
         inst.parents[class] = true -- useful for checking if instance inherits from this class (should not be overridden!)
         add(g_zclass_new_entities, {class, inst}) -- mark for addition to ECS (may be overridden by templates).
-        return zobj_set(inst, template, ...)
+        return f_zobj_set(inst, template, ...)
     end
 
     _g[class] = function(...) if not memloc or peek(memloc) == expected_memloc_value then return g_zclass_constructors[class]({ id=class, parents={}, ecs_exclusions={} }, {}, ...) end end

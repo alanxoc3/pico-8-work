@@ -1,6 +1,6 @@
 zclass[[room_bounds,box|x,@,y,@,rx,@,ry,@]]
 
-|[room_init]| function(state) 
+|[f_room_init]| function(state) 
     local r = g_rooms[peek'MEM_ROOM_IND']
     
     local mus = flr(r.music/2)*8+(r.music%2)*5
@@ -33,7 +33,7 @@ zclass[[room_bounds,box|x,@,y,@,rx,@,ry,@]]
     end)
 end $$
 
-|[room_update]| function(state)
+|[f_room_update]| function(state)
     -- DEBUG_BEGIN
     -- easy way to save
     if g_debug and btnp'BTN_ITEM_SELECT' and g_pl and g_pl:is_alive() then
@@ -55,18 +55,18 @@ end $$
         1 ;,timer,       tick;
         2 ;,actor,       state;
         3 ;,pushable,    update_push;
-        4 ;,mov,         mov_update;
+        4 ;,mov,         f_mov_update;
         5 ;,enemy,       pl_collide_func_batch, ~pls;
 
-        6 ;,collidable,  adjust_deltas_for_solids, %set_x_delta, ~solids;
-        7 ;,collidable,  adjust_deltas_for_tiles,  %set_x_delta, ~room;
-        8 ;,collidable,  adjust_deltas_for_screen, %set_x_delta2;
-        9 ;,vec,         vec_update_x;
+        6 ;,collidable,  f_adjust_deltas_for_solids, %f_set_x_delta, ~solids;
+        7 ;,collidable,  f_adjust_deltas_for_tiles,  %f_set_x_delta, ~room;
+        8 ;,collidable,  f_adjust_deltas_for_screen, %f_set_x_delta2;
+        9 ;,vec,         f_vec_update_x;
 
-        10;,collidable,  adjust_deltas_for_solids, %set_y_delta, ~solids;
-        11;,collidable,  adjust_deltas_for_tiles,  %set_y_delta, ~room;
-        12;,collidable,  adjust_deltas_for_screen, %set_y_delta2;
-        13;,vec,         vec_update_y;
+        10;,collidable,  f_adjust_deltas_for_solids, %f_set_y_delta, ~solids;
+        11;,collidable,  f_adjust_deltas_for_tiles,  %f_set_y_delta, ~room;
+        12;,collidable,  f_adjust_deltas_for_screen, %f_set_y_delta2;
+        13;,vec,         f_vec_update_y;
 
         14;,smaller_slimes,statcollide, ~smaller_slimes;
         15;,smaller_slimes,statcollide, ~statitems;
@@ -110,7 +110,7 @@ end $$
     end
 end $$
 
-|[room_draw]| function(state)
+|[f_room_draw]| function(state)
     isorty(g_zclass_entities['drawlayer_50'])
 
     draw_room(g_rooms[peek'MEM_ROOM_IND'], CARD_CX, CARD_CY, function()

@@ -14,7 +14,7 @@ function draw_bar(x1,y1,x2,y2,percent,align,fg,bg,og)
 end
 
 -- improves performance for draw_card below
-|[card_table_cache]| zobj[[
+|[f_card_table_cache]| f_zobj[[
     1;,1,0,-1,0,13;
     2;,0,1,0,-1,13;
     3;,2,1,-2,-1,1;
@@ -28,7 +28,7 @@ function draw_card(x, y, rx, ry, coffx, coffy, card_func, post_card_func)
 
     zcall_tbl(function(xx1, yy1, xx2, yy2, col)
         rectfill(x1+xx1,y1+yy1,x2+xx2,y2+yy2,col)
-    end, _g.card_table_cache)
+    end, _g.f_card_table_cache)
 
     clip(x1+2,y1+2,x2-x1-3,y2-y1-3)
     zcamera(cam_x, cam_y, card_func)
@@ -41,23 +41,23 @@ function draw_card(x, y, rx, ry, coffx, coffy, card_func, post_card_func)
 end
 
 zclass[[coin_count,vec,actor,drawlayer_90|
-    y,142, draw,%coin_coint_draw;
+    y,142, draw,%f_coin_coint_draw;
     defaults; dy,0, update,nop;
-    start;  next,open,   update,%coin_count_start;
+    start;  next,open,   update,%f_coin_count_start;
     open;   next,normal, dy,-2, duration,.2;
-    normal; next,close,  update,%coin_count_normal;
+    normal; next,close,  update,%f_coin_count_normal;
     close;  next,start,  dy,2,  duration,.2;
 ]]
 
-|[coin_count_start]| function(a)
+|[f_coin_count_start]| function(a)
     if peek'MEM_MONEY' ~= 0 then a:load() end
 end $$
 
-|[coin_count_normal]| function(a)
+|[f_coin_count_normal]| function(a)
     if peek'MEM_MONEY' == 0 then a:load() end
 end $$
 
-|[coin_coint_draw]| function(a)
+|[f_coin_coint_draw]| function(a)
     draw_card(64, a.y, 9, 5, 0, 0, function()
         spr(SPR_COIN_UI, 1, 0)
         zprinttbox(tostr(peek'MEM_MONEY'), 12, 2, 0, 7, 5)
@@ -66,10 +66,10 @@ end $$
 
 -- controls the right stat so there is only ever 1 instance
 zclass[[energybar,vec,actor,drawlayer_99|
-    obj,@, y,20, draw,%energybar_draw;
+    obj,@, y,20, draw,%f_energybar_draw;
 ]]
 
-|[energybar_draw]| function(a)
+|[f_energybar_draw]| function(a)
     local is_cooldown = g_pl.is_energy_cooling_down and g_pl.energy >= g_pl.target_energy
     local fg = is_cooldown and 13 or 11 -- (g_pl.energy > .5 and 8 or 11)
     local bg = is_cooldown and 5 or 3-- (g_pl.energy > .5 and 2 or 3)
@@ -92,24 +92,24 @@ end $$
 zclass[[ma_left|ma_level,0]]
 zclass[[ma_right|ma_level,0]]
 
--- 2 levels of ma_right. battle and interact. interact always trumps battle.
+-- 2 levels of ma_right. battle and f_interact. f_interact always trumps battle.
 zclass[[ma_battle,ma_right|ma_level,0]]
 zclass[[ma_boss,ma_right|ma_level,1]]
 zclass[[ma_interact,ma_right|ma_level,2]]
 
 zclass[[rstat,vec,actor,drawlayer_95|
     align,@, x,@, entity_type,@,
-    y,141, draw,%stat_draw,
-    buffer_update,%rstat_update, get,%rstat_get;
+    y,141, draw,%f_stat_draw,
+    buffer_update,%f_rstat_update, get,%f_rstat_get;
 
     defaults; dy,0, update,nop;
-    start;  next,open,   update,%stat_idle;
+    start;  next,open,   update,%f_stat_idle;
     open;   next,normal, dy,-2, duration,.2;
-    normal; next,close,  update,%stat_normal;
+    normal; next,close,  update,%f_stat_normal;
     close;  next,start,  dy,2,  duration,.2;
 ]]
 
-|[stat_idle]| function(a)
+|[f_stat_idle]| function(a)
     a.obj = nil
     if a.next_obj and a.next_obj:is_alive() then
         a.obj = a.next_obj
@@ -118,7 +118,7 @@ zclass[[rstat,vec,actor,drawlayer_95|
     end
 end $$
 
-|[rstat_update]| function(a)
+|[f_rstat_update]| function(a)
     local buffer, cur_obj, new_lvl, new_obj, should_exit = g_zclass_entities[a.entity_type], a:get(), -1
 
     for obj in all(buffer) do
@@ -130,17 +130,17 @@ end $$
     a.next_obj = new_obj
 end $$
 
-|[rstat_get]| function(a)
+|[f_rstat_get]| function(a)
     return a.curr == 'normal' and a.obj and a.obj:is_alive() and a.obj
 end $$
 
-|[stat_normal]| function(a)
+|[f_stat_normal]| function(a)
     if a.next_obj ~= a.obj then
         a:load()
     end
 end $$
 
-|[stat_draw]| function(a)
+|[f_stat_draw]| function(a)
     local obj = a.obj
     if obj then
         local has_health = obj.parents and obj.parents.healthobj
@@ -165,22 +165,22 @@ zclass[[tbox,vec,actor,drawlayer_99|
     anim,0,
     line_1,,
     line_2,,
-    update,%tbox_update,
-    draw,%tbox_draw;
+    update,%f_tbox_update,
+    draw,%f_tbox_draw;
 
     texts;,;
     defaults; init,nop, update,nop;
-    start;  dy,-2, duration,.2, next,normal, init,%tbox_init;
-    normal; dy,0,  anim,0, done,no, update,%tbox_update;
+    start;  dy,-2, duration,.2, next,normal, init,%f_tbox_init;
+    normal; dy,0,  anim,0, done,no, update,%f_tbox_update;
     ending; dy,2,  duration,.2;
 ]]
 
-|[tbox_init]| function(a)
+|[f_tbox_init]| function(a)
     a.texts = split(a.rawtext, "^")
     a.sind = deli(a.texts, 1)
 end $$
 
-|[tbox_update]| function(a)
+|[f_tbox_update]| function(a)
     local text1 = a.texts[a.cur_text_index]
     local text2 = a.texts[a.cur_text_index+1] or ""
     local textslen = #text1 + #text2 + 4
@@ -206,7 +206,7 @@ end $$
     a.anim = min(textslen, a.anim+.5)
 end $$
 
-|[tbox_draw]| function(a)
+|[f_tbox_draw]| function(a)
     draw_card(64, a.y, 46, 10, 2.5, 5,
     function()
         zcall(zprinttbox, [[

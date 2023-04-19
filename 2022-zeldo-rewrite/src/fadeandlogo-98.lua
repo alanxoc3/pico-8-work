@@ -1,6 +1,6 @@
 -- x=64, y=64, i=@2, u=nf, d=@1, tl_max_time=2.5; -- logo
 
-g_fade, g_fade_table = 1, zobj[[
+g_fade, g_fade_table = 1, f_zobj[[
 0;  ,0  ,0  ,0  ,0  ,0  ,0  ,0  ,0;
 1;  ,1  ,1  ,1  ,1  ,0  ,0  ,0  ,0;
 2;  ,2  ,2  ,2  ,1  ,0  ,0  ,0  ,0;
@@ -19,7 +19,7 @@ g_fade, g_fade_table = 1, zobj[[
 15; ,15 ,15 ,13 ,13 ,5  ,5  ,0  ,0;
 ]]
 
-g_fade_table_gray = zobj[[
+g_fade_table_gray = f_zobj[[
 0;  ,0,  0  ;
 1;  ,1,  1  ;
 2;  ,2,  5  ;
@@ -39,7 +39,7 @@ g_fade_table_gray = zobj[[
 ]]
 
 -- 2 4 7 8 14
-g_fade_table_red = zobj[[
+g_fade_table_red = f_zobj[[
 0;  ,0,  0  ;
 1;  ,1,  2  ;
 2;  ,2,  2  ;
@@ -91,25 +91,25 @@ zclass[[fader,actor|
 ]]
 
 zclass[[fader_out,fader|
-    start; duration,FADE_SPEED, destroyed,@, update,%fader_out_update
+    start; duration,FADE_SPEED, destroyed,@, update,%f_fader_out_update
 ]]
 
-|[fader_out_update]| function(a)
+|[f_fader_out_update]| function(a)
     poke(0x5f43, 0xff)
     g_fade = a:get_elapsed_percent'start'
 end $$
 
 zclass[[fader_in,fader|
-    start; duration,FADE_SPEED, update,%fader_in_update
+    start; duration,FADE_SPEED, update,%f_fader_in_update
 ]]
 
-|[fader_in_update]| function(a)
+|[f_fader_in_update]| function(a)
     g_fade = 1 - a:get_elapsed_percent'start'
 end $$
 
-|[logo_init]| function() sfx(63, 0) end $$
+|[f_logo_init]| function() sfx(63, 0) end $$
 
-|[logo_draw]| function(a)
+|[f_logo_draw]| function(a)
     g_fade = cos(a:get_elapsed_percent'logo')+1
     camera(g_fade > .5 and rnd_one())
     zspr(SPR_LOGO, 64, 64, SPR_LOGO_W, SPR_LOGO_H)

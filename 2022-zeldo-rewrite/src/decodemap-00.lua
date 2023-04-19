@@ -36,8 +36,8 @@ g_obj_map = split[[
 ,woodtbl     -- 29  | 16  | 1  | 1
 ,greytbl     -- 30  | 17  | 1  | 1
 ,soupbucket  -- 31  | 18  | 1  | 1
-,slimy       -- 32  | 118 | 1  | 1
-,miny        -- 33  | 116 | 1  | 1
+,f_slimy       -- 32  | 118 | 1  | 1
+,f_miny        -- 33  | 116 | 1  | 1
 ,woodcrate   -- 34  | 35  | 1  | 1
 ,quack       -- 35  | 32  | 1  | 1
 ,blockade    -- 36  | 25  | 1  | 1
@@ -52,22 +52,22 @@ g_obj_map = split[[
 ,nil         -- 45  | 0   | 1  | 1
 ,nil         -- 46  | 0   | 1  | 1
 ,nil         -- 47  | 0   | 1  | 1
-,coin_1      -- 48  | 36  | 1  | 1
-,coin_2      -- 49  | 36  | 1  | 1
-,coin_3      -- 50  | 36  | 1  | 1
-,coin_4      -- 51  | 36  | 1  | 1
-,coin_5      -- 52  | 36  | 1  | 1
-,coin_6      -- 53  | 36  | 1  | 1
-,coin_7      -- 54  | 36  | 1  | 1
-,coin_8      -- 55  | 36  | 1  | 1
-,coin_9      -- 56  | 36  | 1  | 1
-,coin_10     -- 57  | 36  | 1  | 1
-,coin_11     -- 58  | 36  | 1  | 1
-,coin_12     -- 59  | 36  | 1  | 1
-,coin_13     -- 60  | 36  | 1  | 1
-,coin_14     -- 61  | 36  | 1  | 1
-,coin_15     -- 62  | 36  | 1  | 1
-,coin_16     -- 63  | 36  | 1  | 1
+,f_coin_1      -- 48  | 36  | 1  | 1
+,f_coin_2      -- 49  | 36  | 1  | 1
+,f_coin_3      -- 50  | 36  | 1  | 1
+,f_coin_4      -- 51  | 36  | 1  | 1
+,f_coin_5      -- 52  | 36  | 1  | 1
+,f_coin_6      -- 53  | 36  | 1  | 1
+,f_coin_7      -- 54  | 36  | 1  | 1
+,f_coin_8      -- 55  | 36  | 1  | 1
+,f_coin_9      -- 56  | 36  | 1  | 1
+,f_coin_10     -- 57  | 36  | 1  | 1
+,f_coin_11     -- 58  | 36  | 1  | 1
+,f_coin_12     -- 59  | 36  | 1  | 1
+,f_coin_13     -- 60  | 36  | 1  | 1
+,f_coin_14     -- 61  | 36  | 1  | 1
+,f_coin_15     -- 62  | 36  | 1  | 1
+,f_coin_16     -- 63  | 36  | 1  | 1
 ,nil         -- 64  | 0   | 1  | 1
 ,nil         -- 65  | 0   | 1  | 1
 ,nil         -- 66  | 0   | 1  | 1
@@ -154,7 +154,7 @@ function decode_map()
     end
 
     while @cur_loc ~= CON_END do
-        local room, room_ind = zobj[[tiles_1;,;tiles_2;,;objects;,;w,ROOM_W,h,ROOM_H,color,0,music,0]], peek_inc()
+        local room, room_ind = f_zobj[[tiles_1;,;tiles_2;,;objects;,;w,ROOM_W,h,ROOM_H,color,0,music,0]], peek_inc()
         if room_ind > LAST_ROOM_INDEX then room.w, room.h = HUT_W, HUT_H end
 
         room.color = 0x0f & @cur_loc

@@ -1,14 +1,14 @@
-|[gameover_update]| function()
+|[f_gameover_update]| function()
     zcall(loop_entities, [[
         1;,timer, tick;
         2;,actor, state;
-        3;,vec,   vec_update_x;
-        4;,vec,   vec_update_y;
+        3;,vec,   f_vec_update_x;
+        4;,vec,   f_vec_update_y;
     ]])
 end $$
 
-|[gameover_init]| function(state)
-    game_over_sind, game_over_text = unpack(rnd_item(zobj[[
+|[f_gameover_init]| function(state)
+    game_over_sind, game_over_text = unpack(rnd_item(f_zobj[[
         1;,32,  "quack quack.";
         2;,68,  "and play with me.";
         3;,9,   "to save hi-roll.";
@@ -29,7 +29,7 @@ end $$
     load_save_state()
 end $$
 
-|[gameover_draw]| function(state)
+|[f_gameover_draw]| function(state)
      zcall(loop_entities, [[
         1;,drawlayer_99, draw;
     ]])
