@@ -3,6 +3,8 @@ Lank wakes up from a good night's rest only to find Hi-roll in danger! Ya gotta
 help him save the Land of Hi-roll from the FORCES-OF-EVIL.
 
 # Todo List
+TODO: make work with new minifier structure
+TODO: separate code into shared & not shared
 TODO: 3 jump then bouncy shot
 TODO: no spikes when you beat boss?
 TODO: eliminate randomness
@@ -25,11 +27,30 @@ TODO: first boss (lime)
 TODO: mask particle effect
 TODO: polish until beating first boss
 TODO: think of more enemies
-TODO: think about chicken collection for cannon logic (throw chicken onto a platform)
+TODO: think about chicken collection for canon logic (throw chicken onto a platform)
 TODO: remove duck throw
 TODO: duck throw
 TODO: duck follow logic
 TODO: don't wait for ma for picking things up/interacting (pot, duck?)
+
+# refactoring ideas:
+Maybe, I could replace the whole zclass system with a metatable.
+
+Everything could have all parents, with the defaults. These are the things that currently use id/parents:
+
+pl-10.lua:43:        if obj.id == 'pot' then
+pl-10.lua:46:        elseif obj.id == 'quack' then
+pl-10.lua:286:    if (g_rstat_right:get() or {}).id == 'saveplat' and a:get_elapsed_percent'min_play' and a:get_elapsed_percent'min_play' >= 1 then
+pl-10.lua:394:    return override or not a.item or a.item.id ~= 'mask'
+ui-10.lua:146:        local has_health = obj.parents and obj.parents.healthobj
+
+Should work as long as there are no table values... Oh. States are problematic. I would have to never touch them and it wouldn't add correctly.... This idea might not pan out actually.
+
+One idea could be, definitions are prepended with strings that represent parents. I really do wonder if the base library functions could be trimmed down. No matter how big the refactor would be.
+
+What are the limitations of the trimmed down picodex library? no parents
+
+Oh, well adding to a parents array is really useful. any way to get around that?
 
 ## Sprite Flag Reference
 ```
@@ -46,7 +67,7 @@ TODO: don't wait for ma for picking things up/interacting (pot, duck?)
 - long:       village/house
 - long:       forest
 - long+short: field/mountain
-- long: castle/cannon
+- long: castle/canon
 - long: crypt
 - long: ivan boss fight (based on computer room)
 - long: endless mode
@@ -63,8 +84,8 @@ Lank   - Main character.
 Ivan   - Evil fairy.
 Navy   - Older brother of Lime, first boss.
 Lime   - Younger sister of Navy, gives you the sword. Year passed.
-Bob    - Husband of Jane.
-Jane   - Bob's wife.
+Bobb   - Husband of Jane.
+Jain   - Bob's wife.
 Teach  - The banjo teacher.
 Grover - The gravedigger. Zeldo's dad.
 Teach  - The teacher.
@@ -74,14 +95,14 @@ Canon  - Proposed to zeldo with squareforce. Weirdo dressed as santa. Gave Lime 
 Zeldo  - Canon proposed to her with squareforce.
 
 ## Item Locations
-Sword  - Mandatory. From chest in forest.
-Bowl   - Mandatory. From soup Jane gives you in village.
-Banjo  - Optional.  From Teach in village.
-Bomb   - Mandatory. From cannon in mountains.
+Sword  - Mandatory. Chest next to tomb stone.
+Cup    - Mandatory. From Navy.
+Banjo  - Mandatory. From chest in house.
+Bomb   - Mandatory. From canon in ice castle.
 Brang  - Optional.  4 coins from shop in village.
 Shield - Optional.  4 coins from shop in field. Need brang.
-Sling  - Optional.  4 coins from shop in forest. Need bomb.
-Mask   - Optional.  4 coins from shop in crypt.
+Sling  - Optional.  4 coins from shop in crypt. Need bomb.
+Ears   - Optional.  4 coins from shop in woods.
 
 ## Duck Locations
 Duck #1 - Fores. Room after Lime.
@@ -95,7 +116,7 @@ Coin #2  - Vilag: Play banjo for Lark.
 Coin #3  - Vilag: In bob's bed.
 Coin #4  - Vilag: Chest in lank's room.
 Coin #5  - Vilag: Crate in teach's house.
-Coin #6  - Vilag: Talk to Navy after Lime is dead.
+Coin #6  - Vilag: Play banjo for Lark.
 Coin #7  - Vilag: Pot in gravedigger house.
 Coin #8  - Fores: Hidden room.
 Coin #9  - Fores: Field.
@@ -120,6 +141,15 @@ Zomby      - Hard mode (village).
 Shadow Lank
 Ghost
 
+## Multicart format
+If I have to end up making a multicart. Here are the divisors:
+- Title
+- Village
+- Woods - Slobs
+- Crypt - Duke
+- Field - Ivan
+- Mountain - Canon
+
 ## Ways To Get Money
 - Kill enemies
 - Under pots
@@ -131,29 +161,26 @@ Ghost
 - Flash back, Zeldo and lank talk. Zeldo leaves. Lank gets attacked. Fade to black.
 - In house. Fairy talk to you whatever.
 - Talk to teach for banjo.
-- Unlock field and/or forest. Field needs chicken.
-- Go through woods. Navy lets you in.
-- Get sword from chest.
-- Fight and kill Lime & Mask.
-- Navy is sad. Give you college savings.
-- Go to ice castle
-- Gather ducks across hiroll.
-- Dodge ball
-- Tennis
-- Reveal. Get bomb.
-- Where's Zeldo?
-- Graveyard/Crypt.
-- Tiny puzzle.
-- Zeldo is hiding behind locked door. Blow up the door.
-- It's a trick Grover sets some traps for you & puzzles.
-- Fight grover?
-- Zeldo comes in and explains situation.
-- Zeldo tries to give you the square force.
-- Ivan intercepts it.
-- World corrupted. Enemies everywhere.
-- There is some room that has a computer. Go there.
-- Ivan battle.
-- After you win. Endless mode (lark/high score). Replay game with hard mode (health, enemy...).
+- Find sword in chest next to tombstone.
+- Navy lets you enter woods.
+- Fight Slobs to save Lime.
+- Go back to Navy's house & get a cup.
+- Fill cup with Quack soup.
+- Bobb lets you enter field.
+- Go through field to ice castle.
+- Canonball tennis. Bombs spawn that you have to dodge. A canonball is flung between you and canon. Hit it with your sword to deflect.
+- Reveal. Ivan tells Lank to kill Canon. Ask where squareforce is. Runs away.
+- Canon gives Lank bombs.
+- Use bomb to enter crypt.
+- Grover sets traps in each room of crypt.
+- He prepares for boss fight when you reach the end, but Zeldo stops him.
+- She says Canon gave her the square to propose to her, but she doesn't even want it, hands to Lank, but Ivan intercepts.
+- Ivan takes it away. Game glitches. Lots of enemies. Find Ivan.
+- Ivan in computer room.
+- Go there for final fight, extra monsters along the way to block your path.
+- Ivan has powers of all bosses, enemies, & lank. He appears as a shadow Lank.
+- After game is beat, Lark has endless mode.
+- Most characters don't say anything new after game is beat.
 
 ## Quotes
 - Here's my heart.
@@ -161,22 +188,16 @@ Ghost
 - Silly lank, only works against evil forces. That tickles (canon says on deathbead)
 - Canon can't give gifts. He gave some kid a creepy mask and now he gives me a hunk of metal.
 - I gave it to zeldo you know the gravedigger's daughter?
+- I used most of my explosives on tennis match. This is all I have left, please use it to save my fiancee zeldo.
+- Take these infinite bombs.
+- Only someone loaded with explosives could have gotten past that barrier. You must be the creep that wants to marry my daughter!
+- Daddy! Lank can't talk. How can he even propose to me? Canon is the creep you're looking for!
 
 ## Boss Fights
-Lime:
-    - teleports every few seconds (mask power)
-
-Canon:
-    - dodgeball/tennis
-
-Duck Spirit:
-    - idk
-
-Grover:
-    - zeldo's dad
-
-Ivan:
-    - repeat of previous bosses + something else?
+- Slobs
+- Canon
+- Duke
+- Ivan
 
 ## Areas
 Ice Castle, Graveyard, Zeldo Home, Field, Mountain Area, Spike Forest, Village
@@ -184,13 +205,13 @@ Ice Castle, Graveyard, Zeldo Home, Field, Mountain Area, Spike Forest, Village
 ## Randomness
 how about chicken starts with jane. she says she will make soup. soup is done when you beat lime.
 
-each chicken has a name. later in the game, cannon asks where quin is. that's the one jane cooked.
+each chicken has a name. later in the game, canon asks where quin is. that's the one jane cooked.
 
-maybe cannon says you smell like quack soup. he hates quack soup. ducks are
+maybe canon says you smell like quack soup. he hates quack soup. ducks are
 friends. so he gets angry and sends his pet duck to fight you. Then you settle
 the duel with a game of tennis.
 
-"i'm hungry, i mean i'm cannon"
+"i'm hungry, i mean i'm canon"
 "hey, thanks for the soup"
 "what kind of soup was that anyways"
 ".. 
@@ -210,7 +231,7 @@ secret area in forest, lime gives you the mask.
 save lime. lime says she bought a mask from someone in the forest and went crazy.
 you can buy that mask too after you get bombs.
 
-ivan says cannon is the creepy guy who gave her the mask.
+ivan says canon is the creepy guy who gave her the mask.
 
 sword belongs to lark's father.
 
