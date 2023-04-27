@@ -12,7 +12,7 @@
         game:f_modes_popuntil'team2story'
     end
 
-    for pl in _all{pwin,plose} do
+    for pl in all{pwin,plose} do
         f_zobj_set(menu, [[
             v,0 -- fight over view should always start on top. don't save position for this one.
           ;;pkmn,@
@@ -44,7 +44,7 @@ end $$
 |[f_browse_init_shared]| function(_ENV, selectfunc)
     local tbl = {}
     for i=0,151 do
-        _add(tbl, i)
+        add(tbl, i)
     end
 
     menu:refresh(
@@ -82,15 +82,15 @@ end $$
        ;;name,"lvl 50", style,5
     ]], pkmn)
 
-    _foreach(_split'maxhp,special,attack,defense,speed,total', function(key)
-        _add(menu, { name=c_stages[key].." "..pkmn[key] })
+    foreach(split'maxhp,special,attack,defense,speed,total', function(key)
+        add(menu, { name=c_stages[key].." "..pkmn[key] })
     end)
 
     f_zcall(function(name, key)
         if #c_pokemon[pkmn.num][key] > 0 then
-            _add(menu, {name=name, style=5})
-            _foreach(c_pokemon[pkmn.num][key], function(m)
-                _add(menu, {name=c_moves[m].name})
+            add(menu, {name=name, style=5})
+            foreach(c_pokemon[pkmn.num][key], function(m)
+                add(menu, {name=c_moves[m].name})
             end)
         end
     end, [[
@@ -102,15 +102,15 @@ end $$
 
 |[f_credits_init]| function(_ENV)
     menu:refresh(
-        _split"91,,#alanxoc3,code &,design,28,,#gr8cadet,pokemon,sprites,143,,#tigrwolf,battle,testing,129,,#wadlo,just,magikarp,127,,#tooling,px9 func,shrinko8,137,,#pkmndata,blbpedia,pokeapi,serebii,smogon,upokcntr,volvox,nintendo",
+        split"91,,#alanxoc3,code &,design,28,,#gr8cadet,pokemon,sprites,143,,#tigrwolf,battle,testing,129,,#wadlo,just,magikarp,127,,#tooling,px9 func,shrinko8,137,,#pkmndata,blbpedia,pokeapi,serebii,smogon,upokcntr,volvox,nintendo",
         function(txt)
-            if _type(txt) == "number" then
+            if type(txt) == "number" then
                 return { pkmn=f_create_team_pkmn(txt, f_create_empty_moveset()) }
             end
 
             local style = 1
-            if _sub(txt,1,1) == '#' then
-                txt, style = _sub(txt,2), 5
+            if sub(txt,1,1) == '#' then
+                txt, style = sub(txt,2), 5
             end
 
             return { name=txt, style=style, hidden=txt=='' }
@@ -127,7 +127,7 @@ end $$
             disabled=num-1 > @S_STORY,
             sel=function(game, entry)
                 f_begin_fight_cpu(game, entry.team, entry.name, function(pl, other)
-                    _poke(S_STORY, _mid(@S_STORY, num, 40)) -- 40 trainers, this is hard coded and won't change
+                    poke(S_STORY, mid(@S_STORY, num, 40)) -- 40 trainers, this is hard coded and won't change
                     f_unlock_pkmn(other)
                 end, f_nop)
             end
@@ -203,7 +203,7 @@ end $$
     f_zcall(function(movelist, prefix)
         for i=1,#movelist do
             local moveind = movelist[i]
-            _add(movemetadata, {name=c_moves[moveind].name, disabled=teampkmn:f_pkmn_has_move(moveind), num=moveind, desc=prefix..i})
+            add(movemetadata, {name=c_moves[moveind].name, disabled=teampkmn:f_pkmn_has_move(moveind), num=moveind, desc=prefix..i})
         end
     end, [[
        ;,@,"learn #"
@@ -336,6 +336,6 @@ end $$
 |[f_turn_init]| function(_ENV)
     -- p0 is equal to the higher priority
     local p1, p2 = p1, p2
-    if p1.priority == p2.priority then p2.priority += _sgn(_rnd'2'-1) end
+    if p1.priority == p2.priority then p2.priority += sgn(rnd'2'-1) end
     p0 = p1.priority > p2.priority and p1 or p2
 end $$

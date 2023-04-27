@@ -1,16 +1,16 @@
 -- this file contains logic around teams and creating a "team" pokemon
 |[f_unlock_pkmn]| function(trainer)
     -- add pokemon defeated to picodex
-    _foreach(f_get_team_dead(trainer.team), function(pkmn)
-        _poke(S_POKEMON+pkmn.num, 1)
+    foreach(f_get_team_dead(trainer.team), function(pkmn)
+        poke(S_POKEMON+pkmn.num, 1)
     end)
 end $$
 
 |[f_get_team_dead]| function(team)
     local newteam = {}
-    _foreach(team, function(pkmn)
+    foreach(team, function(pkmn)
         if pkmn.num > -1 and pkmn.major == C_MAJOR_FAINTED then
-            _add(newteam, pkmn)
+            add(newteam, pkmn)
         end
     end)
     return newteam
@@ -21,9 +21,9 @@ end $$
 -- that way missingno is more of a secret.
 |[f_get_team_live]| function(team, exclude_missingno)
     local newteam = {}
-    _foreach(team, function(pkmn)
+    foreach(team, function(pkmn)
         if pkmn.num > (exclude_missingno and 0 or -1) and pkmn.major ~= C_MAJOR_FAINTED then
-            _add(newteam, pkmn)
+            add(newteam, pkmn)
         end
     end)
     return newteam
@@ -46,7 +46,7 @@ end $$
 
 |[f_set_default_team_pkmn]| function(team, ind, num)
     local pkmn, moveset = c_pokemon[num], f_create_empty_moveset()
-    for i=1,_min(4,#pkmn.moves_natural) do
+    for i=1,min(4,#pkmn.moves_natural) do
         moveset[i] = f_create_move(pkmn.moves_natural[i], i)
     end
 
@@ -64,7 +64,7 @@ c_team_memlocs = f_zobj[[0,S_PARTY1, 1,S_PARTY2, 2,S_PARTY3]]
     for i=1,6 do
         local memstart, mynewmoves, has_moves = mem+(i-1)*5, {}, false
         for i=1,4 do
-            mynewmoves[i] = f_create_move(_peek(memstart+i), i)
+            mynewmoves[i] = f_create_move(peek(memstart+i), i)
             if mynewmoves[i].num > 0 then
                 has_moves = true
             else
@@ -80,16 +80,16 @@ end $$
 
 |[f_save_team]| function(team_index, team) -- 0 to 2
     local mem = c_team_memlocs[team_index]
-    _memset(mem,0,30)
+    memset(mem,0,30)
 
     -- clear team and we'll replace it with the logic below
 
     for i=1,6 do
         local memstart, pkmn = mem+(i-1)*5, team[i]
-        _poke(memstart, _max(0, pkmn.num))
+        poke(memstart, max(0, pkmn.num))
 
         for i=1,4 do
-            _poke(memstart+i, pkmn.mynewmoves[i].num > 0 and pkmn.mynewmoves[i].num or 0)
+            poke(memstart+i, pkmn.mynewmoves[i].num > 0 and pkmn.mynewmoves[i].num or 0)
         end
     end
 end $$
@@ -101,27 +101,27 @@ end $$
 -- this is called on startup to populate c_moves
 |[f_populate_c_moves]| function()
     for i=-1,164 do -- there must be 166 loop interations as that matches the compile file (-1 to 164)
-        local params, ofunc = {}, _deli(c_moves_raw[i], 6)
+        local params, ofunc = {}, deli(c_moves_raw[i], 6)
         for ii=6,#c_moves_raw[i] do
-            _add(params, deli(c_moves_raw[i], 6))
+            add(params, deli(c_moves_raw[i], 6))
         end
 
         -- ofunc is used in accuracy check, for a charging move
         c_moves[i] = f_zobj([[
             func,@, num,@, ofunc,@, name,@, movetype,@, pp,@, maxpp,~pp, damage,@, accuracy,@
         ]], function(envparams)
-            return ofunc(envparams, _unpack(params))
-        end, i, ofunc, _unpack(c_moves_raw[i]))
+            return ofunc(envparams, unpack(params))
+        end, i, ofunc, unpack(c_moves_raw[i]))
     end
 end $$
 
 -- move is between -1 and 
 |[f_create_move]| function(id, slot)
-    return _setmetatable(f_zobj([[slot,@]], slot or 0), {___index=c_moves[id]})
+    return setmetatable(f_zobj([[slot,@]], slot or 0), {__index=c_moves[id]})
 end $$
 
 |[f_create_empty_moveset]| function()
     local moveset = {}
-    for i=1,4 do _add(moveset, f_create_move(-1)) end
+    for i=1,4 do add(moveset, f_create_move(-1)) end
     return moveset
 end $$

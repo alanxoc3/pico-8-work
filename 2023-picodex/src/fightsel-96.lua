@@ -9,14 +9,14 @@
 end $$
 
 |[f_update_horde]| function(_ENV)
-    _poke(S_HOARD, _mid(@S_HOARD, #f_get_team_dead(team), 152))
+    poke(S_HOARD, mid(@S_HOARD, #f_get_team_dead(team), 152))
 end $$
 
 |[f_horde_select]| function(_ENV)
     local nums = {}
 
     -- mod here will add missingno (feature, not a bug :)
-    for i=1,152 do _add(nums, i%152) end
+    for i=1,152 do add(nums, i%152) end
 
     -- unlock pkmn and update high score regardless of win/lose
     -- the only pokemon you can unlock is missingno,

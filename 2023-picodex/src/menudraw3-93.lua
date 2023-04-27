@@ -33,7 +33,7 @@ end $$
 
 |[f_team_draw3]| function(game)
     local power, count = 0, 0
-    _foreach(game:f_modes_entry().team, function(num)
+    foreach(game:f_modes_entry().team, function(num)
         if num > -1 then
             power += c_pokemon[num].total
             count += 1

@@ -3,11 +3,11 @@
     local moves = {}
 
     -- need to copy each move just for mimic to work when switching
-    _foreach(pkmn.mynewmoves, function(m)
-        _add(moves, m)
+    foreach(pkmn.mynewmoves, function(m)
+        add(moves, m)
     end)
 
-    pl.active = _setmetatable(f_zobj([[
+    pl.active = setmetatable(f_zobj([[
         isactive,~c_yes, -- used for a drawing function, should draw fainted pokemon if they are not active, but not if they are active.
         lastmoverecv,0,  -- last move targeted at user, for mirrormove
         accuracy,1,      -- accuracy stat for battle
@@ -31,7 +31,7 @@
         stages; special, 0, attack, 0,
                 defense, 0, speed,  0,
                 accuracy,0, evasion,0
-    ]], f_flr_rnd'7'+1, pkmn, moves), {___index=pkmn})
+    ]], f_flr_rnd'7'+1, pkmn, moves), {__index=pkmn})
     -- ^^ hard-coding sleep timer here
 
     return f_newaction(pl, "|enters|fight", function()
@@ -53,7 +53,7 @@ end $$
         params.selfactive.invisible = true
 
         f_addaction(pl, pl, false, function()
-            _add(pl.actions, f_pkmn_comes_out(pl, pkmn))
+            add(pl.actions, f_pkmn_comes_out(pl, pkmn))
         end)
     end)
 
@@ -91,7 +91,7 @@ end $$
             if selfactive.curmove and selfactive.curmove.ofunc == f_move_trapping then return false end
 
             -- every move aimed at oppenent in pokemon stadium has a 1/65536 chance of a move missing, besides swift
-            return _rnd(otheractive:f_movehelp_getstat'evasion') > move.accuracy/100*selfactive:f_movehelp_getstat'accuracy' or f_flr_rnd'256' == 0 and f_flr_rnd'256' == 0
+            return rnd(otheractive:f_movehelp_getstat'evasion') > move.accuracy/100*selfactive:f_movehelp_getstat'accuracy' or f_flr_rnd'256' == 0 and f_flr_rnd'256' == 0
         end)() then
             addaction(self, "|misses|"..move.name)
 
@@ -140,7 +140,7 @@ end $$
         end
 
         if selfactive.major == C_MAJOR_FROZEN then
-            if _rnd'1' < .2 then
+            if rnd'1' < .2 then
                 addaction(self, "|thawed|out")
                 selfactive.shared.major = C_MAJOR_NONE
             else
@@ -199,7 +199,7 @@ end $$
             selfactive.trappedother, selfactive.curmove = nil
         end
 
-        local statdmg = _max(selfactive.maxhp\16,1)
+        local statdmg = max(selfactive.maxhp\16,1)
         local inflictstatdmg = function(title) -- title must start with "|" to save 2 tokens
             addaction(self, title.."|damage")
             f_move_setdmg_self(_ENV, statdmg)
@@ -247,7 +247,7 @@ end $$
 
     -- speed can be between 1 and 999, so multiples of 1000 can be priority
     -- highest priority goes first. if priority is same, roll a dice to decide
-    pl.priority = _min(C_PRIORITY_SWITCH, priority_class+pl.active:f_movehelp_getstat'speed')
+    pl.priority = min(C_PRIORITY_SWITCH, priority_class+pl.active:f_movehelp_getstat'speed')
 end $$
 
 |[f_get_other_pl]| function(game, pl)
@@ -262,7 +262,7 @@ end $$
 end $$
 
 |[f_addaction]| function(p0, ...)
-    _add(p0.actions, f_newaction(...))
+    add(p0.actions, f_newaction(...))
 end $$
 
 |[f_psel_update]| function(_ENV)
@@ -288,7 +288,7 @@ end $$
         -- actions without a message are meant to optionally create actions.
         while true do
             -- check for win condition before selecting every action
-            for p in _all{game.p1, game.p2} do
+            for p in all{game.p1, game.p2} do
                 if not f_get_next_active(p.team) then
                     game.pwin = f_get_other_pl(game, p)
                     game:f_actor_load'fightover'
@@ -327,7 +327,7 @@ end $$
     -- if an active pokemon has no hp, but not the faint status yet, return an action that makes the pokemon faint.
     -- switch if there is a next pokemon
     -- otherwise, do nothing. turn logic will check every turn if there is a win condition
-    for p in _all{game.p1,game.p2} do
+    for p in all{game.p1,game.p2} do
         if p.active.hp <= 0 then
             if p.active.major ~= C_MAJOR_FAINTED then
                 return f_newaction(p, "|has|fainted", function(_ENV)
@@ -339,12 +339,12 @@ end $$
         end
     end
 
-    for s in _all{game.p0, f_get_other_pl(game, game.p0)} do
+    for s in all{game.p0, f_get_other_pl(game, game.p0)} do
         local o = f_get_other_pl(game, s)
 
         -- if the active pokemon shouldn't faint right now, find the next action that references a pokemon still on the field.
         while #s.actions > 0 do
-            local action = _deli(s.actions, 1)
+            local action = deli(s.actions, 1)
             if action.active.major ~= C_MAJOR_FAINTED and (action.active == s.active or action.active == o.active) then
                 return action
             end
@@ -363,7 +363,7 @@ end $$
 end $$
 
 |[f_pkmn_has_move]| function(_ENV, moveid)
-    for m in _all(mynewmoves) do
+    for m in all(mynewmoves) do
         if m.num == moveid then
             return true
         end
@@ -381,9 +381,9 @@ end $$
     -- moves is both an array and a map
     local moves = {}
 
-    _foreach(pkmn.mynewmoves, function(m)
+    foreach(pkmn.mynewmoves, function(m)
         if m.num > 0 and (ismimic or m.pp > 0 and pkmn.disabledslot ~= m.slot) then
-            _add(moves, m)
+            add(moves, m)
             moves[m] = true -- this is to make "disabled" in the UI easier
         end
     end)
@@ -426,8 +426,8 @@ end $$
     ----- BEGIN CRIT LOGIC
     -- this crit formula is only very slightly different than the original games. might be like 1% off.
     -- takes in the hard-coded base speed value for the pkmn, so electrode would have highest crit ratio.
-    -- slash:        _min(.99, (base_speed+76)/128) -- times .3 is close enough
-    -- focus energy: _min(.99, (base_speed+236)/512) -- times .3 is close enough
+    -- slash:        min(.99, (base_speed+76)/128) -- times .3 is close enough
+    -- focus energy: min(.99, (base_speed+236)/512) -- times .3 is close enough
     -- focus energy + crit move: .99 -- with my damage calculation, technically, slowpoke ends up at 98
     -- range is 0 to 255. then random roll is done out of 256, so high crit still has like a .5% chance of failing.
 
@@ -436,25 +436,25 @@ end $$
     if focused then divisor *= .3 end
 
     -- decimal here is 255/256. close enough to the actual formula. >0 check filters out struggle and confuse dmg.
-    local crit = _rnd'1' < _min(.99, (attacker.base_speed+76)/divisor) and move.num > 0 and 2 or 1
+    local crit = rnd'1' < min(.99, (attacker.base_speed+76)/divisor) and move.num > 0 and 2 or 1
     ----- END CRIT LOGIC
 
     -- 3 is min, because 3+2=5... 5*1*.5*.5*.85\1 = 1, so this makes the lowest damage possible 1 (not zero)
-    local base_damage = _mid(
+    local base_damage = mid(
         3, 997,
         (100*crit/5+2)/50             -- [.44,.84], 100 comes from attacker.level*2, level is always 50
         *move.damage                  -- [6.6,285.6] -- [15,340]
-        *_mid(10, .2, attack/defense) -- [1.32,2856]
+        *mid(10, .2, attack/defense) -- [1.32,2856]
     )+2
 
     -- max possible damage: 5994
     -- end of formula multiplies by a random number (217/255)
     local dmg, advantage = base_damage, f_get_type_advantage(move, defender)
         *((move.movetype == attacker.type1 or move.movetype == attacker.type2) and 1.5 or 1) -- stab
-        *(_rnd'.15'+.85)
+        *(rnd'.15'+.85)
 
     if advantage > 0 then
-        return _mid(1, 999, dmg*advantage\1), crit > 1
+        return mid(1, 999, dmg*advantage\1), crit > 1
     end
 
     return 0, false

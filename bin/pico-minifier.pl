@@ -84,10 +84,6 @@ $content = tokenize_constants($content, \%constants);
 my @texts;
 ($content, @texts) = remove_texts($content);
 
-# first pass through will remove leading underscores from some variables
-my %vars = populate_vars($content, 0);
-$content = tokenize_vars($content, \%vars); # todo - remove me
-
 # remove spaces must go before cleaning up quotes
 $content = remove_spaces($content);
 

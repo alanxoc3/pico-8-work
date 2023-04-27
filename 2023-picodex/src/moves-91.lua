@@ -1,7 +1,7 @@
 -- roar/whirlwind/teleport
 |[f_movehelp_switch]| function(pl)
     local team = f_get_team_live(pl.team)
-    _del(team, pl.active.shared)
+    del(team, pl.active.shared)
 
     if #team > 0 then
         return team[f_flr_rnd(#team)+1]
@@ -13,13 +13,13 @@ end $$
 
     -- evasion and accuracy have a different formula: https://www.smogon.com/rb/articles/stadium_guide
     if stat == 'evasion' or stat == 'accuracy' then
-        return _ENV[stat]*_mid(1, 1+stage/3, 3)/_mid(1, 1-stage/3, 3)
+        return _ENV[stat]*mid(1, 1+stage/3, 3)/mid(1, 1-stage/3, 3)
     end
 
     -- all other stats cap at 999: https://www.smogon.com/rb/articles/rby_mechanics_guide
-    return _ceil(_mid(1, 999,
+    return ceil(mid(1, 999,
         (stat == 'attack' and major == C_MAJOR_BURNED and .5 or stat == 'speed' and major == C_MAJOR_PARALYZED and .25 or 1)*
-        _ENV[stat]*_mid(2, 2+stage,   8)/_mid(2, 2-stage,   8)
+        _ENV[stat]*mid(2, 2+stage,   8)/mid(2, 2-stage,   8)
     ))
 end $$
 
@@ -66,12 +66,12 @@ end $$
     else
         addaction(self, "|copies|"..otheractive.name, function()
             selfactive.transform = true
-            _foreach(_split'num,attack,defense,speed,special,type1,type2', function(key)
+            foreach(split'num,attack,defense,speed,special,type1,type2', function(key)
                 selfactive[key] = otheractive[key]
             end)
 
             selfactive.mynewmoves = {}
-            _foreach(otheractive.mynewmoves, function(m)
+            foreach(otheractive.mynewmoves, function(m)
                 f_movehelp_movecopy(selfactive, m.num, m.slot)
             end)
         end)
@@ -84,7 +84,7 @@ end $$
 end $$
 
 |[f_move_haze]| function(_ENV)
-    _foreach({other, self}, function(pl)
+    foreach({other, self}, function(pl)
         addaction(pl, "|resets|stats", function()
             f_zobj_set(pl.active.stages, [[
                 special, 0, attack, 0,
@@ -98,7 +98,7 @@ end $$
 
 -- recover and softboiled
 |[f_move_heal]| function(_ENV, pl, amount)
-    amount = _min(amount, pl.active.maxhp-pl.active.hp)
+    amount = min(amount, pl.active.maxhp-pl.active.hp)
     if amount > 0 then
         f_movehelp_hpchange(_ENV, pl, amount, function()
             pl.active.shared.hp += amount
@@ -126,7 +126,7 @@ end $$
 end $$
 
 |[f_format_num_sign]| function(num, name)
-    return (_sgn(num) > 0 and "|+" or "|-").._abs(num).." "..name.."|change"
+    return (sgn(num) > 0 and "|+" or "|-")..abs(num).." "..name.."|change"
 end $$
 
 |[f_move_self]|  function(_ENV, func, ...) return func(_ENV, self,  ...) end $$
@@ -136,7 +136,7 @@ end $$
 |[f_move_stat]| function(_ENV, pl, key, stage, func)
     local prev = pl.active.stages[key]
     if not pl.active.misted or stage > 0 then
-        pl.active.stages[key] = _mid(-6, 6, prev+stage)
+        pl.active.stages[key] = mid(-6, 6, prev+stage)
     end
 
     if prev ~= pl.active.stages[key] then
@@ -262,7 +262,7 @@ end $$
 end $$
 
 |[f_move_superfang]| function(_ENV)
-    f_move_setdmg(_ENV, _max(otheractive.hp\2, 1))
+    f_move_setdmg(_ENV, max(otheractive.hp\2, 1))
 end $$
 
 |[f_move_thrash]| function(_ENV)
@@ -362,7 +362,7 @@ end $$
 
 |[f_move_multihit_twin]| function(_ENV)
     f_move_multihit_set(_ENV, 2, function()
-        if _rnd'100' < 20 then
+        if rnd'100' < 20 then
             f_move_major_other(_ENV, C_MAJOR_POISONED)
         end
     end)
@@ -370,7 +370,7 @@ end $$
 
 |[f_move_recoil]| function(_ENV)
     f_move_setdmg(_ENV, false, function(dmg)
-        f_move_setdmg_self(_ENV, _max(1, dmg\4))
+        f_move_setdmg_self(_ENV, max(1, dmg\4))
     end)
 end $$
 
@@ -380,15 +380,15 @@ end $$
     local params = {...}
     f_move_setdmg(_ENV, false, function()
         -- if percent is not specified, the func will never run, so func is required when percent is specified
-        if _rnd'100' < (percent or 0) then
-            func(_ENV, _unpack(params))
+        if rnd'100' < (percent or 0) then
+            func(_ENV, unpack(params))
         end
     end)
 end $$
 
 |[f_move_drain]| function(_ENV)
     f_move_setdmg(_ENV, false, function(dmg)
-        f_move_heal(_ENV, self, _max(dmg\2, 1))
+        f_move_heal(_ENV, self, max(dmg\2, 1))
     end)
 end $$
 
@@ -438,9 +438,9 @@ end $$
         if passfunc then passfunc(dmg) end
 
         if issub then
-            active.substitute = _max(active.substitute-dmg, 0)
+            active.substitute = max(active.substitute-dmg, 0)
         else
-            active.shared.hp = _max(active.shared.hp-dmg, 0)
+            active.shared.hp = max(active.shared.hp-dmg, 0)
         end
     end, issub and "substitute")
 end $$

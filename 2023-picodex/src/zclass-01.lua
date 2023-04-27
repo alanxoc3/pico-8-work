@@ -15,7 +15,7 @@ end $$
     if key == curr then
         return duration and timer/duration or 0
     end
-    
+
     if _ENV[key] and _ENV[key].done then
         return 1
     end
@@ -31,8 +31,8 @@ end $$
     timer, next_state, isnew, next, duration = 0
 
     _ENV[curr].done = true
-    for k, v in _pairs(defaults) do _ENV[k] = v end
-    for k, v in _pairs(_ENV[stateName]) do _ENV[k] = v end
+    for k, v in pairs(defaults) do _ENV[k] = v end
+    for k, v in pairs(_ENV[stateName]) do _ENV[k] = v end
 
     curr = stateName
 
@@ -65,11 +65,11 @@ end $$
 |[f_modes_pop]| function(_ENV)
     -- delete the last item on the stack, then load the new last item.
     -- most modes on the stack won't have an init in this game.
-    _deli(stack) 
+    deli(stack)
     _ENV:f_actor_load(stack[#stack] or 'main')
 end $$
 
 |[f_modes_push]| function(_ENV, newstate)
-    _add(stack, newstate)
+    add(stack, newstate)
     _ENV:f_actor_load(newstate)
 end $$

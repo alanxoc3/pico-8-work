@@ -1,16 +1,16 @@
 |[f_game_init]| function(_ENV)
     -- cheats!
-    -- for i=0,151 do _poke(S_POKEMON+i, 1) end -- gives you all pokemon
+    -- for i=0,151 do poke(S_POKEMON+i, 1) end -- gives you all pokemon
     -- poke(S_STORY, 40) -- gives you all trainers
 
     local team = {} -- default team for new games
-    for ind, num in _pairs(_split'133,7,35,1,25,4') do
+    for ind, num in pairs(split'133,7,35,1,25,4') do
         f_set_default_team_pkmn(team, ind, num)
-        _poke(S_POKEMON+num, 1)
+        poke(S_POKEMON+num, 1)
     end
 
     if @S_NEW == 0 then
-        _poke(S_NEW, 1)
+        poke(S_NEW, 1)
         f_save_team(0, team)
     end
 
@@ -101,17 +101,17 @@
         team1horde;menu,~team1menu;
         team1story;menu,~team1menu;
         teampkmn;menu,~browsemenu;
-       
+
     ]], modes.team1.menu, modes.browse.menu)
 
-    _menuitem(1, "close picodex", function()
-        _menuitem(1) -- remove menu item, can't pass in string number here
-        _menuitem(2) -- remove menu item, can't pass in string number here
+    menuitem(1, "close picodex", function()
+        menuitem(1) -- remove menu item, can't pass in string number here
+        menuitem(2) -- remove menu item, can't pass in string number here
         _ENV:f_actor_load'closing'
     end)
 
-    _menuitem(2, "swap 🅾️/❎", function()
-        _poke(S_SWAP_CONTROLS, @S_SWAP_CONTROLS == 0 and 1 or 0)
+    menuitem(2, "swap 🅾️/❎", function()
+        poke(S_SWAP_CONTROLS, @S_SWAP_CONTROLS == 0 and 1 or 0)
     end)
 end $$
 

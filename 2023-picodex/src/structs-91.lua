@@ -4,7 +4,7 @@
 -- this formula is much simpler at a specific level (50), so I took some parts out.
 -- this is only used in populate pokemon func below
 |[f_calc_max_stat]| function(base)
-    return _ceil(base+.5*93)+5
+    return ceil(base+.5*93)+5
 end $$
 
 -- both the default pokemon and shows the fields that should be on the pokemon
@@ -25,7 +25,7 @@ end $$
 end $$
 
 |[f_populate_c_pokemon]| function()
-    local movemem = _peek2'0x8'
+    local movemem = peek2'0x8'
 
     -- -1 is for disabled things. this is never available.
     c_pokemon[-1] = f_get_default_pokemon()
@@ -40,18 +40,18 @@ end $$
                 is_range = true
             elseif is_range then
                 for i=pkmndata[#pkmndata]+1,@movemem do
-                    _add(pkmndata, i)
+                    add(pkmndata, i)
                 end
                 is_range = false
             else
-                _add(pkmndata, @movemem)
+                add(pkmndata, @movemem)
             end
             movemem += 1
         end
         movemem += 1
 
         ---- PART 2 - populate most attributes ----
-        local evolvesfrom = num-_deli(pkmndata, 1)
+        local evolvesfrom = num-deli(pkmndata, 1)
         local pkmn = f_get_default_pokemon()
         f_zobj_set(pkmn, [[
             num,@, evolvesfrom,@, name,@,
@@ -63,7 +63,7 @@ end $$
 
             -- this shouldn't work, but it does. it's unpacking more than it needs to, but since it's at the end, that's fine
             -- the "deli" above is important, because we don't want to include the "evol" key.
-            _unpack(pkmndata) -- ty1, ty2, xhp, att, def, spd, spc, .... and junk we don't care about
+            unpack(pkmndata) -- ty1, ty2, xhp, att, def, spd, spc, .... and junk we don't care about
         )
 
         ---- PASS 3 - populate the moves ----
@@ -75,23 +75,23 @@ end $$
             elseif val == C_EVENT then
                 move_bucket = pkmn.moves_event
             else
-                _add(move_bucket, val)
+                add(move_bucket, val)
             end
         end
 
         if evolvesfrom < num then
-            _foreach(_split'moves_natural,moves_teach', function(key)
-                _foreach(c_pokemon[evolvesfrom][key], function(move)
-                    _add(pkmn[key], move)
+            foreach(split'moves_natural,moves_teach', function(key)
+                foreach(c_pokemon[evolvesfrom][key], function(move)
+                    add(pkmn[key], move)
                 end)
             end)
         end
 
         -- this is my ghetto sorting. it fixes weird ordering for new teachs on evolved forms (tm/hm order)
         local teach_map, teachs = {}, {}
-        _foreach(pkmn.moves_teach, function(move) teach_map[move] = true end)
+        foreach(pkmn.moves_teach, function(move) teach_map[move] = true end)
         for i=1,54 do
-            if teach_map[i] then _add(teachs, i) end
+            if teach_map[i] then add(teachs, i) end
         end
         pkmn.moves_teach = teachs
 
@@ -115,5 +115,5 @@ end $$
 end $$
 
 |[f_create_team_pkmn]| function(num, mynewmoves)
-    return _setmetatable(f_zobj([[mynewmoves,@, major,C_MAJOR_NONE, browse,~c_no]], mynewmoves), {___index=c_pokemon[num]})
+    return setmetatable(f_zobj([[mynewmoves,@, major,C_MAJOR_NONE, browse,~c_no]], mynewmoves), {__index=c_pokemon[num]})
 end $$

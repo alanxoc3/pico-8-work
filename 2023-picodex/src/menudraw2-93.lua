@@ -11,16 +11,16 @@ end $$
 
 -- picodex logo
 |[f_main_draw2]| function()
-    _rectfill(0, 0, 46, 13, 13)
-    _pal(7,1)
+    rectfill(0, 0, 46, 13, 13)
+    pal(7,1)
 
     local xx = 0
-    for i,v in _ipairs(_split'6,5,5,6,6,5,6') do
-        _sspr(6*8+xx, 12*8, v,8, xx+3, 3.5+_cos((_t()+i)/4))
+    for i,v in ipairs(split'6,5,5,6,6,5,6') do
+        sspr(6*8+xx, 12*8, v,8, xx+3, 3.5+cos((t()+i)/4))
         xx += v
     end
 
-    _pal()
+    pal()
 end $$
 
 |[f_turn_draw2]|  function(game) f_print_draw2_message(game.cur_action.pl.name) end $$

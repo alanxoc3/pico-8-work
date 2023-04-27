@@ -40,9 +40,9 @@ end $$
 end $$
 
 |[f_menu_refresh]| function(menu, data, mapfunc)
-    while _deli(menu) do end
+    while deli(menu) do end
     for i=1,#data do
-        _add(menu, (mapfunc or f_nop)(data[i], i))
+        add(menu, (mapfunc or f_nop)(data[i], i))
     end
 end $$
 
@@ -54,7 +54,7 @@ end $$
 |[f_menu_set]| function(menu, delta, is_ud)
     if is_ud then
         local newval = menu.c+delta*menu.r
-        if newval == _mid(0, newval, #menu-1) then
+        if newval == mid(0, newval, #menu-1) then
             menu.c = newval
             if 0+delta ~= 0 then f_minisfx'B_BACK' end
         else
@@ -63,7 +63,7 @@ end $$
     else
         local newval = menu.c+delta
         local left = menu.c - menu.c%menu.r
-        if newval == _mid(left, newval, left + menu.r-1) then
+        if newval == mid(left, newval, left + menu.r-1) then
             menu.c = newval
             if 0+delta ~= 0 then f_minisfx'B_BACK' end
         else
@@ -71,12 +71,12 @@ end $$
         end
     end
 
-    menu.c = _mid(0, menu.c, #menu-1) -- always ensure the cursor is within bounds
+    menu.c = mid(0, menu.c, #menu-1) -- always ensure the cursor is within bounds
 
     -- view logic
     if menu.c\menu.r < menu.v   then menu.v = menu.c\menu.r   end
     if menu.c\menu.r > menu.v+2 then menu.v = menu.c\menu.r-2 end
-    menu.v = _mid(0, menu.v, (#menu-1)\menu.r)
+    menu.v = mid(0, menu.v, (#menu-1)\menu.r)
 end $$
 
 |[f_menu_view_update]| function(game)
@@ -87,7 +87,7 @@ end $$
     if g_bph ~= 0 then game:lrfunc(g_bph) end
 
     local oldview = menu.v
-    menu.v = _mid(menu.viewmin, menu.v, #menu-3)
+    menu.v = mid(menu.viewmin, menu.v, #menu-3)
     if menu.v ~= oldview then
         f_beep()
     elseif g_bpv ~= 0 then
@@ -121,10 +121,10 @@ end $$
     local xoff = 20-(menu.r * cellw)/2
 
     -- bg shadow
-    f_zcall(_rectfill, [[
+    f_zcall(rectfill, [[
        ;,0,0,39,39,1 -- bg shadow
       ;;,0,@,39,@,13 -- fg grey
-    ]], 5-menu.v*10, 4+(_max(_ceil(#menu/menu.r), 3)-menu.v)*10)
+    ]], 5-menu.v*10, 4+(max(ceil(#menu/menu.r), 3)-menu.v)*10)
 
     for i=-1,menu.r*5-1 do
         local index = (menu.v-1)*menu.r+i+1
@@ -136,7 +136,7 @@ end $$
             if index-1 == menu.c then style_ind += 1 end
 
             if not entry.hidden then
-                _rectfill(x, y-5, x+cellw-1, y+4, c_menu_styles[style_ind].bg)
+                rectfill(x, y-5, x+cellw-1, y+4, c_menu_styles[style_ind].bg)
                 f_zcamera(i%menu.r*cellw+xoff+cellw/2, i\menu.r*10-3, function()
                     menu.edraw(entry, c_menu_styles[style_ind])
                 end)
@@ -151,7 +151,7 @@ end $$
     if entry.pkmn then
         local style = c_menu_styles[c_types[entry.pkmn.type1].bg]
 
-        f_zcall(_rectfill, [[
+        f_zcall(rectfill, [[
            ;,-20,-2,19,17,@
           ;;,-20,14,19,17,@
         ]], style.bg, style.aa)

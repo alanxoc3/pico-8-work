@@ -9,20 +9,20 @@ end $$
     local p1c, p2c = 11, 11 -- p1on and 6 or 1, p2on and 6 or 1
     
     -- draw gray bg for health bars
-    f_zcall(_rectfill, [[
+    f_zcall(rectfill, [[
        ;,0,0, 39,6, 5
       ;;,0,33,39,39,5
     ]])
 
     -- draw the health bars
-    f_zcall(_rectfill, [[
+    f_zcall(rectfill, [[
          ;,-1, 33, @, 41, 1
         ;;,-1, -2, @, 6,  1
-    ]], _max(_ceil(p1a.hp/p1a.maxhp*40), 0)-1,
-        _max(_ceil(p2a.hp/p2a.maxhp*40), 0)-1)
+    ]], max(ceil(p1a.hp/p1a.maxhp*40), 0)-1,
+        max(ceil(p2a.hp/p2a.maxhp*40), 0)-1)
 
     -- shape the health bars, so they are kinda curvy
-    f_zcall(_rectfill, [[
+    f_zcall(rectfill, [[
          ;,15, 6, 39,6, 13
         ;;,16, 5, 39,5, 13
         ;;,0,33,24,33,13

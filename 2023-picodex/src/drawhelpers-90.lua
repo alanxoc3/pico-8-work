@@ -4,10 +4,10 @@ end $$
 
 -- format is "a|b|c". first three fields separated by pipe are understood.
 |[f_print_draw3_message]| function(str)
-    f_zcall(_rectfill, [[;,0,0,45,6,1]])
+    f_zcall(rectfill, [[;,0,0,45,6,1]])
     f_zcall(f_zprint, [[
        ;,@,23,1,13,0
       ;;,@,23,8,1,0
       ;;,@,23,15,1,0
-    ]], _unpack(_split(str, "|", false)))
+    ]], unpack(split(str, "|", false)))
 end $$

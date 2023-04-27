@@ -15,20 +15,20 @@
     -- horde count is only used for p2. this is the index the horde is currently on.
 
     d1.key, d2.key = 'p1', 'p2'
-    for dd in _all{d1, d2} do
+    for dd in all{d1, d2} do
         _ENV[dd.key] = f_zobj([[
             actions,#, priority,1,
             menu_action,@, menu_move,@, menu_switch,@, team,@, name,@, iscpu,@, winlogic,@
         ]], f_create_menu(f_menu_drawentry),
             f_create_menu(f_menu_drawentry),
             f_create_menu(f_browse_drawentry, 3),
-            _unpack(dd))
+            unpack(dd))
         local pl=_ENV[dd.key]
         pl.menu_action.cancel = function()
             _ENV:f_modes_pop()
             _ENV:f_actor_load'battleview'
         end
-        _add(pl.actions, f_pkmn_comes_out(pl, f_get_next_active(pl.team)))
+        add(pl.actions, f_pkmn_comes_out(pl, f_get_next_active(pl.team)))
     end
 
     _ENV:f_modes_push'turn'
