@@ -1,5 +1,5 @@
 -- used everywhere
-_g=setmetatable({}, {___index=_ENV})
+_g=setmetatable({}, {__index=_ENV})
 _ENV = _g
 
 function nop() end

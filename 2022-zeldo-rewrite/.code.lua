@@ -109,7 +109,7 @@ end
 end
 g_zclass_new_entities={}
 end
-_g=setmetatable({},{___index=_ENV})
+_g=setmetatable({},{__index=_ENV})
 _ENV=_g
 function nop()end
 function f_zobj_eval(val,table,parameters)
@@ -1342,19 +1342,19 @@ if peek"0x5d00"==0 then
 zcall(poke,"1;,0x5d00,1;2;,0x5d01,224;3;,0x5d02,24;4;,0x5d03,34;5;,0x5d05,121;6;,0x5d06,96;7;,0x5d07,72;8;,0x5d04,1;9;,0x5d08,5;10;,0x5d0b,10;11;,0x5d0c,10;12;,0x5d13,1;")
 end
 end
-function __init()
+function _init()
 load_save_state()
 poke2(0x5f5c,6)
 g_si,g_fi,g_state,g_rooms=0,0,_g.game_state(),decode_map()
 g_tile_animation_lookup=create_tile_animation_lookup(g_rooms[0])
 end
-function __update60()
+function _update60()
 g_zbtn_0,g_zbtn_2=zbtn(btn,0),zbtn(btn,2)
 zcall(loop_entities,"1;,actor,clean;2;,fader,clean;")
 register_entities()
 zcall(loop_entities,"1;,fader,tick;2;,game_state,tick;3;,fader,state;4;,game_state,state;")
 end
-function __draw()
+function _draw()
 g_si,g_fi=g_slow_animation.index,g_fast_animation.index
 cls()
 loop_entities("game_state","draw")
