@@ -149,7 +149,7 @@ end
 function f_zobj(...)
 return f_zobj_set({},...)
 end
-f_zobj_set(_g,"f_actor_load,@,f_actor_loadlogic,@,f_actor_state,@,f_actor_is_alive,@,f_actor_kill,@,f_actor_clean,@,f_animation_init,@,f_auto_outline_draw,@,f_timer_reset_timer,@,f_timer_end_timer,@,f_timer_get_elapsed_percent,@,f_timer_is_active,@,f_timer_tick,@,f_box_touching,@,f_box_outside,@,f_box_inside,@,f_box_side,@,f_box_abside,@,f_box_getdelta,@,f_pos_dist_point,@,f_vec_update_x,@,f_vec_update_y,@,f_vec_mov_towards_point,@,f_mov_update,@,f_mov_towards_point,@,f_explode_draw,@,f_standard_explosion,@,f_set_x_delta,@,f_set_y_delta,@,f_adjust_deltas_for_solids,@,f_adjust_deltas_for_tiles,@,f_set_x_delta2,@,f_set_y_delta2,@,f_adjust_deltas_for_screen,@,f_healthobj_hurt,@,f_healthobj_stun,@,f_healthobj_health_update,@,f_inventory_open_update,@,f_inventory_update,@,f_inventory_start_update,@,f_inventory_normal_init,@,f_inventory_draw,@,f_simple_spr_draw,@,f_anchor_update_anchor,@,f_targettouch_update_target,@,f_coin_pl_collide_func,@,f_coin_1,@,f_coin_2,@,f_coin_3,@,f_coin_4,@,f_coin_5,@,f_coin_6,@,f_coin_7,@,f_coin_8,@,f_coin_9,@,f_coin_10,@,f_coin_11,@,f_coin_12,@,f_coin_13,@,f_coin_14,@,f_coin_15,@,f_coin_16,@,f_propel_func,@,f_interact,@,f_held_to_throw_beg,@,f_held_to_throw_update,@,f_held_to_throw_ending_init,@,f_item_throwing_update,@,f_quack_thrown_destroyed,@,f_bomb_destroyed,@,f_mask_init,@,f_mask_end,@,f_pellet_update,@,f_pellet_draw,@,f_bow_ending_init,@,f_sword_item_hit_func,@,f_banjo_start_init,@,f_banjo_ending_init,@,f_brang_drawout,@,f_brang_start_init,@,f_brang_start_update,@,f_brang_normal_update,@,f_brang_ending_init,@,f_brang_ending_update,@,f_bomb_pl_hit,@,f_item_horizontal_start_init,@,f_item_horizontal_normal_init,@,f_item_horizontal_ending_init,@,f_maskcheck_func,@,f_pushable_push,@,f_pushable_update_push,@,f_pl_update,@,f_pl_drawout,@,f_card_table_cache,@,f_coin_count_start,@,f_coin_count_normal,@,f_coin_coint_draw,@,f_energybar_draw,@,f_stat_idle,@,f_rstat_update,@",function(a,stateName)
+f_zobj_set(_g,"f_actor_load,@,f_actor_loadlogic,@,f_actor_state,@,f_actor_is_alive,@,f_actor_kill,@,f_actor_clean,@,f_animation_init,@,f_auto_outline_draw,@,f_draw_outline,@,f_timer_reset_timer,@,f_timer_end_timer,@,f_timer_get_elapsed_percent,@,f_timer_is_active,@,f_timer_tick,@,f_box_touching,@,f_box_outside,@,f_box_inside,@,f_box_side,@,f_box_abside,@,f_box_getdelta,@,f_pos_dist_point,@,f_vec_update_x,@,f_vec_update_y,@,f_vec_mov_towards_point,@,f_mov_update,@,f_mov_towards_point,@,f_explode_draw,@,f_standard_explosion,@,f_set_x_delta,@,f_set_y_delta,@,f_adjust_deltas_for_solids,@,f_adjust_deltas_for_tiles,@,f_set_x_delta2,@,f_set_y_delta2,@,f_adjust_deltas_for_screen,@,f_healthobj_hurt,@,f_healthobj_stun,@,f_healthobj_health_update,@,f_inventory_open_update,@,f_inventory_update,@,f_inventory_start_update,@,f_inventory_normal_init,@,f_inventory_draw,@,f_simple_spr_draw,@,f_anchor_update_anchor,@,f_targettouch_update_target,@,f_coin_pl_collide_func,@,f_coin_1,@,f_coin_2,@,f_coin_3,@,f_coin_4,@,f_coin_5,@,f_coin_6,@,f_coin_7,@,f_coin_8,@,f_coin_9,@,f_coin_10,@,f_coin_11,@,f_coin_12,@,f_coin_13,@,f_coin_14,@,f_coin_15,@,f_coin_16,@,f_propel_func,@,f_interact,@,f_held_to_throw_beg,@,f_held_to_throw_update,@,f_held_to_throw_ending_init,@,f_item_throwing_update,@,f_quack_thrown_destroyed,@,f_bomb_destroyed,@,f_mask_init,@,f_mask_end,@,f_pellet_update,@,f_pellet_draw,@,f_bow_ending_init,@,f_sword_item_hit_func,@,f_banjo_start_init,@,f_banjo_ending_init,@,f_brang_drawout,@,f_brang_start_init,@,f_brang_start_update,@,f_brang_normal_update,@,f_brang_ending_init,@,f_brang_ending_update,@,f_bomb_pl_hit,@,f_item_horizontal_start_init,@,f_item_horizontal_normal_init,@,f_item_horizontal_ending_init,@,f_maskcheck_func,@,f_pushable_push,@,f_pushable_update_push,@,f_pl_update,@,f_pl_drawout,@,f_card_table_cache,@,f_coin_count_start,@,f_coin_count_normal,@,f_coin_coint_draw,@,f_energybar_draw,@,f_stat_idle,@",function(a,stateName)
 a.next_state=stateName or a.next
 end,function(a,stateName)
 a.next_state,a.isnew=nil
@@ -195,12 +195,20 @@ local stunned=a:is_active"stunned"
 local yoff=((does_entity_exist"banjo" and a.should_dance or stunned)and sin(g_fi/5)or 0)+sin(a:get_elapsed_percent"jumpanim"/2)*8+sin(a:get_elapsed_percent"stunned_jump"/2)*5+sin(a:get_elapsed_percent"injured"/2)*5
 local xoff=0
 camera(ox-xoff,oy-yoff)
-draw_outline(1,function()a:drawout()end)
+f_draw_outline(1,function()a:drawout()end)
 if stunned then gray_fade(1)end
 if injured then red_fade(1)end
 a:drawout()
 pal()
 camera(ox,oy)
+end,function(color,drawfunc)
+for c=1,15 do pal(c,color)end
+local ox,oy=%0x5f28,%0x5f2a
+for y=-1,1 do for x=-1,1 do
+camera(ox+x,oy+y)drawfunc()
+end end
+camera(ox,oy)
+pal()
 end,function(a,timer_name,duration,callback)
 a.timers[timer_name]={active=true,elapsed=false,duration=duration and 0+duration,callback=callback or function()end}
 end,function(a,timer_name)
@@ -590,7 +598,8 @@ a.obj=a.next_obj
 a.next_obj=nil
 a:load()
 end
-end,function(a)
+end)
+f_zobj_set(_g,"f_rstat_update,@,f_rstat_get,@,f_stat_normal,@,f_stat_draw,@,f_tbox_init,@,f_tbox_update,@,f_tbox_draw,@,f_fairy_update,@,f_fairy_draw,@,f_spawn_walls,@,f_pot_callback_touch,@,f_house_init,@,f_person_target_with_tbox_disable_callback,@,f_person_target_with_tbox_finish_callback,@,f_lime_callback,@,f_limestatue_destroyed,@,f_teach_gettext,@,f_keep_gettext,@,f_class_with_target_init,@,f_target_with_tbox_gettext,@,f_target_with_tbox_target_func,@,f_sign_target_with_tbox_disable_callback,@,f_quack_change_dir,@,f_quack_pl_collide_func,@,f_enemy_pl_collide_func_batch,@,f_slimy_parent_statcollide,@,f_slobs_shotgun_init,@,f_slobs_calc_next,@,f_slimy_boss_idle_update,@,f_slimy_boss_spin_update,@,f_slimy_boss_stateless_update,@,f_slimy_boss_jump_init,@,f_slimy_boss_idle_init,@,f_slimyboss_destroyed,@,f_slimyboss_jump,@,f_slimyboss_init,@,f_slimy_ball_update,@,f_minion_to_miny,@,f_slimy_minion_pl_collide,@,f_slimy_minion_update,@,f_slimy,@,f_slimy_destroyed,@,f_miny,@,f_slimy_propel,@,f_slimy_stun_callback,@,f_slimy_stunstate,@,f_slimy_pl_collide_func,@,f_slimy_start,@,f_slimy_bounce,@,f_slimy_jump_init,@,f_spike_pl_collide_func,@,f_blockade_close_init,@,f_blockade_open_init,@,f_saveplat_update,@,f_fader_out_update,@,f_fader_in_update,@,f_logo_init,@,f_logo_draw,@,f_gameover_update,@,f_gameover_init,@,f_gameover_draw,@,f_room_init,@,f_room_update,@,f_room_draw,@,f_title_init,@,f_simple_update,@,f_title_draw,@,f_title_logo_update,@,f_title_logo_drawout,@,f_game_state_init,@",function(a)
 local buffer,cur_obj,new_lvl,new_obj,should_exit=g_zclass_entities[a.entity_type],a:get(),-1
 for obj in all(buffer)do
 if obj:is_active"isma" and obj:is_alive()and(obj.ma_level>new_lvl or obj==cur_obj and obj.ma_level>=new_lvl)then
@@ -598,8 +607,7 @@ new_obj,new_lvl=obj,obj.ma_level
 end
 end
 a.next_obj=new_obj
-end)
-f_zobj_set(_g,"f_rstat_get,@,f_stat_normal,@,f_stat_draw,@,f_tbox_init,@,f_tbox_update,@,f_tbox_draw,@,f_fairy_update,@,f_fairy_draw,@,f_spawn_walls,@,f_pot_callback_touch,@,f_house_init,@,f_person_target_with_tbox_disable_callback,@,f_person_target_with_tbox_finish_callback,@,f_lime_callback,@,f_limestatue_destroyed,@,f_teach_gettext,@,f_keep_gettext,@,f_class_with_target_init,@,f_target_with_tbox_gettext,@,f_target_with_tbox_target_func,@,f_sign_target_with_tbox_disable_callback,@,f_quack_change_dir,@,f_quack_pl_collide_func,@,f_enemy_pl_collide_func_batch,@,f_slimy_parent_statcollide,@,f_slobs_shotgun_init,@,f_slobs_calc_next,@,f_slimy_boss_idle_update,@,f_slimy_boss_spin_update,@,f_slimy_boss_stateless_update,@,f_slimy_boss_jump_init,@,f_slimy_boss_idle_init,@,f_slimyboss_destroyed,@,f_slimyboss_jump,@,f_slimyboss_init,@,f_slimy_ball_update,@,f_minion_to_miny,@,f_slimy_minion_pl_collide,@,f_slimy_minion_update,@,f_slimy,@,f_slimy_destroyed,@,f_miny,@,f_slimy_propel,@,f_slimy_stun_callback,@,f_slimy_stunstate,@,f_slimy_pl_collide_func,@,f_slimy_start,@,f_slimy_bounce,@,f_slimy_jump_init,@,f_spike_pl_collide_func,@,f_blockade_close_init,@,f_blockade_open_init,@,f_saveplat_update,@,f_fader_out_update,@,f_fader_in_update,@,f_logo_init,@,f_logo_draw,@,f_gameover_update,@,f_gameover_init,@,f_gameover_draw,@,f_room_init,@,f_room_update,@,f_room_draw,@,f_title_init,@,f_simple_update,@,f_title_draw,@,f_title_logo_update,@,f_title_logo_drawout,@,f_game_state_init,@",function(a)
+end,function(a)
 return a.curr=="normal" and a.obj and a.obj:is_alive()and a.obj
 end,function(a)
 if a.next_obj ~=a.obj then
@@ -1083,15 +1091,6 @@ zclass"drawlayer_95|"
 zclass"drawlayer_99|"
 zclass"animation,actor|index,0,init,%f_animation_init;start;duration,@,next,start"
 zclass"auto_outline,timer|draw,%f_auto_outline_draw,outline_color,1"
-function draw_outline(color,drawfunc)
-for c=1,15 do pal(c,color)end
-local ox,oy=%0x5f28,%0x5f2a
-for y=-1,1 do for x=-1,1 do
-camera(ox+x,oy+y)drawfunc()
-end end
-camera(ox,oy)
-pal()
-end
 function isorty(t)
 for n=2,#t do
 local i=n
