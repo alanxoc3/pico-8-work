@@ -4,7 +4,7 @@ pico-minifier() { perl "-I$PICO_WORK_DIR/bin/minifier/" "$PICO_WORK_DIR/bin/pico
 # sort by the second field separated by a "-".
 # i sort this way, so the common name goes first, which is nice when editing.
 # Then the order my script needs goes second.
-files_in_order=$(ls ./src/*.lua | sort -t- -nk2)
+files_in_order=$(fd '\.lua$' ./src | sort -t- -nk2)
 
 # expand on newline, not space
 # https://unix.stackexchange.com/questions/39473/command-substitution-splitting-on-newline-but-not-space

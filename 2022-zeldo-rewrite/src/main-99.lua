@@ -54,7 +54,7 @@ function load_save_state()
     end
 end
 
-function __init()
+function _init()
     load_save_state()
 
     poke2(0x5f5c, 6) -- custom press delay... a bit more than the default hold delay
@@ -62,7 +62,7 @@ function __init()
     g_tile_animation_lookup = create_tile_animation_lookup(g_rooms[ANIMATION_ROOM_INDEX])
 end
 
-function __update60()
+function _update60()
     -- a few places check for a button press, making global for token count sake
     g_zbtn_0, g_zbtn_2 = zbtn(btn, 0), zbtn(btn, 2)
 
@@ -85,7 +85,7 @@ function __update60()
     ]])
 end
 
-function __draw()
+function _draw()
     g_si, g_fi = g_slow_animation.index, g_fast_animation.index
     cls()
     loop_entities('game_state', 'draw')

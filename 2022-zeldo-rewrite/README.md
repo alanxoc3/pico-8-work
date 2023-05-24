@@ -3,7 +3,6 @@ Lank wakes up from a good night's rest only to find Hi-roll in danger! Ya gotta
 help him save the Land of Hi-roll from the FORCES-OF-EVIL.
 
 # Todo List
-TODO: make work with new minifier structure
 TODO: separate code into shared & not shared
 TODO: 3 jump then bouncy shot
 TODO: no spikes when you beat boss?
@@ -245,3 +244,5 @@ mwa heh ha... i've been waiting for you. you must be that creep that wants to ma
 if you want to see her that bad, you'll have to get through this crypt i filled with monsters. heh.
 
 2 different levels of ma. Battle level and interact level. Interact level is higher priority.
+
+years have past since cannon tried to take over hiroll.

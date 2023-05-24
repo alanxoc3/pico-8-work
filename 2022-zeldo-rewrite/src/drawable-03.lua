@@ -33,7 +33,7 @@ zclass[[auto_outline,timer|
     local xoff = 0
 
     camera(ox-xoff, oy-yoff)
-    draw_outline(1, function() a:drawout() end)
+    f_draw_outline(1, function() a:drawout() end)
     if stunned then gray_fade(1) end
     if injured then red_fade(1) end
     a:drawout()
@@ -41,7 +41,7 @@ zclass[[auto_outline,timer|
     camera(ox, oy)
 end $$
 
-function draw_outline(color, drawfunc)
+|[f_draw_outline]| function(color, drawfunc)
     for c=1,15 do pal(c,color) end
     -- cache the old camera coords and restore them
     local ox, oy = %0x5f28, %0x5f2a
@@ -50,7 +50,7 @@ function draw_outline(color, drawfunc)
     end end
     camera(ox, oy)
     pal()
-end
+end $$
 
 -- sort based on y position for some draw layers
 function isorty(t)
