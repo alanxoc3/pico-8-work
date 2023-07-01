@@ -2,7 +2,6 @@ create_actor([[deadbody_parent;0;confined,pre_drawable|
     d:@1; i:@2; touchable:no; rx:.25; ry:.5; sind:0;
 ]], function(a)
     local sind = a.sind
-    if g_room.name == 'hospital' then sind += 16 end
     zspr(sind, a.x*8+a.xx, a.y*8+a.yy, 2, 1, a.xf, false)
 end)
 

@@ -29,7 +29,7 @@ create_actor([[bad_patient;3;drawable,col,confined,mov,x_bounded,y_bounded,knock
     sind:224;
     x:@1; y:@2; enemy_id:@3; u:@4; damage:@5; destroyed:@6;
     d:%patient_draw;
-    health:3; max_health:3;
+    health:5; max_health:5;
     sh:2; iyy:-5;
     rx:.375; ry:.375;
     touchable: no;

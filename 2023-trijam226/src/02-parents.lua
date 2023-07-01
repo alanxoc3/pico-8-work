@@ -241,7 +241,7 @@ create_parent([[knockbackable;0;mov,timer,;|
     if not a:any_timer_active('knockback') then
         a.knockback_speed = .075
         a.knockback_dir = direction
-        a:create_timer('knockback', 4)
+        a:create_timer('knockback', 1.5)
     end
 end, function(a)
     a.ax = cos(a.knockback_dir)*a.knockback_speed

@@ -37,7 +37,7 @@ create_actor([[bad_nurse;3;drawable,col,confined,mov,x_bounded,y_bounded,knockba
     sind:5;
     x:@1; y:@2; enemy_id:@3; u:@4; damage:@5; destroyed:@6;
     d:%nurse_draw;
-    health:3; max_health:3;
+    health:6; max_health:6;
     sh:2; iyy:-5;
     rx:.375; ry:.375;
     touchable: no;

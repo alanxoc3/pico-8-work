@@ -36,17 +36,9 @@ function create_all_deadbodies()
     end
 end
 
-function cleanup_confined()
-    batch_call_new(acts_loop, [[
-        confined,room_end;
-        confined,kill;
-        confined,delete;
-    ]])
-end
-
 -- resets the non-hospital dungeon
 function reset_the_dungeon()
-    cleanup_confined()
+    batch_call_new(acts_loop, [[confined,delete;]])
 
     _g.portal_spawner()
     _g.fader_in(.5, nf, nf)
