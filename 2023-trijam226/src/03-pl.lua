@@ -19,7 +19,7 @@ create_parent([[pl;1;drawable,pos,confined,mov,x_bounded,y_bounded,col,spr_obj,k
     hurt_cooldown_time:90;
     passive_mode:@1; create_dead_body:@2; destroyed:@2; d:@3;
 
-    strength:1; -- amount of damage you do to enemies
+    strength:4; -- amount of damage you do to enemies
     dir:0; is_facing_left:yes; xf:yes;
     health:C_PL_HEALTH; max_health:C_PL_HEALTH;
 
@@ -73,7 +73,7 @@ create_parent([[pl_monster;0;pl/no,|
     damage:@1; hurt_start:@2; hurt_end:@3;
     increment_strength:@4; decrement_strength:@5; set_strength:@6;
 
-    strength:0;
+    strength:4;
 ]], function(a, other)
     if not a:any_timer_active'roll' then
         a:hurt()
@@ -84,22 +84,8 @@ end, function(a)
 end, function(a)
     a:set_strength(0)
 end, function(a)
-    if a.strength < 3 then
-        a:set_strength(a.strength + 1)
-    end
 end, function(a)
-    if a.strength > 3 then
-        a:set_strength(0)
-    elseif a.strength > 0 then
-        a:set_strength(a.strength - 1)
-    end
 end, function(a, level)
-    if level ~= a.strength then
-        a.strength = level
-        a:create_timer('strength_timeout', 60*5, function()
-            a:decrement_strength()
-        end)
-    end
 end)
 
 create_parent([[pl_patient;0;pl/yes,|
@@ -117,7 +103,7 @@ create_parent([[pl_patient;0;pl/yes,|
 end)
 
 -- use this for the player with button logic, or for the boss with ai logic.
-function control_player(a, x_dir, y_dir, is_z_pressed, is_x_pressed, punch_func, strength)
+function control_player(a, x_dir, y_dir, is_z_pressed, is_x_pressed, punch_func)
     if not a.pl then return end
 
     if a.teleporting then
@@ -129,27 +115,12 @@ function control_player(a, x_dir, y_dir, is_z_pressed, is_x_pressed, punch_func,
     -- no speed or power multiplier for the non insane
     local speed_multiplier = 1
 
-    -- if strength level is not nil, strength is enabled.
-    if strength then
-        speed_multiplier = 1 + a.strength/10
-
-        -- anger emotion particle is used instead of blood
-        if     strength == 4 then _g.powerup_particle(a.x, a.y+.5, C_COLOR_ANGRY)
-        elseif strength == 3 then _g.powerup_particle(a.x, a.y+.5, C_COLOR_INSANE_3)
-        elseif strength == 2 then _g.powerup_particle(a.x, a.y+.5, C_COLOR_INSANE_2)
-        elseif strength == 1 then _g.powerup_particle(a.x, a.y+.5, C_COLOR_INSANE_1)
-        -- no color for normal
-        -- elseif strength == 0 then _g.powerup_particle(a.x, a.y+.5, C_COLOR_NORMAL)
-        end
-
     -- if not insane, getting hurt can spawn particles
-    elseif a:any_timer_active('hurt_cooldown') then
+    if a:any_timer_active('hurt_cooldown') then
         _g.powerup_particle(a.x, a.y+.5, C_COLOR_BLOOD)
     end
 
     -- amount of damage you do to enemies
-    if strength == 4 then a.stregth = 2
-    else a.stregth = 1 end
 
     if not a:any_timer_active('cooldown', 'roll', 'punch') then
         if is_z_pressed then

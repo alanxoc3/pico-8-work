@@ -21,19 +21,6 @@ end, function(a)
     end
 end)
 
-create_actor([[genocide_tip;2;above_map_drawable,confined|
-    x:@1; y:@2; d:@3; when_to_show_tip:C_WHEN_TO_SHOW_TIP;
-]], function(a)
-    if g_endgame_stats.enemy_total_count - g_endgame_stats.enemy_kill_count <= a.when_to_show_tip then
-        scr_rectfill(.125, a.y-.5, 15.75, a.y+.5, 1)
-        local number_str = ''..g_endgame_stats.enemy_kill_count..'/'..g_endgame_stats.enemy_total_count
-        if g_endgame_stats.enemy_kill_count == g_endgame_stats.enemy_total_count then
-            number_str = "all"
-        end
-        zprint("killed "..number_str.." enemies", a.x*8, a.y*8-2, 8, 0)
-    end
-end)
-
 create_actor([[objective_arrow;2;post_drawable_2,confined|
     x:@1; y:@2; u:@3; d:@4;
     ry:.25;

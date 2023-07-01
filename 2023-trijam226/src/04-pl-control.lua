@@ -40,11 +40,7 @@ end)
 create_actor([[pl_monster_control;2;pl_monster,good_character,pl_control|
     x:@1; y:@2; u:@3; destroyed:@4;
 ]], function(a)
-    -- DEBUG_BEGIN
-    if g_debug and btnp(4) then a:set_strength((a.strength + 1) % 5) end
-    -- DEBUG_END
-
-    control_player(a, xbtn(), ybtn(), btn(4), btn(5), _g.good_fist, a.strength)
+    control_player(a, xbtn(), ybtn(), btn(4), btn(5), _g.good_fist)
 end, function(a)
     a:create_dead_body()
     g_endgame_stats.deaths = g_endgame_stats.deaths + 1

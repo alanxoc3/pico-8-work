@@ -38,15 +38,6 @@ function create_ui_hearts()
     _g.heart_particle_spawner(  8, 1, 1)
 end
 
--- the emotion faces things
-function create_ui_powerups()
-    _g.powerup_particle_spawner(3 , 1 , 0, C_COLOR_NORMAL  , 72)
-    _g.powerup_particle_spawner(4 , 15, 1, C_COLOR_INSANE_1, 74)
-    _g.powerup_particle_spawner(8 , 15, 2, C_COLOR_INSANE_2, 76)
-    _g.powerup_particle_spawner(12, 15, 3, C_COLOR_INSANE_3, 78)
-    _g.powerup_particle_spawner(13, 1 , 4, C_COLOR_ANGRY   , 104)
-end
-
 function create_all_enemies()
     for i, enemy_template in pairs(_g.all_enemy_templates[g_room.name]) do
         if enemy_template.alive then
@@ -82,9 +73,6 @@ function reset_the_dungeon()
     create_all_deadbodies()
     create_all_enemies()
     create_ui_hearts()
-    -- create_ui_powerups()
-
-    _g.genocide_tip(8, 13)
     _g.objective_arrow(8, 13)
 end
 
