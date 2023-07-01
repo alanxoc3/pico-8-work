@@ -62,10 +62,12 @@ end, function(a)
         zprint("hasten 1 2 3", 64, 98+8*3, 13, 0)
     end
 end, function(a)
-  if btn(5) then
-    a.sel = mid(0, 3, a.sel+ybtnp())
-    a:modstat(a.sel, xbtnp())
-  end
+    if not a:any_timer_active('cooldown') then
+        a:create_timer('cooldown', 5*60+flr_rnd(5)*60, function()
+            a.sel = flr_rnd(4)
+            a:modstat(a.sel, 1-flr_rnd(3))
+        end)
+    end
 end, function(a, s, d)
     local curr = a.stats[s]
     local new = mid(1, 3, curr+d)

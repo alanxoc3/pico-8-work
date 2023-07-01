@@ -168,7 +168,7 @@ function control_player(a, x_dir, y_dir, is_z_pressed, is_x_pressed, punch_func)
     elseif a:any_timer_active'punch' then
         a.ax = cos(a.dir)*.005
         a.ay = sin(a.dir)*.005
-    elseif is_moving and not btn(5) then
+    elseif is_moving then
         if x_dir ~= 0 then
             a.is_facing_left = x_dir < 0
         end

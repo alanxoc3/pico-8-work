@@ -1,5 +1,5 @@
 create_actor([[bullet_bad; 4;police_weapon,bad_attack|   x:@1; y:@2; dx:@3; dy:@4; sind:198; col:8]])
-create_actor([[bullet_good;4;police_weapon,good_attack|  x:@1; y:@2; dx:@3; dy:@4; sind:197; col:9]])
+create_actor([[bullet_good;4;police_weapon,good_attack|  x:@1; y:@2; dx:@3; dy:@4; sind:199; col:9; rx:.125; ry:.125;]])
 
 create_actor([[police_weapon;0;col,vec,confined,rel,post_drawable,tcol| -- bad_attack makes it do damage
     d:@1; tile_hit:@2; destroyed:@3;
@@ -35,7 +35,7 @@ create_actor([[bad_police;3;drawable,col,confined,mov,x_bounded,y_bounded,knockb
     local shoot_speed = .2
     -- walk, then wait, then shoot then wait
     if not a:any_timer_active('walk', 'wait', 'aim', 'shoot') then
-        a:create_timer('walk', 120+rnd(60), function()
+        a:create_timer('walk', 30+rnd(60), function()
             a:create_timer('wait', flr_rnd(20)+10, function()
                 a:create_timer('aim', 10, function()
                     _g.bullet_bad(a.x, a.y, a.xf and -shoot_speed or shoot_speed, 0)

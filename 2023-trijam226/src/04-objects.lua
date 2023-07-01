@@ -32,8 +32,8 @@ create_actor([[portal_spawner;0;confined,|
     u:@1;
 ]], function(a)
     if not a:any_timer_active('cooldown') then
-        a:create_timer('cooldown', 2*60, function()
-            _g.portal(flr_rnd(20), flr_rnd(20))
+        a:create_timer('cooldown', 3*60, function()
+            _g.portal(flr_rnd(g_room.w-4)+2, flr_rnd(g_room.h-4)+2)
         end)
     end
 end)

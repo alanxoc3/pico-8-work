@@ -26,28 +26,11 @@ function _init()
 end
 
 function _update60()
-   -- DEBUG_BEGIN
-   if g_debug then poke(0x5f42,15) -- glitch sound
-   else poke(0x5f42,0) -- no glitch sound
-   end
-   -- DEBUG_END
-
-   -- DEBUG_BEGIN
-   if btnp'5' and btn'4' then g_debug = not g_debug end
-   -- DEBUG_END
-
    tl_node(g_tl)
 end
 
 function _draw()
     cls()
-
-    -- DEBUG_BEGIN
-    if g_debug then
-        rect(0,0,127,127,8)
-    end
-    -- DEBUG_END
-
     call_not_nil(g_tl, 'd', g_tl)
 end
 
