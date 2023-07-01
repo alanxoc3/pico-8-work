@@ -15,9 +15,9 @@ end
 
 -- draws the hearts at the top of the screen, with particles!
 function create_ui_hearts()
-    _g.heart_particle_spawner(6.5, 1, 3)
-    _g.heart_particle_spawner(9.5, 1, 2)
-    _g.heart_particle_spawner(  8, 1, 1)
+    _g.heart_particle_spawner(6.5, 11, 1)
+    _g.heart_particle_spawner(8,   11, 2)
+    _g.heart_particle_spawner(9.5, 11, 3)
 end
 
 function create_all_enemies()
@@ -56,5 +56,5 @@ function reset_the_dungeon()
     create_all_enemies()
     create_ui_hearts()
     g_objective_arrow = _g.objective_arrow(8, 13)
-    _g.statsels()
+    g_stats = _g.statsels()
 end

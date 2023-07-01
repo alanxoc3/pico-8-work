@@ -21,7 +21,9 @@ create_parent([[pl;1;drawable,pos,confined,mov,x_bounded,y_bounded,col,spr_obj,k
 
     strength:4; -- amount of damage you do to enemies
     dir:0; is_facing_left:yes; xf:yes;
-    health:C_PL_HEALTH; max_health:C_PL_HEALTH;
+    health:2; max_health:2;
+
+    bullet:2;
 
     -- some methods that could be implemented on sub-actors:
     damage:nf; increment_strength:nf; decrement_strength:nf; set_strength:nf;
@@ -105,6 +107,13 @@ end)
 -- use this for the player with button logic, or for the boss with ai logic.
 function control_player(a, x_dir, y_dir, is_z_pressed, is_x_pressed, punch_func)
     if not a.pl then return end
+    if g_stats and g_stats.stats then
+        a.bullet = g_stats.stats[SBULLET]
+        if a.max_health and g_stats.stats[SHEARTS] ~= a.max_health then
+            a.max_health = g_stats.stats[SHEARTS]
+            a.health     = g_stats.stats[SHEARTS]
+        end
+    end
 
     if a.teleporting then
         a.iyy -= .25
@@ -130,11 +139,14 @@ function control_player(a, x_dir, y_dir, is_z_pressed, is_x_pressed, punch_func)
             if punch_func then
                 a:create_timer('punch', 20, function() a:create_timer('cooldown', 10) end)
                 punch_func(a, a.x, a.y)
-                if g_objective_arrow and g_objective_arrow.objective and g_objective_arrow.smallest_dist < 16 then
-                    local obj = g_objective_arrow.objective
-                    local dir = atan2(obj.x - a.x, obj.y - a.y)
-                    local dx, dy = .2*cos(dir), .2*sin(dir)
-                    _g.bullet_good(a.x, a.y, dx, dy)
+                for i=-(a.bullet-1)/2,(a.bullet-1)/2 do
+                    local ang_off = i*.125/2
+                    if g_objective_arrow and g_objective_arrow.objective and g_objective_arrow.smallest_dist < 16 then
+                        local obj = g_objective_arrow.objective
+                        local dir = atan2(obj.x - a.x, obj.y - a.y)+ang_off
+                        local dx, dy = .2*cos(dir), .2*sin(dir)
+                        _g.bullet_good(a.x, a.y, dx, dy)
+                    end
                 end
             end
         end
