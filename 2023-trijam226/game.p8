@@ -1,11 +1,8 @@
 pico-8 cartridge // http://www.pico-8.com
 version 41
 __lua__
--- a healthy dose of dungeon
--- amorg
-
--- unobfuscated code at:
--- git.io/amorg-pico8
+-- sTAT rOULETTE
+-- bY: aMORG gAMES | xOC3.iO/pICO8
 
 #include .code.lua
 
