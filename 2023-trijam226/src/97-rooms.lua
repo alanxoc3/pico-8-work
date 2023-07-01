@@ -1,7 +1,9 @@
 -- room resec helper functions and functions
 function get_all_enemies_for_story_mode()
     local dungeon_and_hospital = tabcpy(ztable[[
-        x=5,  y=5, dungeon=%bad_police, hospital=%police, alive=yes;
+        x=5,  y=5, dungeon=%bad_police,  alive=yes;
+        x=5,  y=5, dungeon=%bad_nurse,   alive=yes;
+        x=5,  y=5, dungeon=%bad_patient, alive=yes;
     ]])
 
     return {

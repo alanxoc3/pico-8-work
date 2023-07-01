@@ -104,7 +104,7 @@ create_actor([[objective_arrow;2;post_drawable_2,confined|
     a.smallest_dist = smallest_dist
     a.objective = objective
 end, function(a)
-    if a.objective and a.smallest_dist > 3.5 then
+    if a.objective then
         local dir = atan2(a.objective.x - g_pl.x, a.objective.y - g_pl.y)
         dir = round(dir*16)/16
         local dx = cos(dir)
@@ -113,9 +113,9 @@ end, function(a)
         local color = 1
 
         local len_multiplier = 1.75
-        if t() % .5 < .25 then
-            len_multiplier *= 1.125
-        end
+        --if t() % .5 < .25 then
+        --    len_multiplier *= 1.125
+        --end
 
         local x1=g_pl.x+dx
         local y1=offy+g_pl.y+dy
@@ -123,7 +123,7 @@ end, function(a)
         local y2=offy+g_pl.y+dy*len_multiplier
 
         --scr_line(x1, y1, x2, y2, color)
-        zspr(8, x2, y2, 2, 2)
+        zspr(8, x2*8, y2*8, 2, 2)
 
         local turn=.375
         local length=.375

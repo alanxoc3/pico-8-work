@@ -19,7 +19,7 @@ create_parent([[pl;1;drawable,pos,confined,mov,x_bounded,y_bounded,col,spr_obj,k
     hurt_cooldown_time:90;
     passive_mode:@1; create_dead_body:@2; destroyed:@2; d:@3;
 
-    strength:4; -- amount of damage you do to enemies
+    strength:1; -- amount of damage you do to enemies
     dir:0; is_facing_left:yes; xf:yes;
     health:2; max_health:2;
 
@@ -82,16 +82,14 @@ create_parent([[pl_monster;0;pl/no,|
     damage:@1; hurt_start:@2; hurt_end:@3;
     increment_strength:@4; decrement_strength:@5; set_strength:@6;
 
-    strength:4;
+    strength:1;
 ]], function(a, other)
     if not a:any_timer_active'roll' then
         a:hurt()
         a:knockback(atan2(a.x-other.x, a.y-other.y))
     end
-end, function(a)
-    a:set_strength(4)
-end, function(a)
-    a:set_strength(0)
+end, function(a) a:set_strength(1)
+end, function(a) a:set_strength(1)
 end, function(a)
 end, function(a)
 end, function(a, level)

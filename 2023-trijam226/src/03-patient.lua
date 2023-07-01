@@ -1,20 +1,20 @@
 function _g.patient_draw(a)
-    a.sind=9
+    a.sind=224
 
+    a.sw = 1
     if a:any_timer_active'prepare' then
-        a.sind=10
+        a.sw = 2
+        a.sind=226
     elseif a:any_timer_active'charge' then
+        a.sw = 2
         local percent = a:get_timer_percent'charge'
-        if percent < .2 then a.sind=11
-        elseif percent < .4 then a.sind=12
-        elseif percent < .75 then a.sind=13
-        else a.sind=10
+        if     percent < .2 then a.sind=228
+        elseif percent < .4 then a.sind=230
+        elseif percent < .75 then a.sind=232
+        else a.sind=226
         end
     end
 
-    if g_room.name == 'hospital' then
-        a.sind += 32
-    end
     scr_spr(a)
 end
 
@@ -26,10 +26,10 @@ create_actor([[patient_weapon;3;col,confined,rel,bad_attack|
 ]])
 
 create_actor([[bad_patient;3;drawable,col,confined,mov,x_bounded,y_bounded,knockbackable,hurtable,spr_obj,bad_character,tcol|
-    sind:9;
+    sind:224;
     x:@1; y:@2; enemy_id:@3; u:@4; damage:@5; destroyed:@6;
     d:%patient_draw;
-    health:C_ENEMY_HEALTH; max_health:C_ENEMY_HEALTH;
+    health:3; max_health:3;
     sh:2; iyy:-5;
     rx:.375; ry:.375;
     touchable: no;
@@ -80,7 +80,7 @@ end, function(a, other)
         end
     end
 end, function(a)
-    create_cached_deadbody(a.enemy_id, a.x, a.y, a.xf, 14)
+    create_cached_deadbody(a.enemy_id, a.x, a.y, a.xf, 215)
 end)
 
 create_actor([[patient;3;captionable,drawable,col,confined,mov,x_bounded,y_bounded,spr_obj,tcol|

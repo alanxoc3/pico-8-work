@@ -27,7 +27,7 @@ create_actor([[bad_police;3;drawable,col,confined,mov,x_bounded,y_bounded,knockb
     sind:192;
     x:@1; y:@2; enemy_id:@3; u:@4; damage:@5; destroyed:@6; d:@7;
     d:%police_draw;
-    health:100; max_health:C_ENEMY_HEALTH;
+    health:3; max_health:3;
     sh:2; iyy:-5;
     rx:.375; ry:.375;
     touchable: no;
@@ -80,7 +80,7 @@ end, function(a, other)
         end
     end
 end, function(a)
-    create_cached_deadbody(a.enemy_id, a.x, a.y, a.xf, 227)
+    create_cached_deadbody(a.enemy_id, a.x, a.y, a.xf, 213)
 end, function(a) -- draw
     -- a.sind=192
     if a:any_timer_active'aim' then

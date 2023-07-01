@@ -1,24 +1,25 @@
 function _g.nurse_draw(a)
-    a.sind=66
+    a.sind=5
 
+    a.sw = 1
     if a:any_timer_active'prepare' then
-        a.sind=69
+        a.sind=37
+        a.sw = 2
     elseif a:any_timer_active'attack' then
-        a.sind=70
-        if a:get_timer_percent'attack' > .50 then
-            a.sind=71
+        a.sw = 2
+        a.sind=39
+        if     a:get_timer_percent'attack' > .90 then a.sind=45
+        elseif a:get_timer_percent'attack' > .70 then a.sind=43
+        elseif a:get_timer_percent'attack' > .50 then a.sind=41
+        elseif a:get_timer_percent'attack' > .20 then a.sind=39
         end
     elseif abs(a.dx) > .005 or abs(a.dy) > .005 then
         local loop = a.tl_tim % .5 / .5
-        if loop < .25 then a.sind=66
-        elseif loop < .5 then a.sind=67
-        elseif loop < .75 then a.sind=66
-        else a.sind=68
+        if loop < .25 then a.sind=5
+        elseif loop < .5 then a.sind=6
+        elseif loop < .75 then a.sind=5
+        else a.sind=7
         end
-    end
-
-    if g_room.name == 'hospital' then
-        a.sind += 32
     end
     scr_spr(a)
 end
@@ -33,10 +34,10 @@ create_actor([[nurse_weapon;3;col,confined,rel,bad_attack|
 end)
 
 create_actor([[bad_nurse;3;drawable,col,confined,mov,x_bounded,y_bounded,knockbackable,hurtable,spr_obj,bad_character,tcol|
-    sind:66;
+    sind:5;
     x:@1; y:@2; enemy_id:@3; u:@4; damage:@5; destroyed:@6;
     d:%nurse_draw;
-    health:C_ENEMY_HEALTH; max_health:C_ENEMY_HEALTH;
+    health:3; max_health:3;
     sh:2; iyy:-5;
     rx:.375; ry:.375;
     touchable: no;
@@ -84,7 +85,7 @@ end, function(a, other)
         end
     end
 end, function(a)
-    create_cached_deadbody(a.enemy_id, a.x, a.y, a.xf, 96)
+    create_cached_deadbody(a.enemy_id, a.x, a.y, a.xf, 80)
 end)
 
 create_actor([[nurse;3;captionable,drawable,col,confined,mov,x_bounded,y_bounded,spr_obj,tcol|
