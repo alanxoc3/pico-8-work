@@ -1,5 +1,5 @@
-create_actor([[bullet_bad; 4;police_weapon,bad_attack|   x:@1; y:@2; dx:@3; dy:@4; ]])
-create_actor([[bullet_good;4;police_weapon,good_attack| x:@1; y:@2; dx:@3; dy:@4; ]])
+create_actor([[bullet_bad; 4;police_weapon,bad_attack|   x:@1; y:@2; dx:@3; dy:@4; sind:198;]])
+create_actor([[bullet_good;4;police_weapon,good_attack|  x:@1; y:@2; dx:@3; dy:@4; sind:197;]])
 
 create_actor([[police_weapon;0;col,vec,confined,rel,post_drawable,tcol| -- bad_attack makes it do damage
     d:@1; tile_hit:@2; destroyed:@3;
@@ -10,7 +10,6 @@ create_actor([[police_weapon;0;col,vec,confined,rel,post_drawable,tcol| -- bad_a
     tl_max_time=1,;
 ]], function(a)
     a.flipped = not a.flipped
-    a.sind = a.flipped and 197 or 198
     a.xf = a.dx < 0
     scr_spr(a)
 end, function(a)
