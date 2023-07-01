@@ -73,7 +73,7 @@ function reset_the_dungeon()
     create_all_deadbodies()
     create_all_enemies()
     create_ui_hearts()
-    _g.objective_arrow(8, 13)
+    g_objective_arrow = _g.objective_arrow(8, 13)
 end
 
 -- resets the hospital

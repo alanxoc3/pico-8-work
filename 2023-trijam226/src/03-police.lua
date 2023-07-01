@@ -1,5 +1,5 @@
-create_actor([[police_weapon;3;col,vec,confined,rel,bad_attack,post_drawable,tcol|
-    x:@1; y:@2; dx:@3; d:@4; tile_hit:@5; destroyed:@6;
+create_actor([[police_weapon;4;col,vec,confined,rel,post_drawable,tcol| -- bad_attack makes it do damage
+    x:@1; y:@2; dx:@3; dy:@4; d:@5; tile_hit:@6; destroyed:@7;
     kill_when_hit:yes;
     touchable:no; rx:.375; ry:.25;
     iyy:-6;
@@ -36,8 +36,8 @@ create_actor([[bad_police;3;drawable,col,confined,mov,x_bounded,y_bounded,knockb
         a:create_timer('walk', 120+rnd(60), function()
             a:create_timer('wait', flr_rnd(20)+10, function()
                 a:create_timer('aim', 10, function()
-                    _g.police_weapon(a.x, a.y, a.xf and -shoot_speed or shoot_speed)
-                    a:create_timer('aim', 10, function() _g.police_weapon(a.x, a.y-1, a.xf and -shoot_speed or shoot_speed) end)
+                    _g.police_weapon(a.x, a.y, a.xf and -shoot_speed or shoot_speed, 0)
+                    a:create_timer('aim', 10, function() _g.police_weapon(a.x, a.y-1, a.xf and -shoot_speed or shoot_speed, 0) end)
                     a:create_timer('shoot', 40, nf)
                 end)
             end)
