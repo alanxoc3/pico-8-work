@@ -561,6 +561,7 @@ end)
 create_actor[[77|78]]
 create_actor([[79|80]],function(a)
 a:create_timer("bleeding",30)
+sfx(16)
 end,function(a)
 if a:any_timer_active"bleeding"then
 _g.powerup_particle(a.x,a.y,8)
