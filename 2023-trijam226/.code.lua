@@ -1092,15 +1092,13 @@ local x1=g_pl.x+dx
 local y1=offy+g_pl.y+dy
 local x2=g_pl.x+dx*len_multiplier
 local y2=offy+g_pl.y+dy*len_multiplier
-scr_line(x1,y1,x2,y2,color)
+zspr(8,x2,y2,2,2)
 local turn=.375
 local length=.375
 local x3=x2+cos(dir+turn)*length
 local y3=y2+sin(dir+turn)*length
 local x4=x2+cos(dir-turn)*length
 local y4=y2+sin(dir-turn)*length
-scr_line(x2,y2,x3,y3,color)
-scr_line(x2,y2,x4,y4,color)
 end
 end)
 create_actor([[132|133]],function(a)
