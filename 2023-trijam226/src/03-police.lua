@@ -1,5 +1,5 @@
-create_actor([[bullet_bad; 4;police_weapon,bad_attack|   x:@1; y:@2; dx:@3; dy:@4; sind:198; col:9]])
-create_actor([[bullet_good;4;police_weapon,good_attack|  x:@1; y:@2; dx:@3; dy:@4; sind:197; col:8]])
+create_actor([[bullet_bad; 4;police_weapon,bad_attack|   x:@1; y:@2; dx:@3; dy:@4; sind:198; col:8]])
+create_actor([[bullet_good;4;police_weapon,good_attack|  x:@1; y:@2; dx:@3; dy:@4; sind:197; col:9]])
 
 create_actor([[police_weapon;0;col,vec,confined,rel,post_drawable,tcol| -- bad_attack makes it do damage
     d:@1; tile_hit:@2; destroyed:@3;
@@ -15,12 +15,12 @@ create_actor([[police_weapon;0;col,vec,confined,rel,post_drawable,tcol| -- bad_a
 end, function(a)
     a.alive = false
 end, function(a)
-    _g.powerup_particle(a.x, a.y, 8)
-    _g.powerup_particle(a.x, a.y, 8)
-    _g.powerup_particle(a.x, a.y, 8)
-    _g.powerup_particle(a.x, a.y, 8)
-    _g.powerup_particle(a.x, a.y, 8)
-    _g.powerup_particle(a.x, a.y, 8)
+    _g.powerup_particle(a.x, a.y, a.col)
+    _g.powerup_particle(a.x, a.y, a.col)
+    _g.powerup_particle(a.x, a.y, a.col)
+    _g.powerup_particle(a.x, a.y, a.col)
+    _g.powerup_particle(a.x, a.y, a.col)
+    _g.powerup_particle(a.x, a.y, a.col)
 end)
 
 create_actor([[bad_police;3;drawable,col,confined,mov,x_bounded,y_bounded,knockbackable,hurtable,spr_obj,bad_character,tcol|
