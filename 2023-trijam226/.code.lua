@@ -780,11 +780,11 @@ a.yy=0
 a.sw=1
 if a:any_timer_active"punch"then
 local percent=a:get_timer_percent"punch"
-if percent>=.90 then a.sind=133
-elseif percent>=.80 then a.sind=132
-elseif percent>=.50 then a.sind=131
-elseif percent>=.30 then a.sind=130
-elseif percent>=.10 then a.sind=129
+if percent>=.90 then a.sind=166
+elseif percent>=.80 then a.sind=165
+elseif percent>=.50 then a.sind=164
+elseif percent>=.30 then a.sind=163
+elseif percent>=.10 then a.sind=162
 else a.sind=128
 end
 a.yy=sin(percent/2)*5
