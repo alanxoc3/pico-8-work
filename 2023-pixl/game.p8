@@ -1,7 +1,7 @@
 pico-8 cartridge // http://www.pico-8.com
 version 41
 __lua__
--- gAME
+-- pIXL
 -- bY: aMORG gAMES | xOC3.iO/pICO8
 #include .code.lua
 __gfx__

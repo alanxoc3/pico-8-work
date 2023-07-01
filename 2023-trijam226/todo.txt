@@ -1,0 +1,42 @@
+next steps for alan:
+- make procgen mode unlockable.
+- look at possible bug in boss fight, where the portal isn't generated. rare?
+- implement some random props/objects.
+- saw flip animation
+- message - "are you sure you want to enter the boss room"
+- implement another enemy.
+- implement ending screen: pacifist, genocide, normal.
+- credits: denial, cadetthegreat, tigerwolf, alanxoc3, wadlo
+- implement computer controlled pl monster boss.
+- enemies don't move when off the screen.
+- door blocks enemy passage.
+
+- make tiles able to go in front of you (sorted by y) & maybe smaller hitbox.
+- implement door. -- STRETCH
+- title screen lets you select modes. -- STRETCH
+
+- DONE! in portal, levitate.
+- DONE! enemy left arrow.
+- DONE! implement arrow to exit for end thing.
+- DONE! implement stat recordings.
+- DONE! decide on making procgen mode unlock-able.
+- DONE! change plus to square in boss room.
+- DONE! implement portal.
+- DONE! implement separate room.
+- DONE! implement "5 left" countdown if you killed 95%.
+- DONE! experiment with black floor.
+- DONE! implement level restart.
+- DONE! refactor player logic to support multiple types of players.
+- DONE! implement view
+- DONE! make sum muzik.
+- DONE! collision with walls.
+- DONE! anim for nurse monster.
+- DONE! implement lives on ui.
+- DONE! implement combo system.
+- DONE! tie sprites to character.
+- DONE! implement text box system. may need to think more.
+- DONE! particle for enemy.
+- DONE! design text box.
+- DONE! design where things go on the UI.
+- DONE! damage is functional.
+- DONE! figure out that enemy particles is short, not 5 seconds.

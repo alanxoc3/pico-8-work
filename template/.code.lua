@@ -1,86 +1,28 @@
-g_zclass_constructors,g_zclass_entities,g_zclass_new_entities={},{},{}
-function zclass(meta_and_att_str)
-local meta,template,memloc,expected_memloc_value=unpack(split(meta_and_att_str,"|"))
-local parents=split(meta)
-local class=deli(parents,1)
-g_zclass_entities[class]=g_zclass_entities[class]or{}
-g_zclass_constructors[class]=function(inst,done,...)
-foreach(parents,function(parent)
-if not done[parent]then g_zclass_constructors[parent](inst,done)end
-end)
-done[class]=true
-inst.parents[class]=true
-add(g_zclass_new_entities,{class,inst})
-return zobj_set(inst,template,...)
+_g=setmetatable({},{__index=_ENV})
+_ENV=_g
+function f_zobj_eval(val,table,parameters)
+if ord(val)==126 then return table[sub(val,2)]
+elseif val=="@" then return deli(parameters,1)
+elseif val=="#" then return{}end
+return val ~="" and val or nil
 end
-_g[class]=function(...)if not memloc or peek(memloc)==expected_memloc_value then return g_zclass_constructors[class]({id=class,parents={},ecs_exclusions={}},{},...)end end
-end
-function register_entities()
-while #g_zclass_new_entities>0 do
-local class,inst=unpack(deli(g_zclass_new_entities))
-if not inst.ecs_exclusions[class]then add(g_zclass_entities[class],inst)end
-end
-end
-function deregister_entity(inst,...)
-for class,entities in pairs(g_zclass_entities)do
-del(entities,inst)
-end
-end
-function call_not_nil(table,key,...)
-if table and table[key]then
-return table[key](...)
-end
-end
-function does_entity_exist(entity_name)
-return #g_zclass_entities[entity_name]>0
-end
-function loop_entities(class,method_name,...)
-for inst in all(g_zclass_entities[class])do
-call_not_nil(inst,method_name,inst,...)
-end
-end
-function clean_all_entities(...)
-local objs_to_clean,exclusions={},{}
-foreach({...},function(exclusion)exclusions[exclusion]=true end)
-for class,entities in pairs(g_zclass_entities)do
-for entity in all(entities)do
-objs_to_clean[entity]=entity.id
-end
-end
-for obj,id in pairs(objs_to_clean)do
-if not exclusions[id]then
-deregister_entity(obj)
-end
-end
-g_zclass_new_entities={}
-end
-function nop()end
-function zobj_eval(val,table,parameters)
-if ord(val)==37 then return _g[sub(val,2)]
-elseif val=="~"then return table
-elseif ord(val)==126 then return table[sub(val,2)]
-elseif val=="@"then return deli(parameters,1)
-elseif val=="yes"or val=="no"then return val=="yes"
-elseif val=="null"or val==""then return
-elseif val=="nop"then return nop
-end return val
-end
-function zobj_set(table,str,...)
+function f_zobj_set(table,str,...)
 local params,statements,dest={...},split(str,";"),table
 foreach(statements,function(statement)
 local tokens=split(statement)
 if #tokens>1 then
-if tokens[1]==""then
+if tokens[1]=="" then
 foreach(tokens,function(val)
-add(dest,zobj_eval(val,table,params))
+add(dest,f_zobj_eval(val,table,params))
 end)
 else
 for i=1,#tokens,2 do
-dest[tokens[i]]=zobj_eval(tokens[i+1],table,params)
+dest[tokens[i]]=f_zobj_eval(tokens[i+1],table,params)
 end
 end
 dest=table
 else
+if statement=="" then statement=#dest+1 end
 if type(dest[statement])~="table"then
 dest[statement]={}
 end
@@ -89,144 +31,52 @@ end
 end)
 return table
 end
-function zobj(...)
-return zobj_set({},...)
+function f_zobj(...)
+return f_zobj_set(setmetatable({},{__index=_g}),...)
 end
-_g=zobj([[actor_load,@,actor_loadlogic,@,actor_state,@,actor_is_alive,@,actor_kill,@,actor_clean,@,timer_reset_timer,@,timer_end_timer,@,timer_get_elapsed_percent,@,timer_is_active,@,timer_tick,@,test_init,@,test_update,@,test_draw,@,game_init,@,game_update,@,game_draw,@,fader_out_update,@,fader_in_update,@,logo_init,@,logo_draw,@]],function(a,stateName)
-a.next_state=a.next_state or stateName
-end,function(a,stateName)
-a.next_state,a.isnew=nil
-if stateName=="dead"then
-a.alive=false
-else
-a:end_timer(a.curr)
-a.next,a.duration=nil
-for k,v in pairs(a[stateName])do a[k]=v end
-a.curr=stateName
-a:start_timer(a.curr,a.duration,a.duration and function()a:load(a.next or "dead")end)
-a:init()
+f_zobj_set(_g,"c_yes,@,c_no,@,c_empty,@,f_nop,@",true,false,"",function(...)return...end)
+f_zobj_set(_g,"f_zobj,@,f_zobj_set,@,f_zobj_eval,@,f_zclass,@,f_zclass_get_elapsed_percent,@,f_zclass_load,@,f_zclass_loadlogic,@,f_zclass_state,@,f_test_init,@,f_test_update,@,f_test_draw,@,f_game_init,@,f_game_update,@,f_game_draw,@,f_zbtn,@,f_xbtn,@,f_ybtn,@",f_zobj,f_zobj_set,f_zobj_eval,function(template)
+return f_zobj_set(f_zobj"timer,0,isnew,~c_yes,init,~f_nop,update,~f_nop,curr,begin;begin;,;",template)
+end,function(_ENV,key)
+if key==curr then
+return duration and timer/duration or 0
 end
-end,function(a)
-if a.isnew then
-a:loadlogic(a.curr)
-elseif a.next_state then
-a:loadlogic(a.next_state)
+if _ENV[key]and _ENV[key].done then
+return 1
 end
-a:update()
-end,function(a)
-return a:is_active"ending"==nil and a.alive
-end,function(a)
-if a.ending then
-if a.curr=="start"then
-a.next="ending"
-elseif a:is_active"ending"==nil then
-a:load"ending"
-end
-else
-a.alive=nil
-end
-end,function(a)if not a.alive then a:destroyed()deregister_entity(a)end end,function(a,timer_name,duration,callback)
-a.timers[timer_name]={active=true,elapsed=false,duration=duration and 0+duration,callback=callback or function()end}
-end,function(a,timer_name)
-if a.timers[timer_name]then
-a.timers[timer_name].elapsed=a.timers[timer_name].duration or a.timers[timer_name].elapsed
-a.timers[timer_name].active=false
-end
-end,function(a,timer_name)
-local timer=a.timers[timer_name]
-if not timer then return 0
-elseif not timer.duration then return 0
-elseif timer.duration<=0 then return 1
-end
-return min(1,(timer.elapsed or 0)/timer.duration)
-end,function(a,timer_name)
-local timer=a.timers[timer_name]
-return timer and timer.active
-end,function(a)
-local finished_timers={}
-for name,timer in pairs(a.timers)do
-if timer.active then
-if timer.elapsed then
-timer.elapsed=timer.elapsed+1/60
-if timer.duration and timer.elapsed>=timer.duration then
-add(finished_timers,timer)
-end
-elseif not timer.elapsed then
-timer.elapsed=0
-end
-end
-end
-foreach(finished_timers,function(timer)
-timer.active=false
-timer.callback(a)
-end)
-end,function(a)a.color+=1 end,function(a)a.x+=xbtn()a.y+=ybtn()end,function(a)circfill(a.x,a.y,2,a.color)end,function()
-_g.fader_in()
-_g.test_obj(64,64)
-end,function()
-loop_entities("actor","state")
-end,function()
+return 0
+end,function(_ENV,stateName)
+next_state=stateName or next
+end,function(_ENV,stateName)
+timer,next_state,isnew,next,duration=0
+printh(curr)
+_ENV[curr].done=true
+for k,v in pairs(defaults)do _ENV[k]=v end
+for k,v in pairs(_ENV[stateName])do _ENV[k]=v end
+curr=stateName
+printh(init)
+_ENV:init()
+end,function(_ENV)
+timer+=1/60
+if isnew then _ENV:f_zclass_loadlogic(curr)end
+if duration and timer>=duration then _ENV:f_zclass_load()end
+while next_state do _ENV:f_zclass_loadlogic(next_state)end
+_ENV:update()
+end,function(_ENV)col+=1 end,function(_ENV)x+=f_xbtn()y+=f_ybtn()end,function(_ENV)circfill(x,y,2,col)end,function(_ENV)
+ball=f_zclass"x,64,y,64,col,7,init,~f_test_init,update,~f_test_update,draw,~f_test_draw;"
+end,function(_ENV)
+ball:f_zclass_state()
+end,function(_ENV)
+cls()
 rect(0,0,127,127,8)
-loop_entities("drawlayer_50","draw")
-end,function(a)
-poke(0x5f43,0xff)
-g_fade=a:get_elapsed_percent"start"
-end,function(a)
-g_fade=1-a:get_elapsed_percent"start"
-end,function()sfx(63,0)end,function(a)
-g_fade=cos(a:get_elapsed_percent"logo")+1
-camera(g_fade>.5 and rnd_one())
-zspr(108,64,64,4,2)
-camera()
-end)
-function zspr(sind,x,y,sw,sh,...)
-sw,sh=sw or 1,sh or 1
-spr(sind,x-sw*4,y-sh*4,sw,sh,...)
-end
-function flr_rnd(x)
-return flr(rnd(x))
-end
-function rnd_one(val)
-return(flr_rnd"3"-1)*(val or 1)
-end
-function btn_helper(f,a,b)
-return f(a)and f(b)and 0 or f(a)and 0xffff or f(b)and 1 or 0
-end
-function zcall_tbl(func,tbl)
-foreach(tbl,function(params)
-func(unpack(params))
-end)
-end
-function zcall(func,text,...)
-zcall_tbl(func,zobj(text,...))
-end
-function zbtn(f,a)return f(a)and f(a+1)and 0 or f(a)and-1 or f(a+1)and 1 or 0 end
-function xbtn()return zbtn(btn,0)end
-function ybtn()return zbtn(btn,2)end
-zclass[[actor,timer|load,%actor_load,loadlogic,%actor_loadlogic,state,%actor_state,kill,%actor_kill,clean,%actor_clean,is_alive,%actor_is_alive,alive,yes,duration,null,curr,start,next,null,isnew,yes,init,nop,update,nop,destroyed,nop;]]
-zclass[[drawlayer_50|]]
-zclass[[timer|timers;,;start_timer,%timer_reset_timer,end_timer,%timer_end_timer,is_active,%timer_is_active,get_elapsed_percent,%timer_get_elapsed_percent,tick,%timer_tick,]]
-zclass[[test_obj,actor,drawlayer_50|x,@,y,@,color,7,init,%test_init,update,%test_update,draw,%test_draw;]]
-g_fade,g_fade_table=1,zobj[[0;,0,0,0,0,0,0,0,0;1;,1,1,1,1,0,0,0,0;2;,2,2,2,1,0,0,0,0;3;,3,3,3,3,1,1,0,0;4;,4,4,2,2,2,1,0,0;5;,5,5,5,1,0,0,0,0;6;,6,6,13,13,5,5,0,0;7;,7,7,6,13,13,5,0,0;8;,8,8,8,2,2,2,0,0;9;,9,9,4,4,4,5,0,0;10;,10,10,9,4,4,5,0,0;11;,11,11,3,3,3,3,0,0;12;,12,12,12,3,1,0,0,0;13;,13,13,5,5,1,0,0,0;14;,14,14,13,4,2,2,0,0;15;,15,15,13,13,5,5,0,0;]]
-function fade(threshold)
-for c=0,15 do
-pal(c,g_fade_table[c][1+flr(7*min(1,max(0,threshold)))],1)
-end
-end
-zclass[[fader,actor|ecs_exclusions;actor,yes,timer,yes;]]
-zclass[[fader_out,fader|start;duration,.5,destroyed,@,update,%fader_out_update]]
-zclass[[fader_in,fader|start;duration,.5,update,%fader_in_update]]
-zclass[[game_state,actor|ecs_exclusions;actor,true;curr,logo;logo;init,%logo_init,update,nop,draw,%logo_draw,duration,2.5,next,game;game;init,%game_init,update,%game_update,draw,%game_draw;]]
+ball:draw()
+end,function(f,a)return f(a)and f(a+1)and 0 or f(a)and-1 or f(a+1)and 1 or 0 end,function()return f_zbtn(btn,0)end,function()return f_zbtn(btn,2)end)
 function _init()
-g_tl=_g.game_state()
+g_tl=f_zclass"begin;init,~f_game_init,update,~f_game_update,draw,~f_game_draw;"
 end
 function _update60()
-zcall(loop_entities,[[1;,actor,clean;2;,fader,clean;]])
-register_entities()
-zcall(loop_entities,[[1;,fader,tick;2;,game_state,tick;3;,fader,state;4;,game_state,state;]])
+g_tl:f_zclass_state()
 end
 function _draw()
-cls()
-loop_entities("game_state","draw")
-fade(g_fade)
+g_tl:draw()
 end
