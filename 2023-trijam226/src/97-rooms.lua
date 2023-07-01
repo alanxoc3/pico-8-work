@@ -15,9 +15,9 @@ end
 
 -- draws the hearts at the top of the screen, with particles!
 function create_ui_hearts()
-    _g.heart_particle_spawner(6.5, 11, 1)
-    _g.heart_particle_spawner(8,   11, 2)
-    _g.heart_particle_spawner(9.5, 11, 3)
+    _g.heart_particle_spawner(1.5, 11, 1)
+    _g.heart_particle_spawner(3,   11, 2)
+    _g.heart_particle_spawner(4.5, 11, 3)
 end
 
 function create_all_enemies()
@@ -48,8 +48,9 @@ function reset_the_dungeon()
 
     _g.fader_in(.5, nf, nf)
     g_pl = _g.pl_monster_control(18, 3)
+
     g_view = _g.view(15.25, 11.5, 3, g_pl)
-    g_room = ztable[[ name:dungeon; x:0; y:0; w:108; h:32; ]]
+    g_room = ztable[[ name:dungeon; x:0; y:0; w:32; h:24; ]]
 
     -- _g.portal(94, 13)
     create_all_deadbodies()
