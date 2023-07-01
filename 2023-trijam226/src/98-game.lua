@@ -21,7 +21,7 @@ function game_init()
 
     -- array of {x, y, func, alive}
     -- don't remove things from this array!
-    _g.all_enemy_templates = get_all_enemies_for_story_mode()
+    -- _g.all_enemy_templates = get_all_enemies_for_story_mode()
 
     -- g_floormap = create_map()
 
@@ -72,12 +72,6 @@ function game_update()
     end)
 
     if t() % .5 == 0 then disable_offscreen_bad_characters() end
-
-    g_endgame_stats.enemy_kill_count  = #_g.all_deadbody_templates.dungeon
-    g_endgame_stats.enemy_total_count = #_g.all_enemy_templates.dungeon
-
-    -- ran into token limit. may enable again?
-    -- tbox_interact()
 end
 
 function shiftx(view) return (view.x-view.off_x-8)*8 end

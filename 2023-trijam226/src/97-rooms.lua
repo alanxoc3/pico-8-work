@@ -23,11 +23,11 @@ function create_ui_hearts()
 end
 
 function create_all_enemies()
-    for i, enemy_template in pairs(_g.all_enemy_templates[g_room.name]) do
-        if enemy_template.alive then
-            enemy_template[g_room.name](enemy_template.x, enemy_template.y, i)
-        end
-    end
+    -- for i, enemy_template in pairs(_g.all_enemy_templates[g_room.name]) do
+    --     if enemy_template.alive then
+    --         enemy_template[g_room.name](enemy_template.x, enemy_template.y, i)
+    --     end
+    -- end
 end
 
 function create_all_deadbodies()
@@ -48,11 +48,12 @@ end
 function reset_the_dungeon()
     cleanup_confined()
 
+    _g.portal_spawner()
     _g.fader_in(.5, nf, nf)
-    g_pl = _g.pl_monster_control(18, 3)
 
-    g_view = _g.view(15.25, 11.5, 3, g_pl)
     g_room = ztable[[ name:dungeon; x:0; y:0; w:32; h:24; ]]
+    g_pl = _g.pl_monster_control(g_room.w-3.5, g_room.h-3.5)
+    g_view = _g.view(15.25, 11.5, 3, g_pl)
 
     -- _g.portal(94, 13)
     create_all_deadbodies()
