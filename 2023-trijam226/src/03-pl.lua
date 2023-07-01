@@ -129,10 +129,13 @@ function control_player(a, x_dir, y_dir, is_z_pressed, is_x_pressed, punch_func)
             -- if punch is not enabled, assume that talking is enabled.
             if punch_func then
                 a:create_timer('punch', 20, function() a:create_timer('cooldown', 10) end)
-                if g_objective_arrow and g_objective_arrow.objective then
-                    _g.police_weapon(a.x, a.y, a.xf and -.2 or .2, 0)
+                punch_func(a, a.x, a.y)
+                if g_objective_arrow and g_objective_arrow.objective and g_objective_arrow.smallest_dist < 16 then
+                    local obj = g_objective_arrow.objective
+                    local dir = atan2(obj.x - a.x, obj.y - a.y)
+                    local dx, dy = .2*cos(dir), .2*sin(dir)
+                    _g.bullet_good(a.x, a.y, dx, dy)
                 end
-                -- punch_func(a, a.x, a.y)
             end
         end
     end

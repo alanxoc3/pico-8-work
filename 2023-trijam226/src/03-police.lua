@@ -1,5 +1,8 @@
-create_actor([[police_weapon;4;col,vec,confined,rel,post_drawable,tcol| -- bad_attack makes it do damage
-    x:@1; y:@2; dx:@3; dy:@4; d:@5; tile_hit:@6; destroyed:@7;
+create_actor([[bullet_bad; 4;police_weapon,bad_attack|   x:@1; y:@2; dx:@3; dy:@4; ]])
+create_actor([[bullet_good;4;police_weapon,good_attack| x:@1; y:@2; dx:@3; dy:@4; ]])
+
+create_actor([[police_weapon;0;col,vec,confined,rel,post_drawable,tcol| -- bad_attack makes it do damage
+    d:@1; tile_hit:@2; destroyed:@3;
     kill_when_hit:yes;
     touchable:no; rx:.375; ry:.25;
     iyy:-6;
@@ -36,8 +39,8 @@ create_actor([[bad_police;3;drawable,col,confined,mov,x_bounded,y_bounded,knockb
         a:create_timer('walk', 120+rnd(60), function()
             a:create_timer('wait', flr_rnd(20)+10, function()
                 a:create_timer('aim', 10, function()
-                    _g.police_weapon(a.x, a.y, a.xf and -shoot_speed or shoot_speed, 0)
-                    a:create_timer('aim', 10, function() _g.police_weapon(a.x, a.y-1, a.xf and -shoot_speed or shoot_speed, 0) end)
+                    _g.bullet_bad(a.x, a.y, a.xf and -shoot_speed or shoot_speed, 0)
+                    a:create_timer('aim', 10, function() _g.bullet_bad(a.x, a.y-1, a.xf and -shoot_speed or shoot_speed, 0) end)
                     a:create_timer('shoot', 40, nf)
                 end)
             end)

@@ -2,7 +2,6 @@
 function get_all_enemies_for_story_mode()
     local dungeon_and_hospital = tabcpy(ztable[[
         x=5,  y=5, dungeon=%bad_police, hospital=%police, alive=yes;
-        x=41, y=18, dungeon=%bad_police, hospital=%police, alive=yes;
     ]])
 
     return {
@@ -69,7 +68,7 @@ function reset_the_dungeon()
     g_view = _g.view(15.25, 11.5, 3, g_pl)
     g_room = ztable[[ name:dungeon; x:0; y:0; w:108; h:32; ]]
 
-    _g.portal(94, 13)
+    -- _g.portal(94, 13)
     create_all_deadbodies()
     create_all_enemies()
     create_ui_hearts()
