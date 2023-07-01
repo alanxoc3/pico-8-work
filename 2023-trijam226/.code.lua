@@ -775,8 +775,9 @@ create_parent([[108|109]],function(a)
 local sind=a.passive_mode and 80 or 64
 _g.deadbody(a.x,a.y,a.xf,sind)
 end,function(a)
-a.sind=134
+a.sind=128
 a.yy=0
+a.sw=1
 if a:any_timer_active"punch"then
 local percent=a:get_timer_percent"punch"
 if percent>=.90 then a.sind=133
@@ -788,23 +789,27 @@ else a.sind=128
 end
 a.yy=sin(percent/2)*5
 elseif a:any_timer_active"roll"then
+a.sw=2
 local percent=a:get_timer_percent"roll"
-if percent>=.90 then a.sind=140
-elseif percent>=.80 then a.sind=139
-elseif percent>=.50 then a.sind=138
-elseif percent>=.30 then a.sind=137
-else a.sind=136
+if percent>=.90 then a.sind=142
+elseif percent>=.80 then a.sind=140
+elseif percent>=.70 then a.sind=138
+elseif percent>=.50 then a.sind=136
+elseif percent>=.30 then a.sind=134
+elseif percent>=.20 then a.sind=132
+elseif percent>=.10 then a.sind=130
+else a.sind=128
 end
 elseif abs(a.dx)>.005 or abs(a.dy)>.005 then
 local loop=(a.tl_tim%.4)/.4
-if loop>=.8 then a.sind=134
-elseif loop>=.5 then a.sind=142
-elseif loop>=.3 then a.sind=134
-else a.sind=143
+if loop>=.8 then a.sind=128
+elseif loop>=.5 then a.sind=160
+elseif loop>=.3 then a.sind=128
+else a.sind=161
 end
 else
 local loop=a.tl_tim and(a.tl_tim%1)or 0
-if loop<.25 then a.sind=141 end
+if loop<.25 then a.sind=129 end
 end
 a.xf=a.is_facing_left
 if a.passive_mode then a.sind+=32 end
