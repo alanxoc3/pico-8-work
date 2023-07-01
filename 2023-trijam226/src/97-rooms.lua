@@ -1,43 +1,6 @@
 -- room resec helper functions and functions
 function get_all_enemies_for_story_mode()
     local dungeon_and_hospital = tabcpy(ztable[[
-        x=102, y=4 , dungeon=%bad_nurse, hospital=%nurse, alive=yes;
-        x=14 , y=26, dungeon=%bad_nurse, hospital=%nurse, alive=yes;
-        x=18 , y=13, dungeon=%bad_nurse, hospital=%nurse, alive=yes;
-        x=45 , y=28, dungeon=%bad_nurse, hospital=%nurse, alive=yes;
-        x=48 , y=3 , dungeon=%bad_nurse, hospital=%nurse, alive=yes;
-        x=4  , y=28, dungeon=%bad_nurse, hospital=%nurse, alive=yes;
-        x=53 , y=9 , dungeon=%bad_nurse, hospital=%nurse, alive=yes;
-        x=70 , y=13, dungeon=%bad_nurse, hospital=%nurse, alive=yes;
-        x=76 , y=18, dungeon=%bad_nurse, hospital=%nurse, alive=yes;
-        x=76 , y=7, dungeon=%bad_nurse, hospital=%nurse, alive=yes;
-        x=81 , y=4 , dungeon=%bad_nurse, hospital=%nurse, alive=yes;
-        x=65 , y=23, dungeon=%bad_nurse, hospital=%nurse, alive=yes;
-        x=9 , y=17, dungeon=%bad_nurse, hospital=%nurse, alive=yes;
-        x=20 , y=18, dungeon=%bad_nurse, hospital=%nurse, alive=yes;
-        x=30 , y=6, dungeon=%bad_nurse, hospital=%nurse, alive=yes;
-        x=4 , y=3, dungeon=%bad_nurse, hospital=%nurse, alive=yes;
-
-        x=3, y=18, dungeon=%bad_patient, hospital=%patient, alive=yes;
-        x=63, y=8, dungeon=%bad_patient, hospital=%patient, alive=yes;
-        x=70, y=8, dungeon=%bad_patient, hospital=%patient, alive=yes;
-        x=15, y=18, dungeon=%bad_patient, hospital=%patient, alive=yes;
-        x=102, y=13, dungeon=%bad_patient, hospital=%patient, alive=yes;
-        x=106, y=20, dungeon=%bad_patient, hospital=%patient, alive=yes;
-        x=49  , y=19, dungeon=%bad_patient, hospital=%patient, alive=yes;
-        x=9  , y=23, dungeon=%bad_patient, hospital=%patient, alive=yes;
-        x=9  , y=28, dungeon=%bad_patient, hospital=%patient, alive=yes;
-        x=76,  y=12,  dungeon=%bad_patient, hospital=%patient, alive=yes;
-        x=76,  y=3,  dungeon=%bad_patient, hospital=%patient, alive=yes;
-        x=82 , y=4 , dungeon=%bad_patient, hospital=%patient, alive=yes;
-        x=89 , y=15, dungeon=%bad_patient, hospital=%patient, alive=yes;
-
-        x=18 , y=26, dungeon=%bad_police, hospital=%police, alive=yes;
-        x=44 , y=4 , dungeon=%bad_police, hospital=%police, alive=yes;
-        x=54 , y=4 , dungeon=%bad_police, hospital=%police, alive=yes;
-        x=90 , y=4, dungeon=%bad_police, hospital=%police, alive=yes;
-        x=105, y=28, dungeon=%bad_police, hospital=%police, alive=yes;
-        x=102, y=4, dungeon=%bad_police, hospital=%police, alive=yes;
         x=66, y=29, dungeon=%bad_police, hospital=%police, alive=yes;
         x=41, y=18, dungeon=%bad_police, hospital=%police, alive=yes;
     ]])
@@ -119,7 +82,7 @@ function reset_the_dungeon()
     create_all_deadbodies()
     create_all_enemies()
     create_ui_hearts()
-    create_ui_powerups()
+    -- create_ui_powerups()
 
     _g.genocide_tip(8, 13)
     _g.objective_arrow(8, 13)
