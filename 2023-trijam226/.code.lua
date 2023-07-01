@@ -866,7 +866,7 @@ a:create_timer("punch",20,function()a:create_timer("cooldown",10)end)
 punch_func(a,a.x,a.y)
 for i=-(a.bullet-1)/2,(a.bullet-1)/2 do
 local ang_off=i*.125/2
-if g_objective_arrow and g_objective_arrow.objective and g_objective_arrow.smallest_dist<16 then
+if g_objective_arrow and g_objective_arrow.objective then
 local obj=g_objective_arrow.objective
 local dir=atan2(obj.x-a.x,obj.y-a.y)+ang_off
 local dx,dy=.2*cos(dir),.2*sin(dir)

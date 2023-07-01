@@ -147,7 +147,7 @@ function control_player(a, x_dir, y_dir, is_z_pressed, is_x_pressed, punch_func)
                 punch_func(a, a.x, a.y)
                 for i=-(a.bullet-1)/2,(a.bullet-1)/2 do
                     local ang_off = i*.125/2
-                    if g_objective_arrow and g_objective_arrow.objective and g_objective_arrow.smallest_dist < 16 then
+                    if g_objective_arrow and g_objective_arrow.objective then
                         local obj = g_objective_arrow.objective
                         local dir = atan2(obj.x - a.x, obj.y - a.y)+ang_off
                         local dx, dy = .2*cos(dir), .2*sin(dir)
