@@ -13,23 +13,6 @@ function get_all_enemies_for_story_mode()
     }
 end
 
--- turns every tile in the map to a hospital tile.
-function hospitalify_the_map()
-    for x=0,107 do
-        for y=0,31 do
-            local v = mget(x, y)
-            if v >= 1 and v <= 4 then v += 4
-            elseif v >= 17 and v <= 20 then v += 4
-            elseif v >= 33 and v <= 36 then v += 4
-            elseif v >= 49 and v <= 52 then v += 4
-            elseif v == 32 or v == 46 or v == 47 then v += 16
-            elseif v == 117 then v += 1
-            end
-            mset(x, y, v)
-        end
-    end
-end
-
 -- draws the hearts at the top of the screen, with particles!
 function create_ui_hearts()
     _g.heart_particle_spawner(6.5, 1, 3)
@@ -73,37 +56,5 @@ function reset_the_dungeon()
     create_all_enemies()
     create_ui_hearts()
     g_objective_arrow = _g.objective_arrow(8, 13)
-end
-
--- resets the hospital
-function reset_the_hospital()
-    hospitalify_the_map()
-    cleanup_confined()
-
-    _g.fader_in(.5, nf, nf)
-    _g.portal(18, 3)
-    g_pl = _g.pl_patient_control_passive(94, 13)
-    g_view = _g.view(15.25, 11.5, 3, g_pl)
-    g_room = ztable[[ name:hospital; x:0; y:0; w:108; h:32; ]]
-
-    create_all_deadbodies()
-    create_all_enemies()
-    create_ui_hearts()
-    _g.objective_arrow(8, 13)
-end
-
--- resets the boss room
-function reset_the_bossroom()
-    cleanup_confined()
-
-    _g.fader_in(.5, nf, nf)
-    g_pl   = _g.pl_patient_control_fight(110, 8)
-    g_view = _g.view(15.25, 11.5, 3, g_pl)
-    g_room = ztable[[ name:bossroom; x:108; y:0; w:20; h:16; ]]
-
-    create_all_deadbodies()
-    create_all_enemies()
-
-    create_ui_hearts()
-    _g.objective_arrow(8, 13)
+    _g.statsels()
 end

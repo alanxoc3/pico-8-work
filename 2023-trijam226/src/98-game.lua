@@ -11,7 +11,6 @@ function disable_offscreen_bad_characters()
             a.disabled.update = nil
             a.disabled.d = nil
         end
-
     end
 end
 
@@ -36,8 +35,6 @@ function game_init()
 
     -- this controls which room you start in
     g_reset_room=reset_the_dungeon
-    -- g_reset_room=reset_the_hospital
-    -- g_reset_room=reset_the_bossroom
     g_reset_room()
     -- g_pl.x = 4
     -- g_pl.y = 4
@@ -90,7 +87,7 @@ function camera_to_view(view) camera(shiftx(view), shifty(view)) end
 function game_draw()
     fade(g_card_fade)
 
-    local x, y = 8, 8
+    local x, y = 8, 6
     local rx = x - g_view.w/2
     local ry = y - g_view.h/2
 

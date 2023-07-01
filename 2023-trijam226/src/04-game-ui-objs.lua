@@ -21,6 +21,62 @@ end, function(a)
     end
 end)
 
+SBULLET=0
+SHEARTS=1
+SRELOAD=2
+SHASTEN=3
+create_actor([[statsels;0;above_map_drawable,confined|
+    ry:.25;
+    sel:0; -- 0:tl 1:tr 2:bl 3:br 4:go 5:no
+    radius:.2;
+    touchable:no;
+    i:@1;
+    d:@2;
+    u:@3;
+    modstat:@4;
+]], function(a)
+    a.stats = {
+        [SBULLET] = 2,
+        [SHEARTS] = 2,
+        [SRELOAD] = 2,
+        [SHASTEN] = 2,
+    }
+end, function(a)
+    for i=0,3 do
+        local col = i == a.sel and 3 or 2
+        if i == a.sel then
+            rectfill(0, 98+8*i-1, 127, 98+8*i+7-2, 1)
+        end
+        rectfill(a.stats[i]*8+31+19+8, 98+8*i-1,
+                 a.stats[i]*8+37+19+8, 98+8*i+7-2, col)
+    end
+
+    zprint("bullet 1 2 3", 64, 98+8*0, 13, 0)
+    zprint("hearts 1 2 3", 64, 98+8*1, 13, 0)
+    zprint("reload 1 2 3", 64, 98+8*2, 13, 0)
+    zprint("hasten 1 2 3", 64, 98+8*3, 13, 0)
+
+end, function(a)
+  if btn(5) then
+    a.sel = mid(0, 3, a.sel+ybtnp())
+    a:modstat(a.sel, xbtnp())
+  end
+end, function(a, s, d)
+    local curr = a.stats[s]
+    local new = mid(1, 3, curr+d)
+    if new ~= curr then
+        a.stats[s] = new
+        for i=1,3 do
+            local ind = (s+i)%4
+            local nn = mid(1, 3, a.stats[ind] - d)
+            if nn ~= a.stats[ind] then
+                a.stats[ind] = nn
+                break
+            end
+        end
+    end
+end)
+
 create_actor([[objective_arrow;2;post_drawable_2,confined|
     x:@1; y:@2; u:@3; d:@4;
     ry:.25;
