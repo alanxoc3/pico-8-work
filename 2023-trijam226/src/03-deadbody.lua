@@ -28,6 +28,6 @@ end)
 -- sind's hospital form is always 16 sprite indexes away (right below)
 function create_cached_deadbody(enemy_id, ...)
     add(_g.all_deadbody_templates[g_room.name], {...})
-    _g.all_enemy_templates[g_room.name][enemy_id].alive = false
+    --_g.all_enemy_templates[g_room.name][enemy_id].alive = false
     _g.deadbody(...)
 end

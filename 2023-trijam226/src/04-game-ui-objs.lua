@@ -46,20 +46,21 @@ create_actor([[statsels;0;above_map_drawable,confined|
         [SHASTEN] = 2,
     }
 end, function(a)
-    for i=0,3 do
-        local col = i == a.sel and 3 or 2
-        if i == a.sel then
-            rectfill(0, 98+8*i-1, 127, 98+8*i+7-2, 1)
+    if a.stats then
+        for i=0,3 do
+            local col = i == a.sel and 3 or 2
+            if i == a.sel then
+                rectfill(0, 98+8*i-1, 127, 98+8*i+7-2, 1)
+            end
+            rectfill(a.stats[i]*8+31+19+8, 98+8*i-1,
+                     a.stats[i]*8+37+19+8, 98+8*i+7-2, col)
         end
-        rectfill(a.stats[i]*8+31+19+8, 98+8*i-1,
-                 a.stats[i]*8+37+19+8, 98+8*i+7-2, col)
+
+        zprint("bullet 1 2 3", 64, 98+8*0, 13, 0)
+        zprint("hearts 1 2 3", 64, 98+8*1, 13, 0)
+        zprint("reload 1 2 3", 64, 98+8*2, 13, 0)
+        zprint("hasten 1 2 3", 64, 98+8*3, 13, 0)
     end
-
-    zprint("bullet 1 2 3", 64, 98+8*0, 13, 0)
-    zprint("hearts 1 2 3", 64, 98+8*1, 13, 0)
-    zprint("reload 1 2 3", 64, 98+8*2, 13, 0)
-    zprint("hasten 1 2 3", 64, 98+8*3, 13, 0)
-
 end, function(a)
   if btn(5) then
     a.sel = mid(0, 3, a.sel+ybtnp())
