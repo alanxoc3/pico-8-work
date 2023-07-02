@@ -4,6 +4,10 @@
     return f_zobj_set(f_zobj[[
         timer, 0,
 
+        state,   ~f_zclass_state,
+        load,    ~f_zclass_load,
+        elapsed, ~f_zclass_get_elapsed_percent,
+
         isnew,  ~c_yes,
         init,   ~f_nop,
         update, ~f_nop,

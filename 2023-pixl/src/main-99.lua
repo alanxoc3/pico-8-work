@@ -6,6 +6,8 @@ function _init()
                update, ~f_game_update,
                draw,   ~f_game_draw;
     ]]
+
+    palt(0, false)
 end
 
 function _update60()
