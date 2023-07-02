@@ -1,6 +1,7 @@
 -- TEMPLATE TOKEN COUNT: 1045
 function _init()
     g_tl = f_zclass[[
+        level,1;
         begin; init,   ~f_game_init,
                update, ~f_game_update,
                draw,   ~f_game_draw;
