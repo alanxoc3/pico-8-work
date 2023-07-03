@@ -11,21 +11,30 @@ end $$
   if not _ENV[y][x] then _ENV[y][x] = _ENV.color end
 end $$
 
-|[f_pixelgroup_get_pixel]| function(_ENV, x, y)
+-- gets the pixel relative to screen coordinates
+|[f_pixelgroup_get_pixel]| function(_ENV, sx, sy)
   -- todo: maybe more efficient to do mod somewhere else idk
-  return _ENV.grid[y%32] and _ENV.grid[y%32][x%32] or 0
+  return _ENV.grid[(sy-y)%32] and _ENV.grid[(sy-y)%32][(sx-x)%32] or 0
 end $$
 
--- its a destructive operation. as pixels are read, they become black.
+-- checks if there is a collision in direction specified.
+|[f_pixelgroup_check]| function(_ENV, getfunc, xoff, yoff)
+  local sx, sy = x+xoff, y+yoff
+  for coord in all(array) do
+    if _ENV:get(sx, sy) == 0 then -- to improve efficiency, first check the local grid
+      local obj = getfunc(sx, sy) -- if the pixel is not in the local grid, then check with getfunc
+      if obj and obj ~= _ENV then
+        return true
+      end
+    end
+  end
+  return false
+end $$
 
--- i need a function that initially calculates the shape and creates the group
 -- another function for if i delete a node, it needs to figure out whether or not to split into two objects
   -- can deleting 1 pixel possibly split into 3? Yes, if i have a T structure. 4 is only possible if something can teleport into it. over 4 is not possible
--- another function for checking if pixelgroup can move. or this can both be movement and collision checking
 -- a function that tells me if there is a solid collision to the left/up/down/right
 -- another function, given a pixel, tell me which pixel group it is a part ofjj
-
--- returns a list of nodes as well as the root node
 
 -- returns a 2d array of grid positions relative to start_x/y, and a single array with all
 |[f_create_pixelgroup]| function(start_x, start_y)
@@ -35,9 +44,10 @@ end $$
   local queue = {{start_x, start_y}}
 
   local group = f_zclass([[
-    draw, ~f_draw_pixelgroup,
-    set,  ~f_pixelgroup_set_pixel,
-    get,  ~f_pixelgroup_get_pixel,
+    draw,    ~f_draw_pixelgroup,
+    set,     ~f_pixelgroup_set_pixel,
+    get,     ~f_pixelgroup_get_pixel,
+    check,   ~f_pixelgroup_check,
 
     x,@, y,@, col,@,
     grid,@, array,@

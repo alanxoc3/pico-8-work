@@ -45,8 +45,33 @@ end $$
   ystore += f_ybtn()
 end $$
 
-|[f_ball_update_x]| function(_ENV) x += mid(-1,1,xstore) xstore = 0 end $$
-|[f_ball_update_y]| function(_ENV) y += mid(-1,1,ystore) ystore = 0 end $$
+|[f_get_at_coord]| function(x, y)
+  for obj in all(g_zclass) do
+    if obj:get(x, y) ~= 0 then
+      return obj
+    end
+  end
+end $$
+
+|[f_ball_update_x]| function(_ENV)
+  local nx = mid(-1,1,xstore)
+  if nx ~= 0 and not _ENV:check(f_get_at_coord, nx, 0) then
+    x += mid(-1,1,xstore)
+    x %= 32
+    printh(x.." "..y)
+  end
+  xstore = 0
+end $$
+
+|[f_ball_update_y]| function(_ENV)
+  local ny = mid(-1,1,ystore)
+  if ny ~= 0 and not _ENV:check(f_get_at_coord, 0, ny) then
+    y += mid(-1,1,ystore)
+    y %= 32
+    printh(y.." "..y)
+  end
+  ystore = 0
+end $$
 
 |[f_game_draw]| function(_ENV)
     poke(0x5f55, 0x00) clip(0,0,32,32) cls(0) -- screen is spritesheet, so drawing operations happen there
