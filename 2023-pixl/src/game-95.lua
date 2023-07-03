@@ -46,7 +46,7 @@ end $$
     poke(0x5f55, 0x00) clip(0,0,32,32) cls(0) -- screen is spritesheet, so drawing operations happen there
     -- BEGIN DRAWING OPERATIONS
 
-    print("\^x5pIXL", 2,2, 7)
+    print("\^x5pIXLR", 2,2, 7)
     print("\^x5......",  2,5, 7)
     print("\^x5bY",    2,3+10, 5)
     print("\^x5aMORG", 2,3+16, 13)
