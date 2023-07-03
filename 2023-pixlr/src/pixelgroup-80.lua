@@ -19,8 +19,8 @@ end $$
 
 -- checks if there is a collision in direction specified.
 |[f_pixelgroup_check]| function(_ENV, getfunc, xoff, yoff)
-  local sx, sy = x+xoff, y+yoff
   for coord in all(array) do
+    local sx, sy = (x+coord[1]+xoff)%32, (y+coord[2]+yoff)%32
     if _ENV:get(sx, sy) == 0 then -- to improve efficiency, first check the local grid
       local obj = getfunc(sx, sy) -- if the pixel is not in the local grid, then check with getfunc
       if obj and obj ~= _ENV then
@@ -82,7 +82,7 @@ end $$
         local group = f_create_pixelgroup(x, y)
         if group then
           for coord in all(group.array) do
-            grid[coord[1]+coord[2]*32] = true
+            grid[(x+coord[1])%32+(y+coord[2])%32*32] = true
           end
           add(groups, group)
         end
