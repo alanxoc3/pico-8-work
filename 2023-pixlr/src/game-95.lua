@@ -15,6 +15,12 @@
         update_y,~f_ball_update_y
       ]])
       group:register()
+
+    -- just visible pixels that do nothing
+    elseif group.col%16 > 0 then
+      -- f_zobj_set(group, [[
+      -- ]])
+      group:register()
     end
   end
 end $$
@@ -46,18 +52,16 @@ end $$
     poke(0x5f55, 0x00) clip(0,0,32,32) cls(0) -- screen is spritesheet, so drawing operations happen there
     -- BEGIN DRAWING OPERATIONS
 
-    print("\^x5pIXLR", 2,2, 7)
-    print("\^x5......",  2,5, 7)
-    print("\^x5bY",    2,3+10, 5)
-    print("\^x5aMORG", 2,3+16, 13)
-    print("\^x5gAMES", 2,3+22, 6)
-    pset(8+t(),4,9)
-    rect(0,0,31,31,9)
     f_zclass_loop[[draw]]
+
+    -- save the screen to spritesheet if i need to
+    -- if btnp(4) or btnp(5) then
+    --   cstore(0, 0, 0x1000, "img.p8")
+    -- end
 
     -- END DRAWING OPERATIONS
     clip() poke(0x5f55, 0x60) -- screen is the actual screen
-    sspr(0,0,32,32, 0,0,128,128)
+    sspr(0,0,32,32, 0,0,64,64)
 end $$
 
 |[f_zbtn]| function(f, a) return f(a) and f(a+1) and 0 or f(a) and -1 or f(a+1) and 1 or 0 end $$

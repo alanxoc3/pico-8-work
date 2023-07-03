@@ -8,6 +8,10 @@ function _init()
     ]]
 
     palt(0, false)
+
+    -- use a 64x64 screen instead of 128x128
+    -- saves ~.09 cpu because sspr doesn't have to scale as much
+    poke(0x5f2c, 3)
 end
 
 -- 30fps, so we can have more cpu for physics. TODO: can we do 60fps? test when more of the game is done
