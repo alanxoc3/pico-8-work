@@ -38,14 +38,12 @@ end $$
 |[f_zclass_loadlogic]| function(_ENV, stateName)
     timer, next_state, isnew, next, duration = 0
 
-    printh(curr)
     _ENV[curr].done = true
     for k, v in pairs(defaults) do _ENV[k] = v end
     for k, v in pairs(_ENV[stateName]) do _ENV[k] = v end
 
     curr = stateName
 
-    printh(init)
     _ENV:init()
 end $$
 

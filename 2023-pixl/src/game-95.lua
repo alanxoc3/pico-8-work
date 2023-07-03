@@ -3,54 +3,60 @@
 -- i need to easily create a pixel list object
 
 |[f_game_init]| function(_ENV)
-    ball = f_create_pixelgroup(8, 8)
-    ball:set(3,3,13)
-    ball.update = f_ball_update
-end $$
-
-|[f_draw_pixelgroup]| function(_ENV)
-    -- todo: wrapping and maybe centering?
-    for yy=0,31 do
-        for xx=0,31 do
-            if _ENV[yy] and _ENV[yy][xx] then
-                pset((xx+x), (yy+y), _ENV[yy][xx])
-            end
-        end
+  local groups = f_initialize_groups()
+  for group in all(groups) do
+    if group.col == 12 then
+      ball = group
+      break
     end
+  end
+
+  -- ball:set(3,3,13)
+  ball.xstore = 0
+  ball.ystore = 0
+  ball.update = f_ball_update
+  ball.update_x = f_ball_update_x
+  ball.update_y = f_ball_update_y
+
+  xytoggle = 0
 end $$
 
-|[f_pixelgroup_set_pixel]| function(_ENV, x, y, c)
-    -- TODO: wrapping
-    if not _ENV[y] then _ENV[y] = {} end
-    _ENV[y][x] = c
+-- what if there are 4 subpixel positions, 0,1,2,3... the screen could be the spritesheet.
+
+|[f_game_update]| function(_ENV)
+  xytoggle = (xytoggle+1)%2
+
+  ball:update()
+
+  if xytoggle == 1 then
+    ball:update_x()
+  else
+    ball:update_y()
+  end
+
 end $$
 
 |[f_ball_update]| function(_ENV)
-    x += f_xbtn()*.5
-    y += f_ybtn()*.5
+  -- if the button was pressed inbetween frames, we want it to register
+  xstore += f_xbtn()
+  ystore += f_ybtn()
 end $$
 
-|[f_create_pixelgroup]| function(x, y)
-    local group = f_zclass[[
-        draw, ~f_draw_pixelgroup,
-        set,  ~f_pixelgroup_set_pixel
-    ]]
-    group.x = x
-    group.y = y
-    return group
-end $$
-
-|[f_game_update]| function(_ENV)
-    ball:state()
-end $$
+|[f_ball_update_x]| function(_ENV) x += mid(-1,1,xstore) xstore = 0 end $$
+|[f_ball_update_y]| function(_ENV) y += mid(-1,1,ystore) ystore = 0 end $$
 
 |[f_game_draw]| function(_ENV)
     poke(0x5f55, 0x00) clip(0,0,32,32) cls(0) -- screen is spritesheet, so drawing operations happen there
     -- BEGIN DRAWING OPERATIONS
 
-    ball:draw()
+    print("\^x5pIXL", 2,2, 7)
+    print("\^x5......",  2,5, 7)
+    print("\^x5bY",    2,3+10, 5)
+    print("\^x5aMORG", 2,3+16, 13)
+    print("\^x5gAMES", 2,3+22, 6)
     pset(8+t(),4,9)
     rect(0,0,31,31,9)
+    ball:draw()
 
     -- END DRAWING OPERATIONS
     clip() poke(0x5f55, 0x60) -- screen is the actual screen

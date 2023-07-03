@@ -10,7 +10,8 @@ function _init()
     palt(0, false)
 end
 
-function _update60()
+-- 30fps, so we can have more cpu for physics. TODO: can we do 60fps? test when more of the game is done
+function _update()
     -- DEBUG_BEGIN
     if btn(4) and btnp(5) then g_debug = not g_debug end
     -- DEBUG_END
