@@ -77,7 +77,7 @@ end $$
 
 -- calls init/update logic and increments timer
 |[f_zclass_state]| function(_ENV)
-    timer += 1/60
+    timer += 1/_g.G_FPS
 
     if isnew then _ENV:f_zclass_loadlogic(curr) end
     if duration and timer >= duration then _ENV:f_zclass_load() end

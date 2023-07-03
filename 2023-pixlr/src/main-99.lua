@@ -14,8 +14,9 @@ function _init()
     poke(0x5f2c, 3)
 end
 
--- 30fps, so we can have more cpu for physics. TODO: can we do 60fps? test when more of the game is done
-function _update()
+-- 60fps, maybe we can downgrade to 30fps if there are performance issues
+G_FPS=60
+function _update60()
   -- DEBUG_BEGIN
   if btn(4) and btnp(5) then g_debug = not g_debug end
   -- DEBUG_END
@@ -29,9 +30,9 @@ function _draw()
 end
 
 -- BLOCK IDEAS
--- : pushable      (bomb can blow up, breakable) GRAVITY TOGETHER
--- : pushable hurt (bomb can blow up, breakable) GRAVITY TOGETHER
--- : bomb (deletes itself and something else) GRAVITY TOGETHER 
+-- : pushable      (bomb can blow up, breakable)       GRAVITY TOGETHER
+-- : pushable hurt (bomb can blow up, breakable)       GRAVITY TOGETHER
+-- : bomb          (deletes itself and something else) GRAVITY TOGETHER
 -- : sticky GRAVITY
 -- : particle GRAVITY
 -- : player core

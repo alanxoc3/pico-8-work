@@ -9,7 +9,7 @@
   for group in all(groups) do
     if group.col == 12 then
       f_zobj_set(group, [[
-        xstore,0, ystore,0,
+        xstore,0, ystore,0, jump,#, coyote,~c_no,
         update,~f_ball_update,
         update_x,~f_ball_update_x,
         update_y,~f_ball_update_y
@@ -28,13 +28,13 @@ end $$
 -- what if there are 4 subpixel positions, 0,1,2,3... the screen could be the spritesheet.
 
 |[f_game_update]| function(_ENV)
-  xytoggle = (xytoggle+1)%2
+  xytoggle = (xytoggle+1)%4
 
   f_zclass_loop[[state]]
 
-  if xytoggle == 1 then
+  if xytoggle == 0 then
     f_zclass_loop[[update_x]]
-  else
+  elseif xytoggle == 2 then
     f_zclass_loop[[update_y]]
   end
 end $$
@@ -56,20 +56,42 @@ end $$
 |[f_ball_update_x]| function(_ENV)
   local nx = mid(-1,1,xstore)
   if nx ~= 0 and not _ENV:check(f_get_at_coord, nx, 0) then
-    x += mid(-1,1,xstore)
+    x += nx
     x %= 32
-    printh(x.." "..y)
   end
   xstore = 0
 end $$
 
 |[f_ball_update_y]| function(_ENV)
   local ny = mid(-1,1,ystore)
-  if ny ~= 0 and not _ENV:check(f_get_at_coord, 0, ny) then
-    y += mid(-1,1,ystore)
-    y %= 32
-    printh(y.." "..y)
+
+  if #jump == 0 and ny == -1 and not _ENV:check(f_get_at_coord, 0, -1) and (coyote or _ENV:check(f_get_at_coord, 0, 1)) then
+    add(jump, false) add(jump, false) add(jump, true)
+    add(jump, false) add(jump, true) add(jump, true)
+    coyote = false
   end
+
+  if #jump > 0 then
+    if deli(jump) then
+      if not _ENV:check(f_get_at_coord, 0, -1) then
+        y += -1
+        y %= 32
+      else
+        jump = {}
+      end
+    end
+
+  elseif not _ENV:check(f_get_at_coord, 0, 1) then
+    if coyote then
+      coyote = false
+    else
+      y += 1
+      y %= 32
+    end
+  else
+    coyote = true
+  end
+
   ystore = 0
 end $$
 
