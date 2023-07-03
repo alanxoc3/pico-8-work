@@ -3,22 +3,20 @@
 -- i need to easily create a pixel list object
 
 |[f_game_init]| function(_ENV)
+  xytoggle = 0 -- this controls whether to update x or y for the frame
+
   local groups = f_initialize_groups()
   for group in all(groups) do
     if group.col == 12 then
-      ball = group
-      break
+      f_zobj_set(group, [[
+        xstore,0, ystore,0,
+        update,~f_ball_update,
+        update_x,~f_ball_update_x,
+        update_y,~f_ball_update_y
+      ]])
+      group:register()
     end
   end
-
-  -- ball:set(3,3,13)
-  ball.xstore = 0
-  ball.ystore = 0
-  ball.update = f_ball_update
-  ball.update_x = f_ball_update_x
-  ball.update_y = f_ball_update_y
-
-  xytoggle = 0
 end $$
 
 -- what if there are 4 subpixel positions, 0,1,2,3... the screen could be the spritesheet.
@@ -26,14 +24,13 @@ end $$
 |[f_game_update]| function(_ENV)
   xytoggle = (xytoggle+1)%2
 
-  ball:update()
+  f_zclass_loop[[state]]
 
   if xytoggle == 1 then
-    ball:update_x()
+    f_zclass_loop[[update_x]]
   else
-    ball:update_y()
+    f_zclass_loop[[update_y]]
   end
-
 end $$
 
 |[f_ball_update]| function(_ENV)
@@ -56,7 +53,7 @@ end $$
     print("\^x5gAMES", 2,3+22, 6)
     pset(8+t(),4,9)
     rect(0,0,31,31,9)
-    ball:draw()
+    f_zclass_loop[[draw]]
 
     -- END DRAWING OPERATIONS
     clip() poke(0x5f55, 0x60) -- screen is the actual screen

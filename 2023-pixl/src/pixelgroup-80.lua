@@ -16,24 +16,6 @@ end $$
   return _ENV.grid[y%32] and _ENV.grid[y%32][x%32] or 0
 end $$
 
--- todo: return nil if x,y is black maybe
-|[f_create_pixelgroup]| function(x, y)
-  -- create group
-  local group = f_zclass[[
-    draw, ~f_draw_pixelgroup,
-    set,  ~f_pixelgroup_set_pixel,
-    get,  ~f_pixelgroup_get_pixel
-  ]]
-
-  -- make group bigger
-  -- todo: this couple line logic is duplicated in f_store_pixelgroup
-  group.col = sget(x,y)
-  group.x=x group.y=y
-  group.grid, group.array = f_store_pixelgroup(group.x, group.y)
-
-  return group
-end $$
-
 -- its a destructive operation. as pixels are read, they become black.
 
 -- i need a function that initially calculates the shape and creates the group
@@ -46,13 +28,20 @@ end $$
 -- returns a list of nodes as well as the root node
 
 -- returns a 2d array of grid positions relative to start_x/y, and a single array with all
-|[f_store_pixelgroup]| function(start_x, start_y)
-  local queue = {{start_x, start_y}}
-  local grid, array = {}, {}
-  local color = sget(start_x, start_y)
+|[f_create_pixelgroup]| function(start_x, start_y)
+  local col = sget(start_x, start_y)
+  if col == 0 then return nil end -- shouldn't happen based on who is calling this, but doesn't hurt to check
 
-  -- black doesn't count
-  if color == 0 then return {}, {} end
+  local queue = {{start_x, start_y}}
+
+  local group = f_zclass([[
+    draw, ~f_draw_pixelgroup,
+    set,  ~f_pixelgroup_set_pixel,
+    get,  ~f_pixelgroup_get_pixel,
+
+    x,@, y,@, col,@,
+    grid,@, array,@
+  ]], start_x, start_y, col, {}, {})
 
   -- test {x, y} vs (x%32)+y%32*32, which is faster?
   while #queue > 0 do
@@ -61,17 +50,17 @@ end $$
     local gx, gy = (x-start_x)%32, (y-start_y)%32
 
     -- if we hit the color and we didn't go here before
-    if sget(x, y) == color and not (grid[gy] and grid[gy][gx]) then
-      if not grid[gy] then grid[gy] = {} end
-      grid[gy][gx] = true
-      add(array, {gx, gy})
+    if sget(x, y) == col and not (group.grid[gy] and group.grid[gy][gx]) then
+      if not group.grid[gy] then group.grid[gy] = {} end
+      group.grid[gy][gx] = true
+      add(group.array, {gx, gy})
 
       add(queue, {x - 1, y}) add(queue, {x, y - 1})
       add(queue, {x + 1, y}) add(queue, {x, y + 1})
     end
   end
 
-  return grid, array
+  return group
 end $$
 
 -- reads the sprite sheet to create all the pixel groups
@@ -81,10 +70,12 @@ end $$
     for x=0,31 do
       if not grid[x+y*32] then
         local group = f_create_pixelgroup(x, y)
-        for coord in all(group.array) do
-          grid[coord[1]+coord[2]*32] = true
+        if group then
+          for coord in all(group.array) do
+            grid[coord[1]+coord[2]*32] = true
+          end
+          add(groups, group)
         end
-        add(groups, group)
       end
     end
   end
