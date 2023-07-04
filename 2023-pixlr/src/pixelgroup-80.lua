@@ -1,17 +1,53 @@
+g_shadows = f_zobj[[
+  0,0,
+  1,1,
+  2,2,
+  3,3,
+  4,4,
+  5,5,
+  6,5,
+  7,6,
+  8,8,
+  9,4,
+  10,10,
+  11,11,
+  12,12,
+  13,2,
+  14,14,
+  15,15
+]]
+
+-- first draw is obj, second is shadow
 |[f_draw_pixelgroup]| function(_ENV)
-  -- todo: wrapping and maybe centering?
   for coord in all(_ENV.array) do
-    pset((coord[1]+x)%32\1, (coord[2]+y)%32\1, col)
+    local x, y = (coord[1]+x)%32\1, (coord[2]+y)%32\1
+    pset(x, y, pget(x, y) == 1 and darkcol or col)
   end
 end $$
 
-|[f_pixelgroup_set_pixel]| function(_ENV, x, y)
-  x%=32 y%=32
-  if not _ENV[y] then _ENV[y] = {} end
-  if not _ENV[y][x] then _ENV[y][x] = _ENV.color end
+|[f_draw_pixelgroup_shadow]| function(_ENV)
+  --local darkcol = g_shadows[col] or col
+  --for coord in all(_ENV.array) do
+  --  local ox, oy = coord[1], coord[2]
+  --  local x, y = (ox+x)%32\1, (oy+y)%32\1
+  --  --if not _ENV.grid[oy]        or not _ENV.grid[oy][(ox-1)%32] then pset(x-1, y, _g.g_shadows[pget(x-1, y)]) end
+  --  --if not _ENV.grid[(oy-1)%32] or not _ENV.grid[(oy-1)%32][ox] then pset(x, y-1, _g.g_shadows[pget(x, y-1)]) end
+  --  if not _ENV.grid[(oy+1)%32] or not _ENV.grid[(oy+1)%32][ox] then pset(x, (y+1)%32, _g.g_shadows[pget(x, (y+1)%32)]) end
+  --  if not _ENV.grid[oy]        or not _ENV.grid[oy][(ox+1)%32] then pset((x+1)%32, y, _g.g_shadows[pget((x+1)%32, y)]) end
+  --end
 end $$
 
--- gets the pixel relative to screen coordinates
+-- give it screen coords, saves to local grid
+|[f_pixelgroup_set_pixel]| function(_ENV, sx, sy, newcol)
+  local rx, ry = (sx-x)%32, (sy-y)%32
+  if not grid[ry]     then grid[ry] = {} end
+  if not grid[ry][rx] then
+    grid[ry][rx] = newcol or col
+    add(array, {rx, ry})
+  end
+end $$
+
+-- give it screen coords, gets the color
 |[f_pixelgroup_get_pixel]| function(_ENV, sx, sy)
   -- todo: maybe more efficient to do mod somewhere else idk
   return _ENV.grid[(sy-y)%32] and _ENV.grid[(sy-y)%32][(sx-x)%32] or 0
@@ -46,9 +82,14 @@ end $$
     if _ENV:get(sx, sy) == 0 then -- to improve efficiency, first check the local grid
       local obj = getfunc(sx, sy) -- if the pixel is not in the local grid, then check with getfunc
       if obj and not objs[obj] then
-        objs[obj.id] = true
-        objs[obj] = true
-        add(objs, obj)
+        if obj.id == _ENV.id then
+          -- combine, because these are touching
+          _ENV:combine(obj)
+        else
+          objs[obj.id] = true
+          objs[obj] = true
+          add(objs, obj)
+        end
       end
     end
   end
@@ -58,6 +99,16 @@ end $$
   end
 
   return objs
+end $$
+
+|[f_pixelgroup_combine]| function(_ENV, other)
+  for coord in all(other.array) do
+    local sx, sy = (other.x+coord[1])%32, (other.y+coord[2])%32
+    if _ENV:get(sx, sy) == 0 then
+      _ENV:set(sx, sy)
+    end
+  end
+  other.alive = false
 end $$
 
 -- i have a check function that gives me all the objects
@@ -75,12 +126,14 @@ end $$
 
   local group = f_zclass([[
     id,default, -- this should be overridden
-    draw,    ~f_draw_pixelgroup,
-    set,     ~f_pixelgroup_set_pixel,
-    get,     ~f_pixelgroup_get_pixel,
-    check,   ~f_pixelgroup_check,
-    move,    ~f_pixelgroup_move,
-    push,    ~f_pixelgroup_push,
+    draw,       ~f_draw_pixelgroup,
+    drawshadow, ~f_draw_pixelgroup_shadow,
+    set,        ~f_pixelgroup_set_pixel,
+    get,        ~f_pixelgroup_get_pixel,
+    combine,    ~f_pixelgroup_combine,
+    check,      ~f_pixelgroup_check,
+    move,       ~f_pixelgroup_move,
+    push,       ~f_pixelgroup_push,
 
     x,@, y,@, col,@,
     grid,@, array,@

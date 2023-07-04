@@ -38,13 +38,27 @@ end $$
 |[f_game_update]| function(_ENV)
   xytoggle = (xytoggle+1)%4
 
+  -- block-specific logic
   f_zclass_loop[[state]]
 
+  -- move x/y logic, only move logic goes here
   if xytoggle == 0 then
     f_zclass_loop[[update_x]]
   elseif xytoggle == 2 then
     f_zclass_loop[[update_y]]
   end
+
+  -- todo: combines work with check/movement rn. but they don't work if just touching... need to fix that
+  --       i could do a check in all 4 directions, and that would fix it. probably want something a little smarter though.
+
+  f_zclass_clean()
+
+  -- one possibility:
+  -- for everything that moved, recalculate the shape of the moved object, deleting the thing that didn't move if it collides.
+  -- or once moved, check the moved direction again?
+  -- or divide screen into 4 sections
+
+  -- combine same/touching colors
 end $$
 
 |[f_ball_update]| function(_ENV)
@@ -107,6 +121,7 @@ end $$
     -- BEGIN DRAWING OPERATIONS
 
     f_zclass_loop[[draw]]
+    f_zclass_loop[[drawshadow]]
 
     -- save the screen to spritesheet if i need to
     -- if btnp(4) or btnp(5) then
@@ -115,7 +130,10 @@ end $$
 
     -- END DRAWING OPERATIONS
     clip() poke(0x5f55, 0x60) -- screen is the actual screen
+
+    --pal(1,0)
     sspr(0,0,32,32, 0,0,64,64)
+    --pal(1,1)
 end $$
 
 |[f_zbtn]| function(f, a) return f(a) and f(a+1) and 0 or f(a) and -1 or f(a+1) and 1 or 0 end $$

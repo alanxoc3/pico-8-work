@@ -21,7 +21,6 @@ function _update60()
   if btn(4) and btnp(5) then g_debug = not g_debug end
   -- DEBUG_END
 
-  f_zclass_clean()
   g_tl:f_zclass_state()
 end
 
