@@ -9,17 +9,25 @@
   for group in all(groups) do
     if group.col == 12 then
       f_zobj_set(group, [[
+        id,pl,
         xstore,0, ystore,0, jump,#, coyote,~c_no,
         update,~f_ball_update,
         update_x,~f_ball_update_x,
-        update_y,~f_ball_update_y
+        update_y,~f_ball_update_y;
       ]])
       group:register()
 
     -- just visible pixels that do nothing
+    elseif group.col == 7 then
+      f_zobj_set(group, [[
+        id,wall;
+      ]])
+      group:register()
+
     elseif group.col%16 > 0 then
-      -- f_zobj_set(group, [[
-      -- ]])
+      f_zobj_set(group, [[
+        id,movablewall;
+      ]])
       group:register()
     end
   end
@@ -55,9 +63,8 @@ end $$
 
 |[f_ball_update_x]| function(_ENV)
   local nx = mid(-1,1,xstore)
-  if nx ~= 0 and not _ENV:check(f_get_at_coord, nx, 0) then
-    x += nx
-    x %= 32
+  if nx ~= 0 then
+    _ENV:push(nx, 0, {'wall'}, {movablewall=true})
   end
   xstore = 0
 end $$
@@ -65,7 +72,7 @@ end $$
 |[f_ball_update_y]| function(_ENV)
   local ny = mid(-1,1,ystore)
 
-  if #jump == 0 and ny == -1 and not _ENV:check(f_get_at_coord, 0, -1) and (coyote or _ENV:check(f_get_at_coord, 0, 1)) then
+  if #jump == 0 and ny == -1 and (coyote or #_ENV:check(f_get_at_coord, 0, 1) > 0) then
     add(jump, false) add(jump, false) add(jump, true)
     add(jump, false) add(jump, true) add(jump, true)
     coyote = false
@@ -73,20 +80,20 @@ end $$
 
   if #jump > 0 then
     if deli(jump) then
-      if not _ENV:check(f_get_at_coord, 0, -1) then
-        y += -1
-        y %= 32
-      else
+      if not _ENV:push(0, -1, {'wall'}, {movablewall=true}) then
         jump = {}
+        printh("testing no "..t())
+      else
+        printh("testing yea "..t())
       end
     end
 
-  elseif not _ENV:check(f_get_at_coord, 0, 1) then
+  -- todo: need a non-recursive check
+  elseif #_ENV:check(f_get_at_coord, 0, 1) == 0 then
     if coyote then
       coyote = false
     else
-      y += 1
-      y %= 32
+      _ENV:move(0, 1)
     end
   else
     coyote = true

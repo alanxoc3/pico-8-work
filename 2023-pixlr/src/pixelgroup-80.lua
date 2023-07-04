@@ -17,20 +17,50 @@ end $$
   return _ENV.grid[(sy-y)%32] and _ENV.grid[(sy-y)%32][(sx-x)%32] or 0
 end $$
 
--- checks if there is a collision in direction specified.
-|[f_pixelgroup_check]| function(_ENV, getfunc, xoff, yoff)
+-- moves and pushes a thing, pass things that block and things that can be pushed
+-- this was designed to be called in only 1 of 4 directions (udlr)
+-- returns true if move was successful, false if not
+|[f_pixelgroup_push]| function(_ENV, xoff, yoff, blockids, pushmap)
+  local things = _ENV:check(f_get_at_coord, xoff, yoff)
+  for id in all(blockids) do
+    if things[id] then return false end
+  end
+
+  for thing in all(things) do
+    if pushmap[thing.id] then
+      thing:move(xoff, yoff)
+    end
+  end
+
+  _ENV:move(xoff, yoff)
+  return true
+end $$
+
+-- figures out all the objects currently touching in a different direction.
+-- works even if one obj touches another which touches another...
+|[f_pixelgroup_check]| function(_ENV, getfunc, xoff, yoff, objs)
+  objs = objs or {[_ENV]=true} -- this is a map of objs, a map of ids, and an array in one table. it starts with this object in the map, so that this object doesn't get added
+  local start = #objs+1
   for coord in all(array) do
     local sx, sy = (x+coord[1]+xoff)%32, (y+coord[2]+yoff)%32
     if _ENV:get(sx, sy) == 0 then -- to improve efficiency, first check the local grid
       local obj = getfunc(sx, sy) -- if the pixel is not in the local grid, then check with getfunc
-      if obj and obj ~= _ENV then
-        return true
+      if obj and not objs[obj] then
+        objs[obj.id] = true
+        objs[obj] = true
+        add(objs, obj)
       end
     end
   end
-  return false
+
+  for i=start,#objs do
+    objs[i]:check(getfunc, xoff, yoff, objs)
+  end
+
+  return objs
 end $$
 
+-- i have a check function that gives me all the objects
 -- another function for if i delete a node, it needs to figure out whether or not to split into two objects
   -- can deleting 1 pixel possibly split into 3? Yes, if i have a T structure. 4 is only possible if something can teleport into it. over 4 is not possible
 -- a function that tells me if there is a solid collision to the left/up/down/right
@@ -44,10 +74,13 @@ end $$
   local queue = {{start_x, start_y}}
 
   local group = f_zclass([[
+    id,default, -- this should be overridden
     draw,    ~f_draw_pixelgroup,
     set,     ~f_pixelgroup_set_pixel,
     get,     ~f_pixelgroup_get_pixel,
     check,   ~f_pixelgroup_check,
+    move,    ~f_pixelgroup_move,
+    push,    ~f_pixelgroup_push,
 
     x,@, y,@, col,@,
     grid,@, array,@
@@ -73,8 +106,14 @@ end $$
   return group
 end $$
 
+-- assumes you did a check first
+|[f_pixelgroup_move]| function(_ENV, xdir, ydir)
+  x = (x+mid(-1,1,xdir))%32
+  y = (y+mid(-1,1,ydir))%32
+end $$
+
 -- reads the sprite sheet to create all the pixel groups
-|[f_initialize_groups]| function(blah)
+|[f_initialize_groups]| function()
   local grid, groups = {}, {}
   for y=0,31 do
     for x=0,31 do

@@ -33,13 +33,14 @@ end
 -- : pushable      (bomb can blow up, breakable)       GRAVITY TOGETHER
 -- : pushable hurt (bomb can blow up, breakable)       GRAVITY TOGETHER
 -- : bomb          (deletes itself and something else) GRAVITY TOGETHER
--- : sticky GRAVITY
--- : particle GRAVITY
--- : player core
--- : move towards player core
+-- : sticky                                            GRAVITY
+-- : particle                                          GRAVITY
 -- : autocontrol core (direction)                             ANTIGRAVITY NONSTATIC
 -- : background                                               ANTIGRAVITY STATIC
 -- : invincible wall                                          ANTIGRAVITY STATIC
 -- : goal (part of background)                                ANTIGRAVITY STATIC
 -- : trashcan pixel (immovable indestructable deletes things) ANTIGRAVITY STATIC
 -- : graffiti                                                 ANTIGRAVITY STATIC
+
+-- : player core
+-- : move towards player core
