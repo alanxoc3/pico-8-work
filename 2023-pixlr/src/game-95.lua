@@ -94,9 +94,6 @@ end $$
     if deli(jump) then
       if not _ENV:push(0, -1, {'wall'}, {movablewall=true}) then
         jump = {}
-        printh("testing no "..t())
-      else
-        printh("testing yea "..t())
       end
     end
 

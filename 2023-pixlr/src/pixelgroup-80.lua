@@ -27,7 +27,9 @@ end $$
 |[f_pixelgroup_push]| function(_ENV, xoff, yoff, blockids, pushmap)
   local things = _ENV:check(f_get_at_coord, xoff, yoff)
   for id in all(blockids) do
-    if things[id] then return false end
+    if things[id] then
+      return false
+    end
   end
 
   for thing in all(things) do
@@ -45,19 +47,26 @@ end $$
 |[f_pixelgroup_check]| function(_ENV, getfunc, xoff, yoff, objs)
   objs = objs or {[_ENV]=true} -- this is a map of objs, a map of ids, and an array in one table. it starts with this object in the map, so that this object doesn't get added
   local start = #objs+1
-  for coord in all(array) do
-    local sx, sy = (x+coord[1]+xoff)%32, (y+coord[2]+yoff)%32
-    if _ENV:get(sx, sy) == 0 then -- to improve efficiency, first check the local grid
-      local obj = getfunc(sx, sy) -- if the pixel is not in the local grid, then check with getfunc
-      if obj and not objs[obj] then
-        if obj.id == _ENV.id then
-          -- combine, because these are touching
-          _ENV:combine(obj)
-        else
-          objs[obj.id] = true
-          objs[obj] = true
-          add(objs, obj)
-        end
+  for coord in all(_ENV:f_pixelgroup_get_dir_array(xoff, yoff)) do
+    local obj = getfunc((x+coord[1]+xoff)%32, (y+coord[2]+yoff)%32)
+    if obj and not objs[obj] then
+      if obj.id == _ENV.id then
+        _ENV:combine(obj)
+      else
+        objs[obj.id] = true
+        objs[obj] = true
+        add(objs, obj)
+      end
+    end
+  end
+
+  -- check other 3 directions for same id
+  for angoff=1,3 do
+    local x_new, y_new = cos(atan2(xoff,yoff)+angoff/4), sin(atan2(xoff,yoff)+angoff/4)
+    for coord in all(_ENV:f_pixelgroup_get_dir_array(x_new, y_new)) do
+      local obj = getfunc((x+coord[1]+x_new)%32, (y+coord[2]+y_new)%32)
+      if obj and obj ~= _ENV and obj.alive and obj.id == _ENV.id then
+        _ENV:combine(obj)
       end
     end
   end
@@ -76,6 +85,9 @@ end $$
       _ENV:set(sx, sy, other.grid[coord[2]][coord[1]])
     end
   end
+
+  _ENV:f_pixelgroup_set_dir_arrs()
+
   other.alive = false
 end $$
 
@@ -105,7 +117,7 @@ end $$
     x,@, y,@, col,@,
     grid,#, array,#,
     array_l,#, array_r,#,
-    array_u,#, array_d,#,
+    array_u,#, array_d,#
   ]], start_x, start_y, col)
 
   -- the max number for x/y even possible is 1024 since the screen is 32x32, which probably isn't actually even possible...
@@ -125,16 +137,28 @@ end $$
     end
   end
 
-  for p in all(group.array) do
-    local gx, gy = unpack(p)
-
-    if not group.grid[gy-1] or not group.grid[gy-1][gx] then add(group.array_u, p) end
-    if not group.grid[gy+1] or not group.grid[gy+1][gx] then add(group.array_d, p) end
-    if not group.grid[gy][gx+1] then add(group.array_r, p) end -- don't need to check y, because the y already exists
-    if not group.grid[gy][gx-1] then add(group.array_l, p) end
-  end
+  group:f_pixelgroup_set_dir_arrs()
 
   return group
+end $$
+
+|[f_pixelgroup_set_dir_arrs]| function(_ENV)
+  array_l, array_d, array_r, array_u = {}, {}, {}, {}
+  for p in all(array) do
+    local gx, gy = unpack(p)
+
+    if not grid[(gy-1)%32] or not grid[(gy-1)%32][gx] then add(array_u, p) end
+    if not grid[(gy+1)%32] or not grid[(gy+1)%32][gx] then add(array_d, p) end
+    if not grid[gy][(gx+1)%32] then add(array_r, p) end -- don't need to check y, because the y already exists
+    if not grid[gy][(gx-1)%32] then add(array_l, p) end
+  end
+end $$
+
+|[f_pixelgroup_get_dir_array]| function(_ENV, xoff, yoff)
+  if     xoff < 0 then return array_l
+  elseif xoff > 0 then return array_r
+  elseif yoff < 0 then return array_u
+  else                 return array_d end
 end $$
 
 -- assumes you did a check first
