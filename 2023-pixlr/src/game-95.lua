@@ -57,8 +57,6 @@ end $$
   -- for everything that moved, recalculate the shape of the moved object, deleting the thing that didn't move if it collides.
   -- or once moved, check the moved direction again?
   -- or divide screen into 4 sections
-
-  -- combine same/touching colors
 end $$
 
 |[f_ball_update]| function(_ENV)
@@ -121,7 +119,6 @@ end $$
     -- BEGIN DRAWING OPERATIONS
 
     f_zclass_loop[[draw]]
-    f_zclass_loop[[drawshadow]]
 
     -- save the screen to spritesheet if i need to
     -- if btnp(4) or btnp(5) then

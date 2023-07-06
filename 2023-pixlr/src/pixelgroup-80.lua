@@ -1,40 +1,8 @@
-g_shadows = f_zobj[[
-  0,0,
-  1,1,
-  2,2,
-  3,3,
-  4,4,
-  5,5,
-  6,5,
-  7,6,
-  8,8,
-  9,4,
-  10,10,
-  11,11,
-  12,12,
-  13,2,
-  14,14,
-  15,15
-]]
-
--- first draw is obj, second is shadow
 |[f_draw_pixelgroup]| function(_ENV)
   for coord in all(_ENV.array) do
     local x, y = (coord[1]+x)%32\1, (coord[2]+y)%32\1
-    pset(x, y, pget(x, y) == 1 and darkcol or col)
+    pset(x, y, _ENV.grid[coord[2]][coord[1]])
   end
-end $$
-
-|[f_draw_pixelgroup_shadow]| function(_ENV)
-  --local darkcol = g_shadows[col] or col
-  --for coord in all(_ENV.array) do
-  --  local ox, oy = coord[1], coord[2]
-  --  local x, y = (ox+x)%32\1, (oy+y)%32\1
-  --  --if not _ENV.grid[oy]        or not _ENV.grid[oy][(ox-1)%32] then pset(x-1, y, _g.g_shadows[pget(x-1, y)]) end
-  --  --if not _ENV.grid[(oy-1)%32] or not _ENV.grid[(oy-1)%32][ox] then pset(x, y-1, _g.g_shadows[pget(x, y-1)]) end
-  --  if not _ENV.grid[(oy+1)%32] or not _ENV.grid[(oy+1)%32][ox] then pset(x, (y+1)%32, _g.g_shadows[pget(x, (y+1)%32)]) end
-  --  if not _ENV.grid[oy]        or not _ENV.grid[oy][(ox+1)%32] then pset((x+1)%32, y, _g.g_shadows[pget((x+1)%32, y)]) end
-  --end
 end $$
 
 -- give it screen coords, saves to local grid
@@ -105,7 +73,7 @@ end $$
   for coord in all(other.array) do
     local sx, sy = (other.x+coord[1])%32, (other.y+coord[2])%32
     if _ENV:get(sx, sy) == 0 then
-      _ENV:set(sx, sy)
+      _ENV:set(sx, sy, other.grid[coord[2]][coord[1]])
     end
   end
   other.alive = false
@@ -122,12 +90,11 @@ end $$
   local col = sget(start_x, start_y)
   if col == 0 then return nil end -- shouldn't happen based on who is calling this, but doesn't hurt to check
 
-  local queue = {{start_x, start_y}}
+  local queue = {{0, 0}}
 
   local group = f_zclass([[
     id,default, -- this should be overridden
     draw,       ~f_draw_pixelgroup,
-    drawshadow, ~f_draw_pixelgroup_shadow,
     set,        ~f_pixelgroup_set_pixel,
     get,        ~f_pixelgroup_get_pixel,
     combine,    ~f_pixelgroup_combine,
@@ -136,24 +103,35 @@ end $$
     push,       ~f_pixelgroup_push,
 
     x,@, y,@, col,@,
-    grid,@, array,@
-  ]], start_x, start_y, col, {}, {})
+    grid,#, array,#,
+    array_l,#, array_r,#,
+    array_u,#, array_d,#,
+  ]], start_x, start_y, col)
 
-  -- test {x, y} vs (x%32)+y%32*32, which is faster?
+  -- the max number for x/y even possible is 1024 since the screen is 32x32, which probably isn't actually even possible...
   while #queue > 0 do
-    local current_pos = deli(queue)
-    local  x,  y = current_pos[1]%32, current_pos[2]%32
-    local gx, gy = (x-start_x)%32, (y-start_y)%32
+    local lx, ly = unpack(deli(queue))              -- local  xy - can be negative
+    local gx, gy = lx%32, ly%32                     -- grid   xy - between 0-31
+    local sx, sy = (gx+start_x)%32, (gy+start_y)%32 -- screen xy - between 0-31
 
     -- if we hit the color and we didn't go here before
-    if sget(x, y) == col and not (group.grid[gy] and group.grid[gy][gx]) then
+    if sget(sx, sy) == col and not (group.grid[gy] and group.grid[gy][gx]) then
       if not group.grid[gy] then group.grid[gy] = {} end
-      group.grid[gy][gx] = true
+      group.grid[gy][gx] = col
       add(group.array, {gx, gy})
 
-      add(queue, {x - 1, y}) add(queue, {x, y - 1})
-      add(queue, {x + 1, y}) add(queue, {x, y + 1})
+      add(queue, {lx-1, ly}) add(queue, {lx, ly-1})
+      add(queue, {lx+1, ly}) add(queue, {lx, ly+1})
     end
+  end
+
+  for p in all(group.array) do
+    local gx, gy = unpack(p)
+
+    if not group.grid[gy-1] or not group.grid[gy-1][gx] then add(group.array_u, p) end
+    if not group.grid[gy+1] or not group.grid[gy+1][gx] then add(group.array_d, p) end
+    if not group.grid[gy][gx+1] then add(group.array_r, p) end -- don't need to check y, because the y already exists
+    if not group.grid[gy][gx-1] then add(group.array_l, p) end
   end
 
   return group
