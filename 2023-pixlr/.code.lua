@@ -234,8 +234,8 @@ end
 xytoggle=(xytoggle+1)%2
 f_zclass_loop"state"
 if xytoggle==0 then
-f_zclass_loop"update_x"
 elseif xytoggle==1 then
+f_zclass_loop"update_x"
 f_zclass_loop"update_y"
 end
 f_zclass_loop"f_pixelgroup_combine_moved"

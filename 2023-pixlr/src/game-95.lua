@@ -52,8 +52,8 @@ end $$
 
   -- move x/y logic, only move logic goes here
   if xytoggle == 0 then
-    f_zclass_loop[[update_x]]
   elseif xytoggle == 1 then
+    f_zclass_loop[[update_x]]
     f_zclass_loop[[update_y]]
   end
 
