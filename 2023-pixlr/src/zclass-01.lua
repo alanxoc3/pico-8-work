@@ -10,6 +10,7 @@ G_ZCLASS_TEMPLATE = [[
   load,     ~f_zclass_load,
   elapsed,  ~f_zclass_get_elapsed_percent,
   register, ~f_zclass_register,
+  kill,     ~f_zclass_kill,
 
   alive,  ~c_yes,
   isnew,  ~c_yes,
@@ -28,6 +29,10 @@ end $$
 |[f_zclass_register]| function(_ENV)
   del(_g.g_zclass, _ENV)
   add(_g.g_zclass, _ENV)
+end $$
+
+|[f_zclass_kill]| function(_ENV)
+  _ENV.alive = false
 end $$
 
 |[f_zclass_loop]| function(funcName)

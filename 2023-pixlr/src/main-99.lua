@@ -15,8 +15,8 @@ function _init()
 end
 
 -- 60fps, maybe we can downgrade to 30fps if there are performance issues
-G_FPS=60
-function _update60()
+G_FPS=30
+function _update()
   -- DEBUG_BEGIN
   if btn(4) and btnp(5) then g_debug = not g_debug end
   -- DEBUG_END

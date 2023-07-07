@@ -24,35 +24,21 @@ end $$
 -- moves and pushes a thing, pass things that block and things that can be pushed
 -- this was designed to be called in only 1 of 4 directions (udlr)
 -- returns true if move was successful, false if not
-|[f_pixelgroup_push]| function(_ENV, xoff, yoff, blockids, pushmap)
-  local things = _ENV:check(f_get_at_coord, xoff, yoff)
-  for id in all(blockids) do
-    if things[id] then
-      return false
-    end
-  end
-
-  for thing in all(things) do
-    if pushmap[thing.id] then
-      thing:move(xoff, yoff)
-    end
-  end
-
-  _ENV:move(xoff, yoff)
-  return true
-end $$
-
--- figures out all the objects currently touching in a different direction.
--- works even if one obj touches another which touches another...
-|[f_pixelgroup_check]| function(_ENV, getfunc, xoff, yoff, objs)
+-- my collision logic assumes that everything is already in a good state, then it moves and fixes the state it changed
+|[f_pixelgroup_push]| function(_ENV, xoff, yoff, blockids, pushmap, objs)
+  local is_root = not objs
   objs = objs or {[_ENV]=true} -- this is a map of objs, a map of ids, and an array in one table. it starts with this object in the map, so that this object doesn't get added
   local start = #objs+1
   for coord in all(_ENV:f_pixelgroup_get_dir_array(xoff, yoff)) do
-    local obj = getfunc((x+coord[1]+xoff)%32, (y+coord[2]+yoff)%32)
+    local obj = f_get_at_coord((x+coord[1]+xoff)%32, (y+coord[2]+yoff)%32)
     if obj and not objs[obj] then
-      if obj.id == _ENV.id then
-        _ENV:combine(obj)
-      else
+      if blockids[obj.id] then
+        return false
+      elseif pushmap[obj.id] then
+        if obj.id == _ENV.id and _ENV.alive and obj.alive then
+          _ENV:combine(obj)
+        end
+
         objs[obj.id] = true
         objs[obj] = true
         add(objs, obj)
@@ -60,22 +46,53 @@ end $$
     end
   end
 
+  -- todo: move this block up
+  for i=start,#objs do
+    if not objs[i]:push(xoff, yoff, blockids, pushmap, objs) then
+      return false
+    end
+  end
+
   -- check other 3 directions for same id
-  for angoff=1,3 do
-    local x_new, y_new = cos(atan2(xoff,yoff)+angoff/4), sin(atan2(xoff,yoff)+angoff/4)
-    for coord in all(_ENV:f_pixelgroup_get_dir_array(x_new, y_new)) do
-      local obj = getfunc((x+coord[1]+x_new)%32, (y+coord[2]+y_new)%32)
-      if obj and obj ~= _ENV and obj.alive and obj.id == _ENV.id then
-        _ENV:combine(obj)
+  -- todo split ids into groups
+
+  if is_root then
+    for thing in all(objs) do
+      thing:move(xoff, yoff)
+    end
+
+    _ENV:move(xoff, yoff)
+
+    for thing in all(objs) do
+      if thing.alive then
+        local x_new, y_new = xoff, yoff
+        for _=0,3 do -- var doesn't matter, 4 times to do all rotations of 90 degrees
+          x_new, y_new = -y_new, x_new -- efficient way to rotate by 90 degrees
+          for coord in all(thing:f_pixelgroup_get_dir_array(x_new, y_new)) do
+            local obj = f_get_at_coord((thing.x+coord[1]+x_new)%32, (thing.y+coord[2]+y_new)%32)
+            if obj and obj ~= thing and obj.alive and obj.id == thing.id then
+              thing:combine(obj)
+            end
+          end
+        end
       end
     end
   end
 
-  for i=start,#objs do
-    objs[i]:check(getfunc, xoff, yoff, objs)
+  return true
+end $$
+
+-- figures out all the objects currently touching in a different direction.
+-- works even if one obj touches another which touches another...
+|[f_pixelgroup_check]| function(_ENV, xoff, yoff, solidmap)
+  for coord in all(_ENV:f_pixelgroup_get_dir_array(xoff, yoff)) do
+    local obj = f_get_at_coord((x+coord[1]+xoff)%32, (y+coord[2]+yoff)%32)
+    if obj and solidmap[obj.id] then
+      return true
+    end
   end
 
-  return objs
+  return false
 end $$
 
 |[f_pixelgroup_combine]| function(_ENV, other)

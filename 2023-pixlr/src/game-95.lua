@@ -10,7 +10,8 @@
     if group.col == 12 then
       f_zobj_set(group, [[
         id,pl,
-        xstore,0, ystore,0, jump,#, coyote,~c_no,
+        xstore,0, ystore,0, jumpstore,0,
+        jump,#, coyote,~c_no,
         update,~f_ball_update,
         update_x,~f_ball_update_x,
         update_y,~f_ball_update_y;
@@ -36,7 +37,15 @@ end $$
 -- what if there are 4 subpixel positions, 0,1,2,3... the screen could be the spritesheet.
 
 |[f_game_update]| function(_ENV)
-  xytoggle = (xytoggle+1)%4
+  -- reset the game
+  if btnp'5' then
+    f_zclass_loop[[kill]]
+    f_zclass_clean()
+    reload(0x0, 0x0, 0x2000)
+    _ENV:f_game_init()
+  end
+
+  xytoggle = (xytoggle+1)%2
 
   -- block-specific logic
   f_zclass_loop[[state]]
@@ -44,7 +53,7 @@ end $$
   -- move x/y logic, only move logic goes here
   if xytoggle == 0 then
     f_zclass_loop[[update_x]]
-  elseif xytoggle == 2 then
+  elseif xytoggle == 1 then
     f_zclass_loop[[update_y]]
   end
 
@@ -63,6 +72,10 @@ end $$
   -- if the button was pressed inbetween frames, we want it to register
   xstore += f_xbtn()
   ystore += f_ybtn()
+
+  if btn'4' then
+    jumpstore = 1
+  end
 end $$
 
 |[f_get_at_coord]| function(x, y)
@@ -76,7 +89,7 @@ end $$
 |[f_ball_update_x]| function(_ENV)
   local nx = mid(-1,1,xstore)
   if nx ~= 0 then
-    _ENV:push(nx, 0, {'wall'}, {movablewall=true})
+    _ENV:push(nx, 0, {wall=true}, {movablewall=true})
   end
   xstore = 0
 end $$
@@ -84,7 +97,8 @@ end $$
 |[f_ball_update_y]| function(_ENV)
   local ny = mid(-1,1,ystore)
 
-  if #jump == 0 and ny == -1 and (coyote or #_ENV:check(f_get_at_coord, 0, 1) > 0) then
+  -- TODO: jump shouldn't push blocks. up and down should
+  if #jump == 0 and jumpstore > 0 and (coyote or _ENV:check(0, 1, {wall=true, movablewall=true})) then
     add(jump, false) add(jump, false) add(jump, true)
     add(jump, false) add(jump, true) add(jump, true)
     coyote = false
@@ -92,13 +106,13 @@ end $$
 
   if #jump > 0 then
     if deli(jump) then
-      if not _ENV:push(0, -1, {'wall'}, {movablewall=true}) then
+      if not _ENV:push(0, -1, {wall=true}, {movablewall=true}) then
         jump = {}
       end
     end
 
   -- todo: need a non-recursive check
-  elseif #_ENV:check(f_get_at_coord, 0, 1) == 0 then
+  elseif not _ENV:check(0, 1, {wall=true, movablewall=true}) then
     if coyote then
       coyote = false
     else
@@ -108,7 +122,7 @@ end $$
     coyote = true
   end
 
-  ystore = 0
+  jumpstore = 0
 end $$
 
 |[f_game_draw]| function(_ENV)
