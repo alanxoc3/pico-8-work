@@ -62,24 +62,28 @@ end $$
     end
 
     _ENV:move(xoff, yoff)
+  end
 
-    for thing in all(objs) do
-      if thing.alive then
-        local x_new, y_new = xoff, yoff
-        for _=0,3 do -- var doesn't matter, 4 times to do all rotations of 90 degrees
-          x_new, y_new = -y_new, x_new -- efficient way to rotate by 90 degrees
-          for coord in all(thing:f_pixelgroup_get_dir_array(x_new, y_new)) do
-            local obj = f_get_at_coord((thing.x+coord[1]+x_new)%32, (thing.y+coord[2]+y_new)%32)
-            if obj and obj ~= thing and obj.alive and obj.id == thing.id then
-              thing:combine(obj)
-            end
-          end
+  return true
+end $$
+
+|[f_pixelgroup_combine_moved]| function(_ENV)
+  local xoff, yoff = 0, 1
+  if moved and alive then
+    local x_new, y_new = xoff, yoff
+    for _=0,3 do -- var doesn't matter, 4 times to do all rotations of 90 degrees
+      x_new, y_new = -y_new, x_new -- efficient way to rotate by 90 degrees
+      for coord in all(_ENV:f_pixelgroup_get_dir_array(x_new, y_new)) do
+        local obj = f_get_at_coord((x+coord[1]+x_new)%32, (y+coord[2]+y_new)%32)
+        if x == 29 and x_new == -1 and y_new == 0 then
+          printh("obj: "..(obj and obj.id or "no").." | "..(obj and obj.alive and "alive" or "dead").." | T: "..t())
+        end
+        if obj and obj ~= _ENV and obj.alive and obj.id == id then
+          _ENV:combine(obj)
         end
       end
     end
   end
-
-  return true
 end $$
 
 -- figures out all the objects currently touching in a different direction.
@@ -182,6 +186,9 @@ end $$
 |[f_pixelgroup_move]| function(_ENV, xdir, ydir)
   x = (x+mid(-1,1,xdir))%32
   y = (y+mid(-1,1,ydir))%32
+  if xdir~=0 or ydir~=0 then
+    moved = true
+  end
 end $$
 
 -- reads the sprite sheet to create all the pixel groups

@@ -25,7 +25,7 @@ function _update()
 end
 
 function _draw()
-    g_tl:draw()
+  g_tl:draw()
 end
 
 -- BLOCK IDEAS

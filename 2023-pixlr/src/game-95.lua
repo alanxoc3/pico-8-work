@@ -38,7 +38,7 @@ end $$
 
 |[f_game_update]| function(_ENV)
   -- reset the game
-  if btnp'5' then
+  if btnp'4' or btnp'5' then
     f_zclass_loop[[kill]]
     f_zclass_clean()
     reload(0x0, 0x0, 0x2000)
@@ -57,6 +57,11 @@ end $$
     f_zclass_loop[[update_y]]
   end
 
+  f_zclass_loop[[f_pixelgroup_combine_moved]]
+  for obj in all(g_zclass) do
+    obj.moved = false
+  end
+
   -- todo: combines work with check/movement rn. but they don't work if just touching... need to fix that
   --       i could do a check in all 4 directions, and that would fix it. probably want something a little smarter though.
 
@@ -73,14 +78,14 @@ end $$
   xstore += f_xbtn()
   ystore += f_ybtn()
 
-  if btn'4' then
+  if btn'2' then
     jumpstore = 1
   end
 end $$
 
 |[f_get_at_coord]| function(x, y)
   for obj in all(g_zclass) do
-    if obj:get(x, y) ~= 0 then
+    if obj.alive and obj:get(x, y) ~= 0 then
       return obj
     end
   end
@@ -89,7 +94,7 @@ end $$
 |[f_ball_update_x]| function(_ENV)
   local nx = mid(-1,1,xstore)
   if nx ~= 0 then
-    _ENV:push(nx, 0, {wall=true}, {movablewall=true})
+    _ENV:push(nx, 0, {wall=true}, {movablewall=true, pl=true})
   end
   xstore = 0
 end $$
@@ -106,17 +111,17 @@ end $$
 
   if #jump > 0 then
     if deli(jump) then
-      if not _ENV:push(0, -1, {wall=true}, {movablewall=true}) then
+      if not _ENV:push(0, -1, {wall=true}, {movablewall=true, pl=true}) then
         jump = {}
       end
     end
 
   -- todo: need a non-recursive check
-  elseif not _ENV:check(0, 1, {wall=true, movablewall=true}) then
+  elseif not _ENV:check(0, 1, {wall=true, movablewall=true, pl=true}) then
     if coyote then
       coyote = false
     else
-      _ENV:move(0, 1)
+      _ENV:push(0, 1, {wall=true}, {movablewall=true, pl=true})
     end
   else
     coyote = true
@@ -127,6 +132,7 @@ end $$
 
 |[f_game_draw]| function(_ENV)
     poke(0x5f55, 0x00) clip(0,0,32,32) cls(0) -- screen is spritesheet, so drawing operations happen there
+    rect(0,0,31,31,1)
     -- BEGIN DRAWING OPERATIONS
 
     f_zclass_loop[[draw]]
