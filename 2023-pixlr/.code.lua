@@ -230,7 +230,9 @@ x_prev_len=0
 else
 x_prev_len=min(3,x_prev_len+1)
 end
+if x_prev_len==1 or x_prev_len==3 then
 _ENV:push(nx,0,{wall=true},{movablewall=true,pl=true})
+end
 x_prev_dir=nx
 else
 x_prev_len=0
