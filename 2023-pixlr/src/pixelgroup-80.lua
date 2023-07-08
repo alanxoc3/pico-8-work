@@ -5,7 +5,7 @@
 
 |[f_get_at_coord]| function(x, y)
   for obj in all(g_zclass) do
-    if obj.alive and obj:get(x, y) then
+    if obj.alive and obj.id ~= 'goal' and obj:get(x, y) then
       return obj
     end
   end

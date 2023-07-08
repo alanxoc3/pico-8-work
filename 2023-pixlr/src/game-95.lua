@@ -7,7 +7,7 @@
 
   local groups = f_initialize_groups()
   for group in all(groups) do
-        if group.col ==  3 then f_zobj_set(group, G_STR_LAVA)        group:register()
+        if group.col ==  3 then f_zobj_set(group, G_STR_GOAL)        group:register()
     elseif group.col ==  6 then f_zobj_set(group, G_STR_MOVABLEWALL) group:register()
     elseif group.col ==  7 then f_zobj_set(group, G_STR_WALL)        group:register()
     elseif group.col ==  8 then f_zobj_set(group, G_STR_BOMB)        group:register()

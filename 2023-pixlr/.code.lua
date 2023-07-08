@@ -35,7 +35,7 @@ function f_zobj(...)
 return f_zobj_set(setmetatable({},{__index=_g}),...)
 end
 f_zobj_set(_g,"c_yes,@,c_no,@,c_empty,@,f_nop,@",true,false,"",function(...)return...end)
-f_zobj_set(_g,"f_zobj,@,f_zobj_set,@,f_zobj_eval,@,f_zclass,@,f_zclass_register,@,f_zclass_kill,@,f_zclass_loop,@,f_zclass_clean,@,f_zclass_get_elapsed_percent,@,f_zclass_load,@,f_zclass_loadlogic,@,f_zclass_state,@,f_get_at_coord,@,f_draw_pixelgroup,@,f_pixelgroup_set_pixel,@,f_pixelgroup_get_pixel,@,f_pixelgroup_push,@,f_pixelgroup_combine_moved,@,f_pixelgroup_check,@,f_pixelgroup_combine,@,f_create_pixelgroup,@,f_pixelgroup_set_dir_arrs,@,f_pixelgroup_get_dir_array,@,f_pixelgroup_move,@,f_initialize_groups,@,G_STR_MOVABLEWALL,@,G_STR_WALL,@,G_STR_BOMB,@,G_STR_LAVA,@,G_STR_PL,@,f_ball_update,@,f_ball_update_x,@,f_ball_update_y,@,f_game_init,@,f_game_update,@,f_game_draw,@,f_zbtn,@,f_xbtn,@,f_ybtn,@",f_zobj,f_zobj_set,f_zobj_eval,function(...)
+f_zobj_set(_g,"f_zobj,@,f_zobj_set,@,f_zobj_eval,@,f_zclass,@,f_zclass_register,@,f_zclass_kill,@,f_zclass_loop,@,f_zclass_clean,@,f_zclass_get_elapsed_percent,@,f_zclass_load,@,f_zclass_loadlogic,@,f_zclass_state,@,f_get_at_coord,@,f_draw_pixelgroup,@,f_pixelgroup_set_pixel,@,f_pixelgroup_get_pixel,@,f_pixelgroup_push,@,f_pixelgroup_combine_moved,@,f_pixelgroup_check,@,f_pixelgroup_combine,@,f_create_pixelgroup,@,f_pixelgroup_set_dir_arrs,@,f_pixelgroup_get_dir_array,@,f_pixelgroup_move,@,f_initialize_groups,@,G_STR_MOVABLEWALL,@,G_STR_WALL,@,G_STR_BOMB,@,G_STR_GOAL,@,G_STR_LAVA,@,G_STR_PL,@,f_ball_update,@,f_ball_update_x,@,f_ball_update_y,@,f_game_init,@,f_game_update,@,f_game_draw,@,f_zbtn,@,f_xbtn,@,f_ybtn,@",f_zobj,f_zobj_set,f_zobj_eval,function(...)
 return f_zobj_set(f_zobj(G_ZCLASS_TEMPLATE),...)
 end,function(_ENV)
 del(_g.g_zclass,_ENV)
@@ -77,7 +77,7 @@ while next_state do _ENV:f_zclass_loadlogic(next_state)end
 _ENV:update()
 end,function(x,y)
 for obj in all(g_zclass)do
-if obj.alive and obj:get(x,y)then
+if obj.alive and obj.id ~="goal" and obj:get(x,y)then
 return obj
 end
 end
@@ -216,7 +216,7 @@ end
 end
 end
 return groups
-end,"id,movablewall;","id,wall;","id,bomb;","id,lava;","id,pl,xstore,0,ystore,0,jumpstore,0,jump,#,coyote,~c_no,update,~f_ball_update,x_prev_dir,0,x_prev_len,0,update_x,~f_ball_update_x,update_y,~f_ball_update_y;",function(_ENV)
+end,"id,movablewall;","id,wall;","id,bomb;","id,goal;","id,lava;","id,pl,xstore,0,ystore,0,jumpstore,0,jump,#,coyote,~c_no,update,~f_ball_update,x_prev_dir,0,x_prev_len,0,update_x,~f_ball_update_x,update_y,~f_ball_update_y;",function(_ENV)
 xstore+=f_xbtn()
 ystore+=f_ybtn()
 if btn"4" then
@@ -268,7 +268,7 @@ end,function(_ENV)
 xytoggle=0
 local groups=f_initialize_groups()
 for group in all(groups)do
-if group.col==3 then f_zobj_set(group,G_STR_LAVA)group:register()
+if group.col==3 then f_zobj_set(group,G_STR_GOAL)group:register()
 elseif group.col==6 then f_zobj_set(group,G_STR_MOVABLEWALL)group:register()
 elseif group.col==7 then f_zobj_set(group,G_STR_WALL)group:register()
 elseif group.col==8 then f_zobj_set(group,G_STR_BOMB)group:register()

@@ -10,6 +10,10 @@
   id,bomb;
 ]] $$
 
+|[G_STR_GOAL]| [[
+  id,goal;
+]] $$
+
 |[G_STR_LAVA]| [[
   id,lava;
 ]] $$
@@ -55,12 +59,7 @@ end $$
 
   xstore = 0
 
-
-
-
-
-
-
+  -------------------------------------------------------------------------
 
   ---- true false trues
   --local nx = mid(-1,1,xstore)
