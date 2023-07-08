@@ -230,9 +230,7 @@ x_prev_len=0
 else
 x_prev_len=min(3,x_prev_len+1)
 end
-if x_prev_len==1 or x_prev_len==3 then
 _ENV:push(nx,0,{wall=true},{movablewall=true,pl=true})
-end
 x_prev_dir=nx
 else
 x_prev_len=0
@@ -270,7 +268,8 @@ end,function(_ENV)
 xytoggle=0
 local groups=f_initialize_groups()
 for group in all(groups)do
-if group.col==6 then f_zobj_set(group,G_STR_MOVABLEWALL)group:register()
+if group.col==3 then f_zobj_set(group,G_STR_LAVA)group:register()
+elseif group.col==6 then f_zobj_set(group,G_STR_MOVABLEWALL)group:register()
 elseif group.col==7 then f_zobj_set(group,G_STR_WALL)group:register()
 elseif group.col==8 then f_zobj_set(group,G_STR_BOMB)group:register()
 elseif group.col==9 then f_zobj_set(group,G_STR_LAVA)group:register()

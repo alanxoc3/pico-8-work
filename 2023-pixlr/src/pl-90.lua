@@ -45,9 +45,7 @@ end $$
       x_prev_len = min(3,x_prev_len+1)
     end
 
-    if x_prev_len == 1 or x_prev_len == 3 then
-      _ENV:push(nx, 0, {wall=true}, {movablewall=true, pl=true})
-    end
+    _ENV:push(nx, 0, {wall=true}, {movablewall=true, pl=true})
 
     x_prev_dir = nx
   else
@@ -56,6 +54,35 @@ end $$
   end
 
   xstore = 0
+
+
+
+
+
+
+
+
+  ---- true false trues
+  --local nx = mid(-1,1,xstore)
+
+  --if not moved_x and nx ~= 0 then
+  --  if x_prev_dir ~= nx and x_prev_dir ~= 0 then -- if you were moving in the opposite direction
+  --    x_prev_len = 0
+  --  else -- if you were moving in the same direction or not moving at all
+  --    x_prev_len = min(3,x_prev_len+1)
+  --  end
+
+  --  if x_prev_len == 1 or x_prev_len == 3 then
+  --    _ENV:push(nx, 0, {wall=true}, {movablewall=true, pl=true})
+  --  end
+
+  --  x_prev_dir = nx
+  --else
+  --  x_prev_len = 0
+  --  x_prev_dir = 0
+  --end
+
+  --xstore = 0
 end $$
 
 |[f_ball_update_y]| function(_ENV)
