@@ -1,24 +1,37 @@
+-- todo: implement slow x, try coyote jump again, variable y jumps
+
+-- for bomb, before you touch it, i could do the logic. or i could add an extra check for after you move. or the check could be on the bomb every frame.
+-- bomb touch logic goes in should-combine thing. lava touch logic happens every frame
+
+|[f_get_at_coord]| function(x, y)
+  for obj in all(g_zclass) do
+    if obj.alive and obj:get(x, y) then
+      return obj
+    end
+  end
+end $$
+
 |[f_draw_pixelgroup]| function(_ENV)
-  for coord in all(_ENV.array) do
-    local x, y = (coord[1]+x)%32\1, (coord[2]+y)%32\1
-    pset(x, y, _ENV.grid[coord[2]][coord[1]])
+  for coord in all(array) do
+    pset((coord[1]+x)%32\1, (coord[2]+y)%32\1, col)
   end
 end $$
 
 -- give it screen coords, saves to local grid
-|[f_pixelgroup_set_pixel]| function(_ENV, sx, sy, newcol)
+|[f_pixelgroup_set_pixel]| function(_ENV, sx, sy)
   local rx, ry = (sx-x)%32, (sy-y)%32
   if not grid[ry]     then grid[ry] = {} end
   if not grid[ry][rx] then
-    grid[ry][rx] = newcol or col
-    add(array, {rx, ry})
+    local coord = {rx, ry}
+    grid[ry][rx] = coord
+    add(array, coord)
   end
 end $$
 
 -- give it screen coords, gets the color
 |[f_pixelgroup_get_pixel]| function(_ENV, sx, sy)
   -- todo: maybe more efficient to do mod somewhere else idk
-  return _ENV.grid[(sy-y)%32] and _ENV.grid[(sy-y)%32][(sx-x)%32] or 0
+  return _ENV.grid[(sy-y)%32] and _ENV.grid[(sy-y)%32][(sx-x)%32]
 end $$
 
 -- moves and pushes a thing, pass things that block and things that can be pushed
@@ -46,15 +59,11 @@ end $$
     end
   end
 
-  -- todo: move this block up
   for i=start,#objs do
     if not objs[i]:push(xoff, yoff, blockids, pushmap, objs) then
       return false
     end
   end
-
-  -- check other 3 directions for same id
-  -- todo split ids into groups
 
   if is_root then
     for thing in all(objs) do
@@ -67,17 +76,15 @@ end $$
   return true
 end $$
 
+-- checks for sticky things in all 4 directions, and combines if touching
 |[f_pixelgroup_combine_moved]| function(_ENV)
   local xoff, yoff = 0, 1
-  if moved and alive then
+  if (moved_x or moved_y) and alive then
     local x_new, y_new = xoff, yoff
     for _=0,3 do -- var doesn't matter, 4 times to do all rotations of 90 degrees
       x_new, y_new = -y_new, x_new -- efficient way to rotate by 90 degrees
       for coord in all(_ENV:f_pixelgroup_get_dir_array(x_new, y_new)) do
         local obj = f_get_at_coord((x+coord[1]+x_new)%32, (y+coord[2]+y_new)%32)
-        if x == 29 and x_new == -1 and y_new == 0 then
-          printh("obj: "..(obj and obj.id or "no").." | "..(obj and obj.alive and "alive" or "dead").." | T: "..t())
-        end
         if obj and obj ~= _ENV and obj.alive and obj.id == id then
           _ENV:combine(obj)
         end
@@ -102,8 +109,8 @@ end $$
 |[f_pixelgroup_combine]| function(_ENV, other)
   for coord in all(other.array) do
     local sx, sy = (other.x+coord[1])%32, (other.y+coord[2])%32
-    if _ENV:get(sx, sy) == 0 then
-      _ENV:set(sx, sy, other.grid[coord[2]][coord[1]])
+    if not _ENV:get(sx, sy) then
+      _ENV:set(sx, sy)
     end
   end
 
@@ -150,8 +157,10 @@ end $$
     -- if we hit the color and we didn't go here before
     if sget(sx, sy) == col and not (group.grid[gy] and group.grid[gy][gx]) then
       if not group.grid[gy] then group.grid[gy] = {} end
-      group.grid[gy][gx] = col
-      add(group.array, {gx, gy})
+      -- todo: combine with the "set" function logic sometime
+      local coord = {gx, gy}
+      group.grid[gy][gx] = coord
+      add(group.array, coord)
 
       add(queue, {lx-1, ly}) add(queue, {lx, ly-1})
       add(queue, {lx+1, ly}) add(queue, {lx, ly+1})
@@ -165,13 +174,13 @@ end $$
 
 |[f_pixelgroup_set_dir_arrs]| function(_ENV)
   array_l, array_d, array_r, array_u = {}, {}, {}, {}
-  for p in all(array) do
-    local gx, gy = unpack(p)
+  for coord in all(array) do
+    local gx, gy = unpack(coord)
 
-    if not grid[(gy-1)%32] or not grid[(gy-1)%32][gx] then add(array_u, p) end
-    if not grid[(gy+1)%32] or not grid[(gy+1)%32][gx] then add(array_d, p) end
-    if not grid[gy][(gx+1)%32] then add(array_r, p) end -- don't need to check y, because the y already exists
-    if not grid[gy][(gx-1)%32] then add(array_l, p) end
+    if not grid[(gy-1)%32] or not grid[(gy-1)%32][gx] then add(array_u, coord) end
+    if not grid[(gy+1)%32] or not grid[(gy+1)%32][gx] then add(array_d, coord) end
+    if not grid[gy][(gx+1)%32] then add(array_r, coord) end -- don't need to check y, because the y already exists
+    if not grid[gy][(gx-1)%32] then add(array_l, coord) end
   end
 end $$
 
@@ -186,8 +195,12 @@ end $$
 |[f_pixelgroup_move]| function(_ENV, xdir, ydir)
   x = (x+mid(-1,1,xdir))%32
   y = (y+mid(-1,1,ydir))%32
-  if xdir~=0 or ydir~=0 then
-    moved = true
+  if xdir~=0 then
+    moved_x = true
+  end
+
+  if ydir~=0 then
+    moved_y = true
   end
 end $$
 
