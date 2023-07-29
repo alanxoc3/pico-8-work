@@ -5,7 +5,7 @@
 
 |[f_get_at_coord]| function(x, y)
   for obj in all(g_zclass) do
-    if obj.alive and obj.id ~= 'goal' and obj:get(x, y) then
+    if obj.alive and obj.id ~= 'lava' and obj.id ~= 'goal' and obj:get(x, y) then
       return obj
     end
   end
@@ -32,6 +32,40 @@ end $$
 |[f_pixelgroup_get_pixel]| function(_ENV, sx, sy)
   -- todo: maybe more efficient to do mod somewhere else idk
   return _ENV.grid[(sy-y)%32] and _ENV.grid[(sy-y)%32][(sx-x)%32]
+end $$
+
+|[f_pixelgroup_get_local]| function(_ENV, lx, ly)
+  return _ENV.grid[ly%32] and _ENV.grid[ly%32][lx%32]
+end $$
+
+|[f_pixelgroup_set_local]| function(_ENV, lx, ly, val)
+  if _ENV.grid[ly%32] then _ENV.grid[ly%32][lx%32] = val end
+end $$
+
+|[f_pixelgroup_delete_pixel]| function(_ENV, sx, sy)
+  local coords = _ENV:get(sx, sy)
+  if coords then
+    _ENV.alive = false
+    _ENV.grid[coords[2]][coords[1]] = false
+    del(_ENV.array, coords)
+
+    local x_new, y_new = 0, 1
+    for _=0,3 do -- var doesn't matter, 4 times to do all rotations of 90 degrees
+      -- need to check all prev grids.
+      x_new, y_new = -y_new, x_new
+      if _ENV:getlocal(coords[1]+x_new, coords[2]+y_new) then
+        -- do the create thing.....
+        printh("x_new: "..(coords[1]+x_new).." | y_new "..(coords[2]+y_new))
+
+        local group = f_create_pixelgroup(x, y, col, function(sx, sy)
+          if _ENV:getlocal(sx, sy) then
+            _ENV:setlocal(sx, sy, nil)
+            return true
+          end
+        end)
+      end
+    end
+  end
 end $$
 
 -- moves and pushes a thing, pass things that block and things that can be pushed
@@ -126,8 +160,9 @@ end $$
 -- another function, given a pixel, tell me which pixel group it is a part ofjj
 
 -- returns a 2d array of grid positions relative to start_x/y, and a single array with all
-|[f_create_pixelgroup]| function(start_x, start_y)
-  local col = sget(start_x, start_y)
+
+-- i need to pass a gridcheck func
+|[f_create_pixelgroup]| function(start_x, start_y, col, gridcheck_func)
   if col == 0 then return nil end -- shouldn't happen based on who is calling this, but doesn't hurt to check
 
   local queue = {{0, 0}}
@@ -141,7 +176,10 @@ end $$
     check,      ~f_pixelgroup_check,
     move,       ~f_pixelgroup_move,
     push,       ~f_pixelgroup_push,
+    getlocal,   ~f_pixelgroup_get_local,
+    setlocal,   ~f_pixelgroup_set_local,
 
+    delete,     ~f_pixelgroup_delete_pixel,
     x,@, y,@, col,@,
     grid,#, array,#,
     array_l,#, array_r,#,
@@ -155,7 +193,7 @@ end $$
     local sx, sy = (gx+start_x)%32, (gy+start_y)%32 -- screen xy - between 0-31
 
     -- if we hit the color and we didn't go here before
-    if sget(sx, sy) == col and not (group.grid[gy] and group.grid[gy][gx]) then
+    if gridcheck_func(sx, sy) and not (group.grid[gy] and group.grid[gy][gx]) then
       if not group.grid[gy] then group.grid[gy] = {} end
       -- todo: combine with the "set" function logic sometime
       local coord = {gx, gy}
@@ -168,6 +206,14 @@ end $$
   end
 
   group:f_pixelgroup_set_dir_arrs()
+
+      if col ==  3 then f_zobj_set(group, G_STR_GOAL)        group:register()
+  elseif col ==  6 then f_zobj_set(group, G_STR_MOVABLEWALL) group:register()
+  elseif col ==  7 then f_zobj_set(group, G_STR_WALL)        group:register()
+  elseif col ==  8 then f_zobj_set(group, G_STR_BOMB)        group:register()
+  elseif col ==  9 then f_zobj_set(group, G_STR_LAVA)        group:register()
+  elseif col == 12 then f_zobj_set(group, G_STR_PL)          group:register()
+  end
 
   return group
 end $$
@@ -210,7 +256,11 @@ end $$
   for y=0,31 do
     for x=0,31 do
       if not grid[x+y*32] then
-        local group = f_create_pixelgroup(x, y)
+        local col = sget(x, y)
+        local group = f_create_pixelgroup(x, y, col, function(sx, sy)
+          return sget(sx, sy) == col
+        end)
+
         if group then
           for coord in all(group.array) do
             grid[(x+coord[1])%32+(y+coord[2])%32*32] = true

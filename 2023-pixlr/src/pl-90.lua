@@ -14,10 +14,6 @@
   id,goal;
 ]] $$
 
-|[G_STR_LAVA]| [[
-  id,lava;
-]] $$
-
 |[G_STR_PL]| [[
   id,pl,
   xstore,0, ystore,0, jumpstore,0,

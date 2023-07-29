@@ -5,16 +5,7 @@
 |[f_game_init]| function(_ENV)
   xytoggle = 0 -- this controls whether to update x or y for the frame
 
-  local groups = f_initialize_groups()
-  for group in all(groups) do
-        if group.col ==  3 then f_zobj_set(group, G_STR_GOAL)        group:register()
-    elseif group.col ==  6 then f_zobj_set(group, G_STR_MOVABLEWALL) group:register()
-    elseif group.col ==  7 then f_zobj_set(group, G_STR_WALL)        group:register()
-    elseif group.col ==  8 then f_zobj_set(group, G_STR_BOMB)        group:register()
-    elseif group.col ==  9 then f_zobj_set(group, G_STR_LAVA)        group:register()
-    elseif group.col == 12 then f_zobj_set(group, G_STR_PL)          group:register()
-    end
-  end
+  f_initialize_groups()
 end $$
 
 |[f_game_update]| function(_ENV)
@@ -40,6 +31,7 @@ end $$
   f_zclass_loop[[f_pixelgroup_combine_moved]]
 
   -- STEP 5: Check if moved things touched lava and destroy them if so.
+  f_zclass_loop[[lavacheck]]
 
   -- STEP 6: Reset "moved".
   for obj in all(g_zclass) do

@@ -35,7 +35,7 @@ function f_zobj(...)
 return f_zobj_set(setmetatable({},{__index=_g}),...)
 end
 f_zobj_set(_g,"c_yes,@,c_no,@,c_empty,@,f_nop,@",true,false,"",function(...)return...end)
-f_zobj_set(_g,"f_zobj,@,f_zobj_set,@,f_zobj_eval,@,f_zclass,@,f_zclass_register,@,f_zclass_kill,@,f_zclass_loop,@,f_zclass_clean,@,f_zclass_get_elapsed_percent,@,f_zclass_load,@,f_zclass_loadlogic,@,f_zclass_state,@,f_get_at_coord,@,f_draw_pixelgroup,@,f_pixelgroup_set_pixel,@,f_pixelgroup_get_pixel,@,f_pixelgroup_push,@,f_pixelgroup_combine_moved,@,f_pixelgroup_check,@,f_pixelgroup_combine,@,f_create_pixelgroup,@,f_pixelgroup_set_dir_arrs,@,f_pixelgroup_get_dir_array,@,f_pixelgroup_move,@,f_initialize_groups,@,G_STR_MOVABLEWALL,@,G_STR_WALL,@,G_STR_BOMB,@,G_STR_GOAL,@,G_STR_LAVA,@,G_STR_PL,@,f_ball_update,@,f_ball_update_x,@,f_ball_update_y,@,f_game_init,@,f_game_update,@,f_game_draw,@,f_zbtn,@,f_xbtn,@,f_ybtn,@",f_zobj,f_zobj_set,f_zobj_eval,function(...)
+f_zobj_set(_g,"f_zobj,@,f_zobj_set,@,f_zobj_eval,@,f_zclass,@,f_zclass_register,@,f_zclass_kill,@,f_zclass_loop,@,f_zclass_clean,@,f_zclass_get_elapsed_percent,@,f_zclass_load,@,f_zclass_loadlogic,@,f_zclass_state,@,f_get_at_coord,@,f_draw_pixelgroup,@,f_pixelgroup_set_pixel,@,f_pixelgroup_get_pixel,@,f_pixelgroup_get_local,@,f_pixelgroup_set_local,@,f_pixelgroup_delete_pixel,@,f_pixelgroup_push,@,f_pixelgroup_combine_moved,@,f_pixelgroup_check,@,f_pixelgroup_combine,@,f_create_pixelgroup,@,f_pixelgroup_set_dir_arrs,@,f_pixelgroup_get_dir_array,@,f_pixelgroup_move,@,f_initialize_groups,@,G_STR_LAVA,@,f_lava_check,@,G_STR_MOVABLEWALL,@,G_STR_WALL,@,G_STR_BOMB,@,G_STR_GOAL,@,G_STR_PL,@,f_ball_update,@,f_ball_update_x,@,f_ball_update_y,@,f_game_init,@,f_game_update,@,f_game_draw,@,f_zbtn,@,f_xbtn,@,f_ybtn,@",f_zobj,f_zobj_set,f_zobj_eval,function(...)
 return f_zobj_set(f_zobj(G_ZCLASS_TEMPLATE),...)
 end,function(_ENV)
 del(_g.g_zclass,_ENV)
@@ -77,7 +77,7 @@ while next_state do _ENV:f_zclass_loadlogic(next_state)end
 _ENV:update()
 end,function(x,y)
 for obj in all(g_zclass)do
-if obj.alive and obj.id ~="goal" and obj:get(x,y)then
+if obj.alive and obj.id ~="lava" and obj.id ~="goal" and obj:get(x,y)then
 return obj
 end
 end
@@ -95,6 +95,30 @@ add(array,coord)
 end
 end,function(_ENV,sx,sy)
 return _ENV.grid[(sy-y)%32]and _ENV.grid[(sy-y)%32][(sx-x)%32]
+end,function(_ENV,lx,ly)
+return _ENV.grid[ly%32]and _ENV.grid[ly%32][lx%32]
+end,function(_ENV,lx,ly,val)
+if _ENV.grid[ly%32]then _ENV.grid[ly%32][lx%32]=val end
+end,function(_ENV,sx,sy)
+local coords=_ENV:get(sx,sy)
+if coords then
+_ENV.alive=false
+_ENV.grid[coords[2]][coords[1]]=false
+del(_ENV.array,coords)
+local x_new,y_new=0,1
+for _=0,3 do
+x_new,y_new=-y_new,x_new
+if _ENV:getlocal(coords[1]+x_new,coords[2]+y_new)then
+printh("x_new: "..(coords[1]+x_new).." | y_new "..(coords[2]+y_new))
+local group=f_create_pixelgroup(x,y,col,function(sx,sy)
+if _ENV:getlocal(sx,sy)then
+_ENV:setlocal(sx,sy,nil)
+return true
+end
+end)
+end
+end
+end
 end,function(_ENV,xoff,yoff,blockids,pushmap,objs)
 local is_root=not objs
 objs=objs or{[_ENV]=true}
@@ -157,16 +181,15 @@ end
 end
 _ENV:f_pixelgroup_set_dir_arrs()
 other.alive=false
-end,function(start_x,start_y)
-local col=sget(start_x,start_y)
+end,function(start_x,start_y,col,gridcheck_func)
 if col==0 then return nil end
 local queue={{0,0}}
-local group=f_zclass("id,default,draw,~f_draw_pixelgroup,set,~f_pixelgroup_set_pixel,get,~f_pixelgroup_get_pixel,combine,~f_pixelgroup_combine,check,~f_pixelgroup_check,move,~f_pixelgroup_move,push,~f_pixelgroup_push,x,@,y,@,col,@,grid,#,array,#,array_l,#,array_r,#,array_u,#,array_d,#",start_x,start_y,col)
+local group=f_zclass("id,default,draw,~f_draw_pixelgroup,set,~f_pixelgroup_set_pixel,get,~f_pixelgroup_get_pixel,combine,~f_pixelgroup_combine,check,~f_pixelgroup_check,move,~f_pixelgroup_move,push,~f_pixelgroup_push,getlocal,~f_pixelgroup_get_local,setlocal,~f_pixelgroup_set_local,delete,~f_pixelgroup_delete_pixel,x,@,y,@,col,@,grid,#,array,#,array_l,#,array_r,#,array_u,#,array_d,#",start_x,start_y,col)
 while #queue>0 do
 local lx,ly=unpack(deli(queue))
 local gx,gy=lx%32,ly%32
 local sx,sy=(gx+start_x)%32,(gy+start_y)%32
-if sget(sx,sy)==col and not(group.grid[gy]and group.grid[gy][gx])then
+if gridcheck_func(sx,sy)and not(group.grid[gy]and group.grid[gy][gx])then
 if not group.grid[gy]then group.grid[gy]={}end
 local coord={gx,gy}
 group.grid[gy][gx]=coord
@@ -176,6 +199,13 @@ add(queue,{lx+1,ly})add(queue,{lx,ly+1})
 end
 end
 group:f_pixelgroup_set_dir_arrs()
+if col==3 then f_zobj_set(group,G_STR_GOAL)group:register()
+elseif col==6 then f_zobj_set(group,G_STR_MOVABLEWALL)group:register()
+elseif col==7 then f_zobj_set(group,G_STR_WALL)group:register()
+elseif col==8 then f_zobj_set(group,G_STR_BOMB)group:register()
+elseif col==9 then f_zobj_set(group,G_STR_LAVA)group:register()
+elseif col==12 then f_zobj_set(group,G_STR_PL)group:register()
+end
 return group
 end,function(_ENV)
 array_l,array_d,array_r,array_u={},{},{},{}
@@ -205,7 +235,10 @@ local grid,groups={},{}
 for y=0,31 do
 for x=0,31 do
 if not grid[x+y*32]then
-local group=f_create_pixelgroup(x,y)
+local col=sget(x,y)
+local group=f_create_pixelgroup(x,y,col,function(sx,sy)
+return sget(sx,sy)==col
+end)
 if group then
 for coord in all(group.array)do
 grid[(x+coord[1])%32+(y+coord[2])%32*32]=true
@@ -216,7 +249,15 @@ end
 end
 end
 return groups
-end,"id,movablewall;","id,wall;","id,bomb;","id,goal;","id,lava;","id,pl,xstore,0,ystore,0,jumpstore,0,jump,#,coyote,~c_no,update,~f_ball_update,x_prev_dir,0,x_prev_len,0,update_x,~f_ball_update_x,update_y,~f_ball_update_y;",function(_ENV)
+end,"id,lava,lavacheck,~f_lava_check",function(_ENV)
+for coord in all(array)do
+local sx,sy=x+coord[1],y+coord[2]
+local obj=f_get_at_coord(sx,sy)
+if obj then
+obj:delete(sx,sy)
+end
+end
+end,"id,movablewall;","id,wall;","id,bomb;","id,goal;","id,pl,xstore,0,ystore,0,jumpstore,0,jump,#,coyote,~c_no,update,~f_ball_update,x_prev_dir,0,x_prev_len,0,update_x,~f_ball_update_x,update_y,~f_ball_update_y;",function(_ENV)
 xstore+=f_xbtn()
 ystore+=f_ybtn()
 if btn"4" then
@@ -266,16 +307,7 @@ end
 jumpstore=0
 end,function(_ENV)
 xytoggle=0
-local groups=f_initialize_groups()
-for group in all(groups)do
-if group.col==3 then f_zobj_set(group,G_STR_GOAL)group:register()
-elseif group.col==6 then f_zobj_set(group,G_STR_MOVABLEWALL)group:register()
-elseif group.col==7 then f_zobj_set(group,G_STR_WALL)group:register()
-elseif group.col==8 then f_zobj_set(group,G_STR_BOMB)group:register()
-elseif group.col==9 then f_zobj_set(group,G_STR_LAVA)group:register()
-elseif group.col==12 then f_zobj_set(group,G_STR_PL)group:register()
-end
-end
+f_initialize_groups()
 end,function(_ENV)
 if btnp"5" then
 f_zclass_loop"kill"
@@ -290,6 +322,7 @@ f_zclass_loop"update_x"
 f_zclass_loop"update_y"
 end
 f_zclass_loop"f_pixelgroup_combine_moved"
+f_zclass_loop"lavacheck"
 for obj in all(g_zclass)do
 obj.moved_x=false
 obj.moved_y=false
