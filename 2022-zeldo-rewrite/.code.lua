@@ -985,6 +985,13 @@ foreach(r.objects,function(obj_template)
 _g[g_obj_map[obj_template.index]](obj_template.x+.5,obj_template.y+.5)
 end)
 end,function(state)
+if g_debug and btnp"5" and g_pl and g_pl:is_alive()then
+zcall(poke,"1;,0x5d02,@;2;,0x5d03,@;3;,0x5d04,@;",g_pl.x*16,
+g_pl.y*16,
+(g_pl.xf+1)\2
+)
+memcpy(0x5e00,0x5d00,64)
+end
 zcall(loop_entities,"pls,@,solids,@,room,@,statitems,@,smaller_slimes,@;1;,timer,tick;2;,actor,state;3;,pushable,update_push;4;,mov,f_mov_update;5;,enemy,pl_collide_func_batch,~pls;6;,collidable,f_adjust_deltas_for_solids,%f_set_x_delta,~solids;7;,collidable,f_adjust_deltas_for_tiles,%f_set_x_delta,~room;8;,collidable,f_adjust_deltas_for_screen,%f_set_x_delta2;9;,vec,f_vec_update_x;10;,collidable,f_adjust_deltas_for_solids,%f_set_y_delta,~solids;11;,collidable,f_adjust_deltas_for_tiles,%f_set_y_delta,~room;12;,collidable,f_adjust_deltas_for_screen,%f_set_y_delta2;13;,vec,f_vec_update_y;14;,smaller_slimes,statcollide,~smaller_slimes;15;,smaller_slimes,statcollide,~statitems;16;,slobs,statcollide,~statitems;17;,slimy_boss_minion_2,statcollide,~statitems;18;,anchor,update_anchor;19;,target,update_target,~pls;20;,rstat,buffer_update;21;,healthobj,health_update;",g_zclass_entities.pl,g_zclass_entities.solid,g_rooms[peek"0x5d01"],g_zclass_entities.statitem,g_zclass_entities.smaller_slimes)
 poke(0x5d0b,g_pl.health)
 poke(0x5d0c,g_pl.max_health)
@@ -1010,6 +1017,11 @@ end,function(state)
 isorty(g_zclass_entities["drawlayer_50"])
 draw_room(g_rooms[peek"0x5d01"],64,64,function()
 zcall(loop_entities,"1;,drawlayer_25,draw;2;,drawlayer_50,draw;3;,drawlayer_75,draw;")
+if g_debug then
+for inst in all(g_zclass_entities["box"])do
+scr_zrect(inst.x,inst.y,inst.rx,inst.ry,8)
+end
+end
 end,function()
 zcall(loop_entities,"1;,drawlayer_90,draw;2;,drawlayer_95,draw;3;,drawlayer_99,draw;")
 end)
@@ -1338,7 +1350,7 @@ zclass"game_state,actor|ecs_exclusions;actor,yes,timer,yes;curr,room,init,%f_gam
 function load_save_state()
 memcpy(0x5d00,0x5e00,64)
 if peek"0x5d00"==0 then
-zcall(poke,"1;,0x5d00,1;2;,0x5d01,224;3;,0x5d02,24;4;,0x5d03,34;5;,0x5d05,121;6;,0x5d06,96;7;,0x5d07,72;8;,0x5d04,1;9;,0x5d08,5;10;,0x5d0b,10;11;,0x5d0c,10;12;,0x5d13,1;")
+zcall(poke,"1;,0x5d00,1;2;,0x5d01,224;3;,0x5d02,24;4;,0x5d03,34;5;,0x5d05,121;6;,0x5d06,96;7;,0x5d07,72;8;,0x5d04,1;9;,0x5d08,5;10;,0x5d0b,10;11;,0x5d0c,10;12;,0x5d13,1;13;,0x5d15,1;14;,0x5d14,1;15;,0x5d16,1;16;,0x5d10,1;17;,0x5d17,1;18;,0x5d12,1;19;,0x5d11,1;")
 end
 end
 function _init()
@@ -1349,6 +1361,7 @@ g_tile_animation_lookup=create_tile_animation_lookup(g_rooms[0])
 end
 function _update60()
 g_zbtn_0,g_zbtn_2=zbtn(btn,0),zbtn(btn,2)
+if btn(4)and btnp(5)then g_debug=not g_debug end
 zcall(loop_entities,"1;,actor,clean;2;,fader,clean;")
 register_entities()
 zcall(loop_entities,"1;,fader,tick;2;,game_state,tick;3;,fader,state;4;,game_state,state;")
@@ -1358,4 +1371,6 @@ g_si,g_fi=g_slow_animation.index,g_fast_animation.index
 cls()
 loop_entities("game_state","draw")
 fade(g_fade)
+camera()
+rect(0,0,127,127,8)
 end
