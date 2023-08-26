@@ -25,7 +25,6 @@ function draw_pkmn_out(num, x, y, col, orad, prad)
     draw_pkmn(num, x, y, prad, prad)
 end
 
-
 c_bg_styles = {
     [0]={pc=6,  sc=13}, -- normal
     [1]={pc=13, sc=5},  -- darker/psychic/poison/ghost
@@ -36,21 +35,39 @@ c_bg_styles = {
     [6]={pc=10, sc=4},  -- electric/ground
 }
 
+g_palette_swap = {
+  [0]  = 0, [1]  = 0, [2]  = 0, [3]  = 6,
+  [4]  = 6, [5]  = 6, [6]  = 6, [7]  = 6,
+  [8]  = 6, [9]  = 6, [10] = 6, [11] = 6,
+  [12] = 6, [13] = 6, [14] = 6, [15] = 6,
+}
+
 g_xoff = 0
 g_yoff = 0
 g_meh = 0
 g_scale = 1
 g_bg = 0
 function _update()
-    if btnp(4) or btnp(5) then g_meh = (g_meh + 1) % 4 end
+    if btnp(4) or btnp(5) then
+      for y=0,127 do
+        for x=0,127 do
+          sset(x, y, g_palette_swap[sget(x, y)])
+        end
+      end
+
+      cstore(0x0000, 0x0000, 0x2000, "bw.p8")
+      cls()
+      color(7)
+      stop("bw saved to the bw.p8 file")
+    end
 
     if btnp(2) then g_scale += .125 end
     if btnp(3) then g_scale -= .125 end
 
     g_scale = min(2, max(.125, g_scale))
 
-    if btnp(0) then g_bg = (g_bg - 1) % 7 end
-    if btnp(1) then g_bg = (g_bg + 1) % 7 end
+    if btnp(0) then g_bg  = (g_bg - 1) % 7 end
+    if btnp(1) then g_meh = (g_meh + 1) % 4 end
 
     g_xoff = g_meh % 2
     g_yoff = g_meh \ 2

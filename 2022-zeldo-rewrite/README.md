@@ -69,7 +69,6 @@ Oh, well adding to a parents array is really useful. any way to get around that?
 - long: castle/canon
 - long: crypt
 - long: ivan boss fight (based on computer room)
-- long: endless mode
 - shrt: title screen
 - shrt: intro (cut scene)
 - shrt: graveyard (village + crypt)
