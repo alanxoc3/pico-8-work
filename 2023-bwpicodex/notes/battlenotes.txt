@@ -1,0 +1,426 @@
+Fantastic references:
+
+    Here are some changes from the original game:
+    https://bulbapedia.bulbagarden.net/wiki/Pok%C3%A9mon_Stadium_(English)#Changes
+
+    Here are more differences from the original game:
+    https://www.smogon.com/rb/articles/stadium_guide
+
+    https://gamefaqs.gamespot.com/gameboy/367023-pokemon-red-version/faqs/64175/stat-modifiers
+
+    My only concern is that you can't unfreeze your pokemon
+
+    This explains advanced battling & dvs:
+    https://gamefaqs.gamespot.com/gameboy/907714-pokemon-blue-version/faqs/54432
+
+    This is probably the best reference for all the moves:
+    http://www.psypokes.com/rby/attacks.php
+
+--------------------------------------------------------------
+
+Other modifications from pokemon stadium:
+
+    - an infinite battle is only possible if both sides keep switching
+    - status damage is not taken if a pokemon doesn't get a chance to attack due to roar, whirlwind, teleport, fainting, or switching.
+    - frozen stat condition has 10% chance to unthaw each turn
+    - pokemon can't receive status conditions from moves of one of their own types or resistances
+    - two abras that keep using teleport to switch out will not take poison damage.
+    - if opponent keeps using roar, preventing you from attacking (because you use roar/teleport/whirlwind/counter), then you don't take poison damage.
+    - paralysis drops speed by 50% instead of 75%, and the stat reapplication glitch is kept, similar to the rby games.
+
+All possible messages:
+
+    growlithe uses|misses|continues amnesia|psychic|...
+    growlithe is|isnot digging|flying|preparing|recharging|focused|misted|screened|reflected|decoyed|flinching|ko-ed|seeded|frozen|poisoned|toxiced|burned|sleeping|paralyzed|confused
+    growlithe +100|+1|+2|-1|-100|... hp|special|speed|attack|defense|evasion|accuracy
+    growlithe -100|+100 hp
+
+    growlithe copies form|move|types # for transform & conversion
+    growlithe falls back             # whirlwind/roar/teleport
+    growlithe comes out              # whirlwind/roar/teleport
+    growlithe does nothing           # move failed
+    growlithe struggles to fight     # uses the move struggle
+
+    it is super      effective
+    it is not very   effective
+    it is not        effective
+    it is a critical hit
+
+--------------------------------------------------------------
+
+Battle menu has these:
+
+    fight
+    switch
+    stats          ( shows paralysis burn... )
+    forfeit
+
+--------------------------------------------------------------
+
+What actions look like:
+
+    an action has 1 message, and can only affect only 1 pokemon/party
+    but it can create a new action that affects the other party
+
+    action has:
+        {
+            message="its,super,effective",
+            logic=function(active, party),
+            active=activepkmn, -- p1 or p2
+            party=partylist,   -- p1 or p2
+            animation_index=go_out|go_in|shake|dig|fly|...
+        }
+
+Action is skipped if the active pokemon referenced in it is no longer the active pokemon.
+Also, a KO check is run after each action. If passes, a KO action is added.
+
+The function can return a list of actions.
+
+battle starts with 2 actions. p1 (bottom) sends out pkmn as first action. p2 sends out pkmn as second action.
+
+can an action create another action? ex, grass attacks water, could it generate another
+
+
+action displays message first
+    wait .25 sec
+then does the animation
+    wait .25 sec
+then executes the function
+    wait .25 sec
+then next action
+
+for status moves...
+    pikachu use thndrwave
+    oddish is paralyzed
+
+hurt by (poison|toxic|burn)
+
+attack look like:
+bulbasaur
+   use
+leechseed
+
+different messages...
+
+
+
+for solarbeam, hyperbeam, trapping moves, rage, other multiturn moves, and struggle... there is no move menu when you select fight
+when you hover over a disabled move, it will say disabled in the br screen
+for metronome
+
+when turn starts, only a few actions are set:
+switch 1
+switch 2
+(determine speed)
+move 1
+move 2
+
+speed determines status effect application
+
+
+frozen|paralyzed|sleeping are manifest during move
+
+rest resets toxic counter
+
+--------------------------------------------------------------
+
+Pseudocode for battle logic:
+
+    If the opposing Pokémon is under effect of a multi-turn attack, it doesn’t use an attack.
+        Hyper Beam check. If the last move the Pokémon chose for use is Hyper
+        Beam, the Pokémon"must recharge" and skips its attack and then Hyper Beam’s
+        effect ends. (If the Pokémon also flinches, the "X must recharge!" message
+        isn’t shown but Hyper Beam’s effect will still end.)
+
+    turn_init()
+        -- priority 0 - n/a - switch
+        -- priority 1 - spd - quick attack
+        -- priority 2 - spd - main moves
+        -- priority 3 - spd - counter, whirlwind, roar, teleport
+
+        -- just figure out who goes first.
+        -- speed determines the first one. if both are in the same priority.
+        -- if speed is same, a coin is flipped
+
+    turn_update()
+        p1 actions
+        p2 actions
+
+        switch (use pokemon speed to determine first)
+        attack (use pokemon speed to determine first)
+
+    attack(move)
+        trapped   check
+        sleep     check
+        freeze    check
+        paralysis check
+        flinch    check
+        confusion check else damage pokemon
+
+        if none of the above status conditions
+            if not a multiturn attack (dig, fly, hyperbeam, solarbeam, rage, thrash)
+                lower pp for move
+
+            do whatever the attack does
+            -- if it aims on a pokemon, it will call the damage function and pass an attacker.
+
+        -- add action here, because the move could have started poison.
+        -- two abras that keep using teleport to switch out will not take poison damage.
+        -- if you and opponent keep using roar, but opponent is faster than you and both your pokemon have poison damage, you will not take poison damage for as long as opponent uses roar.
+        add_action{
+            if poison/toxic/burn
+                add_action{
+                    ispoisoned!
+                    damage(pkmn, amount)
+                }
+
+            if leech seed
+                add_action{
+                    damage(pkmn, amount)
+                    heal(active, -amount)
+                }
+        }
+
+        -- each time a pkmn is damaged, check effective, substitute, defrost, rage, and ko-status. effective, defrost, sub and rage are checked for moves, not effects
+
+    does_attack_hit(pkmn, attacker)
+        if pkmn.dig or pkmn.fly
+            return no
+        else
+            return smart things based on evasion and accuracy stats
+
+    calculate_damage_amount()
+        -- need to factor in reflect & light screen & crit moves & focus energy -- think i have these now
+        -- need to factor in if burned
+        iscontact = (use movetype, movetype % 2 == 0)
+        strength = 0, .25, .5, 1, 2, 4 (use pkmn.type and movetype)
+        stab = 1, 1.5 (use attacker.type and movetype)
+
+        crit = smart_formula(attacker.focusenergy, attacker.critmove)
+        damage = smart_formula(stab, crit, amount, strength, iscontact) -- crit lvl stab strengtype1 strengthtype2
+
+        if (iscontact and pkmn.reflect) or (not iscontact and pkmn.lightscreen)
+            damage = damage*.5
+
+        ensure damage is an integer before applying it and damage must be at least 1.
+        damage = max(damage\1, 1)
+
+    -- pkmn is the pokemon being damaged
+    -- amount >= 0 and subtracts hp
+
+    -- movetype == none means status attack (doesn't affect substitute)
+    -- returns damage done
+    damage(pkmn, amount, movetype)
+        if movetype != none and pkmn.substitute
+            pkmn.substitute.hp = max(0, pkmn.substitute.hp - amount)
+        else
+            pkmn.hp = max(0, pkmn.hp - amount)
+            
+        if pkmn.iskoed
+            add_ko_action()
+
+        if movetype != none and pkmn.israged
+            add_status_action(pkmn, attack, +1)
+
+        if movetype == fire and pkmn.frozen
+            add_status_action(pkmn is not frozen)
+
+    damage_with_accuracy(pkmn, amount, movetype, attacker)
+        if attacker and not does_attack_hit(pkmn, attacker)
+            add_message("attack missed")
+            return 0, miss
+        else
+            return damage(...)
+
+
+    heal(pkmn, amount)
+        pkmn.hp += amount
+
+--------------------------------------------------------------
+
+Active pokemon data structure:
+
+    {
+        type1    = normal, -- can be changed with conversion
+        type2    = grass,  -- can be changed with conversion
+        moveids  = { 0=13, 1=11, 2=96, 3=33 }, -- copied from shared. move id can change with mimic. or entire table can be changed with transform.
+        movepps  = { 0=10, 1=10, 2=10, 3=10 }, -- this is the same as shared.movepps, unless you use transform and switch it out.
+
+        stages   = { -- lifted with switching or haze
+            special  = 0, -- how much it is modified (-6 to 6)
+            defence  = 0, -- how much it is modified (-6 to 6)
+            attack   = 0, -- how much it is modified (-6 to 6), when pokemon is burned,    this is initially dropped by 2
+            speed    = 0, -- how much it is modified (-6 to 6), when pokemon is paralyzed, this is initially dropped by 2
+            accuracy = 0, -- how much it is modified (-6 to 6)
+            evasion  = 0, -- how much it is modified (-6 to 6)
+        },
+
+        -- if you change something in shared, it is immediately applied to bench too, so it persists when you switch out.
+        shared = {
+            -- things that would change in a battle
+            hp = 100,
+
+            -- major can only be reset with rest
+            major = nil|frozen|poisoned|burned|sleeping|paralyzed|fainted,
+            movepps = { 0=10, 1=10, 2=10, 3=10 }, -- needs to be separate list so mimic works
+            -- other stuff in this table are things that wouldn't change in a battle
+            moveids = { 0=11, 1=19, 2=19, 3=13 },
+            num = 3 -- pokemon number (venasaur in this case)
+            lvl      = 50,  -- set at start of battle
+            maxhp    = 100, -- calculated from level
+            special  = 100, -- calculated from level
+            defence  = 100, -- calculated from level
+            attack   = 100, -- calculated from level
+            speed    = 100, -- calculated from level
+        }
+
+        -- remainder are minor conditions.
+        -- some can only be lifted with switching pokemon out.
+        -- some can be lifted with haze.
+        -- some get lifted on its own or when certain conditions are met.
+
+        -- remember, that haze heals: confused, disabled, focused, misted, reflected, screened, seeded, toxiced
+        -- remember, sleeping does not heal toxic or confuse
+        -- these could all be true
+        confused   = 1-4,   -- confuseray/supersonic/confusion/psybeam/petaldance/thrash
+        disable_m  = 1-4,   -- disable move - only 1 move may be disabled at a time
+        disable_t  = 0-7,   -- the timer for disable. this is 1-7 turns.
+        toxiced    = 1-16,  -- toxic - increase 1 each turn if poisoned. if not poison, then this gets unset
+        focused    = false, -- focusenergy
+        misted     = false, -- mist
+        reflected  = false, -- reflect - half physical
+        screened   = false, -- lightscreen - half special
+        seeded     = false, -- leechseed
+
+        -- no need to store conversion, because conversion can be used infinitely many times
+        critmove   = false, -- karatechop/slash/crabhammer/razorleaf
+        flinching  = false, -- bite/boneclub/hyperfang/headbutt/stomp/lowkick/rollingkick -- resets at end of turn
+        substitute = hp, -- substitute
+        transform  = pkmn_num, -- transform - set, because you can't use transform once you are already transformed
+
+        -- these ones are related, because they are all multiturn attacks, they all don't allow move selection
+        preparing  = false -- dig/fly/skillbash/solarbeam/razorwind/skyattack, used in conjunction with onlymove
+        recharging = 2, -- hyperbeam - uncontrollable 1 turn, recharge should happen after 2 turns no matter what
+
+        rage       = false, -- rage                   - uncontrollable + use a move. attack increases each time you are hit, so no counter needed (use the stages counter)
+        thrashing  = 3-4, -- petaldance/thrash        - uncontrollable + use a move. has a timer (2-3 turns) and get confused at the end
+        trapping   = 2-5, -- bind/clamp/firespin/wrap - use a move. is trapped? (timer 2-5 turns)
+
+        onlymove   = num -- this is the moveid of a multiturn move or nil
+        hmm...
+
+        -- I want sleep/freeze/trap/flinch/paralyze/confuse to all stop multiturn moves.
+        -- I don't want disable to be able to disable an "onlymove"
+        -- you can always switch out? maybe. technically, dig & fly and some other moves prevent it though. trapping moves don't prevent it.
+        -- disable, confuse, thrashing, and trapping subtract 1 at end of each turn
+        -- before attacking, check if the other pokemon is trapping. you can't attack if they are. and they can't trap if they missed the trapping move.
+        -- if preparing, then don't use the move. instead, say "bulbasaur preparing solarbeam"
+        -- if recharging, then don't use the move. instead say "bulbasaur is recharging"
+        -- if your pokemon switches, trapping and trapped are set to false for the oppenent pokemon.
+        -- i should pass turn into move function!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        -- if onlymove == dig or onlymove == fly, you miss...
+        -- you can use a disabled move if it was duplicated with mimic
+
+        -- a move returns the accuracy and damage it would do, it is also able to perform any effects.
+        -- would things like confused would cause dig/fly to end.
+        -- 
+    }
+
+----- RANDOM NOTES COPIED FROM SOMEWHERE ELSE THAT I DONT WANT TO DELETE
+-- pokemon
+-- team_pokemon
+-- active_pokemon
+-- team
+
+-- thanks to bulbapedia: https://bulbapedia.bulbagarden.net/wiki/Stat#Stat
+-- this formula is much simpler at level 50, so I took some parts out.
+--|[f_calc_max_stat]| function(base)
+--    return _ceil(base+.5*93)+5
+--end $$
+
+-- team: team power, alive size
+-- pokemon: 
+
+-- 3 levels of pokemon: browse, fightable, team, active
+
+-- ok, maybe there can be 1 base template with default values.
+-- you just copy a previous one to do whatever
+
+-- CURRENT BROWSE PKMN
+---------------------- these never change
+-- pkmn {
+--   evolvesfrom
+--   name
+--   type1
+--   type2
+--   level -- constant of 50
+--   movelvls
+--   moves_learnable
+--   draw
+--   num
+--   total   -- all the previous stats added together
+--   here, move ids is all the possible moves... maybe
+-- }
+---------------- these change
+-- teampkmn { -- index metatable to pkmn
+--   hp, hurt(), heal() -- should take in the 
+--   set_major
+--   moveids
+--   movepps
+--   spot? this could be useful for checking if you can switch the active pkmn. generally, you can't move around the team/bench/team. you delete and create instead.
+--   major none|paralyze|burn|frozen|poison|faint
+--   toactive() -- returns a new active pokemon, generated from this teampkmn.
+-- }
+---------------- these change
+-- activepkmn { -- index metatable to teampkmn
+--   set_minor() -- transform is number, mimic is number
+--   getstat()
+--   inc_stage()
+--   stages -6 to 6 - accuracy, attack, defense, speed, special, evasion
+--   accuracy -- 100
+--   evasion  -- 100
+--   last_used_move -- needed for mirrormove and mimic. defaults to nil.
+--   turn_damage_taken -- defaults to 0. needed for counter. reset after each turn. this would be set in the "hurt" function. this is partly why we need a separate "hurt" and "heal" function.
+--   -- get_valid_moves() -- if this is 0, that means you use struggle. otherwise, it will return between 1 to 4 move ids. it will not return moves if they have 0 pp or if you are in a multiturn move, or if it is disabled.
+--   -- minor statuses
+--   confused   -- affected by haze
+--   disable_m  -- disable move
+--   disable_t  -- disable o_timer
+--   focused    -- affected by haze
+--   misted     -- affected by haze
+--   reflected  -- affected by haze
+--   screened   -- affected by haze
+--   seeded     -- affected by haze
+--   toxiced    -- affected by haze
+--   critmove   -- karatechop/slash/crabhammer/razorleaf
+--   flinching  -- bite/boneclub/hyperfang/headbutt/stomp/lowkick/rollingkick -- resets at end of turn
+--   substitute -- substitute
+--   transform  -- transform - set, because you can't use transform once you are already transformed
+--   digging    -- dig - uncontrollable + invincible (besides swift)
+--   flying     -- fly - uncontrollable + invincible (besides swift)
+--   preparing  -- skullbash/solarbeam/razorwind/skyattack - uncontrollable + next turn move
+--   recharging -- hyperbeam - uncontrollable 1 turn
+--   rage       -- rage                     - uncontrollable + use a move. attack increases each time you are hit, so %c_no counter needed (use the stages counter)
+--   thrashing  -- petaldance/thrash        - uncontrollable + use a move. has a o_timer (2-3 turns) and get confused at the end
+--   trapping   -- bind/clamp/firespin/wrap - uncontrollable + use a move. is trapped? (o_timer 2-5 turns) recharging? preparing? thrashing?
+--   trapped    -- if you are trapped in a bind/clamp/firespin/wrap
+--   getmove(0-3), or get valid moves? ????
+
+-- }
+--------------- team (or player)... %c_yes! i think...
+-- team {
+--   1-6 - each thing is a teampkmn
+--   can_switch() -- give it an index, it tells you if you can switch with that pkmn
+--   get_next()   -- returns the next team pokemon pokemon that 
+
+--   horde_index = 6 -- only used for horde
+--   active 
+--   name=name1
+--   priority=1
+--   iscpu=iscpu1
+--   actions={}
+--   active=f_team_pkmn_to_active(f_get_next_active(team1))
+--   team=team1
+--   winlogic=p1_win_logic
+--   dielogic=p1_die_logic
+-- }

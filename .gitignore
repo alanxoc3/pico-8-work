@@ -32,3 +32,6 @@ tags
 2023-picodex/spriteviewer/*.png
 2023-picodex/spriteviewer/*.p8
 2023-picodex/spriteviewer/*.gif
+
+2023-bwpicodex/*.png
+2023-bwpicodex/.*.png

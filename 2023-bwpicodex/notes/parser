@@ -1,0 +1,59 @@
+#!/usr/bin/python
+import sys
+import itertools
+
+def ranges(i):
+    for a, b in itertools.groupby(enumerate(i), lambda pair: pair[1] - pair[0]):
+        b = list(b)
+        yield b[0][1], b[-1][1]
+
+myfile = sys.argv[1]
+f = open(myfile, "r")
+ascii = f.read()
+data = []
+lines = ascii.split("\n")
+
+# first loop, populate data
+for line in lines:
+  if line != "":
+    line_parts = line.split("=")
+
+    moves = []
+    for movestr in line_parts[1].split("|"):
+      if movestr != "":
+        moves.append(int(movestr))
+
+    data.append({'evol': int(line_parts[0]), 'moves': moves, 'moveset': set(moves)})
+
+# second loop, populate new move lists
+data_final = []
+for ind in range(len(data)):
+  row = ind
+  while data[row]['evol'] != 0:
+    row = row - data[row]['evol']
+    for move in data[row]['moves']:
+      data[ind]['moveset'].discard(move)
+
+  finalmoves = []
+  for move in data[ind]['moves']:
+    if move in data[ind]['moveset']:
+      finalmoves.append(move)
+
+  data_final.append(finalmoves)
+    
+for moves in data_final:
+  mystrs = []
+  for item in ranges(moves):
+    if item[0] == item[1]:
+      mystrs.append(str(item[0]))
+    elif item[0] == item[1]-1:
+      mystrs.append(str(item[0]))
+      mystrs.append(str(item[1]))
+    else:
+      mystrs.append(str(item[0]) + "-" + str(item[1]))
+
+  print("|".join(mystrs))
+
+# debug
+# for x in data_final:
+#   print(x)

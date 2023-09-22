@@ -1,0 +1,199 @@
+1   - "pallet-town" 
+2   - 
+3   - 
+4   - "pallet-town" 
+5   - 
+6   - 
+7   - "pallet-town" 
+8   - 
+9   - 
+10  - "route-2" "route-24" "route-25" "viridian-forest" 
+11  - "route-24" "route-25" "viridian-forest" 
+12  - 
+13  - "route-2" "route-24" "route-25" "viridian-forest" 
+14  - "route-24" "route-25" "viridian-forest" 
+15  - 
+16  - "route-1" "route-12" "route-13" "route-14" "route-15" "route-2" "route-21" "route-24" "route-25" "route-3" "route-5" "route-6" "route-7" "route-8" 
+17  - "route-14" "route-15" "route-21" 
+18  - 
+19  - "route-1" "route-16" "route-2" "route-21" "route-22" "route-4" "route-9" 
+20  - "route-16" "route-17" "route-18" "route-21" 
+21  - "route-10" "route-11" "route-16" "route-17" "route-18" "route-22" "route-23" "route-3" "route-4" "route-9" 
+22  - "route-17" "route-18" "route-23" 
+23  - "route-10" "route-11" "route-23" "route-4" "route-8" "route-9" 
+24  - "cerulean-cave" "route-23" 
+25  - "power-plant" "viridian-forest" 
+26  - "cerulean-cave" "power-plant" 
+27  - "route-10" "route-11" "route-23" "route-4" "route-8" "route-9" 
+28  - "cerulean-cave" "route-23" 
+29  - "route-22" "safari-zone" 
+30  - "safari-zone" 
+31  - 
+32  - "route-22" "safari-zone" 
+33  - "safari-zone" 
+34  - 
+35  - "mt-moon" 
+36  - 
+37  - "cinnabar-island" "route-7" "route-8" 
+38  - 
+39  - "route-3" 
+40  - "cerulean-cave" 
+41  - "mt-moon" "rock-tunnel" "seafoam-islands" "victory-road" 
+42  - "cerulean-cave" "seafoam-islands" "victory-road" 
+43  - "route-12" "route-13" "route-14" "route-15" "route-24" "route-25" "route-5" "route-6" "route-7" 
+44  - "route-12" "route-13" "route-14" "route-15" 
+45  - 
+46  - "mt-moon" "safari-zone" 
+47  - "cerulean-cave" "safari-zone" 
+48  - "route-12" "route-13" "route-14" "route-15" "safari-zone" 
+49  - "cerulean-cave" "safari-zone" "victory-road" 
+50  - "digletts-cave" 
+51  - "digletts-cave" 
+52  - "route-5" "route-6" "route-7" "route-8" 
+53  - 
+54  - "cerulean-city" "route-24" "route-25" "safari-zone" "seafoam-islands" 
+55  - "seafoam-islands" 
+56  - "route-5" "route-6" "route-7" "route-8" 
+57  - 
+58  - "cinnabar-island" "route-7" "route-8" 
+59  - 
+60  - "celadon-city" "cerulean-cave" "cerulean-city" "cinnabar-island" "fuchsia-city" "pallet-town" "route-10" "route-11" "route-12" "route-13" "route-17" "route-18" "route-19" "route-20" "route-21" "route-22" "route-23" "route-24" "route-25" "route-6" "safari-zone" "seafoam-islands" "vermilion-city" "viridian-city" 
+61  - "celadon-city" "route-10" 
+62  - 
+63  - "route-24" "route-25" 
+64  - "cerulean-cave" 
+65  - 
+66  - "rock-tunnel" "victory-road" 
+67  - "victory-road" 
+68  - 
+69  - "route-12" "route-13" "route-14" "route-15" "route-24" "route-25" "route-5" "route-6" "route-7" 
+70  - "route-12" "route-13" "route-14" "route-15" 
+71  - 
+72  - "pallet-town" "route-12" "route-13" "route-17" "route-18" "route-19" "route-20" "route-21" "viridian-city" 
+73  - 
+74  - "mt-moon" "rock-tunnel" "victory-road" 
+75  - "victory-road" 
+76  - 
+77  - "cinnabar-island" 
+78  - 
+79  - "celadon-city" "route-10" "safari-zone" "seafoam-islands" 
+80  - "cerulean-cave" "route-23" "seafoam-islands" 
+81  - "power-plant" 
+82  - "cerulean-cave" "power-plant" 
+83  - 
+84  - "route-16" "route-17" "route-18" "safari-zone" 
+85  - "cerulean-cave" 
+86  - "seafoam-islands" 
+87  - "seafoam-islands" 
+88  - "cinnabar-island" 
+89  - "cinnabar-island" 
+90  - "cinnabar-island" "route-11" "route-19" "route-20" "route-21" "route-6" "seafoam-islands" "vermilion-city" 
+91  - 
+92  - "lavender-town" 
+93  - "lavender-town" 
+94  - 
+95  - "rock-tunnel" "victory-road" 
+96  - "route-11" 
+97  - "cerulean-cave" 
+98  - "cerulean-city" "fuchsia-city" "route-11" "route-12" "route-13" "route-17" "route-18" "route-24" "route-25" "route-6" "safari-zone" "seafoam-islands" "vermilion-city" 
+99  - "cerulean-cave" "route-23" "seafoam-islands" 
+100 - "power-plant" "route-10" 
+101 - "cerulean-cave" "power-plant" 
+102 - "safari-zone" 
+103 - 
+104 - "lavender-town" 
+105 - "cerulean-cave" "victory-road" 
+106 - "saffron-city" 
+107 - "saffron-city" 
+108 - 
+109 - "cinnabar-island" 
+110 - "cinnabar-island" 
+111 - "safari-zone" 
+112 - "cerulean-cave" 
+113 - "cerulean-cave" "safari-zone" 
+114 - "route-21" 
+115 - "safari-zone" 
+116 - "cinnabar-island" "route-19" "route-20" "route-21" "seafoam-islands" 
+117 - "cerulean-cave" "route-23" "seafoam-islands" 
+118 - "celadon-city" "cerulean-cave" "cerulean-city" "cinnabar-island" "fuchsia-city" "pallet-town" "route-10" "route-11" "route-12" "route-13" "route-17" "route-18" "route-19" "route-20" "route-21" "route-22" "route-23" "route-24" "route-25" "route-6" "safari-zone" "seafoam-islands" "vermilion-city" "viridian-city" 
+119 - "cerulean-cave" "fuchsia-city" "route-23" 
+120 - "cinnabar-island" "route-19" "route-20" "route-21" "seafoam-islands" 
+121 - 
+122 - 
+123 - "safari-zone" 
+124 - 
+125 - "power-plant" 
+126 - "cinnabar-island" 
+127 - "safari-zone" 
+128 - "safari-zone" 
+129 - "celadon-city" "cerulean-cave" "cerulean-city" "cinnabar-island" "fuchsia-city" "pallet-town" "route-10" "route-11" "route-12" "route-13" "route-17" "route-18" "route-19" "route-20" "route-21" "route-22" "route-23" "route-24" "route-25" "route-4" "route-6" "safari-zone" "seafoam-islands" "vermilion-city" "viridian-city" 
+130 - 
+131 - "saffron-city" 
+132 - "cerulean-cave" "route-13" "route-14" "route-15" "route-23" 
+133 - "celadon-city" 
+134 - 
+135 - 
+136 - 
+137 - 
+138 - 
+139 - 
+140 - 
+141 - 
+142 - 
+143 - "route-12" "route-16" 
+144 - "seafoam-islands" 
+145 - "power-plant" 
+146 - "victory-road" 
+147 - "safari-zone" 
+148 - 
+149 - 
+150 - "cerulean-cave" 
+151 - 
+
+
+
+Possible different locations:
+
+"celadon-city"
+"cerulean-cave"
+"cerulean-city"
+"cinnabar-island"
+"digletts-cave"
+"fuchsia-city"
+"lavender-town"
+"mt-moon"
+"pallet-town"
+"power-plant"
+"rock-tunnel"
+"route-1"
+"route-10"
+"route-11"
+"route-12"
+"route-13"
+"route-14"
+"route-15"
+"route-16"
+"route-17"
+"route-18"
+"route-19"
+"route-2"
+"route-20"
+"route-21"
+"route-22"
+"route-23"
+"route-24"
+"route-25"
+"route-3"
+"route-4"
+"route-5"
+"route-6"
+"route-7"
+"route-8"
+"route-9"
+"safari-zone"
+"saffron-city"
+"seafoam-islands"
+"vermilion-city"
+"victory-road"
+"viridian-city"
+"viridian-forest"
