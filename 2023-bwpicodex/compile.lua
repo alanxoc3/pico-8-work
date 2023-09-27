@@ -8,165 +8,161 @@ function vget(offset, x, y)
     else             return (val & 0x0f) end
 end
 
--- px9 compression
-function px9_comp(x0,y0,w,h,dest,vget)
-    local dest0=dest
-    local bit=1
-    local byte=0
-
-    local function vlist_val(l, val)
-        -- find position and move
-        -- to head of the list
-
---[ 2-3x faster than block below
-        local v,i=l[1],1
-        while v!=val do
-            i+=1
-            v,l[i]=l[i],v
-        end
-        l[1]=val
-        return i
---]]
-
---[[ 8 tokens smaller than above
-        for i,v in ipairs(l) do
-            if v==val then
-                add(l,deli(l,i),1)
-                return i
-            end
-        end
---]]
+-- w=128, h=512 (4 spritesheets). 16x16 squares
+function dex_compress(dest, vget)
+  local dest0 = dest
+  for y=0,511 do
+    for x=0,127,8 do
+      local col = 0
+      for v=0,7 do
+        col = col << 1
+        col = col | (vget(x+v, y) > 0 and 1 or 0)
+      end
+      poke(dest, col)
+      dest += 1
     end
-
-    local cache,cache_bits=0,0
-    function putbit(bval)
-     cache=cache<<1|bval
-     cache_bits+=1
-        if cache_bits==8 then
-            poke(dest,cache)
-            dest+=1
-            cache,cache_bits=0,0
-        end
-    end
-
-    function putval(val, bits)
-        for i=bits-1,0,-1 do
-            putbit(val>>i&1)
-        end
-    end
-
-    function putnum(val)
-        local bits = 0
-        repeat
-            bits += 1
-            local mx=(1<<bits)-1
-            local vv=min(val,mx)
-            putval(vv,bits)
-            val -= vv
-        until vv<mx
-    end
-
-
-    -- first_used
-
-    local el={}
-    local found={}
-    local highest=0
-    for y=y0,y0+h-1 do
-        for x=x0,x0+w-1 do
-            c=vget(x,y)
-            if not found[c] then
-                found[c]=true
-                add(el,c)
-                highest=max(highest,c)
-            end
-        end
-    end
-
-    -- header
-
-    local bits=1
-    while highest >= 1<<bits do
-        bits+=1
-    end
-
-    putnum(w-1)
-    putnum(h-1)
-    putnum(bits-1)
-    putnum(#el-1)
-    for i=1,#el do
-        putval(el[i],bits)
-    end
-
-
-    -- data
-
-    local pr={} -- predictions
-
-    local dat={}
-
-    for y=y0,y0+h-1 do
-        for x=x0,x0+w-1 do
-            local v=vget(x,y)
-
-            local a=y>y0 and vget(x,y-1) or 0
-
-            -- create vlist if needed
-            local l=pr[a] or {unpack(el)}
-            pr[a]=l
-
-            -- add to vlist
-            add(dat,vlist_val(l,v))
-           
-            -- and to running list
-            vlist_val(el, v)
-        end
-    end
-
-    -- write
-    -- store bit-0 as runtime len
-    -- start of each run
-
-    local nopredict
-    local pos=1
-
-    while pos <= #dat do
-        -- count length
-        local pos0=pos
-
-        if nopredict then
-            while dat[pos]!=1 and pos<=#dat do
-                pos+=1
-            end
-        else
-            while dat[pos]==1 and pos<=#dat do
-                pos+=1
-            end
-        end
-
-        local splen = pos-pos0
-        putnum(splen-1)
-
-        if nopredict then
-            -- values will all be >= 2
-            while pos0 < pos do
-                putnum(dat[pos0]-2)
-                pos0+=1
-            end
-        end
-
-        nopredict=not nopredict
-    end
-
-    if cache_bits>0 then
-        -- flush
-        poke(dest,cache<<8-cache_bits)
-        dest+=1
-    end
-
-    return dest-dest0
+  end
+  return dest-dest0
 end
 
+-- px9 compression
+-- x0, y0 -> 0, 0
+-- w, h -> 128, 128 (a full pico8 screen)
+-- dest -> where to write the encoded stuff
+-- vget -> a function to get pixels given an x and y
+-- returns how many bytes were written
+function px9_comp(x0,y0,w,h,dest,vget)
+  local dest0=dest -- this is used at the bottom to figure out how many bytes were written
+  local bit=1 -- unused???? that's dumb....
+  local byte=0 -- unused??? that's dumb....
+
+  -- l is a list of colors
+  -- val is a color
+  local function vlist_val(l, val) -- returns the index of where the color was in the list and moves the color to the first spot in the list, all colors before are moved right by 1
+    local v,i=l[1],1 -- v is the first color
+    while v!=val do -- while current color is not the color inputted into the function
+      i+=1
+      v,l[i]=l[i],v -- shift the list to the right
+    end
+    l[1]=val -- set the first thing in the list to the color for the function
+    return i -- return where the color was
+  end
+
+  local cache,cache_bits=0,0 -- cache is the current value, cache_bits is how many bits are in the cache
+  function putbit(bval) -- just caches bits until 8 bits are collected, then pokes the 8 bits.
+   cache=cache<<1|bval
+   cache_bits+=1
+    if cache_bits==8 then
+      poke(dest,cache)
+      dest+=1
+      cache,cache_bits=0,0
+    end
+  end
+
+  function putval(val, bits) -- pokes val, with x number bits.
+    for i=bits-1,0,-1 do
+      putbit(val>>i&1)
+    end
+  end
+
+  function putnum(val) -- goal is to put a number into the memory, but skip the leading zero bits
+    local bits = 0
+    repeat -- executed at least once
+      bits += 1
+      local mx=(1<<bits)-1 -- first loop iteration, this is: 1, then 3, 7, 15, 31...
+      local vv=min(val,mx)
+      putval(vv,bits) -- put 1 bit, then 2 bits, then 3 bits, then 4 bits, then 5 bits
+      val -= vv
+    until vv<mx
+  end
+
+  -- ALG STARTS HERE
+  local el={}    -- list of colors used.
+  local found={} -- set/tfmap (c -> true) of colors used. contains same info as el.
+  local highest=0 -- the color that has the biggest number (up to 15 obviously), used to determine how many bits needed to store colors?
+  for y=y0,y0+h-1 do   -- from 0 to 127
+    for x=x0,x0+w-1 do -- from 0 to 127
+      c=vget(x,y)      -- c was never defined, global var. c means color
+      if not found[c] then -- if the color is used
+        found[c]=true      -- set to true, add the color to some list
+        add(el,c)
+        highest=max(highest,c) -- highest is the biggest color number
+      end
+    end
+  end
+
+  -- header
+  local bits=1
+  while highest >= 1<<bits do -- goes from 2, 4, 8
+    bits+=1 -- highest bits could be is 4. "highest" var is never used again.
+  end
+
+  -- add these numbers to the address space
+  putnum(w-1) -- 127 (if using full screen)
+  putnum(h-1) -- 127 (if using full screen)
+  putnum(bits-1) -- possible bits-1 is 1 to 3 i think. again, bits is the number of bits the highest color is (number of bits colors take)
+  putnum(#el-1) -- the number of different colors used, minus 1. highest possible is 15, lowest is 0
+  for i=1,#el do
+    putval(el[i],bits) -- add all the possible colors to memory
+  end
+
+  -- data
+  local pr={} -- predictions. this list is for the pixel above the current pixel somehow
+  local dat={} --
+  for y=y0,y0+h-1 do   -- for each y. eg: 0 -> 127
+    for x=x0,x0+w-1 do -- for each x. eg: 0 -> 127
+      local v=vget(x,y) -- v is the pixel color.
+      local a=y>y0 and vget(x,y-1) or 0 -- get the color above this pixel (or 0 if there is nothing above)
+      local l=pr[a] or {unpack(el)} -- if predictions doesn't have the current color, set pred[color] to all colors possible
+      pr[a]=l -- ditto above
+
+      add(dat,vlist_val(l,v)) -- adds index of val in vlist and changes the pred list somehow
+
+      vlist_val(el, v) -- changes the "possible colors" list
+    end
+  end
+
+  -- write
+  -- store bit-0 as runtime len
+  -- start of each run
+
+  local nopredict -- true means skipping x amount until a repeat. false means storing how many repeat
+  local pos=1
+
+  while pos <= #dat do -- dat is as long as w*h, so how many pixels
+    -- count length
+    local pos0=pos
+
+    if nopredict then -- nopredict alternates true or false every loop iteration
+      while dat[pos]!=1 and pos<=#dat do
+        pos+=1
+      end
+    else -- first loop iteration goes here
+      while dat[pos]==1 and pos<=#dat do
+        pos+=1
+      end
+    end
+
+    local splen = pos-pos0 -- splen is how long the position changed in this loop iteration
+    putnum(splen-1) -- obviously save the number
+    if nopredict then -- first loop iteration doesn't go here
+      -- values will all be >= 2
+      while pos0 < pos do
+        putnum(dat[pos0]-2)
+        pos0+=1
+      end
+    end
+    nopredict=not nopredict
+  end
+
+  if cache_bits>0 then
+    -- flush
+    poke(dest,cache<<8-cache_bits)
+    dest+=1
+  end
+
+  return dest-dest0
+end
 
 function log(logstr)
     printh(logstr or '')
@@ -181,8 +177,13 @@ function encode_cart(message, cartname, w, h, func)
     return ENCODE_OFFSET
 end
 
+function load_sprites(cartname, dest)
+  reload(dest, 0x0000, 0x2000, cartname)
+  log("loaded sprites from cart: "..cartname.." to "..tostr(dest, 0x1)) -- show numbers as hex
+end
+
 function myinit()
-    ENCODE_OFFSET=12 -- this must be set to where data can start writing
+    ENCODE_OFFSET=0 -- this must be set to where data can start writing
     local enc_vget = function(...) return vget(0x8000, ...) end
 
     cls()
@@ -198,14 +199,23 @@ function myinit()
                                               log("end of cart     | pos: 0x4300")
                                               log()
 
-    poke2(0x0000, ENCODE_OFFSET) encode_cart     ("pokemon 0-63   ", "000-063.p8", 128, 128, enc_vget)
-    poke2(0x0002, ENCODE_OFFSET) encode_cart     ("pokemon 64-127 ", "064-127.p8", 128, 128, enc_vget)
-    poke2(0x0004, ENCODE_OFFSET) encode_cart     ("pokemon 128-151", "128-151.p8", 128, 128, enc_vget)
+    load_sprites("000-063.p8", 0x8000)
+    load_sprites("064-127.p8", 0xa000)
+    load_sprites("128-191.p8", 0xc000)
+    load_sprites("192-255.p8", 0xe000)
 
-    poke(0x5f56, 0xa0) -- mget points to the loaded map.
-    poke2(0x0006, ENCODE_OFFSET) encode_cart     ("picodex skin   ", "128-151.p8", 32,  11,  mget)
-    poke2(0x0008, ENCODE_OFFSET) encode_pkmv_data("pokemon moves  ", g_pkmn_move_data)
-    poke2(0x000a, ENCODE_OFFSET) encode_trnr_data("pokemon trnrs  ", g_trainer_data)   -- 40*6  = 240
+    ENCODE_OFFSET += dex_compress(ENCODE_OFFSET, enc_vget)
+    log("offset: "..tostr(ENCODE_OFFSET, 0x1))
+
+    -- poke2(0x0000, ENCODE_OFFSET) encode_cart     ("pokemon 0-63   ", "000-063.p8", 128, 128, enc_vget)
+    -- poke2(0x0002, ENCODE_OFFSET) encode_cart     ("pokemon 64-127 ", "064-127.p8", 128, 128, enc_vget)
+    -- poke2(0x0004, ENCODE_OFFSET) encode_cart     ("pokemon 128-191", "128-191.p8", 128, 128, enc_vget)
+    -- poke2(0x0004, ENCODE_OFFSET) encode_cart     ("pokemon 192-255", "192-255.p8", 128, 128, enc_vget)
+
+    -- poke(0x5f56, 0xa0) -- mget points to the loaded map.
+    -- poke2(0x0006, ENCODE_OFFSET) encode_cart     ("picodex skin   ", "128-151.p8", 32,  11,  mget)
+    -- poke2(0x0008, ENCODE_OFFSET) encode_pkmv_data("pokemon moves  ", g_pkmn_move_data)
+    -- poke2(0x000a, ENCODE_OFFSET) encode_trnr_data("pokemon trnrs  ", g_trainer_data)   -- 40*6  = 240
 
                                               log("end of compile  | pos: "..tostr(ENCODE_OFFSET, 0x1))
 
@@ -246,6 +256,7 @@ function strip_spaces(data)
     return newdata
 end
 
+-- johto adds 86 moves. originally, there are 165 moves. That makes 251 moves. Am I lucky or what? can still use the reserved 4 things below.
 EVENT = 252 -- is event
 TMHM  = 253 -- is tm/hm
 DASH  = 254 -- is a dash/range
@@ -355,7 +366,40 @@ P_FLAREON     = 136 P_PORYGON     = 137 P_OMANYTE     = 138 P_OMASTAR     = 139
 P_KABUTO      = 140 P_KABUTOPS    = 141 P_AERODACTYL  = 142 P_SNORLAX     = 143
 P_ARTICUNO    = 144 P_ZAPDOS      = 145 P_MOLTRES     = 146 P_DRATINI     = 147
 P_DRAGONAIR   = 148 P_DRAGONITE   = 149 P_MEWTWO      = 150 P_MEW         = 151
+P_CHIKORITA   = 152 P_BAYLEEF     = 153 P_MEGANIUM    = 154 P_CYNDAQUIL   = 155
+P_QUILAVA     = 156 P_TYPHLOSION  = 157 P_TOTODILE    = 158 P_CROCONAW    = 159
+P_FERALIGATR  = 160 P_SENTRET     = 161 P_FURRET      = 162 P_HOOTHOOT    = 163
+P_NOCTOWL     = 164 P_LEDYBA      = 165 P_LEDIAN      = 166 P_SPINARAK    = 167
+P_ARIADOS     = 168 P_CROBAT      = 169 P_CHINCHOU    = 170 P_LANTURN     = 171
+P_PICHU       = 172 P_CLEFFA      = 173 P_IGGLYBUFF   = 174 P_TOGEPI      = 175
+P_TOGETIC     = 176 P_NATU        = 177 P_XATU        = 178 P_MAREEP      = 179
+P_FLAAFFY     = 180 P_AMPHAROS    = 181 P_BELLOSSOM   = 182 P_MARILL      = 183
+P_AZUMARILL   = 184 P_SUDOWOODO   = 185 P_POLITOED    = 186 P_HOPPIP      = 187
+P_SKIPLOOM    = 188 P_JUMPLUFF    = 189 P_AIPOM       = 190 P_SUNKERN     = 191
+P_SUNFLORA    = 192 P_YANMA       = 193 P_WOOPER      = 194 P_QUAGSIRE    = 195
+P_ESPEON      = 196 P_UMBREON     = 197 P_MURKROW     = 198 P_SLOWKING    = 199
+P_MISDREAVUS  = 200 P_UNOWN       = 201 P_WOBBUFFET   = 202 P_GIRAFARIG   = 203
+P_PINECO      = 204 P_FORRETRESS  = 205 P_DUNSPARCE   = 206 P_GLIGAR      = 207
+P_STEELIX     = 208 P_SNUBBULL    = 209 P_GRANBULL    = 210 P_QWILFISH    = 211
+P_SCIZOR      = 212 P_SHUCKLE     = 213 P_HERACROSS   = 214 P_SNEASEL     = 215
+P_TEDDIURSA   = 216 P_URSARING    = 217 P_SLUGMA      = 218 P_MAGCARGO    = 219
+P_SWINUB      = 220 P_PILOSWINE   = 221 P_CORSOLA     = 222 P_REMORAID    = 223
+P_OCTILLERY   = 224 P_DELIBIRD    = 225 P_MANTINE     = 226 P_SKARMORY    = 227
+P_HOUNDOUR    = 228 P_HOUNDOOM    = 229 P_KINGDRA     = 230 P_PHANPY      = 231
+P_DONPHAN     = 232 P_PORYGON2    = 233 P_STANTLER    = 234 P_SMEARGLE    = 235
+P_TYROGUE     = 236 P_HITMONTOP   = 237 P_SMOOCHUM    = 238 P_ELEKID      = 239
+P_MAGBY       = 240 P_MILTANK     = 241 P_BLISSEY     = 242 P_RAIKOU      = 243
+P_ENTEI       = 244 P_SUICUNE     = 245 P_LARVITAR    = 246 P_PUPITAR     = 247
+P_TYRANITAR   = 248 P_LUGIA       = 249 P_HOOH        = 250 P_CELEBI      = 251
 
+-- all trainer types in pkmn crystal. adds a few.
+-- ???, Beauty, Biker, Bird Keeper, Blackbelt, Boarder, Bug Catcher, Burgular, Camper, Champion, Cooltrainer, Firebreather, Fisher, Gentleman, Guitarist, Gym Leader, Hiker, Juggler, Kanto Elite Four, Kimono Girl, Lass, Medium, MysticalMan, Officer, Picnicker, Pokefan, Pokemaniac, Pokemon Trainer, Psychic, Rival, Rocket, Rocket Executive, Rocket Grunt, Sage, Sailor, Schoolboy, Scientist, Skier, Super Nerd, Swimmer, Teacher, Twins, Youngster
+-- all gym leaders:
+-- Gym Leader Falkner, Gym Leader Bugsy, Gym Leader Whitney, Gym Leader Morty, Gym Leader Chuck, Gym Leader Jasmine, Gym Leader Pryce, Gym Leader Clair, Gym Leader Lt. Surge, Gym Leader Sabrina, Gym Leader Erika, Gym Leader Janine, Gym Leader Misty, Gym Leader Brock, Gym Leader Blaine, Gym Leader Blue
+-- all elite 4 champions or whatever you call it:
+-- Kanto Elite Four Will, Kanto Elite Four Koga, Kanto Elite Four Bruno, Kanto Elite Four Karen, Pokemon Trainer Red
+
+-- probably have 64 trainers in total (24 more with johto)
 -- second half of trainer data is stored here. first half is stored in code.
 -- this was done at the very end of picodex implementation. had to remove newline characters from code to do so.
 g_trainer_data = {
@@ -412,6 +456,12 @@ g_trainer_data = {
 
 -- from missingno (0) to mew (151), these are the tms they can learn.
 -- 1-50 are tms. 51-55 are hms. There shouldn't be anything higher than that.
+-- v will have to contain the index of the pre-evolution (no extra space)
+-- will need to add 2 types, and one more column to all pokemon (spd/spa)
+-- pokemon will likely have more moves they can learn too :(
+
+-- sections: move tutor, egg moves, learn, prev evolution, tm & hm, gen1
+-- beat horde to unlock missingno (might not be possible now, lol)
 g_pkmn_move_data =
 --v t1         t2        hp  att def spd spc  learn                                    tm & event
 [[0|T_BIRD    |T_NORMAL  |33 |136|0  |29 |6   |12|43                                   |TM |1-3|5|6|9-11|13|14|17|19|20|25-27|29|30|44|45|49-52

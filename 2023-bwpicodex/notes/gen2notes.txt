@@ -1,0 +1,34 @@
+some notes:
+- sketch will behave like gen 3. it will copy a move for the duration of the battle, but not after that. So, slightly better than mimic. ditto could learn an extra move like this. by transforming into smeargle.
+- sketch otherwise behaves normally and can't copy transform, metronome, or mimic... maybe. gen4 and up allow those moves to be copied.
+
+might have to introduce gender to picodex, to make attract work.
+- attract bypasses substitute
+
+chansey -> female
+hitmons -> male
+nidos -> m/f
+kanga -> f
+jynx -> f
+taur -> m
+miltank -> f
+
+these cannot breed: (unrelated)
+  legendaries: ARTICUNO ZAPDOS MOLTRES MEWTWO MEW UNOWN RAIKOU ENTEI SUICUNE LUGIA HO-OH CELEBI
+  babies: PICHU CLEFFA IGGLYBUFF SMOOCHUM ELEKID MAGBY
+
+
+these pokemon are "genderless". Attract won't work on them:
+  Magnemite Magneton Voltorb Electrode Staryu Starmie Ditto Porygon Articuno Zapdos Moltres Mewtwo Mew Unown Porygon2 Raikou Entei Suicune Lugia Ho-Oh Celebi
+
+unless the pokemon using attract is also genderless. (mew for example.)
+
+curse is a ??? type move, but maybe it should be a ghost type in this.
+
+for destiny bond, the opponent would faint right after user.
+
+Oooo baton pass will pass all status effects. Not just stat changes, but also other things like substitute. but not transform.
+
+baton pass will pass to the next pokemon in party. if last, then it will wrap to first.
+
+endure is before extreme speed:q

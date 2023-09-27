@@ -49,7 +49,7 @@ end $$
         return val
     end
 
-    function gnp(n)
+    function gnp(n) -- gets a number in a weird format. ex: 0 = 0, 1 00 = 1, 1 11 001 = 5
         local bits=0
         repeat
             bits+=1
@@ -59,21 +59,28 @@ end $$
         return n
     end
 
+    -- this section consumes the header section that the compress function setup
+    -- w=width, h_1=height, eb=possible bits per color
+    -- splen is 0, x and y are 0. el is a list. pr is a dict.
+    -- predict is a boolean value, defaults to false/nil
     local w,h_1, eb,el,pr, x,y, splen, predict = gnp"1",gnp"0", gnp"1",{},{}, 0,0, 0
-    for i=1,gnp"1" do add(el,getval(eb)) end
+    for i=1,gnp"1" do -- gnp"1" here is number of different colors used. so setting el to the list of colors
+      add(el,getval(eb))
+    end
+
     for y=0,h_1 do
         for x=0,w-1 do
             splen-=1
-            if(splen<1) then
-                splen,predict=gnp"1",not predict
+            if splen<1 then -- first loop iteration goes into here
+              splen,predict=gnp"1",not predict -- gnp"1" gets: putnum(splen-1)
             end
             local a=y>0 and f_vget(x,y-1) or 0
             local l=pr[a] or {unpack(el)}
             pr[a]=l
-            local v=l[predict and 1 or gnp"2"]
+            local v=l[predict and 1 or gnp"2"] -- gnp"2" gets: putnum(dat[pos0]-2)
             vlist_val(l, v)
             vlist_val(el, v)
-            f_vset(x,y,v)
+            f_vset(x,y,v) -- set x,y to v. duh
         end
     end
 end $$
