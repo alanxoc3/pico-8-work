@@ -9,8 +9,7 @@ function vget(offset, x, y)
 end
 
 -- w=128, h=512 (4 spritesheets). 16x16 squares
-function dex_compress(dest, vget)
-  local dest0 = dest
+function dex_compress(vget)
   for y=0,511 do
     for x=0,127,8 do
       local col = 0
@@ -18,150 +17,10 @@ function dex_compress(dest, vget)
         col = col << 1
         col = col | (vget(x+v, y) > 0 and 1 or 0)
       end
-      poke(dest, col)
-      dest += 1
+      poke(ENCODE_OFFSET, col)
+      ENCODE_OFFSET += 1
     end
   end
-  return dest-dest0
-end
-
--- px9 compression
--- x0, y0 -> 0, 0
--- w, h -> 128, 128 (a full pico8 screen)
--- dest -> where to write the encoded stuff
--- vget -> a function to get pixels given an x and y
--- returns how many bytes were written
-function px9_comp(x0,y0,w,h,dest,vget)
-  local dest0=dest -- this is used at the bottom to figure out how many bytes were written
-  local bit=1 -- unused???? that's dumb....
-  local byte=0 -- unused??? that's dumb....
-
-  -- l is a list of colors
-  -- val is a color
-  local function vlist_val(l, val) -- returns the index of where the color was in the list and moves the color to the first spot in the list, all colors before are moved right by 1
-    local v,i=l[1],1 -- v is the first color
-    while v!=val do -- while current color is not the color inputted into the function
-      i+=1
-      v,l[i]=l[i],v -- shift the list to the right
-    end
-    l[1]=val -- set the first thing in the list to the color for the function
-    return i -- return where the color was
-  end
-
-  local cache,cache_bits=0,0 -- cache is the current value, cache_bits is how many bits are in the cache
-  function putbit(bval) -- just caches bits until 8 bits are collected, then pokes the 8 bits.
-   cache=cache<<1|bval
-   cache_bits+=1
-    if cache_bits==8 then
-      poke(dest,cache)
-      dest+=1
-      cache,cache_bits=0,0
-    end
-  end
-
-  function putval(val, bits) -- pokes val, with x number bits.
-    for i=bits-1,0,-1 do
-      putbit(val>>i&1)
-    end
-  end
-
-  function putnum(val) -- goal is to put a number into the memory, but skip the leading zero bits
-    local bits = 0
-    repeat -- executed at least once
-      bits += 1
-      local mx=(1<<bits)-1 -- first loop iteration, this is: 1, then 3, 7, 15, 31...
-      local vv=min(val,mx)
-      putval(vv,bits) -- put 1 bit, then 2 bits, then 3 bits, then 4 bits, then 5 bits
-      val -= vv
-    until vv<mx
-  end
-
-  -- ALG STARTS HERE
-  local el={}    -- list of colors used.
-  local found={} -- set/tfmap (c -> true) of colors used. contains same info as el.
-  local highest=0 -- the color that has the biggest number (up to 15 obviously), used to determine how many bits needed to store colors?
-  for y=y0,y0+h-1 do   -- from 0 to 127
-    for x=x0,x0+w-1 do -- from 0 to 127
-      c=vget(x,y)      -- c was never defined, global var. c means color
-      if not found[c] then -- if the color is used
-        found[c]=true      -- set to true, add the color to some list
-        add(el,c)
-        highest=max(highest,c) -- highest is the biggest color number
-      end
-    end
-  end
-
-  -- header
-  local bits=1
-  while highest >= 1<<bits do -- goes from 2, 4, 8
-    bits+=1 -- highest bits could be is 4. "highest" var is never used again.
-  end
-
-  -- add these numbers to the address space
-  putnum(w-1) -- 127 (if using full screen)
-  putnum(h-1) -- 127 (if using full screen)
-  putnum(bits-1) -- possible bits-1 is 1 to 3 i think. again, bits is the number of bits the highest color is (number of bits colors take)
-  putnum(#el-1) -- the number of different colors used, minus 1. highest possible is 15, lowest is 0
-  for i=1,#el do
-    putval(el[i],bits) -- add all the possible colors to memory
-  end
-
-  -- data
-  local pr={} -- predictions. this list is for the pixel above the current pixel somehow
-  local dat={} --
-  for y=y0,y0+h-1 do   -- for each y. eg: 0 -> 127
-    for x=x0,x0+w-1 do -- for each x. eg: 0 -> 127
-      local v=vget(x,y) -- v is the pixel color.
-      local a=y>y0 and vget(x,y-1) or 0 -- get the color above this pixel (or 0 if there is nothing above)
-      local l=pr[a] or {unpack(el)} -- if predictions doesn't have the current color, set pred[color] to all colors possible
-      pr[a]=l -- ditto above
-
-      add(dat,vlist_val(l,v)) -- adds index of val in vlist and changes the pred list somehow
-
-      vlist_val(el, v) -- changes the "possible colors" list
-    end
-  end
-
-  -- write
-  -- store bit-0 as runtime len
-  -- start of each run
-
-  local nopredict -- true means skipping x amount until a repeat. false means storing how many repeat
-  local pos=1
-
-  while pos <= #dat do -- dat is as long as w*h, so how many pixels
-    -- count length
-    local pos0=pos
-
-    if nopredict then -- nopredict alternates true or false every loop iteration
-      while dat[pos]!=1 and pos<=#dat do
-        pos+=1
-      end
-    else -- first loop iteration goes here
-      while dat[pos]==1 and pos<=#dat do
-        pos+=1
-      end
-    end
-
-    local splen = pos-pos0 -- splen is how long the position changed in this loop iteration
-    putnum(splen-1) -- obviously save the number
-    if nopredict then -- first loop iteration doesn't go here
-      -- values will all be >= 2
-      while pos0 < pos do
-        putnum(dat[pos0]-2)
-        pos0+=1
-      end
-    end
-    nopredict=not nopredict
-  end
-
-  if cache_bits>0 then
-    -- flush
-    poke(dest,cache<<8-cache_bits)
-    dest+=1
-  end
-
-  return dest-dest0
 end
 
 function log(logstr)
@@ -170,63 +29,44 @@ function log(logstr)
     flip()
 end
 
-function encode_cart(message, cartname, w, h, func)
-    reload(0x8000, 0x0000, 0x3000, cartname)
-    log(message.." | pos: "..tostr(ENCODE_OFFSET, 0x1)) -- show numbers as hex
-    ENCODE_OFFSET += px9_comp(0,0,w,h,ENCODE_OFFSET,func)
-    return ENCODE_OFFSET
-end
-
 function load_sprites(cartname, dest)
   reload(dest, 0x0000, 0x2000, cartname)
-  log("loaded sprites from cart: "..cartname.." to "..tostr(dest, 0x1)) -- show numbers as hex
 end
 
 function myinit()
-    ENCODE_OFFSET=0 -- this must be set to where data can start writing
     local enc_vget = function(...) return vget(0x8000, ...) end
 
     cls()
     memset(0x0000, 0, 0x3100)
     local write_len = 0
 
-                                              log("gfx             | pos: 0x0000")
-                                              log("gfx2/map2       | pos: 0x1000")
-                                              log("map             | pos: 0x2000")
-                                              log("gfx flags       | pos: 0x3000")
-                                              log("song            | pos: 0x3100")
-                                              log("sfx             | pos: 0x3200")
-                                              log("end of cart     | pos: 0x4300")
-                                              log()
 
     load_sprites("000-063.p8", 0x8000)
     load_sprites("064-127.p8", 0xa000)
     load_sprites("128-191.p8", 0xc000)
     load_sprites("192-255.p8", 0xe000)
+    -- log("loaded sprites from cart: "..cartname.." to "..tostr(dest, 0x1)) -- show numbers as hex
+    log()
 
-    ENCODE_OFFSET += dex_compress(ENCODE_OFFSET, enc_vget)
-    log("offset: "..tostr(ENCODE_OFFSET, 0x1))
+                                        log("gfx             | pos: 0x0000")
+                                        log("gfx2/map2       | pos: 0x1000")
+                                        log("map             | pos: 0x2000")
+                                        log("gfx flags       | pos: 0x3000")
+                                        log("song            | pos: 0x3100")
+                                        log("sfx             | pos: 0x3200")
+                                        log("end of cart     | pos: 0x4300")
+                                        log("--------------- | -----------")
+    ENCODE_OFFSET = 0                   log("begin packing   | pos: "..tostr(ENCODE_OFFSET, 0x1))
+    dex_compress(enc_vget)              log("pokemon sprites | pos: "..tostr(ENCODE_OFFSET, 0x1)) -- 0x2000 (1 full spritesheet)
+    encode_pkmv_data(g_pkmn_move_data)  log("pokemon moves   | pos: "..tostr(ENCODE_OFFSET, 0x1)) -- ??? lots
+    encode_trnr_data(g_trainer_data)    log("pokemon trnrs   | pos: "..tostr(ENCODE_OFFSET, 0x1)) -- 240=40*6
 
-    -- poke2(0x0000, ENCODE_OFFSET) encode_cart     ("pokemon 0-63   ", "000-063.p8", 128, 128, enc_vget)
-    -- poke2(0x0002, ENCODE_OFFSET) encode_cart     ("pokemon 64-127 ", "064-127.p8", 128, 128, enc_vget)
-    -- poke2(0x0004, ENCODE_OFFSET) encode_cart     ("pokemon 128-191", "128-191.p8", 128, 128, enc_vget)
-    -- poke2(0x0004, ENCODE_OFFSET) encode_cart     ("pokemon 192-255", "192-255.p8", 128, 128, enc_vget)
-
-    -- poke(0x5f56, 0xa0) -- mget points to the loaded map.
-    -- poke2(0x0006, ENCODE_OFFSET) encode_cart     ("picodex skin   ", "128-151.p8", 32,  11,  mget)
-    -- poke2(0x0008, ENCODE_OFFSET) encode_pkmv_data("pokemon moves  ", g_pkmn_move_data)
-    -- poke2(0x000a, ENCODE_OFFSET) encode_trnr_data("pokemon trnrs  ", g_trainer_data)   -- 40*6  = 240
-
-                                              log("end of compile  | pos: "..tostr(ENCODE_OFFSET, 0x1))
-
-    -- reserve the rest for sfx. this is only 10 sfxs as of 2023-03-21.
-    reload(ENCODE_OFFSET, ENCODE_OFFSET, 0x4300 - ENCODE_OFFSET, "128-151.p8")
-
-                                              log("copy remaining  | pos: 0x4300 ")
+    -- i could have sfx or something on 000-063 if I want. uncomment here if I want that.
+    -- reload(ENCODE_OFFSET, ENCODE_OFFSET, 0x4300 - ENCODE_OFFSET, "./000-063.p8") log("copy remaining  | pos: 0x4300 ")
 
     -- then finally save to the game cartridge.
     cstore(0x0000, 0x0000, 0x4300, "game.p8")
-    log("done!")
+    log() log("done!")
 end
 
 -- poke a 1 byte val and increment offset
@@ -235,9 +75,7 @@ function offsetpoke(val)
     ENCODE_OFFSET += 1
 end
 
-function encode_trnr_data(message, data)
-    log(message.." | pos: "..tostr(ENCODE_OFFSET, 0x1)) -- show numbers as hex
-
+function encode_trnr_data(data)
     for tnum=0,39 do
         for pnum=0,5 do
             offsetpoke(data[tnum*6+pnum+1])
@@ -261,9 +99,7 @@ EVENT = 252 -- is event
 TMHM  = 253 -- is tm/hm
 DASH  = 254 -- is a dash/range
 NEXT  = 255 -- is next pokemon
-function encode_pkmv_data(message, data)
-    log(message.." | pos: "..tostr(ENCODE_OFFSET, 0x1)) -- show numbers as hex
-
+function encode_pkmv_data(data)
     local newdata = strip_spaces(data)
 
     newdata = split(newdata, "\n")
@@ -395,63 +231,467 @@ P_TYRANITAR   = 248 P_LUGIA       = 249 P_HOOH        = 250 P_CELEBI      = 251
 -- all trainer types in pkmn crystal. adds a few.
 -- ???, Beauty, Biker, Bird Keeper, Blackbelt, Boarder, Bug Catcher, Burgular, Camper, Champion, Cooltrainer, Firebreather, Fisher, Gentleman, Guitarist, Gym Leader, Hiker, Juggler, Kanto Elite Four, Kimono Girl, Lass, Medium, MysticalMan, Officer, Picnicker, Pokefan, Pokemaniac, Pokemon Trainer, Psychic, Rival, Rocket, Rocket Executive, Rocket Grunt, Sage, Sailor, Schoolboy, Scientist, Skier, Super Nerd, Swimmer, Teacher, Twins, Youngster
 -- all gym leaders:
--- Gym Leader Falkner, Gym Leader Bugsy, Gym Leader Whitney, Gym Leader Morty, Gym Leader Chuck, Gym Leader Jasmine, Gym Leader Pryce, Gym Leader Clair, Gym Leader Lt. Surge, Gym Leader Sabrina, Gym Leader Erika, Gym Leader Janine, Gym Leader Misty, Gym Leader Brock, Gym Leader Blaine, Gym Leader Blue
+
+-- Falkner, Bugsy, Whitney,  Morty, Chuck,  Jasmine, Pryce,  Clair
+-- Brock,   Misty, Lt Surge, Erika, Janine, Sabrina, Blaine, Blue
+
 -- all elite 4 champions or whatever you call it:
--- Kanto Elite Four Will, Kanto Elite Four Koga, Kanto Elite Four Bruno, Kanto Elite Four Karen, Pokemon Trainer Red
+-- Will, Koga, Bruno, Karen, Lance
+-- Giovanni, Lorelei, Agatha, Oak, Red
+-- Giovanni
+
+
+-- All pokemon trainers in crystal version in order, ready?
+
+P_TOTODILE,   P_CHIKORITA,  P_CYNDAQUIL,                                            -- Cherrygrove City - Rival Silver
+P_RATTATA,                                                                          -- Route 30 - Youngster Joey
+P_PIDGEY,     P_RATTATA,                                                            -- Route 30 - Youngster Mikey
+P_CATERPIE,   P_CATERPIE,                                                           -- Route 30 - Bug Catcher Don
+P_CATERPIE,   P_CATERPIE,   P_WEEDLE,     P_CATERPIE,                               -- Route 31 - Bug Catcher Wade
+P_BELLSPROUT, P_BELLSPROUT, P_BELLSPROUT,                                           -- Sprout Tower - 2F - Sage Nico
+P_BELLSPROUT, P_BELLSPROUT, P_BELLSPROUT,                                           -- Sprout Tower - 1F - Sage Chow
+P_BELLSPROUT, P_BELLSPROUT, P_BELLSPROUT,                                           -- Sprout Tower - 2F - Sage Edmond
+P_BELLSPROUT,                                                                       -- Sprout Tower - 3F - Sage Neal
+P_BELLSPROUT, P_HOOTHOOT,                                                           -- Sprout Tower - 3F - Sage Troy
+P_BELLSPROUT, P_BELLSPROUT, P_HOOTHOOT,                                             -- Sprout Tower - 3F - Sage Li
+P_SPEAROW,                                                                          -- Violet City Gym - Bird Keeper Abe
+P_PIDGEY,     P_PIDGEY,                                                             -- Violet City Gym - Bird Keeper Rod
+P_PIDGEY,     P_PIDGEOTTO,                                                          -- Violet City Gym - Gym Leader Falkner
+P_RATTATA,    P_ZUBAT,                                                              -- Route 32 - Youngster Albert
+P_NIDORAN,♀                                                                         -- Route 32 - Picnicker Liz
+P_NIDORAN,♂                                                                         -- Route 32 - Camper Roland
+P_WOOPER,                                                                           -- Route 32 - Youngster Gordon
+P_GOLDEEN,                                                                          -- Route 32 - Fisher Ralph
+P_MAGIKARP,   P_MAGIKARP,   P_MAGIKARP,   P_MAGIKARP,                               -- Route 32 - Fisher Justin
+P_POLIWAG,    P_POLIWAG,                                                            -- Route 32 - Fisher Henry
+P_PIDGEY,     P_PIDGEY,     P_SPEAROW,                                              -- Route 32 - Bird Keeper Peter
+P_ONIX,                                                                             -- Union Cave - 1F - Hiker Daniel
+P_GEODUDE,    P_GEODUDE,    P_GEODUDE,                                              -- Union Cave - 1F - Hiker Russel
+P_KOFFING,    P_KOFFING,                                                            -- Union Cave - 1F - Firebreather Bill
+P_SLOWPOKE,                                                                         -- Union Cave - 1F - Pokemaniac Larry
+P_VULPIX,                                                                           -- Union Cave - 1F - Firebreather Ray
+P_GEODUDE,    P_MACHOP,                                                             -- Route 33 - Hiker Anthony
+P_RATTATA,    P_RATTATA,                                                            -- Slowpoke Well - B1F - Rocket Grunt #1
+P_ZUBAT,      P_EKANS,                                                              -- Slowpoke Well - B1F - Rocket Grunt #2
+P_RATTATA,    P_ZUBAT,      P_ZUBAT,                                                -- Slowpoke Well - B1F - Rocket Grunt #3
+P_KOFFING,                                                                          -- Slowpoke Well - B1F - Rocket Grunt #4
+P_SPINARAK,   P_LEDYBA,                                                             -- Azalea Town Gym - Twins Amy & May
+P_CATERPIE,   P_WEEDLE,                                                             -- Azalea Town Gym - Bug Catcher Al
+P_WEEDLE,     P_KAKUNA,     P_BEEDRILL,                                             -- Azalea Town Gym - Bug Catcher Benny
+P_PARAS,                                                                            -- Azalea Town Gym - Bug Catcher Josh
+P_METAPOD,    P_KAKUNA,     P_SCYTHER,                                              -- Azalea Town Gym - Gym Leader Bugsy
+P_GASTLY,     P_ZUBAT,      P_CROCONAW,   P_BAYLEEF,    P_QUILAVA,                  -- Azalea Town - Rival Silver
+P_LEDYBA,     P_PARAS,                                                              -- Ilex Forest - Bug Catcher Wayne
+P_RATTATA,    P_SANDSHREW,  P_SPEAROW,    P_SPEAROW,                                -- Route 34 - Youngster Samuel
+P_SNUBBULL,                                                                         -- Route 34 - Pokefan Brandon
+P_HOPPIP,     P_HOPPIP,     P_BULBASAUR,                                            -- Route 34 - Picnicker Gina
+P_MANKEY,     P_DIGLETT,                                                            -- Route 34 - Youngster Ian
+P_GROWLITHE,                                                                        -- Route 34 - Officer Keith
+P_PSYDUCK,                                                                          -- Route 34 - Camper Todd
+P_GRIMER,     P_GRIMER,                                                             -- Goldenrod Underground - Super Nerd Eric
+P_LICKITUNG,                                                                        -- Goldenrod Underground - Pokemaniac Issac
+P_MAGNEMITE,  P_VOLTORB,    P_MAGNEMITE,  P_MAGNEMITE,                              -- Goldenrod Underground - Super Nerd Teru
+P_SLOWPOKE,   P_SLOWPOKE,                                                           -- Goldenrod Underground - Pokemaniac Donald
+P_SENTRET,    P_SENTRET,    P_SENTRET,                                              -- Goldenrod City Gym - Beauty Victoria
+P_MEOWTH,     P_MEOWTH,                                                             -- Goldenrod City Gym - Beauty Sammantha
+P_SNUBBULL,                                                                         -- Goldenrod City Gym - Lass Carrie
+P_JIGGLYPUFF, P_JIGGLYPUFF, P_JIGGLYPUFF,                                           -- Goldenrod City Gym - Lass Bridget
+P_CLEFAIRY,   P_MILTANK,                                                            -- Goldenrod City Gym - Gym Leader Whitney
+P_VULPIX,                                                                           -- Route 35 - Picnicker Kim
+P_SANDSHREW,  P_MARILL,                                                             -- Route 35 - Camper Elliot
+P_PIKACHU,                                                                          -- Route 35 - Picnicker Brooke
+P_DIGLETT,    P_ZUBAT,      P_DIGLETT,                                              -- Route 35 - Camper Ivan
+P_MAGMAR,     P_MAGMAR,                                                             -- Route 35 - Firebreather Walt
+P_VOLTORB,    P_VOLTORB,    P_VOLTORB,    P_VOLTORB,                                -- Route 35 - Juggler Irwin
+P_GROWLITHE,  P_GROWLITHE,                                                          -- Route 35 - Officer Dirk
+P_VENONAT,                                                                          -- Route 35 - Bug Catcher Arnie
+P_PIDGEY,     P_PIDGEOTTO,                                                          -- Route 35 - Bird Keeper Bryan
+P_SNUBBULL,                                                                         -- National Park - Pokefan Beverly
+P_ODDISH,     P_CUBONE,                                                             -- National Park - Lass Krisse
+P_RAICHU,                                                                           -- National Park - Pokefan William
+P_ODDISH,     P_VOLTORB,                                                            -- National Park - Schoolboy Jack
+P_ABRA,       P_ABRA,       P_KADABRA,                                              -- Route 36 - Psychic Mark
+P_TANGELA,                                                                          -- Route 36 - Schoolboy Alan
+P_CLEFAIRY,   P_JIGGLYPUFF,                                                         -- Route 37 - Twins Ann & Anne
+P_DROWZEE,                                                                          -- Route 37 - Psychic Greg
+P_HAUNTER,    P_MAGNEMITE,  P_ZUBAT,      P_CROCONAW,   P_QUILAVA,    P_BAYLEEF,    -- Burned Tower - 1F - Rival Silver
+P_FLAREON,                                                                          -- Ecruteak City - Kimono Girl Naoko
+P_ESPEON,                                                                           -- Ecruteak City - Kimono Girl Sayo
+P_UMBREON,                                                                          -- Ecruteak City - Kimono Girl Zuki
+P_VAPOREON,                                                                         -- Ecruteak City - Kimono Girl Kuni
+P_JOLTEON,                                                                          -- Ecruteak City - Kimono Girl Miki
+P_GASTLY,     P_GASTLY,     P_GASTLY,     P_GASTLY,     P_GASTLY,                   -- Ecruteak City Gym - Sage Ping
+P_HAUNTER,    P_HAUNTER,                                                            -- Ecruteak City Gym - Medium Grace
+P_GASTLY,     P_HAUNTER,    P_GASTLY,                                               -- Ecruteak City Gym - Medium Martha
+P_GASTLY,     P_HAUNTER,    P_GENGAR,     P_HAUNTER,                                -- Ecruteak City Gym - Gym Leader Morty
+P_GEODUDE,    P_MACHOP,                                                             -- Union Cave - B1F - Hiker Leonard
+P_GEODUDE,    P_GEODUDE,    P_GRAVELER,                                             -- Union Cave - B1F - Hiker Phillip
+P_GIRAFARIG,                                                                        -- Ruins of Alph - Psychic Nathan
+P_MAROWAK,    P_MAROWAK,                                                            -- Union Cave - B1F - Pokemaniac Andrew
+P_KANGASKHAN,                                                                       -- Union Cave - B1F - Pokemaniac Calvin
+P_CHARMANDER, P_SQUIRTLE,   P_BULBASAUR,                                            -- Union Cave - B2F - Cooltrainer Nick
+P_EEVEE,      P_FLAREON,    P_VAPOREON,   P_JOLTEON,                                -- Union Cave - B2F - Cooltrainer Gwen
+P_POLIWHIRL,                                                                        -- Union Cave - B2F - Cooltrainer Emma
+P_GOLDEEN,    P_SEAKING,                                                            -- Route 34 - Cooltrainer Irene
+P_STARYU,     P_STARMIE,                                                            -- Route 34 - Cooltrainer Jenn
+P_SHELLDER,   P_CLOYSTER,                                                           -- Route 34 - Cooltrainer Kate
+P_GEODUDE,    P_GEODUDE,    P_GEODUDE,    P_GEODUDE,    P_GEODUDE,                  -- Route 46 - Hiker Bailey
+P_MANKEY,                                                                           -- Route 46 - Camper Ted
+P_PONYTA,     P_PONYTA,                                                             -- Route 46 - Picnicker Erin
+P_HOPPIP,     P_SKIPLOOM,                                                           -- Route 38 - Beauty Valerie
+P_DODUO,      P_DODUO,      P_DODUO,                                                -- Route 38 - Bird Keeper Toby
+P_WOOPER,                                                                           -- Route 38 - Sailor Harry
+P_FLAAFFY,    P_PSYDUCK,                                                            -- Route 38 - Lass Dana
+P_MRMIME,                                                                           -- Route 38 - Schoolboy Chad
+P_CORSOLA,                                                                          -- Route 38 - Beauty Olivia
+P_SLOWPOKE,   P_SLOWPOKE,                                                           -- Route 39 - Psychic Norman
+P_PIKACHU,                                                                          -- Route 39 - Pokefan Ruth
+P_PIKACHU,                                                                          -- Route 39 - Pokefan Derek
+P_POLIWHIRL,  P_RATICATE,   P_KRABBY,                                               -- Route 39 - Sailor Eugene
+P_MEOWTH,                                                                           -- Route 39 - Pokefan Jaime
+P_NOCTOWL,                                                                          -- Glitter Lighthouse - 2F - Gentleman Alfred
+P_POLIWAG,    P_POLIWHIRL,                                                          -- Glitter Lighthouse - 2F - Sailor Huey
+P_PIDGEY,     P_PIDGEY,     P_PIDGEY,     P_PIDGEY,     P_PIDGEY,                   -- Glitter Lighthouse - 3F - Bird Keeper Theo
+P_GROWLITHE,  P_GROWLITHE,                                                          -- Glitter Lighthouse - 3F - Gentleman Preston
+P_MARILL,                                                                           -- Glitter Lighthouse - 4F - Lass Connie
+P_KRABBY,     P_KRABBY,                                                             -- Glitter Lighthouse - 4F - Sailor Kent
+P_SPEAROW,    P_FEAROW,     P_SPEAROW,                                              -- Glitter Lighthouse - 5F - Bird Keeper Denis
+P_POLIWHIRL,                                                                        -- Glitter Lighthouse - 3F - Sailor Terrell
+P_MACHOP,     P_MACHOP,     P_POLIWHIRL,                                            -- Glitter Lighthouse - 5F - Sailor Ernest
+P_TENTACOOL,  P_TENTACOOL,                                                          -- Route 40 - Swimmer&#9794; Simon
+P_STARYU,                                                                           -- Route 40 - Swimmer&#9792; Elaine
+P_GRIMER,     P_SHELLDER,                                                           -- Route 40 - Swimmer&#9792; Paula
+P_SHELLDER,   P_WARTORTLE,  P_SHELLDER,                                             -- Route 40 - Swimmer&#9794; Randall
+P_SHELLDER,   P_TENTACOOL,  P_TENTACRUEL,                                           -- Route 41 - Swimmer&#9794; Charlie
+P_TENTACOOL,  P_TENTACOOL,  P_TENTACOOL,  P_STARYU,     P_TENTACOOL,  P_REMORAID,   -- Route 41 - Swimmer&#9794; George
+P_STARYU,     P_STARMIE,                                                            -- Route 41 - Swimmer&#9792; Kara
+P_KRABBY,                                                                           -- Route 41 - Swimmer&#9794; Matthew
+P_SEEL,                                                                             -- Route 41 - Swimmer&#9792; Denise
+P_GYARADOS,   P_GYARADOS,                                                           -- Route 41 - Swimmer&#9794; Kirk
+P_QWILFISH,                                                                         -- Route 41 - Swimmer&#9794; Berke
+P_PSYDUCK,    P_GOLDEEN,                                                            -- Route 41 - Swimmer&#9792; Susie
+P_GOLDEEN,    P_GOLDEEN,    P_SEAKING,                                              -- Route 41 - Swimmer&#9792; Kaylee
+P_HORSEA,     P_HORSEA,                                                             -- Route 41 - Swimmer&#9792; Wendy
+P_DROWZEE,    P_HAUNTER,    P_ELECTRODE,                                            -- Cianwood City - MysticalMan Eusine
+P_HITMONLEE,                                                                        -- Cianwood City Gym - Blackbelt Yoshi
+P_HITMONCHAN,                                                                       -- Cianwood City Gym - Blackbelt Lao
+P_MACHOP,     P_MACHOKE,                                                            -- Cianwood City Gym - Blackbelt Nob
+P_MANKEY,     P_MANKEY,     P_PRIMEAPE,                                             -- Cianwood City Gym - Blackbelt Lung
+P_PRIMEAPE,   P_POLIWRATH,                                                          -- Cianwood City Gym - Gym Leader Chuck
+P_MAGNEMITE,  P_MAGNEMITE,  P_STEELIX,                                              -- Olivine City Gym - Gym Leader Jasmine
+P_QWILFISH,                                                                         -- Route 42 - Fisher Tully
+P_NIDORINA,   P_NIDORINO,                                                           -- Route 42 - Pokemaniac Shane
+P_DIGLETT,    P_GEODUDE,    P_DUGTRIO,                                              -- Route 42 - Hiker Benjamin
+P_NIDOKING,   P_NIDOQUEEN,                                                          -- Mt. Mortar - Pokemaniac Miller
+P_SLOWPOKE,                                                                         -- Mt. Mortar - Super Nerd Markus
+P_SANDSHREW,  P_SANDSLASH,  P_ZUBAT,                                                -- Route 43 - Camper Spencer
+P_CLEFAIRY,                                                                         -- Route 43 - Picnicker Tiffany
+P_LICKITUNG,                                                                        -- Route 43 - Pokemaniac Brent
+P_NIDOKING,                                                                         -- Route 43 - Pokemaniac Ron
+P_SLOWBRO,                                                                          -- Route 43 - Pokemaniac Ben
+P_MAGIKARP,   P_GYARADOS,   P_MAGIKARP,   P_GYARADOS,                               -- Route 43 - Fisher Marvin
+P_DROWZEE,    P_ZUBAT,                                                              -- Team Rocket Hideout - B1F - Rocket Grunt #1
+P_ZUBAT,      P_GRIMER,     P_RATTATA,                                              -- Team Rocket Hideout - B1F - Rocket Grunt #2
+P_MAGNEMITE,  P_MAGNEMITE,  P_MAGNEMITE,                                            -- Team Rocket Hideout - B1F - Scientist Jed
+P_RATTATA,    P_RATTATA,    P_RATTATA,    P_RATTATA,                                -- Team Rocket Hideout - B1F - Rocket Grunt #3
+P_VENONAT,    P_VENONAT,                                                            -- Team Rocket Hideout - B2F - Rocket Grunt #4
+P_GOLBAT,                                                                           -- Team Rocket Hideout - B2F - Rocket Grunt #5
+P_KOFFING,    P_KOFFING,                                                            -- Team Rocket Hideout - B3F - Scientist Ross
+P_EKANS,      P_GLOOM,                                                              -- Team Rocket Hideout - B3F - Rocket Grunt #6
+P_DITTO,                                                                            -- Team Rocket Hideout - B3F - Scientist Mitch
+P_RATICATE,                                                                         -- Team Rocket Hideout - B3F - Rocket Grunt #7
+P_RATTATA,    P_ZUBAT,      P_RATTATA,                                              -- Team Rocket Hideout - B2F - Rocket Grunt #8
+P_ZUBAT,      P_RATICATE,   P_KOFFING,                                              -- Team Rocket Hideout - B3F - Rocket Executive #1
+P_ARBOK,      P_GASTLY,     P_MURKROW,                                              -- Team Rocket Hideout - B2F - Rocket Executive #2
+P_JYNX,                                                                             -- Mahogany Town Gym - Skier Roxanne
+P_SWINUB,     P_SWINUB,                                                             -- Mahogany Town Gym - Boarder Brad
+P_DEWGONG,                                                                          -- Mahogany Town Gym - Skier Clarissa
+P_SHELLDER,   P_CLOYSTER,   P_SHELLDER,                                             -- Mahogany Town Gym - Boarder Douglas
+P_SEEL,       P_DEWGONG,    P_SEEL,                                                 -- Mahogany Town Gym - Boarder Ronald
+P_SEEL,       P_DEWGONG,    P_PILOSWINE,                                            -- Mahogany Town Gym - Gym Leader Pryce
+P_RATICATE,   P_RATICATE,                                                           -- Goldenrod City - Radio Tower - Rocket Grunt #1
+P_ARBOK,                                                                            -- Goldenrod City - Radio Tower - Rocket Grunt #2
+P_RATTATA,    P_RATTATA,    P_RATTATA,    P_RATTATA,    P_RATTATA,                  -- Goldenrod City - Radio Tower - Rocket Grunt #3
+P_ZUBAT,      P_ZUBAT,                                                              -- Goldenrod City - Radio Tower - Rocket Grunt #4
+P_GRIMER,     P_GRIMER,     P_MUK,                                                  -- Goldenrod City - Radio Tower - Rocket Grunt #5
+P_KOFFING,    P_GRIMER,     P_ZUBAT,      P_RATTATA,                                -- Goldenrod City - Radio Tower - Rocket Grunt #6
+P_WEEZING,                                                                          -- Goldenrod City - Radio Tower - Rocket Grunt #7
+P_MAGNEMITE,  P_MAGNEMITE,  P_MAGNEMITE,                                            -- Goldenrod City - Radio Tower - Scientist Marc
+P_ZUBAT,      P_GOLBAT,     P_GRIMER,                                               -- Goldenrod City - Radio Tower - Rocket Grunt #8
+P_PORYGON,                                                                          -- Goldenrod City - Radio Tower - Scientist Rich
+P_KOFFING,    P_KOFFING,    P_KOFFING,    P_KOFFING,    P_KOFFING,    P_WEEZING,    -- Goldenrod City - Radio Tower - Rocket Executive #1
+P_GOLBAT,     P_MAGNEMITE,  P_HAUNTER,    P_SNEASEL,    P_FERALIGATR, P_QUILAVA,    -- Goldenrod City - Underground Warehouse - Rival Silver
+P_RATTATA,                                                                          -- Goldenrod City - Underground Warehouse - Rocket Grunt #9
+P_MUK,        P_KOFFING,    P_RATTATA,                                              -- Goldenrod City - Underground Warehouse - Rocket Grunt #10
+P_KOFFING,    P_MUK,                                                                -- Goldenrod City - Underground Warehouse - Rocket Grunt #11
+P_GROWLITHE,  P_KOFFING,                                                            -- Goldenrod City - Underground Warehouse - Burgular Eddie
+P_KOFFING,    P_MAGMAR,     P_KOFFING,                                              -- Goldenrod City - Underground Warehouse - Burgular Duncan
+P_GLOOM,      P_GLOOM,                                                              -- Goldenrod City - Underground Warehouse - Rocket Grunt #12
+P_RATICATE,   P_GOLBAT,                                                             -- Goldenrod City - Underground Warehouse - Rocket Grunt #13
+P_GRIMER,     P_WEEZING,                                                            -- Goldenrod City - Underground Warehouse - Rocket Grunt #14
+P_KOFFING,    P_KOFFING,                                                            -- Goldenrod City - Underground Warehouse - Rocket Grunt #15
+P_RATICATE,   P_KOFFING,                                                            -- Goldenrod City - Radio Tower - Rocket Grunt #16
+P_EKANS,      P_ODDISH,     P_EKANS,      P_GLOOM,                                  -- Goldenrod City - Radio Tower - Rocket Grunt #17
+P_GOLBAT,                                                                           -- Goldenrod City - Radio Tower - Rocket Executive #2
+P_ARBOK,      P_VILEPLUME,  P_MURKROW,                                              -- Goldenrod City - Radio Tower - Rocket Executive #3
+P_HOUNDOUR,   P_KOFFING,    P_HOUNDOOM,                                             -- Goldenrod City - Radio Tower - Rocket Executive #4
+P_NATU,       P_KADABRA,                                                            -- Route 44 - Psychic Phil
+P_GOLDEEN,    P_GOLDEEN,    P_SEAKING,                                              -- Route 44 - Fisher Wilton
+P_RHYHORN,                                                                          -- Route 44 - Pokemaniac Zach
+P_BUTTERFREE, P_BELLOSSOM,                                                          -- Route 44 - Cooltrainer Cybil
+P_REMORAID,   P_REMORAID,                                                           -- Route 44 - Fisher Edgar
+P_PIDGEOTTO,  P_PIDGEOTTO,                                                          -- Route 44 - Bird Keeper Vance
+P_DRATINI,    P_DRATINI,    P_DRATINI,                                              -- Blackthorn City Gym - Cooltrainer Paul
+P_SEADRA,                                                                           -- Blackthorn City Gym - Cooltrainer Fran
+P_HORSEA,     P_SEADRA,                                                             -- Blackthorn City Gym - Cooltrainer Cody
+P_DRAGONAIR,                                                                        -- Blackthorn City Gym - Cooltrainer Mike
+P_DRAGONAIR,  P_DRAGONAIR,  P_DRAGONAIR,  P_KINGDRA,                                -- Blackthorn City Gym - Gym Leader Clair
+P_HORSEA,     P_HORSEA,     P_SEADRA,                                               -- Dragon's Den - Cooltrainer Cara
+P_DRAGONAIR,                                                                        -- Dragon's Den - Cooltrainer Darin
+P_DRATINI,    P_DRATINI,                                                            -- Dragon's Den - Twins Lea & Pia
+P_HITMONLEE,  P_HITMONCHAN,                                                         -- Mt. Mortar - Blackbelt Kiyo
+P_MACHOP,     P_GRAVELER,   P_MACHOP,                                               -- Route 45 - Hiker Erik
+P_PIDGEOT,    P_ELECTABUZZ,                                                         -- Route 45 - Cooltrainer Ryan
+P_ONIX,                                                                             -- Route 45 - Hiker Parry
+P_MARILL,     P_WARTORTLE,  P_WARTORTLE,                                            -- Route 45 - Cooltrainer Kelly
+P_MACHOKE,                                                                          -- Route 45 - Blackbelt Kenji
+P_DIGLETT,    P_DUGTRIO,                                                            -- Route 45 - Hiker Timothy
+P_GEODUDE,    P_GRAVELER,   P_GOLEM,                                                -- Route 45 - Hiker Michael
+P_BULBASAUR,  P_IVYSAUR,    P_VENUSAUR,                                             -- Route 27 - Cooltrainer Megan
+P_MAGNETON,   P_QUAGSIRE,   P_EXEGGCUTE,                                            -- Route 27 - Cooltrainer Blake
+P_SANDSLASH,                                                                        -- Route 27 - Cooltrainer Brian
+P_STARMIE,    P_EXEGGCUTE,  P_GIRAFARIG,                                            -- Route 27 - Psychic Gilbert
+P_FARFETCHD,                                                                        -- Route 27 - Bird Keeper Jose
+P_STARMIE,    P_NIDOQUEEN,  P_STARMIE,                                              -- Route 27 - Cooltrainer Reena
+P_QWILFISH,   P_QWILFISH,   P_SEAKING,                                              -- Route 26 - Fisher Scott
+P_ESPEON,                                                                           -- Route 26 - Psychic Richard
+P_PIKACHU,    P_BLASTOISE,                                                          -- Route 26 - Cooltrainer Joyce
+P_VICTREEBEL, P_KINGLER,    P_FLAREON,                                              -- Route 26 - Cooltrainer Gaven
+P_PARASECT,   P_GOLDUCK,                                                            -- Route 26 - Cooltrainer Jake
+P_RAPIDASH,                                                                         -- Route 26 - Cooltrainer Beth
+P_SNEASEL,    P_GOLBAT,     P_MAGNETON,   P_HAUNTER,    P_KADABRA,    P_FERALIGATR, -- Victory Road - Rival Silver
+P_XATU,       P_JYNX,       P_EXEGGUTOR,  P_SLOWBRO,    P_XATU,                     -- Indigo Plateau Pokemon League - Kanto Elite Four Will
+P_ARIADOS,    P_VENOMOTH,   P_FORRETRESS, P_MUK,        P_CROBAT,                   -- Indigo Plateau Pokemon League - Kanto Elite Four Koga
+P_HITMONTOP,  P_HITMONLEE,  P_HITMONCHAN, P_ONIX,       P_MACHAMP,                  -- Indigo Plateau Pokemon League - Kanto Elite Four Bruno
+P_UMBREON,    P_VILEPLUME,  P_GENGAR,     P_MURKROW,    P_HOUNDOOM,                 -- Indigo Plateau Pokemon League - Kanto Elite Four Karen
+P_GYARADOS,   P_DRAGONITE,  P_DRAGONITE,  P_AERODACTYL, P_CHARIZARD,  P_DRAGONITE,  -- Indigo Plateau Pokemon League - Champion Lance
+P_SEADRA,                                                                           -- Mt. Mortar - Super Nerd Hugh
+P_SANDSLASH,  P_GOLEM,                                                              -- S.S. Aqua - Hiker Noland
+P_KOFFING,    P_FLAREON,    P_KOFFING,                                              -- S.S. Aqua - Firebreather Lyle
+P_DELIBIRD,                                                                         -- S.S. Aqua - Pokefan Colin
+P_TEDDIURSA,  P_PHANPY,                                                             -- S.S. Aqua - Twins Meg & Peg
+P_MACHOP,     P_MACHOKE,    P_PSYDUCK,                                              -- S.S. Aqua - Sailor Stanly
+P_MRMIME,     P_MAGMAR,     P_MACHOKE,                                              -- S.S. Aqua - Juggler Fritz
+P_RATICATE,   P_RATICATE,                                                           -- S.S. Aqua - Sailor Jeff
+P_SEAKING,                                                                          -- S.S. Aqua - Picnicker Debra
+P_MAGNEMITE,  P_VOLTORB,    P_MAGNEMITE,  P_MAGNEMITE,                              -- Vermilion City Gym - Guitarist Vincent
+P_ELECTRODE,  P_ELECTRODE,  P_ELECTRODE,  P_ELECTRODE,                              -- Vermilion City Gym - Juggler Horton
+P_PIKACHU,    P_FLAAFFY,                                                            -- Vermilion City Gym - Gentleman Gregory
+P_RAICHU,     P_ELECTRODE,  P_MAGNETON,   P_ELECTRODE,  P_ELECTABUZZ,               -- Vermilion City Gym - Gym Leader Lt. Surge
+P_DROWZEE,    P_HYPNO,                                                              -- Saffron City Gym - Medium Rebecca
+P_KADABRA,                                                                          -- Saffron City Gym - Psychic Franklin
+P_MRMIME,     P_EXEGGCUTE,  P_EXEGGCUTE,                                            -- Saffron City Gym - Psychic Jared
+P_SLOWPOKE,   P_SLOWBRO,                                                            -- Saffron City Gym - Medium Doris
+P_ESPEON,     P_MRMIME,     P_ALAKAZAM,                                             -- Saffron City Gym - Gym Leader Sabrina
+P_VICTREEBEL, P_VILEPLUME,                                                          -- Celadon City Gym - Twins Jo & Zoe
+P_SKIPLOOM,   P_HOPPIP,     P_JUMPLUFF,                                             -- Celadon City Gym - Lass Michelle
+P_EXEGGUTOR,                                                                        -- Celadon City Gym - Picnicker Tanya
+P_PARAS,      P_EXEGGCUTE,  P_PARASECT,                                             -- Celadon City Gym - Beauty Julia
+P_TANGELA,    P_JUMPLUFF,   P_VICTREEBEL, P_BELLOSSOM,                              -- Celadon City Gym - Gym Leader Erika
+P_WEEZING,                                                                          -- Route 17 - Biker Riley
+P_KOFFING,    P_MAGMAR,     P_WEEZING,                                              -- Route 17 - Biker Glenn
+P_MAGMAR,     P_MAGMAR,                                                             -- Route 17 - Biker Joel
+P_KOFFING,    P_CHARMELEON, P_WEEZING,                                              -- Route 17 - Biker Charles
+P_NOCTOWL,                                                                          -- Route 18 - Bird Keeper Bob
+P_DODUO,      P_DODUO,      P_DODRIO,                                               -- Route 18 - Bird Keeper Boris
+P_BULBASAUR,  P_IVYSAUR,    P_VENUSAUR,                                             -- Fuschia City Gym - Lass Linda
+P_NIDOQUEEN,                                                                        -- Fuschia City Gym - Picnicker Cindy
+P_NIDOKING,                                                                         -- Fuschia City Gym - Camper Barry
+P_GLOOM,      P_ARBOK,      P_GLOOM,                                                -- Fuschia City Gym - Lass Alice
+P_CROBAT,     P_WEEZING,    P_WEEZING,    P_ARIADOS,    P_VENOMOTH,                 -- Fuschia City Gym - Gym Leader Janine
+P_NIDORINA,   P_RAICHU,                                                             -- Route 9 - Picnicker Edna
+P_DUGTRIO,    P_PRIMEAPE,   P_POLIWRATH,                                            -- Route 9 - Camper Sid
+P_GOLDUCK,    P_SANDSLASH,                                                          -- Route 9 - Camper Dean
+P_DUGTRIO,    P_ONIX,                                                               -- Route 9 - Hiker Sidney
+P_GRAVELER,   P_GRAVELER,   P_GRAVELER,                                             -- Route 9 - Hiker Tim
+P_SKIPLOOM,   P_SKIPLOOM,                                                           -- Route 9 - Picnicker Heidi
+P_GOLBAT,                                                                           -- Route 24 - Rocket Grunt
+P_WIGGLYTUFF,                                                                       -- Route 24 - Schoolboy Dudley
+P_WIGGLYTUFF, P_GRANBULL,                                                           -- Route 24 - Lass Ellen
+P_TANGELA,    P_VAPOREON,                                                           -- Route 25 - Schoolboy Joe
+P_GLOOM,      P_PIDGEOTTO,  P_BELLOSSOM,                                            -- Route 25 - Lass Laura
+P_NIDOKING,                                                                         -- Route 25 - Camper Lloyd
+P_PARAS,      P_PARAS,      P_PARASECT,                                             -- Route 25 - Lass Shannon
+P_PORYGON,                                                                          -- Route 25 - Super Nerd Pat
+P_RHYHORN,    P_CHARMELEON, P_WARTORTLE,                                            -- Route 25 - Cooltrainer Kevin
+P_SEAKING,    P_SEAKING,                                                            -- Cerulean City Gym - Swimmer Brianna
+P_HORSEA,     P_HORSEA,     P_SEADRA,                                               -- Cerulean City Gym - Swimmer Parker
+P_GOLDUCK,                                                                          -- Cerulean City Gym - Swimmer Diana
+P_GOLDUCK,    P_QUAGSIRE,   P_LAPRAS,     P_STARMIE,                                -- Cerulean City Gym - Gym Leader Misty
+P_KOFFING,    P_KOFFING,    P_KOFFING,    P_KOFFING,                                -- Route 8 - Biker Dwayne
+P_FLAREON,                                                                          -- Route 8 - Biker Harris
+P_KOFFING,    P_KOFFING,                                                            -- Route 8 - Biker Zeke
+P_GRIMER,     P_MUK,                                                                -- Route 8 - Super Nerd Sam
+P_MAGNEMITE,  P_MAGNEMITE,  P_MAGNEMITE,                                            -- Route 8 - Super Nerd Tom
+P_BEEDRILL,   P_BEEDRILL,   P_BEEDRILL,                                             -- Route 2 - Bug Catcher Ed
+P_SANDSLASH,                                                                        -- Pewter City Gym - Camper Jerry
+P_GRAVELER,   P_RHYHORN,    P_OMASTAR,    P_ONIX,       P_KABUTOPS,                 -- Pewter City Gym - Gym Leader Brock
+P_ARIADOS,                                                                          -- Route 2 - Bug Catcher Doug
+P_BEEDRILL,   P_BUTTERFREE,                                                         -- Route 2 - Bug Catcher Rob
+P_SEEL,       P_SEEL,       P_SEEL,       P_DEWGONG,                                -- Route 21 - Swimmer Nikki
+P_TENTACRUEL,                                                                       -- Route 21 - Fisher Arnold
+P_QUAGSIRE,   P_OCTILLERY,  P_QUAGSIRE,                                             -- Route 21 - Swimmer Seth
+P_MARILL,                                                                           -- Route 20 - Swimmer Cameron
+P_STARMIE,    P_STARMIE,                                                            -- Route 20 - Swimmer Lori
+P_MARILL,     P_MARILL,     P_LAPRAS,                                               -- Route 20 - Swimmer Nicole
+P_MAGCARGO,   P_MAGMAR,     P_RAPIDASH,                                             -- Seafoam Islands Gym - Gym Leader Blaine
+P_PIDGEOT,    P_ALAKAZAM,   P_RHYDON,     P_GYARADOS,   P_EXEGGUTOR,  P_ARCANINE,   -- Viridian City Gym - Gym Leader Blue
+P_FEAROW,                                                                           -- Route 3 - Youngster Warren
+P_RATICATE,   P_ARBOK,                                                              -- Route 3 - Youngster Jimmy
+P_MAGMAR,     P_WEEZING,    P_MAGMAR,                                               -- Route 3 - Firebreather Otis
+P_KOFFING,    P_SLUGMA,                                                             -- Route 3 - Firebreather Burt
+P_SNEASEL,    P_GOLBAT,     P_MAGNETON,   P_GENGAR,     P_ALAKAZAM,   P_FERALIGATR, -- Mt. Moon - Rival Silver
+P_FLAAFFY,                                                                          -- Route 4 - Picnicker Hope
+P_PIDGEY,     P_PIDGEOT,                                                            -- Route 4 - Bird Keeper Hawk
+P_FURRET,     P_RAPIDASH,                                                           -- Route 4 - Picnicker Sharon
+P_SEADRA,     P_TENTACOOL,  P_TENTACRUEL, P_GOLDEEN,                                -- Route 19 - Swimmer Jerome
+P_SEAKING,                                                                          -- Route 19 - Swimmer Dawn
+P_SHELLDER,   P_CLOYSTER,                                                           -- Route 19 - Swimmer Tucker
+P_REMORAID,   P_SEADRA,                                                             -- Route 19 - Swimmer Harold
+P_MACHAMP,                                                                          -- Route 10 - Hiker Jim
+P_QUAGSIRE,                                                                         -- Route 10 - Pokefan Robert
+P_XATU,                                                                             -- Route 11 - Psychic Fidel
+P_SANDSLASH,  P_CROBAT,                                                             -- Route 11 - Youngster Jason
+P_VENOMOTH,                                                                         -- Route 11 - Youngster Owen
+P_EXEGGCUTE,  P_EXEGGCUTE,  P_EXEGGUTOR,                                            -- Route 11 - Psychic Herman
+P_REMORAID,   P_REMORAID,                                                           -- Route 12 - Fisher Martin
+P_SEAKING,    P_POLIWHIRL,  P_SEAKING,                                              -- Route 12 - Fisher Kyle
+P_MAGIKARP,   P_MAGIKARP,   P_QWILFISH,   P_TENTACRUEL,                             -- Route 12 - Fisher Stephen
+P_GYARADOS,   P_GYARADOS,   P_GYARADOS,                                             -- Route 12 - Fisher Barney
+P_PIDGEOTTO,  P_FEAROW,                                                             -- Route 13 - Bird Keeper Bret
+P_FARFETCHD,                                                                        -- Route 13 - Bird Keeper Perry
+P_PIKACHU,    P_PIKACHU,    P_PIKACHU,    P_PIKACHU,    P_PIKACHU,                  -- Route 13 - Pokefan Joshua
+P_NIDOKING,   P_SLOWKING,   P_SEAKING,                                              -- Route 13 - Pokefan Alex
+P_SANDSLASH,  P_GRAVELER,   P_GOLEM,      P_GRAVELER,                               -- Route 13 - Hiker Kenny
+P_BULBASAUR,  P_CHARMANDER, P_SQUIRTLE,                                             -- Route 14 - Pokefan Carter
+P_FEAROW,     P_FEAROW,                                                             -- Route 14 - Bird Keeper Roy
+P_BELLSPROUT, P_WEEPINBELL, P_VICTREEBEL,                                           -- Route 15 - Schoolboy Johnny
+P_CLEFAIRY,                                                                         -- Route 15 - Teacher Colette
+P_PARAS,      P_PARAS,      P_POLIWHIRL,  P_DITTO,                                  -- Route 15 - Schoolboy Billy
+P_AIPOM,      P_CUBONE,                                                             -- Route 15 - Teacher Hillary
+P_GYARADOS,   P_ALAKAZAM,                                                           -- Route 15 - Schoolboy Tommy
+P_VOLTORB,    P_MAGNEMITE,  P_VOLTORB,    P_MAGNETON,                               -- Route 15 - Schoolboy Kip
+P_PIKACHU,    P_ESPEON,     P_SNORLAX,    P_VENUSAUR,   P_CHARIZARD,  P_BLASTOISE,  -- Mount Silver - Pokemon Trainer Red
+P_PHANPY,                                                                           -- Route 6 - Pokefan Rex
+P_TEDDIURSA,                                                                        -- Route 6 - Pokefan Allan
+
+
+
 
 -- probably have 64 trainers in total (24 more with johto)
 -- second half of trainer data is stored here. first half is stored in code.
 -- this was done at the very end of picodex implementation. had to remove newline characters from code to do so.
-g_trainer_data = {
-   P_RATTATA,    P_PIDGEY,     P_CATERPIE,   P_SPEAROW,    P_WEEDLE,     P_BELLSPROUT, -- youngstr
-   P_WEEDLE,     P_PARAS,      P_KAKUNA,     P_CATERPIE,   P_METAPOD,    P_PINSIR,     -- bugcatch
-   P_EKANS,      P_SQUIRTLE,   P_SANDSHREW,  P_CHARMANDER, P_RATTATA,    P_BULBASAUR,  -- junior
-   P_GEODUDE,    P_OMANYTE,    P_CUBONE,     P_VULPIX,     P_KABUTO,     P_ONIX,       -- brock
+g_trainer_data = { -- 3 * 16=48 gym leaders and trainers. 10 = silver,oak,elm,giovanni,red,gold,legend,legend,lorelei,agatha. 5 = elite 4/champion. 48 + 10 + 5 = 63. 1 = rocket executive?
+  P_PIDGEOT,    P_FARFETCHD,  P_NOCTOWL,    P_DELIBIRD,   P_FEAROW,     P_TOGETIC,    -- falkner -- first is PS2, second is GSC
+  P_PIDGEY,     P_PIDGEOTTO,                                                          -- falkner
+  P_SCYTHER,    P_BUTTERFREE, P_BEEDRILL,   P_WEEPINBELL, P_PINSIR,     P_PUPITAR,    -- bugsy
+  P_METAPOD,    P_KAKUNA,     P_SCYTHER,                                              -- bugsy
+  P_MILTANK,    P_CLEFABLE,   P_WIGGLYTUFF, P_GLOOM,      P_DODRIO,     P_STANTLER,   -- whitney
+  P_CLEFAIRY,   P_MILTANK,                                                            -- whitney
+  P_GENGAR,     P_ARIADOS,    P_SUDOWOODO,  P_MAROWAK,    P_GIRAFARIG,  P_NOCTOWL,    -- morty
+  P_GASTLY,     P_HAUNTER,    P_GENGAR,                                               -- morty
+  P_POLIWRATH,  P_GRANBULL,   P_MACHOKE,    P_HITMONCHAN, P_SANDSLASH,  P_PRIMEAPE,   -- chuck
+  P_PRIMEAPE,   P_POLIWRATH,                                                          -- chuck
+  P_STEELIX,    P_CORSOLA,    P_MAGNETON,   P_MANTINE,    P_SKARMORY,   P_FORRETRESS, -- jasmine
+  P_MAGNEMITE,  P_STEELIX,                                                            -- jasmine
+  P_PILOSWINE,  P_DEWGONG,    P_CLOYSTER,   P_URSARING,   P_DONPHAN,    P_JYNX,       -- pryce
+  P_SEEL,       P_DEWGONG,    P_PILOSWINE,                                            -- pryce
+  P_KINGDRA,    P_AMPHAROS,   P_DRAGONAIR,  P_RHYDON,     P_ARCANINE,   P_LAPRAS,     -- clair
+  P_DRAGONAIR,  P_KINGDRA,                                                            -- clair
+  P_XATU,       P_KADABRA,    P_GIRAFARIG,  P_CLEFABLE,   P_EXEGGUTOR,  P_JYNX,       -- will
+  P_XATU,       P_JYNX,       P_EXEGGUTOR,  P_SLOWBRO,                                -- will
+  P_VENOMOTH,   P_ARIADOS,    P_GOLBAT,     P_GLIGAR,     P_ELECTRODE,  P_MUK,        -- koga
+  P_ARIADOS,    P_VENOMOTH,   P_FORRETRESS, P_MUK,        P_CROBAT,                   -- koga
+  P_MACHAMP,    P_GOLEM,      P_KANGASKHAN, P_BLASTOISE,  P_HERACROSS,  P_ONIX,       -- bruno
+  P_HITMONTOP,  P_HITMONLEE,  P_HITMONCHAN, P_ONIX,       P_MACHAMP,                  -- bruno
+  P_ONIX,       P_HITMONCHAN, P_OMASTAR,    P_HITMONLEE,  P_GOLEM,      P_MACHAMP,    -- bruno -- kanto picodex team
+  P_UMBREON,    P_VICTREEBEL, P_MURKROW,    P_MAGMAR,     P_GENGAR,     P_VILEPLUME,  -- karen
+  P_UMBREON,    P_VILEPLUME,  P_GENGAR,     P_MURKROW,    P_HOUNDOOM,                 -- karen
+  P_DRAGONITE,  P_TYRANITAR,  P_CHARIZARD,  P_AERODACTYL, P_STEELIX,    P_GYARADOS,   -- lance
+  P_GYARADOS,   P_AERODACTYL, P_CHARIZARD,  P_DRAGONITE,                              -- lance
+  P_GYARADOS,   P_DRAGONAIR,  P_AERODACTYL, P_DRAGONITE,  P_KABUTOPS,   P_SNORLAX,    -- lance -- kanto picodex team
+  P_HOUNDOOM,   P_GOLBAT,     P_PERSIAN,    P_MISDREAVUS, P_VICTREEBEL, P_WOBBUFFET,  -- rocketexecutive
+  P_KOFFING,    P_ZUBAT,      P_RATICATE,   P_ARBOK, P_GLOOM, P_MURKROW, P_GOLBAT, P_WEEZING, P_VILEPLUME, P_HOUNDOUR, P_HOUNDOOM, -- all rockets in gsc. rocket grunt and rocket executive
+  P_SANDSLASH,  P_RATICATE,   P_ELECTRODE,  P_GOLBAT,     P_WEEZING,    P_ARBOK,      -- rocket -- BRY rockets
+  P_SNEASEL, P_CROBAT, P_MAGNETON, P_GENGAR, P_ALAKAZAM, P_TYPHLOSION, P_MEGANIUM, P_FERALIGATR, -- GSC rival
 
-   P_ODDISH,     P_MEOWTH,     P_CLEFAIRY,   P_NIDORANF,   P_DODUO,      P_JIGGLYPUFF, -- lass
-   P_GEODUDE,    P_PARAS,      P_DIGLETT,    P_ZUBAT,      P_GRAVELER,   P_MACHOP,     -- hiker
-   P_HORSEA,     P_POLIWAG,    P_SHELLDER,   P_MAGIKARP,   P_STARYU,     P_GOLDEEN,    -- swimmer
-   P_STARYU,     P_SEADRA,     P_PSYDUCK,    P_SEAKING,    P_SEEL,       P_STARMIE,    -- misty
+  P_RATTATA,    P_PIDGEY,     P_CATERPIE,   P_SPEAROW,    P_WEEDLE,     P_BELLSPROUT, -- youngstr
+  P_WEEDLE,     P_PARAS,      P_KAKUNA,     P_CATERPIE,   P_METAPOD,    P_PINSIR,     -- bugcatch
+  P_EKANS,      P_SQUIRTLE,   P_SANDSHREW,  P_CHARMANDER, P_RATTATA,    P_BULBASAUR,  -- junior
+  P_GEODUDE,    P_OMANYTE,    P_CUBONE,     P_VULPIX,     P_KABUTO,     P_ONIX,       -- brock
+  P_GRAVELER,   P_RHYDON,     P_OMASTAR,    P_ONIX,       P_KABUTOPS,                 -- brock
 
-   P_GROWLITHE,  P_NIDORANM,   P_DRATINI,    P_PONYTA,     P_SANDSHREW,  P_EEVEE,      -- gentlman
-   P_SHELLDER,   P_TENTACOOL,  P_PSYDUCK,    P_POLIWAG,    P_KRABBY,     P_POLIWHIRL,  -- sailor
-   P_VOLTORB,    P_ABRA,       P_ZUBAT,      P_VENONAT,    P_MAGNEMITE,  P_PIKACHU,    -- rocker
-   P_PIKACHU,    P_JOLTEON,    P_VOLTORB,    P_ELECTABUZZ, P_MAGNETON,   P_RAICHU,     -- ltsurge
+  P_ODDISH,     P_MEOWTH,     P_CLEFAIRY,   P_NIDORANF,   P_DODUO,      P_JIGGLYPUFF, -- lass
+  P_GEODUDE,    P_PARAS,      P_DIGLETT,    P_ZUBAT,      P_GRAVELER,   P_MACHOP,     -- hiker
+  P_HORSEA,     P_POLIWAG,    P_SHELLDER,   P_MAGIKARP,   P_STARYU,     P_GOLDEEN,    -- swimmer
+  P_STARYU,     P_SEADRA,     P_PSYDUCK,    P_SEAKING,    P_SEEL,       P_STARMIE,    -- misty
+  P_GOLDUCK,   P_QUAGSIRE,    P_LAPRAS, P_STARMIE, -- misty
 
-   P_GASTLY,     P_JIGGLYPUFF, P_CUBONE,     P_CLEFAIRY,   P_HAUNTER,    P_MAROWAK,    -- channelr
-   P_PIDGEOTTO,  P_GRAVELER,   P_POLIWHIRL,  P_RHYHORN,    P_GROWLITHE,  P_GLOOM,      -- gambler
-   P_BELLSPROUT, P_CHANSEY,    P_WIGGLYTUFF, P_WEEPINBELL, P_EEVEE,      P_CLEFABLE,   -- beauty
-   P_PARASECT,   P_VICTREEBEL, P_EXEGGCUTE,  P_BUTTERFREE, P_TANGELA,    P_VILEPLUME,  -- erika
+  P_GROWLITHE,  P_NIDORANM,   P_DRATINI,    P_PONYTA,     P_SANDSHREW,  P_EEVEE,      -- gentlman
+  P_SHELLDER,   P_TENTACOOL,  P_PSYDUCK,    P_POLIWAG,    P_KRABBY,     P_POLIWHIRL,  -- sailor
+  P_VOLTORB,    P_ABRA,       P_ZUBAT,      P_VENONAT,    P_MAGNEMITE,  P_PIKACHU,    -- rocker
+  P_PIKACHU,    P_JOLTEON,    P_VOLTORB,    P_ELECTABUZZ, P_MAGNETON,   P_RAICHU,     -- ltsurge
+  P_RAICHU,     P_ELECTRODE,  P_MAGNETON,   P_ELECTABUZZ,                             -- ltsurge johto - maybe get rid of pikachu
 
-   P_KOFFING,    P_MANKEY,     P_TENTACOOL,  P_GRIMER,     P_MACHOKE,    P_TENTACRUEL, -- biker
-   P_DODUO,      P_PIDGEOTTO,  P_FEAROW,     P_FARFETCHD,  P_DODRIO,     P_PIDGEOT,    -- birdkeep
-   P_VENONAT,    P_GLOOM,      P_MRMIME,     P_DROWZEE,    P_ELECTRODE,  P_SLOWPOKE,   -- juggler
-   P_NIDORINA,   P_MUK,        P_WEEZING,    P_BEEDRILL,   P_NIDORINO,   P_VENOMOTH,   -- koga
+  P_GASTLY,     P_JIGGLYPUFF, P_CUBONE,     P_CLEFAIRY,   P_HAUNTER,    P_MAROWAK,    -- channelr
+  P_PIDGEOTTO,  P_GRAVELER,   P_POLIWHIRL,  P_RHYHORN,    P_GROWLITHE,  P_GLOOM,      -- gambler
+  P_BELLSPROUT, P_CHANSEY,    P_WIGGLYTUFF, P_WEEPINBELL, P_EEVEE,      P_CLEFABLE,   -- beauty
+  P_PARASECT,   P_VICTREEBEL, P_EXEGGCUTE,  P_BUTTERFREE, P_TANGELA,    P_VILEPLUME,  -- erika
+  P_TANGELA,    P_JUMPLUFF, P_VICTREEBEL, P_BELLOSSOM, -- Erika
 
-   P_MACHOP,     P_MACHOKE,    P_HITMONLEE,  P_MANKEY,     P_PRIMEAPE,   P_HITMONCHAN, -- blckbelt
-   P_SANDSLASH,  P_RATICATE,   P_ELECTRODE,  P_GOLBAT,     P_WEEZING,    P_ARBOK,      -- rocket
-   P_SLOWPOKE,   P_ABRA,       P_SLOWBRO,    P_DROWZEE,    P_EXEGGCUTE,  P_KADABRA,    -- psychic
-   P_MRMIME,     P_EXEGGUTOR,  P_KADABRA,    P_JYNX,       P_HYPNO,      P_ALAKAZAM,   -- sabrina
+  P_KOFFING,    P_MANKEY,     P_TENTACOOL,  P_GRIMER,     P_MACHOKE,    P_TENTACRUEL, -- biker
+  P_DODUO,      P_PIDGEOTTO,  P_FEAROW,     P_FARFETCHD,  P_DODRIO,     P_PIDGEOT,    -- birdkeep
+  P_VENONAT,    P_GLOOM,      P_MRMIME,     P_DROWZEE,    P_ELECTRODE,  P_SLOWPOKE,   -- juggler
+  P_NIDORINA,   P_MUK,        P_WEEZING,    P_BEEDRILL,   P_NIDORINO,   P_VENOMOTH,   -- koga
+  P_CROBAT,     P_WEEZING,    P_ARIADOS,    P_VENOMOTH,                               -- Janine (koga daughter)
 
-   P_DITTO,      P_VICTREEBEL, P_GASTLY,     P_VENOMOTH,   P_HYPNO,      P_PORYGON,    -- scientst
-   P_CHANSEY,    P_PINSIR,     P_ELECTABUZZ, P_SCYTHER,    P_LICKITUNG,  P_GOLDUCK,    -- pkmaniac
-   P_PONYTA,     P_MAGNETON,   P_PRIMEAPE,   P_FLAREON,    P_VULPIX,     P_RAPIDASH,   -- suprnerd
-   P_RAPIDASH,   P_ARCANINE,   P_FLAREON,    P_NINETALES,  P_GOLEM,      P_MAGMAR,     -- blaine
+  P_MACHOP,     P_MACHOKE,    P_HITMONLEE,  P_MANKEY,     P_PRIMEAPE,   P_HITMONCHAN, -- blckbelt
+  P_SANDSLASH,  P_RATICATE,   P_ELECTRODE,  P_GOLBAT,     P_WEEZING,    P_ARBOK,      -- rocket
+  P_SLOWPOKE,   P_ABRA,       P_SLOWBRO,    P_DROWZEE,    P_EXEGGCUTE,  P_KADABRA,    -- psychic
+  P_MRMIME,     P_EXEGGUTOR,  P_KADABRA,    P_JYNX,       P_HYPNO,      P_ALAKAZAM,   -- sabrina
+  P_ESPEON, P_MRMIME, P_ALAKAZAM, -- sabrina
 
-   P_DRAGONAIR,  P_WARTORTLE,  P_PARASECT,   P_CHARMELEON, P_POLIWRATH,  P_IVYSAUR,    -- cooltrnr
-   P_GOLDEEN,    P_TENTACRUEL, P_SEADRA,     P_SEAKING,    P_CLOYSTER,   P_KINGLER,    -- fishrman
-   P_MAROWAK,    P_TAUROS,     P_SANDSLASH,  P_RATICATE,   P_RHYHORN,    P_PERSIAN,    -- tamer
-   P_DUGTRIO,    P_NIDOKING,   P_PERSIAN,    P_NIDOQUEEN,  P_KANGASKHAN, P_RHYDON,     -- giovanni
+  P_DITTO,      P_VICTREEBEL, P_GASTLY,     P_VENOMOTH,   P_HYPNO,      P_PORYGON,    -- scientst
+  P_CHANSEY,    P_PINSIR,     P_ELECTABUZZ, P_SCYTHER,    P_LICKITUNG,  P_GOLDUCK,    -- pkmaniac
+  P_PONYTA,     P_MAGNETON,   P_PRIMEAPE,   P_FLAREON,    P_VULPIX,     P_RAPIDASH,   -- suprnerd
+  P_RAPIDASH,   P_ARCANINE,   P_FLAREON,    P_NINETALES,  P_GOLEM,      P_MAGMAR,     -- blaine
+  P_MAGCARGO,   P_MAGMAR,     P_RAPIDASH,   P_NINETALES,  P_PARASECT,   P_RAPIDASH,  P_FLAREON, P_MAGCARGO, P_OCTILLERY, P_CLEFABLE, P_VILEPLUME, P_ARCANINE, P_CHANSEY, P_MRMIME, -- blaine
 
-   P_CLOYSTER,   P_JYNX,       P_VAPOREON,   P_LAPRAS,     P_SLOWBRO,    P_DEWGONG,    -- lorelei
-   P_ONIX,       P_HITMONCHAN, P_OMASTAR,    P_HITMONLEE,  P_GOLEM,      P_MACHAMP,    -- bruno
-   P_GOLBAT,     P_MUK,        P_HAUNTER,    P_VILEPLUME,  P_ARBOK,      P_GENGAR,     -- agatha
-   P_GYARADOS,   P_DRAGONAIR,  P_AERODACTYL, P_DRAGONITE,  P_KABUTOPS,   P_SNORLAX,    -- lance
+  P_DRAGONAIR,  P_WARTORTLE,  P_PARASECT,   P_CHARMELEON, P_POLIWRATH,  P_IVYSAUR,    -- cooltrnr
+  P_GOLDEEN,    P_TENTACRUEL, P_SEADRA,     P_SEAKING,    P_CLOYSTER,   P_KINGLER,    -- fishrman
+  P_MAROWAK,    P_TAUROS,     P_SANDSLASH,  P_RATICATE,   P_RHYHORN,    P_PERSIAN,    -- tamer
 
-   P_PIDGEOT,    P_ALAKAZAM,   P_JOLTEON,    P_ARCANINE,   P_EXEGGUTOR,  P_BLASTOISE,  -- blue
-   P_GENGAR,     P_KANGASKHAN, P_CLEFABLE,   P_GYARADOS,   P_NINETALES,  P_VENUSAUR,   -- green
-   P_SCYTHER,    P_SNORLAX,    P_RAICHU,     P_LAPRAS,     P_DODRIO,     P_CHARIZARD,  -- red
-   P_DRAGONITE,  P_ZAPDOS,     P_MOLTRES,    P_ARTICUNO,   P_MEWTWO,     P_MEW         -- legendry
+  -- these are characters that don't appear in pokemon GSC
+  P_TAUROS, P_EXEGGUTOR, P_ARCANINE, P_GYARADOS, P_VENUSAUR, P_BLASTOISE, P_CHARIZARD, P_EEVEE, P_PIKACHU, -- oak
+  P_CYNDAQUIL, P_TOTODILE, P_CHIKORITA, P_SUDOWOODO, P_SENTRET, P_TOGEPI, P_CORSOLA, -- elm
+  P_DUGTRIO,    P_NIDOKING,   P_PERSIAN,    P_NIDOQUEEN,  P_KANGASKHAN, P_RHYDON,     -- giovanni -- probably keep kangaskhan
+  P_GOLEM,      P_NIDOKING,   P_MAROWAK,    P_SANDSLASH,  P_NIDOQUEEN,  P_RHYDON,     -- giovanni
+  P_CLOYSTER,   P_JYNX,       P_VAPOREON,   P_LAPRAS,     P_SLOWBRO,    P_DEWGONG,    -- lorelei
+  P_GOLBAT,     P_MUK,        P_HAUNTER,    P_VILEPLUME,  P_ARBOK,      P_GENGAR,     -- agatha -- give her P_MISDREAVUS, P_VENUSAUR, P_ALAKAZAM, P_JYNX, P_GYARADOS
+
+  P_SCYTHER,    P_SNORLAX,    P_RAICHU,     P_LAPRAS,     P_DODRIO,     P_CHARIZARD,  -- red
+  P_RAICHU,     P_ESPEON,     P_SNORLAX,    P_VENUSAUR,   P_CHARIZARD,  P_BLASTOISE,  -- red Maybe this one since it has espeon?
+  P_RAICHU,     P_LAPRAS,     P_SNORLAX,    P_VENUSAUR,   P_CHARIZARD,  P_BLASTOISE,  -- red
+  P_TOGETIC, P_SUDOWOODO, P_AIPOM, P_SUNFLORA, P_TYPHLOSION, P_POLITOED, -- gold
+
+  -- red,  blue,   oak
+  -- gold, silver, elm
+
+  P_PIDGEOT,    P_ALAKAZAM,   P_JOLTEON,    P_ARCANINE,   P_EXEGGUTOR,  P_BLASTOISE,  -- blue
+  P_PIDGEOT,    P_ALAKAZAM,   P_RHYDON,     P_GYARADOS,   P_EXEGGUTOR,  P_ARCANINE,   -- blue
+
+  P_ZAPDOS,     P_MOLTRES,    P_ARTICUNO,   P_RAIKOU,     P_ENTEI,      P_SUICUNE,    -- legendry
+  P_UNOWN,      P_HOOH,       P_LUGIA,      P_MEWTWO,     P_MEW,        P_CELEBI,     -- legendry
 }
 
 -- from missingno (0) to mew (151), these are the tms they can learn.
