@@ -164,7 +164,8 @@ T_GRASS    = 8  T_FLYING   = 9
 T_ICE      = 10 T_BUG      = 11
 T_PSYCHIC  = 12 T_ROCK     = 13
 T_DRAGON   = 14 T_GHOST    = 15
-T_BIRD     = 17
+T_DARK     = 16 T_STEEL    = 17
+T_BIRD     = 18
 
 P_MISSINGNO   = 0   P_BULBASAUR   = 1   P_IVYSAUR     = 2   P_VENUSAUR    = 3
 P_CHARMANDER  = 4   P_CHARMELEON  = 5   P_CHARIZARD   = 6   P_SQUIRTLE    = 7
@@ -236,107 +237,89 @@ P_TYRANITAR   = 248 P_LUGIA       = 249 P_HOOH        = 250 P_CELEBI      = 251
 
 -- All the different trainers in GSC and RBY. Along with all the possible pokemon they have in all the games combined, excluding some kanto gym leaders.
 -- pokemon after dashes represent other possible pokemon, likely coming from later/other games.
+-- each trainer needs about 4 new pokemon. some have 2 i think. some have 6. So it varies. 252 pokemon total. The last pokemon in a party is always brand new.
 
--- youngster                                 - P_ARBOK      P_CROBAT     P_DIGLETT    P_EKANS      P_FEAROW    P_MANKEY     P_NIDORANM   P_NIDORINO   P_PIDGEY     P_RATICATE   P_RATTATA    P_SANDSHREW  P_SANDSLASH  P_SLOWPOKE  P_SPEAROW    P_VENOMOTH  P_WOOPER     P_ZUBAT
--- sage                                      - P_AIPOM      P_ARBOK      P_BELLSPROUT P_CLEFAIRY   P_CUBONE    P_GASTLY     P_GOLDUCK    P_HOOTHOOT   P_PERSIAN    P_RHYHORN    P_SANDSLASH  P_TAUROS
--- Violet City Gym - Gym Leader Falkner      - P_DELIBIRD   P_FARFETCHD  P_FEAROW     P_NOCTOWL    P_PIDGEOT   P_PIDGEOTTO  P_PIDGEY     P_TOGETIC
+-- 60 trainers total
+g_trainer_data = {
+  P_RATTATA,    P_PIDGEY,     P_WOOPER,     P_ZUBAT,      P_SENTRET,    P_EEVEE,      -- youngster
+  P_PSYDUCK,    P_HOOTHOOT,   P_CUBONE,     P_MEOWTH,     P_BELLSPROUT, P_GASTLY,     -- sage
+  P_PIDGEY,     P_DELIBIRD,   P_SPEAROW,    P_FARFETCHD,  P_DODUO,      P_PIDGEOTTO,  -- falkner
 
--- rocketgrunt                               - P_ARBOK      P_DROWZEE    P_EKANS      P_GLOOM      P_GOLBAT    P_GRIMER     P_KOFFING    P_MUK        P_ODDISH     P_RATICATE   P_RATTATA    P_VENONAT    P_WEEZING    P_ZUBAT
--- bugcatcher                                - P_ARIADOS    P_BEEDRILL   P_BUTTERFREE P_CATERPIE   P_KAKUNA    P_LEDYBA     P_METAPOD    P_PARAS      P_VENONAT    P_WEEDLE
--- Azalea Town Gym - Gym Leader Bugsy        - P_BEEDRILL   P_BUTTERFREE P_KAKUNA     P_METAPOD    P_PINSIR    P_PUPITAR    P_SCYTHER    P_WEEPINBELL
+  P_ZUBAT,      P_EKANS,      P_SLOWPOKE,   P_GRIMER,     P_KOFFING,    P_RATICATE,   -- rocketgrunt
+  P_CATERPIE,   P_LEDYBA,     P_PARAS,      P_WEEDLE,     P_VENONAT,    P_SPINARAK,   -- bugcatcher
+  P_KAKUNA,     P_WEEPINBELL, P_PINSIR,     P_METAPOD,    P_PINECO,     P_SCYTHER,    -- bugsy
 
--- officer                                   - P_BELLSPROUT P_BULBASAUR  P_CHARMANDER P_CLEFAIRY   P_DIGLETT   P_EKANS      P_GLOOM      P_GOLDEEN    P_GROWLITHE  P_HOOTHOOT   P_HORSEA     P_IVYSAUR    P_JIGGLYPUFF P_MACHOP    P_MANKEY     P_MEOWTH    P_NIDORANM   P_NIDORINO P_ODDISH    P_PIDGEOTTO P_PIDGEY   P_PIKACHU   P_POLIWAG   P_RAICHU    P_RATICATE   P_RATTATA P_SANDSHREW P_SEAKING  P_SEEL     P_SPEAROW    P_SQUIRTLE P_TANGELA P_TENTACOOL
--- beauty                                    - P_BELLSPROUT P_BULBASAUR  P_CLEFAIRY   P_CORSOLA    P_EXEGGCUTE P_GOLDEEN    P_HOPPIP     P_HORSEA     P_IVYSAUR    P_MEOWTH     P_ODDISH     P_PARAS      P_PARASECT   P_PIDGEOTTO P_PIKACHU    P_POLIWAG   P_RATTATA    P_SEADRA   P_SEAKING   P_SENTRET   P_SKIPLOOM P_STARYU    P_WIGGLYTUFF
--- Goldenrod City Gym - Gym Leader Whitney   - P_CLEFABLE   P_CLEFAIRY   P_DODRIO     P_GLOOM      P_MILTANK   P_STANTLER   P_WIGGLYTUFF
+  P_CYNDAQUIL,  P_PICHU,      P_TOTODILE,   P_IGGLYBUFF,  P_CHIKORITA,  P_SNUBBULL,   -- pokefan
+  P_MAREEP,     P_CLEFFA,     P_POLIWAG,    P_TOGEPI,     P_HOPPIP,     P_TEDDIURSA,  -- beauty
+  P_JIGGLYPUFF, P_CLEFAIRY,   P_PHANPY,     P_LICKITUNG,  P_CHANSEY,    P_MILTANK,    -- whitney
 
--- kiminogirl                                - P_EEVEE      P_ESPEON     P_FLAREON    P_JOLTEON    P_UMBREON   P_VAPOREON
--- medium                                    - P_DROWZEE    P_GASTLY     P_HAUNTER    P_HYPNO      P_SLOWBRO   P_SLOWPOKE
--- Ecruteak City Gym - Gym Leader Morty      - P_ARIADOS    P_GASTLY     P_GENGAR     P_GIRAFARIG  P_HAUNTER   P_MAROWAK    P_NOCTOWL    P_SUDOWOODO
+  P_EEVEE,      P_VAPOREON,   P_JOLTEON,    P_FLAREON,    P_ESPEON,     P_UMBREON,    -- kiminogirl
+  P_CUBONE,     P_GASTLY,     P_ABRA,       P_DROWZEE,    P_HAUNTER,    P_SLOWBRO,    -- medium
+  P_MAROWAK,    P_STANTLER,   P_HAUNTER,    P_SUDOWOODO,  P_MISDREAVUS, P_GENGAR,     -- morty
 
--- pokefan                                   - P_BULBASAUR  P_CHARMANDER P_DELIBIRD   P_MEOWTH     P_NIDOKING  P_PHANPY     P_PIKACHU    P_QUAGSIRE   P_RAICHU     P_SEAKING    P_SLOWKING   P_SNUBBULL   P_SQUIRTLE   P_TEDDIURSA
--- blackbelt                                 - P_HITMONCHAN P_HITMONLEE  P_MACHOKE    P_MACHOP     P_MANKEY    P_PRIMEAPE
--- Cianwood City Gym - Gym Leader Chuck      - P_GRANBULL   P_HITMONCHAN P_MACHOKE    P_POLIWRATH  P_PRIMEAPE  P_SANDSLASH
+  P_LARVITAR,   P_NIDORANF,   P_HOUNDOUR,   P_VULPIX,     P_NIDORANM,   P_GROWLITHE,  -- officer
+  P_MACHOP,     P_TYROGUE,    P_MANKEY,     P_ONIX,       P_POLIWHIRL,  P_HERACROSS,  -- blackbelt
+  P_MACHOKE,    P_GRANBULL,   P_HITMONTOP,  P_POLITOED,   P_PRIMEAPE,   P_POLIWRATH,  -- chuck
 
--- sailor                                    - P_HORSEA     P_KRABBY     P_MACHOKE    P_MACHOP     P_PIKACHU   P_POLIWAG    P_POLIWHIRL  P_PSYDUCK    P_RATICATE   P_SHELLDER   P_STARYU     P_TENTACOOL  P_WOOPER
--- gentleman                                 - P_FLAAFFY    P_GROWLITHE  P_NIDORANF   P_NIDORANM   P_NOCTOWL   P_PIKACHU
--- Olivine City Gym - Gym Leader Jasmine     - P_CORSOLA    P_FORRETRESS P_MAGNEMITE  P_MAGNETON   P_MANTINE   P_SKARMORY   P_STEELIX
+  P_CROCONAW,   P_FLAAFFY,    P_QUILAVA,    P_PIKACHU,    P_BAYLEEF,    P_NOCTOWL,    -- gentleman
+  P_HORSEA,     P_MARILL,     P_MACHOKE,    P_KRABBY,     P_GEODUDE,    P_QUAGSIRE,   -- sailor
+  P_CORSOLA,    P_MAGNEMITE,  P_FORRETRESS, P_MANTINE,    P_SKARMORY,   P_STEELIX,    -- jasmine
 
--- rocketexec                                - P_ARBOK      P_GASTLY     P_GOLBAT     P_HOUNDOOM   P_HOUNDOUR  P_KOFFING    P_MISDREAVUS P_MURKROW    P_PERSIAN    P_RATICATE   P_VICTREEBEL P_VILEPLUME  P_WEEZING    P_WOBBUFFET P_ZUBAT
--- skier                                     - P_CLOYSTER   P_DEWGONG    P_JYNX       P_SEEL       P_SHELLDER  P_SWINUB
--- Mahogany Town Gym - Gym Leader Pryce      - P_CLOYSTER   P_DEWGONG    P_DONPHAN    P_JYNX       P_PILOSWINE P_SEEL       P_URSARING
+  P_ARBOK,      P_RATICATE,   P_GOLBAT,     P_MURKROW,    P_WEEZING,    P_PERSIAN,    -- rocketexec
+  P_SMOOCHUM,   P_SHELLDER,   P_SWINUB,     P_DELIBIRD,   P_SEEL,       P_AZUMARILL,  -- skier
+  P_CLOYSTER,   P_FEAROW,     P_SNEASEL,    P_URSARING,   P_DEWGONG,    P_PILOSWINE,  -- pryce
 
--- scientist                                 - P_DITTO      P_ELECTRODE  P_GRIMER     P_KOFFING    P_MAGNEMITE P_MAGNETON   P_MUK        P_PORYGON    P_VOLTORB    P_WEEZING
--- twins                                     - P_CLEFAIRY   P_DRATINI    P_JIGGLYPUFF P_LEDYBA     P_PHANPY    P_SPINARAK   P_TEDDIURSA  P_VICTREEBEL P_VILEPLUME
--- Blackthorn City Gym - Gym Leader Clair    - P_AMPHAROS   P_ARCANINE   P_DRAGONAIR  P_KINGDRA    P_LAPRAS    P_RHYDON
+  P_VOLTORB,    P_DITTO,      P_SMEARGLE,   P_ODDISH,     P_PORYGON,    P_UNOWN,      -- scientist
+  P_SHUCKLE,    P_DRATINI,    P_LEDIAN,     P_MAGIKARP,   P_SKIPLOOM,   P_SEADRA,     -- twins
+  P_DONPHAN,    P_DRAGONAIR,  P_AMPHAROS,   P_GYARADOS,   P_PUPITAR,    P_KINGDRA,    -- clair
 
--- supernerd                                 - P_CHARMANDER P_GRIMER     P_GROWLITHE  P_KOFFING    P_MAGNEMITE P_MUK        P_NINETALES  P_PONYTA     P_PORYGON    P_RAPIDASH   P_SEADRA     P_SLOWPOKE   P_VOLTORB    P_VULPIX    P_UNOWN
--- camper                                    - P_DIGLETT    P_DUGTRIO    P_GOLDUCK    P_MANKEY     P_MARILL    P_NIDOKING   P_NIDORANM   P_POLIWRATH  P_PRIMEAPE   P_PSYDUCK    P_SANDSHREW  P_SANDSLASH  P_ZUBAT
--- Pewter City Gym - Gym Leader Brock        - P_CUBONE     P_GEODUDE    P_GRAVELER   P_KABUTO     P_KABUTOPS  P_OMANYTE    P_OMASTAR    P_ONIX       P_RHYDON     P_RHYHORN    P_VULPIX
+  P_ELEKID,     P_OMANYTE,    P_TENTACOOL,  P_KABUTO,     P_PONYTA,     P_GLIGAR,     -- supernerd
+  P_DIGLETT,    P_NIDORINA,   P_SANDSHREW,  P_NIDORINO,   P_PRIMEAPE,   P_GRAVELER,   -- camper
+  P_OMASTAR,    P_RHYHORN,    P_KABUTOPS,   P_STEELIX,    P_AERODACTYL, P_GOLEM,      -- brock
 
--- schoolboy                                 - P_ALAKAZAM   P_BELLSPROUT P_DITTO      P_GYARADOS   P_MAGNEMITE P_MAGNETON   P_MRMIME     P_ODDISH     P_PARAS      P_POLIWHIRL  P_TANGELA    P_VAPOREON   P_VICTREEBEL P_VOLTORB   P_WEEPINBELL P_WIGGLYTUFF
--- swimmer                                   - P_CLOYSTER   P_DEWGONG    P_GOLDEEN    P_GOLDUCK    P_GRIMER    P_GYARADOS   P_HORSEA     P_KRABBY     P_LAPRAS     P_MARILL     P_OCTILLERY  P_POLIWAG    P_POLIWHIRL  P_PSYDUCK   P_QUAGSIRE   P_QWILFISH  P_REMORAID   P_SEADRA   P_SEAKING   P_SEEL      P_SHELLDER P_STARMIE   P_STARYU    P_TENTACOOL P_TENTACRUEL P_WARTORTLE
--- Cerulean City Gym - Gym Leader Misty      - P_GOLDUCK    P_LAPRAS     P_PSYDUCK    P_QUAGSIRE   P_SEADRA    P_SEAKING    P_SEEL       P_STARMIE    P_STARYU
+  P_NATU,       P_YANMA,      P_DITTO,      P_LEDIAN,     P_TANGELA,    P_TOGETIC,    -- schoolboy
+  P_STARYU,     P_MANTINE,    P_REMORAID,   P_QWILFISH,   P_GOLDEEN,    P_TENTACRUEL, -- swimmer
+  P_GOLDUCK,    P_QUAGSIRE,   P_SEAKING,    P_WIGGLYTUFF, P_POLITOED,   P_STARMIE,    -- misty
 
--- juggler                                   - P_DROWZEE    P_ELECTRODE  P_HYPNO      P_KADABRA    P_MACHOKE   P_MACHOP     P_MAGMAR     P_MANKEY     P_MRMIME     P_PRIMEAPE   P_TENTACOOL  P_TENTACRUEL P_VOLTORB
--- guitarist                                 - P_ARBOK      P_BELLSPROUT P_CUBONE     P_DROWZEE    P_EKANS     P_ELECTRODE  P_GOLBAT     P_GRIMER     P_GROWLITHE  P_HAUNTER    P_HORSEA     P_HYPNO      P_KOFFING    P_MACHOKE   P_MACHOP     P_MAGNEMITE P_ODDISH     P_POLIWAG  P_POLIWHIRL P_RATICATE  P_RATTATA  P_SANDSHREW P_SANDSLASH P_VOLTORB   P_VULPIX     P_WEEZING P_ZUBAT
--- Vermilion City Gym - Gym Leader Lt. Surge - P_ELECTABUZZ P_ELECTRODE  P_JOLTEON    P_MAGNETON   P_PIKACHU   P_RAICHU     P_VOLTORB
+  P_CHARMANDER, P_SUNKERN,    P_SQUIRTLE,   P_OMASTAR,    P_BULBASAUR,  P_DUNSPARCE,  -- juggler
+  P_KABUTOPS,   P_CHINCHOU,   P_ARBOK,      P_SCIZOR,     P_SANDSLASH,  P_ELECTABUZZ, -- guitarist
+  P_MAGNETON,   P_ELECTRODE,  P_PORYGON2,   P_LANTURN,    P_ELECTABUZZ, P_RAICHU,     -- ltsurge
 
--- birdkeeper                                - P_DODRIO     P_DODUO      P_FARFETCHD  P_FEAROW     P_NOCTOWL   P_PIDGEOT    P_PIDGEOTTO  P_PIDGEY     P_SPEAROW
--- lass                                      - P_ARBOK      P_BELLOSSOM  P_BELLSPROUT P_BULBASAUR  P_CLEFAIRY  P_CUBONE     P_FLAAFFY    P_GLOOM      P_GRANBULL   P_HOPPIP     P_IVYSAUR    P_JIGGLYPUFF P_JUMPLUFF   P_MARILL    P_MEOWTH     P_NIDORANF  P_NIDORANM   P_NIDORINA P_ODDISH    P_PARAS     P_PARASECT P_PIDGEOTTO P_PIDGEY    P_PIKACHU   P_PSYDUCK    P_RATTATA P_SKIPLOOM  P_SNUBBULL P_VENUSAUR P_WEEPINBELL P_WIGGLYTUFF
--- Celadon City Gym - Gym Leader Erika       - P_BELLOSSOM  P_BUTTERFREE P_EXEGGCUTE  P_JUMPLUFF   P_PARASECT  P_TANGELA    P_VICTREEBEL P_VILEPLUME
+  P_SANDSLASH,  P_GLIGAR,     P_PARASECT,   P_MAROWAK,    P_DONPHAN,    P_DUGTRIO,    -- hiker
+  P_CLEFABLE,   P_BUTTERFREE, P_GRANBULL,   P_GLOOM,      P_WIGGLYTUFF, P_SUNFLORA,   -- lass
+  P_TANGELA,    P_JUMPLUFF,   P_PARASECT,   P_VILEPLUME,  P_VICTREEBEL, P_BELLOSSOM,  -- erika
 
--- biker                                     - P_CHARMANDER P_CHARMELEON P_FLAREON    P_GRIMER     P_GROWLITHE P_KOFFING    P_MAGMAR     P_MUK        P_NINETALES  P_PONYTA     P_SLUGMA     P_VOLTORB    P_VULPIX     P_WEEZING
--- picnicker                                 - P_BULBASAUR  P_CLEFAIRY   P_EXEGGUTOR  P_FLAAFFY    P_FURRET    P_HOPPIP     P_NIDOQUEEN  P_NIDORANF   P_NIDORINA   P_PIKACHU    P_PONYTA     P_RAICHU     P_RAPIDASH   P_SEAKING   P_SKIPLOOM   P_VULPIX
--- Fuschia City Gym - Gym Leader Janine      - P_ARIADOS    P_BEEDRILL   P_CROBAT     P_MUK        P_NIDORINA  P_NIDORINO   P_VENOMOTH   P_WEEZING
+  P_SMEARGLE,   P_WOBBUFFET,  P_PINSIR,     P_TAUROS,     P_TENTACRUEL, P_RAPIDASH,   -- biker
+  P_FURRET,     P_EXEGGCUTE,  P_JUMPLUFF,   P_AZUMARILL,  P_CLEFABLE,   P_NIDOQUEEN,  -- picnicker
+  P_WEEZING,    P_ARIADOS,    P_ELECTRODE,  P_MUK,        P_NIDOQUEEN,  P_VENOMOTH,   -- janine
 
--- hiker                                     - P_DIGLETT    P_DUGTRIO    P_GEODUDE    P_GOLEM      P_GRAVELER  P_MACHAMP    P_MACHOP     P_ONIX       P_SANDSLASH
--- psychic                                   - P_ABRA       P_DROWZEE    P_ESPEON     P_EXEGGCUTE  P_EXEGGUTOR P_GIRAFARIG  P_KADABRA    P_MRMIME     P_NATU       P_SLOWBRO    P_SLOWPOKE   P_STARMIE    P_XATU
--- Saffron City Gym - Gym Leader Sabrina     - P_ALAKAZAM   P_ESPEON     P_EXEGGUTOR  P_HYPNO      P_JYNX      P_KADABRA    P_MRMIME
+  P_WARTORTLE,  P_KANGASKHAN, P_CHARMELEON, P_DODRIO,     P_IVYSAUR,    P_NIDOKING,   -- pokemaniac
+  P_MRMIME,     P_GIRAFARIG,  P_WOBBUFFET,  P_KADABRA,    P_SLOWBRO,    P_HYPNO,      -- psychic
+  P_KADABRA,    P_HYPNO,      P_JYNX,       P_STARMIE,    P_MRMIME,     P_ALAKAZAM,   -- sabrina
 
--- fisher                                    - P_CLOYSTER   P_GOLDEEN    P_GYARADOS   P_HORSEA     P_MAGIKARP  P_POLIWAG    P_POLIWHIRL  P_QWILFISH   P_REMORAID   P_SEAKING    P_SHELLDER   P_STARYU     P_TENTACOOL  P_TENTACRUEL
--- firebreather                              - P_CHARMELEON P_FLAREON    P_GRIMER     P_KOFFING    P_MAGMAR    P_MUK        P_SLUGMA     P_VOLTORB    P_VULPIX     P_WEEZING
--- Seafoam Islands Gym - Gym Leader Blaine   - P_ARCANINE   P_CHANSEY    P_CLEFABLE   P_FLAREON    P_GOLEM     P_MAGCARGO   P_MAGMAR     P_MRMIME     P_NINETALES  P_OCTILLERY  P_PARASECT   P_RAPIDASH   P_VILEPLUME
+  P_QWILFISH,   P_OCTILLERY,  P_CLOYSTER,   P_SEAKING,    P_CORSOLA,    P_KINGLER,    -- fisher
+  P_PERSIAN,    P_SLUGMA,     P_RAPIDASH,   P_BEEDRILL,   P_MAGBY,      P_NINETALES,  -- firebreather
+  P_ARCANINE,   P_GOLEM,      P_FLAREON,    P_MAGCARGO,   P_OCTILLERY,  P_MAGMAR,     -- blaine
 
--- pokemaniac                                - P_CHARMANDER P_CHARMELEON P_CUBONE     P_KANGASKHAN P_LAPRAS    P_LICKITUNG  P_MAROWAK    P_NIDOKING   P_NIDOQUEEN  P_NIDORINA   P_NIDORINO   P_RHYHORN    P_SLOWBRO    P_SLOWPOKE
--- cooltrainer                               - P_ARCANINE   P_BELLOSSOM  P_BELLSPROUT P_BLASTOISE  P_BULBASAUR P_BUTTERFREE P_CHANSEY    P_CHARIZARD  P_CHARMANDER P_CHARMELEON P_CLOYSTER   P_DEWGONG    P_DRAGONAIR  P_DRATINI   P_DUGTRIO    P_EEVEE     P_ELECTABUZZ P_EXECUTOR P_EXEGGCUTE P_FLAREON   P_GLOOM    P_GOLDEEN   P_GOLDUCK   P_HORSEA    P_IVYSAUR    P_JOLTEON P_KINGLER   P_MACHOKE  P_MACHOP   P_MAGNETON   P_MANKEY   P_MARILL  P_NIDOKING P_NIDOQUEEN P_NIDORINO P_NINETALES P_PARASECT P_PERSIAN P_PIDGEOT P_PIKACHU P_POLIWHIRL P_QUAGSIRE P_RAPIDASH P_RHYHORN P_SANDSLASH P_SEADRA P_SEAKING P_SHELLDER P_SQUIRTLE P_STARMIE P_STARYU P_TENTACRUEL P_VAPOREON P_VENUSAUR P_VICTREEBEL P_WARTORTLE P_WEEPINBELL
--- Viridian City Gym - Gym Leader Blue       - P_ALAKAZAM   P_ARCANINE   P_BLASTOISE  P_EXEGGUTOR  P_GYARADOS  P_JOLTEON    P_PIDGEOT    P_RHYDON
+  P_FEAROW,     P_DODUO,      P_NOCTOWL,    P_PIDGEOTTO,  P_DODRIO,     P_PIDGEOT,    -- birdkeeper
+  P_DEWGONG,    P_BELLOSSOM,  P_AIPOM,      P_DUGTRIO,    P_GOLDUCK,    P_BLISSEY,    -- cooltrainer
+  P_PIDGEOT,    P_ARCANINE,   P_EXEGGUTOR,  P_RHYDON,     P_JOLTEON,    P_BLASTOISE,  -- blue
 
--- profelm                                   - P_CHIKORITA  P_CORSOLA    P_CYNDAQUIL  P_SENTRET    P_SUDOWOODO P_TOGEPI     P_TOTODILE
--- silver                                    - P_ALAKAZAM   P_BAYLEEF    P_CHIKORITA  P_CROBAT     P_CROCONAW  P_CYNDAQUIL  P_FERALIGATR P_GASTLY     P_GENGAR     P_GOLBAT     P_HAUNTER    P_KADABRA    P_MAGNEMITE  P_MAGNETON  P_QUILAVA    P_SNEASEL   P_TOTODILE   P_ZUBAT
+  P_LANTURN,    P_FURRET,     P_SUDOWOODO,  P_TOGETIC,    P_MAGCARGO,   P_MEGANIUM,   -- elm
+  P_NINETALES,  P_KANGASKHAN, P_RHYDON,     P_VAPOREON,   P_TAUROS,     P_VENUSAUR,   -- oak
+  P_SNEASEL,    P_CROBAT,     P_MAGNETON,   P_URSARING,   P_ALAKAZAM,   P_FERALIGATR, -- silver
 
--- Kanto Elite Four Will                     - P_CLEFABLE   P_EXEGGUTOR  P_GIRAFARIG  P_JYNX       P_KADABRA   P_SLOWBRO    P_XATU
--- Kanto Elite Four Koga                     - P_ARIADOS    P_CROBAT     P_ELECTRODE  P_FORRETRESS P_GLIGAR    P_GOLBAT     P_MUK        P_VENOMOTH
--- Kanto Elite Four Bruno                    - P_BLASTOISE  P_GOLEM      P_HERACROSS  P_HITMONCHAN P_HITMONLEE P_HITMONTOP  P_KANGASKHAN P_MACHAMP    P_OMASTAR    P_ONIX
--- Kanto Elite Four Karen                    - P_GENGAR     P_HOUNDOOM   P_MAGMAR     P_MURKROW    P_UMBREON   P_VICTREEBEL P_VILEPLUME
--- Champion Lance                            - P_AERODACTYL P_CHARIZARD  P_DRAGONAIR  P_DRAGONITE  P_GYARADOS  P_KABUTOPS   P_SNORLAX    P_STEELIX    P_TYRANITAR
+  P_EXEGGUTOR,  P_SLOWKING,   P_GIRAFARIG,  P_JYNX,       P_LAPRAS,     P_XATU,       -- will
+  P_ARIADOS,    P_MUK,        P_FORRETRESS, P_VENOMOTH,   P_NIDOKING,   P_CROBAT,     -- koga
+  P_HITMONCHAN, P_HERACROSS,  P_HITMONLEE,  P_POLIWRATH,  P_HITMONTOP,  P_MACHAMP,    -- bruno
 
--- profoak                                   - P_ARCANINE   P_BLASTOISE  P_CHARIZARD  P_EEVEE      P_EXEGGUTOR P_GYARADOS   P_PIKACHU    P_TAUROS     P_VENUSAUR
--- gold                                      - P_AIPOM      P_POLITOED   P_SUDOWOODO  P_SUNFLORA   P_TOGETIC   P_TYPHLOSION
+  P_GENGAR,     P_UMBREON,    P_MISDREAVUS, P_MURKROW,    P_VILEPLUME,  P_HOUNDOOM,   -- karen
+  P_AERODACTYL, P_GYARADOS,   P_SNORLAX,    P_TYRANITAR,  P_KINGDRA,    P_DRAGONITE,  -- lance
+  P_ESPEON,     P_LAPRAS,     P_SCIZOR,     P_RAICHU,     P_SNORLAX,    P_CHARIZARD,  -- red
 
--- Mount Silver - Pokemon Trainer Red        - P_BLASTOISE  P_CHARIZARD  P_DODRIO     P_ESPEON     P_LAPRAS    P_PIKACHU    P_RAICHU     P_SCYTHER    P_SNORLAX    P_VENUSAUR
--- legend1                                   - P_ENTEI      P_ZAPDOS     P_SUICUNE    P_MOLTRES    P_RAIKOU    P_ARTICUNO
--- legend2                                   - P_HOOH       P_MEW        P_LUGIA      P_MEWTWO     P_CELEBI    P_MISSINGNO
-
-
-
-
-
--- merged boarder into skier
--- merged channeler into medium
--- merged rocker into guitarist
--- merged engineer into scientist
--- merged junior into officer
--- merged gambler into mysticalman
--- merged tamer into teacher into sage
--- merged mysticalman into guitarist
--- merged cueball into juggler
--- merged burglar into biker
-
--- probably have 64 trainers in total (24 more with johto)
--- second half of trainer data is stored here. first half is stored in code.
--- this was done at the very end of picodex implementation. had to remove newline characters from code to do so.
-g_trainer_data = { -- 3 * 16=48 gym leaders and trainers. 10 = silver,oak,elm,giovanni,red,gold,legend,legend,lorelei,agatha. 5 = elite 4/champion. 48 + 10 + 5 = 63. 1 = rocket executive?
-
+  P_SLOWKING,   P_VICTREEBEL, P_TYRANITAR,  P_AMPHAROS,   P_SKARMORY,   P_TYPHLOSION, -- gold
+  P_MOLTRES,    P_RAIKOU,     P_ARTICUNO,   P_ENTEI,      P_ZAPDOS,     P_SUICUNE,    -- legend1
+  P_HOOH,       P_LUGIA,      P_CELEBI,     P_MEW,        P_MEWTWO,     P_MISSINGNO,  -- legend2
 }
 
 -- from missingno (0) to mew (151), these are the tms they can learn.
