@@ -1,7 +1,4 @@
--- TODO, use this maybe: https://github.com/pret/pokecrystal/blob/master/data/pokemon/evos_attacks.asm (and same for pokemon red/yellow)
-
 -- need male/female stat!
-
 
 -- sources: bulbapedia, RBY & GSC disassembled, serebii (missingno), smogon, psypoke (move ref)
 
@@ -324,7 +321,7 @@ M_ANCIENTPOWER = 248  M_FUTURESIGHT  = 249  M_BEATUP       = 250  M_TM05        
 -- pokemon after dashes represent other possible pokemon, likely coming from later/other games.
 -- each trainer needs about 4 new pokemon. some have 2 i think. some have 6. So it varies. 252 pokemon total. The last pokemon in a party is always brand new.
 
--- 60 trainers total
+-- 60 trainers total - doesn't include missingno, i think you should unlock that a different way.
 g_trainer_data = {
   M_CUT,          P_RATTATA,    P_PIDGEY,     P_WOOPER,     P_ZUBAT,      P_SENTRET,    P_EEVEE,      -- youngster
   M_HYPNOSIS,     P_PSYDUCK,    P_HOOTHOOT,   P_CUBONE,     P_MEOWTH,     P_BELLSPROUT, P_GASTLY,     -- sage
@@ -354,7 +351,7 @@ g_trainer_data = {
   M_BLIZZARD,     P_SMOOCHUM,   P_SHELLDER,   P_SWINUB,     P_DELIBIRD,   P_SEEL,       P_AZUMARILL,  -- skier
   M_ICYWIND,      P_CLOYSTER,   P_FEAROW,     P_SNEASEL,    P_URSARING,   P_DEWGONG,    P_PILOSWINE,  -- pryce
 
-  M_PROTECT,      P_VOLTORB,    P_DITTO,      P_SMEARGLE,   P_ODDISH,     P_PORYGON,    P_UNOWN,      -- scientist
+  M_PROTECT,      P_VOLTORB,    P_DITTO,      P_KOFFING,    P_SMEARGLE,   P_ODDISH,     P_PORYGON,    -- scientist
   M_PSYBEAM,      P_SHUCKLE,    P_DRATINI,    P_MAGIKARP,   P_SKIPLOOM,   P_SEADRA,     P_LEDIAN,     -- twins
   M_DRAGONBREATH, P_DONPHAN,    P_DRAGONAIR,  P_AMPHAROS,   P_GYARADOS,   P_PUPITAR,    P_KINGDRA,    -- clair
 
@@ -404,7 +401,7 @@ g_trainer_data = {
 
   M_BLIZZARD,     P_SLOWKING,   P_VICTREEBEL, P_TYRANITAR,  P_AMPHAROS,   P_SKARMORY,   P_TYPHLOSION, -- gold
   M_DOUBLETEAM,   P_MOLTRES,    P_RAIKOU,     P_ARTICUNO,   P_ENTEI,      P_ZAPDOS,     P_SUICUNE,    -- legend1
-  M_SHADOWBALL,   P_HOOH,       P_LUGIA,      P_CELEBI,     P_MEW,        P_MEWTWO,     P_MISSINGNO,  -- legend2
+  M_SHADOWBALL,   P_UNOWN,      P_LUGIA,      P_HOOH,       P_CELEBI,     P_MEW,        P_MEWTWO,     -- legend2
 }
 
 -- from missingno (0) to mew (151), these are the tms they can learn.
@@ -2126,7 +2123,7 @@ move_stats = [[
   M_COUNTER         1  T_FIGHTING      100  20    0 -- EFFECT_COUNTER
 
   -- no power no accuracy
-  M_TM05            0  T_GLITCH          0   0    0 -- EFFECT_EVASION_UP (up by 2)
+  M_TM05            0  T_GLITCH          0  33    0 -- EFFECT_EVASION_UP (up by 2)
   M_GUILLOTINE      0  T_NORMAL         30   5    0 -- EFFECT_OHKO
   M_WHIRLWIND       0  T_NORMAL        100  20    0 -- EFFECT_FORCE_SWITCH
   M_SANDATTACK      0  T_GROUND        100  15    0 -- EFFECT_ACCURACY_DOWN
