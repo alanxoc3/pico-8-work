@@ -31,4 +31,11 @@ Oooo baton pass will pass all status effects. Not just stat changes, but also ot
 
 baton pass will pass to the next pokemon in party. if last, then it will wrap to first.
 
-endure is before extreme speed:q
+endure is before extreme speed. endure has a counter that halves for how likely it will work each time you use it, protect and some other things.
+
+mirror coat will activate with beatup. (didn't in gen2)
+
+I will use PS2 mechanics, which are here: https://bulbapedia.bulbagarden.net/wiki/Pok%C3%A9mon_Stadium_2
+Which is GSC mechanics, but changes a few things slightly.
+
+Teleport goes last. useful if you want abra to take the damage. And can escape some moves you can't normally escape.
