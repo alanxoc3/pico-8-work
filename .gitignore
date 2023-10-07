@@ -5,6 +5,7 @@ build
 .~lock*
 .mapb.bin
 .mapb.p8
+.compile.lua
 out*.p8
 *.p8l
 sheet.png

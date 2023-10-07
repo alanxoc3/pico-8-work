@@ -1,0 +1,9 @@
+#!/bin/bash
+
+runthing() {
+  cat "./compile-scripts/$1" ./compile-scripts/shared.lua | pico-compile-stdout -n > .compile.lua
+  pico8 -x .compile.lua
+}
+
+runthing sprite.lua
+runthing trainers.lua
