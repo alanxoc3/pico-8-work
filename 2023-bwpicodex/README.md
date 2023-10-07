@@ -9,3 +9,9 @@ A few ways to play picodex:
 
 You can find the guide here:
 - https://github.com/alanxoc3/pico-8-work/blob/master/2023-picodex/guide.md
+
+## Some sort of devlog
+Around 2023-09-23, I finished creating the trainer pokemon lineup for story mode.
+Around 2023-09-26, I finished a rough draft of color versions for all 251 pokemon.
+Around 2023-10-01, I finished getting all the move info I need from decompiled games.
+2023-10-06, ran into issue with compiling. 200,000 characters used for compile cart, when I need under 65000. Fix will be to compile the compile cart and break it up into multiple files, each saving one thing.

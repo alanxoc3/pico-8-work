@@ -26,8 +26,10 @@ binmode(STDOUT, "encoding(UTF-8)");
 my $minify;
 my $ignorelib;
 my $debug_mode;
-GetOptions('minify'    => \$minify,     # minify the generated code
-           'debug'     => \$debug_mode, # should the generated code include debug code
+my $newline;
+GetOptions('minify'  => \$minify,     # minify the generated code
+           'debug'   => \$debug_mode, # should the generated code include debug code
+           'newline' => \$newline, # should the generated code include debug code
 ) or die "Usage: $0 [--minify] [--debug]\n";
 
 # Set constants from colon separated keyvalue pairs in arguments.
@@ -88,7 +90,9 @@ my @texts;
 $content = remove_spaces($content);
 
 # remove quotes within multiline strings
-$content =~ s/\[\[.*?\]\]/$& =~ s|\n||rg/gimse;
+if (!$newline) {
+  $content =~ s/\[\[.*?\]\]/$& =~ s|\n||rg/gimse;
+}
 $content =~ s/\[\[.*?\]\]/$& =~ s|"||rg/gimse;
 $content =~ s/\[\[.*?\]\]/$& =~ s|'||rg/gimse;
 

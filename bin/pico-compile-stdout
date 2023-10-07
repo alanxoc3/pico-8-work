@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+pico-minifier() { perl "-I$PICO_WORK_DIR/bin/minifier/" "$PICO_WORK_DIR/bin/pico-minifier.pl" "$@"; }
+
+# expand on newline, not space
+# https://unix.stackexchange.com/questions/39473/command-substitution-splitting-on-newline-but-not-space
+set -f; IFS='
+'
+pico-minifier "$@" $(cat ./constants.txt 2>/dev/null | awk '/^[[:alnum:]_]/{gsub(/[[:blank:]]*:[[:blank:]]*/, ":"); gsub(/#.*/, ""); print $0;}')

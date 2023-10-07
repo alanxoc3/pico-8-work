@@ -36,8 +36,9 @@ function init() -- entry point for this compile script
                                         log("--------------- | -----------")
     ENCODE_OFFSET = 0                   log("begin packing   | pos: "..tostr(ENCODE_OFFSET, 0x1))
     dex_compress(enc_vget)              log("pokemon sprites | pos: "..tostr(ENCODE_OFFSET, 0x1)) -- 0x2000 (1 full spritesheet)
-    encode_pkmv_data(g_pkmn_move_data)  log("pokemon moves   | pos: "..tostr(ENCODE_OFFSET, 0x1)) -- ??? lots
-    encode_trnr_data(g_trainer_data)    log("pokemon trnrs   | pos: "..tostr(ENCODE_OFFSET, 0x1)) -- 240=40*6
+    datastr_to_arr(g_trainer_data)
+    -- log("pokemon moves   | pos: "..tostr(ENCODE_OFFSET, 0x1)) -- ??? lots
+    -- log("pokemon trnrs   | pos: "..tostr(ENCODE_OFFSET, 0x1)) -- 240=40*6
 
     -- i could have sfx or something on 000-063 if I want. uncomment here if I want that.
     -- reload(ENCODE_OFFSET, ENCODE_OFFSET, 0x4300 - ENCODE_OFFSET, "./000-063.p8") log("copy remaining  | pos: 0x4300 ")
@@ -45,6 +46,10 @@ function init() -- entry point for this compile script
     -- then finally save to the game cartridge.
     cstore(0x0000, 0x0000, 0x4300, "game.p8")
     log() log("done!")
+end
+
+function datastr_to_arr(datastr)
+  printh(datastr)
 end
 
 -- get pixels, but not limited to the graphics data section, can go beyond.
@@ -88,14 +93,6 @@ function offsetpoke(val)
     ENCODE_OFFSET += 1
 end
 
-function encode_trnr_data(data)
-    for tnum=0,39 do
-        for pnum=0,5 do
-            offsetpoke(data[tnum*6+pnum+1])
-        end
-    end
-end
-
 function strip_spaces(data)
     local newdata = ""
     for i=1,#data do
@@ -107,302 +104,92 @@ function strip_spaces(data)
     return newdata
 end
 
--- johto adds 86 moves. originally, there are 165 moves. That makes 251 moves. Am I lucky or what? can still use the reserved 4 things below.
-EVENT = 252 -- is event
-TMHM  = 253 -- is tm/hm
-DASH  = 254 -- is a dash/range
-NEXT  = 255 -- is next pokemon
-function encode_pkmv_data(data)
-    local newdata = strip_spaces(data)
-
-    newdata = split(newdata, "\n")
-    for line in all(newdata) do
-        if line ~= "" then
-            local fields = split(line, "|")
-            for field in all(fields) do
-                if type(field) == "number"   then offsetpoke(field)
-                elseif field == "T_NONE"     then offsetpoke(T_NONE)
-                elseif field == "T_NORMAL"   then offsetpoke(T_NORMAL)
-                elseif field == "T_FIRE"     then offsetpoke(T_FIRE)
-                elseif field == "T_FIGHTING" then offsetpoke(T_FIGHTING)
-                elseif field == "T_WATER"    then offsetpoke(T_WATER)
-                elseif field == "T_POISON"   then offsetpoke(T_POISON)
-                elseif field == "T_ELECTRIC" then offsetpoke(T_ELECTRIC)
-                elseif field == "T_GROUND"   then offsetpoke(T_GROUND)
-                elseif field == "T_GRASS"    then offsetpoke(T_GRASS)
-                elseif field == "T_FLYING"   then offsetpoke(T_FLYING)
-                elseif field == "T_ICE"      then offsetpoke(T_ICE)
-                elseif field == "T_BUG"      then offsetpoke(T_BUG)
-                elseif field == "T_PSYCHIC"  then offsetpoke(T_PSYCHIC)
-                elseif field == "T_ROCK"     then offsetpoke(T_ROCK)
-                elseif field == "T_DRAGON"   then offsetpoke(T_DRAGON)
-                elseif field == "T_GHOST"    then offsetpoke(T_GHOST)
-                elseif field == "T_BIRD"     then offsetpoke(T_BIRD)
-                elseif field == "TM"         then offsetpoke(TMHM)
-                elseif field == "EVENT"      then offsetpoke(EVENT)
-                else
-                    local range = split(field,"-")
-                    offsetpoke(range[1])
-                    offsetpoke(DASH)
-                    offsetpoke(range[2])
-                end
-            end
-        end
-        offsetpoke(NEXT)
-    end
-    offsetpoke(NEXT)
-end
-
 ------------------------------------------------
 ------------ BELOW HERE IS ALL DATA ------------
 ------------------------------------------------
--- FIRST CONSTANTS, THEN DATASTRINGS
-
--- BEFORE: 2699
--- AFTER: 3400 about
--- add levels
--- 164 is highest move index
--- 81 is highest level  N
-
--- spots 1-8 are: evol t1 t2 hp att def spd spc
--- spots 9+ are moves.
--- 1-164 ar moves
--- 252 is event
--- 253 is tm/hm
--- 254 is a dash/range
--- 255 is next pokemon
-
-T_NONE     = 0  T_NORMAL   = 1
-T_FIRE     = 2  T_FIGHTING = 3
-T_WATER    = 4  T_POISON   = 5
-T_ELECTRIC = 6  T_GROUND   = 7
-T_GRASS    = 8  T_FLYING   = 9
-T_ICE      = 10 T_BUG      = 11
-T_PSYCHIC  = 12 T_ROCK     = 13
-T_DRAGON   = 14 T_GHOST    = 15
-T_DARK     = 16 T_STEEL    = 17
-T_BIRD     = 18 T_GLITCH   = 19
-
-P_MISSINGNO   = 0    P_BULBASAUR   = 1    P_IVYSAUR     = 2    P_VENUSAUR    = 3
-P_CHARMANDER  = 4    P_CHARMELEON  = 5    P_CHARIZARD   = 6    P_SQUIRTLE    = 7
-P_WARTORTLE   = 8    P_BLASTOISE   = 9    P_CATERPIE    = 10   P_METAPOD     = 11
-P_BUTTERFREE  = 12   P_WEEDLE      = 13   P_KAKUNA      = 14   P_BEEDRILL    = 15
-P_PIDGEY      = 16   P_PIDGEOTTO   = 17   P_PIDGEOT     = 18   P_RATTATA     = 19
-P_RATICATE    = 20   P_SPEAROW     = 21   P_FEAROW      = 22   P_EKANS       = 23
-P_ARBOK       = 24   P_PIKACHU     = 25   P_RAICHU      = 26   P_SANDSHREW   = 27
-P_SANDSLASH   = 28   P_NIDORANF    = 29   P_NIDORINA    = 30   P_NIDOQUEEN   = 31
-P_NIDORANM    = 32   P_NIDORINO    = 33   P_NIDOKING    = 34   P_CLEFAIRY    = 35
-P_CLEFABLE    = 36   P_VULPIX      = 37   P_NINETALES   = 38   P_JIGGLYPUFF  = 39
-P_WIGGLYTUFF  = 40   P_ZUBAT       = 41   P_GOLBAT      = 42   P_ODDISH      = 43
-P_GLOOM       = 44   P_VILEPLUME   = 45   P_PARAS       = 46   P_PARASECT    = 47
-P_VENONAT     = 48   P_VENOMOTH    = 49   P_DIGLETT     = 50   P_DUGTRIO     = 51
-P_MEOWTH      = 52   P_PERSIAN     = 53   P_PSYDUCK     = 54   P_GOLDUCK     = 55
-P_MANKEY      = 56   P_PRIMEAPE    = 57   P_GROWLITHE   = 58   P_ARCANINE    = 59
-P_POLIWAG     = 60   P_POLIWHIRL   = 61   P_POLIWRATH   = 62   P_ABRA        = 63
-P_KADABRA     = 64   P_ALAKAZAM    = 65   P_MACHOP      = 66   P_MACHOKE     = 67
-P_MACHAMP     = 68   P_BELLSPROUT  = 69   P_WEEPINBELL  = 70   P_VICTREEBEL  = 71
-P_TENTACOOL   = 72   P_TENTACRUEL  = 73   P_GEODUDE     = 74   P_GRAVELER    = 75
-P_GOLEM       = 76   P_PONYTA      = 77   P_RAPIDASH    = 78   P_SLOWPOKE    = 79
-P_SLOWBRO     = 80   P_MAGNEMITE   = 81   P_MAGNETON    = 82   P_FARFETCHD   = 83
-P_DODUO       = 84   P_DODRIO      = 85   P_SEEL        = 86   P_DEWGONG     = 87
-P_GRIMER      = 88   P_MUK         = 89   P_SHELLDER    = 90   P_CLOYSTER    = 91
-P_GASTLY      = 92   P_HAUNTER     = 93   P_GENGAR      = 94   P_ONIX        = 95
-P_DROWZEE     = 96   P_HYPNO       = 97   P_KRABBY      = 98   P_KINGLER     = 99
-P_VOLTORB     = 100  P_ELECTRODE   = 101  P_EXEGGCUTE   = 102  P_EXEGGUTOR   = 103
-P_CUBONE      = 104  P_MAROWAK     = 105  P_HITMONLEE   = 106  P_HITMONCHAN  = 107
-P_LICKITUNG   = 108  P_KOFFING     = 109  P_WEEZING     = 110  P_RHYHORN     = 111
-P_RHYDON      = 112  P_CHANSEY     = 113  P_TANGELA     = 114  P_KANGASKHAN  = 115
-P_HORSEA      = 116  P_SEADRA      = 117  P_GOLDEEN     = 118  P_SEAKING     = 119
-P_STARYU      = 120  P_STARMIE     = 121  P_MRMIME      = 122  P_SCYTHER     = 123
-P_JYNX        = 124  P_ELECTABUZZ  = 125  P_MAGMAR      = 126  P_PINSIR      = 127
-P_TAUROS      = 128  P_MAGIKARP    = 129  P_GYARADOS    = 130  P_LAPRAS      = 131
-P_DITTO       = 132  P_EEVEE       = 133  P_VAPOREON    = 134  P_JOLTEON     = 135
-P_FLAREON     = 136  P_PORYGON     = 137  P_OMANYTE     = 138  P_OMASTAR     = 139
-P_KABUTO      = 140  P_KABUTOPS    = 141  P_AERODACTYL  = 142  P_SNORLAX     = 143
-P_ARTICUNO    = 144  P_ZAPDOS      = 145  P_MOLTRES     = 146  P_DRATINI     = 147
-P_DRAGONAIR   = 148  P_DRAGONITE   = 149  P_MEWTWO      = 150  P_MEW         = 151
-P_CHIKORITA   = 152  P_BAYLEEF     = 153  P_MEGANIUM    = 154  P_CYNDAQUIL   = 155
-P_QUILAVA     = 156  P_TYPHLOSION  = 157  P_TOTODILE    = 158  P_CROCONAW    = 159
-P_FERALIGATR  = 160  P_SENTRET     = 161  P_FURRET      = 162  P_HOOTHOOT    = 163
-P_NOCTOWL     = 164  P_LEDYBA      = 165  P_LEDIAN      = 166  P_SPINARAK    = 167
-P_ARIADOS     = 168  P_CROBAT      = 169  P_CHINCHOU    = 170  P_LANTURN     = 171
-P_PICHU       = 172  P_CLEFFA      = 173  P_IGGLYBUFF   = 174  P_TOGEPI      = 175
-P_TOGETIC     = 176  P_NATU        = 177  P_XATU        = 178  P_MAREEP      = 179
-P_FLAAFFY     = 180  P_AMPHAROS    = 181  P_BELLOSSOM   = 182  P_MARILL      = 183
-P_AZUMARILL   = 184  P_SUDOWOODO   = 185  P_POLITOED    = 186  P_HOPPIP      = 187
-P_SKIPLOOM    = 188  P_JUMPLUFF    = 189  P_AIPOM       = 190  P_SUNKERN     = 191
-P_SUNFLORA    = 192  P_YANMA       = 193  P_WOOPER      = 194  P_QUAGSIRE    = 195
-P_ESPEON      = 196  P_UMBREON     = 197  P_MURKROW     = 198  P_SLOWKING    = 199
-P_MISDREAVUS  = 200  P_UNOWN       = 201  P_WOBBUFFET   = 202  P_GIRAFARIG   = 203
-P_PINECO      = 204  P_FORRETRESS  = 205  P_DUNSPARCE   = 206  P_GLIGAR      = 207
-P_STEELIX     = 208  P_SNUBBULL    = 209  P_GRANBULL    = 210  P_QWILFISH    = 211
-P_SCIZOR      = 212  P_SHUCKLE     = 213  P_HERACROSS   = 214  P_SNEASEL     = 215
-P_TEDDIURSA   = 216  P_URSARING    = 217  P_SLUGMA      = 218  P_MAGCARGO    = 219
-P_SWINUB      = 220  P_PILOSWINE   = 221  P_CORSOLA     = 222  P_REMORAID    = 223
-P_OCTILLERY   = 224  P_DELIBIRD    = 225  P_MANTINE     = 226  P_SKARMORY    = 227
-P_HOUNDOUR    = 228  P_HOUNDOOM    = 229  P_KINGDRA     = 230  P_PHANPY      = 231
-P_DONPHAN     = 232  P_PORYGON2    = 233  P_STANTLER    = 234  P_SMEARGLE    = 235
-P_TYROGUE     = 236  P_HITMONTOP   = 237  P_SMOOCHUM    = 238  P_ELEKID      = 239
-P_MAGBY       = 240  P_MILTANK     = 241  P_BLISSEY     = 242  P_RAIKOU      = 243
-P_ENTEI       = 244  P_SUICUNE     = 245  P_LARVITAR    = 246  P_PUPITAR     = 247
-P_TYRANITAR   = 248  P_LUGIA       = 249  P_HOOH        = 250  P_CELEBI      = 251
-P_NONE        = 252
-
--- struggle, then 50 tms, then 7 hms, then the remaining moves in the order they appear from decompiled crystal
-M_STRUGGLE     = 0    M_DYNAMICPUNCH =  1   M_HEADBUTT     =  2   M_CURSE        = 3
-M_ROLLOUT      = 4    M_ROAR         =  5   M_TOXIC        =  6   M_ZAPCANNON    = 7
-M_ROCKSMASH    = 8    M_PSYCHUP      =  9   M_HIDDENPOWER  = 10   M_SUNNYDAY     = 11
-M_SWEETSCENT   = 12   M_SNORE        = 13   M_BLIZZARD     = 14   M_HYPERBEAM    = 15
-M_ICYWIND      = 16   M_PROTECT      = 17   M_RAINDANCE    = 18   M_GIGADRAIN    = 19
-M_ENDURE       = 20   M_FRUSTRATION  = 21   M_SOLARBEAM    = 22   M_IRONTAIL     = 23
-M_DRAGONBREATH = 24   M_THUNDER      = 25   M_EARTHQUAKE   = 26   M_RETURN       = 27
-M_DIG          = 28   M_PSYCHIC      = 29   M_SHADOWBALL   = 30   M_MUDSLAP      = 31
-M_DOUBLETEAM   = 32   M_ICEPUNCH     = 33   M_SWAGGER      = 34   M_SLEEPTALK    = 35
-M_SLUDGEBOMB   = 36   M_SANDSTORM    = 37   M_FIREBLAST    = 38   M_SWIFT        = 39
-M_DEFENSECURL  = 40   M_THUNDERPUNCH = 41   M_DREAMEATER   = 42   M_DETECT       = 43
-M_REST         = 44   M_ATTRACT      = 45   M_THIEF        = 46   M_STEELWING    = 47
-M_FIREPUNCH    = 48   M_FURYCUTTER   = 49   M_NIGHTMARE    = 50   M_CUT          = 51
-M_FLY          = 52   M_SURF         = 53   M_STRENGTH     = 54   M_FLASH        = 55
-M_WHIRLPOOL    = 56   M_WATERFALL    = 57   M_POUND        = 58   M_KARATECHOP   = 59
-M_DOUBLESLAP   = 60   M_COMETPUNCH   = 61   M_MEGAPUNCH    = 62   M_PAYDAY       = 63
-M_SCRATCH      = 64   M_VICEGRIP     = 65   M_GUILLOTINE   = 66   M_RAZORWIND    = 67
-M_SWORDSDANCE  = 68   M_GUST         = 69   M_WINGATTACK   = 70   M_WHIRLWIND    = 71
-M_BIND         = 72   M_SLAM         = 73   M_VINEWHIP     = 74   M_STOMP        = 75
-M_DOUBLEKICK   = 76   M_MEGAKICK     = 77   M_JUMPKICK     = 78   M_ROLLINGKICK  = 79
-M_SANDATTACK   = 80   M_HORNATTACK   = 81   M_FURYATTACK   = 82   M_HORNDRILL    = 83
-M_TACKLE       = 84   M_BODYSLAM     = 85   M_WRAP         = 86   M_TAKEDOWN     = 87
-M_THRASH       = 88   M_DOUBLEEDGE   = 89   M_TAILWHIP     = 90   M_POISONSTING  = 91
-M_TWINEEDLE    = 92   M_PINMISSILE   = 93   M_LEER         = 94   M_BITE         = 95
-M_GROWL        = 96   M_SING         = 97   M_SUPERSONIC   = 98   M_SONICBOOM    = 99
-M_DISABLE      = 100  M_ACID         = 101  M_EMBER        = 102  M_FLAMETHROWER = 103
-M_MIST         = 104  M_WATERGUN     = 105  M_HYDROPUMP    = 106  M_ICEBEAM      = 107
-M_PSYBEAM      = 108  M_BUBBLEBEAM   = 109  M_AURORABEAM   = 110  M_PECK         = 111
-M_DRILLPECK    = 112  M_SUBMISSION   = 113  M_LOWKICK      = 114  M_COUNTER      = 115
-M_SEISMICTOSS  = 116  M_ABSORB       = 117  M_MEGADRAIN    = 118  M_LEECHSEED    = 119
-M_GROWTH       = 120  M_RAZORLEAF    = 121  M_POISONPOWDER = 122  M_STUNSPORE    = 123
-M_SLEEPPOWDER  = 124  M_PETALDANCE   = 125  M_STRINGSHOT   = 126  M_DRAGONRAGE   = 127
-M_FIRESPIN     = 128  M_THUNDERSHOCK = 129  M_THUNDERBOLT  = 130  M_THUNDERWAVE  = 131
-M_ROCKTHROW    = 132  M_FISSURE      = 133  M_CONFUSION    = 134  M_HYPNOSIS     = 135
-M_MEDITATE     = 136  M_AGILITY      = 137  M_QUICKATTACK  = 138  M_RAGE         = 139
-M_TELEPORT     = 140  M_NIGHTSHADE   = 141  M_MIMIC        = 142  M_SCREECH      = 143
-M_RECOVER      = 144  M_HARDEN       = 145  M_MINIMIZE     = 146  M_SMOKESCREEN  = 147
-M_CONFUSERAY   = 148  M_WITHDRAW     = 149  M_BARRIER      = 150  M_LIGHTSCREEN  = 151
-M_HAZE         = 152  M_REFLECT      = 153  M_FOCUSENERGY  = 154  M_BIDE         = 155
-M_METRONOME    = 156  M_MIRRORMOVE   = 157  M_SELFDESTRUCT = 158  M_EGGBOMB      = 159
-M_LICK         = 160  M_SMOG         = 161  M_SLUDGE       = 162  M_BONECLUB     = 163
-M_CLAMP        = 164  M_SKULLBASH    = 165  M_SPIKECANNON  = 166  M_CONSTRICT    = 167
-M_AMNESIA      = 168  M_KINESIS      = 169  M_SOFTBOILED   = 170  M_HIJUMPKICK   = 171
-M_GLARE        = 172  M_POISONGAS    = 173  M_BARRAGE      = 174  M_LEECHLIFE    = 175
-M_LOVELYKISS   = 176  M_SKYATTACK    = 177  M_TRANSFORM    = 178  M_BUBBLE       = 179
-M_DIZZYPUNCH   = 180  M_SPORE        = 181  M_PSYWAVE      = 182  M_SPLASH       = 183
-M_ACIDARMOR    = 184  M_CRABHAMMER   = 185  M_EXPLOSION    = 186  M_FURYSWIPES   = 187
-M_BONEMERANG   = 188  M_ROCKSLIDE    = 189  M_HYPERFANG    = 190  M_SHARPEN      = 191
-M_CONVERSION   = 192  M_TRIATTACK    = 193  M_SUPERFANG    = 194  M_SLASH        = 195
-M_SUBSTITUTE   = 196  M_SKETCH       = 197  M_TRIPLEKICK   = 198  M_SPIDERWEB    = 199
-M_MINDREADER   = 200  M_FLAMEWHEEL   = 201  M_FLAIL        = 202  M_CONVERSION2  = 203
-M_AEROBLAST    = 204  M_COTTONSPORE  = 205  M_REVERSAL     = 206  M_SPITE        = 207
-M_POWDERSNOW   = 208  M_MACHPUNCH    = 209  M_SCARYFACE    = 210  M_FAINTATTACK  = 211
-M_SWEETKISS    = 212  M_BELLYDRUM    = 213  M_OCTAZOOKA    = 214  M_SPIKES       = 215
-M_FORESIGHT    = 216  M_DESTINYBOND  = 217  M_PERISHSONG   = 218  M_BONERUSH     = 219
-M_LOCKON       = 220  M_OUTRAGE      = 221  M_CHARM        = 222  M_FALSESWIPE   = 223
-M_MILKDRINK    = 224  M_SPARK        = 225  M_MEANLOOK     = 226  M_HEALBELL     = 227
-M_PRESENT      = 228  M_SAFEGUARD    = 229  M_PAINSPLIT    = 230  M_SACREDFIRE   = 231
-M_MAGNITUDE    = 232  M_MEGAHORN     = 233  M_BATONPASS    = 234  M_ENCORE       = 235
-M_PURSUIT      = 236  M_RAPIDSPIN    = 237  M_METALCLAW    = 238  M_VITALTHROW   = 239
-M_MORNINGSUN   = 240  M_SYNTHESIS    = 241  M_MOONLIGHT    = 242  M_CROSSCHOP    = 243
-M_TWISTER      = 244  M_CRUNCH       = 245  M_MIRRORCOAT   = 246  M_EXTREMESPEED = 247
-M_ANCIENTPOWER = 248  M_FUTURESIGHT  = 249  M_BEATUP       = 250  M_TM05         = 251
-
--- all trainer types in pkmn crystal. adds a few.
-
--- kanto trainer list with pokemon.
-
--- All the different trainers in GSC and RBY. Along with all the possible pokemon they have in all the games combined, excluding some kanto gym leaders.
--- pokemon after dashes represent other possible pokemon, likely coming from later/other games.
--- each trainer needs about 4 new pokemon. some have 2 i think. some have 6. So it varies. 252 pokemon total. The last pokemon in a party is always brand new.
 
 -- 60 trainers total - doesn't include missingno, i think you should unlock that a different way.
-g_trainer_data = {
-  M_CUT,          P_RATTATA,    P_PIDGEY,     P_WOOPER,     P_ZUBAT,      P_SENTRET,    P_EEVEE,      -- youngster
-  M_HYPNOSIS,     P_PSYDUCK,    P_HOOTHOOT,   P_CUBONE,     P_MEOWTH,     P_BELLSPROUT, P_GASTLY,     -- sage
-  M_MUDSLAP,      P_PIDGEY,     P_DELIBIRD,   P_SPEAROW,    P_FARFETCHD,  P_DODUO,      P_PIDGEOTTO,  -- falkner
+g_trainer_data = [[
+  M_CUT          P_RATTATA    P_PIDGEY     P_WOOPER     P_ZUBAT      P_SENTRET    P_EEVEE      -- youngster
+  M_HYPNOSIS     P_PSYDUCK    P_HOOTHOOT   P_CUBONE     P_MEOWTH     P_BELLSPROUT P_GASTLY     -- sage
+  M_MUDSLAP      P_PIDGEY     P_DELIBIRD   P_SPEAROW    P_FARFETCHD  P_DODUO      P_PIDGEOTTO  -- falkner
 
-  M_FRUSTRATION,  P_ZUBAT,      P_EKANS,      P_SLOWPOKE,   P_GRIMER,     P_KOFFING,    P_RATICATE,   -- rocketgrunt
-  M_DISABLE,      P_CATERPIE,   P_LEDYBA,     P_PARAS,      P_WEEDLE,     P_VENONAT,    P_SPINARAK,   -- bugcatcher
-  M_FURYCUTTER,   P_KAKUNA,     P_WEEPINBELL, P_PINSIR,     P_METAPOD,    P_PINECO,     P_SCYTHER,    -- bugsy
+  M_FRUSTRATION  P_ZUBAT      P_EKANS      P_SLOWPOKE   P_GRIMER     P_KOFFING    P_RATICATE   -- rocketgrunt
+  M_DISABLE      P_CATERPIE   P_LEDYBA     P_PARAS      P_WEEDLE     P_VENONAT    P_SPINARAK   -- bugcatcher
+  M_FURYCUTTER   P_KAKUNA     P_WEEPINBELL P_PINSIR     P_METAPOD    P_PINECO     P_SCYTHER    -- bugsy
 
-  M_RETURN,       P_CYNDAQUIL,  P_PICHU,      P_TOTODILE,   P_IGGLYBUFF,  P_CHIKORITA,  P_SNUBBULL,   -- pokefan
-  M_METRONOME,    P_MAREEP,     P_CLEFFA,     P_POLIWAG,    P_TOGEPI,     P_HOPPIP,     P_TEDDIURSA,  -- beauty
-  M_ATTRACT,      P_JIGGLYPUFF, P_CLEFAIRY,   P_PHANPY,     P_LICKITUNG,  P_CHANSEY,    P_MILTANK,    -- whitney
+  M_RETURN       P_CYNDAQUIL  P_PICHU      P_TOTODILE   P_IGGLYBUFF  P_CHIKORITA  P_SNUBBULL   -- pokefan
+  M_METRONOME    P_MAREEP     P_CLEFFA     P_POLIWAG    P_TOGEPI     P_HOPPIP     P_TEDDIURSA  -- beauty
+  M_ATTRACT      P_JIGGLYPUFF P_CLEFAIRY   P_PHANPY     P_LICKITUNG  P_CHANSEY    P_MILTANK    -- whitney
 
-  M_FOCUSENERGY,  P_EEVEE,      P_VAPOREON,   P_JOLTEON,    P_FLAREON,    P_ESPEON,     P_UMBREON,    -- kiminogirl
-  M_CURSE,        P_CUBONE,     P_GASTLY,     P_ABRA,       P_DROWZEE,    P_HAUNTER,    P_SLOWBRO,    -- medium
-  M_SHADOWBALL,   P_MAROWAK,    P_STANTLER,   P_HAUNTER,    P_SUDOWOODO,  P_MISDREAVUS, P_GENGAR,     -- morty
+  M_FOCUSENERGY  P_EEVEE      P_VAPOREON   P_JOLTEON    P_FLAREON    P_ESPEON     P_UMBREON    -- kiminogirl
+  M_CURSE        P_CUBONE     P_GASTLY     P_ABRA       P_DROWZEE    P_HAUNTER    P_SLOWBRO    -- medium
+  M_SHADOWBALL   P_MAROWAK    P_STANTLER   P_HAUNTER    P_SUDOWOODO  P_MISDREAVUS P_GENGAR     -- morty
 
-  M_CRUNCH,       P_LARVITAR,   P_NIDORANF,   P_HOUNDOUR,   P_VULPIX,     P_NIDORANM,   P_GROWLITHE,  -- officer
-  M_REVERSAL,     P_MACHOP,     P_TYROGUE,    P_MANKEY,     P_ONIX,       P_POLIWHIRL,  P_HERACROSS,  -- blackbelt
-  M_DYNAMICPUNCH, P_MACHOKE,    P_GRANBULL,   P_HITMONTOP,  P_POLITOED,   P_PRIMEAPE,   P_POLIWRATH,  -- chuck
+  M_CRUNCH       P_LARVITAR   P_NIDORANF   P_HOUNDOUR   P_VULPIX     P_NIDORANM   P_GROWLITHE  -- officer
+  M_REVERSAL     P_MACHOP     P_TYROGUE    P_MANKEY     P_ONIX       P_POLIWHIRL  P_HERACROSS  -- blackbelt
+  M_DYNAMICPUNCH P_MACHOKE    P_GRANBULL   P_HITMONTOP  P_POLITOED   P_PRIMEAPE   P_POLIWRATH  -- chuck
 
-  M_HYPNOSIS,     P_CROCONAW,   P_FLAAFFY,    P_QUILAVA,    P_PIKACHU,    P_BAYLEEF,    P_NOCTOWL,    -- gentleman
-  M_ROLLOUT,      P_HORSEA,     P_MARILL,     P_MACHOKE,    P_KRABBY,     P_GEODUDE,    P_QUAGSIRE,   -- sailor
-  M_IRONTAIL,     P_CORSOLA,    P_MAGNEMITE,  P_FORRETRESS, P_MANTINE,    P_SKARMORY,   P_STEELIX,    -- jasmine
+  M_HYPNOSIS     P_CROCONAW   P_FLAAFFY    P_QUILAVA    P_PIKACHU    P_BAYLEEF    P_NOCTOWL    -- gentleman
+  M_ROLLOUT      P_HORSEA     P_MARILL     P_MACHOKE    P_KRABBY     P_GEODUDE    P_QUAGSIRE   -- sailor
+  M_IRONTAIL     P_CORSOLA    P_MAGNEMITE  P_FORRETRESS P_MANTINE    P_SKARMORY   P_STEELIX    -- jasmine
 
-  M_SPITE,        P_ARBOK,      P_RATICATE,   P_GOLBAT,     P_MURKROW,    P_WEEZING,    P_PERSIAN,    -- rocketexec
-  M_BLIZZARD,     P_SMOOCHUM,   P_SHELLDER,   P_SWINUB,     P_DELIBIRD,   P_SEEL,       P_AZUMARILL,  -- skier
-  M_ICYWIND,      P_CLOYSTER,   P_FEAROW,     P_SNEASEL,    P_URSARING,   P_DEWGONG,    P_PILOSWINE,  -- pryce
+  M_SPITE        P_ARBOK      P_RATICATE   P_GOLBAT     P_MURKROW    P_WEEZING    P_PERSIAN    -- rocketexec
+  M_BLIZZARD     P_SMOOCHUM   P_SHELLDER   P_SWINUB     P_DELIBIRD   P_SEEL       P_AZUMARILL  -- skier
+  M_ICYWIND      P_CLOYSTER   P_FEAROW     P_SNEASEL    P_URSARING   P_DEWGONG    P_PILOSWINE  -- pryce
 
-  M_PROTECT,      P_VOLTORB,    P_DITTO,      P_KOFFING,    P_SMEARGLE,   P_ODDISH,     P_PORYGON,    -- scientist
-  M_PSYBEAM,      P_SHUCKLE,    P_DRATINI,    P_MAGIKARP,   P_SKIPLOOM,   P_SEADRA,     P_LEDIAN,     -- twins
-  M_DRAGONBREATH, P_DONPHAN,    P_DRAGONAIR,  P_AMPHAROS,   P_GYARADOS,   P_PUPITAR,    P_KINGDRA,    -- clair
+  M_PROTECT      P_VOLTORB    P_DITTO      P_KOFFING    P_SMEARGLE   P_ODDISH     P_PORYGON    -- scientist
+  M_PSYBEAM      P_SHUCKLE    P_DRATINI    P_MAGIKARP   P_SKIPLOOM   P_SEADRA     P_LEDIAN     -- twins
+  M_DRAGONBREATH P_DONPHAN    P_DRAGONAIR  P_AMPHAROS   P_GYARADOS   P_PUPITAR    P_KINGDRA    -- clair
 
-  M_HEADBUTT,     P_ELEKID,     P_OMANYTE,    P_TENTACOOL,  P_KABUTO,     P_PONYTA,     P_GLIGAR,     -- supernerd
-  M_ICEBEAM,      P_DIGLETT,    P_NIDORINA,   P_SANDSHREW,  P_PRIMEAPE,   P_GRAVELER,   P_NIDORINO,   -- camper
-  M_SANDSTORM,    P_OMASTAR,    P_RHYHORN,    P_KABUTOPS,   P_STEELIX,    P_AERODACTYL, P_GOLEM,      -- brock
+  M_HEADBUTT     P_ELEKID     P_OMANYTE    P_TENTACOOL  P_KABUTO     P_PONYTA     P_GLIGAR     -- supernerd
+  M_ICEBEAM      P_DIGLETT    P_NIDORINA   P_SANDSHREW  P_PRIMEAPE   P_GRAVELER   P_NIDORINO   -- camper
+  M_SANDSTORM    P_OMASTAR    P_RHYHORN    P_KABUTOPS   P_STEELIX    P_AERODACTYL P_GOLEM      -- brock
 
-  M_METRONOME,    P_NATU,       P_YANMA,      P_DITTO,      P_LEDIAN,     P_TANGELA,    P_TOGETIC,    -- schoolboy
-  M_RAINDANCE,    P_STARYU,     P_MANTINE,    P_REMORAID,   P_QWILFISH,   P_GOLDEEN,    P_TENTACRUEL, -- swimmer
-  M_SURF,         P_GOLDUCK,    P_QUAGSIRE,   P_SEAKING,    P_WIGGLYTUFF, P_POLITOED,   P_STARMIE,    -- misty
+  M_METRONOME    P_NATU       P_YANMA      P_DITTO      P_LEDIAN     P_TANGELA    P_TOGETIC    -- schoolboy
+  M_RAINDANCE    P_STARYU     P_MANTINE    P_REMORAID   P_QWILFISH   P_GOLDEEN    P_TENTACRUEL -- swimmer
+  M_SURF         P_GOLDUCK    P_QUAGSIRE   P_SEAKING    P_WIGGLYTUFF P_POLITOED   P_STARMIE    -- misty
 
-  M_THUNDERBOLT,  P_CHARMANDER, P_SUNKERN,    P_SQUIRTLE,   P_OMASTAR,    P_BULBASAUR,  P_DUNSPARCE,  -- juggler
-  M_ENDURE,       P_KABUTOPS,   P_CHINCHOU,   P_ARBOK,      P_SCIZOR,     P_SANDSLASH,  P_ELECTABUZZ, -- guitarist
-  M_ZAPCANNON,    P_MAGNETON,   P_ELECTRODE,  P_PORYGON2,   P_LANTURN,    P_ELECTABUZZ, P_RAICHU,     -- ltsurge
+  M_THUNDERBOLT  P_CHARMANDER P_SUNKERN    P_SQUIRTLE   P_OMASTAR    P_BULBASAUR  P_DUNSPARCE  -- juggler
+  M_ENDURE       P_KABUTOPS   P_CHINCHOU   P_ARBOK      P_SCIZOR     P_SANDSLASH  P_ELECTABUZZ -- guitarist
+  M_ZAPCANNON    P_MAGNETON   P_ELECTRODE  P_PORYGON2   P_LANTURN    P_ELECTABUZZ P_RAICHU     -- ltsurge
 
-  M_DIG,          P_SANDSLASH,  P_GLIGAR,     P_PARASECT,   P_MAROWAK,    P_DONPHAN,    P_DUGTRIO,    -- hiker
-  M_SUNNYDAY,     P_CLEFABLE,   P_BUTTERFREE, P_GRANBULL,   P_GLOOM,      P_WIGGLYTUFF, P_SUNFLORA,   -- lass
-  M_GIGADRAIN,    P_TANGELA,    P_JUMPLUFF,   P_PARASECT,   P_VILEPLUME,  P_VICTREEBEL, P_BELLOSSOM,  -- erika
+  M_DIG          P_SANDSLASH  P_GLIGAR     P_PARASECT   P_MAROWAK    P_DONPHAN    P_DUGTRIO    -- hiker
+  M_SUNNYDAY     P_CLEFABLE   P_BUTTERFREE P_GRANBULL   P_GLOOM      P_WIGGLYTUFF P_SUNFLORA   -- lass
+  M_GIGADRAIN    P_TANGELA    P_JUMPLUFF   P_PARASECT   P_VILEPLUME  P_VICTREEBEL P_BELLOSSOM  -- erika
 
-  M_FLAMETHROWER, P_SMEARGLE,   P_WOBBUFFET,  P_PINSIR,     P_TAUROS,     P_TENTACRUEL, P_RAPIDASH,   -- biker
-  M_ROAR,         P_FURRET,     P_EXEGGCUTE,  P_JUMPLUFF,   P_AZUMARILL,  P_CLEFABLE,   P_NIDOQUEEN,  -- picnicker
-  M_TOXIC,        P_WEEZING,    P_ARIADOS,    P_ELECTRODE,  P_MUK,        P_NIDOQUEEN,  P_VENOMOTH,   -- janine
+  M_FLAMETHROWER P_SMEARGLE   P_WOBBUFFET  P_PINSIR     P_TAUROS     P_TENTACRUEL P_RAPIDASH   -- biker
+  M_ROAR         P_FURRET     P_EXEGGCUTE  P_JUMPLUFF   P_AZUMARILL  P_CLEFABLE   P_NIDOQUEEN  -- picnicker
+  M_TOXIC        P_WEEZING    P_ARIADOS    P_ELECTRODE  P_MUK        P_NIDOQUEEN  P_VENOMOTH   -- janine
 
-  M_THUNDERBOLT,  P_WARTORTLE,  P_KANGASKHAN, P_CHARMELEON, P_DODRIO,     P_IVYSAUR,    P_NIDOKING,   -- pokemaniac
-  M_CONFUSION,    P_MRMIME,     P_GIRAFARIG,  P_WOBBUFFET,  P_KADABRA,    P_SLOWBRO,    P_HYPNO,      -- psychic
-  M_PSYCHIC,      P_KADABRA,    P_HYPNO,      P_JYNX,       P_STARMIE,    P_MRMIME,     P_ALAKAZAM,   -- sabrina
+  M_THUNDERBOLT  P_WARTORTLE  P_KANGASKHAN P_CHARMELEON P_DODRIO     P_IVYSAUR    P_NIDOKING   -- pokemaniac
+  M_CONFUSION    P_MRMIME     P_GIRAFARIG  P_WOBBUFFET  P_KADABRA    P_SLOWBRO    P_HYPNO      -- psychic
+  M_PSYCHIC      P_KADABRA    P_HYPNO      P_JYNX       P_STARMIE    P_MRMIME     P_ALAKAZAM   -- sabrina
 
-  M_WHIRLPOOL,    P_QWILFISH,   P_OCTILLERY,  P_CLOYSTER,   P_SEAKING,    P_CORSOLA,    P_KINGLER,    -- fisher
-  M_FLAMETHROWER, P_PERSIAN,    P_SLUGMA,     P_RAPIDASH,   P_BEEDRILL,   P_MAGBY,      P_NINETALES,  -- firebreather
-  M_FIREBLAST,    P_ARCANINE,   P_GOLEM,      P_FLAREON,    P_MAGCARGO,   P_OCTILLERY,  P_MAGMAR,     -- blaine
+  M_WHIRLPOOL    P_QWILFISH   P_OCTILLERY  P_CLOYSTER   P_SEAKING    P_CORSOLA    P_KINGLER    -- fisher
+  M_FLAMETHROWER P_PERSIAN    P_SLUGMA     P_RAPIDASH   P_BEEDRILL   P_MAGBY      P_NINETALES  -- firebreather
+  M_FIREBLAST    P_ARCANINE   P_GOLEM      P_FLAREON    P_MAGCARGO   P_OCTILLERY  P_MAGMAR     -- blaine
 
-  M_SKYATTACK,    P_FEAROW,     P_DODUO,      P_NOCTOWL,    P_PIDGEOTTO,  P_DODRIO,     P_PIDGEOT,    -- birdkeeper
-  M_MINIMIZE,     P_DEWGONG,    P_BELLOSSOM,  P_AIPOM,      P_DUGTRIO,    P_GOLDUCK,    P_BLISSEY,    -- cooltrainer
-  M_EARTHQUAKE,   P_PIDGEOT,    P_ARCANINE,   P_EXEGGUTOR,  P_RHYDON,     P_JOLTEON,    P_BLASTOISE,  -- blue
+  M_SKYATTACK    P_FEAROW     P_DODUO      P_NOCTOWL    P_PIDGEOTTO  P_DODRIO     P_PIDGEOT    -- birdkeeper
+  M_MINIMIZE     P_DEWGONG    P_BELLOSSOM  P_AIPOM      P_DUGTRIO    P_GOLDUCK    P_BLISSEY    -- cooltrainer
+  M_EARTHQUAKE   P_PIDGEOT    P_ARCANINE   P_EXEGGUTOR  P_RHYDON     P_JOLTEON    P_BLASTOISE  -- blue
 
-  M_ANCIENTPOWER, P_LANTURN,    P_FURRET,     P_SUDOWOODO,  P_TOGETIC,    P_MAGCARGO,   P_MEGANIUM,   -- elm
-  M_SKULLBASH,    P_NINETALES,  P_KANGASKHAN, P_RHYDON,     P_VAPOREON,   P_TAUROS,     P_VENUSAUR,   -- oak
-  M_CRUNCH,       P_SNEASEL,    P_CROBAT,     P_MAGNETON,   P_URSARING,   P_ALAKAZAM,   P_FERALIGATR, -- silver
+  M_ANCIENTPOWER P_LANTURN    P_FURRET     P_SUDOWOODO  P_TOGETIC    P_MAGCARGO   P_MEGANIUM   -- elm
+  M_SKULLBASH    P_NINETALES  P_KANGASKHAN P_RHYDON     P_VAPOREON   P_TAUROS     P_VENUSAUR   -- oak
+  M_CRUNCH       P_SNEASEL    P_CROBAT     P_MAGNETON   P_URSARING   P_ALAKAZAM   P_FERALIGATR -- silver
 
-  M_ICEBEAM,      P_EXEGGUTOR,  P_SLOWKING,   P_GIRAFARIG,  P_JYNX,       P_LAPRAS,     P_XATU,       -- will
-  M_TOXIC,        P_ARIADOS,    P_MUK,        P_FORRETRESS, P_VENOMOTH,   P_NIDOKING,   P_CROBAT,     -- koga
-  M_FOCUSENERGY,  P_HITMONCHAN, P_HERACROSS,  P_HITMONLEE,  P_POLIWRATH,  P_HITMONTOP,  P_MACHAMP,    -- bruno
+  M_ICEBEAM      P_EXEGGUTOR  P_SLOWKING   P_GIRAFARIG  P_JYNX       P_LAPRAS     P_XATU       -- will
+  M_TOXIC        P_ARIADOS    P_MUK        P_FORRETRESS P_VENOMOTH   P_NIDOKING   P_CROBAT     -- koga
+  M_FOCUSENERGY  P_HITMONCHAN P_HERACROSS  P_HITMONLEE  P_POLIWRATH  P_HITMONTOP  P_MACHAMP    -- bruno
 
-  M_MUDSLAP,      P_GENGAR,     P_UMBREON,    P_MISDREAVUS, P_MURKROW,    P_VILEPLUME,  P_HOUNDOOM,   -- karen
-  M_DRAGONBREATH, P_AERODACTYL, P_GYARADOS,   P_SNORLAX,    P_TYRANITAR,  P_KINGDRA,    P_DRAGONITE,  -- lance
-  M_FLAMETHROWER, P_ESPEON,     P_LAPRAS,     P_SCIZOR,     P_RAICHU,     P_SNORLAX,    P_CHARIZARD,  -- red
+  M_MUDSLAP      P_GENGAR     P_UMBREON    P_MISDREAVUS P_MURKROW    P_VILEPLUME  P_HOUNDOOM   -- karen
+  M_DRAGONBREATH P_AERODACTYL P_GYARADOS   P_SNORLAX    P_TYRANITAR  P_KINGDRA    P_DRAGONITE  -- lance
+  M_FLAMETHROWER P_ESPEON     P_LAPRAS     P_SCIZOR     P_RAICHU     P_SNORLAX    P_CHARIZARD  -- red
 
-  M_BLIZZARD,     P_SLOWKING,   P_VICTREEBEL, P_TYRANITAR,  P_AMPHAROS,   P_SKARMORY,   P_TYPHLOSION, -- gold
-  M_DOUBLETEAM,   P_MOLTRES,    P_RAIKOU,     P_ARTICUNO,   P_ENTEI,      P_ZAPDOS,     P_SUICUNE,    -- legend1
-  M_SHADOWBALL,   P_UNOWN,      P_LUGIA,      P_HOOH,       P_CELEBI,     P_MEW,        P_MEWTWO,     -- legend2
-}
+  M_BLIZZARD     P_SLOWKING   P_VICTREEBEL P_TYRANITAR  P_AMPHAROS   P_SKARMORY   P_TYPHLOSION -- gold
+  M_DOUBLETEAM   P_MOLTRES    P_RAIKOU     P_ARTICUNO   P_ENTEI      P_ZAPDOS     P_SUICUNE    -- legend1
+  M_SHADOWBALL   P_UNOWN      P_LUGIA      P_HOOH       P_CELEBI     P_MEW        P_MEWTWO     -- legend2
+]]
 
 -- from missingno (0) to mew (151), these are the tms they can learn.
 -- 1-50 are tms. 51-55 are hms. There shouldn't be anything higher than that.
@@ -2123,7 +1910,7 @@ move_stats = [[
   M_COUNTER         1  T_FIGHTING      100  20    0 -- EFFECT_COUNTER
 
   -- no power no accuracy
-  M_TM05            0  T_GLITCH          0  33    0 -- EFFECT_EVASION_UP (up by 2)
+  M_TM05            0  T_QUESTION        0  33    0 -- EFFECT_EVASION_UP (up by 2)
   M_GUILLOTINE      0  T_NORMAL         30   5    0 -- EFFECT_OHKO
   M_WHIRLWIND       0  T_NORMAL        100  20    0 -- EFFECT_FORCE_SWITCH
   M_SANDATTACK      0  T_GROUND        100  15    0 -- EFFECT_ACCURACY_DOWN
@@ -2202,7 +1989,7 @@ move_stats = [[
   M_CONVERSION      0  T_NORMAL        100  30    0 -- EFFECT_CONVERSION
   M_SUBSTITUTE      0  T_NORMAL        100  10    0 -- EFFECT_SUBSTITUTE
   M_SPIDERWEB       0  T_BUG           100  10    0 -- EFFECT_MEAN_LOOK
-  M_CURSE           0  T_GHOST         100  10    0 -- EFFECT_CURSE
+  M_CURSE           0  T_QUESTION      100  10    0 -- EFFECT_CURSE
   M_PROTECT         0  T_NORMAL        100  10    0 -- EFFECT_PROTECT
   M_BELLYDRUM       0  T_NORMAL        100  10    0 -- EFFECT_BELLY_DRUM
   M_DESTINYBOND     0  T_GHOST         100   5    0 -- EFFECT_DESTINY_BOND
