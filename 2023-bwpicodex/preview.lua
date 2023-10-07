@@ -1,4 +1,5 @@
-poke(0x5f2c, 3)
+cartdata"picodex_preview"
+poke(0x5f2c, 3) -- enable 64x64
 
 g_outline_in_progress = false
 function outline(x, y, col, func)
@@ -51,11 +52,11 @@ color_schemes = {
 
 g_off = 0
 g_scale = 1
-view_y = 0
-s_x = 0
-s_y = 0
-g_color=0
-function _update()
+view_y = dget(0)
+s_x    = dget(1)
+s_y    = dget(2)
+g_color= dget(3)
+function _update60()
   local top = 64\3
   if btnp(0) then s_x = mid(0, 2,   s_x-1) end
   if btnp(1) then s_x = mid(0, 2,   s_x+1) end
@@ -67,12 +68,52 @@ function _update()
 
   if s_y-2 > view_y then view_y = mid(s_y-2, 0, top) end
   if s_y   < view_y then view_y = mid(s_y,   0, top) end
+
+  dset(0, view_y)
+  dset(1, s_x)
+  dset(2, s_y)
+  dset(3, g_color)
 end
 
+g_anim=0
 function _draw()
   --fillp(0b1000010110100001)
   rectfill(0,0,63,63,0)
   --fillp()
+
+  -- this is a cool line pattern
+  --  for j=-2,7 do
+  --    local y = j*16-g_anim\1 +32
+  --    for l=0,7 do
+  --      line(0, y+l, 127, y-63+l, 6)
+  --    end
+  --  end
+
+  for j=-4,4 do
+    for i=-4,4 do
+      local x, y = i*16+g_anim\1, j*16+8+g_anim\1
+      if (j+i) % 2 == 0 then
+        local r = j % 2 == 0 and 3 or 5
+        if g_color == 0 then
+          local r1, r2 = r-2, r+2
+          rectfill(x-r1, y-r2, x+r1, y+r2, 6)
+          rectfill(x-r2, y-r1, x+r2, y+r1, 6)
+        elseif g_color == 1 then
+          for l=-3,3 do
+            line(x+r+1, y+l, x-r, y+l-r-1, 6)
+          end
+        elseif g_color == 2 then
+          local r1, r2 = r-2, r+2
+          ovalfill(x-r1, y-r2, x+r1, y+r2, 6)
+          ovalfill(x-r2, y-r1, x+r2, y+r1, 6)
+        elseif g_color == 3 then
+          circfill(x, y, r, 6)
+        elseif g_color == 4 then
+          rectfill(x-r, y-r, x+r, y+r, 6)
+        end
+      end
+    end
+  end
 
   for j=0,7 do
     for i=0,7 do
@@ -84,6 +125,7 @@ function _draw()
         local offset = 32-16-gap
         local sx, sy = offset+ii*(16+gap), offset+jj*(16+gap)
         if ind == s_x + s_y*3 then
+          -- rectfill(1+ii*20-1, 1+jj*20-1, 1+ii*20+20+2, 1+jj*20+20+2, 6)
           outline(sx, sy, 6, function(x, y)
             outline(x, y, 1, function(x, y)
               draw_pkmn(ind, x, y, g_scale, g_scale)
@@ -102,4 +144,6 @@ function _draw()
     pal(i, color_schemes[g_color+1][2], 1)
   end
   pal(0, color_schemes[g_color+1][1], 1)
+
+  g_anim = (g_anim + .5) % 64
 end
