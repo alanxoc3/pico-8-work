@@ -9,4 +9,6 @@ runthing() {
 
 runthing sprite.lua
 runthing trainers.lua
-runthing movedata.lua
+# runthing movedata.lua
+runthing pkmnmoves.lua
+runthing pkmnstats.lua

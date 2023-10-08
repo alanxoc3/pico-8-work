@@ -1,8 +1,7 @@
 function init() -- entry point for this compile script
   load_sprites("000-063.p8", 0x8000) load_sprites("064-127.p8", 0xa000)
   load_sprites("128-191.p8", 0xc000) load_sprites("192-255.p8", 0xe000)
-  dex_compress(function(...) return vget(0x8000, ...) end)
-
+  store_pack(function(...) return vget(0x8000, ...) end)
   log("Wrote Pokemon Sprites")
 end
 
@@ -16,8 +15,14 @@ function vget(offset, x, y)
   else             return (val & 0x0f) end
 end
 
+function load_sprites(cartname, dest)
+  reload(dest, 0x0000, 0x2000, cartname)
+end
+
 -- w=128, h=512 (4 spritesheets). 16x16 squares
-function dex_compress(vget)
+-- this function will simply pack all the spritesheets one after another with a single bit per pixel.
+-- better compression ratio to just save the data than trying rle or px9.
+function store_pack(vget)
   for y=0,511 do
     for x=0,127,8 do
       local col = 0
@@ -28,8 +33,4 @@ function dex_compress(vget)
       offsetpoke(col)
     end
   end
-end
-
-function load_sprites(cartname, dest)
-  reload(dest, 0x0000, 0x2000, cartname)
 end
