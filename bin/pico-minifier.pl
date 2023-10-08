@@ -24,7 +24,6 @@ binmode(STDOUT, "encoding(UTF-8)");
 # |[...]| ... $$ -- adds something to the _g table. name of item is specified between | and |. value is specified between | and $$.
 
 my $minify;
-my $ignorelib;
 my $debug_mode;
 my $newline;
 GetOptions('minify'  => \$minify,     # minify the generated code

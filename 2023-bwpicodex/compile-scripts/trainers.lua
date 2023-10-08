@@ -1,5 +1,10 @@
 function init() -- entry point for this compile script
-  printh(tostring(datastr_to_arr(g_trainer_data)))
+  for trainer in all(datastr_to_arr(g_trainer_data)) do
+    for thing in all(trainer) do
+      offsetpoke(thing)
+    end
+  end
+  log("Wrote Trainer Data")
 end
 
 -- 60 trainers total - doesn't include missingno, i think you should unlock that a different way (horde mode again?)

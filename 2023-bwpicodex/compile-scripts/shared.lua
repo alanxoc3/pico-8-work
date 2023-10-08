@@ -90,10 +90,10 @@ end
 memset(0x0000, 0, 0x8000) -- start with a clean slate
 memset(0x8000, 0, 0x8000)
 
-ENCODE_OFFSET = tonum(stat(6), 0x1)
+ENCODE_OFFSET = tonum(stat(6))
 START_OFFSET = ENCODE_OFFSET
-log("BEGIN SCRIPT")
+log("=== BEGIN SCRIPT")
 cls()
 init()
 cstore(START_OFFSET, START_OFFSET, ENCODE_OFFSET-START_OFFSET, "game.p8")
-log("END SCRIPT")
+log("=== END SCRIPT")

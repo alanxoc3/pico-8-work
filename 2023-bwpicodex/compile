@@ -1,9 +1,12 @@
 #!/bin/bash
 
+MEMLOC="0x0000.0000"
 runthing() {
   cat "./compile-scripts/$1" ./compile-scripts/shared.lua | pico-compile-stdout -n > .compile.lua
-  pico8 -x .compile.lua
+  MEMLOC=$(pico8 -x .compile.lua -p "$MEMLOC" | tee /dev/stderr | grep 'END SCRIPT' | awk '{print $2}')
+  echo
 }
 
 runthing sprite.lua
 runthing trainers.lua
+runthing movedata.lua
