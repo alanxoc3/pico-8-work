@@ -3,7 +3,7 @@ function init() -- entry point for this compile script
   local moveid_to_stat = {}
 
   for stats in all(movestat_data) do
-    moveid_to_stat[stats[1]] = {stats[2], stats[3], stats[4], stats[5]}
+    moveid_to_stat[stats[1]] = {stats[2], stats[3]} -- stats[4], stats[5]
   end
 
   for i=0,251 do
@@ -14,6 +14,13 @@ function init() -- entry point for this compile script
 
   log("Wrote Move Data")
 end
+
+-- accuracy and pp can be put together
+-- there are only 12 possible different accuracies: 0 30 50 55 60 70 75 80 85 90 95 100
+-- there are only 10 possible different pps: 1 5 10 15 20 25 30 33 35 40
+-- there are only 27 possible different pow
+-- there are only 18 possible types
+-- there are only 10 pow differences: 0 1 2 3 4 5 9 10 20 50
 
 -- taken from crystal decompiled. according to that, there are 135 different categorizable move effects...
 -- some accuracies don't make sense, for moves that don't have an accuracy
@@ -278,3 +285,7 @@ move_stats = [[
   M_RAINDANCE       0  T_WATER          90   5    0 -- EFFECT_RAIN_DANCE
   M_SUNNYDAY        0  T_FIRE           90   5    0 -- EFFECT_SUNNY_DAY
 ]]
+
+
+
+

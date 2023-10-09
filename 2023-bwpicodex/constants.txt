@@ -319,52 +319,56 @@ P_CELEBI:     251
 P_NONE:       252
 
 # ----------------------------- move numbers
+# i did some hacky stuff and realized these two sequences could save space (for tms)
+# [11, 13, 21, 27, 45]
+# [3, 6, 10, 17, 20, 32, 34, 35, 44]
+
 M_STRUGGLE:      0
-M_DYNAMICPUNCH:  1
-M_HEADBUTT:      2
-M_CURSE:         3
-M_ROLLOUT:       4
-M_ROAR:          5
-M_TOXIC:         6
-M_ZAPCANNON:     7
-M_ROCKSMASH:     8
-M_PSYCHUP:       9
-M_HIDDENPOWER:   10
-M_SUNNYDAY:      11
-M_SWEETSCENT:    12
-M_SNORE:         13
-M_BLIZZARD:      14
-M_HYPERBEAM:     15
-M_ICYWIND:       16
-M_PROTECT:       17
-M_RAINDANCE:     18
-M_GIGADRAIN:     19
-M_ENDURE:        20
-M_FRUSTRATION:   21
-M_SOLARBEAM:     22
-M_IRONTAIL:      23
-M_DRAGONBREATH:  24
-M_THUNDER:       25
-M_EARTHQUAKE:    26
-M_RETURN:        27
-M_DIG:           28
-M_PSYCHIC:       29
-M_SHADOWBALL:    30
-M_MUDSLAP:       31
-M_DOUBLETEAM:    32
-M_ICEPUNCH:      33
-M_SWAGGER:       34
-M_SLEEPTALK:     35
-M_SLUDGEBOMB:    36
-M_SANDSTORM:     37
-M_FIREBLAST:     38
-M_SWIFT:         39
-M_DEFENSECURL:   40
-M_THUNDERPUNCH:  41
-M_DREAMEATER:    42
-M_DETECT:        43
-M_REST:          44
-M_ATTRACT:       45
+M_CURSE:         1  # BEGIN COMMON SEQUENCE (like 20 repeats)
+M_TOXIC:         2
+M_HIDDENPOWER:   3
+M_PROTECT:       4
+M_ENDURE:        5
+M_DOUBLETEAM:    6
+M_SWAGGER:       7
+M_SLEEPTALK:     8
+M_REST:          9  # END COMMON SEQUENCE
+M_SUNNYDAY:      10 # BEGIN COMMON SEQUENCE (like 80 repeats)
+M_SNORE:         11
+M_FRUSTRATION:   12
+M_RETURN:        13
+M_ATTRACT:       14 # END COMMON SEQUENCE
+M_DYNAMICPUNCH:  15
+M_HEADBUTT:      16
+M_ROLLOUT:       17
+M_ROAR:          18
+M_ZAPCANNON:     19
+M_ROCKSMASH:     20
+M_PSYCHUP:       21
+M_SWEETSCENT:    22
+M_BLIZZARD:      23
+M_HYPERBEAM:     24
+M_ICYWIND:       25
+M_RAINDANCE:     26
+M_GIGADRAIN:     27
+M_SOLARBEAM:     28
+M_IRONTAIL:      29
+M_DRAGONBREATH:  30
+M_THUNDER:       31
+M_EARTHQUAKE:    32
+M_DIG:           33
+M_PSYCHIC:       34
+M_SHADOWBALL:    35
+M_MUDSLAP:       36
+M_ICEPUNCH:      37
+M_SLUDGEBOMB:    38
+M_SANDSTORM:     39
+M_FIREBLAST:     40
+M_SWIFT:         41
+M_DEFENSECURL:   42
+M_THUNDERPUNCH:  43
+M_DREAMEATER:    44
+M_DETECT:        45
 M_THIEF:         46
 M_STEELWING:     47
 M_FIREPUNCH:     48
@@ -571,3 +575,257 @@ M_ANCIENTPOWER:  248
 M_FUTURESIGHT:   249
 M_BEATUP:        250
 M_TM05:          251
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

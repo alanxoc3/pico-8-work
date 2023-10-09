@@ -25,7 +25,7 @@ Smeargle can learn and sketch these moves that it couldn't in the gen 2 games:
 - M_MIMIC
 - M_TRANSFORM
 
-Smeargle still can't sketch these moves:
+Smeargle still can't sketch these moves: (probably mimic would do the same thing, but transform would only not do struggle)
 - M_EXPLOSION
 - M_SELFDESTRUCT
 - M_SKETCH
@@ -44,3 +44,5 @@ Smeargle cannot sketch these moves:
 - Metronome    -- later games removed this restriction
 - Mimic        -- later games removed this restriction
 - Transform    -- later games removed this restriction
+
+Should sleep talk be able to select rest? I think so, like the OG games. Sleep talk cannot select itself. (no difference)

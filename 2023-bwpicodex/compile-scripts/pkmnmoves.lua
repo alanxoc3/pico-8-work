@@ -162,7 +162,7 @@ function init() -- entry point for this compile script
     for x in all(movearr[i]) do
       offsetpoke(x)
     end
-    -- printh("I: "..i..tostring(movearr[i]))
+    -- printh(tostring(movearr[i]))
   end
 
   log("Wrote Pokemon Movesets")
