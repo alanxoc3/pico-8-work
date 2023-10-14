@@ -8,15 +8,12 @@ from itertools import combinations # to get subsets
 from collections import Counter # To keep counts of subset repeats
 import random          # random sample if list is to big
 import sys             # stderr log and stdin
-import signal          # For giving the subset function a timeout
-import time            # For giving the subset function a timeout
-import multiprocessing # For giving the subset function a timeout
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor # For running in parallel.
 import math # For how many subsets of len x in thing
 
 def log(*args):
   print(*args)
-  print(*args, file=sys.stderr)
+  sys.stdout.flush()
 
 # This will return all subsets of a list if possible.
 def get_subsets_with_len(subset_len, source_len, l): # only returns up to 100 subsets, but randomly distributed
@@ -33,31 +30,50 @@ def get_subsets(executor, subset_len, l):
 
   return subs
 
+# returns a list of sets
 def get_all_subsets(executor, l):
-  all_subs = []
+  subs = []
   for subset_len in range(4,len(l)):
-    all_subs.append(get_subsets(executor, subset_len, l))
-  return all_subs
+    for sub in get_subsets(executor, subset_len, l):
+      subs.append(sub)
+  return subs
 
+# sub group looks like:
 def main(executor, lists):
-  shared_subs = {}
-  sub_groups = []
+  all_subs = set()
 
-  print("Running in parallel...")
+  # For each list, get all or a random sample of all the subsets if there are too many.
+  log("\nRunning in parallel...\n")
 
   futures = []
   for i, l in enumerate(lists):
     future = executor.submit(get_all_subsets, executor, l)
     futures.append(future)
-    print(f"Starting: {i+1} of {len(lists)}")
+    log(f"Starting: {i+1} of {len(lists)}")
 
+  log("\nCollecting subsets...\n")
+
+  # Store all subsets found in a single set.
   for i, future in enumerate(futures):
-    sub_groups.append(future.result())
-    print(f"Finished: {i+1} of {len(lists)}")
+    for fz in future.result():
+      all_subs.add(fz)
+    log(f"Finished: {i+1} of {len(lists)}")
 
-  # for s, c in Counter(all_subs).items():
-  #   if c >= 10:
-  #     log("count", c, sorted(list(s)))
+  log("\nPreparing and displaying results...\n")
+
+  lists_as_sets = {frozenset(x) for x in lists}
+  savings_arr = []
+  for fz in all_subs:
+    count = 0
+    for listset in lists_as_sets:
+      if fz.issubset(listset):
+        count += 1
+    # savings is how many bytes would be saved by storing a range.
+    if count > 1: # 1 count will never save anything significant
+      savings_arr.append({"len": len(fz), "count": count, "savings": max(0, len(fz)-3)*count, "vals": sorted([int(x) for x in fz])})
+
+  for x in reversed(sorted(savings_arr, key=lambda x: x['savings'])):
+    log(f'SAV:{x["savings"]}', f'CNT:{x["count"]}', f'LEN:{x["len"]}', '|', ' '.join([str(n) for n in x["vals"]]))
 
 if __name__ == "__main__":
   # Pass in lines with numbers separated by spaces.
