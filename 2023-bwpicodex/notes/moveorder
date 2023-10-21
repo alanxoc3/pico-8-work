@@ -4,6 +4,7 @@
 # As well as a subset of 9 that appeared 20 times.
 # So it does work :D. This saved me 972 bytes. I just tried for johto tms, could try for kanto ones too.
 
+import itertools
 from itertools import combinations # to get subsets
 from collections import Counter # To keep counts of subset repeats
 import random          # random sample if list is to big
@@ -38,6 +39,19 @@ def get_all_subsets(executor, l):
       subs.append(sub)
   return subs
 
+# give it list of ints. output list of pairs
+def ranges(i):
+  for a, b in itertools.groupby(enumerate(i), lambda pair: pair[1] - pair[0]):
+    b = list(b)
+    yield b[0][1], b[-1][1]
+
+# input: list of ints. output bytes saved (taking ranges into account
+def calc_saving(vals, count):
+  real_byte_len = sum([min(b-a, 2)+1 for a, b in ranges(vals)])
+  cur_len=real_byte_len*count
+  new_len = min(3, len(vals))*count
+  return max(0, cur_len-new_len)
+
 # sub group looks like:
 def main(executor, lists):
   all_subs = set()
@@ -70,7 +84,13 @@ def main(executor, lists):
         count += 1
     # savings is how many bytes would be saved by storing a range.
     if count > 1: # 1 count will never save anything significant
-      savings_arr.append({"len": len(fz), "count": count, "savings": max(0, len(fz)-3)*count, "vals": sorted([int(x) for x in fz])})
+      vals = sorted([int(x) for x in fz])
+      savings_arr.append({
+        "len": len(fz),
+        "count": count,
+        "savings": calc_saving(vals, count),
+        "vals": vals,
+      })
 
   for x in reversed(sorted(savings_arr, key=lambda x: x['savings'])):
     log(f'SAV:{x["savings"]}', f'CNT:{x["count"]}', f'LEN:{x["len"]}', '|', ' '.join([str(n) for n in x["vals"]]))
