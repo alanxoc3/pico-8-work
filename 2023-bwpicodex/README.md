@@ -24,6 +24,8 @@ Around 2023-10-01, I finished getting all the move info I need from decompiled g
   - 0x35c2
   - 0x359c
   - 0x358c
+  - 0x3585
+  - 0x354f
 
 ## changes
 Smeargle can learn and sketch these moves that it couldn't in the gen 2 games:
