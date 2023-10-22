@@ -20,7 +20,7 @@ end
 -- 130 pokemon with "none" evolution
 -- 143 pokemon with "none" type
 
--- 5 bits for type. 1 for gender/type2. 1 for evolution.
+-- 5 bits for type. 1 for gender/type2. 1 for "has" evolution. (could save some bytes)
 -- results from crystal decompiled - besides missingno
 --pokemon      pre-evolve   type 1     type 2      hp  att  def  spd  sat  sdf gender
 pokemon_stats = [[
@@ -137,7 +137,7 @@ pokemon_stats = [[
   P_WEEZING    P_KOFFING    T_POISON   T_NONE      65   90  120   60   85   70 G_BOTH
   P_RHYHORN    P_NONE       T_GROUND   T_ROCK      80   85   95   25   30   30 G_BOTH
   P_RHYDON     P_RHYHORN    T_GROUND   T_ROCK     105  130  120   40   45   45 G_BOTH
-  P_CHANSEY    P_NONE       T_NORMAL   T_NONE     250   05   05   50   35  105 G_FEMA
+  P_CHANSEY    P_NONE       T_NORMAL   T_NONE     250    5    5   50   35  105 G_FEMA
   P_TANGELA    P_NONE       T_GRASS    T_NONE      65   55  115   60  100   40 G_BOTH
   P_KANGASKHAN P_NONE       T_NORMAL   T_NONE     105   95   80   90   40   80 G_FEMA
   P_HORSEA     P_NONE       T_WATER    T_NONE      30   40   70   60   70   25 G_BOTH
@@ -237,7 +237,7 @@ pokemon_stats = [[
   P_GRANBULL   P_SNUBBULL   T_NORMAL   T_NONE      90  120   75   45   60   60 G_BOTH
   P_QWILFISH   P_NONE       T_WATER    T_POISON    65   95   75   85   55   55 G_BOTH
   P_SCIZOR     P_SCYTHER    T_BUG      T_STEEL     70  130  100   65   55   80 G_BOTH
-  P_SHUCKLE    P_NONE       T_BUG      T_ROCK      20   10  230   05   10  230 G_BOTH
+  P_SHUCKLE    P_NONE       T_BUG      T_ROCK      20   10  230    5   10  230 G_BOTH
   P_HERACROSS  P_NONE       T_BUG      T_FIGHTING  80  125   75   85   40   95 G_BOTH
   P_SNEASEL    P_NONE       T_DARK     T_ICE       55   95   55  115   35   75 G_BOTH
   P_TEDDIURSA  P_NONE       T_NORMAL   T_NONE      60   80   50   40   50   50 G_BOTH

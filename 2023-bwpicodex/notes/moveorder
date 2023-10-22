@@ -1,8 +1,7 @@
 #!/usr/bin/python3
 # Figuring out the most common subsets is a hard problem.
-# But I was able to hack/use this to find one subset of 5 that appeared 80 times.
-# As well as a subset of 9 that appeared 20 times.
-# So it does work :D. This saved me 972 bytes. I just tried for johto tms, could try for kanto ones too.
+# This takes a random sample of a set if there would be too many subsets for a given length.
+# Finding subset patterns saves tons of bytes for picodex!
 
 import itertools
 from itertools import combinations # to get subsets
@@ -90,10 +89,18 @@ def main(executor, lists):
         "count": count,
         "savings": calc_saving(vals, count),
         "vals": vals,
+        "valsSet": fz,
       })
 
+  savings_set = set()
+  total_savings = 0
   for x in reversed(sorted(savings_arr, key=lambda x: x['savings'])):
-    log(f'SAV:{x["savings"]}', f'CNT:{x["count"]}', f'LEN:{x["len"]}', '|', ' '.join([str(n) for n in x["vals"]]))
+    if len(savings_set & x["valsSet"]) <= 1 and x["savings"] > 0:
+      savings_set.update(x["valsSet"])
+      log(f'SAV:{x["savings"]}', f'CNT:{x["count"]}', f'LEN:{x["len"]}', '|', ' '.join([str(n) for n in x["vals"]]))
+      total_savings += x["savings"]
+  log()
+  log("TOTAL SAVINGS:", total_savings)
 
 if __name__ == "__main__":
   # Pass in lines with numbers separated by spaces.

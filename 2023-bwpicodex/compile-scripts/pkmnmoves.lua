@@ -1,5 +1,7 @@
+-- Sections will put me at 0x42cb. Which is close to the limit, could be slightly optimized.
 NEXT_ID=255
 DASH_ID=254
+END_ID=253 -- if there is no gen 1 or event, just finish
 
 function init() -- entry point for this compile script
   -- Initialize datastructures.
@@ -147,14 +149,18 @@ function init() -- entry point for this compile script
   end
 
   -- Add all the moves.
-  learnfunc(gen2_learn)    loglen("Added gen2 Lrnmvs")
+  learnfunc(gen2_learn)    loglen("Added gen2 Lrnmvs") -- gen 2 learn (order matters)
   movesfunc(gen2_eggmoves) loglen("Added gen2 Eggmvs")
-  movesfunc(gen2_tmhm)     loglen("Added gen2 TM/HMs")
+  -- Section
+  movesfunc(gen2_tmhm)     loglen("Added gen2 TM/HMs") -- gen 2 teach (order doesn't matter)
   movesfunc(gen2_tutor)    loglen("Added gen2 Tutmvs")
-  learnfunc(gen1_learn)    loglen("Added gen1 Lrnmvs")
+  -- Section
+  learnfunc(gen1_learn)    loglen("Added gen1 Lrnmvs") -- gen 1 only (order doesn't matter)
   movesfunc(gen1_tmhm)     loglen("Added gen1 TM/HMs")
-  movesfunc(genx_events)   loglen("Added genx Events")
+  -- Section
+  movesfunc(genx_events)   loglen("Added genx Events") -- event only (order doesn't matter)
   addweird()               loglen("Add gotchas")
+  -- Section
   dedup_evol()             loglen("Dedup evolutions")
   replace_ranges()         loglen("Replace ranges")
 

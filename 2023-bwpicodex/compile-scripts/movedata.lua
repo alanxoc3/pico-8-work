@@ -3,7 +3,7 @@ function init() -- entry point for this compile script
   local moveid_to_stat = {}
 
   for stats in all(movestat_data) do
-    moveid_to_stat[stats[1]] = {stats[2], stats[3]} -- stats[4], stats[5]
+    moveid_to_stat[stats[1]] = {stats[2], stats[3], stats[4]} -- , stats[5]
   end
 
   for i=0,251 do
@@ -15,12 +15,39 @@ function init() -- entry point for this compile script
   log("Wrote Move Data")
 end
 
+-- TODO: format the 3 bytes above correctly. Here is the format:
+-- 3 bytes is possible, including fin. this opposed to 5 bytes.
+-- fin  11  | 4 (div by 10)
+-- pp   9   | 4 (div by 5)
+-- type 18  | 5 (div by 1)
+-- acc  21  | 5 (div by 5)
+-- pow  51  | 6 (div by 5) -- pow could be 6 if the 14 and 18 multihit moves store the 4 and 8 for multihit part in the percentage area (divided by 10)
+
 -- accuracy and pp can be put together
 -- there are only 12 possible different accuracies: 0 30 50 55 60 70 75 80 85 90 95 100
 -- there are only 10 possible different pps: 1 5 10 15 20 25 30 33 35 40
 -- there are only 27 possible different pow
 -- there are only 18 possible types
 -- there are only 10 pow differences: 0 1 2 3 4 5 9 10 20 50
+-- there are only 7 different fin/percents.
+
+-- 32 5
+-- 18 5
+-- 10 4 12 4
+
+-- pow is divisible by 5, except for 14 and 18 (multihit moves)
+-- acc is divisible by 5 to 100
+-- pp is divisible by 5 to 40 (except glitch move tm05 and struggle)
+-- pp 0-40*5   (0-8,  9=33 (tm05))
+-- acc 0-100*5 (0-20)
+-- pow (32)
+-- type (18)
+-- fin (10 or 7)
+-- percent 100 (7 bits
+
+-- fin is divisible by 10 to 100
+
+-- pow  255 | 8
 
 -- taken from crystal decompiled. according to that, there are 135 different categorizable move effects...
 -- some accuracies don't make sense, for moves that don't have an accuracy
@@ -285,7 +312,3 @@ move_stats = [[
   M_RAINDANCE       0  T_WATER          90   5    0 -- EFFECT_RAIN_DANCE
   M_SUNNYDAY        0  T_FIRE           90   5    0 -- EFFECT_SUNNY_DAY
 ]]
-
-
-
-

@@ -17,15 +17,18 @@ Around 2023-10-01, I finished getting all the move info I need from decompiled g
 2023-10-06, ran into issue with compiling. 200,000 characters used for compile cart, when I need under 65000. Fix will be to compile the compile cart and break it up into multiple files, each saving one thing.
 2023-10-08, got most of stuff packed into cartridge, but there isn't enough room for everything. will need to figure out what to take out and keep.
 2023-10-21, instead came up with a solution to save space even more. got down to:
-  - 0x3734
-  - 0x3633
-  - 0x361e
-  - 0x35d9
-  - 0x35c2
-  - 0x359c
-  - 0x358c
-  - 0x3585
-  - 0x354f
+  - 0x3830
+  - 0x372f
+  - 0x371a
+  - 0x36d5
+  - 0x36be
+  - 0x3698
+  - 0x3688
+  - 0x3681
+  - 0x364b
+  # - 0x3639
+  # - 0x35ff
+  # - 0x35ff
 
 ## changes
 Smeargle can learn and sketch these moves that it couldn't in the gen 2 games:
