@@ -7,8 +7,19 @@ runthing() {
   echo
 }
 
-runthing sprite.lua
-runthing trainers.lua
-runthing movedata.lua
+#runthing sprite.lua
+#runthing trainers.lua
+#runthing movedata.lua
 runthing pkmnmoves.lua
-runthing pkmnstats.lua
+#runthing pkmnstats.lua
+
+# Try this:
+# SAV:636 CNT:106 LEN:9 | 1 2 4 5 7 9 11 12 13
+# SAV:154 CNT:77 LEN:5 | 3 6 8 10 22
+# SAV:48 CNT:12 LEN:7 | 14 15 33 34 36 37 48
+# SAV:36 CNT:12 LEN:6 | 16 17 19 20 21 67
+# SAV:18 CNT:9 LEN:5 | 35 45 47 55 69
+# SAV:15 CNT:5 LEN:6 | 18 23 26 27 38 43
+# SAV:14 CNT:7 LEN:5 | 39 41 50 54 57
+# SAV:6 CNT:6 LEN:4 | 24 28 29 52
+# SAV:3 CNT:3 LEN:4 | 31 32 44 56

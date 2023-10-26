@@ -52,55 +52,48 @@ def calc_saving(vals, count):
   return max(0, cur_len-new_len)
 
 # sub group looks like:
-def main(executor, lists):
-  all_subs = set()
+def get_top_savings(lists):
+  with ThreadPoolExecutor(max_workers=16) as executor:
+    all_subs = set()
 
-  # For each list, get all or a random sample of all the subsets if there are too many.
-  log("\nRunning in parallel...\n")
+    # For each list, get all or a random sample of all the subsets if there are too many.
+    futures = []
+    for i, l in enumerate(lists):
+      future = executor.submit(get_all_subsets, executor, l)
+      futures.append(future)
 
-  futures = []
-  for i, l in enumerate(lists):
-    future = executor.submit(get_all_subsets, executor, l)
-    futures.append(future)
-    log(f"Starting: {i+1} of {len(lists)}")
+    # Store all subsets found in a single set.
+    for i, future in enumerate(futures):
+      for fz in future.result():
+        all_subs.add(fz)
 
-  log("\nCollecting subsets...\n")
+    lists_as_sets = {frozenset(x) for x in lists}
+    savings_arr = []
+    for fz in all_subs:
+      count = 0
+      for listset in lists_as_sets:
+        if fz.issubset(listset):
+          count += 1
+      # savings is how many bytes would be saved by storing a range.
+      if count > 1: # 1 count will never save anything significant
+        vals = sorted([int(x) for x in fz])
+        savings_arr.append({
+          "len": len(fz),
+          "count": count,
+          "savings": calc_saving(vals, count),
+          "vals": vals,
+          "valsSet": fz,
+        })
 
-  # Store all subsets found in a single set.
-  for i, future in enumerate(futures):
-    for fz in future.result():
-      all_subs.add(fz)
-    log(f"Finished: {i+1} of {len(lists)}")
-
-  log("\nPreparing and displaying results...\n")
-
-  lists_as_sets = {frozenset(x) for x in lists}
-  savings_arr = []
-  for fz in all_subs:
-    count = 0
-    for listset in lists_as_sets:
-      if fz.issubset(listset):
-        count += 1
-    # savings is how many bytes would be saved by storing a range.
-    if count > 1: # 1 count will never save anything significant
-      vals = sorted([int(x) for x in fz])
-      savings_arr.append({
-        "len": len(fz),
-        "count": count,
-        "savings": calc_saving(vals, count),
-        "vals": vals,
-        "valsSet": fz,
-      })
-
-  savings_set = set()
-  total_savings = 0
-  for x in reversed(sorted(savings_arr, key=lambda x: x['savings'])):
-    if len(savings_set & x["valsSet"]) <= 1 and x["savings"] > 0:
-      savings_set.update(x["valsSet"])
-      log(f'SAV:{x["savings"]}', f'CNT:{x["count"]}', f'LEN:{x["len"]}', '|', ' '.join([str(n) for n in x["vals"]]))
-      total_savings += x["savings"]
-  log()
-  log("TOTAL SAVINGS:", total_savings)
+    savings_set = set()
+    final_arr = []
+    for x in reversed(sorted(savings_arr, key=lambda x: x['savings'])):
+      if len(savings_set & x["valsSet"]) == 0 and x["savings"] > 0:
+        savings_set.update(x["valsSet"])
+        final_arr.append(x)
+    # try a saving. check if it saved space. if not, revert. then try next saving.
+    # when done, print the new constant list, colon separated.
+    return final_arr
 
 if __name__ == "__main__":
   # Pass in lines with numbers separated by spaces.
@@ -108,5 +101,10 @@ if __name__ == "__main__":
   lines = [[y for y in line if y != ""] for line in lines]
   lines = [line for line in lines if len(line) > 0]
 
-  with ThreadPoolExecutor(max_workers=16) as executor:
-    main(executor, lines)
+  log("Calculating savings... (This is pretty slow. Up to around a minute or two on my machine.)")
+  savings = get_top_savings(lines)
+  total_savings = 0
+  for stat in savings:
+    log(f'SAV:{stat["savings"]}', f'CNT:{stat["count"]}', f'LEN:{stat["len"]}', '|', ' '.join([str(n) for n in stat["vals"]]))
+    total_savings += stat["savings"]
+  log("TOTAL SAVINGS:", total_savings)

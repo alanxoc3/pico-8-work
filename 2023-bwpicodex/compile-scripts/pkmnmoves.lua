@@ -1,7 +1,7 @@
 -- Sections will put me at 0x42cb. Which is close to the limit, could be slightly optimized.
 NEXT_ID=255
-DASH_ID=254
-END_ID=253 -- if there is no gen 1 or event, just finish
+DASH_ID=254 -- if there is no gen 1 or event, just finish
+-- 251 is tm05 and 252 is unused, which means a range into a dash isn't possible
 
 function init() -- entry point for this compile script
   -- Initialize datastructures.
@@ -71,12 +71,6 @@ function init() -- entry point for this compile script
   end
 
   -- Add function that separates the different types of moves.
-  local addnext = function()
-    for i=0,251 do
-      add(movearr[i], NEXT_ID)
-    end
-  end
-
   local loglen = function(msg)
     local total = 0
     for i=0,251 do
@@ -100,7 +94,9 @@ function init() -- entry point for this compile script
         local pkmnid = evoldict[i]
         while pkmnid do
           for moveid in all(movearr[pkmnid]) do
-            delmove(i, moveid)
+            if moveid < 252 then -- don't delete dashes and sections
+              delmove(i, moveid)
+            end
           end
           pkmnid = evoldict[pkmnid]
         end
@@ -148,27 +144,37 @@ function init() -- entry point for this compile script
     end
   end
 
+  local addnext = function()
+    for pkmnid=0,251 do
+      add(movearr[pkmnid], NEXT_ID)
+    end
+  end
+
   -- Add all the moves.
-  learnfunc(gen2_learn)    loglen("Added gen2 Lrnmvs") -- gen 2 learn (order matters)
-  movesfunc(gen2_eggmoves) loglen("Added gen2 Eggmvs")
-  -- Section
-  movesfunc(gen2_tmhm)     loglen("Added gen2 TM/HMs") -- gen 2 teach (order doesn't matter)
-  movesfunc(gen2_tutor)    loglen("Added gen2 Tutmvs")
-  -- Section
-  learnfunc(gen1_learn)    loglen("Added gen1 Lrnmvs") -- gen 1 only (order doesn't matter)
-  movesfunc(gen1_tmhm)     loglen("Added gen1 TM/HMs")
-  -- Section
-  movesfunc(genx_events)   loglen("Added genx Events") -- event only (order doesn't matter)
+  learnfunc(gen2_learn)    loglen("Added gen2 Lrnmvs") -- gen 2 learn ordered
+  movesfunc(gen2_eggmoves) loglen("Added gen2 Eggmvs") -- gen 2 learn no order
+  addnext()
+
+  movesfunc(gen2_tmhm)     loglen("Added gen2 TM/HMs") -- gen 2 teach no order -- TODO: combine these 2 into 1
+  movesfunc(gen2_tutor)    loglen("Added gen2 Tutmvs") -- gen 2 teach no order
   addweird()               loglen("Add gotchas")
-  -- Section
+  addnext()
+
+  learnfunc(gen1_learn)    loglen("Added gen1 Lrnmvs") -- gen 1 learn ordered
+  movesfunc(gen1_tmhm)     loglen("Added gen1 TM/HMs") -- gen 1 teach no order
+  addnext()
+
+  movesfunc(genx_events)   loglen("Added genx Events") -- event only no order
+  addnext()
+
   dedup_evol()             loglen("Dedup evolutions")
-  replace_ranges()         loglen("Replace ranges")
+  -- replace_ranges()         loglen("Replace ranges")
 
   for i=0,251 do
     for x in all(movearr[i]) do
       offsetpoke(x)
     end
-    -- printh(tostring(movearr[i]))
+    printh(tostring(movearr[i]))
   end
 
   log("Wrote Pokemon Movesets")
