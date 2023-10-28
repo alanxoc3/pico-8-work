@@ -22,6 +22,7 @@ end
 
 -- 5 bits for type. 1 for gender/type2. 1 for "has" evolution. (could save some bytes)
 -- results from crystal decompiled - besides missingno
+-- primary and secondary types are sometimes switched, to improve sprite color
 --pokemon      pre-evolve   type 1     type 2      hp  att  def  spd  sat  sdf gender
 pokemon_stats = [[
   P_MISSINGNO  P_NONE       T_BIRD     T_NORMAL    33  136    0   29    6    6 G_NONE
@@ -40,13 +41,13 @@ pokemon_stats = [[
   P_WEEDLE     P_NONE       T_BUG      T_POISON    40   35   30   50   20   20 G_BOTH
   P_KAKUNA     P_WEEDLE     T_BUG      T_POISON    45   25   50   35   25   25 G_BOTH
   P_BEEDRILL   P_KAKUNA     T_BUG      T_POISON    65   80   40   75   45   80 G_BOTH
-  P_PIDGEY     P_NONE       T_NORMAL   T_FLYING    40   45   40   56   35   35 G_BOTH
-  P_PIDGEOTTO  P_PIDGEY     T_NORMAL   T_FLYING    63   60   55   71   50   50 G_BOTH
-  P_PIDGEOT    P_PIDGEOTTO  T_NORMAL   T_FLYING    83   80   75   91   70   70 G_BOTH
+  P_PIDGEY     P_NONE       T_FLYING   T_NORMAL    40   45   40   56   35   35 G_BOTH
+  P_PIDGEOTTO  P_PIDGEY     T_FLYING   T_NORMAL    63   60   55   71   50   50 G_BOTH
+  P_PIDGEOT    P_PIDGEOTTO  T_FLYING   T_NORMAL    83   80   75   91   70   70 G_BOTH
   P_RATTATA    P_NONE       T_NORMAL   T_NONE      30   56   35   72   25   35 G_BOTH
   P_RATICATE   P_RATTATA    T_NORMAL   T_NONE      55   81   60   97   50   70 G_BOTH
-  P_SPEAROW    P_NONE       T_NORMAL   T_FLYING    40   60   30   70   31   31 G_BOTH
-  P_FEAROW     P_SPEAROW    T_NORMAL   T_FLYING    65   90   65  100   61   61 G_BOTH
+  P_SPEAROW    P_NONE       T_FLYING   T_NORMAL    40   60   30   70   31   31 G_BOTH
+  P_FEAROW     P_SPEAROW    T_FLYING   T_NORMAL    65   90   65  100   61   61 G_BOTH
   P_EKANS      P_NONE       T_POISON   T_NONE      35   60   44   55   40   54 G_BOTH
   P_ARBOK      P_EKANS      T_POISON   T_NONE      60   85   69   80   65   79 G_BOTH
   P_PIKACHU    P_PICHU      T_ELECTRIC T_NONE      35   55   30   90   50   40 G_BOTH
@@ -72,8 +73,8 @@ pokemon_stats = [[
   P_VILEPLUME  P_GLOOM      T_GRASS    T_POISON    75   80   85   50  100   90 G_BOTH
   P_PARAS      P_NONE       T_BUG      T_GRASS     35   70   55   25   45   55 G_BOTH
   P_PARASECT   P_PARAS      T_BUG      T_GRASS     60   95   80   30   60   80 G_BOTH
-  P_VENONAT    P_NONE       T_BUG      T_POISON    60   55   50   45   40   55 G_BOTH
-  P_VENOMOTH   P_VENONAT    T_BUG      T_POISON    70   65   60   90   90   75 G_BOTH
+  P_VENONAT    P_NONE       T_POISON   T_BUG       60   55   50   45   40   55 G_BOTH
+  P_VENOMOTH   P_VENONAT    T_POISON   T_BUG       70   65   60   90   90   75 G_BOTH
   P_DIGLETT    P_NONE       T_GROUND   T_NONE      10   55   25   95   35   45 G_BOTH
   P_DUGTRIO    P_DIGLETT    T_GROUND   T_NONE      35   80   50  120   50   70 G_BOTH
   P_MEOWTH     P_NONE       T_NORMAL   T_NONE      40   45   35   90   40   40 G_BOTH
@@ -105,11 +106,11 @@ pokemon_stats = [[
   P_RAPIDASH   P_PONYTA     T_FIRE     T_NONE      65  100   70  105   80   80 G_BOTH
   P_SLOWPOKE   P_NONE       T_WATER    T_PSYCHIC   90   65   65   15   40   40 G_BOTH
   P_SLOWBRO    P_SLOWPOKE   T_WATER    T_PSYCHIC   95   75  110   30  100   80 G_BOTH
-  P_MAGNEMITE  P_NONE       T_ELECTRIC T_STEEL     25   35   70   45   95   55 G_NONE
-  P_MAGNETON   P_MAGNEMITE  T_ELECTRIC T_STEEL     50   60   95   70  120   70 G_NONE
-  P_FARFETCHD  P_NONE       T_NORMAL   T_FLYING    52   65   55   60   58   62 G_BOTH
-  P_DODUO      P_NONE       T_NORMAL   T_FLYING    35   85   45   75   35   35 G_BOTH
-  P_DODRIO     P_DODUO      T_NORMAL   T_FLYING    60  110   70  100   60   60 G_BOTH
+  P_MAGNEMITE  P_NONE       T_STEEL    T_ELECTRIC  25   35   70   45   95   55 G_NONE
+  P_MAGNETON   P_MAGNEMITE  T_STEEL    T_ELECTRIC  50   60   95   70  120   70 G_NONE
+  P_FARFETCHD  P_NONE       T_FLYING   T_NORMAL    52   65   55   60   58   62 G_BOTH
+  P_DODUO      P_NONE       T_FLYING   T_NORMAL    35   85   45   75   35   35 G_BOTH
+  P_DODRIO     P_DODUO      T_FLYING   T_NORMAL    60  110   70  100   60   60 G_BOTH
   P_SEEL       P_NONE       T_WATER    T_NONE      65   45   55   45   45   70 G_BOTH
   P_DEWGONG    P_SEEL       T_WATER    T_ICE       90   70   80   70   70   95 G_BOTH
   P_GRIMER     P_NONE       T_POISON   T_NONE      80   80   50   25   40   50 G_BOTH
@@ -187,12 +188,12 @@ pokemon_stats = [[
   P_FERALIGATR P_CROCONAW   T_WATER    T_NONE      85  105  100   78   79   83 G_BOTH
   P_SENTRET    P_NONE       T_NORMAL   T_NONE      35   46   34   20   35   45 G_BOTH
   P_FURRET     P_SENTRET    T_NORMAL   T_NONE      85   76   64   90   45   55 G_BOTH
-  P_HOOTHOOT   P_NONE       T_NORMAL   T_FLYING    60   30   30   50   36   56 G_BOTH
-  P_NOCTOWL    P_HOOTHOOT   T_NORMAL   T_FLYING   100   50   50   70   76   96 G_BOTH
+  P_HOOTHOOT   P_NONE       T_FLYING   T_NORMAL    60   30   30   50   36   56 G_BOTH
+  P_NOCTOWL    P_HOOTHOOT   T_FLYING   T_NORMAL   100   50   50   70   76   96 G_BOTH
   P_LEDYBA     P_NONE       T_BUG      T_FLYING    40   20   30   55   40   80 G_BOTH
   P_LEDIAN     P_LEDYBA     T_BUG      T_FLYING    55   35   50   85   55  110 G_BOTH
-  P_SPINARAK   P_NONE       T_BUG      T_POISON    40   60   40   30   40   40 G_BOTH
-  P_ARIADOS    P_SPINARAK   T_BUG      T_POISON    70   90   70   40   60   60 G_BOTH
+  P_SPINARAK   P_NONE       T_POISON   T_BUG       40   60   40   30   40   40 G_BOTH
+  P_ARIADOS    P_SPINARAK   T_POISON   T_BUG       70   90   70   40   60   60 G_BOTH
   P_CROBAT     P_GOLBAT     T_POISON   T_FLYING    85   90   80  130   70   80 G_BOTH
   P_CHINCHOU   P_NONE       T_WATER    T_ELECTRIC  75   38   38   67   56   56 G_BOTH
   P_LANTURN    P_CHINCHOU   T_WATER    T_ELECTRIC 125   58   58   67   76   76 G_BOTH
@@ -236,9 +237,9 @@ pokemon_stats = [[
   P_SNUBBULL   P_NONE       T_NORMAL   T_NONE      60   80   50   30   40   40 G_BOTH
   P_GRANBULL   P_SNUBBULL   T_NORMAL   T_NONE      90  120   75   45   60   60 G_BOTH
   P_QWILFISH   P_NONE       T_WATER    T_POISON    65   95   75   85   55   55 G_BOTH
-  P_SCIZOR     P_SCYTHER    T_BUG      T_STEEL     70  130  100   65   55   80 G_BOTH
+  P_SCIZOR     P_SCYTHER    T_STEEL    T_BUG       70  130  100   65   55   80 G_BOTH
   P_SHUCKLE    P_NONE       T_BUG      T_ROCK      20   10  230    5   10  230 G_BOTH
-  P_HERACROSS  P_NONE       T_BUG      T_FIGHTING  80  125   75   85   40   95 G_BOTH
+  P_HERACROSS  P_NONE       T_FIGHTING T_BUG       80  125   75   85   40   95 G_BOTH
   P_SNEASEL    P_NONE       T_DARK     T_ICE       55   95   55  115   35   75 G_BOTH
   P_TEDDIURSA  P_NONE       T_NORMAL   T_NONE      60   80   50   40   50   50 G_BOTH
   P_URSARING   P_TEDDIURSA  T_NORMAL   T_NONE      90  130   75   55   75   75 G_BOTH
@@ -275,5 +276,5 @@ pokemon_stats = [[
   P_TYRANITAR  P_PUPITAR    T_ROCK     T_DARK     100  134  110   61   95  100 G_BOTH
   P_LUGIA      P_NONE       T_PSYCHIC  T_FLYING   106   90  130  110   90  154 G_NONE
   P_HOOH       P_NONE       T_FIRE     T_FLYING   106  130   90   90  110  154 G_NONE
-  P_CELEBI     P_NONE       T_PSYCHIC  T_GRASS    100  100  100  100  100  100 G_NONE
+  P_CELEBI     P_NONE       T_GRASS    T_PSYCHIC  100  100  100  100  100  100 G_NONE
 ]]
