@@ -320,23 +320,21 @@ function _draw()
     -- draw_pkmn(g_num, m(0), m(1), g_scale, g_scale, false, false)
 
     -- draw_pkmn(g_num, m(0), m(2), g_scale, g_scale, true,  draw_watchmode_flip)
-    draw_pkmn(g_num, m(1), m(2), g_scale, g_scale, true, draw_watchmode_flip)
-    draw_pkmn(g_num, m(2), m(2), g_scale, g_scale, false,  draw_watchmode_flip)
+    draw_pkmn(g_num, m(1), m(2), g_scale, g_scale, false, true)
+    draw_pkmn(g_num, m(2), m(2), g_scale, g_scale, false, true)
 
     draw_pkmn(g_num, m(1), m(1), g_scale, g_scale, false, false)
-    draw_pkmn(g_num, m(2), m(1), g_scale, g_scale, true, false)
+    draw_pkmn(g_num, m(2), m(1), g_scale, g_scale, false, false)
 
-    draw_pkmn(g_num, m(1), m(0), g_scale, g_scale, true, not draw_watchmode_flip)
-    draw_pkmn(g_num, m(2), m(0), g_scale, g_scale, false, not draw_watchmode_flip)
+    draw_pkmn(g_num, m(1), m(0), g_scale, g_scale, false, draw_watchmode_flip)
+    draw_pkmn(g_num, m(2), m(0), g_scale, g_scale, false, draw_watchmode_flip)
 
     if draw_watchmode_flip then
       -- draw_pkmn(g_num, m(0), m(1), g_scale, g_scale, false, false)
       -- draw_pkmn(g_num, m(1), m(1), g_scale, g_scale, true, false)
-
-      disable_alt_for_row(2)
-    else
       disable_alt_for_row(0)
     end
+    disable_alt_for_row(2)
 
     if watchcounter_draw % 10 == 0 then
       draw_watchmode_flip = not draw_watchmode_flip
