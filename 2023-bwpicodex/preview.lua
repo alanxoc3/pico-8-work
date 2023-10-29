@@ -74,7 +74,7 @@ pkmn_types={
 pkmn_to_color = {[0]="bird", "grass", "grass", "grass", "fire", "fire", "fire", "water", "water", "water", "bug", "bug", "bug", "bug", "bug", "bug", "flying", "flying", "flying", "normal", "normal", "flying", "flying", "poison", "poison", "electric", "electric", "ground", "ground", "poison", "poison", "poison", "poison", "poison", "poison", "normal", "normal", "fire", "fire", "normal", "normal", "poison", "poison", "grass", "grass", "grass", "bug", "bug", "poison", "poison", "ground", "ground", "normal", "normal", "water", "water", "fighting", "fighting", "fire", "fire", "water", "water", "water", "psychic", "psychic", "psychic", "fighting", "fighting", "fighting", "grass", "grass", "grass", "water", "water", "rock", "rock", "rock", "fire", "fire", "water", "water", "steel", "steel", "flying", "flying", "flying", "water", "water", "poison", "poison", "water", "water", "ghost", "ghost", "ghost", "rock", "psychic", "psychic", "water", "water", "electric", "electric", "grass", "grass", "ground", "ground", "fighting", "fighting", "normal", "poison", "poison", "ground", "ground", "normal", "grass", "normal", "water", "water", "water", "water", "water", "water", "psychic", "bug", "ice", "electric", "fire", "bug", "normal", "water", "water", "water", "normal", "normal", "water", "electric", "fire", "normal", "rock", "rock", "rock", "rock", "rock", "normal", "ice", "electric", "fire", "dragon", "dragon", "dragon", "psychic", "psychic", "grass", "grass", "grass", "fire", "fire", "fire", "water", "water", "water", "normal", "normal", "flying", "flying", "bug", "bug", "poison", "poison", "poison", "water", "water", "electric", "normal", "normal", "normal", "normal", "psychic", "psychic", "electric", "electric", "electric", "grass", "water", "water", "rock", "water", "grass", "grass", "grass", "normal", "grass", "grass", "bug", "water", "water", "psychic", "dark", "dark", "water", "ghost", "psychic", "psychic", "normal", "bug", "bug", "normal", "ground", "steel", "normal", "normal", "water", "steel", "bug", "fighting", "dark", "normal", "normal", "fire", "fire", "ice", "ice", "water", "water", "water", "ice", "water", "steel", "dark", "dark", "water", "ground", "ground", "normal", "normal", "normal", "fighting", "fighting", "ice", "electric", "fire", "normal", "normal", "electric", "fire", "water", "rock", "rock", "rock", "psychic", "fire", "grass", "bird", "bird", "bird"}
 
 g_loaded_row = 0
-function draw_pkmn(num, x, y, sw, sh, highlighted, has_color)
+function load_pkmn(num)
   local row = num/8\1
   local col = num%8
 
@@ -89,7 +89,7 @@ function draw_pkmn(num, x, y, sw, sh, highlighted, has_color)
     local shift = row\8
     local bits = 0b10001000 >> shift
 
-    local col = 6
+    local col = 6 -- set all pixels to one color... this may not actually be needed, but whatever
     for i=0,0x400-1 do
       local loc = 0x400+i
       local val = (peek(loc) & bits) << shift
@@ -98,13 +98,26 @@ function draw_pkmn(num, x, y, sw, sh, highlighted, has_color)
       poke(loc, val)
     end
   end
+end
+
+function load_watchmode_prev(num)
+  load_pkmn(num)
+  memcpy(0x0800, 0x0000, 0x800) -- copy first 2 rows to 3rd/4th rows
+end
+
+function draw_pkmn(num, x, y, sw, sh, highlighted, has_color, is_draft)
+  local row = num/8\1
+  local col = num%8
+
+  load_pkmn(num)
 
   sw = sw or 1
   sh = sh or 1
 
   local w, h = 16*sw, 16*sh
   local drawfunc = function(ix, iy)
-    sspr(col*16, has_color and 0 or 16, 16, 16, ix-w/2, iy-h/2, w, h)
+    local yoff = is_draft and 32 or 0
+    sspr(col*16, yoff + (has_color and 0 or 16), 16, 16, ix-w/2, iy-h/2, w, h)
   end
 
   local colordrawfunc = function(ix, iy, c)
@@ -125,7 +138,6 @@ function draw_pkmn(num, x, y, sw, sh, highlighted, has_color)
       outline(x, y, 1, g_corners and 5 or 1, drawfunc)
       colordrawfunc(x, y)
     else
-
       local c = {6, 1}
       if pkmn_to_color[num] and not has_color then
         c = pkmn_types[pkmn_to_color[num]]
@@ -253,6 +265,7 @@ function _update60()
     if btnp(5) and not watch_mode then
       watch_mode = true
       watch_mode_counter = 0
+      load_watchmode_prev(g_num)
     end
 
     if btnp(4) then
@@ -315,19 +328,19 @@ function _draw()
     end
   else
     local m = function(x, y) return offset+x*(16+gap) end
-    print("watch\nmode", 2, 32-6, 7)
+    print("wATCH\nl:nEW\nr:oLD", 2, 24, 7)
 
     -- draw_pkmn(g_num, m(0), m(1), g_scale, g_scale, false, false)
 
     -- draw_pkmn(g_num, m(0), m(2), g_scale, g_scale, true,  draw_watchmode_flip)
     draw_pkmn(g_num, m(1), m(2), g_scale, g_scale, false, true)
-    draw_pkmn(g_num, m(2), m(2), g_scale, g_scale, false, true)
+    draw_pkmn(g_num, m(2), m(2), g_scale, g_scale, false, true, true)
 
     draw_pkmn(g_num, m(1), m(1), g_scale, g_scale, false, false)
-    draw_pkmn(g_num, m(2), m(1), g_scale, g_scale, false, false)
+    draw_pkmn(g_num, m(2), m(1), g_scale, g_scale, false, false, true)
 
     draw_pkmn(g_num, m(1), m(0), g_scale, g_scale, false, draw_watchmode_flip)
-    draw_pkmn(g_num, m(2), m(0), g_scale, g_scale, false, draw_watchmode_flip)
+    draw_pkmn(g_num, m(2), m(0), g_scale, g_scale, false, draw_watchmode_flip, true)
 
     if draw_watchmode_flip then
       -- draw_pkmn(g_num, m(0), m(1), g_scale, g_scale, false, false)
