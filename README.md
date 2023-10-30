@@ -19,3 +19,4 @@ The minifier is not a standard pico-8 or standard lua minifier. Instead, it is b
 * Variable names, functions, and tokens in general that are not pico-8 std library functions or lua keywords will be minified.
 * Text within single quotes or double square brackets WILL BE minified.
 * Text within double quotes WILL NOT BE minified.
+
