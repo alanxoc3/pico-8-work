@@ -1,25 +1,29 @@
 #!/bin/bash
-generate_sub_picture() {
-  if [[ -f "$1.p8" ]]; then
-    pico8 -screenshot_scale 3 -x "$1.p8"
-    convert -append ~/Desktop/render1.png ~/Desktop/render2.png "$1.png"
-  fi
-}
-
-cat ./color-000-063.p8 | rg -v 'preview|__lua__' | sed 's/__gfx__/__lua__\n#include render.lua\n__gfx__/g' > ".000-063.p8"
-cat ./color-064-127.p8 | rg -v 'preview|__lua__' | sed 's/__gfx__/__lua__\n#include render.lua\n__gfx__/g' > ".064-127.p8"
-cat ./color-128-191.p8 | rg -v 'preview|__lua__' | sed 's/__gfx__/__lua__\n#include render.lua\n__gfx__/g' > ".128-191.p8"
-cat ./color-192-255.p8 | rg -v 'preview|__lua__' | sed 's/__gfx__/__lua__\n#include render.lua\n__gfx__/g' > ".192-255.p8"
-
-generate_sub_picture .000-063
-generate_sub_picture .064-127
-generate_sub_picture .128-191
-generate_sub_picture .192-255
-
-rm .000-063.p8 .064-127.p8 .128-191.p8 .192-255.p8
-
-echo "CREATING all.png"
-convert +append .000-063.png .064-127.png .128-191.png .192-255.png "all.png"
+echo "GENERATING SUB IMAGES..."
+pico8 -screenshot_scale 3 -x preview.lua -p shot
 echo
 
-rm .000-063.png .064-127.png .128-191.png .192-255.png
+echo "CREATING ROWS..."
+for i in 0 4 8 12 16 20 24; do
+  convert +append \
+    "$HOME/Desktop/col-$((i+0)).png" \
+    "$HOME/Desktop/col-$((i+1)).png" \
+    "$HOME/Desktop/col-$((i+2)).png" \
+    "$HOME/Desktop/col-$((i+3)).png" \
+    "$HOME/Desktop/bw-$((i+0)).png" \
+    "$HOME/Desktop/bw-$((i+1)).png" \
+    "$HOME/Desktop/bw-$((i+2)).png" \
+    "$HOME/Desktop/bw-$((i+3)).png" \
+    "$HOME/Desktop/row-$((i/4)).png"
+done
+
+
+echo "COMBINING ALL ROWS..."
+convert -append $(seq 0  7  | awk "{print \"$HOME/Desktop/row-\" \$1 \".png\"}") "$HOME/Desktop/all.png"
+echo
+
+echo "COPYING TO CLIPBOARD..."
+cat "$HOME/Desktop/all.png" | ccl
+echo
+
+echo "DONE"

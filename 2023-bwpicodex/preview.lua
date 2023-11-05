@@ -239,6 +239,35 @@ function _init()
     for i=0,g_maxnum-1 do mydset(i, 1) end
   end)
 
+  if stat(6) == "shot" then
+    local old_g_num = g_num
+    local old_g_view = g_view
+    g_4_by_7 = true
+
+    for i=0,252-1 do mydset(i, 1) end
+    for i=0,252\3\3-1 do
+      view_y = i*3
+      g_num = -1
+      _draw() flip()
+      extcmd("set_filename", "col-"..i)
+      extcmd("screen")
+    end
+
+    for i=0,252-1 do mydset(i, 0) end
+    for i=0,252\3\3-1 do
+      view_y = i*3
+      g_num = -1
+      _draw() flip()
+      extcmd("set_filename", "bw-"..i)
+      extcmd("screen")
+    end
+
+    g_num  = old_g_num
+    g_view = old_g_view
+    cls() flip()
+    printh("done: desktop/(col|bw)-*")
+    stop("done: desktop/(col|bw)-*")
+  end
 end
 
 g_off = 0
@@ -283,18 +312,18 @@ end
 poke(0x5f5f,0x10) -- allow pallette setting for sections of screen
 function disable_alt_for_row(row)
   if row == 0 then
-    poke(0x5f70, (@0x5f70) | 0b11111100)
+    poke(0x5f70, (@0x5f70) | 0b11111110)
     poke(0x5f71, (@0x5f71) | 0b11111111)
     poke(0x5f72, (@0x5f72) | 0b00111111)
   elseif row == 1 then
     poke(0x5f72, (@0x5f72) | 0b11000000)
     poke(0x5f73, (@0x5f73) | 0b11111111)
     poke(0x5f74, (@0x5f74) | 0b11111111)
-    poke(0x5f75, (@0x5f75) | 0b00000011)
+    poke(0x5f75, (@0x5f75) | 0b00000111)
   elseif row == 2 then
-    poke(0x5f75, (@0x5f75) | 0b11111100)
+    poke(0x5f75, (@0x5f75) | 0b11111000)
     poke(0x5f76, (@0x5f76) | 0b11111111)
-    poke(0x5f77, (@0x5f77) | 0b00111111)
+    poke(0x5f77, (@0x5f77) | 0b11111111)
   end
 end
 
@@ -307,28 +336,45 @@ function _draw()
   memset(0x5f70, 0, 16) -- enable secondary pallette for all lines
   rectfill(0,0,63,63,13)
 
-  local gap = 4
-  local offset = 32-16-gap
+  local x_gap,    y_gap = 5, 5
+  local x_offset, y_offset = 32-16-x_gap, 32-16-y_gap
 
   if not watch_mode then
     for j=0,32 do
       for i=0,7 do
         local ind = j*8 + i
-        if ind\3 >= view_y and ind\3 <= view_y+2 then
+        if not g_4_by_7 and ind\3 >= view_y and ind\3 <= view_y+2 then
           local ii = ind % 3
           local jj = ind \ 3 - view_y
-          local sx, sy = offset+ii*(16+gap), offset+jj*(16+gap)
+          local sx, sy = x_offset+ii*(16+x_gap), y_offset+jj*(16+y_gap)
           if mydget(ind\3) > 0 then
             disable_alt_for_row(ind\3 - view_y)
           end
 
           draw_pkmn(ind, sx, sy, g_scale, g_scale, ind == g_num, mydget(ind\3) > 0)
+        elseif g_4_by_7 and ind\3 >= view_y and ind\3 <= view_y+2 then
+          local ii = ind % 3
+          local jj = ind \ 3 - view_y
+          local sx, sy = x_offset+ii*(16+x_gap), y_offset+jj*(16+y_gap)
+          if mydget(ind\3) > 0 then
+            disable_alt_for_row(ind\3 - view_y)
+          end
+
+          -- 0=0 1=1 2=2 9=3 10=4 11=5
+          -- 0 12 24
+          local corner = ind\36*36
+          local subind = ind%36
+          local subrow = subind%9\3
+          local subgrd = subind\9
+          local newind = corner + subrow*12 + subgrd*3 + subind%3
+
+          draw_pkmn(newind, sx, sy, g_scale, g_scale, ind == g_num, mydget(ind\3) > 0)
         end
       end
     end
   else
-    local m = function(x, y) return offset+x*(16+gap) end
-    print("wATCH\nl:nEW\nr:oLD", 2, 24, 7)
+    local m = function(x, y) return x_offset+x*(16+x_gap) end
+    print("WATCH\nl:new\nr:old", 2, 23, 7)
 
     -- draw_pkmn(g_num, m(0), m(1), g_scale, g_scale, false, false)
 

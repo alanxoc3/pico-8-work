@@ -38,4 +38,20 @@ mirror coat will activate with beatup. (didn't in gen2)
 I will use PS2 mechanics, which are here: https://bulbapedia.bulbagarden.net/wiki/Pok%C3%A9mon_Stadium_2
 Which is GSC mechanics, but changes a few things slightly.
 
-Teleport goes last. useful if you want abra to take the damage. And can escape some moves you can't normally escape.
+Teleport goes last. useful if you want abra to take the damage. And can escape some moves you can't normally escape. And against pursuit.
+
+Move priority.
++4	Pursuit (on a switch)
++3	Switching
++2	Detect, Endure, Protect
++1	ExtremeSpeed, Mach Punch, Quick Attack
+ 0	All moves not listed
+-1	Teleport, Counter, Mirror Coat, Roar, Vital Throw, Whirlwind
+
+DIFF: Protect and Detect protect against Mean Look. (Didn't in the original games.)
+DIFF: Mean Look and Trapping Moves prevent manual switching. They do not prevent Beat Up, Teleport, or Baton Pass.
+DIFF: Baton Pass doesn't allow selecting a Pokemon. Instead, the next available Pokemon in the order of the user's party is selected.
+DIFF: Hidden Power has a base power of 60 and changes type to be a random super effective move for one of the opposing Pokemon's 2 types. It's possible for Hidden Power to be normal type.
+DIFF: Morning Sun, Moonlight, & Synthesis normally restore 1/2 HP instead of 1/4. They restore 3/4 during Sunny Day and 1/4 during rain/sand.
+
+STRAT: Hidden Power counters Conversion 2.
