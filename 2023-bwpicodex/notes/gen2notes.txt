@@ -23,20 +23,8 @@ these pokemon are "genderless". Attract won't work on them:
 
 unless the pokemon using attract is also genderless. (mew for example.)
 
-curse is a ??? type move, but maybe it should be a ghost type in this.
-
-for destiny bond, the opponent would faint right after user.
-
-Oooo baton pass will pass all status effects. Not just stat changes, but also other things like substitute. but not transform.
-
-baton pass will pass to the next pokemon in party. if last, then it will wrap to first.
-
-endure is before extreme speed. endure has a counter that halves for how likely it will work each time you use it, protect and some other things.
-
-mirror coat will activate with beatup. (didn't in gen2)
 
 I will use PS2 mechanics, which are here: https://bulbapedia.bulbagarden.net/wiki/Pok%C3%A9mon_Stadium_2
-Which is GSC mechanics, but changes a few things slightly.
 
 Teleport goes last. useful if you want abra to take the damage. And can escape some moves you can't normally escape. And against pursuit.
 
@@ -48,10 +36,52 @@ Move priority.
  0	All moves not listed
 -1	Teleport, Counter, Mirror Coat, Roar, Vital Throw, Whirlwind
 
+Modifications inspired by previous games:
+DIFF: Haze works similarly to how it worked in Gen 1. All effects and stat modifiers that can be Baton Passed can also be reset with haze.
+DIFF: Substitute works similarly to Gen 1. Only protects from damage done by opponent. Not against any effects.
+DIFF: Metal powder increases defense and special defense by 50% for ditto even when transformed.
+DIFF: Recoil, Self-KO, Freeze, and Sleep clauses are all removed.
+DIFF: Like Gen 1. Swift will never miss, bypassing all accuracy checks including when opponent uses dig/fly.
+
+Modifications inspired by later games:
 DIFF: Protect and Detect protect against Mean Look. (Didn't in the original games.)
+DIFF: Flail and Reversal can now cause a critical hit and are varied by the random damage factor.
+DIFF: Transform fails when opponent is transformed or user is already transformed.
+DIFF: Lock-On sets a status on the user, not the target. So it can be baton passed and work even if the target switches out. Earthquake/Magnitude/Fissure will still hit a non-flying Pokemon in the middle of Fly.
+DIFF: The freeze status condition has a 20% chance to unthaw the Pokemon each turn.
+DIFF: Teleport switches the user's Pokemon with another random Pokemon.
+DIFF: Transform copies oppenent's gender, species, stats, and moves. Transform does not copy existing stat modifiers.
+DIFF: Detect, Protect and Endure all work behind a substitute.
+DIFF: Curse is a ghost type move.
+DIFF: Being transformed gets the benefit of special items like light ball and thick club.
+DIFF: Dynamicpunch always confuses the target if it hits.
+
+Modifications inspired by design:
+DIFF: All Pokemon are set to level 50 with the highest possible stats they can have for that level.
+DIFF: When you KO the target with a multihit move such as "Double Slap", your attack will continue onto the next Pokemon sent out.
+DIFF: If a Pokemon faints, the next Pokemon in the user's team is sent out automatically. This places more importance on team order.
+DIFF: Confusion will be passed with baton pass.
+DIFF: A genderless Pokemon that uses Attract will infatuate the foe if the foe is also genderless.
+DIFF: Rest will not reset the Toxic counter.
+DIFF: Focus band has a chance to activate as long as the Pokemon has >1 HP for anything that does damage. This includes self KO moves, confusion, leech seed, Perish Song, Destiny Bond, etc...
+DIFF: Endure guarantees that next time the Pokemon would get KOed, it remains at 1 HP instead. Fails if the Pokemon is already at 1 HP, and is more likely to fail if used consecutively with Protect/Detect.
 DIFF: Mean Look and Trapping Moves prevent manual switching. They do not prevent Beat Up, Teleport, or Baton Pass.
+DIFF: Self-KO moves, Perish Song, and Destiny Bond all KO the user before the opponent, which means a self-KO will lose the match, unless Endure or Focus Band is activated! Recoil moves will do damage to the user after the attack.
+DIFF: Attract's effect passes to the next Pokemon with Baton Pass.
+DIFF: Endure can be baton passed. The detect/protect/endure counter is also Baton Passed.
+DIFF: Defense Curl powerup for rollout is Baton Passed.
+DIFF: Rage counter is Baton Passed. Rage counter does not reset when rage is not used anymore.
+DIFF: Kings Rock has a chance to activate with any attack that does damage at the time of using the attack. It can still be triggered with attacking moves that already has a flinch chance if that flinch chance failed. All multistrike moves only have the chance on the last hit.
 DIFF: Baton Pass doesn't allow selecting a Pokemon. Instead, the next available Pokemon in the order of the user's party is selected.
 DIFF: Hidden Power has a base power of 60 and changes type to be a random super effective move for one of the opposing Pokemon's 2 types. It's possible for Hidden Power to be normal type.
-DIFF: Morning Sun, Moonlight, & Synthesis normally restore 1/2 HP instead of 1/4. They restore 3/4 during Sunny Day and 1/4 during rain/sand.
+DIFF: Morning Sun, Moonlight, & Synthesis normally restore 1/2 HP. They restore 3/4 during Sunny Day and 1/4 during rain/sandstorm.
+DIFF: Mirror Coat will still activate if the foe used Beatup. It didn't do this in Gen 2.
+DIFF: Damage calculation is capped at 999 damage.
+DIFF: Amulet Coin doubles base power of Pay Day. (Makes it similar to Drill Peck.)
+DIFF: Whirlwind will get rid of spikes from the opponent's side of the field. Roar will not.
+DIFF: A Pokemon entering from Baton Pass, Teleport, and Roar will take spike damage.
+DIFF: Frustration has 100 Base Power if hp <= foe hp. Otherwise has 50 Base Power.
+DIFF: Return has 100 Base Power if hp >= foe hp. Otherwise has 50 Base Power.
+DIFF: Swagger still confuses the foe if attack at the max stage.
 
 STRAT: Hidden Power counters Conversion 2.

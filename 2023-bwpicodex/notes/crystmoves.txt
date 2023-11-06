@@ -1,24 +1,6 @@
-Perish Song  Normal   5  N/A     N/A  -- All active Pokemon will faint in 3 turns unless they are switched out.
-Destiny Bond Ghost    5  N/A     N/A  -- Causes an opponent to faint if its next attack KOs the user.
-
-Reflect      Psychic  20 N/A     N/A  -- All Pokemon in the user's party receive 1/2 damage from Physical attacks for 5 turns.
-Light Screen Psychic  30 N/A     N/A  -- All Pokemon in the user's party receive 1/2 damage from Special attacks for 5 turns.
-
-Endure       Normal   10 N/A     N/A  -- Almost always goes first. The user is left with at least 1 HP following any attacks for one turn, but the move's success rate halves with each consecutive use of Protect, Detect or Endure.
-Detect       Fighting 5  N/A     N/A  -- Almost always goes first. The user is protected from all attacks for one turn, but the move's success rate halves with each consecutive use of Protect, Detect or Endure.
-Protect      Normal   10 N/A     N/A  -- Almost always goes first. The user is protected from all attacks for one turn, but the move's success rate halves with each consecutive use of Protect, Detect or Endure.
-
-Counter      Fighting 20 Var Dmg 100% -- Almost always goes last; if an opponent strikes with a Physical attack before the user's turn, the user retaliates for twice the damage it had endured.
-Mirror Coat  Psychic  20 Var Dmg 100% -- Almost always goes last; if an opponent strikes with a Special attack before the user's turn, the user retaliates for twice the damage it had endured.
-
 Roar         Normal   20 N/A     100% -- Almost always goes last; in trainer battles, the target is switched out for a random member of its team. Escapes from wild battles.
-Whirlwind    Normal   20 N/A     100% -- Almost always goes last; in trainer battles, the target is switched out for a random member of its team. Escapes from wild battles.
+Whirlwind    Normal   20 N/A     100% -- Almost always goes last; in trainer battles, the target is switched out for a random member of its team. Escapes from wild battles. Mod: Removes spikes from both sides.
 Teleport     Psychic  20 N/A     N/A  -- Escapes from wild battles; fails automatically in trainer and link battles.
-
-Sonicboom    Normal   20 Set     90%  -- Always deals 20 points of damage.
-Dragon Rage  Dragon   10 Set     100% -- Always deals 40 points of damage.
-
-Sand-Attack  Ground   15 N/A     100% -- Lowers the target's Accuracy by 1 stage.
 
 Barrage      Normal   20 15      85%  -- Attacks 2-5 times in one turn; if one of these attacks breaks a target's Substitute, the target will take damage for the rest of the hits. This move has a 3/8 chance to hit twice, a 3/8 chance to hit three times, a 1/8 chance to hit four times and a 1/8 chance to hit five times.
 Bone Rush    Ground   10 25      80%  -- Attacks 2-5 times in one turn; if one of these attacks breaks a target's Substitute, the target will take damage for the rest of the hits. This move has a 3/8 chance to hit twice, a 3/8 chance to hit three times, a 1/8 chance to hit four times and a 1/8 chance to hit five times.
@@ -28,25 +10,29 @@ Fury Attack  Normal   20 15      85%  -- Attacks 2-5 times in one turn; if one o
 Fury Swipes  Normal   15 10      80%  -- Attacks 2-5 times in one turn; if one of these attacks breaks a target's Substitute, the target will take damage for the rest of the hits. This move has a 3/8 chance to hit twice, a 3/8 chance to hit three times, a 1/8 chance to hit four times and a 1/8 chance to hit five times.
 Pin Missile  Bug      20 14      85%  -- Attacks 2-5 times in one turn; if one of these attacks breaks a target's Substitute, the target will take damage for the rest of the hits. This move has a 3/8 chance to hit twice, a 3/8 chance to hit three times, a 1/8 chance to hit four times and a 1/8 chance to hit five times.
 Spike Cannon Normal   15 20      100% -- Attacks 2-5 times in one turn; if one of these attacks breaks a target's Substitute, the target will take damage for the rest of the hits. This move has a 3/8 chance to hit twice, a 3/8 chance to hit three times, a 1/8 chance to hit four times and a 1/8 chance to hit five times.
-
 Triple Kick  Fighting 10 10      90%  -- Attacks three times in one turn, adding 10 BP for each kick. If a kick misses, the move ends instantly; if one of the kicks breaks a target's Substitute, the real Pokemon will take damage for the remaining kicks.
+Bonemerang   Ground   10 50      90%  -- Strikes twice; if the first hit breaks the target's Substitute, the real Pokemon will take damage from the second hit.
+Double Kick  Fighting 30 30      100% -- Strikes twice; if the first hit breaks the target's Substitute, the real Pokemon will take damage from the second hit.
+Twineedle    Bug      20 25      100% -- Strikes twice; if the first hit breaks the target's Substitute, the real Pokemon will take damage from the second hit. Has a ~20% chance to poison the target , even if it is a Steel-type Pokemon.
 
-Flail        Normal   15 Var BP  100% -- Base power increases as the user's HP decreases.
-Reversal     Fighting 15 Var BP  100% -- Base power increases as the user's HP decreases.
-
-Pain Split   Normal   20 Var Dmg 100% -- Calculates the average of the user's current HP and the target's HP; the HP of both Pokemon is set to this average.
-
-Sandstorm    Rock     10 N/A     N/A  -- Cancels all other weather moves. For 5 turns: each active Pokemon, even when protected by a Substitute, loses 1/16 of its max HP unless it is a Ground-, Rock-, or Steel-type, and the healing power of Morning Sun, Synthesis and Moonlight is halved.
-Sunny Day    Fire     5  N/A     N/A  -- Cancels all other weather moves. For 5 turns: freezing is prevented, the power of Fire attacks is increased by 50%, the power of Water attacks is decreased by 50%, Solarbeam fires immediately, Thunder becomes 50% accurate, and the healing power of Morning Sun, Synthesis and Moonlight is doubled.
-Rain Dance   Water    5  N/A     N/A  -- Cancels all other weather moves. For 5 turns: the power of Water attacks is increased by 50%, the power of Fire attacks is decreased by 50%, Thunder becomes 100% accurate, the power of Solarbeam is halved, and the healing power of Morning Sun, Synthesis and Moonlight is halved.
+Flail        Normal   15 Var BP  100% -- Base power increases as the user's HP decreases. Damage formula... 20: (HP ≥ 68.75%), 40: (35.42% ≤ HP < 68.75%), 80: (20.83% ≤ HP < 35.42%), 100: (10.42% ≤ HP < 20.83%), 150: (4.17% ≤ HP < 10.42%), 200: (HP < 4.17%).
+Reversal     Fighting 15 Var BP  100% -- Base power increases as the user's HP decreases. Damage formula... 20: (HP ≥ 68.75%), 40: (35.42% ≤ HP < 68.75%), 80: (20.83% ≤ HP < 35.42%), 100: (10.42% ≤ HP < 20.83%), 150: (4.17% ≤ HP < 10.42%), 200: (HP < 4.17%).
+Frustration  Normal   20 Var BP  100% -- Power increases as user's happiness decreases; maximum 102 BP. My modification: BP is 100 if hp% <= opponent else BP is 50.
+Return       Normal   20 Var BP  100% -- Power increases as user's happiness increases; maximum 102 BP. My modification: BP is 100 if hp% >= opponent else BP is 50.
+Present      Normal   15 Var BP  90%  -- Randomly either attacks with a variable power, between 40 base power and 120 base power, or heals the target by 80 HP. STADIUM DIFF is: Present uses a different damage formula. The move has a 40 % chance of having a Base Damage of 40; a 30 % chance of having a Base Damage of 80; a 10 % chance of having a Base Damage of 120 and a 20 % chance of healing a quarter of the opponent's HP (unless it has full health, in which case, the move fails).
+Magnitude    Ground   30 Var BP  100% -- Deals variable damage, between 10 base power and 130 base power, as well as double damage against Digging Pokemon.
 
 Confuse Ray  Ghost    10 N/A     100% -- Confuses the target.
-Dynamicpunch Fighting 5  100     50%  -- Confuses the target. 255/256 chance to confuse the target. Later gens always confuse.
+Dynamicpunch Fighting 5  100     50%  -- Confuses the target. 255/256 chance to confuse the target. Later gens always confuse. Mod: always hit for this game.
 Supersonic   Normal   20 N/A     55%  -- Confuses the target.
 Sweet Kiss   Normal   10 N/A     75%  -- Confuses the target.
-Swagger      Normal   15 N/A     90%  -- Confuses the target and raises its Attack by 2 stages. In gen2, swagger fails if attack is already at 6. Good because attack stat contributes to confusion damage.
+Swagger      Normal   15 N/A     90%  -- Confuses the target and raises its Attack by 2 stages. In gen2, swagger fails if attack is already at 6. Good because attack stat contributes to confusion damage. Mod: dont get confused
 
-Spikes       Ground   20 N/A     100% -- Damages opponents, unless they are Flying-type, every time they are switched in; saps 1/8 of the opponent's max HP.
+Extremespeed Normal   5  80      100% -- Usually goes first. +1 Priority.
+Mach Punch   Fighting 30 40      100% -- Usually goes first. +1 Priority.
+Quick Attack Normal   30 40      100% -- Usually goes first. +1 Priority.
+Hidden Power Normal   15 Var BP  100% -- Varies in power and type depending on the user's DVs; maximum 70 BP. Will run off the user's Attack or Special Attack depending on type.
+Struggle     None     1  50      100% -- Used automatically when all of the user's other moves have run out of PP or are otherwise inaccessible. The user receives 1/4 recoil damage. Struggle is classified as a typeless move and will hit any Pokemon, including Rock-, Steel- and Ghost-type Pokemon, for normal damage.
 
 Cut          Normal   30 50      95%  -- Damages the target.
 Drill Peck   Flying   20 80      100% -- Damages the target.
@@ -69,20 +55,46 @@ Vine Whip    Grass    10 35      100% -- Damages the target.
 Waterfall    Water    15 80      100% -- Damages the target.
 Water Gun    Water    25 40      100% -- Damages the target.
 Wing Attack  Flying   35 60      100% -- Damages the target.
+Pay Day      Normal   20 40      100% -- The player picks up extra money after in-game battles; the money received is equal to: [user's level * 2 * number of times Pay Day is used]. The player does not lose money if the opponent uses Pay Day but the player wins the battle.
 
+# These don't use the damage formula
+Sonicboom    Normal   20 Set     90%  -- Always deals 20 points of damage.
+Dragon Rage  Dragon   10 Set     100% -- Always deals 40 points of damage.
+Counter      Fighting 20 Var Dmg 100% -- Almost always goes last; if an opponent strikes with a Physical attack before the user's turn, the user retaliates for twice the damage it had endured.
+Mirror Coat  Psychic  20 Var Dmg 100% -- Almost always goes last; if an opponent strikes with a Special attack before the user's turn, the user retaliates for twice the damage it had endured.
 Night Shade  Ghost    15 Var Dmg 100% -- Does damage equal to user's level.
 Seismic Toss Fighting 20 Var Dmg 100% -- Does damage equal to user's level.
+Psywave      Psychic  15 Var Dmg 80%  -- Randomly inflicts set damage between a minimum of 1 HP and a maximum of [1.5x the user's level] HP.
+Bide         Normal   10 Var Dmg 100% -- The user absorbs all damage for 2-3 turns and then inflicts twice the absorbed damage on its target. This move ignores the target's type but still cannot hit Ghost-type Pokemon.
+Super Fang   Normal   10 Var Dmg 90%  -- This move halves the target's current HP.
+False Swipe  Normal   40 40      100% -- Leaves the target with at least 1 HP.
 
+# These can trigger another move
 Sleep Talk   Normal   10 Copy    N/A  -- Does nothing if the user is awake. If the user asleep, it randomly performs one of its attacks. If Rest is selected, user recovers its HP and stays asleep for two more turns. Sleep Talk can choose an attack that has run out of PP; the generated attacks also do not cost PP, and it cannot generate itself, Bide, Disabled attacks or two-turn attacks with a charge-up turn like Fly or Skull Bash. (Moves with a recharge turn like Hyper Beam can be generated.)
 Metronome    Normal   10 N/A     N/A  -- The user performs a randomly selected move; almost any move in the game could be picked. Metronome cannot generate itself, Sketch, Struggle or any move that the user already knows.
+Mirror Move  Flying   20 Copy    N/A  -- The user performs the last move executed by its target; if applicable, an attack's damage is calculated with the user's stats, level and type(s). This moves fails if the target has not yet used a move. Mirror Move cannot copy itself, Metronome, Mimic, Sketch, Sleep Talk, Struggle, Transform or moves that user already knows.
+
+# Moves that can directly or indirectly restore HP or heal status conditions.
+Milk Drink   Normal   10 N/A     N/A  -- Restores 1/2 of the user's max HP.
+Recover      Normal   20 N/A     N/A  -- Restores 1/2 of the user's max HP.
+Softboiled   Normal   10 N/A     N/A  -- Restores 1/2 of the user's max HP.
+Morning Sun  Normal   5  N/A     N/A  -- Restores 1/2 of the user's max HP without weather. 3/4 with Sunny Day. 1/4 with Rain/Sandstorm.
+Moonlight    Normal   5  N/A     N/A  -- Restores 1/2 of the user's max HP without weather. 3/4 with Sunny Day. 1/4 with Rain/Sandstorm.
+Synthesis    Grass    5  N/A     N/A  -- Restores 1/2 of the user's max HP without weather. 3/4 with Sunny Day. 1/4 with Rain/Sandstorm.
+Absorb       Grass    20 20      100% -- Restores the user's HP by 1/2 of the damage inflicted on the target.
+Giga Drain   Grass    5  60      100% -- Restores the user's HP by 1/2 of the damage inflicted on the target.
+Leech Life   Bug      15 20      100% -- Restores the user's HP by 1/2 of the damage inflicted on the target.
+Mega Drain   Grass    10 40      100% -- Restores the user's HP by 1/2 of the damage inflicted on the target.
+Dream Eater  Psychic  15 100     100% -- Restores the user's HP by 1/2 of the damage inflicted on the target but only works on a sleeping target.
+Rest         Psychic  10 N/A     N/A  -- The user is cured of status effects (and confusion), and recovers full HP, but falls asleep for 2 turns.
+Haze         Ice      30 N/A     N/A  -- Eliminates any stat modifiers from all active Pokemon. Status condition (par/etc) are not healed. Mod: like gen 1
+Heal Bell    Normal   5  N/A     N/A  -- Every Pokemon in the user's party is cured of status conditions.
+Pain Split   Normal   20 Var Dmg 100% -- Calculates the average of the user's current HP and the target's HP; the HP of both Pokemon is set to this average.
 
 Splash       Normal   40 N/A     N/A  -- Doesn't do anything (but we still love it).
 
 Beat Up      Dark     10 10      100% -- Each healthy (i.e. not fainted nor inflicted with a status condition) Pokemon in your party contributes a typeless 10 base power hit determined solely by their base Attack and Defense stats.
 Baton Pass   Normal   40 N/A     N/A  -- The user returns to its party, bypassing any trapping moves and Pursuit; it passes all stat modifiers (positive or negative), as well as confusion, Focus Energy, Perish Song count, Mist, Leech Seed, Ghost Curses, Mind Reader, Lock-On, Mean Look, Spider Web and Substitute to the replacement Pokemon. In-game, Baton Pass also passes partial trapping moves (Bind, Clamp, Fire Spin and Wrap), Foresight, Toxic if the replacement is poisoned and Nightmare if replacement is asleep.
-
-Haze         Ice      30 N/A     N/A  -- Eliminates any stat modifiers from all active Pokemon. Status condition (par/etc) are not healed.
-Heal Bell    Normal   5  N/A     N/A  -- Every Pokemon in the user's party is cured of status conditions.
 
 Ember        Fire     25 40      100% -- Has a ~10% chance to burn the target.
 Fire Blast   Fire     5  120     85%  -- Has a ~10% chance to burn the target.
@@ -148,32 +160,22 @@ Faint Attack Dark     25 60      100% -- Ignores Evasion and Accuracy modifiers 
 Swift        Normal   20 60      100% -- Ignores Evasion and Accuracy modifiers and never misses except against Protect, Detect or a target in the middle of Dig or Fly.
 Vital Throw  Fighting 10 70      100% -- This move usually goes last. It ignores Evasion and Accuracy modifiers and never misses except against Protect, Detect or a target in the middle of Dig or Fly.
 
-Attract      Normal   15 N/A     100% -- Infatuates Pokemon of the opposite gender, even if they have a Substitute, causing a 50% chance for the target's attack to fail.
-
-False Swipe  Normal   40 40      100% -- Leaves the target with at least 1 HP.
-
 Rapid Spin   Normal   40 20      100% -- Removes Spikes and Leech Seed from the user's side of the field; also frees the user from Bind, Clamp, Fire Spin, Whirlpool and Wrap. These side effects do not occur if the move misses or is used against Ghost-type Pokemon.
-
-Lock-On      Normal   5  N/A     100% -- This move ensures that the user's next attack will hit against its current target. Even if the user switches out, its replacement's next move will always hit too. Lock-On fails against Pokemon in the middle of using Protect, Detect, Dig or Fly, as well as Pokemon behind a Substitute.
 
 Dig          Ground   10 60      100% -- On the first turn, the user digs underground, becoming uncontrollable, and evades all attacks. Earthquake, Magnitude and Fissure can hit underground, with Earthquake and Magnitude having doubled power; the user may also be hit underground if it was previously targeted by Lock-On or Mind Reader. On the second turn, the user attacks.
 Fly          Flying   15 70      95%  -- On the first turn, the user flies into the air, becoming uncontrollable, and evades most attacks. Gust, Twister and Thunder have normal accuracy against a mid-air Pokemon, with Gust and Twister also gaining doubled power. The user may also be hit in mid-air if it was previously targeted by Lock-On or Mind Reader. On the second turn, the user attacks.
 
 Gust         Flying   35 40      100% -- Power doubles if the target is in mid-air via Fly.
 Earthquake   Ground   10 100     100% -- Power doubles when performed against Pokemon using Dig.
-Frustration  Normal   20 Var BP  100% -- Power increases as user's happiness decreases; maximum 102 BP.
-Return       Normal   20 Var BP  100% -- Power increases as user's happiness increases; maximum 102 BP.
-Mist         Ice      30 N/A     N/A  -- Protects the user from negative stat modifiers caused by other Pokemon, but not by itself, until it switches out; can be Baton Passed by user. The user's Accuracy and Evasion stats are also protected. Moves that cause negative stat modifiers as a secondary effect, such as Psychic, still deal their regular damage.
-Safeguard    Normal   25 N/A     N/A  -- Protects the user's entire team from status conditions for five turns.
-TM05         ???      33 N/A     N/A  -- Raises Evasion by 2 levels.
 
+# Moves that affect stat modifiers for self
+TM05         ???      33 N/A     N/A  -- Raises Evasion by 2 levels.
 Meditate     Psychic  40 N/A     N/A  -- Raises the user's Attack by 1 stage.
 Sharpen      Normal   30 N/A     N/A  -- Raises the user's Attack by 1 stage.
 Swords Dance Normal   30 N/A     N/A  -- Raises the user's Attack by 2 stages.
 Focus Energy Normal   30 N/A     N/A  -- Raises the user's chance for a critical hit by one domain.
 Harden       Normal   30 N/A     N/A  -- Raises the user's Defense by 1 stage.
 Withdraw     Water    40 N/A     N/A  -- Raises the user's Defense by 1 stage.
-Defense Curl Normal   40 N/A     N/A  -- Raises the user's Defense by 1 stage; after one use of this move, the user's starting base power is doubled for every use of Rollout.
 Acid Armor   Poison   40 N/A     N/A  -- Raises the user's Defense by 2 stages.
 Barrier      Psychic  30 N/A     N/A  -- Raises the user's Defense by 2 stages.
 Double Team  Normal   15 N/A     N/A  -- Raises the user's Evasion by 1 stage.
@@ -181,10 +183,9 @@ Minimize     Normal   20 N/A     N/A  -- Raises the user's Evasion by 1 stage; h
 Growth       Normal   40 N/A     N/A  -- Raises the user's Special Attack by 1 stage.
 Amnesia      Psychic  20 N/A     N/A  -- Raises the user's Special Defense by 2 stages.
 Agility      Psychic  30 N/A     N/A  -- Raises the user's Speed by 2 stages.
+Psych Up     Normal   10 N/A     N/A  -- The user copies all seven of the target's current stat modifiers. (speed, accuracy, evasion, att, def, spatt, spdef)
+Belly Drum   Normal   10 N/A     N/A  -- The user maximizes its Attack but sacrifices 50% of its max HP. To the +6 attack stage.
 
-Flash        Normal   20 N/A     70%  -- Lowers the target's Accuracy by 1 stage.
-Kinesis      Psychic  15 N/A     80%  -- Lowers the target's Accuracy by 1 stage.
-Smokescreen  Normal   20 N/A     100% -- Lowers the target's Accuracy by 1 stage.
 Growl        Normal   40 N/A     100% -- Lowers the target's Attack by 1 stage.
 Charm        Normal   20 N/A     100% -- Lowers the target's Attack by 2 stages.
 Leer         Normal   30 N/A     100% -- Lowers the target's Defense by 1 stage.
@@ -195,7 +196,13 @@ Icy Wind     Ice      15 55      95%  -- Lowers the target's Speed by 1 stage.
 String Shot  Bug      40 N/A     95%  -- Lowers the target's Speed by 1 stage.
 Cotton Spore Grass    40 N/A     85%  -- Lowers the target's Speed by 2 stages.
 Scary Face   Normal   10 N/A     90%  -- Lowers the target's Speed by 2 stages.
+Flash        Normal   20 N/A     70%  -- Lowers the target's Accuracy by 1 stage.
+Kinesis      Psychic  15 N/A     80%  -- Lowers the target's Accuracy by 1 stage.
+Smokescreen  Normal   20 N/A     100% -- Lowers the target's Accuracy by 1 stage.
+Sand-Attack  Ground   15 N/A     100% -- Lowers the target's Accuracy by 1 stage.
+Mud-Slap     Ground   10 20      100% -- Lowers the target's Accuracy by 1 stage.
 
+# Moves that affect status condition
 Glare        Normal   30 N/A     75%  -- Paralyzes the target.
 Stun Spore   Grass    30 N/A     75%  -- Paralyzes the target.
 Thunder Wave Electric 20 N/A     100% -- Paralyzes the target.
@@ -208,105 +215,75 @@ Sing         Normal   15 N/A     55%  -- Puts the target to sleep.
 Sleep Powder Grass    15 N/A     75%  -- Puts the target to sleep.
 Spore        Grass    15 N/A     100% -- Puts the target to sleep.
 
-Present      Normal   15 Var BP  90%  -- Randomly either attacks with a variable power, between 40 base power and 120 base power, or heals the target by 80 HP.
-Magnitude    Ground   30 Var BP  100% -- Deals variable damage, between 10 base power and 130 base power, as well as double damage against Digging Pokemon.
-Psywave      Psychic  15 Var Dmg 80%  -- Randomly inflicts set damage between a minimum of 1 HP and a maximum of [1.5x the user's level] HP.
-
-Milk Drink   Normal   10 N/A     N/A  -- Restores 1/2 of the user's max HP.
-Recover      Normal   20 N/A     N/A  -- Restores 1/2 of the user's max HP.
-Softboiled   Normal   10 N/A     N/A  -- Restores 1/2 of the user's max HP.
-Morning Sun  Normal   5  N/A     N/A  -- Restores 1/2 of the user's max HP without weather. 3/4 with Sunny Day. 1/4 with Rain/Sandstorm.
-Moonlight    Normal   5  N/A     N/A  -- Restores 1/2 of the user's max HP without weather. 3/4 with Sunny Day. 1/4 with Rain/Sandstorm.
-Synthesis    Grass    5  N/A     N/A  -- Restores 1/2 of the user's max HP without weather. 3/4 with Sunny Day. 1/4 with Rain/Sandstorm.
-
-Absorb       Grass    20 20      100% -- Restores the user's HP by 1/2 of the damage inflicted on the target.
-Giga Drain   Grass    5  60      100% -- Restores the user's HP by 1/2 of the damage inflicted on the target.
-Leech Life   Bug      15 20      100% -- Restores the user's HP by 1/2 of the damage inflicted on the target.
-Mega Drain   Grass    10 40      100% -- Restores the user's HP by 1/2 of the damage inflicted on the target.
-Dream Eater  Psychic  15 100     100% -- Restores the user's HP by 1/2 of the damage inflicted on the target but only works on a sleeping target.
-
-Mud-Slap     Ground   10 20      100% -- Lowers the target's Accuracy by 1 stage.
-
 Thief        Dark     10 40      100% -- Steals the target's held item unless the user is already holding an item
-
-Bonemerang   Ground   10 50      90%  -- Strikes twice; if the first hit breaks the target's Substitute, the real Pokemon will take damage from the second hit.
-Double Kick  Fighting 30 30      100% -- Strikes twice; if the first hit breaks the target's Substitute, the real Pokemon will take damage from the second hit.
-Twineedle    Bug      20 25      100% -- Strikes twice; if the first hit breaks the target's Substitute, the real Pokemon will take damage from the second hit. Has a ~20% chance to poison the target , even if it is a Steel-type Pokemon.
-Fury Cutter  Bug      20 10      95%  -- The base power of this move doubles with each consecutive hit; however, power is capped at a maximum 160 BP and remains there for any subsequent uses. If this move misses, or if the user selects another move, base power will be reset to 10 BP on the next turn.
-
-Pay Day      Normal   20 40      100% -- The player picks up extra money after in-game battles; the money received is equal to: [user's level * 2 * number of times Pay Day is used]. The player does not lose money if the opponent uses Pay Day but the player wins the battle.
 
 Explosion    Normal   5  250     100% -- The Defense stat of other Pokemon is halved against this attack, essentially doubling the move's base power; causes the user to faint.
 Selfdestruct Normal   5  200     100% -- The Defense stat of other Pokemon is halved against this attack, essentially doubling the move's base power; causes the user to faint.
 
-Toxic        Poison   10 N/A     85%  -- The target is badly poisoned, with the damage caused by poison doubling after each turn. However, Toxic poisoning will revert to normal poisoning if the poisoned Pokemon is switched out.
-
-Disable      Normal   20 N/A     55%  -- The target cannot choose its last move for 2-5 turns. Disable only works on one move at a time and fails if the target has not yet used a move or if its move has run out of PP. The target does nothing if it is about to use a move that becomes disabled.
-Encore       Normal   5  N/A     100% -- The target is forced to use its last attack for the next 2-6 turns. The effects of this move will end immediately if the target runs out of PP for the repeated attack.
-Spite        Ghost    10 N/A     100% -- The target's most recent move is reduced by 2-5 PP; this fails if the target has not yet performed a move, if the target's last move has run out of PP, or if the target can only use Struggle.
-Mirror Move  Flying   20 Copy    N/A  -- The user performs the last move executed by its target; if applicable, an attack's damage is calculated with the user's stats, level and type(s). This moves fails if the target has not yet used a move. Mirror Move cannot copy itself, Metronome, Mimic, Sketch, Sleep Talk, Struggle, Transform or moves that user already knows.
-Sketch       Normal   1  N/A     100% -- The user permanently replaces Sketch with the last move used by the target. Sketch cannot copy itself, Explosion, Metronome, Mimic, Mirror Move, Selfdestruct, Sleep Talk, Struggle or Transform. This move fails automatically when selected in link battles.
-
-Bide         Normal   10 Var Dmg 100% -- The user absorbs all damage for 2-3 turns and then inflicts twice the absorbed damage on its target. This move ignores the target's type but still cannot hit Ghost-type Pokemon.
-
-Guillotine   Normal   5  KO      30%  -- The target faints; doesn't work on higher-leveled Pokemon.
-Horn Drill   Normal   5  KO      30%  -- The target faints; doesn't work on higher-leveled Pokemon.
-Fissure      Ground   5  KO      30%  -- The target faints; doesn't work on higher-leveled Pokemon. However, this move will hit Digging Pokemon.
-
-Outrage      Dragon   20 90      100% -- The user attacks uncontrollably for 2-3 turns and then gets confused.
-Petal Dance  Grass    20 70      100% -- The user attacks uncontrollably for 2-3 turns and then gets confused.
-Thrash       Normal   20 90      100% -- The user attacks uncontrollably for 2-3 turns and then gets confused.
-
-Rollout      Rock     20 30      90%  -- The user attacks uncontrollably for five turns; this move's power doubles after each turn and also if Defense Curl was used beforehand. Its power resets after five turns have ended or if the attack misses.
-
-Psych Up     Normal   10 N/A     N/A  -- The user copies all seven of the target's current stat modifiers. (speed, accuracy, evasion, att, def, spatt, spdef)
-
-Belly Drum   Normal   10 N/A     N/A  -- The user maximizes its Attack but sacrifices 50% of its max HP. To the +6 attack stage.
-
-Transform    Normal   10 N/A     N/A  -- The user morphs into a near-exact copy of the target. Stats, stat modifiers, type, moves, Hidden Power data and appearance are changed; the user's level and HP remain the same and each copied move receives only 5 PP. (If Transform is used by Ditto, the effects of Metal Powder stop working after transformation.)
-
-Rest         Psychic  10 N/A     N/A  -- The user is cured of status effects (and confusion), and recovers full HP, but falls asleep for 2 turns.
-
+Guillotine   Normal   5  KO      30%  -- The target faints; doesn't work on higher-leveled Pokemon. Focus Band or Endure can protect against this.
+Horn Drill   Normal   5  KO      30%  -- The target faints; doesn't work on higher-leveled Pokemon. Focus Band or Endure can protect against this.
+Fissure      Ground   5  KO      30%  -- The target faints; doesn't work on higher-leveled Pokemon. However, this move will hit Digging Pokemon. Focus Band or Endure can protect against this.
 
 Submission   Fighting 20 80      80%  -- The user receives 1/4 recoil damage.
 Take Down    Normal   20 90      85%  -- The user receives 1/4 recoil damage.
 Double-edge  Normal   15 120     100% -- The user receives 1/4 recoil damage.
 
+# Moves that set a temp flag on pokemon (cannot be baton passed). par/brn/etc are not passed. cnf is. mimic sets a temp flag, to prevent mimic from being used again. Hmm... Every Pokemon has an encore and disable timer. If both are set to the same move, that pokemon uses struggle.
+Disable      Normal   20 N/A     55%  -- The target cannot choose its last move for 2-5 turns. Disable only works on one move at a time and fails if the target has not yet used a move or if its move has run out of PP. The target does nothing if it is about to use a move that becomes disabled.
+Encore       Normal   5  N/A     100% -- The target is forced to use its last attack for the next 2-6 turns. The effects of this move will end immediately if the target runs out of PP for the repeated attack.
+Outrage      Dragon   20 90      100% -- The user attacks uncontrollably for 2-3 turns and then gets confused.
+Petal Dance  Grass    20 70      100% -- The user attacks uncontrollably for 2-3 turns and then gets confused.
+Thrash       Normal   20 90      100% -- The user attacks uncontrollably for 2-3 turns and then gets confused.
 Sky Attack   Flying   5  140     90%  -- The user prepares on turn one, becoming uncontrollable, and then attacks on turn two.
-Solarbeam    Grass    10 120     100% -- The user prepares on turn one, becoming uncontrollable, and then attacks on turn two. During Sunny Day, this move fires immediately; during Rain Dance, this move has half power.
 Razor Wind   Normal   10 80      75%  -- The user prepares on turn one, becoming uncontrollable, and then attacks on turn two. Has a high critical hit ratio.
 Skull Bash   Normal   15 100     100% -- The user prepares on turn one, raising its Defense by 1 stage and becoming uncontrollable, and then attacks on turn two.
+Solarbeam    Grass    10 120     100% -- The user prepares on turn one, becoming uncontrollable, and then attacks on turn two. During Sunny Day, this move fires immediately; during Rain Dance, this move has half power.
 Hyper Beam   Normal   5  150     90%  -- The user recharges during its next turn; as a result, until the end of the next turn, the user becomes uncontrollable.
 
-Rage         Normal   20 20      100% -- Separate rage counter up to 255. Increases Rage's attack power if user is damaged while using Rage.
-
+# Moves that actually change the pokemon somehow (move id, move pp, type, transform)
+Mimic        Normal   10 N/A     100% -- This move is temporarily replaced by the target's last move; the replacement move will have 5 PP and become part of the user's moveset until the user switches out or the battle ends. Mimic copies attacks even if they miss or the user has immunity toward their type; it cannot copy itself, Struggle, Transform, Sketch, Metronome or moves that the user already knows, and it will fail if the target has yet to use a move.
+Sketch       Normal   1  N/A     100% -- The user permanently replaces Sketch with the last move used by the target. Sketch cannot copy itself, Explosion, Metronome, Mimic, Mirror Move, Selfdestruct, Sleep Talk, Struggle or Transform. This move fails automatically when selected in link battles.
 Conversion   Normal   30 N/A     N/A  -- The user's type changes to match the type of one of its four attacks. This move fails if the user cannot change its type under this condition.
 Conversion 2 Normal   30 N/A     100% -- The user's type changes to one that resists the type of the last attack that hit the user.
+Transform    Normal   10 N/A     N/A  -- The user morphs into a near-exact copy of the target. Stats, stat modifiers, type, moves, Hidden Power data and appearance are changed; the user's level and HP remain the same and each copied move receives only 5 PP. (If Transform is used by Ditto, the effects of Metal Powder stop working after transformation.)
+Spite        Ghost    10 N/A     100% -- The target's most recent move is reduced by 2-5 PP; this fails if the target has not yet performed a move, if the target's last move has run out of PP, or if the target can only use Struggle.
 
-Mind Reader  Normal   5  N/A     100% -- This move ensures that the user's next attack will hit against its current target. Even if the user switches out, its replacement's next move will always hit too. Mind Reader fails against Pokemon in the middle of using Protect, Detect, Dig or Fly, as well as Pokemon behind a Substitute.
-Mimic        Normal   10 N/A     100% -- This move is temporarily replaced by the target's last move; the replacement move will have 5 PP and become part of the user's moveset until the user switches out or the battle ends. Mimic copies attacks even if they miss or the user has immunity toward their type; it cannot copy itself, Struggle, Transform, Sketch, Metronome or moves that the user already knows, and it will fail if the target has yet to use a move.
+# Moves that set a flag on pokemon (can be baton passed) confuse can be baton passed
+Rage         Normal   20 20      100% -- Separate rage counter up to 255. Increases Rage's attack power if user is damaged by an attack while using Rage.
+Rollout      Rock     20 30      90%  -- The user attacks uncontrollably for five turns; this move's power doubles after each turn and also if Defense Curl was used beforehand. Its power resets after five turns have ended or if the attack misses.
+Fury Cutter  Bug      20 10      95%  -- The base power of this move doubles with each consecutive hit; however, power is capped at a maximum 160 BP and remains there for any subsequent uses. If this move misses, or if the user selects another move, base power will be reset to 10 BP on the next turn.
+Defense Curl Normal   40 N/A     N/A  -- Raises the user's Defense by 1 stage; after one use of this move, the user's starting base power is doubled for every use of Rollout.
+Attract      Normal   15 N/A     100% -- Infatuates Pokemon of the opposite gender, even if they have a Substitute, causing a 50% chance for the target's attack to fail.
 Nightmare    Ghost    15 N/A     100% -- This move only works on a sleeping target; as long as the target remains asleep and in battle, 1/4 of its max HP is sapped after each turn.
-
+Toxic        Poison   10 N/A     85%  -- The target is badly poisoned, with the damage caused by poison doubling after each turn. However, Toxic poisoning will revert to normal poisoning if the poisoned Pokemon is switched out.
 Substitute   Normal   10 N/A     N/A  -- The user takes one-fourth of its maximum HP to create a substitute; this move fails if the user does not have enough HP for this. Until the substitute is broken, it receives damage from all attacks made by other Pokemon and shields the user from status effects and stat modifiers caused by other Pokemon. The user is still affected by Sandstorm and Attract from behind its Substitute. If a Substitute breaks from a hit during a multistrike move such as Fury Attack, the user takes damage from the remaining strikes.
-
-# Moves that set a flag
-Future Sight Psychic  15 80      90%  -- This move, even if the user and/or the target switch out, will strike the active target at the end of the second turn after its use. This move cannot cause a critical hit and its damage is calculated by using the original user's Special Attack and the original target's Special Defense. The move's damage is typeless so it never receives STAB and ignores weaknesses, resistances and immunities against this move's type. Only one instance of Future Sight may be active at a time; because it occurs at the end of the round, it also hits through Protect, Detect and Endure.
-Leech Seed   Grass    10 N/A     90%  -- The user steals 1/8 of the target's max HP until the target is switched out, is KO'ed, or uses Rapid Spin; does not work against Grass-type Pokemon or Pokemon behind Substitutes.
 Mean Look    Normal   5  N/A     N/A  -- As long as the user remains in battle, the target cannot switch out unless it uses Baton Pass or Teleport. The target will still be trapped if the user switches out by using Baton Pass.
 Spider Web   Bug      10 N/A     N/A  -- As long as the user remains in battle, the target cannot switch out unless it uses Baton Pass or Teleport. The target will still be trapped if the user switches out by using Baton Pass.
-
-Super Fang   Normal   10 Var Dmg 90%  -- This move halves the target's current HP.
-
+Leech Seed   Grass    10 N/A     90%  -- The user steals 1/8 of the target's max HP until the target is switched out, is KO'ed, or uses Rapid Spin; does not work against Grass-type Pokemon or Pokemon behind Substitutes.
+Curse        ???      10 N/A     N/A  -- When used by a Ghost-type, the user sacrifices half of its max HP to sap the target by 1/4 of its max HP per turn. When used by anything else, the user's Speed is decreased by 1 stage and its Attack and Defense are increased by 1 stage.
+Foresight    Normal   40 N/A     100% -- Sets a on just the target. Until the target faints or switches, the user's Accuracy modifiers and the target's Evasion modifiers are ignored. Ghost-type targets also lose their immunities against Normal-type and Fighting-type moves.
 Bind         Normal   20 15      75%  -- Traps the target for 2-5 turns, causing damage equal to 1/16 of its max HP each turn; this trapped effect can be broken by Rapid Spin. The target can still switch out if it uses Baton Pass.
 Clamp        Water    10 35      75%  -- Traps the target for 2-5 turns, causing damage equal to 1/16 of its max HP each turn; this trapped effect can be broken by Rapid Spin. The target can still switch out if it uses Baton Pass.
 Fire Spin    Fire     15 15      70%  -- Traps the target for 2-5 turns, causing damage equal to 1/16 of its max HP each turn; this trapped effect can be broken by Rapid Spin. The target can still switch out if it uses Baton Pass.
 Whirlpool    Water    15 15      70%  -- Traps the target for 2-5 turns, causing damage equal to 1/16 of its max HP each turn; this trapped effect can be broken by Rapid Spin. The target can still switch out if it uses Baton Pass.
 Wrap         Normal   20 15      85%  -- Traps the target for 2-5 turns, causing damage equal to 1/16 of its max HP each turn; this trapped effect can be broken by Rapid Spin. The target can still switch out if it uses Baton Pass.
+Mist         Ice      30 N/A     N/A  -- Protects the user from negative stat modifiers caused by other Pokemon, but not by itself, until it switches out; can be Baton Passed by user. The user's Accuracy and Evasion stats are also protected. Moves that cause negative stat modifiers as a secondary effect, such as Psychic, still deal their regular damage.
+Destiny Bond Ghost    5  N/A     N/A  -- Causes an opponent to faint if its next attack KOs the user.
+Endure       Normal   10 N/A     N/A  -- Almost always goes first. The user is left with at least 1 HP following any attacks for one turn, but the move's success rate halves with each consecutive use of Protect, Detect or Endure.
+Detect       Fighting 5  N/A     N/A  -- Almost always goes first. The user is protected from all attacks for one turn, but the move's success rate halves with each consecutive use of Protect, Detect or Endure. Only protected from direct attacks, not from self-inflicted moves, weather effects, or status conditions.
+Protect      Normal   10 N/A     N/A  -- Almost always goes first. The user is protected from all attacks for one turn, but the move's success rate halves with each consecutive use of Protect, Detect or Endure. Only protected from direct attacks, not from self-inflicted moves, weather effects, or status conditions.
+Lock-On      Normal   5  N/A     100% -- Applies to target in gen ii, but changing to apply to user. This move ensures that the user's next attack will hit against its current target. Even if the user switches out, its replacement's next move will always hit too. Lock-On fails against Pokemon in the middle of using Protect, Detect, Dig or Fly, as well as Pokemon behind a Substitute.
 
-Foresight    Normal   40 N/A     100% -- Until the target faints or switches, the user's Accuracy modifiers and the target's Evasion modifiers are ignored. Ghost-type targets also lose their immunities against Normal-type and Fighting-type moves.
-Struggle     None     1  50      100% -- Used automatically when all of the user's other moves have run out of PP or are otherwise inaccessible. The user receives 1/4 recoil damage. Struggle is classified as a typeless move and will hit any Pokemon, including Rock-, Steel- and Ghost-type Pokemon, for normal damage.
-Extremespeed Normal   5  80      100% -- Usually goes first. +1 Priority.
-Mach Punch   Fighting 30 40      100% -- Usually goes first. +1 Priority.
-Quick Attack Normal   30 40      100% -- Usually goes first. +1 Priority.
-Hidden Power Normal   15 Var BP  100% -- Varies in power and type depending on the user's DVs; maximum 70 BP. Will run off the user's Attack or Special Attack depending on type.
-Curse        ???      10 N/A     N/A  -- When used by a Ghost-type, the user sacrifices half of its max HP to sap the target by 1/4 of its max HP per turn. When used by anything else, the user's Speed is decreased by 1 stage and its Attack and Defense are increased by 1 stage.
+# Moves that set a flag on party (can pass from switch/roar/teleport)
+Mind Reader  Normal   5  N/A     100% -- This move ensures that the user's next attack will hit against its current target. Even if the user switches out, its replacement's next move will always hit too. Mind Reader fails against Pokemon in the middle of using Protect, Detect, Dig or Fly, as well as Pokemon behind a Substitute.
+Future Sight Psychic  15 80      90%  -- This move, even if the user and/or the target switch out, will strike the active target at the end of the second turn after its use. This move cannot cause a critical hit and its damage is calculated by using the original user's Special Attack and the original target's Special Defense. The move's damage is typeless so it never receives STAB and ignores weaknesses, resistances and immunities against this move's type. Only one instance of Future Sight may be active at a time; because it occurs at the end of the round, it also hits through Protect, Detect and Endure.
+Safeguard    Normal   25 N/A     N/A  -- Protects the user's entire team from status conditions for five turns.
+Reflect      Psychic  20 N/A     N/A  -- All Pokemon in the user's party receive 1/2 damage from Physical attacks for 5 turns.
+Light Screen Psychic  30 N/A     N/A  -- All Pokemon in the user's party receive 1/2 damage from Special attacks for 5 turns.
+Spikes       Ground   20 N/A     100% -- Damages opponents, unless they are Flying-type, every time they are switched in; saps 1/8 of the opponent's max HP.
+
+# Moves that set a flag on battle
+Sandstorm    Rock     10 N/A     N/A  -- Cancels all other weather moves. For 5 turns: each active Pokemon, even when protected by a Substitute, loses 1/16 of its max HP unless it is a Ground-, Rock-, or Steel-type, and the healing power of Morning Sun, Synthesis and Moonlight is halved.
+Sunny Day    Fire     5  N/A     N/A  -- Cancels all other weather moves. For 5 turns: freezing is prevented, the power of Fire attacks is increased by 50%, the power of Water attacks is decreased by 50%, Solarbeam fires immediately, Thunder becomes 50% accurate, and the healing power of Morning Sun, Synthesis and Moonlight is doubled.
+Rain Dance   Water    5  N/A     N/A  -- Cancels all other weather moves. For 5 turns: the power of Water attacks is increased by 50%, the power of Fire attacks is decreased by 50%, Thunder becomes 100% accurate, the power of Solarbeam is halved, and the healing power of Morning Sun, Synthesis and Moonlight is halved.
+Perish Song  Normal   5  N/A     N/A  -- All active Pokemon will faint in 3 turns unless they are switched out.
