@@ -23,7 +23,6 @@ these pokemon are "genderless". Attract won't work on them:
 
 unless the pokemon using attract is also genderless. (mew for example.)
 
-
 I will use PS2 mechanics, which are here: https://bulbapedia.bulbagarden.net/wiki/Pok%C3%A9mon_Stadium_2
 
 Teleport goes last. useful if you want abra to take the damage. And can escape some moves you can't normally escape. And against pursuit.
@@ -47,7 +46,7 @@ Modifications inspired by later games:
 DIFF: Protect and Detect protect against Mean Look. (Didn't in the original games.)
 DIFF: Flail and Reversal can now cause a critical hit and are varied by the random damage factor.
 DIFF: Transform fails when opponent is transformed or user is already transformed.
-DIFF: Lock-On sets a status on the user, not the target. So it can be baton passed and work even if the target switches out. Earthquake/Magnitude/Fissure will still hit a non-flying Pokemon in the middle of Fly.
+DIFF: Lock-On/MindReader sets a status on the user, not the target. So it can be baton passed and work even if the target switches out. Earthquake/Magnitude/Fissure will still hit a non-flying Pokemon in the middle of Fly.
 DIFF: The freeze status condition has a 20% chance to unthaw the Pokemon each turn.
 DIFF: Teleport switches the user's Pokemon with another random Pokemon.
 DIFF: Transform copies oppenent's gender, species, stats, and moves. Transform does not copy existing stat modifiers.
@@ -84,4 +83,10 @@ DIFF: Frustration has 100 Base Power if hp <= foe hp. Otherwise has 50 Base Powe
 DIFF: Return has 100 Base Power if hp >= foe hp. Otherwise has 50 Base Power.
 DIFF: Swagger still confuses the foe if attack at the max stage.
 
+DIFF: Mimic and Sketch both have 10 pp. The copied move will use the same pp counter as mimic/sketch or whatever move called it.
+DIFF: Trigger moves (Mirror Move, Metronome, Sleep Talk) fail when triggering another trigger move. And they cannot trigger Struggle.
+DIFF: Mimic & Sketch can copy any move in the game besides struggle.
+DIFF: Transform fails if Pokemon is already transformed.
+
+STRAT: Sketch and Mimic allow for the same move to be available in multiple move slots.
 STRAT: Hidden Power counters Conversion 2.

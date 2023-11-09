@@ -65,14 +65,10 @@ Mirror Coat  Psychic  20 Var Dmg 100% -- Almost always goes last; if an opponent
 Night Shade  Ghost    15 Var Dmg 100% -- Does damage equal to user's level.
 Seismic Toss Fighting 20 Var Dmg 100% -- Does damage equal to user's level.
 Psywave      Psychic  15 Var Dmg 80%  -- Randomly inflicts set damage between a minimum of 1 HP and a maximum of [1.5x the user's level] HP.
-Bide         Normal   10 Var Dmg 100% -- The user absorbs all damage for 2-3 turns and then inflicts twice the absorbed damage on its target. This move ignores the target's type but still cannot hit Ghost-type Pokemon.
 Super Fang   Normal   10 Var Dmg 90%  -- This move halves the target's current HP.
 False Swipe  Normal   40 40      100% -- Leaves the target with at least 1 HP.
 
 # These can trigger another move
-Sleep Talk   Normal   10 Copy    N/A  -- Does nothing if the user is awake. If the user asleep, it randomly performs one of its attacks. If Rest is selected, user recovers its HP and stays asleep for two more turns. Sleep Talk can choose an attack that has run out of PP; the generated attacks also do not cost PP, and it cannot generate itself, Bide, Disabled attacks or two-turn attacks with a charge-up turn like Fly or Skull Bash. (Moves with a recharge turn like Hyper Beam can be generated.)
-Metronome    Normal   10 N/A     N/A  -- The user performs a randomly selected move; almost any move in the game could be picked. Metronome cannot generate itself, Sketch, Struggle or any move that the user already knows.
-Mirror Move  Flying   20 Copy    N/A  -- The user performs the last move executed by its target; if applicable, an attack's damage is calculated with the user's stats, level and type(s). This moves fails if the target has not yet used a move. Mirror Move cannot copy itself, Metronome, Mimic, Sketch, Sleep Talk, Struggle, Transform or moves that user already knows.
 
 # Moves that can directly or indirectly restore HP or heal status conditions.
 Milk Drink   Normal   10 N/A     N/A  -- Restores 1/2 of the user's max HP.
@@ -238,14 +234,22 @@ Sky Attack   Flying   5  140     90%  -- The user prepares on turn one, becoming
 Razor Wind   Normal   10 80      75%  -- The user prepares on turn one, becoming uncontrollable, and then attacks on turn two. Has a high critical hit ratio.
 Skull Bash   Normal   15 100     100% -- The user prepares on turn one, raising its Defense by 1 stage and becoming uncontrollable, and then attacks on turn two.
 Solarbeam    Grass    10 120     100% -- The user prepares on turn one, becoming uncontrollable, and then attacks on turn two. During Sunny Day, this move fires immediately; during Rain Dance, this move has half power.
+Bide         Normal   10 Var Dmg 100% -- The user absorbs all damage for 2-3 turns and then inflicts twice the absorbed damage on its target. This move ignores the target's type but still cannot hit Ghost-type Pokemon.
 Hyper Beam   Normal   5  150     90%  -- The user recharges during its next turn; as a result, until the end of the next turn, the user becomes uncontrollable.
 
-# Moves that actually change the pokemon somehow (move id, move pp, type, transform)
+# These change the moveset.
 Mimic        Normal   10 N/A     100% -- This move is temporarily replaced by the target's last move; the replacement move will have 5 PP and become part of the user's moveset until the user switches out or the battle ends. Mimic copies attacks even if they miss or the user has immunity toward their type; it cannot copy itself, Struggle, Transform, Sketch, Metronome or moves that the user already knows, and it will fail if the target has yet to use a move.
-Sketch       Normal   1  N/A     100% -- The user permanently replaces Sketch with the last move used by the target. Sketch cannot copy itself, Explosion, Metronome, Mimic, Mirror Move, Selfdestruct, Sleep Talk, Struggle or Transform. This move fails automatically when selected in link battles.
+Sketch       Normal   10 N/A     100% -- The user permanently replaces Sketch with the last move used by the target. Sketch cannot copy itself, Explosion, Metronome, Mimic, Mirror Move, Selfdestruct, Sleep Talk, Struggle or Transform. This move fails automatically when selected in link battles.
+Transform    Normal   10 N/A     N/A  -- The user morphs into a near-exact copy of the target. Stats, stat modifiers, type, moves, Hidden Power data and appearance are changed; the user's level and HP remain the same and each copied move receives only 5 PP. (If Transform is used by Ditto, the effects of Metal Powder stop working after transformation.)
+
+# These trigger a move.
+Sleep Talk   Normal   10 Copy    N/A  -- Does nothing if the user is awake. If the user asleep, it randomly performs one of its attacks. If Rest is selected, user recovers its HP and stays asleep for two more turns. Sleep Talk can choose an attack that has run out of PP; the generated attacks also do not cost PP, and it cannot generate itself, Bide, Disabled attacks or two-turn attacks with a charge-up turn like Fly or Skull Bash. (Moves with a recharge turn like Hyper Beam can be generated.)
+Metronome    Normal   10 N/A     N/A  -- The user performs a randomly selected move; almost any move in the game could be picked. Metronome cannot generate itself, Sketch, Struggle or any move that the user already knows.
+Mirror Move  Flying   20 Copy    N/A  -- The user performs the last move executed by its target; if applicable, an attack's damage is calculated with the user's stats, level and type(s). This moves fails if the target has not yet used a move. Mirror Move cannot copy itself, Metronome, Mimic, Sketch, Sleep Talk, Struggle, Transform or moves that user already knows.
+
+These affect type or pp.
 Conversion   Normal   30 N/A     N/A  -- The user's type changes to match the type of one of its four attacks. This move fails if the user cannot change its type under this condition.
 Conversion 2 Normal   30 N/A     100% -- The user's type changes to one that resists the type of the last attack that hit the user.
-Transform    Normal   10 N/A     N/A  -- The user morphs into a near-exact copy of the target. Stats, stat modifiers, type, moves, Hidden Power data and appearance are changed; the user's level and HP remain the same and each copied move receives only 5 PP. (If Transform is used by Ditto, the effects of Metal Powder stop working after transformation.)
 Spite        Ghost    10 N/A     100% -- The target's most recent move is reduced by 2-5 PP; this fails if the target has not yet performed a move, if the target's last move has run out of PP, or if the target can only use Struggle.
 
 # Moves that set a flag on pokemon (can be baton passed) confuse can be baton passed
@@ -261,7 +265,7 @@ Mean Look    Normal   5  N/A     N/A  -- As long as the user remains in battle, 
 Spider Web   Bug      10 N/A     N/A  -- As long as the user remains in battle, the target cannot switch out unless it uses Baton Pass or Teleport. The target will still be trapped if the user switches out by using Baton Pass.
 Leech Seed   Grass    10 N/A     90%  -- The user steals 1/8 of the target's max HP until the target is switched out, is KO'ed, or uses Rapid Spin; does not work against Grass-type Pokemon or Pokemon behind Substitutes.
 Curse        ???      10 N/A     N/A  -- When used by a Ghost-type, the user sacrifices half of its max HP to sap the target by 1/4 of its max HP per turn. When used by anything else, the user's Speed is decreased by 1 stage and its Attack and Defense are increased by 1 stage.
-Foresight    Normal   40 N/A     100% -- Sets a on just the target. Until the target faints or switches, the user's Accuracy modifiers and the target's Evasion modifiers are ignored. Ghost-type targets also lose their immunities against Normal-type and Fighting-type moves.
+Foresight    Normal   40 N/A     100% -- Sets a flag on the target, not the user. Until the target faints or switches, the target's Accuracy modifiers and the target's Evasion modifiers are ignored. Ghost-type targets also lose their immunities against Normal-type and Fighting-type moves.
 Bind         Normal   20 15      75%  -- Traps the target for 2-5 turns, causing damage equal to 1/16 of its max HP each turn; this trapped effect can be broken by Rapid Spin. The target can still switch out if it uses Baton Pass.
 Clamp        Water    10 35      75%  -- Traps the target for 2-5 turns, causing damage equal to 1/16 of its max HP each turn; this trapped effect can be broken by Rapid Spin. The target can still switch out if it uses Baton Pass.
 Fire Spin    Fire     15 15      70%  -- Traps the target for 2-5 turns, causing damage equal to 1/16 of its max HP each turn; this trapped effect can be broken by Rapid Spin. The target can still switch out if it uses Baton Pass.
@@ -272,10 +276,10 @@ Destiny Bond Ghost    5  N/A     N/A  -- Causes an opponent to faint if its next
 Endure       Normal   10 N/A     N/A  -- Almost always goes first. The user is left with at least 1 HP following any attacks for one turn, but the move's success rate halves with each consecutive use of Protect, Detect or Endure.
 Detect       Fighting 5  N/A     N/A  -- Almost always goes first. The user is protected from all attacks for one turn, but the move's success rate halves with each consecutive use of Protect, Detect or Endure. Only protected from direct attacks, not from self-inflicted moves, weather effects, or status conditions.
 Protect      Normal   10 N/A     N/A  -- Almost always goes first. The user is protected from all attacks for one turn, but the move's success rate halves with each consecutive use of Protect, Detect or Endure. Only protected from direct attacks, not from self-inflicted moves, weather effects, or status conditions.
-Lock-On      Normal   5  N/A     100% -- Applies to target in gen ii, but changing to apply to user. This move ensures that the user's next attack will hit against its current target. Even if the user switches out, its replacement's next move will always hit too. Lock-On fails against Pokemon in the middle of using Protect, Detect, Dig or Fly, as well as Pokemon behind a Substitute.
+Lock-On      Normal   5  N/A     100% -- Same as mind reader. Applies to target in gen ii, but changing to apply to user. This move ensures that the user's next attack will hit against its current target. Even if the user switches out, its replacement's next move will always hit too. Lock-On fails against Pokemon in the middle of using Protect, Detect, Dig or Fly, as well as Pokemon behind a Substitute.
+Mind Reader  Normal   5  N/A     100% -- Same as lockon. Applies to target in gen ii, but changing to apply to user. This move ensures that the user's next attack will hit against its current target. Even if the user switches out, its replacement's next move will always hit too. Mind Reader fails against Pokemon in the middle of using Protect, Detect, Dig or Fly, as well as Pokemon behind a Substitute.
 
 # Moves that set a flag on party (can pass from switch/roar/teleport)
-Mind Reader  Normal   5  N/A     100% -- This move ensures that the user's next attack will hit against its current target. Even if the user switches out, its replacement's next move will always hit too. Mind Reader fails against Pokemon in the middle of using Protect, Detect, Dig or Fly, as well as Pokemon behind a Substitute.
 Future Sight Psychic  15 80      90%  -- This move, even if the user and/or the target switch out, will strike the active target at the end of the second turn after its use. This move cannot cause a critical hit and its damage is calculated by using the original user's Special Attack and the original target's Special Defense. The move's damage is typeless so it never receives STAB and ignores weaknesses, resistances and immunities against this move's type. Only one instance of Future Sight may be active at a time; because it occurs at the end of the round, it also hits through Protect, Detect and Endure.
 Safeguard    Normal   25 N/A     N/A  -- Protects the user's entire team from status conditions for five turns.
 Reflect      Psychic  20 N/A     N/A  -- All Pokemon in the user's party receive 1/2 damage from Physical attacks for 5 turns.
