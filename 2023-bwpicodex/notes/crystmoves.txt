@@ -31,6 +31,7 @@ Swagger      Normal   15 N/A     90%  -- Confuses the target and raises its Atta
 Extremespeed Normal   5  80      100% -- Usually goes first. +1 Priority.
 Mach Punch   Fighting 30 40      100% -- Usually goes first. +1 Priority.
 Quick Attack Normal   30 40      100% -- Usually goes first. +1 Priority.
+Pursuit      Dark     20 40      100% -- If the target switches out on the current turn, this move strikes with doubled power before the switch. Baton Passers still escape safely.
 Hidden Power Normal   15 Var BP  100% -- Varies in power and type depending on the user's DVs; maximum 70 BP. Will run off the user's Attack or Special Attack depending on type.
 Struggle     None     1  50      100% -- Used automatically when all of the user's other moves have run out of PP or are otherwise inaccessible. The user receives 1/4 recoil damage. Struggle is classified as a typeless move and will hit any Pokemon, including Rock-, Steel- and Ghost-type Pokemon, for normal damage.
 
@@ -68,8 +69,6 @@ Psywave      Psychic  15 Var Dmg 80%  -- Randomly inflicts set damage between a 
 Super Fang   Normal   10 Var Dmg 90%  -- This move halves the target's current HP.
 False Swipe  Normal   40 40      100% -- Leaves the target with at least 1 HP.
 
-# These can trigger another move
-
 # Moves that can directly or indirectly restore HP or heal status conditions.
 Milk Drink   Normal   10 N/A     N/A  -- Restores 1/2 of the user's max HP.
 Recover      Normal   20 N/A     N/A  -- Restores 1/2 of the user's max HP.
@@ -92,44 +91,32 @@ Splash       Normal   40 N/A     N/A  -- Doesn't do anything (but we still love 
 Beat Up      Dark     10 10      100% -- Each healthy (i.e. not fainted nor inflicted with a status condition) Pokemon in your party contributes a typeless 10 base power hit determined solely by their base Attack and Defense stats.
 Baton Pass   Normal   40 N/A     N/A  -- The user returns to its party, bypassing any trapping moves and Pursuit; it passes all stat modifiers (positive or negative), as well as confusion, Focus Energy, Perish Song count, Mist, Leech Seed, Ghost Curses, Mind Reader, Lock-On, Mean Look, Spider Web and Substitute to the replacement Pokemon. In-game, Baton Pass also passes partial trapping moves (Bind, Clamp, Fire Spin and Wrap), Foresight, Toxic if the replacement is poisoned and Nightmare if replacement is asleep.
 
-Ember        Fire     25 40      100% -- Has a ~10% chance to burn the target.
-Fire Blast   Fire     5  120     85%  -- Has a ~10% chance to burn the target.
-Fire Punch   Fire     15 75      100% -- Has a ~10% chance to burn the target.
-Flamethrower Fire     15 95      100% -- Has a ~10% chance to burn the target.
-Flame Wheel  Fire     25 60      100% -- Has a ~10% chance to burn the target; can be used while frozen, which both attacks the target normally and thaws the user.
-Blizzard     Ice      5  120     70%  -- Has a ~10% chance to freeze the target.
-Ice Beam     Ice      10 95      100% -- Has a ~10% chance to freeze the target.
-Ice Punch    Ice      15 75      100% -- Has a ~10% chance to freeze the target.
-Powder Snow  Ice      25 40      100% -- Has a ~10% chance to freeze the target.
 Aurora Beam  Ice      20 65      100% -- Has a ~10% chance to lower the target's Attack by 1 stage.
 Acid         Poison   30 40      100% -- Has a ~10% chance to lower the target's Defense by 1 stage.
+Rock Smash   Fighting 15 20      100% -- Has a ~50% chance to lower the target's Defense by 1 stage.
+Iron Tail    Steel    15 100     75%  -- Has a ~30% chance to lower the target's Defense by 1 stage.
+Crunch       Dark     15 80      100% -- Has a ~20% chance to lower the target's Special Defense by 1 stage.
+Shadow Ball  Ghost    15 80      100% -- Has a ~20% chance to lower the target's Special Defense by 1 stage.
 Psychic      Psychic  10 90      100% -- Has a ~10% chance to lower the target's Special Defense by 1 stage.
 Bubblebeam   Water    20 65      100% -- Has a ~10% chance to lower the target's Speed by 1 stage.
 Bubble       Water    30 20      100% -- Has a ~10% chance to lower the target's Speed by 1 stage.
 Constrict    Normal   35 10      100% -- Has a ~10% chance to lower the target's Speed by 1 stage.
 Bone Club    Ground   20 65      85%  -- Has a ~10% chance to make the target flinch.
 Hyper Fang   Normal   15 80      90%  -- Has a ~10% chance to make the target flinch.
+Ember        Fire     25 40      100% -- Has a ~10% chance to burn the target.
+Fire Blast   Fire     5  120     85%  -- Has a ~10% chance to burn the target.
+Fire Punch   Fire     15 75      100% -- Has a ~10% chance to burn the target.
+Flamethrower Fire     15 95      100% -- Has a ~10% chance to burn the target.
+Sacred Fire  Fire     5  100     95%  -- Has a ~50% chance to burn the target; can be used while frozen, which both attacks the target normally and thaws the user.
+Flame Wheel  Fire     25 60      100% -- Has a ~10% chance to burn the target; can be used while frozen, which both attacks the target normally and thaws the user.
+Blizzard     Ice      5  120     70%  -- Has a ~10% chance to freeze the target.
+Ice Beam     Ice      10 95      100% -- Has a ~10% chance to freeze the target.
+Ice Punch    Ice      15 75      100% -- Has a ~10% chance to freeze the target.
+Powder Snow  Ice      25 40      100% -- Has a ~10% chance to freeze the target.
+Tri Attack   Normal   10 80      100% -- Has a ~20% chance to burn, paralyze or freeze the target.
 Thunderbolt  Electric 15 95      100% -- Has a ~10% chance to paralyze the target.
 Thunderpunch Electric 15 75      100% -- Has a ~10% chance to paralyze the target.
 Thundershock Electric 30 40      100% -- Has a ~10% chance to paralyze the target.
-Ancientpower Rock     5  60      100% -- Has a ~10% chance to raise all of the user's stats by 1 stage.
-Metal Claw   Steel    35 50      95%  -- Has a ~10% chance to raise the user's Attack by 1 stage.
-Steel Wing   Steel    25 70      95%  -- Has a ~10% chance to raise the user's Defense by 1 stage.
-Tri Attack   Normal   10 80      100% -- Has a ~20% chance to burn, paralyze or freeze the target.
-Confusion    Psychic  25 50      100% -- Has a ~10% chance to confuse the target.
-Psybeam      Psychic  20 65      100% -- Has a ~10% chance to confuse the target.
-Dizzy Punch  Normal   10 70      100% -- Has a ~20% chance to confuse the target.
-Crunch       Dark     15 80      100% -- Has a ~20% chance to lower the target's Special Defense by 1 stage.
-Shadow Ball  Ghost    15 80      100% -- Has a ~20% chance to lower the target's Special Defense by 1 stage.
-Twister      Dragon   20 40      100% -- Has a ~20% chance to make the target flinch; power doubles while the target is in mid-air via Fly.
-Iron Tail    Steel    15 100     75%  -- Has a ~30% chance to lower the target's Defense by 1 stage.
-Bite         Dark     25 60      100% -- Has a ~30% chance to make the target flinch.
-Headbutt     Normal   15 70      100% -- Has a ~30% chance to make the target flinch.
-Low Kick     Fighting 20 50      90%  -- Has a ~30% chance to make the target flinch.
-Rock Slide   Rock     10 75      90%  -- Has a ~30% chance to make the target flinch.
-Rolling Kick Fighting 15 60      85%  -- Has a ~30% chance to make the target flinch.
-Stomp        Normal   20 65      100% -- Has a ~30% chance to make the target flinch; also retains its normal accuracy and gains doubled power against Minimized Pokemon.
-Snore        Normal   15 40      100% -- Has a ~30% chance to make the target flinch; fails if user is awake.
 Body Slam    Normal   15 85      100% -- Has a ~30% chance to paralyze the target.
 Dragonbreath Dragon   20 60      100% -- Has a ~30% chance to paralyze the target.
 Lick         Ghost    30 20      100% -- Has a ~30% chance to paralyze the target.
@@ -139,16 +126,27 @@ Poison Sting Poison   35 15      100% -- Has a ~30% chance to poison the target.
 Sludge Bomb  Poison   10 90      100% -- Has a ~30% chance to poison the target.
 Sludge       Poison   20 65      100% -- Has a ~30% chance to poison the target.
 Smog         Poison   20 20      100% -- Has a ~40% chance to poison the target.
-Sacred Fire  Fire     5  100     95%  -- Has a ~50% chance to burn the target; can be used while frozen, which both attacks the target normally and thaws the user.
+Ancientpower Rock     5  60      100% -- Has a ~10% chance to raise all of the user's stats by 1 stage.
+Metal Claw   Steel    35 50      95%  -- Has a ~10% chance to raise the user's Attack by 1 stage.
+Steel Wing   Steel    25 70      95%  -- Has a ~10% chance to raise the user's Defense by 1 stage.
+Confusion    Psychic  25 50      100% -- Has a ~10% chance to confuse the target.
+Psybeam      Psychic  20 65      100% -- Has a ~10% chance to confuse the target.
+Dizzy Punch  Normal   10 70      100% -- Has a ~20% chance to confuse the target.
+Twister      Dragon   20 40      100% -- Has a ~20% chance to make the target flinch; power doubles while the target is in mid-air via Fly.
+Bite         Dark     25 60      100% -- Has a ~30% chance to make the target flinch.
+Headbutt     Normal   15 70      100% -- Has a ~30% chance to make the target flinch.
+Low Kick     Fighting 20 50      90%  -- Has a ~30% chance to make the target flinch.
+Rock Slide   Rock     10 75      90%  -- Has a ~30% chance to make the target flinch.
+Rolling Kick Fighting 15 60      85%  -- Has a ~30% chance to make the target flinch.
+Stomp        Normal   20 65      100% -- Has a ~30% chance to make the target flinch; also retains its normal accuracy and gains doubled power against Minimized Pokemon.
+Snore        Normal   15 40      100% -- Has a ~30% chance to make the target flinch; fails if user is awake.
 Octazooka    Water    10 65      85%  -- Has a ~50% chance to lower the target's Accuracy by 1 stage.
-Rock Smash   Fighting 15 20      100% -- Has a ~50% chance to lower the target's Defense by 1 stage.
 Aeroblast    Flying   5  100     95%  -- Has a high critical hit ratio.
 Crabhammer   Water    10 90      85%  -- Has a high critical hit ratio.
 Cross Chop   Fighting 5  100     80%  -- Has a high critical hit ratio.
 Karate Chop  Fighting 25 55      100% -- Has a high critical hit ratio.
 Razor Leaf   Grass    25 55      95%  -- Has a high critical hit ratio.
 Slash        Normal   20 70      100% -- Has a high critical hit ratio.
-Pursuit      Dark     20 40      100% -- If the target switches out on the current turn, this move strikes with doubled power before the switch. Baton Passers still escape safely.
 Hi Jump Kick Fighting 20 85      90%  -- If this attack misses the target, the user receives 1/8 "recoil" damage of what it would have inflicted.
 Jump Kick    Fighting 20 70      95%  -- If this attack misses the target, the user receives 1/8 "recoil" damage of what it would have inflicted.
 
@@ -247,7 +245,7 @@ Sleep Talk   Normal   10 Copy    N/A  -- Does nothing if the user is awake. If t
 Metronome    Normal   10 N/A     N/A  -- The user performs a randomly selected move; almost any move in the game could be picked. Metronome cannot generate itself, Sketch, Struggle or any move that the user already knows.
 Mirror Move  Flying   20 Copy    N/A  -- The user performs the last move executed by its target; if applicable, an attack's damage is calculated with the user's stats, level and type(s). This moves fails if the target has not yet used a move. Mirror Move cannot copy itself, Metronome, Mimic, Sketch, Sleep Talk, Struggle, Transform or moves that user already knows.
 
-These affect type or pp.
+# These affect type or pp.
 Conversion   Normal   30 N/A     N/A  -- The user's type changes to match the type of one of its four attacks. This move fails if the user cannot change its type under this condition.
 Conversion 2 Normal   30 N/A     100% -- The user's type changes to one that resists the type of the last attack that hit the user.
 Spite        Ghost    10 N/A     100% -- The target's most recent move is reduced by 2-5 PP; this fails if the target has not yet performed a move, if the target's last move has run out of PP, or if the target can only use Struggle.

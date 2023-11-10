@@ -168,7 +168,7 @@ function init() -- entry point for this compile script
   addnext()
 
   dedup_evol()             loglen("Dedup evolutions")
-  -- replace_ranges()         loglen("Replace ranges")
+  replace_ranges()         loglen("Replace ranges")
 
   for i=0,251 do
     for x in all(movearr[i]) do

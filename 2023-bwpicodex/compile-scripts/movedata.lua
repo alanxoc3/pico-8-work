@@ -51,7 +51,7 @@ end
 
 -- taken from crystal decompiled. according to that, there are 135 different categorizable move effects...
 -- some accuracies don't make sense, for moves that don't have an accuracy
--- move id        pow  move type       acc  pp  fin    decompiled effect
+-- move id     pow  move type acc pp  fin    decompiled effect
 move_stats = [[
 M_EXPLOSION    250 T_NORMAL   100 5  0   -- EFFECT_SELFDESTRUCT
 M_SELFDESTRUCT 200 T_NORMAL   100 5  0   -- EFFECT_SELFDESTRUCT
@@ -137,7 +137,7 @@ M_RAZORLEAF    55  T_GRASS    95  25 0   -- EFFECT_NORMAL_HIT
 M_METALCLAW    50  T_STEEL    95  35 10  -- EFFECT_ATTACK_UP_HIT
 M_ROCKTHROW    50  T_ROCK     90  15 0   -- EFFECT_NORMAL_HIT
 M_CONFUSION    50  T_PSYCHIC  100 25 10  -- EFFECT_CONFUSE_HIT
-M_STRUGGLE     50  T_NORMAL   100 1  0   -- EFFECT_RECOIL_HIT
+M_STRUGGLE     50  T_NORMAL   100 40 0   -- EFFECT_RECOIL_HIT
 M_CUT          50  T_NORMAL   95  30 0   -- EFFECT_NORMAL_HIT
 M_BONEMERANG   50  T_GROUND   90  10 0   -- EFFECT_DOUBLE_HIT
 M_KARATECHOP   50  T_FIGHTING 100 25 0   -- EFFECT_NORMAL_HIT
@@ -235,7 +235,7 @@ M_CONFUSERAY   0   T_GHOST    100 10 0   -- EFFECT_CONFUSE
 M_MINDREADER   0   T_NORMAL   100 5  0   -- EFFECT_LOCK_ON
 M_LOCKON       0   T_NORMAL   100 5  0   -- EFFECT_LOCK_ON
 M_ENCORE       0   T_NORMAL   100 5  0   -- EFFECT_ENCORE
-M_SKETCH       0   T_NORMAL   100 1  0   -- EFFECT_SKETCH
+M_SKETCH       0   T_NORMAL   100 10 0   -- EFFECT_SKETCH
 M_STRINGSHOT   0   T_BUG      95  40 0   -- EFFECT_SPEED_DOWN
 M_SWAGGER      0   T_NORMAL   90  15 100 -- EFFECT_SWAGGER
 M_SCARYFACE    0   T_NORMAL   90  10 0   -- EFFECT_SPEED_DOWN_2
