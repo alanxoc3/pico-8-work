@@ -92,3 +92,5 @@ DIFF: Missingno can learn Struggle and TM05. Struggle has 40 pp if learned.
 
 STRAT: Sketch and Mimic allow for the same move to be available in multiple move slots.
 STRAT: Hidden Power counters Conversion 2.
+
+IDEA: Unlock moves as you defeat trainers.

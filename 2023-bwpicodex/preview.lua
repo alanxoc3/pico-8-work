@@ -1,7 +1,7 @@
 cartdata"picodex_preview"
 cls()
 poke(0x5f2c, 3) -- enable 64x64
-poke(0x5f5c, 255) -- never repeat btnp
+-- poke(0x5f5c, 255) -- never repeat btnp
 
 g_outline_in_progress = false
 function outline(x, y, col1, col2, func)
@@ -32,46 +32,35 @@ function outline(x, y, col1, col2, func)
   end
 end
            --       0 1   2 3   4   5 6   7 8 9   a b   c  d  e  f
-altpalette = {[0]=130,140,2,131,132,5,134,6,8,141,9,139,12,13,14,142}
+-- altpalette = {[0]=130,140,2,131,132,5,134,6,8,141,9,139,12,13,14,142}
+-- 1, 3, 4
+--                0 1   2   3 4   5 6   7 8   9 1011  12 13 14 15
+altpalette = {[0]=1,143,136,4,138,5,134,6,141,8,9,139,12,13,14,142}
 
-pkmn_types={
-  ghost   ={0x2, 0x0},
-  bird    ={0x6, 0x0},
-  dark    ={0x9, 0x0},
-  poison  ={0x9, 0x0},
-  fire    ={0x8, 0x2},
-  psychic ={0xe, 0x2},
-  normal  ={0x6, 0x5},
-  flying  ={0xf, 0x2},
-  ice     ={0xc, 0x1},
-  water   ={0xc, 0x1},
-  grass   ={0xb, 0x3},
-  bug     ={0xb, 0x3},
-  dragon  ={0xa, 0x4},
-  electric={0xa, 0x4},
-  fighting={0xf, 0x4},
-  ground  ={0xf, 0x4},
-  rock    ={0xf, 0x4},
-  steel   ={0x6, 0x5},
+pkmn_types={ -- 0xd and 0x8 are unused
+  fighting={0x1, 0x0},
+  rock    ={0x1, 0x0},
+  ghost   ={0x8, 0x0},
+  poison  ={0x2, 0x0},
+  ground  ={0x3, 0x0},
+  bug     ={0x4, 0x0},
+  dark    ={0x5, 0x0},
+  steel   ={0x6, 0x0},
+  normal  ={0x7, 0x0},
+  bird    ={0x7, 0x0},
+  fire    ={0x9, 0x0},
+  electric={0xa, 0x0},
+  grass   ={0xb, 0x0},
+  ice     ={0xc, 0x0},
+  water   ={0xc, 0x0},
+  psychic ={0xe, 0x0},
+  flying  ={0xf, 0x0},
+  dragon  ={0xf, 0x0},
 }
 
--- a not used
--- 0x0
--- 0x1
--- 0x2
--- 0x3
--- 0x4
--- 0x5
--- 0x6
--- 0x7
--- 0x8
--- 0x9
--- 0xb
--- 0xc
--- 0xe
--- 0xf
-
-pkmn_to_color = {[0]="bird", "grass", "grass", "grass", "fire", "fire", "fire", "water", "water", "water", "bug", "bug", "bug", "bug", "bug", "bug", "flying", "flying", "flying", "normal", "normal", "flying", "flying", "poison", "poison", "electric", "electric", "ground", "ground", "poison", "poison", "poison", "poison", "poison", "poison", "normal", "normal", "fire", "fire", "normal", "normal", "poison", "poison", "grass", "grass", "grass", "bug", "bug", "poison", "poison", "ground", "ground", "normal", "normal", "water", "water", "fighting", "fighting", "fire", "fire", "water", "water", "water", "psychic", "psychic", "psychic", "fighting", "fighting", "fighting", "grass", "grass", "grass", "water", "water", "rock", "rock", "rock", "fire", "fire", "water", "water", "steel", "steel", "flying", "flying", "flying", "water", "water", "poison", "poison", "water", "water", "ghost", "ghost", "ghost", "rock", "psychic", "psychic", "water", "water", "electric", "electric", "grass", "grass", "ground", "ground", "fighting", "fighting", "normal", "poison", "poison", "ground", "ground", "normal", "grass", "normal", "water", "water", "water", "water", "water", "water", "psychic", "bug", "ice", "electric", "fire", "bug", "normal", "water", "water", "water", "normal", "normal", "water", "electric", "fire", "normal", "rock", "rock", "rock", "rock", "rock", "normal", "ice", "electric", "fire", "dragon", "dragon", "dragon", "psychic", "psychic", "grass", "grass", "grass", "fire", "fire", "fire", "water", "water", "water", "normal", "normal", "flying", "flying", "bug", "bug", "poison", "poison", "poison", "water", "water", "electric", "normal", "normal", "normal", "normal", "psychic", "psychic", "electric", "electric", "electric", "grass", "water", "water", "rock", "water", "grass", "grass", "grass", "normal", "grass", "grass", "bug", "water", "water", "psychic", "dark", "dark", "water", "ghost", "psychic", "psychic", "normal", "bug", "bug", "normal", "ground", "steel", "normal", "normal", "water", "steel", "bug", "fighting", "dark", "normal", "normal", "fire", "fire", "ice", "ice", "water", "water", "water", "ice", "water", "steel", "dark", "dark", "water", "ground", "ground", "normal", "normal", "normal", "fighting", "fighting", "ice", "electric", "fire", "normal", "normal", "electric", "fire", "water", "rock", "rock", "rock", "psychic", "fire", "grass", "bird", "bird", "bird"}
+-- pkmn_to_color = {[0]="bird", "grass", "grass", "grass", "fire", "fire", "fire", "water", "water", "water", "bug", "bug", "bug", "bug", "bug", "bug", "flying", "flying", "flying", "normal", "normal", "flying", "flying", "poison", "poison", "electric", "electric", "ground", "ground", "poison", "poison", "poison", "poison", "poison", "poison", "normal", "normal", "fire", "fire", "normal", "normal", "poison", "poison", "grass", "grass", "grass", "bug", "bug", "poison", "poison", "ground", "ground", "normal", "normal", "water", "water", "fighting", "fighting", "fire", "fire", "water", "water", "water", "psychic", "psychic", "psychic", "fighting", "fighting", "fighting", "grass", "grass", "grass", "water", "water", "rock", "rock", "rock", "fire", "fire", "water", "water", "electric", "electric", "flying", "flying", "flying", "water", "water", "poison", "poison", "water", "water", "ghost", "ghost", "ghost", "rock", "psychic", "psychic", "water", "water", "electric", "electric", "grass", "grass", "ground", "ground", "fighting", "fighting", "normal", "poison", "poison", "ground", "ground", "normal", "grass", "normal", "water", "water", "water", "water", "water", "water", "psychic", "bug", "ice", "electric", "fire", "bug", "normal", "water", "water", "water", "normal", "normal", "water", "electric", "fire", "normal", "rock", "rock", "rock", "rock", "rock", "normal", "ice", "electric", "fire", "dragon", "dragon", "dragon", "psychic", "psychic", "grass", "grass", "grass", "fire", "fire", "fire", "water", "water", "water", "normal", "normal", "flying", "flying", "bug", "bug", "poison", "poison", "poison", "water", "water", "electric", "normal", "normal", "normal", "normal", "psychic", "psychic", "electric", "electric", "electric", "grass", "water", "water", "rock", "water", "grass", "grass", "grass", "normal", "grass", "grass", "bug", "water", "water", "psychic", "dark", "dark", "water", "ghost", "psychic", "psychic", "normal", "bug", "bug", "normal", "ground", "steel", "normal", "normal", "water", "steel", "bug", "bug", "dark", "normal", "normal", "fire", "fire", "ice", "ice", "water", "water", "water", "ice", "water", "steel", "dark", "dark", "water", "ground", "ground", "normal", "normal", "normal", "fighting", "fighting", "ice", "electric", "fire", "normal", "normal", "electric", "fire", "water", "rock", "rock", "rock", "psychic", "fire", "grass"}
+-- pkmn_to_color = {[0]="bird", "grass", "grass", "grass", "fire", "fire", "fire", "water", "water", "water", "bug", "bug", "bug", "bug", "bug", "bug", "flying", "flying", "flying", "normal", "normal", "flying", "flying", "poison", "poison", "electric", "electric", "ground", "ground", "poison", "poison", "poison", "poison", "poison", "poison", "normal", "normal", "fire", "fire", "normal", "normal", "poison", "poison", "grass", "grass", "grass", "bug", "bug", "poison", "poison", "ground", "ground", "normal", "normal", "water", "water", "fighting", "fighting", "fire", "fire", "water", "water", "water", "psychic", "psychic", "psychic", "fighting", "fighting", "fighting", "grass", "grass", "grass", "water", "water", "rock", "rock", "rock", "fire", "fire", "water", "water", "electric", "electric", "flying", "flying", "flying", "water", "ice", "poison", "poison", "water", "ice", "ghost", "ghost", "ghost", "rock", "psychic", "psychic", "water", "water", "electric", "electric", "grass", "grass", "ground", "ground", "fighting", "fighting", "normal", "poison", "poison", "ground", "ground", "normal", "grass", "normal", "water", "water", "water", "water", "water", "water", "psychic", "bug", "ice", "electric", "fire", "bug", "normal", "water", "water", "ice", "normal", "normal", "water", "electric", "fire", "normal", "rock", "rock", "rock", "rock", "rock", "normal", "ice", "electric", "fire", "dragon", "dragon", "dragon", "psychic", "psychic", "grass", "grass", "grass", "fire", "fire", "fire", "water", "water", "water", "normal", "normal", "flying", "flying", "bug", "bug", "poison", "poison", "poison", "water", "water", "electric", "normal", "normal", "normal", "normal", "psychic", "psychic", "electric", "electric", "electric", "grass", "water", "water", "rock", "water", "grass", "grass", "grass", "normal", "grass", "grass", "bug", "water", "water", "psychic", "dark", "dark", "water", "ghost", "psychic", "psychic", "normal", "bug", "bug", "normal", "ground", "steel", "normal", "normal", "water", "steel", "bug", "bug", "dark", "normal", "normal", "fire", "fire", "ice", "ice", "water", "water", "water", "ice", "water", "steel", "dark", "dark", "water", "ground", "ground", "normal", "normal", "normal", "fighting", "fighting", "ice", "electric", "fire", "normal", "normal", "electric", "fire", "water", "rock", "rock", "rock", "psychic", "fire", "grass"}
+pkmn_to_color = {[0]="bird", "grass", "grass", "grass", "fire", "fire", "fire", "water", "water", "water", "bug", "bug", "bug", "bug", "bug", "bug", "flying", "flying", "flying", "normal", "normal", "flying", "flying", "poison", "poison", "electric", "electric", "ground", "ground", "poison", "poison", "poison", "poison", "poison", "poison", "normal", "normal", "fire", "fire", "normal", "normal", "poison", "poison", "grass", "grass", "grass", "bug", "bug", "poison", "poison", "ground", "ground", "normal", "normal", "water", "water", "fighting", "fighting", "fire", "fire", "water", "water", "water", "psychic", "psychic", "psychic", "fighting", "fighting", "fighting", "grass", "grass", "grass", "water", "water", "rock", "rock", "rock", "fire", "fire", "psychic", "psychic", "steel", "steel", "flying", "flying", "flying", "water", "water", "poison", "poison", "water", "water", "ghost", "ghost", "ghost", "rock", "psychic", "psychic", "water", "water", "electric", "electric", "grass", "grass", "ground", "ground", "fighting", "fighting", "normal", "poison", "poison", "ground", "ground", "normal", "grass", "normal", "water", "water", "water", "water", "water", "water", "psychic", "bug", "psychic", "electric", "fire", "bug", "normal", "water", "water", "water", "normal", "normal", "water", "electric", "fire", "normal", "rock", "rock", "rock", "rock", "rock", "normal", "ice", "electric", "fire", "dragon", "dragon", "dragon", "psychic", "psychic", "grass", "grass", "grass", "fire", "fire", "fire", "water", "water", "water", "normal", "normal", "flying", "flying", "bug", "bug", "bug", "bug", "poison", "electric", "electric", "electric", "normal", "normal", "normal", "normal", "psychic", "psychic", "electric", "electric", "electric", "grass", "water", "water", "rock", "water", "grass", "grass", "grass", "normal", "grass", "grass", "bug", "water", "water", "psychic", "dark", "dark", "psychic", "ghost", "psychic", "psychic", "psychic", "bug", "bug", "normal", "ground", "steel", "normal", "normal", "water", "steel", "bug", "bug", "dark", "normal", "normal", "fire", "fire", "ground", "ground", "rock", "water", "water", "flying", "water", "steel", "dark", "dark", "water", "ground", "ground", "normal", "normal", "normal", "fighting", "fighting", "psychic", "electric", "fire", "normal", "normal", "electric", "fire", "water", "rock", "rock", "dark", "psychic", "fire", "grass"}
 
 g_loaded_row = 0
 function load_pkmn(num)
@@ -156,7 +145,7 @@ function draw_pkmn(num, x, y, sw, sh, highlighted, has_color, is_draft)
       c = pkmn_types[pkmn_to_color[num]]
     end
 
-    outline(x, y, c[2], has_color and (g_corners and 5 or 1) or (g_corners and 13 or c[2]), drawfunc)
+    outline(x, y, c[2], has_color and (g_corners and 5 or 1) or (g_corners and 5 or c[2]), drawfunc)
     colordrawfunc(x, y, c[1])
   end
 end
@@ -334,7 +323,9 @@ draw_watchmode_flip = true
 watchcounter_draw = 0
 function _draw()
   memset(0x5f70, 0, 16) -- enable secondary pallette for all lines
-  rectfill(0,0,63,63,13)
+  -- fillp(0b1010111110100000)
+  rectfill(0,0,63,63,0xd)
+  -- fillp()
 
   local x_gap,    y_gap = 5, 5
   local x_offset, y_offset = 32-16-x_gap, 32-16-y_gap
