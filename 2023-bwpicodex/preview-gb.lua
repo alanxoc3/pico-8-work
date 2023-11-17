@@ -328,9 +328,17 @@ draw_watchmode_flip = true
 watchcounter_draw = 0
 function _draw()
   memset(0x5f70, 0, 16) -- enable secondary pallette for all lines
-  -- fillp(0b1010111110100000)
-  rectfill(0,0,63,63,1)
-  -- fillp()
+  fillp(0b1111000011110000)
+  rectfill(0,0,63,63,0x01)
+  fillp()
+  rectfill(0,scannum-20,63,scannum,1)
+  rectfill(0,scannum-15,63,scannum-5,8)
+  rectfill(0,64-(scannum2-8),63,64-(scannum2),1)
+  rectfill(0,64-(scannum2-6),63,64-(scannum2-2),8)
+  scannum += 4
+  scannum %= 64+20+1
+  scannum2 += 3
+  scannum2 %= 64+8+1
 
   local x_gap,    y_gap = 5, 5
   local x_offset, y_offset = 32-16-x_gap, 32-16-y_gap
@@ -428,6 +436,12 @@ function _draw()
     end
   end
 
-  pal({[0]=cols[1], cols[2], cols[3], cols[4], cols[5], cols[2]}, 2)
-  pal({[0]=cols[1], cols[3], cols[3], cols[4], cols[5], cols[2]}, 1)
+  pal({[0]=cols[1], cols[2], cols[3], cols[4], cols[5], cols[2], 0, cols[3], cols[3], }, 2)
+  pal({[0]=cols[1], cols[2], cols[3], cols[5], cols[5], cols[2], 0, cols[2], cols[2], }, 1)
+  print("+", -1,-2,6)
+  print("+", -1,61,6)
+  print("+", 62,61,6)
+  print("+", 62,-2,6)
 end
+scannum = 0
+scannum2 = 0
