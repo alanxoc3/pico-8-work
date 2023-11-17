@@ -1,4 +1,3 @@
-cartdata"picodex_preview"
 cls()
 poke(0x5f2c, 3) -- enable 64x64
 -- poke(0x5f5c, 255) -- never repeat btnp
@@ -53,10 +52,6 @@ pkmn_types={ -- 0xd and 0x8 are unused
   dragon  ={0xf, 0x0},
 }
 
--- pkmn_to_color = {[0]="bird", "grass", "grass", "grass", "fire", "fire", "fire", "water", "water", "water", "bug", "bug", "bug", "bug", "bug", "bug", "flying", "flying", "flying", "normal", "normal", "flying", "flying", "poison", "poison", "electric", "electric", "ground", "ground", "poison", "poison", "poison", "poison", "poison", "poison", "normal", "normal", "fire", "fire", "normal", "normal", "poison", "poison", "grass", "grass", "grass", "bug", "bug", "poison", "poison", "ground", "ground", "normal", "normal", "water", "water", "fighting", "fighting", "fire", "fire", "water", "water", "water", "psychic", "psychic", "psychic", "fighting", "fighting", "fighting", "grass", "grass", "grass", "water", "water", "rock", "rock", "rock", "fire", "fire", "water", "water", "electric", "electric", "flying", "flying", "flying", "water", "water", "poison", "poison", "water", "water", "ghost", "ghost", "ghost", "rock", "psychic", "psychic", "water", "water", "electric", "electric", "grass", "grass", "ground", "ground", "fighting", "fighting", "normal", "poison", "poison", "ground", "ground", "normal", "grass", "normal", "water", "water", "water", "water", "water", "water", "psychic", "bug", "ice", "electric", "fire", "bug", "normal", "water", "water", "water", "normal", "normal", "water", "electric", "fire", "normal", "rock", "rock", "rock", "rock", "rock", "normal", "ice", "electric", "fire", "dragon", "dragon", "dragon", "psychic", "psychic", "grass", "grass", "grass", "fire", "fire", "fire", "water", "water", "water", "normal", "normal", "flying", "flying", "bug", "bug", "poison", "poison", "poison", "water", "water", "electric", "normal", "normal", "normal", "normal", "psychic", "psychic", "electric", "electric", "electric", "grass", "water", "water", "rock", "water", "grass", "grass", "grass", "normal", "grass", "grass", "bug", "water", "water", "psychic", "dark", "dark", "water", "ghost", "psychic", "psychic", "normal", "bug", "bug", "normal", "ground", "steel", "normal", "normal", "water", "steel", "bug", "bug", "dark", "normal", "normal", "fire", "fire", "ice", "ice", "water", "water", "water", "ice", "water", "steel", "dark", "dark", "water", "ground", "ground", "normal", "normal", "normal", "fighting", "fighting", "ice", "electric", "fire", "normal", "normal", "electric", "fire", "water", "rock", "rock", "rock", "psychic", "fire", "grass"}
--- pkmn_to_color = {[0]="bird", "grass", "grass", "grass", "fire", "fire", "fire", "water", "water", "water", "bug", "bug", "bug", "bug", "bug", "bug", "flying", "flying", "flying", "normal", "normal", "flying", "flying", "poison", "poison", "electric", "electric", "ground", "ground", "poison", "poison", "poison", "poison", "poison", "poison", "normal", "normal", "fire", "fire", "normal", "normal", "poison", "poison", "grass", "grass", "grass", "bug", "bug", "poison", "poison", "ground", "ground", "normal", "normal", "water", "water", "fighting", "fighting", "fire", "fire", "water", "water", "water", "psychic", "psychic", "psychic", "fighting", "fighting", "fighting", "grass", "grass", "grass", "water", "water", "rock", "rock", "rock", "fire", "fire", "water", "water", "electric", "electric", "flying", "flying", "flying", "water", "ice", "poison", "poison", "water", "ice", "ghost", "ghost", "ghost", "rock", "psychic", "psychic", "water", "water", "electric", "electric", "grass", "grass", "ground", "ground", "fighting", "fighting", "normal", "poison", "poison", "ground", "ground", "normal", "grass", "normal", "water", "water", "water", "water", "water", "water", "psychic", "bug", "ice", "electric", "fire", "bug", "normal", "water", "water", "ice", "normal", "normal", "water", "electric", "fire", "normal", "rock", "rock", "rock", "rock", "rock", "normal", "ice", "electric", "fire", "dragon", "dragon", "dragon", "psychic", "psychic", "grass", "grass", "grass", "fire", "fire", "fire", "water", "water", "water", "normal", "normal", "flying", "flying", "bug", "bug", "poison", "poison", "poison", "water", "water", "electric", "normal", "normal", "normal", "normal", "psychic", "psychic", "electric", "electric", "electric", "grass", "water", "water", "rock", "water", "grass", "grass", "grass", "normal", "grass", "grass", "bug", "water", "water", "psychic", "dark", "dark", "water", "ghost", "psychic", "psychic", "normal", "bug", "bug", "normal", "ground", "steel", "normal", "normal", "water", "steel", "bug", "bug", "dark", "normal", "normal", "fire", "fire", "ice", "ice", "water", "water", "water", "ice", "water", "steel", "dark", "dark", "water", "ground", "ground", "normal", "normal", "normal", "fighting", "fighting", "ice", "electric", "fire", "normal", "normal", "electric", "fire", "water", "rock", "rock", "rock", "psychic", "fire", "grass"}
-pkmn_to_color = {[0]="bird", "grass", "grass", "grass", "fire", "fire", "fire", "water", "water", "water", "bug", "bug", "bug", "bug", "bug", "bug", "flying", "flying", "flying", "normal", "normal", "flying", "flying", "poison", "poison", "electric", "electric", "ground", "ground", "poison", "poison", "poison", "poison", "poison", "poison", "normal", "normal", "fire", "fire", "normal", "normal", "poison", "poison", "grass", "grass", "grass", "bug", "bug", "poison", "poison", "ground", "ground", "normal", "normal", "water", "water", "fighting", "fighting", "fire", "fire", "water", "water", "water", "psychic", "psychic", "psychic", "fighting", "fighting", "fighting", "grass", "grass", "grass", "water", "water", "rock", "rock", "rock", "fire", "fire", "psychic", "psychic", "steel", "steel", "flying", "flying", "flying", "water", "water", "poison", "poison", "water", "water", "ghost", "ghost", "ghost", "rock", "psychic", "psychic", "water", "water", "electric", "electric", "grass", "grass", "ground", "ground", "fighting", "fighting", "normal", "poison", "poison", "ground", "ground", "normal", "grass", "normal", "water", "water", "water", "water", "water", "water", "psychic", "bug", "psychic", "electric", "fire", "bug", "normal", "water", "water", "water", "normal", "normal", "water", "electric", "fire", "normal", "rock", "rock", "rock", "rock", "rock", "normal", "ice", "electric", "fire", "dragon", "dragon", "dragon", "psychic", "psychic", "grass", "grass", "grass", "fire", "fire", "fire", "water", "water", "water", "normal", "normal", "flying", "flying", "bug", "bug", "bug", "bug", "poison", "electric", "electric", "electric", "normal", "normal", "normal", "normal", "psychic", "psychic", "electric", "electric", "electric", "grass", "water", "water", "rock", "water", "grass", "grass", "grass", "normal", "grass", "grass", "bug", "water", "water", "psychic", "dark", "dark", "psychic", "ghost", "psychic", "psychic", "psychic", "bug", "bug", "normal", "ground", "steel", "normal", "normal", "water", "steel", "bug", "bug", "dark", "normal", "normal", "fire", "fire", "ground", "ground", "rock", "water", "water", "flying", "water", "steel", "dark", "dark", "water", "ground", "ground", "normal", "normal", "normal", "fighting", "fighting", "psychic", "electric", "fire", "normal", "normal", "electric", "fire", "water", "rock", "rock", "dark", "psychic", "fire", "grass"}
-
 g_loaded_row = 0
 function load_pkmn(num)
   local row = num/8\1
@@ -64,9 +59,6 @@ function load_pkmn(num)
 
   if row ~= g_loaded_row then
     g_loaded_row = row
-    -- loaded_row for color
-    memcpy(0x0000, 0x8000+0x400*row, 0x400)
-
     -- loaded_row for monochrome (row below is monochrome for current row)
     memcpy(0x0400, 0x2000+0x400*(row%8), 0x400)
 
@@ -84,12 +76,7 @@ function load_pkmn(num)
   end
 end
 
-function load_watchmode_prev(num)
-  load_pkmn(num)
-  memcpy(0x0800, 0x0000, 0x800) -- copy first 2 rows to 3rd/4th rows
-end
-
-function draw_pkmn(num, x, y, sw, sh, highlighted, has_color, is_draft)
+function draw_pkmn(num, x, y, sw, sh, highlighted, is_draft)
   local row = num/8\1
   local col = num%8
 
@@ -101,45 +88,25 @@ function draw_pkmn(num, x, y, sw, sh, highlighted, has_color, is_draft)
   local w, h = 16*sw, 16*sh
   local drawfunc = function(ix, iy)
     local yoff = is_draft and 32 or 0
-    sspr(col*16, yoff + (has_color and 0 or 16), 16, 16, ix-w/2, iy-h/2, w, h)
+    sspr(col*16, yoff + 16, 16, 16, ix-w/2, iy-h/2, w, h)
   end
 
   local colordrawfunc = function(ix, iy, c)
-    if not has_color then
-      pal(6, c)
-      drawfunc(ix, iy)
-      pal(6, 6)
-    else
-      drawfunc(ix, iy)
-    end
+    pal(6, c)
+    drawfunc(ix, iy)
+    pal(6, 6)
   end
 
   if highlighted then
-    if has_color then
-      --outline(x, y, 6, g_corners and 13 or 6, function(xx, yy)
-      --  outline(xx, yy, 1, 1, drawfunc)
-      --end)
-      outline(x, y, 1, g_corners and 5 or 1, drawfunc)
-      colordrawfunc(x, y)
-    else
-      -- if pkmn_to_color[num] and not has_color then
-      --   c = pkmn_types[pkmn_to_color[num]]
-      -- end
+    outline(x, y, 2, 1, function(xx, yy) -- light outline
+      outline(xx, yy, 1, 1, drawfunc)
+    end)
 
-      outline(x, y, 3, 2, function(xx, yy) -- highlight
-        outline(xx, yy, 1, 1, drawfunc)
-      end)
-
-      outline(x, y, 5, 5, drawfunc) -- dark outline
-      colordrawfunc(x, y, 4) -- sprite
-    end
+    outline(x, y, 5, 5, drawfunc) -- dark outline
+    colordrawfunc(x, y, 3) -- sprite
   else
-    -- if pkmn_to_color[num] and not has_color then
-    --   c = pkmn_types[pkmn_to_color[num]]
-    -- end
-
-    outline(x, y, 0, 0, drawfunc)
-    colordrawfunc(x, y, 2)
+    outline(x, y, 6, 6, drawfunc)
+    colordrawfunc(x, y, 1)
   end
 end
 
@@ -147,11 +114,6 @@ end
 function mydget(num) -- 0-255
   num = mid(0, num\1, 255)
   return peek(0x5e00+num)
-end
-
-function mydset(num, val) -- 0-255
-  num = mid(0, num\1, 255)
-  poke(0x5e00+num, val)
 end
 
 function vget(offset, x, y)
@@ -195,210 +157,74 @@ function reload_sprites()
 
   store_pack(0x2000, function(...) return vget(0x8000, ...) end)
 
-  reload(0x8000, 0x0000, 0x2000, "./color-000-063.p8")
-  reload(0xa000, 0x0000, 0x2000, "./color-064-127.p8")
-  reload(0xc000, 0x0000, 0x2000, "./color-128-191.p8")
-  reload(0xe000, 0x0000, 0x2000, "./color-192-255.p8")
-
   g_loaded_row = -1
 end
 
 g_maxnum = 255
-g_corners = false
 
 function _init()
   reload_sprites()
-
-  menuitem(1, "toggle corners", function()
-    g_corners = not g_corners
-  end)
-
-  menuitem(2, "reset to mono", function()
-    for i=0,g_maxnum-1 do mydset(i, 0) end
-  end)
-
-  menuitem(3, "reset to color", function()
-    for i=0,g_maxnum-1 do mydset(i, 1) end
-  end)
-
-  if stat(6) == "shot" then
-    local old_g_num = g_num
-    local old_g_view = g_view
-    g_4_by_7 = true
-
-    for i=0,252-1 do mydset(i, 1) end
-    for i=0,252\3\3-1 do
-      view_y = i*3
-      g_num = -1
-      _draw() flip()
-      extcmd("set_filename", "col-"..i)
-      extcmd("screen")
-    end
-
-    for i=0,252-1 do mydset(i, 0) end
-    for i=0,252\3\3-1 do
-      view_y = i*3
-      g_num = -1
-      _draw() flip()
-      extcmd("set_filename", "bw-"..i)
-      extcmd("screen")
-    end
-
-    g_num  = old_g_num
-    g_view = old_g_view
-    cls() flip()
-    printh("done: desktop/(col|bw)-*")
-    stop("done: desktop/(col|bw)-*")
-  end
 end
 
+cols = {
+  {1,   131, 3,   139, 11},
+  {130, 132, 4,   143, 15},
+  {129, 1,   140, 12,  12},
+  {133, 5,   13,  6,   7},
+}
+
+cols_ind = 0
 g_off = 0
 g_scale = 1
-view_y = mydget(254)
-g_num  = mydget(255)
-watch_mode = false
-watch_mode_counter = 0
+view_y = 0
+g_num  = 0
 function _update60()
   local top = (g_maxnum-1)\3 -- 253, includes substitute/empty/?
 
-  if watch_mode then
-    watch_mode_counter = (watch_mode_counter + 1) % 60
-    if watch_mode_counter == 0 then
-      reload_sprites()
-    elseif btnp(0) or btnp(1) or btnp(2) or btnp(3) or btnp(4) or btnp(5) then
-      watch_mode = false
-    end
-  else
-    if btnp(0) then cols = {1,   131, 3,   139, 11}   end
-    if btnp(1) then cols = {130, 132, 4,   143, 15}     end
-    if btnp(2) then cols = {129, 1,   140, 12,  12} end
-    if btnp(3) then cols = {133, 5, 13, 6, 7} end
-    -- if btnp(2) then cols = {128, 132, 4, 142, 143} end
+  if btnp(0) then g_num = (g_num-1)%g_maxnum end
+  if btnp(1) then g_num = (g_num+1)%g_maxnum end
+  if btnp(2) then g_num = (g_num-3)%g_maxnum end
+  if btnp(3) then g_num = (g_num+3)%g_maxnum end
 
-    if btnp(0) then g_num = (g_num-1)%g_maxnum end
-    if btnp(1) then g_num = (g_num+1)%g_maxnum end
-    if btnp(2) then g_num = (g_num-3)%g_maxnum end
-    if btnp(3) then g_num = (g_num+3)%g_maxnum end
-    if btnp(5) and not watch_mode then
-      watch_mode = true
-      watch_mode_counter = 0
-      load_watchmode_prev(g_num)
-    end
-
-    if btnp(4) then
-      mydset(g_num\3, mydget(g_num\3) > 0 and 0 or 1)
-    end
+  if btnp(4) then
+    cols_ind = (cols_ind - 1)%#cols
+  end
+  if btnp(5) then
+    cols_ind = (cols_ind + 1)%#cols
   end
 
   if g_num\3-2 > view_y then view_y = mid(g_num\3-2, 0, top) end
   if g_num\3   < view_y then view_y = mid(g_num\3,   0, top) end
-
-  mydset(254, view_y)
-  mydset(255, g_num)
 end
 
 poke(0x5f5f,0x10) -- allow pallette setting for sections of screen
-function disable_alt_for_row(row)
-  if row == 0 then
-    poke(0x5f70, (@0x5f70) | 0b11111110)
-    poke(0x5f71, (@0x5f71) | 0b11111111)
-    poke(0x5f72, (@0x5f72) | 0b00111111)
-  elseif row == 1 then
-    poke(0x5f72, (@0x5f72) | 0b11000000)
-    poke(0x5f73, (@0x5f73) | 0b11111111)
-    poke(0x5f74, (@0x5f74) | 0b11111111)
-    poke(0x5f75, (@0x5f75) | 0b00000111)
-  elseif row == 2 then
-    poke(0x5f75, (@0x5f75) | 0b11111000)
-    poke(0x5f76, (@0x5f76) | 0b11111111)
-    poke(0x5f77, (@0x5f77) | 0b11111111)
-  end
-end
-
--- pal({[0]=0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15}, 2)
---   dark to light
-
-cols = {1, 131, 3, 139, 11}
-cols = {1, 2, 136, 8, 14}
-cols = {133, 5, 134, 143, 15}
-pal({[0]=cols[1], cols[2], cols[3], cols[4], cols[5], cols[2]}, 2)
-pal({[0]=cols[1], cols[3], cols[3], cols[4], cols[5], cols[2]}, 1)
-
-draw_watchmode_flip = true
-watchcounter_draw = 0
 function _draw()
   memset(0x5f70, 0, 16) -- enable secondary pallette for all lines
   fillp(0b1111000011110000)
-  rectfill(0,0,63,63,0x01)
+  rectfill(0,2,63,63,0x01)
   fillp()
   --rectfill(0,scannum-23,63,scannum+3,1)
   --rectfill(0,64-(scannum2-8),63,64-(scannum2),1)
 
-  rectfill(0,scannum-15,63,scannum-5,7)
-  rectfill(0,64-(scannum2-6),63,64-(scannum2-2),7)
+  rectfill(0,scannum2-6,63,scannum2-2,1)
+  rectfill(0,scannum2-5,63,scannum2-3,7)
+
+  rectfill(0,64-scannum+15,63,64-scannum+5,1)
+  rectfill(0,64-scannum+12,63,64-scannum+8,7)
   local x_gap,    y_gap = 5, 5
   local x_offset, y_offset = 32-16-x_gap, 32-16-y_gap
 
-  if not watch_mode then
-    for j=0,32 do
-      for i=0,7 do
-        local ind = j*8 + i
-        if not g_4_by_7 and ind\3 >= view_y and ind\3 <= view_y+2 then
-          local ii = ind % 3
-          local jj = ind \ 3 - view_y
-          local sx, sy = x_offset+ii*(16+x_gap), y_offset+jj*(16+y_gap)
-          if mydget(ind\3) > 0 then
-            disable_alt_for_row(ind\3 - view_y)
-          end
+  for j=0,32 do
+    for i=0,7 do
+      local ind = j*8 + i
+      if ind\3 >= view_y and ind\3 <= view_y+2 then
+        local ii = ind % 3
+        local jj = ind \ 3 - view_y
+        local sx, sy = x_offset+ii*(16+x_gap), y_offset+jj*(16+y_gap)
 
-          draw_pkmn(ind, sx, sy, g_scale, g_scale, ind == g_num, mydget(ind\3) > 0)
-        elseif g_4_by_7 and ind\3 >= view_y and ind\3 <= view_y+2 then
-          local ii = ind % 3
-          local jj = ind \ 3 - view_y
-          local sx, sy = x_offset+ii*(16+x_gap), y_offset+jj*(16+y_gap)
-          if mydget(ind\3) > 0 then
-            disable_alt_for_row(ind\3 - view_y)
-          end
-
-          -- 0=0 1=1 2=2 9=3 10=4 11=5
-          -- 0 12 24
-          local corner = ind\36*36
-          local subind = ind%36
-          local subrow = subind%9\3
-          local subgrd = subind\9
-          local newind = corner + subrow*12 + subgrd*3 + subind%3
-
-          draw_pkmn(newind, sx, sy, g_scale, g_scale, ind == g_num, mydget(ind\3) > 0)
-        end
+        draw_pkmn(ind, sx, sy, g_scale, g_scale, ind == g_num)
       end
     end
-  else
-    local m = function(x, y) return x_offset+x*(16+x_gap) end
-    print("WATCH\nl:new\nr:old", 2, 23, 7)
-
-    -- draw_pkmn(g_num, m(0), m(1), g_scale, g_scale, false, false)
-
-    -- draw_pkmn(g_num, m(0), m(2), g_scale, g_scale, true,  draw_watchmode_flip)
-    draw_pkmn(g_num, m(1), m(2), g_scale, g_scale, false, true)
-    draw_pkmn(g_num, m(2), m(2), g_scale, g_scale, false, true, true)
-
-    draw_pkmn(g_num, m(1), m(1), g_scale, g_scale, false, false)
-    draw_pkmn(g_num, m(2), m(1), g_scale, g_scale, false, false, true)
-
-    draw_pkmn(g_num, m(1), m(0), g_scale, g_scale, false, draw_watchmode_flip)
-    draw_pkmn(g_num, m(2), m(0), g_scale, g_scale, false, draw_watchmode_flip, true)
-
-    if draw_watchmode_flip then
-      -- draw_pkmn(g_num, m(0), m(1), g_scale, g_scale, false, false)
-      -- draw_pkmn(g_num, m(1), m(1), g_scale, g_scale, true, false)
-      disable_alt_for_row(0)
-    end
-    disable_alt_for_row(2)
-
-    if watchcounter_draw % 10 == 0 then
-      draw_watchmode_flip = not draw_watchmode_flip
-    end
-    watchcounter_draw = (watchcounter_draw + 1 % 60)
   end
 
   -- for i=0, 63 do
@@ -432,21 +258,38 @@ function _draw()
     end
   end
 
-  pal({[0]=cols[1], cols[2], cols[3], cols[5], cols[5], cols[2], 0, cols[3], cols[3], }, 2)
-  pal({[0]=cols[1], cols[2], cols[3], cols[4], cols[5], cols[2], 0, cols[2], cols[2], }, 1)
   --print("+", -1,-2,6) -- for screen border
   --print("+", -1,61,6) -- for screen border
   --print("+", 62,61,6) -- for screen border
   --print("+", 62,-2,6) -- for screen border
 
-  rectfill(0,scannum-10,63,scannum-10,7)
-  rectfill(0,64-(scannum2-4),63,64-(scannum2-4),7)
+  --rectfill(0,scannum-10,63,scannum-10,7)
+  rectfill(0,scannum2-4,63,scannum2-4,7)
 
-  scannum += 2
+  scannum += 3
   scannum %= 64+20+1
-  scannum2 += 3
+  scannum2 += 1
   scannum2 %= 64+8+1
 
+  rectfill(0, 42, 63, 63, 0)
+  rectfill(0,50,63,63,1)
+  rectfill(0,42,63,42,1)
+  print("+", -1, 41, 1)
+  print("+", -1, 39, 1)
+
+  print("+", 62, 41, 1)
+  print("+", 62, 39, 1)
+
+  print("+", -1, -1, 1)
+  print("+", 62, -1, 1)
+
+  print("   fERALIGATR", 0, 44,     2)
+  print("      uSES",    0, 44+7,   6)
+  print("     tACKLE",   0, 44+7+7, 6)
+
+  local col = cols[cols_ind+1]
+  pal({[0]=col[1], col[2], col[3], col[4], col[5], col[2], 129, col[3], col[3], }, 2)
+  pal({[0]=col[1], col[2], col[3], col[4], col[5], col[2], 129, col[2], col[2], }, 1)
 end
 scannum = 0
 scannum2 = 0
