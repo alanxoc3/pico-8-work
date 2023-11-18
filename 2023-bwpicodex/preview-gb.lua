@@ -200,18 +200,21 @@ end
 poke(0x5f5f,0x10) -- allow pallette setting for sections of screen
 function _draw()
   memset(0x5f70, 0, 16) -- enable secondary pallette for all lines
-  fillp(0b1111000011110000)
-  rectfill(0,2,63,63,0x01)
-  fillp()
-  --rectfill(0,scannum-23,63,scannum+3,1)
-  --rectfill(0,64-(scannum2-8),63,64-(scannum2),1)
+  rectfill(0,-1,63,63,0)
+  camera(0,-1)
+
+  rectfill(1,1,62,42,0x01)
+  pset(1,1,0)
+  pset(62,1,0)
+  pset(62,42,0)
+  pset(1,42,0)
 
   rectfill(0,scannum2-6,63,scannum2-2,1)
   rectfill(0,scannum2-5,63,scannum2-3,7)
-
   rectfill(0,64-scannum+15,63,64-scannum+5,1)
   rectfill(0,64-scannum+12,63,64-scannum+8,7)
-  local x_gap,    y_gap = 5, 5
+
+  local x_gap,    y_gap = 4, 4
   local x_offset, y_offset = 32-16-x_gap, 32-16-y_gap
 
   for j=0,32 do
@@ -227,69 +230,51 @@ function _draw()
     end
   end
 
-  -- for i=0, 63 do
-  --   pset(i, 63, i%16)
-  --   pset(63-i, 0, i%16)
-  -- end
-
-  --  https://twitter.com/bone_volt/status/1276320064627781632?lang=en
-  -- poke(0x5f2c,0x40)
-  -- poke(0x5f5f,0x10)
-  -- for i=0,15 do
-  --  --⬇️your scanline palette here
-  --  poke(0x5f60+i,i+128)
-  -- end
-  -- for i=9,15 do
-  --  poke(0x5f70+i,0xaa)
-  -- end
-
   local chance2 = flr(rnd()*(60))
   local one, two = 0xaa, 0x55
-  -- if chance2 == 0 then
-  --   one, two = 0x55, 0xaa
-  -- end
-  for i=0,7 do
-    local chance = flr(rnd()*(60*4))
-    -- if false then
-    if chance == 0 then     poke(0x5f70+i,0x00)
-    -- elseif chance == 2 then poke(0x5f70+i,0x00)
-    -- elseif chance == 3 then poke(0x5f70+i,0xff)
-    else                    poke(0x5f70+i,0b10101010)
-    end
-  end
-
-  --print("+", -1,-2,6) -- for screen border
-  --print("+", -1,61,6) -- for screen border
-  --print("+", 62,61,6) -- for screen border
-  --print("+", 62,-2,6) -- for screen border
-
-  --rectfill(0,scannum-10,63,scannum-10,7)
-  rectfill(0,scannum2-4,63,scannum2-4,7)
-
+  for i=0,7 do poke(0x5f70+i,0b10101010) end
+  --rectfill(0,scannum2-4,63,scannum2-4,7)
   scannum += 3
   scannum %= 64+20+1
   scannum2 += 1
   scannum2 %= 64+8+1
 
-  rectfill(0, 42, 63, 63, 0)
-  rectfill(0,50,63,63,1)
-  rectfill(0,42,63,42,1)
-  print("+", -1, 41, 1)
-  print("+", -1, 39, 1)
+  rectfill(0, 43, 63, 63, 0)
+--  rectfill(0, 44, 63, 44, 6)
 
-  print("+", 62, 41, 1)
-  print("+", 62, 39, 1)
+  local texts = {
+    { "bulbasaur",
+      "uses leechsed" },
+    { "bulbasaur",
+      "super efective" },
+  }
 
-  print("+", -1, -1, 1)
-  print("+", 62, -1, 1)
+  local r, y, h = 31, 45, 15
+  rectfill(31-r+1, y,   32+r-1, y+h,6)
+  --rectfill(31-r+1, y+9, 32+r-1, y+h,9)
+  pset(31-r+1, y, 0) pset(31-r+1, y+h, 0)
+  pset(32+r-1, y, 0) pset(32+r-1, y+h, 0)
+  pset(    31-r,y, 0)
+  pset(    32+r,y, 0)
+  print(texts[t()\1%#texts+1][1],3, y+2,  2)
+  print(texts[t()\1%#texts+1][2],3, y+8+1,1)
+  -- print(texts[t()\1%#texts+1][3],-2, y+12,9)
 
-  print("   fERALIGATR", 0, 44,     2)
-  print("      uSES",    0, 44+7,   6)
-  print("     tACKLE",   0, 44+7+7, 6)
+  -- another style
+  --print("  PICODEX DUAL",   0, 63-5,   10)
+  --local r, y, h = 31, 45, 17-5
+  --rectfill(31-r+1, y, 32+r-1, y+h,9)
+  ----rectfill(31-r+1, y,   32+r-1, y+6,2)
+  --pset(31-r+1, y, 0) pset(31-r+1, y+h, 0)
+  --pset(32+r-1, y, 0) pset(32+r-1, y+h, 0)
+  --pset(    31-r,y, 0)
+  --pset(    32+r,y, 0)
+  --print("    missingno.", -2, y+1,   6)
+  --print("  USES TAKEDOWN",    -2, y+7, 6)
 
   local col = cols[cols_ind+1]
-  pal({[0]=col[1], col[2], col[3], col[4], col[5], col[2], 129, col[3], col[3], }, 2)
-  pal({[0]=col[1], col[2], col[3], col[4], col[5], col[2], 129, col[2], col[2], }, 1)
+  pal({[0]=col[1], col[2], col[3], col[4], col[5], col[2], 129, col[3], col[3], col[2], 0}, 2)
+  pal({[0]=col[1], col[2], col[3], col[4], col[5], col[2], 129, col[2], col[2], col[2], 0}, 1)
 end
 scannum = 0
 scannum2 = 0
