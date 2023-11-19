@@ -1,7 +1,9 @@
 cls()
 poke(0x5f2c, 3) -- enable 64x64
+poke(0x5f5c, 8)
+poke(0x5f5d, 1)
 
-pkmn_names = split"missingno,bulbasaur,ivysaur,venusaur,charmander,charmeleon,charizard,squirtle,wartortle,blastoise,caterpie,metapod,butterfree,weedle,kakuna,beedrill,pidgey,pidgeotto,pidgeot,rattata,raticate,spearow,fearow,ekans,arbok,pikachu,raichu,sandshrew,sandslash,nidoranf,nidorina,nidoqueen,nidoranm,nidorino,nidoking,clefairy,clefable,vulpix,ninetales,jigglypuff,wigglytuff,zubat,golbat,oddish,gloom,vileplume,paras,parasect,venonat,venomoth,diglett,dugtrio,meowth,persian,psyduck,golduck,mankey,primeape,growlithe,arcanine,poliwag,poliwhirl,poliwrath,abra,kadabra,alakazam,machop,machoke,machamp,bellsprout,weepinbell,victreebel,tentacool,tentacruel,geodude,graveler,golem,ponyta,rapidash,slowpoke,slowbro,magnemite,magneton,farfetchd,doduo,dodrio,seel,dewgong,grimer,muk,shellder,cloyster,gastly,haunter,gengar,onix,drowzee,hypno,krabby,kingler,voltorb,electrode,exeggcute,exeggutor,cubone,marowak,hitmonlee,hitmonchan,lickitung,koffing,weezing,rhyhorn,rhydon,chansey,tangela,kangaskhan,horsea,seadra,goldeen,seaking,staryu,starmie,mrmime,scyther,jynx,electabuzz,magmar,pinsir,tauros,magikarp,gyarados,lapras,ditto,eevee,vaporeon,jolteon,flareon,porygon,omanyte,omastar,kabuto,kabutops,aerodactyl,snorlax,articuno,zapdos,moltres,dratini,dragonair,dragonite,mewtwo,mew,chikorita,bayleef,meganium,cyndaquil,quilava,typhlosion,totodile,croconaw,feraligatr,sentret,furret,hoothoot,noctowl,ledyba,ledian,spinarak,ariados,crobat,chinchou,lanturn,pichu,cleffa,igglybuff,togepi,togetic,natu,xatu,mareep,flaaffy,ampharos,bellossom,marill,azumarill,sudowoodo,politoed,hoppip,skiploom,jumpluff,aipom,sunkern,sunflora,yanma,wooper,quagsire,espeon,umbreon,murkrow,slowking,misdreavus,unown,wobbuffet,girafarig,pineco,forretress,dunsparce,gligar,steelix,snubbull,granbull,qwilfish,scizor,shuckle,heracross,sneasel,teddiursa,ursaring,slugma,magcargo,swinub,piloswine,corsola,remoraid,octillery,delibird,mantine,skarmory,houndour,houndoom,kingdra,phanpy,donphan,porygon2,stantler,smeargle,tyrogue,hitmontop,smoochum,elekid,magby,miltank,blissey,raikou,entei,suicune,larvitar,pupitar,tyranitar,lugia,hooh,celebi"
+pkmn_names = split"missingno,bulbasaur,ivysaur,venusaur,charmandr,charmleon,charizard,squirtle,wartortle,blastoise,caterpie,metapod,buterfree,weedle,kakuna,beedrill,pidgey,pidgeotto,pidgeot,rattata,raticate,spearow,fearow,ekans,arbok,pikachu,raichu,sandshrew,sandslash,nidoranf,nidorina,nidoqueen,nidoranm,nidorino,nidoking,clefairy,clefable,vulpix,ninetales,jiglypuff,wiglytuff,zubat,golbat,oddish,gloom,vileplume,paras,parasect,venonat,venomoth,diglett,dugtrio,meowth,persian,psyduck,golduck,mankey,primeape,growlithe,arcanine,poliwag,poliwhirl,poliwrath,abra,kadabra,alakazam,machop,machoke,machamp,belsprout,weepinbel,victrebel,tentacool,tentcruel,geodude,graveler,golem,ponyta,rapidash,slowpoke,slowbro,magnemite,magneton,farfetchd,doduo,dodrio,seel,dewgong,grimer,muk,shellder,cloyster,gastly,haunter,gengar,onix,drowzee,hypno,krabby,kingler,voltorb,electrode,exeggcute,exeggutor,cubone,marowak,hitmonlee,hitmnchan,lickitung,koffing,weezing,rhyhorn,rhydon,chansey,tangela,kangaskan,horsea,seadra,goldeen,seaking,staryu,starmie,mrmime,scyther,jynx,electabuz,magmar,pinsir,tauros,magikarp,gyarados,lapras,ditto,eevee,vaporeon,jolteon,flareon,porygon,omanyte,omastar,kabuto,kabutops,aerdactyl,snorlax,articuno,zapdos,moltres,dratini,dragonair,dragonite,mewtwo,mew,chikorita,bayleef,meganium,cyndaquil,quilava,typhlsion,totodile,croconaw,fraligatr,sentret,furret,hoothoot,noctowl,ledyba,ledian,spinarak,ariados,crobat,chinchou,lanturn,pichu,cleffa,igglybuff,togepi,togetic,natu,xatu,mareep,flaaffy,ampharos,bellossom,marill,azumarill,sudowoodo,politoed,hoppip,skiploom,jumpluff,aipom,sunkern,sunflora,yanma,wooper,quagsire,espeon,umbreon,murkrow,slowking,misdreavs,unown,wobbuffet,girafarig,pineco,foretress,dunsparce,gligar,steelix,snubbull,granbull,qwilfish,scizor,shuckle,heracross,sneasel,teddiursa,ursaring,slugma,magcargo,swinub,piloswine,corsola,remoraid,octillery,delibird,mantine,skarmory,houndour,houndoom,kingdra,phanpy,donphan,porygon2,stantler,smeargle,tyrogue,hitmontop,smoochum,elekid,magby,miltank,blissey,raikou,entei,suicune,larvitar,pupitar,tyranitar,lugia,hooh,celebi"
 pkmn_types = {{"bird","normal"}, {"grass","poison"}, {"grass","poison"}, {"grass","poison"}, {"fire",""}, {"fire",""}, {"fire","flying"}, {"water",""}, {"water",""}, {"water",""}, {"bug",""}, {"bug",""}, {"bug","flying"}, {"bug","poison"}, {"bug","poison"}, {"bug","poison"}, {"flying","normal"}, {"flying","normal"}, {"flying","normal"}, {"normal",""}, {"normal",""}, {"flying","normal"}, {"flying","normal"}, {"poison",""}, {"poison",""}, {"electr",""}, {"electr",""}, {"ground",""}, {"ground",""}, {"poison",""}, {"poison",""}, {"poison","ground"}, {"poison",""}, {"poison",""}, {"poison","ground"}, {"normal",""}, {"normal",""}, {"fire",""}, {"fire",""}, {"normal",""}, {"normal",""}, {"poison","flying"}, {"poison","flying"}, {"grass","poison"}, {"grass","poison"}, {"grass","poison"}, {"bug","grass"}, {"bug","grass"}, {"poison","bug"}, {"poison","bug"}, {"ground",""}, {"ground",""}, {"normal",""}, {"normal",""}, {"water",""}, {"water",""}, {"fightg",""}, {"fightg",""}, {"fire",""}, {"fire",""}, {"water",""}, {"water",""}, {"water","fightg"}, {"psychc",""}, {"psychc",""}, {"psychc",""}, {"fightg",""}, {"fightg",""}, {"fightg",""}, {"grass","poison"}, {"grass","poison"}, {"grass","poison"}, {"water","poison"}, {"water","poison"}, {"rock","ground"}, {"rock","ground"}, {"rock","ground"}, {"fire",""}, {"fire",""}, {"psychc","water"}, {"psychc","water"}, {"steel","electr"}, {"steel","electr"}, {"flying","normal"}, {"flying","normal"}, {"flying","normal"}, {"water",""}, {"water","ice"}, {"poison",""}, {"poison",""}, {"water",""}, {"water","ice"}, {"ghost","poison"}, {"ghost","poison"}, {"ghost","poison"}, {"rock","ground"}, {"psychc",""}, {"psychc",""}, {"water",""}, {"water",""}, {"electr",""}, {"electr",""}, {"grass","psychc"}, {"grass","psychc"}, {"ground",""}, {"ground",""}, {"fightg",""}, {"fightg",""}, {"normal",""}, {"poison",""}, {"poison",""}, {"ground","rock"}, {"ground","rock"}, {"normal",""}, {"grass",""}, {"normal",""}, {"water",""}, {"water",""}, {"water",""}, {"water",""}, {"water",""}, {"water","psychc"}, {"psychc",""}, {"bug","flying"}, {"psychc","ice"}, {"electr",""}, {"fire",""}, {"bug",""}, {"normal",""}, {"water",""}, {"water","flying"}, {"water","ice"}, {"normal",""}, {"normal",""}, {"water",""}, {"electr",""}, {"fire",""}, {"normal",""}, {"rock","water"}, {"rock","water"}, {"rock","water"}, {"rock","water"}, {"rock","flying"}, {"normal",""}, {"ice","flying"}, {"electr","flying"}, {"fire","flying"}, {"dragon",""}, {"dragon",""}, {"dragon","flying"}, {"psychc",""}, {"psychc",""}, {"grass",""}, {"grass",""}, {"grass",""}, {"fire",""}, {"fire",""}, {"fire",""}, {"water",""}, {"water",""}, {"water",""}, {"normal",""}, {"normal",""}, {"flying","normal"}, {"flying","normal"}, {"bug","flying"}, {"bug","flying"}, {"bug","poison"}, {"bug","poison"}, {"poison","flying"}, {"electr","water"}, {"electr","water"}, {"electr",""}, {"normal",""}, {"normal",""}, {"normal",""}, {"normal","flying"}, {"psychc","flying"}, {"psychc","flying"}, {"electr",""}, {"electr",""}, {"electr",""}, {"grass",""}, {"water",""}, {"water",""}, {"rock",""}, {"water",""}, {"grass","flying"}, {"grass","flying"}, {"grass","flying"}, {"normal",""}, {"grass",""}, {"grass",""}, {"bug","flying"}, {"water","ground"}, {"water","ground"}, {"psychc",""}, {"dark",""}, {"dark","flying"}, {"psychc","water"}, {"ghost",""}, {"psychc",""}, {"psychc",""}, {"psychc","normal"}, {"bug",""}, {"bug","steel"}, {"normal",""}, {"ground","flying"}, {"steel","ground"}, {"normal",""}, {"normal",""}, {"water","poison"}, {"steel","bug"}, {"bug","rock"}, {"bug","fightg"}, {"dark","ice"}, {"normal",""}, {"normal",""}, {"fire",""}, {"fire","rock"}, {"ground","ice"}, {"ground","ice"}, {"rock","water"}, {"water",""}, {"water",""}, {"flying","ice"}, {"water","flying"}, {"steel","flying"}, {"dark","fire"}, {"dark","fire"}, {"water","dragon"}, {"ground",""}, {"ground",""}, {"normal",""}, {"normal",""}, {"normal",""}, {"fightg",""}, {"fightg",""}, {"psychc","ice"}, {"electr",""}, {"fire",""}, {"normal",""}, {"normal",""}, {"electr",""}, {"fire",""}, {"water",""}, {"rock","ground"}, {"rock","ground"}, {"dark","rock"}, {"psychc","flying"}, {"fire","flying"}, {"grass","psychc"}}
 
 g_outline_in_progress = false
@@ -79,15 +81,14 @@ function draw_pkmn(num, x, y, sw, sh, highlighted, is_draft)
   end
 
   if highlighted then
-    outline(x, y, C_3, C_2, function(xx, yy) -- light outline
-      outline(xx, yy, 1, 1, drawfunc)
-    end)
+    roundrect(x, y, 10, 10, C_3)
 
     outline(x, y, C_2, C_2, drawfunc) -- dark outline
     colordrawfunc(x, y, C_4) -- sprite
+
   else
-    outline(x, y, C_0, C_0, drawfunc)
-    colordrawfunc(x, y, C_2)
+    outline(x, y, C_1, C_1, drawfunc)
+    colordrawfunc(x, y, C_3)
   end
 end
 
@@ -151,86 +152,160 @@ cols = {
   {[0]=129, 133, 5,   13,  6,   7 },
 }
 
+mock_ind = 0
 cols_ind = 0
 g_off = 0
 g_scale = 1
 view_y = 0
 g_num  = 0
+g_active = false
+g_hpmod = 0
 function _update60()
   local top = (g_maxnum-1)\3 -- 253, includes substitute/empty/?
 
-  if btnp(0) then g_num = (g_num-1)%g_maxnum end
-  if btnp(1) then g_num = (g_num+1)%g_maxnum end
-  if btnp(2) then g_num = (g_num-3)%g_maxnum end
-  if btnp(3) then g_num = (g_num+3)%g_maxnum end
+  if btnp(0) then g_hpmod -= 1 g_num = mid(0,251,g_num-1) end
+  if btnp(1) then g_hpmod += 1 g_num = mid(0,251,g_num+1) end
+  if btnp(2) then g_active = not g_active g_num = mid(g_num%3,249+g_num%3,g_num-3) end
+  if btnp(3) then g_active = not g_active g_num = mid(g_num%3,249+g_num%3,g_num+3) end
 
   if btnp(4) then
     cols_ind = (cols_ind - 1)%#cols
   end
   if btnp(5) then
-    cols_ind = (cols_ind + 1)%#cols
+    mock_ind = (mock_ind + 1) % 3
   end
 
-  if g_num\3-1 > view_y then view_y = mid(g_num\3-1, 0, top) end
-  if g_num\3   < view_y then view_y = mid(g_num\3,   0, top) end
+  if g_num\3-1 > view_y then view_y = (view_y+1)%(top) end
+  if g_num\3   < view_y then view_y = (view_y-1)%(top) end
 end
 
 scannum = 0
 scannum2 = 0
 
+function f_zprint(text, x, y, color, align, control)
+    text = ""..text
+    if align == 0    then x -= #text*2
+    elseif align > 0 then x -= #text*4+1 end
+
+    print((control or "")..text, x, y, color)
+end
+
+function f_wobble_text(text, x, y, color, wob, align)
+    local t1, t2 = "", ""
+    for i=1,#text do
+        local letter, switch = sub(text, i, i), i%2==(wob and 1 or 0)
+        t1 ..= switch and " " or letter
+        t2 ..= switch and letter or " "
+    end
+
+    f_zprint(t1, x, y,   color, align or 0)
+    f_zprint(t2, x, y+1, color, align or 0)
+end
+
+function roundrect(x, y, rx, ry, c)
+  roundrect_r(x-rx, y-ry, x+rx-1, y+ry-1, c)
+end
+
+function roundrect_r(x1, y1, x2, y2, c)
+  rectfill(x1, y1+1, x2, y2-1, c)
+  if x2-x1 > 2 then -- if check is for the hp bar, so it looks good when small.
+    rectfill(x1+1, y1, x2-1, y2, c)
+  end
+end
+
 function _draw()
   memset(0x5f70, 0, 16) -- enable secondary pallette for all lines
-  rectfill(0,-1,63,63,C_1)
-  camera(0,-1)
 
-  rectfill(1,1,62,42,C_2)
-  pset(1,  1,C_1)
-  pset(62, 1,C_1)
-  pset(62,42,C_1)
-  pset(1, 42,C_1)
+  cls(C_1)
+  roundrect(32,23,31,21,C_2)
+  clip(1, 3, 62, 40)
 
   -- rectfill(0,scannum2-6,63,scannum2-2, C_3)
   -- rectfill(0,64-scannum+15,63,64-scannum+5,1)
 
   fillp(0b1111000011110000)
   rectfill(0,scannum2-5,63,scannum2-3,     (C_3 << 4) | C_2)
+  fillp()
+
+  fillp(0b0000111100001111)
   rectfill(0,64-scannum+12,63,64-scannum+8,(C_3 << 4) | C_2)
   fillp()
 
-  local x_gap,    y_gap = 4, 4
-  local x_offset, y_offset = 32-16-x_gap, 32-16-y_gap
-
-  for j=0,32 do
-    for i=0,7 do
-      local ind = j*8 + i
-      if ind\3 >= view_y and ind\3 <= view_y+1 then
-        local ii = ind % 3
-        local jj = ind \ 3 - view_y
-        local sx, sy = x_offset+ii*(16+x_gap), y_offset+jj*(16+y_gap)
-
-        draw_pkmn(ind, sx, sy, g_scale, g_scale, ind == g_num)
-      end
+  if mock_ind == 0 then
+    local yy = view_y*3
+    local xo = 12
+    local yo = 13
+    for ii=0,2 do
+      local ind = yy + ii
+      draw_pkmn(ind, xo+ii*20, yo, g_scale, g_scale, ind == g_num)
     end
+
+    yy = (view_y*3+3)%252
+    for ii=0,2 do
+      local ind = yy + ii
+      draw_pkmn(ind, xo+ii*20, yo+20, g_scale, g_scale, ind == g_num)
+    end
+
+  elseif mock_ind == 1 then
+    --rectfill(1,2,62,43,C_2)
+    roundrect(17, 8, 15,  5, C_3)
+    f_wobble_text("cooltrn", 31-14,  5+10*0, C_2, t()*2\1%2==0) f_wobble_text("cooltrn", 32+16,  5+10*0, C_1)
+    f_wobble_text("cooltrn", 31-14,  5+10*1, C_1) f_wobble_text("cooltrn", 32+16,  5+10*1, C_1)
+    f_wobble_text("cooltrn", 31-14,  5+10*3, C_1) f_wobble_text("cooltrn", 32+16,  5+10*3, C_1)
+    f_wobble_text("cooltrn", 31-14,  5+10*2, C_1) f_wobble_text("cooltrn", 32+16,  5+10*2, C_1)
+
+  elseif mock_ind == 2 then
+    local b = function(name, gender, status, x, y, hi, hp, hpmax)
+      local d, l = C_1, C_3
+      if hi then
+        d, l = C_1, C_4
+      end
+
+      roundrect_r(x, y+1, x+34, y+6, d)
+      if hp > 0 then
+        rectfill(x+1, y+2, x+mid(1, hp/hpmax*33, 33), y+5, l)
+        pset(x+1, y+2, d)
+        pset(x+33, y+2, d)
+        pset(x+1, y+5, d)
+        pset(x+33, y+5, d)
+      end
+
+      f_zprint(name,   x+0, y-5, d, -1)
+      f_zprint(flr(hp),             x+0, y+8, d, -1)
+      f_zprint(status.." "..gender, x+37, y+8, d, 1)
+    end
+
+    --roundrect(24+8, 13 + (not g_active and 20 or 0),    22+8, 10, C_3)
+    draw_pkmn(94, 52, 13, 1, 1, g_active)     b("wigglytuf", "m", "brn", 4,8, g_active,   80+g_hpmod, 90)
+    draw_pkmn(33, 12, 33, 1, 1, not g_active) b("nidorino", "m", "",    25,30, not g_active, 100+g_hpmod, 100)
   end
+
+  clip()
 
   local chance2 = flr(rnd()*(60))
   local one, two = 0xaa, 0x55
   for i=0,7 do poke(0x5f70+i,0b10101010) end
-  scannum += 1.5
+  scannum += .75
   scannum %= 64+20+1
   scannum2 += .5
   scannum2 %= 64+8+1
 
-  rectfill(0, 43, 63, 63, C_1)
+  --rectfill(0, 43, 63, 63, C_1)
 
-  local r, y, h = 31, 45, 15
+  local r, y, h = 31, 46, 15
   rectfill(31-r+1, y,   32+r-1, y+h,C_0)
   pset(31-r+1, y, 0) pset(31-r+1, y+h, C_1)
   pset(32+r-1, y, 0) pset(32+r-1, y+h, C_1)
   pset(    31-r+1,y, C_1)
   pset(    32+r-1,y, C_1)
-  print(pkmn_names[g_num+1],3, y+2,  C_3)
-  print("."..pkmn_types[g_num+1][1].."_"..pkmn_types[g_num+1][2],3, y+8+1,C_2)
+  local numstr = tostr(g_num)
+  while #numstr < 3 do numstr = "0"..numstr end
+  print("#"..numstr.." "..pkmn_names[g_num+1],3, y+2,  C_3)
+  local typstr = pkmn_types[g_num+1][1]
+  if pkmn_types[g_num+1][2] ~= "" then
+    typstr ..= "/"..pkmn_types[g_num+1][2]
+  end
+  print(typstr,3, y+8+1,C_2)
 
   pal(cols[cols_ind+1], 1)
 end
