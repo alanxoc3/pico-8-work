@@ -255,29 +255,29 @@ function _draw()
     f_wobble_text("cooltrn", 31-14,  5+10*2, C_1) f_wobble_text("cooltrn", 32+16,  5+10*2, C_1)
 
   elseif mock_ind == 2 then
-    local b = function(name, gender, status, x, y, hi, hp, hpmax)
+    local b = function(name, gender, status, x, y, bx, by, hi, hp, hpmax)
       local d, l = C_1, C_3
       if hi then
-        d, l = C_1, C_4
+        d, l = C_2, C_4
       end
 
-      roundrect_r(x, y+1, x+34, y+6, d)
+      roundrect_r(bx, by+1, bx+34, by+6, d)
       if hp > 0 then
-        rectfill(x+1, y+2, x+mid(1, hp/hpmax*33, 33), y+5, l)
-        pset(x+1, y+2, d)
-        pset(x+33, y+2, d)
-        pset(x+1, y+5, d)
-        pset(x+33, y+5, d)
+        rectfill(bx+1, by+2, bx+mid(1, hp/hpmax*33, 33), by+5, l)
+        pset(bx+1, by+2, d)
+        pset(bx+33, by+2, d)
+        pset(bx+1, by+5, d)
+        pset(bx+33, by+5, d)
       end
 
       f_zprint(name,   x+0, y-5, d, -1)
-      f_zprint(flr(hp),             x+0, y+8, d, -1)
-      f_zprint(status.." "..gender, x+37, y+8, d, 1)
+      f_zprint(gender.." "..status,             x+0, y+8, d, -1)
+      f_zprint(flr(hp), x+37, y+8, d, 1)
     end
 
-    --roundrect(24+8, 13 + (not g_active and 20 or 0),    22+8, 10, C_3)
-    draw_pkmn(94, 52, 13, 1, 1, g_active)     b("wigglytuf", "m", "brn", 4,8, g_active,   80+g_hpmod, 90)
-    draw_pkmn(33, 12, 33, 1, 1, not g_active) b("nidorino", "m", "",    25,30, not g_active, 100+g_hpmod, 100)
+    roundrect(24+8, 13 + (not g_active and 20 or 0),    22+8, 10, C_3)
+    draw_pkmn(94, 52, 13, 1, 1, g_active)     b("gengar", "m", "brn", 5, 9,  5, 9,  g_active,   80+g_hpmod, 90)
+    draw_pkmn(33, 12, 33, 1, 1, not g_active) b("nidorino",  "m", "",    24,29, 24,29,  not g_active, 100+g_hpmod, 100)
   end
 
   clip()
