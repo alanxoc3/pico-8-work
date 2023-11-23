@@ -43,8 +43,9 @@ DIFF: Recoil, Self-KO, Freeze, and Sleep clauses are all removed.
 DIFF: Like Gen 1. Swift will never miss, bypassing all accuracy checks including when opponent uses dig/fly.
 
 Modifications inspired by later games:
-DIFF: Protect and Detect protect against Mean Look. (Didn't in the original games.)
+DIFF: Protect and Detect protect against Mean Look and Substitute. (Didn't in the original games.)
 DIFF: Flail and Reversal can now cause a critical hit and are varied by the random damage factor.
+DIFF: Protect and Detect work behind a substitute.
 DIFF: Transform fails when opponent is transformed or user is already transformed.
 DIFF: Lock-On/MindReader sets a status on the user, not the target. So it can be baton passed and work even if the target switches out. Earthquake/Magnitude/Fissure will still hit a non-flying Pokemon in the middle of Fly.
 DIFF: The freeze status condition has a 20% chance to unthaw the Pokemon each turn.
@@ -63,11 +64,12 @@ DIFF: Confusion will be passed with baton pass.
 DIFF: A genderless Pokemon that uses Attract will infatuate the foe if the foe is also genderless.
 DIFF: Rest will not reset the Toxic counter.
 DIFF: Focus band has a chance to activate as long as the Pokemon has >1 HP for anything that does damage. This includes self KO moves, confusion, leech seed, Perish Song, Destiny Bond, etc...
-DIFF: Endure guarantees that next time the Pokemon would get KOed, it remains at 1 HP instead. Fails if the Pokemon is already at 1 HP, and is more likely to fail if used consecutively with Protect/Detect.
+DIFF: Endure protects from all damage for the remainder of the entire turn. Including Perish Song, Future Sight, Pain Split, Spite, Poison, Burn, Sandstorm, Leech Seed...
+DIFF: Pain Split hits opponent past substitute.
 DIFF: Mean Look and Trapping Moves prevent manual switching. They do not prevent Beat Up, Teleport, or Baton Pass.
 DIFF: Self-KO moves, Perish Song, and Destiny Bond all KO the user before the opponent, which means a self-KO will lose the match, unless Endure or Focus Band is activated! Recoil moves will do damage to the user after the attack.
 DIFF: Attract's effect passes to the next Pokemon with Baton Pass.
-DIFF: Endure can be baton passed. The detect/protect/endure counter is also Baton Passed.
+DIFF: The detect/protect/endure counter is Baton Passed.
 DIFF: Defense Curl powerup for rollout is Baton Passed.
 DIFF: Rage counter is Baton Passed. Rage counter does not reset when rage is not used anymore.
 DIFF: Kings Rock has a chance to activate with any attack that does damage at the time of using the attack. It can still be triggered with attacking moves that already has a flinch chance if that flinch chance failed. All multistrike moves only have the chance on the last hit.

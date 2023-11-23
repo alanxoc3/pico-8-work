@@ -11,9 +11,10 @@ You can find the guide here:
 - https://github.com/alanxoc3/pico-8-work/blob/master/2023-picodex/guide.md
 
 ## Constraints
-Pokemon names must be <=9 characters
+trainer, pokemon, move, item, type names must all be <= 7 characters
+Pokemon names must be <=7 characters
 Moves must be <=7 characters (so they can fit side-by-side)
-Types must be <=6 characters.
+Types must be <=7 characters.
 
 pokemon names that change:
 

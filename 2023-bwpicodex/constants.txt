@@ -26,6 +26,7 @@ C_MAJOR_SLEEPING:  6
 #   5 | pokemon (1 num, 1 gender, 1 move, 1 move, 1 move, 1 move)
 #   5 | pokemon (1 num, 1 gender, 1 move, 1 move, 1 move, 1 move)
 
+# 32 bytes for unlocked pokemon. 8 bytes for unlocked trainers.
 S_PARTY1:         0x5e00
 S_PARTY2:         0x5e1e
 S_PARTY3:         0x5e3c
