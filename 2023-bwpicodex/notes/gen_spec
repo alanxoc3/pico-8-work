@@ -1,0 +1,21 @@
+#!/bin/bash
+while sleep 1s; do
+  echo "NEW RUN: " $(date '+%Y-%m-%d %H:%M:%S')
+  # 8 threads focused on improving the latest things.
+  ROWS=$(cat ./tmp* | rg -- -- | sort -n | head -n 32 | shuf | head -n 8 | sed -E 's/^\w+ -- //g')
+  IFS=$'\n' read -d '' -r -a array <<< "$ROWS"
+
+  for i in "${array[@]}"; do
+    tr ' ' '\n' <<< "$i" | ./moveorder gen > $(mktemp -p ./) &
+  done
+
+  # 8 threads focused on trying to find new branches.
+  ROWS=$(cat ./tmp* | rg -- -- | sort -un | head -n 256 | shuf | head -n 8 | sed -E 's/^\w+ -- //g')
+  IFS=$'\n' read -d '' -r -a array <<< "$ROWS"
+
+  for i in "${array[@]}"; do
+    tr ' ' '\n' <<< "$i" | ./moveorder gen > $(mktemp -p ./) &
+  done
+
+  wait
+done

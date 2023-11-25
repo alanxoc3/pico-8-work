@@ -1,0 +1,9 @@
+#!/bin/bash
+while sleep 1m; do
+  echo "NEW RUN: " $(date '+%Y-%m-%d %H:%M:%S')
+
+  for x in $(seq 16); do
+    ./moveorder gen > $(mktemp -p ./) &
+  done
+  wait
+done

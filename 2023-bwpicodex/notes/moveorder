@@ -12,7 +12,7 @@ import sys             # stderr log and stdin
 import math # For how many subsets of len x in thing
 from multiprocessing import Pool
 
-def log(*args): print(*args, file=sys.stderr, flush=True)
+# def log(*args): print(*args, file=sys.stderr, flush=True)
 def out(*args): print(*args, flush=True)
 
 # This will return all subsets of a list if possible.
@@ -30,11 +30,8 @@ def get_all_subsets(l, samp_size):
       subs.append(sub)
   return subs
 
-def get_all_subsets_samp(l):
-  return get_all_subsets(l, 50)
-
 # yields non-overlapping sets that may save space.
-def get_suggestion_sets(move_lists, move_order):
+def get_suggestion_sets(move_lists, move_order, try_count):
   move_lists = move_lists[:]
   random.shuffle(move_lists)
 
@@ -45,7 +42,7 @@ def get_suggestion_sets(move_lists, move_order):
   # For each list, get all or a random sample of all the subsets if there are too many.
   futures = []
   for move_list in move_lists:
-    for fz in get_all_subsets_samp(move_list):
+    for fz in get_all_subsets(move_list, 50):
       all_subsets.add(fz)
       all_subsets_d[fz] = all_subsets_d[fz]+1
 
@@ -58,6 +55,9 @@ def get_suggestion_sets(move_lists, move_order):
     savings_arr.append(((len(fz) - 3) * count, fz))
 
   random.shuffle(savings_arr)
+  if try_count%3 > 0: # if random fails, try a best to worst priority. I had tried a "worse to best" priority too, but that didn't seem to help usually and it slows things down with that extra step.
+    savings_arr = sorted(savings_arr, key=lambda x: x[0])
+    savings_arr = reversed(savings_arr)
 
   savings_set = set()
   final_arr = []
@@ -73,8 +73,8 @@ def get_move_reorderings(moveorder, moves):
     if m not in moveset:
       newmoveorder.append(m)
 
-  for i in range(len(newmoveorder)): # exclude the zeroth spot for struggle.
-    yield newmoveorder[0:i+1] + moves + newmoveorder[i+1:]
+  for i in range(len(newmoveorder)+1):
+    yield newmoveorder[0:i] + moves + newmoveorder[i:]
 
 # test function returns true if the new order is good.
 def test_suggestions(suggestion_sets, cur_moveorder, logfunc):
@@ -1716,6 +1716,7 @@ pkmn_learn   = filter_movesets(dedup_evols(combine_movesets(gen2_learn, gen2_egg
 pkmn_teach   = filter_movesets(dedup_evols(combine_movesets(gen2_tmhm, gen2_tutor, gen1_tmhm))     , pkmn_default, pkmn_learn)
 pkmn_event   = filter_movesets(dedup_evols(combine_movesets(genx_events))                          , pkmn_default, pkmn_learn, pkmn_teach)
 pkmn_every   = combine_movesets(pkmn_default, pkmn_learn, pkmn_teach, pkmn_event)
+pkmn_every_raw = combine_movesets(def_learn, gen2_learn, gen2_eggmoves, gen1_learn, gen2_tmhm, gen2_tutor, gen1_tmhm, genx_events)
 
 # Just a list of all possible moves that show up in all the lists
 pkmn_moves = {move for moveset in [pkmn_default, pkmn_learn, pkmn_teach, pkmn_event] for moves in moveset.values() for move in moves}
@@ -1761,15 +1762,12 @@ def filter_move_list(moves_ordered):
   moves_filtered = []
   seen_moves = {}
   for move in moves_ordered:
-    if move in pkmn_moves and move not in seen_moves and move != "M_STRUGGLE":
+    if move in pkmn_moves and move not in seen_moves:
       moves_filtered.append(move)
       seen_moves[move] = True
 
   for missing_move in sorted(pkmn_moves - set(moves_filtered)):
-    if missing_move != "M_STRUGGLE":
-      moves_filtered.append(missing_move)
-
-  moves_filtered.insert(0, "M_STRUGGLE")
+    moves_filtered.append(missing_move)
 
   return moves_filtered
 
@@ -1813,11 +1811,12 @@ if __name__ == "__main__":
   parser = argparse.ArgumentParser()
   parser.add_argument('command', choices=[
     # These display pokemon and the moves they can learn.
-    "default", # Default moves for Picodex. This list came from gen1_learn, gen2_learn, and gen2_eggmoves. Order matters only for this list.
-    "learn",   # All other moves a Pokemon learns naturally. Includes remaining level-up and egg moves.
-    "teach",   # Moves a Pokemon can be taught from gen1 tms, gen1 hms, gen2 tms, gen2 hms, gen2 movetutor, and sketch.
-    "event",   # Moves a Pokemon can only learn from an event, excluding default, learn, and teach.
-    "every",   # Above lists combined.
+    "default",  # Default moves for Picodex. This list came from gen1_learn, gen2_learn, and gen2_eggmoves. Order matters only for this list.
+    "learn",    # All other moves a Pokemon learns naturally. Includes remaining level-up and egg moves.
+    "teach",    # Moves a Pokemon can be taught from gen1 tms, gen1 hms, gen2 tms, gen2 hms, gen2 movetutor, and sketch.
+    "event",    # Moves a Pokemon can only learn from an event, excluding default, learn, and teach.
+    "every",    # Above lists combined.
+    "everyraw", # Above lists combined, but doesn't dedup evolutions.
 
     # This just displays the evolution data.
     "evols",   # All pokemon evolutions (evolved -> prev evol)
@@ -1846,11 +1845,12 @@ if __name__ == "__main__":
     lines = [line for line in lines if line]
     return filter_move_list(lines)
 
-  if   args.command in ["learn"]:   print_moveset(pkmn_learn)
-  elif args.command in ["teach"]:   print_moveset(pkmn_teach)
-  elif args.command in ["event"]:   print_moveset(pkmn_event)
-  elif args.command in ["every"]:   print_moveset(pkmn_every)
-  elif args.command in ["default"]: print_moveset(pkmn_default)
+  if   args.command in ["learn"]:    print_moveset(pkmn_learn)
+  elif args.command in ["teach"]:    print_moveset(pkmn_teach)
+  elif args.command in ["event"]:    print_moveset(pkmn_event)
+  elif args.command in ["every"]:    print_moveset(pkmn_every)
+  elif args.command in ["everyraw"]: print_moveset(pkmn_every_raw)
+  elif args.command in ["default"]:  print_moveset(pkmn_default)
 
   elif args.command in ["evols"]:
     for pkmn, prev in pkmn_evols.items():
@@ -1866,10 +1866,14 @@ if __name__ == "__main__":
   elif args.command in ["moves"]: # take in movelist and remove garbage to get it in a decent order.
     for move in read_stdin_movelist(): out(move)
 
-  elif args.command in ["gen"]: # take in movelist and remove garbage to get it in a decent order.
-    cur_moveorder = list(pkmn_moves)
-    random.shuffle(cur_moveorder)
-    cur_moveorder = filter_move_list(cur_moveorder)
+  elif args.command in ["gen"]: # take in optional movelist and remove garbage to get it in a decent order.
+    if sys.stdin.isatty():
+      cur_moveorder = list(pkmn_moves)
+      random.shuffle(cur_moveorder)
+      cur_moveorder = filter_move_list(cur_moveorder)
+    else:
+      cur_moveorder = read_stdin_movelist()
+
     cur_len = get_full_data_len(cur_moveorder)
 
     move_lists = []
@@ -1877,14 +1881,18 @@ if __name__ == "__main__":
     for _, moveset in stream_moveset(pkmn_teach): move_lists.append(moveset[:])
     for _, moveset in stream_moveset(pkmn_event): move_lists.append(moveset[:])
 
+    try_count = 0
     for iteration in itertools.count():
-      log("ITERATION #" + str(iteration+1))
-      suggestion_sets = get_suggestion_sets(move_lists, cur_moveorder)
-      new_moveorder, new_len = test_suggestions(suggestion_sets, cur_moveorder, lambda moveorder, curlen: log(str(curlen), "--", " ".join(moveorder)))
+      out("ITERATION #" + str(iteration+1))
+      suggestion_sets = get_suggestion_sets(move_lists, cur_moveorder, try_count)
+      new_moveorder, new_len = test_suggestions(suggestion_sets, cur_moveorder, lambda moveorder, curlen: out(str(curlen), "--", " ".join(moveorder)))
+
       if new_len < cur_len:
         cur_moveorder = new_moveorder
         cur_len = new_len
-        log()
+        out()
+        try_count = 0
+      elif try_count < 1: try_count += 1
       else: break
 
   else:
