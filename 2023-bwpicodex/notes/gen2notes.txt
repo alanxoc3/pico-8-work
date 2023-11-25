@@ -84,7 +84,6 @@ DIFF: A Pokemon entering from Baton Pass, Teleport, and Roar will take spike dam
 DIFF: Frustration has 100 Base Power if hp <= foe hp. Otherwise has 50 Base Power.
 DIFF: Return has 100 Base Power if hp >= foe hp. Otherwise has 50 Base Power.
 DIFF: Swagger still confuses the foe if attack at the max stage.
-
 DIFF: Mimic and Sketch both have 10 pp. The copied move will use the same pp counter as mimic/sketch or whatever move called it.
 DIFF: Trigger moves (Mirror Move, Metronome, Sleep Talk) fail when triggering another trigger move. And they cannot trigger Struggle.
 DIFF: Mimic & Sketch can copy any move in the game besides struggle and tm05.
@@ -92,6 +91,7 @@ DIFF: Transform fails if Pokemon is already transformed.
 DIFF: Smeargle can only learn Sketch once, not 4 times.
 DIFF: Missingno can learn Struggle and TM05. Struggle has 40 pp if learned.
 DIFF: Nightmare doesn't go away when awake and will re-apply if the Pokemon falls asleep again.
+DIFF: Porygon does not learn the move Conversion 2. (due to the way i pack all moves and to make it so each move is represented when battling)
 
 STRAT: Sketch and Mimic allow for the same move to be available in multiple move slots.
 STRAT: Hidden Power counters Conversion 2.

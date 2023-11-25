@@ -76,3 +76,11 @@ Smeargle cannot sketch these moves:
 - Transform    -- later games removed this restriction
 
 Should sleep talk be able to select rest? I think so, like the OG games. Sleep talk cannot select itself. (no difference)
+
+# Next steps...
+- Mock entire UI.
+- Finish python script to try to squeeze some extra bytes.
+- Finish compression code.
+- Then actually do the UI code.
+- Then the battle system.
+- Then improve sprites.

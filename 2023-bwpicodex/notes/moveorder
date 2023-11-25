@@ -3,99 +3,98 @@
 # This takes a random sample of a set if there would be too many subsets for a given length.
 # Finding subset patterns saves tons of bytes for picodex!
 
-# SMALLEST is 5255. default: 7062
+# SMALLEST is 5250. default: 7062 (saw 5090 as a number... its possible :)
 
-import itertools
-from itertools import combinations # to get subsets
+import itertools # groupby (for ranges), combinations (for subsets), count (for save cmd)
 from collections import Counter # To keep counts of subset repeats
-import random          # random sample if list is to big
+import random          # random sample and shuffle to make big lists smaller and randomize input
 import sys             # stderr log and stdin
-from concurrent.futures import ThreadPoolExecutor # For running in parallel.
 import math # For how many subsets of len x in thing
+from multiprocessing import Pool
 
-def log(*args):
-  print(*args)
-  sys.stdout.flush()
+def log(*args): print(*args, file=sys.stderr, flush=True)
+def out(*args): print(*args, flush=True)
 
 # This will return all subsets of a list if possible.
-def get_subsets_with_len(subset_len, source_len, l): # only returns up to 100 subsets, but randomly distributed
-  subsets = [frozenset(subset) for subset in combinations(random.sample(l, min(len(l), source_len)), subset_len)]
-  return random.sample(subsets, min(len(subsets), 200))
-
-def get_subsets(executor, subset_len, l):
-  subs = []
-  source_len = len(l)-1
-  for source_len in range(len(l), subset_len-1, -1):
-    if math.comb(source_len,subset_len) <= 10000:
-      subs = get_subsets_with_len(subset_len, source_len, l)
-      break
-
-  return subs
+def get_subsets(subset_len, l, samp_size):
+  return [frozenset(subset) for _, subset in zip(range(samp_size), itertools.combinations(random.sample(l, len(l)), subset_len))]
 
 # returns a list of sets
-def get_all_subsets(executor, l):
+def get_all_subsets(l, samp_size):
   subs = []
-  for subset_len in range(4,len(l)):
-    for sub in get_subsets(executor, subset_len, l):
+  subset_lens = [x for x in range(4,len(l))]
+  random.shuffle(subset_lens)
+
+  for subset_len in subset_lens:
+    for sub in get_subsets(subset_len, l, samp_size):
       subs.append(sub)
   return subs
 
-# give it list of ints. output list of pairs
-def ranges(i):
-  for a, b in itertools.groupby(enumerate(i), lambda pair: pair[1] - pair[0]):
-    b = list(b)
-    yield b[0][1], b[-1][1]
+def get_all_subsets_samp(l):
+  return get_all_subsets(l, 50)
 
-# input: list of ints. output bytes saved (taking ranges into account
-def calc_saving(vals, count):
-  real_byte_len = sum([min(b-a, 2)+1 for a, b in ranges(vals)])
-  cur_len=real_byte_len*count
-  new_len = min(3, len(vals))*count
-  return max(0, cur_len-new_len)
+# yields non-overlapping sets that may save space.
+def get_suggestion_sets(move_lists, move_order):
+  move_lists = move_lists[:]
+  random.shuffle(move_lists)
 
-# sub group looks like:
-def get_top_savings(lists):
-  with ThreadPoolExecutor(max_workers=16) as executor:
-    all_subs = set()
+  all_subsets = set()
+  all_subsets_d = defaultdict(int)
+  move_sets = {frozenset(x) for x in move_lists}
 
-    # For each list, get all or a random sample of all the subsets if there are too many.
-    futures = []
-    for i, l in enumerate(lists):
-      future = executor.submit(get_all_subsets, executor, l)
-      futures.append(future)
+  # For each list, get all or a random sample of all the subsets if there are too many.
+  futures = []
+  for move_list in move_lists:
+    for fz in get_all_subsets_samp(move_list):
+      all_subsets.add(fz)
+      all_subsets_d[fz] = all_subsets_d[fz]+1
 
-    # Store all subsets found in a single set.
-    for i, future in enumerate(futures):
-      for fz in future.result():
-        all_subs.add(fz)
+  savings_arr = []
+  for fz in all_subsets:
+    count = 0
+    for listset in move_sets:
+      if fz.issubset(listset):
+        count += 1
+    savings_arr.append(((len(fz) - 3) * count, fz))
 
-    lists_as_sets = {frozenset(x) for x in lists}
-    savings_arr = []
-    for fz in all_subs:
-      count = 0
-      for listset in lists_as_sets:
-        if fz.issubset(listset):
-          count += 1
-      # savings is how many bytes would be saved by storing a range.
-      if count > 1: # 1 count will never save anything significant
-        vals = sorted([int(x) for x in fz])
-        savings_arr.append({
-          "len": len(fz),
-          "count": count,
-          "savings": calc_saving(vals, count),
-          "vals": vals,
-          "valsSet": fz,
-        })
+  random.shuffle(savings_arr)
 
-    savings_set = set()
-    final_arr = []
-    for x in reversed(sorted(savings_arr, key=lambda x: x['savings'])):
-      if len(savings_set & x["valsSet"]) == 0 and x["savings"] > 0:
-        savings_set.update(x["valsSet"])
-        final_arr.append(x)
-    # try a saving. check if it saved space. if not, revert. then try next saving.
-    # when done, print the new constant list, colon separated.
-    return final_arr
+  savings_set = set()
+  final_arr = []
+  for saving, fz in savings_arr:
+    if len(savings_set & fz) == 0:
+      savings_set.update(fz)
+      yield fz
+
+def get_move_reorderings(moveorder, moves):
+  moveset = frozenset(moves)
+  newmoveorder = []
+  for m in moveorder:
+    if m not in moveset:
+      newmoveorder.append(m)
+
+  for i in range(len(newmoveorder)): # exclude the zeroth spot for struggle.
+    yield newmoveorder[0:i+1] + moves + newmoveorder[i+1:]
+
+# test function returns true if the new order is good.
+def test_suggestions(suggestion_sets, cur_moveorder, logfunc):
+  suggestion_sets = [x for x in suggestion_sets]
+  cur_len = get_full_data_len(cur_moveorder)
+
+  random.shuffle(suggestion_sets)
+
+  for s in suggestion_sets:
+    moveslice = list(s)
+    for _ in range(2):
+      random.shuffle(moveslice)
+      for tmp_moveorder in get_move_reorderings(cur_moveorder, moveslice):
+        new_len = get_full_data_len(tmp_moveorder)
+        if new_len < cur_len:
+          cur_moveorder = tmp_moveorder
+          cur_len = new_len
+          logfunc(cur_moveorder, cur_len)
+
+  return cur_moveorder, cur_len
 
 # ---------------------------------- POKEMON MOVE DATA ----------------------------------
 from collections import defaultdict
@@ -120,8 +119,15 @@ def strdata_move(strdata): # order doesn't matter
     if len(items) > 0:
       data[items[0]].extend(items[1:])
 
+  # should keep order because of the def_learn one
   for k, v in data.items():
-    data[k] = sorted(set(v))
+    seen = set()
+    newv = []
+    for x in v:
+      if x not in seen:
+        seen.add(x)
+        newv.append(x)
+    data[k] = newv
 
   return data
 
@@ -133,6 +139,191 @@ def strdata_evol(strdata): # order doesn't matter
       data[items[0]] = items[1]
 
   return data
+
+# These moves are duplicated from gen1_learn, gen2_learn, and gen2_eggmoves.
+# They represent the first four moves the pokemon needs to know in order.
+# This list was carefully constructed by Alan so that all ~230 possible moves pokemon can learn are represented in the first 3 moveslots.
+# While trying to keep the style of each Pokemon consistent with the moves.
+# The weirdest one is PORYGON2, which doesn't have any attacking moves since porygon learns 3 unique moves.
+def_learn = strdata_move("""
+  P_ABRA       M_TELEPORT     M_BARRIER      M_ENCORE       M_LIGHTSCREEN
+  P_AERODACTYL M_HYPERBEAM    M_ANCIENTPOWER M_STEELWING    M_SCARYFACE
+  P_AIPOM      M_FURYSWIPES   M_AGILITY      M_BATONPASS    M_SCRATCH
+  P_AMPHAROS   M_THUNDERPUNCH
+  P_ARCANINE   M_EXTREMESPEED
+  P_ARTICUNO   M_ICEBEAM      M_BLIZZARD     M_MINDREADER   M_POWDERSNOW
+  P_BEEDRILL   M_TWINEEDLE    M_PINMISSILE   M_PURSUIT      M_FOCUSENERGY
+  P_BELLSPROUT M_SLAM         M_RAZORLEAF    M_SWEETSCENT   M_ACID
+  P_BULBASAUR  M_SOLARBEAM    M_GROWTH       M_VINEWHIP     M_LEECHSEED
+  P_BUTTERFREE M_PSYBEAM      M_SLEEPPOWDER  M_WHIRLWIND    M_GUST
+  P_CATERPIE   M_TACKLE       M_STRINGSHOT
+  P_CELEBI     M_HEALBELL     M_LEECHSEED    M_CONFUSION    M_ANCIENTPOWER
+  P_CHANSEY    M_SOFTBOILED   M_EGGBOMB      M_LIGHTSCREEN  M_PRESENT
+  P_CHARIZARD  M_WINGATTACK
+  P_CHARMANDER M_FLAMETHROWER M_FIRESPIN     M_DRAGONRAGE   M_GROWL
+  P_CHIKORITA  M_SOLARBEAM    M_SYNTHESIS    M_RAZORLEAF    M_BODYSLAM
+  P_CHINCHOU   M_SPARK        M_THUNDERWAVE  M_WATERGUN     M_FLAIL
+  P_CLEFAIRY   M_MOONLIGHT    M_DOUBLESLAP   M_MINIMIZE     M_LIGHTSCREEN
+  P_CLEFFA     M_SWEETKISS    M_SING         M_ENCORE       M_POUND
+  P_CLOYSTER   M_SPIKECANNON  M_SPIKES
+  P_CORSOLA    M_BUBBLEBEAM   M_RECOVER      M_MIRRORCOAT   M_SPIKECANNON
+  P_CUBONE     M_BONECLUB     M_BONEMERANG   M_BONERUSH     M_SWORDSDANCE
+  P_CYNDAQUIL  M_FLAMEWHEEL   M_QUICKATTACK  M_SUBMISSION   M_SMOKESCREEN
+  P_DELIBIRD   M_PRESENT      M_AURORABEAM   M_QUICKATTACK  M_FUTURESIGHT
+  P_DIGLETT    M_FISSURE      M_DIG          M_MAGNITUDE    M_SANDATTACK
+  P_DITTO      M_TRANSFORM
+  P_DODUO      M_TRIATTACK    M_GROWL        M_DRILLPECK    M_SUPERSONIC
+  P_DONPHAN    M_EARTHQUAKE   M_RAPIDSPIN    M_FURYATTACK   M_HORNATTACK
+  P_DRAGONITE  M_WINGATTACK
+  P_DRATINI    M_OUTRAGE      M_HYPERBEAM    M_DRAGONRAGE   M_WRAP
+  P_DROWZEE    M_HYPNOSIS     M_HEADBUTT     M_DISABLE      M_PSYCHUP
+  P_DUGTRIO    M_TRIATTACK
+  P_DUNSPARCE  M_TAKEDOWN     M_GLARE        M_SPITE        M_BIDE
+  P_EEVEE      M_FOCUSENERGY  M_BATONPASS    M_QUICKATTACK  M_BITE
+  P_EKANS      M_GLARE        M_SLAM         M_ACID         M_HAZE
+  P_ELECTABUZZ M_THUNDERSHOCK
+  P_ELEKID     M_THUNDERPUNCH M_CROSSCHOP    M_LEER         M_KARATECHOP
+  P_ENTEI      M_FIREBLAST    M_BITE         M_ROAR         M_SWAGGER
+  P_ESPEON     M_MORNINGSUN   M_PSYCHUP      M_PSYBEAM      M_CONFUSION
+  P_EXEGGCUTE  M_BARRAGE      M_SOLARBEAM    M_CONFUSION    M_SLEEPPOWDER
+  P_EXEGGUTOR  M_EGGBOMB      M_STOMP
+  P_FARFETCHD  M_FALSESWIPE   M_SLASH        M_SWORDSDANCE  M_PECK
+  P_FLAREON    M_FLAMETHROWER M_SMOG         M_EMBER        M_FIRESPIN
+  P_FURRET     M_SCRATCH
+  P_GASTLY     M_HYPNOSIS     M_CURSE        M_DREAMEATER   M_NIGHTSHADE
+  P_GEODUDE    M_EXPLOSION    M_EARTHQUAKE   M_ROLLOUT      M_DEFENSECURL
+  P_GIRAFARIG  M_BATONPASS    M_PSYBEAM      M_BEATUP       M_CONFUSION
+  P_GLIGAR     M_GUILLOTINE   M_COUNTER      M_SANDATTACK   M_RAZORWIND
+  P_GOLBAT     M_SCREECH
+  P_GOLDEEN    M_WATERFALL    M_HORNDRILL    M_PECK         M_TAILWHIP
+  P_GRIMER     M_SLUDGEBOMB   M_ACIDARMOR    M_SLUDGE       M_MINIMIZE
+  P_GROWLITHE  M_FLAMEWHEEL   M_TAKEDOWN     M_LEER         M_EMBER
+  P_GYARADOS   M_HYDROPUMP    M_HYPERBEAM    M_TWISTER      M_THRASH
+  P_HERACROSS  M_MEGAHORN     M_REVERSAL     M_ENDURE       M_COUNTER
+  P_HITMONCHAN M_MEGAPUNCH    M_COMETPUNCH   M_COUNTER      M_AGILITY
+  P_HITMONLEE  M_MEGAKICK     M_JUMPKICK     M_ROLLINGKICK  M_DOUBLEKICK
+  P_HITMONTOP  M_TRIPLEKICK   M_ROLLINGKICK  M_DETECT       M_COUNTER
+  P_HOOH       M_SACREDFIRE   M_ANCIENTPOWER M_WHIRLWIND    M_FIREBLAST
+  P_HOOTHOOT   M_FORESIGHT    M_HYPNOSIS     M_TAKEDOWN     M_DREAMEATER
+  P_HOPPIP     M_MEGADRAIN    M_PAYDAY       M_STUNSPORE    M_LEECHSEED
+  P_HORSEA     M_TWISTER      M_OCTAZOOKA    M_SMOKESCREEN  M_DRAGONRAGE
+  P_HOUNDOUR   M_CRUNCH       M_FLAMETHROWER M_ROAR         M_BEATUP
+  P_IGGLYBUFF  M_SWEETKISS    M_POUND        M_DEFENSECURL  M_SING
+  P_JIGGLYPUFF M_DOUBLEEDGE   M_ROLLOUT      M_DOUBLESLAP   M_REST
+  P_JOLTEON    M_THUNDER      M_PINMISSILE   M_THUNDERSHOCK M_DOUBLEKICK
+  P_JYNX       M_BODYSLAM     M_ICEPUNCH     M_DOUBLESLAP   M_THRASH
+  P_KABUTO     M_MEGADRAIN    M_ANCIENTPOWER M_ENDURE       M_SANDATTACK
+  P_KADABRA    M_KINESIS      M_PSYCHIC      M_RECOVER      M_FUTURESIGHT
+  P_KAKUNA     M_HARDEN
+  P_KANGASKHAN M_DIZZYPUNCH   M_ENDURE       M_REVERSAL     M_COMETPUNCH
+  P_KOFFING    M_EXPLOSION    M_SMOG         M_POISONGAS    M_SMOKESCREEN
+  P_KRABBY     M_CRABHAMMER   M_GUILLOTINE   M_BUBBLE       M_VICEGRIP
+  P_LAPRAS     M_PERISHSONG   M_ICEBEAM      M_BODYSLAM     M_AURORABEAM
+  P_LARVITAR   M_HYPERBEAM    M_EARTHQUAKE   M_CRUNCH       M_SANDSTORM
+  P_LEDYBA     M_DOUBLEEDGE   M_COMETPUNCH   M_AGILITY      M_BATONPASS
+  P_LICKITUNG  M_LICK         M_MAGNITUDE    M_BELLYDRUM    M_WRAP
+  P_LUGIA      M_AEROBLAST    M_FUTURESIGHT  M_SAFEGUARD    M_WHIRLWIND
+  P_MACHOP     M_VITALTHROW   M_MEDITATE     M_CROSSCHOP    M_SUBMISSION
+  P_MAGBY      M_FIREBLAST    M_FIREPUNCH    M_SUNNYDAY     M_SMOKESCREEN
+  P_MAGIKARP   M_SPLASH       M_TACKLE       M_FLAIL
+  P_MAGNEMITE  M_ZAPCANNON    M_LOCKON       M_SONICBOOM    M_THUNDERWAVE
+  P_MAGNETON   M_TRIATTACK
+  P_MANKEY     M_THRASH       M_CROSSCHOP    M_KARATECHOP   M_SCREECH
+  P_MANTINE    M_BUBBLEBEAM   M_WINGATTACK   M_SUPERSONIC   M_TWISTER
+  P_MAREEP     M_THUNDERSHOCK M_COTTONSPORE  M_BODYSLAM     M_LIGHTSCREEN
+  P_MARILL     M_BUBBLEBEAM   M_FORESIGHT    M_ROLLOUT      M_DEFENSECURL
+  P_MEOWTH     M_PAYDAY       M_FURYSWIPES   M_FAINTATTACK  M_CHARM
+  P_METAPOD    M_HARDEN
+  P_MEW        M_MEGAPUNCH    M_METRONOME    M_PSYCHIC      M_TRANSFORM
+  P_MEWTWO     M_RECOVER      M_PSYCHIC      M_FUTURESIGHT  M_PSYCHUP
+  P_MILTANK    M_MILKDRINK    M_ROLLOUT      M_DEFENSECURL  M_SEISMICTOSS
+  P_MISDREAVUS M_PAINSPLIT    M_PSYWAVE      M_SPITE        M_DESTINYBOND
+  P_MISSINGNO  M_SKYATTACK    M_STRUGGLE     M_TM05         M_WATERGUN
+  P_MOLTRES    M_SKYATTACK    M_FLAMETHROWER M_SAFEGUARD    M_FIRESPIN
+  P_MRMIME     M_SUBSTITUTE   M_DOUBLESLAP   M_REFLECT      M_CONFUSION
+  P_MURKROW    M_FAINTATTACK  M_HAZE         M_NIGHTSHADE   M_DRILLPECK
+  P_NATU       M_FUTURESIGHT  M_PSYCHIC      M_NIGHTSHADE   M_CONFUSERAY
+  P_NIDOKING   M_THRASH
+  P_NIDOQUEEN  M_BODYSLAM
+  P_NIDORANF   M_FURYSWIPES   M_DOUBLEKICK   M_TAILWHIP     M_POISONSTING
+  P_NIDORANM   M_HORNDRILL    M_DOUBLEKICK   M_FOCUSENERGY  M_POISONSTING
+  P_OCTILLERY  M_CONSTRICT
+  P_ODDISH     M_PETALDANCE   M_MOONLIGHT    M_ACID         M_SOLARBEAM
+  P_OMANYTE    M_SPIKECANNON  M_ANCIENTPOWER M_PROTECT      M_WITHDRAW
+  P_ONIX       M_ROCKTHROW    M_SANDSTORM    M_FLAIL        M_BIND
+  P_PARAS      M_SPORE        M_GIGADRAIN    M_SLASH        M_GROWTH
+  P_PHANPY     M_ROLLOUT      M_FLAIL        M_TACKLE       M_GROWL
+  P_PICHU      M_THUNDERSHOCK M_THUNDERWAVE  M_SWEETKISS    M_TAILWHIP
+  P_PIDGEY     M_MIRRORMOVE   M_WHIRLWIND    M_GUST         M_WINGATTACK
+  P_PIKACHU    M_THUNDERBOLT  M_DOUBLETEAM   M_QUICKATTACK  M_SLAM
+  P_PILOSWINE  M_FURYATTACK   M_HORNATTACK
+  P_PINECO     M_EXPLOSION    M_SPIKES       M_RAPIDSPIN    M_PROTECT
+  P_PINSIR     M_GUILLOTINE   M_VICEGRIP     M_SEISMICTOSS  M_SWORDSDANCE
+  P_POLITOED   M_SWAGGER      M_PERISHSONG
+  P_POLIWAG    M_BUBBLEBEAM   M_RAINDANCE    M_BELLYDRUM    M_HYPNOSIS
+  P_POLIWRATH  M_SUBMISSION
+  P_PONYTA     M_FIREBLAST    M_FIRESPIN     M_AGILITY      M_DOUBLEKICK
+  P_PORYGON2   M_CONVERSION2  M_DEFENSECURL
+  P_PORYGON    M_TRIATTACK    M_SHARPEN      M_CONVERSION   M_RECOVER
+  P_PRIMEAPE   M_RAGE
+  P_PSYDUCK    M_HYDROPUMP    M_CROSSCHOP    M_PSYCHUP      M_DISABLE
+  P_QWILFISH   M_PINMISSILE   M_POISONSTING  M_MINIMIZE     M_SPIKES
+  P_RAIKOU     M_THUNDER      M_CRUNCH       M_ROAR         M_SPARK
+  P_RAPIDASH   M_FURYATTACK
+  P_RATICATE   M_SCARYFACE
+  P_RATTATA    M_SUPERFANG    M_HYPERFANG    M_PURSUIT      M_TAILWHIP
+  P_REMORAID   M_OCTAZOOKA    M_LOCKON       M_ICEBEAM      M_SCREECH
+  P_RHYHORN    M_EARTHQUAKE   M_HORNATTACK   M_HORNDRILL    M_SCARYFACE
+  P_SANDSHREW  M_SANDSTORM    M_SLASH        M_SANDATTACK   M_FURYSWIPES
+  P_SCIZOR     M_METALCLAW
+  P_SCYTHER    M_SWORDSDANCE  M_RAZORWIND    M_SLASH        M_FALSESWIPE
+  P_SEEL       M_ICEBEAM      M_REST         M_HEADBUTT     M_GROWL
+  P_SENTRET    M_QUICKATTACK  M_REST         M_REVERSAL     M_FOCUSENERGY
+  P_SHELLDER   M_CLAMP        M_ICEBEAM      M_PROTECT      M_LEER
+  P_SHUCKLE    M_WRAP         M_BIDE         M_ENCORE       M_SWEETSCENT
+  P_SKARMORY   M_STEELWING    M_SKYATTACK    M_WHIRLWIND    M_SWIFT
+  P_SLOWBRO    M_WITHDRAW
+  P_SLOWKING   M_SWAGGER
+  P_SLOWPOKE   M_PSYCHIC      M_AMNESIA      M_HEADBUTT     M_WATERGUN
+  P_SLUGMA     M_ROCKTHROW    M_ROCKSLIDE    M_EMBER        M_ACIDARMOR
+  P_SMEARGLE   M_SKETCH
+  P_SMOOCHUM   M_LOVELYKISS   M_POWDERSNOW   M_POUND        M_SWEETKISS
+  P_SNEASEL    M_BEATUP       M_SLASH        M_FORESIGHT    M_METALCLAW
+  P_SNORLAX    M_BELLYDRUM    M_HYPERBEAM    M_REST         M_SNORE
+  P_SNUBBULL   M_TAKEDOWN     M_RAGE         M_CHARM        M_BITE
+  P_SPEAROW    M_DRILLPECK    M_PECK         M_LEER         M_FAINTATTACK
+  P_SPINARAK   M_SPIDERWEB    M_POISONSTING  M_NIGHTSHADE   M_SONICBOOM
+  P_SQUIRTLE   M_HYDROPUMP    M_SKULLBASH    M_PROTECT      M_RAPIDSPIN
+  P_STANTLER   M_TAKEDOWN     M_REFLECT      M_STOMP        M_HYPNOSIS
+  P_STARMIE    M_CONFUSERAY
+  P_STARYU     M_BUBBLEBEAM   M_RECOVER      M_RAPIDSPIN    M_SWIFT
+  P_STEELIX    M_CRUNCH
+  P_SUDOWOODO  M_MIMIC        M_SELFDESTRUCT M_LOWKICK      M_ROCKSLIDE
+  P_SUICUNE    M_AURORABEAM   M_MIST         M_MIRRORCOAT   M_GUST
+  P_SUNFLORA   M_SOLARBEAM    M_PETALDANCE   M_RAZORLEAF    M_POUND
+  P_SUNKERN    M_GIGADRAIN    M_ABSORB       M_GROWTH       M_MEGADRAIN
+  P_SWINUB     M_BLIZZARD     M_ENDURE       M_MIST         M_POWDERSNOW
+  P_TANGELA    M_GROWTH       M_MEGADRAIN    M_BIND         M_VINEWHIP
+  P_TAUROS     M_RAGE         M_HORNATTACK   M_STOMP        M_PURSUIT
+  P_TEDDIURSA  M_THRASH       M_SNORE        M_REST         M_METALCLAW
+  P_TENTACOOL  M_HYDROPUMP    M_CONSTRICT    M_ACID         M_WRAP
+  P_TOGEPI     M_METRONOME    M_DOUBLEEDGE   M_SWEETKISS    M_CHARM
+  P_TOTODILE   M_WATERGUN     M_CRUNCH       M_ROCKSLIDE    M_SCARYFACE
+  P_TYROGUE    M_MACHPUNCH    M_HIJUMPKICK   M_MINDREADER   M_RAPIDSPIN
+  P_UMBREON    M_MOONLIGHT    M_FAINTATTACK  M_MEANLOOK     M_PURSUIT
+  P_UNOWN      M_HIDDENPOWER
+  P_VAPOREON   M_HYDROPUMP    M_ACIDARMOR    M_HAZE         M_AURORABEAM
+  P_VENOMOTH   M_GUST
+  P_VENONAT    M_PSYBEAM      M_GIGADRAIN    M_POISONPOWDER M_SUPERSONIC
+  P_VOLTORB    M_MIRRORCOAT   M_EXPLOSION    M_SWIFT        M_SONICBOOM
+  P_VULPIX     M_FIRESPIN     M_FLAMETHROWER M_ROAR         M_CONFUSERAY
+  P_WEEDLE     M_STRINGSHOT   M_POISONSTING
+  P_WOBBUFFET  M_DESTINYBOND  M_SAFEGUARD    M_MIRRORCOAT   M_COUNTER
+  P_WOOPER     M_EARTHQUAKE   M_SLAM         M_WATERGUN     M_SAFEGUARD
+  P_YANMA      M_SWIFT        M_DOUBLETEAM   M_SONICBOOM    M_DETECT
+  P_ZAPDOS     M_DRILLPECK    M_THUNDER      M_LIGHTSCREEN  M_THUNDERSHOCK
+  P_ZUBAT      M_FAINTATTACK  M_SUPERSONIC   M_LEECHLIFE    M_WINGATTACK
+""")
 
 gen1_learn = strdata_lvl("""
   P_ABRA       1:M_TELEPORT
@@ -856,7 +1047,7 @@ gen2_learn = strdata_lvl("""
   P_POLIWHIRL   1:M_BUBBLE       1:M_HYPNOSIS     1:M_WATERGUN      7:M_HYPNOSIS      13:M_WATERGUN     19:M_DOUBLESLAP   27:M_RAINDANCE    35:M_BODYSLAM     43:M_BELLYDRUM    51:M_HYDROPUMP
   P_POLIWRATH   1:M_DOUBLESLAP   1:M_HYPNOSIS     1:M_SUBMISSION    1:M_WATERGUN      35:M_SUBMISSION   51:M_MINDREADER
   P_PONYTA      1:M_TACKLE       4:M_GROWL        8:M_TAILWHIP      13:M_EMBER        19:M_STOMP        26:M_FIRESPIN     34:M_TAKEDOWN     43:M_AGILITY      53:M_FIREBLAST
-  P_PORYGON     1:M_CONVERSION   1:M_CONVERSION2  1:M_TACKLE        9:M_AGILITY       12:M_PSYBEAM      20:M_RECOVER      24:M_SHARPEN      32:M_LOCKON       36:M_TRIATTACK    44:M_ZAPCANNON
+  P_PORYGON     1:M_CONVERSION   1:M_TACKLE       9:M_AGILITY       12:M_PSYBEAM      20:M_RECOVER      24:M_SHARPEN      32:M_LOCKON       36:M_TRIATTACK    44:M_ZAPCANNON
   P_PORYGON2    1:M_CONVERSION   1:M_CONVERSION2  1:M_TACKLE        9:M_AGILITY       12:M_PSYBEAM      20:M_RECOVER      24:M_DEFENSECURL  32:M_LOCKON       36:M_TRIATTACK    44:M_ZAPCANNON
   P_PRIMEAPE    1:M_LEER         1:M_LOWKICK      1:M_RAGE          1:M_SCRATCH       9:M_LOWKICK       15:M_KARATECHOP   21:M_FURYSWIPES   27:M_FOCUSENERGY  28:M_RAGE         36:M_SEISMICTOSS  45:M_CROSSCHOP  54:M_SCREECH     63:M_THRASH
   P_PSYDUCK     1:M_SCRATCH      5:M_TAILWHIP     10:M_DISABLE      16:M_CONFUSION    23:M_SCREECH      31:M_PSYCHUP      40:M_FURYSWIPES   50:M_HYDROPUMP
@@ -1461,7 +1652,8 @@ pokemon_evol = strdata_evol("""
 """)
 
 # Pass in initial order. It figures out a better order.
-# gen2_learn    # order matters
+# def_learn     # order matters takes learn/egg and makes order
+# gen2_learn    # order doesn't matter
 # gen1_learn    # order doesn't matter
 # gen1_tmhm     # order doesn't matter
 # gen2_tmhm     # order doesn't matter
@@ -1469,10 +1661,6 @@ pokemon_evol = strdata_evol("""
 # gen2_eggmoves # order doesn't matter
 # genx_events   # order doesn't matter
 # pokemon_evol  # n/a
-
-# learn
-# teach
-# event
 
 def combine_movesets(*args): # ex: combine_movesets(gen1_learn, gen2_eggmoves, gen1_learn)
   all_pkmn = sorted({p for l in args for p in l.keys()})
@@ -1503,6 +1691,7 @@ def filter_movesets(initial_moveset, *args): # ex: filter_movesets(teach, learn)
 
   return newmoveset
 
+# gets rid of moves from evolutions that are already on pre-evolved forms
 def dedup_evols(moveset):
   all_pkmn = sorted({p for p in moveset.keys()})
 
@@ -1522,11 +1711,15 @@ def dedup_evols(moveset):
 
   return newmoveset
 
-pkmn_learn =                 dedup_evols(combine_movesets(gen2_learn, gen2_eggmoves, gen1_learn))
-pkmn_teach = filter_movesets(dedup_evols(combine_movesets(gen2_tmhm, gen2_tutor, gen1_tmhm))     , pkmn_learn)
-pkmn_event = filter_movesets(dedup_evols(combine_movesets(genx_events))                          , pkmn_learn, pkmn_teach)
-pkmn_every = combine_movesets(pkmn_learn, pkmn_teach, pkmn_event)
-pkmn_moves = {move for moveset in [pkmn_learn, pkmn_teach, pkmn_event] for moves in moveset.values() for move in moves}
+pkmn_default =                 dedup_evols(def_learn)
+pkmn_learn   = filter_movesets(dedup_evols(combine_movesets(gen2_learn, gen2_eggmoves, gen1_learn)), pkmn_default)
+pkmn_teach   = filter_movesets(dedup_evols(combine_movesets(gen2_tmhm, gen2_tutor, gen1_tmhm))     , pkmn_default, pkmn_learn)
+pkmn_event   = filter_movesets(dedup_evols(combine_movesets(genx_events))                          , pkmn_default, pkmn_learn, pkmn_teach)
+pkmn_every   = combine_movesets(pkmn_default, pkmn_learn, pkmn_teach, pkmn_event)
+
+# Just a list of all possible moves that show up in all the lists
+pkmn_moves = {move for moveset in [pkmn_default, pkmn_learn, pkmn_teach, pkmn_event] for moves in moveset.values() for move in moves}
+
 pkmn_evols = pokemon_evol
 pkmn_order = ["P_MISSINGNO", "P_BULBASAUR", "P_IVYSAUR", "P_VENUSAUR", "P_CHARMANDER", "P_CHARMELEON", "P_CHARIZARD", "P_SQUIRTLE", "P_WARTORTLE", "P_BLASTOISE", "P_CATERPIE", "P_METAPOD", "P_BUTTERFREE", "P_WEEDLE", "P_KAKUNA", "P_BEEDRILL", "P_PIDGEY", "P_PIDGEOTTO", "P_PIDGEOT", "P_RATTATA", "P_RATICATE", "P_SPEAROW", "P_FEAROW", "P_EKANS", "P_ARBOK", "P_PIKACHU", "P_RAICHU", "P_SANDSHREW", "P_SANDSLASH", "P_NIDORANF", "P_NIDORINA", "P_NIDOQUEEN", "P_NIDORANM", "P_NIDORINO", "P_NIDOKING", "P_CLEFAIRY", "P_CLEFABLE", "P_VULPIX", "P_NINETALES", "P_JIGGLYPUFF", "P_WIGGLYTUFF", "P_ZUBAT", "P_GOLBAT", "P_ODDISH", "P_GLOOM", "P_VILEPLUME", "P_PARAS", "P_PARASECT", "P_VENONAT", "P_VENOMOTH", "P_DIGLETT", "P_DUGTRIO", "P_MEOWTH", "P_PERSIAN", "P_PSYDUCK", "P_GOLDUCK", "P_MANKEY", "P_PRIMEAPE", "P_GROWLITHE", "P_ARCANINE", "P_POLIWAG", "P_POLIWHIRL", "P_POLIWRATH", "P_ABRA", "P_KADABRA", "P_ALAKAZAM", "P_MACHOP", "P_MACHOKE", "P_MACHAMP", "P_BELLSPROUT", "P_WEEPINBELL", "P_VICTREEBEL", "P_TENTACOOL", "P_TENTACRUEL", "P_GEODUDE", "P_GRAVELER", "P_GOLEM", "P_PONYTA", "P_RAPIDASH", "P_SLOWPOKE", "P_SLOWBRO", "P_MAGNEMITE", "P_MAGNETON", "P_FARFETCHD", "P_DODUO", "P_DODRIO", "P_SEEL", "P_DEWGONG", "P_GRIMER", "P_MUK", "P_SHELLDER", "P_CLOYSTER", "P_GASTLY", "P_HAUNTER", "P_GENGAR", "P_ONIX", "P_DROWZEE", "P_HYPNO", "P_KRABBY", "P_KINGLER", "P_VOLTORB", "P_ELECTRODE", "P_EXEGGCUTE", "P_EXEGGUTOR", "P_CUBONE", "P_MAROWAK", "P_HITMONLEE", "P_HITMONCHAN", "P_LICKITUNG", "P_KOFFING", "P_WEEZING", "P_RHYHORN", "P_RHYDON", "P_CHANSEY", "P_TANGELA", "P_KANGASKHAN", "P_HORSEA", "P_SEADRA", "P_GOLDEEN", "P_SEAKING", "P_STARYU", "P_STARMIE", "P_MRMIME", "P_SCYTHER", "P_JYNX", "P_ELECTABUZZ", "P_MAGMAR", "P_PINSIR", "P_TAUROS", "P_MAGIKARP", "P_GYARADOS", "P_LAPRAS", "P_DITTO", "P_EEVEE", "P_VAPOREON", "P_JOLTEON", "P_FLAREON", "P_PORYGON", "P_OMANYTE", "P_OMASTAR", "P_KABUTO", "P_KABUTOPS", "P_AERODACTYL", "P_SNORLAX", "P_ARTICUNO", "P_ZAPDOS", "P_MOLTRES", "P_DRATINI", "P_DRAGONAIR", "P_DRAGONITE", "P_MEWTWO", "P_MEW", "P_CHIKORITA", "P_BAYLEEF", "P_MEGANIUM", "P_CYNDAQUIL", "P_QUILAVA", "P_TYPHLOSION", "P_TOTODILE", "P_CROCONAW", "P_FERALIGATR", "P_SENTRET", "P_FURRET", "P_HOOTHOOT", "P_NOCTOWL", "P_LEDYBA", "P_LEDIAN", "P_SPINARAK", "P_ARIADOS", "P_CROBAT", "P_CHINCHOU", "P_LANTURN", "P_PICHU", "P_CLEFFA", "P_IGGLYBUFF", "P_TOGEPI", "P_TOGETIC", "P_NATU", "P_XATU", "P_MAREEP", "P_FLAAFFY", "P_AMPHAROS", "P_BELLOSSOM", "P_MARILL", "P_AZUMARILL", "P_SUDOWOODO", "P_POLITOED", "P_HOPPIP", "P_SKIPLOOM", "P_JUMPLUFF", "P_AIPOM", "P_SUNKERN", "P_SUNFLORA", "P_YANMA", "P_WOOPER", "P_QUAGSIRE", "P_ESPEON", "P_UMBREON", "P_MURKROW", "P_SLOWKING", "P_MISDREAVUS", "P_UNOWN", "P_WOBBUFFET", "P_GIRAFARIG", "P_PINECO", "P_FORRETRESS", "P_DUNSPARCE", "P_GLIGAR", "P_STEELIX", "P_SNUBBULL", "P_GRANBULL", "P_QWILFISH", "P_SCIZOR", "P_SHUCKLE", "P_HERACROSS", "P_SNEASEL", "P_TEDDIURSA", "P_URSARING", "P_SLUGMA", "P_MAGCARGO", "P_SWINUB", "P_PILOSWINE", "P_CORSOLA", "P_REMORAID", "P_OCTILLERY", "P_DELIBIRD", "P_MANTINE", "P_SKARMORY", "P_HOUNDOUR", "P_HOUNDOOM", "P_KINGDRA", "P_PHANPY", "P_DONPHAN", "P_PORYGON2", "P_STANTLER", "P_SMEARGLE", "P_TYROGUE", "P_HITMONTOP", "P_SMOOCHUM", "P_ELEKID", "P_MAGBY", "P_MILTANK", "P_BLISSEY", "P_RAIKOU", "P_ENTEI", "P_SUICUNE", "P_LARVITAR", "P_PUPITAR", "P_TYRANITAR", "P_LUGIA", "P_HOOH", "P_CELEBI"]
 
@@ -1568,113 +1761,131 @@ def filter_move_list(moves_ordered):
   moves_filtered = []
   seen_moves = {}
   for move in moves_ordered:
-    if move in pkmn_moves and move not in seen_moves and move != "M_STRUGGLE" and move != "M_TM05":
+    if move in pkmn_moves and move not in seen_moves and move != "M_STRUGGLE":
       moves_filtered.append(move)
       seen_moves[move] = True
 
   for missing_move in sorted(pkmn_moves - set(moves_filtered)):
-    if missing_move != "M_STRUGGLE" and missing_move != "M_TM05":
+    if missing_move != "M_STRUGGLE":
       moves_filtered.append(missing_move)
 
   moves_filtered.insert(0, "M_STRUGGLE")
-  moves_filtered.append("M_TM05")
 
   return moves_filtered
 
 def get_full_data_as_nums(moves_ordered):
-  movelist = filter_move_list(moves_ordered)
+  movelist = moves_ordered[:]
 
   # convert sections to list of ints
-  learn_num = replace_ranges(moveset_to_int(pkmn_learn, movelist))
-  teach_num = replace_ranges(sort_moveset_nums(moveset_to_int(pkmn_teach, movelist)))
-  event_num = replace_ranges(sort_moveset_nums(moveset_to_int(pkmn_event, movelist)))
+  default_num = replace_ranges(                  moveset_to_int(pkmn_default, movelist))
+  learn_num   = replace_ranges(sort_moveset_nums(moveset_to_int(pkmn_learn,   movelist)))
+  teach_num   = replace_ranges(sort_moveset_nums(moveset_to_int(pkmn_teach,   movelist)))
+  event_num   = replace_ranges(sort_moveset_nums(moveset_to_int(pkmn_event,   movelist)))
 
-  final_list = []
   for ind, pkmn in enumerate(pkmn_order):
     p = []
+    p.extend(default_num[pkmn])
     p.extend(learn_num[pkmn])
     p.append(255)
     p.extend(teach_num[pkmn])
     p.append(255)
     p.extend(event_num[pkmn])
     p.append(255)
-    final_list.append(p)
-  return final_list
+    yield p
+
+# Made it a little more complex, but theoretically a bit more efficient i guess... though probably doesn't matter...
+def get_full_data_len(moves_ordered):
+  movelist = moves_ordered[:]
+
+  # convert sections to list of ints
+  default_num = replace_ranges(                  moveset_to_int(pkmn_default, movelist))
+  learn_num   = replace_ranges(sort_moveset_nums(moveset_to_int(pkmn_learn,   movelist)))
+  teach_num   = replace_ranges(sort_moveset_nums(moveset_to_int(pkmn_teach,   movelist)))
+  event_num   = replace_ranges(sort_moveset_nums(moveset_to_int(pkmn_event,   movelist)))
+
+  count = 0
+  for ind, pkmn in enumerate(pkmn_order):
+    count += len(default_num[pkmn]) + len(learn_num[pkmn]) + len(teach_num[pkmn]) + len(event_num[pkmn]) + 3
+  return count
 
 if __name__ == "__main__":
   import argparse
   parser = argparse.ArgumentParser()
   parser.add_argument('command', choices=[
-    "gen1_tmhm", "gen2_tmhm",
-    "gen1_learn_unique", "gen2_learn_unique",
-    "gen1_unique", # tmhm and learns that are unique to gen1
-    "gen2", # all moves that can be learned in gen1 (excluding events)
-    "gen1", # all moves that can be learned in gen1 (excluding events)
+    # These display pokemon and the moves they can learn.
+    "default", # Default moves for Picodex. This list came from gen1_learn, gen2_learn, and gen2_eggmoves. Order matters only for this list.
+    "learn",   # All other moves a Pokemon learns naturally. Includes remaining level-up and egg moves.
+    "teach",   # Moves a Pokemon can be taught from gen1 tms, gen1 hms, gen2 tms, gen2 hms, gen2 movetutor, and sketch.
+    "event",   # Moves a Pokemon can only learn from an event, excluding default, learn, and teach.
+    "every",   # Above lists combined.
 
-    "learn", # moves a pokemon learns naturally (level or egg). order matters.
-    "teach", # moves a pokemon can be taught (tm/hm/tutor), excluding learn
-    "event", # moves a pokemon can only learn from an event, excluding teach, gen1, and learn
-    "every", # above 3 combined
-    "moves", # moves a pokemon can only learn from an event, excluding teach, gen1, and learn
-    "evols",  # all pokemon evolutions (evolved -> prev evol)
+    # This just displays the evolution data.
+    "evols",   # All pokemon evolutions (evolved -> prev evol)
 
-    "nums",
-    "len",
+    # These commands accept a list of line separated move names from stdin.
+    "moves",   # Clean movelist, adding back in missing moves.
+    "nums",    # Use the order from movelist to generate the numerical data that would be stored in a cartridge.
+    "len",     # Use the order from the movelist to get the number of bytes the entire movedata would take up.
+
+    # This tries to run an algorithm to improve ordering and save space.
+    "gen",     # starts from random moveset. and iterates until it can't change the order and make it smaller anymore.
   ])
   args = parser.parse_args()
 
-  if args.command in ["learn"]:
-    for pkmn, moveset in pkmn_learn.items():
-      if moveset: print(pkmn, " ".join(moveset))
+  def stream_moveset(pkmn_move_struct):
+    for pkmn in pkmn_order:
+      moveset = pkmn_move_struct[pkmn]
+      if moveset: yield pkmn, moveset
 
-  elif args.command in ["teach"]:
-    for pkmn, moveset in pkmn_teach.items():
-      if moveset: print(pkmn, " ".join(moveset))
+  def print_moveset(pkmn_move_struct):
+    for pkmn, moveset in stream_moveset(pkmn_move_struct):
+      out(pkmn, " ".join(moveset))
 
-  elif args.command in ["event"]:
-    for pkmn, moveset in pkmn_event.items():
-      if moveset: print(pkmn, " ".join(moveset))
+  def read_stdin_movelist():
+    lines = [line.strip() for line in sys.stdin.read().split("\n")]
+    lines = [line for line in lines if line]
+    return filter_move_list(lines)
 
-  elif args.command in ["every"]:
-    for pkmn, moveset in pkmn_every.items():
-      if moveset: print(pkmn, " ".join(moveset))
+  if   args.command in ["learn"]:   print_moveset(pkmn_learn)
+  elif args.command in ["teach"]:   print_moveset(pkmn_teach)
+  elif args.command in ["event"]:   print_moveset(pkmn_event)
+  elif args.command in ["every"]:   print_moveset(pkmn_every)
+  elif args.command in ["default"]: print_moveset(pkmn_default)
 
   elif args.command in ["evols"]:
     for pkmn, prev in pkmn_evols.items():
-      if prev: print(pkmn, prev)
+      if prev: out(pkmn, prev)
 
   elif args.command in ["nums"]:
-    lines = [line.strip() for line in sys.stdin.read().split("\n")]
-    lines = [line for line in lines if line]
-    for l in get_full_data_as_nums(lines):
-      print(" ".join([str(x) for x in l]))
+    for l in get_full_data_as_nums(read_stdin_movelist()):
+      out(" ".join([str(x) for x in l]))
 
   elif args.command in ["len"]:
-    lines = [line.strip() for line in sys.stdin.read().split("\n")]
-    lines = [line for line in lines if line]
-    print(len([num for l in get_full_data_as_nums(lines) for num in l]))
+    out(get_full_data_len(read_stdin_movelist()))
 
   elif args.command in ["moves"]: # take in movelist and remove garbage to get it in a decent order.
-    lines = [line.strip() for line in sys.stdin.read().split("\n")]
-    lines = [line for line in lines if line]
-    for move in filter_move_list(lines): print(move)
+    for move in read_stdin_movelist(): out(move)
+
+  elif args.command in ["gen"]: # take in movelist and remove garbage to get it in a decent order.
+    cur_moveorder = list(pkmn_moves)
+    random.shuffle(cur_moveorder)
+    cur_moveorder = filter_move_list(cur_moveorder)
+    cur_len = get_full_data_len(cur_moveorder)
+
+    move_lists = []
+    for _, moveset in stream_moveset(pkmn_learn): move_lists.append(moveset[:])
+    for _, moveset in stream_moveset(pkmn_teach): move_lists.append(moveset[:])
+    for _, moveset in stream_moveset(pkmn_event): move_lists.append(moveset[:])
+
+    for iteration in itertools.count():
+      log("ITERATION #" + str(iteration+1))
+      suggestion_sets = get_suggestion_sets(move_lists, cur_moveorder)
+      new_moveorder, new_len = test_suggestions(suggestion_sets, cur_moveorder, lambda moveorder, curlen: log(str(curlen), "--", " ".join(moveorder)))
+      if new_len < cur_len:
+        cur_moveorder = new_moveorder
+        cur_len = new_len
+        log()
+      else: break
 
   else:
     print("ERROR! Wrong argument")
-
-  # input to every command is list of lines (order of moves)
-  # lines = [line.strip() for line in sys.stdin.read().split("\n")]
-  # lines = [line for line in lines if line != ""]
-
-  # Pass in lines with numbers separated by spaces.
-  # lines = [line.split(" ") for line in sys.stdin.read().split("\n")]
-  # lines = [[y for y in line if y != ""] for line in lines]
-  # lines = [line for line in lines if len(line) > 0]
-
-  # log("Calculating savings... (This is pretty slow. Up to around a minute or two on my machine.)")
-  # savings = get_top_savings(lines)
-  # total_savings = 0
-  # for stat in savings:
-  #   log(f'SAV:{stat["savings"]}', f'CNT:{stat["count"]}', f'LEN:{stat["len"]}', '|', ' '.join([str(n) for n in stat["vals"]]))
-  #   total_savings += stat["savings"]
-  # log("TOTAL SAVINGS:", total_savings)
