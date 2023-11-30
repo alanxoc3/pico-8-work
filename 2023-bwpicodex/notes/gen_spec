@@ -1,17 +1,5 @@
 #!/bin/bash
-cat tmp.plTckX1QrP      | rg -- -- | sort -n | head -n 1 | sed -E 's/\w+ -- //g' | tr ' ' '\n' | ./moveorder gen > $(mktemp -p ./ spc_XXXXXXX) &
-cat tmp.rjHuL7rdEX      | rg -- -- | sort -n | head -n 1 | sed -E 's/\w+ -- //g' | tr ' ' '\n' | ./moveorder gen > $(mktemp -p ./ spc_XXXXXXX) &
-cat tmp.d9OtZw7xfF      | rg -- -- | sort -n | head -n 1 | sed -E 's/\w+ -- //g' | tr ' ' '\n' | ./moveorder gen > $(mktemp -p ./ spc_XXXXXXX) &
-cat tmp.tDB3Xo6Pl2      | rg -- -- | sort -n | head -n 1 | sed -E 's/\w+ -- //g' | tr ' ' '\n' | ./moveorder gen > $(mktemp -p ./ spc_XXXXXXX) &
-cat tmp.FwIVCFLhai      | rg -- -- | sort -n | head -n 1 | sed -E 's/\w+ -- //g' | tr ' ' '\n' | ./moveorder gen > $(mktemp -p ./ spc_XXXXXXX) &
-cat tmp.L1FfigXQm9      | rg -- -- | sort -n | head -n 1 | sed -E 's/\w+ -- //g' | tr ' ' '\n' | ./moveorder gen > $(mktemp -p ./ spc_XXXXXXX) &
-cat tmp.ToJGWw3uG1      | rg -- -- | sort -n | head -n 1 | sed -E 's/\w+ -- //g' | tr ' ' '\n' | ./moveorder gen > $(mktemp -p ./ spc_XXXXXXX) &
-cat tmp.jN8GIs7IXC      | rg -- -- | sort -n | head -n 1 | sed -E 's/\w+ -- //g' | tr ' ' '\n' | ./moveorder gen > $(mktemp -p ./ spc_XXXXXXX) &
-cat tmp.fSuY7ADQWT      | rg -- -- | sort -n | head -n 1 | sed -E 's/\w+ -- //g' | tr ' ' '\n' | ./moveorder gen > $(mktemp -p ./ spc_XXXXXXX) &
-cat tmp.wceb5BUWIr      | rg -- -- | sort -n | head -n 1 | sed -E 's/\w+ -- //g' | tr ' ' '\n' | ./moveorder gen > $(mktemp -p ./ spc_XXXXXXX) &
-cat tmp.r0YpFvqyQ2      | rg -- -- | sort -n | head -n 1 | sed -E 's/\w+ -- //g' | tr ' ' '\n' | ./moveorder gen > $(mktemp -p ./ spc_XXXXXXX) &
-cat tmp.jU4GWvbZCT      | rg -- -- | sort -n | head -n 1 | sed -E 's/\w+ -- //g' | tr ' ' '\n' | ./moveorder gen > $(mktemp -p ./ spc_XXXXXXX) &
-cat tmp.FNzantY8Vy      | rg -- -- | sort -n | head -n 1 | sed -E 's/\w+ -- //g' | tr ' ' '\n' | ./moveorder gen > $(mktemp -p ./ spc_XXXXXXX) &
-cat tmp.phziJkNGvC      | rg -- -- | sort -n | head -n 1 | sed -E 's/\w+ -- //g' | tr ' ' '\n' | ./moveorder gen > $(mktemp -p ./ spc_XXXXXXX) &
-cat tmp.3c9rS5rXhW      | rg -- -- | sort -n | head -n 1 | sed -E 's/\w+ -- //g' | tr ' ' '\n' | ./moveorder gen > $(mktemp -p ./ spc_XXXXXXX) &
-cat tmp.prev_iterations | rg -- -- | sort -n | head -n 1 | sed -E 's/\w+ -- //g' | tr ' ' '\n' | ./moveorder gen > $(mktemp -p ./ spc_XXXXXXX) &
+for top_file in $(rg -- -- tmp* | sort -t : -k2 -n | awk -F : '{print $1}' | uniq | head -n 16); do
+  cat top_file | rg -- -- | sort -n | head -n 1 | sed -E 's/\w+ -- //g' | tr ' ' '\n' | ./moveorder gen > $(mktemp -p ./ tmp.spc_XXXXXXX) &
+done
+wait

@@ -99,19 +99,15 @@ def get_sublists(lst): # from gpt
 
 def test_all_combinations(cur_moveorder, logfunc):
   cur_len = get_full_data_len(cur_moveorder)
-  moveorder_len = len(cur_moveorder)
+  sublists = list(get_sublists(cur_moveorder))
+  random.shuffle(sublists)
 
-  random.shuffle(suggestion_sets)
-
-  for sublist in get_sublists(cur_moveorder):
-
-  for s in suggestion_sets:
-    for tmp_moveorder in get_move_reorderings(cur_moveorder, moveslice):
+  for sublist in sublists[0:256]:
+    for tmp_moveorder in get_move_reorderings(cur_moveorder, sublist):
       new_len = get_full_data_len(tmp_moveorder)
-        if new_len < cur_len:
-          cur_moveorder = tmp_moveorder
-          cur_len = new_len
-          logfunc(cur_moveorder, cur_len)
+      if new_len < cur_len:
+        logfunc(tmp_moveorder, new_len)
+        return tmp_moveorder, new_len
 
   return cur_moveorder, cur_len
 
@@ -1968,11 +1964,11 @@ if __name__ == "__main__":
 
     try_count = 0
     for iteration in itertools.count():
-      out(f"ITERATION #{str(iteration+1)} | (try #{try_count})" + str(iteration+1), "(random)")
-
-      if try_count == 1:
-        test_all_combinations(cur_moveorder, print_progress_func)
+      if try_count % 2 == 0:
+        out(f"ITERATION #{str(iteration+1)} | TRY #{try_count} | ALL")
+        new_moveorder, new_len = test_all_combinations(cur_moveorder, print_progress_func)
       else:
+        out(f"ITERATION #{str(iteration+1)} | TRY #{try_count} | RANDOM")
         suggestion_sets = get_suggestion_sets(move_lists, cur_moveorder)
         new_moveorder, new_len = test_suggestions(suggestion_sets, cur_moveorder, print_progress_func)
 
@@ -1982,7 +1978,6 @@ if __name__ == "__main__":
         try_count = 0
       else:
         try_count += 1
-        
 
       out()
 
