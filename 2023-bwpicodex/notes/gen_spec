@@ -1,5 +1,5 @@
 #!/bin/bash
 for top_file in $(rg -- -- tmp* | sort -t : -k2 -n | awk -F : '{print $1}' | uniq | head -n 16); do
-  cat top_file | rg -- -- | sort -n | head -n 1 | sed -E 's/\w+ -- //g' | tr ' ' '\n' | ./moveorder gen > $(mktemp -p ./ tmp.spc_XXXXXXX) &
+  cat "$top_file" | rg -- -- | sort -n | head -n 1 | sed -E 's/\w+ -- //g' | tr ' ' '\n' | ./moveorder gen > $(mktemp -p ./ tmp.spc_XXXXXXX) &
 done
 wait

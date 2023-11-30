@@ -4,6 +4,7 @@
 # Finding subset patterns saves tons of bytes for picodex!
 
 # SMALLEST is 5250. default: 7062 (saw 5090 as a number... its possible :)
+# SMALLEST is 4509.
 
 import itertools # groupby (for ranges), combinations (for subsets), count (for save cmd)
 from collections import Counter # To keep counts of subset repeats
