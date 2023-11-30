@@ -1,21 +1,17 @@
 #!/bin/bash
-while sleep 1s; do
-  echo "NEW RUN: " $(date '+%Y-%m-%d %H:%M:%S')
-  # 8 threads focused on improving the latest things.
-  ROWS=$(cat ./tmp* | rg -- -- | sort -n | head -n 32 | shuf | head -n 8 | sed -E 's/^\w+ -- //g')
-  IFS=$'\n' read -d '' -r -a array <<< "$ROWS"
-
-  for i in "${array[@]}"; do
-    tr ' ' '\n' <<< "$i" | ./moveorder gen > $(mktemp -p ./) &
-  done
-
-  # 8 threads focused on trying to find new branches.
-  ROWS=$(cat ./tmp* | rg -- -- | sort -un | head -n 256 | shuf | head -n 8 | sed -E 's/^\w+ -- //g')
-  IFS=$'\n' read -d '' -r -a array <<< "$ROWS"
-
-  for i in "${array[@]}"; do
-    tr ' ' '\n' <<< "$i" | ./moveorder gen > $(mktemp -p ./) &
-  done
-
-  wait
-done
+cat tmp.plTckX1QrP      | rg -- -- | sort -n | head -n 1 | sed -E 's/\w+ -- //g' | tr ' ' '\n' | ./moveorder gen > $(mktemp -p ./ spc_XXXXXXX) &
+cat tmp.rjHuL7rdEX      | rg -- -- | sort -n | head -n 1 | sed -E 's/\w+ -- //g' | tr ' ' '\n' | ./moveorder gen > $(mktemp -p ./ spc_XXXXXXX) &
+cat tmp.d9OtZw7xfF      | rg -- -- | sort -n | head -n 1 | sed -E 's/\w+ -- //g' | tr ' ' '\n' | ./moveorder gen > $(mktemp -p ./ spc_XXXXXXX) &
+cat tmp.tDB3Xo6Pl2      | rg -- -- | sort -n | head -n 1 | sed -E 's/\w+ -- //g' | tr ' ' '\n' | ./moveorder gen > $(mktemp -p ./ spc_XXXXXXX) &
+cat tmp.FwIVCFLhai      | rg -- -- | sort -n | head -n 1 | sed -E 's/\w+ -- //g' | tr ' ' '\n' | ./moveorder gen > $(mktemp -p ./ spc_XXXXXXX) &
+cat tmp.L1FfigXQm9      | rg -- -- | sort -n | head -n 1 | sed -E 's/\w+ -- //g' | tr ' ' '\n' | ./moveorder gen > $(mktemp -p ./ spc_XXXXXXX) &
+cat tmp.ToJGWw3uG1      | rg -- -- | sort -n | head -n 1 | sed -E 's/\w+ -- //g' | tr ' ' '\n' | ./moveorder gen > $(mktemp -p ./ spc_XXXXXXX) &
+cat tmp.jN8GIs7IXC      | rg -- -- | sort -n | head -n 1 | sed -E 's/\w+ -- //g' | tr ' ' '\n' | ./moveorder gen > $(mktemp -p ./ spc_XXXXXXX) &
+cat tmp.fSuY7ADQWT      | rg -- -- | sort -n | head -n 1 | sed -E 's/\w+ -- //g' | tr ' ' '\n' | ./moveorder gen > $(mktemp -p ./ spc_XXXXXXX) &
+cat tmp.wceb5BUWIr      | rg -- -- | sort -n | head -n 1 | sed -E 's/\w+ -- //g' | tr ' ' '\n' | ./moveorder gen > $(mktemp -p ./ spc_XXXXXXX) &
+cat tmp.r0YpFvqyQ2      | rg -- -- | sort -n | head -n 1 | sed -E 's/\w+ -- //g' | tr ' ' '\n' | ./moveorder gen > $(mktemp -p ./ spc_XXXXXXX) &
+cat tmp.jU4GWvbZCT      | rg -- -- | sort -n | head -n 1 | sed -E 's/\w+ -- //g' | tr ' ' '\n' | ./moveorder gen > $(mktemp -p ./ spc_XXXXXXX) &
+cat tmp.FNzantY8Vy      | rg -- -- | sort -n | head -n 1 | sed -E 's/\w+ -- //g' | tr ' ' '\n' | ./moveorder gen > $(mktemp -p ./ spc_XXXXXXX) &
+cat tmp.phziJkNGvC      | rg -- -- | sort -n | head -n 1 | sed -E 's/\w+ -- //g' | tr ' ' '\n' | ./moveorder gen > $(mktemp -p ./ spc_XXXXXXX) &
+cat tmp.3c9rS5rXhW      | rg -- -- | sort -n | head -n 1 | sed -E 's/\w+ -- //g' | tr ' ' '\n' | ./moveorder gen > $(mktemp -p ./ spc_XXXXXXX) &
+cat tmp.prev_iterations | rg -- -- | sort -n | head -n 1 | sed -E 's/\w+ -- //g' | tr ' ' '\n' | ./moveorder gen > $(mktemp -p ./ spc_XXXXXXX) &

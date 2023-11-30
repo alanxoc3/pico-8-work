@@ -1,0 +1,5 @@
+#!/bin/bash
+for x in $(seq 16); do
+  ./moveorder ga > $(mktemp -p ./) &
+done
+wait

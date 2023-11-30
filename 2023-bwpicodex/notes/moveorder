@@ -9,8 +9,9 @@ import itertools # groupby (for ranges), combinations (for subsets), count (for 
 from collections import Counter # To keep counts of subset repeats
 import random          # random sample and shuffle to make big lists smaller and randomize input
 import sys             # stderr log and stdin
-import math # For how many subsets of len x in thing
+import math # For how many subsets of len x in thing and ceil
 from multiprocessing import Pool
+from datetime import datetime
 
 # def log(*args): print(*args, file=sys.stderr, flush=True)
 def out(*args): print(*args, flush=True)
@@ -31,7 +32,7 @@ def get_all_subsets(l, samp_size):
   return subs
 
 # yields non-overlapping sets that may save space.
-def get_suggestion_sets(move_lists, move_order, try_count):
+def get_suggestion_sets(move_lists, move_order):
   move_lists = move_lists[:]
   random.shuffle(move_lists)
 
@@ -55,9 +56,6 @@ def get_suggestion_sets(move_lists, move_order, try_count):
     savings_arr.append(((len(fz) - 3) * count, fz))
 
   random.shuffle(savings_arr)
-  if try_count%3 > 0: # if random fails, try a best to worst priority. I had tried a "worse to best" priority too, but that didn't seem to help usually and it slows things down with that extra step.
-    savings_arr = sorted(savings_arr, key=lambda x: x[0])
-    savings_arr = reversed(savings_arr)
 
   savings_set = set()
   final_arr = []
@@ -89,6 +87,27 @@ def test_suggestions(suggestion_sets, cur_moveorder, logfunc):
       random.shuffle(moveslice)
       for tmp_moveorder in get_move_reorderings(cur_moveorder, moveslice):
         new_len = get_full_data_len(tmp_moveorder)
+        if new_len < cur_len:
+          cur_moveorder = tmp_moveorder
+          cur_len = new_len
+          logfunc(cur_moveorder, cur_len)
+
+  return cur_moveorder, cur_len
+
+def get_sublists(lst): # from gpt
+  return (lst[i:j] for i in range(len(lst)) for j in range(i+1, len(lst)+1))
+
+def test_all_combinations(cur_moveorder, logfunc):
+  cur_len = get_full_data_len(cur_moveorder)
+  moveorder_len = len(cur_moveorder)
+
+  random.shuffle(suggestion_sets)
+
+  for sublist in get_sublists(cur_moveorder):
+
+  for s in suggestion_sets:
+    for tmp_moveorder in get_move_reorderings(cur_moveorder, moveslice):
+      new_len = get_full_data_len(tmp_moveorder)
         if new_len < cur_len:
           cur_moveorder = tmp_moveorder
           cur_len = new_len
@@ -1720,9 +1739,13 @@ pkmn_every_raw = combine_movesets(def_learn, gen2_learn, gen2_eggmoves, gen1_lea
 
 # Just a list of all possible moves that show up in all the lists
 pkmn_moves = {move for moveset in [pkmn_default, pkmn_learn, pkmn_teach, pkmn_event] for moves in moveset.values() for move in moves}
+pkmn_moves_id_to_str = dict(enumerate(sorted(pkmn_moves))) # converts numbers to string values
+pkmn_moves_str_to_id = dict((x, i) for i, x in enumerate(sorted(pkmn_moves))) # converts numbers to string values
 
 pkmn_evols = pokemon_evol
 pkmn_order = ["P_MISSINGNO", "P_BULBASAUR", "P_IVYSAUR", "P_VENUSAUR", "P_CHARMANDER", "P_CHARMELEON", "P_CHARIZARD", "P_SQUIRTLE", "P_WARTORTLE", "P_BLASTOISE", "P_CATERPIE", "P_METAPOD", "P_BUTTERFREE", "P_WEEDLE", "P_KAKUNA", "P_BEEDRILL", "P_PIDGEY", "P_PIDGEOTTO", "P_PIDGEOT", "P_RATTATA", "P_RATICATE", "P_SPEAROW", "P_FEAROW", "P_EKANS", "P_ARBOK", "P_PIKACHU", "P_RAICHU", "P_SANDSHREW", "P_SANDSLASH", "P_NIDORANF", "P_NIDORINA", "P_NIDOQUEEN", "P_NIDORANM", "P_NIDORINO", "P_NIDOKING", "P_CLEFAIRY", "P_CLEFABLE", "P_VULPIX", "P_NINETALES", "P_JIGGLYPUFF", "P_WIGGLYTUFF", "P_ZUBAT", "P_GOLBAT", "P_ODDISH", "P_GLOOM", "P_VILEPLUME", "P_PARAS", "P_PARASECT", "P_VENONAT", "P_VENOMOTH", "P_DIGLETT", "P_DUGTRIO", "P_MEOWTH", "P_PERSIAN", "P_PSYDUCK", "P_GOLDUCK", "P_MANKEY", "P_PRIMEAPE", "P_GROWLITHE", "P_ARCANINE", "P_POLIWAG", "P_POLIWHIRL", "P_POLIWRATH", "P_ABRA", "P_KADABRA", "P_ALAKAZAM", "P_MACHOP", "P_MACHOKE", "P_MACHAMP", "P_BELLSPROUT", "P_WEEPINBELL", "P_VICTREEBEL", "P_TENTACOOL", "P_TENTACRUEL", "P_GEODUDE", "P_GRAVELER", "P_GOLEM", "P_PONYTA", "P_RAPIDASH", "P_SLOWPOKE", "P_SLOWBRO", "P_MAGNEMITE", "P_MAGNETON", "P_FARFETCHD", "P_DODUO", "P_DODRIO", "P_SEEL", "P_DEWGONG", "P_GRIMER", "P_MUK", "P_SHELLDER", "P_CLOYSTER", "P_GASTLY", "P_HAUNTER", "P_GENGAR", "P_ONIX", "P_DROWZEE", "P_HYPNO", "P_KRABBY", "P_KINGLER", "P_VOLTORB", "P_ELECTRODE", "P_EXEGGCUTE", "P_EXEGGUTOR", "P_CUBONE", "P_MAROWAK", "P_HITMONLEE", "P_HITMONCHAN", "P_LICKITUNG", "P_KOFFING", "P_WEEZING", "P_RHYHORN", "P_RHYDON", "P_CHANSEY", "P_TANGELA", "P_KANGASKHAN", "P_HORSEA", "P_SEADRA", "P_GOLDEEN", "P_SEAKING", "P_STARYU", "P_STARMIE", "P_MRMIME", "P_SCYTHER", "P_JYNX", "P_ELECTABUZZ", "P_MAGMAR", "P_PINSIR", "P_TAUROS", "P_MAGIKARP", "P_GYARADOS", "P_LAPRAS", "P_DITTO", "P_EEVEE", "P_VAPOREON", "P_JOLTEON", "P_FLAREON", "P_PORYGON", "P_OMANYTE", "P_OMASTAR", "P_KABUTO", "P_KABUTOPS", "P_AERODACTYL", "P_SNORLAX", "P_ARTICUNO", "P_ZAPDOS", "P_MOLTRES", "P_DRATINI", "P_DRAGONAIR", "P_DRAGONITE", "P_MEWTWO", "P_MEW", "P_CHIKORITA", "P_BAYLEEF", "P_MEGANIUM", "P_CYNDAQUIL", "P_QUILAVA", "P_TYPHLOSION", "P_TOTODILE", "P_CROCONAW", "P_FERALIGATR", "P_SENTRET", "P_FURRET", "P_HOOTHOOT", "P_NOCTOWL", "P_LEDYBA", "P_LEDIAN", "P_SPINARAK", "P_ARIADOS", "P_CROBAT", "P_CHINCHOU", "P_LANTURN", "P_PICHU", "P_CLEFFA", "P_IGGLYBUFF", "P_TOGEPI", "P_TOGETIC", "P_NATU", "P_XATU", "P_MAREEP", "P_FLAAFFY", "P_AMPHAROS", "P_BELLOSSOM", "P_MARILL", "P_AZUMARILL", "P_SUDOWOODO", "P_POLITOED", "P_HOPPIP", "P_SKIPLOOM", "P_JUMPLUFF", "P_AIPOM", "P_SUNKERN", "P_SUNFLORA", "P_YANMA", "P_WOOPER", "P_QUAGSIRE", "P_ESPEON", "P_UMBREON", "P_MURKROW", "P_SLOWKING", "P_MISDREAVUS", "P_UNOWN", "P_WOBBUFFET", "P_GIRAFARIG", "P_PINECO", "P_FORRETRESS", "P_DUNSPARCE", "P_GLIGAR", "P_STEELIX", "P_SNUBBULL", "P_GRANBULL", "P_QWILFISH", "P_SCIZOR", "P_SHUCKLE", "P_HERACROSS", "P_SNEASEL", "P_TEDDIURSA", "P_URSARING", "P_SLUGMA", "P_MAGCARGO", "P_SWINUB", "P_PILOSWINE", "P_CORSOLA", "P_REMORAID", "P_OCTILLERY", "P_DELIBIRD", "P_MANTINE", "P_SKARMORY", "P_HOUNDOUR", "P_HOUNDOOM", "P_KINGDRA", "P_PHANPY", "P_DONPHAN", "P_PORYGON2", "P_STANTLER", "P_SMEARGLE", "P_TYROGUE", "P_HITMONTOP", "P_SMOOCHUM", "P_ELEKID", "P_MAGBY", "P_MILTANK", "P_BLISSEY", "P_RAIKOU", "P_ENTEI", "P_SUICUNE", "P_LARVITAR", "P_PUPITAR", "P_TYRANITAR", "P_LUGIA", "P_HOOH", "P_CELEBI"]
+
+max_byte_len = len(pkmn_order)*3 + sum([len(l) for l in pkmn_every.values()])
 
 def moveset_to_int(moveset, movelist):
   name_to_index = {v: k for k, v in enumerate(movelist)}
@@ -1802,7 +1825,7 @@ def get_full_data_len(moves_ordered):
   event_num   = replace_ranges(sort_moveset_nums(moveset_to_int(pkmn_event,   movelist)))
 
   count = 0
-  for ind, pkmn in enumerate(pkmn_order):
+  for pkmn in pkmn_order:
     count += len(default_num[pkmn]) + len(learn_num[pkmn]) + len(teach_num[pkmn]) + len(event_num[pkmn]) + 3
   return count
 
@@ -1828,6 +1851,7 @@ if __name__ == "__main__":
 
     # This tries to run an algorithm to improve ordering and save space.
     "gen",     # starts from random moveset. and iterates until it can't change the order and make it smaller anymore.
+    "ga",      # same as above but uses an actual genetic algorithm
   ])
   args = parser.parse_args()
 
@@ -1844,6 +1868,10 @@ if __name__ == "__main__":
     lines = [line.strip() for line in sys.stdin.read().split("\n")]
     lines = [line for line in lines if line]
     return filter_move_list(lines)
+
+  def read_stdin_movelists():
+    lines = [line.strip() for line in sys.stdin.read().split("\n")]
+    return [filter_move_list(line.split(" ")) for line in lines if line]
 
   if   args.command in ["learn"]:    print_moveset(pkmn_learn)
   elif args.command in ["teach"]:    print_moveset(pkmn_teach)
@@ -1866,6 +1894,61 @@ if __name__ == "__main__":
   elif args.command in ["moves"]: # take in movelist and remove garbage to get it in a decent order.
     for move in read_stdin_movelist(): out(move)
 
+  elif args.command in ["ga"]:
+    import pygad
+
+    if sys.stdin.isatty():
+      initial_population = None
+    else:
+      movelists = read_stdin_movelists()
+      initial_population = []
+      for movelist in movelists:
+        initial_population.append([pkmn_moves_str_to_id[m] for m in movelist])
+
+    most_saved_bytes = 0
+
+    def nums_to_moveorder(sol):
+      return [pkmn_moves_id_to_str[s] for s in sol]
+
+    # called after each generation
+    # returning the string "stop" will terminate the genetic algorithm
+    def on_generation(g):
+      global most_saved_bytes
+      sol, fit, _ = g.best_solution()
+      if fit > most_saved_bytes:
+        most_saved_bytes = fit
+        out(max_byte_len - fit, "--", " ".join(nums_to_moveorder(sol)))
+
+    def fit_func(g, sol, sol_idx):
+      # lower is better for data length, so the "1/" part inverts this and makes higher better for the gad library.
+      return max_byte_len - get_full_data_len(nums_to_moveorder(sol))
+
+    sol_per_pop = len(pkmn_moves)
+    ga_instance = pygad.GA(num_generations=10000,
+      sol_per_pop=sol_per_pop,
+      num_parents_mating=math.ceil(sol_per_pop * .125),
+
+      # these 3 parameters make it a list ordering problem
+      num_genes=len(pkmn_moves), # number of moves
+      gene_space=range(0, len(pkmn_moves)),
+      allow_duplicate_genes=False,
+
+      # pass an initial population if it was specified from stdin
+
+      # these are functions. fitness is the important one. on_generation is for printing status
+      fitness_func=fit_func,
+      on_generation=on_generation,
+
+      # These were on an example I saw, all optional
+      # keep_parents=math.ceil(sol_per_pop * .05),
+      # parent_selection_type="rank",
+      # crossover_type="single_point", # apparently for resources
+      # mutation_type="adaptive",
+      # mutation_percent_genes=[20, 5],
+    )
+
+    ga_instance.run()
+
   elif args.command in ["gen"]: # take in optional movelist and remove garbage to get it in a decent order.
     if sys.stdin.isatty():
       cur_moveorder = list(pkmn_moves)
@@ -1881,19 +1964,27 @@ if __name__ == "__main__":
     for _, moveset in stream_moveset(pkmn_teach): move_lists.append(moveset[:])
     for _, moveset in stream_moveset(pkmn_event): move_lists.append(moveset[:])
 
+    print_progress_func = lambda moveorder, curlen: out(str(curlen), "--", " ".join(moveorder))
+
     try_count = 0
     for iteration in itertools.count():
-      out("ITERATION #" + str(iteration+1))
-      suggestion_sets = get_suggestion_sets(move_lists, cur_moveorder, try_count)
-      new_moveorder, new_len = test_suggestions(suggestion_sets, cur_moveorder, lambda moveorder, curlen: out(str(curlen), "--", " ".join(moveorder)))
+      out(f"ITERATION #{str(iteration+1)} | (try #{try_count})" + str(iteration+1), "(random)")
+
+      if try_count == 1:
+        test_all_combinations(cur_moveorder, print_progress_func)
+      else:
+        suggestion_sets = get_suggestion_sets(move_lists, cur_moveorder)
+        new_moveorder, new_len = test_suggestions(suggestion_sets, cur_moveorder, print_progress_func)
 
       if new_len < cur_len:
         cur_moveorder = new_moveorder
         cur_len = new_len
-        out()
         try_count = 0
-      elif try_count < 1: try_count += 1
-      else: break
+      else:
+        try_count += 1
+        
+
+      out()
 
   else:
     print("ERROR! Wrong argument")
