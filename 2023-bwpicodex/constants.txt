@@ -77,7 +77,7 @@ G_FEMA: 2
 G_BOTH: 3
 
 # ----------------------------- type numbers - odds are physical, evens are special.
-T_NONE:     0
+T_BIRD:     0
 T_NORMAL:   1
 T_FIRE:     2
 T_FIGHTING: 3
@@ -95,7 +95,6 @@ T_DRAGON:   14
 T_GHOST:    15
 T_DARK:     16
 T_STEEL:    17
-T_BIRD:     18
 
 # ----------------------------- pkmn numbers
 P_MISSINGNO:  0

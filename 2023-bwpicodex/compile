@@ -9,9 +9,9 @@ runthing() {
 
 runthing sprite.lua
 runthing trainers.lua
+runthing typechart.lua
 runthing movedata.lua
 runthing pkmnstats.lua
-runthing typechart.lua
 runthing pkmnmoves.lua
 
 # Try this:

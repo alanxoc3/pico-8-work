@@ -1,8 +1,30 @@
--- TODO: ya... this needs to be done.
 function init() -- entry point for this compile script
-  for i=0, 323 do
-    offsetpoke(rnd())
+  for x in all(type_chart) do
+    offsetpoke(x)
   end
 
   log("Wrote Type Chart")
 end
+
+-- order of types here is important. it corresponds to the constants file.
+type_chart = { -- 0: no effect, 1: resist, 2: normal, 4: x2
+-- BRD NOR FIR FIG WAT POI ELE GRO GRA FLY ICE BUG PSY ROC DRA GHO DAR STE <-def v-atk
+    2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,     -- BRD
+    2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  1,  2,  0,  2,  1,     -- NOR
+    2,  2,  1,  2,  1,  2,  2,  2,  4,  2,  4,  4,  2,  1,  1,  2,  2,  4,     -- FIR
+    2,  4,  2,  2,  2,  1,  2,  2,  2,  1,  4,  1,  1,  4,  2,  0,  4,  4,     -- FIG
+    2,  2,  4,  2,  1,  2,  2,  4,  1,  2,  2,  2,  2,  4,  1,  2,  2,  2,     -- WAT
+    2,  2,  2,  2,  2,  1,  2,  1,  4,  2,  2,  2,  2,  1,  2,  1,  2,  0,     -- POI
+    2,  2,  2,  2,  4,  2,  1,  0,  1,  4,  2,  2,  2,  2,  1,  2,  2,  2,     -- ELE
+    2,  2,  4,  2,  2,  4,  4,  2,  1,  0,  2,  1,  2,  4,  2,  2,  2,  4,     -- GRO
+    2,  2,  1,  2,  4,  1,  2,  4,  1,  1,  2,  1,  2,  4,  1,  2,  2,  1,     -- GRA
+    2,  2,  2,  4,  2,  2,  1,  2,  4,  2,  2,  4,  2,  1,  2,  2,  2,  1,     -- FLY
+    2,  2,  1,  2,  1,  2,  2,  4,  4,  4,  1,  2,  2,  2,  4,  2,  2,  1,     -- ICE
+    2,  2,  1,  1,  2,  1,  2,  2,  4,  1,  2,  2,  4,  2,  2,  1,  4,  1,     -- BUG
+    2,  2,  2,  4,  2,  4,  2,  2,  2,  2,  2,  2,  1,  2,  2,  2,  0,  1,     -- PSY
+    2,  2,  4,  1,  2,  2,  2,  1,  2,  4,  4,  4,  2,  2,  2,  2,  2,  1,     -- ROC
+    2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  4,  2,  2,  1,     -- DRA
+    2,  0,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  4,  2,  2,  4,  1,  1,     -- GHO
+    2,  2,  2,  1,  2,  2,  2,  2,  2,  2,  2,  2,  4,  2,  2,  4,  1,  1,     -- DAR
+    2,  2,  1,  2,  1,  2,  1,  2,  2,  2,  4,  2,  2,  4,  2,  2,  2,  1,     -- STE
+}
