@@ -3,7 +3,7 @@ function init() -- entry point for this compile script
 
   for arr in all(datastr_to_arr(pokemon_stats)) do
     local pkmnid = arr[1]
-    statarr[pkmnid] = {arr[2], arr[3], arr[4], arr[5], arr[6], arr[7], arr[8], arr[9], arr[10]} -- arr[11] is gender and should probably be included somehow.
+    statarr[pkmnid] = {arr[2], arr[3], arr[4], arr[5], arr[6], arr[7], arr[8], arr[9], arr[10], arr[11]} -- arr[11] is gender and should probably be included somehow.
   end
 
   for i=0,251 do

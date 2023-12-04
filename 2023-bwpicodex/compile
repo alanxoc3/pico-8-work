@@ -10,8 +10,9 @@ runthing() {
 runthing sprite.lua
 runthing trainers.lua
 runthing movedata.lua
-runthing pkmnmoves.lua
 runthing pkmnstats.lua
+runthing typechart.lua
+runthing pkmnmoves.lua
 
 # Try this:
 # SAV:636 CNT:106 LEN:9 | 1 2 4 5 7 9 11 12 13

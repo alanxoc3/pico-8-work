@@ -1,6 +1,17 @@
 # ----------------------------- just some constants for the game
 C_LEVEL: 50
 
+# ----------------------------- save locations - will have to update/change slightly
+#   1 num, 1 gender, 1 item, 1 move, 1 move, 1 move, 1 move
+S_PARTY1:         0x5e00
+S_PARTY2:         0x5e1e
+S_PARTY3:         0x5e3c
+S_POKEMON:        0x5e5a
+S_NEW:            0x5efc
+S_STORY:          0x5efd
+S_HOARD:          0x5efe
+S_SWAP_CONTROLS:  0x5eff
+
 # ----------------------------- priorities - aligned to thousand because 999 is the max speed stat
 C_PRIORITY_SWITCH:      3000
 C_PRIORITY_QUICKATTACK: 2000
@@ -16,27 +27,50 @@ C_MAJOR_PARALYZED: 4
 C_MAJOR_POISONED:  5
 C_MAJOR_SLEEPING:  6
 
-# ----------------------------- save locations - will have to update/change slightly
-# party structure (30 bytes)
-# if all the moves are 0 (struggle), the pokemon is not in the party
-#   5 | pokemon (1 num, 1 gender, 1 move, 1 move, 1 move, 1 move)
-#   5 | pokemon (1 num, 1 gender, 1 move, 1 move, 1 move, 1 move)
-#   5 | pokemon (1 num, 1 gender, 1 move, 1 move, 1 move, 1 move)
-#   5 | pokemon (1 num, 1 gender, 1 move, 1 move, 1 move, 1 move)
-#   5 | pokemon (1 num, 1 gender, 1 move, 1 move, 1 move, 1 move)
-#   5 | pokemon (1 num, 1 gender, 1 move, 1 move, 1 move, 1 move)
+# ----------------------------- held items
+I_AMULETCOIN:        1
+I_BERSERKGENE:       2
+I_BLACKBELT:         3
+I_BLACKGLASSES:      4
+I_BRIGHTPOWDER:      5
+I_CHARCOAL:          6
+I_DRAGONFANG:        7
+I_FOCUSBAND:         8
+I_HARDSTONE:         9
+I_KINGSROCK:         10
+I_LEFTOVERS:         11
+I_LIGHTBALL:         12
+I_LUCKYPUNCH:        13
+I_MAGNET:            14
+I_METALCOAT:         15
+I_METALPOWDER:       16
+I_MIRACLESEED:       17
+I_MYSTICWATER:       18
+I_NEVERMELTICE:      19
+I_PINKBOW:           20
+I_POISONBARB:        21
+I_POLKADOTBOW:       22
+I_QUICKCLAW:         23
+I_SCOPELENS:         24
+I_SHARPBEAK:         25
+I_SILVERPOWDER:      26
+I_SOFTSAND:          27
+I_SPELLTAG:          28
+I_STICK:             29
+I_THICKCLUB:         30
+I_TWISTEDSPOON:      31
+I_BERRY:             32
+I_BITTERBERRY:       33
+I_BURNTBERRY:        34
+I_GOLDBERRY:         35
+I_ICEBERRY:          36
+I_MINTBERRY:         37
+I_MIRACLEBERRY:      38
+I_MYSTERYBERRY:      39
+I_PARALYZECUREBERRY: 40
+I_POISONCUREBERRY:   41
 
-# 32 bytes for unlocked pokemon. 8 bytes for unlocked trainers.
-S_PARTY1:         0x5e00
-S_PARTY2:         0x5e1e
-S_PARTY3:         0x5e3c
-S_POKEMON:        0x5e5a
-S_NEW:            0x5efc
-S_STORY:          0x5efd
-S_HOARD:          0x5efe
-S_SWAP_CONTROLS:  0x5eff
-
-# ----------------------------- genders
+# ----------------------------- genders - these are the 4 possible
 G_NONE: 0
 G_MALE: 1
 G_FEMA: 2
@@ -61,8 +95,7 @@ T_DRAGON:   14
 T_GHOST:    15
 T_DARK:     16
 T_STEEL:    17
-T_QUESTION: 18
-T_BIRD:     19
+T_BIRD:     18
 
 # ----------------------------- pkmn numbers
 P_MISSINGNO:  0

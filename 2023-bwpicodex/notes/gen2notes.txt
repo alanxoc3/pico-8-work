@@ -74,7 +74,7 @@ DIFF: Defense Curl powerup for rollout is Baton Passed.
 DIFF: Rage counter is Baton Passed. Rage counter does not reset when rage is not used anymore.
 DIFF: Kings Rock has a chance to activate with any attack that does damage at the time of using the attack. It can still be triggered with attacking moves that already has a flinch chance if that flinch chance failed. All multistrike moves only have the chance on the last hit.
 DIFF: Baton Pass doesn't allow selecting a Pokemon. Instead, the next available Pokemon in the order of the user's party is selected.
-DIFF: Hidden Power has a base power of 60 and changes type to be a random super effective move for one of the opposing Pokemon's 2 types. It's possible for Hidden Power to be normal type.
+DIFF: Hidden Power has a base power of 60 and changes type to be a random super effective move for one of the opposing Pokemon's 2 types. Defaults to normal type if the chosen type has no super effective weakness.
 DIFF: Morning Sun, Moonlight, & Synthesis normally restore 1/2 HP. They restore 3/4 during Sunny Day and 1/4 during rain/sandstorm.
 DIFF: Mirror Coat will still activate if the foe used Beatup. It didn't do this in Gen 2.
 DIFF: Damage calculation is capped at 999 damage.
