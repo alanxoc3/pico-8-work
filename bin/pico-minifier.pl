@@ -34,8 +34,8 @@ GetOptions('minify'  => \$minify,     # minify the generated code
 # Set constants from colon separated keyvalue pairs in arguments.
 my %constants;
 for (@ARGV) {
-    my @pair = split(/:/, $_, 2);
-    $constants{$pair[0]} = $pair[1];
+  my @pair = split(/:/, $_, 2);
+  $constants{$pair[0]} = $pair[1];
 }
 
 my $content = join("\n", <STDIN>);
