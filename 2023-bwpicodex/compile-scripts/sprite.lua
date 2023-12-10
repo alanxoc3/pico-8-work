@@ -19,17 +19,21 @@ function load_sprites(cartname, dest)
   reload(dest, 0x0000, 0x2000, cartname)
 end
 
--- w=128, h=512 (4 spritesheets). 16x16 squares
--- this function will simply pack all the spritesheets one after another with a single bit per pixel.
--- better compression ratio to just save the data than trying rle or px9.
 function store_pack(vget)
-  for y=0,511 do
-    for x=0,127,8 do
+  for y=0,127 do
+    for x=0,127,2 do
       local col = 0
-      for v=0,7 do
-        col = col << 1
-        col = col | (vget(x+v, y) > 0 and 1 or 0)
-      end
+
+      col = (col << 1) | (vget(x+1, y+128*0) > 0 and 1 or 0)
+      col = (col << 1) | (vget(x+1, y+128*1) > 0 and 1 or 0)
+      col = (col << 1) | (vget(x+1, y+128*2) > 0 and 1 or 0)
+      col = (col << 1) | (vget(x+1, y+128*3) > 0 and 1 or 0)
+
+      col = (col << 1) | (vget(x+0, y+128*0) > 0 and 1 or 0)
+      col = (col << 1) | (vget(x+0, y+128*1) > 0 and 1 or 0)
+      col = (col << 1) | (vget(x+0, y+128*2) > 0 and 1 or 0)
+      col = (col << 1) | (vget(x+0, y+128*3) > 0 and 1 or 0)
+
       offsetpoke(col)
     end
   end

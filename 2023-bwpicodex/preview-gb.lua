@@ -14,7 +14,7 @@ function minisfx(num) -- plays a sfx with len of 4
   -- - get rid of loops
   -- - set speed to 4
 
-  sfx(num%63, 0, num\63*8, 8)
+  sfx(num\4, 0, num%4*8, 8)
 end
 
 pkmn_names = split"missing,bulsaur,ivysaur,vensaur,charman,charmel,charzar,squirtl,wartort,blstois,catrpie,metapod,btrfree,weedle,kakuna,beedril,pidgey,pidgeto,pidgeot,rattata,raticat,spearow,fearow,ekans,arbok,pikachu,raichu,sndshrw,sndslas,nidranf,nidrina,nidquen,nidranm,nidrino,nidking,clfairy,clfable,vulpix,nintale,jigpuff,wigtuff,zubat,golbat,oddish,gloom,vilplum,paras,parsect,venonat,venmoth,diglett,dugtrio,meowth,persian,psyduck,golduck,mankey,primape,growlth,arcanin,poliwag,polwirl,polrath,abra,kadabra,alkazam,machop,machoke,machamp,belsprt,weepbel,victbel,tntcool,tntcrul,geodude,gravler,golem,ponyta,rapdash,slowpok,slowbro,magnmit,magnton,fafetch,doduo,dodrio,seel,dewgong,grimer,muk,shelder,clyster,gastly,haunter,gengar,onix,drowzee,hypno,krabby,kingler,voltorb,elcrode,eggcute,eggutor,cubone,marowak,hitmlee,hitmchn,liktung,koffing,weezing,rhyhorn,rhydon,chansey,tangela,kangkan,horsea,seadra,goldeen,seaking,staryu,starmie,mrmime,scyther,jynx,elcabuz,magmar,pinsir,tauros,magkarp,gyardos,lapras,ditto,eevee,vapreon,jolteon,flareon,porygon,omanyte,omastar,kabuto,kabtops,aerodac,snorlax,artcuno,zapdos,moltres,dratini,dragair,dragite,mewtwo,mew,chikita,bayleef,megnium,cyndqil,quilava,typhlos,totodil,crocnaw,frlgatr,sentret,furret,hootoot,noctowl,ledyba,ledian,spinrak,ariados,crobat,chinchu,lanturn,pichu,cleffa,iggbuff,togepi,togetic,natu,xatu,mareep,flaaffy,amphros,belosom,marill,azmaril,sudwood,poltoed,hoppip,skiplom,jumpluf,aipom,sunkern,sunflor,yanma,wooper,quagsir,espeon,umbreon,murkrow,slowkng,misdvus,unown,wobufet,gifarig,pineco,fortres,dunspar,gligar,steelix,snubbul,granbul,qilfish,scizor,shuckle,hercros,sneasel,tediurs,ursring,slugma,macargo,swinub,pilswin,corsola,remraid,octlery,delbird,mantine,skarmry,hondour,hondoom,kingdra,phanpy,donphan,porygn2,stantlr,smeargl,tyrogue,hitmtop,smoochm,elekid,magby,miltank,blissey,raikou,entei,suicune,larvtar,pupitar,tyratar,lugia,hooh,celebi"
@@ -49,61 +49,42 @@ function outline(x, y, col1, col2, func)
   end
 end
 
-g_loaded_row = 0
-function load_pkmn(num)
+function draw_pkmn(num, x, y, highlighted)
   local row = num/8\1
   local col = num%8
 
-  if row ~= g_loaded_row then
-    g_loaded_row = row
-    -- loaded_row for monochrome (row below is monochrome for current row)
-    memcpy(0x0400, 0x2000+0x400*(row%8), 0x400)
-
-    local shift = row\8
-    local bits = 0b10001000 >> shift
-
-    local col = 6 -- set all pixels to one color... this may not actually be needed, but whatever
-    for i=0,0x400-1 do
-      local loc = 0x400+i
-      local val = (peek(loc) & bits) << shift
-      if (val & 0b00001111) > 0 then val = (val & 0b11110000) | (col        & 0b00001111) end
-      if (val & 0b11110000) > 0 then val = (val & 0b00001111) | ((col << 4) & 0b11110000) end
-      poke(loc, val)
-    end
-  end
-end
-
-function draw_pkmn(num, x, y, sw, sh, highlighted, is_draft)
-  local row = num/8\1
-  local col = num%8
-
-  load_pkmn(num)
-
-  sw = sw or 1
-  sh = sh or 1
-
-  local w, h = 16*sw, 16*sh
-  local drawfunc = function(ix, iy)
-    local yoff = is_draft and 32 or 0
-    sspr(col*16, yoff + 16, 16, 16, ix-w/2, iy-h/2, w, h)
-  end
-
+  local masks = {8, 4, 2, 1}
   local colordrawfunc = function(ix, iy, c)
-    pal(6, c)
-    drawfunc(ix, iy)
-    pal(6, 6)
+    local mask = masks[num\64+1]
+    for i=1,15 do
+      if i & mask == 0 then
+        palt(i, true)
+      else
+        pal(i, c)
+      end
+    end
+    palt(mask, false)
+    pal(mask, c)
+
+    spr(num%64\8*16+num%64*2, ix-8, iy-8, 2, 2)
+
+    palt()
+    pal()
   end
 
   if highlighted then
     roundrect(x, y, 10, 10, C_3)
-
-    outline(x, y, C_2, C_2, drawfunc) -- dark outline
-    colordrawfunc(x, y, C_4) -- sprite
-
-  else
-    outline(x, y, C_1, C_1, drawfunc)
-    colordrawfunc(x, y, C_3)
   end
+
+  for yy=-1,1 do
+    for xx=-1,1 do
+      if not (xx == 0 and yy == 0) then
+        colordrawfunc(x+xx, y+yy, highlighted and C_2 or C_1)
+      end
+    end
+  end
+
+  colordrawfunc(x, y, highlighted and C_4 or C_3) -- sprite
 end
 
 -- {dark, light}
@@ -116,59 +97,34 @@ function vget(offset, x, y)
   else             return (val & 0x0f) end
 end
 
--- w=128, h=512 (4 spritesheets). 16x16 squares
--- this function will simply pack all the spritesheets one after another with a single bit per pixel.
--- better compression ratio to just save the data than trying rle or px9.
-function store_pack(offset, vget)
-  for y=0,127 do
-    for x=0,127,2 do
-      local col = 0
-
-      col = (col << 1) | (vget(x+1, y+128*0) > 0 and 1 or 0)
-      col = (col << 1) | (vget(x+1, y+128*1) > 0 and 1 or 0)
-      col = (col << 1) | (vget(x+1, y+128*2) > 0 and 1 or 0)
-      col = (col << 1) | (vget(x+1, y+128*3) > 0 and 1 or 0)
-
-      col = (col << 1) | (vget(x+0, y+128*0) > 0 and 1 or 0)
-      col = (col << 1) | (vget(x+0, y+128*1) > 0 and 1 or 0)
-      col = (col << 1) | (vget(x+0, y+128*2) > 0 and 1 or 0)
-      col = (col << 1) | (vget(x+0, y+128*3) > 0 and 1 or 0)
-
-      poke(offset, col)
-      offset += 1
-    end
-  end
-end
-
-function reload_sprites()
-  reload(0x8000, 0x0000, 0x2000, "./000-063.p8")
-  reload(0xa000, 0x0000, 0x2000, "./064-127.p8")
-  reload(0xc000, 0x0000, 0x2000, "./128-191.p8")
-  reload(0xe000, 0x0000, 0x2000, "./192-255.p8")
-
-  store_pack(0x2000, function(...) return vget(0x8000, ...) end)
-
-  reload(0x3200, 0x3200, 0x1100, "./game.p8") -- for sfx
-
-  for i=0,62 do
-    for j=0,63 do
-      poke(0x3200+i*68+j, peek(0x3200+i*68+j) & 0x3f) -- the & 3f part brings the max pitch down a bit
-    end
-    poke(0x3200+i*68+0+64, 0xd7)
-    poke(0x3200+i*68+1+64, 0x06)
-    poke(0x3200+i*68+2+64, 0x00)
-    poke(0x3200+i*68+3+64, 0x00)
-  end
-
-  -- cstore(0x3200, 0x3200, 0x1100, "./testsfx.p8") -- for sfx
-
-  g_loaded_row = -1
-end
-
 g_maxnum = 252
 
 function _init()
-  reload_sprites()
+  reload(0x0000, 0x0000, 0x4300, "./game.p8") -- for sfx
+
+  -- sfx starts at 0x3200. each sfx are 68 bytes. 64 for notes then 4 for effects.
+  -- 0x4278 = 0x3200+62*68 (0 to 62, only modify 63/64 sfx, because 63*4 = 252, which is how many pkmn there are)
+  for iloc=0x3200, 0x4278, 68 do
+    for loc=iloc, iloc+63, 2 do
+      -- breaking apart the bits:
+      -- & 0b0111000011011111 (0x70df)
+      --   0: disable custom waves
+      --   111: keep the note effects
+      --   000: dont keeep the volume
+      --   011: only allow triangle, tilted saw, saw, and square waves. tilted saw usually gives the "meat" of the cry.
+      --   011111: note pitch, but remove the top bit so we don't have tons of super high pitched noises (lots of 255 and 254)
+      -- | 0b0000100000000000 (0x0800): set the volume to 4 for everything
+
+      poke2(loc, %loc & 0x70df | 0x0800)
+    end
+
+    -- breaking apart the bits:
+    -- 0x00: zero out the beg loop
+    -- 0x00: zero out the end loop
+    -- 0x07: set speed to 7
+    -- 0xd7: somehow sets noiz, buzz, detune, reverb, dampen all to max
+    poke4(iloc+64, 0x.07d7)
+  end
 end
 
 C_0=0 C_1=1 C_2=2
@@ -195,15 +151,8 @@ function _update60()
   if btnp(1) then g_hpmod += 1 g_num = mid(0,251,g_num+1) end
   if btnp(2) then g_active = not g_active g_num = mid(g_num%3,249+g_num%3,g_num-3) end
   if btnp(3) then g_active = not g_active g_num = mid(g_num%3,249+g_num%3,g_num+3) end
-
-  if btnp(4) then
-    -- cols_ind = (cols_ind - 1)%#cols
-    minisfx(g_num)
-  end
-
-  if btnp(5) then
-    mock_ind = (mock_ind + 1) % 6
-  end
+  if btnp(4) then minisfx(g_num) end
+  if btnp(5) then mock_ind = (mock_ind + 1) % 6 end
 
   if g_num\3-1 > view_y then view_y = (view_y+1)%(top) end
   if g_num\3   < view_y then view_y = (view_y-1)%(top) end
@@ -269,13 +218,13 @@ function _draw()
     local yo = 13
     for ii=0,2 do
       local ind = yy + ii
-      draw_pkmn(ind, xo+ii*20, yo, g_scale, g_scale, ind == g_num)
+      draw_pkmn(ind, xo+ii*20, yo, ind == g_num)
     end
 
     yy = (view_y*3+3)%252
     for ii=0,2 do
       local ind = yy + ii
-      draw_pkmn(ind, xo+ii*20, yo+20, g_scale, g_scale, ind == g_num)
+      draw_pkmn(ind, xo+ii*20, yo+20, ind == g_num)
     end
 
   elseif mock_ind == 1 then
@@ -285,10 +234,6 @@ function _draw()
     f_zprint("\^wdual",  3+5-1-2+12, oy-3-19+12+1+3-1, C_1, -1)
 
     srand(t()\1)
-    --draw_pkmn(rnd()*251\1+1, ox+9+20+1, oy-7-4-2, .25, .5, false)
-    --srand(t()\1+1)
-    --draw_pkmn(rnd()*251\1+1, ox+7+2+40+3-1, oy-7-4+1, -1, 1, false)
-    --f_zprint("\^tdual",    1+4+5+5+2, oy-6+1+6, C_1, -1)
     local xx, yy = g_num%6%2*31, g_num%6\2*7
     rectfill(ox+xx-1, oy+yy, 29+ox+xx, oy+6+yy, C_3)
 
@@ -342,8 +287,8 @@ function _draw()
     local myoff = (not g_active and 21 or 0)
     rectfill(1, 2+myoff, 62, 22+myoff, C_3)
 
-    draw_pkmn(5, 52, 13 - (g_active and t()*2\1%2 or 0), -1, 1, g_active)        b("charmel", "M", "brn", 4, 9,  4, 9,  g_active,   80+g_hpmod, 90)
-    draw_pkmn(5, 12, 33 + (not g_active and t()*2\1%2 or 0), 1, 1, not g_active) b("charmel",  "M", "",    25,30, 25,30,  not g_active, 100+g_hpmod, 100)
+    draw_pkmn(5, 52, 13 - (g_active and t()*2\1%2 or 0), g_active)         b("charmel", "M", "brn", 4, 9,  4, 9,  g_active,   80+g_hpmod, 90)
+    draw_pkmn(5, 12, 33 + (not g_active and t()*2\1%2 or 0), not g_active) b("charmel",  "M", "",    25,30, 25,30,  not g_active, 100+g_hpmod, 100)
   end
 
   clip()
