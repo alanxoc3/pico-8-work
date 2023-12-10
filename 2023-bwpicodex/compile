@@ -9,7 +9,7 @@ runthing() {
 
 runthing sprite.lua
 runthing typechart.lua
-runthing pkmnmoves.lua
-runthing movedata.lua
 runthing pkmnstats.lua
+runthing movedata.lua
+runthing pkmnmoves.lua
 runthing trainers.lua

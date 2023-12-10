@@ -35,14 +35,13 @@ Move priority.
  0	All moves not listed
 -1	Teleport, Counter, Mirror Coat, Roar, Vital Throw, Whirlwind
 
-Modifications inspired by previous games:
-DIFF: Haze works similarly to how it worked in Gen 1. All effects and stat modifiers that can be Baton Passed can also be reset with haze.
-DIFF: Substitute works similarly to Gen 1. Only protects from damage done by opponent. Not against any effects.
-DIFF: Metal powder increases defense and special defense by 50% for ditto even when transformed.
-DIFF: Recoil, Self-KO, Freeze, and Sleep clauses are all removed.
-DIFF: Like Gen 1. Swift will never miss, bypassing all accuracy checks including when opponent uses dig/fly.
-
-Modifications inspired by later games:
+Modifications inspired by other games:
+DIFF: Gen 1 games. Missingno is a Pokemon and can learn TM05.
+DIFF: Gen 1 games. Haze works similarly to how it worked in Gen 1. All effects and stat modifiers that can be Baton Passed can also be reset with haze.
+DIFF: Gen 1 games. Substitute works similarly to Gen 1. Only protects from damage done by opponent. Not against any effects.
+DIFF: Gen 2 games. Metal powder increases defense and special defense by 50% for ditto even when transformed.
+DIFF: Gen 2 games. Recoil, Self-KO, Freeze, and Sleep clauses are all removed.
+DIFF: Gen 1 games. Swift will never miss, bypassing all accuracy checks including when opponent uses dig/fly.
 DIFF: Protect and Detect protect against Mean Look and Substitute. (Didn't in the original games.)
 DIFF: Flail and Reversal can now cause a critical hit and are varied by the random damage factor.
 DIFF: Protect and Detect work behind a substitute.
@@ -55,6 +54,7 @@ DIFF: Detect, Protect and Endure all work behind a substitute.
 DIFF: Curse is a ghost type move.
 DIFF: Being transformed gets the benefit of special items like light ball and thick club.
 DIFF: Dynamicpunch always confuses the target if it hits.
+DIFF: The Polkadot Bow item is excluded in favor of Pink Bow.
 
 Modifications inspired by design:
 DIFF: All Pokemon are set to level 50 with the highest possible stats they can have for that level.
@@ -86,12 +86,13 @@ DIFF: Return has 100 Base Power if hp >= foe hp. Otherwise has 50 Base Power.
 DIFF: Swagger still confuses the foe if attack at the max stage.
 DIFF: Mimic and Sketch both have 10 pp. The copied move will use the same pp counter as mimic/sketch or whatever move called it.
 DIFF: Trigger moves (Mirror Move, Metronome, Sleep Talk) fail when triggering another trigger move. And they cannot trigger Struggle.
-DIFF: Mimic & Sketch can copy any move in the game besides struggle and tm05.
+DIFF: Mimic & Sketch can copy any move in the game besides struggle.
 DIFF: Transform fails if Pokemon is already transformed.
 DIFF: Smeargle can only learn Sketch once, not 4 times.
-DIFF: Missingno can learn Struggle and TM05. Struggle has 40 pp if learned.
 DIFF: Nightmare doesn't go away when awake and will re-apply if the Pokemon falls asleep again.
 DIFF: Porygon does not learn the move Conversion 2. (due to the way i pack all moves and to make it so each move is represented when battling)
+DIFF: Leftovers fails if the user runs out of PP and doesn't get triggered when pokemon is switched in.
+DIFF: Berserk Gene boosts both Special Attack and Attack by 2 stages.
 
 STRAT: Sketch and Mimic allow for the same move to be available in multiple move slots.
 STRAT: Hidden Power counters Conversion 2.

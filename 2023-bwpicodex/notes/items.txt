@@ -1,54 +1,46 @@
-BrightPowder         Lowers the foe's accuracy.
-Focus Band           May prevent fainting. 12% (30/256) stay at 1 hp.
-King's Rock          See DIFF!!! 11.71875% (30/256) chance to flinch for attacks. Only last for multistrike moves. But every attack for beatup.
-Leftovers            Restores 1/16 of the holder's maximum HP (rounded down, but not less than 1) at the end of each turn.
-Quick Claw           ~23% (60/256) chance to go first in current priority bracket.
-Scope Lens           increases crit by 1 stage.
-SilverPowder         Boosts POW of bug-type      moves by 10%.
-BlackGlasses         Boosts POW of dark-type     moves by 10%.
-Dragon Fang          Boosts POW of dragon-type   moves by 10%.
-Magnet               Boosts POW of electric-type moves by 10%.
-Black Belt           Boosts POW of fighting-type moves by 10%.
-Charcoal             Boosts POW of fire-type     moves by 10%.
-Sharp Beak           Boosts POW of flying-type   moves by 10%.
-Spell Tag            Boosts POW of ghost-type    moves by 10%.
-Miracle Seed         Boosts POW of grass-type    moves by 10%.
-Soft Sand            Boosts POW of ground-type   moves by 10%.
-NeverMeltIce         Boosts POW of ice-type      moves by 10%.
-Pink Bow             Boosts POW of normal-type   moves by 10%.
-Polkadot Bow         Boosts POW of normal-type   moves by 10%.
-Poison Barb          Boosts POW of poison-type   moves by 10%.
-TwistedSpoon         Boosts POW of psychic-type  moves by 10%.
-Hard Stone           Boosts POW of rock-type     moves by 10%.
-Metal Coat           Boosts POW of steel-type    moves by 10%.
-Mystic Water         Boosts POW of water-type    moves by 10%.
-Stick                Farfetchd: increases crit by 2 stages.
-Thick Club           Cubone/Marowak: doubles attack.
-Light Ball           Pikachu: doubles special attack.
-Lucky Punch          Chansey: increases crit by 2 stages.
-Metal Powder         Ditto: increases defense and special defense by 50%.
+BrightPowder          Lowers the foe's accuracy.
+Miracle Berry         Cures any status condition or confusion.
 Berserk Gene          Raises attack by 2 stages when Pokemon Appears, but consumes the item and causes confusion.
-Berry                 Recover 10 hp. OTU if < 50% hp.
+
+King's Rock           See DIFF!!! 11.71875% (30/256) chance to flinch for attacks. Only last for multistrike moves. But every attack for beatup.
+Leftovers             Restores 1/16 of the holder's maximum HP (rounded down, but not less than 1) at the end of each turn.
+
+Focus Band            May prevent fainting. 12% (30/256) stay at 1 hp.
+Quick Claw            ~23% (60/256) chance to go first in current priority bracket.
+Scope Lens            increases crit by 1 stage.
+
 Gold Berry            Recover 30 hp. OTU if < 50% hp.
 Mysteryberry          Recovers 5 pp if one move runs out of pp.
+Black Belt            Boosts POW of fighting-type moves by 10%.
+BlackGlasses          Boosts POW of dark-type     moves by 10%.
+Charcoal              Boosts POW of fire-type     moves by 10%.
+Dragon Fang           Boosts POW of dragon-type   moves by 10%.
+Hard Stone            Boosts POW of rock-type     moves by 10%.
+Magnet                Boosts POW of electric-type moves by 10%.
+Metal Coat            Boosts POW of steel-type    moves by 10%.
+Miracle Seed          Boosts POW of grass-type    moves by 10%.
+Mystic Water          Boosts POW of water-type    moves by 10%.
+NeverMeltIce          Boosts POW of ice-type      moves by 10%.
+Pink Bow              Boosts POW of normal-type   moves by 10%.
+Poison Barb           Boosts POW of poison-type   moves by 10%.
+Polkadot Bow          Boosts POW of normal-type   moves by 10%.
+Sharp Beak            Boosts POW of flying-type   moves by 10%.
+SilverPowder          Boosts POW of bug-type      moves by 10%.
+Soft Sand             Boosts POW of ground-type   moves by 10%.
+Spell Tag             Boosts POW of ghost-type    moves by 10%.
+TwistedSpoon          Boosts POW of psychic-type  moves by 10%.
+
+Berry                 Recover 10 hp. OTU if < 50% hp.
 PSNCUREBERRY          Cures Poison if poisoned.
 Ice Berry             Heals Burns if burned
 Burnt Berry           Defrosts if frozen
 PRZCUREBERRY          cures Paralysis if paralyzed.
 Bitter Berry          Snaps out of confusion if confused
 Mint Berry            wakes you up if sleeping.
-Miracle Berry         Cures any status condition or confusion.
+
 Amulet Coin           Doubles monetary earnings. Johto: Goldenrod Underground
-
-Does nothing:
-Everstone	Stops evolution.	Johto: New Bark Town (Prof. Elm), National Park (2nd Prize in Bug Catching),
-Exp. Share	Shares battle EXP.points.	Johto: Route 30 (Mr. Pokemon, traded for Red Scale)
-Lucky Egg	Earns extra EXP. points.
-Smoke Ball	Escape from wild Pokémon.	Johto: Goldenrod Underground
-Cleanse Tag  Helps repel wild Pokémon.
-
-I_BRIGHTPOWDER I_FOCUSBAND I_KINGSROCK I_LEFTOVERS I_QUICKCLAW I_SCOPELENS I_SILVERPOWDER I_BLACKGLASSES
-I_DRAGONFANG I_MAGNET I_BLACKBELT I_CHARCOAL I_SHARPBEAK I_SPELLTAG I_MIRACLESEED I_SOFTSAND
-I_NEVERMELTICE I_PINKBOW I_POLKADOTBOW I_POISONBARB I_TWISTEDSPOON I_HARDSTONE I_METALCOAT I_MYSTICWATER
-I_STICK I_THICKCLUB I_LIGHTBALL I_LUCKYPUNCH I_METALPOWDER I_BERSERKGENE I_BERRY I_GOLDBERRY
-I_MYSTERYBERRY I_POISONCUREBERRY I_ICEBERRY I_BURNTBERRY I_PARALYZECUREBERRY I_BITTERBERRY I_MINTBERRY I_MIRACLEBERRY I_AMULETCOIN
+Stick                 Farfetchd: increases crit by 2 stages.
+Thick Club            Cubone/Marowak: doubles attack.
+Light Ball            Pikachu: doubles special attack.
+Lucky Punch           Chansey: increases crit by 2 stages.
+Metal Powder          Ditto: increases defense and special defense by 50%.

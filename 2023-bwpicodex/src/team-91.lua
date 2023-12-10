@@ -115,7 +115,7 @@ end $$
     end
 end $$
 
--- move is between -1 and 
+-- move is between -1 and
 |[f_create_move]| function(id, slot)
     return setmetatable(f_zobj([[slot,@]], slot or 0), {__index=c_moves[id]})
 end $$
