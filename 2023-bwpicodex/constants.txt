@@ -27,6 +27,9 @@ C_PRIORITY_QUICKATTACK: 2000 # M_EXTREMESPEED M_MACHPUNCH M_QUICKATTACK
 C_PRIORITY_ATTACK:      1000
 C_PRIORITY_COUNTER:     0000 # M_TELEPORT M_COUNTER M_MIRRORCOAT M_ROAR M_VITALTHROW M_WHIRLWIND
 
+C_DASH: 254
+C_NEXT: 255
+
 # ----------------------------- major status conditions
 C_MAJOR_NONE:      0
 C_MAJOR_FAINTED:   1
@@ -83,11 +86,11 @@ I_MYSTERYBERRY:      38
 I_PARALYZECUREBERRY: 39
 I_POISONCUREBERRY:   40
 
-# ----------------------------- genders - these are the 4 possible
+# ----------------------------- genders - these are the 4 possible gender. bitmasked to top 2 bits to save a few tokens since they are packed with the item
 G_NONE: 0
-G_MALE: 1
-G_FEMA: 2
-G_BOTH: 3
+G_MALE: 64
+G_FEMA: 128
+G_BOTH: 192
 
 # ----------------------------- type numbers - odds are physical, evens are special.
 T_NONE:     0 # Yes... bird and none are the same, which contributes to its glitchiness.

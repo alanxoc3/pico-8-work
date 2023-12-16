@@ -2,9 +2,9 @@ function init() -- entry point for this compile script
   local statarr  = {} -- for each pokemon, array/order of moves
 
   for arr in all(datastr_to_arr(pokemon_stats)) do
-    local pkmnid = arr[1]
     -- todo: merge gender and item
-    statarr[pkmnid] = {arr[2], arr[3], arr[4], arr[5], arr[6], arr[7], arr[8], arr[9], arr[10], arr[11]} -- arr[11] is gender and should probably be included somehow.
+    local pkmnid, prevolve, type1, type2, hp, att, def, spd, sat, sdf, gender, item = unpack(arr)
+    statarr[pkmnid] = {prevolve, type1, type2, hp, att, def, spd, sat, sdf, gender | item}
   end
 
   for i=0,251 do

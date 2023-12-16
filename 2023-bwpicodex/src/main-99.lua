@@ -1,40 +1,6 @@
--- every state change will clean up all the entities.
-|[f_game_state_init]| function(state)
-    if state.mysfx then f_minisfx(state.mysfx) end
-    state:sinit()
-end $$
-
-function _update60()
-    local _ENV = _g
-    g_bpo, g_bpx, g_bph, g_bpv = btnp'4', btnp'5', btnp'0' and btnp'1' and 0 or btnp'0' and -1 or btnp'1' and 1 or 0, btnp'2' and btnp'3' and 0 or btnp'2' and -1 or btnp'3' and 1 or 0
-
-    if @S_SWAP_CONTROLS == 1 then
-        g_bpo, g_bpx = g_bpx, g_bpo
-    end
-
-    g_picodex:f_actor_state()
-
-    -- you can set the music speed with this
-    -- poke(0x4055, 96)
-    if g_cur_sound then
-        -- returns nothing, so sets to nil
-        g_cur_sound = f_minisfx_now(g_cur_sound)
-    end
-end
-
-function _draw()
-    local _ENV = _g
-    g_picodex:draw()
-end
-
 -------------------------------------------------------
 -- BELOW IS INIT LOGIC. NOT IN FUNCTION TO SAVE TOKENS!
 -------------------------------------------------------
-
-|[c_types]| f_zobj[[ -- 0 to 17 are all tables
-  0;# ;;# ;;# ;;# ;;# ;;# ;;# ;;# ;;#
-  ;;# ;;# ;;# ;;# ;;# ;;# ;;# ;;# ;;#
-]] $$
 
 |[c_trainers]| f_zobj[[]] $$
 
@@ -50,19 +16,38 @@ f_zcall(poke, [[
 
 -- TODO: replace peeks with peek_inc, save tokens.
 
--- unpack all sprites
-f_zcall(memcpy, [[;,0x8000, L_SPRITES, 0x2000]])
+-- unpack all sprites ... dont need to do this actually.
+-- f_zcall(memcpy, [[;,0x8000, L_SPRITES, 0x2000]])
+
+-- STEP 2: UNPACK TYPE CHART
+|[c_types]| f_zobj[[ -- 0 to 17 are all tables
+  0;, ;;, ;;, ;;, ;;, ;;, ;;, ;;, ;;,
+  ;;, ;;, ;;, ;;, ;;, ;;, ;;, ;;, ;;,
+]] $$
+
+|[f_init_peek_inc]| function()
+  g_init_peek_loc += 1
+  return peek(g_init_peek_loc-1)
+end $$
 
 for i=0,323 do -- 18*18 = 324 (18 types)
-  c_types[i\18][i%18] = peek(L_TYPECHART+i)\2
+  c_types[i\18][i%18] = f_init_peek_inc()\2
 end
 
--- at the end of picodex development, i stored half the trainers in code. half are stored in cartridge data.
-for i=0,56 do
-    c_trainers[i] = {name=c_trainer_names[i]}
-    for j=0,5 do
-        add(c_trainers[i], peek(L_TRAINER+i*8+j))
-    end
-    c_trainers[i].item = peek(L_TRAINER+i*8+6)
-    c_trainers[i].move = peek(L_TRAINER+i*8+7)
+-- STEP 3: UNPACK PkMN
+for i=0,251 do
+  c_pokemon[i] = {}
+  for key in all(split'prevolve,type1,type2,hp,att,def,spd,sat,sdf,gender_item') do
+    c_pokemon[i][key] = f_init_peek_inc()
+  end
 end
+
+-- STEP 4: UNPACK MOVES
+for i=0,251 do
+  c_moves[i] = {}
+  for key in all(split'pow,type,acc,pp') do
+    c_moves[i][key] = f_init_peek_inc()
+  end
+end
+
+print("done") printh("done")
