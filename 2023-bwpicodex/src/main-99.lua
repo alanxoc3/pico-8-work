@@ -34,19 +34,29 @@ for i=0,323 do -- 18*18 = 324 (18 types)
   c_types[i\18][i%18] = f_init_peek_inc()\2
 end
 
--- STEP 3: UNPACK PkMN
-for i=0,251 do
-  c_pokemon[i] = {}
-  for key in all(split'prevolve,type1,type2,hp,att,def,spd,sat,sdf,gender_item') do
-    c_pokemon[i][key] = f_init_peek_inc()
-  end
-end
+-- 136 to 118. Storing data all together saves like 18 code tokens.
+for i=0,251 do -- There are 252 pkmn and 252 moves. So zipped when unpacking to save some tokens.
+  local cur_list, pkmn = pkmn.learn, f_zobj[[learn;, ;teach;, ;event;,]]
+  c_moves[i], c_pokemon[i] = {}, pkmn
 
--- STEP 4: UNPACK MOVES
-for i=0,251 do
-  c_moves[i] = {}
   for key in all(split'pow,type,acc,pp') do
     c_moves[i][key] = f_init_peek_inc()
+  end
+
+  for key in all(split'prevolve,type1,type2,hp,att,def,spd,sat,sdf,gender_item') do
+    pkmn[key] = f_init_peek_inc()
+  end
+
+  while f_init_peek_inc() < C_NEXT do
+    if     @g_init_peek_loc == C_TEACH then cur_list = pkmn.teach
+    elseif @g_init_peek_loc == C_EVENT then cur_list = pkmn.event
+    elseif @g_init_peek_loc == C_DASH  then
+      for j=cur_list[#cur_list-1]+1,cur_list[#cur_list]-1 do
+        add(cur_list, j)
+      end
+    else
+      add(cur_list, @g_init_peek_loc)
+    end
   end
 end
 

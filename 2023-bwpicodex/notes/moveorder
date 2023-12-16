@@ -1763,8 +1763,8 @@ def ranges_helper(i):
       yield b
     else:
       yield a
-      yield 254
       yield b
+      yield 254 # postfix notation saves like 4 code tokens.... WORTH IT!!!!
 
 def replace_ranges(moveset):
   newmoveset = defaultdict(list)
@@ -1805,27 +1805,20 @@ def get_full_data_as_nums(moves_ordered):
     p = []
     p.extend(default_num[pkmn])
     p.extend(learn_num[pkmn])
-    p.append(255)
-    p.extend(teach_num[pkmn])
-    p.append(255)
-    p.extend(event_num[pkmn])
+
+    if len(teach_num[pkmn]) > 0:
+      p.append(252)
+      p.extend(teach_num[pkmn])
+
+    if len(event_num[pkmn]) > 0:
+      p.append(253)
+      p.extend(event_num[pkmn])
+
     p.append(255)
     yield p
 
-# Made it a little more complex, but theoretically a bit more efficient i guess... though probably doesn't matter...
 def get_full_data_len(moves_ordered):
-  movelist = moves_ordered[:]
-
-  # convert sections to list of ints
-  default_num = replace_ranges(                  moveset_to_int(pkmn_default, movelist))
-  learn_num   = replace_ranges(sort_moveset_nums(moveset_to_int(pkmn_learn,   movelist)))
-  teach_num   = replace_ranges(sort_moveset_nums(moveset_to_int(pkmn_teach,   movelist)))
-  event_num   = replace_ranges(sort_moveset_nums(moveset_to_int(pkmn_event,   movelist)))
-
-  count = 0
-  for pkmn in pkmn_order:
-    count += len(default_num[pkmn]) + len(learn_num[pkmn]) + len(teach_num[pkmn]) + len(event_num[pkmn]) + 3
-  return count
+  return len([0 for p in get_full_data_as_nums(moves_ordered) for x in p])
 
 if __name__ == "__main__":
   import argparse
