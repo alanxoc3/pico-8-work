@@ -13,12 +13,7 @@ S_HOARD:          0x5efe
 S_SWAP_CONTROLS:  0x5eff
 
 # ----------------------------- load memory locations
-L_SPRITES:   0x0000
-L_TYPECHART: 0x2000
-L_PKMNSTATS: 0x2144
-L_MOVEDATA:  0x2b1c
-L_PKMNMOVES: 0x2f0c
-L_TRAINER:   0x40a8
+L_DATASTART: 0x1fff # data starts one byte before because the code increments first
 
 # ----------------------------- priorities - aligned to thousand because 999 is the max speed stat
 C_PRIORITY_SWITCH:      4000 # M_PURSUIT
@@ -43,50 +38,50 @@ C_MAJOR_SLEEPING:  6
 
 # ----------------------------- held items
 I_NONE:              0
-I_PINKBOW:           1  # T_NORMAL
-I_CHARCOAL:          2  # T_FIRE
-I_BLACKBELT:         3  # T_FIGHTING
-I_MYSTICWATER:       4  # T_WATER
-I_POISONBARB:        5  # T_POISON
-I_MAGNET:            6  # T_ELECTRIC
-I_SOFTSAND:          7  # T_GROUND
-I_MIRACLESEED:       8  # T_GRASS
-I_SHARPBEAK:         9  # T_FLYING
-I_NEVERMELTICE:      10 # T_ICE
-I_SILVERPOWDER:      11 # T_BUG
-I_TWISTEDSPOON:      12 # T_PSYCHIC
-I_HARDSTONE:         13 # T_ROCK
-I_DRAGONFANG:        14 # T_DRAGON
-I_SPELLTAG:          15 # T_GHOST
-I_BLACKGLASSES:      16 # T_DARK
-I_METALCOAT:         17 # T_STEEL
+I_PINKBOW:           1  # pinkbow  ---- T_NORMAL
+I_CHARCOAL:          2  # charcol  ---- T_FIRE
+I_BLACKBELT:         3  # blkbelt  ---- T_FIGHTING
+I_MYSTICWATER:       4  # mstwatr  ---- T_WATER
+I_POISONBARB:        5  # psnbarb  ---- T_POISON
+I_MAGNET:            6  # magnet   ---- T_ELECTRIC
+I_SOFTSAND:          7  # softsnd  ---- T_GROUND
+I_MIRACLESEED:       8  # mirased  ---- T_GRASS
+I_SHARPBEAK:         9  # shrbeak  ---- T_FLYING
+I_NEVERMELTICE:      10 # nevrice  ---- T_ICE
+I_SILVERPOWDER:      11 # slvpowd  ---- T_BUG
+I_TWISTEDSPOON:      12 # twstspn  ---- T_PSYCHIC
+I_HARDSTONE:         13 # harston  ---- T_ROCK
+I_DRAGONSCALE:       14 # drgscal  ---- T_DRAGON
+I_SPELLTAG:          15 # speltag  ---- T_GHOST
+I_BLACKGLASSES:      16 # blkglas  ---- T_DARK
+I_METALCOAT:         17 # metcoat  ---- T_STEEL
 
-I_BRIGHTPOWDER:      18 # Next are items that apply to any Pokemon.
-I_FOCUSBAND:         19
-I_KINGSROCK:         20
-I_LEFTOVERS:         21
-I_QUICKCLAW:         22
-I_SCOPELENS:         23
+I_BRIGHTPOWDER:      18 # bripowd ---- Next are items that apply to any Pokemon.
+I_FOCUSBAND:         19 # focband
+I_KINGSROCK:         20 # kingrok
+I_LEFTOVERS:         21 # leftovr
+I_QUICKCLAW:         22 # quikclw
+I_SCOPELENS:         23 # scoplen
 
-I_AMULETCOIN:        24 # This is wierdest because it only applies to Payday
+I_AMULETCOIN:        24 # amucoin ---- This is wierdest because it only applies to Payday
 
-I_LIGHTBALL:         25 # Items that only apply to specific Pokemon.
-I_LUCKYPUNCH:        26
-I_METALPOWDER:       27
-I_STICK:             28
-I_THICKCLUB:         29
+I_LIGHTBALL:         25 # litball ---- Items that only apply to specific Pokemon.
+I_LUCKYPUNCH:        26 # lukpnch
+I_METALPOWDER:       27 # metpowd
+I_STICK:             28 # stick
+I_THICKCLUB:         29 # thkclub
 
-I_BERSERKGENE:       30 # Items that apply to any Pokemon but are only a single use.
-I_BERRY:             31
-I_BITTERBERRY:       32
-I_BURNTBERRY:        33
-I_GOLDBERRY:         34
-I_ICEBERRY:          35
-I_MINTBERRY:         36
-I_MIRACLEBERRY:      37
-I_MYSTERYBERRY:      38
-I_PARALYZECUREBERRY: 39
-I_POISONCUREBERRY:   40
+I_BERSERKGENE:       30 # berserk ---- Items that apply to any Pokemon but are only a single use.
+I_BERRY:             31 # berry
+I_BITTERBERRY:       32 # btrbery
+I_BURNTBERRY:        33 # brnbery
+I_GOLDBERRY:         34 # gldbery
+I_ICEBERRY:          35 # icebery
+I_MINTBERRY:         36 # mntbery
+I_MIRACLEBERRY:      37 # mirbery
+I_MYSTERYBERRY:      38 # mstbery
+I_PARALYZECUREBERRY: 39 # parbery
+I_POISONCUREBERRY:   40 # psnbery
 
 # ----------------------------- genders - these are the 4 possible gender. bitmasked to top 2 bits to save a few tokens since they are packed with the item
 G_NONE: 0
@@ -96,785 +91,529 @@ G_BOTH: 192
 
 # ----------------------------- type numbers - odds are physical, evens are special.
 T_NONE:     0 # Yes... bird and none are the same, which contributes to its glitchiness.
-T_BIRD:     0
-T_NORMAL:   1
-T_FIRE:     2
-T_FIGHTING: 3
-T_WATER:    4
-T_POISON:   5
-T_ELECTRIC: 6
-T_GROUND:   7
-T_GRASS:    8
-T_FLYING:   9
-T_ICE:      10
-T_BUG:      11
-T_PSYCHIC:  12
-T_ROCK:     13
-T_DRAGON:   14
-T_GHOST:    15
-T_DARK:     16
-T_STEEL:    17
+T_BIRD:     0  # bird
+T_NORMAL:   1  # normal
+T_FIRE:     2  # fire
+T_FIGHTING: 3  # fightn
+T_WATER:    4  # water
+T_POISON:   5  # poison
+T_ELECTRIC: 6  # electr
+T_GROUND:   7  # ground
+T_GRASS:    8  # grass
+T_FLYING:   9  # flying
+T_ICE:      10 # ice
+T_BUG:      11 # bug
+T_PSYCHIC:  12 # psychc
+T_ROCK:     13 # rock
+T_DRAGON:   14 # dragon
+T_GHOST:    15 # ghost
+T_DARK:     16 # dark
+T_STEEL:    17 # steel
 
 # ----------------------------- pkmn numbers
-P_MISSINGNO:  0
-P_BULBASAUR:  1
-P_IVYSAUR:    2
-P_VENUSAUR:   3
-P_CHARMANDER: 4
-P_CHARMELEON: 5
-P_CHARIZARD:  6
-P_SQUIRTLE:   7
-P_WARTORTLE:  8
-P_BLASTOISE:  9
-P_CATERPIE:   10
-P_METAPOD:    11
-P_BUTTERFREE: 12
-P_WEEDLE:     13
-P_KAKUNA:     14
-P_BEEDRILL:   15
-P_PIDGEY:     16
-P_PIDGEOTTO:  17
-P_PIDGEOT:    18
-P_RATTATA:    19
-P_RATICATE:   20
-P_SPEAROW:    21
-P_FEAROW:     22
-P_EKANS:      23
-P_ARBOK:      24
-P_PIKACHU:    25
-P_RAICHU:     26
-P_SANDSHREW:  27
-P_SANDSLASH:  28
-P_NIDORANF:   29
-P_NIDORINA:   30
-P_NIDOQUEEN:  31
-P_NIDORANM:   32
-P_NIDORINO:   33
-P_NIDOKING:   34
-P_CLEFAIRY:   35
-P_CLEFABLE:   36
-P_VULPIX:     37
-P_NINETALES:  38
-P_JIGGLYPUFF: 39
-P_WIGGLYTUFF: 40
-P_ZUBAT:      41
-P_GOLBAT:     42
-P_ODDISH:     43
-P_GLOOM:      44
-P_VILEPLUME:  45
-P_PARAS:      46
-P_PARASECT:   47
-P_VENONAT:    48
-P_VENOMOTH:   49
-P_DIGLETT:    50
-P_DUGTRIO:    51
-P_MEOWTH:     52
-P_PERSIAN:    53
-P_PSYDUCK:    54
-P_GOLDUCK:    55
-P_MANKEY:     56
-P_PRIMEAPE:   57
-P_GROWLITHE:  58
-P_ARCANINE:   59
-P_POLIWAG:    60
-P_POLIWHIRL:  61
-P_POLIWRATH:  62
-P_ABRA:       63
-P_KADABRA:    64
-P_ALAKAZAM:   65
-P_MACHOP:     66
-P_MACHOKE:    67
-P_MACHAMP:    68
-P_BELLSPROUT: 69
-P_WEEPINBELL: 70
-P_VICTREEBEL: 71
-P_TENTACOOL:  72
-P_TENTACRUEL: 73
-P_GEODUDE:    74
-P_GRAVELER:   75
-P_GOLEM:      76
-P_PONYTA:     77
-P_RAPIDASH:   78
-P_SLOWPOKE:   79
-P_SLOWBRO:    80
-P_MAGNEMITE:  81
-P_MAGNETON:   82
-P_FARFETCHD:  83
-P_DODUO:      84
-P_DODRIO:     85
-P_SEEL:       86
-P_DEWGONG:    87
-P_GRIMER:     88
-P_MUK:        89
-P_SHELLDER:   90
-P_CLOYSTER:   91
-P_GASTLY:     92
-P_HAUNTER:    93
-P_GENGAR:     94
-P_ONIX:       95
-P_DROWZEE:    96
-P_HYPNO:      97
-P_KRABBY:     98
-P_KINGLER:    99
-P_VOLTORB:    100
-P_ELECTRODE:  101
-P_EXEGGCUTE:  102
-P_EXEGGUTOR:  103
-P_CUBONE:     104
-P_MAROWAK:    105
-P_HITMONLEE:  106
-P_HITMONCHAN: 107
-P_LICKITUNG:  108
-P_KOFFING:    109
-P_WEEZING:    110
-P_RHYHORN:    111
-P_RHYDON:     112
-P_CHANSEY:    113
-P_TANGELA:    114
-P_KANGASKHAN: 115
-P_HORSEA:     116
-P_SEADRA:     117
-P_GOLDEEN:    118
-P_SEAKING:    119
-P_STARYU:     120
-P_STARMIE:    121
-P_MRMIME:     122
-P_SCYTHER:    123
-P_JYNX:       124
-P_ELECTABUZZ: 125
-P_MAGMAR:     126
-P_PINSIR:     127
-P_TAUROS:     128
-P_MAGIKARP:   129
-P_GYARADOS:   130
-P_LAPRAS:     131
-P_DITTO:      132
-P_EEVEE:      133
-P_VAPOREON:   134
-P_JOLTEON:    135
-P_FLAREON:    136
-P_PORYGON:    137
-P_OMANYTE:    138
-P_OMASTAR:    139
-P_KABUTO:     140
-P_KABUTOPS:   141
-P_AERODACTYL: 142
-P_SNORLAX:    143
-P_ARTICUNO:   144
-P_ZAPDOS:     145
-P_MOLTRES:    146
-P_DRATINI:    147
-P_DRAGONAIR:  148
-P_DRAGONITE:  149
-P_MEWTWO:     150
-P_MEW:        151
-P_CHIKORITA:  152
-P_BAYLEEF:    153
-P_MEGANIUM:   154
-P_CYNDAQUIL:  155
-P_QUILAVA:    156
-P_TYPHLOSION: 157
-P_TOTODILE:   158
-P_CROCONAW:   159
-P_FERALIGATR: 160
-P_SENTRET:    161
-P_FURRET:     162
-P_HOOTHOOT:   163
-P_NOCTOWL:    164
-P_LEDYBA:     165
-P_LEDIAN:     166
-P_SPINARAK:   167
-P_ARIADOS:    168
-P_CROBAT:     169
-P_CHINCHOU:   170
-P_LANTURN:    171
-P_PICHU:      172
-P_CLEFFA:     173
-P_IGGLYBUFF:  174
-P_TOGEPI:     175
-P_TOGETIC:    176
-P_NATU:       177
-P_XATU:       178
-P_MAREEP:     179
-P_FLAAFFY:    180
-P_AMPHAROS:   181
-P_BELLOSSOM:  182
-P_MARILL:     183
-P_AZUMARILL:  184
-P_SUDOWOODO:  185
-P_POLITOED:   186
-P_HOPPIP:     187
-P_SKIPLOOM:   188
-P_JUMPLUFF:   189
-P_AIPOM:      190
-P_SUNKERN:    191
-P_SUNFLORA:   192
-P_YANMA:      193
-P_WOOPER:     194
-P_QUAGSIRE:   195
-P_ESPEON:     196
-P_UMBREON:    197
-P_MURKROW:    198
-P_SLOWKING:   199
-P_MISDREAVUS: 200
-P_UNOWN:      201
-P_WOBBUFFET:  202
-P_GIRAFARIG:  203
-P_PINECO:     204
-P_FORRETRESS: 205
-P_DUNSPARCE:  206
-P_GLIGAR:     207
-P_STEELIX:    208
-P_SNUBBULL:   209
-P_GRANBULL:   210
-P_QWILFISH:   211
-P_SCIZOR:     212
-P_SHUCKLE:    213
-P_HERACROSS:  214
-P_SNEASEL:    215
-P_TEDDIURSA:  216
-P_URSARING:   217
-P_SLUGMA:     218
-P_MAGCARGO:   219
-P_SWINUB:     220
-P_PILOSWINE:  221
-P_CORSOLA:    222
-P_REMORAID:   223
-P_OCTILLERY:  224
-P_DELIBIRD:   225
-P_MANTINE:    226
-P_SKARMORY:   227
-P_HOUNDOUR:   228
-P_HOUNDOOM:   229
-P_KINGDRA:    230
-P_PHANPY:     231
-P_DONPHAN:    232
-P_PORYGON2:   233
-P_STANTLER:   234
-P_SMEARGLE:   235
-P_TYROGUE:    236
-P_HITMONTOP:  237
-P_SMOOCHUM:   238
-P_ELEKID:     239
-P_MAGBY:      240
-P_MILTANK:    241
-P_BLISSEY:    242
-P_RAIKOU:     243
-P_ENTEI:      244
-P_SUICUNE:    245
-P_LARVITAR:   246
-P_PUPITAR:    247
-P_TYRANITAR:  248
-P_LUGIA:      249
-P_HOOH:       250
-P_CELEBI:     251
-P_NONE:       252
+P_MISSINGNO:  0  # missing
+P_BULBASAUR:  1  # bulsaur
+P_IVYSAUR:    2  # ivysaur
+P_VENUSAUR:   3  # vensaur
+P_CHARMANDER: 4  # charman
+P_CHARMELEON: 5  # charmel
+P_CHARIZARD:  6  # charzar
+P_SQUIRTLE:   7  # squirtl
+P_WARTORTLE:  8  # wartort
+P_BLASTOISE:  9  # blstois
+P_CATERPIE:   10  # catrpie
+P_METAPOD:    11  # metapod
+P_BUTTERFREE: 12  # butfree
+P_WEEDLE:     13  # weedle
+P_KAKUNA:     14  # kakuna
+P_BEEDRILL:   15  # beedril
+P_PIDGEY:     16  # pidgey
+P_PIDGEOTTO:  17  # pidgeto
+P_PIDGEOT:    18  # pidgeot
+P_RATTATA:    19  # rattata
+P_RATICATE:   20  # raticat
+P_SPEAROW:    21  # spearow
+P_FEAROW:     22  # fearow
+P_EKANS:      23  # ekans
+P_ARBOK:      24  # arbok
+P_PIKACHU:    25  # pikachu
+P_RAICHU:     26  # raichu
+P_SANDSHREW:  27  # sndshrw
+P_SANDSLASH:  28  # sndslas
+P_NIDORANF:   29  # nidranf
+P_NIDORINA:   30  # nidrina
+P_NIDOQUEEN:  31  # nidquen
+P_NIDORANM:   32  # nidranm
+P_NIDORINO:   33  # nidrino
+P_NIDOKING:   34  # nidking
+P_CLEFAIRY:   35  # clfairy
+P_CLEFABLE:   36  # clfable
+P_VULPIX:     37  # vulpix
+P_NINETALES:  38  # nintale
+P_JIGGLYPUFF: 39  # jigpuff
+P_WIGGLYTUFF: 40  # wigtuff
+P_ZUBAT:      41  # zubat
+P_GOLBAT:     42  # golbat
+P_ODDISH:     43  # oddish
+P_GLOOM:      44  # gloom
+P_VILEPLUME:  45  # vilplum
+P_PARAS:      46  # paras
+P_PARASECT:   47  # parsect
+P_VENONAT:    48  # venonat
+P_VENOMOTH:   49  # venmoth
+P_DIGLETT:    50  # diglett
+P_DUGTRIO:    51  # dugtrio
+P_MEOWTH:     52  # meowth
+P_PERSIAN:    53  # persian
+P_PSYDUCK:    54  # psyduck
+P_GOLDUCK:    55  # golduck
+P_MANKEY:     56  # mankey
+P_PRIMEAPE:   57  # primape
+P_GROWLITHE:  58  # growlth
+P_ARCANINE:   59  # arcanin
+P_POLIWAG:    60  # poliwag
+P_POLIWHIRL:  61  # polwirl
+P_POLIWRATH:  62  # polrath
+P_ABRA:       63  # abra
+P_KADABRA:    64  # kadabra
+P_ALAKAZAM:   65  # alkazam
+P_MACHOP:     66  # machop
+P_MACHOKE:    67  # machoke
+P_MACHAMP:    68  # machamp
+P_BELLSPROUT: 69  # belsprt
+P_WEEPINBELL: 70  # weepbel
+P_VICTREEBEL: 71  # victbel
+P_TENTACOOL:  72  # tntcool
+P_TENTACRUEL: 73  # tntcrul
+P_GEODUDE:    74  # geodude
+P_GRAVELER:   75  # gravler
+P_GOLEM:      76  # golem
+P_PONYTA:     77  # ponyta
+P_RAPIDASH:   78  # rapdash
+P_SLOWPOKE:   79  # slowpok
+P_SLOWBRO:    80  # slowbro
+P_MAGNEMITE:  81  # magnmit
+P_MAGNETON:   82  # magnton
+P_FARFETCHD:  83  # fafetch
+P_DODUO:      84  # doduo
+P_DODRIO:     85  # dodrio
+P_SEEL:       86  # seel
+P_DEWGONG:    87  # dewgong
+P_GRIMER:     88  # grimer
+P_MUK:        89  # muk
+P_SHELLDER:   90  # shelder
+P_CLOYSTER:   91  # clyster
+P_GASTLY:     92  # gastly
+P_HAUNTER:    93  # haunter
+P_GENGAR:     94  # gengar
+P_ONIX:       95  # onix
+P_DROWZEE:    96  # drowzee
+P_HYPNO:      97  # hypno
+P_KRABBY:     98  # krabby
+P_KINGLER:    99  # kingler
+P_VOLTORB:    100  # voltorb
+P_ELECTRODE:  101  # elcrode
+P_EXEGGCUTE:  102  # eggcute
+P_EXEGGUTOR:  103  # eggutor
+P_CUBONE:     104  # cubone
+P_MAROWAK:    105  # marowak
+P_HITMONLEE:  106  # hitmlee
+P_HITMONCHAN: 107  # hitmchn
+P_LICKITUNG:  108  # liktung
+P_KOFFING:    109  # koffing
+P_WEEZING:    110  # weezing
+P_RHYHORN:    111  # rhyhorn
+P_RHYDON:     112  # rhydon
+P_CHANSEY:    113  # chansey
+P_TANGELA:    114  # tangela
+P_KANGASKHAN: 115  # kangkan
+P_HORSEA:     116  # horsea
+P_SEADRA:     117  # seadra
+P_GOLDEEN:    118  # goldeen
+P_SEAKING:    119  # seaking
+P_STARYU:     120  # staryu
+P_STARMIE:    121  # starmie
+P_MRMIME:     122  # mrmime
+P_SCYTHER:    123  # scyther
+P_JYNX:       124  # jynx
+P_ELECTABUZZ: 125  # elcabuz
+P_MAGMAR:     126  # magmar
+P_PINSIR:     127  # pinsir
+P_TAUROS:     128  # tauros
+P_MAGIKARP:   129  # magkarp
+P_GYARADOS:   130  # gyardos
+P_LAPRAS:     131  # lapras
+P_DITTO:      132  # ditto
+P_EEVEE:      133  # eevee
+P_VAPOREON:   134  # vapreon
+P_JOLTEON:    135  # jolteon
+P_FLAREON:    136  # flareon
+P_PORYGON:    137  # porygon
+P_OMANYTE:    138  # omanyte
+P_OMASTAR:    139  # omastar
+P_KABUTO:     140  # kabuto
+P_KABUTOPS:   141  # kabtops
+P_AERODACTYL: 142  # aerodac
+P_SNORLAX:    143  # snorlax
+P_ARTICUNO:   144  # artcuno
+P_ZAPDOS:     145  # zapdos
+P_MOLTRES:    146  # moltres
+P_DRATINI:    147  # dratini
+P_DRAGONAIR:  148  # dragair
+P_DRAGONITE:  149  # dragite
+P_MEWTWO:     150  # mewtwo
+P_MEW:        151  # mew
+P_CHIKORITA:  152  # chikita
+P_BAYLEEF:    153  # bayleef
+P_MEGANIUM:   154  # megnium
+P_CYNDAQUIL:  155  # cyndqil
+P_QUILAVA:    156  # quilava
+P_TYPHLOSION: 157  # typhlos
+P_TOTODILE:   158  # totodil
+P_CROCONAW:   159  # crocnaw
+P_FERALIGATR: 160  # frlgatr
+P_SENTRET:    161  # sentret
+P_FURRET:     162  # furret
+P_HOOTHOOT:   163  # hootoot
+P_NOCTOWL:    164  # noctowl
+P_LEDYBA:     165  # ledyba
+P_LEDIAN:     166  # ledian
+P_SPINARAK:   167  # spinrak
+P_ARIADOS:    168  # ariados
+P_CROBAT:     169  # crobat
+P_CHINCHOU:   170  # chinchu
+P_LANTURN:    171  # lanturn
+P_PICHU:      172  # pichu
+P_CLEFFA:     173  # cleffa
+P_IGGLYBUFF:  174  # iggbuff
+P_TOGEPI:     175  # togepi
+P_TOGETIC:    176  # togetic
+P_NATU:       177  # natu
+P_XATU:       178  # xatu
+P_MAREEP:     179  # mareep
+P_FLAAFFY:    180  # flaaffy
+P_AMPHAROS:   181  # amphros
+P_BELLOSSOM:  182  # belosom
+P_MARILL:     183  # marill
+P_AZUMARILL:  184  # azmaril
+P_SUDOWOODO:  185  # sudwood
+P_POLITOED:   186  # poltoed
+P_HOPPIP:     187  # hoppip
+P_SKIPLOOM:   188  # skiplom
+P_JUMPLUFF:   189  # jumpluf
+P_AIPOM:      190  # aipom
+P_SUNKERN:    191  # sunkern
+P_SUNFLORA:   192  # sunflor
+P_YANMA:      193  # yanma
+P_WOOPER:     194  # wooper
+P_QUAGSIRE:   195  # quagsir
+P_ESPEON:     196  # espeon
+P_UMBREON:    197  # umbreon
+P_MURKROW:    198  # murkrow
+P_SLOWKING:   199  # slowkng
+P_MISDREAVUS: 200  # misdvus
+P_UNOWN:      201  # unown
+P_WOBBUFFET:  202  # wobufet
+P_GIRAFARIG:  203  # gifarig
+P_PINECO:     204  # pineco
+P_FORRETRESS: 205  # fortres
+P_DUNSPARCE:  206  # dunspar
+P_GLIGAR:     207  # gligar
+P_STEELIX:    208  # steelix
+P_SNUBBULL:   209  # snubbul
+P_GRANBULL:   210  # granbul
+P_QWILFISH:   211  # qilfish
+P_SCIZOR:     212  # scizor
+P_SHUCKLE:    213  # shuckle
+P_HERACROSS:  214  # hercros
+P_SNEASEL:    215  # sneasel
+P_TEDDIURSA:  216  # tediurs
+P_URSARING:   217  # ursring
+P_SLUGMA:     218  # slugma
+P_MAGCARGO:   219  # macargo
+P_SWINUB:     220  # swinub
+P_PILOSWINE:  221  # pilswin
+P_CORSOLA:    222  # corsola
+P_REMORAID:   223  # remraid
+P_OCTILLERY:  224  # octlery
+P_DELIBIRD:   225  # delbird
+P_MANTINE:    226  # mantine
+P_SKARMORY:   227  # skarmry
+P_HOUNDOUR:   228  # hondour
+P_HOUNDOOM:   229  # hondoom
+P_KINGDRA:    230  # kingdra
+P_PHANPY:     231  # phanpy
+P_DONPHAN:    232  # donphan
+P_PORYGON2:   233  # porygn2
+P_STANTLER:   234  # stantlr
+P_SMEARGLE:   235  # smeargl
+P_TYROGUE:    236  # tyrogue
+P_HITMONTOP:  237  # hitmtop
+P_SMOOCHUM:   238  # smoochm
+P_ELEKID:     239  # elekid
+P_MAGBY:      240  # magby
+P_MILTANK:    241  # miltank
+P_BLISSEY:    242  # blissey
+P_RAIKOU:     243  # raikou
+P_ENTEI:      244  # entei
+P_SUICUNE:    245  # suicune
+P_LARVITAR:   246  # larvtar
+P_PUPITAR:    247  # pupitar
+P_TYRANITAR:  248  # tyratar
+P_LUGIA:      249  # lugia
+P_HOOH:       250  # hooh
+P_CELEBI:     251  # celebi
 
 # ----------------------------- move numbers - 4508 bytes. It took lots of compute to generate this. Order matters, a bad order wastes lots of space.
-M_STRUGGLE:     0
-M_ACID:         1
-M_ACIDARMOR:    2
-M_BARRAGE:      3
-M_BONECLUB:     4
-M_BIND:         5
-M_CLAMP:        6
-M_MOONLIGHT:    7
-M_LEECHSEED:    8
-M_EXTREMESPEED: 9
-M_SONICBOOM:    10
-M_TWINEEDLE:    11
-M_THUNDERSHOCK: 12
-M_GLARE:        13
-M_GUILLOTINE:   14
-M_HYPERFANG:    15
-M_JUMPKICK:     16
-M_KINESIS:      17
-M_LOCKON:       18
-M_LOVELYKISS:   19
-M_MACHPUNCH:    20
-M_VICEGRIP:     21
-M_SPIKECANNON:  22
-M_SPIKES:       23
-M_SPORE:        24
-M_COTTONSPORE:  25
-M_PRESENT:      26
-M_VITALTHROW:   27
-M_COMETPUNCH:   28
-M_DRILLPECK:    29
-M_SANDATTACK:   30
-M_AGILITY:      31
-M_FURYATTACK:   32
-M_QUICKATTACK:  33
-M_FALSESWIPE:   34
-M_GROWL:        35
-M_HEALBELL:     36
-M_SING:         37
-M_POUND:        38
-M_MINIMIZE:     39
-M_TAILWHIP:     40
-M_DOUBLESLAP:   41
-M_MEGAHORN:     42
-M_BONEMERANG:   43
-M_CONVERSION:   44
-M_CONVERSION2:  45
-M_SPARK:        46
-M_MILKDRINK:    47
-M_MORNINGSUN:   48
-M_NIGHTSHADE:   49
-M_OCTAZOOKA:    50
-M_PINMISSILE:   51
-M_POWDERSNOW:   52
-M_SUPERFANG:    53
-M_TM05:         54
-M_FIRESPIN:     55
-M_POISONGAS:    56
-M_BARRIER:      57
-M_MEDITATE:     58
-M_FUTURESIGHT:  59
-M_HYPNOSIS:     60
-M_PSYBEAM:      61
-M_LIGHTSCREEN:  62
-M_SAFEGUARD:    63
-M_PETALDANCE:   64
-M_CHARM:        65
-M_SYNTHESIS:    66
-M_SWEETSCENT:   67
-M_RAZORLEAF:    68
-M_POISONPOWDER: 69
-M_SLEEPPOWDER:  70
-M_ABSORB:       71
-M_STUNSPORE:    72
-M_FLAIL:        73
-M_CONFUSION:    74
-M_SLAM:         75
-M_CONSTRICT:    76
-M_AMNESIA:      77
-M_BUBBLE:       78
-M_SPLASH:       79
-M_HYDROPUMP:    80
-M_MINDREADER:   81
-M_MIST:         82
-M_HORNATTACK:   83
-M_SPIDERWEB:    84
-M_DOUBLEKICK:   85
-M_SWEETKISS:    86
-M_METALCLAW:    87
-M_TRANSFORM:    88
-M_TRIPLEKICK:   89
-M_GUST:         90
-M_TWISTER:      91
-M_CRABHAMMER:   92
-M_DIZZYPUNCH:   93
-M_SLUDGE:       94
-M_PAINSPLIT:    95
-M_DESTINYBOND:  96
-M_HAZE:         97
-M_LICK:         98
-M_PERISHSONG:   99
-M_MEANLOOK:     100
-M_CONFUSERAY:   101
-M_CROSSCHOP:    102
-M_SMOG:         103
-M_KARATECHOP:   104
-M_EMBER:        105
-M_SMOKESCREEN:  106
-M_BELLYDRUM:    107
-M_BEATUP:       108
-M_SCRATCH:      109
-M_SLASH:        110
-M_ANCIENTPOWER: 111
-M_LEER:         112
-M_BITE:         113
-M_OUTRAGE:      114
-M_SCARYFACE:    115
-M_THRASH:       116
-M_STOMP:        117
-M_ROCKSLIDE:    118
-M_MAGNITUDE:    119
-M_ROCKTHROW:    120
-M_HARDEN:       121
-M_BONERUSH:     122
-M_HIJUMPKICK:   123
-M_RECOVER:      124
-M_AEROBLAST:    125
-M_HORNDRILL:    126
-M_DRAGONRAGE:   127
-M_SOFTBOILED:   128
-M_DRAGONBREATH: 129
-M_SELFDESTRUCT: 130
-M_EXPLOSION:    131
-M_EGGBOMB:      132
-M_SLUDGEBOMB:   133
-M_GIGADRAIN:    134
-M_MEGADRAIN:    135
-M_SWORDSDANCE:  136
-M_CUT:          137
-M_FURYCUTTER:   138
-M_THIEF:        139
-M_DIG:          140
-M_ROLLOUT:      141
-M_DEFENSECURL:  142
-M_DETECT:       143
-M_SOLARBEAM:    144
-M_RAINDANCE:    145
-M_FLASH:        146
-M_PSYCHIC:      147
-M_PSYCHUP:      148
-M_DREAMEATER:   149
-M_NIGHTMARE:    150
-M_SHADOWBALL:   151
-M_ZAPCANNON:    152
-M_THUNDER:      153
-M_THUNDERBOLT:  154
-M_IRONTAIL:     155
-M_STRENGTH:     156
-M_ROCKSMASH:    157
-M_HEADBUTT:     158
-M_MUDSLAP:      159
-M_SUNNYDAY:     160
-M_PROTECT:      161
-M_DOUBLETEAM:   162
-M_SLEEPTALK:    163
-M_CURSE:        164
-M_HIDDENPOWER:  165
-M_SWAGGER:      166
-M_FRUSTRATION:  167
-M_RETURN:       168
-M_TOXIC:        169
-M_SNORE:        170
-M_REST:         171
-M_ENDURE:       172
-M_ATTRACT:      173
-M_BIDE:         174
-M_MIMIC:        175
-M_SUBSTITUTE:   176
-M_RAGE:         177
-M_DOUBLEEDGE:   178
-M_TAKEDOWN:     179
-M_SKULLBASH:    180
-M_BODYSLAM:     181
-M_WATERGUN:     182
-M_BUBBLEBEAM:   183
-M_ICEBEAM:      184
-M_BLIZZARD:     185
-M_ICYWIND:      186
-M_SURF:         187
-M_WHIRLPOOL:    188
-M_WATERFALL:    189
-M_SWIFT:        190
-M_PAYDAY:       191
-M_TRIATTACK:    192
-M_REFLECT:      193
-M_THUNDERWAVE:  194
-M_TELEPORT:     195
-M_PSYWAVE:      196
-M_METRONOME:    197
-M_COUNTER:      198
-M_MEGAPUNCH:    199
-M_SEISMICTOSS:  200
-M_SUBMISSION:   201
-M_MEGAKICK:     202
-M_DYNAMICPUNCH: 203
-M_FIREPUNCH:    204
-M_THUNDERPUNCH: 205
-M_ICEPUNCH:     206
-M_FIREBLAST:    207
-M_FLAMETHROWER: 208
-M_FISSURE:      209
-M_EARTHQUAKE:   210
-M_SANDSTORM:    211
-M_HYPERBEAM:    212
-M_ROAR:         213
-M_STEELWING:    214
-M_FLY:          215
-M_RAZORWIND:    216
-M_WHIRLWIND:    217
-M_SKYATTACK:    218
-M_WINGATTACK:   219
-M_PECK:         220
-M_MIRRORMOVE:   221
-M_FAINTATTACK:  222
-M_WITHDRAW:     223
-M_RAPIDSPIN:    224
-M_SUPERSONIC:   225
-M_AURORABEAM:   226
-M_MIRRORCOAT:   227
-M_POISONSTING:  228
-M_SPITE:        229
-M_CRUNCH:       230
-M_PURSUIT:      231
-M_STRINGSHOT:   232
-M_LEECHLIFE:    233
-M_BATONPASS:    234
-M_DISABLE:      235
-M_SCREECH:      236
-M_TACKLE:       237
-M_FLAMEWHEEL:   238
-M_REVERSAL:     239
-M_FURYSWIPES:   240
-M_FOCUSENERGY:  241
-M_FORESIGHT:    242
-M_LOWKICK:      243
-M_ROLLINGKICK:  244
-M_ENCORE:       245
-M_WRAP:         246
-M_GROWTH:       247
-M_VINEWHIP:     248
-M_SACREDFIRE:   249
-M_SHARPEN:      250
-M_SKETCH:       251
-
-# nicknames
-#                  12345678
-# M_STRUGGLE:      struggl
-# M_TOXIC:         toxic
-# M_PROTECT:       protect
-# M_SWAGGER:       swagger
-# M_REST:          rest
-# M_RETURN:        return
-# M_ATTRACT:       attract
-# M_HEADBUTT:      headbut
-# M_BLIZZARD:      blizard
-# M_SURF:          surf
-# M_DREAMEATER:    drmeatr
-# M_FLASH:         flash
-# M_DIG:           dig
-# M_SWIFT:         swift
-# M_DEFENSECURL:   defcurl
-# M_STRENGTH:      strngth
-# M_MUDSLAP:       mudslap
-# M_ROAR:          roar
-# M_EARTHQUAKE:    earquak
-# M_DETECT:        detect
-# M_THIEF:         thief
-# M_STEELWING:     stlwing
-# M_CUT:           cut
-# M_FLY:           fly
-# M_TAKEDOWN:      takdown
-# M_MIMIC:         mimic
-# M_SUBSTITUTE:    substit
-# M_SKULLBASH:     sklbash
-# M_REFLECT:       reflect
-# M_COUNTER:       counter
-# M_SCREECH:       screech
-# M_FLAIL:         flail
-# M_PURSUIT:       pursuit
-# M_POUND:         pound
-# M_SCRATCH:       scratch
-# M_VICEGRIP:      vicegrp
-# M_GUILLOTINE:    gilotin
-# M_GUST:          gust
-# M_BIND:          bind
-# M_VINEWHIP:      vinwhip
-# M_STOMP:         stomp
-# M_WRAP:          wrap
-# M_THRASH:        thrash
-# M_TWINEEDLE:     twineed
-# M_LEER:          leer
-# M_GROWL:         growl
-# M_SING:          sing
-# M_EMBER:         ember
-# M_MIST:          mist
-# M_HYDROPUMP:     hydrpmp
-# M_SEISMICTOSS:   seitoss
-# M_ABSORB:        absorb
-# M_GROWTH:        growth
-# M_STRINGSHOT:    strshot
-# M_MEDITATE:      meditat
-# M_AGILITY:       agility
-# M_TELEPORT:      telport
-# M_RECOVER:       recover
-# M_HARDEN:        harden
-# M_MINIMIZE:      minimiz
-# M_WITHDRAW:      withdrw
-# M_BARRIER:       barrier
-# M_FOCUSENERGY:   fcsnrgy
-# M_METRONOME:     metrnom
-# M_SELFDESTRUCT:  selfdes
-# M_LICK:          lick
-# M_SMOG:          smog
-# M_CLAMP:         clamp
-# M_CONSTRICT:     constri
-# M_AMNESIA:       amnesia
-# M_KINESIS:       kinesis
-# M_SOFTBOILED:    sofboil
-# M_TRANSFORM:     trnform
-# M_SPLASH:        splash
-# M_CRABHAMMER:    crabham
-# M_SHARPEN:       sharpen
-# M_SLASH:         slash
-# M_SKETCH:        sketch
-# M_SPIDERWEB:     spdrweb
-# M_MINDREADER:    mndread
-# M_REVERSAL:      reversl
-# M_SCARYFACE:     scarfac
-# M_OCTAZOOKA:     octzook
-# M_DESTINYBOND:   dstbond
-# M_PERISHSONG:    persong
-# M_LOCKON:        lockon
-# M_CHARM:         charm
-# M_MILKDRINK:     mlkdrnk
-# M_SPARK:         spark
-# M_MEANLOOK:      meanlok
-# M_PRESENT:       present
-# M_SAFEGUARD:     safegrd
-# M_PAINSPLIT:     painspl
-# M_MAGNITUDE:     magntud
-# M_BATONPASS:     btnpass
-# M_METALCLAW:     mtlclaw
-# M_SYNTHESIS:     synthes
-# M_TWISTER:       twister
-# M_CRUNCH:        crunch
-# M_EXTREMESPEED:  extrspd
-# M_BEATUP:        beatup
-# M_TM05:          tm05
-# M_SOLARBEAM:     solbeam
-# M_ICEBEAM:       icebeam
-# M_BUBBLEBEAM:    bblbeam
-# M_AURORABEAM:    aurbeam
-# M_WATERFALL:     watrfal
-# M_WATERGUN:      watrgun
-# M_MIRRORCOAT:    mircoat
-# M_SACREDFIRE:    sacrfir
-# M_RAPIDSPIN:     rapspin
-# M_FIRESPIN:      firspin
-# M_FORESIGHT:     forsigt
-# M_FUTURESIGHT:   futsigt
-# M_HIDDENPOWER:   hidpowr
-# M_ANCIENTPOWER:  ancpowr
-# M_DYNAMICPUNCH:  dynpnch
-# M_ICEPUNCH:      icepnch
-# M_COMETPUNCH:    cmtpnch
-# M_DIZZYPUNCH:    dizpnch
-# M_MACHPUNCH:     macpnch
-# M_FIREPUNCH:     firpnch
-# M_LEECHSEED:     lechsed
-# M_LEECHLIFE:     lechlif
-# M_KARATECHOP:    karachp
-# M_CROSSCHOP:     croschp
-# M_WHIRLPOOL:     wrlpool
-# M_PSYCHUP:       psychup
-# M_PSYCHIC:       psychic
-# M_PSYBEAM:       psybeam
-# M_DRAGONBREATH:  drgbrea
-# M_DOUBLETEAM:    dblteam
-# M_DOUBLESLAP:    dblslap
-# M_JUMPKICK:      jmpkick
-# M_LOWKICK:       lowkick
-# M_HIJUMPKICK:    hijkick
-# M_TRIPLEKICK:    trikick
-# M_DOUBLEKICK:    dblkick
-# M_FURYCUTTER:    furycut
-# M_FURYSWIPES:    furywip
-# M_FALSESWIPE:    falswip
-# M_MEGAPUNCH:     megpnch
-# M_MEGAKICK:      megkick
-# M_MEGADRAIN:     megdrai
-# M_GIGADRAIN:     gigdrai
-# M_THUNDER:       thunder
-# M_THUNDERBOLT:   thnbolt
-# M_THUNDERSHOCK:  thnshck
-# M_THUNDERPUNCH:  thnpnch
-# M_ROCKSMASH:     rocsmas
-# M_ROCKSLIDE:     rocslid
-# M_ROCKTHROW:     rocthrw
-# M_VITALTHROW:    vitthrw
-# M_SHADOWBALL:    shadbal
-# M_NIGHTSHADE:    ngtshad
-# M_BONECLUB:      bonclub
-# M_BONEMERANG:    bonrang
-# M_BONERUSH:      bonrush
-# M_MEGAHORN:      meghorn
-# M_HORNDRILL:     horndrl
-# M_PECK:          peck
-# M_DRILLPECK:     drlpeck
-# M_RAZORLEAF:     razleaf
-# M_ICYWIND:       icywind
-# M_WHIRLWIND:     wrlwind
-# M_RAZORWIND:     razwind
-# M_POISONSTING:   psnstng
-# M_POISONGAS:     psngas
-# M_POWDERSNOW:    powdsnw
-# M_POISONPOWDER:  psnpowd
-# M_WINGATTACK:    wingatk
-# M_QUICKATTACK:   quikatk
-# M_SKYATTACK:     skyatk
-# M_TRIATTACK:     triatk
-# M_FAINTATTACK:   fainatk
-# M_FURYATTACK:    furyatk
-# M_HORNATTACK:    hornatk
-# M_ROLLOUT:       rollout
-# M_ROLLINGKICK:   rolkick
-# M_ZAPCANNON:     zapcann
-# M_SPIKECANNON:   spkcann
-# M_SPIKES:        spikes
-# M_SWEETSCENT:    swtscen
-# M_LOVELYKISS:    lovkiss
-# M_SWEETKISS:     swtkiss
-# M_STUNSPORE:     stnspor
-# M_COTTONSPORE:   cotspor
-# M_MORNINGSUN:    mornsun
-# M_TAILWHIP:      tailwhp
-# M_IRONTAIL:      irntail
-# M_SLAM:          slam
-# M_BODYSLAM:      bodslam
-# M_SLEEPTALK:     slptalk
-# M_SLEEPPOWDER:   slppowd
-# M_EGGBOMB:       eggbomb
-# M_SLUDGEBOMB:    slgbomb
-# M_MOONLIGHT:     moonlit
-# M_SMOKESCREEN:   smkscrn
-# M_LIGHTSCREEN:   litscrn
-# M_SANDSTORM:     sandsto
-# M_SANDATTACK:    sandatk
-# M_HYPNOSIS:      hypnosi
-# M_RAINDANCE:     raindnc
-# M_SWORDSDANCE:   swordnc
-# M_PETALDANCE:    petldnc
-# M_AEROBLAST:     aerblst
-# M_FIREBLAST:     firblst
-# M_SONICBOOM:     soncbom
-# M_SUPERSONIC:    supsonc
-# M_PAYDAY:        payday
-# M_SUNNYDAY:      sunyday
-# M_BELLYDRUM:     beldrum
-# M_HEALBELL:      healbel
-# M_FLAMEWHEEL:    flmweel
-# M_FLAMETHROWER:  flmthrw
-# M_SUPERFANG:     supfang
-# M_HYPERBEAM:     hypbeam
-# M_HYPERFANG:     hypfang
-# M_ACID:          acid
-# M_ACIDARMOR:     acidarm
-# M_CONFUSERAY:    cnfsray
-# M_PINMISSILE:    pinmiss
-# M_FRUSTRATION:   frustra
-# M_EXPLOSION:     explosi
-# M_CONVERSION:    conver
-# M_CONVERSION2:   conver2
-# M_CONFUSION:     cnfsion
-# M_SUBMISSION:    submiss
-# M_CURSE:         curse
-# M_ENDURE:        endure
-# M_SNORE:         snore
-# M_BIDE:          bide
-# M_TACKLE:        tackle
-# M_BITE:          bite
-# M_DISABLE:       disable
-# M_FISSURE:       fissure
-# M_HAZE:          haze
-# M_GLARE:         glare
-# M_BUBBLE:        bubble
-# M_SPITE:         spite
-# M_ENCORE:        encore
-# M_MIRRORMOVE:    mirmove
-# M_DOUBLEEDGE:    dbledge
-# M_THUNDERWAVE:   thnwave
-# M_PSYWAVE:       psywave
-# M_NIGHTMARE:     ngtmare
-# M_SPORE:         spore
-# M_SLUDGE:        sludge
-# M_RAGE:          rage
-# M_BARRAGE:       barrage
-# M_OUTRAGE:       outrage
-# M_DRAGONRAGE:    drgrage
+M_STRUGGLE:     0  # struggl
+M_ACID:         1  # acid
+M_ACIDARMOR:    2  # acidarm
+M_BARRAGE:      3  # barrage
+M_BONECLUB:     4  # bonclub
+M_BIND:         5  # bind
+M_CLAMP:        6  # clamp
+M_MOONLIGHT:    7  # moonlit
+M_LEECHSEED:    8  # lechsed
+M_EXTREMESPEED: 9  # extrspd
+M_SONICBOOM:    10  # soncbom
+M_TWINEEDLE:    11  # twineed
+M_THUNDERSHOCK: 12  # thnshck
+M_GLARE:        13  # glare
+M_GUILLOTINE:   14  # gilotin
+M_HYPERFANG:    15  # hypfang
+M_JUMPKICK:     16  # jmpkick
+M_KINESIS:      17  # kinesis
+M_LOCKON:       18  # lockon
+M_LOVELYKISS:   19  # lovkiss
+M_MACHPUNCH:    20  # macpnch
+M_VICEGRIP:     21  # vicegrp
+M_SPIKECANNON:  22  # spkcann
+M_SPIKES:       23  # spikes
+M_SPORE:        24  # spore
+M_COTTONSPORE:  25  # cotspor
+M_PRESENT:      26  # present
+M_VITALTHROW:   27  # vitthrw
+M_COMETPUNCH:   28  # cmtpnch
+M_DRILLPECK:    29  # drlpeck
+M_SANDATTACK:   30  # sandatk
+M_AGILITY:      31  # agility
+M_FURYATTACK:   32  # furyatk
+M_QUICKATTACK:  33  # quikatk
+M_FALSESWIPE:   34  # falswip
+M_GROWL:        35  # growl
+M_HEALBELL:     36  # healbel
+M_SING:         37  # sing
+M_POUND:        38  # pound
+M_MINIMIZE:     39  # minimiz
+M_TAILWHIP:     40  # tailwhp
+M_DOUBLESLAP:   41  # dblslap
+M_MEGAHORN:     42  # meghorn
+M_BONEMERANG:   43  # bonrang
+M_CONVERSION:   44  # conver
+M_CONVERSION2:  45  # conver2
+M_SPARK:        46  # spark
+M_MILKDRINK:    47  # mlkdrnk
+M_MORNINGSUN:   48  # mornsun
+M_NIGHTSHADE:   49  # ngtshad
+M_OCTAZOOKA:    50  # octzook
+M_PINMISSILE:   51  # pinmiss
+M_POWDERSNOW:   52  # powdsnw
+M_SUPERFANG:    53  # supfang
+M_TM05:         54  # tm05
+M_FIRESPIN:     55  # firspin
+M_POISONGAS:    56  # psngas
+M_BARRIER:      57  # barrier
+M_MEDITATE:     58  # meditat
+M_FUTURESIGHT:  59  # futsigt
+M_HYPNOSIS:     60  # hypnosi
+M_PSYBEAM:      61  # psybeam
+M_LIGHTSCREEN:  62  # litscrn
+M_SAFEGUARD:    63  # safegrd
+M_PETALDANCE:   64  # petldnc
+M_CHARM:        65  # charm
+M_SYNTHESIS:    66  # synthes
+M_SWEETSCENT:   67  # swtscen
+M_RAZORLEAF:    68  # razleaf
+M_POISONPOWDER: 69  # psnpowd
+M_SLEEPPOWDER:  70  # slppowd
+M_ABSORB:       71  # absorb
+M_STUNSPORE:    72  # stnspor
+M_FLAIL:        73  # flail
+M_CONFUSION:    74  # cnfsion
+M_SLAM:         75  # slam
+M_CONSTRICT:    76  # constri
+M_AMNESIA:      77  # amnesia
+M_BUBBLE:       78  # bubble
+M_SPLASH:       79  # splash
+M_HYDROPUMP:    80  # hydrpmp
+M_MINDREADER:   81  # mndread
+M_MIST:         82  # mist
+M_HORNATTACK:   83  # hornatk
+M_SPIDERWEB:    84  # spdrweb
+M_DOUBLEKICK:   85  # dblkick
+M_SWEETKISS:    86  # swtkiss
+M_METALCLAW:    87  # mtlclaw
+M_TRANSFORM:    88  # trnform
+M_TRIPLEKICK:   89  # trikick
+M_GUST:         90  # gust
+M_TWISTER:      91  # twister
+M_CRABHAMMER:   92  # crabham
+M_DIZZYPUNCH:   93  # dizpnch
+M_SLUDGE:       94  # sludge
+M_PAINSPLIT:    95  # painspl
+M_DESTINYBOND:  96  # dstbond
+M_HAZE:         97  # haze
+M_LICK:         98  # lick
+M_PERISHSONG:   99  # persong
+M_MEANLOOK:     100  # meanlok
+M_CONFUSERAY:   101  # cnfsray
+M_CROSSCHOP:    102  # croschp
+M_SMOG:         103  # smog
+M_KARATECHOP:   104  # karachp
+M_EMBER:        105  # ember
+M_SMOKESCREEN:  106  # smkscrn
+M_BELLYDRUM:    107  # beldrum
+M_BEATUP:       108  # beatup
+M_SCRATCH:      109  # scratch
+M_SLASH:        110  # slash
+M_ANCIENTPOWER: 111  # ancpowr
+M_LEER:         112  # leer
+M_BITE:         113  # bite
+M_OUTRAGE:      114  # outrage
+M_SCARYFACE:    115  # scarfac
+M_THRASH:       116  # thrash
+M_STOMP:        117  # stomp
+M_ROCKSLIDE:    118  # rocslid
+M_MAGNITUDE:    119  # magntud
+M_ROCKTHROW:    120  # rocthrw
+M_HARDEN:       121  # harden
+M_BONERUSH:     122  # bonrush
+M_HIJUMPKICK:   123  # hijkick
+M_RECOVER:      124  # recover
+M_AEROBLAST:    125  # aerblst
+M_HORNDRILL:    126  # horndrl
+M_DRAGONRAGE:   127  # drgrage
+M_SOFTBOILED:   128  # sofboil
+M_DRAGONBREATH: 129  # drgbrea
+M_SELFDESTRUCT: 130  # selfdes
+M_EXPLOSION:    131  # explosi
+M_EGGBOMB:      132  # eggbomb
+M_SLUDGEBOMB:   133  # slgbomb
+M_GIGADRAIN:    134  # gigdrai
+M_MEGADRAIN:    135  # megdrai
+M_SWORDSDANCE:  136  # swordnc
+M_CUT:          137  # cut
+M_FURYCUTTER:   138  # furycut
+M_THIEF:        139  # thief
+M_DIG:          140  # dig
+M_ROLLOUT:      141  # rollout
+M_DEFENSECURL:  142  # defcurl
+M_DETECT:       143  # detect
+M_SOLARBEAM:    144  # solbeam
+M_RAINDANCE:    145  # raindnc
+M_FLASH:        146  # flash
+M_PSYCHIC:      147  # psychic
+M_PSYCHUP:      148  # psychup
+M_DREAMEATER:   149  # drmeatr
+M_NIGHTMARE:    150  # ngtmare
+M_SHADOWBALL:   151  # shadbal
+M_ZAPCANNON:    152  # zapcann
+M_THUNDER:      153  # thunder
+M_THUNDERBOLT:  154  # thnbolt
+M_IRONTAIL:     155  # irntail
+M_STRENGTH:     156  # strngth
+M_ROCKSMASH:    157  # rocsmas
+M_HEADBUTT:     158  # headbut
+M_MUDSLAP:      159  # mudslap
+M_SUNNYDAY:     160  # sunyday
+M_PROTECT:      161  # protect
+M_DOUBLETEAM:   162  # dblteam
+M_SLEEPTALK:    163  # slptalk
+M_CURSE:        164  # curse
+M_HIDDENPOWER:  165  # hidpowr
+M_SWAGGER:      166  # swagger
+M_FRUSTRATION:  167  # frustra
+M_RETURN:       168  # return
+M_TOXIC:        169  # toxic
+M_SNORE:        170  # snore
+M_REST:         171  # rest
+M_ENDURE:       172  # endure
+M_ATTRACT:      173  # attract
+M_BIDE:         174  # bide
+M_MIMIC:        175  # mimic
+M_SUBSTITUTE:   176  # substit
+M_RAGE:         177  # rage
+M_DOUBLEEDGE:   178  # dbledge
+M_TAKEDOWN:     179  # takdown
+M_SKULLBASH:    180  # sklbash
+M_BODYSLAM:     181  # bodslam
+M_WATERGUN:     182  # watrgun
+M_BUBBLEBEAM:   183  # bblbeam
+M_ICEBEAM:      184  # icebeam
+M_BLIZZARD:     185  # blizard
+M_ICYWIND:      186  # icywind
+M_SURF:         187  # surf
+M_WHIRLPOOL:    188  # wrlpool
+M_WATERFALL:    189  # watrfal
+M_SWIFT:        190  # swift
+M_PAYDAY:       191  # payday
+M_TRIATTACK:    192  # triatk
+M_REFLECT:      193  # reflect
+M_THUNDERWAVE:  194  # thnwave
+M_TELEPORT:     195  # telport
+M_PSYWAVE:      196  # psywave
+M_METRONOME:    197  # metrnom
+M_COUNTER:      198  # counter
+M_MEGAPUNCH:    199  # megpnch
+M_SEISMICTOSS:  200  # seitoss
+M_SUBMISSION:   201  # submiss
+M_MEGAKICK:     202  # megkick
+M_DYNAMICPUNCH: 203  # dynpnch
+M_FIREPUNCH:    204  # firpnch
+M_THUNDERPUNCH: 205  # thnpnch
+M_ICEPUNCH:     206  # icepnch
+M_FIREBLAST:    207  # firblst
+M_FLAMETHROWER: 208  # flmthrw
+M_FISSURE:      209  # fissure
+M_EARTHQUAKE:   210  # earquak
+M_SANDSTORM:    211  # sandsto
+M_HYPERBEAM:    212  # hypbeam
+M_ROAR:         213  # roar
+M_STEELWING:    214  # stlwing
+M_FLY:          215  # fly
+M_RAZORWIND:    216  # razwind
+M_WHIRLWIND:    217  # wrlwind
+M_SKYATTACK:    218  # skyatk
+M_WINGATTACK:   219  # wingatk
+M_PECK:         220  # peck
+M_MIRRORMOVE:   221  # mirmove
+M_FAINTATTACK:  222  # fainatk
+M_WITHDRAW:     223  # withdrw
+M_RAPIDSPIN:    224  # rapspin
+M_SUPERSONIC:   225  # supsonc
+M_AURORABEAM:   226  # aurbeam
+M_MIRRORCOAT:   227  # mircoat
+M_POISONSTING:  228  # psnstng
+M_SPITE:        229  # spite
+M_CRUNCH:       230  # crunch
+M_PURSUIT:      231  # pursuit
+M_STRINGSHOT:   232  # strshot
+M_LEECHLIFE:    233  # lechlif
+M_BATONPASS:    234  # btnpass
+M_DISABLE:      235  # disable
+M_SCREECH:      236  # screech
+M_TACKLE:       237  # tackle
+M_FLAMEWHEEL:   238  # flmweel
+M_REVERSAL:     239  # reversl
+M_FURYSWIPES:   240  # furywip
+M_FOCUSENERGY:  241  # fcsnrgy
+M_FORESIGHT:    242  # forsigt
+M_LOWKICK:      243  # lowkick
+M_ROLLINGKICK:  244  # rolkick
+M_ENCORE:       245  # encore
+M_WRAP:         246  # wrap
+M_GROWTH:       247  # growth
+M_VINEWHIP:     248  # vinwhip
+M_SACREDFIRE:   249  # sacrfir
+M_SHARPEN:      250  # sharpen
+M_SKETCH:       251  # sketch

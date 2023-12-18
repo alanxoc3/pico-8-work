@@ -17,8 +17,8 @@ function minisfx(num) -- plays a sfx with len of 4
   sfx(num\4, 0, num%4*8, 8)
 end
 
-pkmn_names = split"missing,bulsaur,ivysaur,vensaur,charman,charmel,charzar,squirtl,wartort,blstois,catrpie,metapod,btrfree,weedle,kakuna,beedril,pidgey,pidgeto,pidgeot,rattata,raticat,spearow,fearow,ekans,arbok,pikachu,raichu,sndshrw,sndslas,nidranf,nidrina,nidquen,nidranm,nidrino,nidking,clfairy,clfable,vulpix,nintale,jigpuff,wigtuff,zubat,golbat,oddish,gloom,vilplum,paras,parsect,venonat,venmoth,diglett,dugtrio,meowth,persian,psyduck,golduck,mankey,primape,growlth,arcanin,poliwag,polwirl,polrath,abra,kadabra,alkazam,machop,machoke,machamp,belsprt,weepbel,victbel,tntcool,tntcrul,geodude,gravler,golem,ponyta,rapdash,slowpok,slowbro,magnmit,magnton,fafetch,doduo,dodrio,seel,dewgong,grimer,muk,shelder,clyster,gastly,haunter,gengar,onix,drowzee,hypno,krabby,kingler,voltorb,elcrode,eggcute,eggutor,cubone,marowak,hitmlee,hitmchn,liktung,koffing,weezing,rhyhorn,rhydon,chansey,tangela,kangkan,horsea,seadra,goldeen,seaking,staryu,starmie,mrmime,scyther,jynx,elcabuz,magmar,pinsir,tauros,magkarp,gyardos,lapras,ditto,eevee,vapreon,jolteon,flareon,porygon,omanyte,omastar,kabuto,kabtops,aerodac,snorlax,artcuno,zapdos,moltres,dratini,dragair,dragite,mewtwo,mew,chikita,bayleef,megnium,cyndqil,quilava,typhlos,totodil,crocnaw,frlgatr,sentret,furret,hootoot,noctowl,ledyba,ledian,spinrak,ariados,crobat,chinchu,lanturn,pichu,cleffa,iggbuff,togepi,togetic,natu,xatu,mareep,flaaffy,amphros,belosom,marill,azmaril,sudwood,poltoed,hoppip,skiplom,jumpluf,aipom,sunkern,sunflor,yanma,wooper,quagsir,espeon,umbreon,murkrow,slowkng,misdvus,unown,wobufet,gifarig,pineco,fortres,dunspar,gligar,steelix,snubbul,granbul,qilfish,scizor,shuckle,hercros,sneasel,tediurs,ursring,slugma,macargo,swinub,pilswin,corsola,remraid,octlery,delbird,mantine,skarmry,hondour,hondoom,kingdra,phanpy,donphan,porygn2,stantlr,smeargl,tyrogue,hitmtop,smoochm,elekid,magby,miltank,blissey,raikou,entei,suicune,larvtar,pupitar,tyratar,lugia,hooh,celebi"
-pkmn_types = {{"bird","normal"}, {"grass","poison"}, {"grass","poison"}, {"grass","poison"}, {"fire",""}, {"fire",""}, {"fire","flying"}, {"water",""}, {"water",""}, {"water",""}, {"bug",""}, {"bug",""}, {"bug","flying"}, {"bug","poison"}, {"bug","poison"}, {"bug","poison"}, {"flying","normal"}, {"flying","normal"}, {"flying","normal"}, {"normal",""}, {"normal",""}, {"flying","normal"}, {"flying","normal"}, {"poison",""}, {"poison",""}, {"electr",""}, {"electr",""}, {"ground",""}, {"ground",""}, {"poison",""}, {"poison",""}, {"poison","ground"}, {"poison",""}, {"poison",""}, {"poison","ground"}, {"normal",""}, {"normal",""}, {"fire",""}, {"fire",""}, {"normal",""}, {"normal",""}, {"poison","flying"}, {"poison","flying"}, {"grass","poison"}, {"grass","poison"}, {"grass","poison"}, {"bug","grass"}, {"bug","grass"}, {"poison","bug"}, {"poison","bug"}, {"ground",""}, {"ground",""}, {"normal",""}, {"normal",""}, {"water",""}, {"water",""}, {"fightg",""}, {"fightg",""}, {"fire",""}, {"fire",""}, {"water",""}, {"water",""}, {"water","fightg"}, {"psychc",""}, {"psychc",""}, {"psychc",""}, {"fightg",""}, {"fightg",""}, {"fightg",""}, {"grass","poison"}, {"grass","poison"}, {"grass","poison"}, {"water","poison"}, {"water","poison"}, {"rock","ground"}, {"rock","ground"}, {"rock","ground"}, {"fire",""}, {"fire",""}, {"psychc","water"}, {"psychc","water"}, {"steel","electr"}, {"steel","electr"}, {"flying","normal"}, {"flying","normal"}, {"flying","normal"}, {"water",""}, {"water","ice"}, {"poison",""}, {"poison",""}, {"water",""}, {"water","ice"}, {"ghost","poison"}, {"ghost","poison"}, {"ghost","poison"}, {"rock","ground"}, {"psychc",""}, {"psychc",""}, {"water",""}, {"water",""}, {"electr",""}, {"electr",""}, {"grass","psychc"}, {"grass","psychc"}, {"ground",""}, {"ground",""}, {"fightg",""}, {"fightg",""}, {"normal",""}, {"poison",""}, {"poison",""}, {"ground","rock"}, {"ground","rock"}, {"normal",""}, {"grass",""}, {"normal",""}, {"water",""}, {"water",""}, {"water",""}, {"water",""}, {"water",""}, {"water","psychc"}, {"psychc",""}, {"bug","flying"}, {"psychc","ice"}, {"electr",""}, {"fire",""}, {"bug",""}, {"normal",""}, {"water",""}, {"water","flying"}, {"water","ice"}, {"normal",""}, {"normal",""}, {"water",""}, {"electr",""}, {"fire",""}, {"normal",""}, {"rock","water"}, {"rock","water"}, {"rock","water"}, {"rock","water"}, {"rock","flying"}, {"normal",""}, {"ice","flying"}, {"electr","flying"}, {"fire","flying"}, {"dragon",""}, {"dragon",""}, {"dragon","flying"}, {"psychc",""}, {"psychc",""}, {"grass",""}, {"grass",""}, {"grass",""}, {"fire",""}, {"fire",""}, {"fire",""}, {"water",""}, {"water",""}, {"water",""}, {"normal",""}, {"normal",""}, {"flying","normal"}, {"flying","normal"}, {"bug","flying"}, {"bug","flying"}, {"bug","poison"}, {"bug","poison"}, {"poison","flying"}, {"electr","water"}, {"electr","water"}, {"electr",""}, {"normal",""}, {"normal",""}, {"normal",""}, {"normal","flying"}, {"psychc","flying"}, {"psychc","flying"}, {"electr",""}, {"electr",""}, {"electr",""}, {"grass",""}, {"water",""}, {"water",""}, {"rock",""}, {"water",""}, {"grass","flying"}, {"grass","flying"}, {"grass","flying"}, {"normal",""}, {"grass",""}, {"grass",""}, {"bug","flying"}, {"water","ground"}, {"water","ground"}, {"psychc",""}, {"dark",""}, {"dark","flying"}, {"psychc","water"}, {"ghost",""}, {"psychc",""}, {"psychc",""}, {"psychc","normal"}, {"bug",""}, {"bug","steel"}, {"normal",""}, {"ground","flying"}, {"steel","ground"}, {"normal",""}, {"normal",""}, {"water","poison"}, {"steel","bug"}, {"bug","rock"}, {"bug","fightg"}, {"dark","ice"}, {"normal",""}, {"normal",""}, {"fire",""}, {"fire","rock"}, {"ground","ice"}, {"ground","ice"}, {"rock","water"}, {"water",""}, {"water",""}, {"flying","ice"}, {"water","flying"}, {"steel","flying"}, {"dark","fire"}, {"dark","fire"}, {"water","dragon"}, {"ground",""}, {"ground",""}, {"normal",""}, {"normal",""}, {"normal",""}, {"fightg",""}, {"fightg",""}, {"psychc","ice"}, {"electr",""}, {"fire",""}, {"normal",""}, {"normal",""}, {"electr",""}, {"fire",""}, {"water",""}, {"rock","ground"}, {"rock","ground"}, {"dark","rock"}, {"psychc","flying"}, {"fire","flying"}, {"grass","psychc"}}
+pkmn_names = split"mISSING,bULSAUR,iVYSAUR,vENSAUR,cHARMAN,cHARMEL,cHARZAR,sQUIRTL,wARTORT,bLSTOIS,cATRPIE,mETAPOD,bUTFREE,wEEDLE,kAKUNA,bEEDRIL,pIDGEY,pIDGETO,pIDGEOT,rATTATA,rATICAT,sPEAROW,fEAROW,eKANS,aRBOK,pIKACHU,rAICHU,sNDSHRW,sNDSLAS,nIDRANF,nIDRINA,nIDQUEN,nIDRANM,nIDRINO,nIDKING,cLFAIRY,cLFABLE,vULPIX,nINTALE,jIGPUFF,wIGTUFF,zUBAT,gOLBAT,oDDISH,gLOOM,vILPLUM,pARAS,pARSECT,vENONAT,vENMOTH,dIGLETT,dUGTRIO,mEOWTH,pERSIAN,pSYDUCK,gOLDUCK,mANKEY,pRIMAPE,gROWLTH,aRCANIN,pOLIWAG,pOLWIRL,pOLRATH,aBRA,kADABRA,aLKAZAM,mACHOP,mACHOKE,mACHAMP,bELSPRT,wEEPBEL,vICTBEL,tNTCOOL,tNTCRUL,gEODUDE,gRAVLER,gOLEM,pONYTA,rAPDASH,sLOWPOK,sLOWBRO,mAGNMIT,mAGNTON,fAFETCH,dODUO,dODRIO,sEEL,dEWGONG,gRIMER,mUK,sHELDER,cLYSTER,gASTLY,hAUNTER,gENGAR,oNIX,dROWZEE,hYPNO,kRABBY,kINGLER,vOLTORB,eLCRODE,eGGCUTE,eGGUTOR,cUBONE,mAROWAK,hITMLEE,hITMCHN,lIKTUNG,kOFFING,wEEZING,rHYHORN,rHYDON,cHANSEY,tANGELA,kANGKAN,hORSEA,sEADRA,gOLDEEN,sEAKING,sTARYU,sTARMIE,mRMIME,sCYTHER,jYNX,eLCABUZ,mAGMAR,pINSIR,tAUROS,mAGKARP,gYARDOS,lAPRAS,dITTO,eEVEE,vAPREON,jOLTEON,fLAREON,pORYGON,oMANYTE,oMASTAR,kABUTO,kABTOPS,aERODAC,sNORLAX,aRTCUNO,zAPDOS,mOLTRES,dRATINI,dRAGAIR,dRAGITE,mEWTWO,mEW,cHIKITA,bAYLEEF,mEGNIUM,cYNDQIL,qUILAVA,tYPHLOS,tOTODIL,cROCNAW,fRLGATR,sENTRET,fURRET,hOOTOOT,nOCTOWL,lEDYBA,lEDIAN,sPINRAK,aRIADOS,cROBAT,cHINCHU,lANTURN,pICHU,cLEFFA,iGGBUFF,tOGEPI,tOGETIC,nATU,xATU,mAREEP,fLAAFFY,aMPHROS,bELOSOM,mARILL,aZMARIL,sUDWOOD,pOLTOED,hOPPIP,sKIPLOM,jUMPLUF,aIPOM,sUNKERN,sUNFLOR,yANMA,wOOPER,qUAGSIR,eSPEON,uMBREON,mURKROW,sLOWKNG,mISDVUS,uNOWN,wOBUFET,gIFARIG,pINECO,fORTRES,dUNSPAR,gLIGAR,sTEELIX,sNUBBUL,gRANBUL,qILFISH,sCIZOR,sHUCKLE,hERCROS,sNEASEL,tEDIURS,uRSRING,sLUGMA,mACARGO,sWINUB,pILSWIN,cORSOLA,rEMRAID,oCTLERY,dELBIRD,mANTINE,sKARMRY,hONDOUR,hONDOOM,kINGDRA,pHANPY,dONPHAN,pORYGN2,sTANTLR,sMEARGL,tYROGUE,hITMTOP,sMOOCHM,eLEKID,mAGBY,mILTANK,bLISSEY,rAIKOU,eNTEI,sUICUNE,lARVTAR,pUPITAR,tYRATAR,lUGIA,hOOH,cELEBI"
+pkmn_types = {{"bIRD","nORMAL"}, {"gRASS","pOISON"}, {"gRASS","pOISON"}, {"gRASS","pOISON"}, {"fIRE",""}, {"fIRE",""}, {"fIRE","fLYING"}, {"wATER",""}, {"wATER",""}, {"wATER",""}, {"bUG",""}, {"bUG",""}, {"bUG","fLYING"}, {"bUG","pOISON"}, {"bUG","pOISON"}, {"bUG","pOISON"}, {"fLYING","nORMAL"}, {"fLYING","nORMAL"}, {"fLYING","nORMAL"}, {"nORMAL",""}, {"nORMAL",""}, {"fLYING","nORMAL"}, {"fLYING","nORMAL"}, {"pOISON",""}, {"pOISON",""}, {"eLECTR",""}, {"eLECTR",""}, {"gROUND",""}, {"gROUND",""}, {"pOISON",""}, {"pOISON",""}, {"pOISON","gROUND"}, {"pOISON",""}, {"pOISON",""}, {"pOISON","gROUND"}, {"nORMAL",""}, {"nORMAL",""}, {"fIRE",""}, {"fIRE",""}, {"nORMAL",""}, {"nORMAL",""}, {"pOISON","fLYING"}, {"pOISON","fLYING"}, {"gRASS","pOISON"}, {"gRASS","pOISON"}, {"gRASS","pOISON"}, {"bUG","gRASS"}, {"bUG","gRASS"}, {"pOISON","bUG"}, {"pOISON","bUG"}, {"gROUND",""}, {"gROUND",""}, {"nORMAL",""}, {"nORMAL",""}, {"wATER",""}, {"wATER",""}, {"fIGHTG",""}, {"fIGHTG",""}, {"fIRE",""}, {"fIRE",""}, {"wATER",""}, {"wATER",""}, {"wATER","fIGHTG"}, {"pSYCHC",""}, {"pSYCHC",""}, {"pSYCHC",""}, {"fIGHTG",""}, {"fIGHTG",""}, {"fIGHTG",""}, {"gRASS","pOISON"}, {"gRASS","pOISON"}, {"gRASS","pOISON"}, {"wATER","pOISON"}, {"wATER","pOISON"}, {"rOCK","gROUND"}, {"rOCK","gROUND"}, {"rOCK","gROUND"}, {"fIRE",""}, {"fIRE",""}, {"pSYCHC","wATER"}, {"pSYCHC","wATER"}, {"sTEEL","eLECTR"}, {"sTEEL","eLECTR"}, {"fLYING","nORMAL"}, {"fLYING","nORMAL"}, {"fLYING","nORMAL"}, {"wATER",""}, {"wATER","iCE"}, {"pOISON",""}, {"pOISON",""}, {"wATER",""}, {"wATER","iCE"}, {"gHOST","pOISON"}, {"gHOST","pOISON"}, {"gHOST","pOISON"}, {"rOCK","gROUND"}, {"pSYCHC",""}, {"pSYCHC",""}, {"wATER",""}, {"wATER",""}, {"eLECTR",""}, {"eLECTR",""}, {"gRASS","pSYCHC"}, {"gRASS","pSYCHC"}, {"gROUND",""}, {"gROUND",""}, {"fIGHTG",""}, {"fIGHTG",""}, {"nORMAL",""}, {"pOISON",""}, {"pOISON",""}, {"gROUND","rOCK"}, {"gROUND","rOCK"}, {"nORMAL",""}, {"gRASS",""}, {"nORMAL",""}, {"wATER",""}, {"wATER",""}, {"wATER",""}, {"wATER",""}, {"wATER",""}, {"wATER","pSYCHC"}, {"pSYCHC",""}, {"bUG","fLYING"}, {"pSYCHC","iCE"}, {"eLECTR",""}, {"fIRE",""}, {"bUG",""}, {"nORMAL",""}, {"wATER",""}, {"wATER","fLYING"}, {"wATER","iCE"}, {"nORMAL",""}, {"nORMAL",""}, {"wATER",""}, {"eLECTR",""}, {"fIRE",""}, {"nORMAL",""}, {"rOCK","wATER"}, {"rOCK","wATER"}, {"rOCK","wATER"}, {"rOCK","wATER"}, {"rOCK","fLYING"}, {"nORMAL",""}, {"iCE","fLYING"}, {"eLECTR","fLYING"}, {"fIRE","fLYING"}, {"dRAGON",""}, {"dRAGON",""}, {"dRAGON","fLYING"}, {"pSYCHC",""}, {"pSYCHC",""}, {"gRASS",""}, {"gRASS",""}, {"gRASS",""}, {"fIRE",""}, {"fIRE",""}, {"fIRE",""}, {"wATER",""}, {"wATER",""}, {"wATER",""}, {"nORMAL",""}, {"nORMAL",""}, {"fLYING","nORMAL"}, {"fLYING","nORMAL"}, {"bUG","fLYING"}, {"bUG","fLYING"}, {"bUG","pOISON"}, {"bUG","pOISON"}, {"pOISON","fLYING"}, {"eLECTR","wATER"}, {"eLECTR","wATER"}, {"eLECTR",""}, {"nORMAL",""}, {"nORMAL",""}, {"nORMAL",""}, {"nORMAL","fLYING"}, {"pSYCHC","fLYING"}, {"pSYCHC","fLYING"}, {"eLECTR",""}, {"eLECTR",""}, {"eLECTR",""}, {"gRASS",""}, {"wATER",""}, {"wATER",""}, {"rOCK",""}, {"wATER",""}, {"gRASS","fLYING"}, {"gRASS","fLYING"}, {"gRASS","fLYING"}, {"nORMAL",""}, {"gRASS",""}, {"gRASS",""}, {"bUG","fLYING"}, {"wATER","gROUND"}, {"wATER","gROUND"}, {"pSYCHC",""}, {"dARK",""}, {"dARK","fLYING"}, {"pSYCHC","wATER"}, {"gHOST",""}, {"pSYCHC",""}, {"pSYCHC",""}, {"pSYCHC","nORMAL"}, {"bUG",""}, {"bUG","sTEEL"}, {"nORMAL",""}, {"gROUND","fLYING"}, {"sTEEL","gROUND"}, {"nORMAL",""}, {"nORMAL",""}, {"wATER","pOISON"}, {"sTEEL","bUG"}, {"bUG","rOCK"}, {"bUG","fIGHTG"}, {"dARK","iCE"}, {"nORMAL",""}, {"nORMAL",""}, {"fIRE",""}, {"fIRE","rOCK"}, {"gROUND","iCE"}, {"gROUND","iCE"}, {"rOCK","wATER"}, {"wATER",""}, {"wATER",""}, {"fLYING","iCE"}, {"wATER","fLYING"}, {"sTEEL","fLYING"}, {"dARK","fIRE"}, {"dARK","fIRE"}, {"wATER","dRAGON"}, {"gROUND",""}, {"gROUND",""}, {"nORMAL",""}, {"nORMAL",""}, {"nORMAL",""}, {"fIGHTG",""}, {"fIGHTG",""}, {"pSYCHC","iCE"}, {"eLECTR",""}, {"fIRE",""}, {"nORMAL",""}, {"nORMAL",""}, {"eLECTR",""}, {"fIRE",""}, {"wATER",""}, {"rOCK","gROUND"}, {"rOCK","gROUND"}, {"dARK","rOCK"}, {"pSYCHC","fLYING"}, {"fIRE","fLYING"}, {"gRASS","pSYCHC"}}
 
 g_outline_in_progress = false
 function outline(x, y, col1, col2, func)
@@ -49,7 +49,7 @@ function outline(x, y, col1, col2, func)
   end
 end
 
-function draw_pkmn(num, x, y, highlighted)
+function draw_pkmn(num, x, y, highlighted, flip)
   local row = num/8\1
   local col = num%8
 
@@ -66,7 +66,7 @@ function draw_pkmn(num, x, y, highlighted)
     palt(mask, false)
     pal(mask, c)
 
-    spr(num%64\8*16+num%64*2, ix-8, iy-8, 2, 2)
+    spr(num%64\8*16+num%64*2, ix-8, iy-8, 2, 2, flip, false)
 
     palt()
     pal()
@@ -129,11 +129,12 @@ end
 
 C_0=0 C_1=1 C_2=2
 C_3=3 C_4=4 C_5=5
+C_6=6
 cols = {
-  {[0]=129, 1,   131, 3,   139, 11},
-  {[0]=129, 130, 132, 4,   143, 15},
-  {[0]=129, 129, 1,   140, 12,  12},
-  {[0]=129, 133, 5,   13,  6,   7 },
+  {[0]=129, 1,   131, 3,   139, 11, 0},
+  {[0]=129, 130, 132, 4,   143, 15, 0},
+  {[0]=129, 129, 1,   140, 12,  12, 0},
+  {[0]=129, 133, 5,   13,  6,   7 , 0},
 }
 
 mock_ind = 0
@@ -144,7 +145,27 @@ view_y = 0
 g_num  = 0
 g_active = false
 g_hpmod = 0
+g_pkmn = 25
+g_pkmn_x = 0
 function _update60()
+  g_pkmn_off = 0
+  local cycle = 3.5
+  if t()%cycle < 2 then
+    if t()%cycle < 1 then
+      g_pkmn_x += 1
+    else
+      if t()%cycle == 1 then
+        g_pkmn = rnd(251)\1+1
+      end
+      g_pkmn_x -= 1
+    end
+  elseif t()%cycle >= 2.25 and t()%cycle < 2.5 then
+    g_pkmn_off = (rnd(3)-1)\1
+    if t()%cycle == 2.25 then
+      minisfx(g_pkmn)
+    end
+  end
+
   local top = (g_maxnum-1)\3 -- 253, includes substitute/empty/?
 
   if btnp(0) then g_hpmod -= 1 g_num = mid(0,251,g_num-1) end
@@ -182,7 +203,8 @@ function f_wobble_text(text, x, y, color, wob, align)
 end
 
 function roundrect(x, y, rx, ry, c)
-  rectfill(x-rx, y-ry, x+rx-1, y+ry-1, c)
+  rectfill(x-rx+1, y-ry, x+rx-1-1, y+ry-1, c)
+  rectfill(x-rx, y-ry+1, x+rx-1, y+ry-1-1, c)
 end
 
 function roundrect_r(x1, y1, x2, y2, c)
@@ -195,22 +217,21 @@ end
 function _draw()
   memset(0x5f70, 0, 16) -- enable secondary pallette for all lines
 
-  cls(C_1)
-  --fillp(0b1010010110100101)
+  cls(C_0)
+  --rect(0,0,63,63,C_1)
+  camera(0,1)
+  --rect(0,0,63,63,C_0)
   roundrect(32,23,31,21,C_2)
   fillp()
-  clip(1, 2, 62, 42)
+  clip(1, 1, 62, 42)
 
-  -- rectfill(0,scannum2-6,63,scannum2-2, C_3)
-  -- rectfill(0,64-scannum+15,63,64-scannum+5,1)
+  --fillp(0b1111000011110000)
+  --rectfill(0,scannum2-5,63,scannum2-3,     (C_3 << 4) | C_2)
+  --fillp()
 
-  fillp(0b1111000011110000)
-  rectfill(0,scannum2-5,63,scannum2-3,     (C_3 << 4) | C_2)
-  fillp()
-
-  fillp(0b0000111100001111)
-  rectfill(0,64-scannum+12,63,64-scannum+8,(C_3 << 4) | C_2)
-  fillp()
+  --fillp(0b0000111100001111)
+  --rectfill(0,64-scannum+12,63,64-scannum+8,(C_3 << 4) | C_2)
+  --fillp()
 
   if mock_ind == 0 then
     local yy = view_y*3
@@ -230,25 +251,27 @@ function _draw()
   elseif mock_ind == 1 then
     --rectfill(1,2,62,43,C_2)
     local ox, oy = 2, 8+7-7+7+7+1
+    --roundrect_r(0+2,oy,63-1-1,oy+20-1,C_3)
     f_zprint("\^w\^tpicodex",  3+5-1-2, oy+3-19-2-1,    C_1, -1)
-    f_zprint("\^wdual",  3+5-1-2+12, oy-3-19+12+1+3-1, C_1, -1)
+    f_zprint("\^wdual",  3+5-1-2+12, oy-3-19+12+1+3-1,  C_1, -1)
 
-    srand(t()\1)
     local xx, yy = g_num%6%2*31, g_num%6\2*7
-    rectfill(ox+xx-1, oy+yy, 29+ox+xx, oy+6+yy, C_3)
+    draw_pkmn(254, 32-10, oy+8+2, false)
+    draw_pkmn(g_pkmn, 32+10+4+g_pkmn_x+g_pkmn_off, oy+8+2, false)
+    --rectfill(ox+xx-1, oy+yy, 29+ox+xx, oy+6+yy, C_3)
 
-    local items = {
-      "browse", "edit",
-      "league", "versus",
-      "horde", "credits",
-    }
-    for i=0,5 do
-      local xx, yy = i%2*31, i\2*7
-      local wob = i%2==0
-      local col = C_1
-      if i == g_num%6 then wob = t()\1%2==0 col = C_2 end
-      f_zprint(items[i+1], 2+ox+xx-1, 1+oy+yy, col, -1)
-    end
+    -- local items = {
+    --   "browse", "edit",
+    --   "league", "versus",
+    --   "horde", "credits",
+    -- }
+    -- for i=0,5 do
+    --   local xx, yy = i%2*31, i\2*7
+    --   local wob = i%2==0
+    --   local col = C_1
+    --   if i == g_num%6 then wob = t()\1%2==0 col = C_2 end
+    --   f_zprint(items[i+1], 2+ox+xx-1, 1+oy+yy, col, -1)
+    -- end
 
   elseif mock_ind >= 2 then
     local b = function(name, gender, status, x, y, bx, by, hi, hp, hpmax)
@@ -257,16 +280,16 @@ function _draw()
         d, l = C_2, C_4
       end
 
-      roundrect_r(bx-1, by+1, bx+35, by+5, d)
+      roundrect_r(bx-1, by+1, bx+35, by+6, d)
       if hp > 0 then
-        rectfill(bx, by+2, bx+mid(1, hp/hpmax*34, 34), by+4, l)
+        rectfill(bx, by+2, bx+mid(1, hp/hpmax*34, 34), by+5, l)
         pset(bx, by+2, d)
         pset(bx+34, by+2, d)
-        pset(bx, by+4, d)
-        pset(bx+34, by+4, d)
+        pset(bx, by+5, d)
+        pset(bx+34, by+5, d)
       end
 
-      local tx, ty = x+15, y+8
+      local tx, ty = x+15, y+9
       for i=0,5 do
         if i ~= 1 then
           if i == 0 then
@@ -279,19 +302,21 @@ function _draw()
       end
 
       f_zprint(name,   x+0, y-5, d, -1)
-      f_zprint(status,              x+0, y+7, d, -1)
-      f_zprint(flr(hp), x+37, y+7, d, 1)
+      f_zprint(status,   x+0, y+8, d, -1)
+      f_zprint(flr(hp), x+37, y+8, d, 1)
       f_zprint(gender, x+37, y-5, d, 1)
     end
 
-    local myoff = (not g_active and 21 or 0)
-    rectfill(1, 2+myoff, 62, 22+myoff, C_3)
+    local myoff = (not g_active and 21 or 1)
+    roundrect_r(2, 2+myoff, 61, 22+myoff-1, C_3)
 
-    draw_pkmn(5, 52, 13 - (g_active and t()*2\1%2 or 0), g_active)         b("charmel", "M", "brn", 4, 9,  4, 9,  g_active,   80+g_hpmod, 90)
-    draw_pkmn(5, 12, 33 + (not g_active and t()*2\1%2 or 0), not g_active) b("charmel",  "M", "",    25,30, 25,30,  not g_active, 100+g_hpmod, 100)
+    draw_pkmn(5, 52, 13,     g_active, true) b("cHARMEL",  "M", "bRN", 4,  9,  4, 9,  g_active,   80+g_hpmod, 90)
+    draw_pkmn(5, 12, 33, not g_active)       b("cHARMEL",  "M", "",    25, 29, 25,29,  not g_active, 100+g_hpmod, 100)
   end
 
   clip()
+  camera()
+  camera(0,0)
 
   local one, two = 0xaa, 0x55
   for i=0,7 do poke(0x5f70+i,0b10101010) end
@@ -300,29 +325,28 @@ function _draw()
   scannum2 += .5
   scannum2 %= 64+8+1
 
-  --rectfill(0, 43, 63, 63, C_1)
+  local r, y, h = 31, 46, 14
+  roundrect_r(31-r+1-1, y,   32+r-1+1, y+h+1,C_0)
 
-  local r, y, h = 31, 46, 15
-  rectfill(31-r+1, y,   32+r-1, y+h,C_0)
-
-  if mock_ind == 2 or mock_ind == 3 then
-    local items = {"fight", "party", "auto", "forfeit"}
+  if mock_ind == 1 or mock_ind == 2 or mock_ind == 3 then
+    local items = {"fIGHT", "pARTY", "aUTO", "fORFEIT"}
     if mock_ind == 3 then
       items = {"tackle", "tailwhp", "flmthwr", "flmweel"}
+    elseif mock_ind == 1 then
+      items = {"bROWSE", "vERSUS", "eDIT", "lEAGUE"}
     end
-    local xx, yy = g_num%4%2*30, g_num%4\2*7
+    local xx, yy = g_num%4%2*31, g_num%4\2*7
     --rectfill(2, y+1, 31, y+7, C_1)
-    rectfill(2+xx, y+1+yy, 31+xx, y+7+yy, g_num%4==0 and C_2 or C_2)
+    roundrect_r(2+xx-1, y+1+yy, 31+xx, y+7+yy, g_num%4==0 and C_2 or C_2)
 
     for i=0,3 do
       xx, yy = i%2*31, i\2*7
       f_zprint(items[i+1], 3+xx, y+2+yy, i==g_num%4 and C_3 or C_2, -1)
     end
-
-    -- f_zprint(items[1], 3, y+2, C_1, -1)
-    -- if g_num%4 == 0 then
-    --   f_zprint(items[1], 3, y+2, C_0, -1)
-    -- end
+    line(30,45, 33,45, C_2)
+    line(31,44, 32,44, C_2)
+    line(30,62, 33,62, C_2)
+    line(31,63, 32,63, C_2)
 
   elseif mock_ind == 4 then
     local items = {"#3 flmthwr", "", "normal 17/20PP", ""}
@@ -350,7 +374,7 @@ function _draw()
     local numstr = tostr(g_num)
     while #numstr < 3 do numstr = "0"..numstr end
     --rectfill(2, y+1, 61, y+7, C_2)
-    print("#"..numstr.." "..pkmn_names[g_num+1],3, y+2,  C_3)
+    print(""..numstr.." "..pkmn_names[g_num+1],3, y+2,  C_3)
     local typstr = pkmn_types[g_num+1][1]
     if pkmn_types[g_num+1][2] ~= "" then
       typstr ..= "/"..pkmn_types[g_num+1][2]
@@ -359,4 +383,5 @@ function _draw()
   end
 
   pal(cols[cols_ind+1], 1)
+  camera()
 end

@@ -42,8 +42,8 @@ end
 
 -- first, set the basic constants/values used by global things.
 f_zobj_set(_g, [[
-  c_pokemon,#, c_moves,#,
-  g_init_peek_loc,L_TYPECHART,
+  c_pokemon,#, c_moves,#, c_trainers,#,
+  g_init_peek_loc,L_DATASTART,
   c_yes,@, c_no,@, c_empty,@, f_nop,@
 ]], true, false, "", function(...) return ... end)
 
