@@ -49,7 +49,7 @@ function outline(x, y, col1, col2, func)
   end
 end
 
-function draw_pkmn(num, x, y, highlighted, flip)
+function draw_pkmn(num, x, y, high_out, high_in, flip)
   local row = num/8\1
   local col = num%8
 
@@ -72,19 +72,19 @@ function draw_pkmn(num, x, y, highlighted, flip)
     pal()
   end
 
-  if highlighted then
-    roundrect(x, y, 10, 10, C_3)
+  if high_out then
+    rectfill(x-10, y-10, x+9, y+9, C_3)
   end
 
   for yy=-1,1 do
     for xx=-1,1 do
       if not (xx == 0 and yy == 0) then
-        colordrawfunc(x+xx, y+yy, highlighted and C_2 or C_1)
+        colordrawfunc(x+xx, y+yy, high_out and C_2 or C_1)
       end
     end
   end
 
-  colordrawfunc(x, y, highlighted and C_4 or C_3) -- sprite
+  colordrawfunc(x, y, high_in and C_4 or C_3) -- sprite
 end
 
 -- {dark, light}
@@ -127,14 +127,15 @@ function _init()
   end
 end
 
-C_0=0 C_1=1 C_2=2
-C_3=3 C_4=4 C_5=5
-C_6=6
+C_0=0 C_1=0 C_2=1
+C_3=2 C_4=3
 cols = {
-  {[0]=129, 1,   131, 3,   139, 11, 0},
-  {[0]=129, 130, 132, 4,   143, 15, 0},
-  {[0]=129, 129, 1,   140, 12,  12, 0},
-  {[0]=129, 133, 5,   13,  6,   7 , 0},
+  {[0]=129, 131, 3,   139},
+  {[0]=128, 132, 4,   143},
+  {[0]=129, 140, 12,  7  },
+  {[0]=129, 5,   13,  6  },
+  {[0]=134, 5,   128, 0  },
+  {[0]=0,   5,   6,   7  },
 }
 
 mock_ind = 0
@@ -172,7 +173,7 @@ function _update60()
   if btnp(1) then g_hpmod += 1 g_num = mid(0,251,g_num+1) end
   if btnp(2) then g_active = not g_active g_num = mid(g_num%3,249+g_num%3,g_num-3) end
   if btnp(3) then g_active = not g_active g_num = mid(g_num%3,249+g_num%3,g_num+3) end
-  if btnp(4) then minisfx(g_num) end
+  if btnp(4) then minisfx(g_num) cols_ind = (cols_ind+1)%#cols end
   if btnp(5) then mock_ind = (mock_ind + 1) % 6 end
 
   if g_num\3-1 > view_y then view_y = (view_y+1)%(top) end
@@ -190,21 +191,14 @@ function f_zprint(text, x, y, color, align, control)
     print((control or "")..text, x, y, color)
 end
 
-function f_wobble_text(text, x, y, color, wob, align)
-    local t1, t2 = "", ""
-    for i=1,#text do
-        local letter, switch = sub(text, i, i), i%2==(wob and 1 or 0)
-        t1 ..= switch and " " or letter
-        t2 ..= switch and letter or " "
-    end
-
-    f_zprint(t1, x, y,   color, align or 0)
-    f_zprint(t2, x, y+1, color, align or 0)
-end
-
 function roundrect(x, y, rx, ry, c)
   rectfill(x-rx+1, y-ry, x+rx-1-1, y+ry-1, c)
   rectfill(x-rx, y-ry+1, x+rx-1, y+ry-1-1, c)
+end
+
+function roundrect_nofill(x, y, rx, ry, c)
+  rect(x-rx+1, y-ry, x+rx-1-1, y+ry-1, c)
+  rect(x-rx, y-ry+1, x+rx-1, y+ry-1-1, c)
 end
 
 function roundrect_r(x1, y1, x2, y2, c)
@@ -218,20 +212,11 @@ function _draw()
   memset(0x5f70, 0, 16) -- enable secondary pallette for all lines
 
   cls(C_0)
-  --rect(0,0,63,63,C_1)
   camera(0,1)
-  --rect(0,0,63,63,C_0)
-  roundrect(32,23,31,21,C_2)
+  rectfill(2,3,61,42,C_2)
+
   fillp()
-  clip(1, 1, 62, 42)
-
-  --fillp(0b1111000011110000)
-  --rectfill(0,scannum2-5,63,scannum2-3,     (C_3 << 4) | C_2)
-  --fillp()
-
-  --fillp(0b0000111100001111)
-  --rectfill(0,64-scannum+12,63,64-scannum+8,(C_3 << 4) | C_2)
-  --fillp()
+  clip(2, 2, 60, 40)
 
   if mock_ind == 0 then
     local yy = view_y*3
@@ -239,39 +224,23 @@ function _draw()
     local yo = 13
     for ii=0,2 do
       local ind = yy + ii
-      draw_pkmn(ind, xo+ii*20, yo, ind == g_num)
+      draw_pkmn(ind, xo+ii*20, yo, ind == g_num, ind == g_num)
     end
 
     yy = (view_y*3+3)%252
     for ii=0,2 do
       local ind = yy + ii
-      draw_pkmn(ind, xo+ii*20, yo+20, ind == g_num)
+      draw_pkmn(ind, xo+ii*20, yo+20, ind == g_num, ind == g_num)
     end
 
   elseif mock_ind == 1 then
-    --rectfill(1,2,62,43,C_2)
     local ox, oy = 2, 8+7-7+7+7+1
-    --roundrect_r(0+2,oy,63-1-1,oy+20-1,C_3)
-    f_zprint("\^w\^tpicodex",  3+5-1-2, oy+3-19-2-1,    C_1, -1)
-    f_zprint("\^wdual",  3+5-1-2+12, oy-3-19+12+1+3-1,  C_1, -1)
+    f_zprint("\^w\^tpicodex",  3+5-1-2, oy+3-19-2-1+1,    C_1, -1)
+    f_zprint("dual version",  3+5-1-2+12-12, oy-3-19+12+1+3-2+1,  C_1, -1)
 
     local xx, yy = g_num%6%2*31, g_num%6\2*7
-    draw_pkmn(254, 32-10, oy+8+2, false)
-    draw_pkmn(g_pkmn, 32+10+4+g_pkmn_x+g_pkmn_off, oy+8+2, false)
-    --rectfill(ox+xx-1, oy+yy, 29+ox+xx, oy+6+yy, C_3)
-
-    -- local items = {
-    --   "browse", "edit",
-    --   "league", "versus",
-    --   "horde", "credits",
-    -- }
-    -- for i=0,5 do
-    --   local xx, yy = i%2*31, i\2*7
-    --   local wob = i%2==0
-    --   local col = C_1
-    --   if i == g_num%6 then wob = t()\1%2==0 col = C_2 end
-    --   f_zprint(items[i+1], 2+ox+xx-1, 1+oy+yy, col, -1)
-    -- end
+    draw_pkmn(254, 32-10, oy+8+2-1, false, false)
+    draw_pkmn(g_pkmn, 32+10+4+g_pkmn_x+g_pkmn_off, oy+8+2-1, false, true)
 
   elseif mock_ind >= 2 then
     local b = function(name, gender, status, x, y, bx, by, hi, hp, hpmax)
@@ -308,15 +277,21 @@ function _draw()
     end
 
     local myoff = (not g_active and 21 or 1)
-    roundrect_r(2, 2+myoff, 61, 22+myoff-1, C_3)
+    rectfill(2, 2+myoff, 61, 22+myoff-1, C_3)
 
-    draw_pkmn(5, 52, 13,     g_active, true) b("cHARMEL",  "M", "bRN", 4,  9,  4, 9,  g_active,   80+g_hpmod, 90)
-    draw_pkmn(5, 12, 33, not g_active)       b("cHARMEL",  "M", "",    25, 29, 25,29,  not g_active, 100+g_hpmod, 100)
+    draw_pkmn(5, 52, 13,     g_active, g_active,     true) b("cHARMEL",  "M", "bRN", 4,  9,  4, 9,  g_active,   80+g_hpmod, 90)
+    draw_pkmn(5, 12, 33, not g_active, not g_active)       b("cHARMEL",  "M", "",    25, 29, 25,29,  not g_active, 100+g_hpmod, 100)
   end
 
   clip()
+  --pset(2,3,C_0)
+  --pset(61,3,C_0)
+  --pset(61,42,C_0)
+  --pset(2,42,C_0)
+  -- rectfill(0, 4+yyy, 0, 6+yyy, C_1)
   camera()
-  camera(0,0)
+
+  camera(0,2)
 
   local one, two = 0xaa, 0x55
   for i=0,7 do poke(0x5f70+i,0b10101010) end
@@ -326,62 +301,65 @@ function _draw()
   scannum2 %= 64+8+1
 
   local r, y, h = 31, 46, 14
-  roundrect_r(31-r+1-1, y,   32+r-1+1, y+h+1,C_0)
+  rectfill(33-r, y,   30+r, y+h+1+2,C_0)
 
   if mock_ind == 1 or mock_ind == 2 or mock_ind == 3 then
     local items = {"fIGHT", "pARTY", "aUTO", "fORFEIT"}
     if mock_ind == 3 then
-      items = {"tackle", "tailwhp", "flmthwr", "flmweel"}
+      items = {"tACKLE", "tAILWHP", "fLMTHWR", "fLMWEEL"}
     elseif mock_ind == 1 then
-      items = {"bROWSE", "vERSUS", "eDIT", "lEAGUE"}
+      items = {"bROWSED", "vERSUSD", "eDIT", "lEAGUE"}
     end
-    local xx, yy = g_num%4%2*31, g_num%4\2*7
+    local xx, yy = g_num%4%2*30, g_num%4\2*9
     --rectfill(2, y+1, 31, y+7, C_1)
-    roundrect_r(2+xx-1, y+1+yy, 31+xx, y+7+yy, g_num%4==0 and C_2 or C_2)
+    rectfill(3+xx-1, y+1+yy-1, 31+xx, y+7+yy+1, g_num%4==0 and C_2 or C_2)
 
     for i=0,3 do
-      xx, yy = i%2*31, i\2*7
-      f_zprint(items[i+1], 3+xx, y+2+yy, i==g_num%4 and C_3 or C_2, -1)
+      xx, yy = i%2*31-1, i\2*9
+      f_zprint(items[i+1], 4+xx, y+2+yy, i==g_num%4 and (i==0 and C_1 or C_3) or (i==0 and C_2 or C_2), -1)
     end
-    line(30,45, 33,45, C_2)
-    line(31,44, 32,44, C_2)
-    line(30,62, 33,62, C_2)
-    line(31,63, 32,63, C_2)
 
   elseif mock_ind == 4 then
-    local items = {"#3 flmthwr", "", "normal 17/20PP", ""}
+    local items = {"uSE fLMTHWR?", "", "nORMAL 17/20PP", ""}
     local xx, yy = g_num%4%2*30, g_num%4\2*7
     ----rectfill(2+xx, y+1+yy, 31+xx, y+7+yy, C_2)
 
     for i=0,3 do
       xx, yy = i%2*31, i\2*7
 
-      f_zprint(items[i+1], 3+xx, y+2+yy, i == 0 and C_3 or C_2, -1)
+      f_zprint(items[i+1], 3+xx, y+3+yy, i == 0 and C_3 or C_2, -1)
     end
 
   elseif mock_ind == 5 then
-    local items = {"charmel", "", "uses flmthwr", ""}
+    local items = {"cHARMEL", "", "uSES fLMTHWR", ""}
     local xx, yy = g_num%4%2*30, g_num%4\2*7
     ----rectfill(2+xx, y+1+yy, 31+xx, y+7+yy, C_2)
 
     for i=0,3 do
       xx, yy = i%2*31, i\2*7
 
-      f_zprint(items[i+1], 3+xx, y+2+yy, i == 0 and C_3 or C_2, -1)
+      f_zprint(items[i+1], 3+xx, y+3+yy, i == 0 and C_3 or C_2, -1)
     end
 
   elseif mock_ind == 0 then
     local numstr = tostr(g_num)
     while #numstr < 3 do numstr = "0"..numstr end
     --rectfill(2, y+1, 61, y+7, C_2)
-    print(""..numstr.." "..pkmn_names[g_num+1],3, y+2,  C_3)
+    print(""..numstr.." "..pkmn_names[g_num+1],3, y+3,  C_3)
     local typstr = pkmn_types[g_num+1][1]
     if pkmn_types[g_num+1][2] ~= "" then
       typstr ..= "/"..pkmn_types[g_num+1][2]
     end
-    print(typstr,3, y+8+1,C_2)
+    print(typstr,3, y+8+2,C_2)
   end
 
+  --rectfill(1,  48+6,1,48+7,C_2)
+  --rectfill(1+1,48+5,1+1,48+8,C_2)
+
+  --rectfill(62,  48+6,62,48+7,C_2)
+  --rectfill(62-1,48+5,62-1,48+8,C_2)
+
   pal(cols[cols_ind+1], 1)
+
   camera()
 end
