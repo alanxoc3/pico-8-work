@@ -3,10 +3,51 @@ poke(0x5f2c, 3) -- enable 64x64
 poke(0x5f5c, 8)
 poke(0x5f5d, 1)
 
--- d7040000 this is the sfx prefix to:
--- - set dampen/reverb/buzz/noise to max
--- - get rid of loops
--- - set speed to 4
+function create_grid(grid_w, grid_len, cw, ch, x, y, sel_bg, bg, view_h)
+  return {
+    num=0,
+    view=0,
+    w=grid_w,
+    len=grid_len,
+    cw=cw, ch=ch,
+    x=x, y=y,
+    selbg=sel_bg, bg=bg,
+    vh=view_h,
+  }
+end
+
+function update_grid(grid)
+  if btnp'0' then grid.num = mid(0, grid.len-1, grid.num-1) end
+  if btnp'1' then grid.num = mid(0, grid.len-1, grid.num+1) end
+  if btnp'2' then grid.num = mid(grid.num%grid.w, grid.len-1, grid.num-grid.w) end
+  if btnp'3' then grid.num = mid(grid.num%grid.w, grid.len-1, grid.num+grid.w) end
+
+  if grid.num\grid.w-grid.vh+1 > grid.view then grid.view = (grid.view+1)%((grid.len-grid.vh+1)\grid.w) end
+  if grid.num\grid.w           < grid.view then grid.view = (grid.view-1)%((grid.len-grid.vh+1)\grid.w) end
+end
+
+function draw_grid(grid, draw_func)
+  for j=0,grid.vh*grid.w-1 do
+    local i = j + grid.view*grid.w
+    local xloc, yloc = grid.x+i%grid.w*grid.cw, grid.y+j\grid.w*grid.ch
+    camera(-xloc-1, -yloc-1)
+
+    local l, r, u, d = 0, 0, 0, 0
+
+    if i == 0                          then l = 1 u = 1 end
+    if i == grid.w-1                   then r = 1 u = 1 end
+    if i == grid.len-1                 then r = 1 d = 1 end
+    if i == (grid.len-1)\grid.w*grid.w then l = 1 d = 1 end
+
+    rectfill(-1+l, -1,   grid.cw-2-r, grid.ch-2,   i == grid.num and grid.selbg or grid.bg)
+    rectfill(-1,   -1+u, grid.cw-2,   grid.ch-2-d, i == grid.num and grid.selbg or grid.bg)
+
+    clip(xloc+1, yloc+1, grid.cw-2, grid.ch-2)
+    draw_func(i, i == grid.num)
+    camera()
+    clip()
+  end
+end
 
 function minisfx(num) -- plays a sfx with len of 4
   -- d7040000 this is the sfx prefix to:
@@ -19,35 +60,6 @@ end
 
 pkmn_names = split"mISSING,bULSAUR,iVYSAUR,vENSAUR,cHARMAN,cHARMEL,cHARZAR,sQUIRTL,wARTORT,bLSTOIS,cATRPIE,mETAPOD,bUTFREE,wEEDLE,kAKUNA,bEEDRIL,pIDGEY,pIDGETO,pIDGEOT,rATTATA,rATICAT,sPEAROW,fEAROW,eKANS,aRBOK,pIKACHU,rAICHU,sNDSHRW,sNDSLAS,nIDRANF,nIDRINA,nIDQUEN,nIDRANM,nIDRINO,nIDKING,cLFAIRY,cLFABLE,vULPIX,nINTALE,jIGPUFF,wIGTUFF,zUBAT,gOLBAT,oDDISH,gLOOM,vILPLUM,pARAS,pARSECT,vENONAT,vENMOTH,dIGLETT,dUGTRIO,mEOWTH,pERSIAN,pSYDUCK,gOLDUCK,mANKEY,pRIMAPE,gROWLTH,aRCANIN,pOLIWAG,pOLWIRL,pOLRATH,aBRA,kADABRA,aLKAZAM,mACHOP,mACHOKE,mACHAMP,bELSPRT,wEEPBEL,vICTBEL,tNTCOOL,tNTCRUL,gEODUDE,gRAVLER,gOLEM,pONYTA,rAPDASH,sLOWPOK,sLOWBRO,mAGNMIT,mAGNTON,fAFETCH,dODUO,dODRIO,sEEL,dEWGONG,gRIMER,mUK,sHELDER,cLYSTER,gASTLY,hAUNTER,gENGAR,oNIX,dROWZEE,hYPNO,kRABBY,kINGLER,vOLTORB,eLCRODE,eGGCUTE,eGGUTOR,cUBONE,mAROWAK,hITMLEE,hITMCHN,lIKTUNG,kOFFING,wEEZING,rHYHORN,rHYDON,cHANSEY,tANGELA,kANGKAN,hORSEA,sEADRA,gOLDEEN,sEAKING,sTARYU,sTARMIE,mRMIME,sCYTHER,jYNX,eLCABUZ,mAGMAR,pINSIR,tAUROS,mAGKARP,gYARDOS,lAPRAS,dITTO,eEVEE,vAPREON,jOLTEON,fLAREON,pORYGON,oMANYTE,oMASTAR,kABUTO,kABTOPS,aERODAC,sNORLAX,aRTCUNO,zAPDOS,mOLTRES,dRATINI,dRAGAIR,dRAGITE,mEWTWO,mEW,cHIKITA,bAYLEEF,mEGNIUM,cYNDQIL,qUILAVA,tYPHLOS,tOTODIL,cROCNAW,fRLGATR,sENTRET,fURRET,hOOTOOT,nOCTOWL,lEDYBA,lEDIAN,sPINRAK,aRIADOS,cROBAT,cHINCHU,lANTURN,pICHU,cLEFFA,iGGBUFF,tOGEPI,tOGETIC,nATU,xATU,mAREEP,fLAAFFY,aMPHROS,bELOSOM,mARILL,aZMARIL,sUDWOOD,pOLTOED,hOPPIP,sKIPLOM,jUMPLUF,aIPOM,sUNKERN,sUNFLOR,yANMA,wOOPER,qUAGSIR,eSPEON,uMBREON,mURKROW,sLOWKNG,mISDVUS,uNOWN,wOBUFET,gIFARIG,pINECO,fORTRES,dUNSPAR,gLIGAR,sTEELIX,sNUBBUL,gRANBUL,qILFISH,sCIZOR,sHUCKLE,hERCROS,sNEASEL,tEDIURS,uRSRING,sLUGMA,mACARGO,sWINUB,pILSWIN,cORSOLA,rEMRAID,oCTLERY,dELBIRD,mANTINE,sKARMRY,hONDOUR,hONDOOM,kINGDRA,pHANPY,dONPHAN,pORYGN2,sTANTLR,sMEARGL,tYROGUE,hITMTOP,sMOOCHM,eLEKID,mAGBY,mILTANK,bLISSEY,rAIKOU,eNTEI,sUICUNE,lARVTAR,pUPITAR,tYRATAR,lUGIA,hOOH,cELEBI"
 pkmn_types = {{"bIRD","nORMAL"}, {"gRASS","pOISON"}, {"gRASS","pOISON"}, {"gRASS","pOISON"}, {"fIRE",""}, {"fIRE",""}, {"fIRE","fLYING"}, {"wATER",""}, {"wATER",""}, {"wATER",""}, {"bUG",""}, {"bUG",""}, {"bUG","fLYING"}, {"bUG","pOISON"}, {"bUG","pOISON"}, {"bUG","pOISON"}, {"fLYING","nORMAL"}, {"fLYING","nORMAL"}, {"fLYING","nORMAL"}, {"nORMAL",""}, {"nORMAL",""}, {"fLYING","nORMAL"}, {"fLYING","nORMAL"}, {"pOISON",""}, {"pOISON",""}, {"eLECTR",""}, {"eLECTR",""}, {"gROUND",""}, {"gROUND",""}, {"pOISON",""}, {"pOISON",""}, {"pOISON","gROUND"}, {"pOISON",""}, {"pOISON",""}, {"pOISON","gROUND"}, {"nORMAL",""}, {"nORMAL",""}, {"fIRE",""}, {"fIRE",""}, {"nORMAL",""}, {"nORMAL",""}, {"pOISON","fLYING"}, {"pOISON","fLYING"}, {"gRASS","pOISON"}, {"gRASS","pOISON"}, {"gRASS","pOISON"}, {"bUG","gRASS"}, {"bUG","gRASS"}, {"pOISON","bUG"}, {"pOISON","bUG"}, {"gROUND",""}, {"gROUND",""}, {"nORMAL",""}, {"nORMAL",""}, {"wATER",""}, {"wATER",""}, {"fIGHTG",""}, {"fIGHTG",""}, {"fIRE",""}, {"fIRE",""}, {"wATER",""}, {"wATER",""}, {"wATER","fIGHTG"}, {"pSYCHC",""}, {"pSYCHC",""}, {"pSYCHC",""}, {"fIGHTG",""}, {"fIGHTG",""}, {"fIGHTG",""}, {"gRASS","pOISON"}, {"gRASS","pOISON"}, {"gRASS","pOISON"}, {"wATER","pOISON"}, {"wATER","pOISON"}, {"rOCK","gROUND"}, {"rOCK","gROUND"}, {"rOCK","gROUND"}, {"fIRE",""}, {"fIRE",""}, {"pSYCHC","wATER"}, {"pSYCHC","wATER"}, {"sTEEL","eLECTR"}, {"sTEEL","eLECTR"}, {"fLYING","nORMAL"}, {"fLYING","nORMAL"}, {"fLYING","nORMAL"}, {"wATER",""}, {"wATER","iCE"}, {"pOISON",""}, {"pOISON",""}, {"wATER",""}, {"wATER","iCE"}, {"gHOST","pOISON"}, {"gHOST","pOISON"}, {"gHOST","pOISON"}, {"rOCK","gROUND"}, {"pSYCHC",""}, {"pSYCHC",""}, {"wATER",""}, {"wATER",""}, {"eLECTR",""}, {"eLECTR",""}, {"gRASS","pSYCHC"}, {"gRASS","pSYCHC"}, {"gROUND",""}, {"gROUND",""}, {"fIGHTG",""}, {"fIGHTG",""}, {"nORMAL",""}, {"pOISON",""}, {"pOISON",""}, {"gROUND","rOCK"}, {"gROUND","rOCK"}, {"nORMAL",""}, {"gRASS",""}, {"nORMAL",""}, {"wATER",""}, {"wATER",""}, {"wATER",""}, {"wATER",""}, {"wATER",""}, {"wATER","pSYCHC"}, {"pSYCHC",""}, {"bUG","fLYING"}, {"pSYCHC","iCE"}, {"eLECTR",""}, {"fIRE",""}, {"bUG",""}, {"nORMAL",""}, {"wATER",""}, {"wATER","fLYING"}, {"wATER","iCE"}, {"nORMAL",""}, {"nORMAL",""}, {"wATER",""}, {"eLECTR",""}, {"fIRE",""}, {"nORMAL",""}, {"rOCK","wATER"}, {"rOCK","wATER"}, {"rOCK","wATER"}, {"rOCK","wATER"}, {"rOCK","fLYING"}, {"nORMAL",""}, {"iCE","fLYING"}, {"eLECTR","fLYING"}, {"fIRE","fLYING"}, {"dRAGON",""}, {"dRAGON",""}, {"dRAGON","fLYING"}, {"pSYCHC",""}, {"pSYCHC",""}, {"gRASS",""}, {"gRASS",""}, {"gRASS",""}, {"fIRE",""}, {"fIRE",""}, {"fIRE",""}, {"wATER",""}, {"wATER",""}, {"wATER",""}, {"nORMAL",""}, {"nORMAL",""}, {"fLYING","nORMAL"}, {"fLYING","nORMAL"}, {"bUG","fLYING"}, {"bUG","fLYING"}, {"bUG","pOISON"}, {"bUG","pOISON"}, {"pOISON","fLYING"}, {"eLECTR","wATER"}, {"eLECTR","wATER"}, {"eLECTR",""}, {"nORMAL",""}, {"nORMAL",""}, {"nORMAL",""}, {"nORMAL","fLYING"}, {"pSYCHC","fLYING"}, {"pSYCHC","fLYING"}, {"eLECTR",""}, {"eLECTR",""}, {"eLECTR",""}, {"gRASS",""}, {"wATER",""}, {"wATER",""}, {"rOCK",""}, {"wATER",""}, {"gRASS","fLYING"}, {"gRASS","fLYING"}, {"gRASS","fLYING"}, {"nORMAL",""}, {"gRASS",""}, {"gRASS",""}, {"bUG","fLYING"}, {"wATER","gROUND"}, {"wATER","gROUND"}, {"pSYCHC",""}, {"dARK",""}, {"dARK","fLYING"}, {"pSYCHC","wATER"}, {"gHOST",""}, {"pSYCHC",""}, {"pSYCHC",""}, {"pSYCHC","nORMAL"}, {"bUG",""}, {"bUG","sTEEL"}, {"nORMAL",""}, {"gROUND","fLYING"}, {"sTEEL","gROUND"}, {"nORMAL",""}, {"nORMAL",""}, {"wATER","pOISON"}, {"sTEEL","bUG"}, {"bUG","rOCK"}, {"bUG","fIGHTG"}, {"dARK","iCE"}, {"nORMAL",""}, {"nORMAL",""}, {"fIRE",""}, {"fIRE","rOCK"}, {"gROUND","iCE"}, {"gROUND","iCE"}, {"rOCK","wATER"}, {"wATER",""}, {"wATER",""}, {"fLYING","iCE"}, {"wATER","fLYING"}, {"sTEEL","fLYING"}, {"dARK","fIRE"}, {"dARK","fIRE"}, {"wATER","dRAGON"}, {"gROUND",""}, {"gROUND",""}, {"nORMAL",""}, {"nORMAL",""}, {"nORMAL",""}, {"fIGHTG",""}, {"fIGHTG",""}, {"pSYCHC","iCE"}, {"eLECTR",""}, {"fIRE",""}, {"nORMAL",""}, {"nORMAL",""}, {"eLECTR",""}, {"fIRE",""}, {"wATER",""}, {"rOCK","gROUND"}, {"rOCK","gROUND"}, {"dARK","rOCK"}, {"pSYCHC","fLYING"}, {"fIRE","fLYING"}, {"gRASS","pSYCHC"}}
-
-g_outline_in_progress = false
-function outline(x, y, col1, col2, func)
-  if not g_outline_in_progress then
-    g_outline_in_progress = true
-
-    for c=0,15 do pal(c,col2) end
-    for c in all({{1, 1}, {1, -1}, {-1, -1}, {-1, 1}}) do
-      func(x+c[1],y+c[2])
-    end
-
-    for c=0,15 do pal(c,col1) end
-    for c in all({{0, 1}, {1, 0}, {-1, 0}, {0, -1}}) do
-      func(x+c[1],y+c[2])
-    end
-
-    pal(0)
-
-    g_outline_in_progress = false
-  else
-    for yy=-1,1 do
-      for xx=-1,1 do
-        if not (xx == 0 and yy == 0) then
-          func(x+xx,y+yy)
-        end
-      end
-    end
-  end
-end
 
 function draw_pkmn(num, x, y, high_out, high_in, flip)
   local row = num/8\1
@@ -72,10 +84,6 @@ function draw_pkmn(num, x, y, high_out, high_in, flip)
     pal()
   end
 
-  if high_out then
-    rectfill(x-10, y-10, x+9, y+9, C_3)
-  end
-
   for yy=-1,1 do
     for xx=-1,1 do
       if not (xx == 0 and yy == 0) then
@@ -85,16 +93,6 @@ function draw_pkmn(num, x, y, high_out, high_in, flip)
   end
 
   colordrawfunc(x, y, high_in and C_4 or C_3) -- sprite
-end
-
--- {dark, light}
-function vget(offset, x, y)
-  x = min(max(0, x), 127)\1
-  y = y\1
-
-  local val = peek(y*64+offset+x\2)
-  if x%2 == 1 then return (val & 0xf0) >>> 4
-  else             return (val & 0x0f) end
 end
 
 g_maxnum = 252
@@ -125,6 +123,8 @@ function _init()
     -- 0xd7: somehow sets noiz, buzz, detune, reverb, dampen all to max
     poke4(iloc+64, 0x.07d7)
   end
+
+  g_gridtest = create_grid(3, 252, 20, 20, 2, 2, C_3, C_2, 2)
 end
 
 C_0=0 C_1=0 C_2=1
@@ -178,6 +178,8 @@ function _update60()
 
   if g_num\3-1 > view_y then view_y = (view_y+1)%(top) end
   if g_num\3   < view_y then view_y = (view_y-1)%(top) end
+
+  update_grid(g_gridtest)
 end
 
 scannum = 0
@@ -196,11 +198,6 @@ function roundrect(x, y, rx, ry, c)
   rectfill(x-rx, y-ry+1, x+rx-1, y+ry-1-1, c)
 end
 
-function roundrect_nofill(x, y, rx, ry, c)
-  rect(x-rx+1, y-ry, x+rx-1-1, y+ry-1, c)
-  rect(x-rx, y-ry+1, x+rx-1, y+ry-1-1, c)
-end
-
 function roundrect_r(x1, y1, x2, y2, c)
   rectfill(x1, y1+1, x2, y2-1, c)
   if x2-x1 > 2 then -- if check is for the hp bar, so it looks good when small.
@@ -213,25 +210,15 @@ function _draw()
 
   cls(C_0)
   camera(0,1)
-  rectfill(2,3,61,42,C_2)
+  --rectfill(2,3,61,42,C_2)
 
   fillp()
   clip(2, 2, 60, 40)
 
   if mock_ind == 0 then
-    local yy = view_y*3
-    local xo = 12
-    local yo = 13
-    for ii=0,2 do
-      local ind = yy + ii
-      draw_pkmn(ind, xo+ii*20, yo, ind == g_num, ind == g_num)
-    end
-
-    yy = (view_y*3+3)%252
-    for ii=0,2 do
-      local ind = yy + ii
-      draw_pkmn(ind, xo+ii*20, yo+20, ind == g_num, ind == g_num)
-    end
+    draw_grid(g_gridtest, function(i, is_sel)
+      draw_pkmn(i, 9, 9, is_sel, is_sel)
+    end)
 
   elseif mock_ind == 1 then
     local ox, oy = 2, 8+7-7+7+7+1
@@ -359,7 +346,8 @@ function _draw()
   --rectfill(62,  48+6,62,48+7,C_2)
   --rectfill(62-1,48+5,62-1,48+8,C_2)
 
-  pal(cols[cols_ind+1], 1)
-
   camera()
+  clip()
+
+  pal(cols[cols_ind+1], 1)
 end
