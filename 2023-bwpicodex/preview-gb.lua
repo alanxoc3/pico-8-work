@@ -3,6 +3,9 @@ poke(0x5f2c, 3) -- enable 64x64
 poke(0x5f5c, 8)
 poke(0x5f5d, 1)
 
+-- menus: browse,edit,league,versus
+-- credits can be shown automatically
+
 --num=0, --view=0,
 function create_grid(memloc, grid_w, grid_len, cw, ch, x, y, sel_bg, bg, view_h, draw_func)
   return {
@@ -31,6 +34,7 @@ end
 function draw_grid(grid)
   for j=0,grid.vh*grid.w-1 do
     local i = j + @grid.viewloc*grid.w
+    if i >= grid.len then return end
     local xloc, yloc = grid.x+i%grid.w*grid.cw, grid.y+j\grid.w*grid.ch
     camera(-xloc-1, -yloc-1)
 
@@ -163,13 +167,45 @@ function _init()
       f_zprint(gender,                 x+37, y-5, is_sel and C_2 or C_1, 1)
     end
 
-    if i == 0 then draw_pkmn(5, 49, 9, is_sel and C_2 or C_1, is_sel and C_4 or C_3, true)  b("cHARMEL","M","bRN",1, 5,1, 5, 50+(sin(t())+1)*20, 80)
-    else           draw_pkmn(5, 9,  9, is_sel and C_2 or C_1, is_sel and C_4 or C_3, false) b("cHARMEL","M","",   22,5,22,5, -10+(cos(t())+1)*80, 80)
+    if i == 0 then draw_pkmn(pkmn_cycle, 48, 9, is_sel and C_2 or C_1, is_sel and C_4 or C_3, true)   b(pkmn_name,"M","bRN",1, 5,1, 5, 50+(sin(t())+1)*20, 80)
+    else           draw_pkmn(pkmn_cycle, 10,  9, is_sel and C_2 or C_1, is_sel and C_4 or C_3, false) b(pkmn_name,"M","",   22,5,22,5, -10+(cos(t())+1)*80, 80)
     end
   end)
 
+  local bb = split"fIGHT,pARTY,aUTO,fORFEIT"
+  g_browse_text = create_grid(0x5e06, 2, 4, 30, 9, 2, 44, C_3, C_2, 2, function(i, is_sel)
+    print(bb[i+1], i%2, 1, is_sel and C_4 or C_1)
+  end)
 
-  g_list = {g_battleanim, g_browse, g_titleanim}
+  local aa = split"bROWSE,eDIT,lEAGUE,vERSUS"
+  g_title_text = create_grid(0x5e06, 2, 4, 30, 9, 2, 44, C_3, C_2, 2, function(i, is_sel)
+    print(aa[i+1], i%2, 1, is_sel and C_4 or C_1)
+  end)
+
+  g_trainers = split"pLAYR1,pLAYR2,yOUNGS,sAGE,fALKNR,gRUNT,bUGCTR,bUGSY,pKMFAN,bEAUTY,wITNEY,kIMINO,mEDIUM,mORTY,pOLICE,kARATE,cHUCK,gENTLE,sAILOR,jASMIN,rOCKET,sKIER,pRYCE,sCIENT,tWINS,cLAIR,nERD,cAMPER,bROCK,sCHOOL,sWIMER,mISTY,jUGLER,gUITAR,lTSURG,hIKER,lASS,eRIKA,bIKER,pICNIK,jANINE,mANIAC,pSYCIC,sABRIN,fISHER,bREATH,bLAINE,bIRDKP,cOOLTR,bLUE,sILVER,wILL,kOGA,bRUNO,kAREN,lANCE,eUSINE,lAWREN,rED"
+
+  g_display_text = create_grid(0x5e06, 1, 1, 60, 16, 2, 45, C_2, C_2, 1, function(i, is_sel)
+    print("\f0"..g_trainers[t()\1%#g_trainers+1].." \f3"..pkmn_name, 0, 1, C_1)
+    print("\f0USES \f2fLAMTHR",            0, 8, C_1)
+  end)
+
+  local tt = split"tAKDOWN,tACKLE,fIRSPIN,rAPSPIN,sPIKES,rAINDNC,sUNYDAY,lEER,sTRSHOT"
+  g_movelist = create_grid(0x5e08, 2, #tt, 30, 9, 2, 4, C_3, C_2, 4, function(i, is_sel)
+    f_zprint(tt[i+1], i%2, 1, is_sel and C_4 or C_1, -1)
+  end)
+
+  g_list = {
+    g_movelist,
+    g_battleanim,
+    g_browse,
+    g_titleanim,
+  }
+
+  g_list_text = {
+    g_title_text,
+    g_display_text,
+    g_browse_text,
+  }
 end
 
 cur_list_ind = 0x5eff
@@ -184,9 +220,14 @@ view_y = 0
 g_num  = 0
 g_active = false
 g_hpmod = 0
-g_pkmn = 25
+g_pkmn = 0
 g_pkmn_x = 0
+pkmn_cycle = 0
+pkmn_name = "missing"
 function _update60()
+  pkmn_cycle = t()\1%252
+  pkmn_name = pkmn_names[pkmn_cycle+1]
+
   cols = {
     {[0]=1,       13,     6,      7,    }, -- default
     {[0]=128+4,   4,      128+15, 15    }, -- sand
@@ -205,7 +246,7 @@ function _update60()
       g_pkmn_x += 1
     else
       if t()%cycle == 1 then
-        g_pkmn = rnd(251)\1+1
+        g_pkmn = rnd(252)\1
       end
       g_pkmn_x -= 1
     end
@@ -226,6 +267,7 @@ function _update60()
   if btnp(5) then poke(cur_list_ind, (@cur_list_ind + 1) % #g_list) end
 
   update_grid(g_list[@cur_list_ind%#g_list+1])
+  update_grid(g_list_text[@cur_list_ind%#g_list_text+1])
 end
 
 scannum = 0
@@ -253,29 +295,11 @@ end
 
 function _draw()
   memset(0x5f70, 0, 16) -- enable secondary pallette for all lines
-  clip()
 
   cls(C_0)
-  -- camera(0,1)
-  --rectfill(2,3,61,42,C_2)
-  -- clip(2, 2, 60, 40)
 
   draw_grid(g_list[@cur_list_ind%#g_list+1])
-
-  if mock_ind == 0 then
-
-  elseif mock_ind >= 2 then
-  end
-
-  clip()
-  --pset(2,3,C_0)
-  --pset(61,3,C_0)
-  --pset(61,42,C_0)
-  --pset(2,42,C_0)
-  -- rectfill(0, 4+yyy, 0, 6+yyy, C_1)
-  camera()
-
-  camera(0,2)
+  draw_grid(g_list_text[@cur_list_ind%#g_list_text+1])
 
   local one, two = 0xaa, 0x55
   for i=0,7 do poke(0x5f70+i,0b10101010) end
@@ -285,9 +309,7 @@ function _draw()
   scannum2 %= 64+8+1
 
   local r, y, h = 31, 46, 14
-  rectfill(33-r, y,   30+r, y+h+1+2,C_0)
-
-  if mock_ind == 1 or mock_ind == 2 or mock_ind == 3 then
+  if false then
     local items = {"fIGHT", "pARTY", "aUTO", "fORFEIT"}
     if mock_ind == 3 then
       items = {"tACKLE", "tAILWHP", "fLMTHWR", "fLMWEEL"}
@@ -303,7 +325,7 @@ function _draw()
       f_zprint(items[i+1], 4+xx, y+2+yy, i==@g_browse.numloc%4 and (i==0 and C_1 or C_3) or (i==0 and C_2 or C_2), -1)
     end
 
-  elseif mock_ind == 4 then
+  elseif false then
     local items = {"uSE fLMTHWR?", "", "nORMAL 17/20PP", ""}
     local xx, yy = @g_browse.numloc%4%2*30, @g_browse.numloc%4\2*7
     ----rectfill(2+xx, y+1+yy, 31+xx, y+7+yy, C_2)
@@ -314,7 +336,7 @@ function _draw()
       f_zprint(items[i+1], 3+xx, y+3+yy, i == 0 and C_3 or C_2, -1)
     end
 
-  elseif mock_ind == 5 then
+  elseif false then
     local items = {"cHARMEL", "", "uSES fLMTHWR", ""}
     local xx, yy = @g_browse.numloc%4%2*30, @g_browse.numloc%4\2*7
     ----rectfill(2+xx, y+1+yy, 31+xx, y+7+yy, C_2)
@@ -325,7 +347,7 @@ function _draw()
       f_zprint(items[i+1], 3+xx, y+3+yy, i == 0 and C_3 or C_2, -1)
     end
 
-  elseif mock_ind == 0 then
+  elseif false then
     local numstr = tostr(@g_browse.numloc)
     while #numstr < 3 do numstr = "0"..numstr end
     --rectfill(2, y+1, 61, y+7, C_2)
@@ -344,7 +366,7 @@ function _draw()
   --rectfill(62-1,48+5,62-1,48+8,C_2)
 
   camera()
-  clip()
 
   pal(cols[@cols_loc%#cols+1], 1)
+  
 end
