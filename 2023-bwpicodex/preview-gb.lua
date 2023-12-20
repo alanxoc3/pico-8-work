@@ -3,32 +3,34 @@ poke(0x5f2c, 3) -- enable 64x64
 poke(0x5f5c, 8)
 poke(0x5f5d, 1)
 
-function create_grid(grid_w, grid_len, cw, ch, x, y, sel_bg, bg, view_h)
+--num=0, --view=0,
+function create_grid(memloc, grid_w, grid_len, cw, ch, x, y, sel_bg, bg, view_h, draw_func)
   return {
-    num=0,
-    view=0,
+    numloc=memloc,
+    viewloc=memloc+1,
     w=grid_w,
     len=grid_len,
     cw=cw, ch=ch,
     x=x, y=y,
     selbg=sel_bg, bg=bg,
     vh=view_h,
+    df=draw_func,
   }
 end
 
 function update_grid(grid)
-  if btnp'0' then grid.num = mid(0, grid.len-1, grid.num-1) end
-  if btnp'1' then grid.num = mid(0, grid.len-1, grid.num+1) end
-  if btnp'2' then grid.num = mid(grid.num%grid.w, grid.len-1, grid.num-grid.w) end
-  if btnp'3' then grid.num = mid(grid.num%grid.w, grid.len-1, grid.num+grid.w) end
+  if btnp'0' then poke(grid.numloc, mid(0, grid.len-1, @grid.numloc-1)) end
+  if btnp'1' then poke(grid.numloc, mid(0, grid.len-1, @grid.numloc+1)) end
+  if btnp'2' then poke(grid.numloc, mid(@grid.numloc%grid.w, grid.len-1, @grid.numloc-grid.w)) end
+  if btnp'3' then poke(grid.numloc, mid(@grid.numloc%grid.w, grid.len-1, @grid.numloc+grid.w)) end
 
-  if grid.num\grid.w-grid.vh+1 > grid.view then grid.view = (grid.view+1)%((grid.len-grid.vh+1)\grid.w) end
-  if grid.num\grid.w           < grid.view then grid.view = (grid.view-1)%((grid.len-grid.vh+1)\grid.w) end
+  if @grid.numloc \grid.w-grid.vh+1 > @grid.viewloc then poke(grid.viewloc, (@grid.viewloc+1)%((grid.len-grid.vh+1)\grid.w)) end
+  if @grid.numloc \grid.w           < @grid.viewloc then poke(grid.viewloc, (@grid.viewloc-1)%((grid.len-grid.vh+1)\grid.w)) end
 end
 
-function draw_grid(grid, draw_func)
+function draw_grid(grid)
   for j=0,grid.vh*grid.w-1 do
-    local i = j + grid.view*grid.w
+    local i = j + @grid.viewloc*grid.w
     local xloc, yloc = grid.x+i%grid.w*grid.cw, grid.y+j\grid.w*grid.ch
     camera(-xloc-1, -yloc-1)
 
@@ -39,11 +41,11 @@ function draw_grid(grid, draw_func)
     if i == grid.len-1                 then r = 1 d = 1 end
     if i == (grid.len-1)\grid.w*grid.w then l = 1 d = 1 end
 
-    rectfill(-1+l, -1,   grid.cw-2-r, grid.ch-2,   i == grid.num and grid.selbg or grid.bg)
-    rectfill(-1,   -1+u, grid.cw-2,   grid.ch-2-d, i == grid.num and grid.selbg or grid.bg)
+    rectfill(-1+l, -1,   grid.cw-2-r, grid.ch-2,   i == @grid.numloc and grid.selbg or grid.bg)
+    rectfill(-1,   -1+u, grid.cw-2,   grid.ch-2-d, i == @grid.numloc and grid.selbg or grid.bg)
 
-    clip(xloc+1, yloc+1, grid.cw-2, grid.ch-2)
-    draw_func(i, i == grid.num)
+    clip(xloc, yloc, grid.cw, grid.ch) -- camera goes in one, but clip doesn't. dont want to go in for the title screen animation
+    grid.df(i, i == @grid.numloc)
     camera()
     clip()
   end
@@ -61,7 +63,7 @@ end
 pkmn_names = split"mISSING,bULSAUR,iVYSAUR,vENSAUR,cHARMAN,cHARMEL,cHARZAR,sQUIRTL,wARTORT,bLSTOIS,cATRPIE,mETAPOD,bUTFREE,wEEDLE,kAKUNA,bEEDRIL,pIDGEY,pIDGETO,pIDGEOT,rATTATA,rATICAT,sPEAROW,fEAROW,eKANS,aRBOK,pIKACHU,rAICHU,sNDSHRW,sNDSLAS,nIDRANF,nIDRINA,nIDQUEN,nIDRANM,nIDRINO,nIDKING,cLFAIRY,cLFABLE,vULPIX,nINTALE,jIGPUFF,wIGTUFF,zUBAT,gOLBAT,oDDISH,gLOOM,vILPLUM,pARAS,pARSECT,vENONAT,vENMOTH,dIGLETT,dUGTRIO,mEOWTH,pERSIAN,pSYDUCK,gOLDUCK,mANKEY,pRIMAPE,gROWLTH,aRCANIN,pOLIWAG,pOLWIRL,pOLRATH,aBRA,kADABRA,aLKAZAM,mACHOP,mACHOKE,mACHAMP,bELSPRT,wEEPBEL,vICTBEL,tNTCOOL,tNTCRUL,gEODUDE,gRAVLER,gOLEM,pONYTA,rAPDASH,sLOWPOK,sLOWBRO,mAGNMIT,mAGNTON,fAFETCH,dODUO,dODRIO,sEEL,dEWGONG,gRIMER,mUK,sHELDER,cLYSTER,gASTLY,hAUNTER,gENGAR,oNIX,dROWZEE,hYPNO,kRABBY,kINGLER,vOLTORB,eLCRODE,eGGCUTE,eGGUTOR,cUBONE,mAROWAK,hITMLEE,hITMCHN,lIKTUNG,kOFFING,wEEZING,rHYHORN,rHYDON,cHANSEY,tANGELA,kANGKAN,hORSEA,sEADRA,gOLDEEN,sEAKING,sTARYU,sTARMIE,mRMIME,sCYTHER,jYNX,eLCABUZ,mAGMAR,pINSIR,tAUROS,mAGKARP,gYARDOS,lAPRAS,dITTO,eEVEE,vAPREON,jOLTEON,fLAREON,pORYGON,oMANYTE,oMASTAR,kABUTO,kABTOPS,aERODAC,sNORLAX,aRTCUNO,zAPDOS,mOLTRES,dRATINI,dRAGAIR,dRAGITE,mEWTWO,mEW,cHIKITA,bAYLEEF,mEGNIUM,cYNDQIL,qUILAVA,tYPHLOS,tOTODIL,cROCNAW,fRLGATR,sENTRET,fURRET,hOOTOOT,nOCTOWL,lEDYBA,lEDIAN,sPINRAK,aRIADOS,cROBAT,cHINCHU,lANTURN,pICHU,cLEFFA,iGGBUFF,tOGEPI,tOGETIC,nATU,xATU,mAREEP,fLAAFFY,aMPHROS,bELOSOM,mARILL,aZMARIL,sUDWOOD,pOLTOED,hOPPIP,sKIPLOM,jUMPLUF,aIPOM,sUNKERN,sUNFLOR,yANMA,wOOPER,qUAGSIR,eSPEON,uMBREON,mURKROW,sLOWKNG,mISDVUS,uNOWN,wOBUFET,gIFARIG,pINECO,fORTRES,dUNSPAR,gLIGAR,sTEELIX,sNUBBUL,gRANBUL,qILFISH,sCIZOR,sHUCKLE,hERCROS,sNEASEL,tEDIURS,uRSRING,sLUGMA,mACARGO,sWINUB,pILSWIN,cORSOLA,rEMRAID,oCTLERY,dELBIRD,mANTINE,sKARMRY,hONDOUR,hONDOOM,kINGDRA,pHANPY,dONPHAN,pORYGN2,sTANTLR,sMEARGL,tYROGUE,hITMTOP,sMOOCHM,eLEKID,mAGBY,mILTANK,bLISSEY,rAIKOU,eNTEI,sUICUNE,lARVTAR,pUPITAR,tYRATAR,lUGIA,hOOH,cELEBI"
 pkmn_types = {{"bIRD","nORMAL"}, {"gRASS","pOISON"}, {"gRASS","pOISON"}, {"gRASS","pOISON"}, {"fIRE",""}, {"fIRE",""}, {"fIRE","fLYING"}, {"wATER",""}, {"wATER",""}, {"wATER",""}, {"bUG",""}, {"bUG",""}, {"bUG","fLYING"}, {"bUG","pOISON"}, {"bUG","pOISON"}, {"bUG","pOISON"}, {"fLYING","nORMAL"}, {"fLYING","nORMAL"}, {"fLYING","nORMAL"}, {"nORMAL",""}, {"nORMAL",""}, {"fLYING","nORMAL"}, {"fLYING","nORMAL"}, {"pOISON",""}, {"pOISON",""}, {"eLECTR",""}, {"eLECTR",""}, {"gROUND",""}, {"gROUND",""}, {"pOISON",""}, {"pOISON",""}, {"pOISON","gROUND"}, {"pOISON",""}, {"pOISON",""}, {"pOISON","gROUND"}, {"nORMAL",""}, {"nORMAL",""}, {"fIRE",""}, {"fIRE",""}, {"nORMAL",""}, {"nORMAL",""}, {"pOISON","fLYING"}, {"pOISON","fLYING"}, {"gRASS","pOISON"}, {"gRASS","pOISON"}, {"gRASS","pOISON"}, {"bUG","gRASS"}, {"bUG","gRASS"}, {"pOISON","bUG"}, {"pOISON","bUG"}, {"gROUND",""}, {"gROUND",""}, {"nORMAL",""}, {"nORMAL",""}, {"wATER",""}, {"wATER",""}, {"fIGHTG",""}, {"fIGHTG",""}, {"fIRE",""}, {"fIRE",""}, {"wATER",""}, {"wATER",""}, {"wATER","fIGHTG"}, {"pSYCHC",""}, {"pSYCHC",""}, {"pSYCHC",""}, {"fIGHTG",""}, {"fIGHTG",""}, {"fIGHTG",""}, {"gRASS","pOISON"}, {"gRASS","pOISON"}, {"gRASS","pOISON"}, {"wATER","pOISON"}, {"wATER","pOISON"}, {"rOCK","gROUND"}, {"rOCK","gROUND"}, {"rOCK","gROUND"}, {"fIRE",""}, {"fIRE",""}, {"pSYCHC","wATER"}, {"pSYCHC","wATER"}, {"sTEEL","eLECTR"}, {"sTEEL","eLECTR"}, {"fLYING","nORMAL"}, {"fLYING","nORMAL"}, {"fLYING","nORMAL"}, {"wATER",""}, {"wATER","iCE"}, {"pOISON",""}, {"pOISON",""}, {"wATER",""}, {"wATER","iCE"}, {"gHOST","pOISON"}, {"gHOST","pOISON"}, {"gHOST","pOISON"}, {"rOCK","gROUND"}, {"pSYCHC",""}, {"pSYCHC",""}, {"wATER",""}, {"wATER",""}, {"eLECTR",""}, {"eLECTR",""}, {"gRASS","pSYCHC"}, {"gRASS","pSYCHC"}, {"gROUND",""}, {"gROUND",""}, {"fIGHTG",""}, {"fIGHTG",""}, {"nORMAL",""}, {"pOISON",""}, {"pOISON",""}, {"gROUND","rOCK"}, {"gROUND","rOCK"}, {"nORMAL",""}, {"gRASS",""}, {"nORMAL",""}, {"wATER",""}, {"wATER",""}, {"wATER",""}, {"wATER",""}, {"wATER",""}, {"wATER","pSYCHC"}, {"pSYCHC",""}, {"bUG","fLYING"}, {"pSYCHC","iCE"}, {"eLECTR",""}, {"fIRE",""}, {"bUG",""}, {"nORMAL",""}, {"wATER",""}, {"wATER","fLYING"}, {"wATER","iCE"}, {"nORMAL",""}, {"nORMAL",""}, {"wATER",""}, {"eLECTR",""}, {"fIRE",""}, {"nORMAL",""}, {"rOCK","wATER"}, {"rOCK","wATER"}, {"rOCK","wATER"}, {"rOCK","wATER"}, {"rOCK","fLYING"}, {"nORMAL",""}, {"iCE","fLYING"}, {"eLECTR","fLYING"}, {"fIRE","fLYING"}, {"dRAGON",""}, {"dRAGON",""}, {"dRAGON","fLYING"}, {"pSYCHC",""}, {"pSYCHC",""}, {"gRASS",""}, {"gRASS",""}, {"gRASS",""}, {"fIRE",""}, {"fIRE",""}, {"fIRE",""}, {"wATER",""}, {"wATER",""}, {"wATER",""}, {"nORMAL",""}, {"nORMAL",""}, {"fLYING","nORMAL"}, {"fLYING","nORMAL"}, {"bUG","fLYING"}, {"bUG","fLYING"}, {"bUG","pOISON"}, {"bUG","pOISON"}, {"pOISON","fLYING"}, {"eLECTR","wATER"}, {"eLECTR","wATER"}, {"eLECTR",""}, {"nORMAL",""}, {"nORMAL",""}, {"nORMAL",""}, {"nORMAL","fLYING"}, {"pSYCHC","fLYING"}, {"pSYCHC","fLYING"}, {"eLECTR",""}, {"eLECTR",""}, {"eLECTR",""}, {"gRASS",""}, {"wATER",""}, {"wATER",""}, {"rOCK",""}, {"wATER",""}, {"gRASS","fLYING"}, {"gRASS","fLYING"}, {"gRASS","fLYING"}, {"nORMAL",""}, {"gRASS",""}, {"gRASS",""}, {"bUG","fLYING"}, {"wATER","gROUND"}, {"wATER","gROUND"}, {"pSYCHC",""}, {"dARK",""}, {"dARK","fLYING"}, {"pSYCHC","wATER"}, {"gHOST",""}, {"pSYCHC",""}, {"pSYCHC",""}, {"pSYCHC","nORMAL"}, {"bUG",""}, {"bUG","sTEEL"}, {"nORMAL",""}, {"gROUND","fLYING"}, {"sTEEL","gROUND"}, {"nORMAL",""}, {"nORMAL",""}, {"wATER","pOISON"}, {"sTEEL","bUG"}, {"bUG","rOCK"}, {"bUG","fIGHTG"}, {"dARK","iCE"}, {"nORMAL",""}, {"nORMAL",""}, {"fIRE",""}, {"fIRE","rOCK"}, {"gROUND","iCE"}, {"gROUND","iCE"}, {"rOCK","wATER"}, {"wATER",""}, {"wATER",""}, {"fLYING","iCE"}, {"wATER","fLYING"}, {"sTEEL","fLYING"}, {"dARK","fIRE"}, {"dARK","fIRE"}, {"wATER","dRAGON"}, {"gROUND",""}, {"gROUND",""}, {"nORMAL",""}, {"nORMAL",""}, {"nORMAL",""}, {"fIGHTG",""}, {"fIGHTG",""}, {"pSYCHC","iCE"}, {"eLECTR",""}, {"fIRE",""}, {"nORMAL",""}, {"nORMAL",""}, {"eLECTR",""}, {"fIRE",""}, {"wATER",""}, {"rOCK","gROUND"}, {"rOCK","gROUND"}, {"dARK","rOCK"}, {"pSYCHC","fLYING"}, {"fIRE","fLYING"}, {"gRASS","pSYCHC"}}
 
-function draw_pkmn(num, x, y, high_out, high_in, flip)
+function draw_pkmn(num, x, y, out_c, in_c, flip)
   local row = num/8\1
   local col = num%8
 
@@ -87,12 +89,12 @@ function draw_pkmn(num, x, y, high_out, high_in, flip)
   for yy=-1,1 do
     for xx=-1,1 do
       if not (xx == 0 and yy == 0) then
-        colordrawfunc(x+xx, y+yy, high_out and C_2 or C_1)
+        colordrawfunc(x+xx, y+yy, out_c)
       end
     end
   end
 
-  colordrawfunc(x, y, high_in and C_4 or C_3) -- sprite
+  colordrawfunc(x, y, in_c) -- sprite
 end
 
 g_maxnum = 252
@@ -124,22 +126,58 @@ function _init()
     poke4(iloc+64, 0x.07d7)
   end
 
-  g_gridtest = create_grid(3, 252, 20, 20, 2, 2, C_3, C_2, 2)
+  g_browse  = create_grid(0x5e00, 3, 252, 20, 20, 2, 2, C_3, C_2, 2, function(i, is_sel)
+    draw_pkmn(i, 9, 9, is_sel and C_2 or C_1, is_sel and C_4 or C_3)
+  end)
+
+  g_titleanim = create_grid(0x5e02, 1, 1, 60, 40, 2, 2, C_2, C_2, 1, function(i, is_sel)
+    f_zprint("\^w\^tpicodex", 2, 1,  C_1, -1)
+    f_zprint("dual version",  2, 12, C_1, -1)
+
+    draw_pkmn(254, 19, 28, C_0, C_3)
+    draw_pkmn(g_pkmn, 43+g_pkmn_x+g_pkmn_off, 28, C_0, C_4)
+  end)
+
+  g_battleanim = create_grid(0x5e04, 1, 2, 60, 20, 2, 2, C_3, C_2, 2, function(i, is_sel)
+    local b = function(name, gender, status, x, y, bx, by, hp, hpmax)
+      roundrect_r(bx-1, by+1, bx+35, by+6, (is_sel and C_2 or C_1))
+      if hp > 0 then
+        rectfill(bx, by+2, bx+mid(1, hp/hpmax*34, 34), by+5, is_sel and C_4 or C_3)
+        pset(bx,    by+2, (is_sel and C_2 or C_1))
+        pset(bx+34, by+2, (is_sel and C_2 or C_1))
+        pset(bx,    by+5, (is_sel and C_2 or C_1))
+        pset(bx+34, by+5, (is_sel and C_2 or C_1))
+      end
+
+      local tx, ty = x+15, y+9
+      for i=0,5 do
+        if i ~= 1 then
+          pset(tx+i%3*2, ty+i%2*2, i == 5 and (is_sel and C_4 or C_3) or (is_sel and C_2 or C_1))
+        end
+      end
+      -- end hp bar section
+
+      f_zprint(name,                   x+0,  y-5, is_sel and C_2 or C_1, -1)
+      f_zprint(status,                 x+0,  y+8, is_sel and C_2 or C_1, -1)
+      f_zprint(mid(0, hpmax, flr(hp)), x+37, y+8, is_sel and C_2 or C_1, 1)
+      f_zprint(gender,                 x+37, y-5, is_sel and C_2 or C_1, 1)
+    end
+
+    if i == 0 then draw_pkmn(5, 49, 9, is_sel and C_2 or C_1, is_sel and C_4 or C_3, true)  b("cHARMEL","M","bRN",1, 5,1, 5, 50+(sin(t())+1)*20, 80)
+    else           draw_pkmn(5, 9,  9, is_sel and C_2 or C_1, is_sel and C_4 or C_3, false) b("cHARMEL","M","",   22,5,22,5, -10+(cos(t())+1)*80, 80)
+    end
+  end)
+
+
+  g_list = {g_battleanim, g_browse, g_titleanim}
 end
 
+cur_list_ind = 0x5eff
 C_0=0 C_1=0 C_2=1
 C_3=2 C_4=3
-cols = {
-  {[0]=129, 131, 3,   139},
-  {[0]=128, 132, 4,   143},
-  {[0]=129, 140, 12,  7  },
-  {[0]=129, 5,   13,  6  },
-  {[0]=134, 5,   128, 0  },
-  {[0]=0,   5,   6,   7  },
-}
 
-mock_ind = 0
-cols_ind = 0
+cols_loc = 0x5efe
+mock_ind = -1
 g_off = 0
 g_scale = 1
 view_y = 0
@@ -149,6 +187,17 @@ g_hpmod = 0
 g_pkmn = 25
 g_pkmn_x = 0
 function _update60()
+  cols = {
+    {[0]=1,       13,     6,      7,    }, -- default
+    {[0]=128+4,   4,      128+15, 15    }, -- sand
+    {[0]=128+3,   3,      128+11, 128+10}, -- green
+    {[0]=128+2,   2,      128+8,  8     }, -- red
+    {[0]=128+1,   1,      128+12, 12    }, -- blue
+    {[0]=128+5,   128+13, 13,     14,   }, -- pink
+    {[0]=0,       5,      6,      7,    }, -- black & white
+    {[0]=128+0,   5,      128+6,  128+7 }, -- dark-yel
+  }
+
   g_pkmn_off = 0
   local cycle = 3.5
   if t()%cycle < 2 then
@@ -169,17 +218,14 @@ function _update60()
 
   local top = (g_maxnum-1)\3 -- 253, includes substitute/empty/?
 
-  if btnp(0) then g_hpmod -= 1 g_num = mid(0,251,g_num-1) end
-  if btnp(1) then g_hpmod += 1 g_num = mid(0,251,g_num+1) end
-  if btnp(2) then g_active = not g_active g_num = mid(g_num%3,249+g_num%3,g_num-3) end
-  if btnp(3) then g_active = not g_active g_num = mid(g_num%3,249+g_num%3,g_num+3) end
-  if btnp(4) then minisfx(g_num) cols_ind = (cols_ind+1)%#cols end
-  if btnp(5) then mock_ind = (mock_ind + 1) % 6 end
+  if btnp(0) then g_hpmod -= 1 end
+  if btnp(1) then g_hpmod += 1 end
+  if btnp(2) then g_active = not g_active end
+  if btnp(3) then g_active = not g_active end
+  if btnp(4) then minisfx(@g_browse.numloc) poke(cols_loc, (@cols_loc+1)%#cols) end
+  if btnp(5) then poke(cur_list_ind, (@cur_list_ind + 1) % #g_list) end
 
-  if g_num\3-1 > view_y then view_y = (view_y+1)%(top) end
-  if g_num\3   < view_y then view_y = (view_y-1)%(top) end
-
-  update_grid(g_gridtest)
+  update_grid(g_list[@cur_list_ind%#g_list+1])
 end
 
 scannum = 0
@@ -207,67 +253,18 @@ end
 
 function _draw()
   memset(0x5f70, 0, 16) -- enable secondary pallette for all lines
+  clip()
 
   cls(C_0)
-  camera(0,1)
+  -- camera(0,1)
   --rectfill(2,3,61,42,C_2)
+  -- clip(2, 2, 60, 40)
 
-  fillp()
-  clip(2, 2, 60, 40)
+  draw_grid(g_list[@cur_list_ind%#g_list+1])
 
   if mock_ind == 0 then
-    draw_grid(g_gridtest, function(i, is_sel)
-      draw_pkmn(i, 9, 9, is_sel, is_sel)
-    end)
-
-  elseif mock_ind == 1 then
-    local ox, oy = 2, 8+7-7+7+7+1
-    f_zprint("\^w\^tpicodex",  3+5-1-2, oy+3-19-2-1+1,    C_1, -1)
-    f_zprint("dual version",  3+5-1-2+12-12, oy-3-19+12+1+3-2+1,  C_1, -1)
-
-    local xx, yy = g_num%6%2*31, g_num%6\2*7
-    draw_pkmn(254, 32-10, oy+8+2-1, false, false)
-    draw_pkmn(g_pkmn, 32+10+4+g_pkmn_x+g_pkmn_off, oy+8+2-1, false, true)
 
   elseif mock_ind >= 2 then
-    local b = function(name, gender, status, x, y, bx, by, hi, hp, hpmax)
-      local d, l = C_1, C_3
-      if hi then
-        d, l = C_2, C_4
-      end
-
-      roundrect_r(bx-1, by+1, bx+35, by+6, d)
-      if hp > 0 then
-        rectfill(bx, by+2, bx+mid(1, hp/hpmax*34, 34), by+5, l)
-        pset(bx, by+2, d)
-        pset(bx+34, by+2, d)
-        pset(bx, by+5, d)
-        pset(bx+34, by+5, d)
-      end
-
-      local tx, ty = x+15, y+9
-      for i=0,5 do
-        if i ~= 1 then
-          if i == 0 then
-            -- rect(tx+i%3*2-1, ty+i%2*2-1, tx+i%3*2+1, ty+i%2*2+1, l)
-          elseif i == 5 then
-            -- print("+", tx+i%3*2-1, ty+i%2*2-2, l)
-          end
-          pset(tx+i%3*2, ty+i%2*2, i == 5 and l or d)
-        end
-      end
-
-      f_zprint(name,   x+0, y-5, d, -1)
-      f_zprint(status,   x+0, y+8, d, -1)
-      f_zprint(flr(hp), x+37, y+8, d, 1)
-      f_zprint(gender, x+37, y-5, d, 1)
-    end
-
-    local myoff = (not g_active and 21 or 1)
-    rectfill(2, 2+myoff, 61, 22+myoff-1, C_3)
-
-    draw_pkmn(5, 52, 13,     g_active, g_active,     true) b("cHARMEL",  "M", "bRN", 4,  9,  4, 9,  g_active,   80+g_hpmod, 90)
-    draw_pkmn(5, 12, 33, not g_active, not g_active)       b("cHARMEL",  "M", "",    25, 29, 25,29,  not g_active, 100+g_hpmod, 100)
   end
 
   clip()
@@ -297,18 +294,18 @@ function _draw()
     elseif mock_ind == 1 then
       items = {"bROWSED", "vERSUSD", "eDIT", "lEAGUE"}
     end
-    local xx, yy = g_num%4%2*30, g_num%4\2*9
+    local xx, yy = @g_browse.numloc%4%2*30, @g_browse.numloc%4\2*9
     --rectfill(2, y+1, 31, y+7, C_1)
-    rectfill(3+xx-1, y+1+yy-1, 31+xx, y+7+yy+1, g_num%4==0 and C_2 or C_2)
+    rectfill(3+xx-1, y+1+yy-1, 31+xx, y+7+yy+1, @g_browse.numloc%4==0 and C_2 or C_2)
 
     for i=0,3 do
       xx, yy = i%2*31-1, i\2*9
-      f_zprint(items[i+1], 4+xx, y+2+yy, i==g_num%4 and (i==0 and C_1 or C_3) or (i==0 and C_2 or C_2), -1)
+      f_zprint(items[i+1], 4+xx, y+2+yy, i==@g_browse.numloc%4 and (i==0 and C_1 or C_3) or (i==0 and C_2 or C_2), -1)
     end
 
   elseif mock_ind == 4 then
     local items = {"uSE fLMTHWR?", "", "nORMAL 17/20PP", ""}
-    local xx, yy = g_num%4%2*30, g_num%4\2*7
+    local xx, yy = @g_browse.numloc%4%2*30, @g_browse.numloc%4\2*7
     ----rectfill(2+xx, y+1+yy, 31+xx, y+7+yy, C_2)
 
     for i=0,3 do
@@ -319,7 +316,7 @@ function _draw()
 
   elseif mock_ind == 5 then
     local items = {"cHARMEL", "", "uSES fLMTHWR", ""}
-    local xx, yy = g_num%4%2*30, g_num%4\2*7
+    local xx, yy = @g_browse.numloc%4%2*30, @g_browse.numloc%4\2*7
     ----rectfill(2+xx, y+1+yy, 31+xx, y+7+yy, C_2)
 
     for i=0,3 do
@@ -329,13 +326,13 @@ function _draw()
     end
 
   elseif mock_ind == 0 then
-    local numstr = tostr(g_num)
+    local numstr = tostr(@g_browse.numloc)
     while #numstr < 3 do numstr = "0"..numstr end
     --rectfill(2, y+1, 61, y+7, C_2)
-    print(""..numstr.." "..pkmn_names[g_num+1],3, y+3,  C_3)
-    local typstr = pkmn_types[g_num+1][1]
-    if pkmn_types[g_num+1][2] ~= "" then
-      typstr ..= "/"..pkmn_types[g_num+1][2]
+    print(""..numstr.." "..pkmn_names[@g_browse.numloc+1],3, y+3,  C_3)
+    local typstr = pkmn_types[@g_browse.numloc+1][1]
+    if pkmn_types[@g_browse.numloc+1][2] ~= "" then
+      typstr ..= "/"..pkmn_types[@g_browse.numloc+1][2]
     end
     print(typstr,3, y+8+2,C_2)
   end
@@ -349,5 +346,5 @@ function _draw()
   camera()
   clip()
 
-  pal(cols[cols_ind+1], 1)
+  pal(cols[@cols_loc%#cols+1], 1)
 end

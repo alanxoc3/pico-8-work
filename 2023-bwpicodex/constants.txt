@@ -12,6 +12,11 @@ S_STORY:          0x5efd
 S_HOARD:          0x5efe
 S_SWAP_CONTROLS:  0x5eff
 
+# horde hi score
+# league score
+# 6 bytes for a pokemon... 36 for a party. gender+item in same byte
+# i can fit like 4-6 parties easily. above 6 is too much.
+
 # ----------------------------- load memory locations
 L_DATASTART: 0x1fff # data starts one byte before because the code increments first
 
