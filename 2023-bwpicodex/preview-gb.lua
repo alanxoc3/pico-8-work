@@ -1,7 +1,7 @@
 cls()
 poke(0x5f2c, 3) -- enable 64x64
-poke(0x5f5c, 8)
-poke(0x5f5d, 1)
+poke(0x5f5c, 8) -- btn initial delay
+poke(0x5f5d, 1) -- btn repeat delay
 
 -- menus: browse,edit,league,versus
 -- credits can be shown automatically
@@ -22,13 +22,17 @@ function create_grid(memloc, grid_w, grid_len, cw, ch, x, y, sel_bg, bg, view_h,
 end
 
 function update_grid(grid)
-  if btnp'0' then poke(grid.numloc, mid(0, grid.len-1, @grid.numloc-1)) end
-  if btnp'1' then poke(grid.numloc, mid(0, grid.len-1, @grid.numloc+1)) end
-  if btnp'2' then poke(grid.numloc, mid(@grid.numloc%grid.w, grid.len-1, @grid.numloc-grid.w)) end
-  if btnp'3' then poke(grid.numloc, mid(@grid.numloc%grid.w, grid.len-1, @grid.numloc+grid.w)) end
+  local h = @grid.numloc\grid.w*grid.w
 
-  if @grid.numloc \grid.w-grid.vh+1 > @grid.viewloc then poke(grid.viewloc, (@grid.viewloc+1)%((grid.len-grid.vh+1)\grid.w)) end
-  if @grid.numloc \grid.w           < @grid.viewloc then poke(grid.viewloc, (@grid.viewloc-1)%((grid.len-grid.vh+1)\grid.w)) end
+  if btnp'0' then poke(grid.numloc, max(h, @grid.numloc-1)) end
+  if btnp'1' then poke(grid.numloc, min(h+grid.w-1, @grid.numloc+1)) end
+  if btnp'2' then poke(grid.numloc, max(@grid.numloc%grid.w, @grid.numloc-grid.w)) end
+  if btnp'3' then poke(grid.numloc, min(grid.len-grid.w+@grid.numloc%grid.w, @grid.numloc+grid.w)) end
+
+  if @grid.numloc >= grid.len then poke(grid.numloc, grid.len-1) end
+
+  if @grid.numloc\grid.w-grid.vh+1 > @grid.viewloc then poke(grid.viewloc, (@grid.viewloc+1)%((grid.len-grid.vh+1)\grid.w)) end
+  if @grid.numloc\grid.w           < @grid.viewloc then poke(grid.viewloc, (@grid.viewloc-1)%((grid.len-grid.vh+1)\grid.w)) end
 end
 
 function draw_grid(grid)
@@ -60,7 +64,6 @@ function minisfx(num) -- plays a sfx with len of 4
   -- - set dampen/reverb/buzz/noise to max
   -- - get rid of loops
   -- - set speed to 4
-
   sfx(num\4, 0, num%4*8, 8)
 end
 
@@ -136,7 +139,7 @@ function _init()
 
   g_titleanim = create_grid(0x5e02, 1, 1, 60, 40, 2, 2, C_2, C_2, 1, function(i, is_sel)
     f_zprint("\^w\^tpicodex", 2, 1,  C_1, -1)
-    f_zprint("dual version",  2, 12, C_1, -1)
+    f_zprint("dUAL vERSION",  2, 12, C_1, -1)
 
     draw_pkmn(254, 19, 28, C_0, C_3)
     draw_pkmn(g_pkmn, 43+g_pkmn_x+g_pkmn_off, 28, C_0, C_4)
@@ -193,6 +196,9 @@ function _init()
   g_movelist = create_grid(0x5e08, 2, #tt, 30, 9, 2, 4, C_3, C_2, 4, function(i, is_sel)
     f_zprint(tt[i+1], i%2, 1, is_sel and C_4 or C_1, -1)
   end)
+  -- so do i need 2 grids for every view?
+  -- well, there are less than that. big view has: title, party select, pkmn select, move select, battle, trainer select.
+  -- there is enough diversity i guess.
 
   g_list = {
     g_movelist,

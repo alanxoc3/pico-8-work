@@ -1,6 +1,6 @@
 -- This part must go first!
 _g=setmetatable({}, {__index=_ENV})
-_ENV = _g
+_ENV = _g -- todo: try removing this line... wonder if things work...
 
 function f_zobj_eval(val, table, parameters)
   if     ord(val) == 126 then return table[sub(val, 2)] -- 126 means "~"
