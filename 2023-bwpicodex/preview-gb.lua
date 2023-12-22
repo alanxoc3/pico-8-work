@@ -27,7 +27,7 @@ function update_grid(grid)
   if btnp'0' then poke(grid.numloc, max(h, @grid.numloc-1)) end
   if btnp'1' then poke(grid.numloc, min(h+grid.w-1, @grid.numloc+1)) end
   if btnp'2' then poke(grid.numloc, max(@grid.numloc%grid.w, @grid.numloc-grid.w)) end
-  if btnp'3' then poke(grid.numloc, min(grid.len-grid.w+@grid.numloc%grid.w, @grid.numloc+grid.w)) end
+  if btnp'3' then poke(grid.numloc, min(grid.len-grid.w+@grid.numloc%grid.w, @grid.numloc+grid.w)) end -- TODO: there is a bug when there is only one cell at the bottom and you go down.
 
   if @grid.numloc >= grid.len then poke(grid.numloc, grid.len-1) end
 
@@ -68,7 +68,7 @@ function minisfx(num) -- plays a sfx with len of 4
 end
 
 pkmn_names = split"mISSING,bULSAUR,iVYSAUR,vENSAUR,cHARMAN,cHARMEL,cHARZAR,sQUIRTL,wARTORT,bLSTOIS,cATRPIE,mETAPOD,bUTFREE,wEEDLE,kAKUNA,bEEDRIL,pIDGEY,pIDGETO,pIDGEOT,rATTATA,rATICAT,sPEAROW,fEAROW,eKANS,aRBOK,pIKACHU,rAICHU,sNDSHRW,sNDSLAS,nIDRANF,nIDRINA,nIDQUEN,nIDRANM,nIDRINO,nIDKING,cLFAIRY,cLFABLE,vULPIX,nINTALE,jIGPUFF,wIGTUFF,zUBAT,gOLBAT,oDDISH,gLOOM,vILPLUM,pARAS,pARSECT,vENONAT,vENMOTH,dIGLETT,dUGTRIO,mEOWTH,pERSIAN,pSYDUCK,gOLDUCK,mANKEY,pRIMAPE,gROWLTH,aRCANIN,pOLIWAG,pOLWIRL,pOLRATH,aBRA,kADABRA,aLKAZAM,mACHOP,mACHOKE,mACHAMP,bELSPRT,wEEPBEL,vICTBEL,tNTCOOL,tNTCRUL,gEODUDE,gRAVLER,gOLEM,pONYTA,rAPDASH,sLOWPOK,sLOWBRO,mAGNMIT,mAGNTON,fAFETCH,dODUO,dODRIO,sEEL,dEWGONG,gRIMER,mUK,sHELDER,cLYSTER,gASTLY,hAUNTER,gENGAR,oNIX,dROWZEE,hYPNO,kRABBY,kINGLER,vOLTORB,eLCRODE,eGGCUTE,eGGUTOR,cUBONE,mAROWAK,hITMLEE,hITMCHN,lIKTUNG,kOFFING,wEEZING,rHYHORN,rHYDON,cHANSEY,tANGELA,kANGKAN,hORSEA,sEADRA,gOLDEEN,sEAKING,sTARYU,sTARMIE,mRMIME,sCYTHER,jYNX,eLCABUZ,mAGMAR,pINSIR,tAUROS,mAGKARP,gYARDOS,lAPRAS,dITTO,eEVEE,vAPREON,jOLTEON,fLAREON,pORYGON,oMANYTE,oMASTAR,kABUTO,kABTOPS,aERODAC,sNORLAX,aRTCUNO,zAPDOS,mOLTRES,dRATINI,dRAGAIR,dRAGITE,mEWTWO,mEW,cHIKITA,bAYLEEF,mEGNIUM,cYNDQIL,qUILAVA,tYPHLOS,tOTODIL,cROCNAW,fRLGATR,sENTRET,fURRET,hOOTOOT,nOCTOWL,lEDYBA,lEDIAN,sPINRAK,aRIADOS,cROBAT,cHINCHU,lANTURN,pICHU,cLEFFA,iGGBUFF,tOGEPI,tOGETIC,nATU,xATU,mAREEP,fLAAFFY,aMPHROS,bELOSOM,mARILL,aZMARIL,sUDWOOD,pOLTOED,hOPPIP,sKIPLOM,jUMPLUF,aIPOM,sUNKERN,sUNFLOR,yANMA,wOOPER,qUAGSIR,eSPEON,uMBREON,mURKROW,sLOWKNG,mISDVUS,uNOWN,wOBUFET,gIFARIG,pINECO,fORTRES,dUNSPAR,gLIGAR,sTEELIX,sNUBBUL,gRANBUL,qILFISH,sCIZOR,sHUCKLE,hERCROS,sNEASEL,tEDIURS,uRSRING,sLUGMA,mACARGO,sWINUB,pILSWIN,cORSOLA,rEMRAID,oCTLERY,dELBIRD,mANTINE,sKARMRY,hONDOUR,hONDOOM,kINGDRA,pHANPY,dONPHAN,pORYGN2,sTANTLR,sMEARGL,tYROGUE,hITMTOP,sMOOCHM,eLEKID,mAGBY,mILTANK,bLISSEY,rAIKOU,eNTEI,sUICUNE,lARVTAR,pUPITAR,tYRATAR,lUGIA,hOOH,cELEBI"
-pkmn_types = {{"bIRD","nORMAL"}, {"gRASS","pOISON"}, {"gRASS","pOISON"}, {"gRASS","pOISON"}, {"fIRE",""}, {"fIRE",""}, {"fIRE","fLYING"}, {"wATER",""}, {"wATER",""}, {"wATER",""}, {"bUG",""}, {"bUG",""}, {"bUG","fLYING"}, {"bUG","pOISON"}, {"bUG","pOISON"}, {"bUG","pOISON"}, {"fLYING","nORMAL"}, {"fLYING","nORMAL"}, {"fLYING","nORMAL"}, {"nORMAL",""}, {"nORMAL",""}, {"fLYING","nORMAL"}, {"fLYING","nORMAL"}, {"pOISON",""}, {"pOISON",""}, {"eLECTR",""}, {"eLECTR",""}, {"gROUND",""}, {"gROUND",""}, {"pOISON",""}, {"pOISON",""}, {"pOISON","gROUND"}, {"pOISON",""}, {"pOISON",""}, {"pOISON","gROUND"}, {"nORMAL",""}, {"nORMAL",""}, {"fIRE",""}, {"fIRE",""}, {"nORMAL",""}, {"nORMAL",""}, {"pOISON","fLYING"}, {"pOISON","fLYING"}, {"gRASS","pOISON"}, {"gRASS","pOISON"}, {"gRASS","pOISON"}, {"bUG","gRASS"}, {"bUG","gRASS"}, {"pOISON","bUG"}, {"pOISON","bUG"}, {"gROUND",""}, {"gROUND",""}, {"nORMAL",""}, {"nORMAL",""}, {"wATER",""}, {"wATER",""}, {"fIGHTG",""}, {"fIGHTG",""}, {"fIRE",""}, {"fIRE",""}, {"wATER",""}, {"wATER",""}, {"wATER","fIGHTG"}, {"pSYCHC",""}, {"pSYCHC",""}, {"pSYCHC",""}, {"fIGHTG",""}, {"fIGHTG",""}, {"fIGHTG",""}, {"gRASS","pOISON"}, {"gRASS","pOISON"}, {"gRASS","pOISON"}, {"wATER","pOISON"}, {"wATER","pOISON"}, {"rOCK","gROUND"}, {"rOCK","gROUND"}, {"rOCK","gROUND"}, {"fIRE",""}, {"fIRE",""}, {"pSYCHC","wATER"}, {"pSYCHC","wATER"}, {"sTEEL","eLECTR"}, {"sTEEL","eLECTR"}, {"fLYING","nORMAL"}, {"fLYING","nORMAL"}, {"fLYING","nORMAL"}, {"wATER",""}, {"wATER","iCE"}, {"pOISON",""}, {"pOISON",""}, {"wATER",""}, {"wATER","iCE"}, {"gHOST","pOISON"}, {"gHOST","pOISON"}, {"gHOST","pOISON"}, {"rOCK","gROUND"}, {"pSYCHC",""}, {"pSYCHC",""}, {"wATER",""}, {"wATER",""}, {"eLECTR",""}, {"eLECTR",""}, {"gRASS","pSYCHC"}, {"gRASS","pSYCHC"}, {"gROUND",""}, {"gROUND",""}, {"fIGHTG",""}, {"fIGHTG",""}, {"nORMAL",""}, {"pOISON",""}, {"pOISON",""}, {"gROUND","rOCK"}, {"gROUND","rOCK"}, {"nORMAL",""}, {"gRASS",""}, {"nORMAL",""}, {"wATER",""}, {"wATER",""}, {"wATER",""}, {"wATER",""}, {"wATER",""}, {"wATER","pSYCHC"}, {"pSYCHC",""}, {"bUG","fLYING"}, {"pSYCHC","iCE"}, {"eLECTR",""}, {"fIRE",""}, {"bUG",""}, {"nORMAL",""}, {"wATER",""}, {"wATER","fLYING"}, {"wATER","iCE"}, {"nORMAL",""}, {"nORMAL",""}, {"wATER",""}, {"eLECTR",""}, {"fIRE",""}, {"nORMAL",""}, {"rOCK","wATER"}, {"rOCK","wATER"}, {"rOCK","wATER"}, {"rOCK","wATER"}, {"rOCK","fLYING"}, {"nORMAL",""}, {"iCE","fLYING"}, {"eLECTR","fLYING"}, {"fIRE","fLYING"}, {"dRAGON",""}, {"dRAGON",""}, {"dRAGON","fLYING"}, {"pSYCHC",""}, {"pSYCHC",""}, {"gRASS",""}, {"gRASS",""}, {"gRASS",""}, {"fIRE",""}, {"fIRE",""}, {"fIRE",""}, {"wATER",""}, {"wATER",""}, {"wATER",""}, {"nORMAL",""}, {"nORMAL",""}, {"fLYING","nORMAL"}, {"fLYING","nORMAL"}, {"bUG","fLYING"}, {"bUG","fLYING"}, {"bUG","pOISON"}, {"bUG","pOISON"}, {"pOISON","fLYING"}, {"eLECTR","wATER"}, {"eLECTR","wATER"}, {"eLECTR",""}, {"nORMAL",""}, {"nORMAL",""}, {"nORMAL",""}, {"nORMAL","fLYING"}, {"pSYCHC","fLYING"}, {"pSYCHC","fLYING"}, {"eLECTR",""}, {"eLECTR",""}, {"eLECTR",""}, {"gRASS",""}, {"wATER",""}, {"wATER",""}, {"rOCK",""}, {"wATER",""}, {"gRASS","fLYING"}, {"gRASS","fLYING"}, {"gRASS","fLYING"}, {"nORMAL",""}, {"gRASS",""}, {"gRASS",""}, {"bUG","fLYING"}, {"wATER","gROUND"}, {"wATER","gROUND"}, {"pSYCHC",""}, {"dARK",""}, {"dARK","fLYING"}, {"pSYCHC","wATER"}, {"gHOST",""}, {"pSYCHC",""}, {"pSYCHC",""}, {"pSYCHC","nORMAL"}, {"bUG",""}, {"bUG","sTEEL"}, {"nORMAL",""}, {"gROUND","fLYING"}, {"sTEEL","gROUND"}, {"nORMAL",""}, {"nORMAL",""}, {"wATER","pOISON"}, {"sTEEL","bUG"}, {"bUG","rOCK"}, {"bUG","fIGHTG"}, {"dARK","iCE"}, {"nORMAL",""}, {"nORMAL",""}, {"fIRE",""}, {"fIRE","rOCK"}, {"gROUND","iCE"}, {"gROUND","iCE"}, {"rOCK","wATER"}, {"wATER",""}, {"wATER",""}, {"fLYING","iCE"}, {"wATER","fLYING"}, {"sTEEL","fLYING"}, {"dARK","fIRE"}, {"dARK","fIRE"}, {"wATER","dRAGON"}, {"gROUND",""}, {"gROUND",""}, {"nORMAL",""}, {"nORMAL",""}, {"nORMAL",""}, {"fIGHTG",""}, {"fIGHTG",""}, {"pSYCHC","iCE"}, {"eLECTR",""}, {"fIRE",""}, {"nORMAL",""}, {"nORMAL",""}, {"eLECTR",""}, {"fIRE",""}, {"wATER",""}, {"rOCK","gROUND"}, {"rOCK","gROUND"}, {"dARK","rOCK"}, {"pSYCHC","fLYING"}, {"fIRE","fLYING"}, {"gRASS","pSYCHC"}}
+pkmn_types = {{"bIRD","nORMAL"}, {"gRASS","pOISON"}, {"gRASS","pOISON"}, {"gRASS","pOISON"}, {"fIRE",""}, {"fIRE",""}, {"fIRE","fLYING"}, {"wATER",""}, {"wATER",""}, {"wATER",""}, {"bUG",""}, {"bUG",""}, {"bUG","fLYING"}, {"bUG","pOISON"}, {"bUG","pOISON"}, {"bUG","pOISON"}, {"fLYING","nORMAL"}, {"fLYING","nORMAL"}, {"fLYING","nORMAL"}, {"nORMAL",""}, {"nORMAL",""}, {"fLYING","nORMAL"}, {"fLYING","nORMAL"}, {"pOISON",""}, {"pOISON",""}, {"eLECTR",""}, {"eLECTR",""}, {"gROUND",""}, {"gROUND",""}, {"pOISON",""}, {"pOISON",""}, {"pOISON","gROUND"}, {"pOISON",""}, {"pOISON",""}, {"pOISON","gROUND"}, {"nORMAL",""}, {"nORMAL",""}, {"fIRE",""}, {"fIRE",""}, {"nORMAL",""}, {"nORMAL",""}, {"pOISON","fLYING"}, {"pOISON","fLYING"}, {"gRASS","pOISON"}, {"gRASS","pOISON"}, {"gRASS","pOISON"}, {"bUG","gRASS"}, {"bUG","gRASS"}, {"pOISON","bUG"}, {"pOISON","bUG"}, {"gROUND",""}, {"gROUND",""}, {"nORMAL",""}, {"nORMAL",""}, {"wATER",""}, {"wATER",""}, {"fIGHTG",""}, {"fIGHTG",""}, {"fIRE",""}, {"fIRE",""}, {"wATER",""}, {"wATER",""}, {"wATER","fIGHTG"}, {"pSYCIC",""}, {"pSYCIC",""}, {"pSYCIC",""}, {"fIGHTG",""}, {"fIGHTG",""}, {"fIGHTG",""}, {"gRASS","pOISON"}, {"gRASS","pOISON"}, {"gRASS","pOISON"}, {"wATER","pOISON"}, {"wATER","pOISON"}, {"rOCK","gROUND"}, {"rOCK","gROUND"}, {"rOCK","gROUND"}, {"fIRE",""}, {"fIRE",""}, {"pSYCIC","wATER"}, {"pSYCIC","wATER"}, {"sTEEL","eLECTR"}, {"sTEEL","eLECTR"}, {"fLYING","nORMAL"}, {"fLYING","nORMAL"}, {"fLYING","nORMAL"}, {"wATER",""}, {"wATER","iCE"}, {"pOISON",""}, {"pOISON",""}, {"wATER",""}, {"wATER","iCE"}, {"gHOST","pOISON"}, {"gHOST","pOISON"}, {"gHOST","pOISON"}, {"rOCK","gROUND"}, {"pSYCIC",""}, {"pSYCIC",""}, {"wATER",""}, {"wATER",""}, {"eLECTR",""}, {"eLECTR",""}, {"gRASS","pSYCIC"}, {"gRASS","pSYCIC"}, {"gROUND",""}, {"gROUND",""}, {"fIGHTG",""}, {"fIGHTG",""}, {"nORMAL",""}, {"pOISON",""}, {"pOISON",""}, {"gROUND","rOCK"}, {"gROUND","rOCK"}, {"nORMAL",""}, {"gRASS",""}, {"nORMAL",""}, {"wATER",""}, {"wATER",""}, {"wATER",""}, {"wATER",""}, {"wATER",""}, {"wATER","pSYCIC"}, {"pSYCIC",""}, {"bUG","fLYING"}, {"pSYCIC","iCE"}, {"eLECTR",""}, {"fIRE",""}, {"bUG",""}, {"nORMAL",""}, {"wATER",""}, {"wATER","fLYING"}, {"wATER","iCE"}, {"nORMAL",""}, {"nORMAL",""}, {"wATER",""}, {"eLECTR",""}, {"fIRE",""}, {"nORMAL",""}, {"rOCK","wATER"}, {"rOCK","wATER"}, {"rOCK","wATER"}, {"rOCK","wATER"}, {"rOCK","fLYING"}, {"nORMAL",""}, {"iCE","fLYING"}, {"eLECTR","fLYING"}, {"fIRE","fLYING"}, {"dRAGON",""}, {"dRAGON",""}, {"dRAGON","fLYING"}, {"pSYCIC",""}, {"pSYCIC",""}, {"gRASS",""}, {"gRASS",""}, {"gRASS",""}, {"fIRE",""}, {"fIRE",""}, {"fIRE",""}, {"wATER",""}, {"wATER",""}, {"wATER",""}, {"nORMAL",""}, {"nORMAL",""}, {"fLYING","nORMAL"}, {"fLYING","nORMAL"}, {"bUG","fLYING"}, {"bUG","fLYING"}, {"bUG","pOISON"}, {"bUG","pOISON"}, {"pOISON","fLYING"}, {"eLECTR","wATER"}, {"eLECTR","wATER"}, {"eLECTR",""}, {"nORMAL",""}, {"nORMAL",""}, {"nORMAL",""}, {"nORMAL","fLYING"}, {"pSYCIC","fLYING"}, {"pSYCIC","fLYING"}, {"eLECTR",""}, {"eLECTR",""}, {"eLECTR",""}, {"gRASS",""}, {"wATER",""}, {"wATER",""}, {"rOCK",""}, {"wATER",""}, {"gRASS","fLYING"}, {"gRASS","fLYING"}, {"gRASS","fLYING"}, {"nORMAL",""}, {"gRASS",""}, {"gRASS",""}, {"bUG","fLYING"}, {"wATER","gROUND"}, {"wATER","gROUND"}, {"pSYCIC",""}, {"dARK",""}, {"dARK","fLYING"}, {"pSYCIC","wATER"}, {"gHOST",""}, {"pSYCIC",""}, {"pSYCIC",""}, {"pSYCIC","nORMAL"}, {"bUG",""}, {"bUG","sTEEL"}, {"nORMAL",""}, {"gROUND","fLYING"}, {"sTEEL","gROUND"}, {"nORMAL",""}, {"nORMAL",""}, {"wATER","pOISON"}, {"sTEEL","bUG"}, {"bUG","rOCK"}, {"bUG","fIGHTG"}, {"dARK","iCE"}, {"nORMAL",""}, {"nORMAL",""}, {"fIRE",""}, {"fIRE","rOCK"}, {"gROUND","iCE"}, {"gROUND","iCE"}, {"rOCK","wATER"}, {"wATER",""}, {"wATER",""}, {"fLYING","iCE"}, {"wATER","fLYING"}, {"sTEEL","fLYING"}, {"dARK","fIRE"}, {"dARK","fIRE"}, {"wATER","dRAGON"}, {"gROUND",""}, {"gROUND",""}, {"nORMAL",""}, {"nORMAL",""}, {"nORMAL",""}, {"fIGHTG",""}, {"fIGHTG",""}, {"pSYCIC","iCE"}, {"eLECTR",""}, {"fIRE",""}, {"nORMAL",""}, {"nORMAL",""}, {"eLECTR",""}, {"fIRE",""}, {"wATER",""}, {"rOCK","gROUND"}, {"rOCK","gROUND"}, {"dARK","rOCK"}, {"pSYCIC","fLYING"}, {"fIRE","fLYING"}, {"gRASS","pSYCIC"}}
 
 function draw_pkmn(num, x, y, out_c, in_c, flip)
   local row = num/8\1
@@ -145,38 +145,42 @@ function _init()
     draw_pkmn(g_pkmn, 43+g_pkmn_x+g_pkmn_off, 28, C_0, C_4)
   end)
 
-  g_battleanim = create_grid(0x5e04, 1, 2, 60, 20, 2, 2, C_3, C_2, 2, function(i, is_sel)
-    local b = function(name, gender, status, x, y, bx, by, hp, hpmax)
-      roundrect_r(bx-1, by+1, bx+35, by+6, (is_sel and C_2 or C_1))
-      if hp > 0 then
-        rectfill(bx, by+2, bx+mid(1, hp/hpmax*34, 34), by+5, is_sel and C_4 or C_3)
-        pset(bx,    by+2, (is_sel and C_2 or C_1))
-        pset(bx+34, by+2, (is_sel and C_2 or C_1))
-        pset(bx,    by+5, (is_sel and C_2 or C_1))
-        pset(bx+34, by+5, (is_sel and C_2 or C_1))
-      end
-
-      local tx, ty = x+15, y+9
-      for i=0,5 do
-        if i ~= 1 then
-          pset(tx+i%3*2, ty+i%2*2, i == 5 and (is_sel and C_4 or C_3) or (is_sel and C_2 or C_1))
+  create_battle_grid = function(pkmn1, pkmn2)
+    return create_grid(0x5e04, 1, 2, 60, 20, 2, 2, C_3, C_2, 2, function(i, is_sel)
+      local b = function(name, gender, status, x, y, bx, by, hp, hpmax)
+        roundrect_r(bx-1, by+1, bx+35, by+6, (is_sel and C_2 or C_1))
+        if hp > 0 then
+          rectfill(bx, by+2, bx+mid(1, hp/hpmax*34, 34), by+5, is_sel and C_4 or C_3)
+          pset(bx,    by+2, (is_sel and C_2 or C_1))
+          pset(bx+34, by+2, (is_sel and C_2 or C_1))
+          pset(bx,    by+5, (is_sel and C_2 or C_1))
+          pset(bx+34, by+5, (is_sel and C_2 or C_1))
         end
+
+        local tx, ty = x+15, y+9
+        for i=0,5 do
+          if i ~= 1 then
+            pset(tx+i%3*2, ty+i%2*2, i == 5 and (is_sel and C_4 or C_3) or (is_sel and C_2 or C_1))
+          end
+        end
+        -- end hp bar section
+
+        f_zprint(name,                   x+0,  y-5, is_sel and C_2 or C_1, -1)
+        f_zprint(status,                 x+0,  y+8, is_sel and C_2 or C_1, -1)
+        f_zprint(mid(0, hpmax, flr(hp)), x+37, y+8, is_sel and C_2 or C_1, 1)
+        f_zprint(gender,                 x+37, y-5, is_sel and C_2 or C_1, 1)
       end
-      -- end hp bar section
 
-      f_zprint(name,                   x+0,  y-5, is_sel and C_2 or C_1, -1)
-      f_zprint(status,                 x+0,  y+8, is_sel and C_2 or C_1, -1)
-      f_zprint(mid(0, hpmax, flr(hp)), x+37, y+8, is_sel and C_2 or C_1, 1)
-      f_zprint(gender,                 x+37, y-5, is_sel and C_2 or C_1, 1)
-    end
+      if i == 0 then draw_pkmn(pkmn1, 48, 9, is_sel and C_2 or C_1, is_sel and C_4 or C_3, true)  b(pkmn_names[pkmn1+1],"M","bRN",1, 5,1, 5,  50+(sin(t())+1)*20, 80)
+      else           draw_pkmn(pkmn2, 10, 9, is_sel and C_2 or C_1, is_sel and C_4 or C_3, false) b(pkmn_names[pkmn2+1],"M","",   22,5,22,5, -10+(cos(t())+1)*80, 80)
+      end
+    end)
+  end
 
-    if i == 0 then draw_pkmn(pkmn_cycle, 48, 9, is_sel and C_2 or C_1, is_sel and C_4 or C_3, true)   b(pkmn_name,"M","bRN",1, 5,1, 5, 50+(sin(t())+1)*20, 80)
-    else           draw_pkmn(pkmn_cycle, 10,  9, is_sel and C_2 or C_1, is_sel and C_4 or C_3, false) b(pkmn_name,"M","",   22,5,22,5, -10+(cos(t())+1)*80, 80)
-    end
-  end)
+  g_battleanim = create_battle_grid(5, rnd'19'\1)
 
   local bb = split"fIGHT,pARTY,aUTO,fORFEIT"
-  g_browse_text = create_grid(0x5e06, 2, 4, 30, 9, 2, 44, C_3, C_2, 2, function(i, is_sel)
+  g_fight_text = create_grid(0x5e06, 2, 4, 30, 9, 2, 44, C_3, C_2, 2, function(i, is_sel)
     print(bb[i+1], i%2, 1, is_sel and C_4 or C_1)
   end)
 
@@ -188,29 +192,48 @@ function _init()
   g_trainers = split"pLAYR1,pLAYR2,yOUNGS,sAGE,fALKNR,gRUNT,bUGCTR,bUGSY,pKMFAN,bEAUTY,wITNEY,kIMINO,mEDIUM,mORTY,pOLICE,kARATE,cHUCK,gENTLE,sAILOR,jASMIN,rOCKET,sKIER,pRYCE,sCIENT,tWINS,cLAIR,nERD,cAMPER,bROCK,sCHOOL,sWIMER,mISTY,jUGLER,gUITAR,lTSURG,hIKER,lASS,eRIKA,bIKER,pICNIK,jANINE,mANIAC,pSYCIC,sABRIN,fISHER,bREATH,bLAINE,bIRDKP,cOOLTR,bLUE,sILVER,wILL,kOGA,bRUNO,kAREN,lANCE,eUSINE,lAWREN,rED"
 
   g_display_text = create_grid(0x5e06, 1, 1, 60, 16, 2, 45, C_2, C_2, 1, function(i, is_sel)
-    print("\f0"..g_trainers[t()\1%#g_trainers+1].." \f3"..pkmn_name, 0, 1, C_1)
+    print("\f0"..g_trainers[t()\1%#g_trainers+1].." \f3".."cHARMEL", 0, 1, C_1)
     print("\f0USES \f2fLAMTHR",            0, 8, C_1)
   end)
 
-  local tt = split"tAKDOWN,tACKLE,fIRSPIN,rAPSPIN,sPIKES,rAINDNC,sUNYDAY,lEER,sTRSHOT"
+  g_browse_text = create_grid(0x5e06, 1, 1, 60, 16, 2, 45, C_2, C_2, 1, function(i, is_sel)
+    local numstr = tostr(@g_browse.numloc)
+    while #numstr < 3 do numstr = "0"..numstr end
+
+    print("\f2"..numstr.." \f3"..pkmn_names[@g_browse.numloc+1], 0, 1, C_1)
+    print("\f0"..pkmn_types[@g_browse.numloc+1][1].." \f0"..pkmn_types[@g_browse.numloc+1][2],            0, 8, C_1)
+  end)
+
+  local tt   = split"tAKDOWN,tACKLE,fIRSPIN,rAPSPIN,sPIKES,rAINDNC,sUNYDAY,lEER,sTRSHOT"
+  local ttyp = split"nORMAL,nORMAL,fIRE,nORMAL,gROUND,wATER,fIRE,nORMAL,bUG"
   g_movelist = create_grid(0x5e08, 2, #tt, 30, 9, 2, 4, C_3, C_2, 4, function(i, is_sel)
     f_zprint(tt[i+1], i%2, 1, is_sel and C_4 or C_1, -1)
+  end)
+
+  g_move_text = create_grid(0x5e06, 1, 1, 60, 16, 2, 45, C_2, C_2, 1, function(i, is_sel)
+    local move_name = tt[@g_movelist.numloc+1]
+
+    print("\f3"..move_name.."\f0 "..ttyp[@g_movelist.numloc+1], 0, 1, C_1)
+    print("\f020PP \f0100A 100S",            0, 8, C_1)
   end)
   -- so do i need 2 grids for every view?
   -- well, there are less than that. big view has: title, party select, pkmn select, move select, battle, trainer select.
   -- there is enough diversity i guess.
 
   g_list = {
-    g_movelist,
-    g_battleanim,
-    g_browse,
     g_titleanim,
+    g_browse,
+    g_battleanim,
+    g_battleanim,
+    g_movelist,
   }
 
   g_list_text = {
     g_title_text,
-    g_display_text,
     g_browse_text,
+    g_fight_text,
+    g_display_text,
+    g_move_text,
   }
 end
 
@@ -252,7 +275,7 @@ function _update60()
       g_pkmn_x += 1
     else
       if t()%cycle == 1 then
-        g_pkmn = rnd(252)\1
+        g_pkmn = rnd'19'\1
       end
       g_pkmn_x -= 1
     end
