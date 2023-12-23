@@ -1,7 +1,7 @@
-|[f_create_gridpair]| function(name, ...)
+|[f_create_gridpair]| function(name, first, second, selfunc, leavefunc)
   pair = {}
 
-  for tab in all{...} do
+  for tab in all{first, second} do
     add(pair, f_zobj([[
       num,0, view,0,
       active,@, w,@, len,@, vh,@,
@@ -12,15 +12,26 @@
     ]], unpack(tab)))
   end
 
+  add(pair, selfunc)
+  add(pair, leavefunc)
+
   _g[name] = pair
 end $$
 
 |[f_update_grid]| function(_ENV)
   if active then
     local evalfunc = function(num, mmin, mmax, b0, b1, l)
-      return mid(mmin, min(len-1, mmin+mmax), num + (b1 and l or 0) - (b0 and l or 0))
+      local off = (b1 and l or 0) - (b0 and l or 0)
+      local newnum = mid(mmin, min(len-1, mmin+mmax), num + off)
+      if newnum == num and off ~= 0 then
+        f_minisfx(SFX_ERROR)
+      elseif newnum ~= num then
+        f_minisfx(SFX_MOVE)
+      end
+      return newnum
     end
 
+    local prevnum = num
     num = evalfunc(num, num\w*w, w-1,         btnp'0', btnp'1', 1)
     num = evalfunc(num, num%w,   (len-1)\w*w, btnp'2', btnp'3', w)
 

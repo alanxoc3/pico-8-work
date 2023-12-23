@@ -3,10 +3,10 @@
 -------------------------------------------------------
 
 |[c_move_names]| split"struggl,acid,acidarm,barrage,bonclub,bind,clamp,moonlit,lechsed,extrspd,soncbom,twineed,thnshck,glare,gilotin,hypfang,jmpkick,kinesis,lockon,lovkiss,macpnch,vicegrp,spkcann,spikes,spore,cotspor,present,vitthrw,cmtpnch,drlpeck,sandatk,agility,furyatk,quikatk,falswip,growl,healbel,sing,pound,minimiz,tailwhp,dblslap,meghorn,bonrang,conver,conver2,spark,mlkdrnk,mornsun,ngtshad,octzook,pinmiss,powdsnw,supfang,tm05,firspin,psngas,barrier,meditat,futsigt,hypnosi,psybeam,litscrn,safegrd,petldnc,charm,synthes,swtscen,razleaf,psnpowd,slppowd,absorb,stnspor,flail,cnfsion,slam,constri,amnesia,bubble,splash,hydrpmp,mndread,mist,hornatk,spdrweb,dblkick,swtkiss,mtlclaw,trnform,trikick,gust,twister,crabham,dizpnch,sludge,painspl,dstbond,haze,lick,persong,meanlok,cnfsray,croschp,smog,karachp,ember,smkscrn,beldrum,beatup,scratch,slash,ancpowr,leer,bite,outrage,scarfac,thrash,stomp,rocslid,magntud,rocthrw,harden,bonrush,hijkick,recover,aerblst,horndrl,drgrage,sofboil,drgbrea,selfdes,explosi,eggbomb,slgbomb,gigdrai,megdrai,swordnc,cut,furycut,thief,dig,rollout,defcurl,detect,solbeam,raindnc,flash,psychic,psychup,drmeatr,ngtmare,shadbal,zapcann,thunder,thnbolt,irntail,strngth,rocsmas,headbut,mudslap,sunyday,protect,dblteam,slptalk,curse,hidpowr,swagger,frustra,return,toxic,snore,rest,endure,attract,bide,mimic,substit,rage,dbledge,takdown,sklbash,bodslam,watrgun,bblbeam,icebeam,blizard,icywind,surf,wrlpool,watrfal,swift,payday,triatk,reflect,thnwave,telport,psywave,metrnom,counter,megpnch,seitoss,submiss,megkick,dynpnch,firpnch,thnpnch,icepnch,firblst,flmthrw,fissure,earquak,sandsto,hypbeam,roar,stlwing,fly,razwind,wrlwind,skyatk,wingatk,peck,mirmove,fainatk,withdrw,rapspin,supsonc,aurbeam,mircoat,psnstng,spite,crunch,pursuit,strshot,lechlif,btnpass,disable,screech,tackle,flmweel,reversl,furywip,fcsnrgy,forsigt,lowkick,rolkick,encore,wrap,growth,vinwhip,sacrfir,sharpen,sketch" $$
-|[c_pkmn_names]| split"missing,bulsaur,ivysaur,vensaur,charman,charmel,charzar,squirtl,wartort,blstois,catrpie,metapod,butfree,weedle,kakuna,beedril,pidgey,pidgeto,pidgeot,rattata,raticat,spearow,fearow,ekans,arbok,pikachu,raichu,sndshrw,sndslas,nidranf,nidrina,nidquen,nidranm,nidrino,nidking,clfairy,clfable,vulpix,nintale,jigpuff,wigtuff,zubat,golbat,oddish,gloom,vilplum,paras,parsect,venonat,venmoth,diglett,dugtrio,meowth,persian,psyduck,golduck,mankey,primape,growlth,arcanin,poliwag,polwirl,polrath,abra,kadabra,alkazam,machop,machoke,machamp,belsprt,weepbel,victbel,tntcool,tntcrul,geodude,gravler,golem,ponyta,rapdash,slowpok,slowbro,magnmit,magnton,fafetch,doduo,dodrio,seel,dewgong,grimer,muk,shelder,clyster,gastly,haunter,gengar,onix,drowzee,hypno,krabby,kingler,voltorb,elcrode,eggcute,eggutor,cubone,marowak,hitmlee,hitmchn,liktung,koffing,weezing,rhyhorn,rhydon,chansey,tangela,kangkan,horsea,seadra,goldeen,seaking,staryu,starmie,mrmime,scyther,jynx,elcabuz,magmar,pinsir,tauros,magkarp,gyardos,lapras,ditto,eevee,vapreon,jolteon,flareon,porygon,omanyte,omastar,kabuto,kabtops,aerodac,snorlax,artcuno,zapdos,moltres,dratini,dragair,dragite,mewtwo,mew,chikita,bayleef,megnium,cyndqil,quilava,typhlos,totodil,crocnaw,frlgatr,sentret,furret,hootoot,noctowl,ledyba,ledian,spinrak,ariados,crobat,chinchu,lanturn,pichu,cleffa,iggbuff,togepi,togetic,natu,xatu,mareep,flaaffy,amphros,belosom,marill,azmaril,sudwood,poltoed,hoppip,skiplom,jumpluf,aipom,sunkern,sunflor,yanma,wooper,quagsir,espeon,umbreon,murkrow,slowkng,misdvus,unown,wobufet,gifarig,pineco,fortres,dunspar,gligar,steelix,snubbul,granbul,qilfish,scizor,shuckle,hercros,sneasel,tediurs,ursring,slugma,macargo,swinub,pilswin,corsola,remraid,octlery,delbird,mantine,skarmry,hondour,hondoom,kingdra,phanpy,donphan,porygn2,stantlr,smeargl,tyrogue,hitmtop,smoochm,elekid,magby,miltank,blissey,raikou,entei,suicune,larvtar,pupitar,tyratar,lugia,hooh,celebi" $$
-|[c_trnr_names]| split"youngs,sage,falknr,grunt,bugctr,bugsy,pkmfan,beauty,witney,kimino,medium,morty,police,karate,chuck,gentle,sailor,jasmin,rocket,skier,pryce,scient,twins,clair,nerd,camper,brock,school,swimer,misty,jugler,guitar,ltsurg,hiker,lass,erika,biker,picnik,janine,maniac,psycic,sabrin,fisher,breath,blaine,birdkp,cooltr,blue,silver,will,koga,bruno,karen,lance,eusine,lawren,red,horde" $$
-|[c_type_names]| split"bird,normal,fire,fightn,water,poison,electr,ground,grass,flying,ice,bug,psycic,rock,dragon,ghost,dark,steel" $$
-|[c_item_names]| split"pinkbow,charcol,blkbelt,myswatr,psnbarb,magnet,softsnd,mirased,shrbeak,nevrice,slvpowd,twstspn,harston,drgscal,speltag,blkglas,metcoat,bripowd,focband,kingrok,leftovr,quikclw,scoplen,amucoin,litball,lukpnch,metpowd,stick,thkclub,berserk,berry,btrbery,brnbery,gldbery,icebery,mntbery,mirbery,mysbery,parbery,psnbery" $$
+|[c_pkmn_names]| split"mISSING,bULSAUR,iVYSAUR,vENSAUR,cHARMAN,cHARMEL,cHARZAR,sQUIRTL,wARTORT,bLSTOIS,cATRPIE,mETAPOD,bUTFREE,wEEDLE,kAKUNA,bEEDRIL,pIDGEY,pIDGETO,pIDGEOT,rATTATA,rATICAT,sPEAROW,fEAROW,eKANS,aRBOK,pIKACHU,rAICHU,sNDSHRW,sNDSLAS,nIDRANF,nIDRINA,nIDQUEN,nIDRANM,nIDRINO,nIDKING,cLFAIRY,cLFABLE,vULPIX,nINTALE,jIGPUFF,wIGTUFF,zUBAT,gOLBAT,oDDISH,gLOOM,vILPLUM,pARAS,pARSECT,vENONAT,vENMOTH,dIGLETT,dUGTRIO,mEOWTH,pERSIAN,pSYDUCK,gOLDUCK,mANKEY,pRIMAPE,gROWLTH,aRCANIN,pOLIWAG,pOLWIRL,pOLRATH,aBRA,kADABRA,aLKAZAM,mACHOP,mACHOKE,mACHAMP,bELSPRT,wEEPBEL,vICTBEL,tNTCOOL,tNTCRUL,gEODUDE,gRAVLER,gOLEM,pONYTA,rAPDASH,sLOWPOK,sLOWBRO,mAGNMIT,mAGNTON,fAFETCH,dODUO,dODRIO,sEEL,dEWGONG,gRIMER,mUK,sHELDER,cLYSTER,gASTLY,hAUNTER,gENGAR,oNIX,dROWZEE,hYPNO,kRABBY,kINGLER,vOLTORB,eLCRODE,eGGCUTE,eGGUTOR,cUBONE,mAROWAK,hITMLEE,hITMCHN,lIKTUNG,kOFFING,wEEZING,rHYHORN,rHYDON,cHANSEY,tANGELA,kANGKAN,hORSEA,sEADRA,gOLDEEN,sEAKING,sTARYU,sTARMIE,mRMIME,sCYTHER,jYNX,eLCABUZ,mAGMAR,pINSIR,tAUROS,mAGKARP,gYARDOS,lAPRAS,dITTO,eEVEE,vAPREON,jOLTEON,fLAREON,pORYGON,oMANYTE,oMASTAR,kABUTO,kABTOPS,aERODAC,sNORLAX,aRTCUNO,zAPDOS,mOLTRES,dRATINI,dRAGAIR,dRAGITE,mEWTWO,mEW,cHIKITA,bAYLEEF,mEGNIUM,cYNDQIL,qUILAVA,tYPHLOS,tOTODIL,cROCNAW,fRLGATR,sENTRET,fURRET,hOOTOOT,nOCTOWL,lEDYBA,lEDIAN,sPINRAK,aRIADOS,cROBAT,cHINCHU,lANTURN,pICHU,cLEFFA,iGGBUFF,tOGEPI,tOGETIC,nATU,xATU,mAREEP,fLAAFFY,aMPHROS,bELOSOM,mARILL,aZMARIL,sUDWOOD,pOLTOED,hOPPIP,sKIPLOM,jUMPLUF,aIPOM,sUNKERN,sUNFLOR,yANMA,wOOPER,qUAGSIR,eSPEON,uMBREON,mURKROW,sLOWKNG,mISDVUS,uNOWN,wOBUFET,gIFARIG,pINECO,fORTRES,dUNSPAR,gLIGAR,sTEELIX,sNUBBUL,gRANBUL,qILFISH,sCIZOR,sHUCKLE,hERCROS,sNEASEL,tEDIURS,uRSRING,sLUGMA,mACARGO,sWINUB,pILSWIN,cORSOLA,rEMRAID,oCTLERY,dELBIRD,mANTINE,sKARMRY,hONDOUR,hONDOOM,kINGDRA,pHANPY,dONPHAN,pORYGN2,sTANTLR,sMEARGL,tYROGUE,hITMTOP,sMOOCHM,eLEKID,mAGBY,mILTANK,bLISSEY,rAIKOU,eNTEI,sUICUNE,lARVTAR,pUPITAR,tYRATAR,lUGIA,hOOH,cELEBI" $$
+|[c_trnr_names]| split"yOUNGS,sAGE,fALKNR,gRUNT,bUGCTR,bUGSY,pKMFAN,bEAUTY,wITNEY,kIMINO,mEDIUM,mORTY,pOLICE,kARATE,cHUCK,gENTLE,sAILOR,jASMIN,rOCKET,sKIER,pRYCE,sCIENT,tWINS,cLAIR,nERD,cAMPER,bROCK,sCHOOL,sWIMER,mISTY,jUGLER,gUITAR,lTSURG,hIKER,lASS,eRIKA,bIKER,pICNIK,jANINE,mANIAC,pSYCIC,sABRIN,fISHER,bREATH,bLAINE,bIRDKP,cOOLTR,bLUE,sILVER,wILL,kOGA,bRUNO,kAREN,lANCE,eUSINE,lAWREN,rED,hORDE" $$
+|[c_type_names]| split"bIRD,nORMAL,fIRE,fIGHTN,wATER,pOISON,eLECTR,gROUND,gRASS,fLYING,iCE,bUG,pSYCIC,rOCK,dRAGON,gHOST,dARK,sTEEL" $$
+|[c_item_names]| split"pINKBOW,cHARCOL,bLKBELT,mYSWATR,pSNBARB,mAGNET,sOFTSND,mIRASED,sHRBEAK,nEVRICE,sLVPOWD,tWSTSPN,hARSTON,dRGSCAL,sPELTAG,bLKGLAS,mETCOAT,bRIPOWD,fOCBAND,kINGROK,lEFTOVR,qUIKCLW,sCOPLEN,aMUCOIN,lITBALL,lUKPNCH,mETPOWD,sTICK,tHKCLUB,bERSERK,bERRY,bTRBERY,bRNBERY,gLDBERY,iCEBERY,mNTBERY,mIRBERY,mYSBERY,pARBERY,pSNBERY" $$
 
 |[c_trainers]| f_zobj[[]] $$
 
@@ -109,13 +109,13 @@ for iloc=0x3200, 0x4278, 68 do
 end
 
 f_zcall(f_create_gridpair, [[
-   p_browse; ,~c_yes ,3 ,252  ,2 ,2 ,2  ,20 ,20 ,C_2 ,C_1 ,@
+   p_browse; ,~c_yes ,3 ,252 ,2 ,2 ,2  ,20 ,20 ,C_2 ,C_1 ,@
   ;t_browse; ,~c_no  ,1 ,1   ,1 ,2 ,45 ,60 ,16 ,C_1 ,C_1 ,@
-  ;p_idk;    ,~c_yes ,3 ,252 ,2 ,2 ,2  ,20 ,20 ,C_2 ,C_1 ,@
-  ;t_idk;    ,~c_yes ,3 ,252 ,2 ,2 ,2  ,20 ,20 ,C_2 ,C_1 ,@
+  ;p_title;  ,~c_yes ,1 ,1   ,1 ,2 ,2  ,60 ,40 ,C_1 ,C_1 ,@
+  ;t_title;  ,~c_yes ,2 ,4   ,2 ,2 ,44 ,30 ,9  ,C_2 ,C_1 ,@
 
-  ;;,g_grid_browse ,~p_browse ,~t_browse
-  ;;,g_grid_idk    ,~p_idk    ,~t_idk
+  ;;,g_grid_browse ,~p_browse ,~t_browse ,@ ,@
+  ;;,g_grid_title  ,~p_title  ,~t_title  ,@ ,@
 ]], function(i, is_sel) -- p_browse
   f_draw_pkmn(i, 9, 9, is_sel and C_1 or C_0, is_sel and C_3 or C_2)
 end, function(i, is_sel) -- t_browse
@@ -127,15 +127,38 @@ end, function(i, is_sel) -- t_browse
   end
   print(str, 1, 1)
 
-end, function(i, is_sel)
-  print("\^y7\f1pOTAT \f4cHARMEL\n\f1USES \f3fLAMTHR", 1, 1)
-end, function(i, is_sel)
-  print("\^y7\f1pOTAT \f4cHARMEL\n\f1USES \f3fLAMTHR", 1, 1)
+end, function(i, is_sel) -- p_title
+  print("\^w\^tpicodex", 2, 1,  C_0)
+  print("dUAL vERSION",  2, 12, C_0)
+
+  f_draw_pkmn(254, 15, 28, C_0, C_2)
+  f_draw_pkmn(252, 40, 28, C_0, C_3)
+end, function(i, is_sel) -- t_title
+  print(split"bROWSE,eDIT,lEAGUE,vERSUS"[i+1], 1, 1, is_sel and C_3 or C_0)
+end, function() -- browse if select
+
+end, function() -- browse if leave
+  deli(g_gridstack)
+
+end, function() -- title if select
+  if g_cg_t.num == 0 then
+    add(g_gridstack, g_grid_browse)
+  end
+end, function() -- title if leave
+  g_col += 1
+  g_col %= 8
 end)
 
-g_gridstack = {g_grid_browse}
+-- sounds: go forward. go backward. disallow
+-- how to determine disabled cell? could have a "disabled" list.
+-- locked pkmn are disabled, disabled move is disabled. mean look disables switching. no pp is disabled.
+-- clicking on something... does it always take me to a new place? not during battle.
+-- when is something disabled? moves can be disabled...
+
+g_gridstack = {g_grid_title}
+g_col = 0
 c_cols = f_zobj[[
-   ; ,1   ,13  ,6   ,7   -- default
+  0; ,1   ,13  ,6   ,7   -- default
   ;; ,132 ,4   ,143 ,15  -- sand
   ;; ,131 ,3   ,139 ,138 -- green
   ;; ,130 ,2   ,136 ,8   -- red
@@ -150,10 +173,16 @@ c_cols = f_zobj[[
 -------------------------------------------------------
 
 |[_update60]| function()
-  g_cg_p, g_cg_t = unpack(g_gridstack[#g_gridstack])
+  g_cg_p, g_cg_t, g_cg_s, g_cg_l = unpack(g_gridstack[#g_gridstack])
 
   f_update_grid(g_cg_p)
   f_update_grid(g_cg_t)
+
+  if btnp'4' then
+    f_minisfx(g_cg_l() and SFX_ERROR or SFX_LEAVE)
+  elseif btnp'5' then
+    f_minisfx(g_cg_s() and SFX_ERROR or SFX_SELECT)
+  end
 end $$
 
 |[_draw]| function()
@@ -162,5 +191,5 @@ end $$
   f_draw_grid(g_cg_p)
   f_draw_grid(g_cg_t)
 
-  pal(c_cols[1], 1)
+  pal(c_cols[g_col], 1)
 end $$

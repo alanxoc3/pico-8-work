@@ -116,8 +116,8 @@ pokemon_stats = [[
   P_RAPIDASH   P_PONYTA     T_FIRE     T_NONE      65  100   70  105   80   80 G_BOTH I_CHARCOAL          -- fire blast
   P_SLOWPOKE   P_MISSINGNO  T_WATER    T_PSYCHIC   90   65   65   15   40   40 G_BOTH I_MYSTERYBERRY      -- no reason first of 3
   P_SLOWBRO    P_SLOWPOKE   T_WATER    T_PSYCHIC   95   75  110   30  100   80 G_BOTH I_TWISTEDSPOON      -- good with psychic
-  P_MAGNEMITE  P_MISSINGNO  T_STEEL    T_ELECTRIC  25   35   70   45   95   55 G_NONE I_ICEBERRY          -- burn is bad for steel i guess
-  P_MAGNETON   P_MAGNEMITE  T_STEEL    T_ELECTRIC  50   60   95   70  120   70 G_NONE I_MAGNET            -- its literally a magnet... kinda sticks
+  P_MAGNEMITE  P_MISSINGNO  T_ELECTRIC T_STEEL     25   35   70   45   95   55 G_NONE I_ICEBERRY          -- burn is bad for steel i guess
+  P_MAGNETON   P_MAGNEMITE  T_ELECTRIC T_STEEL     50   60   95   70  120   70 G_NONE I_MAGNET            -- its literally a magnet... kinda sticks
   P_FARFETCHD  P_MISSINGNO  T_NORMAL   T_FLYING    52   65   55   60   58   62 G_BOTH I_STICK             -- special item
   P_DODUO      P_MISSINGNO  T_NORMAL   T_FLYING    35   85   45   75   35   35 G_BOTH I_MINTBERRY         -- why not
   P_DODRIO     P_DODUO      T_NORMAL   T_FLYING    60  110   70  100   60   60 G_BOTH I_SHARPBEAK         -- wild has it and drillpeck
