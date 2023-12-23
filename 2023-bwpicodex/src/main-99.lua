@@ -109,8 +109,8 @@ for iloc=0x3200, 0x4278, 68 do
 end
 
 f_zcall(f_create_grid, [[
-   ;,g_grid_browse ,0x5e00 ,3 ,252 ,2 ,2 ,2 ,20 ,20 ,C_2 ,C_1 ,@
-  ;;,g_grid_idk    ,0x5e02 ,3 ,252 ,2 ,2 ,2 ,20 ,20 ,C_2 ,C_1 ,@
+   ;,g_grid_browse ,~c_yes ,3 ,11 ,2 ,2 ,2 ,20 ,20 ,C_2 ,C_1 ,@
+  ;;,g_grid_idk    ,~c_yes ,3 ,252 ,2 ,2 ,2 ,20 ,20 ,C_2 ,C_1 ,@
 ]], function(i, is_sel)
   f_draw_pkmn(i, 9, 9, is_sel and C_1 or C_0, is_sel and C_3 or C_2)
 end, function(i, is_sel)
