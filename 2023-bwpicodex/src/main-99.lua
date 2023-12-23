@@ -108,13 +108,29 @@ for iloc=0x3200, 0x4278, 68 do
   poke4(iloc+64, 0x.07d7)
 end
 
-f_zcall(f_create_grid, [[
-   ;,g_grid_browse ,~c_yes ,3 ,11 ,2 ,2 ,2 ,20 ,20 ,C_2 ,C_1 ,@
-  ;;,g_grid_idk    ,~c_yes ,3 ,252 ,2 ,2 ,2 ,20 ,20 ,C_2 ,C_1 ,@
-]], function(i, is_sel)
+f_zcall(f_create_gridpair, [[
+   p_browse; ,~c_yes ,3 ,252  ,2 ,2 ,2  ,20 ,20 ,C_2 ,C_1 ,@
+  ;t_browse; ,~c_no  ,1 ,1   ,1 ,2 ,45 ,60 ,16 ,C_1 ,C_1 ,@
+  ;p_idk;    ,~c_yes ,3 ,252 ,2 ,2 ,2  ,20 ,20 ,C_2 ,C_1 ,@
+  ;t_idk;    ,~c_yes ,3 ,252 ,2 ,2 ,2  ,20 ,20 ,C_2 ,C_1 ,@
+
+  ;;,g_grid_browse ,~p_browse ,~t_browse
+  ;;,g_grid_idk    ,~p_idk    ,~t_idk
+]], function(i, is_sel) -- p_browse
   f_draw_pkmn(i, 9, 9, is_sel and C_1 or C_0, is_sel and C_3 or C_2)
+end, function(i, is_sel) -- t_browse
+  local numstr = tostr(g_cg_p.num)
+  while #numstr < 3 do numstr = "0"..numstr end
+  local str = "\^y7\f3#"..numstr.." \f4"..c_pkmn_names[g_cg_p.num+1].."\n\f1"..c_type_names[c_pokemon[g_cg_p.num].type1+1]
+  if c_pokemon[g_cg_p.num].type2 > T_NONE then
+    str ..= "+"..c_type_names[c_pokemon[g_cg_p.num].type2+1]
+  end
+  print(str, 1, 1)
+
 end, function(i, is_sel)
-  f_draw_pkmn(i, 9, 9, is_sel and C_1 or C_0, is_sel and C_3 or C_2)
+  print("\^y7\f1pOTAT \f4cHARMEL\n\f1USES \f3fLAMTHR", 1, 1)
+end, function(i, is_sel)
+  print("\^y7\f1pOTAT \f4cHARMEL\n\f1USES \f3fLAMTHR", 1, 1)
 end)
 
 g_gridstack = {g_grid_browse}
@@ -134,11 +150,17 @@ c_cols = f_zobj[[
 -------------------------------------------------------
 
 |[_update60]| function()
-  f_update_grid(g_gridstack[#g_gridstack])
+  g_cg_p, g_cg_t = unpack(g_gridstack[#g_gridstack])
+
+  f_update_grid(g_cg_p)
+  f_update_grid(g_cg_t)
 end $$
 
 |[_draw]| function()
   cls'C_0'
-  f_draw_grid(g_gridstack[#g_gridstack])
+
+  f_draw_grid(g_cg_p)
+  f_draw_grid(g_cg_t)
+
   pal(c_cols[1], 1)
 end $$

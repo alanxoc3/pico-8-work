@@ -1,13 +1,18 @@
-|[f_create_grid]| function(name, ...)
-  _g[name] = f_zobj([[
-    num,0, view,0,
-    active,@,
-    w,@, len,@, vh,@,
-    x,@, y,@,
-    cw,@, ch,@,
-    selbg,@, bg,@,
-    df,@
-  ]], ...)
+|[f_create_gridpair]| function(name, ...)
+  pair = {}
+
+  for tab in all{...} do
+    add(pair, f_zobj([[
+      num,0, view,0,
+      active,@, w,@, len,@, vh,@,
+      x,@, y,@,
+      cw,@, ch,@,
+      selbg,@, bg,@,
+      df,@
+    ]], unpack(tab)))
+  end
+
+  _g[name] = pair
 end $$
 
 |[f_update_grid]| function(_ENV)
