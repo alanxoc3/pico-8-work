@@ -111,31 +111,69 @@ end
 f_zcall(f_create_gridpair, [[
    p_browse; ,~c_yes ,3 ,252 ,2 ,2 ,2  ,20 ,20 ,C_2 ,C_1 ,@
   ;t_browse; ,~c_no  ,1 ,1   ,1 ,2 ,45 ,60 ,16 ,C_1 ,C_1 ,@
-  ;p_title;  ,~c_yes ,1 ,1   ,1 ,2 ,2  ,60 ,40 ,C_1 ,C_1 ,@
+  ;p_title;  ,~c_no  ,1 ,1   ,1 ,2 ,2  ,60 ,40 ,C_1 ,C_1 ,@
   ;t_title;  ,~c_yes ,2 ,4   ,2 ,2 ,44 ,30 ,9  ,C_2 ,C_1 ,@
+  ;p_pkstat; ,~c_no  ,1 ,1   ,1 ,2 ,3  ,60 ,38 ,C_1 ,C_1 ,@ -- same as p_title
 
   ;;,g_grid_browse ,~p_browse ,~t_browse ,@ ,@
   ;;,g_grid_title  ,~p_title  ,~t_title  ,@ ,@
+  ;;,g_pkstat      ,~p_pkstat ,~t_browse ,@ ,@
 ]], function(i, is_sel) -- p_browse
-  f_draw_pkmn(i, 9, 9, is_sel and C_1 or C_0, is_sel and C_3 or C_2)
+  f_draw_pkmn(i, 1, 1, is_sel and C_1 or C_0, is_sel and C_3 or C_2)
 end, function(i, is_sel) -- t_browse
-  local numstr = tostr(g_cg_p.num)
+  local numstr = tostr(g_grid_browse[1].num)
   while #numstr < 3 do numstr = "0"..numstr end
-  local str = "\^y7\f3#"..numstr.." \f4"..c_pkmn_names[g_cg_p.num+1].."\n\f1"..c_type_names[c_pokemon[g_cg_p.num].type1+1]
-  if c_pokemon[g_cg_p.num].type2 > T_NONE then
-    str ..= "+"..c_type_names[c_pokemon[g_cg_p.num].type2+1]
-  end
-  print(str, 1, 1)
 
+  local genders = ""
+  local pkmn = c_pokemon[g_grid_browse[1].num]
+  if pkmn.gender_item & G_MALE > 0 then genders ..= "M" end
+  if pkmn.gender_item & G_FEMA > 0 then genders ..= "F" end
+  if #genders == 0 then genders ..= "U" end
+
+  local str = "\^y7\f3"..numstr.." \f4"..c_pkmn_names[g_grid_browse[1].num+1].."\f1 "..genders.."\n\f1"..c_type_names[c_pokemon[g_grid_browse[1].num].type1+1]
+  if c_pokemon[g_grid_browse[1].num].type2 > T_NONE then
+    str ..= "/"..c_type_names[c_pokemon[g_grid_browse[1].num].type2+1]
+  end
+
+  print(str, 1, 1)
 end, function(i, is_sel) -- p_title
   print("\^w\^tpicodex", 2, 1,  C_0)
   print("dUAL vERSION",  2, 12, C_0)
 
-  f_draw_pkmn(254, 15, 28, C_0, C_2)
-  f_draw_pkmn(252, 40, 28, C_0, C_3)
+  f_draw_pkmn(254, 15-8, 20, C_0, C_2)
+  f_draw_pkmn(252, 40-8, 20, C_0, C_2)
 end, function(i, is_sel) -- t_title
   print(split"bROWSE,eDIT,lEAGUE,vERSUS"[i+1], 1, 1, is_sel and C_3 or C_0)
+end, function(i, is_sel) -- p_pkstat
+  local pkmn_ind = g_grid_browse[1].num
+  local pkmn = c_pokemon[pkmn_ind]
+
+  if     i == 9  then f_draw_pkmn(pkmn_ind, 1, 10-8, C_0, C_2, false, 32)
+  elseif i == 9  then f_draw_pkmn(pkmn_ind, 1, 3-8,  C_0, C_2, false, 32)
+  elseif i == 0  then
+    rectfill(-1,-1,58,0,C_0)
+    rectfill(-1,-1,0,36,C_0)
+    rectfill(-1,-1,28,18,C_2)
+    pset(-1,-1,C_0)
+    pset(58,-1,C_0)
+    pset(28,18,C_1)
+    pset(28,-1,C_0)
+    pset(1,36,C_0)
+    pset(-1,18,C_0)
+    pset(58,1,C_0)
+    f_draw_pkmn(pkmn_ind, 1+5, 1,    C_1, C_3, false)
+    print("pA:"..pkmn.att, 41-20+5+5, 3+9*0, C_0)
+    print("pD:"..pkmn.def, 41-20+5+5, 3+9*1, C_0)
+    print("sA:"..pkmn.sat, 41-20+5+5, 3+9*2, C_0)
+    print("sD:"..pkmn.sdf, 41-20+5+5, 3+9*3, C_0)
+
+    print("hP:"..pkmn.hp , 3, 3+9*2, C_0)
+    print("sP:"..pkmn.spd, 3, 3+9*3, C_0)
+  end
+
 end, function() -- browse if select
+  add(g_gridstack, g_pkstat)
+  return g_cg_p.num
 
 end, function() -- browse if leave
   deli(g_gridstack)
@@ -147,6 +185,10 @@ end, function() -- title if select
 end, function() -- title if leave
   g_col += 1
   g_col %= 8
+end, function() -- pkstat if select
+  return g_grid_browse[1].num
+end, function() -- pkstat if leave
+  deli(g_gridstack)
 end)
 
 -- sounds: go forward. go backward. disallow
@@ -179,9 +221,9 @@ c_cols = f_zobj[[
   f_update_grid(g_cg_t)
 
   if btnp'4' then
-    f_minisfx(g_cg_l() and SFX_ERROR or SFX_LEAVE)
+    f_minisfx(g_cg_l() or SFX_LEAVE)
   elseif btnp'5' then
-    f_minisfx(g_cg_s() and SFX_ERROR or SFX_SELECT)
+    f_minisfx(g_cg_s() or SFX_SELECT)
   end
 end $$
 

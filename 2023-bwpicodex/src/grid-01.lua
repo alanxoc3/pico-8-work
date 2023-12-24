@@ -32,8 +32,8 @@ end $$
     end
 
     local prevnum = num
-    num = evalfunc(num, num\w*w, w-1,         btnp'0', btnp'1', 1)
-    num = evalfunc(num, num%w,   (len-1)\w*w, btnp'2', btnp'3', w)
+    num = evalfunc(num, 0,     len-1,       btnp'0', btnp'1', 1)
+    num = evalfunc(num, num%w, (len-1)\w*w, btnp'2', btnp'3', w)
 
     if num\w-vh+1 > view then view = (view+1)%((len-vh+1)\w) end
     if num\w           < view then view = (view-1)%((len-vh+1)\w) end
@@ -57,9 +57,9 @@ end $$
     rectfill(-1+l, -1,   cw-2-r, ch-2,   i == num and selbg or bg)
     rectfill(-1,   -1+u, cw-2,   ch-2-d, i == num and selbg or bg)
 
-    clip(xloc, yloc, cw, ch) -- camera goes in one, but clip doesn't. dont want to go in for the title screen animation
+    -- clip(xloc, yloc, cw, ch) -- camera goes in one, but clip doesn't. dont want to go in for the title screen animation
     df(i, i == num)
     camera()
-    clip()
+    -- clip()
   end
 end $$

@@ -1,5 +1,5 @@
 |[f_minisfx]| function(num) -- plays a sfx with len of 4. num corresponds to pkmn numbers. 252, 253, 254, 255 are sfx.
-  sfx(num\4, 0, num%4*8, 8)
+  sfx(num\4, num < 252 and 0 or 1, num%4*8, 8)
 end $$
 
 |[f_draw_pkmn]| function(num, x, y, out_c, in_c, flip)
@@ -19,7 +19,7 @@ end $$
     palt(mask, false)
     pal(mask, c)
 
-    spr(num%64\8*16+num%64*2, ix-8, iy-8, 2, 2, flip, false)
+    spr(col*2+row%8*32, ix, iy, 2, 2, flip, false)
 
     palt()
     pal()
