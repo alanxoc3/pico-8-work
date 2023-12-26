@@ -41,6 +41,7 @@ C_0: 1 # These are color constants.
 C_1: 2
 C_2: 3
 C_3: 4
+C_4: 5
 
 # ----------------------------- major status conditions
 C_MAJOR_NONE:      0
