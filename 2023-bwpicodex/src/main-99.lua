@@ -112,44 +112,44 @@ for iloc=0x3200, 0x4278, 68 do
 end
 
 f_zcall(f_create_gridpair, [[
-   p_browse;    ,~c_yes ,3 ,252 ,2 ,2 ,2  ,20 ,20 ,C_2 ,C_1 ,@
-  ;t_browse;    ,~c_no  ,1 ,1   ,1 ,2 ,45 ,60 ,16 ,C_1 ,C_1 ,@
-  ;p_title;     ,~c_no  ,1 ,1   ,1 ,2 ,2  ,60 ,40 ,C_1 ,C_1 ,@
-  ;t_title;     ,~c_yes ,2 ,4   ,2 ,2 ,44 ,30 ,9  ,C_2 ,C_1 ,@
-  ;p_pkpreview; ,~c_no  ,1 ,1   ,1 ,2 ,2  ,60 ,40 ,C_2 ,C_1 ,@ -- same as p_title
-  ;p_pkstat;    ,~c_yes  ,2 ,264  ,4 ,2 ,4  ,30 ,9  ,C_1 ,C_1 ,@ -- same as p_title
+   p_browse;    ,~c_yes ,3 ,252 ,2 ,2 ,2  ,20 ,20 ,C_3 ,C_2 ,@
+  ;t_browse;    ,~c_no  ,1 ,1   ,1 ,2 ,45 ,60 ,16 ,C_2 ,C_2 ,@
+  ;p_title;     ,~c_no  ,1 ,1   ,1 ,2 ,2  ,60 ,40 ,C_2 ,C_2 ,@
+  ;t_title;     ,~c_yes ,2 ,4   ,2 ,2 ,44 ,30 ,9  ,C_3 ,C_2 ,@
+  ;p_pkpreview; ,~c_no  ,1 ,1   ,1 ,2 ,2  ,60 ,40 ,C_2 ,C_2 ,@ -- same as p_title
+  ;p_pkstat;    ,~c_yes ,2 ,264 ,4 ,2 ,4  ,30 ,9  ,C_2 ,C_2 ,@ -- same as p_title
 
   ;;,g_grid_browse     ,~p_browse    ,~t_browse ,@ ,@
   ;;,g_grid_title      ,~p_title     ,~t_title  ,@ ,@
   ;;,g_grid_pkpreview  ,~p_pkpreview ,~t_browse ,@ ,@
   ;;,g_grid_pkstat     ,~p_pkstat    ,~t_browse ,@ ,@
 ]], function(i, is_sel) -- p_browse
-  f_draw_pkmn(i, 1, 1, is_sel and C_0 or C_0, is_sel and C_3 or C_1, false)
+  f_draw_pkmn(i, 1, 1, is_sel and C_2 or C_1, is_sel and C_4 or C_3, false)
 end, function(i, is_sel) -- t_browse
   local numstr = tostr(g_grid_browse[1].num)
   while #numstr < 3 do numstr = "0"..numstr end
 
-  local str = "\^y7\f1"..numstr.." \f4"..c_pkmn_names[g_grid_browse[1].num+1].."\n\f1"..c_type_names[c_pokemon[g_grid_browse[1].num].type1+1]
+  local str = "\^y7\f6"..numstr.." \f7"..c_pkmn_names[g_grid_browse[1].num+1].."\n\f1"..c_type_names[c_pokemon[g_grid_browse[1].num].type1+1]
   if c_pokemon[g_grid_browse[1].num].type2 > T_NONE then
     str ..= "/"..c_type_names[c_pokemon[g_grid_browse[1].num].type2+1]
   end
 
   print(str, 1, 1)
 end, function(i, is_sel) -- p_title
-  print("\^w\^tpicodex", 2, 1,  C_0)
-  print("dUAL vERSION",  2, 12, C_0)
+  print("\^w\^tpicodex", 2, 1,  C_1)
+  print("dUAL vERSION",  2, 12, C_1)
 
-  -- f_draw_pkmn((t()+.5)\2, 32-8- sin(t()/2)*4\1, 24+sin(t()/2)*4\1, C_0, C_3, false, 8-sin(t()/2)*8\1)
-  f_draw_pkmn(t()\1%252, 32-4, 24-4, C_0, C_3, false)
-  f_draw_pkmn(254, 15-8, 20, C_0, C_2)
+  -- f_draw_pkmn((t()+.5)\2, 32-8- sin(t()/2)*4\1, 24+sin(t()/2)*4\1, C_1, C_4, false, 8-sin(t()/2)*8\1)
+  f_draw_pkmn(254, 15-8, 20, C_1, C_3)
+  f_draw_pkmn(t()\1%252, 32-4, 24-4, C_1, C_3, false)
 end, function(i, is_sel) -- t_title
   if i > 0 and not is_sel then
-    rectfill(-1,-1,28,7,C_4)
+    rectfill(-1,-1,28,7,C_1)
   end
-  print(split"bROWSE,eDIT,lEAGUE,vERSUS"[i+1], 1, 1, is_sel and i == 0 and C_3 or C_0)
+  print(split"bROWSE,eDIT,lEAGUE,vERSUS"[i+1], 1, 1, is_sel and (i == 0 and C_2 or C_1) or (i == 0 and C_1 or C_2))
 end, function(i, is_sel) -- p_pkpreview
   local pkmn_ind = g_grid_browse[1].num
-  f_draw_pkmn(pkmn_ind, 2+1+2*4+2+(t()%1<.25 and (rnd(3)\1-1)*2 or 0), 1+2,    C_0, C_3, false, 32)
+  f_draw_pkmn(pkmn_ind, 13+(t()%1<.25 and (rnd(3)\1-1)*2 or 0), 1+2, C_1, C_3, false, 32)
 
 end, function(i, is_sel) -- p_pkstat
   local pkmn_ind = g_grid_browse[1].num
@@ -164,13 +164,15 @@ end, function(i, is_sel) -- p_pkstat
   if #genders == 0 then genders ..= "U" end
 
   if i == 1 then
-    rectfill(1-32, -1, 28, 7, C_2)
-    pset(1-32, -1, C_0)
-    pset(28, -1, C_0)
-    print("\f4bASE sTATS", 1-30, 1) -- base stats | learn moves | teach moves | event moves | battle stats | move stats
+    rectfill(1-32, -1, 28, 6, C_1)
+    pset(1-32, -1, 0)
+    pset(28, -1, 0)
+    --rectfill(1-32, 7, 28, 7, C_1)
+    print("\fdbASE sTATS", 1-30, 1) -- base stats | learn moves | teach moves | event moves | battle stats | move stats
   elseif i == 11 then
-    rectfill(1-32, -1, 28, 7, C_2)
-    print("\f4"..c_pkmn_names[pkmn_ind+1].." mOVES", 1-30, 1)
+    rectfill(1-32, -1, 28, 7, C_1)
+    --rectfill(1-32, 7, 28, 7, C_1)
+    print("\fdlEARN mOVES", 1-30, 1)
 
   elseif i > 11 then
     local move_name = c_move_names[i-11]
@@ -179,16 +181,16 @@ end, function(i, is_sel) -- p_pkstat
       move_name = ""
       for i=1,l do move_name ..= "?" end
     end
-    print(move_name, 1, 1, C_0)
+    print(move_name, 1, 1, C_1)
 
-  elseif i == 2 then print("hP:"..pkmn.hp , 1, 1, C_0)
-  elseif i == 3 then print("sP:"..pkmn.spd, 1, 1, C_0)
-  elseif i == 4 then print("aT:"..pkmn.att, 1, 1, C_0)
-  elseif i == 5 then print("dF:"..pkmn.def, 1, 1, C_0)
-  elseif i == 6 then print("sA:"..pkmn.sat, 1, 1, C_0)
-  elseif i == 7 then print("sD:"..pkmn.sdf, 1, 1, C_0)
-  elseif i == 8 then print("gD:"..genders, 1, 1, C_0)
-  elseif i == 9 then print("lV:50", 1, 1, C_0)
+  elseif i == 2 then print("hP:"..pkmn.hp , 1, 1, C_1)
+  elseif i == 3 then print("sP:"..pkmn.spd, 1, 1, C_1)
+  elseif i == 4 then print("aT:"..pkmn.att, 1, 1, C_1)
+  elseif i == 5 then print("dF:"..pkmn.def, 1, 1, C_1)
+  elseif i == 6 then print("sA:"..pkmn.sat, 1, 1, C_1)
+  elseif i == 7 then print("sD:"..pkmn.sdf, 1, 1, C_1)
+  elseif i == 8 then print("gD:"..genders, 1, 1, C_1)
+  elseif i == 9 then print("lV:50", 1, 1, C_1)
   end
 
 end, function() -- browse if select
@@ -203,8 +205,6 @@ end, function() -- title if select
     add(g_gridstack, g_grid_browse)
   end
 end, function() -- title if leave
-  g_col += 1
-  g_col %= 8
 end, function() -- pkpreview if select
   if g_cg_t.num == 0 then
     add(g_gridstack, g_grid_pkstat)
@@ -230,17 +230,6 @@ end)
 -- when is something disabled? moves can be disabled...
 
 g_gridstack = {g_grid_title}
-g_col = 0
-c_cols = f_zobj[[
-  0; ,1   ,13  ,6   ,7, 5   -- default
-  ;; ,132 ,4   ,143 ,15  -- sand
-  ;; ,131 ,3   ,139 ,138 -- green
-  ;; ,130 ,2   ,136 ,8   -- red
-  ;; ,129 ,140   ,12 ,7  -- blue
-  ;; ,133 ,13 ,14  ,7 -- pink
-  ;; ,0   ,5   ,6   ,7   -- black & white
-  ;; ,128 ,5   ,134 ,135 -- dark yellow
-]]
 
 -------------------------------------------------------
 -- UPDATE AND DRAW
@@ -265,5 +254,5 @@ end $$
   f_draw_grid(g_cg_p)
   f_draw_grid(g_cg_t)
 
-  pal(c_cols[g_col], 1)
+  pal(0, 129, 1)
 end $$
