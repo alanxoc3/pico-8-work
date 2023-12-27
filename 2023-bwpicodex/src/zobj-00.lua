@@ -43,6 +43,8 @@ end
 -- first, set the basic constants/values used by global things.
 f_zobj_set(_g, [[
   c_pokemon,#, c_moves,#, c_trainers,#,
+  g_lock_pokemon,#, g_lock_move,#, g_lock_item,#,
+
   g_init_peek_loc,L_DATASTART,
   c_yes,@, c_no,@, c_empty,@, f_nop,@
 ]], true, false, "", function(...) return ... end)
@@ -69,7 +71,7 @@ end $$
 -- Just for debugging
 -- basic sort for tostring. tostring for debugging.
 function debug_sort(t, compare_func)
-  compare_func = compare_func or function(a, b) return a < b end
+  compare_func = compare_func or function(a, b) return tostr(a) < tostr(b) end
   if t then
     for n=2,#t do
       local i=n

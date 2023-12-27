@@ -3,14 +3,8 @@ C_LEVEL: 50
 
 # ----------------------------- save locations - will have to update/change slightly
 #   1 num, 1 gender, 1 item, 1 move, 1 move, 1 move, 1 move
-S_PARTY1:         0x5e00
-S_PARTY2:         0x5e1e
-S_PARTY3:         0x5e3c
-S_POKEMON:        0x5e5a
-S_NEW:            0x5efc
-S_STORY:          0x5efd
-S_HOARD:          0x5efe
-S_SWAP_CONTROLS:  0x5eff
+S_STORY:          0x5efe
+S_NEW:            0x5eff
 
 SFX_SELECT: 252
 SFX_ERROR:  253

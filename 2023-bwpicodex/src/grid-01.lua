@@ -1,3 +1,9 @@
+|[f_create_cell]| function(...)
+  return f_zobj([[
+    disabled,@
+  ]], ...)
+end $$
+
 |[f_create_gridpair]| function(name, first, second, selfunc, leavefunc)
   pair = {}
 
@@ -18,6 +24,8 @@
   _g[name] = pair
 end $$
 
+-- pass in cell list.
+-- each cell has: enabled, text
 |[f_update_grid]| function(_ENV)
   if active then
     local evalfunc = function(num, mmin, mmax, b0, b1, l)
@@ -49,9 +57,9 @@ end $$
 
     local l, r, u, d = 0, 0, 0, 0
 
-    if i == 0                          then l = 1 u = 1 end
-    if i == w-1                   then r = 1 u = 1 end
-    if i == len-1                 then r = 1 d = 1 end
+    if i == 0           then l = 1 u = 1 end
+    if i == w-1         then r = 1 u = 1 end
+    if i == len-1       then r = 1 d = 1 end
     if i == (len-1)\w*w then l = 1 d = 1 end
 
     rectfill(-1+l, -1,   cw-2-r, ch-2,   i == num and selbg or bg)

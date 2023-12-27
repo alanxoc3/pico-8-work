@@ -10,7 +10,7 @@ end
 -- 57 trainers total - includes every pokemon and every move besides missingno and struggle.
 -- saves a few tokens when upacking to put the move first
 g_trainer_data = [[
-  M_SWIFT        P_RATTATA    P_PIDGEY     P_WOOPER     P_SENTRET    P_ZUBAT      P_EEVEE      -- youngster    TM39
+  M_SWIFT        P_RATTATA    P_PIDGEY     P_SENTRET    P_ZUBAT      P_EEVEE      P_WOOPER     -- youngster    TM39
   M_DREAMEATER   P_PSYDUCK    P_CUBONE     P_HOOTHOOT   P_MEOWTH     P_GASTLY     P_BELLSPROUT -- sage         TM42
   M_MUDSLAP      P_PIDGEY     P_SPEAROW    P_DELIBIRD   P_FARFETCHD  P_DODUO      P_PIDGEOTTO  -- falkner      TM31
 
