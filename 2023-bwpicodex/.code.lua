@@ -35,25 +35,25 @@ function f_zobj(...)
 return f_zobj_set(setmetatable({},{__index=_g}),...)
 end
 f_zobj_set(_g,"c_pokemon,#,c_moves,#,c_trainers,#,g_lock_pokemon,#,g_lock_move,#,g_lock_item,#,g_init_peek_loc,0x1fff,c_yes,@,c_no,@,c_empty,@,f_nop,@",true,false,"",function(...)return...end)
-f_zobj_set(_g,"f_zobj,@,f_zobj_set,@,f_zobj_eval,@,f_zcall,@,f_create_cell,@,f_create_gridpair,@,f_update_grid,@,f_draw_grid,@,f_minisfx,@,f_draw_pkmn,@,c_move_names,@,c_pkmn_names,@,c_trnr_names,@,c_type_names,@,c_item_names,@,f_init_peek_inc,@,c_types,@,f_can_pokemon_teach_move,@,f_update_locks,@,f_strtoq,@,_update60,@,_draw,@",f_zobj,f_zobj_set,f_zobj_eval,function(func,text,...)
+f_zobj_set(_g,"f_zobj,@,f_zobj_set,@,f_zobj_eval,@,f_zcall,@,f_create_gridpair,@,f_update_grid,@,f_draw_grid,@,f_minisfx,@,f_draw_pkmn,@,c_move_names,@,c_pkmn_names,@,c_trnr_names,@,c_type_names,@,c_item_names,@,f_init_peek_inc,@,c_types,@,f_can_pokemon_teach_move,@,f_update_locks,@,f_strtoq,@,_update60,@,_draw,@",f_zobj,f_zobj_set,f_zobj_eval,function(func,text,...)
 foreach(f_zobj(text,...),function(params)
 func(unpack(params))
 end)
-end,function(...)
-return f_zobj("disabled,@",...)
-end,function(name,first,second,selfunc,leavefunc)
+end,function(name,first,second,selfunc,leavefunc,first_obj,second_obj)
 pair={}
 for tab in all{first,second}do
-add(pair,f_zobj("num,0,view,0,active,@,w,@,len,@,vh,@,x,@,y,@,cw,@,ch,@,selbg,@,bg,@,df,@",unpack(tab)))
+add(pair,f_zobj("num,0,view,0,active,@,vert,@,w,@,vh,@,x,@,y,@,cw,@,ch,@,df,@,lrfunc,@",unpack(tab)))
 end
 add(pair,selfunc)
 add(pair,leavefunc)
+add(pair,first_obj)
+add(pair,second_obj)
 _g[name]=pair
-end,function(_ENV)
+end,function(_ENV,gridobj)
 if active then
 local evalfunc=function(num,mmin,mmax,b0,b1,l)
 local off=(b1 and l or 0)-(b0 and l or 0)
-local newnum=mid(mmin,min(len-1,mmin+mmax),num+off)
+local newnum=mid(mmin,min(#gridobj-1,mmin+mmax),num+off)
 if newnum==num and off ~=0 then
 f_minisfx(253)
 elseif newnum ~=num then
@@ -62,27 +62,61 @@ end
 return newnum
 end
 local prevnum=num
-num=evalfunc(num,0,len-1,btnp"0",btnp"1",1)
-num=evalfunc(num,num%w,(len-1)\w*w,btnp"2",btnp"3",w)
-if num\w-vh+1>view then view=(view+1)%((len-vh+1)\w)end
-if num\w<view then view=(view-1)%((len-vh+1)\w)end
+if vert then
+num=-1
+local off=(btnp"3" and 1 or 0)-(btnp"2" and 1 or 0)
+local prevview=view
+view=mid(0,view+off,(#gridobj-1)\w-vh+1)
+if view==prevview and off ~=0 then
+f_minisfx(253)
+elseif off ~=0 then
+f_minisfx(255)
 end
-end,function(_ENV)
+lrfunc((btnp"1" and 1 or 0)-(btnp"0" and 1 or 0))
+else
+num=evalfunc(num,0,#gridobj-1,btnp"0",btnp"1",1)
+num=evalfunc(num,num%w,(#gridobj-1)\w*w,btnp"2",btnp"3",w)
+if num\w-vh+1>view then view=num\w-vh+1 end
+if num\w<view then view=num\w end
+view=mid(0,view,(#gridobj-1)\w-vh+1)
+end
+end
+end,function(_ENV,gridobj)
 for j=0,vh*w-1 do
 local i=j+view*w
-if i>=len then return end
+local obj=gridobj[i+1]
+if i>=#gridobj then break end
 local xloc,yloc=x+i%w*cw,y+j\w*ch
 camera(-xloc-1,-yloc-1)
 local l,r,u,d=0,0,0,0
 if i==0 then l=1 u=1 end
 if i==w-1 then r=1 u=1 end
-if i==len-1 then r=1 d=1 end
-if i==(len-1)\w*w then l=1 d=1 end
-rectfill(-1+l,-1,cw-2-r,ch-2,i==num and selbg or bg)
-rectfill(-1,-1+u,cw-2,ch-2-d,i==num and selbg or bg)
-df(i,i==num)
-camera()
+if i==#gridobj-1 then r=1 d=1 end
+if i==(#gridobj-1)\w*w then l=1 d=1 end
+local c=13
+if active and i==num then
+c=6
 end
+if i ~=num and obj.disabled then
+c=1
+end
+rectfill(-1+l,-1,cw-2-r,ch-2,c)
+rectfill(-1,-1+u,cw-2,ch-2-d,c)
+end
+for j=0,vh*w-1 do
+local i=j+view*w
+local obj=gridobj[i+1]
+if i>=#gridobj then break end
+local xloc,yloc=x+i%w*cw,y+j\w*ch
+camera(-xloc-1,-yloc-1)
+local c=1
+if obj.disabled then
+c=13
+end
+print(obj.text or "",1,1,c)
+df(i,i==num,obj)
+end
+camera()
 end,function(num)
 sfx(num\4,num<252 and 0 or 1,num%4*8,8)
 end,function(num,x,y,out_c,in_c,flip,width)
@@ -131,11 +165,12 @@ memset(0x5e00,0,256)
 g_lock_pokemon={}
 g_lock_move={}
 g_lock_item={}
+poke(0x5eff,1)
 end
 for ind in all(split"1,4,7,152,155,158")do
 g_lock_pokemon[ind]=true
 end
-for i=1,min(57,57)do
+for i=1,min(57,@0x5efe)do
 for pkmn in all(c_trainers[i])do
 g_lock_pokemon[pkmn.ind]=true
 for i=1,4 do
@@ -152,9 +187,12 @@ local ns=""
 for i=1,#s do ns..="?" end
 return ns
 end,function()
-g_cg_p,g_cg_t,g_cg_s,g_cg_l=unpack(g_gridstack[#g_gridstack])
-f_update_grid(g_cg_p)
-f_update_grid(g_cg_t)
+g_preview_timer=max(0,g_preview_timer-1)
+g_cg_p,g_cg_t,g_cg_s,g_cg_l,gridpo,gridto=unpack(g_gridstack[#g_gridstack])
+gridpo=_ENV[gridpo]
+gridto=_ENV[gridto]
+f_update_grid(g_cg_p,gridpo)
+f_update_grid(g_cg_t,gridto)
 if btnp"4" then
 f_minisfx(g_cg_l()or 254)
 elseif btnp"5" then
@@ -162,8 +200,8 @@ f_minisfx(g_cg_s()or 252)
 end
 end,function()
 cls"0 "
-f_draw_grid(g_cg_p)
-f_draw_grid(g_cg_t)
+f_draw_grid(g_cg_p,gridpo)
+f_draw_grid(g_cg_t,gridto)
 pal(0,129,1)
 end)
 function debug_sort(t,compare_func)
@@ -205,8 +243,8 @@ for i=0,323 do
 c_types[i\18][i%18]=f_init_peek_inc()\2
 end
 for i=0,251 do
-local pkmn=f_zobj"learn;,;teach;,;event;,"
-cur_list,c_moves[i],c_pokemon[i]=pkmn.learn,{},pkmn
+local pkmn=f_zobj"old;learn,#,teach,#,event,#;learn;,;teach;,;event;,"
+cur_list,c_moves[i],c_pokemon[i]=pkmn.old.learn,{},pkmn
 foreach(split"pow,type,acc,pp",function(key)
 c_moves[i][key]=f_init_peek_inc()
 end)
@@ -214,8 +252,8 @@ foreach(split"prevolve,type1,type2,hp,att,def,spd,sat,sdf,gender_item",function(
 pkmn[key]=f_init_peek_inc()
 end)
 while f_init_peek_inc()<255 do
-if@g_init_peek_loc==252 then cur_list=pkmn.teach
-elseif@g_init_peek_loc==253 then cur_list=pkmn.event
+if@g_init_peek_loc==252 then cur_list=pkmn.old.teach
+elseif@g_init_peek_loc==253 then cur_list=pkmn.old.event
 elseif@g_init_peek_loc==254 then
 for j=cur_list[#cur_list-1]+1,cur_list[#cur_list]-1 do
 add(cur_list,j)
@@ -227,16 +265,15 @@ end
 end
 for i=0,251 do
 local sub=c_pokemon[i]
-while sub.prevolve>0 do
-sub=c_pokemon[sub.prevolve]
+while sub do
 foreach(split"learn,teach,event",function(key)
-foreach(sub[key],function(v)
+foreach(sub.old[key],function(v)
 add(c_pokemon[i][key],v)
 end)
 end)
+sub=c_pokemon[sub.prevolve]
 end
 end
-printh(#c_trainers)
 for i=0,56 do
 local trainer={move=f_init_peek_inc()}
 for j=1,6 do
@@ -250,8 +287,8 @@ end
 add(trainer,pkmn)
 end
 add(c_trainers,trainer)
-printh(i.." | "..debug(trainer))
 end
+poke(0x5efe,57)
 f_update_locks()
 for iloc=0x3200,0x4278,68 do
 for loc=iloc,iloc+63,2 do
@@ -259,7 +296,76 @@ poke2(loc,%loc & 0x70df|0x0800)
 end
 poke4(iloc+64,0x.07d7)
 end
-f_zcall(f_create_gridpair,"p_browse;,~c_yes,3,252,2,2,2,20,20,6,13,@;t_browse;,~c_no,1,1,1,2,45,60,16,13,13,@;p_title;,~c_no,1,1,1,2,2,60,40,13,13,@;t_title;,~c_yes,2,4,2,2,44,30,9,6,13,@;p_pkpreview;,~c_no,1,1,1,2,2,60,40,13,13,@;p_pkstat;,~c_yes,2,264,4,2,4,30,9,13,13,@;;,g_grid_browse,~p_browse,~t_browse,@,@;;,g_grid_title,~p_title,~t_title,@,@;;,g_grid_pkpreview,~p_pkpreview,~t_browse,@,@;;,g_grid_pkstat,~p_pkstat,~t_browse,@,@",function(i,is_sel)
+op_browse={}
+for i=0,251 do
+add(op_browse,{data=i})
+end
+op_def={{}}
+op_title={{},{},{},{disabled=true}}
+f_nf=function()end
+f_populate_stats=function()
+op_pkstat={}
+local pkmn=c_pokemon[g_grid_browse[1].num]
+local genders=""
+if pkmn.gender_item & 64>0 then genders..="M" end
+if pkmn.gender_item & 128>0 then
+if #genders>0 then genders..="/" end
+genders..="F" end
+if #genders==0 then genders..="U" end
+add(op_pkstat,{text="bASE sTATS",disabled=true})
+add(op_pkstat,{text="",disabled=true})
+add(op_pkstat,{text="hP:"..pkmn.hp})
+add(op_pkstat,{text="sP:"..pkmn.spd})
+add(op_pkstat,{text="aT:"..pkmn.att})
+add(op_pkstat,{text="dF:"..pkmn.def})
+add(op_pkstat,{text="sA:"..pkmn.sat})
+add(op_pkstat,{text="sD:"..pkmn.sdf})
+add(op_pkstat,{text="gD:"..genders})
+add(op_pkstat,{text="lV:50"})
+if #pkmn.learn>0 then
+add(op_pkstat,{text="lEARN mOVES",disabled=true})
+add(op_pkstat,{text="",disabled=true})
+for m in all(pkmn.learn)do
+add(op_pkstat,{text=c_move_names[m+1]})
+end
+if #op_pkstat%2==1 then add(op_pkstat,{text=""})end
+end
+if #pkmn.teach>0 then
+add(op_pkstat,{text="tEACH mOVES",disabled=true})
+add(op_pkstat,{text="",disabled=true})
+for m in all(pkmn.teach)do
+local movename=c_move_names[m+1]
+if not g_lock_move[m]then
+movename=f_strtoq(movename)
+end
+add(op_pkstat,{text=movename})
+end
+if #op_pkstat%2==1 then add(op_pkstat,{text=""})end
+end
+if #pkmn.event>0 then
+add(op_pkstat,{text="eVENT mOVES",disabled=true})
+add(op_pkstat,{text="",disabled=true})
+for m in all(pkmn.event)do
+local movename=c_move_names[m+1]
+if not g_lock_move[m]then
+movename=f_strtoq(movename)
+end
+add(op_pkstat,{text=movename})
+end
+if #op_pkstat%2==1 then add(op_pkstat,{text=""})end
+end
+end
+f_browselr=function(dir)
+local prev=g_grid_browse[1].num
+g_grid_browse[1].num=mid(0,g_grid_browse[1].num+dir,251)
+if prev ~=g_grid_browse[1].num then
+f_minisfx(255)
+f_populate_stats()
+elseif dir ~=0 then
+f_minisfx(253)
+end
+end
+f_zcall(f_create_gridpair,"p_browse;,~c_yes,~c_no,3,2,2,2,20,20,@,~f_nf;t_browse;,~c_no,~c_no,1,1,2,45,60,16,@,~f_nf;p_title;,~c_no,~c_no,1,1,2,2,60,40,@,~f_nf;t_title;,~c_yes,~c_no,2,2,2,44,30,9,@,~f_nf;p_pkpreview;,~c_yes,~c_yes,1,1,2,2,60,40,@,~f_browselr;p_pkstat;,~c_yes,~c_yes,2,4,2,4,30,9,@,~f_browselr;;,g_grid_browse,~p_browse,~t_browse,@,@,op_browse,op_def;;,g_grid_title,~p_title,~t_title,@,@,op_def,op_title;;,g_grid_pkpreview,~p_pkpreview,~t_browse,@,@,op_def,op_def;;,g_grid_pkstat,~p_pkstat,~t_browse,@,@,op_pkstat,op_def",function(i,is_sel)
 if not g_lock_pokemon[i]then
 if not is_sel then
 rectfill(-1,-1,18,18,1)
@@ -285,50 +391,15 @@ print("\^w\^tpicodex",2,1,1)
 print("dUAL vERSION",2,12,1)
 f_draw_pkmn(254,15-8,20,1,6)
 f_draw_pkmn(t()\1%252,32-4,24-4,1,6,false)
-end,function(i,is_sel)
-if i>0 and not is_sel then
-rectfill(-1,-1,28,7,1)
-end
-print(split"bROWSE,eDIT,lEAGUE,vERSUS"[i+1],1,1,is_sel and(i==0 and 13 or 1)or(i==0 and 1 or 13))
+end,function(i,is_sel,gridobj)
+print(split"bROWSE,eDIT,lEAGUE,vERSUS"[i+1],1,1,is_sel and(gridobj.disabled and 1 or 13)or(gridobj.disabled and 13 or 1))
 end,function(i,is_sel)
 local pkmn_ind=g_grid_browse[1].num
-f_draw_pkmn(pkmn_ind,13+(t()%1<.25 and(rnd(3)\1-1)*2 or 0),1+2,1,6,false,32)
-end,function(i,is_sel)
-local pkmn_ind=g_grid_browse[1].num
-local pkmn=c_pokemon[pkmn_ind]
-local genders=""
-local pkmn=c_pokemon[g_grid_browse[1].num]
-if pkmn.gender_item & 64>0 then genders..="M" end
-if pkmn.gender_item & 128>0 then
-if #genders>0 then genders..="/" end
-genders..="F" end
-if #genders==0 then genders..="U" end
-if i==1 then
-rectfill(1-32,-1,28,6,1)
-pset(1-32,-1,0)
-pset(28,-1,0)
-print("\fdbASE sTATS",1-30,1)
-elseif i==11 then
-rectfill(1-32,-1,28,7,1)
-print("\fdlEARN mOVES",1-30,1)
-elseif i>11 then
-local move_name=c_move_names[i-11]
-if i%3==0 then
-move_name=f_strtoq(move_name)
-end
-print(move_name,1,1,1)
-elseif i==2 then print("hP:"..pkmn.hp,1,1,1)
-elseif i==3 then print("sP:"..pkmn.spd,1,1,1)
-elseif i==4 then print("aT:"..pkmn.att,1,1,1)
-elseif i==5 then print("dF:"..pkmn.def,1,1,1)
-elseif i==6 then print("sA:"..pkmn.sat,1,1,1)
-elseif i==7 then print("sD:"..pkmn.sdf,1,1,1)
-elseif i==8 then print("gD:"..genders,1,1,1)
-elseif i==9 then print("lV:50",1,1,1)
-end
+f_draw_pkmn(pkmn_ind,13+(g_preview_timer>0 and(rnd(3)\1-1)*2 or 0),1+2,1,6,false,32)
+end,function(i,is_sel,obj)
 end,function()
-add(g_gridstack,g_grid_pkpreview)
-return g_cg_p.num
+add(g_gridstack,g_grid_pkstat)
+f_populate_stats()
 end,function()
 deli(g_gridstack)
 end,function()
@@ -337,14 +408,14 @@ add(g_gridstack,g_grid_browse)
 end
 end,function()
 end,function()
-if g_cg_t.num==0 then
-add(g_gridstack,g_grid_pkstat)
-end
+g_preview_timer=20
+return g_grid_browse[1].num
 end,function()
 deli(g_gridstack)
 end,function()
-return g_grid_browse[1].num
+add(g_gridstack,g_grid_pkpreview)
 end,function()
 deli(g_gridstack)
 end)
 g_gridstack={g_grid_title}
+g_preview_timer=0

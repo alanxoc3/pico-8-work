@@ -38,9 +38,9 @@ end
 
 -- 136 to 118. Storing data all together saves like 18 code tokens.
 for i=0,251 do -- There are 252 pkmn and 252 moves. So zipped when unpacking to save some tokens.
-  local pkmn = f_zobj[[learn;, ;teach;, ;event;,]]
+  local pkmn = f_zobj[[old;learn,#, teach,#, event,#; learn;, ;teach;, ;event;,]]
   -- cur_list is not local just so I can save 1 token
-  cur_list, c_moves[i], c_pokemon[i] = pkmn.learn, {}, pkmn
+  cur_list, c_moves[i], c_pokemon[i] = pkmn.old.learn, {}, pkmn
 
   foreach(split'pow,type,acc,pp', function(key)
     c_moves[i][key] = f_init_peek_inc()
@@ -51,8 +51,8 @@ for i=0,251 do -- There are 252 pkmn and 252 moves. So zipped when unpacking to 
   end)
 
   while f_init_peek_inc() < C_NEXT do
-    if     @g_init_peek_loc == C_TEACH then cur_list = pkmn.teach
-    elseif @g_init_peek_loc == C_EVENT then cur_list = pkmn.event
+    if     @g_init_peek_loc == C_TEACH then cur_list = pkmn.old.teach
+    elseif @g_init_peek_loc == C_EVENT then cur_list = pkmn.old.event
     elseif @g_init_peek_loc == C_DASH  then
       for j=cur_list[#cur_list-1]+1,cur_list[#cur_list]-1 do
         add(cur_list, j)
@@ -66,14 +66,14 @@ end
 for i=0,251 do
   local sub = c_pokemon[i]
 
-  while sub.prevolve > 0 do
-    sub = c_pokemon[sub.prevolve]
-
+  while sub do
     foreach(split'learn,teach,event', function(key)
-      foreach(sub[key], function(v)
+      foreach(sub.old[key], function(v)
         add(c_pokemon[i][key], v)
       end)
     end)
+
+    sub = c_pokemon[sub.prevolve]
   end
 end
 
@@ -86,8 +86,6 @@ end
     end
   end
 end $$
-
-printh(#c_trainers)
 
 for i=0,56 do
   local trainer = {move=f_init_peek_inc()}
@@ -102,7 +100,6 @@ for i=0,56 do
     add(trainer, pkmn)
   end
   add(c_trainers, trainer)
-  printh(i.." | "..debug(trainer))
 end
 
 |[f_update_locks]| function()
@@ -111,13 +108,14 @@ end
     g_lock_pokemon = {}
     g_lock_move    = {}
     g_lock_item    = {}
+    poke(S_NEW, 1)
   end
 
   for ind in all(split'1,4,7,152,155,158') do -- 6 starter pokemon
     g_lock_pokemon[ind] = true
   end
 
-  for i=1,min(57,57) do
+  for i=1,min(57,@S_STORY) do
     for pkmn in all(c_trainers[i]) do
       g_lock_pokemon[pkmn.ind] = true
       for i=1,4 do
@@ -131,6 +129,7 @@ end
   end
 end $$
 
+poke(S_STORY,57) -- todo: remove me, this is just for debugging
 f_update_locks()
 
 -- after we have read all the bytes, we can now apply filters to the sfx for the cool sounding pkmn cries.
@@ -167,18 +166,106 @@ end $$
 -- d_browse = {}
 -- for i=0,251 do add(d_browse, f_create_cell(true)) end
 
-f_zcall(f_create_gridpair, [[
-   p_browse;    ,~c_yes ,3 ,252 ,2 ,2 ,2  ,20 ,20 ,C_3 ,C_2 ,@
-  ;t_browse;    ,~c_no  ,1 ,1   ,1 ,2 ,45 ,60 ,16 ,C_2 ,C_2 ,@
-  ;p_title;     ,~c_no  ,1 ,1   ,1 ,2 ,2  ,60 ,40 ,C_2 ,C_2 ,@
-  ;t_title;     ,~c_yes ,2 ,4   ,2 ,2 ,44 ,30 ,9  ,C_3 ,C_2 ,@
-  ;p_pkpreview; ,~c_no  ,1 ,1   ,1 ,2 ,2  ,60 ,40 ,C_2 ,C_2 ,@ -- same as p_title
-  ;p_pkstat;    ,~c_yes ,2 ,264 ,4 ,2 ,4  ,30 ,9  ,C_2 ,C_2 ,@ -- same as p_title
+op_browse = {}
+for i=0,251 do
+  add(op_browse, {data=i})
+end
 
-  ;;,g_grid_browse     ,~p_browse    ,~t_browse ,@ ,@
-  ;;,g_grid_title      ,~p_title     ,~t_title  ,@ ,@
-  ;;,g_grid_pkpreview  ,~p_pkpreview ,~t_browse ,@ ,@
-  ;;,g_grid_pkstat     ,~p_pkstat    ,~t_browse ,@ ,@
+op_def = {{}}
+
+op_title = {{}, {}, {}, {disabled=true}}
+
+f_nf = function() end
+
+f_populate_stats = function()
+  op_pkstat = {}
+  local pkmn = c_pokemon[g_grid_browse[1].num]
+
+  local genders = ""
+  if pkmn.gender_item & G_MALE > 0 then genders ..= "M" end
+  if pkmn.gender_item & G_FEMA > 0 then
+    if #genders > 0 then genders ..= "/" end
+    genders ..= "F" end
+  if #genders == 0 then genders ..= "U" end
+
+  add(op_pkstat, {text="bASE sTATS", disabled=true})
+  add(op_pkstat, {text="", disabled=true})
+
+  add(op_pkstat, {text="hP:"..pkmn.hp})
+  add(op_pkstat, {text="sP:"..pkmn.spd})
+  add(op_pkstat, {text="aT:"..pkmn.att})
+  add(op_pkstat, {text="dF:"..pkmn.def})
+  add(op_pkstat, {text="sA:"..pkmn.sat})
+  add(op_pkstat, {text="sD:"..pkmn.sdf})
+  add(op_pkstat, {text="gD:"..genders})
+  add(op_pkstat, {text="lV:50"})
+
+  if #pkmn.learn > 0 then
+    add(op_pkstat, {text="lEARN mOVES", disabled=true})
+    add(op_pkstat, {text="", disabled=true})
+
+    for m in all(pkmn.learn) do
+      add(op_pkstat, {text=c_move_names[m+1]})
+    end
+
+    if #op_pkstat % 2 == 1 then add(op_pkstat, {text=""}) end
+  end
+
+  if #pkmn.teach > 0 then
+    add(op_pkstat, {text="tEACH mOVES", disabled=true})
+    add(op_pkstat, {text="", disabled=true})
+
+    for m in all(pkmn.teach) do
+      local movename = c_move_names[m+1]
+      if not g_lock_move[m] then
+        movename = f_strtoq(movename)
+      end
+      add(op_pkstat, {text=movename})
+    end
+
+    if #op_pkstat % 2 == 1 then add(op_pkstat, {text=""}) end
+  end
+
+  if #pkmn.event > 0 then
+    add(op_pkstat, {text="eVENT mOVES", disabled=true})
+    add(op_pkstat, {text="", disabled=true})
+
+    for m in all(pkmn.event) do
+      local movename = c_move_names[m+1]
+      if not g_lock_move[m] then
+        movename = f_strtoq(movename)
+      end
+      add(op_pkstat, {text=movename})
+    end
+
+    if #op_pkstat % 2 == 1 then add(op_pkstat, {text=""}) end
+  end
+
+end
+
+f_browselr = function(dir)
+  local prev = g_grid_browse[1].num
+  g_grid_browse[1].num = mid(0, g_grid_browse[1].num+dir, 251)
+  if prev ~= g_grid_browse[1].num then
+    f_minisfx(SFX_MOVE)
+    f_populate_stats()
+  elseif dir ~= 0 then
+    f_minisfx(SFX_ERROR)
+  end
+end
+
+f_zcall(f_create_gridpair, [[
+   p_browse;    ,~c_yes ,~c_no  ,3 ,2 ,2 ,2  ,20 ,20 ,@ ,~f_nf
+  ;t_browse;    ,~c_no  ,~c_no  ,1 ,1 ,2 ,45 ,60 ,16 ,@ ,~f_nf
+  ;p_title;     ,~c_no  ,~c_no  ,1 ,1 ,2 ,2  ,60 ,40 ,@ ,~f_nf
+  ;t_title;     ,~c_yes ,~c_no  ,2 ,2 ,2 ,44 ,30 ,9  ,@ ,~f_nf
+  ;p_pkpreview; ,~c_yes ,~c_yes  ,1 ,1 ,2 ,2  ,60 ,40 ,@ ,~f_browselr -- same as p_title
+  ;p_pkstat;    ,~c_yes ,~c_yes ,2 ,4 ,2 ,4  ,30 ,9  ,@ ,~f_browselr -- same as p_title
+
+  ;;,g_grid_browse     ,~p_browse    ,~t_browse ,@ ,@, op_browse, op_def
+  ;;,g_grid_title      ,~p_title     ,~t_title  ,@ ,@, op_def,    op_title
+  ;;,g_grid_pkpreview  ,~p_pkpreview ,~t_browse ,@ ,@, op_def,    op_def
+  ;;,g_grid_pkstat     ,~p_pkstat    ,~t_browse ,@ ,@, op_pkstat, op_def
 ]], function(i, is_sel) -- p_browse
   if not g_lock_pokemon[i] then
     if not is_sel then
@@ -212,58 +299,18 @@ end, function(i, is_sel) -- p_title
   -- f_draw_pkmn((t()+.5)\2, 32-8- sin(t()/2)*4\1, 24+sin(t()/2)*4\1, C_1, C_4, false, 8-sin(t()/2)*8\1)
   f_draw_pkmn(254, 15-8, 20, C_1, C_3)
   f_draw_pkmn(t()\1%252, 32-4, 24-4, C_1, C_3, false)
-end, function(i, is_sel) -- t_title
-  if i > 0 and not is_sel then
-    rectfill(-1,-1,28,7,C_1)
-  end
-  print(split"bROWSE,eDIT,lEAGUE,vERSUS"[i+1], 1, 1, is_sel and (i == 0 and C_2 or C_1) or (i == 0 and C_1 or C_2))
+end, function(i, is_sel, gridobj) -- t_title
+  print(split"bROWSE,eDIT,lEAGUE,vERSUS"[i+1], 1, 1, is_sel and (gridobj.disabled and C_1 or C_2) or (gridobj.disabled and C_2 or C_1))
 end, function(i, is_sel) -- p_pkpreview
   local pkmn_ind = g_grid_browse[1].num
-  f_draw_pkmn(pkmn_ind, 13+(t()%1<.25 and (rnd(3)\1-1)*2 or 0), 1+2, C_1, C_3, false, 32)
+  f_draw_pkmn(pkmn_ind, 13+(g_preview_timer > 0 and (rnd(3)\1-1)*2 or 0), 1+2, C_1, C_3, false, 32)
 
-end, function(i, is_sel) -- p_pkstat
-  local pkmn_ind = g_grid_browse[1].num
-  local pkmn = c_pokemon[pkmn_ind]
-
-  local genders = ""
-  local pkmn = c_pokemon[g_grid_browse[1].num]
-  if pkmn.gender_item & G_MALE > 0 then genders ..= "M" end
-  if pkmn.gender_item & G_FEMA > 0 then
-    if #genders > 0 then genders ..= "/" end
-    genders ..= "F" end
-  if #genders == 0 then genders ..= "U" end
-
-  if i == 1 then
-    rectfill(1-32, -1, 28, 6, C_1)
-    pset(1-32, -1, 0)
-    pset(28, -1, 0)
-    --rectfill(1-32, 7, 28, 7, C_1)
-    print("\fdbASE sTATS", 1-30, 1) -- base stats | learn moves | teach moves | event moves | battle stats | move stats
-  elseif i == 11 then
-    rectfill(1-32, -1, 28, 7, C_1)
-    --rectfill(1-32, 7, 28, 7, C_1)
-    print("\fdlEARN mOVES", 1-30, 1)
-
-  elseif i > 11 then
-    local move_name = c_move_names[i-11]
-    if i % 3 == 0 then
-      move_name = f_strtoq(move_name)
-    end
-    print(move_name, 1, 1, C_1)
-
-  elseif i == 2 then print("hP:"..pkmn.hp , 1, 1, C_1)
-  elseif i == 3 then print("sP:"..pkmn.spd, 1, 1, C_1)
-  elseif i == 4 then print("aT:"..pkmn.att, 1, 1, C_1)
-  elseif i == 5 then print("dF:"..pkmn.def, 1, 1, C_1)
-  elseif i == 6 then print("sA:"..pkmn.sat, 1, 1, C_1)
-  elseif i == 7 then print("sD:"..pkmn.sdf, 1, 1, C_1)
-  elseif i == 8 then print("gD:"..genders, 1, 1, C_1)
-  elseif i == 9 then print("lV:50", 1, 1, C_1)
-  end
+end, function(i, is_sel, obj) -- p_pkstat
+  -- print(obj.data, 1, 1, C_1)
 
 end, function() -- browse if select
-  add(g_gridstack, g_grid_pkpreview)
-  return g_cg_p.num
+  add(g_gridstack, g_grid_pkstat)
+  f_populate_stats()
 
 end, function() -- browse if leave
   deli(g_gridstack)
@@ -274,19 +321,12 @@ end, function() -- title if select
   end
 end, function() -- title if leave
 end, function() -- pkpreview if select
-  if g_cg_t.num == 0 then
-    add(g_gridstack, g_grid_pkstat)
-  end
-
-  -- return g_grid_browse[1].num
+  g_preview_timer = 20
+  return g_grid_browse[1].num
 end, function() -- pkpreview if leave
   deli(g_gridstack)
 end, function() -- pkstat if select
-  --if g_cg_t.num == 0 then
-    --add(g_gridstack, g_grid_pkstat)
-  --end
-
-  return g_grid_browse[1].num
+  add(g_gridstack, g_grid_pkpreview)
 end, function() -- pkstat if leave
   deli(g_gridstack)
 end)
@@ -303,11 +343,17 @@ g_gridstack = {g_grid_title}
 -- UPDATE AND DRAW
 -------------------------------------------------------
 
+g_preview_timer = 0
 |[_update60]| function()
-  g_cg_p, g_cg_t, g_cg_s, g_cg_l = unpack(g_gridstack[#g_gridstack])
+  g_preview_timer = max(0, g_preview_timer-1)
+  g_cg_p, g_cg_t, g_cg_s, g_cg_l, gridpo, gridto = unpack(g_gridstack[#g_gridstack])
 
-  f_update_grid(g_cg_p)
-  f_update_grid(g_cg_t)
+  gridpo = _ENV[gridpo]
+  gridto = _ENV[gridto]
+
+
+  f_update_grid(g_cg_p, gridpo)
+  f_update_grid(g_cg_t, gridto)
 
   if btnp'4' then
     f_minisfx(g_cg_l() or SFX_LEAVE)
@@ -319,8 +365,8 @@ end $$
 |[_draw]| function()
   cls'C_0'
 
-  f_draw_grid(g_cg_p)
-  f_draw_grid(g_cg_t)
+  f_draw_grid(g_cg_p, gridpo)
+  f_draw_grid(g_cg_t, gridto)
 
   pal(0, 129, 1)
 end $$

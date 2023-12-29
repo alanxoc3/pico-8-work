@@ -388,14 +388,7 @@ function _draw()
     print(typstr,3, y+8+2,C_2)
   end
 
-  --rectfill(1,  48+6,1,48+7,C_2)
-  --rectfill(1+1,48+5,1+1,48+8,C_2)
-
-  --rectfill(62,  48+6,62,48+7,C_2)
-  --rectfill(62-1,48+5,62-1,48+8,C_2)
-
   camera()
 
   pal(cols[@cols_loc%#cols+1], 1)
-  
 end

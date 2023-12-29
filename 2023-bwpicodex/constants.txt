@@ -373,6 +373,7 @@ P_TYRANITAR:  248  # tyratar
 P_LUGIA:      249  # lugia
 P_HOOH:       250  # hooh
 P_CELEBI:     251  # celebi
+P_NONE:       252  # this is for prevolve with basic/baby pkmn
 
 # ----------------------------- move numbers - 4508 bytes. It took lots of compute to generate this. Order matters, a bad order wastes lots of space.
 M_STRUGGLE:     0  # struggl
