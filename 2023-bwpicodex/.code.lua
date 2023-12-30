@@ -35,17 +35,15 @@ function f_zobj(...)
 return f_zobj_set(setmetatable({},{__index=_g}),...)
 end
 f_zobj_set(_g,"c_pokemon,#,c_moves,#,c_trainers,#,g_lock_pokemon,#,g_lock_move,#,g_lock_item,#,g_init_peek_loc,0x1fff,c_yes,@,c_no,@,c_empty,@,f_nop,@",true,false,"",function(...)return...end)
-f_zobj_set(_g,"f_zobj,@,f_zobj_set,@,f_zobj_eval,@,f_zcall,@,f_create_gridpair,@,f_update_grid,@,f_draw_grid,@,f_minisfx,@,f_draw_pkmn,@,c_move_names,@,c_pkmn_names,@,c_trnr_names,@,c_type_names,@,c_item_names,@,f_init_peek_inc,@,c_types,@,f_can_pokemon_teach_move,@,f_update_locks,@,f_strtoq,@,_update60,@,_draw,@",f_zobj,f_zobj_set,f_zobj_eval,function(func,text,...)
+f_zobj_set(_g,"f_zobj,@,f_zobj_set,@,f_zobj_eval,@,f_zcall,@,f_create_gridpair,@,f_update_grid,@,f_draw_grid,@,f_minisfx,@,f_draw_pkmn,@,c_move_names,@,c_pkmn_names,@,c_trnr_names,@,c_type_names,@,c_item_names,@,f_init_peek_inc,@,c_types,@,f_can_pokemon_teach_move,@,f_update_locks,@,f_strtoq,@,f_dp_browse,@,f_dt_browse,@,f_l_browse,@,f_s_browse,@,f_dp_title,@,f_dt_title,@,f_s_title,@,f_dp_pkpreview,@,f_l_pkpreview,@,f_s_pkpreview,@,f_dp_pkstat,@,f_l_pkstat,@,f_s_pkstat,@,_update60,@,_draw,@",f_zobj,f_zobj_set,f_zobj_eval,function(func,text,...)
 foreach(f_zobj(text,...),function(params)
 func(unpack(params))
 end)
-end,function(name,first,second,selfunc,leavefunc,first_obj,second_obj)
+end,function(name,first,second,first_obj,second_obj)
 pair={}
 for tab in all{first,second}do
-add(pair,f_zobj("num,0,view,0,active,@,vert,@,w,@,vh,@,x,@,y,@,cw,@,ch,@,df,@,lrfunc,@",unpack(tab)))
+add(pair,f_zobj("num,0,view,0,active,@,vert,@,w,@,vh,@,x,@,y,@,cw,@,ch,@,df,@,lrfunc,@,selfunc,@,leavefunc,@",unpack(tab)))
 end
-add(pair,selfunc)
-add(pair,leavefunc)
 add(pair,first_obj)
 add(pair,second_obj)
 _g[name]=pair
@@ -79,6 +77,15 @@ num=evalfunc(num,num%w,(#gridobj-1)\w*w,btnp"2",btnp"3",w)
 if num\w-vh+1>view then view=num\w-vh+1 end
 if num\w<view then view=num\w end
 view=mid(0,view,(#gridobj-1)\w-vh+1)
+end
+if btnp"4" then
+f_minisfx(leavefunc()or 254)
+elseif btnp"5" then
+if(num<0 or not gridobj[num+1].disabled)then
+f_minisfx(selfunc()or 252)
+else
+f_minisfx(253)
+end
 end
 end
 end,function(_ENV,gridobj)
@@ -167,6 +174,7 @@ g_lock_move={}
 g_lock_item={}
 poke(0x5eff,1)
 end
+op_browse={}
 for ind in all(split"1,4,7,152,155,158")do
 g_lock_pokemon[ind]=true
 end
@@ -182,22 +190,63 @@ g_lock_pokemon[pkmn.ind]=true
 g_lock_item[c_pokemon[pkmn.ind].gender_item & 0b00111111]=true
 end
 end
+for i=0,251 do
+add(op_browse,{data=g_lock_pokemon[i]and i or 255,disabled=not g_lock_pokemon[i]})
+end
 end,function(s)
 local ns=""
 for i=1,#s do ns..="?" end
 return ns
+end,function(i,is_sel,gridobj)
+f_draw_pkmn(gridobj.data,1,1,is_sel and(gridobj.disabled and 1 or 13)or 1,gridobj.disabled and 13 or(is_sel and 7 or 6),false)
+end,function(i,is_sel)
+local numstr=tostr(g_grid_browse[1].num)
+while #numstr<3 do numstr="0"..numstr end
+local namestr,type1,type2=c_pkmn_names[g_grid_browse[1].num+1],c_type_names[c_pokemon[g_grid_browse[1].num].type1+1],""
+if c_pokemon[g_grid_browse[1].num].type2>0 then
+type2=c_type_names[c_pokemon[g_grid_browse[1].num].type2+1]
+end
+if not g_lock_pokemon[g_grid_browse[1].num]then
+namestr,type1,type2=f_strtoq(namestr),f_strtoq(type1),f_strtoq(type2)
+end
+local str="\^y7\f6"..numstr.." \f7"..namestr.."\n\f1"..type1.." "..type2
+print(str,1,1)
+end,function()
+deli(g_gridstack)
+end,function()
+add(g_gridstack,g_grid_pkstat)
+f_populate_stats()
+end,function(i,is_sel)
+print("\^w\^tpicodex",2,1,1)
+print("dUAL vERSION",2,12,1)
+f_draw_pkmn(254,15-8,20,1,6)
+f_draw_pkmn(t()\1%252,32-4,24-4,1,6,false)
+end,function(i,is_sel,gridobj)
+print(split"bROWSE,eDIT,lEAGUE,vERSUS"[i+1],1,1,is_sel and(gridobj.disabled and 1 or 13)or(gridobj.disabled and 13 or 1))
+end,function()
+if g_cg_t.num==0 then
+add(g_gridstack,g_grid_browse)
+end
+end,function(i,is_sel)
+local pkmn_ind=g_grid_browse[1].num
+f_draw_pkmn(pkmn_ind,13+(g_preview_timer>0 and(rnd(3)\1-1)*2 or 0),1+2,1,6,false,32)
+end,function()
+deli(g_gridstack)
+end,function()
+g_preview_timer=20
+return g_grid_browse[1].num
+end,function(i,is_sel,obj)
+end,function()
+deli(g_gridstack)
+end,function()
+add(g_gridstack,g_grid_pkpreview)
 end,function()
 g_preview_timer=max(0,g_preview_timer-1)
-g_cg_p,g_cg_t,g_cg_s,g_cg_l,gridpo,gridto=unpack(g_gridstack[#g_gridstack])
+g_cg_p,g_cg_t,gridpo,gridto=unpack(g_gridstack[#g_gridstack])
 gridpo=_ENV[gridpo]
 gridto=_ENV[gridto]
 f_update_grid(g_cg_p,gridpo)
 f_update_grid(g_cg_t,gridto)
-if btnp"4" then
-f_minisfx(g_cg_l()or 254)
-elseif btnp"5" then
-f_minisfx(g_cg_s()or 252)
-end
 end,function()
 cls"0 "
 f_draw_grid(g_cg_p,gridpo)
@@ -288,17 +337,13 @@ add(trainer,pkmn)
 end
 add(c_trainers,trainer)
 end
-poke(0x5efe,57)
+poke(0x5efe,20)
 f_update_locks()
 for iloc=0x3200,0x4278,68 do
 for loc=iloc,iloc+63,2 do
 poke2(loc,%loc & 0x70df|0x0800)
 end
 poke4(iloc+64,0x.07d7)
-end
-op_browse={}
-for i=0,251 do
-add(op_browse,{data=i})
 end
 op_def={{}}
 op_title={{},{},{},{disabled=true}}
@@ -357,7 +402,23 @@ end
 end
 f_browselr=function(dir)
 local prev=g_grid_browse[1].num
-g_grid_browse[1].num=mid(0,g_grid_browse[1].num+dir,251)
+local next=prev
+if dir>0 then
+for i=prev+1,251,1 do
+if g_lock_pokemon[i]then
+next=i
+break
+end
+end
+elseif dir<0 then
+for i=prev-1,0,-1 do
+if g_lock_pokemon[i]then
+next=i
+break
+end
+end
+end
+g_grid_browse[1].num=next
 if prev ~=g_grid_browse[1].num then
 f_minisfx(255)
 f_populate_stats()
@@ -365,57 +426,6 @@ elseif dir ~=0 then
 f_minisfx(253)
 end
 end
-f_zcall(f_create_gridpair,"p_browse;,~c_yes,~c_no,3,2,2,2,20,20,@,~f_nf;t_browse;,~c_no,~c_no,1,1,2,45,60,16,@,~f_nf;p_title;,~c_no,~c_no,1,1,2,2,60,40,@,~f_nf;t_title;,~c_yes,~c_no,2,2,2,44,30,9,@,~f_nf;p_pkpreview;,~c_yes,~c_yes,1,1,2,2,60,40,@,~f_browselr;p_pkstat;,~c_yes,~c_yes,2,4,2,4,30,9,@,~f_browselr;;,g_grid_browse,~p_browse,~t_browse,@,@,op_browse,op_def;;,g_grid_title,~p_title,~t_title,@,@,op_def,op_title;;,g_grid_pkpreview,~p_pkpreview,~t_browse,@,@,op_def,op_def;;,g_grid_pkstat,~p_pkstat,~t_browse,@,@,op_pkstat,op_def",function(i,is_sel)
-if not g_lock_pokemon[i]then
-if not is_sel then
-rectfill(-1,-1,18,18,1)
-end
-f_draw_pkmn(255,1,1,1,is_sel and 13 or 13,false)
-else
-f_draw_pkmn(i,1,1,is_sel and 13 or 1,is_sel and 7 or 6,false)
-end
-end,function(i,is_sel)
-local numstr=tostr(g_grid_browse[1].num)
-while #numstr<3 do numstr="0"..numstr end
-local namestr,type1,type2=c_pkmn_names[g_grid_browse[1].num+1],c_type_names[c_pokemon[g_grid_browse[1].num].type1+1],""
-if c_pokemon[g_grid_browse[1].num].type2>0 then
-type2=c_type_names[c_pokemon[g_grid_browse[1].num].type2+1]
-end
-if not g_lock_pokemon[g_grid_browse[1].num]then
-namestr,type1,type2=f_strtoq(namestr),f_strtoq(type1),f_strtoq(type2)
-end
-local str="\^y7\f6"..numstr.." \f7"..namestr.."\n\f1"..type1.." "..type2
-print(str,1,1)
-end,function(i,is_sel)
-print("\^w\^tpicodex",2,1,1)
-print("dUAL vERSION",2,12,1)
-f_draw_pkmn(254,15-8,20,1,6)
-f_draw_pkmn(t()\1%252,32-4,24-4,1,6,false)
-end,function(i,is_sel,gridobj)
-print(split"bROWSE,eDIT,lEAGUE,vERSUS"[i+1],1,1,is_sel and(gridobj.disabled and 1 or 13)or(gridobj.disabled and 13 or 1))
-end,function(i,is_sel)
-local pkmn_ind=g_grid_browse[1].num
-f_draw_pkmn(pkmn_ind,13+(g_preview_timer>0 and(rnd(3)\1-1)*2 or 0),1+2,1,6,false,32)
-end,function(i,is_sel,obj)
-end,function()
-add(g_gridstack,g_grid_pkstat)
-f_populate_stats()
-end,function()
-deli(g_gridstack)
-end,function()
-if g_cg_t.num==0 then
-add(g_gridstack,g_grid_browse)
-end
-end,function()
-end,function()
-g_preview_timer=20
-return g_grid_browse[1].num
-end,function()
-deli(g_gridstack)
-end,function()
-add(g_gridstack,g_grid_pkpreview)
-end,function()
-deli(g_gridstack)
-end)
+f_zcall(f_create_gridpair,"p_browse;,~c_yes,~c_no,3,2,2,2,20,20,~f_dp_browse,~f_nf,~f_s_browse,~f_l_browse;t_browse;,~c_no,~c_no,1,1,2,45,60,16,~f_dt_browse,~f_nf,~f_nf,~f_nf;p_title;,~c_no,~c_no,1,1,2,2,60,40,~f_dp_title,~f_nf,~f_nf,~f_nf;t_title;,~c_yes,~c_no,2,2,2,44,30,9,~f_dt_title,~f_nf,~f_s_title,~f_nf;p_pkpreview;,~c_yes,~c_yes,1,1,2,2,60,40,~f_dp_pkpreview,~f_browselr,~f_s_pkpreview,~f_l_pkpreview;p_pkstat;,~c_yes,~c_yes,2,4,2,4,30,9,~f_dp_pkstat,~f_browselr,~f_s_pkstat,~f_l_pkstat;;,g_grid_browse,~p_browse,~t_browse,op_browse,op_def;;,g_grid_title,~p_title,~t_title,op_def,op_title;;,g_grid_pkpreview,~p_pkpreview,~t_browse,op_def,op_def;;,g_grid_pkstat,~p_pkstat,~t_browse,op_pkstat,op_def")
 g_gridstack={g_grid_title}
 g_preview_timer=0

@@ -1,4 +1,4 @@
-|[f_create_gridpair]| function(name, first, second, selfunc, leavefunc, first_obj, second_obj)
+|[f_create_gridpair]| function(name, first, second, first_obj, second_obj)
   pair = {}
 
   for tab in all{first, second} do
@@ -7,12 +7,11 @@
       active,@, vert,@, w,@, vh,@,
       x,@, y,@,
       cw,@, ch,@,
-      df,@, lrfunc,@
+      df,@, lrfunc,@,
+      selfunc,@, leavefunc,@
     ]], unpack(tab)))
   end
 
-  add(pair, selfunc)
-  add(pair, leavefunc)
   add(pair, first_obj)
   add(pair, second_obj)
 
@@ -52,9 +51,19 @@ end $$
       num = evalfunc(num, 0,     #gridobj-1,       btnp'0', btnp'1', 1)
       num = evalfunc(num, num%w, (#gridobj-1)\w*w, btnp'2', btnp'3', w)
 
-      if num\w-vh+1     > view then view = num\w-vh+1     end
-      if num\w          < view then view = num\w          end
+      if num\w-vh+1 > view then view = num\w-vh+1 end
+      if num\w      < view then view = num\w      end
       view = mid(0, view, (#gridobj-1)\w-vh+1)
+    end
+
+    if btnp'4' then
+      f_minisfx(leavefunc() or SFX_LEAVE)
+    elseif btnp'5' then
+      if (num < 0 or not gridobj[num+1].disabled) then
+        f_minisfx(selfunc() or SFX_SELECT)
+      else
+        f_minisfx(SFX_ERROR)
+      end
     end
   end
 end $$

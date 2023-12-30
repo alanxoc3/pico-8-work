@@ -111,6 +111,7 @@ end
     poke(S_NEW, 1)
   end
 
+  op_browse = {}
   for ind in all(split'1,4,7,152,155,158') do -- 6 starter pokemon
     g_lock_pokemon[ind] = true
   end
@@ -127,9 +128,13 @@ end
       g_lock_item[c_pokemon[pkmn.ind].gender_item & 0b00111111] = true
     end
   end
+
+  for i=0,251 do
+    add(op_browse, {data=g_lock_pokemon[i] and i or 255, disabled=not g_lock_pokemon[i]})
+  end
 end $$
 
-poke(S_STORY,57) -- todo: remove me, this is just for debugging
+poke(S_STORY,20) -- todo: remove me, this is just for debugging
 f_update_locks()
 
 -- after we have read all the bytes, we can now apply filters to the sfx for the cool sounding pkmn cries.
@@ -165,11 +170,6 @@ end $$
 
 -- d_browse = {}
 -- for i=0,251 do add(d_browse, f_create_cell(true)) end
-
-op_browse = {}
-for i=0,251 do
-  add(op_browse, {data=i})
-end
 
 op_def = {{}}
 
@@ -245,7 +245,24 @@ end
 
 f_browselr = function(dir)
   local prev = g_grid_browse[1].num
-  g_grid_browse[1].num = mid(0, g_grid_browse[1].num+dir, 251)
+  local next = prev
+  if dir > 0 then
+    for i=prev+1,251,1 do
+      if g_lock_pokemon[i] then
+        next = i
+        break
+      end
+    end
+  elseif dir < 0 then
+    for i=prev-1,0,-1 do
+      if g_lock_pokemon[i] then
+        next = i
+        break
+      end
+    end
+  end
+
+  g_grid_browse[1].num = next
   if prev ~= g_grid_browse[1].num then
     f_minisfx(SFX_MOVE)
     f_populate_stats()
@@ -254,29 +271,11 @@ f_browselr = function(dir)
   end
 end
 
-f_zcall(f_create_gridpair, [[
-   p_browse;    ,~c_yes ,~c_no  ,3 ,2 ,2 ,2  ,20 ,20 ,@ ,~f_nf
-  ;t_browse;    ,~c_no  ,~c_no  ,1 ,1 ,2 ,45 ,60 ,16 ,@ ,~f_nf
-  ;p_title;     ,~c_no  ,~c_no  ,1 ,1 ,2 ,2  ,60 ,40 ,@ ,~f_nf
-  ;t_title;     ,~c_yes ,~c_no  ,2 ,2 ,2 ,44 ,30 ,9  ,@ ,~f_nf
-  ;p_pkpreview; ,~c_yes ,~c_yes  ,1 ,1 ,2 ,2  ,60 ,40 ,@ ,~f_browselr -- same as p_title
-  ;p_pkstat;    ,~c_yes ,~c_yes ,2 ,4 ,2 ,4  ,30 ,9  ,@ ,~f_browselr -- same as p_title
+|[f_dp_browse]| function(i, is_sel, gridobj)
+  f_draw_pkmn(gridobj.data, 1, 1, is_sel and (gridobj.disabled and C_1 or C_2) or C_1, gridobj.disabled and C_2 or (is_sel and C_4 or C_3), false)
+end $$
 
-  ;;,g_grid_browse     ,~p_browse    ,~t_browse ,@ ,@, op_browse, op_def
-  ;;,g_grid_title      ,~p_title     ,~t_title  ,@ ,@, op_def,    op_title
-  ;;,g_grid_pkpreview  ,~p_pkpreview ,~t_browse ,@ ,@, op_def,    op_def
-  ;;,g_grid_pkstat     ,~p_pkstat    ,~t_browse ,@ ,@, op_pkstat, op_def
-]], function(i, is_sel) -- p_browse
-  if not g_lock_pokemon[i] then
-    if not is_sel then
-      rectfill(-1,-1,18,18,C_1)
-    end
-    -- f_draw_pkmn(i, 1, 1, C_1, is_sel and C_2 or C_2, false)
-    f_draw_pkmn(255, 1, 1, C_1, is_sel and C_2 or C_2, false)
-  else
-    f_draw_pkmn(i, 1, 1, is_sel and C_2 or C_1, is_sel and C_4 or C_3, false)
-  end
-end, function(i, is_sel) -- t_browse
+|[f_dt_browse]| function(i, is_sel)
   local numstr = tostr(g_grid_browse[1].num)
   while #numstr < 3 do numstr = "0"..numstr end
   local namestr, type1, type2 = c_pkmn_names[g_grid_browse[1].num+1], c_type_names[c_pokemon[g_grid_browse[1].num].type1+1], ""
@@ -292,51 +291,80 @@ end, function(i, is_sel) -- t_browse
   local str = "\^y7\f6"..numstr.." \f7"..namestr.."\n\f1"..type1.." "..type2
 
   print(str, 1, 1)
-end, function(i, is_sel) -- p_title
+end $$
+
+|[f_l_browse]| function()
+  deli(g_gridstack)
+end $$
+
+|[f_s_browse]| function()
+  add(g_gridstack, g_grid_pkstat)
+  f_populate_stats()
+end $$
+
+|[f_dp_title]| function(i, is_sel)
   print("\^w\^tpicodex", 2, 1,  C_1)
   print("dUAL vERSION",  2, 12, C_1)
 
-  -- f_draw_pkmn((t()+.5)\2, 32-8- sin(t()/2)*4\1, 24+sin(t()/2)*4\1, C_1, C_4, false, 8-sin(t()/2)*8\1)
   f_draw_pkmn(254, 15-8, 20, C_1, C_3)
   f_draw_pkmn(t()\1%252, 32-4, 24-4, C_1, C_3, false)
-end, function(i, is_sel, gridobj) -- t_title
+end $$
+
+|[f_dt_title]| function(i, is_sel, gridobj)
   print(split"bROWSE,eDIT,lEAGUE,vERSUS"[i+1], 1, 1, is_sel and (gridobj.disabled and C_1 or C_2) or (gridobj.disabled and C_2 or C_1))
-end, function(i, is_sel) -- p_pkpreview
-  local pkmn_ind = g_grid_browse[1].num
-  f_draw_pkmn(pkmn_ind, 13+(g_preview_timer > 0 and (rnd(3)\1-1)*2 or 0), 1+2, C_1, C_3, false, 32)
+end $$
 
-end, function(i, is_sel, obj) -- p_pkstat
-  -- print(obj.data, 1, 1, C_1)
-
-end, function() -- browse if select
-  add(g_gridstack, g_grid_pkstat)
-  f_populate_stats()
-
-end, function() -- browse if leave
-  deli(g_gridstack)
-
-end, function() -- title if select
+|[f_s_title]| function()
   if g_cg_t.num == 0 then
     add(g_gridstack, g_grid_browse)
   end
-end, function() -- title if leave
-end, function() -- pkpreview if select
+end $$
+
+|[f_dp_pkpreview]| function(i, is_sel)
+  local pkmn_ind = g_grid_browse[1].num
+  f_draw_pkmn(pkmn_ind, 13+(g_preview_timer > 0 and (rnd(3)\1-1)*2 or 0), 1+2, C_1, C_3, false, 32)
+end $$
+
+|[f_l_pkpreview]| function()
+  deli(g_gridstack)
+end $$
+
+|[f_s_pkpreview]| function()
   g_preview_timer = 20
   return g_grid_browse[1].num
-end, function() -- pkpreview if leave
+end $$
+
+|[f_dp_pkstat]| function(i, is_sel, obj)
+end $$
+
+|[f_l_pkstat]| function()
   deli(g_gridstack)
-end, function() -- pkstat if select
+end $$
+
+|[f_s_pkstat]| function()
   add(g_gridstack, g_grid_pkpreview)
-end, function() -- pkstat if leave
-  deli(g_gridstack)
-end)
+end $$
+
+f_zcall(f_create_gridpair, [[
+  --            active  vert    w  vh x  y   cw   ch draw func        lrfunc        select func     leave func
+   p_browse;    ,~c_yes ,~c_no  ,3 ,2 ,2 ,2  ,20 ,20 ,~f_dp_browse    ,~f_nf        ,~f_s_browse    ,~f_l_browse
+  ;t_browse;    ,~c_no  ,~c_no  ,1 ,1 ,2 ,45 ,60 ,16 ,~f_dt_browse    ,~f_nf        ,~f_nf          ,~f_nf
+  ;p_title;     ,~c_no  ,~c_no  ,1 ,1 ,2 ,2  ,60 ,40 ,~f_dp_title     ,~f_nf        ,~f_nf          ,~f_nf
+  ;t_title;     ,~c_yes ,~c_no  ,2 ,2 ,2 ,44 ,30 ,9  ,~f_dt_title     ,~f_nf        ,~f_s_title     ,~f_nf
+  ;p_pkpreview; ,~c_yes ,~c_yes ,1 ,1 ,2 ,2  ,60 ,40 ,~f_dp_pkpreview ,~f_browselr  ,~f_s_pkpreview ,~f_l_pkpreview
+  ;p_pkstat;    ,~c_yes ,~c_yes ,2 ,4 ,2 ,4  ,30 ,9  ,~f_dp_pkstat    ,~f_browselr  ,~f_s_pkstat    ,~f_l_pkstat
+
+  ;;,g_grid_browse    ,~p_browse    ,~t_browse ,op_browse ,op_def
+  ;;,g_grid_title     ,~p_title     ,~t_title  ,op_def    ,op_title
+  ;;,g_grid_pkpreview ,~p_pkpreview ,~t_browse ,op_def    ,op_def
+  ;;,g_grid_pkstat    ,~p_pkstat    ,~t_browse ,op_pkstat ,op_def
+]])
 
 -- sounds: go forward. go backward. disallow
 -- how to determine disabled cell? could have a "disabled" list.
 -- locked pkmn are disabled, disabled move is disabled. mean look disables switching. no pp is disabled.
 -- clicking on something... does it always take me to a new place? not during battle.
 -- when is something disabled? moves can be disabled...
-
 g_gridstack = {g_grid_title}
 
 -------------------------------------------------------
@@ -346,20 +374,13 @@ g_gridstack = {g_grid_title}
 g_preview_timer = 0
 |[_update60]| function()
   g_preview_timer = max(0, g_preview_timer-1)
-  g_cg_p, g_cg_t, g_cg_s, g_cg_l, gridpo, gridto = unpack(g_gridstack[#g_gridstack])
+  g_cg_p, g_cg_t, gridpo, gridto = unpack(g_gridstack[#g_gridstack])
 
   gridpo = _ENV[gridpo]
   gridto = _ENV[gridto]
 
-
   f_update_grid(g_cg_p, gridpo)
   f_update_grid(g_cg_t, gridto)
-
-  if btnp'4' then
-    f_minisfx(g_cg_l() or SFX_LEAVE)
-  elseif btnp'5' then
-    f_minisfx(g_cg_s() or SFX_SELECT)
-  end
 end $$
 
 |[_draw]| function()
