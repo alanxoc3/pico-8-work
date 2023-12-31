@@ -306,8 +306,8 @@ end $$
   print("\^w\^tpicodex", 2, 1,  C_1)
   print("dUAL vERSION",  2, 12, C_1)
 
-  f_draw_pkmn(254, 15-8, 20, C_1, C_3)
-  f_draw_pkmn(t()\1%252, 32-4, 24-4, C_1, C_3, false)
+  f_draw_pkmn(254,       15-8+4, 20, C_1, C_3)
+  f_draw_pkmn(t()\1%252, 32-4+4, 24-4, C_1, C_3, false)
 end $$
 
 |[f_dt_title]| function(i, is_sel, gridobj)
@@ -317,6 +317,8 @@ end $$
 |[f_s_title]| function()
   if g_cg_t.num == 0 then
     add(g_gridstack, g_grid_browse)
+  elseif g_cg_t.num == 1 then
+    add(g_gridstack, g_grid_edit)
   end
 end $$
 
@@ -345,12 +347,17 @@ end $$
   add(g_gridstack, g_grid_pkpreview)
 end $$
 
+|[f_l_title]| function()
+  return SFX_ERROR
+end $$
+
+-- next, implement edit.
 f_zcall(f_create_gridpair, [[
   --            active  vert    w  vh x  y   cw   ch draw func        lrfunc        select func     leave func
    p_browse;    ,~c_yes ,~c_no  ,3 ,2 ,2 ,2  ,20 ,20 ,~f_dp_browse    ,~f_nf        ,~f_s_browse    ,~f_l_browse
   ;t_browse;    ,~c_no  ,~c_no  ,1 ,1 ,2 ,45 ,60 ,16 ,~f_dt_browse    ,~f_nf        ,~f_nf          ,~f_nf
   ;p_title;     ,~c_no  ,~c_no  ,1 ,1 ,2 ,2  ,60 ,40 ,~f_dp_title     ,~f_nf        ,~f_nf          ,~f_nf
-  ;t_title;     ,~c_yes ,~c_no  ,2 ,2 ,2 ,44 ,30 ,9  ,~f_dt_title     ,~f_nf        ,~f_s_title     ,~f_nf
+  ;t_title;     ,~c_yes ,~c_no  ,2 ,2 ,2 ,44 ,30 ,9  ,~f_dt_title     ,~f_nf        ,~f_s_title     ,~f_l_title
   ;p_pkpreview; ,~c_yes ,~c_yes ,1 ,1 ,2 ,2  ,60 ,40 ,~f_dp_pkpreview ,~f_browselr  ,~f_s_pkpreview ,~f_l_pkpreview
   ;p_pkstat;    ,~c_yes ,~c_yes ,2 ,4 ,2 ,4  ,30 ,9  ,~f_dp_pkstat    ,~f_browselr  ,~f_s_pkstat    ,~f_l_pkstat
 

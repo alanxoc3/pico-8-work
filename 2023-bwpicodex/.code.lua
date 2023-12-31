@@ -35,7 +35,7 @@ function f_zobj(...)
 return f_zobj_set(setmetatable({},{__index=_g}),...)
 end
 f_zobj_set(_g,"c_pokemon,#,c_moves,#,c_trainers,#,g_lock_pokemon,#,g_lock_move,#,g_lock_item,#,g_init_peek_loc,0x1fff,c_yes,@,c_no,@,c_empty,@,f_nop,@",true,false,"",function(...)return...end)
-f_zobj_set(_g,"f_zobj,@,f_zobj_set,@,f_zobj_eval,@,f_zcall,@,f_create_gridpair,@,f_update_grid,@,f_draw_grid,@,f_minisfx,@,f_draw_pkmn,@,c_move_names,@,c_pkmn_names,@,c_trnr_names,@,c_type_names,@,c_item_names,@,f_init_peek_inc,@,c_types,@,f_can_pokemon_teach_move,@,f_update_locks,@,f_strtoq,@,f_dp_browse,@,f_dt_browse,@,f_l_browse,@,f_s_browse,@,f_dp_title,@,f_dt_title,@,f_s_title,@,f_dp_pkpreview,@,f_l_pkpreview,@,f_s_pkpreview,@,f_dp_pkstat,@,f_l_pkstat,@,f_s_pkstat,@,_update60,@,_draw,@",f_zobj,f_zobj_set,f_zobj_eval,function(func,text,...)
+f_zobj_set(_g,"f_zobj,@,f_zobj_set,@,f_zobj_eval,@,f_zcall,@,f_create_gridpair,@,f_update_grid,@,f_draw_grid,@,f_minisfx,@,f_draw_pkmn,@,c_move_names,@,c_pkmn_names,@,c_trnr_names,@,c_type_names,@,c_item_names,@,f_init_peek_inc,@,c_types,@,f_can_pokemon_teach_move,@,f_update_locks,@,f_strtoq,@,f_dp_browse,@,f_dt_browse,@,f_l_browse,@,f_s_browse,@,f_dp_title,@,f_dt_title,@,f_s_title,@,f_dp_pkpreview,@,f_l_pkpreview,@,f_s_pkpreview,@,f_dp_pkstat,@,f_l_pkstat,@,f_s_pkstat,@,f_l_title,@,_update60,@,_draw,@",f_zobj,f_zobj_set,f_zobj_eval,function(func,text,...)
 foreach(f_zobj(text,...),function(params)
 func(unpack(params))
 end)
@@ -219,13 +219,15 @@ f_populate_stats()
 end,function(i,is_sel)
 print("\^w\^tpicodex",2,1,1)
 print("dUAL vERSION",2,12,1)
-f_draw_pkmn(254,15-8,20,1,6)
-f_draw_pkmn(t()\1%252,32-4,24-4,1,6,false)
+f_draw_pkmn(254,15-8+4,20,1,6)
+f_draw_pkmn(t()\1%252,32-4+4,24-4,1,6,false)
 end,function(i,is_sel,gridobj)
 print(split"bROWSE,eDIT,lEAGUE,vERSUS"[i+1],1,1,is_sel and(gridobj.disabled and 1 or 13)or(gridobj.disabled and 13 or 1))
 end,function()
 if g_cg_t.num==0 then
 add(g_gridstack,g_grid_browse)
+elseif g_cg_t.num==1 then
+add(g_gridstack,g_grid_edit)
 end
 end,function(i,is_sel)
 local pkmn_ind=g_grid_browse[1].num
@@ -240,6 +242,8 @@ end,function()
 deli(g_gridstack)
 end,function()
 add(g_gridstack,g_grid_pkpreview)
+end,function()
+return 253
 end,function()
 g_preview_timer=max(0,g_preview_timer-1)
 g_cg_p,g_cg_t,gridpo,gridto=unpack(g_gridstack[#g_gridstack])
@@ -426,6 +430,6 @@ elseif dir ~=0 then
 f_minisfx(253)
 end
 end
-f_zcall(f_create_gridpair,"p_browse;,~c_yes,~c_no,3,2,2,2,20,20,~f_dp_browse,~f_nf,~f_s_browse,~f_l_browse;t_browse;,~c_no,~c_no,1,1,2,45,60,16,~f_dt_browse,~f_nf,~f_nf,~f_nf;p_title;,~c_no,~c_no,1,1,2,2,60,40,~f_dp_title,~f_nf,~f_nf,~f_nf;t_title;,~c_yes,~c_no,2,2,2,44,30,9,~f_dt_title,~f_nf,~f_s_title,~f_nf;p_pkpreview;,~c_yes,~c_yes,1,1,2,2,60,40,~f_dp_pkpreview,~f_browselr,~f_s_pkpreview,~f_l_pkpreview;p_pkstat;,~c_yes,~c_yes,2,4,2,4,30,9,~f_dp_pkstat,~f_browselr,~f_s_pkstat,~f_l_pkstat;;,g_grid_browse,~p_browse,~t_browse,op_browse,op_def;;,g_grid_title,~p_title,~t_title,op_def,op_title;;,g_grid_pkpreview,~p_pkpreview,~t_browse,op_def,op_def;;,g_grid_pkstat,~p_pkstat,~t_browse,op_pkstat,op_def")
+f_zcall(f_create_gridpair,"p_browse;,~c_yes,~c_no,3,2,2,2,20,20,~f_dp_browse,~f_nf,~f_s_browse,~f_l_browse;t_browse;,~c_no,~c_no,1,1,2,45,60,16,~f_dt_browse,~f_nf,~f_nf,~f_nf;p_title;,~c_no,~c_no,1,1,2,2,60,40,~f_dp_title,~f_nf,~f_nf,~f_nf;t_title;,~c_yes,~c_no,2,2,2,44,30,9,~f_dt_title,~f_nf,~f_s_title,~f_l_title;p_pkpreview;,~c_yes,~c_yes,1,1,2,2,60,40,~f_dp_pkpreview,~f_browselr,~f_s_pkpreview,~f_l_pkpreview;p_pkstat;,~c_yes,~c_yes,2,4,2,4,30,9,~f_dp_pkstat,~f_browselr,~f_s_pkstat,~f_l_pkstat;;,g_grid_browse,~p_browse,~t_browse,op_browse,op_def;;,g_grid_title,~p_title,~t_title,op_def,op_title;;,g_grid_pkpreview,~p_pkpreview,~t_browse,op_def,op_def;;,g_grid_pkstat,~p_pkstat,~t_browse,op_pkstat,op_def")
 g_gridstack={g_grid_title}
 g_preview_timer=0

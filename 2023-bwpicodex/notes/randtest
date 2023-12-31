@@ -1,0 +1,124 @@
+#!/usr/bin/python3
+# Rand func from Josiah Windstone on Discord. Everything else from Alanxoc3.
+from PIL import Image
+import math
+
+picopal = [
+  (0,   0,   0),   (29,  43,  83),  (126, 37,  83),  (0,   135, 81),
+  (171, 82,  54),  (95,  87,  79),  (194, 195, 199), (255, 241, 232),
+  (255, 0,   77),  (255, 163, 0),   (255, 236, 39),  (0,   228, 54),
+  (41,  173, 255), (131, 118, 156), (255, 119, 168), (255, 204, 170)
+]
+
+def srand(seed=0):
+  global seedhi, seedlo
+  if seed == 0:
+    seedhi, seedlo = 0x60009755, 0xdeadbeef
+  else:
+    seedhi, seedlo = seed ^ 0xbead29ba, seed
+
+  # call rnd() 32 times
+  for _ in range(32):
+    rnd()
+
+def rnd(maxnum=0x10000):
+  global seedhi, seedlo
+  # rotate seedhi by 16
+  seedhi = (seedhi << 16) | (seedhi >> 16)
+  seedhi &= 0xffffffff
+  # add seedlo to seedhi
+  seedhi += seedlo
+  seedhi &= 0xffffffff
+
+  # add seedhi to seedlo
+  seedlo += seedhi
+  seedlo &= 0xffffffff
+
+  # result = seedhi mod maxnum
+  return seedhi % maxnum
+
+cur_pix = 0
+cur_img = 0
+image_dim = 16
+gap_px_len = 4 # 2
+image_len = image_dim**2
+max_num_images = 1024*64 # 64 # 8192
+row_len = math.ceil(math.sqrt(max_num_images))
+multiplier = 32000 / (image_dim/2)
+
+img = Image.new('RGB', (row_len*image_dim+row_len*gap_px_len, row_len*image_dim+row_len*gap_px_len), color = picopal[13])
+
+def sprcoords(xoff, yoff):
+  x = cur_img %row_len*image_dim + max(0, min(xoff, image_dim-1)) + gap_px_len//2 + cur_img %row_len*gap_px_len
+  y = cur_img//row_len*image_dim + max(0, min(yoff, image_dim-1)) + gap_px_len//2 + cur_img//row_len*gap_px_len
+  return (x, y)
+
+def sprcoords_nobound(xoff, yoff):
+  x = cur_img %row_len*image_dim + xoff + gap_px_len//2 + cur_img %row_len*gap_px_len
+  y = cur_img//row_len*image_dim + yoff + gap_px_len//2 + cur_img//row_len*gap_px_len
+  return (x, y)
+
+def getpix_raw(x, y):
+  if x < 0 or x >= image_dim: return 0
+  if y < 0 or y >= image_dim: return 0
+  r, g, b = img.getpixel(sprcoords_nobound(x, y))
+  return r+g+b
+
+def getpix(x, y):
+  if x < 0 or x >= image_dim: return False
+  if y < 0 or y >= image_dim: return False
+  r, g, b = img.getpixel(sprcoords(x, y))
+  return r+g+b == 588
+
+def setpix(shouldset, size, col):
+  global cur_img, cur_pix
+  if shouldset:
+    for xoff in range(-size, size+1):
+      for yoff in range(-size, size+1):
+        if xoff == 0 or yoff == 0:
+          img.putpixel(sprcoords(cur_pix%image_dim+xoff, cur_pix//image_dim+yoff), picopal[col])
+
+  cur_pix += 1
+  if cur_pix == image_len:
+    while True:
+      change_count = 0
+      for yoff in range(0,image_dim):
+        for xoff in range(0,image_dim):
+          if getpix(xoff, yoff):
+            neb_count = 0
+            for yyoff in range(-1,2):
+              for xxoff in range(-1,2):
+                neb_count += 1 if getpix(xoff+xxoff, yoff+yyoff) else 0
+            if neb_count <= 2:
+              img.putpixel(sprcoords(xoff, yoff), picopal[13])
+              change_count += 1
+
+      if change_count == 0: break
+
+    for yoff in range(0,image_dim):
+      for xoff in range(0,image_dim):
+        if getpix_raw(xoff, yoff) == 588:
+          if getpix_raw(xoff-1, yoff) != 588: img.putpixel(sprcoords_nobound(xoff-1, yoff), picopal[1])
+          if getpix_raw(xoff+1, yoff) != 588: img.putpixel(sprcoords_nobound(xoff+1, yoff), picopal[1])
+          if getpix_raw(xoff, yoff-1) != 588: img.putpixel(sprcoords_nobound(xoff, yoff-1), picopal[1])
+          if getpix_raw(xoff, yoff+1) != 588: img.putpixel(sprcoords_nobound(xoff, yoff+1), picopal[1])
+
+          if getpix_raw(xoff-1, yoff-1) != 588: img.putpixel(sprcoords_nobound(xoff-1, yoff-1), picopal[1])
+          if getpix_raw(xoff-1, yoff+1) != 588: img.putpixel(sprcoords_nobound(xoff-1, yoff+1), picopal[1])
+          if getpix_raw(xoff+1, yoff-1) != 588: img.putpixel(sprcoords_nobound(xoff+1, yoff-1), picopal[1])
+          if getpix_raw(xoff+1, yoff+1) != 588: img.putpixel(sprcoords_nobound(xoff+1, yoff+1), picopal[1])
+
+    if cur_img % 128 == 0: print("on spr", cur_img, flush=True)
+    cur_pix = 0
+    cur_img += 1
+
+  return cur_img >= max_num_images
+
+srand()
+while True:
+  num = rnd()
+  diff = abs(image_dim/2-cur_pix%image_dim) + abs(image_dim/2-cur_pix//image_dim)
+  if setpix(num < 42000-diff*multiplier, num%2, 6):
+    break
+
+img.save('f.png')
