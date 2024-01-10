@@ -173,7 +173,14 @@ end $$
 
 op_def = {{}}
 
-op_title = {{}, {}, {}, {disabled=true}}
+op_title = {{text="bROWSE"}, {text="eDIT"}, {text="lEAGUE"}, {text="vERSUS", disabled=true}}
+
+op_teams = {}
+add(op_teams, {text="sELECT a tEAM", disabled=true, header=true})
+add(op_teams, {text="", disabled=true, header=true})
+for i=1, 6 do
+  add(op_teams, {text="tEAM "..i})
+end
 
 f_nf = function() end
 
@@ -188,8 +195,8 @@ f_populate_stats = function()
     genders ..= "F" end
   if #genders == 0 then genders ..= "U" end
 
-  add(op_pkstat, {text="bASE sTATS", disabled=true})
-  add(op_pkstat, {text="", disabled=true})
+  add(op_pkstat, {text="bASE sTATS", header=true})
+  add(op_pkstat, {text=""})
 
   add(op_pkstat, {text="hP:"..pkmn.hp})
   add(op_pkstat, {text="sP:"..pkmn.spd})
@@ -201,18 +208,18 @@ f_populate_stats = function()
   add(op_pkstat, {text="lV:50"})
 
   if #pkmn.learn > 0 then
-    add(op_pkstat, {text="lEARN mOVES", disabled=true})
-    add(op_pkstat, {text="", disabled=true})
+    add(op_pkstat, {text="lEARN mOVES", disabled=true, header=true})
+    add(op_pkstat, {text="", disabled=true, header=true})
 
     for m in all(pkmn.learn) do
       add(op_pkstat, {text=c_move_names[m+1]})
     end
 
-    if #op_pkstat % 2 == 1 then add(op_pkstat, {text=""}) end
+    if #op_pkstat % 2 == 1 then add(op_pkstat, {text="", disabled=true}) end
   end
 
   if #pkmn.teach > 0 then
-    add(op_pkstat, {text="tEACH mOVES", disabled=true})
+    add(op_pkstat, {text="tEACH mOVES", header=true, disabled=true})
     add(op_pkstat, {text="", disabled=true})
 
     for m in all(pkmn.teach) do
@@ -223,11 +230,11 @@ f_populate_stats = function()
       add(op_pkstat, {text=movename})
     end
 
-    if #op_pkstat % 2 == 1 then add(op_pkstat, {text=""}) end
+    if #op_pkstat % 2 == 1 then add(op_pkstat, {text="", disabled=true}) end
   end
 
   if #pkmn.event > 0 then
-    add(op_pkstat, {text="eVENT mOVES", disabled=true})
+    add(op_pkstat, {text="eVENT mOVES", header=true, disabled=true})
     add(op_pkstat, {text="", disabled=true})
 
     for m in all(pkmn.event) do
@@ -238,7 +245,7 @@ f_populate_stats = function()
       add(op_pkstat, {text=movename})
     end
 
-    if #op_pkstat % 2 == 1 then add(op_pkstat, {text=""}) end
+    if #op_pkstat % 2 == 1 then add(op_pkstat, {text="", disabled=true}) end
   end
 
 end
@@ -293,6 +300,19 @@ end $$
   print(str, 1, 1)
 end $$
 
+|[f_dt_teamed]| function()
+  printh(debug(gridpo))
+  printh(debug(g_cg_p))
+
+  local num = g_cg_p.num+1
+  local str = "\^y7\f7"..gridpo[g_cg_p.num+1].text.."\f1 #6\ntOTAL: 18380"
+  if num <= 2 then
+    str = "\^y7\f1sELECT a tEAM"
+  end
+
+  print(str, 1, 1)
+end $$
+
 |[f_l_browse]| function()
   deli(g_gridstack)
 end $$
@@ -308,10 +328,6 @@ end $$
 
   f_draw_pkmn(254,       15-8+4, 20, C_1, C_3)
   f_draw_pkmn(t()\1%252, 32-4+4, 24-4, C_1, C_3, false)
-end $$
-
-|[f_dt_title]| function(i, is_sel, gridobj)
-  print(split"bROWSE,eDIT,lEAGUE,vERSUS"[i+1], 1, 1, is_sel and (gridobj.disabled and C_1 or C_2) or (gridobj.disabled and C_2 or C_1))
 end $$
 
 |[f_s_title]| function()
@@ -357,14 +373,17 @@ f_zcall(f_create_gridpair, [[
    p_browse;    ,~c_yes ,~c_no  ,3 ,2 ,2 ,2  ,20 ,20 ,~f_dp_browse    ,~f_nf        ,~f_s_browse    ,~f_l_browse
   ;t_browse;    ,~c_no  ,~c_no  ,1 ,1 ,2 ,45 ,60 ,16 ,~f_dt_browse    ,~f_nf        ,~f_nf          ,~f_nf
   ;p_title;     ,~c_no  ,~c_no  ,1 ,1 ,2 ,2  ,60 ,40 ,~f_dp_title     ,~f_nf        ,~f_nf          ,~f_nf
-  ;t_title;     ,~c_yes ,~c_no  ,2 ,2 ,2 ,44 ,30 ,9  ,~f_dt_title     ,~f_nf        ,~f_s_title     ,~f_l_title
+  ;t_title;     ,~c_yes ,~c_no  ,2 ,2 ,2 ,44 ,30 ,9  ,~f_nf           ,~f_nf        ,~f_s_title     ,~f_l_title
   ;p_pkpreview; ,~c_yes ,~c_yes ,1 ,1 ,2 ,2  ,60 ,40 ,~f_dp_pkpreview ,~f_browselr  ,~f_s_pkpreview ,~f_l_pkpreview
   ;p_pkstat;    ,~c_yes ,~c_yes ,2 ,4 ,2 ,4  ,30 ,9  ,~f_dp_pkstat    ,~f_browselr  ,~f_s_pkstat    ,~f_l_pkstat
+  ;p_teamed;    ,~c_yes ,~c_no  ,2 ,4 ,2 ,4  ,30 ,9  ,~f_nf           ,~f_nf        ,~f_nf          ,~f_l_pkstat
+  ;t_teamed;    ,~c_no  ,~c_no  ,1 ,1 ,2 ,45 ,60 ,16 ,~f_dt_teamed    ,~f_nf        ,~f_nf          ,~f_nf
 
   ;;,g_grid_browse    ,~p_browse    ,~t_browse ,op_browse ,op_def
   ;;,g_grid_title     ,~p_title     ,~t_title  ,op_def    ,op_title
   ;;,g_grid_pkpreview ,~p_pkpreview ,~t_browse ,op_def    ,op_def
   ;;,g_grid_pkstat    ,~p_pkstat    ,~t_browse ,op_pkstat ,op_def
+  ;;,g_grid_edit      ,~p_teamed    ,~t_teamed ,op_teams  ,op_def
 ]])
 
 -- sounds: go forward. go backward. disallow

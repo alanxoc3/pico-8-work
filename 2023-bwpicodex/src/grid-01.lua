@@ -28,6 +28,10 @@ end $$
       if newnum == num and off ~= 0 then
         f_minisfx(SFX_ERROR)
       elseif newnum ~= num then
+        -- if gridobj[newnum+1].header then
+          -- f_minisfx(SFX_ERROR)
+          -- return num
+        -- end
         f_minisfx(SFX_MOVE)
       end
       return newnum
@@ -71,6 +75,8 @@ end $$
 |[f_draw_grid]| function(_ENV, gridobj)
   for j=0,vh*w-1 do
     local i = j + view*w
+    local isheader = gridobj[i\w*w+1].header
+    local isnumheader = isheader and (num\w == i\w)
     local obj = gridobj[i+1]
     if i >= #gridobj then break end
     local xloc, yloc = x+i%w*cw, y+j\w*ch
@@ -78,18 +84,22 @@ end $$
 
     local l, r, u, d = 0, 0, 0, 0
 
-    if i == 0           then l = 1 u = 1 end
-    if i == w-1         then r = 1 u = 1 end
+    if i == 0                then l = 1 u = 1 end
+    if i == w-1              then r = 1 u = 1 end
     if i == #gridobj-1       then r = 1 d = 1 end
     if i == (#gridobj-1)\w*w then l = 1 d = 1 end
 
     local c = C_2
-    if active and i == num then
-      c = C_3
+    if i ~= num and (obj.disabled or isheader) then
+      c = C_1
     end
 
-    if i ~= num and obj.disabled then
-      c = C_1
+    if active and (i == num or isnumheader) then
+      if obj.disabled or isnumheader then
+        c = C_3
+      else
+        c = C_3
+      end
     end
 
     rectfill(-1+l, -1,   cw-2-r, ch-2,   c)
@@ -100,13 +110,22 @@ end $$
   for j=0,vh*w-1 do
     local i = j + view*w
     local obj = gridobj[i+1]
+    local isheader = gridobj[i\w*w+1].header
+    local isnumheader = isheader and (num\w == i\w)
     if i >= #gridobj then break end
     local xloc, yloc = x+i%w*cw, y+j\w*ch
     camera(-xloc-1, -yloc-1)
 
     local c = C_1
-    if obj.disabled then
+    if i == num and not isnumheader then
       c = C_2
+    end
+    if (obj.disabled or isheader) then
+      if isnumheader or i == num then
+        c = C_4
+      else
+        c = C_2
+      end
     end
     print(obj.text or "", 1, 1, c)
 

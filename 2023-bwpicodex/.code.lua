@@ -35,7 +35,7 @@ function f_zobj(...)
 return f_zobj_set(setmetatable({},{__index=_g}),...)
 end
 f_zobj_set(_g,"c_pokemon,#,c_moves,#,c_trainers,#,g_lock_pokemon,#,g_lock_move,#,g_lock_item,#,g_init_peek_loc,0x1fff,c_yes,@,c_no,@,c_empty,@,f_nop,@",true,false,"",function(...)return...end)
-f_zobj_set(_g,"f_zobj,@,f_zobj_set,@,f_zobj_eval,@,f_zcall,@,f_create_gridpair,@,f_update_grid,@,f_draw_grid,@,f_minisfx,@,f_draw_pkmn,@,c_move_names,@,c_pkmn_names,@,c_trnr_names,@,c_type_names,@,c_item_names,@,f_init_peek_inc,@,c_types,@,f_can_pokemon_teach_move,@,f_update_locks,@,f_strtoq,@,f_dp_browse,@,f_dt_browse,@,f_l_browse,@,f_s_browse,@,f_dp_title,@,f_dt_title,@,f_s_title,@,f_dp_pkpreview,@,f_l_pkpreview,@,f_s_pkpreview,@,f_dp_pkstat,@,f_l_pkstat,@,f_s_pkstat,@,f_l_title,@,_update60,@,_draw,@",f_zobj,f_zobj_set,f_zobj_eval,function(func,text,...)
+f_zobj_set(_g,"f_zobj,@,f_zobj_set,@,f_zobj_eval,@,f_zcall,@,f_create_gridpair,@,f_update_grid,@,f_draw_grid,@,f_minisfx,@,f_draw_pkmn,@,c_move_names,@,c_pkmn_names,@,c_trnr_names,@,c_type_names,@,c_item_names,@,f_init_peek_inc,@,c_types,@,f_can_pokemon_teach_move,@,f_update_locks,@,f_strtoq,@,f_dp_browse,@,f_dt_browse,@,f_dt_teamed,@,f_l_browse,@,f_s_browse,@,f_dp_title,@,f_s_title,@,f_dp_pkpreview,@,f_l_pkpreview,@,f_s_pkpreview,@,f_dp_pkstat,@,f_l_pkstat,@,f_s_pkstat,@,f_l_title,@,_update60,@,_draw,@",f_zobj,f_zobj_set,f_zobj_eval,function(func,text,...)
 foreach(f_zobj(text,...),function(params)
 func(unpack(params))
 end)
@@ -91,6 +91,8 @@ end
 end,function(_ENV,gridobj)
 for j=0,vh*w-1 do
 local i=j+view*w
+local isheader=gridobj[i\w*w+1].header
+local isnumheader=isheader and(num\w==i\w)
 local obj=gridobj[i+1]
 if i>=#gridobj then break end
 local xloc,yloc=x+i%w*cw,y+j\w*ch
@@ -101,11 +103,15 @@ if i==w-1 then r=1 u=1 end
 if i==#gridobj-1 then r=1 d=1 end
 if i==(#gridobj-1)\w*w then l=1 d=1 end
 local c=13
-if active and i==num then
+if i ~=num and(obj.disabled or isheader)then
+c=1
+end
+if active and(i==num or isnumheader)then
+if obj.disabled or isnumheader then
+c=6
+else
 c=6
 end
-if i ~=num and obj.disabled then
-c=1
 end
 rectfill(-1+l,-1,cw-2-r,ch-2,c)
 rectfill(-1,-1+u,cw-2,ch-2-d,c)
@@ -113,12 +119,21 @@ end
 for j=0,vh*w-1 do
 local i=j+view*w
 local obj=gridobj[i+1]
+local isheader=gridobj[i\w*w+1].header
+local isnumheader=isheader and(num\w==i\w)
 if i>=#gridobj then break end
 local xloc,yloc=x+i%w*cw,y+j\w*ch
 camera(-xloc-1,-yloc-1)
 local c=1
-if obj.disabled then
+if i==num and not isnumheader then
 c=13
+end
+if(obj.disabled or isheader)then
+if isnumheader or i==num then
+c=7
+else
+c=13
+end
 end
 print(obj.text or "",1,1,c)
 df(i,i==num,obj)
@@ -212,6 +227,15 @@ end
 local str="\^y7\f6"..numstr.." \f7"..namestr.."\n\f1"..type1.." "..type2
 print(str,1,1)
 end,function()
+printh(debug(gridpo))
+printh(debug(g_cg_p))
+local num=g_cg_p.num+1
+local str="\^y7\f7"..gridpo[g_cg_p.num+1].text.."\f1 #6\ntOTAL: 18380"
+if num<=2 then
+str="\^y7\f1sELECT a tEAM"
+end
+print(str,1,1)
+end,function()
 deli(g_gridstack)
 end,function()
 add(g_gridstack,g_grid_pkstat)
@@ -221,8 +245,6 @@ print("\^w\^tpicodex",2,1,1)
 print("dUAL vERSION",2,12,1)
 f_draw_pkmn(254,15-8+4,20,1,6)
 f_draw_pkmn(t()\1%252,32-4+4,24-4,1,6,false)
-end,function(i,is_sel,gridobj)
-print(split"bROWSE,eDIT,lEAGUE,vERSUS"[i+1],1,1,is_sel and(gridobj.disabled and 1 or 13)or(gridobj.disabled and 13 or 1))
 end,function()
 if g_cg_t.num==0 then
 add(g_gridstack,g_grid_browse)
@@ -350,7 +372,13 @@ end
 poke4(iloc+64,0x.07d7)
 end
 op_def={{}}
-op_title={{},{},{},{disabled=true}}
+op_title={{text="bROWSE"},{text="eDIT"},{text="lEAGUE"},{text="vERSUS",disabled=true}}
+op_teams={}
+add(op_teams,{text="sELECT a tEAM",disabled=true,header=true})
+add(op_teams,{text="",disabled=true,header=true})
+for i=1,6 do
+add(op_teams,{text="tEAM "..i})
+end
 f_nf=function()end
 f_populate_stats=function()
 op_pkstat={}
@@ -361,8 +389,8 @@ if pkmn.gender_item & 128>0 then
 if #genders>0 then genders..="/" end
 genders..="F" end
 if #genders==0 then genders..="U" end
-add(op_pkstat,{text="bASE sTATS",disabled=true})
-add(op_pkstat,{text="",disabled=true})
+add(op_pkstat,{text="bASE sTATS",header=true})
+add(op_pkstat,{text=""})
 add(op_pkstat,{text="hP:"..pkmn.hp})
 add(op_pkstat,{text="sP:"..pkmn.spd})
 add(op_pkstat,{text="aT:"..pkmn.att})
@@ -372,15 +400,15 @@ add(op_pkstat,{text="sD:"..pkmn.sdf})
 add(op_pkstat,{text="gD:"..genders})
 add(op_pkstat,{text="lV:50"})
 if #pkmn.learn>0 then
-add(op_pkstat,{text="lEARN mOVES",disabled=true})
-add(op_pkstat,{text="",disabled=true})
+add(op_pkstat,{text="lEARN mOVES",disabled=true,header=true})
+add(op_pkstat,{text="",disabled=true,header=true})
 for m in all(pkmn.learn)do
 add(op_pkstat,{text=c_move_names[m+1]})
 end
-if #op_pkstat%2==1 then add(op_pkstat,{text=""})end
+if #op_pkstat%2==1 then add(op_pkstat,{text="",disabled=true})end
 end
 if #pkmn.teach>0 then
-add(op_pkstat,{text="tEACH mOVES",disabled=true})
+add(op_pkstat,{text="tEACH mOVES",header=true,disabled=true})
 add(op_pkstat,{text="",disabled=true})
 for m in all(pkmn.teach)do
 local movename=c_move_names[m+1]
@@ -389,10 +417,10 @@ movename=f_strtoq(movename)
 end
 add(op_pkstat,{text=movename})
 end
-if #op_pkstat%2==1 then add(op_pkstat,{text=""})end
+if #op_pkstat%2==1 then add(op_pkstat,{text="",disabled=true})end
 end
 if #pkmn.event>0 then
-add(op_pkstat,{text="eVENT mOVES",disabled=true})
+add(op_pkstat,{text="eVENT mOVES",header=true,disabled=true})
 add(op_pkstat,{text="",disabled=true})
 for m in all(pkmn.event)do
 local movename=c_move_names[m+1]
@@ -401,7 +429,7 @@ movename=f_strtoq(movename)
 end
 add(op_pkstat,{text=movename})
 end
-if #op_pkstat%2==1 then add(op_pkstat,{text=""})end
+if #op_pkstat%2==1 then add(op_pkstat,{text="",disabled=true})end
 end
 end
 f_browselr=function(dir)
@@ -430,6 +458,6 @@ elseif dir ~=0 then
 f_minisfx(253)
 end
 end
-f_zcall(f_create_gridpair,"p_browse;,~c_yes,~c_no,3,2,2,2,20,20,~f_dp_browse,~f_nf,~f_s_browse,~f_l_browse;t_browse;,~c_no,~c_no,1,1,2,45,60,16,~f_dt_browse,~f_nf,~f_nf,~f_nf;p_title;,~c_no,~c_no,1,1,2,2,60,40,~f_dp_title,~f_nf,~f_nf,~f_nf;t_title;,~c_yes,~c_no,2,2,2,44,30,9,~f_dt_title,~f_nf,~f_s_title,~f_l_title;p_pkpreview;,~c_yes,~c_yes,1,1,2,2,60,40,~f_dp_pkpreview,~f_browselr,~f_s_pkpreview,~f_l_pkpreview;p_pkstat;,~c_yes,~c_yes,2,4,2,4,30,9,~f_dp_pkstat,~f_browselr,~f_s_pkstat,~f_l_pkstat;;,g_grid_browse,~p_browse,~t_browse,op_browse,op_def;;,g_grid_title,~p_title,~t_title,op_def,op_title;;,g_grid_pkpreview,~p_pkpreview,~t_browse,op_def,op_def;;,g_grid_pkstat,~p_pkstat,~t_browse,op_pkstat,op_def")
+f_zcall(f_create_gridpair,"p_browse;,~c_yes,~c_no,3,2,2,2,20,20,~f_dp_browse,~f_nf,~f_s_browse,~f_l_browse;t_browse;,~c_no,~c_no,1,1,2,45,60,16,~f_dt_browse,~f_nf,~f_nf,~f_nf;p_title;,~c_no,~c_no,1,1,2,2,60,40,~f_dp_title,~f_nf,~f_nf,~f_nf;t_title;,~c_yes,~c_no,2,2,2,44,30,9,~f_nf,~f_nf,~f_s_title,~f_l_title;p_pkpreview;,~c_yes,~c_yes,1,1,2,2,60,40,~f_dp_pkpreview,~f_browselr,~f_s_pkpreview,~f_l_pkpreview;p_pkstat;,~c_yes,~c_yes,2,4,2,4,30,9,~f_dp_pkstat,~f_browselr,~f_s_pkstat,~f_l_pkstat;p_teamed;,~c_yes,~c_no,2,4,2,4,30,9,~f_nf,~f_nf,~f_nf,~f_l_pkstat;t_teamed;,~c_no,~c_no,1,1,2,45,60,16,~f_dt_teamed,~f_nf,~f_nf,~f_nf;;,g_grid_browse,~p_browse,~t_browse,op_browse,op_def;;,g_grid_title,~p_title,~t_title,op_def,op_title;;,g_grid_pkpreview,~p_pkpreview,~t_browse,op_def,op_def;;,g_grid_pkstat,~p_pkstat,~t_browse,op_pkstat,op_def;;,g_grid_edit,~p_teamed,~t_teamed,op_teams,op_def")
 g_gridstack={g_grid_title}
 g_preview_timer=0
