@@ -178,15 +178,15 @@ function store_pack(offset, vget)
     for x=0,127,2 do
       local col = 0
 
-      col = (col << 1) | (vget(x+1, y+128*0) > 0 and 1 or 0)
-      col = (col << 1) | (vget(x+1, y+128*1) > 0 and 1 or 0)
-      col = (col << 1) | (vget(x+1, y+128*2) > 0 and 1 or 0)
-      col = (col << 1) | (vget(x+1, y+128*3) > 0 and 1 or 0)
+      col = (col << 1) | (vget(x+1, y+128*0) > 2 and 1 or 0)
+      col = (col << 1) | (vget(x+1, y+128*1) > 2 and 1 or 0)
+      col = (col << 1) | (vget(x+1, y+128*2) > 2 and 1 or 0)
+      col = (col << 1) | (vget(x+1, y+128*3) > 2 and 1 or 0)
 
-      col = (col << 1) | (vget(x+0, y+128*0) > 0 and 1 or 0)
-      col = (col << 1) | (vget(x+0, y+128*1) > 0 and 1 or 0)
-      col = (col << 1) | (vget(x+0, y+128*2) > 0 and 1 or 0)
-      col = (col << 1) | (vget(x+0, y+128*3) > 0 and 1 or 0)
+      col = (col << 1) | (vget(x+0, y+128*0) > 2 and 1 or 0)
+      col = (col << 1) | (vget(x+0, y+128*1) > 2 and 1 or 0)
+      col = (col << 1) | (vget(x+0, y+128*2) > 2 and 1 or 0)
+      col = (col << 1) | (vget(x+0, y+128*3) > 2 and 1 or 0)
 
       poke(offset, col)
       offset += 1
@@ -202,10 +202,10 @@ function reload_sprites()
 
   store_pack(0x2000, function(...) return vget(0x8000, ...) end)
 
-  reload(0x8000, 0x0000, 0x2000, "./color-000-063.p8")
-  reload(0xa000, 0x0000, 0x2000, "./color-064-127.p8")
-  reload(0xc000, 0x0000, 0x2000, "./color-128-191.p8")
-  reload(0xe000, 0x0000, 0x2000, "./color-192-255.p8")
+  reload(0x8000, 0x0000, 0x2000, "./000-063.p8") -- reload(0x8000, 0x0000, 0x2000, "./color-000-063.p8")
+  reload(0xa000, 0x0000, 0x2000, "./064-127.p8") -- reload(0xa000, 0x0000, 0x2000, "./color-064-127.p8")
+  reload(0xc000, 0x0000, 0x2000, "./128-191.p8") -- reload(0xc000, 0x0000, 0x2000, "./color-128-191.p8")
+  reload(0xe000, 0x0000, 0x2000, "./192-255.p8") -- reload(0xe000, 0x0000, 0x2000, "./color-192-255.p8")
 
   g_loaded_row = -1
 end

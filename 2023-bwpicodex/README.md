@@ -84,3 +84,4 @@ Should sleep talk be able to select rest? I think so, like the OG games. Sleep t
 - Then actually do the UI code.
 - Then the battle system.
 - Then improve sprites.
+- Horde mode could be all 6 custom teams against all 57 trainers, followed by a missingno. That seems possible.
