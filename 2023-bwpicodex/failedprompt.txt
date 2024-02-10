@@ -1,0 +1,65 @@
+You must generate a 16x16 monochrome image of a Pokemon in text form. The only two colors/characters in the generated picture should be "█" (full block unicode character) and "░" (light shade unicode character).
+
+The Pokemon must be facing directly or slightly to the right. The full block unicode character is the foreground and the light shade character is the background.
+
+Here is an example of the pokemon "Raticate" in the output I'm looking for.
+
+```
+░░█░░████████░░░
+░█░░█░░░█░░████░
+░█░░█░░░██░░████
+░█░░█░██████░░░█
+░█░░░██░░░█░███░
+██░░░█░████░░██░
+██░░███░░░█░░░░░
+█░░██░░████░██░░
+█░██░██░████░░░░
+█░██░█░░█████░░░
+░░███░░█████░░░░
+░░░████████░░█░░
+░░░░░░████░░█░░░
+░░░██░░██░░░░░░░
+░░█░░█░░░░█░░░░░
+░░░█░░░░██░█░░░░
+```
+
+And another good example of "Venusaur":
+```
+░░░░░░░░░░░░░░░░
+░░░░░████░░░░░░░
+░░████░░████░░░░
+░███░████░███░░░
+░░░░░░██░░░░░░░░
+░░███░░░██░██░░░
+░█░██░██░██░█░█░
+█░██░░███░███░█░
+███░░█████░█░██░
+░░░░███████░████
+░██████░░████░░█
+███░█░██████████
+██████░████████░
+██░████░░░░░░░░█
+███░█░██████████
+░██░████░░░░███░
+```
+
+The specific Pokemon I want you to generate is "Sentret". I've attached a picture of what it looks like. Here is a base template that might get you started:
+
+```
+░░░░░░░░░░░░░░░░
+░░░░░░░░█░░░░░░░
+░░░░░░░██░██░░█░
+░░░░░██████░█░░░
+░░░░░████████░░░
+░░░░░░░████████░
+░░░░░░░███████░░
+░░░░░░░██████░░░
+░░░░░░░░████░░░░
+░░░░░░░░░█░░░░░░
+░░░░░░░░░█░░░░░░
+░░░░░░░██░░░░░░░
+░░░███████░░░░░░
+░░████████░░░░░░
+░░███████░░░░░░░
+░░░████░░░░░░░░░
+```

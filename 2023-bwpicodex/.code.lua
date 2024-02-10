@@ -35,12 +35,12 @@ function f_zobj(...)
 return f_zobj_set(setmetatable({},{__index=_g}),...)
 end
 f_zobj_set(_g,"c_pokemon,#,c_moves,#,c_trainers,#,g_lock_pokemon,#,g_lock_move,#,g_lock_item,#,g_init_peek_loc,0x1fff,c_yes,@,c_no,@,c_empty,@,f_nop,@",true,false,"",function(...)return...end)
-f_zobj_set(_g,"f_zobj,@,f_zobj_set,@,f_zobj_eval,@,f_zcall,@,f_create_gridpair,@,f_update_grid,@,f_draw_grid,@,f_minisfx,@,f_draw_pkmn,@,c_move_names,@,c_pkmn_names,@,c_trnr_names,@,c_type_names,@,c_item_names,@,f_init_peek_inc,@,c_types,@,f_can_pokemon_teach_move,@,f_update_locks,@,f_strtoq,@,f_dp_browse,@,f_dt_browse,@,f_dt_teamed,@,f_l_browse,@,f_s_browse,@,f_dp_title,@,f_s_title,@,f_dp_pkpreview,@,f_l_pkpreview,@,f_s_pkpreview,@,f_dp_pkstat,@,f_l_pkstat,@,f_s_pkstat,@,f_l_title,@,_update60,@,_draw,@",f_zobj,f_zobj_set,f_zobj_eval,function(func,text,...)
+f_zobj_set(_g,"f_zobj,@,f_zobj_set,@,f_zobj_eval,@,f_zcall,@,f_create_gridpair,@,f_update_grid,@,f_draw_grid,@,f_minisfx,@,f_draw_pkmn,@,c_move_names,@,c_pkmn_names,@,c_trnr_names,@,c_type_names,@,c_item_names,@,f_init_peek_inc,@,c_types,@,f_can_pokemon_teach_move,@,f_update_locks,@,f_strtoq,@,f_dp_browse,@,f_dt_browse,@,f_dt_edit,@,f_dt_league,@,f_dt_versus,@,f_l_browse,@,f_s_browse,@,f_dp_title,@,f_s_title,@,f_dp_pkpreview,@,f_l_pkpreview,@,f_s_pkpreview,@,f_dp_pkstat,@,f_l_pkstat,@,f_s_pkstat,@,f_l_title,@,_update60,@,_draw,@",f_zobj,f_zobj_set,f_zobj_eval,function(func,text,...)
 foreach(f_zobj(text,...),function(params)
 func(unpack(params))
 end)
 end,function(name,first,second,first_obj,second_obj)
-pair={}
+local pair={}
 for tab in all{first,second}do
 add(pair,f_zobj("num,0,view,0,active,@,vert,@,w,@,vh,@,x,@,y,@,cw,@,ch,@,df,@,lrfunc,@,selfunc,@,leavefunc,@",unpack(tab)))
 end
@@ -227,10 +227,14 @@ end
 local str="\^y7\f6"..numstr.." \f7"..namestr.."\n\f1"..type1.." "..type2
 print(str,1,1)
 end,function()
-printh(debug(gridpo))
-printh(debug(g_cg_p))
+local num=g_cg_p.num+1
+print("\^y7\f1pLR: \f7"..gridpo[g_cg_p.num+1].text,1,1)
+end,function()
 local num=g_cg_p.num+1
 print("\^y7\f1pLR: \f7"..gridpo[g_cg_p.num+1].text.."\f1\ncPU: \f6"..c_trnr_names[@0x5efe+1],1,1)
+end,function()
+local num=g_cg_p.num+1
+print("\^y7\f1pLR1: \f7"..gridpo[g_cg_p.num+1].text.."\f1\npLR2: \f6"..c_trnr_names[@0x5efe+1],1,1)
 end,function()
 deli(g_gridstack)
 end,function()
@@ -246,6 +250,10 @@ if g_cg_t.num==0 then
 add(g_gridstack,g_grid_browse)
 elseif g_cg_t.num==1 then
 add(g_gridstack,g_grid_edit)
+elseif g_cg_t.num==2 then
+add(g_gridstack,g_grid_league)
+elseif g_cg_t.num==3 then
+add(g_gridstack,g_grid_versus)
 end
 end,function(i,is_sel)
 local pkmn_ind=g_grid_browse[1].num
@@ -368,7 +376,7 @@ end
 poke4(iloc+64,0x.07d7)
 end
 op_def={{}}
-op_title={{text="bROWSE"},{text="eDIT"},{text="lEAGUE"},{text="vERSUS",disabled=true}}
+op_title={{text="bROWSE"},{text="eDIT"},{text="lEAGUE"},{text="vERSUS"}}
 op_teams={}
 for i=1,6 do
 add(op_teams,{text="tEAM "..i})
@@ -456,6 +464,6 @@ elseif dir ~=0 then
 f_minisfx(253)
 end
 end
-f_zcall(f_create_gridpair,"p_browse;,~c_yes,~c_no,3,2,2,2,20,20,~f_dp_browse,~f_nf,~f_s_browse,~f_l_browse;t_browse;,~c_no,~c_no,1,1,2,45,60,16,~f_dt_browse,~f_nf,~f_nf,~f_nf;p_title;,~c_no,~c_no,1,1,2,2,60,40,~f_dp_title,~f_nf,~f_nf,~f_nf;t_title;,~c_yes,~c_no,2,2,2,44,30,9,~f_nf,~f_nf,~f_s_title,~f_l_title;p_pkpreview;,~c_yes,~c_yes,1,1,2,2,60,40,~f_dp_pkpreview,~f_browselr,~f_s_pkpreview,~f_l_pkpreview;p_pkstat;,~c_yes,~c_yes,2,4,2,4,30,9,~f_dp_pkstat,~f_browselr,~f_s_pkstat,~f_l_pkstat;p_teamed;,~c_yes,~c_no,2,4,2,4,30,9,~f_nf,~f_nf,~f_nf,~f_l_pkstat;t_teamed;,~c_no,~c_no,1,1,2,45,60,16,~f_dt_teamed,~f_nf,~f_nf,~f_nf;;,g_grid_browse,~p_browse,~t_browse,op_browse,op_def;;,g_grid_title,~p_title,~t_title,op_def,op_title;;,g_grid_pkpreview,~p_pkpreview,~t_browse,op_def,op_def;;,g_grid_pkstat,~p_pkstat,~t_browse,op_pkstat,op_def;;,g_grid_edit,~p_teamed,~t_teamed,op_teams,op_def")
+f_zcall(f_create_gridpair,"p_browse;,~c_yes,~c_no,3,2,2,2,20,20,~f_dp_browse,~f_nf,~f_s_browse,~f_l_browse;t_browse;,~c_no,~c_no,1,1,2,45,60,16,~f_dt_browse,~f_nf,~f_nf,~f_nf;p_title;,~c_no,~c_no,1,1,2,2,60,40,~f_dp_title,~f_nf,~f_nf,~f_nf;t_title;,~c_yes,~c_no,2,2,2,44,30,9,~f_nf,~f_nf,~f_s_title,~f_l_title;p_pkpreview;,~c_yes,~c_yes,1,1,2,2,60,40,~f_dp_pkpreview,~f_browselr,~f_s_pkpreview,~f_l_pkpreview;p_pkstat;,~c_yes,~c_yes,2,4,2,4,30,9,~f_dp_pkstat,~f_browselr,~f_s_pkstat,~f_l_pkstat;p_teamed;,~c_yes,~c_no,2,4,2,4,30,9,~f_nf,~f_nf,~f_nf,~f_l_pkstat;t_versus;,~c_no,~c_no,1,1,2,45,60,16,~f_dt_versus,~f_nf,~f_nf,~f_nf;t_league;,~c_no,~c_no,1,1,2,45,60,16,~f_dt_league,~f_nf,~f_nf,~f_nf;t_teamed;,~c_no,~c_no,1,1,2,45,60,16,~f_dt_edit,~f_nf,~f_nf,~f_nf;;,g_grid_browse,~p_browse,~t_browse,op_browse,op_def;;,g_grid_title,~p_title,~t_title,op_def,op_title;;,g_grid_pkpreview,~p_pkpreview,~t_browse,op_def,op_def;;,g_grid_pkstat,~p_pkstat,~t_browse,op_pkstat,op_def;;,g_grid_edit,~p_teamed,~t_teamed,op_teams,op_def;;,g_grid_league,~p_teamed,~t_league,op_teams,op_def;;,g_grid_versus,~p_teamed,~t_versus,op_teams,op_def")
 g_gridstack={g_grid_title}
 g_preview_timer=0

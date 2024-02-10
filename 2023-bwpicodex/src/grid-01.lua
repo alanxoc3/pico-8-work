@@ -1,5 +1,5 @@
 |[f_create_gridpair]| function(name, first, second, first_obj, second_obj)
-  pair = {}
+  local pair = {}
 
   for tab in all{first, second} do
     add(pair, f_zobj([[

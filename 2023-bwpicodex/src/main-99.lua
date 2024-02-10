@@ -178,7 +178,7 @@ end $$
 
 op_def = {{}}
 
-op_title = {{text="bROWSE"}, {text="eDIT"}, {text="lEAGUE"}, {text="vERSUS", disabled=true}}
+op_title = {{text="bROWSE"}, {text="eDIT"}, {text="lEAGUE"}, {text="vERSUS"}}
 
 op_teams = {}
 for i=1, 6 do
@@ -307,12 +307,19 @@ end $$
   print(str, 1, 1)
 end $$
 
-|[f_dt_teamed]| function()
-  printh(debug(gridpo))
-  printh(debug(g_cg_p))
+|[f_dt_edit]| function()
+  local num = g_cg_p.num+1
+  print("\^y7\f1pLR: \f7"..gridpo[g_cg_p.num+1].text, 1, 1)
+end $$
 
+|[f_dt_league]| function()
   local num = g_cg_p.num+1
   print("\^y7\f1pLR: \f7"..gridpo[g_cg_p.num+1].text.."\f1\ncPU: \f6"..c_trnr_names[@S_STORY+1], 1, 1)
+end $$
+
+|[f_dt_versus]| function()
+  local num = g_cg_p.num+1
+  print("\^y7\f1pLR1: \f7"..gridpo[g_cg_p.num+1].text.."\f1\npLR2: \f6"..c_trnr_names[@S_STORY+1], 1, 1)
 end $$
 
 |[f_l_browse]| function()
@@ -337,6 +344,10 @@ end $$
     add(g_gridstack, g_grid_browse)
   elseif g_cg_t.num == 1 then
     add(g_gridstack, g_grid_edit)
+  elseif g_cg_t.num == 2 then
+    add(g_gridstack, g_grid_league)
+  elseif g_cg_t.num == 3 then
+    add(g_gridstack, g_grid_versus)
   end
 end $$
 
@@ -379,13 +390,17 @@ f_zcall(f_create_gridpair, [[
   ;p_pkpreview; ,~c_yes ,~c_yes ,1 ,1 ,2 ,2  ,60 ,40 ,~f_dp_pkpreview ,~f_browselr  ,~f_s_pkpreview ,~f_l_pkpreview
   ;p_pkstat;    ,~c_yes ,~c_yes ,2 ,4 ,2 ,4  ,30 ,9  ,~f_dp_pkstat    ,~f_browselr  ,~f_s_pkstat    ,~f_l_pkstat
   ;p_teamed;    ,~c_yes ,~c_no  ,2 ,4 ,2 ,4  ,30 ,9  ,~f_nf           ,~f_nf        ,~f_nf          ,~f_l_pkstat
-  ;t_teamed;    ,~c_no  ,~c_no  ,1 ,1 ,2 ,45 ,60 ,16 ,~f_dt_teamed    ,~f_nf        ,~f_nf          ,~f_nf
+  ;t_versus;    ,~c_no  ,~c_no  ,1 ,1 ,2 ,45 ,60 ,16 ,~f_dt_versus    ,~f_nf        ,~f_nf          ,~f_nf
+  ;t_league;    ,~c_no  ,~c_no  ,1 ,1 ,2 ,45 ,60 ,16 ,~f_dt_league    ,~f_nf        ,~f_nf          ,~f_nf
+  ;t_teamed;    ,~c_no  ,~c_no  ,1 ,1 ,2 ,45 ,60 ,16 ,~f_dt_edit      ,~f_nf        ,~f_nf          ,~f_nf
 
   ;;,g_grid_browse    ,~p_browse    ,~t_browse ,op_browse ,op_def
   ;;,g_grid_title     ,~p_title     ,~t_title  ,op_def    ,op_title
   ;;,g_grid_pkpreview ,~p_pkpreview ,~t_browse ,op_def    ,op_def
   ;;,g_grid_pkstat    ,~p_pkstat    ,~t_browse ,op_pkstat ,op_def
   ;;,g_grid_edit      ,~p_teamed    ,~t_teamed ,op_teams  ,op_def
+  ;;,g_grid_league    ,~p_teamed    ,~t_league ,op_teams  ,op_def
+  ;;,g_grid_versus    ,~p_teamed    ,~t_versus ,op_teams  ,op_def
 ]])
 
 -- sounds: go forward. go backward. disallow
