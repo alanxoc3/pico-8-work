@@ -1,0 +1,9 @@
+# mount command
+# sudo mount -o uid=$USER,gid=$USER /dev/sdd1 /mnt
+
+# files:
+# ~/.playdate/Disk/Data/picodex-edit/images/
+# ~/.playdate/Disk/Data/picodex-edit/000-063.p8
+# ~/.playdate/Disk/Data/picodex-edit/064-127.p8
+# ~/.playdate/Disk/Data/picodex-edit/128-191.p8
+# ~/.playdate/Disk/Data/picodex-edit/192-255.p8
