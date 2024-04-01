@@ -85,3 +85,23 @@ Should sleep talk be able to select rest? I think so, like the OG games. Sleep t
 - Then the battle system.
 - Then improve sprites.
 - Horde mode could be all 6 custom teams against all 57 trainers, followed by a missingno. That seems possible.
+
+# Save format
+256 bytes:
+
+  1 -> story (unlocked pkmn)
+  1 pkmn 4 moves 1 gender 1 item
+  168 (7*6*4)
+
+  pretty much every screen can have a save slot
+  2 -> browseloc
+  2 -> edit loc
+  2 -> edit-edit loc
+
+# How to win horde mode:
+One idea is Marowak, because it has the highest attack in the game.
+
+Another idea is to have some Scizor. They can learn agility, swordsdance, and baton pass. Maybe one can buff, the others can be filled with high-pp attack moves. If 5 are filled with moves, each one needs to take out ~50 Pokemon.
+
+TODO: Ensure smeargle cannot learn tm05.
+TODO: Ensure missingno learns tm05 as a taught move, not a natural move.

@@ -8,7 +8,7 @@
       x,@, y,@,
       cw,@, ch,@,
       df,@, lrfunc,@,
-      selfunc,@, leavefunc,@
+      selfunc,@, leavefunc,@, updatefunc,@
     ]], unpack(tab)))
   end
 
@@ -21,6 +21,7 @@ end $$
 -- pass in cell list.
 -- each cell has: enabled, text
 |[f_update_grid]| function(_ENV, gridobj)
+  updatefunc()
   if active then
     local evalfunc = function(num, mmin, mmax, b0, b1, l)
       local off = (b1 and l or 0) - (b0 and l or 0)
@@ -72,7 +73,9 @@ end $$
   end
 end $$
 
-|[f_draw_grid]| function(_ENV, gridobj)
+|[f_draw_grid]| function(_ENV, gridobj, x, y)
+  clip(x, y, w*cw, vh*ch)
+
   for j=0,vh*w-1 do
     local i = j + view*w
     local isheader = gridobj[i\w*w+1].header
@@ -106,7 +109,6 @@ end $$
     rectfill(-1,   -1+u, cw-2,   ch-2-d, c)
   end
 
-
   for j=0,vh*w-1 do
     local i = j + view*w
     local obj = gridobj[i+1]
@@ -131,6 +133,8 @@ end $$
 
     df(i, i == num, obj)
   end
+
+  clip()
 
   camera()
 end $$

@@ -3,8 +3,12 @@ C_LEVEL: 50
 
 # ----------------------------- save locations - will have to update/change slightly
 #   1 num, 1 gender, 1 item, 1 move, 1 move, 1 move, 1 move
-S_STORY:          0x5efe
-S_NEW:            0x5eff
+S_PARTY1:         0x5e00
+S_PARTY2:         0x5e2a
+S_PARTY3:         0x5e54
+S_PARTY4:         0x5e7e
+S_PARTYEND:       0x5ea8
+S_STORY:          0x5eff
 
 SFX_SELECT: 252
 SFX_ERROR:  253
