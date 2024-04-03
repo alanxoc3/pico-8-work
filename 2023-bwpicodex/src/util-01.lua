@@ -28,15 +28,17 @@ end $$
     pal()
   end
 
-  for yy=-scale,scale,scale do
-    for xx=-scale,scale,scale do
-      if not (xx == 0 and yy == 0) then
-        colordrawfunc(x+xx, y+yy, out_c)
+  if num ~= 255 then
+    for yy=-scale,scale,scale do
+      for xx=-scale,scale,scale do
+        if not (xx == 0 and yy == 0) then
+          colordrawfunc(x+xx, y+yy, out_c)
+        end
       end
     end
   end
 
-  colordrawfunc(x, y, in_c) -- sprite
+  colordrawfunc(x, y, num == 255 and out_c or in_c) -- sprite
 
   --clip(-%0x5f28+x, -%0x5f2a+y+5, 16,6)
   --colordrawfunc(x, y, in_c+1) -- sprite

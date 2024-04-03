@@ -8,6 +8,7 @@ S_PARTY2:         0x5e2a
 S_PARTY3:         0x5e54
 S_PARTY4:         0x5e7e
 S_PARTYEND:       0x5ea8
+S_NEW:            0x5efe
 S_STORY:          0x5eff
 
 SFX_SELECT: 252
@@ -22,6 +23,7 @@ SFX_MOVE:   255
 
 # ----------------------------- load memory locations
 L_DATASTART: 0x1fff # data starts one byte before because the code increments first
+L_PARTY1: 0x418a # The location the first party is in cart storage
 
 # ----------------------------- priorities - aligned to thousand because 999 is the max speed stat
 C_PRIORITY_SWITCH:      4000 # PURSUIT

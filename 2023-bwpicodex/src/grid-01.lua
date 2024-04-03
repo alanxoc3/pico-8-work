@@ -1,19 +1,19 @@
-|[f_create_gridpair]| function(name, first, second, first_obj, second_obj)
+|[f_create_gridpair]| function(name, first, second, first_obj_func)
   local pair = {}
 
   for tab in all{first, second} do
     add(pair, f_zobj([[
       num,0, view,0,
-      active,@, vert,@, w,@, vh,@,
+      active,@, w,@, vh,@,
       x,@, y,@,
       cw,@, ch,@,
       df,@, lrfunc,@,
       selfunc,@, leavefunc,@, updatefunc,@
-    ]], unpack(tab)))
+    ]], tab == first, unpack(tab)))
   end
 
-  add(pair, first_obj)
-  add(pair, second_obj)
+  add(pair, first_obj_func())
+  add(pair, {{}})
 
   _g[name] = pair
 end $$
@@ -39,7 +39,7 @@ end $$
     end
 
     local prevnum = num
-    if vert then
+    if lrfunc then
       num = -1
       local off = (btnp'3' and 1 or 0) - (btnp'2' and 1 or 0)
 
