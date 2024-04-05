@@ -7,7 +7,7 @@ poke(0x5f5d, 1) -- btn repeat delay
 -- credits can be shown automatically
 
 --num=0, --view=0,
-function create_grid(memloc, grid_w, grid_len, cw, ch, x, y, sel_bg, bg, view_h, draw_func)
+function create_grid(memloc, grid_w, grid_len, cw, ch, x, y, sel_bg, bg, view_h, draw_func, disablesel)
   return {
     numloc=memloc,
     viewloc=memloc+1,
@@ -18,6 +18,7 @@ function create_grid(memloc, grid_w, grid_len, cw, ch, x, y, sel_bg, bg, view_h,
     selbg=sel_bg, bg=bg,
     vh=view_h,
     df=draw_func,
+    disablesel=disablesel,
   }
 end
 
@@ -49,8 +50,8 @@ function draw_grid(grid)
     if i == grid.len-1                 then r = 1 d = 1 end
     if i == (grid.len-1)\grid.w*grid.w then l = 1 d = 1 end
 
-    rectfill(-1+l, -1,   grid.cw-2-r, grid.ch-2,   i == @grid.numloc and grid.selbg or grid.bg)
-    rectfill(-1,   -1+u, grid.cw-2,   grid.ch-2-d, i == @grid.numloc and grid.selbg or grid.bg)
+    rectfill(-1+l, -1,   grid.cw-2-r, grid.ch-2,   i == @grid.numloc and not grid.disablesel and grid.selbg or grid.bg)
+    rectfill(-1,   -1+u, grid.cw-2,   grid.ch-2-d, i == @grid.numloc and not grid.disablesel and grid.selbg or grid.bg)
 
     clip(xloc, yloc, grid.cw, grid.ch) -- camera goes in one, but clip doesn't. dont want to go in for the title screen animation
     grid.df(i, i == @grid.numloc)
@@ -146,8 +147,9 @@ function _init()
   end)
 
   create_battle_grid = function(pkmn1, pkmn2)
-    return create_grid(0x5e04, 1, 2, 60, 20, 2, 2, C_3, C_2, 2, function(i, is_sel)
-      local b = function(name, gender, status, x, y, bx, by, hp, hpmax)
+    return create_grid(0x5e04, 1, 1, 60, 40, 2, 2, C_3, C_2, 2, function(i, is_sel)
+      is_sel = false
+      local b = function(name, gender, status, item, x, y, bx, by, hp, hpmax)
         roundrect_r(bx-1, by+1, bx+35, by+6, (is_sel and C_2 or C_1))
         if hp > 0 then
           rectfill(bx, by+2, bx+mid(1, hp/hpmax*34, 34), by+5, is_sel and C_4 or C_3)
@@ -165,16 +167,15 @@ function _init()
         end
         -- end hp bar section
 
-        f_zprint(name,                   x+0,  y-5, is_sel and C_2 or C_1, -1)
-        f_zprint(status,                 x+0,  y+8, is_sel and C_2 or C_1, -1)
-        f_zprint(mid(0, hpmax, flr(hp)), x+37, y+8, is_sel and C_2 or C_1, 1)
-        f_zprint(gender,                 x+37, y-5, is_sel and C_2 or C_1, 1)
+        f_zprint(name,   x+0,  y-5, is_sel and C_2 or C_1, -1)
+        f_zprint(status, x+0,  y+8, is_sel and C_2 or C_1, -1)
+        f_zprint(item,   x+37, y+8, is_sel and C_2 or C_1, 1)
+        f_zprint(gender, x+37, y-5, is_sel and C_2 or C_1, 1)
       end
 
-      if i == 0 then draw_pkmn(pkmn1, 48, 9, is_sel and C_2 or C_1, is_sel and C_4 or C_3, true)  b(pkmn_names[pkmn1+1],"M","bRN",1, 5,1, 5,  50+(sin(t())+1)*20, 80)
-      else           draw_pkmn(pkmn2, 10, 9, is_sel and C_2 or C_1, is_sel and C_4 or C_3, false) b(pkmn_names[pkmn2+1],"M","",   22,5,22,5, -10+(cos(t())+1)*80, 80)
-      end
-    end)
+      draw_pkmn(pkmn1, 49, 9,   is_sel and C_2 or C_1, is_sel and C_4 or C_3, true)  b(pkmn_names[pkmn1+1],"M","bRN","___",1, 5,1, 5,  50+(sin(t())+1)*30, 100)
+      draw_pkmn(pkmn2, 9, 9+20, is_sel and C_2 or C_1, is_sel and C_4 or C_3, false) b(pkmn_names[pkmn2+1],"M","___","pSb",   22,5+20,22,5+20, -10+(cos(t())+1)*80, 80)
+    end, true)
   end
 
   g_battleanim = create_battle_grid(5, rnd'19'\1)

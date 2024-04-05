@@ -8,6 +8,17 @@ S_PARTY2:         0x5e2a
 S_PARTY3:         0x5e54
 S_PARTY4:         0x5e7e
 S_PARTYEND:       0x5ea8
+
+S_BROWSE:         0x5ea8 # browse screen
+S_TITLE:          0x5eaa # title screen
+S_PKPREVIEW:      0x5eac # pk preview (not really needed)
+S_PKSTAT:         0x5eae # unused currently
+S_TEAM:           0x5eb0 # the edit and team 1 selection
+S_TEAM2:          0x5eb2 # the team 2 selection for versus mode
+S_TEAML:          0x5eb4 # the league team selection for league mode
+S_TEAME:          0x5eb6 # the specific pokemon in edit screen
+
+S_PALETTE:        0x5efd
 S_NEW:            0x5efe
 S_STORY:          0x5eff
 
@@ -39,9 +50,9 @@ C_NEXT:  255
 
 C_0: 0 # These are color constants.
 C_1: 1
-C_2: 13
-C_3: 6
-C_4: 7
+C_2: 2
+C_3: 3
+C_4: 4
 
 # ----------------------------- major status conditions
 C_MAJOR_NONE:      0

@@ -1,15 +1,14 @@
-|[f_create_gridpair]| function(name, first, second, first_obj_func)
+|[f_create_gridpair]| function(name, mem, first, second, first_obj_func, selfunc, leavefunc, lrfunc)
   local pair = {}
 
   for tab in all{first, second} do
     add(pair, f_zobj([[
-      num,0, view,0,
-      active,@, w,@, vh,@,
+      name,@, mem,@, memview,@, selfunc,@, leavefunc,@, lrfunc,@,
+      w,@, vh,@,
       x,@, y,@,
       cw,@, ch,@,
-      df,@, lrfunc,@,
-      selfunc,@, leavefunc,@, updatefunc,@
-    ]], tab == first, unpack(tab)))
+      df,@, updatefunc,@
+    ]], name, mem, mem+1, selfunc, leavefunc, lrfunc, unpack(tab)))
   end
 
   add(pair, first_obj_func())
@@ -19,61 +18,55 @@
 end $$
 
 -- pass in cell list.
--- each cell has: enabled, text
+-- each cell has: text, disabled
+-- this only gets called for the current active grid
 |[f_update_grid]| function(_ENV, gridobj)
-  updatefunc()
-  if active then
-    local evalfunc = function(num, mmin, mmax, b0, b1, l)
-      local off = (b1 and l or 0) - (b0 and l or 0)
-      local newnum = mid(mmin, min(#gridobj-1, mmin+mmax), num + off)
-      if newnum == num and off ~= 0 then
-        f_minisfx(SFX_ERROR)
-      elseif newnum ~= num then
-        -- if gridobj[newnum+1].header then
-          -- f_minisfx(SFX_ERROR)
-          -- return num
-        -- end
-        f_minisfx(SFX_MOVE)
-      end
-      return newnum
+  local evalfunc = function(num, mmin, mmax, b0, b1, l)
+    local off = (b1 and l or 0) - (b0 and l or 0)
+    local newnum = mid(mmin, min(#gridobj-1, mmin+mmax), num + off)
+    if newnum == num and off ~= 0 then
+      f_minisfx(SFX_ERROR)
+    elseif newnum ~= num then
+      f_minisfx(SFX_MOVE)
+    end
+    return newnum
+  end
+
+  local num, view = @mem, @memview
+  if lrfunc then
+    local off = (btnp'3' and 1 or 0) - (btnp'2' and 1 or 0)
+
+    local prevview = view
+    view = mid(0, view+off, (#gridobj-1)\w-vh+1)
+    if view == prevview and off ~= 0 then
+      f_minisfx(SFX_ERROR)
+    elseif off ~= 0 then
+      f_minisfx(SFX_MOVE)
     end
 
-    local prevnum = num
-    if lrfunc then
-      num = -1
-      local off = (btnp'3' and 1 or 0) - (btnp'2' and 1 or 0)
+    lrfunc((btnp'1' and 1 or 0) - (btnp'0' and 1 or 0))
+  else
+    num = evalfunc(num, 0,     #gridobj-1,       btnp'0', btnp'1', 1)
+    num = evalfunc(num, num%w, (#gridobj-1)\w*w, btnp'2', btnp'3', w)
 
-      local prevview = view
-      view = mid(0, view+off, (#gridobj-1)\w-vh+1)
-      if view == prevview and off ~= 0 then
-        f_minisfx(SFX_ERROR)
-      elseif off ~= 0 then
-        f_minisfx(SFX_MOVE)
-      end
+    if num\w-vh+1 > view then view = num\w-vh+1 end
+    if num\w      < view then view = num\w      end
+    view = mid(0, view, (#gridobj-1)\w-vh+1)
+  end
 
-      lrfunc((btnp'1' and 1 or 0) - (btnp'0' and 1 or 0))
+  if btnp'4' then
+    f_minisfx(leavefunc() or SFX_LEAVE)
+  elseif btnp'5' then
+    if (num < 0 or not gridobj[num+1].disabled) then
+      f_minisfx(selfunc() or SFX_SELECT)
     else
-      num = evalfunc(num, 0,     #gridobj-1,       btnp'0', btnp'1', 1)
-      num = evalfunc(num, num%w, (#gridobj-1)\w*w, btnp'2', btnp'3', w)
-
-      if num\w-vh+1 > view then view = num\w-vh+1 end
-      if num\w      < view then view = num\w      end
-      view = mid(0, view, (#gridobj-1)\w-vh+1)
-    end
-
-    if btnp'4' then
-      f_minisfx(leavefunc() or SFX_LEAVE)
-    elseif btnp'5' then
-      if (num < 0 or not gridobj[num+1].disabled) then
-        f_minisfx(selfunc() or SFX_SELECT)
-      else
-        f_minisfx(SFX_ERROR)
-      end
+      f_minisfx(SFX_ERROR)
     end
   end
+  poke(mem, num, view)
 end $$
 
-|[f_draw_grid]| function(_ENV, gridobj, x, y)
+|[f_draw_grid]| function(_ENV, gridobj, num, view, x, y, active) -- "active" is just needed to be able to draw the bright selection fill background (or not draw it)
   clip(x, y, w*cw, vh*ch)
 
   for j=0,vh*w-1 do
@@ -97,11 +90,11 @@ end $$
       c = C_1
     end
 
-    if active and (i == num or isnumheader) then
+    if not lrfunc and active and (i == num or isnumheader) then
       if obj.disabled or isnumheader then
         c = C_3
       else
-        c = C_3
+        c = C_4
       end
     end
 
@@ -124,7 +117,7 @@ end $$
     end
     if (obj.disabled or isheader) then
       if isnumheader or i == num then
-        c = C_4
+        c = C_2
       else
         c = C_2
       end
