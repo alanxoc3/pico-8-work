@@ -105,3 +105,5 @@ Another idea is to have some Scizor. They can learn agility, swordsdance, and ba
 
 TODO: Ensure smeargle cannot learn tm05.
 TODO: Ensure missingno learns tm05 as a taught move, not a natural move.
+
+Pokemon can be "neuter" gender: https://archive.org/details/nintendo-power-2001-pokemon-crystal/page/n25/mode/2up

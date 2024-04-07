@@ -1,4 +1,4 @@
-|[f_create_gridpair]| function(name, mem, first, second, first_obj_func, selfunc, leavefunc, lrfunc)
+|[f_create_gridpair]| function(name, mem, first, second, first_obj_func, selfunc, leavefunc, lrfunc, ...)
   local pair = {}
 
   for tab in all{first, second} do
@@ -11,8 +11,8 @@
     ]], name, mem, mem+1, selfunc, leavefunc, lrfunc, unpack(tab)))
   end
 
-  add(pair, first_obj_func())
-  add(pair, {{}})
+  add(pair, first_obj_func)
+  add(pair, {...})
 
   _g[name] = pair
 end $$

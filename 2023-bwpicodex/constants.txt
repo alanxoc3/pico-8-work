@@ -17,6 +17,8 @@ S_TEAM:           0x5eb0 # the edit and team 1 selection
 S_TEAM2:          0x5eb2 # the team 2 selection for versus mode
 S_TEAML:          0x5eb4 # the league team selection for league mode
 S_TEAME:          0x5eb6 # the specific pokemon in edit screen
+S_EDITSTAT:       0x5eb8 # edit the stats for a specific pokemon
+S_EDITMOVE:       0x5eba # edit the move for a specific pokemon
 
 S_PALETTE:        0x5efd
 S_NEW:            0x5efe
@@ -138,7 +140,7 @@ T_DARK:     16 # dark
 T_STEEL:    17 # steel
 
 # ----------------------------- pkmn numbers
-P_MISSINGNO:  0  # missing
+P_NONE:       0  # this is for prevolve with basic/baby pkmn
 P_BULBASAUR:  1  # bulsaur
 P_IVYSAUR:    2  # ivysaur
 P_VENUSAUR:   3  # vensaur
@@ -390,7 +392,7 @@ P_TYRANITAR:  248  # tyratar
 P_LUGIA:      249  # lugia
 P_HOOH:       250  # hooh
 P_CELEBI:     251  # celebi
-P_NONE:       252  # this is for prevolve with basic/baby pkmn
+P_MISSINGNO:  252  # misngno
 
 # ----------------------------- move numbers - 4508 bytes. It took lots of compute to generate this. Order matters, a bad order wastes lots of space.
 M_STRUGGLE:     0  # struggl
