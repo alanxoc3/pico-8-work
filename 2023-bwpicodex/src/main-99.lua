@@ -19,7 +19,6 @@
 |[c_type_names]| split"bIRD,nORMAL,fIRE,fIGHTN,wATER,pOISON,eLECTR,gROUND,gRASS,fLYING,iCE,bUG,pSYCIC,rOCK,dRAGON,gHOST,dARK,sTEEL" $$
 |[c_item_names]| split"nONE,pNKBOW,cHRCOL,bLKbLT,mYwATR,pSNbRB,mAGNET,sOsAND,mIRACL,sHbEAK,nVRiCE,sLVpWD,tWsPON,hSTONE,dRAGsC,sPELtG,bLKgLS,mTLcOT,bRIpWD,fOCbND,kINGrK,lEFToV,qIKcLW,sCOPlN,aMcOIN,lITbAL,lUKpNC,mTLpWD,sTICK,tHKcLB,bERSRK,bERRY,bTRbRY,bRNbRY,gLDbRY,iCEbRY,mNTbRY,mIRbRY,mYSbRY,pARbRY,pSNbRY" $$
 |[c_pkmn_names]| split"___,bULSAUR,iVYSAUR,vENSAUR,cHARMAN,cHARMEL,cHARZAR,sQUIRTL,wARTORT,bLSTOIS,cATRPIE,mETAPOD,bUTFREE,wEEDLE,kAKUNA,bEEDRIL,pIDGEY,pIDGETO,pIDGEOT,rATTATA,rATICAT,sPEAROW,fEAROW,eKANS,aRBOK,pIKACHU,rAICHU,sNDSHRW,sNDSLAS,nIDRANf,nIDRINA,nIDQUEN,nIDRANm,nIDRINO,nIDKING,cLFAIRY,cLFABLE,vULPIX,nINTALE,jIGPUFF,wIGTUFF,zUBAT,gOLBAT,oDDISH,gLOOM,vILPLUM,pARAS,pARSECT,vENONAT,vENMOTH,dIGLETT,dUGTRIO,mEOWTH,pERSIAN,pSYDUCK,gOLDUCK,mANKEY,pRIMAPE,gROWLTH,aRCANIN,pOLIWAG,pOLWIRL,pOLRATH,aBRA,kADABRA,aLKAZAM,mACHOP,mACHOKE,mACHAMP,bELSPRT,wEEPBEL,vICTBEL,tNTCOOL,tNTCRUL,gEODUDE,gRAVLER,gOLEM,pONYTA,rAPDASH,sLOWPOK,sLOWBRO,mAGNMIT,mAGNTON,fAFETCd,dODUO,dODRIO,sEEL,dEWGONG,gRIMER,mUK,sHELDER,cLYSTER,gASTLY,hAUNTER,gENGAR,oNIX,dROWZEE,hYPNO,kRABBY,kINGLER,vOLTORB,eLCRODE,eGGCUTE,eGGUTOR,cUBONE,mAROWAK,hITMLEE,hITMCHN,lIKTUNG,kOFFING,wEEZING,rHYHORN,rHYDON,cHANSEY,tANGELA,kANGKAN,hORSEA,sEADRA,gOLDEEN,sEAKING,sTARYU,sTARMIE,mRmIME,sCYTHER,jYNX,eLCABUZ,mAGMAR,pINSIR,tAUROS,mAGKARP,gYARDOS,lAPRAS,dITTO,eEVEE,vAPREON,jOLTEON,fLAREON,pORYGON,oMANYTE,oMASTAR,kABUTO,kABTOPS,aERODAC,sNORLAX,aRTCUNO,zAPDOS,mOLTRES,dRATINI,dRAGAIR,dRAGITE,mEWTWO,mEW,cHIKITA,bAYLEEF,mEGNIUM,cYNDQIL,qUILAVA,tYPHLOS,tOTODIL,cROCNAW,fRLGATR,sENTRET,fURRET,hOOTOOT,nOCTOWL,lEDYBA,lEDIAN,sPINRAK,aRIADOS,cROBAT,cHINCHU,lANTURN,pICHU,cLEFFA,iGGBUFF,tOGEPI,tOGETIC,nATU,xATU,mAREEP,fLAAFFY,aMPHROS,bELOSOM,mARILL,aZMARIL,sUDWOOD,pOLTOED,hOPPIP,sKIPLOM,jUMPLUF,aIPOM,sUNKERN,sUNFLOR,yANMA,wOOPER,qUAGSIR,eSPEON,uMBREON,mURKROW,sLOWKNG,mISDVUS,uNOWN,wOBUFET,gIFARIG,pINECO,fORTRES,dUNSPAR,gLIGAR,sTEELIX,sNUBBUL,gRANBUL,qILFISH,sCIZOR,sHUCKLE,hERCROS,sNEASEL,tEDIURS,uRSRING,sLUGMA,mACARGO,sWINUB,pILSWIN,cORSOLA,rEMRAID,oCTLERY,dELBIRD,mANTINE,sKARMRY,hONDOUR,hONDOOM,kINGDRA,pHANPY,dONPHAN,pORYGN2,sTANTLR,sMEARGL,tYROGUE,hITMTOP,sMOOCHM,eLEKID,mAGBY,mILTANK,bLISSEY,rAIKOU,eNTEI,sUICUNE,lARVTAR,pUPITAR,tYRATAR,lUGIA,hOoH,cELEBI,mISNGnO,___,___,___" $$
-|[c_pkmn_color]| split"5,5,5,12,13,12,11,11,11,5,5,11,7,13,13,10,10,10,8,10,11,11,8,8,13,11,10,11,12,12,12,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,3" $$
 
 |[f_init_peek_inc]| function()
   g_init_peek_loc += 1
@@ -56,9 +55,25 @@ for i=1,252 do -- There are 252 pkmn and 252 moves. So zipped when unpacking to 
     c_moves[i-1][key] = f_init_peek_inc()
   end)
 
-  foreach(split'prevolve,type1,type2,hp,att,def,spd,sat,sdf,gender_item', function(key)
+  -- 'color' actually has gender and color information, but keeping the name color saves a possible token
+  foreach(split'prevolve,type1,type2,hp,att,def,spd,sat,sdf,item,color', function(key)
     pkmn[key] = f_init_peek_inc()
   end)
+
+  -- this is guaranteed to set pkmn.genders, as long as the data is all correct, which it is.
+  -- saves tokens to be ugly like this (not setting a default value)
+  for k, v in pairs(f_zobj[[
+     G_BOTH;,m,f
+    ;G_NONE;,n
+    ;G_MALE;,m
+    ;G_FEMA;,f
+  ]]) do
+    if pkmn.color & G_BOTH == k then
+      pkmn.genders = v
+    end
+  end
+
+  -- pkmn.color &= 0xf
 
   f_zobj_set(pkmn, [[name,@, num,@]], c_pkmn_names[i+1], i%252)
 
@@ -173,12 +188,23 @@ end $$
         end
       end
       g_lock_pokemon[pkmn.ind] = true
-      g_lock_item[c_pokemon[pkmn.ind].gender_item & 0b00111111] = true
+      g_lock_item[c_pokemon[pkmn.ind].item] = true
     end
   end
 end $$
 
-poke(S_STORY,20) -- todo: remove me, this is just for debugging
+|[f_get_party_pkmn]| function(party_num, pkmn_num)
+  local _ENV = f_zobj[[]]
+  for i, key in ipairs(split'num,gender,item,level,0,1,2,3') do
+    _ENV[key] = @(S_PARTY1+party_num*42+pkmn_num*7+i-1)
+  end
+  -- it's possible to save weird gendered pokemon.
+  -- gender should be "m", "f" or "n"
+  -- 0=neuter 1=female 2=male.. odd is female. even is male
+  return _ENV
+end $$
+
+poke(S_STORY,58) -- todo: remove me, this is just for debugging
 f_update_locks()
 |[f_op_edit]| function(sumdisable)
   local op = {}
@@ -288,23 +314,23 @@ f_nf = function() end
   local pkmn = c_pokemon[@g_grid_browse[1].mem]
 
   local genders = ""
-  if pkmn.gender_item & G_MALE > 0 then genders ..= "m" end
-  if pkmn.gender_item & G_FEMA > 0 then
-    if #genders > 0 then genders ..= "/" end
-    genders ..= "f" end
-  if #genders == 0 then genders ..= "n" end
+  -- if pkmn.gender_item & G_MALE > 0 then genders ..= "m" end
+  -- if pkmn.gender_item & G_FEMA > 0 then
+  --   if #genders > 0 then genders ..= "/" end
+  --   genders ..= "f" end
+  -- if #genders == 0 then genders ..= "n" end
 
   --add(op, {text="bASE sTATS", header=true})
   --add(op, {text=""})
 
-  add(op, {text="hP:"..pkmn.hp})
-  add(op, {text="sP:"..pkmn.spd})
-  add(op, {text="aT:"..pkmn.att})
-  add(op, {text="dF:"..pkmn.def})
-  add(op, {text="sA:"..pkmn.sat})
-  add(op, {text="sD:"..pkmn.sdf})
-  add(op, {text="gD:"..genders})
-  add(op, {text="lV:50"})
+  -- add(op, {text="hP:"..pkmn.hp})
+  -- add(op, {text="sP:"..pkmn.spd})
+  -- add(op, {text="aT:"..pkmn.att})
+  -- add(op, {text="dF:"..pkmn.def})
+  -- add(op, {text="sA:"..pkmn.sat})
+  -- add(op, {text="sD:"..pkmn.sdf})
+  -- add(op, {text="gD:"..genders})
+  -- add(op, {text="lV:50"})
   return op
 
   --if #pkmn.learn > 0 then
@@ -425,7 +451,7 @@ end $$
 end $$
 
 |[f_dt_browse]| function(i, is_sel)
-  local numstr = tostr(@S_BROWSE+1)
+  local numstr = tostr((@S_BROWSE+1)%252)
   local pkmn = c_pokemon[@S_BROWSE+1]
 
   while #numstr < 3 do numstr = "0"..numstr end
@@ -485,17 +511,9 @@ end $$
   print("\^w\^tpicodex", 2, 1,  4)
   print("dUAL vERSION",  2, 12, 1)
 
-  --f_draw_pkmn(250,       -8+sin(t())*10, 20, C_1, C_3)
   -- todo: give title pokemon correct colors
   f_draw_pkmn(g_title_l, -8+15+(mid(-1, -.75, cos(0+g_title_an_timer/300))+.75)*4*26   + (g_title_an_timer > 190 and g_title_an_timer < 220 and (rnd(3)\1-1) or 0), 20, 16)
   f_draw_pkmn(g_title_r, 50-15-(mid(-1, -.75, cos(.5+g_title_an_timer/300))+.75)*4*26  + (g_title_an_timer > 40  and g_title_an_timer < 70  and (rnd(3)\1-1) or 0), 20, 16, true)
-
-  --print("gAME BY\naLANxOC3",  32-6-10, 33+sin(g_title_timer/60)*10, C_1)
-  -- print("\^y7aLANxOC3\npRESENTS",  32-6-10-2, 33+sin(mid(0, g_title_timer, 30)/60-.25)*11, C_1)
-  --f_draw_pkmn(t()\1%252, 32-4+4+4-1, 24-4, C_1, C_3, false)
-
-  --print("hORDE\nhs: 123", 32-6, 23, C_1)
-  --print("dUAL\nvERSION",  32-6, 23, C_1)
 end $$
 
 g_title_an_timer = 70 -- starts at 70, so both are centered and not shaking. TODO: try setting with better syntax
@@ -581,13 +599,13 @@ end $$
 end $$
 
 g_palettes = {
-  --   bg1 bg2 mg  fg1 fg2
-  {[0]=129,  1, 13,  6,  7,138,135, 14,15,143,142, 12,9,8,3,136}, -- default
-  {[0]=131,129,  3, 11, 10,138,135, 14,15,143,142, 12,9,8,3,136}, -- green
-  {[0]=129,  1,140, 12,  6,138,135, 14,15,143,142, 12,9,8,3,136}, -- blues
-  {[0]=8,    0, 10,136,  9,138,135, 14,15,143,142, 12,9,8,3,136}, -- hotdog
-  {[0]=7,    6,  0,134,  5,  5,  4,129, 3,130,  2,128,1,5,5,  5}, -- invert
-  {[0]=128,130,141,134,135,138,135, 14,15,143,142, 12,9,8,3,136}, -- purple yel
+  --   bg1 bg2 mg  fg1 fg2   5,   6,  7,  8,  9, 10, 11, 12, 13, 14, 15
+  {[0]=  1,129, 13,  6,  7,139, 141, 14,  6,143,142, 12,  9,  8,  4,  5}, -- default
+  {[0]=131,129,  3, 11, 10,139, 141, 14,  6,143,142, 12,  9,  8,  4,  5}, -- green
+  {[0]=129,  1,140, 12,  6,139, 141, 14,  6,143,142, 12,  9,  8,  4,  5}, -- blues
+  {[0]=8,    0, 10,136,  9,139, 141, 14,  6,143,142, 12,  9,  8,  4,  5}, -- hotdog
+  {[0]=7,    6,  0,134,  5,139, 141, 14,  6,143,  2, 12,  1,  8,  4,  5}, -- invert
+  {[0]=128,130,141,134,135,139, 141, 14,  6,143,142, 12,  9,  8,  4,  5}, -- purple yel
 }
 g_palette = 0
 

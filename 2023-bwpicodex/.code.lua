@@ -35,7 +35,7 @@ function f_zobj(...)
 return f_zobj_set(setmetatable({},{__index=_g}),...)
 end
 f_zobj_set(_g,"c_pokemon,#,c_moves,#,c_trainers,#,g_lock_pokemon,#,g_lock_move,#,g_lock_item,#,g_init_peek_loc,0x1fff,c_yes,@,c_no,@,c_empty,@,f_nop,@",true,false,"",function(...)return...end)
-f_zobj_set(_g,"f_zobj,@,f_zobj_set,@,f_zobj_eval,@,f_zcall,@,f_create_gridpair,@,f_update_grid,@,f_draw_grid,@,f_minisfx,@,f_draw_pkmn,@,c_move_names,@,c_trnr_names,@,c_type_names,@,c_item_names,@,c_pkmn_names,@,c_pkmn_color,@,f_init_peek_inc,@,c_types,@,f_can_pokemon_teach_move,@,f_op_def,@,f_op_browse,@,f_update_locks,@,f_op_edit,@,f_op_editparty,@,f_strtoq,@,f_op_title,@,f_op_teams,@,f_op_editstat,@,f_op_editmove,@,f_op_pkstat,@,f_dp_browse,@,f_loop_through_team_pkmn,@,f_dp_edit,@,f_dt_edit2,@,f_dt_editstat,@,f_dp_edit2,@,f_dt_browse,@,f_dt_edit,@,f_dt_league,@,f_dt_versus,@,f_l_browse,@,f_s_browse,@,f_dp_title,@,f_dp_title_update,@,f_s_title,@,f_dp_pkpreview,@,f_l_pkpreview,@,f_s_pkpreview,@,f_dp_pkstat,@,f_l_pkstat,@,f_s_pkstat,@,f_s_versus,@,f_s_league,@,f_s_edit,@,f_s_edit2,@,f_s_editstat,@,f_s_editmove,@,f_l_title,@,_update60,@,_draw,@",f_zobj,f_zobj_set,f_zobj_eval,function(func,text,...)
+f_zobj_set(_g,"f_zobj,@,f_zobj_set,@,f_zobj_eval,@,f_zcall,@,f_create_gridpair,@,f_update_grid,@,f_draw_grid,@,f_minisfx,@,f_draw_pkmn,@,c_move_names,@,c_trnr_names,@,c_type_names,@,c_item_names,@,c_pkmn_names,@,f_init_peek_inc,@,c_types,@,f_can_pokemon_teach_move,@,f_op_def,@,f_op_browse,@,f_update_locks,@,f_get_party_pkmn,@,f_op_edit,@,f_op_editparty,@,f_strtoq,@,f_op_title,@,f_op_teams,@,f_op_editstat,@,f_op_editmove,@,f_op_pkstat,@,f_dp_browse,@,f_loop_through_team_pkmn,@,f_dp_edit,@,f_dt_edit2,@,f_dt_editstat,@,f_dp_edit2,@,f_dt_browse,@,f_dt_edit,@,f_dt_league,@,f_dt_versus,@,f_l_browse,@,f_s_browse,@,f_dp_title,@,f_dp_title_update,@,f_s_title,@,f_dp_pkpreview,@,f_l_pkpreview,@,f_s_pkpreview,@,f_dp_pkstat,@,f_l_pkstat,@,f_s_pkstat,@,f_s_versus,@,f_s_league,@,f_s_edit,@,f_s_edit2,@,f_s_editstat,@,f_s_editmove,@,f_l_title,@,_update60,@,_draw,@",f_zobj,f_zobj_set,f_zobj_eval,function(func,text,...)
 foreach(f_zobj(text,...),function(params)
 func(unpack(params))
 end)
@@ -142,7 +142,7 @@ camera()
 end,function(num)
 sfx(num\4,num<252 and 0 or 1,num%4*8,8)
 end,function(num,x,y,width,flip,sel,disabled)
-local in_c=sel and(disabled and 3 or 4)or disabled and 1 or c_pkmn_color[num]
+local in_c=sel and(disabled and 3 or 4)or disabled and 1 or c_pokemon[mid(1,num,252)].color
 local out_c=(sel or disabled)and 2 or 1
 if num==0 then
 rectfill(x+width/2-1,y+width/2-1,x+width/2,y+width/2,out_c)
@@ -175,7 +175,7 @@ end
 end
 end
 colordrawfunc(x,y,in_c)
-end,split"___,aCID,aCIDaR,bARAGE,bONcLB,bIND,cLAMP,mOONlT,lECHsD,eXTRsP,sNCbOM,tWInDL,tHNsHK,gLARE,gILOTN,hYPfNG,jMPkCK,kINSIS,lOCKoN,lOVkIS,mACpNC,vICgRP,sPIcAN,sPIKES,sPORE,cOTsPR,pRESNT,vItHRW,cMTpNC,dRLpCK,sNDaTK,aGILTY,fRYaTK,qIKaTK,fALsWP,gROWL,hEALbL,sING,pOUND,mINMIZ,tAILwP,dBLsLP,mEGhRN,bONRNG,cONVR1,cONVR2,sPARK,mLKdRK,mORsUN,nGTsHD,oCTZOK,pINmIS,pWDsNW,sUPfNG,fIRsPN,pSNgAS,bARIER,mEDTAT,fTRsGT,hYPNOS,pSYbEM,lITsCR,sAFgRD,pETdNC,cHARM,sYNTHS,sWTsCN,rAZlEF,pSNpWD,sLPpWD,aBSORB,sTNsPR,fLAIL,cONFSN,sLAM,cONSTR,aMNESA,bUBBLE,sPLASH,hYDpMP,mNDrED,mIST,hRNaTK,sPIwEB,dBLkCK,sWTkIS,mTLcLW,tRFORM,tRIKCK,gUST,tWISTR,cRBhAM,dIZpNC,sLUDGE,pAINsP,dSTbND,hAZE,lICK,pERsNG,mEANlK,cNFrAY,cRScHP,sMOG,kARcHP,eMBER,sMKsCR,bELdRM,bEATUP,sCRTCH,sLASH,aNCpWR,lEER,bITE,oUTrGE,sCRYfC,tHRASH,sTOMP,rOKsLD,mAGTUD,rOCtHR,hARDEN,bONrSH,hIJkCK,rECOVR,aERbLS,hRNdRL,dRGrGE,sFbOIL,dRGbRt,sLFdES,eXPLSN,eGGbMB,sLGbMB,gIGdRN,mEGdRN,sWRdNC,cUT,fRYcTR,tHIEF,dIG,rOLOUT,dFNcRL,dETECT,sOLbEM,rAIdNC,fLASH,pSYCIC,pSYCuP,dRMeAT,nGTMAR,sHDbAL,zAPcAN,tHUNDR,tHNbLT,iRNtAL,sTRENG,rOCsMS,hEDbUT,mUDsLP,sUNdAY,pROTCT,dBLtEM,sLPtLK,cURSE,hIDpWR,sWAGER,fRUSTR,rETURN,tOXIC,sNORE,rEST,eNDURE,aTRACT,bIDE,mIMIC,sUBSTU,rAGE,dBLeDG,tAKdWN,sKLbAS,bODsLM,wTRgUN,bBLbEM,iCEbEM,bLIZRD,iCYwND,sURF,wRLPOL,wTRFAL,sWIFT,pAYDAY,tRIaTK,rFLECT,tHNwAV,tELPRT,pSYwAV,mETRNM,cOUNTR,mEGpNC,sEITOS,sUBMIS,mEGkCK,dYNpNC,fIRpNC,tHNpNC,iCEpNC,fIRbLS,fLMtHR,fISURE,eARTqK,sNDsTR,hYPbEM,rOAR,sTLwNG,fLY,rAZwND,wRLwND,sKYaTK,wNGaTK,pECK,mIRMOV,fNTaTK,wITdRW,rAPsPN,sUPsNC,aURbEM,mIRcOT,pSNsTG,sPITE,cRUNCH,pURSUT,sTRsHT,lECHlF,bTNpAS,dISABL,sCRECH,tACKLE,fLMwEL,rEVERS,fRYsWP,fCSeNG,fORsGT,lOWkCK,rOLkCK,eNCORE,wRAP,gROWTH,vINwHP,sACfIR,sHRPEN,sKETCH,tM05,sTRUGL,nONE,nONE,nONE",split"yOUNGS,sAGE,fALKNR,gRUNT,bUGcTR,bUGSY,pKMfAN,bEAUTY,wITNEY,kIMINO,mEDIUM,mORTY,pOLICE,kARATE,cHUCK,gENTLE,sAILOR,jASMIN,rOCKET,sKIER,pRYCE,sCIENT,tWINS,cLAIR,nERD,cAMPER,bROCK,sCHOOL,sWIMER,mISTY,jUGLER,gUITAR,lTsURG,hIKER,lASS,eRIKA,bIKER,pICNIK,jANINE,mANIAC,pSYCIC,sABRIN,fISHER,bREATH,bLAINE,bIRDkP,cOOLtR,bLUE,sILVER,wILL,kOGA,bRUNO,kAREN,lANCE,eUSINE,lAWRNC,rED,hORDE",split"bIRD,nORMAL,fIRE,fIGHTN,wATER,pOISON,eLECTR,gROUND,gRASS,fLYING,iCE,bUG,pSYCIC,rOCK,dRAGON,gHOST,dARK,sTEEL",split"nONE,pNKBOW,cHRCOL,bLKbLT,mYwATR,pSNbRB,mAGNET,sOsAND,mIRACL,sHbEAK,nVRiCE,sLVpWD,tWsPON,hSTONE,dRAGsC,sPELtG,bLKgLS,mTLcOT,bRIpWD,fOCbND,kINGrK,lEFToV,qIKcLW,sCOPlN,aMcOIN,lITbAL,lUKpNC,mTLpWD,sTICK,tHKcLB,bERSRK,bERRY,bTRbRY,bRNbRY,gLDbRY,iCEbRY,mNTbRY,mIRbRY,mYSbRY,pARbRY,pSNbRY",split"___,bULSAUR,iVYSAUR,vENSAUR,cHARMAN,cHARMEL,cHARZAR,sQUIRTL,wARTORT,bLSTOIS,cATRPIE,mETAPOD,bUTFREE,wEEDLE,kAKUNA,bEEDRIL,pIDGEY,pIDGETO,pIDGEOT,rATTATA,rATICAT,sPEAROW,fEAROW,eKANS,aRBOK,pIKACHU,rAICHU,sNDSHRW,sNDSLAS,nIDRANf,nIDRINA,nIDQUEN,nIDRANm,nIDRINO,nIDKING,cLFAIRY,cLFABLE,vULPIX,nINTALE,jIGPUFF,wIGTUFF,zUBAT,gOLBAT,oDDISH,gLOOM,vILPLUM,pARAS,pARSECT,vENONAT,vENMOTH,dIGLETT,dUGTRIO,mEOWTH,pERSIAN,pSYDUCK,gOLDUCK,mANKEY,pRIMAPE,gROWLTH,aRCANIN,pOLIWAG,pOLWIRL,pOLRATH,aBRA,kADABRA,aLKAZAM,mACHOP,mACHOKE,mACHAMP,bELSPRT,wEEPBEL,vICTBEL,tNTCOOL,tNTCRUL,gEODUDE,gRAVLER,gOLEM,pONYTA,rAPDASH,sLOWPOK,sLOWBRO,mAGNMIT,mAGNTON,fAFETCd,dODUO,dODRIO,sEEL,dEWGONG,gRIMER,mUK,sHELDER,cLYSTER,gASTLY,hAUNTER,gENGAR,oNIX,dROWZEE,hYPNO,kRABBY,kINGLER,vOLTORB,eLCRODE,eGGCUTE,eGGUTOR,cUBONE,mAROWAK,hITMLEE,hITMCHN,lIKTUNG,kOFFING,wEEZING,rHYHORN,rHYDON,cHANSEY,tANGELA,kANGKAN,hORSEA,sEADRA,gOLDEEN,sEAKING,sTARYU,sTARMIE,mRmIME,sCYTHER,jYNX,eLCABUZ,mAGMAR,pINSIR,tAUROS,mAGKARP,gYARDOS,lAPRAS,dITTO,eEVEE,vAPREON,jOLTEON,fLAREON,pORYGON,oMANYTE,oMASTAR,kABUTO,kABTOPS,aERODAC,sNORLAX,aRTCUNO,zAPDOS,mOLTRES,dRATINI,dRAGAIR,dRAGITE,mEWTWO,mEW,cHIKITA,bAYLEEF,mEGNIUM,cYNDQIL,qUILAVA,tYPHLOS,tOTODIL,cROCNAW,fRLGATR,sENTRET,fURRET,hOOTOOT,nOCTOWL,lEDYBA,lEDIAN,sPINRAK,aRIADOS,cROBAT,cHINCHU,lANTURN,pICHU,cLEFFA,iGGBUFF,tOGEPI,tOGETIC,nATU,xATU,mAREEP,fLAAFFY,aMPHROS,bELOSOM,mARILL,aZMARIL,sUDWOOD,pOLTOED,hOPPIP,sKIPLOM,jUMPLUF,aIPOM,sUNKERN,sUNFLOR,yANMA,wOOPER,qUAGSIR,eSPEON,uMBREON,mURKROW,sLOWKNG,mISDVUS,uNOWN,wOBUFET,gIFARIG,pINECO,fORTRES,dUNSPAR,gLIGAR,sTEELIX,sNUBBUL,gRANBUL,qILFISH,sCIZOR,sHUCKLE,hERCROS,sNEASEL,tEDIURS,uRSRING,sLUGMA,mACARGO,sWINUB,pILSWIN,cORSOLA,rEMRAID,oCTLERY,dELBIRD,mANTINE,sKARMRY,hONDOUR,hONDOOM,kINGDRA,pHANPY,dONPHAN,pORYGN2,sTANTLR,sMEARGL,tYROGUE,hITMTOP,sMOOCHM,eLEKID,mAGBY,mILTANK,bLISSEY,rAIKOU,eNTEI,sUICUNE,lARVTAR,pUPITAR,tYRATAR,lUGIA,hOoH,cELEBI,mISNGnO,___,___,___",split"5,5,5,12,13,12,11,11,11,5,5,11,7,13,13,10,10,10,8,10,11,11,8,8,13,11,10,11,12,12,12,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,3",function()
+end,split"___,aCID,aCIDaR,bARAGE,bONcLB,bIND,cLAMP,mOONlT,lECHsD,eXTRsP,sNCbOM,tWInDL,tHNsHK,gLARE,gILOTN,hYPfNG,jMPkCK,kINSIS,lOCKoN,lOVkIS,mACpNC,vICgRP,sPIcAN,sPIKES,sPORE,cOTsPR,pRESNT,vItHRW,cMTpNC,dRLpCK,sNDaTK,aGILTY,fRYaTK,qIKaTK,fALsWP,gROWL,hEALbL,sING,pOUND,mINMIZ,tAILwP,dBLsLP,mEGhRN,bONRNG,cONVR1,cONVR2,sPARK,mLKdRK,mORsUN,nGTsHD,oCTZOK,pINmIS,pWDsNW,sUPfNG,fIRsPN,pSNgAS,bARIER,mEDTAT,fTRsGT,hYPNOS,pSYbEM,lITsCR,sAFgRD,pETdNC,cHARM,sYNTHS,sWTsCN,rAZlEF,pSNpWD,sLPpWD,aBSORB,sTNsPR,fLAIL,cONFSN,sLAM,cONSTR,aMNESA,bUBBLE,sPLASH,hYDpMP,mNDrED,mIST,hRNaTK,sPIwEB,dBLkCK,sWTkIS,mTLcLW,tRFORM,tRIKCK,gUST,tWISTR,cRBhAM,dIZpNC,sLUDGE,pAINsP,dSTbND,hAZE,lICK,pERsNG,mEANlK,cNFrAY,cRScHP,sMOG,kARcHP,eMBER,sMKsCR,bELdRM,bEATUP,sCRTCH,sLASH,aNCpWR,lEER,bITE,oUTrGE,sCRYfC,tHRASH,sTOMP,rOKsLD,mAGTUD,rOCtHR,hARDEN,bONrSH,hIJkCK,rECOVR,aERbLS,hRNdRL,dRGrGE,sFbOIL,dRGbRt,sLFdES,eXPLSN,eGGbMB,sLGbMB,gIGdRN,mEGdRN,sWRdNC,cUT,fRYcTR,tHIEF,dIG,rOLOUT,dFNcRL,dETECT,sOLbEM,rAIdNC,fLASH,pSYCIC,pSYCuP,dRMeAT,nGTMAR,sHDbAL,zAPcAN,tHUNDR,tHNbLT,iRNtAL,sTRENG,rOCsMS,hEDbUT,mUDsLP,sUNdAY,pROTCT,dBLtEM,sLPtLK,cURSE,hIDpWR,sWAGER,fRUSTR,rETURN,tOXIC,sNORE,rEST,eNDURE,aTRACT,bIDE,mIMIC,sUBSTU,rAGE,dBLeDG,tAKdWN,sKLbAS,bODsLM,wTRgUN,bBLbEM,iCEbEM,bLIZRD,iCYwND,sURF,wRLPOL,wTRFAL,sWIFT,pAYDAY,tRIaTK,rFLECT,tHNwAV,tELPRT,pSYwAV,mETRNM,cOUNTR,mEGpNC,sEITOS,sUBMIS,mEGkCK,dYNpNC,fIRpNC,tHNpNC,iCEpNC,fIRbLS,fLMtHR,fISURE,eARTqK,sNDsTR,hYPbEM,rOAR,sTLwNG,fLY,rAZwND,wRLwND,sKYaTK,wNGaTK,pECK,mIRMOV,fNTaTK,wITdRW,rAPsPN,sUPsNC,aURbEM,mIRcOT,pSNsTG,sPITE,cRUNCH,pURSUT,sTRsHT,lECHlF,bTNpAS,dISABL,sCRECH,tACKLE,fLMwEL,rEVERS,fRYsWP,fCSeNG,fORsGT,lOWkCK,rOLkCK,eNCORE,wRAP,gROWTH,vINwHP,sACfIR,sHRPEN,sKETCH,tM05,sTRUGL,nONE,nONE,nONE",split"yOUNGS,sAGE,fALKNR,gRUNT,bUGcTR,bUGSY,pKMfAN,bEAUTY,wITNEY,kIMINO,mEDIUM,mORTY,pOLICE,kARATE,cHUCK,gENTLE,sAILOR,jASMIN,rOCKET,sKIER,pRYCE,sCIENT,tWINS,cLAIR,nERD,cAMPER,bROCK,sCHOOL,sWIMER,mISTY,jUGLER,gUITAR,lTsURG,hIKER,lASS,eRIKA,bIKER,pICNIK,jANINE,mANIAC,pSYCIC,sABRIN,fISHER,bREATH,bLAINE,bIRDkP,cOOLtR,bLUE,sILVER,wILL,kOGA,bRUNO,kAREN,lANCE,eUSINE,lAWRNC,rED,hORDE",split"bIRD,nORMAL,fIRE,fIGHTN,wATER,pOISON,eLECTR,gROUND,gRASS,fLYING,iCE,bUG,pSYCIC,rOCK,dRAGON,gHOST,dARK,sTEEL",split"nONE,pNKBOW,cHRCOL,bLKbLT,mYwATR,pSNbRB,mAGNET,sOsAND,mIRACL,sHbEAK,nVRiCE,sLVpWD,tWsPON,hSTONE,dRAGsC,sPELtG,bLKgLS,mTLcOT,bRIpWD,fOCbND,kINGrK,lEFToV,qIKcLW,sCOPlN,aMcOIN,lITbAL,lUKpNC,mTLpWD,sTICK,tHKcLB,bERSRK,bERRY,bTRbRY,bRNbRY,gLDbRY,iCEbRY,mNTbRY,mIRbRY,mYSbRY,pARbRY,pSNbRY",split"___,bULSAUR,iVYSAUR,vENSAUR,cHARMAN,cHARMEL,cHARZAR,sQUIRTL,wARTORT,bLSTOIS,cATRPIE,mETAPOD,bUTFREE,wEEDLE,kAKUNA,bEEDRIL,pIDGEY,pIDGETO,pIDGEOT,rATTATA,rATICAT,sPEAROW,fEAROW,eKANS,aRBOK,pIKACHU,rAICHU,sNDSHRW,sNDSLAS,nIDRANf,nIDRINA,nIDQUEN,nIDRANm,nIDRINO,nIDKING,cLFAIRY,cLFABLE,vULPIX,nINTALE,jIGPUFF,wIGTUFF,zUBAT,gOLBAT,oDDISH,gLOOM,vILPLUM,pARAS,pARSECT,vENONAT,vENMOTH,dIGLETT,dUGTRIO,mEOWTH,pERSIAN,pSYDUCK,gOLDUCK,mANKEY,pRIMAPE,gROWLTH,aRCANIN,pOLIWAG,pOLWIRL,pOLRATH,aBRA,kADABRA,aLKAZAM,mACHOP,mACHOKE,mACHAMP,bELSPRT,wEEPBEL,vICTBEL,tNTCOOL,tNTCRUL,gEODUDE,gRAVLER,gOLEM,pONYTA,rAPDASH,sLOWPOK,sLOWBRO,mAGNMIT,mAGNTON,fAFETCd,dODUO,dODRIO,sEEL,dEWGONG,gRIMER,mUK,sHELDER,cLYSTER,gASTLY,hAUNTER,gENGAR,oNIX,dROWZEE,hYPNO,kRABBY,kINGLER,vOLTORB,eLCRODE,eGGCUTE,eGGUTOR,cUBONE,mAROWAK,hITMLEE,hITMCHN,lIKTUNG,kOFFING,wEEZING,rHYHORN,rHYDON,cHANSEY,tANGELA,kANGKAN,hORSEA,sEADRA,gOLDEEN,sEAKING,sTARYU,sTARMIE,mRmIME,sCYTHER,jYNX,eLCABUZ,mAGMAR,pINSIR,tAUROS,mAGKARP,gYARDOS,lAPRAS,dITTO,eEVEE,vAPREON,jOLTEON,fLAREON,pORYGON,oMANYTE,oMASTAR,kABUTO,kABTOPS,aERODAC,sNORLAX,aRTCUNO,zAPDOS,mOLTRES,dRATINI,dRAGAIR,dRAGITE,mEWTWO,mEW,cHIKITA,bAYLEEF,mEGNIUM,cYNDQIL,qUILAVA,tYPHLOS,tOTODIL,cROCNAW,fRLGATR,sENTRET,fURRET,hOOTOOT,nOCTOWL,lEDYBA,lEDIAN,sPINRAK,aRIADOS,cROBAT,cHINCHU,lANTURN,pICHU,cLEFFA,iGGBUFF,tOGEPI,tOGETIC,nATU,xATU,mAREEP,fLAAFFY,aMPHROS,bELOSOM,mARILL,aZMARIL,sUDWOOD,pOLTOED,hOPPIP,sKIPLOM,jUMPLUF,aIPOM,sUNKERN,sUNFLOR,yANMA,wOOPER,qUAGSIR,eSPEON,uMBREON,mURKROW,sLOWKNG,mISDVUS,uNOWN,wOBUFET,gIFARIG,pINECO,fORTRES,dUNSPAR,gLIGAR,sTEELIX,sNUBBUL,gRANBUL,qILFISH,sCIZOR,sHUCKLE,hERCROS,sNEASEL,tEDIURS,uRSRING,sLUGMA,mACARGO,sWINUB,pILSWIN,cORSOLA,rEMRAID,oCTLERY,dELBIRD,mANTINE,sKARMRY,hONDOUR,hONDOOM,kINGDRA,pHANPY,dONPHAN,pORYGN2,sTANTLR,sMEARGL,tYROGUE,hITMTOP,sMOOCHM,eLEKID,mAGBY,mILTANK,bLISSEY,rAIKOU,eNTEI,sUICUNE,lARVTAR,pUPITAR,tYRATAR,lUGIA,hOoH,cELEBI,mISNGnO,___,___,___",function()
 g_init_peek_loc+=1
 return@g_init_peek_loc
 end,f_zobj"0;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,",function(pkmn_ind,move_ind)
@@ -200,7 +200,7 @@ g_lock_pokemon[ind]=true
 end
 if@0x5efe==0 then
 poke(0x5efe,1)
-memcpy(0x5e00,0x418a,42)
+memcpy(0x5e00,0x4286,42)
 end
 for i=1,min(58,@0x5eff)do
 for pkmn in all(c_trainers[i])do
@@ -211,9 +211,15 @@ g_lock_move[pkmn[i]]=true
 end
 end
 g_lock_pokemon[pkmn.ind]=true
-g_lock_item[c_pokemon[pkmn.ind].gender_item & 0b00111111]=true
+g_lock_item[c_pokemon[pkmn.ind].item]=true
 end
 end
+end,function(party_num,pkmn_num)
+local _ENV=f_zobj""
+for i,key in ipairs(split"num,gender,item,level,0,1,2,3")do
+_ENV[key]=@(0x5e00+party_num*42+pkmn_num*7+i-1)
+end
+return _ENV
 end,function(sumdisable)
 local op={}
 for partynum=0,3 do
@@ -278,19 +284,6 @@ end,function()
 local op={}
 local pkmn=c_pokemon[@g_grid_browse[1].mem]
 local genders=""
-if pkmn.gender_item & 64>0 then genders..="m" end
-if pkmn.gender_item & 128>0 then
-if #genders>0 then genders..="/" end
-genders..="f" end
-if #genders==0 then genders..="n" end
-add(op,{text="hP:"..pkmn.hp})
-add(op,{text="sP:"..pkmn.spd})
-add(op,{text="aT:"..pkmn.att})
-add(op,{text="dF:"..pkmn.def})
-add(op,{text="sA:"..pkmn.sat})
-add(op,{text="sD:"..pkmn.sdf})
-add(op,{text="gD:"..genders})
-add(op,{text="lV:50"})
 return op
 end,function(i,is_sel,gridobj)
 f_draw_pkmn(gridobj.data,1,1,6,false,is_sel,gridobj.disabled)
@@ -322,7 +315,7 @@ end
 end,function(i,is_sel,gridobj)
 f_draw_pkmn(gridobj.data,1,1,16,false,is_sel)
 end,function(i,is_sel)
-local numstr=tostr(@0x5ea8+1)
+local numstr=tostr((@0x5ea8+1)%252)
 local pkmn=c_pokemon[@0x5ea8+1]
 while #numstr<3 do numstr="0"..numstr end
 local namestr,type1,type2=pkmn.name,c_type_names[pkmn.type1+1],""
@@ -481,9 +474,14 @@ cur_list,c_moves[i-1],c_pokemon[i]=pkmn.old.learn,{},pkmn
 foreach(split"pow,type,acc,pp",function(key)
 c_moves[i-1][key]=f_init_peek_inc()
 end)
-foreach(split"prevolve,type1,type2,hp,att,def,spd,sat,sdf,gender_item",function(key)
+foreach(split"prevolve,type1,type2,hp,att,def,spd,sat,sdf,item,color",function(key)
 pkmn[key]=f_init_peek_inc()
 end)
+for k,v in pairs(f_zobj"192;,m,f;0;,n;64;,m;128;,f")do
+if pkmn.color & 192==k then
+pkmn.genders=v
+end
+end
 f_zobj_set(pkmn,"name,@,num,@",c_pkmn_names[i+1],i%252)
 while f_init_peek_inc()<255 do
 if@g_init_peek_loc==252 then cur_list=pkmn.old.teach
@@ -539,7 +537,7 @@ cls()flip()
 memset(0x5e00,0,256)
 run()
 end)
-poke(0x5eff,20)
+poke(0x5eff,58)
 f_update_locks()
 for iloc=0x3200,0x4278,68 do
 for loc=iloc,iloc+63,2 do
@@ -575,12 +573,12 @@ end
 end
 g_title_an_timer=70
 g_palettes={
-{[0]=129,1,13,6,7,138,135,14,15,143,142,12,9,8,3,136},
-{[0]=131,129,3,11,10,138,135,14,15,143,142,12,9,8,3,136},
-{[0]=129,1,140,12,6,138,135,14,15,143,142,12,9,8,3,136},
-{[0]=8,0,10,136,9,138,135,14,15,143,142,12,9,8,3,136},
-{[0]=7,6,0,134,5,5,4,129,3,130,2,128,1,5,5,5},
-{[0]=128,130,141,134,135,138,135,14,15,143,142,12,9,8,3,136},
+{[0]=1,129,13,6,7,139,141,14,6,143,142,12,9,8,4,5},
+{[0]=131,129,3,11,10,139,141,14,6,143,142,12,9,8,4,5},
+{[0]=129,1,140,12,6,139,141,14,6,143,142,12,9,8,4,5},
+{[0]=8,0,10,136,9,139,141,14,6,143,142,12,9,8,4,5},
+{[0]=7,6,0,134,5,139,141,14,6,143,2,12,1,8,4,5},
+{[0]=128,130,141,134,135,139,141,14,6,143,142,12,9,8,4,5},
 }
 g_palette=0
 f_zcall(f_create_gridpair,"p_browse;,6,4,2,2,10,10,~f_dp_browse,~f_nf;t_browse;,1,1,2,45,60,16,~f_dt_browse,~f_nf;p_title;,1,1,2,2,60,40,~f_dp_title,~f_dp_title_update;t_title;,2,2,2,44,30,9,~f_nf,~f_nf;p_pkpreview;,1,1,2,2,60,40,~f_dp_pkpreview,~f_nf;p_pkstat;,2,4,2,4,30,9,~f_dp_pkstat,~f_nf;t_edit;,1,1,2,45,60,16,~f_dt_edit,~f_nf;p_edit;,2,2,2,2,30,20,~f_dp_edit,~f_nf;t_edit2;,1,1,2,45,60,16,~f_dt_edit2,~f_nf;p_edit2;,3,2,2,2,20,20,~f_dp_edit2,~f_nf;t_edit3;,1,1,2,45,60,16,~f_dt_editstat,~f_nf;p_edit3;,2,4,2,4,30,9,~f_nf,~f_nf;t_edit4;,1,1,2,45,60,16,~f_dt_editstat,~f_nf;p_edit4;,2,4,2,4,30,9,~f_nf,~f_nf;t_versus;,1,1,2,45,60,16,~f_dt_versus,~f_nf;t_league;,1,1,2,45,60,16,~f_dt_league,~f_nf;p_teamed;,2,4,2,4,30,9,~f_nf,~f_nf;t_teamed;,1,1,2,45,60,16,~f_dt_edit,~f_nf;;,g_grid_browse,0x5ea8,~p_browse,~t_browse,~f_op_browse,~f_s_pkstat,~f_l_browse,,~c_no;;,g_grid_title,0x5eaa,~t_title,~p_title,~f_op_title,~f_s_title,~f_l_title,,~c_no;;,g_grid_pkpreview,0x5eac,~p_pkpreview,~t_browse,~f_op_def,~f_s_pkpreview,~f_l_pkpreview,~f_browselr;;,g_grid_pkstat,0x5eae,~p_pkstat,~t_browse,~f_op_pkstat,~f_s_pkstat,~f_l_pkstat,,~c_no;;,g_grid_edit,0x5eb0,~p_edit,~t_edit,~f_op_edit,~f_s_edit,~f_l_browse,,~c_no;;,g_grid_edit2,0x5eb6,~p_edit2,~t_edit2,~f_op_editparty,~f_s_edit2,~f_l_browse,,~c_no;;,g_grid_edit3,0x5eb8,~p_edit3,~t_edit3,~f_op_editstat,~f_s_editstat,~f_l_browse,,~c_no;;,g_grid_editmove,0x5eba,~p_edit4,~t_edit4,~f_op_editmove,~f_s_editmove,~f_l_browse,,~c_no;;,g_grid_editpkmn,0x5ea8,~p_browse,~t_browse,~f_op_browse,~f_nf,~f_l_browse,,~c_no;;,g_grid_league,0x5eb0,~p_edit,~t_league,~f_op_edit,~f_s_league,~f_l_browse,,~c_no,~c_yes;;,g_grid_league2,0x5eb4,~p_teamed,~t_league,~f_op_teams,~f_nf,~f_l_browse,,~c_no;;,g_grid_versus,0x5eb0,~p_edit,~t_versus,~f_op_edit,~f_s_versus,~f_l_browse,,~c_no,~c_yes;;,g_grid_versus2,0x5eb2,~p_edit,~t_versus,~f_op_edit,~f_nf,~f_l_browse,,~c_no,~c_yes")

@@ -3,7 +3,8 @@
 end $$
 
 |[f_draw_pkmn]| function(num, x, y, width, flip, sel, disabled)
-  local in_c = sel and (disabled and C_3 or C_4) or disabled and C_1 or c_pkmn_color[num]
+  -- the "min" is needed to draw trainers
+  local in_c = sel and (disabled and C_3 or C_4) or disabled and C_1 or c_pokemon[mid(1,num,252)].color
   local out_c = (sel or disabled) and C_2 or C_1
 
   if num == 0 then

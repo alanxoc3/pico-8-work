@@ -36,7 +36,7 @@ SFX_MOVE:   255
 
 # ----------------------------- load memory locations
 L_DATASTART: 0x1fff # data starts one byte before because the code increments first
-L_PARTY1: 0x418a # The location the first party is in cart storage
+L_PARTY1: 0x4286 # The location the first party is in cart storage
 
 # ----------------------------- priorities - aligned to thousand because 999 is the max speed stat
 C_PRIORITY_SWITCH:      4000 # PURSUIT
@@ -112,7 +112,7 @@ I_MYSTERYBERRY:      38 # mstbery
 I_PARALYZECUREBERRY: 39 # parbery
 I_POISONCUREBERRY:   40 # psnbery
 
-# ----------------------------- genders - these are the 4 possible gender. bitmasked to top 2 bits to save a few tokens since they are packed with the item
+# ----------------------------- genders - these are the 4 possible gender. bitmasked to top 2 bits to save a few tokens since they are packed with the color
 G_NONE: 0
 G_MALE: 64
 G_FEMA: 128
