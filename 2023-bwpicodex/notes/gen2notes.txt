@@ -74,7 +74,7 @@ DIFF: Defense Curl powerup for rollout is Baton Passed.
 DIFF: Rage counter is Baton Passed. Rage counter does not reset when rage is not used anymore.
 DIFF: Kings Rock has a chance to activate with any attack that does damage at the time of using the attack. It can still be triggered with attacking moves that already has a flinch chance if that flinch chance failed. All multistrike moves only have the chance on the last hit.
 DIFF: Baton Pass doesn't allow selecting a Pokemon. Instead, the next available Pokemon in the order of the user's party is selected.
-DIFF: Hidden Power has a base power of 60 and changes type to be a random super effective move for one of the opposing Pokemon's 2 types. Defaults to normal type if the chosen type has no super effective weakness.
+DIFF: Hidden Power has a base power of 60 and changes type to be a random super effective move for one of the opposing Pokemon's 2 types. Defaults to bird type if the chosen type has no super effective weakness.
 DIFF: Morning Sun, Moonlight, & Synthesis normally restore 1/2 HP. They restore 3/4 during Sunny Day and 1/4 during rain/sandstorm.
 DIFF: Mirror Coat will still activate if the foe used Beatup. It didn't do this in Gen 2.
 DIFF: Damage calculation is capped at 999 damage.
@@ -94,6 +94,9 @@ DIFF: Leftovers fails if the user runs out of PP and doesn't get triggered when 
 DIFF: Berserk Gene boosts both Special Attack and Attack by 2 stages.
 DIFF: Missingno copies best stats and all moves from RB missingno, Y missingno, and "M (00)". As well as adding 1 extra glitch move.
 DIFF: Metronome will not trigger Sketch or TM05. (sequentially next to each other)
+DIFF: Struggle's recoil is 1/4 of the users max hp rounded up. Was 1/4 of damage dealt in gen 2. This ensures infinite battles with leftovers are not possible.
+DIFF: Encore works against sketch/transform/mirrormove/mimic. It just looks at the last moveslot used. Encore fails when the Pokemon never used a move, is using struggle, or is disabled or encored already.
+DIFF: Disable fails if the Pokemon is currently encored or disabled.
 
 STRAT: Sketch and Mimic allow for the same move to be available in multiple move slots.
 STRAT: Hidden Power counters Conversion 2.

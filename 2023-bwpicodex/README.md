@@ -86,6 +86,9 @@ Should sleep talk be able to select rest? I think so, like the OG games. Sleep t
 - Then improve sprites.
 - Horde mode could be all 6 custom teams against all 57 trainers, followed by a missingno. That seems possible.
 
+# NOTES TO GO THROUGH LATER
+- Smeargle can sketch 249 moves. He can learn sketch 4 times, and there are 3 empty moveslots. 249 + 4 + 3 = 256, which is the max byte size. This means I can enforce movesets saved for every single Pokemon. How lucky can I be? It just means that pokemon must have at least 1 move, which is standard in pokemon anyways.
+
 # Save format
 256 bytes:
 

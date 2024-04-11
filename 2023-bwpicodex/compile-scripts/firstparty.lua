@@ -11,11 +11,26 @@ function init() -- entry point for this compile script
   log("Wrote First Party Data")
 end
 
+-- the level is +1, because lvl 0 is impossible. So levels are actually "50"
+-- the moves are specific to each pokemon and would have to change if move orders change.
+-- so yeah, don't change the move stuff unless you know what you're doing
+-- pkmn ind    gender item   lvl moves.............
 firstparty = [[
-  P_BULBASAUR  G_MALE I_BERRY M_TACKLE  M_GROWL    M_VINEWHIP  M_LEECHSEED
-  P_CHARMANDER G_FEMA I_BERRY M_SCRATCH M_GROWL    M_EMBER     M_SMOKESCREEN
-  P_SQUIRTLE   G_MALE I_BERRY M_TACKLE  M_TAILWHIP M_BUBBLE    M_WITHDRAW
-  P_CHIKORITA  G_FEMA I_BERRY M_TACKLE  M_GROWL    M_RAZORLEAF M_REFLECT
-  P_CYNDAQUIL  G_MALE I_BERRY M_TACKLE  M_LEER     M_EMBER     M_SMOKESCREEN
-  P_TOTODILE   G_FEMA I_BERRY M_SCRATCH M_LEER     M_WATERGUN  M_RAGE
+  --                        tackle growl     leechseed   none
+  P_BULBASAUR  0 I_BERRY 49 19     7         6           0
+
+  --                        scratch growl    ember       none
+  P_CHARMANDER 1 I_BERRY 49 12      6        7           0
+
+  --                        tackle  tailwhip bubble      none
+  P_SQUIRTLE   0 I_BERRY 49 18      7        10          0
+
+  --                        tackle  growl    razorleaf   none
+  P_CHIKORITA  1 I_BERRY 49 17      8        5           0
+
+  --                        tackle  leer     smokescreen none
+  P_CYNDAQUIL  0 I_BERRY 49 12      8        6           0
+
+  --                        scratch leer     rage        none
+  P_TOTODILE   1 I_BERRY 49 8       12       14          0
 ]]

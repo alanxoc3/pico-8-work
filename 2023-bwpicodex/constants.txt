@@ -2,23 +2,23 @@
 C_LEVEL: 50
 
 # ----------------------------- save locations - will have to update/change slightly
-#   1 num, 1 gender, 1 item, 1 move, 1 move, 1 move, 1 move
+#   1 num, 1 gender, 1 item, 1 level, 1 move, 1 move, 1 move, 1 move
 S_PARTY1:         0x5e00
-S_PARTY2:         0x5e2a
-S_PARTY3:         0x5e54
-S_PARTY4:         0x5e7e
-S_PARTYEND:       0x5ea8
+S_PARTY2:         0x5e30
+S_PARTY3:         0x5e60
+S_PARTY4:         0x5e90
+S_PARTYEND:       0x5ec0
 
-S_BROWSE:         0x5ea8 # browse screen
-S_TITLE:          0x5eaa # title screen
-S_PKPREVIEW:      0x5eac # pk preview (not really needed)
-S_PKSTAT:         0x5eae # unused currently
-S_TEAM:           0x5eb0 # the edit and team 1 selection
-S_TEAM2:          0x5eb2 # the team 2 selection for versus mode
-S_TEAML:          0x5eb4 # the league team selection for league mode
-S_TEAME:          0x5eb6 # the specific pokemon in edit screen
-S_EDITSTAT:       0x5eb8 # edit the stats for a specific pokemon
-S_EDITMOVE:       0x5eba # edit the move for a specific pokemon
+S_BROWSE:         0x5ec0 # browse screen
+S_TITLE:          0x5ec2 # title screen
+S_PKPREVIEW:      0x5ec4 # pk preview (not really needed)
+S_PKSTAT:         0x5ec6 # unused currently
+S_TEAM:           0x5ec8 # the edit and team 1 selection
+S_TEAM2:          0x5eca # the team 2 selection for versus mode
+S_TEAML:          0x5ecc # the league team selection for league mode
+S_TEAME:          0x5ece # the specific pokemon in edit screen
+S_EDITSTAT:       0x5ed0 # edit the stats for a specific pokemon
+S_EDITMOVE:       0x5ed2 # edit the move for a specific pokemon
 
 S_PALETTE:        0x5efd
 S_NEW:            0x5efe
@@ -64,6 +64,12 @@ C_MAJOR_FROZEN:    3
 C_MAJOR_PARALYZED: 4
 C_MAJOR_POISONED:  5
 C_MAJOR_SLEEPING:  6
+
+C_LEN_ITEMS: 41
+C_LEN_GENDERS: 3
+C_LEN_LEVELS: 100
+C_LEN_MOVES: 252
+C_LEN_PKMN: 253
 
 # ----------------------------- held items
 I_NONE:              0
@@ -113,10 +119,16 @@ I_PARALYZECUREBERRY: 39 # parbery
 I_POISONCUREBERRY:   40 # psnbery
 
 # ----------------------------- genders - these are the 4 possible gender. bitmasked to top 2 bits to save a few tokens since they are packed with the color
-G_NONE: 0
-G_MALE: 64
-G_FEMA: 128
-G_BOTH: 192
+# Gender masks. These determine which genders a pokemon can be.
+GP_NEUT: 0
+GP_MALE: 64
+GP_FEMA: 128
+GP_BOTH: 192
+
+# Genders. These are numbers representing the actual gender of a Pokemon.
+G_NEUT: 0
+G_MALE: 1
+G_FEMA: 2
 
 # ----------------------------- type numbers - odds are physical, evens are special.
 T_NONE:     0 # Yes... bird and none are the same, which contributes to its glitchiness.
@@ -395,7 +407,8 @@ P_CELEBI:     251  # celebi
 P_MISSINGNO:  252  # misngno
 
 # ----------------------------- move numbers - 4508 bytes. It took lots of compute to generate this. Order matters, a bad order wastes lots of space.
-M_STRUGGLE:     0  # struggl
+M_NONE:         0  # ___
+M_STRUGGLE:     0  # struggl i might move this to be 252
 M_ACID:         1  # acid
 M_ACIDARMOR:    2  # acidarm
 M_BARRAGE:      3  # barrage
