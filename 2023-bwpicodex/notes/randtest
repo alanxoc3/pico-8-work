@@ -42,7 +42,7 @@ cur_img = 0
 image_dim = 16
 gap_px_len = 4 # 2
 image_len = image_dim**2
-max_num_images = 1024*64 # 64 # 8192
+max_num_images = 1024 # *64 # 64 # 8192
 row_len = math.ceil(math.sqrt(max_num_images))
 multiplier = 32000 / (image_dim/2)
 
@@ -117,6 +117,7 @@ def setpix(shouldset, size, col):
 srand()
 while True:
   num = rnd()
+  print(num)
   diff = abs(image_dim/2-cur_pix%image_dim) + abs(image_dim/2-cur_pix//image_dim)
   if setpix(num < 42000-diff*multiplier, num%2, 6):
     break

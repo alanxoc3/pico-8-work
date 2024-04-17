@@ -90,10 +90,9 @@ DIFF: Mimic & Sketch can copy any move in the game besides struggle.
 DIFF: Transform fails if Pokemon is already transformed.
 DIFF: Nightmare doesn't go away when awake and will re-apply if the Pokemon falls asleep again.
 DIFF: Porygon does not learn the move Conversion 2. (due to the way i pack all moves and to make it so each move is represented when battling)
-DIFF: Leftovers fails if the user runs out of PP and doesn't get triggered when pokemon is switched in.
+DIFF: Leftovers doesn't get triggered when pokemon is switched in.
 DIFF: Berserk Gene boosts both Special Attack and Attack by 2 stages.
 DIFF: Missingno copies best stats and all moves from RB missingno, Y missingno, and "M (00)". As well as adding 1 extra glitch move.
-DIFF: Metronome will not trigger Sketch or TM05. (sequentially next to each other)
 DIFF: Struggle's recoil is 1/4 of the users max hp rounded up. Was 1/4 of damage dealt in gen 2. This ensures infinite battles with leftovers are not possible.
 DIFF: Encore works against sketch/transform/mirrormove/mimic. It just looks at the last moveslot used. Encore fails when the Pokemon never used a move, is using struggle, or is disabled or encored already.
 DIFF: Disable fails if the Pokemon is currently encored or disabled.
