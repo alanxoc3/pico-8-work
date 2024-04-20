@@ -96,6 +96,10 @@ function load_cur_spr(ind, mid_func)
   calc_backup(ind)
 end
 
+function flipSpr()
+  g_cur_sprite = g_cur_sprite:scaledImage(-1, 1)
+end
+
 function calc_backup(ind)
   g_bak_count = 0
   local bak_filename = "pkmn-"..ind..".pdi"
@@ -209,6 +213,7 @@ function update()
   local yb = (dpad_helper(playdate.kButtonUp,   dpady) and -1 or 0) + (dpad_helper(playdate.kButtonDown,  dpady) and 1 or 0)
   local ab = playdate.buttonIsPressed(playdate.kButtonA)
   local bb = playdate.buttonIsPressed(playdate.kButtonB)
+  local abj = playdate.buttonJustPressed(playdate.kButtonA)
 
   if bb then
     local image_copy = g_cur_sprite:copy()
@@ -224,7 +229,7 @@ function update()
   if dpadx and dpadx < button_hold then dpadx += 1 end
   if dpady and dpady < button_hold then dpady += 1 end
 
-  if ab and not pix_entered[state.y*16+state.x] then
+  if not bb and kb and not pix_entered[state.y*16+state.x] then
     playdate.graphics.pushContext( g_cur_sprite )
     playdate.graphics.setColor(g_cur_sprite:sample(state.x, state.y) == playdate.graphics.kColorWhite and playdate.graphics.kColorBlack or playdate.graphics.kColorWhite)
     playdate.graphics.fillRect(state.x, state.y, 1, 1)
@@ -232,8 +237,13 @@ function update()
 
     did_edit = true
     pix_entered[state.y*16+state.x] = true
-  elseif not ab then
+  else
     pix_entered = {}
+  end
+
+  if bb and abj then
+    flipSpr()
+    did_edit = true
   end
 
   local tickcount = playdate.getCrankTicks(12)
@@ -273,38 +283,30 @@ end
 
 g_font = playdate.graphics.getSystemFont(normal)
 
--- local game_mode = "pico8-to-pics"
--- local game_mode = "pics-to-pico8"
-local game_mode = "normal"
+-- game should keep 3 backups of images. menu should be able to restore a backup.
+playdate.update = update
 
-if game_mode == "normal" then
-  -- game should keep 3 backups of images. menu should be able to restore a backup.
-  playdate.update = update
+loadStore()
+load_cur_spr(state.cur)
 
-  loadStore()
+playdate.getSystemMenu():addMenuItem("Pop Save", function()
+  local filename = "pkmn-"..state.cur..".pdi"
   load_cur_spr(state.cur)
+  playdate.file.delete("images/"..filename)
+  playdate.file.rename("images/"..filename..".bak1", "images/"..filename)
+  for i=1,backup_len do playdate.file.rename("images/"..filename..".bak"..(i+1), "images/"..filename..".bak"..i) end
+  calc_backup(state.cur)
+end)
 
-  playdate.getSystemMenu():addMenuItem("Pop Save", function()
-    local filename = "pkmn-"..state.cur..".pdi"
-    load_cur_spr(state.cur)
-    playdate.file.delete("images/"..filename)
-    playdate.file.rename("images/"..filename..".bak1", "images/"..filename)
-    for i=1,backup_len do playdate.file.rename("images/"..filename..".bak"..(i+1), "images/"..filename..".bak"..i) end
-    calc_backup(state.cur)
-  end)
+playdate.getSystemMenu():addMenuItem("export pico8", function()
+  save_to_pico8()
 
-  local save_callback = function()
-    save_state_and_sprite(state.cur)
-    calc_backup(state.cur)
+  playdate.update = function()
+    g_font:drawText("pics-to-pico8 complete!", 50, 50)
   end
+end)
 
-  playdate.getSystemMenu():addMenuItem("Push Save", save_callback)
-
-  playdate.gameWillTerminate = save_callback
-  playdate.deviceWillSleep = save_callback
-  playdate.deviceWillLock  = save_callback
-
-elseif game_mode == "pico8-to-pics" then
+playdate.getSystemMenu():addMenuItem("import pico8", function()
   print("loading pico8 files")
   local images = load_pico8_files()
   print("load complete")
@@ -319,11 +321,15 @@ elseif game_mode == "pico8-to-pics" then
   playdate.update = function()
     g_font:drawText("pico8-to-pics complete!", 50, 50)
   end
+end)
 
-elseif game_mode == "pics-to-pico8" then
-  save_to_pico8()
-
-  playdate.update = function()
-    g_font:drawText("pics-to-pico8 complete!", 50, 50)
-  end
+local save_callback = function()
+  save_state_and_sprite(state.cur)
+  calc_backup(state.cur)
 end
+
+playdate.getSystemMenu():addMenuItem("Push Save", save_callback)
+
+playdate.gameWillTerminate = save_callback
+playdate.deviceWillSleep = save_callback
+playdate.deviceWillLock  = save_callback
