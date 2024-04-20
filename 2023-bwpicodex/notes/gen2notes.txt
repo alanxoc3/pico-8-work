@@ -79,7 +79,7 @@ DIFF: Morning Sun, Moonlight, & Synthesis normally restore 1/2 HP. They restore 
 DIFF: Mirror Coat will still activate if the foe used Beatup. It didn't do this in Gen 2.
 DIFF: Damage calculation is capped at 999 damage.
 DIFF: Amulet Coin doubles base power of Pay Day. (Makes it similar to Drill Peck.)
-DIFF: Whirlwind will get rid of spikes from the opponent's side of the field. Roar will not.
+DIFF: Whirlwind will get rid of spikes from the opponent's side of the field. Roar will not. But whirlwind works against fly.
 DIFF: A Pokemon entering from Baton Pass, Teleport, and Roar will take spike damage.
 DIFF: Frustration has 100 Base Power if hp <= foe hp. Otherwise has 50 Base Power.
 DIFF: Return has 100 Base Power if hp >= foe hp. Otherwise has 50 Base Power.
@@ -96,6 +96,7 @@ DIFF: Missingno copies best stats and all moves from RB missingno, Y missingno, 
 DIFF: Struggle's recoil is 1/4 of the users max hp rounded up. Was 1/4 of damage dealt in gen 2. This ensures infinite battles with leftovers are not possible.
 DIFF: Encore works against sketch/transform/mirrormove/mimic. It just looks at the last moveslot used. Encore fails when the Pokemon never used a move, is using struggle, or is disabled or encored already.
 DIFF: Disable fails if the Pokemon is currently encored or disabled.
+DIFF: A transformed pokemon can make use of pokemon specific items (thickclub, lightball, lucky punch, stick)
 
 STRAT: Sketch and Mimic allow for the same move to be available in multiple move slots.
 STRAT: Hidden Power counters Conversion 2.

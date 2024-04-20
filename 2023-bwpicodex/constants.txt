@@ -19,6 +19,8 @@ S_TEAML:          0x5ecc # the league team selection for league mode
 S_TEAME:          0x5ece # the specific pokemon in edit screen
 S_EDITSTAT:       0x5ed0 # edit the stats for a specific pokemon
 S_EDITMOVE:       0x5ed2 # edit the move for a specific pokemon
+S_EDITITEM:       0x5ed4 # edit the item for a specific pokemon
+S_EDITLEVEL:      0x5ed6 # edit the level for a specific pokemon
 
 S_PALETTE:        0x5efd
 S_NEW:            0x5efe
@@ -73,7 +75,7 @@ C_LEN_PKMN: 253
 
 # ----------------------------- held items
 I_NONE:              0
-I_PINKBOW:           1  # pinkbow  ---- T_NORMAL
+I_PINKBOW:           1  # pinkbow  ---- T_NORMAL   ----- These are ordered by type.
 I_CHARCOAL:          2  # charcol  ---- T_FIRE
 I_BLACKBELT:         3  # blkbelt  ---- T_FIGHTING
 I_MYSTICWATER:       4  # mstwatr  ---- T_WATER
@@ -90,33 +92,36 @@ I_DRAGONSCALE:       14 # drgscal  ---- T_DRAGON
 I_SPELLTAG:          15 # speltag  ---- T_GHOST
 I_BLACKGLASSES:      16 # blkglas  ---- T_DARK
 I_METALCOAT:         17 # metcoat  ---- T_STEEL
+I_POLKADOTBOW:       18 # polkbow  ---- T_NORMAL -- polkadot bow is actually included so that there is an even number of items for the UI.
 
-I_BRIGHTPOWDER:      18 # bripowd ---- Next are items that apply to any Pokemon.
-I_FOCUSBAND:         19 # focband
-I_KINGSROCK:         20 # kingrok
-I_LEFTOVERS:         21 # leftovr
-I_QUICKCLAW:         22 # quikclw
-I_SCOPELENS:         23 # scoplen
+I_BRIGHTPOWDER:      19 # bripowd ---- Next are items that apply to any Pokemon.
+I_FOCUSBAND:         20 # focband
+I_KINGSROCK:         21 # kingrok
+I_LEFTOVERS:         22 # leftovr
+I_QUICKCLAW:         23 # quikclw
+I_SCOPELENS:         24 # scoplen
 
-I_AMULETCOIN:        24 # amucoin ---- This is wierdest because it only applies to Payday
+I_AMULETCOIN:        25 # amucoin ---- This is wierdest because it only applies to Payday
 
-I_LIGHTBALL:         25 # litball ---- Items that only apply to specific Pokemon.
-I_LUCKYPUNCH:        26 # lukpnch
-I_METALPOWDER:       27 # metpowd
-I_STICK:             28 # stick
-I_THICKCLUB:         29 # thkclub
+I_LIGHTBALL:         26 # litball ---- Items that only apply to specific Pokemon.
+I_LUCKYPUNCH:        27 # lukpnch
+I_METALPOWDER:       28 # metpowd
+I_STICK:             29 # stick
+I_THICKCLUB:         30 # thkclub
 
-I_BERSERKGENE:       30 # berserk ---- Items that apply to any Pokemon but are only a single use.
-I_BERRY:             31 # berry
-I_BITTERBERRY:       32 # btrbery
-I_BURNTBERRY:        33 # brnbery
-I_GOLDBERRY:         34 # gldbery
-I_ICEBERRY:          35 # icebery
-I_MINTBERRY:         36 # mntbery
-I_MIRACLEBERRY:      37 # mirbery
-I_MYSTERYBERRY:      38 # mstbery
-I_PARALYZECUREBERRY: 39 # parbery
-I_POISONCUREBERRY:   40 # psnbery
+I_BERSERKGENE:       31 # berserk ---- Items that apply to any Pokemon but are only a single use.
+I_BERRY:             32 # berry
+I_BITTERBERRY:       33 # btrbery
+I_BURNTBERRY:        34 # brnbery
+I_GOLDBERRY:         35 # gldbery
+I_ICEBERRY:          36 # icebery
+I_MINTBERRY:         37 # mntbery
+I_MIRACLEBERRY:      38 # mirbery
+I_MYSTERYBERRY:      39 # mstbery
+I_PARALYZECUREBERRY: 40 # parbery
+I_POISONCUREBERRY:   41 # psnbery
+
+I_LEN:               41 # just the last index of all items
 
 # ----------------------------- genders - these are the 4 possible gender. bitmasked to top 2 bits to save a few tokens since they are packed with the color
 # Gender masks. These determine which genders a pokemon can be.

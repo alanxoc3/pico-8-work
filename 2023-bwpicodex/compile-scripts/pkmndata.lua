@@ -60,7 +60,7 @@ pokemon_stats = [[
   P_EKANS      P_NONE       T_POISON   T_NONE      35   60   44   55   40   54 GP_BOTH 6  I_PARALYZECUREBERRY -- first evol no reason
   P_ARBOK      P_EKANS      T_POISON   T_NONE      60   85   69   80   65   79 GP_BOTH 6  I_POISONBARB        -- acid and type boost
   P_PIKACHU    P_PICHU      T_ELECTRIC T_NONE      35   55   30   90   50   40 GP_BOTH 12 I_LIGHTBALL         -- specific special item
-  P_RAICHU     P_PIKACHU    T_ELECTRIC T_NONE      60   90   55  100   90   80 GP_BOTH 10 I_SCOPELENS         -- make up for lack of hp
+  P_RAICHU     P_PIKACHU    T_ELECTRIC T_NONE      60   90   55  100   90   80 GP_BOTH 10 I_SCOPELENS         -- specific special item
   P_SANDSHREW  P_NONE       T_GROUND   T_NONE      50   75   85   40   20   30 GP_BOTH 9  I_BURNTBERRY        -- first evol, why not
   P_SANDSLASH  P_SANDSHREW  T_GROUND   T_NONE      75  100  110   65   45   55 GP_BOTH 14 I_SCOPELENS         -- because of slash
   P_NIDORANF   P_NONE       T_POISON   T_NONE      55   47   52   41   40   40 GP_FEMA 11 I_BURNTBERRY        -- no reason first of 3
@@ -73,8 +73,8 @@ pokemon_stats = [[
   P_CLEFABLE   P_CLEFAIRY   T_NORMAL   T_NONE      95   70   73   60   85   90 GP_BOTH 7  I_GOLDBERRY         -- match wigglytuff
   P_VULPIX     P_NONE       T_FIRE     T_NONE      38   41   40   65   50   65 GP_BOTH 13 I_BURNTBERRY        -- 1st evol
   P_NINETALES  P_VULPIX     T_FIRE     T_NONE      73   76   75  100   81  100 GP_BOTH 9  I_CHARCOAL          -- 2 fire type moves
-  P_JIGGLYPUFF P_IGGLYBUFF  T_NORMAL   T_NONE     115   45   20   20   45   25 GP_BOTH 7  I_PINKBOW           -- mid evol type boost and gen 2 trade item (polkadot technically)
-  P_WIGGLYTUFF P_JIGGLYPUFF T_NORMAL   T_NONE     140   70   45   45   75   50 GP_BOTH 7  I_GOLDBERRY         -- doubedge in moveset
+  P_JIGGLYPUFF P_IGGLYBUFF  T_NORMAL   T_NONE     115   45   20   20   45   25 GP_BOTH 7  I_POLKADOTBOW       -- mid evol type boost and gen 2 trade item. this is only way to get a polkadot bow.
+  P_WIGGLYTUFF P_JIGGLYPUFF T_NORMAL   T_NONE     140   70   45   45   75   50 GP_BOTH 7  I_GOLDBERRY         -- Jiggs gets polkadot bow
   P_ZUBAT      P_NONE       T_POISON   T_FLYING    40   45   35   55   30   40 GP_BOTH 11 I_MYSTERYBERRY      -- first evol and leech life sucks
   P_GOLBAT     P_ZUBAT      T_POISON   T_FLYING    75   80   70   90   65   75 GP_BOTH 11 I_BLACKGLASSES      -- faint attack type boost
   P_ODDISH     P_NONE       T_GRASS    T_POISON    45   50   55   30   75   65 GP_BOTH 5  I_BITTERBERRY       -- has petal dance, first of 3
@@ -206,9 +206,9 @@ pokemon_stats = [[
   P_CROBAT     P_GOLBAT     T_POISON   T_FLYING    85   90   80  130   70   80 GP_BOTH 6  I_KINGSROCK         -- op for final evol
   P_CHINCHOU   P_NONE       T_WATER    T_ELECTRIC  75   38   38   67   56   56 GP_BOTH 11 I_MINTBERRY         -- first evol
   P_LANTURN    P_CHINCHOU   T_WATER    T_ELECTRIC 125   58   58   67   76   76 GP_BOTH 11 I_GOLDBERRY         -- tanky
-  P_PICHU      P_NONE       T_ELECTRIC T_NONE      20   40   15   60   35   35 GP_BOTH 12 I_POISONCUREBERRY   -- baby first evol of 3
+  P_PICHU      P_NONE       T_ELECTRIC T_NONE      20   40   15   60   35   35 GP_BOTH 12 I_POISONCUREBERRY   -- specific special item
   P_CLEFFA     P_NONE       T_NORMAL   T_NONE      50   25   28   15   45   55 GP_BOTH 7  I_BURNTBERRY        -- baby first evol of 3
-  P_IGGLYBUFF  P_NONE       T_NORMAL   T_NONE      90   30   15   15   40   20 GP_BOTH 7  I_ICEBERRY          -- baby first evol of 3
+  P_IGGLYBUFF  P_NONE       T_NORMAL   T_NONE      90   30   15   15   40   20 GP_BOTH 7  I_ICEBERRY          -- jiggs gets polkadot bow when trading
   P_TOGEPI     P_NONE       T_NORMAL   T_NONE      35   20   65   20   40   65 GP_BOTH 8  I_MYSTERYBERRY      -- baby
   P_TOGETIC    P_TOGEPI     T_NORMAL   T_FLYING    55   40   85   40   80  105 GP_BOTH 8  I_FOCUSBAND         -- doubleedge in moveset and belongs in final evol
   P_NATU       P_NONE       T_PSYCHIC  T_FLYING    40   50   45   70   70   45 GP_BOTH 5  I_BITTERBERRY       -- no confuse since it has confuse ray?
@@ -276,7 +276,7 @@ pokemon_stats = [[
   P_ELEKID     P_NONE       T_ELECTRIC T_NONE      45   63   37   95   65   55 GP_BOTH 12 I_BITTERBERRY       -- baby
   P_MAGBY      P_NONE       T_FIRE     T_NONE      45   75   37   83   70   55 GP_BOTH 13 I_MINTBERRY         -- baby
   P_MILTANK    P_NONE       T_NORMAL   T_NONE      95   80  105  100   40   70 GP_FEMA 7  I_KINGSROCK         -- rollout with flinch
-  P_BLISSEY    P_CHANSEY    T_NORMAL   T_NONE     255   10   10   55   75  135 GP_FEMA 7  I_LEFTOVERS         -- final evol & lots of hp, why not
+  P_BLISSEY    P_CHANSEY    T_NORMAL   T_NONE     255   10   10   55   75  135 GP_FEMA 7  I_LEFTOVERS         -- specific special item
   P_RAIKOU     P_NONE       T_ELECTRIC T_NONE      90   85   75  115  115  100 GP_NEUT 12 I_BRIGHTPOWDER      -- match gen 1 legendaries
   P_ENTEI      P_NONE       T_FIRE     T_NONE     115  115   85  100   90   75 GP_NEUT 14 I_BRIGHTPOWDER      -- match gen 1 legendaries
   P_SUICUNE    P_NONE       T_WATER    T_NONE     100   75  115   85   90  115 GP_NEUT 11 I_BRIGHTPOWDER      -- match gen 1 legendaries

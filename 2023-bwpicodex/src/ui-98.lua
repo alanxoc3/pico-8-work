@@ -63,12 +63,22 @@ end $$
       add(g_gridstack, g_grid_editmove)
     end})
   end
-  add(op, {text=c_item_names[pkmn.item], select=function() end})
+
+  add(op, {text=c_item_names[pkmn.item], select=function()
+    poke(S_EDITITEM, pkmn.item)
+    add(g_gridstack, g_grid_edititem)
+  end})
+
   add(op, {text=c_gender_names[pkmn.gender], disabled=#pkmn.genders < 2, select=function()
     pkmn.gender_bit += 1
     pkmn:f_save_party_pkmn(@S_TEAM, @S_TEAME)
   end})
-  add(op, {text="lV "..pkmn.level, select=function() end})
+
+  add(op, {text="lV "..pkmn.level, select=function()
+    poke(S_EDITLEVEL, pkmn.level-1)
+    add(g_gridstack, g_grid_editlevel)
+  end})
+
   add(op, {text="dELETE", select=function()
     memset(S_PARTY1+@S_TEAM*48+@S_TEAME*8, 0, 8)
     deli(g_gridstack)
@@ -83,10 +93,29 @@ end $$
     -- TODO: token crunching here!
     add(op, {text=g_lock_move[m.num] and c_move_names[m.num] or f_strtoq(c_move_names[m.num]), disabled=pkmn.seen_moves[ind-1] or not g_lock_move[m.num]})
   end
-  if #op % 2 == 1 then add(op, {text="", disabled=true}) end -- TODO: i shouldn't have to do this, it should be handled in the grid obj
 
   -- for m in all(pkmn.teach) do add(op, {text=c_move_names[m+1]}) end
   -- for m in all(pkmn.event) do add(op, {text=c_move_names[m+1]}) end
+  return op
+end $$
+
+|[f_op_edititem]| function()
+  local op = {}
+  local pkmn = f_get_party_pkmn(@S_TEAM, @S_TEAME)
+
+  for i=0,I_LEN do
+    add(op, {text=g_lock_item[i] and c_item_names[i] or f_strtoq(c_move_names[i]), disabled=pkmn.item == i or not g_lock_item[i]})
+  end
+
+  return op
+end $$
+
+|[f_op_editlevel]| function()
+  local op = {}
+  local pkmn = f_get_party_pkmn(@S_TEAM, @S_TEAME)
+  for i=1,100 do
+    add(op, {text="lV "..i, disabled=i==pkmn.level})
+  end
   return op
 end $$
 
@@ -195,6 +224,14 @@ end $$
   if @S_EDITSTAT < 4 then
     print("\f3#"..(@S_EDITMOVE+1).." \f4"..pkmn.possible_moves[@S_EDITMOVE+1].method, 1, 1)
   end
+end $$
+
+|[f_dt_edititem]| function(i, is_sel)
+  print("\f3hello", 1, 1)
+  -- local pkmn = f_get_party_pkmn(@S_TEAM, @S_TEAME)
+  -- if @S_EDITSTAT < 4 then
+  --   print("\f3#"..(@S_EDITMOVE+1).." \f4"..pkmn.possible_moves[@S_EDITMOVE+1].method, 1, 1)
+  -- end
 end $$
 
 |[f_dp_edit2]| function(i, is_sel, gridobj)
@@ -352,6 +389,11 @@ end $$
   -- f_l_browse()
 end $$
 
+|[f_s_edititem]| function()
+  -- poke(@S_TEAM+@S_TEAME*42+1+@S_EDITSTAT
+  -- f_l_browse()
+end $$
+
 |[f_l_title]| function()
   return SFX_ERROR
 end $$
@@ -409,6 +451,9 @@ f_zcall(f_create_gridpair, [[
   ;t_edit4;     ,1 ,1 ,2 ,45 ,60 ,16 ,~f_dt_editmove  ,~f_nf
   ;p_edit4;     ,2 ,4 ,2 ,4  ,30 ,9  ,~f_nf           ,~f_nf
 
+  ;t_edititem;  ,1 ,1 ,2 ,45 ,60 ,16 ,~f_dt_edititem  ,~f_nf
+  ;p_edititem;  ,2 ,4 ,2 ,4  ,30 ,9  ,~f_nf           ,~f_nf
+
   ;t_versus;    ,1 ,1 ,2 ,45 ,60 ,16 ,~f_dt_versus    ,~f_nf
   ;t_league;    ,1 ,1 ,2 ,45 ,60 ,16 ,~f_dt_league    ,~f_nf
 
@@ -416,18 +461,20 @@ f_zcall(f_create_gridpair, [[
   ;t_teamed;    ,1 ,1 ,2 ,45 ,60 ,16 ,~f_dt_edit      ,~f_nf
 
   -- name              active mem  main grid     info grid  mg op mkfunc      select func     leave func
-  ;;,g_grid_browse    ,S_BROWSE    ,~p_browse    ,~t_browse ,~f_op_browse,    ~f_s_pkstat     ,~f_l_browse,   ,~c_no
-  ;;,g_grid_title     ,S_TITLE     ,~t_title     ,~p_title  ,~f_op_title,     ~f_s_title      ,~f_l_title,    ,~c_no
-  ;;,g_grid_pkpreview ,S_PKPREVIEW ,~p_pkpreview ,~t_browse ,~f_op_def,       ~f_s_pkpreview  ,~f_l_pkpreview ,~f_browselr
-  ;;,g_grid_pkstat    ,S_PKSTAT    ,~p_pkstat    ,~t_browse ,~f_op_pkstat,    ~f_s_pkstat     ,~f_l_pkstat,   ,~c_no
-  ;;,g_grid_edit      ,S_TEAM      ,~p_edit      ,~t_edit   ,~f_op_edit,      ~f_s_edit       ,~f_l_browse,   ,~c_no
-  ;;,g_grid_edit2     ,S_TEAME     ,~p_edit2     ,~t_edit2  ,~f_op_editparty, ~f_s_edit2      ,~f_l_browse,   ,~c_no
-  ;;,g_grid_edit3     ,S_EDITSTAT  ,~p_edit3     ,~t_edit3  ,~f_op_editstat,  ~f_s_editstat   ,~f_l_browse,   ,~c_no
-  ;;,g_grid_editmove  ,S_EDITMOVE  ,~p_edit4     ,~t_edit4  ,~f_op_editmove,  ~f_s_editmove   ,~f_l_browse,   ,~c_no
-  ;;,g_grid_editpkmn  ,S_BROWSE    ,~p_browse    ,~t_browse ,~f_op_browse,    ~f_nf           ,~f_l_browse,   ,~c_no
+  ;;,g_grid_browse    ,S_BROWSE    ,~p_browse    ,~t_browse    ,~f_op_browse,    ~f_s_pkstat     ,~f_l_browse,   ,~c_no
+  ;;,g_grid_title     ,S_TITLE     ,~t_title     ,~p_title     ,~f_op_title,     ~f_s_title      ,~f_l_title,    ,~c_no
+  ;;,g_grid_pkpreview ,S_PKPREVIEW ,~p_pkpreview ,~t_browse    ,~f_op_def,       ~f_s_pkpreview  ,~f_l_pkpreview ,~f_browselr
+  ;;,g_grid_pkstat    ,S_PKSTAT    ,~p_pkstat    ,~t_browse    ,~f_op_pkstat,    ~f_s_pkstat     ,~f_l_pkstat,   ,~c_no
+  ;;,g_grid_edit      ,S_TEAM      ,~p_edit      ,~t_edit      ,~f_op_edit,      ~f_s_edit       ,~f_l_browse,   ,~c_no
+  ;;,g_grid_edit2     ,S_TEAME     ,~p_edit2     ,~t_edit2     ,~f_op_editparty, ~f_s_edit2      ,~f_l_browse,   ,~c_no
+  ;;,g_grid_edit3     ,S_EDITSTAT  ,~p_edit3     ,~t_edit3     ,~f_op_editstat,  ~f_s_editstat   ,~f_l_browse,   ,~c_no
+  ;;,g_grid_editmove  ,S_EDITMOVE  ,~p_edit4     ,~t_edit4     ,~f_op_editmove,  ~f_s_editmove   ,~f_l_browse,   ,~c_no
+  ;;,g_grid_edititem  ,S_EDITITEM  ,~p_edititem  ,~t_edititem  ,~f_op_edititem,  ~f_s_edititem   ,~f_l_browse,   ,~c_no
+  ;;,g_grid_editlevel ,S_EDITLEVEL ,~p_edititem  ,~t_edititem  ,~f_op_editlevel, ~f_s_edititem   ,~f_l_browse,   ,~c_no
+  ;;,g_grid_editpkmn  ,S_BROWSE    ,~p_browse    ,~t_browse    ,~f_op_browse,    ~f_nf           ,~f_l_browse,   ,~c_no
 
-  ;;,g_grid_league    ,S_TEAM      ,~p_edit      ,~t_league ,~f_op_edit,      ~f_s_league     ,~f_l_browse,   ,~c_no, ~c_yes
-  ;;,g_grid_league2   ,S_TEAML     ,~p_teamed    ,~t_league ,~f_op_teams,     ~f_nf           ,~f_l_browse,   ,~c_no
-  ;;,g_grid_versus    ,S_TEAM      ,~p_edit      ,~t_versus ,~f_op_edit,      ~f_s_versus     ,~f_l_browse,   ,~c_no, ~c_yes
-  ;;,g_grid_versus2   ,S_TEAM2     ,~p_edit      ,~t_versus ,~f_op_edit,      ~f_nf           ,~f_l_browse,   ,~c_no, ~c_yes
+  ;;,g_grid_league    ,S_TEAM      ,~p_edit      ,~t_league    ,~f_op_edit,      ~f_s_league     ,~f_l_browse,   ,~c_no, ~c_yes
+  ;;,g_grid_league2   ,S_TEAML     ,~p_teamed    ,~t_league    ,~f_op_teams,     ~f_nf           ,~f_l_browse,   ,~c_no
+  ;;,g_grid_versus    ,S_TEAM      ,~p_edit      ,~t_versus    ,~f_op_edit,      ~f_s_versus     ,~f_l_browse,   ,~c_no, ~c_yes
+  ;;,g_grid_versus2   ,S_TEAM2     ,~p_edit      ,~t_versus    ,~f_op_edit,      ~f_nf           ,~f_l_browse,   ,~c_no, ~c_yes
 ]])
