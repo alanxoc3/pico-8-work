@@ -35,7 +35,7 @@ end $$
   return op
 end $$
 
-|[f_op_editparty]| function()
+|[f_op_editteam]| function()
   local op = {}
   for pkmnnum=0,5 do
     local pkmn = f_get_party_pkmn(@S_TEAM, pkmnnum)
@@ -75,8 +75,8 @@ end $$
   end})
 
   add(op, {text="lV "..pkmn.level, select=function()
-    poke(S_EDITLEVEL, pkmn.level-1)
-    add(g_gridstack, g_grid_editlevel)
+    poke(S_EDITLEVL, pkmn.level-1)
+    add(g_gridstack, g_grid_editlevl)
   end})
 
   add(op, {text="dELETE", select=function()
@@ -86,33 +86,38 @@ end $$
   return op
 end $$
 
-|[f_op_editmove]| function()
-  local op = {}
-  local pkmn = f_get_party_pkmn(@S_TEAM, @S_TEAME)
-  for ind, m in ipairs(pkmn.possible_moves) do
-    -- TODO: token crunching here!
-    add(op, {text=g_lock_move[m.num] and c_move_names[m.num] or f_strtoq(c_move_names[m.num]), disabled=pkmn.seen_moves[ind-1] or not g_lock_move[m.num]})
-  end
 
-  -- for m in all(pkmn.teach) do add(op, {text=c_move_names[m+1]}) end
-  -- for m in all(pkmn.event) do add(op, {text=c_move_names[m+1]}) end
+-- |[f_edit_template]| function(list, lock, names, disfunc)
+--   local op = {}
+--   for ind, m in ipairs(list) do
+--     add(op, {text=lock[m] and names[m] or f_strtoq(names[m]), disabled=disfunc(ind-1) or not lock[m]})
+--   end
+--   return op
+-- end $$
+
+|[f_create_spot]| function(op, item, lock, names, disfunc)
+  add(op, {text=lock[item] and names[item] or f_strtoq(names[item]), disabled=disfunc() or not lock[item]})
+end $$
+
+|[f_get_edit_op_pkmn]| function() return {}, f_get_party_pkmn(@S_TEAM, @S_TEAME) end $$
+|[f_op_editmove]| function()
+  local op, pkmn = f_get_edit_op_pkmn()
+  for i, m in ipairs(pkmn.possible_moves) do
+    f_create_spot(op, m.num, g_lock_move, c_move_names, function() return pkmn.seen_moves[i-1] end)
+  end
   return op
 end $$
 
 |[f_op_edititem]| function()
-  local op = {}
-  local pkmn = f_get_party_pkmn(@S_TEAM, @S_TEAME)
-
+  local op, pkmn = f_get_edit_op_pkmn()
   for i=0,I_LEN do
-    add(op, {text=g_lock_item[i] and c_item_names[i] or f_strtoq(c_move_names[i]), disabled=pkmn.item == i or not g_lock_item[i]})
+    f_create_spot(op, i, g_lock_item, c_item_names, function() return pkmn.item == i end)
   end
-
   return op
 end $$
 
-|[f_op_editlevel]| function()
-  local op = {}
-  local pkmn = f_get_party_pkmn(@S_TEAM, @S_TEAME)
+|[f_op_editlevl]| function()
+  local op, pkmn = f_get_edit_op_pkmn()
   for i=1,100 do
     add(op, {text="lV "..i, disabled=i==pkmn.level})
   end
@@ -199,7 +204,7 @@ end $$
   end
 end $$
 
-|[f_dt_edit2]| function(i, is_sel)
+|[f_dt_editteam]| function(i, is_sel)
   local pkstr_arr = {}
   local pkstr_lens = split'3,3,3,2'
 
@@ -234,7 +239,7 @@ end $$
   -- end
 end $$
 
-|[f_dp_edit2]| function(i, is_sel, gridobj)
+|[f_dp_editteam]| function(i, is_sel, gridobj)
   f_draw_pkmn(gridobj.data, 1, 1, 16, false, is_sel)
 end $$
 
@@ -272,7 +277,7 @@ end $$
 
 |[f_dt_league]| function()
   -- TODO: save tokens / compression by extracting out this if.
-  if g_cg_m.name == 'g_grid_league' then
+  if g_cg_m.name == 'g_grid_pickleag' then
     print("\^y7\f1pLR: \f4tEAM "..(@S_TEAM+1).."\f1\ncPU: \f3"..c_trnr_names[@S_TEAML+1], 1, 1)
   else
     print("\^y7\f1pLR: \f3tEAM "..(@S_TEAM+1).."\f1\ncPU: \f4"..c_trnr_names[@S_TEAML+1], 1, 1)
@@ -280,7 +285,7 @@ end $$
 end $$
 
 |[f_dt_versus]| function()
-  if g_cg_m.name == 'g_grid_versus' then
+  if g_cg_m.name == 'g_grid_pickplr1' then
     print("\^y7\f1pLR1: \f4tEAM "..(@S_TEAM+1).."\f1\npLR2: \f3tEAM "..(@S_TEAM2+1), 1, 1)
   else
     print("\^y7\f1pLR1: \f3tEAM "..(@S_TEAM+1).."\f1\npLR2: \f4tEAM "..(@S_TEAM2+1), 1, 1)
@@ -332,11 +337,11 @@ end $$
   if @g_cg_m.mem == 0 then
     add(g_gridstack, g_grid_browse)
   elseif @g_cg_m.mem == 1 then
-    add(g_gridstack, g_grid_edit)
+    add(g_gridstack, g_grid_pickedit)
   elseif @g_cg_m.mem == 2 then
-    add(g_gridstack, g_grid_league)
+    add(g_gridstack, g_grid_pickleag)
   elseif @g_cg_m.mem == 3 then
-    add(g_gridstack, g_grid_versus)
+    add(g_gridstack, g_grid_pickplr1)
   end
 end $$
 
@@ -358,23 +363,23 @@ end $$
 end $$
 
 |[f_s_versus]| function()
-  add(g_gridstack, g_grid_versus2)
+  add(g_gridstack, g_grid_pickplr2)
 end $$
 
 |[f_s_league]| function()
-  add(g_gridstack, g_grid_league2)
+  add(g_gridstack, g_grid_picktrnr)
 end $$
 
 |[f_s_edit]| function()
-  add(g_gridstack, g_grid_edit2)
+  add(g_gridstack, g_grid_pickspot)
 end $$
 
-|[f_s_edit2]| function()
+|[f_s_editteam]| function()
   --local party_loc = S_PARTY1+(@S_TEAM)*42
   --local pkmn_loc = party_loc+@S_TEAME*7
   local pkmn = f_get_party_pkmn(@S_TEAM, @S_TEAME)
   if pkmn.num > 0 then -- includes missingno at 252
-    add(g_gridstack, g_grid_edit3)
+    add(g_gridstack, g_grid_editstat)
   else
     add(g_gridstack, g_grid_editpkmn)
   end
@@ -431,50 +436,53 @@ end $$
 ---------------------------------------------
 
 f_zcall(f_create_gridpair, [[
-  --            w  vh x  y   cw   ch draw func        update func
-   p_browse;    ,6 ,4 ,2 ,2  ,10 ,10 ,~f_dp_browse    ,~f_nf
-  ;t_browse;    ,1 ,1 ,2 ,45 ,60 ,16 ,~f_dt_browse    ,~f_nf
-  ;p_title;     ,1 ,1 ,2 ,2  ,60 ,40 ,~f_dp_title     ,~f_dp_title_update
-  ;t_title;     ,2 ,2 ,2 ,44 ,30 ,9  ,~f_nf           ,~f_nf
-  ;p_pkpreview; ,1 ,1 ,2 ,2  ,60 ,40 ,~f_dp_pkpreview ,~f_nf
-  ;p_pkstat;    ,2 ,4 ,2 ,4  ,30 ,9  ,~f_dp_pkstat    ,~f_nf
+  -- TODO: test if duplicating this saves compression space ( getting rid of the p_browse and putting it in the g_grids...)
+  --            w  vh x  y   cw   ch draw func          update func
+   p_browse;    ,6 ,4 ,2 ,2  ,10 ,10 ,~f_dp_browse      ,~f_nf
+  ;t_browse;    ,1 ,1 ,2 ,45 ,60 ,16 ,~f_dt_browse      ,~f_nf
+  ;p_title;     ,1 ,1 ,2 ,2  ,60 ,40 ,~f_dp_title       ,~f_dp_title_update
+  ;t_title;     ,2 ,2 ,2 ,44 ,30 ,9  ,~f_nf             ,~f_nf
+  ;p_pkpreview; ,1 ,1 ,2 ,2  ,60 ,40 ,~f_dp_pkpreview   ,~f_nf
+  ;p_pkstat;    ,2 ,4 ,2 ,4  ,30 ,9  ,~f_dp_pkstat      ,~f_nf
 
-  ;t_edit;      ,1 ,1 ,2 ,45 ,60 ,16 ,~f_dt_edit      ,~f_nf
-  ;p_edit;      ,2 ,2 ,2 ,2  ,30 ,20 ,~f_dp_edit      ,~f_nf
+  ;t_edit;      ,1 ,1 ,2 ,45 ,60 ,16 ,~f_dt_edit        ,~f_nf
+  ;p_edit;      ,2 ,2 ,2 ,2  ,30 ,20 ,~f_dp_edit        ,~f_nf
 
-  ;t_edit2;     ,1 ,1 ,2 ,45 ,60 ,16 ,~f_dt_edit2     ,~f_nf
-  ;p_edit2;     ,3 ,2 ,2 ,2  ,20 ,20 ,~f_dp_edit2     ,~f_nf
+  ;t_editteam;     ,1 ,1 ,2 ,45 ,60 ,16 ,~f_dt_editteam ,~f_nf
+  ;p_editteam;     ,3 ,2 ,2 ,2  ,20 ,20 ,~f_dp_editteam ,~f_nf
 
-  ;t_edit3;     ,1 ,1 ,2 ,45 ,60 ,16 ,~f_dt_editstat  ,~f_nf
-  ;p_edit3;     ,2 ,4 ,2 ,4  ,30 ,9  ,~f_nf           ,~f_nf
+  ;t_editstat;     ,1 ,1 ,2 ,45 ,60 ,16 ,~f_dt_editstat ,~f_nf
+  ;p_editstat;     ,2 ,4 ,2 ,4  ,30 ,9  ,~f_nf          ,~f_nf
 
-  ;t_edit4;     ,1 ,1 ,2 ,45 ,60 ,16 ,~f_dt_editmove  ,~f_nf
-  ;p_edit4;     ,2 ,4 ,2 ,4  ,30 ,9  ,~f_nf           ,~f_nf
+  ;t_edit4;     ,1 ,1 ,2 ,45 ,60 ,16 ,~f_dt_editmove    ,~f_nf
+  ;p_edit4;     ,2 ,4 ,2 ,4  ,30 ,9  ,~f_nf             ,~f_nf
 
-  ;t_edititem;  ,1 ,1 ,2 ,45 ,60 ,16 ,~f_dt_edititem  ,~f_nf
-  ;p_edititem;  ,2 ,4 ,2 ,4  ,30 ,9  ,~f_nf           ,~f_nf
+  ;t_edititem;  ,1 ,1 ,2 ,45 ,60 ,16 ,~f_dt_edititem    ,~f_nf
+  ;p_edititem;  ,2 ,4 ,2 ,4  ,30 ,9  ,~f_nf             ,~f_nf
 
-  ;t_versus;    ,1 ,1 ,2 ,45 ,60 ,16 ,~f_dt_versus    ,~f_nf
-  ;t_league;    ,1 ,1 ,2 ,45 ,60 ,16 ,~f_dt_league    ,~f_nf
+  ;t_versus;    ,1 ,1 ,2 ,45 ,60 ,16 ,~f_dt_versus      ,~f_nf
+  ;t_league;    ,1 ,1 ,2 ,45 ,60 ,16 ,~f_dt_league      ,~f_nf
 
-  ;p_teamed;    ,2 ,4 ,2 ,4  ,30 ,9  ,~f_nf           ,~f_nf
-  ;t_teamed;    ,1 ,1 ,2 ,45 ,60 ,16 ,~f_dt_edit      ,~f_nf
+  ;p_teamed;    ,2 ,4 ,2 ,4  ,30 ,9  ,~f_nf             ,~f_nf
+  ;t_teamed;    ,1 ,1 ,2 ,45 ,60 ,16 ,~f_dt_edit        ,~f_nf
 
-  -- name              active mem  main grid     info grid  mg op mkfunc      select func     leave func
+  -- name              active mem  main grid     info grid     mk op mkfunc      select func     leave func
   ;;,g_grid_browse    ,S_BROWSE    ,~p_browse    ,~t_browse    ,~f_op_browse,    ~f_s_pkstat     ,~f_l_browse,   ,~c_no
   ;;,g_grid_title     ,S_TITLE     ,~t_title     ,~p_title     ,~f_op_title,     ~f_s_title      ,~f_l_title,    ,~c_no
   ;;,g_grid_pkpreview ,S_PKPREVIEW ,~p_pkpreview ,~t_browse    ,~f_op_def,       ~f_s_pkpreview  ,~f_l_pkpreview ,~f_browselr
   ;;,g_grid_pkstat    ,S_PKSTAT    ,~p_pkstat    ,~t_browse    ,~f_op_pkstat,    ~f_s_pkstat     ,~f_l_pkstat,   ,~c_no
-  ;;,g_grid_edit      ,S_TEAM      ,~p_edit      ,~t_edit      ,~f_op_edit,      ~f_s_edit       ,~f_l_browse,   ,~c_no
-  ;;,g_grid_edit2     ,S_TEAME     ,~p_edit2     ,~t_edit2     ,~f_op_editparty, ~f_s_edit2      ,~f_l_browse,   ,~c_no
-  ;;,g_grid_edit3     ,S_EDITSTAT  ,~p_edit3     ,~t_edit3     ,~f_op_editstat,  ~f_s_editstat   ,~f_l_browse,   ,~c_no
+
+  ;;,g_grid_editstat  ,S_EDITSTAT  ,~p_editstat  ,~t_editstat  ,~f_op_editstat,  ~f_s_editstat   ,~f_l_browse,   ,~c_no
   ;;,g_grid_editmove  ,S_EDITMOVE  ,~p_edit4     ,~t_edit4     ,~f_op_editmove,  ~f_s_editmove   ,~f_l_browse,   ,~c_no
   ;;,g_grid_edititem  ,S_EDITITEM  ,~p_edititem  ,~t_edititem  ,~f_op_edititem,  ~f_s_edititem   ,~f_l_browse,   ,~c_no
-  ;;,g_grid_editlevel ,S_EDITLEVEL ,~p_edititem  ,~t_edititem  ,~f_op_editlevel, ~f_s_edititem   ,~f_l_browse,   ,~c_no
+  ;;,g_grid_editlevl  ,S_EDITLEVL  ,~p_edititem  ,~t_edititem  ,~f_op_editlevl,  ~f_s_edititem   ,~f_l_browse,   ,~c_no
   ;;,g_grid_editpkmn  ,S_BROWSE    ,~p_browse    ,~t_browse    ,~f_op_browse,    ~f_nf           ,~f_l_browse,   ,~c_no
 
-  ;;,g_grid_league    ,S_TEAM      ,~p_edit      ,~t_league    ,~f_op_edit,      ~f_s_league     ,~f_l_browse,   ,~c_no, ~c_yes
-  ;;,g_grid_league2   ,S_TEAML     ,~p_teamed    ,~t_league    ,~f_op_teams,     ~f_nf           ,~f_l_browse,   ,~c_no
-  ;;,g_grid_versus    ,S_TEAM      ,~p_edit      ,~t_versus    ,~f_op_edit,      ~f_s_versus     ,~f_l_browse,   ,~c_no, ~c_yes
-  ;;,g_grid_versus2   ,S_TEAM2     ,~p_edit      ,~t_versus    ,~f_op_edit,      ~f_nf           ,~f_l_browse,   ,~c_no, ~c_yes
+  ;;,g_grid_pickedit  ,S_TEAM      ,~p_edit      ,~t_edit      ,~f_op_edit,      ~f_s_edit       ,~f_l_browse,   ,~c_no
+  ;;,g_grid_pickleag  ,S_TEAM      ,~p_edit      ,~t_league    ,~f_op_edit,      ~f_s_league     ,~f_l_browse,   ,~c_no, ~c_yes
+  ;;,g_grid_pickplr1  ,S_TEAM      ,~p_edit      ,~t_versus    ,~f_op_edit,      ~f_s_versus     ,~f_l_browse,   ,~c_no, ~c_yes
+
+  ;;,g_grid_pickspot  ,S_TEAME     ,~p_editteam  ,~t_editteam  ,~f_op_editteam,  ~f_s_editteam   ,~f_l_browse,   ,~c_no
+  ;;,g_grid_picktrnr  ,S_TEAML     ,~p_teamed    ,~t_league    ,~f_op_teams,     ~f_nf           ,~f_l_browse,   ,~c_no
+  ;;,g_grid_pickplr2  ,S_TEAM2     ,~p_edit      ,~t_versus    ,~f_op_edit,      ~f_nf           ,~f_l_browse,   ,~c_no, ~c_yes
 ]])

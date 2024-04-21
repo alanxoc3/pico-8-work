@@ -7,3 +7,5 @@
 # ~/.playdate/Disk/Data/picodex-edit/064-127.p8
 # ~/.playdate/Disk/Data/picodex-edit/128-191.p8
 # ~/.playdate/Disk/Data/picodex-edit/192-255.p8
+
+inotifywait -e close_write,moved_to,create -mr ./in 2>/dev/null | while read -r d; do pdc in picodex-edit; echo wrote; done

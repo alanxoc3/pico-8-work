@@ -123,30 +123,6 @@ function save_state_and_sprite(sprite_to_save)
 end
 
 function save_to_pico8()
-  local images = {}
-  for i=0,255 do
-    images[i] = load_sprite(i)
-  end
-
-  for sheet_num, filename in ipairs(filenames) do
-    local f = playdate.file.open(filename, playdate.file.kFileWrite)
-    local s = "pico-8 cartridge // http://www.pico-8.com\n"
-    s = s.."version 41\n"
-    s = s.."__gfx__\n"
-    f:write(s)
-
-    for yy=0,127 do
-      s = ""
-      for xx=0,127 do
-        s = s..(images[(sheet_num-1)*64+yy//16*8+xx//16]:sample(xx%16, yy%16) == playdate.graphics.kColorWhite and "6" or "0")
-      end
-      s = s.."\n"
-      f:write(s)
-      print("saved row #"..(yy+sheet_num*128).." of 512")
-    end
-    print("")
-    f:close()
-  end
 end
 
 function draw_workspace(ox, oy)
@@ -215,44 +191,52 @@ function update()
   local bb = playdate.buttonIsPressed(playdate.kButtonB)
   local abj = playdate.buttonJustPressed(playdate.kButtonA)
 
-  if bb then
-    local image_copy = g_cur_sprite:copy()
-    playdate.graphics.pushContext(g_cur_sprite)
-    image_copy:draw(xb, yb)
-    image_copy:draw(-15*xb, -15*yb)
-    playdate.graphics.popContext()
-  else
-    state.x = math.min(15, math.max(0, state.x+xb))
-    state.y = math.min(15, math.max(0, state.y+yb))
-  end
-
   if dpadx and dpadx < button_hold then dpadx += 1 end
   if dpady and dpady < button_hold then dpady += 1 end
 
-  if not bb and kb and not pix_entered[state.y*16+state.x] then
-    playdate.graphics.pushContext( g_cur_sprite )
-    playdate.graphics.setColor(g_cur_sprite:sample(state.x, state.y) == playdate.graphics.kColorWhite and playdate.graphics.kColorBlack or playdate.graphics.kColorWhite)
-    playdate.graphics.fillRect(state.x, state.y, 1, 1)
-    playdate.graphics.popContext()
-
-    did_edit = true
-    pix_entered[state.y*16+state.x] = true
-  else
-    pix_entered = {}
-  end
-
-  if bb and abj then
-    flipSpr()
-    did_edit = true
-  end
-
   local tickcount = playdate.getCrankTicks(12)
-  if not playdate.isCrankDocked() and bb then
-    local prevstate = state.cur
-    state.cur = math.min(255, math.max(0, state.cur+tickcount))
-    if prevstate ~= state.cur then
-      save_state_and_sprite(prevstate)
-      load_cur_spr(state.cur)
+  if bb then
+    pix_entered = {}
+
+    if abj then
+      flipSpr()
+      did_edit = true
+    elseif xb ~= 0 or yb ~= 0 then
+      local image_copy = g_cur_sprite:copy()
+      playdate.graphics.pushContext(g_cur_sprite)
+      image_copy:draw(xb, 0)
+      image_copy:draw(-15*xb, 0)
+      playdate.graphics.popContext()
+
+      image_copy = g_cur_sprite:copy()
+      playdate.graphics.pushContext(g_cur_sprite)
+      image_copy:draw(0, yb)
+      image_copy:draw(0, -15*yb)
+      playdate.graphics.popContext()
+
+      did_edit = true
+    elseif not playdate.isCrankDocked() then
+      local prevstate = state.cur
+      state.cur = math.min(255, math.max(0, state.cur+tickcount))
+      if prevstate ~= state.cur then
+        save_state_and_sprite(prevstate)
+        load_cur_spr(state.cur)
+      end
+    end
+  else
+    state.x = math.min(15, math.max(0, state.x+xb))
+    state.y = math.min(15, math.max(0, state.y+yb))
+
+    if ab and not pix_entered[state.y*16+state.x] then
+      playdate.graphics.pushContext( g_cur_sprite )
+      playdate.graphics.setColor(g_cur_sprite:sample(state.x, state.y) == playdate.graphics.kColorWhite and playdate.graphics.kColorBlack or playdate.graphics.kColorWhite)
+      playdate.graphics.fillRect(state.x, state.y, 1, 1)
+      playdate.graphics.popContext()
+
+      did_edit = true
+      pix_entered[state.y*16+state.x] = true
+    elseif not ab then
+      pix_entered = {}
     end
   end
 
@@ -298,30 +282,23 @@ playdate.getSystemMenu():addMenuItem("Pop Save", function()
   calc_backup(state.cur)
 end)
 
-playdate.getSystemMenu():addMenuItem("export pico8", function()
-  save_to_pico8()
-
-  playdate.update = function()
-    g_font:drawText("pics-to-pico8 complete!", 50, 50)
-  end
-end)
-
-playdate.getSystemMenu():addMenuItem("import pico8", function()
-  print("loading pico8 files")
-  local images = load_pico8_files()
-  print("load complete")
-
-  for i=0,255 do
-    print("saving sprite #"..i)
-    save_sprite(images[i], i)
-  end
-
-  print("savings complete")
-
-  playdate.update = function()
-    g_font:drawText("pico8-to-pics complete!", 50, 50)
-  end
-end)
+-- TBH, this isn't really needed practically, keeping it here for reference though
+-- playdate.getSystemMenu():addMenuItem("import pico8", function()
+--   print("loading pico8 files")
+--   local images = load_pico8_files()
+--   print("load complete")
+--
+--   for i=0,255 do
+--     print("saving sprite #"..i)
+--     save_sprite(images[i], i)
+--   end
+--
+--   print("savings complete")
+--
+--   playdate.update = function()
+--     g_font:drawText("pico8-to-pics complete!", 50, 50)
+--   end
+-- end)
 
 local save_callback = function()
   save_state_and_sprite(state.cur)
@@ -329,6 +306,49 @@ local save_callback = function()
 end
 
 playdate.getSystemMenu():addMenuItem("Push Save", save_callback)
+
+playdate.getSystemMenu():addMenuItem("export pico8", function()
+  playdate.update = function()
+    local images = {}
+    for i=0,255 do
+      images[i] = load_sprite(i)
+    end
+
+    for sheet_num, filename in ipairs(filenames) do
+      local f = playdate.file.open(filename, playdate.file.kFileWrite)
+      local s = "pico-8 cartridge // http://www.pico-8.com\n"
+      s = s.."version 41\n"
+      s = s.."__gfx__\n"
+      f:write(s)
+
+      for yy=0,127 do
+        s = ""
+        for xx=0,127 do
+          s = s..(images[(sheet_num-1)*64+yy//16*8+xx//16]:sample(xx%16, yy%16) == playdate.graphics.kColorWhite and "6" or "0")
+        end
+        s = s.."\n"
+        f:write(s)
+        print("saved row #"..(yy+sheet_num*128).." of 512")
+
+        if yy % 32 == 0 then
+          coroutine.yield() -- this function is very slow.
+        end
+      end
+      print("")
+      f:close()
+    end
+
+    playdate.graphics.clear()
+    g_font:drawText("pics-to-pico8 complete! press b to continue", 50, 50)
+
+    playdate.update = function()
+      local abj = playdate.buttonJustPressed(playdate.kButtonB)
+      if abj then
+        playdate.update = update
+      end
+    end
+  end
+end)
 
 playdate.gameWillTerminate = save_callback
 playdate.deviceWillSleep = save_callback
