@@ -11,8 +11,9 @@ function init() -- entry point for this compile script
 
   local statarr = {}
   for arr in all(datastr_to_arr(pokemon_stats)) do
+    -- at one point i was going to have a color for the pokemon, but I decided against that.
     local pkmnid, prevolve, type1, type2, hp, att, def, spd, sat, sdf, gender, color, item = unpack(arr)
-    statarr[pkmnid] = {prevolve, type1, type2, hp, att, def, spd, sat, sdf, item, gender | color}
+    statarr[pkmnid] = {prevolve, type1, type2, hp, att, def, spd, sat, sdf, gender | item}
   end
 
   local data_ind = 1

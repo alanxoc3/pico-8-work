@@ -129,7 +129,7 @@ function draw_pkmn(num, x, y, sw, sh, highlighted, has_color, is_draft)
     else
       local c = {6, 1}
       if pkmn_to_color[num] and not has_color then
-        c = pkmn_types[pkmn_to_color[num]]
+        -- c = pkmn_types[pkmn_to_color[num]]
       end
 
       outline(x, y, 7, g_corners and 13 or 7, function(xx, yy)
@@ -142,7 +142,7 @@ function draw_pkmn(num, x, y, sw, sh, highlighted, has_color, is_draft)
   else
     local c = {6, 1}
     if pkmn_to_color[num] and not has_color then
-      c = pkmn_types[pkmn_to_color[num]]
+      -- c = pkmn_types[pkmn_to_color[num]]
     end
 
     outline(x, y, c[2], has_color and (g_corners and 5 or 1) or (g_corners and 5 or c[2]), drawfunc)

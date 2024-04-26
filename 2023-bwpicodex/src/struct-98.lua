@@ -10,15 +10,13 @@
 
     for i=4,7 do
       local move = @(num_loc+i)%#pkmn.possible_moves
-      while pkmn.seen_moves[move] or not g_lock_move[pkmn.possible_moves[move+1].num] do
+      while pkmn.seen_moves[move] or not c_moves[pkmn.possible_moves[move+1]].lock do
         move = (move + 1)%#pkmn.possible_moves
-        printh(pkmn.possible_moves[move+1].num)
-        printh(debug(g_lock_move))
       end
 
       pkmn.seen_moves[move] = true
       add(pkmn.edit_moves, move)
-      add(pkmn.view_moves, pkmn.possible_moves[move+1].num)
+      add(pkmn.view_moves, pkmn.possible_moves[move+1])
     end
   end
   return pkmn

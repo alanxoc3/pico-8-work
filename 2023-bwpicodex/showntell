@@ -10,20 +10,20 @@ for i in 0 4 8 12 16 20 24; do
     "$HOME/Desktop/col-$((i+1)).png" \
     "$HOME/Desktop/col-$((i+2)).png" \
     "$HOME/Desktop/col-$((i+3)).png" \
-    "$HOME/Desktop/bw-$((i+0)).png" \
-    "$HOME/Desktop/bw-$((i+1)).png" \
-    "$HOME/Desktop/bw-$((i+2)).png" \
-    "$HOME/Desktop/bw-$((i+3)).png" \
     "$HOME/Desktop/row-$((i/4)).png"
+    # "$HOME/Desktop/bw-$((i+0)).png" \
+    # "$HOME/Desktop/bw-$((i+1)).png" \
+    # "$HOME/Desktop/bw-$((i+2)).png" \
+    # "$HOME/Desktop/bw-$((i+3)).png" \
 done
 
 
 echo "COMBINING ALL ROWS..."
-convert -append $(seq 0  7  | awk "{print \"$HOME/Desktop/row-\" \$1 \".png\"}") "$HOME/Desktop/all.png"
+convert -append $(seq 0  6  | awk "{print \"$HOME/Desktop/row-\" \$1 \".png\"}") "$HOME/Desktop/all.png"
 echo
 
 echo "COPYING TO CLIPBOARD..."
-cat "$HOME/Desktop/all.png" | ccl
+cat "$HOME/Desktop/all.png" | ccl >/dev/null
 echo
 
 echo "DONE"

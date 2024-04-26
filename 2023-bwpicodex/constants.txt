@@ -38,7 +38,7 @@ SFX_MOVE:   255
 
 # ----------------------------- load memory locations
 L_DATASTART: 0x1fff # data starts one byte before because the code increments first
-L_PARTY1: 0x4286 # The location the first party is in cart storage
+L_PARTY1: 0x418a # The location the first party is in cart storage
 
 # ----------------------------- priorities - aligned to thousand because 999 is the max speed stat
 C_PRIORITY_SWITCH:      4000 # PURSUIT
@@ -52,8 +52,7 @@ C_EVENT: 253
 C_DASH:  254
 C_NEXT:  255
 
-C_0: 0 # These are color constants.
-C_1: 1
+C_1: 1 # These are color constants. There are only 2 colors in this game (like gameboy colors).
 C_2: 2
 C_3: 3
 C_4: 4
@@ -74,6 +73,7 @@ C_LEN_MOVES: 252
 C_LEN_PKMN: 253
 
 # ----------------------------- held items
+# There must be less than 64 items, because the item info shares with gender info
 I_NONE:              0
 I_PINKBOW:           1  # pinkbow  ---- T_NORMAL   ----- These are ordered by type.
 I_CHARCOAL:          2  # charcol  ---- T_FIRE
@@ -111,15 +111,15 @@ I_THICKCLUB:         30 # thkclub
 
 I_BERSERKGENE:       31 # berserk ---- Items that apply to any Pokemon but are only a single use.
 I_BERRY:             32 # berry
-I_BITTERBERRY:       33 # btrbery
-I_BURNTBERRY:        34 # brnbery
-I_GOLDBERRY:         35 # gldbery
-I_ICEBERRY:          36 # icebery
-I_MINTBERRY:         37 # mntbery
-I_MIRACLEBERRY:      38 # mirbery
-I_MYSTERYBERRY:      39 # mstbery
-I_PARALYZECUREBERRY: 40 # parbery
-I_POISONCUREBERRY:   41 # psnbery
+I_GOLDBERRY:         33 # gldbery
+I_BITTERBERRY:       34 # btrbery
+I_MINTBERRY:         35 # mntbery
+I_BURNTBERRY:        36 # brnbery
+I_ICEBERRY:          37 # icebery
+I_PARALYZECUREBERRY: 38 # parbery
+I_POISONCUREBERRY:   39 # psnbery
+I_MIRACLEBERRY:      40 # mirbery
+I_MYSTERYBERRY:      41 # mstbery
 
 I_LEN:               41 # just the last index of all items
 

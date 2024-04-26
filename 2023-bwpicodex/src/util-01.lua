@@ -4,8 +4,8 @@ end $$
 
 |[f_draw_pkmn]| function(num, x, y, width, flip, sel, disabled)
   -- the "min" is needed to draw trainers
-  local in_c = sel and (disabled and C_3 or C_4) or disabled and C_1 or c_pokemon[mid(1,num,252)].color
-  local out_c = (sel or disabled) and C_2 or C_1
+  local in_c = sel and C_4 or disabled and C_2 or C_4
+  local out_c = disabled and (sel and C_2 or C_3) or sel and C_3 or C_2 --  (sel or disabled) and C_3 or C_2
 
   if num == 0 then
     rectfill(x+width/2-1, y+width/2-1, x+width/2, y+width/2, out_c)

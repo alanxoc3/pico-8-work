@@ -71,8 +71,6 @@ end $$
 
   for j=0,vh*w-1 do
     local i = j + view*w
-    local isheader = gridobj[i\w*w+1].header
-    local isnumheader = isheader and (num\w == i\w)
     local obj = gridobj[i+1]
     if i >= #gridobj then break end
     local xloc, yloc = x+i%w*cw, y+j\w*ch
@@ -85,17 +83,13 @@ end $$
     if i == #gridobj-1       then r = 1 d = 1 end
     if i == (#gridobj-1)\w*w then l = 1 d = 1 end
 
-    local c = C_2
-    if i ~= num and (obj.disabled or isheader) then
-      c = C_1
+    local c = C_3
+    if i ~= num and obj.disabled then
+      c = C_2
     end
 
-    if not lrfunc and active and (i == num or isnumheader) then
-      if obj.disabled or isnumheader then
-        c = C_3
-      else
-        c = C_4
-      end
+    if not lrfunc and active and i == num then
+      c = C_4
     end
 
     rectfill(-1+l, -1,   cw-2-r, ch-2,   c)
@@ -105,21 +99,19 @@ end $$
   for j=0,vh*w-1 do
     local i = j + view*w
     local obj = gridobj[i+1]
-    local isheader = gridobj[i\w*w+1].header
-    local isnumheader = isheader and (num\w == i\w)
     if i >= #gridobj then break end
     local xloc, yloc = x+i%w*cw, y+j\w*ch
     camera(-xloc-1, -yloc-1)
 
-    local c = C_1
-    if i == num and not isnumheader then
-      c = C_2
+    local c = C_2
+    if i == num then
+      c = C_3
     end
-    if (obj.disabled or isheader) then
-      if isnumheader or i == num then
+    if obj.disabled then
+      if i == num then
         c = C_2
       else
-        c = C_2
+        c = C_3
       end
     end
     print(obj.text or "", 1, 1, c)

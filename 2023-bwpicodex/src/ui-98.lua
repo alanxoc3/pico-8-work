@@ -14,7 +14,7 @@ end $$
   local op = {}
 
   for i=1,252 do
-    add(op, {data=g_lock_pokemon[i] and i or 0, disabled=not g_lock_pokemon[i]})
+    add(op, {data=c_pokemon[i].lock and i or 0, disabled=not c_pokemon[i].lock})
   end
 
   return op
@@ -95,34 +95,30 @@ end $$
 --   return op
 -- end $$
 
-|[f_create_spot]| function(op, item, lock, names, disfunc)
-  add(op, {text=lock[item] and names[item] or f_strtoq(names[item]), disabled=disfunc() or not lock[item]})
+-- TODO: experiment with making item num/name/lock in same obj -- 4042
+|[f_create_spot]| function(_ENV, op, disabled)
+  add(op, {text=lock and name or f_strtoq(name), disabled=disabled or not lock})
 end $$
 
 |[f_get_edit_op_pkmn]| function() return {}, f_get_party_pkmn(@S_TEAM, @S_TEAME) end $$
 |[f_op_editmove]| function()
   local op, pkmn = f_get_edit_op_pkmn()
-  for i, m in ipairs(pkmn.possible_moves) do
-    f_create_spot(op, m.num, g_lock_move, c_move_names, function() return pkmn.seen_moves[i-1] end)
+  for i, num in ipairs(pkmn.possible_moves) do
+    f_create_spot(c_moves[num], op, pkmn.seen_moves[i-1])
   end
   return op
 end $$
 
-|[f_op_edititem]| function()
+|[f_op_template_edit]| function(list, key)
   local op, pkmn = f_get_edit_op_pkmn()
-  for i=0,I_LEN do
-    f_create_spot(op, i, g_lock_item, c_item_names, function() return pkmn.item == i end)
+  for obj in all(list) do
+    f_create_spot(obj, op, pkmn[key] == obj.num)
   end
   return op
 end $$
 
-|[f_op_editlevl]| function()
-  local op, pkmn = f_get_edit_op_pkmn()
-  for i=1,100 do
-    add(op, {text="lV "..i, disabled=i==pkmn.level})
-  end
-  return op
-end $$
+|[f_op_edititem]| function() return f_op_template_edit(c_items,  'item')  end $$
+|[f_op_editlevl]| function() return f_op_template_edit(c_levels, 'level') end $$
 
 |[f_op_pkstat]| function()
   local op = {}
@@ -215,28 +211,24 @@ end $$
   end
 
   local pkstr = pkstr_arr[1].."-"..pkstr_arr[2].."-"..pkstr_arr[3].."-"..pkstr_arr[4]
-  print("\^y7\f3#"..(@S_TEAME+1).." \f4"..(c_pkmn_names[pkmn.num]).."\n\f1"..pkstr, 1, 1, C_1)
+  print("\^y7\f4#"..(@S_TEAME+1).." \f4"..(c_pkmn_names[pkmn.num]).."\n\f2"..pkstr, 1, 1, C_2)
 end $$
 
 |[f_dt_editstat]| function(i, is_sel)
   if @S_EDITSTAT < 4 then
-    print("\f3#"..(@S_EDITSTAT+1).." \f4mOVE", 1, 1)
+    print("\f4#"..(@S_EDITSTAT+1).." \f4mOVE", 1, 1)
   end
 end $$
 
 |[f_dt_editmove]| function(i, is_sel)
   local pkmn = f_get_party_pkmn(@S_TEAM, @S_TEAME)
   if @S_EDITSTAT < 4 then
-    print("\f3#"..(@S_EDITMOVE+1).." \f4"..pkmn.possible_moves[@S_EDITMOVE+1].method, 1, 1)
+    print("\f4#"..(@S_EDITMOVE+1).." \f4"..pkmn.possible_moves_method[pkmn.possible_moves[@S_EDITMOVE+1]], 1, 1)
   end
 end $$
 
 |[f_dt_edititem]| function(i, is_sel)
-  print("\f3hello", 1, 1)
-  -- local pkmn = f_get_party_pkmn(@S_TEAM, @S_TEAME)
-  -- if @S_EDITSTAT < 4 then
-  --   print("\f3#"..(@S_EDITMOVE+1).." \f4"..pkmn.possible_moves[@S_EDITMOVE+1].method, 1, 1)
-  -- end
+  print("\f4hello", 1, 1)
 end $$
 
 |[f_dp_editteam]| function(i, is_sel, gridobj)
@@ -254,11 +246,11 @@ end $$
     type2 = c_type_names[pkmn.type2+1]
   end
 
-  if not g_lock_pokemon[@S_BROWSE+1] then
+  if not c_pokemon[@S_BROWSE+1].lock then
     namestr, type1, type2 = f_strtoq(namestr), f_strtoq(type1), f_strtoq(type2)
   end
 
-  local str = "\^y7\f3#"..numstr.." \f4"..namestr.."\n\f1"..type1.." "..type2
+  local str = "\^y7\f4#"..numstr.." \f4"..namestr.."\n\f2"..type1.." "..type2
 
   print(str, 1, 1)
 end $$
@@ -272,29 +264,29 @@ end $$
   end
 
   local pkstr = pkstr_arr[1].."-"..pkstr_arr[2].."-"..pkstr_arr[3]..pkstr_arr[4]..pkstr_arr[5].."-"..pkstr_arr[6]
-  print("\^y7\f3#"..(@g_cg_m.mem+1).." \f4tEAM\n\f1"..pkstr, 1, 1, C_1)
+  print("\^y7\f4#"..(@g_cg_m.mem+1).." \f4tEAM\n\f2"..pkstr, 1, 1, C_2)
 end $$
 
 |[f_dt_league]| function()
   -- TODO: save tokens / compression by extracting out this if.
   if g_cg_m.name == 'g_grid_pickleag' then
-    print("\^y7\f1pLR: \f4tEAM "..(@S_TEAM+1).."\f1\ncPU: \f3"..c_trnr_names[@S_TEAML+1], 1, 1)
+    print("\^y7\f2pLR: \f4tEAM "..(@S_TEAM+1).."\f2\ncPU: \f2"..c_trnr_names[@S_TEAML+1], 1, 1)
   else
-    print("\^y7\f1pLR: \f3tEAM "..(@S_TEAM+1).."\f1\ncPU: \f4"..c_trnr_names[@S_TEAML+1], 1, 1)
+    print("\^y7\f2pLR: \f2tEAM "..(@S_TEAM+1).."\f2\ncPU: \f4"..c_trnr_names[@S_TEAML+1], 1, 1)
   end
 end $$
 
 |[f_dt_versus]| function()
   if g_cg_m.name == 'g_grid_pickplr1' then
-    print("\^y7\f1pLR1: \f4tEAM "..(@S_TEAM+1).."\f1\npLR2: \f3tEAM "..(@S_TEAM2+1), 1, 1)
+    print("\^y7\f2pLR1: \f4tEAM "..(@S_TEAM+1).."\f2\npLR2: \f2tEAM "..(@S_TEAM2+1), 1, 1)
   else
-    print("\^y7\f1pLR1: \f3tEAM "..(@S_TEAM+1).."\f1\npLR2: \f4tEAM "..(@S_TEAM2+1), 1, 1)
+    print("\^y7\f2pLR1: \f2tEAM "..(@S_TEAM+1).."\f2\npLR2: \f4tEAM "..(@S_TEAM2+1), 1, 1)
   end
 end $$
 
 |[f_dp_title]| function(i, is_sel)
-  print("\^w\^tpicodex", 2, 1,  4)
-  print("dUAL vERSION",  2, 12, 1)
+  print("\^w\^tpicodex", 2, 1,  C_4)
+  print("dUAL vERSION",  2, 12, C_2)
 
   -- todo: give title pokemon correct colors
   f_draw_pkmn(g_title_l, -8+15+(mid(-1, -.75, cos(0+g_title_an_timer/300))+.75)*4*26   + (g_title_an_timer > 190 and g_title_an_timer < 220 and (rnd(3)\1-1) or 0), 20, 16)
@@ -351,7 +343,7 @@ end $$
 
 |[f_s_pkpreview]| function()
   g_preview_timer = 20
-  return @g_grid_browse[1].mem
+  return @S_BROWSE
 end $$
 
 |[f_l_pkstat]| function()
@@ -408,14 +400,14 @@ end $$
   local next = prev+1
   if dir > 0 then
     for i=next+1,252,1 do
-      if g_lock_pokemon[i] then
+      if c_pokemon[i].lock then
         next = i
         break
       end
     end
   elseif dir < 0 then
-    for i=prev,0,-1 do
-      if g_lock_pokemon[i] then
+    for i=prev,1,-1 do
+      if c_pokemon[i].lock then
         next = i
         break
       end
