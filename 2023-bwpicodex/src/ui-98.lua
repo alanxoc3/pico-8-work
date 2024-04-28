@@ -220,10 +220,36 @@ end $$
   end
 end $$
 
+|[f_print_top]| function(...)
+  local text = ""
+  for x in all{...} do
+    text ..= x
+  end
+  print(text, 1, 1)
+end $$
+
+|[f_print_bot]| function(...)
+  local text = ""
+  for x in all{...} do
+    text ..= x
+  end
+  print(text, 1, 8)
+end $$
+
 |[f_dt_editmove]| function(i, is_sel)
   local pkmn = f_get_party_pkmn(@S_TEAM, @S_TEAME)
   if @S_EDITSTAT < 4 then
-    print("\f4#"..(@S_EDITMOVE+1).." \f4"..pkmn.possible_moves_method[pkmn.possible_moves[@S_EDITMOVE+1]], 1, 1)
+    local movenum = pkmn.possible_moves[@S_EDITMOVE+1]
+    local move = c_moves[movenum]
+    local pp = f_prefix_zero(move.pp, 2)
+    local pow = f_prefix_zero(move.pow, 3)
+    local acc = f_prefix_zero(move.acc, 3)
+    if move.pow == 0 then pow = "___" end
+    if move.pow == 1 then pow = "var" end
+    if move.acc == 0 then acc = "___" end
+    -- TODO: make this work with commas
+    f_print_top("\f4", pkmn.possible_moves_method[movenum], ": ", c_type_names[move.type+1])
+    f_print_bot("\f2", pp, "PP ", pow, "P ", acc, "A")
   end
 end $$
 
@@ -235,11 +261,14 @@ end $$
   f_draw_pkmn(gridobj.data, 1, 1, 16, false, is_sel)
 end $$
 
-|[f_dt_browse]| function(i, is_sel)
-  local numstr = tostr((@S_BROWSE+1)%252)
-  local pkmn = c_pokemon[@S_BROWSE+1]
+|[f_prefix_zero]| function(num, len)
+  local numstr = tostr(num)
+  while #numstr < len do numstr = " "..numstr end
+  return numstr
+end $$
 
-  while #numstr < 3 do numstr = "0"..numstr end
+|[f_dt_browse]| function(i, is_sel)
+  local pkmn = c_pokemon[@S_BROWSE+1]
   local namestr, type1, type2 = pkmn.name, c_type_names[pkmn.type1+1], ""
 
   if pkmn.type2 > T_NONE then
@@ -250,9 +279,8 @@ end $$
     namestr, type1, type2 = f_strtoq(namestr), f_strtoq(type1), f_strtoq(type2)
   end
 
-  local str = "\^y7\f4#"..numstr.." \f4"..namestr.."\n\f2"..type1.." "..type2
-
-  print(str, 1, 1)
+  f_print_top("\f4#", (@S_BROWSE+1)%252, " \f4", namestr)
+  f_print_bot("\f2", type1, " ", type2)
 end $$
 
 |[f_dt_edit]| function(i, is_sel)

@@ -150,6 +150,7 @@ Slash        Normal   20 70      100% -- Has a high critical hit ratio.
 Hi Jump Kick Fighting 20 85      90%  -- If this attack misses the target, the user receives 1/8 "recoil" damage of what it would have inflicted.
 Jump Kick    Fighting 20 70      95%  -- If this attack misses the target, the user receives 1/8 "recoil" damage of what it would have inflicted.
 
+-- TODO: make these have an "n/a" for accuracy
 Faint Attack Dark     25 60      100% -- Ignores Evasion and Accuracy modifiers and never misses except against Protect, Detect or a target in the middle of Dig or Fly.
 Swift        Normal   20 60      100% -- Ignores Evasion and Accuracy modifiers and never misses except against Protect, Detect or a target in the middle of Dig or Fly.
 Vital Throw  Fighting 10 70      100% -- This move usually goes last. It ignores Evasion and Accuracy modifiers and never misses except against Protect, Detect or a target in the middle of Dig or Fly.

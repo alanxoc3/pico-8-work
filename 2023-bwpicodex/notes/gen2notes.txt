@@ -57,6 +57,7 @@ DIFF: Dynamicpunch always confuses the target if it hits.
 DIFF: The Polkadot Bow item is excluded in favor of Pink Bow.
 
 Modifications inspired by design:
+DIFF: Smeargle can learn Sketch in multiple move slots. Being the only Pokemon that can have the same move in its moveset besides Missingno.
 DIFF: All Pokemon are set to level 50 with the highest possible stats they can have for that level.
 DIFF: When you KO the target with a multihit move such as "Double Slap", your attack will continue onto the next Pokemon sent out.
 DIFF: If a Pokemon faints, the next Pokemon in the user's team is sent out automatically. This places more importance on team order.
@@ -91,14 +92,15 @@ DIFF: Transform fails if Pokemon is already transformed.
 DIFF: Nightmare doesn't go away when awake and will re-apply if the Pokemon falls asleep again.
 DIFF: Porygon does not learn the move Conversion 2. (due to the way i pack all moves and to make it so each move is represented when battling)
 DIFF: Leftovers doesn't get triggered when pokemon is switched in.
-DIFF: Berserk Gene boosts both Special Attack and Attack by 2 stages.
-DIFF: Missingno copies best stats and all moves from RB missingno, Y missingno, and "M (00)". As well as adding 1 extra glitch move.
+DIFF: Berserk Gene boosts both Special Attack and Attack by 2 stages. Confusion is only regular confusion when activated, not for 256 turns.
 DIFF: Struggle's recoil is 1/4 of the users max hp rounded up. Was 1/4 of damage dealt in gen 2. This ensures infinite battles with leftovers are not possible.
 DIFF: Encore works against sketch/transform/mirrormove/mimic. It just looks at the last moveslot used. Encore fails when the Pokemon never used a move, is using struggle, or is disabled or encored already.
 DIFF: Disable fails if the Pokemon is currently encored or disabled.
 DIFF: A transformed pokemon can make use of pokemon specific items (thickclub, lightball, lucky punch, stick)
+DIFF: Missingno copies best stats and all moves from RB missingno, Y missingno, M (Missingno's Sister), O (M's pre-evolution), and "Pゥ_4$" (M's other preevolution). Glitch moves are converted to the gen 2 hex equivalents, except TM05 (from "Pゥ_4$") which is a move in Picodex. Only moves that can be learned up to lvl 100 are included.
 
 STRAT: Sketch and Mimic allow for the same move to be available in multiple move slots.
+STRAT: Missingno is broken.
 STRAT: Hidden Power counters Conversion 2.
 
 IDEA: Unlock moves as you defeat trainers.

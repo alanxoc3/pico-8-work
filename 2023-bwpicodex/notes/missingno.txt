@@ -1,0 +1,99 @@
+In Picodex Dual, Missingno copies best stats and all moves from:
+- Red/Blue Version Missingno (RBM)
+- Yellow Version Missingno (YM)
+- M (M) (Missingno's Sister, nearly identical stats to Missingno)
+- O (O) (M's pre-evolution)
+- Pゥ_4$ (P) (M's other preevolution)
+
+Another description:
+- Pゥ_4$ evolves into M.
+- O evolves into M.
+- M is a slightly different sister variant of Missingno.
+- Missingno in Red/Blue version was slightly different than the Missingno in Yellow version.
+
+Missingno's stats are a combination of the best stats from all the glitch pokemon above. Stats & source:
+  hp:  178 - YM
+  att: 137 - M
+  def: 70  - O
+  spd: 45  - O
+  sat: 95  - O
+  sdf: 95  - O
+
+All Pokemon specific items work on Missingno. Eg: metalpowder, light ball, amulet coin, etc.
+Using all the best stats puts Missingno's total stats above moltres/raikou/celebi/mew, but below mewtwo/hooh/lugia.
+That said, Missingno is likely the best in the game anyways, because it can use any of the pokemon specific Broken items (thickclub/lightball)
+
+Default Moves (all come from RBM, with the addition of TM05, since that is the only glitch move). Watergun was twice on the rb missingno. Out of all the glitches, it's the only move that appears twice in the beginning moves, so the only move that can actually appear multiple times in the moveslot:
+  M_SKYATTACK    - RBM
+  M_TM05         - P
+  M_WATERGUN     - RBM
+  M_WATERGUN     - RBM
+
+The learn moves are all moves learned at level 100 or below. Glitch moves are converted to the Gen2 hex equivalents. For example the "Super Glitch" move that Pゥ_4$ learns becomes "Triple Kick" in gen 2. Here they are:
+  M_ABSORB       - O
+  M_AURORABEAM   - O
+  M_BIND         - YM
+  M_BUBBLEBEAM   - P
+  M_CHARM        - P
+  M_DRAGONBREATH - P
+  M_ENDURE       - O
+  M_FRUSTRATION  - P
+  M_HYPNOSIS     - P
+  M_MEGAHORN     - P
+  M_PAYDAY       - YM/P
+  M_PINMISSILE   - P
+  M_POUND        - M
+  M_SLEEPPOWDER  - O
+  M_SONICBOOM    - P
+  M_SUNNYDAY     - P
+  M_SWAGGER      - P
+  M_SWEETSCENT   - O
+  M_TACKLE       - O/P
+  M_TELEPORT     - P
+  M_TRANSFORM    - O
+  M_TRIPLEKICK   - P
+  M_TWISTER      - P
+  M_WHIRLPOOL    - P
+
+Teach Moves. These are just tms/hms all the glitches could learn:
+  M_BIDE        - O/P
+  M_BLIZZARD    - RBM
+  M_BUBBLEBEAM  - RBM/P
+  M_COUNTER     - P
+  M_CUT         - RBM
+  M_DIG         - P
+  M_DOUBLEEDGE  - RBM/O/P
+  M_DOUBLETEAM  - O/P
+  M_EARTHQUAKE  - RBM
+  M_EGGBOMB     - P
+  M_FISSURE     - RBM/P
+  M_FLASH       - O
+  M_FLY         - RBM
+  M_HORNDRILL   - P
+  M_ICEBEAM     - RBM
+  M_MEGAKICK    - RBM/P
+  M_MEGAPUNCH   - RBM
+  M_METRONOME   - P
+  M_MIMIC       - O/P
+  M_PSYCHIC     - RBM
+  M_PSYWAVE     - P
+  M_RAGE        - RBM/O/P
+  M_RAZORWIND   - RBM
+  M_REFLECT     - O
+  M_REST        - RBM/O
+  M_SEISMICTOSS - RBM/P
+  M_SKULLBASH   - P
+  M_SKYATTACK   - RBM/P
+  M_SOFTBOILED  - P
+  M_STRENGTH    - P
+  M_SUBMISSION  - RBM/P
+  M_SUBSTITUTE  - RBM/O
+  M_SWIFT       - O/P
+  M_SWORDSDANCE - RBM
+  M_TAKEDOWN    - RBM/O
+  M_TELEPORT    - RBM/O
+  M_THUNDERBOLT - O
+  M_THUNDER     - RBM/O/P
+  M_THUNDERWAVE - RBM/O/P
+  M_TOXIC       - RBM/O/P
+  M_TRIATTACK   - RBM/P

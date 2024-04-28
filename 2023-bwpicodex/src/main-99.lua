@@ -39,7 +39,7 @@ end $$
 --   {[0]=7,    6,  0,134,  5,139, 141, 14,  6,143,  2, 12,  1,  8,  4,  5}, -- invert
 --   {[0]=128,130,141,134,135,139, 141, 14,  6,143,142, 12,  9,  8,  4,  5}, -- purple yel
 
-g_palette = 0
+g_palette = 5
 g_gridstack = {g_grid_title}
 g_preview_timer = 0
 g_title_timer = 0
