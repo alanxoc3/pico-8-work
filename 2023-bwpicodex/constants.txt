@@ -412,7 +412,7 @@ P_CELEBI:     251  # celebi
 P_NONE:       252  # this is for prevolve with basic/baby pkmn
 
 # ----------------------------- move numbers - 4508 bytes. It took lots of compute to generate this. Order matters, a bad order wastes lots of space.
-M_NONE:         0  # ___
+M_NONE:         0  # ___ -- TODO: should none be 252? like the p_none is 252. idk. And idk if it matters, something to think about.
 M_STRUGGLE:     0  # struggl i might move this to be 252
 M_ACID:         1  # acid
 M_ACIDARMOR:    2  # acidarm
