@@ -1,8 +1,9 @@
 |[f_get_party_pkmn]| function(party_num, pkmn_num)
   local num_loc = S_PARTY1+party_num*48+pkmn_num*8
-  local pkmn_num = @num_loc%C_LEN_PKMN
+  local pkmn_num = @num_loc
+
   local pkmn = setmetatable(f_zobj([[num,@, edit_moves,#, view_moves,#, seen_moves,#]], pkmn_num), {__index=c_pokemon[pkmn_num]})
-  if pkmn_num > 0 then
+  if pkmn_num < 252 and c_pokemon[pkmn_num].lock then
     pkmn.gender_bit = @(num_loc+1) -- this is how you should change the gender. just add 1
     pkmn.gender     = pkmn.genders[pkmn.gender_bit%#pkmn.genders+1]
     pkmn.item       = @(num_loc+2)%C_LEN_ITEMS

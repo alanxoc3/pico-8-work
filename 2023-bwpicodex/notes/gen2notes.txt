@@ -36,7 +36,6 @@ Move priority.
 -1	Teleport, Counter, Mirror Coat, Roar, Vital Throw, Whirlwind
 
 Modifications inspired by other games:
-DIFF: Gen 1 games. Missingno is a Pokemon and can learn TM05.
 DIFF: Gen 1 games. Haze works similarly to how it worked in Gen 1. All effects and stat modifiers that can be Baton Passed can also be reset with haze.
 DIFF: Gen 1 games. Substitute works similarly to Gen 1. Only protects from damage done by opponent. Not against any effects.
 DIFF: Gen 2 games. Metal powder increases defense and special defense by 50% for ditto even when transformed.
@@ -97,7 +96,7 @@ DIFF: Struggle's recoil is 1/4 of the users max hp rounded up. Was 1/4 of damage
 DIFF: Encore works against sketch/transform/mirrormove/mimic. It just looks at the last moveslot used. Encore fails when the Pokemon never used a move, is using struggle, or is disabled or encored already.
 DIFF: Disable fails if the Pokemon is currently encored or disabled.
 DIFF: A transformed pokemon can make use of pokemon specific items (thickclub, lightball, lucky punch, stick)
-DIFF: Missingno copies best stats and all moves from RB missingno, Y missingno, M (Missingno's Sister), O (M's pre-evolution), and "Pゥ_4$" (M's other preevolution). Glitch moves are converted to the gen 2 hex equivalents, except TM05 (from "Pゥ_4$") which is a move in Picodex. Only moves that can be learned up to lvl 100 are included.
+DIFF: Missingno is a pokemon. It copies best stats and all moves from RB missingno, Y missingno, M (Missingno's Sister), O (M's pre-evolution), and "Pゥ_4$" (M's other preevolution). Glitch moves are converted to the gen 2 hex equivalents, except TM05 (from "Pゥ_4$") which is a move in Picodex. Only moves that can be learned up to lvl 100 are included.
 
 STRAT: Sketch and Mimic allow for the same move to be available in multiple move slots.
 STRAT: Missingno is broken.

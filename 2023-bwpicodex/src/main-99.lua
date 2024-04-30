@@ -58,7 +58,7 @@ function bitmaskToIndex(bitmask)
 end
 
 |[_update60]| function()
-  printh(stat(0))
+  -- printh(stat(0)) -- TODO: remove?
   g_title_timer = min(80, (g_title_timer+1))
   g_preview_timer = max(0, g_preview_timer-1)
   g_cg_m, g_cg_s, gridpo, params = unpack(g_gridstack[#g_gridstack])

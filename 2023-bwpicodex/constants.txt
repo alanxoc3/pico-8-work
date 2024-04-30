@@ -38,7 +38,7 @@ SFX_MOVE:   255
 
 # ----------------------------- load memory locations
 L_DATASTART: 0x1fff # data starts one byte before because the code increments first
-L_PARTY1: 0x418a # The location the first party is in cart storage
+L_PARTY1: 0x41a7 # The location the first party is in cart storage. This is from the output of the compile command.
 
 # ----------------------------- priorities - aligned to thousand because 999 is the max speed stat
 C_PRIORITY_SWITCH:      4000 # PURSUIT
@@ -157,7 +157,7 @@ T_DARK:     16 # dark
 T_STEEL:    17 # steel
 
 # ----------------------------- pkmn numbers
-P_NONE:       0  # this is for prevolve with basic/baby pkmn
+P_MISSINGNO:  0  # misngno
 P_BULBASAUR:  1  # bulsaur
 P_IVYSAUR:    2  # ivysaur
 P_VENUSAUR:   3  # vensaur
@@ -409,7 +409,7 @@ P_TYRANITAR:  248  # tyratar
 P_LUGIA:      249  # lugia
 P_HOOH:       250  # hooh
 P_CELEBI:     251  # celebi
-P_MISSINGNO:  252  # misngno
+P_NONE:       252  # this is for prevolve with basic/baby pkmn
 
 # ----------------------------- move numbers - 4508 bytes. It took lots of compute to generate this. Order matters, a bad order wastes lots of space.
 M_NONE:         0  # ___

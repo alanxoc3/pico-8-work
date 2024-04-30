@@ -13,8 +13,8 @@ end $$
 |[f_op_browse]| function()
   local op = {}
 
-  for i=1,252 do
-    add(op, {data=c_pokemon[i].lock and i or 0, disabled=not c_pokemon[i].lock})
+  for i=0,251 do
+    add(op, {data=c_pokemon[i].lock and i or P_NONE, disabled=not c_pokemon[i].lock})
   end
 
   return op
@@ -23,14 +23,17 @@ end $$
 |[f_op_edit]| function(sumdisable)
   local op = {}
   for partynum=0,3 do
-    local sumind = 0
+    local valid = true
     local inds = {}
     for pkmnnum=0,5 do
       local pkmn = f_get_party_pkmn(partynum, pkmnnum)
-      sumind += pkmn.num
+      if pkmn.num < P_NONE then
+        valid = false
+      end
+
       add(inds, pkmn.num)
     end
-    add(op, {data=inds, disabled=sumdisable and sumind==0})
+    add(op, {data=inds, disabled=sumdisable and valid})
   end
   return op
 end $$
@@ -268,18 +271,18 @@ end $$
 end $$
 
 |[f_dt_browse]| function(i, is_sel)
-  local pkmn = c_pokemon[@S_BROWSE+1]
+  local pkmn = c_pokemon[@S_BROWSE]
   local namestr, type1, type2 = pkmn.name, c_type_names[pkmn.type1+1], ""
 
   if pkmn.type2 > T_NONE then
     type2 = c_type_names[pkmn.type2+1]
   end
 
-  if not c_pokemon[@S_BROWSE+1].lock then
+  if not c_pokemon[@S_BROWSE].lock then
     namestr, type1, type2 = f_strtoq(namestr), f_strtoq(type1), f_strtoq(type2)
   end
 
-  f_print_top("\f4#", (@S_BROWSE+1)%252, " \f4", namestr)
+  f_print_top("\f4#", @S_BROWSE, " \f4", namestr)
   f_print_bot("\f2", type1, " ", type2)
 end $$
 
@@ -325,9 +328,9 @@ end $$
   g_title_an_timer = (g_title_an_timer+1)%300
 
   if g_title_an_timer == 0 then
-    g_title_r = rnd"252"\1+1
+    g_title_r = rnd"252"\1
   elseif g_title_an_timer == 150 then
-    g_title_l = rnd"252"\1+1
+    g_title_l = rnd"252"\1
 
   elseif g_title_an_timer == 50-10  then f_minisfx(g_title_r-1)
   elseif g_title_an_timer == 200-10 then f_minisfx(g_title_l-1)
@@ -335,7 +338,7 @@ end $$
 end $$
 
 |[f_dp_pkpreview]| function(i, is_sel)
-  local pkmn_ind = @S_BROWSE+1
+  local pkmn_ind = @S_BROWSE
   f_draw_pkmn(pkmn_ind, 13+(g_preview_timer > 0 and (rnd(3)\1-1) or 0), 1+2, 32)
 end $$
 
@@ -398,7 +401,7 @@ end $$
   --local party_loc = S_PARTY1+(@S_TEAM)*42
   --local pkmn_loc = party_loc+@S_TEAME*7
   local pkmn = f_get_party_pkmn(@S_TEAM, @S_TEAME)
-  if pkmn.num > 0 then -- includes missingno at 252
+  if pkmn.num < 252 then
     add(g_gridstack, g_grid_editstat)
   else
     add(g_gridstack, g_grid_editpkmn)
@@ -423,20 +426,20 @@ end $$
   return SFX_ERROR
 end $$
 
-|[f_browselr]| function(dir)
+|[f_browselr]| function(dir) -- TODO: can this be simplified?
   local prev = @S_BROWSE
   local next = prev+1
   if dir > 0 then
     for i=next+1,252,1 do
-      if c_pokemon[i].lock then
+      if c_pokemon[i-1].lock then
         next = i
         break
       end
     end
   elseif dir < 0 then
-    for i=prev,1,-1 do
+    for i=prev-1,1,-1 do
       if c_pokemon[i].lock then
-        next = i
+        next = i+1
         break
       end
     end
