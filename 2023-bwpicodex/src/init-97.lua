@@ -4,12 +4,12 @@ f_zcall(poke, [[
    ;,0x5f2c, 3 -- screen to 64x64
   ;;,0x5f5c, 8 -- set btn initial delay before repeating. 255 means never repeat.
   ;;,0x5f5d, 1 -- set btn repeating delay.
-  ;;,S_STORY, 20 -- todo: remove me, this is just for debugging
+  ;;,S_STORY, 0 -- todo: remove me, this is just for debugging
 ]])
 
 |[c_move_names]|       f_zobj[["0,___;,aCID,aCIDaR,bARAGE,bONcLB,bIND,cLAMP,mOONlT,lECHsD,eXTRsP,sNCbOM,tWInDL,tHNsHK,gLARE,gILOTN,hYPfNG,jMPkCK,kINSIS,lOCKoN,lOVkIS,mACpNC,vICgRP,sPIcAN,sPIKES,sPORE,cOTsPR,pRESNT,vItHRW,cMTpNC,dRLpCK,sNDaTK,aGILTY,fRYaTK,qIKaTK,fALsWP,gROWL,hEALbL,sING,pOUND,mINMIZ,tAILwP,dBLsLP,mEGhRN,bONRNG,cONVR1,cONVR2,sPARK,mLKdRK,mORsUN,nGTsHD,oCTZOK,pINmIS,pWDsNW,sUPfNG,fIRsPN,pSNgAS,bARIER,mEDTAT,fTRsGT,hYPNOS,pSYbEM,lITsCR,sAFgRD,pETdNC,cHARM,sYNTHS,sWTsCN,rAZlEF,pSNpWD,sLPpWD,aBSORB,sTNsPR,fLAIL,cONFSN,sLAM,cONSTR,aMNESA,bUBBLE,sPLASH,hYDpMP,mNDrED,mIST,hRNaTK,sPIwEB,dBLkCK,sWTkIS,mTLcLW,tRFORM,tRIKCK,gUST,tWISTR,cRBhAM,dIZpNC,sLUDGE,pAINsP,dSTbND,hAZE,lICK,pERsNG,mEANlK,cNFrAY,cRScHP,sMOG,kARcHP,eMBER,sMKsCR,bELdRM,bEATUP,sCRTCH,sLASH,aNCpWR,lEER,bITE,oUTrGE,sCRYfC,tHRASH,sTOMP,rOKsLD,mAGTUD,rOCtHR,hARDEN,bONrSH,hIJkCK,rECOVR,aERbLS,hRNdRL,dRGrGE,sFbOIL,dRGbRt,sLFdES,eXPLSN,eGGbMB,sLGbMB,gIGdRN,mEGdRN,sWRdNC,cUT,fRYcTR,tHIEF,dIG,rOLOUT,dFNcRL,dETECT,sOLbEM,rAIdNC,fLASH,pSYCIC,pSYCuP,dRMeAT,nGTMAR,sHDbAL,zAPcAN,tHUNDR,tHNbLT,iRNtAL,sTRENG,rOCsMS,hEDbUT,mUDsLP,sUNdAY,pROTCT,dBLtEM,sLPtLK,cURSE,hIDpWR,sWAGER,fRUSTR,rETURN,tOXIC,sNORE,rEST,eNDURE,aTRACT,bIDE,mIMIC,sUBSTU,rAGE,dBLeDG,tAKdWN,sKLbAS,bODsLM,wTRgUN,bBLbEM,iCEbEM,bLIZRD,iCYwND,sURF,wRLPOL,wTRFAL,sWIFT,pAYDAY,tRIaTK,rFLECT,tHNwAV,tELPRT,pSYwAV,mETRNM,cOUNTR,mEGpNC,sEITOS,sUBMIS,mEGkCK,dYNpNC,fIRpNC,tHNpNC,iCEpNC,fIRbLS,fLMtHR,fISURE,eARTqK,sNDsTR,hYPbEM,rOAR,sTLwNG,fLY,rAZwND,wRLwND,sKYaTK,wNGaTK,pECK,mIRMOV,fNTaTK,wITdRW,rAPsPN,sUPsNC,aURbEM,mIRcOT,pSNsTG,sPITE,cRUNCH,pURSUT,sTRsHT,lECHlF,bTNpAS,dISABL,sCRECH,tACKLE,fLMwEL,rEVERS,fRYsWP,fCSeNG,fORsGT,lOWkCK,rOLkCK,eNCORE,wRAP,gROWTH,vINwHP,sACfIR,sHRPEN,sKETCH,tM05,sTRUGL,nONE,nONE,nONE"]] $$
 |[c_trnr_names]|       split"yOUNGS,sAGE,fALKNR,gRUNT,bUGcTR,bUGSY,pKMfAN,bEAUTY,wITNEY,kIMINO,mEDIUM,mORTY,pOLICE,kARATE,cHUCK,gENTLE,sAILOR,jASMIN,rOCKET,sKIER,pRYCE,sCIENT,tWINS,cLAIR,nERD,cAMPER,bROCK,sCHOOL,sWIMER,mISTY,jUGLER,gUITAR,lTsURG,hIKER,lASS,eRIKA,bIKER,pICNIK,jANINE,mANIAC,pSYCIC,sABRIN,fISHER,bREATH,bLAINE,bIRDkP,cOOLtR,bLUE,sILVER,wILL,kOGA,bRUNO,kAREN,lANCE,eUSINE,lAWRNC,rED,hORDE" $$
-|[c_type_names]|       split"bIRD,nORMAL,fIRE,fIGHTN,wATER,pOISON,eLECTR,gROUND,gRASS,fLYING,iCE,bUG,pSYCIC,rOCK,dRAGON,gHOST,dARK,sTEEL" $$
+|[c_type_names]|       split"bIRD,nORMAL,fIRE,fIGHTN,wATER,pOISON,eLECTR,gROUND,gRASS,fLYING,iCE,bUG,pSYCIC,rOCK,dRAGON,gHOST,dARK,sTEEL,nONE" $$
 |[c_item_names]|       f_zobj[["0,___;,pNKbOW,cHRcOL,bLKbLT,mYSwTR,pSNbRB,mAGNET,sOsAND,mIRACL,sHbEAK,nVRiCE,sLVpWD,tWsPON,hRDsTN,dRAGsC,sPELtG,bLKgLS,mTLcOT,pLKbOW,bRIpWD,fOCbND,kINGrK,lEFToV,qIKcLW,sCOPlN,aMcOIN,lITbAL,lUKpNC,mTLpWD,sTICK,tHKcLB,bERSRK,bERRY,gLDbRY,bTRbRY,mNTbRY,bRNbRY,iCEbRY,pARbRY,pSNbRY,mIRbRY,mYSbRY"]] $$
 |[c_pkmn_names]|       f_zobj[["0,mISNGnO;,bULSAUR,iVYSAUR,vENSAUR,cHARMAN,cHARMEL,cHARZAR,sQUIRTL,wARTORT,bLSTOIS,cATRPIE,mETAPOD,bUTFREE,wEEDLE,kAKUNA,bEEDRIL,pIDGEY,pIDGETO,pIDGEOT,rATTATA,rATICAT,sPEAROW,fEAROW,eKANS,aRBOK,pIKACHU,rAICHU,sNDSHRW,sNDSLAS,nIDRANf,nIDRINA,nIDQUEN,nIDRANm,nIDRINO,nIDKING,cLFAIRY,cLFABLE,vULPIX,nINTALE,jIGPUFF,wIGTUFF,zUBAT,gOLBAT,oDDISH,gLOOM,vILPLUM,pARAS,pARSECT,vENONAT,vENMOTH,dIGLETT,dUGTRIO,mEOWTH,pERSIAN,pSYDUCK,gOLDUCK,mANKEY,pRIMAPE,gROWLTH,aRCANIN,pOLIWAG,pOLWIRL,pOLRATH,aBRA,kADABRA,aLKAZAM,mACHOP,mACHOKE,mACHAMP,bELSPRT,wEEPBEL,vICTBEL,tNTCOOL,tNTCRUL,gEODUDE,gRAVLER,gOLEM,pONYTA,rAPDASH,sLOWPOK,sLOWBRO,mAGNMIT,mAGNTON,fAFETCd,dODUO,dODRIO,sEEL,dEWGONG,gRIMER,mUK,sHELDER,cLYSTER,gASTLY,hAUNTER,gENGAR,oNIX,dROWZEE,hYPNO,kRABBY,kINGLER,vOLTORB,eLCRODE,eGGCUTE,eGGUTOR,cUBONE,mAROWAK,hITMLEE,hITMCHN,lIKTUNG,kOFFING,wEEZING,rHYHORN,rHYDON,cHANSEY,tANGELA,kANGKAN,hORSEA,sEADRA,gOLDEEN,sEAKING,sTARYU,sTARMIE,mRmIME,sCYTHER,jYNX,eLCABUZ,mAGMAR,pINSIR,tAUROS,mAGKARP,gYARDOS,lAPRAS,dITTO,eEVEE,vAPREON,jOLTEON,fLAREON,pORYGON,oMANYTE,oMASTAR,kABUTO,kABTOPS,aERODAC,sNORLAX,aRTCUNO,zAPDOS,mOLTRES,dRATINI,dRAGAIR,dRAGITE,mEWTWO,mEW,cHIKITA,bAYLEEF,mEGNIUM,cYNDQIL,qUILAVA,tYPHLOS,tOTODIL,cROCNAW,fRLGATR,sENTRET,fURRET,hOOTOOT,nOCTOWL,lEDYBA,lEDIAN,sPINRAK,aRIADOS,cROBAT,cHINCHU,lANTURN,pICHU,cLEFFA,iGGBUFF,tOGEPI,tOGETIC,nATU,xATU,mAREEP,fLAAFFY,aMPHROS,bELOSOM,mARILL,aZMARIL,sUDWOOD,pOLTOED,hOPPIP,sKIPLOM,jUMPLUF,aIPOM,sUNKERN,sUNFLOR,yANMA,wOOPER,qUAGSIR,eSPEON,uMBREON,mURKROW,sLOWKNG,mISDVUS,uNOWN,wOBUFET,gIFARIG,pINECO,fORTRES,dUNSPAR,gLIGAR,sTEELIX,sNUBBUL,gRANBUL,qILFISH,sCIZOR,sHUCKLE,hERCROS,sNEASEL,tEDIURS,uRSRING,sLUGMA,mACARGO,sWINUB,pILSWIN,cORSOLA,rEMRAID,oCTLERY,dELBIRD,mANTINE,sKARMRY,hONDOUR,hONDOOM,kINGDRA,pHANPY,dONPHAN,pORYGN2,sTANTLR,sMEARGL,tYROGUE,hITMTOP,sMOOCHM,eLEKID,mAGBY,mILTANK,bLISSEY,rAIKOU,eNTEI,sUICUNE,lARVTAR,pUPITAR,tYRATAR,lUGIA,hOoH,cELEBI,___,___,___,___"]] $$
 |[c_gender_names]|     f_zobj[["0,nEUTER;,mALE,fEMALE"]] $$
@@ -54,7 +54,12 @@ for i=0,323 do -- 18*18 = 324 (18 types)
 end
 
 for i=0,I_LEN do add(c_items,  f_zobj([[lock,~c_no,  num,@, name,@]], i, c_item_names[i] )) end
-for i=1,100   do add(c_levels, f_zobj([[lock,~c_yes, num,@, name,@]], i, "lV "..i        )) end
+
+-- in picodex, you can give yourself your own difficulty. setting the level to 100 will make battles easy. using a lower level will make them harder.
+-- horde will still probably be difficult at level 100, but it means more people will be able to defeat horde since they can cheat.
+for i=1,100 do add(c_levels, f_zobj([[lock,~c_yes, num,@, name,@]], i, "lV."..f_prefix_zero(i, 3))) end
+
+c_pokemon[P_NONE] = {num="___", name="eMPTY", type1=18, type2=0} -- TODO: is this needed, if so put in data instead
 
 -- 136 to 118. Storing data all together saves like 18 code tokens.
 for i=0,251 do -- There are 252 pkmn and 252 moves. So zipped when unpacking to save some tokens.
@@ -68,7 +73,7 @@ for i=0,251 do -- There are 252 pkmn and 252 moves. So zipped when unpacking to 
   end)
 
   -- 'item' actually has gender and item information, but keeping the name item saves a possible token
-  foreach(split'prevolve,type1,type2,hp,att,def,spd,sat,sdf,item', function(key)
+  foreach(split'prevolve,type1,type2,hp,att,def,spd,sat,sdf,default_item', function(key)
     pkmn[key] = f_init_peek_inc()
   end)
 
@@ -80,9 +85,9 @@ for i=0,251 do -- There are 252 pkmn and 252 moves. So zipped when unpacking to 
     ;GP_MALE;,G_MALE
     ;GP_FEMA;,G_FEMA
   ]]) do
-    if pkmn.item & GP_BOTH == k then
+    if pkmn.default_item & GP_BOTH == k then
       pkmn.genders = v
-      pkmn.item &= 0x3f -- all bits except first two
+      pkmn.default_item &= 0x3f -- all bits except first two
     end
   end
 
@@ -155,7 +160,7 @@ for i=1,252 do
   add(horde, pkmn)
 
   -- TODO: is this needed? Check stat(0) memory to see how much it actually saves?
-  c_pokemon[pkmn.ind].moves_grouped = nil
+  -- c_pokemon[pkmn.ind].moves_grouped = nil
 end
 add(c_trainers, horde)
 
@@ -163,6 +168,7 @@ menuitem(1, "swap 🅾️/❎", function()
   -- todo: fill me out
 end)
 
+-- TODO: consider removing this. Someone could accidentally set it. But really, it falls out of scope of my idea of a fantasy console.
 menuitem(2, "factory reset", function()
   cls() flip() -- Makes the screen go black while resetting
   memset(0x5e00, 0, 256)
@@ -177,25 +183,29 @@ end $$
 |[f_update_locks]| function()
   f_unlock(c_items, I_NONE+1)
   f_unlock(c_items, I_BERRY+1)
-  for ind in all(split'P_BULBASAUR,P_CHARMANDER,P_SQUIRTLE,P_CHIKORITA,P_CYNDAQUIL,P_TOTODILE') do -- 6 starter pokemon
+
+  -- these are the moves available in the default party
+  for ind in all(split'M_NONE,M_LEECHSEED,M_EMBER,M_WATERGUN,M_RAZORLEAF,M_TACKLE,M_BITE,M_TAILWHIP,M_LEER,M_SMOKESCREEN,M_LIGHTSCREEN,M_SCREECH') do
+    f_unlock(c_moves, ind)
+  end
+
+  for i, ind in ipairs(split'P_BULBASAUR,P_CHARMANDER,P_SQUIRTLE,P_CHIKORITA,P_CYNDAQUIL,P_TOTODILE,P_NONE') do -- 6 starter pokemon
     f_unlock(c_pokemon, ind)
+    if @S_NEW == 0 then
+      f_save_party_pkmn(f_get_default_pkmn(ind), 0, i-1)
+    end
   end
 
   if @S_NEW == 0 then
     poke(S_NEW, 1)
-    memcpy(S_PARTY1, L_PARTY1, 48) -- Copies the Pokemon data to the first party from cart storage. 48 = 8 bytes * 6 pkmn
     memset(S_PARTY2, P_NONE, 144) -- set the "NONE" pokemon to all the other slots. this is 0x90, which is the length of 3 parties
   end
 
-  -- these are the moves available in the default party
-  for ind in all(split'M_NONE,M_TACKLE,M_GROWL,M_LEECHSEED,M_SCRATCH,M_EMBER,M_TAILWHIP,M_BUBBLE,M_RAZORLEAF,M_LEER,M_SMOKESCREEN,M_RAGE') do
-    f_unlock(c_moves, ind)
-  end
 
   for i=1,min(58,@S_STORY) do
     for pkmn in all(c_trainers[i]) do
       f_unlock(c_pokemon, pkmn.ind)
-      f_unlock(c_items, c_pokemon[pkmn.ind].item+1)
+      f_unlock(c_items, c_pokemon[pkmn.ind].default_item+1)
 
       for i=1,4 do
         if pkmn[i] then

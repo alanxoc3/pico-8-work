@@ -38,7 +38,6 @@ SFX_MOVE:   255
 
 # ----------------------------- load memory locations
 L_DATASTART: 0x1fff # data starts one byte before because the code increments first
-L_PARTY1: 0x41a7 # The location the first party is in cart storage. This is from the output of the compile command.
 
 # ----------------------------- priorities - aligned to thousand because 999 is the max speed stat
 C_PRIORITY_SWITCH:      4000 # PURSUIT
@@ -409,7 +408,8 @@ P_TYRANITAR:  248  # tyratar
 P_LUGIA:      249  # lugia
 P_HOOH:       250  # hooh
 P_CELEBI:     251  # celebi
-P_NONE:       252  # this is for prevolve with basic/baby pkmn
+P_NONE:       252  # this is a dummy pkmn for ui things
+P_EMPTY:      253  # this doesn't point to anything, for evolutions to have nothing to point to
 
 # ----------------------------- move numbers - 4508 bytes. It took lots of compute to generate this. Order matters, a bad order wastes lots of space.
 M_NONE:         0  # ___ -- TODO: should none be 252? like the p_none is 252. idk. And idk if it matters, something to think about.

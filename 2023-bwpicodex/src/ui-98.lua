@@ -27,7 +27,7 @@ end $$
     local inds = {}
     for pkmnnum=0,5 do
       local pkmn = f_get_party_pkmn(partynum, pkmnnum)
-      if pkmn.num < P_NONE then
+      if pkmn.valid then
         valid = false
       end
 
@@ -72,31 +72,22 @@ end $$
     add(g_gridstack, g_grid_edititem)
   end})
 
+  add(op, {text=c_levels[pkmn.level].name, select=function()
+    poke(S_EDITLEVL, pkmn.level-1)
+    add(g_gridstack, g_grid_editlevl)
+  end})
+
   add(op, {text=c_gender_names[pkmn.gender], disabled=#pkmn.genders < 2, select=function()
     pkmn.gender_bit += 1
     pkmn:f_save_party_pkmn(@S_TEAM, @S_TEAME)
   end})
 
-  add(op, {text="lV "..pkmn.level, select=function()
-    poke(S_EDITLEVL, pkmn.level-1)
-    add(g_gridstack, g_grid_editlevl)
-  end})
-
   add(op, {text="dELETE", select=function()
-    memset(S_PARTY1+@S_TEAM*48+@S_TEAME*8, 0, 8)
+    memset(S_PARTY1+@S_TEAM*48+@S_TEAME*8, P_NONE, 8)
     deli(g_gridstack)
   end})
   return op
 end $$
-
-
--- |[f_edit_template]| function(list, lock, names, disfunc)
---   local op = {}
---   for ind, m in ipairs(list) do
---     add(op, {text=lock[m] and names[m] or f_strtoq(names[m]), disabled=disfunc(ind-1) or not lock[m]})
---   end
---   return op
--- end $$
 
 -- TODO: experiment with making item num/name/lock in same obj -- 4042
 |[f_create_spot]| function(_ENV, op, disabled)
@@ -204,22 +195,29 @@ end $$
 end $$
 
 |[f_dt_editteam]| function(i, is_sel)
-  local pkstr_arr = {}
-  local pkstr_lens = split'3,3,3,2'
+  -- local pkstr_arr = {}
+  -- local pkstr_lens = split'3,3,3,2'
+
+  -- local pkmn = f_get_party_pkmn(@S_TEAM, @S_TEAME)
+
+  -- for i=1,4 do -- in ipairs(pkmn.view_moves) do
+    -- pkstr_arr[i] = sub(c_move_names[pkmn.view_moves[i] or 0], 1, pkstr_lens[i])
+  --end
+
+  -- local pkstr = pkstr_arr[1].."-"..pkstr_arr[2].."-"..pkstr_arr[3].."-"..pkstr_arr[4]
+  -- print("\^y7\f4#"..(@S_TEAME+1).." \f4"..(c_pkmn_names[pkmn.num]).."\n\f2"..pkstr, 1, 1, C_2)
+  printh("NUM "..f_get_party_pkmn(@S_TEAM, @S_TEAME).num)
 
   local pkmn = f_get_party_pkmn(@S_TEAM, @S_TEAME)
-
-  for i=1,4 do -- in ipairs(pkmn.view_moves) do
-    pkstr_arr[i] = sub(c_move_names[pkmn.view_moves[i] or 0], 1, pkstr_lens[i])
-  end
-
-  local pkstr = pkstr_arr[1].."-"..pkstr_arr[2].."-"..pkstr_arr[3].."-"..pkstr_arr[4]
-  print("\^y7\f4#"..(@S_TEAME+1).." \f4"..(c_pkmn_names[pkmn.num]).."\n\f2"..pkstr, 1, 1, C_2)
+  f_dt_browse_template(pkmn.num)
 end $$
 
 |[f_dt_editstat]| function(i, is_sel)
+  local pkmn = f_get_party_pkmn(@S_TEAM, @S_TEAME)
   if @S_EDITSTAT < 4 then
-    print("\f4#"..(@S_EDITSTAT+1).." \f4mOVE", 1, 1)
+    f_dt_editmove_template(pkmn, pkmn.edit_moves[@S_EDITSTAT+1])
+  else
+    f_dt_browse_template(pkmn.num)
   end
 end $$
 
@@ -228,32 +226,42 @@ end $$
   for x in all{...} do
     text ..= x
   end
-  print(text, 1, 1)
+  print("\f4"..text, 1, 1)
 end $$
 
+-- TODO: dedup with _top
 |[f_print_bot]| function(...)
   local text = ""
   for x in all{...} do
     text ..= x
   end
-  print(text, 1, 8)
+  print("\f2"..text, 1, 8)
 end $$
 
-|[f_dt_editmove]| function(i, is_sel)
-  local pkmn = f_get_party_pkmn(@S_TEAM, @S_TEAME)
-  if @S_EDITSTAT < 4 then
-    local movenum = pkmn.possible_moves[@S_EDITMOVE+1]
-    local move = c_moves[movenum]
-    local pp = f_prefix_zero(move.pp, 2)
-    local pow = f_prefix_zero(move.pow, 3)
-    local acc = f_prefix_zero(move.acc, 3)
-    if move.pow == 0 then pow = "___" end
-    if move.pow == 1 then pow = "var" end
-    if move.acc == 0 then acc = "___" end
-    -- TODO: make this work with commas
-    f_print_top("\f4", pkmn.possible_moves_method[movenum], ": ", c_type_names[move.type+1])
-    f_print_bot("\f2", pp, "PP ", pow, "P ", acc, "A")
+|[f_dt_editmove_template]| function(pkmn, pkmnmoveind)
+  local movenum = pkmn.possible_moves[pkmnmoveind+1]
+  local move = c_moves[movenum]
+  local pp = f_prefix_space(move.pp, 2)
+  local pow = f_prefix_space(move.pow, 3)
+  local acc = f_prefix_space(move.acc, 3)
+  local typ = c_type_names[move.type+1]
+
+  if move.pow == 0 then pow = "___" end
+  if move.pow == 1 then pow = "var" end
+  if move.acc == 0 then acc = "___" end
+
+  -- TODO: I'd rather store an empty move to save a few tokens. Empty and struggle.
+  if movenum == M_NONE then
+    typ, pp, pow, acc = "nONE", "__", "___", "___"
   end
+
+  f_print_top(pkmn.possible_moves_method[movenum], ": ", typ)
+  f_print_bot(pp, "PP ", pow, "P ", acc, "A")
+end $$
+
+|[f_dt_editmove]| function()
+  local pkmn = f_get_party_pkmn(@S_TEAM, @S_TEAME)
+  f_dt_editmove_template(pkmn, @S_EDITMOVE)
 end $$
 
 |[f_dt_edititem]| function(i, is_sel)
@@ -264,58 +272,70 @@ end $$
   f_draw_pkmn(gridobj.data, 1, 1, 16, false, is_sel)
 end $$
 
-|[f_prefix_zero]| function(num, len)
+|[f_prefix_space]| function(num, len)
   local numstr = tostr(num)
   while #numstr < len do numstr = " "..numstr end
   return numstr
 end $$
 
-|[f_dt_browse]| function(i, is_sel)
-  local pkmn = c_pokemon[@S_BROWSE]
+-- TODO: DEDUP ABOVE
+|[f_prefix_zero]| function(num, len)
+  local numstr = tostr(num)
+  while #numstr < len do numstr = "0"..numstr end
+  return numstr
+end $$
+
+|[f_dt_browse_template]| function(pkmn_ind)
+  local pkmn = c_pokemon[pkmn_ind]
   local namestr, type1, type2 = pkmn.name, c_type_names[pkmn.type1+1], ""
 
   if pkmn.type2 > T_NONE then
     type2 = c_type_names[pkmn.type2+1]
   end
 
-  if not c_pokemon[@S_BROWSE].lock then
+  if not pkmn.lock then
     namestr, type1, type2 = f_strtoq(namestr), f_strtoq(type1), f_strtoq(type2)
   end
 
-  f_print_top("\f4#", @S_BROWSE, " \f4", namestr)
-  f_print_bot("\f2", type1, " ", type2)
+  f_print_top("#", f_prefix_zero(pkmn.num, 3), " \f4", namestr)
+  f_print_bot(type1, " ", type2)
 end $$
 
-|[f_dt_edit]| function(i, is_sel)
+|[f_dt_browse]| function()
+  f_dt_browse_template(@S_BROWSE)
+end $$
+
+|[f_dt_edit]| function()
   local pkstr_arr = {}
-  local pkstr_lens = split'3,3,1,1,1,2'
+  local pkstr_lens = split'2,2,2,2,1,1'
   for ii=0,5 do
     local pkmn = f_get_party_pkmn(@S_TEAM, ii)
     add(pkstr_arr, sub(c_pkmn_names[pkmn.num], 1, pkstr_lens[ii+1]))
   end
 
-  local pkstr = pkstr_arr[1].."-"..pkstr_arr[2].."-"..pkstr_arr[3]..pkstr_arr[4]..pkstr_arr[5].."-"..pkstr_arr[6]
-  print("\^y7\f4#"..(@g_cg_m.mem+1).." \f4tEAM\n\f2"..pkstr, 1, 1, C_2)
+  f_print_top("eDIT: tEAM ", (@g_cg_m.mem+1))
+  f_print_bot(pkstr_arr[1], "-", pkstr_arr[2], "-", pkstr_arr[3], "-", pkstr_arr[4], "-", pkstr_arr[5], pkstr_arr[6])
+
+  -- local pkstr = pkstr_arr[1].."-"..pkstr_arr[2].."-"..pkstr_arr[3]..pkstr_arr[4]..pkstr_arr[5].."-"..pkstr_arr[6]
+  -- print("\^y7\f4#"..(@g_cg_m.mem+1).." \f4tEAM\n\f2"..pkstr, 1, 1, C_2)
 end $$
 
 |[f_dt_league]| function()
   -- TODO: save tokens / compression by extracting out this if.
-  if g_cg_m.name == 'g_grid_pickleag' then
-    print("\^y7\f2pLR: \f4tEAM "..(@S_TEAM+1).."\f2\ncPU: \f2"..c_trnr_names[@S_TEAML+1], 1, 1)
-  else
-    print("\^y7\f2pLR: \f2tEAM "..(@S_TEAM+1).."\f2\ncPU: \f4"..c_trnr_names[@S_TEAML+1], 1, 1)
-  end
+  local toggle = g_cg_m.name == 'g_grid_pickleag'
+
+  f_print_top((toggle and "\f4" or "\f2"), "pLR: tEAM ", (@S_TEAM+1))
+  f_print_bot((toggle and "\f2" or "\f4"), "cPU: ", c_trnr_names[@S_TEAML+1])
 end $$
 
 |[f_dt_versus]| function()
-  if g_cg_m.name == 'g_grid_pickplr1' then
-    print("\^y7\f2pLR1: \f4tEAM "..(@S_TEAM+1).."\f2\npLR2: \f2tEAM "..(@S_TEAM2+1), 1, 1)
-  else
-    print("\^y7\f2pLR1: \f2tEAM "..(@S_TEAM+1).."\f2\npLR2: \f4tEAM "..(@S_TEAM2+1), 1, 1)
-  end
+  local toggle = g_cg_m.name == 'g_grid_pickplr1'
+
+  f_print_top((toggle and "\f4" or "\f2"), "pLR1: tEAM ", (@S_TEAM+1))
+  f_print_bot((toggle and "\f2" or "\f4"), "pLR2: tEAM ", (@S_TEAM2+1))
 end $$
 
-|[f_dp_title]| function(i, is_sel)
+|[f_dp_title]| function()
   print("\^w\^tpicodex", 2, 1,  C_4)
   print("dUAL vERSION",  2, 12, C_2)
 
@@ -337,12 +357,12 @@ end $$
   end
 end $$
 
-|[f_dp_pkpreview]| function(i, is_sel)
+|[f_dp_pkpreview]| function()
   local pkmn_ind = @S_BROWSE
   f_draw_pkmn(pkmn_ind, 13+(g_preview_timer > 0 and (rnd(3)\1-1) or 0), 1+2, 32)
 end $$
 
-|[f_dp_pkstat]| function(i, is_sel, obj)
+|[f_dp_pkstat]| function()
 end $$
 
 ----------------------------------------------------
@@ -400,26 +420,37 @@ end $$
 |[f_s_editteam]| function()
   --local party_loc = S_PARTY1+(@S_TEAM)*42
   --local pkmn_loc = party_loc+@S_TEAME*7
-  local pkmn = f_get_party_pkmn(@S_TEAM, @S_TEAME)
-  if pkmn.num < 252 then
-    add(g_gridstack, g_grid_editstat)
-  else
-    add(g_gridstack, g_grid_editpkmn)
-  end
+  add(g_gridstack, f_get_party_pkmn(@S_TEAM, @S_TEAME).valid and g_grid_editstat or g_grid_editpkmn)
+end $$
+
+|[f_s_editpkmn]| function()
+  f_save_party_pkmn(f_get_default_pkmn(@S_BROWSE), @S_TEAM, @S_TEAME)
+  deli(g_gridstack)
 end $$
 
 |[f_s_editstat]| function()
   gridpo[@S_EDITSTAT+1].select()
 end $$
 
+|[f_s_editlevl]| function()
+  local pkmn = f_get_party_pkmn(@S_TEAM, @S_TEAME)
+  pkmn.level = @S_EDITLEVL+1
+  f_save_party_pkmn(pkmn, @S_TEAM, @S_TEAME)
+  deli(g_gridstack)
+end $$
+
 |[f_s_editmove]| function()
-  -- poke(@S_TEAM+@S_TEAME*42+1+@S_EDITSTAT
-  -- f_l_browse()
+  local pkmn = f_get_party_pkmn(@S_TEAM, @S_TEAME)
+  pkmn.edit_moves[@S_EDITSTAT+1] = @S_EDITMOVE
+  f_save_party_pkmn(pkmn, @S_TEAM, @S_TEAME)
+  deli(g_gridstack)
 end $$
 
 |[f_s_edititem]| function()
-  -- poke(@S_TEAM+@S_TEAME*42+1+@S_EDITSTAT
-  -- f_l_browse()
+  local pkmn = f_get_party_pkmn(@S_TEAM, @S_TEAME)
+  pkmn.item = @S_EDITITEM
+  f_save_party_pkmn(pkmn, @S_TEAM, @S_TEAME)
+  deli(g_gridstack)
 end $$
 
 |[f_l_title]| function()
@@ -480,7 +511,7 @@ f_zcall(f_create_gridpair, [[
   ;t_edit4;     ,1 ,1 ,2 ,45 ,60 ,16 ,~f_dt_editmove    ,~f_nf
   ;p_edit4;     ,2 ,4 ,2 ,4  ,30 ,9  ,~f_nf             ,~f_nf
 
-  ;t_edititem;  ,1 ,1 ,2 ,45 ,60 ,16 ,~f_dt_edititem    ,~f_nf
+  ;t_edititem;  ,1 ,1 ,2 ,45 ,60 ,16 ,~f_dt_editstat    ,~f_nf
   ;p_edititem;  ,2 ,4 ,2 ,4  ,30 ,9  ,~f_nf             ,~f_nf
 
   ;t_versus;    ,1 ,1 ,2 ,45 ,60 ,16 ,~f_dt_versus      ,~f_nf
@@ -498,8 +529,8 @@ f_zcall(f_create_gridpair, [[
   ;;,g_grid_editstat  ,S_EDITSTAT  ,~p_editstat  ,~t_editstat  ,~f_op_editstat,  ~f_s_editstat   ,~f_l_browse,   ,~c_no
   ;;,g_grid_editmove  ,S_EDITMOVE  ,~p_edit4     ,~t_edit4     ,~f_op_editmove,  ~f_s_editmove   ,~f_l_browse,   ,~c_no
   ;;,g_grid_edititem  ,S_EDITITEM  ,~p_edititem  ,~t_edititem  ,~f_op_edititem,  ~f_s_edititem   ,~f_l_browse,   ,~c_no
-  ;;,g_grid_editlevl  ,S_EDITLEVL  ,~p_edititem  ,~t_edititem  ,~f_op_editlevl,  ~f_s_edititem   ,~f_l_browse,   ,~c_no
-  ;;,g_grid_editpkmn  ,S_BROWSE    ,~p_browse    ,~t_browse    ,~f_op_browse,    ~f_nf           ,~f_l_browse,   ,~c_no
+  ;;,g_grid_editlevl  ,S_EDITLEVL  ,~p_edititem  ,~t_edititem  ,~f_op_editlevl,  ~f_s_editlevl   ,~f_l_browse,   ,~c_no
+  ;;,g_grid_editpkmn  ,S_BROWSE    ,~p_browse    ,~t_browse    ,~f_op_browse,    ~f_s_editpkmn   ,~f_l_browse,   ,~c_no
 
   ;;,g_grid_pickedit  ,S_TEAM      ,~p_edit      ,~t_edit      ,~f_op_edit,      ~f_s_edit       ,~f_l_browse,   ,~c_no
   ;;,g_grid_pickleag  ,S_TEAM      ,~p_edit      ,~t_league    ,~f_op_edit,      ~f_s_league     ,~f_l_browse,   ,~c_no, ~c_yes
