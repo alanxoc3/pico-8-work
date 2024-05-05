@@ -44,7 +44,7 @@ end $$
       f_minisfx(SFX_MOVE)
     end
 
-    lrfunc((btnp'1' and 1 or 0) - (btnp'0' and 1 or 0))
+    if lrfunc then lrfunc((btnp'1' and 1 or 0) - (btnp'0' and 1 or 0)) end
   else
     num = evalfunc(num, 0,     #gridobj-1,       btnp'0', btnp'1', 1)
     num = evalfunc(num, num%w, (#gridobj-1)\w*w, btnp'2', btnp'3', w)
@@ -57,7 +57,7 @@ end $$
   if btnp'4' then
     f_minisfx(leavefunc() or SFX_LEAVE)
   elseif btnp'5' then
-    if (num < 0 or not gridobj[num+1].disabled) then
+    if (num < 0 or lrfunc or not gridobj[num+1].disabled) then
       f_minisfx(selfunc() or SFX_SELECT)
     else
       f_minisfx(SFX_ERROR)
@@ -84,7 +84,7 @@ end $$
     if i == (#gridobj-1)\w*w then l = 1 d = 1 end
 
     local c = C_3
-    if i ~= num and obj.disabled then
+    if (lrfunc or i ~= num) and obj.disabled then
       c = C_2
     end
 
@@ -104,7 +104,7 @@ end $$
     camera(-xloc-1, -yloc-1)
 
     local c = C_2
-    if i == num then
+    if i == num and not lrfunc then
       c = C_3
     end
     if obj.disabled then

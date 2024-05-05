@@ -14,10 +14,10 @@ end $$
   local num_loc = S_PARTY1+party_num*48+spot_num*8
   local pkmn_num = min(P_NONE, @num_loc)
   if pkmn_num < P_NONE and not c_pokemon[pkmn_num].lock then pkmn_num = P_NONE end
-  local pkmn = f_zobj([[num,@, level,50, edit_moves,#, view_moves,#, seen_moves,#]], pkmn_num)
+  local pkmn = f_zobj[[level,50, edit_moves,#, view_moves,#, seen_moves,#]]
+  pkmn = setmetatable(pkmn, {__index=c_pokemon[pkmn_num]}) -- none is set too.
 
   if pkmn_num < P_NONE then
-    pkmn = setmetatable(pkmn, {__index=c_pokemon[pkmn_num]})
     pkmn.valid = true
     -- if for some reason a locked pokemon is saved, try to find the next valid pkmn.
     -- while not c_pokemon[pkmn_num].lock do

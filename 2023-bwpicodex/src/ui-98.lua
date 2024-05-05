@@ -72,14 +72,14 @@ end $$
     add(g_gridstack, g_grid_edititem)
   end})
 
-  add(op, {text=c_levels[pkmn.level].name, select=function()
-    poke(S_EDITLEVL, pkmn.level-1)
-    add(g_gridstack, g_grid_editlevl)
-  end})
-
   add(op, {text=c_gender_names[pkmn.gender], disabled=#pkmn.genders < 2, select=function()
     pkmn.gender_bit += 1
     pkmn:f_save_party_pkmn(@S_TEAM, @S_TEAME)
+  end})
+
+  add(op, {text=c_levels[pkmn.level].name, select=function()
+    poke(S_EDITLEVL, pkmn.level-1)
+    add(g_gridstack, g_grid_editlevl)
   end})
 
   add(op, {text="dELETE", select=function()
@@ -97,6 +97,7 @@ end $$
 |[f_get_edit_op_pkmn]| function() return {}, f_get_party_pkmn(@S_TEAM, @S_TEAME) end $$
 |[f_op_editmove]| function()
   local op, pkmn = f_get_edit_op_pkmn()
+
   for i, num in ipairs(pkmn.possible_moves) do
     f_create_spot(c_moves[num], op, pkmn.seen_moves[i-1])
   end
@@ -119,65 +120,94 @@ end $$
   local pkmn = c_pokemon[@g_grid_browse[1].mem]
 
   local genders = ""
-  -- if pkmn.gender_item & GP_MALE > 0 then genders ..= "m" end
-  -- if pkmn.gender_item & GP_FEMA > 0 then
-  --   if #genders > 0 then genders ..= "/" end
-  --   genders ..= "f" end
-  -- if #genders == 0 then genders ..= "n" end
+  if #pkmn.genders == 1 then
+    genders = c_gender_names[pkmn.genders[1]].."/"
+  else
+    for g in all(pkmn.genders) do
+      genders ..= sub(c_gender_names[g], 1, 2).."/"
+    end
+  end
+  genders = sub(genders, 1, #genders-1)
 
-  --add(op, {text="bASE sTATS", header=true})
-  --add(op, {text=""})
+  -- add(op, {text="lV.050 sTATS", disabled=true}) add(op, {text="", disabled=true})
+  -- same shows for 
+  add(op, {text="pOKEMON iNFO", disabled=true}) add(op, {text="", disabled=true})
+  -- add(op, {text="      m:fROZEN"}) add(op, {text=""})
+  add(op, {text="     p:"..c_pkmn_names[pkmn.prevolve]})     add(op, {text=""})
+  add(op, {text="     i:"..c_item_names[pkmn.default_item]}) add(op, {text=""})
+  add(op, {text="     g:"..genders})  add(op, {text=""})
 
-  -- add(op, {text="hP:"..pkmn.hp})
-  -- add(op, {text="sP:"..pkmn.spd})
-  -- add(op, {text="aT:"..pkmn.att})
-  -- add(op, {text="dF:"..pkmn.def})
-  -- add(op, {text="sA:"..pkmn.sat})
-  -- add(op, {text="sD:"..pkmn.sdf})
-  -- add(op, {text="gD:"..genders})
-  -- add(op, {text="lV:50"})
+  add(op, {text="pOKEMON sTATS", disabled=true}) add(op, {text="", disabled=true})
+  add(op, {text="lEVEL: lV.099"}) add(op, {text=""})
+  add(op, {text="hP:    019/123"}) add(op, {text=""})
+  add(op, {text="aTACK: 132 +0"}) add(op, {text=""})
+  add(op, {text="dEFNS: 132 +0"}) add(op, {text=""})
+  add(op, {text="sP aT: 132 +1"}) add(op, {text=""})
+  add(op, {text="sP dF: 132 +0"}) add(op, {text=""})
+  add(op, {text="sPEED: 132 +0"}) add(op, {text=""})
+  add(op, {text="eVASN: 100 +0"}) add(op, {text=""})
+  add(op, {text="aCURY: 100 +0"}) add(op, {text=""})
+
+  add(op, {text="mOVE1: sLFdES", disabled=true}) add(op, {text="", disabled=true})
+  add(op, {text="tYPE:  wATER"}) add(op, {text=""})
+  add(op, {text="pP:    05/05"}) add(op, {text=""})
+  add(op, {text="pW/aC: 040/100"}) add(op, {text=""})
+
+  add(op, {text="mOVE2: sLFdES", disabled=true}) add(op, {text="", disabled=true})
+  add(op, {text="tYPE:  wATER"}) add(op, {text=""})
+  add(op, {text="pP:    05/05"}) add(op, {text=""})
+  add(op, {text="pW/aC: 040/100"}) add(op, {text=""})
+
+  add(op, {text="mOVE3: sLFdES", disabled=true}) add(op, {text="", disabled=true})
+  add(op, {text="tYPE:  wATER"}) add(op, {text=""})
+  add(op, {text="pP:    05/05"}) add(op, {text=""})
+  add(op, {text="pW/aC: 040/100"}) add(op, {text=""})
+
+  add(op, {text="mOVE4: sLFdES", disabled=true}) add(op, {text="", disabled=true})
+  add(op, {text="tYPE:  wATER"}) add(op, {text=""})
+  add(op, {text="pP:    05/05"}) add(op, {text=""})
+  add(op, {text="pW/aC: 040/100"}) add(op, {text=""})
+
+  add(op, {text="fLAGS: bATTLE", disabled=true}) add(op, {text="", disabled=true})
+  add(op, {text="sNDsTR: fALSE"})  add(op, {text=""}) -- turn timer for sandstorm
+  add(op, {text="rAIdNC: fALSE"})  add(op, {text=""}) -- turn timer for raining
+  add(op, {text="sUNdAY: fALSE"})  add(op, {text=""}) -- turn timer for harsh sunlight
+
+  add(op, {text="fLAGS: tEAM", disabled=true}) add(op, {text="", disabled=true})
+  add(op, {text="fTRsGT: fALSE"})  add(op, {text=""}) -- turn timer for future sight
+  add(op, {text="sAFgRD: fALSE"})  add(op, {text=""}) -- turn timer for safeguard
+  add(op, {text="lITsCR: fALSE"})  add(op, {text=""}) -- turn timer for light screen
+  add(op, {text="rFLECT: fALSE"})  add(op, {text=""}) -- turn timer for reflect
+  add(op, {text="sPIKES: fALSE"})  add(op, {text=""}) -- boolean whether or not spikes exist
+
+  add(op, {text="fLAGS: pOKEMON", disabled=true}) add(op, {text="", disabled=true})
+  add(op, {text="mVlOCK: fALSE"})  add(op, {text=""}) -- set to move index (1-4) for moves that lock itself for multiple turns (outrage, petal dance, thrash, sky attack, razor wind, skull bash, solarbeam, bide, hyper beam) (need to ensure that pp isnt zero when on a move lock)
+  add(op, {text="bIDE:   fALSE"})  add(op, {text=""}) -- damage counter for bide
+  add(op, {text="dFNcRL: fALSE"})  add(op, {text=""}) -- flag if dFNcRL was used (makes rollout stronger)
+  add(op, {text="dISABL: fALSE"})  add(op, {text=""}) -- turn timer for disable, encore
+  add(op, {text="cONFUS: fALSE"})  add(op, {text=""}) -- turn timer for confusion minor status
+  add(op, {text="rOLOUT: fALSE"})  add(op, {text=""}) -- turn timer for rollout
+  add(op, {text="dSTbND: fALSE"})  add(op, {text=""}) -- turn timer for destiny bond (only 1 turn)
+  add(op, {text="lOCKoN: fALSE"})  add(op, {text=""}) -- turn timer for lockon/mindreader. set on target. turn timer is 1.
+  add(op, {text="dIG:    fALSE"})  add(op, {text=""}) -- turn timer for dig set to 1
+  add(op, {text="fLY:    fALSE"})  add(op, {text=""}) -- turn timer for fly set to 1
+  add(op, {text="fRYcTR: fALSE"})  add(op, {text=""}) -- turn counter for fury cutter
+  add(op, {text="rAGE:   fALSE"})  add(op, {text=""}) -- turn counter for rage
+  add(op, {text="tOXIC:  fALSE"})  add(op, {text=""}) -- turn counter for turns poisoned
+  add(op, {text="pERsNG: fALSE"})  add(op, {text=""}) -- turn counter for perish song. set on both target and user -- counter needs to happen at the end of both turns. -- pkmn can survive with endure/focus band
+  add(op, {text="pDEcNT: fALSE"})  add(op, {text=""}) -- turn counter for protect/detect/endure (determines success rate)
+  add(op, {text="sUBSTU: fALSE"})  add(op, {text=""}) -- hp substitute hp
+  add(op, {text="nGTMAR: fALSE"})  add(op, {text=""}) -- boolean whether or not sleeping
+  add(op, {text="tRFORM: fALSE"})  add(op, {text=""}) -- boolean whether or not transformed. can't transform twice to prevent inifinite battles.
+  add(op, {text="lECHsD: fALSE"})  add(op, {text=""}) -- boolean whether or not seeded
+  add(op, {text="cURSE:  fALSE"})  add(op, {text=""}) -- boolean whether or not cursed
+  add(op, {text="mIST:   fALSE"})  add(op, {text=""}) -- boolean whether on not protected by negative stat mods
+  add(op, {text="tRAPPD: fALSE"})  add(op, {text=""}) -- set to the other pkmn? but also a turn counter... so i'm unsure. this is bind/whirlpool/firespin/clamp/wrap
+  add(op, {text="mEANlK: fALSE"})  add(op, {text=""}) -- set to the other pkmn? mean look or spider web prevents switching (baton pass works)
+  add(op, {text="aTRACT: fALSE"})  add(op, {text=""}) -- set to the other pkmn? that way it doesn't work when they are switched out (and resets).
+  add(op, {text="fORsGT: fALSE"})  add(op, {text=""}) -- set to the other pkmn? boolean whether or not foresighted (set on target)
+
   return op
-
-  --if #pkmn.learn > 0 then
-  --  add(op, {text="lEARN mOVES", disabled=true, header=true})
-  --  add(op, {text="", disabled=true, header=true})
-
-  --  for m in all(pkmn.learn) do
-  --    add(op, {text=c_move_names[m+1]})
-  --  end
-
-  --  if #op % 2 == 1 then add(op, {text="", disabled=true}) end
-  --end
-
-  --if #pkmn.teach > 0 then
-  --  add(op, {text="tEACH mOVES", header=true, disabled=true})
-  --  add(op, {text="", disabled=true})
-
-  --  for m in all(pkmn.teach) do
-  --    local movename = c_move_names[m+1]
-  --    if not g_lock_move[m] then
-  --      movename = f_strtoq(movename)
-  --    end
-  --    add(op, {text=movename})
-  --  end
-
-  --  if #op % 2 == 1 then add(op, {text="", disabled=true}) end
-  --end
-
-  --if #pkmn.event > 0 then
-  --  add(op, {text="eVENT mOVES", header=true, disabled=true})
-  --  add(op, {text="", disabled=true})
-
-  --  for m in all(pkmn.event) do
-  --    local movename = c_move_names[m+1]
-  --    if not g_lock_move[m] then
-  --      movename = f_strtoq(movename)
-  --    end
-  --    add(op, {text=movename})
-  --  end
-
-  --  if #op % 2 == 1 then add(op, {text="", disabled=true}) end
-  --end
 end $$
 
 ---------------------------------------------
@@ -195,30 +225,23 @@ end $$
 end $$
 
 |[f_dt_editteam]| function(i, is_sel)
-  -- local pkstr_arr = {}
-  -- local pkstr_lens = split'3,3,3,2'
-
-  -- local pkmn = f_get_party_pkmn(@S_TEAM, @S_TEAME)
-
-  -- for i=1,4 do -- in ipairs(pkmn.view_moves) do
-    -- pkstr_arr[i] = sub(c_move_names[pkmn.view_moves[i] or 0], 1, pkstr_lens[i])
-  --end
-
-  -- local pkstr = pkstr_arr[1].."-"..pkstr_arr[2].."-"..pkstr_arr[3].."-"..pkstr_arr[4]
-  -- print("\^y7\f4#"..(@S_TEAME+1).." \f4"..(c_pkmn_names[pkmn.num]).."\n\f2"..pkstr, 1, 1, C_2)
-  printh("NUM "..f_get_party_pkmn(@S_TEAM, @S_TEAME).num)
-
+  f_print_top("eDIT: sPOT ", @S_TEAME+1)
   local pkmn = f_get_party_pkmn(@S_TEAM, @S_TEAME)
-  f_dt_browse_template(pkmn.num)
+  f_print_bot("#", pkmn.num_str, " ", pkmn.name)
 end $$
 
 |[f_dt_editstat]| function(i, is_sel)
   local pkmn = f_get_party_pkmn(@S_TEAM, @S_TEAME)
-  if @S_EDITSTAT < 4 then
-    f_dt_editmove_template(pkmn, pkmn.edit_moves[@S_EDITSTAT+1])
-  else
-    f_dt_browse_template(pkmn.num)
+  if @S_EDITSTAT < 4 then f_print_top("eDIT: mOVE ", @S_EDITSTAT+1)
+  elseif @S_EDITSTAT == 4 then f_print_top"eDIT: iTEM"
+  elseif @S_EDITSTAT == 5 then f_print_top"eDIT: gENDER"
+  elseif @S_EDITSTAT == 6 then f_print_top"eDIT: lEVEL"
+  elseif @S_EDITSTAT == 7 then f_print_top"eDIT: dELETE"
   end
+
+  -- f_print_top("eDIT: sPOT ", @S_TEAME+1)
+  local pkmn = f_get_party_pkmn(@S_TEAM, @S_TEAME)
+  f_print_bot("#", pkmn.num_str, " ", pkmn.name)
 end $$
 
 |[f_print_top]| function(...)
@@ -241,9 +264,9 @@ end $$
 |[f_dt_editmove_template]| function(pkmn, pkmnmoveind)
   local movenum = pkmn.possible_moves[pkmnmoveind+1]
   local move = c_moves[movenum]
-  local pp = f_prefix_space(move.pp, 2)
-  local pow = f_prefix_space(move.pow, 3)
-  local acc = f_prefix_space(move.acc, 3)
+  local pp = f_prefix_zero(move.pp, 2)
+  local pow = f_prefix_zero(move.pow, 3)
+  local acc = f_prefix_zero(move.acc, 3)
   local typ = c_type_names[move.type+1]
 
   if move.pow == 0 then pow = "___" end
@@ -357,12 +380,29 @@ end $$
   end
 end $$
 
-|[f_dp_pkpreview]| function()
+|[f_dp_pkpreview]| function() -- TODO: DELETE ME
   local pkmn_ind = @S_BROWSE
-  f_draw_pkmn(pkmn_ind, 13+(g_preview_timer > 0 and (rnd(3)\1-1) or 0), 1+2, 32)
+  f_draw_pkmn(pkmn_ind, 13+(g_preview_timer > 0 and (rnd(3)\1-1) or 0), 1+2, 16)
 end $$
 
-|[f_dp_pkstat]| function()
+|[f_dp_pkstat]| function(i)
+  if i == 7 then
+    local y = 6
+    -- rectfill(-30-1,    -9-9-2-1-1+y-1,    27+1,    -3+4-1-1+y,     C_3)
+    -- rectfill(-30-1+1,  -9-9-2-1-1-1+y-1,  27+1-1,  -3+4-1-1+1+y,   C_3)
+    -- rectfill(-30-1,  -9-9-2-1-1-1+y-1-1,  27+1,  -3+4-1-1+1+y+1,   C_3)
+    local pkmn_ind = @S_BROWSE
+    local pkmn = c_pokemon[@S_BROWSE]
+    f_draw_pkmn(pkmn_ind, -8-20+(g_preview_timer > 0 and (rnd(3)\1-1) or 0), -8+1-10-1-1+y+3-3, 16)
+    -- rectfill(-9-20, -22+6+y+8+7, 10+16-20-15-3, -22+6+y+8+7, C_2)
+    -- rectfill(-9, -18, -9, 6, C_2)
+    -- print(pkmn.name,  4-9,  -22+y-1, C_2)
+    -- print("-"..c_type_names[pkmn.type1+1], 4 -9, -22+8+y, C_2)
+    -- print("-"..c_type_names[pkmn.type2+1], 4 -9, -22+8+8+1+y, C_2)
+
+    -- print("h: 3.2M",  4-9,  -22+y-1, C_2)
+    -- print("w: 123KG", 4 -9, -22+8+y, C_2)
+  end
 end $$
 
 ----------------------------------------------------
@@ -402,7 +442,9 @@ end $$
 end $$
 
 |[f_s_pkstat]| function()
-  add(g_gridstack, g_grid_pkpreview)
+  g_preview_timer = 20
+  return @S_BROWSE
+  -- add(g_gridstack, g_grid_pkpreview)
 end $$
 
 |[f_s_versus]| function()
@@ -521,10 +563,11 @@ f_zcall(f_create_gridpair, [[
   ;t_teamed;    ,1 ,1 ,2 ,45 ,60 ,16 ,~f_dt_edit        ,~f_nf
 
   -- name              active mem  main grid     info grid     mk op mkfunc      select func     leave func
-  ;;,g_grid_browse    ,S_BROWSE    ,~p_browse    ,~t_browse    ,~f_op_browse,    ~f_s_pkstat     ,~f_l_browse,   ,~c_no
+  ;;,g_grid_browse    ,S_BROWSE    ,~p_browse    ,~t_browse    ,~f_op_browse,    ~f_s_browse     ,~f_l_browse,   ,~c_no
   ;;,g_grid_title     ,S_TITLE     ,~t_title     ,~p_title     ,~f_op_title,     ~f_s_title      ,~f_l_title,    ,~c_no
   ;;,g_grid_pkpreview ,S_PKPREVIEW ,~p_pkpreview ,~t_browse    ,~f_op_def,       ~f_s_pkpreview  ,~f_l_pkpreview ,~f_browselr
-  ;;,g_grid_pkstat    ,S_PKSTAT    ,~p_pkstat    ,~t_browse    ,~f_op_pkstat,    ~f_s_pkstat     ,~f_l_pkstat,   ,~c_no
+
+  ;;,g_grid_pkstat    ,S_PKSTAT    ,~p_pkstat    ,~t_browse    ,~f_op_pkstat,    ~f_s_pkstat     ,~f_l_pkstat,   ,~f_browselr
 
   ;;,g_grid_editstat  ,S_EDITSTAT  ,~p_editstat  ,~t_editstat  ,~f_op_editstat,  ~f_s_editstat   ,~f_l_browse,   ,~c_no
   ;;,g_grid_editmove  ,S_EDITMOVE  ,~p_edit4     ,~t_edit4     ,~f_op_editmove,  ~f_s_editmove   ,~f_l_browse,   ,~c_no
@@ -533,10 +576,10 @@ f_zcall(f_create_gridpair, [[
   ;;,g_grid_editpkmn  ,S_BROWSE    ,~p_browse    ,~t_browse    ,~f_op_browse,    ~f_s_editpkmn   ,~f_l_browse,   ,~c_no
 
   ;;,g_grid_pickedit  ,S_TEAM      ,~p_edit      ,~t_edit      ,~f_op_edit,      ~f_s_edit       ,~f_l_browse,   ,~c_no
-  ;;,g_grid_pickleag  ,S_TEAM      ,~p_edit      ,~t_league    ,~f_op_edit,      ~f_s_league     ,~f_l_browse,   ,~c_no, ~c_yes
-  ;;,g_grid_pickplr1  ,S_TEAM      ,~p_edit      ,~t_versus    ,~f_op_edit,      ~f_s_versus     ,~f_l_browse,   ,~c_no, ~c_yes
+  ;;,g_grid_pickleag  ,S_TEAM      ,~p_edit      ,~t_league    ,~f_op_edit,      ~f_s_league     ,~f_l_browse,   ,~c_no,      ~c_yes
+  ;;,g_grid_pickplr1  ,S_TEAM      ,~p_edit      ,~t_versus    ,~f_op_edit,      ~f_s_versus     ,~f_l_browse,   ,~c_no,      ~c_yes
 
   ;;,g_grid_pickspot  ,S_TEAME     ,~p_editteam  ,~t_editteam  ,~f_op_editteam,  ~f_s_editteam   ,~f_l_browse,   ,~c_no
   ;;,g_grid_picktrnr  ,S_TEAML     ,~p_teamed    ,~t_league    ,~f_op_teams,     ~f_nf           ,~f_l_browse,   ,~c_no
-  ;;,g_grid_pickplr2  ,S_TEAM2     ,~p_edit      ,~t_versus    ,~f_op_edit,      ~f_nf           ,~f_l_browse,   ,~c_no, ~c_yes
+  ;;,g_grid_pickplr2  ,S_TEAM2     ,~p_edit      ,~t_versus    ,~f_op_edit,      ~f_nf           ,~f_l_browse,   ,~c_no,      ~c_yes
 ]])

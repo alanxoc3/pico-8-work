@@ -36,11 +36,11 @@ Move priority.
 -1	Teleport, Counter, Mirror Coat, Roar, Vital Throw, Whirlwind
 
 Modifications inspired by other games:
-DIFF: Gen 1 games. Haze works similarly to how it worked in Gen 1. All effects and stat modifiers that can be Baton Passed can also be reset with haze.
+DIFF: Gen 1 games. Haze works similarly to how it worked in Gen 1. All effects and stat modifiers that can be Baton Passed can also be reset with haze. Ultimate counter to baton pass.
 DIFF: Gen 1 games. Substitute works similarly to Gen 1. Only protects from damage done by opponent. Not against any effects.
 DIFF: Gen 2 games. Metal powder increases defense and special defense by 50% for ditto even when transformed.
 DIFF: Gen 2 games. Recoil, Self-KO, Freeze, and Sleep clauses are all removed.
-DIFF: Gen 1 games. Swift will never miss, bypassing all accuracy checks including when opponent uses dig/fly.
+DIFF: Gen 1 games. Swift/Faint Attack/Vital Throw will never miss, bypassing all accuracy checks including when opponent uses dig/fly.
 DIFF: Protect and Detect protect against Mean Look and Substitute. (Didn't in the original games.)
 DIFF: Flail and Reversal can now cause a critical hit and are varied by the random damage factor.
 DIFF: Protect and Detect work behind a substitute.
@@ -97,9 +97,12 @@ DIFF: Encore works against sketch/transform/mirrormove/mimic. It just looks at t
 DIFF: Disable fails if the Pokemon is currently encored or disabled.
 DIFF: A transformed pokemon can make use of pokemon specific items (thickclub, lightball, lucky punch, stick)
 DIFF: Missingno is a pokemon. It copies best stats and all moves from RB missingno, Y missingno, M (Missingno's Sister), O (M's pre-evolution), and "Pゥ_4$" (M's other preevolution). Glitch moves are converted to the gen 2 hex equivalents, except TM05 (from "Pゥ_4$") which is a move in Picodex. Only moves that can be learned up to lvl 100 are included.
+DIFF: Megadrain, gigadrain, absorb, leech life all hit and take hp from a substitute.
 
 STRAT: Sketch and Mimic allow for the same move to be available in multiple move slots.
 STRAT: Missingno is broken.
 STRAT: Hidden Power counters Conversion 2.
 
 IDEA: Unlock moves as you defeat trainers.
+IDEA: disable stores as a turn countdown on the pokemon flags. also disable is on different moves.
+IDEA: a prep move will set a disable countdown and disable all moves besides the prep move.
