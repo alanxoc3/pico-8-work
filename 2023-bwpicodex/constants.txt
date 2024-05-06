@@ -71,6 +71,45 @@ C_LEN_LEVELS: 100
 C_LEN_MOVES: 252
 C_LEN_PKMN: 253
 
+# ----------------------------- pokemon flags
+# F_MVLOCK # mVlOCK  # set to move index (1-4) for moves that lock itself for multiple turns (outrage, petal dance, thrash, sky attack, razor wind, skull bash, solarbeam, bide, hyper beam) (need to ensure that pp isnt zero when on a move lock)
+# F_BIDE   # bIDE    # damage counter for bide
+# F_DFNCRL # dFNcRL  # flag if dFNcRL was used (makes rollout stronger)
+# F_DISABL # dISABL  # turn timer for disable, encore
+# F_CONFUS # cONFUS  # turn timer for confusion minor status
+# F_ROLOUT # rOLOUT  # turn timer for rollout
+# F_DSTBND # dSTbND  # turn timer for destiny bond (only 1 turn)
+# F_LOCKON # lOCKoN  # turn timer for lockon/mindreader. set on target. turn timer is 1.
+# F_DIG    # dIG     # turn timer for dig set to 1
+# F_FLY    # fLY     # turn timer for fly set to 1
+# F_FRYCTR # fRYcTR  # turn counter for fury cutter
+# F_RAGE   # rAGE    # turn counter for rage
+# F_TOXIC  # tOXIC   # turn counter for turns poisoned
+# F_PERSNG # pERsNG  # turn counter for perish song. set on both target and user # counter needs to happen at the end of both turns. # pkmn can survive with endure/focus band
+# F_PDECNT # pDEcNT  # turn counter for protect/detect/endure (determines success rate)
+# F_SUBSTU # sUBSTU  # hp substitute hp
+# F_NGTMAR # nGTMAR  # boolean whether or not sleeping
+# F_TRFORM # tRFORM  # boolean whether or not transformed. can't transform twice to prevent inifinite battles.
+# F_LECHSD # lECHsD  # boolean whether or not seeded
+# F_CURSE  # cURSE   # boolean whether or not cursed
+# F_MIST   # mIST    # boolean whether on not protected by negative stat mods
+# F_TRAPPD # tRAPPD  # set to the other pkmn? but also a turn counter... so i'm unsure. this is bind/whirlpool/firespin/clamp/wrap
+# F_MEANLK # mEANlK  # set to the other pkmn? mean look or spider web prevents switching (baton pass works)
+# F_ATRACT # aTRACT  # set to the other pkmn? that way it doesn't work when they are switched out (and resets).
+# F_FORSGT # fORsGT  # set to the other pkmn? boolean whether or not foresighted (set on target)
+
+# ----------------------------- team flags
+# F_FTRSGT # turn timer for future sight
+# F_SAFGRD # turn timer for safeguard
+# F_LITSCR # turn timer for light screen
+# F_RFLECT # turn timer for reflect
+# F_SPIKES # boolean whether or not spikes exist
+
+# ----------------------------- battle flags
+# F_SNDSTR # turn timer for sandstorm
+# F_RAIDNC # turn timer for raining
+# F_SUNDAY # turn timer for harsh sunlight
+
 # ----------------------------- held items
 # There must be less than 64 items, because the item info shares with gender info
 I_NONE:              0

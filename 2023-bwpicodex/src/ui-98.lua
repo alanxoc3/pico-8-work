@@ -131,81 +131,124 @@ end $$
 
   -- add(op, {text="lV.050 sTATS", disabled=true}) add(op, {text="", disabled=true})
   -- same shows for 
-  add(op, {text="pOKEMON iNFO", disabled=true}) add(op, {text="", disabled=true})
+  add(op, {text="pICODEX eNTRY", disabled=true}) add(op, {text="", disabled=true})
   -- add(op, {text="      m:fROZEN"}) add(op, {text=""})
-  add(op, {text="     p:"..c_pkmn_names[pkmn.prevolve]})     add(op, {text=""})
-  add(op, {text="     i:"..c_item_names[pkmn.default_item]}) add(op, {text=""})
-  add(op, {text="     g:"..genders})  add(op, {text=""})
+  -- 3 most important things to see in stat screen...
+  -- add(op, {text="     p:"..c_pkmn_names[pkmn.prevolve]})     add(op, {text=""})
+  -- add(op, {text="     i:"..c_item_names[pkmn.default_item]}) add(op, {text=""})
+  -- add(op, {text="     g:"..genders})  add(op, {text=""})
 
-  add(op, {text="pOKEMON sTATS", disabled=true}) add(op, {text="", disabled=true})
-  add(op, {text="lEVEL: lV.099"}) add(op, {text=""})
-  add(op, {text="hP:    019/123"}) add(op, {text=""})
-  add(op, {text="aTACK: 132 +0"}) add(op, {text=""})
-  add(op, {text="dEFNS: 132 +0"}) add(op, {text=""})
-  add(op, {text="sP aT: 132 +1"}) add(op, {text=""})
-  add(op, {text="sP dF: 132 +0"}) add(op, {text=""})
-  add(op, {text="sPEED: 132 +0"}) add(op, {text=""})
-  add(op, {text="eVASN: 100 +0"}) add(op, {text=""})
-  add(op, {text="aCURY: 100 +0"}) add(op, {text=""})
+  -- add(op, {text="     mAJ: nON"}) add(op, {text=""})
+  add(op, {text="       "..pkmn.name})  add(op, {text=""})
+  add(op, {text="        "..c_type_names[pkmn.type1+1]})                      add(op, {text=""})
+  if pkmn.type2 ~= T_BIRD then
+    add(op, {text="        "..c_type_names[pkmn.type2+1]})  add(op, {text=""})
+  else
+    add(op, {text=""})  add(op, {text=""})
+  end
+
+  -- add(op, {text="     gN:"..genders})                      add(op, {text=""})
+
+  add(op, {text="pOKEMON dATA", disabled=true})          add(op, {text="", disabled=true})
+  --add(op, {text="tYPE1: "..c_type_names[pkmn.type1+1]})   add(op, {text=""})
+  --add(op, {text="tYPE2: "..c_type_names[pkmn.type2+1]})   add(op, {text=""})
+  add(op, {text="iNDEX: #"..f_prefix_zero(pkmn.num, 3)})                         add(op, {text=""})
+  add(op, {text="eVOLV: "..c_pkmn_names[pkmn.prevolve]})  add(op, {text=""})
+  add(op, {text="gENDR: "..genders})                      add(op, {text=""})
+  add(op, {text="lEVEL: lV.50"})                         add(op, {text=""})
+
+  -- add(op, {text="hP:    019/123"}) add(op, {text=""})
+  -- add(op, {text="iTEM:  bONcLB"}) add(op, {text=""})
+
+  add(op, {text="pOKEMON sTAT", disabled=true})          add(op, {text="", disabled=true})
+  add(op, {text="hEALT: "..pkmn.hp.."/"..pkmn.hp}) add(op, {text=""})
+  add(op, {text="aTACK: 003 +4"}) add(op, {text=""})
+  add(op, {text="dEFNS: 132 +1"}) add(op, {text=""})
+  add(op, {text="sPaTK: 132 -3"}) add(op, {text=""})
+  add(op, {text="sPdFN: 090 -6"}) add(op, {text=""})
+  add(op, {text="sPEED: 132"}) add(op, {text=""})
+  add(op, {text="eVASN: 120% +3"}) add(op, {text=""})
+  add(op, {text="aCURY: 090% -1"}) add(op, {text=""})
+  add(op, {text="cRITL: 006% +2"}) add(op, {text=""})
+
+--   add(op, {text="pOKEMON mOVE 1", disabled=true}) add(op, {text="", disabled=true})
+--   add(op, {text="sLFdES | 30PP"}) add(op, {text=""})
+--   add(op, {text="lEARN | dRAGON"}) add(op, {text=""})
+--   add(op, {text="40PP 030P 100A"}) add(op, {text=""})
+--   add(op, {text="pOKEMON mOVE 2", disabled=true}) add(op, {text="", disabled=true})
+--   add(op, {text="\f4sLFdES"}) add(op, {text=""})
+--   add(op, {text="lEARN | dRAGON"}) add(op, {text=""})
+--   add(op, {text="40PP 030P 100A"}) add(op, {text=""})
+--   -- add(op, {text="tYPE:  wATER"}) add(op, {text=""})
+--   -- add(op, {text="pP:    05/05"}) add(op, {text=""})
+--   -- add(op, {text="pW/aC: 040/100"}) add(op, {text=""})
+-- 
+  -- add(op, {text="pOKEMON mOVES", disabled=true}) add(op, {text="", disabled=true})
+  -- add(op, {text="sLFdES: 05/05"}) add(op, {text=""})
+  -- add(op, {text="bODsLM: 05/05"}) add(op, {text=""})
+  -- add(op, {text="sKETCH: 05/05"}) add(op, {text=""})
+  -- add(op, {text="sCRTCH: 05/05"}) add(op, {text=""})
 
   add(op, {text="mOVE1: sLFdES", disabled=true}) add(op, {text="", disabled=true})
-  add(op, {text="tYPE:  wATER"}) add(op, {text=""})
-  add(op, {text="pP:    05/05"}) add(op, {text=""})
+  add(op, {text="lEARN: wATER"}) add(op, {text=""})
+  add(op, {text="pWpNT: 05/05"}) add(op, {text=""})
   add(op, {text="pW/aC: 040/100"}) add(op, {text=""})
 
   add(op, {text="mOVE2: sLFdES", disabled=true}) add(op, {text="", disabled=true})
-  add(op, {text="tYPE:  wATER"}) add(op, {text=""})
-  add(op, {text="pP:    05/05"}) add(op, {text=""})
+  add(op, {text="lEARN: wATER"}) add(op, {text=""})
+  add(op, {text="pWpNT: 05/05"}) add(op, {text=""})
   add(op, {text="pW/aC: 040/100"}) add(op, {text=""})
 
   add(op, {text="mOVE3: sLFdES", disabled=true}) add(op, {text="", disabled=true})
-  add(op, {text="tYPE:  wATER"}) add(op, {text=""})
-  add(op, {text="pP:    05/05"}) add(op, {text=""})
+  add(op, {text="lEARN: wATER"}) add(op, {text=""})
+  add(op, {text="pWpNT: 05/05"}) add(op, {text=""})
   add(op, {text="pW/aC: 040/100"}) add(op, {text=""})
 
   add(op, {text="mOVE4: sLFdES", disabled=true}) add(op, {text="", disabled=true})
-  add(op, {text="tYPE:  wATER"}) add(op, {text=""})
-  add(op, {text="pP:    05/05"}) add(op, {text=""})
+  add(op, {text="lEARN: wATER"}) add(op, {text=""})
+  add(op, {text="pWpNT: 05/05"}) add(op, {text=""})
   add(op, {text="pW/aC: 040/100"}) add(op, {text=""})
 
-  add(op, {text="fLAGS: bATTLE", disabled=true}) add(op, {text="", disabled=true})
-  add(op, {text="sNDsTR: fALSE"})  add(op, {text=""}) -- turn timer for sandstorm
-  add(op, {text="rAIdNC: fALSE"})  add(op, {text=""}) -- turn timer for raining
-  add(op, {text="sUNdAY: fALSE"})  add(op, {text=""}) -- turn timer for harsh sunlight
+  add(op, {text="bATTLE fLAGS", disabled=true}) add(op, {text="", disabled=true})
+  add(op, {text="aCTIVE"}) -- set to move index (1-4) for moves that lock itself for multiple turns (outrage, petal dance, thrash, sky attack, razor wind, skull bash, solarbeam, bide, hyper beam) (need to ensure that pp isnt zero when on a move lock)
+  add(op, {text="bENCHD"}) -- set to move index (1-4) for moves that lock itself for multiple turns (outrage, petal dance, thrash, sky attack, razor wind, skull bash, solarbeam, bide, hyper beam) (need to ensure that pp isnt zero when on a move lock)
+  add(op, {text="mVlOCK"}) -- set to move index (1-4) for moves that lock itself for multiple turns (outrage, petal dance, thrash, sky attack, razor wind, skull bash, solarbeam, bide, hyper beam) (need to ensure that pp isnt zero when on a move lock)
+  add(op, {text="bIDE"})   -- damage counter for bide
+  add(op, {text="dFNcRL"}) -- flag if dFNcRL was used (makes rollout stronger)
+  add(op, {text="dISABL"}) -- turn timer for disable, encore
+  add(op, {text="cONFUS"}) -- turn timer for confusion minor status
+  add(op, {text="rOLOUT"}) -- turn timer for rollout
+  add(op, {text="dSTbND"}) -- turn timer for destiny bond (only 1 turn)
+  add(op, {text="lOCKoN"}) -- turn timer for lockon/mindreader. set on target. turn timer is 1.
+  add(op, {text="dIG"})    -- turn timer for dig set to 1
+  add(op, {text="fLY"})    -- turn timer for fly set to 1
+  add(op, {text="fRYcTR"}) -- turn counter for fury cutter
+  add(op, {text="rAGE"})   -- turn counter for rage
+  add(op, {text="tOXIC"})  -- turn counter for turns poisoned
+  add(op, {text="pERsNG"}) -- turn counter for perish song. set on both target and user -- counter needs to happen at the end of both turns. -- pkmn can survive with endure/focus band
+  add(op, {text="pDEcNT"}) -- turn counter for protect/detect/endure (determines success rate)
+  add(op, {text="sUBSTU"}) -- hp substitute hp
+  add(op, {text="nGTMAR"}) -- boolean whether or not sleeping
+  add(op, {text="tRFORM"}) -- boolean whether or not transformed. can't transform twice to prevent inifinite battles.
+  add(op, {text="lECHsD"}) -- boolean whether or not seeded
+  add(op, {text="cURSE"})  -- boolean whether or not cursed
+  add(op, {text="mIST"})   -- boolean whether on not protected by negative stat mods
+  add(op, {text="tRAPPD"}) -- set to the other pkmn? but also a turn counter... so i'm unsure. this is bind/whirlpool/firespin/clamp/wrap
+  add(op, {text="mEANlK"}) -- set to the other pkmn? mean look or spider web prevents switching (baton pass works)
+  add(op, {text="aTRACT"}) -- set to the other pkmn? that way it doesn't work when they are switched out (and resets).
+  add(op, {text="fORsGT"}) -- set to the other pkmn? boolean whether or not foresighted (set on target)
 
-  add(op, {text="fLAGS: tEAM", disabled=true}) add(op, {text="", disabled=true})
-  add(op, {text="fTRsGT: fALSE"})  add(op, {text=""}) -- turn timer for future sight
-  add(op, {text="sAFgRD: fALSE"})  add(op, {text=""}) -- turn timer for safeguard
-  add(op, {text="lITsCR: fALSE"})  add(op, {text=""}) -- turn timer for light screen
-  add(op, {text="rFLECT: fALSE"})  add(op, {text=""}) -- turn timer for reflect
-  add(op, {text="sPIKES: fALSE"})  add(op, {text=""}) -- boolean whether or not spikes exist
+  -- add(op, {text="tEAM fLAGS", disabled=true}) add(op, {text="", disabled=true})
+  add(op, {text="fTRsGT"}) -- turn timer for future sight
+  add(op, {text="sAFgRD"}) -- turn timer for safeguard
+  add(op, {text="lITsCR"}) -- turn timer for light screen
+  add(op, {text="rFLECT"}) -- turn timer for reflect
+  add(op, {text="sPIKES"}) -- boolean whether or not spikes exist
 
-  add(op, {text="fLAGS: pOKEMON", disabled=true}) add(op, {text="", disabled=true})
-  add(op, {text="mVlOCK: fALSE"})  add(op, {text=""}) -- set to move index (1-4) for moves that lock itself for multiple turns (outrage, petal dance, thrash, sky attack, razor wind, skull bash, solarbeam, bide, hyper beam) (need to ensure that pp isnt zero when on a move lock)
-  add(op, {text="bIDE:   fALSE"})  add(op, {text=""}) -- damage counter for bide
-  add(op, {text="dFNcRL: fALSE"})  add(op, {text=""}) -- flag if dFNcRL was used (makes rollout stronger)
-  add(op, {text="dISABL: fALSE"})  add(op, {text=""}) -- turn timer for disable, encore
-  add(op, {text="cONFUS: fALSE"})  add(op, {text=""}) -- turn timer for confusion minor status
-  add(op, {text="rOLOUT: fALSE"})  add(op, {text=""}) -- turn timer for rollout
-  add(op, {text="dSTbND: fALSE"})  add(op, {text=""}) -- turn timer for destiny bond (only 1 turn)
-  add(op, {text="lOCKoN: fALSE"})  add(op, {text=""}) -- turn timer for lockon/mindreader. set on target. turn timer is 1.
-  add(op, {text="dIG:    fALSE"})  add(op, {text=""}) -- turn timer for dig set to 1
-  add(op, {text="fLY:    fALSE"})  add(op, {text=""}) -- turn timer for fly set to 1
-  add(op, {text="fRYcTR: fALSE"})  add(op, {text=""}) -- turn counter for fury cutter
-  add(op, {text="rAGE:   fALSE"})  add(op, {text=""}) -- turn counter for rage
-  add(op, {text="tOXIC:  fALSE"})  add(op, {text=""}) -- turn counter for turns poisoned
-  add(op, {text="pERsNG: fALSE"})  add(op, {text=""}) -- turn counter for perish song. set on both target and user -- counter needs to happen at the end of both turns. -- pkmn can survive with endure/focus band
-  add(op, {text="pDEcNT: fALSE"})  add(op, {text=""}) -- turn counter for protect/detect/endure (determines success rate)
-  add(op, {text="sUBSTU: fALSE"})  add(op, {text=""}) -- hp substitute hp
-  add(op, {text="nGTMAR: fALSE"})  add(op, {text=""}) -- boolean whether or not sleeping
-  add(op, {text="tRFORM: fALSE"})  add(op, {text=""}) -- boolean whether or not transformed. can't transform twice to prevent inifinite battles.
-  add(op, {text="lECHsD: fALSE"})  add(op, {text=""}) -- boolean whether or not seeded
-  add(op, {text="cURSE:  fALSE"})  add(op, {text=""}) -- boolean whether or not cursed
-  add(op, {text="mIST:   fALSE"})  add(op, {text=""}) -- boolean whether on not protected by negative stat mods
-  add(op, {text="tRAPPD: fALSE"})  add(op, {text=""}) -- set to the other pkmn? but also a turn counter... so i'm unsure. this is bind/whirlpool/firespin/clamp/wrap
-  add(op, {text="mEANlK: fALSE"})  add(op, {text=""}) -- set to the other pkmn? mean look or spider web prevents switching (baton pass works)
-  add(op, {text="aTRACT: fALSE"})  add(op, {text=""}) -- set to the other pkmn? that way it doesn't work when they are switched out (and resets).
-  add(op, {text="fORsGT: fALSE"})  add(op, {text=""}) -- set to the other pkmn? boolean whether or not foresighted (set on target)
+  -- battle flags
+  add(op, {text="sNDsTR"}) -- turn timer for sandstorm
+  add(op, {text="rAIdNC"}) -- turn timer for raining
+  add(op, {text="sUNdAY"}) -- turn timer for harsh sunlight
 
   return op
 end $$
@@ -393,9 +436,9 @@ end $$
     -- rectfill(-30-1,  -9-9-2-1-1-1+y-1-1,  27+1,  -3+4-1-1+1+y+1,   C_3)
     local pkmn_ind = @S_BROWSE
     local pkmn = c_pokemon[@S_BROWSE]
-    f_draw_pkmn(pkmn_ind, -8-20+(g_preview_timer > 0 and (rnd(3)\1-1) or 0), -8+1-10-1-1+y+3-3, 16)
+    f_draw_pkmn(pkmn_ind, 2-8-20+(g_preview_timer > 0 and (rnd(3)\1-1) or 0), -8+1-10-1-1+y+3-3, 16)
     -- rectfill(-9-20, -22+6+y+8+7, 10+16-20-15-3, -22+6+y+8+7, C_2)
-    -- rectfill(-9, -18, -9, 6, C_2)
+    rectfill(-9+4, -18, -9+4, 6, C_2)
     -- print(pkmn.name,  4-9,  -22+y-1, C_2)
     -- print("-"..c_type_names[pkmn.type1+1], 4 -9, -22+8+y, C_2)
     -- print("-"..c_type_names[pkmn.type2+1], 4 -9, -22+8+8+1+y, C_2)
