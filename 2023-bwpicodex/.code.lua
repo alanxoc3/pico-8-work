@@ -35,7 +35,7 @@ function f_zobj(...)
 return f_zobj_set(setmetatable({},{__index=_g}),...)
 end
 f_zobj_set(_g,"c_pokemon,#,c_moves,#,c_trainers,#,c_items,#,c_levels,#,g_init_peek_loc,0x1fff,c_yes,@,c_no,@,c_empty,@,f_nop,@",true,false,"",function(...)return...end)
-f_zobj_set(_g,"f_zobj,@,f_zobj_set,@,f_zobj_eval,@,f_zcall,@,f_create_gridpair,@,f_update_grid,@,f_draw_grid,@,f_minisfx,@,f_draw_pkmn,@,c_move_names,@,c_trnr_names,@,c_type_names,@,c_item_names,@,c_pkmn_names,@,c_gender_names,@,c_movemethod_names,@,c_palettes,@,c_types,@,f_init_peek_inc,@,f_can_pokemon_teach_move,@,f_unlock,@,f_update_locks,@,f_get_default_pkmn,@,f_get_party_pkmn,@,f_save_party_pkmn,@,f_op_def,@,f_op_browse,@,f_op_edit,@,f_op_editteam,@,f_op_title,@,f_op_teams,@,f_op_editstat,@,f_create_spot,@,f_get_edit_op_pkmn,@,f_op_editmove,@,f_op_template_edit,@,f_op_edititem,@,f_op_editlevl,@,f_op_pkstat,@,f_dp_browse,@,f_dp_edit,@,f_dt_editteam,@,f_dt_editstat,@,f_print_top,@,f_print_bot,@,f_dt_editmove_template,@,f_dt_editmove,@,f_dt_edititem,@,f_dp_editteam,@,f_prefix_space,@,f_prefix_zero,@,f_dt_browse_template,@,f_dt_browse,@,f_dt_edit,@,f_dt_league,@,f_dt_versus,@,f_dp_title,@,f_dp_title_update,@,f_dp_pkpreview,@,f_dp_pkstat,@,f_l_browse,@,f_s_browse,@,f_s_title,@,f_l_pkpreview,@,f_s_pkpreview,@,f_l_pkstat,@,f_s_pkstat,@,f_s_versus,@,f_s_league,@,f_s_edit,@,f_s_editteam,@,f_s_editpkmn,@,f_s_editstat,@,f_s_editlevl,@,f_s_editmove,@,f_s_edititem,@,f_l_title,@,f_browselr,@,f_strtoq,@,f_nf,@,f_loop_through_team_pkmn,@,_update60,@,_draw,@",f_zobj,f_zobj_set,f_zobj_eval,function(func,text,...)
+f_zobj_set(_g,"f_zobj,@,f_zobj_set,@,f_zobj_eval,@,f_zcall,@,f_create_gridpair,@,f_update_grid,@,f_draw_grid,@,f_minisfx,@,f_draw_pkmn,@,c_move_names,@,c_trnr_names,@,c_type_names,@,c_item_names,@,c_pkmn_names,@,c_gender_names,@,c_movemethod_names,@,c_palettes,@,c_types,@,f_init_peek_inc,@,f_can_pokemon_teach_move,@,f_unlock,@,f_update_locks,@,f_get_default_pkmn,@,f_get_party_pkmn,@,f_save_party_pkmn,@,f_op_def,@,f_op_browse,@,f_op_edit,@,f_op_editteam,@,f_op_title,@,f_op_teams,@,f_op_editstat,@,f_create_spot,@,f_get_edit_op_pkmn,@,f_op_editmove,@,f_op_template_edit,@,f_op_edititem,@,f_op_pkstat,@,f_dp_browse,@,f_dp_edit,@,f_dt_editteam,@,f_dt_editstat,@,f_print_top,@,f_print_bot,@,f_dt_editmove_template,@,f_dt_editmove,@,f_dt_edititem,@,f_dp_editteam,@,f_prefix_space,@,f_prefix_zero,@,f_dt_browse_template,@,f_dt_browse,@,f_dt_edit,@,f_dt_league,@,f_dt_versus,@,f_dp_title,@,f_dp_title_update,@,f_dp_pkstat,@,f_l_browse,@,f_s_browse,@,f_s_title,@,f_l_pkstat,@,f_s_pkstat,@,f_s_versus,@,f_s_league,@,f_s_edit,@,f_s_editteam,@,f_s_editpkmn,@,f_s_editstat,@,f_s_editmove,@,f_s_edititem,@,f_l_title,@,f_browselr,@,f_strtoq,@,f_nf,@,f_loop_through_team_pkmn,@,_update60,@,_draw,@",f_zobj,f_zobj_set,f_zobj_eval,function(func,text,...)
 foreach(f_zobj(text,...),function(params)
 func(unpack(params))
 end)
@@ -120,7 +120,7 @@ if i==num and not lrfunc then
 c=3
 end
 if obj.disabled then
-if i==num then
+if i==num and not lrfunc then
 c=2
 else
 c=3
@@ -274,7 +274,7 @@ return op
 end,function()
 local op={}
 for pkmnnum=0,5 do
-local pkmn=f_get_party_pkmn(@0x5ec8,pkmnnum)
+local pkmn=f_get_party_pkmn(@0x5ec6,pkmnnum)
 add(op,{data=pkmn.num})
 end
 return op
@@ -286,33 +286,31 @@ end
 return op
 end,function()
 local op={}
-local pkmn=f_get_party_pkmn(@0x5ec8,@0x5ece)
+local pkmn=f_get_party_pkmn(@0x5ec6,@0x5ecc)
 for i=1,4 do
 add(op,{text=c_move_names[pkmn.view_moves[i]],select=function()
-poke(0x5ed2,pkmn.edit_moves[i])
+poke(0x5ed0,pkmn.edit_moves[i])
 add(g_gridstack,g_grid_editmove)
 end})
 end
 add(op,{text=c_item_names[pkmn.item],select=function()
-poke(0x5ed4,pkmn.item)
+poke(0x5ed2,pkmn.item)
 add(g_gridstack,g_grid_edititem)
 end})
 add(op,{text=c_gender_names[pkmn.gender],disabled=#pkmn.genders<2,select=function()
 pkmn.gender_bit+=1
-pkmn:f_save_party_pkmn(@0x5ec8,@0x5ece)
+pkmn:f_save_party_pkmn(@0x5ec6,@0x5ecc)
 end})
-add(op,{text=c_levels[pkmn.level].name,select=function()
-poke(0x5ed6,pkmn.level-1)
-add(g_gridstack,g_grid_editlevl)
+add(op,{text="vIEW",select=function()
 end})
 add(op,{text="dELETE",select=function()
-memset(0x5e00+@0x5ec8*48+@0x5ece*8,252,8)
+memset(0x5e00+@0x5ec6*48+@0x5ecc*8,252,8)
 deli(g_gridstack)
 end})
 return op
 end,function(_ENV,op,disabled)
 add(op,{text=lock and name or f_strtoq(name),disabled=disabled or not lock})
-end,function()return{},f_get_party_pkmn(@0x5ec8,@0x5ece)end,function()
+end,function()return{},f_get_party_pkmn(@0x5ec6,@0x5ecc)end,function()
 local op,pkmn=f_get_edit_op_pkmn()
 for i,num in ipairs(pkmn.possible_moves)do
 f_create_spot(c_moves[num],op,pkmn.seen_moves[i-1])
@@ -324,7 +322,7 @@ for obj in all(list)do
 f_create_spot(obj,op,pkmn[key]==obj.num)
 end
 return op
-end,function()return f_op_template_edit(c_items,"item")end,function()return f_op_template_edit(c_levels,"level")end,function()
+end,function()return f_op_template_edit(c_items,"item")end,function()
 local op={}
 local pkmn=c_pokemon[@g_grid_browse[1].mem]
 local genders=""
@@ -336,81 +334,60 @@ genders..=sub(c_gender_names[g],1,2).."/"
 end
 end
 genders=sub(genders,1,#genders-1)
-add(op,{text="pICODEX eNTRY",disabled=true})add(op,{text="",disabled=true})
-add(op,{text="       "..pkmn.name})add(op,{text=""})
-add(op,{text="        "..c_type_names[pkmn.type1+1]})add(op,{text=""})
+add(op,{text="#"..f_prefix_zero(pkmn.num,3).." "..pkmn.name,disabled=true})
+add(op,{text="       tYPE:"})
+add(op,{text="        "..c_type_names[pkmn.type1+1]})
 if pkmn.type2 ~=0 then
-add(op,{text="        "..c_type_names[pkmn.type2+1]})add(op,{text=""})
+add(op,{text="        "..c_type_names[pkmn.type2+1]})
 else
-add(op,{text=""})add(op,{text=""})
+add(op,{text=""})
 end
-add(op,{text="pOKEMON dATA",disabled=true})add(op,{text="",disabled=true})
-add(op,{text="iNDEX: #"..f_prefix_zero(pkmn.num,3)})add(op,{text=""})
-add(op,{text="eVOLV: "..c_pkmn_names[pkmn.prevolve]})add(op,{text=""})
-add(op,{text="gENDR: "..genders})add(op,{text=""})
-add(op,{text="lEVEL: lV.50"})add(op,{text=""})
-add(op,{text="pOKEMON sTAT",disabled=true})add(op,{text="",disabled=true})
-add(op,{text="hEALT: "..pkmn.hp.."/"..pkmn.hp})add(op,{text=""})
-add(op,{text="aTACK: 003 +4"})add(op,{text=""})
-add(op,{text="dEFNS: 132 +1"})add(op,{text=""})
-add(op,{text="sPaTK: 132 -3"})add(op,{text=""})
-add(op,{text="sPdFN: 090 -6"})add(op,{text=""})
-add(op,{text="sPEED: 132"})add(op,{text=""})
-add(op,{text="eVASN: 120% +3"})add(op,{text=""})
-add(op,{text="aCURY: 090% -1"})add(op,{text=""})
-add(op,{text="cRITL: 006% +2"})add(op,{text=""})
-add(op,{text="mOVE1: sLFdES",disabled=true})add(op,{text="",disabled=true})
-add(op,{text="lEARN: wATER"})add(op,{text=""})
-add(op,{text="pWpNT: 05/05"})add(op,{text=""})
-add(op,{text="pW/aC: 040/100"})add(op,{text=""})
-add(op,{text="mOVE2: sLFdES",disabled=true})add(op,{text="",disabled=true})
-add(op,{text="lEARN: wATER"})add(op,{text=""})
-add(op,{text="pWpNT: 05/05"})add(op,{text=""})
-add(op,{text="pW/aC: 040/100"})add(op,{text=""})
-add(op,{text="mOVE3: sLFdES",disabled=true})add(op,{text="",disabled=true})
-add(op,{text="lEARN: wATER"})add(op,{text=""})
-add(op,{text="pWpNT: 05/05"})add(op,{text=""})
-add(op,{text="pW/aC: 040/100"})add(op,{text=""})
-add(op,{text="mOVE4: sLFdES",disabled=true})add(op,{text="",disabled=true})
-add(op,{text="lEARN: wATER"})add(op,{text=""})
-add(op,{text="pWpNT: 05/05"})add(op,{text=""})
-add(op,{text="pW/aC: 040/100"})add(op,{text=""})
-add(op,{text="bATTLE fLAGS",disabled=true})add(op,{text="",disabled=true})
-add(op,{text="aCTIVE"})
-add(op,{text="bENCHD"})
-add(op,{text="mVlOCK"})
-add(op,{text="bIDE"})
-add(op,{text="dFNcRL"})
-add(op,{text="dISABL"})
-add(op,{text="cONFUS"})
-add(op,{text="rOLOUT"})
-add(op,{text="dSTbND"})
-add(op,{text="lOCKoN"})
-add(op,{text="dIG"})
-add(op,{text="fLY"})
-add(op,{text="fRYcTR"})
-add(op,{text="rAGE"})
-add(op,{text="tOXIC"})
-add(op,{text="pERsNG"})
-add(op,{text="pDEcNT"})
-add(op,{text="sUBSTU"})
-add(op,{text="nGTMAR"})
-add(op,{text="tRFORM"})
-add(op,{text="lECHsD"})
-add(op,{text="cURSE"})
-add(op,{text="mIST"})
-add(op,{text="tRAPPD"})
-add(op,{text="mEANlK"})
-add(op,{text="aTRACT"})
-add(op,{text="fORsGT"})
-add(op,{text="fTRsGT"})
-add(op,{text="sAFgRD"})
-add(op,{text="lITsCR"})
-add(op,{text="rFLECT"})
-add(op,{text="sPIKES"})
-add(op,{text="sNDsTR"})
-add(op,{text="rAIdNC"})
-add(op,{text="sUNdAY"})
+add(op,{text="pOKEMON dATA",disabled=true})
+add(op,{text="mAJOR: nONE"})
+add(op,{text="iTEM:  nONE"})
+add(op,{text="gENDR: "..genders})
+add(op,{text="pOKEMON sTAT",disabled=true})
+add(op,{text="hEALT: "..pkmn.hp.."/"..pkmn.hp})
+add(op,{text="aTACK: 003 +4"})
+add(op,{text="dEFNS: 132 +1"})
+add(op,{text="sPaTK: 132 -3"})
+add(op,{text="sPdFN: 090 -6"})
+add(op,{text="sPEED: 132"})
+add(op,{text="eVASN: 120% +3"})
+add(op,{text="aCURY: 090% -1"})
+add(op,{text="cRITL: 006% +2"})
+add(op,{text="mOVE1: ___",disabled=true})
+add(op,{text="tYPE:  ___"})
+add(op,{text="pWpNT: __/__"})
+add(op,{text="pW/aC: ___/___"})
+add(op,{text="mOVE2: sLFdES",disabled=true})
+add(op,{text="tYPE:  wATER"})
+add(op,{text="pWpNT: 05/05"})
+add(op,{text="pW/aC: 040/100"})
+add(op,{text="mOVE3: sLFdES",disabled=true})
+add(op,{text="tYPE:  wATER"})
+add(op,{text="pWpNT: 05/05"})
+add(op,{text="pW/aC: 040/100"})
+add(op,{text="mOVE4: sLFdES",disabled=true})
+add(op,{text="tYPE:  wATER"})
+add(op,{text="pWpNT: 05/05"})
+add(op,{text="pW/aC: 040/100"})
+add(op,{text="bATTLE fLAGS",disabled=true})
+local prev=""
+for i,x in ipairs(split"nONE")do
+if i%2==1 do
+prev=x
+while #prev<6 do
+prev=prev.." "
+end
+else
+add(op,{text=prev.." "..x})
+prev=""
+end
+end
+if prev ~=""then
+add(op,{text=prev})
+end
 return op
 end,function(i,is_sel,gridobj)
 f_draw_pkmn(gridobj.data,1,1,6,false,is_sel,gridobj.disabled)
@@ -419,18 +396,18 @@ for ii,ind in ipairs(gridobj.data)do
 f_draw_pkmn(ind,(ii-1)%3+1+(ii-1)%3*9,1+(ii-1)\3*10,6,false,is_sel,gridobj.disabled)
 end
 end,function(i,is_sel)
-f_print_top("eDIT: sPOT ",@0x5ece+1)
-local pkmn=f_get_party_pkmn(@0x5ec8,@0x5ece)
+f_print_top("eDIT: sPOT ",@0x5ecc+1)
+local pkmn=f_get_party_pkmn(@0x5ec6,@0x5ecc)
 f_print_bot("#",pkmn.num_str," ",pkmn.name)
 end,function(i,is_sel)
-local pkmn=f_get_party_pkmn(@0x5ec8,@0x5ece)
-if@0x5ed0<4 then f_print_top("eDIT: mOVE ",@0x5ed0+1)
-elseif@0x5ed0==4 then f_print_top"eDIT: iTEM"
-elseif@0x5ed0==5 then f_print_top"eDIT: gENDER"
-elseif@0x5ed0==6 then f_print_top"eDIT: lEVEL"
-elseif@0x5ed0==7 then f_print_top"eDIT: dELETE"
+local pkmn=f_get_party_pkmn(@0x5ec6,@0x5ecc)
+if@0x5ece<4 then f_print_top("eDIT: mOVE",@0x5ece+1)
+elseif@0x5ece==4 then f_print_top"eDIT: iTEM"
+elseif@0x5ece==5 then f_print_top"eDIT: gENDER"
+elseif@0x5ece==6 then f_print_top"eDIT: pRVIEW"
+elseif@0x5ece==7 then f_print_top"eDIT: dELETE"
 end
-local pkmn=f_get_party_pkmn(@0x5ec8,@0x5ece)
+local pkmn=f_get_party_pkmn(@0x5ec6,@0x5ecc)
 f_print_bot("#",pkmn.num_str," ",pkmn.name)
 end,function(...)
 local text=""
@@ -460,8 +437,8 @@ end
 f_print_top(pkmn.possible_moves_method[movenum],": ",typ)
 f_print_bot(pp,"PP ",pow,"P ",acc,"A")
 end,function()
-local pkmn=f_get_party_pkmn(@0x5ec8,@0x5ece)
-f_dt_editmove_template(pkmn,@0x5ed2)
+local pkmn=f_get_party_pkmn(@0x5ec6,@0x5ecc)
+f_dt_editmove_template(pkmn,@0x5ed0)
 end,function(i,is_sel)
 print("\f4hello",1,1)
 end,function(i,is_sel,gridobj)
@@ -491,19 +468,19 @@ end,function()
 local pkstr_arr={}
 local pkstr_lens=split"2,2,2,2,1,1"
 for ii=0,5 do
-local pkmn=f_get_party_pkmn(@0x5ec8,ii)
+local pkmn=f_get_party_pkmn(@0x5ec6,ii)
 add(pkstr_arr,sub(c_pkmn_names[pkmn.num],1,pkstr_lens[ii+1]))
 end
 f_print_top("eDIT: tEAM ",(@g_cg_m.mem+1))
 f_print_bot(pkstr_arr[1],"-",pkstr_arr[2],"-",pkstr_arr[3],"-",pkstr_arr[4],"-",pkstr_arr[5],pkstr_arr[6])
 end,function()
 local toggle=g_cg_m.name=="g_grid_pickleag"
-f_print_top((toggle and "\f4"or "\f2"),"pLR: tEAM ",(@0x5ec8+1))
-f_print_bot((toggle and "\f2"or "\f4"),"cPU: ",c_trnr_names[@0x5ecc+1])
+f_print_top((toggle and "\f4"or "\f2"),"pLR: tEAM ",(@0x5ec6+1))
+f_print_bot((toggle and "\f2"or "\f4"),"cPU: ",c_trnr_names[@0x5eca+1])
 end,function()
 local toggle=g_cg_m.name=="g_grid_pickplr1"
-f_print_top((toggle and "\f4"or "\f2"),"pLR1: tEAM ",(@0x5ec8+1))
-f_print_bot((toggle and "\f2"or "\f4"),"pLR2: tEAM ",(@0x5eca+1))
+f_print_top((toggle and "\f4"or "\f2"),"pLR1: tEAM ",(@0x5ec6+1))
+f_print_bot((toggle and "\f2"or "\f4"),"pLR2: tEAM ",(@0x5ec8+1))
 end,function()
 print("\^w\^tpicodex",2,1,4)
 print("dUAL vERSION",2,12,2)
@@ -518,16 +495,13 @@ g_title_l=rnd"252"\1
 elseif g_title_an_timer==50-10 then f_minisfx(g_title_r-1)
 elseif g_title_an_timer==200-10 then f_minisfx(g_title_l-1)
 end
-end,function()
-local pkmn_ind=@0x5ec0
-f_draw_pkmn(pkmn_ind,13+(g_preview_timer>0 and(rnd(3)\1-1)or 0),1+2,16)
 end,function(i)
-if i==7 then
+if i==3 then
 local y=6
 local pkmn_ind=@0x5ec0
 local pkmn=c_pokemon[@0x5ec0]
-f_draw_pkmn(pkmn_ind,2-8-20+(g_preview_timer>0 and(rnd(3)\1-1)or 0),-8+1-10-1-1+y+3-3,16)
-rectfill(-9+4,-18,-9+4,6,2)
+f_draw_pkmn(pkmn_ind,2-8-20+(g_preview_timer>0 and(rnd(3)\1-1)or 0)+30,-8+1-10-1-1+y+3-3,16)
+rectfill(-9+4+30,-18,-9+4+30,6,2)
 end
 end,function()
 deli(g_gridstack)
@@ -549,37 +523,27 @@ end,function()
 g_preview_timer=20
 return@0x5ec0
 end,function()
-deli(g_gridstack)
-end,function()
-g_preview_timer=20
-return@0x5ec0
-end,function()
 add(g_gridstack,g_grid_pickplr2)
 end,function()
 add(g_gridstack,g_grid_picktrnr)
 end,function()
 add(g_gridstack,g_grid_pickspot)
 end,function()
-add(g_gridstack,f_get_party_pkmn(@0x5ec8,@0x5ece).valid and g_grid_editstat or g_grid_editpkmn)
+add(g_gridstack,f_get_party_pkmn(@0x5ec6,@0x5ecc).valid and g_grid_editstat or g_grid_editpkmn)
 end,function()
-f_save_party_pkmn(f_get_default_pkmn(@0x5ec0),@0x5ec8,@0x5ece)
+f_save_party_pkmn(f_get_default_pkmn(@0x5ec0),@0x5ec6,@0x5ecc)
 deli(g_gridstack)
 end,function()
-gridpo[@0x5ed0+1].select()
+gridpo[@0x5ece+1].select()
 end,function()
-local pkmn=f_get_party_pkmn(@0x5ec8,@0x5ece)
-pkmn.level=@0x5ed6+1
-f_save_party_pkmn(pkmn,@0x5ec8,@0x5ece)
+local pkmn=f_get_party_pkmn(@0x5ec6,@0x5ecc)
+pkmn.edit_moves[@0x5ece+1]=@0x5ed0
+f_save_party_pkmn(pkmn,@0x5ec6,@0x5ecc)
 deli(g_gridstack)
 end,function()
-local pkmn=f_get_party_pkmn(@0x5ec8,@0x5ece)
-pkmn.edit_moves[@0x5ed0+1]=@0x5ed2
-f_save_party_pkmn(pkmn,@0x5ec8,@0x5ece)
-deli(g_gridstack)
-end,function()
-local pkmn=f_get_party_pkmn(@0x5ec8,@0x5ece)
-pkmn.item=@0x5ed4
-f_save_party_pkmn(pkmn,@0x5ec8,@0x5ece)
+local pkmn=f_get_party_pkmn(@0x5ec6,@0x5ecc)
+pkmn.item=@0x5ed2
+f_save_party_pkmn(pkmn,@0x5ec6,@0x5ecc)
 deli(g_gridstack)
 end,function()
 return 253
@@ -769,7 +733,7 @@ poke2(loc,%loc & 0x70df|0x0a00)
 end
 poke4(iloc+64,0x.07d7)
 end
-f_zcall(f_create_gridpair,"p_browse;,6,4,2,2,10,10,~f_dp_browse,~f_nf;t_browse;,1,1,2,45,60,16,~f_dt_browse,~f_nf;p_title;,1,1,2,2,60,40,~f_dp_title,~f_dp_title_update;t_title;,2,2,2,44,30,9,~f_nf,~f_nf;p_pkpreview;,1,1,2,2,60,40,~f_dp_pkpreview,~f_nf;p_pkstat;,2,4,2,4,30,9,~f_dp_pkstat,~f_nf;t_edit;,1,1,2,45,60,16,~f_dt_edit,~f_nf;p_edit;,2,2,2,2,30,20,~f_dp_edit,~f_nf;t_editteam;,1,1,2,45,60,16,~f_dt_editteam,~f_nf;p_editteam;,3,2,2,2,20,20,~f_dp_editteam,~f_nf;t_editstat;,1,1,2,45,60,16,~f_dt_editstat,~f_nf;p_editstat;,2,4,2,4,30,9,~f_nf,~f_nf;t_edit4;,1,1,2,45,60,16,~f_dt_editmove,~f_nf;p_edit4;,2,4,2,4,30,9,~f_nf,~f_nf;t_edititem;,1,1,2,45,60,16,~f_dt_editstat,~f_nf;p_edititem;,2,4,2,4,30,9,~f_nf,~f_nf;t_versus;,1,1,2,45,60,16,~f_dt_versus,~f_nf;t_league;,1,1,2,45,60,16,~f_dt_league,~f_nf;p_teamed;,2,4,2,4,30,9,~f_nf,~f_nf;t_teamed;,1,1,2,45,60,16,~f_dt_edit,~f_nf;;,g_grid_browse,0x5ec0,~p_browse,~t_browse,~f_op_browse,~f_s_browse,~f_l_browse,,~c_no;;,g_grid_title,0x5ec2,~t_title,~p_title,~f_op_title,~f_s_title,~f_l_title,,~c_no;;,g_grid_pkpreview,0x5ec4,~p_pkpreview,~t_browse,~f_op_def,~f_s_pkpreview,~f_l_pkpreview,~f_browselr;;,g_grid_pkstat,0x5ec6,~p_pkstat,~t_browse,~f_op_pkstat,~f_s_pkstat,~f_l_pkstat,,~f_browselr;;,g_grid_editstat,0x5ed0,~p_editstat,~t_editstat,~f_op_editstat,~f_s_editstat,~f_l_browse,,~c_no;;,g_grid_editmove,0x5ed2,~p_edit4,~t_edit4,~f_op_editmove,~f_s_editmove,~f_l_browse,,~c_no;;,g_grid_edititem,0x5ed4,~p_edititem,~t_edititem,~f_op_edititem,~f_s_edititem,~f_l_browse,,~c_no;;,g_grid_editlevl,0x5ed6,~p_edititem,~t_edititem,~f_op_editlevl,~f_s_editlevl,~f_l_browse,,~c_no;;,g_grid_editpkmn,0x5ec0,~p_browse,~t_browse,~f_op_browse,~f_s_editpkmn,~f_l_browse,,~c_no;;,g_grid_pickedit,0x5ec8,~p_edit,~t_edit,~f_op_edit,~f_s_edit,~f_l_browse,,~c_no;;,g_grid_pickleag,0x5ec8,~p_edit,~t_league,~f_op_edit,~f_s_league,~f_l_browse,,~c_no,~c_yes;;,g_grid_pickplr1,0x5ec8,~p_edit,~t_versus,~f_op_edit,~f_s_versus,~f_l_browse,,~c_no,~c_yes;;,g_grid_pickspot,0x5ece,~p_editteam,~t_editteam,~f_op_editteam,~f_s_editteam,~f_l_browse,,~c_no;;,g_grid_picktrnr,0x5ecc,~p_teamed,~t_league,~f_op_teams,~f_nf,~f_l_browse,,~c_no;;,g_grid_pickplr2,0x5eca,~p_edit,~t_versus,~f_op_edit,~f_nf,~f_l_browse,,~c_no,~c_yes")
+f_zcall(f_create_gridpair,"p_browse;,6,4,2,2,10,10,~f_dp_browse,~f_nf;t_browse;,1,1,2,45,60,16,~f_dt_browse,~f_nf;p_title;,1,1,2,2,60,40,~f_dp_title,~f_dp_title_update;t_title;,2,2,2,44,30,9,~f_nf,~f_nf;p_pkstat;,1,4,2,4,60,9,~f_dp_pkstat,~f_nf;t_edit;,1,1,2,45,60,16,~f_dt_edit,~f_nf;p_edit;,2,2,2,2,30,20,~f_dp_edit,~f_nf;t_editteam;,1,1,2,45,60,16,~f_dt_editteam,~f_nf;p_editteam;,3,2,2,2,20,20,~f_dp_editteam,~f_nf;t_editstat;,1,1,2,45,60,16,~f_dt_editstat,~f_nf;p_editstat;,2,4,2,4,30,9,~f_nf,~f_nf;t_edit4;,1,1,2,45,60,16,~f_dt_editmove,~f_nf;p_edit4;,2,4,2,4,30,9,~f_nf,~f_nf;t_edititem;,1,1,2,45,60,16,~f_dt_editstat,~f_nf;p_edititem;,2,4,2,4,30,9,~f_nf,~f_nf;t_versus;,1,1,2,45,60,16,~f_dt_versus,~f_nf;t_league;,1,1,2,45,60,16,~f_dt_league,~f_nf;p_teamed;,2,4,2,4,30,9,~f_nf,~f_nf;t_teamed;,1,1,2,45,60,16,~f_dt_edit,~f_nf;;,g_grid_browse,0x5ec0,~p_browse,~t_browse,~f_op_browse,~f_s_browse,~f_l_browse,,~c_no;;,g_grid_title,0x5ec2,~t_title,~p_title,~f_op_title,~f_s_title,~f_l_title,,~c_no;;,g_grid_pkstat,0x5ec4,~p_pkstat,~t_browse,~f_op_pkstat,~f_s_pkstat,~f_l_pkstat,,~f_browselr;;,g_grid_editstat,0x5ece,~p_editstat,~t_editstat,~f_op_editstat,~f_s_editstat,~f_l_browse,,~c_no;;,g_grid_editmove,0x5ed0,~p_edit4,~t_edit4,~f_op_editmove,~f_s_editmove,~f_l_browse,,~c_no;;,g_grid_edititem,0x5ed2,~p_edititem,~t_edititem,~f_op_edititem,~f_s_edititem,~f_l_browse,,~c_no;;,g_grid_editpkmn,0x5ec0,~p_browse,~t_browse,~f_op_browse,~f_s_editpkmn,~f_l_browse,,~c_no;;,g_grid_pickedit,0x5ec6,~p_edit,~t_edit,~f_op_edit,~f_s_edit,~f_l_browse,,~c_no;;,g_grid_pickleag,0x5ec6,~p_edit,~t_league,~f_op_edit,~f_s_league,~f_l_browse,,~c_no,~c_yes;;,g_grid_pickplr1,0x5ec6,~p_edit,~t_versus,~f_op_edit,~f_s_versus,~f_l_browse,,~c_no,~c_yes;;,g_grid_pickspot,0x5ecc,~p_editteam,~t_editteam,~f_op_editteam,~f_s_editteam,~f_l_browse,,~c_no;;,g_grid_picktrnr,0x5eca,~p_teamed,~t_league,~f_op_teams,~f_nf,~f_l_browse,,~c_no;;,g_grid_pickplr2,0x5ec8,~p_edit,~t_versus,~f_op_edit,~f_nf,~f_l_browse,,~c_no,~c_yes")
 g_palette=5
 g_gridstack={g_grid_title}
 g_preview_timer=0

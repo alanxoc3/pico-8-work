@@ -77,9 +77,8 @@ end $$
     pkmn:f_save_party_pkmn(@S_TEAM, @S_TEAME)
   end})
 
-  add(op, {text=c_levels[pkmn.level].name, select=function()
-    poke(S_EDITLEVL, pkmn.level-1)
-    add(g_gridstack, g_grid_editlevl)
+  add(op, {text="vIEW", select=function()
+    -- TODO!
   end})
 
   add(op, {text="dELETE", select=function()
@@ -113,7 +112,6 @@ end $$
 end $$
 
 |[f_op_edititem]| function() return f_op_template_edit(c_items,  'item')  end $$
-|[f_op_editlevl]| function() return f_op_template_edit(c_levels, 'level') end $$
 
 |[f_op_pkstat]| function()
   local op = {}
@@ -129,126 +127,70 @@ end $$
   end
   genders = sub(genders, 1, #genders-1)
 
-  -- add(op, {text="lV.050 sTATS", disabled=true}) add(op, {text="", disabled=true})
-  -- same shows for 
-  add(op, {text="pICODEX eNTRY", disabled=true}) add(op, {text="", disabled=true})
-  -- add(op, {text="      m:fROZEN"}) add(op, {text=""})
-  -- 3 most important things to see in stat screen...
-  -- add(op, {text="     p:"..c_pkmn_names[pkmn.prevolve]})     add(op, {text=""})
-  -- add(op, {text="     i:"..c_item_names[pkmn.default_item]}) add(op, {text=""})
-  -- add(op, {text="     g:"..genders})  add(op, {text=""})
-
-  -- add(op, {text="     mAJ: nON"}) add(op, {text=""})
-  add(op, {text="       "..pkmn.name})  add(op, {text=""})
-  add(op, {text="        "..c_type_names[pkmn.type1+1]})                      add(op, {text=""})
+  add(op, {text="#"..f_prefix_zero(pkmn.num, 3).." "..pkmn.name, disabled=true})
+  add(op, {text="       tYPE:"})
+  add(op, {text="        "..c_type_names[pkmn.type1+1]})
   if pkmn.type2 ~= T_BIRD then
-    add(op, {text="        "..c_type_names[pkmn.type2+1]})  add(op, {text=""})
+    add(op, {text="        "..c_type_names[pkmn.type2+1]})
   else
-    add(op, {text=""})  add(op, {text=""})
+    add(op, {text=""})
   end
 
-  -- add(op, {text="     gN:"..genders})                      add(op, {text=""})
+  add(op, {text="pOKEMON dATA", disabled=true})
+  add(op, {text="mAJOR: nONE"})
+  add(op, {text="iTEM:  nONE"})
+  add(op, {text="gENDR: "..genders})
+  -- add(op, {text="eVOLV: "..c_pkmn_names[pkmn.prevolve]})
 
-  add(op, {text="pOKEMON dATA", disabled=true})          add(op, {text="", disabled=true})
-  --add(op, {text="tYPE1: "..c_type_names[pkmn.type1+1]})   add(op, {text=""})
-  --add(op, {text="tYPE2: "..c_type_names[pkmn.type2+1]})   add(op, {text=""})
-  add(op, {text="iNDEX: #"..f_prefix_zero(pkmn.num, 3)})                         add(op, {text=""})
-  add(op, {text="eVOLV: "..c_pkmn_names[pkmn.prevolve]})  add(op, {text=""})
-  add(op, {text="gENDR: "..genders})                      add(op, {text=""})
-  add(op, {text="lEVEL: lV.50"})                         add(op, {text=""})
+  add(op, {text="pOKEMON sTAT", disabled=true})
+  add(op, {text="hEALT: "..pkmn.hp.."/"..pkmn.hp})
+  add(op, {text="aTACK: 003 +4"})
+  add(op, {text="dEFNS: 132 +1"})
+  add(op, {text="sPaTK: 132 -3"})
+  add(op, {text="sPdFN: 090 -6"})
+  add(op, {text="sPEED: 132"})
+  add(op, {text="eVASN: 120% +3"})
+  add(op, {text="aCURY: 090% -1"})
+  add(op, {text="cRITL: 006% +2"})
 
-  -- add(op, {text="hP:    019/123"}) add(op, {text=""})
-  -- add(op, {text="iTEM:  bONcLB"}) add(op, {text=""})
+  add(op, {text="mOVE1: ___", disabled=true})
+  add(op, {text="tYPE:  ___"})
+  add(op, {text="pWpNT: __/__"})
+  add(op, {text="pW/aC: ___/___"})
 
-  add(op, {text="pOKEMON sTAT", disabled=true})          add(op, {text="", disabled=true})
-  add(op, {text="hEALT: "..pkmn.hp.."/"..pkmn.hp}) add(op, {text=""})
-  add(op, {text="aTACK: 003 +4"}) add(op, {text=""})
-  add(op, {text="dEFNS: 132 +1"}) add(op, {text=""})
-  add(op, {text="sPaTK: 132 -3"}) add(op, {text=""})
-  add(op, {text="sPdFN: 090 -6"}) add(op, {text=""})
-  add(op, {text="sPEED: 132"}) add(op, {text=""})
-  add(op, {text="eVASN: 120% +3"}) add(op, {text=""})
-  add(op, {text="aCURY: 090% -1"}) add(op, {text=""})
-  add(op, {text="cRITL: 006% +2"}) add(op, {text=""})
+  add(op, {text="mOVE2: sLFdES", disabled=true})
+  add(op, {text="tYPE:  wATER"})
+  add(op, {text="pWpNT: 05/05"})
+  add(op, {text="pW/aC: 040/100"})
 
---   add(op, {text="pOKEMON mOVE 1", disabled=true}) add(op, {text="", disabled=true})
---   add(op, {text="sLFdES | 30PP"}) add(op, {text=""})
---   add(op, {text="lEARN | dRAGON"}) add(op, {text=""})
---   add(op, {text="40PP 030P 100A"}) add(op, {text=""})
---   add(op, {text="pOKEMON mOVE 2", disabled=true}) add(op, {text="", disabled=true})
---   add(op, {text="\f4sLFdES"}) add(op, {text=""})
---   add(op, {text="lEARN | dRAGON"}) add(op, {text=""})
---   add(op, {text="40PP 030P 100A"}) add(op, {text=""})
---   -- add(op, {text="tYPE:  wATER"}) add(op, {text=""})
---   -- add(op, {text="pP:    05/05"}) add(op, {text=""})
---   -- add(op, {text="pW/aC: 040/100"}) add(op, {text=""})
--- 
-  -- add(op, {text="pOKEMON mOVES", disabled=true}) add(op, {text="", disabled=true})
-  -- add(op, {text="sLFdES: 05/05"}) add(op, {text=""})
-  -- add(op, {text="bODsLM: 05/05"}) add(op, {text=""})
-  -- add(op, {text="sKETCH: 05/05"}) add(op, {text=""})
-  -- add(op, {text="sCRTCH: 05/05"}) add(op, {text=""})
+  add(op, {text="mOVE3: sLFdES", disabled=true})
+  add(op, {text="tYPE:  wATER"})
+  add(op, {text="pWpNT: 05/05"})
+  add(op, {text="pW/aC: 040/100"})
 
-  add(op, {text="mOVE1: sLFdES", disabled=true}) add(op, {text="", disabled=true})
-  add(op, {text="lEARN: wATER"}) add(op, {text=""})
-  add(op, {text="pWpNT: 05/05"}) add(op, {text=""})
-  add(op, {text="pW/aC: 040/100"}) add(op, {text=""})
+  add(op, {text="mOVE4: sLFdES", disabled=true})
+  add(op, {text="tYPE:  wATER"})
+  add(op, {text="pWpNT: 05/05"})
+  add(op, {text="pW/aC: 040/100"})
 
-  add(op, {text="mOVE2: sLFdES", disabled=true}) add(op, {text="", disabled=true})
-  add(op, {text="lEARN: wATER"}) add(op, {text=""})
-  add(op, {text="pWpNT: 05/05"}) add(op, {text=""})
-  add(op, {text="pW/aC: 040/100"}) add(op, {text=""})
+  add(op, {text="bATTLE fLAGS", disabled=true})
 
-  add(op, {text="mOVE3: sLFdES", disabled=true}) add(op, {text="", disabled=true})
-  add(op, {text="lEARN: wATER"}) add(op, {text=""})
-  add(op, {text="pWpNT: 05/05"}) add(op, {text=""})
-  add(op, {text="pW/aC: 040/100"}) add(op, {text=""})
+  local prev = ""
+  for i,x in ipairs(split"nONE") do -- split"aCTIVE,bENCHD,nONE,mVlOCK,bIDE,dFNcRL,dISABL,cONFUS,rOLOUT,dSTbND,lOCKoN,dIG,fLY,fRYcTR,rAGE,tOXIC,pERsNG,pDEcNT,sUBSTU,nGTMAR,tRFORM,lECHsD,cURSE,mIST,tRAPPD,mEANlK,aTRACT,fORsGT,fTRsGT,sAFgRD,lITsCR,rFLECT,sPIKES,sNDsTR,rAIdNC,sUNdAY") do
+    if i%2 == 1 do
+      prev = x
+      while #prev < 6 do
+        prev = prev.." "
+      end
+    else
+      add(op, {text=prev.." "..x})
+      prev=""
+    end
+  end
 
-  add(op, {text="mOVE4: sLFdES", disabled=true}) add(op, {text="", disabled=true})
-  add(op, {text="lEARN: wATER"}) add(op, {text=""})
-  add(op, {text="pWpNT: 05/05"}) add(op, {text=""})
-  add(op, {text="pW/aC: 040/100"}) add(op, {text=""})
-
-  add(op, {text="bATTLE fLAGS", disabled=true}) add(op, {text="", disabled=true})
-  add(op, {text="aCTIVE"}) -- set to move index (1-4) for moves that lock itself for multiple turns (outrage, petal dance, thrash, sky attack, razor wind, skull bash, solarbeam, bide, hyper beam) (need to ensure that pp isnt zero when on a move lock)
-  add(op, {text="bENCHD"}) -- set to move index (1-4) for moves that lock itself for multiple turns (outrage, petal dance, thrash, sky attack, razor wind, skull bash, solarbeam, bide, hyper beam) (need to ensure that pp isnt zero when on a move lock)
-  add(op, {text="mVlOCK"}) -- set to move index (1-4) for moves that lock itself for multiple turns (outrage, petal dance, thrash, sky attack, razor wind, skull bash, solarbeam, bide, hyper beam) (need to ensure that pp isnt zero when on a move lock)
-  add(op, {text="bIDE"})   -- damage counter for bide
-  add(op, {text="dFNcRL"}) -- flag if dFNcRL was used (makes rollout stronger)
-  add(op, {text="dISABL"}) -- turn timer for disable, encore
-  add(op, {text="cONFUS"}) -- turn timer for confusion minor status
-  add(op, {text="rOLOUT"}) -- turn timer for rollout
-  add(op, {text="dSTbND"}) -- turn timer for destiny bond (only 1 turn)
-  add(op, {text="lOCKoN"}) -- turn timer for lockon/mindreader. set on target. turn timer is 1.
-  add(op, {text="dIG"})    -- turn timer for dig set to 1
-  add(op, {text="fLY"})    -- turn timer for fly set to 1
-  add(op, {text="fRYcTR"}) -- turn counter for fury cutter
-  add(op, {text="rAGE"})   -- turn counter for rage
-  add(op, {text="tOXIC"})  -- turn counter for turns poisoned
-  add(op, {text="pERsNG"}) -- turn counter for perish song. set on both target and user -- counter needs to happen at the end of both turns. -- pkmn can survive with endure/focus band
-  add(op, {text="pDEcNT"}) -- turn counter for protect/detect/endure (determines success rate)
-  add(op, {text="sUBSTU"}) -- hp substitute hp
-  add(op, {text="nGTMAR"}) -- boolean whether or not sleeping
-  add(op, {text="tRFORM"}) -- boolean whether or not transformed. can't transform twice to prevent inifinite battles.
-  add(op, {text="lECHsD"}) -- boolean whether or not seeded
-  add(op, {text="cURSE"})  -- boolean whether or not cursed
-  add(op, {text="mIST"})   -- boolean whether on not protected by negative stat mods
-  add(op, {text="tRAPPD"}) -- set to the other pkmn? but also a turn counter... so i'm unsure. this is bind/whirlpool/firespin/clamp/wrap
-  add(op, {text="mEANlK"}) -- set to the other pkmn? mean look or spider web prevents switching (baton pass works)
-  add(op, {text="aTRACT"}) -- set to the other pkmn? that way it doesn't work when they are switched out (and resets).
-  add(op, {text="fORsGT"}) -- set to the other pkmn? boolean whether or not foresighted (set on target)
-
-  -- add(op, {text="tEAM fLAGS", disabled=true}) add(op, {text="", disabled=true})
-  add(op, {text="fTRsGT"}) -- turn timer for future sight
-  add(op, {text="sAFgRD"}) -- turn timer for safeguard
-  add(op, {text="lITsCR"}) -- turn timer for light screen
-  add(op, {text="rFLECT"}) -- turn timer for reflect
-  add(op, {text="sPIKES"}) -- boolean whether or not spikes exist
-
-  -- battle flags
-  add(op, {text="sNDsTR"}) -- turn timer for sandstorm
-  add(op, {text="rAIdNC"}) -- turn timer for raining
-  add(op, {text="sUNdAY"}) -- turn timer for harsh sunlight
+  if prev ~= "" then
+    add(op, {text=prev})
+  end
 
   return op
 end $$
@@ -275,10 +217,10 @@ end $$
 
 |[f_dt_editstat]| function(i, is_sel)
   local pkmn = f_get_party_pkmn(@S_TEAM, @S_TEAME)
-  if @S_EDITSTAT < 4 then f_print_top("eDIT: mOVE ", @S_EDITSTAT+1)
+  if @S_EDITSTAT < 4 then f_print_top("eDIT: mOVE", @S_EDITSTAT+1)
   elseif @S_EDITSTAT == 4 then f_print_top"eDIT: iTEM"
   elseif @S_EDITSTAT == 5 then f_print_top"eDIT: gENDER"
-  elseif @S_EDITSTAT == 6 then f_print_top"eDIT: lEVEL"
+  elseif @S_EDITSTAT == 6 then f_print_top"eDIT: pRVIEW"
   elseif @S_EDITSTAT == 7 then f_print_top"eDIT: dELETE"
   end
 
@@ -423,28 +365,13 @@ end $$
   end
 end $$
 
-|[f_dp_pkpreview]| function() -- TODO: DELETE ME
-  local pkmn_ind = @S_BROWSE
-  f_draw_pkmn(pkmn_ind, 13+(g_preview_timer > 0 and (rnd(3)\1-1) or 0), 1+2, 16)
-end $$
-
 |[f_dp_pkstat]| function(i)
-  if i == 7 then
+  if i == 3 then
     local y = 6
-    -- rectfill(-30-1,    -9-9-2-1-1+y-1,    27+1,    -3+4-1-1+y,     C_3)
-    -- rectfill(-30-1+1,  -9-9-2-1-1-1+y-1,  27+1-1,  -3+4-1-1+1+y,   C_3)
-    -- rectfill(-30-1,  -9-9-2-1-1-1+y-1-1,  27+1,  -3+4-1-1+1+y+1,   C_3)
     local pkmn_ind = @S_BROWSE
     local pkmn = c_pokemon[@S_BROWSE]
-    f_draw_pkmn(pkmn_ind, 2-8-20+(g_preview_timer > 0 and (rnd(3)\1-1) or 0), -8+1-10-1-1+y+3-3, 16)
-    -- rectfill(-9-20, -22+6+y+8+7, 10+16-20-15-3, -22+6+y+8+7, C_2)
-    rectfill(-9+4, -18, -9+4, 6, C_2)
-    -- print(pkmn.name,  4-9,  -22+y-1, C_2)
-    -- print("-"..c_type_names[pkmn.type1+1], 4 -9, -22+8+y, C_2)
-    -- print("-"..c_type_names[pkmn.type2+1], 4 -9, -22+8+8+1+y, C_2)
-
-    -- print("h: 3.2M",  4-9,  -22+y-1, C_2)
-    -- print("w: 123KG", 4 -9, -22+8+y, C_2)
+    f_draw_pkmn(pkmn_ind, 2-8-20+(g_preview_timer > 0 and (rnd(3)\1-1) or 0)+30, -8+1-10-1-1+y+3-3, 16)
+    rectfill(-9+4+30, -18, -9+4+30, 6, C_2)
   end
 end $$
 
@@ -471,15 +398,6 @@ end $$
   end
 end $$
 
-|[f_l_pkpreview]| function()
-  deli(g_gridstack)
-end $$
-
-|[f_s_pkpreview]| function()
-  g_preview_timer = 20
-  return @S_BROWSE
-end $$
-
 |[f_l_pkstat]| function()
   deli(g_gridstack)
 end $$
@@ -487,7 +405,6 @@ end $$
 |[f_s_pkstat]| function()
   g_preview_timer = 20
   return @S_BROWSE
-  -- add(g_gridstack, g_grid_pkpreview)
 end $$
 
 |[f_s_versus]| function()
@@ -515,13 +432,6 @@ end $$
 
 |[f_s_editstat]| function()
   gridpo[@S_EDITSTAT+1].select()
-end $$
-
-|[f_s_editlevl]| function()
-  local pkmn = f_get_party_pkmn(@S_TEAM, @S_TEAME)
-  pkmn.level = @S_EDITLEVL+1
-  f_save_party_pkmn(pkmn, @S_TEAM, @S_TEAME)
-  deli(g_gridstack)
 end $$
 
 |[f_s_editmove]| function()
@@ -581,8 +491,8 @@ f_zcall(f_create_gridpair, [[
   ;t_browse;    ,1 ,1 ,2 ,45 ,60 ,16 ,~f_dt_browse      ,~f_nf
   ;p_title;     ,1 ,1 ,2 ,2  ,60 ,40 ,~f_dp_title       ,~f_dp_title_update
   ;t_title;     ,2 ,2 ,2 ,44 ,30 ,9  ,~f_nf             ,~f_nf
-  ;p_pkpreview; ,1 ,1 ,2 ,2  ,60 ,40 ,~f_dp_pkpreview   ,~f_nf
-  ;p_pkstat;    ,2 ,4 ,2 ,4  ,30 ,9  ,~f_dp_pkstat      ,~f_nf
+
+  ;p_pkstat;    ,1 ,4 ,2 ,4  ,60 ,9  ,~f_dp_pkstat      ,~f_nf
 
   ;t_edit;      ,1 ,1 ,2 ,45 ,60 ,16 ,~f_dt_edit        ,~f_nf
   ;p_edit;      ,2 ,2 ,2 ,2  ,30 ,20 ,~f_dp_edit        ,~f_nf
@@ -608,14 +518,12 @@ f_zcall(f_create_gridpair, [[
   -- name              active mem  main grid     info grid     mk op mkfunc      select func     leave func
   ;;,g_grid_browse    ,S_BROWSE    ,~p_browse    ,~t_browse    ,~f_op_browse,    ~f_s_browse     ,~f_l_browse,   ,~c_no
   ;;,g_grid_title     ,S_TITLE     ,~t_title     ,~p_title     ,~f_op_title,     ~f_s_title      ,~f_l_title,    ,~c_no
-  ;;,g_grid_pkpreview ,S_PKPREVIEW ,~p_pkpreview ,~t_browse    ,~f_op_def,       ~f_s_pkpreview  ,~f_l_pkpreview ,~f_browselr
 
   ;;,g_grid_pkstat    ,S_PKSTAT    ,~p_pkstat    ,~t_browse    ,~f_op_pkstat,    ~f_s_pkstat     ,~f_l_pkstat,   ,~f_browselr
 
   ;;,g_grid_editstat  ,S_EDITSTAT  ,~p_editstat  ,~t_editstat  ,~f_op_editstat,  ~f_s_editstat   ,~f_l_browse,   ,~c_no
   ;;,g_grid_editmove  ,S_EDITMOVE  ,~p_edit4     ,~t_edit4     ,~f_op_editmove,  ~f_s_editmove   ,~f_l_browse,   ,~c_no
   ;;,g_grid_edititem  ,S_EDITITEM  ,~p_edititem  ,~t_edititem  ,~f_op_edititem,  ~f_s_edititem   ,~f_l_browse,   ,~c_no
-  ;;,g_grid_editlevl  ,S_EDITLEVL  ,~p_edititem  ,~t_edititem  ,~f_op_editlevl,  ~f_s_editlevl   ,~f_l_browse,   ,~c_no
   ;;,g_grid_editpkmn  ,S_BROWSE    ,~p_browse    ,~t_browse    ,~f_op_browse,    ~f_s_editpkmn   ,~f_l_browse,   ,~c_no
 
   ;;,g_grid_pickedit  ,S_TEAM      ,~p_edit      ,~t_edit      ,~f_op_edit,      ~f_s_edit       ,~f_l_browse,   ,~c_no

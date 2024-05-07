@@ -108,7 +108,7 @@ end $$
       c = C_3
     end
     if obj.disabled then
-      if i == num then
+      if i == num and not lrfunc then
         c = C_2
       else
         c = C_3

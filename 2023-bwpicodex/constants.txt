@@ -11,16 +11,15 @@ S_PARTYEND:       0x5ec0
 
 S_BROWSE:         0x5ec0 # browse screen
 S_TITLE:          0x5ec2 # title screen
-S_PKPREVIEW:      0x5ec4 # pk preview (not really needed)
-S_PKSTAT:         0x5ec6 # unused currently
-S_TEAM:           0x5ec8 # the edit and team 1 selection
-S_TEAM2:          0x5eca # the team 2 selection for versus mode
-S_TEAML:          0x5ecc # the league team selection for league mode
-S_TEAME:          0x5ece # the specific pokemon in edit screen
-S_EDITSTAT:       0x5ed0 # edit the stats for a specific pokemon
-S_EDITMOVE:       0x5ed2 # edit the move for a specific pokemon
-S_EDITITEM:       0x5ed4 # edit the item for a specific pokemon
-S_EDITLEVL:       0x5ed6 # edit the level for a specific pokemon
+S_PKSTAT:         0x5ec4 # display stats for pokemon
+S_TEAM:           0x5ec6 # the edit and team 1 selection
+S_TEAM2:          0x5ec8 # the team 2 selection for versus mode
+S_TEAML:          0x5eca # the league team selection for league mode
+S_TEAME:          0x5ecc # the specific pokemon in edit screen
+S_EDITSTAT:       0x5ece # edit the stats for a specific pokemon
+S_EDITMOVE:       0x5ed0 # edit the move for a specific pokemon
+S_EDITITEM:       0x5ed2 # edit the item for a specific pokemon
+S_EDITLEVL:       0x5ed4 # edit the level for a specific pokemon
 
 S_PALETTE:        0x5efd
 S_NEW:            0x5efe
