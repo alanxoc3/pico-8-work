@@ -3,7 +3,7 @@
 -- thanks to bulbapedia: https://bulbapedia.bulbagarden.net/wiki/Stat#Stat
 -- this formula is much simpler at a specific level (50), so I took some parts out.
 -- this is only used in populate pokemon func below
-|[f_calc_max_stat]| function(base)
+|[f_calc_max_stat]| function(base) -- after working on the next picodex, i realized this can be simplified to: base+52
     return ceil(base+.5*93)+5
 end $$
 

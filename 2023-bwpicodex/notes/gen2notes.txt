@@ -106,3 +106,6 @@ STRAT: Hidden Power counters Conversion 2.
 IDEA: Unlock moves as you defeat trainers.
 IDEA: disable stores as a turn countdown on the pokemon flags. also disable is on different moves.
 IDEA: a prep move will set a disable countdown and disable all moves besides the prep move.
+
+
+DIFF: crit formula is slightly simplified to be 1/16, 2/16, 4/16, 6/16, 8/16. The biggest diff is making the "+3" stage slightly more likely to crit.

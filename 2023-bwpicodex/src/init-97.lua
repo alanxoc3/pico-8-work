@@ -64,7 +64,8 @@ c_pokemon[P_NONE] = {num_str="___", num=P_NONE, name="eMPTY", type1=18, type2=0}
 
 -- 136 to 118. Storing data all together saves like 18 code tokens.
 for i=0,251 do -- There are 252 pkmn and 252 moves. So zipped when unpacking to save some tokens.
-  local pkmn = f_zobj([[moves_progress;,#,#,#; moves_grouped;,#,#,#; lock,~c_no, name,@, num,@, num_str,@]], c_pkmn_names[i], i, f_prefix_zero(i, 3))
+  local pkmn = f_get_default_pkmn(i)
+  f_zobj_set(pkmn, [[moves_progress;,#,#,#; moves_grouped;,#,#,#; lock,~c_no, name,@, num,@, num_str,@]], c_pkmn_names[i], i, f_prefix_zero(i, 3))
 
   -- cur_list is not local just so I can save 1 token
   cur_list, c_moves[i], c_pokemon[i] = pkmn.moves_progress[1], f_zobj([[lock,~c_no, num,@, name,@]], i, c_move_names[i]), pkmn -- todo: get rid of i-1
@@ -74,9 +75,21 @@ for i=0,251 do -- There are 252 pkmn and 252 moves. So zipped when unpacking to 
   end)
 
   -- 'item' actually has gender and item information, but keeping the name item saves a possible token
-  foreach(split'prevolve,type1,type2,hp,att,def,spd,sat,sdf,default_item', function(key)
+  foreach(split'prevolve,type1,type2,hp,attack,defense,speed,specialattack,specialdefense,default_item', function(key)
     pkmn[key] = f_init_peek_inc()
   end)
+
+  foreach(split'hp,attack,defense,speed,specialattack,specialdefense', function(key)
+    -- This calculates the max stat possible at level 50. Simplified a ton from the original formula.
+    -- HP is different and needs to add an extra 55 to the value (+ level + 10).
+    -- Original formula came from here:
+    -- https://bulbapedia.bulbagarden.net/wiki/Individual_values#Usage
+
+    -- Stat calculator helped verify: https://pycosites.com/pkmn/stat_gen2.php
+    -- MAX EV: 65535 | MAX IV: 15
+    pkmn[key] += 52
+  end)
+  pkmn.hp += 55
 
   -- this is guaranteed to set pkmn.genders, as long as the data is all correct, which it is.
   -- saves tokens to be ugly like this (not setting a default value)

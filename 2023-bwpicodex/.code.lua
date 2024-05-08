@@ -208,19 +208,17 @@ end
 end
 end
 end,function(pkmn_num)
-local pkmn=setmetatable(f_zobj("num,@,edit_moves,#,view_moves,#,seen_moves,#",pkmn_num),{__index=c_pokemon[pkmn_num]})
-pkmn.gender_bit=pkmn_num
-pkmn.item=pkmn.default_item
-pkmn.level=50
+local pkmn=f_zobj("num,@,edit_moves,#,seen_moves,#,view_moves,#,major,0,gender_bit,0,gender,0,level,50,item,0,evasion,1,accuracy,1,crit,1;view_moves;,0,0,0,0;stages;attack,0,defense,0,specialattack,0,specialdefense,0,speed,0,crit,0,evasion,0,accuracy,0;",pkmn_num)
 pkmn.edit_moves=split"3,3,3,3"
 return pkmn
 end,function(party_num,spot_num)
 local num_loc=0x5e00+party_num*48+spot_num*8
 local pkmn_num=min(252,@num_loc)
 if pkmn_num<252 and not c_pokemon[pkmn_num].lock then pkmn_num=252 end
-local pkmn=f_zobj"level,50,edit_moves,#,view_moves,#,seen_moves,#"
+local pkmn=f_get_default_pkmn(pkmn_num)
 pkmn=setmetatable(pkmn,{__index=c_pokemon[pkmn_num]})
 if pkmn_num<252 then
+pkmn.view_moves={}
 pkmn.valid=true
 pkmn.gender_bit=@(num_loc+1)
 pkmn.gender=pkmn.genders[pkmn.gender_bit%#pkmn.genders+1]
@@ -348,14 +346,14 @@ add(op,{text="iTEM:  nONE"})
 add(op,{text="gENDR: "..genders})
 add(op,{text="pOKEMON sTAT",disabled=true})
 add(op,{text="hEALT: "..pkmn.hp.."/"..pkmn.hp})
-add(op,{text="aTACK: 003 +4"})
-add(op,{text="dEFNS: 132 +1"})
-add(op,{text="sPaTK: 132 -3"})
-add(op,{text="sPdFN: 090 -6"})
-add(op,{text="sPEED: 132"})
-add(op,{text="eVASN: 120% +3"})
-add(op,{text="aCURY: 090% -1"})
-add(op,{text="cRITL: 006% +2"})
+add(op,{text="aTACK: "..f_prefix_zero(pkmn.attack,3).." "..(pkmn.stages.attack>0 and "+"..pkmn.stages.attack or(pkmn.stages.attack<0 and "-"..pkmn.stages.attack)or "")})
+add(op,{text="dEFNS: "..f_prefix_zero(pkmn.defense,3).." "..(pkmn.stages.defense>0 and "+"..pkmn.stages.defense or(pkmn.stages.defense<0 and "-"..pkmn.stages.defense)or "")})
+add(op,{text="sPaTK: "..f_prefix_zero(pkmn.specialattack,3).." "..(pkmn.stages.specialattack>0 and "+"..pkmn.stages.specialattack or(pkmn.stages.specialattack<0 and "-"..pkmn.stages.specialattack)or "")})
+add(op,{text="sPdFN: "..f_prefix_zero(pkmn.specialdefense,3).." "..(pkmn.stages.specialdefense>0 and "+"..pkmn.stages.specialdefense or(pkmn.stages.specialdefense<0 and "-"..pkmn.stages.specialdefense)or "")})
+add(op,{text="sPEED: "..f_prefix_zero(pkmn.speed,3).." "..(pkmn.stages.speed>0 and "+"..pkmn.stages.speed or(pkmn.stages.speed<0 and "-"..pkmn.stages.speed)or "")})
+add(op,{text="eVASN: "..f_prefix_zero(pkmn.evasion*100\1,3).."%"})
+add(op,{text="aCURY: "..f_prefix_zero(pkmn.accuracy*100\1,3).."%"})
+add(op,{text="cRITL: "..f_prefix_zero(pkmn.crit/16*100\1,3).."%"})
 add(op,{text="mOVE1: ___",disabled=true})
 add(op,{text="tYPE:  ___"})
 add(op,{text="pWpNT: __/__"})
@@ -649,14 +647,19 @@ for i=0,41 do add(c_items,f_zobj("lock,~c_no,num,@,name,@",i,c_item_names[i]))en
 for i=1,100 do add(c_levels,f_zobj("lock,~c_yes,num,@,name,@",i,"lV."..f_prefix_zero(i,3)))end
 c_pokemon[252]={num_str="___",num=252,name="eMPTY",type1=18,type2=0}
 for i=0,251 do
-local pkmn=f_zobj("moves_progress;,#,#,#;moves_grouped;,#,#,#;lock,~c_no,name,@,num,@,num_str,@",c_pkmn_names[i],i,f_prefix_zero(i,3))
+local pkmn=f_get_default_pkmn(i)
+f_zobj_set(pkmn,"moves_progress;,#,#,#;moves_grouped;,#,#,#;lock,~c_no,name,@,num,@,num_str,@",c_pkmn_names[i],i,f_prefix_zero(i,3))
 cur_list,c_moves[i],c_pokemon[i]=pkmn.moves_progress[1],f_zobj("lock,~c_no,num,@,name,@",i,c_move_names[i]),pkmn
 foreach(split"pow,type,acc,pp",function(key)
 c_moves[i][key]=f_init_peek_inc()
 end)
-foreach(split"prevolve,type1,type2,hp,att,def,spd,sat,sdf,default_item",function(key)
+foreach(split"prevolve,type1,type2,hp,attack,defense,speed,specialattack,specialdefense,default_item",function(key)
 pkmn[key]=f_init_peek_inc()
 end)
+foreach(split"hp,attack,defense,speed,specialattack,specialdefense",function(key)
+pkmn[key]+=52
+end)
+pkmn.hp+=55
 for k,v in pairs(f_zobj"192;,1,2;0;,0;64;,1;128;,2")do
 if pkmn.default_item & 192==k then
 pkmn.genders=v
