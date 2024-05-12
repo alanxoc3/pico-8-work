@@ -4,9 +4,7 @@
   -- TODO: do I need layers of pokemon, like I did in the og picodex.
   local pkmn = f_zobj([[
     num, @,
-    edit_moves, #,            -- Moves are set to the index in the possible_moves for the Pokemon. Not the actual global move id.
     seen_moves, #,            -- A move to boolean map that is used to disable things on the move edit screen and populate edit_moves.
-    view_moves, #,            -- Moves are set to the actual move id. This should somehow be used in the stat UI.
     major,      C_MAJOR_NONE, -- The major status condition in pokemon battles: fainted, burned, frozen, paralyzed, poisoned, sleeping
 
     gender_bit, 0,            -- The gender bit. This number is modded by the Pokemon's possible genders to figure out the gender. TODO: maybe this could be randomized
@@ -14,11 +12,14 @@
 
     level,      50,           -- The level is always 50. 50 is the only level in Picodex. TODO: This should be removed
     item,       I_NONE,       -- The item the Pokemon has
-    evasion,  1,
-    accuracy, 1,
-    crit,     1;
+    evasion,    1,
+    accuracy,   1,
+    crit,       1;
 
-    view_moves;,M_NONE,M_NONE,M_NONE,M_NONE;
+    1; id,M_NONE, pid,3; -- start at 3 because there are usually 3 none spots
+    2; id,M_NONE, pid,4; -- id: the actual move id. pid: the possible move id (local to pkmn)
+    3; id,M_NONE, pid,5;
+    4; id,M_NONE, pid,6;
 
     stages;
       attack,         0,
@@ -35,7 +36,6 @@
   -- pkmn.item = pkmn.default_item
 
   -- todo: moves could change as you unlock them. so all 3s might not be the best approach. or at least i should call getparty then saveparty
-  pkmn.edit_moves = split[[3,3,3,3]] -- all 3s, because 0-2 are ___ empty moves for all pkmn. the get party function below will figure out 
   return pkmn
 end $$
 
@@ -47,7 +47,7 @@ end $$
   pkmn = setmetatable(pkmn, {__index=c_pokemon[pkmn_num]}) -- none is set too.
 
   if pkmn_num < P_NONE then
-    pkmn.view_moves = {}
+    pkmn.moves = {}
     pkmn.valid = true
     pkmn.gender_bit = @(num_loc+1) -- this is how you should change the gender. just add 1
     pkmn.gender     = pkmn.genders[pkmn.gender_bit%#pkmn.genders+1]
@@ -61,8 +61,7 @@ end $$
       end
 
       pkmn.seen_moves[move] = true
-      add(pkmn.edit_moves, move)
-      add(pkmn.view_moves, pkmn.possible_moves[move+1])
+      pkmn[i-3] = {id=pkmn.possible_moves[move+1], pid=move}
     end
   end
 
@@ -77,8 +76,8 @@ end $$
   poke(num_loc+1, gender_bit)
   poke(num_loc+2, item)
   poke(num_loc+3, level-1)
-  poke(num_loc+4, edit_moves[1])
-  poke(num_loc+5, edit_moves[2])
-  poke(num_loc+6, edit_moves[3])
-  poke(num_loc+7, edit_moves[4])
+  poke(num_loc+4, _ENV[1].pid)
+  poke(num_loc+5, _ENV[2].pid)
+  poke(num_loc+6, _ENV[3].pid)
+  poke(num_loc+7, _ENV[4].pid)
 end $$

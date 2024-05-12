@@ -61,8 +61,8 @@ end $$
   local pkmn = f_get_party_pkmn(@S_TEAM, @S_TEAME)
 
   for i=1,4 do
-    add(op, {text=c_move_names[pkmn.view_moves[i]], select=function()
-      poke(S_EDITMOVE, pkmn.edit_moves[i])
+    add(op, {text=c_move_names[pkmn[i].id], select=function()
+      poke(S_EDITMOVE, pkmn[i])
       add(g_gridstack, g_grid_editmove)
     end})
   end
@@ -77,8 +77,8 @@ end $$
     pkmn:f_save_party_pkmn(@S_TEAM, @S_TEAME)
   end})
 
-  add(op, {text="vIEW", select=function()
-    -- TODO!
+  add(op, {text="sTATS", select=function()
+    add(g_gridstack, g_grid_statedit)
   end})
 
   add(op, {text="dELETE", select=function()
@@ -113,10 +113,19 @@ end $$
 
 |[f_op_edititem]| function() return f_op_template_edit(c_items,  'item')  end $$
 
-|[f_op_pkstat]| function()
-  local op = {}
-  local pkmn = c_pokemon[@g_grid_browse[1].mem]
+|[f_add_stat_move]| function(op, pkmn, ind)
+  local m = pkmn[ind]
+  if m.id ~= M_NONE then
+    add(op, {text="mOVE"..ind..": "..c_move_names[m.id], disabled=true})
+    add(op, {text="tYPE:  "..c_type_names[c_moves[m.id].type+1]})
+    add(op, {text="pWpNT: "..f_prefix_zero(c_moves[m.id].pp,  2).."/"..f_prefix_zero(c_moves[m.id].pp,  2)})
+    add(op, {text="pW/aC: "..f_prefix_zero(c_moves[m.id].pow, 3).."/"..f_prefix_zero(c_moves[m.id].acc, 3)})
+  end
+end $$
 
+-- 0 = browse, 1 = edit, 2 = benched, 3 = active
+|[f_add_stat]| function(pkmn, mode)
+  local op = {}
   local genders = ""
   if #pkmn.genders == 1 then
     genders = c_gender_names[pkmn.genders[1]].."/"
@@ -136,69 +145,68 @@ end $$
     add(op, {text=""})
   end
 
-  add(op, {text="pOKEMON dATA", disabled=true})
-  add(op, {text="mAJOR: nONE"})
-  add(op, {text="iTEM:  nONE"})
-  add(op, {text="gENDR: "..genders})
-  -- add(op, {text="eVOLV: "..c_pkmn_names[pkmn.prevolve]})
+  add(op, {text="pOKEMON sTATS", disabled=true})
 
-  add(op, {text="pOKEMON sTAT", disabled=true})
+  if mode >= MODE_BENCH then -- todo: convert to > (gt), saves a character
+    add(op, {text="mAJOR: nONE"})
+  end
+
+  if mode >= MODE_EDIT then -- todo: convert to > (gt), saves a character
+    add(op, {text="iTEM:  nONE"})
+  end
+
+  add(op, {text="gENDR: "..genders})
+  add(op, {text="eVOLV: "..c_pkmn_names[pkmn.prevolve]})
   add(op, {text="hEALT: " .. pkmn.hp .. "/" .. pkmn.hp})
   add(op, {text="aTACK: " .. f_prefix_zero(pkmn.attack,         3) .. " "  .. (pkmn.stages.attack         > 0 and "+"..pkmn.stages.attack         or (pkmn.stages.attack         < 0 and "-"..pkmn.stages.attack        ) or "")})
   add(op, {text="dEFNS: " .. f_prefix_zero(pkmn.defense,        3) .. " "  .. (pkmn.stages.defense        > 0 and "+"..pkmn.stages.defense        or (pkmn.stages.defense        < 0 and "-"..pkmn.stages.defense       ) or "")})
   add(op, {text="sPaTK: " .. f_prefix_zero(pkmn.specialattack,  3) .. " "  .. (pkmn.stages.specialattack  > 0 and "+"..pkmn.stages.specialattack  or (pkmn.stages.specialattack  < 0 and "-"..pkmn.stages.specialattack ) or "")})
   add(op, {text="sPdFN: " .. f_prefix_zero(pkmn.specialdefense, 3) .. " "  .. (pkmn.stages.specialdefense > 0 and "+"..pkmn.stages.specialdefense or (pkmn.stages.specialdefense < 0 and "-"..pkmn.stages.specialdefense) or "")})
   add(op, {text="sPEED: " .. f_prefix_zero(pkmn.speed,          3) .. " "  .. (pkmn.stages.speed          > 0 and "+"..pkmn.stages.speed          or (pkmn.stages.speed          < 0 and "-"..pkmn.stages.speed         ) or "")})
-  add(op, {text="eVASN: " .. f_prefix_zero(pkmn.evasion*100\1,  3) .. "%"})
-  add(op, {text="aCURY: " .. f_prefix_zero(pkmn.accuracy*100\1, 3) .. "%"})
-  add(op, {text="cRITL: " .. f_prefix_zero(pkmn.crit/16*100\1,  3) .. "%"})
 
-  add(op, {text="mOVE1: ___", disabled=true})
-  add(op, {text="tYPE:  ___"})
-  add(op, {text="pWpNT: __/__"})
-  add(op, {text="pW/aC: ___/___"})
-
-  add(op, {text="mOVE2: sLFdES", disabled=true})
-  add(op, {text="tYPE:  wATER"})
-  add(op, {text="pWpNT: 05/05"})
-  add(op, {text="pW/aC: 040/100"})
-
-  add(op, {text="mOVE3: sLFdES", disabled=true})
-  add(op, {text="tYPE:  wATER"})
-  add(op, {text="pWpNT: 05/05"})
-  add(op, {text="pW/aC: 040/100"})
-
-  add(op, {text="mOVE4: sLFdES", disabled=true})
-  add(op, {text="tYPE:  wATER"})
-  add(op, {text="pWpNT: 05/05"})
-  add(op, {text="pW/aC: 040/100"})
-
-  add(op, {text="bATTLE fLAGS", disabled=true})
-
-  local prev = ""
-  for i,x in ipairs(split"nONE") do -- split"aCTIVE,bENCHD,nONE,mVlOCK,bIDE,dFNcRL,dISABL,cONFUS,rOLOUT,dSTbND,lOCKoN,dIG,fLY,fRYcTR,rAGE,tOXIC,pERsNG,pDEcNT,sUBSTU,nGTMAR,tRFORM,lECHsD,cURSE,mIST,tRAPPD,mEANlK,aTRACT,fORsGT,fTRsGT,sAFgRD,lITsCR,rFLECT,sPIKES,sNDsTR,rAIdNC,sUNdAY") do
-    if i%2 == 1 do
-      prev = x
-      while #prev < 6 do
-        prev = prev.." "
-      end
-    else
-      add(op, {text=prev.." "..x})
-      prev=""
-    end
+  if mode >= MODE_ACTIVE then -- todo: convert to > (gt), saves a character
+    add(op, {text="eVASN: " .. f_prefix_zero(pkmn.evasion*100\1,  3) .. "%"})
+    add(op, {text="aCURY: " .. f_prefix_zero(pkmn.accuracy*100\1, 3) .. "%"})
+    add(op, {text="cRITL: " .. f_prefix_zero(pkmn.crit/16*100\1,  3) .. "%"})
   end
 
-  if prev ~= "" then
-    add(op, {text=prev})
+  if mode >= MODE_EDIT then
+    f_add_stat_move(op, pkmn, 1)
+    f_add_stat_move(op, pkmn, 2)
+    f_add_stat_move(op, pkmn, 3)
+    f_add_stat_move(op, pkmn, 4)
+  end
+
+  if mode >= MODE_ACTIVE then
+    add(op, {text="bATTLE fLAGS", disabled=true})
+
+    local prev = ""
+    for i,x in ipairs(split"aCTIVE,bENCHD,nONE,mVlOCK,bIDE,dFNcRL,dISABL,cONFUS,rOLOUT,dSTbND,lOCKoN,dIG,fLY,fRYcTR,rAGE,tOXIC,pERsNG,pDEcNT,sUBSTU,nGTMAR,tRFORM,lECHsD,cURSE,mIST,tRAPPD,mEANlK,aTRACT,fORsGT,fTRsGT,sAFgRD,lITsCR,rFLECT,sPIKES,sNDsTR,rAIdNC,sUNdAY") do
+      if i%2 == 1 do
+        prev = x
+        while #prev < 6 do
+          prev = prev.." "
+        end
+      else
+        add(op, {text=prev.." "..x})
+        prev=""
+      end
+    end
+
+    if prev ~= "" then
+      add(op, {text=prev})
+    end
   end
 
   return op
 end $$
 
+|[f_op_statbrowse]| function() return f_add_stat(c_pokemon[@S_BROWSE], MODE_BROWSE) end $$
+|[f_op_statedit]|   function() return f_add_stat(f_get_party_pkmn(@S_TEAM, @S_TEAME),  MODE_EDIT)   end $$
+
 ---------------------------------------------
 -- dp and dt drawing for ui
 ---------------------------------------------
-
 |[f_dp_browse]| function(i, is_sel, gridobj)
   f_draw_pkmn(gridobj.data, 1, 1, 6, false, is_sel, gridobj.disabled)
 end $$
@@ -220,7 +228,7 @@ end $$
   if @S_EDITSTAT < 4 then f_print_top("eDIT: mOVE", @S_EDITSTAT+1)
   elseif @S_EDITSTAT == 4 then f_print_top"eDIT: iTEM"
   elseif @S_EDITSTAT == 5 then f_print_top"eDIT: gENDER"
-  elseif @S_EDITSTAT == 6 then f_print_top"eDIT: pRVIEW"
+  elseif @S_EDITSTAT == 6 then f_print_top"eDIT: sTATS"
   elseif @S_EDITSTAT == 7 then f_print_top"eDIT: dELETE"
   end
 
@@ -383,7 +391,7 @@ end $$
 end $$
 
 |[f_s_browse]| function()
-  add(g_gridstack, g_grid_pkstat)
+  add(g_gridstack, g_grid_statbrowse)
 end $$
 
 |[f_s_title]| function()
@@ -436,7 +444,7 @@ end $$
 
 |[f_s_editmove]| function()
   local pkmn = f_get_party_pkmn(@S_TEAM, @S_TEAME)
-  pkmn.edit_moves[@S_EDITSTAT+1] = @S_EDITMOVE
+  pkmn[@S_EDITSTAT+1] = @S_EDITMOVE
   f_save_party_pkmn(pkmn, @S_TEAM, @S_TEAME)
   deli(g_gridstack)
 end $$
@@ -474,7 +482,7 @@ end $$
   poke(S_BROWSE, next-1)
   if prev ~= @S_BROWSE then
     f_minisfx(SFX_MOVE)
-    -- f_populate_stats() f_op_pkstat related
+    -- f_populate_stats() f_op_statbrowse related
   elseif dir ~= 0 then
     f_minisfx(SFX_ERROR)
   end
@@ -515,22 +523,24 @@ f_zcall(f_create_gridpair, [[
   ;p_teamed;    ,2 ,4 ,2 ,4  ,30 ,9  ,~f_nf             ,~f_nf
   ;t_teamed;    ,1 ,1 ,2 ,45 ,60 ,16 ,~f_dt_edit        ,~f_nf
 
-  -- name              active mem  main grid     info grid     mk op mkfunc      select func     leave func
-  ;;,g_grid_browse    ,S_BROWSE    ,~p_browse    ,~t_browse    ,~f_op_browse,    ~f_s_browse     ,~f_l_browse,   ,~c_no
-  ;;,g_grid_title     ,S_TITLE     ,~t_title     ,~p_title     ,~f_op_title,     ~f_s_title      ,~f_l_title,    ,~c_no
+  -- name               active mem   main grid     info grid     mk op mkfunc       select func     leave func
+  ;;,g_grid_browse     ,S_BROWSE     ,~p_browse    ,~t_browse    ,~f_op_browse,     ~f_s_browse     ,~f_l_browse,   ,~c_no
+  ;;,g_grid_title      ,S_TITLE      ,~t_title     ,~p_title     ,~f_op_title,      ~f_s_title      ,~f_l_title,    ,~c_no
 
-  ;;,g_grid_pkstat    ,S_PKSTAT    ,~p_pkstat    ,~t_browse    ,~f_op_pkstat,    ~f_s_pkstat     ,~f_l_pkstat,   ,~f_browselr
+  ;;,g_grid_statbrowse ,S_STATBROWSE ,~p_pkstat    ,~t_browse    ,~f_op_statbrowse, ~f_s_pkstat     ,~f_l_pkstat,   ,~f_browselr
+  ;;,g_grid_statedit   ,S_STATEDIT   ,~p_pkstat    ,~t_browse    ,~f_op_statedit,   ~f_s_pkstat     ,~f_l_pkstat,   ,~f_browselr
+  ;;,g_grid_statbattle ,S_STATBATTLE ,~p_pkstat    ,~t_browse    ,~f_op_statbrowse, ~f_s_pkstat     ,~f_l_pkstat,   ,~f_browselr
 
-  ;;,g_grid_editstat  ,S_EDITSTAT  ,~p_editstat  ,~t_editstat  ,~f_op_editstat,  ~f_s_editstat   ,~f_l_browse,   ,~c_no
-  ;;,g_grid_editmove  ,S_EDITMOVE  ,~p_edit4     ,~t_edit4     ,~f_op_editmove,  ~f_s_editmove   ,~f_l_browse,   ,~c_no
-  ;;,g_grid_edititem  ,S_EDITITEM  ,~p_edititem  ,~t_edititem  ,~f_op_edititem,  ~f_s_edititem   ,~f_l_browse,   ,~c_no
-  ;;,g_grid_editpkmn  ,S_BROWSE    ,~p_browse    ,~t_browse    ,~f_op_browse,    ~f_s_editpkmn   ,~f_l_browse,   ,~c_no
+  ;;,g_grid_editstat   ,S_EDITSTAT   ,~p_editstat  ,~t_editstat  ,~f_op_editstat,   ~f_s_editstat   ,~f_l_browse,   ,~c_no
+  ;;,g_grid_editmove   ,S_EDITMOVE   ,~p_edit4     ,~t_edit4     ,~f_op_editmove,   ~f_s_editmove   ,~f_l_browse,   ,~c_no
+  ;;,g_grid_edititem   ,S_EDITITEM   ,~p_edititem  ,~t_edititem  ,~f_op_edititem,   ~f_s_edititem   ,~f_l_browse,   ,~c_no
+  ;;,g_grid_editpkmn   ,S_BROWSE     ,~p_browse    ,~t_browse    ,~f_op_browse,     ~f_s_editpkmn   ,~f_l_browse,   ,~c_no
 
-  ;;,g_grid_pickedit  ,S_TEAM      ,~p_edit      ,~t_edit      ,~f_op_edit,      ~f_s_edit       ,~f_l_browse,   ,~c_no
-  ;;,g_grid_pickleag  ,S_TEAM      ,~p_edit      ,~t_league    ,~f_op_edit,      ~f_s_league     ,~f_l_browse,   ,~c_no,      ~c_yes
-  ;;,g_grid_pickplr1  ,S_TEAM      ,~p_edit      ,~t_versus    ,~f_op_edit,      ~f_s_versus     ,~f_l_browse,   ,~c_no,      ~c_yes
+  ;;,g_grid_pickedit   ,S_TEAM       ,~p_edit      ,~t_edit      ,~f_op_edit,       ~f_s_edit       ,~f_l_browse,   ,~c_no
+  ;;,g_grid_pickleag   ,S_TEAM       ,~p_edit      ,~t_league    ,~f_op_edit,       ~f_s_league     ,~f_l_browse,   ,~c_no,      ~c_yes
+  ;;,g_grid_pickplr1   ,S_TEAM       ,~p_edit      ,~t_versus    ,~f_op_edit,       ~f_s_versus     ,~f_l_browse,   ,~c_no,      ~c_yes
 
-  ;;,g_grid_pickspot  ,S_TEAME     ,~p_editteam  ,~t_editteam  ,~f_op_editteam,  ~f_s_editteam   ,~f_l_browse,   ,~c_no
-  ;;,g_grid_picktrnr  ,S_TEAML     ,~p_teamed    ,~t_league    ,~f_op_teams,     ~f_nf           ,~f_l_browse,   ,~c_no
-  ;;,g_grid_pickplr2  ,S_TEAM2     ,~p_edit      ,~t_versus    ,~f_op_edit,      ~f_nf           ,~f_l_browse,   ,~c_no,      ~c_yes
+  ;;,g_grid_pickspot   ,S_TEAME      ,~p_editteam  ,~t_editteam  ,~f_op_editteam,   ~f_s_editteam   ,~f_l_browse,   ,~c_no
+  ;;,g_grid_picktrnr   ,S_TEAML      ,~p_teamed    ,~t_league    ,~f_op_teams,      ~f_nf           ,~f_l_browse,   ,~c_no
+  ;;,g_grid_pickplr2   ,S_TEAM2      ,~p_edit      ,~t_versus    ,~f_op_edit,       ~f_nf           ,~f_l_browse,   ,~c_no,      ~c_yes
 ]])

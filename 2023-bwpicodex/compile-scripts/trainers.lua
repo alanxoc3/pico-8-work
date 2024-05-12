@@ -7,7 +7,7 @@ function init() -- entry point for this compile script
   log("Wrote Trainer Data")
 end
 
--- 57 trainers total - includes every pokemon and every move besides missingno and struggle.
+-- 57 trainers total - includes every pokemon and every move besides missingno, tm05, and struggle.
 -- saves a few tokens when upacking to put the move first
 g_trainer_data = [[
   M_SWIFT        P_RATTATA    P_PIDGEY     P_SENTRET    P_ZUBAT      P_EEVEE      P_WOOPER     -- youngster    TM39
@@ -74,15 +74,15 @@ g_trainer_data = [[
   M_RAINDANCE    P_AIPOM      P_DUGTRIO    P_DEWGONG    P_CHANSEY    P_FERALIGATR P_BLISSEY    -- cooltrainer  TM18
   M_EARTHQUAKE   P_PIDGEOT    P_ARCANINE   P_NIDOQUEEN  P_NIDOKING   P_VAPOREON   P_RHYDON     -- blue         TM26
 
+  M_ENDURE       P_RAIKOU     P_ENTEI      P_SUICUNE    P_ZAPDOS     P_ARTICUNO   P_MOLTRES    -- legend       TM20
   M_PROTECT      P_CROBAT     P_MAGNETON   P_URSARING   P_SNEASEL    P_GENGAR     P_TYRANITAR  -- silver       TM17
-  M_BLIZZARD     P_GIRAFARIG  P_LAPRAS     P_EXEGGUTOR  P_SLOWKING   P_JYNX       P_XATU       -- will         TM14
-  M_TOXIC        P_MUK        P_FORRETRESS P_VENOMOTH   P_ARIADOS    P_NIDOKING   P_CROBAT     -- koga         TM06
+  M_BLIZZARD     P_GIRAFARIG  P_JYNX       P_ESPEON     P_XATU       P_EXEGGUTOR  P_SLOWKING   -- will         TM14
 
+  M_TOXIC        P_MUK        P_FORRETRESS P_VENOMOTH   P_ARIADOS    P_NIDOKING   P_CROBAT     -- koga         TM06
   M_DETECT       P_HITMONCHAN P_HITMONLEE  P_POLIWRATH  P_HERACROSS  P_HITMONTOP  P_MACHAMP    -- bruno        TM43
   M_CURSE        P_MURKROW    P_VENUSAUR   P_UMBREON    P_VILEPLUME  P_MISDREAVUS P_HOUNDOOM   -- karen        TM03
-  M_HYPERBEAM    P_AERODACTYL P_GYARADOS   P_SNORLAX    P_KINGDRA    P_CHARIZARD  P_DRAGONITE  -- lance        TM15
 
-  M_SWAGGER      P_RAIKOU     P_TYRANITAR  P_ENTEI      P_CELEBI     P_SUICUNE    P_HOOH       -- eusine       TM34
-  M_ENDURE       P_ZAPDOS     P_DRAGONITE  P_ARTICUNO   P_MEW        P_MOLTRES    P_LUGIA      -- lawrence     TM20
-  M_DOUBLETEAM   P_CLOYSTER   P_EXEGGUTOR  P_MAROWAK    P_SNORLAX    P_SKARMORY   P_MEWTWO     -- red          TM32
+  M_HYPERBEAM    P_AERODACTYL P_GYARADOS   P_SNORLAX    P_KINGDRA    P_CHARIZARD  P_DRAGONITE  -- lance        TM15
+  M_DOUBLETEAM   P_PIKACHU    P_VENUSAUR   P_CHARIZARD  P_BLASTOISE  P_MEWTWO     P_MEW        -- red          TM32
+  M_SWAGGER      P_MEGANIUM   P_TYPHLOSION P_FERALIGATR P_HOOH       P_LUGIA      P_CELEBI     -- gold         TM34
 ]]

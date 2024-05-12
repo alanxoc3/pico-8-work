@@ -11,15 +11,17 @@ S_PARTYEND:       0x5ec0
 
 S_BROWSE:         0x5ec0 # browse screen
 S_TITLE:          0x5ec2 # title screen
-S_PKSTAT:         0x5ec4 # display stats for pokemon
-S_TEAM:           0x5ec6 # the edit and team 1 selection
-S_TEAM2:          0x5ec8 # the team 2 selection for versus mode
-S_TEAML:          0x5eca # the league team selection for league mode
-S_TEAME:          0x5ecc # the specific pokemon in edit screen
-S_EDITSTAT:       0x5ece # edit the stats for a specific pokemon
-S_EDITMOVE:       0x5ed0 # edit the move for a specific pokemon
-S_EDITITEM:       0x5ed2 # edit the item for a specific pokemon
-S_EDITLEVL:       0x5ed4 # edit the level for a specific pokemon
+S_STATBROWSE:     0x5ec4 # display stats for pokemon
+S_STATEDIT:       0x5ec6 # display stats for pokemon
+S_STATBATTLE:     0x5ec8 # display stats for pokemon
+S_TEAM:           0x5eca # the edit and team 1 selection
+S_TEAM2:          0x5ecc # the team 2 selection for versus mode
+S_TEAML:          0x5ece # the league team selection for league mode
+S_TEAME:          0x5ed0 # the specific pokemon in edit screen
+S_EDITSTAT:       0x5ed2 # edit the stats for a specific pokemon
+S_EDITMOVE:       0x5ed4 # edit the move for a specific pokemon
+S_EDITITEM:       0x5ed6 # edit the item for a specific pokemon
+S_EDITLEVL:       0x5ed8 # edit the level for a specific pokemon
 
 S_PALETTE:        0x5efd
 S_NEW:            0x5efe
@@ -34,6 +36,12 @@ SFX_MOVE:   255
 # league score
 # 6 bytes for a pokemon... 36 for a party. gender+item in same byte
 # i can fit like 4-6 parties easily. above 6 is too much.
+
+# STAT MODES. These are the modes that the stat menu has.
+MODE_BROWSE: 0
+MODE_EDIT:   1
+MODE_BENCH:  2
+MODE_ACTIVE: 3
 
 # ----------------------------- load memory locations
 L_DATASTART: 0x1fff # data starts one byte before because the code increments first
