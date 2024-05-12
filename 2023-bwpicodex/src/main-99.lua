@@ -47,7 +47,7 @@ g_title_l = 254
 g_title_r = 254
 g_title_an_timer = 70 -- starts at 70, so both are centered and not shaking. TODO: try setting with better syntax
 
--- TODO: dedup this if it's only used once
+-- TODO: dedup this if it's only used once and maybe try a btnp(i) approach instead (for loop)
 function bitmaskToIndex(bitmask)
   for i = 0, 5 do
     if bitmask & (1 << i) ~= 0 then
@@ -66,7 +66,6 @@ end
 
   if g_title_timer == 80 then
     g_cg_m.updatefunc() -- This is used for the title animation and maybe other animations. TODO: Refactor me.
-    g_cg_s.updatefunc() -- This is used for the title animation and maybe other animations. TODO: Refactor me.
     f_update_grid(g_cg_m, gridpo)
   elseif g_title_timer < 80 then
     local b = bitmaskToIndex(btnp())

@@ -39,14 +39,13 @@ f_zobj_set(_g,"f_zobj,@,f_zobj_set,@,f_zobj_eval,@,f_zcall,@,f_create_gridpair,@
 foreach(f_zobj(text,...),function(params)
 func(unpack(params))
 end)
-end,function(name,mem,first,second,first_obj_func,selfunc,leavefunc,lrfunc,...)
-local pair={}
-for tab in all{first,second}do
-add(pair,f_zobj("name,@,mem,@,memview,@,selfunc,@,leavefunc,@,lrfunc,@,w,@,vh,@,x,@,y,@,cw,@,ch,@,df,@,updatefunc,@",name,mem,mem+1,selfunc,leavefunc,lrfunc,unpack(tab)))
-end
-add(pair,first_obj_func)
-add(pair,{...})
-_g[name]=pair
+end,function(name,mem,main_grid_spec,info_grid_spec,main_grid_draw,info_grid_draw,main_op_func,main_sel_func,main_leave_func,main_lr_func,main_update_func,...)
+_g[name]={
+f_zobj("name,@,mem,@,memview,@,df,@,selfunc,@,leavefunc,@,lrfunc,@,updatefunc,@,w,@,vh,@,x,@,y,@,cw,@,ch,@",name,mem,mem+1,main_grid_draw,main_sel_func,main_leave_func,main_lr_func,main_update_func,unpack(main_grid_spec)),
+f_zobj("name,@,mem,@,memview,@,df,@,w,@,vh,@,x,@,y,@,cw,@,ch,@",name,-1,-1,info_grid_draw,unpack(info_grid_spec)),
+main_op_func,
+{...}
+}
 end,function(_ENV,gridobj)
 local evalfunc=function(num,mmin,mmax,b0,b1,l)
 local off=(b1 and l or 0)-(b0 and l or 0)
@@ -590,7 +589,6 @@ g_cg_m,g_cg_s,gridpo,params=unpack(g_gridstack[#g_gridstack])
 gridpo=gridpo(unpack(params))
 if g_title_timer==80 then
 g_cg_m.updatefunc()
-g_cg_s.updatefunc()
 f_update_grid(g_cg_m,gridpo)
 elseif g_title_timer<80 then
 local b=bitmaskToIndex(btnp())
@@ -740,7 +738,7 @@ poke2(loc,%loc & 0x70df|0x0a00)
 end
 poke4(iloc+64,0x.07d7)
 end
-f_zcall(f_create_gridpair,"p_browse;,6,4,2,2,10,10,~f_dp_browse,~f_nf;t_browse;,1,1,2,45,60,16,~f_dt_browse,~f_nf;p_title;,1,1,2,2,60,40,~f_dp_title,~f_dp_title_update;t_title;,2,2,2,44,30,9,~f_nf,~f_nf;p_pkstat;,1,4,2,4,60,9,~f_dp_pkstat,~f_nf;t_edit;,1,1,2,45,60,16,~f_dt_edit,~f_nf;p_edit;,2,2,2,2,30,20,~f_dp_edit,~f_nf;t_editteam;,1,1,2,45,60,16,~f_dt_editteam,~f_nf;p_editteam;,3,2,2,2,20,20,~f_dp_editteam,~f_nf;t_editstat;,1,1,2,45,60,16,~f_dt_editstat,~f_nf;p_editstat;,2,4,2,4,30,9,~f_nf,~f_nf;t_edit4;,1,1,2,45,60,16,~f_dt_editmove,~f_nf;p_edit4;,2,4,2,4,30,9,~f_nf,~f_nf;t_edititem;,1,1,2,45,60,16,~f_dt_editstat,~f_nf;p_edititem;,2,4,2,4,30,9,~f_nf,~f_nf;t_versus;,1,1,2,45,60,16,~f_dt_versus,~f_nf;t_league;,1,1,2,45,60,16,~f_dt_league,~f_nf;p_teamed;,2,4,2,4,30,9,~f_nf,~f_nf;t_teamed;,1,1,2,45,60,16,~f_dt_edit,~f_nf;;,g_grid_browse,0x5ec0,~p_browse,~t_browse,~f_op_browse,~f_s_browse,~f_l_browse,,~c_no;;,g_grid_title,0x5ec2,~t_title,~p_title,~f_op_title,~f_s_title,~f_l_title,,~c_no;;,g_grid_statbrowse,0x5ec4,~p_pkstat,~t_browse,~f_op_statbrowse,~f_s_pkstat,~f_l_pkstat,,~f_browselr;;,g_grid_statedit,0x5ec6,~p_pkstat,~t_browse,~f_op_statedit,~f_s_pkstat,~f_l_pkstat,,~f_browselr;;,g_grid_statbattle,0x5ec8,~p_pkstat,~t_browse,~f_op_statbrowse,~f_s_pkstat,~f_l_pkstat,,~f_browselr;;,g_grid_editstat,0x5ed2,~p_editstat,~t_editstat,~f_op_editstat,~f_s_editstat,~f_l_browse,,~c_no;;,g_grid_editmove,0x5ed4,~p_edit4,~t_edit4,~f_op_editmove,~f_s_editmove,~f_l_browse,,~c_no;;,g_grid_edititem,0x5ed6,~p_edititem,~t_edititem,~f_op_edititem,~f_s_edititem,~f_l_browse,,~c_no;;,g_grid_editpkmn,0x5ec0,~p_browse,~t_browse,~f_op_browse,~f_s_editpkmn,~f_l_browse,,~c_no;;,g_grid_pickedit,0x5eca,~p_edit,~t_edit,~f_op_edit,~f_s_edit,~f_l_browse,,~c_no;;,g_grid_pickleag,0x5eca,~p_edit,~t_league,~f_op_edit,~f_s_league,~f_l_browse,,~c_no,~c_yes;;,g_grid_pickplr1,0x5eca,~p_edit,~t_versus,~f_op_edit,~f_s_versus,~f_l_browse,,~c_no,~c_yes;;,g_grid_pickspot,0x5ed0,~p_editteam,~t_editteam,~f_op_editteam,~f_s_editteam,~f_l_browse,,~c_no;;,g_grid_picktrnr,0x5ece,~p_teamed,~t_league,~f_op_teams,~f_nf,~f_l_browse,,~c_no;;,g_grid_pickplr2,0x5ecc,~p_edit,~t_versus,~f_op_edit,~f_nf,~f_l_browse,,~c_no,~c_yes")
+f_zcall(f_create_gridpair,"top_browse;,6,4,2,2,10,10;top_edit;,2,2,2,2,30,20;top_editteam;,3,2,2,2,20,20;top_pkstat;,1,4,2,4,60,9;top_text_grid;,2,4,2,4,30,9;top_title;,1,1,2,2,60,40;bot_4x4;,2,2,2,44,30,9;bot_info;,1,1,2,45,60,16;;,g_grid_title,0x5ec2,~bot_4x4,~top_title,~f_nf,~f_dp_title,~f_op_title,~f_s_title,~f_l_title,~c_no,~f_dp_title_update;;,g_grid_browse,0x5ec0,~top_browse,~bot_info,~f_dp_browse,~f_dt_browse,~f_op_browse,~f_s_browse,~f_l_browse,~c_no,~f_nf;;,g_grid_editpkmn,0x5ec0,~top_browse,~bot_info,~f_dp_browse,~f_dt_browse,~f_op_browse,~f_s_editpkmn,~f_l_browse,~c_no,~f_nf;;,g_grid_statbrowse,0x5ec4,~top_pkstat,~bot_info,~f_dp_pkstat,~f_dt_browse,~f_op_statbrowse,~f_s_pkstat,~f_l_pkstat,~f_browselr,~f_nf;;,g_grid_statedit,0x5ec6,~top_pkstat,~bot_info,~f_dp_pkstat,~f_dt_browse,~f_op_statedit,~f_s_pkstat,~f_l_pkstat,~f_browselr,~f_nf;;,g_grid_statbattle,0x5ec8,~top_pkstat,~bot_info,~f_dp_pkstat,~f_dt_browse,~f_op_statbrowse,~f_s_pkstat,~f_l_pkstat,~f_browselr,~f_nf;;,g_grid_editstat,0x5ed2,~top_text_grid,~bot_info,~f_nf,~f_dt_editstat,~f_op_editstat,~f_s_editstat,~f_l_browse,~c_no,~f_nf;;,g_grid_editmove,0x5ed4,~top_text_grid,~bot_info,~f_nf,~f_dt_editmove,~f_op_editmove,~f_s_editmove,~f_l_browse,~c_no,~f_nf;;,g_grid_edititem,0x5ed6,~top_text_grid,~bot_info,~f_nf,~f_dt_editstat,~f_op_edititem,~f_s_edititem,~f_l_browse,~c_no,~f_nf;;,g_grid_pickedit,0x5eca,~top_edit,~bot_info,~f_dp_edit,~f_dt_edit,~f_op_edit,~f_s_edit,~f_l_browse,~c_no,~f_nf;;,g_grid_pickleag,0x5eca,~top_edit,~bot_info,~f_dp_edit,~f_dt_league,~f_op_edit,~f_s_league,~f_l_browse,~c_no,~f_nf,~c_yes;;,g_grid_pickplr1,0x5eca,~top_edit,~bot_info,~f_dp_edit,~f_dt_versus,~f_op_edit,~f_s_versus,~f_l_browse,~c_no,~f_nf,~c_yes;;,g_grid_pickplr2,0x5ecc,~top_edit,~bot_info,~f_dp_edit,~f_dt_versus,~f_op_edit,~f_nf,~f_l_browse,~c_no,~f_nf,~c_yes;;,g_grid_pickspot,0x5ed0,~top_editteam,~bot_info,~f_dp_editteam,~f_dt_editteam,~f_op_editteam,~f_s_editteam,~f_l_browse,~c_no,~f_nf;;,g_grid_picktrnr,0x5ece,~top_text_grid,~bot_info,~f_nf,~f_dt_league,~f_op_teams,~f_nf,~f_l_browse,~c_no,~f_nf")
 g_palette=5
 g_gridstack={g_grid_title}
 g_preview_timer=0

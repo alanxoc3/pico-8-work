@@ -1,20 +1,21 @@
-|[f_create_gridpair]| function(name, mem, first, second, first_obj_func, selfunc, leavefunc, lrfunc, ...)
-  local pair = {}
 
-  for tab in all{first, second} do
-    add(pair, f_zobj([[
-      name,@, mem,@, memview,@, selfunc,@, leavefunc,@, lrfunc,@,
-      w,@, vh,@,
-      x,@, y,@,
-      cw,@, ch,@,
-      df,@, updatefunc,@
-    ]], name, mem, mem+1, selfunc, leavefunc, lrfunc, unpack(tab)))
-  end
+  -- name               active mem   maingridspec     infogridspec  maingriddraw    infogriddraw    op mkfunc          select func    leave func      lrfunc        update_func          params
 
-  add(pair, first_obj_func)
-  add(pair, {...})
+|[f_create_gridpair]| function(name, mem, main_grid_spec, info_grid_spec, main_grid_draw, info_grid_draw, main_op_func, main_sel_func, main_leave_func, main_lr_func, main_update_func, ...)
+  _g[name] = {
+    f_zobj([[
+      name,@, mem,@, memview,@, df,@, selfunc,@, leavefunc,@, lrfunc,@, updatefunc,@,
+      w,@,vh,@,x,@,y,@,cw,@,ch,@
+    ]], name, mem, mem+1, main_grid_draw, main_sel_func, main_leave_func, main_lr_func, main_update_func, unpack(main_grid_spec)),
 
-  _g[name] = pair
+    f_zobj([[
+      name,@, mem,@, memview,@, df,@,
+      w,@,vh,@,x,@,y,@,cw,@,ch,@
+    ]], name, -1, -1, info_grid_draw, unpack(info_grid_spec)),
+
+    main_op_func,
+    {...}
+  }
 end $$
 
 -- pass in cell list.

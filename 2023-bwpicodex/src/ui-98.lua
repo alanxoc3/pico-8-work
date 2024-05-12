@@ -1,6 +1,8 @@
 -- in picodex, the screen is always divided into 2 sections, the "preview" grid and the "text" grid.
 -- p_ = preview, t_ = text. The "preview" grid is the area at the top of the screen. The "text" grid is the area at the bottom of the screen.
 
+-- current: 4780 | 29523 | 10742
+
 -----------------------------
 -- OP FUNCTIONS - DATA FOR UI
 -----------------------------
@@ -493,54 +495,34 @@ end $$
 ---------------------------------------------
 
 f_zcall(f_create_gridpair, [[
-  -- TODO: test if duplicating this saves compression space ( getting rid of the p_browse and putting it in the g_grids...)
-  --            w  vh x  y   cw   ch draw func          update func
-   p_browse;    ,6 ,4 ,2 ,2  ,10 ,10 ,~f_dp_browse      ,~f_nf
-  ;t_browse;    ,1 ,1 ,2 ,45 ,60 ,16 ,~f_dt_browse      ,~f_nf
-  ;p_title;     ,1 ,1 ,2 ,2  ,60 ,40 ,~f_dp_title       ,~f_dp_title_update
-  ;t_title;     ,2 ,2 ,2 ,44 ,30 ,9  ,~f_nf             ,~f_nf
+   top_browse    ;,6 ,4 ,2 ,2  ,10 ,10
+  ;top_edit      ;,2 ,2 ,2 ,2  ,30 ,20
+  ;top_editteam  ;,3 ,2 ,2 ,2  ,20 ,20
+  ;top_pkstat    ;,1 ,4 ,2 ,4  ,60 ,9
+  ;top_text_grid ;,2 ,4 ,2 ,4  ,30 ,9
+  ;top_title     ;,1 ,1 ,2 ,2  ,60 ,40
+  ;bot_4x4       ;,2 ,2 ,2 ,44 ,30 ,9
+  ;bot_info      ;,1 ,1 ,2 ,45 ,60 ,16
 
-  ;p_pkstat;    ,1 ,4 ,2 ,4  ,60 ,9  ,~f_dp_pkstat      ,~f_nf
+  -- name              active mem    maingridspec     infogridspec  maingriddraw    infogriddraw    op mkfunc          select func    leave func      lrfunc        update_func          params
+  ;;,g_grid_title      ,S_TITLE      ,~bot_4x4        ,~top_title   ,~f_nf          ,~f_dp_title    ,~f_op_title       ,~f_s_title    ,~f_l_title     ,~c_no        ,~f_dp_title_update
 
-  ;t_edit;      ,1 ,1 ,2 ,45 ,60 ,16 ,~f_dt_edit        ,~f_nf
-  ;p_edit;      ,2 ,2 ,2 ,2  ,30 ,20 ,~f_dp_edit        ,~f_nf
+  ;;,g_grid_browse     ,S_BROWSE     ,~top_browse     ,~bot_info    ,~f_dp_browse   ,~f_dt_browse   ,~f_op_browse      ,~f_s_browse   ,~f_l_browse    ,~c_no        ,~f_nf
+  ;;,g_grid_editpkmn   ,S_BROWSE     ,~top_browse     ,~bot_info    ,~f_dp_browse   ,~f_dt_browse   ,~f_op_browse      ,~f_s_editpkmn ,~f_l_browse    ,~c_no        ,~f_nf
 
-  ;t_editteam;     ,1 ,1 ,2 ,45 ,60 ,16 ,~f_dt_editteam ,~f_nf
-  ;p_editteam;     ,3 ,2 ,2 ,2  ,20 ,20 ,~f_dp_editteam ,~f_nf
+  ;;,g_grid_statbrowse ,S_STATBROWSE ,~top_pkstat     ,~bot_info    ,~f_dp_pkstat   ,~f_dt_browse   ,~f_op_statbrowse  ,~f_s_pkstat   ,~f_l_pkstat    ,~f_browselr  ,~f_nf
+  ;;,g_grid_statedit   ,S_STATEDIT   ,~top_pkstat     ,~bot_info    ,~f_dp_pkstat   ,~f_dt_browse   ,~f_op_statedit    ,~f_s_pkstat   ,~f_l_pkstat    ,~f_browselr  ,~f_nf
+  ;;,g_grid_statbattle ,S_STATBATTLE ,~top_pkstat     ,~bot_info    ,~f_dp_pkstat   ,~f_dt_browse   ,~f_op_statbrowse  ,~f_s_pkstat   ,~f_l_pkstat    ,~f_browselr  ,~f_nf
 
-  ;t_editstat;     ,1 ,1 ,2 ,45 ,60 ,16 ,~f_dt_editstat ,~f_nf
-  ;p_editstat;     ,2 ,4 ,2 ,4  ,30 ,9  ,~f_nf          ,~f_nf
+  ;;,g_grid_editstat   ,S_EDITSTAT   ,~top_text_grid  ,~bot_info    ,~f_nf          ,~f_dt_editstat ,~f_op_editstat    ,~f_s_editstat ,~f_l_browse    ,~c_no        ,~f_nf
+  ;;,g_grid_editmove   ,S_EDITMOVE   ,~top_text_grid  ,~bot_info    ,~f_nf          ,~f_dt_editmove ,~f_op_editmove    ,~f_s_editmove ,~f_l_browse    ,~c_no        ,~f_nf
+  ;;,g_grid_edititem   ,S_EDITITEM   ,~top_text_grid  ,~bot_info    ,~f_nf          ,~f_dt_editstat ,~f_op_edititem    ,~f_s_edititem ,~f_l_browse    ,~c_no        ,~f_nf
 
-  ;t_edit4;     ,1 ,1 ,2 ,45 ,60 ,16 ,~f_dt_editmove    ,~f_nf
-  ;p_edit4;     ,2 ,4 ,2 ,4  ,30 ,9  ,~f_nf             ,~f_nf
+  ;;,g_grid_pickedit   ,S_TEAM       ,~top_edit       ,~bot_info    ,~f_dp_edit     ,~f_dt_edit     ,~f_op_edit        ,~f_s_edit     ,~f_l_browse    ,~c_no        ,~f_nf
+  ;;,g_grid_pickleag   ,S_TEAM       ,~top_edit       ,~bot_info    ,~f_dp_edit     ,~f_dt_league   ,~f_op_edit        ,~f_s_league   ,~f_l_browse    ,~c_no        ,~f_nf               ,~c_yes
+  ;;,g_grid_pickplr1   ,S_TEAM       ,~top_edit       ,~bot_info    ,~f_dp_edit     ,~f_dt_versus   ,~f_op_edit        ,~f_s_versus   ,~f_l_browse    ,~c_no        ,~f_nf               ,~c_yes
+  ;;,g_grid_pickplr2   ,S_TEAM2      ,~top_edit       ,~bot_info    ,~f_dp_edit     ,~f_dt_versus   ,~f_op_edit        ,~f_nf         ,~f_l_browse    ,~c_no        ,~f_nf               ,~c_yes
 
-  ;t_edititem;  ,1 ,1 ,2 ,45 ,60 ,16 ,~f_dt_editstat    ,~f_nf
-  ;p_edititem;  ,2 ,4 ,2 ,4  ,30 ,9  ,~f_nf             ,~f_nf
-
-  ;t_versus;    ,1 ,1 ,2 ,45 ,60 ,16 ,~f_dt_versus      ,~f_nf
-  ;t_league;    ,1 ,1 ,2 ,45 ,60 ,16 ,~f_dt_league      ,~f_nf
-
-  ;p_teamed;    ,2 ,4 ,2 ,4  ,30 ,9  ,~f_nf             ,~f_nf
-  ;t_teamed;    ,1 ,1 ,2 ,45 ,60 ,16 ,~f_dt_edit        ,~f_nf
-
-  -- name               active mem   main grid     info grid     mk op mkfunc       select func     leave func
-  ;;,g_grid_browse     ,S_BROWSE     ,~p_browse    ,~t_browse    ,~f_op_browse,     ~f_s_browse     ,~f_l_browse,   ,~c_no
-  ;;,g_grid_title      ,S_TITLE      ,~t_title     ,~p_title     ,~f_op_title,      ~f_s_title      ,~f_l_title,    ,~c_no
-
-  ;;,g_grid_statbrowse ,S_STATBROWSE ,~p_pkstat    ,~t_browse    ,~f_op_statbrowse, ~f_s_pkstat     ,~f_l_pkstat,   ,~f_browselr
-  ;;,g_grid_statedit   ,S_STATEDIT   ,~p_pkstat    ,~t_browse    ,~f_op_statedit,   ~f_s_pkstat     ,~f_l_pkstat,   ,~f_browselr
-  ;;,g_grid_statbattle ,S_STATBATTLE ,~p_pkstat    ,~t_browse    ,~f_op_statbrowse, ~f_s_pkstat     ,~f_l_pkstat,   ,~f_browselr
-
-  ;;,g_grid_editstat   ,S_EDITSTAT   ,~p_editstat  ,~t_editstat  ,~f_op_editstat,   ~f_s_editstat   ,~f_l_browse,   ,~c_no
-  ;;,g_grid_editmove   ,S_EDITMOVE   ,~p_edit4     ,~t_edit4     ,~f_op_editmove,   ~f_s_editmove   ,~f_l_browse,   ,~c_no
-  ;;,g_grid_edititem   ,S_EDITITEM   ,~p_edititem  ,~t_edititem  ,~f_op_edititem,   ~f_s_edititem   ,~f_l_browse,   ,~c_no
-  ;;,g_grid_editpkmn   ,S_BROWSE     ,~p_browse    ,~t_browse    ,~f_op_browse,     ~f_s_editpkmn   ,~f_l_browse,   ,~c_no
-
-  ;;,g_grid_pickedit   ,S_TEAM       ,~p_edit      ,~t_edit      ,~f_op_edit,       ~f_s_edit       ,~f_l_browse,   ,~c_no
-  ;;,g_grid_pickleag   ,S_TEAM       ,~p_edit      ,~t_league    ,~f_op_edit,       ~f_s_league     ,~f_l_browse,   ,~c_no,      ~c_yes
-  ;;,g_grid_pickplr1   ,S_TEAM       ,~p_edit      ,~t_versus    ,~f_op_edit,       ~f_s_versus     ,~f_l_browse,   ,~c_no,      ~c_yes
-
-  ;;,g_grid_pickspot   ,S_TEAME      ,~p_editteam  ,~t_editteam  ,~f_op_editteam,   ~f_s_editteam   ,~f_l_browse,   ,~c_no
-  ;;,g_grid_picktrnr   ,S_TEAML      ,~p_teamed    ,~t_league    ,~f_op_teams,      ~f_nf           ,~f_l_browse,   ,~c_no
-  ;;,g_grid_pickplr2   ,S_TEAM2      ,~p_edit      ,~t_versus    ,~f_op_edit,       ~f_nf           ,~f_l_browse,   ,~c_no,      ~c_yes
+  ;;,g_grid_pickspot   ,S_TEAME      ,~top_editteam   ,~bot_info    ,~f_dp_editteam ,~f_dt_editteam ,~f_op_editteam    ,~f_s_editteam ,~f_l_browse    ,~c_no        ,~f_nf
+  ;;,g_grid_picktrnr   ,S_TEAML      ,~top_text_grid  ,~bot_info    ,~f_nf          ,~f_dt_league   ,~f_op_teams       ,~f_nf         ,~f_l_browse    ,~c_no        ,~f_nf
 ]])
