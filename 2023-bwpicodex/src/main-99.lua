@@ -61,8 +61,9 @@ end
   -- printh(stat(0)) -- TODO: remove?
   g_title_timer = min(80, (g_title_timer+1))
   g_preview_timer = max(0, g_preview_timer-1)
-  g_cg_m, g_cg_s, gridpo, params = unpack(g_gridstack[#g_gridstack])
-  gridpo = gridpo(unpack(params)) -- TODO: Maybe I shouldn't be calling this every frame and instead only on adds.
+  g_cg_m, g_cg_s, gridpofunc, params = unpack(g_gridstack[#g_gridstack])
+  gridpo = {}
+  gridpofunc(gridpo, unpack(params)) -- TODO: Maybe I shouldn't be calling this every frame and instead only on adds.
 
   if g_title_timer == 80 then
     g_cg_m.updatefunc() -- This is used for the title animation and maybe other animations. TODO: Refactor me.

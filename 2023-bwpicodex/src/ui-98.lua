@@ -1,29 +1,24 @@
 -- in picodex, the screen is always divided into 2 sections, the "preview" grid and the "text" grid.
 -- p_ = preview, t_ = text. The "preview" grid is the area at the top of the screen. The "text" grid is the area at the bottom of the screen.
 
--- current: 4780 | 29523 | 10742
+-- current: 4740 | 29364 | 10721
 
 -----------------------------
 -- OP FUNCTIONS - DATA FOR UI
 -----------------------------
 
 -- This updates the lock variables, which determine if a pokemon/item/move is unlocked.
-|[f_op_def]| function()
-  return {{}}
+|[f_op_def]| function(op)
+  add(op, {})
 end $$
 
-|[f_op_browse]| function()
-  local op = {}
-
+|[f_op_browse]| function(op)
   for i=0,251 do
     add(op, {data=c_pokemon[i].lock and i or P_NONE, disabled=not c_pokemon[i].lock})
   end
-
-  return op
 end $$
 
-|[f_op_edit]| function(sumdisable)
-  local op = {}
+|[f_op_edit]| function(op, sumdisable)
   for partynum=0,3 do
     local valid = true
     local inds = {}
@@ -37,34 +32,33 @@ end $$
     end
     add(op, {data=inds, disabled=sumdisable and valid})
   end
-  return op
 end $$
 
-|[f_op_editteam]| function()
-  local op = {}
+|[f_op_editteam]| function(op)
   for pkmnnum=0,5 do
     local pkmn = f_get_party_pkmn(@S_TEAM, pkmnnum)
     add(op, {data=pkmn.num})
   end
-  return op
 end $$
 
-|[f_op_title]| function() return {{text="bROWSE"}, {text="eDIT"}, {text="lEAGUE"}, {text="vERSUS"}} end $$
-|[f_op_teams]| function()
-  local op = {}
+|[f_op_title]| function(op)
+  foreach(split"bROWSE,eDIT,lEAGUE,vERSUS", function(text)
+    f_addop_text(op, text)
+  end)
+end $$
+
+|[f_op_teams]| function(op)
   for i=1, 58 do
     add(op, {text=c_trnr_names[i], disabled=@S_STORY+1<i})
   end
-  return op
 end $$
 
-|[f_op_editstat]| function()
-  local op = {}
+|[f_op_editstat]| function(op)
   local pkmn = f_get_party_pkmn(@S_TEAM, @S_TEAME)
 
   for i=1,4 do
     add(op, {text=c_move_names[pkmn[i].id], select=function()
-      poke(S_EDITMOVE, pkmn[i])
+      poke(S_EDITMOVE, pkmn[i].pid)
       add(g_gridstack, g_grid_editmove)
     end})
   end
@@ -87,7 +81,6 @@ end $$
     memset(S_PARTY1+@S_TEAM*48+@S_TEAME*8, P_NONE, 8)
     deli(g_gridstack)
   end})
-  return op
 end $$
 
 -- TODO: experiment with making item num/name/lock in same obj -- 4042
@@ -95,25 +88,22 @@ end $$
   add(op, {text=lock and name or f_strtoq(name), disabled=disabled or not lock})
 end $$
 
-|[f_get_edit_op_pkmn]| function() return {}, f_get_party_pkmn(@S_TEAM, @S_TEAME) end $$
-|[f_op_editmove]| function()
-  local op, pkmn = f_get_edit_op_pkmn()
-
+|[f_get_edit_op_pkmn]| function() return f_get_party_pkmn(@S_TEAM, @S_TEAME) end $$
+|[f_op_editmove]| function(op)
+  local pkmn = f_get_edit_op_pkmn()
   for i, num in ipairs(pkmn.possible_moves) do
     f_create_spot(c_moves[num], op, pkmn.seen_moves[i-1])
   end
-  return op
 end $$
 
-|[f_op_template_edit]| function(list, key)
-  local op, pkmn = f_get_edit_op_pkmn()
+|[f_op_template_edit]| function(op, list, key)
+  local pkmn = f_get_edit_op_pkmn()
   for obj in all(list) do
     f_create_spot(obj, op, pkmn[key] == obj.num)
   end
-  return op
 end $$
 
-|[f_op_edititem]| function() return f_op_template_edit(c_items,  'item')  end $$
+|[f_op_edititem]| function(op) f_op_template_edit(op, c_items,  'item')  end $$
 
 |[f_add_stat_move]| function(op, pkmn, ind)
   local m = pkmn[ind]
@@ -126,8 +116,7 @@ end $$
 end $$
 
 -- 0 = browse, 1 = edit, 2 = benched, 3 = active
-|[f_add_stat]| function(pkmn, mode)
-  local op = {}
+|[f_add_stat]| function(op, pkmn, mode)
   local genders = ""
   if #pkmn.genders == 1 then
     genders = c_gender_names[pkmn.genders[1]].."/"
@@ -199,12 +188,10 @@ end $$
       add(op, {text=prev})
     end
   end
-
-  return op
 end $$
 
-|[f_op_statbrowse]| function() return f_add_stat(c_pokemon[@S_BROWSE], MODE_BROWSE) end $$
-|[f_op_statedit]|   function() return f_add_stat(f_get_party_pkmn(@S_TEAM, @S_TEAME),  MODE_EDIT)   end $$
+|[f_op_statbrowse]| function(op) f_add_stat(op, c_pokemon[@S_BROWSE], MODE_BROWSE) end $$
+|[f_op_statedit]|   function(op) f_add_stat(op, f_get_party_pkmn(@S_TEAM, @S_TEAME),  MODE_EDIT)   end $$
 
 ---------------------------------------------
 -- dp and dt drawing for ui
@@ -446,7 +433,7 @@ end $$
 
 |[f_s_editmove]| function()
   local pkmn = f_get_party_pkmn(@S_TEAM, @S_TEAME)
-  pkmn[@S_EDITSTAT+1] = @S_EDITMOVE
+  pkmn[@S_EDITSTAT+1].pid = @S_EDITMOVE
   f_save_party_pkmn(pkmn, @S_TEAM, @S_TEAME)
   deli(g_gridstack)
 end $$

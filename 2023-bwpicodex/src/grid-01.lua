@@ -117,10 +117,18 @@ end $$
     end
     print(obj.text or "", 1, 1, c)
 
+    if obj.draw then
+      obj.draw()
+    end
+
     df(i, i == num, obj)
   end
 
   clip()
 
   camera()
+end $$
+
+|[f_addop_text]| function(op, text)
+  add(op, {draw=function() print(text, 1, 1, C_2) end}) -- todo use zobj?
 end $$

@@ -10,7 +10,6 @@
     gender_bit, 0,            -- The gender bit. This number is modded by the Pokemon's possible genders to figure out the gender. TODO: maybe this could be randomized
     gender,     0,            -- This gets populated from gender bit & pkmn.genders.
 
-    level,      50,           -- The level is always 50. 50 is the only level in Picodex. TODO: This should be removed
     item,       I_NONE,       -- The item the Pokemon has
     evasion,    1,
     accuracy,   1,
@@ -40,7 +39,7 @@
 end $$
 
 |[f_get_party_pkmn]| function(party_num, spot_num)
-  local num_loc = S_PARTY1+party_num*48+spot_num*8
+  local num_loc = S_PARTY1+party_num*42+spot_num*7
   local pkmn_num = min(P_NONE, @num_loc)
   if pkmn_num < P_NONE and not c_pokemon[pkmn_num].lock then pkmn_num = P_NONE end
   local pkmn = f_get_default_pkmn(pkmn_num)
@@ -52,16 +51,15 @@ end $$
     pkmn.gender_bit = @(num_loc+1) -- this is how you should change the gender. just add 1
     pkmn.gender     = pkmn.genders[pkmn.gender_bit%#pkmn.genders+1]
     pkmn.item       = @(num_loc+2)%C_LEN_ITEMS
-    pkmn.level      = @(num_loc+3)%C_LEN_LEVELS+1
 
-    for i=4,7 do
+    for i=3,6 do
       local move = @(num_loc+i)%#pkmn.possible_moves
       while pkmn.seen_moves[move] or not c_moves[pkmn.possible_moves[move+1]].lock do
         move = (move + 1)%#pkmn.possible_moves
       end
 
       pkmn.seen_moves[move] = true
-      pkmn[i-3] = {id=pkmn.possible_moves[move+1], pid=move}
+      pkmn[i-2] = {id=pkmn.possible_moves[move+1], pid=move}
     end
   end
 
@@ -71,13 +69,12 @@ end $$
 end $$
 
 |[f_save_party_pkmn]| function(_ENV, party_num, spot_num)
-  local num_loc = S_PARTY1+party_num*48+spot_num*8
+  local num_loc = S_PARTY1+party_num*42+spot_num*7
   poke(num_loc, num)
   poke(num_loc+1, gender_bit)
   poke(num_loc+2, item)
-  poke(num_loc+3, level-1)
-  poke(num_loc+4, _ENV[1].pid)
-  poke(num_loc+5, _ENV[2].pid)
-  poke(num_loc+6, _ENV[3].pid)
-  poke(num_loc+7, _ENV[4].pid)
+  poke(num_loc+3, _ENV[1].pid)
+  poke(num_loc+4, _ENV[2].pid)
+  poke(num_loc+5, _ENV[3].pid)
+  poke(num_loc+6, _ENV[4].pid)
 end $$
