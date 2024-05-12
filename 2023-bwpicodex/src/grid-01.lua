@@ -1,12 +1,9 @@
-
-  -- name               active mem   maingridspec     infogridspec  maingriddraw    infogriddraw    op mkfunc          select func    leave func      lrfunc        update_func          params
-
-|[f_create_gridpair]| function(name, mem, main_grid_spec, info_grid_spec, main_grid_draw, info_grid_draw, main_op_func, main_sel_func, main_leave_func, main_lr_func, main_update_func, ...)
+|[f_create_gridpair]| function(name, mem, main_grid_spec, info_grid_spec, info_grid_draw, main_op_func, main_sel_func, main_leave_func, main_lr_func, ...)
   _g[name] = {
     f_zobj([[
-      name,@, mem,@, memview,@, df,@, selfunc,@, leavefunc,@, lrfunc,@, updatefunc,@,
+      name,@, mem,@, memview,@, selfunc,@, leavefunc,@, lrfunc,@,
       w,@,vh,@,x,@,y,@,cw,@,ch,@
-    ]], name, mem, mem+1, main_grid_draw, main_sel_func, main_leave_func, main_lr_func, main_update_func, unpack(main_grid_spec)),
+    ]], name, mem, mem+1, main_sel_func, main_leave_func, main_lr_func, unpack(main_grid_spec)),
 
     f_zobj([[
       name,@, mem,@, memview,@, df,@,
@@ -118,10 +115,8 @@ end $$
     print(obj.text or "", 1, 1, c)
 
     if obj.draw then
-      obj.draw()
+      obj.draw(i, i == num, obj)
     end
-
-    df(i, i == num, obj)
   end
 
   clip()

@@ -66,8 +66,15 @@ end
   gridpofunc(gridpo, unpack(params)) -- TODO: Maybe I shouldn't be calling this every frame and instead only on adds.
 
   if g_title_timer == 80 then
-    g_cg_m.updatefunc() -- This is used for the title animation and maybe other animations. TODO: Refactor me.
     f_update_grid(g_cg_m, gridpo)
+
+    if g_cg_m.name == 'g_grid_title' then
+      g_title_an_timer = (g_title_an_timer+1)%300
+      if     g_title_an_timer == 0   then g_title_r = rnd"252"\1
+      elseif g_title_an_timer == 150 then g_title_l = rnd"252"\1
+      elseif g_title_an_timer == 40  then f_minisfx(g_title_r-1)
+      elseif g_title_an_timer == 190 then f_minisfx(g_title_l-1) end
+    end
   elseif g_title_timer < 80 then
     local b = bitmaskToIndex(btnp())
     if b then
@@ -85,7 +92,7 @@ end $$
 
   local easing = sin(max(60, g_title_timer)/80)
   f_draw_grid(g_cg_m, gridpo, @g_cg_m.mem, @g_cg_m.memview, g_cg_m.x, g_cg_m.y+easing*20, true)
-  f_draw_grid(g_cg_s, {{}},   -1,          0,               g_cg_s.x, g_cg_s.y-easing*45)
+  f_draw_grid(g_cg_s, {{draw=g_cg_s.df}},   -1,          0,               g_cg_s.x, g_cg_s.y-easing*45)
 
   pal(c_palettes[g_palette+1],1)
 end $$

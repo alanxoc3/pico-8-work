@@ -1,20 +1,20 @@
 -- in picodex, the screen is always divided into 2 sections, the "preview" grid and the "text" grid.
 -- p_ = preview, t_ = text. The "preview" grid is the area at the top of the screen. The "text" grid is the area at the bottom of the screen.
 
--- current: 4740 | 29364 | 10721
+-- current: 4707 | 28810 | 10642
 
 -----------------------------
 -- OP FUNCTIONS - DATA FOR UI
 -----------------------------
 
 -- This updates the lock variables, which determine if a pokemon/item/move is unlocked.
-|[f_op_def]| function(op)
-  add(op, {})
-end $$
+|[f_op_def]| function(op) add(op, {}) end $$
 
 |[f_op_browse]| function(op)
   for i=0,251 do
-    add(op, {data=c_pokemon[i].lock and i or P_NONE, disabled=not c_pokemon[i].lock})
+    add(op, {disabled=not c_pokemon[i].lock, draw=function(_, is_sel, gridobj)
+      f_draw_pkmn(c_pokemon[i].lock and i or P_NONE, 1, 1, 6, false, is_sel, gridobj.disabled)
+    end})
   end
 end $$
 
@@ -30,14 +30,20 @@ end $$
 
       add(inds, pkmn.num)
     end
-    add(op, {data=inds, disabled=sumdisable and valid})
+    add(op, {data=inds, disabled=sumdisable and valid, draw=function(i, is_sel, gridobj)
+      for ii, ind in ipairs(gridobj.data) do
+        f_draw_pkmn(ind, (ii-1)%3+1+(ii-1)%3*9, 1+(ii-1)\3*10, 6, false, is_sel, gridobj.disabled)
+      end
+    end})
   end
 end $$
 
 |[f_op_editteam]| function(op)
   for pkmnnum=0,5 do
     local pkmn = f_get_party_pkmn(@S_TEAM, pkmnnum)
-    add(op, {data=pkmn.num})
+    add(op, {draw=function(i, is_sel)
+      f_draw_pkmn(pkmn.num, 1, 1, 16, false, is_sel)
+    end})
   end
 end $$
 
@@ -127,14 +133,18 @@ end $$
   end
   genders = sub(genders, 1, #genders-1)
 
-  add(op, {text="#"..f_prefix_zero(pkmn.num, 3).." "..pkmn.name, disabled=true})
-  add(op, {text="       tYPE:"})
-  add(op, {text="        "..c_type_names[pkmn.type1+1]})
+  add(op,  {text="#"..f_prefix_zero(pkmn.num, 3).." "..pkmn.name, disabled=true})
+  add(op,  {text="       tYPE:"})
+  add(op,  {text="        "..c_type_names[pkmn.type1+1]})
+  local t2text = "        "
   if pkmn.type2 ~= T_BIRD then
-    add(op, {text="        "..c_type_names[pkmn.type2+1]})
-  else
-    add(op, {text=""})
+    t2text ..= c_type_names[pkmn.type2+1]
   end
+
+  add(op, {text=t2text, draw=function()
+    f_draw_pkmn(pkmn.num, 2-8-20+(g_preview_timer > 0 and (rnd(3)\1-1) or 0)+30, -8+1-10-1-1+6+3-3, 16)
+    rectfill(-9+4+30, -18, -9+4+30, 6, C_2)
+  end})
 
   add(op, {text="pOKEMON sTATS", disabled=true})
 
@@ -147,7 +157,7 @@ end $$
   end
 
   add(op, {text="gENDR: "..genders})
-  add(op, {text="eVOLV: "..c_pkmn_names[pkmn.prevolve]})
+  add(op, {text="pREVO: "..c_pkmn_names[pkmn.prevolve]})
   add(op, {text="hEALT: " .. pkmn.hp .. "/" .. pkmn.hp})
   add(op, {text="aTACK: " .. f_prefix_zero(pkmn.attack,         3) .. " "  .. (pkmn.stages.attack         > 0 and "+"..pkmn.stages.attack         or (pkmn.stages.attack         < 0 and "-"..pkmn.stages.attack        ) or "")})
   add(op, {text="dEFNS: " .. f_prefix_zero(pkmn.defense,        3) .. " "  .. (pkmn.stages.defense        > 0 and "+"..pkmn.stages.defense        or (pkmn.stages.defense        < 0 and "-"..pkmn.stages.defense       ) or "")})
@@ -196,16 +206,6 @@ end $$
 ---------------------------------------------
 -- dp and dt drawing for ui
 ---------------------------------------------
-|[f_dp_browse]| function(i, is_sel, gridobj)
-  f_draw_pkmn(gridobj.data, 1, 1, 6, false, is_sel, gridobj.disabled)
-end $$
-
-|[f_dp_edit]| function(i, is_sel, gridobj)
-  for ii, ind in ipairs(gridobj.data) do
-    f_draw_pkmn(ind, (ii-1)%3+1+(ii-1)%3*9, 1+(ii-1)\3*10, 6, false, is_sel, gridobj.disabled)
-  end
-end $$
-
 |[f_dt_editteam]| function(i, is_sel)
   f_print_top("eDIT: sPOT ", @S_TEAME+1)
   local pkmn = f_get_party_pkmn(@S_TEAM, @S_TEAME)
@@ -271,10 +271,6 @@ end $$
 
 |[f_dt_edititem]| function(i, is_sel)
   print("\f4hello", 1, 1)
-end $$
-
-|[f_dp_editteam]| function(i, is_sel, gridobj)
-  f_draw_pkmn(gridobj.data, 1, 1, 16, false, is_sel)
 end $$
 
 |[f_prefix_space]| function(num, len)
@@ -349,29 +345,6 @@ end $$
   f_draw_pkmn(g_title_r, 50-15-(mid(-1, -.75, cos(.5+g_title_an_timer/300))+.75)*4*26  + (g_title_an_timer > 40  and g_title_an_timer < 70  and (rnd(3)\1-1) or 0), 20, 16, true)
 end $$
 
-|[f_dp_title_update]| function()
-  g_title_an_timer = (g_title_an_timer+1)%300
-
-  if g_title_an_timer == 0 then
-    g_title_r = rnd"252"\1
-  elseif g_title_an_timer == 150 then
-    g_title_l = rnd"252"\1
-
-  elseif g_title_an_timer == 50-10  then f_minisfx(g_title_r-1)
-  elseif g_title_an_timer == 200-10 then f_minisfx(g_title_l-1)
-  end
-end $$
-
-|[f_dp_pkstat]| function(i)
-  if i == 3 then
-    local y = 6
-    local pkmn_ind = @S_BROWSE
-    local pkmn = c_pokemon[@S_BROWSE]
-    f_draw_pkmn(pkmn_ind, 2-8-20+(g_preview_timer > 0 and (rnd(3)\1-1) or 0)+30, -8+1-10-1-1+y+3-3, 16)
-    rectfill(-9+4+30, -18, -9+4+30, 6, C_2)
-  end
-end $$
-
 ----------------------------------------------------
 -- sels and leaves - forward and back through stack
 ----------------------------------------------------
@@ -393,10 +366,6 @@ end $$
   elseif @g_cg_m.mem == 3 then
     add(g_gridstack, g_grid_pickplr1)
   end
-end $$
-
-|[f_l_pkstat]| function()
-  deli(g_gridstack)
 end $$
 
 |[f_s_pkstat]| function()
@@ -445,7 +414,7 @@ end $$
   deli(g_gridstack)
 end $$
 
-|[f_l_title]| function()
+|[f_l_title]| function() -- TODO: maybe we can call sfx in here and l_browse. might save a token instead of handling that in grid.
   return SFX_ERROR
 end $$
 
@@ -491,25 +460,25 @@ f_zcall(f_create_gridpair, [[
   ;bot_4x4       ;,2 ,2 ,2 ,44 ,30 ,9
   ;bot_info      ;,1 ,1 ,2 ,45 ,60 ,16
 
-  -- name              active mem    maingridspec     infogridspec  maingriddraw    infogriddraw    op mkfunc          select func    leave func      lrfunc        update_func          params
-  ;;,g_grid_title      ,S_TITLE      ,~bot_4x4        ,~top_title   ,~f_nf          ,~f_dp_title    ,~f_op_title       ,~f_s_title    ,~f_l_title     ,~c_no        ,~f_dp_title_update
+  -- name              active mem    maingridspec     infogridspec  infogriddraw    main opfunc        select func    leave func      lrfunc        opfunc params
+  ;;,g_grid_title      ,S_TITLE      ,~bot_4x4        ,~top_title   ,~f_dp_title    ,~f_op_title       ,~f_s_title    ,~f_l_title     ,~c_no
 
-  ;;,g_grid_browse     ,S_BROWSE     ,~top_browse     ,~bot_info    ,~f_dp_browse   ,~f_dt_browse   ,~f_op_browse      ,~f_s_browse   ,~f_l_browse    ,~c_no        ,~f_nf
-  ;;,g_grid_editpkmn   ,S_BROWSE     ,~top_browse     ,~bot_info    ,~f_dp_browse   ,~f_dt_browse   ,~f_op_browse      ,~f_s_editpkmn ,~f_l_browse    ,~c_no        ,~f_nf
+  ;;,g_grid_browse     ,S_BROWSE     ,~top_browse     ,~bot_info    ,~f_dt_browse   ,~f_op_browse      ,~f_s_browse   ,~f_l_browse    ,~c_no
+  ;;,g_grid_editpkmn   ,S_BROWSE     ,~top_browse     ,~bot_info    ,~f_dt_browse   ,~f_op_browse      ,~f_s_editpkmn ,~f_l_browse    ,~c_no
 
-  ;;,g_grid_statbrowse ,S_STATBROWSE ,~top_pkstat     ,~bot_info    ,~f_dp_pkstat   ,~f_dt_browse   ,~f_op_statbrowse  ,~f_s_pkstat   ,~f_l_pkstat    ,~f_browselr  ,~f_nf
-  ;;,g_grid_statedit   ,S_STATEDIT   ,~top_pkstat     ,~bot_info    ,~f_dp_pkstat   ,~f_dt_browse   ,~f_op_statedit    ,~f_s_pkstat   ,~f_l_pkstat    ,~f_browselr  ,~f_nf
-  ;;,g_grid_statbattle ,S_STATBATTLE ,~top_pkstat     ,~bot_info    ,~f_dp_pkstat   ,~f_dt_browse   ,~f_op_statbrowse  ,~f_s_pkstat   ,~f_l_pkstat    ,~f_browselr  ,~f_nf
+  ;;,g_grid_statbrowse ,S_STATBROWSE ,~top_pkstat     ,~bot_info    ,~f_dt_browse   ,~f_op_statbrowse  ,~f_s_pkstat   ,~f_l_browse    ,~f_browselr
+  ;;,g_grid_statedit   ,S_STATEDIT   ,~top_pkstat     ,~bot_info    ,~f_dt_browse   ,~f_op_statedit    ,~f_s_pkstat   ,~f_l_browse    ,~f_browselr
+  ;;,g_grid_statbattle ,S_STATBATTLE ,~top_pkstat     ,~bot_info    ,~f_dt_browse   ,~f_op_statbrowse  ,~f_s_pkstat   ,~f_l_browse    ,~f_browselr
 
-  ;;,g_grid_editstat   ,S_EDITSTAT   ,~top_text_grid  ,~bot_info    ,~f_nf          ,~f_dt_editstat ,~f_op_editstat    ,~f_s_editstat ,~f_l_browse    ,~c_no        ,~f_nf
-  ;;,g_grid_editmove   ,S_EDITMOVE   ,~top_text_grid  ,~bot_info    ,~f_nf          ,~f_dt_editmove ,~f_op_editmove    ,~f_s_editmove ,~f_l_browse    ,~c_no        ,~f_nf
-  ;;,g_grid_edititem   ,S_EDITITEM   ,~top_text_grid  ,~bot_info    ,~f_nf          ,~f_dt_editstat ,~f_op_edititem    ,~f_s_edititem ,~f_l_browse    ,~c_no        ,~f_nf
+  ;;,g_grid_editstat   ,S_EDITSTAT   ,~top_text_grid  ,~bot_info    ,~f_dt_editstat ,~f_op_editstat    ,~f_s_editstat ,~f_l_browse    ,~c_no
+  ;;,g_grid_editmove   ,S_EDITMOVE   ,~top_text_grid  ,~bot_info    ,~f_dt_editmove ,~f_op_editmove    ,~f_s_editmove ,~f_l_browse    ,~c_no
+  ;;,g_grid_edititem   ,S_EDITITEM   ,~top_text_grid  ,~bot_info    ,~f_dt_editstat ,~f_op_edititem    ,~f_s_edititem ,~f_l_browse    ,~c_no
 
-  ;;,g_grid_pickedit   ,S_TEAM       ,~top_edit       ,~bot_info    ,~f_dp_edit     ,~f_dt_edit     ,~f_op_edit        ,~f_s_edit     ,~f_l_browse    ,~c_no        ,~f_nf
-  ;;,g_grid_pickleag   ,S_TEAM       ,~top_edit       ,~bot_info    ,~f_dp_edit     ,~f_dt_league   ,~f_op_edit        ,~f_s_league   ,~f_l_browse    ,~c_no        ,~f_nf               ,~c_yes
-  ;;,g_grid_pickplr1   ,S_TEAM       ,~top_edit       ,~bot_info    ,~f_dp_edit     ,~f_dt_versus   ,~f_op_edit        ,~f_s_versus   ,~f_l_browse    ,~c_no        ,~f_nf               ,~c_yes
-  ;;,g_grid_pickplr2   ,S_TEAM2      ,~top_edit       ,~bot_info    ,~f_dp_edit     ,~f_dt_versus   ,~f_op_edit        ,~f_nf         ,~f_l_browse    ,~c_no        ,~f_nf               ,~c_yes
+  ;;,g_grid_pickedit   ,S_TEAM       ,~top_edit       ,~bot_info    ,~f_dt_edit     ,~f_op_edit        ,~f_s_edit     ,~f_l_browse    ,~c_no
+  ;;,g_grid_pickleag   ,S_TEAM       ,~top_edit       ,~bot_info    ,~f_dt_league   ,~f_op_edit        ,~f_s_league   ,~f_l_browse    ,~c_no        ,~c_yes
+  ;;,g_grid_pickplr1   ,S_TEAM       ,~top_edit       ,~bot_info    ,~f_dt_versus   ,~f_op_edit        ,~f_s_versus   ,~f_l_browse    ,~c_no        ,~c_yes
+  ;;,g_grid_pickplr2   ,S_TEAM2      ,~top_edit       ,~bot_info    ,~f_dt_versus   ,~f_op_edit        ,~f_nf         ,~f_l_browse    ,~c_no        ,~c_yes
 
-  ;;,g_grid_pickspot   ,S_TEAME      ,~top_editteam   ,~bot_info    ,~f_dp_editteam ,~f_dt_editteam ,~f_op_editteam    ,~f_s_editteam ,~f_l_browse    ,~c_no        ,~f_nf
-  ;;,g_grid_picktrnr   ,S_TEAML      ,~top_text_grid  ,~bot_info    ,~f_nf          ,~f_dt_league   ,~f_op_teams       ,~f_nf         ,~f_l_browse    ,~c_no        ,~f_nf
+  ;;,g_grid_pickspot   ,S_TEAME      ,~top_editteam   ,~bot_info    ,~f_dt_editteam ,~f_op_editteam    ,~f_s_editteam ,~f_l_browse    ,~c_no
+  ;;,g_grid_picktrnr   ,S_TEAML      ,~top_text_grid  ,~bot_info    ,~f_dt_league   ,~f_op_teams       ,~f_nf         ,~f_l_browse    ,~c_no
 ]])
