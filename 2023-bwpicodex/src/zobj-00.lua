@@ -5,7 +5,7 @@ _ENV = _g -- todo: try removing this line... wonder if things work...
 function f_zobj_eval(val, table, parameters)
   if     ord(val) == 126 then return table[sub(val, 2)] -- 126 means "~"
   elseif val == '@'       then return deli(parameters, 1)
-  elseif val == '#'       then return {} end
+  elseif val == '#'       then return {} end -- TODO: consider saving some tokens by removing this and replacing usage with `;,` syntax
   return val ~= '' and val or nil
 end
 
@@ -44,7 +44,13 @@ end
 f_zobj_set(_g, [[
   c_pokemon,#, c_moves,#, c_trainers,#, c_items,#,
   g_init_peek_loc,L_DATASTART,
-  c_yes,@, c_no,@, c_empty,@, f_nop,@
+  c_yes,@, c_no,@, c_empty,@, f_nop,@,
+  g_palette,5,
+  g_preview_timer,0,
+  g_title_timer,0,
+  g_title_l,254,
+  g_title_r,254,
+  g_title_an_timer,70 -- starts at 70, so both are centered and not shaking.
 ]], true, false, "", function(...) return ... end)
 
 -- then set the global things.

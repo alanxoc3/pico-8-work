@@ -34,7 +34,7 @@ end
 function f_zobj(...)
 return f_zobj_set(setmetatable({},{__index=_g}),...)
 end
-f_zobj_set(_g,"c_pokemon,#,c_moves,#,c_trainers,#,c_items,#,g_init_peek_loc,0x1fff,c_yes,@,c_no,@,c_empty,@,f_nop,@",true,false,"",function(...)return...end)
+f_zobj_set(_g,"c_pokemon,#,c_moves,#,c_trainers,#,c_items,#,g_init_peek_loc,0x1fff,c_yes,@,c_no,@,c_empty,@,f_nop,@,g_palette,5,g_preview_timer,0,g_title_timer,0,g_title_l,254,g_title_r,254,g_title_an_timer,70",true,false,"",function(...)return...end)
 f_zobj_set(_g,"f_zobj,@,f_zobj_set,@,f_zobj_eval,@,f_zcall,@,f_create_gridpair,@,f_update_grid,@,f_draw_grid,@,f_addop_text,@,f_minisfx,@,f_draw_pkmn,@,c_move_names,@,c_trnr_names,@,c_type_names,@,c_item_names,@,c_pkmn_names,@,c_gender_names,@,c_movemethod_names,@,c_palettes,@,c_types,@,f_init_peek_inc,@,f_can_pokemon_teach_move,@,f_unlock,@,f_update_locks,@,f_get_default_pkmn,@,f_get_party_pkmn,@,f_save_party_pkmn,@,f_op_def,@,f_op_browse,@,f_op_edit,@,f_op_editteam,@,f_op_title,@,f_op_teams,@,f_op_editstat,@,f_create_spot,@,f_get_edit_op_pkmn,@,f_op_editmove,@,f_op_template_edit,@,f_op_edititem,@,f_add_stat_move,@,f_add_stat,@,f_op_statbrowse,@,f_op_statedit,@,f_dt_editteam,@,f_dt_editstat,@,f_print_top,@,f_print_bot,@,f_dt_editmove_template,@,f_dt_editmove,@,f_dt_edititem,@,f_prefix_space,@,f_prefix_zero,@,f_dt_browse_template,@,f_dt_browse,@,f_dt_edit,@,f_dt_league,@,f_dt_versus,@,f_dp_title,@,f_l_browse,@,f_s_browse,@,f_s_title,@,f_s_pkstat,@,f_s_versus,@,f_s_league,@,f_s_edit,@,f_s_editteam,@,f_s_editpkmn,@,f_s_editstat,@,f_s_editmove,@,f_s_edititem,@,f_l_title,@,f_browselr,@,f_strtoq,@,f_nf,@,f_loop_through_team_pkmn,@,_update60,@,_draw,@",f_zobj,f_zobj_set,f_zobj_eval,function(func,text,...)
 foreach(f_zobj(text,...),function(params)
 func(unpack(params))
@@ -211,7 +211,7 @@ end
 end
 end
 end,function(pkmn_num)
-local pkmn=f_zobj("num,@,seen_moves,#,major,0,gender_bit,0,gender,0,item,0,evasion,1,accuracy,1,crit,1;1;id,0,pid,3;2;id,0,pid,4;3;id,0,pid,5;4;id,0,pid,6;stages;attack,0,defense,0,specialattack,0,specialdefense,0,speed,0,crit,0,evasion,0,accuracy,0;",pkmn_num)
+local pkmn=f_zobj("num,@,seen_moves,#,major,0,gender_bit,0,gender,0,item,0,evasion,1,accuracy,1,crit,1;1;id,0,pid,4;2;id,0,pid,5;3;id,0,pid,6;4;id,0,pid,7;stages;attack,0,defense,0,specialattack,0,specialdefense,0,speed,0,crit,0,evasion,0,accuracy,0;",pkmn_num)
 return pkmn
 end,function(party_num,spot_num)
 local num_loc=0x5e00+party_num*42+spot_num*7
@@ -303,7 +303,7 @@ add(op,{text="sTATS",select=function()
 add(g_gridstack,g_grid_statedit)
 end})
 add(op,{text="dELETE",select=function()
-memset(0x5e00+@0x5eb2*48+@0x5eb8*8,252,8)
+memset(0x5e00+@0x5eb2*42+@0x5eb8*7,252,7)
 deli(g_gridstack)
 end})
 end,function(_ENV,op,disabled)
@@ -417,9 +417,7 @@ for x in all{...}do
 text..=x
 end
 print("\f2"..text,1,8)
-end,function(pkmn,pkmnmoveind)
-local movenum=pkmn.possible_moves[pkmnmoveind+1]
-local move=c_moves[movenum]
+end,function(move,method)
 local pp=f_prefix_zero(move.pp,2)
 local pow=f_prefix_zero(move.pow,3)
 local acc=f_prefix_zero(move.acc,3)
@@ -427,14 +425,18 @@ local typ=c_type_names[move.type+1]
 if move.pow==0 then pow="___" end
 if move.pow==1 then pow="var" end
 if move.acc==0 then acc="___" end
-if movenum==0 then
+if move.num==0 then
 typ,pp,pow,acc="nONE","__","___","___"
+elseif not move.lock then
+pp,pow,acc,typ=f_strtoq(pp),f_strtoq(pow),f_strtoq(acc),f_strtoq(typ)
 end
-f_print_top(pkmn.possible_moves_method[movenum],": ",typ)
+f_print_top(method,": ",typ)
 f_print_bot(pp,"PP ",pow,"P ",acc,"A")
 end,function()
 local pkmn=f_get_party_pkmn(@0x5eb2,@0x5eb8)
-f_dt_editmove_template(pkmn,@0x5ebc)
+local movenum=pkmn.possible_moves[@0x5ebc+1]
+local move=c_moves[movenum]
+f_dt_editmove_template(move,pkmn.possible_moves_method[movenum])
 end,function(i,is_sel)
 print("\f4hello",1,1)
 end,function(num,len)
@@ -583,8 +585,10 @@ if g_title_timer<80 then
 print("\^y7\f4aLANxOC3\n\-d \f3pRESENTS",32-4*4,32-6)
 end
 local easing=sin(max(60,g_title_timer)/80)
+if g_cg_m then
 f_draw_grid(g_cg_m,gridpo,@g_cg_m.mem,@g_cg_m.memview,g_cg_m.x,g_cg_m.y+easing*20,true)
 f_draw_grid(g_cg_s,{{draw=g_cg_s.df}},-1,0,g_cg_s.x,g_cg_s.y-easing*45)
+end
 pal(c_palettes[g_palette+1],1)
 end)
 function debug_sort(t,compare_func)
@@ -622,7 +626,8 @@ end
 return str.."}"
 end
 sfx"63"
-f_zcall(poke,";,0x5f2c,3;;,0x5f5c,8;;,0x5f5d,1;;,0x5eff,0")
+f_zcall(poke,";,0x5f2c,3;;,0x5f5c,8;;,0x5f5d,1;;,0x5eff,50")
+_draw()
 for i=0,323 do
 c_types[i\18][i%18]=f_init_peek_inc()\2
 end
@@ -672,7 +677,7 @@ sub=c_pokemon[sub.prevolve]
 end
 end
 for i=0,251 do
-c_pokemon[i].possible_moves=f_zobj",0,0,0"
+c_pokemon[i].possible_moves=f_zobj",0,0,0,0"
 c_pokemon[i].possible_moves_method=f_zobj"0,eMPTY"
 for ii=1,3 do
 foreach(c_pokemon[i].moves_grouped[ii],function(v)
@@ -719,13 +724,7 @@ end
 poke4(iloc+64,0x.07d7)
 end
 f_zcall(f_create_gridpair,"top_browse;,6,4,2,2,10,10;top_edit;,2,2,2,2,30,20;top_editteam;,3,2,2,2,20,20;top_pkstat;,1,4,2,4,60,9;top_text_grid;,2,4,2,4,30,9;top_title;,1,1,2,2,60,40;bot_4x4;,2,2,2,44,30,9;bot_info;,1,1,2,45,60,16;;,g_grid_title,0x5eaa,~bot_4x4,~top_title,~f_dp_title,~f_op_title,~f_s_title,~f_l_title,~c_no;;,g_grid_browse,0x5ea8,~top_browse,~bot_info,~f_dt_browse,~f_op_browse,~f_s_browse,~f_l_browse,~c_no;;,g_grid_editpkmn,0x5ea8,~top_browse,~bot_info,~f_dt_browse,~f_op_browse,~f_s_editpkmn,~f_l_browse,~c_no;;,g_grid_statbrowse,0x5eac,~top_pkstat,~bot_info,~f_dt_browse,~f_op_statbrowse,~f_s_pkstat,~f_l_browse,~f_browselr;;,g_grid_statedit,0x5eae,~top_pkstat,~bot_info,~f_dt_browse,~f_op_statedit,~f_s_pkstat,~f_l_browse,~f_browselr;;,g_grid_statbattle,0x5eb0,~top_pkstat,~bot_info,~f_dt_browse,~f_op_statbrowse,~f_s_pkstat,~f_l_browse,~f_browselr;;,g_grid_editstat,0x5eba,~top_text_grid,~bot_info,~f_dt_editstat,~f_op_editstat,~f_s_editstat,~f_l_browse,~c_no;;,g_grid_editmove,0x5ebc,~top_text_grid,~bot_info,~f_dt_editmove,~f_op_editmove,~f_s_editmove,~f_l_browse,~c_no;;,g_grid_edititem,0x5ebe,~top_text_grid,~bot_info,~f_dt_editstat,~f_op_edititem,~f_s_edititem,~f_l_browse,~c_no;;,g_grid_pickedit,0x5eb2,~top_edit,~bot_info,~f_dt_edit,~f_op_edit,~f_s_edit,~f_l_browse,~c_no;;,g_grid_pickleag,0x5eb2,~top_edit,~bot_info,~f_dt_league,~f_op_edit,~f_s_league,~f_l_browse,~c_no,~c_yes;;,g_grid_pickplr1,0x5eb2,~top_edit,~bot_info,~f_dt_versus,~f_op_edit,~f_s_versus,~f_l_browse,~c_no,~c_yes;;,g_grid_pickplr2,0x5eb4,~top_edit,~bot_info,~f_dt_versus,~f_op_edit,~f_nf,~f_l_browse,~c_no,~c_yes;;,g_grid_pickspot,0x5eb8,~top_editteam,~bot_info,~f_dt_editteam,~f_op_editteam,~f_s_editteam,~f_l_browse,~c_no;;,g_grid_picktrnr,0x5eb6,~top_text_grid,~bot_info,~f_dt_league,~f_op_teams,~f_nf,~f_l_browse,~c_no")
-g_palette=5
 g_gridstack={g_grid_title}
-g_preview_timer=0
-g_title_timer=0
-g_title_l=254
-g_title_r=254
-g_title_an_timer=70
 function bitmaskToIndex(bitmask)
 for i=0,5 do
 if bitmask &(1<<i)~=0 then

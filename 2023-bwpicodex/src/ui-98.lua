@@ -84,7 +84,7 @@ end $$
   end})
 
   add(op, {text="dELETE", select=function()
-    memset(S_PARTY1+@S_TEAM*48+@S_TEAME*8, P_NONE, 8)
+    memset(S_PARTY1+@S_TEAM*42+@S_TEAME*7, P_NONE, 7)
     deli(g_gridstack)
   end})
 end $$
@@ -243,9 +243,8 @@ end $$
   print("\f2"..text, 1, 8)
 end $$
 
-|[f_dt_editmove_template]| function(pkmn, pkmnmoveind)
-  local movenum = pkmn.possible_moves[pkmnmoveind+1]
-  local move = c_moves[movenum]
+-- TODO: is this better being inside an "op" function?
+|[f_dt_editmove_template]| function(move, method)
   local pp = f_prefix_zero(move.pp, 2)
   local pow = f_prefix_zero(move.pow, 3)
   local acc = f_prefix_zero(move.acc, 3)
@@ -256,17 +255,21 @@ end $$
   if move.acc == 0 then acc = "___" end
 
   -- TODO: I'd rather store an empty move to save a few tokens. Empty and struggle.
-  if movenum == M_NONE then
+  if move.num == M_NONE then
     typ, pp, pow, acc = "nONE", "__", "___", "___"
+  elseif not move.lock then
+    pp, pow, acc, typ = f_strtoq(pp), f_strtoq(pow), f_strtoq(acc), f_strtoq(typ)
   end
 
-  f_print_top(pkmn.possible_moves_method[movenum], ": ", typ)
+  f_print_top(method, ": ", typ)
   f_print_bot(pp, "PP ", pow, "P ", acc, "A")
 end $$
 
 |[f_dt_editmove]| function()
   local pkmn = f_get_party_pkmn(@S_TEAM, @S_TEAME)
-  f_dt_editmove_template(pkmn, @S_EDITMOVE)
+  local movenum = pkmn.possible_moves[@S_EDITMOVE+1]
+  local move = c_moves[movenum]
+  f_dt_editmove_template(move, pkmn.possible_moves_method[movenum])
 end $$
 
 |[f_dt_edititem]| function(i, is_sel)
@@ -450,6 +453,7 @@ end $$
 -- connections
 ---------------------------------------------
 
+-- This needs to be called early on because there is a draw
 f_zcall(f_create_gridpair, [[
    top_browse    ;,6 ,4 ,2 ,2  ,10 ,10
   ;top_edit      ;,2 ,2 ,2 ,2  ,30 ,20
@@ -482,3 +486,5 @@ f_zcall(f_create_gridpair, [[
   ;;,g_grid_pickspot   ,S_TEAME      ,~top_editteam   ,~bot_info    ,~f_dt_editteam ,~f_op_editteam    ,~f_s_editteam ,~f_l_browse    ,~c_no
   ;;,g_grid_picktrnr   ,S_TEAML      ,~top_text_grid  ,~bot_info    ,~f_dt_league   ,~f_op_teams       ,~f_nf         ,~f_l_browse    ,~c_no
 ]])
+
+g_gridstack = {g_grid_title} -- gotta run after the above.

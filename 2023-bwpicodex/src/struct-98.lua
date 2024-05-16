@@ -15,10 +15,10 @@
     accuracy,   1,
     crit,       1;
 
-    1; id,M_NONE, pid,3; -- start at 3 because there are usually 3 none spots
-    2; id,M_NONE, pid,4; -- id: the actual move id. pid: the possible move id (local to pkmn)
-    3; id,M_NONE, pid,5;
-    4; id,M_NONE, pid,6;
+    1; id,M_NONE, pid,4; -- start at 4 because there are always 4 none spots at the beginning.
+    2; id,M_NONE, pid,5; -- id: the actual move id. pid: the possible move id (local to pkmn)
+    3; id,M_NONE, pid,6;
+    4; id,M_NONE, pid,7;
 
     stages;
       attack,         0,
@@ -33,7 +33,6 @@
 
   -- pkmn.gender_bit = pkmn_num
   -- pkmn.item = pkmn.default_item
-
   -- todo: moves could change as you unlock them. so all 3s might not be the best approach. or at least i should call getparty then saveparty
   return pkmn
 end $$
