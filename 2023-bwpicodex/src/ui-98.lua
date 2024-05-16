@@ -79,7 +79,7 @@ end $$
     pkmn:f_save_party_pkmn(@S_TEAM, @S_TEAME)
   end})
 
-  add(op, {text="sTATS", select=function()
+  add(op, {text="vIEW", select=function()
     add(g_gridstack, g_grid_statedit)
   end})
 
@@ -113,12 +113,11 @@ end $$
 
 |[f_add_stat_move]| function(op, pkmn, ind)
   local m = pkmn[ind]
-  if m.id ~= M_NONE then
-    add(op, {text="mOVE"..ind..": "..c_move_names[m.id], disabled=true})
-    add(op, {text="tYPE:  "..c_type_names[c_moves[m.id].type+1]})
-    add(op, {text="pWpNT: "..f_prefix_zero(c_moves[m.id].pp,  2).."/"..f_prefix_zero(c_moves[m.id].pp,  2)})
-    add(op, {text="pW/aC: "..f_prefix_zero(c_moves[m.id].pow, 3).."/"..f_prefix_zero(c_moves[m.id].acc, 3)})
-  end
+  local pp, pow, acc, typ = f_get_move_texts(c_moves[m.id])
+  add(op, {text="mOVE"..ind..": "..c_move_names[m.id], disabled=true})
+  add(op, {text="tYPE:  "..typ})
+  add(op, {text="pWpNT: "..pp.."/"..pp})
+  add(op, {text="pW/aC: "..pow.."/"..acc})
 end $$
 
 -- 0 = browse, 1 = edit, 2 = benched, 3 = active
@@ -207,18 +206,19 @@ end $$
 -- dp and dt drawing for ui
 ---------------------------------------------
 |[f_dt_editteam]| function(i, is_sel)
-  f_print_top("eDIT: sPOT ", @S_TEAME+1)
+  f_print_top("tEAM",@S_TEAM+1,": sPOT",@S_TEAME+1)
   local pkmn = f_get_party_pkmn(@S_TEAM, @S_TEAME)
   f_print_bot("#", pkmn.num_str, " ", pkmn.name)
 end $$
 
 |[f_dt_editstat]| function(i, is_sel)
+  local prefix = "sPOT"..@S_TEAME+1
   local pkmn = f_get_party_pkmn(@S_TEAM, @S_TEAME)
-  if @S_EDITSTAT < 4 then f_print_top("eDIT: mOVE", @S_EDITSTAT+1)
-  elseif @S_EDITSTAT == 4 then f_print_top"eDIT: iTEM"
-  elseif @S_EDITSTAT == 5 then f_print_top"eDIT: gENDER"
-  elseif @S_EDITSTAT == 6 then f_print_top"eDIT: sTATS"
-  elseif @S_EDITSTAT == 7 then f_print_top"eDIT: dELETE"
+  if @S_EDITSTAT < 4 then f_print_top(prefix, ": mOVE", @S_EDITSTAT+1)
+  elseif @S_EDITSTAT == 4 then f_print_top(prefix, ": iTEM")
+  elseif @S_EDITSTAT == 5 then f_print_top(prefix, ": gENDER")
+  elseif @S_EDITSTAT == 6 then f_print_top(prefix, ": vIEW")
+  elseif @S_EDITSTAT == 7 then f_print_top(prefix, ": dELETE")
   end
 
   -- f_print_top("eDIT: sPOT ", @S_TEAME+1)
@@ -243,24 +243,26 @@ end $$
   print("\f2"..text, 1, 8)
 end $$
 
--- TODO: is this better being inside an "op" function?
-|[f_dt_editmove_template]| function(move, method)
-  local pp = f_prefix_zero(move.pp, 2)
-  local pow = f_prefix_zero(move.pow, 3)
-  local acc = f_prefix_zero(move.acc, 3)
-  local typ = c_type_names[move.type+1]
+|[f_get_move_texts]| function(move)
+  -- TODO: token crunching with zobj
+  local pp, pow, acc, typ = f_prefix_zero(move.pp, 2), f_prefix_zero(move.pow, 3), f_prefix_zero(move.acc, 3), c_type_names[move.type+1]
 
-  if move.pow == 0 then pow = "___" end
-  if move.pow == 1 then pow = "var" end
+  if     move.pow == 0 then pow = "___"
+  elseif move.pow == 1 then pow = "var" end
   if move.acc == 0 then acc = "___" end
 
   -- TODO: I'd rather store an empty move to save a few tokens. Empty and struggle.
   if move.num == M_NONE then
-    typ, pp, pow, acc = "nONE", "__", "___", "___"
+    typ, pp, pow, acc = "______", "__", "___", "___"
   elseif not move.lock then
     pp, pow, acc, typ = f_strtoq(pp), f_strtoq(pow), f_strtoq(acc), f_strtoq(typ)
   end
+  return pp, pow, acc, typ
+end $$
 
+-- TODO: is this better being inside an "op" function?
+|[f_dt_editmove_template]| function(move, method)
+  local pp, pow, acc, typ = f_get_move_texts(move)
   f_print_top(method, ": ", typ)
   f_print_bot(pp, "PP ", pow, "P ", acc, "A")
 end $$
@@ -301,12 +303,25 @@ end $$
     namestr, type1, type2 = f_strtoq(namestr), f_strtoq(type1), f_strtoq(type2)
   end
 
-  f_print_top("#", f_prefix_zero(pkmn.num, 3), " \f4", namestr)
+  f_print_top("#", f_prefix_zero(pkmn.num, 3), " ", namestr)
   f_print_bot(type1, " ", type2)
 end $$
 
 |[f_dt_browse]| function()
   f_dt_browse_template(@S_BROWSE)
+end $$
+
+-- TODO: dedup with below func
+|[f_dt_editpkmn]| function()
+  local pkmn = c_pokemon[@S_BROWSE]
+  local namestr = pkmn.name
+
+  if not pkmn.lock then
+    namestr = f_strtoq(namestr)
+  end
+
+  f_print_top("tEAM",@S_TEAM+1,": sPOT",@S_TEAME+1)
+  f_print_bot("#", f_prefix_zero(pkmn.num, 3), " ", namestr)
 end $$
 
 |[f_dt_edit]| function()
@@ -317,7 +332,7 @@ end $$
     add(pkstr_arr, sub(c_pkmn_names[pkmn.num], 1, pkstr_lens[ii+1]))
   end
 
-  f_print_top("eDIT: tEAM ", (@g_cg_m.mem+1))
+  f_print_top("eDIT: tEAM", (@g_cg_m.mem+1))
   f_print_bot(pkstr_arr[1], "-", pkstr_arr[2], "-", pkstr_arr[3], "-", pkstr_arr[4], "-", pkstr_arr[5], pkstr_arr[6])
 
   -- local pkstr = pkstr_arr[1].."-"..pkstr_arr[2].."-"..pkstr_arr[3]..pkstr_arr[4]..pkstr_arr[5].."-"..pkstr_arr[6]
@@ -328,15 +343,15 @@ end $$
   -- TODO: save tokens / compression by extracting out this if.
   local toggle = g_cg_m.name == 'g_grid_pickleag'
 
-  f_print_top((toggle and "\f4" or "\f2"), "pLR: tEAM ", (@S_TEAM+1))
-  f_print_bot((toggle and "\f2" or "\f4"), "cPU: ", c_trnr_names[@S_TEAML+1])
+  f_print_top(toggle and "\f4" or "\f2", "pLR: tEAM", @S_TEAM+1)
+  f_print_bot(toggle and "\f2" or "\f4", "cPU: ", c_trnr_names[@S_TEAML+1])
 end $$
 
 |[f_dt_versus]| function()
   local toggle = g_cg_m.name == 'g_grid_pickplr1'
 
-  f_print_top((toggle and "\f4" or "\f2"), "pLR1: tEAM ", (@S_TEAM+1))
-  f_print_bot((toggle and "\f2" or "\f4"), "pLR2: tEAM ", (@S_TEAM2+1))
+  f_print_top(toggle and "\f4" or "\f2", "pLR1: tEAM", @S_TEAM+1)
+  f_print_bot(toggle and "\f2" or "\f4", "pLR2: tEAM", @S_TEAM2+1)
 end $$
 
 |[f_dp_title]| function()
@@ -374,6 +389,11 @@ end $$
 |[f_s_pkstat]| function()
   g_preview_timer = 20
   return @S_BROWSE
+end $$
+
+|[f_s_statedit]| function()
+  g_preview_timer = 20
+  return f_get_party_pkmn(@S_TEAM, @S_TEAME).num
 end $$
 
 |[f_s_versus]| function()
@@ -432,7 +452,7 @@ end $$
       end
     end
   elseif dir < 0 then
-    for i=prev-1,1,-1 do
+    for i=prev-1,0,-1 do
       if c_pokemon[i].lock then
         next = i+1
         break
@@ -444,6 +464,35 @@ end $$
   if prev ~= @S_BROWSE then
     f_minisfx(SFX_MOVE)
     -- f_populate_stats() f_op_statbrowse related
+  elseif dir ~= 0 then
+    f_minisfx(SFX_ERROR)
+  end
+end $$
+
+|[f_lr_statedit]| function(dir) -- TODO: can this be simplified & combined with above?
+  local prev = @S_TEAME
+  local next = prev+1
+  if dir > 0 then
+    for i=next+1,6,1 do
+      local pkmn = f_get_party_pkmn(@S_TEAM, i-1)
+      if pkmn.num ~= P_NONE then
+        next = i
+        break
+      end
+    end
+  elseif dir < 0 then
+    for i=prev-1,0,-1 do
+      local pkmn = f_get_party_pkmn(@S_TEAM, i)
+      if pkmn.num ~= P_NONE then
+        next = i+1
+        break
+      end
+    end
+  end
+
+  poke(S_TEAME, next-1)
+  if prev ~= @S_TEAME then
+    f_minisfx(SFX_MOVE)
   elseif dir ~= 0 then
     f_minisfx(SFX_ERROR)
   end
@@ -468,10 +517,10 @@ f_zcall(f_create_gridpair, [[
   ;;,g_grid_title      ,S_TITLE      ,~bot_4x4        ,~top_title   ,~f_dp_title    ,~f_op_title       ,~f_s_title    ,~f_l_title     ,~c_no
 
   ;;,g_grid_browse     ,S_BROWSE     ,~top_browse     ,~bot_info    ,~f_dt_browse   ,~f_op_browse      ,~f_s_browse   ,~f_l_browse    ,~c_no
-  ;;,g_grid_editpkmn   ,S_BROWSE     ,~top_browse     ,~bot_info    ,~f_dt_browse   ,~f_op_browse      ,~f_s_editpkmn ,~f_l_browse    ,~c_no
+  ;;,g_grid_editpkmn   ,S_BROWSE     ,~top_browse     ,~bot_info    ,~f_dt_editpkmn ,~f_op_browse      ,~f_s_editpkmn ,~f_l_browse    ,~c_no
 
   ;;,g_grid_statbrowse ,S_STATBROWSE ,~top_pkstat     ,~bot_info    ,~f_dt_browse   ,~f_op_statbrowse  ,~f_s_pkstat   ,~f_l_browse    ,~f_browselr
-  ;;,g_grid_statedit   ,S_STATEDIT   ,~top_pkstat     ,~bot_info    ,~f_dt_browse   ,~f_op_statedit    ,~f_s_pkstat   ,~f_l_browse    ,~f_browselr
+  ;;,g_grid_statedit   ,S_STATEDIT   ,~top_pkstat     ,~bot_info    ,~f_dt_editstat ,~f_op_statedit    ,~f_s_statedit ,~f_l_browse    ,~f_lr_statedit
   ;;,g_grid_statbattle ,S_STATBATTLE ,~top_pkstat     ,~bot_info    ,~f_dt_browse   ,~f_op_statbrowse  ,~f_s_pkstat   ,~f_l_browse    ,~f_browselr
 
   ;;,g_grid_editstat   ,S_EDITSTAT   ,~top_text_grid  ,~bot_info    ,~f_dt_editstat ,~f_op_editstat    ,~f_s_editstat ,~f_l_browse    ,~c_no

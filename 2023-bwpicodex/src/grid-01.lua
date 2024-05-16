@@ -76,10 +76,10 @@ end $$
 
     local l, r, u, d = 0, 0, 0, 0
 
-    if i == 0                then l = 1 u = 1 end
-    if i == w-1              then r = 1 u = 1 end
-    if i == #gridobj-1       then r = 1 d = 1 end
-    if i == (#gridobj-1)\w*w then l = 1 d = 1 end
+    if i == 0                then l, u = 1, 1 end
+    if i == w-1              then r, u = 1, 1 end
+    if i == #gridobj-1       then r, d = 1, 1 end
+    if i == (#gridobj-1)\w*w then l, d = 1, 1 end
 
     local c = C_3
     if (lrfunc or i ~= num) and obj.disabled then

@@ -7,7 +7,7 @@
     seen_moves, #,            -- A move to boolean map that is used to disable things on the move edit screen and populate edit_moves.
     major,      C_MAJOR_NONE, -- The major status condition in pokemon battles: fainted, burned, frozen, paralyzed, poisoned, sleeping
 
-    gender_bit, 0,            -- The gender bit. This number is modded by the Pokemon's possible genders to figure out the gender. TODO: maybe this could be randomized
+    gender_bit, @,            -- The gender bit. This number is modded by the Pokemon's possible genders to figure out the gender. TODO: maybe this could be randomized
     gender,     0,            -- This gets populated from gender bit & pkmn.genders.
 
     item,       I_NONE,       -- The item the Pokemon has
@@ -29,7 +29,7 @@
       crit,           0,
       evasion,        0,
       accuracy,       0; -- TODO: delete the semicolon
-  ]], pkmn_num)
+  ]], pkmn_num, rnd(2)\1)
 
   -- pkmn.gender_bit = pkmn_num
   -- pkmn.item = pkmn.default_item
