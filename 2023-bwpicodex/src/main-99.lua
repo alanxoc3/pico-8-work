@@ -51,13 +51,13 @@ end
 
 |[_update60]| function()
   -- printh(stat(0)) -- TODO: remove?
-  g_title_timer = min(80, (g_title_timer+1))
+  g_title_timer = min(C_TITLETIMER, (g_title_timer+1))
   g_preview_timer = max(0, g_preview_timer-1)
   g_cg_m, g_cg_s, gridpofunc, params = unpack(g_gridstack[#g_gridstack])
   gridpo = {}
   gridpofunc(gridpo, unpack(params)) -- TODO: Maybe I shouldn't be calling this every frame and instead only on adds.
 
-  if g_title_timer == 80 then
+  if g_title_timer == C_TITLETIMER then
     f_update_grid(g_cg_m, gridpo)
 
     if g_cg_m.name == 'g_grid_title' then
@@ -67,7 +67,7 @@ end
       elseif g_title_an_timer == 40  then f_minisfx(g_title_r-1)
       elseif g_title_an_timer == 190 then f_minisfx(g_title_l-1) end
     end
-  elseif g_title_timer < 80 then
+  elseif g_title_timer < C_TITLETIMER then
     local b = bitmaskToIndex(btnp())
     if b then
       g_palette = b
@@ -75,14 +75,16 @@ end
   end
 end $$
 
+sfx'63' -- Plays all the 4 sound effects in picodex as the logo/startup tune.
+
 |[_draw]| function()
   cls'C_1'
 
-  if g_title_timer < 80 then
+  if g_title_timer < C_TITLETIMER then
     print("\^y7\f4aLANxOC3\n\-d \f3pRESENTS",  32-4*4, 32-6)
   end
 
-  local easing = sin(max(60, g_title_timer)/80)
+  local easing = sin(max(.75*C_TITLETIMER, g_title_timer)/C_TITLETIMER)
   if g_cg_m then
     f_draw_grid(g_cg_m, gridpo, @g_cg_m.mem, @g_cg_m.memview, g_cg_m.x, g_cg_m.y+easing*20, true)
     f_draw_grid(g_cg_s, {{draw=g_cg_s.df}},   -1,          0,               g_cg_s.x, g_cg_s.y-easing*45)

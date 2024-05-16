@@ -1,6 +1,7 @@
 some notes:
 - sketch will behave like gen 3. it will copy a move for the duration of the battle, but not after that. So, slightly better than mimic. ditto could learn an extra move like this. by transforming into smeargle.
-- sketch otherwise behaves normally and can't copy transform, metronome, or mimic... maybe. gen4 and up allow those moves to be copied.
+- any pokemon with sleeptalk/mirrormove/mimic/transform/metronome could learn any move for the remainder of the battle if they use sketch.
+- moves that trigger another move cannot trigger a triggering move (metronome, sleep talk, mirror move cannot trigger each other)
 
 might have to introduce gender to picodex, to make attract work.
 - attract bypasses substitute
@@ -56,7 +57,6 @@ DIFF: Dynamicpunch always confuses the target if it hits.
 DIFF: The Polkadot Bow item is excluded in favor of Pink Bow.
 
 Modifications inspired by design:
-DIFF: Smeargle can learn Sketch in multiple move slots. Being the only Pokemon that can have the same move in its moveset besides Missingno.
 DIFF: All Pokemon are set to level 50 with the highest possible stats they can have for that level.
 DIFF: When you KO the target with a multihit move such as "Double Slap", your attack will continue onto the next Pokemon sent out.
 DIFF: If a Pokemon faints, the next Pokemon in the user's team is sent out automatically. This places more importance on team order.
@@ -98,6 +98,7 @@ DIFF: Disable fails if the Pokemon is currently encored or disabled.
 DIFF: A transformed pokemon can make use of pokemon specific items (thickclub, lightball, lucky punch, stick)
 DIFF: Missingno is a pokemon. It copies best stats and all moves from RB missingno, Y missingno, M (Missingno's Sister), O (M's pre-evolution), and "Pゥ_4$" (M's other preevolution). Glitch moves are converted to the gen 2 hex equivalents, except TM05 (from "Pゥ_4$") which is a move in Picodex. Only moves that can be learned up to lvl 100 are included.
 DIFF: Megadrain, gigadrain, absorb, leech life all hit and take hp from a substitute.
+DIFF: A Pokemon may have zero moves. The Pokemon will use struggle if that is the case.
 
 STRAT: Sketch and Mimic allow for the same move to be available in multiple move slots.
 STRAT: Missingno is broken.
