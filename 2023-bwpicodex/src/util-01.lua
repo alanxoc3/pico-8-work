@@ -2,9 +2,9 @@
   sfx(num\4, num < 252 and 0 or 1, num%4*8, 8)
 end $$
 
-|[f_draw_pkmn]| function(num, x, y, width, flip, sel, disabled)
+|[f_draw_pkmn]| function(num, x, y, width, flip, sel, disabled, isoutline)
   -- the "min" is needed to draw trainers
-  local in_c = sel and C_4 or disabled and C_2 or C_4
+  local in_c = isoutline and C_3 or sel and C_4 or disabled and C_2 or C_4
   local out_c = disabled and (sel and C_2 or C_3) or sel and C_3 or C_2 --  (sel or disabled) and C_3 or C_2
 
   if num == P_NONE then

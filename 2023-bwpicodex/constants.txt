@@ -21,7 +21,7 @@ S_TEAME:          0x5eb8 # the specific pokemon in edit screen
 S_EDITSTAT:       0x5eba # edit the stats for a specific pokemon
 S_EDITMOVE:       0x5ebc # edit the move for a specific pokemon
 S_EDITITEM:       0x5ebe # edit the item for a specific pokemon
-S_EDITLEVL:       0x5ec0 # edit the level for a specific pokemon
+S_BATSELECT:      0x5ec0 # the battle selection screen where you select your action
 
 S_NEW:            0x5efe
 S_STORY:          0x5eff
