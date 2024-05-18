@@ -2,23 +2,37 @@
 -- p_ = preview, t_ = text. The "preview" grid is the area at the top of the screen. The "text" grid is the area at the bottom of the screen.
 
 -- current: 4707 | 28810 | 10642
+|[f_add_to_ui_stack]| function(_ENV)
+  add(g_gridstack, _ENV)
+  op, pkmnlist = {}, {}
+  gridpofunc(_ENV, unpack(params))
+end $$
+
+|[f_getsel]| function(gridname)
+  return _g[gridname].g_cg_m.sel
+end $$
 
 -----------------------------
 -- OP FUNCTIONS - DATA FOR UI
 -----------------------------
 
 -- This updates the lock variables, which determine if a pokemon/item/move is unlocked.
-|[f_op_def]| function(op) add(op, {}) end $$
+|[f_op_def]| function(_ENV) add(op, {}) end $$
 
-|[f_op_browse]| function(op)
+|[f_op_browse]| function(_ENV)
   for i=0,251 do
-    add(op, {disabled=not c_pokemon[i].lock, draw=function(_, is_sel, gridobj)
+    local disabled = not c_pokemon[i].lock
+    if not disabled then -- TODO: finish this logic pkmnlist
+      add(pkmnlist, c_pokemon[i])
+    end
+
+    add(op, {disabled=disabled, draw=function(_, is_sel, gridobj)
       f_draw_pkmn(c_pokemon[i].lock and i or P_NONE, 1, 1, 6, false, is_sel, gridobj.disabled)
     end})
   end
 end $$
 
-|[f_op_edit]| function(op, sumdisable)
+|[f_op_edit]| function(_ENV, sumdisable)
   for partynum=0,3 do
     local valid = true
     local inds = {}
@@ -38,53 +52,54 @@ end $$
   end
 end $$
 
-|[f_op_editteam]| function(op)
+|[f_op_editteam]| function(_ENV)
   for pkmnnum=0,5 do
-    local pkmn = f_get_party_pkmn(@S_TEAM, pkmnnum)
+    local pkmn = f_get_party_pkmn(f_getsel'g_grid_pickedit', pkmnnum)
     add(op, {draw=function(i, is_sel)
       f_draw_pkmn(pkmn.num, 1, 1, 16, false, is_sel)
     end})
   end
 end $$
 
-|[f_op_title]| function(op)
+|[f_op_title]| function(_ENV)
   foreach(split"bROWSE,eDIT,lEAGUE,vERSUS", function(text)
     f_addop_text(op, text)
   end)
 end $$
 
-|[f_op_teams]| function(op)
+|[f_op_teams]| function(_ENV)
   for i=1, 58 do
-    add(op, {text=c_trnr_names[i], disabled=@S_STORY+1<i})
+    local disabled = @S_STORY+1<i
+    add(op, {text=disabled and f_strtoq(c_trnr_names[i]) or c_trnr_names[i], disabled=disabled})
   end
 end $$
 
-|[f_op_editstat]| function(op)
-  local pkmn = f_get_party_pkmn(@S_TEAM, @S_TEAME)
+|[f_op_editstat]| function(_ENV)
+  local pkmn = f_get_party_pkmn(f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot')
 
   for i=1,4 do
     add(op, {text=c_move_names[pkmn[i].id], select=function()
-      poke(S_EDITMOVE, pkmn[i].pid-1)
-      add(g_gridstack, g_grid_editmove)
+      -- poke(S_EDITMOVE, pkmn[i].pid-1) -- TODO: fixme
+      f_add_to_ui_stack(g_grid_editmove)
     end})
   end
 
   add(op, {text=c_item_names[pkmn.item], select=function()
-    poke(S_EDITITEM, pkmn.item)
-    add(g_gridstack, g_grid_edititem)
+    --poke(S_EDITITEM, pkmn.item) -- TODO: fixme
+    f_add_to_ui_stack(g_grid_edititem)
   end})
 
   add(op, {text=c_gender_names[pkmn.gender], disabled=#pkmn.genders < 2, select=function()
     pkmn.gender_bit += 1
-    pkmn:f_save_party_pkmn(@S_TEAM, @S_TEAME)
+    pkmn:f_save_party_pkmn(f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot')
   end})
 
   add(op, {text="vIEW", select=function()
-    add(g_gridstack, g_grid_statedit)
+    f_add_to_ui_stack(g_grid_statedit)
   end})
 
   add(op, {text="dELETE", select=function()
-    memset(S_PARTY1+@S_TEAM*42+@S_TEAME*7, P_NONE, 7)
+    memset(S_PARTY1+f_getsel'g_grid_pickedit'*42+f_getsel'g_grid_pickspot'*7, P_NONE, 7)
     deli(g_gridstack)
   end})
 end $$
@@ -94,22 +109,22 @@ end $$
   add(op, {text=lock and name or f_strtoq(name), disabled=disabled or not lock})
 end $$
 
-|[f_get_edit_op_pkmn]| function() return f_get_party_pkmn(@S_TEAM, @S_TEAME) end $$
-|[f_op_editmove]| function(op)
+|[f_get_edit_op_pkmn]| function() return f_get_party_pkmn(f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot') end $$
+|[f_op_editmove]| function(_ENV)
   local pkmn = f_get_edit_op_pkmn()
   for i, num in ipairs(pkmn.possible_moves) do
     f_create_spot(c_moves[num], op, pkmn.seen_moves[i])
   end
 end $$
 
-|[f_op_template_edit]| function(op, list, key)
+|[f_op_template_edit]| function(_ENV, list, key)
   local pkmn = f_get_edit_op_pkmn()
   for obj in all(list) do
     f_create_spot(obj, op, pkmn[key] == obj.num)
   end
 end $$
 
-|[f_op_edititem]| function(op) f_op_template_edit(op, c_items, 'item')  end $$
+|[f_op_edititem]| function(_ENV) f_op_template_edit(op, c_items, 'item')  end $$
 
 |[f_add_stat_move]| function(op, pkmn, ind)
   local m = pkmn[ind]
@@ -208,30 +223,31 @@ end $$
   end
 end $$
 
-|[f_op_statbrowse]| function(op) f_add_stat(op, c_pokemon[@S_BROWSE], MODE_BROWSE) end $$
-|[f_op_statedit]|   function(op) f_add_stat(op, f_get_party_pkmn(@S_TEAM, @S_TEAME),  MODE_EDIT)   end $$
+|[f_op_statbrowse]| function(_ENV) f_add_stat(op, c_pokemon[f_getsel'g_grid_browse'], MODE_BROWSE) end $$
+|[f_op_statbattle]| function(_ENV) f_add_stat(op, f_get_party_pkmn(f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot'), MODE_EDIT) end $$
+|[f_op_statedit]|   function(_ENV) f_add_stat(op, f_get_party_pkmn(f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot'),  MODE_EDIT)   end $$
 
 ---------------------------------------------
 -- dp and dt drawing for ui
 ---------------------------------------------
 |[f_dt_editteam]| function(i, is_sel)
-  f_print_top("tEAM",@S_TEAM+1,": sPOT",@S_TEAME+1)
-  local pkmn = f_get_party_pkmn(@S_TEAM, @S_TEAME)
+  f_print_top("tEAM",f_getsel'g_grid_pickedit'+1,": sPOT",f_getsel'g_grid_pickspot'+1)
+  local pkmn = f_get_party_pkmn(f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot')
   f_print_bot("#", pkmn.num_str, " ", pkmn.name)
 end $$
 
 |[f_dt_editstat]| function(i, is_sel)
-  local prefix = "sPOT"..@S_TEAME+1
-  local pkmn = f_get_party_pkmn(@S_TEAM, @S_TEAME)
-  if @S_EDITSTAT < 4 then f_print_top(prefix, ": mOVE", @S_EDITSTAT+1)
-  elseif @S_EDITSTAT == 4 then f_print_top(prefix, ": iTEM")
-  elseif @S_EDITSTAT == 5 then f_print_top(prefix, ": gENDER")
-  elseif @S_EDITSTAT == 6 then f_print_top(prefix, ": vIEW")
-  elseif @S_EDITSTAT == 7 then f_print_top(prefix, ": dELETE")
+  local prefix = "sPOT"..f_getsel'g_grid_pickspot'+1
+  local pkmn = f_get_party_pkmn(f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot')
+  if f_getsel'g_grid_editstat' < 4 then f_print_top(prefix, ": mOVE", f_getsel'g_grid_editstat'+1)
+  elseif f_getsel'g_grid_editstat' == 4 then f_print_top(prefix, ": iTEM")
+  elseif f_getsel'g_grid_editstat' == 5 then f_print_top(prefix, ": gENDER")
+  elseif f_getsel'g_grid_editstat' == 6 then f_print_top(prefix, ": vIEW")
+  elseif f_getsel'g_grid_editstat' == 7 then f_print_top(prefix, ": dELETE")
   end
 
-  -- f_print_top("eDIT: sPOT ", @S_TEAME+1)
-  local pkmn = f_get_party_pkmn(@S_TEAM, @S_TEAME)
+  -- f_print_top("eDIT: sPOT ", f_getsel'g_grid_pickspot'+1)
+  local pkmn = f_get_party_pkmn(f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot')
   f_print_bot("#", pkmn.num_str, " ", pkmn.name)
 end $$
 
@@ -277,8 +293,8 @@ end $$
 end $$
 
 |[f_dt_editmove]| function()
-  local pkmn = f_get_party_pkmn(@S_TEAM, @S_TEAME)
-  local movenum = pkmn.possible_moves[@S_EDITMOVE+1]
+  local pkmn = f_get_party_pkmn(f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot')
+  local movenum = pkmn.possible_moves[f_getsel'g_grid_editmove'+1]
   local move = c_moves[movenum]
   f_dt_editmove_template(move, pkmn.possible_moves_method[movenum])
 end $$
@@ -317,19 +333,19 @@ end $$
 end $$
 
 |[f_dt_browse]| function()
-  f_dt_browse_template(@S_BROWSE)
+  f_dt_browse_template(f_getsel'g_grid_browse')
 end $$
 
 -- TODO: dedup with below func
 |[f_dt_editpkmn]| function()
-  local pkmn = c_pokemon[@S_BROWSE]
+  local pkmn = c_pokemon[f_getsel'g_grid_browse']
   local namestr = pkmn.name
 
   if not pkmn.lock then
     namestr = f_strtoq(namestr)
   end
 
-  f_print_top("tEAM",@S_TEAM+1,": sPOT",@S_TEAME+1)
+  f_print_top("tEAM",f_getsel'g_grid_pickedit'+1,": sPOT",f_getsel'g_grid_pickspot'+1)
   f_print_bot("#", f_prefix_zero(pkmn.num, 3), " ", namestr)
 end $$
 
@@ -337,30 +353,30 @@ end $$
   local pkstr_arr = {}
   local pkstr_lens = split'2,2,2,2,1,1'
   for ii=0,5 do
-    local pkmn = f_get_party_pkmn(@S_TEAM, ii)
+    local pkmn = f_get_party_pkmn(f_getsel'g_grid_pickedit', ii)
     add(pkstr_arr, sub(c_pkmn_names[pkmn.num], 1, pkstr_lens[ii+1]))
   end
 
-  f_print_top("eDIT: tEAM", (@g_cg_m.mem+1))
+  f_print_top("eDIT: tEAM", 1) -- TODO: fixme
   f_print_bot(pkstr_arr[1], "-", pkstr_arr[2], "-", pkstr_arr[3], "-", pkstr_arr[4], "-", pkstr_arr[5], pkstr_arr[6])
-
-  -- local pkstr = pkstr_arr[1].."-"..pkstr_arr[2].."-"..pkstr_arr[3]..pkstr_arr[4]..pkstr_arr[5].."-"..pkstr_arr[6]
-  -- print("\^y7\f4#"..(@g_cg_m.mem+1).." \f4tEAM\n\f2"..pkstr, 1, 1, C_2)
 end $$
 
 |[f_dt_league]| function()
   -- TODO: save tokens / compression by extracting out this if.
   local toggle = g_cg_m.name == 'g_grid_pickleag'
+  local disabled = @S_STORY+1<f_getsel'g_grid_picktrnr'+1
+  local name = c_trnr_names[f_getsel'g_grid_picktrnr'+1]
+  name = disabled and f_strtoq(name) or name
 
-  f_print_top(toggle and "\f4" or "\f2", "pLR: tEAM", @S_TEAM+1)
-  f_print_bot(toggle and "\f2" or "\f4", "cPU: ", c_trnr_names[@S_TEAML+1])
+  f_print_top(toggle and "\f4" or "\f2", "pLR: tEAM", f_getsel'g_grid_pickedit'+1)
+  f_print_bot(toggle and "\f2" or "\f4", "cPU: ", name)
 end $$
 
 |[f_dt_versus]| function()
   local toggle = g_cg_m.name == 'g_grid_pickplr1'
 
-  f_print_top(toggle and "\f4" or "\f2", "pLR1: tEAM", @S_TEAM+1)
-  f_print_bot(toggle and "\f2" or "\f4", "pLR2: tEAM", @S_TEAM2+1)
+  f_print_top(toggle and "\f4" or "\f2", "pLR1: tEAM", f_getsel'g_grid_pickedit'+1)
+  f_print_bot(toggle and "\f2" or "\f4", "pLR2: tEAM", f_getsel'g_grid_pickplr2'+1)
 end $$
 
 |[f_dp_title]| function()
@@ -408,9 +424,11 @@ end
   b("cHARMAND","fZN", 23,24,23,24, 60+cos(t())*50\1,80, true)  f_draw_pkmn(9, 3,  21, 16, false, false, false, false)
 end $$
 
-|[f_op_batsel]| function(op)
+|[f_op_batsel]| function(_ENV)
   add(op, {text="fIGHT"})
-  add(op, {text="sTATS"})
+  add(op, {text="sTATS", select=function()
+    f_add_to_ui_stack(g_grid_battle_stat)
+  end})
   add(op, {text="sWITCH"})
   add(op, {text="gIVEuP"})
 end $$
@@ -423,73 +441,70 @@ end $$
 end $$
 
 |[f_s_browse]| function()
-  add(g_gridstack, g_grid_statbrowse)
+  f_add_to_ui_stack(g_grid_statbrowse)
 end $$
 
 |[f_s_title]| function()
-  if @g_cg_m.mem == 0 then
-    add(g_gridstack, g_grid_browse)
-  elseif @g_cg_m.mem == 1 then
-    add(g_gridstack, g_grid_pickedit)
-  elseif @g_cg_m.mem == 2 then
-    add(g_gridstack, g_grid_pickleag)
-  elseif @g_cg_m.mem == 3 then
-    add(g_gridstack, g_grid_pickplr1)
+  if f_getsel'g_grid_title' == 0 then
+    f_add_to_ui_stack(g_grid_browse)
+  elseif f_getsel'g_grid_title' == 1 then
+    f_add_to_ui_stack(g_grid_pickedit)
+  elseif f_getsel'g_grid_title' == 2 then
+    f_add_to_ui_stack(g_grid_pickleag)
+  elseif f_getsel'g_grid_title' == 3 then
+    f_add_to_ui_stack(g_grid_pickplr1)
   end
 end $$
 
 |[f_s_pkstat]| function()
   g_preview_timer = 20
-  return @S_BROWSE
+  return f_getsel'g_grid_browse'
 end $$
 
 |[f_s_statedit]| function()
   g_preview_timer = 20
-  return f_get_party_pkmn(@S_TEAM, @S_TEAME).num
+  return f_get_party_pkmn(f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot').num
 end $$
 
 |[f_s_versus]| function()
-  add(g_gridstack, g_grid_pickplr2)
+  f_add_to_ui_stack(g_grid_pickplr2)
 end $$
 
 |[f_s_league]| function()
-  add(g_gridstack, g_grid_picktrnr)
+  f_add_to_ui_stack(g_grid_picktrnr)
 end $$
 
 |[f_s_batbegin]| function()
-  add(g_gridstack, g_grid_battle_select)
+  f_add_to_ui_stack(g_grid_battle_select)
 end $$
 
 |[f_s_edit]| function()
-  add(g_gridstack, g_grid_pickspot)
+  f_add_to_ui_stack(g_grid_pickspot)
 end $$
 
 |[f_s_editteam]| function()
-  --local party_loc = S_PARTY1+(@S_TEAM)*42
-  --local pkmn_loc = party_loc+@S_TEAME*7
-  add(g_gridstack, f_get_party_pkmn(@S_TEAM, @S_TEAME).valid and g_grid_editstat or g_grid_editpkmn)
+  f_add_to_ui_stack(f_get_party_pkmn(f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot').valid and g_grid_editstat or g_grid_editpkmn)
 end $$
 
 |[f_s_editpkmn]| function()
-  f_save_party_pkmn(f_mkpkmn(@S_BROWSE, true, rnd(2)\1, 0, 5, 6, 7, 8), @S_TEAM, @S_TEAME)
+  f_save_party_pkmn(f_mkpkmn(f_getsel'g_grid_browse', true, rnd(2)\1, 0, 5, 6, 7, 8), f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot')
   deli(g_gridstack)
 end $$
 
-|[f_s_editstat]| function()
-  gridpo[@S_EDITSTAT+1].select()
-end $$
+|[f_s_editstat]| function() gridpo[f_getsel'g_grid_editstat'+1].select() end $$
+|[f_s_battle]|   function() gridpo[f_getsel'g_grid_battle_select'+1].select() end $$
 
 |[f_s_editmove]| function()
-  local pkmn = f_get_party_pkmn(@S_TEAM, @S_TEAME)
-  pkmn[@S_EDITSTAT+1].pid = @S_EDITMOVE
-  f_save_party_pkmn(pkmn, @S_TEAM, @S_TEAME)
+  local pkmn = f_get_party_pkmn(f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot')
+  pkmn[f_getsel'g_grid_editstat'+1].pid = f_getsel'g_grid_editmove'
+  f_save_party_pkmn(pkmn, f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot')
   deli(g_gridstack)
 end $$
 
 |[f_s_edititem]| function()
-  local pkmn = f_get_party_pkmn(@S_TEAM, @S_TEAME)
-  pkmn.item = @S_EDITITEM
-  f_save_party_pkmn(pkmn, @S_TEAM, @S_TEAME)
+  local pkmn = f_get_party_pkmn(f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot')
+  pkmn.item = f_getsel('g_grid_edititem')
+  f_save_party_pkmn(pkmn, f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot')
   deli(g_gridstack)
 end $$
 
@@ -498,7 +513,7 @@ end $$
 end $$
 
 |[f_browselr]| function(dir) -- TODO: can this be simplified?
-  local prev = @S_BROWSE
+  local prev = f_getsel'g_grid_browse'
   local next = prev+1
   if dir > 0 then
     for i=next+1,252,1 do
@@ -516,8 +531,8 @@ end $$
     end
   end
 
-  poke(S_BROWSE, next-1)
-  if prev ~= @S_BROWSE then
+  -- poke(S_BROWSE, next-1) -- TODO: fixme
+  if prev ~= f_getsel'g_grid_browse' then
     f_minisfx(SFX_MOVE)
     -- f_populate_stats() f_op_statbrowse related
   elseif dir ~= 0 then
@@ -526,11 +541,11 @@ end $$
 end $$
 
 |[f_lr_statedit]| function(dir) -- TODO: can this be simplified & combined with above?
-  local prev = @S_TEAME
+  local prev = f_getsel'g_grid_pickspot'
   local next = prev+1
   if dir > 0 then
     for i=next+1,6,1 do
-      local pkmn = f_get_party_pkmn(@S_TEAM, i-1)
+      local pkmn = f_get_party_pkmn(f_getsel'g_grid_pickedit', i-1)
       if pkmn.num ~= P_NONE then
         next = i
         break
@@ -538,7 +553,7 @@ end $$
     end
   elseif dir < 0 then
     for i=prev-1,0,-1 do
-      local pkmn = f_get_party_pkmn(@S_TEAM, i)
+      local pkmn = f_get_party_pkmn(f_getsel'g_grid_pickedit', i)
       if pkmn.num ~= P_NONE then
         next = i+1
         break
@@ -546,8 +561,8 @@ end $$
     end
   end
 
-  poke(S_TEAME, next-1)
-  if prev ~= @S_TEAME then
+  -- poke(S_TEAME, next-1) -- todo: fixme
+  if prev ~= f_getsel'g_grid_pickspot' then
     f_minisfx(SFX_MOVE)
   elseif dir ~= 0 then
     f_minisfx(SFX_ERROR)
@@ -570,34 +585,36 @@ f_zcall(f_create_gridpair, [[
   ;bot_4x4       ;,2 ,2 ,2 ,44 ,30 ,9
   ;bot_info      ;,1 ,1 ,2 ,45 ,60 ,16
 
-  -- name                  active mem       maingridspec     infogridspec  infogriddraw    main opfunc        select func    leave func      lrfunc        opfunc params
-  ;;,g_grid_title          ,S_TITLE         ,~bot_4x4        ,~top_title   ,~f_dp_title    ,~f_op_title       ,~f_s_title    ,~f_l_title     ,~c_no
+  -- name                  maingridspec     infogridspec  infogriddraw    main opfunc        select func      leave func      lrfunc        opfunc params
+  ;;,g_grid_title          ,~bot_4x4        ,~top_title   ,~f_dp_title    ,~f_op_title       ,~f_s_title      ,~f_l_title     ,~c_no
 
-  ;;,g_grid_browse         ,S_BROWSE        ,~top_browse     ,~bot_info    ,~f_dt_browse   ,~f_op_browse      ,~f_s_browse   ,~f_l_browse    ,~c_no
-  ;;,g_grid_editpkmn       ,S_BROWSE        ,~top_browse     ,~bot_info    ,~f_dt_editpkmn ,~f_op_browse      ,~f_s_editpkmn ,~f_l_browse    ,~c_no
+  ;;,g_grid_browse         ,~top_browse     ,~bot_info    ,~f_dt_browse   ,~f_op_browse      ,~f_s_browse     ,~f_l_browse    ,~c_no
+  ;;,g_grid_editpkmn       ,~top_browse     ,~bot_info    ,~f_dt_editpkmn ,~f_op_browse      ,~f_s_editpkmn   ,~f_l_browse    ,~c_no
 
-  ;;,g_grid_statbrowse     ,S_STATBROWSE    ,~top_pkstat     ,~bot_info    ,~f_dt_browse   ,~f_op_statbrowse  ,~f_s_pkstat   ,~f_l_browse    ,~f_browselr
-  ;;,g_grid_statedit       ,S_STATEDIT      ,~top_pkstat     ,~bot_info    ,~f_dt_editstat ,~f_op_statedit    ,~f_s_statedit ,~f_l_browse    ,~f_lr_statedit
-  ;;,g_grid_statbattle     ,S_STATBATTLE    ,~top_pkstat     ,~bot_info    ,~f_dt_browse   ,~f_op_statbrowse  ,~f_s_pkstat   ,~f_l_browse    ,~f_browselr
+  ;;,g_grid_statbrowse     ,~top_pkstat     ,~bot_info    ,~f_dt_browse   ,~f_op_statbrowse  ,~f_s_pkstat     ,~f_l_browse    ,~f_browselr
+  ;;,g_grid_statedit       ,~top_pkstat     ,~bot_info    ,~f_dt_editstat ,~f_op_statedit    ,~f_s_statedit   ,~f_l_browse    ,~f_lr_statedit
+  ;;,g_grid_battle_stat    ,~top_pkstat     ,~bot_info    ,~f_dt_browse   ,~f_op_statbattle  ,~f_nf           ,~f_l_browse    ,~f_lr_statedit
 
-  ;;,g_grid_editstat       ,S_EDITSTAT      ,~top_text_grid  ,~bot_info    ,~f_dt_editstat ,~f_op_editstat    ,~f_s_editstat ,~f_l_browse    ,~c_no
-  ;;,g_grid_editmove       ,S_EDITMOVE      ,~top_text_grid  ,~bot_info    ,~f_dt_editmove ,~f_op_editmove    ,~f_s_editmove ,~f_l_browse    ,~c_no
-  ;;,g_grid_edititem       ,S_EDITITEM      ,~top_text_grid  ,~bot_info    ,~f_dt_editstat ,~f_op_edititem    ,~f_s_edititem ,~f_l_browse    ,~c_no
+  ;;,g_grid_editstat       ,~top_text_grid  ,~bot_info    ,~f_dt_editstat ,~f_op_editstat    ,~f_s_editstat   ,~f_l_browse    ,~c_no
+  ;;,g_grid_editmove       ,~top_text_grid  ,~bot_info    ,~f_dt_editmove ,~f_op_editmove    ,~f_s_editmove   ,~f_l_browse    ,~c_no
+  ;;,g_grid_edititem       ,~top_text_grid  ,~bot_info    ,~f_dt_editstat ,~f_op_edititem    ,~f_s_edititem   ,~f_l_browse    ,~c_no
 
-  ;;,g_grid_pickedit       ,S_TEAM          ,~top_edit       ,~bot_info    ,~f_dt_edit     ,~f_op_edit        ,~f_s_edit     ,~f_l_browse    ,~c_no
-  ;;,g_grid_pickleag       ,S_TEAM          ,~top_edit       ,~bot_info    ,~f_dt_league   ,~f_op_edit        ,~f_s_league   ,~f_l_browse    ,~c_no        ,~c_yes
-  ;;,g_grid_pickplr1       ,S_TEAM          ,~top_edit       ,~bot_info    ,~f_dt_versus   ,~f_op_edit        ,~f_s_versus   ,~f_l_browse    ,~c_no        ,~c_yes
-  ;;,g_grid_pickplr2       ,S_TEAM2         ,~top_edit       ,~bot_info    ,~f_dt_versus   ,~f_op_edit        ,~f_nf         ,~f_l_browse    ,~c_no        ,~c_yes
+  ;;,g_grid_pickedit       ,~top_edit       ,~bot_info    ,~f_dt_edit     ,~f_op_edit        ,~f_s_edit       ,~f_l_browse    ,~c_no
+  ;;,g_grid_pickleag       ,~top_edit       ,~bot_info    ,~f_dt_league   ,~f_op_edit        ,~f_s_league     ,~f_l_browse    ,~c_no        ,~c_yes
+  ;;,g_grid_pickplr1       ,~top_edit       ,~bot_info    ,~f_dt_versus   ,~f_op_edit        ,~f_s_versus     ,~f_l_browse    ,~c_no        ,~c_yes
+  ;;,g_grid_pickplr2       ,~top_edit       ,~bot_info    ,~f_dt_versus   ,~f_op_edit        ,~f_nf           ,~f_l_browse    ,~c_no        ,~c_yes
 
-  ;;,g_grid_pickspot       ,S_TEAME         ,~top_editteam   ,~bot_info    ,~f_dt_editteam ,~f_op_editteam    ,~f_s_editteam ,~f_l_browse    ,~c_no
-  ;;,g_grid_picktrnr       ,S_TEAML         ,~top_text_grid  ,~bot_info    ,~f_dt_league   ,~f_op_teams       ,~f_s_batbegin ,~f_l_browse    ,~c_no
+  ;;,g_grid_pickspot       ,~top_editteam   ,~bot_info    ,~f_dt_editteam ,~f_op_editteam    ,~f_s_editteam   ,~f_l_browse    ,~c_no
+  ;;,g_grid_picktrnr       ,~top_text_grid  ,~bot_info    ,~f_dt_league   ,~f_op_teams       ,~f_s_batbegin   ,~f_l_browse    ,~c_no
 
-  ;;,g_grid_battle_select, ,S_BATSELECT     ,~bot_4x4        ,~top_battle  ,~f_dp_battle   ,~f_op_batsel      ,~f_nf         ,~f_nf          ,~c_no
-  -- ;;,g_grid_battle_move,   ,S_BATMOVE
-  -- ;;,g_grid_battle_switch, ,S_BATSWITCH
-  -- ;;,g_grid_battle_stat,   ,S_BATSTAT
-  -- ;;,g_grid_battle_turn,   ,S_BATTURN
-  -- ;;,g_grid_battle_result, ,S_BATRESULT
+  ;;,g_grid_battle_select, ,~bot_4x4        ,~top_battle  ,~f_dp_battle   ,~f_op_batsel      ,~f_s_battle ,~f_nf          ,~c_no
+
+  -- ;;,g_grid_battle_move,
+  -- ;;,g_grid_battle_switch,
+  -- ;;,g_grid_battle_stat,
+  -- ;;,g_grid_battle_turn,
+  -- ;;,g_grid_battle_result,
 ]])
 
-g_gridstack = {g_grid_title} -- gotta run after the above.
+g_gridstack = {} -- gotta run after the above.
+f_add_to_ui_stack(g_grid_title)

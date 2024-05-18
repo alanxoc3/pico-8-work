@@ -1,24 +1,25 @@
-|[f_create_gridpair]| function(name, mem, main_grid_spec, info_grid_spec, info_grid_draw, main_op_func, main_sel_func, main_leave_func, main_lr_func, ...)
-  _g[name] = {
+|[f_create_gridpair]| function(name, main_grid_spec, info_grid_spec, info_grid_draw, main_op_func, main_sel_func, main_leave_func, main_lr_func, ...)
+  -- zobj is needed so we can use an _ENV syntax
+  _g[name] = f_zobj([[g_cg_m,@, g_cg_s,@, gridpofunc,@, params,@]],
     f_zobj([[
-      name,@, mem,@, memview,@, selfunc,@, leavefunc,@, lrfunc,@,
-      w,@,vh,@,x,@,y,@,cw,@,ch,@
-    ]], name, mem, mem+1, main_sel_func, main_leave_func, main_lr_func, unpack(main_grid_spec)),
+      sel,0, view,0,
+      name,@, selfunc,@, leavefunc,@, lrfunc,@, w,@,vh,@,x,@,y,@,cw,@,ch,@
+    ]], name, main_sel_func, main_leave_func, main_lr_func, unpack(main_grid_spec)),
 
     f_zobj([[
-      name,@, mem,@, memview,@, df,@,
-      w,@,vh,@,x,@,y,@,cw,@,ch,@
-    ]], name, -1, -1, info_grid_draw, unpack(info_grid_spec)),
+      sel,-1, view,-1,
+      name,@, df,@, w,@,vh,@,x,@,y,@,cw,@,ch,@
+    ]], name, info_grid_draw, unpack(info_grid_spec)),
 
     main_op_func,
     {...}
-  }
+  )
 end $$
 
 -- pass in cell list.
 -- each cell has: text, disabled
 -- this only gets called for the current active grid
-|[f_update_grid]| function(_ENV, gridobj)
+|[f_update_grid]| function(_ENV, gridobj, top_grid)
   local evalfunc = function(num, mmin, mmax, b0, b1, l)
     local off = (b1 and l or 0) - (b0 and l or 0)
     local newnum = mid(mmin, min(#gridobj-1, mmin+mmax), num + off)
@@ -30,7 +31,6 @@ end $$
     return newnum
   end
 
-  local num, view = @mem, @memview
   if lrfunc then
     local off = (btnp'3' and 1 or 0) - (btnp'2' and 1 or 0)
 
@@ -44,24 +44,23 @@ end $$
 
     if lrfunc then lrfunc((btnp'1' and 1 or 0) - (btnp'0' and 1 or 0)) end
   else
-    num = evalfunc(num, 0,     #gridobj-1,       btnp'0', btnp'1', 1)
-    num = evalfunc(num, num%w, (#gridobj-1)\w*w, btnp'2', btnp'3', w)
+    sel = evalfunc(sel, 0,     #gridobj-1,       btnp'0', btnp'1', 1)
+    sel = evalfunc(sel, sel%w, (#gridobj-1)\w*w, btnp'2', btnp'3', w)
 
-    if num\w-vh+1 > view then view = num\w-vh+1 end
-    if num\w      < view then view = num\w      end
+    if sel\w-vh+1 > view then view = sel\w-vh+1 end
+    if sel\w      < view then view = sel\w      end
     view = mid(0, view, (#gridobj-1)\w-vh+1)
   end
 
   if btnp'4' then
     f_minisfx(leavefunc() or SFX_LEAVE)
   elseif btnp'5' then
-    if (num < 0 or lrfunc or not gridobj[num+1].disabled) then
+    if (sel < 0 or lrfunc or not gridobj[sel+1].disabled) then
       f_minisfx(selfunc() or SFX_SELECT)
     else
       f_minisfx(SFX_ERROR)
     end
   end
-  poke(mem, num, view)
 end $$
 
 |[f_draw_grid]| function(_ENV, gridobj, num, view, x, y, active) -- "active" is just needed to be able to draw the bright selection fill background (or not draw it)

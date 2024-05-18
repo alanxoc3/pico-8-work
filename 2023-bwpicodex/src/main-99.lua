@@ -53,12 +53,15 @@ end
   -- printh(stat(0)) -- TODO: remove?
   g_title_timer = min(C_TITLETIMER, (g_title_timer+1))
   g_preview_timer = max(0, g_preview_timer-1)
-  g_cg_m, g_cg_s, gridpofunc, params = unpack(g_gridstack[#g_gridstack])
-  gridpo = {}
-  gridpofunc(gridpo, unpack(params)) -- TODO: Maybe I shouldn't be calling this every frame and instead only on adds.
+  top_grid = g_gridstack[#g_gridstack]
+  g_cg_m     = top_grid.g_cg_m -- TODO: refactor/simplify. maybe dont need all these variables. do what is less tokens
+  g_cg_s     = top_grid.g_cg_s
+  gridpofunc = top_grid.gridpofunc
+  params     = top_grid.params
+  gridpo     = top_grid.op
 
   if g_title_timer == C_TITLETIMER then
-    f_update_grid(g_cg_m, gridpo)
+    f_update_grid(g_cg_m, gridpo, top_grid)
 
     if g_cg_m.name == 'g_grid_title' then
       g_title_an_timer = (g_title_an_timer+1)%300
@@ -86,7 +89,7 @@ sfx'63' -- Plays all the 4 sound effects in picodex as the logo/startup tune.
 
   local easing = sin(max(.75*C_TITLETIMER, g_title_timer)/C_TITLETIMER)
   if g_cg_m then
-    f_draw_grid(g_cg_m, gridpo, @g_cg_m.mem, @g_cg_m.memview, g_cg_m.x, g_cg_m.y+easing*20, true)
+    f_draw_grid(g_cg_m, gridpo, g_cg_m.sel, g_cg_m.view, g_cg_m.x, g_cg_m.y+easing*20, true)
     f_draw_grid(g_cg_s, {{draw=g_cg_s.df}},   -1,          0,               g_cg_s.x, g_cg_s.y-easing*45)
   end
 
