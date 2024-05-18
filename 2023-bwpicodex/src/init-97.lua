@@ -2,12 +2,11 @@ f_zcall(poke, [[
    ;,0x5f2c, 3 -- screen to 64x64
   ;;,0x5f5c, 8 -- set btn initial delay before repeating. 255 means never repeat.
   ;;,0x5f5d, 1 -- set btn repeating delay.
-  ;;,S_STORY, 1 -- todo: remove me, this is just for debugging
+  ;;,S_STORY, 2 -- todo: remove me, this is just for debugging
 ]])
 
-cls()
-
-|[c_move_names]|       f_zobj[["0,______;,aCID,aCIDaR,bARAGE,bONcLB,bIND,cLAMP,mOONlT,lECHsD,eXTRsP,sNCbOM,tWInDL,tHNsHK,gLARE,gILOTN,hYPfNG,jMPkCK,kINSIS,lOCKoN,lOVkIS,mACpNC,vICgRP,sPIcAN,sPIKES,sPORE,cOTsPR,pRESNT,vItHRW,cMTpNC,dRLpCK,sNDaTK,aGILTY,fRYaTK,qIKaTK,fALsWP,gROWL,hEALbL,sING,pOUND,mINMIZ,tAILwP,dBLsLP,mEGhRN,bONRNG,cONVR1,cONVR2,sPARK,mLKdRK,mORsUN,nGTsHD,oCTZOK,pINmIS,pWDsNW,sUPfNG,fIRsPN,pSNgAS,bARIER,mEDTAT,fTRsGT,hYPNOS,pSYbEM,lITsCR,sAFgRD,pETdNC,cHARM,sYNTHS,sWTsCN,rAZlEF,pSNpWD,sLPpWD,aBSORB,sTNsPR,fLAIL,cONFSN,sLAM,cONSTR,aMNESA,bUBBLE,sPLASH,hYDpMP,mNDrED,mIST,hRNaTK,sPIwEB,dBLkCK,sWTkIS,mTLcLW,tRFORM,tRIKCK,gUST,tWISTR,cRBhAM,dIZpNC,sLUDGE,pAINsP,dSTbND,hAZE,lICK,pERsNG,mEANlK,cNFrAY,cRScHP,sMOG,kARcHP,eMBER,sMKsCR,bELdRM,bEATUP,sCRTCH,sLASH,aNCpWR,lEER,bITE,oUTrGE,sCRYfC,tHRASH,sTOMP,rOKsLD,mAGTUD,rOCtHR,hARDEN,bONrSH,hIJkCK,rECOVR,aERbLS,hRNdRL,dRGrAG,sFbOIL,dRGbRE,sLFdES,eXPLSN,eGGbMB,sLGbMB,gIGdRN,mEGdRN,sWRdNC,cUT,fRYcTR,tHIEF,dIG,rOLOUT,dFNcRL,dETECT,sOLbEM,rAIdNC,fLASH,pSYCIC,pSYCuP,dRMeAT,nGTMAR,sHDbAL,zAPcAN,tHUNDR,tHNbLT,iRNtAL,sTRENG,rOCsMS,hEDbUT,mUDsLP,sUNdAY,pROTCT,dBLtEM,sLPtLK,cURSE,hIDpWR,sWAGER,fRUSTR,rETURN,tOXIC,sNORE,rEST,eNDURE,aTRACT,bIDE,mIMIC,sUBSTU,rAGE,dBLeDG,tAKdWN,sKLbAS,bODsLM,wTRgUN,bBLbEM,iCEbEM,bLIZRD,iCYwND,sURF,wRLPOL,wTRFAL,sWIFT,pAYDAY,tRIaTK,rFLECT,tHNwAV,tELPRT,pSYwAV,mETRNM,cOUNTR,mEGpNC,sEITOS,sUBMIS,mEGkCK,dYNpNC,fIRpNC,tHNpNC,iCEpNC,fIRbLS,fLMtHR,fISURE,eARTqK,sNDsTR,hYPbEM,rOAR,sTLwNG,fLY,rAZwND,wRLwND,sKYaTK,wNGaTK,pECK,mIRMOV,fNTaTK,wITdRW,rAPsPN,sUPsNC,aURbEM,mIRcOT,pSNsTG,sPITE,cRUNCH,pURSUT,sTRsHT,lECHlF,bTNpAS,dISABL,sCRECH,tACKLE,fLMwEL,rEVERS,fRYsWP,fCSeNG,fORsGT,lOWkCK,rOLkCK,eNCORE,wRAP,gROWTH,vINwHP,sACfIR,sHRPEN,sKETCH,tM05,sTRUGL,nONE,nONE,nONE"]] $$
+cls() -- this is just a visual thing when the game starts up. TODO: i can remove it if i want. probably should
+|[c_move_names]|       f_zobj[["0,______;,aCID,aCIDaR,bARAGE,bONcLB,bIND,cLAMP,mOONlT,lECHsD,eXTRsP,sNCbOM,tWInDL,tHNsHK,gLARE,gILOTN,hYPfNG,jMPkCK,kINSIS,lOCKoN,lOVkIS,mACpNC,vICgRP,sPIcAN,sPIKES,sPORE,cOTsPR,pRESNT,vItHRW,cMTpNC,dRLpCK,sNDaTK,aGILTY,fRYaTK,qIKaTK,fALsWP,gROWL,hEALbL,sING,pOUND,mINMIZ,tAILwP,dBLsLP,mEGhRN,bONRNG,cONVR1,cONVR2,sPARK,mLKdRK,mORsUN,nGTsHD,oCTZOK,pINmIS,pWDsNW,sUPfNG,fIRsPN,pSNgAS,bARIER,mEDTAT,fTRsGT,hYPNOS,pSYbEM,lITsCR,sAFgRD,pETdNC,cHARM,sYNTHS,sWTsCN,rAZlEF,pSNpWD,sLPpWD,aBSORB,sTNsPR,fLAIL,cONFSN,sLAM,cONSTR,aMNESA,bUBBLE,sPLASH,hYDpMP,mNDrED,mIST,hRNaTK,sPIwEB,dBLkCK,sWTkIS,mTLcLW,tRFORM,tRIKCK,gUST,tWISTR,cRBhAM,dIZpNC,sLUDGE,pAINsP,dSTbND,hAZE,lICK,pERsNG,mEANlK,cNFrAY,cRScHP,sMOG,kARcHP,eMBER,sMKsCR,bELdRM,bEATUP,sCRTCH,sLASH,aNCpWR,lEER,bITE,oUTrGE,sCRYfC,tHRASH,sTOMP,rOKsLD,mAGTUD,rOCtHR,hARDEN,bONrSH,hIJkCK,rECOVR,aERbLS,hRNdRL,dRGrAG,sFbOIL,dRGbRE,sLFdES,eXPLSN,eGGbMB,sLGbMB,gIGdRN,mEGdRN,sWRdNC,cUT,fRYcTR,tHIEF,dIG,rOLOUT,dFNcRL,dETECT,sOLbEM,rAIdNC,fLASH,pSYCIC,pSYCuP,dRMeAT,nGTMAR,sHDbAL,zAPcAN,tHUNDR,tHNbLT,iRNtAL,sTRENG,rOCsMS,hEDbUT,mUDsLP,sUNdAY,pROTCT,dBLtEM,sLPtLK,cURSE,hIDpWR,sWAGER,fRUSTR,rETURN,tOXIC,sNORE,rEST,eNDURE,aTRACT,bIDE,mIMIC,sUBSTU,rAGE,dBLeDG,tAKdWN,sKLbAS,bODsLM,wTRgUN,bBLbEM,iCEbEM,bLIZRD,iCYwND,sURF,wRLPOL,wTRFAL,sWIFT,pAYDAY,tRIaTK,rFLECT,tHNwAV,tELPRT,pSYwAV,mETRNM,cOUNTR,mEGpNC,sEITOS,sUBMIS,mEGkCK,dYNpNC,fIRpNC,tHNpNC,iCEpNC,fIRbLS,fLMtHR,fISURE,eARTqK,sNDsTR,hYPbEM,rOAR,sTLwNG,fLY,rAZwND,wRLwND,sKYaTK,wNGaTK,pECK,mIRMOV,fNTaTK,wITdRW,rAPsPN,sUPsNC,aURbEM,mIRcOT,pSNsTG,sPITE,cRUNCH,pURSUT,sTRsHT,lECHlF,bTNpAS,dISABL,sCRECH,tACKLE,fLMwEL,rEVRSL,fRYsWP,fCSeNG,fORsGT,lOWkCK,rOLkCK,eNCORE,wRAP,gROWTH,vINwHP,sACfIR,sHRPEN,sKETCH,tM05,sTRUGL,nONE,nONE,nONE"]] $$
 |[c_trnr_names]|       split"yOUNGS,sAGE,fALKNR,gRUNT,bUGcTR,bUGSY,pKMfAN,bEAUTY,wITNEY,kIMINO,mEDIUM,mORTY,pOLICE,kARATE,cHUCK,gENTLE,sAILOR,jASMIN,rOCKET,sKIER,pRYCE,sCIENT,tWINS,cLAIR,nERD,cAMPER,bROCK,sCHOOL,sWIMER,mISTY,jUGLER,gUITAR,lTsURG,hIKER,lASS,eRIKA,bIKER,pICNIK,jANINE,mANIAC,pSYCIC,sABRIN,fISHER,bREATH,bLAINE,bIRDkP,cOOLtR,bLUE,lEGEND,sILVER,wILL,kOGA,bRUNO,kAREN,lANCE,rED,gOLD,hORDE" $$
 |[c_type_names]|       split"bIRD,nORMAL,fIRE,fIGHTN,wATER,pOISON,eLECTR,gROUND,gRASS,fLYING,iCE,bUG,pSYCIC,rOCK,dRAGON,gHOST,dARK,sTEEL,nONE" $$ -- TODO: is the nONE type used?
 |[c_item_names]|       f_zobj[["0,nONE;,pNKbOW,cHRcOL,bLKbLT,mYSwTR,pSNbRB,mAGNET,sOsAND,mIRACL,sHbEAK,nVRiCE,sLVpWD,tWsPON,hRDsTN,dRAGsC,sPELtG,bLKgLS,mTLcOT,pLKbOW,bRIpWD,fOCbND,kINGrK,lEFToV,qIKcLW,sCOPlN,aMcOIN,lITbAL,lUKpNC,mTLpWD,sTICK,tHKcLB,bERSRK,bERRY,gLDbRY,bTRbRY,mNTbRY,bRNbRY,iCEbRY,pARbRY,pSNbRY,mIRbRY,mYSbRY"]] $$
@@ -39,29 +38,18 @@ cls()
   return @g_init_peek_loc
 end $$
 
-|[f_can_pokemon_teach_move]| function(pkmn_ind, move_ind) -- todo: can replace this by making a movemap on the pkmn
-  for l=2,3 do
-    for ind in all(c_pokemon[pkmn_ind].moves_grouped[l]) do
-      if ind == move_ind then
-        return true
-      end
-    end
-  end
-end $$
-
 -- STEP 2: UNPACK TYPE CHART
 for i=0,323 do -- 18*18 = 324 (18 types)
   c_types[i\18][i%18] = f_init_peek_inc()\2
 end
 
-for i=0,I_LEN do add(c_items,  f_zobj([[lock,~c_no,  num,@, name,@]], i, c_item_names[i] )) end
+for i=0,I_END do add(c_items,  f_zobj([[lock,~c_no,  num,@, name,@]], i, c_item_names[i] )) end
 
-c_pokemon[P_NONE] = {num_str="___", num=P_NONE, name="eMPTY", type1=18, type2=0} -- TODO: is this needed, if so put in data instead
+c_pokemon[P_NONE] = {num_str="___", num=P_NONE, name="eMPTY", type1=18, type2=0, genders={G_NEUT}, possible_moves=f_zobj[[,0,0,0,0]]} -- TODO: is this needed, if so put in data instead
 
 -- 136 to 118. Storing data all together saves like 18 code tokens.
 for i=0,251 do -- There are 252 pkmn and 252 moves. So zipped when unpacking to save some tokens.
-  local pkmn = f_get_default_pkmn(i)
-  f_zobj_set(pkmn, [[moves_progress;,#,#,#; moves_grouped;,#,#,#; lock,~c_no, name,@, num,@, num_str,@]], c_pkmn_names[i], i, f_prefix_zero(i, 3))
+  local pkmn = f_zobj([[moves_progress;,#,#,#; moves_grouped;,#,#,#; lock,~c_no, name,@, num,@, num_str,@]], c_pkmn_names[i], i, f_prefix_zero(i, 3))
 
   -- cur_list is not local just so I can save 1 token
   cur_list, c_moves[i], c_pokemon[i] = pkmn.moves_progress[1], f_zobj([[lock,~c_no, num,@, name,@]], i, c_move_names[i]), pkmn -- todo: get rid of i-1
@@ -141,18 +129,9 @@ for i=0,251 do -- todo: token crunching - can move up
   end
 end
 
-for i=0,56 do
-  local trainer, move = {}, f_init_peek_inc()
-  for j=1,6 do
-    local pkmn = {ind=f_init_peek_inc()}
-    for i=1,min(4,#c_pokemon[pkmn.ind].moves_grouped[1]) do
-      pkmn[i] = c_pokemon[pkmn.ind].moves_grouped[1][i]
-    end
-    if f_can_pokemon_teach_move(pkmn.ind, move) then
-      pkmn[4] = move
-    end
-    add(trainer, pkmn)
-  end
+for i=1,57 do
+  local trainer = {move=f_init_peek_inc()}
+  for j=1,6 do add(trainer, f_init_peek_inc()) end
   add(c_trainers, trainer)
 end
 
@@ -161,17 +140,8 @@ end
 -- TODO: figure out how trainer len/party goes to battle
 --       only trainers are saved as continuous things.
 
-local horde = {}
-for i=1,252 do
-  local pkmn = {ind=i%252}
-  for ii=1,min(4,#c_pokemon[pkmn.ind].moves_grouped[1]) do
-    pkmn[ii] = c_pokemon[pkmn.ind].moves_grouped[1][ii]
-  end
-  add(horde, pkmn)
-
-  -- TODO: is this needed? Check stat(0) memory to see how much it actually saves?
-  -- c_pokemon[pkmn.ind].moves_grouped = nil
-end
+local horde = {move=M_TM05} -- Maybe this should be struggle, I guess it works for now since only 1 pokemon knows it (missingno) -- i could go back to having tm05 be a teach move for missingno
+for i=1,252 do add(horde, i%252) end
 add(c_trainers, horde)
 
 -- TODO: REMOVE THIS! Only keep this for debugging. Someone could accidentally set it. But really, it falls out of scope of my idea of a fantasy console. And there is a slight bug not worth fixing on the UI when this is done.
@@ -191,14 +161,14 @@ end $$
   -- f_unlock(c_items, I_BERRY+1)
 
   -- these are the moves available in the default party
-  for ind in all(split'M_NONE,M_LEECHSEED,M_EMBER,M_WATERGUN,M_RAZORLEAF,M_TACKLE,M_BITE,M_TAILWHIP,M_LEER,M_SMOKESCREEN,M_LIGHTSCREEN,M_SCREECH') do
+  for ind in all(split'M_NONE,M_LEECHSEED,M_EMBER,M_WATERGUN,M_VINEWHIP,M_TACKLE,M_BITE,M_TAILWHIP,M_LEER,M_SMOKESCREEN,M_LIGHTSCREEN,M_SCREECH') do
     f_unlock(c_moves, ind)
   end
 
   for i, ind in ipairs(split'P_BULBASAUR,P_CHARMANDER,P_SQUIRTLE,P_CHIKORITA,P_CYNDAQUIL,P_TOTODILE,P_NONE') do -- 6 starter pokemon
     f_unlock(c_pokemon, ind)
     if @S_NEW == 0 then
-      f_save_party_pkmn(f_get_default_pkmn(ind), 0, i-1)
+      f_save_party_pkmn(f_mkpkmn(ind, true, rnd(2)\1, 0, 5, 5, 5, 5), 0, i-1)
     end
   end
 
@@ -207,16 +177,13 @@ end $$
     memset(S_PARTY2, P_NONE, 126) -- set the "NONE" pokemon to all the other slots. this is 0x7e, which is the length of 3 parties
   end
 
-
   for i=1,min(58,@S_STORY) do
-    for pkmn in all(c_trainers[i]) do
-      f_unlock(c_pokemon, pkmn.ind)
-      f_unlock(c_items, c_pokemon[pkmn.ind].default_item+1)
-
+    local team = f_team_league(i)
+    for pkmn in all(team) do
+      f_unlock(c_pokemon, pkmn.num)
+      f_unlock(c_items, pkmn.item+1)
       for i=1,4 do
-        if pkmn[i] then
-          f_unlock(c_moves, pkmn[i])
-        end
+        f_unlock(c_moves, pkmn[i].id)
       end
     end
   end

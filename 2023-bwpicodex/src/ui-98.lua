@@ -64,7 +64,7 @@ end $$
 
   for i=1,4 do
     add(op, {text=c_move_names[pkmn[i].id], select=function()
-      poke(S_EDITMOVE, pkmn[i].pid)
+      poke(S_EDITMOVE, pkmn[i].pid-1)
       add(g_gridstack, g_grid_editmove)
     end})
   end
@@ -98,7 +98,7 @@ end $$
 |[f_op_editmove]| function(op)
   local pkmn = f_get_edit_op_pkmn()
   for i, num in ipairs(pkmn.possible_moves) do
-    f_create_spot(c_moves[num], op, pkmn.seen_moves[i-1])
+    f_create_spot(c_moves[num], op, pkmn.seen_moves[i])
   end
 end $$
 
@@ -109,7 +109,7 @@ end $$
   end
 end $$
 
-|[f_op_edititem]| function(op) f_op_template_edit(op, c_items,  'item')  end $$
+|[f_op_edititem]| function(op) f_op_template_edit(op, c_items, 'item')  end $$
 
 |[f_add_stat_move]| function(op, pkmn, ind)
   local m = pkmn[ind]
@@ -123,7 +123,7 @@ end $$
 -- 0 = browse, 1 = edit, 2 = benched, 3 = active
 |[f_add_stat]| function(op, pkmn, mode)
   local genders = ""
-  if #pkmn.genders == 1 then
+  if #pkmn.genders == 1 then -- TODO: gender logic can be simplified by adding another gender "m/f" in gender names
     genders = c_gender_names[pkmn.genders[1]].."/"
   else
     for g in all(pkmn.genders) do
@@ -158,11 +158,20 @@ end $$
   add(op, {text="gENDR: "..genders})
   add(op, {text="pREVO: "..c_pkmn_names[pkmn.prevolve]})
   add(op, {text="hEALT: " .. pkmn.hp .. "/" .. pkmn.hp})
-  add(op, {text="aTACK: " .. f_prefix_zero(pkmn.attack,         3) .. " "  .. (pkmn.stages.attack         > 0 and "+"..pkmn.stages.attack         or (pkmn.stages.attack         < 0 and "-"..pkmn.stages.attack        ) or "")})
-  add(op, {text="dEFNS: " .. f_prefix_zero(pkmn.defense,        3) .. " "  .. (pkmn.stages.defense        > 0 and "+"..pkmn.stages.defense        or (pkmn.stages.defense        < 0 and "-"..pkmn.stages.defense       ) or "")})
-  add(op, {text="sPaTK: " .. f_prefix_zero(pkmn.specialattack,  3) .. " "  .. (pkmn.stages.specialattack  > 0 and "+"..pkmn.stages.specialattack  or (pkmn.stages.specialattack  < 0 and "-"..pkmn.stages.specialattack ) or "")})
-  add(op, {text="sPdFN: " .. f_prefix_zero(pkmn.specialdefense, 3) .. " "  .. (pkmn.stages.specialdefense > 0 and "+"..pkmn.stages.specialdefense or (pkmn.stages.specialdefense < 0 and "-"..pkmn.stages.specialdefense) or "")})
-  add(op, {text="sPEED: " .. f_prefix_zero(pkmn.speed,          3) .. " "  .. (pkmn.stages.speed          > 0 and "+"..pkmn.stages.speed          or (pkmn.stages.speed          < 0 and "-"..pkmn.stages.speed         ) or "")})
+
+  for stat in all(f_zobj[[
+     ;name,aTACK, key,attack
+    ;;name,dEFNS, key,defense
+    ;;name,sPaTK, key,specialattack
+    ;;name,sPdFN, key,specialdefense
+    ;;name,sPEED, key,speed
+  ]]) do
+    local text = stat.name..": "..f_prefix_zero(pkmn[stat.key], 3)
+    if pkmn.stages then
+      text ..= " "..(pkmn.stages[stat.key] > 0 and "+"..pkmn.stages[stat.key] or (pkmn.stages[stat.key] < 0 and "-"..pkmn.stages[stat.key]) or "")
+    end
+    add(op, {text=text})
+  end
 
   if mode >= MODE_ACTIVE then -- todo: convert to > (gt), saves a character
     add(op, {text="eVASN: " .. f_prefix_zero(pkmn.evasion*100\1,  3) .. "%"})
@@ -384,11 +393,11 @@ end
     end
 
     local tx, ty = x+15, y+9
-    -- for i=0,5 do
-    --   if i ~= 1 then
-    --     pset(tx+i%3*2, ty+i%2*2-1+1, col)
-    --   end
-    -- end
+    for i=0,5 do
+      if i ~= 1 then
+        pset(tx+i%3*2, ty+i%2*2-1+1, i==3 and C_4 or C_2 )
+      end
+    end
 
     print(name,   x+2,   y-5+1+1, col, -1)
     print(status.."  "..f_prefix_zero(hp, 3), x+1+1, y+8-1+1,   col, -1)
@@ -462,7 +471,7 @@ end $$
 end $$
 
 |[f_s_editpkmn]| function()
-  f_save_party_pkmn(f_get_default_pkmn(@S_BROWSE), @S_TEAM, @S_TEAME)
+  f_save_party_pkmn(f_mkpkmn(@S_BROWSE, true, rnd(2)\1, 0, 5, 6, 7, 8), @S_TEAM, @S_TEAME)
   deli(g_gridstack)
 end $$
 
