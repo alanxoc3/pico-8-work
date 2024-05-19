@@ -84,12 +84,12 @@ sfx'63' -- Plays all the 4 sound effects in picodex as the logo/startup tune.
   cls'C_1'
 
   if g_title_timer < C_TITLETIMER then
-    print("\^y7\f4aLANxOC3\n\-d \f3pRESENTS",  32-4*4, 32-6)
+    print("\^y7\f4aLANxOC3\n\-d \f3pRESENTS",  16, 26)
   end
 
   local easing = sin(max(.75*C_TITLETIMER, g_title_timer)/C_TITLETIMER)
   if g_cg_m then
-    f_draw_grid(g_cg_m, gridpo, g_cg_m.sel, g_cg_m.view, g_cg_m.x, g_cg_m.y+easing*20, true)
+    f_draw_grid(g_cg_m, gridpo, g_cg_m.sel, g_cg_m.view, g_cg_m.x, g_cg_m.y+easing*24, true)
     f_draw_grid(g_cg_s, {{draw=g_cg_s.df}},   -1,          0,               g_cg_s.x, g_cg_s.y-easing*45)
   end
 
