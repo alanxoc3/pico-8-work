@@ -45,7 +45,7 @@ f_zobj_set(_g, [[
   c_pokemon,#, c_moves,#, c_trainers,#, c_items,#,
   g_init_peek_loc,L_DATASTART,
   c_yes,@, c_no,@, c_empty,@, f_nop,@,
-  g_palette,5,
+  g_palette,0,
   g_preview_timer,0,
   g_title_timer,0,
   g_title_l,254,

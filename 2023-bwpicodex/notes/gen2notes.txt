@@ -109,4 +109,40 @@ IDEA: disable stores as a turn countdown on the pokemon flags. also disable is o
 IDEA: a prep move will set a disable countdown and disable all moves besides the prep move.
 
 
+DIFF: future sight is implemented leader first when getting damage
 DIFF: crit formula is slightly simplified to be 1/16, 2/16, 4/16, 6/16, 8/16. The biggest diff is making the "+3" stage slightly more likely to crit.
+DIFF: no complex fissure accuracy formula because all pokemon are same level, so 30% accuracy. ( https://bulbapedia.bulbagarden.net/wiki/Fissure_(move) )
+DIFF: metronome & sleep talk have a chance to break through frozen or sleep status conditions.
+DIFF: steel claw, steel wing, ancient power will still have the secondary effect if the opponent is KO-ed.
+
+https://www.smogon.com/forums/threads/mechanical-differences-between-the-gens.3474872/
+Changes from ADV to GSC
+- IVs range from 0-15 rather than 0-31.
+- A Pokemon can have 255 EVs in every stat.
+- Natures and Abilities do not exist.
+- If a badly poisoned Pokemon is switched out, it will be afflicted with regular poisoning.
+- If a burned or poisoned Pokemon KOes its opponent, it will not take burn or poison damage that turn.
+- A frozen Pokemon cannot attack on the turn it thaws out.
+- If Sleep Talk chooses Rest, the Pokemon will regain all of its health and have its sleep counter reset. If Sleep Talk chooses Roar or Whirlwind and the user is faster than the opponent, it will fail. Sleep Talk always advances the sleep counter.
+- Phazing moves, Counter, and Vital Throw must go second in order to succeed.
+- Only one layer of Spikes can be set.
+
+Changes from GSC to RBY
+- Rather than Special Attack and Special Defense stats, Pokemon simply have a Special stat that functions as both.
+- Items do not exist.
+- Sleep lasts for 0 to 6 turns. Also, a Pokemon cannot attack on the turn it wakes up. A Pokemon using Rest will wake up after 2 turns rather than 3.
+- If a Pokemon uses Rest while burned or paralyzed, it will retain the respective Attack or Speed drop until switching out. If a Pokemon uses an Attack or Speed boosting move while burned or paralyzed, respectively, the drops will be removed and the stat will raise as if no status was inflicted.
+- The probability of critical hits is determined by base Speed. The formula used is %CH = Base Speed x 100/512. Critical hits ignore all stat changes for both Pokemon, as well as the effects of Light Screen and Reflect. They also double the Level of user during damage calculations, meaning they deal around 1.95x damage at Level 100, but closer 1.5x at Level 5.
+- Bug is super effective against Poison and has normal effectiveness against Ghost, Poison is super effective against Bug, Ghost has no effect against Psychic, and Ice has normal effectiveness against Fire.
+- If a Pokemon KOes an opposing Pokemon or breaks a Substitute with Hyper Beam, it does not have to recharge the next turn.
+- A frozen Pokemon will not randomly thaw out.
+- The accuracy and critical hit rate of all moves is reduced by 0.4% (except Swift, which will never miss).
+- A poisoned or burned Pokemon loses 1/16 of its health rather than 1/8. Similarly, Leech Seed drains 1/16 of health rather than 1/8.
+- A Pokemon hit by a partial trapping move cannot attack for the duration of the attack. However, it can switch out of the partial trapping move.
+- Steel and Dark do not exist as types.
+- Night Shade and Seismic Toss hit everything, regardless of type.
+- If Explosion or SelfDestruct is used against a Pokemon behind a Substitute and breaks the Substitute, the user will not faint.
+- Roar and Whirlwind have no effect.
+- Haze removes major status conditions from the opponent.
+- Pokemon are immune to secondary status effects from attacks of their type. So, Normal-type can't be paralyzed by Body Slam, Ice-types can't be frozen, etc.
+- Counter misses if the last selected move's Base Power is 0, if the last move used by the opponent is not Normal- or Fighting-type (or is Counter), or if the last move used in battle (by either player) did no damage. Damage dealt is based on this move's damage, even if it was the Counter user who used it.

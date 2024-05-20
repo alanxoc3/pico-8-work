@@ -40,15 +40,6 @@ end $$
 --   {[0]=128,130,141,134,135,139, 141, 14,  6,143,142, 12,  9,  8,  4,  5}, -- purple yel
 
 -- TODO: dedup this if it's only used once and maybe try a btnp(i) approach instead (for loop)
-function bitmaskToIndex(bitmask)
-  for i = 0, 5 do
-    if bitmask & (1 << i) ~= 0 then
-      return i
-    end
-  end
-  return nil -- Return -1 if no bits are set
-end
-
 |[_update60]| function()
   -- printh(stat(0)) -- TODO: remove?
   g_title_timer = min(C_TITLETIMER, (g_title_timer+1))
@@ -59,6 +50,7 @@ end
   gridpofunc = top_grid.gridpofunc
   params     = top_grid.params
   gridpo     = top_grid.op
+  grid_previewop = top_grid.preview_op
 
   if g_title_timer == C_TITLETIMER then
     f_update_grid(g_cg_m, gridpo, top_grid)
@@ -69,11 +61,6 @@ end
       elseif g_title_an_timer == 150 then g_title_l = rnd"252"\1
       elseif g_title_an_timer == 40  then f_minisfx(g_title_r-1)
       elseif g_title_an_timer == 190 then f_minisfx(g_title_l-1) end
-    end
-  elseif g_title_timer < C_TITLETIMER then
-    local b = bitmaskToIndex(btnp())
-    if b then
-      g_palette = b
     end
   end
 end $$
@@ -90,7 +77,7 @@ sfx'63' -- Plays all the 4 sound effects in picodex as the logo/startup tune.
   local easing = sin(max(.75*C_TITLETIMER, g_title_timer)/C_TITLETIMER)
   if g_cg_m then
     f_draw_grid(g_cg_m, gridpo, g_cg_m.sel, g_cg_m.view, g_cg_m.x, g_cg_m.y+easing*24, true)
-    f_draw_grid(g_cg_s, {{draw=g_cg_s.df}},   -1,          0,               g_cg_s.x, g_cg_s.y-easing*45)
+    f_draw_grid(g_cg_s, #grid_previewop > 0 and grid_previewop or {{draw=g_cg_s.df}},   -1,          0,               g_cg_s.x, g_cg_s.y-easing*45)
   end
 
   pal(c_palettes[g_palette+1],1)

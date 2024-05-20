@@ -46,7 +46,7 @@ end $$
 
 |[f_team_party]| function(party_num)
   local team = {}
-  for i=0,5 do
+  for spot_num=0,5 do
     add(team, f_get_party_pkmn(party_num, spot_num))
   end
   return team

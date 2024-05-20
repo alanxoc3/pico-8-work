@@ -135,7 +135,7 @@ end $$
 
   local draw_preview = function(off)
     f_draw_pkmn(pkmn.num, 2-8-20+(g_preview_timer > 0 and (rnd(3)\1-1) or 0)+30, -8+1-10-1-1+6+3-3-off, 16)
-    rectfill(-9+4+30, -18-off, -9+4+30, 6-off, C_2)
+    rectfill(-9+4+30, -18-off-1, -9+4+30, 6-off+1, C_2)
   end
 
   add(op,  {text="#"..f_prefix_zero(pkmn.num, 3).." "..pkmn.name, header=true})
@@ -384,76 +384,71 @@ function roundrect_r(x1, y1, x2, y2, c)
   end
 end
 
-|[f_dt_battle]| function()
-  local b = function(name, status, x, y, bx, by, hp, hpmax, sel)
-    local col = sel and C_2 or C_2
-    local boxcol = sel and C_3 or C_3
-    roundrect_r(bx-1+1, by+1-6+1, bx+35-1, by+6+6+1, boxcol)
-    if hp > 0 then
-      rectfill(bx+1, by+3, bx+1+mid(0, hp/hpmax*32, 32), by+6, col)
-      pset(bx+1, by+3, boxcol)
-      pset(bx+1, by+6, boxcol)
-      pset(bx+33, by+3, boxcol)
-      pset(bx+33, by+6, boxcol)
-    end
-
-    local tx, ty = x+15, y+9
-    for i=0,5 do
-      if i ~= 1 then
-        pset(tx+i%3*2, ty+i%2*2-1+1, i==3 and C_4 or C_2 )
-      end
-    end
-
-    print(name,   x+2,   y-5+1+1, col, -1)
-    print(status.."  "..f_prefix_zero(hp, 3), x+1+1, y+8-1+1,   col, -1)
-    -- print(f_prefix_zero(hp, 3),   x+37-4*3-1-1-1, y+8-1+1, col, 1)
-  end
-
-  b("vENUSAUR", "bRN",0, 4, 0, 4,  1,100, false)  f_draw_pkmn(3, 39, 1,  16, true,  false, false, false)
-  b("cHARMAND","fZN", 23,24,23,24, 60+cos(t())*50\1,80, true)  f_draw_pkmn(9, 3,  21, 16, false, false, false, false)
-end $$
-
-|[f_op_battle]| function(_ENV)
-  local b = function(name, status, x, y, bx, by, hp, hpmax, sel)
-    local col = sel and C_2 or C_2
-    local boxcol = sel and C_3 or C_3
-    roundrect_r(bx-1+1, by+1-6+1, bx+35-1, by+6+6+1, boxcol)
-    if hp > 0 then
-      rectfill(bx+1, by+3, bx+1+mid(0, hp/hpmax*32, 32), by+6, col)
-      pset(bx+1, by+3, boxcol)
-      pset(bx+1, by+6, boxcol)
-      pset(bx+33, by+3, boxcol)
-      pset(bx+33, by+6, boxcol)
-    end
-
-    local tx, ty = x+15, y+9
-    for i=0,5 do
-      if i ~= 1 then
-        pset(tx+i%3*2, ty+i%2*2-1+1, i==3 and C_4 or C_2 )
-      end
-    end
-
-    print(name,   x+2,   y-5+1+1, col, -1)
-    print(status.."  "..f_prefix_zero(hp, 3), x+1+1, y+8-1+1,   col, -1)
-    -- print(f_prefix_zero(hp, 3),   x+37-4*3-1-1-1, y+8-1+1, col, 1)
-  end
-
-  add(op, {draw=function(i, is_sel)
-    b("vENUSAUR", "bRN",0, 4, 0,4,  1,100, false)  f_draw_pkmn(3, 39, 1,  16, true,  false, false, not is_sel)
-  end})
-  add(op, {draw=function(i, is_sel)
-    b("bLASTOIS","fZN", 23,4,23,4, 60+cos(t())*50\1,80, true)  f_draw_pkmn(9, 3,  1, 16, false, false, false, not is_sel)
-  end})
-end $$
-
 |[f_op_batsel]| function(_ENV)
-  add(op, {text="fIGHT"})
+  add(op, {text="fIGHT", select=function()
+    f_add_to_ui_stack(g_grid_battle_movesel)
+  end})
+
   add(op, {text="sTATS", select=function()
     f_add_to_ui_stack(g_grid_battle_stat)
   end})
-  add(op, {text="sWITCH"})
+
+  add(op, {text="sWITCH", select=function()
+    f_add_to_ui_stack(g_grid_battle_switch)
+  end})
+
   add(op, {text="gIVEuP"})
+
+  local b = function(_ENV, team, x, y, px, py, flip)
+    roundrect_r(x-1+1, y+1-6+1, x+35-1, y+6+6+1, C_3)
+    if hp > 0 then
+      rectfill(x+1, y+3, x+1+mid(0, hp/hp*32, 32), y+6, C_2)
+      pset(x+1, y+3, C_3)
+      pset(x+1, y+6, C_3)
+      pset(x+33, y+3, C_3)
+      pset(x+33, y+6, C_3)
+    end
+
+    local tx, ty = x+15, y+9
+    for i=0,5 do
+      if team[i+1].valid and team[i+1].major ~= C_MAJOR_FAINTED then
+        pset(tx+i%3*2, ty+i\3*2-1+1, spot == i+1 and C_4 or C_2 )
+      end
+
+      if i ~= 1 then
+      end
+    end
+
+    print(name,   x+2,   y-5+1+1, C_2, -1)
+    print("fZN".."  "..f_prefix_zero(hp, 3), x+1+1, y+8-1+1,   C_2, -1)
+    f_draw_pkmn(num, px, py,  16, flip,  false, false, p0.active ~= _ENV)
+  end
+
+  add(preview_op, {draw=function() b(p2.active, p2.team,  0, 4, 39, 1, true)  end})
+  add(preview_op, {draw=function() b(p1.active, p1.team, 23, 4,  3, 1)        end})
 end $$
+
+|[f_op_movesel]| function(_ENV)
+  for i=1,4 do
+    add(op, {text=c_move_names[p0.active[i].id]})
+  end
+
+  f_add_stat_move(preview_op, p0.active, 1)
+end $$
+
+|[f_op_batswitch]| function(_ENV)
+  for i=1,6 do
+    local pkmn = p0.team[i]
+    local disabled = not pkmn.valid or i==p0.active.spot or pkmn.major == C_MAJOR_FAINTED
+    add(op, {disabled=disabled, draw=function(i, is_sel)
+      f_draw_pkmn(pkmn.num, 1, 1, 16, false, false, disabled, not disabled and not is_sel)
+    end})
+  end
+end $$
+
+-- do i want a stats menu? or do i want level + auto?
+-- well, what is important that you can see in stat menu?
+-- item, move info, major, 
 
 ----------------------------------------------------
 -- sels and leaves - forward and back through stack
@@ -497,6 +492,7 @@ end $$
 end $$
 
 |[f_s_batbegin]| function()
+  f_start_battle(f_team_party(f_getsel'g_grid_pickleag'), f_team_league(f_getsel'g_grid_picktrnr'+1))
   f_add_to_ui_stack(g_grid_battle_select)
 end $$
 
@@ -514,7 +510,9 @@ end $$
 end $$
 
 |[f_s_editstat]| function() gridpo[f_getsel'g_grid_editstat'+1].select() end $$
-|[f_s_battle]|   function() gridpo[f_getsel'g_grid_battle_select'+1].select() end $$
+|[f_s_battle]|   function()
+  gridpo[f_getsel'g_grid_battle_select'+1].select()
+end $$
 
 |[f_s_editmove]| function()
   local pkmn = f_get_party_pkmn(f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot')
@@ -531,7 +529,8 @@ end $$
 end $$
 
 |[f_l_title]| function() -- TODO: maybe we can call sfx in here and l_browse. might save a token instead of handling that in grid.
-  return SFX_ERROR
+  g_palette += 1
+  g_palette %= #c_palettes
 end $$
 
 ---------------------------------------------
@@ -572,16 +571,10 @@ f_zcall(f_create_gridpair, [[
 
   ;;,g_grid_pickspot       ,~top_editteam   ,~bot_info    ,~f_dt_editteam ,~f_op_editteam    ,~f_s_editteam   ,~f_l_browse    ,~c_no
   ;;,g_grid_picktrnr       ,~top_text_grid  ,~bot_info    ,~f_dt_league   ,~f_op_teams       ,~f_s_batbegin   ,~f_l_browse    ,~c_no
+  ;;,g_grid_battle_select  ,~bot_4x4        ,~top_battle2 ,~f_nf          ,~f_op_batsel      ,~f_s_battle     ,~f_nf          ,~c_no
+  ;;,g_grid_battle_movesel ,~bot_4x4        ,~top_pkstat  ,~f_nf          ,~f_op_movesel     ,~f_s_battle     ,~f_l_browse    ,~c_no
 
-  ;;,g_grid_battle_select, ,~top_battle2    ,~bot_info    ,~f_nf          ,~f_op_battle      ,~f_nf           ,~f_nf          ,~c_no
-
-  -- ;;,g_grid_battle_select, ,~bot_4x4        ,~top_battle  ,~f_dp_battle   ,~f_op_batsel      ,~f_s_battle ,~f_nf          ,~c_no
-
-  -- ;;,g_grid_battle_move,
-  -- ;;,g_grid_battle_switch,
-  -- ;;,g_grid_battle_stat,
-  -- ;;,g_grid_battle_turn,
-  -- ;;,g_grid_battle_result,
+  ;;,g_grid_battle_switch  ,~top_editteam,  ,~bot_info    ,~f_nf          ,~f_op_batswitch   ,~f_nf           ,~f_l_browse    ,~c_no
 ]])
 
 g_gridstack = {} -- gotta run after the above.

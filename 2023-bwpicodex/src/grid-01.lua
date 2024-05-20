@@ -2,13 +2,13 @@
 
 |[f_refresh_top]| function()
   local idk = g_gridstack[#g_gridstack] -- TODO: _ENV and dedup
-  idk.op, idk.lrlist = {}, {}
+  idk.op, idk.preview_op, idk.lrlist = {}, {}, {}
   idk.gridpofunc(idk, unpack(idk.params))
 end $$
 
 |[f_add_to_ui_stack]| function(_ENV)
   add(g_gridstack, _ENV)
-  op, lrlist = {}, {}
+  op, preview_op, lrlist = {}, {}, {}
   gridpofunc(_ENV, unpack(params))
 end $$
 

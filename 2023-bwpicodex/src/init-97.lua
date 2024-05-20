@@ -2,7 +2,7 @@ f_zcall(poke, [[
    ;,0x5f2c, 3 -- screen to 64x64
   ;;,0x5f5c, 8 -- set btn initial delay before repeating. 255 means never repeat.
   ;;,0x5f5d, 1 -- set btn repeating delay.
-  ;;,S_STORY, 10 -- todo: remove me, this is just for debugging
+  ;;,S_STORY, 0 -- todo: remove me, this is just for debugging
 ]])
 
 cls() -- this is just a visual thing when the game starts up. TODO: i can remove it if i want. probably should
@@ -20,12 +20,12 @@ cls() -- this is just a visual thing when the game starts up. TODO: i can remove
 -- No blue palette, because that hurts my eyes
 |[c_palettes]| f_zobj[[
   -- bg1  bg2  mg   fg1  fg2
-   ;,136 ,0   ,10  ,8   ,8   -- hotdog
-  ;;,132 ,128 ,4   ,9   ,9   -- sand
-  ;;,131 ,129 ,3   ,138 ,138 -- greens
-  ;;,128 ,130 ,141 ,14  ,14  -- purple pink
-  ;;,134 ,7   ,5   ,0   ,0   -- invert
-  ;;,129 ,1   ,13  ,6   ,6   -- default
+   ;,129 ,129  ,13  ,6   ,6   -- default
+  ;;,128 ,128  ,4   ,9   ,9   -- sand
+  ;;,0   ,0    ,8   ,10  ,10  -- hotdog
+  ;;,129 ,129  ,3   ,138 ,138 -- greens
+  ;;,6   ,6    ,13  ,129 ,129 -- invert
+  ;;,128 ,128  ,141 ,14  ,14  -- purple pink
 ]] $$
 
 |[c_types]| f_zobj[[ -- 0 to 17 are all tables

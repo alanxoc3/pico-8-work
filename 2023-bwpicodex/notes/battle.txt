@@ -1,0 +1,203 @@
+useful: https://web.archive.org/web/20140715133830/http://www.upokecenter.com/content/pokemon-gold-version-silver-version-and-crystal-version-in-depth-guides
+
+-------------------------------
+BATTLE LOGIC!
+
+turn_init(): # Called immediately after selecting moves
+  decide which pokemon goes first:
+    7000: pursuit if opponent switched
+    6000: switch
+    5000: endure, protect, detect
+    4000: extreme speed, match punch, quick attack
+    3000: normal moves
+    2000: vital throw
+    1000: counter, mirror coat
+    0000: roar, whirlwind
+
+    quick claw will make you have a chance to be 999 within the priority bracket.
+    if both priorities are the same, pick a random one between the two
+
+  if p1priority > p2priority: add_action(p1,  n
+  p1turn() # or p1switch
+  p2turn()
+
+calc_critical(self, other):
+  cricital = self.calc_stat("critical")
+  if self.focus_energy is in effect: critical += 1
+  if self.move in (aero_blast, crab_hammer, cross_chop, karate_chop, razor_leaf, or slash): critical += 2
+  if self.item == scope_lens: critical += 1
+  if self.transformed_num == chansey   and self.item == lucky_punch: critical += 2
+  if self.transformed_num == farfetchd and self.item == stick: critical += 2
+
+calc_accuracy(self, other): # TODO: should mind-reader/lockon end now
+  if other.protect/detect: return "fail" # TODO: think about sleep talk with protect
+  if self.move == dream_eater and other.sleeping: return 100%
+
+  if other.fly and self.move in (gust, thunder, twister, whirlwind): return 100%
+  if other.dig and self.move in (earthquake, fissure, magnitude): return 100%
+
+  if self.move in (swift, vital_throw, faint_attack): return 100%
+  if self.move in (thunder) and battle.weather = rain_dance: return 100%
+
+  return calculate_damage_normally() # self.accuracy, other.evasion, move.accuracy. are all a part of this
+
+endofturn()
+  order from upokecenter
+  - Future Sight (non-leader first)
+  - Sandstorm/Sunny Day/Rain Dance
+  - Multi-turn attacks
+  - Perish Song
+  - Recover with Leftovers
+  - Check if defrosted
+  - Check end of Reflect/Light Screen/Safeguard
+  - Check for condition based on Berry
+  - Check end of Encore
+  - Decrement destiny bond?
+
+p1switch()
+  switch_pokemon(ind)
+  if spikes:
+    pokemon gets spike damage
+
+heal(self, amount):
+  self.health = min(amount, self.max_health)
+  print heal message
+
+damage(self, amount):
+  prev_health = self.health
+  self.health = max(0, self.health - amount)
+  if prev_health > 1 and self.health == 0:
+    if endure or (focus band and lucky)
+      self.health = 1
+      addaction("pokemon endured attack")
+
+  if self.health == 0: # (this is after the above because could have endured)
+    if other.destiny_bond:
+
+p1turn(self, other)
+    sleep and !(snore or sleep_talk):         abort
+    freeze and !(flame_wheel or sacred_fire): abort
+    flinch and unlucky:                       abort
+    confusion and unlucky:                    damage(self, amount)
+    attract and unlucky:                      abort
+    move is disabled:                         abort
+    paralysis and unlucky:                    abort
+
+    do_move()
+
+    recoil effect: explosion, self_destruct, struggle, hijumpkick, jumpkick, submission, takedown, double_edge
+    drain effect:  absorb, giga_drain, leech_life, mega_drain, dream_eater
+    secondary effect chance: stat stage modification, poison, burn, etc
+
+    The opposing Pokémon faints if it has zero HP
+    if lucky: pokemon not frozen
+
+    if poisoned: damage(poison dmg)
+    if burned: damage(self)
+    if seeded: damage(self) heal(other, dmg)
+    if nightmared: damage(self)
+    if cursed: damage(self)
+
+    if self.turn_taken_damage > 0:
+      self.rage_counter = mid(0, self.rage_counter + 1, 255)
+
+    if none of the above status conditions
+        if not a multiturn attack (dig, fly, hyperbeam, solarbeam, rage, thrash)
+            lower pp for move
+
+        do whatever the attack does
+        -- if it aims on a pokemon, it will call the damage function and pass an attacker.
+
+    -- add action here, because the move could have started poison.
+    -- two abras that keep using teleport to switch out will not take poison damage.
+    -- if you and opponent keep using roar, but opponent is faster than you and both your pokemon have poison damage, you will not take poison damage for as long as opponent uses roar.
+    add_action{
+        if poison/toxic/burn
+            add_action{
+                ispoisoned!
+                damage(pkmn, amount)
+            }
+
+        if leech seed
+            add_action{
+                damage(pkmn, amount)
+                heal(active, -amount)
+            }
+    }
+
+    -- each time a pkmn is damaged, check effective, substitute, defrost, rage, and ko-status. effective, defrost, sub and rage are checked for moves, not effects
+
+
+
+
+  C_PRIORITY_SWITCH:      3000
+
+  C_PRIORITY_QUICKATTACK: 2000
+  C_PRIORITY_ATTACK:      1000
+  C_PRIORITY_COUNTER:     0000
+
+
+  Switch goes first. 
+  priority 0: - n/a - switch
+  priority 1: - spd - quick attack
+  priority 2: - spd - main moves
+  priority 3: - spd - counter, whirlwind, roar, teleport
+
+-------------------------------
+
+
+
+
+
+
+
+
+
+order:
+
+p1sel
+p2sel
+
+p1turn (this is a list of things)
+p2turn (this is a list of things)
+
+SELF KO moves do damage to the opponent first.
+
+turn order:
+  seeded
+
+end of both turn. who went first decides who goes first for each of these:
+  rain dance (end?)
+  sunny day (end?)
+  sandstorm (end?)
+  future sight
+  perish song (faint in same order move in)
+  leftover
+
+triggered when damaged:
+  endure
+  focus band
+
+faint:
+  dSTbND
+
+switch
+  sPIKES
+  pursuit
+
+triggered when damaged goes down and < 50%. does not trigger if pre-existing:
+  berry
+  goldberry
+
+status: -- triggered when status is inflicted, not if it is pre-existing. this simplifies it slightly.
+  various psn/mint/par cure berries
+  PSNCUREBERRY
+  Ice Berry
+  Burnt Berry
+  PRZCUREBERRY
+  Bitter Berry
+  Mint Berry
+  miracle berry
+
+pp reduced... what about teleport or spite?
+  mysteryberry
