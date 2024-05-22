@@ -2,7 +2,7 @@ f_zcall(poke, [[
    ;,0x5f2c,   3 -- screen to 64x64
   ;;,0x5f5c,   8 -- set btn initial delay before repeating. 255 means never repeat.
   ;;,0x5f5d,   1 -- set btn repeating delay.
-  ;;,S_STORY, 0 -- todo: remove me, this is just for debugging
+  ;;,S_STORY,  58 -- todo: remove me, this is just for debugging
 ]])
 
 cls() -- this is just a visual thing when the game starts up. TODO: i can remove it if i want. probably should
@@ -25,11 +25,11 @@ cls() -- this is just a visual thing when the game starts up. TODO: i can remove
   ;;,130 ,130  ,136 ,8   ,8    -- red
   ;;,131 ,131  ,3   ,138 ,138 -- green
   ;;,0   ,0    ,8   ,10  ,10  -- htdog
-  ;;,4   ,4    ,9   ,10  ,10  -- gold
   ;;,5   ,5    ,134 ,6   ,6   -- silvr
+  ;;,4   ,4    ,9   ,10  ,10  -- gold
 ]] $$
 
-|[c_palette_names]| f_zobj[["0,dUAL;,bLUE,rED,gREEN,hTdOG,gOLD,sILVR"]] $$
+|[c_palette_names]| f_zobj[["0,dUAL;,bLUE,rED,gREEN,hTdOG,sILVR,gOLD"]] $$
 
 |[c_types]| f_zobj[[ -- 0 to 17 are all tables
   0;, ;;, ;;, ;;, ;;, ;;, ;;, ;;, ;;,

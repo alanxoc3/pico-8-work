@@ -9,7 +9,7 @@ end $$
 |[f_draw_pkmn]| function(num, x, y, width, flip, sel, disabled, isoutline)
   -- the "min" is needed to draw trainers
   if not isoutline and stat'46' > -1 and g_cur_pkmn_cry == num then -- if a pkmn cry is currently playing and selected, shake!
-    x += rnd(3)\1-1
+    x += sin(g_shake_timer/4)
   end
 
   local in_c = isoutline and C_3 or sel and C_4 or disabled and C_2 or C_4

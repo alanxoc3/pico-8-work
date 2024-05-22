@@ -438,7 +438,7 @@ end $$
     add(op, {text=c_move_names[p0.active[i].id]})
   end
 
-  f_add_stat_move(preview_op, p0.active, 1)
+  f_add_stat_move(preview_op, p0.active, f_getsel'g_grid_battle_movesel'+1)
 end $$
 
 |[f_op_batswitch]| function(_ENV)
@@ -597,7 +597,6 @@ end $$
 end $$
 
 |[f_l_title]| function() -- TODO: maybe we can call sfx in here and l_browse. might save a token instead of handling that in grid.
-  g_title_shake = 20
   g_title_sel = not g_title_sel
 
   if g_title_sel then
@@ -609,6 +608,8 @@ end $$
   g_palette += 1
   g_palette %= #c_palettes
 end $$
+
+|[f_l_battle]| function() return p0.active.num end $$
 
 ---------------------------------------------
 -- connections
@@ -648,7 +649,7 @@ f_zcall(f_create_gridpair, [[
 
   ;;,g_grid_pickspot       ,~top_editteam   ,~bot_info      ,~f_dt_editteam ,~f_op_editteam    ,~f_s_editteam   ,~f_l_browse    ,~c_no
   ;;,g_grid_picktrnr       ,~top_text_grid  ,~bot_info      ,~f_dt_league   ,~f_op_teams       ,~f_s_batbegin   ,~f_l_browse    ,~c_no
-  ;;,g_grid_battle_select  ,~bot_4x4        ,~top_battle2   ,~f_nf          ,~f_op_batsel      ,~f_s_battle     ,~f_nf          ,~c_no
+  ;;,g_grid_battle_select  ,~bot_4x4        ,~top_battle2   ,~f_nf          ,~f_op_batsel      ,~f_s_battle     ,~f_l_battle    ,~c_no
   ;;,g_grid_battle_movesel ,~bot_4x4        ,~top_pkstat    ,~f_nf          ,~f_op_movesel     ,~f_s_battle     ,~f_l_browse    ,~c_no
 
   ;;,g_grid_battle_switch  ,~top_editteam,  ,~bot_info      ,~f_nf          ,~f_op_batswitch   ,~f_nf           ,~f_l_browse    ,~c_no

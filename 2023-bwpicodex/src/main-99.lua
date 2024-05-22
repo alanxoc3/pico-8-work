@@ -49,9 +49,11 @@ function bitmaskToIndex(bitmask)
 end
 
 -- TODO: dedup this if it's only used once and maybe try a btnp(i) approach instead (for loop)
-|[_update60]| function()
+|[_update]| function()
   -- printh(stat(0)) -- TODO: remove?
-  g_title_timer = min(C_TITLETIMER, (g_title_timer+1))
+  if t() > 1.25 then
+    g_title_timer = min(C_TITLETIMER, (g_title_timer+1))
+  end
   g_preview_timer = max(0, g_preview_timer-1)
   top_grid = g_gridstack[#g_gridstack]
   g_cg_m     = top_grid.g_cg_m -- TODO: refactor/simplify. maybe dont need all these variables. do what is less tokens
@@ -63,26 +65,15 @@ end
 
   if g_title_timer == C_TITLETIMER then
     f_update_grid(g_cg_m, gridpo, top_grid)
-
-    if g_cg_m.name == 'g_grid_title' then
-      --g_title_an_timer = (g_title_an_timer+1)%300
-      -- if     g_title_an_timer == 0   then g_title_r = rnd"252"\1 f_minisfx(g_title_r)
-      -- elseif g_title_an_timer == 150 then g_title_l = rnd"252"\1 f_minisfx(g_title_l)
-      -- end
-      --elseif g_title_an_timer == 40  then f_minisfx(g_title_r)
-      --elseif g_title_an_timer == 190 then f_minisfx(g_title_l) end
-    end
   end
-
-  g_title_shake = max(g_title_shake-1, 0)
 end $$
 
 -- TODO: Bring back the on-logo palette change.
 -- TODO: Make an "on-shake" part of the player logic. And maybe make it so you can't select or lr when
 sfx'63' -- Plays all the 4 sound effects in picodex as the logo/startup tune.
 g_title_sel = true -- title_sel is purposely set to nil so nothing is highlighted on start
-g_title_shake = 0
-|[_draw]| function()
+g_shake_timer = 0
+|[_draw]| function() -- since there is very minimal animation, doing 30fps. this gives me cpu so i can make some things slower to save tokens.
   cls'C_1'
 
   if g_title_timer < C_TITLETIMER then
@@ -93,11 +84,13 @@ g_title_shake = 0
     end
   end
 
-  local easing = sin(max(.75*C_TITLETIMER, g_title_timer)/C_TITLETIMER)
+  local var = 1-min(C_TITLETIMER, g_title_timer)/C_TITLETIMER
+  local easing = var*var
   if g_cg_m then
     f_draw_grid(g_cg_m, gridpo, g_cg_m.sel, g_cg_m.view, g_cg_m.x, g_cg_m.y+easing*24, true)
     f_draw_grid(g_cg_s, #grid_previewop > 0 and grid_previewop or {{draw=g_cg_s.df}},   -1,          0,               g_cg_s.x, g_cg_s.y-easing*45)
   end
 
   pal(c_palettes[g_palette],1)
+  g_shake_timer = (g_shake_timer+1) % 4
 end $$

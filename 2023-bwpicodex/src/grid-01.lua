@@ -59,6 +59,7 @@ end $$
     return newnum
   end
 
+  local prevsel = sel
   if lrbasegrid then
     -- LR logic
     local dir = (btnp'1' and 1 or 0) - (btnp'0' and 1 or 0)
@@ -96,6 +97,10 @@ end $$
   end
 
   sel = evalfunc(sel, sel%w,   (#gridobj-1)\w*w, btnp'2', btnp'3', w)
+  if sel ~= prevsel then
+    -- when the cursor has changed, make the ui change if needed
+    f_refresh_top()
+  end
 
   if sel\w-vh+1 > view then view = sel\w-vh+1 end
   if sel\w      < view then view = sel\w      end

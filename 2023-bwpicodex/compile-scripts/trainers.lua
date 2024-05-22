@@ -18,7 +18,7 @@ g_trainer_data = [[
   M_CUT          P_CATERPIE   P_LEDYBA     P_PARAS      P_WEEDLE     P_VENONAT    P_SPINARAK   -- bugcatcher   HM01 M
   M_FURYCUTTER   P_KAKUNA     P_WEEPINBELL P_METAPOD    P_PINSIR     P_PINECO     P_SCYTHER    -- bugsy        TM49 M
 
-  M_RETURN       P_CYNDAQUIL  P_TOTODILE   P_IGGLYBUFF  P_PICHU      P_CHIKORITA  P_SNUBBULL   -- pokefan      TM27 M
+  M_RETURN       P_CHIKORITA  P_CYNDAQUIL  P_TOTODILE   P_IGGLYBUFF  P_PICHU      P_SNUBBULL   -- pokefan      TM27 M
   M_PSYCHUP      P_MAREEP     P_POLIWAG    P_TEDDIURSA  P_CLEFFA     P_HOPPIP     P_TOGEPI     -- beauty       TM09 F
   M_ATTRACT      P_JIGGLYPUFF P_CLEFAIRY   P_CHANSEY    P_PHANPY     P_LICKITUNG  P_MILTANK    -- whitney      TM45 F
 
@@ -30,7 +30,7 @@ g_trainer_data = [[
   M_ROCKSMASH    P_MACHOP     P_TYROGUE    P_MANKEY     P_POLIWHIRL  P_ONIX       P_HERACROSS  -- blackbelt    TM08 M
   M_DYNAMICPUNCH P_MACHOKE    P_GRANBULL   P_HITMONTOP  P_POLITOED   P_PRIMEAPE   P_POLIWRATH  -- chuck        TM01 M
 
-  M_FLY          P_CROCONAW   P_FLAAFFY    P_QUILAVA    P_PIKACHU    P_BAYLEEF    P_NOCTOWL    -- gentleman    HM02 M
+  M_FLY          P_BAYLEEF    P_QUILAVA    P_CROCONAW   P_FLAAFFY    P_PIKACHU    P_NOCTOWL    -- gentleman    HM02 M
   M_STRENGTH     P_HORSEA     P_MARILL     P_MACHOKE    P_KRABBY     P_GEODUDE    P_QUAGSIRE   -- sailor       HM04 M
   M_IRONTAIL     P_CORSOLA    P_MAGNEMITE  P_FORRETRESS P_SKARMORY   P_MANTINE    P_STEELIX    -- jasmine      TM23 F
 
@@ -48,9 +48,9 @@ g_trainer_data = [[
 
   M_ROLLOUT      P_NATU       P_YANMA      P_DITTO      P_LEDIAN     P_TANGELA    P_TOGETIC    -- schoolboy    TM04 M
   M_WHIRLPOOL    P_STARYU     P_MANTINE    P_REMORAID   P_QWILFISH   P_GOLDEEN    P_TENTACRUEL -- swimmer      HM06 F
-  M_SURF         P_GOLDUCK    P_QUAGSIRE   P_WIGGLYTUFF P_BLASTOISE  P_SEAKING    P_STARMIE    -- misty        HM03 F
+  M_SURF         P_GOLDUCK    P_QUAGSIRE   P_WIGGLYTUFF P_FERALIGATR P_SEAKING    P_STARMIE    -- misty        HM03 F
 
-  M_HIDDENPOWER  P_CHARMANDER P_SUNKERN    P_SQUIRTLE   P_OMASTAR    P_BULBASAUR  P_UNOWN      -- juggler      TM10 M
+  M_HIDDENPOWER  P_BULBASAUR  P_CHARMANDER P_SQUIRTLE   P_SUNKERN    P_OMASTAR    P_UNOWN      -- juggler      TM10 M
   M_FLASH        P_KABUTOPS   P_CHINCHOU   P_ARBOK      P_SCIZOR     P_SANDSLASH  P_ELECTABUZZ -- guitarist    HM05 M
   M_ZAPCANNON    P_MAGNETON   P_ELECTRODE  P_PORYGON2   P_LANTURN    P_ELECTABUZZ P_RAICHU     -- ltsurge      TM07 M
 
@@ -62,7 +62,7 @@ g_trainer_data = [[
   M_SLEEPTALK    P_EXEGGCUTE  P_AZUMARILL  P_FURRET     P_CLEFABLE   P_JUMPLUFF   P_KANGASKHAN -- picnicker    TM35 F
   M_SLUDGEBOMB   P_WEEZING    P_ARIADOS    P_ELECTRODE  P_MUK        P_NIDORINA   P_VENOMOTH   -- janine       TM36 F
 
-  M_SNORE        P_WARTORTLE  P_MAGNEMITE  P_IVYSAUR    P_KANGASKHAN P_CHARMELEON P_DODRIO     -- pokemaniac   TM13 M
+  M_SNORE        P_IVYSAUR    P_CHARMELEON P_WARTORTLE  P_MAGNEMITE  P_KANGASKHAN P_DODRIO     -- pokemaniac   TM13 M
   M_THUNDERPUNCH P_MRMIME     P_GIRAFARIG  P_WOBBUFFET  P_KADABRA    P_SLOWBRO    P_HYPNO      -- psychic      TM41 M
   M_PSYCHIC      P_KADABRA    P_JYNX       P_STARMIE    P_HYPNO      P_MRMIME     P_ALAKAZAM   -- sabrina      TM29 F
 
@@ -71,7 +71,7 @@ g_trainer_data = [[
   M_FIREBLAST    P_ARCANINE   P_GOLEM      P_TYPHLOSION P_MAGCARGO   P_OCTILLERY  P_MAGMAR     -- blaine       TM38 M
 
   M_STEELWING    P_FEAROW     P_DODUO      P_PIDGEOTTO  P_NOCTOWL    P_DODRIO     P_PIDGEOT    -- birdkeeper   TM47 M
-  M_RAINDANCE    P_AIPOM      P_DUGTRIO    P_DEWGONG    P_CHANSEY    P_FERALIGATR P_BLISSEY    -- cooltrainer  TM18 F
+  M_RAINDANCE    P_AIPOM      P_DUGTRIO    P_DEWGONG    P_CHANSEY    P_BLASTOISE  P_BLISSEY    -- cooltrainer  TM18 F
   M_EARTHQUAKE   P_PIDGEOT    P_ARCANINE   P_NIDOQUEEN  P_NIDOKING   P_VAPOREON   P_RHYDON     -- blue         TM26 M
 
   M_ENDURE       P_RAIKOU     P_ENTEI      P_SUICUNE    P_ZAPDOS     P_ARTICUNO   P_MOLTRES    -- legend       TM20 F
@@ -83,6 +83,6 @@ g_trainer_data = [[
   M_CURSE        P_MURKROW    P_VENUSAUR   P_UMBREON    P_VILEPLUME  P_MISDREAVUS P_HOUNDOOM   -- karen        TM03 F
 
   M_HYPERBEAM    P_AERODACTYL P_GYARADOS   P_SNORLAX    P_KINGDRA    P_CHARIZARD  P_DRAGONITE  -- lance        TM15 M
-  M_DOUBLETEAM   P_PIKACHU    P_VENUSAUR   P_CHARIZARD  P_BLASTOISE  P_MEWTWO     P_MEW        -- red          TM32 M
-  M_SWAGGER      P_MEGANIUM   P_TYPHLOSION P_FERALIGATR P_HOOH       P_LUGIA      P_CELEBI     -- gold         TM34 M
+  M_DOUBLETEAM   P_VENUSAUR   P_CHARIZARD  P_BLASTOISE  P_PIKACHU    P_MEWTWO     P_MEW        -- red          TM32 M -- grass fire water is the order of starters from left to right when you choose it at te beginning of the game
+  M_SWAGGER      P_MEGANIUM   P_TYPHLOSION P_FERALIGATR P_HOOH       P_LUGIA      P_CELEBI     -- gold         TM34 M -- grass fire water is the order of starters from left to right when you choose it at te beginning of the game
 ]]
