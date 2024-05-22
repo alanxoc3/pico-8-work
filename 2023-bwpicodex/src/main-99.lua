@@ -39,6 +39,15 @@ end $$
 --   {[0]=7,    6,  0,134,  5,139, 141, 14,  6,143,  2, 12,  1,  8,  4,  5}, -- invert
 --   {[0]=128,130,141,134,135,139, 141, 14,  6,143,142, 12,  9,  8,  4,  5}, -- purple yel
 
+function bitmaskToIndex(bitmask)
+  for i = 0, 5 do
+    if bitmask & (1 << i) ~= 0 then
+      return i
+    end
+  end
+  return nil -- Return -1 if no bits are set
+end
+
 -- TODO: dedup this if it's only used once and maybe try a btnp(i) approach instead (for loop)
 |[_update60]| function()
   -- printh(stat(0)) -- TODO: remove?
@@ -56,22 +65,32 @@ end $$
     f_update_grid(g_cg_m, gridpo, top_grid)
 
     if g_cg_m.name == 'g_grid_title' then
-      g_title_an_timer = (g_title_an_timer+1)%300
-      if     g_title_an_timer == 0   then g_title_r = rnd"252"\1
-      elseif g_title_an_timer == 150 then g_title_l = rnd"252"\1
-      elseif g_title_an_timer == 40  then f_minisfx(g_title_r-1)
-      elseif g_title_an_timer == 190 then f_minisfx(g_title_l-1) end
+      --g_title_an_timer = (g_title_an_timer+1)%300
+      -- if     g_title_an_timer == 0   then g_title_r = rnd"252"\1 f_minisfx(g_title_r)
+      -- elseif g_title_an_timer == 150 then g_title_l = rnd"252"\1 f_minisfx(g_title_l)
+      -- end
+      --elseif g_title_an_timer == 40  then f_minisfx(g_title_r)
+      --elseif g_title_an_timer == 190 then f_minisfx(g_title_l) end
     end
   end
+
+  g_title_shake = max(g_title_shake-1, 0)
 end $$
 
+-- TODO: Bring back the on-logo palette change.
+-- TODO: Make an "on-shake" part of the player logic. And maybe make it so you can't select or lr when
 sfx'63' -- Plays all the 4 sound effects in picodex as the logo/startup tune.
-
+g_title_sel = true -- title_sel is purposely set to nil so nothing is highlighted on start
+g_title_shake = 0
 |[_draw]| function()
   cls'C_1'
 
   if g_title_timer < C_TITLETIMER then
     print("\^y7\f4aLANxOC3\n\-d \f3pRESENTS",  16, 26)
+    local b = bitmaskToIndex(btnp())
+    if b then
+      g_palette = b+1
+    end
   end
 
   local easing = sin(max(.75*C_TITLETIMER, g_title_timer)/C_TITLETIMER)
@@ -80,5 +99,5 @@ sfx'63' -- Plays all the 4 sound effects in picodex as the logo/startup tune.
     f_draw_grid(g_cg_s, #grid_previewop > 0 and grid_previewop or {{draw=g_cg_s.df}},   -1,          0,               g_cg_s.x, g_cg_s.y-easing*45)
   end
 
-  pal(c_palettes[g_palette+1],1)
+  pal(c_palettes[g_palette],1)
 end $$

@@ -1,9 +1,17 @@
+g_cur_pkmn_cry = nil
 |[f_minisfx]| function(num) -- plays a sfx with len of 4. num corresponds to pkmn numbers. 252, 253, 254, 255 are sfx.
+  if num < 252 then -- we never call this function with -1, so this means it is a cry.
+    g_cur_pkmn_cry = num
+  end
   sfx(num\4, num < 252 and 0 or 1, num%4*8, 8)
 end $$
 
 |[f_draw_pkmn]| function(num, x, y, width, flip, sel, disabled, isoutline)
   -- the "min" is needed to draw trainers
+  if not isoutline and stat'46' > -1 and g_cur_pkmn_cry == num then -- if a pkmn cry is currently playing and selected, shake!
+    x += rnd(3)\1-1
+  end
+
   local in_c = isoutline and C_3 or sel and C_4 or disabled and C_2 or C_4
   local out_c = disabled and (sel and C_2 or C_3) or sel and C_3 or C_2 --  (sel or disabled) and C_3 or C_2
 

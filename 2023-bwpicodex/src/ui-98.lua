@@ -78,6 +78,7 @@ end $$
   add(op, {text=c_gender_names[pkmn.gender], disabled=#pkmn.genders < 2, select=function()
     pkmn.gender_bit += 1
     pkmn:f_save_party_pkmn(f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot')
+    f_refresh_top()
   end})
 
   add(op, {text="vIEW", select=function()
@@ -134,7 +135,7 @@ end $$
   genders = sub(genders, 1, #genders-1)
 
   local draw_preview = function(off)
-    f_draw_pkmn(pkmn.num, 2-8-20+(g_preview_timer > 0 and (rnd(3)\1-1) or 0)+30, -8+1-10-1-1+6+3-3-off, 16)
+    f_draw_pkmn(pkmn.num, 2-8-20+30, -8+1-10-1-1+6+3-3-off, 16)
     rectfill(-9+4+30, -18-off-1, -9+4+30, 6-off+1, C_2)
   end
 
@@ -213,7 +214,6 @@ end $$
 end $$
 
 |[f_op_statbrowse]| function(_ENV) f_add_stat(op, c_pokemon[f_getsel'g_grid_browse'], MODE_BROWSE) end $$
-|[f_op_statbattle]| function(_ENV) f_add_stat(op, f_get_party_pkmn(f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot'), MODE_EDIT) end $$
 |[f_op_statedit]|   function(_ENV) f_add_stat(op, f_get_party_pkmn(f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot'),  MODE_EDIT)   end $$
 
 ---------------------------------------------
@@ -286,10 +286,6 @@ end $$
   local movenum = pkmn.possible_moves[f_getsel'g_grid_editmove'+1]
   local move = c_moves[movenum]
   f_dt_editmove_template(move, pkmn.possible_moves_method[movenum])
-end $$
-
-|[f_dt_edititem]| function(i, is_sel)
-  print("\f4hello", 1, 1)
 end $$
 
 |[f_prefix_space]| function(num, len)
@@ -370,11 +366,17 @@ end $$
 
 |[f_dp_title]| function()
   print("\^w\^tpicodex", 2, 1,  C_4)
-  print("dUAL vERSION",  2, 12, C_2)
+  print(c_palette_names[g_palette].." vERSION",  2, 12, C_2)
 
   -- todo: give title pokemon correct colors
-  f_draw_pkmn(g_title_l, -8+15+(mid(-1, -.75, cos(0+g_title_an_timer/300))+.75)*4*26   + (g_title_an_timer > 190 and g_title_an_timer < 220 and (rnd(3)\1-1) or 0), 20, 16)
-  f_draw_pkmn(g_title_r, 50-15-(mid(-1, -.75, cos(.5+g_title_an_timer/300))+.75)*4*26  + (g_title_an_timer > 40  and g_title_an_timer < 70  and (rnd(3)\1-1) or 0), 20, 16, true)
+  -- f_draw_pkmn(g_title_l, -8+15+(mid(-1, -.75, cos(0 +g_title_an_timer/300))+.75)*4*26 + (g_title_an_timer > 190 and g_title_an_timer < 220 and (rnd(3)\1-1) or 0), 20, 16, false, false, false, g_title_an_timer <= 190-50 or g_title_an_timer >= 220+50)
+  -- f_draw_pkmn(g_title_r, 50-15-(mid(-1, -.75, cos(.5+g_title_an_timer/300))+.75)*4*26 + (g_title_an_timer > 40  and g_title_an_timer < 70  and (rnd(3)\1-1) or 0), 20, 16, true , false, false, g_title_an_timer <= 40-50  or g_title_an_timer >= 70+50 )
+
+  -- local toptim = g_title_an_timer >= 150 and g_title_an_timer < 150+70
+  -- local bottim = g_title_an_timer < 70
+
+  f_draw_pkmn(g_title_l, -8+15+(mid(-1, -.75, 0)+.75)*4*26, 20, 16, false, false, false, g_title_sel == nil or g_title_sel == false)
+  f_draw_pkmn(g_title_r, 50-15-(mid(-1, -.75, 0)+.75)*4*26, 20, 16, true , false, false, g_title_sel == nil or g_title_sel)
 end $$
 
 function roundrect_r(x1, y1, x2, y2, c)
@@ -390,14 +392,17 @@ end
   end})
 
   add(op, {text="sTATS", select=function()
-    f_add_to_ui_stack(g_grid_battle_stat)
+    f_add_to_ui_stack(g_grid_battle_stats)
   end})
 
   add(op, {text="sWITCH", select=function()
     f_add_to_ui_stack(g_grid_battle_switch)
   end})
 
-  add(op, {text="gIVEuP"})
+  add(op, {text="gIVEuP", select=function()
+    f_pop_ui_stack()
+    f_add_to_ui_stack(g_grid_battle_results)
+  end})
 
   local b = function(_ENV, team, x, y, px, py, flip)
     roundrect_r(x-1+1, y+1-6+1, x+35-1, y+6+6+1, C_3)
@@ -441,6 +446,47 @@ end $$
     local pkmn = p0.team[i]
     local disabled = not pkmn.valid or i==p0.active.spot or pkmn.major == C_MAJOR_FAINTED
     add(op, {disabled=disabled, draw=function(i, is_sel)
+      f_draw_pkmn(pkmn.num, 1, 1, 16, p0 == p2, false, disabled, not disabled and not is_sel)
+    end})
+  end
+end $$
+
+|[f_s_batresults]| function()
+  g_preview_timer = 20
+  local otherteam = p1 == p0 and p2 or p1
+  return otherteam.team[f_getsel'g_grid_battle_results'+1].num
+end $$
+
+|[f_op_batresults]| function(_ENV)
+  local otherteam = p1 == p0 and p2 or p1
+  for i=1,6 do
+    local pkmn = otherteam.team[i]
+    local disabled = not pkmn.valid or pkmn.major == C_MAJOR_FAINTED
+    add(op, {disabled=disabled, draw=function(i, is_sel)
+      f_draw_pkmn(pkmn.num, 1, 1, 16, otherteam == p2, false, disabled, not disabled and not is_sel)
+    end})
+  end
+
+  add(preview_op, {draw=function()
+    f_print_top"cHAMP: yOUNGS"
+    f_print_bot"lOSER: tEAM1"
+  end})
+end $$
+
+|[f_op_batstats]| function(_ENV)
+  for i=1,6 do
+    local pkmn = p0.team[i]
+    local disabled = not pkmn.valid
+    add(op, {lrvalid=not disabled, disabled=disabled, draw=function(i, is_sel)
+      f_draw_pkmn(pkmn.num, 1, 1, 16, false, false, disabled, not disabled and not is_sel)
+    end})
+  end
+
+  local otherteam = p1 == p0 and p2 or p1
+  for i=1,6 do
+    local pkmn = otherteam.team[i]
+    local disabled = not pkmn.valid
+    add(op, {lrvalid=not disabled, disabled=disabled, draw=function(i, is_sel)
       f_draw_pkmn(pkmn.num, 1, 1, 16, false, false, disabled, not disabled and not is_sel)
     end})
   end
@@ -491,6 +537,28 @@ end $$
   f_add_to_ui_stack(g_grid_picktrnr)
 end $$
 
+|[f_op_statbattle]| function(_ENV)
+  local otherpl = p1 == p0 and p2 or p1
+  local bothteams = {}
+  for i=1,6 do add(bothteams, p0.team[i]) end
+  for i=1,6 do add(bothteams, otherpl.team[i]) end
+
+  f_add_stat(op, bothteams[f_getsel'g_grid_battle_stats'+1], MODE_EDIT)
+end $$
+
+|[f_s_batstat]| function()
+  f_add_to_ui_stack(g_grid_statbattle)
+end $$
+
+|[f_s_statbat]| function()
+  g_preview_timer = 20
+  local otherpl = p1 == p0 and p2 or p1
+  local bothteams = {}
+  for i=1,6 do add(bothteams, p0.team[i]) end
+  for i=1,6 do add(bothteams, otherpl.team[i]) end
+  return bothteams[f_getsel'g_grid_battle_stats'+1].num
+end $$
+
 |[f_s_batbegin]| function()
   f_start_battle(f_team_party(f_getsel'g_grid_pickleag'), f_team_league(f_getsel'g_grid_picktrnr'+1))
   f_add_to_ui_stack(g_grid_battle_select)
@@ -529,6 +597,15 @@ end $$
 end $$
 
 |[f_l_title]| function() -- TODO: maybe we can call sfx in here and l_browse. might save a token instead of handling that in grid.
+  g_title_shake = 20
+  g_title_sel = not g_title_sel
+
+  if g_title_sel then
+    g_title_l = rnd"252"\1 return g_title_l
+  else
+    g_title_r = rnd"252"\1 return g_title_r
+  end
+
   g_palette += 1
   g_palette %= #c_palettes
 end $$
@@ -550,31 +627,33 @@ f_zcall(f_create_gridpair, [[
   ;bot_4x4       ;,2 ,2 ,2 ,44 ,30 ,9
   ;bot_info      ;,1 ,1 ,2 ,45 ,60 ,16
 
-  -- name                  maingridspec     infogridspec  infogriddraw    main opfunc        select func      leave func      lrfunc        opfunc params
-  ;;,g_grid_title          ,~bot_4x4        ,~top_title   ,~f_dp_title    ,~f_op_title       ,~f_s_title      ,~f_l_title     ,~c_no
+  -- name                  maingridspec     infogridspec    infogriddraw    main opfunc        select func      leave func      lrfunc        opfunc params
+  ;;,g_grid_title          ,~bot_4x4        ,~top_title     ,~f_dp_title    ,~f_op_title       ,~f_s_title      ,~f_l_title     ,~c_no
 
-  ;;,g_grid_browse         ,~top_browse     ,~bot_info    ,~f_dt_browse   ,~f_op_browse      ,~f_s_browse     ,~f_l_browse    ,~c_no
-  ;;,g_grid_editpkmn       ,~top_browse     ,~bot_info    ,~f_dt_editpkmn ,~f_op_browse      ,~f_s_editpkmn   ,~f_l_browse    ,~c_no
+  ;;,g_grid_browse         ,~top_browse     ,~bot_info      ,~f_dt_browse   ,~f_op_browse      ,~f_s_browse     ,~f_l_browse    ,~c_no
+  ;;,g_grid_editpkmn       ,~top_browse     ,~bot_info      ,~f_dt_editpkmn ,~f_op_browse      ,~f_s_editpkmn   ,~f_l_browse    ,~c_no
 
-  ;;,g_grid_statbrowse     ,~top_pkstat     ,~bot_info    ,~f_dt_browse   ,~f_op_statbrowse  ,~f_s_pkstat     ,~f_l_browse    ,g_grid_browse
-  ;;,g_grid_statedit       ,~top_pkstat     ,~bot_info    ,~f_dt_editstat ,~f_op_statedit    ,~f_s_statedit   ,~f_l_browse    ,g_grid_pickspot
-  ;;,g_grid_battle_stat    ,~top_pkstat     ,~bot_info    ,~f_dt_browse   ,~f_op_statbattle  ,~f_nf           ,~f_l_browse    ,~c_no
+  ;;,g_grid_statbrowse     ,~top_pkstat     ,~bot_info      ,~f_dt_browse   ,~f_op_statbrowse  ,~f_s_pkstat     ,~f_l_browse    ,g_grid_browse
+  ;;,g_grid_statedit       ,~top_pkstat     ,~bot_info      ,~f_dt_editstat ,~f_op_statedit    ,~f_s_statedit   ,~f_l_browse    ,g_grid_pickspot
+  ;;,g_grid_statbattle     ,~top_pkstat     ,~bot_info      ,~f_dt_browse   ,~f_op_statbattle  ,~f_s_statbat    ,~f_l_browse    ,g_grid_battle_stats
 
-  ;;,g_grid_editstat       ,~top_text_grid  ,~bot_info    ,~f_dt_editstat ,~f_op_editstat    ,~f_s_editstat   ,~f_l_browse    ,~c_no
-  ;;,g_grid_editmove       ,~top_text_grid  ,~bot_info    ,~f_dt_editmove ,~f_op_editmove    ,~f_s_editmove   ,~f_l_browse    ,~c_no
-  ;;,g_grid_edititem       ,~top_text_grid  ,~bot_info    ,~f_dt_editstat ,~f_op_edititem    ,~f_s_edititem   ,~f_l_browse    ,~c_no
+  ;;,g_grid_editstat       ,~top_text_grid  ,~bot_info      ,~f_dt_editstat ,~f_op_editstat    ,~f_s_editstat   ,~f_l_browse    ,~c_no
+  ;;,g_grid_editmove       ,~top_text_grid  ,~bot_info      ,~f_dt_editmove ,~f_op_editmove    ,~f_s_editmove   ,~f_l_browse    ,~c_no
+  ;;,g_grid_edititem       ,~top_text_grid  ,~bot_info      ,~f_dt_editstat ,~f_op_edititem    ,~f_s_edititem   ,~f_l_browse    ,~c_no
 
-  ;;,g_grid_pickedit       ,~top_edit       ,~bot_info    ,~f_dt_edit     ,~f_op_edit        ,~f_s_edit       ,~f_l_browse    ,~c_no
-  ;;,g_grid_pickleag       ,~top_edit       ,~bot_info    ,~f_dt_league   ,~f_op_edit        ,~f_s_league     ,~f_l_browse    ,~c_no        ,~c_yes
-  ;;,g_grid_pickplr1       ,~top_edit       ,~bot_info    ,~f_dt_versus   ,~f_op_edit        ,~f_s_versus     ,~f_l_browse    ,~c_no        ,~c_yes
-  ;;,g_grid_pickplr2       ,~top_edit       ,~bot_info    ,~f_dt_versus   ,~f_op_edit        ,~f_nf           ,~f_l_browse    ,~c_no        ,~c_yes
+  ;;,g_grid_pickedit       ,~top_edit       ,~bot_info      ,~f_dt_edit     ,~f_op_edit        ,~f_s_edit       ,~f_l_browse    ,~c_no
+  ;;,g_grid_pickleag       ,~top_edit       ,~bot_info      ,~f_dt_league   ,~f_op_edit        ,~f_s_league     ,~f_l_browse    ,~c_no        ,~c_yes
+  ;;,g_grid_pickplr1       ,~top_edit       ,~bot_info      ,~f_dt_versus   ,~f_op_edit        ,~f_s_versus     ,~f_l_browse    ,~c_no        ,~c_yes
+  ;;,g_grid_pickplr2       ,~top_edit       ,~bot_info      ,~f_dt_versus   ,~f_op_edit        ,~f_nf           ,~f_l_browse    ,~c_no        ,~c_yes
 
-  ;;,g_grid_pickspot       ,~top_editteam   ,~bot_info    ,~f_dt_editteam ,~f_op_editteam    ,~f_s_editteam   ,~f_l_browse    ,~c_no
-  ;;,g_grid_picktrnr       ,~top_text_grid  ,~bot_info    ,~f_dt_league   ,~f_op_teams       ,~f_s_batbegin   ,~f_l_browse    ,~c_no
-  ;;,g_grid_battle_select  ,~bot_4x4        ,~top_battle2 ,~f_nf          ,~f_op_batsel      ,~f_s_battle     ,~f_nf          ,~c_no
-  ;;,g_grid_battle_movesel ,~bot_4x4        ,~top_pkstat  ,~f_nf          ,~f_op_movesel     ,~f_s_battle     ,~f_l_browse    ,~c_no
+  ;;,g_grid_pickspot       ,~top_editteam   ,~bot_info      ,~f_dt_editteam ,~f_op_editteam    ,~f_s_editteam   ,~f_l_browse    ,~c_no
+  ;;,g_grid_picktrnr       ,~top_text_grid  ,~bot_info      ,~f_dt_league   ,~f_op_teams       ,~f_s_batbegin   ,~f_l_browse    ,~c_no
+  ;;,g_grid_battle_select  ,~bot_4x4        ,~top_battle2   ,~f_nf          ,~f_op_batsel      ,~f_s_battle     ,~f_nf          ,~c_no
+  ;;,g_grid_battle_movesel ,~bot_4x4        ,~top_pkstat    ,~f_nf          ,~f_op_movesel     ,~f_s_battle     ,~f_l_browse    ,~c_no
 
-  ;;,g_grid_battle_switch  ,~top_editteam,  ,~bot_info    ,~f_nf          ,~f_op_batswitch   ,~f_nf           ,~f_l_browse    ,~c_no
+  ;;,g_grid_battle_switch  ,~top_editteam,  ,~bot_info      ,~f_nf          ,~f_op_batswitch   ,~f_nf           ,~f_l_browse    ,~c_no
+  ;;,g_grid_battle_stats   ,~top_editteam,  ,~bot_info      ,~f_nf          ,~f_op_batstats    ,~f_s_batstat    ,~f_l_browse    ,~c_no
+  ;;,g_grid_battle_results ,~top_editteam   ,~bot_info      ,~f_nf          ,~f_op_batresults  ,~f_s_batresults ,~f_l_browse    ,~c_no
 ]])
 
 g_gridstack = {} -- gotta run after the above.
