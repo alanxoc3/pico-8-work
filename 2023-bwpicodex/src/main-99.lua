@@ -39,19 +39,13 @@ end $$
 --   {[0]=7,    6,  0,134,  5,139, 141, 14,  6,143,  2, 12,  1,  8,  4,  5}, -- invert
 --   {[0]=128,130,141,134,135,139, 141, 14,  6,143,142, 12,  9,  8,  4,  5}, -- purple yel
 
-function bitmaskToIndex(bitmask)
-  for i = 0, 5 do
-    if bitmask & (1 << i) ~= 0 then
-      return i
-    end
-  end
-  return nil -- Return -1 if no bits are set
-end
-
 -- TODO: dedup this if it's only used once and maybe try a btnp(i) approach instead (for loop)
 |[_update]| function()
   -- printh(stat(0)) -- TODO: remove?
-  if t() > 1.25 then
+  if t() >= 1.5 then
+    if g_title_timer == 0 then
+      f_minisfx(SFX_LEAVE)
+    end
     g_title_timer = min(C_TITLETIMER, (g_title_timer+1))
   end
   g_preview_timer = max(0, g_preview_timer-1)
@@ -71,16 +65,16 @@ end $$
 -- TODO: Bring back the on-logo palette change.
 -- TODO: Make an "on-shake" part of the player logic. And maybe make it so you can't select or lr when
 sfx'63' -- Plays all the 4 sound effects in picodex as the logo/startup tune.
-g_title_sel = true -- title_sel is purposely set to nil so nothing is highlighted on start
 g_shake_timer = 0
 |[_draw]| function() -- since there is very minimal animation, doing 30fps. this gives me cpu so i can make some things slower to save tokens.
   cls'C_1'
 
   if g_title_timer < C_TITLETIMER then
-    print("\^y7\f4aLANxOC3\n\-d \f3pRESENTS",  16, 26)
-    local b = bitmaskToIndex(btnp())
-    if b then
-      g_palette = b+1
+    print("\^y7\f4aLANxOC3\n\f3pRESENTS", 16, 26)
+    for i=1,6 do
+      if .5 << i & btn() > 0 then
+        g_palette = i
+      end
     end
   end
 

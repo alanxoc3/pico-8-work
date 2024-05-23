@@ -160,18 +160,18 @@ end $$
     add(op, {text="iTEM:  nONE"})
   end
 
-  add(op, {text="gENDR: "..genders})
-  add(op, {text="pREVO: "..c_pkmn_names[pkmn.prevolve]})
-  add(op, {text="hEALT: " .. pkmn.hp .. "/" .. pkmn.hp})
+  add(op, {text="gEND: "..genders})
+  add(op, {text="pREV: "..c_pkmn_names[pkmn.prevolve]})
+  add(op, {text="hP:   " .. pkmn.hp .. "/" .. pkmn.hp})
 
   for stat in all(f_zobj[[
-     ;name,aTACK, key,attack
-    ;;name,dEFNS, key,defense
-    ;;name,sPaTK, key,specialattack
-    ;;name,sPdFN, key,specialdefense
-    ;;name,sPEED, key,speed
+     ;name,aTCK, key,attack
+    ;;name,dEFN, key,defense
+    ;;name,sPaT, key,specialattack
+    ;;name,sPdF, key,specialdefense
+    ;;name,sPED, key,speed
   ]]) do
-    local text = stat.name..": "..f_prefix_zero(pkmn[stat.key], 3)
+    local text = stat.name..": "..f_prefix_zero(pkmn[stat.key], 3).." + 1"
     if pkmn.stages then
       text ..= " "..(pkmn.stages[stat.key] > 0 and "+"..pkmn.stages[stat.key] or (pkmn.stages[stat.key] < 0 and "-"..pkmn.stages[stat.key]) or "")
     end
@@ -367,16 +367,8 @@ end $$
 |[f_dp_title]| function()
   print("\^w\^tpicodex", 2, 1,  C_4)
   print(c_palette_names[g_palette].." vERSION",  2, 12, C_2)
-
-  -- todo: give title pokemon correct colors
-  -- f_draw_pkmn(g_title_l, -8+15+(mid(-1, -.75, cos(0 +g_title_an_timer/300))+.75)*4*26 + (g_title_an_timer > 190 and g_title_an_timer < 220 and (rnd(3)\1-1) or 0), 20, 16, false, false, false, g_title_an_timer <= 190-50 or g_title_an_timer >= 220+50)
-  -- f_draw_pkmn(g_title_r, 50-15-(mid(-1, -.75, cos(.5+g_title_an_timer/300))+.75)*4*26 + (g_title_an_timer > 40  and g_title_an_timer < 70  and (rnd(3)\1-1) or 0), 20, 16, true , false, false, g_title_an_timer <= 40-50  or g_title_an_timer >= 70+50 )
-
-  -- local toptim = g_title_an_timer >= 150 and g_title_an_timer < 150+70
-  -- local bottim = g_title_an_timer < 70
-
-  f_draw_pkmn(g_title_l, -8+15+(mid(-1, -.75, 0)+.75)*4*26, 20, 16, false, false, false, g_title_sel == nil or g_title_sel == false)
-  f_draw_pkmn(g_title_r, 50-15-(mid(-1, -.75, 0)+.75)*4*26, 20, 16, true , false, false, g_title_sel == nil or g_title_sel)
+  f_draw_pkmn(g_title_l, 7 , 20, 16, false, false, false, g_title_sel)
+  f_draw_pkmn(g_title_r, 35, 20, 16, true , false, false, not g_title_sel)
 end $$
 
 function roundrect_r(x1, y1, x2, y2, c)
@@ -400,7 +392,7 @@ end
   end})
 
   add(op, {text="gIVEuP", select=function()
-    f_pop_ui_stack()
+    f_pop_ui_stack() f_pop_ui_stack() f_pop_ui_stack()
     f_add_to_ui_stack(g_grid_battle_results)
   end})
 
@@ -584,7 +576,7 @@ end $$
 
 |[f_s_editmove]| function()
   local pkmn = f_get_party_pkmn(f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot')
-  pkmn[f_getsel'g_grid_editstat'+1].pid = f_getsel'g_grid_editmove'
+  pkmn[f_getsel'g_grid_editstat'+1].pid = f_getsel'g_grid_editmove'+1
   f_save_party_pkmn(pkmn, f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot')
   f_pop_ui_stack()
 end $$
@@ -600,9 +592,9 @@ end $$
   g_title_sel = not g_title_sel
 
   if g_title_sel then
-    g_title_l = rnd"252"\1 return g_title_l
-  else
     g_title_r = rnd"252"\1 return g_title_r
+  else
+    g_title_l = rnd"252"\1 return g_title_l
   end
 
   g_palette += 1
