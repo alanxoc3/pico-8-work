@@ -69,7 +69,6 @@ end $$
     if dir > 0 then
       for i=cur+2,#lst,1 do -- +1 for zero index, +1 for next
         if lst[i].lrvalid then
-          printh("valid "..i)
           nxt = i-1
           break
         end
@@ -77,13 +76,11 @@ end $$
     elseif dir < 0 then
       for i=cur-1,0,-1 do
         if lst[i+1].lrvalid then
-          printh("valid "..i)
           nxt = i
           break
         end
       end
     end
-    printh("nxt "..nxt.." lst: "..#lst)
 
     if nxt ~= cur then
       f_minisfx(SFX_MOVE)
