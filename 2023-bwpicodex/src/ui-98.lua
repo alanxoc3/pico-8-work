@@ -53,6 +53,12 @@ end $$
   end)
 end $$
 
+|[f_op_prevpk]| function(_ENV)
+  add(op, {draw=function()
+    f_draw_pkmn(c_pokemon[f_getsel'g_grid_browse'].num, 30-18+1, 20-18+1, 32, g_title_sel, false, false, false)
+  end})
+end $$
+
 |[f_op_teams]| function(_ENV)
   for i=1, 58 do
     local disabled = @S_STORY+1<i
@@ -135,32 +141,59 @@ end $$
   genders = sub(genders, 1, #genders-1)
 
   local draw_preview = function(off)
-    f_draw_pkmn(pkmn.num, 2-8-20+30, -8+1-10-1-1+6+3-3-off, 16)
-    rectfill(-9+4+30, -18-off-1, -9+4+30, 6-off+1, C_2)
+    local piclist = {}
+    local pkind = pkmn.num
+    while pkind < P_NONE do
+      add(piclist, pkind)
+      pkind = c_pokemon[pkind].prevolve
+    end
+    rectfill(18-6+2,-1,35+6+2,21,C_3)
+
+    -- if #piclist == 1 then
+    f_draw_pkmn(piclist[1],      2-8-20+30+15+2, -8+1-10-1-1+6+3-3-off, 16, g_title_sel,  false, false, false)
+    --f_draw_pkmn(piclist[1],      2-8-20+30+15-14+2, -8+1-10-1-1+6+3-3-off, 14, false, false, false, not g_title_sel)
+    -- elseif #piclist > 1 then
+    --   f_draw_pkmn(piclist[2],      2-8-20+30+15-15+2, -8+1-10-1-1+6+3-3-off, 16, false, false, false, true)
+    --   f_draw_pkmn(piclist[1],      2-8-20+30+15+15+2, -8+1-10-1-1+6+3-3-off, 16)
+    -- elseif #piclist == 3 then
+    --   -- f_draw_pkmn(piclist[3],      2-8-20+30+15-21+2, -8+1-10-1-1+6+3-3-off, 16, false, false, false, true)
+    --   -- f_draw_pkmn(piclist[2],      2-8-20+30+15-1 +2, -8+1-10-1-1+6+3-3-off, 16, false, false, false, true)
+    --   -- f_draw_pkmn(piclist[1],      2-8-20+30+15+19+2, -8+1-10-1-1+6+3-3-off, 16)
+    -- end
   end
 
+  -- add(op, {text="pOKEMON eNTRY", header=true})
   add(op,  {text="#"..f_prefix_zero(pkmn.num, 3).." "..pkmn.name, header=true})
-  add(op,  {text="       tYPE:", draw=function() draw_preview(-18) end})
-  add(op,  {text="        "..c_type_names[pkmn.type1+1], draw=function() draw_preview(-9) end})
-  local t2text = "        "
-  if pkmn.type2 ~= T_BIRD then
-    t2text ..= c_type_names[pkmn.type2+1]
-  end
+  -- add(op,  {text="        tYPE:", draw=function() draw_preview(-18) end, header=true})
+  -- add(op,  {text="        "..c_type_names[pkmn.type1+1], draw=function() draw_preview(-9) end, header=true})
+  -- local t2text = "        "
+  -- if pkmn.type2 ~= T_BIRD then
+  --   t2text ..= c_type_names[pkmn.type2+1]
+  -- end
+  -- add(op, {text=t2text, draw=function() draw_preview(0) end, header=true})
 
-  add(op, {text=t2text, draw=function() draw_preview(0) end})
+  --add(op, {text="pOKEMON eNTRY", header=true})
+  add(op, {text="", header=true, h=3, draw=function() draw_preview(-9*2) end})
+  add(op, {text="", header=true, h=3, draw=function() draw_preview(-9*1) end})
+  add(op, {text="", header=true, h=3, draw=function() draw_preview(-9*0) end})
+  --add(op, {text="", draw=function() draw_preview(0)   end})
 
-  add(op, {text="pOKEMON iNFO", header=true})
+
+  add(op, {text=pkmn.name.." iNFO", header=true})
+  add(op, {text="pREV: "..c_pkmn_names[pkmn.prevolve]})
+  add(op, {text="tYP1: "..c_type_names[pkmn.type1+1], draw=function() end})
+  add(op, {text="tYP2: "..c_type_names[pkmn.type2+1], draw=function() end})
+  add(op, {text="gEND: "..genders})
+  add(op, {text="hp:   " .. pkmn.hp .. "/" .. pkmn.hp})
+
   if mode >= MODE_BENCH then -- todo: convert to > (gt), saves a character
     add(op, {text="mAJR: nONE"})
   end
   if mode >= MODE_EDIT then -- todo: convert to > (gt), saves a character
     add(op, {text="iTEM: "..c_item_names[pkmn.item]})
   end
-  add(op, {text="hITp: " .. pkmn.hp .. "/" .. pkmn.hp})
-  add(op, {text="gEND: "..genders})
-  add(op, {text="pREV: "..c_pkmn_names[pkmn.prevolve]})
 
-  add(op, {text="pOKEMON sTATS", header=true})
+  add(op, {text=pkmn.name.." sTAT", header=true})
 
   for stat in all(f_zobj[[
      ;name,aTACK, key,attack
@@ -316,8 +349,10 @@ end $$
     namestr, type1, type2 = f_strtoq(namestr), f_strtoq(type1), f_strtoq(type2)
   end
 
-  f_print_top("#", f_prefix_zero(pkmn.num, 3), " ", namestr)
-  f_print_bot(type1, " ", type2)
+  f_print_top("bROWSING")
+  f_print_bot("#", f_prefix_zero(pkmn.num, 3), " ", namestr)
+  --f_print_bot("fROM ", c_pkmn_names[pkmn.prevolve])
+  -- f_print_bot(type1, " ", type2)
 end $$
 
 |[f_dt_browse]| function()
@@ -356,8 +391,8 @@ end $$
   local name = c_trnr_names[f_getsel'g_grid_picktrnr'+1]
   name = disabled and f_strtoq(name) or name
 
-  f_print_top(toggle and "\f4" or "\f2", "pLR: tEAM", f_getsel'g_grid_pickedit'+1)
-  f_print_bot(toggle and "\f2" or "\f4", "cPU: ", name)
+  f_print_top(toggle and "\f4" or "\f2", "pLAYER: tEAM", f_getsel'g_grid_pickedit'+1)
+  f_print_bot(toggle and "\f2" or "\f4", "lEAGUE: ", name)
 end $$
 
 |[f_dt_batstats]| function()
@@ -380,8 +415,8 @@ end $$
 |[f_dt_versus]| function()
   local toggle = g_cg_m.name == 'g_grid_pickplr1'
 
-  f_print_top(toggle and "\f4" or "\f2", "pLR1: tEAM", f_getsel'g_grid_pickplr1'+1)
-  f_print_bot(toggle and "\f2" or "\f4", "pLR2: tEAM", f_getsel'g_grid_pickplr2'+1)
+  f_print_top(toggle and "\f4" or "\f2", "pLAYR1: tEAM", f_getsel'g_grid_pickplr1'+1)
+  f_print_bot(toggle and "\f2" or "\f4", "pLAYR2: tEAM", f_getsel'g_grid_pickplr2'+1)
 end $$
 
 |[f_dp_title]| function()
@@ -516,7 +551,7 @@ end $$
 end $$
 
 |[f_s_browse]| function()
-  f_add_to_ui_stack(g_grid_statbrowse)
+  f_add_to_ui_stack(g_grid_statbrowse) -- 
 end $$
 
 |[f_s_title]| function()
@@ -533,11 +568,13 @@ end $$
 
 |[f_s_pkstat]| function()
   g_preview_timer = 20
+  g_title_sel = not g_title_sel
   return f_getsel'g_grid_browse'
 end $$
 
 |[f_s_statedit]| function()
   g_preview_timer = 20
+  g_title_sel = not g_title_sel
   return f_get_party_pkmn(f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot').num
 end $$
 
@@ -564,6 +601,7 @@ end $$
 
 |[f_s_statbat]| function()
   g_preview_timer = 20
+  g_title_sel = not g_title_sel
   local otherpl = p1 == p0 and p2 or p1
   local bothteams = {}
   for i=1,6 do add(bothteams, p0.team[i]) end
@@ -650,6 +688,7 @@ f_zcall(f_create_gridpair, [[
 
   ;;,g_grid_browse         ,~top_browse     ,~bot_info      ,~f_dt_browse   ,~f_op_browse      ,~f_s_browse      ,~f_l_browse    ,~c_no
   ;;,g_grid_editpkmn       ,~top_browse     ,~bot_info      ,~f_dt_editpkmn ,~f_op_browse      ,~f_s_editpkmn    ,~f_l_browse    ,~c_no
+  ;;,g_grid_previewpkmn    ,~top_title      ,~bot_info      ,~f_dt_browse   ,~f_op_prevpk      ,~f_s_pkstat      ,~f_l_browse    ,g_grid_browse
 
   ;;,g_grid_statbrowse     ,~top_pkstat     ,~bot_info      ,~f_dt_browse   ,~f_op_statbrowse  ,~f_s_pkstat      ,~f_l_browse    ,g_grid_browse
   ;;,g_grid_statedit       ,~top_pkstat     ,~bot_info      ,~f_dt_editstat ,~f_op_statedit    ,~f_s_statedit    ,~f_l_browse    ,g_grid_pickspot
