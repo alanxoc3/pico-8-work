@@ -133,41 +133,51 @@ end $$
   local move = c_moves[movenum]
   local pp, pow, acc, typ = f_get_move_texts(move)
   local method = pkmn.possible_moves_method[movenum]
-  add(op, {text="mOVE"..ind..": "..move.name, header=true})
-  add(op, {text=""..method..": "..typ})
-  add(op, {text="pWpNT: "..pp.."/"..pp})
-  add(op, {text="pW/aC: "..pow.."/"..acc})
+  add(op, {text="mOVE"..ind.." "..move.name, header=true})
+  add(op, {text=""..method.." "..typ})
+  add(op, {text="pWpNT "..pp.."/"..pp})
+  add(op, {text="pW/aC "..pow.."/"..acc})
 end $$
 
 |[f_add_stat_info]| function(op, pkmn)
   add(op, {text="#"..f_prefix_zero(pkmn.num, 3).." "..pkmn.name, header=true})
-  add(op, {text="tYPE1 "..c_type_names[pkmn.type1+1]})
-  add(op, {text="tYPE2 "..c_type_names[pkmn.type2+1]})
+  add(op, {text="tYPE1 "..c_type_names[pkmn.type1]})
+  add(op, {text="tYPE2 "..c_type_names[pkmn.type2]})
   add(op, {text="pREVO "..c_pkmn_names[pkmn.prevolve]})
 end $$
 
 |[f_add_stat]| function(op, pkmn, is_battle)
   local draw_preview = function(off)
-    rectfill(15,off-18,42,off+5,C_3) -- TODO: dedup with a roundrect_r function
-    rectfill(16,off-19,41,off+6,C_3)
+    f_roundrect(15,off-19,42,off+6,C_3)
     f_draw_pkmn(pkmn.num, 21, off-13, 16, false, false, false, false)
   end
 
   add(op, {header=true, draw=function() draw_preview'18' end})
   add(op, {header=true, draw=function() draw_preview'9' end})
-  add(op, {header=true, draw=function() draw_preview'1' end})
+  add(op, {header=true, draw=function() draw_preview'0' end})
 
   f_add_stat_info(op, pkmn)
+  if is_battle then
+    add(op, {text="pKMN sTATE", header=true})
+    add(op, {text="cOND "..c_major_names_long[pkmn.major]})
+    add(op, {text="gEND "..c_gender_names[pkmn.gender]})
+    add(op, {text="iTEM "..c_item_names[pkmn.item]})
+  end
 
   add(op, {text="pKMN sTATS", header=true})
   add(op, {text="hTpNT " .. pkmn.hp .. "/" .. pkmn.hp})
 
   for key in all(f_zobj[[,attack,defense,specialattack,specialdefense,speed]]) do
-    add(op, {text=c_statmod_names[key].." 123+"..pkmn.stages[key]})
+    local txt = c_statmod_names[key].." "..f_prefix_zero(pkmn[key], 3)
+    local stage = pkmn.stages and pkmn.stages[key] or 0
+    txt ..= (stage < 0 and "-" or "+")..abs(stage)
+    add(op, {text=txt})
   end
 
-  for key in all(f_zobj[[,crit,evasion,accuracy]]) do
-    add(op, {text=c_statmod_names[key].." 123%"})
+  if is_battle then
+    for key in all(f_zobj[[,crit,evasion,accuracy]]) do
+      add(op, {text=c_statmod_names[key].." 123%"})
+    end
   end
 
   -- add(op, {text="aT/dF 123/096"})
@@ -176,11 +186,6 @@ end $$
   -- add(op, {text="eV/aC 100/100"})
 
   if is_battle then
-    add(op, {text="pKMN sTATE", header=true})
-    add(op, {text="cOND "..c_major_names_long[pkmn.major]})
-    add(op, {text="gEND "..c_gender_names[pkmn.gender]})
-    add(op, {text="iTEM "..c_item_names[pkmn.item]})
-
     add(op, {text="pKMN mOVES", header=true})
     add(op, {text=f_prefix_space(c_move_names[pkmn[1].id], 6).." 20/20"})
     add(op, {text=f_prefix_space(c_move_names[pkmn[2].id], 6).." 20/20"})
@@ -198,7 +203,7 @@ end $$
 -- dp and dt drawing for ui
 ---------------------------------------------
 |[f_dt_editteam]| function(i, is_sel)
-  local spotstr = "sPOT"..(f_getsel'g_grid_pickspot'+1) -- ,": sPOT",f_getsel'g_grid_pickspot'+1)
+  local spotstr = "sPOT"..(f_getsel'g_grid_pickspot'+1) -- ," sPOT",f_getsel'g_grid_pickspot'+1)
 
   f_print_top("eDIT ", spotstr)
   local pkmn = f_get_party_pkmn(f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot')
@@ -239,7 +244,7 @@ end $$
 
 |[f_get_move_texts]| function(move)
   -- TODO: token crunching with zobj
-  local pp, pow, acc, typ = f_prefix_zero(move.pp, 2), f_prefix_zero(move.pow, 3), f_prefix_zero(move.acc, 3), c_type_names[move.type+1]
+  local pp, pow, acc, typ = f_prefix_zero(move.pp, 2), f_prefix_zero(move.pow, 3), f_prefix_zero(move.acc, 3), c_type_names[move.type]
 
   if     move.pow == 0 then pow = "___"
   elseif move.pow == 1 then pow = "var" end
@@ -293,20 +298,14 @@ end $$
 
 |[f_dt_browse_template]| function(pkmn_ind)
   local pkmn = c_pokemon[pkmn_ind]
-  local namestr, type1, type2 = pkmn.name, c_type_names[pkmn.type1+1], ""
-
-  if pkmn.type2 > T_NONE then
-    type2 = c_type_names[pkmn.type2+1]
-  end
+  local namestr = pkmn.name
 
   if not pkmn.lock then
-    namestr, type1, type2 = f_strtoq(namestr), f_strtoq(type1), f_strtoq(type2)
+    namestr = f_strtoq(namestr)
   end
 
   f_print_top("vIEW ", namestr)
   f_print_bot("pICODEX #", f_prefix_zero(pkmn.num, 3))
-  --f_print_bot("fROM ", c_pkmn_names[pkmn.prevolve])
-  -- f_print_bot(type1, " ", type2)
 end $$
 
 |[f_dt_browse]| function()
@@ -346,8 +345,8 @@ end $$
   local name = c_trnr_names[f_getsel'g_grid_picktrnr'+1]
   name = disabled and f_strtoq(name) or name
 
-  f_print_top(toggle and "\f4" or "\f2", "pLR1: tEAM", f_getsel'g_grid_pickleag'+1)
-  f_print_bot(toggle and "\f2" or "\f4", "cOMP: ", name)
+  f_print_top(toggle and "\f4" or "\f2", "pLAYER tEAM", f_getsel'g_grid_pickleag'+1)
+  f_print_bot(toggle and "\f2" or "\f4", "cOMPTR ", name)
 end $$
 
 |[f_dt_batstats]| function()
@@ -355,7 +354,7 @@ end $$
   local p = ind < 6 and p0 or p1 == p0 and p2 or p1
   local name = c_trnr_names[f_getsel'g_grid_picktrnr'+1]
   local pkmn = p.team[ind%6+1]
-  f_print_bot(p.name, ": sPOT", ind%6+1)
+  f_print_bot(p.name, " sPOT", ind%6+1)
   f_print_top("vIEW ", pkmn.name)
 end $$
 
@@ -366,14 +365,14 @@ end $$
   f_print_top("sWAP ", pkmn.name)
   --f_print_bot("#", f_prefix_zero(pkmn.num, 3), " ", pkmn.name)
   local p = ind < 6 and p0 or p1 == p0 and p2 or p1
-  f_print_bot(p.name, ": sPOT", ind%6+1)
+  f_print_bot(p.name, " sPOT", ind%6+1)
 end $$
 
 |[f_dt_versus]| function()
   local toggle = g_cg_m.name == 'g_grid_pickplr1'
 
-  f_print_top(toggle and "\f4" or "\f2", "pLR1: tEAM", f_getsel'g_grid_pickplr1'+1)
-  f_print_bot(toggle and "\f2" or "\f4", "pLR2: tEAM", f_getsel'g_grid_pickplr2'+1)
+  f_print_top(toggle and "\f4" or "\f2", "pLAYER1 tEAM", f_getsel'g_grid_pickplr1'+1)
+  f_print_bot(toggle and "\f2" or "\f4", "pLAYER2 tEAM", f_getsel'g_grid_pickplr2'+1)
 end $$
 
 |[f_dp_title]| function()
@@ -383,12 +382,12 @@ end $$
   f_draw_pkmn(g_title_r, 35, 20, 16, true , false, false, not g_title_sel)
 end $$
 
-function roundrect_r(x1, y1, x2, y2, c)
+|[f_roundrect]| function(x1, y1, x2, y2, c)
   rectfill(x1, y1+1, x2, y2-1, c)
   if x2-x1 > 2 then -- if check is for the hp bar, so it looks good when small.
     rectfill(x1+1, y1, x2-1, y2, c)
   end
-end
+end $$
 
 |[f_op_batsel]| function(_ENV)
   add(op, {text="fIGHT", select=function()
@@ -409,7 +408,7 @@ end
   end})
 
   local b = function(_ENV, team, x, y, px, py, flip)
-    roundrect_r(x-1+1, y+1-6+1, x+35-1, y+6+6+1, C_3)
+    f_roundrect(x-1+1, y+1-6+1, x+35-1, y+6+6+1, C_3)
     if hp > 0 then
       rectfill(x+1, y+3, x+1+mid(0, hp/hp*32, 32), y+6, C_2)
       pset(x+1, y+3, C_3)
@@ -472,8 +471,8 @@ end $$
   end
 
   add(preview_op, {draw=function()
-    f_print_top("cHAMP: "..otherteam.name)
-    f_print_bot("lOSER: "..p0.name)
+    f_print_top("cHAMP "..otherteam.name)
+    f_print_bot("lOSER "..p0.name)
   end})
 end $$
 
@@ -567,12 +566,12 @@ end $$
 end $$
 
 |[f_s_versusbegin]| function()
-  f_start_battle("pLR1", "pLR2", f_team_party(f_getsel'g_grid_pickplr1'), f_team_party(f_getsel'g_grid_pickplr2'))
+  f_start_battle("pLAYER1", "pLAYER2", f_team_party(f_getsel'g_grid_pickplr1'), f_team_party(f_getsel'g_grid_pickplr2'))
   f_add_to_ui_stack(g_grid_battle_select)
 end $$
 
 |[f_s_batbegin]| function()
-  f_start_battle("pLR1", c_trnr_names[f_getsel'g_grid_picktrnr'+1], f_team_party(f_getsel'g_grid_pickleag'), f_team_league(f_getsel'g_grid_picktrnr'+1))
+  f_start_battle("pLAYER", c_trnr_names[f_getsel'g_grid_picktrnr'+1], f_team_party(f_getsel'g_grid_pickleag'), f_team_league(f_getsel'g_grid_picktrnr'+1))
   f_add_to_ui_stack(g_grid_battle_select)
 end $$
 

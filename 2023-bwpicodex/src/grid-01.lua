@@ -142,6 +142,8 @@ end $$
       c = C_2
     end
 
+    -- This is not a roundrect, this is specific for rounding corners on the grid edge.
+    -- TODO: try to combine with rounded rect func.
     rectfill(offx-1+l, offy-1,   offx+cw-2-r, offy+ch-2,   c)
     rectfill(offx-1,   offy-1+u, offx+cw-2,   offy+ch-2-d, c)
   end

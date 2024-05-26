@@ -99,6 +99,8 @@ DIFF: A transformed pokemon can make use of pokemon specific items (thickclub, l
 DIFF: Missingno is a pokemon. It copies best stats and all moves from RB missingno, Y missingno, M (Missingno's Sister), O (M's pre-evolution), and "Pゥ_4$" (M's other preevolution). Glitch moves are converted to the gen 2 hex equivalents, except TM05 (from "Pゥ_4$") which is a move in Picodex. Only moves that can be learned up to lvl 100 are included.
 DIFF: Megadrain, gigadrain, absorb, leech life all hit and take hp from a substitute.
 DIFF: A Pokemon may have zero moves. The Pokemon will use struggle if that is the case.
+DIFF: Struggle is "None" type instead of "Normal" type.
+DIFF: Bird type is partially resistant to every other type, except it is vulnerable to struggle.
 
 STRAT: Sketch and Mimic allow for the same move to be available in multiple move slots.
 STRAT: Missingno is broken.

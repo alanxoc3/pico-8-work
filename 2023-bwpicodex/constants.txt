@@ -167,25 +167,25 @@ G_MALE: 1
 G_FEMA: 2
 
 # ----------------------------- type numbers - odds are physical, evens are special.
-T_NONE:     0 # Yes... bird and none are the same, which contributes to its glitchiness.
-T_BIRD:     0  # bird
+T_NONE:     0  # none
 T_NORMAL:   1  # normal
 T_FIRE:     2  # fire
-T_FIGHTING: 3  # fightn
+T_FIGHTING: 3  # fighting
 T_WATER:    4  # water
 T_POISON:   5  # poison
-T_ELECTRIC: 6  # electr
+T_ELECTRIC: 6  # electric
 T_GROUND:   7  # ground
 T_GRASS:    8  # grass
 T_FLYING:   9  # flying
 T_ICE:      10 # ice
 T_BUG:      11 # bug
-T_PSYCHIC:  12 # psychc
+T_PSYCHIC:  12 # psychic
 T_ROCK:     13 # rock
 T_DRAGON:   14 # dragon
 T_GHOST:    15 # ghost
 T_DARK:     16 # dark
 T_STEEL:    17 # steel
+T_BIRD:     18 # bird
 
 # ----------------------------- pkmn numbers
 P_MISSINGNO:  0   # mISINGNO
