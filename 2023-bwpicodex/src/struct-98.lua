@@ -12,7 +12,7 @@
     num,@, gender_bit,@, item,@, valid,@,
     seen_moves, #,            -- A move to boolean map that is used to disable things on the move edit screen and populate edit_moves.
     major,      C_MAJOR_NONE, -- The major status condition in pokemon battles: fainted, burned, frozen, paralyzed, poisoned, sleeping
-    gender,     0,            -- This gets populated from gender bit & pkmn.genders.
+    gender,     0,            -- This gets populated from gender bit & pkmn.genders. TODO: this line could be removed if pressed for compression!
     evasion,    1,
     accuracy,   1,
     crit,       1;
