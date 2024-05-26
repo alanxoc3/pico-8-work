@@ -6,6 +6,8 @@
 -- OP FUNCTIONS - DATA FOR UI
 -----------------------------
 
+-- TODO: stretch goal: add tiny descriptions for items
+
 -- This updates the lock variables, which determine if a pokemon/item/move is unlocked.
 |[f_op_def]| function(_ENV) add(op, {}) end $$
 
@@ -48,7 +50,7 @@ end $$
 end $$
 
 |[f_op_title]| function(_ENV)
-  foreach(split"bROWSE,eDIT,lEAGUE,vERSUS", function(text)
+  foreach(split"vIEW,eDIT,lEAGUE,vERSUS", function(text)
     f_addop_text(op, text)
   end)
 end $$
@@ -66,15 +68,59 @@ end $$
   end
 end $$
 
-|[f_op_editstat]| function(_ENV)
+|[f_op_editmovebot]| function(_ENV)
   local pkmn = f_get_party_pkmn(f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot')
-
   for i=1,4 do
     add(op, {text=c_move_names[pkmn[i].id], select=function()
       f_setsel('g_grid_editmove', pkmn[i].pid-1)
       f_add_to_ui_stack(g_grid_editmove)
     end})
   end
+
+  --local pkmn = f_get_party_pkmn(f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot')
+  local ind = f_getsel'g_grid_editmovebot'+1
+  local movenum = pkmn[ind].id
+  local move = c_moves[movenum]
+  local pp, pow, acc, typ = f_get_move_texts(move)
+  local method = pkmn.possible_moves_method[movenum]
+  add(preview_op, {text="mOVE"..ind..": "..move.name, header=true})
+  add(preview_op, {text=""..method..": "..typ})
+  add(preview_op, {text="pWpNT: "..pp.."/"..pp})
+  add(preview_op, {text="pW/aC: "..pow.."/"..acc})
+
+end $$
+
+|[f_op_editstat]| function(_ENV)
+  --for pkmnnum=0,5 do
+  --  local pkmn = f_get_party_pkmn(f_getsel'g_grid_pickedit', pkmnnum)
+  --  add(preview_op, {lrvalid=pkmn.valid, draw=function(i, is_sel)
+  --    f_draw_pkmn(pkmn.num, 1, 1, 16, false, false, false, pkmnnum ~= f_getsel'g_grid_pickspot')
+  --  end})
+  --end
+
+  local pkmn = f_get_party_pkmn(f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot')
+
+  add(preview_op, {text="#"..f_prefix_zero(pkmn.num, 3).." "..pkmn.name, header=true})
+  add(preview_op, {text="tYP1: "..c_type_names[pkmn.type1+1], draw=function() end})
+  add(preview_op, {text="tYP2: "..c_type_names[pkmn.type2+1], draw=function() end})
+  add(preview_op, {text="pREV: "..c_pkmn_names[pkmn.prevolve]})
+
+  -- f_add_stat(preview_op, f_get_party_pkmn(f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot'),  MODE_EDIT)
+
+  --add(preview_op, {draw=function()
+  --  f_draw_pkmn(pkmn.num, 30-18+1, 20-18+1, 32, g_title_sel, false, false, false)
+  --end})
+
+  add(op, {text="mOVES", select=function()
+    f_add_to_ui_stack(g_grid_editmovebot)
+  end})
+
+  --for i=1,4 do
+  --  add(op, {text=c_move_names[pkmn[i].id], select=function()
+  --    f_setsel('g_grid_editmove', pkmn[i].pid-1)
+  --    f_add_to_ui_stack(g_grid_editmove)
+  --  end})
+  --end
 
   add(op, {text=c_item_names[pkmn.item], select=function()
     f_setsel('g_grid_edititem', pkmn.item)
@@ -87,14 +133,11 @@ end $$
     f_refresh_top()
   end})
 
-  add(op, {text="vIEW", select=function()
-    f_add_to_ui_stack(g_grid_statedit)
-  end})
-
   add(op, {text="dELETE", select=function()
     memset(S_PARTY1+f_getsel'g_grid_pickedit'*42+f_getsel'g_grid_pickspot'*7, P_NONE, 7)
     f_pop_ui_stack()
   end})
+
 end $$
 
 -- TODO: experiment with making item num/name/lock in same obj -- 4042
@@ -121,11 +164,18 @@ end $$
 
 |[f_add_stat_move]| function(op, pkmn, ind)
   local m = pkmn[ind]
+  --  local pp, pow, acc, typ = f_get_move_texts(c_moves[m.id])
+
+  local method = pkmn.possible_moves_method[m.id]
   local pp, pow, acc, typ = f_get_move_texts(c_moves[m.id])
-  add(op, {text="mOVE"..ind..": "..c_move_names[m.id], header=true})
-  add(op, {text="tYPE:  "..typ})
-  add(op, {text="pWpNT: "..pp.."/"..pp})
-  add(op, {text="pW/aC: "..pow.."/"..acc})
+  add(op, {text="mOVE"..ind.." "..c_move_names[m.id], header=true})
+  add(op, {text=method.." "..typ})
+  add(op, {text=pp.."PP "..pow.."P "..acc.."A"})
+
+
+  -- add(op, {text="tYPE  "..typ})
+  -- add(op, {text="pWpNT "..pp.."/"..pp})
+  -- add(op, {text="pW/aC "..pow.."/"..acc})
 end $$
 
 -- 0 = browse, 1 = edit, 2 = benched, 3 = active
@@ -147,10 +197,12 @@ end $$
       add(piclist, pkind)
       pkind = c_pokemon[pkind].prevolve
     end
-    rectfill(18-6+2,-1,35+6+2,21,C_3)
+    local hh = -1
+    rectfill(14-hh,-18-off+1-1,43+hh,6-off-1+1,C_3)
+    rectfill(14-hh+1,-18-off-1,43+hh-1,6-off+1,C_3)
 
     -- if #piclist == 1 then
-    f_draw_pkmn(piclist[1],      2-8-20+30+15+2, -8+1-10-1-1+6+3-3-off, 16, g_title_sel,  false, false, false)
+    f_draw_pkmn(piclist[1],      2-8-20+30+15+2, -8+1-10-1-1+6+3-3-off, 16, false,  false, false, false)
     --f_draw_pkmn(piclist[1],      2-8-20+30+15-14+2, -8+1-10-1-1+6+3-3-off, 14, false, false, false, not g_title_sel)
     -- elseif #piclist > 1 then
     --   f_draw_pkmn(piclist[2],      2-8-20+30+15-15+2, -8+1-10-1-1+6+3-3-off, 16, false, false, false, true)
@@ -163,7 +215,6 @@ end $$
   end
 
   -- add(op, {text="pOKEMON eNTRY", header=true})
-  add(op,  {text="#"..f_prefix_zero(pkmn.num, 3).." "..pkmn.name, header=true})
   -- add(op,  {text="        tYPE:", draw=function() draw_preview(-18) end, header=true})
   -- add(op,  {text="        "..c_type_names[pkmn.type1+1], draw=function() draw_preview(-9) end, header=true})
   -- local t2text = "        "
@@ -173,58 +224,78 @@ end $$
   -- add(op, {text=t2text, draw=function() draw_preview(0) end, header=true})
 
   --add(op, {text="pOKEMON eNTRY", header=true})
+  --add(op, {text="", draw=function() draw_preview(0)   end})
+
   add(op, {text="", header=true, h=3, draw=function() draw_preview(-9*2) end})
   add(op, {text="", header=true, h=3, draw=function() draw_preview(-9*1) end})
   add(op, {text="", header=true, h=3, draw=function() draw_preview(-9*0) end})
-  --add(op, {text="", draw=function() draw_preview(0)   end})
 
-
-  add(op, {text=pkmn.name.." iNFO", header=true})
-  add(op, {text="pREV: "..c_pkmn_names[pkmn.prevolve]})
+  add(op, {text="#"..f_prefix_zero(pkmn.num, 3).." "..pkmn.name, header=true})
+  --add(op, {text=pkmn.name.." iNFO", header=true})
   add(op, {text="tYP1: "..c_type_names[pkmn.type1+1], draw=function() end})
   add(op, {text="tYP2: "..c_type_names[pkmn.type2+1], draw=function() end})
-  add(op, {text="gEND: "..genders})
-  add(op, {text="hp:   " .. pkmn.hp .. "/" .. pkmn.hp})
+  add(op, {text="pREV: "..c_pkmn_names[pkmn.prevolve]})
 
-  if mode >= MODE_BENCH then -- todo: convert to > (gt), saves a character
-    add(op, {text="mAJR: nONE"})
-  end
-  if mode >= MODE_EDIT then -- todo: convert to > (gt), saves a character
+  if mode >= MODE_EDIT then
+    add(op, {text="pKMN sTATE", header=true})
+    add(op, {text="mAJR: fROZEN"})
+    add(op, {text="gEND: "..genders})
     add(op, {text="iTEM: "..c_item_names[pkmn.item]})
   end
 
-  add(op, {text=pkmn.name.." sTAT", header=true})
+  -- add(op, {text=pkmn.name.." iNFO", header=true})
+  -- add(op, {text="fROM "..c_pkmn_names[pkmn.prevolve]})
+  -- add(op, {text="pREV: "..})
 
-  for stat in all(f_zobj[[
-     ;name,aTACK, key,attack
-    ;;name,dEFNS, key,defense
-    ;;name,sPaTK, key,specialattack
-    ;;name,sPdFN, key,specialdefense
-    ;;name,sPEED, key,speed
-  ]]) do
-    local text = stat.name..": "..f_prefix_zero(pkmn[stat.key], 3).." +1"
-    if pkmn.stages then
-      text ..= " "..(pkmn.stages[stat.key] > 0 and "+"..pkmn.stages[stat.key] or (pkmn.stages[stat.key] < 0 and "-"..pkmn.stages[stat.key]) or "")
-    end
-    add(op, {text=text})
+  add(op, {text="pKMN sTATS", header=true})
+  add(op, {text="hTpNT: " .. pkmn.hp .. "/" .. pkmn.hp})
+  add(op, {text="aT/dF: 123/096"})
+  add(op, {text="sA/sD: 311/916"})
+  add(op, {text="sP/cR: 223/006"})
+  add(op, {text="eV/aC: 100/100"})
+
+  if mode >= MODE_EDIT then
+    add(op, {text="pKMN mOVES", header=true})
+    add(op, {text=f_prefix_space(c_move_names[pkmn[1].id], 6)..": 20/20"})
+    add(op, {text=f_prefix_space(c_move_names[pkmn[2].id], 6)..": 20/20"})
+    add(op, {text=f_prefix_space(c_move_names[pkmn[3].id], 6)..": 20/20"})
+    add(op, {text=f_prefix_space(c_move_names[pkmn[4].id], 6)..": 20/20"})
   end
+
+  if mode >= MODE_EDIT then
+    -- f_add_stat_move(op, pkmn, 1)
+    -- f_add_stat_move(op, pkmn, 2)
+    -- f_add_stat_move(op, pkmn, 3)
+    -- f_add_stat_move(op, pkmn, 4)
+  end
+
+  if mode >= MODE_BENCH then -- todo: convert to > (gt), saves a character
+  end
+  if mode >= MODE_EDIT then -- todo: convert to > (gt), saves a character
+  end
+
+  -- for stat in all(f_zobj[[
+  --    ;name,aTACK, key,attack
+  --   ;;name,dEFNS, key,defense
+  --   ;;name,sPaTK, key,specialattack
+  --   ;;name,sPdFN, key,specialdefense
+  --   ;;name,sPEED, key,speed
+  -- ]]) do
+  --   local text = stat.name..": "..f_prefix_zero(pkmn[stat.key], 3).." +1"
+  --   if pkmn.stages then
+  --     text ..= " "..(pkmn.stages[stat.key] > 0 and "+"..pkmn.stages[stat.key] or (pkmn.stages[stat.key] < 0 and "-"..pkmn.stages[stat.key]) or "")
+  --   end
+  --   add(op, {text=text})
+  -- end
+
+  --   add(op, {text="eVASN: " .. f_prefix_zero(pkmn.evasion*100\1,  3) .. ""})
+  --   add(op, {text="aCURY: " .. f_prefix_zero(pkmn.accuracy*100\1, 3) .. ""})
+  --   add(op, {text="cRITL: " .. f_prefix_zero(pkmn.crit/16*100\1,  3) .. ""})
 
   if mode >= MODE_ACTIVE then -- todo: convert to > (gt), saves a character
     add(op, {text="eVAS: " .. f_prefix_zero(pkmn.evasion*100\1,  3) .. "%"})
     add(op, {text="aCUR: " .. f_prefix_zero(pkmn.accuracy*100\1, 3) .. "%"})
     add(op, {text="cRIT: " .. f_prefix_zero(pkmn.crit/16*100\1,  3) .. "%"})
-  end
-
-  if mode >= MODE_EDIT then
-    add(op, {text="pOKEMON mOVES", header=true})
-    add(op, {text="mOVE1: "..c_move_names[pkmn[1].id]})
-    add(op, {text="mOVE2: "..c_move_names[pkmn[2].id]})
-    add(op, {text="mOVE3: "..c_move_names[pkmn[3].id]})
-    add(op, {text="mOVE4: "..c_move_names[pkmn[4].id]})
-    f_add_stat_move(op, pkmn, 1)
-    f_add_stat_move(op, pkmn, 2)
-    f_add_stat_move(op, pkmn, 3)
-    f_add_stat_move(op, pkmn, 4)
   end
 
   if mode >= MODE_ACTIVE then
@@ -256,22 +327,24 @@ end $$
 -- dp and dt drawing for ui
 ---------------------------------------------
 |[f_dt_editteam]| function(i, is_sel)
-  f_print_top("tEAM",f_getsel'g_grid_pickedit'+1,": sPOT",f_getsel'g_grid_pickspot'+1)
+  local spotstr = "sPOT"..(f_getsel'g_grid_pickspot'+1) -- ,": sPOT",f_getsel'g_grid_pickspot'+1)
+
+  f_print_top("eDIT ", spotstr)
   local pkmn = f_get_party_pkmn(f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot')
   f_print_bot("#", pkmn.num_str, " ", pkmn.name)
 end $$
 
 |[f_dt_editstat]| function(i, is_sel)
-  local prefix = "sPOT"..f_getsel'g_grid_pickspot'+1
+  local prefix = "eDIT" -- ..f_getsel'g_grid_pickspot'+1
   local pkmn = f_get_party_pkmn(f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot')
-  if f_getsel'g_grid_editstat' < 4 then f_print_top(prefix, ": mOVE", f_getsel'g_grid_editstat'+1)
-  elseif f_getsel'g_grid_editstat' == 4 then f_print_top(prefix, ": iTEM")
-  elseif f_getsel'g_grid_editstat' == 5 then f_print_top(prefix, ": gENDER")
-  elseif f_getsel'g_grid_editstat' == 6 then f_print_top(prefix, ": vIEW")
-  elseif f_getsel'g_grid_editstat' == 7 then f_print_top(prefix, ": dELETE")
+  local spotstr = "sPOT"..(f_getsel'g_grid_pickspot'+1)
+  if f_getsel'g_grid_editstat' == 0 then f_print_top("vIEW: "..spotstr)
+  elseif f_getsel'g_grid_editstat' == 1 then f_print_top("eDIT iTEM")
+  elseif f_getsel'g_grid_editstat' == 6 then f_print_top(prefix, " iTEM")
+  elseif f_getsel'g_grid_editstat' == 7 then f_print_top(prefix, " gENDER")
+  else f_print_top(prefix, " mOVE", f_getsel'g_grid_editstat'-1)
   end
 
-  -- f_print_top("eDIT: sPOT ", f_getsel'g_grid_pickspot'+1)
   local pkmn = f_get_party_pkmn(f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot')
   f_print_bot("#", pkmn.num_str, " ", pkmn.name)
 end $$
@@ -313,8 +386,15 @@ end $$
 -- TODO: is this better being inside an "op" function?
 |[f_dt_editmove_template]| function(move, method)
   local pp, pow, acc, typ = f_get_move_texts(move)
-  f_print_top(method, ": ", typ)
-  f_print_bot(pp, "PP ", pow, "P ", acc, "A")
+  local ind = f_getsel'g_grid_editmovebot'+1
+
+  f_print_top("eDIT mOVE"..ind)
+  f_print_bot(method..": "..typ)
+  --f_print_bot("pW:"..pow.." aC:"..acc)
+  --add(preview_op, {text=})
+
+  -- f_print_top(method, " ", typ)
+  -- f_print_bot(pp, "PP ", pow, "P ", acc, "A")
 end $$
 
 |[f_dt_editmove]| function()
@@ -322,6 +402,9 @@ end $$
   local movenum = pkmn.possible_moves[f_getsel'g_grid_editmove'+1]
   local move = c_moves[movenum]
   f_dt_editmove_template(move, pkmn.possible_moves_method[movenum])
+end $$
+
+|[f_dt_editmovebot]| function()
 end $$
 
 |[f_prefix_space]| function(num, len)
@@ -349,8 +432,8 @@ end $$
     namestr, type1, type2 = f_strtoq(namestr), f_strtoq(type1), f_strtoq(type2)
   end
 
-  f_print_top("bROWSING")
-  f_print_bot("#", f_prefix_zero(pkmn.num, 3), " ", namestr)
+  f_print_top("vIEW ", namestr)
+  f_print_bot("pICODEX #", f_prefix_zero(pkmn.num, 3))
   --f_print_bot("fROM ", c_pkmn_names[pkmn.prevolve])
   -- f_print_bot(type1, " ", type2)
 end $$
@@ -368,7 +451,8 @@ end $$
     namestr = f_strtoq(namestr)
   end
 
-  f_print_top("tEAM",f_getsel'g_grid_pickedit'+1,": sPOT",f_getsel'g_grid_pickspot'+1)
+  local spotstr = "sPOT"..(f_getsel'g_grid_pickspot'+1)
+  f_print_top("eDIT ",spotstr)
   f_print_bot("#", f_prefix_zero(pkmn.num, 3), " ", namestr)
 end $$
 
@@ -380,7 +464,7 @@ end $$
     add(pkstr_arr, sub(c_pkmn_names[pkmn.num], 1, pkstr_lens[ii+1]))
   end
 
-  f_print_top("eDIT: tEAM", f_getsel'g_grid_pickedit'+1) -- TODO: fixme
+  f_print_top("eDIT tEAM", f_getsel'g_grid_pickedit'+1) -- TODO: fixme
   f_print_bot(pkstr_arr[1], "-", pkstr_arr[2], "-", pkstr_arr[3], "-", pkstr_arr[4], "-", pkstr_arr[5], pkstr_arr[6])
 end $$
 
@@ -391,8 +475,8 @@ end $$
   local name = c_trnr_names[f_getsel'g_grid_picktrnr'+1]
   name = disabled and f_strtoq(name) or name
 
-  f_print_top(toggle and "\f4" or "\f2", "pLAYER: tEAM", f_getsel'g_grid_pickedit'+1)
-  f_print_bot(toggle and "\f2" or "\f4", "lEAGUE: ", name)
+  f_print_top(toggle and "\f4" or "\f2", "pLR1: tEAM", f_getsel'g_grid_pickleag'+1)
+  f_print_bot(toggle and "\f2" or "\f4", "cOMP: ", name)
 end $$
 
 |[f_dt_batstats]| function()
@@ -400,23 +484,25 @@ end $$
   local p = ind < 6 and p0 or p1 == p0 and p2 or p1
   local name = c_trnr_names[f_getsel'g_grid_picktrnr'+1]
   local pkmn = p.team[ind%6+1]
-  f_print_top(p.name, ": sPOT", ind%6+1)
-  f_print_bot("#", f_prefix_zero(pkmn.num, 3), " ", pkmn.name)
+  f_print_bot(p.name, ": sPOT", ind%6+1)
+  f_print_top("vIEW ", pkmn.name)
 end $$
 
 |[f_dt_switch]| function()
   local ind = f_getsel'g_grid_battle_switch'
   local name = c_trnr_names[f_getsel'g_grid_picktrnr'+1]
   local pkmn = p0.team[ind%6+1]
-  f_print_top("sWITCH: sPOT", ind%6+1)
-  f_print_bot("#", f_prefix_zero(pkmn.num, 3), " ", pkmn.name)
+  f_print_top("sWAP ", pkmn.name)
+  --f_print_bot("#", f_prefix_zero(pkmn.num, 3), " ", pkmn.name)
+  local p = ind < 6 and p0 or p1 == p0 and p2 or p1
+  f_print_bot(p.name, ": sPOT", ind%6+1)
 end $$
 
 |[f_dt_versus]| function()
   local toggle = g_cg_m.name == 'g_grid_pickplr1'
 
-  f_print_top(toggle and "\f4" or "\f2", "pLAYR1: tEAM", f_getsel'g_grid_pickplr1'+1)
-  f_print_bot(toggle and "\f2" or "\f4", "pLAYR2: tEAM", f_getsel'g_grid_pickplr2'+1)
+  f_print_top(toggle and "\f4" or "\f2", "pLR1: tEAM", f_getsel'g_grid_pickplr1'+1)
+  f_print_bot(toggle and "\f2" or "\f4", "pLR2: tEAM", f_getsel'g_grid_pickplr2'+1)
 end $$
 
 |[f_dp_title]| function()
@@ -438,15 +524,15 @@ end
     f_add_to_ui_stack(g_grid_battle_movesel)
   end})
 
-  add(op, {text="sTATS", select=function()
-    f_add_to_ui_stack(g_grid_battle_stats)
-  end})
-
-  add(op, {text="sWITCH", select=function()
+  add(op, {text="sWAP", select=function()
     f_add_to_ui_stack(g_grid_battle_switch)
   end})
 
-  add(op, {text="gIVEuP", select=function()
+  add(op, {text="vIEW", select=function()
+    f_add_to_ui_stack(g_grid_battle_stats)
+  end})
+
+  add(op, {text="rUN", select=function()
     f_pop_ui_stack() f_pop_ui_stack() f_pop_ui_stack()
     f_add_to_ui_stack(g_grid_battle_results)
   end})
@@ -610,12 +696,12 @@ end $$
 end $$
 
 |[f_s_versusbegin]| function()
-  f_start_battle("pLAYR1", "pLAYR2", f_team_party(f_getsel'g_grid_pickplr1'), f_team_party(f_getsel'g_grid_pickplr2'))
+  f_start_battle("pLR1", "pLR2", f_team_party(f_getsel'g_grid_pickplr1'), f_team_party(f_getsel'g_grid_pickplr2'))
   f_add_to_ui_stack(g_grid_battle_select)
 end $$
 
 |[f_s_batbegin]| function()
-  f_start_battle("pLAYER", c_trnr_names[f_getsel'g_grid_picktrnr'+1], f_team_party(f_getsel'g_grid_pickleag'), f_team_league(f_getsel'g_grid_picktrnr'+1))
+  f_start_battle("pLR1", c_trnr_names[f_getsel'g_grid_picktrnr'+1], f_team_party(f_getsel'g_grid_pickleag'), f_team_league(f_getsel'g_grid_picktrnr'+1))
   f_add_to_ui_stack(g_grid_battle_select)
 end $$
 
@@ -630,16 +716,19 @@ end $$
 |[f_s_editpkmn]| function()
   f_save_party_pkmn(f_mkpkmn(f_getsel'g_grid_editpkmn', true, rnd(2)\1, 0, 5, 6, 7, 8), f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot')
   f_pop_ui_stack()
+  g_preview_timer = 20
+  return f_getsel'g_grid_editpkmn'
 end $$
 
 |[f_s_editstat]| function() gridpo[f_getsel'g_grid_editstat'+1].select() end $$
+|[f_s_editmovebot]| function() gridpo[f_getsel'g_grid_editmovebot'+1].select() end $$
 |[f_s_battle]|   function()
   gridpo[f_getsel'g_grid_battle_select'+1].select()
 end $$
 
 |[f_s_editmove]| function()
   local pkmn = f_get_party_pkmn(f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot')
-  pkmn[f_getsel'g_grid_editstat'+1].pid = f_getsel'g_grid_editmove'+1
+  pkmn[f_getsel'g_grid_editmovebot'+1].pid = f_getsel'g_grid_editmove'+1
   f_save_party_pkmn(pkmn, f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot')
   f_pop_ui_stack()
 end $$
@@ -676,14 +765,17 @@ f_zcall(f_create_gridpair, [[
   ;top_edit      ;,2 ,2 ,2 ,2  ,30 ,20
   ;top_editteam  ;,3 ,2 ,2 ,2  ,20 ,20
   ;top_pkstat    ;,1 ,4 ,2 ,4  ,60 ,9
+  ;top_pkstatbig ;,1 ,6 ,2 ,5  ,60 ,9
   ;top_text_grid ;,2 ,4 ,2 ,4  ,30 ,9
   ;top_title     ;,1 ,1 ,2 ,2  ,60 ,40
   ;top_battle    ;,1 ,1 ,2 ,2  ,60 ,40
   ;top_battle2   ;,1 ,2 ,2 ,2  ,60 ,20
   ;bot_4x4       ;,2 ,2 ,2 ,44 ,30 ,9
   ;bot_info      ;,1 ,1 ,2 ,45 ,60 ,16
+  ;bot_ignore    ;,1 ,1 ,2 ,200 ,60 ,16
+  ;top_newstat   ;,1 ,6 ,2 ,4  ,60 ,9
 
-  -- name                  maingridspec     infogridspec    infogriddraw    main opfunc        select func       leave func      lrfunc        opfunc params
+  -- name                  maingridspec     infogridspec    infogriddraw    main opfunc        select func       leave func      lrbasegrid        opfunc params
   ;;,g_grid_title          ,~bot_4x4        ,~top_title     ,~f_dp_title    ,~f_op_title       ,~f_s_title       ,~f_l_title     ,~c_no
 
   ;;,g_grid_browse         ,~top_browse     ,~bot_info      ,~f_dt_browse   ,~f_op_browse      ,~f_s_browse      ,~f_l_browse    ,~c_no
@@ -691,10 +783,10 @@ f_zcall(f_create_gridpair, [[
   ;;,g_grid_previewpkmn    ,~top_title      ,~bot_info      ,~f_dt_browse   ,~f_op_prevpk      ,~f_s_pkstat      ,~f_l_browse    ,g_grid_browse
 
   ;;,g_grid_statbrowse     ,~top_pkstat     ,~bot_info      ,~f_dt_browse   ,~f_op_statbrowse  ,~f_s_pkstat      ,~f_l_browse    ,g_grid_browse
-  ;;,g_grid_statedit       ,~top_pkstat     ,~bot_info      ,~f_dt_editstat ,~f_op_statedit    ,~f_s_statedit    ,~f_l_browse    ,g_grid_pickspot
   ;;,g_grid_statbattle     ,~top_pkstat     ,~bot_info      ,~f_dt_batstats ,~f_op_statbattle  ,~f_s_statbat     ,~f_l_browse    ,g_grid_battle_stats
 
-  ;;,g_grid_editstat       ,~top_text_grid  ,~bot_info      ,~f_dt_editstat ,~f_op_editstat    ,~f_s_editstat    ,~f_l_browse    ,~c_no
+  ;;,g_grid_editstat       ,~bot_4x4        ,~top_pkstat    ,~f_nf          ,~f_op_editstat    ,~f_s_editstat    ,~f_l_browse    ,~c_no
+  ;;,g_grid_editmovebot    ,~bot_4x4        ,~top_pkstat    ,~f_nf          ,~f_op_editmovebot ,~f_s_editmovebot ,~f_l_browse    ,~c_no
   ;;,g_grid_editmove       ,~top_text_grid  ,~bot_info      ,~f_dt_editmove ,~f_op_editmove    ,~f_s_editmove    ,~f_l_browse    ,~c_no
   ;;,g_grid_edititem       ,~top_text_grid  ,~bot_info      ,~f_dt_editstat ,~f_op_edititem    ,~f_s_edititem    ,~f_l_browse    ,~c_no
 

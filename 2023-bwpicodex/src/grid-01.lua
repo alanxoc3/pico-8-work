@@ -93,14 +93,22 @@ end $$
     sel = evalfunc(sel, sel\w*w, w-1, btnp'0', btnp'1', 1)
   end
 
-  sel = evalfunc(sel, sel%w,   (#gridobj-1)\w*w, btnp'2', btnp'3', w)
-  if sel ~= prevsel then
-    -- when the cursor has changed, make the ui change if needed
-    f_refresh_top()
+  if lrbasegrid then
+    sel = -1
+    dir = (btnp'3' and 1 or 0) - (btnp'2' and 1 or 0)
+    view += dir
+  else
+    sel = evalfunc(sel, sel%w,   (#gridobj-1)\w*w, btnp'2', btnp'3', w)
+
+    if sel ~= prevsel then
+      -- when the cursor has changed, make the ui change if needed
+      f_refresh_top()
+    end
+
+    if sel\w-vh+1 > view then view = sel\w-vh+1 end
+    if sel\w      < view then view = sel\w      end
   end
 
-  if sel\w-vh+1 > view then view = sel\w-vh+1 end
-  if sel\w      < view then view = sel\w      end
   view = mid(0, view, (#gridobj-1)\w-vh+1)
 
   if btnp'4' then
