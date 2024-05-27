@@ -6,6 +6,7 @@
 -- OP FUNCTIONS - DATA FOR UI
 -----------------------------
 
+-- TODO: i could add another ui screen for confirming you want to select a pokemon. but its fine if i dont do this too.
 -- TODO: stretch goal: add tiny descriptions for items
 
 -- This updates the lock variables, which determine if a pokemon/item/move is unlocked.
@@ -169,15 +170,14 @@ end $$
 
   for key in all(f_zobj[[,attack,defense,specialattack,specialdefense,speed]]) do
     local txt = c_statmod_names[key].." "..f_prefix_zero(pkmn[key], 3)
-    local stage = pkmn.stages and pkmn.stages[key] or 0
+    local stage = pkmn.stages[key]
     txt ..= (stage < 0 and "-" or "+")..abs(stage)
     add(op, {text=txt})
   end
 
-  if is_battle then
-    for key in all(f_zobj[[,crit,evasion,accuracy]]) do
-      add(op, {text=c_statmod_names[key].." 123%"})
-    end
+  for key in all(f_zobj[[,crit,evasion,accuracy]]) do
+    local stage = pkmn.stages[key]
+    add(op, {text=c_statmod_names[key].." "..stage.."%"})
   end
 
   -- add(op, {text="aT/dF 123/096"})
@@ -584,7 +584,7 @@ end $$
 end $$
 
 |[f_s_editpkmn]| function()
-  f_save_party_pkmn(f_mkpkmn(f_getsel'g_grid_editpkmn', true, rnd(2)\1, 0, 5, 6, 7, 8), f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot')
+  f_save_party_pkmn(f_mkpkmn(f_getsel'g_grid_editpkmn', c_pokemon[f_getsel'g_grid_editpkmn'], true, rnd(2)\1, I_NONE, 5, 6, 7, 8), f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot')
   f_pop_ui_stack()
 end $$
 

@@ -7,9 +7,12 @@
   -- pkmn.item = pkmn.default_item
   -- todo: moves could change as you unlock them. so all 3s might not be the best approach. or at least i should call getparty then saveparty
 
-|[f_mkpkmn]| function(ind, respect_locks, gender_bit, item, ...)
+|[f_mkpkmn]| function(ind, base, respect_locks, gender_bit, item, ...)
+  -- base is the parent table. at the start of a battle and when loading for edit, base is c_pokemon[ind].
+  -- when a pokemon becomes active, it calls mkpkmn with base being the bench/initial battle stats.
+  -- hp/item/major changes must happen on "base"
   local pkmn = f_zobj([[
-    num,@, gender_bit,@, item,@, valid,@,
+    num,@, base,@, gender_bit,@, item,@, valid,@,
     seen_moves, #,            -- A move to boolean map that is used to disable things on the move edit screen and populate edit_moves.
     major,      C_MAJOR_NONE, -- The major status condition in pokemon battles: fainted, burned, frozen, paralyzed, poisoned, sleeping
     gender,     0,            -- This gets populated from gender bit & pkmn.genders. TODO: this line could be removed if pressed for compression!
@@ -26,8 +29,8 @@
       crit,           0,
       evasion,        0,
       accuracy,       0; -- TODO: delete the semicolon
-  ]], ind, gender_bit, item % C_LEN_ITEMS, ind < P_NONE)
-  pkmn = setmetatable(pkmn, {__index=c_pokemon[ind]}) -- none is set too.
+  ]], ind, base, gender_bit, item % C_LEN_ITEMS, ind < P_NONE)
+  pkmn = setmetatable(pkmn, {__index=base}) -- none is set too.
   pkmn.gender     = pkmn.genders[pkmn.gender_bit%#pkmn.genders+1]
 
   local moves = {...}
@@ -65,7 +68,7 @@ end $$
         break
       end
     end
-    add(team, f_mkpkmn(pkmn_ind, false, 1, c_pokemon[pkmn_ind].default_item, 5, 6, 7, last_move))
+    add(team, f_mkpkmn(pkmn_ind, c_pokemon[pkmn_ind], false, 1, c_pokemon[pkmn_ind].default_item, 5, 6, 7, last_move))
   end
 
   return team
@@ -75,7 +78,7 @@ end $$
   local num_loc = S_PARTY1+party_num*42+spot_num*7
   local pkmn_num = min(P_NONE, @num_loc)
   if pkmn_num < P_NONE and not c_pokemon[pkmn_num].lock then pkmn_num = P_NONE end
-  local pkmn = f_mkpkmn(pkmn_num, true, @(num_loc+1), @(num_loc+2), @(num_loc+3), @(num_loc+4), @(num_loc+5), @(num_loc+6))
+  local pkmn = f_mkpkmn(pkmn_num, c_pokemon[pkmn_num], true, @(num_loc+1), @(num_loc+2), @(num_loc+3), @(num_loc+4), @(num_loc+5), @(num_loc+6))
   f_save_party_pkmn(pkmn, party_num, spot_num)
   return pkmn
 end $$

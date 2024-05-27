@@ -444,8 +444,7 @@ P_NONE:       252 # this is a dummy pkmn for ui things
 P_EMPTY:      253 # this doesn't point to anything, for evolutions to have nothing to point to
 
 # ----------------------------- move numbers - 4508 bytes. It took lots of compute to generate this. Order matters, a bad order wastes lots of space.
-M_NONE:         0  # ___ -- TODO: should none be 252? like the p_none is 252. idk. And idk if it matters, something to think about.
-M_STRUGGLE:     0  # struggl i might move this to be 252
+M_STRUGGLE:     0  # struggle
 M_ACID:         1  # acid
 M_ACIDARMOR:    2  # acidarm
 M_BARRAGE:      3  # barrage
@@ -697,3 +696,4 @@ M_SACREDFIRE:   248  # sacrfir
 M_SHARPEN:      249  # sharpen
 M_SKETCH:       250  # sketch
 M_TM05:         251  # tm05
+M_NONE:         252  # ___ -- TODO: should none be 252? like the p_none is 252. idk. And idk if it matters, something to think about.

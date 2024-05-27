@@ -6,14 +6,14 @@ f_zcall(poke, [[
 ]])
 
 cls() -- this is just a visual thing when the game starts up. TODO: i can remove it if i want. probably should
-|[c_move_names]|        f_zobj[["0,______;,aCID,aCIDaR,bARAGE,bONcLB,bIND,cLAMP,mOONlT,lECHsD,eXTRsP,sNCbOM,tWInDL,tHNsHK,gLARE,gILOTN,hYPfNG,jMPkCK,kINSIS,lOCKoN,lOVkIS,mACpNC,vICgRP,sPIcAN,sPIKES,sPORE,cOTsPR,pRESNT,vItHRW,cMTpNC,dRLpCK,sNDaTK,aGILTY,fRYaTK,qIKaTK,fALsWP,gROWL,hEALbL,sING,pOUND,mINMIZ,tAILwP,dBLsLP,mEGhRN,bONRNG,cONVR1,cONVR2,sPARK,mLKdRK,mORsUN,nGTsHD,oCTZOK,pINmIS,pWDsNW,sUPfNG,fIRsPN,pSNgAS,bARIER,mEDTAT,fTRsGT,hYPNOS,pSYbEM,lITsCR,sAFgRD,pETdNC,cHARM,sYNTHS,sWTsCN,rAZlEF,pSNpWD,sLPpWD,aBSORB,sTNsPR,fLAIL,cONFSN,sLAM,cONSTR,aMNESA,bUBBLE,sPLASH,hYDpMP,mNDrED,mIST,hRNaTK,sPIwEB,dBLkCK,sWTkIS,mTLcLW,tRFORM,tRIKCK,gUST,tWISTR,cRBhAM,dIZpNC,sLUDGE,pAINsP,dSTbND,hAZE,lICK,pERsNG,mEANlK,cNFrAY,cRScHP,sMOG,kARcHP,eMBER,sMKsCR,bELdRM,bEATUP,sCRTCH,sLASH,aNCpWR,lEER,bITE,oUTrGE,sCRYfC,tHRASH,sTOMP,rOKsLD,mAGTUD,rOCtHR,hARDEN,bONrSH,hIJkCK,rECOVR,aERbLS,hRNdRL,dRGrAG,sFbOIL,dRGbRE,sLFdES,eXPLSN,eGGbMB,sLGbMB,gIGdRN,mEGdRN,sWRdNC,cUT,fRYcTR,tHIEF,dIG,rOLOUT,dFNcRL,dETECT,sOLbEM,rAIdNC,fLASH,pSYCIC,pSYCuP,dRMeAT,nGTMAR,sHDbAL,zAPcAN,tHUNDR,tHNbLT,iRNtAL,sTRENG,rOCsMS,hEDbUT,mUDsLP,sUNdAY,pROTCT,dBLtEM,sLPtLK,cURSE,hIDpWR,sWAGER,fRUSTR,rETURN,tOXIC,sNORE,rEST,eNDURE,aTRACT,bIDE,mIMIC,sUBSTU,rAGE,dBLeDG,tAKdWN,sKLbAS,bODsLM,wTRgUN,bBLbEM,iCEbEM,bLIZRD,iCYwND,sURF,wRLPOL,wTRFAL,sWIFT,pAYDAY,tRIaTK,rFLECT,tHNwAV,tELPRT,pSYwAV,mETRNM,cOUNTR,mEGpNC,sEITOS,sUBMIS,mEGkCK,dYNpNC,fIRpNC,tHNpNC,iCEpNC,fIRbLS,fLMtHR,fISURE,eARTqK,sNDsTR,hYPbEM,rOAR,sTLwNG,fLY,rAZwND,wRLwND,sKYaTK,wNGaTK,pECK,mIRMOV,fNTaTK,wITdRW,rAPsPN,sUPsNC,aURbEM,mIRcOT,pSNsTG,sPITE,cRUNCH,pURSUT,sTRsHT,lECHlF,bTNpAS,dISABL,sCRECH,tACKLE,fLMwEL,rEVRSL,fRYsWP,fCSeNG,fORsGT,lOWkCK,rOLkCK,eNCORE,wRAP,gROWTH,vINwHP,sACfIR,sHRPEN,sKETCH,tM05,sTRUGL,nONE,nONE,nONE"]] $$
+|[c_move_names]|        f_zobj[["0,sTRUGL;,aCID,aCIDaR,bARAGE,bONcLB,bIND,cLAMP,mOONlT,lECHsD,eXTRsP,sNCbOM,tWInDL,tHNsHK,gLARE,gILOTN,hYPfNG,jMPkCK,kINSIS,lOCKoN,lOVkIS,mACpNC,vICgRP,sPIcAN,sPIKES,sPORE,cOTsPR,pRESNT,vItHRW,cMTpNC,dRLpCK,sNDaTK,aGILTY,fRYaTK,qIKaTK,fALsWP,gROWL,hEALbL,sING,pOUND,mINMIZ,tAILwP,dBLsLP,mEGhRN,bONRNG,cONVR1,cONVR2,sPARK,mLKdRK,mORsUN,nGTsHD,oCTZOK,pINmIS,pWDsNW,sUPfNG,fIRsPN,pSNgAS,bARIER,mEDTAT,fTRsGT,hYPNOS,pSYbEM,lITsCR,sAFgRD,pETdNC,cHARM,sYNTHS,sWTsCN,rAZlEF,pSNpWD,sLPpWD,aBSORB,sTNsPR,fLAIL,cONFSN,sLAM,cONSTR,aMNESA,bUBBLE,sPLASH,hYDpMP,mNDrED,mIST,hRNaTK,sPIwEB,dBLkCK,sWTkIS,mTLcLW,tRFORM,tRIKCK,gUST,tWISTR,cRBhAM,dIZpNC,sLUDGE,pAINsP,dSTbND,hAZE,lICK,pERsNG,mEANlK,cNFrAY,cRScHP,sMOG,kARcHP,eMBER,sMKsCR,bELdRM,bEATUP,sCRTCH,sLASH,aNCpWR,lEER,bITE,oUTrGE,sCRYfC,tHRASH,sTOMP,rOKsLD,mAGTUD,rOCtHR,hARDEN,bONrSH,hIJkCK,rECOVR,aERbLS,hRNdRL,dRGrAG,sFbOIL,dRGbRE,sLFdES,eXPLSN,eGGbMB,sLGbMB,gIGdRN,mEGdRN,sWRdNC,cUT,fRYcTR,tHIEF,dIG,rOLOUT,dFNcRL,dETECT,sOLbEM,rAIdNC,fLASH,pSYCIC,pSYCuP,dRMeAT,nGTMAR,sHDbAL,zAPcAN,tHUNDR,tHNbLT,iRNtAL,sTRENG,rOCsMS,hEDbUT,mUDsLP,sUNdAY,pROTCT,dBLtEM,sLPtLK,cURSE,hIDpWR,sWAGER,fRUSTR,rETURN,tOXIC,sNORE,rEST,eNDURE,aTRACT,bIDE,mIMIC,sUBSTU,rAGE,dBLeDG,tAKdWN,sKLbAS,bODsLM,wTRgUN,bBLbEM,iCEbEM,bLIZRD,iCYwND,sURF,wRLPOL,wTRFAL,sWIFT,pAYDAY,tRIaTK,rFLECT,tHNwAV,tELPRT,pSYwAV,mETRNM,cOUNTR,mEGpNC,sEITOS,sUBMIS,mEGkCK,dYNpNC,fIRpNC,tHNpNC,iCEpNC,fIRbLS,fLMtHR,fISURE,eARTqK,sNDsTR,hYPbEM,rOAR,sTLwNG,fLY,rAZwND,wRLwND,sKYaTK,wNGaTK,pECK,mIRMOV,fNTaTK,wITdRW,rAPsPN,sUPsNC,aURbEM,mIRcOT,pSNsTG,sPITE,cRUNCH,pURSUT,sTRsHT,lECHlF,bTNpAS,dISABL,sCRECH,tACKLE,fLMwEL,rEVRSL,fRYsWP,fCSeNG,fORsGT,lOWkCK,rOLkCK,eNCORE,wRAP,gROWTH,vINwHP,sACfIR,sHRPEN,sKETCH,tM05,______"]] $$
 |[c_trnr_names]|        split"yOUNGS,sAGE,fALKNR,gRUNT,bUGcTR,bUGSY,pKMfAN,bEAUTY,wITNEY,kIMINO,mEDIUM,mORTY,pOLICE,kARATE,cHUCK,gENTLE,sAILOR,jASMIN,rOCKET,sKIER,pRYCE,sCIENT,tWINS,cLAIR,nERD,cAMPER,bROCK,sCHOOL,sWIMER,mISTY,jUGLER,gUITAR,lTsURG,hIKER,lASS,eRIKA,bIKER,pICNIK,jANINE,mANIAC,pSYCIC,sABRIN,fISHER,bREATH,bLAINE,bIRDkP,cOOLtR,bLUE,lEGEND,sILVER,wILL,kOGA,bRUNO,kAREN,lANCE,rED,gOLD,hORDE" $$
 |[c_type_names]|        f_zobj[["0,nONE;,nORMAL,fIRE,fIGHTN,wATER,pOISON,eLECTR,gROUND,gRASS,fLYING,iCE,bUG,pSYCIC,rOCK,dRAGON,gHOST,dARK,sTEEL,bIRD"]] $$
-|[c_item_names]|        f_zobj[["0,nONE;,pNKbOW,cHRcOL,bLKbLT,mYSwTR,pSNbRB,mAGNET,sOsAND,mIRAsD,sHbEAK,nVRiCE,sLVpWD,tWsPON,hRDsTN,dRAGsC,sPELtG,bLKgLS,mTLcOT,pLKbOW,bRIpWD,fOCbND,kINGrK,lEFToV,qIKcLW,sCOPlN,aMcOIN,lITbAL,lUKpNC,mTLpWD,sTICK,tHKcLB,bERSRK,bERRY,gLDbRY,bTRbRY,mNTbRY,bRNbRY,iCEbRY,pARbRY,pSNbRY,mIRbRY,mYSbRY"]] $$
+|[c_item_names]|        f_zobj[["0,______;,pNKbOW,cHRcOL,bLKbLT,mYSwTR,pSNbRB,mAGNET,sOsAND,mIRAsD,sHbEAK,nVRiCE,sLVpWD,tWsPON,hRDsTN,dRAGsC,sPELtG,bLKgLS,mTLcOT,pLKbOW,bRIpWD,fOCbND,kINGrK,lEFToV,qIKcLW,sCOPlN,aMcOIN,lITbAL,lUKpNC,mTLpWD,sTICK,tHKcLB,bERSRK,bERRY,gLDbRY,bTRbRY,mNTbRY,bRNbRY,iCEbRY,pARbRY,pSNbRY,mIRbRY,mYSbRY"]] $$
 -- TODO: I think Pokemon names can actually go up to 9 characters now. If the battle UI works out like that, then ya. change the names
 |[c_pkmn_names]|        f_zobj[["0,mISINGNO;,bULBSAUR,iVYSAUR,vENUSAUR,cHARMAND,cHARMELN,cHARZARD,sQUIRTLE,wARTORTL,bLASTOIS,cATERPIE,mETAPOD,bUTRFREE,wEEDLE,kAKUNA,bEEDRILL,pIDGEY,pIDGEOTO,pIDGEOT,rATTATA,rATICATE,sPEAROW,fEAROW,eKANS,aRBOK,pIKACHU,rAICHU,sNDSHREW,sNDSLASH,nIDORANF,nIDORINA,nIDOQUEN,nIDORANM,nIDORINO,nIDOKING,cLEFAIRY,cLEFABLE,vULPIX,nINETALE,jIGLYPUF,wIGLYTUF,zUBAT,gOLBAT,oDDISH,gLOOM,vILEPLUM,pARAS,pARASECT,vENONAT,vENOMOTH,dIGLETT,dUGTRIO,mEOWTH,pERSIAN,pSYDUCK,gOLDUCK,mANKEY,pRIMEAPE,gROWLITH,aRCANINE,pOLIWAG,pOLWHIRL,pOLWRATH,aBRA,kADABRA,aLAKAZAM,mACHOP,mACHOKE,mACHAMP,bELSPROT,wEEPNBEL,vICTRBEL,tNTACOOL,tNTCRUEL,gEODUDE,gRAVELER,gOLEM,pONYTA,rAPIDASH,sLOWPOKE,sLOWBRO,mAGNEMIT,mAGNETON,fAFETCHd,dODUO,dODRIO,sEEL,dEWGONG,gRIMER,mUK,sHELLDER,cLOYSTER,gASTLY,hAUNTER,gENGAR,oNIX,dROWZEE,hYPNO,kRABBY,kINGLER,vOLTORB,eLECTROD,eXEGCUTE,eXEGUTOR,cUBONE,mAROWAK,hITMNLEE,hITMNCHN,lICKTUNG,kOFFING,wEEZING,rHYHORN,rHYDON,cHANSEY,tANGELA,kANGAKAN,hORSEA,sEADRA,gOLDEEN,sEAKING,sTARYU,sTARMIE,mRmIME,sCYTHER,jYNX,eLECABUZ,mAGMAR,pINSIR,tAUROS,mAGIKARP,gYARADOS,lAPRAS,dITTO,eEVEE,vAPOREON,jOLTEON,fLAREON,pORYGON,oMANYTE,oMASTAR,kABUTO,kABUTOPS,aERODACT,sNORLAX,aRTICUNO,zAPDOS,mOLTRES,dRATINI,dRAGNAIR,dRAGNITE,mEWTWO,mEW,cHIKRITA,bAYLEEF,mEGANIUM,cYNDQUIL,qUILAVA,tYPHLOSN,tOTODILE,cROCONAW,fRALGATR,sENTRET,fURRET,hOOTHOOT,nOCTOWL,lEDYBA,lEDIAN,sPINARAK,aRIADOS,cROBAT,cHINCHOU,lANTURN,pICHU,cLEFFA,iGGLYBUF,tOGEPI,tOGETIC,nATU,xATU,mAREEP,fLAAFFY,aMPHAROS,bELOSSOM,mARILL,aZUMARIL,sUDWOODO,pOLITOED,hOPPIP,sKIPLOOM,jUMPLUFF,aIPOM,sUNKERN,sUNFLORA,yANMA,wOOPER,qUAGSIRE,eSPEON,uMBREON,mURKROW,sLOWKING,mISDRVUS,uNOWN,wOBBUFET,gIRAFRIG,pINECO,fORETRES,dUNSPARC,gLIGAR,sTEELIX,sNUBBULL,gRANBULL,qWILFISH,sCIZOR,sHUCKLE,hERACROS,sNEASEL,tEDIURSA,uRSARING,sLUGMA,mAGCARGO,sWINUB,pILOSWIN,cORSOLA,rEMORAID,oCTILERY,dELIBIRD,mANTINE,sKARMORY,hOUNDOUR,hOUNDOOM,kINGDRA,pHANPY,dONPHAN,pORYGON2,sTANTLER,sMEARGLE,tYROGUE,hITMNTOP,sMOOCHUM,eLEKID,mAGBY,mILTANK,bLISSEY,rAIKOU,eNTEI,sUICUNE,lARVITAR,pUPITAR,tYRNITAR,lUGIA,hOoH,cELEBI,___,nONE,___,___"]] $$ -- celebi, (the none pokemon for UI), (empty pokemon ind that prevolve points to), unused, unused.
 |[c_gender_names]|      f_zobj[["0,nEUTER;,mALE,fEMALE"]] $$
-|[c_major_names_long]|  f_zobj[["0,nONE;,fAINTED,bURNED,fROZEN,pARALYZED,pOISONED,sLEEPING"]] $$
+|[c_major_names_long]|  f_zobj[["0,______;,fAINT,bURN,fREEZE,pARLYZ,pOISND,sLEEP"]] $$
 |[c_major_names_short]| f_zobj[["0,___;,fNT,bRN,fZN,pAR,pSN,sLP"]] $$
 |[c_movemethod_names]|  split"lEARN,tEACH,cHEAT" $$
 |[c_statmod_names]|     f_zobj[[attack,"aTACK", defense,"dEFNS", specialattack,"sPaTK", specialdefense,"sPdFN", speed,"sPEED", evasion,"eVASN", accuracy,"aCURY", crit,"cRITL"]] $$
@@ -25,7 +25,7 @@ cls() -- this is just a visual thing when the game starts up. TODO: i can remove
   -- bg1  bg2  mg   fg1  fg2
   0;,129 ,129  ,13  ,6   ,6   -- dual
   ;;,1   ,1    ,140 ,12  ,12  -- blue
-  ;;,130 ,130  ,136 ,8   ,8    -- red
+  ;;,130 ,130  ,136 ,8   ,8   -- red
   ;;,131 ,131  ,3   ,138 ,138 -- green
   ;;,0   ,0    ,8   ,10  ,10  -- htdog
   ;;,5   ,5    ,134 ,6   ,6   -- silvr
@@ -46,16 +46,14 @@ cls() -- this is just a visual thing when the game starts up. TODO: i can remove
 end $$
 
 -- STEP 2: UNPACK TYPE CHART
-for i=0,360 do -- 19*19-1 = 324 (19 types)
+for i=0,360 do -- 19*19-1 = 324 (19 types, including BIRD and NONE)
   c_types[i\19][i%19] = f_init_peek_inc()\2
 end
 
 for i=0,I_END do add(c_items,  f_zobj([[lock,~c_no,  num,@, name,@]], i, c_item_names[i] )) end
 
-c_pokemon[P_NONE] = {num_str="___", num=P_NONE, name="eMPTY", type1=18, type2=0, genders={G_NEUT}, possible_moves=f_zobj[[,0,0,0,0]]} -- TODO: is this needed, if so put in data instead
-
 -- 136 to 118. Storing data all together saves like 18 code tokens.
-for i=0,251 do -- There are 252 pkmn and 252 moves. So zipped when unpacking to save some tokens.
+for i=0,252 do -- There are 252+1 pkmn and 252+1 moves. The +1s are for empties. So zipped when unpacking to save some tokens.
   local pkmn = f_zobj([[moves_progress;,#,#,#; moves_grouped;,#,#,#; lock,~c_no, name,@, num,@, num_str,@]], c_pkmn_names[i], i, f_prefix_zero(i, 3))
 
   -- cur_list is not local just so I can save 1 token
@@ -109,7 +107,7 @@ for i=0,251 do -- There are 252 pkmn and 252 moves. So zipped when unpacking to 
   end
 end
 
-for i=0,251 do
+for i=0,252 do
   local sub = c_pokemon[i]
 
   while sub do
@@ -123,10 +121,10 @@ for i=0,251 do
   end
 end
 
-for i=0,251 do -- todo: token crunching - can move up
+for i=0,252 do -- todo: token crunching - can move up
   -- having metatables here causes me to run out of lua memory, lets keep good ol' number arrays
-  c_pokemon[i].possible_moves = f_zobj[[,0,0,0,0]]
-  c_pokemon[i].possible_moves_method = f_zobj[[0,"eMPTY"]]
+  c_pokemon[i].possible_moves = f_zobj[[,M_NONE,M_NONE,M_NONE,M_NONE]]
+  c_pokemon[i].possible_moves_method = f_zobj[[M_NONE,"eMPTY"]]
 
   for ii=1,3 do
     foreach(c_pokemon[i].moves_grouped[ii], function(v)
@@ -134,6 +132,8 @@ for i=0,251 do -- todo: token crunching - can move up
       c_pokemon[i].possible_moves_method[v] = c_movemethod_names[ii]
     end)
   end
+  -- And finally, set stats/etc on the base pokemon.
+  c_pokemon[i] = f_mkpkmn(i, c_pokemon[i], false, 0, I_NONE)
 end
 
 for i=1,57 do
@@ -168,14 +168,15 @@ end $$
   -- f_unlock(c_items, I_BERRY+1)
 
   -- these are the moves available in the default party -- TODO: Maybe I can use GROWL. I think Bulb/Chik/Charm are the 3 that can learn growl. not positive.
-  for ind in all(split'M_NONE,M_LEECHSEED,M_EMBER,M_WATERGUN,M_VINEWHIP,M_TACKLE,M_BITE,M_TAILWHIP,M_LEER,M_SMOKESCREEN,M_LIGHTSCREEN,M_SCREECH') do
+  -- Because this happens before unlocking the trainers, the default team will survive a factory reset! Which is good, though factory reset will probably not be available in the released game to save tokens and users accidentally resetting.
+  for ind in all(split'M_STRUGGLE,M_NONE,M_LEECHSEED,M_EMBER,M_WATERGUN,M_VINEWHIP,M_TACKLE,M_BITE,M_TAILWHIP,M_LEER,M_SMOKESCREEN,M_LIGHTSCREEN,M_SCREECH') do
     f_unlock(c_moves, ind)
   end
 
-  for i, ind in ipairs(split'P_BULBASAUR,P_CHARMANDER,P_SQUIRTLE,P_CHIKORITA,P_CYNDAQUIL,P_TOTODILE,P_NONE') do -- 6 starter pokemon
+  for i, ind in ipairs(split'P_BULBASAUR,P_CHARMANDER,P_SQUIRTLE,P_CHIKORITA,P_CYNDAQUIL,P_TOTODILE,P_NONE') do -- 6 starter pokemon. the none pokemon should be unlocked too
     f_unlock(c_pokemon, ind)
     if @S_NEW == 0 then
-      f_save_party_pkmn(f_mkpkmn(ind, true, rnd(2)\1, 0, 5, 5, 5, 5), 0, i-1)
+      f_save_party_pkmn(f_mkpkmn(ind, c_pokemon[ind], true, rnd(2)\1, 0, 5, 5, 5, 5), 0, i-1)
     end
   end
 
