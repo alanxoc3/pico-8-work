@@ -41,7 +41,7 @@ end $$
 
 -- TODO: dedup this if it's only used once and maybe try a btnp(i) approach instead (for loop)
 |[_update]| function()
-  --printh(stat(0)) -- TODO: remove?
+  printh(stat(0)) -- TODO: remove?
   if t() >= 1.5 then
     if g_title_timer == 0 then
       f_minisfx(SFX_LEAVE)

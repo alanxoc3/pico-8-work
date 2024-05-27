@@ -55,22 +55,36 @@ end $$
   return team
 end $$
 
-|[f_team_league]| function(trainer_num)
-  local team = {}
-  local trainer = c_trainers[trainer_num]
-  for pkmn_ind in all(trainer) do
+-- this gets called to populate a trainer and when a pokemon dies (for horde mode).
+|[f_fill_team]| function(team) -- TODO: use _ENV syntax
+  local spot = false
+  for i=6,1,-1 do
+    if not team[i] then -- TODO: make this work for fainted pkmn too. fainted would be during horde mode
+      spot = i
+    end
+  end
+
+  local pkmn_ind = team.trainer[team.fill_ind]
+  if spot and pkmn_ind then
     local last_move = 8
     local possible_moves = c_pokemon[pkmn_ind].possible_moves
     -- the "9" hear means: skip 1-4 empty move slots. 5,6,7 are the first 3 moves. 8 is the last move, which we want to check if we overwrite
     for i=9,#possible_moves do
-      if possible_moves[i] == trainer.move then
+      if possible_moves[i] == team.trainer.move then
         last_move = i
         break
       end
     end
-    add(team, f_mkpkmn(pkmn_ind, c_pokemon[pkmn_ind], false, 1, c_pokemon[pkmn_ind].default_item, 5, 6, 7, last_move))
+    team[spot] = f_mkpkmn(pkmn_ind, c_pokemon[pkmn_ind], false, 1, c_pokemon[pkmn_ind].default_item, 5, 6, 7, last_move)
+    team.fill_ind += 1
   end
+end $$
 
+|[f_team_league]| function(trainer_num)
+  local team = {fill_ind=1, trainer=c_trainers[trainer_num]}
+  for i=1,6 do
+    f_fill_team(team)
+  end
   return team
 end $$
 
