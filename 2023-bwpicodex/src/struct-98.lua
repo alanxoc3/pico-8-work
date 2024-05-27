@@ -80,8 +80,8 @@ end $$
   end
 end $$
 
-|[f_team_league]| function(trainer_num)
-  local team = {fill_ind=1, trainer=c_trainers[trainer_num]}
+|[f_team_league]| function(trainer_num, fill_ind)
+  local team = {fill_ind=fill_ind or 1, trainer=c_trainers[trainer_num]}
   for i=1,6 do
     f_fill_team(team)
   end

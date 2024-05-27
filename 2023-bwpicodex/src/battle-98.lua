@@ -17,7 +17,8 @@ end $$
   return f_zobj([[
     active,@,
     team,@,
-    name,@
+    name,@,
+    actions,#
   ]], active, team, name)
 end $$
 
@@ -26,5 +27,6 @@ end $$
 |[f_start_battle]| function(team1_name, team2_name, team1, team2)
   p1 = f_create_player(team1, team1_name)
   p2 = f_create_player(team2, team2_name)
-  p0 = p1
+  p_self = p1
+  p_other = p2
 end $$

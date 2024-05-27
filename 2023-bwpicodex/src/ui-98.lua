@@ -351,7 +351,7 @@ end $$
 
 |[f_dt_batstats]| function()
   local ind = f_getsel'g_grid_battle_stats'
-  local p = ind < 6 and p0 or p1 == p0 and p2 or p1
+  local p = ind < 6 and p_self or p_other
   local name = c_trnr_names[f_getsel'g_grid_picktrnr'+1]
   local pkmn = p.team[ind%6+1]
   f_print_bot(p.name, " sPOT", ind%6+1)
@@ -361,18 +361,18 @@ end $$
 |[f_dt_switch]| function()
   local ind = f_getsel'g_grid_battle_switch'
   local name = c_trnr_names[f_getsel'g_grid_picktrnr'+1]
-  local pkmn = p0.team[ind%6+1]
+  local pkmn = p_self.team[ind%6+1]
   f_print_top("sWAP ", pkmn.name)
   --f_print_bot("#", f_prefix_zero(pkmn.num, 3), " ", pkmn.name)
-  local p = ind < 6 and p0 or p1 == p0 and p2 or p1
+  local p = ind < 6 and p_self or p_other
   f_print_bot(p.name, " sPOT", ind%6+1)
 end $$
 
 |[f_dt_versus]| function()
   local toggle = g_cg_m.name == 'g_grid_pickplr1'
 
-  f_print_top(toggle and "\f4" or "\f2", "pLAYER1 tEAM", f_getsel'g_grid_pickplr1'+1)
-  f_print_bot(toggle and "\f2" or "\f4", "pLAYER2 tEAM", f_getsel'g_grid_pickplr2'+1)
+  f_print_top(toggle and "\f4" or "\f2", "pLAYR1 tEAM", f_getsel'g_grid_pickplr1'+1)
+  f_print_bot(toggle and "\f2" or "\f4", "pLAYR2 tEAM", f_getsel'g_grid_pickplr2'+1)
 end $$
 
 |[f_dp_title]| function()
@@ -389,24 +389,7 @@ end $$
   end
 end $$
 
-|[f_op_batsel]| function(_ENV)
-  add(op, {text="fIGHT", select=function()
-    f_add_to_ui_stack(g_grid_battle_movesel)
-  end})
-
-  add(op, {text="sWAP", select=function()
-    f_add_to_ui_stack(g_grid_battle_switch)
-  end})
-
-  add(op, {text="vIEW", select=function()
-    f_add_to_ui_stack(g_grid_battle_stats)
-  end})
-
-  add(op, {text="rUN", select=function()
-    f_pop_ui_stack() f_pop_ui_stack() f_pop_ui_stack()
-    f_add_to_ui_stack(g_grid_battle_results)
-  end})
-
+|[f_add_battle]| function(op)
   local b = function(_ENV, team, x, y, px, py, flip)
     f_roundrect(x-1+1, y+1-6+1, x+35-1, y+6+6+1, C_3)
     if hp > 0 then
@@ -429,65 +412,84 @@ end $$
 
     print(name,   x+2,   y-5+1+1, C_2, -1)
     print(c_major_names_short[major].."  "..f_prefix_zero(hp, 3), x+1+1, y+8-1+1,   C_2, -1)
-    f_draw_pkmn(num, px, py,  16, flip,  false, false, p0.active ~= _ENV)
+    f_draw_pkmn(num, px, py,  16, flip,  false, false, p_self.active ~= _ENV)
   end
 
-  add(preview_op, {draw=function() b(p2.active, p2.team,  0, 4, 39, 1, true)  end})
-  add(preview_op, {draw=function() b(p1.active, p1.team, 23, 4,  3, 1)        end})
+  add(op, {draw=function() b(p2.active, p2.team,  0, 4, 39, 1, true)  end})
+  add(op, {draw=function() b(p1.active, p1.team, 23, 4,  3, 1)        end})
+
+end $$
+
+|[f_op_batsel]| function(_ENV)
+  add(op, {text="fIGHT", select=function()
+    f_add_to_ui_stack(g_grid_battle_movesel)
+  end})
+
+  add(op, {text="sWAP", select=function()
+    f_add_to_ui_stack(g_grid_battle_switch)
+  end})
+
+  add(op, {text="vIEW", select=function()
+    f_add_to_ui_stack(g_grid_battle_stats)
+  end})
+
+  add(op, {text="rUN", select=function()
+    f_pop_ui_stack() f_pop_ui_stack() f_pop_ui_stack()
+    f_add_to_ui_stack(g_grid_battle_results)
+  end})
+
+  f_add_battle(preview_op)
 end $$
 
 |[f_op_movesel]| function(_ENV)
   for i=1,4 do
-    add(op, {text=c_move_names[p0.active[i].id]})
+    add(op, {text=c_move_names[p_self.active[i].id]})
   end
 
-  f_add_stat_move(preview_op, p0.active, f_getsel'g_grid_battle_movesel')
+  f_add_stat_move(preview_op, p_self.active, f_getsel'g_grid_battle_movesel')
 end $$
 
 |[f_op_batswitch]| function(_ENV)
   for i=1,6 do
-    local pkmn = p0.team[i]
-    local disabled = not pkmn.valid or i==p0.active.spot or pkmn.major == C_MAJOR_FAINTED
+    local pkmn = p_self.team[i]
+    local disabled = not pkmn.valid or i==p_self.active.spot or pkmn.major == C_MAJOR_FAINTED
     add(op, {disabled=disabled, draw=function(i, is_sel)
-      f_draw_pkmn(pkmn.num, 1, 1, 16, p0 == p2, false, disabled, not disabled and not is_sel)
+      f_draw_pkmn(pkmn.num, 1, 1, 16, p_self == p2, false, disabled, not disabled and not is_sel)
     end})
   end
 end $$
 
 |[f_s_batresults]| function()
   g_preview_timer = 20
-  local otherteam = p1 == p0 and p2 or p1
-  return otherteam.team[f_getsel'g_grid_battle_results'+1].num
+  return p_other.team[f_getsel'g_grid_battle_results'+1].num
 end $$
 
 |[f_op_batresults]| function(_ENV)
-  local otherteam = p1 == p0 and p2 or p1
   for i=1,6 do
-    local pkmn = otherteam.team[i]
+    local pkmn = p_other.team[i]
     local disabled = not pkmn.valid or pkmn.major == C_MAJOR_FAINTED
     add(op, {disabled=disabled, draw=function(i, is_sel)
-      f_draw_pkmn(pkmn.num, 1, 1, 16, otherteam == p2, false, disabled, not disabled and not is_sel)
+      f_draw_pkmn(pkmn.num, 1, 1, 16, false, false, disabled, not disabled and not is_sel)
     end})
   end
 
   add(preview_op, {draw=function()
-    f_print_top("cHAMP "..otherteam.name)
-    f_print_bot("lOSER "..p0.name)
+    f_print_top("cHAMP "..p_other.name)
+    f_print_bot("lOSER "..p_self.name)
   end})
 end $$
 
 |[f_op_batstats]| function(_ENV)
   for i=1,6 do
-    local pkmn = p0.team[i]
+    local pkmn = p_self.team[i]
     local disabled = not pkmn.valid
     add(op, {lrvalid=not disabled, disabled=disabled, draw=function(i, is_sel)
       f_draw_pkmn(pkmn.num, 1, 1, 16, false, false, disabled, not disabled and not is_sel)
     end})
   end
 
-  local otherteam = p1 == p0 and p2 or p1
   for i=1,6 do
-    local pkmn = otherteam.team[i]
+    local pkmn = p_other.team[i]
     local disabled = not pkmn.valid
     add(op, {lrvalid=not disabled, disabled=disabled, draw=function(i, is_sel)
       f_draw_pkmn(pkmn.num, 1, 1, 16, false, false, disabled, not disabled and not is_sel)
@@ -543,10 +545,9 @@ end $$
 end $$
 
 |[f_op_statbattle]| function(_ENV)
-  local otherpl = p1 == p0 and p2 or p1
   local bothteams = {}
-  for i=1,6 do add(bothteams, p0.team[i]) end
-  for i=1,6 do add(bothteams, otherpl.team[i]) end
+  for i=1,6 do add(bothteams, p_self.team[i]) end
+  for i=1,6 do add(bothteams, p_other.team[i]) end
 
   f_add_stat(op, bothteams[f_getsel'g_grid_battle_stats'+1], true)
 end $$
@@ -558,15 +559,14 @@ end $$
 |[f_s_statbat]| function()
   g_preview_timer = 20
   g_title_sel = not g_title_sel
-  local otherpl = p1 == p0 and p2 or p1
   local bothteams = {}
-  for i=1,6 do add(bothteams, p0.team[i]) end
-  for i=1,6 do add(bothteams, otherpl.team[i]) end
+  for i=1,6 do add(bothteams, p_self.team[i]) end
+  for i=1,6 do add(bothteams, p_other.team[i]) end
   return bothteams[f_getsel'g_grid_battle_stats'+1].num
 end $$
 
 |[f_s_versusbegin]| function()
-  f_start_battle("pLAYER1", "pLAYER2", f_team_party(f_getsel'g_grid_pickplr1'), f_team_party(f_getsel'g_grid_pickplr2'))
+  f_start_battle("pLAYR1", "pLAYR2", f_team_party(f_getsel'g_grid_pickplr1'), f_team_party(f_getsel'g_grid_pickplr2'))
   f_add_to_ui_stack(g_grid_battle_select)
 end $$
 
@@ -621,11 +621,46 @@ end $$
   g_palette %= #c_palettes
 end $$
 
-|[f_l_battle]| function() return p0.active.num end $$
+|[f_l_battle]| function() return p_self.active.num end $$
+
+|[f_s_batmove]| function()
+  add(p_self.actions, {p_self, "uSES aN aTTACK", nil})
+  f_add_to_ui_stack(g_grid_battle_actions)
+  f_s_bataction()
+end $$
+
+|[f_op_bataction]| function(_ENV)
+  add(op, {draw=function()
+    f_print_top(g_bat_self.name, " ", g_bat_self.active.name)
+    f_print_bot(g_bat_msg)
+  end})
+
+  f_add_battle(preview_op)
+end $$
+
+g_bat_msg = ""
+g_bat_self = nil
+g_bat_func = nil
+|[f_s_bataction]| function()
+  if #p_self.actions > 0 then
+    g_bat_self, g_bat_msg, g_bat_func = unpack(deli(p_self.actions))
+    local func = g_bat_func or f_nf
+    func()
+  else
+    p_self = p1
+    p_other = p2
+    f_pop_ui_stack()
+  end
+end $$
+
+|[f_l_bataction]| function()
+  return p_self.active.num
+end $$
 
 ---------------------------------------------
 -- connections
 ---------------------------------------------
+
 
 -- This needs to be called early on because there is a draw
 f_zcall(f_create_gridpair, [[
@@ -662,15 +697,17 @@ f_zcall(f_create_gridpair, [[
   ;;,g_grid_pickleag       ,~top_edit       ,~bot_info      ,~f_dt_league   ,~f_op_edit        ,~f_s_league      ,~f_l_browse    ,~c_no        ,~c_yes
   ;;,g_grid_pickplr1       ,~top_edit       ,~bot_info      ,~f_dt_versus   ,~f_op_edit        ,~f_s_versus      ,~f_l_browse    ,~c_no        ,~c_yes
   ;;,g_grid_pickplr2       ,~top_edit       ,~bot_info      ,~f_dt_versus   ,~f_op_edit        ,~f_s_versusbegin ,~f_l_browse    ,~c_no        ,~c_yes
-
   ;;,g_grid_pickspot       ,~top_editteam   ,~bot_info      ,~f_dt_editteam ,~f_op_editteam    ,~f_s_editteam    ,~f_l_browse    ,~c_no
   ;;,g_grid_picktrnr       ,~top_text_grid  ,~bot_info      ,~f_dt_league   ,~f_op_teams       ,~f_s_batbegin    ,~f_l_browse    ,~c_no
-  ;;,g_grid_battle_select  ,~bot_4x4        ,~top_battle2   ,~f_nf          ,~f_op_batsel      ,~f_s_battle      ,~f_l_battle    ,~c_no
-  ;;,g_grid_battle_movesel ,~bot_4x4        ,~top_pkstat    ,~f_nf          ,~f_op_movesel     ,~f_s_battle      ,~f_l_browse    ,~c_no
 
+  -- Battle UI
+  ;;,g_grid_battle_select  ,~bot_4x4        ,~top_battle2   ,~f_nf          ,~f_op_batsel      ,~f_s_battle      ,~f_l_battle    ,~c_no
+  ;;,g_grid_battle_movesel ,~bot_4x4        ,~top_pkstat    ,~f_nf          ,~f_op_movesel     ,~f_s_batmove     ,~f_l_browse    ,~c_no
   ;;,g_grid_battle_switch  ,~top_editteam,  ,~bot_info      ,~f_dt_switch   ,~f_op_batswitch   ,~f_nf            ,~f_l_browse    ,~c_no
   ;;,g_grid_battle_stats   ,~top_editteam,  ,~bot_info      ,~f_dt_batstats ,~f_op_batstats    ,~f_s_batstat     ,~f_l_browse    ,~c_no
   ;;,g_grid_battle_results ,~top_editteam   ,~bot_info      ,~f_nf          ,~f_op_batresults  ,~f_s_batresults  ,~f_l_browse    ,~c_no
+
+  ;;,g_grid_battle_actions ,~bot_info       ,~top_battle2    ,~f_nf          ,~f_op_bataction   ,~f_s_bataction   ,~f_l_bataction ,~c_no
 ]])
 
 g_gridstack = {} -- gotta run after the above.
