@@ -166,7 +166,7 @@ end $$
   end
 
   add(op, {text="pKMN sTATS", header=true})
-  add(op, {text="hTpNT " .. pkmn.hp .. "/" .. pkmn.hp})
+  add(op, {text="hTpNT " .. pkmn.hp .. "/" .. pkmn.maxhp})
 
   for key in all(f_zobj[[,attack,defense,specialattack,specialdefense,speed]]) do
     local txt = c_statmod_names[key].." "..f_prefix_zero(pkmn[key], 3)
@@ -351,10 +351,10 @@ end $$
 
 |[f_dt_batstats]| function()
   local ind = f_getsel'g_grid_battle_stats'
-  local p = ind < 6 and p_self or p_other
+  local player = ind < 6 and p_self or p_other
   local name = c_trnr_names[f_getsel'g_grid_picktrnr'+1]
-  local pkmn = p.team[ind%6+1]
-  f_print_bot(p.name, " sPOT", ind%6+1)
+  local pkmn = player.team[ind%6+1]
+  f_print_bot(player.name, " sPOT", ind%6+1)
   f_print_top("vIEW ", pkmn.name)
 end $$
 
@@ -364,8 +364,8 @@ end $$
   local pkmn = p_self.team[ind%6+1]
   f_print_top("sWAP ", pkmn.name)
   --f_print_bot("#", f_prefix_zero(pkmn.num, 3), " ", pkmn.name)
-  local p = ind < 6 and p_self or p_other
-  f_print_bot(p.name, " sPOT", ind%6+1)
+  local player = ind < 6 and p_self or p_other
+  f_print_bot(player.name, " sPOT", ind%6+1)
 end $$
 
 |[f_dt_versus]| function()
@@ -393,9 +393,9 @@ end $$
   local b = function(_ENV, team, x, y, px, py, flip)
     f_roundrect(x-1+1, y+1-6+1, x+35-1, y+6+6+1, C_3)
     if hp > 0 then
-      rectfill(x+1, y+3, x+1+mid(0, hp/hp*32, 32), y+6, C_2)
-      pset(x+1, y+3, C_3)
-      pset(x+1, y+6, C_3)
+      rectfill(x+1, y+3, x+1+mid(0, hp/maxhp*32, 32), y+6, C_2)
+      pset(x+1,  y+3, C_3)
+      pset(x+1,  y+6, C_3)
       pset(x+33, y+3, C_3)
       pset(x+33, y+6, C_3)
     end
@@ -415,8 +415,8 @@ end $$
     f_draw_pkmn(num, px, py,  16, flip,  false, false, p_self.active ~= _ENV)
   end
 
-  add(op, {draw=function() b(p2.active, p2.team,  0, 4, 39, 1, true)  end})
-  add(op, {draw=function() b(p1.active, p1.team, 23, 4,  3, 1)        end})
+  add(op, {draw=function() b(p_2.active, p_2.team,  0, 4, 39, 1, true)  end})
+  add(op, {draw=function() b(p_1.active, p_1.team, 23, 4,  3, 1)        end})
 
 end $$
 
@@ -434,8 +434,7 @@ end $$
   end})
 
   add(op, {text="rUN", select=function()
-    f_pop_ui_stack() f_pop_ui_stack() f_pop_ui_stack()
-    f_add_to_ui_stack(g_grid_battle_results)
+    f_end_battle(p_self)
   end})
 
   f_add_battle(preview_op)
@@ -454,7 +453,7 @@ end $$
     local pkmn = p_self.team[i]
     local disabled = not pkmn.valid or i==p_self.active.spot or pkmn.major == C_MAJOR_FAINTED
     add(op, {disabled=disabled, draw=function(i, is_sel)
-      f_draw_pkmn(pkmn.num, 1, 1, 16, p_self == p2, false, disabled, not disabled and not is_sel)
+      f_draw_pkmn(pkmn.num, 1, 1, 16, p_self == p_2, false, disabled, not disabled and not is_sel)
     end})
   end
 end $$
@@ -624,14 +623,19 @@ end $$
 |[f_l_battle]| function() return p_self.active.num end $$
 
 |[f_s_batmove]| function()
-  add(p_self.actions, {p_self, "uSES aN aTTACK", nil})
+  f_addaction(p_self, p_self, "uSES vINwHP", f_nop)
+  f_addaction(p_other, p_other, "uSES hYPfNG", f_nop)
+  p_first = p_self
+  p_last  = p_other
+  f_pop_ui_stack()
+  f_pop_ui_stack()
   f_add_to_ui_stack(g_grid_battle_actions)
   f_s_bataction()
 end $$
 
 |[f_op_bataction]| function(_ENV)
   add(op, {draw=function()
-    f_print_top(g_bat_self.name, " ", g_bat_self.active.name)
+    f_print_top(p_self.name, " ", p_self.active.name)
     f_print_bot(g_bat_msg)
   end})
 
@@ -639,17 +643,37 @@ end $$
 end $$
 
 g_bat_msg = ""
-g_bat_self = nil
 g_bat_func = nil
 |[f_s_bataction]| function()
-  if #p_self.actions > 0 then
-    g_bat_self, g_bat_msg, g_bat_func = unpack(deli(p_self.actions))
-    local func = g_bat_func or f_nf
-    func()
-  else
-    p_self = p1
-    p_other = p2
-    f_pop_ui_stack()
+  while true do -- a "return" is the only way out of here. we could execute multiple actions in a frame if some actions simply trigger other actions. TODO: is there any checks i can have here instead of returns?
+    -- check for win condition before selecting every action
+    for player in all{p_first, p_last} do
+      if not f_get_next_active(player) then
+        f_end_battle(player)
+        return
+      end
+    end
+
+    local action = f_pop_next_action()
+    if action then
+      f_set_pself(action.player)
+      a_self_active, a_other_active = p_self.active, p_other.active
+
+      -- TODO: this should probably add to the current turn actions. Not the current actions player.
+      a_addaction = function(...) f_addaction(action.player, ...) end
+      action.logic(envparams)
+
+      -- an empty message means we execute the logic, but look for another action
+      if action.message then
+        g_bat_msg = action.message
+        return
+      end
+    else
+      f_set_pself(p_1)
+      f_pop_ui_stack()
+      f_add_to_ui_stack(g_grid_battle_select)
+      return -- important! need to return out otherwise we have an infinite loop
+    end
   end
 end $$
 
@@ -660,8 +684,6 @@ end $$
 ---------------------------------------------
 -- connections
 ---------------------------------------------
-
-
 -- This needs to be called early on because there is a draw
 f_zcall(f_create_gridpair, [[
    top_browse    ;,6 ,4 ,2 ,2  ,10 ,10
@@ -688,8 +710,8 @@ f_zcall(f_create_gridpair, [[
   ;;,g_grid_statbrowse     ,~top_pkstat     ,~bot_info      ,~f_dt_browse   ,~f_op_statbrowse  ,~f_s_pkstat      ,~f_l_browse    ,g_grid_browse
   ;;,g_grid_statbattle     ,~top_pkstat     ,~bot_info      ,~f_dt_batstats ,~f_op_statbattle  ,~f_s_statbat     ,~f_l_browse    ,g_grid_battle_stats
 
-  ;;,g_grid_editstat       ,~bot_4x4        ,~top_pkstat    ,~f_nf          ,~f_op_editstat    ,~f_s_editstat    ,~f_l_browse    ,~c_no
-  ;;,g_grid_editmovebot    ,~bot_4x4        ,~top_pkstat    ,~f_nf          ,~f_op_editmovebot ,~f_s_editmovebot ,~f_l_browse    ,~c_no
+  ;;,g_grid_editstat       ,~bot_4x4        ,~top_pkstat    ,~f_nop          ,~f_op_editstat    ,~f_s_editstat    ,~f_l_browse    ,~c_no
+  ;;,g_grid_editmovebot    ,~bot_4x4        ,~top_pkstat    ,~f_nop          ,~f_op_editmovebot ,~f_s_editmovebot ,~f_l_browse    ,~c_no
   ;;,g_grid_editmove       ,~top_text_grid  ,~bot_info      ,~f_dt_editmove ,~f_op_editmove    ,~f_s_editmove    ,~f_l_browse    ,~c_no
   ;;,g_grid_edititem       ,~top_text_grid  ,~bot_info      ,~f_dt_editstat ,~f_op_edititem    ,~f_s_edititem    ,~f_l_browse    ,~c_no
 
@@ -701,13 +723,13 @@ f_zcall(f_create_gridpair, [[
   ;;,g_grid_picktrnr       ,~top_text_grid  ,~bot_info      ,~f_dt_league   ,~f_op_teams       ,~f_s_batbegin    ,~f_l_browse    ,~c_no
 
   -- Battle UI
-  ;;,g_grid_battle_select  ,~bot_4x4        ,~top_battle2   ,~f_nf          ,~f_op_batsel      ,~f_s_battle      ,~f_l_battle    ,~c_no
-  ;;,g_grid_battle_movesel ,~bot_4x4        ,~top_pkstat    ,~f_nf          ,~f_op_movesel     ,~f_s_batmove     ,~f_l_browse    ,~c_no
-  ;;,g_grid_battle_switch  ,~top_editteam,  ,~bot_info      ,~f_dt_switch   ,~f_op_batswitch   ,~f_nf            ,~f_l_browse    ,~c_no
+  ;;,g_grid_battle_select  ,~bot_4x4        ,~top_battle2   ,~f_nop          ,~f_op_batsel      ,~f_s_battle      ,~f_l_battle    ,~c_no
+  ;;,g_grid_battle_movesel ,~bot_4x4        ,~top_pkstat    ,~f_nop          ,~f_op_movesel     ,~f_s_batmove     ,~f_l_browse    ,~c_no
+  ;;,g_grid_battle_switch  ,~top_editteam,  ,~bot_info      ,~f_dt_switch   ,~f_op_batswitch   ,~f_nop            ,~f_l_browse    ,~c_no
   ;;,g_grid_battle_stats   ,~top_editteam,  ,~bot_info      ,~f_dt_batstats ,~f_op_batstats    ,~f_s_batstat     ,~f_l_browse    ,~c_no
-  ;;,g_grid_battle_results ,~top_editteam   ,~bot_info      ,~f_nf          ,~f_op_batresults  ,~f_s_batresults  ,~f_l_browse    ,~c_no
+  ;;,g_grid_battle_results ,~top_editteam   ,~bot_info      ,~f_nop          ,~f_op_batresults  ,~f_s_batresults  ,~f_l_browse    ,~c_no
 
-  ;;,g_grid_battle_actions ,~bot_info       ,~top_battle2    ,~f_nf          ,~f_op_bataction   ,~f_s_bataction   ,~f_l_bataction ,~c_no
+  ;;,g_grid_battle_actions ,~bot_info       ,~top_battle2    ,~f_nop          ,~f_op_bataction   ,~f_s_bataction   ,~f_l_bataction ,~c_no
 ]])
 
 g_gridstack = {} -- gotta run after the above.

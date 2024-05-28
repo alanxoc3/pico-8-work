@@ -18,9 +18,6 @@ end $$
 -- d_browse = {}
 -- for i=0,251 do add(d_browse, f_create_cell(true)) end
 
--- TODO: check if this already exists?
-|[f_nf]| function() end $$
-
 -- todo: only used in dp_edit so far
 |[f_loop_through_team_pkmn]| function(party_num, callback)
   for ii=0,5 do
@@ -41,7 +38,7 @@ end $$
 
 -- TODO: dedup this if it's only used once and maybe try a btnp(i) approach instead (for loop)
 |[_update]| function()
-  printh(stat(0)) -- TODO: remove?
+  -- printh(stat(0)) -- TODO: remove?
   if t() >= 1.5 then
     if g_title_timer == 0 then
       f_minisfx(SFX_LEAVE)
