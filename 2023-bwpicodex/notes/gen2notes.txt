@@ -82,7 +82,7 @@ DIFF: Hidden Power has a base power of 60 and changes type to be a random super 
 DIFF: Morning Sun, Moonlight, & Synthesis normally restore 1/2 HP. They restore 3/4 during Sunny Day and 1/4 during rain/sandstorm.
 DIFF: Mirror Coat will still activate if the foe used Beatup. It didn't do this in Gen 2.
 DIFF: Damage calculation is capped at 999 damage.
-DIFF: Amulet Coin doubles base power of Pay Day. (Makes it similar to Drill Peck.)
+DIFF: Amulet Coin triples base power of Pay Day. (Like drill peck, but more dmg. On par with megahorn/hydropump/megakick, but better accuracy.)
 DIFF: Whirlwind will get rid of spikes from the opponent's side of the field. Roar will not. But whirlwind works against fly.
 DIFF: A Pokemon entering from Baton Pass, Teleport, and Roar will take spike damage.
 DIFF: Frustration has 100 Base Power if hp <= foe hp. Otherwise has 50 Base Power.

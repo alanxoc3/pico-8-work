@@ -1,5 +1,5 @@
 # Non-consumables with special properties
-Amulet Coin           Doubles monetary earnings. Johto: Goldenrod Underground
+Amulet Coin           Doubles monetary earnings. Johto: Goldenrod Underground. diff: payday x 3
 Leftovers             Restores 1/16 of the holder's maximum HP (rounded down, but not less than 1) at the end of each turn.
 
 # Non-consumables that boost move types

@@ -236,11 +236,13 @@ end $$
   p_first = p_1.priority > p_2.priority and p_1 or p_2
   p_last  = f_get_other_pl(p_first)
 
-  f_addaction(p_first, p_first, "uSES "..c_move_names[p_first.nextmove.num], function()
-  end)
-
-  f_addaction(p_last,  p_last,  "uSES "..c_move_names[p_last.nextmove.num], function()
-  end)
+  for player in all{p_first,p_last} do
+    if player.nextmove then
+      f_addaction(player, player, "uses "..c_move_names[player.nextmove.num], function()
+        c_move_funcs[player.nextmove.num]()
+      end)
+    end
+  end
 
   f_pop_ui_stack()
   f_s_bataction()
@@ -270,7 +272,7 @@ end $$
 
 |[f_calc_movemod]| function(active, move)
   return 1
-  -- movemod:
+  -- movemod: must be <= 32 to prevent any possible number overflow
   --   rollout:    2^(n+d) -- n=times, d=defcurl and 1 or 0
   --   furycutter: 2^n     -- n=times
   --   rage:       num of times user damaged while using rage
@@ -281,30 +283,35 @@ end $$
   --   twister:    2 -- if target is flying
   --   earthquake: 2 -- if target is digging
   --   magnitude:  2 -- if target is digging
-  --   rain:       1.5 -- if water type move is used during rain
-  --   sun:        1.5 -- if solar beam or fire type move used during sunlight
-  --   rain:       .5  -- if solar beam or fire type move used during rain
-  --   sun:        .5  -- if water type move is used during sun
+  --   explosion:  2 -- always
+  --   selfdstrct: 2 -- always
+  --   payday:     3 -- if holding amulet coin
+  --   rain:       1.5 -- if water pktype move is used during rain
+  --   sun:        1.5 -- if solar beam or fire pktype move used during sunlight
+  --   rain:       .5  -- if solar beam or fire pktype move used during rain
+  --   sun:        .5  -- if water pktype move is used during sun
   --   else:       1 -- for every other scenario
 end $$
 
---   ((.44*power*att/def)*item*crit+2)*weather*stab*movemod*type*random
---   item is 1.1 if move type equals item specialty
+|[f_get_type_advantage]| function(move, defender)
+  return (c_types[move.pktype][defender.type1] or 1)*(c_types[move.pktype][defender.type2] or 1)
+end $$
 
+--   ((.44*power*att/def)*item*crit+2)*weather*stab*movemod*pktype*random
 -- damage formula: https://bulbapedia.bulbagarden.net/wiki/Damage#Generation_II
 |[f_calc_move_damage]| function(attacker, defender, move)
   -- BEGIN: PHYSICAL/SPECIAL
   local attack, defense = attacker:f_stat_calc('specialattack', true), defender:f_stat_calc('specialdefense', true)
-  if move.movetype % 2 == 1 then -- iscontact
+  if move.pktype % 2 == 1 then -- iscontact
     attack, defense = attacker:f_stat_calc('attack', true), defender:f_stat_calc('defense', true)
   end
 
   -- BEGIN: CRIT
   -- TODO: really implement all the stuff here (focus energy, etc)
   local crit = rnd'1' < f_stat_crit(0) and 2 or 1
-  local stab = (move.movetype == attacker.type1 or move.movetype == attacker.type2) and 1.5 or 1
+  local stab = (move.pktype == attacker.pktype1 or move.pktype == attacker.pktype2) and 1.5 or 1
+  local itemdmg = 1 -- TODO: fill this out! item is 1.1 if move pktype equals item specialty for type boost items
 
-  -- 3 is min, because 3+2=5... 5*1*.5*.5*.85\1 = 1, so this makes the lowest damage possible 1 (not zero)
   local base_damage = mid( -- min: .44*1*.2*1*1+2 = 2.088 | max: .44*999*10*1.1*2+2 = 9672.32
       1, 999,
       .44*move.pow
@@ -321,9 +328,3 @@ end $$
 
   return base_damage\1
 end $$
-
--- requires both players to have an action selected.
-|[f_start_turn]| function()
-  
-end $$
-

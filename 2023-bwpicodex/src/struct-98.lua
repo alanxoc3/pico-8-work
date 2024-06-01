@@ -42,7 +42,8 @@
     end
 
     pkmn.seen_moves[move] = true
-    pkmn[i] = {num=pkmn.possible_moves[move], pid=move}
+    local num = pkmn.possible_moves[move]
+    pkmn[i] = setmetatable({num=num, pid=move}, {__index=c_moves[num]})
   end
 
   return pkmn

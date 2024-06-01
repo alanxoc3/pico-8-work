@@ -67,7 +67,7 @@ g_shake_timer = 0
   cls'C_1'
 
   if g_title_timer < C_TITLETIMER then
-    print("\^y7\f4aLANxOC3\n\f3pRESENTS", 16, 26)
+    print("\^y7\f4alanxoc3\n\f3presents", 16, 26)
     for i=1,6 do
       if .5 << i & btn() > 0 then
         g_palette = i
