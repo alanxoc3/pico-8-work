@@ -12,7 +12,7 @@ turn_init(): # Called immediately after selecting moves
     3000: normal moves
     2000: vital throw
     1000: counter, mirror coat
-    0000: roar, whirlwind
+    0000: roar, whirlwind, teleport
 
     quick claw will make you have a chance to be 999 within the priority bracket.
     if both priorities are the same, pick a random one between the two
@@ -201,3 +201,30 @@ status: -- triggered when status is inflicted, not if it is pre-existing. this s
 
 pp reduced... what about teleport or spite?
   mysteryberry
+
+here is the damage formula!
+  ((22/50*power*att/def)*item*crit+2)*weather*stab*movemod*type*random
+
+  att/def is special or non-special. and has some other gotchas with item/burn, etc
+  item is 1.1 if move type equals item specialty
+
+  movemod:
+    rollout:    2^(n+d) -- n=times, d=defcurl and 1 or 0
+    furycutter: 2^n     -- n=times
+    rage:       num of times user damaged while using rage
+    triplekick: 1, 2, then 3 for each kick
+    pursuit:    2 -- if target is switching
+    stomp:      2 -- if target minimized
+    gust:       2 -- if target is flying
+    twister:    2 -- if target is flying
+    earthquake: 2 -- if target is digging
+    magnitude:  2 -- if target is digging
+    rain:       1.5 -- if water type move is used during rain
+    sun:        1.5 -- if solar beam or fire type move used during sunlight
+    rain:       .5  -- if solar beam or fire type move used during rain
+    sun:        .5  -- if water type move is used during sun
+    else:       1 -- for every other scenario
+
+
+
+

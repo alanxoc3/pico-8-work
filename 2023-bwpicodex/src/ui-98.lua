@@ -72,7 +72,7 @@ end $$
 |[f_op_editmovebot]| function(_ENV)
   local pkmn = f_get_party_pkmn(f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot')
   for i=1,4 do
-    add(op, {text=c_move_names[pkmn[i].id], select=function()
+    add(op, {text=c_move_names[pkmn[i].num], select=function()
       f_setsel('g_grid_editmove', pkmn[i].pid-1)
       f_add_to_ui_stack(g_grid_editmove)
     end})
@@ -130,7 +130,7 @@ end $$
 
 |[f_add_stat_move]| function(op, pkmn, ind)
   ind=ind+1
-  local movenum = pkmn[ind].id
+  local movenum = pkmn[ind].num
   local move = c_moves[movenum]
   local pp, pow, acc, typ = f_get_move_texts(move)
   local method = pkmn.possible_moves_method[movenum]
@@ -187,10 +187,10 @@ end $$
 
   if is_battle then
     add(op, {text="pKMN mOVES", header=true})
-    add(op, {text=f_prefix_space(c_move_names[pkmn[1].id], 6).." 20/20"})
-    add(op, {text=f_prefix_space(c_move_names[pkmn[2].id], 6).." 20/20"})
-    add(op, {text=f_prefix_space(c_move_names[pkmn[3].id], 6).." 20/20"})
-    add(op, {text=f_prefix_space(c_move_names[pkmn[4].id], 6).." 20/20"})
+    add(op, {text=f_prefix_space(c_move_names[pkmn[1].num], 6).." 20/20"})
+    add(op, {text=f_prefix_space(c_move_names[pkmn[2].num], 6).." 20/20"})
+    add(op, {text=f_prefix_space(c_move_names[pkmn[3].num], 6).." 20/20"})
+    add(op, {text=f_prefix_space(c_move_names[pkmn[4].num], 6).." 20/20"})
   end
 
   -- TODO: idk. should i include battle flags or no?
@@ -442,7 +442,7 @@ end $$
 
 |[f_op_movesel]| function(_ENV)
   for i=1,4 do
-    add(op, {text=c_move_names[p_self.active[i].id]})
+    add(op, {text=c_move_names[p_self.active[i].num]})
   end
 
   f_add_stat_move(preview_op, p_self.active, f_getsel'g_grid_battle_movesel')
@@ -565,13 +565,18 @@ end $$
 end $$
 
 |[f_s_versusbegin]| function()
-  f_start_battle("pLAYR1", "pLAYR2", f_team_party(f_getsel'g_grid_pickplr1'), f_team_party(f_getsel'g_grid_pickplr2'))
-  f_add_to_ui_stack(g_grid_battle_select)
+  p_1, p_2 = f_create_player(f_team_party(f_getsel'g_grid_pickplr1'), "pLAYR1"), f_create_player(f_team_party(f_getsel'g_grid_pickplr2'), "pLAYR2")
+  f_set_pself(p_1)
+
+  f_add_to_ui_stack(g_grid_battle_turnbeg)
 end $$
 
 |[f_s_batbegin]| function()
-  f_start_battle("pLAYER", c_trnr_names[f_getsel'g_grid_picktrnr'+1], f_team_party(f_getsel'g_grid_pickleag'), f_team_league(f_getsel'g_grid_picktrnr'+1))
-  f_add_to_ui_stack(g_grid_battle_select)
+  -- TODO: dedup & check tokens with f_s_versus_begun
+  p_1, p_2 = f_create_player(f_team_party(f_getsel'g_grid_pickleag'), "pLAYER"), f_create_player(f_team_league(f_getsel'g_grid_picktrnr'+1), c_trnr_names[f_getsel'g_grid_picktrnr'+1], true)
+  f_set_pself(p_1)
+
+  f_add_to_ui_stack(g_grid_battle_turnbeg)
 end $$
 
 |[f_s_edit]| function()
@@ -623,17 +628,29 @@ end $$
 |[f_l_battle]| function() return p_self.active.num end $$
 
 |[f_s_batmove]| function()
-  f_addaction(p_self, p_self, "uSES vINwHP", f_nop)
-  f_addaction(p_other, p_other, "uSES hYPfNG", f_nop)
-  p_first = p_self
-  p_last  = p_other
+  p_self.nextmove = p_self.active[f_getsel'g_grid_battle_movesel'+1]
+
   f_pop_ui_stack()
+  if p_self == p_1 then
+    f_turn_end_p1()
+  else
+    f_turn_end_p2()
+  end
+end $$
+
+|[f_op_startturn]| function(obj)
+  g_bat_msg = "bEGINS tURN"
+  f_op_bataction(obj)
+end $$
+
+|[f_s_startturn]| function()
   f_pop_ui_stack()
-  f_add_to_ui_stack(g_grid_battle_actions)
-  f_s_bataction()
+  f_add_to_ui_stack(g_grid_battle_select)
 end $$
 
 |[f_op_bataction]| function(_ENV)
+  if not g_bat_msg then
+  end
   add(op, {draw=function()
     f_print_top(p_self.name, " ", p_self.active.name)
     f_print_bot(g_bat_msg)
@@ -671,7 +688,7 @@ g_bat_func = nil
     else
       f_set_pself(p_1)
       f_pop_ui_stack()
-      f_add_to_ui_stack(g_grid_battle_select)
+      f_add_to_ui_stack(g_grid_battle_turnbeg)
       return -- important! need to return out otherwise we have an infinite loop
     end
   end
@@ -726,9 +743,10 @@ f_zcall(f_create_gridpair, [[
   ;;,g_grid_battle_select  ,~bot_4x4        ,~top_battle2   ,~f_nop          ,~f_op_batsel      ,~f_s_battle      ,~f_l_battle    ,~c_no
   ;;,g_grid_battle_movesel ,~bot_4x4        ,~top_pkstat    ,~f_nop          ,~f_op_movesel     ,~f_s_batmove     ,~f_l_browse    ,~c_no
   ;;,g_grid_battle_switch  ,~top_editteam,  ,~bot_info      ,~f_dt_switch   ,~f_op_batswitch   ,~f_nop            ,~f_l_browse    ,~c_no
-  ;;,g_grid_battle_stats   ,~top_editteam,  ,~bot_info      ,~f_dt_batstats ,~f_op_batstats    ,~f_s_batstat     ,~f_l_browse    ,~c_no
+  ;;,g_grid_battle_stats   ,~top_editteam,  ,~bot_info      ,~f_dt_batstats ,~f_op_batstats    ,~f_s_batstat      ,~f_l_browse    ,~c_no
   ;;,g_grid_battle_results ,~top_editteam   ,~bot_info      ,~f_nop          ,~f_op_batresults  ,~f_s_batresults  ,~f_l_browse    ,~c_no
 
+  ;;,g_grid_battle_turnbeg ,~bot_info       ,~top_battle2    ,~f_nop          ,~f_op_startturn   ,~f_s_startturn   ,~f_l_bataction ,~c_no
   ;;,g_grid_battle_actions ,~bot_info       ,~top_battle2    ,~f_nop          ,~f_op_bataction   ,~f_s_bataction   ,~f_l_bataction ,~c_no
 ]])
 

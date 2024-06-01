@@ -1,3 +1,7 @@
+This is interesting: https://www.smogon.com/forums/threads/gsc-mechanics.3542417/
+Mentions illegal movesets (horde mode?)
+
+
 some notes:
 - sketch will behave like gen 3. it will copy a move for the duration of the battle, but not after that. So, slightly better than mimic. ditto could learn an extra move like this. by transforming into smeargle.
 - any pokemon with sleeptalk/mirrormove/mimic/transform/metronome could learn any move for the remainder of the battle if they use sketch.
@@ -102,6 +106,10 @@ DIFF: A Pokemon may have zero moves. The Pokemon will use struggle if that is th
 DIFF: Struggle is "None" type instead of "Normal" type.
 DIFF: Bird type is partially resistant to every other type, except it is vulnerable to struggle.
 DIFF: A transformed Pokemon automatically un-transforms if it runs out of PP.
+DIFF: Trigger moves (metronome/sleeptalk/mirrormove) could trigger 
+DIFF: beatup is not typeless. it attacks as dark type. and it uses the special attack stat of every pokemon, because it is not a physical move. But the modified stat of the active pokemon.. it uses the current modified defense of the opponent.
+DIFF: flail/reversal can cause critical hits and are subject to the random factor like in gen 3.
+DIFF: future sight can recieve stab.
 
 STRAT: Sketch and Mimic allow for the same move to be available in multiple move slots.
 STRAT: Missingno is broken.
@@ -117,6 +125,8 @@ DIFF: crit formula is slightly simplified to be 1/16, 2/16, 4/16, 6/16, 8/16. Th
 DIFF: no complex fissure accuracy formula because all pokemon are same level, so 30% accuracy. ( https://bulbapedia.bulbagarden.net/wiki/Fissure_(move) )
 DIFF: metronome & sleep talk have a chance to break through frozen or sleep status conditions.
 DIFF: steel claw, steel wing, ancient power will still have the secondary effect if the opponent is KO-ed.
+DIFF: bright powder multiplies evasion by .8 while being held, this is similar to gen III, though a bit more powerful. i think the math plays out similarly.
+DIFF: berserk gene is no longer a consumable. both attack and special attack are boosted by 2 stages while holding it. but the pokemon is indefinitely confused while holding it.
 
 https://www.smogon.com/forums/threads/mechanical-differences-between-the-gens.3474872/
 Changes from ADV to GSC

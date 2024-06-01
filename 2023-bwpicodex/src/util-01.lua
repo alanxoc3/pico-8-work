@@ -6,6 +6,16 @@ g_cur_pkmn_cry = nil
   sfx(num\4, num < 252 and 0 or 1, num%4*8, 8)
 end $$
 
+|[f_flr_rnd]| function(n) return flr(rnd(n)) end $$
+
+|[f_in_split]| function(val, str)
+  for m in all(split(str)) do
+    if m == val then
+      return true
+    end
+  end
+end $$
+
 -- TODO: pkmn shakes when disabled (battle, press o, then x on switch). i don't want that.
 |[f_draw_pkmn]| function(num, x, y, width, flip, sel, disabled, isoutline)
   -- the "min" is needed to draw trainers

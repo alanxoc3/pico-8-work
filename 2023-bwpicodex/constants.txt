@@ -32,11 +32,19 @@ MODE_ACTIVE: 3
 L_DATASTART: 0x1fff # data starts one byte before because the code increments first
 
 # ----------------------------- priorities - aligned to thousand because 999 is the max speed stat
-C_PRIORITY_SWITCH:      4000 # PURSUIT
-C_PRIORITY_PROTECT:     3000 # PROTECT DETECT ENDURE
-C_PRIORITY_QUICKATTACK: 2000 # EXTREMESPEED MACHPUNCH QUICKATTACK
-C_PRIORITY_ATTACK:      1000
-C_PRIORITY_COUNTER:     0000 # TELEPORT COUNTER MIRRORCOAT ROAR VITALTHROW WHIRLWIND
+C_PRIORITY_PURSUIT:     7000 #pursuit if opponent switched
+C_PRIORITY_SWITCH:      6000 #switch
+C_PRIORITY_PROTECT:     5000 #endure, protect, detect
+C_PRIORITY_QUICKATTACK: 4000 #extreme speed, mach punch, quick attack
+C_PRIORITY_ATTACK:      3000 #normal moves
+C_PRIORITY_VITALTHROW:  2000 #vital throw
+C_PRIORITY_COUNTER:     1000 #counter, mirror coat
+C_PRIORITY_ROAR:        0000 #roar, whirlwind, teleport
+
+C_WEATHER_NONE: 0
+C_WEATHER_RAIN: 1
+C_WEATHER_SUN:  2
+C_WEATHER_SAND: 3
 
 C_TEACH: 252 # These are baked into the compile script
 C_EVENT: 253

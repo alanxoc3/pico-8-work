@@ -191,7 +191,7 @@ end $$
       f_unlock(c_pokemon, pkmn.num)
       f_unlock(c_items, pkmn.item+1)
       for i=1,4 do
-        f_unlock(c_moves, pkmn[i].id)
+        f_unlock(c_moves, pkmn[i].num)
       end
     end
   end

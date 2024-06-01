@@ -11,7 +11,6 @@
 
 -- Some player specific things
 
-
 |[f_create_active]| function(team, ind)
   return setmetatable(f_zobj([[
     spot,@,
@@ -19,7 +18,7 @@
   ]], ind), {__index=team[ind]})
 end $$
 
-|[f_create_player]| function(team, name)
+|[f_create_player]| function(team, name, iscpu)
   local active = nil -- active guaranteed to be set because we can't enter the battle without it.
   for i=1,6 do
     if team[i].valid then
@@ -29,20 +28,14 @@ end $$
   end
 
   return f_zobj([[
-    active,@,       -- The single active pokemon.
-    team,@,         -- The 1-6 benched pokemon.
-    name,@,         -- The player's name.
-    turnover,~c_no, -- Whether or not the player has executed its end-of-turn logic when actions are empty. TODO: this could be removed, here so i don't forget that it must be updated each turn
-    actions,#       -- Actions for the player.
-  ]], active, team, name)
-end $$
-
--- This function creates the player objects that are considered as globals throughout the fight. Called at the beginning of a battle.
--- Team can be any length up to 252 (horde mode). First six slots must have at least 1 Pokemon.
-|[f_start_battle]| function(team1_name, team2_name, team1, team2)
-  p_1 = f_create_player(team1, team1_name)
-  p_2 = f_create_player(team2, team2_name)
-  f_set_pself(p_1)
+    active,@,         -- The single active pokemon.
+    team,@,           -- The 1-6 benched pokemon.
+    name,@,           -- The player's name.
+    iscpu,@,          -- Whether or not the player is a cpu
+    turnover,~c_no,   -- Whether or not the player has executed its end-of-turn logic when actions are empty. TODO: this could be removed, here so i don't forget that it must be updated each turn
+    actions,#,        -- Actions for the player.
+    -- nextmove,~c_no -- 0-3 for a move index into the moveset. false value for switching. Commented out to save on compression, defaults to nil value
+  ]], active, team, name, iscpu)
 end $$
 
 |[f_get_other_pl]| function(player)
@@ -206,3 +199,131 @@ end $$
     end
   end)
 end $$
+
+-- TODO: I'M HERE.
+|[f_set_player_priority]| function(player)
+  local priority_class = C_PRIORITY_ATTACK
+  local movenum = player.nextmove and player.nextmove.num
+  if movenum then
+    printh("M: "..movenum)
+  end
+  local other = f_get_other_pl(player)
+
+  -- TODO: in picodex, I was calling f_premovelogic(player, move) here
+
+  -- TODO: is there a good way to simplify tokens here?
+  if not movenum                                                         then priority_class = C_PRIORITY_SWITCH
+  elseif movenum == M_PURSUIT and not other.movenum                      then priority_class = C_PRIORITY_PURSUIT
+  elseif f_in_split(movenum, 'M_WHIRLWIND,M_ROAR,M_TELEPORT')            then priority_class = C_PRIORITY_ROAR
+  elseif f_in_split(movenum, 'M_QUICKATTACK,M_MACHPUNCH,M_EXTREMESPEED') then priority_class = C_PRIORITY_QUICKATTACK
+  elseif f_in_split(movenum, 'M_COUNTER,M_MIRRORCOAT')                   then priority_class = C_PRIORITY_COUNTER
+  elseif movenum == M_VITALTHROW                                         then priority_class = C_PRIORITY_VITALTHROW
+  end -- TODO: ensure quickclaw is accounted for
+
+  -- speed can be between 1 and 999, so multiples of 1000 can be priority
+  -- highest priority goes first. if priority is same, roll a dice to decide
+  -- speed can technically affect a switch/pursuit, but doesn't actually matter in that case.
+  -- the og picodex had a min(C_PRIORITY_SWITCH, ...) here.
+  player.priority = priority_class+f_stat_calc(player.active, 'speed', true)
+end $$
+
+|[f_turn_end_p2]| function()
+  f_set_player_priority(p_1)
+  f_set_player_priority(p_2)
+
+  -- if priorities are equal, then coin flip!
+  if p_1.priority == p_2.priority then p_2.priority += sgn(rnd'2'-1) end
+  p_first = p_1.priority > p_2.priority and p_1 or p_2
+  p_last  = f_get_other_pl(p_first)
+
+  f_addaction(p_first, p_first, "uSES "..c_move_names[p_first.nextmove.num], function()
+  end)
+
+  f_addaction(p_last,  p_last,  "uSES "..c_move_names[p_last.nextmove.num], function()
+  end)
+
+  f_pop_ui_stack()
+  f_s_bataction()
+  f_add_to_ui_stack(g_grid_battle_actions)
+end $$
+
+|[f_turn_end_p1]| function()
+  f_set_pself(p_2)
+  if p_2.iscpu then
+    local possible_moves = {}
+    for i=1,4 do
+      if p_2.active[i].valid and p_2.active[i].pp > 0 then
+        add(possible_moves, i)
+      end
+    end
+    if #possible_moves > 0 then
+      p_2.nextmove = p_2.active[f_flr_rnd(#possible_moves)+1]
+    else
+      p_2.nextmove = c_moves[M_STRUGGLE]
+    end
+    f_turn_end_p2()
+  else
+    f_pop_ui_stack()
+    f_add_to_ui_stack(g_grid_battle_turnbeg)
+  end
+end $$
+
+|[f_calc_movemod]| function(active, move)
+  return 1
+  -- movemod:
+  --   rollout:    2^(n+d) -- n=times, d=defcurl and 1 or 0
+  --   furycutter: 2^n     -- n=times
+  --   rage:       num of times user damaged while using rage
+  --   triplekick: 1, 2, then 3 for each kick
+  --   pursuit:    2 -- if target is switching
+  --   stomp:      2 -- if target minimized
+  --   gust:       2 -- if target is flying
+  --   twister:    2 -- if target is flying
+  --   earthquake: 2 -- if target is digging
+  --   magnitude:  2 -- if target is digging
+  --   rain:       1.5 -- if water type move is used during rain
+  --   sun:        1.5 -- if solar beam or fire type move used during sunlight
+  --   rain:       .5  -- if solar beam or fire type move used during rain
+  --   sun:        .5  -- if water type move is used during sun
+  --   else:       1 -- for every other scenario
+end $$
+
+--   ((.44*power*att/def)*item*crit+2)*weather*stab*movemod*type*random
+--   item is 1.1 if move type equals item specialty
+
+-- damage formula: https://bulbapedia.bulbagarden.net/wiki/Damage#Generation_II
+|[f_calc_move_damage]| function(attacker, defender, move)
+  -- BEGIN: PHYSICAL/SPECIAL
+  local attack, defense = attacker:f_stat_calc('specialattack', true), defender:f_stat_calc('specialdefense', true)
+  if move.movetype % 2 == 1 then -- iscontact
+    attack, defense = attacker:f_stat_calc('attack', true), defender:f_stat_calc('defense', true)
+  end
+
+  -- BEGIN: CRIT
+  -- TODO: really implement all the stuff here (focus energy, etc)
+  local crit = rnd'1' < f_stat_crit(0) and 2 or 1
+  local stab = (move.movetype == attacker.type1 or move.movetype == attacker.type2) and 1.5 or 1
+
+  -- 3 is min, because 3+2=5... 5*1*.5*.5*.85\1 = 1, so this makes the lowest damage possible 1 (not zero)
+  local base_damage = mid( -- min: .44*1*.2*1*1+2 = 2.088 | max: .44*999*10*1.1*2+2 = 9672.32
+      1, 999,
+      .44*move.pow
+      *mid(10, .2, attack/defense) -- this .2 to 10 ratio range comes from the original picodex. it exists to bound minimum and maximum damages
+      *itemdmg
+      *crit+2
+  )
+
+  -- min: 1*1*.25 = .25 | max: 999*1.5*4 = 5994
+  base_damage = mid(1, 999, base_damage*stab*f_get_type_advantage(move, defender))
+
+  -- min: 1*1 = 1 | max: 999*32 = 31968
+  base_damage = mid(1, 999, base_damage*f_calc_movemod(attacker, move)*(rnd'.15'+.85))
+
+  return base_damage\1
+end $$
+
+-- requires both players to have an action selected.
+|[f_start_turn]| function()
+  
+end $$
+

@@ -1,4 +1,5 @@
 -- this is a battle team
+-- https://www.dragonflycave.com/mechanics/stat-stages
 
   -- TODO: consolidate edit/view/seen moves. I can't deal with so many move structures.
   -- TODO: do I need layers of pokemon, like I did in the og picodex.
@@ -16,8 +17,8 @@
     seen_moves, #,            -- A move to boolean map that is used to disable things on the move edit screen and populate edit_moves.
     major,      C_MAJOR_NONE, -- The major status condition in pokemon battles: fainted, burned, frozen, paralyzed, poisoned, sleeping
     gender,     0,            -- This gets populated from gender bit & pkmn.genders. TODO: this line could be removed if pressed for compression!
-    evasion,    1,
-    accuracy,   1,
+    evasion,    100,
+    accuracy,   100,
     crit,       1;
 
     stages;
@@ -41,7 +42,7 @@
     end
 
     pkmn.seen_moves[move] = true
-    pkmn[i] = {id=pkmn.possible_moves[move], pid=move}
+    pkmn[i] = {num=pkmn.possible_moves[move], pid=move}
   end
 
   return pkmn
@@ -106,4 +107,42 @@ end $$
   poke(num_loc+4, _ENV[2].pid)
   poke(num_loc+5, _ENV[3].pid)
   poke(num_loc+6, _ENV[4].pid)
+end $$
+
+|[f_stat_crit]| function(crit)
+  -- 0,0.0625 | 1,0.125 | 2,0.25 | 3,0.33333333333333 | 4,0.5 | 5,1 | 6,1
+  -- used lagrange polynomial interpolation to get a function
+  return mid(0, 1, .0095*crit^4 - .0746*crit^3 + .1883*crit^2 - .0607*crit + .0625)
+end $$
+
+-- TODO: implement brightpowder somewhere
+-- if special and stat == 'evasion' and active.item == I_BRIGHTPOWDER then base *= 1.2 end
+|[f_stat_evac]| function(stat)
+  -- 3/3 | 3/5 | 3/6 | 3/7 | 3/8 | 3/9
+  return mid(1, 1+stat/3, 3)/mid(1, 1-stat/3, 3)
+end $$
+
+-- Stat Stages Guide: https://www.dragonflycave.com/mechanics/stat-stages
+-- IDEA: all stats could be normalized to a number between 0 and 1. technically, it looks like it doesn't really matter if its decimal or not. besides fixed point numbers of course.
+|[f_stat_calc]| function(active, stat, special)
+  local stage = active.stages[stat] or 0
+  local base = active[stat]*mid(2, 2+stage, 8)/mid(2, 2-stage, 8) -- TODO: verify this is correct, copied from og picodex.
+
+  if special then
+    -- TODO: explosion/selfdestruct are doubled. how to do this?
+    if stat == 'attack' and major == C_MAJOR_BURNED then base *= .5 end
+    if stat == 'defense'        and active.reflected then base *= 2 end
+    if stat == 'specialdefense' and active.screened  then base *= 2 end
+    if stat == 'speed' then
+      if major == C_MAJOR_PARALYZED then
+        base *= .25
+      end
+      if active.item == I_QUICKCLAW and rnd() < .23 then
+        base = 999
+      end
+    end
+  end
+
+  -- TODO: i might be able to remove the mid if i'm positive nothing can ever go over 999 or below 1. only if i'm really pressed on tokens.
+  return mid(1, 999, base) -- all stats cap at 999, though evasion/accuracy wouldn't really get that high.
 end $$
