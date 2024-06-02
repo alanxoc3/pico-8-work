@@ -18,7 +18,7 @@
   ]], ind), {__index=team[ind]})
 end $$
 
-|[f_create_player]| function(team, name, iscpu)
+|[f_create_player]| function(team, name, subname, iscpu)
   local active = nil -- active guaranteed to be set because we can't enter the battle without it.
   for i=1,6 do
     if team[i].valid then
@@ -30,12 +30,13 @@ end $$
   return f_zobj([[
     active,@,         -- The single active pokemon.
     team,@,           -- The 1-6 benched pokemon.
-    name,@,           -- The player's name.
+    name,@,           -- The player's name (enemy/player...)
+    subname,@,        -- The real team name (team1/lance...)
     iscpu,@,          -- Whether or not the player is a cpu
     turnover,~c_no,   -- Whether or not the player has executed its end-of-turn logic when actions are empty. TODO: this could be removed, here so i don't forget that it must be updated each turn
     actions,#,        -- Actions for the player.
     -- nextmove,~c_no -- 0-3 for a move index into the moveset. false value for switching. Commented out to save on compression, defaults to nil value
-  ]], active, team, name, iscpu)
+  ]], active, team, name, subname, iscpu)
 end $$
 
 |[f_get_other_pl]| function(player)

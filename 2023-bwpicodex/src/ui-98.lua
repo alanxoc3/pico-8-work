@@ -265,7 +265,7 @@ end $$
   local ind = f_getsel'g_grid_editmovebot'+1
 
   f_print_top("edit move"..ind)
-  f_print_bot(method..": "..typ)
+  f_print_bot(method.." "..typ)
   --f_print_bot("pw:"..pow.." ac:"..acc)
   --add(preview_op, {text=})
 
@@ -345,8 +345,8 @@ end $$
   local name = c_trnr_names[f_getsel'g_grid_picktrnr'+1]
   name = disabled and f_strtoq(name) or name
 
-  f_print_top(toggle and "\f4" or "\f2", "player team", f_getsel'g_grid_pickleag'+1)
-  f_print_bot(toggle and "\f2" or "\f4", "comptr ", name)
+  f_print_top(toggle and "\f4" or "\f2", "playr team", f_getsel'g_grid_pickleag'+1)
+  f_print_bot(toggle and "\f2" or "\f4", "enemy ", name)
 end $$
 
 |[f_dt_batstats]| function()
@@ -371,8 +371,8 @@ end $$
 |[f_dt_versus]| function()
   local toggle = g_cg_m.name == 'g_grid_pickplr1'
 
-  f_print_top(toggle and "\f4" or "\f2", "playr1 team", f_getsel'g_grid_pickplr1'+1)
-  f_print_bot(toggle and "\f2" or "\f4", "playr2 team", f_getsel'g_grid_pickplr2'+1)
+  f_print_top(toggle and "\f4" or "\f2", "plyr1 team", f_getsel'g_grid_pickplr1'+1)
+  f_print_bot(toggle and "\f2" or "\f4", "plyr2 team", f_getsel'g_grid_pickplr2'+1)
 end $$
 
 |[f_dp_title]| function()
@@ -435,7 +435,7 @@ end $$
     f_add_to_ui_stack(g_grid_battle_switch)
   end})
 
-  add(op, {text="view", select=function()
+  add(op, {text="auto", select=function()
     f_add_to_ui_stack(g_grid_battle_stats)
   end})
 
@@ -479,8 +479,10 @@ end $$
   end
 
   add(preview_op, {draw=function()
-    f_print_top("champ "..p_other.name)
-    f_print_bot("loser "..p_self.name)
+    f_print_top(p_other.name.." "..p_other.subname)
+    --f_print_bot("is victorious")
+    --f_print_bot("wins the match!")
+    f_print_bot("is the winner!")
   end})
 end $$
 
@@ -571,7 +573,7 @@ end $$
 end $$
 
 |[f_s_versusbegin]| function()
-  p_1, p_2 = f_create_player(f_team_party(f_getsel'g_grid_pickplr1'), "playr1"), f_create_player(f_team_party(f_getsel'g_grid_pickplr2'), "playr2")
+  p_1, p_2 = f_create_player(f_team_party(f_getsel'g_grid_pickplr1'), "plyr1", "team"..(f_getsel'g_grid_pickplr1'+1)), f_create_player(f_team_party(f_getsel'g_grid_pickplr2'), "plyr2", "team"..(f_getsel'g_grid_pickplr1'+1))
   f_set_pself(p_1)
 
   f_add_to_ui_stack(g_grid_battle_turnbeg)
@@ -579,7 +581,7 @@ end $$
 
 |[f_s_batbegin]| function()
   -- TODO: dedup & check tokens with f_s_versus_begun
-  p_1, p_2 = f_create_player(f_team_party(f_getsel'g_grid_pickleag'), "player"), f_create_player(f_team_league(f_getsel'g_grid_picktrnr'+1), c_trnr_names[f_getsel'g_grid_picktrnr'+1], true)
+  p_1, p_2 = f_create_player(f_team_party(f_getsel'g_grid_pickleag'), "playr", "team"..(f_getsel'g_grid_pickplr1'+1)), f_create_player(f_team_league(f_getsel'g_grid_picktrnr'+1), "enemy", c_trnr_names[f_getsel'g_grid_picktrnr'+1], true)
   f_set_pself(p_1)
 
   f_add_to_ui_stack(g_grid_battle_turnbeg)
