@@ -10,5 +10,11 @@ end $$
   --a_self_active
   printh("ay: "..debug(p_self.nextmove))
   local dmg = f_calc_move_damage(a_self_active, a_other_active, p_self.nextmove)
-  a_addaction(p_other, "-"..dmg.."0 hp change")
+  dmg = mid(a_other_active.hp, dmg, 0)
+  local text = "-"..dmg.." hp change"
+  a_addaction(p_other, text, function()
+    a_addaction(p_self, text, function()
+      a_self_active.hp -= dmg
+    end)
+  end)
 end $$

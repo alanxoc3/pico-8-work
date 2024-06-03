@@ -256,7 +256,7 @@ end
 end
 end
 end,function(team,ind)
-return setmetatable(f_zobj("spot,@,stages,#",ind),{__index=team[ind]})
+return setmetatable(f_zobj("spot,@,stages,#,base,@",ind,team[ind]),{__index=team[ind]})
 end,function(team,name,subname,iscpu)
 local active=nil
 for i=1,6 do
@@ -273,9 +273,10 @@ p_self,p_other=player,f_get_other_pl(player)
 end,function(player)
 local newteam={}
 for i=1,6 do
-local pkmn=player.team[(player.active.spot+i-1)%6+1]
+local ind=(player.active.spot+i-1)%6+1
+local pkmn=player.team[ind]
 if pkmn.valid and pkmn.major ~=1 then
-add(newteam,pkmn)
+add(newteam,ind)
 end
 end
 return newteam
@@ -291,13 +292,13 @@ end,function(player,message,logic)
 return f_zobj("player,@,active,@,message,@,logic,@",player,player.active,message,logic or f_nop)
 end,function(player,...)
 add(player.actions,f_newaction(...))
-end,function(player,pkmn)
-local moves={}
-foreach(pkmn,function(m)
-add(moves,m)
-end)
-player.active=setmetatable(f_zobj("isactive,~c_yes,lastmoverecv,0,moveturn,0,invisible,~c_yes,counterdmg,0,bidedmg,0,disabledtimer,0,confused,0,sleeping,@,substitute,0,toxiced,0,base,@,mynewmoves,@;stages;attack,0,defense,0,specialattack,0,specialdefense,0,speed,0,crit,0,evasion,0,accuracy,0;",f_flr_rnd"7"+1,pkmn,moves),{__index=pkmn})
-return f_newaction(player,"enters,fight",function()
+end,function(player,spot)
+local pkmn=player.team[spot]
+player.active=setmetatable(f_zobj("isactive,~c_yes,lastmoverecv,0,moveturn,0,invisible,~c_yes,counterdmg,0,bidedmg,0,disabledtimer,0,confused,0,sleeping,@,substitute,0,toxiced,0,spot,@,base,@;stages;attack,0,defense,0,specialattack,0,specialdefense,0,speed,0,crit,0,evasion,0,accuracy,0;",f_flr_rnd"7"+1,spot,pkmn),{__index=pkmn})
+for i=1,4 do
+player.active[i]=pkmn[i]
+end
+return f_newaction(player,"enters fight",function()
 player.active.invisible=false
 return player.active.num
 end)
@@ -305,8 +306,9 @@ end,function()
 for player in all{p_first,p_last}do
 if player.active.hp<=0 then
 if player.active.major ~=1 then
-return f_newaction(player,"has fainted",function(_ENV)
-selfactive.base.major=1
+return f_newaction(player,"has fainted",function()
+player.active.base.major=1
+player.active.major=1
 end)
 else
 return f_pkmn_comes_out(player,f_get_next_active(player))
@@ -380,7 +382,7 @@ f_set_pself(p_2)
 if p_2.iscpu then
 local possible_moves={}
 for i=1,4 do
-if p_2.active[i].valid and p_2.active[i].pp>0 then
+if p_2.active[i].num<252 and p_2.active[i].pp>0 then
 add(possible_moves,i)
 end
 end
@@ -421,7 +423,13 @@ a_addaction(p_self,"does nothing")
 end,function()
 printh("ay: "..debug(p_self.nextmove))
 local dmg=f_calc_move_damage(a_self_active,a_other_active,p_self.nextmove)
-a_addaction(p_other,"-"..dmg.."0 hp change")
+dmg=mid(a_other_active.hp,dmg,0)
+local text="-"..dmg.." hp change"
+a_addaction(p_other,text,function()
+a_addaction(p_self,text,function()
+a_self_active.hp-=dmg
+end)
+end)
 end,function(ind,base,respect_locks,gender_bit,item,...)
 local pkmn=f_zobj("num,@,base,@,gender_bit,@,item,@,valid,@,seen_moves,#,major,0,gender,0,evasion,100,accuracy,100,crit,1;stages;attack,0,defense,0,specialattack,0,specialdefense,0,speed,0,crit,0,evasion,0,accuracy,0;",ind,base,gender_bit,item%42,ind<252)
 pkmn=setmetatable(pkmn,{__index=base})
@@ -787,18 +795,10 @@ end
 add(op,{draw=function()b(p_2.active,p_2.team,0,4,39,1,true)end})
 add(op,{draw=function()b(p_1.active,p_1.team,23,4,3,1)end})
 end,function(_ENV)
-add(op,{text="fight",select=function()
-f_add_to_ui_stack(g_grid_battle_movesel)
-end})
-add(op,{text="swap",select=function()
-f_add_to_ui_stack(g_grid_battle_switch)
-end})
-add(op,{text="auto",select=function()
-f_add_to_ui_stack(g_grid_battle_stats)
-end})
-add(op,{text="run",select=function()
-f_end_battle(p_self)
-end})
+add(op,{text="fight",select=function()f_add_to_ui_stack(g_grid_battle_movesel)end})
+add(op,{text="swap",select=function()f_add_to_ui_stack(g_grid_battle_switch)end})
+add(op,{text="view",select=function()f_add_to_ui_stack(g_grid_battle_stats)end})
+add(op,{text="run",select=function()f_end_battle(p_self)end})
 f_add_battle(preview_op)
 end,function(_ENV)
 for i=1,4 do

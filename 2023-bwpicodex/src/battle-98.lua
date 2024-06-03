@@ -14,8 +14,9 @@
 |[f_create_active]| function(team, ind)
   return setmetatable(f_zobj([[
     spot,@,
-    stages,#
-  ]], ind), {__index=team[ind]})
+    stages,#,
+    base,@
+  ]], ind, team[ind]), {__index=team[ind]})
 end $$
 
 |[f_create_player]| function(team, name, subname, iscpu)
@@ -50,9 +51,10 @@ end $$
 |[f_get_live_pkmn]| function(player)
   local newteam = {} -- TODO: _ENV syntax here?
   for i=1,6 do
-    local pkmn = player.team[(player.active.spot+i-1)%6+1]
+    local ind = (player.active.spot+i-1)%6+1
+    local pkmn = player.team[ind]
     if pkmn.valid and pkmn.major ~= C_MAJOR_FAINTED then
-      add(newteam, pkmn)
+      add(newteam, ind)
     end
   end
   return newteam
@@ -85,13 +87,10 @@ end $$
   add(player.actions, f_newaction(...))
 end $$
 
-|[f_pkmn_comes_out]| function(player, pkmn) -- assumes that the pkmn coming is not nil.
-  local moves = {}
+|[f_pkmn_comes_out]| function(player, spot) -- assumes that the pkmn coming is not nil.
+  local pkmn = player.team[spot]
 
   -- need to copy each move just for mimic to work when switching
-  foreach(pkmn, function(m)
-    add(moves, m)
-  end)
 
   -- TODO: i should combine this with f_mkpkmn. so all pkmn stuff is just in 1 place.
   player.active = setmetatable(f_zobj([[
@@ -110,8 +109,8 @@ end $$
     toxiced,       0, -- how bad the toxic is
 
     -- curmove -- used for multiturn moves, if moveturn ~= 0, this must be set
-    base,@,
-    mynewmoves,@;
+    spot,@,
+    base,@;
 
     stages;
       attack,         0,
@@ -122,10 +121,14 @@ end $$
       crit,           0, -- TODO: rename crit
       evasion,        0,
       accuracy,       0; -- TODO: delete the semicolon
-  ]], f_flr_rnd'7'+1, pkmn, moves), {__index=pkmn})
+  ]], f_flr_rnd'7'+1, spot, pkmn), {__index=pkmn})
   -- ^^ hard-coding sleep timer here
 
-  return f_newaction(player, "enters,fight", function()
+  for i=1,4 do
+    player.active[i] = pkmn[i]
+  end
+
+  return f_newaction(player, "enters fight", function()
     player.active.invisible = false
     return player.active.num
   end)
@@ -141,8 +144,9 @@ end $$
   for player in all{p_first,p_last} do -- TODO: try _ENV syntax here?
     if player.active.hp <= 0 then
       if player.active.major ~= C_MAJOR_FAINTED then
-        return f_newaction(player, "has fainted", function(_ENV)
-          selfactive.base.major = C_MAJOR_FAINTED
+        return f_newaction(player, "has fainted", function()
+          player.active.base.major = C_MAJOR_FAINTED
+          player.active.major = C_MAJOR_FAINTED -- TODO: why do i need to call this, the call on base didn't work.
         end)
       else -- TODO: this is slightly diff logic than og picodex, check if there are any issues here
         return f_pkmn_comes_out(player, f_get_next_active(player)) -- TODO: is there a nil issue here?
@@ -255,7 +259,7 @@ end $$
   if p_2.iscpu then
     local possible_moves = {}
     for i=1,4 do
-      if p_2.active[i].valid and p_2.active[i].pp > 0 then
+      if p_2.active[i].num < M_NONE and p_2.active[i].pp > 0 then
         add(possible_moves, i)
       end
     end

@@ -427,21 +427,11 @@ end $$
 end $$
 
 |[f_op_batsel]| function(_ENV)
-  add(op, {text="fight", select=function()
-    f_add_to_ui_stack(g_grid_battle_movesel)
-  end})
-
-  add(op, {text="swap", select=function()
-    f_add_to_ui_stack(g_grid_battle_switch)
-  end})
-
-  add(op, {text="auto", select=function()
-    f_add_to_ui_stack(g_grid_battle_stats)
-  end})
-
-  add(op, {text="run", select=function()
-    f_end_battle(p_self)
-  end})
+  -- TODO: this definitely could be crunched
+  add(op, {text="fight", select=function() f_add_to_ui_stack(g_grid_battle_movesel) end})
+  add(op, {text="swap",  select=function() f_add_to_ui_stack(g_grid_battle_switch)  end})
+  add(op, {text="view",  select=function() f_add_to_ui_stack(g_grid_battle_stats)   end})
+  add(op, {text="run",   select=function() f_end_battle(p_self)                     end})
 
   f_add_battle(preview_op)
 end $$
