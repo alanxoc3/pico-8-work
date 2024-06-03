@@ -304,11 +304,10 @@ return player.active.num
 end)
 end,function()
 for player in all{p_first,p_last}do
-if player.active.hp<=0 then
-if player.active.major ~=1 then
-return f_newaction(player,"has fainted",function()
-player.active.base.major=1
-player.active.major=1
+if player.active.major==1 then
+if not player.active.invisible then
+return f_newaction(player,"leaves fight",function()
+player.active.invisible=true
 end)
 else
 return f_pkmn_comes_out(player,f_get_next_active(player))
@@ -428,6 +427,9 @@ local text="-"..dmg.." hp change"
 a_addaction(p_other,text,function()
 a_addaction(p_self,text,function()
 a_self_active.hp-=dmg
+if a_self_active.hp<=0 then
+a_self_active.base.major=1
+end
 end)
 end)
 end,function(ind,base,respect_locks,gender_bit,item,...)
@@ -772,6 +774,7 @@ end
 end)
 f_zobj_set(_g,"f_add_battle,@,f_op_batsel,@,f_op_movesel,@,f_op_batswitch,@,f_s_batresults,@,f_op_batresults,@,f_op_batstats,@,f_l_browse,@,f_s_browse,@,f_s_title,@,f_s_pkstat,@,f_s_statedit,@,f_s_versus,@,f_s_league,@,f_op_statbattle,@,f_s_batstat,@,f_s_statbat,@,f_s_versusbegin,@,f_s_batbegin,@,f_s_edit,@,f_s_editteam,@,f_s_editpkmn,@,f_s_editstat,@,f_s_editmovebot,@,f_s_battle,@,f_s_editmove,@,f_s_edititem,@,f_l_title,@,f_l_battle,@,f_s_batmove,@,f_op_startturn,@,f_s_startturn,@,f_op_bataction,@,f_s_bataction,@,f_l_bataction,@,f_strtoq,@,f_loop_through_team_pkmn,@,_update,@,_draw,@,c_move_funcs,@",function(op)
 local b=function(_ENV,team,x,y,px,py,flip)
+if invisible then return end
 f_roundrect(x-1+1,y+1-6+1,x+35-1,y+6+6+1,3)
 if hp>0 then
 rectfill(x+1,y+3,x+1+mid(0,hp/maxhp*32,32),y+6,2)
@@ -782,7 +785,7 @@ pset(x+33,y+6,3)
 end
 local tx,ty=x+15,y+9
 for i=0,5 do
-if team[i+1].valid and team[i+1].major ~=1 then
+if spot==i+1 or team[i+1].valid and team[i+1].major ~=1 then
 pset(tx+i%3*2,ty+i\3*2-1+1,spot==i+1 and 4 or 2)
 end
 if i ~=1 then

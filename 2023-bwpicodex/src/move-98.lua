@@ -15,6 +15,10 @@ end $$
   a_addaction(p_other, text, function()
     a_addaction(p_self, text, function()
       a_self_active.hp -= dmg
+      if a_self_active.hp <= 0 then
+        a_self_active.base.major = C_MAJOR_FAINTED
+        --a_self_active.major = C_MAJOR_FAINTED -- TODO: why do i need to call this, the call on base didn't work.
+      end
     end)
   end)
 end $$

@@ -142,11 +142,10 @@ end $$
   -- switch if there is a next pokemon
   -- otherwise, do nothing. turn logic will check every turn if there is a win condition
   for player in all{p_first,p_last} do -- TODO: try _ENV syntax here?
-    if player.active.hp <= 0 then
-      if player.active.major ~= C_MAJOR_FAINTED then
-        return f_newaction(player, "has fainted", function()
-          player.active.base.major = C_MAJOR_FAINTED
-          player.active.major = C_MAJOR_FAINTED -- TODO: why do i need to call this, the call on base didn't work.
+    if player.active.major == C_MAJOR_FAINTED then
+      if not player.active.invisible then
+        return f_newaction(player, "leaves fight", function()
+          player.active.invisible = true
         end)
       else -- TODO: this is slightly diff logic than og picodex, check if there are any issues here
         return f_pkmn_comes_out(player, f_get_next_active(player)) -- TODO: is there a nil issue here?

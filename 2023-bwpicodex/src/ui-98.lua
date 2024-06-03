@@ -397,6 +397,7 @@ end $$
 
 |[f_add_battle]| function(op)
   local b = function(_ENV, team, x, y, px, py, flip)
+    if invisible then return end
     f_roundrect(x-1+1, y+1-6+1, x+35-1, y+6+6+1, C_3)
     if hp > 0 then
       rectfill(x+1, y+3, x+1+mid(0, hp/maxhp*32, 32), y+6, C_2)
@@ -408,7 +409,7 @@ end $$
 
     local tx, ty = x+15, y+9
     for i=0,5 do
-      if team[i+1].valid and team[i+1].major ~= C_MAJOR_FAINTED then
+      if spot == i+1 or team[i+1].valid and team[i+1].major ~= C_MAJOR_FAINTED then
         pset(tx+i%3*2, ty+i\3*2-1+1, spot == i+1 and C_4 or C_2 )
       end
 
