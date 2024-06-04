@@ -78,13 +78,13 @@ end $$
 -- player cannot be nil, others can. the player turn is passed and the current active is extracted.
 -- the current active is needed because if it dies, we want to skip over actions
 -- if message is false/nil, the logic function is executed immediately, then the next action is executed
-|[f_newaction]| function(player, message, logic)
-  return f_zobj([[player,@, active,@, message,@, logic,@]], player, player.active, message, logic or f_nop)
+|[f_newaction]| function(onplayer, player, message, logic, isplayeraction)
+  return f_zobj([[onplayer,@, player,@, active,@, message,@, logic,@, isplayeraction,@]], onplayer, player, player.active, message, logic or f_nop, isplayeraction)
 end $$
 
 -- adds an action to a player's turn
 |[f_addaction]| function(player, ...)
-  add(player.actions, f_newaction(...))
+  add(player.actions, f_newaction(player, ...))
 end $$
 
 |[f_pkmn_comes_out]| function(player, spot) -- assumes that the pkmn coming is not nil.
@@ -128,10 +128,10 @@ end $$
     player.active[i] = pkmn[i]
   end
 
-  return f_newaction(player, "enters fight", function()
+  return f_newaction(player, player, "sends "..player.active.name, function()
     player.active.invisible = false
     return player.active.num
-  end)
+  end, true)
 end $$
 
 -- self player, other player
@@ -144,9 +144,9 @@ end $$
   for player in all{p_first,p_last} do -- TODO: try _ENV syntax here?
     if player.active.major == C_MAJOR_FAINTED then
       if not player.active.invisible then
-        return f_newaction(player, "leaves fight", function()
+        return f_newaction(player, player, "backs "..player.active.name, function()
           player.active.invisible = true
-        end)
+        end, true)
       else -- TODO: this is slightly diff logic than og picodex, check if there are any issues here
         return f_pkmn_comes_out(player, f_get_next_active(player)) -- TODO: is there a nil issue here?
       end
@@ -155,6 +155,7 @@ end $$
 
   for player in all{p_first,p_last} do
     local other = f_get_other_pl(player) -- TODO: i think i can move this below. only 1 usage
+    printh(player.name.." len "..#player.actions)
 
     -- if the active pokemon shouldn't faint right now, find the next action that references a pokemon still on the field.
     while #player.actions > 0 do
@@ -179,7 +180,7 @@ end $$
 end $$
 
 |[f_postmove_logic]| function(self) -- TODO: this is only used once, the function could go away.
-  return f_newaction(self, false, function()
+  return f_newaction(self, self, false, function()
     -- flinching is reset at the psel init level, so you can't be flinching the next turn. no need to reset flinching here.
     -- counterdmg is also reset at psel init level.
 

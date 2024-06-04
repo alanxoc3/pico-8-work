@@ -638,7 +638,8 @@ end $$
 end $$
 
 |[f_op_startturn]| function(obj)
-  g_bat_msg = "begins turn"
+  g_msg_top = p_self.name.." "..p_self.subname -- TODO: can this be extracted/combined with other g_msg stuff?
+  g_msg_bot = "begins turn"
   f_op_bataction(obj)
 end $$
 
@@ -648,17 +649,17 @@ end $$
 end $$
 
 |[f_op_bataction]| function(_ENV)
-  if not g_bat_msg then
-  end
+  if not g_msg_bot then end -- TODO: is this needed?
   add(op, {draw=function()
-    f_print_top(p_self.name, " ", p_self.active.name)
-    f_print_bot(g_bat_msg)
+    f_print_top(g_msg_top)
+    f_print_bot(g_msg_bot)
   end})
 
   f_add_battle(preview_op)
 end $$
 
-g_bat_msg = ""
+g_msg_top = ""
+g_msg_bot = ""
 g_bat_func = nil
 |[f_s_bataction]| function()
   while true do -- a "return" is the only way out of here. we could execute multiple actions in a frame if some actions simply trigger other actions. TODO: is there any checks i can have here instead of returns?
@@ -676,16 +677,22 @@ g_bat_func = nil
       a_self_active, a_other_active = p_self.active, p_other.active
 
       -- TODO: this should probably add to the current turn actions. Not the current actions player.
-      a_addaction = function(...) f_addaction(action.player, ...) end
+      a_addaction = function(...) f_addaction(action.onplayer, ...) end
       action.logic(envparams)
 
       -- an empty message means we execute the logic, but look for another action
       if action.message then
-        g_bat_msg = action.message
+        g_msg_top = p_self.name.." "..p_self.active.name
+        if action.isplayeraction then -- TODO: token crunch
+          g_msg_top = p_self.name.." "..p_self.subname
+        end
+        g_msg_bot = action.message
         return
       end
     else
       f_set_pself(p_1)
+      p_1.turnover = false
+      p_2.turnover = false
       f_pop_ui_stack()
       f_add_to_ui_stack(g_grid_battle_turnbeg)
       return -- important! need to return out otherwise we have an infinite loop
