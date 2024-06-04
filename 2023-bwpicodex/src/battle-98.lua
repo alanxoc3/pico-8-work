@@ -244,7 +244,7 @@ end $$
   for player in all{p_first,p_last} do
     if player.nextmove then
       f_addaction(player, player, "uses "..c_move_names[player.nextmove.num], function()
-        c_move_funcs[player.nextmove.num]()
+        player.nextmove:func()
       end)
     end
   end

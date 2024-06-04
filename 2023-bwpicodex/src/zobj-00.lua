@@ -57,6 +57,7 @@ f_zobj_set(_g, [[
 -- set the initial state of _g. _g is needed for ztable "%" references to work.
 -- see the perl preprocessor script for more info on G_TABLE_INITIALIZATION.
 -- technically, f_zobj sets the metatable to _g. That's recursive and bad, so we overwrite it to the global scope. This way we can access pico-8 api functions.
+-- sets to f_zobj_set(_g, [[...]], ...)
 _G_ZOBJ
 
 -- need to add the functions in this file to the _g scope too, so other things can access them!

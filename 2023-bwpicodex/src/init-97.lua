@@ -2,7 +2,7 @@ f_zcall(poke, [[
    ;,0x5f2c,   3 -- screen to 64x64
   ;;,0x5f5c,   8 -- set btn initial delay before repeating. 255 means never repeat.
   ;;,0x5f5d,   1 -- set btn repeating delay.
-  ;;,S_STORY,  20 -- todo: remove me, this is just for debugging
+  ;;,S_STORY,  57 -- todo: remove me, this is just for debugging
 ]])
 
 cls() -- this is just a visual thing when the game starts up. TODO: i can remove it if i want. probably should
@@ -319,6 +319,10 @@ for i=0,252 do -- There are 252+1 pkmn and 252+1 moves. The +1s are for empties.
   foreach(split'pow,pktype,acc,pp', function(key)
     c_moves[i][key] = f_init_peek_inc()
   end)
+
+  -- TODO: if these can fit in data section, that would be sweet scent
+  c_moves[i].func = _g[c_move_funcs[i][1]]
+  c_moves[i].spec = c_move_funcs[i][2]
 
   -- 'item' actually has gender and item information, but keeping the name item saves a possible token
   foreach(split'prevolve,pktype1,pktype2,hp,attack,defense,speed,specialattack,specialdefense,default_item', function(key)
