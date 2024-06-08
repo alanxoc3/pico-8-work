@@ -14,7 +14,6 @@
 |[f_create_active]| function(team, ind)
   return setmetatable(f_zobj([[
     spot,@,
-    stages,#,
     base,@
   ]], ind, team[ind]), {__index=team[ind]})
 end $$
@@ -155,7 +154,6 @@ end $$
 
   for player in all{p_first,p_last} do
     local other = f_get_other_pl(player) -- TODO: i think i can move this below. only 1 usage
-    printh(player.name.." len "..#player.actions)
 
     -- if the active pokemon shouldn't faint right now, find the next action that references a pokemon still on the field.
     while #player.actions > 0 do
@@ -210,7 +208,6 @@ end $$
   local priority_class = C_PRIORITY_ATTACK
   local movenum = player.nextmove and player.nextmove.num
   if movenum then
-    printh("M: "..movenum)
   end
   local other = f_get_other_pl(player)
 
@@ -232,6 +229,50 @@ end $$
   player.priority = priority_class+f_stat_calc(player.active, 'speed', true)
 end $$
 
+|[f_movelogic]| function(player)
+  local move = player.nextmove
+  f_addaction(player, player, (player.active.curmove and "resumes " or (move.func == f_move_multiturn and "begins " or "uses "))..c_move_names[move.num], function()
+    -- TODO: how does metronome work with solar beam. would pp get deducted twice?
+    move.pp -= 1 -- deducts struggle too, because why not. it cant hurt
+
+    if (function() -- miss logic TODO: fix this to be in line with gen 2 logic. this was copied from gen 1 picodex
+      if move.accuracy <= 0 then return false end -- swift/haze (-1) and status moves (0)
+
+      -- -- charging moves & fly/dig can't miss on the first turn
+      -- if (move.func == f_move_prepare or move.func == f_move_flydig) and not a_self_active.curmove then return false end
+
+      -- -- a_self_active misses if a_other_active is using fly/dig
+      -- if a_other_active.curmove and a_other_active.curmove.func == f_move_flydig then return true end
+
+      -- -- a_self_active can't miss trapping moves if the first hit succeeded
+      -- if a_self_active.curmove and a_self_active.curmove.func == f_move_trapping then return false end
+
+      -- every move aimed at oppenent in pokemon stadium has a 1/65536 chance of a move missing, besides swift
+      return rnd(f_stat_evac(a_other_active.stages['evasion'])) > move.accuracy/100*f_stat_evac(a_self_active.stages['accuracy']) or f_flr_rnd'256' == 0 and f_flr_rnd'256' == 0
+    end)() then
+      a_addaction(player, "misses "..move.name)
+
+      -- explosion & player destruct hurt the user first, then they might miss, so this part of that logic must go outside the normal flow
+      if f_in_split(move.num, 'M_EXPLOSION,M_SELFDESTRUCT') then -- TODO: maybe func could be checked? Might save tokens
+        f_moveutil_damage(a_self, a_self_active.hp)
+      end
+
+      if f_in_split(move.num, 'M_HIGH_JUMP_KICK,M_JUMP_KICK') then
+        -- TODO: 1/8 recoil of what it would have inflicted. TODO: Maybe I can modify this to 1/16 of health like leech seed. umm, that might be more damage. whatever maybe not
+        f_moveutil_damage(a_self, 1)
+      end
+    else
+      if move:func() then
+        a_addaction(player, "fails attack")
+      end
+    end
+
+    if move.accuracy ~= 0 then -- -1 is swift & haze. targeting moves
+      a_other_active.lastmoverecv = move.num
+    end
+  end)
+end $$
+
 |[f_turn_end_p2]| function()
   f_set_player_priority(p_1)
   f_set_player_priority(p_2)
@@ -243,9 +284,7 @@ end $$
 
   for player in all{p_first,p_last} do
     if player.nextmove then
-      f_addaction(player, player, "uses "..c_move_names[player.nextmove.num], function()
-        player.nextmove:func()
-      end)
+      f_movelogic(player)
     end
   end
 

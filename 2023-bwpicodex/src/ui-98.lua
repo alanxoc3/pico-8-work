@@ -130,14 +130,14 @@ end $$
 
 |[f_add_stat_move]| function(op, pkmn, ind)
   ind=ind+1
-  local movenum = pkmn[ind].num
-  local move = c_moves[movenum]
-  local pp, pow, acc, typ = f_get_move_texts(move)
+  local move = pkmn[ind]
+  local movenum = move.num
+  local maxpp, pp, pow, accuracy, typ = f_get_move_texts(move)
   local method = pkmn.possible_moves_method[movenum]
   add(op, {text="move"..ind.." "..move.name, header=true})
   add(op, {text=""..method.." "..typ})
-  add(op, {text="pwpnt "..pp.."/"..pp})
-  add(op, {text="pw/ac "..pow.."/"..acc})
+  add(op, {text="pwpnt "..pp.."/"..maxpp})
+  add(op, {text="pw/ac "..pow.."/"..accuracy})
 end $$
 
 |[f_add_stat_info]| function(op, pkmn)
@@ -244,33 +244,33 @@ end $$
 
 |[f_get_move_texts]| function(move)
   -- TODO: token crunching with zobj
-  local pp, pow, acc, typ = f_prefix_zero(move.pp, 2), f_prefix_zero(move.pow, 3), f_prefix_zero(move.acc, 3), c_type_names[move.pktype]
+  local maxpp, pp, pow, accuracy, typ = f_prefix_zero(move.maxpp, 2), f_prefix_zero(move.pp, 2), f_prefix_zero(move.pow, 3), f_prefix_zero(move.accuracy, 3), c_type_names[move.pktype]
 
   if     move.pow == 0 then pow = "___"
   elseif move.pow == 1 then pow = "var" end
-  if move.acc == 0 then acc = "___" end
+  if move.accuracy == 0 then accuracy = "___" end
 
   -- TODO: I'd rather store an empty move to save a few tokens. Empty and struggle.
   if move.num == M_NONE then
-    typ, pp, pow, acc = "______", "__", "___", "___"
+    typ, maxpp, pp, pow, accuracy = "______", "__", "__", "___", "___"
   elseif not move.lock then
-    pp, pow, acc, typ = f_strtoq(pp), f_strtoq(pow), f_strtoq(acc), f_strtoq(typ)
+    maxpp, pp, pow, accuracy, typ = f_strtoq(maxpp), f_strtoq(pp), f_strtoq(pow), f_strtoq(accuracy), f_strtoq(typ)
   end
-  return pp, pow, acc, typ
+  return maxpp, pp, pow, accuracy, typ
 end $$
 
 -- TODO: is this better being inside an "op" function?
 |[f_dt_editmove_template]| function(move, method)
-  local pp, pow, acc, typ = f_get_move_texts(move)
+  local maxpp, pp, pow, accuracy, typ = f_get_move_texts(move)
   local ind = f_getsel'g_grid_editmovebot'+1
 
   f_print_top("edit move"..ind)
   f_print_bot(method.." "..typ)
-  --f_print_bot("pw:"..pow.." ac:"..acc)
+  --f_print_bot("pw:"..pow.." ac:"..accuracy)
   --add(preview_op, {text=})
 
   -- f_print_top(method, " ", typ)
-  -- f_print_bot(pp, "pp ", pow, "P ", acc, "A")
+  -- f_print_bot(pp, "pp ", pow, "P ", accuracy, "A")
 end $$
 
 |[f_dt_editmove]| function()
@@ -439,7 +439,7 @@ end $$
 
 |[f_op_movesel]| function(_ENV)
   for i=1,4 do
-    add(op, {text=c_move_names[p_self.active[i].num]})
+    add(op, {text=c_move_names[p_self.active[i].num], disabled=p_self.active[i].pp == 0})
   end
 
   f_add_stat_move(preview_op, p_self.active, f_getsel'g_grid_battle_movesel')

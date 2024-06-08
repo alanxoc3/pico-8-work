@@ -89,7 +89,15 @@ function debug_sort(t, compare_func)
 end
 
 -- converts anything to a string
-function debug(any)
+function db(...)
+  local str = ""
+  for x in all{...} do
+    str = str..debug_helper(x).." "
+  end
+  printh(str)
+end
+
+function debug_helper(any)
   if type(any)~="table" then return tostr(any) end
   local str = "{"
   local keys = {}
