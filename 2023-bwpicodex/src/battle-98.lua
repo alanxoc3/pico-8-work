@@ -35,6 +35,7 @@ end $$
     iscpu,@,          -- Whether or not the player is a cpu
     turnover,~c_no,   -- Whether or not the player has executed its end-of-turn logic when actions are empty. TODO: this could be removed, here so i don't forget that it must be updated each turn
     actions,#,        -- Actions for the player.
+    greed,7           -- The next spot in the buffer. This is only used for horde.
     -- nextmove,~c_no -- 0-3 for a move index into the moveset. false value for switching. Commented out to save on compression, defaults to nil value
   ]], active, team, name, subname, iscpu)
 end $$
@@ -72,6 +73,7 @@ end $$
   f_pop_ui_stack() -- p_2 select scene
   f_pop_ui_stack() -- p_1 select scene
   f_add_to_ui_stack(g_grid_battle_results)
+  f_setsel('g_grid_battle_results', p_other.active.spot-1)
 end $$
 
 -- player cannot be nil, others can. the player turn is passed and the current active is extracted.
@@ -145,6 +147,7 @@ end $$
       if not player.active.invisible then
         return f_newaction(player, player, "backs "..player.active.name, function()
           player.active.invisible = true
+          f_fill_team(player.team, player.active.spot)
         end, true)
       else -- TODO: this is slightly diff logic than og picodex, check if there are any issues here
         return f_pkmn_comes_out(player, f_get_next_active(player)) -- TODO: is there a nil issue here?
@@ -233,7 +236,7 @@ end $$
   local move = player.nextmove
   f_addaction(player, player, (player.active.curmove and "resumes " or (move.func == f_move_multiturn and "begins " or "uses "))..c_move_names[move.num], function()
     -- TODO: how does metronome work with solar beam. would pp get deducted twice?
-    move.pp -= 1 -- deducts struggle too, because why not. it cant hurt
+    -- move.pp -= 1 -- deducts struggle too, because why not. it cant hurt
 
     if (function() -- miss logic TODO: fix this to be in line with gen 2 logic. this was copied from gen 1 picodex
       if move.accuracy <= 0 then return false end -- swift/haze (-1) and status moves (0)

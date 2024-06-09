@@ -104,7 +104,7 @@ function debug_helper(any)
   for i=1,#any do
     if str~="{" then str=str.."," end
     keys[i] = true
-    str=str..debug(any[i])
+    str=str..debug_helper(any[i])
   end
   local sortedkeys = {}
   for k,v in pairs(any) do
@@ -116,7 +116,7 @@ function debug_helper(any)
   debug_sort(sortedkeys)
   for k in all(sortedkeys) do
     if str~="{" then str=str.."," end
-    str=str..debug(k).."="..debug(any[k])
+    str=str..debug_helper(k).."="..debug_helper(any[k])
   end
   return str.."}"
 end

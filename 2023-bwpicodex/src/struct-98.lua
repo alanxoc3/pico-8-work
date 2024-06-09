@@ -50,7 +50,7 @@
 end $$
 
 |[f_team_party]| function(party_num)
-  local team = {}
+  local team = {fill_ind=7, trainer={}}
   for spot_num=0,5 do
     add(team, f_get_party_pkmn(party_num, spot_num))
   end
@@ -58,16 +58,9 @@ end $$
 end $$
 
 -- this gets called to populate a trainer and when a pokemon dies (for horde mode).
-|[f_fill_team]| function(team) -- TODO: use _ENV syntax
-  local spot = false
-  for i=6,1,-1 do
-    if not team[i] then -- TODO: make this work for fainted pkmn too. fainted would be during horde mode
-      spot = i
-    end
-  end
-
+|[f_fill_team]| function(team, spot) -- TODO: use _ENV syntax
   local pkmn_ind = team.trainer[team.fill_ind]
-  if spot and pkmn_ind then
+  if pkmn_ind then
     local last_move = 8
     local possible_moves = c_pokemon[pkmn_ind].possible_moves
     -- the "9" hear means: skip 1-4 empty move slots. 5,6,7 are the first 3 moves. 8 is the last move, which we want to check if we overwrite
@@ -82,10 +75,11 @@ end $$
   end
 end $$
 
-|[f_team_league]| function(trainer_num, fill_ind)
-  local team = {fill_ind=fill_ind or 1, trainer=c_trainers[trainer_num]}
+|[f_team_league]| function(trainer_num)
+  local team = {fill_ind=1, trainer=c_trainers[trainer_num]}
+  db(c_trainers[trainer_num])
   for i=1,6 do
-    f_fill_team(team)
+    f_fill_team(team, i)
   end
   return team
 end $$

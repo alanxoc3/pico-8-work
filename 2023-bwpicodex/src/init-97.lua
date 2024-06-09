@@ -449,7 +449,7 @@ end $$
   end
 
   for i=1,min(58,@S_STORY) do
-    local team = f_team_league(i, i==58 and 247) -- the if check is to add missingno from horde mode
+    local team = f_team_league(i)
     for pkmn in all(team) do
       f_unlock(c_pokemon, pkmn.num)
       f_unlock(c_items, pkmn.item+1)

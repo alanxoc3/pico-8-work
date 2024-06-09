@@ -19,7 +19,7 @@ end $$
 -- TODO: pkmn shakes when disabled (battle, press o, then x on switch). i don't want that.
 |[f_draw_pkmn]| function(num, x, y, width, flip, sel, disabled, isoutline)
   -- the "min" is needed to draw trainers
-  if not isoutline and stat'46' > -1 and g_cur_pkmn_cry == num then -- if a pkmn cry is currently playing and selected, shake!
+  if not disabled and not isoutline and stat'46' > -1 and g_cur_pkmn_cry == num then -- if a pkmn cry is currently playing and selected, shake!
     x += sin(g_shake_timer/4)
   end
 
