@@ -2,15 +2,17 @@
 -- p_ = preview, t_ = text. The "preview" grid is the area at the top of the screen. The "text" grid is the area at the bottom of the screen.
 
 -- current: 4707 | 28810 | 10642
------------------------------
--- OP FUNCTIONS - DATA FOR UI
------------------------------
 
 -- TODO: i could add another ui screen for confirming you want to select a pokemon. but its fine if i dont do this too.
 -- TODO: stretch goal: add tiny descriptions for items
 
+
+---------------------------------------------------------------------- :OP
+
 -- This updates the lock variables, which determine if a pokemon/item/move is unlocked.
-|[f_op_def]| function(_ENV) add(op, {}) end $$
+|[f_op_def]|        function(_ENV) add(op, {}) end $$
+|[f_op_edititem]|   function(_ENV) f_op_template_edit(op, c_items, 'item')  end $$
+|[f_op_statbrowse]| function(_ENV) f_add_stat(op, c_pokemon[f_getsel'g_grid_browse']) end $$
 
 |[f_op_browse]| function(_ENV)
   for i=0,251 do
@@ -19,6 +21,14 @@
       f_draw_pkmn(c_pokemon[i].lock and i or P_NONE, 1, 1, 6, false, false, gridobj.disabled, not is_sel)
     end})
   end
+end $$
+
+|[f_op_statbattle]| function(_ENV)
+  local bothteams = {}
+  for i=1,6 do add(bothteams, p_self.team[i]) end
+  for i=1,6 do add(bothteams, p_other.team[i]) end
+
+  f_add_stat(op, bothteams[f_getsel'g_grid_battle_stats'+1], true)
 end $$
 
 |[f_op_edit]| function(_ENV, sumdisable)
@@ -106,12 +116,6 @@ end $$
   end})
 end $$
 
--- TODO: experiment with making item num/name/lock in same obj -- 4042
-|[f_create_spot]| function(_ENV, op, disabled)
-  add(op, {text=lock and name or f_strtoq(name), disabled=disabled or not lock})
-end $$
-
-|[f_get_edit_op_pkmn]| function() return f_get_party_pkmn(f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot') end $$
 |[f_op_editmove]| function(_ENV)
   local pkmn = f_get_edit_op_pkmn()
   for i, num in ipairs(pkmn.possible_moves) do
@@ -119,89 +123,70 @@ end $$
   end
 end $$
 
-|[f_op_template_edit]| function(op, list, key)
-  local pkmn = f_get_edit_op_pkmn()
-  for obj in all(list) do
-    f_create_spot(obj, op, pkmn[key] == obj.num)
+|[f_op_batsel]| function(_ENV)
+  -- TODO: this definitely could be crunched
+  add(op, {text="fight", select=function() f_add_to_ui_stack(g_grid_battle_movesel) end})
+  add(op, {text="swap",  select=function() f_add_to_ui_stack(g_grid_battle_switch)  end})
+  add(op, {text="view",  select=function() f_add_to_ui_stack(g_grid_battle_stats)   end})
+  add(op, {text="run",   select=function() f_end_battle(p_self)                     end})
+
+  f_add_battle(preview_op)
+end $$
+
+|[f_op_movesel]| function(_ENV)
+  for i=1,4 do
+    add(op, {text=c_move_names[p_self.active[i].num], disabled=p_self.active[i].pp == 0})
+  end
+
+  f_add_stat_move(preview_op, p_self.active, f_getsel'g_grid_battle_movesel')
+end $$
+
+|[f_op_batswitch]| function(_ENV)
+  for i=1,6 do
+    local pkmn = p_self.team[i]
+    local disabled = not pkmn.valid or i==p_self.active.spot or pkmn.major == C_MAJOR_FAINTED
+    add(op, {disabled=disabled, draw=function(i, is_sel)
+      f_draw_pkmn(pkmn.num, 1, 1, 16, p_self == p_2, false, disabled, not disabled and not is_sel)
+    end})
   end
 end $$
 
-|[f_op_edititem]| function(_ENV) f_op_template_edit(op, c_items, 'item')  end $$
+|[f_op_batresults]| function(_ENV)
+  for i=1,6 do
+    local pkmn = p_other.team[i]
+    local disabled = not pkmn.valid or pkmn.major == C_MAJOR_FAINTED
+    add(op, {disabled=disabled, draw=function(i, is_sel)
+      f_draw_pkmn(pkmn.num, 1, 1, 16, false, false, disabled, not disabled and not is_sel)
+    end})
+  end
 
-|[f_add_stat_move]| function(op, pkmn, ind)
-  ind=ind+1
-  local move = pkmn[ind]
-  local movenum = move.num
-  local maxpp, pp, pow, accuracy, typ = f_get_move_texts(move)
-  local method = pkmn.possible_moves_method[movenum]
-  add(op, {text="move"..ind.." "..move.name, header=true})
-  add(op, {text=""..method.." "..typ})
-  add(op, {text="pwpnt "..pp.."/"..maxpp})
-  add(op, {text="pw/ac "..pow.."/"..accuracy})
+  add(preview_op, {draw=function()
+    f_print_top(p_other.name.." "..p_other.subname)
+    --f_print_bot("is victorious")
+    --f_print_bot("wins the match!")
+    f_print_bot("is the winner!")
+  end})
 end $$
 
-|[f_add_stat_info]| function(op, pkmn)
-  add(op, {text="#"..f_prefix_zero(pkmn.num, 3).." "..pkmn.name, header=true})
-  add(op, {text="type1 "..c_type_names[pkmn.pktype1]})
-  add(op, {text="type2 "..c_type_names[pkmn.pktype2]})
-  add(op, {text="prevo "..c_pkmn_names[pkmn.prevolve]})
+|[f_op_batstats]| function(_ENV)
+  for i=1,6 do
+    local pkmn = p_self.team[i]
+    local disabled = not pkmn.valid
+    add(op, {lrvalid=not disabled, disabled=disabled, draw=function(i, is_sel)
+      f_draw_pkmn(pkmn.num, 1, 1, 16, false, false, disabled, not disabled and not is_sel)
+    end})
+  end
+
+  for i=1,6 do
+    local pkmn = p_other.team[i]
+    local disabled = not pkmn.valid
+    add(op, {lrvalid=not disabled, disabled=disabled, draw=function(i, is_sel)
+      f_draw_pkmn(pkmn.num, 1, 1, 16, false, false, disabled, not disabled and not is_sel)
+    end})
+  end
 end $$
 
-|[f_add_stat]| function(op, pkmn, is_battle)
-  local draw_preview = function(off)
-    f_roundrect(15,off-19,42,off+6,C_3)
-    f_draw_pkmn(pkmn.num, 21, off-13, 16, false, false, false, false)
-  end
-
-  add(op, {header=true, draw=function() draw_preview'18' end})
-  add(op, {header=true, draw=function() draw_preview'9' end})
-  add(op, {header=true, draw=function() draw_preview'0' end})
-
-  f_add_stat_info(op, pkmn)
-  if is_battle then
-    add(op, {text="pkmn state", header=true})
-    add(op, {text="cond "..c_major_names_long[pkmn.major]})
-    add(op, {text="gend "..c_gender_names[pkmn.gender]})
-    add(op, {text="item "..c_item_names[pkmn.item]})
-  end
-
-  add(op, {text="pkmn stats", header=true})
-  add(op, {text="htpnt " .. pkmn.hp .. "/" .. pkmn.maxhp})
-
-  for key in all(f_zobj[[,attack,defense,specialattack,specialdefense,speed]]) do
-    local txt = c_statmod_names[key].." "..f_prefix_zero(pkmn[key], 3)
-    local stage = pkmn.stages[key]
-    txt ..= (stage < 0 and "-" or "+")..abs(stage)
-    add(op, {text=txt})
-  end
-
-  for key in all(f_zobj[[,crit,evasion,accuracy]]) do
-    local stage = pkmn.stages[key]
-    add(op, {text=c_statmod_names[key].." "..stage.."%"})
-  end
-
-  -- add(op, {text="at/df 123/096"})
-  -- add(op, {text="sa/sd 311/916"})
-  -- add(op, {text="sp/cr 223/006"})
-  -- add(op, {text="ev/ac 100/100"})
-
-  if is_battle then
-    add(op, {text="pkmn moves", header=true})
-    add(op, {text=f_prefix_space(c_move_names[pkmn[1].num], 6).." 20/20"})
-    add(op, {text=f_prefix_space(c_move_names[pkmn[2].num], 6).." 20/20"})
-    add(op, {text=f_prefix_space(c_move_names[pkmn[3].num], 6).." 20/20"})
-    add(op, {text=f_prefix_space(c_move_names[pkmn[4].num], 6).." 20/20"})
-  end
-
-  -- TODO: idk. should i include battle flags or no?
-  -- for i,x in ipairs(split"active,benchd,none,mvlock,bide,dfncrl,disabl,confus,rolout,dstbnd,lockon,dig,fly,fryctr,rage,toxic,persng,pdecnt,substu,ngtmar,trform,lechsd,curse,mist,trappd,meanlk,atract,forsgt,ftrsgt,safgrd,litscr,rflect,spikes,sndstr,raidnc,sunday") do
-end $$
-
-|[f_op_statbrowse]| function(_ENV) f_add_stat(op, c_pokemon[f_getsel'g_grid_browse']) end $$
-
----------------------------------------------
--- dp and dt drawing for ui
----------------------------------------------
+---------------------------------------------------------------------- :DT
 |[f_dt_editteam]| function(i, is_sel)
   local spotstr = "spot"..(f_getsel'g_grid_pickspot'+1) -- ," spot",f_getsel'g_grid_pickspot'+1)
 
@@ -225,40 +210,6 @@ end $$
   f_print_bot("#", pkmn.num_str, " ", pkmn.name)
 end $$
 
-|[f_print_top]| function(...)
-  local text = ""
-  for x in all{...} do
-    text ..= x
-  end
-  print("\f4"..text, 1, 1)
-end $$
-
--- TODO: dedup with _top
-|[f_print_bot]| function(...)
-  local text = ""
-  for x in all{...} do
-    text ..= x
-  end
-  print("\f2"..text, 1, 8)
-end $$
-
-|[f_get_move_texts]| function(move)
-  -- TODO: token crunching with zobj
-  local maxpp, pp, pow, accuracy, typ = f_prefix_zero(move.maxpp, 2), f_prefix_zero(move.pp, 2), f_prefix_zero(move.pow, 3), f_prefix_zero(move.accuracy, 3), c_type_names[move.pktype]
-
-  if     move.pow == 0 then pow = "___"
-  elseif move.pow == 1 then pow = "var" end
-  if move.accuracy == 0 then accuracy = "___" end
-
-  -- TODO: I'd rather store an empty move to save a few tokens. Empty and struggle.
-  if move.num == M_NONE then
-    typ, maxpp, pp, pow, accuracy = "______", "__", "__", "___", "___"
-  elseif not move.lock then
-    maxpp, pp, pow, accuracy, typ = f_strtoq(maxpp), f_strtoq(pp), f_strtoq(pow), f_strtoq(accuracy), f_strtoq(typ)
-  end
-  return maxpp, pp, pow, accuracy, typ
-end $$
-
 -- TODO: is this better being inside an "op" function?
 |[f_dt_editmove_template]| function(move, method)
   local maxpp, pp, pow, accuracy, typ = f_get_move_texts(move)
@@ -266,11 +217,6 @@ end $$
 
   f_print_top("edit move"..ind)
   f_print_bot(method.." "..typ)
-  --f_print_bot("pw:"..pow.." ac:"..accuracy)
-  --add(preview_op, {text=})
-
-  -- f_print_top(method, " ", typ)
-  -- f_print_bot(pp, "pp ", pow, "P ", accuracy, "A")
 end $$
 
 |[f_dt_editmove]| function()
@@ -278,34 +224,6 @@ end $$
   local movenum = pkmn.possible_moves[f_getsel'g_grid_editmove'+1]
   local move = c_moves[movenum]
   f_dt_editmove_template(move, pkmn.possible_moves_method[movenum])
-end $$
-
-|[f_dt_editmovebot]| function()
-end $$
-
-|[f_prefix_space]| function(num, len)
-  local numstr = tostr(num)
-  while #numstr < len do numstr = " "..numstr end
-  return numstr
-end $$
-
--- TODO: DEDUP ABOVE
-|[f_prefix_zero]| function(num, len)
-  local numstr = tostr(num)
-  while #numstr < len do numstr = "0"..numstr end
-  return numstr
-end $$
-
-|[f_dt_browse_template]| function(pkmn_ind)
-  local pkmn = c_pokemon[pkmn_ind]
-  local namestr = pkmn.name
-
-  if not pkmn.lock then
-    namestr = f_strtoq(namestr)
-  end
-
-  f_print_top("view ", namestr)
-  f_print_bot("picodex #", f_prefix_zero(pkmn.num, 3))
 end $$
 
 |[f_dt_browse]| function()
@@ -375,140 +293,34 @@ end $$
   f_print_bot(toggle and "\f2" or "\f4", "plyr2 team", f_getsel'g_grid_pickplr2'+1)
 end $$
 
-|[f_dp_title]| function()
-  print("\^t\^wpicodex dual", 2, 1,  C_4)
-  print(c_palette_names[g_palette].." version",  2, 13, C_2)
-  f_draw_pkmn(g_title_l, 7 , 20+1, 16, false, false, false, g_title_sel)
-  f_draw_pkmn(g_title_r, 35, 20+1, 16, true , false, false, not g_title_sel)
-
-  -- print("\^wpicodex", 2, 1+1,  C_4)
-  -- print(c_palette_names[g_palette].." version",  2, 12-6+4, C_2)
-  -- f_draw_pkmn(g_title_l, 7 , 20-1, 16, false, false, false, g_title_sel)
-  -- f_draw_pkmn(g_title_r, 35, 20-1, 16, true , false, false, not g_title_sel)
-
+|[f_dt_title]| function()
+  print("\^w\^tpicodex", 2, 1-1+1+2-2,  C_4)
+  print(c_palette_names[g_palette], 2, 13-5+3+1, C_2)
+  f_draw_pkmn(g_title_l, 7 -0 , 20+1-4+2+1, 16, false, false, false, g_title_sel, true)
+  f_draw_pkmn(g_title_r, 35+0, 20+1-4+2+1, 16, true , false, false, not g_title_sel, true)
 end $$
 
-|[f_roundrect]| function(x1, y1, x2, y2, c)
-  rectfill(x1, y1+1, x2, y2-1, c)
-  if x2-x1 > 2 then -- if check is for the hp bar, so it looks good when small.
-    rectfill(x1+1, y1, x2-1, y2, c)
-  end
-end $$
+-- do i want a stats menu? or do i want level + auto?
+-- well, what is important that you can see in stat menu?
+-- item, move info, major, ...
 
-|[f_add_battle]| function(op)
-  local b = function(_ENV, team, x, y, px, py, flip)
-    if invisible then return end
-    f_roundrect(x-1+1, y+1-6+1, x+35-1, y+6+6+1, C_3)
-    if hp > 0 then
-      rectfill(x+1, y+3, x+1+mid(0, hp/maxhp*32, 32), y+6, C_2)
-      pset(x+1,  y+3, C_3)
-      pset(x+1,  y+6, C_3)
-      pset(x+33, y+3, C_3)
-      pset(x+33, y+6, C_3)
-    end
-
-    local tx, ty = x+15, y+9
-    for i=0,5 do
-      if spot == i+1 or team[i+1].valid and team[i+1].major ~= C_MAJOR_FAINTED then
-        pset(tx+i%3*2, ty+i\3*2-1+1, spot == i+1 and C_4 or C_2 )
-      end
-
-      if i ~= 1 then
-      end
-    end
-
-    print(name,   x+2,   y-5+1+1, C_2, -1)
-    print(c_major_names_short[major].."  "..f_prefix_zero(hp, 3), x+1+1, y+8-1+1,   C_2, -1)
-    f_draw_pkmn(num, px, py,  16, flip,  false, false, p_self.active ~= _ENV)
-  end
-
-  add(op, {draw=function() b(p_2.active, p_2.team,  0, 4, 39, 1, true)  end})
-  add(op, {draw=function() b(p_1.active, p_1.team, 23, 4,  3, 1)        end})
-
-end $$
-
-|[f_op_batsel]| function(_ENV)
-  -- TODO: this definitely could be crunched
-  add(op, {text="fight", select=function() f_add_to_ui_stack(g_grid_battle_movesel) end})
-  add(op, {text="swap",  select=function() f_add_to_ui_stack(g_grid_battle_switch)  end})
-  add(op, {text="view",  select=function() f_add_to_ui_stack(g_grid_battle_stats)   end})
-  add(op, {text="run",   select=function() f_end_battle(p_self)                     end})
-
-  f_add_battle(preview_op)
-end $$
-
-|[f_op_movesel]| function(_ENV)
-  for i=1,4 do
-    add(op, {text=c_move_names[p_self.active[i].num], disabled=p_self.active[i].pp == 0})
-  end
-
-  f_add_stat_move(preview_op, p_self.active, f_getsel'g_grid_battle_movesel')
-end $$
-
-|[f_op_batswitch]| function(_ENV)
-  for i=1,6 do
-    local pkmn = p_self.team[i]
-    local disabled = not pkmn.valid or i==p_self.active.spot or pkmn.major == C_MAJOR_FAINTED
-    add(op, {disabled=disabled, draw=function(i, is_sel)
-      f_draw_pkmn(pkmn.num, 1, 1, 16, p_self == p_2, false, disabled, not disabled and not is_sel)
-    end})
-  end
-end $$
-
+---------------------------------------------------------------------- :SELECT :LEAVE
 |[f_s_batresults]| function()
   g_preview_timer = 20
   return p_other.team[f_getsel'g_grid_battle_results'+1].num
 end $$
 
-|[f_op_batresults]| function(_ENV)
-  for i=1,6 do
-    local pkmn = p_other.team[i]
-    local disabled = not pkmn.valid or pkmn.major == C_MAJOR_FAINTED
-    add(op, {disabled=disabled, draw=function(i, is_sel)
-      f_draw_pkmn(pkmn.num, 1, 1, 16, false, false, disabled, not disabled and not is_sel)
-    end})
-  end
+|[f_l_browse]|   function()  f_pop_ui_stack()                                                                                                                      end $$
+|[f_s_browse]|   function()  f_add_to_ui_stack(g_grid_statbrowse)                                                                                                  end $$
+|[f_s_versus]|   function()  f_add_to_ui_stack(g_grid_pickplr2)                                                                                                    end $$
+|[f_s_league]|   function()  f_add_to_ui_stack(g_grid_picktrnr)                                                                                                    end $$
+|[f_s_batstat]|  function() f_add_to_ui_stack(g_grid_statbattle)                                                                                                   end $$
+|[f_s_edit]|     function() f_add_to_ui_stack(g_grid_pickspot)                                                                                                     end $$
+|[f_s_editteam]| function() f_add_to_ui_stack(f_get_party_pkmn(f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot').valid and g_grid_editstat or g_grid_editpkmn) end $$
 
-  add(preview_op, {draw=function()
-    f_print_top(p_other.name.." "..p_other.subname)
-    --f_print_bot("is victorious")
-    --f_print_bot("wins the match!")
-    f_print_bot("is the winner!")
-  end})
-end $$
-
-|[f_op_batstats]| function(_ENV)
-  for i=1,6 do
-    local pkmn = p_self.team[i]
-    local disabled = not pkmn.valid
-    add(op, {lrvalid=not disabled, disabled=disabled, draw=function(i, is_sel)
-      f_draw_pkmn(pkmn.num, 1, 1, 16, false, false, disabled, not disabled and not is_sel)
-    end})
-  end
-
-  for i=1,6 do
-    local pkmn = p_other.team[i]
-    local disabled = not pkmn.valid
-    add(op, {lrvalid=not disabled, disabled=disabled, draw=function(i, is_sel)
-      f_draw_pkmn(pkmn.num, 1, 1, 16, false, false, disabled, not disabled and not is_sel)
-    end})
-  end
-end $$
-
--- do i want a stats menu? or do i want level + auto?
--- well, what is important that you can see in stat menu?
--- item, move info, major, 
-
-----------------------------------------------------
--- sels and leaves - forward and back through stack
-----------------------------------------------------
-|[f_l_browse]| function()
-  f_pop_ui_stack()
-end $$
-
-|[f_s_browse]| function()
-  f_add_to_ui_stack(g_grid_statbrowse) -- 
-end $$
+|[f_s_editstat]|    function() gridpo[f_getsel'g_grid_editstat'+1].select()      end $$
+|[f_s_editmovebot]| function() gridpo[f_getsel'g_grid_editmovebot'+1].select()   end $$
+|[f_s_battle]|      function() gridpo[f_getsel'g_grid_battle_select'+1].select() end $$
 
 |[f_s_title]| function()
   if f_getsel'g_grid_title' == 0 then
@@ -532,26 +344,6 @@ end $$
   g_preview_timer = 20
   g_title_sel = not g_title_sel
   return f_get_party_pkmn(f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot').num
-end $$
-
-|[f_s_versus]| function()
-  f_add_to_ui_stack(g_grid_pickplr2)
-end $$
-
-|[f_s_league]| function()
-  f_add_to_ui_stack(g_grid_picktrnr)
-end $$
-
-|[f_op_statbattle]| function(_ENV)
-  local bothteams = {}
-  for i=1,6 do add(bothteams, p_self.team[i]) end
-  for i=1,6 do add(bothteams, p_other.team[i]) end
-
-  f_add_stat(op, bothteams[f_getsel'g_grid_battle_stats'+1], true)
-end $$
-
-|[f_s_batstat]| function()
-  f_add_to_ui_stack(g_grid_statbattle)
 end $$
 
 |[f_s_statbat]| function()
@@ -578,23 +370,9 @@ end $$
   f_add_to_ui_stack(g_grid_battle_turnbeg)
 end $$
 
-|[f_s_edit]| function()
-  f_add_to_ui_stack(g_grid_pickspot)
-end $$
-
-|[f_s_editteam]| function()
-  f_add_to_ui_stack(f_get_party_pkmn(f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot').valid and g_grid_editstat or g_grid_editpkmn)
-end $$
-
 |[f_s_editpkmn]| function()
   f_save_party_pkmn(f_mkpkmn(f_getsel'g_grid_editpkmn', c_pokemon[f_getsel'g_grid_editpkmn'], true, rnd(2)\1, I_NONE, 5, 6, 7, 8), f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot')
   f_pop_ui_stack()
-end $$
-
-|[f_s_editstat]| function() gridpo[f_getsel'g_grid_editstat'+1].select() end $$
-|[f_s_editmovebot]| function() gridpo[f_getsel'g_grid_editmovebot'+1].select() end $$
-|[f_s_battle]|   function()
-  gridpo[f_getsel'g_grid_battle_select'+1].select()
 end $$
 
 |[f_s_editmove]| function()
@@ -658,9 +436,6 @@ end $$
   f_add_battle(preview_op)
 end $$
 
-g_msg_top = ""
-g_msg_bot = ""
-g_bat_func = nil
 |[f_s_bataction]| function()
   while true do -- a "return" is the only way out of here. we could execute multiple actions in a frame if some actions simply trigger other actions. TODO: is there any checks i can have here instead of returns?
     -- check for win condition before selecting every action
@@ -704,9 +479,7 @@ end $$
   return p_self.active.num
 end $$
 
----------------------------------------------
--- connections
----------------------------------------------
+---------------------------------------------------------------------- :CONNECT
 -- This needs to be called early on because there is a draw
 f_zcall(f_create_gridpair, [[
    top_browse    ;,6 ,4 ,2 ,2  ,10 ,10
@@ -717,14 +490,14 @@ f_zcall(f_create_gridpair, [[
   ;top_text_grid ;,2 ,4 ,2 ,4  ,30 ,9
   ;top_title     ;,1 ,1 ,2 ,2  ,60 ,40
   ;top_battle    ;,1 ,1 ,2 ,2  ,60 ,40
-  ;top_battle2   ;,1 ,2 ,2 ,2  ,60 ,20
+  ;top_battle2   ;,1 ,1 ,2 ,2  ,60 ,40
   ;bot_4x4       ;,2 ,2 ,2 ,44 ,30 ,9
   ;bot_info      ;,1 ,1 ,2 ,45 ,60 ,16
   ;bot_ignore    ;,1 ,1 ,2 ,200 ,60 ,16
   ;top_newstat   ;,1 ,6 ,2 ,4  ,60 ,9
 
   -- name                  maingridspec     infogridspec    infogriddraw    main opfunc        select func       leave func      lrbasegrid        opfunc params
-  ;;,g_grid_title          ,~bot_4x4        ,~top_title     ,~f_dp_title    ,~f_op_title       ,~f_s_title       ,~f_l_title     ,~c_no
+  ;;,g_grid_title          ,~bot_4x4        ,~top_title     ,~f_dt_title    ,~f_op_title       ,~f_s_title       ,~f_l_title     ,~c_no
 
   ;;,g_grid_browse         ,~top_browse     ,~bot_info      ,~f_dt_browse   ,~f_op_browse      ,~f_s_browse      ,~f_l_browse    ,~c_no
   ;;,g_grid_editpkmn       ,~top_browse     ,~bot_info      ,~f_dt_editpkmn ,~f_op_browse      ,~f_s_editpkmn    ,~f_l_browse    ,~c_no
@@ -756,5 +529,4 @@ f_zcall(f_create_gridpair, [[
   ;;,g_grid_battle_actions ,~bot_info       ,~top_battle2    ,~f_nop          ,~f_op_bataction   ,~f_s_bataction   ,~f_l_bataction ,~c_no
 ]])
 
-g_gridstack = {} -- gotta run after the above.
 f_add_to_ui_stack(g_grid_title)

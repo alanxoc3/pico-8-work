@@ -16,9 +16,17 @@ end $$
   end
 end $$
 
+|[f_roundrect]| function(x1, y1, x2, y2, c)
+  rectfill(x1, y1+1, x2, y2-1, c)
+  if x2-x1 > 2 then -- if check is for the hp bar, so it looks good when small.
+    rectfill(x1+1, y1, x2-1, y2, c)
+  end
+end $$
+
 -- TODO: pkmn shakes when disabled (battle, press o, then x on switch). i don't want that.
-|[f_draw_pkmn]| function(num, x, y, width, flip, sel, disabled, isoutline)
+|[f_draw_pkmn]| function(num, x, y, width, flip, sel, disabled, isoutline, platform)
   -- the "min" is needed to draw trainers
+  local og_x = x
   if not disabled and not isoutline and stat'46' > -1 and g_cur_pkmn_cry == num then -- if a pkmn cry is currently playing and selected, shake!
     x += sin(g_shake_timer/4)
   end
@@ -52,6 +60,18 @@ end $$
 
     palt()
     pal()
+  end
+
+  if platform then
+    f_roundrect(x-3,y+14,x+18,y+18-1,in_c)
+
+    --for yy=-2,2,1 do
+    --  for xx=-2,2,1 do
+    --    if not (xx == 0 and yy == 0) then
+    --      colordrawfunc(x+xx, y+yy, C_3)
+    --    end
+    --  end
+    --end
   end
 
   for yy=-scale,scale,scale do

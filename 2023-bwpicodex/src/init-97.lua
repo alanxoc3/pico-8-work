@@ -289,7 +289,7 @@ cls() -- this is just a visual thing when the game starts up. TODO: i can remove
   ;;,4   ,4    ,9   ,10  ,10  -- gold
 ]] $$
 
-|[c_palette_names]| f_zobj[["0,dual;,blue,red,green,htdog,silvr,gold"]] $$
+|[c_palette_names]| f_zobj[["0,dual version;,blue version,red version,green version,hotdog flavor,silvr version,gold version"]] $$
 
 |[c_types]| f_zobj[[ -- 0 to 18 are all tables
   0;, ;;, ;;, ;;, ;;, ;;, ;;, ;;, ;;,

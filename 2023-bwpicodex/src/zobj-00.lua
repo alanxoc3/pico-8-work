@@ -50,6 +50,15 @@ f_zobj_set(_g, [[
   g_title_timer,0,
   g_title_l,254,
   g_title_r,254,
+
+  -- globals for battle ui
+  g_msg_top," ",
+  g_msg_bot," ",
+  g_bat_func,,
+
+  -- needed for the grid
+  g_gridstack,#,
+
   g_title_an_timer,70 -- starts at 70, so both are centered and not shaking.
 ]], true, false, "", function(...) return ... end)
 
