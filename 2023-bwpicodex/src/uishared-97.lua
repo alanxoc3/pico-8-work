@@ -18,39 +18,50 @@ end $$
   local movenum = move.num
   local maxpp, pp, pow, accuracy, typ = f_get_move_texts(move)
   local method = pkmn.possible_moves_method[movenum]
-  add(op, {text="move"..ind.." "..move.name, header=true})
-  add(op, {text=""..method.." "..typ})
-  add(op, {text="pwpnt "..pp.."/"..maxpp})
-  add(op, {text="pw/ac "..pow.."/"..accuracy})
+  add(op, {text="mov"..ind..": "..move.name, header=true})
+  add(op, {text=""..method..": "..typ})
+  add(op, {text="pwpnt: "..pp.."/"..maxpp})
+  add(op, {text="pw/ac: "..pow.."/"..accuracy})
 end $$
 
 |[f_add_stat_info]| function(op, pkmn)
-  add(op, {text="#"..f_prefix_zero(pkmn.num, 3).." "..pkmn.name, header=true})
-  add(op, {text="type1 "..c_type_names[pkmn.pktype1]})
-  add(op, {text="type2 "..c_type_names[pkmn.pktype2]})
-  add(op, {text="prevo "..c_pkmn_names[pkmn.prevolve]})
+  --add(op, {text="pokemon basics", header=true})
+  add(op, {text="info: "..pkmn.name, header=true})
+  add(op, {text="gendr: "..c_gender_names[pkmn.gender]})
+  add(op, {text="type1: "..c_type_names[pkmn.pktype1]})
+  add(op, {text="type2: "..c_type_names[pkmn.pktype2]})
 end $$
 
 |[f_add_stat]| function(op, pkmn, is_battle)
   local draw_preview = function(off)
-    f_draw_pkmn(pkmn.num, 21, off-13, 16, false, false, false, false, true)
+    f_draw_pkmn(pkmn.num, 21, off-12, 16, false, false, false, false, true)
   end
 
-  add(op, {text="#"..f_prefix_zero(pkmn.num, 3).." "..pkmn.name, header=true})
+  add(op, {text="#"..f_prefix_zero(pkmn.num, 3)..": "..pkmn.name, header=true})
   add(op, { draw=function() draw_preview'17' end})
   add(op, { draw=function() draw_preview'8' end})
   add(op, { draw=function() draw_preview'-1' end})
 
+  -- add(op, {text="pokemon evol", header=true})
+  -- add(op, {text="name: "..pkmn.name})
+  -- add(op, {text="prev: "..c_pkmn_names[pkmn.prevolve]})
+  -- add(op, {text="next: "..c_pkmn_names[pkmn.prevolve]})
+
   f_add_stat_info(op, pkmn)
-  if is_battle then
-    add(op, {text="pkmn state", header=true})
-    add(op, {text="cond "..c_major_names_long[pkmn.major]})
-    add(op, {text="gend "..c_gender_names[pkmn.gender]})
-    add(op, {text="item "..c_item_names[pkmn.item]})
-  end
+
+  add(op, {text="stat: "..pkmn.name, header=true})
+  add(op, {text="at/df: 123/096"})
+  add(op, {text="sa/sd: 311/916"})
+  add(op, {text="sp/lv: 223/050"})
+
+  --if is_battle then
+    add(op, {text="batl: "..pkmn.name, header=true})
+    add(op, {text="htpnt: 123/321"})
+    add(op, {text="condi: "..c_major_names_long[pkmn.major]})
+    add(op, {text="holdi: "..c_item_names[pkmn.item]})
+  --end
 
   --add(op, {text="pkmn stats", header=true})
-  add(op, {text="#"..f_prefix_zero(pkmn.num, 3).." "..pkmn.name, header=true})
   -- add(op, {text="htpnt " .. pkmn.hp .. "/" .. pkmn.maxhp})
   -- add(op, {text="htpnt " .. pkmn.maxhp})
 
@@ -66,17 +77,18 @@ end $$
   --   add(op, {text=c_statmod_names[key].." "..stage.."%"})
   -- end
 
-  add(op, {text="hp/sp 223/006"})
-  add(op, {text="at/df 123/096"})
-  add(op, {text="sa/sd 311/916"})
   -- add(op, {text="ev/ac 100/100"})
 
   if is_battle then
-    add(op, {text="pkmn moves", header=true})
-    add(op, {text=f_prefix_space(c_move_names[pkmn[1].num], 6).." 20/20"})
-    add(op, {text=f_prefix_space(c_move_names[pkmn[2].num], 6).." 20/20"})
-    add(op, {text=f_prefix_space(c_move_names[pkmn[3].num], 6).." 20/20"})
-    add(op, {text=f_prefix_space(c_move_names[pkmn[4].num], 6).." 20/20"})
+    f_add_stat_move(op, pkmn, 0)
+    f_add_stat_move(op, pkmn, 1)
+    f_add_stat_move(op, pkmn, 2)
+    f_add_stat_move(op, pkmn, 3)
+
+    -- add(op, {text=f_prefix_space(c_move_names[pkmn[1].num], 6)..": 20/20"})
+    -- add(op, {text=f_prefix_space(c_move_names[pkmn[2].num], 6)..": 20/20"})
+    -- add(op, {text=f_prefix_space(c_move_names[pkmn[3].num], 6)..": 20/20"})
+    -- add(op, {text=f_prefix_space(c_move_names[pkmn[4].num], 6)..": 20/20"})
   end
 
   -- TODO: idk. should i include battle flags or no?

@@ -30,13 +30,13 @@ end $$
   -- zobj is needed so we can use an _ENV syntax
   _g[name] = f_zobj([[g_cg_m,@, g_cg_s,@, gridpofunc,@, params,@]],
     f_zobj([[
-      sel,@, view,0,
-      name,@, selfunc,@, leavefunc,@, lrbasegrid,@, w,@,vh,@,x,@,y,@,cw,@,ch,@
-    ]], lrbasegrid and -1 or 0, name, main_sel_func, main_leave_func, lrbasegrid, unpack(main_grid_spec)),
+      sel,0, view,0,
+      name,@, selfunc,@, leavefunc,@, lrbasegrid,@, w,@,vh,@,x,@,y,@,cw,@,ch,@,selh,@
+    ]], name, main_sel_func, main_leave_func, lrbasegrid, unpack(main_grid_spec)),
 
     f_zobj([[
       sel,-1, view,-1,
-      name,@, df,@, w,@,vh,@,x,@,y,@,cw,@,ch,@
+      name,@, df,@, w,@,vh,@,x,@,y,@,cw,@,ch,@,selh,@
     ]], name, info_grid_draw, unpack(info_grid_spec)),
 
     main_op_func,
@@ -93,21 +93,21 @@ end $$
     sel = evalfunc(sel, sel\w*w, w-1, btnp'0', btnp'1', 1)
   end
 
-  if lrbasegrid then
-    sel = -1
-    dir = (btnp'3' and 1 or 0) - (btnp'2' and 1 or 0)
-    view += dir
-  else
-    sel = evalfunc(sel, sel%w,   (#gridobj-1)\w*w, btnp'2', btnp'3', w)
+  -- if lrbasegrid then
+  --   sel = -1
+  --   dir = (btnp'3' and 1 or 0) - (btnp'2' and 1 or 0)
+  --   view += dir
+  -- else
+  sel = evalfunc(sel, sel%w,   (#gridobj-1)\w*w\selh*selh, btnp'2', btnp'3', w*selh)
 
-    if sel ~= prevsel then
-      -- when the cursor has changed, make the ui change if needed
-      f_refresh_top()
-    end
-
-    if sel\w-vh+1 > view then view = sel\w-vh+1 end
-    if sel\w      < view then view = sel\w      end
+  if sel ~= prevsel then
+    -- when the cursor has changed, make the ui change if needed
+    f_refresh_top()
   end
+
+  if sel\w-vh+1 > view then view = (sel\w-vh+1)\selh*selh+(selh-1) end
+  if sel\w      < view+selh-1 then view = sel\w\selh*selh end
+  -- end
 
   view = mid(0, view, (#gridobj-1)\w-vh+1)
 
@@ -174,15 +174,21 @@ end $$
 
   if sel >= 0 then
     pal{C_4,C_4,C_4}
-    for i=-1,1 do
-      for j=-1,1 do
-        draw_cell_bg(num-view*w, i, j)
+    for ss=1,selh do
+      for i=-1,1 do
+        for j=-1,1 do
+          draw_cell_bg(num-view*w-1+ss, i, j)
+        end
       end
     end
     pal()
 
-    draw_cell_bg(num-view*w, 0, 0)
-    draw_cell_fg(num-view*w)
+    for ss=1,selh do
+      draw_cell_bg(num-view*w-1+ss, 0, 0)
+    end
+    for ss=1,selh do
+      draw_cell_fg(num-view*w-1+ss)
+    end
   end
   camera()
 end $$

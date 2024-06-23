@@ -482,19 +482,19 @@ end $$
 ---------------------------------------------------------------------- :CONNECT
 -- This needs to be called early on because there is a draw
 f_zcall(f_create_gridpair, [[
-   top_browse    ;,6 ,4 ,2 ,2  ,10 ,10
-  ;top_edit      ;,2 ,2 ,2 ,2  ,30 ,20
-  ;top_editteam  ;,3 ,2 ,2 ,2  ,20 ,20
-  ;top_pkstat    ;,1 ,4 ,2 ,4  ,60 ,9
-  ;top_pkstatbig ;,1 ,6 ,2 ,5  ,60 ,9
-  ;top_text_grid ;,2 ,4 ,2 ,4  ,30 ,9
-  ;top_title     ;,1 ,1 ,2 ,2  ,60 ,40
-  ;top_battle    ;,1 ,1 ,2 ,2  ,60 ,40
-  ;top_battle2   ;,1 ,1 ,2 ,2  ,60 ,40
-  ;bot_4x4       ;,2 ,2 ,2 ,44 ,30 ,9
-  ;bot_info      ;,1 ,1 ,2 ,45 ,60 ,16
-  ;bot_ignore    ;,1 ,1 ,2 ,200 ,60 ,16
-  ;top_newstat   ;,1 ,6 ,2 ,4  ,60 ,9
+  --               w  vh x  y   cw  ch selh
+   top_browse    ;,6 ,4 ,2 ,2  ,10 ,10 ,1
+  ;top_edit      ;,2 ,2 ,2 ,2  ,30 ,20 ,1
+  ;top_editteam  ;,3 ,2 ,2 ,2  ,20 ,20 ,1
+  ;top_pkstat    ;,1 ,4 ,2 ,4  ,60 ,9 ,4
+  ;top_pkstatbig ;,1 ,6 ,2 ,5  ,60 ,9  ,1
+  ;top_text_grid ;,2 ,4 ,2 ,4  ,30 ,9  ,1
+  ;top_title     ;,1 ,1 ,2 ,2  ,60 ,40 ,1
+  ;top_battle    ;,1 ,1 ,2 ,2  ,60 ,40 ,1
+  ;top_battle2   ;,1 ,1 ,2 ,2  ,60 ,40 ,1
+  ;bot_4x4       ;,2 ,2 ,2 ,44 ,30 ,9  ,1
+  ;bot_info      ;,1 ,1 ,2 ,45 ,60 ,16 ,1
+  ;top_newstat   ;,1 ,6 ,2 ,4  ,60 ,9  ,1
 
   -- name                  maingridspec     infogridspec    infogriddraw    main opfunc        select func       leave func      lrbasegrid        opfunc params
   ;;,g_grid_title          ,~bot_4x4        ,~top_title     ,~f_dt_title    ,~f_op_title       ,~f_s_title       ,~f_l_title     ,~c_no
