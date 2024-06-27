@@ -35,39 +35,39 @@ Pursuit      Dark     20 40      100% -- If the target switches out on the curre
 Hidden Power Normal   15 Var BP  100% -- Varies in power and type depending on the user's DVs; maximum 70 BP. Will run off the user's Attack or Special Attack depending on type.
 Struggle     None     1  50      100% -- Used automatically when all of the user's other moves have run out of PP or are otherwise inaccessible. The user receives 1/4 recoil damage. Struggle is classified as a typeless move and will hit any Pokemon, including Rock-, Steel- and Ghost-type Pokemon, for normal damage.
 
-Cut          Normal   30 50      95%  -- Damages the target.
-Drill Peck   Flying   20 80      100% -- Damages the target.
-Egg Bomb     Normal   10 100     75%  -- Damages the target.
-Horn Attack  Normal   25 65      100% -- Damages the target.
-Hydro Pump   Water    5  120     80%  -- Damages the target.
-Megahorn     Bug      10 120     85%  -- Damages the target.
-Mega Kick    Normal   5  120     75%  -- Damages the target.
-Mega Punch   Normal   20 80      85%  -- Damages the target.
-Peck         Flying   35 35      100% -- Damages the target.
-Pound        Normal   35 40      100% -- Damages the target.
-Rock Throw   Rock     15 50      90%  -- Damages the target.
-Scratch      Normal   35 40      100% -- Damages the target.
-Slam         Normal   20 80      75%  -- Damages the target.
-Strength     Normal   15 80      100% -- Damages the target.
-Surf         Water    15 95      100% -- Damages the target.
-Tackle       Normal   35 35      95%  -- Damages the target.
-Vicegrip     Normal   30 55      100% -- Damages the target.
-Vine Whip    Grass    10 35      100% -- Damages the target.
-Waterfall    Water    15 80      100% -- Damages the target.
-Water Gun    Water    25 40      100% -- Damages the target.
-Wing Attack  Flying   35 60      100% -- Damages the target.
-Pay Day      Normal   20 40      100% -- The player picks up extra money after in-game battles; the money received is equal to: [user's level * 2 * number of times Pay Day is used]. The player does not lose money if the opponent uses Pay Day but the player wins the battle.
+DONE Cut          Normal   30 50      95%  -- Damages the target.
+DONE Drill Peck   Flying   20 80      100% -- Damages the target.
+DONE Egg Bomb     Normal   10 100     75%  -- Damages the target.
+DONE Horn Attack  Normal   25 65      100% -- Damages the target.
+DONE Hydro Pump   Water    5  120     80%  -- Damages the target.
+DONE Megahorn     Bug      10 120     85%  -- Damages the target.
+DONE Mega Kick    Normal   5  120     75%  -- Damages the target.
+DONE Mega Punch   Normal   20 80      85%  -- Damages the target.
+DONE Peck         Flying   35 35      100% -- Damages the target.
+DONE Pound        Normal   35 40      100% -- Damages the target.
+DONE Rock Throw   Rock     15 50      90%  -- Damages the target.
+DONE Scratch      Normal   35 40      100% -- Damages the target.
+DONE Slam         Normal   20 80      75%  -- Damages the target.
+DONE Strength     Normal   15 80      100% -- Damages the target.
+DONE Surf         Water    15 95      100% -- Damages the target.
+DONE Tackle       Normal   35 35      95%  -- Damages the target.
+DONE Vicegrip     Normal   30 55      100% -- Damages the target.
+DONE Vine Whip    Grass    10 35      100% -- Damages the target.
+DONE Waterfall    Water    15 80      100% -- Damages the target.
+DONE Water Gun    Water    25 40      100% -- Damages the target.
+DONE Wing Attack  Flying   35 60      100% -- Damages the target.
+DONE Pay Day      Normal   20 40      100% -- The player picks up extra money after in-game battles; the money received is equal to: [user's level * 2 * number of times Pay Day is used]. The player does not lose money if the opponent uses Pay Day but the player wins the battle.
 
 # These don't use the damage formula
-Sonicboom    Normal   20 Set     90%  -- Always deals 20 points of damage.
-Dragon Rage  Dragon   10 Set     100% -- Always deals 40 points of damage.
 Counter      Fighting 20 Var Dmg 100% -- Almost always goes last; if an opponent strikes with a Physical attack before the user's turn, the user retaliates for twice the damage it had endured.
 Mirror Coat  Psychic  20 Var Dmg 100% -- Almost always goes last; if an opponent strikes with a Special attack before the user's turn, the user retaliates for twice the damage it had endured.
-Night Shade  Ghost    15 Var Dmg 100% -- Does damage equal to user's level.
-Seismic Toss Fighting 20 Var Dmg 100% -- Does damage equal to user's level.
-Psywave      Psychic  15 Var Dmg 80%  -- Randomly inflicts set damage between a minimum of 1 HP and a maximum of [1.5x the user's level] HP.
-Super Fang   Normal   10 Var Dmg 90%  -- This move halves the target's current HP.
-False Swipe  Normal   40 40      100% -- Leaves the target with at least 1 HP.
+DONE Sonicboom    Normal   20 Set     90%  -- Always deals 20 points of damage.
+DONE Dragon Rage  Dragon   10 Set     100% -- Always deals 40 points of damage.
+DONE Night Shade  Ghost    15 Var Dmg 100% -- Does damage equal to user's level.
+DONE Seismic Toss Fighting 20 Var Dmg 100% -- Does damage equal to user's level.
+DONE Psywave      Psychic  15 Var Dmg 80%  -- Randomly inflicts set damage between a minimum of 1 HP and a maximum of [1.5x the user's level] HP.
+DONE Super Fang   Normal   10 Var Dmg 90%  -- This move halves the target's current HP.
+DONE False Swipe  Normal   40 40      100% -- Leaves the target with at least 1 HP.
 
 # Moves that can directly or indirectly restore HP or heal status conditions.
 Milk Drink   Normal   10 N/A     N/A  -- Restores 1/2 of the user's max HP.

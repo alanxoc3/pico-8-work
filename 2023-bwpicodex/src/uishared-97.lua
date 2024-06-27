@@ -18,7 +18,7 @@ end $$
   local movenum = move.num
   local maxpp, pp, pow, accuracy, typ = f_get_move_texts(move)
   local method = pkmn.possible_moves_method[movenum]
-  add(op, {text="mov"..ind..": "..move.name, header=true})
+  add(op, {text="move"..ind..": "..move.name, header=true})
   add(op, {text=""..method..": "..typ})
   add(op, {text="pwpnt: "..pp.."/"..maxpp})
   add(op, {text="pw/ac: "..pow.."/"..accuracy})
@@ -42,11 +42,6 @@ end $$
   add(op, { draw=function() draw_preview'8' end})
   add(op, { draw=function() draw_preview'-1' end})
 
-  -- add(op, {text="pokemon evol", header=true})
-  -- add(op, {text="name: "..pkmn.name})
-  -- add(op, {text="prev: "..c_pkmn_names[pkmn.prevolve]})
-  -- add(op, {text="next: "..c_pkmn_names[pkmn.prevolve]})
-
   f_add_stat_info(op, pkmn)
 
   add(op, {text="stat: "..pkmn.name, header=true})
@@ -54,12 +49,10 @@ end $$
   add(op, {text="sa/sd: 311/916"})
   add(op, {text="sp/lv: 223/050"})
 
-  --if is_battle then
-    add(op, {text="batl: "..pkmn.name, header=true})
-    add(op, {text="htpnt: 123/321"})
-    add(op, {text="condi: "..c_major_names_long[pkmn.major]})
-    add(op, {text="holdi: "..c_item_names[pkmn.item]})
-  --end
+  add(op, {text="batl: "..pkmn.name, header=true})
+  add(op, {text="htpnt: 123/321"})
+  add(op, {text="major: "..c_major_names_long[pkmn.major]})
+  add(op, {text="item:  "..c_item_names[pkmn.item]})
 
   --add(op, {text="pkmn stats", header=true})
   -- add(op, {text="htpnt " .. pkmn.hp .. "/" .. pkmn.maxhp})

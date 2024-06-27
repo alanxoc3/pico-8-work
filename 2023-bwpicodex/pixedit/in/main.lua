@@ -25,8 +25,8 @@ local state = { cur = 0, x = 0, y = 0, }
 function loadStore()
   state = playdate.datastore.read() or {}
   state.cur = state.cur or 0
-  state.x   = state.x or 0
-  state.y   = state.y or 0
+  state.x = state.x or 0
+  state.y = state.y or 0
 end
 
 function load_pico8_files()
@@ -283,29 +283,40 @@ playdate.getSystemMenu():addMenuItem("Pop Save", function()
 end)
 
 -- TBH, this isn't really needed practically, keeping it here for reference though
--- playdate.getSystemMenu():addMenuItem("import pico8", function()
---   print("loading pico8 files")
---   local images = load_pico8_files()
---   print("load complete")
---
---   for i=0,255 do
---     print("saving sprite #"..i)
---     save_sprite(images[i], i)
---   end
---
---   print("savings complete")
---
---   playdate.update = function()
---     g_font:drawText("pico8-to-pics complete!", 50, 50)
---   end
--- end)
+playdate.getSystemMenu():addMenuItem("import pico8", function()
+  playdate.update = function()
+    print("loading pico8 files")
+    local images = load_pico8_files()
+    print("load complete")
+
+    for i=0,255 do
+      print("saving sprite #"..i)
+      if i%32 == 0 then
+        coroutine.yield()
+      end
+      save_sprite(images[i], i)
+    end
+
+    print("savings complete")
+
+    playdate.graphics.clear()
+    g_font:drawText("import pico8 complete! press b to continue", 50, 50)
+
+    playdate.update = function()
+      local abj = playdate.buttonJustPressed(playdate.kButtonB)
+      if abj then
+        playdate.update = update
+      end
+    end
+  end
+end)
 
 local save_callback = function()
   save_state_and_sprite(state.cur)
   calc_backup(state.cur)
 end
 
-playdate.getSystemMenu():addMenuItem("Push Save", save_callback)
+-- playdate.getSystemMenu():addMenuItem("Push Save", save_callback)
 
 playdate.getSystemMenu():addMenuItem("export pico8", function()
   playdate.update = function()

@@ -34,11 +34,26 @@ end $$
 
 -- moves like cut/surf/tackle. the move only does damage with no other side effect
 |[f_move_damage]| function(_ENV)
+  -- TODO: remove local variable
   local dmg = f_calc_move_damage(a_self_active, a_other_active, _ENV)
   f_moveutil_damage(p_other, dmg)
 end $$
 
-|[f_move_seismictoss]| function(_ENV) f_moveutil_damage(p_other, spec)     end $$ -- also: night shade, sonicboom, dragonrage
+|[f_move_seismictoss]| function(_ENV) f_moveutil_damage(p_other, spec)    end $$ -- also: night shade, sonicboom, dragonrage
 |[f_move_psywave]|     function()     f_move_seismictoss(f_flr_rnd'75'+1) end $$
+
+|[f_move_superfang]|  function() f_moveutil_damage(p_other, ceil(a_other_active.hp/2)) end $$
+|[f_move_falseswipe]| function(_ENV)
+  -- TODO: remove local variable
+  local dmg = f_calc_move_damage(a_self_active, a_other_active, _ENV)
+  f_moveutil_damage(p_other, min(a_other_active.hp-1, dmg)) -- there is a zero check in the damage function already, which will fail false swipe
+end $$
+
+|[f_move_submission]| function(_ENV)
+  local dmg = f_calc_move_damage(a_self_active, a_other_active, _ENV)
+  local recoil = ceil(dmg\4) -- TODO: there could maybe be a ceil-div function. might save space
+  f_moveutil_damage(p_other, dmg)
+  f_moveutil_damage(p_self,  recoil)
+end $$
 
 |[f_move_heal]| function(_ENV) f_moveutil_damage(p_self, -a_self_active.maxhp\2) end $$ -- softboiled, recover, milk drink

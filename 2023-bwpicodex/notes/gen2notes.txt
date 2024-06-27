@@ -71,7 +71,6 @@ DIFF: Focus band has a chance to activate as long as the Pokemon has >1 HP for a
 DIFF: Endure protects from all damage for the remainder of the entire turn. Including Perish Song, Future Sight, Pain Split, Spite, Poison, Burn, Sandstorm, Leech Seed...
 DIFF: Pain Split hits opponent past substitute.
 DIFF: Mean Look and Trapping Moves prevent manual switching. They do not prevent Beat Up, Teleport, or Baton Pass.
-DIFF: Self-KO moves, Perish Song, and Destiny Bond all KO the user before the opponent, which means a self-KO will lose the match, unless Endure or Focus Band is activated! Recoil moves will do damage to the user after the attack.
 DIFF: Attract's effect passes to the next Pokemon with Baton Pass.
 DIFF: The detect/protect/endure counter is Baton Passed.
 DIFF: Defense Curl powerup for rollout is Baton Passed.
