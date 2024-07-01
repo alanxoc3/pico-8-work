@@ -25,14 +25,13 @@ end $$
 end $$
 
 |[f_add_stat_info]| function(op, pkmn)
-  --add(op, {text="pokemon basics", header=true})
   add(op, {text="info: "..pkmn.name, header=true})
   add(op, {text="gendr: "..c_gender_names[pkmn.gender]})
   add(op, {text="type1: "..c_type_names[pkmn.pktype1]})
   add(op, {text="type2: "..c_type_names[pkmn.pktype2]})
 end $$
 
-|[f_add_stat]| function(op, pkmn, is_battle)
+|[f_add_stat_preview]| function(op, pkmn)
   local draw_preview = function(off)
     f_draw_pkmn(pkmn.num, 21, off-12, 16, false, false, false, false, true)
   end
@@ -41,7 +40,11 @@ end $$
   add(op, { draw=function() draw_preview'17' end})
   add(op, { draw=function() draw_preview'8' end})
   add(op, { draw=function() draw_preview'-1' end})
+end $$
 
+|[f_add_stat]| function(op, pkmn, is_battle)
+
+  f_add_stat_preview(op, pkmn)
   f_add_stat_info(op, pkmn)
 
   add(op, {text="stat: "..pkmn.name, header=true})

@@ -93,7 +93,7 @@ end $$
 
 |[f_op_editstat]| function(_ENV)
   local pkmn = f_get_party_pkmn(f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot')
-  f_add_stat_info(preview_op, pkmn)
+  f_add_stat_preview(preview_op, pkmn)
 
   add(op, {text="moves", select=function()
     f_add_to_ui_stack(g_grid_editmovebot)
@@ -406,6 +406,23 @@ end $$
 
 |[f_s_batmove]| function()
   p_self.nextmove = p_self.active[f_getsel'g_grid_battle_movesel'+1]
+  f_movelogic(p_self)
+
+  f_pop_ui_stack()
+  if p_self == p_1 then
+    f_turn_end_p1()
+  else
+    f_turn_end_p2()
+  end
+end $$
+
+|[f_s_batswitch]| function()
+  p_self.nextmove = nil -- nextmove as nil means the pokemon will switch out
+
+  f_addaction(p_self, p_self, "backs "..p_self.active.name, function()
+    p_self.active.invisible = true
+    add(p_self.actions, f_pkmn_comes_out(p_self, f_getsel'g_grid_battle_switch'+1))
+  end, true)
 
   f_pop_ui_stack()
   if p_self == p_1 then
@@ -521,8 +538,8 @@ f_zcall(f_create_gridpair, [[
   -- Battle UI
   ;;,g_grid_battle_select  ,~bot_4x4        ,~top_battle2   ,~f_nop          ,~f_op_batsel      ,~f_s_battle      ,~f_l_battle    ,~c_no
   ;;,g_grid_battle_movesel ,~bot_4x4        ,~top_pkstat    ,~f_nop          ,~f_op_movesel     ,~f_s_batmove     ,~f_l_browse    ,~c_no
-  ;;,g_grid_battle_switch  ,~top_editteam,  ,~bot_info      ,~f_dt_switch   ,~f_op_batswitch   ,~f_nop            ,~f_l_browse    ,~c_no
-  ;;,g_grid_battle_stats   ,~top_editteam,  ,~bot_info      ,~f_dt_batstats ,~f_op_batstats    ,~f_s_batstat      ,~f_l_browse    ,~c_no
+  ;;,g_grid_battle_switch  ,~top_editteam,  ,~bot_info      ,~f_dt_switch    ,~f_op_batswitch   ,~f_s_batswitch   ,~f_l_browse    ,~c_no
+  ;;,g_grid_battle_stats   ,~top_editteam,  ,~bot_info      ,~f_dt_batstats  ,~f_op_batstats    ,~f_s_batstat     ,~f_l_browse    ,~c_no
   ;;,g_grid_battle_results ,~top_editteam   ,~bot_info      ,~f_nop          ,~f_op_batresults  ,~f_s_batresults  ,~f_l_browse    ,~c_no
 
   ;;,g_grid_battle_turnbeg ,~bot_info       ,~top_battle2    ,~f_nop          ,~f_op_startturn   ,~f_s_startturn   ,~f_l_bataction ,~c_no

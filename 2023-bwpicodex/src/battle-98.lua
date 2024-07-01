@@ -1,3 +1,9 @@
+-- battle: this file contains functions that help with all logic of pkmn battles besides logic executed during a move.
+-- examples of things that would be in this file:
+-- - weather at end of turn. futuresight effect at end of turn
+-- - switching logic. battle data structures. turn logic.
+-- - priority logic. logic for executing moves. determining when battle ends.
+
 -- Some globals that we manage in the battle:
 -- p_1:            player 1: this is the bottom player on the UI. it never changes throughout the battle.
 -- p_2:            player 2: this is the top    player on the UI. it never changes throughout the battle.
@@ -210,8 +216,6 @@ end $$
 |[f_set_player_priority]| function(player)
   local priority_class = C_PRIORITY_ATTACK
   local movenum = player.nextmove and player.nextmove.num
-  if movenum then
-  end
   local other = f_get_other_pl(player)
 
   -- TODO: in picodex, I was calling f_premovelogic(player, move) here
@@ -236,7 +240,7 @@ end $$
   local move = player.nextmove
   f_addaction(player, player, (player.active.curmove and "resumes " or (move.func == f_move_multiturn and "begins " or "uses "))..c_move_names[move.num], function()
     -- TODO: how does metronome work with solar beam. would pp get deducted twice?
-    -- move.pp -= 1 -- deducts struggle too, because why not. it cant hurt
+    move.pp -= 1 -- deducts struggle too, because why not. it cant hurt
 
     if (function() -- miss logic TODO: fix this to be in line with gen 2 logic. this was copied from gen 1 picodex
       if move.accuracy <= 0 then return false end -- swift/haze (-1) and status moves (0)
@@ -255,24 +259,26 @@ end $$
     end)() then
       a_addaction(player, "misses "..move.name)
 
-      -- explosion & player destruct hurt the user first, then they might miss, so this part of that logic must go outside the normal flow
-      if f_in_split(move.num, 'M_EXPLOSION,M_SELFDESTRUCT') then -- TODO: maybe func could be checked? Might save tokens
-        f_moveutil_damage(a_self, a_self_active.hp)
-      end
-
       if f_in_split(move.num, 'M_HIGH_JUMP_KICK,M_JUMP_KICK') then
         -- TODO: 1/8 recoil of what it would have inflicted. TODO: Maybe I can modify this to 1/16 of health like leech seed. umm, that might be more damage. whatever maybe not
-        f_moveutil_damage(a_self, 1)
+        f_moveutil_dmgself(player, 1)
       end
     else
-      if move:func() then
+      if move:func() then -- TODO: calc attack fail based on whether or not an action was added
         a_addaction(player, "fails attack")
       end
     end
 
-    if move.accuracy ~= 0 then -- -1 is swift & haze. targeting moves
-      a_other_active.lastmoverecv = move.num
+    -- explosion and selfdestruct self-inflict damage whether or not the attack hit the opponent.
+    -- and this happens after the attack hits
+    if f_in_split(move.num, 'M_EXPLOSION,M_SELFDESTRUCT') then -- TODO: maybe func could be checked? Might save tokens
+      f_moveutil_dmgself(player, a_self_active.hp)
     end
+
+    -- TODO: populate last move... OG picodex had this logic
+    -- if move.accuracy ~= 0 then -- -1 is swift & haze. targeting moves
+    --   a_other_active.lastmoverecv = move.num
+    -- end
   end)
 end $$
 
@@ -285,11 +291,11 @@ end $$
   p_first = p_1.priority > p_2.priority and p_1 or p_2
   p_last  = f_get_other_pl(p_first)
 
-  for player in all{p_first,p_last} do
-    if player.nextmove then
-      f_movelogic(player)
-    end
-  end
+  -- for player in all{p_first,p_last} do
+  --   -- if player.nextmove then
+  --   --   f_movelogic(player)
+  --   -- end
+  -- end
 
   f_pop_ui_stack()
   f_s_bataction()
@@ -310,6 +316,8 @@ end $$
     else
       p_2.nextmove = c_moves[M_STRUGGLE]
     end
+    f_movelogic(p_2)
+
     f_turn_end_p2()
   else
     f_pop_ui_stack()
@@ -317,61 +325,3 @@ end $$
   end
 end $$
 
-|[f_calc_movemod]| function(active, move)
-  return 1
-  -- movemod: must be <= 32 to prevent any possible number overflow
-  --   rollout:    2^(n+d) -- n=times, d=defcurl and 1 or 0
-  --   furycutter: 2^n     -- n=times
-  --   rage:       num of times user damaged while using rage
-  --   triplekick: 1, 2, then 3 for each kick
-  --   pursuit:    2 -- if target is switching
-  --   stomp:      2 -- if target minimized
-  --   gust:       2 -- if target is flying
-  --   twister:    2 -- if target is flying
-  --   earthquake: 2 -- if target is digging
-  --   magnitude:  2 -- if target is digging
-  --   explosion:  2 -- always
-  --   selfdstrct: 2 -- always
-  --   payday:     3 -- if holding amulet coin
-  --   rain:       1.5 -- if water pktype move is used during rain
-  --   sun:        1.5 -- if solar beam or fire pktype move used during sunlight
-  --   rain:       .5  -- if solar beam or fire pktype move used during rain
-  --   sun:        .5  -- if water pktype move is used during sun
-  --   else:       1 -- for every other scenario
-end $$
-
-|[f_get_type_advantage]| function(move, defender)
-  return (c_types[move.pktype][defender.type1] or 1)*(c_types[move.pktype][defender.type2] or 1)
-end $$
-
---   ((.44*power*att/def)*item*crit+2)*weather*stab*movemod*pktype*random
--- damage formula: https://bulbapedia.bulbagarden.net/wiki/Damage#Generation_II
-|[f_calc_move_damage]| function(attacker, defender, move)
-  -- BEGIN: PHYSICAL/SPECIAL
-  local attack, defense = attacker:f_stat_calc('specialattack', true), defender:f_stat_calc('specialdefense', true)
-  if move.pktype % 2 == 1 then -- iscontact
-    attack, defense = attacker:f_stat_calc('attack', true), defender:f_stat_calc('defense', true)
-  end
-
-  -- BEGIN: CRIT
-  -- TODO: really implement all the stuff here (focus energy, etc)
-  local crit = rnd'1' < f_stat_crit(0) and 2 or 1
-  local stab = (move.pktype == attacker.pktype1 or move.pktype == attacker.pktype2) and 1.5 or 1
-  local itemdmg = 1 -- TODO: fill this out! item is 1.1 if move pktype equals item specialty for type boost items
-
-  local base_damage = mid( -- min: .44*1*.2*1*1+2 = 2.088 | max: .44*999*10*1.1*2+2 = 9672.32
-      1, 999,
-      .44*move.pow
-      *mid(10, .2, attack/defense) -- this .2 to 10 ratio range comes from the original picodex. it exists to bound minimum and maximum damages
-      *itemdmg
-      *crit+2
-  )
-
-  -- min: 1*1*.25 = .25 | max: 999*1.5*4 = 5994
-  base_damage = mid(1, 999, base_damage*stab*f_get_type_advantage(move, defender))
-
-  -- min: 1*1 = 1 | max: 999*32 = 31968
-  base_damage = mid(1, 999, base_damage*f_calc_movemod(attacker, move)*(rnd'.15'+.85))
-
-  return base_damage\1
-end $$
