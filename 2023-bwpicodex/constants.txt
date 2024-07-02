@@ -3,14 +3,32 @@ C_LEVEL: 50 # unused, but good for ref
 
 # ----------------------------- save locations - will have to update/change slightly
 #   1 num, 1 gender, 1 item, 1 move, 1 move, 1 move, 1 move
-S_PARTY1:         0x5e00
-S_PARTY2:         0x5e2a # these are unused, but still good for reference
-S_PARTY3:         0x5e54 # these are unused, but still good for reference
-S_PARTY4:         0x5e7e # these are unused, but still good for reference
-S_PARTYEND:       0x5ea8 # these are unused, but still good for reference
+S_PARTY1:       0x5e00
+S_PARTY2:       0x5e2a # these are unused, but still good for reference
+S_PARTY3:       0x5e54 # these are unused, but still good for reference
+S_PARTY4:       0x5e7e # these are unused, but still good for reference
+S_PARTYEND:     0x5ea8 # these are unused, but still good for reference
 
-S_NEW:            0x5efe
-S_STORY:          0x5eff
+S_TITLE:        0x5ea8
+S_BROWSE:       0x5eaa
+S_STAT:         0x5eac
+S_TEAM1:        0x5eae
+S_TEAM2:        0x5eb0
+S_LEAGUE:       0x5eb2
+S_EDITPKMN:     0x5eb4
+S_EDITSEL:      0x5eb6
+S_EDITMOVE:     0x5eb8
+
+S_P1_BATACTION: 0x5eba
+S_P1_MOVE:      0x5ebc
+S_P1_STAT:      0x5ebe
+S_P2_BATACTION: 0x5ec0
+S_P2_MOVE:      0x5ec2
+S_P2_STAT:      0x5ec4
+S_DEFAULT:      0x5ec6
+
+S_NEW:          0x5efe
+S_STORY:        0x5eff
 
 SFX_SELECT: 252
 SFX_ERROR:  253

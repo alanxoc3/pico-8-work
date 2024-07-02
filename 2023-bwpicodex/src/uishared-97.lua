@@ -48,9 +48,9 @@ end $$
   f_add_stat_info(op, pkmn)
 
   add(op, {text="stat: "..pkmn.name, header=true})
-  add(op, {text="at/df: "..f_stat_calc(pkmn, 'attack').."/"..f_stat_calc(pkmn, 'defense')})
-  add(op, {text="sa/sd: "..f_stat_calc(pkmn, 'specialattack').."/"..f_stat_calc(pkmn, 'specialdefense')})
-  add(op, {text="sp/lv: "..f_stat_calc(pkmn, 'speed').."/050"})
+  add(op, {text="at/df: "..f_prefix_zero(f_stat_calc(pkmn, 'attack'), 3).."/"..f_prefix_zero(f_stat_calc(pkmn, 'defense'), 3)})
+  add(op, {text="sa/sd: "..f_prefix_zero(f_stat_calc(pkmn, 'specialattack'), 3).."/"..f_prefix_zero(f_stat_calc(pkmn, 'specialdefense'), 3)})
+  add(op, {text="sp/lv: "..f_prefix_zero(f_stat_calc(pkmn, 'speed'), 3).."/050"})
 
   add(op, {text="batl: "..pkmn.name, header=true})
   add(op, {text="major: "..c_major_names_long[pkmn.major]})

@@ -78,7 +78,7 @@ g_shake_timer = 0
   local var = 1-min(C_TITLETIMER, g_title_timer)/C_TITLETIMER
   local easing = var*var
   if g_cg_m then
-    f_draw_grid(g_cg_m, gridpo, g_cg_m.sel, g_cg_m.view, g_cg_m.x, g_cg_m.y+easing*24, true)
+    f_draw_grid(g_cg_m, gridpo, @g_cg_m.sel, @g_cg_m.view, g_cg_m.x, g_cg_m.y+easing*24, true)
     f_draw_grid(g_cg_s, #grid_previewop > 0 and grid_previewop or {{draw=g_cg_s.df}},   -1,          0,               g_cg_s.x, g_cg_s.y-easing*45)
   end
 

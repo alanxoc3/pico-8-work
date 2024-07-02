@@ -19,25 +19,23 @@ end $$
 end $$
 
 |[f_getsel]| function(gridname)
-  return _g[gridname].g_cg_m.sel
+  return @_g[gridname].g_cg_m.sel
 end $$
 
 |[f_setsel]| function(gridname, val)
-  _g[gridname].g_cg_m.sel = val
+  poke(_g[gridname].g_cg_m.sel, val)
 end $$
 
-|[f_create_gridpair]| function(name, main_grid_spec, info_grid_spec, info_grid_draw, main_op_func, main_sel_func, main_leave_func, lrbasegrid, ...)
+|[f_create_gridpair]| function(name, memloc, main_grid_spec, info_grid_spec, info_grid_draw, main_op_func, main_sel_func, main_leave_func, lrbasegrid, ...)
   -- zobj is needed so we can use an _ENV syntax
   _g[name] = f_zobj([[g_cg_m,@, g_cg_s,@, gridpofunc,@, params,@]],
     f_zobj([[
-      sel,0, view,0,
-      name,@, selfunc,@, leavefunc,@, lrbasegrid,@, w,@,vh,@,x,@,y,@,cw,@,ch,@,selh,@
-    ]], name, main_sel_func, main_leave_func, lrbasegrid, unpack(main_grid_spec)),
+      sel,@, view,@, name,@, selfunc,@, leavefunc,@, lrbasegrid,@, w,@,vh,@,x,@,y,@,cw,@,ch,@,selh,@
+    ]], memloc, memloc+1, name, main_sel_func, main_leave_func, lrbasegrid, unpack(main_grid_spec)),
 
     f_zobj([[
-      sel,-1, view,-1,
-      name,@, df,@, w,@,vh,@,x,@,y,@,cw,@,ch,@,selh,@
-    ]], name, info_grid_draw, unpack(info_grid_spec)),
+      sel,@, view,@, disabled,~c_yes, name,@, df,@, w,@,vh,@,x,@,y,@,cw,@,ch,@,selh,@
+    ]], S_DEFAULT, S_DEFAULT+1, name, info_grid_draw, unpack(info_grid_spec)),
 
     main_op_func,
     {...}
@@ -59,7 +57,7 @@ end $$
     return newnum
   end
 
-  local prevsel = sel
+  local prevsel = @sel
   if lrbasegrid then
     -- LR logic
     local dir = (btnp'1' and 1 or 0) - (btnp'0' and 1 or 0)
@@ -90,31 +88,26 @@ end $$
       f_minisfx(SFX_ERROR)
     end
   else
-    sel = evalfunc(sel, sel\w*w, w-1, btnp'0', btnp'1', 1)
+    poke(sel, evalfunc(@sel, @sel\w*w, w-1, btnp'0', btnp'1', 1))
   end
 
-  -- if lrbasegrid then
-  --   sel = -1
-  --   dir = (btnp'3' and 1 or 0) - (btnp'2' and 1 or 0)
-  --   view += dir
-  -- else
-  sel = evalfunc(sel, sel%w,   (#gridobj-1)\w*w\selh*selh, btnp'2', btnp'3', w*selh)
+  poke(sel, evalfunc(@sel, @sel%w,   (#gridobj-1)\w*w\selh*selh, btnp'2', btnp'3', w*selh))
 
-  if sel ~= prevsel then
+  if @sel ~= prevsel then
     -- when the cursor has changed, make the ui change if needed
     f_refresh_top()
   end
 
-  if sel\w-vh+1 > view then view = (sel\w-vh+1)\selh*selh+(selh-1) end
-  if sel\w      < view+selh-1 then view = sel\w\selh*selh end
+  if @sel\w-vh+1 > @view then poke(view, (@sel\w-vh+1)\selh*selh+(selh-1)) end
+  if @sel\w      < @view+selh-1 then poke(view, @sel\w\selh*selh) end
   -- end
 
-  view = mid(0, view, (#gridobj-1)\w-vh+1)
+  poke(view, mid(0, @view, (#gridobj-1)\w-vh+1))
 
   if btnp'4' then
     f_minisfx(leavefunc() or SFX_LEAVE)
   elseif btnp'5' then
-    if (sel < 0 or lrfunc or not gridobj[sel+1].disabled) then
+    if (disabled or lrfunc or not gridobj[@sel+1].disabled) then
       f_minisfx(selfunc() or SFX_SELECT)
     else
       f_minisfx(SFX_ERROR)
@@ -172,7 +165,7 @@ end $$
   for j=0,vh*w-1 do if draw_cell_bg(j, 0, 0) then break end end
   for j=0,vh*w-1 do if draw_cell_fg(j) then break end end
 
-  if sel >= 0 then
+  if not disabled then
     pal{C_4,C_4,C_4}
     for ss=1,selh do
       for i=-1,1 do

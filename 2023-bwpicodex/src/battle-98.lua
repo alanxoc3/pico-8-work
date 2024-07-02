@@ -330,3 +330,24 @@ end $$
   end
 end $$
 
+|[f_start_battle]| function(p1name, ...)
+  p_1, p_2 = f_create_player(f_team_party(@S_TEAM1), p1name, "team"..(@S_TEAM1+1)), f_create_player(...)
+
+  f_set_pself(p_1)
+
+  -- TODO: use a memcpy here
+  poke(S_P1_BATACTION, 0)
+  poke(S_P1_MOVE, 0)
+  poke(S_P1_STAT, 0)
+  poke(S_P1_BATACTION+1, 0)
+  poke(S_P1_MOVE+1, 0)
+  poke(S_P1_STAT+1, 0)
+  poke(S_P2_BATACTION, 0)
+  poke(S_P2_MOVE, 0)
+  poke(S_P2_STAT, 0)
+  poke(S_P2_BATACTION+1, 0)
+  poke(S_P2_MOVE+1, 0)
+  poke(S_P2_STAT+1, 0)
+
+  f_add_to_ui_stack(g_grid_battle_turnbeg)
+end $$
