@@ -125,7 +125,6 @@ end $$
   local base = active[stat]*mid(2, 2+stage, 8)/mid(2, 2-stage, 8) -- TODO: verify this is correct, copied from og picodex.
 
   if special then
-    -- TODO: explosion/selfdestruct are doubled. how to do this?
     if stat == 'attack' and major == C_MAJOR_BURNED then base *= .5 end
     if stat == 'defense'        and active.reflected then base *= 2 end
     if stat == 'specialdefense' and active.screened  then base *= 2 end

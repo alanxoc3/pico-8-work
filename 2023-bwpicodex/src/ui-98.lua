@@ -466,7 +466,7 @@ end $$
     local action = f_pop_next_action()
     if action then
       f_set_pself(action.player)
-      a_self_active, a_other_active = p_self.active, p_other.active
+      a_self_active, a_other_active, a_turnself = p_self.active, p_other.active, action.onplayer
 
       -- TODO: this should probably add to the current turn actions. Not the current actions player.
       a_addaction = function(...) f_addaction(action.onplayer, ...) end

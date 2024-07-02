@@ -61,6 +61,7 @@ DIFF: Dynamicpunch always confuses the target if it hits.
 DIFF: The Polkadot Bow item is excluded in favor of Pink Bow.
 
 Modifications inspired by design:
+DIFF: When switching a Pokemon out and the opponent uses pursuit which ends up fainting your Pokemon before switching, the next pokemon in your party will be sent out instead of the one you wanted to switch with.
 DIFF: All Pokemon are set to level 50 with the highest possible stats they can have for that level.
 DIFF: When you KO the target with a multihit move such as "Double Slap", your attack will continue onto the next Pokemon sent out.
 DIFF: If a Pokemon faints, the next Pokemon in the user's team is sent out automatically. This places more importance on team order.

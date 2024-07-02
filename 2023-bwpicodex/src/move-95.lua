@@ -23,6 +23,6 @@ end $$
 
 |[f_move_submission]| function(_ENV)
   f_moveutil_dmgother(_ENV, function(dmg)
-    f_moveutil_dmgself(p_other, ceil(dmg/4))
+    f_moveutil_dmgself(ceil(dmg/4))
   end)
 end $$

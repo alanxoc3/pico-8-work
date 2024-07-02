@@ -5,15 +5,16 @@
 -- - priority logic. logic for executing moves. determining when battle ends.
 
 -- Some globals that we manage in the battle:
--- p_1:            player 1: this is the bottom player on the UI. it never changes throughout the battle.
--- p_2:            player 2: this is the top    player on the UI. it never changes throughout the battle.
--- p_self:         this is the current highlighted player. also corresponds to the player who is currently running an action.
--- p_other:        this is the non highlighted player. also corresponds to the player who is currently running an action.
--- p_first:        this is the player who went first this turns. this changes before each turn starts and is unavailable during move selection.
--- p_last:         this is the player who went first this turns. this changes before each turn starts and is unavailable during move selection.
--- a_addaction:    this is a convenience function available to all action logic functions. adds an action to the current player's turn.
--- a_self_active:  a_self.active, convenience for action logic functions
--- a_other_active: a_other.active, convenience for action logic functions
+-- p_1:           player 1: this is the bottom player on the UI. it never changes throughout the battle.
+-- p_2:           player 2: this is the top    player on the UI. it never changes throughout the battle.
+-- p_self:        this is the current highlighted player. aka the player currently running an action.
+-- p_other:       this is the non highlighted player.     aka the player currently running an action.
+-- p_first:       this is the player who went first this turns. this changes before each turn starts and is unavailable during move selection.
+-- p_last:        this is the player who went first this turns. this changes before each turn starts and is unavailable during move selection.
+-- a_addaction:   this is a convenience function available to all action logic functions. adds an action to the current player's turn.
+-- a_activeself:  a_self.active, convenience for action logic functions
+-- a_activeother: a_other.active, convenience for action logic functions
+-- a_turnself:    the player that is currently executing a turn.
 
 -- Some player specific things
 
@@ -92,6 +93,10 @@ end $$
 -- adds an action to a player's turn
 |[f_addaction]| function(player, ...)
   add(player.actions, f_newaction(player, ...))
+end $$
+
+|[f_insaction]| function(player, ...)
+  add(player.actions, f_newaction(player, ...), 1)
 end $$
 
 |[f_pkmn_comes_out]| function(player, spot) -- assumes that the pkmn coming is not nil.
@@ -261,7 +266,7 @@ end $$
 
       if f_in_split(move.num, 'M_HIGH_JUMP_KICK,M_JUMP_KICK') then
         -- TODO: 1/8 recoil of what it would have inflicted. TODO: Maybe I can modify this to 1/16 of health like leech seed. umm, that might be more damage. whatever maybe not
-        f_moveutil_dmgself(player, 1)
+        f_moveutil_dmgself'1'
       end
     else
       if move:func() then -- TODO: calc attack fail based on whether or not an action was added
@@ -272,7 +277,7 @@ end $$
     -- explosion and selfdestruct self-inflict damage whether or not the attack hit the opponent.
     -- and this happens after the attack hits
     if f_in_split(move.num, 'M_EXPLOSION,M_SELFDESTRUCT') then -- TODO: maybe func could be checked? Might save tokens
-      f_moveutil_dmgself(player, a_self_active.hp)
+      f_moveutil_dmgself(a_self_active.hp)
     end
 
     -- TODO: populate last move... OG picodex had this logic

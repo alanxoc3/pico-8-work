@@ -57,9 +57,9 @@
   end
 end $$
 
-|[f_moveutil_dmgself]| function(player, dmg)
+|[f_moveutil_dmgself]| function(dmg)
   -- TODO: some logic could go here, like focus band or endure (can protect against self-inflicted damage)
-  return f_moveutil_hpchange(player, dmg)
+  return f_moveutil_hpchange(a_turnself, dmg)
 end $$
 
 -- all opponent dmg goes through here. based on code from OG picodex.

@@ -20,7 +20,7 @@ end $$
   local method = pkmn.possible_moves_method[movenum]
   add(op, {text="move"..ind..": "..move.name, header=true})
   add(op, {text=""..method..": "..typ})
-  add(op, {text="pwpnt: "..pp.."/"..maxpp})
+  add(op, {text="   pp: "..pp.."/"..maxpp})
   add(op, {text="pw/ac: "..pow.."/"..accuracy})
 end $$
 
@@ -48,14 +48,14 @@ end $$
   f_add_stat_info(op, pkmn)
 
   add(op, {text="stat: "..pkmn.name, header=true})
-  add(op, {text="at/df: 123/096"})
-  add(op, {text="sa/sd: 311/916"})
-  add(op, {text="sp/lv: 223/050"})
+  add(op, {text="at/df: "..f_stat_calc(pkmn, 'attack').."/"..f_stat_calc(pkmn, 'defense')})
+  add(op, {text="sa/sd: "..f_stat_calc(pkmn, 'specialattack').."/"..f_stat_calc(pkmn, 'specialdefense')})
+  add(op, {text="sp/lv: "..f_stat_calc(pkmn, 'speed').."/050"})
 
   add(op, {text="batl: "..pkmn.name, header=true})
-  add(op, {text="htpnt: 123/321"})
   add(op, {text="major: "..c_major_names_long[pkmn.major]})
-  add(op, {text="item:  "..c_item_names[pkmn.item]})
+  add(op, {text="   hp: "..pkmn.hp.."/"..pkmn.maxhp})
+  add(op, {text=" item: "..c_item_names[pkmn.item]})
 
   --add(op, {text="pkmn stats", header=true})
   -- add(op, {text="htpnt " .. pkmn.hp .. "/" .. pkmn.maxhp})
