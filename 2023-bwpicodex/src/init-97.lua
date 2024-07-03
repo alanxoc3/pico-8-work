@@ -275,18 +275,16 @@ cls() -- this is just a visual thing when the game starts up. TODO: i can remove
 |[c_movemethod_names]|  split"learn,teach,cheat" $$
 |[c_statmod_names]|     f_zobj[[attack,"atack", defense,"defns", specialattack,"spatk", specialdefense,"spdfn", speed,"speed", evasion,"evasn", accuracy,"acury", crit,"critl"]] $$
 
--- TODO: It would be fun to be able to customize pkmn colors.
 -- todo: can this go in cartridge data? maybe i dont want that though (uses more tokens)
--- No blue palette, because that hurts my eyes
 |[c_palettes]| f_zobj[[
-  -- bg1  bg2  mg   fg1  fg2
-  0;,129 ,129  ,13  ,6   ,6   -- dual
-  ;;,1   ,1    ,140 ,12  ,12  -- blue
-  ;;,130 ,130  ,136 ,8   ,8   -- red
-  ;;,131 ,131  ,3   ,138 ,138 -- green
-  ;;,0   ,0    ,8   ,10  ,10  -- htdog
-  ;;,5   ,5    ,134 ,6   ,6   -- silvr
-  ;;,4   ,4    ,9   ,10  ,10  -- gold
+  -- bg   mg   fg
+  0;,129 ,13  ,6   -- dual
+  ;;,1   ,140 ,12  -- blue
+  ;;,130 ,136 ,8   -- red
+  ;;,131 ,3   ,138 -- green
+  ;;,0   ,8   ,10  -- htdog
+  ;;,5   ,134 ,6   -- silvr
+  ;;,4   ,9   ,10  -- gold
 ]] $$
 
 |[c_palette_names]| f_zobj[["0,dual version;,blue version,red version,green version,hotdog flavor,silvr version,gold version"]] $$

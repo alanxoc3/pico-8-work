@@ -26,6 +26,7 @@
 end $$
 
 |[f_create_player]| function(team, name, subname, iscpu)
+  printh("n: "..name..", s: "..subname)
   local active = nil -- active guaranteed to be set because we can't enter the battle without it.
   for i=1,6 do
     if team[i].valid then

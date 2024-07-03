@@ -70,7 +70,7 @@ C_DASH:  254
 C_NEXT:  255
 
 C_TITLETIMER: 6
-C_1: 1 # These are color constants. There are only 2 colors in this game (like gameboy colors).
+C_1: 1 # These are color constants. There are only 3 colors in this game.
 C_2: 2
 C_3: 3
 C_4: 4

@@ -365,7 +365,7 @@ end $$
   return bothteams[f_getsel'g_grid_battle_stats'+1].num
 end $$
 
-|[f_s_versusbegin]| function() f_start_battle("plyr1", f_team_party(f_getsel'g_grid_pickplr2'),    "plyr2", "team"..(f_getsel'g_grid_pickplr1'+1))           end $$
+|[f_s_versusbegin]| function() f_start_battle("plyr1", f_team_party(f_getsel'g_grid_pickplr2'),    "plyr2", "team"..(f_getsel'g_grid_pickplr2'+1))           end $$
 |[f_s_batbegin]|    function() f_start_battle("playr", f_team_league(f_getsel'g_grid_picktrnr'+1), "enemy", c_trnr_names[f_getsel'g_grid_picktrnr'+1], true) end $$
 
 |[f_s_editpkmn]| function()
