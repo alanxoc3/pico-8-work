@@ -91,7 +91,6 @@ end $$
 
 -- calculates the "movemod" variable that is used in the damage formula. This is a multiplier that changes based on special conditions. Like certain moves or move plus weather condition, etc. Or move state.
 |[f_moveutil_movemod]| function(active, move)
-  printh(a_other_active.nextmove)
   if f_in_split(move.num, 'M_EXPLOSION,M_SELFDESTRUCT') or not p_other.nextmove then
     return 2
   end
@@ -149,7 +148,6 @@ end $$
   base_damage = mid(1, 999, base_damage*stab*advantage)
 
   -- min: 1*1 = 1 | max: 999*32 = 31968
-  printh("movemod "..f_moveutil_movemod(attacker, move))
   base_damage = mid(1, 999, base_damage*f_moveutil_movemod(attacker, move)*(rnd'.15'+.85))
 
   return base_damage\1, advantage, crit

@@ -96,7 +96,7 @@ end $$
   for x in all{...} do
     text ..= x
   end
-  print("\f4"..text, 1, 1)
+  print("\f3"..text, 1, 1)
 end $$
 
 -- TODO: dedup with _top
@@ -105,7 +105,7 @@ end $$
   for x in all{...} do
     text ..= x
   end
-  print("\f2"..text, 1, 8)
+  print("\f1"..text, 1, 8)
 end $$
 
 |[f_get_move_texts]| function(move)
@@ -154,27 +154,27 @@ end $$
   local b = function(_ENV, team, x, y, px, py, flip)
     local is_notactive = p_self.active ~= _ENV
     if invisible then return end
-    --f_roundrect(x+1, y+1-6+1, x+34-1, y+6+6+1, C_3)
+    --f_roundrect(x+1, y+1-6+1, x+34-1, y+6+6+1, C_2)
     if hp > 0 then
-      rectfill(x+1, y+2, x+1+mid(0, hp/maxhp*32, 32), y+5, C_2)
-      pset(x+1,  y+2, C_3)
-      pset(x+1,  y+5, C_3)
-      pset(x+33, y+2, C_3)
-      pset(x+33, y+5, C_3)
+      rectfill(x+1, y+2, x+1+mid(0, hp/maxhp*32, 32), y+5, C_1)
+      pset(x+1,  y+2, C_2)
+      pset(x+1,  y+5, C_2)
+      pset(x+33, y+2, C_2)
+      pset(x+33, y+5, C_2)
     end
 
     local tx, ty = x+15, y+9
     for i=0,5 do
       if spot == i+1 or team[i+1].valid and team[i+1].major ~= C_MAJOR_FAINTED then
-        pset(tx+i%3*2, ty+i\3*2-1+1-1-1+1, spot == i+1 and C_4 or C_2 )
+        pset(tx+i%3*2, ty+i\3*2-1+1-1-1+1, spot == i+1 and C_3 or C_1 )
       end
 
       if i ~= 1 then
       end
     end
 
-    print(name,   x+2,   y-5+1+1+1-2, C_2, -1)
-    print(c_major_names_short[major].."  "..f_prefix_zero(hp, 3), x+1+1, y+8-1+1-1-1+1,   C_2, -1)
+    print(name,   x+2,   y-5+1+1+1-2, C_1, -1)
+    print(c_major_names_short[major].."  "..f_prefix_zero(hp, 3), x+1+1, y+8-1+1-1-1+1,   C_1, -1)
     f_draw_pkmn(num, px, py,  16, flip,  false, false, is_notactive, true)
   end
 

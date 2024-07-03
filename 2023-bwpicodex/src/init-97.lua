@@ -2,7 +2,7 @@ f_zcall(poke, [[
    ;,0x5f2c,   3 -- screen to 64x64
   ;;,0x5f5c,   8 -- set btn initial delay before repeating. 255 means never repeat.
   ;;,0x5f5d,   1 -- set btn repeating delay.
-  ;;,S_STORY,  0 -- todo: remove me, this is just for debugging
+  ;;,S_STORY,  56 -- todo: remove me, this is just for debugging
 ]])
 
 cls() -- this is just a visual thing when the game starts up. TODO: i can remove it if i want. probably should
@@ -264,10 +264,11 @@ cls() -- this is just a visual thing when the game starts up. TODO: i can remove
   ,"lugia"
   ,"hooh"
   ,"celebi"
-  ,"___"
-  ,"none"
-  ,"___"
-  ,"___"]] $$ -- todo: last 2 ___ blanks can be removed. maybe none can too? or that is used for prevol? celebi, (the none pokemon for ui), (empty pokemon ind that prevolve points to), unused, unused.
+  ,"________"
+  ,"none" -- todo: is this used?
+  ,"___" -- todo: is this used?
+  ,"___" -- todo: is this used?
+]] $$ -- todo: last 2 ___ blanks can be removed. maybe none can too? or that is used for prevol? celebi, (the none pokemon for ui), (empty pokemon ind that prevolve points to), unused, unused.
 
 |[c_gender_names]|      f_zobj[["0,neuter;,male,female"]] $$
 |[c_major_names_long]|  f_zobj[["0,______;,faint,burn,freeze,parlyz,poisnd,sleep"]] $$
@@ -309,7 +310,7 @@ for i=0,I_END do add(c_items,  f_zobj([[lock,~c_no,  num,@, name,@]], i, c_item_
 
 -- 136 to 118. Storing data all together saves like 18 code tokens.
 for i=0,252 do -- There are 252+1 pkmn and 252+1 moves. The +1s are for empties. So zipped when unpacking to save some tokens.
-  local pkmn = f_zobj([[moves_progress;,#,#,#; moves_grouped;,#,#,#; lock,~c_no, name,@, num,@, num_str,@]], c_pkmn_names[i], i, f_prefix_zero(i, 3))
+  local pkmn = f_zobj([[moves_progress;,#,#,#; moves_grouped;,#,#,#; lock,~c_no, name,@, num,@, num_str,@]], c_pkmn_names[i], i, f_prefix_zero(i < P_NONE and i or "???", 3))
 
   -- cur_list is not local just so I can save 1 token
   cur_list, c_moves[i], c_pokemon[i] = pkmn.moves_progress[1], f_zobj([[lock,~c_no, num,@, name,@]], i, c_move_names[i]), pkmn -- todo: get rid of i-1
@@ -424,9 +425,9 @@ end)
 end $$
 
 -- TODO: does this need to be extracted into a function, or can it just run here?
-|[f_update_locks]| function()
+|[f_update_locks]| function(start_trnr) -- game lags with this function, so it should be called when there can be a lag. TODO: Or I could try speeding it up?
   f_unlock(c_items, I_NONE+1)
-  -- f_unlock(c_items, I_BERRY+1)
+  f_unlock(c_items, I_BERRY+1) -- berry is nice to have to start with
 
   -- these are the moves available in the default party -- TODO: Maybe I can use GROWL. I think Bulb/Chik/Charm are the 3 that can learn growl. not positive.
   -- Because this happens before unlocking the trainers, the default team will survive a factory reset! Which is good, though factory reset will probably not be available in the released game to save tokens and users accidentally resetting.
@@ -446,7 +447,7 @@ end $$
     memset(S_PARTY2, P_NONE, 126) -- set the "NONE" pokemon to all the other slots. this is 0x7e, which is the length of 3 parties
   end
 
-  for i=1,min(58,@S_STORY) do
+  for i=start_trnr,min(58,@S_STORY) do
     local team = f_team_league(i)
     for pkmn in all(team) do
       f_unlock(c_pokemon, pkmn.num)
@@ -457,7 +458,7 @@ end $$
     end
   end
 end $$
-f_update_locks()
+f_update_locks(1)
 
 -- after we have read all the bytes, we can now apply filters to the sfx for the cool sounding pkmn cries.
 -- sfx starts at 0x3200. each sfx are 68 bytes. 64 for notes then 4 for effects.

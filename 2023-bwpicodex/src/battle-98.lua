@@ -26,7 +26,6 @@
 end $$
 
 |[f_create_player]| function(team, name, subname, iscpu)
-  printh("n: "..name..", s: "..subname)
   local active = nil -- active guaranteed to be set because we can't enter the battle without it.
   for i=1,6 do
     if team[i].valid then
@@ -80,7 +79,12 @@ end $$
   f_pop_ui_stack() -- battle scene TODO: convert to a zcall?
   f_pop_ui_stack() -- p_2 select scene
   f_pop_ui_stack() -- p_1 select scene
-  f_add_to_ui_stack(g_grid_battle_results)
+
+  f_add_to_ui_stack(g_grid_battle_results, function()
+    if p_other == p_1 then
+      g_p1_winfunc()
+    end
+  end)
   f_setsel('g_grid_battle_results', p_other.active.spot-1)
 end $$
 
@@ -320,8 +324,9 @@ end $$
   end
 end $$
 
-|[f_start_battle]| function(p1name, ...)
+|[f_start_battle]| function(p1name, p1winfunc, ...)
   p_1, p_2 = f_create_player(f_team_party(@S_TEAM1), p1name, "team"..(@S_TEAM1+1)), f_create_player(...)
+  g_p1_winfunc = p1winfunc
 
   f_set_pself(p_1)
 

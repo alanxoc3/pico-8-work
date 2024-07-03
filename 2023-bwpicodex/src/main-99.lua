@@ -20,6 +20,7 @@
     gridpofunc(g_top_grid, unpack(g_top_grid.params))
   end
 
+  -- needs to go after if statement, because if statement populates op.
   gridpo     = g_top_grid.op
   g_cg_m     = g_top_grid.g_cg_m -- TODO: refactor/simplify. maybe dont need all these variables. do what is less tokens
   g_cg_s     = g_top_grid.g_cg_s
@@ -36,9 +37,8 @@ sfx'63' -- Plays all the 4 sound effects in picodex as the logo/startup tune.
 g_shake_timer = 0
 |[_draw]| function() -- since there is very minimal animation, doing 30fps. this gives me cpu so i can make some things slower to save tokens.
   cls'C_1'
-
   if g_title_timer < C_TITLETIMER then
-    print("\^y7\f4alanxoc3\n\f3presents", 16, 26)
+    print"\^j47\|e\f3alanxoc3\n\^j4a\|9\f2presents"
     for i=1,6 do
       if .5 << i & btn() > 0 then
         g_palette = i

@@ -128,9 +128,9 @@ if i==0 then l,u=1,1 end
 if i==w-1 then r,u=1,1 end
 if i==#gridobj-1 then r,d=1,1 end
 if i==(#gridobj-1)\w*w then l,d=1,1 end
-local c=3
+local c=2
 if obj.disabled or obj.header then
-c=2
+c=1
 end
 rectfill(offx-1+l,offy-1,offx+cw-2-r,offy+ch-2,c)
 rectfill(offx-1,offy-1+u,offx+cw-2,offy+ch-2-d,c)
@@ -142,9 +142,9 @@ if i>=#gridobj then return true end
 local xloc,yloc=x+i%w*cw,y+j\w*ch
 clip(xloc,yloc,cw,ch)
 camera(-xloc-1,-yloc-1)
-local c=2
+local c=1
 if obj.disabled or obj.header then
-c=3
+c=2
 end
 print(obj.text or "",1,1,c)
 if obj.draw then
@@ -155,7 +155,7 @@ end
 for j=0,vh*w-1 do if draw_cell_bg(j,0,0)then break end end
 for j=0,vh*w-1 do if draw_cell_fg(j)then break end end
 if not disabled then
-pal{4,4,4}
+pal{3,3,3}
 for ss=1,selh do
 for i=-1,1 do
 for j=-1,1 do
@@ -173,7 +173,7 @@ end
 end
 camera()
 end,function(op,text)
-add(op,{draw=function()print(text,1,1,2)end})
+add(op,{draw=function()print(text,1,1,1)end})
 end,function(num)
 if num<252 then
 g_cur_pkmn_cry=num
@@ -195,8 +195,8 @@ local og_x=x
 if not disabled and not isoutline and stat"46">-1 and g_cur_pkmn_cry==num then
 x+=sin(g_shake_timer/4)
 end
-local in_c=isoutline and 3 or sel and 4 or disabled and 2 or 4
-local out_c=disabled and(sel and 2 or 3)or sel and 3 or 2
+local in_c=isoutline and 2 or sel and 3 or disabled and 1 or 3
+local out_c=disabled and(sel and 1 or 2)or sel and 2 or 1
 if num==252 then
 rectfill(x+width/2-1,y+width/2-1,x+width/2,y+width/2,out_c)
 return
@@ -292,7 +292,6 @@ else
 a_addaction(p_other,"resisted attack")
 end
 end,function(active,move)
-printh(a_other_active.nextmove)
 if f_in_split(move.num,"130,129 ")or not p_other.nextmove then
 return 2
 end
@@ -316,7 +315,6 @@ local base_damage=mid(
 )
 local advantage=f_moveutil_typeadv(move,defender)
 base_damage=mid(1,999,base_damage*stab*advantage)
-printh("movemod "..f_moveutil_movemod(attacker,move))
 base_damage=mid(1,999,base_damage*f_moveutil_movemod(attacker,move)*(rnd".15"+.85))
 return base_damage\1,advantage,crit
 end,function()a_addaction(p_self,"does nothing")end,function(_ENV)return f_moveutil_hpchange(p_self,-a_self_active.maxhp\2)end,function(_ENV)
@@ -328,13 +326,14 @@ end,function(_ENV)
 f_moveutil_dmgother(_ENV,function(dmg)
 f_moveutil_dmgself(ceil(dmg/4))
 end)
-end,f_zobj"0;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_seismictoss,20;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_falseswipe,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_recover,0;;,f_move_splash,0;;,f_move_seismictoss,50;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_superfang,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_recover,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_seismictoss,40;;,f_move_recover,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_tackle,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_submission,0;;,f_move_submission,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_psywave,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_seismictoss,999;;,f_move_submission,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0",f_zobj"0,strugl;,acid,acidar,barage,bonclb,bind,clamp,moonlt,lechsd,extrsp,sncbom,twindl,thnshk,glare,gilotn,hypfng,jmpkck,kinsis,lockon,lovkis,macpnc,vicgrp,spican,spikes,spore,cotspr,presnt,vithrw,cmtpnc,drlpck,sndatk,agilty,fryatk,qikatk,falswp,growl,healbl,sing,pound,minmiz,tailwp,dblslp,meghrn,bonrng,convr1,convr2,spark,mlkdrk,morsun,ngtshd,octzok,pinmis,pwdsnw,supfng,firspn,psngas,barier,medtat,ftrsgt,hypnos,psybem,litscr,safgrd,petdnc,charm,synths,swtscn,razlef,psnpwd,slppwd,absorb,stnspr,flail,confsn,slam,constr,amnesa,bubble,splash,hydpmp,mindrd,mist,hrnatk,spiweb,dblkck,swtkis,mtlclw,trform,trikck,gust,twistr,crbham,dizpnc,sludge,painsp,dstbnd,haze,lick,persng,meanlk,cnfray,crschp,smog,karchp,ember,smkscr,beldrm,beatup,scrtch,slash,ancpwr,leer,bite,outrge,scryfc,thrash,stomp,roksld,magtud,rocthr,harden,bonrsh,hijkck,recovr,aerbls,hrndrl,drgrag,sfboil,drgbre,slfdes,explsn,eggbmb,slgbmb,gigdrn,megdrn,swrdnc,cut,fryctr,thief,dig,rolout,dfncrl,detect,solbem,raidnc,flash,psycic,psycup,drmeat,ngtmar,shdbal,zapcan,thundr,thnblt,irntal,streng,rocsms,hedbut,mudslp,sunday,protct,dbltem,slptlk,curse,hidpwr,swager,frustr,return,toxic,snore,rest,endure,atract,bide,mimic,substu,rage,dbledg,takdwn,sklbas,bodslm,wtrgun,bblbem,icebem,blizrd,icywnd,surf,wrlpol,wtrfal,swift,payday,triatk,rflect,thnwav,telprt,psywav,metrnm,countr,megpnc,seitos,submis,megkck,dynpnc,firpnc,thnpnc,icepnc,firbls,flmthr,fisure,eartqk,sndstr,hypbem,roar,stlwng,fly,razwnd,wrlwnd,skyatk,wngatk,peck,mirmov,fntatk,witdrw,rapspn,supsnc,aurbem,mircot,psnstg,spite,crunch,pursut,strsht,lechlf,btnpas,disabl,screch,tackle,flmwel,revrsl,fryswp,fcseng,forsgt,lowkck,rolkck,encore,wrap,growth,vinwip,sacfir,sharpn,sketch,tm05,______",split"youngs,sage,falknr,grunt,bugctr,bugsy,pkmfan,beauty,witney,kimono,medium,morty,police,karate,chuck,gentle,sailor,jasmin,rocket,skier,pryce,scient,twins,clair,nerd,camper,brock,school,swimer,misty,jugler,guitar,ltsurg,hiker,lass,erika,biker,picnik,janine,maniac,psycic,sabrin,fisher,breath,blaine,birdkp,cooltr,blue,legend,silver,will,koga,bruno,karen,lance,red,gold,horde",f_zobj"0,none;,normal,fire,fightng,water,poison,electrc,ground,grass,flying,ice,bug,psychic,rock,dragon,ghost,dark,steel,bird",f_zobj"0,______;,pnkbow,chrcol,blkblt,myswtr,psnbrb,magnet,sosand,mirasd,shbeak,nvrice,slvpwd,twspon,hrdstn,dragsc,speltg,blkgls,mtlcot,plkbow,bripwd,focbnd,kingrk,leftov,qikclw,scopln,amcoin,litbal,lukpnc,mtlpwd,stick,thkclb,bersrk,berry,gldbry,btrbry,mntbry,brnbry,icebry,parbry,psnbry,mirbry,mysbry",f_zobj"0,misingno;,bulbsaur,ivysaur,venusaur,charmand,charmeln,charzard,squirtle,wartortl,blastois,caterpie,metapod,butrfree,weedle,kakuna,beedrill,pidgey,pidgeoto,pidgeot,rattata,raticate,spearow,fearow,ekans,arbok,pikachu,raichu,sndshrew,sndslash,nidoranf,nidorina,nidoquen,nidoranm,nidorino,nidoking,clefairy,clefable,vulpix,ninetale,jiglypuf,wiglytuf,zubat,golbat,oddish,gloom,vileplum,paras,parasect,venonat,venomoth,diglett,dugtrio,meowth,persian,psyduck,golduck,mankey,primeape,growlith,arcanine,poliwag,polwhirl,polwrath,abra,kadabra,alakazam,machop,machoke,machamp,belsprot,weepnbel,victrbel,tntacool,tntcruel,geodude,graveler,golem,ponyta,rapidash,slowpoke,slowbro,magnemit,magneton,fafetchd,doduo,dodrio,seel,dewgong,grimer,muk,shellder,cloyster,gastly,haunter,gengar,onix,drowzee,hypno,krabby,kingler,voltorb,electrod,exegcute,exegutor,cubone,marowak,hitmnlee,hitmnchn,licktung,koffing,weezing,rhyhorn,rhydon,chansey,tangela,kangakan,horsea,seadra,goldeen,seaking,staryu,starmie,mrmime,scyther,jynx,elecabuz,magmar,pinsir,tauros,magikarp,gyarados,lapras,ditto,eevee,vaporeon,jolteon,flareon,porygon,omanyte,omastar,kabuto,kabutops,aerodact,snorlax,articuno,zapdos,moltres,dratini,dragnair,dragnite,mewtwo,mew,chikrita,bayleef,meganium,cyndquil,quilava,typhlosn,totodile,croconaw,fralgatr,sentret,furret,hoothoot,noctowl,ledyba,ledian,spinarak,ariados,crobat,chinchou,lanturn,pichu,cleffa,igglybuf,togepi,togetic,natu,xatu,mareep,flaaffy,ampharos,belossom,marill,azumaril,sudwoodo,politoed,hoppip,skiploom,jumpluff,aipom,sunkern,sunflora,yanma,wooper,quagsire,espeon,umbreon,murkrow,slowking,misdrvus,unown,wobbufet,girafrig,pineco,foretres,dunsparc,gligar,steelix,snubbull,granbull,qwilfish,scizor,shuckle,heracros,sneasel,tediursa,ursaring,slugma,magcargo,swinub,piloswin,corsola,remoraid,octilery,delibird,mantine,skarmory,houndour,houndoom,kingdra,phanpy,donphan,porygon2,stantler,smeargle,tyrogue,hitmntop,smoochum,elekid,magby,miltank,blissey,raikou,entei,suicune,larvitar,pupitar,tyrnitar,lugia,hooh,celebi,___,none,___,___",f_zobj"0,neuter;,male,female",f_zobj"0,______;,faint,burn,freeze,parlyz,poisnd,sleep",f_zobj"0,___;,fnt,brn,fzn,par,psn,slp",split"learn,teach,cheat",f_zobj"attack,atack,defense,defns,specialattack,spatk,specialdefense,spdfn,speed,speed,evasion,evasn,accuracy,acury,crit,critl",f_zobj"0;,129,13,6;;,1,140,12;;,130,136,8;;,131,3,138;;,0,8,10;;,5,134,6;;,4,9,10",f_zobj"0,dual version;,blue version,red version,green version,hotdog flavor,silvr version,gold version",f_zobj"0;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,",function()
+end,f_zobj"0;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_seismictoss,20;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_falseswipe,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_recover,0;;,f_move_splash,0;;,f_move_seismictoss,50;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_superfang,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_recover,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_seismictoss,40;;,f_move_recover,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_tackle,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_submission,0;;,f_move_submission,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_psywave,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_seismictoss,999;;,f_move_submission,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0",f_zobj"0,strugl;,acid,acidar,barage,bonclb,bind,clamp,moonlt,lechsd,extrsp,sncbom,twindl,thnshk,glare,gilotn,hypfng,jmpkck,kinsis,lockon,lovkis,macpnc,vicgrp,spican,spikes,spore,cotspr,presnt,vithrw,cmtpnc,drlpck,sndatk,agilty,fryatk,qikatk,falswp,growl,healbl,sing,pound,minmiz,tailwp,dblslp,meghrn,bonrng,convr1,convr2,spark,mlkdrk,morsun,ngtshd,octzok,pinmis,pwdsnw,supfng,firspn,psngas,barier,medtat,ftrsgt,hypnos,psybem,litscr,safgrd,petdnc,charm,synths,swtscn,razlef,psnpwd,slppwd,absorb,stnspr,flail,confsn,slam,constr,amnesa,bubble,splash,hydpmp,mindrd,mist,hrnatk,spiweb,dblkck,swtkis,mtlclw,trform,trikck,gust,twistr,crbham,dizpnc,sludge,painsp,dstbnd,haze,lick,persng,meanlk,cnfray,crschp,smog,karchp,ember,smkscr,beldrm,beatup,scrtch,slash,ancpwr,leer,bite,outrge,scryfc,thrash,stomp,roksld,magtud,rocthr,harden,bonrsh,hijkck,recovr,aerbls,hrndrl,drgrag,sfboil,drgbre,slfdes,explsn,eggbmb,slgbmb,gigdrn,megdrn,swrdnc,cut,fryctr,thief,dig,rolout,dfncrl,detect,solbem,raidnc,flash,psycic,psycup,drmeat,ngtmar,shdbal,zapcan,thundr,thnblt,irntal,streng,rocsms,hedbut,mudslp,sunday,protct,dbltem,slptlk,curse,hidpwr,swager,frustr,return,toxic,snore,rest,endure,atract,bide,mimic,substu,rage,dbledg,takdwn,sklbas,bodslm,wtrgun,bblbem,icebem,blizrd,icywnd,surf,wrlpol,wtrfal,swift,payday,triatk,rflect,thnwav,telprt,psywav,metrnm,countr,megpnc,seitos,submis,megkck,dynpnc,firpnc,thnpnc,icepnc,firbls,flmthr,fisure,eartqk,sndstr,hypbem,roar,stlwng,fly,razwnd,wrlwnd,skyatk,wngatk,peck,mirmov,fntatk,witdrw,rapspn,supsnc,aurbem,mircot,psnstg,spite,crunch,pursut,strsht,lechlf,btnpas,disabl,screch,tackle,flmwel,revrsl,fryswp,fcseng,forsgt,lowkck,rolkck,encore,wrap,growth,vinwip,sacfir,sharpn,sketch,tm05,______",split"youngs,sage,falknr,grunt,bugctr,bugsy,pkmfan,beauty,witney,kimono,medium,morty,police,karate,chuck,gentle,sailor,jasmin,rocket,skier,pryce,scient,twins,clair,nerd,camper,brock,school,swimer,misty,jugler,guitar,ltsurg,hiker,lass,erika,biker,picnik,janine,maniac,psycic,sabrin,fisher,breath,blaine,birdkp,cooltr,blue,legend,silver,will,koga,bruno,karen,lance,red,gold,horde",f_zobj"0,none;,normal,fire,fightng,water,poison,electrc,ground,grass,flying,ice,bug,psychic,rock,dragon,ghost,dark,steel,bird",f_zobj"0,______;,pnkbow,chrcol,blkblt,myswtr,psnbrb,magnet,sosand,mirasd,shbeak,nvrice,slvpwd,twspon,hrdstn,dragsc,speltg,blkgls,mtlcot,plkbow,bripwd,focbnd,kingrk,leftov,qikclw,scopln,amcoin,litbal,lukpnc,mtlpwd,stick,thkclb,bersrk,berry,gldbry,btrbry,mntbry,brnbry,icebry,parbry,psnbry,mirbry,mysbry",f_zobj"0,misingno;,bulbsaur,ivysaur,venusaur,charmand,charmeln,charzard,squirtle,wartortl,blastois,caterpie,metapod,butrfree,weedle,kakuna,beedrill,pidgey,pidgeoto,pidgeot,rattata,raticate,spearow,fearow,ekans,arbok,pikachu,raichu,sndshrew,sndslash,nidoranf,nidorina,nidoquen,nidoranm,nidorino,nidoking,clefairy,clefable,vulpix,ninetale,jiglypuf,wiglytuf,zubat,golbat,oddish,gloom,vileplum,paras,parasect,venonat,venomoth,diglett,dugtrio,meowth,persian,psyduck,golduck,mankey,primeape,growlith,arcanine,poliwag,polwhirl,polwrath,abra,kadabra,alakazam,machop,machoke,machamp,belsprot,weepnbel,victrbel,tntacool,tntcruel,geodude,graveler,golem,ponyta,rapidash,slowpoke,slowbro,magnemit,magneton,fafetchd,doduo,dodrio,seel,dewgong,grimer,muk,shellder,cloyster,gastly,haunter,gengar,onix,drowzee,hypno,krabby,kingler,voltorb,electrod,exegcute,exegutor,cubone,marowak,hitmnlee,hitmnchn,licktung,koffing,weezing,rhyhorn,rhydon,chansey,tangela,kangakan,horsea,seadra,goldeen,seaking,staryu,starmie,mrmime,scyther,jynx,elecabuz,magmar,pinsir,tauros,magikarp,gyarados,lapras,ditto,eevee,vaporeon,jolteon,flareon,porygon,omanyte,omastar,kabuto,kabutops,aerodact,snorlax,articuno,zapdos,moltres,dratini,dragnair,dragnite,mewtwo,mew,chikrita,bayleef,meganium,cyndquil,quilava,typhlosn,totodile,croconaw,fralgatr,sentret,furret,hoothoot,noctowl,ledyba,ledian,spinarak,ariados,crobat,chinchou,lanturn,pichu,cleffa,igglybuf,togepi,togetic,natu,xatu,mareep,flaaffy,ampharos,belossom,marill,azumaril,sudwoodo,politoed,hoppip,skiploom,jumpluff,aipom,sunkern,sunflora,yanma,wooper,quagsire,espeon,umbreon,murkrow,slowking,misdrvus,unown,wobbufet,girafrig,pineco,foretres,dunsparc,gligar,steelix,snubbull,granbull,qwilfish,scizor,shuckle,heracros,sneasel,tediursa,ursaring,slugma,magcargo,swinub,piloswin,corsola,remoraid,octilery,delibird,mantine,skarmory,houndour,houndoom,kingdra,phanpy,donphan,porygon2,stantler,smeargle,tyrogue,hitmntop,smoochum,elekid,magby,miltank,blissey,raikou,entei,suicune,larvitar,pupitar,tyrnitar,lugia,hooh,celebi,________,none,___,___",f_zobj"0,neuter;,male,female",f_zobj"0,______;,faint,burn,freeze,parlyz,poisnd,sleep",f_zobj"0,___;,fnt,brn,fzn,par,psn,slp",split"learn,teach,cheat",f_zobj"attack,atack,defense,defns,specialattack,spatk,specialdefense,spdfn,speed,speed,evasion,evasn,accuracy,acury,crit,critl",f_zobj"0;,129,13,6;;,1,140,12;;,130,136,8;;,131,3,138;;,0,8,10;;,5,134,6;;,4,9,10",f_zobj"0,dual version;,blue version,red version,green version,hotdog flavor,silvr version,gold version",f_zobj"0;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,",function()
 g_init_peek_loc+=1
 return@g_init_peek_loc
 end,function(list,ind)
 list[ind].lock=true
-end,function()
+end,function(start_trnr)
 f_unlock(c_items,0+1)
+f_unlock(c_items,32+1)
 for ind in all(split"0,252,8,104,181,247,236,112,40,111,105,61,235 ")do
 f_unlock(c_moves,ind)
 end
@@ -348,7 +347,7 @@ if@0x5efe==0 then
 poke(0x5efe,1)
 memset(0x5e2a,252,126)
 end
-for i=1,min(58,@0x5eff)do
+for i=start_trnr,min(58,@0x5eff)do
 local team=f_team_league(i)
 for pkmn in all(team)do
 f_unlock(c_pokemon,pkmn.num)
@@ -410,13 +409,13 @@ local text=""
 for x in all{...}do
 text..=x
 end
-print("\f4"..text,1,1)
+print("\f3"..text,1,1)
 end,function(...)
 local text=""
 for x in all{...}do
 text..=x
 end
-print("\f2"..text,1,8)
+print("\f1"..text,1,8)
 end,function(move)
 local maxpp,pp,pow,accuracy,typ=f_prefix_zero(move.maxpp,2),f_prefix_zero(move.pp,2),f_prefix_zero(move.pow,3),f_prefix_zero(move.accuracy,3),c_type_names[move.pktype]
 if move.pow==0 then pow="___"
@@ -449,22 +448,22 @@ local b=function(_ENV,team,x,y,px,py,flip)
 local is_notactive=p_self.active ~=_ENV
 if invisible then return end
 if hp>0 then
-rectfill(x+1,y+2,x+1+mid(0,hp/maxhp*32,32),y+5,2)
-pset(x+1,y+2,3)
-pset(x+1,y+5,3)
-pset(x+33,y+2,3)
-pset(x+33,y+5,3)
+rectfill(x+1,y+2,x+1+mid(0,hp/maxhp*32,32),y+5,1)
+pset(x+1,y+2,2)
+pset(x+1,y+5,2)
+pset(x+33,y+2,2)
+pset(x+33,y+5,2)
 end
 local tx,ty=x+15,y+9
 for i=0,5 do
 if spot==i+1 or team[i+1].valid and team[i+1].major ~=1 then
-pset(tx+i%3*2,ty+i\3*2-1+1-1-1+1,spot==i+1 and 4 or 2)
+pset(tx+i%3*2,ty+i\3*2-1+1-1-1+1,spot==i+1 and 3 or 1)
 end
 if i ~=1 then
 end
 end
-print(name,x+2,y-5+1+1+1-2,2,-1)
-print(c_major_names_short[major].."  "..f_prefix_zero(hp,3),x+1+1,y+8-1+1-1-1+1,2,-1)
+print(name,x+2,y-5+1+1+1-2,1,-1)
+print(c_major_names_short[major].."  "..f_prefix_zero(hp,3),x+1+1,y+8-1+1-1-1+1,1,-1)
 f_draw_pkmn(num,px,py,16,flip,false,false,is_notactive,true)
 end
 add(op,{draw=function()
@@ -474,7 +473,6 @@ end})
 end,function(team,ind)
 return setmetatable(f_zobj("spot,@,base,@",ind,team[ind]),{__index=team[ind]})
 end,function(team,name,subname,iscpu)
-printh("n: "..name..", s: "..subname)
 local active=nil
 for i=1,6 do
 if team[i].valid then
@@ -504,7 +502,11 @@ f_set_pself(player)
 f_pop_ui_stack()
 f_pop_ui_stack()
 f_pop_ui_stack()
-f_add_to_ui_stack(g_grid_battle_results)
+f_add_to_ui_stack(g_grid_battle_results,function()
+if p_other==p_1 then
+g_p1_winfunc()
+end
+end)
 f_setsel("g_grid_battle_results",p_other.active.spot-1)
 end,function(onplayer,player,message,logic,isplayeraction)
 return f_zobj("onplayer,@,player,@,active,@,message,@,logic,@,isplayeraction,@",onplayer,player,player.active,message,logic or f_nop,isplayeraction)
@@ -623,8 +625,9 @@ end
 f_movelogic(p_2)
 f_turn_end_p2()
 end
-end,function(p1name,...)
+end,function(p1name,p1winfunc,...)
 p_1,p_2=f_create_player(f_team_party(@0x5eae),p1name,"team"..(@0x5eae+1)),f_create_player(...)
+g_p1_winfunc=p1winfunc
 f_set_pself(p_1)
 poke(0x5eba,0)
 poke(0x5ebc,0)
@@ -763,7 +766,7 @@ add(op,{draw=function()
 f_draw_pkmn(c_pokemon[f_getsel"g_grid_browse"].num,30-18+1,20-18+1,32,g_title_sel,false,false,false)
 end})
 end)
-f_zobj_set(_g,"f_op_teams,@,f_op_editmovebot,@,f_op_editstat,@,f_op_editmove,@,f_op_batsel,@,f_op_movesel,@,f_op_batswitch,@,f_op_batresults,@,f_op_batstats,@,f_dt_editteam,@,f_dt_editstat,@,f_dt_editmove_template,@,f_dt_editmove,@,f_dt_browse,@,f_dt_editpkmn,@,f_dt_edit,@,f_dt_league,@,f_dt_batstats,@,f_dt_switch,@,f_dt_versus,@,f_dt_title,@,f_s_batresults,@,f_l_browse,@,f_s_browse,@,f_s_versus,@,f_s_league,@,f_s_batstat,@,f_s_edit,@,f_s_editteam,@,f_s_editstat,@,f_s_editmovebot,@,f_s_battle,@,f_s_title,@,f_s_pkstat,@,f_s_statedit,@,f_s_statbat,@,f_s_versusbegin,@,f_s_batbegin,@,f_s_editpkmn,@,f_s_editmove,@,f_s_edititem,@,f_l_title,@,f_l_battle,@,f_s_batmove,@,f_s_batswitch,@,f_op_startturn,@,f_s_startturn,@,f_op_bataction,@,f_s_bataction,@,f_l_bataction,@,_update,@,_draw,@",function(_ENV)
+f_zobj_set(_g,"f_op_teams,@,f_op_editmovebot,@,f_op_editstat,@,f_op_editmove,@,f_op_batsel,@,f_op_movesel,@,f_op_batswitch,@,f_op_batresults,@,f_op_batstats,@,f_dt_editteam,@,f_dt_editstat,@,f_dt_editmove_template,@,f_dt_editmove,@,f_dt_browse,@,f_dt_editpkmn,@,f_dt_edit,@,f_dt_batstats,@,f_dt_switch,@,f_dt_league,@,f_dt_versus,@,f_dt_title,@,f_s_batresults,@,f_l_browse,@,f_s_browse,@,f_s_versus,@,f_s_league,@,f_s_batstat,@,f_s_edit,@,f_s_editteam,@,f_s_editstat,@,f_s_editmovebot,@,f_s_battle,@,f_s_title,@,f_s_pkstat,@,f_s_statedit,@,f_s_statbat,@,f_s_versusbegin,@,f_s_batbegin,@,f_s_editpkmn,@,f_s_editmove,@,f_s_edititem,@,f_l_title,@,f_l_battle,@,f_s_batmove,@,f_s_batswitch,@,f_op_startturn,@,f_s_startturn,@,f_op_bataction,@,f_s_bataction,@,f_l_bataction,@,_update,@,_draw,@",function(_ENV)
 for i=1,58 do
 local disabled=@0x5eff+1<i
 add(op,{text=disabled and f_strtoq(c_trnr_names[i])or c_trnr_names[i],disabled=disabled})
@@ -901,13 +904,6 @@ end
 f_print_top("edit team",f_getsel"g_grid_pickedit"+1)
 f_print_bot(pkstr_arr[1],"-",pkstr_arr[2],"-",pkstr_arr[3],"-",pkstr_arr[4],"-",pkstr_arr[5],pkstr_arr[6])
 end,function()
-local toggle=g_cg_m.name=="g_grid_pickleag"
-local disabled=@0x5eff+1<f_getsel"g_grid_picktrnr"+1
-local name=c_trnr_names[f_getsel"g_grid_picktrnr"+1]
-name=disabled and f_strtoq(name)or name
-f_print_top(toggle and "\f4"or "\f2","playr team",f_getsel"g_grid_pickleag"+1)
-f_print_bot(toggle and "\f2"or "\f4","enemy ",name)
-end,function()
 local ind=f_getsel"g_grid_battle_stats"
 local player=ind<6 and p_self or p_other
 local name=c_trnr_names[f_getsel"g_grid_picktrnr"+1]
@@ -922,14 +918,21 @@ f_print_top("swap ",pkmn.name)
 local player=ind<6 and p_self or p_other
 f_print_bot(player.name," spot",ind%6+1)
 end,function()
-local toggle=g_cg_m.name=="g_grid_pickplr1"
-f_print_top(toggle and "\f4"or "\f2","plyr1 team",f_getsel"g_grid_pickplr1"+1)
-f_print_bot(toggle and "\f2"or "\f4","plyr2 team",f_getsel"g_grid_pickplr2"+1)
+local toggle=g_cg_m.name=="g_grid_pickleag"
+local disabled=@0x5eff+1<f_getsel"g_grid_picktrnr"+1
+local name=c_trnr_names[f_getsel"g_grid_picktrnr"+1]
+name=disabled and f_strtoq(name)or name
+f_print_top(toggle and "\f3"or "\f1","playr team",f_getsel"g_grid_pickleag"+1)
+f_print_bot(toggle and "\f1"or "\f3","enemy ",name)
 end,function()
-print("\^w\^tpicodex",2,1-1+1+2-2,4)
-print(c_palette_names[g_palette],2,13-5+3+1,2)
-f_draw_pkmn(g_title_l,7-0,20+1-4+2+1,16,false,false,false,g_title_sel,true)
-f_draw_pkmn(g_title_r,35+0,20+1-4+2+1,16,true,false,false,not g_title_sel,true)
+local toggle=g_cg_m.name=="g_grid_pickplr1"
+f_print_top(toggle and "\f3"or "\f1","plyr1 team",f_getsel"g_grid_pickplr1"+1)
+f_print_bot(toggle and "\f1"or "\f3","plyr2 team",f_getsel"g_grid_pickplr2"+1)
+end,function()
+print("\^w\^tpicodex",2,1,3)
+print(c_palette_names[g_palette],2,12,1)
+f_draw_pkmn(g_title_l,7,20,16,false,false,false,g_title_sel,true)
+f_draw_pkmn(g_title_r,35,20,16,true,false,false,not g_title_sel,true)
 end,function()
 g_preview_timer=20
 return p_other.team[f_getsel"g_grid_battle_results"+1].num
@@ -958,7 +961,18 @@ local bothteams={}
 for i=1,6 do add(bothteams,p_self.team[i])end
 for i=1,6 do add(bothteams,p_other.team[i])end
 return bothteams[f_getsel"g_grid_battle_stats"+1].num
-end,function()f_start_battle("plyr1",f_team_party(f_getsel"g_grid_pickplr2"),"plyr2","team"..(f_getsel"g_grid_pickplr2"+1))end,function()f_start_battle("playr",f_team_league(f_getsel"g_grid_picktrnr"+1),"enemy",c_trnr_names[f_getsel"g_grid_picktrnr"+1],true)end,function()
+end,function()
+f_start_battle("plyr1",f_nop,f_team_party(f_getsel"g_grid_pickplr2"),"plyr2","team"..(f_getsel"g_grid_pickplr2"+1))
+end,function()
+local loc=f_getsel"g_grid_picktrnr"
+f_start_battle("playr",function()
+if loc==@0x5eff then
+poke(0x5eff,max(loc+1,@0x5eff))
+poke(0x5eb2,min(@0x5eff,57))
+f_update_locks(loc)
+end
+end,f_team_league(loc+1),"enemy",c_trnr_names[loc+1],true)
+end,function()
 f_save_party_pkmn(f_mkpkmn(f_getsel"g_grid_editpkmn",c_pokemon[f_getsel"g_grid_editpkmn"],true,rnd(2)\1,0,5,6,7,8),f_getsel"g_grid_pickedit",f_getsel"g_grid_pickspot")
 f_pop_ui_stack()
 end,function()
@@ -1009,14 +1023,13 @@ f_turn_end_p2()
 end
 end)
 end,function(obj)
-printh("selfer "..p_self.name)
 g_msg_top=p_self.name.." "..p_self.subname
 g_msg_bot="begins turn"
 f_op_bataction(obj)
 end,function()
 f_pop_ui_stack()
+f_setsel("g_grid_battle_select",0)
 if p_self==p_1 then
-printh("p1 turn")
 g_grid_battle_select.g_cg_m.sel=0x5eba
 g_grid_statbattle.g_cg_m.sel=0x5ebe
 g_grid_battle_movesel.g_cg_m.sel=0x5ebc
@@ -1024,7 +1037,6 @@ g_grid_battle_select.g_cg_m.view=0x5eba+1
 g_grid_statbattle.g_cg_m.view=0x5ebe+1
 g_grid_battle_movesel.g_cg_m.view=0x5ebc+1
 else
-printh("p2 turn")
 g_grid_battle_select.g_cg_m.sel=0x5ec0
 g_grid_statbattle.g_cg_m.sel=0x5ec4
 g_grid_battle_movesel.g_cg_m.sel=0x5ec2
@@ -1034,7 +1046,6 @@ g_grid_battle_movesel.g_cg_m.view=0x5ec2+1
 end
 f_add_to_ui_stack(g_grid_battle_select)
 end,function(_ENV)
-printh("onbatac")
 if not g_msg_bot then end
 add(op,{draw=function()
 f_print_top(g_msg_top)
@@ -1102,7 +1113,7 @@ end
 end,function()
 cls"1 "
 if g_title_timer<6 then
-print("\^y7\f4alanxoc3\n\f3presents",16,26)
+print"\^j47\|e\f3alanxoc3\n\^j4a\|9\f2presents"
 for i=1,6 do
 if.5<<i & btn()>0 then
 g_palette=i
@@ -1160,14 +1171,14 @@ end
 return str.."}"
 end
 g_cur_pkmn_cry=nil
-f_zcall(poke,";,0x5f2c,3;;,0x5f5c,8;;,0x5f5d,1;;,0x5eff,0")
+f_zcall(poke,";,0x5f2c,3;;,0x5f5c,8;;,0x5f5d,1;;,0x5eff,56")
 cls()
 for i=0,360 do
 c_types[i\19][i%19]=f_init_peek_inc()\2
 end
 for i=0,41 do add(c_items,f_zobj("lock,~c_no,num,@,name,@",i,c_item_names[i]))end
 for i=0,252 do
-local pkmn=f_zobj("moves_progress;,#,#,#;moves_grouped;,#,#,#;lock,~c_no,name,@,num,@,num_str,@",c_pkmn_names[i],i,f_prefix_zero(i,3))
+local pkmn=f_zobj("moves_progress;,#,#,#;moves_grouped;,#,#,#;lock,~c_no,name,@,num,@,num_str,@",c_pkmn_names[i],i,f_prefix_zero(i<252 and i or "???",3))
 cur_list,c_moves[i],c_pokemon[i]=pkmn.moves_progress[1],f_zobj("lock,~c_no,num,@,name,@",i,c_move_names[i]),pkmn
 foreach(split"pow,pktype,accuracy,maxpp",function(key)
 c_moves[i][key]=f_init_peek_inc()
@@ -1236,7 +1247,7 @@ cls()flip()
 memset(0x5e00,0,256)
 run()
 end)
-f_update_locks()
+f_update_locks(1)
 for iloc=0x3200,0x4278,68 do
 for loc=iloc,iloc+63,2 do
 poke2(loc,%loc & 0x70df|0x0a00)

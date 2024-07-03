@@ -266,17 +266,6 @@ end $$
   f_print_bot(pkstr_arr[1], "-", pkstr_arr[2], "-", pkstr_arr[3], "-", pkstr_arr[4], "-", pkstr_arr[5], pkstr_arr[6])
 end $$
 
-|[f_dt_league]| function()
-  -- TODO: save tokens / compression by extracting out this if.
-  local toggle = g_cg_m.name == 'g_grid_pickleag'
-  local disabled = @S_STORY+1<f_getsel'g_grid_picktrnr'+1
-  local name = c_trnr_names[f_getsel'g_grid_picktrnr'+1]
-  name = disabled and f_strtoq(name) or name
-
-  f_print_top(toggle and "\f4" or "\f2", "playr team", f_getsel'g_grid_pickleag'+1)
-  f_print_bot(toggle and "\f2" or "\f4", "enemy ", name)
-end $$
-
 |[f_dt_batstats]| function()
   local ind = f_getsel'g_grid_battle_stats'
   local player = ind < 6 and p_self or p_other
@@ -296,18 +285,29 @@ end $$
   f_print_bot(player.name, " spot", ind%6+1)
 end $$
 
+|[f_dt_league]| function()
+  -- TODO: save tokens / compression by extracting out this if.
+  local toggle = g_cg_m.name == 'g_grid_pickleag'
+  local disabled = @S_STORY+1<f_getsel'g_grid_picktrnr'+1
+  local name = c_trnr_names[f_getsel'g_grid_picktrnr'+1]
+  name = disabled and f_strtoq(name) or name
+
+  f_print_top(toggle and "\f3" or "\f1", "playr team", f_getsel'g_grid_pickleag'+1)
+  f_print_bot(toggle and "\f1" or "\f3", "enemy ", name)
+end $$
+
 |[f_dt_versus]| function()
   local toggle = g_cg_m.name == 'g_grid_pickplr1'
 
-  f_print_top(toggle and "\f4" or "\f2", "plyr1 team", f_getsel'g_grid_pickplr1'+1)
-  f_print_bot(toggle and "\f2" or "\f4", "plyr2 team", f_getsel'g_grid_pickplr2'+1)
+  f_print_top(toggle and "\f3" or "\f1", "plyr1 team", f_getsel'g_grid_pickplr1'+1)
+  f_print_bot(toggle and "\f1" or "\f3", "plyr2 team", f_getsel'g_grid_pickplr2'+1)
 end $$
 
 |[f_dt_title]| function()
-  print("\^w\^tpicodex", 2, 1-1+1+2-2,  C_4)
-  print(c_palette_names[g_palette], 2, 13-5+3+1, C_2)
-  f_draw_pkmn(g_title_l, 7 -0 , 20+1-4+2+1, 16, false, false, false, g_title_sel, true)
-  f_draw_pkmn(g_title_r, 35+0, 20+1-4+2+1, 16, true , false, false, not g_title_sel, true)
+  print("\^w\^tpicodex", 2, 1,  C_3)
+  print(c_palette_names[g_palette], 2, 12, C_1)
+  f_draw_pkmn(g_title_l, 7,  20, 16, false, false, false,     g_title_sel, true)
+  f_draw_pkmn(g_title_r, 35, 20, 16, true , false, false, not g_title_sel, true)
 end $$
 
 -- do i want a stats menu? or do i want level + auto?
@@ -365,8 +365,21 @@ end $$
   return bothteams[f_getsel'g_grid_battle_stats'+1].num
 end $$
 
-|[f_s_versusbegin]| function() f_start_battle("plyr1", f_team_party(f_getsel'g_grid_pickplr2'),    "plyr2", "team"..(f_getsel'g_grid_pickplr2'+1))           end $$
-|[f_s_batbegin]|    function() f_start_battle("playr", f_team_league(f_getsel'g_grid_picktrnr'+1), "enemy", c_trnr_names[f_getsel'g_grid_picktrnr'+1], true) end $$
+|[f_s_versusbegin]| function()
+  f_start_battle("plyr1", f_nop, f_team_party(f_getsel'g_grid_pickplr2'),    "plyr2", "team"..(f_getsel'g_grid_pickplr2'+1))
+end $$
+
+|[f_s_batbegin]|    function()
+  local loc = f_getsel'g_grid_picktrnr'
+
+  f_start_battle("playr", function()
+    if loc == @S_STORY then
+      poke(S_STORY,  max(loc+1, @S_STORY))
+      poke(S_LEAGUE, min(@S_STORY, 57))
+      f_update_locks(loc)
+    end
+  end, f_team_league(loc+1), "enemy", c_trnr_names[loc+1], true)
+end $$
 
 |[f_s_editpkmn]| function()
   f_save_party_pkmn(f_mkpkmn(f_getsel'g_grid_editpkmn', c_pokemon[f_getsel'g_grid_editpkmn'], true, rnd(2)\1, I_NONE, 5, 6, 7, 8), f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot')
@@ -444,7 +457,6 @@ end $$
 end $$
 
 |[f_op_startturn]| function(obj)
-  printh("selfer "..p_self.name)
   g_msg_top = p_self.name.." "..p_self.subname -- TODO: can this be extracted/combined with other g_msg stuff?
   g_msg_bot = "begins turn"
   f_op_bataction(obj)
@@ -453,8 +465,10 @@ end $$
 |[f_s_startturn]| function()
   f_pop_ui_stack()
 
+  -- this is a quality of life thing. when switching and spamming x, i never wanted to switch 2 times in a row. most commonly you just want to fight right after.
+  f_setsel('g_grid_battle_select', 0)
+
   if p_self == p_1 then
-    printh("p1 turn")
     g_grid_battle_select.g_cg_m.sel  = S_P1_BATACTION
     g_grid_statbattle.g_cg_m.sel     = S_P1_STAT
     g_grid_battle_movesel.g_cg_m.sel = S_P1_MOVE
@@ -462,7 +476,6 @@ end $$
     g_grid_statbattle.g_cg_m.view     = S_P1_STAT+1
     g_grid_battle_movesel.g_cg_m.view = S_P1_MOVE+1
   else
-    printh("p2 turn")
     g_grid_battle_select.g_cg_m.sel  = S_P2_BATACTION
     g_grid_statbattle.g_cg_m.sel     = S_P2_STAT
     g_grid_battle_movesel.g_cg_m.sel = S_P2_MOVE
@@ -475,7 +488,6 @@ end $$
 end $$
 
 |[f_op_bataction]| function(_ENV)
-  printh("onbatac")
   if not g_msg_bot then end -- TODO: is this needed?
   add(op, {draw=function()
     f_print_top(g_msg_top)

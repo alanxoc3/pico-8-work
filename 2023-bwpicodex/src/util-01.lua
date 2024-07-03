@@ -31,8 +31,8 @@ end $$
     x += sin(g_shake_timer/4)
   end
 
-  local in_c = isoutline and C_3 or sel and C_4 or disabled and C_2 or C_4
-  local out_c = disabled and (sel and C_2 or C_3) or sel and C_3 or C_2 --  (sel or disabled) and C_3 or C_2
+  local in_c = isoutline and C_2 or sel and C_3 or disabled and C_1 or C_3
+  local out_c = disabled and (sel and C_1 or C_2) or sel and C_2 or C_1 --  (sel or disabled) and C_2 or C_1
 
   if num == P_NONE then
     rectfill(x+width/2-1, y+width/2-1, x+width/2, y+width/2, out_c)
@@ -68,7 +68,7 @@ end $$
     --for yy=-2,2,1 do
     --  for xx=-2,2,1 do
     --    if not (xx == 0 and yy == 0) then
-    --      colordrawfunc(x+xx, y+yy, C_3)
+    --      colordrawfunc(x+xx, y+yy, C_2)
     --    end
     --  end
     --end

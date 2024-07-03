@@ -127,9 +127,9 @@ end $$
     if i == #gridobj-1       then r, d = 1, 1 end
     if i == (#gridobj-1)\w*w then l, d = 1, 1 end
 
-    local c = C_3
+    local c = C_2
     if obj.disabled or obj.header then
-      c = C_2
+      c = C_1
     end
 
     -- This is not a roundrect, this is specific for rounding corners on the grid edge.
@@ -146,9 +146,9 @@ end $$
     clip(xloc, yloc, cw, ch)
     camera(-xloc-1, -yloc-1)
 
-    local c = C_2
+    local c = C_1
     if obj.disabled or obj.header then
-      c = C_3
+      c = C_2
     end
     print(obj.text or "", 1, 1, c)
 
@@ -163,7 +163,7 @@ end $$
   for j=0,vh*w-1 do if draw_cell_fg(j) then break end end
 
   if not disabled then
-    pal{C_4,C_4,C_4}
+    pal{C_3,C_3,C_3}
     for ss=1,selh do
       for i=-1,1 do
         for j=-1,1 do
@@ -184,5 +184,5 @@ end $$
 end $$
 
 |[f_addop_text]| function(op, text)
-  add(op, {draw=function() print(text, 1, 1, C_2) end}) -- todo use zobj?
+  add(op, {draw=function() print(text, 1, 1, C_1) end}) -- todo use zobj?
 end $$
