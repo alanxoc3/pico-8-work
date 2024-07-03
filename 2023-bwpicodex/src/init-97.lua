@@ -2,7 +2,7 @@ f_zcall(poke, [[
    ;,0x5f2c,   3 -- screen to 64x64
   ;;,0x5f5c,   8 -- set btn initial delay before repeating. 255 means never repeat.
   ;;,0x5f5d,   1 -- set btn repeating delay.
-  ;;,S_STORY,  57 -- todo: remove me, this is just for debugging
+  ;;,S_STORY,  0 -- todo: remove me, this is just for debugging
 ]])
 
 cls() -- this is just a visual thing when the game starts up. TODO: i can remove it if i want. probably should

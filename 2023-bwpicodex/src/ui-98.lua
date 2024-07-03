@@ -123,11 +123,21 @@ end $$
   end
 end $$
 
+-- TODO: there is currently a bug when swapping. the ui speeds through. Reproduce by playing versus and just swap.
+-- first frame flips. nxt frame p2t2
 |[f_op_batsel]| function(_ENV)
   -- TODO: this definitely could be crunched
   add(op, {text="fight", select=function() f_add_to_ui_stack(g_grid_battle_movesel) end})
-  add(op, {text="swap",  select=function() f_add_to_ui_stack(g_grid_battle_switch)  end})
-  add(op, {text="view",  select=function() f_add_to_ui_stack(g_grid_battle_stats)   end})
+  add(op, {text="swap",  select=function()
+    f_setsel('g_grid_battle_switch', p_self.active.spot-1)
+    f_add_to_ui_stack(g_grid_battle_switch)
+  end})
+
+  add(op, {text="view",  select=function()
+    f_setsel('g_grid_battle_stats', p_self.active.spot-1)
+    f_add_to_ui_stack(g_grid_battle_stats)
+  end})
+
   add(op, {text="run",   select=function() f_end_battle(p_self)                     end})
 
   f_add_battle(preview_op)
@@ -146,7 +156,7 @@ end $$
     local pkmn = p_self.team[i]
     local disabled = not pkmn.valid or i==p_self.active.spot or pkmn.major == C_MAJOR_FAINTED
     add(op, {disabled=disabled, draw=function(i, is_sel)
-      f_draw_pkmn(pkmn.num, 1, 1, 16, p_self == p_2, false, disabled, not disabled and not is_sel)
+      f_draw_pkmn(pkmn.num, 1, 1, 16, false, false, disabled, not disabled and not is_sel)
     end})
   end
 end $$
@@ -396,31 +406,45 @@ end $$
   p_self.nextmove = p_self.active[f_getsel'g_grid_battle_movesel'+1]
   f_movelogic(p_self)
 
+  -- TODO: Dedup with below.
   f_pop_ui_stack()
-  if p_self == p_1 then
-    f_turn_end_p1()
-  else
-    f_turn_end_p2()
-  end
+  f_pop_ui_stack()
+
+  f_add_to_ui_stack((p_self == p_2 or p_2.iscpu) and g_grid_battle_actions or g_grid_battle_turnbeg, function()
+    if p_self == p_1 then
+      f_turn_end_p1()
+    else
+      f_turn_end_p2()
+    end
+  end)
 end $$
 
+-- TODO: fix ui bug where state changes a frame early. Probably by putting a callback in pop ui stack?
+-- it immediately applies thing, but doesn't switch the drawn thing for another frame...
+-- fixed the draw thing, but now the selection doesn't get applied immediately. TODO: figure this out!
 |[f_s_batswitch]| function()
   p_self.nextmove = nil -- nextmove as nil means the pokemon will switch out
 
+  local nextpkmn = f_getsel'g_grid_battle_switch'+1 -- needs to be defined out of callback, because it can change!
   f_addaction(p_self, p_self, "backs "..p_self.active.name, function()
     p_self.active.invisible = true
-    add(p_self.actions, f_pkmn_comes_out(p_self, f_getsel'g_grid_battle_switch'+1))
+    add(p_self.actions, f_pkmn_comes_out(p_self, nextpkmn))
   end, true)
 
   f_pop_ui_stack()
-  if p_self == p_1 then
-    f_turn_end_p1()
-  else
-    f_turn_end_p2()
-  end
+  f_pop_ui_stack()
+
+  f_add_to_ui_stack((p_self == p_2 or p_2.iscpu) and g_grid_battle_actions or g_grid_battle_turnbeg, function()
+    if p_self == p_1 then
+      f_turn_end_p1()
+    else
+      f_turn_end_p2()
+    end
+  end)
 end $$
 
 |[f_op_startturn]| function(obj)
+  printh("selfer "..p_self.name)
   g_msg_top = p_self.name.." "..p_self.subname -- TODO: can this be extracted/combined with other g_msg stuff?
   g_msg_bot = "begins turn"
   f_op_bataction(obj)
@@ -451,6 +475,7 @@ end $$
 end $$
 
 |[f_op_bataction]| function(_ENV)
+  printh("onbatac")
   if not g_msg_bot then end -- TODO: is this needed?
   add(op, {draw=function()
     f_print_top(g_msg_top)

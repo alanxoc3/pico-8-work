@@ -35,21 +35,18 @@ function f_zobj(...)
 return f_zobj_set(setmetatable({},{__index=_g}),...)
 end
 f_zobj_set(_g,"c_pokemon,#,c_moves,#,c_trainers,#,c_items,#,g_init_peek_loc,0x1fff,c_yes,@,c_no,@,c_empty,@,f_nop,@,g_palette,0,g_preview_timer,0,g_title_timer,0,g_title_l,254,g_title_r,254,g_msg_top, ,g_msg_bot, ,g_bat_func,,g_gridstack,#,g_title_an_timer,70",true,false,"",function(...)return...end)
-f_zobj_set(_g,"f_zobj,@,f_zobj_set,@,f_zobj_eval,@,f_zcall,@,f_refresh_top,@,f_add_to_ui_stack,@,f_pop_ui_stack,@,f_getsel,@,f_setsel,@,f_create_gridpair,@,f_update_grid,@,f_draw_grid,@,f_addop_text,@,f_minisfx,@,f_flr_rnd,@,f_in_split,@,f_roundrect,@,f_draw_pkmn,@,f_moveutil_hpchange,@,f_moveutil_dmgself,@,f_moveutil_dmgother,@,f_moveutil_movemod,@,f_moveutil_typeadv,@,f_moveutil_calc_move_damage,@,f_move_splash,@,f_move_recover,@,f_move_tackle,@,f_move_seismictoss,@,f_move_psywave,@,f_move_superfang,@,f_move_falseswipe,@,f_move_submission,@,c_move_funcs,@,c_move_names,@,c_trnr_names,@,c_type_names,@,c_item_names,@,c_pkmn_names,@,c_gender_names,@,c_major_names_long,@,c_major_names_short,@,c_movemethod_names,@,c_statmod_names,@,c_palettes,@,c_palette_names,@,c_types,@,f_init_peek_inc,@,f_unlock,@,f_update_locks,@,f_create_spot,@,f_get_edit_op_pkmn,@,f_op_template_edit,@,f_add_stat_move,@,f_add_stat_info,@,f_add_stat_preview,@,f_add_stat,@,f_print_top,@,f_print_bot,@,f_get_move_texts,@,f_prefix_space,@,f_prefix_zero,@,f_dt_browse_template,@,f_add_battle,@,f_create_active,@,f_create_player,@,f_get_other_pl,@,f_set_pself,@,f_get_live_pkmn,@,f_get_next_active,@,f_end_battle,@,f_newaction,@,f_addaction,@,f_insaction,@,f_pkmn_comes_out,@,f_pop_next_action,@,f_postmove_logic,@,f_set_player_priority,@,f_movelogic,@,f_turn_end_p2,@,f_turn_end_p1,@,f_start_battle,@,f_mkpkmn,@,f_team_party,@,f_fill_team,@,f_team_league,@,f_get_party_pkmn,@,f_save_party_pkmn,@,f_stat_crit,@,f_stat_evac,@,f_stat_calc,@,f_op_def,@,f_op_edititem,@,f_op_statbrowse,@,f_op_browse,@,f_op_statbattle,@,f_op_edit,@,f_op_editteam,@,f_op_title,@,f_op_prevpk,@,f_op_teams,@",f_zobj,f_zobj_set,f_zobj_eval,function(func,text,...)
+f_zobj_set(_g,"f_zobj,@,f_zobj_set,@,f_zobj_eval,@,f_zcall,@,f_refresh_top,@,f_add_to_ui_stack,@,f_pop_ui_stack,@,f_getsel,@,f_setsel,@,f_create_gridpair,@,f_update_grid,@,f_draw_grid,@,f_addop_text,@,f_minisfx,@,f_flr_rnd,@,f_in_split,@,f_roundrect,@,f_draw_pkmn,@,f_strtoq,@,f_moveutil_hpchange,@,f_moveutil_dmgself,@,f_moveutil_dmgother,@,f_moveutil_movemod,@,f_moveutil_typeadv,@,f_moveutil_calc_move_damage,@,f_move_splash,@,f_move_recover,@,f_move_tackle,@,f_move_seismictoss,@,f_move_psywave,@,f_move_superfang,@,f_move_falseswipe,@,f_move_submission,@,c_move_funcs,@,c_move_names,@,c_trnr_names,@,c_type_names,@,c_item_names,@,c_pkmn_names,@,c_gender_names,@,c_major_names_long,@,c_major_names_short,@,c_movemethod_names,@,c_statmod_names,@,c_palettes,@,c_palette_names,@,c_types,@,f_init_peek_inc,@,f_unlock,@,f_update_locks,@,f_create_spot,@,f_get_edit_op_pkmn,@,f_op_template_edit,@,f_add_stat_move,@,f_add_stat_info,@,f_add_stat_preview,@,f_add_stat,@,f_print_top,@,f_print_bot,@,f_get_move_texts,@,f_prefix_space,@,f_prefix_zero,@,f_dt_browse_template,@,f_add_battle,@,f_create_active,@,f_create_player,@,f_get_other_pl,@,f_set_pself,@,f_get_live_pkmn,@,f_get_next_active,@,f_end_battle,@,f_newaction,@,f_addaction,@,f_insaction,@,f_pkmn_comes_out,@,f_pop_next_action,@,f_postmove_logic,@,f_set_player_priority,@,f_movelogic,@,f_turn_end_p2,@,f_turn_end_p1,@,f_start_battle,@,f_mkpkmn,@,f_team_party,@,f_fill_team,@,f_team_league,@,f_get_party_pkmn,@,f_save_party_pkmn,@,f_stat_crit,@,f_stat_evac,@,f_stat_calc,@,f_op_def,@,f_op_edititem,@,f_op_statbrowse,@,f_op_browse,@,f_op_statbattle,@,f_op_edit,@,f_op_editteam,@,f_op_title,@,f_op_prevpk,@",f_zobj,f_zobj_set,f_zobj_eval,function(func,text,...)
 foreach(f_zobj(text,...),function(params)
 func(unpack(params))
 end)
 end,function()
-local idk=g_gridstack[#g_gridstack]
-idk.op,idk.preview_op,idk.lrlist={},{},{}
-idk.gridpofunc(idk,unpack(idk.params))
-end,function(_ENV)
-add(g_gridstack,_ENV)
-op,preview_op,lrlist={},{},{}
-gridpofunc(_ENV,unpack(params))
-end,function()
+g_top_grid.op,g_top_grid.preview_op,g_top_grid.lrlist={},{},{}
+g_top_grid.gridpofunc(g_top_grid,unpack(g_top_grid.params))
+end,function(_ENV,init_func)
+add(g_gridstack,{obj=_ENV,init_func=init_func or f_nop})
+end,function(init_func)
 deli(g_gridstack)
-f_refresh_top()
+g_gridstack[#g_gridstack].init_func=init_func or f_nop
 end,function(gridname)
 return@_g[gridname].g_cg_m.sel
 end,function(gridname,val)
@@ -61,7 +58,7 @@ f_zobj("sel,@,view,@,disabled,~c_yes,name,@,df,@,w,@,vh,@,x,@,y,@,cw,@,ch,@,selh
 main_op_func,
 {...}
 )
-end,function(_ENV,gridobj,top_grid)
+end,function(_ENV,gridobj)
 local evalfunc=function(num,mmin,mmax,b0,b1,l)
 local off=(b1 and l or 0)-(b0 and l or 0)
 local newnum=mid(mmin,min(#gridobj-1,mmin+mmax),num+off)
@@ -234,6 +231,10 @@ end
 end
 end
 colordrawfunc(x,y,in_c)
+end,function(s)
+local ns=""
+for i=1,#s do ns..="?" end
+return ns
 end,function(player,amount,callback_function,issub)
 local pkmn=player.active
 local hp=issub and pkmn.substitute or pkmn.hp
@@ -603,9 +604,7 @@ f_set_player_priority(p_2)
 if p_1.priority==p_2.priority then p_2.priority+=sgn(rnd"2"-1)end
 p_first=p_1.priority>p_2.priority and p_1 or p_2
 p_last=f_get_other_pl(p_first)
-f_pop_ui_stack()
 f_s_bataction()
-f_add_to_ui_stack(g_grid_battle_actions)
 end,function()
 f_set_pself(p_2)
 if p_2.iscpu then
@@ -622,9 +621,6 @@ p_2.nextmove=c_moves[0]
 end
 f_movelogic(p_2)
 f_turn_end_p2()
-else
-f_pop_ui_stack()
-f_add_to_ui_stack(g_grid_battle_turnbeg)
 end
 end,function(p1name,...)
 p_1,p_2=f_create_player(f_team_party(@0x5eae),p1name,"team"..(@0x5eae+1)),f_create_player(...)
@@ -765,13 +761,13 @@ end,function(_ENV)
 add(op,{draw=function()
 f_draw_pkmn(c_pokemon[f_getsel"g_grid_browse"].num,30-18+1,20-18+1,32,g_title_sel,false,false,false)
 end})
-end,function(_ENV)
+end)
+f_zobj_set(_g,"f_op_teams,@,f_op_editmovebot,@,f_op_editstat,@,f_op_editmove,@,f_op_batsel,@,f_op_movesel,@,f_op_batswitch,@,f_op_batresults,@,f_op_batstats,@,f_dt_editteam,@,f_dt_editstat,@,f_dt_editmove_template,@,f_dt_editmove,@,f_dt_browse,@,f_dt_editpkmn,@,f_dt_edit,@,f_dt_league,@,f_dt_batstats,@,f_dt_switch,@,f_dt_versus,@,f_dt_title,@,f_s_batresults,@,f_l_browse,@,f_s_browse,@,f_s_versus,@,f_s_league,@,f_s_batstat,@,f_s_edit,@,f_s_editteam,@,f_s_editstat,@,f_s_editmovebot,@,f_s_battle,@,f_s_title,@,f_s_pkstat,@,f_s_statedit,@,f_s_statbat,@,f_s_versusbegin,@,f_s_batbegin,@,f_s_editpkmn,@,f_s_editmove,@,f_s_edititem,@,f_l_title,@,f_l_battle,@,f_s_batmove,@,f_s_batswitch,@,f_op_startturn,@,f_s_startturn,@,f_op_bataction,@,f_s_bataction,@,f_l_bataction,@,_update,@,_draw,@",function(_ENV)
 for i=1,58 do
 local disabled=@0x5eff+1<i
 add(op,{text=disabled and f_strtoq(c_trnr_names[i])or c_trnr_names[i],disabled=disabled})
 end
-end)
-f_zobj_set(_g,"f_op_editmovebot,@,f_op_editstat,@,f_op_editmove,@,f_op_batsel,@,f_op_movesel,@,f_op_batswitch,@,f_op_batresults,@,f_op_batstats,@,f_dt_editteam,@,f_dt_editstat,@,f_dt_editmove_template,@,f_dt_editmove,@,f_dt_browse,@,f_dt_editpkmn,@,f_dt_edit,@,f_dt_league,@,f_dt_batstats,@,f_dt_switch,@,f_dt_versus,@,f_dt_title,@,f_s_batresults,@,f_l_browse,@,f_s_browse,@,f_s_versus,@,f_s_league,@,f_s_batstat,@,f_s_edit,@,f_s_editteam,@,f_s_editstat,@,f_s_editmovebot,@,f_s_battle,@,f_s_title,@,f_s_pkstat,@,f_s_statedit,@,f_s_statbat,@,f_s_versusbegin,@,f_s_batbegin,@,f_s_editpkmn,@,f_s_editmove,@,f_s_edititem,@,f_l_title,@,f_l_battle,@,f_s_batmove,@,f_s_batswitch,@,f_op_startturn,@,f_s_startturn,@,f_op_bataction,@,f_s_bataction,@,f_l_bataction,@,f_strtoq,@,f_loop_through_team_pkmn,@,_update,@,_draw,@",function(_ENV)
+end,function(_ENV)
 local pkmn=f_get_party_pkmn(f_getsel"g_grid_pickedit",f_getsel"g_grid_pickspot")
 for i=1,4 do
 add(op,{text=c_move_names[pkmn[i].num],select=function()
@@ -806,8 +802,14 @@ f_create_spot(c_moves[num],op,pkmn.seen_moves[i])
 end
 end,function(_ENV)
 add(op,{text="fight",select=function()f_add_to_ui_stack(g_grid_battle_movesel)end})
-add(op,{text="swap",select=function()f_add_to_ui_stack(g_grid_battle_switch)end})
-add(op,{text="view",select=function()f_add_to_ui_stack(g_grid_battle_stats)end})
+add(op,{text="swap",select=function()
+f_setsel("g_grid_battle_switch",p_self.active.spot-1)
+f_add_to_ui_stack(g_grid_battle_switch)
+end})
+add(op,{text="view",select=function()
+f_setsel("g_grid_battle_stats",p_self.active.spot-1)
+f_add_to_ui_stack(g_grid_battle_stats)
+end})
 add(op,{text="run",select=function()f_end_battle(p_self)end})
 f_add_battle(preview_op)
 end,function(_ENV)
@@ -820,7 +822,7 @@ for i=1,6 do
 local pkmn=p_self.team[i]
 local disabled=not pkmn.valid or i==p_self.active.spot or pkmn.major==1
 add(op,{disabled=disabled,draw=function(i,is_sel)
-f_draw_pkmn(pkmn.num,1,1,16,p_self==p_2,false,disabled,not disabled and not is_sel)
+f_draw_pkmn(pkmn.num,1,1,16,false,false,disabled,not disabled and not is_sel)
 end})
 end
 end,function(_ENV)
@@ -981,24 +983,32 @@ end,function()return p_self.active.num end,function()
 p_self.nextmove=p_self.active[f_getsel"g_grid_battle_movesel"+1]
 f_movelogic(p_self)
 f_pop_ui_stack()
+f_pop_ui_stack()
+f_add_to_ui_stack((p_self==p_2 or p_2.iscpu)and g_grid_battle_actions or g_grid_battle_turnbeg,function()
 if p_self==p_1 then
 f_turn_end_p1()
 else
 f_turn_end_p2()
 end
+end)
 end,function()
 p_self.nextmove=nil
+local nextpkmn=f_getsel"g_grid_battle_switch"+1
 f_addaction(p_self,p_self,"backs "..p_self.active.name,function()
 p_self.active.invisible=true
-add(p_self.actions,f_pkmn_comes_out(p_self,f_getsel"g_grid_battle_switch"+1))
+add(p_self.actions,f_pkmn_comes_out(p_self,nextpkmn))
 end,true)
 f_pop_ui_stack()
+f_pop_ui_stack()
+f_add_to_ui_stack((p_self==p_2 or p_2.iscpu)and g_grid_battle_actions or g_grid_battle_turnbeg,function()
 if p_self==p_1 then
 f_turn_end_p1()
 else
 f_turn_end_p2()
 end
+end)
 end,function(obj)
+printh("selfer "..p_self.name)
 g_msg_top=p_self.name.." "..p_self.subname
 g_msg_bot="begins turn"
 f_op_bataction(obj)
@@ -1023,6 +1033,7 @@ g_grid_battle_movesel.g_cg_m.view=0x5ec2+1
 end
 f_add_to_ui_stack(g_grid_battle_select)
 end,function(_ENV)
+printh("onbatac")
 if not g_msg_bot then end
 add(op,{draw=function()
 f_print_top(g_msg_top)
@@ -1062,16 +1073,6 @@ end
 end
 end,function()
 return p_self.active.num
-end,function(s)
-local ns=""
-for i=1,#s do ns..="?" end
-return ns
-end,function(party_num,callback)
-for ii=0,5 do
-local party_loc=0x5e00+party_num*42
-local pkmn_ind=@(party_loc+ii*7)
-callback(c_pokemon[pkmn_ind].lock and pkmn_ind,ii)
-end
 end,function()
 if t()>=1.5 then
 if g_title_timer==0 then
@@ -1080,15 +1081,22 @@ end
 g_title_timer=min(6,(g_title_timer+1))
 end
 g_preview_timer=max(0,g_preview_timer-1)
-top_grid=g_gridstack[#g_gridstack]
-g_cg_m=top_grid.g_cg_m
-g_cg_s=top_grid.g_cg_s
-gridpofunc=top_grid.gridpofunc
-params=top_grid.params
-gridpo=top_grid.op
-grid_previewop=top_grid.preview_op
+g_top_grid_cont=g_gridstack[#g_gridstack]
+g_top_grid=g_top_grid_cont.obj
+gridpofunc=g_top_grid.gridpofunc
+params=g_top_grid.params
+if g_top_grid_cont.init_func then
+g_top_grid_cont.init_func()
+g_top_grid_cont.init_func=nil
+g_top_grid.op,g_top_grid.preview_op,g_top_grid.lrlist={},{},{}
+gridpofunc(g_top_grid,unpack(g_top_grid.params))
+end
+gridpo=g_top_grid.op
+g_cg_m=g_top_grid.g_cg_m
+g_cg_s=g_top_grid.g_cg_s
+grid_previewop=g_top_grid.preview_op
 if g_title_timer==6 then
-f_update_grid(g_cg_m,gridpo,top_grid)
+f_update_grid(g_cg_m,gridpo)
 end
 end,function()
 cls"1 "
@@ -1151,7 +1159,7 @@ end
 return str.."}"
 end
 g_cur_pkmn_cry=nil
-f_zcall(poke,";,0x5f2c,3;;,0x5f5c,8;;,0x5f5d,1;;,0x5eff,57")
+f_zcall(poke,";,0x5f2c,3;;,0x5f5c,8;;,0x5f5d,1;;,0x5eff,0")
 cls()
 for i=0,360 do
 c_types[i\19][i%19]=f_init_peek_inc()\2

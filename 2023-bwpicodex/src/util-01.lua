@@ -88,3 +88,10 @@ end $$
   --colordrawfunc(x, y, in_c+1) -- sprite
   --clip()
 end $$
+
+-- Turn a string into a question marks with the same length
+|[f_strtoq]| function(s)
+  local ns = ""
+  for i=1,#s do ns ..= "?" end
+  return ns
+end $$

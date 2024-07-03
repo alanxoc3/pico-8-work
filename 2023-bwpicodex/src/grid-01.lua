@@ -1,21 +1,18 @@
 -- TODO: after a factory reset, there is an extra beep when selecting bulbasaur in browse... WHY?
 
 |[f_refresh_top]| function()
-  local idk = g_gridstack[#g_gridstack] -- TODO: _ENV and dedup
-  idk.op, idk.preview_op, idk.lrlist = {}, {}, {}
-  idk.gridpofunc(idk, unpack(idk.params))
+  g_top_grid.op, g_top_grid.preview_op, g_top_grid.lrlist = {}, {}, {}
+  g_top_grid.gridpofunc(g_top_grid, unpack(g_top_grid.params))
 end $$
 
-|[f_add_to_ui_stack]| function(_ENV)
-  add(g_gridstack, _ENV)
-  op, preview_op, lrlist = {}, {}, {}
-  gridpofunc(_ENV, unpack(params))
+|[f_add_to_ui_stack]| function(_ENV, init_func)
+  add(g_gridstack, {obj=_ENV, init_func=init_func or f_nop})
 end $$
 
-|[f_pop_ui_stack]| function()
+|[f_pop_ui_stack]| function(init_func)
   -- if we pop, we should recompute the ops, because there may have been an operation.
   deli(g_gridstack)
-  f_refresh_top()
+  g_gridstack[#g_gridstack].init_func = init_func or f_nop
 end $$
 
 |[f_getsel]| function(gridname)
@@ -45,7 +42,7 @@ end $$
 -- pass in cell list.
 -- each cell has: text, disabled
 -- this only gets called for the current active grid
-|[f_update_grid]| function(_ENV, gridobj, top_grid)
+|[f_update_grid]| function(_ENV, gridobj)
   local evalfunc = function(num, mmin, mmax, b0, b1, l)
     local off = (b1 and l or 0) - (b0 and l or 0)
     local newnum = mid(mmin, min(#gridobj-1, mmin+mmax), num + off)

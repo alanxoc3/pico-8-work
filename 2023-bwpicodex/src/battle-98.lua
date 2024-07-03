@@ -296,15 +296,7 @@ end $$
   p_first = p_1.priority > p_2.priority and p_1 or p_2
   p_last  = f_get_other_pl(p_first)
 
-  -- for player in all{p_first,p_last} do
-  --   -- if player.nextmove then
-  --   --   f_movelogic(player)
-  --   -- end
-  -- end
-
-  f_pop_ui_stack()
   f_s_bataction()
-  f_add_to_ui_stack(g_grid_battle_actions)
 end $$
 
 |[f_turn_end_p1]| function()
@@ -324,9 +316,6 @@ end $$
     f_movelogic(p_2)
 
     f_turn_end_p2()
-  else
-    f_pop_ui_stack()
-    f_add_to_ui_stack(g_grid_battle_turnbeg)
   end
 end $$
 
