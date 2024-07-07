@@ -14,7 +14,7 @@ end $$
 |[f_move_seismictoss]| function(_ENV) f_moveutil_dmgother(spec) end $$ -- also: night shade, sonicboom, dragonrage
 |[f_move_psywave]|     function()     f_moveutil_dmgother(f_flr_rnd'75'+1) end $$
 
-|[f_move_superfang]|  function() f_moveutil_dmgother(ceil(a_other_active.hp/2)) end $$
+|[f_move_superfang]|  function() f_moveutil_dmgother(ceil(a_other_active.hp/2)) end $$ -- TODO: maybe this shouldn't be ceil and instead be floor with a min of 1
 |[f_move_falseswipe]| function(_ENV)
   -- TODO: remove local variable... can i? since there are multiple return values.. maybe :D
   local dmg = f_moveutil_calc_move_damage(_ENV, a_self_active, a_other_active)
@@ -59,5 +59,44 @@ end $$
     end
   end
 
+  f_moveutil_dmgother(setmetatable({pow=pow}, {__index=_ENV}))
+end $$
+
+|[f_move_return]| function(_ENV)
+  local is_happy = p_selfturn.active.hp/p_selfturn.active.maxhp >= p_otherturn.active.hp/p_otherturn.active.maxhp
+  f_moveutil_dmgother(setmetatable({pow=is_happy and 100 or 50}, {__index=_ENV}))
+end $$
+
+|[f_move_frustration]| function(_ENV)
+  local is_sad = p_selfturn.active.hp/p_selfturn.active.maxhp <= p_otherturn.active.hp/p_otherturn.active.maxhp
+  f_moveutil_dmgother(setmetatable({pow=is_sad and 100 or 50}, {__index=_ENV}))
+end $$
+
+|[f_move_present]| function(_ENV)
+  local perc, pow = rnd() -- implied nil
+  for pair in all(f_zobj[[;,.2,120;;,.3,80;;,.6,40]]) do
+    if perc > pair[1] then
+      pow = pair[2]
+    end
+  end
+
+  if pow then
+    f_moveutil_dmgother(setmetatable({pow=pow}, {__index=_ENV}))
+  else
+    return f_moveutil_hpchange(p_otherturn, -p_otherturn.active.maxhp\4)
+  end
+end $$
+
+|[f_move_magnitude]| function(_ENV)
+  -- magnitude is between 4-10 representing how powerful the magnitude was.
+  local perc, num, pow = rnd()
+  for i, pair in ipairs(f_zobj[[;,0,10;;,.05,30;;,.15,50;;,.35,70;;,.65,90;;,.85,110;;,.95,150]]) do
+    if perc >= pair[1] then
+      pow, num = pair[2], i+3
+    end
+  end
+
+  -- safe to add 2 actions next to each other, because there is no function/effect on the first one.
+  a_addaction(p_selfturn, "magnitude "..num)
   f_moveutil_dmgother(setmetatable({pow=pow}, {__index=_ENV}))
 end $$
