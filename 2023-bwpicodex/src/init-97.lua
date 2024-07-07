@@ -1,7 +1,7 @@
 f_zcall(poke, [[
-   ;,0x5f2c,   3 -- screen to 64x64
-  ;;,0x5f5c,   8 -- set btn initial delay before repeating. 255 means never repeat.
-  ;;,0x5f5d,   1 -- set btn repeating delay.
+   ;,0x5f2c,   3  -- screen to 64x64
+  ;;,0x5f5c,   8  -- set btn initial delay before repeating. 255 means never repeat.
+  ;;,0x5f5d,   1  -- set btn repeating delay.
   ;;,S_STORY,  56 -- todo: remove me, this is just for debugging
 ]])
 

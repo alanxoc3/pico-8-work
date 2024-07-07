@@ -20,7 +20,8 @@
     substitute, 0, -- substitute hp
     evasion,    100,
     accuracy,   100,
-    crit,       1;
+    crit,       1,
+    numtimes,   0; -- this gets reset each turn, probably all these should go together
 
     stages;
       attack,         0,

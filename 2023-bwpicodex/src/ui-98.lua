@@ -25,8 +25,8 @@ end $$
 
 |[f_op_statbattle]| function(_ENV)
   local bothteams = {}
-  for i=1,6 do add(bothteams, p_self.team[i]) end
-  for i=1,6 do add(bothteams, p_other.team[i]) end
+  for i=1,6 do add(bothteams, p_selfaction.team[i]) end
+  for i=1,6 do add(bothteams, p_otheraction.team[i]) end
 
   f_add_stat(op, bothteams[f_getsel'g_grid_battle_stats'+1], true)
 end $$
@@ -129,32 +129,32 @@ end $$
   -- TODO: this definitely could be crunched
   add(op, {text="fight", select=function() f_add_to_ui_stack(g_grid_battle_movesel) end})
   add(op, {text="swap",  select=function()
-    f_setsel('g_grid_battle_switch', p_self.active.spot-1)
+    f_setsel('g_grid_battle_switch', p_selfaction.active.spot-1)
     f_add_to_ui_stack(g_grid_battle_switch)
   end})
 
   add(op, {text="view",  select=function()
-    f_setsel('g_grid_battle_stats', p_self.active.spot-1)
+    f_setsel('g_grid_battle_stats', p_selfaction.active.spot-1)
     f_add_to_ui_stack(g_grid_battle_stats)
   end})
 
-  add(op, {text="run",   select=function() f_end_battle(p_self)                     end})
+  add(op, {text="run",   select=function() f_end_battle(p_selfaction)                     end})
 
   f_add_battle(preview_op)
 end $$
 
 |[f_op_movesel]| function(_ENV)
   for i=1,4 do
-    add(op, {text=c_move_names[p_self.active[i].num], disabled=p_self.active[i].pp == 0})
+    add(op, {text=c_move_names[p_selfaction.active[i].num], disabled=p_selfaction.active[i].pp == 0})
   end
 
-  f_add_stat_move(preview_op, p_self.active, f_getsel'g_grid_battle_movesel')
+  f_add_stat_move(preview_op, p_selfaction.active, f_getsel'g_grid_battle_movesel')
 end $$
 
 |[f_op_batswitch]| function(_ENV)
   for i=1,6 do
-    local pkmn = p_self.team[i]
-    local disabled = not pkmn.valid or i==p_self.active.spot or pkmn.major == C_MAJOR_FAINTED
+    local pkmn = p_selfaction.team[i]
+    local disabled = not pkmn.valid or i==p_selfaction.active.spot or pkmn.major == C_MAJOR_FAINTED
     add(op, {disabled=disabled, draw=function(i, is_sel)
       f_draw_pkmn(pkmn.num, 1, 1, 16, false, false, disabled, not disabled and not is_sel)
     end})
@@ -163,7 +163,7 @@ end $$
 
 |[f_op_batresults]| function(_ENV)
   for i=1,6 do
-    local pkmn = p_other.team[i]
+    local pkmn = p_otheraction.team[i]
     local disabled = not pkmn.valid or pkmn.major == C_MAJOR_FAINTED
     add(op, {disabled=disabled, draw=function(i, is_sel)
       f_draw_pkmn(pkmn.num, 1, 1, 16, false, false, disabled, not disabled and not is_sel)
@@ -171,7 +171,7 @@ end $$
   end
 
   add(preview_op, {draw=function()
-    f_print_top(p_other.name.." "..p_other.subname)
+    f_print_top(p_otheraction.name.." "..p_otheraction.subname)
     --f_print_bot("is victorious")
     --f_print_bot("wins the match!")
     f_print_bot("is the winner!")
@@ -180,7 +180,7 @@ end $$
 
 |[f_op_batstats]| function(_ENV)
   for i=1,6 do
-    local pkmn = p_self.team[i]
+    local pkmn = p_selfaction.team[i]
     local disabled = not pkmn.valid
     add(op, {lrvalid=not disabled, disabled=disabled, draw=function(i, is_sel)
       f_draw_pkmn(pkmn.num, 1, 1, 16, false, false, disabled, not disabled and not is_sel)
@@ -188,7 +188,7 @@ end $$
   end
 
   for i=1,6 do
-    local pkmn = p_other.team[i]
+    local pkmn = p_otheraction.team[i]
     local disabled = not pkmn.valid
     add(op, {lrvalid=not disabled, disabled=disabled, draw=function(i, is_sel)
       f_draw_pkmn(pkmn.num, 1, 1, 16, false, false, disabled, not disabled and not is_sel)
@@ -268,7 +268,7 @@ end $$
 
 |[f_dt_batstats]| function()
   local ind = f_getsel'g_grid_battle_stats'
-  local player = ind < 6 and p_self or p_other
+  local player = ind < 6 and p_selfaction or p_otheraction
   local name = c_trnr_names[f_getsel'g_grid_picktrnr'+1]
   local pkmn = player.team[ind%6+1]
   f_print_bot(player.name, " spot", ind%6+1)
@@ -278,10 +278,10 @@ end $$
 |[f_dt_switch]| function()
   local ind = f_getsel'g_grid_battle_switch'
   local name = c_trnr_names[f_getsel'g_grid_picktrnr'+1]
-  local pkmn = p_self.team[ind%6+1]
+  local pkmn = p_selfaction.team[ind%6+1]
   f_print_top("swap ", pkmn.name)
   --f_print_bot("#", f_prefix_zero(pkmn.num, 3), " ", pkmn.name)
-  local player = ind < 6 and p_self or p_other
+  local player = ind < 6 and p_selfaction or p_otheraction
   f_print_bot(player.name, " spot", ind%6+1)
 end $$
 
@@ -317,7 +317,7 @@ end $$
 ---------------------------------------------------------------------- :SELECT :LEAVE
 |[f_s_batresults]| function()
   g_preview_timer = 20
-  return p_other.team[f_getsel'g_grid_battle_results'+1].num
+  return p_otheraction.team[f_getsel'g_grid_battle_results'+1].num
 end $$
 
 |[f_l_browse]|   function()  f_pop_ui_stack()                                                                                                                      end $$
@@ -360,8 +360,8 @@ end $$
   g_preview_timer = 20
   g_title_sel = not g_title_sel
   local bothteams = {}
-  for i=1,6 do add(bothteams, p_self.team[i]) end
-  for i=1,6 do add(bothteams, p_other.team[i]) end
+  for i=1,6 do add(bothteams, p_selfaction.team[i]) end
+  for i=1,6 do add(bothteams, p_otheraction.team[i]) end
   return bothteams[f_getsel'g_grid_battle_stats'+1].num
 end $$
 
@@ -413,18 +413,18 @@ end $$
   g_palette %= #c_palettes
 end $$
 
-|[f_l_battle]| function() return p_self.active.num end $$
+|[f_l_battle]| function() return p_selfaction.active.num end $$
 
 |[f_s_batmove]| function()
-  p_self.nextmove = p_self.active[f_getsel'g_grid_battle_movesel'+1]
-  f_movelogic(p_self)
+  p_selfaction.nextmove = p_selfaction.active[f_getsel'g_grid_battle_movesel'+1]
+  f_movelogic(p_selfaction)
 
   -- TODO: Dedup with below.
   f_pop_ui_stack()
   f_pop_ui_stack()
 
-  f_add_to_ui_stack((p_self == p_2 or p_2.iscpu) and g_grid_battle_actions or g_grid_battle_turnbeg, function()
-    if p_self == p_1 then
+  f_add_to_ui_stack((p_selfaction == p_2 or p_2.iscpu) and g_grid_battle_actions or g_grid_battle_turnbeg, function()
+    if p_selfaction == p_1 then
       f_turn_end_p1()
     else
       f_turn_end_p2()
@@ -436,19 +436,19 @@ end $$
 -- it immediately applies thing, but doesn't switch the drawn thing for another frame...
 -- fixed the draw thing, but now the selection doesn't get applied immediately. TODO: figure this out!
 |[f_s_batswitch]| function()
-  p_self.nextmove = nil -- nextmove as nil means the pokemon will switch out
+  p_selfaction.nextmove = nil -- nextmove as nil means the pokemon will switch out
 
   local nextpkmn = f_getsel'g_grid_battle_switch'+1 -- needs to be defined out of callback, because it can change!
-  f_addaction(p_self, p_self, "backs "..p_self.active.name, function()
-    p_self.active.invisible = true
-    add(p_self.actions, f_pkmn_comes_out(p_self, nextpkmn))
+  f_insaction(p_selfaction, p_selfaction, "backs "..p_selfaction.active.name, function()
+    p_selfaction.active.invisible = true
+    add(p_selfaction.actions, f_pkmn_comes_out(p_selfaction, nextpkmn))
   end, true)
 
   f_pop_ui_stack()
   f_pop_ui_stack()
 
-  f_add_to_ui_stack((p_self == p_2 or p_2.iscpu) and g_grid_battle_actions or g_grid_battle_turnbeg, function()
-    if p_self == p_1 then
+  f_add_to_ui_stack((p_selfaction == p_2 or p_2.iscpu) and g_grid_battle_actions or g_grid_battle_turnbeg, function()
+    if p_selfaction == p_1 then
       f_turn_end_p1()
     else
       f_turn_end_p2()
@@ -457,7 +457,7 @@ end $$
 end $$
 
 |[f_op_startturn]| function(obj)
-  g_msg_top = p_self.name.." "..p_self.subname -- TODO: can this be extracted/combined with other g_msg stuff?
+  g_msg_top = p_selfaction.name.." "..p_selfaction.subname -- TODO: can this be extracted/combined with other g_msg stuff?
   g_msg_bot = "begins turn"
   f_op_bataction(obj)
 end $$
@@ -468,7 +468,7 @@ end $$
   -- this is a quality of life thing. when switching and spamming x, i never wanted to switch 2 times in a row. most commonly you just want to fight right after.
   f_setsel('g_grid_battle_select', 0)
 
-  if p_self == p_1 then
+  if p_selfaction == p_1 then
     g_grid_battle_select.g_cg_m.sel  = S_P1_BATACTION
     g_grid_statbattle.g_cg_m.sel     = S_P1_STAT
     g_grid_battle_movesel.g_cg_m.sel = S_P1_MOVE
@@ -510,17 +510,20 @@ end $$
     local action = f_pop_next_action()
     if action then
       f_set_pself(action.player)
-      a_self_active, a_other_active, a_turnself = p_self.active, p_other.active, action.onplayer
+      a_self_active, a_other_active, a_turnself = p_selfaction.active, p_otheraction.active, action.onplayer
 
       -- TODO: this should probably add to the current turn actions. Not the current actions player.
       a_addaction = function(...) f_addaction(action.onplayer, ...) end
+      a_insaction = function(...) f_insaction(action.onplayer, ...) end
+      p_selfturn  = action.onplayer
+      p_otherturn = f_get_other_pl(action.onplayer)
       action.logic(envparams)
 
       -- an empty message means we execute the logic, but look for another action
       if action.message then
-        g_msg_top = p_self.name.." "..p_self.active.name
+        g_msg_top = p_selfaction.name.." "..p_selfaction.active.name
         if action.isplayeraction then -- TODO: token crunch
-          g_msg_top = p_self.name.." "..p_self.subname
+          g_msg_top = p_selfaction.name.." "..p_selfaction.subname
         end
         g_msg_bot = action.message
         return
@@ -537,7 +540,7 @@ end $$
 end $$
 
 |[f_l_bataction]| function()
-  return p_self.active.num
+  return p_selfaction.active.num
 end $$
 
 ---------------------------------------------------------------------- :CONNECT

@@ -48,7 +48,7 @@
           callback_function(amount)
         end
       else
-        a_addaction(p_self, text, function()
+        a_addaction(p_selfaction, text, function()
           hpchange()
           callback_function(amount)
         end)
@@ -70,29 +70,33 @@ end $$
   callback_function = callback_function or f_nop
   local advantage, crit = 1 -- implied nil/false
   if type(dmg) == "table" then
-    dmg, advantage, crit = f_moveutil_calc_move_damage(dmg, a_self_active, a_other_active)
+    dmg, advantage, crit = f_moveutil_calc_move_damage(dmg, a_self_active, p_otherturn.active)
   end
 
   -- zero damage only means that attack was resisted. moves with set damage don't monitor resistance.
   if advantage > 0 then
-    if advantage > 1     then a_addaction(p_self, "super effective")
-    elseif advantage < 1 then a_addaction(p_self, "not very effective") end
-    if crit then a_addaction(p_self, "critical hit") end
+    if advantage > 1     then a_addaction(p_selfaction, "super effective")
+    elseif advantage < 1 then a_addaction(p_selfaction, "not very effective") end
+    if crit then a_addaction(p_selfaction, "critical hit") end
 
-    return f_moveutil_hpchange(p_other, dmg, function(dmg)
+    return f_moveutil_hpchange(p_otherturn, dmg, function(dmg)
       -- TODO: rage/bide logic can go here?
       -- TODO: counter/mirrorcoat logic might go here? It did in the OG picodex
       callback_function(dmg)
-    end, a_other_active.substitute > 0)
+    end, p_otherturn.active.substitute > 0)
   else
-    a_addaction(p_other, "resisted attack")
+    a_addaction(p_otherturn, "resisted attack")
   end
 end $$
 
 -- calculates the "movemod" variable that is used in the damage formula. This is a multiplier that changes based on special conditions. Like certain moves or move plus weather condition, etc. Or move state.
 |[f_moveutil_movemod]| function(active, move)
-  if f_in_split(move.num, 'M_EXPLOSION,M_SELFDESTRUCT') or not p_other.nextmove then
+  -- TODO: token crunching here. maybe a func that takes pairs of bools, idk.
+  if f_in_split(move.num, 'M_EXPLOSION,M_SELFDESTRUCT')
+    or move.num == M_PURSUIT and not p_otheraction.nextmove then
     return 2
+  elseif move.num == M_TRIPLEKICK then
+    return p_selfturn.active.numtimes
   end
   return 1
   -- movemod: must be <= 32 to prevent any possible number overflow
@@ -120,7 +124,7 @@ end $$
   return (c_types[move.pktype][defender.type1] or 1)*(c_types[move.pktype][defender.type2] or 1)
 end $$
 
---   ((.44*power*att/def)*item*crit+2)*weather*stab*movemod*pktype*random
+-- ((.44*power*att/def)*item*crit+2)*weather*stab*movemod*pktype*random
 -- damage formula: https://bulbapedia.bulbagarden.net/wiki/Damage#Generation_II
 |[f_moveutil_calc_move_damage]| function(move, attacker, defender)
   -- BEGIN: PHYSICAL/SPECIAL

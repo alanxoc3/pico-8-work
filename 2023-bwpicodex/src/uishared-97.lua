@@ -152,7 +152,7 @@ end $$
 
 |[f_add_battle]| function(op)
   local b = function(_ENV, team, x, y, px, py, flip)
-    local is_notactive = p_self.active ~= _ENV
+    local is_notactive = p_selfaction.active ~= _ENV
     if invisible then return end
     --f_roundrect(x+1, y+1-6+1, x+34-1, y+6+6+1, C_2)
     if hp > 0 then

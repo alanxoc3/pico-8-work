@@ -7,10 +7,12 @@
 -- Some globals that we manage in the battle:
 -- p_1:           player 1: this is the bottom player on the UI. it never changes throughout the battle.
 -- p_2:           player 2: this is the top    player on the UI. it never changes throughout the battle.
--- p_self:        this is the current highlighted player. aka the player currently running an action.
--- p_other:       this is the non highlighted player.     aka the player currently running an action.
+-- p_selfaction:  this is the current highlighted player. aka the player currently running an action.
+-- p_otheraction: this is the non highlighted player.     aka the player currently running an action.
 -- p_first:       this is the player who went first this turns. this changes before each turn starts and is unavailable during move selection.
 -- p_last:        this is the player who went first this turns. this changes before each turn starts and is unavailable during move selection.
+-- p_selfturn:    this is the player who is currently executing actions. useful for moves.
+-- p_otherturn:   this is the player who is currently executing actions. useful for moves.
 -- a_addaction:   this is a convenience function available to all action logic functions. adds an action to the current player's turn.
 -- a_activeself:  a_self.active, convenience for action logic functions
 -- a_activeother: a_other.active, convenience for action logic functions
@@ -52,7 +54,7 @@ end $$
 end $$
 
 |[f_set_pself]| function(player)
-  p_self, p_other = player, f_get_other_pl(player)
+  p_selfaction, p_otheraction = player, f_get_other_pl(player)
 end $$
 
 |[f_get_live_pkmn]| function(player)
@@ -81,18 +83,19 @@ end $$
   f_pop_ui_stack() -- p_1 select scene
 
   f_add_to_ui_stack(g_grid_battle_results, function()
-    if p_other == p_1 then
+    if p_otheraction == p_1 then
       g_p1_winfunc()
     end
   end)
-  f_setsel('g_grid_battle_results', p_other.active.spot-1)
+  f_setsel('g_grid_battle_results', p_otheraction.active.spot-1)
 end $$
 
 -- player cannot be nil, others can. the player turn is passed and the current active is extracted.
 -- the current active is needed because if it dies, we want to skip over actions
 -- if message is false/nil, the logic function is executed immediately, then the next action is executed
 |[f_newaction]| function(onplayer, player, message, logic, isplayeraction)
-  return f_zobj([[onplayer,@, player,@, active,@, message,@, logic,@, isplayeraction,@]], onplayer, player, player.active, message, logic or f_nop, isplayeraction)
+  -- TODO: why does the "message or false" line need an "or false"?
+  return f_zobj([[onplayer,@, player,@, active,@, message,@, logic,@, isplayeraction,@]], onplayer, player, player.active, message or false, logic or f_nop, isplayeraction)
 end $$
 
 -- adds an action to a player's turn
@@ -207,7 +210,7 @@ end $$
     -- if opponent is slower, then dies from leech/psn/brn, the trapper could lose a turn
     -- but that's just a super edge case, so i don't care about changing it
     local statdmg = max(a_self_active.maxhp\16,1) -- TODO: if I really need it to save tokens, I could remove the max, because all pokemon have > 16 max hp.
-    local inflictstatdmg = function(title) -- title must start with "|" to save 2 tokens
+    local inflictstatdmg = function(title)
       f_addaction(self, title.." damage")
       f_move_setdmg_self(_ENV, statdmg)
     end
@@ -219,6 +222,7 @@ end $$
       end
       inflictstatdmg"poison"
     end
+    a_self_active.numtimes = 0
   end)
 end $$
 
