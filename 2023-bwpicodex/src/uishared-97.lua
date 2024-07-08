@@ -151,12 +151,19 @@ end $$
 
     print(name,   x+2,   y-5+1+1+1-2, C_1, -1)
     print(c_major_names_short[major].."  "..f_prefix_zero(hp, 3), x+1+1, y+8-1+1-1-1+1,   C_1, -1)
-    f_draw_pkmn(num, px, py,  16, flip,  false, false, is_notactive, true)
+    f_draw_pkmn(num, px, py,  16, flip,  false, false, is_notactive, false)
   end
 
+  -- add(op, {draw=function()
+  --   b(p_2.active, p_2.team,  -1+1,   4-1+2,       39-4+2+1,  1, true) -- top pl
+  --   b(p_1.active, p_1.team, 23+1-1, 4+20+2+1-1-1,  3+4-2-1, 1-4+20+1+1+1) -- bot pl
+  -- end})
   add(op, {draw=function()
     b(p_2.active, p_2.team,  -1+1,   4-1+2,       39-4+2+1,  1, true) -- top pl
-    b(p_1.active, p_1.team, 23+1-1, 4+20+2+1-1-1,  3+4-2-1, 1-4+20+1+1+1) -- bot pl
+  end})
+
+  add(op, {draw=function()
+    b(p_1.active, p_1.team, 23+1-1, 4-1+2,  3+4-2-1, 1) -- bot pl
   end})
 end $$
 

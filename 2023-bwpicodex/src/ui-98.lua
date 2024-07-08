@@ -538,12 +538,12 @@ end $$
 
 |[f_op_bataction]| function(_ENV)
   if not g_msg_bot then end -- TODO: is this needed?
-  add(op, {draw=function()
+  add(preview_op, {draw=function()
     f_print_top(g_msg_top)
     f_print_bot(g_msg_bot)
   end})
 
-  f_add_battle(preview_op)
+  f_add_battle(op)
 end $$
 
 |[f_s_bataction]| function()
@@ -569,6 +569,7 @@ end $$
 
       -- an empty message means we execute the logic, but look for another action
       if action.message then
+        f_setsel('g_grid_battle_actions', p_selfaction == p_1 and 1 or 0) -- TODO: dedup
         g_msg_top = p_selfaction.name.." "..p_selfaction.active.name
         if action.isplayeraction then -- TODO: token crunch
           g_msg_top = p_selfaction.name.." "..p_selfaction.subname
@@ -581,6 +582,7 @@ end $$
       p_1.turnover = false
       p_2.turnover = false
       f_pop_ui_stack()
+
       f_add_to_ui_stack(g_grid_battle_turnbeg)
       return -- important! need to return out otherwise we have an infinite loop
     end
@@ -604,7 +606,7 @@ f_zcall(f_create_gridpair, [[
   ;top_text_grid ;,2 ,4 ,2 ,4  ,30 ,9  ,1   ,1
   ;top_title     ;,1 ,1 ,2 ,2  ,60 ,40 ,1   ,1
   ;top_battle    ;,1 ,1 ,2 ,2  ,60 ,40 ,1   ,1
-  ;top_battle2   ;,1 ,1 ,2 ,2  ,60 ,40 ,1   ,1
+  ;top_battle2   ;,1 ,2 ,2 ,2  ,60 ,20 ,1   ,1
   ;bot_4x4       ;,2 ,2 ,2 ,44 ,30 ,9  ,1   ,1
   ;bot_info      ;,1 ,1 ,2 ,45 ,60 ,16 ,1   ,1
   ;top_newstat   ;,1 ,6 ,2 ,4  ,60 ,9  ,1   ,1
@@ -636,10 +638,10 @@ f_zcall(f_create_gridpair, [[
   ;;,g_grid_battle_dmovsel ,S_DEFAULT      ,~bot_info      ,~top_pkstat    ,~f_nop           ,~f_op_dmovsel     ,~f_s_dmovsel      ,~f_l_browse      ,~c_no
   ;;,g_grid_battle_switch  ,S_DEFAULT      ,~top_editteam  ,~bot_info      ,~f_dt_switch     ,~f_op_batswitch   ,~f_s_batswitch    ,~f_l_browse      ,~c_no
   ;;,g_grid_battle_stats   ,S_DEFAULT      ,~top_editteam  ,~bot_info      ,~f_dt_batstats   ,~f_op_batstats    ,~f_s_batstat      ,~f_l_browse      ,~c_no
-  ;;,g_grid_battle_turnbeg ,S_DEFAULT      ,~bot_info      ,~top_battle2   ,~f_nop           ,~f_op_startturn   ,~f_s_startturn    ,~f_l_bataction   ,~c_no
+  ;;,g_grid_battle_turnbeg ,S_DEFAULT      ,~top_battle2   ,~bot_info      ,~f_nop           ,~f_op_startturn   ,~f_s_startturn    ,~f_l_bataction   ,~c_no
 
   ;;,g_grid_battle_results ,S_DEFAULT      ,~top_results   ,~bot_info      ,~f_nop           ,~f_op_batresults  ,~f_s_batresults   ,~f_l_browse      ,~c_no
-  ;;,g_grid_battle_actions ,S_DEFAULT      ,~bot_info      ,~top_battle2   ,~f_nop           ,~f_op_bataction   ,~f_s_bataction    ,~f_l_bataction   ,~c_no
+  ;;,g_grid_battle_actions ,S_DEFAULT      ,~top_battle2   ,~bot_info      ,~f_nop           ,~f_op_bataction   ,~f_s_bataction    ,~f_l_bataction   ,~c_no
 ]])
 
 f_add_to_ui_stack(g_grid_title)
