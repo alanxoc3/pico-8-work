@@ -75,8 +75,8 @@ end $$
 
   -- zero damage only means that attack was resisted. moves with set damage don't monitor resistance.
   if advantage > 0 then
-    if advantage > 1     then a_addaction(p_selfaction, "super effective")
-    elseif advantage < 1 then a_addaction(p_selfaction, "not very effective") end
+    if advantage > 1     then a_addaction(p_selfaction, "very effective")
+    elseif advantage < 1 then a_addaction(p_selfaction, "not effective") end
     if crit then a_addaction(p_selfaction, "critical hit") end
 
     return f_moveutil_hpchange(p_otherturn, dmg, function(dmg)
@@ -85,7 +85,7 @@ end $$
       callback_function(dmg)
     end, p_otherturn.active.substitute > 0)
   else
-    a_addaction(p_otherturn, "resisted attack")
+    a_addaction(p_otherturn, "resists attack")
   end
 end $$
 
@@ -121,7 +121,9 @@ end $$
 end $$
 
 |[f_moveutil_typeadv]| function(move, defender)
-  return (c_types[move.pktype][defender.type1] or 1)*(c_types[move.pktype][defender.type2] or 1)
+  printh("PKTY: "..move.pktype)
+  db(c_types[move.pktype])
+  return (c_types[move.pktype][defender.pktype1] or 1)*(c_types[move.pktype][defender.pktype2] or 1)
 end $$
 
 -- ((.44*power*att/def)*item*crit+2)*weather*stab*movemod*pktype*random

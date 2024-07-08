@@ -100,3 +100,23 @@ end $$
   a_addaction(p_selfturn, "magnitude "..num)
   f_moveutil_dmgother(setmetatable({pow=pow}, {__index=_ENV}))
 end $$
+
+|[f_move_hiddenpower]| function(_ENV)
+  local possible_types = {}
+  for i=T_NORMAL,T_BIRD do
+    local v = f_moveutil_typeadv(setmetatable({pktype=i}, _ENV), p_otherturn.active)
+    printh("TYP "..v)
+    if v > 1 then
+      add(possible_types, i)
+    end
+  end
+
+  -- TODO: T_BIRD could be removed, since there are no pokemon with zero type weaknesses in first 2 gens. Sableye and Spiritomb were the only ones at one point.
+  local newpktype = #possible_types > 0 and possible_types[f_flr_rnd(#possible_types)+1] or T_BIRD
+  a_addaction(p_selfturn, "type "..c_type_names[newpktype])
+
+  -- TODO: maybe i can set pow to 60 as part of the compiled data
+  -- TODO: the newpktype should reset when switching out the move.
+  pktype = newpktype
+  f_moveutil_dmgother(setmetatable({pow=60}, {__index=_ENV}))
+end $$

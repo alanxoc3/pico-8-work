@@ -104,7 +104,7 @@ DIFF: Missingno is a pokemon. It copies best stats and all moves from RB missing
 DIFF: Megadrain, gigadrain, absorb, leech life all hit and take hp from a substitute.
 DIFF: A Pokemon may have zero moves. The Pokemon will use struggle if that is the case.
 DIFF: Struggle is "None" type instead of "Normal" type.
-DIFF: Bird type is partially resistant to every other type, except it is vulnerable to struggle.
+DIFF: Bird type is partially resistant to every other type, except it is vulnerable to struggle. Which means hidden power could change to Bird type when facing MissingNo as opponent.
 DIFF: A transformed Pokemon automatically un-transforms if it runs out of PP.
 DIFF: Trigger moves (metronome/sleeptalk/mirrormove) could trigger 
 DIFF: beatup is not typeless. it attacks as dark type. and it uses the special attack stat of every pokemon, because it is not a physical move. But the modified stat of the active pokemon.. it uses the current modified defense of the opponent.
