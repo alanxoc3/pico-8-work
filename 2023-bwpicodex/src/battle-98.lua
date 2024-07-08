@@ -85,6 +85,7 @@ end $$
   ]])
 
   f_add_to_ui_stack(g_grid_battle_results, function()
+    g_win_spot = p_otheraction.active.spot
     if p_otheraction == p_1 then
       g_p1_winfunc()
     end

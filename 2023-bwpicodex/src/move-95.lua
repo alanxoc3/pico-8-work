@@ -80,18 +80,18 @@ end $$
 end $$
 
 |[f_move_present]| function(_ENV)
-  local perc, pow = rnd() -- implied nil
-  for pair in all(f_zobj[[;,.2,120;;,.3,80;;,.6,40]]) do
-    if perc > pair[1] then
-      pow = pair[2]
-    end
-  end
+  -- local perc, pow = rnd() -- implied nil
+  -- for pair in all(f_zobj[[;,.2,120;;,.3,80;;,.6,40]]) do
+  --   if perc > pair[1] then
+  --     pow = pair[2]
+  --   end
+  -- end
 
-  if pow then
-    f_moveutil_dmgother(f_zobj_setmeta(_ENV, [[pow,@]], pow))
-  else
-    return f_moveutil_hpchange(p_otherturn, -p_otherturn.active.maxhp\4)
-  end
+  -- if pow then
+  --   f_moveutil_dmgother(f_zobj_setmeta(_ENV, [[pow,@]], pow))
+  -- else
+  --   return f_moveutil_hpchange(p_otherturn, -p_otherturn.active.maxhp\4)
+  -- end
 end $$
 
 |[f_move_magnitude]| function(_ENV)

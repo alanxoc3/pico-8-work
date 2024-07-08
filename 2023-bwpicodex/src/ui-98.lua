@@ -188,15 +188,13 @@ end $$
   for i=1,6 do
     local pkmn = p_otheraction.team[i]
     local disabled = not pkmn.valid or pkmn.major == C_MAJOR_FAINTED
-    add(op, {disabled=disabled, draw=function(i, is_sel)
-      f_draw_pkmn(pkmn.num, 1, 1, 16, false, false, disabled, not disabled and not is_sel)
+    add(op, {disabled=disabled, draw=function(i)
+      f_draw_pkmn(pkmn.num, 1, 1, 16, false, false, disabled, not disabled and g_win_spot ~= i+1)
     end})
   end
 
   add(preview_op, {draw=function()
     f_print_top(p_otheraction.name.." "..p_otheraction.subname)
-    --f_print_bot("is victorious")
-    --f_print_bot("wins the match!")
     f_print_bot("is the winner!")
   end})
 end $$
@@ -339,8 +337,20 @@ end $$
 
 ---------------------------------------------------------------------- :SELECT :LEAVE
 |[f_s_batresults]| function()
+  -- TODO: dedup with other loops through alive pokemon
+  local possible_spots = {}
+  for i=1,6 do
+    local pkmn = p_otheraction.team[i]
+    local disabled = not pkmn.valid or pkmn.major == C_MAJOR_FAINTED
+    if not disabled and i ~= g_win_spot then
+      add(possible_spots, i)
+    end
+  end
+  if #possible_spots > 0 then
+    g_win_spot = possible_spots[f_flr_rnd(#possible_spots)+1]
+  end
   g_preview_timer = 20
-  return p_otheraction.team[f_getsel'g_grid_battle_results'+1].num
+  return p_otheraction.team[g_win_spot].num
 end $$
 
 |[f_l_browse]|   function()  f_pop_ui_stack()                                                                                                                      end $$
@@ -584,19 +594,20 @@ end $$
 ---------------------------------------------------------------------- :CONNECT
 -- This needs to be called early on because there is a draw
 f_zcall(f_create_gridpair, [[
-  --               w  vh x  y   cw  ch selh
-   top_browse    ;,6 ,4 ,2 ,2  ,10 ,10 ,1
-  ;top_edit      ;,2 ,2 ,2 ,2  ,30 ,20 ,1
-  ;top_editteam  ;,3 ,2 ,2 ,2  ,20 ,20 ,1
-  ;top_pkstat    ;,1 ,4 ,2 ,4  ,60 ,9 ,4
-  ;top_pkstatbig ;,1 ,6 ,2 ,5  ,60 ,9  ,1
-  ;top_text_grid ;,2 ,4 ,2 ,4  ,30 ,9  ,1
-  ;top_title     ;,1 ,1 ,2 ,2  ,60 ,40 ,1
-  ;top_battle    ;,1 ,1 ,2 ,2  ,60 ,40 ,1
-  ;top_battle2   ;,1 ,1 ,2 ,2  ,60 ,40 ,1
-  ;bot_4x4       ;,2 ,2 ,2 ,44 ,30 ,9  ,1
-  ;bot_info      ;,1 ,1 ,2 ,45 ,60 ,16 ,1
-  ;top_newstat   ;,1 ,6 ,2 ,4  ,60 ,9  ,1
+  --               w  vh x  y   cw  ch selw selh
+   top_browse    ;,6 ,4 ,2 ,2  ,10 ,10 ,1   ,1
+  ;top_edit      ;,2 ,2 ,2 ,2  ,30 ,20 ,1   ,1
+  ;top_editteam  ;,3 ,2 ,2 ,2  ,20 ,20 ,1   ,1
+  ;top_results   ;,3 ,2 ,2 ,2  ,20 ,20 ,3   ,2
+  ;top_pkstat    ;,1 ,4 ,2 ,4  ,60 ,9  ,4   ,4
+  ;top_pkstatbig ;,1 ,6 ,2 ,5  ,60 ,9  ,1   ,1
+  ;top_text_grid ;,2 ,4 ,2 ,4  ,30 ,9  ,1   ,1
+  ;top_title     ;,1 ,1 ,2 ,2  ,60 ,40 ,1   ,1
+  ;top_battle    ;,1 ,1 ,2 ,2  ,60 ,40 ,1   ,1
+  ;top_battle2   ;,1 ,1 ,2 ,2  ,60 ,40 ,1   ,1
+  ;bot_4x4       ;,2 ,2 ,2 ,44 ,30 ,9  ,1   ,1
+  ;bot_info      ;,1 ,1 ,2 ,45 ,60 ,16 ,1   ,1
+  ;top_newstat   ;,1 ,6 ,2 ,4  ,60 ,9  ,1   ,1
 
   --,name                  ,savespot       ,maingridspec   ,infogridspec   ,infogriddraw     ,main opfunc       ,select func       ,leave func       ,lrbasegrid        ,opfunc params
   ;;,g_grid_title          ,S_TITLE        ,~bot_4x4       ,~top_title     ,~f_dt_title      ,~f_op_title       ,~f_s_title        ,~f_l_title       ,~c_no
@@ -627,7 +638,7 @@ f_zcall(f_create_gridpair, [[
   ;;,g_grid_battle_stats   ,S_DEFAULT      ,~top_editteam  ,~bot_info      ,~f_dt_batstats   ,~f_op_batstats    ,~f_s_batstat      ,~f_l_browse      ,~c_no
   ;;,g_grid_battle_turnbeg ,S_DEFAULT      ,~bot_info      ,~top_battle2   ,~f_nop           ,~f_op_startturn   ,~f_s_startturn    ,~f_l_bataction   ,~c_no
 
-  ;;,g_grid_battle_results ,S_DEFAULT      ,~top_editteam  ,~bot_info      ,~f_nop           ,~f_op_batresults  ,~f_s_batresults   ,~f_l_browse      ,~c_no
+  ;;,g_grid_battle_results ,S_DEFAULT      ,~top_results   ,~bot_info      ,~f_nop           ,~f_op_batresults  ,~f_s_batresults   ,~f_l_browse      ,~c_no
   ;;,g_grid_battle_actions ,S_DEFAULT      ,~bot_info      ,~top_battle2   ,~f_nop           ,~f_op_bataction   ,~f_s_bataction    ,~f_l_bataction   ,~c_no
 ]])
 

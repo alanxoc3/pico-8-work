@@ -27,11 +27,11 @@ end $$
   -- zobj is needed so we can use an _ENV syntax
   _g[name] = f_zobj([[g_cg_m,@, g_cg_s,@, gridpofunc,@, params,@]],
     f_zobj([[
-      sel,@, view,@, name,@, selfunc,@, leavefunc,@, lrbasegrid,@, w,@,vh,@,x,@,y,@,cw,@,ch,@,selh,@
+      sel,@, view,@, name,@, selfunc,@, leavefunc,@, lrbasegrid,@, w,@,vh,@,x,@,y,@,cw,@,ch,@,selw,@,selh,@
     ]], memloc, memloc+1, name, main_sel_func, main_leave_func, lrbasegrid, unpack(main_grid_spec)),
 
     f_zobj([[
-      sel,@, view,@, disabled,~c_yes, name,@, df,@, w,@,vh,@,x,@,y,@,cw,@,ch,@,selh,@
+      sel,@, view,@, disabled,~c_yes, name,@, df,@, w,@,vh,@,x,@,y,@,cw,@,ch,@,selw,@,selh,@
     ]], S_DEFAULT, S_DEFAULT+1, name, info_grid_draw, unpack(info_grid_spec)),
 
     main_op_func,
@@ -85,10 +85,10 @@ end $$
       f_minisfx(SFX_ERROR)
     end
   else
-    poke(sel, evalfunc(@sel, @sel\w*w, w-1, btnp'0', btnp'1', 1))
+    poke(sel, evalfunc(@sel, @sel\w*w, w-selw, btnp'0', btnp'1', selw))
   end
 
-  poke(sel, evalfunc(@sel, @sel%w,   (#gridobj-1)\w*w\selh*selh, btnp'2', btnp'3', w*selh))
+  poke(sel, evalfunc(@sel, @sel%w,   (#gridobj-1)\w*w\(selh*selw)*selh*selw, btnp'2', btnp'3', w*selh))
 
   if @sel ~= prevsel then
     -- when the cursor has changed, make the ui change if needed
@@ -164,20 +164,26 @@ end $$
 
   if not disabled then
     pal{C_3,C_3,C_3}
-    for ss=1,selh do
-      for i=-1,1 do
-        for j=-1,1 do
-          draw_cell_bg(num-view*w-1+ss, i, j)
+    for ss=0,selh-1 do
+      for sw=0,selw-1 do
+        for i=-1,1 do
+          for j=-1,1 do
+            draw_cell_bg(num-view*w+ss*selw+sw, i, j)
+          end
         end
       end
     end
     pal()
 
-    for ss=1,selh do
-      draw_cell_bg(num-view*w-1+ss, 0, 0)
+    for ss=0,selh-1 do
+      for sw=0,selw-1 do
+        draw_cell_bg(num-view*w+ss*selw+sw, 0, 0)
+      end
     end
-    for ss=1,selh do
-      draw_cell_fg(num-view*w-1+ss)
+    for ss=0,selh-1 do
+      for sw=0,selw-1 do
+        draw_cell_fg(num-view*w+ss*selw+sw)
+      end
     end
   end
   camera()
