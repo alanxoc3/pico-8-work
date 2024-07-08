@@ -47,6 +47,7 @@
     local num = pkmn.possible_moves[move]
     pkmn[i] = setmetatable({num=num, pid=move}, {__index=c_moves[num]})
   end
+  pkmn[0] = setmetatable({num=M_STRUGGLE, pid=1}, {__index=c_moves[M_STRUGGLE]})
 
   return pkmn
 end $$

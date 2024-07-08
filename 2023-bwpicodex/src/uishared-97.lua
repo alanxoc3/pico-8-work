@@ -17,7 +17,7 @@ end $$
   local move = pkmn[ind]
   local movenum = move.num
   local maxpp, pp, pow, accuracy, typ = f_get_move_texts(move)
-  local method = pkmn.possible_moves_method[movenum]
+  local method = pkmn.possible_moves_method[movenum] or "empty"
   add(op, {text="move"..ind..": "..move.name, header=true})
   add(op, {text=""..method..": "..typ})
   add(op, {text="   pp: "..pp.."/"..maxpp})

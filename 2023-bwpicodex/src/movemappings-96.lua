@@ -1,6 +1,6 @@
 -- this has to go after all the moves, so that the move functions are available in the global scope
 |[c_move_funcs]| f_zobj[[  -- for some reason, the ~tilde syntax doesn't work here. TODO: spend more time figuring out why.
-0;,f_move_splash       ,0  -- M_STRUGGLE
+0;,f_move_struggle     ,0  -- M_STRUGGLE
 ;;,f_move_splash       ,0  -- M_ACID
 ;;,f_move_splash       ,0  -- M_ACIDARMOR
 ;;,f_move_barrage      ,0  -- M_BARRAGE

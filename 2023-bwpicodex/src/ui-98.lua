@@ -127,7 +127,21 @@ end $$
 -- first frame flips. nxt frame p2t2
 |[f_op_batsel]| function(_ENV)
   -- TODO: this definitely could be crunched
-  add(op, {text="fight", select=function() f_add_to_ui_stack(g_grid_battle_movesel) end})
+  add(op, {text="fight", select=function()
+    local should_struggle = true
+    for i=1,4 do
+      if p_selfaction.active[i].pp > 0 then
+        should_struggle = false
+      end
+    end
+
+    if should_struggle then
+      f_add_to_ui_stack(g_grid_battle_dmovsel)
+    else
+      f_add_to_ui_stack(g_grid_battle_movesel)
+    end
+  end})
+
   add(op, {text="swap",  select=function()
     f_setsel('g_grid_battle_switch', p_selfaction.active.spot-1)
     f_add_to_ui_stack(g_grid_battle_switch)
@@ -149,6 +163,15 @@ end $$
   end
 
   f_add_stat_move(preview_op, p_selfaction.active, f_getsel'g_grid_battle_movesel')
+end $$
+
+|[f_op_dmovsel]| function(_ENV)
+  add(op, {draw=function()
+    f_print_top"no more moves"
+    f_print_bot"use struggle?"
+  end})
+
+  f_add_stat_move(preview_op, p_selfaction.active, -1) -- -1+1=0 is struggle, every pokemon has a default move of 0 which is always struggle.
 end $$
 
 |[f_op_batswitch]| function(_ENV)
@@ -432,6 +455,22 @@ end $$
   end)
 end $$
 
+|[f_s_dmovsel]| function()
+  -- TODO: dedup
+  p_selfaction.nextmove = c_moves[M_STRUGGLE]
+  f_movelogic(p_selfaction)
+  f_pop_ui_stack()
+  f_pop_ui_stack()
+
+  f_add_to_ui_stack((p_selfaction == p_2 or p_2.iscpu) and g_grid_battle_actions or g_grid_battle_turnbeg, function()
+    if p_selfaction == p_1 then
+      f_turn_end_p1()
+    else
+      f_turn_end_p2()
+    end
+  end)
+end $$
+
 -- TODO: fix ui bug where state changes a frame early. Probably by putting a callback in pop ui stack?
 -- it immediately applies thing, but doesn't switch the drawn thing for another frame...
 -- fixed the draw thing, but now the selection doesn't get applied immediately. TODO: figure this out!
@@ -584,6 +623,7 @@ f_zcall(f_create_gridpair, [[
   ;;,g_grid_battle_select  ,S_DEFAULT      ,~bot_4x4       ,~top_battle2   ,~f_nop           ,~f_op_batsel      ,~f_s_battle       ,~f_l_battle      ,~c_no
   ;;,g_grid_statbattle     ,S_DEFAULT      ,~top_pkstat    ,~bot_info      ,~f_dt_batstats   ,~f_op_statbattle  ,~f_s_statbat      ,~f_l_browse      ,g_grid_battle_stats
   ;;,g_grid_battle_movesel ,S_DEFAULT      ,~bot_4x4       ,~top_pkstat    ,~f_nop           ,~f_op_movesel     ,~f_s_batmove      ,~f_l_browse      ,~c_no
+  ;;,g_grid_battle_dmovsel ,S_DEFAULT      ,~bot_info      ,~top_pkstat    ,~f_nop           ,~f_op_dmovsel     ,~f_s_dmovsel      ,~f_l_browse      ,~c_no
   ;;,g_grid_battle_switch  ,S_DEFAULT      ,~top_editteam  ,~bot_info      ,~f_dt_switch     ,~f_op_batswitch   ,~f_s_batswitch    ,~f_l_browse      ,~c_no
   ;;,g_grid_battle_stats   ,S_DEFAULT      ,~top_editteam  ,~bot_info      ,~f_dt_batstats   ,~f_op_batstats    ,~f_s_batstat      ,~f_l_browse      ,~c_no
   ;;,g_grid_battle_turnbeg ,S_DEFAULT      ,~bot_info      ,~top_battle2   ,~f_nop           ,~f_op_startturn   ,~f_s_startturn    ,~f_l_bataction   ,~c_no
