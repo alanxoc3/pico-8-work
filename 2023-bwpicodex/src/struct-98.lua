@@ -12,7 +12,7 @@
   -- base is the parent table. at the start of a battle and when loading for edit, base is c_pokemon[ind].
   -- when a pokemon becomes active, it calls mkpkmn with base being the bench/initial battle stats.
   -- hp/item/major changes must happen on "base"
-  local pkmn = f_zobj([[
+  local pkmn = f_zobj_setmeta(base, [[
     num,@, base,@, gender_bit,@, item,@, valid,@,
     seen_moves, #,            -- A move to boolean map that is used to disable things on the move edit screen and populate edit_moves.
     major,      C_MAJOR_NONE, -- The major status condition in pokemon battles: fainted, burned, frozen, paralyzed, poisoned, sleeping
@@ -33,7 +33,6 @@
       evasion,        0,
       accuracy,       0; -- TODO: delete the semicolon
   ]], ind, base, gender_bit, item % C_LEN_ITEMS, ind < P_NONE)
-  pkmn = setmetatable(pkmn, {__index=base}) -- none is set too.
   pkmn.gender     = pkmn.genders[pkmn.gender_bit%#pkmn.genders+1]
 
   local moves = {...}
@@ -45,9 +44,9 @@
 
     pkmn.seen_moves[move] = true
     local num = pkmn.possible_moves[move]
-    pkmn[i] = setmetatable({num=num, pid=move}, {__index=c_moves[num]})
+    pkmn[i] = f_zobj_setmeta(c_moves[num], [[num,@, pid,@]], num, move)
   end
-  pkmn[0] = setmetatable({num=M_STRUGGLE, pid=1}, {__index=c_moves[M_STRUGGLE]})
+  pkmn[0] = f_zobj_setmeta(c_moves[M_STRUGGLE], [[num,M_STRUGGLE, pid,1]])
 
   return pkmn
 end $$

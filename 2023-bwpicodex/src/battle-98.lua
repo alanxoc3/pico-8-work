@@ -21,10 +21,10 @@
 -- Some player specific things
 
 |[f_create_active]| function(team, ind)
-  return setmetatable(f_zobj([[
+  return f_zobj_setmeta(team[ind], [[
     spot,@,
     base,@
-  ]], ind, team[ind]), {__index=team[ind]})
+  ]], ind, team[ind])
 end $$
 
 |[f_create_player]| function(team, name, subname, iscpu)
@@ -78,9 +78,11 @@ end $$
 -- Pass in the loser player.
 |[f_end_battle]| function(player)
   f_set_pself(player)
-  f_pop_ui_stack() -- battle scene TODO: convert to a zcall?
-  f_pop_ui_stack() -- p_2 select scene
-  f_pop_ui_stack() -- p_1 select scene
+  f_zcall(f_pop_ui_stack, [[
+     ;, -- battle scene TODO: convert to a zcall?
+    ;;, -- p_2 select scene
+    ;;, -- p_1 select scene
+  ]])
 
   f_add_to_ui_stack(g_grid_battle_results, function()
     if p_otheraction == p_1 then
@@ -103,17 +105,13 @@ end $$
   add(player.actions, f_newaction(player, ...))
 end $$
 
-|[f_insaction]| function(player, ...)
-  add(player.actions, f_newaction(player, ...), 1)
-end $$
-
 |[f_pkmn_comes_out]| function(player, spot) -- assumes that the pkmn coming is not nil.
   local pkmn = player.team[spot]
 
   -- need to copy each move just for mimic to work when switching
 
   -- TODO: i should combine this with f_mkpkmn. so all pkmn stuff is just in 1 place.
-  player.active = setmetatable(f_zobj([[
+  player.active = f_zobj_setmeta(pkmn, [[
     isactive,     ~c_yes, -- used for a drawing function, should draw fainted pokemon if they are not active, but not if they are active.
     lastmoverecv, 0,      -- last move targeted at user, for mirrormove
     moveturn,     0,      -- turn move is on. > 0, decrements each turn. 0, is the same. -1, is multiturn move that doesn't end (rage).
@@ -141,7 +139,7 @@ end $$
       crit,           0, -- TODO: rename crit
       evasion,        0,
       accuracy,       0; -- TODO: delete the semicolon
-  ]], f_flr_rnd'7'+1, spot, pkmn), {__index=pkmn})
+  ]], f_flr_rnd'7'+1, spot, pkmn)
   -- ^^ hard-coding sleep timer here
 
   for i=1,4 do

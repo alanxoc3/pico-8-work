@@ -66,17 +66,17 @@ end $$
     end
   end
 
-  f_moveutil_dmgother(setmetatable({pow=pow}, {__index=_ENV}))
+  f_moveutil_dmgother(f_zobj_setmeta(_ENV, [[pow,@]], pow))
 end $$
 
 |[f_move_return]| function(_ENV)
   local is_happy = p_selfturn.active.hp/p_selfturn.active.maxhp >= p_otherturn.active.hp/p_otherturn.active.maxhp
-  f_moveutil_dmgother(setmetatable({pow=is_happy and 100 or 50}, {__index=_ENV}))
+  f_moveutil_dmgother(f_zobj_setmeta(_ENV, [[pow,@]], is_happy and 100 or 50))
 end $$
 
 |[f_move_frustration]| function(_ENV)
   local is_sad = p_selfturn.active.hp/p_selfturn.active.maxhp <= p_otherturn.active.hp/p_otherturn.active.maxhp
-  f_moveutil_dmgother(setmetatable({pow=is_sad and 100 or 50}, {__index=_ENV}))
+  f_moveutil_dmgother(f_zobj_setmeta(_ENV, [[pow,@]], is_sad and 100 or 50))
 end $$
 
 |[f_move_present]| function(_ENV)
@@ -88,7 +88,7 @@ end $$
   end
 
   if pow then
-    f_moveutil_dmgother(setmetatable({pow=pow}, {__index=_ENV}))
+    f_moveutil_dmgother(f_zobj_setmeta(_ENV, [[pow,@]], pow))
   else
     return f_moveutil_hpchange(p_otherturn, -p_otherturn.active.maxhp\4)
   end
@@ -105,13 +105,13 @@ end $$
 
   -- safe to add 2 actions next to each other, because there is no function/effect on the first one.
   a_addaction(p_selfturn, "magnitude "..num)
-  f_moveutil_dmgother(setmetatable({pow=pow}, {__index=_ENV}))
+  f_moveutil_dmgother(f_zobj_setmeta(_ENV, [[pow,@]], pow))
 end $$
 
 |[f_move_hiddenpower]| function(_ENV)
   local possible_types = {}
   for i=T_NORMAL,T_BIRD do
-    local v = f_moveutil_typeadv(setmetatable({pktype=i}, _ENV), p_otherturn.active)
+    local v = f_moveutil_typeadv(f_zobj_setmeta(_ENV, [[pktype,@]], i), p_otherturn.active)
     printh("TYP "..v)
     if v > 1 then
       add(possible_types, i)
@@ -125,5 +125,5 @@ end $$
   -- TODO: maybe i can set pow to 60 as part of the compiled data
   -- TODO: the newpktype should reset when switching out the move.
   pktype = newpktype
-  f_moveutil_dmgother(setmetatable({pow=60}, {__index=_ENV}))
+  f_moveutil_dmgother(f_zobj_setmeta(_ENV, [[pow,@]], 60))
 end $$

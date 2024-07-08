@@ -36,8 +36,12 @@ function f_zobj_set(table, str, ...)
   return table
 end
 
+function f_zobj_setmeta(parent, ...)
+  return f_zobj_set(setmetatable({}, {__index=parent}), ...)
+end
+
 function f_zobj(...)
-  return f_zobj_set(setmetatable({}, {__index=_g}), ...)
+  return f_zobj_setmeta(_g, ...)
 end
 
 -- first, set the basic constants/values used by global things.

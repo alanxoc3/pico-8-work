@@ -478,7 +478,7 @@ end $$
   p_selfaction.nextmove = nil -- nextmove as nil means the pokemon will switch out
 
   local nextpkmn = f_getsel'g_grid_battle_switch'+1 -- needs to be defined out of callback, because it can change!
-  f_insaction(p_selfaction, p_selfaction, "backs "..p_selfaction.active.name, function()
+  f_addaction(p_selfaction, p_selfaction, "backs "..p_selfaction.active.name, function()
     p_selfaction.active.invisible = true
     add(p_selfaction.actions, f_pkmn_comes_out(p_selfaction, nextpkmn))
   end, true)
@@ -553,7 +553,6 @@ end $$
 
       -- TODO: this should probably add to the current turn actions. Not the current actions player.
       a_addaction = function(...) f_addaction(action.onplayer, ...) end
-      a_insaction = function(...) f_insaction(action.onplayer, ...) end
       p_selfturn  = action.onplayer
       p_otherturn = f_get_other_pl(action.onplayer)
       action.logic(envparams)

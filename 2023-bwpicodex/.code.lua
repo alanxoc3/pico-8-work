@@ -31,11 +31,14 @@ end
 end)
 return table
 end
+function f_zobj_setmeta(parent,...)
+return f_zobj_set(setmetatable({},{__index=parent}),...)
+end
 function f_zobj(...)
-return f_zobj_set(setmetatable({},{__index=_g}),...)
+return f_zobj_setmeta(_g,...)
 end
 f_zobj_set(_g,"c_pokemon,#,c_moves,#,c_trainers,#,c_items,#,g_init_peek_loc,0x1fff,c_yes,@,c_no,@,c_empty,@,f_nop,@,g_palette,0,g_preview_timer,0,g_title_timer,0,g_title_l,254,g_title_r,254,g_msg_top, ,g_msg_bot, ,g_bat_func,,g_gridstack,#,g_title_an_timer,70",true,false,"",function(...)return...end)
-f_zobj_set(_g,"f_zobj,@,f_zobj_set,@,f_zobj_eval,@,f_zcall,@,f_refresh_top,@,f_add_to_ui_stack,@,f_pop_ui_stack,@,f_getsel,@,f_setsel,@,f_create_gridpair,@,f_update_grid,@,f_draw_grid,@,f_addop_text,@,f_minisfx,@,f_flr_rnd,@,f_in_split,@,f_roundrect,@,f_draw_pkmn,@,f_strtoq,@,f_moveutil_hpchange,@,f_moveutil_dmgself,@,f_moveutil_dmgother,@,f_moveutil_movemod,@,f_moveutil_typeadv,@,f_moveutil_calc_move_damage,@,f_move_splash,@,f_move_recover,@,f_move_tackle,@,f_move_seismictoss,@,f_move_psywave,@,f_move_superfang,@,f_move_falseswipe,@,f_move_submission,@,f_move_struggle,@,f_move_multihit_set,@,f_move_barrage,@,f_move_doublekick,@,f_move_flail,@,f_move_return,@,f_move_frustration,@,f_move_present,@,f_move_magnitude,@,f_move_hiddenpower,@,c_move_funcs,@,c_move_names,@,c_trnr_names,@,c_type_names,@,c_item_names,@,c_pkmn_names,@,c_gender_names,@,c_major_names_long,@,c_major_names_short,@,c_movemethod_names,@,c_statmod_names,@,c_palettes,@,c_palette_names,@,c_types,@,f_init_peek_inc,@,f_unlock,@,f_update_locks,@,f_create_spot,@,f_get_edit_op_pkmn,@,f_op_template_edit,@,f_add_stat_move,@,f_add_stat_info,@,f_add_stat_preview,@,f_add_stat,@,f_print_top,@,f_print_bot,@,f_get_move_texts,@,f_prefix_space,@,f_prefix_zero,@,f_dt_browse_template,@,f_add_battle,@,f_create_active,@,f_create_player,@,f_get_other_pl,@,f_set_pself,@,f_get_live_pkmn,@,f_get_next_active,@,f_end_battle,@,f_newaction,@,f_addaction,@,f_insaction,@,f_pkmn_comes_out,@,f_pop_next_action,@,f_postmove_logic,@,f_set_player_priority,@,f_movelogic,@,f_turn_end_p2,@,f_turn_end_p1,@,f_start_battle,@,f_mkpkmn,@,f_team_party,@,f_fill_team,@,f_team_league,@,f_get_party_pkmn,@,f_save_party_pkmn,@,f_stat_crit,@,f_stat_evac,@",f_zobj,f_zobj_set,f_zobj_eval,function(func,text,...)
+f_zobj_set(_g,"f_zobj,@,f_zobj_set,@,f_zobj_eval,@,f_zcall,@,f_refresh_top,@,f_add_to_ui_stack,@,f_pop_ui_stack,@,f_getsel,@,f_setsel,@,f_create_gridpair,@,f_update_grid,@,f_draw_grid,@,f_addop_text,@,f_minisfx,@,f_flr_rnd,@,f_in_split,@,f_roundrect,@,f_draw_pkmn,@,f_strtoq,@,f_moveutil_hpchange,@,f_moveutil_dmgself,@,f_moveutil_dmgother,@,f_moveutil_movemod,@,f_moveutil_typeadv,@,f_moveutil_calc_move_damage,@,f_move_splash,@,f_move_recover,@,f_move_tackle,@,f_move_seismictoss,@,f_move_psywave,@,f_move_superfang,@,f_move_falseswipe,@,f_move_submission,@,f_move_struggle,@,f_move_multihit_set,@,f_move_barrage,@,f_move_doublekick,@,f_move_flail,@,f_move_return,@,f_move_frustration,@,f_move_present,@,f_move_magnitude,@,f_move_hiddenpower,@,c_move_funcs,@,c_move_names,@,c_trnr_names,@,c_type_names,@,c_item_names,@,c_pkmn_names,@,c_gender_names,@,c_major_names_long,@,c_major_names_short,@,c_movemethod_names,@,c_statmod_names,@,c_palettes,@,c_palette_names,@,c_types,@,f_init_peek_inc,@,f_unlock,@,f_update_locks,@,f_create_spot,@,f_get_edit_op_pkmn,@,f_op_template_edit,@,f_add_stat_move,@,f_add_stat_info,@,f_add_stat_preview,@,f_add_stat,@,f_print_top,@,f_print_bot,@,f_get_move_texts,@,f_prefix_space,@,f_prefix_zero,@,f_dt_browse_template,@,f_add_battle,@,f_create_active,@,f_create_player,@,f_get_other_pl,@,f_set_pself,@,f_get_live_pkmn,@,f_get_next_active,@,f_end_battle,@,f_newaction,@,f_addaction,@,f_pkmn_comes_out,@,f_pop_next_action,@,f_postmove_logic,@,f_set_player_priority,@,f_movelogic,@,f_turn_end_p2,@,f_turn_end_p1,@,f_start_battle,@,f_mkpkmn,@,f_team_party,@,f_fill_team,@,f_team_league,@,f_get_party_pkmn,@,f_save_party_pkmn,@,f_stat_crit,@,f_stat_evac,@,f_stat_calc,@",f_zobj,f_zobj_set,f_zobj_eval,function(func,text,...)
 foreach(f_zobj(text,...),function(params)
 func(unpack(params))
 end)
@@ -356,13 +359,13 @@ pow=pair[2]
 break
 end
 end
-f_moveutil_dmgother(setmetatable({pow=pow},{__index=_ENV}))
+f_moveutil_dmgother(f_zobj_setmeta(_ENV,"pow,@",pow))
 end,function(_ENV)
 local is_happy=p_selfturn.active.hp/p_selfturn.active.maxhp>=p_otherturn.active.hp/p_otherturn.active.maxhp
-f_moveutil_dmgother(setmetatable({pow=is_happy and 100 or 50},{__index=_ENV}))
+f_moveutil_dmgother(f_zobj_setmeta(_ENV,"pow,@",is_happy and 100 or 50))
 end,function(_ENV)
 local is_sad=p_selfturn.active.hp/p_selfturn.active.maxhp<=p_otherturn.active.hp/p_otherturn.active.maxhp
-f_moveutil_dmgother(setmetatable({pow=is_sad and 100 or 50},{__index=_ENV}))
+f_moveutil_dmgother(f_zobj_setmeta(_ENV,"pow,@",is_sad and 100 or 50))
 end,function(_ENV)
 local perc,pow=rnd()
 for pair in all(f_zobj";,.2,120;;,.3,80;;,.6,40")do
@@ -371,7 +374,7 @@ pow=pair[2]
 end
 end
 if pow then
-f_moveutil_dmgother(setmetatable({pow=pow},{__index=_ENV}))
+f_moveutil_dmgother(f_zobj_setmeta(_ENV,"pow,@",pow))
 else
 return f_moveutil_hpchange(p_otherturn,-p_otherturn.active.maxhp\4)
 end
@@ -383,11 +386,11 @@ pow,num=pair[2],i+3
 end
 end
 a_addaction(p_selfturn,"magnitude "..num)
-f_moveutil_dmgother(setmetatable({pow=pow},{__index=_ENV}))
+f_moveutil_dmgother(f_zobj_setmeta(_ENV,"pow,@",pow))
 end,function(_ENV)
 local possible_types={}
 for i=1,18 do
-local v=f_moveutil_typeadv(setmetatable({pktype=i},_ENV),p_otherturn.active)
+local v=f_moveutil_typeadv(f_zobj_setmeta(_ENV,"pktype,@",i),p_otherturn.active)
 printh("TYP "..v)
 if v>1 then
 add(possible_types,i)
@@ -396,7 +399,7 @@ end
 local newpktype=#possible_types>0 and possible_types[f_flr_rnd(#possible_types)+1]or 18
 a_addaction(p_selfturn,"type "..c_type_names[newpktype])
 pktype=newpktype
-f_moveutil_dmgother(setmetatable({pow=60},{__index=_ENV}))
+f_moveutil_dmgother(f_zobj_setmeta(_ENV,"pow,@",60))
 end,f_zobj"0;,f_move_struggle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_barrage,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_seismictoss,20;;,f_move_twineedle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_tackle,0;;,f_move_barrage,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_present,0;;,f_move_splash,0;;,f_move_barrage,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_barrage,0;;,f_move_tackle,0;;,f_move_falseswipe,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_barrage,0;;,f_move_tackle,0;;,f_move_doublekick,2;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_recover,0;;,f_move_splash,0;;,f_move_seismictoss,50;;,f_move_splash,0;;,f_move_barrage,0;;,f_move_splash,0;;,f_move_superfang,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_flail,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_doublekick,2;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_doublekick,3;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_magnitude,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_barrage,0;;,f_move_splash,0;;,f_move_recover,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_seismictoss,40;;,f_move_recover,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_tackle,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_hiddenpower,0;;,f_move_splash,0;;,f_move_frustration,0;;,f_move_return,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_submission,0;;,f_move_submission,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_psywave,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_seismictoss,999;;,f_move_submission,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_flail,0;;,f_move_barrage,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_tackle,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0;;,f_move_splash,0",f_zobj"0,strugl;,acid,acidar,barage,bonclb,bind,clamp,moonlt,lechsd,extrsp,sncbom,twindl,thnshk,glare,gilotn,hypfng,jmpkck,kinsis,lockon,lovkis,macpnc,vicgrp,spican,spikes,spore,cotspr,presnt,vithrw,cmtpnc,drlpck,sndatk,agilty,fryatk,qikatk,falswp,growl,healbl,sing,pound,minmiz,tailwp,dblslp,meghrn,bonrng,convr1,convr2,spark,mlkdrk,morsun,ngtshd,octzok,pinmis,pwdsnw,supfng,firspn,psngas,barier,medtat,ftrsgt,hypnos,psybem,litscr,safgrd,petdnc,charm,synths,swtscn,razlef,psnpwd,slppwd,absorb,stnspr,flail,confsn,slam,constr,amnesa,bubble,splash,hydpmp,mindrd,mist,hrnatk,spiweb,dblkck,swtkis,mtlclw,trform,trikck,gust,twistr,crbham,dizpnc,sludge,painsp,dstbnd,haze,lick,persng,meanlk,cnfray,crschp,smog,karchp,ember,smkscr,beldrm,beatup,scrtch,slash,ancpwr,leer,bite,outrge,scryfc,thrash,stomp,roksld,magtud,rocthr,harden,bonrsh,hijkck,recovr,aerbls,hrndrl,drgrag,sfboil,drgbre,slfdes,explsn,eggbmb,slgbmb,gigdrn,megdrn,swrdnc,cut,fryctr,thief,dig,rolout,dfncrl,detect,solbem,raidnc,flash,psycic,psycup,drmeat,ngtmar,shdbal,zapcan,thundr,thnblt,irntal,streng,rocsms,hedbut,mudslp,sunday,protct,dbltem,slptlk,curse,hidpwr,swager,frustr,return,toxic,snore,rest,endure,atract,bide,mimic,substu,rage,dbledg,takdwn,sklbas,bodslm,wtrgun,bblbem,icebem,blizrd,icywnd,surf,wrlpol,wtrfal,swift,payday,triatk,rflect,thnwav,telprt,psywav,metrnm,countr,megpnc,seitos,submis,megkck,dynpnc,firpnc,thnpnc,icepnc,firbls,flmthr,fisure,eartqk,sndstr,hypbem,roar,stlwng,fly,razwnd,wrlwnd,skyatk,wngatk,peck,mirmov,fntatk,witdrw,rapspn,supsnc,aurbem,mircot,psnstg,spite,crunch,pursut,strsht,lechlf,btnpas,disabl,screch,tackle,flmwel,revrsl,fryswp,fcseng,forsgt,lowkck,rolkck,encore,wrap,growth,vinwip,sacfir,sharpn,sketch,tm05,______",split"youngs,sage,falknr,grunt,bugctr,bugsy,pkmfan,beauty,witney,kimono,medium,morty,police,karate,chuck,gentle,sailor,jasmin,rocket,skier,pryce,scient,twins,clair,nerd,camper,brock,school,swimer,misty,jugler,guitar,ltsurg,hiker,lass,erika,biker,picnik,janine,maniac,psycic,sabrin,fisher,breath,blaine,birdkp,cooltr,blue,legend,silver,will,koga,bruno,karen,lance,red,gold,horde",f_zobj"0,none;,normal,fire,fightng,water,poison,electrc,ground,grass,flying,ice,bug,psychic,rock,dragon,ghost,dark,steel,bird",f_zobj"0,______;,pnkbow,chrcol,blkblt,myswtr,psnbrb,magnet,sosand,mirasd,shbeak,nvrice,slvpwd,twspon,hrdstn,dragsc,speltg,blkgls,mtlcot,plkbow,bripwd,focbnd,kingrk,leftov,qikclw,scopln,amcoin,litbal,lukpnc,mtlpwd,stick,thkclb,bersrk,berry,gldbry,btrbry,mntbry,brnbry,icebry,parbry,psnbry,mirbry,mysbry",f_zobj"0,misingno;,bulbsaur,ivysaur,venusaur,charmand,charmeln,charzard,squirtle,wartortl,blastois,caterpie,metapod,butrfree,weedle,kakuna,beedrill,pidgey,pidgeoto,pidgeot,rattata,raticate,spearow,fearow,ekans,arbok,pikachu,raichu,sndshrew,sndslash,nidoranf,nidorina,nidoquen,nidoranm,nidorino,nidoking,clefairy,clefable,vulpix,ninetale,jiglypuf,wiglytuf,zubat,golbat,oddish,gloom,vileplum,paras,parasect,venonat,venomoth,diglett,dugtrio,meowth,persian,psyduck,golduck,mankey,primeape,growlith,arcanine,poliwag,polwhirl,polwrath,abra,kadabra,alakazam,machop,machoke,machamp,belsprot,weepnbel,victrbel,tntacool,tntcruel,geodude,graveler,golem,ponyta,rapidash,slowpoke,slowbro,magnemit,magneton,fafetchd,doduo,dodrio,seel,dewgong,grimer,muk,shellder,cloyster,gastly,haunter,gengar,onix,drowzee,hypno,krabby,kingler,voltorb,electrod,exegcute,exegutor,cubone,marowak,hitmnlee,hitmnchn,licktung,koffing,weezing,rhyhorn,rhydon,chansey,tangela,kangakan,horsea,seadra,goldeen,seaking,staryu,starmie,mrmime,scyther,jynx,elecabuz,magmar,pinsir,tauros,magikarp,gyarados,lapras,ditto,eevee,vaporeon,jolteon,flareon,porygon,omanyte,omastar,kabuto,kabutops,aerodact,snorlax,articuno,zapdos,moltres,dratini,dragnair,dragnite,mewtwo,mew,chikrita,bayleef,meganium,cyndquil,quilava,typhlosn,totodile,croconaw,fralgatr,sentret,furret,hoothoot,noctowl,ledyba,ledian,spinarak,ariados,crobat,chinchou,lanturn,pichu,cleffa,igglybuf,togepi,togetic,natu,xatu,mareep,flaaffy,ampharos,belossom,marill,azumaril,sudwoodo,politoed,hoppip,skiploom,jumpluff,aipom,sunkern,sunflora,yanma,wooper,quagsire,espeon,umbreon,murkrow,slowking,misdrvus,unown,wobbufet,girafrig,pineco,foretres,dunsparc,gligar,steelix,snubbull,granbull,qwilfish,scizor,shuckle,heracros,sneasel,tediursa,ursaring,slugma,magcargo,swinub,piloswin,corsola,remoraid,octilery,delibird,mantine,skarmory,houndour,houndoom,kingdra,phanpy,donphan,porygon2,stantler,smeargle,tyrogue,hitmntop,smoochum,elekid,magby,miltank,blissey,raikou,entei,suicune,larvitar,pupitar,tyrnitar,lugia,hooh,celebi,________,none,___,___",f_zobj"0,neuter;,male,female",f_zobj"0,______;,faint,burn,freeze,parlyz,poisnd,sleep",f_zobj"0,___;,fnt,brn,fzn,par,psn,slp",split"learn,teach,cheat",f_zobj"attack,atack,defense,defns,specialattack,spatk,specialdefense,spdfn,speed,speed,evasion,evasn,accuracy,acury,crit,critl",f_zobj"0;,129,13,6;;,1,140,12;;,130,136,8;;,131,3,138;;,0,8,10;;,5,134,6;;,4,9,10",f_zobj"0,dual version;,blue version,red version,green version,hotdog flavor,silvr version,gold version",f_zobj"0;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,",function()
 g_init_peek_loc+=1
 return@g_init_peek_loc
@@ -542,7 +545,7 @@ b(p_2.active,p_2.team,-1+1,4-1+2,39-4+2+1,1,true)
 b(p_1.active,p_1.team,23+1-1,4+20+2+1-1-1,3+4-2-1,1-4+20+1+1+1)
 end})
 end,function(team,ind)
-return setmetatable(f_zobj("spot,@,base,@",ind,team[ind]),{__index=team[ind]})
+return f_zobj_setmeta(team[ind],"spot,@,base,@",ind,team[ind])
 end,function(team,name,subname,iscpu)
 local active=nil
 for i=1,6 do
@@ -570,9 +573,7 @@ end,function(player)
 return f_get_live_pkmn(player)[1]
 end,function(player)
 f_set_pself(player)
-f_pop_ui_stack()
-f_pop_ui_stack()
-f_pop_ui_stack()
+f_zcall(f_pop_ui_stack,";,;;,;;,")
 f_add_to_ui_stack(g_grid_battle_results,function()
 if p_otheraction==p_1 then
 g_p1_winfunc()
@@ -583,11 +584,9 @@ end,function(onplayer,player,message,logic,isplayeraction)
 return f_zobj("onplayer,@,player,@,active,@,message,@,logic,@,isplayeraction,@",onplayer,player,player.active,message or false,logic or f_nop,isplayeraction)
 end,function(player,...)
 add(player.actions,f_newaction(player,...))
-end,function(player,...)
-add(player.actions,f_newaction(player,...),1)
 end,function(player,spot)
 local pkmn=player.team[spot]
-player.active=setmetatable(f_zobj("isactive,~c_yes,lastmoverecv,0,moveturn,0,invisible,~c_yes,counterdmg,0,bidedmg,0,disabledtimer,0,confused,0,sleeping,@,substitute,0,toxiced,0,spot,@,base,@;stages;attack,0,defense,0,specialattack,0,specialdefense,0,speed,0,crit,0,evasion,0,accuracy,0;",f_flr_rnd"7"+1,spot,pkmn),{__index=pkmn})
+player.active=f_zobj_setmeta(pkmn,"isactive,~c_yes,lastmoverecv,0,moveturn,0,invisible,~c_yes,counterdmg,0,bidedmg,0,disabledtimer,0,confused,0,sleeping,@,substitute,0,toxiced,0,spot,@,base,@;stages;attack,0,defense,0,specialattack,0,specialdefense,0,speed,0,crit,0,evasion,0,accuracy,0;",f_flr_rnd"7"+1,spot,pkmn)
 for i=1,4 do
 player.active[i]=pkmn[i]
 end
@@ -715,8 +714,7 @@ poke(0x5ec2+1,0)
 poke(0x5ec4+1,0)
 f_add_to_ui_stack(g_grid_battle_turnbeg)
 end,function(ind,base,respect_locks,gender_bit,item,...)
-local pkmn=f_zobj("num,@,base,@,gender_bit,@,item,@,valid,@,seen_moves,#,major,0,gender,0,substitute,0,evasion,100,accuracy,100,crit,1,numtimes,0;stages;attack,0,defense,0,specialattack,0,specialdefense,0,speed,0,crit,0,evasion,0,accuracy,0;",ind,base,gender_bit,item%42,ind<252)
-pkmn=setmetatable(pkmn,{__index=base})
+local pkmn=f_zobj_setmeta(base,"num,@,base,@,gender_bit,@,item,@,valid,@,seen_moves,#,major,0,gender,0,substitute,0,evasion,100,accuracy,100,crit,1,numtimes,0;stages;attack,0,defense,0,specialattack,0,specialdefense,0,speed,0,crit,0,evasion,0,accuracy,0;",ind,base,gender_bit,item%42,ind<252)
 pkmn.gender=pkmn.genders[pkmn.gender_bit%#pkmn.genders+1]
 local moves={...}
 for i=1,4 do
@@ -726,9 +724,9 @@ move=move%#pkmn.possible_moves+1
 end
 pkmn.seen_moves[move]=true
 local num=pkmn.possible_moves[move]
-pkmn[i]=setmetatable({num=num,pid=move},{__index=c_moves[num]})
+pkmn[i]=f_zobj_setmeta(c_moves[num],"num,@,pid,@",num,move)
 end
-pkmn[0]=setmetatable({num=0,pid=1},{__index=c_moves[0]})
+pkmn[0]=f_zobj_setmeta(c_moves[0],"num,0,pid,1")
 return pkmn
 end,function(party_num)
 local team={fill_ind=7,trainer={}}
@@ -777,8 +775,7 @@ end,function(crit)
 return mid(0,1,.0095*crit^4-.0746*crit^3+.1883*crit^2-.0607*crit+.0625)
 end,function(stat)
 return mid(1,1+stat/3,3)/mid(1,1-stat/3,3)
-end)
-f_zobj_set(_g,"f_stat_calc,@,f_op_def,@,f_op_edititem,@,f_op_statbrowse,@,f_op_browse,@,f_op_statbattle,@,f_op_edit,@,f_op_editteam,@,f_op_title,@,f_op_prevpk,@,f_op_teams,@,f_op_editmovebot,@,f_op_editstat,@,f_op_editmove,@,f_op_batsel,@,f_op_movesel,@,f_op_dmovsel,@,f_op_batswitch,@,f_op_batresults,@,f_op_batstats,@,f_dt_editteam,@,f_dt_editstat,@,f_dt_editmove_template,@,f_dt_editmove,@,f_dt_browse,@,f_dt_editpkmn,@,f_dt_edit,@,f_dt_batstats,@,f_dt_switch,@,f_dt_league,@,f_dt_versus,@,f_dt_title,@,f_s_batresults,@,f_l_browse,@,f_s_browse,@,f_s_versus,@,f_s_league,@,f_s_batstat,@,f_s_edit,@,f_s_editteam,@,f_s_editstat,@,f_s_editmovebot,@,f_s_battle,@,f_s_title,@,f_s_pkstat,@,f_s_statedit,@,f_s_statbat,@,f_s_versusbegin,@,f_s_batbegin,@,f_s_editpkmn,@,f_s_editmove,@,f_s_edititem,@,f_l_title,@,f_l_battle,@,f_s_batmove,@,f_s_dmovsel,@,f_s_batswitch,@,f_op_startturn,@,f_s_startturn,@,f_op_bataction,@,f_s_bataction,@,f_l_bataction,@,_update,@,_draw,@",function(active,stat,special)
+end,function(active,stat,special)
 local stage=active.stages[stat]or 0
 local base=active[stat]*mid(2,2+stage,8)/mid(2,2-stage,8)
 if special then
@@ -795,7 +792,8 @@ end
 end
 end
 return mid(1,999,base)
-end,function(_ENV)add(op,{})end,function(_ENV)f_op_template_edit(op,c_items,"item")end,function(_ENV)f_add_stat(op,c_pokemon[f_getsel"g_grid_browse"])end,function(_ENV)
+end)
+f_zobj_set(_g,"f_op_def,@,f_op_edititem,@,f_op_statbrowse,@,f_op_browse,@,f_op_statbattle,@,f_op_edit,@,f_op_editteam,@,f_op_title,@,f_op_prevpk,@,f_op_teams,@,f_op_editmovebot,@,f_op_editstat,@,f_op_editmove,@,f_op_batsel,@,f_op_movesel,@,f_op_dmovsel,@,f_op_batswitch,@,f_op_batresults,@,f_op_batstats,@,f_dt_editteam,@,f_dt_editstat,@,f_dt_editmove_template,@,f_dt_editmove,@,f_dt_browse,@,f_dt_editpkmn,@,f_dt_edit,@,f_dt_batstats,@,f_dt_switch,@,f_dt_league,@,f_dt_versus,@,f_dt_title,@,f_s_batresults,@,f_l_browse,@,f_s_browse,@,f_s_versus,@,f_s_league,@,f_s_batstat,@,f_s_edit,@,f_s_editteam,@,f_s_editstat,@,f_s_editmovebot,@,f_s_battle,@,f_s_title,@,f_s_pkstat,@,f_s_statedit,@,f_s_statbat,@,f_s_versusbegin,@,f_s_batbegin,@,f_s_editpkmn,@,f_s_editmove,@,f_s_edititem,@,f_l_title,@,f_l_battle,@,f_s_batmove,@,f_s_dmovsel,@,f_s_batswitch,@,f_op_startturn,@,f_s_startturn,@,f_op_bataction,@,f_s_bataction,@,f_l_bataction,@,_update,@,_draw,@",function(_ENV)add(op,{})end,function(_ENV)f_op_template_edit(op,c_items,"item")end,function(_ENV)f_add_stat(op,c_pokemon[f_getsel"g_grid_browse"])end,function(_ENV)
 for i=0,251 do
 local disabled=not c_pokemon[i].lock
 add(op,{lrvalid=not disabled,disabled=disabled,draw=function(_,is_sel,gridobj)
@@ -1112,7 +1110,7 @@ end)
 end,function()
 p_selfaction.nextmove=nil
 local nextpkmn=f_getsel"g_grid_battle_switch"+1
-f_insaction(p_selfaction,p_selfaction,"backs "..p_selfaction.active.name,function()
+f_addaction(p_selfaction,p_selfaction,"backs "..p_selfaction.active.name,function()
 p_selfaction.active.invisible=true
 add(p_selfaction.actions,f_pkmn_comes_out(p_selfaction,nextpkmn))
 end,true)
@@ -1168,7 +1166,6 @@ if action then
 f_set_pself(action.player)
 a_self_active,a_other_active,a_turnself=p_selfaction.active,p_otheraction.active,action.onplayer
 a_addaction=function(...)f_addaction(action.onplayer,...)end
-a_insaction=function(...)f_insaction(action.onplayer,...)end
 p_selfturn=action.onplayer
 p_otherturn=f_get_other_pl(action.onplayer)
 action.logic(envparams)
