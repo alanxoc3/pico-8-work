@@ -18,14 +18,14 @@ end $$
   local movenum = move.num
   local maxpp, pp, pow, accuracy, typ = f_get_move_texts(move)
   local method = pkmn.possible_moves_method[movenum] or "empty"
-  add(op, {text="move"..ind..": "..move.name, header=true})
+  add(op, {text="move"..ind..": "..move.name, disabled=true})
   add(op, {text=""..method..": "..typ})
   add(op, {text="   pp: "..pp.."/"..maxpp})
   add(op, {text="pw/ac: "..pow.."/"..accuracy})
 end $$
 
 |[f_add_stat_info]| function(op, pkmn)
-  add(op, {text="info: "..pkmn.name, header=true})
+  add(op, {text="info: "..pkmn.name, disabled=true})
   add(op, {text="gendr: "..c_gender_names[pkmn.gender]})
   add(op, {text="type1: "..c_type_names[pkmn.pktype1]})
   add(op, {text="type2: "..c_type_names[pkmn.pktype2]})
@@ -36,55 +36,31 @@ end $$
     f_draw_pkmn(pkmn.num, 21, off-12, 16, false, false, false, false, true)
   end
 
-  add(op, {text="#"..f_prefix_zero(pkmn.num, 3)..": "..pkmn.name, header=true})
+  add(op, {text="#"..f_prefix_zero(pkmn.num, 3)..": "..pkmn.name, disabled=true})
   add(op, { draw=function() draw_preview'17' end})
   add(op, { draw=function() draw_preview'8' end})
   add(op, { draw=function() draw_preview'-1' end})
 end $$
 
 |[f_add_stat]| function(op, pkmn, is_battle)
-
   f_add_stat_preview(op, pkmn)
   f_add_stat_info(op, pkmn)
 
-  add(op, {text="stat: "..pkmn.name, header=true})
+  add(op, {text="stat: "..pkmn.name, disabled=true})
   add(op, {text="at/df: "..f_prefix_zero(f_stat_calc(pkmn, 'attack'), 3).."/"..f_prefix_zero(f_stat_calc(pkmn, 'defense'), 3)})
   add(op, {text="sa/sd: "..f_prefix_zero(f_stat_calc(pkmn, 'specialattack'), 3).."/"..f_prefix_zero(f_stat_calc(pkmn, 'specialdefense'), 3)})
   add(op, {text="sp/lv: "..f_prefix_zero(f_stat_calc(pkmn, 'speed'), 3).."/050"})
 
-  add(op, {text="batl: "..pkmn.name, header=true})
+  add(op, {text="batl: "..pkmn.name, disabled=true})
   add(op, {text="major: "..c_major_names_long[pkmn.major]})
   add(op, {text="   hp: "..pkmn.hp.."/"..pkmn.maxhp})
   add(op, {text=" item: "..c_item_names[pkmn.item]})
-
-  --add(op, {text="pkmn stats", header=true})
-  -- add(op, {text="htpnt " .. pkmn.hp .. "/" .. pkmn.maxhp})
-  -- add(op, {text="htpnt " .. pkmn.maxhp})
-
-  -- for key in all(f_zobj[[,attack,defense,specialattack,specialdefense,speed]]) do
-  --   local txt = c_statmod_names[key].." "..f_prefix_zero(pkmn[key], 3)
-  --   -- local stage = pkmn.stages[key]
-  --   -- txt ..= (stage < 0 and "-" or "+")..abs(stage)
-  --   add(op, {text=txt})
-  -- end
-
-  -- for key in all(f_zobj[[,crit,evasion,accuracy]]) do
-  --   local stage = pkmn.stages[key]
-  --   add(op, {text=c_statmod_names[key].." "..stage.."%"})
-  -- end
-
-  -- add(op, {text="ev/ac 100/100"})
 
   if is_battle then
     f_add_stat_move(op, pkmn, 0)
     f_add_stat_move(op, pkmn, 1)
     f_add_stat_move(op, pkmn, 2)
     f_add_stat_move(op, pkmn, 3)
-
-    -- add(op, {text=f_prefix_space(c_move_names[pkmn[1].num], 6)..": 20/20"})
-    -- add(op, {text=f_prefix_space(c_move_names[pkmn[2].num], 6)..": 20/20"})
-    -- add(op, {text=f_prefix_space(c_move_names[pkmn[3].num], 6)..": 20/20"})
-    -- add(op, {text=f_prefix_space(c_move_names[pkmn[4].num], 6)..": 20/20"})
   end
 
   -- TODO: idk. should i include battle flags or no?

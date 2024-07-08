@@ -104,7 +104,7 @@ end $$
   if btnp'4' then
     f_minisfx(leavefunc() or SFX_LEAVE)
   elseif btnp'5' then
-    if (disabled or lrfunc or not gridobj[@sel+1].disabled) then
+    if (selw*selh > 1 or disabled or lrfunc or not gridobj[@sel+1].disabled) then
       f_minisfx(selfunc() or SFX_SELECT)
     else
       f_minisfx(SFX_ERROR)
@@ -128,7 +128,7 @@ end $$
     if i == (#gridobj-1)\w*w then l, d = 1, 1 end
 
     local c = C_2
-    if obj.disabled or obj.header then
+    if obj.disabled then
       c = C_1
     end
 
@@ -147,7 +147,7 @@ end $$
     camera(-xloc-1, -yloc-1)
 
     local c = C_1
-    if obj.disabled or obj.header then
+    if obj.disabled then
       c = C_2
     end
     print(obj.text or "", 1, 1, c)

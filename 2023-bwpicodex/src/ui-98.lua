@@ -599,7 +599,7 @@ f_zcall(f_create_gridpair, [[
   ;top_edit      ;,2 ,2 ,2 ,2  ,30 ,20 ,1   ,1
   ;top_editteam  ;,3 ,2 ,2 ,2  ,20 ,20 ,1   ,1
   ;top_results   ;,3 ,2 ,2 ,2  ,20 ,20 ,3   ,2
-  ;top_pkstat    ;,1 ,4 ,2 ,4  ,60 ,9  ,4   ,4
+  ;top_pkstat    ;,1 ,4 ,2 ,4  ,60 ,9  ,1   ,4
   ;top_pkstatbig ;,1 ,6 ,2 ,5  ,60 ,9  ,1   ,1
   ;top_text_grid ;,2 ,4 ,2 ,4  ,30 ,9  ,1   ,1
   ;top_title     ;,1 ,1 ,2 ,2  ,60 ,40 ,1   ,1
