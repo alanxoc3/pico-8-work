@@ -38,7 +38,7 @@ function f_zobj(...)
 return f_zobj_setmeta(_g,...)
 end
 f_zobj_set(_g,"c_pokemon,#,c_moves,#,c_trainers,#,c_items,#,g_init_peek_loc,0x1fff,c_yes,@,c_no,@,c_empty,@,f_nop,@,g_palette,0,g_preview_timer,0,g_title_timer,0,g_title_l,254,g_title_r,254,g_msg_top, ,g_msg_bot, ,g_bat_func,,g_gridstack,#,g_title_an_timer,70",true,false,"",function(...)return...end)
-f_zobj_set(_g,"f_zobj,@,f_zobj_set,@,f_zobj_eval,@,f_zcall,@,f_refresh_top,@,f_add_to_ui_stack,@,f_pop_ui_stack,@,f_getsel,@,f_setsel,@,f_create_gridpair,@,f_update_grid,@,f_draw_grid,@,f_addop_text,@,f_minisfx,@,f_flr_rnd,@,f_in_split,@,f_roundrect,@,f_draw_pkmn,@,f_strtoq,@,f_moveutil_hpchange,@,f_moveutil_dmgself,@,f_moveutil_dmgother,@,f_moveutil_movemod,@,f_moveutil_typeadv,@,f_moveutil_calc_move_damage,@,f_move_splash,@,f_move_recover,@,f_move_tackle,@,f_move_seismictoss,@,f_move_psywave,@,f_move_superfang,@,f_move_falseswipe,@,f_move_submission,@,f_move_struggle,@,f_move_multihit_set,@,f_move_barrage,@,f_move_doublekick,@,f_move_flail,@,f_move_return,@,f_move_frustration,@,f_move_present,@,f_move_magnitude,@,f_move_hiddenpower,@,c_move_funcs,@,c_move_names,@,c_trnr_names,@,c_type_names,@,c_item_names,@,c_pkmn_names,@,c_gender_names,@,c_major_names_long,@,c_major_names_short,@,c_movemethod_names,@,c_statmod_names,@,c_palettes,@,c_palette_names,@,c_types,@,f_init_peek_inc,@,f_unlock,@,f_update_locks,@,f_create_spot,@,f_get_edit_op_pkmn,@,f_op_template_edit,@,f_add_stat_move,@,f_add_stat_info,@,f_add_stat_preview,@,f_add_stat,@,f_print_top,@,f_print_bot,@,f_get_move_texts,@,f_prefix_space,@,f_prefix_zero,@,f_dt_browse_template,@,f_add_battle,@,f_create_active,@,f_create_player,@,f_get_other_pl,@,f_set_pself,@,f_get_live_pkmn,@,f_get_next_active,@,f_end_battle,@,f_newaction,@,f_addaction,@,f_pkmn_comes_out,@,f_pop_next_action,@,f_postmove_logic,@,f_set_player_priority,@,f_movelogic,@,f_turn_end_p2,@,f_turn_end_p1,@,f_start_battle,@,f_mkpkmn,@,f_team_party,@,f_fill_team,@,f_team_league,@,f_get_party_pkmn,@,f_save_party_pkmn,@,f_stat_crit,@,f_stat_evac,@,f_stat_calc,@",f_zobj,f_zobj_set,f_zobj_eval,function(func,text,...)
+f_zobj_set(_g,"f_zobj,@,f_zobj_set,@,f_zobj_eval,@,f_zcall,@,f_refresh_top,@,f_add_to_ui_stack,@,f_pop_ui_stack,@,f_getsel,@,f_setsel,@,f_create_gridpair,@,f_update_grid,@,f_draw_grid,@,f_addop_text,@,f_minisfx,@,f_flr_rnd,@,f_in_split,@,f_roundrect,@,f_draw_pkmn,@,f_strtoq,@,f_moveutil_hpchange,@,f_moveutil_dmgself,@,f_moveutil_dmgother,@,f_moveutil_movemod,@,f_moveutil_typeadv,@,f_moveutil_calc_move_damage,@,f_move_splash,@,f_move_recover,@,f_move_tackle,@,f_move_seismictoss,@,f_move_psywave,@,f_move_superfang,@,f_move_falseswipe,@,f_move_submission,@,f_move_struggle,@,f_move_multihit_set,@,f_move_barrage,@,f_move_doublekick,@,f_move_flail,@,f_move_return,@,f_move_frustration,@,f_move_present,@,f_move_magnitude,@,f_move_hiddenpower,@,c_move_funcs,@,c_move_names,@,c_trnr_names,@,c_type_names,@,c_item_names,@,c_pkmn_names,@,c_gender_names,@,c_major_names_long,@,c_major_names_short,@,c_movemethod_names,@,c_statmod_names,@,c_palettes,@,c_palette_names,@,c_types,@,f_init_peek_inc,@,f_unlock,@,f_update_locks,@,f_create_spot,@,f_get_edit_op_pkmn,@,f_op_template_edit,@,f_add_stat_move,@,f_add_stat_info,@,f_add_stat_preview,@,f_add_stat,@,f_print_top,@,f_print_bot,@,f_get_move_texts,@,f_prefix_space,@,f_prefix_zero,@,f_dt_browse_template,@,f_add_battle,@,f_create_active,@,f_create_player,@,f_get_other_pl,@,f_set_pself,@,f_get_live_pkmn,@,f_get_next_active,@,f_end_battle,@,f_newaction,@,f_addaction,@,f_pkmn_comes_out,@,f_pop_next_action,@,f_set_player_priority,@,f_movelogic,@,f_turn_end_p2,@,f_turn_end_p1,@,f_start_turn,@,f_start_battle,@,f_mkpkmn,@,f_team_party,@,f_fill_team,@,f_team_league,@,f_get_party_pkmn,@,f_save_party_pkmn,@,f_stat_crit,@,f_stat_evac,@,f_stat_calc,@",f_zobj,f_zobj_set,f_zobj_eval,function(func,text,...)
 foreach(f_zobj(text,...),function(params)
 func(unpack(params))
 end)
@@ -343,18 +343,8 @@ f_moveutil_dmgother(_ENV,function(dmg)
 f_moveutil_dmgself(ceil(p_selfturn.active.maxhp/4))
 end)
 end,function(_ENV,hitcount,isresume)
-if hitcount>0 then
-a_addaction(p_selfturn,isresume and "resumes "..name,function()
-p_selfturn.active.numtimes+=1
-f_moveutil_dmgother(_ENV,function()
-f_move_multihit_set(_ENV,hitcount-1,true)
-end)
-end)
-end
 end,function(_ENV)
-f_move_multihit_set(_ENV,2+f_flr_rnd"4")
 end,function(_ENV)
-f_move_multihit_set(_ENV,spec)
 end,function(_ENV)
 local hplist=f_zobj";,.7,20;;,.4,40;;,.2,80;;,.1,100;;,.05,150"
 local perc=p_selfturn.active.hp/p_selfturn.active.maxhp
@@ -551,7 +541,7 @@ active=f_create_active(team,i)
 break
 end
 end
-return f_zobj("active,@,team,@,name,@,subname,@,iscpu,@,turnover,~c_no,actions,#,greed,7",active,team,name,subname,iscpu)
+return f_zobj("active,@,team,@,name,@,subname,@,iscpu,@,actions,#,greed,7",active,team,name,subname,iscpu)
 end,function(player)
 return player==p_1 and p_2 or p_1
 end,function(player)
@@ -578,17 +568,17 @@ g_p1_winfunc()
 end
 end)
 f_setsel("g_grid_battle_results",p_otheraction.active.spot-1)
-end,function(onplayer,player,message,logic,isplayeraction)
-return f_zobj("onplayer,@,player,@,active,@,message,@,logic,@,isplayeraction,@",onplayer,player,player.active,message or false,logic or f_nop,isplayeraction)
-end,function(player,...)
-add(player.actions,f_newaction(player,...))
+end,function(player,message,logic,isplayeraction)
+return f_zobj("player,@,message,@,logic,@,isplayeraction,@",player,message or false,logic or f_nop,isplayeraction)
+end,function(player,level,...)
+add(player.actions,f_zobj_set(f_newaction(...),"level,@",level))
 end,function(player,spot)
 local pkmn=player.team[spot]
 player.active=f_zobj_setmeta(pkmn,"isactive,~c_yes,lastmoverecv,0,moveturn,0,invisible,~c_yes,counterdmg,0,bidedmg,0,disabledtimer,0,confused,0,sleeping,@,substitute,0,toxiced,0,spot,@,base,@;stages;attack,0,defense,0,specialattack,0,specialdefense,0,speed,0,crit,0,evasion,0,accuracy,0;",f_flr_rnd"7"+1,spot,pkmn)
 for i=1,4 do
 player.active[i]=pkmn[i]
 end
-return f_newaction(player,player,"sends "..player.active.name,function()
+return f_newaction(player,"sends "..player.active.name,function()
 player.active.invisible=false
 return player.active.num
 end,true)
@@ -596,47 +586,31 @@ end,function()
 for player in all{p_first,p_last}do
 if player.active.major==1 then
 if not player.active.invisible then
-return f_newaction(player,player,"backs "..player.active.name,function()
+for np in all{p_first,p_last}do
+for action in all(np.actions)do
+if action.level==2 and del({p_first,p_last},action.player)then
+del(np.actions,action)
+end
+end
+end
+return player,f_newaction(player,"backs "..player.active.name,function()
 player.active.invisible=true
 f_fill_team(player.team,player.active.spot)
 end,true)
 else
-return f_pkmn_comes_out(player,f_get_next_active(player))
+return player,f_pkmn_comes_out(player,f_get_next_active(player))
 end
 end
 end
+for level=1,10 do
 for player in all{p_first,p_last}do
-local other=f_get_other_pl(player)
-while #player.actions>0 do
-local action=deli(player.actions,1)
-if action.active.major ~=1 and(action.active==player.active or action.active==other.active)then
-return action
+for action in all(player.actions)do
+if action.level==level then
+return player,del(player.actions,action)
 end
 end
-if player.active.hp<=0 and player.active.major==1 then
-return f_pkmn_comes_out(player,f_get_next_active(player.team))
-end
-if not player.turnover then
-player.turnover=true
-return f_postmove_logic(player)
 end
 end
-end,function(self)
-return f_newaction(self,self,false,function()
-local statdmg=max(a_self_active.maxhp\16,1)
-local inflictstatdmg=function(title)
-f_addaction(self,title.." damage")
-f_move_setdmg_self(_ENV,statdmg)
-end
-if a_self_active.major==5 then
-if a_self_active.toxiced>0 then
-statdmg*=a_self_active.toxiced
-a_self_active.toxiced+=1
-end
-inflictstatdmg"poison"
-end
-a_self_active.numtimes=0
-end)
 end,function(player)
 local priority_class=3000
 local movenum=player.nextmove and player.nextmove.num
@@ -651,7 +625,7 @@ end
 player.priority=priority_class+f_stat_calc(player.active,"speed",true)
 end,function(player)
 local move=player.nextmove
-f_addaction(player,player,(player.active.curmove and "resumes "or(move.func==f_move_multiturn and "begins "or "uses "))..c_move_names[move.num],function()
+f_addaction(player,2,player,(player.active.curmove and "resumes "or(move.func==f_move_multiturn and "begins "or "uses "))..c_move_names[move.num],function()
 move.pp-=1
 if(function()
 if move.accuracy<=0 then return false end
@@ -694,23 +668,48 @@ end
 f_movelogic(p_2)
 f_turn_end_p2()
 end
+end,function()
+local x=function()
+f_addaction(p_selfturn,1,p_selfturn,false,function()
+f_pop_ui_stack()
+f_setsel("g_grid_battle_select",0)
+if p_selfaction==p_1 then
+g_grid_battle_select.g_cg_m.sel=0x5eba
+g_grid_statbattle.g_cg_m.sel=0x5ebe
+g_grid_battle_movesel.g_cg_m.sel=0x5ebc
+g_grid_battle_select.g_cg_m.view=0x5eba+1
+g_grid_statbattle.g_cg_m.view=0x5ebe+1
+g_grid_battle_movesel.g_cg_m.view=0x5ebc+1
+else
+g_grid_battle_select.g_cg_m.sel=0x5ec0
+g_grid_statbattle.g_cg_m.sel=0x5ec4
+g_grid_battle_movesel.g_cg_m.sel=0x5ec2
+g_grid_battle_select.g_cg_m.view=0x5ec0+1
+g_grid_statbattle.g_cg_m.view=0x5ec4+1
+g_grid_battle_movesel.g_cg_m.view=0x5ec2+1
+end
+f_add_to_ui_stack(g_grid_battle_select)
+end)
+end
+p_first=p_1
+p_last=p_2
+f_addaction(p_1,1,p_1,"begins turn",x,true)
+if not p_2.iscpu then
+f_addaction(p_2,1,p_2,"begins turn",x,true)
+end
 end,function(p1name,p1winfunc,...)
 p_1,p_2=f_create_player(f_team_party(@0x5eae),p1name,"team"..(@0x5eae+1)),f_create_player(...)
 g_p1_winfunc=p1winfunc
+g_action_level=1
 f_set_pself(p_1)
-poke(0x5eba,0)
-poke(0x5ebc,0)
-poke(0x5ebe,0)
-poke(0x5eba+1,0)
-poke(0x5ebc+1,0)
-poke(0x5ebe+1,0)
-poke(0x5ec0,0)
-poke(0x5ec2,0)
-poke(0x5ec4,0)
-poke(0x5ec0+1,0)
-poke(0x5ec2+1,0)
-poke(0x5ec4+1,0)
-f_add_to_ui_stack(g_grid_battle_turnbeg)
+poke2(0x5eba,0)
+poke2(0x5ebc,0)
+poke2(0x5ebe,0)
+poke2(0x5ec0,0)
+poke2(0x5ec2,0)
+poke2(0x5ec4,0)
+f_start_turn()
+f_add_to_ui_stack(g_grid_battle_actions)
 end,function(ind,base,respect_locks,gender_bit,item,...)
 local pkmn=f_zobj_setmeta(base,"num,@,base,@,gender_bit,@,item,@,valid,@,seen_moves,#,major,0,gender,0,substitute,0,evasion,100,accuracy,100,crit,1,numtimes,0;stages;attack,0,defense,0,specialattack,0,specialdefense,0,speed,0,crit,0,evasion,0,accuracy,0;",ind,base,gender_bit,item%42,ind<252)
 pkmn.gender=pkmn.genders[pkmn.gender_bit%#pkmn.genders+1]
@@ -791,7 +790,7 @@ end
 end
 return mid(1,999,base)
 end)
-f_zobj_set(_g,"f_op_def,@,f_op_edititem,@,f_op_statbrowse,@,f_op_browse,@,f_op_statbattle,@,f_op_edit,@,f_op_editteam,@,f_op_title,@,f_op_prevpk,@,f_op_teams,@,f_op_editmovebot,@,f_op_editstat,@,f_op_editmove,@,f_op_batsel,@,f_op_movesel,@,f_op_dmovsel,@,f_op_batswitch,@,f_op_batresults,@,f_op_batstats,@,f_dt_editteam,@,f_dt_editstat,@,f_dt_editmove_template,@,f_dt_editmove,@,f_dt_browse,@,f_dt_editpkmn,@,f_dt_edit,@,f_dt_batstats,@,f_dt_switch,@,f_dt_league,@,f_dt_versus,@,f_dt_title,@,f_s_batresults,@,f_l_browse,@,f_s_browse,@,f_s_versus,@,f_s_league,@,f_s_batstat,@,f_s_edit,@,f_s_editteam,@,f_s_editstat,@,f_s_editmovebot,@,f_s_battle,@,f_s_title,@,f_s_pkstat,@,f_s_statedit,@,f_s_statbat,@,f_s_versusbegin,@,f_s_batbegin,@,f_s_editpkmn,@,f_s_editmove,@,f_s_edititem,@,f_l_title,@,f_l_battle,@,f_s_batmove,@,f_s_dmovsel,@,f_s_batswitch,@,f_op_startturn,@,f_s_startturn,@,f_op_bataction,@,f_s_bataction,@,f_l_bataction,@,_update,@,_draw,@",function(_ENV)add(op,{})end,function(_ENV)f_op_template_edit(op,c_items,"item")end,function(_ENV)f_add_stat(op,c_pokemon[f_getsel"g_grid_browse"])end,function(_ENV)
+f_zobj_set(_g,"f_op_def,@,f_op_edititem,@,f_op_statbrowse,@,f_op_browse,@,f_op_statbattle,@,f_op_edit,@,f_op_editteam,@,f_op_title,@,f_op_prevpk,@,f_op_teams,@,f_op_editmovebot,@,f_op_editstat,@,f_op_editmove,@,f_op_batsel,@,f_op_movesel,@,f_op_dmovsel,@,f_op_batswitch,@,f_op_batresults,@,f_op_batstats,@,f_dt_editteam,@,f_dt_editstat,@,f_dt_editmove_template,@,f_dt_editmove,@,f_dt_browse,@,f_dt_editpkmn,@,f_dt_edit,@,f_dt_batstats,@,f_dt_switch,@,f_dt_league,@,f_dt_versus,@,f_dt_title,@,f_s_batresults,@,f_l_browse,@,f_s_browse,@,f_s_versus,@,f_s_league,@,f_s_batstat,@,f_s_edit,@,f_s_editteam,@,f_s_editstat,@,f_s_editmovebot,@,f_s_battle,@,f_s_title,@,f_s_pkstat,@,f_s_statedit,@,f_s_statbat,@,f_s_versusbegin,@,f_s_batbegin,@,f_s_editpkmn,@,f_s_editmove,@,f_s_edititem,@,f_l_title,@,f_l_battle,@,f_s_batmove,@,f_s_dmovsel,@,f_s_batswitch,@,f_op_bataction,@,f_s_bataction,@,_update,@,_draw,@",function(_ENV)add(op,{})end,function(_ENV)f_op_template_edit(op,c_items,"item")end,function(_ENV)f_add_stat(op,c_pokemon[f_getsel"g_grid_browse"])end,function(_ENV)
 for i=0,251 do
 local disabled=not c_pokemon[i].lock
 add(op,{lrvalid=not disabled,disabled=disabled,draw=function(_,is_sel,gridobj)
@@ -1097,7 +1096,7 @@ p_selfaction.nextmove=p_selfaction.active[f_getsel"g_grid_battle_movesel"+1]
 f_movelogic(p_selfaction)
 f_pop_ui_stack()
 f_pop_ui_stack()
-f_add_to_ui_stack((p_selfaction==p_2 or p_2.iscpu)and g_grid_battle_actions or g_grid_battle_turnbeg,function()
+f_add_to_ui_stack(g_grid_battle_actions,function()
 if p_selfaction==p_1 then
 f_turn_end_p1()
 else
@@ -1109,7 +1108,7 @@ p_selfaction.nextmove=c_moves[0]
 f_movelogic(p_selfaction)
 f_pop_ui_stack()
 f_pop_ui_stack()
-f_add_to_ui_stack((p_selfaction==p_2 or p_2.iscpu)and g_grid_battle_actions or g_grid_battle_turnbeg,function()
+f_add_to_ui_stack(g_grid_battle_actions,function()
 if p_selfaction==p_1 then
 f_turn_end_p1()
 else
@@ -1119,42 +1118,19 @@ end)
 end,function()
 p_selfaction.nextmove=nil
 local nextpkmn=f_getsel"g_grid_battle_switch"+1
-f_addaction(p_selfaction,p_selfaction,"backs "..p_selfaction.active.name,function()
+f_addaction(p_selfaction,2,p_selfaction,"backs "..p_selfaction.active.name,function()
 p_selfaction.active.invisible=true
 add(p_selfaction.actions,f_pkmn_comes_out(p_selfaction,nextpkmn))
 end,true)
 f_pop_ui_stack()
 f_pop_ui_stack()
-f_add_to_ui_stack((p_selfaction==p_2 or p_2.iscpu)and g_grid_battle_actions or g_grid_battle_turnbeg,function()
+f_add_to_ui_stack(g_grid_battle_actions,function()
 if p_selfaction==p_1 then
 f_turn_end_p1()
 else
 f_turn_end_p2()
 end
 end)
-end,function(obj)
-g_msg_top=p_selfaction.name.." "..p_selfaction.subname
-g_msg_bot="begins turn"
-f_op_bataction(obj)
-end,function()
-f_pop_ui_stack()
-f_setsel("g_grid_battle_select",0)
-if p_selfaction==p_1 then
-g_grid_battle_select.g_cg_m.sel=0x5eba
-g_grid_statbattle.g_cg_m.sel=0x5ebe
-g_grid_battle_movesel.g_cg_m.sel=0x5ebc
-g_grid_battle_select.g_cg_m.view=0x5eba+1
-g_grid_statbattle.g_cg_m.view=0x5ebe+1
-g_grid_battle_movesel.g_cg_m.view=0x5ebc+1
-else
-g_grid_battle_select.g_cg_m.sel=0x5ec0
-g_grid_statbattle.g_cg_m.sel=0x5ec4
-g_grid_battle_movesel.g_cg_m.sel=0x5ec2
-g_grid_battle_select.g_cg_m.view=0x5ec0+1
-g_grid_statbattle.g_cg_m.view=0x5ec4+1
-g_grid_battle_movesel.g_cg_m.view=0x5ec2+1
-end
-f_add_to_ui_stack(g_grid_battle_select)
 end,function(_ENV)
 if not g_msg_bot then end
 add(preview_op,{draw=function()
@@ -1170,34 +1146,28 @@ f_end_battle(player)
 return
 end
 end
-local action=f_pop_next_action()
-if action then
-f_set_pself(action.player)
-a_self_active,a_other_active,a_turnself=p_selfaction.active,p_otheraction.active,action.onplayer
-a_addaction=function(...)f_addaction(action.onplayer,...)end
-p_selfturn=action.onplayer
-p_otherturn=f_get_other_pl(action.onplayer)
-action.logic(envparams)
-if action.message then
+p_selfturn,p_curaction=f_pop_next_action()
+if p_curaction then
+f_set_pself(p_curaction.player)
+a_self_active,a_other_active=p_selfaction.active,p_otheraction.active
+a_addaction=function(...)f_addaction(p_selfturn,2,...)end
+p_otherturn=f_get_other_pl(p_selfturn)
+p_curaction.logic()
+if p_curaction.message then
 f_setsel("g_grid_battle_actions",p_selfaction==p_1 and 1 or 0)
 g_msg_top=p_selfaction.name.." "..p_selfaction.active.name
-if action.isplayeraction then
+if p_curaction.isplayeraction then
 g_msg_top=p_selfaction.name.." "..p_selfaction.subname
 end
-g_msg_bot=action.message
+g_msg_bot=p_curaction.message
 return
 end
 else
+printh("aoh no")
 f_set_pself(p_1)
-p_1.turnover=false
-p_2.turnover=false
-f_pop_ui_stack()
-f_add_to_ui_stack(g_grid_battle_turnbeg)
-return
+f_start_turn()
 end
 end
-end,function()
-return p_selfaction.active.num
 end,function()
 if t()>=1.5 then
 if g_title_timer==0 then
@@ -1367,7 +1337,7 @@ poke2(loc,%loc & 0x70df|0x0a00)
 end
 poke4(iloc+64,0x.07d7)
 end
-f_zcall(f_create_gridpair,"top_browse;,6,4,2,2,10,10,1,1;top_edit;,2,2,2,2,30,20,1,1;top_editteam;,3,2,2,2,20,20,1,1;top_results;,3,2,2,2,20,20,3,2;top_pkstat;,1,4,2,4,60,9,1,4;top_pkstatbig;,1,6,2,5,60,9,1,1;top_text_grid;,2,4,2,4,30,9,1,1;top_title;,1,1,2,2,60,40,1,1;top_battle;,1,1,2,2,60,40,1,1;top_battle2;,1,2,2,2,60,20,1,1;bot_4x4;,2,2,2,44,30,9,1,1;bot_info;,1,1,2,45,60,16,1,1;top_newstat;,1,6,2,4,60,9,1,1;;,g_grid_title,0x5ea8,~bot_4x4,~top_title,~f_dt_title,~f_op_title,~f_s_title,~f_l_title,~c_no;;,g_grid_browse,0x5eaa,~top_browse,~bot_info,~f_dt_browse,~f_op_browse,~f_s_browse,~f_l_browse,~c_no,~c_no;;,g_grid_editpkmn,0x5eaa,~top_browse,~bot_info,~f_dt_editpkmn,~f_op_browse,~f_s_editpkmn,~f_l_browse,~c_no,~c_no;;,g_grid_statbrowse,0x5eac,~top_pkstat,~bot_info,~f_dt_browse,~f_op_statbrowse,~f_s_pkstat,~f_l_browse,g_grid_browse;;,g_grid_editstat,0x5eb6,~bot_4x4,~top_pkstat,~f_nop,~f_op_editstat,~f_s_editstat,~f_l_browse,~c_no;;,g_grid_editmovebot,0x5eb8,~bot_4x4,~top_pkstat,~f_nop,~f_op_editmovebot,~f_s_editmovebot,~f_l_browse,~c_no;;,g_grid_editmove,0x5ec6,~top_text_grid,~bot_info,~f_dt_editmove,~f_op_editmove,~f_s_editmove,~f_l_browse,~c_no;;,g_grid_edititem,0x5ec6,~top_text_grid,~bot_info,~f_dt_editstat,~f_op_edititem,~f_s_edititem,~f_l_browse,~c_no;;,g_grid_pickedit,0x5eae,~top_edit,~bot_info,~f_dt_edit,~f_op_edit,~f_s_edit,~f_l_browse,~c_no;;,g_grid_pickleag,0x5eae,~top_edit,~bot_info,~f_dt_league,~f_op_edit,~f_s_league,~f_l_browse,~c_no,~c_yes;;,g_grid_pickplr1,0x5eae,~top_edit,~bot_info,~f_dt_versus,~f_op_edit,~f_s_versus,~f_l_browse,~c_no,~c_yes;;,g_grid_pickplr2,0x5eb0,~top_edit,~bot_info,~f_dt_versus,~f_op_edit,~f_s_versusbegin,~f_l_browse,~c_no,~c_yes;;,g_grid_pickspot,0x5eb4,~top_editteam,~bot_info,~f_dt_editteam,~f_op_editteam,~f_s_editteam,~f_l_browse,~c_no;;,g_grid_picktrnr,0x5eb2,~top_text_grid,~bot_info,~f_dt_league,~f_op_teams,~f_s_batbegin,~f_l_browse,~c_no;;,g_grid_battle_select,0x5ec6,~bot_4x4,~top_battle2,~f_nop,~f_op_batsel,~f_s_battle,~f_l_battle,~c_no;;,g_grid_statbattle,0x5ec6,~top_pkstat,~bot_info,~f_dt_batstats,~f_op_statbattle,~f_s_statbat,~f_l_browse,g_grid_battle_stats;;,g_grid_battle_movesel,0x5ec6,~bot_4x4,~top_pkstat,~f_nop,~f_op_movesel,~f_s_batmove,~f_l_browse,~c_no;;,g_grid_battle_dmovsel,0x5ec6,~bot_info,~top_pkstat,~f_nop,~f_op_dmovsel,~f_s_dmovsel,~f_l_browse,~c_no;;,g_grid_battle_switch,0x5ec6,~top_editteam,~bot_info,~f_dt_switch,~f_op_batswitch,~f_s_batswitch,~f_l_browse,~c_no;;,g_grid_battle_stats,0x5ec6,~top_editteam,~bot_info,~f_dt_batstats,~f_op_batstats,~f_s_batstat,~f_l_browse,~c_no;;,g_grid_battle_turnbeg,0x5ec6,~top_battle2,~bot_info,~f_nop,~f_op_startturn,~f_s_startturn,~f_l_bataction,~c_no;;,g_grid_battle_results,0x5ec6,~top_results,~bot_info,~f_nop,~f_op_batresults,~f_s_batresults,~f_l_browse,~c_no;;,g_grid_battle_actions,0x5ec6,~top_battle2,~bot_info,~f_nop,~f_op_bataction,~f_s_bataction,~f_l_bataction,~c_no")
+f_zcall(f_create_gridpair,"top_browse;,6,4,2,2,10,10,1,1;top_edit;,2,2,2,2,30,20,1,1;top_editteam;,3,2,2,2,20,20,1,1;top_results;,3,2,2,2,20,20,3,2;top_pkstat;,1,4,2,4,60,9,1,4;top_pkstatbig;,1,6,2,5,60,9,1,1;top_text_grid;,2,4,2,4,30,9,1,1;top_title;,1,1,2,2,60,40,1,1;top_battle;,1,1,2,2,60,40,1,1;top_battle2;,1,2,2,2,60,20,1,1;bot_4x4;,2,2,2,44,30,9,1,1;bot_info;,1,1,2,45,60,16,1,1;top_newstat;,1,6,2,4,60,9,1,1;;,g_grid_title,0x5ea8,~bot_4x4,~top_title,~f_dt_title,~f_op_title,~f_s_title,~f_l_title,~c_no;;,g_grid_browse,0x5eaa,~top_browse,~bot_info,~f_dt_browse,~f_op_browse,~f_s_browse,~f_l_browse,~c_no,~c_no;;,g_grid_editpkmn,0x5eaa,~top_browse,~bot_info,~f_dt_editpkmn,~f_op_browse,~f_s_editpkmn,~f_l_browse,~c_no,~c_no;;,g_grid_statbrowse,0x5eac,~top_pkstat,~bot_info,~f_dt_browse,~f_op_statbrowse,~f_s_pkstat,~f_l_browse,g_grid_browse;;,g_grid_editstat,0x5eb6,~bot_4x4,~top_pkstat,~f_nop,~f_op_editstat,~f_s_editstat,~f_l_browse,~c_no;;,g_grid_editmovebot,0x5eb8,~bot_4x4,~top_pkstat,~f_nop,~f_op_editmovebot,~f_s_editmovebot,~f_l_browse,~c_no;;,g_grid_editmove,0x5ec6,~top_text_grid,~bot_info,~f_dt_editmove,~f_op_editmove,~f_s_editmove,~f_l_browse,~c_no;;,g_grid_edititem,0x5ec6,~top_text_grid,~bot_info,~f_dt_editstat,~f_op_edititem,~f_s_edititem,~f_l_browse,~c_no;;,g_grid_pickedit,0x5eae,~top_edit,~bot_info,~f_dt_edit,~f_op_edit,~f_s_edit,~f_l_browse,~c_no;;,g_grid_pickleag,0x5eae,~top_edit,~bot_info,~f_dt_league,~f_op_edit,~f_s_league,~f_l_browse,~c_no,~c_yes;;,g_grid_pickplr1,0x5eae,~top_edit,~bot_info,~f_dt_versus,~f_op_edit,~f_s_versus,~f_l_browse,~c_no,~c_yes;;,g_grid_pickplr2,0x5eb0,~top_edit,~bot_info,~f_dt_versus,~f_op_edit,~f_s_versusbegin,~f_l_browse,~c_no,~c_yes;;,g_grid_pickspot,0x5eb4,~top_editteam,~bot_info,~f_dt_editteam,~f_op_editteam,~f_s_editteam,~f_l_browse,~c_no;;,g_grid_picktrnr,0x5eb2,~top_text_grid,~bot_info,~f_dt_league,~f_op_teams,~f_s_batbegin,~f_l_browse,~c_no;;,g_grid_battle_select,0x5ec6,~bot_4x4,~top_battle2,~f_nop,~f_op_batsel,~f_s_battle,~f_l_battle,~c_no;;,g_grid_statbattle,0x5ec6,~top_pkstat,~bot_info,~f_dt_batstats,~f_op_statbattle,~f_s_statbat,~f_l_browse,g_grid_battle_stats;;,g_grid_battle_movesel,0x5ec6,~bot_4x4,~top_pkstat,~f_nop,~f_op_movesel,~f_s_batmove,~f_l_browse,~c_no;;,g_grid_battle_dmovsel,0x5ec6,~bot_info,~top_pkstat,~f_nop,~f_op_dmovsel,~f_s_dmovsel,~f_l_browse,~c_no;;,g_grid_battle_switch,0x5ec6,~top_editteam,~bot_info,~f_dt_switch,~f_op_batswitch,~f_s_batswitch,~f_l_browse,~c_no;;,g_grid_battle_stats,0x5ec6,~top_editteam,~bot_info,~f_dt_batstats,~f_op_batstats,~f_s_batstat,~f_l_browse,~c_no;;,g_grid_battle_results,0x5ec6,~top_results,~bot_info,~f_nop,~f_op_batresults,~f_s_batresults,~f_l_browse,~c_no;;,g_grid_battle_actions,0x5ec6,~top_battle2,~bot_info,~f_nop,~f_op_bataction,~f_s_bataction,~f_l_bataction,~c_no")
 f_add_to_ui_stack(g_grid_title)
 sfx"63"
 g_shake_timer=0

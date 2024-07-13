@@ -6,7 +6,6 @@
 -- TODO: i could add another ui screen for confirming you want to select a pokemon. but its fine if i dont do this too.
 -- TODO: stretch goal: add tiny descriptions for items
 
-
 ---------------------------------------------------------------------- :OP
 
 -- This updates the lock variables, which determine if a pokemon/item/move is unlocked.
@@ -456,7 +455,7 @@ end $$
   f_pop_ui_stack()
   f_pop_ui_stack()
 
-  f_add_to_ui_stack((p_selfaction == p_2 or p_2.iscpu) and g_grid_battle_actions or g_grid_battle_turnbeg, function()
+  f_add_to_ui_stack(g_grid_battle_actions, function()
     if p_selfaction == p_1 then
       f_turn_end_p1()
     else
@@ -472,7 +471,7 @@ end $$
   f_pop_ui_stack()
   f_pop_ui_stack()
 
-  f_add_to_ui_stack((p_selfaction == p_2 or p_2.iscpu) and g_grid_battle_actions or g_grid_battle_turnbeg, function()
+  f_add_to_ui_stack(g_grid_battle_actions, function()
     if p_selfaction == p_1 then
       f_turn_end_p1()
     else
@@ -488,7 +487,7 @@ end $$
   p_selfaction.nextmove = nil -- nextmove as nil means the pokemon will switch out
 
   local nextpkmn = f_getsel'g_grid_battle_switch'+1 -- needs to be defined out of callback, because it can change!
-  f_addaction(p_selfaction, p_selfaction, "backs "..p_selfaction.active.name, function()
+  f_addaction(p_selfaction, L_ATTACK, p_selfaction, "backs "..p_selfaction.active.name, function()
     p_selfaction.active.invisible = true
     add(p_selfaction.actions, f_pkmn_comes_out(p_selfaction, nextpkmn))
   end, true)
@@ -496,44 +495,13 @@ end $$
   f_pop_ui_stack()
   f_pop_ui_stack()
 
-  f_add_to_ui_stack((p_selfaction == p_2 or p_2.iscpu) and g_grid_battle_actions or g_grid_battle_turnbeg, function()
+  f_add_to_ui_stack(g_grid_battle_actions, function()
     if p_selfaction == p_1 then
       f_turn_end_p1()
     else
       f_turn_end_p2()
     end
   end)
-end $$
-
-|[f_op_startturn]| function(obj)
-  g_msg_top = p_selfaction.name.." "..p_selfaction.subname -- TODO: can this be extracted/combined with other g_msg stuff?
-  g_msg_bot = "begins turn"
-  f_op_bataction(obj)
-end $$
-
-|[f_s_startturn]| function()
-  f_pop_ui_stack()
-
-  -- this is a quality of life thing. when switching and spamming x, i never wanted to switch 2 times in a row. most commonly you just want to fight right after.
-  f_setsel('g_grid_battle_select', 0)
-
-  if p_selfaction == p_1 then
-    g_grid_battle_select.g_cg_m.sel  = S_P1_BATACTION
-    g_grid_statbattle.g_cg_m.sel     = S_P1_STAT
-    g_grid_battle_movesel.g_cg_m.sel = S_P1_MOVE
-    g_grid_battle_select.g_cg_m.view  = S_P1_BATACTION+1
-    g_grid_statbattle.g_cg_m.view     = S_P1_STAT+1
-    g_grid_battle_movesel.g_cg_m.view = S_P1_MOVE+1
-  else
-    g_grid_battle_select.g_cg_m.sel  = S_P2_BATACTION
-    g_grid_statbattle.g_cg_m.sel     = S_P2_STAT
-    g_grid_battle_movesel.g_cg_m.sel = S_P2_MOVE
-    g_grid_battle_select.g_cg_m.view  = S_P2_BATACTION+1
-    g_grid_statbattle.g_cg_m.view     = S_P2_STAT+1
-    g_grid_battle_movesel.g_cg_m.view = S_P2_MOVE+1
-  end
-
-  f_add_to_ui_stack(g_grid_battle_select)
 end $$
 
 |[f_op_bataction]| function(_ENV)
@@ -556,41 +524,32 @@ end $$
       end
     end
 
-    local action = f_pop_next_action()
-    if action then
-      f_set_pself(action.player)
-      a_self_active, a_other_active, a_turnself = p_selfaction.active, p_otheraction.active, action.onplayer
+    p_selfturn, p_curaction = f_pop_next_action()
+    if p_curaction then
+      f_set_pself(p_curaction.player)
+      a_self_active, a_other_active = p_selfaction.active, p_otheraction.active
 
       -- TODO: this should probably add to the current turn actions. Not the current actions player.
-      a_addaction = function(...) f_addaction(action.onplayer, ...) end
-      p_selfturn  = action.onplayer
-      p_otherturn = f_get_other_pl(action.onplayer)
-      action.logic(envparams)
+      a_addaction = function(...) f_addaction(p_selfturn, L_ATTACK, ...) end
+      p_otherturn = f_get_other_pl(p_selfturn)
+      p_curaction.logic()
 
-      -- an empty message means we execute the logic, but look for another action
-      if action.message then
+      -- an empty message means we execute the logic, but look for another p_curaction
+      if p_curaction.message then
         f_setsel('g_grid_battle_actions', p_selfaction == p_1 and 1 or 0) -- TODO: dedup
         g_msg_top = p_selfaction.name.." "..p_selfaction.active.name
-        if action.isplayeraction then -- TODO: token crunch
+        if p_curaction.isplayeraction then -- TODO: token crunch
           g_msg_top = p_selfaction.name.." "..p_selfaction.subname
         end
-        g_msg_bot = action.message
+        g_msg_bot = p_curaction.message
         return
       end
     else
+      printh("aoh no")
       f_set_pself(p_1)
-      p_1.turnover = false
-      p_2.turnover = false
-      f_pop_ui_stack()
-
-      f_add_to_ui_stack(g_grid_battle_turnbeg)
-      return -- important! need to return out otherwise we have an infinite loop
+      f_start_turn()
     end
   end
-end $$
-
-|[f_l_bataction]| function()
-  return p_selfaction.active.num
 end $$
 
 ---------------------------------------------------------------------- :CONNECT
@@ -638,7 +597,6 @@ f_zcall(f_create_gridpair, [[
   ;;,g_grid_battle_dmovsel ,S_DEFAULT      ,~bot_info      ,~top_pkstat    ,~f_nop           ,~f_op_dmovsel     ,~f_s_dmovsel      ,~f_l_browse      ,~c_no
   ;;,g_grid_battle_switch  ,S_DEFAULT      ,~top_editteam  ,~bot_info      ,~f_dt_switch     ,~f_op_batswitch   ,~f_s_batswitch    ,~f_l_browse      ,~c_no
   ;;,g_grid_battle_stats   ,S_DEFAULT      ,~top_editteam  ,~bot_info      ,~f_dt_batstats   ,~f_op_batstats    ,~f_s_batstat      ,~f_l_browse      ,~c_no
-  ;;,g_grid_battle_turnbeg ,S_DEFAULT      ,~top_battle2   ,~bot_info      ,~f_nop           ,~f_op_startturn   ,~f_s_startturn    ,~f_l_bataction   ,~c_no
 
   ;;,g_grid_battle_results ,S_DEFAULT      ,~top_results   ,~bot_info      ,~f_nop           ,~f_op_batresults  ,~f_s_batresults   ,~f_l_browse      ,~c_no
   ;;,g_grid_battle_actions ,S_DEFAULT      ,~top_battle2   ,~bot_info      ,~f_nop           ,~f_op_bataction   ,~f_s_bataction    ,~f_l_bataction   ,~c_no

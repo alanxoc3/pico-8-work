@@ -1,5 +1,24 @@
 useful: https://web.archive.org/web/20140715133830/http://www.upokecenter.com/content/pokemon-gold-version-silver-version-and-crystal-version-in-depth-guides
 
+p1=first
+p2=last
+
+starts like this: {{p1, p2}}
+calculate turns: constructs a new list on players
+if actions are empty, but prep actions are not:
+  change priority (first/last) and construct a new list adding:
+    add: {first, last} Attack logic
+    add: {first, last} Future Sight
+    add: {first, last} Weather
+    add: {first, last} Multi-turn attacks
+    add: {first, last} Perish Song
+    add: {first, last} Recover with Leftovers
+    add: {first, last} Check if defrosted
+    add: {first, last} Check end of Reflect/Light Screen/Safeguard
+    add: {first, last} Check for condition based on Berry
+    add: {first, last} Check end of Encore
+once all actions are empty, go back to beginning
+
 -------------------------------
 BATTLE LOGIC!
 

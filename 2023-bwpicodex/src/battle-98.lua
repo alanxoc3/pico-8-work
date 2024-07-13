@@ -42,7 +42,6 @@ end $$
     name,@,           -- The player's name (enemy/player...)
     subname,@,        -- The real team name (team1/lance...)
     iscpu,@,          -- Whether or not the player is a cpu
-    turnover,~c_no,   -- Whether or not the player has executed its end-of-turn logic when actions are empty. TODO: this could be removed, here so i don't forget that it must be updated each turn
     actions,#,        -- Actions for the player.
     greed,7           -- The next spot in the buffer. This is only used for horde.
     -- nextmove,~c_no -- 0-3 for a move index into the moveset. false value for switching. Commented out to save on compression, defaults to nil value
@@ -96,14 +95,15 @@ end $$
 -- player cannot be nil, others can. the player turn is passed and the current active is extracted.
 -- the current active is needed because if it dies, we want to skip over actions
 -- if message is false/nil, the logic function is executed immediately, then the next action is executed
-|[f_newaction]| function(onplayer, player, message, logic, isplayeraction)
+|[f_newaction]| function(player, message, logic, isplayeraction)
   -- TODO: why does the "message or false" line need an "or false"?
-  return f_zobj([[onplayer,@, player,@, active,@, message,@, logic,@, isplayeraction,@]], onplayer, player, player.active, message or false, logic or f_nop, isplayeraction)
+  return f_zobj([[player,@, message,@, logic,@, isplayeraction,@]], player, message or false, logic or f_nop, isplayeraction)
 end $$
 
--- adds an action to a player's turn
-|[f_addaction]| function(player, ...)
-  add(player.actions, f_newaction(player, ...))
+-- adds an action to a player's action list
+|[f_addaction]| function(player, level, ...)
+  -- TODO: can this be token crunched?
+  add(player.actions, f_zobj_set(f_newaction(...), [[level,@]], level)) -- TODO: try adding at "1" location
 end $$
 
 |[f_pkmn_comes_out]| function(player, spot) -- assumes that the pkmn coming is not nil.
@@ -147,7 +147,7 @@ end $$
     player.active[i] = pkmn[i]
   end
 
-  return f_newaction(player, player, "sends "..player.active.name, function()
+  return f_newaction(player, "sends "..player.active.name, function()
     player.active.invisible = false
     return player.active.num
   end, true)
@@ -156,6 +156,11 @@ end $$
 -- self player, other player
 -- return faint action if ~c_no hp and not dead
 -- return nothing if end of turn
+
+-- timing notes:
+-- L_PICK: after this level, p_first and p_last could change.
+-- L_ATTACK: if a pokemon faints during (or before, though should be impossible) all actions affecting the fainted pokemon are removed.
+-- Remaining: execute checks and do things.
 |[f_pop_next_action]| function()
   -- if an active pokemon has no hp, but not the faint status yet, return an action that makes the pokemon faint.
   -- switch if there is a next pokemon
@@ -163,69 +168,36 @@ end $$
   for player in all{p_first,p_last} do -- TODO: try _ENV syntax here?
     if player.active.major == C_MAJOR_FAINTED then
       if not player.active.invisible then
-        return f_newaction(player, player, "backs "..player.active.name, function()
+        -- delete all instances of the current player from the attack phase. this prevents moves from glitching or end of attack stuff from being applied (eg: poison)
+        for np in all{p_first, p_last} do
+          for action in all(np.actions) do
+            if action.level == L_ATTACK and del({p_first, p_last}, action.player) then -- Using del is a hack to save on tokens
+              del(np.actions, action)
+            end
+          end
+        end
+
+        return player, f_newaction(player, "backs "..player.active.name, function()
           player.active.invisible = true
-          f_fill_team(player.team, player.active.spot)
+          f_fill_team(player.team, player.active.spot) -- this is for horde mode, the team will be refilled once the pokemon has fainted.
         end, true)
-      else -- TODO: this is slightly diff logic than og picodex, check if there are any issues here
-        return f_pkmn_comes_out(player, f_get_next_active(player)) -- TODO: is there a nil issue here?
+      else
+        return player, f_pkmn_comes_out(player, f_get_next_active(player)) -- TODO: is there a nil issue here?
       end
     end
   end
 
-  for player in all{p_first,p_last} do
-    local other = f_get_other_pl(player) -- TODO: i think i can move this below. only 1 usage
-
-    -- if the active pokemon shouldn't faint right now, find the next action that references a pokemon still on the field.
-    while #player.actions > 0 do
-      local action = deli(player.actions, 1)
-      if action.active.major ~= C_MAJOR_FAINTED and (action.active == player.active or action.active == other.active) then
-        return action
+  for level=1,L_END do
+    for player in all{p_first,p_last} do
+      for action in all(player.actions) do
+        if action.level == level then
+          return player, del(player.actions, action)
+        end
       end
-    end
-
-    -- for explosion, you should finish the turn before switching in your pokemon
-    if player.active.hp <= 0 and player.active.major == C_MAJOR_FAINTED then
-      return f_pkmn_comes_out(player, f_get_next_active(player.team))
-    end
-
-    if not player.turnover then
-      player.turnover = true
-      return f_postmove_logic(player)
     end
   end
-
-  -- TODO: add turn ending things (futuresight, etc)
 end $$
 
-|[f_postmove_logic]| function(self) -- TODO: this is only used once, the function could go away.
-  return f_newaction(self, self, false, function()
-    -- flinching is reset at the psel init level, so you can't be flinching the next turn. no need to reset flinching here.
-    -- counterdmg is also reset at psel init level.
-
-    -- TODO: change/remove this comment vvvvv. from old picodex
-    -- reset moveturn if you sleep or are frozen. this is done at end of the turn to prevent weird cases (you freeze then unfreeze same turn).
-    -- if you are using rage and freeze then unfreeze in the same turn, you continue your rage.
-    -- if opponent is slower, then dies from leech/psn/brn, the trapper could lose a turn
-    -- but that's just a super edge case, so i don't care about changing it
-    local statdmg = max(a_self_active.maxhp\16,1) -- TODO: if I really need it to save tokens, I could remove the max, because all pokemon have > 16 max hp.
-    local inflictstatdmg = function(title)
-      f_addaction(self, title.." damage")
-      f_move_setdmg_self(_ENV, statdmg)
-    end
-
-    if a_self_active.major == C_MAJOR_POISONED then
-      if a_self_active.toxiced > 0 then
-        statdmg *= a_self_active.toxiced
-        a_self_active.toxiced += 1
-      end
-      inflictstatdmg"poison"
-    end
-    a_self_active.numtimes = 0
-  end)
-end $$
-
--- TODO: I'M HERE.
 |[f_set_player_priority]| function(player)
   local priority_class = C_PRIORITY_ATTACK
   local movenum = player.nextmove and player.nextmove.num
@@ -251,7 +223,7 @@ end $$
 
 |[f_movelogic]| function(player)
   local move = player.nextmove
-  f_addaction(player, player, (player.active.curmove and "resumes " or (move.func == f_move_multiturn and "begins " or "uses "))..c_move_names[move.num], function()
+  f_addaction(player, L_ATTACK, player, (player.active.curmove and "resumes " or (move.func == f_move_multiturn and "begins " or "uses "))..c_move_names[move.num], function()
     -- TODO: how does metronome work with solar beam. would pp get deducted twice?
     move.pp -= 1 -- deducts struggle too, because why not. it cant hurt
 
@@ -327,25 +299,58 @@ end $$
   end
 end $$
 
+|[f_start_turn]| function()
+  local x = function()
+    f_addaction(p_selfturn, L_PICK, p_selfturn, false, function()
+      f_pop_ui_stack()
+
+      -- this is a quality of life thing. when switching and spamming x, i never wanted to switch 2 times in a row. most commonly you just want to fight right after.
+      f_setsel('g_grid_battle_select', 0)
+
+      if p_selfaction == p_1 then
+        g_grid_battle_select.g_cg_m.sel   = S_P1_BATACTION
+        g_grid_statbattle.g_cg_m.sel      = S_P1_STAT
+        g_grid_battle_movesel.g_cg_m.sel  = S_P1_MOVE
+        g_grid_battle_select.g_cg_m.view  = S_P1_BATACTION+1
+        g_grid_statbattle.g_cg_m.view     = S_P1_STAT+1
+        g_grid_battle_movesel.g_cg_m.view = S_P1_MOVE+1
+      else
+        g_grid_battle_select.g_cg_m.sel   = S_P2_BATACTION
+        g_grid_statbattle.g_cg_m.sel      = S_P2_STAT
+        g_grid_battle_movesel.g_cg_m.sel  = S_P2_MOVE
+        g_grid_battle_select.g_cg_m.view  = S_P2_BATACTION+1
+        g_grid_statbattle.g_cg_m.view     = S_P2_STAT+1
+        g_grid_battle_movesel.g_cg_m.view = S_P2_MOVE+1
+      end
+
+      f_add_to_ui_stack(g_grid_battle_select)
+    end)
+  end
+
+  p_first = p_1
+  p_last  = p_2
+
+  f_addaction(p_1, L_PICK, p_1, "begins turn", x, true)
+  if not p_2.iscpu then
+    f_addaction(p_2, L_PICK, p_2, "begins turn", x, true)
+  end
+end $$
+
 |[f_start_battle]| function(p1name, p1winfunc, ...)
   p_1, p_2 = f_create_player(f_team_party(@S_TEAM1), p1name, "team"..(@S_TEAM1+1)), f_create_player(...)
   g_p1_winfunc = p1winfunc
+  g_action_level = 1
 
   f_set_pself(p_1)
 
   -- TODO: use a memcpy here
-  poke(S_P1_BATACTION, 0)
-  poke(S_P1_MOVE, 0)
-  poke(S_P1_STAT, 0)
-  poke(S_P1_BATACTION+1, 0)
-  poke(S_P1_MOVE+1, 0)
-  poke(S_P1_STAT+1, 0)
-  poke(S_P2_BATACTION, 0)
-  poke(S_P2_MOVE, 0)
-  poke(S_P2_STAT, 0)
-  poke(S_P2_BATACTION+1, 0)
-  poke(S_P2_MOVE+1, 0)
-  poke(S_P2_STAT+1, 0)
+  poke2(S_P1_BATACTION, 0)
+  poke2(S_P1_MOVE, 0)
+  poke2(S_P1_STAT, 0)
+  poke2(S_P2_BATACTION, 0)
+  poke2(S_P2_MOVE, 0)
+  poke2(S_P2_STAT, 0)
 
-  f_add_to_ui_stack(g_grid_battle_turnbeg)
+  f_start_turn()
+  f_add_to_ui_stack(g_grid_battle_actions)
 end $$

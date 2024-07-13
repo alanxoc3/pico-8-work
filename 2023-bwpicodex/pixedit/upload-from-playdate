@@ -1,5 +1,5 @@
 # mount command
-# sudo mount -o uid=$USER,gid=$USER /dev/sdd1 /mnt
+# DRIVE=/dev/sda1; sudo mount -o uid=$USER,gid=$USER $DRIVE /mnt; cp /mnt/Data/picodex-edit/*.p8 ../; sync; umount $DRIVE
 
 # files:
 # ~/.playdate/Disk/Data/picodex-edit/images/

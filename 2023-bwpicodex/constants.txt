@@ -46,6 +46,19 @@ MODE_EDIT:   1
 MODE_BENCH:  2
 MODE_ACTIVE: 3
 
+# -------------- Battle levels. These determine timing in a battle
+L_PICK:        1
+L_ATTACK:      2
+L_FUTURESIGHT: 3
+L_WEATHER:     4
+L_PERISHSONG:  5
+L_LEFTOVERS:   6
+L_DEFROST:     7
+L_REFLECT:     8
+L_BERRY:       9
+L_ENCORE:      10
+L_END:         10
+
 # ----------------------------- load memory locations
 L_DATASTART: 0x1fff # data starts one byte before because the code increments first
 

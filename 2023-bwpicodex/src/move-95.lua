@@ -35,22 +35,22 @@ end $$
 end $$
 
 |[f_move_multihit_set]| function(_ENV, hitcount, isresume)
-  if hitcount > 0 then
-    a_addaction(p_selfturn, isresume and "resumes "..name, function()
-      p_selfturn.active.numtimes += 1
-      f_moveutil_dmgother(_ENV, function()
-        f_move_multihit_set(_ENV, hitcount-1, true)
-      end)
-    end)
-  end
+  -- if hitcount > 0 then
+  --   a_addaction(p_selfturn, isresume and "resumes "..name, function()
+  --     p_selfturn.active.numtimes += 1
+  --     f_moveutil_dmgother(_ENV, function()
+  --       f_move_multihit_set(_ENV, hitcount-1, true)
+  --     end)
+  --   end)
+  -- end
 end $$
 
 |[f_move_barrage]| function(_ENV)
-  f_move_multihit_set(_ENV, 2+f_flr_rnd'4')
+  -- f_move_multihit_set(_ENV, 2+f_flr_rnd'4')
 end $$
 
 |[f_move_doublekick]| function(_ENV)
-  f_move_multihit_set(_ENV, spec)
+  -- f_move_multihit_set(_ENV, spec)
 end $$
 
 |[f_move_flail]| function(_ENV)
