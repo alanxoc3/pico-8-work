@@ -59,7 +59,7 @@ end $$
 
 |[f_moveutil_dmgself]| function(dmg)
   -- TODO: some logic could go here, like focus band or endure (can protect against self-inflicted damage)
-  return f_moveutil_hpchange(a_turnself, dmg)
+  return f_moveutil_hpchange(p_selfturn, dmg)
 end $$
 
 -- all opponent dmg goes through here. based on code from OG picodex.
@@ -121,7 +121,6 @@ end $$
 end $$
 
 |[f_moveutil_typeadv]| function(move, defender)
-  printh("PKTY: "..move.pktype)
   db(c_types[move.pktype])
   return (c_types[move.pktype][defender.pktype1] or 1)*(c_types[move.pktype][defender.pktype2] or 1)
 end $$

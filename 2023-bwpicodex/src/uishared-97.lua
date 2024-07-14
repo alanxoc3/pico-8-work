@@ -129,6 +129,8 @@ end $$
 |[f_add_battle]| function(op)
   local b = function(_ENV, team, x, y, px, py, flip)
     local is_notactive = p_selfaction.active ~= _ENV
+    -- TODO: shouldn't be 254. Should be the player's sprites. I can probably fit a few player sprites: plrboy, plrgirl, cpu, horde
+    f_draw_pkmn(invisible and 254 or num, px, py,  16, flip,  false, false, is_notactive, false)
     if invisible then return end
     --f_roundrect(x+1, y+1-6+1, x+34-1, y+6+6+1, C_2)
     if hp > 0 then
@@ -151,7 +153,6 @@ end $$
 
     print(name,   x+2,   y-5+1+1+1-2, C_1, -1)
     print(c_major_names_short[major].."  "..f_prefix_zero(hp, 3), x+1+1, y+8-1+1-1-1+1,   C_1, -1)
-    f_draw_pkmn(num, px, py,  16, flip,  false, false, is_notactive, false)
   end
 
   -- add(op, {draw=function()

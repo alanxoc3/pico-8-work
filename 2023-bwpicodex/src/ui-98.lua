@@ -282,7 +282,7 @@ end $$
     add(pkstr_arr, sub(c_pkmn_names[pkmn.num], 1, pkstr_lens[ii+1]))
   end
 
-  f_print_top("edit team", f_getsel'g_grid_pickedit'+1) -- TODO: fixme
+  f_print_top("edit ", c_team_names[f_getsel'g_grid_pickedit']) -- TODO: fixme
   f_print_bot(pkstr_arr[1], "-", pkstr_arr[2], "-", pkstr_arr[3], "-", pkstr_arr[4], "-", pkstr_arr[5], pkstr_arr[6])
 end $$
 
@@ -312,15 +312,15 @@ end $$
   local name = c_trnr_names[f_getsel'g_grid_picktrnr'+1]
   name = disabled and f_strtoq(name) or name
 
-  f_print_top(toggle and "\f3" or "\f1", "playr team", f_getsel'g_grid_pickleag'+1)
+  f_print_top(toggle and "\f3" or "\f1", "playr ", c_team_names[f_getsel'g_grid_pickleag'])
   f_print_bot(toggle and "\f1" or "\f3", "enemy ", name)
 end $$
 
 |[f_dt_versus]| function()
   local toggle = g_cg_m.name == 'g_grid_pickplr1'
 
-  f_print_top(toggle and "\f3" or "\f1", "plyr1 team", f_getsel'g_grid_pickplr1'+1)
-  f_print_bot(toggle and "\f1" or "\f3", "plyr2 team", f_getsel'g_grid_pickplr2'+1)
+  f_print_top(toggle and "\f3" or "\f1", "playr ", c_team_names[f_getsel'g_grid_pickplr1'])
+  f_print_bot(toggle and "\f1" or "\f3", "enemy ", c_team_names[f_getsel'g_grid_pickplr2'])
 end $$
 
 |[f_dt_title]| function()
@@ -398,7 +398,7 @@ end $$
 end $$
 
 |[f_s_versusbegin]| function()
-  f_start_battle("plyr1", f_nop, f_team_party(f_getsel'g_grid_pickplr2'),    "plyr2", "team"..(f_getsel'g_grid_pickplr2'+1))
+  f_start_battle("plyr1", f_nop, f_team_party(f_getsel'g_grid_pickplr2'),    "enemy", c_team_names[f_getsel'g_grid_pickplr2'])
 end $$
 
 |[f_s_batbegin]|    function()
@@ -505,7 +505,7 @@ end $$
 end $$
 
 |[f_op_bataction]| function(_ENV)
-  if not g_msg_bot then end -- TODO: is this needed?
+  if not g_msg_bot then end -- TODO: is this needed? I'm guessing not... experiment removing it!
   add(preview_op, {draw=function()
     f_print_top(g_msg_top)
     f_print_bot(g_msg_bot)
@@ -545,7 +545,6 @@ end $$
         return
       end
     else
-      printh("aoh no")
       f_set_pself(p_1)
       f_start_turn()
     end
@@ -599,7 +598,7 @@ f_zcall(f_create_gridpair, [[
   ;;,g_grid_battle_stats   ,S_DEFAULT      ,~top_editteam  ,~bot_info      ,~f_dt_batstats   ,~f_op_batstats    ,~f_s_batstat      ,~f_l_browse      ,~c_no
 
   ;;,g_grid_battle_results ,S_DEFAULT      ,~top_results   ,~bot_info      ,~f_nop           ,~f_op_batresults  ,~f_s_batresults   ,~f_l_browse      ,~c_no
-  ;;,g_grid_battle_actions ,S_DEFAULT      ,~top_battle2   ,~bot_info      ,~f_nop           ,~f_op_bataction   ,~f_s_bataction    ,~f_l_bataction   ,~c_no
+  ;;,g_grid_battle_actions ,S_DEFAULT      ,~top_battle2   ,~bot_info      ,~f_nop           ,~f_op_bataction   ,~f_s_bataction    ,~f_l_battle      ,~c_no
 ]])
 
 f_add_to_ui_stack(g_grid_title)

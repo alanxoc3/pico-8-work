@@ -22,9 +22,35 @@
 
 |[f_create_active]| function(team, ind)
   return f_zobj_setmeta(team[ind], [[
+    isactive,     ~c_yes, -- used for a drawing function, should draw fainted pokemon if they are not active, but not if they are active.
+    lastmoverecv, 0,      -- last move targeted at user, for mirrormove
+    moveturn,     0,      -- turn move is on. > 0, decrements each turn. 0, is the same. -1, is multiturn move that doesn't end (rage).
+    invisible,    ~c_yes,
+
+    -- conditions are all numbers ...
+    counterdmg,    0, -- resets to zero each turn
+    bidedmg,       0, -- resets to zero when using bide
+    disabledtimer, 0, -- how long the disabled move should last
+    confused,      0, -- for confusion, how long pkmn is confused
+    sleeping,      @, -- for sleeping, how long pkmn is sleeping. must start at non-zero in case a pokemon is switched in
+    substitute,    0, -- for substitute obviously
+    toxiced,       0, -- how bad the toxic is
+
+    -- curmove -- used for multiturn moves, if moveturn ~= 0, this must be set
     spot,@,
-    base,@
-  ]], ind, team[ind])
+    base,@;
+
+    stages;
+      attack,         0,
+      defense,        0,
+      specialattack,  0,
+      specialdefense, 0,
+      speed,          0,
+      crit,           0, -- TODO: rename crit
+      evasion,        0,
+      accuracy,       0; -- TODO: delete the semicolon
+  ]], f_flr_rnd'7'+1, ind, team[ind])
+  -- ^^ hard-coding sleep timer here
 end $$
 
 |[f_create_player]| function(team, name, subname, iscpu)
@@ -95,15 +121,15 @@ end $$
 -- player cannot be nil, others can. the player turn is passed and the current active is extracted.
 -- the current active is needed because if it dies, we want to skip over actions
 -- if message is false/nil, the logic function is executed immediately, then the next action is executed
-|[f_newaction]| function(player, message, logic, isplayeraction)
+|[f_newaction]| function(level, player, message, logic, isplayeraction)
   -- TODO: why does the "message or false" line need an "or false"?
-  return f_zobj([[player,@, message,@, logic,@, isplayeraction,@]], player, message or false, logic or f_nop, isplayeraction)
+  return f_zobj([[level,@, player,@, message,@, logic,@, isplayeraction,@]], level, player, message or false, logic or f_nop, isplayeraction)
 end $$
 
 -- adds an action to a player's action list
-|[f_addaction]| function(player, level, ...)
+|[f_addaction]| function(player, ...)
   -- TODO: can this be token crunched?
-  add(player.actions, f_zobj_set(f_newaction(...), [[level,@]], level)) -- TODO: try adding at "1" location
+  add(player.actions, f_newaction(...)) -- TODO: try adding at "1" location
 end $$
 
 |[f_pkmn_comes_out]| function(player, spot) -- assumes that the pkmn coming is not nil.
@@ -112,42 +138,13 @@ end $$
   -- need to copy each move just for mimic to work when switching
 
   -- TODO: i should combine this with f_mkpkmn. so all pkmn stuff is just in 1 place.
-  player.active = f_zobj_setmeta(pkmn, [[
-    isactive,     ~c_yes, -- used for a drawing function, should draw fainted pokemon if they are not active, but not if they are active.
-    lastmoverecv, 0,      -- last move targeted at user, for mirrormove
-    moveturn,     0,      -- turn move is on. > 0, decrements each turn. 0, is the same. -1, is multiturn move that doesn't end (rage).
-    invisible,    ~c_yes,
-
-    -- conditions are all numbers ...
-    counterdmg,    0, -- resets to zero each turn
-    bidedmg,       0, -- resets to zero when using bide
-    disabledtimer, 0, -- how long the disabled move should last
-    confused,      0, -- for confusion, how long pkmn is confused
-    sleeping,      @, -- for sleeping, how long pkmn is sleeping. must start at non-zero in case a pokemon is switched in
-    substitute,    0, -- for substitute obviously
-    toxiced,       0, -- how bad the toxic is
-
-    -- curmove -- used for multiturn moves, if moveturn ~= 0, this must be set
-    spot,@,
-    base,@;
-
-    stages;
-      attack,         0,
-      defense,        0,
-      specialattack,  0,
-      specialdefense, 0,
-      speed,          0,
-      crit,           0, -- TODO: rename crit
-      evasion,        0,
-      accuracy,       0; -- TODO: delete the semicolon
-  ]], f_flr_rnd'7'+1, spot, pkmn)
-  -- ^^ hard-coding sleep timer here
+  player.active = f_create_active(player.team, spot)
 
   for i=1,4 do
     player.active[i] = pkmn[i]
   end
 
-  return f_newaction(player, "sends "..player.active.name, function()
+  return f_newaction(L_ATTACK, player, "sends "..player.active.name, function()
     player.active.invisible = false
     return player.active.num
   end, true)
@@ -166,24 +163,23 @@ end $$
   -- switch if there is a next pokemon
   -- otherwise, do nothing. turn logic will check every turn if there is a win condition
   for player in all{p_first,p_last} do -- TODO: try _ENV syntax here?
-    if player.active.major == C_MAJOR_FAINTED then
-      if not player.active.invisible then
-        -- delete all instances of the current player from the attack phase. this prevents moves from glitching or end of attack stuff from being applied (eg: poison)
-        for np in all{p_first, p_last} do
-          for action in all(np.actions) do
-            if action.level == L_ATTACK and del({p_first, p_last}, action.player) then -- Using del is a hack to save on tokens
-              del(np.actions, action)
-            end
+    if player.active.major == C_MAJOR_FAINTED and not player.active.invisible then
+      -- delete all instances of the current player from the attack phase. this prevents moves from glitching or end of attack stuff from being applied (eg: poison)
+      for np in all{p_first, p_last} do
+        for action in all(np.actions) do
+          if action.level == L_ATTACK and del({p_first, p_last}, action.player) then -- Using del is a hack to save on tokens
+            del(np.actions, action)
           end
         end
-
-        return player, f_newaction(player, "backs "..player.active.name, function()
-          player.active.invisible = true
-          f_fill_team(player.team, player.active.spot) -- this is for horde mode, the team will be refilled once the pokemon has fainted.
-        end, true)
-      else
-        return player, f_pkmn_comes_out(player, f_get_next_active(player)) -- TODO: is there a nil issue here?
       end
+
+      -- Actually, it doesn't matter what the Level is here since it is returned. Just saying L_PICK, why not. TODO: maybe i can have L_PICK and not have a return? Maybe that's a bad idea. thank about it tho!
+      return player, f_newaction(L_PICK, player, "backs "..player.active.name, function()
+        player.active.invisible = true
+        f_fill_team(player.team, player.active.spot) -- this is for horde mode, the team will be refilled once the pokemon has fainted.
+      end, true)
+    elseif player.active.invisible then
+      return player, f_pkmn_comes_out(player, f_get_next_active(player)) -- TODO: is there a nil issue here?
     end
   end
 
@@ -219,6 +215,7 @@ end $$
   -- speed can technically affect a switch/pursuit, but doesn't actually matter in that case.
   -- the og picodex had a min(C_PRIORITY_SWITCH, ...) here.
   player.priority = priority_class+f_stat_calc(player.active, 'speed', true)
+  printh("prior: "..player.name)
 end $$
 
 |[f_movelogic]| function(player)
@@ -274,6 +271,7 @@ end $$
   -- if priorities are equal, then coin flip!
   if p_1.priority == p_2.priority then p_2.priority += sgn(rnd'2'-1) end
   p_first = p_1.priority > p_2.priority and p_1 or p_2
+  printh("first is: "..p_first.name)
   p_last  = f_get_other_pl(p_first)
 
   f_s_bataction()
@@ -301,7 +299,9 @@ end $$
 
 |[f_start_turn]| function()
   local x = function()
-    f_addaction(p_selfturn, L_PICK, p_selfturn, false, function()
+    -- umm, this may be a hack. i have "begins turn" again here, so the text doesn't change.
+    f_addaction(p_selfaction, L_PICK, p_selfaction, "begins turn", function()
+      printh("IDEK")
       f_pop_ui_stack()
 
       -- this is a quality of life thing. when switching and spamming x, i never wanted to switch 2 times in a row. most commonly you just want to fight right after.
@@ -324,20 +324,23 @@ end $$
       end
 
       f_add_to_ui_stack(g_grid_battle_select)
-    end)
+    end, true)
   end
 
   p_first = p_1
   p_last  = p_2
 
   f_addaction(p_1, L_PICK, p_1, "begins turn", x, true)
-  if not p_2.iscpu then
-    f_addaction(p_2, L_PICK, p_2, "begins turn", x, true)
-  end
+  f_addaction(p_2, L_PICK, p_2, not p_2.iscpu and "begins turn", function()
+    if p_2.iscpu then
+    else
+      x()
+    end
+  end, true)
 end $$
 
 |[f_start_battle]| function(p1name, p1winfunc, ...)
-  p_1, p_2 = f_create_player(f_team_party(@S_TEAM1), p1name, "team"..(@S_TEAM1+1)), f_create_player(...)
+  p_1, p_2 = f_create_player(f_team_party(@S_TEAM1), p1name, c_team_names[@S_TEAM1]), f_create_player(...)
   g_p1_winfunc = p1winfunc
   g_action_level = 1
 
@@ -351,6 +354,8 @@ end $$
   poke2(S_P2_MOVE, 0)
   poke2(S_P2_STAT, 0)
 
-  f_start_turn()
+  -- f_start_turn()
   f_add_to_ui_stack(g_grid_battle_actions)
+
+  f_s_bataction() -- call once, because need to pop the first action!
 end $$
