@@ -264,85 +264,80 @@ end $$
   end)
 end $$
 
-|[f_turn_end_p2]| function()
-  f_set_player_priority(p_1)
-  f_set_player_priority(p_2)
-
-  -- if priorities are equal, then coin flip!
-  if p_1.priority == p_2.priority then p_2.priority += sgn(rnd'2'-1) end
-  p_first = p_1.priority > p_2.priority and p_1 or p_2
-  printh("first is: "..p_first.name)
-  p_last  = f_get_other_pl(p_first)
-
-  f_s_bataction()
-end $$
-
-|[f_turn_end_p1]| function()
-  f_set_pself(p_2)
-  if p_2.iscpu then
-    local possible_moves = {}
-    for i=1,4 do
-      if p_2.active[i].num < M_NONE and p_2.active[i].pp > 0 then
-        add(possible_moves, i)
-      end
-    end
-    if #possible_moves > 0 then
-      p_2.nextmove = p_2.active[f_flr_rnd(#possible_moves)+1]
-    else
-      p_2.nextmove = c_moves[M_STRUGGLE]
-    end
-    f_movelogic(p_2)
-
-    f_turn_end_p2()
-  end
-end $$
-
 |[f_start_turn]| function()
   local x = function()
-    -- umm, this may be a hack. i have "begins turn" again here, so the text doesn't change.
-    f_addaction(p_selfaction, L_PICK, p_selfaction, "begins turn", function()
-      printh("IDEK")
-      f_pop_ui_stack()
-
-      -- this is a quality of life thing. when switching and spamming x, i never wanted to switch 2 times in a row. most commonly you just want to fight right after.
-      f_setsel('g_grid_battle_select', 0)
-
-      if p_selfaction == p_1 then
-        g_grid_battle_select.g_cg_m.sel   = S_P1_BATACTION
-        g_grid_statbattle.g_cg_m.sel      = S_P1_STAT
-        g_grid_battle_movesel.g_cg_m.sel  = S_P1_MOVE
-        g_grid_battle_select.g_cg_m.view  = S_P1_BATACTION+1
-        g_grid_statbattle.g_cg_m.view     = S_P1_STAT+1
-        g_grid_battle_movesel.g_cg_m.view = S_P1_MOVE+1
-      else
-        g_grid_battle_select.g_cg_m.sel   = S_P2_BATACTION
-        g_grid_statbattle.g_cg_m.sel      = S_P2_STAT
-        g_grid_battle_movesel.g_cg_m.sel  = S_P2_MOVE
-        g_grid_battle_select.g_cg_m.view  = S_P2_BATACTION+1
-        g_grid_statbattle.g_cg_m.view     = S_P2_STAT+1
-        g_grid_battle_movesel.g_cg_m.view = S_P2_MOVE+1
+    if p_selfaction.iscpu then
+      local possible_moves = {}
+      for i=1,4 do
+        if p_selfaction.active[i].num < M_NONE and p_selfaction.active[i].pp > 0 then
+          add(possible_moves, i)
+        end
       end
+      if #possible_moves > 0 then
+        p_selfaction.nextmove = p_selfaction.active[f_flr_rnd(#possible_moves)+1]
+      else
+        p_selfaction.nextmove = c_moves[M_STRUGGLE]
+      end
+      f_movelogic(p_selfaction)
+    else
+      -- umm, this may be a hack. i have "begins turn" again here, so the text doesn't change, but this action is immediately replaced by an action selection screen.
+      f_addaction(p_selfaction, L_PICK, p_selfaction, "begins turn", function()
+        printh("IDEK")
+        f_pop_ui_stack()
 
-      f_add_to_ui_stack(g_grid_battle_select)
-    end, true)
+        -- this is a quality of life thing. when switching and spamming x, i never wanted to switch 2 times in a row. most commonly you just want to fight right after.
+        f_setsel('g_grid_battle_select', 0)
+
+        if p_selfaction == p_1 then
+          g_grid_battle_select.g_cg_m.sel   = S_P1_BATACTION
+          g_grid_statbattle.g_cg_m.sel      = S_P1_STAT
+          g_grid_battle_movesel.g_cg_m.sel  = S_P1_MOVE
+          g_grid_battle_select.g_cg_m.view  = S_P1_BATACTION+1
+          g_grid_statbattle.g_cg_m.view     = S_P1_STAT+1
+          g_grid_battle_movesel.g_cg_m.view = S_P1_MOVE+1
+        else
+          g_grid_battle_select.g_cg_m.sel   = S_P2_BATACTION
+          g_grid_statbattle.g_cg_m.sel      = S_P2_STAT
+          g_grid_battle_movesel.g_cg_m.sel  = S_P2_MOVE
+          g_grid_battle_select.g_cg_m.view  = S_P2_BATACTION+1
+          g_grid_statbattle.g_cg_m.view     = S_P2_STAT+1
+          g_grid_battle_movesel.g_cg_m.view = S_P2_MOVE+1
+        end
+
+        f_add_to_ui_stack(g_grid_battle_select)
+      end, true)
+    end
   end
 
   p_first = p_1
   p_last  = p_2
 
-  f_addaction(p_1, L_PICK, p_1, "begins turn", x, true)
-  f_addaction(p_2, L_PICK, p_2, not p_2.iscpu and "begins turn", function()
-    if p_2.iscpu then
-    else
-      x()
-    end
-  end, true)
+  f_addaction(p_1, L_PICK, p_1, not p_1.iscpu and "begins turn", x, true)
+  f_addaction(p_2, L_PICK, p_2, not p_2.iscpu and "begins turn", x, true)
+
+  -- calculate priorities
+  f_addaction(p_1, L_PICK, p_1, false, function()
+    f_set_player_priority(p_1)
+    f_set_player_priority(p_2)
+
+    -- if priorities are equal, then coin flip!
+    if p_1.priority == p_2.priority then p_2.priority += sgn(rnd'2'-1) end
+    p_first = p_1.priority > p_2.priority and p_1 or p_2
+    printh("first is: "..p_first.name)
+    p_last  = f_get_other_pl(p_first)
+
+    -- f_s_bataction()
+  end)
 end $$
 
 |[f_start_battle]| function(p1name, p1winfunc, ...)
   p_1, p_2 = f_create_player(f_team_party(@S_TEAM1), p1name, c_team_names[@S_TEAM1]), f_create_player(...)
+  p_first, p_last = p_1, p_2
   g_p1_winfunc = p1winfunc
+  p_curaction = nil -- TODO: could i remove this? Maybe?
   g_action_level = 1
+  db(p_1.actions)
+  db(p_2.actions)
 
   f_set_pself(p_1)
 

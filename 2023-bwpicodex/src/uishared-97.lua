@@ -128,43 +128,35 @@ end $$
 
 |[f_add_battle]| function(op)
   local b = function(_ENV, team, x, y, px, py, flip)
-    local is_notactive = p_selfaction.active ~= _ENV
-    -- TODO: shouldn't be 254. Should be the player's sprites. I can probably fit a few player sprites: plrboy, plrgirl, cpu, horde
-    f_draw_pkmn(invisible and 254 or num, px, py,  16, flip,  false, false, is_notactive, false)
-    if invisible then return end
-    --f_roundrect(x+1, y+1-6+1, x+34-1, y+6+6+1, C_2)
-    if hp > 0 then
-      rectfill(x+1, y+2, x+1+mid(0, hp/maxhp*32, 32), y+5, C_1)
-      pset(x+1,  y+2, C_2)
-      pset(x+1,  y+5, C_2)
-      pset(x+33, y+2, C_2)
-      pset(x+33, y+5, C_2)
-    end
-
-    local tx, ty = x+15, y+9
-    for i=0,5 do
-      if spot == i+1 or team[i+1].valid and team[i+1].major ~= C_MAJOR_FAINTED then
-        pset(tx+i%3*2, ty+i\3*2-1+1-1-1+1, spot == i+1 and C_3 or C_1 )
+    add(op, {draw=function()
+      local is_notactive = p_selfaction.active ~= _ENV
+      -- TODO: shouldn't be 254. Should be the player's sprites. I can probably fit a few player sprites: plrboy, plrgirl, cpu, horde
+      f_draw_pkmn(invisible and 254 or num, px, py,  16, flip,  false, false, is_notactive, not is_notactive)
+      if invisible then return end
+      --f_roundrect(x+1, y+1-6+1, x+34-1, y+6+6+1, C_2)
+      if hp > 0 then
+        rectfill(x+1, y+2, x+1+mid(0, hp/maxhp*32, 32), y+5, C_1)
+        pset(x+1,  y+2, C_2)
+        pset(x+1,  y+5, C_2)
+        pset(x+33, y+2, C_2)
+        pset(x+33, y+5, C_2)
       end
 
-      if i ~= 1 then
-      end
-    end
+      local tx, ty = x+15, y+9
+      for i=0,5 do
+        if spot == i+1 or team[i+1].valid and team[i+1].major ~= C_MAJOR_FAINTED then
+          pset(tx+i%3*2, ty+i\6-1, spot == i+1 and C_3 or C_1 )
+        end
 
-    print(name,   x+2,   y-5+1+1+1-2, C_1, -1)
-    print(c_major_names_short[major].."  "..f_prefix_zero(hp, 3), x+1+1, y+8-1+1-1-1+1,   C_1, -1)
+        if i ~= 1 then
+        end
+      end
+
+      print(name, x+2, y-4, C_1, -1)
+      print(c_major_names_short[major].."  "..f_prefix_zero(hp, 3), x+1+1, y+8-1, C_1, -1)
+    end})
   end
 
-  -- add(op, {draw=function()
-  --   b(p_2.active, p_2.team,  -1+1,   4-1+2,       39-4+2+1,  1, true) -- top pl
-  --   b(p_1.active, p_1.team, 23+1-1, 4+20+2+1-1-1,  3+4-2-1, 1-4+20+1+1+1) -- bot pl
-  -- end})
-  add(op, {draw=function()
-    b(p_2.active, p_2.team,  -1+1,   4-1+2,       39-4+2+1,  1, true) -- top pl
-  end})
-
-  add(op, {draw=function()
-    b(p_1.active, p_1.team, 23+1-1, 4-1+2,  3+4-2-1, 1) -- bot pl
-  end})
+  b(p_2.active, p_2.team,  1, 5, 39, 1, true) -- top pl
+  b(p_1.active, p_1.team, 22, 5,  3, 1)       -- bot pl
 end $$
-

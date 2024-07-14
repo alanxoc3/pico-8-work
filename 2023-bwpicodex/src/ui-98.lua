@@ -455,13 +455,7 @@ end $$
   f_pop_ui_stack()
   f_pop_ui_stack()
 
-  f_add_to_ui_stack(g_grid_battle_actions, function()
-    if p_selfaction == p_1 then
-      f_turn_end_p1()
-    else
-      f_turn_end_p2()
-    end
-  end)
+  f_add_to_ui_stack(g_grid_battle_actions, f_s_bataction) -- TODO: add init select func?
 end $$
 
 |[f_s_dmovsel]| function()
@@ -471,13 +465,7 @@ end $$
   f_pop_ui_stack()
   f_pop_ui_stack()
 
-  f_add_to_ui_stack(g_grid_battle_actions, function()
-    if p_selfaction == p_1 then
-      f_turn_end_p1()
-    else
-      f_turn_end_p2()
-    end
-  end)
+  f_add_to_ui_stack(g_grid_battle_actions, f_s_bataction)
 end $$
 
 -- TODO: fix ui bug where state changes a frame early. Probably by putting a callback in pop ui stack?
@@ -495,13 +483,7 @@ end $$
   f_pop_ui_stack()
   f_pop_ui_stack()
 
-  f_add_to_ui_stack(g_grid_battle_actions, function()
-    if p_selfaction == p_1 then
-      f_turn_end_p1()
-    else
-      f_turn_end_p2()
-    end
-  end)
+  f_add_to_ui_stack(g_grid_battle_actions, f_s_bataction) -- todo: add init? select func
 end $$
 
 |[f_op_bataction]| function(_ENV)
@@ -525,7 +507,7 @@ end $$
     end
 
     p_selfturn, p_curaction = f_pop_next_action()
-    if p_curaction then
+    if p_curaction then -- if there is a next action
       f_set_pself(p_curaction.player)
       a_self_active, a_other_active = p_selfaction.active, p_otheraction.active
 
@@ -533,6 +515,7 @@ end $$
       a_addaction = function(...) f_addaction(p_selfturn, L_ATTACK, ...) end
       p_otherturn = f_get_other_pl(p_selfturn)
       p_curaction.logic()
+      printh("Running some logic")
 
       -- an empty message means we execute the logic, but look for another p_curaction
       if p_curaction.message then
@@ -544,7 +527,7 @@ end $$
         g_msg_bot = p_curaction.message
         return
       end
-    else
+    else -- if there is no next action, that means we are at the end of the turn.
       f_set_pself(p_1)
       f_start_turn()
     end
@@ -569,36 +552,36 @@ f_zcall(f_create_gridpair, [[
   ;bot_info      ;,1 ,1 ,2 ,45 ,60 ,16 ,1   ,1
   ;top_newstat   ;,1 ,6 ,2 ,4  ,60 ,9  ,1   ,1
 
-  --,name                  ,savespot       ,maingridspec   ,infogridspec   ,infogriddraw     ,main opfunc       ,select func       ,leave func       ,lrbasegrid        ,opfunc params
-  ;;,g_grid_title          ,S_TITLE        ,~bot_4x4       ,~top_title     ,~f_dt_title      ,~f_op_title       ,~f_s_title        ,~f_l_title       ,~c_no
+  --,name                  ,savespot       ,maingridspec   ,infogridspec   ,infogriddraw     ,main opfunc       ,select func       ,leave func       ,lrbasegrid          ,static ,opfunc params
+  ;;,g_grid_title          ,S_TITLE        ,~bot_4x4       ,~top_title     ,~f_dt_title      ,~f_op_title       ,~f_s_title        ,~f_l_title       ,~c_no               ,~c_no
 
-  ;;,g_grid_browse         ,S_BROWSE       ,~top_browse    ,~bot_info      ,~f_dt_browse     ,~f_op_browse      ,~f_s_browse       ,~f_l_browse      ,~c_no             ,~c_no
-  ;;,g_grid_editpkmn       ,S_BROWSE       ,~top_browse    ,~bot_info      ,~f_dt_editpkmn   ,~f_op_browse      ,~f_s_editpkmn     ,~f_l_browse      ,~c_no             ,~c_no
+  ;;,g_grid_browse         ,S_BROWSE       ,~top_browse    ,~bot_info      ,~f_dt_browse     ,~f_op_browse      ,~f_s_browse       ,~f_l_browse      ,~c_no               ,~c_no  ,~c_no
+  ;;,g_grid_editpkmn       ,S_BROWSE       ,~top_browse    ,~bot_info      ,~f_dt_editpkmn   ,~f_op_browse      ,~f_s_editpkmn     ,~f_l_browse      ,~c_no               ,~c_no  ,~c_no
 
-  ;;,g_grid_statbrowse     ,S_STAT         ,~top_pkstat    ,~bot_info      ,~f_dt_browse     ,~f_op_statbrowse  ,~f_s_pkstat       ,~f_l_browse      ,g_grid_browse
+  ;;,g_grid_statbrowse     ,S_STAT         ,~top_pkstat    ,~bot_info      ,~f_dt_browse     ,~f_op_statbrowse  ,~f_s_pkstat       ,~f_l_browse      ,g_grid_browse       ,~c_no
 
-  ;;,g_grid_editstat       ,S_EDITSEL      ,~bot_4x4       ,~top_pkstat    ,~f_nop           ,~f_op_editstat    ,~f_s_editstat     ,~f_l_browse      ,~c_no
-  ;;,g_grid_editmovebot    ,S_EDITMOVE     ,~bot_4x4       ,~top_pkstat    ,~f_nop           ,~f_op_editmovebot ,~f_s_editmovebot  ,~f_l_browse      ,~c_no
-  ;;,g_grid_editmove       ,S_DEFAULT      ,~top_text_grid ,~bot_info      ,~f_dt_editmove   ,~f_op_editmove    ,~f_s_editmove     ,~f_l_browse      ,~c_no
-  ;;,g_grid_edititem       ,S_DEFAULT      ,~top_text_grid ,~bot_info      ,~f_dt_editstat   ,~f_op_edititem    ,~f_s_edititem     ,~f_l_browse      ,~c_no
+  ;;,g_grid_editstat       ,S_EDITSEL      ,~bot_4x4       ,~top_pkstat    ,~f_nop           ,~f_op_editstat    ,~f_s_editstat     ,~f_l_browse      ,~c_no               ,~c_no
+  ;;,g_grid_editmovebot    ,S_EDITMOVE     ,~bot_4x4       ,~top_pkstat    ,~f_nop           ,~f_op_editmovebot ,~f_s_editmovebot  ,~f_l_browse      ,~c_no               ,~c_no
+  ;;,g_grid_editmove       ,S_DEFAULT      ,~top_text_grid ,~bot_info      ,~f_dt_editmove   ,~f_op_editmove    ,~f_s_editmove     ,~f_l_browse      ,~c_no               ,~c_no
+  ;;,g_grid_edititem       ,S_DEFAULT      ,~top_text_grid ,~bot_info      ,~f_dt_editstat   ,~f_op_edititem    ,~f_s_edititem     ,~f_l_browse      ,~c_no               ,~c_no
 
-  ;;,g_grid_pickedit       ,S_TEAM1        ,~top_edit      ,~bot_info      ,~f_dt_edit       ,~f_op_edit        ,~f_s_edit         ,~f_l_browse      ,~c_no
-  ;;,g_grid_pickleag       ,S_TEAM1        ,~top_edit      ,~bot_info      ,~f_dt_league     ,~f_op_edit        ,~f_s_league       ,~f_l_browse      ,~c_no             ,~c_yes
-  ;;,g_grid_pickplr1       ,S_TEAM1        ,~top_edit      ,~bot_info      ,~f_dt_versus     ,~f_op_edit        ,~f_s_versus       ,~f_l_browse      ,~c_no             ,~c_yes
-  ;;,g_grid_pickplr2       ,S_TEAM2        ,~top_edit      ,~bot_info      ,~f_dt_versus     ,~f_op_edit        ,~f_s_versusbegin  ,~f_l_browse      ,~c_no             ,~c_yes
-  ;;,g_grid_pickspot       ,S_EDITPKMN     ,~top_editteam  ,~bot_info      ,~f_dt_editteam   ,~f_op_editteam    ,~f_s_editteam     ,~f_l_browse      ,~c_no
-  ;;,g_grid_picktrnr       ,S_LEAGUE       ,~top_text_grid ,~bot_info      ,~f_dt_league     ,~f_op_teams       ,~f_s_batbegin     ,~f_l_browse      ,~c_no
+  ;;,g_grid_pickedit       ,S_TEAM1        ,~top_edit      ,~bot_info      ,~f_dt_edit       ,~f_op_edit        ,~f_s_edit         ,~f_l_browse      ,~c_no               ,~c_no
+  ;;,g_grid_pickleag       ,S_TEAM1        ,~top_edit      ,~bot_info      ,~f_dt_league     ,~f_op_edit        ,~f_s_league       ,~f_l_browse      ,~c_no               ,~c_no  ,~c_yes
+  ;;,g_grid_pickplr1       ,S_TEAM1        ,~top_edit      ,~bot_info      ,~f_dt_versus     ,~f_op_edit        ,~f_s_versus       ,~f_l_browse      ,~c_no               ,~c_no  ,~c_yes
+  ;;,g_grid_pickplr2       ,S_TEAM2        ,~top_edit      ,~bot_info      ,~f_dt_versus     ,~f_op_edit        ,~f_s_versusbegin  ,~f_l_browse      ,~c_no               ,~c_no  ,~c_yes
+  ;;,g_grid_pickspot       ,S_EDITPKMN     ,~top_editteam  ,~bot_info      ,~f_dt_editteam   ,~f_op_editteam    ,~f_s_editteam     ,~f_l_browse      ,~c_no               ,~c_no
+  ;;,g_grid_picktrnr       ,S_LEAGUE       ,~top_text_grid ,~bot_info      ,~f_dt_league     ,~f_op_teams       ,~f_s_batbegin     ,~f_l_browse      ,~c_no               ,~c_no
 
   -- Battle UI
-  ;;,g_grid_battle_select  ,S_DEFAULT      ,~bot_4x4       ,~top_battle2   ,~f_nop           ,~f_op_batsel      ,~f_s_battle       ,~f_l_battle      ,~c_no
-  ;;,g_grid_statbattle     ,S_DEFAULT      ,~top_pkstat    ,~bot_info      ,~f_dt_batstats   ,~f_op_statbattle  ,~f_s_statbat      ,~f_l_browse      ,g_grid_battle_stats
-  ;;,g_grid_battle_movesel ,S_DEFAULT      ,~bot_4x4       ,~top_pkstat    ,~f_nop           ,~f_op_movesel     ,~f_s_batmove      ,~f_l_browse      ,~c_no
-  ;;,g_grid_battle_dmovsel ,S_DEFAULT      ,~bot_info      ,~top_pkstat    ,~f_nop           ,~f_op_dmovsel     ,~f_s_dmovsel      ,~f_l_browse      ,~c_no
-  ;;,g_grid_battle_switch  ,S_DEFAULT      ,~top_editteam  ,~bot_info      ,~f_dt_switch     ,~f_op_batswitch   ,~f_s_batswitch    ,~f_l_browse      ,~c_no
-  ;;,g_grid_battle_stats   ,S_DEFAULT      ,~top_editteam  ,~bot_info      ,~f_dt_batstats   ,~f_op_batstats    ,~f_s_batstat      ,~f_l_browse      ,~c_no
+  ;;,g_grid_battle_select  ,S_DEFAULT      ,~bot_4x4       ,~top_battle2   ,~f_nop           ,~f_op_batsel      ,~f_s_battle       ,~f_l_battle      ,~c_no               ,~c_no
+  ;;,g_grid_statbattle     ,S_DEFAULT      ,~top_pkstat    ,~bot_info      ,~f_dt_batstats   ,~f_op_statbattle  ,~f_s_statbat      ,~f_l_browse      ,g_grid_battle_stats ,~c_no
+  ;;,g_grid_battle_movesel ,S_DEFAULT      ,~bot_4x4       ,~top_pkstat    ,~f_nop           ,~f_op_movesel     ,~f_s_batmove      ,~f_l_browse      ,~c_no               ,~c_no
+  ;;,g_grid_battle_dmovsel ,S_DEFAULT      ,~bot_info      ,~top_pkstat    ,~f_nop           ,~f_op_dmovsel     ,~f_s_dmovsel      ,~f_l_browse      ,~c_no               ,~c_no
+  ;;,g_grid_battle_switch  ,S_DEFAULT      ,~top_editteam  ,~bot_info      ,~f_dt_switch     ,~f_op_batswitch   ,~f_s_batswitch    ,~f_l_browse      ,~c_no               ,~c_no  -- TODO: try removing the c_nos at the end here. wonder if I can do it saving chars and tokens
+  ;;,g_grid_battle_stats   ,S_DEFAULT      ,~top_editteam  ,~bot_info      ,~f_dt_batstats   ,~f_op_batstats    ,~f_s_batstat      ,~f_l_browse      ,~c_no               ,~c_no
 
-  ;;,g_grid_battle_results ,S_DEFAULT      ,~top_results   ,~bot_info      ,~f_nop           ,~f_op_batresults  ,~f_s_batresults   ,~f_l_browse      ,~c_no
-  ;;,g_grid_battle_actions ,S_DEFAULT      ,~top_battle2   ,~bot_info      ,~f_nop           ,~f_op_bataction   ,~f_s_bataction    ,~f_l_battle      ,~c_no
+  ;;,g_grid_battle_results ,S_DEFAULT      ,~top_results   ,~bot_info      ,~f_nop           ,~f_op_batresults  ,~f_s_batresults   ,~f_l_browse      ,~c_no               ,~c_no
+  ;;,g_grid_battle_actions ,S_DEFAULT      ,~top_battle2   ,~bot_info      ,~f_nop           ,~f_op_bataction   ,~f_s_bataction    ,~f_l_battle      ,~c_no               ,~c_yes
 ]])
 
 f_add_to_ui_stack(g_grid_title)

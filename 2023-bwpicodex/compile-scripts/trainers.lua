@@ -10,11 +10,11 @@ end
 -- 57 trainers total - includes every pokemon and every move besides missingno, tm05, and struggle.
 -- saves a few tokens when upacking to put the move first
 g_trainer_data = [[
-  M_SWIFT        P_RATTATA    P_PIDGEY     P_SENTRET    P_ZUBAT      P_EEVEE      P_WOOPER     -- youngster    TM39 M -- ACTUALLY, not using the gender flag
+  M_SWIFT        P_RATTATA    P_PIDGEY     P_SENTRET    P_ZUBAT      P_EEVEE      P_WOOPER     -- youngster    TM39 M -- ACTUALLY, not using the gender flag, but it might be cool to use :D
   M_DREAMEATER   P_PSYDUCK    P_CUBONE     P_HOOTHOOT   P_MEOWTH     P_GASTLY     P_BELLSPROUT -- sage         TM42 M
   M_MUDSLAP      P_PIDGEY     P_SPEAROW    P_DELIBIRD   P_FARFETCHD  P_DODUO      P_PIDGEOTTO  -- falkner      TM31 M
 
-  M_FRUSTRATION  P_ZUBAT      P_EKANS      P_GRIMER     P_SLOWPOKE   P_KOFFING    P_RATICATE   -- rocketgrunt  TM21 M
+  M_FRUSTRATION  P_ZUBAT      P_EKANS      P_GRIMER     P_SLOWPOKE   P_KOFFING    P_RATICATE   -- rocketgrunt  TM21 F
   M_CUT          P_CATERPIE   P_LEDYBA     P_PARAS      P_WEEDLE     P_VENONAT    P_SPINARAK   -- bugcatcher   HM01 M
   M_FURYCUTTER   P_KAKUNA     P_WEEPINBELL P_METAPOD    P_PINSIR     P_PINECO     P_SCYTHER    -- bugsy        TM49 M
 
@@ -34,7 +34,7 @@ g_trainer_data = [[
   M_STRENGTH     P_HORSEA     P_MARILL     P_MACHOKE    P_KRABBY     P_GEODUDE    P_QUAGSIRE   -- sailor       HM04 M
   M_IRONTAIL     P_CORSOLA    P_MAGNEMITE  P_FORRETRESS P_SKARMORY   P_MANTINE    P_STEELIX    -- jasmine      TM23 F
 
-  M_HEADBUTT     P_ARBOK      P_RATICATE   P_GOLBAT     P_MURKROW    P_WEEZING    P_PERSIAN    -- rocketexec   TM02 M
+  M_HEADBUTT     P_ARBOK      P_RATICATE   P_GOLBAT     P_MURKROW    P_WEEZING    P_PERSIAN    -- rocketexec   TM02 F
   M_ICEPUNCH     P_SMOOCHUM   P_SHELLDER   P_SWINUB     P_DELIBIRD   P_SEEL       P_AZUMARILL  -- skier        TM33 F
   M_ICYWIND      P_LAPRAS     P_FEAROW     P_SNEASEL    P_URSARING   P_DEWGONG    P_PILOSWINE  -- pryce        TM16 M
 
@@ -63,7 +63,7 @@ g_trainer_data = [[
   M_SLUDGEBOMB   P_WEEZING    P_ARIADOS    P_ELECTRODE  P_MUK        P_NIDORINA   P_VENOMOTH   -- janine       TM36 F
 
   M_SNORE        P_IVYSAUR    P_CHARMELEON P_WARTORTLE  P_MAGNEMITE  P_KANGASKHAN P_DODRIO     -- pokemaniac   TM13 M
-  M_THUNDERPUNCH P_MRMIME     P_GIRAFARIG  P_WOBBUFFET  P_KADABRA    P_SLOWBRO    P_HYPNO      -- psychic      TM41 M
+  M_THUNDERPUNCH P_MRMIME     P_GIRAFARIG  P_WOBBUFFET  P_KADABRA    P_SLOWBRO    P_HYPNO      -- psychic      TM41 F
   M_PSYCHIC      P_KADABRA    P_JYNX       P_STARMIE    P_HYPNO      P_MRMIME     P_ALAKAZAM   -- sabrina      TM29 F
 
   M_WATERFALL    P_QWILFISH   P_DUNSPARCE  P_CLOYSTER   P_SEAKING    P_CORSOLA    P_KINGLER    -- fisher       HM07 M
@@ -74,7 +74,7 @@ g_trainer_data = [[
   M_RAINDANCE    P_AIPOM      P_DUGTRIO    P_DEWGONG    P_CHANSEY    P_BLASTOISE  P_BLISSEY    -- cooltrainer  TM18 F
   M_EARTHQUAKE   P_PIDGEOT    P_ARCANINE   P_NIDOQUEEN  P_NIDOKING   P_VAPOREON   P_RHYDON     -- blue         TM26 M
 
-  M_ENDURE       P_RAIKOU     P_ENTEI      P_SUICUNE    P_ZAPDOS     P_ARTICUNO   P_MOLTRES    -- legend       TM20 F
+  M_ENDURE       P_RAIKOU     P_ENTEI      P_SUICUNE    P_ZAPDOS     P_ARTICUNO   P_MOLTRES    -- legend       TM20 U
   M_PROTECT      P_CROBAT     P_MAGNETON   P_URSARING   P_SNEASEL    P_GENGAR     P_TYRANITAR  -- silver       TM17 M
   M_BLIZZARD     P_GIRAFARIG  P_JYNX       P_ESPEON     P_XATU       P_EXEGGUTOR  P_SLOWKING   -- will         TM14 M
 

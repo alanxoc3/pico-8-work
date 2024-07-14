@@ -63,15 +63,8 @@ end $$
   end
 
   if platform then
-    f_roundrect(x-3,y+14,x+18,y+18-1,in_c)
-
-    --for yy=-2,2,1 do
-    --  for xx=-2,2,1 do
-    --    if not (xx == 0 and yy == 0) then
-    --      colordrawfunc(x+xx, y+yy, C_2)
-    --    end
-    --  end
-    --end
+    --rect(x-3, y+16, x+18, y+16, out_c)
+    --f_roundrect(x-3,y+15,x+18,y+18-1,in_c)
   end
 
   for yy=-scale,scale,scale do

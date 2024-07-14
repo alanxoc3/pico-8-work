@@ -1,4 +1,5 @@
 -- TODO: after a factory reset, there is an extra beep when selecting bulbasaur in browse... WHY?
+-- TODO: I noticed that totodile using watergun against fralgatr says "attack resists". I should investigate why that is happening and fix it.
 
 |[f_refresh_top]| function()
   g_top_grid.op, g_top_grid.preview_op, g_top_grid.lrlist = {}, {}, {}
@@ -23,15 +24,15 @@ end $$
   poke(_g[gridname].g_cg_m.sel, val)
 end $$
 
-|[f_create_gridpair]| function(name, memloc, main_grid_spec, info_grid_spec, info_grid_draw, main_op_func, main_sel_func, main_leave_func, lrbasegrid, ...)
+|[f_create_gridpair]| function(name, memloc, main_grid_spec, info_grid_spec, info_grid_draw, main_op_func, main_sel_func, main_leave_func, lrbasegrid, static, ...)
   -- zobj is needed so we can use an _ENV syntax
   _g[name] = f_zobj([[g_cg_m,@, g_cg_s,@, gridpofunc,@, params,@]],
     f_zobj([[
-      sel,@, view,@, name,@, selfunc,@, leavefunc,@, lrbasegrid,@, w,@,vh,@,x,@,y,@,cw,@,ch,@,selw,@,selh,@
-    ]], memloc, memloc+1, name, main_sel_func, main_leave_func, lrbasegrid, unpack(main_grid_spec)),
+      sel,@, view,@, name,@, selfunc,@, leavefunc,@, lrbasegrid,@, static,@, w,@,vh,@,x,@,y,@,cw,@,ch,@,selw,@,selh,@
+    ]], memloc, memloc+1, name, main_sel_func, main_leave_func, lrbasegrid, static, unpack(main_grid_spec)),
 
     f_zobj([[
-      sel,@, view,@, disabled,~c_yes, name,@, df,@, w,@,vh,@,x,@,y,@,cw,@,ch,@,selw,@,selh,@
+      sel,@, view,@, static,~c_no, disabled,~c_yes, name,@, df,@, w,@,vh,@,x,@,y,@,cw,@,ch,@,selw,@,selh,@
     ]], S_DEFAULT, S_DEFAULT+1, name, info_grid_draw, unpack(info_grid_spec)),
 
     main_op_func,
@@ -45,7 +46,7 @@ end $$
 |[f_update_grid]| function(_ENV, gridobj)
   local evalfunc = function(num, mmin, mmax, b0, b1, l)
     local off = (b1 and l or 0) - (b0 and l or 0)
-    local newnum = mid(mmin, min(#gridobj-1, mmin+mmax), num + off)
+    local newnum = mid(mmin, min(#gridobj-1, mmin+mmax), num + (static and 0 or off))
     if newnum == num and off ~= 0 then
       f_minisfx(SFX_ERROR)
     elseif newnum ~= num then
@@ -113,7 +114,9 @@ end $$
 end $$
 
 |[f_draw_grid]| function(_ENV, gridobj, num, view, x, y, active) -- "active" is just needed to be able to draw the bright selection fill background (or not draw it)
-  local draw_cell_bg = function(j, offx, offy)
+  printh("static _")
+  db(_ENV)
+  local draw_cell_bg = function(j, offx, offy, force)
     local i = j + view*w
     local obj = gridobj[i+1]
     if i >= #gridobj then return true end
@@ -122,9 +125,9 @@ end $$
 
     local l, r, u, d = 0, 0, 0, 0
 
-    if i == 0                then l, u = 1, 1 end
+    if force or i == 0                then l, u = 1, 1 end
     if i == w-1              then r, u = 1, 1 end
-    if i == #gridobj-1       then r, d = 1, 1 end
+    if force or i == #gridobj-1       then r, d = 1, 1 end
     if i == (#gridobj-1)\w*w then l, d = 1, 1 end
 
     local c = C_2
@@ -168,7 +171,7 @@ end $$
       for sw=0,selw-1 do
         for i=-1,1 do
           for j=-1,1 do
-            draw_cell_bg(num-view*w+ss*selw+sw, i, j)
+            draw_cell_bg(num-view*w+ss*selw+sw, i, j, static)
           end
         end
       end
@@ -177,7 +180,7 @@ end $$
 
     for ss=0,selh-1 do
       for sw=0,selw-1 do
-        draw_cell_bg(num-view*w+ss*selw+sw, 0, 0)
+        draw_cell_bg(num-view*w+ss*selw+sw, 0, 0, static)
       end
     end
     for ss=0,selh-1 do
