@@ -112,7 +112,6 @@ end $$
   local possible_types = {}
   for i=T_NORMAL,T_BIRD do
     local v = f_moveutil_typeadv(f_zobj_setmeta(_ENV, [[pktype,@]], i), p_otherturn.active)
-    printh("TYP "..v)
     if v > 1 then
       add(possible_types, i)
     end

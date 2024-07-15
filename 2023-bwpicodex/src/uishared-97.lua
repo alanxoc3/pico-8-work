@@ -127,12 +127,22 @@ end $$
 end $$
 
 |[f_add_battle]| function(op)
-  local b = function(_ENV, team, x, y, px, py, flip)
+  local b = function(player, x, y, px, py, flip)
     add(op, {draw=function()
-      local is_notactive = p_selfaction.active ~= _ENV
+      local invisible = player.active.invisible
+      local team  = player.team
+      local active = player.active
+
+      local is_notactive = p_selfaction ~= player
       -- TODO: shouldn't be 254. Should be the player's sprites. I can probably fit a few player sprites: plrboy, plrgirl, cpu, horde
-      f_draw_pkmn(invisible and 254 or num, px, py,  16, flip,  false, false, is_notactive, not is_notactive)
+      f_draw_pkmn(invisible and 254 or active.num, px, py,  16, flip,  false, false, is_notactive, not is_notactive)
       if invisible then return end
+      print(active.name, x+2, y-4, C_1, -1)
+      local hp = active.hp
+      local maxhp = active.maxhp
+      local spot = active.spot
+      local major = active.major
+
       --f_roundrect(x+1, y+1-6+1, x+34-1, y+6+6+1, C_2)
       if hp > 0 then
         rectfill(x+1, y+2, x+1+mid(0, hp/maxhp*32, 32), y+5, C_1)
@@ -145,18 +155,16 @@ end $$
       local tx, ty = x+15, y+9
       for i=0,5 do
         if spot == i+1 or team[i+1].valid and team[i+1].major ~= C_MAJOR_FAINTED then
-          pset(tx+i%3*2, ty+i\6-1, spot == i+1 and C_3 or C_1 )
-        end
-
-        if i ~= 1 then
+          pset(tx+i%3*2, ty+i\3*2-1, spot == i+1 and C_3 or C_1)
         end
       end
 
-      print(name, x+2, y-4, C_1, -1)
-      print(c_major_names_short[major].."  "..f_prefix_zero(hp, 3), x+1+1, y+8-1, C_1, -1)
+      local majtext = c_major_names_short[major]
+      local hptext = f_prefix_zero(hp, 3)
+      print(majtext.."  "..hptext, x+1+1, y+8-1, C_1, -1)
     end})
   end
 
-  b(p_2.active, p_2.team,  1, 5, 39, 1, true) -- top pl
-  b(p_1.active, p_1.team, 22, 5,  3, 1)       -- bot pl
+  b(p_2,  1, 5, 39, 1, true) -- top pl
+  b(p_1, 22, 5,  3, 1)       -- bot pl
 end $$

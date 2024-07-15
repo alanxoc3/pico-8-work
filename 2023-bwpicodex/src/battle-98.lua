@@ -132,7 +132,7 @@ end $$
   add(player.actions, f_newaction(...)) -- TODO: try adding at "1" location
 end $$
 
-|[f_pkmn_comes_out]| function(player, spot) -- assumes that the pkmn coming is not nil.
+|[f_pkmn_comes_out]| function(player, spot, level) -- assumes that the pkmn coming is not nil.
   local pkmn = player.team[spot]
 
   -- need to copy each move just for mimic to work when switching
@@ -144,7 +144,7 @@ end $$
     player.active[i] = pkmn[i]
   end
 
-  return f_newaction(L_ATTACK, player, "sends "..player.active.name, function()
+  return f_newaction(level, player, "sends "..player.active.name, function()
     player.active.invisible = false
     return player.active.num
   end, true)
@@ -163,23 +163,25 @@ end $$
   -- switch if there is a next pokemon
   -- otherwise, do nothing. turn logic will check every turn if there is a win condition
   for player in all{p_first,p_last} do -- TODO: try _ENV syntax here?
-    if player.active.major == C_MAJOR_FAINTED and not player.active.invisible then
-      -- delete all instances of the current player from the attack phase. this prevents moves from glitching or end of attack stuff from being applied (eg: poison)
-      for np in all{p_first, p_last} do
-        for action in all(np.actions) do
-          if action.level == L_ATTACK and del({p_first, p_last}, action.player) then -- Using del is a hack to save on tokens
-            del(np.actions, action)
+    if player.active.major == C_MAJOR_FAINTED then
+      if player.active.invisible then
+        return player, f_pkmn_comes_out(player, f_get_next_active(player), L_ATTACK) -- TODO: is there a nil issue here?
+      else
+        -- delete all instances of the current player from the attack phase. this prevents moves from glitching or end of attack stuff from being applied (eg: poison)
+        for np in all{p_first, p_last} do
+          for action in all(np.actions) do
+            if action.level == L_ATTACK and del({p_first, p_last}, action.player) then -- Using del is a hack to save on tokens
+              del(np.actions, action)
+            end
           end
         end
-      end
 
-      -- Actually, it doesn't matter what the Level is here since it is returned. Just saying L_PICK, why not. TODO: maybe i can have L_PICK and not have a return? Maybe that's a bad idea. thank about it tho!
-      return player, f_newaction(L_PICK, player, "backs "..player.active.name, function()
-        player.active.invisible = true
-        f_fill_team(player.team, player.active.spot) -- this is for horde mode, the team will be refilled once the pokemon has fainted.
-      end, true)
-    elseif player.active.invisible then
-      return player, f_pkmn_comes_out(player, f_get_next_active(player)) -- TODO: is there a nil issue here?
+        -- Actually, it doesn't matter what the Level is here since it is returned. Just saying L_PICK, why not. TODO: maybe i can have L_PICK and not have a return? Maybe that's a bad idea. thank about it tho!
+        return player, f_newaction(L_PICK, player, "backs "..player.active.name, function()
+          player.active.invisible = true
+          f_fill_team(player.team, player.active.spot) -- this is for horde mode, the team will be refilled once the pokemon has fainted.
+        end, true)
+      end
     end
   end
 
@@ -215,7 +217,6 @@ end $$
   -- speed can technically affect a switch/pursuit, but doesn't actually matter in that case.
   -- the og picodex had a min(C_PRIORITY_SWITCH, ...) here.
   player.priority = priority_class+f_stat_calc(player.active, 'speed', true)
-  printh("prior: "..player.name)
 end $$
 
 |[f_movelogic]| function(player)
@@ -269,12 +270,13 @@ end $$
     if p_selfaction.iscpu then
       local possible_moves = {}
       for i=1,4 do
+        printh("pp: "..p_selfaction.active[i].pp)
         if p_selfaction.active[i].num < M_NONE and p_selfaction.active[i].pp > 0 then
           add(possible_moves, i)
         end
       end
       if #possible_moves > 0 then
-        p_selfaction.nextmove = p_selfaction.active[f_flr_rnd(#possible_moves)+1]
+        p_selfaction.nextmove = p_selfaction.active[possible_moves[f_flr_rnd(#possible_moves)+1]]
       else
         p_selfaction.nextmove = c_moves[M_STRUGGLE]
       end
@@ -282,7 +284,6 @@ end $$
     else
       -- umm, this may be a hack. i have "begins turn" again here, so the text doesn't change, but this action is immediately replaced by an action selection screen.
       f_addaction(p_selfaction, L_PICK, p_selfaction, "begins turn", function()
-        printh("IDEK")
         f_pop_ui_stack()
 
         -- this is a quality of life thing. when switching and spamming x, i never wanted to switch 2 times in a row. most commonly you just want to fight right after.
@@ -315,15 +316,16 @@ end $$
   f_addaction(p_1, L_PICK, p_1, not p_1.iscpu and "begins turn", x, true)
   f_addaction(p_2, L_PICK, p_2, not p_2.iscpu and "begins turn", x, true)
 
-  -- calculate priorities
-  f_addaction(p_1, L_PICK, p_1, false, function()
+  -- calculate priorities. this just has to be on 1 of the 2 players so it gets executed.
+  f_addaction(p_1, L_PRIORITY, p_1, false, function()
     f_set_player_priority(p_1)
     f_set_player_priority(p_2)
 
+    printh("IM HERE")
+    printh("p1p: "..p_1.priority.." | p2p: "..p_2.priority)
     -- if priorities are equal, then coin flip!
     if p_1.priority == p_2.priority then p_2.priority += sgn(rnd'2'-1) end
     p_first = p_1.priority > p_2.priority and p_1 or p_2
-    printh("first is: "..p_first.name)
     p_last  = f_get_other_pl(p_first)
 
     -- f_s_bataction()
@@ -331,13 +333,11 @@ end $$
 end $$
 
 |[f_start_battle]| function(p1name, p1winfunc, ...)
-  p_1, p_2 = f_create_player(f_team_party(@S_TEAM1), p1name, c_team_names[@S_TEAM1]), f_create_player(...)
+  p_1, p_2 = f_create_player(f_team_party(@S_TEAM1), p1name, c_team_names[@S_TEAM1], @S_TEAM1 > 1), f_create_player(...)
   p_first, p_last = p_1, p_2
   g_p1_winfunc = p1winfunc
   p_curaction = nil -- TODO: could i remove this? Maybe?
   g_action_level = 1
-  db(p_1.actions)
-  db(p_2.actions)
 
   f_set_pself(p_1)
 
@@ -348,6 +348,12 @@ end $$
   poke2(S_P2_BATACTION, 0)
   poke2(S_P2_MOVE, 0)
   poke2(S_P2_STAT, 0)
+
+  f_addaction(p_1, L_PICK, p_1, "begins battle", f_nop, true)
+  add(p_1.actions, f_pkmn_comes_out(p_1, p_1.active.spot, L_PICK))
+
+  f_addaction(p_2, L_PICK, p_2, "begins battle", f_nop, true)
+  add(p_2.actions, f_pkmn_comes_out(p_2, p_2.active.spot, L_PICK))
 
   -- f_start_turn()
   f_add_to_ui_stack(g_grid_battle_actions)

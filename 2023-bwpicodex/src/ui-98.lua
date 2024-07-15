@@ -398,7 +398,7 @@ end $$
 end $$
 
 |[f_s_versusbegin]| function()
-  f_start_battle("plyr1", f_nop, f_team_party(f_getsel'g_grid_pickplr2'),    "enemy", c_team_names[f_getsel'g_grid_pickplr2'])
+  f_start_battle("plyr1", f_nop, f_team_party(f_getsel'g_grid_pickplr2'),    "enemy", c_team_names[f_getsel'g_grid_pickplr2'], f_getsel'g_grid_pickplr2' > 1)
 end $$
 
 |[f_s_batbegin]|    function()
@@ -410,7 +410,7 @@ end $$
       poke(S_LEAGUE, min(@S_STORY, 57))
       f_update_locks(loc)
     end
-  end, f_team_league(loc+1), "enemy", c_trnr_names[loc+1], true)
+  end, f_team_league(loc+1, 1), "enemy", c_trnr_names[loc+1], true)
 end $$
 
 |[f_s_editpkmn]| function()
@@ -445,7 +445,7 @@ end $$
   g_palette %= #c_palettes
 end $$
 
-|[f_l_battle]| function() return p_selfaction.active.num end $$
+|[f_l_battle]| function() return p_selfaction.active.invisible and p_selfaction.num or p_selfaction.active.num end $$
 
 |[f_s_batmove]| function()
   p_selfaction.nextmove = p_selfaction.active[f_getsel'g_grid_battle_movesel'+1]
@@ -477,7 +477,7 @@ end $$
   local nextpkmn = f_getsel'g_grid_battle_switch'+1 -- needs to be defined out of callback, because it can change!
   f_addaction(p_selfaction, L_ATTACK, p_selfaction, "backs "..p_selfaction.active.name, function()
     p_selfaction.active.invisible = true
-    add(p_selfaction.actions, f_pkmn_comes_out(p_selfaction, nextpkmn))
+    add(p_selfaction.actions, f_pkmn_comes_out(p_selfaction, nextpkmn, L_ATTACK))
   end, true)
 
   f_pop_ui_stack()
@@ -515,7 +515,6 @@ end $$
       a_addaction = function(...) f_addaction(p_selfturn, L_ATTACK, ...) end
       p_otherturn = f_get_other_pl(p_selfturn)
       p_curaction.logic()
-      printh("Running some logic")
 
       -- an empty message means we execute the logic, but look for another p_curaction
       if p_curaction.message then

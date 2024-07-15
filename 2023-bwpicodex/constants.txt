@@ -47,17 +47,18 @@ MODE_BENCH:  2
 MODE_ACTIVE: 3
 
 # -------------- Battle levels. These determine timing in a battle
-L_PICK:        1
-L_ATTACK:      2
-L_FUTURESIGHT: 3
-L_WEATHER:     4
-L_PERISHSONG:  5
-L_LEFTOVERS:   6
-L_DEFROST:     7
-L_REFLECT:     8
-L_BERRY:       9
-L_ENCORE:      10
-L_END:         10
+L_PICK:        1 # For players to pick which action they will work on.
+L_PRIORITY:    2 # A hidden action that happens after both players have selected an action.
+L_ATTACK:      3 # Switching or attack. The priority step before determines which pkmn goes first.
+L_FUTURESIGHT: 4 # Here and below are things that happen after all attacks.
+L_WEATHER:     5
+L_PERISHSONG:  6
+L_LEFTOVERS:   7
+L_DEFROST:     8
+L_REFLECT:     9
+L_BERRY:       10
+L_ENCORE:      11
+L_END:         11 # This is used in a for loop, in case I add more actions.
 
 # ----------------------------- load memory locations
 L_DATASTART: 0x1fff # data starts one byte before because the code increments first

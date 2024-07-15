@@ -121,7 +121,6 @@ end $$
 end $$
 
 |[f_moveutil_typeadv]| function(move, defender)
-  db(c_types[move.pktype])
   return (c_types[move.pktype][defender.pktype1] or 1)*(c_types[move.pktype][defender.pktype2] or 1)
 end $$
 

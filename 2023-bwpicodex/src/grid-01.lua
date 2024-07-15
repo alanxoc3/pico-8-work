@@ -114,8 +114,6 @@ end $$
 end $$
 
 |[f_draw_grid]| function(_ENV, gridobj, num, view, x, y, active) -- "active" is just needed to be able to draw the bright selection fill background (or not draw it)
-  printh("static _")
-  db(_ENV)
   local draw_cell_bg = function(j, offx, offy, force)
     local i = j + view*w
     local obj = gridobj[i+1]
