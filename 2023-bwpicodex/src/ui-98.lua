@@ -103,7 +103,7 @@ end $$
     f_add_to_ui_stack(g_grid_edititem)
   end})
 
-  add(op, {text=c_gender_names[pkmn.gender], disabled=#pkmn.genders < 2, select=function()
+  add(op, {text=c_gender_names[pkmn.gender], disabled=pkmn.gender_mask < G_BOTH, select=function()
     pkmn.gender_bit += 1
     pkmn:f_save_party_pkmn(f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot')
     f_refresh_top()

@@ -12,11 +12,12 @@
   -- base is the parent table. at the start of a battle and when loading for edit, base is c_pokemon[ind].
   -- when a pokemon becomes active, it calls mkpkmn with base being the bench/initial battle stats.
   -- hp/item/major changes must happen on "base"
+  -- TODO: do i need base? Maybe? not actually using it as of 2024-07-16
   local pkmn = f_zobj_setmeta(base, [[
     num,@, base,@, gender_bit,@, item,@, valid,@,
     seen_moves, #,            -- A move to boolean map that is used to disable things on the move edit screen and populate edit_moves.
     major,      C_MAJOR_NONE, -- The major status condition in pokemon battles: fainted, burned, frozen, paralyzed, poisoned, sleeping
-    gender,     0,            -- This gets populated from gender bit & pkmn.genders. TODO: this line could be removed if pressed for compression!
+    gender,     0,            -- This gets populated from gender bit & pkmn.gender_mask. TODO: this line could be removed if pressed for compression!
     substitute, 0, -- substitute hp
     evasion,    100,
     accuracy,   100,
@@ -33,7 +34,11 @@
       evasion,        0,
       accuracy,       0; -- TODO: delete the semicolon
   ]], ind, base, gender_bit, item % C_LEN_ITEMS, ind < P_NONE)
-  pkmn.gender     = pkmn.genders[pkmn.gender_bit%#pkmn.genders+1]
+  pkmn.gender = pkmn.gender_mask
+  -- Using local variable for gender_bit to save a token, though maybe i could just set _ENV here, idk.
+  if gender_bit and pkmn.gender_mask == G_BOTH then
+    pkmn.gender = gender_bit%2+1 -- 1
+  end
 
   local moves = {...}
   for i=1,4 do -- yes, there is some weird number logic here because I want to use modulo but index starts at 1.

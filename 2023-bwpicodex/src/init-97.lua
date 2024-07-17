@@ -271,7 +271,7 @@ cls() -- this is just a visual thing when the game starts up. TODO: i can remove
   ,"___" -- todo: is this used?
 ]] $$ -- todo: last 2 ___ blanks can be removed. maybe none can too? or that is used for prevol? celebi, (the none pokemon for ui), (empty pokemon ind that prevolve points to), unused, unused.
 
-|[c_gender_names]|      f_zobj[["0,neuter;,male,female"]] $$
+|[c_gender_names]|      f_zobj[["0,neuter;,male,female,mal/fem"]] $$
 |[c_major_names_long]|  f_zobj[["0,______;,faint,burn,freeze,parlyz,poisnd,sleep"]] $$
 |[c_major_names_short]| f_zobj[["0,___;,fnt,brn,fzn,par,psn,slp"]] $$
 |[c_movemethod_names]|  split"learn,teach,cheat" $$
@@ -341,21 +341,9 @@ for i=0,252 do -- There are 252+1 pkmn and 252+1 moves. The +1s are for empties.
     pkmn[key] += 52
   end)
   pkmn.hp += 55
-  pkmn.maxhp = pkmn.hp
-
-  -- this is guaranteed to set pkmn.genders, as long as the data is all correct, which it is.
-  -- saves tokens to be ugly like this (not setting a default value)
-  for k, v in pairs(f_zobj[[
-     GP_BOTH;,G_MALE,G_FEMA
-    ;GP_NEUT;,G_NEUT
-    ;GP_MALE;,G_MALE
-    ;GP_FEMA;,G_FEMA
-  ]]) do
-    if pkmn.default_item & GP_BOTH == k then
-      pkmn.genders = v
-      pkmn.default_item &= 0x3f -- all bits except first two
-    end
-  end
+  pkmn.maxhp = pkmn.hp -- TODO: save a token by combining with below eqals statement. actually all these sets could use zobj possibly
+  pkmn.gender_mask = pkmn.default_item >>> 6 & G_BOTH
+  pkmn.default_item &= 63 -- all bits except first two (0x3f or 0b00111111)
 
   while f_init_peek_inc() < C_NEXT do
     if     @g_init_peek_loc == C_TEACH then cur_list = pkmn.moves_progress[2]
@@ -396,7 +384,7 @@ for i=0,252 do -- todo: token crunching - can move up
     end)
   end
   -- And finally, set stats/etc on the base pokemon.
-  c_pokemon[i] = f_mkpkmn(i, c_pokemon[i], false, 0, I_NONE)
+  c_pokemon[i] = f_mkpkmn(i, c_pokemon[i], false, false, I_NONE)
 end
 
 for i=1,57 do

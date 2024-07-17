@@ -195,16 +195,11 @@ I_MYSTERYBERRY:      41 # mstbery
 I_END:               41 # same as last one
 
 # ----------------------------- genders - these are the 4 possible gender. bitmasked to top 2 bits to save a few tokens since they are packed with the color
-# Gender masks. These determine which genders a pokemon can be.
-GP_NEUT: 0
-GP_MALE: 64
-GP_FEMA: 128
-GP_BOTH: 192
-
 # Genders. These are numbers representing the actual gender of a Pokemon.
 G_NEUT: 0
-G_MALE: 1
+G_MALE: 1 # This is hard-coded somewhere with semi-complex logic, so don't change it unless you are motivated and destructive!
 G_FEMA: 2
+G_BOTH: 3
 
 # ----------------------------- type numbers - odds are physical, evens are special.
 T_NONE:     0  # none
