@@ -2,7 +2,7 @@ f_zcall(poke, [[
    ;,0x5f2c,   3  -- screen to 64x64
   ;;,0x5f5c,   8  -- set btn initial delay before repeating. 255 means never repeat.
   ;;,0x5f5d,   1  -- set btn repeating delay.
-  ;;,S_STORY,  58 -- todo: remove me, this is just for debugging
+  ;;,S_STORY,  30 -- todo: remove me, this is just for debugging
 ]])
 
 cls() -- this is just a visual thing when the game starts up. TODO: i can remove it if i want. probably should
@@ -311,7 +311,7 @@ for i=0,I_END do add(c_items,  f_zobj([[lock,~c_no,  num,@, name,@]], i, c_item_
 
 -- 136 to 118. Storing data all together saves like 18 code tokens.
 for i=0,252 do -- There are 252+1 pkmn and 252+1 moves. The +1s are for empties. So zipped when unpacking to save some tokens.
-  local pkmn = f_zobj([[moves_progress;,#,#,#; moves_grouped;,#,#,#; lock,~c_no, name,@, num,@, num_str,@]], c_pkmn_names[i], i, f_prefix_zero(i < P_NONE and i or "???", 3))
+  local pkmn = f_zobj([[moves_progress;,#,#,#; moves_grouped;,#,#,#; lock,~c_no, pktype2,T_NONE, prevolve,P_EMPTY, name,@, num,@, num_str,@]], c_pkmn_names[i], i, f_prefix_zero(i < P_NONE and i or "???", 3))
 
   -- cur_list is not local just so I can save 1 token
   cur_list, c_moves[i], c_pokemon[i] = pkmn.moves_progress[1], f_zobj([[lock,~c_no, num,@, name,@]], i, c_move_names[i]), pkmn -- todo: get rid of i-1
@@ -325,10 +325,18 @@ for i=0,252 do -- There are 252+1 pkmn and 252+1 moves. The +1s are for empties.
   c_moves[i].func = _g[c_move_funcs[i][1]]
   c_moves[i].spec = c_move_funcs[i][2]
 
+  -- TODO: idea, i could use the last bit of type1 to specify an extra gender byte. uses more space but saves 13 tokens
   -- 'item' actually has gender and item information, but keeping the name item saves a possible token
-  foreach(split'prevolve,pktype1,pktype2,hp,attack,defense,speed,specialattack,specialdefense,default_item', function(key)
+  foreach(split'pktype1,hp,attack,defense,speed,specialattack,specialdefense,default_item', function(key)
     pkmn[key] = f_init_peek_inc()
   end)
+  for i, key in ipairs{'pktype2','prevolve'} do
+    if pkmn.pktype1 >> (4+i) & 1 == 1 then
+      pkmn[key] = f_init_peek_inc()
+    end
+  end
+
+  pkmn.pktype1 &= 31 -- 0b 0001 1111
 
   foreach(split'hp,attack,defense,speed,specialattack,specialdefense', function(key)
     -- This calculates the max stat possible at level 50. Simplified a ton from the original formula.
@@ -388,7 +396,8 @@ for i=0,252 do -- todo: token crunching - can move up
 end
 
 for i=1,57 do
-  local trainer = {move=f_init_peek_inc()}
+  local trainer = {sprite=f_init_peek_inc()}
+  trainer.move = f_init_peek_inc()
   for j=1,6 do add(trainer, f_init_peek_inc()) end
   add(c_trainers, trainer)
 end
@@ -427,7 +436,7 @@ end $$
   for i, ind in ipairs(split'P_BULBASAUR,P_CHARMANDER,P_SQUIRTLE,P_CHIKORITA,P_CYNDAQUIL,P_TOTODILE,P_NONE') do -- 6 starter pokemon. the none pokemon should be unlocked too
     f_unlock(c_pokemon, ind)
     if @S_NEW == 0 then
-      f_save_party_pkmn(f_mkpkmn(ind, c_pokemon[ind], true, rnd(2)\1, 0, 5, 5, 5, 5), 0, i-1)
+      f_save_party_pkmn(f_mkpkmn(ind, c_pokemon[ind], true, i, 0, 5, 5, 5, 5), 0, i-1)
     end
   end
 
@@ -447,7 +456,7 @@ end $$
     end
   end
 end $$
-f_update_locks(1)
+f_update_locks'1' -- unlock everything from the first trainer to the current trainer
 
 -- after we have read all the bytes, we can now apply filters to the sfx for the cool sounding pkmn cries.
 -- sfx starts at 0x3200. each sfx are 68 bytes. 64 for notes then 4 for effects.

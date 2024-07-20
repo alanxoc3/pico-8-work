@@ -17,7 +17,7 @@
   for i=0,251 do
     local disabled = not c_pokemon[i].lock
     add(op, {lrvalid=not disabled, disabled=disabled, draw=function(_, is_sel, gridobj)
-      f_draw_pkmn(c_pokemon[i].lock and i or P_NONE, 1, 1, 6, false, false, gridobj.disabled, not is_sel)
+      f_draw_pkmn(c_pokemon[i].lock and i or P_NONE, 1, 1, 6, false, gridobj.disabled, not is_sel)
     end})
   end
 end $$
@@ -44,7 +44,7 @@ end $$
     end
     add(op, {data=inds, disabled=sumdisable and valid, draw=function(i, is_sel, gridobj)
       for ii, ind in ipairs(gridobj.data) do
-        f_draw_pkmn(ind, (ii-1)%3+1+(ii-1)%3*9, 1+(ii-1)\3*10, 6, false, false, gridobj.disabled, not is_sel)
+        f_draw_pkmn(ind, (ii-1)%3+1+(ii-1)%3*9, 1+(ii-1)\3*10, 6, false, gridobj.disabled, not is_sel)
       end
     end})
   end
@@ -54,7 +54,7 @@ end $$
   for pkmnnum=0,5 do
     local pkmn = f_get_party_pkmn(f_getsel'g_grid_pickedit', pkmnnum)
     add(op, {lrvalid=pkmn.valid, draw=function(i, is_sel)
-      f_draw_pkmn(pkmn.num, 1, 1, 16, false, false, false, not is_sel)
+      f_draw_pkmn(pkmn.num, 1, 1, 16, false, false, not is_sel)
     end})
   end
 end $$
@@ -63,12 +63,6 @@ end $$
   foreach(split"view,edit,league,versus", function(text)
     f_addop_text(op, text)
   end)
-end $$
-
-|[f_op_prevpk]| function(_ENV)
-  add(op, {draw=function()
-    f_draw_pkmn(c_pokemon[f_getsel'g_grid_browse'].num, 30-18+1, 20-18+1, 32, g_title_sel, false, false, false)
-  end})
 end $$
 
 |[f_op_teams]| function(_ENV)
@@ -178,7 +172,7 @@ end $$
     local pkmn = p_selfaction.team[i]
     local disabled = not pkmn.valid or i==p_selfaction.active.spot or pkmn.major == C_MAJOR_FAINTED
     add(op, {disabled=disabled, draw=function(i, is_sel)
-      f_draw_pkmn(pkmn.num, 1, 1, 16, false, false, disabled, not disabled and not is_sel)
+      f_draw_pkmn(pkmn.num, 1, 1, 16, false, disabled, not disabled and not is_sel)
     end})
   end
 end $$
@@ -188,7 +182,7 @@ end $$
     local pkmn = p_otheraction.team[i]
     local disabled = not pkmn.valid or pkmn.major == C_MAJOR_FAINTED
     add(op, {disabled=disabled, draw=function(i)
-      f_draw_pkmn(pkmn.num, 1, 1, 16, false, false, disabled, not disabled and g_win_spot ~= i+1)
+      f_draw_pkmn(pkmn.num, 1, 1, 16, false, disabled, not disabled and g_win_spot ~= i+1)
     end})
   end
 
@@ -203,7 +197,7 @@ end $$
     local pkmn = p_selfaction.team[i]
     local disabled = not pkmn.valid
     add(op, {lrvalid=not disabled, disabled=disabled, draw=function(i, is_sel)
-      f_draw_pkmn(pkmn.num, 1, 1, 16, false, false, disabled, not disabled and not is_sel)
+      f_draw_pkmn(pkmn.num, 1, 1, 16, false, disabled, not disabled and not is_sel)
     end})
   end
 
@@ -211,7 +205,7 @@ end $$
     local pkmn = p_otheraction.team[i]
     local disabled = not pkmn.valid
     add(op, {lrvalid=not disabled, disabled=disabled, draw=function(i, is_sel)
-      f_draw_pkmn(pkmn.num, 1, 1, 16, false, false, disabled, not disabled and not is_sel)
+      f_draw_pkmn(pkmn.num, 1, 1, 16, false, disabled, not disabled and not is_sel)
     end})
   end
 end $$
@@ -326,8 +320,8 @@ end $$
 |[f_dt_title]| function()
   print("\^w\^tpicodex", 2, 1,  C_3)
   print(c_palette_names[g_palette], 2, 12, C_1)
-  f_draw_pkmn(g_title_l, 7,  20, 16, false, false, false,     g_title_sel, true)
-  f_draw_pkmn(g_title_r, 35, 20, 16, true , false, false, not g_title_sel, true)
+  f_draw_pkmn(g_title_l, 7,  20, 16, false, false,     g_title_sel)
+  f_draw_pkmn(g_title_r, 35, 20, 16, true , false, not g_title_sel)
 end $$
 
 -- do i want a stats menu? or do i want level + auto?
@@ -436,9 +430,9 @@ end $$
   g_title_sel = not g_title_sel
 
   if g_title_sel then
-    g_title_r = rnd"252"\1 return g_title_r
+    g_title_r = rnd"256"\1 return g_title_r
   else
-    g_title_l = rnd"252"\1 return g_title_l
+    g_title_l = rnd"256"\1 return g_title_l
   end
 
   g_palette += 1

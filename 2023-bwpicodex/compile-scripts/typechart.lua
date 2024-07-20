@@ -1,3 +1,4 @@
+-- i could compress the space here, but I dont think i want to.
 function init() -- entry point for this compile script
   for x in all(type_chart) do
     offsetpoke(x)
@@ -6,6 +7,7 @@ function init() -- entry point for this compile script
   log("Wrote Type Chart")
 end
 
+-- TODO: I could compress this more. Don't need to take up a full byte for each one.
 -- order of types here is important. it corresponds to the constants file.
 type_chart = { -- 0: no effect, 1: resist, 2: normal, 4: x2
 -- NON NOR FIR FIG WAT POI ELE GRO GRA FLY ICE BUG PSY ROC DRA GHO DAR STE BRD <-def v-atk

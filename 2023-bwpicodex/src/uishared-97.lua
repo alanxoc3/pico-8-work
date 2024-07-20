@@ -33,7 +33,7 @@ end $$
 
 |[f_add_stat_preview]| function(op, pkmn)
   local draw_preview = function(off)
-    f_draw_pkmn(pkmn.num, 21, off-12, 16, false, false, false, false, true)
+    f_draw_pkmn(pkmn.num, 21, off-12, 16, false, false, false)
   end
 
   add(op, {text="#"..f_prefix_zero(pkmn.num, 3)..": "..pkmn.name, disabled=true})
@@ -135,7 +135,7 @@ end $$
 
       local is_notactive = p_selfaction ~= player
       -- TODO: shouldn't be 254. Should be the player's sprites. I can probably fit a few player sprites: plrboy, plrgirl, cpu, horde
-      f_draw_pkmn(invisible and 254 or active.num, px, py,  16, flip,  false, false, is_notactive, not is_notactive)
+      f_draw_pkmn(invisible and 254 or active.num, px, py,  16, flip,  false, is_notactive)
       if invisible then return end
       print(active.name, x+2, y-4, C_1, -1)
       local hp = active.hp

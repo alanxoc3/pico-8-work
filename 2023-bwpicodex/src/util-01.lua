@@ -1,9 +1,9 @@
 g_cur_pkmn_cry = nil
 |[f_minisfx]| function(num) -- plays a sfx with len of 4. num corresponds to pkmn numbers. 252, 253, 254, 255 are sfx.
+  g_cur_pkmn_cry = num
   if num < 252 then -- we never call this function with -1, so this means it is a cry.
-    g_cur_pkmn_cry = num
   end
-  sfx(num\4, num < 252 and 0 or 1, num%4*8, 8)
+  sfx(num\4, 0, num%4*8, 8)
 end $$
 
 |[f_flr_rnd]| function(n) return flr(rnd(n)) end $$
@@ -24,20 +24,20 @@ end $$
 end $$
 
 -- TODO: pkmn shakes when disabled (battle, press o, then x on switch). i don't want that.
-|[f_draw_pkmn]| function(num, x, y, width, flip, sel, disabled, isoutline, platform)
+|[f_draw_pkmn]| function(num, x, y, width, flip, disabled, isoutline)
   -- the "min" is needed to draw trainers
   local og_x = x
   if not disabled and not isoutline and stat'46' > -1 and g_cur_pkmn_cry == num then -- if a pkmn cry is currently playing and selected, shake!
     x += sin(g_shake_timer/4)
   end
 
-  local in_c = isoutline and C_2 or sel and C_3 or disabled and C_1 or C_3
-  local out_c = disabled and (sel and C_1 or C_2) or sel and C_2 or C_1 --  (sel or disabled) and C_2 or C_1
+  local in_c = isoutline and C_2 or disabled and C_1 or C_3
+  local out_c = disabled and C_2 or C_1
 
-  if num == P_NONE then
-    rectfill(x+width/2-1, y+width/2-1, x+width/2, y+width/2, out_c)
-    return
-  end
+  -- if num == P_NONE then
+  --   rectfill(x+width/2-1, y+width/2-1, x+width/2, y+width/2, out_c)
+  --   return
+  -- end
 
   local row = num/8\1
   local col = num%8
@@ -60,11 +60,6 @@ end $$
 
     palt()
     pal()
-  end
-
-  if platform then
-    --rect(x-3, y+16, x+18, y+16, out_c)
-    --f_roundrect(x-3,y+15,x+18,y+18-1,in_c)
   end
 
   for yy=-scale,scale,scale do

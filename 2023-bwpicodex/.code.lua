@@ -37,7 +37,7 @@ end
 function f_zobj(...)
 return f_zobj_setmeta(_g,...)
 end
-f_zobj_set(_g,"c_pokemon,#,c_moves,#,c_trainers,#,c_items,#,g_init_peek_loc,0x1fff,c_yes,@,c_no,@,c_empty,@,f_nop,@,g_palette,0,g_preview_timer,0,g_title_timer,0,g_title_l,254,g_title_r,254,g_msg_top, ,g_msg_bot, ,g_bat_func,,g_gridstack,#,g_title_an_timer,70",true,false,"",function(...)return...end)
+f_zobj_set(_g,"c_pokemon,#,c_moves,#,c_trainers,#,c_items,#,g_init_peek_loc,0x1fff,c_yes,@,c_no,@,c_empty,@,f_nop,@,g_palette,0,g_preview_timer,0,g_title_timer,0,g_title_l,253,g_title_r,254,g_msg_top, ,g_msg_bot, ,g_bat_func,,g_gridstack,#,g_title_an_timer,70",true,false,"",function(...)return...end)
 f_zobj_set(_g,"f_zobj,@,f_zobj_set,@,f_zobj_eval,@,f_zcall,@,f_refresh_top,@,f_add_to_ui_stack,@,f_pop_ui_stack,@,f_getsel,@,f_setsel,@,f_create_gridpair,@,f_update_grid,@,f_draw_grid,@,f_addop_text,@,f_minisfx,@,f_flr_rnd,@,f_in_split,@,f_roundrect,@,f_draw_pkmn,@,f_strtoq,@,f_moveutil_hpchange,@,f_moveutil_dmgself,@,f_moveutil_dmgother,@,f_moveutil_movemod,@,f_moveutil_typeadv,@,f_moveutil_calc_move_damage,@,f_move_splash,@,f_move_recover,@,f_move_tackle,@,f_move_seismictoss,@,f_move_psywave,@,f_move_superfang,@,f_move_falseswipe,@,f_move_submission,@,f_move_struggle,@,f_move_multihit_set,@,f_move_barrage,@,f_move_doublekick,@,f_move_flail,@,f_move_return,@,f_move_frustration,@,f_move_present,@,f_move_magnitude,@,f_move_hiddenpower,@,c_move_funcs,@,c_move_names,@,c_trnr_names,@,c_type_names,@,c_item_names,@,c_team_names,@,c_pkmn_names,@,c_gender_names,@,c_major_names_long,@,c_major_names_short,@,c_movemethod_names,@,c_statmod_names,@,c_palettes,@,c_palette_names,@,c_types,@,f_init_peek_inc,@,f_unlock,@,f_update_locks,@,f_create_spot,@,f_get_edit_op_pkmn,@,f_op_template_edit,@,f_add_stat_move,@,f_add_stat_info,@,f_add_stat_preview,@,f_add_stat,@,f_print_top,@,f_print_bot,@,f_get_move_texts,@,f_prefix_space,@,f_prefix_zero,@,f_dt_browse_template,@,f_add_battle,@,f_create_active,@,f_create_player,@,f_get_other_pl,@,f_set_pself,@,f_get_live_pkmn,@,f_get_next_active,@,f_end_battle,@,f_newaction,@,f_addaction,@,f_pkmn_comes_out,@,f_pop_next_action,@,f_set_player_priority,@,f_movelogic,@,f_start_turn,@,f_start_battle,@,f_mkpkmn,@,f_team_party,@,f_fill_team,@,f_team_league,@,f_get_party_pkmn,@,f_save_party_pkmn,@,f_stat_crit,@,f_stat_evac,@,f_stat_calc,@,f_op_def,@",f_zobj,f_zobj_set,f_zobj_eval,function(func,text,...)
 foreach(f_zobj(text,...),function(params)
 func(unpack(params))
@@ -184,10 +184,10 @@ camera()
 end,function(op,text)
 add(op,{draw=function()print(text,1,1,1)end})
 end,function(num)
-if num<252 then
 g_cur_pkmn_cry=num
+if num<252 then
 end
-sfx(num\4,num<252 and 0 or 1,num%4*8,8)
+sfx(num\4,0,num%4*8,8)
 end,function(n)return flr(rnd(n))end,function(val,str)
 for m in all(split(str))do
 if m==val then
@@ -199,17 +199,13 @@ rectfill(x1,y1+1,x2,y2-1,c)
 if x2-x1>2 then
 rectfill(x1+1,y1,x2-1,y2,c)
 end
-end,function(num,x,y,width,flip,sel,disabled,isoutline,platform)
+end,function(num,x,y,width,flip,disabled,isoutline)
 local og_x=x
 if not disabled and not isoutline and stat"46">-1 and g_cur_pkmn_cry==num then
 x+=sin(g_shake_timer/4)
 end
-local in_c=isoutline and 2 or sel and 3 or disabled and 1 or 3
-local out_c=disabled and(sel and 1 or 2)or sel and 2 or 1
-if num==252 then
-rectfill(x+width/2-1,y+width/2-1,x+width/2,y+width/2,out_c)
-return
-end
+local in_c=isoutline and 2 or disabled and 1 or 3
+local out_c=disabled and 2 or 1
 local row=num/8\1
 local col=num%8
 local scale=max(width\16,1)
@@ -228,8 +224,6 @@ pal(mask,c)
 sspr(col*16,row%8*16,16,16,ix,iy,width,width,flip,false)
 palt()
 pal()
-end
-if platform then
 end
 for yy=-scale,scale,scale do
 for xx=-scale,scale,scale do
@@ -395,7 +389,7 @@ end
 for i,ind in ipairs(split"1,4,7,152,155,158,252 ")do
 f_unlock(c_pokemon,ind)
 if@0x5efe==0 then
-f_save_party_pkmn(f_mkpkmn(ind,c_pokemon[ind],true,rnd(2)\1,0,5,5,5,5),0,i-1)
+f_save_party_pkmn(f_mkpkmn(ind,c_pokemon[ind],true,i,0,5,5,5,5),0,i-1)
 end
 end
 if@0x5efe==0 then
@@ -436,7 +430,7 @@ add(op,{text="type1: "..c_type_names[pkmn.pktype1]})
 add(op,{text="type2: "..c_type_names[pkmn.pktype2]})
 end,function(op,pkmn)
 local draw_preview=function(off)
-f_draw_pkmn(pkmn.num,21,off-12,16,false,false,false,false,true)
+f_draw_pkmn(pkmn.num,21,off-12,16,false,false,false)
 end
 add(op,{text="#"..f_prefix_zero(pkmn.num,3)..": "..pkmn.name,disabled=true})
 add(op,{draw=function()draw_preview"17" end})
@@ -505,7 +499,7 @@ local invisible=player.active.invisible
 local team=player.team
 local active=player.active
 local is_notactive=p_selfaction ~=player
-f_draw_pkmn(invisible and 254 or active.num,px,py,16,flip,false,false,is_notactive,not is_notactive)
+f_draw_pkmn(invisible and 254 or active.num,px,py,16,flip,false,is_notactive)
 if invisible then return end
 print(active.name,x+2,y-4,1,-1)
 local hp=active.hp
@@ -798,11 +792,11 @@ end
 end
 return mid(1,999,base)
 end,function(_ENV)add(op,{})end)
-f_zobj_set(_g,"f_op_edititem,@,f_op_statbrowse,@,f_op_browse,@,f_op_statbattle,@,f_op_edit,@,f_op_editteam,@,f_op_title,@,f_op_prevpk,@,f_op_teams,@,f_op_editmovebot,@,f_op_editstat,@,f_op_editmove,@,f_op_batsel,@,f_op_movesel,@,f_op_dmovsel,@,f_op_batswitch,@,f_op_batresults,@,f_op_batstats,@,f_dt_editteam,@,f_dt_editstat,@,f_dt_editmove_template,@,f_dt_editmove,@,f_dt_browse,@,f_dt_editpkmn,@,f_dt_edit,@,f_dt_batstats,@,f_dt_switch,@,f_dt_league,@,f_dt_versus,@,f_dt_title,@,f_s_batresults,@,f_l_browse,@,f_s_browse,@,f_s_versus,@,f_s_league,@,f_s_batstat,@,f_s_edit,@,f_s_editteam,@,f_s_editstat,@,f_s_editmovebot,@,f_s_battle,@,f_s_title,@,f_s_pkstat,@,f_s_statedit,@,f_s_statbat,@,f_s_versusbegin,@,f_s_batbegin,@,f_s_editpkmn,@,f_s_editmove,@,f_s_edititem,@,f_l_title,@,f_l_battle,@,f_s_batmove,@,f_s_dmovsel,@,f_s_batswitch,@,f_op_bataction,@,f_s_bataction,@,_update,@,_draw,@",function(_ENV)f_op_template_edit(op,c_items,"item")end,function(_ENV)f_add_stat(op,c_pokemon[f_getsel"g_grid_browse"])end,function(_ENV)
+f_zobj_set(_g,"f_op_edititem,@,f_op_statbrowse,@,f_op_browse,@,f_op_statbattle,@,f_op_edit,@,f_op_editteam,@,f_op_title,@,f_op_teams,@,f_op_editmovebot,@,f_op_editstat,@,f_op_editmove,@,f_op_batsel,@,f_op_movesel,@,f_op_dmovsel,@,f_op_batswitch,@,f_op_batresults,@,f_op_batstats,@,f_dt_editteam,@,f_dt_editstat,@,f_dt_editmove_template,@,f_dt_editmove,@,f_dt_browse,@,f_dt_editpkmn,@,f_dt_edit,@,f_dt_batstats,@,f_dt_switch,@,f_dt_league,@,f_dt_versus,@,f_dt_title,@,f_s_batresults,@,f_l_browse,@,f_s_browse,@,f_s_versus,@,f_s_league,@,f_s_batstat,@,f_s_edit,@,f_s_editteam,@,f_s_editstat,@,f_s_editmovebot,@,f_s_battle,@,f_s_title,@,f_s_pkstat,@,f_s_statedit,@,f_s_statbat,@,f_s_versusbegin,@,f_s_batbegin,@,f_s_editpkmn,@,f_s_editmove,@,f_s_edititem,@,f_l_title,@,f_l_battle,@,f_s_batmove,@,f_s_dmovsel,@,f_s_batswitch,@,f_op_bataction,@,f_s_bataction,@,_update,@,_draw,@",function(_ENV)f_op_template_edit(op,c_items,"item")end,function(_ENV)f_add_stat(op,c_pokemon[f_getsel"g_grid_browse"])end,function(_ENV)
 for i=0,251 do
 local disabled=not c_pokemon[i].lock
 add(op,{lrvalid=not disabled,disabled=disabled,draw=function(_,is_sel,gridobj)
-f_draw_pkmn(c_pokemon[i].lock and i or 252,1,1,6,false,false,gridobj.disabled,not is_sel)
+f_draw_pkmn(c_pokemon[i].lock and i or 252,1,1,6,false,gridobj.disabled,not is_sel)
 end})
 end
 end,function(_ENV)
@@ -823,7 +817,7 @@ add(inds,pkmn.num)
 end
 add(op,{data=inds,disabled=sumdisable and valid,draw=function(i,is_sel,gridobj)
 for ii,ind in ipairs(gridobj.data)do
-f_draw_pkmn(ind,(ii-1)%3+1+(ii-1)%3*9,1+(ii-1)\3*10,6,false,false,gridobj.disabled,not is_sel)
+f_draw_pkmn(ind,(ii-1)%3+1+(ii-1)%3*9,1+(ii-1)\3*10,6,false,gridobj.disabled,not is_sel)
 end
 end})
 end
@@ -831,17 +825,13 @@ end,function(_ENV)
 for pkmnnum=0,5 do
 local pkmn=f_get_party_pkmn(f_getsel"g_grid_pickedit",pkmnnum)
 add(op,{lrvalid=pkmn.valid,draw=function(i,is_sel)
-f_draw_pkmn(pkmn.num,1,1,16,false,false,false,not is_sel)
+f_draw_pkmn(pkmn.num,1,1,16,false,false,not is_sel)
 end})
 end
 end,function(_ENV)
 foreach(split"view,edit,league,versus",function(text)
 f_addop_text(op,text)
 end)
-end,function(_ENV)
-add(op,{draw=function()
-f_draw_pkmn(c_pokemon[f_getsel"g_grid_browse"].num,30-18+1,20-18+1,32,g_title_sel,false,false,false)
-end})
 end,function(_ENV)
 for i=1,58 do
 local disabled=@0x5eff+1<i
@@ -920,7 +910,7 @@ for i=1,6 do
 local pkmn=p_selfaction.team[i]
 local disabled=not pkmn.valid or i==p_selfaction.active.spot or pkmn.major==1
 add(op,{disabled=disabled,draw=function(i,is_sel)
-f_draw_pkmn(pkmn.num,1,1,16,false,false,disabled,not disabled and not is_sel)
+f_draw_pkmn(pkmn.num,1,1,16,false,disabled,not disabled and not is_sel)
 end})
 end
 end,function(_ENV)
@@ -928,7 +918,7 @@ for i=1,6 do
 local pkmn=p_otheraction.team[i]
 local disabled=not pkmn.valid or pkmn.major==1
 add(op,{disabled=disabled,draw=function(i)
-f_draw_pkmn(pkmn.num,1,1,16,false,false,disabled,not disabled and g_win_spot ~=i+1)
+f_draw_pkmn(pkmn.num,1,1,16,false,disabled,not disabled and g_win_spot ~=i+1)
 end})
 end
 add(preview_op,{draw=function()
@@ -940,14 +930,14 @@ for i=1,6 do
 local pkmn=p_selfaction.team[i]
 local disabled=not pkmn.valid
 add(op,{lrvalid=not disabled,disabled=disabled,draw=function(i,is_sel)
-f_draw_pkmn(pkmn.num,1,1,16,false,false,disabled,not disabled and not is_sel)
+f_draw_pkmn(pkmn.num,1,1,16,false,disabled,not disabled and not is_sel)
 end})
 end
 for i=1,6 do
 local pkmn=p_otheraction.team[i]
 local disabled=not pkmn.valid
 add(op,{lrvalid=not disabled,disabled=disabled,draw=function(i,is_sel)
-f_draw_pkmn(pkmn.num,1,1,16,false,false,disabled,not disabled and not is_sel)
+f_draw_pkmn(pkmn.num,1,1,16,false,disabled,not disabled and not is_sel)
 end})
 end
 end,function(i,is_sel)
@@ -1025,8 +1015,8 @@ f_print_bot(toggle and "\f1"or "\f3","enemy ",c_team_names[f_getsel"g_grid_pickp
 end,function()
 print("\^w\^tpicodex",2,1,3)
 print(c_palette_names[g_palette],2,12,1)
-f_draw_pkmn(g_title_l,7,20,16,false,false,false,g_title_sel,true)
-f_draw_pkmn(g_title_r,35,20,16,true,false,false,not g_title_sel,true)
+f_draw_pkmn(g_title_l,7,20,16,false,false,g_title_sel)
+f_draw_pkmn(g_title_r,35,20,16,true,false,not g_title_sel)
 end,function()
 local possible_spots={}
 for i=1,6 do
@@ -1093,9 +1083,9 @@ f_pop_ui_stack()
 end,function()
 g_title_sel=not g_title_sel
 if g_title_sel then
-g_title_r=rnd"252"\1 return g_title_r
+g_title_r=rnd"256"\1 return g_title_r
 else
-g_title_l=rnd"252"\1 return g_title_l
+g_title_l=rnd"256"\1 return g_title_l
 end
 g_palette+=1
 g_palette%=#c_palettes
@@ -1243,14 +1233,14 @@ end
 return str.."}"
 end
 g_cur_pkmn_cry=nil
-f_zcall(poke,";,0x5f2c,3;;,0x5f5c,8;;,0x5f5d,1;;,0x5eff,58")
+f_zcall(poke,";,0x5f2c,3;;,0x5f5c,8;;,0x5f5d,1;;,0x5eff,30")
 cls()
 for i=0,360 do
 c_types[i\19][i%19]=f_init_peek_inc()\2
 end
 for i=0,41 do add(c_items,f_zobj("lock,~c_no,num,@,name,@",i,c_item_names[i]))end
 for i=0,252 do
-local pkmn=f_zobj("moves_progress;,#,#,#;moves_grouped;,#,#,#;lock,~c_no,name,@,num,@,num_str,@",c_pkmn_names[i],i,f_prefix_zero(i<252 and i or "???",3))
+local pkmn=f_zobj("moves_progress;,#,#,#;moves_grouped;,#,#,#;lock,~c_no,pktype2,0,prevolve,253,name,@,num,@,num_str,@",c_pkmn_names[i],i,f_prefix_zero(i<252 and i or "???",3))
 cur_list,c_moves[i],c_pokemon[i]=pkmn.moves_progress[1],f_zobj("lock,~c_no,num,@,name,@",i,c_move_names[i]),pkmn
 foreach(split"pow,pktype,accuracy,maxpp",function(key)
 c_moves[i][key]=f_init_peek_inc()
@@ -1258,9 +1248,15 @@ end)
 c_moves[i].pp=c_moves[i].maxpp
 c_moves[i].func=_g[c_move_funcs[i][1]]
 c_moves[i].spec=c_move_funcs[i][2]
-foreach(split"prevolve,pktype1,pktype2,hp,attack,defense,speed,specialattack,specialdefense,default_item",function(key)
+foreach(split"pktype1,hp,attack,defense,speed,specialattack,specialdefense,default_item",function(key)
 pkmn[key]=f_init_peek_inc()
 end)
+for i,key in ipairs{"pktype2","prevolve"}do
+if pkmn.pktype1>>(4+i)& 1==1 then
+pkmn[key]=f_init_peek_inc()
+end
+end
+pkmn.pktype1 &=31
 foreach(split"hp,attack,defense,speed,specialattack,specialdefense",function(key)
 pkmn[key]+=52
 end)
@@ -1303,7 +1299,8 @@ end
 c_pokemon[i]=f_mkpkmn(i,c_pokemon[i],false,false,0)
 end
 for i=1,57 do
-local trainer={move=f_init_peek_inc()}
+local trainer={sprite=f_init_peek_inc()}
+trainer.move=f_init_peek_inc()
 for j=1,6 do add(trainer,f_init_peek_inc())end
 add(c_trainers,trainer)
 end
@@ -1315,7 +1312,7 @@ cls()flip()
 memset(0x5e00,0,256)
 run()
 end)
-f_update_locks(1)
+f_update_locks"1"
 for iloc=0x3200,0x4278,68 do
 for loc=iloc,iloc+63,2 do
 poke2(loc,%loc & 0x70df|0x0a00)
