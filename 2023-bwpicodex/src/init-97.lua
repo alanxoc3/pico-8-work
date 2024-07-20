@@ -2,7 +2,7 @@ f_zcall(poke, [[
    ;,0x5f2c,   3  -- screen to 64x64
   ;;,0x5f5c,   8  -- set btn initial delay before repeating. 255 means never repeat.
   ;;,0x5f5d,   1  -- set btn repeating delay.
-  ;;,S_STORY,  30 -- todo: remove me, this is just for debugging
+  ;;,S_STORY,  58 -- todo: remove me, this is just for debugging
 ]])
 
 cls() -- this is just a visual thing when the game starts up. TODO: i can remove it if i want. probably should
@@ -10,7 +10,7 @@ cls() -- this is just a visual thing when the game starts up. TODO: i can remove
 |[c_trnr_names]|        split"youngs,sage,falknr,grunt,bugctr,bugsy,pkmfan,beauty,witney,kimono,medium,morty,police,karate,chuck,gentle,sailor,jasmin,rocket,skier,pryce,scient,twins,clair,nerd,camper,brock,school,swimer,misty,jugler,guitar,ltsurg,hiker,lass,erika,biker,picnik,janine,maniac,psycic,sabrin,fisher,breath,blaine,birdkp,cooltr,blue,legend,silver,will,koga,bruno,karen,lance,red,gold,horde" $$
 |[c_type_names]|        f_zobj[["0,none;,normal,fire,fightng,water,poison,electrc,ground,grass,flying,ice,bug,psychic,rock,dragon,ghost,dark,steel,bird"]] $$
 |[c_item_names]|        f_zobj[["0,______;,pnkbow,chrcol,blkblt,myswtr,psnbrb,magnet,sosand,mirasd,shbeak,nvrice,slvpwd,twspon,hrdstn,dragsc,speltg,blkgls,mtlcot,plkbow,bripwd,focbnd,kingrk,leftov,qikclw,scopln,amcoin,litbal,lukpnc,mtlpwd,stick,thkclb,bersrk,berry,gldbry,btrbry,mntbry,brnbry,icebry,parbry,psnbry,mirbry,mysbry"]] $$
-|[c_team_names]|        f_zobj[["0,plr-boy;,plr-girl,cpu-boy,cpu-girl"]] $$
+|[c_team_names]|        f_zobj[["0,boy;,girl,cpu-boy,cpu-girl"]] $$
 
 |[c_pkmn_names]| f_zobj[[
  0,"misingno"

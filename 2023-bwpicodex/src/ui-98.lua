@@ -181,8 +181,8 @@ end $$
   for i=1,6 do
     local pkmn = p_otheraction.team[i]
     local disabled = not pkmn.valid or pkmn.major == C_MAJOR_FAINTED
-    add(op, {disabled=disabled, draw=function(i)
-      f_draw_pkmn(pkmn.num, 1, 1, STYLE_SHAKE, p_otheraction == p_2, g_win_spot == i+1, disabled)
+    add(op, {disabled=disabled, draw=function(i, is_sel)
+      f_draw_pkmn(pkmn.num, 1, 1, STYLE_SHAKE, p_otheraction == p_2, is_sel, disabled)
     end})
   end
 
@@ -332,19 +332,7 @@ end $$
 ---------------------------------------------------------------------- :SELECT :LEAVE
 |[f_s_batresults]| function()
   -- TODO: dedup with other loops through alive pokemon
-  local possible_spots = {}
-  for i=1,6 do
-    local pkmn = p_otheraction.team[i]
-    local disabled = not pkmn.valid or pkmn.major == C_MAJOR_FAINTED
-    if not disabled and i ~= g_win_spot then
-      add(possible_spots, i)
-    end
-  end
-  if #possible_spots > 0 then
-    g_win_spot = possible_spots[f_flr_rnd(#possible_spots)+1]
-  end
-  g_preview_timer = 20
-  return p_otheraction.team[g_win_spot].num
+  return p_otheraction.team[f_getsel'g_grid_battle_results'+1].num
 end $$
 
 |[f_l_browse]|   function()  f_pop_ui_stack()                                                                                                                      end $$
@@ -393,18 +381,24 @@ end $$
 end $$
 
 |[f_s_versusbegin]| function()
-  f_start_battle("plyr1", f_nop, f_team_party(f_getsel'g_grid_pickplr2'),    "enemy", c_team_names[f_getsel'g_grid_pickplr2'], P_MALETRNR + f_getsel'g_grid_pickplr2' % 2, f_getsel'g_grid_pickplr2' > 1)
+  f_start_battle(
+    f_nop,
+    f_team_party(f_getsel'g_grid_pickplr2'),
+    c_team_names[f_getsel'g_grid_pickplr2'],
+    P_MALETRNR + f_getsel'g_grid_pickplr2' % 2,
+    f_getsel'g_grid_pickplr2' > 1
+  )
 end $$
 
 |[f_s_batbegin]|    function()
-  local loc = f_getsel'g_grid_picktrnr'
-  f_start_battle("playr", function()
+  local loc = f_getsel'g_grid_picktrnr' -- I THINK THIS NEEDS TO BE SET BEFORE THE FUNCTION. TODO: I should check that's correct and comment it for sure, which means cant save tokens.
+  f_start_battle(function()
     if loc == @S_STORY then
       poke(S_STORY,  max(loc+1, @S_STORY))
       poke(S_LEAGUE, min(@S_STORY, 57))
       f_update_locks(loc)
     end
-  end, f_team_league(loc+1, 1), "enemy", c_trnr_names[loc+1], c_trainers[loc+1].num, true)
+  end, f_team_league(loc+1, 1), c_trnr_names[loc+1], c_trainers[loc+1].num, true)
 end $$
 
 |[f_s_editpkmn]| function()
@@ -534,7 +528,7 @@ f_zcall(f_create_gridpair, [[
    top_browse    ;,6 ,4 ,2 ,2  ,10 ,10 ,1   ,1
   ;top_edit      ;,2 ,2 ,2 ,2  ,30 ,20 ,1   ,1
   ;top_editteam  ;,3 ,2 ,2 ,2  ,20 ,20 ,1   ,1
-  ;top_results   ;,3 ,2 ,2 ,2  ,20 ,20 ,3   ,2
+  ;top_results   ;,3 ,2 ,2 ,2  ,20 ,20 ,1   ,1
   ;top_pkstat    ;,1 ,4 ,2 ,4  ,60 ,9  ,1   ,4
   ;top_pkstatbig ;,1 ,6 ,2 ,5  ,60 ,9  ,1   ,1
   ;top_text_grid ;,2 ,4 ,2 ,4  ,30 ,9  ,1   ,1
@@ -573,7 +567,7 @@ f_zcall(f_create_gridpair, [[
   ;;,g_grid_battle_switch  ,S_DEFAULT      ,~top_editteam  ,~bot_info      ,~f_dt_switch     ,~f_op_batswitch   ,~f_s_batswitch    ,~f_l_browse      ,~c_no               ,~c_no  -- TODO: try removing the c_nos at the end here. wonder if I can do it saving chars and tokens
   ;;,g_grid_battle_stats   ,S_DEFAULT      ,~top_editteam  ,~bot_info      ,~f_dt_batstats   ,~f_op_batstats    ,~f_s_batstat      ,~f_l_browse      ,~c_no               ,~c_no
 
-  ;;,g_grid_battle_results ,S_DEFAULT      ,~top_results   ,~bot_info      ,~f_nop           ,~f_op_batresults  ,~f_s_batresults   ,~f_l_browse      ,~c_no               ,~c_no
+  ;;,g_grid_battle_results ,S_DEFAULT      ,~top_results   ,~bot_info      ,~f_nop           ,~f_op_batresults  ,~f_s_batresults   ,~f_l_browse      ,~c_no               ,~c_yes
   ;;,g_grid_battle_actions ,S_DEFAULT      ,~top_battle2   ,~bot_info      ,~f_nop           ,~f_op_bataction   ,~f_s_bataction    ,~f_l_battle      ,~c_no               ,~c_yes
 ]])
 

@@ -53,7 +53,7 @@
   -- ^^ hard-coding sleep timer here
 end $$
 
-|[f_create_player]| function(team, name, subname, num, iscpu)
+|[f_create_player]| function(name, team, subname, num, iscpu)
   local active = nil -- active guaranteed to be set because we can't enter the battle without it.
   for i=1,6 do
     if team[i].valid then
@@ -111,7 +111,6 @@ end $$
   ]])
 
   f_add_to_ui_stack(g_grid_battle_results, function()
-    g_win_spot = p_otheraction.active.spot
     if p_otheraction == p_1 then
       g_p1_winfunc()
     end
@@ -333,8 +332,8 @@ end $$
   end)
 end $$
 
-|[f_start_battle]| function(p1name, p1winfunc, ...)
-  p_1, p_2 = f_create_player(f_team_party(@S_TEAM1), p1name, c_team_names[@S_TEAM1], P_MALETRNR+@S_TEAM1%2, @S_TEAM1 > 1), f_create_player(...)
+|[f_start_battle]| function(p1winfunc, ...)
+  p_1, p_2 = f_create_player("playr", f_team_party(@S_TEAM1), c_team_names[@S_TEAM1], P_MALETRNR+@S_TEAM1%2, @S_TEAM1 > 1), f_create_player("enemy", ...)
   p_first, p_last = p_1, p_2
   g_p1_winfunc = p1winfunc
   p_curaction = nil -- TODO: could i remove this? Maybe?
