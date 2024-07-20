@@ -53,7 +53,7 @@
   -- ^^ hard-coding sleep timer here
 end $$
 
-|[f_create_player]| function(team, name, subname, iscpu)
+|[f_create_player]| function(team, name, subname, num, iscpu)
   local active = nil -- active guaranteed to be set because we can't enter the battle without it.
   for i=1,6 do
     if team[i].valid then
@@ -67,11 +67,12 @@ end $$
     team,@,           -- The 1-6 benched pokemon.
     name,@,           -- The player's name (enemy/player...)
     subname,@,        -- The real team name (team1/lance...)
+    num,@,            -- The sprite number of the player.
     iscpu,@,          -- Whether or not the player is a cpu
     actions,#,        -- Actions for the player.
     greed,7           -- The next spot in the buffer. This is only used for horde.
     -- nextmove,~c_no -- 0-3 for a move index into the moveset. false value for switching. Commented out to save on compression, defaults to nil value
-  ]], active, team, name, subname, iscpu)
+  ]], active, team, name, subname, num, iscpu)
 end $$
 
 |[f_get_other_pl]| function(player)
@@ -333,7 +334,7 @@ end $$
 end $$
 
 |[f_start_battle]| function(p1name, p1winfunc, ...)
-  p_1, p_2 = f_create_player(f_team_party(@S_TEAM1), p1name, c_team_names[@S_TEAM1], @S_TEAM1 > 1), f_create_player(...)
+  p_1, p_2 = f_create_player(f_team_party(@S_TEAM1), p1name, c_team_names[@S_TEAM1], P_MALETRNR+@S_TEAM1%2, @S_TEAM1 > 1), f_create_player(...)
   p_first, p_last = p_1, p_2
   g_p1_winfunc = p1winfunc
   p_curaction = nil -- TODO: could i remove this? Maybe?

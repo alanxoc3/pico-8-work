@@ -1,8 +1,6 @@
 g_cur_pkmn_cry = nil
 |[f_minisfx]| function(num) -- plays a sfx with len of 4. num corresponds to pkmn numbers. 252, 253, 254, 255 are sfx.
   g_cur_pkmn_cry = num
-  if num < 252 then -- we never call this function with -1, so this means it is a cry.
-  end
   sfx(num\4, 0, num%4*8, 8)
 end $$
 
@@ -24,24 +22,26 @@ end $$
 end $$
 
 -- TODO: pkmn shakes when disabled (battle, press o, then x on switch). i don't want that.
-|[f_draw_pkmn]| function(num, x, y, width, flip, disabled, isoutline)
+|[f_draw_pkmn]| function(num, x, y, style, flip, selected, disabled)
+  local in_c  = disabled and C_2 or selected and C_3 or C_2
+  local out_c = disabled and C_1 or C_1
+  local row = num/8\1
+  local col = num%8
+  local width = style == STYLE_SMALL and 6 or 16
+
+  if (style ~= STYLE_SHAKE or disabled) and num == P_NONE then
+    rectfill(x+width/2-1, y+width/2-1, x+width/2, y+width/2, disabled and C_2 or out_c)
+    return
+  end
+
   -- the "min" is needed to draw trainers
-  local og_x = x
-  if not disabled and not isoutline and stat'46' > -1 and g_cur_pkmn_cry == num then -- if a pkmn cry is currently playing and selected, shake!
+  if style == STYLE_SHAKE and selected and not disabled and stat'46' > -1 and g_cur_pkmn_cry == num then -- if a pkmn cry is currently playing and selected, shake!
     x += sin(g_shake_timer/4)
   end
 
-  local in_c = isoutline and C_2 or disabled and C_1 or C_3
-  local out_c = disabled and C_2 or C_1
-
-  -- if num == P_NONE then
-  --   rectfill(x+width/2-1, y+width/2-1, x+width/2, y+width/2, out_c)
-  --   return
-  -- end
-
   local row = num/8\1
   local col = num%8
-  local scale = max(width\16, 1)
+  local width = style == STYLE_SMALL and 6 or 16
 
   local masks = {8, 4, 2, 1}
   local colordrawfunc = function(ix, iy, c)
@@ -62,11 +62,9 @@ end $$
     pal()
   end
 
-  for yy=-scale,scale,scale do
-    for xx=-scale,scale,scale do
-      if not (xx == 0 and yy == 0) then
-        colordrawfunc(x+xx, y+yy, out_c)
-      end
+  for yy=-1,1,1 do
+    for xx=-1,1,1 do
+      colordrawfunc(x+xx, y+yy, out_c)
     end
   end
 

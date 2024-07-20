@@ -10,7 +10,7 @@ cls() -- this is just a visual thing when the game starts up. TODO: i can remove
 |[c_trnr_names]|        split"youngs,sage,falknr,grunt,bugctr,bugsy,pkmfan,beauty,witney,kimono,medium,morty,police,karate,chuck,gentle,sailor,jasmin,rocket,skier,pryce,scient,twins,clair,nerd,camper,brock,school,swimer,misty,jugler,guitar,ltsurg,hiker,lass,erika,biker,picnik,janine,maniac,psycic,sabrin,fisher,breath,blaine,birdkp,cooltr,blue,legend,silver,will,koga,bruno,karen,lance,red,gold,horde" $$
 |[c_type_names]|        f_zobj[["0,none;,normal,fire,fightng,water,poison,electrc,ground,grass,flying,ice,bug,psychic,rock,dragon,ghost,dark,steel,bird"]] $$
 |[c_item_names]|        f_zobj[["0,______;,pnkbow,chrcol,blkblt,myswtr,psnbrb,magnet,sosand,mirasd,shbeak,nvrice,slvpwd,twspon,hrdstn,dragsc,speltg,blkgls,mtlcot,plkbow,bripwd,focbnd,kingrk,leftov,qikclw,scopln,amcoin,litbal,lukpnc,mtlpwd,stick,thkclb,bersrk,berry,gldbry,btrbry,mntbry,brnbry,icebry,parbry,psnbry,mirbry,mysbry"]] $$
-|[c_team_names]|        f_zobj[["0,team-a;,team-b,comp-a,comp-b"]] $$
+|[c_team_names]|        f_zobj[["0,plr-boy;,plr-girl,cpu-boy,cpu-girl"]] $$
 
 |[c_pkmn_names]| f_zobj[[
  0,"misingno"
@@ -396,7 +396,7 @@ for i=0,252 do -- todo: token crunching - can move up
 end
 
 for i=1,57 do
-  local trainer = {sprite=f_init_peek_inc()}
+  local trainer = {num=f_init_peek_inc()}
   trainer.move = f_init_peek_inc()
   for j=1,6 do add(trainer, f_init_peek_inc()) end
   add(c_trainers, trainer)
@@ -407,7 +407,7 @@ end
 -- TODO: figure out how trainer len/party goes to battle
 --       only trainers are saved as continuous things.
 
-local horde = {move=M_TM05} -- Maybe this should be struggle, I guess it works for now since only 1 pokemon knows it (missingno) -- i could go back to having tm05 be a teach move for missingno
+local horde = {num=P_GHOST, move=M_TM05} -- Maybe this should be struggle, I guess it works for now since only 1 pokemon knows it (missingno) -- i could go back to having tm05 be a teach move for missingno
 for i=1,252 do add(horde, i%252) end
 add(c_trainers, horde)
 
@@ -436,7 +436,7 @@ end $$
   for i, ind in ipairs(split'P_BULBASAUR,P_CHARMANDER,P_SQUIRTLE,P_CHIKORITA,P_CYNDAQUIL,P_TOTODILE,P_NONE') do -- 6 starter pokemon. the none pokemon should be unlocked too
     f_unlock(c_pokemon, ind)
     if @S_NEW == 0 then
-      f_save_party_pkmn(f_mkpkmn(ind, c_pokemon[ind], true, i, 0, 5, 5, 5, 5), 0, i-1)
+      f_save_party_pkmn(f_mkpkmn(ind, c_pokemon[ind], true, 0, 0, 5, 5, 5, 5), 0, i-1)
     end
   end
 

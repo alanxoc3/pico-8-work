@@ -17,7 +17,7 @@
   for i=0,251 do
     local disabled = not c_pokemon[i].lock
     add(op, {lrvalid=not disabled, disabled=disabled, draw=function(_, is_sel, gridobj)
-      f_draw_pkmn(c_pokemon[i].lock and i or P_NONE, 1, 1, 6, false, gridobj.disabled, not is_sel)
+      f_draw_pkmn(c_pokemon[i].lock and i or P_NONE, 1, 1, STYLE_SMALL, false, is_sel, gridobj.disabled)
     end})
   end
 end $$
@@ -44,7 +44,7 @@ end $$
     end
     add(op, {data=inds, disabled=sumdisable and valid, draw=function(i, is_sel, gridobj)
       for ii, ind in ipairs(gridobj.data) do
-        f_draw_pkmn(ind, (ii-1)%3+1+(ii-1)%3*9, 1+(ii-1)\3*10, 6, false, gridobj.disabled, not is_sel)
+        f_draw_pkmn(ind, (ii-1)%3+1+(ii-1)%3*9, 1+(ii-1)\3*10, STYLE_SMALL, false, is_sel, gridobj.disabled)
       end
     end})
   end
@@ -54,7 +54,7 @@ end $$
   for pkmnnum=0,5 do
     local pkmn = f_get_party_pkmn(f_getsel'g_grid_pickedit', pkmnnum)
     add(op, {lrvalid=pkmn.valid, draw=function(i, is_sel)
-      f_draw_pkmn(pkmn.num, 1, 1, 16, false, false, not is_sel)
+      f_draw_pkmn(pkmn.num, 1, 1, STYLE_NORMAL, false, is_sel, false)
     end})
   end
 end $$
@@ -172,7 +172,7 @@ end $$
     local pkmn = p_selfaction.team[i]
     local disabled = not pkmn.valid or i==p_selfaction.active.spot or pkmn.major == C_MAJOR_FAINTED
     add(op, {disabled=disabled, draw=function(i, is_sel)
-      f_draw_pkmn(pkmn.num, 1, 1, 16, false, disabled, not disabled and not is_sel)
+      f_draw_pkmn(pkmn.num, 1, 1, STYLE_NORMAL, false, is_sel, disabled)
     end})
   end
 end $$
@@ -182,7 +182,7 @@ end $$
     local pkmn = p_otheraction.team[i]
     local disabled = not pkmn.valid or pkmn.major == C_MAJOR_FAINTED
     add(op, {disabled=disabled, draw=function(i)
-      f_draw_pkmn(pkmn.num, 1, 1, 16, false, disabled, not disabled and g_win_spot ~= i+1)
+      f_draw_pkmn(pkmn.num, 1, 1, STYLE_SHAKE, p_otheraction == p_2, g_win_spot == i+1, disabled)
     end})
   end
 
@@ -192,12 +192,13 @@ end $$
   end})
 end $$
 
+-- TODO: make pkmn face opposite way if player 2, for switch screen as well. Maybe...
 |[f_op_batstats]| function(_ENV)
   for i=1,6 do
     local pkmn = p_selfaction.team[i]
     local disabled = not pkmn.valid
     add(op, {lrvalid=not disabled, disabled=disabled, draw=function(i, is_sel)
-      f_draw_pkmn(pkmn.num, 1, 1, 16, false, disabled, not disabled and not is_sel)
+      f_draw_pkmn(pkmn.num, 1, 1, STYLE_NORMAL, false, is_sel, disabled)
     end})
   end
 
@@ -205,7 +206,7 @@ end $$
     local pkmn = p_otheraction.team[i]
     local disabled = not pkmn.valid
     add(op, {lrvalid=not disabled, disabled=disabled, draw=function(i, is_sel)
-      f_draw_pkmn(pkmn.num, 1, 1, 16, false, disabled, not disabled and not is_sel)
+      f_draw_pkmn(pkmn.num, 1, 1, STYLE_NORMAL, true, is_sel, disabled)
     end})
   end
 end $$
@@ -320,8 +321,8 @@ end $$
 |[f_dt_title]| function()
   print("\^w\^tpicodex", 2, 1,  C_3)
   print(c_palette_names[g_palette], 2, 12, C_1)
-  f_draw_pkmn(g_title_l, 7,  20, 16, false, false,     g_title_sel)
-  f_draw_pkmn(g_title_r, 35, 20, 16, true , false, not g_title_sel)
+  f_draw_pkmn(g_title_l, 7,  20, STYLE_SHAKE, false, not g_title_sel, false)
+  f_draw_pkmn(g_title_r, 35, 20, STYLE_SHAKE, true,  g_title_sel,     false)
 end $$
 
 -- do i want a stats menu? or do i want level + auto?
@@ -392,19 +393,18 @@ end $$
 end $$
 
 |[f_s_versusbegin]| function()
-  f_start_battle("plyr1", f_nop, f_team_party(f_getsel'g_grid_pickplr2'),    "enemy", c_team_names[f_getsel'g_grid_pickplr2'], f_getsel'g_grid_pickplr2' > 1)
+  f_start_battle("plyr1", f_nop, f_team_party(f_getsel'g_grid_pickplr2'),    "enemy", c_team_names[f_getsel'g_grid_pickplr2'], P_MALETRNR + f_getsel'g_grid_pickplr2' % 2, f_getsel'g_grid_pickplr2' > 1)
 end $$
 
 |[f_s_batbegin]|    function()
   local loc = f_getsel'g_grid_picktrnr'
-
   f_start_battle("playr", function()
     if loc == @S_STORY then
       poke(S_STORY,  max(loc+1, @S_STORY))
       poke(S_LEAGUE, min(@S_STORY, 57))
       f_update_locks(loc)
     end
-  end, f_team_league(loc+1, 1), "enemy", c_trnr_names[loc+1], true)
+  end, f_team_league(loc+1, 1), "enemy", c_trnr_names[loc+1], c_trainers[loc+1].num, true)
 end $$
 
 |[f_s_editpkmn]| function()
@@ -430,9 +430,9 @@ end $$
   g_title_sel = not g_title_sel
 
   if g_title_sel then
-    g_title_r = rnd"256"\1 return g_title_r
+    g_title_r = rnd"252"\1 return g_title_r
   else
-    g_title_l = rnd"256"\1 return g_title_l
+    g_title_l = rnd"252"\1 return g_title_l
   end
 
   g_palette += 1

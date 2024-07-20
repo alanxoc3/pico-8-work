@@ -46,6 +46,11 @@ MODE_EDIT:   1
 MODE_BENCH:  2
 MODE_ACTIVE: 3
 
+# DRAW STYLES. These are the ways a Pokemon can be drawn.
+STYLE_SMALL:  0
+STYLE_NORMAL: 1
+STYLE_SHAKE:  2
+
 # -------------- Battle levels. These determine timing in a battle
 L_PICK:        1 # For players to pick which action they will work on.
 L_PRIORITY:    2 # A hidden action that happens after both players have selected an action.
@@ -87,7 +92,6 @@ C_TITLETIMER: 6
 C_1: 1 # These are color constants. There are only 3 colors in this game.
 C_2: 2
 C_3: 3
-C_4: 4
 
 # ----------------------------- major status conditions
 C_MAJOR_NONE:      0
@@ -477,6 +481,11 @@ P_HOOH:       250 # hOoH
 P_CELEBI:     251 # cELEBI
 P_NONE:       252 # this is a dummy pkmn for ui things
 P_EMPTY:      253 # this doesn't point to anything, for evolutions to have nothing to point to
+
+P_SUBSTITUTE: 252
+P_MALETRNR:   253
+P_FEMALETRNR: 254
+P_GHOST:      255
 
 # ----------------------------- move numbers - 4508 bytes. It took lots of compute to generate this. Order matters, a bad order wastes lots of space.
 M_STRUGGLE:     0  # struggle
