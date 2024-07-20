@@ -1062,7 +1062,7 @@ f_update_locks(loc)
 end
 end,f_team_league(loc+1,1),c_trnr_names[loc+1],c_trainers[loc+1].num,true)
 end,function()
-f_save_party_pkmn(f_mkpkmn(f_getsel"g_grid_editpkmn",c_pokemon[f_getsel"g_grid_editpkmn"],true,rnd(2)\1,0,5,6,7,8),f_getsel"g_grid_pickedit",f_getsel"g_grid_pickspot")
+f_save_party_pkmn(f_mkpkmn(f_getsel"g_grid_editpkmn",c_pokemon[f_getsel"g_grid_editpkmn"],true,@0x5eae,0,5,6,7,8),f_getsel"g_grid_pickedit",f_getsel"g_grid_pickspot")
 f_pop_ui_stack()
 end,function()
 local pkmn=f_get_party_pkmn(f_getsel"g_grid_pickedit",f_getsel"g_grid_pickspot")
