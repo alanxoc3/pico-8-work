@@ -30,10 +30,10 @@ S_DEFAULT:      0x5ec6
 S_NEW:          0x5efe
 S_STORY:        0x5eff
 
-SFX_SELECT: 252
-SFX_ERROR:  253
-SFX_LEAVE:  254
-SFX_MOVE:   255
+SFX_SELECT: 252 # corresponds to the substitute sprite
+SFX_ERROR:  253 # corresponds to the boy sprite
+SFX_LEAVE:  254 # corresponds to the girl sprite
+SFX_MOVE:   255 # corresponds to the ghost sprite
 
 # horde hi score
 # league score

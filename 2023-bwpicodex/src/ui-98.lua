@@ -320,9 +320,9 @@ end $$
 
 |[f_dt_title]| function()
   print("\^w\^tpicodex", 2, 1,  C_3)
-  print(c_palette_names[g_palette], 2, 12, C_1)
-  f_draw_pkmn(g_title_l, 7,  20, STYLE_SHAKE, false, not g_title_sel, false)
-  f_draw_pkmn(g_title_r, 35, 20, STYLE_SHAKE, true,  g_title_sel,     false)
+  print(c_palette_names[g_palette], 2, 32, C_1)
+  f_draw_pkmn(g_title_l, 7,  14, STYLE_SHAKE, false, not g_title_sel, false)
+  f_draw_pkmn(g_title_r, 35, 14, STYLE_SHAKE, true,  g_title_sel,     false)
 end $$
 
 -- do i want a stats menu? or do i want level + auto?
@@ -361,19 +361,16 @@ end $$
 
 |[f_s_pkstat]| function()
   g_preview_timer = 20
-  g_title_sel = not g_title_sel
   return f_getsel'g_grid_browse'
 end $$
 
 |[f_s_statedit]| function()
   g_preview_timer = 20
-  g_title_sel = not g_title_sel
   return f_get_party_pkmn(f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot').num
 end $$
 
 |[f_s_statbat]| function()
   g_preview_timer = 20
-  g_title_sel = not g_title_sel
   local bothteams = {}
   for i=1,6 do add(bothteams, p_selfaction.team[i]) end
   for i=1,6 do add(bothteams, p_otheraction.team[i]) end
@@ -433,7 +430,8 @@ end $$
   g_palette %= #c_palettes
 end $$
 
-|[f_l_battle]| function() return p_selfaction.active.invisible and p_selfaction.num or p_selfaction.active.num end $$
+|[f_l_battle]| function()
+  return p_selfaction.active.invisible and SFX_ERROR or p_selfaction.active.num end $$
 
 |[f_s_batmove]| function()
   p_selfaction.nextmove = p_selfaction.active[f_getsel'g_grid_battle_movesel'+1]

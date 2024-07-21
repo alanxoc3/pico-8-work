@@ -1,3 +1,6 @@
+-- TODO: as of 2024-07-20 There is a tiny lag when pressing left/right on browse screen. The bottom info box updates right before the top box. It's annoying and I must fix it!
+-- TODO: fix struggle. struggle loses pp and shows it has negative pp. probably the pp should not decrement for struggle.
+
 -- TODO: experiment with making item num/name/lock in same obj -- 4042
 |[f_create_spot]| function(_ENV, op, disabled)
   add(op, {text=lock and name or f_strtoq(name), disabled=disabled or not lock})
@@ -18,17 +21,10 @@ end $$
   local movenum = move.num
   local maxpp, pp, pow, accuracy, typ = f_get_move_texts(move)
   local method = pkmn.possible_moves_method[movenum] or "empty"
-  add(op, {text="move"..ind..": "..move.name, disabled=true})
-  add(op, {text=""..method..": "..typ})
-  add(op, {text="   pp: "..pp.."/"..maxpp})
-  add(op, {text="pw/ac: "..pow.."/"..accuracy})
-end $$
-
-|[f_add_stat_info]| function(op, pkmn)
-  add(op, {text="info: "..pkmn.name, disabled=true})
-  add(op, {text="gendr: "..c_gender_names[pkmn.gender]})
-  add(op, {text="type1: "..c_type_names[pkmn.pktype1]})
-  add(op, {text="type2: "..c_type_names[pkmn.pktype2]})
+  add(op, {text="move"..ind.." "..move.name, disabled=true})
+  add(op, {text=""..method.." "..typ})
+  add(op, {text="   pp "..pp.."/"..maxpp})
+  add(op, {text="pw/ac "..pow.."/"..accuracy})
 end $$
 
 |[f_add_stat_preview]| function(op, pkmn)
@@ -36,7 +32,7 @@ end $$
     f_draw_pkmn(pkmn.num, 21, off-12, STYLE_SHAKE, false, true, false)
   end
 
-  add(op, {text="#"..f_prefix_zero(pkmn.num, 3)..": "..pkmn.name, disabled=true})
+  add(op, {text="#"..f_prefix_zero(pkmn.num, 3).." "..pkmn.name, disabled=true})
   add(op, { draw=function() draw_preview'17' end})
   add(op, { draw=function() draw_preview'8' end})
   add(op, { draw=function() draw_preview'-1' end})
@@ -44,24 +40,32 @@ end $$
 
 |[f_add_stat]| function(op, pkmn, is_battle)
   f_add_stat_preview(op, pkmn)
-  f_add_stat_info(op, pkmn)
 
-  add(op, {text="stat: "..pkmn.name, disabled=true})
-  add(op, {text="at/df: "..f_prefix_zero(f_stat_calc(pkmn, 'attack'), 3).."/"..f_prefix_zero(f_stat_calc(pkmn, 'defense'), 3)})
-  add(op, {text="sa/sd: "..f_prefix_zero(f_stat_calc(pkmn, 'specialattack'), 3).."/"..f_prefix_zero(f_stat_calc(pkmn, 'specialdefense'), 3)})
-  add(op, {text="sp/lv: "..f_prefix_zero(f_stat_calc(pkmn, 'speed'), 3).."/050"})
-
-  add(op, {text="batl: "..pkmn.name, disabled=true})
-  add(op, {text="major: "..c_major_names_long[pkmn.major]})
-  add(op, {text="   hp: "..pkmn.hp.."/"..pkmn.maxhp})
-  add(op, {text=" item: "..c_item_names[pkmn.item]})
-
+  add(op, {text="peek "..pkmn.name, disabled=true})
   if is_battle then
+    add(op, {text="major "..c_major_names_long[pkmn.major]})
+  else
+    add(op, {text="prevo "..c_pkmn_names[pkmn.prevolve]})
+  end
+  add(op, {text="   hp "..pkmn.hp.."/"..pkmn.maxhp})
+  add(op, {text=" item "..c_item_names[is_battle and pkmn.item or pkmn.default_item]})
+
+  add(op, {text="info "..pkmn.name, disabled=true})
+  add(op, {text="gendr "..c_gender_names[pkmn.gender]})
+  add(op, {text="type1 "..c_type_names[pkmn.pktype1]})
+  add(op, {text="type2 "..c_type_names[pkmn.pktype2]})
+
+  add(op, {text="stat "..pkmn.name, disabled=true})
+  add(op, {text="at/df "..f_prefix_zero(f_stat_calc(pkmn, 'attack'), 3).."/"..f_prefix_zero(f_stat_calc(pkmn, 'defense'), 3)})
+  add(op, {text="sa/sd "..f_prefix_zero(f_stat_calc(pkmn, 'specialattack'), 3).."/"..f_prefix_zero(f_stat_calc(pkmn, 'specialdefense'), 3)})
+  add(op, {text="sp/lv "..f_prefix_zero(f_stat_calc(pkmn, 'speed'), 3).."/050"})
+
+  --if is_battle then
     f_add_stat_move(op, pkmn, 0)
     f_add_stat_move(op, pkmn, 1)
     f_add_stat_move(op, pkmn, 2)
     f_add_stat_move(op, pkmn, 3)
-  end
+  --end
 
   -- TODO: idk. should i include battle flags or no?
   -- for i,x in ipairs(split"active,benchd,none,mvlock,bide,dfncrl,disabl,confus,rolout,dstbnd,lockon,dig,fly,fryctr,rage,toxic,persng,pdecnt,substu,ngtmar,trform,lechsd,curse,mist,trappd,meanlk,atract,forsgt,ftrsgt,safgrd,litscr,rflect,spikes,sndstr,raidnc,sunday") do

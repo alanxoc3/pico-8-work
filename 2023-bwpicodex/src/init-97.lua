@@ -9,7 +9,7 @@ cls() -- this is just a visual thing when the game starts up. TODO: i can remove
 |[c_move_names]|        f_zobj[["0,strugl;,acid,acidar,barage,bonclb,bind,clamp,moonlt,lechsd,extrsp,sncbom,twindl,thnshk,glare,gilotn,hypfng,jmpkck,kinsis,lockon,lovkis,macpnc,vicgrp,spican,spikes,spore,cotspr,presnt,vithrw,cmtpnc,drlpck,sndatk,agilty,fryatk,qikatk,falswp,growl,healbl,sing,pound,minmiz,tailwp,dblslp,meghrn,bonrng,convr1,convr2,spark,mlkdrk,morsun,ngtshd,octzok,pinmis,pwdsnw,supfng,firspn,psngas,barier,medtat,ftrsgt,hypnos,psybem,litscr,safgrd,petdnc,charm,synths,swtscn,razlef,psnpwd,slppwd,absorb,stnspr,flail,confsn,slam,constr,amnesa,bubble,splash,hydpmp,mindrd,mist,hrnatk,spiweb,dblkck,swtkis,mtlclw,trform,trikck,gust,twistr,crbham,dizpnc,sludge,painsp,dstbnd,haze,lick,persng,meanlk,cnfray,crschp,smog,karchp,ember,smkscr,beldrm,beatup,scrtch,slash,ancpwr,leer,bite,outrge,scryfc,thrash,stomp,roksld,magtud,rocthr,harden,bonrsh,hijkck,recovr,aerbls,hrndrl,drgrag,sfboil,drgbre,slfdes,explsn,eggbmb,slgbmb,gigdrn,megdrn,swrdnc,cut,fryctr,thief,dig,rolout,dfncrl,detect,solbem,raidnc,flash,psycic,psycup,drmeat,ngtmar,shdbal,zapcan,thundr,thnblt,irntal,streng,rocsms,hedbut,mudslp,sunday,protct,dbltem,slptlk,curse,hidpwr,swager,frustr,return,toxic,snore,rest,endure,atract,bide,mimic,substu,rage,dbledg,takdwn,sklbas,bodslm,wtrgun,bblbem,icebem,blizrd,icywnd,surf,wrlpol,wtrfal,swift,payday,triatk,rflect,thnwav,telprt,psywav,metrnm,countr,megpnc,seitos,submis,megkck,dynpnc,firpnc,thnpnc,icepnc,firbls,flmthr,fisure,eartqk,sndstr,hypbem,roar,stlwng,fly,razwnd,wrlwnd,skyatk,wngatk,peck,mirmov,fntatk,witdrw,rapspn,supsnc,aurbem,mircot,psnstg,spite,crunch,pursut,strsht,lechlf,btnpas,disabl,screch,tackle,flmwel,revrsl,fryswp,fcseng,forsgt,lowkck,rolkck,encore,wrap,growth,vinwip,sacfir,sharpn,sketch,tm05,______"]] $$
 |[c_trnr_names]|        split"youngs,sage,falknr,grunt,bugctr,bugsy,pkmfan,beauty,witney,kimono,medium,morty,police,karate,chuck,gentle,sailor,jasmin,rocket,skier,pryce,scient,twins,clair,nerd,camper,brock,school,swimer,misty,jugler,guitar,ltsurg,hiker,lass,erika,biker,picnik,janine,maniac,psycic,sabrin,fisher,breath,blaine,birdkp,cooltr,blue,legend,silver,will,koga,bruno,karen,lance,red,gold,horde" $$
 |[c_type_names]|        f_zobj[["0,none;,normal,fire,fightng,water,poison,electrc,ground,grass,flying,ice,bug,psychic,rock,dragon,ghost,dark,steel,bird"]] $$
-|[c_item_names]|        f_zobj[["0,______;,pnkbow,chrcol,blkblt,myswtr,psnbrb,magnet,sosand,mirasd,shbeak,nvrice,slvpwd,twspon,hrdstn,dragsc,speltg,blkgls,mtlcot,plkbow,bripwd,focbnd,kingrk,leftov,qikclw,scopln,amcoin,litbal,lukpnc,mtlpwd,stick,thkclb,bersrk,berry,gldbry,btrbry,mntbry,brnbry,icebry,parbry,psnbry,mirbry,mysbry"]] $$
+|[c_item_names]|        f_zobj[["0,none;,pnkbow,chrcol,blkblt,myswtr,psnbrb,magnet,sosand,mirasd,shbeak,nvrice,slvpwd,twspon,hrdstn,dragsc,speltg,blkgls,mtlcot,plkbow,bripwd,focbnd,kingrk,leftov,qikclw,scopln,amcoin,litbal,lukpnc,mtlpwd,stick,thkclb,bersrk,berry,gldbry,btrbry,mntbry,brnbry,icebry,parbry,psnbry,mirbry,mysbry"]] $$
 |[c_team_names]|        f_zobj[["0,boy;,girl,cpu-boy,cpu-girl"]] $$
 
 |[c_pkmn_names]| f_zobj[[
@@ -272,7 +272,7 @@ cls() -- this is just a visual thing when the game starts up. TODO: i can remove
 ]] $$ -- todo: last 2 ___ blanks can be removed. maybe none can too? or that is used for prevol? celebi, (the none pokemon for ui), (empty pokemon ind that prevolve points to), unused, unused.
 
 |[c_gender_names]|      f_zobj[["0,neuter;,male,female,mal/fem"]] $$
-|[c_major_names_long]|  f_zobj[["0,______;,faint,burn,freeze,parlyz,poisnd,sleep"]] $$
+|[c_major_names_long]|  f_zobj[["0,none;,faint,burn,freeze,parlyz,poisnd,sleep"]] $$
 |[c_major_names_short]| f_zobj[["0,___;,fnt,brn,fzn,par,psn,slp"]] $$
 |[c_movemethod_names]|  split"learn,teach,cheat" $$
 |[c_statmod_names]|     f_zobj[[attack,"atack", defense,"defns", specialattack,"spatk", specialdefense,"spdfn", speed,"speed", evasion,"evasn", accuracy,"acury", crit,"critl"]] $$
@@ -289,7 +289,7 @@ cls() -- this is just a visual thing when the game starts up. TODO: i can remove
   ;;,4   ,9   ,10  -- gold
 ]] $$
 
-|[c_palette_names]| f_zobj[["0,dual version;,blue version,red version,green version,hotdog flavor,silvr version,gold version"]] $$
+|[c_palette_names]| f_zobj[["0,DUAL VERSION;,BLUE VERSION,RED VERSION,GREEN VERSION,HOTDOG FLAVOR,SILVR VERSION,GOLD VERSION"]] $$
 
 |[c_types]| f_zobj[[ -- 0 to 18 are all tables
   0;, ;;, ;;, ;;, ;;, ;;, ;;, ;;, ;;,
@@ -387,12 +387,19 @@ for i=0,252 do -- todo: token crunching - can move up
 
   for ii=1,3 do
     foreach(c_pokemon[i].moves_grouped[ii], function(v)
-      add(c_pokemon[i].possible_moves, v)
-      c_pokemon[i].possible_moves_method[v] = c_movemethod_names[ii]
+      if not c_pokemon[i].possible_moves_method[v] then -- this if statement is required for pokemon learn a move naturally and their prevolve learns the move through teaching. Specifically Jigglypuff/Igglybuff have this scenario with rest & rollout. There may be others too.
+        add(c_pokemon[i].possible_moves, v)
+        c_pokemon[i].possible_moves_method[v] = c_movemethod_names[ii]
+      end
     end)
   end
+
+  -- TODO: This obviously takes up a few tokens, but it frees up 272 mb of lua memory.
+  -- c_pokemon[i].moves_progress = nil
+  -- c_pokemon[i].moves_grouped = nil
+
   -- And finally, set stats/etc on the base pokemon.
-  c_pokemon[i] = f_mkpkmn(i, c_pokemon[i], false, false, I_NONE)
+  c_pokemon[i] = f_mkpkmn(i, c_pokemon[i], false, false, I_NONE, 5, 6, 7, 8) -- sets the moves for dex entries!
 end
 
 for i=1,57 do

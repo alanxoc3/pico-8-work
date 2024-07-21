@@ -1,7 +1,9 @@
 g_cur_pkmn_cry = nil
 |[f_minisfx]| function(num) -- plays a sfx with len of 4. num corresponds to pkmn numbers. 252, 253, 254, 255 are sfx.
-  g_cur_pkmn_cry = num
-  sfx(num\4, 0, num%4*8, 8)
+  if num < P_NONE then
+    g_cur_pkmn_cry = num
+  end
+  sfx(num\4, num < P_NONE and 0 or 1, num%4*8, 8)
 end $$
 
 |[f_flr_rnd]| function(n) return flr(rnd(n)) end $$
@@ -21,7 +23,6 @@ end $$
   end
 end $$
 
--- TODO: pkmn shakes when disabled (battle, press o, then x on switch). i don't want that.
 |[f_draw_pkmn]| function(num, x, y, style, flip, selected, disabled)
   local in_c  = disabled and C_2 or selected and C_3 or C_2
   local out_c = disabled and C_1 or C_1

@@ -40,7 +40,7 @@ g_trainer_data = [[
   254 M_ICEPUNCH     P_SMOOCHUM   P_SHELLDER   P_SWINUB     P_DELIBIRD   P_SEEL       P_AZUMARILL  -- skier        TM33
   253 M_ICYWIND      P_LAPRAS     P_FEAROW     P_SNEASEL    P_URSARING   P_DEWGONG    P_PILOSWINE  -- pryce        TM16
 
-  253 M_THUNDER      P_VOLTORB    P_PORYGON    P_KOFFING    P_SMEARGLE   P_ODDISH     P_DITTO      -- scientist    TM25
+  253 M_THUNDER      P_VOLTORB    P_PORYGON    P_KOFFING    P_SMEARGLE   P_ODDISH     P_DITTO      -- scientist    TM25 -- both smeargle and porygon learn sharpen
   254 M_SWEETSCENT   P_SHUCKLE    P_DRATINI    P_MAGIKARP   P_SKIPLOOM   P_SEADRA     P_LEDIAN     -- twins        TM12
   254 M_DRAGONBREATH P_DONPHAN    P_DRAGONAIR  P_AMPHAROS   P_GYARADOS   P_PUPITAR    P_KINGDRA    -- clair        TM24
 
