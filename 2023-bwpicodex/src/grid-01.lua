@@ -1,6 +1,6 @@
 |[f_refresh_top]| function()
   g_top_grid.op, g_top_grid.preview_op, g_top_grid.lrlist = {}, {}, {}
-  g_top_grid.gridpofunc(g_top_grid, unpack(g_top_grid.params))
+  g_top_grid:gridpofunc()
 end $$
 
 |[f_add_to_ui_stack]| function(grid)
@@ -22,9 +22,10 @@ end $$
   poke(_g[gridname].g_cg_m.sel, val)
 end $$
 
-|[f_create_gridpair]| function(name, memloc, main_grid_spec, info_grid_spec, info_grid_draw, main_op_func, main_sel_func, main_leave_func, lrbasegrid, static, init, ...)
+-- "arg" is an optional param that can be used as something accessible in the op func, such as to change the parameter.
+|[f_create_gridpair]| function(name, memloc, main_grid_spec, info_grid_spec, info_grid_draw, main_op_func, main_sel_func, main_leave_func, lrbasegrid, static, init, arg)
   -- zobj is needed so we can use an _ENV syntax
-  _g[name] = f_zobj([[init,@, g_cg_m,@, g_cg_s,@, gridpofunc,@, params,@]],
+  _g[name] = f_zobj([[init,@, g_cg_m,@, g_cg_s,@, gridpofunc,@, arg,@]],
     init,
     f_zobj([[
       sel,@, view,@, name,@, selfunc,@, leavefunc,@, lrbasegrid,@, static,@, w,@,vh,@,x,@,y,@,cw,@,ch,@,selw,@,selh,@
@@ -35,7 +36,7 @@ end $$
     ]], S_DEFAULT, S_DEFAULT+1, name, info_grid_draw, unpack(info_grid_spec)),
 
     main_op_func,
-    {...}
+    arg
   )
 end $$
 

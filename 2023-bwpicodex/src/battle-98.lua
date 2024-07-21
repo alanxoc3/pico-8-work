@@ -351,8 +351,10 @@ end $$
   f_addaction(p_2, L_PICK, p_2, "begins battle", f_nop, true)
   add(p_2.actions, f_pkmn_comes_out(p_2, p_2.active.spot, L_PICK))
 
-  -- f_start_turn()
-  f_add_to_ui_stack(g_grid_battle_actions)
+  -- the normal action grid has an init function which is called immediately.
+  -- this adds a special first action which is the same as a normal action but with no init function.
+  -- this could also be solved by creating an initial empty action. TODO: experiment with which can save more tokens.
+  f_add_to_ui_stack(g_grid_battle_firstaction)
 
   f_s_bataction() -- call once, because need to pop the first action!
 end $$

@@ -21,13 +21,12 @@
   g_top_grid_cont = g_gridstack[#g_gridstack]
   g_top_grid = g_top_grid_cont.obj
   gridpofunc = g_top_grid.gridpofunc
-  params     = g_top_grid.params
 
   if not g_grid_called_init then
-    g_top_grid.init()
+    g_top_grid:init()
     g_grid_called_init = true
     g_top_grid.op, g_top_grid.preview_op, g_top_grid.lrlist = {}, {}, {}
-    gridpofunc(g_top_grid, unpack(g_top_grid.params))
+    g_top_grid:gridpofunc()
   end
 
   -- needs to go after if statement, because if statement populates op.
