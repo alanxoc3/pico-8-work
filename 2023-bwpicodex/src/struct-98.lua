@@ -79,7 +79,9 @@ end $$
         break
       end
     end
-    team[spot] = f_mkpkmn(pkmn_ind, c_pokemon[pkmn_ind], false, team.trainer.num, c_pokemon[pkmn_ind].default_item, 5, 6, 7, last_move)
+    -- TODO: token save! change the saved num through compilation to save 2 tokens with the +1 here. male and female sprites should be reversed.
+    -- TODO: maybe a token could be saved by having an "is_horde" variable.
+    team[spot] = f_mkpkmn(pkmn_ind, c_pokemon[pkmn_ind], false, team.trainer.num == P_GHOST and pkmn_ind or team.trainer.num+1, c_pokemon[pkmn_ind].default_item, 5, 6, 7, last_move)
     team.fill_ind += 1
   end
 end $$

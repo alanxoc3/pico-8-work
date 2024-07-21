@@ -774,7 +774,7 @@ last_move=i
 break
 end
 end
-team[spot]=f_mkpkmn(pkmn_ind,c_pokemon[pkmn_ind],false,team.trainer.num,c_pokemon[pkmn_ind].default_item,5,6,7,last_move)
+team[spot]=f_mkpkmn(pkmn_ind,c_pokemon[pkmn_ind],false,team.trainer.num==255 and pkmn_ind or team.trainer.num+1,c_pokemon[pkmn_ind].default_item,5,6,7,last_move)
 team.fill_ind+=1
 end
 end,function(trainer_num,fill_ind)

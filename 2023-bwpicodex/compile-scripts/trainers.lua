@@ -8,11 +8,11 @@ function init() -- entry point for this compile script
 end
 
 -- 57 trainers total - includes every pokemon and every move besides missingno, tm05, and struggle.
--- saves a few tokens when upacking to put the move first
+-- saves a few tokens when upacking to put the move at the beginning
 -- 254 is girl. 35 boys. 22 girls
 -- IDEA: I could set the gender bit of every pokemon if I want with the first byte. maybe overkill though. Anyways, I can fit something in that first byte. Maybe the trainer AI alg? Idk...
 g_trainer_data = [[
-  253 M_SWIFT        P_RATTATA    P_PIDGEY     P_SENTRET    P_ZUBAT      P_EEVEE      P_WOOPER     -- youngster    TM39 -- ACTUALLY, not using the gender flag, but it might be cool to use :D
+  253 M_SWIFT        P_RATTATA    P_PIDGEY     P_SENTRET    P_ZUBAT      P_WOOPER     P_EEVEE      -- youngster    TM39 -- ACTUALLY, not using the gender flag, but it might be cool to use :D
   253 M_DREAMEATER   P_PSYDUCK    P_CUBONE     P_HOOTHOOT   P_MEOWTH     P_GASTLY     P_BELLSPROUT -- sage         TM42
   253 M_MUDSLAP      P_PIDGEY     P_SPEAROW    P_DELIBIRD   P_FARFETCHD  P_DODUO      P_PIDGEOTTO  -- falkner      TM31
 
