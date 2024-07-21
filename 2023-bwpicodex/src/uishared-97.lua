@@ -72,6 +72,15 @@ end $$
   -- for i,x in ipairs(split"active,benchd,none,mvlock,bide,dfncrl,disabl,confus,rolout,dstbnd,lockon,dig,fly,fryctr,rage,toxic,persng,pdecnt,substu,ngtmar,trform,lechsd,curse,mist,trappd,meanlk,atract,forsgt,ftrsgt,safgrd,litscr,rflect,spikes,sndstr,raidnc,sunday") do
 end $$
 
+|[f_print_info]| function(op, ...)
+  local params = {...}
+  add(op, {draw=function()
+    local infoobj = f_zobj(unpack(params))
+    f_print_top(unpack(infoobj[1]))
+    f_print_bot(unpack(infoobj[2]))
+  end})
+end $$
+
 |[f_print_top]| function(...)
   local text = ""
   for x in all{...} do

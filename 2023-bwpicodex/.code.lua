@@ -38,7 +38,7 @@ function f_zobj(...)
 return f_zobj_setmeta(_g,...)
 end
 f_zobj_set(_g,"c_pokemon,#,c_moves,#,c_trainers,#,c_items,#,g_init_peek_loc,0x1fff,c_yes,@,c_no,@,c_empty,@,f_nop,@,g_palette,0,g_preview_timer,0,g_title_timer,0,g_title_l,253,g_title_r,254,g_msg_top, ,g_msg_bot, ,g_bat_func,,g_gridstack,#,g_title_an_timer,70",true,false,"",function(...)return...end)
-f_zobj_set(_g,"f_zobj,@,f_zobj_set,@,f_zobj_eval,@,f_zcall,@,f_refresh_top,@,f_add_to_ui_stack,@,f_pop_ui_stack,@,f_getsel,@,f_setsel,@,f_create_gridpair,@,f_update_grid,@,f_draw_grid,@,f_addop_text,@,f_minisfx,@,f_flr_rnd,@,f_in_split,@,f_roundrect,@,f_draw_pkmn,@,f_strtoq,@,f_moveutil_hpchange,@,f_moveutil_dmgself,@,f_moveutil_dmgother,@,f_moveutil_movemod,@,f_moveutil_typeadv,@,f_moveutil_calc_move_damage,@,f_move_splash,@,f_move_recover,@,f_move_tackle,@,f_move_seismictoss,@,f_move_psywave,@,f_move_superfang,@,f_move_falseswipe,@,f_move_submission,@,f_move_struggle,@,f_move_multihit_set,@,f_move_barrage,@,f_move_doublekick,@,f_move_flail,@,f_move_return,@,f_move_frustration,@,f_move_present,@,f_move_magnitude,@,f_move_hiddenpower,@,c_move_funcs,@,c_move_names,@,c_trnr_names,@,c_type_names,@,c_item_names,@,c_team_names,@,c_pkmn_names,@,c_gender_names,@,c_major_names_long,@,c_major_names_short,@,c_movemethod_names,@,c_statmod_names,@,c_palettes,@,c_palette_names,@,c_types,@,f_init_peek_inc,@,f_unlock,@,f_update_locks,@,f_create_spot,@,f_get_edit_op_pkmn,@,f_op_template_edit,@,f_add_stat_move,@,f_add_stat_preview,@,f_add_stat,@,f_print_top,@,f_print_bot,@,f_get_move_texts,@,f_prefix_space,@,f_prefix_zero,@,f_add_battle,@,f_create_active,@,f_create_player,@,f_get_other_pl,@,f_set_pself,@,f_get_live_pkmn,@,f_get_next_active,@,f_end_battle,@,f_newaction,@,f_addaction,@,f_pkmn_comes_out,@,f_pop_next_action,@,f_set_player_priority,@,f_movelogic,@,f_start_turn,@,f_start_battle,@,f_mkpkmn,@,f_team_party,@,f_fill_team,@,f_team_league,@,f_get_party_pkmn,@,f_save_party_pkmn,@,f_stat_crit,@,f_stat_evac,@,f_stat_calc,@,f_init_batresults,@,f_op_def,@,f_op_edititem,@",f_zobj,f_zobj_set,f_zobj_eval,function(func,text,...)
+f_zobj_set(_g,"f_zobj,@,f_zobj_set,@,f_zobj_eval,@,f_zcall,@,f_refresh_top,@,f_add_to_ui_stack,@,f_pop_ui_stack,@,f_getsel,@,f_setsel,@,f_create_gridpair,@,f_update_grid,@,f_draw_grid,@,f_addop_text,@,f_minisfx,@,f_flr_rnd,@,f_in_split,@,f_roundrect,@,f_draw_pkmn,@,f_strtoq,@,f_moveutil_hpchange,@,f_moveutil_dmgself,@,f_moveutil_dmgother,@,f_moveutil_movemod,@,f_moveutil_typeadv,@,f_moveutil_calc_move_damage,@,f_move_splash,@,f_move_recover,@,f_move_tackle,@,f_move_seismictoss,@,f_move_psywave,@,f_move_superfang,@,f_move_falseswipe,@,f_move_submission,@,f_move_struggle,@,f_move_multihit_set,@,f_move_barrage,@,f_move_doublekick,@,f_move_flail,@,f_move_return,@,f_move_frustration,@,f_move_present,@,f_move_magnitude,@,f_move_hiddenpower,@,c_move_funcs,@,c_move_names,@,c_trnr_names,@,c_type_names,@,c_item_names,@,c_team_names,@,c_pkmn_names,@,c_gender_names,@,c_major_names_long,@,c_major_names_short,@,c_movemethod_names,@,c_statmod_names,@,c_palettes,@,c_palette_names,@,c_types,@,f_init_peek_inc,@,f_unlock,@,f_update_locks,@,f_create_spot,@,f_get_edit_op_pkmn,@,f_op_template_edit,@,f_add_stat_move,@,f_add_stat_preview,@,f_add_stat,@,f_print_info,@,f_print_top,@,f_print_bot,@,f_get_move_texts,@,f_prefix_space,@,f_prefix_zero,@,f_add_battle,@,f_create_active,@,f_create_player,@,f_get_other_pl,@,f_set_pself,@,f_get_live_pkmn,@,f_get_next_active,@,f_end_battle,@,f_newaction,@,f_addaction,@,f_pkmn_comes_out,@,f_pop_next_action,@,f_set_player_priority,@,f_movelogic,@,f_start_turn,@,f_start_battle,@,f_mkpkmn,@,f_team_party,@,f_fill_team,@,f_team_league,@,f_get_party_pkmn,@,f_save_party_pkmn,@,f_stat_crit,@,f_stat_evac,@,f_stat_calc,@,f_init_batresults,@,f_op_def,@",f_zobj,f_zobj_set,f_zobj_eval,function(func,text,...)
 foreach(f_zobj(text,...),function(params)
 func(unpack(params))
 end)
@@ -484,6 +484,13 @@ f_add_stat_move(op,pkmn,1)
 f_add_stat_move(op,pkmn,2)
 f_add_stat_move(op,pkmn,3)
 end
+end,function(op,...)
+local params={...}
+add(op,{draw=function()
+local infoobj=f_zobj(unpack(params))
+f_print_top(unpack(infoobj[1]))
+f_print_bot(unpack(infoobj[2]))
+end})
 end,function(...)
 local text=""
 for x in all{...}do
@@ -812,8 +819,12 @@ end,function()
 if p_otheraction==p_1 then
 g_p1_winfunc()
 end
-end,function(_ENV)add(op,{})end,function(_ENV)f_op_template_edit(op,c_items,"item")end)
-f_zobj_set(_g,"f_op_statbrowse,@,f_op_browse,@,f_op_statbattle,@,f_op_edit,@,f_op_editteam,@,f_op_title,@,f_op_teams,@,f_op_editmovebot,@,f_op_editstat,@,f_op_editmove,@,f_op_batsel,@,f_op_movesel,@,f_op_dmovsel,@,f_op_batswitch,@,f_op_batresults,@,f_op_batstats,@,f_dt_editteam,@,f_dt_editstat,@,f_dt_editmove_template,@,f_dt_editmove,@,f_dt_browse,@,f_dt_editpkmn,@,f_dt_batstats,@,f_dt_edit,@,f_dt_league,@,f_dt_versus,@,f_dt_title,@,f_s_batresults,@,f_l_browse,@,f_s_browse,@,f_s_versus,@,f_s_league,@,f_s_batstat,@,f_s_edit,@,f_s_editteam,@,f_s_editstat,@,f_s_editmovebot,@,f_s_battle,@,f_s_title,@,f_s_pkstat,@,f_s_statedit,@,f_s_statbat,@,f_s_versusbegin,@,f_s_batbegin,@,f_s_editpkmn,@,f_s_editmove,@,f_s_edititem,@,f_l_title,@,f_l_battle,@,f_s_batmove,@,f_s_dmovsel,@,f_s_batswitch,@,f_op_bataction,@,f_s_bataction,@,_update,@,_draw,@",function(_ENV)f_add_stat(op,c_pokemon[f_getsel"g_grid_browse"])end,function(_ENV)
+end,function(_ENV)add(op,{})end)
+f_zobj_set(_g,"f_op_edititem,@,f_op_statbrowse,@,f_op_browse,@,f_op_statbattle,@,f_op_edit,@,f_op_editteam,@,f_op_title,@,f_op_teams,@,f_op_editmovebot,@,f_op_editstat,@,f_op_editmove,@,f_op_batsel,@,f_op_movesel,@,f_op_dmovsel,@,f_op_batswitch,@,f_op_batresults,@,f_op_batstats,@,f_dt_browse,@,f_dt_editpkmn,@,f_dt_batstats,@,f_dt_edit,@,f_dt_league,@,f_dt_versus,@,f_dt_title,@,f_s_batresults,@,f_l_browse,@,f_s_browse,@,f_s_versus,@,f_s_league,@,f_s_batstat,@,f_s_edit,@,f_s_editteam,@,f_s_editstat,@,f_s_editmovebot,@,f_s_battle,@,f_s_title,@,f_s_pkstat,@,f_s_statedit,@,f_s_statbat,@,f_s_versusbegin,@,f_s_batbegin,@,f_s_editpkmn,@,f_s_editmove,@,f_s_edititem,@,f_l_title,@,f_l_battle,@,f_s_batmove,@,f_s_dmovsel,@,f_s_batswitch,@,f_op_bataction,@,f_s_bataction,@,_update,@,_draw,@",function(_ENV)
+local pkmn=f_get_party_pkmn(f_getsel"g_grid_pickedit",f_getsel"g_grid_pickspot")
+f_print_info(preview_op,";,edit item;;,@,@, ,@","#",pkmn.num_str,pkmn.name)
+f_op_template_edit(op,c_items,"item")
+end,function(_ENV)f_add_stat(op,c_pokemon[f_getsel"g_grid_browse"])end,function(_ENV)
 for i=0,251 do
 local disabled=not c_pokemon[i].lock
 add(op,{lrvalid=not disabled,disabled=disabled,draw=function(_,is_sel,gridobj)
@@ -844,6 +855,8 @@ end
 end})
 end
 end,function(_ENV)
+local pkmn=f_get_party_pkmn(f_getsel"g_grid_pickedit",f_getsel"g_grid_pickspot")
+f_print_info(preview_op,";,edit spot,@;;,@,@, ,@",f_getsel"g_grid_pickspot"+1,"#",pkmn.num_str,pkmn.name)
 for pkmnnum=0,5 do
 local pkmn=f_get_party_pkmn(f_getsel"g_grid_pickedit",pkmnnum)
 add(op,{lrvalid=pkmn.valid,draw=function(i,is_sel)
@@ -889,6 +902,12 @@ f_pop_ui_stack()
 end})
 end,function(_ENV)
 local pkmn=f_get_edit_op_pkmn()
+local movenum=pkmn.possible_moves[f_getsel"g_grid_editmove"+1]
+local move=c_moves[movenum]
+local method=pkmn.possible_moves_method[movenum]
+local maxpp,pp,pow,accuracy,typ=f_get_move_texts(move)
+local ind=f_getsel"g_grid_editmovebot"+1
+f_print_info(preview_op,";,edit move,@;;,@, ,@",ind,method,typ)
 for i,num in ipairs(pkmn.possible_moves)do
 f_create_spot(c_moves[num],op,pkmn.seen_moves[i])
 end
@@ -922,21 +941,15 @@ add(op,{text=c_move_names[p_selfaction.active[i].num],disabled=p_selfaction.acti
 end
 f_add_stat_move(preview_op,p_selfaction.active,f_getsel"g_grid_battle_movesel")
 end,function(_ENV)
-add(op,{draw=function()
-f_print_top"no more moves"
-f_print_bot"use struggle?"
-end})
+f_print_info(op,";,no more moves;;,use struggle?")
 f_add_stat_move(preview_op,p_selfaction.active,-1)
 end,function(_ENV)
 local pkind=f_getsel"g_grid_battle_switch"
 local trainer_ind=f_getsel"g_grid_picktrnr"
-add(preview_op,{draw=function()
 local name=c_trnr_names[trainer_ind+1]
 local pkmn=p_selfaction.team[pkind%6+1]
-f_print_top("swap ",pkmn.name)
 local player=pkind<6 and p_selfaction or p_otheraction
-f_print_bot(player.name," spot",pkind%6+1)
-end})
+f_print_info(preview_op,";,swap ,@;;,@, spot,@",pkmn.name,player.name,pkind%6+1)
 for i=1,6 do
 local pkmn=p_selfaction.team[i]
 local disabled=not pkmn.valid or i==p_selfaction.active.spot or pkmn.major==1
@@ -952,10 +965,7 @@ add(op,{disabled=disabled,draw=function(i,is_sel)
 f_draw_pkmn(pkmn.num,1,1,2,p_otheraction==p_2,is_sel,disabled)
 end})
 end
-add(preview_op,{draw=function()
-f_print_top(p_otheraction.name.." "..p_otheraction.subname)
-f_print_bot("is the winner!")
-end})
+f_print_info(preview_op,";,@, ,@;;,is the winner!",p_otheraction.name,p_otheraction.subname)
 end,function(_ENV)
 f_dt_batstats(preview_op,f_getsel"g_grid_picktrnr",f_getsel"g_grid_battle_stats")
 for i=1,6 do
@@ -972,41 +982,14 @@ add(op,{lrvalid=not disabled,disabled=disabled,draw=function(i,is_sel)
 f_draw_pkmn(pkmn.num,1,1,1,true,is_sel,disabled)
 end})
 end
-end,function(i,is_sel)
-local spotstr="spot"..(f_getsel"g_grid_pickspot"+1)
-f_print_top("edit ",spotstr)
-local pkmn=f_get_party_pkmn(f_getsel"g_grid_pickedit",f_getsel"g_grid_pickspot")
-f_print_bot("#",pkmn.num_str," ",pkmn.name)
-end,function(i,is_sel)
-local prefix="edit"
-local pkmn=f_get_party_pkmn(f_getsel"g_grid_pickedit",f_getsel"g_grid_pickspot")
-local spotstr="spot"..(f_getsel"g_grid_pickspot"+1)
-if f_getsel"g_grid_editstat"==0 then f_print_top("view: "..spotstr)
-elseif f_getsel"g_grid_editstat"==1 then f_print_top("edit item")
-elseif f_getsel"g_grid_editstat"==6 then f_print_top(prefix," item")
-elseif f_getsel"g_grid_editstat"==7 then f_print_top(prefix," gender")
-else f_print_top(prefix," move",f_getsel"g_grid_editstat"-1)
-end
-local pkmn=f_get_party_pkmn(f_getsel"g_grid_pickedit",f_getsel"g_grid_pickspot")
-f_print_bot("#",pkmn.num_str," ",pkmn.name)
-end,function(move,method)
-local maxpp,pp,pow,accuracy,typ=f_get_move_texts(move)
-local ind=f_getsel"g_grid_editmovebot"+1
-f_print_top("edit move"..ind)
-f_print_bot(method.." "..typ)
-end,function()
-local pkmn=f_get_party_pkmn(f_getsel"g_grid_pickedit",f_getsel"g_grid_pickspot")
-local movenum=pkmn.possible_moves[f_getsel"g_grid_editmove"+1]
-local move=c_moves[movenum]
-f_dt_editmove_template(move,pkmn.possible_moves_method[movenum])
 end,function()
 local pkmn=c_pokemon[f_getsel"g_grid_browse"]
 local namestr=pkmn.name
 if not pkmn.lock then
 namestr=f_strtoq(namestr)
 end
-f_print_top("view ",namestr)
-f_print_bot("picodex #",f_prefix_zero(pkmn.num,3))
+f_print_top("view picodex")
+f_print_bot("#",f_prefix_zero(pkmn.num,3)," ",namestr)
 end,function()
 local pkmn=c_pokemon[f_getsel"g_grid_editpkmn"]
 local namestr=pkmn.name
@@ -1017,13 +1000,10 @@ local spotstr="spot"..(f_getsel"g_grid_pickspot"+1)
 f_print_top("edit ",spotstr)
 f_print_bot("#",f_prefix_zero(pkmn.num,3)," ",namestr)
 end,function(op,trainer_ind,pkind)
-add(op,{draw=function()
 local player=pkind<6 and p_selfaction or p_otheraction
 local name=c_trnr_names[trainer_ind+1]
 local pkmn=player.team[pkind%6+1]
-f_print_bot(player.name," spot",pkind%6+1)
-f_print_top("view ",pkmn.name)
-end})
+f_print_info(op,";,@, spot,@;;,view ,@",player.name,pkind%6+1,pkmn.name)
 end,function()
 local pkstr_arr={}
 local pkstr_lens=split"2,2,2,2,1,1"
@@ -1137,10 +1117,7 @@ f_pop_ui_stack()
 f_add_to_ui_stack(g_grid_battle_actions)
 end,function(_ENV)
 if not g_msg_bot then end
-add(preview_op,{draw=function()
-f_print_top(g_msg_top)
-f_print_bot(g_msg_bot)
-end})
+f_print_info(preview_op,";,~g_msg_top;;,~g_msg_bot")
 f_add_battle(op)
 end,function()
 while true do
@@ -1343,7 +1320,7 @@ poke2(loc,%loc & 0x70df|0x0a00)
 end
 poke4(iloc+64,0x.07d7)
 end
-f_zcall(f_create_gridpair,"top_browse;,6,4,2,2,10,10,1,1;top_edit;,2,2,2,2,30,20,1,1;top_editteam;,3,2,2,2,20,20,1,1;top_results;,3,2,2,2,20,20,1,1;top_pkstat;,1,4,2,4,60,9,1,4;top_pkstatbig;,1,6,2,5,60,9,1,1;top_text_grid;,2,4,2,4,30,9,1,1;top_title;,1,1,2,2,60,40,1,1;top_battle;,1,1,2,2,60,40,1,1;top_battle2;,1,2,2,2,60,20,1,1;bot_4x4;,2,2,2,44,30,9,1,1;bot_info;,1,1,2,45,60,16,1,1;top_newstat;,1,6,2,4,60,9,1,1;;,g_grid_title,0x5ea8,~bot_4x4,~top_title,~f_dt_title,~f_op_title,~f_s_title,~f_l_title,~c_no,~c_no,~f_nop;;,g_grid_browse,0x5eaa,~top_browse,~bot_info,~f_dt_browse,~f_op_browse,~f_s_browse,~f_l_browse,~c_no,~c_no,~f_nop;;,g_grid_editpkmn,0x5eaa,~top_browse,~bot_info,~f_dt_editpkmn,~f_op_browse,~f_s_editpkmn,~f_l_browse,~c_no,~c_no,~f_nop;;,g_grid_statbrowse,0x5eac,~top_pkstat,~bot_info,~f_dt_browse,~f_op_statbrowse,~f_s_pkstat,~f_l_browse,g_grid_browse,~c_no,~f_nop;;,g_grid_editstat,0x5eb6,~bot_4x4,~top_pkstat,~f_nop,~f_op_editstat,~f_s_editstat,~f_l_browse,~c_no,~c_no,~f_nop;;,g_grid_editmovebot,0x5eb8,~bot_4x4,~top_pkstat,~f_nop,~f_op_editmovebot,~f_s_editmovebot,~f_l_browse,~c_no,~c_no,~f_nop;;,g_grid_editmove,0x5ec6,~top_text_grid,~bot_info,~f_dt_editmove,~f_op_editmove,~f_s_editmove,~f_l_browse,~c_no,~c_no,~f_nop;;,g_grid_edititem,0x5ec6,~top_text_grid,~bot_info,~f_dt_editstat,~f_op_edititem,~f_s_edititem,~f_l_browse,~c_no,~c_no,~f_nop;;,g_grid_pickedit,0x5eae,~top_edit,~bot_info,~f_dt_edit,~f_op_edit,~f_s_edit,~f_l_browse,~c_no,~c_no,~f_nop;;,g_grid_pickleag,0x5eae,~top_edit,~bot_info,~f_dt_league,~f_op_edit,~f_s_league,~f_l_browse,~c_no,~c_no,~f_nop,~c_yes;;,g_grid_pickplr1,0x5eae,~top_edit,~bot_info,~f_dt_versus,~f_op_edit,~f_s_versus,~f_l_browse,~c_no,~c_no,~f_nop,~c_yes;;,g_grid_pickplr2,0x5eb0,~top_edit,~bot_info,~f_dt_versus,~f_op_edit,~f_s_versusbegin,~f_l_browse,~c_no,~c_no,~f_nop,~c_yes;;,g_grid_pickspot,0x5eb4,~top_editteam,~bot_info,~f_dt_editteam,~f_op_editteam,~f_s_editteam,~f_l_browse,~c_no,~c_no,~f_nop;;,g_grid_picktrnr,0x5eb2,~top_text_grid,~bot_info,~f_dt_league,~f_op_teams,~f_s_batbegin,~f_l_browse,~c_no,~c_no,~f_nop;;,g_grid_battle_select,0x5ec6,~bot_4x4,~top_battle2,~f_nop,~f_op_batsel,~f_s_battle,~f_l_battle,~c_no,~c_no,~f_nop;;,g_grid_statbattle,0x5ec6,~top_pkstat,~bot_info,~f_nop,~f_op_statbattle,~f_s_statbat,~f_l_browse,g_grid_battle_stats,~c_no,~f_nop;;,g_grid_battle_movesel,0x5ec6,~bot_4x4,~top_pkstat,~f_nop,~f_op_movesel,~f_s_batmove,~f_l_browse,~c_no,~c_no,~f_nop;;,g_grid_battle_dmovsel,0x5ec6,~bot_info,~top_pkstat,~f_nop,~f_op_dmovsel,~f_s_dmovsel,~f_l_browse,~c_no,~c_no,~f_nop;;,g_grid_battle_switch,0x5ec6,~top_editteam,~bot_info,~f_nop,~f_op_batswitch,~f_s_batswitch,~f_l_browse,~c_no,~c_no,~f_nop;;,g_grid_battle_stats,0x5ec6,~top_editteam,~bot_info,~f_nop,~f_op_batstats,~f_s_batstat,~f_l_browse,~c_no,~c_no,~f_nop;;,g_grid_battle_results,0x5ec6,~top_results,~bot_info,~f_nop,~f_op_batresults,~f_s_batresults,~f_l_browse,~c_no,~c_yes,~f_init_batresults;;,g_grid_battle_actions,0x5ec6,~top_battle2,~bot_info,~f_nop,~f_op_bataction,~f_s_bataction,~f_l_battle,~c_no,~c_yes,~f_s_bataction;;,g_grid_battle_firstaction,0x5ec6,~top_battle2,~bot_info,~f_nop,~f_op_bataction,~f_s_bataction,~f_l_battle,~c_no,~c_yes,~f_nop")
+f_zcall(f_create_gridpair,"top_browse;,6,4,2,2,10,10,1,1;top_edit;,2,2,2,2,30,20,1,1;top_editteam;,3,2,2,2,20,20,1,1;top_results;,3,2,2,2,20,20,1,1;top_pkstat;,1,4,2,4,60,9,1,4;top_pkstatbig;,1,6,2,5,60,9,1,1;top_text_grid;,2,4,2,4,30,9,1,1;top_title;,1,1,2,2,60,40,1,1;top_battle;,1,1,2,2,60,40,1,1;top_battle2;,1,2,2,2,60,20,1,1;bot_4x4;,2,2,2,44,30,9,1,1;bot_info;,1,1,2,45,60,16,1,1;top_newstat;,1,6,2,4,60,9,1,1;;,g_grid_title,0x5ea8,~bot_4x4,~top_title,~f_dt_title,~f_op_title,~f_s_title,~f_l_title,~c_no,~c_no,~f_nop;;,g_grid_browse,0x5eaa,~top_browse,~bot_info,~f_dt_browse,~f_op_browse,~f_s_browse,~f_l_browse,~c_no,~c_no,~f_nop;;,g_grid_editpkmn,0x5eaa,~top_browse,~bot_info,~f_dt_editpkmn,~f_op_browse,~f_s_editpkmn,~f_l_browse,~c_no,~c_no,~f_nop;;,g_grid_statbrowse,0x5eac,~top_pkstat,~bot_info,~f_dt_browse,~f_op_statbrowse,~f_s_pkstat,~f_l_browse,g_grid_browse,~c_no,~f_nop;;,g_grid_editstat,0x5eb6,~bot_4x4,~top_pkstat,~f_nop,~f_op_editstat,~f_s_editstat,~f_l_browse,~c_no,~c_no,~f_nop;;,g_grid_editmovebot,0x5eb8,~bot_4x4,~top_pkstat,~f_nop,~f_op_editmovebot,~f_s_editmovebot,~f_l_browse,~c_no,~c_no,~f_nop;;,g_grid_editmove,0x5ec6,~top_text_grid,~bot_info,~f_nop,~f_op_editmove,~f_s_editmove,~f_l_browse,~c_no,~c_no,~f_nop;;,g_grid_edititem,0x5ec6,~top_text_grid,~bot_info,~f_nop,~f_op_edititem,~f_s_edititem,~f_l_browse,~c_no,~c_no,~f_nop;;,g_grid_pickedit,0x5eae,~top_edit,~bot_info,~f_dt_edit,~f_op_edit,~f_s_edit,~f_l_browse,~c_no,~c_no,~f_nop;;,g_grid_pickleag,0x5eae,~top_edit,~bot_info,~f_dt_league,~f_op_edit,~f_s_league,~f_l_browse,~c_no,~c_no,~f_nop,~c_yes;;,g_grid_pickplr1,0x5eae,~top_edit,~bot_info,~f_dt_versus,~f_op_edit,~f_s_versus,~f_l_browse,~c_no,~c_no,~f_nop,~c_yes;;,g_grid_pickplr2,0x5eb0,~top_edit,~bot_info,~f_dt_versus,~f_op_edit,~f_s_versusbegin,~f_l_browse,~c_no,~c_no,~f_nop,~c_yes;;,g_grid_pickspot,0x5eb4,~top_editteam,~bot_info,~f_nop,~f_op_editteam,~f_s_editteam,~f_l_browse,~c_no,~c_no,~f_nop;;,g_grid_picktrnr,0x5eb2,~top_text_grid,~bot_info,~f_dt_league,~f_op_teams,~f_s_batbegin,~f_l_browse,~c_no,~c_no,~f_nop;;,g_grid_battle_select,0x5ec6,~bot_4x4,~top_battle2,~f_nop,~f_op_batsel,~f_s_battle,~f_l_battle,~c_no,~c_no,~f_nop;;,g_grid_statbattle,0x5ec6,~top_pkstat,~bot_info,~f_nop,~f_op_statbattle,~f_s_statbat,~f_l_browse,g_grid_battle_stats,~c_no,~f_nop;;,g_grid_battle_movesel,0x5ec6,~bot_4x4,~top_pkstat,~f_nop,~f_op_movesel,~f_s_batmove,~f_l_browse,~c_no,~c_no,~f_nop;;,g_grid_battle_dmovsel,0x5ec6,~bot_info,~top_pkstat,~f_nop,~f_op_dmovsel,~f_s_dmovsel,~f_l_browse,~c_no,~c_no,~f_nop;;,g_grid_battle_switch,0x5ec6,~top_editteam,~bot_info,~f_nop,~f_op_batswitch,~f_s_batswitch,~f_l_browse,~c_no,~c_no,~f_nop;;,g_grid_battle_stats,0x5ec6,~top_editteam,~bot_info,~f_nop,~f_op_batstats,~f_s_batstat,~f_l_browse,~c_no,~c_no,~f_nop;;,g_grid_battle_results,0x5ec6,~top_results,~bot_info,~f_nop,~f_op_batresults,~f_s_batresults,~f_l_browse,~c_no,~c_yes,~f_init_batresults;;,g_grid_battle_actions,0x5ec6,~top_battle2,~bot_info,~f_nop,~f_op_bataction,~f_s_bataction,~f_l_battle,~c_no,~c_yes,~f_s_bataction;;,g_grid_battle_firstaction,0x5ec6,~top_battle2,~bot_info,~f_nop,~f_op_bataction,~f_s_bataction,~f_l_battle,~c_no,~c_yes,~f_nop")
 f_add_to_ui_stack(g_grid_title)
 sfx"63"
 g_shake_timer=0

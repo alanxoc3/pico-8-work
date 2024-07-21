@@ -16,7 +16,17 @@ end $$
 
 -- This updates the lock variables, which determine if a pokemon/item/move is unlocked.
 |[f_op_def]|        function(_ENV) add(op, {}) end $$
-|[f_op_edititem]|   function(_ENV) f_op_template_edit(op, c_items, 'item')  end $$
+|[f_op_edititem]| function(_ENV)
+  local pkmn = f_get_party_pkmn(f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot')
+
+  f_print_info(preview_op, [[
+     ;,"edit item"
+    ;;,@,@," ",@
+  ]], "#", pkmn.num_str, pkmn.name)
+
+  f_op_template_edit(op, c_items, 'item')
+end $$
+
 |[f_op_statbrowse]| function(_ENV) f_add_stat(op, c_pokemon[f_getsel'g_grid_browse']) end $$
 
 |[f_op_browse]| function(_ENV)
@@ -59,6 +69,13 @@ end $$
 end $$
 
 |[f_op_editteam]| function(_ENV)
+  local pkmn = f_get_party_pkmn(f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot')
+
+  f_print_info(preview_op, [[
+     ;,"edit spot",@
+    ;;,@,@," ",@
+  ]], f_getsel'g_grid_pickspot'+1, "#", pkmn.num_str, pkmn.name)
+
   for pkmnnum=0,5 do
     local pkmn = f_get_party_pkmn(f_getsel'g_grid_pickedit', pkmnnum)
     add(op, {lrvalid=pkmn.valid, draw=function(i, is_sel)
@@ -119,6 +136,19 @@ end $$
 
 |[f_op_editmove]| function(_ENV)
   local pkmn = f_get_edit_op_pkmn()
+
+  local movenum = pkmn.possible_moves[f_getsel'g_grid_editmove'+1]
+  local move = c_moves[movenum]
+  local method = pkmn.possible_moves_method[movenum]
+
+  local maxpp, pp, pow, accuracy, typ = f_get_move_texts(move)
+  local ind = f_getsel'g_grid_editmovebot'+1
+
+  f_print_info(preview_op, [[
+     ;,"edit move",@
+    ;;,@," ",@
+  ]], ind, method, typ)
+
   for i, num in ipairs(pkmn.possible_moves) do
     f_create_spot(c_moves[num], op, pkmn.seen_moves[i])
   end
@@ -167,11 +197,7 @@ end $$
 end $$
 
 |[f_op_dmovsel]| function(_ENV)
-  add(op, {draw=function()
-    f_print_top"no more moves"
-    f_print_bot"use struggle?"
-  end})
-
+  f_print_info(op, [[;,"no more moves";;,"use struggle?"]])
   f_add_stat_move(preview_op, p_selfaction.active, -1) -- -1+1=0 is struggle, every pokemon has a default move of 0 which is always struggle.
 end $$
 
@@ -179,14 +205,15 @@ end $$
   -- TODO: this could likely be combined with f_dt_batstats. would saves tokenies :)
   local pkind = f_getsel'g_grid_battle_switch'
   local trainer_ind = f_getsel'g_grid_picktrnr'
-  add(preview_op, {draw=function()
-    local name = c_trnr_names[trainer_ind+1]
-    local pkmn = p_selfaction.team[pkind%6+1]
-    f_print_top("swap ", pkmn.name)
-    --f_print_bot("#", f_prefix_zero(pkmn.num, 3), " ", pkmn.name)
-    local player = pkind < 6 and p_selfaction or p_otheraction
-    f_print_bot(player.name, " spot", pkind%6+1)
-  end})
+
+  local name = c_trnr_names[trainer_ind+1]
+  local pkmn = p_selfaction.team[pkind%6+1]
+  local player = pkind < 6 and p_selfaction or p_otheraction
+
+  f_print_info(preview_op, [[
+     ;,"swap ",@
+    ;;,@," spot",@
+  ]], pkmn.name, player.name, pkind%6+1)
 
   for i=1,6 do
     local pkmn = p_selfaction.team[i]
@@ -206,10 +233,10 @@ end $$
     end})
   end
 
-  add(preview_op, {draw=function()
-    f_print_top(p_otheraction.name.." "..p_otheraction.subname)
-    f_print_bot("is the winner!")
-  end})
+  f_print_info(preview_op, [[
+     ;,@," ",@
+    ;;,"is the winner!" -- ;;,"is victorious!" -- that's another good win phrase.
+  ]], p_otheraction.name, p_otheraction.subname)
 end $$
 
 -- TODO: make pkmn face opposite way if player 2, for switch screen as well. Maybe...
@@ -234,45 +261,6 @@ end $$
 end $$
 
 ---------------------------------------------------------------------- :DT
-|[f_dt_editteam]| function(i, is_sel)
-  local spotstr = "spot"..(f_getsel'g_grid_pickspot'+1) -- ," spot",f_getsel'g_grid_pickspot'+1)
-
-  f_print_top("edit ", spotstr)
-  local pkmn = f_get_party_pkmn(f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot')
-  f_print_bot("#", pkmn.num_str, " ", pkmn.name)
-end $$
-
-|[f_dt_editstat]| function(i, is_sel)
-  local prefix = "edit" -- ..f_getsel'g_grid_pickspot'+1
-  local pkmn = f_get_party_pkmn(f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot')
-  local spotstr = "spot"..(f_getsel'g_grid_pickspot'+1)
-  if f_getsel'g_grid_editstat' == 0 then f_print_top("view: "..spotstr)
-  elseif f_getsel'g_grid_editstat' == 1 then f_print_top("edit item")
-  elseif f_getsel'g_grid_editstat' == 6 then f_print_top(prefix, " item")
-  elseif f_getsel'g_grid_editstat' == 7 then f_print_top(prefix, " gender")
-  else f_print_top(prefix, " move", f_getsel'g_grid_editstat'-1)
-  end
-
-  local pkmn = f_get_party_pkmn(f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot')
-  f_print_bot("#", pkmn.num_str, " ", pkmn.name)
-end $$
-
--- TODO: is this better being inside an "op" function?
-|[f_dt_editmove_template]| function(move, method)
-  local maxpp, pp, pow, accuracy, typ = f_get_move_texts(move)
-  local ind = f_getsel'g_grid_editmovebot'+1
-
-  f_print_top("edit move"..ind)
-  f_print_bot(method.." "..typ)
-end $$
-
-|[f_dt_editmove]| function()
-  local pkmn = f_get_party_pkmn(f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot')
-  local movenum = pkmn.possible_moves[f_getsel'g_grid_editmove'+1]
-  local move = c_moves[movenum]
-  f_dt_editmove_template(move, pkmn.possible_moves_method[movenum])
-end $$
-
 |[f_dt_browse]| function()
   local pkmn = c_pokemon[f_getsel'g_grid_browse']
   local namestr = pkmn.name
@@ -281,8 +269,8 @@ end $$
     namestr = f_strtoq(namestr)
   end
 
-  f_print_top("view ", namestr)
-  f_print_bot("picodex #", f_prefix_zero(pkmn.num, 3))
+  f_print_top("view picodex")
+  f_print_bot("#", f_prefix_zero(pkmn.num, 3), " ", namestr)
 end $$
 
 -- TODO: dedup with below func
@@ -300,13 +288,14 @@ end $$
 end $$
 
 |[f_dt_batstats]| function(op, trainer_ind, pkind)
-  add(op, {draw=function()
-    local player = pkind < 6 and p_selfaction or p_otheraction
-    local name = c_trnr_names[trainer_ind+1]
-    local pkmn = player.team[pkind%6+1]
-    f_print_bot(player.name, " spot", pkind%6+1)
-    f_print_top("view ", pkmn.name)
-  end})
+  local player = pkind < 6 and p_selfaction or p_otheraction
+  local name = c_trnr_names[trainer_ind+1]
+  local pkmn = player.team[pkind%6+1]
+  -- TODO: try changing this to match the editbrowse and viewbrowse info boxes (#xxx pkmname)
+  f_print_info(op, [[
+     ;,@," spot",@
+    ;;,"view ",@
+  ]], player.name, pkind%6+1,pkmn.name)
 end $$
 
 |[f_dt_edit]| function()
@@ -495,11 +484,7 @@ end $$
 
 |[f_op_bataction]| function(_ENV)
   if not g_msg_bot then end -- TODO: is this needed? I'm guessing not... experiment removing it!
-  add(preview_op, {draw=function()
-    f_print_top(g_msg_top)
-    f_print_bot(g_msg_bot)
-  end})
-
+  f_print_info(preview_op, [[;,~g_msg_top;;,~g_msg_bot]])
   f_add_battle(op)
 end $$
 
@@ -568,14 +553,14 @@ f_zcall(f_create_gridpair, [[
 
   ;;,g_grid_editstat           ,S_EDITSEL      ,~bot_4x4       ,~top_pkstat    ,~f_nop           ,~f_op_editstat    ,~f_s_editstat     ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop
   ;;,g_grid_editmovebot        ,S_EDITMOVE     ,~bot_4x4       ,~top_pkstat    ,~f_nop           ,~f_op_editmovebot ,~f_s_editmovebot  ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop
-  ;;,g_grid_editmove           ,S_DEFAULT      ,~top_text_grid ,~bot_info      ,~f_dt_editmove   ,~f_op_editmove    ,~f_s_editmove     ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop
-  ;;,g_grid_edititem           ,S_DEFAULT      ,~top_text_grid ,~bot_info      ,~f_dt_editstat   ,~f_op_edititem    ,~f_s_edititem     ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop
+  ;;,g_grid_editmove           ,S_DEFAULT      ,~top_text_grid ,~bot_info      ,~f_nop           ,~f_op_editmove    ,~f_s_editmove     ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop
+  ;;,g_grid_edititem           ,S_DEFAULT      ,~top_text_grid ,~bot_info      ,~f_nop           ,~f_op_edititem    ,~f_s_edititem     ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop
 
   ;;,g_grid_pickedit           ,S_TEAM1        ,~top_edit      ,~bot_info      ,~f_dt_edit       ,~f_op_edit        ,~f_s_edit         ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop
   ;;,g_grid_pickleag           ,S_TEAM1        ,~top_edit      ,~bot_info      ,~f_dt_league     ,~f_op_edit        ,~f_s_league       ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop ,~c_yes
   ;;,g_grid_pickplr1           ,S_TEAM1        ,~top_edit      ,~bot_info      ,~f_dt_versus     ,~f_op_edit        ,~f_s_versus       ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop ,~c_yes
   ;;,g_grid_pickplr2           ,S_TEAM2        ,~top_edit      ,~bot_info      ,~f_dt_versus     ,~f_op_edit        ,~f_s_versusbegin  ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop ,~c_yes
-  ;;,g_grid_pickspot           ,S_EDITPKMN     ,~top_editteam  ,~bot_info      ,~f_dt_editteam   ,~f_op_editteam    ,~f_s_editteam     ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop
+  ;;,g_grid_pickspot           ,S_EDITPKMN     ,~top_editteam  ,~bot_info      ,~f_nop           ,~f_op_editteam    ,~f_s_editteam     ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop
   ;;,g_grid_picktrnr           ,S_LEAGUE       ,~top_text_grid ,~bot_info      ,~f_dt_league     ,~f_op_teams       ,~f_s_batbegin     ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop
 
   -- Battle UI
