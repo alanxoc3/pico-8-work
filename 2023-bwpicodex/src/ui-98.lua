@@ -435,9 +435,6 @@ end $$
 
 |[f_s_batmove]| function()
   p_selfaction.nextmove = p_selfaction.active[f_getsel'g_grid_battle_movesel'+1]
-  printh("MOVE PRE")
-  db(p_selfaction.active[1])
-
   f_movelogic(p_selfaction)
 
   -- TODO: Dedup with below.

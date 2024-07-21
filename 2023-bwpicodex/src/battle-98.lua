@@ -57,7 +57,6 @@
     -- this allows changing the move with hidden power, mimic, transform.
     active[i] = f_zobj_setmeta(bench_parent[i], [[cool,hello world]])
   end
-  printh("yes a cool "..bench_parent.name)
   return active
 end $$
 

@@ -329,6 +329,8 @@ return base_damage\1,advantage,crit
 end,function()a_addaction(p_selfaction,"does nothing")end,function(_ENV)return f_moveutil_hpchange(p_selfaction,-a_self_active.maxhp\2)end,function(_ENV)
 f_moveutil_dmgother(_ENV)
 end,function(_ENV)f_moveutil_dmgother(spec)end,function()f_moveutil_dmgother(f_flr_rnd"75"+1)end,function()f_moveutil_dmgother(ceil(a_other_active.hp/2))end,function(_ENV)
+local dmg=f_moveutil_calc_move_damage(_ENV,a_self_active,a_other_active)
+return f_moveutil_dmgother(min(a_other_active.hp-1,dmg))
 end,function(_ENV)
 f_moveutil_dmgother(_ENV,function(dmg)
 f_moveutil_dmgself(ceil(dmg/4))
@@ -338,8 +340,18 @@ f_moveutil_dmgother(_ENV,function(dmg)
 f_moveutil_dmgself(ceil(p_selfturn.active.maxhp/4))
 end)
 end,function(_ENV,hitcount,isresume)
+if hitcount>0 then
+a_addaction(p_selfturn,isresume and "resumes "..name,function()
+p_selfturn.active.numtimes+=1
+f_moveutil_dmgother(_ENV,function()
+f_move_multihit_set(_ENV,hitcount-1,true)
+end)
+end)
+end
 end,function(_ENV)
+f_move_multihit_set(_ENV,2+f_flr_rnd"4")
 end,function(_ENV)
+f_move_multihit_set(_ENV,spec)
 end,function(_ENV)
 local hplist=f_zobj";,.7,20;;,.4,40;;,.2,80;;,.1,100;;,.05,150"
 local perc=p_selfturn.active.hp/p_selfturn.active.maxhp
@@ -358,6 +370,17 @@ end,function(_ENV)
 local is_sad=p_selfturn.active.hp/p_selfturn.active.maxhp<=p_otherturn.active.hp/p_otherturn.active.maxhp
 f_moveutil_dmgother(f_zobj_setmeta(_ENV,"pow,@",is_sad and 100 or 50))
 end,function(_ENV)
+local perc,pow=rnd()
+for pair in all(f_zobj";,.2,120;;,.3,80;;,.6,40")do
+if perc>pair[1]then
+pow=pair[2]
+end
+end
+if pow then
+f_moveutil_dmgother(f_zobj_setmeta(_ENV,"pow,@",pow))
+else
+return f_moveutil_hpchange(p_otherturn,-p_otherturn.active.maxhp\4)
+end
 end,function(_ENV)
 local perc,num,pow=rnd()
 for i,pair in ipairs(f_zobj";,0,10;;,.05,30;;,.15,50;;,.35,70;;,.65,90;;,.85,110;;,.95,150")do
@@ -368,7 +391,6 @@ end
 a_addaction(p_selfturn,"magnitude "..num)
 f_moveutil_dmgother(f_zobj_setmeta(_ENV,"pow,@",pow))
 end,function(_ENV)
-db(_ENV)
 local possible_types={}
 for i=1,18 do
 local v=f_moveutil_typeadv(f_zobj_setmeta(_ENV,"pktype,@",i),p_otherturn.active)
@@ -536,7 +558,6 @@ local active=f_zobj_setmeta(team[ind],"isactive,~c_yes,lastmoverecv,0,moveturn,0
 for i=1,4 do
 active[i]=f_zobj_setmeta(bench_parent[i],"cool,hello world")
 end
-printh("yes a cool "..bench_parent.name)
 return active
 end,function(name,team,subname,num,iscpu)
 local active=nil
@@ -1087,8 +1108,6 @@ g_palette%=#c_palettes
 end,function()
 return p_selfaction.active.invisible and 253 or p_selfaction.active.num end,function()
 p_selfaction.nextmove=p_selfaction.active[f_getsel"g_grid_battle_movesel"+1]
-printh("MOVE PRE")
-db(p_selfaction.active[1])
 f_movelogic(p_selfaction)
 f_pop_ui_stack()
 f_pop_ui_stack()
