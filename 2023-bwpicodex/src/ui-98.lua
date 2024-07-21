@@ -258,7 +258,15 @@ end $$
 end $$
 
 |[f_dt_browse]| function()
-  f_dt_browse_template(f_getsel'g_grid_browse')
+  local pkmn = c_pokemon[f_getsel'g_grid_browse']
+  local namestr = pkmn.name
+
+  if not pkmn.lock then
+    namestr = f_strtoq(namestr)
+  end
+
+  f_print_top("view ", namestr)
+  f_print_bot("picodex #", f_prefix_zero(pkmn.num, 3))
 end $$
 
 -- TODO: dedup with below func

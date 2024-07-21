@@ -117,18 +117,6 @@ end $$
   return numstr
 end $$
 
-|[f_dt_browse_template]| function(pkmn_ind)
-  local pkmn = c_pokemon[pkmn_ind]
-  local namestr = pkmn.name
-
-  if not pkmn.lock then
-    namestr = f_strtoq(namestr)
-  end
-
-  f_print_top("view ", namestr)
-  f_print_bot("picodex #", f_prefix_zero(pkmn.num, 3))
-end $$
-
 |[f_add_battle]| function(op)
   local b = function(player, x, y, px, py, flip)
     add(op, {draw=function()
