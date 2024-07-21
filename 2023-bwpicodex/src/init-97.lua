@@ -402,7 +402,7 @@ for i=0,252 do -- todo: token crunching - can move up
   -- c_pokemon[i].moves_grouped = nil
 
   -- And finally, set stats/etc on the base pokemon.
-  c_pokemon[i] = f_mkpkmn(i, c_pokemon[i], false, false, I_NONE, 5, 6, 7, 8) -- sets the moves for dex entries!
+  c_pokemon[i] = f_mkpkmn(i, c_pokemon[i], false, false, I_NONE) -- sets the moves for dex entries!
 end
 
 for i=1,57 do

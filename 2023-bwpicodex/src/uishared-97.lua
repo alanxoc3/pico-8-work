@@ -48,7 +48,7 @@ end $$
   end
 
   add(op, {text="   hp "..f_prefix_zero(pkmn.hp, 3).."/"..f_prefix_zero(pkmn.maxhp, 3)})
-  add(op, {text=" item "..c_item_names[is_battle and pkmn.item or pkmn.default_item]})
+  add(op, {text=" item "..c_item_names[pkmn.item]})
 
   add(op, {text="info "..pkmn.name, disabled=true})
   add(op, {text="gendr "..c_gender_names[pkmn.gender]})
@@ -61,10 +61,12 @@ end $$
   add(op, {text="sp/lv "..f_prefix_zero(f_stat_calc(pkmn, 'speed'), 3).."/050"})
 
   -- TODO: token saving, add a zcall here
-  f_add_stat_move(op, pkmn, 0)
-  f_add_stat_move(op, pkmn, 1)
-  f_add_stat_move(op, pkmn, 2)
-  f_add_stat_move(op, pkmn, 3)
+  if is_battle then
+    f_add_stat_move(op, pkmn, 0)
+    f_add_stat_move(op, pkmn, 1)
+    f_add_stat_move(op, pkmn, 2)
+    f_add_stat_move(op, pkmn, 3)
+  end
 
   -- TODO: idk. should i include battle flags or no?
   -- for i,x in ipairs(split"active,benchd,none,mvlock,bide,dfncrl,disabl,confus,rolout,dstbnd,lockon,dig,fly,fryctr,rage,toxic,persng,pdecnt,substu,ngtmar,trform,lechsd,curse,mist,trappd,meanlk,atract,forsgt,ftrsgt,safgrd,litscr,rflect,spikes,sndstr,raidnc,sunday") do

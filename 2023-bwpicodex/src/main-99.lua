@@ -7,6 +7,10 @@
 -- 3. lrfunc
 -- 4. vert/horiz movement
 
+-- calculate grids only when a select/leave/move happens
+-- benefits to putting preview_op in ui gridpofunc?
+-- can reuse some preview_ops or whatever
+
 -- TODO: dedup this if it's only used once and maybe try a btnp(i) approach instead (for loop)
 |[_update]| function()
   --printh(stat'0') -- check memory
@@ -34,8 +38,6 @@
   g_cg_m     = g_top_grid.g_cg_m -- TODO: refactor/simplify. maybe dont need all these variables. do what is less tokens
   g_cg_s     = g_top_grid.g_cg_s
 
-  grid_previewop = g_top_grid.preview_op
-
   if g_title_timer == C_TITLETIMER then
     f_update_grid(g_cg_m, gridpo)
   end
@@ -45,7 +47,7 @@ end $$
 sfx'63' -- Plays all the 4 sound effects in picodex as the logo/startup tune.
 g_shake_timer = 0
 |[_draw]| function() -- since there is very minimal animation, doing 30fps. this gives me cpu so i can make some things slower to save tokens.
-  cls'C_1'
+  cls'C_1' -- TODO: I could maybe add a C_0 for the background. I had this before then got rid of it because I couldn't find enough colors. Maybe I could try again with the colors though.
   if g_title_timer < C_TITLETIMER then
     print"\^j47\|e\f3alanxoc3\n\^j4a\|9\f2presents"
     for i=1,6 do
@@ -57,9 +59,9 @@ g_shake_timer = 0
 
   local var = 1-min(C_TITLETIMER, g_title_timer)/C_TITLETIMER
   local easing = var*var
-  if g_cg_m then
-    f_draw_grid(g_cg_m, gridpo, @g_cg_m.sel, @g_cg_m.view, g_cg_m.x, g_cg_m.y+easing*24, true)
-    f_draw_grid(g_cg_s, #grid_previewop > 0 and grid_previewop or {{draw=g_cg_s.df}},   -1,          0,               g_cg_s.x, g_cg_s.y-easing*45)
+  if g_top_grid.g_cg_m then
+    f_draw_grid(g_top_grid.g_cg_m, g_top_grid.op, @g_top_grid.g_cg_m.sel, @g_top_grid.g_cg_m.view, g_top_grid.g_cg_m.x, g_top_grid.g_cg_m.y+easing*24, true)
+    f_draw_grid(g_top_grid.g_cg_s, #g_top_grid.preview_op > 0 and g_top_grid.preview_op or {{draw=g_top_grid.g_cg_s.df}},   -1,          0,               g_top_grid.g_cg_s.x, g_top_grid.g_cg_s.y-easing*45)
   end
 
   pal(c_palettes[g_palette],1)

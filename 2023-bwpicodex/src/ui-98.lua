@@ -29,6 +29,8 @@ end $$
 end $$
 
 |[f_op_statbattle]| function(_ENV)
+  f_dt_batstats(preview_op, f_getsel'g_grid_picktrnr', f_getsel'g_grid_battle_stats')
+
   local bothteams = {}
   for i=1,6 do add(bothteams, i == p_selfaction.active.spot  and p_selfaction.active  or p_selfaction.team[i]) end
   for i=1,6 do add(bothteams, i == p_otheraction.active.spot and p_otheraction.active or p_otheraction.team[i]) end
@@ -174,6 +176,18 @@ end $$
 end $$
 
 |[f_op_batswitch]| function(_ENV)
+  -- TODO: this could likely be combined with f_dt_batstats. would saves tokenies :)
+  local pkind = f_getsel'g_grid_battle_switch'
+  local trainer_ind = f_getsel'g_grid_picktrnr'
+  add(preview_op, {draw=function()
+    local name = c_trnr_names[trainer_ind+1]
+    local pkmn = p_selfaction.team[pkind%6+1]
+    f_print_top("swap ", pkmn.name)
+    --f_print_bot("#", f_prefix_zero(pkmn.num, 3), " ", pkmn.name)
+    local player = pkind < 6 and p_selfaction or p_otheraction
+    f_print_bot(player.name, " spot", pkind%6+1)
+  end})
+
   for i=1,6 do
     local pkmn = p_selfaction.team[i]
     local disabled = not pkmn.valid or i==p_selfaction.active.spot or pkmn.major == C_MAJOR_FAINTED
@@ -200,6 +214,8 @@ end $$
 
 -- TODO: make pkmn face opposite way if player 2, for switch screen as well. Maybe...
 |[f_op_batstats]| function(_ENV)
+  f_dt_batstats(preview_op, f_getsel'g_grid_picktrnr', f_getsel'g_grid_battle_stats')
+
   for i=1,6 do
     local pkmn = p_selfaction.team[i]
     local disabled = not pkmn.valid
@@ -283,6 +299,16 @@ end $$
   f_print_bot("#", f_prefix_zero(pkmn.num, 3), " ", namestr)
 end $$
 
+|[f_dt_batstats]| function(op, trainer_ind, pkind)
+  add(op, {draw=function()
+    local player = pkind < 6 and p_selfaction or p_otheraction
+    local name = c_trnr_names[trainer_ind+1]
+    local pkmn = player.team[pkind%6+1]
+    f_print_bot(player.name, " spot", pkind%6+1)
+    f_print_top("view ", pkmn.name)
+  end})
+end $$
+
 |[f_dt_edit]| function()
   local pkstr_arr = {}
   local pkstr_lens = split'2,2,2,2,1,1'
@@ -293,25 +319,6 @@ end $$
 
   f_print_top("edit ", c_team_names[f_getsel'g_grid_pickedit']) -- TODO: fixme
   f_print_bot(pkstr_arr[1], "-", pkstr_arr[2], "-", pkstr_arr[3], "-", pkstr_arr[4], "-", pkstr_arr[5], pkstr_arr[6])
-end $$
-
-|[f_dt_batstats]| function()
-  local ind = f_getsel'g_grid_battle_stats'
-  local player = ind < 6 and p_selfaction or p_otheraction
-  local name = c_trnr_names[f_getsel'g_grid_picktrnr'+1]
-  local pkmn = player.team[ind%6+1]
-  f_print_bot(player.name, " spot", ind%6+1)
-  f_print_top("view ", pkmn.name)
-end $$
-
-|[f_dt_switch]| function()
-  local ind = f_getsel'g_grid_battle_switch'
-  local name = c_trnr_names[f_getsel'g_grid_picktrnr'+1]
-  local pkmn = p_selfaction.team[ind%6+1]
-  f_print_top("swap ", pkmn.name)
-  --f_print_bot("#", f_prefix_zero(pkmn.num, 3), " ", pkmn.name)
-  local player = ind < 6 and p_selfaction or p_otheraction
-  f_print_bot(player.name, " spot", ind%6+1)
 end $$
 
 |[f_dt_league]| function()
@@ -573,11 +580,11 @@ f_zcall(f_create_gridpair, [[
 
   -- Battle UI
   ;;,g_grid_battle_select      ,S_DEFAULT      ,~bot_4x4       ,~top_battle2   ,~f_nop           ,~f_op_batsel      ,~f_s_battle       ,~f_l_battle      ,~c_no               ,~c_no  ,~f_nop
-  ;;,g_grid_statbattle         ,S_DEFAULT      ,~top_pkstat    ,~bot_info      ,~f_dt_batstats   ,~f_op_statbattle  ,~f_s_statbat      ,~f_l_browse      ,g_grid_battle_stats ,~c_no  ,~f_nop
+  ;;,g_grid_statbattle         ,S_DEFAULT      ,~top_pkstat    ,~bot_info      ,~f_nop           ,~f_op_statbattle  ,~f_s_statbat      ,~f_l_browse      ,g_grid_battle_stats ,~c_no  ,~f_nop
   ;;,g_grid_battle_movesel     ,S_DEFAULT      ,~bot_4x4       ,~top_pkstat    ,~f_nop           ,~f_op_movesel     ,~f_s_batmove      ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop
   ;;,g_grid_battle_dmovsel     ,S_DEFAULT      ,~bot_info      ,~top_pkstat    ,~f_nop           ,~f_op_dmovsel     ,~f_s_dmovsel      ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop
-  ;;,g_grid_battle_switch      ,S_DEFAULT      ,~top_editteam  ,~bot_info      ,~f_dt_switch     ,~f_op_batswitch   ,~f_s_batswitch    ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop
-  ;;,g_grid_battle_stats       ,S_DEFAULT      ,~top_editteam  ,~bot_info      ,~f_dt_batstats   ,~f_op_batstats    ,~f_s_batstat      ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop
+  ;;,g_grid_battle_switch      ,S_DEFAULT      ,~top_editteam  ,~bot_info      ,~f_nop           ,~f_op_batswitch   ,~f_s_batswitch    ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop
+  ;;,g_grid_battle_stats       ,S_DEFAULT      ,~top_editteam  ,~bot_info      ,~f_nop           ,~f_op_batstats    ,~f_s_batstat      ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop
 
   ;;,g_grid_battle_results     ,S_DEFAULT      ,~top_results   ,~bot_info      ,~f_nop           ,~f_op_batresults  ,~f_s_batresults   ,~f_l_browse      ,~c_no               ,~c_yes ,~f_init_batresults
   ;;,g_grid_battle_actions     ,S_DEFAULT      ,~top_battle2   ,~bot_info      ,~f_nop           ,~f_op_bataction   ,~f_s_bataction    ,~f_l_battle      ,~c_no               ,~c_yes ,~f_s_bataction
