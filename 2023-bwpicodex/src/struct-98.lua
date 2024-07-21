@@ -12,6 +12,7 @@
   -- base is the parent table. at the start of a battle and when loading for edit, base is c_pokemon[ind].
   -- when a pokemon becomes active, it calls mkpkmn with base being the bench/initial battle stats.
   -- hp/item/major changes must happen on "base"
+
   -- TODO: do i need base? Maybe? not actually using it as of 2024-07-16
   local pkmn = f_zobj_setmeta(base, [[
     num,@, base,@, gender_bit,@, item,@, valid,@,
@@ -35,6 +36,7 @@
       accuracy,       0; -- TODO: delete the semicolon
   ]], ind, base, gender_bit, item % C_LEN_ITEMS, ind < P_NONE)
   pkmn.gender = pkmn.gender_mask
+
   -- Using local variable for gender_bit to save a token, though maybe i could just set _ENV here, idk.
   if gender_bit and pkmn.gender_mask == G_BOTH then
     pkmn.gender = gender_bit%2+1 -- 1

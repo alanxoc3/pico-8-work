@@ -223,7 +223,7 @@ end $$
   local move = player.nextmove
   f_addaction(player, L_ATTACK, player, (player.active.curmove and "resumes " or (move.func == f_move_multiturn and "begins " or "uses "))..c_move_names[move.num], function()
     -- TODO: how does metronome work with solar beam. would pp get deducted twice?
-    move.pp -= 1 -- deducts struggle too, because why not. it cant hurt
+    move.pp = max(0, move.pp-1) -- needs a zero bounds check, because struggle could go negative without this.
 
     if (function() -- miss logic TODO: fix this to be in line with gen 2 logic. this was copied from gen 1 picodex
       if move.accuracy <= 0 then return false end -- swift/haze (-1) and status moves (0)
@@ -270,7 +270,6 @@ end $$
     if p_selfaction.iscpu then
       local possible_moves = {}
       for i=1,4 do
-        printh("pp: "..p_selfaction.active[i].pp)
         if p_selfaction.active[i].num < M_NONE and p_selfaction.active[i].pp > 0 then
           add(possible_moves, i)
         end
@@ -321,8 +320,6 @@ end $$
     f_set_player_priority(p_1)
     f_set_player_priority(p_2)
 
-    printh("IM HERE")
-    printh("p1p: "..p_1.priority.." | p2p: "..p_2.priority)
     -- if priorities are equal, then coin flip!
     if p_1.priority == p_2.priority then p_2.priority += sgn(rnd'2'-1) end
     p_first = p_1.priority > p_2.priority and p_1 or p_2

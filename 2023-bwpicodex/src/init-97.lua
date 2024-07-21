@@ -304,7 +304,7 @@ end $$
 
 -- STEP 2: UNPACK TYPE CHART
 for i=0,360 do -- 19*19-1 = 324 (19 types, including BIRD and NONE)
-  c_types[i\19][i%19] = f_init_peek_inc()\2
+  c_types[i\19][i%19] = f_init_peek_inc()/2 -- want division, not integer division. need .5 for less effective moves
 end
 
 for i=0,I_END do add(c_items,  f_zobj([[lock,~c_no,  num,@, name,@]], i, c_item_names[i] )) end
@@ -320,8 +320,8 @@ for i=0,252 do -- There are 252+1 pkmn and 252+1 moves. The +1s are for empties.
     c_moves[i][key] = f_init_peek_inc()
   end)
 
-  -- TODO: if these can fit in data section, that would be sweet scent
-  c_moves[i].pp = c_moves[i].maxpp
+  -- TODO: if these can fit in data section, that would be very sweetscent.
+  c_moves[i].pp   = c_moves[i].maxpp
   c_moves[i].func = _g[c_move_funcs[i][1]]
   c_moves[i].spec = c_move_funcs[i][2]
 
@@ -387,7 +387,10 @@ for i=0,252 do -- todo: token crunching - can move up
 
   for ii=1,3 do
     foreach(c_pokemon[i].moves_grouped[ii], function(v)
-      if not c_pokemon[i].possible_moves_method[v] then -- this if statement is required for pokemon learn a move naturally and their prevolve learns the move through teaching. Specifically Jigglypuff/Igglybuff have this scenario with rest & rollout. There may be others too.
+      -- this if statement is required for pokemon learn a move naturally and their prevolve learns the move through teaching.
+      -- Specifically Jigglypuff/Igglybuff have this scenario with rest & rollout. There may be others too.
+      -- Missingno is the only exception here because it is the only pokemon that can learn multiple of one move (watergun)
+      if i == P_MISSINGNO or not c_pokemon[i].possible_moves_method[v] then
         add(c_pokemon[i].possible_moves, v)
         c_pokemon[i].possible_moves_method[v] = c_movemethod_names[ii]
       end

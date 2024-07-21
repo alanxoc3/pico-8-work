@@ -19,8 +19,8 @@
   local dmgtxt = (amount > 0 and "-" or "+")..abs(amount).." hp change"
 
   local hpchange = function()
-    a_self_active.hp -= amount
-    if a_self_active.hp <= 0 then
+    a_self_active.base.hp -= amount
+    if a_self_active.base.hp <= 0 then
       a_self_active.base.major = C_MAJOR_FAINTED
     end
   end

@@ -248,8 +248,8 @@ callback_function=callback_function or f_nop
 amount=mid(amount>0 and hp or-pkmn.maxhp+hp,amount,0)
 local dmgtxt=(amount>0 and "-"or "+")..abs(amount).." hp change"
 local hpchange=function()
-a_self_active.hp-=amount
-if a_self_active.hp<=0 then
+a_self_active.base.hp-=amount
+if a_self_active.base.hp<=0 then
 a_self_active.base.major=1
 end
 end
@@ -443,7 +443,7 @@ add(op,{text="major "..c_major_names_long[pkmn.major]})
 else
 add(op,{text="prevo "..c_pkmn_names[pkmn.prevolve]})
 end
-add(op,{text="   hp "..pkmn.hp.."/"..pkmn.maxhp})
+add(op,{text="   hp "..f_prefix_zero(pkmn.hp,3).."/"..f_prefix_zero(pkmn.maxhp,3)})
 add(op,{text=" item "..c_item_names[is_battle and pkmn.item or pkmn.default_item]})
 add(op,{text="info "..pkmn.name,disabled=true})
 add(op,{text="gendr "..c_gender_names[pkmn.gender]})
@@ -623,7 +623,7 @@ player.priority=priority_class+f_stat_calc(player.active,"speed",true)
 end,function(player)
 local move=player.nextmove
 f_addaction(player,3,player,(player.active.curmove and "resumes "or(move.func==f_move_multiturn and "begins "or "uses "))..c_move_names[move.num],function()
-move.pp-=1
+move.pp=max(0,move.pp-1)
 if(function()
 if move.accuracy<=0 then return false end
 return rnd(f_stat_evac(a_other_active.stages["evasion"]))>move.accuracy/100*f_stat_evac(a_self_active.stages["accuracy"])or f_flr_rnd"256"==0 and f_flr_rnd"256"==0
@@ -646,7 +646,6 @@ local x=function()
 if p_selfaction.iscpu then
 local possible_moves={}
 for i=1,4 do
-printh("pp: "..p_selfaction.active[i].pp)
 if p_selfaction.active[i].num<252 and p_selfaction.active[i].pp>0 then
 add(possible_moves,i)
 end
@@ -687,8 +686,6 @@ f_addaction(p_2,1,p_2,not p_2.iscpu and "begins turn",x,true)
 f_addaction(p_1,2,p_1,false,function()
 f_set_player_priority(p_1)
 f_set_player_priority(p_2)
-printh("IM HERE")
-printh("p1p: "..p_1.priority.." | p2p: "..p_2.priority)
 if p_1.priority==p_2.priority then p_2.priority+=sgn(rnd"2"-1)end
 p_first=p_1.priority>p_2.priority and p_1 or p_2
 p_last=f_get_other_pl(p_first)
@@ -1142,7 +1139,6 @@ f_start_turn()
 end
 end
 end,function()
-printh(stat"0")
 if t()>=1.5 then
 if g_title_timer==0 then
 f_minisfx(254)
@@ -1231,7 +1227,7 @@ g_cur_pkmn_cry=nil
 f_zcall(poke,";,0x5f2c,3;;,0x5f5c,8;;,0x5f5d,1;;,0x5eff,58")
 cls()
 for i=0,360 do
-c_types[i\19][i%19]=f_init_peek_inc()\2
+c_types[i\19][i%19]=f_init_peek_inc()/2
 end
 for i=0,41 do add(c_items,f_zobj("lock,~c_no,num,@,name,@",i,c_item_names[i]))end
 for i=0,252 do
@@ -1287,7 +1283,7 @@ c_pokemon[i].possible_moves=f_zobj",252,252,252,252"
 c_pokemon[i].possible_moves_method=f_zobj"252,empty"
 for ii=1,3 do
 foreach(c_pokemon[i].moves_grouped[ii],function(v)
-if not c_pokemon[i].possible_moves_method[v]then
+if i==0 or not c_pokemon[i].possible_moves_method[v]then
 add(c_pokemon[i].possible_moves,v)
 c_pokemon[i].possible_moves_method[v]=c_movemethod_names[ii]
 end
