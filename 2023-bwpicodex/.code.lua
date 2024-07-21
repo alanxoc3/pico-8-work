@@ -368,6 +368,7 @@ end
 a_addaction(p_selfturn,"magnitude "..num)
 f_moveutil_dmgother(f_zobj_setmeta(_ENV,"pow,@",pow))
 end,function(_ENV)
+db(_ENV)
 local possible_types={}
 for i=1,18 do
 local v=f_moveutil_typeadv(f_zobj_setmeta(_ENV,"pktype,@",i),p_otherturn.active)
@@ -470,7 +471,7 @@ text..=x
 end
 print("\f1"..text,1,8)
 end,function(move)
-local maxpp,pp,pow,accuracy,typ=f_prefix_zero(move.maxpp,2),f_prefix_zero(move.pp,2),f_prefix_zero(move.pow,3),f_prefix_zero(move.accuracy,3),c_type_names[move.pktype]
+local maxpp,pp,pow,accuracy,typ=f_prefix_zero(move.maxpp,2),f_prefix_zero(move.pp_obj.pp,2),f_prefix_zero(move.pow,3),f_prefix_zero(move.accuracy,3),c_type_names[move.pktype]
 if move.pow==0 then pow="___"
 elseif move.pow==1 then pow="var" end
 if move.accuracy==0 then accuracy="___" end
@@ -530,7 +531,13 @@ end
 b(p_2,1,5,39,1,true)
 b(p_1,22,5,3,1)
 end,function(team,ind)
-return f_zobj_setmeta(team[ind],"isactive,~c_yes,lastmoverecv,0,moveturn,0,invisible,~c_yes,counterdmg,0,bidedmg,0,disabledtimer,0,confused,0,sleeping,@,substitute,0,toxiced,0,spot,@,base,@;stages;attack,0,defense,0,specialattack,0,specialdefense,0,speed,0,crit,0,evasion,0,accuracy,0;",f_flr_rnd"7"+1,ind,team[ind])
+local bench_parent=team[ind]
+local active=f_zobj_setmeta(team[ind],"isactive,~c_yes,lastmoverecv,0,moveturn,0,invisible,~c_yes,counterdmg,0,bidedmg,0,disabledtimer,0,confused,0,sleeping,@,substitute,0,toxiced,0,spot,@,base,@;stages;attack,0,defense,0,specialattack,0,specialdefense,0,speed,0,crit,0,evasion,0,accuracy,0;",f_flr_rnd"7"+1,ind,bench_parent)
+for i=1,4 do
+active[i]=f_zobj_setmeta(bench_parent[i],"cool,hello world")
+end
+printh("yes a cool "..bench_parent.name)
+return active
 end,function(name,team,subname,num,iscpu)
 local active=nil
 for i=1,6 do
@@ -572,9 +579,6 @@ add(player.actions,f_newaction(...))
 end,function(player,spot,level)
 local pkmn=player.team[spot]
 player.active=f_create_active(player.team,spot)
-for i=1,4 do
-player.active[i]=pkmn[i]
-end
 return f_newaction(level,player,"sends "..player.active.name,function()
 player.active.invisible=false
 return player.active.num
@@ -623,7 +627,7 @@ player.priority=priority_class+f_stat_calc(player.active,"speed",true)
 end,function(player)
 local move=player.nextmove
 f_addaction(player,3,player,(player.active.curmove and "resumes "or(move.func==f_move_multiturn and "begins "or "uses "))..c_move_names[move.num],function()
-move.pp=max(0,move.pp-1)
+move.pp_obj.pp=max(0,move.pp_obj.pp-1)
 if(function()
 if move.accuracy<=0 then return false end
 return rnd(f_stat_evac(a_other_active.stages["evasion"]))>move.accuracy/100*f_stat_evac(a_self_active.stages["accuracy"])or f_flr_rnd"256"==0 and f_flr_rnd"256"==0
@@ -646,7 +650,7 @@ local x=function()
 if p_selfaction.iscpu then
 local possible_moves={}
 for i=1,4 do
-if p_selfaction.active[i].num<252 and p_selfaction.active[i].pp>0 then
+if p_selfaction.active[i].num<252 and p_selfaction.active[i].pp_obj.pp>0 then
 add(possible_moves,i)
 end
 end
@@ -724,6 +728,7 @@ end
 pkmn.seen_moves[move]=true
 local num=pkmn.possible_moves[move]
 pkmn[i]=f_zobj_setmeta(c_moves[num],"num,@,pid,@",num,move)
+pkmn[i].pp_obj={pp=pkmn[i].maxpp}
 end
 pkmn[0]=f_zobj_setmeta(c_moves[0],"num,0,pid,1")
 return pkmn
@@ -800,8 +805,8 @@ end})
 end
 end,function(_ENV)
 local bothteams={}
-for i=1,6 do add(bothteams,p_selfaction.team[i])end
-for i=1,6 do add(bothteams,p_otheraction.team[i])end
+for i=1,6 do add(bothteams,i==p_selfaction.active.spot and p_selfaction.active or p_selfaction.team[i])end
+for i=1,6 do add(bothteams,i==p_otheraction.active.spot and p_otheraction.active or p_otheraction.team[i])end
 f_add_stat(op,bothteams[f_getsel"g_grid_battle_stats"+1],true)
 end,function(_ENV,sumdisable)
 for partynum=0,3 do
@@ -873,7 +878,7 @@ end,function(_ENV)
 add(op,{text="fight",select=function()
 local should_struggle=true
 for i=1,4 do
-if p_selfaction.active[i].pp>0 then
+if p_selfaction.active[i].pp_obj.pp>0 then
 should_struggle=false
 end
 end
@@ -895,7 +900,7 @@ add(op,{text="run",select=function()f_end_battle(p_selfaction)end})
 f_add_battle(preview_op)
 end,function(_ENV)
 for i=1,4 do
-add(op,{text=c_move_names[p_selfaction.active[i].num],disabled=p_selfaction.active[i].pp==0})
+add(op,{text=c_move_names[p_selfaction.active[i].num],disabled=p_selfaction.active[i].pp_obj.pp==0})
 end
 f_add_stat_move(preview_op,p_selfaction.active,f_getsel"g_grid_battle_movesel")
 end,function(_ENV)
@@ -1082,6 +1087,8 @@ g_palette%=#c_palettes
 end,function()
 return p_selfaction.active.invisible and 253 or p_selfaction.active.num end,function()
 p_selfaction.nextmove=p_selfaction.active[f_getsel"g_grid_battle_movesel"+1]
+printh("MOVE PRE")
+db(p_selfaction.active[1])
 f_movelogic(p_selfaction)
 f_pop_ui_stack()
 f_pop_ui_stack()
@@ -1236,7 +1243,7 @@ cur_list,c_moves[i],c_pokemon[i]=pkmn.moves_progress[1],f_zobj("lock,~c_no,num,@
 foreach(split"pow,pktype,accuracy,maxpp",function(key)
 c_moves[i][key]=f_init_peek_inc()
 end)
-c_moves[i].pp=c_moves[i].maxpp
+c_moves[i].pp_obj={pp=c_moves[i].maxpp}
 c_moves[i].func=_g[c_move_funcs[i][1]]
 c_moves[i].spec=c_move_funcs[i][2]
 foreach(split"pktype1,hp,attack,defense,speed,specialattack,specialdefense,default_item",function(key)

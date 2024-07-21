@@ -89,7 +89,7 @@ end $$
 
 |[f_get_move_texts]| function(move)
   -- TODO: token crunching with zobj
-  local maxpp, pp, pow, accuracy, typ = f_prefix_zero(move.maxpp, 2), f_prefix_zero(move.pp, 2), f_prefix_zero(move.pow, 3), f_prefix_zero(move.accuracy, 3), c_type_names[move.pktype]
+  local maxpp, pp, pow, accuracy, typ = f_prefix_zero(move.maxpp, 2), f_prefix_zero(move.pp_obj.pp, 2), f_prefix_zero(move.pow, 3), f_prefix_zero(move.accuracy, 3), c_type_names[move.pktype]
 
   if     move.pow == 0 then pow = "___"
   elseif move.pow == 1 then pow = "var" end

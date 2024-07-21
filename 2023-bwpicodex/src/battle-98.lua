@@ -20,8 +20,10 @@
 
 -- Some player specific things
 
+-- TODO: combine with mkpkmn
 |[f_create_active]| function(team, ind)
-  return f_zobj_setmeta(team[ind], [[
+  local bench_parent = team[ind]
+  local active = f_zobj_setmeta(team[ind], [[
     isactive,     ~c_yes, -- used for a drawing function, should draw fainted pokemon if they are not active, but not if they are active.
     lastmoverecv, 0,      -- last move targeted at user, for mirrormove
     moveturn,     0,      -- turn move is on. > 0, decrements each turn. 0, is the same. -1, is multiturn move that doesn't end (rage).
@@ -49,8 +51,14 @@
       crit,           0, -- TODO: rename crit
       evasion,        0,
       accuracy,       0; -- TODO: delete the semicolon
-  ]], f_flr_rnd'7'+1, ind, team[ind])
+  ]], f_flr_rnd'7'+1, ind, bench_parent)
   -- ^^ hard-coding sleep timer here
+  for i=1,4 do
+    -- this allows changing the move with hidden power, mimic, transform.
+    active[i] = f_zobj_setmeta(bench_parent[i], [[cool,hello world]])
+  end
+  printh("yes a cool "..bench_parent.name)
+  return active
 end $$
 
 |[f_create_player]| function(name, team, subname, num, iscpu)
@@ -140,10 +148,6 @@ end $$
   -- TODO: i should combine this with f_mkpkmn. so all pkmn stuff is just in 1 place.
   player.active = f_create_active(player.team, spot)
 
-  for i=1,4 do
-    player.active[i] = pkmn[i]
-  end
-
   return f_newaction(level, player, "sends "..player.active.name, function()
     player.active.invisible = false
     return player.active.num
@@ -223,7 +227,7 @@ end $$
   local move = player.nextmove
   f_addaction(player, L_ATTACK, player, (player.active.curmove and "resumes " or (move.func == f_move_multiturn and "begins " or "uses "))..c_move_names[move.num], function()
     -- TODO: how does metronome work with solar beam. would pp get deducted twice?
-    move.pp = max(0, move.pp-1) -- needs a zero bounds check, because struggle could go negative without this.
+    move.pp_obj.pp = max(0, move.pp_obj.pp-1) -- needs a zero bounds check, because struggle could go negative without this.
 
     if (function() -- miss logic TODO: fix this to be in line with gen 2 logic. this was copied from gen 1 picodex
       if move.accuracy <= 0 then return false end -- swift/haze (-1) and status moves (0)
@@ -270,7 +274,7 @@ end $$
     if p_selfaction.iscpu then
       local possible_moves = {}
       for i=1,4 do
-        if p_selfaction.active[i].num < M_NONE and p_selfaction.active[i].pp > 0 then
+        if p_selfaction.active[i].num < M_NONE and p_selfaction.active[i].pp_obj.pp > 0 then
           add(possible_moves, i)
         end
       end

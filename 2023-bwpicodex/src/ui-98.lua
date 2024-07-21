@@ -24,8 +24,8 @@ end $$
 
 |[f_op_statbattle]| function(_ENV)
   local bothteams = {}
-  for i=1,6 do add(bothteams, p_selfaction.team[i]) end
-  for i=1,6 do add(bothteams, p_otheraction.team[i]) end
+  for i=1,6 do add(bothteams, i == p_selfaction.active.spot  and p_selfaction.active  or p_selfaction.team[i]) end
+  for i=1,6 do add(bothteams, i == p_otheraction.active.spot and p_otheraction.active or p_otheraction.team[i]) end
 
   f_add_stat(op, bothteams[f_getsel'g_grid_battle_stats'+1], true)
 end $$
@@ -123,7 +123,7 @@ end $$
   add(op, {text="fight", select=function()
     local should_struggle = true
     for i=1,4 do
-      if p_selfaction.active[i].pp > 0 then
+      if p_selfaction.active[i].pp_obj.pp > 0 then
         should_struggle = false
       end
     end
@@ -152,7 +152,7 @@ end $$
 
 |[f_op_movesel]| function(_ENV)
   for i=1,4 do
-    add(op, {text=c_move_names[p_selfaction.active[i].num], disabled=p_selfaction.active[i].pp == 0})
+    add(op, {text=c_move_names[p_selfaction.active[i].num], disabled=p_selfaction.active[i].pp_obj.pp == 0})
   end
 
   f_add_stat_move(preview_op, p_selfaction.active, f_getsel'g_grid_battle_movesel')
@@ -435,6 +435,9 @@ end $$
 
 |[f_s_batmove]| function()
   p_selfaction.nextmove = p_selfaction.active[f_getsel'g_grid_battle_movesel'+1]
+  printh("MOVE PRE")
+  db(p_selfaction.active[1])
+
   f_movelogic(p_selfaction)
 
   -- TODO: Dedup with below.

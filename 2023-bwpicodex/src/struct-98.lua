@@ -52,6 +52,7 @@
     pkmn.seen_moves[move] = true
     local num = pkmn.possible_moves[move]
     pkmn[i] = f_zobj_setmeta(c_moves[num], [[num,@, pid,@]], num, move)
+    pkmn[i].pp_obj = {pp=pkmn[i].maxpp}
   end
   pkmn[0] = f_zobj_setmeta(c_moves[M_STRUGGLE], [[num,M_STRUGGLE, pid,1]])
 

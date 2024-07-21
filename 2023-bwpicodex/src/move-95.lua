@@ -111,6 +111,7 @@ end $$
 -- TODO: currently hidden power saves the new type to the bench version. I don't think I want that.
 -- TODO: what other moves change the move just for active but keep pp. Mimic does, but needs to keep pp.
 |[f_move_hiddenpower]| function(_ENV)
+  db(_ENV)
   local possible_types = {}
   for i=T_NORMAL,T_BIRD do
     local v = f_moveutil_typeadv(f_zobj_setmeta(_ENV, [[pktype,@]], i), p_otherturn.active)
@@ -119,7 +120,7 @@ end $$
     end
   end
 
-  -- TODO: T_BIRD could be removed, since there are no pokemon with zero type weaknesses in first 2 gens. Sableye and Spiritomb were the only ones at one point.
+  -- TODO: the "or T_BIRD" could be removed, since there are no pokemon with zero type weaknesses in first 2 gens. Sableye and Spiritomb were the only ones at one point (ghost+dark).
   -- Missingno is likely the closest to this. It is only weak against bird type. It resists everything else except fighting which just does normal amount of damage.
   local newpktype = #possible_types > 0 and possible_types[f_flr_rnd(#possible_types)+1] or T_BIRD
   a_addaction(p_selfturn, "type "..c_type_names[newpktype])

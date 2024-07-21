@@ -321,7 +321,7 @@ for i=0,252 do -- There are 252+1 pkmn and 252+1 moves. The +1s are for empties.
   end)
 
   -- TODO: if these can fit in data section, that would be very sweetscent.
-  c_moves[i].pp   = c_moves[i].maxpp
+  c_moves[i].pp_obj = {pp=c_moves[i].maxpp}
   c_moves[i].func = _g[c_move_funcs[i][1]]
   c_moves[i].spec = c_move_funcs[i][2]
 
