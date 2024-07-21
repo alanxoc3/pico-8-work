@@ -1,12 +1,11 @@
 -- this is a battle team
 -- https://www.dragonflycave.com/mechanics/stat-stages
 
-  -- TODO: consolidate edit/view/seen moves. I can't deal with so many move structures.
-  -- TODO: do I need layers of pokemon, like I did in the og picodex.
+-- TODO: do I need layers of pokemon, like I did in the og picodex.
 
-  -- pkmn.gender_bit = pkmn_num
-  -- pkmn.item = pkmn.default_item
-  -- todo: moves could change as you unlock them. so all 3s might not be the best approach. or at least i should call getparty then saveparty
+-- pkmn.gender_bit = pkmn_num
+-- pkmn.item = pkmn.default_item
+-- todo: moves could change as you unlock them. so all 3s might not be the best approach. or at least i should call getparty then saveparty
 
 |[f_mkpkmn]| function(ind, base, respect_locks, gender_bit, item, ...)
   -- base is the parent table. at the start of a battle and when loading for edit, base is c_pokemon[ind].

@@ -117,11 +117,7 @@ end $$
     ;;, -- p_1 select scene
   ]])
 
-  f_add_to_ui_stack(g_grid_battle_results, function()
-    if p_otheraction == p_1 then
-      g_p1_winfunc()
-    end
-  end)
+  f_add_to_ui_stack(g_grid_battle_results)
   f_setsel('g_grid_battle_results', p_otheraction.active.spot-1)
 end $$
 

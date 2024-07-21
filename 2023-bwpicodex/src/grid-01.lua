@@ -1,19 +1,17 @@
--- TODO: after a factory reset, there is an extra beep when selecting bulbasaur in browse... WHY?
--- TODO: I noticed that totodile using watergun against fralgatr says "attack resists". I should investigate why that is happening and fix it.
-
 |[f_refresh_top]| function()
   g_top_grid.op, g_top_grid.preview_op, g_top_grid.lrlist = {}, {}, {}
   g_top_grid.gridpofunc(g_top_grid, unpack(g_top_grid.params))
 end $$
 
-|[f_add_to_ui_stack]| function(_ENV, init_func)
-  add(g_gridstack, {obj=_ENV, init_func=init_func or f_nop})
+|[f_add_to_ui_stack]| function(grid)
+  add(g_gridstack, {obj=grid})
+  g_grid_called_init = false
 end $$
 
-|[f_pop_ui_stack]| function(init_func)
+|[f_pop_ui_stack]| function()
   -- if we pop, we should recompute the ops, because there may have been an operation.
   deli(g_gridstack)
-  g_gridstack[#g_gridstack].init_func = init_func or f_nop
+  g_grid_called_init = false
 end $$
 
 |[f_getsel]| function(gridname)
@@ -24,9 +22,10 @@ end $$
   poke(_g[gridname].g_cg_m.sel, val)
 end $$
 
-|[f_create_gridpair]| function(name, memloc, main_grid_spec, info_grid_spec, info_grid_draw, main_op_func, main_sel_func, main_leave_func, lrbasegrid, static, ...)
+|[f_create_gridpair]| function(name, memloc, main_grid_spec, info_grid_spec, info_grid_draw, main_op_func, main_sel_func, main_leave_func, lrbasegrid, static, init, ...)
   -- zobj is needed so we can use an _ENV syntax
-  _g[name] = f_zobj([[g_cg_m,@, g_cg_s,@, gridpofunc,@, params,@]],
+  _g[name] = f_zobj([[init,@, g_cg_m,@, g_cg_s,@, gridpofunc,@, params,@]],
+    init,
     f_zobj([[
       sel,@, view,@, name,@, selfunc,@, leavefunc,@, lrbasegrid,@, static,@, w,@,vh,@,x,@,y,@,cw,@,ch,@,selw,@,selh,@
     ]], memloc, memloc+1, name, main_sel_func, main_leave_func, lrbasegrid, static, unpack(main_grid_spec)),

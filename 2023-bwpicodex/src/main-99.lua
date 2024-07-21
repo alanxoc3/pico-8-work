@@ -1,3 +1,12 @@
+-- lemme think... when calling update_grid, what should the order be?
+-- One idea:
+-- 1. calc bounds
+-- 2. seleave
+--   1. call init
+--   2. calc bound
+-- 3. lrfunc
+-- 4. vert/horiz movement
+
 -- TODO: dedup this if it's only used once and maybe try a btnp(i) approach instead (for loop)
 |[_update]| function()
   --printh(stat'0') -- check memory
@@ -14,9 +23,9 @@
   gridpofunc = g_top_grid.gridpofunc
   params     = g_top_grid.params
 
-  if g_top_grid_cont.init_func then
-    g_top_grid_cont.init_func()
-    g_top_grid_cont.init_func = nil
+  if not g_grid_called_init then
+    g_top_grid.init()
+    g_grid_called_init = true
     g_top_grid.op, g_top_grid.preview_op, g_top_grid.lrlist = {}, {}, {}
     gridpofunc(g_top_grid, unpack(g_top_grid.params))
   end
