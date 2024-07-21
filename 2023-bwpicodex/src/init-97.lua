@@ -1,4 +1,3 @@
--- 8062 before 1 thing
 f_zcall(poke, [[
    ;,0x5f2c,   3  -- screen to 64x64
   ;;,0x5f5c,   8  -- set btn initial delay before repeating. 255 means never repeat.

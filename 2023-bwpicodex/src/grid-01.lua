@@ -23,7 +23,7 @@ end $$
 end $$
 
 -- "arg" is an optional param that can be used as something accessible in the op func, such as to change the parameter.
-|[f_create_gridpair]| function(name, memloc, main_grid_spec, info_grid_spec, info_grid_draw, main_op_func, main_sel_func, main_leave_func, lrbasegrid, static, init, arg)
+|[f_create_gridpair]| function(name, memloc, main_grid_spec, info_grid_spec, main_op_func, main_sel_func, main_leave_func, lrbasegrid, static, init, arg)
   -- zobj is needed so we can use an _ENV syntax
   _g[name] = f_zobj([[init,@, g_cg_m,@, g_cg_s,@, gridpofunc,@, arg,@]],
     init,
@@ -32,8 +32,8 @@ end $$
     ]], memloc, memloc+1, name, main_sel_func, main_leave_func, lrbasegrid, static, unpack(main_grid_spec)),
 
     f_zobj([[
-      sel,@, view,@, static,~c_no, disabled,~c_yes, name,@, df,@, w,@,vh,@,x,@,y,@,cw,@,ch,@,selw,@,selh,@
-    ]], S_DEFAULT, S_DEFAULT+1, name, info_grid_draw, unpack(info_grid_spec)),
+      sel,@, view,@, static,~c_no, disabled,~c_yes, name,@, w,@,vh,@,x,@,y,@,cw,@,ch,@,selw,@,selh,@
+    ]], S_DEFAULT, S_DEFAULT+1, name, unpack(info_grid_spec)),
 
     main_op_func,
     arg

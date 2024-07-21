@@ -75,8 +75,8 @@ end $$
 
   -- zero damage only means that attack was resisted. moves with set damage don't monitor resistance.
   if advantage > 0 then
-    if advantage > 1     then a_addaction(p_selfaction, "very effective")
-    elseif advantage < 1 then a_addaction(p_selfaction, "not effective") end
+    if advantage > 1     then a_addaction(p_selfaction, "super effect")
+    elseif advantage < 1 then a_addaction(p_selfaction, "little effect") end
     if crit then a_addaction(p_selfaction, "critical hit") end
 
     return f_moveutil_hpchange(p_otherturn, dmg, function(dmg)

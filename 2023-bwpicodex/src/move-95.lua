@@ -27,13 +27,13 @@ end $$
   end)
 end $$
 
--- TODO: Currently, struggle loses pp. Fix this, it should remain constant pp.
 |[f_move_struggle]| function(_ENV)
   f_moveutil_dmgother(_ENV, function(dmg)
     f_moveutil_dmgself(ceil(p_selfturn.active.maxhp/4))
   end)
 end $$
 
+-- this attacks after the opponent faints because it creates an action on the user.
 |[f_move_multihit_set]| function(_ENV, hitcount, isresume)
   if hitcount > 0 then
     a_addaction(p_selfturn, isresume and "resumes "..name, function()

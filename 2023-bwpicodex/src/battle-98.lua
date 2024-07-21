@@ -110,7 +110,7 @@ end $$
 -- This is called when a player either gives up or loses.
 -- Pass in the loser player.
 |[f_end_battle]| function(player)
-  f_set_pself(player)
+  f_set_pself(player) -- TODO: Could this be removed?
   f_zcall(f_pop_ui_stack, [[
      ;, -- battle scene TODO: convert to a zcall?
     ;;, -- p_2 select scene
@@ -118,7 +118,6 @@ end $$
   ]])
 
   f_add_to_ui_stack(g_grid_battle_results)
-  f_setsel('g_grid_battle_results', p_otheraction.active.spot-1)
 end $$
 
 -- player cannot be nil, others can. the player turn is passed and the current active is extracted.
@@ -169,7 +168,7 @@ end $$
         -- delete all instances of the current player from the attack phase. this prevents moves from glitching or end of attack stuff from being applied (eg: poison)
         for np in all{p_first, p_last} do
           for action in all(np.actions) do
-            if action.level == L_ATTACK and del({p_first, p_last}, action.player) then -- Using del is a hack to save on tokens
+            if action.level == L_ATTACK and player == action.player then -- Using del is a hack to save on tokens
               del(np.actions, action)
             end
           end
