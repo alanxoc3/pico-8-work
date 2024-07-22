@@ -1,3 +1,5 @@
+-- stretch goal TODO: I could make it so when setting the moves for a pokemon, those possible move nums get stored on the global c_pokemon, so you can easily copy and paste pokemon like that.
+
 -- every state change will clean up all the entities.
 |[f_game_state_init]| function(state)
     if state.mysfx then f_minisfx(state.mysfx) end
