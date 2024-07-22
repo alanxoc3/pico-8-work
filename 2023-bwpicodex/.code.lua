@@ -336,21 +336,17 @@ a_addaction(p_otherturn,"thawed out",function()
 p_otherturn.active.base.major=0
 end)
 elseif p_otherturn.active.major==0 and(majorind==6 or f_movehelp_effect_works(_ENV))then
-printh("INMORE")
 a_addaction(p_otherturn,"now "..c_major_names_long[majorind],function()
 p_otherturn.active.base.major=majorind
 p_otherturn.active.sleeping=f_flr_rnd"7"+1
 end)
 else
-printh("INLESS")
 return true
 end
 end,function()a_addaction(p_selfaction,"does nothing")end,function(_ENV)return f_moveutil_hpchange(p_selfaction,-a_self_active.maxhp\2)end,function(_ENV,percent,func,...)
 local params={_ENV,...}
 f_moveutil_dmgother(_ENV,function()
-printh("ZAP OUT")
 if rnd"100"<(percent or 0)then
-printh("ZAP IN")
 func(unpack(params))
 end
 end)

@@ -12,9 +12,7 @@
   local params = {_ENV, ...}
   f_moveutil_dmgother(_ENV, function()
     -- if percent is not specified, the func will never run, so func is required when percent is specified
-    printh("ZAP OUT")
     if rnd'100' < (percent or 0) then -- TODO: would a 'percent and' be shorter
-      printh("ZAP IN")
       func(unpack(params))
     end
   end)

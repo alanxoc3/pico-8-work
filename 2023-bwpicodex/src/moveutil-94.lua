@@ -172,7 +172,6 @@ end $$
 
   -- sing works on ghost pokemon and should. TODO: verify this logic is correct
   elseif p_otherturn.active.major == C_MAJOR_NONE and (majorind == C_MAJOR_SLEEPING or f_movehelp_effect_works(_ENV)) then
-    printh("INMORE")
     a_addaction(p_otherturn, "now "..c_major_names_long[majorind], function()
       p_otherturn.active.base.major = majorind
 
@@ -181,7 +180,6 @@ end $$
       -- ^^ If I change the sleep timer amount, remember to change it somewhere else too!
     end)
   else
-    printh("INLESS")
     return true
   end
 end $$
