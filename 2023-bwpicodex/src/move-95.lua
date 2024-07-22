@@ -1,17 +1,26 @@
 -- every function in this file is prepended with f_move_
 -- these are the different functions a move could implement
 
+-- TODO: clean up _ENV calls
+
 -- called for splash, but also when a move fails
 -- TODO: idea, maybe splash could actually just go through a 0 dmg tackle. but maybe this is a bad idea. idk!
 |[f_move_splash]| function() a_addaction(p_selfaction, "does nothing") end $$
 |[f_move_recover]| function(_ENV) return f_moveutil_hpchange(p_selfaction, -a_self_active.maxhp\2) end $$
 
--- moves like cut/surf/tackle. the move only does damage with no other side effect
-|[f_move_tackle]| function(_ENV)
-  f_moveutil_dmgother(_ENV)
+|[f_move_default]| function(_ENV, percent, func, ...)
+  local params = {_ENV, ...}
+  f_moveutil_dmgother(_ENV, function()
+    -- if percent is not specified, the func will never run, so func is required when percent is specified
+    printh("ZAP OUT")
+    if rnd'100' < (percent or 0) then -- TODO: would a 'percent and' be shorter
+      printh("ZAP IN")
+      func(unpack(params))
+    end
+  end)
 end $$
 
-|[f_move_seismictoss]| function(_ENV) f_moveutil_dmgother(spec) end $$ -- also: night shade, sonicboom, dragonrage
+|[f_move_seismictoss]| function(_ENV, spec) f_moveutil_dmgother(spec) end $$ -- also: night shade, sonicboom, dragonrage
 |[f_move_psywave]|     function()     f_moveutil_dmgother(f_flr_rnd'75'+1) end $$
 
 |[f_move_superfang]|  function() f_moveutil_dmgother(ceil(a_other_active.hp/2)) end $$ -- TODO: maybe this shouldn't be ceil and instead be floor with a min of 1
@@ -49,7 +58,7 @@ end $$
   f_move_multihit_set(_ENV, 2+f_flr_rnd'4')
 end $$
 
-|[f_move_doublekick]| function(_ENV)
+|[f_move_doublekick]| function(_ENV, spec)
   f_move_multihit_set(_ENV, spec)
 end $$
 

@@ -2,14 +2,14 @@ Roar         Normal   20 N/A     100% -- Almost always goes last; in trainer bat
 Whirlwind    Normal   20 N/A     100% -- Almost always goes last; in trainer battles, the target is switched out for a random member of its team. Escapes from wild battles. Mod: Removes spikes from both sides.
 Teleport     Psychic  20 N/A     N/A  -- Escapes from wild battles; fails automatically in trainer and link battles.
 
-DONEO Barrage      Normal   20 15      85%  -- Attacks 2-5 times in one turn; if one of these attacks breaks a target's Substitute, the target will take damage for the rest of the hits. This move has a 3/8 chance to hit twice, a 3/8 chance to hit three times, a 1/8 chance to hit four times and a 1/8 chance to hit five times.
-DONEO Bone Rush    Ground   10 25      80%  -- Attacks 2-5 times in one turn; if one of these attacks breaks a target's Substitute, the target will take damage for the rest of the hits. This move has a 3/8 chance to hit twice, a 3/8 chance to hit three times, a 1/8 chance to hit four times and a 1/8 chance to hit five times.
-DONEO Comet Punch  Normal   15 18      85%  -- Attacks 2-5 times in one turn; if one of these attacks breaks a target's Substitute, the target will take damage for the rest of the hits. This move has a 3/8 chance to hit twice, a 3/8 chance to hit three times, a 1/8 chance to hit four times and a 1/8 chance to hit five times.
-DONEO Doubleslap   Normal   10 15      85%  -- Attacks 2-5 times in one turn; if one of these attacks breaks a target's Substitute, the target will take damage for the rest of the hits. This move has a 3/8 chance to hit twice, a 3/8 chance to hit three times, a 1/8 chance to hit four times and a 1/8 chance to hit five times.
-DONEO Fury Attack  Normal   20 15      85%  -- Attacks 2-5 times in one turn; if one of these attacks breaks a target's Substitute, the target will take damage for the rest of the hits. This move has a 3/8 chance to hit twice, a 3/8 chance to hit three times, a 1/8 chance to hit four times and a 1/8 chance to hit five times.
-DONEO Fury Swipes  Normal   15 10      80%  -- Attacks 2-5 times in one turn; if one of these attacks breaks a target's Substitute, the target will take damage for the rest of the hits. This move has a 3/8 chance to hit twice, a 3/8 chance to hit three times, a 1/8 chance to hit four times and a 1/8 chance to hit five times.
-DONEO Pin Missile  Bug      20 14      85%  -- Attacks 2-5 times in one turn; if one of these attacks breaks a target's Substitute, the target will take damage for the rest of the hits. This move has a 3/8 chance to hit twice, a 3/8 chance to hit three times, a 1/8 chance to hit four times and a 1/8 chance to hit five times.
-DONEO Spike Cannon Normal   15 20      100% -- Attacks 2-5 times in one turn; if one of these attacks breaks a target's Substitute, the target will take damage for the rest of the hits. This move has a 3/8 chance to hit twice, a 3/8 chance to hit three times, a 1/8 chance to hit four times and a 1/8 chance to hit five times.
+DONE Barrage      Normal   20 15      85%  -- Attacks 2-5 times in one turn; if one of these attacks breaks a target's Substitute, the target will take damage for the rest of the hits. This move has a 3/8 chance to hit twice, a 3/8 chance to hit three times, a 1/8 chance to hit four times and a 1/8 chance to hit five times.
+DONE Bone Rush    Ground   10 25      80%  -- Attacks 2-5 times in one turn; if one of these attacks breaks a target's Substitute, the target will take damage for the rest of the hits. This move has a 3/8 chance to hit twice, a 3/8 chance to hit three times, a 1/8 chance to hit four times and a 1/8 chance to hit five times.
+DONE Comet Punch  Normal   15 18      85%  -- Attacks 2-5 times in one turn; if one of these attacks breaks a target's Substitute, the target will take damage for the rest of the hits. This move has a 3/8 chance to hit twice, a 3/8 chance to hit three times, a 1/8 chance to hit four times and a 1/8 chance to hit five times.
+DONE Doubleslap   Normal   10 15      85%  -- Attacks 2-5 times in one turn; if one of these attacks breaks a target's Substitute, the target will take damage for the rest of the hits. This move has a 3/8 chance to hit twice, a 3/8 chance to hit three times, a 1/8 chance to hit four times and a 1/8 chance to hit five times.
+DONE Fury Attack  Normal   20 15      85%  -- Attacks 2-5 times in one turn; if one of these attacks breaks a target's Substitute, the target will take damage for the rest of the hits. This move has a 3/8 chance to hit twice, a 3/8 chance to hit three times, a 1/8 chance to hit four times and a 1/8 chance to hit five times.
+DONE Fury Swipes  Normal   15 10      80%  -- Attacks 2-5 times in one turn; if one of these attacks breaks a target's Substitute, the target will take damage for the rest of the hits. This move has a 3/8 chance to hit twice, a 3/8 chance to hit three times, a 1/8 chance to hit four times and a 1/8 chance to hit five times.
+DONE Pin Missile  Bug      20 14      85%  -- Attacks 2-5 times in one turn; if one of these attacks breaks a target's Substitute, the target will take damage for the rest of the hits. This move has a 3/8 chance to hit twice, a 3/8 chance to hit three times, a 1/8 chance to hit four times and a 1/8 chance to hit five times.
+DONE Spike Cannon Normal   15 20      100% -- Attacks 2-5 times in one turn; if one of these attacks breaks a target's Substitute, the target will take damage for the rest of the hits. This move has a 3/8 chance to hit twice, a 3/8 chance to hit three times, a 1/8 chance to hit four times and a 1/8 chance to hit five times.
 
 DONE Triple Kick  Fighting 10 10      90%  -- Attacks three times in one turn, adding 10 BP for each kick. If a kick misses, the move ends instantly; if one of the kicks breaks a target's Substitute, the real Pokemon will take damage for the remaining kicks.
 DONE Bonemerang   Ground   10 50      90%  -- Strikes twice; if the first hit breaks the target's Substitute, the real Pokemon will take damage from the second hit.
@@ -92,6 +92,8 @@ Splash       Normal   40 N/A     N/A  -- Doesn't do anything (but we still love 
 Beat Up      Dark     10 10      100% -- Each healthy (i.e. not fainted nor inflicted with a status condition) Pokemon in your party contributes a typeless 10 base power hit determined solely by their base Attack and Defense stats.
 Baton Pass   Normal   40 N/A     N/A  -- The user returns to its party, bypassing any trapping moves and Pursuit; it passes all stat modifiers (positive or negative), as well as confusion, Focus Energy, Perish Song count, Mist, Leech Seed, Ghost Curses, Mind Reader, Lock-On, Mean Look, Spider Web and Substitute to the replacement Pokemon. In-game, Baton Pass also passes partial trapping moves (Bind, Clamp, Fire Spin and Wrap), Foresight, Toxic if the replacement is poisoned and Nightmare if replacement is asleep.
 
+Tri Attack   Normal   10 80      100% -- Has a ~20% chance to burn, paralyze or freeze the target.
+
 Aurora Beam  Ice      20 65      100% -- Has a ~10% chance to lower the target's Attack by 1 stage.
 Acid         Poison   30 40      100% -- Has a ~10% chance to lower the target's Defense by 1 stage.
 Rock Smash   Fighting 15 20      100% -- Has a ~50% chance to lower the target's Defense by 1 stage.
@@ -104,29 +106,31 @@ Bubble       Water    30 20      100% -- Has a ~10% chance to lower the target's
 Constrict    Normal   35 10      100% -- Has a ~10% chance to lower the target's Speed by 1 stage.
 Bone Club    Ground   20 65      85%  -- Has a ~10% chance to make the target flinch.
 Hyper Fang   Normal   15 80      90%  -- Has a ~10% chance to make the target flinch.
-Ember        Fire     25 40      100% -- Has a ~10% chance to burn the target.
-Fire Blast   Fire     5  120     85%  -- Has a ~10% chance to burn the target.
-Fire Punch   Fire     15 75      100% -- Has a ~10% chance to burn the target.
-Flamethrower Fire     15 95      100% -- Has a ~10% chance to burn the target.
-Sacred Fire  Fire     5  100     95%  -- Has a ~50% chance to burn the target; can be used while frozen, which both attacks the target normally and thaws the user.
-Flame Wheel  Fire     25 60      100% -- Has a ~10% chance to burn the target; can be used while frozen, which both attacks the target normally and thaws the user.
-Blizzard     Ice      5  120     70%  -- Has a ~10% chance to freeze the target.
-Ice Beam     Ice      10 95      100% -- Has a ~10% chance to freeze the target.
-Ice Punch    Ice      15 75      100% -- Has a ~10% chance to freeze the target.
-Powder Snow  Ice      25 40      100% -- Has a ~10% chance to freeze the target.
-Tri Attack   Normal   10 80      100% -- Has a ~20% chance to burn, paralyze or freeze the target.
-Thunderbolt  Electric 15 95      100% -- Has a ~10% chance to paralyze the target.
-Thunderpunch Electric 15 75      100% -- Has a ~10% chance to paralyze the target.
-Thundershock Electric 30 40      100% -- Has a ~10% chance to paralyze the target.
-Body Slam    Normal   15 85      100% -- Has a ~30% chance to paralyze the target.
-Dragonbreath Dragon   20 60      100% -- Has a ~30% chance to paralyze the target.
-Lick         Ghost    30 20      100% -- Has a ~30% chance to paralyze the target.
-Spark        Electric 20 65      100% -- Has a ~30% chance to paralyze the target.
-Thunder      Electric 10 120     70%  -- Has a ~30% chance to paralyze the target. Has 50% accuracy during Sunny Day and 100% accuracy during Rain Dance. Also has normal accuracy against mid-air Pokemon have used Fly.
-Poison Sting Poison   35 15      100% -- Has a ~30% chance to poison the target.
-Sludge Bomb  Poison   10 90      100% -- Has a ~30% chance to poison the target.
-Sludge       Poison   20 65      100% -- Has a ~30% chance to poison the target.
-Smog         Poison   20 20      100% -- Has a ~40% chance to poison the target.
+
+DONE Sacred Fire  Fire     5  100     95%  -- Has a ~50% chance to burn the target; can be used while frozen, which both attacks the target normally and thaws the user.
+DONE Flame Wheel  Fire     25 60      100% -- Has a ~10% chance to burn the target; can be used while frozen, which both attacks the target normally and thaws the user.
+DONE Ember        Fire     25 40      100% -- Has a ~10% chance to burn the target.
+DONE Fire Blast   Fire     5  120     85%  -- Has a ~10% chance to burn the target.
+DONE Fire Punch   Fire     15 75      100% -- Has a ~10% chance to burn the target.
+DONE Flamethrower Fire     15 95      100% -- Has a ~10% chance to burn the target.
+DONE Blizzard     Ice      5  120     70%  -- Has a ~10% chance to freeze the target.
+DONE Ice Beam     Ice      10 95      100% -- Has a ~10% chance to freeze the target.
+DONE Ice Punch    Ice      15 75      100% -- Has a ~10% chance to freeze the target.
+DONE Powder Snow  Ice      25 40      100% -- Has a ~10% chance to freeze the target.
+DONE Zap Cannon   Electric 5  100     50%  -- Paralyzes the target.
+DONE Thunderbolt  Electric 15 95      100% -- Has a ~10% chance to paralyze the target.
+DONE Thunderpunch Electric 15 75      100% -- Has a ~10% chance to paralyze the target.
+DONE Thundershock Electric 30 40      100% -- Has a ~10% chance to paralyze the target.
+DONE Body Slam    Normal   15 85      100% -- Has a ~30% chance to paralyze the target.
+DONE Dragonbreath Dragon   20 60      100% -- Has a ~30% chance to paralyze the target.
+DONE Lick         Ghost    30 20      100% -- Has a ~30% chance to paralyze the target.
+DONE Spark        Electric 20 65      100% -- Has a ~30% chance to paralyze the target.
+DONE Thunder      Electric 10 120     70%  -- Has a ~30% chance to paralyze the target. Has 50% accuracy during Sunny Day and 100% accuracy during Rain Dance. Also has normal accuracy against mid-air Pokemon have used Fly.
+DONE Poison Sting Poison   35 15      100% -- Has a ~30% chance to poison the target.
+DONE Sludge Bomb  Poison   10 90      100% -- Has a ~30% chance to poison the target.
+DONE Sludge       Poison   20 65      100% -- Has a ~30% chance to poison the target.
+DONE Smog         Poison   20 20      100% -- Has a ~40% chance to poison the target.
+
 Ancientpower Rock     5  60      100% -- Has a ~10% chance to raise all of the user's stats by 1 stage.
 Metal Claw   Steel    35 50      95%  -- Has a ~10% chance to raise the user's Attack by 1 stage.
 Steel Wing   Steel    25 70      95%  -- Has a ~10% chance to raise the user's Defense by 1 stage.
@@ -199,17 +203,16 @@ Sand-Attack  Ground   15 N/A     100% -- Lowers the target's Accuracy by 1 stage
 Mud-Slap     Ground   10 20      100% -- Lowers the target's Accuracy by 1 stage.
 
 # Moves that affect status condition
-Glare        Normal   30 N/A     75%  -- Paralyzes the target.
-Stun Spore   Grass    30 N/A     75%  -- Paralyzes the target.
-Thunder Wave Electric 20 N/A     100% -- Paralyzes the target.
-Zap Cannon   Electric 5  100     50%  -- Paralyzes the target.
-Poison Gas   Poison   40 N/A     55%  -- Poisons the target.
-Poisonpowder Poison   35 N/A     75%  -- Poisons the target.
-Hypnosis     Psychic  20 N/A     60%  -- Puts the target to sleep.
-Lovely Kiss  Normal   10 N/A     75%  -- Puts the target to sleep.
-Sing         Normal   15 N/A     55%  -- Puts the target to sleep.
-Sleep Powder Grass    15 N/A     75%  -- Puts the target to sleep.
-Spore        Grass    15 N/A     100% -- Puts the target to sleep.
+DONE Glare        Normal   30 N/A     75%  -- Paralyzes the target.
+DONE Stun Spore   Grass    30 N/A     75%  -- Paralyzes the target.
+DONE Thunder Wave Electric 20 N/A     100% -- Paralyzes the target.
+DONE Poison Gas   Poison   40 N/A     55%  -- Poisons the target.
+DONE Poisonpowder Poison   35 N/A     75%  -- Poisons the target.
+DONE Hypnosis     Psychic  20 N/A     60%  -- Puts the target to sleep.
+DONE Lovely Kiss  Normal   10 N/A     75%  -- Puts the target to sleep.
+DONE Sing         Normal   15 N/A     55%  -- Puts the target to sleep.
+DONE Sleep Powder Grass    15 N/A     75%  -- Puts the target to sleep.
+DONE Spore        Grass    15 N/A     100% -- Puts the target to sleep.
 
 Thief        Dark     10 40      100% -- Steals the target's held item unless the user is already holding an item
 

@@ -245,7 +245,7 @@ end $$
         f_moveutil_dmgself'1'
       end
     else
-      if move:func() then -- TODO: calc attack fail based on whether or not an action was added
+      if move:func(unpack(move.params)) then -- TODO: calc attack fail based on whether or not an action was added
         a_addaction(player, "fails attack")
       end
     end

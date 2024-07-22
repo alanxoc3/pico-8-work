@@ -156,3 +156,32 @@ end $$
 
   return base_damage\1, advantage, crit
 end $$
+
+-- types that resist the move's type and opponents with types equal to the moves type means that the status effect doesn't apply/work.
+|[f_movehelp_effect_works]| function(_ENV)
+  -- TODO: I could probably make this smaller
+  return f_moveutil_typeadv(_ENV, p_otherturn.active) > 0 and pktype ~= p_otherturn.active.pktype1 and pktype ~= p_otherturn.active.pktype2
+end $$
+
+|[f_move_major_other]| function(_ENV, majorind)
+  -- if you thawed out, you won't get burned that turn
+  if p_otherturn.active.major == C_MAJOR_FROZEN and majorind == C_MAJOR_BURNED then
+    a_addaction(p_otherturn, "thawed out", function()
+      p_otherturn.active.base.major = C_MAJOR_NONE
+    end)
+
+  -- sing works on ghost pokemon and should. TODO: verify this logic is correct
+  elseif p_otherturn.active.major == C_MAJOR_NONE and (majorind == C_MAJOR_SLEEPING or f_movehelp_effect_works(_ENV)) then
+    printh("INMORE")
+    a_addaction(p_otherturn, "now "..c_major_names_long[majorind], function()
+      p_otherturn.active.base.major = majorind
+
+      -- every time major stat is set, sleep timer is set, but sleep timer isn't used unless pkmn is actually sleeping
+      p_otherturn.active.sleeping = f_flr_rnd'7'+1 -- TODO: verify this is the correct number of turns for sleeping
+      -- ^^ If I change the sleep timer amount, remember to change it somewhere else too!
+    end)
+  else
+    printh("INLESS")
+    return true
+  end
+end $$

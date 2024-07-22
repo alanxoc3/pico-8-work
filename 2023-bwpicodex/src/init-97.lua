@@ -272,7 +272,7 @@ cls() -- this is just a visual thing when the game starts up. TODO: i can remove
 ]] $$ -- todo: last 2 ___ blanks can be removed. maybe none can too? or that is used for prevol? celebi, (the none pokemon for ui), (empty pokemon ind that prevolve points to), unused, unused.
 
 |[c_gender_names]|      f_zobj[["0,neuter;,male,female,mal/fem"]] $$
-|[c_major_names_long]|  f_zobj[["0,none;,faint,burn,freeze,parlyz,poisnd,sleep"]] $$
+|[c_major_names_long]|  f_zobj[["0,none;,fainted,burned,frozen,paralyzed,poisoned,sleeping"]] $$
 |[c_major_names_short]| f_zobj[["0,___;,fnt,brn,fzn,par,psn,slp"]] $$
 |[c_movemethod_names]|  split"learn,teach,cheat" $$
 |[c_statmod_names]|     f_zobj[[attack,"atack", defense,"defns", specialattack,"spatk", specialdefense,"spdfn", speed,"speed", evasion,"evasn", accuracy,"acury", crit,"critl"]] $$
@@ -322,8 +322,8 @@ for i=0,252 do -- There are 252+1 pkmn and 252+1 moves. The +1s are for empties.
 
   -- TODO: if these can fit in data section, that would be very sweetscent.
   c_moves[i].pp_obj = {pp=c_moves[i].maxpp}
-  c_moves[i].func = _g[c_move_funcs[i][1]]
-  c_moves[i].spec = c_move_funcs[i][2]
+  c_moves[i].func = deli(c_move_funcs[i], 1) -- TODO: if c_move_funcs order is reversed (move is last), a token could be saved. This would definitely make it more confusing to look at though
+  c_moves[i].params = c_move_funcs[i]
 
   -- TODO: idea, i could use the last bit of type1 to specify an extra gender byte. uses more space but saves 13 tokens
   -- 'item' actually has gender and item information, but keeping the name item saves a possible token
