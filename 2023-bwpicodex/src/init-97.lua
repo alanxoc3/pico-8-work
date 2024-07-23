@@ -11,6 +11,16 @@ cls() -- this is just a visual thing when the game starts up. TODO: i can remove
 |[c_type_names]|        f_zobj[["0,none;,normal,fire,fightng,water,poison,electrc,ground,grass,flying,ice,bug,psychic,rock,dragon,ghost,dark,steel,bird"]] $$
 |[c_item_names]|        f_zobj[["0,none;,pnkbow,chrcol,blkblt,myswtr,psnbrb,magnet,sosand,mirasd,shbeak,nvrice,slvpwd,twspon,hrdstn,dragsc,speltg,blkgls,mtlcot,plkbow,bripwd,focbnd,kingrk,leftov,qikclw,scopln,amcoin,litbal,lukpnc,mtlpwd,stick,thkclb,bersrk,berry,gldbry,btrbry,mntbry,brnbry,icebry,parbry,psnbry,mirbry,mysbry"]] $$
 |[c_team_names]|        f_zobj[["0,boy;,girl,cpu-boy,cpu-girl"]] $$
+|[c_stages]| f_zobj[[
+  attack,         "attack",
+  defense,        "defens",
+  specialattack,  "spcatk",
+  specialdefense, "spcdef",
+  speed,          "speed",
+  crit,           "crit",
+  evasion,        "evason",
+  accuracy,       "accury"
+]] $$
 
 |[c_pkmn_names]| f_zobj[[
  0,"misingno"

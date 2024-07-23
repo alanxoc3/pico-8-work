@@ -134,3 +134,19 @@ end $$
   pktype = newpktype
   f_moveutil_dmgother(f_zobj_setmeta(_ENV, [[pow,@]], 60))
 end $$
+
+-- leverages f_move_(self|other)
+|[f_move_stat]| function(_ENV, isself, key, stage, func)
+  local pl = isself and p_selfturn or p_otherturn
+  local prev = pl.active.stages[key]
+  if not pl.active.misted or stage > 0 then
+    pl.active.stages[key] = mid(-6, 6, prev+stage)
+  end
+
+  if prev ~= pl.active.stages[key] then
+    -- TODO: in the OG picodex, the change string +- thing was combined with the hp change string gen, maybe i can combine to save tokens?
+    a_addaction(pl, (sgn(stage) > 0 and "+" or "-")..abs(stage).." "..c_stages[key].." stat", func or f_nop)
+  else
+    return true
+  end
+end $$
