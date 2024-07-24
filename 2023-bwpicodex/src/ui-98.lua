@@ -7,9 +7,9 @@
 -- TODO: stretch goal: add tiny descriptions for items
 
 |[f_init_batresults]| function()
-  f_setsel('g_grid_battle_results', p_otheraction.active.spot-1) -- this needs to go in init, because it uses the DEFAULT memory location and there is a minor ui bug if it is called before init
+  f_setsel('g_grid_battle_results', p_action_other.active.spot-1) -- this needs to go in init, because it uses the DEFAULT memory location and there is a minor ui bug if it is called before init
 
-  if p_otheraction == p_1 then
+  if p_action_other == p_battle_bot then
     g_p1_winfunc()
   end
 end $$
@@ -82,8 +82,8 @@ end $$
   f_dt_batstats(preview_op, f_getsel'g_grid_picktrnr', f_getsel'g_grid_battle_stats')
 
   local bothteams = {}
-  for i=1,6 do add(bothteams, i == p_selfaction.active.spot  and p_selfaction.active  or p_selfaction.team[i]) end
-  for i=1,6 do add(bothteams, i == p_otheraction.active.spot and p_otheraction.active or p_otheraction.team[i]) end
+  for i=1,6 do add(bothteams, i == p_action_self.active.spot  and p_action_self.active  or p_action_self.team[i]) end
+  for i=1,6 do add(bothteams, i == p_action_other.active.spot and p_action_other.active or p_action_other.team[i]) end
   f_add_stat(op, bothteams[f_getsel'g_grid_battle_stats'+1], true)
 end $$
 
@@ -200,7 +200,7 @@ end $$
   add(op, {text="fight", select=function()
     local should_struggle = true
     for i=1,4 do
-      if p_selfaction.active[i].pp_obj.pp > 0 then
+      if p_action_self.active[i].pp_obj.pp > 0 then
         should_struggle = false
       end
     end
@@ -213,31 +213,31 @@ end $$
   end})
 
   add(op, {text="swap",  select=function()
-    f_setsel('g_grid_battle_switch', p_selfaction.active.spot-1)
+    f_setsel('g_grid_battle_switch', p_action_self.active.spot-1)
     f_add_to_ui_stack(g_grid_battle_switch)
   end})
 
   add(op, {text="view",  select=function()
-    f_setsel('g_grid_battle_stats', p_selfaction.active.spot-1)
+    f_setsel('g_grid_battle_stats', p_action_self.active.spot-1)
     f_add_to_ui_stack(g_grid_battle_stats)
   end})
 
-  add(op, {text="run",   select=function() f_end_battle(p_selfaction)                     end})
+  add(op, {text="run",   select=function() f_end_battle(p_action_self)                     end})
 
   f_add_battle(preview_op)
 end $$
 
 |[f_op_movesel]| function(_ENV)
   for i=1,4 do
-    add(op, {text=c_move_names[p_selfaction.active[i].num], disabled=p_selfaction.active[i].pp_obj.pp == 0})
+    add(op, {text=c_move_names[p_action_self.active[i].num], disabled=p_action_self.active[i].pp_obj.pp == 0})
   end
 
-  f_add_stat_move(preview_op, p_selfaction.active, f_getsel'g_grid_battle_movesel')
+  f_add_stat_move(preview_op, p_action_self.active, f_getsel'g_grid_battle_movesel')
 end $$
 
 |[f_op_dmovsel]| function(_ENV)
   f_print_info(op, [[;,"no more moves";;,"use struggle?"]])
-  f_add_stat_move(preview_op, p_selfaction.active, -1) -- -1+1=0 is struggle, every pokemon has a default move of 0 which is always struggle.
+  f_add_stat_move(preview_op, p_action_self.active, -1) -- -1+1=0 is struggle, every pokemon has a default move of 0 which is always struggle.
 end $$
 
 |[f_op_batswitch]| function(_ENV)
@@ -246,8 +246,8 @@ end $$
   local trainer_ind = f_getsel'g_grid_picktrnr'
 
   local name = c_trnr_names[trainer_ind+1]
-  local pkmn = p_selfaction.team[pkind%6+1]
-  local player = pkind < 6 and p_selfaction or p_otheraction
+  local pkmn = p_action_self.team[pkind%6+1]
+  local player = pkind < 6 and p_action_self or p_action_other
 
   f_print_info(preview_op, [[
      ;,"swap ",@
@@ -255,8 +255,8 @@ end $$
   ]], pkmn.name, player.name, pkind%6+1)
 
   for i=1,6 do
-    local pkmn = p_selfaction.team[i]
-    local disabled = not pkmn.valid or i==p_selfaction.active.spot or pkmn.major == C_MAJOR_FAINTED
+    local pkmn = p_action_self.team[i]
+    local disabled = not pkmn.valid or i==p_action_self.active.spot or pkmn.major == C_MAJOR_FAINTED
     add(op, {disabled=disabled, draw=function(i, is_sel)
       f_draw_pkmn(pkmn.num, 1, 1, STYLE_NORMAL, false, is_sel, disabled)
     end})
@@ -265,17 +265,17 @@ end $$
 
 |[f_op_batresults]| function(_ENV)
   for i=1,6 do
-    local pkmn = p_otheraction.team[i]
+    local pkmn = p_action_other.team[i]
     local disabled = not pkmn.valid or pkmn.major == C_MAJOR_FAINTED
     add(op, {disabled=disabled, draw=function(i, is_sel)
-      f_draw_pkmn(pkmn.num, 1, 1, STYLE_SHAKE, p_otheraction == p_2, is_sel, disabled)
+      f_draw_pkmn(pkmn.num, 1, 1, STYLE_SHAKE, p_action_other == p_battle_top, is_sel, disabled)
     end})
   end
 
   f_print_info(preview_op, [[
      ;,@," ",@
     ;;,"is the winner!" -- ;;,"is victorious!" -- that's another good win phrase.
-  ]], p_otheraction.name, p_otheraction.subname)
+  ]], p_action_other.name, p_action_other.subname)
 end $$
 
 -- TODO: make pkmn face opposite way if player 2, for switch screen as well. Maybe...
@@ -283,7 +283,7 @@ end $$
   f_dt_batstats(preview_op, f_getsel'g_grid_picktrnr', f_getsel'g_grid_battle_stats')
 
   for i=1,6 do
-    local pkmn = p_selfaction.team[i]
+    local pkmn = p_action_self.team[i]
     local disabled = not pkmn.valid
     add(op, {lrvalid=not disabled, disabled=disabled, draw=function(i, is_sel)
       f_draw_pkmn(pkmn.num, 1, 1, STYLE_NORMAL, false, is_sel, disabled)
@@ -291,7 +291,7 @@ end $$
   end
 
   for i=1,6 do
-    local pkmn = p_otheraction.team[i]
+    local pkmn = p_action_other.team[i]
     local disabled = not pkmn.valid
     add(op, {lrvalid=not disabled, disabled=disabled, draw=function(i, is_sel)
       f_draw_pkmn(pkmn.num, 1, 1, STYLE_NORMAL, true, is_sel, disabled)
@@ -318,7 +318,7 @@ end $$
 |[f_add_editbrowse_info]| function(op) f_add_browse_info_template(op, 'g_grid_editpkmn', "edit spot"..(f_getsel'g_grid_pickspot'+1)) end $$ -- TODO: check if the parens are needed here. could save a token if not
 
 |[f_dt_batstats]| function(op, trainer_ind, pkind)
-  local player = pkind < 6 and p_selfaction or p_otheraction
+  local player = pkind < 6 and p_action_self or p_action_other
   local name = c_trnr_names[trainer_ind+1]
   local pkmn = player.team[pkind%6+1]
   -- TODO: try changing this to match the editbrowse and viewbrowse info boxes (#xxx pkmname)
@@ -335,7 +335,7 @@ end $$
 ---------------------------------------------------------------------- :SELECT :LEAVE
 |[f_s_batresults]| function()
   -- TODO: dedup with other loops through alive pokemon
-  return p_otheraction.team[f_getsel'g_grid_battle_results'+1].num
+  return p_action_other.team[f_getsel'g_grid_battle_results'+1].num
 end $$
 
 |[f_l_browse]|   function()  f_pop_ui_stack()                                                                                                                      end $$
@@ -375,8 +375,8 @@ end $$
 |[f_s_statbat]| function()
   g_preview_timer = 20
   local bothteams = {}
-  for i=1,6 do add(bothteams, p_selfaction.team[i]) end
-  for i=1,6 do add(bothteams, p_otheraction.team[i]) end
+  for i=1,6 do add(bothteams, p_action_self.team[i]) end
+  for i=1,6 do add(bothteams, p_action_other.team[i]) end
   return bothteams[f_getsel'g_grid_battle_stats'+1].num
 end $$
 
@@ -434,11 +434,11 @@ end $$
 end $$
 
 |[f_l_battle]| function()
-  return p_selfaction.active.invisible and SFX_ERROR or p_selfaction.active.num end $$
+  return p_action_self.active.invisible and SFX_ERROR or p_action_self.active.num end $$
 
 |[f_s_batmove]| function()
-  p_selfaction.nextmove = p_selfaction.active[f_getsel'g_grid_battle_movesel'+1]
-  f_movelogic(p_selfaction)
+  p_action_self.nextmove = p_action_self.active[f_getsel'g_grid_battle_movesel'+1]
+  f_movelogic(p_action_self)
 
   -- TODO: Dedup with below.
   f_pop_ui_stack()
@@ -449,8 +449,8 @@ end $$
 
 |[f_s_dmovsel]| function()
   -- TODO: dedup
-  p_selfaction.nextmove = c_moves[M_STRUGGLE]
-  f_movelogic(p_selfaction)
+  p_action_self.nextmove = c_moves[M_STRUGGLE]
+  f_movelogic(p_action_self)
   f_pop_ui_stack()
   f_pop_ui_stack()
 
@@ -461,12 +461,12 @@ end $$
 -- it immediately applies thing, but doesn't switch the drawn thing for another frame...
 -- fixed the draw thing, but now the selection doesn't get applied immediately. TODO: figure this out!
 |[f_s_batswitch]| function()
-  p_selfaction.nextmove = nil -- nextmove as nil means the pokemon will switch out
+  p_action_self.nextmove = nil -- nextmove as nil means the pokemon will switch out
 
   local nextpkmn = f_getsel'g_grid_battle_switch'+1 -- needs to be defined out of callback, because it can change!
-  f_addaction(p_selfaction, L_TRIGGER, p_selfaction, "backs "..p_selfaction.active.name, function()
-    p_selfaction.active.invisible = true
-    add(p_selfaction.actions, f_pkmn_comes_out(p_selfaction, nextpkmn, L_TRIGGER)) -- technically, this could be L_ATTACK too, doesn't really matter since poison/nightmare dmg isnt done on switches.
+  f_addaction(p_action_self, L_TRIGGER, p_action_self, "backs "..p_action_self.active.name, function()
+    p_action_self.active.invisible = true
+    add(p_action_self.actions, f_pkmn_comes_out(p_action_self, nextpkmn, L_TRIGGER)) -- technically, this could be L_ATTACK too, doesn't really matter since poison/nightmare dmg isnt done on switches.
   end, true)
 
   f_pop_ui_stack()
@@ -492,31 +492,31 @@ end $$
     end
 
     -- uncomment this for a decent log that prints the contents of the action stack.
-    -- local actionstr = "p1 actions" for x in all(p_1.actions) do actionstr ..= " | "..(x.message or "empty") end actionstr ..= " |:| p2 actions" for x in all(p_2.actions) do actionstr ..= " | "..(x.message or "empty") end printh(actionstr)
+    -- local actionstr = "p1 actions" for x in all(p_battle_bot.actions) do actionstr ..= " | "..(x.message or "empty") end actionstr ..= " |:| p2 actions" for x in all(p_battle_top.actions) do actionstr ..= " | "..(x.message or "empty") end printh(actionstr)
 
-    p_selfturn, p_curaction = f_pop_next_action()
+    p_turn_self, p_curaction = f_pop_next_action()
     if p_curaction then -- if there is a next action
       f_set_pself(p_curaction.player)
-      a_self_active, a_other_active = p_selfaction.active, p_otheraction.active
+      p_turn_other = f_get_other_pl(p_turn_self)
 
-      -- TODO: this should probably add to the current turn actions. Not the current actions player.
-      a_addaction = function(...) f_addaction(p_selfturn, L_ATTACK, ...) end
-      p_otherturn = f_get_other_pl(p_selfturn)
+      -- TODO: token crunch
+      p_action_self_active, p_action_other_active = p_action_self.active, p_action_other.active
+      p_turn_self_active,   p_turn_other_active   = p_turn_self.active,   p_turn_other.active
 
       p_curaction.logic()
 
       -- an empty message means we execute the logic, but look for another p_curaction
       if p_curaction.message then
-        f_setsel('g_grid_battle_actions', p_selfaction == p_1 and 1 or 0) -- TODO: dedup
-        g_msg_top = p_selfaction.name.." "..p_selfaction.active.name
+        f_setsel('g_grid_battle_actions', p_action_self == p_battle_bot and 1 or 0) -- TODO: dedup
+        g_msg_top = p_action_self.name.." "..p_action_self.active.name
         if p_curaction.isplayeraction then -- TODO: token crunch
-          g_msg_top = p_selfaction.name.." "..p_selfaction.subname
+          g_msg_top = p_action_self.name.." "..p_action_self.subname
         end
         g_msg_bot = p_curaction.message
         return
       end
     else -- if there is no next action, that means we are at the end of the turn.
-      f_set_pself(p_1)
+      f_set_pself(p_battle_bot)
       f_start_turn()
     end
   end

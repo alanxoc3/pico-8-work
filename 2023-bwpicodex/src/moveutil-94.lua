@@ -7,6 +7,15 @@
 -- f_moveutil_hpchange: a function that shares logic between healing and damaging moves. healing moves call this directly, damaging indirectly through f_moveutil_dmg. recoil damage calls this directly as well.
 -- f_moveutil_dmgother: all damage that goes to the opponent goes through this function, so that applicable logic passes through.
 
+-- this is used by sandstorm/leech/mare/burn/poison/struggle, anything that self inflicts a percentage of damage based on maxhp.
+|[f_hurt_self]| function(hurtby, divide, activation)
+  if activation then
+    -- TODO: from what I can tell, divide is a floor operation, not a ceil. I could technically save a token by making it floor, but then i lose a KO in exact number of turns. Think about it bro!
+    f_turn_addattack(p_turn_self, "hurt by "..hurtby)
+    f_moveutil_dmgself(ceil(p_turn_self_active.maxhp/divide))
+  end
+end $$
+
 -- return of true means the hpchange failed. aka amount is zero
 |[f_moveutil_hpchange]| function(player, amount, callback_function, issub)
   -- ensure amount is in bounds. TODO: verify this logic
@@ -19,9 +28,9 @@
   local dmgtxt = (amount > 0 and "-" or "+")..abs(amount).." hp change"
 
   local hpchange = function()
-    a_self_active.base.hp -= amount
-    if a_self_active.base.hp <= 0 then
-      a_self_active.base.major = C_MAJOR_FAINTED
+    p_action_self_active.base.hp -= amount
+    if p_action_self_active.base.hp <= 0 then
+      p_action_self_active.base.major = C_MAJOR_FAINTED
     end
   end
 
@@ -33,12 +42,12 @@
   else
     local amount_str = (amount > 0 and "-" or "+")..abs(amount)
     local text = issub and "substitute "..amount_str.." hp" or amount_str.." hp change"
-    a_addaction(player, text, function()
+    f_turn_addattack(player, text, function()
       if issub then
         hpchange()
 
         if pkmn.substitute <= 0 then
-          a_addaction(player,
+          f_turn_addattack(player,
             "substitute broke",
             function()
               callback_function(amount)
@@ -48,7 +57,7 @@
           callback_function(amount)
         end
       else
-        a_addaction(p_selfaction, text, function()
+        f_turn_addattack(p_action_self, text, function()
           hpchange()
           callback_function(amount)
         end)
@@ -59,7 +68,7 @@ end $$
 
 |[f_moveutil_dmgself]| function(dmg)
   -- TODO: some logic could go here, like focus band or endure (can protect against self-inflicted damage)
-  return f_moveutil_hpchange(p_selfturn, dmg)
+  return f_moveutil_hpchange(p_turn_self, dmg)
 end $$
 
 -- all opponent dmg goes through here. based on code from OG picodex.
@@ -70,23 +79,23 @@ end $$
   callback_function = callback_function or f_nop
   local advantage, crit = 1 -- implied nil/false
   if type(dmg) == "table" then
-    dmg, advantage, crit = f_moveutil_calc_move_damage(dmg, a_self_active, p_otherturn.active)
+    dmg, advantage, crit = f_moveutil_calc_move_damage(dmg, p_turn_self_active, p_turn_other_active)
   end
 
   -- zero damage only means that attack was resisted. moves with set damage don't monitor resistance.
   if advantage > 0 then
-    f_zcall(a_addaction, [[ -- zcall saves 2 token vs not using zcall
-       ;,~p_selfaction,@
-      ;;,~p_selfaction,@
+    f_zcall(f_turn_addattack, [[ -- zcall saves 2 token vs not using zcall
+       ;,~p_action_self,@
+      ;;,~p_action_self,@
     ]], advantage > 1 and "super effect" or advantage < 1 and "little effect", crit and "critical hit")
 
-    return f_moveutil_hpchange(p_otherturn, dmg, function(dmg)
+    return f_moveutil_hpchange(p_turn_other, dmg, function(dmg)
       -- TODO: rage/bide logic can go here?
       -- TODO: counter/mirrorcoat logic might go here? It did in the OG picodex
       callback_function(dmg)
-    end, p_otherturn.active.substitute > 0)
+    end, p_turn_other_active.substitute > 0)
   else
-    a_addaction(p_otherturn, "resists attack")
+    f_turn_addattack(p_turn_other, "resists attack")
   end
 end $$
 
@@ -94,10 +103,10 @@ end $$
 |[f_moveutil_movemod]| function(active, move)
   -- TODO: token crunching here. maybe a func that takes pairs of bools, idk.
   if f_in_split(move.num, 'M_EXPLOSION,M_SELFDESTRUCT')
-    or move.num == M_PURSUIT and not p_otheraction.nextmove then
+    or move.num == M_PURSUIT and not p_action_other.nextmove then
     return 2
   elseif move.num == M_TRIPLEKICK then
-    return p_selfturn.active.numtimes
+    return p_turn_self_active.numtimes
   end
   return 1
   -- movemod: must be <= 32 to prevent any possible number overflow
@@ -161,23 +170,23 @@ end $$
 -- types that resist the move's type and opponents with types equal to the moves type means that the status effect doesn't apply/work.
 |[f_movehelp_effect_works]| function(_ENV)
   -- TODO: I could probably make this smaller
-  return f_moveutil_typeadv(_ENV, p_otherturn.active) > 0 and pktype ~= p_otherturn.active.pktype1 and pktype ~= p_otherturn.active.pktype2
+  return f_moveutil_typeadv(_ENV, p_turn_other_active) > 0 and pktype ~= p_turn_other_active.pktype1 and pktype ~= p_turn_other_active.pktype2
 end $$
 
 |[f_move_major_other]| function(_ENV, majorind)
   -- if you thawed out, you won't get burned that turn
-  if p_otherturn.active.major == C_MAJOR_FROZEN and majorind == C_MAJOR_BURNED then
-    a_addaction(p_otherturn, "thawed out", function()
-      p_otherturn.active.base.major = C_MAJOR_NONE
+  if p_turn_other_active.major == C_MAJOR_FROZEN and majorind == C_MAJOR_BURNED then
+    f_turn_addattack(p_turn_other, "thawed out", function()
+      p_turn_other_active.base.major = C_MAJOR_NONE
     end)
 
   -- sing works on ghost pokemon and should. TODO: verify this logic is correct
-  elseif p_otherturn.active.major == C_MAJOR_NONE and (majorind == C_MAJOR_SLEEPING or f_movehelp_effect_works(_ENV)) then
-    a_addaction(p_otherturn, "now "..c_major_names_long[majorind], function()
-      p_otherturn.active.base.major = majorind
+  elseif p_turn_other_active.major == C_MAJOR_NONE and (majorind == C_MAJOR_SLEEPING or f_movehelp_effect_works(_ENV)) then
+    f_turn_addattack(p_turn_other, "now "..c_major_names_long[majorind], function()
+      p_turn_other_active.base.major = majorind
 
       -- every time major stat is set, sleep timer is set, but sleep timer isn't used unless pkmn is actually sleeping
-      p_otherturn.active.sleeping = f_flr_rnd'7'+1 -- TODO: verify this is the correct number of turns for sleeping
+      p_turn_other_active.sleeping = f_flr_rnd'7'+1 -- TODO: verify this is the correct number of turns for sleeping
       -- ^^ If I change the sleep timer amount, remember to change it somewhere else too!
     end)
   else

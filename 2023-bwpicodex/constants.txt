@@ -101,7 +101,7 @@ C_MAJOR_BURNED:    2
 C_MAJOR_FROZEN:    3
 C_MAJOR_PARALYZED: 4
 C_MAJOR_POISONED:  5
-C_MAJOR_SLEEPING:  6
+C_MAJOR_SLEEPING:  6 # Idea: make the numbers after this be sleep turn timer.
 
 C_LEN_ITEMS:   42 # 1 more than len of all items
 C_LEN_GENDERS: 3

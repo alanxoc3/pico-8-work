@@ -149,7 +149,7 @@ end $$
       local active = player.active
 
       -- TODO: shouldn't be 254. Should be the player's sprites. I can probably fit a few player sprites: plrboy, plrgirl, cpu, horde
-      f_draw_pkmn(invisible and player.num or active.num, px, py, STYLE_SHAKE, flip,  p_selfaction == player, false)
+      f_draw_pkmn(invisible and player.num or active.num, px, py, STYLE_SHAKE, flip,  p_action_self == player, false)
       if invisible then return end
       print(active.name, x+2, y-4, C_1, -1)
       local hp = active.hp
@@ -179,6 +179,6 @@ end $$
     end})
   end
 
-  b(p_2,  1, 5, 39, 1, true) -- top pl
-  b(p_1, 22, 5,  3, 1)       -- bot pl
+  b(p_battle_top,  1, 5, 39, 1, true) -- top pl
+  b(p_battle_bot, 22, 5,  3, 1)       -- bot pl
 end $$

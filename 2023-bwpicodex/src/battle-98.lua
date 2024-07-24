@@ -5,18 +5,21 @@
 -- - priority logic. logic for executing moves. determining when battle ends.
 
 -- Some globals that we manage in the battle:
--- p_1:           player 1: this is the bottom player on the UI. it never changes throughout the battle.
--- p_2:           player 2: this is the top    player on the UI. it never changes throughout the battle.
--- p_selfaction:  this is the current highlighted player. aka the player currently running an action.
--- p_otheraction: this is the non highlighted player.     aka the player currently running an action.
--- p_first:       this is the player who went first this turns. this changes before each turn starts and is unavailable during move selection.
--- p_last:        this is the player who went first this turns. this changes before each turn starts and is unavailable during move selection.
--- p_selfturn:    this is the player who is currently executing actions. useful for moves.
--- p_otherturn:   this is the player who is currently executing actions. useful for moves.
--- a_addaction:   this is a convenience function available to all action logic functions. adds an action to the current player's turn.
--- a_activeself:  a_self.active, convenience for action logic functions
--- a_activeother: a_other.active, convenience for action logic functions
--- a_turnself:    the player that is currently executing a turn.
+
+-- Some terminology:
+-- - battle: from when both players send out their first pokemon until one player forfeits or has all their pokemon faint.
+-- - round:  from when you select you move/switch action until the next time you can choose your move/switch action.
+-- - turn:   the current action stack that is being popped from. starts with p_first then p_last for each level
+-- - action: within the current turn, an action is a discrete message and/or function that operates on a player
+
+-- p_battle_bot  & p_battle_top:   bottom (1) and top (2) players on the ui gets set when the battle starts and never changes throughout the battle.
+-- p_round_first & p_round_last:   the player that goes first/last. this changes before each round starts and should not be used during move/action selection.
+-- p_turn_self   & p_turn_other:   the player currently executing actions from an action stack.
+-- p_action_self & p_action_other: the current highlighted player or the player currently executing an action.
+
+-- some convenience active pokemon variables are available for actions:
+-- p_turn_self_active   & p_turn_other_active
+-- p_action_self_active & p_action_other_active
 
 -- Some player specific things
 
@@ -83,11 +86,11 @@ end $$
 end $$
 
 |[f_get_other_pl]| function(player)
-  return player == p_1 and p_2 or p_1
+  return player == p_battle_bot and p_battle_top or p_battle_bot
 end $$
 
 |[f_set_pself]| function(player)
-  p_selfaction, p_otheraction = player, f_get_other_pl(player)
+  p_action_self, p_action_other = player, f_get_other_pl(player)
 end $$
 
 |[f_get_live_pkmn]| function(player)
@@ -113,8 +116,8 @@ end $$
   f_set_pself(player) -- TODO: Could this be removed?
   f_zcall(f_pop_ui_stack, [[
      ;, -- battle scene TODO: convert to a zcall?
-    ;;, -- p_2 select scene
-    ;;, -- p_1 select scene
+    ;;, -- p_battle_top select scene
+    ;;, -- p_battle_bot select scene
   ]])
 
   f_add_to_ui_stack(g_grid_battle_results)
@@ -132,6 +135,11 @@ end $$
 |[f_addaction]| function(player, ...)
   -- TODO: can this be token crunched?
   add(player.actions, f_newaction(...)) -- TODO: try adding at "1" location
+end $$
+
+-- a lot of attacks just add subsequent actions to the attack level of the current turn, so here is a wrapper around that.
+|[f_turn_addattack]| function(...)
+  f_addaction(p_turn_self, L_ATTACK, ...)
 end $$
 
 |[f_pkmn_comes_out]| function(player, spot, level) -- assumes that the pkmn coming is not nil.
@@ -220,6 +228,7 @@ end $$
 
 |[f_movelogic]| function(player)
   local move = player.nextmove
+  -- TODO: verify the resumes thing
   f_addaction(player, L_TRIGGER, player, (player.active.curmove and "resumes " or (move.func == f_move_multiturn and "begins " or "uses "))..c_move_names[move.num], function()
     -- TODO: how does metronome work with solar beam. would pp get deducted twice?
     move.pp_obj.pp = max(0, move.pp_obj.pp-1) -- needs a zero bounds check, because struggle could go negative without this.
@@ -228,18 +237,18 @@ end $$
       if move.accuracy <= 0 then return false end -- swift/haze (-1) and status moves (0)
 
       -- -- charging moves & fly/dig can't miss on the first turn
-      -- if (move.func == f_move_prepare or move.func == f_move_flydig) and not a_self_active.curmove then return false end
+      -- if (move.func == f_move_prepare or move.func == f_move_flydig) and not p_action_self_active.curmove then return false end
 
-      -- -- a_self_active misses if a_other_active is using fly/dig
-      -- if a_other_active.curmove and a_other_active.curmove.func == f_move_flydig then return true end
+      -- -- p_action_self_active misses if p_action_other_active is using fly/dig
+      -- if p_action_other_active.curmove and p_action_other_active.curmove.func == f_move_flydig then return true end
 
-      -- -- a_self_active can't miss trapping moves if the first hit succeeded
-      -- if a_self_active.curmove and a_self_active.curmove.func == f_move_trapping then return false end
+      -- -- p_action_self_active can't miss trapping moves if the first hit succeeded
+      -- if p_action_self_active.curmove and p_action_self_active.curmove.func == f_move_trapping then return false end
 
       -- every move aimed at oppenent in pokemon stadium has a 1/65536 chance of a move missing, besides swift
-      return rnd(f_stat_evac(a_other_active.stages['evasion'])) > move.accuracy/100*f_stat_evac(a_self_active.stages['accuracy']) or f_flr_rnd'256' == 0 and f_flr_rnd'256' == 0
+      return rnd(f_stat_evac(p_action_other_active.stages['evasion'])) > move.accuracy/100*f_stat_evac(p_action_self_active.stages['accuracy']) or f_flr_rnd'256' == 0 and f_flr_rnd'256' == 0
     end)() then
-      a_addaction(player, "misses "..move.name)
+      f_turn_addattack(player, "misses "..move.name)
 
       if f_in_split(move.num, 'M_HIGH_JUMP_KICK,M_JUMP_KICK') then
         -- TODO: 1/8 recoil of what it would have inflicted. TODO: Maybe I can modify this to 1/16 of health like leech seed. umm, that might be more damage. whatever maybe not
@@ -247,47 +256,54 @@ end $$
       end
     else
       if move:func(unpack(move.params)) then -- TODO: calc attack fail based on whether or not an action was added
-        a_addaction(player, "fails attack")
+        f_turn_addattack(player, "fails attack")
       end
     end
 
     -- explosion and selfdestruct self-inflict damage whether or not the attack hit the opponent.
     -- and this happens after the attack hits
     if f_in_split(move.num, 'M_EXPLOSION,M_SELFDESTRUCT') then -- TODO: maybe func could be checked? Might save tokens
-      f_moveutil_dmgself(a_self_active.hp)
+      f_moveutil_dmgself(p_action_self_active.hp)
     end
 
     -- TODO: populate last move... OG picodex had this logic
     -- if move.accuracy ~= 0 then -- -1 is swift & haze. targeting moves
-    --   a_other_active.lastmoverecv = move.num
+    --   p_action_other_active.lastmoverecv = move.num
     -- end
+  end)
+
+  f_addaction(player, L_TRIGGER, player, false, function()
+    f_hurt_self("poison", 8, p_turn_self_active.major == C_MAJOR_POISONED)
+    f_hurt_self("burn",   8, p_turn_self_active.major == C_MAJOR_BURNED)
+    f_hurt_self("curse",  4, p_turn_self_active.cursed)
+    f_hurt_self("dream",  4, p_turn_self_active.nightmare)
   end)
 end $$
 
 |[f_start_turn]| function()
   local x = function()
-    if p_selfaction.iscpu then
+    if p_action_self.iscpu then
       local possible_moves = {}
       for i=1,4 do
-        if p_selfaction.active[i].num < M_NONE and p_selfaction.active[i].pp_obj.pp > 0 then
+        if p_action_self.active[i].num < M_NONE and p_action_self.active[i].pp_obj.pp > 0 then
           add(possible_moves, i)
         end
       end
       if #possible_moves > 0 then
-        p_selfaction.nextmove = p_selfaction.active[possible_moves[f_flr_rnd(#possible_moves)+1]]
+        p_action_self.nextmove = p_action_self.active[possible_moves[f_flr_rnd(#possible_moves)+1]]
       else
-        p_selfaction.nextmove = c_moves[M_STRUGGLE]
+        p_action_self.nextmove = c_moves[M_STRUGGLE]
       end
-      f_movelogic(p_selfaction)
+      f_movelogic(p_action_self)
     else
       -- umm, this may be a hack. i have "begins turn" again here, so the text doesn't change, but this action is immediately replaced by an action selection screen.
-      f_addaction(p_selfaction, L_PICK, p_selfaction, "begins turn", function()
+      f_addaction(p_action_self, L_PICK, p_action_self, "begins turn", function()
         f_pop_ui_stack()
 
         -- this is a quality of life thing. when switching and spamming x, i never wanted to switch 2 times in a row. most commonly you just want to fight right after.
         f_setsel('g_grid_battle_select', 0)
 
-        if p_selfaction == p_1 then
+        if p_action_self == p_battle_bot then
           g_grid_battle_select.g_cg_m.sel   = S_P1_BATACTION
           g_grid_statbattle.g_cg_m.sel      = S_P1_STAT
           g_grid_battle_movesel.g_cg_m.sel  = S_P1_MOVE
@@ -308,20 +324,20 @@ end $$
     end
   end
 
-  p_first = p_1
-  p_last  = p_2
+  p_first = p_battle_bot
+  p_last  = p_battle_top
 
-  f_addaction(p_1, L_PICK, p_1, not p_1.iscpu and "begins turn", x, true)
-  f_addaction(p_2, L_PICK, p_2, not p_2.iscpu and "begins turn", x, true)
+  f_addaction(p_battle_bot, L_PICK, p_battle_bot, not p_battle_bot.iscpu and "begins turn", x, true)
+  f_addaction(p_battle_top, L_PICK, p_battle_top, not p_battle_top.iscpu and "begins turn", x, true)
 
   -- calculate priorities. this just has to be on 1 of the 2 players so it gets executed.
-  f_addaction(p_1, L_PRIORITY, p_1, false, function()
-    f_set_player_priority(p_1)
-    f_set_player_priority(p_2)
+  f_addaction(p_battle_bot, L_PRIORITY, p_battle_bot, false, function()
+    f_set_player_priority(p_battle_bot)
+    f_set_player_priority(p_battle_top)
 
     -- if priorities are equal, then coin flip!
-    if p_1.priority == p_2.priority then p_2.priority += sgn(rnd'2'-1) end
-    p_first = p_1.priority > p_2.priority and p_1 or p_2
+    if p_battle_bot.priority == p_battle_top.priority then p_battle_top.priority += sgn(rnd'2'-1) end
+    p_first = p_battle_bot.priority > p_battle_top.priority and p_battle_bot or p_battle_top
     p_last  = f_get_other_pl(p_first)
 
     -- f_s_bataction()
@@ -329,13 +345,13 @@ end $$
 end $$
 
 |[f_start_battle]| function(p1winfunc, ...)
-  p_1, p_2 = f_create_player("playr", f_team_party(@S_TEAM1), c_team_names[@S_TEAM1], P_MALETRNR+@S_TEAM1%2, @S_TEAM1 > 1), f_create_player("enemy", ...)
-  p_first, p_last = p_1, p_2
+  p_battle_bot, p_battle_top = f_create_player("playr", f_team_party(@S_TEAM1), c_team_names[@S_TEAM1], P_MALETRNR+@S_TEAM1%2, @S_TEAM1 > 1), f_create_player("enemy", ...)
+  p_first, p_last = p_battle_bot, p_battle_top
   g_p1_winfunc = p1winfunc
   p_curaction = nil -- TODO: could i remove this? Maybe?
   g_action_level = 1
 
-  f_set_pself(p_1)
+  f_set_pself(p_battle_bot)
 
   -- TODO: use a memcpy here
   poke2(S_P1_BATACTION, 0)
@@ -345,11 +361,11 @@ end $$
   poke2(S_P2_MOVE, 0)
   poke2(S_P2_STAT, 0)
 
-  f_addaction(p_1, L_PICK, p_1, "begins battle", f_nop, true)
-  add(p_1.actions, f_pkmn_comes_out(p_1, p_1.active.spot, L_PICK))
+  f_addaction(p_battle_bot, L_PICK, p_battle_bot, "begins battle", f_nop, true)
+  add(p_battle_bot.actions, f_pkmn_comes_out(p_battle_bot, p_battle_bot.active.spot, L_PICK))
 
-  f_addaction(p_2, L_PICK, p_2, "begins battle", f_nop, true)
-  add(p_2.actions, f_pkmn_comes_out(p_2, p_2.active.spot, L_PICK))
+  f_addaction(p_battle_top, L_PICK, p_battle_top, "begins battle", f_nop, true)
+  add(p_battle_top.actions, f_pkmn_comes_out(p_battle_top, p_battle_top.active.spot, L_PICK))
 
   -- the normal action grid has an init function which is called immediately.
   -- this adds a special first action which is the same as a normal action but with no init function.
