@@ -75,9 +75,10 @@ end $$
 
   -- zero damage only means that attack was resisted. moves with set damage don't monitor resistance.
   if advantage > 0 then
-    if advantage > 1     then a_addaction(p_selfaction, "super effect")
-    elseif advantage < 1 then a_addaction(p_selfaction, "little effect") end
-    if crit then a_addaction(p_selfaction, "critical hit") end
+    f_zcall(a_addaction, [[ -- zcall saves 2 token vs not using zcall
+       ;,~p_selfaction,@
+      ;;,~p_selfaction,@
+    ]], advantage > 1 and "super effect" or advantage < 1 and "little effect", crit and "critical hit")
 
     return f_moveutil_hpchange(p_otherturn, dmg, function(dmg)
       -- TODO: rage/bide logic can go here?

@@ -290,9 +290,7 @@ if type(dmg)=="table"then
 dmg,advantage,crit=f_moveutil_calc_move_damage(dmg,a_self_active,p_otherturn.active)
 end
 if advantage>0 then
-if advantage>1 then a_addaction(p_selfaction,"super effect")
-elseif advantage<1 then a_addaction(p_selfaction,"little effect")end
-if crit then a_addaction(p_selfaction,"critical hit")end
+f_zcall(a_addaction,";,~p_selfaction,@;;,~p_selfaction,@",advantage>1 and "super effect"or advantage<1 and "little effect",crit and "critical hit")
 return f_moveutil_hpchange(p_otherturn,dmg,function(dmg)
 callback_function(dmg)
 end,p_otherturn.active.substitute>0)
@@ -647,7 +645,7 @@ return player,f_pkmn_comes_out(player,f_get_next_active(player),3)
 else
 for np in all{p_first,p_last}do
 for action in all(np.actions)do
-if action.level==3 and player==action.player then
+if action.level<=4 and player==action.player then
 del(np.actions,action)
 end
 end
@@ -659,7 +657,7 @@ end,true)
 end
 end
 end
-for level=1,11 do
+for level=1,12 do
 for player in all{p_first,p_last}do
 for action in all(player.actions)do
 if action.level==level then
@@ -682,7 +680,7 @@ end
 player.priority=priority_class+f_stat_calc(player.active,"speed",true)
 end,function(player)
 local move=player.nextmove
-f_addaction(player,3,player,(player.active.curmove and "resumes "or(move.func==f_move_multiturn and "begins "or "uses "))..c_move_names[move.num],function()
+f_addaction(player,4,player,(player.active.curmove and "resumes "or(move.func==f_move_multiturn and "begins "or "uses "))..c_move_names[move.num],function()
 move.pp_obj.pp=max(0,move.pp_obj.pp-1)
 if(function()
 if move.accuracy<=0 then return false end
@@ -1136,9 +1134,9 @@ f_add_to_ui_stack(g_grid_battle_actions)
 end,function()
 p_selfaction.nextmove=nil
 local nextpkmn=f_getsel"g_grid_battle_switch"+1
-f_addaction(p_selfaction,3,p_selfaction,"backs "..p_selfaction.active.name,function()
+f_addaction(p_selfaction,4,p_selfaction,"backs "..p_selfaction.active.name,function()
 p_selfaction.active.invisible=true
-add(p_selfaction.actions,f_pkmn_comes_out(p_selfaction,nextpkmn,3))
+add(p_selfaction.actions,f_pkmn_comes_out(p_selfaction,nextpkmn,4))
 end,true)
 f_pop_ui_stack()
 f_pop_ui_stack()

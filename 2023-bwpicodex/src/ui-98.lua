@@ -464,9 +464,9 @@ end $$
   p_selfaction.nextmove = nil -- nextmove as nil means the pokemon will switch out
 
   local nextpkmn = f_getsel'g_grid_battle_switch'+1 -- needs to be defined out of callback, because it can change!
-  f_addaction(p_selfaction, L_ATTACK, p_selfaction, "backs "..p_selfaction.active.name, function()
+  f_addaction(p_selfaction, L_TRIGGER, p_selfaction, "backs "..p_selfaction.active.name, function()
     p_selfaction.active.invisible = true
-    add(p_selfaction.actions, f_pkmn_comes_out(p_selfaction, nextpkmn, L_ATTACK))
+    add(p_selfaction.actions, f_pkmn_comes_out(p_selfaction, nextpkmn, L_TRIGGER)) -- technically, this could be L_ATTACK too, doesn't really matter since poison/nightmare dmg isnt done on switches.
   end, true)
 
   f_pop_ui_stack()
@@ -563,8 +563,8 @@ f_zcall(f_create_gridpair, [[
   -- Battle UI
   ;;,g_grid_battle_select      ,S_DEFAULT      ,~bot_4x4       ,~top_battle2   ,~f_op_batsel          ,~f_s_battle       ,~f_l_battle      ,~c_no               ,~c_no  ,~f_nop
   ;;,g_grid_statbattle         ,S_DEFAULT      ,~top_pkstat    ,~bot_info      ,~f_op_statbattle      ,~f_s_statbat      ,~f_l_browse      ,g_grid_battle_stats ,~c_no  ,~f_nop
-  ;;,g_grid_battle_movesel     ,S_DEFAULT      ,~bot_4x4       ,~top_pkstat    ,~f_op_movesel         ,~f_s_batmove      ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop
-  ;;,g_grid_battle_dmovsel     ,S_DEFAULT      ,~bot_info      ,~top_pkstat    ,~f_op_dmovsel         ,~f_s_dmovsel      ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop
+  ;;,g_grid_battle_movesel     ,S_DEFAULT      ,~bot_4x4       ,~top_pkstat    ,~f_op_movesel         ,~f_s_batmove      ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop -- normal move sel
+  ;;,g_grid_battle_dmovsel     ,S_DEFAULT      ,~bot_info      ,~top_pkstat    ,~f_op_dmovsel         ,~f_s_dmovsel      ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop -- struggle move sel
   ;;,g_grid_battle_switch      ,S_DEFAULT      ,~top_editteam  ,~bot_info      ,~f_op_batswitch       ,~f_s_batswitch    ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop
   ;;,g_grid_battle_stats       ,S_DEFAULT      ,~top_editteam  ,~bot_info      ,~f_op_batstats        ,~f_s_batstat      ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop
 

@@ -155,6 +155,7 @@ end $$
 -- timing notes:
 -- L_PICK: after this level, p_first and p_last could change.
 -- L_ATTACK: if a pokemon faints during (or before, though should be impossible) all actions affecting the fainted pokemon are removed.
+-- L_TRIGGER: initial attack stuff goes in trigger, then it creates attacks, which is a lower level.
 -- Remaining: execute checks and do things.
 |[f_pop_next_action]| function()
   -- if an active pokemon has no hp, but not the faint status yet, return an action that makes the pokemon faint.
@@ -163,12 +164,12 @@ end $$
   for player in all{p_first,p_last} do -- TODO: try _ENV syntax here?
     if player.active.major == C_MAJOR_FAINTED then
       if player.active.invisible then
-        return player, f_pkmn_comes_out(player, f_get_next_active(player), L_ATTACK) -- TODO: is there a nil issue here?
+        return player, f_pkmn_comes_out(player, f_get_next_active(player), L_ATTACK) -- The level here doesn't actually matter. TODO: is there a nil issue here? And maybe L_ATTACK could be nil.
       else
-        -- delete all instances of the current player from the attack phase. this prevents moves from glitching or end of attack stuff from being applied (eg: poison)
+        -- delete all instances of the current player from the attack phase. remember trigger is part of the considered attack phase (poision/burn in trigger). this prevents moves from glitching or end of attack stuff from being applied (eg: poison)
         for np in all{p_first, p_last} do
           for action in all(np.actions) do
-            if action.level == L_ATTACK and player == action.player then -- Using del is a hack to save on tokens
+            if action.level <= L_TRIGGER and player == action.player then -- Using del is a hack to save on tokens
               del(np.actions, action)
             end
           end
@@ -219,7 +220,7 @@ end $$
 
 |[f_movelogic]| function(player)
   local move = player.nextmove
-  f_addaction(player, L_ATTACK, player, (player.active.curmove and "resumes " or (move.func == f_move_multiturn and "begins " or "uses "))..c_move_names[move.num], function()
+  f_addaction(player, L_TRIGGER, player, (player.active.curmove and "resumes " or (move.func == f_move_multiturn and "begins " or "uses "))..c_move_names[move.num], function()
     -- TODO: how does metronome work with solar beam. would pp get deducted twice?
     move.pp_obj.pp = max(0, move.pp_obj.pp-1) -- needs a zero bounds check, because struggle could go negative without this.
 
