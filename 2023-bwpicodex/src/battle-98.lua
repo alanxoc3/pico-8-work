@@ -89,8 +89,8 @@ end $$
   return player == p_battle_bot and p_battle_top or p_battle_bot
 end $$
 
-|[f_set_pself]| function(player)
-  p_action_self, p_action_other = player, f_get_other_pl(player)
+|[f_set_both_players]| function(zobjtext, player)
+  f_zobj_set(_g, zobjtext, player, f_get_other_pl(player), player.active, f_get_other_pl(player).active)
 end $$
 
 |[f_get_live_pkmn]| function(player)
@@ -113,7 +113,8 @@ end $$
 -- This is called when a player either gives up or loses.
 -- Pass in the loser player.
 |[f_end_battle]| function(player)
-  f_set_pself(player) -- TODO: Could this be removed?
+  f_set_both_players([[p_action_self,@, p_action_other,@, p_action_self_active,@, p_action_other_active,@]], player) -- TODO: Could this be removed?
+
   f_zcall(f_pop_ui_stack, [[
      ;, -- battle scene TODO: convert to a zcall?
     ;;, -- p_battle_top select scene
@@ -204,15 +205,15 @@ end $$
 end $$
 
 |[f_set_player_priority]| function(player)
+  f_set_both_players([[p_action_self,@, p_action_other,@, p_action_self_active,@, p_action_other_active,@]], player)
   local priority_class = C_PRIORITY_ATTACK
-  local movenum = player.nextmove and player.nextmove.num
-  local other = f_get_other_pl(player)
+  local movenum = p_action_self.nextmove and p_action_self.nextmove.num
 
-  -- TODO: in picodex, I was calling f_premovelogic(player, move) here
+  -- TODO: in OG picodex, I was calling f_premovelogic(player, move) here
 
   -- TODO: is there a good way to simplify tokens here?
   if not movenum                                                         then priority_class = C_PRIORITY_SWITCH
-  elseif movenum == M_PURSUIT and not other.movenum                      then priority_class = C_PRIORITY_PURSUIT
+  elseif movenum == M_PURSUIT and not p_action_other.movenum             then priority_class = C_PRIORITY_PURSUIT
   elseif f_in_split(movenum, 'M_WHIRLWIND,M_ROAR,M_TELEPORT')            then priority_class = C_PRIORITY_ROAR
   elseif f_in_split(movenum, 'M_QUICKATTACK,M_MACHPUNCH,M_EXTREMESPEED') then priority_class = C_PRIORITY_QUICKATTACK
   elseif f_in_split(movenum, 'M_COUNTER,M_MIRRORCOAT')                   then priority_class = C_PRIORITY_COUNTER
@@ -223,7 +224,7 @@ end $$
   -- highest priority goes first. if priority is same, roll a dice to decide
   -- speed can technically affect a switch/pursuit, but doesn't actually matter in that case.
   -- the og picodex had a min(C_PRIORITY_SWITCH, ...) here.
-  player.priority = priority_class+f_stat_calc(player.active, 'speed', true)
+  p_action_self.priority = priority_class+f_stat_calc(p_action_self_active, 'speed', true)
 end $$
 
 |[f_movelogic]| function(player)
@@ -285,12 +286,12 @@ end $$
     if p_action_self.iscpu then
       local possible_moves = {}
       for i=1,4 do
-        if p_action_self.active[i].num < M_NONE and p_action_self.active[i].pp_obj.pp > 0 then
+        if p_action_self_active[i].num < M_NONE and p_action_self_active[i].pp_obj.pp > 0 then
           add(possible_moves, i)
         end
       end
       if #possible_moves > 0 then
-        p_action_self.nextmove = p_action_self.active[possible_moves[f_flr_rnd(#possible_moves)+1]]
+        p_action_self.nextmove = p_action_self_active[possible_moves[f_flr_rnd(#possible_moves)+1]]
       else
         p_action_self.nextmove = c_moves[M_STRUGGLE]
       end
@@ -324,8 +325,7 @@ end $$
     end
   end
 
-  p_first = p_battle_bot
-  p_last  = p_battle_top
+  f_set_both_players([[p_first,@, p_last,@]], p_battle_bot)
 
   f_addaction(p_battle_bot, L_PICK, p_battle_bot, not p_battle_bot.iscpu and "begins turn", x, true)
   f_addaction(p_battle_top, L_PICK, p_battle_top, not p_battle_top.iscpu and "begins turn", x, true)
@@ -337,8 +337,7 @@ end $$
 
     -- if priorities are equal, then coin flip!
     if p_battle_bot.priority == p_battle_top.priority then p_battle_top.priority += sgn(rnd'2'-1) end
-    p_first = p_battle_bot.priority > p_battle_top.priority and p_battle_bot or p_battle_top
-    p_last  = f_get_other_pl(p_first)
+    f_set_both_players([[p_first,@, p_last,@]], p_battle_bot.priority > p_battle_top.priority and p_battle_bot or p_battle_top)
 
     -- f_s_bataction()
   end)
@@ -346,20 +345,11 @@ end $$
 
 |[f_start_battle]| function(p1winfunc, ...)
   p_battle_bot, p_battle_top = f_create_player("playr", f_team_party(@S_TEAM1), c_team_names[@S_TEAM1], P_MALETRNR+@S_TEAM1%2, @S_TEAM1 > 1), f_create_player("enemy", ...)
-  p_first, p_last = p_battle_bot, p_battle_top
+  f_set_both_players([[p_first,@, p_last,@]], p_battle_bot) -- without this line, the initial sending pkmn out part doesn't work.
   g_p1_winfunc = p1winfunc
-  p_curaction = nil -- TODO: could i remove this? Maybe?
-  g_action_level = 1
 
-  f_set_pself(p_battle_bot)
-
-  -- TODO: use a memcpy here
-  poke2(S_P1_BATACTION, 0)
-  poke2(S_P1_MOVE, 0)
-  poke2(S_P1_STAT, 0)
-  poke2(S_P2_BATACTION, 0)
-  poke2(S_P2_MOVE, 0)
-  poke2(S_P2_STAT, 0)
+  f_set_both_players([[p_action_self,@, p_action_other,@, p_action_self_active,@, p_action_other_active,@]], p_battle_bot)
+  memset(S_P1_BATACTION, 0, 12) -- resets battle ui to zeros
 
   f_addaction(p_battle_bot, L_PICK, p_battle_bot, "begins battle", f_nop, true)
   add(p_battle_bot.actions, f_pkmn_comes_out(p_battle_bot, p_battle_bot.active.spot, L_PICK))

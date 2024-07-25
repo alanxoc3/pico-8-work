@@ -90,7 +90,7 @@ c_move_funcs = f_zobj[[
   ;;,~f_move_default      ,10 ,~f_move_stat ,~c_yes ,attack ,1                          -- M_METALCLAW
   ;;,~f_move_splash       ,0                                                            -- M_TRANSFORM
   ;;,~f_move_doublekick   ,3                                                            -- M_TRIPLEKICK
-  ;;,~f_move_splash       ,0                                                            -- M_GUST
+  ;;,~f_move_default                                                                    -- M_GUST
   ;;,~f_move_splash       ,0                                                            -- M_TWISTER
   ;;,~f_move_splash       ,0                                                            -- M_CRABHAMMER
   ;;,~f_move_splash       ,0                                                            -- M_DIZZYPUNCH
@@ -210,7 +210,7 @@ c_move_funcs = f_zobj[[
   ;;,~f_move_default      ,10 ,~f_move_major_other ,C_MAJOR_BURNED                      -- M_FIREBLAST
   ;;,~f_move_default      ,10 ,~f_move_major_other ,C_MAJOR_BURNED                      -- M_FLAMETHROWER
   ;;,~f_move_splash       ,0                                                            -- M_FISSURE
-  ;;,~f_move_splash       ,0                                                            -- M_EARTHQUAKE
+  ;;,~f_move_default                                                                    -- M_EARTHQUAKE
   ;;,~f_move_splash       ,0                                                            -- M_SANDSTORM
   ;;,~f_move_splash       ,0                                                            -- M_HYPERBEAM
   ;;,~f_move_splash       ,0                                                            -- M_ROAR

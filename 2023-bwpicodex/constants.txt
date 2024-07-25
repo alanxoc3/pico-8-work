@@ -19,12 +19,13 @@ S_EDITPKMN:     0x5eb4
 S_EDITSEL:      0x5eb6
 S_EDITMOVE:     0x5eb8
 
-S_P1_BATACTION: 0x5eba
+S_P1_BATACTION: 0x5eba # The order of this block matters. We have a memset in the code that assumes all these values are next to each other.
 S_P1_MOVE:      0x5ebc
 S_P1_STAT:      0x5ebe
 S_P2_BATACTION: 0x5ec0
 S_P2_MOVE:      0x5ec2
 S_P2_STAT:      0x5ec4
+
 S_DEFAULT:      0x5ec6
 
 S_NEW:          0x5efe

@@ -38,7 +38,7 @@ function f_zobj(...)
 return f_zobj_setmeta(_g,...)
 end
 f_zobj_set(_g,"c_pokemon,#,c_moves,#,c_trainers,#,c_items,#,g_init_peek_loc,0x1fff,c_yes,@,c_no,@,c_empty,@,f_nop,@,g_palette,0,g_preview_timer,0,g_title_timer,0,g_title_l,253,g_title_r,254,g_msg_top, ,g_msg_bot, ,g_bat_func,,g_gridstack,#,g_title_an_timer,70",true,false,"",function(...)return...end)
-f_zobj_set(_g,"f_zobj,@,f_zobj_set,@,f_zobj_eval,@,f_zcall,@,f_refresh_top,@,f_add_to_ui_stack,@,f_pop_ui_stack,@,f_getsel,@,f_setsel,@,f_create_gridpair,@,f_update_grid,@,f_draw_grid,@,f_addop_text,@,f_minisfx,@,f_flr_rnd,@,f_in_split,@,f_roundrect,@,f_draw_pkmn,@,f_strtoq,@,f_hurt_self,@,f_moveutil_hpchange,@,f_moveutil_dmgself,@,f_moveutil_dmgother,@,f_moveutil_movemod,@,f_moveutil_typeadv,@,f_moveutil_calc_move_damage,@,f_movehelp_effect_works,@,f_move_major_other,@,f_move_splash,@,f_move_recover,@,f_move_default,@,f_move_seismictoss,@,f_move_psywave,@,f_move_superfang,@,f_move_falseswipe,@,f_move_submission,@,f_move_struggle,@,f_move_multihit_set,@,f_move_barrage,@,f_move_doublekick,@,f_move_flail,@,f_move_return,@,f_move_frustration,@,f_move_present,@,f_move_magnitude,@,f_move_hiddenpower,@,f_move_stat,@,c_move_names,@,c_trnr_names,@,c_type_names,@,c_item_names,@,c_team_names,@,c_stages,@,c_pkmn_names,@,c_gender_names,@,c_major_names_long,@,c_major_names_short,@,c_movemethod_names,@,c_statmod_names,@,c_palettes,@,c_palette_names,@,c_types,@,f_init_peek_inc,@,f_unlock,@,f_update_locks,@,f_create_spot,@,f_get_edit_op_pkmn,@,f_op_template_edit,@,f_info_toggle,@,f_leagueinfo,@,f_add_stat_move,@,f_add_stat_preview,@,f_add_stat,@,f_print_info,@,f_print_top,@,f_print_bot,@,f_get_move_texts,@,f_prefix_space,@,f_prefix_zero,@,f_add_battle,@,f_create_active,@,f_create_player,@,f_get_other_pl,@,f_set_pself,@,f_get_live_pkmn,@,f_get_next_active,@,f_end_battle,@,f_newaction,@,f_addaction,@,f_turn_addattack,@,f_pkmn_comes_out,@,f_pop_next_action,@,f_set_player_priority,@,f_movelogic,@,f_start_turn,@,f_start_battle,@,f_mkpkmn,@,f_team_party,@,f_fill_team,@,f_team_league,@",f_zobj,f_zobj_set,f_zobj_eval,function(func,text,...)
+f_zobj_set(_g,"f_zobj,@,f_zobj_set,@,f_zobj_eval,@,f_zcall,@,f_refresh_top,@,f_add_to_ui_stack,@,f_pop_ui_stack,@,f_getsel,@,f_setsel,@,f_create_gridpair,@,f_update_grid,@,f_draw_grid,@,f_addop_text,@,f_minisfx,@,f_flr_rnd,@,f_in_split,@,f_roundrect,@,f_draw_pkmn,@,f_strtoq,@,f_hurt_self,@,f_moveutil_hpchange,@,f_moveutil_dmgself,@,f_moveutil_dmgother,@,f_moveutil_movemod,@,f_moveutil_typeadv,@,f_moveutil_calc_move_damage,@,f_movehelp_effect_works,@,f_move_major_other,@,f_move_splash,@,f_move_recover,@,f_move_default,@,f_move_seismictoss,@,f_move_psywave,@,f_move_superfang,@,f_move_falseswipe,@,f_move_submission,@,f_move_struggle,@,f_move_multihit_set,@,f_move_barrage,@,f_move_doublekick,@,f_move_flail,@,f_move_return,@,f_move_frustration,@,f_move_present,@,f_move_magnitude,@,f_move_hiddenpower,@,f_move_stat,@,c_move_names,@,c_trnr_names,@,c_type_names,@,c_item_names,@,c_team_names,@,c_stages,@,c_pkmn_names,@,c_gender_names,@,c_major_names_long,@,c_major_names_short,@,c_movemethod_names,@,c_statmod_names,@,c_palettes,@,c_palette_names,@,c_types,@,f_init_peek_inc,@,f_unlock,@,f_update_locks,@,f_create_spot,@,f_get_edit_op_pkmn,@,f_op_template_edit,@,f_info_toggle,@,f_leagueinfo,@,f_add_stat_move,@,f_add_stat_preview,@,f_add_stat,@,f_print_info,@,f_print_top,@,f_print_bot,@,f_get_move_texts,@,f_prefix_space,@,f_prefix_zero,@,f_add_battle,@,f_create_active,@,f_create_player,@,f_get_other_pl,@,f_set_both_players,@,f_get_live_pkmn,@,f_get_next_active,@,f_end_battle,@,f_newaction,@,f_addaction,@,f_turn_addattack,@,f_pkmn_comes_out,@,f_pop_next_action,@,f_set_player_priority,@,f_movelogic,@,f_start_turn,@,f_start_battle,@,f_mkpkmn,@,f_team_party,@,f_fill_team,@,f_team_league,@",f_zobj,f_zobj_set,f_zobj_eval,function(func,text,...)
 foreach(f_zobj(text,...),function(params)
 func(unpack(params))
 end)
@@ -613,8 +613,8 @@ end
 return f_zobj("active,@,team,@,name,@,subname,@,num,@,iscpu,@,actions,#,greed,7",active,team,name,subname,num,iscpu)
 end,function(player)
 return player==p_battle_bot and p_battle_top or p_battle_bot
-end,function(player)
-p_action_self,p_action_other=player,f_get_other_pl(player)
+end,function(zobjtext,player)
+f_zobj_set(_g,zobjtext,player,f_get_other_pl(player),player.active,f_get_other_pl(player).active)
 end,function(player)
 local newteam={}
 for i=1,6 do
@@ -628,7 +628,7 @@ return newteam
 end,function(player)
 return f_get_live_pkmn(player)[1]
 end,function(player)
-f_set_pself(player)
+f_set_both_players("p_action_self,@,p_action_other,@,p_action_self_active,@,p_action_other_active,@",player)
 f_zcall(f_pop_ui_stack,";,;;,;;,")
 f_add_to_ui_stack(g_grid_battle_results)
 end,function(level,player,message,logic,isplayeraction)
@@ -674,17 +674,17 @@ end
 end
 end
 end,function(player)
+f_set_both_players("p_action_self,@,p_action_other,@,p_action_self_active,@,p_action_other_active,@",player)
 local priority_class=3000
-local movenum=player.nextmove and player.nextmove.num
-local other=f_get_other_pl(player)
+local movenum=p_action_self.nextmove and p_action_self.nextmove.num
 if not movenum then priority_class=6000
-elseif movenum==230 and not other.movenum then priority_class=7000
+elseif movenum==230 and not p_action_other.movenum then priority_class=7000
 elseif f_in_split(movenum,"216,212,194 ")then priority_class=0000
 elseif f_in_split(movenum,"33,20,9 ")then priority_class=4000
 elseif f_in_split(movenum,"197,226 ")then priority_class=1000
 elseif movenum==27 then priority_class=2000
 end
-player.priority=priority_class+f_stat_calc(player.active,"speed",true)
+p_action_self.priority=priority_class+f_stat_calc(p_action_self_active,"speed",true)
 end,function(player)
 local move=player.nextmove
 f_addaction(player,4,player,(player.active.curmove and "resumes "or(move.func==f_move_multiturn and "begins "or "uses "))..c_move_names[move.num],function()
@@ -717,12 +717,12 @@ local x=function()
 if p_action_self.iscpu then
 local possible_moves={}
 for i=1,4 do
-if p_action_self.active[i].num<252 and p_action_self.active[i].pp_obj.pp>0 then
+if p_action_self_active[i].num<252 and p_action_self_active[i].pp_obj.pp>0 then
 add(possible_moves,i)
 end
 end
 if #possible_moves>0 then
-p_action_self.nextmove=p_action_self.active[possible_moves[f_flr_rnd(#possible_moves)+1]]
+p_action_self.nextmove=p_action_self_active[possible_moves[f_flr_rnd(#possible_moves)+1]]
 else
 p_action_self.nextmove=c_moves[0]
 end
@@ -750,30 +750,21 @@ f_add_to_ui_stack(g_grid_battle_select)
 end,true)
 end
 end
-p_first=p_battle_bot
-p_last=p_battle_top
+f_set_both_players("p_first,@,p_last,@",p_battle_bot)
 f_addaction(p_battle_bot,1,p_battle_bot,not p_battle_bot.iscpu and "begins turn",x,true)
 f_addaction(p_battle_top,1,p_battle_top,not p_battle_top.iscpu and "begins turn",x,true)
 f_addaction(p_battle_bot,2,p_battle_bot,false,function()
 f_set_player_priority(p_battle_bot)
 f_set_player_priority(p_battle_top)
 if p_battle_bot.priority==p_battle_top.priority then p_battle_top.priority+=sgn(rnd"2"-1)end
-p_first=p_battle_bot.priority>p_battle_top.priority and p_battle_bot or p_battle_top
-p_last=f_get_other_pl(p_first)
+f_set_both_players("p_first,@,p_last,@",p_battle_bot.priority>p_battle_top.priority and p_battle_bot or p_battle_top)
 end)
 end,function(p1winfunc,...)
 p_battle_bot,p_battle_top=f_create_player("playr",f_team_party(@0x5eae),c_team_names[@0x5eae],253+@0x5eae%2,@0x5eae>1),f_create_player("enemy",...)
-p_first,p_last=p_battle_bot,p_battle_top
+f_set_both_players("p_first,@,p_last,@",p_battle_bot)
 g_p1_winfunc=p1winfunc
-p_curaction=nil
-g_action_level=1
-f_set_pself(p_battle_bot)
-poke2(0x5eba,0)
-poke2(0x5ebc,0)
-poke2(0x5ebe,0)
-poke2(0x5ec0,0)
-poke2(0x5ec2,0)
-poke2(0x5ec4,0)
+f_set_both_players("p_action_self,@,p_action_other,@,p_action_self_active,@,p_action_other_active,@",p_battle_bot)
+memset(0x5eba,0,12)
 f_addaction(p_battle_bot,1,p_battle_bot,"begins battle",f_nop,true)
 add(p_battle_bot.actions,f_pkmn_comes_out(p_battle_bot,p_battle_bot.active.spot,1))
 f_addaction(p_battle_top,1,p_battle_top,"begins battle",f_nop,true)
@@ -864,7 +855,7 @@ end
 end
 return mid(1,999,base)
 end,function()
-f_setsel("g_grid_battle_results",p_action_other.active.spot-1)
+f_setsel("g_grid_battle_results",p_action_other_active.spot-1)
 if p_action_other==p_battle_bot then
 g_p1_winfunc()
 end
@@ -907,8 +898,8 @@ end
 end,function(_ENV)
 f_dt_batstats(preview_op,f_getsel"g_grid_picktrnr",f_getsel"g_grid_battle_stats")
 local bothteams={}
-for i=1,6 do add(bothteams,i==p_action_self.active.spot and p_action_self.active or p_action_self.team[i])end
-for i=1,6 do add(bothteams,i==p_action_other.active.spot and p_action_other.active or p_action_other.team[i])end
+for i=1,6 do add(bothteams,i==p_action_self_active.spot and p_action_self_active or p_action_self.team[i])end
+for i=1,6 do add(bothteams,i==p_action_other_active.spot and p_action_other_active or p_action_other.team[i])end
 f_add_stat(op,bothteams[f_getsel"g_grid_battle_stats"+1],true)
 end,function(op,disable_empty)
 for partynum=0,3 do
@@ -989,7 +980,7 @@ end,function(_ENV)
 add(op,{text="fight",select=function()
 local should_struggle=true
 for i=1,4 do
-if p_action_self.active[i].pp_obj.pp>0 then
+if p_action_self_active[i].pp_obj.pp>0 then
 should_struggle=false
 end
 end
@@ -1000,23 +991,23 @@ f_add_to_ui_stack(g_grid_battle_movesel)
 end
 end})
 add(op,{text="swap",select=function()
-f_setsel("g_grid_battle_switch",p_action_self.active.spot-1)
+f_setsel("g_grid_battle_switch",p_action_self_active.spot-1)
 f_add_to_ui_stack(g_grid_battle_switch)
 end})
 add(op,{text="view",select=function()
-f_setsel("g_grid_battle_stats",p_action_self.active.spot-1)
+f_setsel("g_grid_battle_stats",p_action_self_active.spot-1)
 f_add_to_ui_stack(g_grid_battle_stats)
 end})
 add(op,{text="run",select=function()f_end_battle(p_action_self)end})
 f_add_battle(preview_op)
 end,function(_ENV)
 for i=1,4 do
-add(op,{text=c_move_names[p_action_self.active[i].num],disabled=p_action_self.active[i].pp_obj.pp==0})
+add(op,{text=c_move_names[p_action_self_active[i].num],disabled=p_action_self_active[i].pp_obj.pp==0})
 end
-f_add_stat_move(preview_op,p_action_self.active,f_getsel"g_grid_battle_movesel")
+f_add_stat_move(preview_op,p_action_self_active,f_getsel"g_grid_battle_movesel")
 end,function(_ENV)
 f_print_info(op,";,no more moves;;,use struggle?")
-f_add_stat_move(preview_op,p_action_self.active,-1)
+f_add_stat_move(preview_op,p_action_self_active,-1)
 end,function(_ENV)
 local pkind=f_getsel"g_grid_battle_switch"
 local trainer_ind=f_getsel"g_grid_picktrnr"
@@ -1026,7 +1017,7 @@ local player=pkind<6 and p_action_self or p_action_other
 f_print_info(preview_op,";,swap ,@;;,@, spot,@",pkmn.name,player.name,pkind%6+1)
 for i=1,6 do
 local pkmn=p_action_self.team[i]
-local disabled=not pkmn.valid or i==p_action_self.active.spot or pkmn.major==1
+local disabled=not pkmn.valid or i==p_action_self_active.spot or pkmn.major==1
 add(op,{disabled=disabled,draw=function(i,is_sel)
 f_draw_pkmn(pkmn.num,1,1,1,false,is_sel,disabled)
 end})
@@ -1132,8 +1123,8 @@ end
 g_palette+=1
 g_palette%=#c_palettes
 end,function()
-return p_action_self.active.invisible and 253 or p_action_self.active.num end,function()
-p_action_self.nextmove=p_action_self.active[f_getsel"g_grid_battle_movesel"+1]
+return p_action_self_active.invisible and 253 or p_action_self_active.num end,function()
+p_action_self.nextmove=p_action_self_active[f_getsel"g_grid_battle_movesel"+1]
 f_movelogic(p_action_self)
 f_pop_ui_stack()
 f_pop_ui_stack()
@@ -1147,8 +1138,8 @@ f_add_to_ui_stack(g_grid_battle_actions)
 end,function()
 p_action_self.nextmove=nil
 local nextpkmn=f_getsel"g_grid_battle_switch"+1
-f_addaction(p_action_self,4,p_action_self,"backs "..p_action_self.active.name,function()
-p_action_self.active.invisible=true
+f_addaction(p_action_self,4,p_action_self,"backs "..p_action_self_active.name,function()
+p_action_self_active.invisible=true
 add(p_action_self.actions,f_pkmn_comes_out(p_action_self,nextpkmn,4))
 end,true)
 f_pop_ui_stack()
@@ -1168,14 +1159,12 @@ end
 end
 p_turn_self,p_curaction=f_pop_next_action()
 if p_curaction then
-f_set_pself(p_curaction.player)
-p_turn_other=f_get_other_pl(p_turn_self)
-p_action_self_active,p_action_other_active=p_action_self.active,p_action_other.active
-p_turn_self_active,p_turn_other_active=p_turn_self.active,p_turn_other.active
+f_set_both_players("p_action_self,@,p_action_other,@,p_action_self_active,@,p_action_other_active,@",p_curaction.player)
+f_set_both_players("p_turn_self,@,p_turn_other,@,p_turn_self_active,@,p_turn_other_active,@",p_turn_self)
 p_curaction.logic()
 if p_curaction.message then
 f_setsel("g_grid_battle_actions",p_action_self==p_battle_bot and 1 or 0)
-g_msg_top=p_action_self.name.." "..p_action_self.active.name
+g_msg_top=p_action_self.name.." "..p_action_self_active.name
 if p_curaction.isplayeraction then
 g_msg_top=p_action_self.name.." "..p_action_self.subname
 end
@@ -1183,7 +1172,7 @@ g_msg_bot=p_curaction.message
 return
 end
 else
-f_set_pself(p_battle_bot)
+f_set_both_players("p_action_self,@,p_action_other,@,p_action_self_active,@,p_action_other_active,@",p_battle_bot)
 f_start_turn()
 end
 end
@@ -1271,7 +1260,7 @@ end
 return str.."}"
 end
 g_cur_pkmn_cry=nil
-c_move_funcs=f_zobj"0;,~f_move_struggle,0;;,~f_move_default,10,~f_move_stat,~c_no,defense,-1;;,~f_move_stat,~c_yes,defense,2;;,~f_move_barrage,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_default;;,~f_move_seismictoss,20;;,~f_move_splash,0;;,~f_move_default,10,~f_move_major_other,4;;,~f_move_major_other,4;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_stat,~c_no,accuracy,-1;;,~f_move_splash,0;;,~f_move_major_other,6;;,~f_move_default;;,~f_move_default;;,~f_move_barrage,0;;,~f_move_splash,0;;,~f_move_major_other,6;;,~f_move_stat,~c_no,speed,-2;;,~f_move_present,0;;,~f_move_splash,0;;,~f_move_barrage,0;;,~f_move_default;;,~f_move_stat,~c_no,accuracy,-1;;,~f_move_stat,~c_yes,speed,2;;,~f_move_barrage,0;;,~f_move_default;;,~f_move_falseswipe,0;;,~f_move_stat,~c_no,attack,-1;;,~f_move_splash,0;;,~f_move_major_other,6;;,~f_move_default;;,~f_move_stat,~c_yes,evasion,1;;,~f_move_stat,~c_no,defense,-1;;,~f_move_barrage,0;;,~f_move_default;;,~f_move_doublekick,2;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_default,30,~f_move_major_other,4;;,~f_move_recover,0;;,~f_move_splash,0;;,~f_move_seismictoss,50;;,~f_move_default,50,~f_move_stat,~c_no,accuracy,-1;;,~f_move_barrage,0;;,~f_move_default,10,~f_move_major_other,3;;,~f_move_superfang,0;;,~f_move_splash,0;;,~f_move_major_other,5;;,~f_move_stat,~c_yes,defense,2;;,~f_move_stat,~c_yes,attack,1;;,~f_move_splash,0;;,~f_move_major_other,6;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_stat,~c_no,attack,-2;;,~f_move_splash,0;;,~f_move_stat,~c_no,evasion,-1;;,~f_move_splash,0;;,~f_move_major_other,5;;,~f_move_major_other,6;;,~f_move_splash,0;;,~f_move_major_other,4;;,~f_move_flail,0;;,~f_move_splash,0;;,~f_move_default;;,~f_move_default,10,~f_move_stat,~c_no,speed,-1;;,~f_move_stat,~c_yes,specialdefense,2;;,~f_move_default,10,~f_move_stat,~c_no,speed,-1;;,~f_move_splash,0;;,~f_move_default;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_default;;,~f_move_splash,0;;,~f_move_doublekick,2;;,~f_move_splash,0;;,~f_move_default,10,~f_move_stat,~c_yes,attack,1;;,~f_move_splash,0;;,~f_move_doublekick,3;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_default,30,~f_move_major_other,5;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_default,30,~f_move_major_other,4;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_default,40,~f_move_major_other,5;;,~f_move_splash,0;;,~f_move_default,10,~f_move_major_other,2;;,~f_move_stat,~c_no,accuracy,-1;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_default;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_stat,~c_no,defense,-1;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_stat,~c_no,speed,-2;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_magnitude,0;;,~f_move_default;;,~f_move_stat,~c_yes,defense,1;;,~f_move_barrage,0;;,~f_move_splash,0;;,~f_move_recover,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_seismictoss,40;;,~f_move_recover,0;;,~f_move_default,30,~f_move_major_other,4;;,~f_move_default;;,~f_move_default;;,~f_move_default;;,~f_move_default,30,~f_move_major_other,5;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_stat,~c_yes,attack,2;;,~f_move_default;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_stat,~c_no,accuracy,-1;;,~f_move_default,10,~f_move_stat,~c_no,specialdefense,-1;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_default,20,~f_move_stat,~c_no,specialdefense,-1;;,~f_move_default,100,~f_move_major_other,4;;,~f_move_default,30,~f_move_major_other,4;;,~f_move_default,10,~f_move_major_other,4;;,~f_move_default,30,~f_move_stat,~c_no,defense,-1;;,~f_move_default;;,~f_move_default,50,~f_move_stat,~c_no,defense,-1;;,~f_move_splash,0;;,~f_move_default,100,~f_move_stat,~c_no,accuracy,-1;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_stat,~c_yes,evasion,1;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_hiddenpower,0;;,~f_move_splash,0;;,~f_move_frustration,0;;,~f_move_return,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_submission,0;;,~f_move_submission,0;;,~f_move_splash,0;;,~f_move_default,30,~f_move_major_other,4;;,~f_move_default;;,~f_move_default,10,~f_move_stat,~c_no,speed,-1;;,~f_move_default,10,~f_move_major_other,3;;,~f_move_default,10,~f_move_major_other,3;;,~f_move_default,100,~f_move_stat,~c_no,speed,-1;;,~f_move_default;;,~f_move_splash,0;;,~f_move_default;;,~f_move_splash,0;;,~f_move_default;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_major_other,4;;,~f_move_splash,0;;,~f_move_psywave,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_default;;,~f_move_seismictoss,999;;,~f_move_submission,0;;,~f_move_default;;,~f_move_splash,0;;,~f_move_default,10,~f_move_major_other,2;;,~f_move_default,10,~f_move_major_other,4;;,~f_move_default,10,~f_move_major_other,3;;,~f_move_default,10,~f_move_major_other,2;;,~f_move_default,10,~f_move_major_other,2;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_default,10,~f_move_stat,~c_yes,defense,1;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_default;;,~f_move_default;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_stat,~c_yes,defense,1;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_default,10,~f_move_stat,~c_no,attack,-1;;,~f_move_splash,0;;,~f_move_default,30,~f_move_major_other,5;;,~f_move_splash,0;;,~f_move_default,20,~f_move_stat,~c_no,specialdefense,-1;;,~f_move_default;;,~f_move_stat,~c_no,speed,-1;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_stat,~c_no,defense,-2;;,~f_move_default;;,~f_move_default,10,~f_move_major_other,2;;,~f_move_flail,0;;,~f_move_barrage,0;;,~f_move_stat,~c_yes,crit,1;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_stat,~c_yes,specialattack,1;;,~f_move_default;;,~f_move_default,50,~f_move_major_other,2;;,~f_move_stat,~c_yes,attack,1;;,~f_move_splash,0;;,~f_move_stat,~c_yes,evasion,2;;,~f_move_splash,0"
+c_move_funcs=f_zobj"0;,~f_move_struggle,0;;,~f_move_default,10,~f_move_stat,~c_no,defense,-1;;,~f_move_stat,~c_yes,defense,2;;,~f_move_barrage,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_default;;,~f_move_seismictoss,20;;,~f_move_splash,0;;,~f_move_default,10,~f_move_major_other,4;;,~f_move_major_other,4;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_stat,~c_no,accuracy,-1;;,~f_move_splash,0;;,~f_move_major_other,6;;,~f_move_default;;,~f_move_default;;,~f_move_barrage,0;;,~f_move_splash,0;;,~f_move_major_other,6;;,~f_move_stat,~c_no,speed,-2;;,~f_move_present,0;;,~f_move_splash,0;;,~f_move_barrage,0;;,~f_move_default;;,~f_move_stat,~c_no,accuracy,-1;;,~f_move_stat,~c_yes,speed,2;;,~f_move_barrage,0;;,~f_move_default;;,~f_move_falseswipe,0;;,~f_move_stat,~c_no,attack,-1;;,~f_move_splash,0;;,~f_move_major_other,6;;,~f_move_default;;,~f_move_stat,~c_yes,evasion,1;;,~f_move_stat,~c_no,defense,-1;;,~f_move_barrage,0;;,~f_move_default;;,~f_move_doublekick,2;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_default,30,~f_move_major_other,4;;,~f_move_recover,0;;,~f_move_splash,0;;,~f_move_seismictoss,50;;,~f_move_default,50,~f_move_stat,~c_no,accuracy,-1;;,~f_move_barrage,0;;,~f_move_default,10,~f_move_major_other,3;;,~f_move_superfang,0;;,~f_move_splash,0;;,~f_move_major_other,5;;,~f_move_stat,~c_yes,defense,2;;,~f_move_stat,~c_yes,attack,1;;,~f_move_splash,0;;,~f_move_major_other,6;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_stat,~c_no,attack,-2;;,~f_move_splash,0;;,~f_move_stat,~c_no,evasion,-1;;,~f_move_splash,0;;,~f_move_major_other,5;;,~f_move_major_other,6;;,~f_move_splash,0;;,~f_move_major_other,4;;,~f_move_flail,0;;,~f_move_splash,0;;,~f_move_default;;,~f_move_default,10,~f_move_stat,~c_no,speed,-1;;,~f_move_stat,~c_yes,specialdefense,2;;,~f_move_default,10,~f_move_stat,~c_no,speed,-1;;,~f_move_splash,0;;,~f_move_default;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_default;;,~f_move_splash,0;;,~f_move_doublekick,2;;,~f_move_splash,0;;,~f_move_default,10,~f_move_stat,~c_yes,attack,1;;,~f_move_splash,0;;,~f_move_doublekick,3;;,~f_move_default;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_default,30,~f_move_major_other,5;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_default,30,~f_move_major_other,4;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_default,40,~f_move_major_other,5;;,~f_move_splash,0;;,~f_move_default,10,~f_move_major_other,2;;,~f_move_stat,~c_no,accuracy,-1;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_default;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_stat,~c_no,defense,-1;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_stat,~c_no,speed,-2;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_magnitude,0;;,~f_move_default;;,~f_move_stat,~c_yes,defense,1;;,~f_move_barrage,0;;,~f_move_splash,0;;,~f_move_recover,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_seismictoss,40;;,~f_move_recover,0;;,~f_move_default,30,~f_move_major_other,4;;,~f_move_default;;,~f_move_default;;,~f_move_default;;,~f_move_default,30,~f_move_major_other,5;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_stat,~c_yes,attack,2;;,~f_move_default;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_stat,~c_no,accuracy,-1;;,~f_move_default,10,~f_move_stat,~c_no,specialdefense,-1;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_default,20,~f_move_stat,~c_no,specialdefense,-1;;,~f_move_default,100,~f_move_major_other,4;;,~f_move_default,30,~f_move_major_other,4;;,~f_move_default,10,~f_move_major_other,4;;,~f_move_default,30,~f_move_stat,~c_no,defense,-1;;,~f_move_default;;,~f_move_default,50,~f_move_stat,~c_no,defense,-1;;,~f_move_splash,0;;,~f_move_default,100,~f_move_stat,~c_no,accuracy,-1;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_stat,~c_yes,evasion,1;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_hiddenpower,0;;,~f_move_splash,0;;,~f_move_frustration,0;;,~f_move_return,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_submission,0;;,~f_move_submission,0;;,~f_move_splash,0;;,~f_move_default,30,~f_move_major_other,4;;,~f_move_default;;,~f_move_default,10,~f_move_stat,~c_no,speed,-1;;,~f_move_default,10,~f_move_major_other,3;;,~f_move_default,10,~f_move_major_other,3;;,~f_move_default,100,~f_move_stat,~c_no,speed,-1;;,~f_move_default;;,~f_move_splash,0;;,~f_move_default;;,~f_move_splash,0;;,~f_move_default;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_major_other,4;;,~f_move_splash,0;;,~f_move_psywave,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_default;;,~f_move_seismictoss,999;;,~f_move_submission,0;;,~f_move_default;;,~f_move_splash,0;;,~f_move_default,10,~f_move_major_other,2;;,~f_move_default,10,~f_move_major_other,4;;,~f_move_default,10,~f_move_major_other,3;;,~f_move_default,10,~f_move_major_other,2;;,~f_move_default,10,~f_move_major_other,2;;,~f_move_splash,0;;,~f_move_default;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_default,10,~f_move_stat,~c_yes,defense,1;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_default;;,~f_move_default;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_stat,~c_yes,defense,1;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_default,10,~f_move_stat,~c_no,attack,-1;;,~f_move_splash,0;;,~f_move_default,30,~f_move_major_other,5;;,~f_move_splash,0;;,~f_move_default,20,~f_move_stat,~c_no,specialdefense,-1;;,~f_move_default;;,~f_move_stat,~c_no,speed,-1;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_stat,~c_no,defense,-2;;,~f_move_default;;,~f_move_default,10,~f_move_major_other,2;;,~f_move_flail,0;;,~f_move_barrage,0;;,~f_move_stat,~c_yes,crit,1;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_stat,~c_yes,specialattack,1;;,~f_move_default;;,~f_move_default,50,~f_move_major_other,2;;,~f_move_stat,~c_yes,attack,1;;,~f_move_splash,0;;,~f_move_stat,~c_yes,evasion,2;;,~f_move_splash,0"
 f_zcall(poke,";,0x5f2c,3;;,0x5f5c,8;;,0x5f5d,1;;,0x5eff,58")
 cls()
 for i=0,360 do
