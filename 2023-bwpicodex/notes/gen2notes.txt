@@ -110,6 +110,8 @@ DIFF: Trigger moves (metronome/sleeptalk/mirrormove) could trigger
 DIFF: beatup is not typeless. it attacks as dark type. and it uses the special attack stat of every pokemon, because it is not a physical move. But the modified stat of the active pokemon.. it uses the current modified defense of the opponent.
 DIFF: flail/reversal can cause critical hits and are subject to the random factor like in gen 3.
 DIFF: future sight can recieve stab.
+DIFF: if a faster pokemon dies from recoil/psn/curse/burn/nightmare damage, the other pokemon will still have an opportunity to attack.
+DIFF: the round doesn't end when a pokemon faints.
 
 STRAT: Sketch and Mimic allow for the same move to be available in multiple move slots.
 STRAT: Missingno is broken.

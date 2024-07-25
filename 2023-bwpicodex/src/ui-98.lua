@@ -536,37 +536,39 @@ f_zcall(f_create_gridpair, [[
   ;bot_info      ;,1 ,1 ,2 ,45 ,60 ,16 ,1   ,1
   ;top_newstat   ;,1 ,6 ,2 ,4  ,60 ,9  ,1   ,1
 
-  --,name                      ,savespot       ,maingridspec   ,infogridspec   ,main opfunc           ,select func       ,leave func       ,lrbasegrid          ,static ,initfunc ,opfunc params
-  ;;,g_grid_title              ,S_TITLE        ,~bot_4x4       ,~top_title     ,~f_op_title           ,~f_s_title        ,~f_l_title       ,~c_no               ,~c_no  ,~f_nop
+  -- TODO: the lrbasegrid could be replaced with a mem reference. the grid can be figured out based on the previous item in the grid stack.
+  -- TODO: f_setsel could go away. getsel might be able to go away too.
+  --,name                      ,savespot      ,maingridspec   ,infogridspec   ,main opfunc           ,select func       ,leave func       ,lrbasegrid          ,static ,initfunc ,opfunc params
+  ;;,g_grid_title              ,S_TITLEACTION ,~bot_4x4       ,~top_title     ,~f_op_title           ,~f_s_title        ,~f_l_title       ,~c_no               ,~c_no  ,~f_nop
 
-  ;;,g_grid_browse             ,S_BROWSE       ,~top_browse    ,~bot_info      ,~f_op_browse          ,~f_s_browse       ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop,  ,~f_add_browse_info
-  ;;,g_grid_editpkmn           ,S_BROWSE       ,~top_browse    ,~bot_info      ,~f_op_browse          ,~f_s_editpkmn     ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop,  ,~f_add_editbrowse_info
+  ;;,g_grid_browse             ,S_BROWSE      ,~top_browse    ,~bot_info      ,~f_op_browse          ,~f_s_browse       ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop   ,~f_add_browse_info
+  ;;,g_grid_editpkmn           ,S_BROWSE      ,~top_browse    ,~bot_info      ,~f_op_browse          ,~f_s_editpkmn     ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop   ,~f_add_editbrowse_info
 
-  ;;,g_grid_statbrowse         ,S_STAT         ,~top_pkstat    ,~bot_info      ,~f_op_statbrowse       ,~f_s_pkstat       ,~f_l_browse      ,g_grid_browse       ,~c_no  ,~f_nop
+  ;;,g_grid_statbrowse         ,S_BROWSESTAT  ,~top_pkstat    ,~bot_info      ,~f_op_statbrowse      ,~f_s_pkstat       ,~f_l_browse      ,g_grid_browse       ,~c_no  ,~f_nop
 
-  ;;,g_grid_editstat           ,S_EDITSEL      ,~bot_4x4       ,~top_pkstat    ,~f_op_editstat        ,~f_s_editstat     ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop
-  ;;,g_grid_editmovebot        ,S_EDITMOVE     ,~bot_4x4       ,~top_pkstat    ,~f_op_editmovebot     ,~f_s_editmovebot  ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop
-  ;;,g_grid_editmove           ,S_DEFAULT      ,~top_text_grid ,~bot_info      ,~f_op_editmove        ,~f_s_editmove     ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop
-  ;;,g_grid_edititem           ,S_DEFAULT      ,~top_text_grid ,~bot_info      ,~f_op_edititem        ,~f_s_edititem     ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop
+  ;;,g_grid_editstat           ,S_EDITACTION  ,~bot_4x4       ,~top_pkstat    ,~f_op_editstat        ,~f_s_editstat     ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop
+  ;;,g_grid_editmovebot        ,S_EDITMOVE    ,~bot_4x4       ,~top_pkstat    ,~f_op_editmovebot     ,~f_s_editmovebot  ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop
+  ;;,g_grid_editmove           ,S_DEFAULT     ,~top_text_grid ,~bot_info      ,~f_op_editmove        ,~f_s_editmove     ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop
+  ;;,g_grid_edititem           ,S_DEFAULT     ,~top_text_grid ,~bot_info      ,~f_op_edititem        ,~f_s_edititem     ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop
 
-  ;;,g_grid_pickedit           ,S_TEAM1        ,~top_edit      ,~bot_info      ,~f_op_pickedit        ,~f_s_edit         ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop
-  ;;,g_grid_pickleag           ,S_TEAM1        ,~top_edit      ,~bot_info      ,~f_op_pickleagueplayr ,~f_s_league       ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop
-  ;;,g_grid_pickplr1           ,S_TEAM1        ,~top_edit      ,~bot_info      ,~f_op_pickversus      ,~f_s_versus       ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop
-  ;;,g_grid_pickplr2           ,S_TEAM2        ,~top_edit      ,~bot_info      ,~f_op_pickversus      ,~f_s_versusbegin  ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop
-  ;;,g_grid_picktrnr           ,S_LEAGUE       ,~top_text_grid ,~bot_info      ,~f_op_pickleagueenemy ,~f_s_batbegin     ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop
-  ;;,g_grid_pickspot           ,S_EDITPKMN     ,~top_editteam  ,~bot_info      ,~f_op_editteam        ,~f_s_editteam     ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop
+  ;;,g_grid_pickedit           ,S_TEAM1       ,~top_edit      ,~bot_info      ,~f_op_pickedit        ,~f_s_edit         ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop
+  ;;,g_grid_pickleag           ,S_TEAM1       ,~top_edit      ,~bot_info      ,~f_op_pickleagueplayr ,~f_s_league       ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop
+  ;;,g_grid_pickplr1           ,S_TEAM1       ,~top_edit      ,~bot_info      ,~f_op_pickversus      ,~f_s_versus       ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop
+  ;;,g_grid_pickplr2           ,S_TEAM2       ,~top_edit      ,~bot_info      ,~f_op_pickversus      ,~f_s_versusbegin  ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop
+  ;;,g_grid_picktrnr           ,S_LEAGUE      ,~top_text_grid ,~bot_info      ,~f_op_pickleagueenemy ,~f_s_batbegin     ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop
+  ;;,g_grid_pickspot           ,S_EDITPKMN    ,~top_editteam  ,~bot_info      ,~f_op_editteam        ,~f_s_editteam     ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop
 
   -- Battle UI
-  ;;,g_grid_battle_select      ,S_DEFAULT      ,~bot_4x4       ,~top_battle2   ,~f_op_batsel          ,~f_s_battle       ,~f_l_battle      ,~c_no               ,~c_no  ,~f_nop
-  ;;,g_grid_statbattle         ,S_DEFAULT      ,~top_pkstat    ,~bot_info      ,~f_op_statbattle      ,~f_s_statbat      ,~f_l_browse      ,g_grid_battle_stats ,~c_no  ,~f_nop
-  ;;,g_grid_battle_movesel     ,S_DEFAULT      ,~bot_4x4       ,~top_pkstat    ,~f_op_movesel         ,~f_s_batmove      ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop -- normal move sel
-  ;;,g_grid_battle_dmovsel     ,S_DEFAULT      ,~bot_info      ,~top_pkstat    ,~f_op_dmovsel         ,~f_s_dmovsel      ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop -- struggle move sel
-  ;;,g_grid_battle_switch      ,S_DEFAULT      ,~top_editteam  ,~bot_info      ,~f_op_batswitch       ,~f_s_batswitch    ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop
-  ;;,g_grid_battle_stats       ,S_DEFAULT      ,~top_editteam  ,~bot_info      ,~f_op_batstats        ,~f_s_batstat      ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop
+  ;;,g_grid_battle_select      ,S_DEFAULT     ,~bot_4x4       ,~top_battle2   ,~f_op_batsel          ,~f_s_battle       ,~f_l_battle      ,~c_no               ,~c_no  ,~f_nop
+  ;;,g_grid_statbattle         ,S_DEFAULT     ,~top_pkstat    ,~bot_info      ,~f_op_statbattle      ,~f_s_statbat      ,~f_l_browse      ,g_grid_battle_stats ,~c_no  ,~f_nop
+  ;;,g_grid_battle_movesel     ,S_DEFAULT     ,~bot_4x4       ,~top_pkstat    ,~f_op_movesel         ,~f_s_batmove      ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop -- normal move sel
+  ;;,g_grid_battle_dmovsel     ,S_DEFAULT     ,~bot_info      ,~top_pkstat    ,~f_op_dmovsel         ,~f_s_dmovsel      ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop -- struggle move sel
+  ;;,g_grid_battle_switch      ,S_DEFAULT     ,~top_editteam  ,~bot_info      ,~f_op_batswitch       ,~f_s_batswitch    ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop
+  ;;,g_grid_battle_stats       ,S_DEFAULT     ,~top_editteam  ,~bot_info      ,~f_op_batstats        ,~f_s_batstat      ,~f_l_browse      ,~c_no               ,~c_no  ,~f_nop
 
-  ;;,g_grid_battle_results     ,S_DEFAULT      ,~top_results   ,~bot_info      ,~f_op_batresults      ,~f_s_batresults   ,~f_l_browse      ,~c_no               ,~c_yes ,~f_init_batresults
-  ;;,g_grid_battle_actions     ,S_DEFAULT      ,~top_battle2   ,~bot_info      ,~f_op_bataction       ,~f_s_bataction    ,~f_l_battle      ,~c_no               ,~c_yes ,~f_s_bataction
-  ;;,g_grid_battle_firstaction ,S_DEFAULT      ,~top_battle2   ,~bot_info      ,~f_op_bataction       ,~f_s_bataction    ,~f_l_battle      ,~c_no               ,~c_yes ,~f_nop
+  ;;,g_grid_battle_results     ,S_DEFAULT     ,~top_results   ,~bot_info      ,~f_op_batresults      ,~f_s_batresults   ,~f_l_browse      ,~c_no               ,~c_yes ,~f_init_batresults
+  ;;,g_grid_battle_actions     ,S_DEFAULT     ,~top_battle2   ,~bot_info      ,~f_op_bataction       ,~f_s_bataction    ,~f_l_battle      ,~c_no               ,~c_yes ,~f_s_bataction
+  ;;,g_grid_battle_firstaction ,S_DEFAULT     ,~top_battle2   ,~bot_info      ,~f_op_bataction       ,~f_s_bataction    ,~f_l_battle      ,~c_no               ,~c_yes ,~f_nop
 ]])
 
 f_add_to_ui_stack(g_grid_title)

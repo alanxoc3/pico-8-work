@@ -1,3 +1,5 @@
+-- TODO: faster pkmn dies of poison, then slower pkmn uses move shouldn't attack next pkmn... or should it? it's different from the games, but I think i like it like this.
+
 -- every function in this file is prepended with f_move_
 -- these are the different functions a move could implement
 
