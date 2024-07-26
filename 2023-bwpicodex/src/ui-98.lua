@@ -3,6 +3,8 @@
 
 -- current: 4707 | 28810 | 10642
 
+-- TODO: idea: what if cartdata matches the title/color scheme. idk why, but its an idea. maybe a bad one.
+
 -- TODO: i could add another ui screen for confirming you want to select a pokemon. but its fine if i dont do this too.
 -- TODO: stretch goal: add tiny descriptions for items
 
@@ -84,7 +86,7 @@ end $$
   local bothteams = {}
   for i=1,6 do add(bothteams, i == p_action_self_active.spot  and p_action_self_active  or p_action_self.team[i]) end
   for i=1,6 do add(bothteams, i == p_action_other_active.spot and p_action_other_active or p_action_other.team[i]) end
-  f_add_stat(op, bothteams[f_getsel'g_grid_battle_stats'+1], true)
+  f_add_stat(op, bothteams[f_getsel'g_grid_battle_stats'+1], f_getsel'g_grid_battle_stats' >= 6 and p_action_other or p_action_self)
 end $$
 
 |[f_add_edit]| function(op, disable_empty)
@@ -125,10 +127,42 @@ end $$
 
 |[f_op_title]| function(_ENV)
   add(preview_op, {draw=function()
-    print("\^w\^tpicodex", 2, 1,  C_3)
-    print(c_palette_names[g_palette], 2, 32, C_1)
-    f_draw_pkmn(g_title_l, 7,  14, STYLE_SHAKE, false, not g_title_sel, false)
-    f_draw_pkmn(g_title_r, 35, 14, STYLE_SHAKE, true,  g_title_sel,     false)
+    local tcol = g_title_sel and C_3 or C_1
+    local bcol = g_title_sel and C_1 or C_3
+    local messages = f_zobj([[
+       -- credits
+       ,"\^w\f1rom \n\f3hack\n\f1 plz" -- keep this spot, matches with missingno
+       ,"\^w\f1thx!\n\f3bulb\npdia" -- keep this spot, matches with bulbasaur
+       ,"\^w\f1thx!\n\f3nint\nendo"
+       ,"\^w\f1easy\n\f3cmfy\n\f1shrt"
+
+       ,"\^w\f3upok\ncntr\n\f1thx!"
+       ,"\^w\f1disa\nsmbl\n\f3thx!"
+       ,"\^w\f1poke\nhist\n\f3thx!"
+       ,"\^w\f3smo \n gon\n\f1thx!" -- keep this order, it matches with koffing
+
+       -- info
+       ,"\^w\f1 by \n\f3alan\nxoc3" -- by alan
+       ,"\^w\f332kb\n\f1pico\ncart"
+
+       -- random pkmn quotes
+       ,"\^w\f3thx!\n\f1shri\nnko8"
+       ,"\^w\f1ctch\n\f3 em'\n\f1all!"
+       ,"\^w\f1awww\n\f3hmph\n\f1ohho"
+       ,"\^w\f3thx!\n\f1sere\n bii" -- keep this spot, it matches with celebii
+       ,"\^w\f1nihi\n\f3only\n\f1grls"
+
+       ,"\^w\f3gen2\n\f1batl\n sim"
+       ,@
+    ]], "\^w\f3pico\n dex\n\f1"..c_palette_names[g_palette])
+
+    f_draw_pkmn(g_title_l, 7 -4, 14+1-1-3+10, STYLE_SHAKE, false, g_title_sel, false, function(x, y)
+      print(messages[g_title_l%#messages+1], x+3, y-1)
+    end)
+
+    f_draw_pkmn(g_title_r, 35+4, 14+1-1-3-4+1-9+3-1, STYLE_SHAKE, true,  not g_title_sel,     false, function(x, y)
+      print(messages[g_title_r%#messages+1], x, y)
+    end)
   end})
 
   foreach(split"view,edit,league,versus", function(text)
@@ -258,7 +292,7 @@ end $$
     local pkmn = p_action_self.team[i]
     local disabled = not pkmn.valid or i==p_action_self_active.spot or pkmn.major == C_MAJOR_FAINTED
     add(op, {disabled=disabled, draw=function(i, is_sel)
-      f_draw_pkmn(pkmn.num, 1, 1, STYLE_NORMAL, false, is_sel, disabled)
+      f_draw_pkmn(pkmn.num, 1, 1, STYLE_NORMAL, p_action_self == p_battle_top, is_sel, disabled)
     end})
   end
 end $$
@@ -282,11 +316,12 @@ end $$
 |[f_op_batstats]| function(_ENV)
   f_dt_batstats(preview_op, f_getsel'g_grid_picktrnr', f_getsel'g_grid_battle_stats')
 
+  -- TODO: obvious token crunching / deduplication here.
   for i=1,6 do
     local pkmn = p_action_self.team[i]
     local disabled = not pkmn.valid
     add(op, {lrvalid=not disabled, disabled=disabled, draw=function(i, is_sel)
-      f_draw_pkmn(pkmn.num, 1, 1, STYLE_NORMAL, false, is_sel, disabled)
+      f_draw_pkmn(pkmn.num, 1, 1, STYLE_NORMAL, p_action_self == p_battle_top, is_sel, disabled)
     end})
   end
 
@@ -294,7 +329,7 @@ end $$
     local pkmn = p_action_other.team[i]
     local disabled = not pkmn.valid
     add(op, {lrvalid=not disabled, disabled=disabled, draw=function(i, is_sel)
-      f_draw_pkmn(pkmn.num, 1, 1, STYLE_NORMAL, true, is_sel, disabled)
+      f_draw_pkmn(pkmn.num, 1, 1, STYLE_NORMAL, p_action_other == p_battle_top, is_sel, disabled)
     end})
   end
 end $$
@@ -424,9 +459,9 @@ end $$
   g_title_sel = not g_title_sel
 
   if g_title_sel then
-    g_title_r = rnd"252"\1 return g_title_r
-  else
     g_title_l = rnd"252"\1 return g_title_l
+  else
+    g_title_r = rnd"252"\1 return g_title_r
   end
 
   g_palette += 1

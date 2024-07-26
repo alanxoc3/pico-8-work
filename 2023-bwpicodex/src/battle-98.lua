@@ -24,7 +24,8 @@
 -- Some player specific things
 
 -- TODO: combine with mkpkmn
-|[f_create_active]| function(team, ind)
+-- Takes in a player.
+|[f_create_active]| function(_ENV, ind)
   local bench_parent = team[ind]
   local active = f_zobj_setmeta(team[ind], [[
     isactive,     ~c_yes, -- used for a drawing function, should draw fainted pokemon if they are not active, but not if they are active.
@@ -55,25 +56,16 @@
       evasion,        0,
       accuracy,       0; -- TODO: delete the semicolon
   ]], f_flr_rnd'7'+1, ind, bench_parent)
-  -- ^^ hard-coding sleep timer here
+  -- ^^ hard-coding sleep timer here -- TODO: don't do this. sleep timer persists in gsc, not random each switch.
   for i=1,4 do
     -- this allows changing the move with hidden power, mimic, transform.
-    active[i] = f_zobj_setmeta(bench_parent[i], [[cool,hello world]])
+    active[i] = f_zobj_setmeta(bench_parent[i], [[]])
   end
   return active
 end $$
 
 |[f_create_player]| function(name, team, subname, num, iscpu)
-  local active = nil -- active guaranteed to be set because we can't enter the battle without it.
-  for i=1,6 do
-    if team[i].valid then
-      active = f_create_active(team, i)
-      break
-    end
-  end
-
-  return f_zobj([[
-    active,@,         -- The single active pokemon.
+  local player = f_zobj([[
     team,@,           -- The 1-6 benched pokemon.
     name,@,           -- The player's name (enemy/player...)
     subname,@,        -- The real team name (team1/lance...)
@@ -82,7 +74,16 @@ end $$
     actions,#,        -- Actions for the player.
     greed,7           -- The next spot in the buffer. This is only used for horde.
     -- nextmove,~c_no -- 0-3 for a move index into the moveset. false value for switching. Commented out to save on compression, defaults to nil value
-  ]], active, team, name, subname, num, iscpu)
+  ]], team, name, subname, num, iscpu)
+
+  for i=1,6 do
+    if team[i].valid then
+      player.active = f_create_active(player, i)
+      break
+    end
+  end
+
+  return player
 end $$
 
 |[f_get_other_pl]| function(player)
@@ -143,13 +144,13 @@ end $$
   f_addaction(p_turn_self, L_ATTACK, ...)
 end $$
 
-|[f_pkmn_comes_out]| function(player, spot, level) -- assumes that the pkmn coming is not nil.
+|[f_pkmn_comes_out]| function(player, spot, level) -- assumes that the pkmn coming is not nil. TODO: level could go away I think?
   local pkmn = player.team[spot]
 
   -- need to copy each move just for mimic to work when switching
 
   -- TODO: i should combine this with f_mkpkmn. so all pkmn stuff is just in 1 place.
-  player.active = f_create_active(player.team, spot)
+  player.active = f_create_active(player, spot) -- TODO: the mkactive stuff could go in this comes out function i think, since the only other place it is called is on startup.
 
   return f_newaction(level, player, "sends "..player.active.name, function()
     player.active.invisible = false

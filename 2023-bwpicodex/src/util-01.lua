@@ -23,7 +23,8 @@ end $$
   end
 end $$
 
-|[f_draw_pkmn]| function(num, x, y, style, flip, selected, disabled)
+|[f_draw_pkmn]| function(num, x, y, style, flip, selected, disabled, func)
+  func = func or f_nop
   local in_c  = disabled and C_2 or selected and C_3 or C_2
   local out_c = disabled and C_1 or C_1
   local row = num/8\1
@@ -70,6 +71,7 @@ end $$
   end
 
   colordrawfunc(x, y, in_c) -- sprite
+  func(x+(flip and -38+1 or 19+1),y)
 
   --clip(-%0x5f28+x, -%0x5f2a+y+5, 16,6)
   --colordrawfunc(x, y, in_c+1) -- sprite

@@ -51,6 +51,7 @@ f_zobj_set(_g, [[
   c_yes,@, c_no,@, c_empty,@, f_nop,@,
   g_palette,0,
   g_preview_timer,0,
+
   g_title_timer,0,
   g_title_l,253,
   g_title_r,254,

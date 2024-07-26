@@ -12,7 +12,6 @@
   -- when a pokemon becomes active, it calls mkpkmn with base being the bench/initial battle stats.
   -- hp/item/major changes must happen on "base"
 
-  -- TODO: do i need base? Maybe? not actually using it as of 2024-07-16
   local pkmn = f_zobj_setmeta(base, [[
     num,@, base,@, gender_bit,@, item,@, valid,@,
     seen_moves, #,            -- A move to boolean map that is used to disable things on the move edit screen and populate edit_moves.
@@ -33,7 +32,7 @@
       crit,           0,
       evasion,        0,
       accuracy,       0; -- TODO: delete the semicolon
-  ]], ind, base, gender_bit, item % C_LEN_ITEMS, ind < P_NONE)
+  ]], ind, base, gender_bit, item % C_LEN_ITEMS, ind < P_NONE) -- player is needed to get ui flipping correct. TODO: if not used anywhere else, it maybe could be turned into a boolean to save a few tokens.
   pkmn.gender = pkmn.gender_mask
 
   -- Using local variable for gender_bit to save a token, though maybe i could just set _ENV here, idk.

@@ -290,16 +290,16 @@ cls() -- this is just a visual thing when the game starts up. TODO: i can remove
 -- todo: can this go in cartridge data? maybe i dont want that though (uses more tokens)
 |[c_palettes]| f_zobj[[
   -- bg   mg   fg
-  0;,129 ,13  ,6   -- dual
-  ;;,1   ,140 ,12  -- blue
-  ;;,130 ,136 ,8   -- red
-  ;;,131 ,3   ,138 -- green
-  ;;,0   ,8   ,10  -- htdog
-  ;;,5   ,134 ,6   -- silvr
-  ;;,4   ,9   ,10  -- gold
+  0;,129 ,13  ,6   -- gen2
+  ;;,0   ,5   ,6   -- pong
+  ;;,131 ,3   ,138 -- gboy
+  ;;,0   ,8   ,10  -- hdog
+  ;;,141  ,12  ,7  -- cga
+  ;;,1   ,140   ,8 -- rb
+  ;;,5   ,9  ,10   -- gs
 ]] $$
 
-|[c_palette_names]| f_zobj[["0,DUAL VERSION;,BLUE VERSION,RED VERSION,GREEN VERSION,HOTDOG FLAVOR,SILVR VERSION,GOLD VERSION"]] $$
+|[c_palette_names]| f_zobj[["0,dual;,pong,gboy,hdog,cga,rebl,gosi"]] $$
 
 |[c_types]| f_zobj[[ -- 0 to 18 are all tables
   0;, ;;, ;;, ;;, ;;, ;;, ;;, ;;, ;;,

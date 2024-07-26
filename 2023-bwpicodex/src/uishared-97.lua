@@ -39,9 +39,9 @@ end $$
   add(op, {text="pw/ac "..pow.."/"..accuracy})
 end $$
 
-|[f_add_stat_preview]| function(op, pkmn)
+|[f_add_stat_preview]| function(op, pkmn, player)
   local draw_preview = function(off)
-    f_draw_pkmn(pkmn.num, 21, off-12, STYLE_SHAKE, false, true, false)
+    f_draw_pkmn(pkmn.num, 21, off-12, STYLE_SHAKE, p_battle_top and player == p_battle_top, true, false)
   end
 
   add(op, {text="#"..f_prefix_zero(pkmn.num, 3).." "..pkmn.name, disabled=true})
@@ -50,11 +50,11 @@ end $$
   add(op, { draw=function() draw_preview'-1' end})
 end $$
 
-|[f_add_stat]| function(op, pkmn, is_battle)
-  f_add_stat_preview(op, pkmn)
+|[f_add_stat]| function(op, pkmn, player)
+  f_add_stat_preview(op, pkmn, player)
 
   add(op, {text="peek "..pkmn.name, disabled=true})
-  if is_battle then
+  if player then
     add(op, {text="major "..c_major_names_long[pkmn.major]})
   else
     add(op, {text="prevo "..c_pkmn_names[pkmn.prevolve]})
@@ -142,43 +142,44 @@ end $$
 end $$
 
 |[f_add_battle]| function(op)
-  local b = function(player, x, y, px, py, flip)
+  local b = function(player, px, py, flip)
     add(op, {draw=function()
       local invisible = player.active.invisible
       local team  = player.team
       local active = player.active
 
       -- TODO: shouldn't be 254. Should be the player's sprites. I can probably fit a few player sprites: plrboy, plrgirl, cpu, horde
-      f_draw_pkmn(invisible and player.num or active.num, px, py, STYLE_SHAKE, flip,  p_action_self == player, false)
-      if invisible then return end
-      print(active.name, x+2, y-4, C_1, -1)
-      local hp = active.hp
-      local maxhp = active.maxhp
-      local spot = active.spot
-      local major = active.major
+      f_draw_pkmn(invisible and player.num or active.num, px, py, STYLE_SHAKE, flip,  p_action_self == player, false, invisible and f_nop or function(x, y)
+        print(active.name, x+1, y, C_1, -1)
+        local hp = active.hp
+        local maxhp = active.maxhp
+        local spot = active.spot
+        local major = active.major
 
-      --f_roundrect(x+1, y+1-6+1, x+34-1, y+6+6+1, C_2)
-      if hp > 0 then
-        rectfill(x+1, y+2, x+1+mid(0, hp/maxhp*32, 32), y+5, C_1)
-        pset(x+1,  y+2, C_2)
-        pset(x+1,  y+5, C_2)
-        pset(x+33, y+2, C_2)
-        pset(x+33, y+5, C_2)
-      end
-
-      local tx, ty = x+15, y+9
-      for i=0,5 do
-        if spot == i+1 or team[i+1].valid and team[i+1].major ~= C_MAJOR_FAINTED then
-          pset(tx+i%3*2, ty+i\3*2-1, spot == i+1 and C_3 or C_1)
+        --f_roundrect(x+1, y+1-6+1, x+34-1, y+6+6+1, C_2)
+        if hp > 0 then
+          rectfill(x, y+6, x+mid(0, hp/maxhp*32, 32), y+9, C_1)
+          pset(x,  y+6, C_2)
+          pset(x,  y+9, C_2)
+          pset(x+32, y+6, C_2)
+          pset(x+32, y+9, C_2)
         end
-      end
 
-      local majtext = c_major_names_short[major]
-      local hptext = f_prefix_zero(hp, 3)
-      print(majtext.."  "..hptext, x+1+1, y+8-1, C_1, -1)
+        local tx, ty = x+14, y+13
+        for i=0,5 do
+          if spot == i+1 or team[i+1].valid and team[i+1].major ~= C_MAJOR_FAINTED then
+            pset(tx+i%3*2, ty+i\3*2-1, spot == i+1 and C_3 or C_1)
+          end
+        end
+
+        local majtext = c_major_names_short[major]
+        local hptext = f_prefix_zero(hp, 3)
+        print(majtext.."  "..hptext, x+1, y+11, C_1, -1)
+      end)
     end})
   end
 
-  b(p_battle_top,  1, 5, 39, 1, true) -- top pl
-  b(p_battle_bot, 22, 5,  3, 1)       -- bot pl
+
+  b(p_battle_top, 39, 1, true) -- top pl
+  b(p_battle_bot,  3, 1)       -- bot pl
 end $$

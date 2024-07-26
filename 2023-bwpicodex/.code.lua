@@ -201,7 +201,8 @@ rectfill(x1,y1+1,x2,y2-1,c)
 if x2-x1>2 then
 rectfill(x1+1,y1,x2-1,y2,c)
 end
-end,function(num,x,y,style,flip,selected,disabled)
+end,function(num,x,y,style,flip,selected,disabled,func)
+func=func or f_nop
 local in_c=disabled and 2 or selected and 3 or 2
 local out_c=disabled and 1 or 1
 local row=num/8\1
@@ -239,6 +240,7 @@ colordrawfunc(x+xx,y+yy,out_c)
 end
 end
 colordrawfunc(x,y,in_c)
+func(x+(flip and-38+1 or 19+1),y)
 end,function(s)
 local ns=""
 for i=1,#s do ns..="?" end
@@ -438,7 +440,7 @@ f_turn_addattack(pl,(sgn(stage)>0 and "+"or "-")..abs(stage).." "..c_stages[key]
 else
 return true
 end
-end,f_zobj"0,strugl;,acid,acidar,barage,bonclb,bind,clamp,moonlt,lechsd,extrsp,sncbom,twindl,thnshk,glare,gilotn,hypfng,jmpkck,kinsis,lockon,lovkis,macpnc,vicgrp,spican,spikes,spore,cotspr,presnt,vithrw,cmtpnc,drlpck,sndatk,agilty,fryatk,qikatk,falswp,growl,healbl,sing,pound,minmiz,tailwp,dblslp,meghrn,bonrng,convr1,convr2,spark,mlkdrk,morsun,ngtshd,octzok,pinmis,pwdsnw,supfng,firspn,psngas,barier,medtat,ftrsgt,hypnos,psybem,litscr,safgrd,petdnc,charm,synths,swtscn,razlef,psnpwd,slppwd,absorb,stnspr,flail,confsn,slam,constr,amnesa,bubble,splash,hydpmp,mindrd,mist,hrnatk,spiweb,dblkck,swtkis,mtlclw,trform,trikck,gust,twistr,crbham,dizpnc,sludge,painsp,dstbnd,haze,lick,persng,meanlk,cnfray,crschp,smog,karchp,ember,smkscr,beldrm,beatup,scrtch,slash,ancpwr,leer,bite,outrge,scryfc,thrash,stomp,roksld,magtud,rocthr,harden,bonrsh,hijkck,recovr,aerbls,hrndrl,drgrag,sfboil,drgbre,slfdes,explsn,eggbmb,slgbmb,gigdrn,megdrn,swrdnc,cut,fryctr,thief,dig,rolout,dfncrl,detect,solbem,raidnc,flash,psycic,psycup,drmeat,ngtmar,shdbal,zapcan,thundr,thnblt,irntal,streng,rocsms,hedbut,mudslp,sunday,protct,dbltem,slptlk,curse,hidpwr,swager,frustr,return,toxic,snore,rest,endure,atract,bide,mimic,substu,rage,dbledg,takdwn,sklbas,bodslm,wtrgun,bblbem,icebem,blizrd,icywnd,surf,wrlpol,wtrfal,swift,payday,triatk,rflect,thnwav,telprt,psywav,metrnm,countr,megpnc,seitos,submis,megkck,dynpnc,firpnc,thnpnc,icepnc,firbls,flmthr,fisure,eartqk,sndstr,hypbem,roar,stlwng,fly,razwnd,wrlwnd,skyatk,wngatk,peck,mirmov,fntatk,witdrw,rapspn,supsnc,aurbem,mircot,psnstg,spite,crunch,pursut,strsht,lechlf,btnpas,disabl,screch,tackle,flmwel,revrsl,fryswp,fcseng,forsgt,lowkck,rolkck,encore,wrap,growth,vinwip,sacfir,sharpn,sketch,tm05,______",split"youngs,sage,falknr,grunt,bugctr,bugsy,pkmfan,beauty,witney,kimono,medium,morty,police,karate,chuck,gentle,sailor,jasmin,rocket,skier,pryce,scient,twins,clair,nerd,camper,brock,school,swimer,misty,jugler,guitar,ltsurg,hiker,lass,erika,biker,picnik,janine,maniac,psycic,sabrin,fisher,breath,blaine,birdkp,cooltr,blue,legend,silver,will,koga,bruno,karen,lance,red,gold,horde",f_zobj"0,none;,normal,fire,fightng,water,poison,electrc,ground,grass,flying,ice,bug,psychic,rock,dragon,ghost,dark,steel,bird",f_zobj"0,none;,pnkbow,chrcol,blkblt,myswtr,psnbrb,magnet,sosand,mirasd,shbeak,nvrice,slvpwd,twspon,hrdstn,dragsc,speltg,blkgls,mtlcot,plkbow,bripwd,focbnd,kingrk,leftov,qikclw,scopln,amcoin,litbal,lukpnc,mtlpwd,stick,thkclb,bersrk,berry,gldbry,btrbry,mntbry,brnbry,icebry,parbry,psnbry,mirbry,mysbry",f_zobj"0,boy;,girl,cpu-boy,cpu-girl",f_zobj"attack,attack,defense,defens,specialattack,spcatk,specialdefense,spcdef,speed,speed,crit,crit,evasion,evason,accuracy,accury",f_zobj"0,misingno;,bulbsaur,ivysaur,venusaur,charmand,charmeln,charzard,squirtle,wartortl,blastois,caterpie,metapod,butrfree,weedle,kakuna,beedrill,pidgey,pidgeoto,pidgeot,rattata,raticate,spearow,fearow,ekans,arbok,pikachu,raichu,sndshrew,sndslash,nidoranf,nidorina,nidoquen,nidoranm,nidorino,nidoking,clefairy,clefable,vulpix,ninetale,jiglypuf,wiglytuf,zubat,golbat,oddish,gloom,vileplum,paras,parasect,venonat,venomoth,diglett,dugtrio,meowth,persian,psyduck,golduck,mankey,primeape,growlith,arcanine,poliwag,polwhirl,polwrath,abra,kadabra,alakazam,machop,machoke,machamp,belsprot,weepnbel,victrbel,tntacool,tntcruel,geodude,graveler,golem,ponyta,rapidash,slowpoke,slowbro,magnemit,magneton,fafetchd,doduo,dodrio,seel,dewgong,grimer,muk,shellder,cloyster,gastly,haunter,gengar,onix,drowzee,hypno,krabby,kingler,voltorb,electrod,exegcute,exegutor,cubone,marowak,hitmnlee,hitmnchn,licktung,koffing,weezing,rhyhorn,rhydon,chansey,tangela,kangakan,horsea,seadra,goldeen,seaking,staryu,starmie,mrmime,scyther,jynx,elecabuz,magmar,pinsir,tauros,magikarp,gyarados,lapras,ditto,eevee,vaporeon,jolteon,flareon,porygon,omanyte,omastar,kabuto,kabutops,aerodact,snorlax,articuno,zapdos,moltres,dratini,dragnair,dragnite,mewtwo,mew,chikrita,bayleef,meganium,cyndquil,quilava,typhlosn,totodile,croconaw,fralgatr,sentret,furret,hoothoot,noctowl,ledyba,ledian,spinarak,ariados,crobat,chinchou,lanturn,pichu,cleffa,igglybuf,togepi,togetic,natu,xatu,mareep,flaaffy,ampharos,belossom,marill,azumaril,sudwoodo,politoed,hoppip,skiploom,jumpluff,aipom,sunkern,sunflora,yanma,wooper,quagsire,espeon,umbreon,murkrow,slowking,misdrvus,unown,wobbufet,girafrig,pineco,foretres,dunsparc,gligar,steelix,snubbull,granbull,qwilfish,scizor,shuckle,heracros,sneasel,tediursa,ursaring,slugma,magcargo,swinub,piloswin,corsola,remoraid,octilery,delibird,mantine,skarmory,houndour,houndoom,kingdra,phanpy,donphan,porygon2,stantler,smeargle,tyrogue,hitmntop,smoochum,elekid,magby,miltank,blissey,raikou,entei,suicune,larvitar,pupitar,tyrnitar,lugia,hooh,celebi,________,none,___,___",f_zobj"0,neuter;,male,female,mal/fem",f_zobj"0,none;,fainted,burned,frozen,paralyzed,poisoned,sleeping",f_zobj"0,___;,fnt,brn,fzn,par,psn,slp",split"learn,teach,cheat",f_zobj"attack,atack,defense,defns,specialattack,spatk,specialdefense,spdfn,speed,speed,evasion,evasn,accuracy,acury,crit,critl",f_zobj"0;,129,13,6;;,1,140,12;;,130,136,8;;,131,3,138;;,0,8,10;;,5,134,6;;,4,9,10",f_zobj"0,DUAL VERSION;,BLUE VERSION,RED VERSION,GREEN VERSION,HOTDOG FLAVOR,SILVR VERSION,GOLD VERSION",f_zobj"0;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,",function()
+end,f_zobj"0,strugl;,acid,acidar,barage,bonclb,bind,clamp,moonlt,lechsd,extrsp,sncbom,twindl,thnshk,glare,gilotn,hypfng,jmpkck,kinsis,lockon,lovkis,macpnc,vicgrp,spican,spikes,spore,cotspr,presnt,vithrw,cmtpnc,drlpck,sndatk,agilty,fryatk,qikatk,falswp,growl,healbl,sing,pound,minmiz,tailwp,dblslp,meghrn,bonrng,convr1,convr2,spark,mlkdrk,morsun,ngtshd,octzok,pinmis,pwdsnw,supfng,firspn,psngas,barier,medtat,ftrsgt,hypnos,psybem,litscr,safgrd,petdnc,charm,synths,swtscn,razlef,psnpwd,slppwd,absorb,stnspr,flail,confsn,slam,constr,amnesa,bubble,splash,hydpmp,mindrd,mist,hrnatk,spiweb,dblkck,swtkis,mtlclw,trform,trikck,gust,twistr,crbham,dizpnc,sludge,painsp,dstbnd,haze,lick,persng,meanlk,cnfray,crschp,smog,karchp,ember,smkscr,beldrm,beatup,scrtch,slash,ancpwr,leer,bite,outrge,scryfc,thrash,stomp,roksld,magtud,rocthr,harden,bonrsh,hijkck,recovr,aerbls,hrndrl,drgrag,sfboil,drgbre,slfdes,explsn,eggbmb,slgbmb,gigdrn,megdrn,swrdnc,cut,fryctr,thief,dig,rolout,dfncrl,detect,solbem,raidnc,flash,psycic,psycup,drmeat,ngtmar,shdbal,zapcan,thundr,thnblt,irntal,streng,rocsms,hedbut,mudslp,sunday,protct,dbltem,slptlk,curse,hidpwr,swager,frustr,return,toxic,snore,rest,endure,atract,bide,mimic,substu,rage,dbledg,takdwn,sklbas,bodslm,wtrgun,bblbem,icebem,blizrd,icywnd,surf,wrlpol,wtrfal,swift,payday,triatk,rflect,thnwav,telprt,psywav,metrnm,countr,megpnc,seitos,submis,megkck,dynpnc,firpnc,thnpnc,icepnc,firbls,flmthr,fisure,eartqk,sndstr,hypbem,roar,stlwng,fly,razwnd,wrlwnd,skyatk,wngatk,peck,mirmov,fntatk,witdrw,rapspn,supsnc,aurbem,mircot,psnstg,spite,crunch,pursut,strsht,lechlf,btnpas,disabl,screch,tackle,flmwel,revrsl,fryswp,fcseng,forsgt,lowkck,rolkck,encore,wrap,growth,vinwip,sacfir,sharpn,sketch,tm05,______",split"youngs,sage,falknr,grunt,bugctr,bugsy,pkmfan,beauty,witney,kimono,medium,morty,police,karate,chuck,gentle,sailor,jasmin,rocket,skier,pryce,scient,twins,clair,nerd,camper,brock,school,swimer,misty,jugler,guitar,ltsurg,hiker,lass,erika,biker,picnik,janine,maniac,psycic,sabrin,fisher,breath,blaine,birdkp,cooltr,blue,legend,silver,will,koga,bruno,karen,lance,red,gold,horde",f_zobj"0,none;,normal,fire,fightng,water,poison,electrc,ground,grass,flying,ice,bug,psychic,rock,dragon,ghost,dark,steel,bird",f_zobj"0,none;,pnkbow,chrcol,blkblt,myswtr,psnbrb,magnet,sosand,mirasd,shbeak,nvrice,slvpwd,twspon,hrdstn,dragsc,speltg,blkgls,mtlcot,plkbow,bripwd,focbnd,kingrk,leftov,qikclw,scopln,amcoin,litbal,lukpnc,mtlpwd,stick,thkclb,bersrk,berry,gldbry,btrbry,mntbry,brnbry,icebry,parbry,psnbry,mirbry,mysbry",f_zobj"0,boy;,girl,cpu-boy,cpu-girl",f_zobj"attack,attack,defense,defens,specialattack,spcatk,specialdefense,spcdef,speed,speed,crit,crit,evasion,evason,accuracy,accury",f_zobj"0,misingno;,bulbsaur,ivysaur,venusaur,charmand,charmeln,charzard,squirtle,wartortl,blastois,caterpie,metapod,butrfree,weedle,kakuna,beedrill,pidgey,pidgeoto,pidgeot,rattata,raticate,spearow,fearow,ekans,arbok,pikachu,raichu,sndshrew,sndslash,nidoranf,nidorina,nidoquen,nidoranm,nidorino,nidoking,clefairy,clefable,vulpix,ninetale,jiglypuf,wiglytuf,zubat,golbat,oddish,gloom,vileplum,paras,parasect,venonat,venomoth,diglett,dugtrio,meowth,persian,psyduck,golduck,mankey,primeape,growlith,arcanine,poliwag,polwhirl,polwrath,abra,kadabra,alakazam,machop,machoke,machamp,belsprot,weepnbel,victrbel,tntacool,tntcruel,geodude,graveler,golem,ponyta,rapidash,slowpoke,slowbro,magnemit,magneton,fafetchd,doduo,dodrio,seel,dewgong,grimer,muk,shellder,cloyster,gastly,haunter,gengar,onix,drowzee,hypno,krabby,kingler,voltorb,electrod,exegcute,exegutor,cubone,marowak,hitmnlee,hitmnchn,licktung,koffing,weezing,rhyhorn,rhydon,chansey,tangela,kangakan,horsea,seadra,goldeen,seaking,staryu,starmie,mrmime,scyther,jynx,elecabuz,magmar,pinsir,tauros,magikarp,gyarados,lapras,ditto,eevee,vaporeon,jolteon,flareon,porygon,omanyte,omastar,kabuto,kabutops,aerodact,snorlax,articuno,zapdos,moltres,dratini,dragnair,dragnite,mewtwo,mew,chikrita,bayleef,meganium,cyndquil,quilava,typhlosn,totodile,croconaw,fralgatr,sentret,furret,hoothoot,noctowl,ledyba,ledian,spinarak,ariados,crobat,chinchou,lanturn,pichu,cleffa,igglybuf,togepi,togetic,natu,xatu,mareep,flaaffy,ampharos,belossom,marill,azumaril,sudwoodo,politoed,hoppip,skiploom,jumpluff,aipom,sunkern,sunflora,yanma,wooper,quagsire,espeon,umbreon,murkrow,slowking,misdrvus,unown,wobbufet,girafrig,pineco,foretres,dunsparc,gligar,steelix,snubbull,granbull,qwilfish,scizor,shuckle,heracros,sneasel,tediursa,ursaring,slugma,magcargo,swinub,piloswin,corsola,remoraid,octilery,delibird,mantine,skarmory,houndour,houndoom,kingdra,phanpy,donphan,porygon2,stantler,smeargle,tyrogue,hitmntop,smoochum,elekid,magby,miltank,blissey,raikou,entei,suicune,larvitar,pupitar,tyrnitar,lugia,hooh,celebi,________,none,___,___",f_zobj"0,neuter;,male,female,mal/fem",f_zobj"0,none;,fainted,burned,frozen,paralyzed,poisoned,sleeping",f_zobj"0,___;,fnt,brn,fzn,par,psn,slp",split"learn,teach,cheat",f_zobj"attack,atack,defense,defns,specialattack,spatk,specialdefense,spdfn,speed,speed,evasion,evasn,accuracy,acury,crit,critl",f_zobj"0;,129,13,6;;,0,5,6;;,131,3,138;;,0,8,10;;,141,12,7;;,1,140,8;;,5,9,10",f_zobj"0,dual;,pong,gboy,hdog,cga,rebl,gosi",f_zobj"0;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,",function()
 g_init_peek_loc+=1
 return@g_init_peek_loc
 end,function(list,ind)
@@ -492,18 +494,18 @@ add(op,{text="move"..ind.." "..move.name,disabled=true})
 add(op,{text=""..method.." "..typ})
 add(op,{text="   pp "..pp.."/"..maxpp})
 add(op,{text="pw/ac "..pow.."/"..accuracy})
-end,function(op,pkmn)
+end,function(op,pkmn,player)
 local draw_preview=function(off)
-f_draw_pkmn(pkmn.num,21,off-12,2,false,true,false)
+f_draw_pkmn(pkmn.num,21,off-12,2,p_battle_top and player==p_battle_top,true,false)
 end
 add(op,{text="#"..f_prefix_zero(pkmn.num,3).." "..pkmn.name,disabled=true})
 add(op,{draw=function()draw_preview"17" end})
 add(op,{draw=function()draw_preview"8" end})
 add(op,{draw=function()draw_preview"-1" end})
-end,function(op,pkmn,is_battle)
-f_add_stat_preview(op,pkmn)
+end,function(op,pkmn,player)
+f_add_stat_preview(op,pkmn,player)
 add(op,{text="peek "..pkmn.name,disabled=true})
-if is_battle then
+if player then
 add(op,{text="major "..c_major_names_long[pkmn.major]})
 else
 add(op,{text="prevo "..c_pkmn_names[pkmn.prevolve]})
@@ -563,26 +565,25 @@ local numstr=tostr(num)
 while #numstr<len do numstr="0"..numstr end
 return numstr
 end,function(op)
-local b=function(player,x,y,px,py,flip)
+local b=function(player,px,py,flip)
 add(op,{draw=function()
 local invisible=player.active.invisible
 local team=player.team
 local active=player.active
-f_draw_pkmn(invisible and player.num or active.num,px,py,2,flip,p_action_self==player,false)
-if invisible then return end
-print(active.name,x+2,y-4,1,-1)
+f_draw_pkmn(invisible and player.num or active.num,px,py,2,flip,p_action_self==player,false,invisible and f_nop or function(x,y)
+print(active.name,x+1,y,1,-1)
 local hp=active.hp
 local maxhp=active.maxhp
 local spot=active.spot
 local major=active.major
 if hp>0 then
-rectfill(x+1,y+2,x+1+mid(0,hp/maxhp*32,32),y+5,1)
-pset(x+1,y+2,2)
-pset(x+1,y+5,2)
-pset(x+33,y+2,2)
-pset(x+33,y+5,2)
+rectfill(x,y+6,x+mid(0,hp/maxhp*32,32),y+9,1)
+pset(x,y+6,2)
+pset(x,y+9,2)
+pset(x+32,y+6,2)
+pset(x+32,y+9,2)
 end
-local tx,ty=x+15,y+9
+local tx,ty=x+14,y+13
 for i=0,5 do
 if spot==i+1 or team[i+1].valid and team[i+1].major ~=1 then
 pset(tx+i%3*2,ty+i\3*2-1,spot==i+1 and 3 or 1)
@@ -590,27 +591,28 @@ end
 end
 local majtext=c_major_names_short[major]
 local hptext=f_prefix_zero(hp,3)
-print(majtext.."  "..hptext,x+1+1,y+8-1,1,-1)
+print(majtext.."  "..hptext,x+1,y+11,1,-1)
+end)
 end})
 end
-b(p_battle_top,1,5,39,1,true)
-b(p_battle_bot,22,5,3,1)
-end,function(team,ind)
+b(p_battle_top,39,1,true)
+b(p_battle_bot,3,1)
+end,function(_ENV,ind)
 local bench_parent=team[ind]
 local active=f_zobj_setmeta(team[ind],"isactive,~c_yes,lastmoverecv,0,moveturn,0,invisible,~c_yes,counterdmg,0,bidedmg,0,disabledtimer,0,confused,0,sleeping,@,substitute,0,toxiced,0,spot,@,base,@;stages;attack,0,defense,0,specialattack,0,specialdefense,0,speed,0,crit,0,evasion,0,accuracy,0;",f_flr_rnd"7"+1,ind,bench_parent)
 for i=1,4 do
-active[i]=f_zobj_setmeta(bench_parent[i],"cool,hello world")
+active[i]=f_zobj_setmeta(bench_parent[i],"")
 end
 return active
 end,function(name,team,subname,num,iscpu)
-local active=nil
+local player=f_zobj("team,@,name,@,subname,@,num,@,iscpu,@,actions,#,greed,7",team,name,subname,num,iscpu)
 for i=1,6 do
 if team[i].valid then
-active=f_create_active(team,i)
+player.active=f_create_active(player,i)
 break
 end
 end
-return f_zobj("active,@,team,@,name,@,subname,@,num,@,iscpu,@,actions,#,greed,7",active,team,name,subname,num,iscpu)
+return player
 end,function(player)
 return player==p_battle_bot and p_battle_top or p_battle_bot
 end,function(zobjtext,player)
@@ -639,7 +641,7 @@ end,function(...)
 f_addaction(p_turn_self,3,...)
 end,function(player,spot,level)
 local pkmn=player.team[spot]
-player.active=f_create_active(player.team,spot)
+player.active=f_create_active(player,spot)
 return f_newaction(level,player,"sends "..player.active.name,function()
 player.active.invisible=false
 return player.active.num
@@ -900,7 +902,7 @@ f_dt_batstats(preview_op,f_getsel"g_grid_picktrnr",f_getsel"g_grid_battle_stats"
 local bothteams={}
 for i=1,6 do add(bothteams,i==p_action_self_active.spot and p_action_self_active or p_action_self.team[i])end
 for i=1,6 do add(bothteams,i==p_action_other_active.spot and p_action_other_active or p_action_other.team[i])end
-f_add_stat(op,bothteams[f_getsel"g_grid_battle_stats"+1],true)
+f_add_stat(op,bothteams[f_getsel"g_grid_battle_stats"+1],f_getsel"g_grid_battle_stats">=6 and p_action_other or p_action_self)
 end,function(op,disable_empty)
 for partynum=0,3 do
 local valid=true
@@ -929,10 +931,15 @@ end})
 end
 end,function(_ENV)
 add(preview_op,{draw=function()
-print("\^w\^tpicodex",2,1,3)
-print(c_palette_names[g_palette],2,32,1)
-f_draw_pkmn(g_title_l,7,14,2,false,not g_title_sel,false)
-f_draw_pkmn(g_title_r,35,14,2,true,g_title_sel,false)
+local tcol=g_title_sel and 3 or 1
+local bcol=g_title_sel and 1 or 3
+local messages=f_zobj(",\^w\f1rom \n\f3hack\n\f1 plz,\^w\f1thx!\n\f3bulb\npdia,\^w\f1thx!\n\f3nint\nendo,\^w\f1easy\n\f3cmfy\n\f1shrt,\^w\f3upok\ncntr\n\f1thx!,\^w\f1disa\nsmbl\n\f3thx!,\^w\f1poke\nhist\n\f3thx!,\^w\f3smo \n gon\n\f1thx!,\^w\f1 by \n\f3alan\nxoc3,\^w\f332kb\n\f1pico\ncart,\^w\f3thx!\n\f1shri\nnko8,\^w\f1ctch\n\f3 em'\n\f1all!,\^w\f1awww\n\f3hmph\n\f1ohho,\^w\f3thx!\n\f1sere\n bii,\^w\f1nihi\n\f3only\n\f1grls,\^w\f3gen2\n\f1batl\n sim,@","\^w\f3pico\n dex\n\f1"..c_palette_names[g_palette])
+f_draw_pkmn(g_title_l,7-4,14+1-1-3+10,2,false,g_title_sel,false,function(x,y)
+print(messages[g_title_l%#messages+1],x+3,y-1)
+end)
+f_draw_pkmn(g_title_r,35+4,14+1-1-3-4+1-9+3-1,2,true,not g_title_sel,false,function(x,y)
+print(messages[g_title_r%#messages+1],x,y)
+end)
 end})
 foreach(split"view,edit,league,versus",function(text)
 f_addop_text(op,text)
@@ -1019,7 +1026,7 @@ for i=1,6 do
 local pkmn=p_action_self.team[i]
 local disabled=not pkmn.valid or i==p_action_self_active.spot or pkmn.major==1
 add(op,{disabled=disabled,draw=function(i,is_sel)
-f_draw_pkmn(pkmn.num,1,1,1,false,is_sel,disabled)
+f_draw_pkmn(pkmn.num,1,1,1,p_action_self==p_battle_top,is_sel,disabled)
 end})
 end
 end,function(_ENV)
@@ -1037,14 +1044,14 @@ for i=1,6 do
 local pkmn=p_action_self.team[i]
 local disabled=not pkmn.valid
 add(op,{lrvalid=not disabled,disabled=disabled,draw=function(i,is_sel)
-f_draw_pkmn(pkmn.num,1,1,1,false,is_sel,disabled)
+f_draw_pkmn(pkmn.num,1,1,1,p_action_self==p_battle_top,is_sel,disabled)
 end})
 end
 for i=1,6 do
 local pkmn=p_action_other.team[i]
 local disabled=not pkmn.valid
 add(op,{lrvalid=not disabled,disabled=disabled,draw=function(i,is_sel)
-f_draw_pkmn(pkmn.num,1,1,1,true,is_sel,disabled)
+f_draw_pkmn(pkmn.num,1,1,1,p_action_other==p_battle_top,is_sel,disabled)
 end})
 end
 end,function(op,selname,topline)
@@ -1116,9 +1123,9 @@ f_pop_ui_stack()
 end,function()
 g_title_sel=not g_title_sel
 if g_title_sel then
-g_title_r=rnd"252"\1 return g_title_r
-else
 g_title_l=rnd"252"\1 return g_title_l
+else
+g_title_r=rnd"252"\1 return g_title_r
 end
 g_palette+=1
 g_palette%=#c_palettes
