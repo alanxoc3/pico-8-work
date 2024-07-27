@@ -7,6 +7,44 @@
 -- pkmn.item = pkmn.default_item
 -- todo: moves could change as you unlock them. so all 3s might not be the best approach. or at least i should call getparty then saveparty
 
+-- TODO: combine with mkpkmn
+-- Takes in a player.
+|[f_create_active]| function(_ENV, ind)
+  local active = f_zobj_setmeta(team[ind], [[
+    isactive,     ~c_yes, -- used for a drawing function, should draw fainted pokemon if they are not active, but not if they are active.
+    lastmoverecv, 0,      -- last move targeted at user, for mirrormove
+    moveturn,     0,      -- turn move is on. > 0, decrements each turn. 0, is the same. -1, is multiturn move that doesn't end (rage).
+    invisible,    ~c_yes,
+
+    -- conditions are all numbers ...
+    counterdmg,    0, -- resets to zero each turn
+    bidedmg,       0, -- resets to zero when using bide
+    disabledtimer, 0, -- how long the disabled move should last
+    confused,      0, -- for confusion, how long pkmn is confused
+    substitute,    0, -- for substitute obviously
+    toxiced,       0, -- how bad the toxic is
+
+    -- curmove -- used for multiturn moves, if moveturn ~= 0, this must be set
+    spot,@, base,@;
+
+    stages;
+      attack,         0,
+      defense,        0,
+      specialattack,  0,
+      specialdefense, 0,
+      speed,          0,
+      crit,           0, -- TODO: rename crit
+      evasion,        0,
+      accuracy,       0
+  ]], ind, team[ind])
+
+  -- this assumes the parent always has len(4). foreach saves a few tokens
+  foreach(team[ind], function(val)
+    add(active, f_zobj_setmeta(val, [[]]))
+  end)
+  return active
+end $$
+
 |[f_mkpkmn]| function(ind, base, respect_locks, gender_bit, item, ...)
   -- base is the parent table. at the start of a battle and when loading for edit, base is c_pokemon[ind].
   -- when a pokemon becomes active, it calls mkpkmn with base being the bench/initial battle stats.
@@ -16,7 +54,7 @@
     num,@, base,@, gender_bit,@, item,@, valid,@,
     seen_moves, #,            -- A move to boolean map that is used to disable things on the move edit screen and populate edit_moves.
     major,      C_MAJOR_NONE, -- The major status condition in pokemon battles: fainted, burned, frozen, paralyzed, poisoned, sleeping
-    gender,     0,            -- This gets populated from gender bit & pkmn.gender_mask. TODO: this line could be removed if pressed for compression!
+    gender,     ~gender_mask, -- Gender is initially set to gender mask, then overwritten below if there is a gender_bit
     substitute, 0, -- substitute hp
     evasion,    100,
     accuracy,   100,
@@ -33,7 +71,6 @@
       evasion,        0,
       accuracy,       0; -- TODO: delete the semicolon
   ]], ind, base, gender_bit, item % C_LEN_ITEMS, ind < P_NONE) -- player is needed to get ui flipping correct. TODO: if not used anywhere else, it maybe could be turned into a boolean to save a few tokens.
-  pkmn.gender = pkmn.gender_mask
 
   -- Using local variable for gender_bit to save a token, though maybe i could just set _ENV here, idk.
   if gender_bit and pkmn.gender_mask == G_BOTH then
@@ -103,14 +140,9 @@ end $$
 end $$
 
 |[f_save_party_pkmn]| function(_ENV, party_num, spot_num)
-  local num_loc = S_PARTY1+party_num*42+spot_num*7
-  poke(num_loc, num)
-  poke(num_loc+1, gender_bit)
-  poke(num_loc+2, item)
-  poke(num_loc+3, _ENV[1].pid)
-  poke(num_loc+4, _ENV[2].pid)
-  poke(num_loc+5, _ENV[3].pid)
-  poke(num_loc+6, _ENV[4].pid)
+  for i=1,7 do
+    poke(S_PARTY1+party_num*42+spot_num*7 + i-1, ({num, gender_bit, item, _ENV[1].pid, _ENV[2].pid, _ENV[3].pid, _ENV[4].pid})[i])
+  end
 end $$
 
 |[f_stat_crit]| function(crit)

@@ -38,7 +38,7 @@ function f_zobj(...)
 return f_zobj_setmeta(_g,...)
 end
 f_zobj_set(_g,"c_pokemon,#,c_moves,#,c_trainers,#,c_items,#,g_init_peek_loc,0x1fff,c_yes,@,c_no,@,c_empty,@,f_nop,@,g_palette,0,g_preview_timer,0,g_title_timer,0,g_title_l,253,g_title_r,254,g_msg_top, ,g_msg_bot, ,g_bat_func,,g_gridstack,#,g_title_an_timer,70",true,false,"",function(...)return...end)
-f_zobj_set(_g,"f_zobj,@,f_zobj_set,@,f_zobj_eval,@,f_zcall,@,f_refresh_top,@,f_add_to_ui_stack,@,f_pop_ui_stack,@,f_getsel,@,f_setsel,@,f_create_gridpair,@,f_update_grid,@,f_draw_grid,@,f_addop_text,@,f_minisfx,@,f_flr_rnd,@,f_in_split,@,f_roundrect,@,f_draw_pkmn,@,f_strtoq,@,f_hurt_self,@,f_moveutil_hpchange,@,f_moveutil_dmgself,@,f_moveutil_dmgother,@,f_moveutil_movemod,@,f_moveutil_typeadv,@,f_moveutil_calc_move_damage,@,f_movehelp_effect_works,@,f_move_major_other,@,f_move_splash,@,f_move_recover,@,f_move_default,@,f_move_seismictoss,@,f_move_psywave,@,f_move_superfang,@,f_move_falseswipe,@,f_move_submission,@,f_move_struggle,@,f_move_multihit_set,@,f_move_barrage,@,f_move_doublekick,@,f_move_flail,@,f_move_return,@,f_move_frustration,@,f_move_present,@,f_move_magnitude,@,f_move_hiddenpower,@,f_move_stat,@,c_move_names,@,c_trnr_names,@,c_type_names,@,c_item_names,@,c_team_names,@,c_stages,@,c_pkmn_names,@,c_gender_names,@,c_major_names_long,@,c_major_names_short,@,c_movemethod_names,@,c_statmod_names,@,c_palettes,@,c_palette_names,@,c_types,@,f_init_peek_inc,@,f_unlock,@,f_update_locks,@,f_create_spot,@,f_get_edit_op_pkmn,@,f_op_template_edit,@,f_info_toggle,@,f_leagueinfo,@,f_add_stat_move,@,f_add_stat_preview,@,f_add_stat,@,f_print_info,@,f_print_top,@,f_print_bot,@,f_get_move_texts,@,f_prefix_space,@,f_prefix_zero,@,f_add_battle,@,f_create_active,@,f_create_player,@,f_get_other_pl,@,f_set_both_players,@,f_get_live_pkmn,@,f_get_next_active,@,f_end_battle,@,f_newaction,@,f_addaction,@,f_turn_addattack,@,f_pkmn_comes_out,@,f_pop_next_action,@,f_set_player_priority,@,f_movelogic,@,f_start_turn,@,f_start_battle,@,f_mkpkmn,@,f_team_party,@,f_fill_team,@,f_team_league,@",f_zobj,f_zobj_set,f_zobj_eval,function(func,text,...)
+f_zobj_set(_g,"f_zobj,@,f_zobj_set,@,f_zobj_eval,@,f_zcall,@,f_refresh_top,@,f_add_to_ui_stack,@,f_pop_ui_stack,@,f_getsel,@,f_setsel,@,f_create_gridpair,@,f_update_grid,@,f_draw_grid,@,f_addop_text,@,f_minisfx,@,f_flr_rnd,@,f_in_split,@,f_roundrect,@,f_draw_pkmn,@,f_strtoq,@,f_hurt_self,@,f_moveutil_hpchange,@,f_moveutil_dmgself,@,f_moveutil_dmgother,@,f_moveutil_movemod,@,f_moveutil_typeadv,@,f_moveutil_calc_move_damage,@,f_movehelp_effect_works,@,f_move_major_other,@,f_move_splash,@,f_move_recover,@,f_move_default,@,f_move_seismictoss,@,f_move_psywave,@,f_move_superfang,@,f_move_falseswipe,@,f_move_submission,@,f_move_struggle,@,f_move_multihit_set,@,f_move_barrage,@,f_move_doublekick,@,f_move_flail,@,f_move_return,@,f_move_frustration,@,f_move_present,@,f_move_magnitude,@,f_move_hiddenpower,@,f_move_stat,@,c_move_names,@,c_trnr_names,@,c_type_names,@,c_item_names,@,c_team_names,@,c_stages,@,c_pkmn_names,@,c_gender_names,@,c_major_names_long,@,c_major_names_short,@,c_movemethod_names,@,c_statmod_names,@,c_palettes,@,c_palette_names,@,c_types,@,f_init_peek_inc,@,f_unlock,@,f_update_locks,@,f_create_spot,@,f_get_edit_op_pkmn,@,f_op_template_edit,@,f_info_toggle,@,f_leagueinfo,@,f_add_stat_move,@,f_add_stat_preview,@,f_add_stat,@,f_print_info,@,f_print_top,@,f_print_bot,@,f_get_move_texts,@,f_prefix_space,@,f_prefix_zero,@,f_add_battle,@,f_create_player,@,f_get_other_pl,@,f_set_both_players,@,f_get_live_pkmn,@,f_get_next_active,@,f_end_battle,@,f_newaction,@,f_addaction,@,f_turn_addattack,@,f_pkmn_comes_out,@,f_pop_next_action,@,f_set_player_priority,@,f_movelogic,@,f_start_turn,@,f_start_battle,@,f_create_active,@,f_mkpkmn,@,f_team_party,@,f_fill_team,@,f_team_league,@",f_zobj,f_zobj_set,f_zobj_eval,function(func,text,...)
 foreach(f_zobj(text,...),function(params)
 func(unpack(params))
 end)
@@ -520,7 +520,7 @@ add(op,{text="stat "..pkmn.name,disabled=true})
 add(op,{text="at/df "..f_prefix_zero(f_stat_calc(pkmn,"attack"),3).."/"..f_prefix_zero(f_stat_calc(pkmn,"defense"),3)})
 add(op,{text="sa/sd "..f_prefix_zero(f_stat_calc(pkmn,"specialattack"),3).."/"..f_prefix_zero(f_stat_calc(pkmn,"specialdefense"),3)})
 add(op,{text="sp/lv "..f_prefix_zero(f_stat_calc(pkmn,"speed"),3).."/050"})
-if is_battle then
+if player then
 f_add_stat_move(op,pkmn,0)
 f_add_stat_move(op,pkmn,1)
 f_add_stat_move(op,pkmn,2)
@@ -597,13 +597,6 @@ end})
 end
 b(p_battle_top,39,1,true)
 b(p_battle_bot,3,1)
-end,function(_ENV,ind)
-local bench_parent=team[ind]
-local active=f_zobj_setmeta(team[ind],"isactive,~c_yes,lastmoverecv,0,moveturn,0,invisible,~c_yes,counterdmg,0,bidedmg,0,disabledtimer,0,confused,0,sleeping,@,substitute,0,toxiced,0,spot,@,base,@;stages;attack,0,defense,0,specialattack,0,specialdefense,0,speed,0,crit,0,evasion,0,accuracy,0;",f_flr_rnd"7"+1,ind,bench_parent)
-for i=1,4 do
-active[i]=f_zobj_setmeta(bench_parent[i],"")
-end
-return active
 end,function(name,team,subname,num,iscpu)
 local player=f_zobj("team,@,name,@,subname,@,num,@,iscpu,@,actions,#,greed,7",team,name,subname,num,iscpu)
 for i=1,6 do
@@ -773,9 +766,14 @@ f_addaction(p_battle_top,1,p_battle_top,"begins battle",f_nop,true)
 add(p_battle_top.actions,f_pkmn_comes_out(p_battle_top,p_battle_top.active.spot,1))
 f_add_to_ui_stack(g_grid_battle_firstaction)
 f_s_bataction()
+end,function(_ENV,ind)
+local active=f_zobj_setmeta(team[ind],"isactive,~c_yes,lastmoverecv,0,moveturn,0,invisible,~c_yes,counterdmg,0,bidedmg,0,disabledtimer,0,confused,0,substitute,0,toxiced,0,spot,@,base,@;stages;attack,0,defense,0,specialattack,0,specialdefense,0,speed,0,crit,0,evasion,0,accuracy,0",ind,team[ind])
+foreach(team[ind],function(val)
+add(active,f_zobj_setmeta(val,""))
+end)
+return active
 end,function(ind,base,respect_locks,gender_bit,item,...)
-local pkmn=f_zobj_setmeta(base,"num,@,base,@,gender_bit,@,item,@,valid,@,seen_moves,#,major,0,gender,0,substitute,0,evasion,100,accuracy,100,crit,1,numtimes,0;stages;attack,0,defense,0,specialattack,0,specialdefense,0,speed,0,crit,0,evasion,0,accuracy,0;",ind,base,gender_bit,item%42,ind<252)
-pkmn.gender=pkmn.gender_mask
+local pkmn=f_zobj_setmeta(base,"num,@,base,@,gender_bit,@,item,@,valid,@,seen_moves,#,major,0,gender,~gender_mask,substitute,0,evasion,100,accuracy,100,crit,1,numtimes,0;stages;attack,0,defense,0,specialattack,0,specialdefense,0,speed,0,crit,0,evasion,0,accuracy,0;",ind,base,gender_bit,item%42,ind<252)
 if gender_bit and pkmn.gender_mask==3 then
 pkmn.gender=gender_bit%2+1
 end
@@ -827,14 +825,9 @@ local pkmn=f_mkpkmn(pkmn_num,c_pokemon[pkmn_num],true,@(num_loc+1),@(num_loc+2),
 f_save_party_pkmn(pkmn,party_num,spot_num)
 return pkmn
 end,function(_ENV,party_num,spot_num)
-local num_loc=0x5e00+party_num*42+spot_num*7
-poke(num_loc,num)
-poke(num_loc+1,gender_bit)
-poke(num_loc+2,item)
-poke(num_loc+3,_ENV[1].pid)
-poke(num_loc+4,_ENV[2].pid)
-poke(num_loc+5,_ENV[3].pid)
-poke(num_loc+6,_ENV[4].pid)
+for i=1,7 do
+poke(0x5e00+party_num*42+spot_num*7+i-1,({num,gender_bit,item,_ENV[1].pid,_ENV[2].pid,_ENV[3].pid,_ENV[4].pid})[i])
+end
 end,function(crit)
 return mid(0,1,.0095*crit^4-.0746*crit^3+.1883*crit^2-.0607*crit+.0625)
 end,function(stat)
@@ -1323,17 +1316,17 @@ sub=c_pokemon[sub.prevolve]
 end
 end
 for i=0,252 do
-c_pokemon[i].possible_moves=f_zobj",252,252,252,252"
-c_pokemon[i].possible_moves_method=f_zobj"252,empty"
+local _ENV=c_pokemon[i]
+possible_moves,possible_moves_method=f_zobj",252,252,252,252",f_zobj"252,empty"
 for ii=1,3 do
-foreach(c_pokemon[i].moves_grouped[ii],function(v)
-if i==0 or not c_pokemon[i].possible_moves_method[v]then
-add(c_pokemon[i].possible_moves,v)
-c_pokemon[i].possible_moves_method[v]=c_movemethod_names[ii]
+foreach(moves_grouped[ii],function(v)
+if i==0 or not possible_moves_method[v]then
+add(possible_moves,v)
+possible_moves_method[v]=c_movemethod_names[ii]
 end
 end)
 end
-c_pokemon[i]=f_mkpkmn(i,c_pokemon[i],false,false,0)
+c_pokemon[i]=f_mkpkmn(i,_ENV,false,false,0)
 end
 for i=1,57 do
 local trainer={num=f_init_peek_inc()}

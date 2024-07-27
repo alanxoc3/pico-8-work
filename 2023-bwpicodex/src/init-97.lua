@@ -391,28 +391,28 @@ for i=0,252 do
 end
 
 for i=0,252 do -- todo: token crunching - can move up
+  local _ENV = c_pokemon[i]
   -- having metatables here causes me to run out of lua memory, lets keep good ol' number arrays
-  c_pokemon[i].possible_moves = f_zobj[[,M_NONE,M_NONE,M_NONE,M_NONE]]
-  c_pokemon[i].possible_moves_method = f_zobj[[M_NONE,"empty"]]
+  possible_moves, possible_moves_method = f_zobj[[,M_NONE,M_NONE,M_NONE,M_NONE]], f_zobj[[M_NONE,"empty"]]
 
   for ii=1,3 do
-    foreach(c_pokemon[i].moves_grouped[ii], function(v)
+    foreach(moves_grouped[ii], function(v)
       -- this if statement is required for pokemon learn a move naturally and their prevolve learns the move through teaching.
       -- Specifically Jigglypuff/Igglybuff have this scenario with rest & rollout. There may be others too.
       -- Missingno is the only exception here because it is the only pokemon that can learn multiple of one move (watergun)
-      if i == P_MISSINGNO or not c_pokemon[i].possible_moves_method[v] then
-        add(c_pokemon[i].possible_moves, v)
-        c_pokemon[i].possible_moves_method[v] = c_movemethod_names[ii]
+      if i == P_MISSINGNO or not possible_moves_method[v] then
+        add(possible_moves, v)
+        possible_moves_method[v] = c_movemethod_names[ii]
       end
     end)
   end
 
-  -- TODO: This obviously takes up a few tokens, but it frees up 272 mb of lua memory.
+  -- TODO: These 2 lines obviously take up a few tokens, but it frees up 272 mb of lua memory.
   -- c_pokemon[i].moves_progress = nil
   -- c_pokemon[i].moves_grouped = nil
 
   -- And finally, set stats/etc on the base pokemon.
-  c_pokemon[i] = f_mkpkmn(i, c_pokemon[i], false, false, I_NONE) -- sets the moves for dex entries!
+  c_pokemon[i] = f_mkpkmn(i, _ENV, false, false, I_NONE)
 end
 
 for i=1,57 do

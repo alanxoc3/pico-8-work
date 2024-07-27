@@ -74,7 +74,7 @@ end $$
   add(op, {text="sp/lv "..f_prefix_zero(f_stat_calc(pkmn, 'speed'), 3).."/050"})
 
   -- TODO: token saving, add a zcall here
-  if is_battle then
+  if player then -- if the player was passed in, then we are in a battle and should show moves
     f_add_stat_move(op, pkmn, 0)
     f_add_stat_move(op, pkmn, 1)
     f_add_stat_move(op, pkmn, 2)

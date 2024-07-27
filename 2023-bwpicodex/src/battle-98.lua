@@ -23,47 +23,6 @@
 
 -- Some player specific things
 
--- TODO: combine with mkpkmn
--- Takes in a player.
-|[f_create_active]| function(_ENV, ind)
-  local bench_parent = team[ind]
-  local active = f_zobj_setmeta(team[ind], [[
-    isactive,     ~c_yes, -- used for a drawing function, should draw fainted pokemon if they are not active, but not if they are active.
-    lastmoverecv, 0,      -- last move targeted at user, for mirrormove
-    moveturn,     0,      -- turn move is on. > 0, decrements each turn. 0, is the same. -1, is multiturn move that doesn't end (rage).
-    invisible,    ~c_yes,
-
-    -- conditions are all numbers ...
-    counterdmg,    0, -- resets to zero each turn
-    bidedmg,       0, -- resets to zero when using bide
-    disabledtimer, 0, -- how long the disabled move should last
-    confused,      0, -- for confusion, how long pkmn is confused
-    sleeping,      @, -- for sleeping, how long pkmn is sleeping. must start at non-zero in case a pokemon is switched in
-    substitute,    0, -- for substitute obviously
-    toxiced,       0, -- how bad the toxic is
-
-    -- curmove -- used for multiturn moves, if moveturn ~= 0, this must be set
-    spot,@,
-    base,@;
-
-    stages;
-      attack,         0,
-      defense,        0,
-      specialattack,  0,
-      specialdefense, 0,
-      speed,          0,
-      crit,           0, -- TODO: rename crit
-      evasion,        0,
-      accuracy,       0; -- TODO: delete the semicolon
-  ]], f_flr_rnd'7'+1, ind, bench_parent)
-  -- ^^ hard-coding sleep timer here -- TODO: don't do this. sleep timer persists in gsc, not random each switch.
-  for i=1,4 do
-    -- this allows changing the move with hidden power, mimic, transform.
-    active[i] = f_zobj_setmeta(bench_parent[i], [[]])
-  end
-  return active
-end $$
-
 |[f_create_player]| function(name, team, subname, num, iscpu)
   local player = f_zobj([[
     team,@,           -- The 1-6 benched pokemon.
