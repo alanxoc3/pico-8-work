@@ -7,13 +7,6 @@ end $$
 
 |[f_get_edit_op_pkmn]| function() return f_get_party_pkmn(f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot') end $$
 
-|[f_op_template_edit]| function(op, list, key)
-  local pkmn = f_get_edit_op_pkmn()
-  for obj in all(list) do
-    f_create_spot(obj, op, pkmn[key] == obj.num)
-  end
-end $$
-
 |[f_info_toggle]| function(op, toggle_grid, enemyname)
   local toggle = g_cg_m.name == toggle_grid
   f_print_info(op, [[

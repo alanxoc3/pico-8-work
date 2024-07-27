@@ -55,14 +55,16 @@ end $$
 -- This updates the lock variables, which determine if a pokemon/item/move is unlocked.
 |[f_op_def]|        function(_ENV) add(op, {}) end $$
 |[f_op_edititem]| function(_ENV)
-  local pkmn = f_get_party_pkmn(f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot')
+  local pkmn = f_get_edit_op_pkmn()
 
   f_print_info(preview_op, [[
      ;,"edit item"
     ;;,@,@," ",@
   ]], "#", pkmn.num_str, pkmn.name)
 
-  f_op_template_edit(op, c_items, 'item')
+  for i=0,I_END do
+    f_create_spot(c_items[i], op, pkmn.item == i)
+  end
 end $$
 
 |[f_op_statbrowse]| function(_ENV)

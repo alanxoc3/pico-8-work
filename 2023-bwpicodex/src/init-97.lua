@@ -2,7 +2,7 @@ f_zcall(poke, [[
    ;,0x5f2c,   3  -- screen to 64x64
   ;;,0x5f5c,   8  -- set btn initial delay before repeating. 255 means never repeat.
   ;;,0x5f5d,   1  -- set btn repeating delay.
-  ;;,S_STORY,  58 -- todo: remove me, this is just for debugging
+  ;;,S_STORY,  3-- todo: remove me, this is just for debugging
 ]])
 
 cls() -- this is just a visual thing when the game starts up. TODO: i can remove it if i want. probably should
@@ -317,7 +317,7 @@ for i=0,360 do -- 19*19-1 = 324 (19 types, including BIRD and NONE)
   c_types[i\19][i%19] = f_init_peek_inc()/2 -- want division, not integer division. need .5 for less effective moves
 end
 
-for i=0,I_END do add(c_items,  f_zobj([[lock,~c_no,  num,@, name,@]], i, c_item_names[i] )) end
+for i=0,I_END do c_items[i] = f_zobj([[lock,~c_no, num,@, name,@]], i, c_item_names[i]) end
 
 -- 136 to 118. Storing data all together saves like 18 code tokens.
 for i=0,252 do -- There are 252+1 pkmn and 252+1 moves. The +1s are for empties. So zipped when unpacking to save some tokens.
@@ -336,7 +336,7 @@ for i=0,252 do -- There are 252+1 pkmn and 252+1 moves. The +1s are for empties.
   c_moves[i].params = c_move_funcs[i]
 
   -- TODO: idea, i could use the last bit of type1 to specify an extra gender byte. uses more space but saves 13 tokens
-  -- 'item' actually has gender and item information, but keeping the name item saves a possible token
+  -- default_item actually has gender and item information, but keeping the name item saves a possible token
   foreach(split'pktype1,hp,attack,defense,speed,specialattack,specialdefense,default_item', function(key)
     pkmn[key] = f_init_peek_inc()
   end)
@@ -443,8 +443,8 @@ end $$
 
 -- TODO: does this need to be extracted into a function, or can it just run here?
 |[f_update_locks]| function(start_trnr) -- game lags with this function, so it should be called when there can be a lag. TODO: Or I could try speeding it up?
-  f_unlock(c_items, I_NONE+1)
-  f_unlock(c_items, I_BERRY+1) -- berry is nice to have to start with
+  f_unlock(c_items, I_NONE)
+  f_unlock(c_items, I_BERRY) -- berry is nice to have to start with
 
   -- these are the moves available in the default party -- TODO: Maybe I can use GROWL. I think Bulb/Chik/Charm are the 3 that can learn growl. not positive.
   -- Because this happens before unlocking the trainers, the default team will survive a factory reset! Which is good, though factory reset will probably not be available in the released game to save tokens and users accidentally resetting.
@@ -468,7 +468,7 @@ end $$
     local team = f_team_league(i, i\58*251+1) -- this math will do start the team at just missingno for the last team, that way missingno gets unlocked.
     for pkmn in all(team) do
       f_unlock(c_pokemon, pkmn.num)
-      f_unlock(c_items, pkmn.item+1)
+      f_unlock(c_items, pkmn.item)
       for i=1,4 do
         f_unlock(c_moves, pkmn[i].num)
       end

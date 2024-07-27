@@ -198,7 +198,7 @@ I_POISONCUREBERRY:   39 # psnbery
 I_MIRACLEBERRY:      40 # mirbery
 I_MYSTERYBERRY:      41 # mstbery
 
-I_END:               41 # same as last one
+I_END:               41 # same as last one. used in at least 1 loop.
 
 # ----------------------------- genders - these are the 4 possible gender. bitmasked to top 2 bits to save a few tokens since they are packed with the color
 # Genders. These are numbers representing the actual gender of a Pokemon.
