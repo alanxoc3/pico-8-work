@@ -416,10 +416,10 @@ for i=0,252 do -- todo: token crunching - can move up
 end
 
 for i=1,57 do
-  local trainer = {num=f_init_peek_inc()}
-  trainer.move = f_init_peek_inc()
-  for j=1,6 do add(trainer, f_init_peek_inc()) end
-  add(c_trainers, trainer)
+  add(c_trainers, {})
+  foreach(f_zobj[[,num,move,1,2,3,4,5,6]], function(k)
+    c_trainers[i][k] = f_init_peek_inc()
+  end)
 end
 
 -- Logic to add the horde.
@@ -427,9 +427,8 @@ end
 -- TODO: figure out how trainer len/party goes to battle
 --       only trainers are saved as continuous things.
 
-local horde = {num=P_GHOST, move=M_TM05} -- Maybe this should be struggle, I guess it works for now since only 1 pokemon knows it (missingno) -- i could go back to having tm05 be a teach move for missingno
-for i=1,252 do add(horde, i%252) end
-add(c_trainers, horde)
+add(c_trainers, f_zobj[[num,P_GHOST, move,M_TM05]])
+for i=1,252 do add(c_trainers[58], i%252) end
 
 -- TODO: REMOVE THIS! Only keep this for debugging. Someone could accidentally set it. But really, it falls out of scope of my idea of a fantasy console. And there is a slight bug not worth fixing on the UI when this is done.
 menuitem(1, "factory reset", function()

@@ -1329,14 +1329,13 @@ end
 c_pokemon[i]=f_mkpkmn(i,_ENV,false,false,0)
 end
 for i=1,57 do
-local trainer={num=f_init_peek_inc()}
-trainer.move=f_init_peek_inc()
-for j=1,6 do add(trainer,f_init_peek_inc())end
-add(c_trainers,trainer)
+add(c_trainers,{})
+foreach(f_zobj",num,move,1,2,3,4,5,6",function(k)
+c_trainers[i][k]=f_init_peek_inc()
+end)
 end
-local horde={num=255,move=251}
-for i=1,252 do add(horde,i%252)end
-add(c_trainers,horde)
+add(c_trainers,f_zobj"num,255,move,251")
+for i=1,252 do add(c_trainers[58],i%252)end
 menuitem(1,"factory reset",function()
 cls()flip()
 memset(0x5e00,0,256)
