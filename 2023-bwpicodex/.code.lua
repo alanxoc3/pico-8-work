@@ -29,7 +29,7 @@ end
 end)
 return table
 end
-f_zobj_set(_ENV,"c_yes,@,c_no,@,c_empty,@,f_nop,@,f_zobj_setmeta,@,f_zobj,@,f_zcall,@,c_pokemon,#,c_moves,#,c_trainers,#,c_items,#,g_gridstack,#,g_palette,0,g_preview_timer,0,g_title_timer,0,g_shake_timer,0,g_title_l,253,g_title_r,254,g_msg_top, ,g_msg_bot, ,g_init_peek_loc,0x1fff",true,false,"",function()end,
+f_zobj_set(_ENV,"c_yes,@,c_no,@,f_nop,@,f_zobj_setmeta,@,f_zobj,@,f_zcall,@,c_pokemon,#,c_moves,#,c_trainers,#,c_items,#,g_gridstack,#,g_palette,0,g_preview_timer,0,g_title_timer,0,g_shake_timer,0,g_title_l,253,g_title_r,254,g_msg_top, ,g_msg_bot, ,g_init_peek_loc,0x1fff",true,false,function()end,
 function(parent,...)
 return f_zobj_set(setmetatable({},{__index=parent}),...)
 end,

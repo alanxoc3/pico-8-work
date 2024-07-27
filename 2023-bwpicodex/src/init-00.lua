@@ -41,15 +41,14 @@ end
 -- first, set the basic constants/values used by global things below.
 -- an initial pass is required because some globals could be set to f_zobj(...), which requires zobj to be set beforehand.
 f_zobj_set(_ENV, [[
-  c_yes,@, c_no,@, c_empty,@, f_nop,@, f_zobj_setmeta,@, f_zobj,@, f_zcall,@,
+  c_yes,@, c_no,@, f_nop,@, f_zobj_setmeta,@, f_zobj,@, f_zcall,@,
   c_pokemon,#, c_moves,#, c_trainers,#, c_items,#, g_gridstack,#, -- needed for the grid
   g_palette,0, g_preview_timer,0, g_title_timer,0, g_shake_timer,0,
   g_title_l,253, g_title_r,254,
   g_msg_top," ", g_msg_bot," ", -- TODO: do I need these? try removing
 
   g_init_peek_loc,L_DATASTART
-]], true, false, "", function()  end, -- TODO: before this function looked like function(...) ... end : I should check nothing broke from removing that to make it empty.
-
+]], true, false, function() end, -- TODO: before this function looked like function(...) ... end : I should check nothing broke from removing that to make it empty.
   function(parent, ...) -- f_zobj_setmeta
     return f_zobj_set(setmetatable({}, {__index=parent}), ...)
   end,
