@@ -1,3 +1,5 @@
+-- TODO: see if a roundrect function could be implemented that supports changing the 4 corners and used in the grid cell + hp bar. only do it if it saves tokens.
+
 |[f_minisfx]| function(num) -- plays a sfx with len of 4. num corresponds to pkmn numbers. 252, 253, 254, 255 are sfx.
   if num < P_NONE then
     g_cur_pkmn_cry = num -- initial g_cur_pkmn_cry value is the default nil
@@ -12,13 +14,6 @@ end $$
     if m == val then
       return true
     end
-  end
-end $$
-
-|[f_roundrect]| function(x1, y1, x2, y2, c)
-  rectfill(x1, y1+1, x2, y2-1, c)
-  if x2-x1 > 2 then -- if check is for the hp bar, so it looks good when small.
-    rectfill(x1+1, y1, x2-1, y2, c)
   end
 end $$
 
@@ -91,7 +86,6 @@ end $$
   list[ind].lock = true
 end $$
 
--- TODO: does this need to be extracted into a function, or can it just run here?
 |[f_update_locks]| function(start_trnr) -- game lags with this function, so it should be called when there can be a lag. TODO: Or I could try speeding it up?
   foreach(f_zobj[[
     -- Only 2 items when you start the game.

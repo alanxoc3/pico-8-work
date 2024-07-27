@@ -50,7 +50,7 @@ end $$
 end $$
 
 |[f_set_both_players]| function(zobjtext, player)
-  f_zobj_set(_g, zobjtext, player, f_get_other_pl(player), player.active, f_get_other_pl(player).active)
+  f_zobj_set(_ENV, zobjtext, player, f_get_other_pl(player), player.active, f_get_other_pl(player).active)
 end $$
 
 |[f_get_live_pkmn]| function(player)

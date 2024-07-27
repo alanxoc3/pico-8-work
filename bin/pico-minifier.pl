@@ -73,7 +73,7 @@ my $finalzobjstr = "";
 for (my $i = 0; $i < scalar @keys_arr2; $i++) {
     my $keystr = substr $keys_arr2[$i], 1;
     my $valstr = $vals_arr2[$i];
-    $finalzobjstr .= "f_zobj_set(_g, [[".$keystr."]]".$valstr.")\n";
+    $finalzobjstr .= "f_zobj_set(_ENV, [[".$keystr."]]".$valstr.")\n";
 }
 
 if (length $finalzobjstr) {

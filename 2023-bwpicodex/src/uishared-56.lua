@@ -149,7 +149,6 @@ end $$
         local spot = active.spot
         local major = active.major
 
-        --f_roundrect(x+1, y+1-6+1, x+34-1, y+6+6+1, C_2)
         if hp > 0 then
           rectfill(x, y+6, x+mid(0, hp/maxhp*32, 32), y+9, C_1)
           pset(x,  y+6, C_2)

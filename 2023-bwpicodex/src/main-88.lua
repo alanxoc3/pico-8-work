@@ -47,8 +47,6 @@
 end $$
 
 -- TODO: Make an "on-shake" part of the player logic. And maybe make it so you can't select or lr when
-sfx'63' -- Plays all the 4 sound effects in picodex as the logo/startup tune.
-g_shake_timer = 0
 |[_draw]| function() -- since there is very minimal animation, doing 30fps. this gives me cpu so i can make some things slower to save tokens.
   cls'C_1' -- TODO: I could maybe add a C_0 for the background. I had this before then got rid of it because I couldn't find enough colors. Maybe I could try again with the colors though.
   if g_title_timer < C_TITLETIMER then
@@ -68,5 +66,5 @@ g_shake_timer = 0
   end
 
   pal(c_palettes[g_palette],1)
-  g_shake_timer = (g_shake_timer+1) % 4
+  g_shake_timer += 1 -- i don't care if this overflows. won't actually mess up the shaking.
 end $$

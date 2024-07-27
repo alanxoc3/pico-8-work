@@ -15,17 +15,17 @@ end $$
 end $$
 
 |[f_getsel]| function(gridname)
-  return @_g[gridname].g_cg_m.sel
+  return @_ENV[gridname].g_cg_m.sel
 end $$
 
 |[f_setsel]| function(gridname, val)
-  poke(_g[gridname].g_cg_m.sel, val)
+  poke(_ENV[gridname].g_cg_m.sel, val)
 end $$
 
 -- "arg" is an optional param that can be used as something accessible in the op func, such as to change the parameter.
 |[f_create_gridpair]| function(name, memloc, main_grid_spec, info_grid_spec, main_op_func, main_sel_func, main_leave_func, lrbasegrid, static, init, arg)
   -- zobj is needed so we can use an _ENV syntax
-  _g[name] = f_zobj([[init,@, g_cg_m,@, g_cg_s,@, gridpofunc,@, arg,@]],
+  _ENV[name] = f_zobj([[init,@, g_cg_m,@, g_cg_s,@, gridpofunc,@, arg,@]],
     init,
     f_zobj([[
       sel,@, view,@, name,@, selfunc,@, leavefunc,@, lrbasegrid,@, static,@, w,@,vh,@,x,@,y,@,cw,@,ch,@,selw,@,selh,@
@@ -59,7 +59,7 @@ end $$
   if lrbasegrid then
     -- LR logic
     local dir = (btnp'1' and 1 or 0) - (btnp'0' and 1 or 0)
-    local lst = _g[lrbasegrid].op
+    local lst = _ENV[lrbasegrid].op
     local cur = f_getsel(lrbasegrid)
     local nxt = cur
     if dir > 0 then
