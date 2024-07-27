@@ -1,7 +1,6 @@
-g_cur_pkmn_cry = nil
 |[f_minisfx]| function(num) -- plays a sfx with len of 4. num corresponds to pkmn numbers. 252, 253, 254, 255 are sfx.
   if num < P_NONE then
-    g_cur_pkmn_cry = num
+    g_cur_pkmn_cry = num -- initial g_cur_pkmn_cry value is the default nil
   end
   sfx(num\4, num < P_NONE and 0 or 1, num%4*8, 8)
 end $$
@@ -72,10 +71,6 @@ end $$
 
   colordrawfunc(x, y, in_c) -- sprite
   func(x+(flip and -38+1 or 19+1),y)
-
-  --clip(-%0x5f28+x, -%0x5f2a+y+5, 16,6)
-  --colordrawfunc(x, y, in_c+1) -- sprite
-  --clip()
 end $$
 
 -- Turn a string into a question marks with the same length
@@ -83,4 +78,69 @@ end $$
   local ns = ""
   for i=1,#s do ns ..= "?" end
   return ns
+end $$
+
+-- some util funcs used in the init file
+
+|[f_init_peek_inc]| function()
+  g_init_peek_loc += 1
+  return @g_init_peek_loc
+end $$
+
+|[f_unlock]| function(list, ind)
+  list[ind].lock = true
+end $$
+
+-- TODO: does this need to be extracted into a function, or can it just run here?
+|[f_update_locks]| function(start_trnr) -- game lags with this function, so it should be called when there can be a lag. TODO: Or I could try speeding it up?
+  foreach(f_zobj[[
+    -- Only 2 items when you start the game.
+     ;,~c_items, I_NONE
+    ;;,~c_items, I_BERRY
+
+    -- These are the moves used for the default party.
+    -- TODO: Maybe I can use GROWL. I think Bulb/Chik/Charm are the 3 that can learn growl. not positive.
+    ;;,~c_moves, M_STRUGGLE
+    ;;,~c_moves, M_NONE
+    ;;,~c_moves, M_LEECHSEED
+    ;;,~c_moves, M_EMBER
+    ;;,~c_moves, M_WATERGUN
+    ;;,~c_moves, M_VINEWHIP
+    ;;,~c_moves, M_TACKLE
+    ;;,~c_moves, M_BITE
+    ;;,~c_moves, M_TAILWHIP
+    ;;,~c_moves, M_LEER
+    ;;,~c_moves, M_SMOKESCREEN
+    ;;,~c_moves, M_LIGHTSCREEN
+    ;;,~c_moves, M_SCREECH
+
+    ;;,~c_pokemon, P_BULBASAUR
+    ;;,~c_pokemon, P_CHARMANDER
+    ;;,~c_pokemon, P_SQUIRTLE
+    ;;,~c_pokemon, P_CHIKORITA
+    ;;,~c_pokemon, P_CYNDAQUIL
+    ;;,~c_pokemon, P_TOTODILE
+    ;;,~c_pokemon, P_NONE
+  ]], function(obj)
+    f_unlock(unpack(obj))
+  end)
+
+  if @S_NEW == 0 then
+    for i, ind in ipairs(split'P_BULBASAUR,P_CHARMANDER,P_SQUIRTLE,P_CHIKORITA,P_CYNDAQUIL,P_TOTODILE') do -- 6 starter pokemon. the none pokemon should be unlocked too
+      f_save_party_pkmn(f_mkpkmn(ind, c_pokemon[ind], true, 0, 0, 5, 5, 5, 5), 0, i-1) -- TODO: more crunching could be done here.
+    end
+
+    poke(S_NEW, 1)
+    memset(S_PARTY2, P_NONE, 126) -- set the "NONE" pokemon to all the other slots. this is 0x7e, which is the length of 3 parties
+  end
+
+  for i=start_trnr,min(LEAGUE_HORDE, @S_STORY) do
+    for pkmn in all(f_team_league(i, i\LEAGUE_HORDE*251+1)) do -- this math will do start the team at just missingno for the last team, that way missingno gets unlocked.
+      f_unlock(c_pokemon, pkmn.num)
+      f_unlock(c_items, pkmn.item)
+      for i=1,4 do
+        f_unlock(c_moves, pkmn[i].num)
+      end
+    end
+  end
 end $$
