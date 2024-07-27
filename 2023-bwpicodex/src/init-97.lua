@@ -1,10 +1,12 @@
+-- memset(0x5e00, 0, 256) -- factory reset!
 f_zcall(poke, [[
    ;,0x5f2c,   3  -- screen to 64x64
   ;;,0x5f5c,   8  -- set btn initial delay before repeating. 255 means never repeat.
   ;;,0x5f5d,   1  -- set btn repeating delay.
-  ;;,S_STORY,  3-- todo: remove me, this is just for debugging
+  ;;,S_STORY,  57 -- todo: remove me, story set for debugging
 ]])
 
+-- TODO: idea, zcall could be changed to call different functions, then this clear could be called
 cls() -- this is just a visual thing when the game starts up. TODO: i can remove it if i want. probably should
 |[c_move_names]|        f_zobj[["0,strugl;,acid,acidar,barage,bonclb,bind,clamp,moonlt,lechsd,extrsp,sncbom,twindl,thnshk,glare,gilotn,hypfng,jmpkck,kinsis,lockon,lovkis,macpnc,vicgrp,spican,spikes,spore,cotspr,presnt,vithrw,cmtpnc,drlpck,sndatk,agilty,fryatk,qikatk,falswp,growl,healbl,sing,pound,minmiz,tailwp,dblslp,meghrn,bonrng,convr1,convr2,spark,mlkdrk,morsun,ngtshd,octzok,pinmis,pwdsnw,supfng,firspn,psngas,barier,medtat,ftrsgt,hypnos,psybem,litscr,safgrd,petdnc,charm,synths,swtscn,razlef,psnpwd,slppwd,absorb,stnspr,flail,confsn,slam,constr,amnesa,bubble,splash,hydpmp,mindrd,mist,hrnatk,spiweb,dblkck,swtkis,mtlclw,trform,trikck,gust,twistr,crbham,dizpnc,sludge,painsp,dstbnd,haze,lick,persng,meanlk,cnfray,crschp,smog,karchp,ember,smkscr,beldrm,beatup,scrtch,slash,ancpwr,leer,bite,outrge,scryfc,thrash,stomp,roksld,magtud,rocthr,harden,bonrsh,hijkck,recovr,aerbls,hrndrl,drgrag,sfboil,drgbre,slfdes,explsn,eggbmb,slgbmb,gigdrn,megdrn,swrdnc,cut,fryctr,thief,dig,rolout,dfncrl,detect,solbem,raidnc,flash,psycic,psycup,drmeat,ngtmar,shdbal,zapcan,thundr,thnblt,irntal,streng,rocsms,hedbut,mudslp,sunday,protct,dbltem,slptlk,curse,hidpwr,swager,frustr,return,toxic,snore,rest,endure,atract,bide,mimic,substu,rage,dbledg,takdwn,sklbas,bodslm,wtrgun,bblbem,icebem,blizrd,icywnd,surf,wrlpol,wtrfal,swift,payday,triatk,rflect,thnwav,telprt,psywav,metrnm,countr,megpnc,seitos,submis,megkck,dynpnc,firpnc,thnpnc,icepnc,firbls,flmthr,fisure,eartqk,sndstr,hypbem,roar,stlwng,fly,razwnd,wrlwnd,skyatk,wngatk,peck,mirmov,fntatk,witdrw,rapspn,supsnc,aurbem,mircot,psnstg,spite,crunch,pursut,strsht,lechlf,btnpas,disabl,screch,tackle,flmwel,revrsl,fryswp,fcseng,forsgt,lowkck,rolkck,encore,wrap,growth,vinwip,sacfir,sharpn,sketch,tm05,______"]] $$
 |[c_trnr_names]|        split"youngs,sage,falknr,grunt,bugctr,bugsy,pkmfan,beauty,witney,kimono,medium,morty,police,karate,chuck,gentle,sailor,jasmin,rocket,skier,pryce,scient,twins,clair,nerd,camper,brock,school,swimer,misty,jugler,guitar,ltsurg,hiker,lass,erika,biker,picnik,janine,maniac,psycic,sabrin,fisher,breath,blaine,birdkp,cooltr,blue,legend,silver,will,koga,bruno,karen,lance,red,gold,horde" $$
@@ -415,7 +417,7 @@ for i=0,252 do -- todo: token crunching - can move up
   c_pokemon[i] = f_mkpkmn(i, _ENV, false, false, I_NONE)
 end
 
-for i=1,57 do
+for i=1,LEAGUE_END do
   add(c_trainers, {})
   foreach(f_zobj[[,num,move,1,2,3,4,5,6]], function(k)
     c_trainers[i][k] = f_init_peek_inc()
@@ -428,14 +430,7 @@ end
 --       only trainers are saved as continuous things.
 
 add(c_trainers, f_zobj[[num,P_GHOST, move,M_TM05]])
-for i=1,252 do add(c_trainers[58], i%252) end
-
--- TODO: REMOVE THIS! Only keep this for debugging. Someone could accidentally set it. But really, it falls out of scope of my idea of a fantasy console. And there is a slight bug not worth fixing on the UI when this is done.
-menuitem(1, "factory reset", function()
-  cls() flip() -- Makes the screen go black while resetting
-  memset(0x5e00, 0, 256)
-  run() -- this is the function that reruns the cartridge
-end)
+for i=1,252 do add(c_trainers[LEAGUE_HORDE], i%252) end
 
 |[f_unlock]| function(list, ind)
   list[ind].lock = true
@@ -443,30 +438,49 @@ end $$
 
 -- TODO: does this need to be extracted into a function, or can it just run here?
 |[f_update_locks]| function(start_trnr) -- game lags with this function, so it should be called when there can be a lag. TODO: Or I could try speeding it up?
-  f_unlock(c_items, I_NONE)
-  f_unlock(c_items, I_BERRY) -- berry is nice to have to start with
+  foreach(f_zobj[[
+    -- Only 2 items when you start the game.
+     ;,~c_items, I_NONE
+    ;;,~c_items, I_BERRY
 
-  -- these are the moves available in the default party -- TODO: Maybe I can use GROWL. I think Bulb/Chik/Charm are the 3 that can learn growl. not positive.
-  -- Because this happens before unlocking the trainers, the default team will survive a factory reset! Which is good, though factory reset will probably not be available in the released game to save tokens and users accidentally resetting.
-  for ind in all(split'M_STRUGGLE,M_NONE,M_LEECHSEED,M_EMBER,M_WATERGUN,M_VINEWHIP,M_TACKLE,M_BITE,M_TAILWHIP,M_LEER,M_SMOKESCREEN,M_LIGHTSCREEN,M_SCREECH') do
-    f_unlock(c_moves, ind)
-  end
+    -- These are the moves used for the default party.
+    -- TODO: Maybe I can use GROWL. I think Bulb/Chik/Charm are the 3 that can learn growl. not positive.
+    ;;,~c_moves, M_STRUGGLE
+    ;;,~c_moves, M_NONE
+    ;;,~c_moves, M_LEECHSEED
+    ;;,~c_moves, M_EMBER
+    ;;,~c_moves, M_WATERGUN
+    ;;,~c_moves, M_VINEWHIP
+    ;;,~c_moves, M_TACKLE
+    ;;,~c_moves, M_BITE
+    ;;,~c_moves, M_TAILWHIP
+    ;;,~c_moves, M_LEER
+    ;;,~c_moves, M_SMOKESCREEN
+    ;;,~c_moves, M_LIGHTSCREEN
+    ;;,~c_moves, M_SCREECH
 
-  for i, ind in ipairs(split'P_BULBASAUR,P_CHARMANDER,P_SQUIRTLE,P_CHIKORITA,P_CYNDAQUIL,P_TOTODILE,P_NONE') do -- 6 starter pokemon. the none pokemon should be unlocked too
-    f_unlock(c_pokemon, ind)
-    if @S_NEW == 0 then
-      f_save_party_pkmn(f_mkpkmn(ind, c_pokemon[ind], true, 0, 0, 5, 5, 5, 5), 0, i-1)
-    end
-  end
+    ;;,~c_pokemon, P_BULBASAUR
+    ;;,~c_pokemon, P_CHARMANDER
+    ;;,~c_pokemon, P_SQUIRTLE
+    ;;,~c_pokemon, P_CHIKORITA
+    ;;,~c_pokemon, P_CYNDAQUIL
+    ;;,~c_pokemon, P_TOTODILE
+    ;;,~c_pokemon, P_NONE
+  ]], function(obj)
+    f_unlock(unpack(obj))
+  end)
 
   if @S_NEW == 0 then
+    for i, ind in ipairs(split'P_BULBASAUR,P_CHARMANDER,P_SQUIRTLE,P_CHIKORITA,P_CYNDAQUIL,P_TOTODILE') do -- 6 starter pokemon. the none pokemon should be unlocked too
+      f_save_party_pkmn(f_mkpkmn(ind, c_pokemon[ind], true, 0, 0, 5, 5, 5, 5), 0, i-1) -- TODO: more crunching could be done here.
+    end
+
     poke(S_NEW, 1)
     memset(S_PARTY2, P_NONE, 126) -- set the "NONE" pokemon to all the other slots. this is 0x7e, which is the length of 3 parties
   end
 
-  for i=start_trnr,min(58,@S_STORY) do
-    local team = f_team_league(i, i\58*251+1) -- this math will do start the team at just missingno for the last team, that way missingno gets unlocked.
-    for pkmn in all(team) do
+  for i=start_trnr,min(LEAGUE_HORDE, @S_STORY) do
+    for pkmn in all(f_team_league(i, i\LEAGUE_HORDE*251+1)) do -- this math will do start the team at just missingno for the last team, that way missingno gets unlocked.
       f_unlock(c_pokemon, pkmn.num)
       f_unlock(c_items, pkmn.item)
       for i=1,4 do

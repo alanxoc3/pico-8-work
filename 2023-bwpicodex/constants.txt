@@ -36,6 +36,9 @@ SFX_ERROR:  253 # corresponds to the boy sprite
 SFX_LEAVE:  254 # corresponds to the girl sprite
 SFX_MOVE:   255 # corresponds to the ghost sprite
 
+LEAGUE_END:   57 # index for the last trainer in league
+LEAGUE_HORDE: 58 # index for horde
+
 # horde hi score
 # league score
 # 6 bytes for a pokemon... 36 for a party. gender+item in same byte

@@ -446,24 +446,18 @@ return@g_init_peek_loc
 end,function(list,ind)
 list[ind].lock=true
 end,function(start_trnr)
-f_unlock(c_items,0)
-f_unlock(c_items,32)
-for ind in all(split"0,252,8,104,181,247,236,112,40,111,105,61,235 ")do
-f_unlock(c_moves,ind)
-end
-for i,ind in ipairs(split"1,4,7,152,155,158,252 ")do
-f_unlock(c_pokemon,ind)
+foreach(f_zobj";,~c_items,0;;,~c_items,32;;,~c_moves,0;;,~c_moves,252;;,~c_moves,8;;,~c_moves,104;;,~c_moves,181;;,~c_moves,247;;,~c_moves,236;;,~c_moves,112;;,~c_moves,40;;,~c_moves,111;;,~c_moves,105;;,~c_moves,61;;,~c_moves,235;;,~c_pokemon,1;;,~c_pokemon,4;;,~c_pokemon,7;;,~c_pokemon,152;;,~c_pokemon,155;;,~c_pokemon,158;;,~c_pokemon,252",function(obj)
+f_unlock(unpack(obj))
+end)
 if@0x5efe==0 then
+for i,ind in ipairs(split"1,4,7,152,155,158 ")do
 f_save_party_pkmn(f_mkpkmn(ind,c_pokemon[ind],true,0,0,5,5,5,5),0,i-1)
 end
-end
-if@0x5efe==0 then
 poke(0x5efe,1)
 memset(0x5e2a,252,126)
 end
 for i=start_trnr,min(58,@0x5eff)do
-local team=f_team_league(i,i\58*251+1)
-for pkmn in all(team)do
+for pkmn in all(f_team_league(i,i\58*251+1))do
 f_unlock(c_pokemon,pkmn.num)
 f_unlock(c_items,pkmn.item)
 for i=1,4 do
@@ -1258,7 +1252,7 @@ return str.."}"
 end
 g_cur_pkmn_cry=nil
 c_move_funcs=f_zobj"0;,~f_move_struggle,0;;,~f_move_default,10,~f_move_stat,~c_no,defense,-1;;,~f_move_stat,~c_yes,defense,2;;,~f_move_barrage,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_default;;,~f_move_seismictoss,20;;,~f_move_splash,0;;,~f_move_default,10,~f_move_major_other,4;;,~f_move_major_other,4;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_stat,~c_no,accuracy,-1;;,~f_move_splash,0;;,~f_move_major_other,6;;,~f_move_default;;,~f_move_default;;,~f_move_barrage,0;;,~f_move_splash,0;;,~f_move_major_other,6;;,~f_move_stat,~c_no,speed,-2;;,~f_move_present,0;;,~f_move_splash,0;;,~f_move_barrage,0;;,~f_move_default;;,~f_move_stat,~c_no,accuracy,-1;;,~f_move_stat,~c_yes,speed,2;;,~f_move_barrage,0;;,~f_move_default;;,~f_move_falseswipe,0;;,~f_move_stat,~c_no,attack,-1;;,~f_move_splash,0;;,~f_move_major_other,6;;,~f_move_default;;,~f_move_stat,~c_yes,evasion,1;;,~f_move_stat,~c_no,defense,-1;;,~f_move_barrage,0;;,~f_move_default;;,~f_move_doublekick,2;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_default,30,~f_move_major_other,4;;,~f_move_recover,0;;,~f_move_splash,0;;,~f_move_seismictoss,50;;,~f_move_default,50,~f_move_stat,~c_no,accuracy,-1;;,~f_move_barrage,0;;,~f_move_default,10,~f_move_major_other,3;;,~f_move_superfang,0;;,~f_move_splash,0;;,~f_move_major_other,5;;,~f_move_stat,~c_yes,defense,2;;,~f_move_stat,~c_yes,attack,1;;,~f_move_splash,0;;,~f_move_major_other,6;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_stat,~c_no,attack,-2;;,~f_move_splash,0;;,~f_move_stat,~c_no,evasion,-1;;,~f_move_splash,0;;,~f_move_major_other,5;;,~f_move_major_other,6;;,~f_move_splash,0;;,~f_move_major_other,4;;,~f_move_flail,0;;,~f_move_splash,0;;,~f_move_default;;,~f_move_default,10,~f_move_stat,~c_no,speed,-1;;,~f_move_stat,~c_yes,specialdefense,2;;,~f_move_default,10,~f_move_stat,~c_no,speed,-1;;,~f_move_splash,0;;,~f_move_default;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_default;;,~f_move_splash,0;;,~f_move_doublekick,2;;,~f_move_splash,0;;,~f_move_default,10,~f_move_stat,~c_yes,attack,1;;,~f_move_splash,0;;,~f_move_doublekick,3;;,~f_move_default;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_default,30,~f_move_major_other,5;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_default,30,~f_move_major_other,4;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_default,40,~f_move_major_other,5;;,~f_move_splash,0;;,~f_move_default,10,~f_move_major_other,2;;,~f_move_stat,~c_no,accuracy,-1;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_default;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_stat,~c_no,defense,-1;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_stat,~c_no,speed,-2;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_magnitude,0;;,~f_move_default;;,~f_move_stat,~c_yes,defense,1;;,~f_move_barrage,0;;,~f_move_splash,0;;,~f_move_recover,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_seismictoss,40;;,~f_move_recover,0;;,~f_move_default,30,~f_move_major_other,4;;,~f_move_default;;,~f_move_default;;,~f_move_default;;,~f_move_default,30,~f_move_major_other,5;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_stat,~c_yes,attack,2;;,~f_move_default;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_stat,~c_no,accuracy,-1;;,~f_move_default,10,~f_move_stat,~c_no,specialdefense,-1;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_default,20,~f_move_stat,~c_no,specialdefense,-1;;,~f_move_default,100,~f_move_major_other,4;;,~f_move_default,30,~f_move_major_other,4;;,~f_move_default,10,~f_move_major_other,4;;,~f_move_default,30,~f_move_stat,~c_no,defense,-1;;,~f_move_default;;,~f_move_default,50,~f_move_stat,~c_no,defense,-1;;,~f_move_splash,0;;,~f_move_default,100,~f_move_stat,~c_no,accuracy,-1;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_stat,~c_yes,evasion,1;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_hiddenpower,0;;,~f_move_splash,0;;,~f_move_frustration,0;;,~f_move_return,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_submission,0;;,~f_move_submission,0;;,~f_move_splash,0;;,~f_move_default,30,~f_move_major_other,4;;,~f_move_default;;,~f_move_default,10,~f_move_stat,~c_no,speed,-1;;,~f_move_default,10,~f_move_major_other,3;;,~f_move_default,10,~f_move_major_other,3;;,~f_move_default,100,~f_move_stat,~c_no,speed,-1;;,~f_move_default;;,~f_move_splash,0;;,~f_move_default;;,~f_move_splash,0;;,~f_move_default;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_major_other,4;;,~f_move_splash,0;;,~f_move_psywave,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_default;;,~f_move_seismictoss,999;;,~f_move_submission,0;;,~f_move_default;;,~f_move_splash,0;;,~f_move_default,10,~f_move_major_other,2;;,~f_move_default,10,~f_move_major_other,4;;,~f_move_default,10,~f_move_major_other,3;;,~f_move_default,10,~f_move_major_other,2;;,~f_move_default,10,~f_move_major_other,2;;,~f_move_splash,0;;,~f_move_default;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_default,10,~f_move_stat,~c_yes,defense,1;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_default;;,~f_move_default;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_stat,~c_yes,defense,1;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_default,10,~f_move_stat,~c_no,attack,-1;;,~f_move_splash,0;;,~f_move_default,30,~f_move_major_other,5;;,~f_move_splash,0;;,~f_move_default,20,~f_move_stat,~c_no,specialdefense,-1;;,~f_move_default;;,~f_move_stat,~c_no,speed,-1;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_stat,~c_no,defense,-2;;,~f_move_default;;,~f_move_default,10,~f_move_major_other,2;;,~f_move_flail,0;;,~f_move_barrage,0;;,~f_move_stat,~c_yes,crit,1;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_stat,~c_yes,specialattack,1;;,~f_move_default;;,~f_move_default,50,~f_move_major_other,2;;,~f_move_stat,~c_yes,attack,1;;,~f_move_splash,0;;,~f_move_stat,~c_yes,evasion,2;;,~f_move_splash,0"
-f_zcall(poke,";,0x5f2c,3;;,0x5f5c,8;;,0x5f5d,1;;,0x5eff,3")
+f_zcall(poke,";,0x5f2c,3;;,0x5f5c,8;;,0x5f5d,1;;,0x5eff,57")
 cls()
 for i=0,360 do
 c_types[i\19][i%19]=f_init_peek_inc()/2
@@ -1333,11 +1327,6 @@ end)
 end
 add(c_trainers,f_zobj"num,255,move,251")
 for i=1,252 do add(c_trainers[58],i%252)end
-menuitem(1,"factory reset",function()
-cls()flip()
-memset(0x5e00,0,256)
-run()
-end)
 f_update_locks"1"
 for iloc=0x3200,0x4278,68 do
 for loc=iloc,iloc+63,2 do

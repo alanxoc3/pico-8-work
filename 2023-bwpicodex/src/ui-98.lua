@@ -34,7 +34,7 @@ end $$
 end $$
 
 |[f_op_pickleagueenemy]| function(_ENV)
-  for i=1, 58 do
+  for i=1, LEAGUE_HORDE do
     local disabled = @S_STORY+1<i
     add(op, {text=disabled and f_strtoq(c_trnr_names[i]) or c_trnr_names[i], disabled=disabled})
   end
@@ -432,7 +432,7 @@ end $$
   f_start_battle(function()
     if loc == @S_STORY then
       poke(S_STORY,  max(loc+1, @S_STORY))
-      poke(S_LEAGUE, min(@S_STORY, 57))
+      poke(S_LEAGUE, min(@S_STORY, LEAGUE_END))
       f_update_locks(loc)
     end
   end, f_team_league(loc+1, 1), c_trnr_names[loc+1], c_trainers[loc+1].num, true)
