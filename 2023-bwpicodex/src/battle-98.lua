@@ -75,11 +75,11 @@ end $$
 |[f_end_battle]| function(player)
   f_set_both_players([[p_action_self,@, p_action_other,@, p_action_self_active,@, p_action_other_active,@]], player) -- TODO: Could this be removed?
 
-  f_zcall(f_pop_ui_stack, [[
-     ;, -- battle scene TODO: convert to a zcall?
-    ;;, -- p_battle_top select scene
-    ;;, -- p_battle_bot select scene
-  ]])
+  f_zcall[[
+     ;,~f_pop_ui_stack -- battle scene TODO: convert to a zcall?
+    ;;,~f_pop_ui_stack -- p_battle_top select scene
+    ;;,~f_pop_ui_stack -- p_battle_bot select scene
+  ]]
 
   f_add_to_ui_stack(g_grid_battle_results)
 end $$

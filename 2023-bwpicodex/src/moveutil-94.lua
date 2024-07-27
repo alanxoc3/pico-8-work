@@ -84,9 +84,9 @@ end $$
 
   -- zero damage only means that attack was resisted. moves with set damage don't monitor resistance.
   if advantage > 0 then
-    f_zcall(f_turn_addattack, [[ -- zcall saves 2 token vs not using zcall
-       ;,~p_action_self,@
-      ;;,~p_action_self,@
+    f_zcall([[ -- using zcall saves a few tokens
+       ;,~f_turn_addattack ,~p_action_self ,@
+      ;;,~f_turn_addattack ,~p_action_self ,@
     ]], advantage > 1 and "super effect" or advantage < 1 and "little effect", crit and "critical hit")
 
     return f_moveutil_hpchange(p_turn_other, dmg, function(dmg)

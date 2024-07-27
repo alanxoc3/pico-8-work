@@ -80,8 +80,9 @@ _G_ZOBJ
 |[f_zobj_eval]| f_zobj_eval $$
 
 -- used everwhere
-|[f_zcall]| function(func, text, ...)
+|[f_zcall]| function(text, ...)
   foreach(f_zobj(text, ...), function(params)
+    local func = deli(params, 1) -- TODO: any better way to do this? with select?
     func(unpack(params))
   end)
 end $$
