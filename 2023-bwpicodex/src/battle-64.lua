@@ -265,19 +265,23 @@ end $$
         f_setsel('g_grid_battle_select', 0)
 
         if p_action_self == p_battle_bot then
-          g_grid_battle_select.g_cg_m.sel   = S_P1_BATACTION
-          g_grid_statbattle.g_cg_m.sel      = S_P1_BATSTAT
-          g_grid_battle_movesel.g_cg_m.sel  = S_P1_MOVE
-          g_grid_battle_select.g_cg_m.view  = S_P1_BATACTION+1
-          g_grid_statbattle.g_cg_m.view     = S_P1_BATSTAT+1
-          g_grid_battle_movesel.g_cg_m.view = S_P1_MOVE+1
+          f_zobj_set(_ENV, [[
+             g_grid_battle_select  ;g_cg_m ;sel,S_P1_BATACTION
+            ;g_grid_statbattle     ;g_cg_m ;sel,S_P1_BATSTAT
+            ;g_grid_battle_movesel ;g_cg_m ;sel,S_P1_MOVE
+            ;g_grid_battle_select  ;g_cg_m ;view,@
+            ;g_grid_statbattle     ;g_cg_m ;view,@
+            ;g_grid_battle_movesel ;g_cg_m ;view,@
+          ]], S_P1_BATACTION+1, S_P1_BATSTAT+1, S_P1_MOVE+1)
         else
-          g_grid_battle_select.g_cg_m.sel   = S_P2_BATACTION
-          g_grid_statbattle.g_cg_m.sel      = S_P2_BATSTAT
-          g_grid_battle_movesel.g_cg_m.sel  = S_P2_MOVE
-          g_grid_battle_select.g_cg_m.view  = S_P2_BATACTION+1
-          g_grid_statbattle.g_cg_m.view     = S_P2_BATSTAT+1
-          g_grid_battle_movesel.g_cg_m.view = S_P2_MOVE+1
+          f_zobj_set(_ENV, [[
+             g_grid_battle_select  ;g_cg_m ;sel,S_P2_BATACTION
+            ;g_grid_statbattle     ;g_cg_m ;sel,S_P2_BATSTAT
+            ;g_grid_battle_movesel ;g_cg_m ;sel,S_P2_MOVE
+            ;g_grid_battle_select  ;g_cg_m ;view,@
+            ;g_grid_statbattle     ;g_cg_m ;view,@
+            ;g_grid_battle_movesel ;g_cg_m ;view,@
+          ]], S_P2_BATACTION+1, S_P2_BATSTAT+1, S_P2_MOVE+1)
         end
 
         f_add_to_ui_stack(g_grid_battle_select)

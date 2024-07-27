@@ -715,19 +715,9 @@ f_addaction(p_action_self,1,p_action_self,"begins turn",function()
 f_pop_ui_stack()
 f_setsel("g_grid_battle_select",0)
 if p_action_self==p_battle_bot then
-g_grid_battle_select.g_cg_m.sel=0x5eba
-g_grid_statbattle.g_cg_m.sel=0x5ebe
-g_grid_battle_movesel.g_cg_m.sel=0x5ebc
-g_grid_battle_select.g_cg_m.view=0x5eba+1
-g_grid_statbattle.g_cg_m.view=0x5ebe+1
-g_grid_battle_movesel.g_cg_m.view=0x5ebc+1
+f_zobj_set(_ENV,"g_grid_battle_select;g_cg_m;sel,0x5eba;g_grid_statbattle;g_cg_m;sel,0x5ebe;g_grid_battle_movesel;g_cg_m;sel,0x5ebc;g_grid_battle_select;g_cg_m;view,@;g_grid_statbattle;g_cg_m;view,@;g_grid_battle_movesel;g_cg_m;view,@",0x5eba+1,0x5ebe+1,0x5ebc+1)
 else
-g_grid_battle_select.g_cg_m.sel=0x5ec0
-g_grid_statbattle.g_cg_m.sel=0x5ec4
-g_grid_battle_movesel.g_cg_m.sel=0x5ec2
-g_grid_battle_select.g_cg_m.view=0x5ec0+1
-g_grid_statbattle.g_cg_m.view=0x5ec4+1
-g_grid_battle_movesel.g_cg_m.view=0x5ec2+1
+f_zobj_set(_ENV,"g_grid_battle_select;g_cg_m;sel,0x5ec0;g_grid_statbattle;g_cg_m;sel,0x5ec4;g_grid_battle_movesel;g_cg_m;sel,0x5ec2;g_grid_battle_select;g_cg_m;view,@;g_grid_statbattle;g_cg_m;view,@;g_grid_battle_movesel;g_cg_m;view,@",0x5ec0+1,0x5ec4+1,0x5ec2+1)
 end
 f_add_to_ui_stack(g_grid_battle_select)
 end,true)
