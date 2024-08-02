@@ -135,45 +135,37 @@ end $$
 end $$
 
 |[f_add_battle]| function(op)
-  local b = function(player, px, py, flip)
+  local b = function(_ENV, px, py, flip)
     add(op, {draw=function()
-      local invisible = player.active.invisible
-      local team  = player.team
-      local active = player.active
-
       -- TODO: shouldn't be 254. Should be the player's sprites. I can probably fit a few player sprites: plrboy, plrgirl, cpu, horde
-      f_draw_pkmn(invisible and player.num or active.num, px, py, STYLE_SHAKE, flip,  p_action_self == player, false, invisible and f_nop or function()
+      f_draw_pkmn(active.invisible and num or active.num, px, py, STYLE_SHAKE, flip, p_action_self == _ENV, false, active.invisible and f_nop or function()
         print(active.name, 1, 0, C_1, -1)
-        local hp = active.hp
-        local maxhp = active.maxhp
-        local spot = active.spot
-        local major = active.major
 
-        if hp > 0 then
+        if active.hp > 0 then
           f_zcall([[
              ;,~rectfill,0,6,@,9,C_1
             ;;,~pset,0,6,C_2
             ;;,~pset,0,9,C_2
             ;;,~pset,32,6,C_2
             ;;,~pset,32,9,C_2
-          ]], mid(0, hp/maxhp*32, 32))
+          ]], mid(0, active.hp/active.maxhp*32, 32))
         end
 
         local tx, ty = 14, 13
         for i=0,5 do
-          if spot == i+1 or team[i+1].valid and team[i+1].major ~= C_MAJOR_FAINTED then
-            pset(tx+i%3*2, ty+i\3*2-1, spot == i+1 and C_3 or C_1)
+          if active.spot == i+1 or team[i+1].valid and team[i+1].major ~= C_MAJOR_FAINTED then
+            pset(tx+i%3*2, ty+i\3*2-1, active.spot == i+1 and C_3 or C_1)
           end
         end
 
-        local majtext = c_major_names_short[major]
-        local hptext = f_prefix_zero(hp, 3)
-        print(majtext.."  "..hptext, 1, 11, C_1, -1)
+        print(c_major_names_short[active.major].."  "..f_prefix_zero(active.hp, 3), 1, 11, C_1, -1)
       end)
     end})
   end
 
-
-  b(p_battle_top, 39, 1, true) -- top pl
-  b(p_battle_bot,  3, 1)       -- bot pl
+  f_zcall([[
+    b,@
+    ;;,~b,~p_battle_top,39,1,~c_yes
+    ;;,~b,~p_battle_bot,3,1
+  ]], b)
 end $$
