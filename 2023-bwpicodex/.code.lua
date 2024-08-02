@@ -29,7 +29,7 @@ end
 end)
 return table
 end
-f_zobj_set(_ENV,"c_yes,@,c_no,@,f_nop,@,f_zobj_setmeta,@,f_zobj,@,f_zcall,@,c_pokemon,#,c_moves,#,c_trainers,#,c_items,#,g_gridstack,#,g_palette,0,g_preview_timer,0,g_title_timer,0,g_shake_timer,0,g_title_l,253,g_title_r,254,g_msg_top, ,g_msg_bot, ,g_init_peek_loc,0x1fff",true,false,function()end,
+f_zobj_set(_ENV,"c_yes,@,c_no,@,f_nop,@,f_zobj_setmeta,@,f_zobj,@,f_zcall,@,c_pokemon,#,c_moves,#,c_trainers,#,c_items,#,g_gridstack,#,g_palette,0,g_preview_timer,0,g_title_timer,0,g_shake_timer,0,g_title_l,253,g_title_r,254,g_msg_top, ,g_msg_bot, ,g_init_peek_loc,0x1fff;g_draw_masks;,8,4,2,1;g_style_size;,3,8,8",true,false,function()end,
 function(parent,...)
 return f_zobj_set(setmetatable({},{__index=parent}),...)
 end,
@@ -190,9 +190,6 @@ camera()
 end,function(op,text)
 add(op,{draw=function()print(text,1,1,1)end})
 end,function(num)
-if num<252 then
-g_cur_pkmn_cry=num
-end
 sfx(num\4,num<252 and 0 or 1,num%4*8,8)
 end,function(n)return flr(rnd(n))end,function(val,str)
 for m in all(split(str))do
@@ -200,46 +197,32 @@ if m==val then
 return true
 end
 end
-end,function(num,x,y,style,flip,selected,disabled,func)
-func=func or f_nop
-local in_c=disabled and 2 or selected and 3 or 2
-local out_c=disabled and 1 or 1
-local row=num/8\1
-local col=num%8
-local width=style==0 and 6 or 16
-if(style ~=2 or disabled)and num==252 then
-rectfill(x+width/2-1,y+width/2-1,x+width/2,y+width/2,disabled and 2 or out_c)
+end,function(num,x,y,style,flip,selected,disabled,draw_side)
+local width=g_style_size[style]
+if num==252 and(style ~=3 or disabled)then
+rectfill(x+width-1,y+width-1,x+width,y+width,disabled and 2 or 1)
 return
 end
-if style==2 and selected and not disabled and stat"46">-1 and g_cur_pkmn_cry==num then
+if style==3 and selected and not disabled and num==stat"46"*4+stat"50"\8 then
 x+=sin(g_shake_timer/4)
 end
-local row=num/8\1
-local col=num%8
-local width=style==0 and 6 or 16
-local masks={8,4,2,1}
 local colordrawfunc=function(ix,iy,c)
-local mask=masks[num\64+1]
 for i=1,15 do
-if i & mask==0 then
-palt(i,true)
-else
+palt(i,i & g_draw_masks[num\64+1]==0)
 pal(i,c)
 end
-end
-palt(mask,false)
-pal(mask,c)
-sspr(col*16,row%8*16,16,16,ix,iy,width,width,flip,false)
-palt()
+sspr(num%8*16,num/8\1%8*16,16,16,ix,iy,width*2,width*2,flip,false)
 pal()
 end
-for yy=-1,1,1 do
-for xx=-1,1,1 do
-colordrawfunc(x+xx,y+yy,out_c)
+for yy=-1,1 do
+for xx=-1,1 do
+colordrawfunc(x+xx,y+yy,1)
 end
 end
-colordrawfunc(x,y,in_c)
-func(x+(flip and-38+1 or 19+1),y)
+colordrawfunc(x,y,not disabled and selected and 3 or 2)
+if draw_side then
+draw_side(x+(flip and-37 or 20),y)
+end
 end,function(s)
 local ns=""
 for i=1,#s do ns..="?" end
@@ -484,7 +467,7 @@ add(op,{text="   pp "..pp.."/"..maxpp})
 add(op,{text="pw/ac "..pow.."/"..accuracy})
 end,function(op,pkmn,player)
 local draw_preview=function(off)
-f_draw_pkmn(pkmn.num,21,off-12,2,p_battle_top and player==p_battle_top,true,false)
+f_draw_pkmn(pkmn.num,21,off-12,3,p_battle_top and player==p_battle_top,true,false)
 end
 add(op,{text="#"..f_prefix_zero(pkmn.num,3).." "..pkmn.name,disabled=true})
 add(op,{draw=function()draw_preview"17" end})
@@ -558,7 +541,7 @@ add(op,{draw=function()
 local invisible=player.active.invisible
 local team=player.team
 local active=player.active
-f_draw_pkmn(invisible and player.num or active.num,px,py,2,flip,p_action_self==player,false,invisible and f_nop or function(x,y)
+f_draw_pkmn(invisible and player.num or active.num,px,py,3,flip,p_action_self==player,false,invisible and f_nop or function(x,y)
 print(active.name,x+1,y,1,-1)
 local hp=active.hp
 local maxhp=active.maxhp
@@ -866,7 +849,7 @@ arg(preview_op)
 for i=0,251 do
 local disabled=not c_pokemon[i].lock
 add(op,{lrvalid=not disabled,disabled=disabled,draw=function(_,is_sel,gridobj)
-f_draw_pkmn(c_pokemon[i].lock and i or 252,1,1,0,false,is_sel,gridobj.disabled)
+f_draw_pkmn(c_pokemon[i].lock and i or 252,1,1,1,false,is_sel,gridobj.disabled)
 end})
 end
 end,function(_ENV)
@@ -888,7 +871,7 @@ add(inds,pkmn.num)
 end
 add(op,{data=inds,disabled=disable_empty and valid,draw=function(i,is_sel,gridobj)
 for ii,ind in ipairs(gridobj.data)do
-f_draw_pkmn(ind,(ii-1)%3+1+(ii-1)%3*9,1+(ii-1)\3*10,0,false,is_sel,gridobj.disabled)
+f_draw_pkmn(ind,(ii-1)%3+1+(ii-1)%3*9,1+(ii-1)\3*10,1,false,is_sel,gridobj.disabled)
 end
 end})
 end
@@ -898,7 +881,7 @@ f_print_info(preview_op,";,edit spot,@;;,@,@, ,@",f_getsel"g_grid_pickspot"+1,"#
 for pkmnnum=0,5 do
 local pkmn=f_get_party_pkmn(f_getsel"g_grid_pickedit",pkmnnum)
 add(op,{lrvalid=pkmn.valid,draw=function(i,is_sel)
-f_draw_pkmn(pkmn.num,1,1,1,false,is_sel,false)
+f_draw_pkmn(pkmn.num,1,1,2,false,is_sel,false)
 end})
 end
 end,function(_ENV)
@@ -906,10 +889,10 @@ add(preview_op,{draw=function()
 local tcol=g_title_sel and 3 or 1
 local bcol=g_title_sel and 1 or 3
 local messages=f_zobj(",\^w\f1rom \n\f3hack\n\f1 plz,\^w\f1thx!\n\f3bulb\npdia,\^w\f1thx!\n\f3nint\nendo,\^w\f1easy\n\f3cmfy\n\f1shrt,\^w\f3upok\ncntr\n\f1thx!,\^w\f1disa\nsmbl\n\f3thx!,\^w\f1poke\nhist\n\f3thx!,\^w\f3smo \n gon\n\f1thx!,\^w\f1 by \n\f3alan\nxoc3,\^w\f332kb\n\f1pico\ncart,\^w\f3thx!\n\f1shri\nnko8,\^w\f1ctch\n\f3 em'\n\f1all!,\^w\f1awww\n\f3hmph\n\f1ohho,\^w\f3thx!\n\f1sere\n bii,\^w\f1nihi\n\f3only\n\f1grls,\^w\f3gen2\n\f1batl\n sim,@","\^w\f3pico\n dex\n\f1"..c_palette_names[g_palette])
-f_draw_pkmn(g_title_l,7-4,14+1-1-3+10,2,false,g_title_sel,false,function(x,y)
+f_draw_pkmn(g_title_l,7-4,14+1-1-3+10,3,false,g_title_sel,false,function(x,y)
 print(messages[g_title_l%#messages+1],x+3,y-1)
 end)
-f_draw_pkmn(g_title_r,35+4,14+1-1-3-4+1-9+3-1,2,true,not g_title_sel,false,function(x,y)
+f_draw_pkmn(g_title_r,35+4,14+1-1-3-4+1-9+3-1,3,true,not g_title_sel,false,function(x,y)
 print(messages[g_title_r%#messages+1],x,y)
 end)
 end})
@@ -999,7 +982,7 @@ for i=1,6 do
 local pkmn=p_action_self.team[i]
 local disabled=not pkmn.valid or i==p_action_self_active.spot or pkmn.major==1
 add(op,{disabled=disabled,draw=function(i,is_sel)
-f_draw_pkmn(pkmn.num,1,1,1,p_action_self==p_battle_top,is_sel,disabled)
+f_draw_pkmn(pkmn.num,1,1,2,p_action_self==p_battle_top,is_sel,disabled)
 end})
 end
 end,function(_ENV)
@@ -1007,7 +990,7 @@ for i=1,6 do
 local pkmn=p_action_other.team[i]
 local disabled=not pkmn.valid or pkmn.major==1
 add(op,{disabled=disabled,draw=function(i,is_sel)
-f_draw_pkmn(pkmn.num,1,1,2,p_action_other==p_battle_top,is_sel,disabled)
+f_draw_pkmn(pkmn.num,1,1,3,p_action_other==p_battle_top,is_sel,disabled)
 end})
 end
 f_print_info(preview_op,";,@, ,@;;,is the winner!",p_action_other.name,p_action_other.subname)
@@ -1017,14 +1000,14 @@ for i=1,6 do
 local pkmn=p_action_self.team[i]
 local disabled=not pkmn.valid
 add(op,{lrvalid=not disabled,disabled=disabled,draw=function(i,is_sel)
-f_draw_pkmn(pkmn.num,1,1,1,p_action_self==p_battle_top,is_sel,disabled)
+f_draw_pkmn(pkmn.num,1,1,2,p_action_self==p_battle_top,is_sel,disabled)
 end})
 end
 for i=1,6 do
 local pkmn=p_action_other.team[i]
 local disabled=not pkmn.valid
 add(op,{lrvalid=not disabled,disabled=disabled,draw=function(i,is_sel)
-f_draw_pkmn(pkmn.num,1,1,1,p_action_other==p_battle_top,is_sel,disabled)
+f_draw_pkmn(pkmn.num,1,1,2,p_action_other==p_battle_top,is_sel,disabled)
 end})
 end
 end,function(op,selname,topline)
@@ -1198,7 +1181,7 @@ end
 pal(c_palettes[g_palette],1)
 g_shake_timer+=1
 end,f_zobj"0,strugl;,acid,acidar,barage,bonclb,bind,clamp,moonlt,lechsd,extrsp,sncbom,twindl,thnshk,glare,gilotn,hypfng,jmpkck,kinsis,lockon,lovkis,macpnc,vicgrp,spican,spikes,spore,cotspr,presnt,vithrw,cmtpnc,drlpck,sndatk,agilty,fryatk,qikatk,falswp,growl,healbl,sing,pound,minmiz,tailwp,dblslp,meghrn,bonrng,convr1,convr2,spark,mlkdrk,morsun,ngtshd,octzok,pinmis,pwdsnw,supfng,firspn,psngas,barier,medtat,ftrsgt,hypnos,psybem,litscr,safgrd,petdnc,charm,synths,swtscn,razlef,psnpwd,slppwd,absorb,stnspr,flail,confsn,slam,constr,amnesa,bubble,splash,hydpmp,mindrd,mist,hrnatk,spiweb,dblkck,swtkis,mtlclw,trform,trikck,gust,twistr,crbham,dizpnc,sludge,painsp,dstbnd,haze,lick,persng,meanlk,cnfray,crschp,smog,karchp,ember,smkscr,beldrm,beatup,scrtch,slash,ancpwr,leer,bite,outrge,scryfc,thrash,stomp,roksld,magtud,rocthr,harden,bonrsh,hijkck,recovr,aerbls,hrndrl,drgrag,sfboil,drgbre,slfdes,explsn,eggbmb,slgbmb,gigdrn,megdrn,swrdnc,cut,fryctr,thief,dig,rolout,dfncrl,detect,solbem,raidnc,flash,psycic,psycup,drmeat,ngtmar,shdbal,zapcan,thundr,thnblt,irntal,streng,rocsms,hedbut,mudslp,sunday,protct,dbltem,slptlk,curse,hidpwr,swager,frustr,return,toxic,snore,rest,endure,atract,bide,mimic,substu,rage,dbledg,takdwn,sklbas,bodslm,wtrgun,bblbem,icebem,blizrd,icywnd,surf,wrlpol,wtrfal,swift,payday,triatk,rflect,thnwav,telprt,psywav,metrnm,countr,megpnc,seitos,submis,megkck,dynpnc,firpnc,thnpnc,icepnc,firbls,flmthr,fisure,eartqk,sndstr,hypbem,roar,stlwng,fly,razwnd,wrlwnd,skyatk,wngatk,peck,mirmov,fntatk,witdrw,rapspn,supsnc,aurbem,mircot,psnstg,spite,crunch,pursut,strsht,lechlf,btnpas,disabl,screch,tackle,flmwel,revrsl,fryswp,fcseng,forsgt,lowkck,rolkck,encore,wrap,growth,vinwip,sacfir,sharpn,sketch,tm05,______",split"youngs,sage,falknr,grunt,bugctr,bugsy,pkmfan,beauty,witney,kimono,medium,morty,police,karate,chuck,gentle,sailor,jasmin,rocket,skier,pryce,scient,twins,clair,nerd,camper,brock,school,swimer,misty,jugler,guitar,ltsurg,hiker,lass,erika,biker,picnik,janine,maniac,psycic,sabrin,fisher,breath,blaine,birdkp,cooltr,blue,legend,silver,will,koga,bruno,karen,lance,red,gold,horde",f_zobj"0,none;,normal,fire,fightng,water,poison,electrc,ground,grass,flying,ice,bug,psychic,rock,dragon,ghost,dark,steel,bird",f_zobj"0,none;,pnkbow,chrcol,blkblt,myswtr,psnbrb,magnet,sosand,mirasd,shbeak,nvrice,slvpwd,twspon,hrdstn,dragsc,speltg,blkgls,mtlcot,plkbow,bripwd,focbnd,kingrk,leftov,qikclw,scopln,amcoin,litbal,lukpnc,mtlpwd,stick,thkclb,bersrk,berry,gldbry,btrbry,mntbry,brnbry,icebry,parbry,psnbry,mirbry,mysbry",f_zobj"0,boy;,girl,cpu-boy,cpu-girl",f_zobj"attack,attack,defense,defens,specialattack,spcatk,specialdefense,spcdef,speed,speed,crit,crit,evasion,evason,accuracy,accury",f_zobj"0,misingno;,bulbsaur,ivysaur,venusaur,charmand,charmeln,charzard,squirtle,wartortl,blastois,caterpie,metapod,butrfree,weedle,kakuna,beedrill,pidgey,pidgeoto,pidgeot,rattata,raticate,spearow,fearow,ekans,arbok,pikachu,raichu,sndshrew,sndslash,nidoranf,nidorina,nidoquen,nidoranm,nidorino,nidoking,clefairy,clefable,vulpix,ninetale,jiglypuf,wiglytuf,zubat,golbat,oddish,gloom,vileplum,paras,parasect,venonat,venomoth,diglett,dugtrio,meowth,persian,psyduck,golduck,mankey,primeape,growlith,arcanine,poliwag,polwhirl,polwrath,abra,kadabra,alakazam,machop,machoke,machamp,belsprot,weepnbel,victrbel,tntacool,tntcruel,geodude,graveler,golem,ponyta,rapidash,slowpoke,slowbro,magnemit,magneton,fafetchd,doduo,dodrio,seel,dewgong,grimer,muk,shellder,cloyster,gastly,haunter,gengar,onix,drowzee,hypno,krabby,kingler,voltorb,electrod,exegcute,exegutor,cubone,marowak,hitmnlee,hitmnchn,licktung,koffing,weezing,rhyhorn,rhydon,chansey,tangela,kangakan,horsea,seadra,goldeen,seaking,staryu,starmie,mrmime,scyther,jynx,elecabuz,magmar,pinsir,tauros,magikarp,gyarados,lapras,ditto,eevee,vaporeon,jolteon,flareon,porygon,omanyte,omastar,kabuto,kabutops,aerodact,snorlax,articuno,zapdos,moltres,dratini,dragnair,dragnite,mewtwo,mew,chikrita,bayleef,meganium,cyndquil,quilava,typhlosn,totodile,croconaw,fralgatr,sentret,furret,hoothoot,noctowl,ledyba,ledian,spinarak,ariados,crobat,chinchou,lanturn,pichu,cleffa,igglybuf,togepi,togetic,natu,xatu,mareep,flaaffy,ampharos,belossom,marill,azumaril,sudwoodo,politoed,hoppip,skiploom,jumpluff,aipom,sunkern,sunflora,yanma,wooper,quagsire,espeon,umbreon,murkrow,slowking,misdrvus,unown,wobbufet,girafrig,pineco,foretres,dunsparc,gligar,steelix,snubbull,granbull,qwilfish,scizor,shuckle,heracros,sneasel,tediursa,ursaring,slugma,magcargo,swinub,piloswin,corsola,remoraid,octilery,delibird,mantine,skarmory,houndour,houndoom,kingdra,phanpy,donphan,porygon2,stantler,smeargle,tyrogue,hitmntop,smoochum,elekid,magby,miltank,blissey,raikou,entei,suicune,larvitar,pupitar,tyrnitar,lugia,hooh,celebi,________,none,___,___",f_zobj"0,neuter;,male,female,mal/fem",f_zobj"0,none;,fainted,burned,frozen,paralyzed,poisoned,sleeping",f_zobj"0,___;,fnt,brn,fzn,par,psn,slp",split"learn,teach,cheat",f_zobj"attack,atack,defense,defns,specialattack,spatk,specialdefense,spdfn,speed,speed,evasion,evasn,accuracy,acury,crit,critl",f_zobj"0;,129,13,6;;,0,5,6;;,131,3,138;;,0,8,10;;,141,12,7;;,1,140,8;;,5,9,10",f_zobj"0,dual;,pong,gboy,hdog,cga,rebl,gosi",f_zobj"0;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,;;,",f_zobj"0;,~f_move_struggle,0;;,~f_move_default,10,~f_move_stat,~c_no,defense,-1;;,~f_move_stat,~c_yes,defense,2;;,~f_move_barrage,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_default;;,~f_move_seismictoss,20;;,~f_move_splash,0;;,~f_move_default,10,~f_move_major_other,4;;,~f_move_major_other,4;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_stat,~c_no,accuracy,-1;;,~f_move_splash,0;;,~f_move_major_other,6;;,~f_move_default;;,~f_move_default;;,~f_move_barrage,0;;,~f_move_splash,0;;,~f_move_major_other,6;;,~f_move_stat,~c_no,speed,-2;;,~f_move_present,0;;,~f_move_splash,0;;,~f_move_barrage,0;;,~f_move_default;;,~f_move_stat,~c_no,accuracy,-1;;,~f_move_stat,~c_yes,speed,2;;,~f_move_barrage,0;;,~f_move_default;;,~f_move_falseswipe,0;;,~f_move_stat,~c_no,attack,-1;;,~f_move_splash,0;;,~f_move_major_other,6;;,~f_move_default;;,~f_move_stat,~c_yes,evasion,1;;,~f_move_stat,~c_no,defense,-1;;,~f_move_barrage,0;;,~f_move_default;;,~f_move_doublekick,2;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_default,30,~f_move_major_other,4;;,~f_move_recover,0;;,~f_move_splash,0;;,~f_move_seismictoss,50;;,~f_move_default,50,~f_move_stat,~c_no,accuracy,-1;;,~f_move_barrage,0;;,~f_move_default,10,~f_move_major_other,3;;,~f_move_superfang,0;;,~f_move_splash,0;;,~f_move_major_other,5;;,~f_move_stat,~c_yes,defense,2;;,~f_move_stat,~c_yes,attack,1;;,~f_move_splash,0;;,~f_move_major_other,6;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_stat,~c_no,attack,-2;;,~f_move_splash,0;;,~f_move_stat,~c_no,evasion,-1;;,~f_move_splash,0;;,~f_move_major_other,5;;,~f_move_major_other,6;;,~f_move_splash,0;;,~f_move_major_other,4;;,~f_move_flail,0;;,~f_move_splash,0;;,~f_move_default;;,~f_move_default,10,~f_move_stat,~c_no,speed,-1;;,~f_move_stat,~c_yes,specialdefense,2;;,~f_move_default,10,~f_move_stat,~c_no,speed,-1;;,~f_move_splash,0;;,~f_move_default;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_default;;,~f_move_splash,0;;,~f_move_doublekick,2;;,~f_move_splash,0;;,~f_move_default,10,~f_move_stat,~c_yes,attack,1;;,~f_move_splash,0;;,~f_move_doublekick,3;;,~f_move_default;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_default,30,~f_move_major_other,5;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_default,30,~f_move_major_other,4;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_default,40,~f_move_major_other,5;;,~f_move_splash,0;;,~f_move_default,10,~f_move_major_other,2;;,~f_move_stat,~c_no,accuracy,-1;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_default;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_stat,~c_no,defense,-1;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_stat,~c_no,speed,-2;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_magnitude,0;;,~f_move_default;;,~f_move_stat,~c_yes,defense,1;;,~f_move_barrage,0;;,~f_move_splash,0;;,~f_move_recover,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_seismictoss,40;;,~f_move_recover,0;;,~f_move_default,30,~f_move_major_other,4;;,~f_move_default;;,~f_move_default;;,~f_move_default;;,~f_move_default,30,~f_move_major_other,5;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_stat,~c_yes,attack,2;;,~f_move_default;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_stat,~c_no,accuracy,-1;;,~f_move_default,10,~f_move_stat,~c_no,specialdefense,-1;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_default,20,~f_move_stat,~c_no,specialdefense,-1;;,~f_move_default,100,~f_move_major_other,4;;,~f_move_default,30,~f_move_major_other,4;;,~f_move_default,10,~f_move_major_other,4;;,~f_move_default,30,~f_move_stat,~c_no,defense,-1;;,~f_move_default;;,~f_move_default,50,~f_move_stat,~c_no,defense,-1;;,~f_move_splash,0;;,~f_move_default,100,~f_move_stat,~c_no,accuracy,-1;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_stat,~c_yes,evasion,1;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_hiddenpower,0;;,~f_move_splash,0;;,~f_move_frustration,0;;,~f_move_return,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_submission,0;;,~f_move_submission,0;;,~f_move_splash,0;;,~f_move_default,30,~f_move_major_other,4;;,~f_move_default;;,~f_move_default,10,~f_move_stat,~c_no,speed,-1;;,~f_move_default,10,~f_move_major_other,3;;,~f_move_default,10,~f_move_major_other,3;;,~f_move_default,100,~f_move_stat,~c_no,speed,-1;;,~f_move_default;;,~f_move_splash,0;;,~f_move_default;;,~f_move_splash,0;;,~f_move_default;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_major_other,4;;,~f_move_splash,0;;,~f_move_psywave,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_default;;,~f_move_seismictoss,999;;,~f_move_submission,0;;,~f_move_default;;,~f_move_splash,0;;,~f_move_default,10,~f_move_major_other,2;;,~f_move_default,10,~f_move_major_other,4;;,~f_move_default,10,~f_move_major_other,3;;,~f_move_default,10,~f_move_major_other,2;;,~f_move_default,10,~f_move_major_other,2;;,~f_move_splash,0;;,~f_move_default;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_default,10,~f_move_stat,~c_yes,defense,1;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_default;;,~f_move_default;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_stat,~c_yes,defense,1;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_default,10,~f_move_stat,~c_no,attack,-1;;,~f_move_splash,0;;,~f_move_default,30,~f_move_major_other,5;;,~f_move_splash,0;;,~f_move_default,20,~f_move_stat,~c_no,specialdefense,-1;;,~f_move_default;;,~f_move_stat,~c_no,speed,-1;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_stat,~c_no,defense,-2;;,~f_move_default;;,~f_move_default,10,~f_move_major_other,2;;,~f_move_flail,0;;,~f_move_barrage,0;;,~f_move_stat,~c_yes,crit,1;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_splash,0;;,~f_move_stat,~c_yes,specialattack,1;;,~f_move_default;;,~f_move_default,50,~f_move_major_other,2;;,~f_move_stat,~c_yes,attack,1;;,~f_move_splash,0;;,~f_move_stat,~c_yes,evasion,2;;,~f_move_splash,0")
-f_zcall"top_browse;,6,4,2,2,10,10,1,1;top_edit;,2,2,2,2,30,20,1,1;top_editteam;,3,2,2,2,20,20,1,1;top_results;,3,2,2,2,20,20,1,1;top_pkstat;,1,4,2,4,60,9,1,4;top_pkstatbig;,1,6,2,5,60,9,1,1;top_text_grid;,2,4,2,4,30,9,1,1;top_title;,1,1,2,2,60,40,1,1;top_battle;,1,1,2,2,60,40,1,1;top_battle2;,1,2,2,2,60,20,1,1;bot_4x4;,2,2,2,44,30,9,1,1;bot_info;,1,1,2,45,60,16,1,1;top_newstat;,1,6,2,4,60,9,1,1;;,~f_create_gridpair,g_grid_title,0x5ea8,~bot_4x4,~top_title,~f_op_title,~f_s_title,~f_l_title,~c_no,~c_no,~f_nop;;,~f_create_gridpair,g_grid_browse,0x5eaa,~top_browse,~bot_info,~f_op_browse,~f_s_browse,~f_l_browse,~c_no,~c_no,~f_nop,~f_add_browse_info;;,~f_create_gridpair,g_grid_editpkmn,0x5eaa,~top_browse,~bot_info,~f_op_browse,~f_s_editpkmn,~f_l_browse,~c_no,~c_no,~f_nop,~f_add_editbrowse_info;;,~f_create_gridpair,g_grid_statbrowse,0x5eac,~top_pkstat,~bot_info,~f_op_statbrowse,~f_s_pkstat,~f_l_browse,g_grid_browse,~c_no,~f_nop;;,~f_create_gridpair,g_grid_editstat,0x5eb6,~bot_4x4,~top_pkstat,~f_op_editstat,~f_s_editstat,~f_l_browse,~c_no,~c_no,~f_nop;;,~f_create_gridpair,g_grid_editmovebot,0x5eb8,~bot_4x4,~top_pkstat,~f_op_editmovebot,~f_s_editmovebot,~f_l_browse,~c_no,~c_no,~f_nop;;,~f_create_gridpair,g_grid_editmove,0x5ec6,~top_text_grid,~bot_info,~f_op_editmove,~f_s_editmove,~f_l_browse,~c_no,~c_no,~f_nop;;,~f_create_gridpair,g_grid_edititem,0x5ec6,~top_text_grid,~bot_info,~f_op_edititem,~f_s_edititem,~f_l_browse,~c_no,~c_no,~f_nop;;,~f_create_gridpair,g_grid_pickedit,0x5eae,~top_edit,~bot_info,~f_op_pickedit,~f_s_edit,~f_l_browse,~c_no,~c_no,~f_nop;;,~f_create_gridpair,g_grid_pickleag,0x5eae,~top_edit,~bot_info,~f_op_pickleagueplayr,~f_s_league,~f_l_browse,~c_no,~c_no,~f_nop;;,~f_create_gridpair,g_grid_pickplr1,0x5eae,~top_edit,~bot_info,~f_op_pickversus,~f_s_versus,~f_l_browse,~c_no,~c_no,~f_nop;;,~f_create_gridpair,g_grid_pickplr2,0x5eb0,~top_edit,~bot_info,~f_op_pickversus,~f_s_versusbegin,~f_l_browse,~c_no,~c_no,~f_nop;;,~f_create_gridpair,g_grid_picktrnr,0x5eb2,~top_text_grid,~bot_info,~f_op_pickleagueenemy,~f_s_batbegin,~f_l_browse,~c_no,~c_no,~f_nop;;,~f_create_gridpair,g_grid_pickspot,0x5eb4,~top_editteam,~bot_info,~f_op_editteam,~f_s_editteam,~f_l_browse,~c_no,~c_no,~f_nop;;,~f_create_gridpair,g_grid_battle_select,0x5ec6,~bot_4x4,~top_battle2,~f_op_batsel,~f_s_battle,~f_l_battle,~c_no,~c_no,~f_nop;;,~f_create_gridpair,g_grid_statbattle,0x5ec6,~top_pkstat,~bot_info,~f_op_statbattle,~f_s_statbat,~f_l_browse,g_grid_battle_stats,~c_no,~f_nop;;,~f_create_gridpair,g_grid_battle_movesel,0x5ec6,~bot_4x4,~top_pkstat,~f_op_movesel,~f_s_batmove,~f_l_browse,~c_no,~c_no,~f_nop;;,~f_create_gridpair,g_grid_battle_dmovsel,0x5ec6,~bot_info,~top_pkstat,~f_op_dmovsel,~f_s_dmovsel,~f_l_browse,~c_no,~c_no,~f_nop;;,~f_create_gridpair,g_grid_battle_switch,0x5ec6,~top_editteam,~bot_info,~f_op_batswitch,~f_s_batswitch,~f_l_browse,~c_no,~c_no,~f_nop;;,~f_create_gridpair,g_grid_battle_stats,0x5ec6,~top_editteam,~bot_info,~f_op_batstats,~f_s_batstat,~f_l_browse,~c_no,~c_no,~f_nop;;,~f_create_gridpair,g_grid_battle_results,0x5ec6,~top_results,~bot_info,~f_op_batresults,~f_s_batresults,~f_l_browse,~c_no,~c_yes,~f_init_batresults;;,~f_create_gridpair,g_grid_battle_actions,0x5ec6,~top_battle2,~bot_info,~f_op_bataction,~f_s_bataction,~f_l_battle,~c_no,~c_yes,~f_s_bataction;;,~f_create_gridpair,g_grid_battle_firstaction,0x5ec6,~top_battle2,~bot_info,~f_op_bataction,~f_s_bataction,~f_l_battle,~c_no,~c_yes,~f_nop;;,~poke,0x5f2c,3;;,~poke,0x5f5c,8;;,~poke,0x5f5d,1;;,~cls;;,~memset,0x5e00,0,256;;,~poke,0x5eff,57"
+f_zcall"top_browse;,6,4,2,2,10,10,1,1;top_edit;,2,2,2,2,30,20,1,1;top_editteam;,3,2,2,2,20,20,1,1;top_results;,3,2,2,2,20,20,1,1;top_pkstat;,1,4,2,4,60,9,1,4;top_pkstatbig;,1,6,2,5,60,9,1,1;top_text_grid;,2,4,2,4,30,9,1,1;top_title;,1,1,2,2,60,40,1,1;top_battle;,1,1,2,2,60,40,1,1;top_battle2;,1,2,2,2,60,20,1,1;bot_4x4;,2,2,2,44,30,9,1,1;bot_info;,1,1,2,45,60,16,1,1;top_newstat;,1,6,2,4,60,9,1,1;;,~f_create_gridpair,g_grid_title,0x5ea8,~bot_4x4,~top_title,~f_op_title,~f_s_title,~f_l_title,~c_no,~c_no,~f_nop;;,~f_create_gridpair,g_grid_browse,0x5eaa,~top_browse,~bot_info,~f_op_browse,~f_s_browse,~f_l_browse,~c_no,~c_no,~f_nop,~f_add_browse_info;;,~f_create_gridpair,g_grid_editpkmn,0x5eaa,~top_browse,~bot_info,~f_op_browse,~f_s_editpkmn,~f_l_browse,~c_no,~c_no,~f_nop,~f_add_editbrowse_info;;,~f_create_gridpair,g_grid_statbrowse,0x5eac,~top_pkstat,~bot_info,~f_op_statbrowse,~f_s_pkstat,~f_l_browse,g_grid_browse,~c_no,~f_nop;;,~f_create_gridpair,g_grid_editstat,0x5eb6,~bot_4x4,~top_pkstat,~f_op_editstat,~f_s_editstat,~f_l_browse,~c_no,~c_no,~f_nop;;,~f_create_gridpair,g_grid_editmovebot,0x5eb8,~bot_4x4,~top_pkstat,~f_op_editmovebot,~f_s_editmovebot,~f_l_browse,~c_no,~c_no,~f_nop;;,~f_create_gridpair,g_grid_editmove,0x5ec6,~top_text_grid,~bot_info,~f_op_editmove,~f_s_editmove,~f_l_browse,~c_no,~c_no,~f_nop;;,~f_create_gridpair,g_grid_edititem,0x5ec6,~top_text_grid,~bot_info,~f_op_edititem,~f_s_edititem,~f_l_browse,~c_no,~c_no,~f_nop;;,~f_create_gridpair,g_grid_pickedit,0x5eae,~top_edit,~bot_info,~f_op_pickedit,~f_s_edit,~f_l_browse,~c_no,~c_no,~f_nop;;,~f_create_gridpair,g_grid_pickleag,0x5eae,~top_edit,~bot_info,~f_op_pickleagueplayr,~f_s_league,~f_l_browse,~c_no,~c_no,~f_nop;;,~f_create_gridpair,g_grid_pickplr1,0x5eae,~top_edit,~bot_info,~f_op_pickversus,~f_s_versus,~f_l_browse,~c_no,~c_no,~f_nop;;,~f_create_gridpair,g_grid_pickplr2,0x5eb0,~top_edit,~bot_info,~f_op_pickversus,~f_s_versusbegin,~f_l_browse,~c_no,~c_no,~f_nop;;,~f_create_gridpair,g_grid_picktrnr,0x5eb2,~top_text_grid,~bot_info,~f_op_pickleagueenemy,~f_s_batbegin,~f_l_browse,~c_no,~c_no,~f_nop;;,~f_create_gridpair,g_grid_pickspot,0x5eb4,~top_editteam,~bot_info,~f_op_editteam,~f_s_editteam,~f_l_browse,~c_no,~c_no,~f_nop;;,~f_create_gridpair,g_grid_battle_select,0x5ec6,~bot_4x4,~top_battle2,~f_op_batsel,~f_s_battle,~f_l_battle,~c_no,~c_no,~f_nop;;,~f_create_gridpair,g_grid_statbattle,0x5ec6,~top_pkstat,~bot_info,~f_op_statbattle,~f_s_statbat,~f_l_browse,g_grid_battle_stats,~c_no,~f_nop;;,~f_create_gridpair,g_grid_battle_movesel,0x5ec6,~bot_4x4,~top_pkstat,~f_op_movesel,~f_s_batmove,~f_l_browse,~c_no,~c_no,~f_nop;;,~f_create_gridpair,g_grid_battle_dmovsel,0x5ec6,~bot_info,~top_pkstat,~f_op_dmovsel,~f_s_dmovsel,~f_l_browse,~c_no,~c_no,~f_nop;;,~f_create_gridpair,g_grid_battle_switch,0x5ec6,~top_editteam,~bot_info,~f_op_batswitch,~f_s_batswitch,~f_l_browse,~c_no,~c_no,~f_nop;;,~f_create_gridpair,g_grid_battle_stats,0x5ec6,~top_editteam,~bot_info,~f_op_batstats,~f_s_batstat,~f_l_browse,~c_no,~c_no,~f_nop;;,~f_create_gridpair,g_grid_battle_results,0x5ec6,~top_results,~bot_info,~f_op_batresults,~f_s_batresults,~f_l_browse,~c_no,~c_yes,~f_init_batresults;;,~f_create_gridpair,g_grid_battle_actions,0x5ec6,~top_battle2,~bot_info,~f_op_bataction,~f_s_bataction,~f_l_battle,~c_no,~c_yes,~f_s_bataction;;,~f_create_gridpair,g_grid_battle_firstaction,0x5ec6,~top_battle2,~bot_info,~f_op_bataction,~f_s_bataction,~f_l_battle,~c_no,~c_yes,~f_nop;;,~poke,0x5f2c,3;;,~poke,0x5f5c,8;;,~poke,0x5f5d,1;;,~cls;;,~memset,0x5e00,0,256;;,~poke,0x5eff,58"
 f_add_to_ui_stack(g_grid_title)
 for i=0,360 do
 c_types[i\19][i%19]=f_init_peek_inc()/2

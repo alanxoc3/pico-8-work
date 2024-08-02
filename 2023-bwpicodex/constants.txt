@@ -50,10 +50,10 @@ MODE_EDIT:   1
 MODE_BENCH:  2
 MODE_ACTIVE: 3
 
-# DRAW STYLES. These are the ways a Pokemon can be drawn.
-STYLE_SMALL:  0
-STYLE_NORMAL: 1
-STYLE_SHAKE:  2
+# DRAW STYLES. These are the ways a Pokemon can be drawn. Don't change these numbers, they are hard-coded order in init.
+STYLE_SMALL:  1
+STYLE_NORMAL: 2
+STYLE_SHAKE:  3
 
 # -------------- Battle levels. These determine timing in a battle
 L_PICK:        1 # For players to pick which action they will work on.

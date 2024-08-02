@@ -1,3 +1,6 @@
+-- TODO: I really want a device opening using the johto pokedex style. It could just draw once at the beginning of the game so wouldn't really conflict with other things. But I don't think this will fit.
+--       No, maybe it should just be a gameboy-like, then i don't have to make a flip animation. And it can use the same color palette maybe?
+
 -- INITIALIZATION FILE
 -- Everything that is run before the first _update is here.
 -- All in one file to make it easier to organize startup stuff.
@@ -48,6 +51,8 @@ f_zobj_set(_ENV, [[
   g_msg_top," ", g_msg_bot," ", -- TODO: do I need these? try removing
 
   g_init_peek_loc,L_DATASTART
+  ;g_draw_masks ;,8,4,2,1 -- for the f_draw_pkmn function
+  ;g_style_size ;,3,8,8   -- also for f_draw_pkmn
 ]], true, false, function() end, -- TODO: before this function looked like function(...) ... end : I should check nothing broke from removing that to make it empty.
   function(parent, ...) -- f_zobj_setmeta
     return f_zobj_set(setmetatable({}, {__index=parent}), ...)
@@ -135,7 +140,7 @@ f_zcall[[
   ;;,~cls      -- this is just a visual blank screen when the game starts up
 
   ;;,~memset ,0x5e00 ,0   ,256 -- todo: remove me, factory reset
-  ;;,~poke   ,S_STORY ,57      -- todo: remove me, story set for debugging
+  ;;,~poke   ,S_STORY ,58      -- todo: remove me, story set for debugging
 ]]
 
 -- This needs to go after the above zcall and can't go inside, because g_grid_title wouldn't exist when the initial zobj is parsed.

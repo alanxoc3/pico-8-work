@@ -1,9 +1,6 @@
 -- TODO: see if a roundrect function could be implemented that supports changing the 4 corners and used in the grid cell + hp bar. only do it if it saves tokens.
 
 |[f_minisfx]| function(num) -- plays a sfx with len of 4. num corresponds to pkmn numbers. 252, 253, 254, 255 are sfx.
-  if num < P_NONE then
-    g_cur_pkmn_cry = num -- initial g_cur_pkmn_cry value is the default nil
-  end
   sfx(num\4, num < P_NONE and 0 or 1, num%4*8, 8)
 end $$
 
@@ -17,55 +14,41 @@ end $$
   end
 end $$
 
-|[f_draw_pkmn]| function(num, x, y, style, flip, selected, disabled, func)
-  func = func or f_nop
-  local in_c  = disabled and C_2 or selected and C_3 or C_2
-  local out_c = disabled and C_1 or C_1
-  local row = num/8\1
-  local col = num%8
-  local width = style == STYLE_SMALL and 6 or 16
+|[f_draw_pkmn]| function(num, x, y, style, flip, selected, disabled, draw_side)
+  local width = g_style_size[style]
 
-  if (style ~= STYLE_SHAKE or disabled) and num == P_NONE then
-    rectfill(x+width/2-1, y+width/2-1, x+width/2, y+width/2, disabled and C_2 or out_c)
+  -- P_NONE is shared with the substitute sprite, so need some special logic
+  if num == P_NONE and (style ~= STYLE_SHAKE or disabled) then
+    rectfill(x+width-1, y+width-1, x+width, y+width, disabled and C_2 or C_1)
     return
   end
 
   -- the "min" is needed to draw trainers
-  if style == STYLE_SHAKE and selected and not disabled and stat'46' > -1 and g_cur_pkmn_cry == num then -- if a pkmn cry is currently playing and selected, shake!
+  if style == STYLE_SHAKE and selected and not disabled and num == stat'46'*4+stat'50'\8 then -- if a pkmn cry is currently playing and selected, shake!
     x += sin(g_shake_timer/4)
   end
 
-  local row = num/8\1
-  local col = num%8
-  local width = style == STYLE_SMALL and 6 or 16
-
-  local masks = {8, 4, 2, 1}
   local colordrawfunc = function(ix, iy, c)
-    local mask = masks[num\64+1]
     for i=1,15 do
-      if i & mask == 0 then
-        palt(i, true)
-      else
-        pal(i, c)
-      end
+      palt(i, i & g_draw_masks[num\64+1] == 0)
+      pal(i, c)
     end
-    palt(mask, false)
-    pal(mask, c)
 
-    sspr(col*16, row%8*16, 16, 16, ix, iy, width, width, flip, false)
-
-    palt()
-    pal()
+    -- can't use a zcall here because it's too slow
+    sspr(num%8*16, num/8\1%8*16, 16, 16, ix, iy, width*2, width*2, flip, false)
+    pal() -- dont need to reset palt because that doesn't affect print operations and this is the only function in the game that draws.
   end
 
-  for yy=-1,1,1 do
-    for xx=-1,1,1 do
-      colordrawfunc(x+xx, y+yy, out_c)
+  for yy=-1,1 do
+    for xx=-1,1 do
+      colordrawfunc(x+xx, y+yy, C_1)
     end
   end
 
-  colordrawfunc(x, y, in_c) -- sprite
-  func(x+(flip and -38+1 or 19+1),y)
+  colordrawfunc(x, y, not disabled and selected and C_3 or C_2) -- sprite
+  if draw_side then
+    draw_side(x+(flip and -37 or 20), y)
+  end
 end $$
 
 -- Turn a string into a question marks with the same length
