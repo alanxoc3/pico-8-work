@@ -17,38 +17,42 @@ end $$
 |[f_draw_pkmn]| function(num, x, y, style, flip, selected, disabled, draw_side)
   local width = g_style_size[style]
 
-  -- P_NONE is shared with the substitute sprite, so need some special logic
-  if num == P_NONE and (style ~= STYLE_SHAKE or disabled) then
-    rectfill(x+width-1, y+width-1, x+width, y+width, disabled and C_2 or C_1)
-    return
-  end
-
   -- the "min" is needed to draw trainers
   if style == STYLE_SHAKE and selected and not disabled and num == stat'46'*4+stat'50'\8 then -- if a pkmn cry is currently playing and selected, shake!
     x += sin(g_shake_timer/4)
   end
 
-  local colordrawfunc = function(ix, iy, c)
-    for i=1,15 do
-      palt(i, i & g_draw_masks[num\64+1] == 0)
-      pal(i, c)
+  f_zcamera(x, y, function()
+    -- P_NONE is shared with the substitute sprite, so need some special logic
+    if num == P_NONE and (style ~= STYLE_SHAKE or disabled) then
+      rectfill(width-1, width-1, width, width, disabled and C_2 or C_1)
+      return
     end
 
-    -- can't use a zcall here because it's too slow
-    sspr(num%8*16, num/8\1%8*16, 16, 16, ix, iy, width*2, width*2, flip, false)
-    pal() -- dont need to reset palt because that doesn't affect print operations and this is the only function in the game that draws.
-  end
+    local colordrawfunc = function(c)
+      for i=1,15 do
+        palt(i, i & g_draw_masks[num\64+1] == 0)
+        pal(i, c)
+      end
 
-  for yy=-1,1 do
-    for xx=-1,1 do
-      colordrawfunc(x+xx, y+yy, C_1)
+      -- can't use a zcall here because it's too slow
+      sspr(num%8*16, num/8\1%8*16, 16, 16, 0, 0, width*2, width*2, flip, false)
+      pal() -- dont need to reset palt because that doesn't affect print operations and this is the only function in the game that draws.
     end
-  end
 
-  colordrawfunc(x, y, not disabled and selected and C_3 or C_2) -- sprite
-  if draw_side then
-    draw_side(x+(flip and -37 or 20), y)
-  end
+    for yy=-1,1 do
+      for xx=-1,1 do
+        f_zcamera(xx, yy, function()
+          colordrawfunc(C_1)
+        end)
+      end
+    end
+
+    colordrawfunc(not disabled and selected and C_3 or C_2) -- sprite
+    if draw_side then
+      f_zcamera(flip and -37 or 20, 0, draw_side)
+    end
+  end)
 end $$
 
 -- Turn a string into a question marks with the same length
@@ -121,3 +125,11 @@ end $$
     end
   end
 end $$
+
+|[f_zcamera]| function(nx, ny, func)
+  local ox, oy = %0x5f28, %0x5f2a
+  camera(ox-nx, oy-ny)
+  func()
+  camera(ox, oy)
+end $$
+

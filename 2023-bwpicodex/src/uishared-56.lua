@@ -142,22 +142,24 @@ end $$
       local active = player.active
 
       -- TODO: shouldn't be 254. Should be the player's sprites. I can probably fit a few player sprites: plrboy, plrgirl, cpu, horde
-      f_draw_pkmn(invisible and player.num or active.num, px, py, STYLE_SHAKE, flip,  p_action_self == player, false, invisible and f_nop or function(x, y)
-        print(active.name, x+1, y, C_1, -1)
+      f_draw_pkmn(invisible and player.num or active.num, px, py, STYLE_SHAKE, flip,  p_action_self == player, false, invisible and f_nop or function()
+        print(active.name, 1, 0, C_1, -1)
         local hp = active.hp
         local maxhp = active.maxhp
         local spot = active.spot
         local major = active.major
 
         if hp > 0 then
-          rectfill(x, y+6, x+mid(0, hp/maxhp*32, 32), y+9, C_1)
-          pset(x,  y+6, C_2)
-          pset(x,  y+9, C_2)
-          pset(x+32, y+6, C_2)
-          pset(x+32, y+9, C_2)
+          f_zcall([[
+             ;,~rectfill,0,6,@,9,C_1
+            ;;,~pset,0,6,C_2
+            ;;,~pset,0,9,C_2
+            ;;,~pset,32,6,C_2
+            ;;,~pset,32,9,C_2
+          ]], mid(0, hp/maxhp*32, 32))
         end
 
-        local tx, ty = x+14, y+13
+        local tx, ty = 14, 13
         for i=0,5 do
           if spot == i+1 or team[i+1].valid and team[i+1].major ~= C_MAJOR_FAINTED then
             pset(tx+i%3*2, ty+i\3*2-1, spot == i+1 and C_3 or C_1)
@@ -166,7 +168,7 @@ end $$
 
         local majtext = c_major_names_short[major]
         local hptext = f_prefix_zero(hp, 3)
-        print(majtext.."  "..hptext, x+1, y+11, C_1, -1)
+        print(majtext.."  "..hptext, 1, 11, C_1, -1)
       end)
     end})
   end

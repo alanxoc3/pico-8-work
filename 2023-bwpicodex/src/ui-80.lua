@@ -158,12 +158,12 @@ end $$
        ,@
     ]], "\^w\f3pico\n dex\n\f1"..c_palette_names[g_palette])
 
-    f_draw_pkmn(g_title_l, 7 -4, 14+1-1-3+10, STYLE_SHAKE, false, g_title_sel, false, function(x, y)
-      print(messages[g_title_l%#messages+1], x+3, y-1)
+    f_draw_pkmn(g_title_l, 7 -4, 14+1-1-3+10, STYLE_SHAKE, false, g_title_sel, false, function()
+      print(messages[g_title_l%#messages+1], 3, -1)
     end)
 
-    f_draw_pkmn(g_title_r, 35+4, 14+1-1-3-4+1-9+3-1, STYLE_SHAKE, true,  not g_title_sel,     false, function(x, y)
-      print(messages[g_title_r%#messages+1], x, y)
+    f_draw_pkmn(g_title_r, 35+4, 14+1-1-3-4+1-9+3-1, STYLE_SHAKE, true,  not g_title_sel, false, function()
+      print(messages[g_title_r%#messages+1], 0, 0)
     end)
   end})
 

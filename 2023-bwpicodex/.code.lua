@@ -46,7 +46,7 @@ end
 function debug_sort(t,compare_func)compare_func=compare_func or function(a,b)return tostr(a)<tostr(b)end if t then for n=2,#t do local i=n while i>1 and compare_func(t[i],t[i-1])do t[i],t[i-1]=t[i-1],t[i]i=i-1 end end end end
 function db(...)local str="" for x in all{...}do str=str..debug_helper(x).." " end printh(str)end
 function debug_helper(any)if type(any)~="table"then return tostr(any)end local str="{" local keys={}for i=1,#any do if str~="{"then str=str.."," end keys[i]=true str=str..debug_helper(any[i])end local sortedkeys={}for k,v in pairs(any)do if not keys[k]then add(sortedkeys,k)end end debug_sort(sortedkeys)for k in all(sortedkeys)do if str~="{"then str=str.."," end str=str..debug_helper(k).."="..debug_helper(any[k])end return str.."}" end
-f_zobj_set(_ENV,"f_refresh_top,@,f_add_to_ui_stack,@,f_pop_ui_stack,@,f_getsel,@,f_setsel,@,f_create_gridpair,@,f_update_grid,@,f_draw_grid,@,f_addop_text,@,f_minisfx,@,f_flr_rnd,@,f_in_split,@,f_draw_pkmn,@,f_strtoq,@,f_init_peek_inc,@,f_unlock,@,f_update_locks,@,f_hurt_self,@,f_moveutil_hpchange,@,f_moveutil_dmgself,@,f_moveutil_dmgother,@,f_moveutil_movemod,@,f_moveutil_typeadv,@,f_moveutil_calc_move_damage,@,f_movehelp_effect_works,@,f_move_major_other,@,f_move_splash,@,f_move_recover,@,f_move_default,@,f_move_seismictoss,@,f_move_psywave,@,f_move_superfang,@,f_move_falseswipe,@,f_move_submission,@,f_move_struggle,@,f_move_multihit_set,@,f_move_barrage,@,f_move_doublekick,@,f_move_flail,@,f_move_return,@,f_move_frustration,@,f_move_present,@,f_move_magnitude,@,f_move_hiddenpower,@,f_move_stat,@,f_create_spot,@,f_get_edit_op_pkmn,@,f_info_toggle,@,f_leagueinfo,@,f_add_stat_move,@,f_add_stat_preview,@,f_add_stat,@,f_print_info,@,f_print_top,@,f_print_bot,@,f_get_move_texts,@,f_prefix_space,@,f_prefix_zero,@,f_add_battle,@,f_create_player,@,f_get_other_pl,@,f_set_both_players,@,f_get_live_pkmn,@,f_get_next_active,@,f_end_battle,@,f_newaction,@,f_addaction,@,f_turn_addattack,@,f_pkmn_comes_out,@,f_pop_next_action,@,f_set_player_priority,@,f_movelogic,@,f_start_turn,@,f_start_battle,@,f_create_active,@,f_mkpkmn,@,f_team_party,@,f_fill_team,@,f_team_league,@,f_get_party_pkmn,@,f_save_party_pkmn,@,f_stat_crit,@,f_stat_evac,@,f_stat_calc,@,f_init_batresults,@,f_op_pickedit,@,f_op_pickleagueenemy,@,f_op_pickleagueplayr,@,f_op_pickversus,@,f_op_def,@,f_op_edititem,@,f_op_statbrowse,@,f_op_browse,@,f_op_statbattle,@,f_add_edit,@,f_op_editteam,@,f_op_title,@,f_op_editmovebot,@,f_op_editstat,@,f_op_editmove,@",function()
+f_zobj_set(_ENV,"f_refresh_top,@,f_add_to_ui_stack,@,f_pop_ui_stack,@,f_getsel,@,f_setsel,@,f_create_gridpair,@,f_update_grid,@,f_draw_grid,@,f_addop_text,@,f_minisfx,@,f_flr_rnd,@,f_in_split,@,f_draw_pkmn,@,f_strtoq,@,f_init_peek_inc,@,f_unlock,@,f_update_locks,@,f_zcamera,@,f_hurt_self,@,f_moveutil_hpchange,@,f_moveutil_dmgself,@,f_moveutil_dmgother,@,f_moveutil_movemod,@,f_moveutil_typeadv,@,f_moveutil_calc_move_damage,@,f_movehelp_effect_works,@,f_move_major_other,@,f_move_splash,@,f_move_recover,@,f_move_default,@,f_move_seismictoss,@,f_move_psywave,@,f_move_superfang,@,f_move_falseswipe,@,f_move_submission,@,f_move_struggle,@,f_move_multihit_set,@,f_move_barrage,@,f_move_doublekick,@,f_move_flail,@,f_move_return,@,f_move_frustration,@,f_move_present,@,f_move_magnitude,@,f_move_hiddenpower,@,f_move_stat,@,f_create_spot,@,f_get_edit_op_pkmn,@,f_info_toggle,@,f_leagueinfo,@,f_add_stat_move,@,f_add_stat_preview,@,f_add_stat,@,f_print_info,@,f_print_top,@,f_print_bot,@,f_get_move_texts,@,f_prefix_space,@,f_prefix_zero,@,f_add_battle,@,f_create_player,@,f_get_other_pl,@,f_set_both_players,@,f_get_live_pkmn,@,f_get_next_active,@,f_end_battle,@,f_newaction,@,f_addaction,@,f_turn_addattack,@,f_pkmn_comes_out,@,f_pop_next_action,@,f_set_player_priority,@,f_movelogic,@,f_start_turn,@,f_start_battle,@,f_create_active,@,f_mkpkmn,@,f_team_party,@,f_fill_team,@,f_team_league,@,f_get_party_pkmn,@,f_save_party_pkmn,@,f_stat_crit,@,f_stat_evac,@,f_stat_calc,@,f_init_batresults,@,f_op_pickedit,@,f_op_pickleagueenemy,@,f_op_pickleagueplayr,@,f_op_pickversus,@,f_op_def,@,f_op_edititem,@,f_op_statbrowse,@,f_op_browse,@,f_op_statbattle,@,f_add_edit,@,f_op_editteam,@,f_op_title,@,f_op_editmovebot,@,f_op_editstat,@",function()
 g_top_grid.op,g_top_grid.preview_op,g_top_grid.lrlist={},{},{}
 g_top_grid:gridpofunc()
 end,function(grid)
@@ -199,30 +199,34 @@ end
 end
 end,function(num,x,y,style,flip,selected,disabled,draw_side)
 local width=g_style_size[style]
-if num==252 and(style ~=3 or disabled)then
-rectfill(x+width-1,y+width-1,x+width,y+width,disabled and 2 or 1)
-return
-end
 if style==3 and selected and not disabled and num==stat"46"*4+stat"50"\8 then
 x+=sin(g_shake_timer/4)
 end
-local colordrawfunc=function(ix,iy,c)
+f_zcamera(x,y,function()
+if num==252 and(style ~=3 or disabled)then
+rectfill(width-1,width-1,width,width,disabled and 2 or 1)
+return
+end
+local colordrawfunc=function(c)
 for i=1,15 do
 palt(i,i & g_draw_masks[num\64+1]==0)
 pal(i,c)
 end
-sspr(num%8*16,num/8\1%8*16,16,16,ix,iy,width*2,width*2,flip,false)
+sspr(num%8*16,num/8\1%8*16,16,16,0,0,width*2,width*2,flip,false)
 pal()
 end
 for yy=-1,1 do
 for xx=-1,1 do
-colordrawfunc(x+xx,y+yy,1)
+f_zcamera(xx,yy,function()
+colordrawfunc(1)
+end)
 end
 end
-colordrawfunc(x,y,not disabled and selected and 3 or 2)
+colordrawfunc(not disabled and selected and 3 or 2)
 if draw_side then
-draw_side(x+(flip and-37 or 20),y)
+f_zcamera(flip and-37 or 20,0,draw_side)
 end
+end)
 end,function(s)
 local ns=""
 for i=1,#s do ns..="?" end
@@ -252,6 +256,11 @@ f_unlock(c_moves,pkmn[i].num)
 end
 end
 end
+end,function(nx,ny,func)
+local ox,oy=%0x5f28,%0x5f2a
+camera(ox-nx,oy-ny)
+func()
+camera(ox,oy)
 end,function(hurtby,divide,activation)
 if activation then
 f_turn_addattack(p_turn_self,"hurt by "..hurtby)
@@ -541,20 +550,16 @@ add(op,{draw=function()
 local invisible=player.active.invisible
 local team=player.team
 local active=player.active
-f_draw_pkmn(invisible and player.num or active.num,px,py,3,flip,p_action_self==player,false,invisible and f_nop or function(x,y)
-print(active.name,x+1,y,1,-1)
+f_draw_pkmn(invisible and player.num or active.num,px,py,3,flip,p_action_self==player,false,invisible and f_nop or function()
+print(active.name,1,0,1,-1)
 local hp=active.hp
 local maxhp=active.maxhp
 local spot=active.spot
 local major=active.major
 if hp>0 then
-rectfill(x,y+6,x+mid(0,hp/maxhp*32,32),y+9,1)
-pset(x,y+6,2)
-pset(x,y+9,2)
-pset(x+32,y+6,2)
-pset(x+32,y+9,2)
+f_zcall(";,~rectfill,0,6,@,9,1;;,~pset,0,6,2;;,~pset,0,9,2;;,~pset,32,6,2;;,~pset,32,9,2",mid(0,hp/maxhp*32,32))
 end
-local tx,ty=x+14,y+13
+local tx,ty=14,13
 for i=0,5 do
 if spot==i+1 or team[i+1].valid and team[i+1].major ~=1 then
 pset(tx+i%3*2,ty+i\3*2-1,spot==i+1 and 3 or 1)
@@ -562,7 +567,7 @@ end
 end
 local majtext=c_major_names_short[major]
 local hptext=f_prefix_zero(hp,3)
-print(majtext.."  "..hptext,x+1,y+11,1,-1)
+print(majtext.."  "..hptext,1,11,1,-1)
 end)
 end})
 end
@@ -889,11 +894,11 @@ add(preview_op,{draw=function()
 local tcol=g_title_sel and 3 or 1
 local bcol=g_title_sel and 1 or 3
 local messages=f_zobj(",\^w\f1rom \n\f3hack\n\f1 plz,\^w\f1thx!\n\f3bulb\npdia,\^w\f1thx!\n\f3nint\nendo,\^w\f1easy\n\f3cmfy\n\f1shrt,\^w\f3upok\ncntr\n\f1thx!,\^w\f1disa\nsmbl\n\f3thx!,\^w\f1poke\nhist\n\f3thx!,\^w\f3smo \n gon\n\f1thx!,\^w\f1 by \n\f3alan\nxoc3,\^w\f332kb\n\f1pico\ncart,\^w\f3thx!\n\f1shri\nnko8,\^w\f1ctch\n\f3 em'\n\f1all!,\^w\f1awww\n\f3hmph\n\f1ohho,\^w\f3thx!\n\f1sere\n bii,\^w\f1nihi\n\f3only\n\f1grls,\^w\f3gen2\n\f1batl\n sim,@","\^w\f3pico\n dex\n\f1"..c_palette_names[g_palette])
-f_draw_pkmn(g_title_l,7-4,14+1-1-3+10,3,false,g_title_sel,false,function(x,y)
-print(messages[g_title_l%#messages+1],x+3,y-1)
+f_draw_pkmn(g_title_l,7-4,14+1-1-3+10,3,false,g_title_sel,false,function()
+print(messages[g_title_l%#messages+1],3,-1)
 end)
-f_draw_pkmn(g_title_r,35+4,14+1-1-3-4+1-9+3-1,3,true,not g_title_sel,false,function(x,y)
-print(messages[g_title_r%#messages+1],x,y)
+f_draw_pkmn(g_title_r,35+4,14+1-1-3-4+1-9+3-1,3,true,not g_title_sel,false,function()
+print(messages[g_title_r%#messages+1],0,0)
 end)
 end})
 foreach(split"view,edit,league,versus",function(text)
@@ -927,7 +932,8 @@ add(op,{text="delete",select=function()
 memset(0x5e00+f_getsel"g_grid_pickedit"*42+f_getsel"g_grid_pickspot"*7,252,7)
 f_pop_ui_stack()
 end})
-end,function(_ENV)
+end)
+f_zobj_set(_ENV,"f_op_editmove,@,f_op_batsel,@,f_op_movesel,@,f_op_dmovsel,@,f_op_batswitch,@,f_op_batresults,@,f_op_batstats,@,f_add_browse_info_template,@,f_add_browse_info,@,f_add_editbrowse_info,@,f_dt_batstats,@,f_s_batresults,@,f_l_browse,@,f_s_browse,@,f_s_versus,@,f_s_league,@,f_s_batstat,@,f_s_edit,@,f_s_editteam,@,f_s_editstat,@,f_s_editmovebot,@,f_s_battle,@,f_s_title,@,f_s_pkstat,@,f_s_statedit,@,f_s_statbat,@,f_s_versusbegin,@,f_s_batbegin,@,f_s_editpkmn,@,f_s_editmove,@,f_s_edititem,@,f_l_title,@,f_l_battle,@,f_s_batmove,@,f_s_dmovsel,@,f_s_batswitch,@,f_op_bataction,@,f_s_bataction,@,_update,@,_draw,@,c_move_names,@,c_trnr_names,@,c_type_names,@,c_item_names,@,c_team_names,@,c_stages,@,c_pkmn_names,@,c_gender_names,@,c_major_names_long,@,c_major_names_short,@,c_movemethod_names,@,c_statmod_names,@,c_palettes,@,c_palette_names,@,c_types,@,c_move_funcs,@",function(_ENV)
 local pkmn=f_get_edit_op_pkmn()
 local movenum=pkmn.possible_moves[f_getsel"g_grid_editmove"+1]
 local move=c_moves[movenum]
@@ -938,8 +944,7 @@ f_print_info(preview_op,";,edit move,@;;,@, ,@",ind,method,typ)
 for i,num in ipairs(pkmn.possible_moves)do
 f_create_spot(c_moves[num],op,pkmn.seen_moves[i])
 end
-end)
-f_zobj_set(_ENV,"f_op_batsel,@,f_op_movesel,@,f_op_dmovsel,@,f_op_batswitch,@,f_op_batresults,@,f_op_batstats,@,f_add_browse_info_template,@,f_add_browse_info,@,f_add_editbrowse_info,@,f_dt_batstats,@,f_s_batresults,@,f_l_browse,@,f_s_browse,@,f_s_versus,@,f_s_league,@,f_s_batstat,@,f_s_edit,@,f_s_editteam,@,f_s_editstat,@,f_s_editmovebot,@,f_s_battle,@,f_s_title,@,f_s_pkstat,@,f_s_statedit,@,f_s_statbat,@,f_s_versusbegin,@,f_s_batbegin,@,f_s_editpkmn,@,f_s_editmove,@,f_s_edititem,@,f_l_title,@,f_l_battle,@,f_s_batmove,@,f_s_dmovsel,@,f_s_batswitch,@,f_op_bataction,@,f_s_bataction,@,_update,@,_draw,@,c_move_names,@,c_trnr_names,@,c_type_names,@,c_item_names,@,c_team_names,@,c_stages,@,c_pkmn_names,@,c_gender_names,@,c_major_names_long,@,c_major_names_short,@,c_movemethod_names,@,c_statmod_names,@,c_palettes,@,c_palette_names,@,c_types,@,c_move_funcs,@",function(_ENV)
+end,function(_ENV)
 add(op,{text="fight",select=function()
 local should_struggle=true
 for i=1,4 do
