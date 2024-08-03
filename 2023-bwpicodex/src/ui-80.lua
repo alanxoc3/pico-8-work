@@ -158,18 +158,22 @@ end $$
        ,@
     ]], "\^w\f3pico\n dex\n\f1"..c_palette_names[g_palette])
 
-    f_draw_pkmn(g_title_l, 7 -4, 14+1-1-3+10, STYLE_SHAKE, false, g_title_sel, false, function()
+    f_draw_pkmn(g_title_l, 7 -4, 21, STYLE_SHAKE, false, g_title_sel, false, function()
       print(messages[g_title_l%#messages+1], 3, -1)
     end)
 
-    f_draw_pkmn(g_title_r, 35+4, 14+1-1-3-4+1-9+3-1, STYLE_SHAKE, true,  not g_title_sel, false, function()
+    f_draw_pkmn(g_title_r, 39, 1, STYLE_SHAKE, true,  not g_title_sel, false, function()
       print(messages[g_title_r%#messages+1], 0, 0)
     end)
   end})
 
-  foreach(split"view,edit,league,versus", function(text)
-    f_addop_text(op, text)
-  end)
+  f_zcall([[
+    op,@
+    ;;,~f_addop_text,~op,"view"
+    ;;,~f_addop_text,~op,"edit"
+    ;;,~f_addop_text,~op,"league"
+    ;;,~f_addop_text,~op,"versus"
+  ]], op)
 end $$
 
 |[f_op_editmovebot]| function(_ENV)

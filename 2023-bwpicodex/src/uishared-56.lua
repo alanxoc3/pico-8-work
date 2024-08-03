@@ -5,7 +5,9 @@
   add(op, {text=lock and name or f_strtoq(name), disabled=disabled or not lock})
 end $$
 
-|[f_get_edit_op_pkmn]| function() return f_get_party_pkmn(f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot') end $$
+|[f_get_edit_op_pkmn]| function()
+  return f_get_party_pkmn(f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot')
+end $$
 
 |[f_info_toggle]| function(op, toggle_grid, enemyname)
   f_print_info(op, [[
@@ -16,16 +18,15 @@ end $$
 
 |[f_leagueinfo]| function(op)
   local name = c_trnr_names[f_getsel'g_grid_picktrnr'+1]
-  f_info_toggle(op, g_grid_pickleag, (@S_STORY+1<f_getsel'g_grid_picktrnr'+1) and f_strtoq(name) or name)
+  f_info_toggle(op, g_grid_pickleag, @S_STORY+1<f_getsel'g_grid_picktrnr'+1 and f_strtoq(name) or name)
 end $$
 
 |[f_add_stat_move]| function(op, pkmn, ind)
   ind=ind+1
-  local move = pkmn[ind]
-  local movenum = move.num
-  local maxpp, pp, pow, accuracy, typ = f_get_move_texts(move)
-  local method = pkmn.possible_moves_method[movenum] or "empty"
-  add(op, {text="move"..ind.." "..move.name, disabled=true})
+  local _ENV = pkmn[ind]
+  local maxpp, pp, pow, accuracy, typ = f_get_move_texts(_ENV)
+  local method = pkmn.possible_moves_method[num] or "empty"
+  add(op, {text="move"..ind.." "..name, disabled=true})
   add(op, {text=""..method.." "..typ})
   add(op, {text="   pp "..pp.."/"..maxpp})
   add(op, {text="pw/ac "..pow.."/"..accuracy})
@@ -33,13 +34,15 @@ end $$
 
 |[f_add_stat_preview]| function(op, pkmn, player)
   local draw_preview = function(off)
-    f_draw_pkmn(pkmn.num, 21, off-12, STYLE_SHAKE, p_battle_top and player == p_battle_top, true, false)
+    return function()
+      f_draw_pkmn(pkmn.num, 21, off-12, STYLE_SHAKE, p_battle_top and player == p_battle_top, true, false)
+    end
   end
 
   add(op, {text="#"..f_prefix_zero(pkmn.num, 3).." "..pkmn.name, disabled=true})
-  add(op, { draw=function() draw_preview'17' end})
-  add(op, { draw=function() draw_preview'8' end})
-  add(op, { draw=function() draw_preview'-1' end})
+  f_addop_draw(op, draw_preview'17')
+  f_addop_draw(op, draw_preview'8')
+  f_addop_draw(op, draw_preview'-1')
 end $$
 
 |[f_add_stat]| function(op, pkmn, player)
@@ -79,11 +82,11 @@ end $$
 
 |[f_print_info]| function(op, ...)
   local params = {...}
-  add(op, {draw=function()
+  f_addop_draw(op, function()
     local infoobj = f_zobj(unpack(params))
     f_print_top(unpack(infoobj[1]))
     f_print_bot(unpack(infoobj[2]))
-  end})
+  end)
 end $$
 
 |[f_print_top]| function(...)
