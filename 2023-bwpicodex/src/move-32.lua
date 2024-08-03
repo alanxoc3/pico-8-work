@@ -20,6 +20,24 @@
   end)
 end $$
 
+|[f_movehelp_effect_works]| function(_ENV) -- takes in a move to determine if that move would be effective
+  return f_moveutil_typeadv(_ENV, p_turn_other_active) > 0 and pktype ~= otheractive.pktype1 and pktype ~= otheractive.pktype2
+end $$
+
+-- focus/screen/seed/mist/reflct/toxic TODO: pl could be the _ENV here
+|[f_movehelp_minor]| function(_ENV, pl, message, minor, val, respect_type)
+  if (pl.active[minor] or 0) == 0 and (not respect_type or f_movehelp_effect_works(_ENV)) then
+    pl.active[minor] = val or 1
+    f_turn_addattack(pl, message)
+  else
+    return true
+  end
+end $$
+
+|[f_move_confuse]| function()
+  return f_movehelp_minor(_ENV, p_turn_other, "now confused", 'confused', f_flr_rnd'4'+1)
+end $$
+
 |[f_move_seismictoss]| function(_ENV, spec) f_moveutil_dmgother(spec) end $$ -- also: night shade, sonicboom, dragonrage
 |[f_move_psywave]|     function()     f_moveutil_dmgother(f_flr_rnd'75'+1) end $$
 

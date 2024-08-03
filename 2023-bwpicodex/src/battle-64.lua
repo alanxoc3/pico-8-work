@@ -187,7 +187,43 @@ end $$
   p_action_self.priority = priority_class+f_stat_calc(p_action_self_active, 'speed', true)
 end $$
 
-|[f_movelogic]| function(player)
+|[f_decrement_timer]| function(active, key, endfunc)
+  if active[key] > 0 then
+    active[key] -= 1
+    if active[key] == 0 then
+      endfunc()
+    end
+  end
+end $$
+
+|[f_premovelogic]| function(player)
+  -- PRE MOVE LOGIC
+  f_addaction(player, L_TRIGGER, player, false, function()
+    local execute_move_logic = true
+    if p_turn_self_active.confused > 0 then
+      f_turn_addattack(p_turn_self, "is confused")
+      if f_flr_rnd'2' == 0 then
+        f_turn_addattack(p_turn_self, "hurt itself")
+        f_moveutil_dmgself(f_moveutil_calc_move_damage(c_moves[M_NONE], p_turn_self_active, p_turn_self_active))
+        execute_move_logic = false
+      end
+    end
+
+    -- MOVE LOGIC
+    if execute_move_logic then
+      f_movelogic(player)
+    end
+
+    -- POST MOVE LOGIC
+    f_addaction(player, L_TRIGGER, player, false, function()
+      f_decrement_timer(p_turn_self_active, 'confused', function()
+        f_turn_addattack(p_turn_self, "end confused")
+      end)
+    end)
+  end)
+end $$
+
+|[f_movelogic]| function(player) -- called by premove logic & metronome. So that's why it must be separated out into its own function.
   local move = player.nextmove
   -- TODO: verify the resumes thing
   f_addaction(player, L_TRIGGER, player, (player.active.curmove and "resumes " or (move.func == f_move_multiturn and "begins " or "uses "))..c_move_names[move.num], function()
@@ -255,7 +291,7 @@ end $$
       else
         p_action_self.nextmove = c_moves[M_STRUGGLE]
       end
-      f_movelogic(p_action_self)
+      f_premovelogic(p_action_self)
     else
       -- umm, this may be a hack. i have "begins turn" again here, so the text doesn't change, but this action is immediately replaced by an action selection screen.
       f_addaction(p_action_self, L_PICK, p_action_self, "begins turn", function()

@@ -97,12 +97,14 @@ end $$
     ,f_prefix_zero(f_stat_calc(pkmn, 'speed'), 3)
   )
 
-  -- TODO: token saving, add a zcall here
   if player then -- if the player was passed in, then we are in a battle and should show moves
-    f_add_stat_move(op, pkmn, 0)
-    f_add_stat_move(op, pkmn, 1)
-    f_add_stat_move(op, pkmn, 2)
-    f_add_stat_move(op, pkmn, 3)
+    f_zcall([[
+      op,@, pkmn,@
+      ;;,~f_add_stat_move,~op,~pkmn,0
+      ;;,~f_add_stat_move,~op,~pkmn,1
+      ;;,~f_add_stat_move,~op,~pkmn,2
+      ;;,~f_add_stat_move,~op,~pkmn,3
+    ]], op, pkmn)
   end
 
   -- TODO: idk. should i include battle flags or no?

@@ -23,10 +23,10 @@ DONE Return       Normal   20 Var BP  100% -- Power increases as user's happines
 DONE Present      Normal   15 Var BP  90%  -- Randomly either attacks with a variable power, between 40 base power and 120 base power, or heals the target by 80 HP. STADIUM DIFF is: Present uses a different damage formula. The move has a 40 % chance of having a Base Damage of 40; a 30 % chance of having a Base Damage of 80; a 10 % chance of having a Base Damage of 120 and a 20 % chance of healing a quarter of the opponent's HP (unless it has full health, in which case, the move fails).
 DONE Magnitude    Ground   30 Var BP  100% -- Deals variable damage, between 10 base power and 130 base power, as well as double damage against Digging Pokemon.
 
-Confuse Ray  Ghost    10 N/A     100% -- Confuses the target.
-Dynamicpunch Fighting 5  100     50%  -- Confuses the target. 255/256 chance to confuse the target. Later gens always confuse. Mod: always hit for this game.
-Supersonic   Normal   20 N/A     55%  -- Confuses the target.
-Sweet Kiss   Normal   10 N/A     75%  -- Confuses the target.
+DONE Confuse Ray  Ghost    10 N/A     100% -- Confuses the target.
+DONE Supersonic   Normal   20 N/A     55%  -- Confuses the target.
+DONE Sweet Kiss   Normal   10 N/A     75%  -- Confuses the target.
+DONE Dynamicpunch Fighting 5  100     50%  -- Confuses the target. 255/256 chance to confuse the target. Later gens always confuse. Mod: always hit for this game.
 Swagger      Normal   15 N/A     90%  -- Confuses the target and raises its Attack by 2 stages. In gen2, swagger fails if attack is already at 6. Good because attack stat contributes to confusion damage. Mod: dont get confused
 
 DONE Extremespeed Normal   5  80      100% -- Usually goes first. +1 Priority.

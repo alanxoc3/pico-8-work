@@ -139,7 +139,7 @@ f_zcall[[
 
   ;;,~cls      -- this is just a visual blank screen when the game starts up
 
-  ;;,~memset ,0x5e00 ,0   ,256 -- todo: remove me, factory reset
+  -- ;;,~memset ,0x5e00 ,0   ,256 -- todo: remove me, factory reset
   ;;,~poke   ,S_STORY ,58      -- todo: remove me, story set for debugging
 ]]
 

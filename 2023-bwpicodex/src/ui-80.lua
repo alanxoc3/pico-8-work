@@ -479,7 +479,7 @@ end $$
 
 |[f_s_batmove]| function()
   p_action_self.nextmove = p_action_self_active[f_getsel'g_grid_battle_movesel'+1]
-  f_movelogic(p_action_self)
+  f_premovelogic(p_action_self)
 
   -- TODO: Dedup with below.
   f_pop_ui_stack()
@@ -491,7 +491,7 @@ end $$
 |[f_s_dmovsel]| function()
   -- TODO: dedup
   p_action_self.nextmove = c_moves[M_STRUGGLE]
-  f_movelogic(p_action_self)
+  f_premovelogic(p_action_self)
   f_pop_ui_stack()
   f_pop_ui_stack()
 

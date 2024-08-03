@@ -154,7 +154,7 @@
   ;;,~f_move_default                                                                    -- M_HORNATTACK
   ;;,~f_move_splash       ,0                                                            -- M_SPIDERWEB
   ;;,~f_move_doublekick   ,2                                                            -- M_DOUBLEKICK
-  ;;,~f_move_splash       ,0                                                            -- M_SWEETKISS
+  ;;,~f_move_confuse                                                                    -- M_SWEETKISS
   ;;,~f_move_default      ,10 ,~f_move_stat ,~c_yes ,attack ,1                          -- M_METALCLAW
   ;;,~f_move_splash       ,0                                                            -- M_TRANSFORM
   ;;,~f_move_doublekick   ,3                                                            -- M_TRIPLEKICK
@@ -169,7 +169,7 @@
   ;;,~f_move_default      ,30 ,~f_move_major_other ,C_MAJOR_PARALYZED                   -- M_LICK
   ;;,~f_move_splash       ,0                                                            -- M_PERISHSONG
   ;;,~f_move_splash       ,0                                                            -- M_MEANLOOK
-  ;;,~f_move_splash       ,0                                                            -- M_CONFUSERAY
+  ;;,~f_move_confuse                                                                    -- M_CONFUSERAY
   ;;,~f_move_splash       ,0                                                            -- M_CROSSCHOP
   ;;,~f_move_default      ,40 ,~f_move_major_other ,C_MAJOR_POISONED                    -- M_SMOG
   ;;,~f_move_splash       ,0                                                            -- M_KARATECHOP
@@ -251,9 +251,9 @@
   ;;,~f_move_splash       ,0                                                            -- M_SKULLBASH
   ;;,~f_move_default      ,30 ,~f_move_major_other ,C_MAJOR_PARALYZED                   -- M_BODYSLAM
   ;;,~f_move_default                                                                    -- M_WATERGUN
-  ;;,~f_move_default      ,10 ,~f_move_stat ,~c_no ,speed ,-1                           -- M_BUBBLEBEAM
-  ;;,~f_move_default      ,10 ,~f_move_major_other ,C_MAJOR_FROZEN                      -- M_ICEBEAM
-  ;;,~f_move_default      ,10 ,~f_move_major_other ,C_MAJOR_FROZEN                      -- M_BLIZZARD
+  ;;,~f_move_default      ,10  ,~f_move_stat ,~c_no ,speed ,-1                           -- M_BUBBLEBEAM
+  ;;,~f_move_default      ,10  ,~f_move_major_other ,C_MAJOR_FROZEN                      -- M_ICEBEAM
+  ;;,~f_move_default      ,10  ,~f_move_major_other ,C_MAJOR_FROZEN                      -- M_BLIZZARD
   ;;,~f_move_default      ,100 ,~f_move_stat ,~c_no ,speed ,-1                          -- M_ICYWIND
   ;;,~f_move_default                                                                    -- M_SURF
   ;;,~f_move_splash       ,0                                                            -- M_WHIRLPOOL
@@ -271,7 +271,7 @@
   ;;,~f_move_seismictoss  ,999                                                          -- M_SEISMICTOSS -- TODO: revert to correct number was here jost fur tastieng
   ;;,~f_move_submission   ,0                                                            -- M_SUBMISSION
   ;;,~f_move_default                                                                    -- M_MEGAKICK
-  ;;,~f_move_splash       ,0                                                            -- M_DYNAMICPUNCH
+  ;;,~f_move_default      ,100 ,~f_move_confuse                                         -- M_DYNAMICPUNCH
   ;;,~f_move_default      ,10 ,~f_move_major_other ,C_MAJOR_BURNED                      -- M_FIREPUNCH
   ;;,~f_move_default      ,10 ,~f_move_major_other ,C_MAJOR_PARALYZED                   -- M_THUNDERPUNCH
   ;;,~f_move_default      ,10 ,~f_move_major_other ,C_MAJOR_FROZEN                      -- M_ICEPUNCH
@@ -293,7 +293,7 @@
   ;;,~f_move_splash       ,0                                                            -- M_FAINTATTACK
   ;;,~f_move_stat         ,~c_yes ,defense ,1                                           -- M_WITHDRAW
   ;;,~f_move_splash       ,0                                                            -- M_RAPIDSPIN
-  ;;,~f_move_splash       ,0                                                            -- M_SUPERSONIC
+  ;;,~f_move_confuse                                                                    -- M_SUPERSONIC
   ;;,~f_move_default      ,10 ,~f_move_stat ,~c_no ,attack ,-1                          -- M_AURORABEAM
   ;;,~f_move_splash       ,0                                                            -- M_MIRRORCOAT
   ;;,~f_move_default      ,30 ,~f_move_major_other ,C_MAJOR_POISONED                    -- M_POISONSTING
