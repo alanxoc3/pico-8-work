@@ -189,12 +189,3 @@ end $$
   end
   camera()
 end $$
-
-|[f_addop_draw]| function(op, draw)
-  add(op, {draw=draw}) -- todo use zobj?
-end $$
-
-|[f_addop_text]| function(op, text)
-  f_addop_draw(op, function() print(text, 1, 1, C_1) end)
-end $$
-

@@ -169,10 +169,10 @@ end $$
 
   f_zcall([[
     op,@
-    ;;,~f_addop_text,~op,"view"
-    ;;,~f_addop_text,~op,"edit"
-    ;;,~f_addop_text,~op,"league"
-    ;;,~f_addop_text,~op,"versus"
+    ;;,~f_addop_text,~op,~c_no,"view"
+    ;;,~f_addop_text,~op,~c_no,"edit"
+    ;;,~f_addop_text,~op,~c_no,"league"
+    ;;,~f_addop_text,~op,~c_no,"versus"
   ]], op)
 end $$
 

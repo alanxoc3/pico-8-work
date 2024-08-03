@@ -26,10 +26,19 @@ end $$
   local _ENV = pkmn[ind]
   local maxpp, pp, pow, accuracy, typ = f_get_move_texts(_ENV)
   local method = pkmn.possible_moves_method[num] or "empty"
-  add(op, {text="move"..ind.." "..name, disabled=true})
-  add(op, {text=""..method.." "..typ})
-  add(op, {text="   pp "..pp.."/"..maxpp})
-  add(op, {text="pw/ac "..pow.."/"..accuracy})
+
+  f_zcall([[
+    op,@
+    ;;,~f_addop_text,~op,~c_yes,"move",@," ",@
+    ;;,~f_addop_text,~op,~c_no ,@," ",@
+    ;;,~f_addop_text,~op,~c_no ,"   pp ",@,"/",@
+    ;;,~f_addop_text,~op,~c_no ,"pw/ac ",@,"/",@
+  ]],op
+    ,ind    ,name
+    ,method ,typ
+    ,pp     ,maxpp
+    ,pow    ,accuracy
+  )
 end $$
 
 |[f_add_stat_preview]| function(op, pkmn, player)
@@ -39,34 +48,54 @@ end $$
     end
   end
 
-  add(op, {text="#"..f_prefix_zero(pkmn.num, 3).." "..pkmn.name, disabled=true})
-  f_addop_draw(op, draw_preview'17')
-  f_addop_draw(op, draw_preview'8')
-  f_addop_draw(op, draw_preview'-1')
+  f_zcall([[
+    op,@
+    ;;,~f_addop_text,~op,~c_yes,@,@," ",@
+    ;;,~f_addop_draw,~op,@
+    ;;,~f_addop_draw,~op,@
+    ;;,~f_addop_draw,~op,@
+  ]],op
+    -- TODO: if i remove the special # empty table logic from ztable, this can save 1 token
+    ,"#" ,f_prefix_zero(pkmn.num, 3) ,pkmn.name
+    ,draw_preview'17'
+    ,draw_preview'8'
+    ,draw_preview'-1'
+  )
 end $$
 
 |[f_add_stat]| function(op, pkmn, player)
   f_add_stat_preview(op, pkmn, player)
 
-  add(op, {text="peek "..pkmn.name, disabled=true})
-  if player then
-    add(op, {text="major "..c_major_names_long[pkmn.major]})
-  else
-    add(op, {text="prevo "..c_pkmn_names[pkmn.prevolve]})
-  end
+  f_zcall([[
+    op,@
+    ;;,~f_addop_text,~op,~c_yes,"peek ",@
+    ;;,~f_addop_text,~op,~c_no ,@
+    ;;,~f_addop_text,~op,~c_no ,"   hp ",@,"/",@
+    ;;,~f_addop_text,~op,~c_no ," item ",@
+    ;;,~f_addop_text,~op,~c_yes,"info ",@
+    ;;,~f_addop_text,~op,~c_no ,"gendr ",@
+    ;;,~f_addop_text,~op,~c_no ,"type1 ",@
+    ;;,~f_addop_text,~op,~c_no ,"type2 ",@
+    ;;,~f_addop_text,~op,~c_yes,"stat ",@
+    ;;,~f_addop_text,~op,~c_no ,"at/df ",@,"/",@
+    ;;,~f_addop_text,~op,~c_no ,"sa/sd ",@,"/",@
+    ;;,~f_addop_text,~op,~c_no ,"sp/lv ",@,"/050"
+  ]],op
+    ,pkmn.name
+    ,"major "..c_major_names_long[pkmn.major] or "prevo "..c_pkmn_names[pkmn.prevolve]
+    ,f_prefix_zero(pkmn.hp, 3) ,f_prefix_zero(pkmn.maxhp, 3) -- hp
 
-  add(op, {text="   hp "..f_prefix_zero(pkmn.hp, 3).."/"..f_prefix_zero(pkmn.maxhp, 3)})
-  add(op, {text=" item "..c_item_names[pkmn.item]})
+    ,c_item_names[pkmn.item]     -- item
+    ,pkmn.name                   -- info
+    ,c_gender_names[pkmn.gender] -- gendr
+    ,c_type_names[pkmn.pktype1]  -- type1
+    ,c_type_names[pkmn.pktype2]  -- type2
+    ,pkmn.name                   -- stat
 
-  add(op, {text="info "..pkmn.name, disabled=true})
-  add(op, {text="gendr "..c_gender_names[pkmn.gender]})
-  add(op, {text="type1 "..c_type_names[pkmn.pktype1]})
-  add(op, {text="type2 "..c_type_names[pkmn.pktype2]})
-
-  add(op, {text="stat "..pkmn.name, disabled=true})
-  add(op, {text="at/df "..f_prefix_zero(f_stat_calc(pkmn, 'attack'), 3).."/"..f_prefix_zero(f_stat_calc(pkmn, 'defense'), 3)})
-  add(op, {text="sa/sd "..f_prefix_zero(f_stat_calc(pkmn, 'specialattack'), 3).."/"..f_prefix_zero(f_stat_calc(pkmn, 'specialdefense'), 3)})
-  add(op, {text="sp/lv "..f_prefix_zero(f_stat_calc(pkmn, 'speed'), 3).."/050"})
+    ,f_prefix_zero(f_stat_calc(pkmn, 'attack'), 3)        ,f_prefix_zero(f_stat_calc(pkmn, 'defense'), 3)
+    ,f_prefix_zero(f_stat_calc(pkmn, 'specialattack'), 3) ,f_prefix_zero(f_stat_calc(pkmn, 'specialdefense'), 3)
+    ,f_prefix_zero(f_stat_calc(pkmn, 'speed'), 3)
+  )
 
   -- TODO: token saving, add a zcall here
   if player then -- if the player was passed in, then we are in a battle and should show moves
@@ -84,26 +113,17 @@ end $$
   local params = {...}
   f_addop_draw(op, function()
     local infoobj = f_zobj(unpack(params))
-    f_print_top(unpack(infoobj[1]))
-    f_print_bot(unpack(infoobj[2]))
+    print(f_join(unpack(infoobj[1])), 1, 1, C_3)
+    print(f_join(unpack(infoobj[2])), 1, 8, C_1)
   end)
 end $$
 
-|[f_print_top]| function(...)
-  local text = ""
-  for x in all{...} do
-    text ..= x
-  end
-  print("\f3"..text, 1, 1)
+|[f_addop_draw]| function(op, draw, disabled)
+  add(op, {draw=draw, disabled=disabled}) -- todo use zobj?
 end $$
 
--- TODO: dedup with _top
-|[f_print_bot]| function(...)
-  local text = ""
-  for x in all{...} do
-    text ..= x
-  end
-  print("\f1"..text, 1, 8)
+|[f_addop_text]| function(op, disabled, ...)
+  add(op, {text=f_join(...), disabled=disabled})
 end $$
 
 |[f_get_move_texts]| function(move)

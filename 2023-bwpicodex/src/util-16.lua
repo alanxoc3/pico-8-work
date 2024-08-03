@@ -6,6 +6,14 @@ end $$
 
 |[f_flr_rnd]| function(n) return flr(rnd(n)) end $$
 
+|[f_join]| function(...)
+  local text = ""
+  for x in all{...} do
+    text ..= x
+  end
+  return text
+end $$
+
 |[f_in_split]| function(val, str)
   for m in all(split(str)) do
     if m == val then
