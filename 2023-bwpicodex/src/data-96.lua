@@ -263,7 +263,7 @@
   ;;,~f_move_splash       ,0                                                            -- M_TRIATTACK
   ;;,~f_move_splash       ,0                                                            -- M_REFLECT
   ;;,~f_move_major_other  ,C_MAJOR_PARALYZED                                            -- M_THUNDERWAVE
-  ;;,~f_move_splash       ,0                                                            -- M_TELEPORT
+  ;;,~f_move_switch ,~c_yes                                                             -- M_TELEPORT
   ;;,~f_move_psywave      ,0                                                            -- M_PSYWAVE
   ;;,~f_move_splash       ,0                                                            -- M_METRONOME
   ;;,~f_move_splash       ,0                                                            -- M_COUNTER
@@ -281,11 +281,11 @@
   ;;,~f_move_default                                                                    -- M_EARTHQUAKE
   ;;,~f_move_splash       ,0                                                            -- M_SANDSTORM
   ;;,~f_move_splash       ,0                                                            -- M_HYPERBEAM
-  ;;,~f_move_splash       ,0                                                            -- M_ROAR
+  ;;,~f_move_switch ,~c_no                                                              -- M_ROAR
   ;;,~f_move_default      ,10 ,~f_move_stat ,~c_yes ,defense ,1                         -- M_STEELWING
   ;;,~f_move_splash       ,0                                                            -- M_FLY
   ;;,~f_move_splash       ,0                                                            -- M_RAZORWIND
-  ;;,~f_move_splash       ,0                                                            -- M_WHIRLWIND
+  ;;,~f_move_switch ,~c_no                                                              -- M_WHIRLWIND
   ;;,~f_move_splash       ,0                                                            -- M_SKYATTACK
   ;;,~f_move_default                                                                    -- M_WINGATTACK
   ;;,~f_move_default                                                                    -- M_PECK

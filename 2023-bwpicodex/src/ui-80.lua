@@ -294,6 +294,7 @@ end $$
     ;;,@," spot",@
   ]], pkmn.name, player.name, pkind%6+1)
 
+  -- TODO: can I combine this with f_switch_list?
   for i=1,6 do
     local pkmn = p_action_self.team[i]
     local disabled = not pkmn.valid or i==p_action_self_active.spot or pkmn.major == C_MAJOR_FAINTED
@@ -504,11 +505,7 @@ end $$
 |[f_s_batswitch]| function()
   p_action_self.nextmove = nil -- nextmove as nil means the pokemon will switch out
 
-  local nextpkmn = f_getsel'g_grid_battle_switch'+1 -- needs to be defined out of callback, because it can change!
-  f_addaction(p_action_self, L_TRIGGER, p_action_self, "backs "..p_action_self_active.name, function()
-    p_action_self_active.invisible = true
-    add(p_action_self.actions, f_pkmn_comes_out(p_action_self, nextpkmn, L_TRIGGER)) -- technically, this could be L_ATTACK too, doesn't really matter since poison/nightmare dmg isnt done on switches.
-  end, true)
+  f_switch_pkmn(p_action_self, L_TRIGGER, f_getsel'g_grid_battle_switch'+1)
 
   f_pop_ui_stack()
   f_pop_ui_stack()

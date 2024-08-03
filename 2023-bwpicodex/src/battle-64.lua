@@ -364,3 +364,23 @@ end $$
 
   f_s_bataction() -- call once, because need to pop the first action!
 end $$
+
+-- TODO: I think "level" could be hard coded as L_TRIGGER or L_ATTACK. Think about at and how it affects switching/teleport/roar/whirlwind.
+|[f_switch_pkmn]| function(pl, level, nextpkmn)
+  f_addaction(pl, level, pl, "backs "..pl.active.name, function()
+    p_action_self_active.invisible = true -- action sets p_action_self_active, so this is the same as the pl variable above and saves 1 token
+    add(pl.actions, f_pkmn_comes_out(pl, nextpkmn, level))
+  end, true)
+end $$
+
+-- Returns a list of pokemon that could be switched in.
+|[f_switch_list]| function(pl)
+  local l = {}
+  for i=1,6 do
+    local pkmn = pl.team[i]
+    if pkmn.valid and i ~= pl.active.spot and pkmn.major ~= C_MAJOR_FAINTED then
+      add(l, i)
+    end
+  end
+  return l
+end $$

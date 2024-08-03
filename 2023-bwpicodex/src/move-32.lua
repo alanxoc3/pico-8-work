@@ -10,6 +10,14 @@
 |[f_move_splash]| function() f_turn_addattack(p_action_self, "does nothing") end $$
 |[f_move_recover]| function(_ENV) return f_moveutil_hpchange(p_action_self, -p_action_self_active.maxhp\2) end $$
 
+-- for roar, whirlwind, teleport
+|[f_move_switch]| function(_ENV, isself)
+  local pl = isself and p_turn_self or p_turn_other
+  local l = f_switch_list(pl)
+  if #l == 0 then return true end
+  f_switch_pkmn(pl, L_ATTACK, l[f_flr_rnd(#l)+1])
+end $$
+
 |[f_move_default]| function(_ENV, percent, func, ...)
   local params = {_ENV, ...}
   f_moveutil_dmgother(_ENV, function()

@@ -1,6 +1,6 @@
-Roar         Normal   20 N/A     100% -- Almost always goes last; in trainer battles, the target is switched out for a random member of its team. Escapes from wild battles.
-Whirlwind    Normal   20 N/A     100% -- Almost always goes last; in trainer battles, the target is switched out for a random member of its team. Escapes from wild battles. Mod: Removes spikes from both sides.
-Teleport     Psychic  20 N/A     N/A  -- Escapes from wild battles; fails automatically in trainer and link battles.
+DONE Roar         Normal   20 N/A     100% -- Almost always goes last; in trainer battles, the target is switched out for a random member of its team. Escapes from wild battles.
+DONE Whirlwind    Normal   20 N/A     100% -- Almost always goes last; in trainer battles, the target is switched out for a random member of its team. Escapes from wild battles. Mod: Removes spikes from both sides.
+DONE Teleport     Psychic  20 N/A     N/A  -- Escapes from wild battles; fails automatically in trainer and link battles.
 
 DONE Barrage      Normal   20 15      85%  -- Attacks 2-5 times in one turn; if one of these attacks breaks a target's Substitute, the target will take damage for the rest of the hits. This move has a 3/8 chance to hit twice, a 3/8 chance to hit three times, a 1/8 chance to hit four times and a 1/8 chance to hit five times.
 DONE Bone Rush    Ground   10 25      80%  -- Attacks 2-5 times in one turn; if one of these attacks breaks a target's Substitute, the target will take damage for the rest of the hits. This move has a 3/8 chance to hit twice, a 3/8 chance to hit three times, a 1/8 chance to hit four times and a 1/8 chance to hit five times.
