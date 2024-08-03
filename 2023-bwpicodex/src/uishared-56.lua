@@ -8,16 +8,15 @@ end $$
 |[f_get_edit_op_pkmn]| function() return f_get_party_pkmn(f_getsel'g_grid_pickedit', f_getsel'g_grid_pickspot') end $$
 
 |[f_info_toggle]| function(op, toggle_grid, enemyname)
-  local toggle = g_cg_m.name == toggle_grid
   f_print_info(op, [[
      ;,@,"playr ",@
     ;;,@,"enemy ",@
-  ]], toggle and "\f3" or "\f1", c_team_names[f_getsel(toggle_grid)], toggle and "\f1" or "\f3", enemyname)
+  ]], g_top_grid == toggle_grid and "\f3" or "\f1", c_team_names[f_getsel(toggle_grid.g_cg_m.name)], g_top_grid == toggle_grid and "\f1" or "\f3", enemyname)
 end $$
 
 |[f_leagueinfo]| function(op)
   local name = c_trnr_names[f_getsel'g_grid_picktrnr'+1]
-  f_info_toggle(op, 'g_grid_pickleag', (@S_STORY+1<f_getsel'g_grid_picktrnr'+1) and f_strtoq(name) or name)
+  f_info_toggle(op, g_grid_pickleag, (@S_STORY+1<f_getsel'g_grid_picktrnr'+1) and f_strtoq(name) or name)
 end $$
 
 |[f_add_stat_move]| function(op, pkmn, ind)

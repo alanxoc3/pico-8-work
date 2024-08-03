@@ -459,11 +459,10 @@ end
 end,function(_ENV,op,disabled)
 add(op,{text=lock and name or f_strtoq(name),disabled=disabled or not lock})
 end,function()return f_get_party_pkmn(f_getsel"g_grid_pickedit",f_getsel"g_grid_pickspot")end,function(op,toggle_grid,enemyname)
-local toggle=g_cg_m.name==toggle_grid
-f_print_info(op,";,@,playr ,@;;,@,enemy ,@",toggle and "\f3"or "\f1",c_team_names[f_getsel(toggle_grid)],toggle and "\f1"or "\f3",enemyname)
+f_print_info(op,";,@,playr ,@;;,@,enemy ,@",g_top_grid==toggle_grid and "\f3"or "\f1",c_team_names[f_getsel(toggle_grid.g_cg_m.name)],g_top_grid==toggle_grid and "\f1"or "\f3",enemyname)
 end,function(op)
 local name=c_trnr_names[f_getsel"g_grid_picktrnr"+1]
-f_info_toggle(op,"g_grid_pickleag",(@0x5eff+1<f_getsel"g_grid_picktrnr"+1)and f_strtoq(name)or name)
+f_info_toggle(op,g_grid_pickleag,(@0x5eff+1<f_getsel"g_grid_picktrnr"+1)and f_strtoq(name)or name)
 end,function(op,pkmn,ind)
 ind=ind+1
 local move=pkmn[ind]
@@ -828,7 +827,7 @@ end,function(_ENV)
 f_add_edit(op,true)
 f_leagueinfo(preview_op)
 end,function(_ENV)
-f_info_toggle(preview_op,"g_grid_pickplr1",c_team_names[f_getsel"g_grid_pickplr2"])
+f_info_toggle(preview_op,g_grid_pickplr1,c_team_names[f_getsel"g_grid_pickplr2"])
 f_add_edit(op,true)
 end,function(_ENV)add(op,{})end,function(_ENV)
 local pkmn=f_get_edit_op_pkmn()

@@ -48,7 +48,7 @@ end $$
 end $$
 
 |[f_op_pickversus]| function(_ENV)
-  f_info_toggle(preview_op, 'g_grid_pickplr1', c_team_names[f_getsel'g_grid_pickplr2'])
+  f_info_toggle(preview_op, g_grid_pickplr1, c_team_names[f_getsel'g_grid_pickplr2'])
   f_add_edit(op, true)
 end $$
 
