@@ -87,9 +87,9 @@ end $$
 -- player cannot be nil, others can. the player turn is passed and the current active is extracted.
 -- the current active is needed because if it dies, we want to skip over actions
 -- if message is false/nil, the logic function is executed immediately, then the next action is executed
-|[f_newaction]| function(level, player, message, logic, isplayeraction)
+|[f_newaction]| function(level, player, message, logic, message_type)
   -- TODO: why does the "message or false" line need an "or false"?
-  return f_zobj([[level,@, player,@, message,@, logic,@, isplayeraction,@]], level, player, message or false, logic or f_nop, isplayeraction)
+  return f_zobj([[level,@, player,@, message,@, logic,@, message_type,@]], level, player, message or false, logic or f_nop, message_type)
 end $$
 
 -- adds an action to a player's action list
@@ -173,7 +173,7 @@ end $$
 
   -- TODO: is there a good way to simplify tokens here?
   if not movenum                                                         then priority_class = C_PRIORITY_SWITCH
-  elseif movenum == M_PURSUIT and not p_action_other.movenum             then priority_class = C_PRIORITY_PURSUIT
+  elseif movenum == M_PURSUIT and not p_action_other.nextmove            then priority_class = C_PRIORITY_PURSUIT
   elseif f_in_split(movenum, 'M_WHIRLWIND,M_ROAR,M_TELEPORT')            then priority_class = C_PRIORITY_ROAR
   elseif f_in_split(movenum, 'M_QUICKATTACK,M_MACHPUNCH,M_EXTREMESPEED') then priority_class = C_PRIORITY_QUICKATTACK
   elseif f_in_split(movenum, 'M_COUNTER,M_MIRRORCOAT')                   then priority_class = C_PRIORITY_COUNTER
@@ -321,14 +321,14 @@ end $$
         end
 
         f_add_to_ui_stack(g_grid_battle_select)
-      end, true)
+      end, C_MESSAGE_PLAYER)
     end
   end
 
   f_set_both_players([[p_first,@, p_last,@]], p_battle_bot)
 
-  f_addaction(p_battle_bot, L_PICK, p_battle_bot, not p_battle_bot.iscpu and "begins turn", x, true)
-  f_addaction(p_battle_top, L_PICK, p_battle_top, not p_battle_top.iscpu and "begins turn", x, true)
+  f_addaction(p_battle_bot, L_PICK, p_battle_bot, not p_battle_bot.iscpu and "begins turn", x, C_MESSAGE_PLAYER)
+  f_addaction(p_battle_top, L_PICK, p_battle_top, not p_battle_top.iscpu and "begins turn", x, C_MESSAGE_PLAYER)
 
   -- calculate priorities. this just has to be on 1 of the 2 players so it gets executed.
   f_addaction(p_battle_bot, L_PRIORITY, p_battle_bot, false, function()
@@ -339,6 +339,24 @@ end $$
     if p_battle_bot.priority == p_battle_top.priority then p_battle_top.priority += sgn(rnd'2'-1) end
     f_set_both_players([[p_first,@, p_last,@]], p_battle_bot.priority > p_battle_top.priority and p_battle_bot or p_battle_top)
 
+    f_addaction(p_first, L_WEATHER, p_first, false, function()
+      if g_battle_weather.turn > 0 then
+        if g_battle_weather.kind == C_WEATHER_SAND then
+          for pl in all{p_first, p_last} do
+            if not f_in_split(pl.active.pktype1, 'T_ROCK,T_GROUND,T_STEEL') and not f_in_split(pl.active.pktype2, 'T_ROCK,T_GROUND,T_STEEL') then
+              f_addaction(pl, L_ATTACK, pl, "hurt by sand", function()
+                f_moveutil_dmgself(ceil(p_turn_self_active.maxhp/8)) -- TODO: should this and others really be a ceil? I think officially it is a floor.
+              end)
+            end
+          end
+        end
+      end
+
+      f_decrement_timer(g_battle_weather, 'turn', function()
+        f_addaction(g_battle_weather.player, L_WEATHER, g_battle_weather.player, "goes away", f_nop, C_MESSAGE_WEATHER)
+      end)
+    end)
+
     -- f_s_bataction()
   end)
 end $$
@@ -347,14 +365,15 @@ end $$
   p_battle_bot, p_battle_top = f_create_player("playr", f_team_party(@S_TEAM1), c_team_names[@S_TEAM1], P_MALETRNR+@S_TEAM1%2, @S_TEAM1 > 1), f_create_player("enemy", ...)
   f_set_both_players([[p_first,@, p_last,@]], p_battle_bot) -- without this line, the initial sending pkmn out part doesn't work.
   g_p1_winfunc = p1winfunc
+  g_battle_weather = f_zobj[[turn,0, kind,C_WEATHER_NONE]] -- implied there is also a 'player' variable on here
 
   f_set_both_players([[p_action_self,@, p_action_other,@, p_action_self_active,@, p_action_other_active,@]], p_battle_bot)
   memset(S_P1_BATACTION, 0, 12) -- resets battle ui to zeros
 
-  f_addaction(p_battle_bot, L_PICK, p_battle_bot, "begins battle", f_nop, true)
+  f_addaction(p_battle_bot, L_PICK, p_battle_bot, "begins battle", f_nop, C_MESSAGE_PLAYER)
   add(p_battle_bot.actions, f_pkmn_comes_out(p_battle_bot, p_battle_bot.active.spot, L_PICK))
 
-  f_addaction(p_battle_top, L_PICK, p_battle_top, "begins battle", f_nop, true)
+  f_addaction(p_battle_top, L_PICK, p_battle_top, "begins battle", f_nop, C_MESSAGE_PLAYER)
   add(p_battle_top.actions, f_pkmn_comes_out(p_battle_top, p_battle_top.active.spot, L_PICK))
 
   -- the normal action grid has an init function which is called immediately.

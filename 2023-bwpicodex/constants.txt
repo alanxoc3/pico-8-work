@@ -73,6 +73,10 @@ L_END:         12 # This is used in a for loop, in case I add more actions.
 # ----------------------------- load memory locations
 L_DATASTART: 0x1fff # data starts one byte before because the code increments first
 
+# --------------- Used for top line in info box message
+C_MESSAGE_PLAYER: 0
+C_MESSAGE_WEATHER: 1
+
 # ----------------------------- priorities - aligned to thousand because 999 is the max speed stat
 C_PRIORITY_PURSUIT:     7000 #pursuit if opponent switched
 C_PRIORITY_SWITCH:      6000 #switch

@@ -10,6 +10,14 @@
 |[f_move_splash]| function() f_turn_addattack(p_action_self, "does nothing") end $$
 |[f_move_recover]| function(_ENV) return f_moveutil_hpchange(p_action_self, -p_action_self_active.maxhp\2) end $$
 
+|[f_move_weather]| function(_ENV, weather)
+  f_addaction(p_turn_self, L_ATTACK, p_turn_self, "takes effect", function()
+    g_battle_weather.kind = weather
+    g_battle_weather.turn = 5
+    g_battle_weather.player = p_turn_self
+  end, C_MESSAGE_WEATHER)
+end $$
+
 -- for roar, whirlwind, teleport
 |[f_move_switch]| function(_ENV, isself)
   local pl = isself and p_turn_self or p_turn_other
@@ -26,10 +34,6 @@ end $$
       func(unpack(params))
     end
   end)
-end $$
-
-|[f_movehelp_effect_works]| function(_ENV) -- takes in a move to determine if that move would be effective
-  return f_moveutil_typeadv(_ENV, p_turn_other_active) > 0 and pktype ~= otheractive.pktype1 and pktype ~= otheractive.pktype2
 end $$
 
 -- focus/screen/seed/mist/reflct/toxic TODO: pl could be the _ENV here

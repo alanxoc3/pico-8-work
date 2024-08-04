@@ -542,9 +542,12 @@ end $$
       -- an empty message means we execute the logic, but look for another p_curaction
       if p_curaction.message then
         f_setsel('g_grid_battle_actions', p_action_self == p_battle_bot and 1 or 0) -- TODO: dedup
-        g_msg_top = p_action_self.name.." "..p_action_self_active.name
-        if p_curaction.isplayeraction then -- TODO: token crunch
+        if p_curaction.message_type == C_MESSAGE_PLAYER then -- TODO: token crunch
           g_msg_top = p_action_self.name.." "..p_action_self.subname
+        elseif p_curaction.message_type == C_MESSAGE_WEATHER then
+          g_msg_top = c_weather_names[g_battle_weather.kind].." weather"
+        else
+          g_msg_top = p_action_self.name.." "..p_action_self_active.name
         end
         g_msg_bot = p_curaction.message
         return

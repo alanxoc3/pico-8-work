@@ -45,6 +45,7 @@
 |[c_major_names_short]| f_zobj[["0,___;,fnt,brn,fzn,par,psn,slp"]] $$
 |[c_movemethod_names]|  split"learn,teach,cheat" $$
 |[c_statmod_names]|     f_zobj[[attack,"atack", defense,"defns", specialattack,"spatk", specialdefense,"spdfn", speed,"speed", evasion,"evasn", accuracy,"acury", crit,"critl"]] $$
+|[c_weather_names]|     f_zobj[["0, ;,rainy,sunny,sandy"]] $$
 
 -- todo: can this go in cartridge data? maybe i dont want that though (uses more tokens)
 |[c_palettes]| f_zobj[[
@@ -213,7 +214,7 @@
   ;;,~f_move_splash       ,0                                                            -- M_DEFENSECURL
   ;;,~f_move_splash       ,0                                                            -- M_DETECT
   ;;,~f_move_splash       ,0                                                            -- M_SOLARBEAM
-  ;;,~f_move_splash       ,0                                                            -- M_RAINDANCE
+  ;;,~f_move_weather ,C_WEATHER_RAIN                                                    -- M_RAINDANCE
   ;;,~f_move_stat ,~c_no ,accuracy ,-1                                                  -- M_FLASH
   ;;,~f_move_default      ,10 ,~f_move_stat ,~c_no ,specialdefense ,-1                  -- M_PSYCHIC
   ;;,~f_move_splash       ,0                                                            -- M_PSYCHUP
@@ -228,7 +229,7 @@
   ;;,~f_move_default      ,50 ,~f_move_stat ,~c_no ,defense ,-1                         -- M_ROCKSMASH
   ;;,~f_move_splash       ,0                                                            -- M_HEADBUTT
   ;;,~f_move_default      ,100 ,~f_move_stat ,~c_no ,accuracy ,-1                       -- M_MUDSLAP
-  ;;,~f_move_splash       ,0                                                            -- M_SUNNYDAY
+  ;;,~f_move_weather ,C_WEATHER_SUN                                                     -- M_SUNNYDAY
   ;;,~f_move_splash       ,0                                                            -- M_PROTECT
   ;;,~f_move_stat         ,~c_yes ,evasion ,1                                           -- M_DOUBLETEAM
   ;;,~f_move_splash       ,0                                                            -- M_SLEEPTALK
@@ -279,7 +280,7 @@
   ;;,~f_move_default      ,10 ,~f_move_major_other ,C_MAJOR_BURNED                      -- M_FLAMETHROWER
   ;;,~f_move_splash       ,0                                                            -- M_FISSURE
   ;;,~f_move_default                                                                    -- M_EARTHQUAKE
-  ;;,~f_move_splash       ,0                                                            -- M_SANDSTORM
+  ;;,~f_move_weather ,C_WEATHER_SAND                                                    -- M_SANDSTORM
   ;;,~f_move_splash       ,0                                                            -- M_HYPERBEAM
   ;;,~f_move_switch ,~c_no                                                              -- M_ROAR
   ;;,~f_move_default      ,10 ,~f_move_stat ,~c_yes ,defense ,1                         -- M_STEELWING

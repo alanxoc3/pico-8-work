@@ -131,7 +131,6 @@ f_zcall[[
   ;;,~f_create_gridpair ,g_grid_battle_actions     ,S_DEFAULT     ,~top_battle2   ,~bot_info      ,~f_op_bataction       ,~f_s_bataction    ,~f_l_battle      ,~c_no               ,~c_yes ,~f_s_bataction
   ;;,~f_create_gridpair ,g_grid_battle_firstaction ,S_DEFAULT     ,~top_battle2   ,~bot_info      ,~f_op_bataction       ,~f_s_bataction    ,~f_l_battle      ,~c_no               ,~c_yes ,~f_nop
 
-
   ----------------------------------------------------- GAME INITIALIZATION
   ;;,~poke ,0x5f2c  ,3  -- screen to 64x64
   ;;,~poke ,0x5f5c  ,8  -- set btn initial delay before repeating. 255 means never repeat.
