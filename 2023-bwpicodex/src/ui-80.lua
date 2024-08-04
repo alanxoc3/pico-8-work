@@ -297,7 +297,7 @@ end $$
   -- TODO: can I combine this with f_switch_list?
   for i=1,6 do
     local pkmn = p_action_self.team[i]
-    local disabled = not pkmn.valid or i==p_action_self_active.spot or pkmn.major == C_MAJOR_FAINTED
+    local disabled = p_action_self_active.meanlook or p_action_self_active.trap > 0 or not pkmn.valid or i==p_action_self_active.spot or pkmn.major == C_MAJOR_FAINTED
     add(op, {disabled=disabled, draw=function(i, is_sel)
       f_draw_pkmn(pkmn.num, 1, 1, STYLE_NORMAL, p_action_self == p_battle_top, is_sel, disabled)
     end})

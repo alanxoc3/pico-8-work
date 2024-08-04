@@ -45,7 +45,7 @@
 |[c_major_names_short]| f_zobj[["0,___;,fnt,brn,fzn,par,psn,slp"]] $$
 |[c_movemethod_names]|  split"learn,teach,cheat" $$
 |[c_statmod_names]|     f_zobj[[attack,"atack", defense,"defns", specialattack,"spatk", specialdefense,"spdfn", speed,"speed", evasion,"evasn", accuracy,"acury", crit,"critl"]] $$
-|[c_weather_names]|     f_zobj[["0, ;,rainy,sunny,sandy"]] $$
+|[c_weather_names]|     f_zobj[["0, ;,rainy,sunny,sandy"]] $$ -- TODO: could this be a split?
 
 -- todo: can this go in cartridge data? maybe i dont want that though (uses more tokens)
 |[c_palettes]| f_zobj[[
@@ -75,8 +75,8 @@
   ;;,~f_move_stat         ,~c_yes ,defense ,2                                           -- M_ACIDARMOR
   ;;,~f_move_barrage      ,0                                                            -- M_BARRAGE
   ;;,~f_move_default      ,10 ,~f_move_flinch                                           -- M_BONECLUB
-  ;;,~f_move_splash       ,0                                                            -- M_BIND
-  ;;,~f_move_splash       ,0                                                            -- M_CLAMP
+  ;;,~f_move_default      ,100 ,~f_move_trap                                            -- M_BIND
+  ;;,~f_move_default      ,100 ,~f_move_trap                                            -- M_CLAMP
   ;;,~f_move_moonlight                                                                  -- M_MOONLIGHT
   ;;,~f_move_splash       ,0                                                            -- M_LEECHSEED
   ;;,~f_move_default                                                                    -- M_EXTREMESPEED
@@ -124,7 +124,7 @@
   ;;,~f_move_barrage      ,0                                                            -- M_PINMISSILE
   ;;,~f_move_default      ,10 ,~f_move_major_other ,C_MAJOR_FROZEN                      -- M_POWDERSNOW
   ;;,~f_move_superfang    ,0                                                            -- M_SUPERFANG
-  ;;,~f_move_splash       ,0                                                            -- M_FIRESPIN
+  ;;,~f_move_default      ,100 ,~f_move_trap                                            -- M_FIRESPIN
   ;;,~f_move_major_other  ,C_MAJOR_POISONED                                             -- M_POISONGAS
   ;;,~f_move_stat         ,~c_yes ,defense ,2                                           -- M_BARRIER
   ;;,~f_move_stat         ,~c_yes ,attack ,1                                            -- M_MEDITATE
@@ -140,7 +140,7 @@
   ;;,~f_move_default                                                                    -- M_RAZORLEAF
   ;;,~f_move_major_other  ,C_MAJOR_POISONED                                             -- M_POISONPOWDER
   ;;,~f_move_major_other  ,C_MAJOR_SLEEPING                                             -- M_SLEEPPOWDER
-  ;;,~f_move_splash       ,0                                                            -- M_ABSORB
+  ;;,~f_move_drain                                                                      -- M_ABSORB
   ;;,~f_move_major_other  ,C_MAJOR_PARALYZED                                            -- M_STUNSPORE
   ;;,~f_move_flail        ,0                                                            -- M_FLAIL
   ;;,~f_move_default      ,10 ,~f_move_confuse                                          -- M_CONFUSION
@@ -153,7 +153,7 @@
   ;;,~f_move_splash       ,0                                                            -- M_MINDREADER
   ;;,~f_move_splash       ,0                                                            -- M_MIST
   ;;,~f_move_default                                                                    -- M_HORNATTACK
-  ;;,~f_move_splash       ,0                                                            -- M_SPIDERWEB
+  ;;,~f_move_meanlook                                                                   -- M_SPIDERWEB
   ;;,~f_move_doublekick   ,2                                                            -- M_DOUBLEKICK
   ;;,~f_move_confuse                                                                    -- M_SWEETKISS
   ;;,~f_move_default      ,10 ,~f_move_stat ,~c_yes ,attack ,1                          -- M_METALCLAW
@@ -169,7 +169,7 @@
   ;;,~f_move_splash       ,0                                                            -- M_HAZE
   ;;,~f_move_default      ,30 ,~f_move_major_other ,C_MAJOR_PARALYZED                   -- M_LICK
   ;;,~f_move_splash       ,0                                                            -- M_PERISHSONG
-  ;;,~f_move_splash       ,0                                                            -- M_MEANLOOK
+  ;;,~f_move_meanlook                                                                   -- M_MEANLOOK
   ;;,~f_move_confuse                                                                    -- M_CONFUSERAY
   ;;,~f_move_default                                                                    -- M_CROSSCHOP
   ;;,~f_move_default      ,40 ,~f_move_major_other ,C_MAJOR_POISONED                    -- M_SMOG
@@ -203,8 +203,8 @@
   ;;,~f_move_default                                                                    -- M_EXPLOSION
   ;;,~f_move_default                                                                    -- M_EGGBOMB
   ;;,~f_move_default      ,30 ,~f_move_major_other ,C_MAJOR_POISONED                    -- M_SLUDGEBOMB
-  ;;,~f_move_splash       ,0                                                            -- M_GIGADRAIN
-  ;;,~f_move_splash       ,0                                                            -- M_MEGADRAIN
+  ;;,~f_move_drain                                                                      -- M_GIGADRAIN
+  ;;,~f_move_drain                                                                      -- M_MEGADRAIN
   ;;,~f_move_stat         ,~c_yes ,attack ,2                                            -- M_SWORDSDANCE
   ;;,~f_move_default                                                                    -- M_CUT
   ;;,~f_move_splash       ,0                                                            -- M_FURYCUTTER
@@ -252,12 +252,12 @@
   ;;,~f_move_splash       ,0                                                            -- M_SKULLBASH
   ;;,~f_move_default      ,30 ,~f_move_major_other ,C_MAJOR_PARALYZED                   -- M_BODYSLAM
   ;;,~f_move_default                                                                    -- M_WATERGUN
-  ;;,~f_move_default      ,10  ,~f_move_stat ,~c_no ,speed ,-1                           -- M_BUBBLEBEAM
-  ;;,~f_move_default      ,10  ,~f_move_major_other ,C_MAJOR_FROZEN                      -- M_ICEBEAM
-  ;;,~f_move_default      ,10  ,~f_move_major_other ,C_MAJOR_FROZEN                      -- M_BLIZZARD
+  ;;,~f_move_default      ,10  ,~f_move_stat ,~c_no ,speed ,-1                          -- M_BUBBLEBEAM
+  ;;,~f_move_default      ,10  ,~f_move_major_other ,C_MAJOR_FROZEN                     -- M_ICEBEAM
+  ;;,~f_move_default      ,10  ,~f_move_major_other ,C_MAJOR_FROZEN                     -- M_BLIZZARD
   ;;,~f_move_default      ,100 ,~f_move_stat ,~c_no ,speed ,-1                          -- M_ICYWIND
   ;;,~f_move_default                                                                    -- M_SURF
-  ;;,~f_move_splash       ,0                                                            -- M_WHIRLPOOL
+  ;;,~f_move_default      ,100 ,~f_move_trap                                            -- M_WHIRLPOOL
   ;;,~f_move_default                                                                    -- M_WATERFALL
   ;;,~f_move_splash       ,0                                                            -- M_SWIFT
   ;;,~f_move_default                                                                    -- M_PAYDAY
@@ -302,7 +302,7 @@
   ;;,~f_move_default      ,20 ,~f_move_stat ,~c_no ,specialdefense ,-1                  -- M_CRUNCH
   ;;,~f_move_default                                                                    -- M_PURSUIT
   ;;,~f_move_stat ,~c_no ,speed ,-1                                                     -- M_STRINGSHOT
-  ;;,~f_move_splash       ,0                                                            -- M_LEECHLIFE
+  ;;,~f_move_drain                                                                      -- M_LEECHLIFE
   ;;,~f_move_splash       ,0                                                            -- M_BATONPASS
   ;;,~f_move_splash       ,0                                                            -- M_DISABLE
   ;;,~f_move_stat ,~c_no ,defense ,-2                                                   -- M_SCREECH
@@ -315,7 +315,7 @@
   ;;,~f_move_default      ,30 ,~f_move_flinch                                           -- M_LOWKICK
   ;;,~f_move_default      ,30 ,~f_move_flinch                                           -- M_ROLLINGKICK
   ;;,~f_move_splash       ,0                                                            -- M_ENCORE
-  ;;,~f_move_splash       ,0                                                            -- M_WRAP
+  ;;,~f_move_default      ,100 ,~f_move_trap                                            -- M_WRAP
   ;;,~f_move_stat         ,~c_yes ,specialattack ,1                                     -- M_GROWTH
   ;;,~f_move_default                                                                    -- M_VINEWHIP
   ;;,~f_move_default      ,50 ,~f_move_major_other ,C_MAJOR_BURNED                      -- M_SACREDFIRE

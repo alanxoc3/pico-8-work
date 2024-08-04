@@ -71,16 +71,16 @@ DONE Super Fang   Normal   10 Var Dmg 90%  -- This move halves the target's curr
 DONE False Swipe  Normal   40 40      100% -- Leaves the target with at least 1 HP.
 
 # Moves that can directly or indirectly restore HP or heal status conditions.
-Milk Drink   Normal   10 N/A     N/A  -- Restores 1/2 of the user's max HP.
-Recover      Normal   20 N/A     N/A  -- Restores 1/2 of the user's max HP.
-Softboiled   Normal   10 N/A     N/A  -- Restores 1/2 of the user's max HP.
-Morning Sun  Normal   5  N/A     N/A  -- Restores 1/2 of the user's max HP without weather. 3/4 with Sunny Day. 1/4 with Rain/Sandstorm.
-Moonlight    Normal   5  N/A     N/A  -- Restores 1/2 of the user's max HP without weather. 3/4 with Sunny Day. 1/4 with Rain/Sandstorm.
-Synthesis    Grass    5  N/A     N/A  -- Restores 1/2 of the user's max HP without weather. 3/4 with Sunny Day. 1/4 with Rain/Sandstorm.
-Absorb       Grass    20 20      100% -- Restores the user's HP by 1/2 of the damage inflicted on the target.
-Giga Drain   Grass    5  60      100% -- Restores the user's HP by 1/2 of the damage inflicted on the target.
-Leech Life   Bug      15 20      100% -- Restores the user's HP by 1/2 of the damage inflicted on the target.
-Mega Drain   Grass    10 40      100% -- Restores the user's HP by 1/2 of the damage inflicted on the target.
+DONE Milk Drink   Normal   10 N/A     N/A  -- Restores 1/2 of the user's max HP.
+DONE Recover      Normal   20 N/A     N/A  -- Restores 1/2 of the user's max HP.
+DONE Softboiled   Normal   10 N/A     N/A  -- Restores 1/2 of the user's max HP.
+DONE Morning Sun  Normal   5  N/A     N/A  -- Restores 1/2 of the user's max HP without weather. 3/4 with Sunny Day. 1/4 with Rain/Sandstorm.
+DONE Moonlight    Normal   5  N/A     N/A  -- Restores 1/2 of the user's max HP without weather. 3/4 with Sunny Day. 1/4 with Rain/Sandstorm.
+DONE Synthesis    Grass    5  N/A     N/A  -- Restores 1/2 of the user's max HP without weather. 3/4 with Sunny Day. 1/4 with Rain/Sandstorm.
+DONE Absorb       Grass    20 20      100% -- Restores the user's HP by 1/2 of the damage inflicted on the target.
+DONE Giga Drain   Grass    5  60      100% -- Restores the user's HP by 1/2 of the damage inflicted on the target.
+DONE Leech Life   Bug      15 20      100% -- Restores the user's HP by 1/2 of the damage inflicted on the target.
+DONE Mega Drain   Grass    10 40      100% -- Restores the user's HP by 1/2 of the damage inflicted on the target.
 Dream Eater  Psychic  15 100     100% -- Restores the user's HP by 1/2 of the damage inflicted on the target but only works on a sleeping target.
 Rest         Psychic  10 N/A     N/A  -- The user is cured of status effects (and confusion), and recovers full HP, but falls asleep for 2 turns.
 Haze         Ice      30 N/A     N/A  -- Eliminates any stat modifiers from all active Pokemon. Status condition (par/etc) are not healed. Mod: like gen 1
@@ -270,16 +270,9 @@ Attract      Normal   15 N/A     100% -- Infatuates Pokemon of the opposite gend
 Nightmare    Ghost    15 N/A     100% -- This move only works on a sleeping target; as long as the target remains asleep and in battle, 1/4 of its max HP is sapped after each turn.
 Toxic        Poison   10 N/A     85%  -- The target is badly poisoned, with the damage caused by poison doubling after each turn. However, Toxic poisoning will revert to normal poisoning if the poisoned Pokemon is switched out.
 Substitute   Normal   10 N/A     N/A  -- The user takes one-fourth of its maximum HP to create a substitute; this move fails if the user does not have enough HP for this. Until the substitute is broken, it receives damage from all attacks made by other Pokemon and shields the user from status effects and stat modifiers caused by other Pokemon. The user is still affected by Sandstorm and Attract from behind its Substitute. If a Substitute breaks from a hit during a multistrike move such as Fury Attack, the user takes damage from the remaining strikes.
-Mean Look    Normal   5  N/A     N/A  -- As long as the user remains in battle, the target cannot switch out unless it uses Baton Pass or Teleport. The target will still be trapped if the user switches out by using Baton Pass. Baton Pass can switch actually. Beat up can too.
-Spider Web   Bug      10 N/A     N/A  -- As long as the user remains in battle, the target cannot switch out unless it uses Baton Pass or Teleport. The target will still be trapped if the user switches out by using Baton Pass. Baton Pass can switch actually. Beat up can too.
 Leech Seed   Grass    10 N/A     90%  -- The user steals 1/8 of the target's max HP until the target is switched out, is KO'ed, or uses Rapid Spin; does not work against Grass-type Pokemon or Pokemon behind Substitutes.
 Curse        ???      10 N/A     N/A  -- When used by a Ghost-type, the user sacrifices half of its max HP to sap the target by 1/4 of its max HP per turn. When used by anything else, the user's Speed is decreased by 1 stage and its Attack and Defense are increased by 1 stage.
 Foresight    Normal   40 N/A     100% -- Sets a flag on the target, not the user. Until the target faints or switches, the target's Accuracy modifiers and the target's Evasion modifiers are ignored. Ghost-type targets also lose their immunities against Normal-type and Fighting-type moves.
-Bind         Normal   20 15      75%  -- Traps the target for 2-5 turns, causing damage equal to 1/16 of its max HP each turn; this trapped effect can be broken by Rapid Spin. The target can still switch out if it uses Baton Pass.
-Clamp        Water    10 35      75%  -- Traps the target for 2-5 turns, causing damage equal to 1/16 of its max HP each turn; this trapped effect can be broken by Rapid Spin. The target can still switch out if it uses Baton Pass.
-Fire Spin    Fire     15 15      70%  -- Traps the target for 2-5 turns, causing damage equal to 1/16 of its max HP each turn; this trapped effect can be broken by Rapid Spin. The target can still switch out if it uses Baton Pass.
-Whirlpool    Water    15 15      70%  -- Traps the target for 2-5 turns, causing damage equal to 1/16 of its max HP each turn; this trapped effect can be broken by Rapid Spin. The target can still switch out if it uses Baton Pass.
-Wrap         Normal   20 15      85%  -- Traps the target for 2-5 turns, causing damage equal to 1/16 of its max HP each turn; this trapped effect can be broken by Rapid Spin. The target can still switch out if it uses Baton Pass.
 Mist         Ice      30 N/A     N/A  -- Protects the user from negative stat modifiers caused by other Pokemon, but not by itself, until it switches out; can be Baton Passed by user. The user's Accuracy and Evasion stats are also protected. Moves that cause negative stat modifiers as a secondary effect, such as Psychic, still deal their regular damage.
 Destiny Bond Ghost    5  N/A     N/A  -- Causes an opponent to faint if its next attack KOs the user.
 Endure       Normal   10 N/A     N/A  -- Almost always goes first. The user is left with at least 1 HP following any attacks for one turn, but the move's success rate halves with each consecutive use of Protect, Detect or Endure.
@@ -288,6 +281,14 @@ Protect      Normal   10 N/A     N/A  -- Almost always goes first. The user is p
 Lock-On      Normal   5  N/A     100% -- Same as mind reader. Applies to target in gen ii. This move ensures that the user's next attack will hit against its current target. Even if the user switches out, its replacement's next move will always hit too. Lock-On fails against Pokemon in the middle of using Protect, Detect, Dig or Fly, as well as Pokemon behind a Substitute.
 Mind Reader  Normal   5  N/A     100% -- Same as lockon. Applies to target in gen ii. This move ensures that the user's next attack will hit against its current target. Even if the user switches out, its replacement's next move will always hit too. Mind Reader fails against Pokemon in the middle of using Protect, Detect, Dig or Fly, as well as Pokemon behind a Substitute.
 Perish Song  Normal   5  N/A     N/A  -- All active Pokemon will faint in 3 turns unless they are switched out.
+
+DONE Mean Look    Normal   5  N/A     N/A  -- As long as the user remains in battle, the target cannot switch out unless it uses Baton Pass or Teleport. The target will still be trapped if the user switches out by using Baton Pass. Baton Pass can switch actually. Beat up can too.
+DONE Spider Web   Bug      10 N/A     N/A  -- As long as the user remains in battle, the target cannot switch out unless it uses Baton Pass or Teleport. The target will still be trapped if the user switches out by using Baton Pass. Baton Pass can switch actually. Beat up can too.
+DONE Bind         Normal   20 15      75%  -- Traps the target for 2-5 turns, causing damage equal to 1/16 of its max HP each turn; this trapped effect can be broken by Rapid Spin. The target can still switch out if it uses Baton Pass.
+DONE Clamp        Water    10 35      75%  -- Traps the target for 2-5 turns, causing damage equal to 1/16 of its max HP each turn; this trapped effect can be broken by Rapid Spin. The target can still switch out if it uses Baton Pass.
+DONE Fire Spin    Fire     15 15      70%  -- Traps the target for 2-5 turns, causing damage equal to 1/16 of its max HP each turn; this trapped effect can be broken by Rapid Spin. The target can still switch out if it uses Baton Pass.
+DONE Whirlpool    Water    15 15      70%  -- Traps the target for 2-5 turns, causing damage equal to 1/16 of its max HP each turn; this trapped effect can be broken by Rapid Spin. The target can still switch out if it uses Baton Pass.
+DONE Wrap         Normal   20 15      85%  -- Traps the target for 2-5 turns, causing damage equal to 1/16 of its max HP each turn; this trapped effect can be broken by Rapid Spin. The target can still switch out if it uses Baton Pass.
 
 # Moves that set a flag on party (can pass from switch/roar/teleport)
 Future Sight Psychic  15 80      90%  -- This move, even if the user and/or the target switch out, will strike the active target at the end of the second turn after its use. This move cannot cause a critical hit and its damage is calculated by using the original user's Special Attack and the original target's Special Defense. The move's damage is typeless so it never receives STAB and ignores weaknesses, resistances and immunities against this move's type. Only one instance of Future Sight may be active at a time; because it occurs at the end of the round, it also hits through Protect, Detect and Endure.

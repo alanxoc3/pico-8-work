@@ -17,12 +17,14 @@
     invisible,    ~c_yes,
 
     flinch,       ~c_no, -- TODO: could be removed/auto implied if needed
+    meanlook,     ~c_no, -- TODO: could be removed/auto implied if needed
 
     -- conditions are all numbers ...
+    trap,          0, -- timer goes down each turn
+    confused,      0, -- timer goes down each turn
     counterdmg,    0, -- resets to zero each turn
     bidedmg,       0, -- resets to zero when using bide
     disabledtimer, 0, -- how long the disabled move should last
-    confused,      0, -- for confusion, how long pkmn is confused
     substitute,    0, -- for substitute obviously
     toxiced,       0, -- how bad the toxic is
 

@@ -110,6 +110,8 @@ end $$
 
   -- TODO: i should combine this with f_mkpkmn. so all pkmn stuff is just in 1 place.
   player.active = f_create_active(player, spot) -- TODO: the mkactive stuff could go in this comes out function i think, since the only other place it is called is on startup.
+  f_get_other_pl(player).active.trap = 0
+  f_get_other_pl(player).active.meanlook = false
 
   return f_newaction(level, player, "sends "..player.active.name, function()
     player.active.invisible = false
@@ -366,6 +368,20 @@ end $$
 
     -- f_s_bataction()
   end)
+
+  for pl in all{p_battle_top, p_battle_bot} do
+    f_addaction(pl, L_TRAPPING, pl, false, function()
+      if p_turn_self_active.trap > 0 then
+        f_addaction(p_turn_self, L_ATTACK, p_turn_self, "hurt by trap", function()
+          f_moveutil_dmgself(ceil(p_turn_self_active.maxhp/16)) -- TODO: should this and others really be a ceil? I think officially it is a floor.
+        end)
+      end
+
+      f_decrement_timer(p_turn_self_active, 'trap', function()
+        f_addaction(p_turn_self, L_TRAPPING, p_turn_self, "ends trap")
+      end)
+    end)
+  end
 end $$
 
 |[f_start_battle]| function(p1winfunc, ...)

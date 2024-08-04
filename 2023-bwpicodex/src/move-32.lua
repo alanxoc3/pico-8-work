@@ -8,7 +8,7 @@
 -- called for splash, but also when a move fails
 -- TODO: idea, maybe splash could actually just go through a 0 dmg tackle. but maybe this is a bad idea. idk!
 |[f_move_splash]| function() f_turn_addattack(p_action_self, "does nothing") end $$
-|[f_move_recover]| function() return f_moveutil_hpchange(p_action_self, -p_action_self_active.maxhp*.5\1) end $$
+|[f_move_recover]| function() return f_moveutil_hpchange(p_action_self, -ceil(p_action_self_active.maxhp*.5)) end $$
 
 -- TODO: could this combine with recover?
 |[f_move_moonlight]| function()
@@ -16,7 +16,29 @@
   if g_battle_weather.turn > 0 then
     fraction = g_battle_weather.kind == C_WEATHER_SUN and .75 or .25
   end
-  return f_moveutil_hpchange(p_action_self, -p_action_self_active.maxhp*fraction\1)
+  return f_moveutil_hpchange(p_action_self, -ceil(p_action_self_active.maxhp*fraction))
+end $$
+
+|[f_move_trap]| function(_ENV)
+  if p_turn_other_active.trap == 0 then
+    f_turn_addattack(p_turn_other, "is trapped")
+    p_turn_other_active.trap = f_flr_rnd'4'+2
+  end
+end $$
+
+|[f_move_meanlook]| function(_ENV)
+  if not p_turn_other_active.meanlook then
+    p_turn_other_active.meanlook = true
+    f_addaction(p_turn_other, L_ATTACK, p_turn_other, "cant escape")
+  else
+    return true
+  end
+end $$
+
+|[f_move_drain]| function(_ENV)
+  f_moveutil_dmgother(_ENV, function(dmg)
+    f_moveutil_hpchange(p_action_self, -ceil(dmg/2))
+  end)
 end $$
 
 |[f_move_weather]| function(_ENV, weather)

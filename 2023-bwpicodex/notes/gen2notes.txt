@@ -112,6 +112,7 @@ DIFF: flail/reversal can cause critical hits and are subject to the random facto
 DIFF: future sight can recieve stab.
 DIFF: if a faster pokemon dies from recoil/psn/curse/burn/nightmare damage, the other pokemon will still have an opportunity to attack.
 DIFF: the round doesn't end when a pokemon faints.
+DIFF: trapping moves last 2-5 turns including this turn. when trap is over damage is inflicted and you are notified it is over. no extra trapping turn without damage.
 
 STRAT: Sketch and Mimic allow for the same move to be available in multiple move slots.
 STRAT: Missingno is broken.

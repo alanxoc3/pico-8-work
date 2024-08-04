@@ -62,13 +62,14 @@ L_ATTACK:      3 # All attack effects go here. When an attack adds an action, it
 L_TRIGGER:     4 # The initial action for an attack phase is set here. All following actions are L_ATTACK. Then poison/burn/leech/nightmare/curse effects are here.
 L_FUTURESIGHT: 5 # Here and below are things that happen after all attacks.
 L_WEATHER:     6
-L_PERISHSONG:  7
-L_LEFTOVERS:   8
-L_DEFROST:     9
-L_REFLECT:     10
-L_BERRY:       11
-L_ENCORE:      12
-L_END:         12 # This is used in a for loop, in case I add more actions.
+L_TRAPPING:    7
+L_PERISHSONG:  8
+L_LEFTOVERS:   9
+L_DEFROST:     10
+L_REFLECT:     11
+L_BERRY:       12
+L_ENCORE:      13
+L_END:         13 # This is used in a for loop, in case I add more actions.
 
 # ----------------------------- load memory locations
 L_DATASTART: 0x1fff # data starts one byte before because the code increments first
