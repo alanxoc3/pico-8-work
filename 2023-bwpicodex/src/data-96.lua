@@ -74,10 +74,10 @@
   ;;,~f_move_default      ,10 ,~f_move_stat ,~c_no ,defense ,-1                         -- M_ACID
   ;;,~f_move_stat         ,~c_yes ,defense ,2                                           -- M_ACIDARMOR
   ;;,~f_move_barrage      ,0                                                            -- M_BARRAGE
-  ;;,~f_move_splash       ,0                                                            -- M_BONECLUB
+  ;;,~f_move_default      ,10 ,~f_move_flinch                                           -- M_BONECLUB
   ;;,~f_move_splash       ,0                                                            -- M_BIND
   ;;,~f_move_splash       ,0                                                            -- M_CLAMP
-  ;;,~f_move_splash       ,0                                                            -- M_MOONLIGHT
+  ;;,~f_move_moonlight                                                                  -- M_MOONLIGHT
   ;;,~f_move_splash       ,0                                                            -- M_LEECHSEED
   ;;,~f_move_default                                                                    -- M_EXTREMESPEED
   ;;,~f_move_seismictoss  ,20                                                           -- M_SONICBOOM
@@ -85,7 +85,7 @@
   ;;,~f_move_default      ,10 ,~f_move_major_other ,C_MAJOR_PARALYZED                   -- M_THUNDERSHOCK
   ;;,~f_move_major_other  ,C_MAJOR_PARALYZED                                            -- M_GLARE
   ;;,~f_move_splash       ,0                                                            -- M_GUILLOTINE
-  ;;,~f_move_splash       ,0                                                            -- M_HYPERFANG
+  ;;,~f_move_default      ,10 ,~f_move_flinch                                           -- M_HYPERFANG
   ;;,~f_move_splash       ,0                                                            -- M_JUMPKICK
   ;;,~f_move_stat ,~c_no ,accuracy ,-1                                                  -- M_KINESIS
   ;;,~f_move_splash       ,0                                                            -- M_LOCKON
@@ -117,8 +117,8 @@
   ;;,~f_move_splash       ,0                                                            -- M_CONVERSION
   ;;,~f_move_splash       ,0                                                            -- M_CONVERSION2
   ;;,~f_move_default      ,30 ,~f_move_major_other ,C_MAJOR_PARALYZED                   -- M_SPARK
-  ;;,~f_move_recover      ,0                                                            -- M_MILKDRINK
-  ;;,~f_move_splash       ,0                                                            -- M_MORNINGSUN
+  ;;,~f_move_recover                                                                    -- M_MILKDRINK
+  ;;,~f_move_moonlight                                                                  -- M_MORNINGSUN
   ;;,~f_move_seismictoss  ,50                                                           -- M_NIGHTSHADE
   ;;,~f_move_default      ,50 ,~f_move_stat ,~c_no ,accuracy ,-1                        -- M_OCTAZOOKA
   ;;,~f_move_barrage      ,0                                                            -- M_PINMISSILE
@@ -130,20 +130,20 @@
   ;;,~f_move_stat         ,~c_yes ,attack ,1                                            -- M_MEDITATE
   ;;,~f_move_splash       ,0                                                            -- M_FUTURESIGHT
   ;;,~f_move_major_other  ,C_MAJOR_SLEEPING                                             -- M_HYPNOSIS
-  ;;,~f_move_splash       ,0                                                            -- M_PSYBEAM
+  ;;,~f_move_default      ,10 ,~f_move_confuse                                          -- M_PSYBEAM
   ;;,~f_move_splash       ,0                                                            -- M_LIGHTSCREEN
   ;;,~f_move_splash       ,0                                                            -- M_SAFEGUARD
   ;;,~f_move_splash       ,0                                                            -- M_PETALDANCE
   ;;,~f_move_stat ,~c_no ,attack ,-2                                                    -- M_CHARM
-  ;;,~f_move_splash       ,0                                                            -- M_SYNTHESIS
+  ;;,~f_move_moonlight                                                                  -- M_SYNTHESIS
   ;;,~f_move_stat         ,~c_no ,evasion ,-1                                           -- M_SWEETSCENT
-  ;;,~f_move_splash       ,0                                                            -- M_RAZORLEAF
+  ;;,~f_move_default                                                                    -- M_RAZORLEAF
   ;;,~f_move_major_other  ,C_MAJOR_POISONED                                             -- M_POISONPOWDER
   ;;,~f_move_major_other  ,C_MAJOR_SLEEPING                                             -- M_SLEEPPOWDER
   ;;,~f_move_splash       ,0                                                            -- M_ABSORB
   ;;,~f_move_major_other  ,C_MAJOR_PARALYZED                                            -- M_STUNSPORE
   ;;,~f_move_flail        ,0                                                            -- M_FLAIL
-  ;;,~f_move_splash       ,0                                                            -- M_CONFUSION
+  ;;,~f_move_default      ,10 ,~f_move_confuse                                          -- M_CONFUSION
   ;;,~f_move_default                                                                    -- M_SLAM
   ;;,~f_move_default      ,10 ,~f_move_stat ,~c_no ,speed ,-1                           -- M_CONSTRICT
   ;;,~f_move_stat         ,~c_yes ,specialdefense ,2                                    -- M_AMNESIA
@@ -161,8 +161,8 @@
   ;;,~f_move_doublekick   ,3                                                            -- M_TRIPLEKICK
   ;;,~f_move_default                                                                    -- M_GUST
   ;;,~f_move_splash       ,0                                                            -- M_TWISTER
-  ;;,~f_move_splash       ,0                                                            -- M_CRABHAMMER
-  ;;,~f_move_splash       ,0                                                            -- M_DIZZYPUNCH
+  ;;,~f_move_default                                                                    -- M_CRABHAMMER
+  ;;,~f_move_default      ,20 ,~f_move_confuse                                          -- M_DIZZYPUNCH
   ;;,~f_move_default      ,30 ,~f_move_major_other ,C_MAJOR_POISONED                    -- M_SLUDGE
   ;;,~f_move_splash       ,0                                                            -- M_PAINSPLIT
   ;;,~f_move_splash       ,0                                                            -- M_DESTINYBOND
@@ -171,33 +171,33 @@
   ;;,~f_move_splash       ,0                                                            -- M_PERISHSONG
   ;;,~f_move_splash       ,0                                                            -- M_MEANLOOK
   ;;,~f_move_confuse                                                                    -- M_CONFUSERAY
-  ;;,~f_move_splash       ,0                                                            -- M_CROSSCHOP
+  ;;,~f_move_default                                                                    -- M_CROSSCHOP
   ;;,~f_move_default      ,40 ,~f_move_major_other ,C_MAJOR_POISONED                    -- M_SMOG
-  ;;,~f_move_splash       ,0                                                            -- M_KARATECHOP
+  ;;,~f_move_default                                                                    -- M_KARATECHOP
   ;;,~f_move_default      ,10 ,~f_move_major_other ,C_MAJOR_BURNED                      -- M_EMBER
   ;;,~f_move_stat ,~c_no ,accuracy ,-1                                                  -- M_SMOKESCREEN
   ;;,~f_move_splash       ,0                                                            -- M_BELLYDRUM -- this might be possible with a self recoil func?
   ;;,~f_move_splash       ,0                                                            -- M_BEATUP
   ;;,~f_move_default                                                                    -- M_SCRATCH
-  ;;,~f_move_splash       ,0                                                            -- M_SLASH
+  ;;,~f_move_default                                                                    -- M_SLASH
   ;;,~f_move_splash       ,0                                                            -- M_ANCIENTPOWER
   ;;,~f_move_stat ,~c_no ,defense ,-1                                                   -- M_LEER
-  ;;,~f_move_splash       ,0                                                            -- M_BITE
+  ;;,~f_move_default      ,30 ,~f_move_flinch                                           -- M_BITE
   ;;,~f_move_splash       ,0                                                            -- M_OUTRAGE
   ;;,~f_move_stat ,~c_no ,speed ,-2                                                     -- M_SCARYFACE
   ;;,~f_move_splash       ,0                                                            -- M_THRASH
   ;;,~f_move_splash       ,0                                                            -- M_STOMP
-  ;;,~f_move_splash       ,0                                                            -- M_ROCKSLIDE
+  ;;,~f_move_default      ,30 ,~f_move_flinch                                           -- M_ROCKSLIDE
   ;;,~f_move_magnitude    ,0                                                            -- M_MAGNITUDE
   ;;,~f_move_default                                                                    -- M_ROCKTHROW
   ;;,~f_move_stat         ,~c_yes ,defense ,1                                           -- M_HARDEN
   ;;,~f_move_barrage      ,0                                                            -- M_BONERUSH
   ;;,~f_move_splash       ,0                                                            -- M_HIJUMPKICK
-  ;;,~f_move_recover      ,0                                                            -- M_RECOVER
-  ;;,~f_move_splash       ,0                                                            -- M_AEROBLAST
+  ;;,~f_move_recover                                                                    -- M_RECOVER
+  ;;,~f_move_default                                                                    -- M_AEROBLAST
   ;;,~f_move_splash       ,0                                                            -- M_HORNDRILL
   ;;,~f_move_seismictoss  ,40                                                           -- M_DRAGONRAGE
-  ;;,~f_move_recover      ,0                                                            -- M_SOFTBOILED
+  ;;,~f_move_recover                                                                    -- M_SOFTBOILED
   ;;,~f_move_default      ,30 ,~f_move_major_other ,C_MAJOR_PARALYZED                   -- M_DRAGONBREATH
   ;;,~f_move_default                                                                    -- M_SELFDESTRUCT
   ;;,~f_move_default                                                                    -- M_EXPLOSION
@@ -227,7 +227,7 @@
   ;;,~f_move_default      ,30 ,~f_move_stat ,~c_no ,defense ,-1                         -- M_IRONTAIL
   ;;,~f_move_default                                                                    -- M_STRENGTH
   ;;,~f_move_default      ,50 ,~f_move_stat ,~c_no ,defense ,-1                         -- M_ROCKSMASH
-  ;;,~f_move_splash       ,0                                                            -- M_HEADBUTT
+  ;;,~f_move_default      ,30 ,~f_move_flinch                                           -- M_HEADBUTT
   ;;,~f_move_default      ,100 ,~f_move_stat ,~c_no ,accuracy ,-1                       -- M_MUDSLAP
   ;;,~f_move_weather ,C_WEATHER_SUN                                                     -- M_SUNNYDAY
   ;;,~f_move_splash       ,0                                                            -- M_PROTECT
@@ -269,7 +269,7 @@
   ;;,~f_move_splash       ,0                                                            -- M_METRONOME
   ;;,~f_move_splash       ,0                                                            -- M_COUNTER
   ;;,~f_move_default                                                                    -- M_MEGAPUNCH
-  ;;,~f_move_seismictoss  ,999                                                          -- M_SEISMICTOSS -- TODO: revert to correct number was here jost fur tastieng
+  ;;,~f_move_seismictoss  ,50                                                           -- M_SEISMICTOSS -- TODO: revert to correct number was here jost fur tastieng
   ;;,~f_move_submission   ,0                                                            -- M_SUBMISSION
   ;;,~f_move_default                                                                    -- M_MEGAKICK
   ;;,~f_move_default      ,100 ,~f_move_confuse                                         -- M_DYNAMICPUNCH
@@ -312,8 +312,8 @@
   ;;,~f_move_barrage      ,0                                                            -- M_FURYSWIPES
   ;;,~f_move_stat         ,~c_yes ,crit ,1                                              -- M_FOCUSENERGY
   ;;,~f_move_splash       ,0                                                            -- M_FORESIGHT
-  ;;,~f_move_splash       ,0                                                            -- M_LOWKICK
-  ;;,~f_move_splash       ,0                                                            -- M_ROLLINGKICK
+  ;;,~f_move_default      ,30 ,~f_move_flinch                                           -- M_LOWKICK
+  ;;,~f_move_default      ,30 ,~f_move_flinch                                           -- M_ROLLINGKICK
   ;;,~f_move_splash       ,0                                                            -- M_ENCORE
   ;;,~f_move_splash       ,0                                                            -- M_WRAP
   ;;,~f_move_stat         ,~c_yes ,specialattack ,1                                     -- M_GROWTH

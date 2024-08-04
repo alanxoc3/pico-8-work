@@ -87,7 +87,7 @@ Haze         Ice      30 N/A     N/A  -- Eliminates any stat modifiers from all 
 Heal Bell    Normal   5  N/A     N/A  -- Every Pokemon in the user's party is cured of status conditions.
 Pain Split   Normal   20 Var Dmg 100% -- Calculates the average of the user's current HP and the target's HP; the HP of both Pokemon is set to this average.
 
-Splash       Normal   40 N/A     N/A  -- Doesn't do anything (but we still love it).
+DONE Splash       Normal   40 N/A     N/A  -- Doesn't do anything (but we still love it).
 
 Beat Up      Dark     10 10      100% -- Each healthy (i.e. not fainted nor inflicted with a status condition) Pokemon in your party contributes a typeless 10 base power hit determined solely by their base Attack and Defense stats.
 Baton Pass   Normal   40 N/A     N/A  -- The user returns to its party, bypassing any trapping moves and Pursuit; it passes all stat modifiers (positive or negative), as well as confusion, Focus Energy, Perish Song count, Mist, Leech Seed, Ghost Curses, Mind Reader, Lock-On, Mean Look, Spider Web and Substitute to the replacement Pokemon. In-game, Baton Pass also passes partial trapping moves (Bind, Clamp, Fire Spin and Wrap), Foresight, Toxic if the replacement is poisoned and Nightmare if replacement is asleep.
@@ -134,26 +134,30 @@ DONE Sludge       Poison   20 65      100% -- Has a ~30% chance to poison the ta
 DONE Smog         Poison   20 20      100% -- Has a ~40% chance to poison the target.
 
 Ancientpower Rock     5  60      100% -- Has a ~10% chance to raise all of the user's stats by 1 stage.
-Confusion    Psychic  25 50      100% -- Has a ~10% chance to confuse the target.
-Psybeam      Psychic  20 65      100% -- Has a ~10% chance to confuse the target.
-Dizzy Punch  Normal   10 70      100% -- Has a ~20% chance to confuse the target.
-Twister      Dragon   20 40      100% -- Has a ~20% chance to make the target flinch; power doubles while the target is in mid-air via Fly.
-Bite         Dark     25 60      100% -- Has a ~30% chance to make the target flinch.
-Headbutt     Normal   15 70      100% -- Has a ~30% chance to make the target flinch.
-Bone Club    Ground   20 65      85%  -- Has a ~10% chance to make the target flinch.
-Hyper Fang   Normal   15 80      90%  -- Has a ~10% chance to make the target flinch.
 
-Low Kick     Fighting 20 50      90%  -- Has a ~30% chance to make the target flinch.
-Rock Slide   Rock     10 75      90%  -- Has a ~30% chance to make the target flinch.
-Rolling Kick Fighting 15 60      85%  -- Has a ~30% chance to make the target flinch.
+Twister      Dragon   20 40      100% -- Has a ~20% chance to make the target flinch; power doubles while the target is in mid-air via Fly.
+DONE Bite         Dark     25 60      100% -- Has a ~30% chance to make the target flinch.
+DONE Headbutt     Normal   15 70      100% -- Has a ~30% chance to make the target flinch.
+DONE Bone Club    Ground   20 65      85%  -- Has a ~10% chance to make the target flinch.
+DONE Hyper Fang   Normal   15 80      90%  -- Has a ~10% chance to make the target flinch.
+
+DONE Confusion    Psychic  25 50      100% -- Has a ~10% chance to confuse the target.
+DONE Psybeam      Psychic  20 65      100% -- Has a ~10% chance to confuse the target.
+DONE Dizzy Punch  Normal   10 70      100% -- Has a ~20% chance to confuse the target.
+
+DONE Low Kick     Fighting 20 50      90%  -- Has a ~30% chance to make the target flinch.
+DONE Rock Slide   Rock     10 75      90%  -- Has a ~30% chance to make the target flinch.
+DONE Rolling Kick Fighting 15 60      85%  -- Has a ~30% chance to make the target flinch.
 Stomp        Normal   20 65      100% -- Has a ~30% chance to make the target flinch; also retains its normal accuracy and gains doubled power against Minimized Pokemon.
 Snore        Normal   15 40      100% -- Has a ~30% chance to make the target flinch; fails if user is awake.
-Aeroblast    Flying   5  100     95%  -- Has a high critical hit ratio.
-Crabhammer   Water    10 90      85%  -- Has a high critical hit ratio.
-Cross Chop   Fighting 5  100     80%  -- Has a high critical hit ratio.
-Karate Chop  Fighting 25 55      100% -- Has a high critical hit ratio.
-Razor Leaf   Grass    25 55      95%  -- Has a high critical hit ratio.
-Slash        Normal   20 70      100% -- Has a high critical hit ratio.
+
+DONE Aeroblast    Flying   5  100     95%  -- Has a high critical hit ratio.
+DONE Crabhammer   Water    10 90      85%  -- Has a high critical hit ratio.
+DONE Cross Chop   Fighting 5  100     80%  -- Has a high critical hit ratio.
+DONE Karate Chop  Fighting 25 55      100% -- Has a high critical hit ratio.
+DONE Razor Leaf   Grass    25 55      95%  -- Has a high critical hit ratio.
+DONE Slash        Normal   20 70      100% -- Has a high critical hit ratio.
+
 Hi Jump Kick Fighting 20 85      90%  -- If this attack misses the target, the user receives 1/8 "recoil" damage of what it would have inflicted.
 Jump Kick    Fighting 20 70      95%  -- If this attack misses the target, the user receives 1/8 "recoil" damage of what it would have inflicted.
 
@@ -225,9 +229,9 @@ Guillotine   Normal   5  KO      30%  -- The target faints; doesn't work on high
 Horn Drill   Normal   5  KO      30%  -- The target faints; doesn't work on higher-leveled Pokemon. Focus Band or Endure can protect against this.
 Fissure      Ground   5  KO      30%  -- The target faints; doesn't work on higher-leveled Pokemon. However, this move will hit Digging Pokemon. Focus Band or Endure can protect against this.
 
-Submission   Fighting 20 80      80%  -- The user receives 1/4 recoil damage.
-Take Down    Normal   20 90      85%  -- The user receives 1/4 recoil damage.
-Double-edge  Normal   15 120     100% -- The user receives 1/4 recoil damage.
+DONE Submission   Fighting 20 80      80%  -- The user receives 1/4 recoil damage.
+DONE Take Down    Normal   20 90      85%  -- The user receives 1/4 recoil damage.
+DONE Double-edge  Normal   15 120     100% -- The user receives 1/4 recoil damage.
 
 # Moves that set a temp flag on pokemon (cannot be baton passed). par/brn/etc are not passed. cnf is. mimic sets a temp flag, to prevent mimic from being used again. Hmm... Every Pokemon has an encore and disable timer. If both are set to the same move, that pokemon uses struggle.
 Disable      Normal   20 N/A     55%  -- The target cannot choose its last move for 2-5 turns. Disable only works on one move at a time and fails if the target has not yet used a move or if its move has run out of PP. The target does nothing if it is about to use a move that becomes disabled.

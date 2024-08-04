@@ -8,7 +8,16 @@
 -- called for splash, but also when a move fails
 -- TODO: idea, maybe splash could actually just go through a 0 dmg tackle. but maybe this is a bad idea. idk!
 |[f_move_splash]| function() f_turn_addattack(p_action_self, "does nothing") end $$
-|[f_move_recover]| function(_ENV) return f_moveutil_hpchange(p_action_self, -p_action_self_active.maxhp\2) end $$
+|[f_move_recover]| function() return f_moveutil_hpchange(p_action_self, -p_action_self_active.maxhp*.5\1) end $$
+
+-- TODO: could this combine with recover?
+|[f_move_moonlight]| function()
+  local fraction = .5
+  if g_battle_weather.turn > 0 then
+    fraction = g_battle_weather.kind == C_WEATHER_SUN and .75 or .25
+  end
+  return f_moveutil_hpchange(p_action_self, -p_action_self_active.maxhp*fraction\1)
+end $$
 
 |[f_move_weather]| function(_ENV, weather)
   f_addaction(p_turn_self, L_ATTACK, p_turn_self, "takes effect", function()
@@ -48,6 +57,10 @@ end $$
 
 |[f_move_confuse]| function()
   return f_movehelp_minor(_ENV, p_turn_other, "now confused", 'confused', f_flr_rnd'4'+1)
+end $$
+
+|[f_move_flinch]| function()
+  p_turn_other_active.flinch = true
 end $$
 
 |[f_move_seismictoss]| function(_ENV, spec) f_moveutil_dmgother(spec) end $$ -- also: night shade, sonicboom, dragonrage

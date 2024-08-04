@@ -41,9 +41,10 @@ King's Rock           See DIFF!!! 11.71875% (30/256) chance to flinch for attack
 Focus Band            May prevent fainting. 12% (30/256) stay at 1 hp.
 Quick Claw            ~23% (60/256) chance to go first in current priority bracket.
 BrightPowder          Lowers the foe's accuracy. (DIFF: raises evasion stat by one stage)
-Scope Lens            increases crit by 1 stage.
-Stick                 Farfetchd: increases crit by 2 stages.
 Thick Club            Cubone/Marowak: doubles attack.
 Light Ball            Pikachu: doubles special attack.
-Lucky Punch           Chansey: increases crit by 2 stages.
 Metal Powder          Ditto: increases defense and special defense by 50%.
+
+DONE Scope Lens            increases crit by 1 stage.
+DONE Stick                 Farfetchd: increases crit by 2 stages.
+DONE Lucky Punch           Chansey: increases crit by 2 stages.

@@ -16,6 +16,8 @@
     moveturn,     0,      -- turn move is on. > 0, decrements each turn. 0, is the same. -1, is multiturn move that doesn't end (rage).
     invisible,    ~c_yes,
 
+    flinch,       ~c_no, -- TODO: could be removed/auto implied if needed
+
     -- conditions are all numbers ...
     counterdmg,    0, -- resets to zero each turn
     bidedmg,       0, -- resets to zero when using bide

@@ -145,7 +145,14 @@ end $$
 
   -- BEGIN: CRIT
   -- TODO: really implement all the stuff here (focus energy, etc)
-  local crit = rnd'1' < f_stat_crit(0)
+  -- TODO: verify this is the correct crit logic
+  local crit_count = p_turn_self_active.stages.crit
+  if f_in_split(move.num, 'M_AEROBLAST,M_CRABHAMMER,M_CROSSCHOP,M_KARATECHOP,M_RAZORLEAF,M_SLASH,M_RAZORWIND') then crit_count += 1 end
+  if p_turn_self_active.item == I_SCOPELENS                                                                    then crit_count += 1 end
+  if p_turn_self_active.item == I_LUCKYPUNCH and p_turn_self_active.num == P_CHANSEY                           then crit_count += 2 end
+  if p_turn_self_active.item == I_STICK      and p_turn_self_active.num == P_FARFETCHD                         then crit_count += 2 end
+
+  local crit = rnd'1' < f_stat_crit(crit_count)
   local stab = (move.pktype == attacker.pktype1 or move.pktype == attacker.pktype2) and 1.5 or 1
   local itemdmg = 1 -- TODO: fill this out! item is 1.1 if move pktype equals item specialty for type boost items
 

@@ -209,6 +209,11 @@ end $$
       end
     end
 
+    if p_turn_self_active.flinch then
+      f_turn_addattack(p_turn_self, "is flinching")
+      execute_move_logic = false
+    end
+
     -- MOVE LOGIC
     if execute_move_logic then
       f_movelogic(player)
@@ -278,7 +283,9 @@ end $$
 end $$
 
 |[f_start_turn]| function()
-  local x = function()
+  local begin_turn_func = function()
+    p_action_self_active.flinch = false
+
     if p_action_self.iscpu then
       local possible_moves = {}
       for i=1,4 do
@@ -327,10 +334,10 @@ end $$
 
   f_set_both_players([[p_first,@, p_last,@]], p_battle_bot)
 
-  f_addaction(p_battle_bot, L_PICK, p_battle_bot, not p_battle_bot.iscpu and "begins turn", x, C_MESSAGE_PLAYER)
-  f_addaction(p_battle_top, L_PICK, p_battle_top, not p_battle_top.iscpu and "begins turn", x, C_MESSAGE_PLAYER)
+  f_addaction(p_battle_bot, L_PICK, p_battle_bot, not p_battle_bot.iscpu and "begins turn", begin_turn_func, C_MESSAGE_PLAYER)
+  f_addaction(p_battle_top, L_PICK, p_battle_top, not p_battle_top.iscpu and "begins turn", begin_turn_func, C_MESSAGE_PLAYER)
 
-  -- calculate priorities. this just has to be on 1 of the 2 players so it gets executed.
+  -- calculate priorities and add later levels (eg weather/item).
   f_addaction(p_battle_bot, L_PRIORITY, p_battle_bot, false, function()
     f_set_player_priority(p_battle_bot)
     f_set_player_priority(p_battle_top)
