@@ -209,7 +209,7 @@
   ;;,~f_move_default                                                                    -- M_CUT
   ;;,~f_move_splash       ,0                                                            -- M_FURYCUTTER
   ;;,~f_move_splash       ,0                                                            -- M_THIEF
-  ;;,~f_move_splash       ,0                                                            -- M_DIG
+  ;;,~f_move_dig                                                                        -- M_DIG
   ;;,~f_move_splash       ,0                                                            -- M_ROLLOUT
   ;;,~f_move_splash       ,0                                                            -- M_DEFENSECURL
   ;;,~f_move_splash       ,0                                                            -- M_DETECT

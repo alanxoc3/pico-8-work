@@ -157,7 +157,7 @@ for i=0,252 do -- There are 252+1 pkmn and 252+1 moves. The +1s are for empties.
   local pkmn = f_zobj([[moves_progress;,#,#,#; moves_grouped;,#,#,#; lock,~c_no, pktype2,T_NONE, prevolve,P_EMPTY, name,@, num,@, num_str,@]], c_pkmn_names[i], i, f_prefix_zero(i < P_NONE and i or "???", 3))
 
   -- cur_list is not local just so I can save 1 token
-  cur_list, c_moves[i], c_pokemon[i] = pkmn.moves_progress[1], f_zobj([[lock,~c_no, num,@, name,@]], i, c_move_names[i]), pkmn -- todo: get rid of i-1
+  cur_list, c_moves[i], c_pokemon[i] = pkmn.moves_progress[1], f_zobj([[lock,~c_no, slot,0, num,@, name,@]], i, c_move_names[i]), pkmn -- todo: get rid of i-1
 
   foreach(split'pow,pktype,accuracy,maxpp', function(key)
     c_moves[i][key] = f_init_peek_inc()

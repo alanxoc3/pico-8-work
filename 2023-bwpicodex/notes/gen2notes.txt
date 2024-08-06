@@ -131,6 +131,8 @@ DIFF: steel claw, steel wing, ancient power will still have the secondary effect
 DIFF: bright powder multiplies evasion by .8 while being held, this is similar to gen III, though a bit more powerful. i think the math plays out similarly.
 DIFF: berserk gene is no longer a consumable. both attack and special attack are boosted by 2 stages while holding it. but the pokemon is indefinitely confused while holding it.
 
+DIFF: all multiturn moves subtract pp on the first turn only. including if solar beam prepares then was cancelled for some reason.
+
 https://www.smogon.com/forums/threads/mechanical-differences-between-the-gens.3474872/
 Changes from ADV to GSC
 - IVs range from 0-15 rather than 0-31.

@@ -19,20 +19,34 @@
   return f_moveutil_hpchange(p_action_self, -ceil(p_action_self_active.maxhp*fraction))
 end $$
 
-|[f_move_trap]| function(_ENV)
-  if p_turn_other_active.trap == 0 then
-    f_turn_addattack(p_turn_other, "is trapped")
-    p_turn_other_active.trap = f_flr_rnd'4'+2
+|[f_move_dig]| function(move)
+  if p_turn_self_active.locked_moveturn == 0 then
+    f_turn_addattack(p_turn_self, "is digging", function()
+      p_turn_self_active.digging = true
+      p_turn_self_active.locked_move = move
+      p_turn_self_active.locked_moveturn = 2
+    end)
+  else
+    p_turn_self_active.digging = false
+    f_move_default(move)
   end
 end $$
 
+|[f_move_trap]| function(_ENV)
+  -- if p_turn_other_active.trap == 0 then
+  --   f_turn_addattack(p_turn_other, "is trapped")
+  --   p_turn_other_active.trap = f_flr_rnd'4'+2
+  -- end
+end $$
+
+-- TODO: unlock
 |[f_move_meanlook]| function(_ENV)
-  if not p_turn_other_active.meanlook then
-    p_turn_other_active.meanlook = true
-    f_addaction(p_turn_other, L_ATTACK, p_turn_other, "cant escape")
-  else
-    return true
-  end
+  -- if not p_turn_other_active.meanlook then
+  --   p_turn_other_active.meanlook = true
+  --   f_addaction(p_turn_other, L_ATTACK, p_turn_other, "cant escape")
+  -- else
+  --   return true
+  -- end
 end $$
 
 |[f_move_drain]| function(_ENV)
@@ -101,10 +115,12 @@ end $$
   end)
 end $$
 
+|[f_recoil_struggle]| function()
+  f_moveutil_dmgself(ceil(p_turn_self_active.maxhp/4))
+end $$
+
 |[f_move_struggle]| function(_ENV)
-  f_moveutil_dmgother(_ENV, function(dmg)
-    f_moveutil_dmgself(ceil(p_turn_self_active.maxhp/4))
-  end)
+  f_moveutil_dmgother(_ENV, f_recoil_struggle)
 end $$
 
 -- this attacks after the opponent faints because it creates an action on the user.
@@ -183,23 +199,23 @@ end $$
 end $$
 
 |[f_move_hiddenpower]| function(_ENV)
-  local possible_types = {}
-  for i=T_NORMAL,T_BIRD do
-    local v = f_moveutil_typeadv(f_zobj_setmeta(_ENV, [[pktype,@]], i), p_turn_other_active)
-    if v > 1 then
-      add(possible_types, i)
-    end
-  end
+  --   local possible_types = {}
+  --   for i=T_NORMAL,T_BIRD do
+  --     local v = f_moveutil_typeadv(f_zobj_setmeta(_ENV, [[pktype,@]], i), p_turn_other_active)
+  --     if v > 1 then
+  --       add(possible_types, i)
+  --     end
+  --   end
 
-  -- TODO: the "or T_BIRD" could be removed, since there are no pokemon with zero type weaknesses in first 2 gens. Sableye and Spiritomb were the only ones at one point (ghost+dark).
-  -- Missingno is likely the closest to this. It is only weak against bird type. It resists everything else except fighting which just does normal amount of damage.
-  local newpktype = #possible_types > 0 and possible_types[f_flr_rnd(#possible_types)+1] or T_BIRD
-  f_turn_addattack(p_turn_self, "type "..c_type_names[newpktype])
+  --   -- TODO: the "or T_BIRD" could be removed, since there are no pokemon with zero type weaknesses in first 2 gens. Sableye and Spiritomb were the only ones at one point (ghost+dark).
+  --   -- Missingno is likely the closest to this. It is only weak against bird type. It resists everything else except fighting which just does normal amount of damage.
+  --   local newpktype = #possible_types > 0 and possible_types[f_flr_rnd(#possible_types)+1] or T_BIRD
+  --   f_turn_addattack(p_turn_self, "type "..c_type_names[newpktype])
 
-  -- TODO: maybe i can set pow to 60 as part of the compiled data
-  -- TODO: the newpktype should reset when switching out the move.
-  pktype = newpktype
-  f_moveutil_dmgother(f_zobj_setmeta(_ENV, [[pow,@]], 60))
+  --   -- TODO: maybe i can set pow to 60 as part of the compiled data
+  --   -- TODO: the newpktype should reset when switching out the move.
+  --   pktype = newpktype
+  --   f_moveutil_dmgother(f_zobj_setmeta(_ENV, [[pow,@]], 60))
 end $$
 
 -- leverages f_move_(self|other)

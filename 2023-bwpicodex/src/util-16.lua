@@ -22,7 +22,7 @@ end $$
   end
 end $$
 
-|[f_draw_pkmn]| function(num, x, y, style, flip, selected, disabled, draw_side)
+|[f_draw_pkmn]| function(num, x, y, style, flip, selected, disabled, draw_side, hiding)
   local width = g_style_size[style]
 
   -- the "min" is needed to draw trainers
@@ -48,15 +48,18 @@ end $$
       pal() -- dont need to reset palt because that doesn't affect print operations and this is the only function in the game that draws.
     end
 
-    for yy=-1,1 do
-      for xx=-1,1 do
-        f_zcamera(xx, yy, function()
-          colordrawfunc(C_1)
-        end)
+    if not hiding then
+      for yy=-1,1 do
+        for xx=-1,1 do
+          f_zcamera(xx, yy, function()
+            colordrawfunc(C_1)
+          end)
+        end
       end
+
+      colordrawfunc(not disabled and selected and C_3 or C_2) -- sprite
     end
 
-    colordrawfunc(not disabled and selected and C_3 or C_2) -- sprite
     if draw_side then
       f_zcamera(flip and -37 or 20, 0, draw_side)
     end

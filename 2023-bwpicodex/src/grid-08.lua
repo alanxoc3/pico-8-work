@@ -49,7 +49,7 @@ end $$
     local newnum = mid(mmin, min(#gridobj-1, mmin+mmax), num + (static and 0 or off))
     if newnum == num and off ~= 0 then
       f_minisfx(SFX_ERROR)
-    elseif newnum ~= num then
+    elseif newnum ~= num and off ~= 0 then -- need the off ~= 0, otherwise there could be an unwanted sound made
       f_minisfx(SFX_MOVE)
     end
     return newnum

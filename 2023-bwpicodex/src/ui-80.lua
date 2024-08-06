@@ -238,14 +238,10 @@ end $$
 |[f_op_batsel]| function(_ENV)
   -- TODO: this definitely could be crunched
   add(op, {text="fight", select=function()
-    local should_struggle = true
-    for i=1,4 do
-      if p_action_self_active[i].pp_obj.pp > 0 then
-        should_struggle = false
-      end
-    end
-
-    if should_struggle then
+    if p_action_self_active.locked_moveturn > 0 then
+      f_add_to_ui_stack(g_grid_battle_dmovsel)
+    elseif #f_valid_move_list(p_action_self_active) == 0 then
+      p_action_self_active.locked_move = c_moves[M_STRUGGLE]
       f_add_to_ui_stack(g_grid_battle_dmovsel)
     else
       f_add_to_ui_stack(g_grid_battle_movesel)
@@ -262,7 +258,7 @@ end $$
     f_add_to_ui_stack(g_grid_battle_stats)
   end})
 
-  add(op, {text="run",   select=function() f_end_battle(p_action_self)                     end})
+  add(op, {text="run", select=function() f_end_battle(p_action_self) end})
 
   f_add_battle(preview_op)
 end $$
@@ -276,8 +272,8 @@ end $$
 end $$
 
 |[f_op_dmovsel]| function(_ENV)
-  f_print_info(op, [[;,"no more moves";;,"use struggle?"]])
-  f_add_stat_move(preview_op, p_action_self_active, -1) -- -1+1=0 is struggle, every pokemon has a default move of 0 which is always struggle.
+  f_print_info(op, [[;,"moves disabled";;,"use ",@,"?"]], p_action_self_active.locked_move.name)
+  f_add_stat_move(preview_op, p_action_self_active, p_action_self_active.locked_move) -- -1+1=0 is struggle, every pokemon has a default move of 0 which is always struggle.
 end $$
 
 |[f_op_batswitch]| function(_ENV)
@@ -479,7 +475,7 @@ end $$
   return p_action_self_active.invisible and SFX_ERROR or p_action_self_active.num end $$
 
 |[f_s_batmove]| function()
-  p_action_self.nextmove = p_action_self_active[f_getsel'g_grid_battle_movesel'+1]
+  p_action_self.nextmove = f_getsel'g_grid_battle_movesel'+1
   f_premovelogic(p_action_self)
 
   -- TODO: Dedup with below.
@@ -491,8 +487,9 @@ end $$
 
 |[f_s_dmovsel]| function()
   -- TODO: dedup
-  p_action_self.nextmove = c_moves[M_STRUGGLE]
+  p_action_self.nextmove = 'locked_move'
   f_premovelogic(p_action_self)
+
   f_pop_ui_stack()
   f_pop_ui_stack()
 

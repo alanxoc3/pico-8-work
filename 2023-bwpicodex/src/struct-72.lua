@@ -13,11 +13,15 @@
   local active = f_zobj_setmeta(team[ind], [[
     isactive,     ~c_yes, -- used for a drawing function, should draw fainted pokemon if they are not active, but not if they are active.
     lastmoverecv, 0,      -- last move targeted at user, for mirrormove
-    moveturn,     0,      -- turn move is on. > 0, decrements each turn. 0, is the same. -1, is multiturn move that doesn't end (rage).
+    locked_moveturn,     0,      -- turn move is on. > 0, decrements each turn. 0, is the same. -1, is multiturn move that doesn't end (rage).
     invisible,    ~c_yes,
 
     flinch,       ~c_no, -- TODO: could be removed/auto implied if needed
     meanlook,     ~c_no, -- TODO: could be removed/auto implied if needed
+
+    locked_move,  ~c_no, -- This is for multi-turn moves such as dig/fly/petaldance/solarbeam/etc and struggle.
+    locked_moveturn,     0,     -- the number of turns left for a locked move (a move that spans multiple turns)
+    curmoveind,   0,     -- the moveslot of the locked move. -1 for struggle.
 
     -- conditions are all numbers ...
     trap,          0, -- timer goes down each turn
@@ -28,7 +32,6 @@
     substitute,    0, -- for substitute obviously
     toxiced,       0, -- how bad the toxic is
 
-    -- curmove -- used for multiturn moves, if moveturn ~= 0, this must be set
     spot,@, base,@;
 
     stages;
@@ -90,10 +93,9 @@ end $$
 
     pkmn.seen_moves[move] = true
     local num = pkmn.possible_moves[move]
-    pkmn[i] = f_zobj_setmeta(c_moves[num], [[num,@, pid,@]], num, move)
+    pkmn[i] = f_zobj_setmeta(c_moves[num], [[slot,@, num,@, pid,@]], i, num, move)
     pkmn[i].pp_obj = {pp=pkmn[i].maxpp}
   end
-  pkmn[0] = f_zobj_setmeta(c_moves[M_STRUGGLE], [[num,M_STRUGGLE, pid,1]])
 
   return pkmn
 end $$

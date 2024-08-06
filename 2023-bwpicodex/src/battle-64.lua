@@ -169,7 +169,7 @@ end $$
 |[f_set_player_priority]| function(player)
   f_set_both_players([[p_action_self,@, p_action_other,@, p_action_self_active,@, p_action_other_active,@]], player)
   local priority_class = C_PRIORITY_ATTACK
-  local movenum = p_action_self.nextmove and p_action_self.nextmove.num
+  local movenum = p_action_self.nextmove and p_action_self_active[p_action_self.nextmove].num
 
   -- TODO: in OG picodex, I was calling f_premovelogic(player, move) here
 
@@ -230,21 +230,26 @@ end $$
   end)
 end $$
 
+-- TODO: fix the move number for dig move preview.
+
 |[f_movelogic]| function(player) -- called by premove logic & metronome. So that's why it must be separated out into its own function.
-  local move = player.nextmove
-  -- TODO: verify the resumes thing
-  f_addaction(player, L_TRIGGER, player, (player.active.curmove and "resumes " or (move.func == f_move_multiturn and "begins " or "uses "))..c_move_names[move.num], function()
-    -- TODO: how does metronome work with solar beam. would pp get deducted twice?
-    move.pp_obj.pp = max(0, move.pp_obj.pp-1) -- needs a zero bounds check, because struggle could go negative without this.
+  local move = player.active[player.nextmove] -- nextmove will never be nil since this is not called on a switch.
+  f_addaction(player, L_TRIGGER, player, (player.active.locked_moveturn > 0 and "resumes " or "uses ")..c_move_names[move.num], function()
+    if player.active.locked_moveturn == 0 then
+      move.pp_obj.pp = max(0, move.pp_obj.pp-1) -- needs a zero bounds check, because struggle could go negative without this.
+    end
 
     if (function() -- miss logic TODO: fix this to be in line with gen 2 logic. this was copied from gen 1 picodex
       if move.accuracy <= 0 then return false end -- swift/haze (-1) and status moves (0)
 
+      -- fly/dig can't miss on the first turn.
+      if f_in_split(move.num, 'M_FLY,M_DIG') and player.active.locked_moveturn == 0 then return false end
+
+      if p_turn_other_active.digging and not f_in_split(move.num, 'M_EARTHQUAKE,M_MAGNITUDE,M_FISSURE') then return true end
+      if p_turn_other_active.flying  and not f_in_split(move.num, 'M_GUST,M_TWISTER,M_THUNDER')         then return true end
+
       -- -- charging moves & fly/dig can't miss on the first turn
       -- if (move.func == f_move_prepare or move.func == f_move_flydig) and not p_action_self_active.curmove then return false end
-
-      -- -- p_action_self_active misses if p_action_other_active is using fly/dig
-      -- if p_action_other_active.curmove and p_action_other_active.curmove.func == f_move_flydig then return true end
 
       -- -- p_action_self_active can't miss trapping moves if the first hit succeeded
       -- if p_action_self_active.curmove and p_action_self_active.curmove.func == f_move_trapping then return false end
@@ -255,8 +260,10 @@ end $$
       f_turn_addattack(player, "misses "..move.name)
 
       if f_in_split(move.num, 'M_HIGH_JUMP_KICK,M_JUMP_KICK') then
-        -- TODO: 1/8 recoil of what it would have inflicted. TODO: Maybe I can modify this to 1/16 of health like leech seed. umm, that might be more damage. whatever maybe not
-        f_moveutil_dmgself'1'
+        f_moveutil_dmgself'1' -- TODO: actually 1/8 recoil of what it would have inflicted. TODO: Maybe I can modify this to 1/16 of health like leech seed. umm, that might be more damage. whatever maybe not
+
+      elseif move.num == M_STRUGGLE then -- struggle gets recoil regardless of hit or miss
+        f_recoil_struggle()
       end
     else
       if move:func(unpack(move.params)) then -- TODO: calc attack fail based on whether or not an action was added
@@ -266,14 +273,23 @@ end $$
 
     -- explosion and selfdestruct self-inflict damage whether or not the attack hit the opponent.
     -- and this happens after the attack hits
-    if f_in_split(move.num, 'M_EXPLOSION,M_SELFDESTRUCT') then -- TODO: maybe func could be checked? Might save tokens
-      f_moveutil_dmgself(p_action_self_active.hp)
-    end
+    -- TODO: uncomment this?
+    -- if f_in_split(move.num, 'M_EXPLOSION,M_SELFDESTRUCT') then -- TODO: maybe func could be checked? Might save tokens
+    --   f_moveutil_dmgself(p_action_self_active.hp)
+    -- end
 
     -- TODO: populate last move... OG picodex had this logic
     -- if move.accuracy ~= 0 then -- -1 is swift & haze. targeting moves
     --   p_action_other_active.lastmoverecv = move.num
     -- end
+  end)
+
+  -- after the move logic, decrement move turn
+  f_addaction(player, L_TRIGGER, player, false, function()
+    f_decrement_timer(player.active, 'locked_moveturn', function()
+      player.active.digging = false -- I think these might be needed if you get like frozen while digging/flying.
+      player.active.flying = false
+    end)
   end)
 
   f_addaction(player, L_TRIGGER, player, false, function()
@@ -298,7 +314,8 @@ end $$
       if #possible_moves > 0 then
         p_action_self.nextmove = p_action_self_active[possible_moves[f_flr_rnd(#possible_moves)+1]]
       else
-        p_action_self.nextmove = c_moves[M_STRUGGLE]
+        p_action_self.locked_move = c_moves[M_STRUGGLE]
+        p_action_self.nextmove = 'locked_move'
       end
       f_premovelogic(p_action_self)
     else
@@ -422,6 +439,16 @@ end $$
     local pkmn = pl.team[i]
     if pkmn.valid and i ~= pl.active.spot and pkmn.major ~= C_MAJOR_FAINTED then
       add(l, i)
+    end
+  end
+  return l
+end $$
+
+|[f_valid_move_list]| function(pkmn)
+  local l = {}
+  for i=1,4 do
+    if pkmn[i].num < M_NONE and pkmn[i].pp_obj.pp > 0 and not pkmn[i].disabled then
+      add(l, pkmn[i])
     end
   end
   return l

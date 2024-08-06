@@ -21,9 +21,8 @@ end $$
   f_info_toggle(op, g_grid_pickleag, @S_STORY+1<f_getsel'g_grid_picktrnr'+1 and f_strtoq(name) or name)
 end $$
 
-|[f_add_stat_move]| function(op, pkmn, ind)
-  ind=ind+1
-  local _ENV = pkmn[ind]
+|[f_add_stat_move]| function(op, pkmn, move)
+  local _ENV = type(move) == "table" and move or pkmn[move+1]
   local maxpp, pp, pow, accuracy, typ = f_get_move_texts(_ENV)
   local method = pkmn.possible_moves_method[num] or "empty"
 
@@ -34,7 +33,7 @@ end $$
     ;;,~f_addop_text,~op,~c_no ,"   pp ",@,"/",@
     ;;,~f_addop_text,~op,~c_no ,"pw/ac ",@,"/",@
   ]],op
-    ,ind    ,name
+    ,slot   ,name
     ,method ,typ
     ,pp     ,maxpp
     ,pow    ,accuracy
@@ -183,7 +182,7 @@ end $$
         end
 
         print(c_major_names_short[active.major].."  "..f_prefix_zero(active.hp, 3), 1, 11, C_1, -1)
-      end)
+      end, active.digging or active.flying)
     end})
   end
 

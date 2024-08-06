@@ -168,7 +168,7 @@ Vital Throw  Fighting 10 70      100% -- This move usually goes last. It ignores
 
 Rapid Spin   Normal   40 20      100% -- Removes Spikes and Leech Seed from the user's side of the field; also frees the user from Bind, Clamp, Fire Spin, Whirlpool and Wrap. These side effects do not occur if the move misses or is used against Ghost-type Pokemon.
 
-Dig          Ground   10 60      100% -- On the first turn, the user digs underground, becoming uncontrollable, and evades all attacks. Earthquake, Magnitude and Fissure can hit underground, with Earthquake and Magnitude having doubled power; the user may also be hit underground if it was previously targeted by Lock-On or Mind Reader. On the second turn, the user attacks.
+DONE Dig          Ground   10 60      100% -- On the first turn, the user digs underground, becoming uncontrollable, and evades all attacks. Earthquake, Magnitude and Fissure can hit underground, with Earthquake and Magnitude having doubled power; the user may also be hit underground if it was previously targeted by Lock-On or Mind Reader. On the second turn, the user attacks.
 Fly          Flying   15 70      95%  -- On the first turn, the user flies into the air, becoming uncontrollable, and evades most attacks. Gust, Twister and Thunder have normal accuracy against a mid-air Pokemon, with Gust and Twister also gaining doubled power. The user may also be hit in mid-air if it was previously targeted by Lock-On or Mind Reader. On the second turn, the user attacks.
 
 Gust         Flying   35 40      100% -- Power doubles if the target is in mid-air via Fly.
